@@ -1,0 +1,100 @@
+
+                               EMBOSS: silent
+     _________________________________________________________________
+   
+                                Program silent
+                                       
+Function
+
+   Silent mutation RE scan
+   
+Description
+
+Usage
+
+   Here is a sample session with silent:
+
+% silent
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-seq]               sequence   Sequence USA
+   -enzymes            string     Comma separated enzyme list
+  [-outf]              outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -sshow              bool       Display untranslated sequence
+   -tshow              bool       Display translated sequence
+   -allmut             bool       Display all mutations
+
+
+   Mandatory qualifiers Allowed values Default
+   [-seq]
+   (Parameter 1) Sequence USA Readable sequence Required
+   -enzymes Comma separated enzyme list Any string is accepted all
+   [-outf]
+   (Parameter 2) Output file name Output file <sequence>.silent
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -sshow Display untranslated sequence Yes/No No
+   -tshow Display translated sequence Yes/No No
+   -allmut Display all mutations Yes/No No
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   chaos Create a chaos game representation plot for a sequence
+   cpgplot Plot CpG rich areas
+   cpgreport Reports all CpG rich regions
+   diffseq Find differences (SNPs) between nearly identical sequences
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   einverted Finds DNA inverted repeats
+   equicktandem Finds tandem repeats
+   etandem Looks for tandem repeats in a nucleotide sequence
+   isochore Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   palindrome Looks for inverted repeats in a nucleotide sequence
+   polydot Displays all-against-all dotplots of a set of sequences
+   rebaseextract Extract data from REBASE
+   redata Search REBASE for enzyme name, references, suppliers etc
+   remap Display a sequence with restriction cut sites, translation etc
+   restrict Finds restriction enzyme cleavage sites
+   showseq Display a sequence with features, translation etc
+   tfscan Scans DNA sequences for transcription factors
+   
+Author(s)
+
+History
+
+   Written (date) - author.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

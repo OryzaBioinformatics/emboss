@@ -1,0 +1,20 @@
+# silent mutation application 
+#
+appl: silent [
+          doc: "Silent mutation RE scan"
+          groups: "DNA: sequence features, restriction enzymes, SDM"
+]
+
+  sequence: seq [ param: Y ]
+
+  string: enzymes [ req: Y def: all info: "Comma separated enzyme list" ]
+   
+  bool: sshow [ req: N def: N info: "Display untranslated sequence" ]
+
+  bool: tshow [ req: N def: N info: "Display translated sequence" ]
+
+  bool: allmut [ req: N def: N info: "Display all mutations" ]
+  
+  outfile: outf [ param: Y ]
+
+
