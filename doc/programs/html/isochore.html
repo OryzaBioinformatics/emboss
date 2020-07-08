@@ -11,8 +11,8 @@
 <tr>
 <td>
 
-<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
 </a>
 
 </td>
@@ -105,14 +105,13 @@ IT IS DONE FOR YOU.
    Mandatory qualifiers:
   [-sequence]          sequence   Sequence USA
   [-out]               outfile    Output file name
+   -graph              xygraph    Graph type
 
    Optional qualifiers:
    -window             integer    Window size
    -shift              integer    Shift increment
 
-   Advanced qualifiers:
-   -graph              xygraph    Graph type
-
+   Advanced qualifiers: (none)
 
 </pre>
 </td></tr></table>
@@ -137,6 +136,13 @@ IT IS DONE FOR YOU.
 <td>Output file name</td>
 <td>Output file</td>
 <td><i>&lt;sequence&gt;</i>.isochore</td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -166,10 +172,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-graph</td>
-<td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm</td>
-<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+<td colspan=4>(none)</td>
 </tr>
 
 </table>

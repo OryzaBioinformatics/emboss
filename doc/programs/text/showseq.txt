@@ -773,12 +773,14 @@ See also
 
    Program name Description
    antigenic Finds antigenic sites in proteins
+   backtranseq Back translate a protein sequence
    chaos Create a chaos game representation plot for a sequence
    cpgplot Plot CpG rich areas
    cpgreport Reports all CpG rich regions
    cusp Create a codon usage table
    diffseq Find differences (SNPs) between nearly identical sequences
    dotmatcher Displays a thresholded dotplot of two sequences
+   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
    dottup Displays a wordmatch dotplot of two sequences
    einverted Finds DNA inverted repeats
    equicktandem Finds tandem repeats
@@ -803,7 +805,6 @@ See also
    seqret Reads and writes (returns) sequences
    seqretall Reads and writes (returns) a set of sequences one at a time
    seqretset Reads and writes (returns) a set of sequences all at once
-   seqretsplit Reads and writes (returns) sequences
    showfeat Show features of a sequence
    showorf Pretty output of DNA translations
    sigcleave Reports protein signal cleavage sites

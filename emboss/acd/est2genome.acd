@@ -96,8 +96,8 @@ best one by setting this to be false."
 
   float: space [ 
 	def: 10.0 
-	info: "Space threshold (in megabytes)" help: "for linear-space
-recursion.  If product of sequence lengths divided by 4 exceeds this
+	info: "Space threshold (in megabytes)"
+        help: "for linear-space recursion.  If product of sequence lengths divided by 4 exceeds this
 then a divide-and-conquer strategy is used to control the memory
 requirements.  In this way very long sequences can be aligned.  \ If you
 have a machine with plenty of memory you can raise this parameter (but

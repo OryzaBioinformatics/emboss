@@ -29,7 +29,7 @@ appl: prettyplot [
 	bool: ccolours [ 
 	optional: Y
 	def : Y
-	info: "Colour residues by there consensus value."
+	info: "Colour residues by their consensus value."
 	]
 
 	string: cidentity [ 

@@ -44,6 +44,10 @@ char*   embPropCharToThree (char c);
 char*   embPropIntToThree (int c);
 AjPStr  embPropProtGaps (AjPSeq seq, int pad);
 AjPStr  embPropProt1to3 (AjPSeq seq, int pad);
+AjBool  embPropPurine (char base);
+AjBool  embPropPyrimidine (char base);
+AjBool  embPropTransversion (char base1, char base2);
+AjBool  embPropTransition (char base1, char base2);
 
 #endif
 

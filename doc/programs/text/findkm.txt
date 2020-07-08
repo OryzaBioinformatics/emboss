@@ -39,7 +39,7 @@ Command line arguments
    [-infile]
    (Parameter 1) Enter name of file containing data Input file Required
    [-outfile]
-   (Parameter 2) Output file name Output file findkm.out
+   (Parameter 2) Output file name Output file <sequence>.findkm
    -graphlb Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm

@@ -401,7 +401,6 @@ See also
    seqret Reads and writes (returns) sequences
    seqretall Reads and writes (returns) a set of sequences one at a time
    seqretset Reads and writes (returns) a set of sequences all at once
-   seqretsplit Reads and writes (returns) sequences
    showseq Display a sequence with features, translation etc
    
 Author(s)

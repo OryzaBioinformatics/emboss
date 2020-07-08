@@ -45,21 +45,35 @@ $doctop = "/data/www/Software/EMBOSS";
 	    "$doctop/EMBASSY/PHYLIP",
 	    "$doctop/EMBASSY/TOPO");
 
+# open the index.html file we will be putting in the distribution
+open (INDEX, "> i.i") || die "Cannot open i.i\n";
+indexheader(INDEX);
+
+
 # look at all directories in our documentation list
 foreach $docdir (@doclist) {
-    if ($docdir =~ /EMBASSY\/(.*)/) {$embassy = $1}
-    else {$embassy = ""}
+  if ($docdir =~ /EMBASSY\/(.*)/) {$embassy = $1}
+  else {$embassy = ""}
 
 # look at all applications alphabetically
-    foreach $x (sort (keys %progs)) {
+  foreach $x (sort (keys %progs)) {
 #  print "\n$x '$progs{$x}'\n";
 
+# add the entry in the index.html file
+    print INDEX
+"<tr>
+<td><a href=\"$x.html\">$x</a></td>
+<td>$progs{$x}</td>
+</tr>
+";
+
+
 # check the documentation for this file exists
-	if (-e "$docdir/$x.html") {
-#    print "$x.html found\n";
-	    $progdone{$x} = 1;
+  if (-e "$docdir/$x.html") {
+#  print "$x.html found\n";
+    $progdone{$x} = 1;
 # if this is an EMBASSY document, note which EMBASSY directory it is in
-	    if ($embassy ne "") {$progdir{$x} = $embassy}
+    if ($embassy ne "") {$progdir{$x} = $embassy}
 	} elsif ($embassy eq "") {
 # application's document is missing
 	    print "\n$x.html =missing=\n";
@@ -200,8 +214,11 @@ REMEMBER TO EDIT THESE FILES:
 
 # check to see if the CVS tree copy of the html documentation needs updating
 	if (-e "$cvsdoc/html/$x.html") {
-# check to see if the text has changed
+# check to see if the html file has changed
 	    system "lynx -source $url/$x.html > x.x";
+# change ../emboss_icon.gif and ../index.html to current directory
+            system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' x.x";
+            system "perl -p -i -e 's#\.\.\/emboss_icon.gif#emboss_icon.gif#g;' x.x";
 	    if (filediff (0, "$cvsdoc/html/$x.html", "x.x")) {
 		system "cp x.x $cvsdoc/html/$x.html";
 		chmod 0664, "$cvsdoc/html/$x.html";
@@ -212,6 +229,9 @@ REMEMBER TO EDIT THESE FILES:
 	} else {
 # it doesn't exist, so create the new html output
 	    system "lynx -source $url/$x.html > $cvsdoc/html/$x.html";
+# change ../emboss_icon.gif and ../index.html to current directory
+            system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' $cvsdoc/html/$x.html";
+            system "perl -p -i -e 's#\.\.\/emboss_icon.gif#emboss_icon.gif#g;' $cvsdoc/html/$x.html";
             chmod 0664, "$cvsdoc/html/$x.html";
 	    system "cvs add -m'documentation created' $cvsdoc/html/$x.html";
 	    system "cvs commit -m'documentation created' $cvsdoc/html/$x.html";
@@ -219,7 +239,22 @@ REMEMBER TO EDIT THESE FILES:
 	}
 
     }
+
 }
+
+# end the index.html file
+indexfooter(INDEX);
+close(INDEX);
+
+# check to see if the index.html file has changed
+if (filediff (1, "$cvsdoc/html/index.html", "i.i")) {    
+  system "cp i.i $cvsdoc/html/index.html";
+  chmod 0664, "$cvsdoc/html/index.html";
+  system "cvs commit -m'index.html updated' $cvsdoc/html/index.html";
+  print "index.html *replaced*\n";
+  unlink "i.i";
+}
+
 
 # look at all applications and report the ones with missing documentation
 foreach $x (sort (keys %progs)) {
@@ -310,19 +345,45 @@ $progs{$p}
   close GRP;
 
   if (-e "$docdir/$g\_group.html") {
-    if (filediff (0, "$docdir/$g\_group.html", "y.y")) {
+    if (filediff (1, "$docdir/$g\_group.html", "y.y")) {
       print "$g\_group.html group file *differences*\n";
       system "cp y.y $docdir/$g\_group.html";
-      chmod 0664, "$docdir/$g/\_group.html";
+      chmod 0664, "$docdir/$g\_group.html";
       print "$g\_group.html *replaced*\n";
       unlink "y.y";
     }
-  }
-  else {
+  } else {
     system "cp y.y $docdir/$g\_group.html";
-    chmod 0664, "$docdir/$g/\_group.html";
+    chmod 0664, "$docdir/$g\_group.html";
     print "$g\_group.html *created*\n";
     unlink "y.y";
+  }
+
+
+# check to see if the CVS tree copy of the html groups documentation needs updating
+  if (-e "$cvsdoc/html/$g\_group.html") {
+# check to see if the html file has changed
+    system "lynx -source $url/$g\_group.html > x.x";
+# change ../emboss_icon.gif and ../index.html to current directory
+    system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' x.x";
+    system "perl -p -i -e 's#\.\.\/emboss_icon.gif#emboss_icon.gif#g;' x.x";
+    if (filediff (1, "$cvsdoc/html/$g\_group.html", "x.x")) {
+      system "cp x.x $cvsdoc/html/$g\_group.html";
+      chmod 0664, "$cvsdoc/html/$g\_group.html";
+      system "cvs commit -m'documentation updated' $cvsdoc/html/$g\_group.html";
+      print "$g\_group.html *replaced*\n";
+      unlink "x.x";
+    }
+  } else {
+# it doesn't exist, so create the new html output
+    system "lynx -source $url/$g\_group.html > $cvsdoc/html/$g\_group.html";
+# change ../emboss_icon.gif and ../index.html to current directory
+    system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' $cvsdoc/html/$g\_group.html";
+    system "perl -p -i -e 's#\.\.\/emboss_icon.gif#emboss_icon.gif#g;' $cvsdoc/html/$g\_group.html";
+    chmod 0664, "$cvsdoc/html/$g\_group.html";
+    system "cvs add -m'documentation created' $cvsdoc/html/$g\_group.html";
+    system "cvs commit -m'documentation created' $cvsdoc/html/$g\_group.html";
+    print "$g\_group.html *created*\n";
   }
 }
 
@@ -342,6 +403,32 @@ if (filediff (0, "$docdir/groups.html", "g.g")) {
   unlink "g.g";
 }
 
+
+# check to see if the CVS tree copy of the html group documentation needs updating
+if (-e "$cvsdoc/html/groups.html") {
+# check to see if the html file has changed
+    system "lynx -source $url/groups.html > x.x";
+# change ../emboss_icon.gif and ../index.html to current directory
+    system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' x.x";
+    system "perl -p -i -e 's#\.\.\/emboss_icon.gif#emboss_icon.gif#g;' x.x";
+    if (filediff (1, "$cvsdoc/html/groups.html", "x.x")) {
+      system "cp x.x $cvsdoc/html/groups.html";
+      chmod 0664, "$cvsdoc/html/groups.html";
+      system "cvs commit -m'documentation updated' $cvsdoc/html/groups.html";
+      print "groups.html *replaced*\n";
+      unlink "x.x";
+    }
+} else {
+# it doesn't exist, so create the new html output
+    system "lynx -source $url/groups.html > $cvsdoc/html/groups.html";
+# change ../emboss_icon.gif and ../index.html to current directory
+    system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' $cvsdoc/html/groups.html";
+    system "perl -p -i -e 's#\.\.\/emboss_icon.gif#emboss_icon.gif#g;' $cvsdoc/html/groups.html";
+    chmod 0664, "$cvsdoc/html/groups.html";
+    system "cvs add -m'documentation created' $cvsdoc/html/groups.html";
+    system "cvs commit -m'documentation created' $cvsdoc/html/groups.html";
+    print "groups.html *created*\n";
+}
 
 ##################################################################
 sub filediff ( $$ ) {
@@ -438,7 +525,87 @@ print OUT "
 }
 
 
+##################################################################
+
+sub indexheader (*) {
+	local (*OUT) = @_;
+
+print OUT "
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: The Applications (programs)
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR=\"#FFFFFF\" text=\"#000000\">
+
+<table align=center bgcolor=\"#000070\" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href=\"http://www.uk.embnet.org/Software/EMBOSS/index.html\" onmouseover=\"self.status='Go to the EMBOSS home page';return true\">
+<img border=0 src=\"emboss_icon.gif\" alt=\"\" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face=\"Arial,Helvetica\" size=6 color=\"#ffffff\">
+<H2>
+EMBOSS: The Applications (programs)
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+
+The programs are listed in alphabetical order, Look at the individual
+applications or go to the 
+<a href=\"groups.html\">GROUPS</a>
+page. 
+<p>
+
+
+<h3><A NAME=\"current\">Applications</A> in the <a
+href=\"ftp://ftp.uk.embnet.org/pub/EMBOSS/\">current release</a></h3>
+
+<table border cellpadding=4 bgcolor=\"#FFFFF0\">
+
+<tr>
+<th>Program name</th>
+<th>Description</th>
+</tr>
+
+";
+
+}
+
+##################################################################
+
+sub indexfooter (*) {
+	local (*OUT) = @_;
+
+print OUT "
+
+</table>
 
 
 
 
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+";
+}

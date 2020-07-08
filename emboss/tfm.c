@@ -36,7 +36,7 @@ static void FindAppDocRoot (AjPStr* docroot) {
 /* try to open the installed doc directory */
   (void) ajNamRootInstall (&docrootinst);
   (void) ajFileDirFix (&docrootinst);
-  ajFmtPrintS (docroot, "%Sshare/doc/programs/",
+  ajFmtPrintS (docroot, "%Sshare/EMBOSS/doc/programs/",
   	docrootinst);
   if (!ajFileDir(docroot)) {
 /* if that didn't work then try the doc directory from the distribution tarball */

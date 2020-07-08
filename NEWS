@@ -1,8 +1,9 @@
-29/09/2000      Version 1.4.2 Changes to graphics data output for GUIs
-25/09/2000      Version 1.4.1 Minor library changes
-20/09/2000      Version 1.4.0 SILENT plus RESTRICT additions
-18/09/2000      Version 1.3.1 Indexing filenamelen fix + diffseq mod
-17/09/2000      Version 1.3.0 Addition of VECTORSTRIP and DIFFSEQ
+03/09/2000      Version 1.4.3 TFM corrected. HTML corrected. More GUI work
+29/08/2000      Version 1.4.2 Changes to graphics data output for GUIs
+25/08/2000      Version 1.4.1 Minor library changes
+20/08/2000      Version 1.4.0 SILENT plus RESTRICT additions
+18/08/2000      Version 1.3.1 Indexing filenamelen fix + diffseq mod
+17/08/2000      Version 1.3.0 Addition of VECTORSTRIP and DIFFSEQ
 15/08/2000      Version 1.2.0 released
 09/08/2000      Version 1.1.0 released
 08/08/2000      Version 1.0.2 released

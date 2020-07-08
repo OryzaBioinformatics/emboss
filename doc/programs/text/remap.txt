@@ -397,7 +397,6 @@ See also
    seqret Reads and writes (returns) sequences
    seqretall Reads and writes (returns) a set of sequences one at a time
    seqretset Reads and writes (returns) a set of sequences all at once
-   seqretsplit Reads and writes (returns) sequences
    showfeat Show features of a sequence
    showorf Pretty output of DNA translations
    showseq Display a sequence with features, translation etc

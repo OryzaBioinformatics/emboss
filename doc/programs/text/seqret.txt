@@ -456,7 +456,6 @@ See also
    remap Display a sequence with restriction cut sites, translation etc
    seqretall Reads and writes (returns) a set of sequences one at a time
    seqretset Reads and writes (returns) a set of sequences all at once
-   seqretsplit Reads and writes (returns) sequences
    showfeat Show features of a sequence
    showseq Display a sequence with features, translation etc
    

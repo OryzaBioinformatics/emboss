@@ -200,9 +200,13 @@ if ($ans !~ /^y/) {
       system "lynx -source $url/$application.html > $cvsdoc/html/$application.html";
       chmod 0664, "$cvsdoc/html/$application.html";
     }
+# change ../emboss_icon.gif and ../index.html to current directory
+    system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' $cvsdoc/html/$application.html";
+    system "perl -p -i -e 's#\.\.\/emboss_icon.gif#emboss_icon.gif#g;' $cvsdoc/html/$application.html";
     system "cvs commit -m'documentation created' $cvsdoc/html/$application.html";
     print "$application.html *created*\n";
-}
+
+
 
 print "Done.\n";
     

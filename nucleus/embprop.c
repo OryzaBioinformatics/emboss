@@ -4,6 +4,7 @@
 ** @author Copyright (c) 1999 Alan Bleasby
 ** @version 1.0
 ** @modified 24 Nov 1999 - GWW - Added embPropProtGaps and embPropProt1to3
+** @modified 1 Sept 2000 - GWW - Added embPropTransition embPropTranversion
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -42,6 +43,8 @@ static AjBool propInit=0;
 
 double *EmbPropTable[EMBPROPSIZE];
 
+static char propPurines[] = "agrAGR";
+static char propPyrimidines[] = "ctuyCTUY";
 
 static int propFragCompare(const void *a, const void *b);
 
@@ -453,3 +456,129 @@ AjPStr embPropProt1to3 (AjPSeq seq, int pad) {
 
   return temp;
 }
+
+/* @func embPropPurine ******************************************************
+**
+** Returns ajTrue if the input base is a Purine.
+** Returns ajFalse if it is a Pyrimidine or it is ambiguous.
+** 
+** @param [r] base [char] base
+** @return [AjBool] return ajTrue if this is a Purine
+** @@
+******************************************************************************/
+
+AjBool embPropPurine (char base) {
+
+  return (index(propPurines, base) != NULL);
+
+}
+
+
+/* @func embPropPyrimidine ******************************************************
+**
+** Returns ajTrue if the input base is a Pyrimidine.
+** Returns ajFalse if it is a Purine or it is ambiguous.
+** 
+** @param [r] base [char] base
+** @return [AjBool] return ajTrue if this is a Pyrimidine
+** @@
+******************************************************************************/
+
+AjBool embPropPyrimidine (char base) {
+
+  return (index(propPyrimidines, base) != NULL);
+
+}
+
+
+/* @func embPropTransversion ******************************************************
+**
+** Returns ajTrue if the input two bases have undergone a tranversion.
+** (Pyrimidine to Purine, or vice versa)
+** Returns ajFalse if this is not a transversion or it can not be determined
+** (e.g. no change A->A, transition C->T, unknown A->N)
+** 
+** @param [r] base1 [char] first base
+** @param [r] base2 [char] second base
+** @return [AjBool] return ajTrue if this is a transversion
+** @@
+******************************************************************************/
+
+AjBool embPropTransversion (char base1, char base2) {
+  AjBool u1, u2;
+  AjBool y1, y2;
+
+  u1 = embPropPurine(base1);
+  u2 = embPropPurine(base2);
+
+  y1 = embPropPyrimidine(base1);
+  y2 = embPropPyrimidine(base2);
+
+  ajDebug("base1 py = %d, pu = %d", u1, y1);
+  ajDebug("base2 py = %d, pu = %d", u2, y2);
+    
+
+/* not a purine or a pyrimidine - ambiguous - return ajFalse */
+  if (!u1 && !y1) return ajFalse;
+  if (!u2 && !y2) return ajFalse;
+
+  ajDebug("embPropTransversion result = %d", (u1 != u2));
+
+  return (u1 != u2);
+
+}
+
+
+
+/* @func embPropTransition ******************************************************
+**
+** Returns ajTrue if the input two bases have undergone a transition.
+** (Pyrimidine to Pyrimidine, or Purine to Purine)
+** Returns ajFalse if this is not a transition or it can not be determined
+** (e.g. no change A->A, transversion A->T, unknown A->N)
+** 
+** @param [r] base1 [char] first base
+** @param [r] base2 [char] second base
+** @return [AjBool] return ajTrue if this is a transition
+** @@
+******************************************************************************/
+
+AjBool embPropTransition (char base1, char base2) {
+  AjBool u1, u2;
+  AjBool y1, y2;
+
+  u1 = embPropPurine(base1);
+  u2 = embPropPurine(base2);
+
+  y1 = embPropPyrimidine(base1);
+  y2 = embPropPyrimidine(base2);
+
+  ajDebug("base1 py = %d, pu = %d", u1, y1);
+  ajDebug("base2 py = %d, pu = %d", u2, y2);
+
+/* not a purine or a pyrimidine - ambiguous - return ajFalse */
+  if (!u1 && !y1) return ajFalse;
+  if (!u2 && !y2) return ajFalse;
+
+/* no change - return ajFalse */
+  if (tolower(base1) == tolower(base2)) return ajFalse;
+
+/* U to T is not a transition */
+  if (tolower(base1) == 't' && tolower(base2) == 'u') return ajFalse;
+  if (tolower(base1) == 'u' && tolower(base2) == 't') return ajFalse;
+
+/* C to Y, T to Y, A to R, G to R - ambiguous - not a transition */
+  if (u1 && tolower(base2) == 'r') return ajFalse; 
+  if (u2 && tolower(base1) == 'r') return ajFalse; 
+  if (y1 && tolower(base2) == 'y') return ajFalse; 
+  if (y2 && tolower(base1) == 'y') return ajFalse; 
+
+  ajDebug("embPropTransition result = %d", (u1 == u2));
+
+  return (u1 == u2);
+
+}
+
+
+
+

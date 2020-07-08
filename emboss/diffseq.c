@@ -23,7 +23,7 @@
 #include "emboss.h"
 
 static void diff (AjPList matchlist, AjPSeq seq1, AjPSeq seq2, AjPFile
-	outfile);
+	outfile, AjBool columns);
 
 
 static void WordMatchListConvDiffToFeat(AjPList list, AjPFeatTable *tab1,
@@ -40,6 +40,7 @@ int main(int argc, char * argv[]) {
   int i;
   AjPFeatTable Tab1=NULL,Tab2=NULL;
   AjPFeatTabOut seq1out = NULL, seq2out = NULL;
+  AjBool columns;	/* format output report files in columns */
     
   embInit("diffseq", argc, argv);
 
@@ -47,8 +48,9 @@ int main(int argc, char * argv[]) {
   seq1 = ajAcdGetSeq ("asequence");
   seq2 = ajAcdGetSeq ("bsequence");
   outfile = ajAcdGetOutfile ("outfile");
-  seq1out     =  ajAcdGetFeatout("afeatout");
-  seq2out     =  ajAcdGetFeatout("bfeatout");
+  seq1out = ajAcdGetFeatout("afeatout");
+  seq2out = ajAcdGetFeatout("bfeatout");
+  columns = ajAcdGetBool ("columns");
     
   ajSeqTrim(seq1);
   ajSeqTrim(seq2);
@@ -67,7 +69,7 @@ int main(int argc, char * argv[]) {
 	  seq1->Name, seq2->Name, seq1, seq2);
                                   
 /* make the output file */
-    (void) diff (matchlist, seq1, seq2, outfile);
+    (void) diff (matchlist, seq1, seq2, outfile, columns);
     
 /* tidy up */
     embWordMatchListDelete(matchlist); /* free the match structures */
@@ -316,12 +318,13 @@ static void Features(AjPFile outfile, AjPFeatTable feat, int start, int end) {
 ** @param [r] seq1 [AjPSeq] Sequence to be diff'd.
 ** @param [r] seq2 [AjPSeq] Sequence to be diff'd.
 ** @param [r] outfile [AjPFile] Output file containing report.
+** @param [r] columns [AjBool] format in columns
 ** @return [void] 
 ** @@
 ******************************************************************************/
 
 static void diff (AjPList matchlist, AjPSeq seq1, AjPSeq seq2, AjPFile
-	outfile) {
+	outfile, AjBool columns) {
 
   AjIList iter=NULL;		/* match list iterator */
   EmbPWordMatch p;  		/* match structure */
@@ -334,9 +337,15 @@ static void diff (AjPList matchlist, AjPSeq seq1, AjPSeq seq2, AjPFile
   AjPStr name2 = ajStrNewC(ajSeqName(seq2));	/* name of seq2 */
   int start, end;		/* start and end of the difference (using human coords) */
 
+/* stuff for counting SNPs, transitions & transversions */
+  int snps=0, transitions=0, transversions = 0;	/* counts of SNP types */
+  char base1, base2;
+  int len1, len2;
+
 /* get the feature table of the sequences */
   AjPFeatTable feat1 = ajSeqGetFeat(seq1);
   AjPFeatTable feat2 = ajSeqGetFeat(seq2);
+
 
 /* title line */
   (void) ajFmtPrintF(outfile, "# Report of diffseq of: %S and %S\n\n", name1, name2);
@@ -346,8 +355,11 @@ static void diff (AjPList matchlist, AjPSeq seq1, AjPSeq seq2, AjPFile
     p = (EmbPWordMatch) ajListIterNext (iter) ;
 /* first match? */
     if (!count++) {
+      if (columns) (void) ajFmtPrintF(outfile, "# ");
       (void) ajFmtPrintF(outfile, "%S overlap starts at %d\n", name1, p->seq1start+1);
-      (void) ajFmtPrintF(outfile, "%S overlap starts at %d\n", name2, p->seq2start+1);
+      if (columns) (void) ajFmtPrintF(outfile, "# ");
+      (void) ajFmtPrintF(outfile, "%S overlap starts at %d\n\n", name2, p->seq2start+1);
+      if (columns) (void) ajFmtPrintF(outfile, "# (%S) start end length sequence  (%S) start end length sequence\n\n", name1, name2);
 
     } else {
 /* output the difference between the matching regions */   
@@ -355,29 +367,63 @@ static void diff (AjPList matchlist, AjPSeq seq1, AjPSeq seq2, AjPFile
       start = prev1end+1;
       end = p->seq1start;
       if (prev1end<p->seq1start) {
-        (void) ajFmtPrintF(outfile, "\n%S %d-%d Length: %d\n", name1, start, end, end-start+1);
+        if (columns) {
+          (void) ajFmtPrintF(outfile, "%d\t%d\t%d\t", start, end, end-start+1);
+        } else {
+          (void) ajFmtPrintF(outfile, "\n%S %d-%d Length: %d\n", name1, start, end, end-start+1);
+        }
         ajStrAssSub(&tmp, s1, prev1end, p->seq1start-1);
+        len1=end-start+1;
+        base1 = * ajStrStr(tmp);
       } else {
-      	(void) ajFmtPrintF(outfile, "\n%S %d Length: 0\n", name1, start-1);
+      	if (columns) {
+          (void) ajFmtPrintF(outfile, "%d\t%d\t0\t", start-1, start-1);
+        } else {
+          (void) ajFmtPrintF(outfile, "\n%S %d Length: 0\n", name1, start-1);
+        }
         ajStrAssC(&tmp, "");
+        len1=0;
       }
-      (void) Features(outfile, feat1, start, end);
-      (void) ajFmtPrintF(outfile, "Sequence: %S\n", tmp);
+      if (!columns) (void) Features(outfile, feat1, start, end);
+      if (columns) {
+      	(void) ajFmtPrintF(outfile, "'%S'\t", tmp);
+      } else {
+        (void) ajFmtPrintF(outfile, "Sequence: %S\n", tmp);
+      }
 
 /* seq2 details */
       start = prev2end+1;
       end = p->seq2start;
       if (prev2end<p->seq2start) {
         ajStrAssSub(&tmp, s2, prev2end, p->seq2start-1);
-        (void) ajFmtPrintF(outfile, "Sequence: %S\n", tmp);
-        (void) Features(outfile, feat2, start, end);
-        (void) ajFmtPrintF(outfile, "%S %d-%d Length: %d\n", name2, start, end, end-start+1);
+        if (columns) {
+          (void) ajFmtPrintF(outfile, "%d\t%d\t%d\t'%S'\n", start, end, end-start+1, tmp);
+        } else {
+          (void) ajFmtPrintF(outfile, "Sequence: %S\n", tmp);
+          if (!columns) (void) Features(outfile, feat2, start, end);
+          (void) ajFmtPrintF(outfile, "%S %d-%d Length: %d\n", name2, start, end, end-start+1);
+        }
+        len2=end-start+1;
+        base2 = * ajStrStr(tmp);
       } else {
         ajStrAssC(&tmp, "");
-        (void) ajFmtPrintF(outfile, "Sequence: %S\n", tmp);
-        (void) Features(outfile, feat2, start, end);
-      	(void) ajFmtPrintF(outfile, "%S %d Length: 0\n", name2, start-1);
+        if (columns) {
+          (void) ajFmtPrintF(outfile, "%d\t%d\t0\t'%S'\n", start-1, start-1, tmp);
+        } else {
+          (void) ajFmtPrintF(outfile, "Sequence: %S\n", tmp);
+          if (!columns) (void) Features(outfile, feat2, start, end);
+          (void) ajFmtPrintF(outfile, "%S %d Length: 0\n", name2, start-1);
+        }
+        len2=0;
       }
+
+/* count SNPs, transitions & transversions */
+      if (len1 == 1 && len2 == 1) {
+        snps++;
+        transitions += (int) embPropTransition(base1, base2);
+        transversions += (int) embPropTransversion(base1, base2);
+      }
+
     }
     
 /* output the match */
@@ -393,8 +439,22 @@ static void diff (AjPList matchlist, AjPSeq seq1, AjPSeq seq2, AjPFile
   }   	
 
 /* end of overlapping region */
-  (void) ajFmtPrintF(outfile, "\n%S overlap ends at %d\n", name1, p->seq1start+p->length);
+  (void) ajFmtPrintF(outfile, "\n\n");
+  if (columns) (void) ajFmtPrintF(outfile, "# ");
+  (void) ajFmtPrintF(outfile, "%S overlap ends at %d\n", name1, p->seq1start+p->length);
+  if (columns) (void) ajFmtPrintF(outfile, "# ");
   (void) ajFmtPrintF(outfile, "%S overlap ends at %d\n\n", name2, p->seq2start+p->length);
+
+/* report the counts of SNP types */
+  (void) ajFmtPrintF(outfile, "\n\n");
+  if (columns) (void) ajFmtPrintF(outfile, "# ");
+  (void) ajFmtPrintF(outfile, "No. of SNPs = %d\n", snps);
+  if (columns) (void) ajFmtPrintF(outfile, "# ");
+  (void) ajFmtPrintF(outfile, "No. of transitions = %d\n", transitions);
+  if (columns) (void) ajFmtPrintF(outfile, "# ");
+  (void) ajFmtPrintF(outfile, "No. of transversions = %d\n", transversions);
+  
+
 
 /* tidy up */
   ajStrDel(&s1);

@@ -37,7 +37,7 @@ Command line arguments
    -residuesperline    integer    The number of residues to be displayed on
                                   each line
    -resbreak           integer    Residues before a space
-   -[no]ccolours       bool       Colour residues by there consensus value.
+   -[no]ccolours       bool       Colour residues by their consensus value.
    -cidentity          string     Colour to display identical residues (RED)
    -csimilarity        string     Colour to display similar residues (GREEN)
    -cother             string     Colour to display other residues (BLACK)
@@ -98,7 +98,7 @@ Command line arguments
    Any integer value 50
    -resbreak Residues before a space Integer 1 or more Same as
    -residuesperline to give no breaks
-   -[no]ccolours Colour residues by there consensus value. Yes/No Yes
+   -[no]ccolours Colour residues by their consensus value. Yes/No Yes
    -cidentity Colour to display identical residues (RED) Any string is
    accepted RED
    -csimilarity Colour to display similar residues (GREEN) Any string is
