@@ -250,6 +250,7 @@ See also
    chips Codon usage statistics
    codcmp Codon usage table comparison
    cusp Create a codon usage table
+   emowse Protein identification by mass spectrometry
    freak Residue/base frequency table or plot
    geecee Calculates the fractional GC content of nucleic acid sequences
    isochore Plots isochores in large DNA sequences

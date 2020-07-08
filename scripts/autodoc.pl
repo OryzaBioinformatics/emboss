@@ -59,14 +59,15 @@ foreach $docdir (@doclist) {
   foreach $x (sort (keys %progs)) {
 #  print "\n$x '$progs{$x}'\n";
 
-# add the entry in the index.html file
-    print INDEX
+# add the non-EMBASSY entry in the index.html file
+    if ($embassy eq "") {
+	    print INDEX
 "<tr>
 <td><a href=\"$x.html\">$x</a></td>
 <td>$progs{$x}</td>
 </tr>
 ";
-
+    }
 
 # check the documentation for this file exists
   if (-e "$docdir/$x.html") {
@@ -88,14 +89,14 @@ foreach $docdir (@doclist) {
 		chmod 0664, "$docdir/$x.html";
 		if (defined $ENV{'EDITOR'} && $ENV{'EDITOR'} ne "") {
 		    system("$ENV{'EDITOR'} $docdir/$x.html");
-		    open (INDEX, ">> $docdir/index.html") || die "Can't open $docdir/index.html";
-		    print INDEX "
+		    open (INDEX2, ">> $docdir/index.html") || die "Cannot open $docdir/index.html\n";
+		    print INDEX2 "
 
 <tr><td><a href=\"$x.html\">$x</a></td><td>INSTITUTE</td><td>
 $progs{$x}
 </td></tr>
 ";
-		    close (INDEX);
+		    close (INDEX2);
 		    system("$ENV{'EDITOR'} $docdir/index.html");
 		} else {
 		    print "*********************************

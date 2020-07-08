@@ -23,8 +23,12 @@ appl: polydot [
   int: wordsize [ req: Y def: 6 min: 2
                     info: "Word size" ]
 
+  bool: data [ req: N
+        def: N
+  ]
+
   graph: graph [ 
-	req: Y 
+	req: @(!$(data)) 
         gtitle: "Polydot:" 
   ]
 
@@ -44,3 +48,7 @@ in residues, as displayed in the output."
   string: format [ def: "gff" opt: Y info: "format to Dump out as" ]
 
   string: ext    [ def: "gff"  opt: Y info: "Extension for feature file" ]
+
+  outfile: outfile [ req: $(data)
+         nullok: Y
+  ]

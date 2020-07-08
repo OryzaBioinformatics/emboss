@@ -22,12 +22,17 @@ appl: dotmatcher [
         min : "0"
   ]
 
-  matrix: datafile [
+  matrix: matrixfile [
         optional: Y
         info: "Matrix file"
         protein: $(sequencea.protein)
   ]
-  graph: graph [ param: y
+
+  bool: data [ req: N
+        def: N
+  ]
+
+  graph: graph [ req: @(!$(data))
 	opt: N
 	gtitle: "Dotmatcher:  $(sequencea.name) vs $(sequenceb.name)"
 	gxtitle: "$(sequencea.name)"
@@ -35,3 +40,7 @@ appl: dotmatcher [
   ]
  
 
+  outfile: outfile [ req: $(data)
+	nullok: Y
+	info: "Display as data"
+  ]

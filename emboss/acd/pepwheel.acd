@@ -8,7 +8,7 @@ appl: pepwheel [
 	groups: "Protein: sequence properties, secondary structure"
 ]
 
-  seqall: sequence [
+  sequence: sequence [
 	param: Y
 	type: Protein
   ]
@@ -69,7 +69,19 @@ squares."
 with octagons."
   ]
 
-  graph: graph [
-	req: Y
+
+  bool: data [
+        req: N
+        def: N
+        info: "Display as data"
   ]
 
+  graph: graph [
+	req: @(!$(data))
+	gxtitle: $(sequence.name)
+  ]
+
+  outfile: outfile [
+        req: $(data)
+        nullok: Y
+  ]

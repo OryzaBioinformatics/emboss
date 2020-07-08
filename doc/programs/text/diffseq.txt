@@ -390,6 +390,7 @@ See also
    etandem Looks for tandem repeats in a nucleotide sequence
    garnier Predicts protein secondary structure
    helixturnhelix Report nucleic acid binding motifs
+   isochore Plots isochores in large DNA sequences
    newcpgreport Report CpG rich areas
    newcpgseek Reports CpG rich regions
    oddcomp Finds protein sequence regions with a biased composition

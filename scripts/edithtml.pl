@@ -192,7 +192,7 @@ if ($ans !~ /^y/) {
     print "$application.txt *created*\n";
 
 # create the new html output
-    if (!-e "$cvsdoc/text/$application.html") {
+    if (!-e "$cvsdoc/html/$application.html") {
       system "lynx -source $url/$application.html > $cvsdoc/html/$application.html";
       chmod 0664, "$cvsdoc/html/$application.html";
       system "cvs add -m'documentation created' $cvsdoc/html/$application.html";

@@ -184,6 +184,7 @@ See also
    dotmatcher Displays a thresholded dotplot of two sequences
    dotpath Displays a non-overlapping wordmatch dotplot of two sequences
    dottup Displays a wordmatch dotplot of two sequences
+   emowse Protein identification by mass spectrometry
    garnier Predicts protein secondary structure
    helixturnhelix Report nucleic acid binding motifs
    pepcoil Predicts coiled coil regions

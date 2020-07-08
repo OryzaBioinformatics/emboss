@@ -2138,8 +2138,9 @@ static void GraphxyDisplayToData (AjPGraph graphs, AjBool closeit, char *ext) {
 	    }
 	    else if(type==TEXT)
 	    {
-		ajFmtPrintF(outf,"Text ");
-		ajFmtPrintF(outf,"x1 %f y1 %f x2 %f y2 %f colour %d text %S\n",
+		ajFmtPrintF(outf,"Textline ");
+		ajFmtPrintF(outf,"x1 %f y1 %f x2 %f y2 %f colour %d "
+			    "size 1.0 %S\n",
 			    ptr->x1,ptr->y1,ptr->x2,ptr->y2,ptr->colour,
 			    ptr->text);
 	    }
@@ -2170,8 +2171,9 @@ static void GraphxyDisplayToData (AjPGraph graphs, AjBool closeit, char *ext) {
 	    }
 	    else if(type==TEXT)
 	    {
-		ajFmtPrintF(outf,"Text ");
-		ajFmtPrintF(outf,"x1 %f y1 %f x2 %f y2 %f colour %d text %S\n",
+		ajFmtPrintF(outf,"Textline ");
+		ajFmtPrintF(outf,"x1 %f y1 %f x2 %f y2 %f colour %d "
+			    "size 1.0 %S\n",
 			    ptr->x1,ptr->y1,ptr->x2,ptr->y2,ptr->colour,
 			    ptr->text);
 	    }

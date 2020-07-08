@@ -27,15 +27,12 @@
 
 
 static void plotresidue(char c, float r, float a, char *squares, char *circles,
-		 char *diamonds);
-static void drawocta(float x, float y, float size);
+			char *diamonds, AjBool text, AjPFile outf,
+			float xmin,float xmax,float ymin,float ymax);
+static void drawocta(float x, float y, float size, AjBool text, AjPFile outf);
 
 
 
-/* Ah, the joy of colour maps again. The following colours should
- * be defined correctly for most displays but there is no
- * guarantee
- */
 #define AJB_BLUE   9
 #define AJB_BLACK  0
 #define AJB_GREY   7
@@ -45,7 +42,6 @@ static void drawocta(float x, float y, float size);
 
 int main( int argc, char **argv, char **env)
 {
-    AjPSeqall seqall;
     AjPSeq    seq=NULL;
     AjPStr    strand=NULL;
     AjPStr    substr=NULL;
@@ -55,8 +51,9 @@ int main( int argc, char **argv, char **env)
     AjBool    wheel;
     AjBool    amphipathic;
     AjPStr    txt=NULL;
-    AjPGraph  graph=NULL;
-    
+    AjPGraph  graph=0;
+    AjBool    text;
+    AjPFile   outf=NULL;
     AjBool first;
     AjBool startloop;
     
@@ -99,7 +96,7 @@ int main( int argc, char **argv, char **env)
     (void) ajGraphInit("pepwheel", argc, argv);
 
 
-    seqall    = ajAcdGetSeqall("sequence");
+    seq       = ajAcdGetSeq("sequence");
     steps     = ajAcdGetInt("steps");
     turns     = ajAcdGetInt("turns");
     graph     = ajAcdGetGraph("graph");
@@ -108,7 +105,9 @@ int main( int argc, char **argv, char **env)
     diamonds  = ajAcdGetString("diamonds");
     wheel     = ajAcdGetBool("wheel");
     amphipathic = ajAcdGetBool("amphipathic");
-
+    text        = ajAcdGetBool("data");
+    outf        = ajAcdGetOutfile("outfile");
+    
     ajStrToUpper(&octags);
     ajStrToUpper(&squares);
     ajStrToUpper(&diamonds);
@@ -125,80 +124,102 @@ int main( int argc, char **argv, char **env)
     txt    = ajStrNew();
     
     
-    while(ajSeqallNext(seqall, &seq))
+    begin=ajSeqBegin(seq);
+    end=ajSeqEnd(seq);
+    ajDebug("begin: %d end: %d\n", begin, end);
+    strand = ajSeqStrCopy(seq);
+    
+    ajStrToUpper(&strand);
+    ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
+    len    = ajStrLen(substr);
+    
+    ajFmtPrintS(&txt,"PEPWHEEL of %s from %d to %d",ajSeqName(seq),
+		begin,end);
+    
+    if(!text)
     {
-	begin=ajSeqallBegin(seqall);
-	end=ajSeqallEnd(seqall);
-	ajDebug("begin: %d end: %d\n", begin, end);
-	strand = ajSeqStrCopy(seq);
-	
-	ajStrToUpper(&strand);
-	ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
-	len    = ajStrLen(substr);
-
-	ajFmtPrintS(&txt,"PEPWHEEL of %s from %d to %d",ajSeqName(seq),
-		    begin,end);
-
 	ajGraphOpenWin(graph,xmin,xmax,ymin,ymax);
-	ajGraphSetFore(AJB_BLACK);
 	
+	ajGraphSetFore(AJB_BLACK);
 	ajGraphText(0.0,0.64,ajStrStr(txt),0.5);
-
-	ajGraphSetBackBlack();
+	/*	ajGraphSetBackBlack();*/
 	ajGraphSetFore(AJB_BLACK);
+    }
+    else
+    {
+	ajFmtPrintF(outf,"##Graphic\n##Screen x1 %f y1 %f x2 %f y2 %f\n",
+		    xmin,ymin,xmax,ymax);
+	ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour 0 size 0.5 %s\n",
+		    0.,0.64,ajStrStr(txt));
+    }
+    
+    
+    ang = (360.0 / (float)steps) * (float)turns;
+    
+    first = ajTrue;
+    angle = 90.0 + ang;
+    if(end-begin > (int)minresplot) wradius = 0.2;
+    else                            wradius = 0.40;
 
-	ang = (360.0 / (float)steps) * (float)turns;
-
-	first = ajTrue;
-	angle = 90.0 + ang;
-	if(end-begin > (int)minresplot) wradius = 0.2;
-	else                            wradius = 0.40;
-	
-	for(i=0,lc=0,radius=wradius+wheelgap;i<len;i+=steps)
+    for(i=0,lc=0,radius=wradius+wheelgap;i<len;i+=steps)
+    {
+	wradius += wheelgap;
+	startloop = ajTrue;
+	k = AJMIN(i+steps, end);
+	for(j=i;j<k;++j)
 	{
-	    wradius += wheelgap;
-	    startloop = ajTrue;
-	    k = AJMIN(i+steps, end);
-	    for(j=i;j<k;++j)
+	    oldangle=angle;
+	    angle=oldangle-ang;
+	    if(first) startloop=first=ajFalse;
+	    else
 	    {
-		oldangle=angle;
-		angle=oldangle-ang;
-		if(first) startloop=first=ajFalse;
+		if(startloop)
+		{
+		    if(wheel)
+		    {
+			ajPolToRec(wradius-wheelgap,oldangle,&x1,&y1);
+			ajPolToRec(wradius,angle,&x2,&y2);
+			if(!text)
+			    ajGraphLine(x1,y1,x2,y2);
+			else
+			    ajFmtPrintF(outf,"Line x1 %f y1 %f x2 %f y2 %f"
+					" colour 0\n",x1,y1,x2,y2);
+		    }
+		    startloop=ajFalse;
+		}
 		else
 		{
-		    if(startloop)
+		    if(wheel)
 		    {
-			if(wheel)
-			{
-			    ajPolToRec(wradius-wheelgap,oldangle,&x1,&y1);
-			    ajPolToRec(wradius,angle,&x2,&y2);
+			ajPolToRec(wradius,oldangle,&x1,&y1);
+			ajPolToRec(wradius,angle,&x2,&y2);
+			if(!text)
 			    ajGraphLine(x1,y1,x2,y2);
-			}
-			startloop=ajFalse;
-		    }
-		    else
-		    {
-			if(wheel)
-			{
-			    ajPolToRec(wradius,oldangle,&x1,&y1);
-			    ajPolToRec(wradius,angle,&x2,&y2);
-			    ajGraphLine(x1,y1,x2,y2);
-			}
+			else
+			    ajFmtPrintF(outf,"Line x1 %f y1 %f x2 %f y2 %f"
+					" colour 0\n",x1,y1,x2,y2);
 		    }
 		}
-		plotresidue(*(ajStrStr(substr)+lc),radius+resgap,angle,
-			    ajStrStr(squares),ajStrStr(octags),
-			    ajStrStr(diamonds));
-		++lc;
-		if(lc==len)
-		    break;
 	    }
-	    radius += nresgap;
+	    plotresidue(*(ajStrStr(substr)+lc),radius+resgap,angle,
+			ajStrStr(squares),ajStrStr(octags),
+			ajStrStr(diamonds),text,outf,
+			xmin,xmax,ymin,ymax);
+	    ++lc;
+	    if(lc==len)
+		break;
 	}
+	radius += nresgap;
 
-	ajGraphCloseWin();
-	ajStrDel(&strand);
     }
+    
+    if(!text)
+	ajGraphCloseWin();
+    else
+	ajFileClose(&outf);
+    
+    ajStrDel(&strand);
+
     
     
 
@@ -210,7 +231,7 @@ int main( int argc, char **argv, char **env)
 }
 
 
-static void drawocta(float x, float y, float size)
+static void drawocta(float x, float y, float size, AjBool text, AjPFile outf)
 {
     static float polyx[]=
     {
@@ -226,8 +247,17 @@ static void drawocta(float x, float y, float size)
     
 
     for(i=0;i<8;++i)
-	ajGraphLine(x+polyx[i]*size,y+polyy[i]*size,x+polyx[i+1]*size,
-		    y+polyy[i+1]*size);
+    {
+	if(!text)
+	    ajGraphLine(x+polyx[i]*size,y+polyy[i]*size,x+polyx[i+1]*size,
+			y+polyy[i+1]*size);
+	else
+	    ajFmtPrintF(outf,"Line x1 %f y1 %f x2 %f y2 %f colour 0\n",
+			x+polyx[i]*size,y+polyy[i]*size,x+polyx[i+1]*size,
+			y+polyy[i+1]*size);
+    }
+
+    return;
 }
 
 
@@ -235,7 +265,8 @@ static void drawocta(float x, float y, float size)
     
 
 static void plotresidue(char c, float r, float a, char *squares, char *octags,
-		 char *diamonds)
+		 char *diamonds, AjBool text, AjPFile outf,
+			float xmin, float xmax, float ymin, float ymax)
 {
     float  x;
     float  y;
@@ -246,26 +277,51 @@ static void plotresidue(char c, float r, float a, char *squares, char *octags,
     *cs=c;
     
     ajPolToRec(r, a, &x, &y);
-    
-    ajGraphSetFore(AJB_PURPLE);
 
+    if(x<xmin+.1 || x>xmax-.1 || y<ymin+.2 || y>ymax-.2)
+	return;
+
+    
+    if(!text)
+	ajGraphSetFore(AJB_PURPLE);
+    
     if(strstr(squares,cs))
     {
-	ajGraphSetFore(AJB_BLUE);
-	ajGraphBox(x-0.025,y-0.022,0.05);
+	if(!text)
+	{
+	    ajGraphSetFore(AJB_BLUE);
+	    ajGraphBox(x-0.025,y-0.022,0.05);
+	}
+	else
+	    ajFmtPrintF(outf,"Rectangle x1 %f y1 %f x2 %f y2 %f colour %d\n",
+			x-0.025,y-0.022,x-0.025+.05,y-0.022+.05,AJB_BLUE);
     }
     if(strstr(octags,cs))
     {
-	ajGraphSetFore(AJB_BLACK);
-	drawocta(x,y+0.003,0.28);
+	if(!text)
+	    ajGraphSetFore(AJB_BLACK);
+	drawocta(x,y+0.003,0.28,text,outf);
     }
     if(strstr(diamonds,cs))
     {
-	ajGraphSetFore(AJB_RED);
-	ajGraphDia(x-0.042,y-0.04,0.085);
+	if(!text)
+	{
+	    ajGraphSetFore(AJB_RED);
+	    ajGraphDia(x-0.042,y-0.04,0.085);
+	}
+	else
+	    ajFmtPrintF(outf,"Shaded Rectangle x1 %f y1 %f x2 %f y2 %f "
+			"colour %d\n",
+			x-0.025,y-0.022,x-0.025+.05,y-0.022+.05,AJB_RED);
     }
 
-    ajGraphText(x,y,cs,0.5);
+    if(!text)
+    {
+	ajGraphText(x,y,cs,0.5);
+	ajGraphSetFore(AJB_BLACK);
+    }
+    else
+	ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour 0 size 0.5 %s\n",x,y,cs);
 
-    ajGraphSetFore(AJB_BLACK);
+    return;
 }

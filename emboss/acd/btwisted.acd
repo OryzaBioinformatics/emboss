@@ -11,13 +11,13 @@ sequence: sequence  [
 string: angledata  [
   required: "N"
   default: "Eangles.dat"
-  information: "file containing base pair twist angles"
+  information: "File containing base pair twist angles"
 ]
 
 string: energydata  [
   required: "N"
   default: "Eenergy.dat"
-  information: "file containing base pair stacking energies"
+  information: "File containing base pair stacking energies"
 ]
 
 outfile: outfile  [

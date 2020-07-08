@@ -775,6 +775,7 @@ See also
    antigenic Finds antigenic sites in proteins
    backtranseq Back translate a protein sequence
    chaos Create a chaos game representation plot for a sequence
+   cirdna Draws circular maps of DNA constructs
    cpgplot Plot CpG rich areas
    cpgreport Reports all CpG rich regions
    cusp Create a codon usage table
@@ -789,6 +790,7 @@ See also
    getorf Finds and extracts open reading frames (ORFs)
    helixturnhelix Report nucleic acid binding motifs
    isochore Plots isochores in large DNA sequences
+   lindna Draws linear maps of DNA constructs
    newcpgreport Report CpG rich areas
    newcpgseek Reports CpG rich regions
    oddcomp Finds protein sequence regions with a biased composition

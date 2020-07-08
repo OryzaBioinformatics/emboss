@@ -15,7 +15,7 @@ appl: pepwindowall [
 
   datafile: datafile [
         optional: Y
-        info: "nakia database file"
+        info: "nakai database file"
         def: "Enakai.dat"
   ]
 

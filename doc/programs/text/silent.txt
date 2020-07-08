@@ -10,11 +10,18 @@ Function
    
 Description
 
+   silent does a scan of a nucleic acid sequence for silent mutation
+   restriction enzyme sites.
+   
 Usage
 
    Here is a sample session with silent:
-
+   
 % silent
+Silent mutation restriction enzyme scan
+Input sequence: embl:hsfau
+Comma separated enzyme list [all]: ecori,hindiii
+Output file [hsfau.silent]:
 
 Command line arguments
 
@@ -45,22 +52,65 @@ Command line arguments
    
 Input file format
 
+   Nucleic acid sequence USA.
+   
 Output file format
+
+   This is the result of the example above:
+   
+Results for HSFAU:
+
+KEY:
+        Enzyme          Enzyme name
+        RS-Pattern      Restriction enzyme recognition site pattern
+        Match-Posn      Position of the first base of RS pattern in sequence
+        AA              Amino acid. Original sequence(.)After mutation
+        Base-Posn       Position of base to be mutated in sequence
+        Mutation        The base mutation to perform
+
+Silent mutations
+
+Enzyme      RS-Pattern  Match-Posn   AA  Base-Posn Mutation
+
+
+
+
+Results for reverse of HSFAU:
+
+Silent mutations
+
+Enzyme      RS-Pattern  Match-Posn   AA  Base-Posn Mutation
+
+HindIII     AAGCTT         267       A.A    268      A->T
 
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with status 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description
@@ -88,9 +138,12 @@ See also
    
 Author(s)
 
+   This application was written by Amy Williams (bmbawi@leeds.ac.uk) and
+   Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
 History
 
-   Written (date) - author.
+   Written (Aug 2000) - Amy Williams and Alan Bleasby.
    
 Target users
 

@@ -387,8 +387,10 @@ See also
 
    Program name Description
    backtranseq Back translate a protein sequence
+   cirdna Draws circular maps of DNA constructs
    cusp Create a codon usage table
    getorf Finds and extracts open reading frames (ORFs)
+   lindna Draws linear maps of DNA constructs
    plotorf Plot potential open reading frames
    prettyseq Output sequence with translated ranges
    rebaseextract Extract data from REBASE

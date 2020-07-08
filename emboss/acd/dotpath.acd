@@ -22,11 +22,14 @@ appl: dotpath [
 minimal set of non-overlapping matches"
   ]
 
-  graph: graph [ req: Y
+
+  bool: data [def: N opt: Y info: "Display as data" ]
+
+  graph: graph [ req: @(!$(data))
   gxtitle: $(sequenceb.name) gytitle: $(sequencea.name) ]
 
-  bool: text [def: N opt: Y info: "Display as text" ]
+
 
   bool: boxit [def: Y opt: Y info: "Draw a box around dotplot" ]
 
-  outfile: outfile [ req: "$(text)" nullok: Y ]
+  outfile: outfile [ req: $(data) nullok: Y ]

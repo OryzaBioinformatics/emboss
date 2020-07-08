@@ -7,7 +7,7 @@ appl: pepnet [
 	groups: "Protein: sequence properties, secondary structure"
 ]
 
-  seqall: sequence [
+  sequence: sequence [
 	param: Y 
 	type: Protein 
   ]
@@ -43,8 +43,14 @@ squares."
 with octagons."
   ]
 
+  bool: data [
+	req: N
+	def: N
+	info: "Display as data"
+  ]
+
   graph: graph [
-	req: Y 
+	req: @(!$(data)) 
   ]
 
 
