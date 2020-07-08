@@ -1,0 +1,145 @@
+
+                            EMBOSS: prosextract
+     _________________________________________________________________
+   
+                              Program prosextract
+                                       
+Function
+
+   Builds the PROSITE motif database for patmatmotifs to search
+   
+Description
+
+   Takes the IDentity, ACcession number and motif PAttern line contents
+   from prosite entries. Also converts the PAttern into a regular
+   expression and writes these four pieces to an output file - defaulted
+   to be called 'prosite.lines'.
+   
+Usage
+
+   Here is a sample session with prosextract.
+
+% prosextract
+Extracting ID, AC & PA lines from the Prosite motif Database.
+Enter name of prosite directory: data/PROSITE
+        
+% more prosite.lines
+ASN_GLYCOSYLATION PS00001
+N-glycosylation
+N-{P}-[ST]-{P}
+^N[^P][ST][^P]
+
+CAMP_PHOSPHO_SITE PS00004
+cAMP-
+[RK](2)-x-[ST]
+^[RK]{2}[^BJOUXZ][ST]
+
+PKC_PHOSPHO_SITE PS00005
+Protein
+[ST]-x-[RK]
+^[ST][^BJOUXZ][RK]
+
+CK2_PHOSPHO_SITE PS00006
+Casein
+[ST]-x(2)-[DE]
+^[ST][^BJOUXZ]{2}[DE]
+
+etc.......
+
+   The output files named after the prosite accession numbers can now
+   also be seen in the prosite directory. This files are automatically
+   created after prosextract is run.
+   
+Command line arguments
+
+   Mandatory qualifiers:
+  [-infdat]            string     Enter name of prosite directory
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-infdat]
+   (Parameter 1) Enter name of prosite directory Any string is accepted
+   An empty string is accepted
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   These files must be the "prosite.dat" and "prosite.doc" file of a
+   Prosite distribution, containing all current prosite data.
+   
+Output file format
+
+   These files are held in the prosite subdirectory of the emboss data
+   directory. The default names are "prosite.lines" and "PS*****"
+   (accession number documentation files)
+   
+Data files
+
+   See Input file format above.
+   
+Notes
+
+   Program is most useful when used as a prerequisite for patmatmotifs.
+   
+References
+
+    1. Bairoch, A., Bucher P. (1994) PROSITE: recent developments.
+       Nucleic Acids Research, Vol 22, No.17 3583-3589.
+    2. Bairoch, A., (1992) PROSITE: a dictionary of sites and patterns in
+       proteins. Nucleic Acids Research, Vol 20, Supplement, 2013-2018.
+    3. Peek, J., O'Reilly, T., Loukides, M., (1997) Unix Power Tools, 2nd
+       Edition.
+       
+Warnings
+
+   The program will warn the user if the input file is incorrectly
+   formatted.
+   
+Diagnostic Error Messages
+
+   As in warnings.
+   
+Exit status
+
+   Always exits with status 0
+   
+Known bugs
+
+See also
+
+   Program name Description
+   embossdata Finds or fetches the data files read in by the EMBOSS
+   programs
+   helixturnhelix Report nucleic acid binding motifs
+   patmatdb Search a protein sequence with a motif
+   patmatmotifs Search a PROSITE motif database with a protein sequence
+   printsextract Extract data from PRINTS
+   pscan Scans proteins using PRINTS
+   rebaseextract Extract data from REBASE
+   tfextract Extract data from TRANSFAC
+   tfscan Scans DNA sequences for transcription factors
+   
+Author(s)
+
+   This application was written by Sinead O'Leary
+   (soleary@hgmp.mrc.ac.uk)
+   
+History
+
+   Completed March 24 1999.
+   
+Target users
+
+   This program is intended to be used by administrators responsible for
+   software and database installation and maintenance.
+   
+Comments
+
+   PAextract is a similar program, not in EMBOSS, which extracts the
+   PAttern lines only and writes them to an output file, default name -
+   prosite.PAlines.

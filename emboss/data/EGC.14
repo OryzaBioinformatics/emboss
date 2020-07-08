@@ -1,0 +1,32 @@
+# Genetic Code Table
+#
+# Obtained from: http://www.ncbi.nlm.nih.gov/collab/FT/genetic_codes.html
+# and: http://www3.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wprintgc?mode=c
+#
+# Differences from the Standard Code: 
+# 
+#           Code 14      Standard
+# 
+#  AAA      Asn  N       Lys  K
+#  AGA      Ser  S       Arg  R
+#  AGG      Ser  S       Arg  R
+#  UAA      Tyr  Y       Ter  *
+#  UGA      Trp  W       Ter  *
+# 
+# 
+# Systematic Range: 
+# 
+# Platyhelminthes (flatworms) 
+
+
+Genetic Code [14]
+
+Flatworm Mitochondrial
+  
+AAs  =   FFLLSSSSYYY*CCWWLLLLPPPPHHQQRRRRIIIMTTTTNNNKSSSSVVVVAAAADDEEGGGG
+Starts = -----------------------------------M----------------------------
+Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
+Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
+Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
+
+

@@ -1,0 +1,390 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: rebaseextract
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: rebaseextract
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program rebaseextract
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Extract data from REBASE
+
+
+<H2>
+    Description
+</H2>
+
+
+The Restriction Enzyme database (REBASE) is a collection of information
+about restriction enzymes and related proteins.  It contains published
+and unpublished references, recognition and cleavage sites,
+isoschizomers, commercial availability, methylation sensitivity, crystal
+and sequence data.  DNA methyltransferases, homing endonucleases,
+nicking enzymes, specificity subunits and control proteins are also
+included.  Most recently, putative DNA methyltransferases and
+restriction enzymes, as predicted from analysis of genomic sequences,
+are also listed. 
+
+<p>
+The home page of REBASE is:
+http://rebase.neb.com/rebase/rebase.html
+
+<p>
+This program derives recognition site and cleavage information from the
+"withrefm" file of an REBASE distribution.  It creates three files in
+the EMBOSS data subdirectory REBASE.  A pattern file, a reference file
+and a supplier file.  
+
+<p>
+The EMBOSS programs that find restriction cutting sites use the data
+files produced by this program and will not work without them. 
+
+<p>
+Running this program may be the job of your system manager. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with rebaseextract.
+
+<pre>
+
+% rebaseextract
+Full pathname of WITHREFM: /data/rebase/withrefm.904
+
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-inf]               infile     Full pathname of WITHREFM
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-inf]<br>(Parameter 1)</td>
+<td>Full pathname of WITHREFM</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+The input file must be the "withrefm" file of a REBASE distribution.
+
+<p>
+For example, the withrefm file for REBASE version 005 is at: <a
+href="ftp://ftp.neb.com/pub/rebase/withrefm.005">ftp://ftp.neb.com/pub/rebase/withrefm.005</a>
+
+<H2>
+    Output file format
+</H2>
+
+
+The output files are held in the REBASE subdirectory of the EMBOSS data
+directory. There are three:
+
+
+<ul>
+	<li> embossre.enz		Enzyme pattern file
+	<li> embossre.ref		Enzyme references
+	<li> embossre.sup		Enzyme suppliers
+</ul>
+
+Here are examples of the three formats:
+
+<ul>
+<li>a) Enzyme file
+
+<pre>
+#             length  cuts     blunt    3'      5'     [3']    [5']
+AlwI    GGATC   5       2       0       9       10      0       0
+Alw21I  GWGCWC  6       2       0       5       1       0       0
+Alw26I  GTCTC   5       2       0       6       10      0       0
+Alw44I  GTGCAC  6       2       0       1       5       0       0
+</pre>
+
+
+<li>
+b) Reference file
+<pre>
+# REBASE enzyme information for EMBOSS
+#
+# Format:
+# Line 1: Name of Enzyme
+# Line 2: Organism
+# Line 3: Isoschizomers
+# Line 4: Methylation
+# Line 5: Source
+# Line 6: Suppliers
+# Line 7: Number of following references
+# Lines 8..n: References
+# // (end of entry marker)
+#
+AclI
+Acinetobacter calcoaceticus M4
+Psp1406I
+?(5)
+S.K. Degtyarev
+IN
+1
+Nucleic Acids Res. vol. 20 pp. 3787.
+//
+</pre>
+
+<li>
+c) Suppliers file
+
+<pre>
+# REBASE Supplier information for EMBOSS
+#
+# Format:
+# Code of Supplier&lt;ws&gt;Supplier name
+#
+A Amersham Pharmacia Biotech (11/98)
+B Life Technologies Inc. (1/98)
+C Minotech, Molecular Biology Products (3/99)
+D Angewandte Gentechnologie Systeme (10/97)
+E Stratagene (1/98)
+F Fermentas AB (1/99)
+G Appligene Oncor (10/97)
+H American Allied Biochemical, Inc. (10/98)
+I SibEnzyme Ltd. (3/99)
+J Nippon Gene Co., Ltd. (10/97)
+K Takara Shuzo Co. Ltd. (11/98)
+L Kramel Biotech (7/98)
+M Roche Molecular Biochemicals (3/99)
+N New England BioLabs (3/99)
+O Toyobo Biochemicals (11/98)
+P Megabase Research Products (3/99)
+Q CHIMERx (10/97)
+R Promega Corporation (10/98)
+S Sigma Chemical Corporation (11/98)
+T Advanced Biotechnologies Ltd. (3/98)
+</pre>
+
+</ul>
+
+<H2>
+    Data files
+</H2>
+
+
+The "withrefm" file of an REBASE distribution is the input file for this
+program.
+
+<H2>
+    Notes
+</H2>
+
+
+The home page of REBASE is:
+http://rebase.neb.com/rebase/rebase.html
+
+<p>
+Running this program may be the job of your system manager. 
+
+<p>
+The ready-made files produced by this program may already be available
+at the REBASE web site:
+<a href="http://rebase.neb.com/rebase/rebase.files.html">http://rebase.neb.com/rebase/rebase.files.html</a>
+or
+<a href="http://rebase.neb.com/rebase/rebase.f37.html">http://rebase.neb.com/rebase/rebase.f37.html</a>
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>
+Nucleic Acids Research 27: 312-313 (1999).
+
+</ol>
+<H2>
+    Warnings
+</H2>
+
+
+The program will warn you if the input file is incorrectly formatted.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0 unless an error is reported.
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="embossdata.html">embossdata</a></td><td>Finds or fetches the data files read in by the EMBOSS programs</td></tr>
+<tr><td><a href="printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
+<tr><td><a href="prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
+<tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
+<tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
+<tr><td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td></tr>
+<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+Completed 12th April 1999
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by administrators responsible
+for software and database installation and maintenance. 
+
+<H2>
+    Comments
+</H2>
+
+
+You may have to ask your system manager to run this program.
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

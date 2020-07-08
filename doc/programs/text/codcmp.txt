@@ -1,0 +1,134 @@
+
+                               EMBOSS: codcmp
+     _________________________________________________________________
+   
+                                Program codcmp
+                                       
+Function
+
+   Codon usage table comparison
+   
+Description
+
+   This program reads in two codon usage table files.
+   
+   It counts the number of the 64 possible codons which are unused (i.e.
+   has a usage fraction of 0) in either one or the other or both of the
+   codon usage tables.
+   
+   The usage fraction of a codon is its proportion (0 to 1) of the total
+   of the codons in the sequences used to construct the usage table.
+   
+   For each codon that is used in both tables, it takes the difference
+   between the usage fraction. The sum of the differences and the sum of
+   the differences squared is reported in the output file, together with
+   the number of unused codons.
+   
+Usage
+
+   Here is a sample session with codcmp, comparing the codon usage tables
+   for Escherichia coli and Haemophilus influenzae.
+
+% codcmp
+Codon usage file [Ehum.cut]: Eeco.cut
+Codon usage file [Ehum.cut]: Ehin.cut
+Output file [outfile.codcmp]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-first]             codon      First codon usage file
+  [-second]            codon      Second codon usage file
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-first]
+   (Parameter 1) First codon usage file Codon usage file in EMBOSS data
+   path Ehum.cut
+   [-second]
+   (Parameter 2) Second codon usage file Codon usage file in EMBOSS data
+   path Ehum.cut
+   [-outfile]
+   (Parameter 3) Output file name Output file <sequence>.codcmp
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+   This is the result of the example run:
+
+# CODCMP codon usage table comparison
+# Eeco.cut vs Ehin.cut
+
+Sum Difference Squared = 2.337
+Sum Difference         = 0.040
+Codons not appearing   = 0
+
+Data files
+
+   The codon usage tables are read by default from "Ehum.cut" in the
+   data/CODONS directory of the EMBOSS distribution.
+   
+   If the name of a codon usage file is specified on the command line,
+   then this file will first be searched for in the current directory and
+   then in the 'data/CODONS' directory of the EMBOSS distribution.
+   
+   To see the available EMBOSS codon usage files, run:
+
+% embossdata -showall
+
+   To fetch one of the codon usage tables (for example 'Emus.cut') into
+   your current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Emus.cut
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+   This program always exits with a status of 0.
+   
+Known bugs
+
+See also
+
+   Program name Description
+   chaos Create a chaos game representation plot for a sequence
+   chips Codon usage statistics
+   compseq Counts the composition of dimer/trimer/etc words in a sequence
+   cusp Create a codon usage table
+   freak Residue/base frequency table or plot
+   geecee Calculates the fractional GC content of nucleic acid sequences
+   isochore Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   wobble Wobble base plot
+   wordcount Counts words of a specified size in a DNA sequence
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+   Completed 9 Sept 1999
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

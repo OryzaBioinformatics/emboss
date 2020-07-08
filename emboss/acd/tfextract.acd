@@ -1,0 +1,9 @@
+appl: tfextract [
+  documentation: "Extract data from TRANSFAC"
+  groups: "utilities"
+]
+
+infile: inf  [
+  parameter: "Y"
+  prompt: "Full pathname of transfac SITE.DAT"
+]

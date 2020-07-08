@@ -1,0 +1,296 @@
+
+                                EMBOSS: emma
+     _________________________________________________________________
+   
+                                 Program emma
+                                       
+Function
+
+   Multiple alignment program - interface to ClustalW program
+   
+Description
+
+   EMMA calculates the multiple alignment of nucleic acid or protein
+   sequences according to the method of Thompson, J.D., Higgins, D.G. and
+   Gibson, T.J. (1994).
+   
+   This is an interface to the ClustalW distribution.
+   
+Usage
+
+   Here is an example session with emma.
+
+% emma
+Input sequence: globins.fasta
+Output sequence [hbahum.aln]:
+Output file [hbahum.dnd]:
+..clustalw17 -infile=5345A -outfile=5345B -align -type=protein ...
+
+
+
+
+ CLUSTAL W (1.74) Multiple Sequence Alignments
+
+
+
+Sequence type explicitly set to Protein
+Sequence format is Pearson
+Sequence 1: hbahum          141 aa
+Sequence 2: hbbhum          146 aa
+Sequence 3: hbghum          146 aa
+Sequence 4: hbhagf          148 aa
+Sequence 5: hbrlam          149 aa
+Sequence 6: mycrhi          151 aa
+Sequence 7: myohum          153 aa
+Start of Pairwise alignments
+Aligning...
+Sequences (1:2) Aligned. Score:  41
+Sequences (1:3) Aligned. Score:  39
+Sequences (1:4) Aligned. Score:  21
+Sequences (1:5) Aligned. Score:  27
+Sequences (1:6) Aligned. Score:  13
+Sequences (1:7) Aligned. Score:  26
+Sequences (2:3) Aligned. Score:  73
+Sequences (2:4) Aligned. Score:  19
+Sequences (2:5) Aligned. Score:  19
+Sequences (2:6) Aligned. Score:  15
+Sequences (2:7) Aligned. Score:  24
+Sequences (3:4) Aligned. Score:  21
+Sequences (3:5) Aligned. Score:  21
+Sequences (3:6) Aligned. Score:  15
+Sequences (3:7) Aligned. Score:  23
+Sequences (4:5) Aligned. Score:  41
+Sequences (4:6) Aligned. Score:  12
+Sequences (4:7) Aligned. Score:  16
+Sequences (5:6) Aligned. Score:  17
+Sequences (5:7) Aligned. Score:  18
+Sequences (6:7) Aligned. Score:  11
+Guide tree        file created:   [5345C]
+Start of Multiple Alignment
+There are 6 groups
+Aligning...
+Group 1: Sequences:   2      Score:883
+Group 2: Sequences:   2      Score:2344
+Group 3: Sequences:   3      Score:934
+Group 4:                     Delayed
+Group 5: Sequences:   5      Score:950
+Group 6:                     Delayed
+Sequence:7     Score:1046
+Sequence:6     Score:986
+Alignment Score 1746
+GCG-Alignment file created      [5345B]
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-inseqs]            seqall     Sequence database USA
+  [-outseq]            seqoutset  The sequence alignment output filename
+  [-dendoutfile]       outfile    The dendogram output filename
+*  -dendfile           string     name of old dendrogram file
+*  -pwgapc             float      slow pairwise alignment: gap opening penalty
+*  -pwgapv             float      slow pairwise alignment: gap extension
+                                  penalty
+*  -pwmatrix           select     Select matrix
+*  -pwdnamatrix        select     Select matrix
+*  -pairwisedata       string     Filename of user pairwise matrix
+*  -ktup               integer    fast pairwise alignment: similarity scores:
+                                  K-Tuple size
+*  -gapw               integer    fast pairwise alignment: similarity scores:
+                                  gap penalty
+*  -topdiags           integer    fast pairwise alignment: similarity scores:
+                                  number of diagonals to be considered
+*  -window             integer    fast pairwise alignment: similarity scores:
+                                  diagonal window size
+*  -nopercent          bool       fast pairwise alignment: similarity scores:
+                                  suppresses percentage score
+*  -mamatrix           string     Filename of user multiple alignment matrix
+
+   Optional qualifiers (* if not always prompted):
+   -onlydend           bool       only produce dendrogram file
+*  -dend               bool       select if you want to do alignment using an
+                                  old dendrogram
+   -insist             bool       Insist that the sequence type is changed to
+                                  protein
+   -slowfast           select     Please select one
+*  -matrix             select     Select matrix
+*  -dnamatrix          select     Select matrix
+   -gapc               float      Multiple alignment: gap penalty
+   -gapv               float      Multiple alignment: variable gap penalty
+*  -unweighted         bool       Transitions are unweighted
+   -[no]endgaps        bool       use end gap separation penalty
+   -gapdist            integer    gap separation penalty range
+*  -norgap             bool       no residue specific gaps
+*  -hgapres            string     list of hydrophilic residues
+*  -nohgap             bool       no hydrophilic gaps
+   -maxdiv             integer    cut-off to delay the alignment of the most
+                                  divergent sequences in a data set
+
+   Advanced qualifiers:
+   -tmpprot            bool       Temporary holder for input protein sequence
+                                  type
+   -prot               bool       Protein input sequence
+   -slow               bool       Slow and accurate alignment
+   -displayslow        bool       Prompt for slow alignment options
+   -usermatrix         bool       User defined matrix required
+   -umatrix            bool       User defined matrix (not used)
+   -displayfast        bool       Prompt for fast alignment options
+   -usermamatrix       bool       Prompt for user multiple alignment matrix
+   -umamatrix          bool       User defined multiple alignment matrix
+
+
+   Mandatory qualifiers Allowed values Default
+   [-inseqs]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outseq]
+   (Parameter 2) The sequence alignment output filename Writeable
+   sequences <sequence>.format
+   [-dendoutfile]
+   (Parameter 3) The dendogram output filename Output file
+   <sequence>.emma
+   -dendfile name of old dendrogram file Any string is accepted NULL
+   -pwgapc slow pairwise alignment: gap opening penalty Number 0.000 or
+   more 10.0
+   -pwgapv slow pairwise alignment: gap extension penalty Number 0.000 or
+   more 0.1
+   -pwmatrix Select matrix blosum
+   pam
+   gonnet
+   id
+   own
+   blosum
+   -pwdnamatrix Select matrix iub
+   clustalw
+   own
+   iub
+   -pairwisedata Filename of user pairwise matrix Any string is accepted
+   NULL
+   -ktup fast pairwise alignment: similarity scores: K-Tuple size integer
+   from 0 to 4 1 for protein, 2 for nucleic
+   -gapw fast pairwise alignment: similarity scores: gap penalty Positive
+   integer 3 for protein, 5 for nucleic
+   -topdiags fast pairwise alignment: similarity scores: number of
+   diagonals to be considered Positive integer 5 for protein, 4 for
+   nucleic
+   -window fast pairwise alignment: similarity scores: diagonal window
+   size Positive integer 5 for protein, 4 for nucleic
+   -nopercent fast pairwise alignment: similarity scores: suppresses
+   percentage score Yes/No No
+   -mamatrix Filename of user multiple alignment matrix Any string is
+   accepted NULL
+   Optional qualifiers Allowed values Default
+   -onlydend only produce dendrogram file Yes/No No
+   -dend select if you want to do alignment using an old dendrogram
+   Yes/No No
+   -insist Insist that the sequence type is changed to protein Yes/No No
+   -slowfast Please select one slow
+   fast
+   slow
+   -matrix Select matrix blosum
+   pam
+   gonnet
+   id
+   own
+   blosum
+   -dnamatrix Select matrix iub
+   clustalw
+   own
+   iub
+   -gapc Multiple alignment: gap penalty Positive foating point number
+   10.0
+   -gapv Multiple alignment: variable gap penalty Positive foating point
+   number 5.0
+   -unweighted Transitions are unweighted Yes/No No
+   -[no]endgaps use end gap separation penalty Yes/No Yes
+   -gapdist gap separation penalty range Positive integer 8
+   -norgap no residue specific gaps Yes/No No
+   -hgapres list of hydrophilic residues Any string is accepted GPSNDQEKR
+   -nohgap no hydrophilic gaps Yes/No No
+   -maxdiv cut-off to delay the alignment of the most divergent sequences
+   in a data set Integer from 0 to 100 30
+   Advanced qualifiers Allowed values Default
+   -tmpprot Temporary holder for input protein sequence type Yes/No Yes
+   for protein sequences
+   -prot Protein input sequence Yes/No Yes if -insist was set
+   -slow Slow and accurate alignment Yes/No Yes unless -slowfast is
+   'fast'
+   -displayslow Prompt for slow alignment options Yes/No Yes if -options
+   and -slow are both set
+   -usermatrix User defined matrix required Yes/No Yes if -pwmatrix is
+   set
+   -umatrix User defined matrix (not used) Yes/No Yes if -pwdnamatrix is
+   set
+   -displayfast Prompt for fast alignment options Yes/No Yes if -options
+   is true and -slow is false
+   -usermamatrix Prompt for user multiple alignment matrix Yes/No True if
+   -matrix was set
+   -umamatrix User defined multiple alignment matrix Yes/No True if
+   -dnamatrix was set
+   
+Input file format
+
+   The input is two or more sequences.
+   
+Output file format
+
+   emma writes the aligned sequences and a dendrogram file showing how
+   the sequences were clusterd during the progressive alignments.
+   
+   The clustalw output sequeces are reformatted into EMBOSS output.
+   
+Data files
+
+   The comparison matrices available for clustalw in carrying out a
+   protein sequence alignment are:
+     * blosum
+     * pam
+     * gonnet
+     * id
+     * user defined
+       
+   The comparison matrices available for clustalw in carrying out a
+   nucleotide sequence alignment are:
+     * iub
+     * clustalw
+     * user defined
+       
+Notes
+
+   This is an interface to the ClustalW application
+   
+References
+
+    1. Thompson, J.D., Higgins, D.G. and Gibson, T.J. (1994) "CLUSTAL W:
+       improving the sensitivity of progressive multiple sequence
+       alignment through sequence weighting, positions-specific gap
+       penalties and weight matrix choice." Nucleic Acids Research,
+       22:4673-4680.
+       
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   
+   Other EMBOSS intefaces to the ClustalW package functions.
+     * clustree
+       
+Author(s)
+
+   This application was written by Mark Faller (mfaller@hgmp.mrc.ac.uk)
+   
+History
+
+   Completed 18 February 1999
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

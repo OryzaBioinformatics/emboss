@@ -1,0 +1,503 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: restrict
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: restrict
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program restrict
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Finds restriction enzyme cleavage sites
+
+
+<H2>
+    Description
+</H2>
+
+
+Restrict uses the REBASE database of restriction enzymes to predict
+cut sites in a DNA sequence. The program allows you to select a range
+of cuts, whether the DNA is circular, whether IUB ambiguity codes are
+used, whether blunt or sticky ends or both are reported. You may also
+force the reporting of single cleavage sites.
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with restrict.
+
+<pre>
+
+% restrict
+Input sequence [stdin]: ecrrnbz
+Begin at [1]: 
+End at [7508]: 
+Minimum cuts [1]:
+Maximum cuts [2]: 2
+Minimum recognition site length [4]: 6
+Output file [stdout]: ecrrnbz.out
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -sitelen            integer    Minimum recognition site length
+   -enzymes            string     The name 'all' reads in all enzyme names
+                                  from the REBASE database. You can specify
+                                  enzymes by giving their names with commas
+                                  between then, such as:
+                                  'HincII,hinfI,ppiI,hindiii'.
+                                  The case of the names is not important. You
+                                  can specify a file of enzyme names to read
+                                  in by giving the name of the file holding
+                                  the enzyme names with a '@' character in
+                                  front of it, for example, '@enz.list'.
+                                  Blank lines and lines starting with a hash
+                                  character or '!' are ignored and all other
+                                  lines are concatenated together with a comma
+                                  character ',' and then treated as the list
+                                  of enzymes to search for.
+                                  An example of a file of enzyme names is:
+                                  ! my enzymes
+                                  HincII, ppiII
+                                  ! other enzymes
+                                  hindiii
+                                  HinfI
+                                  PpiI
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -min                integer    Minimum cuts per RE
+   -max                integer    Maximum cuts per RE
+   -single             bool       Force single site only cuts
+   -[no]blunt          bool       Allow blunt end cutters
+   -[no]sticky         bool       Allow sticky end cutters
+   -[no]ambiguity      bool       Allow ambiguous matches
+   -plasmid            bool       Allow circular DNA
+   -[no]commercial     bool       Only enzymes with suppliers
+   -[no]limit          bool       Limits reports to one isoschizomer
+   -preferred          bool       Report preferred isoschizomers
+   -alphabetic         bool       Sort output alphabetically
+   -datafile           string     Alternative RE data file
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-sitelen</td>
+<td>Minimum recognition site length</td>
+<td>Integer from 2 to 20</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>-enzymes</td>
+<td>The name 'all' reads in all enzyme names from the REBASE database. You can specify enzymes by giving their names with commas between then, such as: 'HincII,hinfI,ppiI,hindiii'.
+The case of the names is not important. You can specify a file of enzyme names to read in by giving the name of the file holding the enzyme names with a '@' character in front of it, for example, '@enz.list'.
+Blank lines and lines starting with a hash character or '!' are ignored and all other lines are concatenated together with a comma character ',' and then treated as the list of enzymes to search for.
+An example of a file of enzyme names is:
+! my enzymes
+HincII, ppiII
+! other enzymes
+hindiii
+HinfI
+PpiI</td>
+<td>Any string is accepted</td>
+<td>all</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.restrict</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-min</td>
+<td>Minimum cuts per RE</td>
+<td>Integer from 1 to 1000</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-max</td>
+<td>Maximum cuts per RE</td>
+<td>Integer up to 2000000000</td>
+<td>2000000000</td>
+</tr>
+
+<tr>
+<td>-single</td>
+<td>Force single site only cuts</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]blunt</td>
+<td>Allow blunt end cutters</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]sticky</td>
+<td>Allow sticky end cutters</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]ambiguity</td>
+<td>Allow ambiguous matches</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-plasmid</td>
+<td>Allow circular DNA</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]commercial</td>
+<td>Only enzymes with suppliers</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]limit</td>
+<td>Limits reports to one isoschizomer</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-preferred</td>
+<td>Report preferred isoschizomers</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-alphabetic</td>
+<td>Sort output alphabetically</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-datafile</td>
+<td>Alternative RE data file</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+The input sequence can be one or more DNA sequences.
+
+<H2>
+    Output file format
+</H2>
+
+
+The output from restrict is a simple text one. The base number,
+restriction enzyme name, recognition site and cut positions are
+shown. Note that cuts are always to the right of the residue
+shown and that 5' cuts are referred to by their associated 3'
+number sequence.
+
+The program reports enzymes that cut at two or four sites. The
+program also reports isoschizomers and enzymes having the same
+recognition sequence but different cut sites.
+
+Here is part of a sample output:
+
+<pre>
+# Restrict of ECRRNBZ from 1 to 7508
+#
+# Minimum cuts per enzyme: 1
+# Maximum cuts per enzyme: 2
+# Minimum length of recognition site: 6
+# Blunt ends allowed
+# Sticky ends allowed
+# DNA is linear
+# Ambiguities allowed
+# Number of hits: 442
+#
+# Base Number   Enzyme          Site            3'      5'      [3'     5']
+        1       Nsp29132II      GGATCC          1       5
+        1       BspAAIII        GGATCC          1       5
+        1       AccEBI          GGATCC          1       5
+        1       Bsp4009I        GGATCC          1       5
+        1       BstI            GGATCC          1       5
+        1       AliI            GGATCC          1       5
+        1       SolI            GGATCC          1       5
+        1       Mlu23I          GGATCC          1       5
+        1       ApaCI           GGATCC          1       5
+        1       BnaI            GGATCC          1       5
+        1       SurI            GGATCC          1       5
+        1       OkrAI           GGATCC          1       5
+        1       NspSAIV         GGATCC          1       5
+        1       RspLKII         GGATCC          1       5
+        1       BamHI           GGATCC          1       5
+        1       Bce751I         GGATCC          1       5
+        17      BssSI           CACGAG          17      21
+        17      BsiI            CACGAG          17      21
+        17      Bst2BI          CACGAG          17      21
+        24      NsbI            TGCGCA          26      26
+        24      AviII           TGCGCA          26      26
+        24      MstI            TGCGCA          26      26
+        24      Acc16I          TGCGCA          26      26
+        24      PamI            TGCGCA          26      26
+        24      AosI            TGCGCA          26      26
+        24      FspI            TGCGCA          26      26
+        24      FdiII           TGCGCA          26      26
+</pre>
+
+<H2>
+    Data files
+</H2>
+
+
+The data files are stored in the REBASE directory of the standard EMBOSS
+data directory. The names are:
+
+<ul>
+   <li> embossre.enz     Cleavage information
+   <li> embossre.ref     Reference/methylation information
+   <li> embossre.sup     Supplier information
+</ul>
+
+The column information is described at the top of the data files
+
+<H2>
+    Notes
+</H2>
+
+
+Output file size is related to the size of the recognition site and the
+maximum number of allowed cutting positions. Setting the site length
+to six and restricting the cuts to two is a common choice of parameters.
+The size of the output can sometimes be reduced by specifying
+the -noambiguity switch.
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>
+Nucleic Acids Research 27: 312-313 (1999).
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+The program will warn you if a protein sequence is given.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0 unless an error is reported.
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="chaos.html">chaos</a></td><td>Create a chaos game representation plot for a sequence</td></tr>
+<tr><td><a href="cpgplot.html">cpgplot</a></td><td>Plot CpG rich areas</td></tr>
+<tr><td><a href="cpgreport.html">cpgreport</a></td><td>Reports all CpG rich regions</td></tr>
+<tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td></tr>
+<tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
+<tr><td><a href="einverted.html">einverted</a></td><td>Finds DNA inverted repeats</td></tr>
+<tr><td><a href="equicktandem.html">equicktandem</a></td><td>Finds tandem repeats</td></tr>
+<tr><td><a href="etandem.html">etandem</a></td><td>Looks for tandem repeats in a nucleotide sequence</td></tr>
+<tr><td><a href="isochore.html">isochore</a></td><td>Plots isochores in large DNA sequences</td></tr>
+<tr><td><a href="newcpgreport.html">newcpgreport</a></td><td>Report CpG rich areas</td></tr>
+<tr><td><a href="newcpgseek.html">newcpgseek</a></td><td>Reports CpG rich regions</td></tr>
+<tr><td><a href="palindrome.html">palindrome</a></td><td>Looks for inverted repeats in a nucleotide sequence</td></tr>
+<tr><td><a href="polydot.html">polydot</a></td><td>Displays all-against-all dotplots of a set of sequences</td></tr>
+<tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
+<tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
+<tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
+<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+Completed 16th April 1999
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+The data files must have been created before running this program. This is
+done by running the REBASEEXTRACT program with the "withrefm" file from
+an REBASE release. You may have to ask your system manager to do this.
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

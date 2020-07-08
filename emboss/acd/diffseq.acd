@@ -1,0 +1,47 @@
+# diffseq application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+appl: diffseq [
+	doc: "Find differences (SNPs) between nearly identical sequences"
+	groups: "comparison, DNA: sequence features, protein: sequence features"
+]
+
+  sequence: asequence [
+	param: Y
+	type: any
+	feat: Y
+  ]
+
+  sequence: bsequence [ 
+	param: Y 
+	type: "@($(asequence.protein) ? protein : nucleotide)" 
+	feat: Y
+  ]
+
+  int: wordsize [
+	req: Y
+	def: 10
+	min: 2
+	info: "Word size"
+  ]
+
+  outfile: outfile [
+	req: Y
+	info: "Output report file"
+  ]
+
+featout: afeatout [
+        opt: Y
+	def: "$(asequence.name).diffgff"
+        info: "Feature file for output asequence"
+        help: "File for output of first sequence's normal tab delimted gff's"
+  ]
+
+featout: bfeatout [
+        opt: Y
+	def: "$(bsequence.name).diffgff"
+        info: "Feature file for output bsequence"
+        help: "File for output of second sequence's normal tab delimted gff's"
+  ]
+
+

@@ -1,0 +1,125 @@
+
+                               EMBOSS: pepnet
+     _________________________________________________________________
+   
+                                Program pepnet
+                                       
+Function
+
+   Displays proteins as a helical net
+   
+Description
+
+   This is a method of displaying the residues of a protein in a simple
+   3,4,3,4 repeating pattern that emulates at a simple level the
+   arrangement of residues around an alpha helix.
+   
+   It is therefore easy to see patterns of amphipathicity that you may
+   wish to investigate in more detail by using displays such as pepwheel.
+   
+   You can specify which residues to mark up in squares, diamonds and
+   octagons.
+   
+Usage
+
+   Here is a sample session with pepnet.
+
+% pepnet -sask
+Input sequence: sw:gcn4_yeast
+     Begin at position [start]: 253
+       End at position [end]: 274
+Graph type [x11]:
+
+   CLick here for the graph
+   
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -graph              graph      Graph type
+
+   Optional qualifiers (* if not always prompted):
+*  -squares            string     By default the aliphatic residues ILVM are
+                                  marked with squares.
+*  -diamonds           string     By default the residues DENQST are marked
+                                  with diamonds.
+*  -octags             string     By default the positively charged residues
+                                  HKR are marked with octagons.
+
+   Advanced qualifiers:
+   -amphipathic        bool       If this is true then the residues ACFGILMVWY
+                                  are marked as squares and all other
+                                  residues are unmarked. This overrides any
+                                  other markup that you may have specified
+                                  using the qualifiers '-squares', '-diamonds'
+                                  and '-octags'.
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   -graph Graph type EMBOSS has a list of known devices, including
+   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
+   EMBOSS_GRAPHICS value, or x11
+   Optional qualifiers Allowed values Default
+   -squares By default the aliphatic residues ILVM are marked with
+   squares. Any string is accepted ILVM
+   -diamonds By default the residues DENQST are marked with diamonds. Any
+   string is accepted DENQST
+   -octags By default the positively charged residues HKR are marked with
+   octagons. Any string is accepted HKR
+   Advanced qualifiers Allowed values Default
+   -amphipathic If this is true then the residues ACFGILMVWY are marked
+   as squares and all other residues are unmarked. This overrides any
+   other markup that you may have specified using the qualifiers
+   '-squares', '-diamonds' and '-octags'. Yes/No No
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   checktrans Reports STOP codons and ORF statistics of a protein
+   sequence
+   digest Protein proteolytic enzyme or reagent cleavage digest
+   garnier Predicts protein secondary structure
+   helixturnhelix Report nucleic acid binding motifs
+   iep Calculates the isoelectric point of a protein
+   octanol Displays protein hydropathy
+   pepcoil Predicts coiled coil regions
+   pepinfo Plots simple amino acid properties in parallel
+   pepstats Protein statistics
+   pepwheel Shows protein sequences as helices
+   pepwindow Displays protein hydropathy
+   pepwindowall Displays protein hydropathy of a set of sequences
+   sigcleave Reports protein signal cleavage sites
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

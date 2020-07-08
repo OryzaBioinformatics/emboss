@@ -1,0 +1,155 @@
+
+                             EMBOSS: dotmatcher
+     _________________________________________________________________
+   
+                              Program dotmatcher
+                                       
+Function
+
+   Displays a thresholded dotplot of two sequences
+   
+Description
+
+   A dotplot is a graphical representation of the regions of similarity
+   between two sequences.
+   
+   The two sequences are placed on the axes of a rectangular image and
+   (subject to threshold conditions) wherever there is a similarity
+   between the sequences a dot is placed on the image.
+   
+   Where the two sequences have substantial regions of similarity, many
+   dots align to form diagonal lines. It is therefore possible to see at
+   a glance where there are local regions of similarity.
+   
+   dotmatcher uses a threshold to define whether a match is plotted
+   (calculated from the substitution matrix). A window of specified
+   length is moved up all possible diagonals and a score is calculated
+   within each window for each position along the diagonals. The score is
+   the sum of the comparisons of the two sequences using the given
+   similarity matrix along the window. If the score is above the
+   threshold, then a line is plotted on the image over the position of
+   the window.
+   
+Usage
+
+   Here is a sample session with dotmatcher.
+
+% dotmatcher sw:hba_human sw:hbb_human
+
+   click here for result
+   
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequencea]         sequence   Sequence USA
+  [-sequenceb]         sequence   Sequence USA
+  [-graph]             graph      Graph type
+
+   Optional qualifiers:
+   -windowsize         integer    window size over which to test threshhold
+   -threshold          float      threshold
+   -datafile           matrix     Matrix file
+
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequencea]
+   (Parameter 1) Sequence USA Readable sequence Required
+   [-sequenceb]
+   (Parameter 2) Sequence USA Readable sequence Required
+   [-graph]
+   (Parameter 3) Graph type EMBOSS has a list of known devices, including
+   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
+   EMBOSS_GRAPHICS value, or x11
+   Optional qualifiers Allowed values Default
+   -windowsize window size over which to test threshhold Integer 3 or
+   more 10
+   -threshold threshold Number 0.000 or more 17.0
+   -datafile Matrix file Comparison matrix file in EMBOSS data path
+   EBLOSUM62 for protein
+   EDNAMAT for DNA
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   Any 2 sequence USAs of the same type (DNA or protein).
+   
+Output file format
+
+   A .ps file is produced if postscript output is requested.
+   
+Data files
+
+   Matrix substitution file.
+   
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+   0 upon successful completion.
+   
+Known bugs
+
+See also
+
+   Program name Description
+   antigenic Finds antigenic sites in proteins
+   chaos Create a chaos game representation plot for a sequence
+   cpgplot Plot CpG rich areas
+   cpgreport Reports all CpG rich regions
+   dottup Displays a wordmatch dotplot of two sequences
+   einverted Finds DNA inverted repeats
+   equicktandem Finds tandem repeats
+   etandem Looks for tandem repeats in a nucleotide sequence
+   garnier Predicts protein secondary structure
+   helixturnhelix Report nucleic acid binding motifs
+   isochore Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   oddcomp Finds protein sequence regions with a biased composition
+   palindrome Looks for inverted repeats in a nucleotide sequence
+   pepcoil Predicts coiled coil regions
+   polydot Displays all-against-all dotplots of a set of sequences
+   pscan Scans proteins using PRINTS
+   redata Search REBASE for enzyme name, references, suppliers etc
+   restrict Finds restriction enzyme cleavage sites
+   seqmatchall Does an all-against-all comparison of a set of sequences
+   showseq Display a sequence with features, translation etc
+   sigcleave Reports protein signal cleavage sites
+   stssearch Searches a DNA database for matches with a set of STS
+   primers
+   supermatcher Finds a match of a large sequence against one or more
+   sequences
+   tfscan Scans DNA sequences for transcription factors
+   tmap Displays membrane spanning regions
+   wordmatch Finds all exact matches of a given size between 2 sequences
+   
+   dottup, by comparison, has no threshold.
+   
+   This is really just the wordmatch method with a grahical output.
+   
+Author(s)
+
+   This application was written by Ian Longden (il@sanger.ac.uk)
+   Informatics Division, The Sanger Centre, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge, CB10 1SA, UK.
+   
+History
+
+ Completed 1st June 1999.
+ Last modified 16th June 1999.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

@@ -1,0 +1,22 @@
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# AJB 25 Oct 1999
+
+appl: plotorf [
+	doc: "Plot potential open reading frames"
+	group: "coding regions, translation"
+]
+
+  sequence: sequence [
+	param: Y
+	type: dna
+  ]
+
+  xygraph: graph [
+        req: Y multi: 6
+  ]

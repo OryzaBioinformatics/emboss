@@ -1,0 +1,135 @@
+
+                               EMBOSS: findkm
+     _________________________________________________________________
+   
+                                Program findkm
+                                       
+Function
+
+   Calculates Km and Vmax for an enzyme reaction using a Hanes/Woolf plot
+   
+Description
+
+   Takes a file of enzymatic data and plots Michaelkis Menten and Hanes
+   Woolf plots of the data. From these ot calculates the Michaelis Menten
+   constant (Km) and the maximum velocity (Vmax) of the reaction.
+   
+Usage
+
+   Here is a sample session with findkm.
+
+%findkm
+Calculates Km and Vmax for an enzyme reaction.
+Enter name of file containing data: enztest.dat
+Display on device [xwin]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-infile]            infile     Enter name of file containing data
+  [-outfile]           outfile    Output file name
+   -graphlb            xygraph    Graph type
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -[no]plot           bool       S/V vs S
+
+
+   Mandatory qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) Enter name of file containing data Input file Required
+   [-outfile]
+   (Parameter 2) Output file name Output file findkm.out
+   -graphlb Graph type EMBOSS has a list of known devices, including
+   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
+   EMBOSS_GRAPHICS value, or x11
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -[no]plot S/V vs S Yes/No Yes
+   
+Input file format
+
+   The input file is a file of enzymatic data, [S] against V, Substrate
+   concentration against reaction velocity.
+   
+   The data for the example run are shown below:
+
+  0.10   2
+  0.20   4
+  0.50   9
+  1.00  17
+  2.00  29
+  5.00  50
+ 10.00  67
+ 20.00  80
+ 50.00  91
+100.00  95
+
+
+Output file format
+
+   Here is a sample output from the example above, together with the
+   plots:
+
+---Hanes Woolf Plot Calculations---
+Slope of best fit line is a = 0.01
+Coefficient in Eqn of line y = ma +b is b = 0.05
+Where line cuts x axis = (-0.20, 0)
+Where line cuts y axis = (0, 0.05)
+Limit-point of graph for plot = (103.00, 1.08)
+
+Vmax = 99.70, Km = 4.894612
+
+   Click here for the graphical output
+   
+Data files
+
+   See Input File Format
+   
+Notes
+
+References
+
+    1. Voet & Voet (1993) 'Biochemistry'
+    2. Dawes 'Quantitative Problems in Biochemistry' 5th Edition.
+    3. Manuel G. Claros, Francisco M. Canovas 'Lines&Kinetics: a graphic
+       tool to deal with linear regressions and enzyme kinetics.'
+       EMBnet.news vol 5.1
+       http://www.uk.embnet.org/embnet.news/vol5_1/kinetics.html
+    4. Cornish-Bowden (1996) 'Fundamentals of Enzyme kinetics' Portland
+       Press, London.
+       
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   
+Author(s)
+
+   This application was written by Sinead O'Leary
+   (soleary@hgmp.mrc.ac.uk)
+   
+   This application was modified for inclusion in EMBOSS by David Martin
+   (david.martin@biotek.uio.no) at the Norwegian EMBnet node.
+   
+History
+
+   Completed November 1999
+   
+   Modified May 2000
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

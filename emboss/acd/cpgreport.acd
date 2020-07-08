@@ -1,0 +1,34 @@
+# CpG REPORT
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+
+# ajb 14th March 1999
+appl: cpgreport [
+	doc: "Reports all CpG rich regions"
+	groups: "CpG islands, DNA: sequence features"
+]
+
+  seqall: sequence [ 
+	param: Y 
+	type: DNA 
+  ]
+
+  int: score [ 
+	req: Y 
+	min: 1 
+	max: 200 
+	def: 17
+	info: "CpG score" 
+	help: "This sets the score for each CG sequence found.  A value
+of 17 is more sensitive, but 28 has also been used with some success."
+  ]
+
+  outfile: outfile [ 
+	param: Y 
+  ]
+
+  featout: featout [
+        parameter: N
+	info: "feature file for output "
+        help: "File for output features"
+        ]

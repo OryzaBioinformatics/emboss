@@ -1,0 +1,21 @@
+appl: syco [
+        doc: "Synonymous codon usage Gribskov statistic plot"
+        groups: "sequence composition, gene finding"
+]
+
+ sequence: sequence [ param: Y type: DNA ]
+
+ codon: cfile [ opt: N info: "Codon usage file" ]
+
+ int: window [ opt: N def: 30 info: "Averaging window" ]
+
+ bool: uncommon [ opt: N def: N info: "Show common codon usage" ]
+
+ float: minimum [ opt: N def: .15 min: 0.0 max: .99
+	   info: "Minimum value for a common codon" ]
+
+ bool: plot [ opt: N info: "Produce plot" ]
+
+ xygraph: graph [ req: $(plot) multi: 3 ]
+
+ outfile: outfile [ req: @(!$(plot)) ]

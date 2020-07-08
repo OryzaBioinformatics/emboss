@@ -1,0 +1,394 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: getorf
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: getorf
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program getorf
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Finds and extracts open reading frames (ORFs)
+
+
+<H2>
+    Description
+</H2>
+
+
+This program finds and outputs the sequences of open reading frames
+(ORFs).
+
+<p>
+The ORFs can be defined as regions of a specified minimum size between
+STOP codons or between START and STOP codons.  
+
+<p>
+The ORFs can be output as the nucleotide sequence or as the translation. 
+
+<p>
+The program can also output the region around the START or the initial
+STOP codon or the ending STOP codons of an ORF for those doing analysis
+of the properties of these regions. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with getorf.
+
+<pre>
+
+% getorf -minsize 300
+Input sequence: embl:eclaci
+Output sequence [eclaci.orf]: 
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outseq]            seqoutall  Output sequence(s) USA
+
+   Optional qualifiers:
+   -table              list       Code to use
+   -minsize            integer    Minimum nucleotide size of ORF to report
+   -find               list       This is a small menu of possible output
+                                  options. The first four options are to
+                                  select either the protein translation or the
+                                  original nucleic acid sequence of the open
+                                  reading frame. There are two possible
+                                  definitions of an open reading frame: it can
+                                  either be a region that is free of STOP
+                                  codons or a region that begins with a START
+                                  codon and ends with a STOP codon. The last
+                                  three options are probably only of interest
+                                  to people who wish to investigate the
+                                  statistical properties of the regions around
+                                  potential START or STOP codons. The last
+                                  option assumes that ORF lengths are
+                                  calculated between two STOP codons.
+
+   Advanced qualifiers:
+   -[no]methionine     bool       START codons at the beginning of protein
+                                  products will usually code for Methionine,
+                                  despite what the codon will code for when it
+                                  is internal to a protein. This qualifier
+                                  sets all such START codons to code for
+                                  Methionine by default.
+   -circular           bool       Is the sequence circular
+   -[no]reverse        bool       Set this to be false if you do not wish to
+                                  find ORFs in the reverse complement of the
+                                  sequence.
+   -flanking           integer    If you have chosen one of the options of the
+                                  type of sequence to find that gives the
+                                  flanking sequence around a STOP or START
+                                  codon, this allows you to set the number of
+                                  nucleotides either side of that codon to
+                                  output. If the region of flanking
+                                  nucleotides crosses the start or end of the
+                                  sequence, no output is given for this codon.
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Output sequence(s) USA</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-table</td>
+<td>Code to use</td>
+<td><table><tr><td>0</td> <td><i>(Standard)</i></td></tr><tr><td>1</td> <td><i>(Standard (with alternative initiation codons))</i></td></tr><tr><td>2</td> <td><i>(Vertebrate Mitochondrial)</i></td></tr><tr><td>3</td> <td><i>(Yeast Mitochondrial)</i></td></tr><tr><td>4</td> <td><i>(Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma)</i></td></tr><tr><td>5</td> <td><i>(Invertebrate Mitochondrial)</i></td></tr><tr><td>6</td> <td><i>(Ciliate Macronuclear and Dasycladacean)</i></td></tr><tr><td>9</td> <td><i>(Echinoderm Mitochondrial)</i></td></tr><tr><td>10</td> <td><i>(Euplotid Nuclear)</i></td></tr><tr><td>11</td> <td><i>(Bacterial)</i></td></tr><tr><td>12</td> <td><i>(Alternative Yeast Nuclear)</i></td></tr><tr><td>13</td> <td><i>(Ascidian Mitochondrial)</i></td></tr><tr><td>14</td> <td><i>(Flatworm Mitochondrial)</i></td></tr><tr><td>15</td> <td><i>(Blepharisma Macronuclear)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-minsize</td>
+<td>Minimum nucleotide size of ORF to report</td>
+<td>Any integer value</td>
+<td>30</td>
+</tr>
+
+<tr>
+<td>-find</td>
+<td>This is a small menu of possible output options. The first four options are to select either the protein translation or the original nucleic acid sequence of the open reading frame. There are two possible definitions of an open reading frame: it can either be a region that is free of STOP codons or a region that begins with a START codon and ends with a STOP codon. The last three options are probably only of interest to people who wish to investigate the statistical properties of the regions around potential START or STOP codons. The last option assumes that ORF lengths are calculated between two STOP codons.</td>
+<td><table><tr><td>0</td> <td><i>(Translation of regions between STOP codons)</i></td></tr><tr><td>1</td> <td><i>(Translation of regions between START and STOP codons)</i></td></tr><tr><td>2</td> <td><i>(Nucleic sequences between STOP codons)</i></td></tr><tr><td>3</td> <td><i>(Nucleic sequences between START and STOP codons)</i></td></tr><tr><td>4</td> <td><i>(Nucleotides flanking START codons)</i></td></tr><tr><td>5</td> <td><i>(Nucleotides flanking initial STOP codons)</i></td></tr><tr><td>6</td> <td><i>(Nucleotides flanking ending STOP codons)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]methionine</td>
+<td>START codons at the beginning of protein products will usually code for Methionine, despite what the codon will code for when it is internal to a protein. This qualifier sets all such START codons to code for Methionine by default.</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-circular</td>
+<td>Is the sequence circular</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]reverse</td>
+<td>Set this to be false if you do not wish to find ORFs in the reverse complement of the sequence.</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-flanking</td>
+<td>If you have chosen one of the options of the type of sequence to find that gives the flanking sequence around a STOP or START codon, this allows you to set the number of nucleotides either side of that codon to output. If the region of flanking nucleotides crosses the start or end of the sequence, no output is given for this codon.</td>
+<td>Any integer value</td>
+<td>100</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+Any nucleic acid sequence USA.
+
+<H2>
+    Output file format
+</H2>
+
+
+The output is a sequence file containing predicted open reading frames
+longer than the minimum size, which defaults to 30 bases or 10 amino acids.
+
+<p>
+The results from the example run are:
+
+<pre>
+
+&gt;ECLACI_1 [735 - 1112] E. coli laci gene (codes for the lac repressor).
+GHRSHCDAGCQRSDGAGRNARHYRVRAARWCGYLGSGIRRYRRQLMLYPAVNHHQTGFSP
+AGANQRGPLAATLSGPGGEGQSAVARLTGEKKNHPGAQYANRLSPRVGRFINAAGTTGFP
+TGKRAV
+&gt;ECLACI_2 [1 - 1110] E. coli laci gene (codes for the lac repressor).
+PEESQFRVVNVKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPN
+RVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGVEACKAA
+VHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSIIFSHEDGTRLG
+VEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWSAMSGFQQTM
+QMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSSCYIPPSTTIK
+QDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASPRALADSLMQLA
+RQVSRLESGQ*
+&gt;ECLACI_3 [1065 - 649] E. coli laci gene (codes for the lac repressor).
+RRNISAGSFHSNGILVIQRIVNDQPTDALREKIVHRRFTGFDAASFYHRHHHAGTQLIGA
+RFNRRDNLRRRVQGQTGGGNANQQRLFARQLLCHAVGNVIQLRHRRFHFFPRFRRNVAGL
+VHHAGNGLIRDTGILCDIV
+
+</pre>
+
+
+All output ORF sequences are written to the specified outut file.
+
+<p>
+The name of the ORF sequences is constructed from the name of the input
+sequence with an underscore character ('_') and the number of the ORF
+found appended.  The description of the output ORF sequence is
+constructed from the description of the input sequence with the start
+and end positions of the ORF prepended. 
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0. 
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="backtranseq.html">backtranseq</a></td><td>Back translate a protein sequence</td></tr>
+<tr><td><a href="chips.html">chips</a></td><td>Codon usage statistics</td></tr>
+<tr><td><a href="cusp.html">cusp</a></td><td>Create a codon usage table</td></tr>
+<tr><td><a href="plotorf.html">plotorf</a></td><td>Plot potential open reading frames</td></tr>
+<tr><td><a href="prettyseq.html">prettyseq</a></td><td>Output sequence with translated ranges</td></tr>
+<tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
+<tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
+<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="syco.html">syco</a></td><td>Synonymous codon usage Gribskov statistic plot</td></tr>
+<tr><td><a href="transeq.html">transeq</a></td><td>Translate nucleic acid sequences</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+<P>
+<ul>
+
+<li><a href="checktrans.html">checktrans</a> - Reports STOP codons
+and ORF statistics of a protein sequence
+
+</ul>
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Gary Williams <a
+href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,179 @@
+
+                               EMBOSS: digest
+     _________________________________________________________________
+   
+                                Program digest
+                                       
+Function
+
+   Protein proteolytic enzyme or reagent cleavage digest
+   
+Description
+
+   This finds the positions where a specified proteolytic enzyme or
+   reagent might cut a peptide sequence.
+   
+Usage
+
+   Here is a sample session with digest.
+
+% digest
+Input sequence: sw:opsd_human
+Enzymes and Reagents
+         1 : Trypsin
+         2 : Lys-C
+         3 : Arg-C
+         4 : Asp-N
+         5 : V8-bicarb
+         6 : V8-phosph
+         7 : Chymotrypsin
+         8 : CNBr
+Select number [1]:
+Output file [opsd_human.digest]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequencea]         sequence   Sequence USA
+   -menu               list       Select number
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -unfavoured         bool       Trypsin will not normally cut after a K if
+                                  it is followed by (e.g.) another K or a P.
+                                  Specifying this shows those cuts. as well as
+                                  the favoured ones.
+   -overlap            bool       Used for partial digestion. Shows all cuts
+                                  from favoured cut sites plus 1..3, 2..4,
+                                  3..5 etc but not (e.g.) 2..5. Overlaps are
+                                  therefore fragments with exactly one
+                                  potential cut site within it.
+   -allpartials        bool       As for overlap but fragments containing more
+                                  than one potential cut site are included.
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequencea]
+   (Parameter 1) Sequence USA Readable sequence Required
+   -menu Select number
+   1 (Trypsin)
+   2 (Lys-C)
+   3 (Arg-C)
+   4 (Asp-N)
+   5 (V8-bicarb)
+   6 (V8-phosph)
+   7 (Chymotrypsin)
+   8 (CNBr)
+   1
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.digest
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -unfavoured Trypsin will not normally cut after a K if it is followed
+   by (e.g.) another K or a P. Specifying this shows those cuts. as well
+   as the favoured ones. Yes/No No
+   -overlap Used for partial digestion. Shows all cuts from favoured cut
+   sites plus 1..3, 2..4, 3..5 etc but not (e.g.) 2..5. Overlaps are
+   therefore fragments with exactly one potential cut site within it.
+   Yes/No No
+   -allpartials As for overlap but fragments containing more than one
+   potential cut site are included. Yes/No No
+   
+Input file format
+
+   Any protein sequence.
+   
+Output file format
+
+   Here is the output from the example:
+
+DIGEST of OPSD_HUMAN from 1 to 348 Molwt= 38892.536
+
+Complete digestion with Trypsin yields 14 fragments:
+Start   End     Molwt      Sequence (up to 38 residues)
+70      135     7129.324   (R) TPLNYILLNLAVADLFMVLGGFTSTLYTSLHGYFVFGP (Y) ...
+178     231     6335.500   (R) YIPEGLQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIP (E) ...
+22      69      5788.878   (R) SPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTL (T) ...
+253     296     5004.090   (R) MVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTI (S) ...
+136     177     4600.464   (R) YVVVCKPMSNFRFGENHAIMGVAFTWVMALACAAPPLA (Y) ...
+1       21      2257.500    () MNGTEGPNFYVPFSNATGVVR (S)
+297     311     1728.093   (K) SAAIYNPVIYIMMNK (Q)
+232     245     1490.543   (K) EAAAQQQESATTQK (A)
+326     339     1403.462   (K) NPLGDDEASATVSK (T)
+315     325     1186.480   (R) NCMLTTICCGK (N)
+340     348     902.954    (K) TETSQVAPA  ()
+249     252     503.555    (K) EVTR (M)
+312     314     449.509    (K) QFR (N)
+246     248     346.383    (K) AEK (E)
+
+   The first non-blank line is the title containing the name of the
+   program and the name o fthe input sequence with the range considered
+   and the calculated molecular weight of the protein.
+   
+   The next non-blank line gives the name of the reagent used to digest
+   the protein and the number of fragments reported. The line will report
+   is complete or partial digestion was chosen. If the protein is not
+   digested at all by the reagent chosen the following is reported:
+"Is not proteolytically digested using (reagent name)"
+
+   If '-overlap' was specified, the next line will be:
+"Only overlapping partials shown:"
+
+   If '-allpartials' was specified, the next line will be:
+"All partials shown:"
+
+   The next non-blank line gives the headings of the columns of data.
+   
+   The rest of the file consists of columns holding the following data:
+     * The start position of the fragment
+     * The end position of the fragment
+     * The residue before the cut site (in brackets)
+     * The sequence of the fragment. If the fragment is longer than 38
+       residues then the sequence reported is truncated to 38 residues
+       and '...' is in the last column
+     * The residue after the second cut site (in brackets)
+     * If the fragment is longer than 38 then '...' is in the last
+       column, else this is blank.
+       
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   checktrans Reports STOP codons and ORF statistics of a protein
+   sequence
+   iep Calculates the isoelectric point of a protein
+   octanol Displays protein hydropathy
+   pepinfo Plots simple amino acid properties in parallel
+   pepnet Displays proteins as a helical net
+   pepstats Protein statistics
+   pepwheel Shows protein sequences as helices
+   pepwindow Displays protein hydropathy
+   pepwindowall Displays protein hydropathy of a set of sequences
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

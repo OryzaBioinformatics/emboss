@@ -1,0 +1,32 @@
+# Genetic Code Table
+#
+# Obtained from: http://www.ncbi.nlm.nih.gov/collab/FT/genetic_codes.html
+# and: http://www3.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wprintgc?mode=c
+#
+# Differences from the Standard Code: 
+# 
+#           Code 13     Standard
+# 
+#  AGA      Gly  G        Arg  R
+#  AGG      Gly  G        Arg  R
+#  AUA      Met  M        Ile  I
+#  UGA      Trp  W        Ter  *
+# 
+# 
+# Systematic Range: 
+# 
+# Ascidiacea (sea squirts): Pyuridae (Durrheim et al.  1993; Yokobori et
+# al., 1993)
+
+
+Genetic Code [13]
+
+Ascidian Mitochondrial
+  
+AAs  =   FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIMMTTTTNNKKSSGGVVVVAAAADDEEGGGG
+Starts = -----------------------------------M----------------------------
+Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
+Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
+Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
+
+

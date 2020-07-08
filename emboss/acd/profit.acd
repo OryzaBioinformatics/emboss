@@ -1,0 +1,30 @@
+# PROFIT application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# AJB 28 June 1999
+
+appl: profit [
+	doc: "Scan a sequence or database with a matrix or profile"
+	group: "profiles"
+  ]
+
+
+  infile: infile [
+	param: Y
+	prompt: "Profile or matrix file"
+ ]
+
+
+  seqall: sequence [
+	param: Y
+	type: any
+  ]
+
+  outfile: outfile [
+	param: Y
+  ]

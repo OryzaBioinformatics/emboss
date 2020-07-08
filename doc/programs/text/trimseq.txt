@@ -1,0 +1,192 @@
+
+                              EMBOSS: trimseq
+     _________________________________________________________________
+   
+                                Program trimseq
+                                       
+Function
+
+   Trim ambiguous bits off the ends of sequences
+   
+Description
+
+   This program is used to tidy up the ends of sequences, removing all
+   the bits that you would really rather were not published.
+   
+   Specifically, it:
+     * removes all gap characters from the ends.
+     * removes X's and N's (in nucleic sequences) from the ends.
+     * optionally removes *'s from the ends
+     * optionally removes IUPAC ambiguity codes from the ends (B and Z in
+       proteins, M,R,W,S,Y,K,V,H,D and B in nucleic sequences)
+       
+   It then optionally trims off poor quality regions from the end, using
+   a threshold percentage of unwanted characters in a window which is
+   moved along the sequence from the ends. The unwanted characters which
+   are used are X's and N's (in nucleic sequences), optionally *'s, and
+   optionally IUPAC ambiguity codes.
+   
+   The program stops trimming the ends when the percentage of unwanted
+   characters in the moving window drops below the threshold percentage.
+   
+   Thus if the window size is set to 1 and the percentage threshold is
+   100, no further poor quality regions will be removed. If the window
+   size is set to 5 and the percentage threshold is 40 then the sequence
+   AAGCTNNNNATT will be trimmed to AAGCT, while AAGCTNATT or
+   AAGCTNNNNATTT will not be trimmed as less than 40% of the last 5
+   characters are N's.
+   
+   After trimming these poor quality regions, it will again then trim off
+   any dangling gap characters from the ends .
+   
+Usage
+
+   Tidy up the sequence ends, stopping at the first wanted code
+% trimseq xyz.seq xyz_clean.seq -window 1 -percent 100
+
+   Tidy up the sequence ends, removing poor bits at the ends
+% trimseq xyz.seq xyz_clean.seq -window 5 -percent 40
+
+   Tidy up the sequence ends, removing very poor bits at the ends
+% trimseq xyz.seq xyz_clean.seq -window 20 -percent 80
+
+   Tidy up the sequence ends, removing even maginally poor bits at the
+   ends
+% trimseq xyz.seq xyz_clean.seq -window 20 -percent 10
+
+   Tidy up the sequence ends, removing poor bits including ambiguity
+   codes
+% trimseq xyz.seq xyz_clean.seq -window 20 -percent 50 -strict
+
+   Tidy up the sequence ends, removing asterisks from a protein end
+% trimseq xyz.seq xyz_clean.seq -window 1 -percent 100 -star
+
+   Tidy up the sequence ends, removing poor bits at only the left end
+% trimseq xyz.seq xyz_clean.seq -window 20 -percent 50 -noright
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outseq]            seqoutall  Output sequence(s) USA
+
+   Optional qualifiers:
+   -window             integer    This determines the size of the region that
+                                  is considered when deciding whether the
+                                  percentage of ambiguity is greater than the
+                                  threshold. A value of 5 means that a region
+                                  of 5 letters in the sequence is shifted
+                                  along the sequence from the ends and
+                                  trimming is done only if there is a greater
+                                  or equal percentage of ambiguity than the
+                                  threshold percentage.
+   -percent            float      This is the threshold of the percentage
+                                  ambiguity in the window required in order to
+                                  trim a sequence.
+   -strict             bool       In nucleic sequences, trim off not only N's
+                                  and X's, but also the nucleotide IUPAC
+                                  ambiguity codes M, R, W, S, Y, K, V, H, D
+                                  and B. In protein sequences, trim off not
+                                  only X's but also B and Z.
+   -star               bool       In protein sequences, trim off not only X's,
+                                  but also the *'s
+
+   Advanced qualifiers:
+   -[no]left           bool       Trim at the start
+   -[no]right          bool       Trim at the end
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outseq]
+   (Parameter 2) Output sequence(s) USA Writeable sequence(s)
+   <sequence>.format
+   Optional qualifiers Allowed values Default
+   -window This determines the size of the region that is considered when
+   deciding whether the percentage of ambiguity is greater than the
+   threshold. A value of 5 means that a region of 5 letters in the
+   sequence is shifted along the sequence from the ends and trimming is
+   done only if there is a greater or equal percentage of ambiguity than
+   the threshold percentage. Any integer value 1
+   -percent This is the threshold of the percentage ambiguity in the
+   window required in order to trim a sequence. Any integer value 100.0
+   -strict In nucleic sequences, trim off not only N's and X's, but also
+   the nucleotide IUPAC ambiguity codes M, R, W, S, Y, K, V, H, D and B.
+   In protein sequences, trim off not only X's but also B and Z. Yes/No
+   No
+   -star In protein sequences, trim off not only X's, but also the *'s
+   Yes/No No
+   Advanced qualifiers Allowed values Default
+   -[no]left Trim at the start Yes/No Yes
+   -[no]right Trim at the end Yes/No Yes
+   
+Input file format
+
+   Normal sequence.
+   
+Output file format
+
+   Normal sequence file.
+   
+Data files
+
+   None.
+   
+Notes
+
+   If you use the '-star' qualifier and set the window size to greater
+   than 1, you may trim bits of sequence with internal *'s. This may not
+   be what you expected.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None noted.
+   
+See also
+
+   Program name Description
+   cutseq Removes a specified section from a sequence
+   descseq Alter the name or description of a sequence
+   extractseq Extract regions from a sequence
+   maskfeat Mask off features of a sequence
+   maskseq Mask off regions of a sequence
+   merger Merge two overlapping nucleic acid sequences
+   newseq Type in a short new sequence
+   noreturn Removes carriage return from ASCII files
+   nthseq Writes one sequence from a multiple set of sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a sequence
+   splitter Split a sequence into (overlapping) smaller sequences
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Finished.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

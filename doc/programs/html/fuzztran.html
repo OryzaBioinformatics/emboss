@@ -1,0 +1,581 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: fuzztran
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: fuzztran
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program fuzztran
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Protein pattern search after translation
+
+
+<H2>
+    Description
+</H2>
+
+
+fuzztran uses PROSITE style protein patterns to search nucleic acid
+sequences translated in the specified frame(s). 
+
+<p>
+Patterns are specifications of a (typically short) length of sequence to
+be found.  They can specify a search for an exact sequence or they can
+allow various ambiguities, matches to variable lengths of sequence and
+repeated subsections of the sequence. 
+
+<p>
+fuzztran intelligently selects the optimum searching algorithm to use,
+depending on the complexity of the search pattern specified. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with fuzztran, using all options.
+
+<pre>
+
+% fuzztran -opt
+Protein pattern search after translation
+Input sequence(s): embl:rnops
+Translation frames
+         1 : 1
+         2 : 2
+         3 : 3
+         F : Forward three frames
+        -1 : -1
+        -2 : -2
+        -3 : -3
+         R : Reverse three frames
+         6 : All six frames
+Frame(s) to translate [1]: f
+Genetic codes
+         0 : Standard
+         1 : Standard (with alternative initiation codons)
+         2 : Vertebrate Mitochondrial
+         3 : Yeast Mitochondrial
+         4 : Mold/Protozoan/Coelenterate Mitochondrial and Mycoplasma/Spiroplasma
+         5 : Invertebrate Mitochondrial
+         6 : Ciliate Macronuclear and dasycladacean
+         9 : Echinoderm Mitochondrail
+        10 : Euplotid Nuclear
+        11 : Bacterial
+        12 : Alternative Yeast Nuclear
+        13 : Ascidian Mitochondrial
+        14 : Flatworm Mitochondrial
+        15 : Blepharisma Macronuclear
+Genetic code to use [0]: 
+Search pattern: RA
+Number of mismatches [0]:  
+Output file [rnops.fuzztran]:
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -pattern            string     Search pattern
+   -mismatch           integer    Number of mismatches
+  [-outf]              outfile    Output file name
+
+   Optional qualifiers:
+   -frame              list       Frame(s) to translate
+   -table              list       Genetic code to use
+
+   Advanced qualifiers:
+   -mmshow             bool       Show mismatches
+   -accshow            bool       Show accession numbers
+   -descshow           bool       Show descriptions
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-pattern</td>
+<td>Search pattern</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-mismatch</td>
+<td>Number of mismatches</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>[-outf]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.fuzztran</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-frame</td>
+<td>Frame(s) to translate</td>
+<td><table><tr><td>1</td> <td><i>(1)</i></td></tr><tr><td>2</td> <td><i>(2)</i></td></tr><tr><td>3</td> <td><i>(3)</i></td></tr><tr><td>F</td> <td><i>(Forward three frames)</i></td></tr><tr><td>-1</td> <td><i>(-1)</i></td></tr><tr><td>-2</td> <td><i>(-2)</i></td></tr><tr><td>-3</td> <td><i>(-3)</i></td></tr><tr><td>R</td> <td><i>(Reverse three frames)</i></td></tr><tr><td>6</td> <td><i>(All six frames)</i></td></tr></table></td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-table</td>
+<td>Genetic code to use</td>
+<td><table><tr><td>0</td> <td><i>(Standard)</i></td></tr><tr><td>1</td> <td><i>(Standard (with alternative initiation codons))</i></td></tr><tr><td>2</td> <td><i>(Vertebrate Mitochondrial)</i></td></tr><tr><td>3</td> <td><i>(Yeast Mitochondrial)</i></td></tr><tr><td>4</td> <td><i>(Mold/Protozoan/Coelenterate Mitochondrial and Mycoplasma/Spiroplasma)</i></td></tr><tr><td>5</td> <td><i>(Invertebrate Mitochondrial)</i></td></tr><tr><td>6</td> <td><i>(Ciliate Macronuclear and dasycladacean)</i></td></tr><tr><td>9</td> <td><i>(Echinoderm Mitochondrail)</i></td></tr><tr><td>10</td> <td><i>(Euplotid Nuclear)</i></td></tr><tr><td>11</td> <td><i>(Bacterial)</i></td></tr><tr><td>12</td> <td><i>(Alternative Yeast Nuclear)</i></td></tr><tr><td>13</td> <td><i>(Ascidian Mitochondrial)</i></td></tr><tr><td>14</td> <td><i>(Flatworm Mitochondrial)</i></td></tr><tr><td>15</td> <td><i>(Blepharisma Macronuclear)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-mmshow</td>
+<td>Show mismatches</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-accshow</td>
+<td>Show accession numbers</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-descshow</td>
+<td>Show descriptions</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+Patterns for fuzztran are based on the format of pattern used in the PROSITE
+database, with the difference that the terminating dot '.' and the hyphens, '-',
+between the characters are optional. 
+
+<p>
+The PROSITE pattern definition from the PROSITE documentation follows. 
+
+<ul>
+
+<li>
+      The standard IUPAC one-letter codes for the amino acids are
+      used.
+
+<li>
+      The symbol `x' is used for a position where any amino acid is accepted. 
+
+<li>
+      Ambiguities are indicated by listing the acceptable amino acids
+      for a given position, between square parentheses `[ ]'. For
+      example: [ALT] stands for Ala or Leu or Thr.
+
+<li>
+      Ambiguities are also indicated by listing between a pair of
+      curly brackets `{ }' the amino acids that are not accepted at a
+      given position. For example: {AM} stands for any amino acid
+      except Ala and Met.
+
+<li>
+      Each element in a pattern is separated from its neighbor by a
+      `-'.  (Optional in fuzztran).
+
+<li>
+      Repetition of an element of the pattern can be indicated by
+      following that element with a numerical value or a numerical
+      range between parenthesis. Examples: x(3) corresponds to x-x-x,
+      x(2,4) corresponds to x-x or x-x-x or x-x-x-x.
+
+<li>
+      When a pattern is restricted to either the N- or C-terminal of a
+      sequence, that pattern either starts with a `&lt;' symbol or
+      respectively ends with a `&gt;' symbol.
+
+<li>
+      A period ends the pattern. (Optional in fuzztran).
+
+</ul>
+
+<p>
+For example, you can look for the pattern: 
+
+<pre>
+
+[DE](2)HS{P}X(2)PX(2,4)C
+
+</pre>
+
+<p>
+This means: Two Asps or Glus in any order followed by His, Ser, any
+residue other then Pro, then two of any residue followed by Pro
+followed by two to four of any residue followed by Cys.
+
+<p>
+The search is case-independent, so 'AAA' matches 'aaa'. 
+
+<H2>
+    Output file format
+</H2>
+
+
+Here is the output from the example search: 
+
+<pre>
+
+          RNOPS  1       97 RA
+          RNOPS  1      133 RA
+          RNOPS  1      421 RA
+          RNOPS  1      625 RA
+          RNOPS  1      835 RA
+          RNOPS  1      919 RA
+          RNOPS  2      227 RA
+          RNOPS  2      752 RA
+          RNOPS  3       72 RA
+
+</pre>
+
+<p>
+
+It is composed of four columns of data. 
+
+<ul>
+
+<li>      The first column is the name of the sequence being searched. 
+<li>      The second is the frame of translation that the pattern was found in.
+<li>      The third is the start position of the match found. 
+<li>      The fourth is the actual sequence that was matched by the search pattern. 
+</ul>
+
+<p>
+If the option '-mmshow' is used, then an extra fourth column of data is
+output indicating how many mismatches there are:
+
+<pre>
+
+% fuzztran -mmshow -frame 6
+Protein pattern search after translation
+Input sequence(s): embl:rnops
+Search pattern: TWLWLT
+Number of mismatches [0]: 2
+Output file [rnops.fuzztran]: stdout
+
+          RNOPS  1      316     0 TWLWLT
+          RNOPS  1     1138     2 QRLWLT
+
+</pre>
+
+<H2>
+    Data files
+</H2>
+
+
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+
+<p>
+The Genetic Code data files are based on the NCBI genetic code tables. 
+Their names and descriptions are:
+
+<dl>
+<dt>EGC.0 </dt><dd>
+      Standard (Differs from GC.1 in that it only has initiation site 'AUG') 
+<dt>EGC.1 </dt><dd>
+      Standard 
+<dt>EGC.2 </dt><dd>
+      Vertebrate Mitochondrial
+<dt>EGC.3 </dt><dd>
+      Yeast Mitochondrial 
+<dt>EGC.4 </dt><dd>
+      Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma 
+<dt>EGC.5 </dt><dd>
+      Invertebrate Mitochondrial 
+<dt>EGC.6 </dt><dd>
+      Ciliate Macronuclear and Dasycladacean 
+<dt>EGC.9 </dt><dd>
+      Echinoderm Mitochondrial 
+<dt>EGC.10 </dt><dd>
+      Euplotid Nuclear 
+<dt>EGC.11 </dt><dd>
+      Bacterial 
+<dt>EGC.12 </dt><dd>
+      Alternative Yeast Nuclear 
+<dt>EGC.13 </dt><dd>
+      Ascidian Mitochondrial 
+<dt>EGC.14 </dt><dd>
+      Flatworm Mitochondrial 
+<dt>EGC.15</dt><dd> 
+      Blepharisma Macronuclear 
+</dl>
+<p>
+The format of these files is very simple. 
+
+<p>
+It consists of several lines of optional comments, each starting with
+a '#' character.
+
+<p>
+These are followed the line: 'Genetic Code [n]', where 'n' is the
+number of the genetic code file.
+
+<p>
+This is followed by the description of the code and then by four lines
+giving the IUPAC one-letter code of the translated amino acid, the
+start codons (indicdated by an 'M') and the three bases of the codon,
+lined up one on top of the other.
+
+<p>
+For example: 
+
+<pre>
+
+------------------------------------------------------------------------------
+# Genetic Code Table
+#
+# Obtained from: http://www.ncbi.nlm.nih.gov/collab/FT/genetic_codes.html
+# and: http://www3.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wprintgc?mode=c
+#
+# Differs from Genetic Code [1] only in that the initiation sites have been
+# changed to only 'AUG'
+
+Genetic Code [0]
+Standard
+ 
+AAs  =   FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG
+Starts = -----------------------------------M----------------------------
+Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
+Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
+Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
+------------------------------------------------------------------------------
+
+</pre>
+
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+When translating using non-standard genetic code table, always check the
+table carefully for deviations from your particular organism's code. 
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="dreg.html">dreg</a></td><td>regular expression search of a nucleotide sequence</td></tr>
+<tr><td><a href="fuzznuc.html">fuzznuc</a></td><td>Nucleic acid pattern search</td></tr>
+<tr><td><a href="fuzzpro.html">fuzzpro</a></td><td>Protein pattern search</td></tr>
+<tr><td><a href="patmatdb.html">patmatdb</a></td><td>Search a protein sequence with a motif</td></tr>
+<tr><td><a href="patmatmotifs.html">patmatmotifs</a></td><td>Search a PROSITE motif database with a protein sequence</td></tr>
+<tr><td><a href="preg.html">preg</a></td><td>regular expression search of a protein sequence</td></tr>
+<tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
+<tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+<p>
+Other EMBOSS programs allow you to search for regular expression
+patterns but may be less easy for the user who has never used regular
+expressions before:
+
+<p>
+
+<ul>
+
+<li><a href="dreg.html">dreg</a> - Regular expression search of a
+nucleotide sequence
+
+<li><a href="preg.html">preg</a> - Regular expression search of a protein
+sequence
+
+</ul>
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,344 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: printsextract
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: printsextract
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program printsextract
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Extract data from PRINTS
+
+
+<H2>
+    Description
+</H2>
+
+
+Preprocesses the PRINTS database for use with the program PSCAN.
+
+<p>
+This program derives matrix information from the final motif sets of the
+PRINTS data file (prints.dat).  It creates files in the EMBOSS data
+subdirectory PRINTS these being a matrix file and files containing text
+information for each fingerprint.  Running this program may be the job
+of your system manager. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with printsextract.
+
+<pre>
+
+% printsextract
+Full pathname of PRINTS.DAT: /data/prints/prints.dat
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-inf]               infile     Full pathname of prints.dat
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-inf]<br>(Parameter 1)</td>
+<td>Full pathname of prints.dat</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+The input file must be the "prints.dat" file of a PRINTS distribution. 
+
+<p>
+The PRINTS database is currently available via the anonymous ftp servers at: 
+
+<ul>
+
+<li>  Manchester   <a href="ftp://bioinf.man.ac.uk/pub/prints/">ftp://bioinf.man.ac.uk/pub/prints/</a>
+<li>  EBI          <a href="ftp://ftp.ebi.ac.uk/pub/databases/">ftp://ftp.ebi.ac.uk/pub/databases/</a>
+<li>  EMBL         <a href="ftp://ftp.embl-heidelberg.de/">ftp://ftp.embl-heidelberg.de/</a>
+<li>  NCBI         <a href="ftp://ncbi.nlm.nih.gov/">ftp://ncbi.nlm.nih.gov/</a>
+
+</ul>
+
+<p>
+It is also distributed on the EMBL CD-ROMs. 
+<p>
+
+The home page for PRINTS is: <a
+href="http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/">http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/</a>
+
+<H2>
+    Output file format
+</H2>
+
+
+The output files are held in the PRINTS subdirectory of the EMBOSS data
+directory.
+
+<ul>
+	<li> prints.mat		matrices calculated from PRINTS
+	<li> Pxxxxx		text information for each fingerprint
+	<li> embossre.sup		Enzyme suppliers
+</ul>
+
+<H2>
+    Data files
+</H2>
+
+
+The "prints.dat" file of a PRINTS distribution is the input file for this
+program.
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+<li>
+ Attwood, T.K., Flower, D.R., Lewis, A.P., Mabey, J.E., Morgan, S.R., 
+   Scordis, P., Selley, J. and Wright, W. (1999) PRINTS prepares for the new
+   millennium. Nucleic Acids Research, 27(1), 220-225. 
+<li>
+ Attwood, T.K., Beck, M.E., Flower, D.R., Scordis, P. and Selley, J. (1998)
+   The PRINTS protein fingerprint database in its fifth year. Nucleic Acids 
+   Research, 26(1), 304-308. 
+<li>
+ Attwood, T.K., Beck, M.E., Bleasby, A.J., Degtyarenko, K., Michie, A.D. and 
+   Parry-Smith, D.J. (1997) Novel developments with the PRINTS protein motif
+   fingerprint database. Nucleic Acids Research, 25 (1), 212-216.
+<li>
+ Attwood, T.K. and Beck, M.E. (1994) PRINTS - A protein motif fingerprint
+   database. Protein Engineering, 7(7), 841-848.
+<li>
+ Bleasby, A.J., Akrigg, D.A. and Attwood, T.K. (1994) OWL - A non-redundant
+   composite protein sequence database. Nucleic Acids Research, 22(17), 3574-77.
+<li>
+Bleasby, A.J. and Wootton, J.C. (1990) Constructing validated, non-
+   redundant composite protein sequence databases. Protein Engineering, 3(3), 
+   153-159. 
+<li>
+Parry-Smith, D.J. and Attwood, T.K. (1992) ADSP - A new package for
+   computational sequence analysis. CABIOS, 8(5), 451-459.
+<li>
+Attwood, T.K. and Findlay, J.B.C. (1994) Fingerprinting G-protein-coupled
+   receptors. Prot.Engng. 7(2), 195-203.
+<li>
+Attwood, T.K. and Findlay, J.B.C. (1993) Design of a discriminating finger-
+   print for G-protein-coupled receptors. Prot.Engng. 6(2) 167-176.
+<li>
+ Akrigg, D., Attwood, T.K., Bleasby, A.J., Findlay, J.B.C, North, A.C.T.,
+   Maughan, N.A., Parry-Smith, D.J., Perkins, D.N. and Wootton, J.C. (1992)
+   SERPENT - An information storage and analysis resource for protein
+   sequences. CABIOS 8(3) 295-296.
+<li>
+Parry-Smith, D.J. and Attwood, T.K. (1991) SOMAP - A novel interactive
+    approach to multiple protein sequence aligment. CABIOS, 7(2), 233-235.
+<li>
+Perkins, D.N. and Attwood, T.K. (1995) VISTAS - A package for VIsualising
+    STructures And Sequences of proteins. J.Mol.Graph., 13, 73-75. 
+<li>
+Parry-Smith, D.J., Payne, A.W.R, Michie, A.D. and Attwood, T.K. (1998) 
+    CINEMA - A novel Colour INteractive Editor for Multiple Alignments.
+    Gene, 211(2), GC45-56. 
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+The program will warn you if the input file is incorrectly formatted.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0 unless an error is reported.
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="embossdata.html">embossdata</a></td><td>Finds or fetches the data files read in by the EMBOSS programs</td></tr>
+<tr><td><a href="helixturnhelix.html">helixturnhelix</a></td><td>Report nucleic acid binding motifs</td></tr>
+<tr><td><a href="patmatdb.html">patmatdb</a></td><td>Search a protein sequence with a motif</td></tr>
+<tr><td><a href="patmatmotifs.html">patmatmotifs</a></td><td>Search a PROSITE motif database with a protein sequence</td></tr>
+<tr><td><a href="prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
+<tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
+<tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
+<tr><td><a href="tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
+<tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+Completed 8th April 1999
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by administrators responsible
+for software and database installation and maintenance. 
+
+<H2>
+    Comments
+</H2>
+
+
+You may have to ask your system manager to run this program.
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

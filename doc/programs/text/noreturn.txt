@@ -1,0 +1,115 @@
+
+                              EMBOSS: noreturn
+     _________________________________________________________________
+   
+                               Program noreturn
+                                       
+Function
+
+   Removes carriage return from ASCII files
+   
+Description
+
+   The way that Unix and PC operating systems store simple text files,
+   (including sequence files), differs slightly.
+   
+   Unix files have a hidden character called 'new line' at the end of
+   every line.
+   
+   PC files have two hidden characters called 'carriage return' and then
+   'new line' at the end of every line.
+   
+   When files are transferred from PC machines to Unix machines, it is
+   often useful to convert the file from the PC format to the Unix
+   format, otherwise commands like 'more' to display the file and text
+   editors can become confused.
+   
+   This simple utility removes 'carriage return' characters from such
+   files, converting them from PC format to Unix format text files.
+   
+   EMBOSS programs can read in both PC and Unix text file formats, so it
+   is not necessary for you to use this utility all of the time.
+   
+Usage
+
+   Here is a sample session with noreturn.
+
+% noreturn
+Input file: abc.dat
+Output file [abc.noreturn]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-infile]            infile     (no help text) infile value
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) (no help text) infile value Input file Required
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.noreturn
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   The input file is a text data file with unwanted trailing carriage
+   returns.
+   
+Output file format
+
+   The output file is identical to the input file, except that any
+   trailing carriage returns have been removed. For most files this will
+   make no difference.
+   
+Data files
+
+Notes
+
+   EMBOSS programs can read in both PC and Unix text file formats, so it
+   is not necessary for you to use this utility all of the time.
+   
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   cutseq Removes a specified section from a sequence
+   descseq Alter the name or description of a sequence
+   extractseq Extract regions from a sequence
+   maskfeat Mask off features of a sequence
+   maskseq Mask off regions of a sequence
+   merger Merge two overlapping nucleic acid sequences
+   newseq Type in a short new sequence
+   nthseq Writes one sequence from a multiple set of sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a sequence
+   splitter Split a sequence into (overlapping) smaller sequences
+   trimseq Trim ambiguous bits off the ends of sequences
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

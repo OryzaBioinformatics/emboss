@@ -1,0 +1,226 @@
+
+                                EMBOSS: preg
+     _________________________________________________________________
+   
+                                 Program preg
+                                       
+Function
+
+   regular expression search of a protein sequence
+   
+Description
+
+   This searches for matches of a regular expression to a protein
+   sequence.
+   
+   A regular expression is a way of specifying an ambiguous pattern to
+   search for. Regular expressions are commonly used in some computer
+   programming languages and may be more familiar to some users than to
+   others.
+   
+   The following is a short guide to regular expressions in EMBOSS:
+   
+   ^
+          use this at the start of a pattern to insist that the pattern
+          can only match at the start of a sequence. (eg. '^M' matches a
+          methionine at the start of the sequence)
+          
+   $
+          use this at the end of a pattern to insist that the pattern can
+          only match at the end of a sequence (eg. 'R$' matches an
+          arginine at the end of the sequence)
+          
+   ()
+          groups a pattern. This is commonly used with '|' (eg.
+          '(ACD)|(VWY)' matches either the first 'ACD' or the second
+          'VWY' pattern )
+          
+   |
+          This is the OR operator to enable a match to be made to either
+          one pattern OR another. There is no AND operator in this
+          version of regular expressions.
+          
+   The following quantifier characters specify the number of time that
+   the character before (in this case 'x') matches:
+   
+   x?
+          matches 0 or 1 times (ie, '' or 'x')
+          
+   x*
+          matches 0 or more times (ie, '' or 'x' or 'xx' or 'xxx', etc)
+          
+   x+
+          matches 1 or more times (ie, 'x' or 'xx' or 'xxx', etc)
+          
+   Quantifiers can follow any of the following types of character
+   specification:
+   
+   x
+          any character (ie 'A')
+          
+   \x
+          the character after the backslash is used instead of its normal
+          regular expression meaning. This is commonly used to turn off
+          the special meaning of the characters '^$()|?*+[]-.'. It may be
+          especially useful when searching for gap characters in a
+          sequence (eg '\.' matches only a dot character '.')
+          
+   [xy]
+          match one of the characters 'x' or 'y'. You may have one or
+          more characters in this set.
+          
+   [x-z]
+          match any one of the set of characters starting with 'x' and
+          ending in 'y' in ASCII order (eg '[A-G]' matches any one of:
+          'A', 'B', 'C', 'D', 'E', 'F', 'G')
+          
+   [^x-z]
+          matches anything except any one of the group of characters in
+          ASCII order (eg '[^A-G]' matches anything EXCEPT any one of:
+          'A', 'B', 'C', 'D', 'E', 'F', 'G')
+          
+   .
+          the dot character matches any other character (eg: 'A.G'
+          matches 'AAG', 'AaG', 'AZG', 'A-G' 'A G', etc.)
+          
+   Combining some of these features gives these examples from the PROSITE
+   patterns database:
+'[STAGCN][RKH][LIVMAFY]$'
+
+   which is the 'Microbodies C-terminal targeting signal'.
+'LP.TG[STGAVDE]'
+
+   which is the 'Gram-positive cocci surface proteins anchoring
+   hexapeptide'.
+   
+   Regular expressions are case-sensitive. The pattern 'AAAA' will not
+   match the sequence 'aaaa'.
+   
+Usage
+
+   Here is a sample session with preg.
+
+% preg
+Input sequence: sw:*
+Output file [5h1d_fugru.preg]:
+Regular expression pattern: gc[^g]
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outfile]           outfile    Output file name
+  [-pattern]           regexp     Regular expression pattern
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.preg
+   [-pattern]
+   (Parameter 3) Regular expression pattern Any regular epression pattern
+   is accepted Required
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   Any protein sequence.
+   
+Output file format
+
+   Here is the output from the example run:
+
+Matches in CO9_FUGRU
+      CO9_FUGRU   522 GCQ
+Matches in D1DR_FUGRU
+     D1DR_FUGRU    27 GCF
+     D1DR_FUGRU   345 GCH
+Matches in D5DR_FUGRU
+     D5DR_FUGRU    43 GCV
+     D5DR_FUGRU   349 GCS
+Matches in HD_FUGRU
+       HD_FUGRU   982 GCC
+Matches in SYH_FUGRU
+      SYH_FUGRU    15 GCR
+Matches in SYV_FUGRU
+      SYV_FUGRU   329 GCD
+      SYV_FUGRU  1128 GCA
+Matches in TCPD_FUGRU
+     TCPD_FUGRU   291 GCN
+     TCPD_FUGRU   375 GCA
+Matches in ACH2_DROME
+     ACH2_DROME     4 GCC
+     ACH2_DROME   433 GCN
+Matches in LACY_ECOLI
+     LACY_ECOLI   147 GCV
+     LACY_ECOLI   175 GCA
+     LACY_ECOLI   332 GCF
+Matches in BGAL_ECOLI
+     BGAL_ECOLI   121 GCY
+Matches in 12S1_ARATH
+     12S1_ARATH   111 GCA
+Matches in OPSD_HUMAN
+     OPSD_HUMAN   109 GCN
+Matches in AMIC_PSEAE
+     AMIC_PSEAE    80 GCY
+Matches in AMIR_PSEAE
+     AMIR_PSEAE    36 GCS
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+   Regular expressions are case-sensitive. The pattern 'AAAA' will not
+   match the sequence 'aaaa'.
+   
+Diagnostic Error Messages
+
+Exit status
+
+   Always returns 0.
+   
+Known bugs
+
+See also
+
+   Program name Description
+   dreg regular expression search of a nucleotide sequence
+   fuzznuc Nucleic acid pattern search
+   fuzzpro Protein pattern search
+   fuzztran Protein pattern search after translation
+   patmatdb Search a protein sequence with a motif
+   patmatmotifs Search a PROSITE motif database with a protein sequence
+   pscan Scans proteins using PRINTS
+   tfscan Scans DNA sequences for transcription factors
+   
+   Other EMBOSS programs allow you to search for simple patterns and may
+   be easier for the user who has never used regular expressions before:
+   
+     * fuzznuc - Nucleic acid pattern search
+     * fuzzpro - Protein pattern search
+     * fuzztran - Protein pattern search after translation
+       
+Author(s)
+
+   This application was written by Peter Rice (pmr@sanger.ac.uk)
+   Informatics Division, The Sanger Centre, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge, CB10 1SA, UK.
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

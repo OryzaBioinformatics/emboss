@@ -1,0 +1,33 @@
+appl: water [
+        doc: "Smith-Waterman local alignment."
+        groups: "alignment: local"
+]
+
+  sequence: sequencea [ param: Y type: any]
+
+  seqall: seqall [ param: Y 
+     type: "@($(sequencea.protein) ? protein : nucleotide)" ]
+
+  matrixf: datafile [
+	optional: Y
+	info: "Matrix file"
+        protein: $(sequencea.protein)
+  ]
+
+ float: gapopen [ req: Y info: "Gap opening penalty" min: 1.0 max: 100.0
+                  def: "@($(sequencea.protein)? 10.0 : 10.0)"
+                  expect: "10.0 for any sequence"
+  ]
+
+ float: gapextend [ req: Y info: "Gap extension penalty" min: 0.1 max: 10.0
+                  def: "@($(sequencea.protein)? 0.5 : 0.5)"
+                  expect: "0.5 for any sequence"
+   ]
+
+ outfile: outfile [param: Y ]
+
+  bool: showinternals [
+	optional: Y
+	def: "N"
+	info: "Show internals"
+  ]

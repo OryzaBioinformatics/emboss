@@ -1,0 +1,135 @@
+
+                              EMBOSS: isochore
+     _________________________________________________________________
+   
+                               Program isochore
+                                       
+Function
+
+   Plots isochores in large DNA sequences
+   
+Description
+
+   The nuclear genomes of vertebrates are mosaics of isochores, very long
+   stretches (>300kb) of DNA that are homogeneous in base composition and
+   are compositionally correlated with the coding sequences that they
+   embed. Isochores can be partitioned in a small number of families that
+   cover a range of GC levels (GC is the molar ratio of guanine+cytosine
+   in DNA), which is narrow in cold-blooded vertebrates, but broad in
+   warm-blooded vertebrates.
+   
+   This application plots GC content over a sequence. It is ntended for
+   large sequences such as complete chromosomes or large genomic contigs,
+   although interesting results can also be obtained from shorter
+   sequences.
+   
+Usage
+
+   Here is a sample session with isochore. This reads yeast chromosome 3
+   from a remote web server so the sequence reading may take a little
+   time.
+
+% isochore
+Input sequence: tgb:scchriii
+Output file [scchriii.iso]:
+
+   click here for result
+   
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-out]               outfile    Output file name
+
+   Optional qualifiers:
+   -window             integer    Window size
+   -shift              integer    Shift increment
+
+   Advanced qualifiers:
+   -graph              xygraph    Graph type
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence USA Readable sequence Required
+   [-out]
+   (Parameter 2) Output file name Output file <sequence>.isochore
+   Optional qualifiers Allowed values Default
+   -window Window size Integer 1 or more 1000
+   -shift Shift increment Integer 1 or more 100
+   Advanced qualifiers Allowed values Default
+   -graph Graph type EMBOSS has a list of known devices, including
+   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
+   EMBOSS_GRAPHICS value, or x11
+   
+Input file format
+
+Output file format
+
+   The graph from the example run
+   
+Data files
+
+Notes
+
+References
+
+    1. Bernardi G Isochores and the evolutionary genomics of vertebrates.
+       Gene 2000 Jan 4;241(1):3-17
+    2. Pesole G, Bernardi G, Saccone C Isochore specificity of AUG
+       initiator context of human genes. FEBS Lett 1999 Dec
+       24;464(1-2):60-2
+    3. Bernardi G The human genome: organization and evolutionary
+       history. Annu Rev Genet 1995;29:445-76
+       
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   chaos Create a chaos game representation plot for a sequence
+   chips Codon usage statistics
+   codcmp Codon usage table comparison
+   compseq Counts the composition of dimer/trimer/etc words in a sequence
+   cpgplot Plot CpG rich areas
+   cpgreport Reports all CpG rich regions
+   cusp Create a codon usage table
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   einverted Finds DNA inverted repeats
+   equicktandem Finds tandem repeats
+   etandem Looks for tandem repeats in a nucleotide sequence
+   freak Residue/base frequency table or plot
+   geecee Calculates the fractional GC content of nucleic acid sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   palindrome Looks for inverted repeats in a nucleotide sequence
+   polydot Displays all-against-all dotplots of a set of sequences
+   redata Search REBASE for enzyme name, references, suppliers etc
+   restrict Finds restriction enzyme cleavage sites
+   showseq Display a sequence with features, translation etc
+   tfscan Scans DNA sequences for transcription factors
+   wobble Wobble base plot
+   wordcount Counts words of a specified size in a DNA sequence
+   
+Author(s)
+
+   This application was written by Peter Rice (pmr@sanger.ac.uk)
+   Informatics Division, The Sanger Centre, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge, CB10 1SA, UK.
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

@@ -1,0 +1,266 @@
+
+                            EMBOSS: primersearch
+     _________________________________________________________________
+   
+                             Program primersearch
+                                       
+Function
+
+   Searches DNA sequences for matches with primer pairs
+   
+Description
+
+   primersearch reads in primer pairs from an input file and searches
+   them against sequence(s) specified by the user. Each of the primers in
+   a pair is searched against the sequence and potential amplimers are
+   reported. The user can specify a maximum percent mismatch level; for
+   example, 10% mismatch on a primer of length 20bp means that the
+   program will classify a primer as matching a sequence if 18 of the 20
+   base pairs matches.
+   
+Usage
+
+   Here is a sample session with primersearch:
+
+unix% primersearch embl:Z52466
+Searches DNA sequences for matches with primer pairs
+Primer file: primers
+Output file [hsa203yc1.primersearch]: stdout
+Allowed percent mismatch [0]:
+
+Primer name D1S243
+
+Primer name D1S468
+
+Primer name D1S2845
+
+Primer name D1S1608
+
+Primer name D1S2893
+
+Primer name D1S2660
+Amplimer 1
+        Sequence: HSA203YC1 Z52466
+        H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc
+1; single read.
+        CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
+        AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
+        Amplimer length: 261 bp
+
+   Here we run the same example but allowing 20% mismatch between the
+   primers and the sequence.
+unix % primersearch embl:Z52466
+Searches DNA sequences for matches with primer pairs
+Primer file: primers
+Output file [hsa203yc1.primersearch]: stdout
+Allowed percent mismatch [0]: 20
+
+Primer name D1S243
+
+Primer name D1S468
+
+Primer name D1S2845
+
+Primer name D1S1608
+
+Primer name D1S2893
+
+Primer name D1S2660
+Amplimer 1
+        Sequence: HSA203YC1 Z52466
+        H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc
+1; single read.
+        CACACATGCACATGCAC hits forward strand at 49 with 2 mismatches
+        AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
+        Amplimer length: 239 bp
+Amplimer 2
+        Sequence: HSA203YC1 Z52466
+        H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc
+1; single read.
+        CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
+        AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
+        Amplimer length: 261 bp
+
+   Here is an example of running with a file containing a list of
+   sequences.
+curium % primersearch @seqs.list
+Searches DNA sequences for matches with primer pairs
+Primer file: primers
+Output file [hs214yg7.primersearch]: stdout
+Allowed percent mismatch [0]:
+
+Primer name D1S243
+Amplimer 1
+        Sequence: HS214YG7 Z16979
+        H. sapiens (D1S243) DNA segment containing (CA) repeat; clone AFM214yg7
+; single read.
+        CACACAGGCTCACATGCC hits forward strand at 122 with 0 mismatches
+        GCTCCAGCGTCATGGACT hits reverse strand at [36] with 0 mismatches
+        Amplimer length: 162 bp
+
+Primer name D1S468
+Amplimer 1
+        Sequence: HS280WE5 Z23994
+        H. sapiens (D1S468) DNA segment containing (CA) repeat; clone AFM280we5
+; single read.
+        AATTAACCGTTTTGGTCCT hits forward strand at 47 with 0 mismatches
+        GCGACACACACTTCCC hits reverse strand at [96] with 0 mismatches
+        Amplimer length: 185 bp
+
+Primer name D1S2845
+Amplimer 1
+        Sequence: HS344WE9 Z51474
+        H.sapiens (D1S2845) DNA segment containing (CA) repeat; clone AFM344we9
+; single read.
+        CCAAAGGGTGCTTCTC hits forward strand at 29 with 0 mismatches
+        GTGGCATTCCAACCTC hits reverse strand at [157] with 0 mismatches
+        Amplimer length: 201 bp
+
+Primer name D1S1608
+Amplimer 1
+        Sequence: HS829186 G07829
+        human STS CHLC.GATA49A06.P15262 clone GATA49A06, sequence tagged site.
+        GATGGCTTTTGGGGACTATT hits forward strand at 13 with 0 mismatches
+        CACTGAGCCAAGTGACACAG hits reverse strand at [92] with 0 mismatches
+        Amplimer length: 270 bp
+
+Primer name D1S2893
+Amplimer 1
+        Sequence: HS123XC3 Z50993
+        H.sapiens (D1S2893) DNA segment containing (CA) repeat; clone AFM123xc3
+; single read.
+        AAAACATCAACTCTCCCCTG hits forward strand at 5 with 0 mismatches
+        CTCAAACCCCAATAAGCCTT hits reverse strand at [3] with 0 mismatches
+        Amplimer length: 215 bp
+
+Primer name D1S2660
+Amplimer 1
+        Sequence: HSA203YC1 Z52466
+        H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc
+1; single read.
+        CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
+        AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
+        Amplimer length: 261 bp
+
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequences]         seqall     Sequence database USA
+  [-primers]           infile     Primer file
+  [-out]               outfile    Output file name
+  [-mismatchpercent]   integer    Allowed percent mismatch
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequences]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-primers]
+   (Parameter 2) Primer file Input file Required
+   [-out]
+   (Parameter 3) Output file name Output file <sequence>.primersearch
+   [-mismatchpercent]
+   (Parameter 4) Allowed percent mismatch Any integer value 0
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   The input primer file used in the example above has the following
+   format:
+# This is my primer file
+D1S243  cacacaggctcacatgcc      gctccagcgtcatggact
+D1S468 aattaaccgttttggtcct     gcgacacacacttccc
+D1S2845 ccaaagggtgcttctc        gtggcattccaacctc
+D1S1608 gatggcttttggggactatt    cactgagccaagtgacacag
+D1S2893 aaaacatcaactctcccctg    ctcaaaccccaataagcctt
+D1S2660 cacacatgcacatgcac       agtgacaccagcaggg
+
+   Comments can be inserted provided they are prefaced with "#" Empty
+   files will cause primersearch to note that no primers have been found,
+   and to exit. In this example, seqs.list contains the following
+   sequences:
+embl:Z16979
+embl:Z23994
+embl:Z51474
+embl:G07829
+embl:Z50993
+embl:Z52466
+
+Output file format
+
+   Here is an exmaple of the output file:
+Primer name D1S243
+
+Primer name D1S468
+
+Primer name D1S2845
+
+Primer name D1S1608
+
+Primer name D1S2893
+
+Primer name D1S2660
+Amplimer 1
+        Sequence: HSA203YC1 Z52466
+        H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc
+1; single read.
+        CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
+        AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
+        Amplimer length: 261 bp
+
+Data files
+
+Notes
+
+   Every potential amplimer will be reported; if one primer matches the
+   forward strand twice and the other matches the reverse strand only
+   once, two potential amplimers are reported. If the reverse primer
+   matches twice, four potential amplimers are reported. Each primer pair
+   consists of a name, followed by two primer sequences, primerA and
+   primerB. The program first compares primerA to the forward strand and
+   if it matches, primerB is compared to the reverse strand. The approach
+   is then reversed, with the primerB being compared to the forward
+   strand and primerA to the reverse. In this way all possible amplimers
+   are reported.
+   
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+   "No suitable primers found - exiting" means that either the primers
+   file was empty or there were no compilable primer pairs contained in
+   it.
+   
+Exit status
+
+   It always exits with status 0
+   
+Known bugs
+
+See also
+
+   Program name Description
+   dottup Displays a wordmatch dotplot of two sequences
+   prima Selects primers for PCR and DNA amplification
+   stssearch Searches a DNA database for matches with a set of STS
+   primers
+   
+Author(s)
+
+   This application was written by Val Curwen (vcurwen@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

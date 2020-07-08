@@ -1,0 +1,329 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: etandem
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: etandem
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program etandem
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Looks for tandem repeats in a nucleotide sequence
+
+
+<H2>
+Description
+</H2>
+
+
+etandem looks for tandem repeats in a sequence. It is normally used after
+equicktandem has been run to identify potential repeat sizes.
+
+<H2>
+Usage
+</H2>
+
+
+Here is a sample session with etandem. The input sequence is the
+human herpesvirus tandem repeat.
+
+<pre>
+% etandem
+Input sequence: embl:hhtetra
+Output file [hhtetra.tan]: 
+Minimum repeat size [10]: 6
+Maximum repeat size [6]: 
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-outfile]           outfile    Output file name
+   -minrepeat          integer    Minimum repeat size
+   -maxrepeat          integer    Maximum repeat size
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -threshold          integer    Threshold score
+   -mismatch           bool       Allow N as a mismatch
+   -uniform            bool       Allow uniform consensus
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence USA</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.etandem</td>
+</tr>
+
+<tr>
+<td>-minrepeat</td>
+<td>Minimum repeat size</td>
+<td>Integer, 2 or higher</td>
+<td>10</td>
+</tr>
+
+<tr>
+<td>-maxrepeat</td>
+<td>Maximum repeat size</td>
+<td>Integer, same as -minrepeat or higher</td>
+<td>Same as -minrepeat</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-threshold</td>
+<td>Threshold score</td>
+<td>Any integer value</td>
+<td>20</td>
+</tr>
+
+<tr>
+<td>-mismatch</td>
+<td>Allow N as a mismatch</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-uniform</td>
+<td>Allow uniform consensus</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+The input for etandem is a nucleotide sequence.
+
+<H2>
+    Output file format
+</H2>
+
+
+The output from etandem is an uncommented list of identified repeats.
+In a future version this will change to be annotated sequence features.
+
+<p>
+The columns of the report show:
+
+<ol>
+<li>Score
+<li>Start base position
+<li>End base position
+<li>Repeat size
+<li>Repeat count
+<li>Percent identity
+<li>Consensus sequence
+</ol>
+
+<p>
+<pre>
+   120        793        936  6  24  93.8 acccta
+    90        283        420  6  23  84.8 taaccc
+    38        432        485  6   9  90.7 ccctaa
+    26        494        529  6   6  94.4 ccctaa
+    24        568        597  6   5 100.0 aaccct
+</pre>
+<H2>
+Data files
+</H2>
+
+
+<H2>
+Notes
+</H2>
+
+
+<H2>
+References
+</H2>
+
+
+<H2>
+Warnings
+</H2>
+
+
+<H2>
+Diagnostics
+</H2>
+
+
+<H2>
+Exit status</font></th></tr></table><p>
+<H2>
+Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="chaos.html">chaos</a></td><td>Create a chaos game representation plot for a sequence</td></tr>
+<tr><td><a href="cpgplot.html">cpgplot</a></td><td>Plot CpG rich areas</td></tr>
+<tr><td><a href="cpgreport.html">cpgreport</a></td><td>Reports all CpG rich regions</td></tr>
+<tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td></tr>
+<tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
+<tr><td><a href="einverted.html">einverted</a></td><td>Finds DNA inverted repeats</td></tr>
+<tr><td><a href="equicktandem.html">equicktandem</a></td><td>Finds tandem repeats</td></tr>
+<tr><td><a href="isochore.html">isochore</a></td><td>Plots isochores in large DNA sequences</td></tr>
+<tr><td><a href="newcpgreport.html">newcpgreport</a></td><td>Report CpG rich areas</td></tr>
+<tr><td><a href="newcpgseek.html">newcpgseek</a></td><td>Reports CpG rich regions</td></tr>
+<tr><td><a href="palindrome.html">palindrome</a></td><td>Looks for inverted repeats in a nucleotide sequence</td></tr>
+<tr><td><a href="polydot.html">polydot</a></td><td>Displays all-against-all dotplots of a set of sequences</td></tr>
+<tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
+<tr><td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td></tr>
+<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+<H2>
+Authors</font></th></tr></table><p>
+</H2>
+
+This program was originally written by Richard Durbin and Jean
+Thierry-Mieg as part of the ACEDB genome database package.
+<p>
+
+This application was modified for inclusion in EMBOSS by Peter Rice <a
+href="mailto:pmr@sanger.ac.uk">(pmr@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+Priority</font></th></tr></table><p>
+</H2>
+
+Completed 25 May 1999
+
+<H2>
+Target</font></th></tr></table><p>
+</H2>
+
+etandem is aimed at automated repeat identification in genomic sequnece
+but can also be used by general users.
+
+<H2>
+Comments</font></th></tr></table><p>
+</H2>
+
+<pre>
+</pre>
+
+
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+
+

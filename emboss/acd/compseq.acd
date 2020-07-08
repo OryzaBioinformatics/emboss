@@ -1,0 +1,102 @@
+# SEQRET application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# GWW 24 March 1999
+
+appl: compseq [
+	doc: "Counts the composition of dimer/trimer/etc words in a sequence"
+	group: "DNA: sequence composition, protein: sequence composition"
+  ]
+
+  seqall: sequence [
+	param: Y
+  ]
+
+  int: word [
+	param: Y 
+	min: 1
+	def: "2"
+        max: 10
+	info: "Word size to consider (e.g. 2=dimer)"
+	help: "This is the size of word (n-mer) to count. \
+               Thus if you want to count codon frequencies,
+               you should enter 3 here."
+  ]
+
+  outfile: outfile [
+	param: Y
+	ext: "composition"
+	help: "This is the results file."
+  ]
+
+  infile: infile [
+	opt: Y
+# don't complain if this is not specified - we simply won't try to read it in.
+	nullok: Y
+	info: "'compseq' file to use for expected word frequencies"
+	help: "This is a file previously produced by 'compseq' that can
+	       be used to set the expected frequencies of words in this
+               analysis. \
+               The word size in the current run must be the same as the
+               one in this results file.  Obviously, you should use a file
+               produced from protein sequences if you are counting protein
+               sequence word frequencies, and you must use one made from
+               nucleotide frequencies if you and analysing a nucleotide
+               sequence."
+ ]
+
+
+  bool: zerocount [
+	opt: Y
+	def: Y
+	info: "Display the words that have a frequency of zero"
+	help: "You can make the output results file much smaller if you
+               do not display the words with a zero count."
+  ]
+
+  int: frame [
+	opt: Y
+	def: 0
+	min: 0
+	max: $(word)
+	info: "Frame of word to look at (0=all frames)"
+
+	help: "The normal behaviour of 'compseq' is to count the
+               frequencies of all words that occur by moving a window of
+               length 'word' up by one each time. \
+               This option allows you to move the window up by
+               the length of the word each time, skipping over the intervening
+               words. \
+               You can count only those words that occur in a single frame of
+               the word by setting this value to a number other than zero. \
+               If you set it to 1 it will only count the words in
+               frame 1, 2 will only count the words in frame 2 and so on."
+  ]
+
+  bool: ignorebz [
+# this is only useful as an option if the sequence is a protein
+	opt: $(sequence.protein)
+	def: Y
+	info: "Ignore the amino acids B and Z and just count them as 'Other'"
+	help: "The amino acid code B represents Asparagine or Aspartic
+               acid and the code Z represents Glutamine or Glutamic acid. \
+               These are not commonly used codes and you may wish not to
+               count words containing them, just noting them in the count of
+               'Other' words."
+  ]
+	
+
+  bool: reverse [
+        opt: "@(!$(sequence.protein))"
+        default: "@(!$(sequence.protein))"
+        info: "Count words in the forward and reverse sense"
+        help: "Set this to be false if you do not wish to also count
+               words in the reverse complement of the sequence."
+        expect: "Yes for nucleic acid, No for protein"
+  ]
+

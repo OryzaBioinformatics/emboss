@@ -1,0 +1,5 @@
+appl: ajtest2 [
+        doc: "Test file for ACD parsing"
+        groups: "debugging"
+]
+

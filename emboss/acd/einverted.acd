@@ -1,0 +1,16 @@
+appl: einverted [
+	doc: "Finds DNA inverted repeats"
+	groups: "DNA: sequence features, repeats"
+]
+
+  sequence: sequence [ param: Y type: dna ]
+
+  outfile: outfile [ param: Y  ext: inv ]
+
+  int: gap [def: 12 req: Y info: "Gap penalty" ]
+
+  int: threshold [ def: 50 req: Y info: "Minimum score threshold" ]
+
+  int: match [ def: 3 req: Y info: "Match score" ]
+
+  int: mismatch [ def: -4 req: Y info: "Mismatch score" ]

@@ -1,0 +1,176 @@
+
+                               EMBOSS: newseq
+     _________________________________________________________________
+   
+                                Program newseq
+                                       
+Function
+
+   Type in a short new sequence
+   
+Description
+
+   This allows you to type a sequence into a file in a quick and easy
+   manner.
+   
+   The length of the sequence you can type in is restricted to a fairly
+   short length (typically less than 255 characters). This length
+   restriction is not a property of the EMBOSS package, but of the
+   computer system you are using. This is because as you type in response
+   to a prompt from this program, what you type is stored in the computer
+   operating system before being handed over to the program. There is
+   often a limit of less than 255 characters on the length of a response
+   that a computer system will allow you to give.
+   
+   Despite this restriction, it is expected that this program will be a
+   useful and easy way of constructing new sequence files.
+   
+   (You wouldn't want to type a long sequence in by hand, anyway, would
+   you?)
+   
+Usage
+
+   Type in a short sequence to the file 'mycc.pep' in EMBL format:
+% newseq
+Type in a short new sequence.
+Output sequence [outfile.fasta]: embl::mycc.pep
+Name of the sequence: cytoc
+Description of the sequence: fragment of cytochrome C
+Type of sequence
+
+         N : Nucleic
+         P : Protein
+Type of sequence [N]: p
+Enter the sequence: KKKEERADLIAY
+
+   Display the resulting new file:
+   
+% more mycc.pep
+ID   cytoc          STANDARD;      PRT;    12 AA.
+DE   fragment of cytochrome C
+SQ   SEQUENCE    12 AA;   1464 MW;  2BF1DB53 CRC32;
+     KKKEERADLI AY
+//
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-outseq]            seqout     Output sequence USA
+  [-name]              string     The name of of the sequence should be a
+                                  single word that you will use to identify
+                                  the sequence. It should have no (or few)
+                                  punctuation characters in it.
+  [-description]       string     Enter any description of the sequence that
+                                  you require.
+  [-type]              list       Type of sequence
+  [-sequence]          string     The sequence itself.
+                                  Because of the limitation of the operating
+                                  system, you will only be able to type in a
+                                  short sequence of (typically) 250
+                                  characters, or so.
+                                  The keyboard will beep at you when you have
+                                  reached this limit and you will not be able
+                                  to press the RETURN/ENTER key until you have
+                                  deleted a few characters.
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-outseq]
+   (Parameter 1) Output sequence USA Writeable sequence <sequence>.format
+   [-name]
+   (Parameter 2) The name of of the sequence should be a single word that
+   you will use to identify the sequence. It should have no (or few)
+   punctuation characters in it. Any string is accepted An empty string
+   is accepted
+   [-description]
+   (Parameter 3) Enter any description of the sequence that you require.
+   Any string is accepted An empty string is accepted
+   [-type]
+   (Parameter 4) Type of sequence
+   N (Nucleic)
+   P (Protein)
+   N
+   [-sequence]
+   (Parameter 5) The sequence itself. Because of the limitation of the
+   operating system, you will only be able to type in a short sequence of
+   (typically) 250 characters, or so. The keyboard will beep at you when
+   you have reached this limit and you will not be able to press the
+   RETURN/ENTER key until you have deleted a few characters. Any string
+   is accepted An empty string is accepted
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   None.
+   
+Output file format
+
+   Normal sequence.
+   
+Data files
+
+   None.
+   
+Notes
+
+   The length of the sequence you can type in is restricted to a fairly
+   short length (typically less than 255 characters). If your computer
+   beeps at you, you will typically have to delete the last character you
+   typed and press the RETURN key.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None noted.
+   
+See also
+
+   Program name Description
+   cutseq Removes a specified section from a sequence
+   descseq Alter the name or description of a sequence
+   extractseq Extract regions from a sequence
+   maskfeat Mask off features of a sequence
+   maskseq Mask off regions of a sequence
+   merger Merge two overlapping nucleic acid sequences
+   noreturn Removes carriage return from ASCII files
+   nthseq Writes one sequence from a multiple set of sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a sequence
+   splitter Split a sequence into (overlapping) smaller sequences
+   trimseq Trim ambiguous bits off the ends of sequences
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Finished.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

@@ -1,0 +1,37 @@
+appl: dotmatcher [
+        doc: "Displays a thresholded dotplot of two sequences"
+        groups: "sequence comparison, DNA: sequence features, protein: sequence features"
+]
+
+  sequence: sequencea [ param: y type: any]
+
+  sequence: sequenceb [ param: y
+     type: "@($(sequencea.protein) ? protein : nucleotide)" ]
+
+  int: windowsize [
+        optional: Y 
+        info: "window size over which to test threshhold"
+        def : "10"
+        min : "3"
+  ]
+
+  float: threshold [
+        optional: Y 
+        info: "threshold"
+        def : "17.0"
+        min : "0"
+  ]
+
+  matrix: datafile [
+        optional: Y
+        info: "Matrix file"
+        protein: $(sequencea.protein)
+  ]
+  graph: graph [ param: y
+	opt: N
+	gtitle: "Dotmatcher:  $(sequencea.name) vs $(sequenceb.name)"
+	gxtitle: "$(sequencea.name)"
+	gytitle: "$(sequenceb.name)"
+  ]
+ 
+

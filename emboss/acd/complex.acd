@@ -1,0 +1,63 @@
+
+#COMPLEX application
+#areadc37 7-July-99"
+
+
+
+
+appl: complex [
+	doc: "Find the linguistic complexity in nucleotide sequences"
+	groups: "DNA: sequence properties"
+]
+
+
+
+
+  seqall: sequence    [ param: Y type: dna ]
+  bool: omnia [default: N info: "All sequences" 
+             help: "calculate over a set of sequences"
+  ]
+  seqoutall: outseq   [ required: $(omnia) ]
+
+  int: lwin [required: Y default: 100 max: $(sequence.length)
+             info: "Window length"
+  ]
+  int: step [required: Y default: 5 max: $(lwin)
+             info: "Step size" 
+             help: "the displacement of the window 
+                    over the sequence"
+  ]
+  int: sim  [required: N default: 0
+             info: "Simulations" 
+             help: "calculate the linguistic complexity
+                    by comparison with a number of simulations 
+                    having a uniform distribution of bases"
+  ]
+
+  int: jmin [required: Y default: 4 min:2 max:20
+             info: "Minimum word length" 
+             help: ""
+  ]
+  int: jmax [required: Y default: 6 min:2 max:50
+             info: "Maximum word length" 
+             help: ""
+  ]
+  
+  bool: freq  [default: N info: "Calculate frequency" 
+             help: "execute the simulation of a sequence based on the
+                    base frequency of the original sequence"
+  ]
+  bool: print [default: N info: "Print to file" 
+             help: "generate a file named UjTable
+                    containing the values of Uj for each word
+                    j in the real sequence(s) and in any simulated 
+                    sequences"
+  ]
+
+ 
+  outfile: outfile [ required: Y extension: "complex" ]
+  outfile: ujtable [ required: "@($(sim) & $(omnia))" def: "complex.ujtable"
+                   info: "UjTable temporary file name" 
+             help: ""
+  ]
+

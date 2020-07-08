@@ -1,0 +1,145 @@
+
+                               EMBOSS: dbigcg
+     _________________________________________________________________
+   
+                                Program dbigcg
+                                       
+Function
+
+   Index a GCG formatted database
+   
+Description
+
+   dbigcg indexes a flat file database of one or more files, and builds
+   EMBL CD-ROM format index files. This format is used by the software on
+   the EMBL database CD-ROM distribution and by the Staden package in
+   addition to EMBOSS, and appears to be the most generally used and
+   publicly available index file format for these databases.
+   
+Usage
+
+   Here is a sample session with dbigcg.
+
+% dbigcg
+      EMBL : EMBL
+     SWISS : Swiss-Prot, SpTrEMBL, TrEMBLnew
+        GB : Genbank, DDBJ
+       PIR : NBRF
+Entry format [EMBL]:
+Database name: tembl
+Database directory [.]: /nfs/disk42/pmr/emboss/test/gcgembl/
+Wildcard database filename [*.seq]:
+Release number [0.0]:
+Index date [00/00/00]: 04/02/00
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+   -idformat           list       Entry format
+  [-dbname]            string     Database name
+*  -directory          string     Database directory
+*  -filename           string     Wildcard database filename
+   -release            string     Release number
+   -date               string     Index date
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -staden             bool       Use staden index file names
+   -indexdirectory     string     Index directory
+   -sortoptions        string     Sort options, typically '-T .' to use
+                                  current directory for work files and '-k
+                                  1,1' to force GNU sort to use the first
+                                  field
+   -[no]systemsort     bool       Use system sort utility
+   -[no]cleanup        bool       Clean up temporary files
+
+
+   Mandatory qualifiers Allowed values Default
+   -idformat Entry format
+   EMBL (EMBL)
+   SWISS (Swiss-Prot, SpTrEMBL, TrEMBLnew)
+   GB (Genbank, DDBJ)
+   PIR (NBRF)
+   EMBL
+   [-dbname]
+   (Parameter 1) Database name A string from 1 to 19 characters Required
+   -directory Database directory Any string is accepted .
+   -filename Wildcard database filename Any string is accepted *.seq
+   -release Release number A string up to 9 characters 0.0
+   -date Index date Date string dd/mm/yy 00/00/00
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -staden Use staden index file names Yes/No No
+   -indexdirectory Index directory Any string is accepted .
+   -sortoptions Sort options, typically '-T .' to use current directory
+   for work files and '-k 1,1' to force GNU sort to use the first field
+   Any string is accepted -T . -k 1,1
+   -[no]systemsort Use system sort utility Yes/No Yes
+   -[no]cleanup Clean up temporary files Yes/No Yes
+   
+Input file format
+
+Output file format
+
+   dbigcg creates four index files. All are binary but with a simple
+   format.
+     * division.lkp is the master index file, and has a 300 byte header
+       containing the database name and date plus information on the
+       record size. This header is followed by one record for each
+       database file, giving the full file names for the reference file
+       and sequence file.
+     * entryname.idx is the entry name index. It has the same 300 byte
+       header, mainly used to store the record size which will depend on
+       the size of the longest entryname in the database. Each entry is
+       stored in sorted alphanumeric order so that a binary search can be
+       used to efficiently find any record. The record also holds the
+       file number from division.lkp and the offsets in the data and
+       sequence files for that entry.
+     * acnum.trg holds the accession number information. The file has the
+       usual 300 byte header, and a sorted list of record by accession
+       number. Each accession number record contains the first record
+       number in acnum.hit and the total number of records in acnum.hit
+       so that secondary (duplicated) accession numbers can be searched.
+     * acnum.hit is a very simple file. After the usual 300 byte header,
+       each record simply holds the record number in entryname.idx. An
+       accession number search will use acnum.trg to find a start
+       position and number of records to read in this file, and will then
+       simply read the entryname.idx records for each entry in turn.
+       
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   dbiblast Index a BLAST database
+   dbiflat Index a flat file database
+   
+Author(s)
+
+   This application was written by Peter Rice (pmr@sanger.ac.uk)
+   Informatics Division, The Sanger Centre, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge, CB10 1SA, UK.
+   
+History
+
+   Completed December 1999
+   
+Target users
+
+   This program is intended to be used by administrators responsible for
+   software and database installation and maintenance.
+   
+Comments

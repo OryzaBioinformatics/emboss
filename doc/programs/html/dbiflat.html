@@ -1,0 +1,377 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: dbiflat
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: dbiflat
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program dbiflat
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Index a flat file database
+
+
+<H2>
+    Description
+</H2>
+
+
+dbiflat indexes a flat file database of one or more files, and builds
+EMBL CD-ROM format index files. This format is used by the software on
+the EMBL database CD-ROM distribution and by the Staden package in
+addition to EMBOSS, and appears to be the most generally used and
+publicly available index file format for these databases.
+
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with dbiflat, using the data in the test/embl
+directory of the distribution which is normally indexed as "tembl"
+
+<pre>
+
+% dbiflat
+      EMBL : EMBL
+     SWISS : Swiss-Prot, SpTrEMBL, TrEMBLnew
+        GB : Genbank, DDBJ
+Entry format [SWISS]: EMBL
+Database name: tembl
+Database directory [.]: /nfs/disk42/pmr/emboss/osf/emboss/test/embl/
+Wildcard database filename [*.dat]: 
+Release number [0.0]: 1.0
+Index date [00/00/00]: 04/02/00
+
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers (* if not always prompted):
+   -idformat           list       Entry format
+  [-dbname]            string     Database name
+*  -directory          string     Database directory
+*  -filenames          string     Wildcard database filename
+   -release            string     Release number
+   -date               string     Index date
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -staden             bool       Use staden index file names
+   -exclude            string     wildcard filename(s) to exclude
+   -indexdirectory     string     Index directory
+   -sortoptions        string     Sort options, typically '-T .' to use
+                                  current directory for work files and '-k
+                                  1,1' to force GNU sort to use the first
+                                  field
+   -[no]systemsort     bool       Use system sort utility
+   -[no]cleanup        bool       Clean up temporary files
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-idformat</td>
+<td>Entry format</td>
+<td><table><tr><td>EMBL</td> <td><i>(EMBL)</i></td></tr><tr><td>SWISS</td> <td><i>(Swiss-Prot, SpTrEMBL, TrEMBLnew)</i></td></tr><tr><td>GB</td> <td><i>(Genbank, DDBJ)</i></td></tr><tr><td>FASTA</td> <td><i>(FASTA format)</i></td></tr></table></td>
+<td>SWISS</td>
+</tr>
+
+<tr>
+<td>[-dbname]<br>(Parameter 1)</td>
+<td>Database name</td>
+<td>A string from 1 to 19 characters</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-directory</td>
+<td>Database directory</td>
+<td>Any string is accepted</td>
+<td>.</td>
+</tr>
+
+<tr>
+<td>-filenames</td>
+<td>Wildcard database filename</td>
+<td>Any string is accepted</td>
+<td>*.dat</td>
+</tr>
+
+<tr>
+<td>-release</td>
+<td>Release number</td>
+<td>A string up to 9 characters</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>-date</td>
+<td>Index date</td>
+<td>Date string dd/mm/yy</td>
+<td>00/00/00</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-staden</td>
+<td>Use staden index file names</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-exclude</td>
+<td>wildcard filename(s) to exclude</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-indexdirectory</td>
+<td>Index directory</td>
+<td>Any string is accepted</td>
+<td>.</td>
+</tr>
+
+<tr>
+<td>-sortoptions</td>
+<td>Sort options, typically '-T .' to use current directory for work files and '-k 1,1' to force GNU sort to use the first field</td>
+<td>Any string is accepted</td>
+<td>-T . -k 1,1</td>
+</tr>
+
+<tr>
+<td>-[no]systemsort</td>
+<td>Use system sort utility</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]cleanup</td>
+<td>Clean up temporary files</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<H2>
+    Output file format
+</H2>
+
+
+dbiflat creates four index files. All are binary but with a simple format.
+
+<ul>
+
+<li>division.lkp is the master index file, and has a 300 byte header
+containing the database name and date plus information on the record
+size. This header is followed by one record for each database file,
+giving the full file name for the data file, and optionally a second
+sequence file.
+
+<li>entryname.idx is the entry name index. It has the same 300 byte
+header, mainly used to store the record size which will depend on the
+size of the longest entryname in the database. Each entry is stored in
+sorted alphanumeric order so that a binary search can be used to
+efficiently find any record. The record also holds the file number
+from division.lkp and the offsets in the data and sequence files for
+that entry.
+
+<li>acnum.trg holds the accession number information. The file has the
+usual 300 byte header, and a sorted list of record by accession number.
+Each accession number record contains the first record number in acnum.hit
+and the total number of records in acnum.hit so that secondary (duplicated)
+accession numbers can be searched.
+
+<li>acnum.hit is a very simple file. After the usual 300 byte header,
+each record simply holds the record number in entryname.idx. An
+accession number search will use acnum.trg to find a start position
+and number of records to read in this file, and will then simply
+read the entryname.idx records for each entry in turn.
+
+</ul>
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+
+The indexing method depends on each entry having a unique entry name.
+No allowance is made for two entries with the same name so it is
+not possible to index EMBL and EMBLNEW together.
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Peter Rice <a
+href="mailto:pmr@sanger.ac.uk">(pmr@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+    History
+</H2>
+
+
+Completed December 1999
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by administrators responsible
+for software and database installation and maintenance. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

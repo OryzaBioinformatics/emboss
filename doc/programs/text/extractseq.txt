@@ -1,0 +1,178 @@
+
+                             EMBOSS: extractseq
+     _________________________________________________________________
+   
+                              Program extractseq
+                                       
+Function
+
+   Extract regions from a sequence
+   
+Description
+
+   This allows you to specify one or more regions of a sequence to
+   extract sub-sequences from to build up a contiguous resulting
+   sequence.
+   
+   This is modelled on the cell's process of splicing out exons from
+   mRNA, but the program is generally applicable to any cutting and
+   splicing or editing operation on a single sequence.
+   
+Usage
+
+   Extract the region from position 10 to 20.
+% extractseq main.seq result.seq -regions '10-20'
+
+   Extract the regions 10 to 20, 30 to 45, 533 to 537
+% extractseq main.seq result2.seq -regions '10-20, 30-45, 533-537'
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outseq]            seqoutall  Output sequence(s) USA
+   -regions            range      Regions to extract.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are separated by any non-digit,
+                                  non-alpha character.
+                                  Examples of region specifications are:
+                                  24-45, 56-78
+                                  1:45, 67=99;765..888
+                                  1,5,8,10,23,45,57,99
+
+   Optional qualifiers:
+   -separate           bool       If this is set true then each specified
+                                  region is written out as a separate
+                                  sequence. The name of the sequence is
+                                  created from the name of the original
+                                  sequence with the start and end positions of
+                                  the range appended with underscore
+                                  characters between them, eg: XYZ region 2 to
+                                  34 is written as: XYZ_2_34
+
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outseq]
+   (Parameter 2) Output sequence(s) USA Writeable sequence(s)
+   <sequence>.format
+   -regions Regions to extract. A set of regions is specified by a set of
+   pairs of positions. The positions are integers. They are separated by
+   any non-digit, non-alpha character. Examples of region specifications
+   are: 24-45, 56-78 1:45, 67=99;765..888 1,5,8,10,23,45,57,99 Sequence
+   range Whole sequence
+   Optional qualifiers Allowed values Default
+   -separate If this is set true then each specified region is written
+   out as a separate sequence. The name of the sequence is created from
+   the name of the original sequence with the start and end positions of
+   the range appended with underscore characters between them, eg: XYZ
+   region 2 to 34 is written as: XYZ_2_34 Yes/No No
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   Normal sequence.
+   
+   You can specifiy a file of ranges to extract by giving the '-regions'
+   qualifier the value '@' followed by the name of the file containing
+   the ranges. (eg: '-regions @myfile').
+   
+   The format of the range file is:
+     * Comment lines start with '#' in the first column.
+     * Comment lines and blank lines are ignored.
+     * The line may start with white-space.
+     * There are two positive (integer) numbers per line separated by one
+       or more space or TAB characters.
+     * The second number must be greater or equal to the first number.
+     * There can be optional text after the two numbers to annotate the
+       line.
+     * White-space before or after the text is removed.
+       
+   An example range file is:
+
+# this is my set of ranges
+12   23
+ 4   5       this is like 12-23, but smaller
+67   10348   interesting region
+
+Output file format
+
+   The output is a normal sequence file.
+   
+   If the option '-separate' is used then each specified region is
+   written to the output file as a separate sequence. The name of the
+   sequence is created from the name of the original sequence with the
+   start and end positions of the range appended with underscore
+   characters between them,
+   
+   For example: "XYZ region 2 to 34" is written as: "XYZ_2_34"
+   
+Data files
+
+   None.
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   Several warning messages about malformed region specifications:
+     * Non-digit found in region ...
+     * Unpaired start of a region found in ...
+     * Non-digit found in region ...
+     * The start of a pair of region positions must be smaller than the
+       end in ...
+       
+Exit status
+
+   It exits with status 0, unless a region is badly constructed.
+   
+Known bugs
+
+   None noted.
+   
+See also
+
+   Program name Description
+   cutseq Removes a specified section from a sequence
+   descseq Alter the name or description of a sequence
+   maskfeat Mask off features of a sequence
+   maskseq Mask off regions of a sequence
+   merger Merge two overlapping nucleic acid sequences
+   newseq Type in a short new sequence
+   noreturn Removes carriage return from ASCII files
+   nthseq Writes one sequence from a multiple set of sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a sequence
+   splitter Split a sequence into (overlapping) smaller sequences
+   trimseq Trim ambiguous bits off the ends of sequences
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Finished.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

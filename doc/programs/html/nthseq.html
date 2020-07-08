@@ -1,0 +1,312 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: nthseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: nthseq
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program nthseq
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Writes one sequence from a multiple set of sequences
+
+
+<H2>
+    Description
+</H2>
+
+
+In EMBOSS, when an application has to write out many sequences, the
+normal style is to write them all into one file containing multiple
+sequences. 
+
+<p>
+This default behaviour can be changed by using the qualifier '-ossingle'
+which writes many sequences into many files, each containing one
+sequence.  It can also be changed by using the qualifier '-osf=gcg'
+which forces the output sequence format to be 'GCG' format - this format
+cannot cope with holding multiple sequences in one file and so EMBOSS
+writes each GCG-format sequence into its own individual file. 
+
+<p>
+If, however you have the situation where you have a file containing
+multiple sequences and you wish to extract one of them, then this
+application may be useful. 
+
+<p>
+This application extracts the indicated sequence from a multiple set of
+sequences and writes it out. 
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with nthseq.
+
+<pre>
+
+% nthseq
+Input sequence: embl:eclac*
+The number of the sequence to output [1]: 2
+Output sequence [eclaca.fasta]: 
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -number             integer    The number of the sequence to output
+  [-outseq]            seqout     Output sequence USA
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-number</td>
+<td>The number of the sequence to output</td>
+<td>Integer 1 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Output sequence USA</td>
+<td>Writeable sequence</td>
+<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<H2>
+    Output file format
+</H2>
+
+
+The output is the first, second, third, etc. sequence from the input USA.
+
+<p>
+In the example, the search will find entries ECLACA, ECLACI, ECLACY
+and ECLACZ in that order.
+
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+
+It may be useful to use this application in a small script that extracts
+all sequences from a multiple sequence file and explicitly names the
+output files in the way that you require. 
+
+<p>
+For example:
+
+<pre>
+#!/usr/local/bin/perl -w
+if ($#ARGV !=1) {
+  die "Usage: scriptname in out\n";
+}
+$count=1;
+@list = `infoseq $ARGV[0] -auto -only -name`;
+while ($count &lt;= $#list+1) {
+  system("nthseq -auto $ARGV[0] -n $count $ARGV[1]-$count.seq");
+  $count++;
+}
+</pre>
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="cutseq.html">cutseq</a></td><td>Removes a specified section from a sequence</td></tr>
+<tr><td><a href="descseq.html">descseq</a></td><td>Alter the name or description of a sequence</td></tr>
+<tr><td><a href="extractseq.html">extractseq</a></td><td>Extract regions from a sequence</td></tr>
+<tr><td><a href="maskfeat.html">maskfeat</a></td><td>Mask off features of a sequence</td></tr>
+<tr><td><a href="maskseq.html">maskseq</a></td><td>Mask off regions of a sequence</td></tr>
+<tr><td><a href="merger.html">merger</a></td><td>Merge two overlapping nucleic acid sequences</td></tr>
+<tr><td><a href="newseq.html">newseq</a></td><td>Type in a short new sequence</td></tr>
+<tr><td><a href="noreturn.html">noreturn</a></td><td>Removes carriage return from ASCII files</td></tr>
+<tr><td><a href="pasteseq.html">pasteseq</a></td><td>Insert one sequence into another</td></tr>
+<tr><td><a href="revseq.html">revseq</a></td><td>Reverse and complement a sequence</td></tr>
+<tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
+<tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Gary Williams <a
+href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,62 @@
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# GWW 15 March 1999
+
+appl:	embossdata [ 
+	doc: "Finds or fetches the data files read in by the EMBOSS programs"
+	groups: "utilities"
+]
+
+outfile: outf [
+	opt: Y
+	def: "stdout"
+	info: "Results file name" 
+	help: "This specifies the name of the file that the results of a
+               search for a file in the various data directories is
+               written to. By default these results are written to
+               the screen (stdout)."
+
+]
+bool:	showall [
+	opt: Y
+	info: "Show all potential EMBOSS data files"
+]
+
+bool:	fetch [
+	opt: @($(showall)?N:Y)
+	info: "Fetch a data file"
+]
+
+string:	filename [
+	opt: Y
+# the filename is required if 'fetch' is true
+	req: $(fetch)
+	def: ""
+	info: "File to fetch or search for"
+	help: "This specifies the name of the file that should be
+               fetched into the current directory or searched for
+               in all of the directories that EMBOSS programs search
+               when looking for a data file. The name of the file
+               is not altered when it is fetched."
+]
+
+select:   reject [
+	opt: N
+	default: "2, 3, 4"
+	minimum: "1"
+	maximum: "4"
+	values: "None, PROSITE, PRINTS, CVS, CODONS"
+	delim: ","
+	header: "Directories to ignore"
+	info: "Select directories"
+	help: "This specifies the names of the sub-directories of the
+               EMBOSS data directory that should be ignored when displaying
+               data directories."
+	button: "Y"
+]
+

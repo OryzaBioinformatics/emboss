@@ -1,0 +1,40 @@
+appl: dbiblast [ group: "database: indexing" doc: "Index a BLAST database" ]
+
+bool: staden [ prompt: "Use staden index file names" ]
+
+
+string: dbname [ param: Y max: 19 min: 1 prompt: "Database name" ]
+
+string: directory [ req: Y def: "." prompt: "Database directory" ]
+
+string: filename [ req: Y prompt: "database base filename" def: $(dbname)
+        expect: "Database name" ]
+
+string: indexdirectory [ def: "." prompt: "Index directory" ]
+
+string: sortoptions [ def: "-T . -k 1,1" prompt: "Sort option(s)"
+      help "Sort options, typically '-T .' to use current directory for
+      work files and '-k 1,1' to force GNU sort to use the first field" ]
+
+string: release [ req: Y def: "0.0" max: 9 prompt: "Release number" ]
+
+string: date [ req: Y def: "00/00/00" valid: "Date string dd/mm/yy"
+        prompt: "Index date" pattern: "^([0-9]+.[0-9]+.[0-9]+)?$" ]
+
+bool: systemsort [def: Y info: "Use system sort utility" ]
+
+bool: cleanup [def: Y info: "Clean up temporary files" ]
+
+List: seqtype [ req: Y 
+    prompt: "Sequence type"
+    value: "N:nucleic;P:protein;?:unknown"
+   max: 1 min: 1 def: unknown
+  ]
+
+list: blastversion [ req: Y 
+    prompt: "Blast index version"
+    value: "1:wublast and setdb/pressdb;2:formatdb;0:unknown"
+   max: 1 min: 1 def: unknown
+  ]
+
+bool: sourcefile [ info: "Use FASTA source file" ]

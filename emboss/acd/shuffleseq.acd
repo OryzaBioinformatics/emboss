@@ -1,0 +1,22 @@
+# SHUFFLESEQ application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# MSch 14-jun-99
+
+appl: shuffleseq [
+       doc: "Shuffles a set of sequences maintaining composition"
+       groups: "mutation"
+]
+
+  seqall: sequence [ param: Y type: any]
+
+  int: shuffle [ req: N def: 1 info: "Number of shuffles" ]
+
+  seqoutall: outseq [ param: Y ]
+
+

@@ -1,0 +1,126 @@
+
+                              EMBOSS: descseq
+     _________________________________________________________________
+   
+                                Program descseq
+                                       
+Function
+
+   Alter the name or description of a sequence
+   
+Description
+
+   This alters the name or the description of a sequence, either by
+   replacing the previous one with a new name or description, or by
+   appending some text to the existing one.
+   
+Usage
+
+   Set the name of a sequence to "myclone23"
+% descseq -seq clone23 -out clone23.seq -name "myclone23"
+
+   Set the description of a sequence to "This is my clone number 244"
+% descseq -seq xy24 -out xy24.seq -desc "This is my clone number 244"
+
+   Append some text to the description of a sequence
+% descseq -seq est.seq -out est4.seq -desc " (submitted)" -append
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-outseq]            seqout     Output sequence USA
+
+   Optional qualifiers:
+   -name               string     Name of the sequence
+   -description        string     Description of the sequence
+
+   Advanced qualifiers:
+   -append             bool       This allows you to append the name or
+                                  description you have given on to the end of
+                                  the existing name or description of the
+                                  sequence.
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence USA Readable sequence Required
+   [-outseq]
+   (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
+   Optional qualifiers Allowed values Default
+   -name Name of the sequence Any string is accepted An empty string is
+   accepted
+   -description Description of the sequence Any string is accepted An
+   empty string is accepted
+   Advanced qualifiers Allowed values Default
+   -append This allows you to append the name or description you have
+   given on to the end of the existing name or description of the
+   sequence. Yes/No No
+   
+Input file format
+
+   Normal sequence.
+   
+Output file format
+
+   Normal sequence file.
+   
+Data files
+
+   None.
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None noted.
+   
+See also
+
+   Program name Description
+   cutseq Removes a specified section from a sequence
+   extractseq Extract regions from a sequence
+   maskfeat Mask off features of a sequence
+   maskseq Mask off regions of a sequence
+   merger Merge two overlapping nucleic acid sequences
+   newseq Type in a short new sequence
+   noreturn Removes carriage return from ASCII files
+   nthseq Writes one sequence from a multiple set of sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a sequence
+   splitter Split a sequence into (overlapping) smaller sequences
+   trimseq Trim ambiguous bits off the ends of sequences
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Finished.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

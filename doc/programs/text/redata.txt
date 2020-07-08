@@ -1,0 +1,201 @@
+
+                               EMBOSS: redata
+     _________________________________________________________________
+   
+                                Program redata
+                                       
+Function
+
+   Search REBASE for enzyme name, references, suppliers etc
+   
+Description
+
+   The Restriction Enzyme database (REBASE) is a collection of
+   information about restriction enzymes and related proteins. It
+   contains published and unpublished references, recognition and
+   cleavage sites, isoschizomers, commercial availability, methylation
+   sensitivity, crystal and sequence data. DNA methyltransferases, homing
+   endonucleases, nicking enzymes, specificity subunits and control
+   proteins are also included. Most recently, putative DNA
+   methyltransferases and restriction enzymes, as predicted from analysis
+   of genomic sequences, are also listed.
+   
+   The home page of REBASE is: http://rebase.neb.com/rebase/rebase.html
+   
+   This program searches the REBASE database for information on a
+   specified restriction enzyme.
+   
+   It outputs a report including the cut site, isoschizomers, references
+   and commercial suppliers of the enzyme.
+   
+Usage
+
+   Here is a sample session with redata.
+
+% redata
+Search REBASE for enzyme name, references, suppliers etc.
+Restriction enzyme name [BamHI]:
+Output file [outfile.redata]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-enzyme]            string     Enter the name of the restrcition enzyme
+                                  that you wish to get details of. The names
+                                  often have a 'I' in them - this is a capital
+                                  'i', not a '1' or an 'l'. The names are
+                                  case-indeppendent ('AaeI' is the same as
+                                  'aaei')
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -[no]isoschizomers  bool       Show other enzymes with this specificity.
+                                  (Isoschizomers)
+   -[no]references     bool       Show references
+   -[no]suppliers      bool       Show suppliers
+
+
+   Mandatory qualifiers Allowed values Default
+   [-enzyme]
+   (Parameter 1) Enter the name of the restrcition enzyme that you wish
+   to get details of. The names often have a 'I' in them - this is a
+   capital 'i', not a '1' or an 'l'. The names are case-indeppendent
+   ('AaeI' is the same as 'aaei') Any string is accepted BamHI
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.redata
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -[no]isoschizomers Show other enzymes with this specificity.
+   (Isoschizomers) Yes/No Yes
+   -[no]references Show references Yes/No Yes
+   -[no]suppliers Show suppliers Yes/No Yes
+   
+Input file format
+
+Output file format
+
+   Here is the output from the example run. It includes the full list of
+   isoschizomers (enzymes with the same target sequence), suppliers and
+   references from the REBASE database.
+
+BamHI
+
+Recognition site is GGATCC leaving sticky ends
+  Cut positions 5':1 3':5
+Organism: Bacillus amyloliquefaciens H
+Methylated: 5(4)
+Source: ATCC 49763
+
+Isoschizomers:
+   AacI        AaeI        AcaII       AccEBI      AinII       AliI
+   Ali12257I   Ali12258I   ApaCI       AsiI        AspTII      Atu1II
+   BamFI       BamKI       BamNI       Bca1259I    Bce751I     Bco10278I
+   BnaI        BsaDI       Bsp30I      Bsp46I      Bsp90II     Bsp98I
+   Bsp130I     Bsp131I     Bsp144I     Bsp4009I    BspAAIII    BstI
+   Bst1126I    Bst2464I    Bst2902I    BstQI       Bsu90I      Bsu8565I
+   Bsu8646I    BsuB519I    BsuB763I    CelI        DdsI        GdoI
+   GinI        GoxI        GseIII      MleI        Mlu23I      NasBI
+   Nsp29132II  NspSAIV     OkrAI       Pac1110I    Pae177I     Psp56I
+   RhsI        Rlu4I       RspLKII     SolI        SpvI        SurI
+   Uba19I      Uba31I      Uba38I      Uba51I      Uba88I      Uba1098I
+   Uba1163I    Uba1167I    Uba1172I    Uba1173I    Uba1205I    Uba1224I
+   Uba1242I    Uba1250I    Uba1258I    Uba1297I    Uba1302I    Uba1324I
+   Uba1325I    Uba1334I    Uba1339I    Uba1346I    Uba1383I    Uba1398I
+   Uba1402I    Uba1414I
+
+Suppliers:
+Amersham Pharmacia Biotech (11/98)
+Life Technologies Inc. (1/98)
+Minotech, Molecular Biology Products (3/99)
+Angewandte Gentechnologie Systeme (10/97)
+Stratagene (1/98)
+Fermentas AB (8/99)
+Appligene Oncor (10/97)
+American Allied Biochemical, Inc. (10/98)
+SibEnzyme Ltd. (9/99)
+Nippon Gene Co., Ltd. (10/97)
+Takara Shuzo Co. Ltd. (11/98)
+Kramel Biotech (7/98)
+Roche Molecular Biochemicals (3/99)
+New England BioLabs (2/00)
+Toyobo Biochemicals (11/98)
+CHIMERx (10/97)
+Promega Corporation (6/99)
+Sigma Chemical Corporation (11/98)
+Advanced Biotechnologies Ltd. (3/98)
+
+References:
+Brooks, J.E., Howard, K.A., US Patent Office, 1994.
+Brooks, J.E., Nathan, P.D., Landry, D., Sznyter, L.A., Waite-Rees, P., Ives, C.
+L., Moran, L.S., Slatko, B.E., Benner, J.S., (1991) Nucleic Acids Res., vol. 19
+, pp. 841-850.
+Hattman, S., Keister, T., Gottehrer, A., (1978) J. Mol. Biol., vol. 124, pp. 70
+1-711.
+Lee, S.P., Porter, D., Chirikjian, J.G., Knutson, J.R., Han, M.K., (1994) Anal.
+ Biochem., vol. 220, pp. 377-383.
+Newman, M., Strzelecka, T., Dorner, L.F., Schildkraut, I., Aggarwal, A.K., (199
+4) Structure, vol. 2, pp. 439-452.
+Roberts, R.J., Wilson, G.A., Young, F.E., (1977) Nature, vol. 265, pp. 82-84.
+Roy, K.B., Vrushank, D., Jayaram, B., (1994) Anal. Biochem., vol. 220, pp. 160-
+164.
+Strzelecka, T., Newman, M., Dorner, L.F., Knott, R., Schildkraut, I., Aggarwal,
+ A.K., (1994) J. Mol. Biol., vol. 239, pp. 430-432.
+Wilson, G.A., Young, F.E., (1975) J. Mol. Biol., vol. 97, pp. 123-125.
+Xu, S.-Y., Fomenkov, A., (1994) Biotechniques, vol. 17, pp. 57.
+
+Data files
+
+   This uses the EMBOSS REBASE data files in 'data/REBASE/*' under the
+   EMBOSS installation directory.
+   
+   These files must first be set up using the program 'rebaseextract'.
+   Running 'rebaseextract' may be the job of your system manager.
+   
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   chaos Create a chaos game representation plot for a sequence
+   cpgplot Plot CpG rich areas
+   cpgreport Reports all CpG rich regions
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   einverted Finds DNA inverted repeats
+   equicktandem Finds tandem repeats
+   etandem Looks for tandem repeats in a nucleotide sequence
+   isochore Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   palindrome Looks for inverted repeats in a nucleotide sequence
+   polydot Displays all-against-all dotplots of a set of sequences
+   rebaseextract Extract data from REBASE
+   remap Display a sequence with restriction cut sites, translation etc
+   restrict Finds restriction enzyme cleavage sites
+   showseq Display a sequence with features, translation etc
+   tfscan Scans DNA sequences for transcription factors
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

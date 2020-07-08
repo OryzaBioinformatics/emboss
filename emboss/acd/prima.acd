@@ -1,0 +1,81 @@
+#  prima Sinead O'Leary May 1999
+# PRIMA - APPLICATION TO SELECT FORWARD AND REVERSE PRIMERS FOR PCR
+# AND DNA AMPLIFICATION.
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+appl: 	prima [ doc: "Selects primers for PCR and DNA amplification."
+	        groups: "primers" ]
+
+sequence: sequence [param: "Y" req: "Y" ]
+
+
+
+bool:   targetrange [param:"Y" default:"N"
+            info: "Specify a Target Range?"]
+
+int:	targetstart [req: $(targetrange) default: $(sequence.begin)
+            info:"Target start position."
+            expect: "Start of sequence" ] 
+
+int:	targetend [req: $(targetrange) default: $(sequence.length)
+            info:"Target end position."
+            expect: "End of sequence" ]
+
+int:	overlap [req: N default: 50
+            info: "Minimum overlap of sequences"]
+
+
+int:	minprimerlen [req: N default: 18
+			info:"Minimum primer length"]
+
+int:	maxprimerlen [req: N default: 22
+			info:"Minimum primer length"]        
+
+float: 	minpmGCcont [req: N min: .30 max: .70 default: .40
+			info:"Minimum primer GC fraction"]
+
+float: 	maxpmGCcont [req: N min: .30 max: .70 default: .55
+			info:"Maximum primer GC fraction"]
+
+float: minprimerTm [req: Y default: 53
+            info: "Minimum Primer Tm (deg Celsius)"]
+            
+float: maxprimerTm [req: Y default: 58
+            info: "Maximum Primer Tm (deg Celsius)"]
+
+int:    minprodlen [req: @($(targetrange)==False) default: 100
+            info: "Minimum product length"]
+            
+int:    maxprodlen [req: @($(targetrange)==False) default: 300
+            info: "Maximum product length"]    
+
+float: 	minprodGCcont [req: N min: .30 max: .70 default: .40
+			info:"Minimum product GC fraction"]
+
+float: 	maxprodGCcont [req: N min: .30 max: .70 default: .55
+			info:"Maximum product GC fraction"]
+            
+                        
+
+float:	saltconc [req: N min: 1 max: 100  default: 50
+			info:"Salt concentration (mM)"]
+
+float:	dnaconc [req: N min: 1 max: 100 default: 50
+			info:"DNA concentration (mM)"]
+
+bool:   list [opt: N def: N info: "Force list-style output" ]
+
+outfile: outf [param: Y ]
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+

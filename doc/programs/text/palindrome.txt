@@ -1,0 +1,209 @@
+
+                             EMBOSS: palindrome
+     _________________________________________________________________
+   
+                              Program palindrome
+                                       
+Function
+
+   Looks for inverted repeats in a nucleotide sequence
+   
+Description
+
+   This looks for inverted repeats (stem loops) in a nucleotide sequence.
+   
+   It will find inverted repeats that include a proportion of mismatches
+   and gaps (bulges in the stem loop).
+   
+   It works by finding all possible inverted matches satisfying the
+   specified conditions of minimum and maximum length of palindrome,
+   maximum gap between repeated regions and number of mismatches allowed.
+   
+   Secondary structures like inverted repeats in genomic sequences may be
+   implicated in initiation of DNA replication.
+   
+Usage
+
+   Here is a sample session with palindrome. As there are a number of
+   overlapping possibilties in this sequence, we choose a longer minimum
+   repeat length.
+
+% palindrome
+Input sequence: embl:hsts1
+Enter minimum length of palindrome [10]: 15
+Enter maximum length of palindrome [100]:
+Enter maximum gap between repeated regions [100]:
+Number of mismatches allowed [0]:
+Output file [hsts1.pal]:
+Report overlapping matches [Y]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-insequence]        sequence   Sequence USA
+   -minpallen          integer    Enter minimum length of palindrome
+   -maxpallen          integer    Enter maximum length of palindrome
+   -gaplimit           integer    Enter maximum gap between repeated regions
+   -nummismatches      integer    Number of mismatches allowed
+  [-outfile]           outfile    Output file name
+   -[no]overlap        bool       Report overlapping matches
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-insequence]
+   (Parameter 1) Sequence USA Readable sequence Required
+   -minpallen Enter minimum length of palindrome Integer 1 or more 10
+   -maxpallen Enter maximum length of palindrome Any integer value 100
+   -gaplimit Enter maximum gap between repeated regions Integer 0 or more
+   100
+   -nummismatches Number of mismatches allowed Positive integer 0
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.palindrome
+   -[no]overlap Report overlapping matches Yes/No Yes
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   The input for palindrome is a nucleotide sequence.
+   
+Output file format
+
+   Here is the output file from the example run:
+
+Palindromes of:  HSTS1
+Sequence length is: 18596
+Start at position: 1
+End at position: 18596
+Minimum length of Palindromes is: 15
+Maximum length of Palindromes is: 100
+Maximum gap between elements is: 100
+Number of mismatches allowed in Palindrome: 0
+
+
+
+Palindromes:
+126   caaaaaaaaaaaaaaaa   142
+      |||||||||||||||||
+217   gtttttttttttttttt   201
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+215   tttttttttttttttt   200
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+214   tttttttttttttttt   199
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+213   tttttttttttttttt   198
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+212   tttttttttttttttt   197
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+211   tttttttttttttttt   196
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+210   tttttttttttttttt   195
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+209   tttttttttttttttt   194
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+208   tttttttttttttttt   193
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+207   tttttttttttttttt   192
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+206   tttttttttttttttt   191
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+205   tttttttttttttttt   190
+
+127   aaaaaaaaaaaaaaaagaccgccagggct   155
+      |||||||||||||||||||||||||||||
+204   ttttttttttttttttctggcggtcccga   176
+
+
+Data files
+
+Notes
+
+   Unless the qualifier '-nooverlap' is specified, palindrome makes no
+   attempt to exclude subsets of previously found palindromes.
+   
+   Several examples can be seen in the sample output above.
+   
+References
+
+   Some references on inverted repeats:
+    1. Pearson CE, Zorbas H, Price GB, Zannis-Hadjopoulos M Inverted
+       repeats, stem-loops, and cruciforms: significance for initiation
+       of DNA replication. J Cell Biochem 1996 Oct;63(1):1-22
+    2. Waldman AS, Tran H, Goldsmith EC, Resnick MA. q Long inverted
+       repeats are an at-risk motif for recombination in mammalian cells.
+       Genetics. 1999 Dec;153(4):1873-83. PMID: 10581292; UI: 20050682
+    3. Jacobsen SE Gene silencing: Maintaining methylation patterns. Curr
+       Biol 1999 Aug 26;9(16):R617-9
+    4. Lewis S, Akgun E, Jasin M. Palindromic DNA and genome stability.
+       Further studies. Ann N Y Acad Sci. 1999 May 18;870:45-57. PMID:
+       10415472; UI: 99343961
+    5. Dai X, Greizerstein MB, Nadas-Chinni K, Rothman-Denes LB
+       Supercoil-induced extrusion of a regulatory DNA hairpin. Proc Natl
+       Acad Sci U S A 1997 Mar 18;94(6):2174-9
+       
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   chaos Create a chaos game representation plot for a sequence
+   cpgplot Plot CpG rich areas
+   cpgreport Reports all CpG rich regions
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   einverted Finds DNA inverted repeats
+   equicktandem Finds tandem repeats
+   etandem Looks for tandem repeats in a nucleotide sequence
+   isochore Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   polydot Displays all-against-all dotplots of a set of sequences
+   redata Search REBASE for enzyme name, references, suppliers etc
+   restrict Finds restriction enzyme cleavage sites
+   showseq Display a sequence with features, translation etc
+   tfscan Scans DNA sequences for transcription factors
+   
+Author(s)
+
+   This application was written by Mark Faller (mfaller@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

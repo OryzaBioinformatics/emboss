@@ -1,0 +1,3 @@
+appl: demosequence [ doc: "demonstration of the sequence functions"
+      group: "demo" ]
+

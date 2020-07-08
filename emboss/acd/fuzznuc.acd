@@ -1,0 +1,53 @@
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+
+appl: fuzznuc [
+	doc: "Nucleic acid pattern search"
+	group: "pattern matching"
+]
+
+seqall: sequence [
+	param: Y
+        type: dna
+]
+
+string: pattern [
+	req: Y
+	prompt: "Search pattern"
+]
+
+int: mismatch [ 
+	req: Y
+	def: 0
+	min: 0
+	prompt: "Number of mismatches"
+]
+
+bool: mmshow [
+	opt: N
+	def: 0
+	info: "Show mismatches"
+]
+
+bool: accshow [
+	opt: N
+	def: 0
+	info: "Show accession numbers"
+]
+
+bool: descshow [
+	opt: N
+	def: 0
+	info: "Show descriptions"
+]
+
+bool: complement [
+	opt: N
+	def: 0
+	prompt: "Search complementary strand"
+]
+
+outfile: outf [
+	param: Y
+]
+

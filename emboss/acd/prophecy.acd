@@ -1,0 +1,49 @@
+# PROPHECY application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# ajb 23-jul-199
+
+appl: prophecy [
+	doc: "Creates matrices/profiles from multiple alignments"
+	groups: "profiles"
+]
+
+  seqset: sequence [ param: Y type: gapany ]
+
+list: type  [
+  required: "Y"
+  default: "F"
+  minimum: "1"
+  maximum: "1"
+  values: "F:Frequency,G:Gribskov,H:Henikoff"
+  delimiter: ","
+  codedelim: ":"
+  header: "Profile type"
+  prompt: "Select type"
+  button: "Y"
+]
+
+  variable: dogap "@($(type) != f)"
+
+  string: name [ req: Y def: "mymatrix"
+                 info: "Enter a name for the profile" ]
+
+  int: threshold [ req: @($(type)==F) def: 75 min: 1 max: 100
+                  info: "Enter threshold reporting percentage" ]
+
+  matrixf: datafile [ req: @($(type)!=F)  info: "Scoring matrix"
+	def: "@($(type) = G: Epprofile H: EBLOSUM62 F: EBLOSUM62)"
+	protein: $(sequence.protein) 
+        expect: "'Epprofile' for Gribskov type, or EBLOSUM62" ]
+
+
+  float: open [req: $(dogap) info: "Gap opening penalty" def: 3.0 ]
+
+  float: extension [ req: $(dogap) info: "Gap extension penalty" def: 0.3 ]
+
+  outfile: outf [ param: Y ]

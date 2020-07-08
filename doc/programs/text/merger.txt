@@ -1,0 +1,222 @@
+
+                               EMBOSS: merger
+     _________________________________________________________________
+   
+                                Program merger
+                                       
+Function
+
+   Merge two overlapping nucleic acid sequences
+   
+Description
+
+   This joins two overlapping nucleic acid sequences into one merged
+   sequence.
+   
+   It uses a global alignment algorithm (Needleman & Wunsch) to optimally
+   align the sequences and then it creates the merged sequence from the
+   alignment. When there is a mismatch in the alignment between the two
+   sequences, the correct base to include in the resulting sequence is
+   chosen by using the base from the sequence which has the best local
+   sequence quality score. The following heuristic is used to find the
+   sequence quality score:
+   
+   If one of the bases is a 'N', then the other sequence's base is used,
+   else:
+   
+   A window size around the disputed base is used to find the local
+   quality score. This window size is increased from 5, to 10 to 20 bases
+   or until there is a clear decision on the best choice. If there is no
+   best choice after using a window of 20, then the base in the first
+   sequence is used.
+   
+   To calculate the quality of a window of a sequence around a base:
+     * quality = sequence value/length under window either side of the
+       base
+     * sequence value = sum of points in that window
+     * unambiguous bases (ACGTU) score 2 points
+     * ambiguous bases (MRWSYKVHDB) score 1 point
+     * Ns score 0 points
+     * off end of the sequence scores 0 points
+       
+   N.B. This heavily discriminates against the iffy bits at the end of
+   sequence reads.
+   
+   This program was originally written to aid in the reconstruction of
+   mRNA sequences which had been sequenced from both ends as a 5' and 3'
+   EST (cDNA).
+   
+   Care should be taken to reverse one of the sequences (e.g. using the
+   qualifier '-sreverse2') if this is required.
+   
+   Because it uses a Needleman & Wunsch alignment the required memory may
+   be greater than the available memory when attempting to merge large
+   (cosmid-sized or greater) sequences.
+   
+   The gap open and gap extension penalties have been set at a higher
+   level than is usual (50 and 5). This was experimentally determined to
+   give the best results with a set of poor quality EST test sequences.
+   
+Usage
+
+   Here is a sample session with merger.
+
+% merger
+Input sequence: embl:eclacy
+Second sequence: embl:eclaca
+Output sequence [eclacy.fasta]:
+Output file [stdout]:
+
+Global: ECLACY vs ECLACA
+Score: 795.00
+
+ECLACY          1     ttccagctgagcgccggtcgctaccattaccagttggtctggtgt 45
+
+ECLACA
+
+
+.................... until ......................
+
+
+ECLACY          1306  agcggccccggcccgctttccctgctgcgtcgtcaggtgaatgaa 1350
+                                                          |||||||||
+ECLACA          1                                         gtgaatgaa 9
+
+ECLACY          1351  gtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccga 1395
+                      |||||||||||||||||||||||||||||||||||||||||||||
+ECLACA          10    gtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccga 54
+
+ECLACY          1396  ccaacatatcataacggagtgatcgcattgaacatgccaatgacc 1440
+                      |||||||||||||||||||||||||||||||||||||||||||||
+ECLACA          55    ccaacatatcataacggagtgatcgcattgaacatgccaatgacc 99
+
+ECLACY          1441  gaaagaataagagcaggcaagctatttaccgatatgtgcgaaggc 1485
+                      |||||||||||||||||||||||||||||||||||||||||||||
+ECLACA          100   gaaagaataagagcaggcaagctatttaccgatatgtgcgaaggc 144
+
+ECLACY          1486  ttaccggaaaaaaga                               1500
+                      |||||||||||||||
+ECLACA          145   ttaccggaaaaaagacttcgtgggaaaacgttaatgtatgagttt 189
+
+ECLACY
+
+ECLACA          190   aatcactcgcatccatcagaagttgaaaaaagagaaagcctgatt 234
+
+ECLACY
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-seqa]              sequence   Sequence USA
+  [-seqb]              sequence   Sequence USA
+  [-outseq]            seqout     Output sequence USA
+   -report             outfile    Output alignment and explanation
+
+   Optional qualifiers:
+   -datafile           matrixf    Matrix file
+   -gapopen            float      Gap opening penalty
+   -gapextend          float      Gap extension penalty
+
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-seqa]
+   (Parameter 1) Sequence USA Readable sequence Required
+   [-seqb]
+   (Parameter 2) Sequence USA Readable sequence Required
+   [-outseq]
+   (Parameter 3) Output sequence USA Writeable sequence <sequence>.format
+   -report Output alignment and explanation Output file stdout
+   Optional qualifiers Allowed values Default
+   -datafile Matrix file Comparison matrix file in EMBOSS data path
+   EBLOSUM62 for protein
+   EDNAMAT for DNA
+   -gapopen Gap opening penalty Number from 1.000 to 100.000 50.0
+   -gapextend Gap extension penalty Number from 0.100 to 10.000 5
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+   The output sequence file contains the joined sequence, by default in
+   FASTA format. Where there is a mismatch in the alignment, the chosen
+   base is written to the output sequence in uppercase.
+   
+   The output report file contains descriptions of the positions where
+   there is a mismatch in the alignment and shows the alignment. Where
+   there is a mismatch in the alignment, the chosen base is written in
+   uppercase.
+   
+   An example report file showing mismatches follows:
+
+# j1 position base           j2 position base        Using
+        12      'G'             1       'a'             'G'
+        13      'C'             2       'a'             'C'
+        14      'G'             3       'a'             'G'
+        16      'T'             5       'a'             'T'
+        20      'T'             9       'g'             'T'
+        23      'G'             12      'c'             'G'
+        24      'C'             13      'g'             'C'
+        41      'G'             30      't'             'G'
+        57      't'             46      'C'             'C'
+Global: j1 vs j2
+Score: 188.00
+
+j1              1        gtatggtcgatGCGaTgcgTatGCtGacgttAgcggcggcGatat 45
+                                       | ||| ||  | ||||| |||||||| ||||
+j2              1                   aaaaagcggatcgtnacgttngcggcggctatat 34
+
+j1              46       attgcgagctatgatgctnatcgtngc                   72
+                         ||||||||||| |||||| ||||| ||
+j2              35       attgcgagctaCgatgctGatcgtAgcgtacgttgaaagctacta 79
+
+j1
+
+j2              80       ctatgctgtgctagctgacgtagc                      103
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   cutseq Removes a specified section from a sequence
+   descseq Alter the name or description of a sequence
+   est2genome Align EST and genomic DNA sequences
+   extractseq Extract regions from a sequence
+   maskfeat Mask off features of a sequence
+   maskseq Mask off regions of a sequence
+   newseq Type in a short new sequence
+   noreturn Removes carriage return from ASCII files
+   nthseq Writes one sequence from a multiple set of sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a sequence
+   splitter Split a sequence into (overlapping) smaller sequences
+   trimseq Trim ambiguous bits off the ends of sequences
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

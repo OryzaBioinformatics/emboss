@@ -1,0 +1,384 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: redata
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: redata
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program redata
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Search REBASE for enzyme name, references, suppliers etc
+
+
+<H2>
+    Description
+</H2>
+
+
+The Restriction Enzyme database (REBASE) is a collection of information about
+restriction enzymes and related proteins. It contains published and
+unpublished references, recognition and cleavage sites, isoschizomers,
+commercial availability, methylation sensitivity, crystal and sequence data.
+DNA methyltransferases, homing endonucleases, nicking enzymes, specificity
+subunits and control proteins are also included. Most recently, putative DNA
+methyltransferases and restriction enzymes, as predicted from analysis of
+genomic sequences, are also listed. 
+
+<p>
+The home page of REBASE is: <a
+href="http://rebase.neb.com/rebase/rebase.html">http://rebase.neb.com/rebase/rebase.html</a>
+
+<p>
+This program searches the REBASE database for information on a specified
+restriction enzyme.  
+
+<p>
+It outputs a report including the cut site, isoschizomers, references
+and commercial suppliers of the enzyme. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with redata.
+
+<pre>
+
+% redata
+Search REBASE for enzyme name, references, suppliers etc.
+Restriction enzyme name [BamHI]: 
+Output file [outfile.redata]: 
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-enzyme]            string     Enter the name of the restrcition enzyme
+                                  that you wish to get details of. The names
+                                  often have a 'I' in them - this is a capital
+                                  'i', not a '1' or an 'l'. The names are
+                                  case-indeppendent ('AaeI' is the same as
+                                  'aaei')
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -[no]isoschizomers  bool       Show other enzymes with this specificity.
+                                  (Isoschizomers)
+   -[no]references     bool       Show references
+   -[no]suppliers      bool       Show suppliers
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-enzyme]<br>(Parameter 1)</td>
+<td>Enter the name of the restrcition enzyme that you wish to get details of. The names often have a 'I' in them - this is a capital 'i', not a '1' or an 'l'. The names are case-indeppendent ('AaeI' is the same as 'aaei')</td>
+<td>Any string is accepted</td>
+<td>BamHI</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.redata</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]isoschizomers</td>
+<td>Show other enzymes with this specificity. (Isoschizomers)</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]references</td>
+<td>Show references</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]suppliers</td>
+<td>Show suppliers</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<H2>
+    Output file format
+</H2>
+
+
+Here is the output from the example run. It includes the full list of
+isoschizomers (enzymes with the same target sequence), suppliers and
+references from the REBASE database.
+
+<pre>
+
+BamHI
+
+Recognition site is GGATCC leaving sticky ends
+  Cut positions 5':1 3':5
+Organism: Bacillus amyloliquefaciens H
+Methylated: 5(4)
+Source: ATCC 49763
+
+Isoschizomers:
+   AacI        AaeI        AcaII       AccEBI      AinII       AliI        
+   Ali12257I   Ali12258I   ApaCI       AsiI        AspTII      Atu1II      
+   BamFI       BamKI       BamNI       Bca1259I    Bce751I     Bco10278I   
+   BnaI        BsaDI       Bsp30I      Bsp46I      Bsp90II     Bsp98I      
+   Bsp130I     Bsp131I     Bsp144I     Bsp4009I    BspAAIII    BstI        
+   Bst1126I    Bst2464I    Bst2902I    BstQI       Bsu90I      Bsu8565I    
+   Bsu8646I    BsuB519I    BsuB763I    CelI        DdsI        GdoI        
+   GinI        GoxI        GseIII      MleI        Mlu23I      NasBI       
+   Nsp29132II  NspSAIV     OkrAI       Pac1110I    Pae177I     Psp56I      
+   RhsI        Rlu4I       RspLKII     SolI        SpvI        SurI        
+   Uba19I      Uba31I      Uba38I      Uba51I      Uba88I      Uba1098I    
+   Uba1163I    Uba1167I    Uba1172I    Uba1173I    Uba1205I    Uba1224I    
+   Uba1242I    Uba1250I    Uba1258I    Uba1297I    Uba1302I    Uba1324I    
+   Uba1325I    Uba1334I    Uba1339I    Uba1346I    Uba1383I    Uba1398I    
+   Uba1402I    Uba1414I    
+
+Suppliers:
+Amersham Pharmacia Biotech (11/98)
+Life Technologies Inc. (1/98)
+Minotech, Molecular Biology Products (3/99)
+Angewandte Gentechnologie Systeme (10/97)
+Stratagene (1/98)
+Fermentas AB (8/99)
+Appligene Oncor (10/97)
+American Allied Biochemical, Inc. (10/98)
+SibEnzyme Ltd. (9/99)
+Nippon Gene Co., Ltd. (10/97)
+Takara Shuzo Co. Ltd. (11/98)
+Kramel Biotech (7/98)
+Roche Molecular Biochemicals (3/99)
+New England BioLabs (2/00)
+Toyobo Biochemicals (11/98)
+CHIMERx (10/97)
+Promega Corporation (6/99)
+Sigma Chemical Corporation (11/98)
+Advanced Biotechnologies Ltd. (3/98)
+
+References:
+Brooks, J.E., Howard, K.A., US Patent Office, 1994.
+Brooks, J.E., Nathan, P.D., Landry, D., Sznyter, L.A., Waite-Rees, P., Ives, C.L., Moran, L.S., Slatko, B.E., Benner, J.S., (1991) Nucleic Acids Res., vol. 19, pp. 841-850.
+Hattman, S., Keister, T., Gottehrer, A., (1978) J. Mol. Biol., vol. 124, pp. 701-711.
+Lee, S.P., Porter, D., Chirikjian, J.G., Knutson, J.R., Han, M.K., (1994) Anal. Biochem., vol. 220, pp. 377-383.
+Newman, M., Strzelecka, T., Dorner, L.F., Schildkraut, I., Aggarwal, A.K., (1994) Structure, vol. 2, pp. 439-452.
+Roberts, R.J., Wilson, G.A., Young, F.E., (1977) Nature, vol. 265, pp. 82-84.
+Roy, K.B., Vrushank, D., Jayaram, B., (1994) Anal. Biochem., vol. 220, pp. 160-164.
+Strzelecka, T., Newman, M., Dorner, L.F., Knott, R., Schildkraut, I., Aggarwal, A.K., (1994) J. Mol. Biol., vol. 239, pp. 430-432.
+Wilson, G.A., Young, F.E., (1975) J. Mol. Biol., vol. 97, pp. 123-125.
+Xu, S.-Y., Fomenkov, A., (1994) Biotechniques, vol. 17, pp. 57.
+
+</pre>
+
+<H2>
+    Data files
+</H2>
+
+
+This uses the EMBOSS REBASE data files in 'data/REBASE/*' under the
+EMBOSS installation directory.
+
+<p>
+These files must first be set up using the program <a
+href="rebaseextrract.html">'rebaseextract'.</a> Running
+'rebaseextract' may be the job of your system manager.
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="chaos.html">chaos</a></td><td>Create a chaos game representation plot for a sequence</td></tr>
+<tr><td><a href="cpgplot.html">cpgplot</a></td><td>Plot CpG rich areas</td></tr>
+<tr><td><a href="cpgreport.html">cpgreport</a></td><td>Reports all CpG rich regions</td></tr>
+<tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td></tr>
+<tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
+<tr><td><a href="einverted.html">einverted</a></td><td>Finds DNA inverted repeats</td></tr>
+<tr><td><a href="equicktandem.html">equicktandem</a></td><td>Finds tandem repeats</td></tr>
+<tr><td><a href="etandem.html">etandem</a></td><td>Looks for tandem repeats in a nucleotide sequence</td></tr>
+<tr><td><a href="isochore.html">isochore</a></td><td>Plots isochores in large DNA sequences</td></tr>
+<tr><td><a href="newcpgreport.html">newcpgreport</a></td><td>Report CpG rich areas</td></tr>
+<tr><td><a href="newcpgseek.html">newcpgseek</a></td><td>Reports CpG rich regions</td></tr>
+<tr><td><a href="palindrome.html">palindrome</a></td><td>Looks for inverted repeats in a nucleotide sequence</td></tr>
+<tr><td><a href="polydot.html">polydot</a></td><td>Displays all-against-all dotplots of a set of sequences</td></tr>
+<tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
+<tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
+<tr><td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td></tr>
+<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

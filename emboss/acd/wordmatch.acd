@@ -1,0 +1,41 @@
+# WORDMATCH application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# il 14-jun-98
+
+appl: wordmatch [
+	doc: "Finds all exact matches of a given size between 2 sequences"
+	groups: "sequence comparison"
+]
+
+  sequence: asequence [ param: Y type: any ]
+
+  sequence: bsequence [ param: Y  
+     type: "@($(asequence.protein) ? protein : nucleotide)"
+  ]
+
+  outfile: outfile [ param: Y ]
+
+  int: wordsize [ req: Y def: 4 min: 2
+                    info: "Word size" ]
+
+featout: afeatout [
+        parameter: N
+        info: "feature file for output aseq "
+        help: "File for output of normal tab delimted gff's"
+        ]
+
+featout: bfeatout [
+        parameter: N
+        info: "feature file for output bseq"
+        help: "File for output of normal tab delimted gff's"
+        ]
+
+
+
+

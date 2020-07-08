@@ -1,0 +1,58 @@
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+
+# ajb 14th April 1999
+appl: restrict [
+	doc: "Finds restriction enzyme cleavage sites"
+	groups: "DNA: sequence features, restriction enzymes"
+]
+
+  seqall: sequence [ param: Y type: DNA ]
+
+  int: min [ opt: N min: 1 max: 1000 def: 1 info:"Minimum cuts per RE" ]
+
+  int: max [ opt: N min: $(min) max: 2000000000 def: 2000000000
+             info:"Maximum cuts per RE" ]
+
+  int: sitelen [ req: Y min: 2 max: 20 def: 4
+	         info: "Minimum recognition site length" ]
+
+  bool: single [ opt: N def: N info: "Force single site only cuts"]
+
+  bool: blunt [ opt: N def: Y info: "Allow blunt end cutters" ]
+
+  bool: sticky [ opt: N def: Y info: "Allow sticky end cutters" ]
+
+  bool: ambiguity [ opt: N def: Y info: "Allow ambiguous matches" ]
+
+  bool: plasmid [ opt: N def: N info: "Allow circular DNA" ]
+
+  bool: commercial [ opt: N def: Y info: "Only enzymes with suppliers" ]
+
+  bool: limit [ opt: N def: Y info: "Limits reports to one isoschizomer" ]
+
+  bool: preferred [ opt: N def: N info: "Report preferred isoschizomers" ]
+
+  bool: alphabetic [ opt: N def: N info: "Sort output alphabetically" ]
+
+  string: enzymes [
+        req: Y
+        def: all
+        info: "Comma separated enzyme list"
+        help: "The name 'all' reads in all enzyme names from the REBASE
+database.  You can specify enzymes by giving their names with commas
+between then, such as: 'HincII,hinfI,ppiI,hindiii'.  \ The case of the
+names is not important.  You can specify a file of enzyme names to read
+in by giving the name of the file holding the enzyme names with a '@'
+character in front of it, for example, '@enz.list'.  \ Blank lines and
+lines starting with a hash character or '!' are ignored and all other
+lines are concatenated together with a comma character ',' and then
+treated as the list of enzymes to search for.  \ An example of a file of
+enzyme names is: \ ! my enzymes \ HincII, ppiII \ ! other enzymes \
+hindiii \ HinfI \ PpiI"
+  ]
+
+  string: datafile [ req: N def: "" info: "Alternative RE data file" ]
+
+  outfile: outfile [ param: Y ]
+

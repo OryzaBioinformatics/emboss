@@ -1,0 +1,191 @@
+
+                           EMBOSS: rebaseextract
+     _________________________________________________________________
+   
+                             Program rebaseextract
+                                       
+Function
+
+   Extract data from REBASE
+   
+Description
+
+   The Restriction Enzyme database (REBASE) is a collection of
+   information about restriction enzymes and related proteins. It
+   contains published and unpublished references, recognition and
+   cleavage sites, isoschizomers, commercial availability, methylation
+   sensitivity, crystal and sequence data. DNA methyltransferases, homing
+   endonucleases, nicking enzymes, specificity subunits and control
+   proteins are also included. Most recently, putative DNA
+   methyltransferases and restriction enzymes, as predicted from analysis
+   of genomic sequences, are also listed.
+   
+   The home page of REBASE is: http://rebase.neb.com/rebase/rebase.html
+   
+   This program derives recognition site and cleavage information from
+   the "withrefm" file of an REBASE distribution. It creates three files
+   in the EMBOSS data subdirectory REBASE. A pattern file, a reference
+   file and a supplier file.
+   
+   The EMBOSS programs that find restriction cutting sites use the data
+   files produced by this program and will not work without them.
+   
+   Running this program may be the job of your system manager.
+   
+Usage
+
+   Here is a sample session with rebaseextract.
+
+% rebaseextract
+Full pathname of WITHREFM: /data/rebase/withrefm.904
+
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-inf]               infile     Full pathname of WITHREFM
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-inf]
+   (Parameter 1) Full pathname of WITHREFM Input file Required
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   The input file must be the "withrefm" file of a REBASE distribution.
+   
+   For example, the withrefm file for REBASE version 005 is at:
+   ftp://ftp.neb.com/pub/rebase/withrefm.005
+   
+Output file format
+
+   The output files are held in the REBASE subdirectory of the EMBOSS
+   data directory. There are three:
+     * embossre.enz Enzyme pattern file
+     * embossre.ref Enzyme references
+     * embossre.sup Enzyme suppliers
+       
+   Here are examples of the three formats:
+     * a) Enzyme file
+#             length  cuts     blunt    3'      5'     [3']    [5']
+AlwI    GGATC   5       2       0       9       10      0       0
+Alw21I  GWGCWC  6       2       0       5       1       0       0
+Alw26I  GTCTC   5       2       0       6       10      0       0
+Alw44I  GTGCAC  6       2       0       1       5       0       0
+     * b) Reference file
+# REBASE enzyme information for EMBOSS
+#
+# Format:
+# Line 1: Name of Enzyme
+# Line 2: Organism
+# Line 3: Isoschizomers
+# Line 4: Methylation
+# Line 5: Source
+# Line 6: Suppliers
+# Line 7: Number of following references
+# Lines 8..n: References
+# // (end of entry marker)
+#
+AclI
+Acinetobacter calcoaceticus M4
+Psp1406I
+?(5)
+S.K. Degtyarev
+IN
+1
+Nucleic Acids Res. vol. 20 pp. 3787.
+//
+     * c) Suppliers file
+# REBASE Supplier information for EMBOSS
+#
+# Format:
+# Code of Supplier<ws>Supplier name
+#
+A Amersham Pharmacia Biotech (11/98)
+B Life Technologies Inc. (1/98)
+C Minotech, Molecular Biology Products (3/99)
+D Angewandte Gentechnologie Systeme (10/97)
+E Stratagene (1/98)
+F Fermentas AB (1/99)
+G Appligene Oncor (10/97)
+H American Allied Biochemical, Inc. (10/98)
+I SibEnzyme Ltd. (3/99)
+J Nippon Gene Co., Ltd. (10/97)
+K Takara Shuzo Co. Ltd. (11/98)
+L Kramel Biotech (7/98)
+M Roche Molecular Biochemicals (3/99)
+N New England BioLabs (3/99)
+O Toyobo Biochemicals (11/98)
+P Megabase Research Products (3/99)
+Q CHIMERx (10/97)
+R Promega Corporation (10/98)
+S Sigma Chemical Corporation (11/98)
+T Advanced Biotechnologies Ltd. (3/98)
+       
+Data files
+
+   The "withrefm" file of an REBASE distribution is the input file for
+   this program.
+   
+Notes
+
+   The home page of REBASE is: http://rebase.neb.com/rebase/rebase.html
+   
+   Running this program may be the job of your system manager.
+   
+   The ready-made files produced by this program may already be available
+   at the REBASE web site: http://rebase.neb.com/rebase/rebase.files.html
+   or http://rebase.neb.com/rebase/rebase.f37.html
+   
+References
+
+    1. Nucleic Acids Research 27: 312-313 (1999).
+       
+Warnings
+
+   The program will warn you if the input file is incorrectly formatted.
+   
+Diagnostic Error Messages
+
+Exit status
+
+   It exits with status 0 unless an error is reported.
+   
+Known bugs
+
+See also
+
+   Program name Description
+   embossdata Finds or fetches the data files read in by the EMBOSS
+   programs
+   printsextract Extract data from PRINTS
+   prosextract Builds the PROSITE motif database for patmatmotifs to
+   search
+   redata Search REBASE for enzyme name, references, suppliers etc
+   remap Display a sequence with restriction cut sites, translation etc
+   restrict Finds restriction enzyme cleavage sites
+   showseq Display a sequence with features, translation etc
+   tfextract Extract data from TRANSFAC
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+   Completed 12th April 1999
+   
+Target users
+
+   This program is intended to be used by administrators responsible for
+   software and database installation and maintenance.
+   
+Comments
+
+   You may have to ask your system manager to run this program.

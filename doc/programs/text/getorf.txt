@@ -1,0 +1,220 @@
+
+                               EMBOSS: getorf
+     _________________________________________________________________
+   
+                                Program getorf
+                                       
+Function
+
+   Finds and extracts open reading frames (ORFs)
+   
+Description
+
+   This program finds and outputs the sequences of open reading frames
+   (ORFs).
+   
+   The ORFs can be defined as regions of a specified minimum size between
+   STOP codons or between START and STOP codons.
+   
+   The ORFs can be output as the nucleotide sequence or as the
+   translation.
+   
+   The program can also output the region around the START or the initial
+   STOP codon or the ending STOP codons of an ORF for those doing
+   analysis of the properties of these regions.
+   
+Usage
+
+   Here is a sample session with getorf.
+
+% getorf -minsize 300
+Input sequence: embl:eclaci
+Output sequence [eclaci.orf]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outseq]            seqoutall  Output sequence(s) USA
+
+   Optional qualifiers:
+   -table              list       Code to use
+   -minsize            integer    Minimum nucleotide size of ORF to report
+   -find               list       This is a small menu of possible output
+                                  options. The first four options are to
+                                  select either the protein translation or the
+                                  original nucleic acid sequence of the open
+                                  reading frame. There are two possible
+                                  definitions of an open reading frame: it can
+                                  either be a region that is free of STOP
+                                  codons or a region that begins with a START
+                                  codon and ends with a STOP codon. The last
+                                  three options are probably only of interest
+                                  to people who wish to investigate the
+                                  statistical properties of the regions around
+                                  potential START or STOP codons. The last
+                                  option assumes that ORF lengths are
+                                  calculated between two STOP codons.
+
+   Advanced qualifiers:
+   -[no]methionine     bool       START codons at the beginning of protein
+                                  products will usually code for Methionine,
+                                  despite what the codon will code for when it
+                                  is internal to a protein. This qualifier
+                                  sets all such START codons to code for
+                                  Methionine by default.
+   -circular           bool       Is the sequence circular
+   -[no]reverse        bool       Set this to be false if you do not wish to
+                                  find ORFs in the reverse complement of the
+                                  sequence.
+   -flanking           integer    If you have chosen one of the options of the
+                                  type of sequence to find that gives the
+                                  flanking sequence around a STOP or START
+                                  codon, this allows you to set the number of
+                                  nucleotides either side of that codon to
+                                  output. If the region of flanking
+                                  nucleotides crosses the start or end of the
+                                  sequence, no output is given for this codon.
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outseq]
+   (Parameter 2) Output sequence(s) USA Writeable sequence(s)
+   <sequence>.format
+   Optional qualifiers Allowed values Default
+   -table Code to use
+   0 (Standard)
+   1 (Standard (with alternative initiation codons))
+   2 (Vertebrate Mitochondrial)
+   3 (Yeast Mitochondrial)
+   4 (Mold, Protozoan, Coelenterate Mitochondrial and
+   Mycoplasma/Spiroplasma)
+   5 (Invertebrate Mitochondrial)
+   6 (Ciliate Macronuclear and Dasycladacean)
+   9 (Echinoderm Mitochondrial)
+   10 (Euplotid Nuclear)
+   11 (Bacterial)
+   12 (Alternative Yeast Nuclear)
+   13 (Ascidian Mitochondrial)
+   14 (Flatworm Mitochondrial)
+   15 (Blepharisma Macronuclear)
+   0
+   -minsize Minimum nucleotide size of ORF to report Any integer value 30
+   -find This is a small menu of possible output options. The first four
+   options are to select either the protein translation or the original
+   nucleic acid sequence of the open reading frame. There are two
+   possible definitions of an open reading frame: it can either be a
+   region that is free of STOP codons or a region that begins with a
+   START codon and ends with a STOP codon. The last three options are
+   probably only of interest to people who wish to investigate the
+   statistical properties of the regions around potential START or STOP
+   codons. The last option assumes that ORF lengths are calculated
+   between two STOP codons.
+   0 (Translation of regions between STOP codons)
+   1 (Translation of regions between START and STOP codons)
+   2 (Nucleic sequences between STOP codons)
+   3 (Nucleic sequences between START and STOP codons)
+   4 (Nucleotides flanking START codons)
+   5 (Nucleotides flanking initial STOP codons)
+   6 (Nucleotides flanking ending STOP codons)
+   0
+   Advanced qualifiers Allowed values Default
+   -[no]methionine START codons at the beginning of protein products will
+   usually code for Methionine, despite what the codon will code for when
+   it is internal to a protein. This qualifier sets all such START codons
+   to code for Methionine by default. Yes/No Yes
+   -circular Is the sequence circular Yes/No No
+   -[no]reverse Set this to be false if you do not wish to find ORFs in
+   the reverse complement of the sequence. Yes/No Yes
+   -flanking If you have chosen one of the options of the type of
+   sequence to find that gives the flanking sequence around a STOP or
+   START codon, this allows you to set the number of nucleotides either
+   side of that codon to output. If the region of flanking nucleotides
+   crosses the start or end of the sequence, no output is given for this
+   codon. Any integer value 100
+   
+Input file format
+
+   Any nucleic acid sequence USA.
+   
+Output file format
+
+   The output is a sequence file containing predicted open reading frames
+   longer than the minimum size, which defaults to 30 bases or 10 amino
+   acids.
+   
+   The results from the example run are:
+
+>ECLACI_1 [735 - 1112] E. coli laci gene (codes for the lac repressor).
+GHRSHCDAGCQRSDGAGRNARHYRVRAARWCGYLGSGIRRYRRQLMLYPAVNHHQTGFSP
+AGANQRGPLAATLSGPGGEGQSAVARLTGEKKNHPGAQYANRLSPRVGRFINAAGTTGFP
+TGKRAV
+>ECLACI_2 [1 - 1110] E. coli laci gene (codes for the lac repressor).
+PEESQFRVVNVKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPN
+RVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGVEACKAA
+VHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSIIFSHEDGTRLG
+VEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWSAMSGFQQTM
+QMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSSCYIPPSTTIK
+QDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASPRALADSLMQLA
+RQVSRLESGQ*
+>ECLACI_3 [1065 - 649] E. coli laci gene (codes for the lac repressor).
+RRNISAGSFHSNGILVIQRIVNDQPTDALREKIVHRRFTGFDAASFYHRHHHAGTQLIGA
+RFNRRDNLRRRVQGQTGGGNANQQRLFARQLLCHAVGNVIQLRHRRFHFFPRFRRNVAGL
+VHHAGNGLIRDTGILCDIV
+
+   All output ORF sequences are written to the specified outut file.
+   
+   The name of the ORF sequences is constructed from the name of the
+   input sequence with an underscore character ('_') and the number of
+   the ORF found appended. The description of the output ORF sequence is
+   constructed from the description of the input sequence with the start
+   and end positions of the ORF prepended.
+   
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+See also
+
+   Program name Description
+   backtranseq Back translate a protein sequence
+   chips Codon usage statistics
+   cusp Create a codon usage table
+   plotorf Plot potential open reading frames
+   prettyseq Output sequence with translated ranges
+   remap Display a sequence with restriction cut sites, translation etc
+   showorf Pretty output of DNA translations
+   showseq Display a sequence with features, translation etc
+   syco Synonymous codon usage Gribskov statistic plot
+   transeq Translate nucleic acid sequences
+   
+     * checktrans - Reports STOP codons and ORF statistics of a protein
+       sequence
+       
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

@@ -1,0 +1,447 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: prettyseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: prettyseq
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program prettyseq
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Output sequence with translated ranges
+
+
+<H2>
+    Description
+</H2>
+
+
+This writes out a nicely formatted display of the sequence with the
+translation (within specified ranges) displayed beneath it. 
+
+<p>
+Slightly unusually, this application uses the codon usage tables to
+translate the codons. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with prettyseq.
+
+<pre>
+
+% prettyseq
+Input sequence: embl:paamir
+Range(s) to translate [1-2167]: 135-1292        
+Output file [paamir.prettyseq]: 
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+   -range              range      Range(s) to translate
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers:
+   -[no]ruler          bool       Add a ruler
+   -[no]plabel         bool       Number translations
+   -[no]nlabel         bool       Number DNA sequence
+
+   Advanced qualifiers:
+   -cfile              codon      Codon usage file
+   -width              integer    Width of screen
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence USA</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-range</td>
+<td>Range(s) to translate</td>
+<td>Sequence range</td>
+<td>Whole sequence</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.prettyseq</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]ruler</td>
+<td>Add a ruler</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]plabel</td>
+<td>Number translations</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]nlabel</td>
+<td>Number DNA sequence</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-cfile</td>
+<td>Codon usage file</td>
+<td>Codon usage file in EMBOSS data path</td>
+<td>Ehum.cut</td>
+</tr>
+
+<tr>
+<td>-width</td>
+<td>Width of screen</td>
+<td>Integer 10 or more</td>
+<td>60</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+You can specifiy a file of ranges to extract by giving the '-range'
+qualifier the value '@' followed by the name of the file containing
+the ranges. (eg: '-range @myfile').
+
+<p>
+The format of the range file is: 
+
+<ul>
+
+<li> Comment lines start with '#' in the first column.
+
+<li> Comment lines and blank lines are ignored.
+
+<li> The line may start with white-space.
+
+<li> There are two positive (integer) numbers per line separated by
+one or more space or TAB characters.
+
+<li> The second number must be greater or equal to the first number.
+
+<li> There can be optional text after the two numbers to annotate the
+line.
+
+<li> White-space before or after the text is removed.
+
+</ul>
+
+<p>
+An example range file is: 
+
+<pre>
+
+# this is my set of ranges
+12   23
+ 4   5       this is like 12-23, but smaller
+67   10348   interesting region
+
+</pre>
+
+<H2>
+    Output file format
+</H2>
+
+
+Here is the output from the example run.
+
+<p>
+
+<pre>
+
+PRETTYSEQ of PAAMIR from 1 to 2167
+
+           ---------|---------|---------|---------|---------|---------|
+         1 GGTACCGCTGGCCGAGCATCTGCTCGATCACCACCAGCCGGGCGACGGGAACTGCACGAT 60
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+        61 CTACCTGGCGAGCCTGGAGCACGAGCGGGTTCGCTTCGTACGGCGCTGAGCGACAGTCAC 120
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+       121 AGGAGAGGAAACGGatgggatcgcaccaggagcggccgctgatcggcctgctgttctccg 180
+         1               M  G  S  H  Q  E  R  P  L  I  G  L  L  F  S  E 16
+
+           ---------|---------|---------|---------|---------|---------|
+       181 aaaccggcgtcaccgccgatatcgagcgctcgcacgcgtatggcgcattgctcgcggtcg 240
+        17   T  G  V  T  A  D  I  E  R  S  H  A  Y  G  A  L  L  A  V  E 36
+
+           ---------|---------|---------|---------|---------|---------|
+       241 agcaactgaaccgcgagggcggcgtcggcggtcgcccgatcgaaacgctgtcccaggacc 300
+        37   Q  L  N  R  E  G  G  V  G  G  R  P  I  E  T  L  S  Q  D  P 56
+
+           ---------|---------|---------|---------|---------|---------|
+       301 ccggcggcgacccggaccgctatcggctgtgcgccgaggacttcattcgcaaccgggggg 360
+        57   G  G  D  P  D  R  Y  R  L  C  A  E  D  F  I  R  N  R  G  V 76
+
+           ---------|---------|---------|---------|---------|---------|
+       361 tacggttcctcgtgggctgctacatgtcgcacacgcgcaaggcggtgatgccggtggtcg 420
+        77   R  F  L  V  G  C  Y  M  S  H  T  R  K  A  V  M  P  V  V  E 96
+
+           ---------|---------|---------|---------|---------|---------|
+       421 agcgcgccgacgcgctgctctgctacccgaccccctacgagggcttcgagtattcgccga 480
+        97   R  A  D  A  L  L  C  Y  P  T  P  Y  E  G  F  E  Y  S  P  N 116
+
+           ---------|---------|---------|---------|---------|---------|
+       481 acatcgtctacggcggtccggcgccgaaccagaacagtgcgccgctggcggcgtacctga 540
+       117   I  V  Y  G  G  P  A  P  N  Q  N  S  A  P  L  A  A  Y  L  I 136
+
+           ---------|---------|---------|---------|---------|---------|
+       541 ttcgccactacggcgagcgggtggtgttcatcggctcggactacatctatccgcgggaaa 600
+       137   R  H  Y  G  E  R  V  V  F  I  G  S  D  Y  I  Y  P  R  E  S 156
+
+           ---------|---------|---------|---------|---------|---------|
+       601 gcaaccatgtgatgcgccacctgtatcgccagcacggcggcacggtgctcgaggaaatct 660
+       157   N  H  V  M  R  H  L  Y  R  Q  H  G  G  T  V  L  E  E  I  Y 176
+
+           ---------|---------|---------|---------|---------|---------|
+       661 acattccgctgtatccctccgacgacgacttgcagcgcgccgtcgagcgcatctaccagg 720
+       177   I  P  L  Y  P  S  D  D  D  L  Q  R  A  V  E  R  I  Y  Q  A 196
+
+           ---------|---------|---------|---------|---------|---------|
+       721 cgcgcgccgacgtggtcttctccaccgtggtgggcaccggcaccgccgagctgtatcgcg 780
+       197   R  A  D  V  V  F  S  T  V  V  G  T  G  T  A  E  L  Y  R  A 216
+
+           ---------|---------|---------|---------|---------|---------|
+       781 ccatcgcccgtcgctacggcgacggcaggcggccgccgatcgccagcctgaccaccagcg 840
+       217   I  A  R  R  Y  G  D  G  R  R  P  P  I  A  S  L  T  T  S  E 236
+
+           ---------|---------|---------|---------|---------|---------|
+       841 aggcggaggtggcgaagatggagagtgacgtggcagaggggcaggtggtggtcgcgcctt 900
+       237   A  E  V  A  K  M  E  S  D  V  A  E  G  Q  V  V  V  A  P  Y 256
+
+           ---------|---------|---------|---------|---------|---------|
+       901 acttctccagcatcgatacgcccgccagccgggccttcgtccaggcctgccatggtttct 960
+       257   F  S  S  I  D  T  P  A  S  R  A  F  V  Q  A  C  H  G  F  F 276
+
+           ---------|---------|---------|---------|---------|---------|
+       961 tcccggagaacgcgaccatcaccgcctgggccgaggcggcctactggcagaccttgttgc 1020
+       277   P  E  N  A  T  I  T  A  W  A  E  A  A  Y  W  Q  T  L  L  L 296
+
+           ---------|---------|---------|---------|---------|---------|
+      1021 tcggccgcgccgcgcaggccgcaggcaactggcgggtggaagacgtgcagcggcacctgt 1080
+       297   G  R  A  A  Q  A  A  G  N  W  R  V  E  D  V  Q  R  H  L  Y 316
+
+           ---------|---------|---------|---------|---------|---------|
+      1081 acgacatcgacatcgacgcgccacaggggccggtccgggtggagcgccagaacaaccaca 1140
+       317   D  I  D  I  D  A  P  Q  G  P  V  R  V  E  R  Q  N  N  H  S 336
+
+           ---------|---------|---------|---------|---------|---------|
+      1141 gccgcctgtcttcgcgcatcgcggaaatcgatgcgcgcggcgtgttccaggtccgctggc 1200
+       337   R  L  S  S  R  I  A  E  I  D  A  R  G  V  F  Q  V  R  W  Q 356
+
+           ---------|---------|---------|---------|---------|---------|
+      1201 agtcgcccgaaccgattcgccccgacccttatgtcgtcgtgcataacctcgacgactggt 1260
+       357   S  P  E  P  I  R  P  D  P  Y  V  V  V  H  N  L  D  D  W  S 376
+
+           ---------|---------|---------|---------|---------|---------|
+      1261 ccgccagcatgggcgggggaccgctcccatgaGCGCCAACTCGCTGCTCGGCAGCCTGCG 1320
+       377   A  S  M  G  G  G  P  L  P  *                               385
+
+           ---------|---------|---------|---------|---------|---------|
+      1321 CGAGTTGCAGGTGCTGGTCCTCAACCCGCCGGGGGAGGTCAGCGACGCCCTGGTCTTGCA 1380
+                                                                        
+
+
+...............
+
+</pre>
+
+
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="backtranseq.html">backtranseq</a></td><td>Back translate a protein sequence</td></tr>
+<tr><td><a href="cusp.html">cusp</a></td><td>Create a codon usage table</td></tr>
+<tr><td><a href="getorf.html">getorf</a></td><td>Finds and extracts open reading frames (ORFs)</td></tr>
+<tr><td><a href="plotorf.html">plotorf</a></td><td>Plot potential open reading frames</td></tr>
+<tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
+<tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
+<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="transeq.html">transeq</a></td><td>Translate nucleic acid sequences</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

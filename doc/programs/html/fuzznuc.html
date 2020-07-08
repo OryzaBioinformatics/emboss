@@ -1,0 +1,439 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: fuzznuc
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: fuzznuc
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program fuzznuc
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Nucleic acid pattern search
+
+
+<H2>
+    Description
+</H2>
+
+
+fuzznuc uses PROSITE style patterns to search nucleotide sequences. 
+
+<p>
+Patterns are specifications of a (typically short) length of sequence to
+be found.  They can specify a search for an exact sequence or they can
+allow various ambiguities, matches to variable lengths of sequence and
+repeated subsections of the sequence. 
+
+<p>
+fuzznuc intelligently selects the optimum searching algorithm to use,
+depending on the complexity of the search pattern specified. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with fuzznuc.
+
+<pre>
+
+% fuzznuc
+Input sequence: embl:hhtetra
+Search pattern: AAGCTT
+Number of mismatches [0]: 
+Output file [hhtetra.fuzznuc]:
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -pattern            string     Search pattern
+   -mismatch           integer    Number of mismatches
+  [-outf]              outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -mmshow             bool       Show mismatches
+   -accshow            bool       Show accession numbers
+   -descshow           bool       Show descriptions
+   -complement         bool       Search complementary strand
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-pattern</td>
+<td>Search pattern</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-mismatch</td>
+<td>Number of mismatches</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>[-outf]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.fuzznuc</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-mmshow</td>
+<td>Show mismatches</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-accshow</td>
+<td>Show accession numbers</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-descshow</td>
+<td>Show descriptions</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-complement</td>
+<td>Search complementary strand</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+Patterns for fuzznuc are based on the format of pattern used in the
+PROSITE database, with the difference that the terminating dot '.' and
+the hyphens, '-', between the characters are optional. 
+
+<p>
+The PROSITE pattern definition from the PROSITE documentation (amended
+to refer to nucleic acid sequences, not proteins) follows. 
+
+<ul>
+
+<li>The standard IUPAC one-letter codes for the nucleotides are used. 
+
+<li>The symbol `n' is used for a position where any nucleotide is
+accepted. 
+
+<li>Ambiguities are indicated by listing the acceptable nucleotides for a
+given position, between square parentheses `[ ]'.  For example: [ACG]
+stands for A or C or G. 
+
+<li>Ambiguities are also indicated by listing between a pair of curly
+brackets `{ }' the nucleotides that are not accepted at a given
+position.  For example: {AG} stands for any nucleotides except A and G. 
+
+<li>Each element in a pattern is separated from its neighbor by a `-'. 
+(Optional in fuzznuc). 
+
+<li>Repetition of an element of the pattern can be indicated by following
+that element with a numerical value or a numerical range between
+parenthesis.  Examples: N(3) corresponds to N-N-N, N(2,4) corresponds to
+N-N or N-N-N or N-N-N-N. 
+
+<li>When a pattern is restricted to either the 5' or 3' end of a
+sequence, that pattern either starts with a `&lt;' symbol or respectively
+ends with a `&gt;' symbol. 
+
+<li>A period ends the pattern.  (Optional in fuzznuc). 
+
+</ul>
+
+<p>
+For example, in the EMBL entry ECLAC you can look for the pattern:
+
+<pre>
+
+[CG](5)TG{A}N(1,5)C
+
+</pre>
+
+<p>
+This searches for "C or G" 5 times, followed by T and G, then anything
+except A, then any base (1 to 5 times) before a C. 
+
+<p>
+You can use ambiguity codes for nucleic acid searches but not within []
+or {} as they expand to bracketed counterparts.  For example, "s" is
+expanded to "[GC]" therefore [S] would be expanded to [[GC]] which is
+illegal. 
+
+<p>
+Note the use of X is reserved for proteins.  You must use N for nucleic
+acids to refer to any base. 
+
+<p>
+The search is case-independent, so 'AAA' matches 'aaa'. 
+
+<H2>
+    Output file format
+</H2>
+
+
+Here is the output from the example search:
+
+<p>
+<pre>
+
+        HHTETRA     1 AAGCTT
+        HHTETRA  1267 AAGCTT
+
+</pre>
+
+<p>
+It is composed of three columns of data.
+
+<ul>
+<li>The first column is the name of the sequence being searched.
+<li>The second is the start position of the match found.
+<li>The third is the actual sequence that was matched by the search pattern. 
+</ul>
+
+If the option '-mmshow' is used, then an extra column of data is output
+indicating how many mismatches there are in the match, for example:
+
+<pre>
+
+% fuzznuc embl:hhtetra -mmshow
+Nucleic acid pattern search
+Search pattern: AAGCTT
+Number of mismatches [0]: 1
+Output file [hhtetra.fuzznuc]: stdout
+
+</pre>
+
+<p>
+<pre>
+
+        HHTETRA       53     1 AAGCTG
+        HHTETRA      140     1 AAGCAT
+        HHTETRA      314     1 AACCTT
+        HHTETRA      350     1 AAGCCT
+        HHTETRA      374     1 AAGTTT
+        HHTETRA     1009     1 AAGTTT
+        HHTETRA     1259     1 AAGTTT
+        HHTETRA     1267     0 AAGCTT
+
+</pre>
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="dreg.html">dreg</a></td><td>regular expression search of a nucleotide sequence</td></tr>
+<tr><td><a href="fuzzpro.html">fuzzpro</a></td><td>Protein pattern search</td></tr>
+<tr><td><a href="fuzztran.html">fuzztran</a></td><td>Protein pattern search after translation</td></tr>
+<tr><td><a href="patmatdb.html">patmatdb</a></td><td>Search a protein sequence with a motif</td></tr>
+<tr><td><a href="patmatmotifs.html">patmatmotifs</a></td><td>Search a PROSITE motif database with a protein sequence</td></tr>
+<tr><td><a href="preg.html">preg</a></td><td>regular expression search of a protein sequence</td></tr>
+<tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
+<tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+<p>
+Other EMBOSS programs allow you to search for regular expression
+patterns but may be less easy for the user who has never used regular
+expressions before:
+
+<p>
+
+<ul>
+
+<li><a href="dreg.html">dreg</a> - Regular expression search of a
+nucleotide sequence
+
+<li><a href="preg.html">preg</a> - Regular expression search of a protein
+sequence
+
+</ul>
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,80 @@
+
+                              EMBOSS: prophet
+     _________________________________________________________________
+   
+                                Program prophet
+                                       
+Function
+
+   Gapped alignment for profiles
+   
+Description
+
+Usage
+
+   Here is a sample session with prophet.
+
+% prophet
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-infile]            infile     Profile or matrix file
+   -gapopen            float      Gap opening coefficient
+   -gapextend          float      Gap extension coefficient
+  [-sequence]          seqall     Sequence database USA
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) Profile or matrix file Input file Required
+   -gapopen Gap opening coefficient Any integer value 1.0
+   -gapextend Gap extension coefficient Any integer value 0.1
+   [-sequence]
+   (Parameter 2) Sequence database USA Readable sequence(s) Required
+   [-outfile]
+   (Parameter 3) Output file name Output file <sequence>.prophet
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   profit Scan a sequence or database with a matrix or profile
+   prophecy Creates matrices/profiles from multiple alignments
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

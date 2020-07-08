@@ -1,0 +1,350 @@
+#!/usr/local/bin/perl
+
+$pubout = "public";
+$locout = "local";
+$infile = "";
+$lib = "unknown";
+
+%test = ("func" => 1, "funcstatic" => 1);
+
+if ($ARGV[0]) {$infile = $ARGV[0];}
+if ($ARGV[1]) {$lib = $ARGV[1];}
+
+$source = "";
+
+if ($infile) {
+    ($dummy, $dir, $pubout) = ($infile =~ /(([^\/.]+)\/)?([^\/.]+)(\.\S+)?$/);
+    $local = $pubout;
+    if ($dir) {$lib = $dir}
+    print "set pubout '$pubout' lib '$lib'\n";
+    open (INFILE, "$infile") || die "Cannot open $infile";
+    while (<INFILE>) {$source .= $_}
+}
+else {
+    while (<>) {$source .= $_}
+}
+
+open (HTML, ">$pubout.html");
+open (HTMLB, ">$local\_static.html");
+open (SRS, ">$pubout.srs");
+
+$file = "$pubout\.c";
+$title = "$file";
+
+print HTML  "<html><head><title>$title</title></head><body bgcolor=\"#ffffff\">\n";
+print HTMLB "<html><head><title>$title</title></head><body bgcolor=\"#ffffff\">\n";
+
+print HTML  "<h1>$file</h1>\n";
+print HTMLB "<h1>$file</h1>\n";
+
+$lastfsect = $laststatfsect = "";
+
+while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
+  $ccfull = $&;
+  $rest = $';
+
+  ($cc) = ($ccfull =~ /^..\s*(.*\S)*\s*..$/gos);
+  $cc =~ s/[* ]*\n[* ]*/\n/gos;
+
+  $type = "";
+  $acnt = 0;
+  $rtype = "";
+  @largs = ();
+  while ($cc =~ m/@((\S+)([^@]+))/gos) {
+    $data = $1;
+    $token = $2;
+#    print "<$token>\n";
+#    print "$data\n";
+
+    if ($token eq "section")  {
+      $OFILE = HTML;
+     ($sect, $srest) = ($data =~ /\S+\s+([^*\n]+)\s*(.*)/gos);
+      $sect =~ s/\s+/ /gos;
+      $sect =~ s/^ //gos;
+      $sect =~ s/ $//gos;
+      $srest =~ s/>/\&gt;/gos;
+      $srest =~ s/</\&lt;/gos;
+      $srest =~ s/\n\n/\n<p>\n/gos;
+      $srest =~ s/{([^}]+)}/<a href="#$1">$1<\/a>/gos;
+      print "Section $sect\n";
+    }
+
+    if ($token eq "func")  {
+      $OFILE = HTML;
+      if ($sect NE $lastfsect) {
+        print $OFILE "<hr><h2><a name=\"$sect\">\n";
+        print $OFILE "$sect</a></h2>\n";
+        print $OFILE "$srest\n";
+	$lastfsect = $sect
+      }
+      $type = $token;
+      ($name, $frest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
+      ($ftype,$fname, $fargs) =
+	  $rest =~ /^\s*([^\(\)]*\S)\s+(\S+)\s*[\(]\s*([^{]*)[)]\s*[\{]/os;
+      print "Function $name\n";
+      print $OFILE "<hr><h3><a name=\"$name\">\n";
+      print $OFILE "Function</a> ".srsref($name)."</h3>\n";
+      $srest = $frest;
+      $frest =~ s/>/\&gt;/gos;
+      $frest =~ s/</\&lt;/gos;
+      $frest =~ s/\n\n/\n<p>\n/gos;
+      print $OFILE "$frest\n";
+
+      print SRS "ID $name\n";
+      print SRS "TY public\n";
+      print SRS "MO $pubout\n";
+      print SRS "LB $lib\n";
+      print SRS "XX\n";
+
+      $ftype =~ s/\s+/ /gos;
+      $ftype =~ s/ \*/\*/gos;
+      $fname =~ s/^[(]//gos;
+      $fname =~ s/[)]$//gos;
+      if (!$ftype) {print "bad function definition\n"}
+      if ($fname ne $name) {print "bad function name <$name> <$fname>\n"}
+      if (!$frest) {print "bad function '$name', no description\n"}
+
+      $srest =~ s/\n\n+$/\n/gos;
+      $srest =~ s/\n\n\n+/\n\n/gos;
+      $srest =~ s/\n([^\n])/\nDE $1/gos;
+      $srest =~ s/\n\n/\nDE\n/gos;
+      $srest =~ s/>/\&gt;/gos;
+      $srest =~ s/</\&lt;/gos;
+      print SRS "DE $srest";
+      print SRS "XX\n";
+
+      $fargs =~ s/\s+/ /gos;    # all whitespace is one space
+      $fargs =~ s/ ,/,/gos;   # no space before comma
+      $fargs =~ s/, /,/gos;   # no space after comma
+      $fargs =~ s/(\w+) *(\[[^\]]*\])/$2 $1/gos;   # [] before name
+      $fargs =~ s/(\*+)(\S)/$1 $2/g;  # put space after run of *
+      $fargs =~ s/ \*/\*/gos;         # no space before run of *
+      $fargs =~ s/ [\(]\* (\w+)[\)]/* $1/gos;  # remove function arguments
+      $fargs =~ s/(\w+)\s?[\(][^\)]+[\)],/function $1,/gos;  # remove function arguments
+      $fargs =~ s/(\w+)\s?[\(][^\)]+[\)]$/function $1/gos;  # remove function arguments
+      $fargs =~ s/\s*\(\*(\w+)[^\)]*\)/\* $1/gs;
+#      print "**functype <$ftype> fname <$fname> fargs <$fargs>\n";
+      @largs = split(/,/, $fargs);
+#      foreach $x (@largs) {
+#	print "<$x> ";
+#      }
+#      print "\n";
+#      print "-----------------------------\n";
+    }
+
+    if ($token eq "funcstatic")  {
+      $OFILE = HTMLB;
+      if ($sect NE $laststatfsect) {
+        print $OFILE "<hr><h2><a name=\"$sect\">\n";
+        print $OFILE "$sect</a></h2>\n";
+        print $OFILE "$srest\n";
+	$laststatfsect = $sect
+      }
+      $type = $token;
+      ($name, $frest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
+      ($ftype,$fname, $fargs) =
+	$rest =~ /^\s*static\s+([^\(\)]*\S)\s+(\S+)\s*[\(]\s*([^{]*)[)]\s*[\{]/os;
+      print "Static function $name\n";
+      print $OFILE "<h3><a name=\"$name\">\n";
+      print $OFILE "Static function</a> ".srsref($name)."</h3>\n";
+      $srest = $frest;
+      $frest =~ s/>/\&gt;/gos;
+      $frest =~ s/</\&lt;/gos;
+      $frest =~ s/\n\n/\n<p>\n/gos;
+      print $OFILE "$frest\n";
+
+      print SRS "ID $name\n";
+      print SRS "TY static\n";
+      print SRS "MO $pubout\n";
+      print SRS "LB $lib\n";
+      print SRS "XX\n";
+
+      $ftype =~ s/\s+/ /gos;
+      $ftype =~ s/ \*/\*/gos;
+      if (!$ftype) {print "bad static function definition\n"}
+      if ($fname ne $name) {print "bad function name <$name> <$fname>\n"}
+      if (!$frest) {print "bad function '$name', no description\n"}
+
+      $srest =~ s/\n\n+$/\n/gos;
+      $srest =~ s/\n\n\n+/\n\n/gos;
+      $srest =~ s/\n([^\n])/\nDE $1/gos;
+      $srest =~ s/\n\n/\nDE\n/gos;
+      $srest =~ s/>/\&gt;/gos;
+      $srest =~ s/</\&lt;/gos;
+      print SRS "DE $srest";
+      print SRS "XX\n";
+
+      $fargs =~ s/\s+/ /gos;    # all whitespace is one space
+      $fargs =~ s/ ,/,/gos;   # no space before comma
+      $fargs =~ s/, /,/gos;   # no space after comma
+      $fargs =~ s/(\w+) *(\[[^\]]*\])/$2 $1/gos;   # [] before name
+      $fargs =~ s/(\*+)(\S)/$1 $2/g;  # put space after run of *
+      $fargs =~ s/ \*/\*/gos;         # no space before run of *
+      $fargs =~ s/ [\(]\* (\w+)[\)]/* $1/gos;  # remove function arguments
+      $fargs =~ s/(\w+)\s?[\(][^\)]+[\)],/function $1,/gos;  # remove function arguments
+      $fargs =~ s/(\w+)\s?[\(][^\)]+[\)]$/function $1/gos;  # remove function arguments
+      $fargs =~ s/\s*\(\*(\w+)[^\)]*\)/\* $1/gs;
+#      print "**static <$ftype> fname <$fname> fargs <$fargs>\n"; 
+      @largs = split(/,/, $fargs);
+#      foreach $x (@largs) {
+#	print "<$x> ";
+#      }
+#      print "\n";
+#      print "-----------------------------\n";
+    }
+
+    if ($token eq "macro")  {
+      $OFILE = HTML;
+      if ($sect NE $lastfsect) {
+        print $OFILE "<hr><h2><a name=\"$sect\">\n";
+        print $OFILE "$sect</a></h2>\n";
+        print $OFILE "$srest\n";
+	$lastfsect = $sect
+      }
+
+      $type = $token; 
+      ($name, $mrest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
+      print "Macro $name\n";
+      print "args '$margs'\n";
+      print $OFILE "<hr><h3><a name=\"$name\">\n";
+      print $OFILE "Macro</a> ".srsref($name)."</h3>\n";
+      $srest = $mrest;
+      $mrest =~ s/>/\&gt;/gos;
+      $mrest =~ s/</\&lt;/gos;
+      $mrest =~ s/\n\n/\n<p>\n/gos;
+      print $OFILE "$mrest\n";
+
+      print SRS "ID $name\n";
+      print SRS "TY macro\n";
+      print SRS "MO $pubout\n";
+      print SRS "LB $lib\n";
+      print SRS "XX\n";
+
+#      $ftype =~ s/\s+/ /gos;
+#      $ftype =~ s/ \*/\*/gos;
+#      if (!$ftype) {print "bad macro definition\n"}
+#      if ($fname ne $name) {print "bad macro name <$name> <$fname>\n"}
+#      if (!$frest) {print "bad macro '$name', no description\n"}
+
+      $srest =~ s/\n\n+$/\n/gos;
+      $srest =~ s/\n\n\n+/\n\n/gos;
+      $srest =~ s/\n([^\n])/\nDE $1/gos;
+      $srest =~ s/\n\n/\nDE\n/gos;
+      $srest =~ s/>/\&gt;/gos;
+      $srest =~ s/</\&lt;/gos;
+      print SRS "DE $srest";
+      print SRS "XX\n";
+
+    }
+
+    if ($token eq "param")  {
+      if (!$intable) {
+	print $OFILE "<p><table border=3>\n";
+	print $OFILE "<tr><th>RW</th><th>Name</th><th>Type</th><th>Description</th></tr>\n";
+	$intable = 1;
+      }
+      ($code,$var,$cast, $prest) = ($data =~ m/[\[]([^\]]+)[\]]\s*(\S*)\s*[\[]([^\]]+[\]]?)[\]]\s*(.*)/gos);
+#      print "code: <$code> var: <$var> cast: <$cast>\n";
+#      print "-----------------------------\n";
+      $cast =~ s/ \*/\*/gos;         # no space before run of *
+      $curarg = @largs[$acnt];
+      ($tcast,$tname) = ($curarg =~ /(\S.*\S)\s+(\S+)/);
+      if (!$tname) {
+	  $tcast = $curarg;
+	  if (!$var && $curarg eq "...") {$var = $tname = "vararg"}
+      }
+      if ($cast ne $tcast) {
+	print "bad cast <$cast> <$tcast>\n";
+      }
+      if ($var ne $tname) {
+	print "bad var <$var> <$tname>\n";
+      }
+      $acnt++;
+
+      $drest = $prest;
+      $drest =~ s/\n\n+$/\n/gos;
+      $drest =~ s/\n\n\n+/\n\n/gos;
+      $drest =~ s/\n([^\n])/\nPD $1/gos;
+      $drest =~ s/\n\n/\nPD\n/gos;
+      $drest =~ s/>/\&gt;/gos;
+      $drest =~ s/</\&lt;/gos;
+      print SRS "PN [$acnt]\n";
+      print SRS "PA $code $var $cast\n";
+      print SRS "PD $drest";
+      print SRS "PX\n";
+
+      if (!$prest) {print "bad \@param '$var', no description\n"}
+      print $OFILE "<tr><td>$code</td><td>$var</td><td>$cast</td><td>$prest</td></tr>\n";
+    }
+
+    if ($token eq "return")  {
+      if (!$intable) {
+	print $OFILE "<p><table border=3>\n";
+	print $OFILE "<tr><th>RW</th><th>Name</th><th>Type</th><th>Description</th></tr>\n";
+	$intable = 1;
+      }
+      ($rtype, $rrest) = ($data =~ /\S+\s+\[([^\]]+)\]\s*(.*)/gos);
+      if ($rtype ne $ftype) {print "bad return type <$rtype> <$ftype>\n"}
+      if (!$rrest && $rtype ne "void") {print "bad \@return [$rtype], no description\n"}
+      $rrest =~ s/>/\&gt;/gos;
+      $rrest =~ s/</\&lt;/gos;
+      print $OFILE "<tr><td>\&nbsp;</td><td>RETURN</td><td>$rtype</td><td>$rrest</td></tr>\n";
+      print $OFILE "</table><p>\n";
+      $intable = 0;
+
+      $drest = $rrest;
+      $drest =~ s/^$/\n/gos;  # make sure we have something
+      $drest =~ s/\n\n+$/\n/gos;
+      $drest =~ s/\n\n\n+/\n\n/gos;
+      $drest =~ s/\n([^\n])/\nRD $1/gos;
+      $drest =~ s/\n\n/\nRD\n/gos;
+      $drest =~ s/>/\&gt;/gos;
+      $drest =~ s/</\&lt;/gos;
+      print SRS "RT $rtype\n";
+      print SRS "RD $drest";
+      print SRS "RX\n";
+
+    }
+
+    if ($token eq "@")  {
+	break;
+    }
+
+  }
+  if ($type) {
+#    print "acnt: $acnt largs: $#largs\n";
+#      print "type $type test $test{$type}\n";
+    if ($test{$type}) {
+      if ($acnt == $#largs) {
+	  if ($largs[$#largs] ne "void") {
+	      print "bad last argument: $largs[$#largs]\n";
+	  }
+      }
+      if ($acnt < $#largs) {   # allow one remaining
+	  $w=$#largs+1;
+	  print "bad \@param list $acnt found $w wanted\n";
+      }
+      if (!$rtype) {print "bad missing \@return\n"}
+      print "=============================\n";
+    }
+    print SRS "//\n";
+
+    if ($test{$type}) {
+	($body) = ($rest =~ /(.*?\n\}[^\n]*\n)/gos);
+	print SRS $body;
+    }
+  }
+
+}
+
+print HTML "</body></html>\n";
+print HTMLB "</body></html>\n";
+close HTML;
+close HTMLB;
+
+sub srsref {
+    return "<a href=\"/srs6bin/cgi-bin/wgetz?-e+[EFUNC-ID:$_[0]]\">$_[0]</a>";
+}
+sub srsdref {
+    return "<a href=\"/srs6bin/cgi-bin/wgetz?-e+[EDATA-ID:$_[0]]\">$_[0]</a>";
+}

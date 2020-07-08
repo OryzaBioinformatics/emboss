@@ -1,0 +1,130 @@
+
+                               EMBOSS: nthseq
+     _________________________________________________________________
+   
+                                Program nthseq
+                                       
+Function
+
+   Writes one sequence from a multiple set of sequences
+   
+Description
+
+   In EMBOSS, when an application has to write out many sequences, the
+   normal style is to write them all into one file containing multiple
+   sequences.
+   
+   This default behaviour can be changed by using the qualifier
+   '-ossingle' which writes many sequences into many files, each
+   containing one sequence. It can also be changed by using the qualifier
+   '-osf=gcg' which forces the output sequence format to be 'GCG' format
+   - this format cannot cope with holding multiple sequences in one file
+   and so EMBOSS writes each GCG-format sequence into its own individual
+   file.
+   
+   If, however you have the situation where you have a file containing
+   multiple sequences and you wish to extract one of them, then this
+   application may be useful.
+   
+   This application extracts the indicated sequence from a multiple set
+   of sequences and writes it out.
+   
+Usage
+
+   Here is a sample session with nthseq.
+
+% nthseq
+Input sequence: embl:eclac*
+The number of the sequence to output [1]: 2
+Output sequence [eclaca.fasta]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -number             integer    The number of the sequence to output
+  [-outseq]            seqout     Output sequence USA
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   -number The number of the sequence to output Integer 1 or more 1
+   [-outseq]
+   (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+   The output is the first, second, third, etc. sequence from the input
+   USA.
+   
+   In the example, the search will find entries ECLACA, ECLACI, ECLACY
+   and ECLACZ in that order.
+   
+Data files
+
+Notes
+
+   It may be useful to use this application in a small script that
+   extracts all sequences from a multiple sequence file and explicitly
+   names the output files in the way that you require.
+   
+   For example:
+#!/usr/local/bin/perl -w
+if ($#ARGV !=1) {
+  die "Usage: scriptname in out\n";
+}
+$count=1;
+@list = `infoseq $ARGV[0] -auto -only -name`;
+while ($count <= $#list+1) {
+  system("nthseq -auto $ARGV[0] -n $count $ARGV[1]-$count.seq");
+  $count++;
+}
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   cutseq Removes a specified section from a sequence
+   descseq Alter the name or description of a sequence
+   extractseq Extract regions from a sequence
+   maskfeat Mask off features of a sequence
+   maskseq Mask off regions of a sequence
+   merger Merge two overlapping nucleic acid sequences
+   newseq Type in a short new sequence
+   noreturn Removes carriage return from ASCII files
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a sequence
+   splitter Split a sequence into (overlapping) smaller sequences
+   trimseq Trim ambiguous bits off the ends of sequences
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

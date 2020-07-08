@@ -1,0 +1,575 @@
+<!--
+Edit this file to replace 'primersearch' with the name of the program.
+-->
+
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: primersearch
+</H2>
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+
+<!--END OF HEADER-->
+
+
+
+
+
+<H1>
+Program primersearch
+</H1>
+<H2>
+    Function
+</H2>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Searches DNA sequences for matches with primer pairs
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+
+        This is what the user looks at to find out if this program will
+        do what he wants. 
+
+        Long description.
+
+        Why it is useful.
+
+        When it should/shouldn't be used.
+
+        Algorithms
+
+        Expanded description.
+
+        eg: Reverse engineers Wheedle's 'talpsgob' program. This does a 
+        splurge of the 5' end of the sequence followed by a durm.
+        The net effect is a 5' end splurt.
+        etc. for as long as is required (several pages is not unreasonable)
+  -->
+
+primersearch reads in primer pairs from an input file and searches
+them against sequence(s) specified by the user. Each of the primers in
+a pair is searched against the sequence and potential amplimers are
+reported.
+
+The user can specify a maximum percent mismatch level; for example,
+10% mismatch on a primer of length 20bp means that the program will
+classify a primer as matching a sequence if 18 of the 20 base pairs
+matches.
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+
+Here is a sample session with primersearch:
+
+<pre>
+
+unix% primersearch embl:Z52466
+Searches DNA sequences for matches with primer pairs
+Primer file: primers
+Output file [hsa203yc1.primersearch]: stdout
+Allowed percent mismatch [0]: 
+
+Primer name D1S243
+
+Primer name D1S468
+
+Primer name D1S2845
+
+Primer name D1S1608
+
+Primer name D1S2893
+
+Primer name D1S2660
+Amplimer 1
+        Sequence: HSA203YC1 Z52466 
+        H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
+        CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
+        AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
+        Amplimer length: 261 bp
+
+</pre>
+
+Here we run the same example but allowing 20% mismatch between the 
+primers and the sequence.
+<pre>
+unix % primersearch embl:Z52466
+Searches DNA sequences for matches with primer pairs
+Primer file: primers
+Output file [hsa203yc1.primersearch]: stdout
+Allowed percent mismatch [0]: 20
+
+Primer name D1S243
+
+Primer name D1S468
+
+Primer name D1S2845
+
+Primer name D1S1608
+
+Primer name D1S2893
+
+Primer name D1S2660
+Amplimer 1
+        Sequence: HSA203YC1 Z52466 
+        H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
+        CACACATGCACATGCAC hits forward strand at 49 with 2 mismatches
+        AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
+        Amplimer length: 239 bp
+Amplimer 2
+        Sequence: HSA203YC1 Z52466 
+        H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
+        CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
+        AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
+        Amplimer length: 261 bp
+
+</pre>
+
+Here is an example of running with a file containing a list of sequences.
+<pre>
+curium % primersearch @seqs.list
+Searches DNA sequences for matches with primer pairs
+Primer file: primers
+Output file [hs214yg7.primersearch]: stdout
+Allowed percent mismatch [0]: 
+
+Primer name D1S243
+Amplimer 1
+        Sequence: HS214YG7 Z16979 
+        H. sapiens (D1S243) DNA segment containing (CA) repeat; clone AFM214yg7; single read.
+        CACACAGGCTCACATGCC hits forward strand at 122 with 0 mismatches
+        GCTCCAGCGTCATGGACT hits reverse strand at [36] with 0 mismatches
+        Amplimer length: 162 bp
+
+Primer name D1S468
+Amplimer 1
+        Sequence: HS280WE5 Z23994 
+        H. sapiens (D1S468) DNA segment containing (CA) repeat; clone AFM280we5; single read.
+        AATTAACCGTTTTGGTCCT hits forward strand at 47 with 0 mismatches
+        GCGACACACACTTCCC hits reverse strand at [96] with 0 mismatches
+        Amplimer length: 185 bp
+
+Primer name D1S2845
+Amplimer 1
+        Sequence: HS344WE9 Z51474 
+        H.sapiens (D1S2845) DNA segment containing (CA) repeat; clone AFM344we9; single read.
+        CCAAAGGGTGCTTCTC hits forward strand at 29 with 0 mismatches
+        GTGGCATTCCAACCTC hits reverse strand at [157] with 0 mismatches
+        Amplimer length: 201 bp
+
+Primer name D1S1608
+Amplimer 1
+        Sequence: HS829186 G07829 
+        human STS CHLC.GATA49A06.P15262 clone GATA49A06, sequence tagged site.
+        GATGGCTTTTGGGGACTATT hits forward strand at 13 with 0 mismatches
+        CACTGAGCCAAGTGACACAG hits reverse strand at [92] with 0 mismatches
+        Amplimer length: 270 bp
+
+Primer name D1S2893
+Amplimer 1
+        Sequence: HS123XC3 Z50993 
+        H.sapiens (D1S2893) DNA segment containing (CA) repeat; clone AFM123xc3; single read.
+        AAAACATCAACTCTCCCCTG hits forward strand at 5 with 0 mismatches
+        CTCAAACCCCAATAAGCCTT hits reverse strand at [3] with 0 mismatches
+        Amplimer length: 215 bp
+
+Primer name D1S2660
+Amplimer 1
+        Sequence: HSA203YC1 Z52466 
+        H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
+        CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
+        AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
+        Amplimer length: 261 bp
+
+
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequences]         seqall     Sequence database USA
+  [-primers]           infile     Primer file
+  [-out]               outfile    Output file name
+  [-mismatchpercent]   integer    Allowed percent mismatch
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequences]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-primers]<br>(Parameter 2)</td>
+<td>Primer file</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-out]<br>(Parameter 3)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.primersearch</td>
+</tr>
+
+<tr>
+<td>[-mismatchpercent]<br>(Parameter 4)</td>
+<td>Allowed percent mismatch</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        Except for sequences which can be described by 'sequence USA',
+        this should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+The input primer file used in the example above has the following format:
+<pre>
+# This is my primer file
+D1S243  cacacaggctcacatgcc      gctccagcgtcatggact
+D1S468 aattaaccgttttggtcct     gcgacacacacttccc 
+D1S2845 ccaaagggtgcttctc        gtggcattccaacctc
+D1S1608 gatggcttttggggactatt    cactgagccaagtgacacag
+D1S2893 aaaacatcaactctcccctg    ctcaaaccccaataagcctt
+D1S2660 cacacatgcacatgcac       agtgacaccagcaggg    
+</pre>
+Comments can be inserted provided they are prefaced with "#"
+
+Empty files will cause primersearch to note that no primers have 
+been found, and to exit.
+
+In this example, seqs.list contains the following sequences:
+
+<pre>
+embl:Z16979
+embl:Z23994  
+embl:Z51474  
+embl:G07829  
+embl:Z50993  
+embl:Z52466
+</pre>
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats 
+        Except for sequences which can be described by 'sequence USA',
+        this should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+   -->
+
+Here is an exmaple of the output file:
+<pre>
+Primer name D1S243
+
+Primer name D1S468
+
+Primer name D1S2845
+
+Primer name D1S1608
+
+Primer name D1S2893
+
+Primer name D1S2660
+Amplimer 1
+        Sequence: HSA203YC1 Z52466 
+        H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
+        CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
+        AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
+        Amplimer length: 261 bp
+</pre>
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+        eg:
+        data file format:
+
+	blank lines and comment lines are ignored.
+        comment lines start with '#'
+        There are three columns separated by one or more space or TAB
+	characters for X and Y values of durm, followed by energy
+        all coefficients are given as floating point values
+        An example is:
+
+        # Durm coefficient enery file
+        # X     Y       Energy
+        0.1     0.2     0.331
+        0.2     0.4     0.332
+        0.3     0.6     0.333
+        0.3     0.8     0.334
+
+   -->
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+Every potential amplimer will be reported; if one primer matches the
+forward strand twice and the other matches the reverse strand only
+once, two potential amplimers are reported. If the reverse primer
+matches twice, four potential amplimers are reported.
+
+Each primer pair consists of a name, followed by two primer sequences,
+primerA and primerB. The program first compares primerA to the forward
+strand and if it matches, primerB is compared to the reverse
+strand. The approach is then reversed, with the primerB being compared
+to the forward strand and primerA to the reverse. In this way all
+possible amplimers are reported.
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+        eg:
+        It doesn't check to see if the sequence is a protein sequence or not.
+   -->
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program.
+        eg:
+
+        "Threshold value greater than 1." - means that the threshold has
+        been set to be greater than 1 but a burgle exception has
+        occurred making this invalid - you should reduce the wobble
+        parameter and try again. 
+
+   --> 
+
+"No suitable primers found - exiting" means that either the primers
+file was empty or there were no compilable primer pairs contained in it.
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+        eg:
+        "It always exits with status 0"
+   -->
+It always exits with status 0
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
+<tr><td><a href="prima.html">prima</a></td><td>Selects primers for PCR and DNA amplification</td></tr>
+<tr><td><a href="stssearch.html">stssearch</a></td><td>Searches a DNA database for matches with a set of STS primers</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+<!--
+        Who has worked on the program in the past.
+e.g.
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+   -->
+
+This application was written by Val Curwen <a
+href="mailto:vcurwen@hgmp.mrc.ac.uk">(vcurwen@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+<!--
+        What changes have been made.
+   -->
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+<H2>
+    Comments
+</H2>
+
+<!--
+	Any comments, requests etc. that people have about the program
+   -->
+
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

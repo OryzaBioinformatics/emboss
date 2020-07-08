@@ -1,0 +1,238 @@
+
+                              EMBOSS: restrict
+     _________________________________________________________________
+   
+                               Program restrict
+                                       
+Function
+
+   Finds restriction enzyme cleavage sites
+   
+Description
+
+   Restrict uses the REBASE database of restriction enzymes to predict
+   cut sites in a DNA sequence. The program allows you to select a range
+   of cuts, whether the DNA is circular, whether IUB ambiguity codes are
+   used, whether blunt or sticky ends or both are reported. You may also
+   force the reporting of single cleavage sites.
+   
+Usage
+
+   Here is a sample session with restrict.
+
+% restrict
+Input sequence [stdin]: ecrrnbz
+Begin at [1]:
+End at [7508]:
+Minimum cuts [1]:
+Maximum cuts [2]: 2
+Minimum recognition site length [4]: 6
+Output file [stdout]: ecrrnbz.out
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -sitelen            integer    Minimum recognition site length
+   -enzymes            string     The name 'all' reads in all enzyme names
+                                  from the REBASE database. You can specify
+                                  enzymes by giving their names with commas
+                                  between then, such as:
+                                  'HincII,hinfI,ppiI,hindiii'.
+                                  The case of the names is not important. You
+                                  can specify a file of enzyme names to read
+                                  in by giving the name of the file holding
+                                  the enzyme names with a '@' character in
+                                  front of it, for example, '@enz.list'.
+                                  Blank lines and lines starting with a hash
+                                  character or '!' are ignored and all other
+                                  lines are concatenated together with a comma
+                                  character ',' and then treated as the list
+                                  of enzymes to search for.
+                                  An example of a file of enzyme names is:
+                                  ! my enzymes
+                                  HincII, ppiII
+                                  ! other enzymes
+                                  hindiii
+                                  HinfI
+                                  PpiI
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -min                integer    Minimum cuts per RE
+   -max                integer    Maximum cuts per RE
+   -single             bool       Force single site only cuts
+   -[no]blunt          bool       Allow blunt end cutters
+   -[no]sticky         bool       Allow sticky end cutters
+   -[no]ambiguity      bool       Allow ambiguous matches
+   -plasmid            bool       Allow circular DNA
+   -[no]commercial     bool       Only enzymes with suppliers
+   -[no]limit          bool       Limits reports to one isoschizomer
+   -preferred          bool       Report preferred isoschizomers
+   -alphabetic         bool       Sort output alphabetically
+   -datafile           string     Alternative RE data file
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   -sitelen Minimum recognition site length Integer from 2 to 20 4
+   -enzymes The name 'all' reads in all enzyme names from the REBASE
+   database. You can specify enzymes by giving their names with commas
+   between then, such as: 'HincII,hinfI,ppiI,hindiii'. The case of the
+   names is not important. You can specify a file of enzyme names to read
+   in by giving the name of the file holding the enzyme names with a '@'
+   character in front of it, for example, '@enz.list'. Blank lines and
+   lines starting with a hash character or '!' are ignored and all other
+   lines are concatenated together with a comma character ',' and then
+   treated as the list of enzymes to search for. An example of a file of
+   enzyme names is: ! my enzymes HincII, ppiII ! other enzymes hindiii
+   HinfI PpiI Any string is accepted all
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.restrict
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -min Minimum cuts per RE Integer from 1 to 1000 1
+   -max Maximum cuts per RE Integer up to 2000000000 2000000000
+   -single Force single site only cuts Yes/No No
+   -[no]blunt Allow blunt end cutters Yes/No Yes
+   -[no]sticky Allow sticky end cutters Yes/No Yes
+   -[no]ambiguity Allow ambiguous matches Yes/No Yes
+   -plasmid Allow circular DNA Yes/No No
+   -[no]commercial Only enzymes with suppliers Yes/No Yes
+   -[no]limit Limits reports to one isoschizomer Yes/No Yes
+   -preferred Report preferred isoschizomers Yes/No No
+   -alphabetic Sort output alphabetically Yes/No No
+   -datafile Alternative RE data file Any string is accepted An empty
+   string is accepted
+   
+Input file format
+
+   The input sequence can be one or more DNA sequences.
+   
+Output file format
+
+   The output from restrict is a simple text one. The base number,
+   restriction enzyme name, recognition site and cut positions are shown.
+   Note that cuts are always to the right of the residue shown and that
+   5' cuts are referred to by their associated 3' number sequence. The
+   program reports enzymes that cut at two or four sites. The program
+   also reports isoschizomers and enzymes having the same recognition
+   sequence but different cut sites. Here is part of a sample output:
+# Restrict of ECRRNBZ from 1 to 7508
+#
+# Minimum cuts per enzyme: 1
+# Maximum cuts per enzyme: 2
+# Minimum length of recognition site: 6
+# Blunt ends allowed
+# Sticky ends allowed
+# DNA is linear
+# Ambiguities allowed
+# Number of hits: 442
+#
+# Base Number   Enzyme          Site            3'      5'      [3'     5']
+        1       Nsp29132II      GGATCC          1       5
+        1       BspAAIII        GGATCC          1       5
+        1       AccEBI          GGATCC          1       5
+        1       Bsp4009I        GGATCC          1       5
+        1       BstI            GGATCC          1       5
+        1       AliI            GGATCC          1       5
+        1       SolI            GGATCC          1       5
+        1       Mlu23I          GGATCC          1       5
+        1       ApaCI           GGATCC          1       5
+        1       BnaI            GGATCC          1       5
+        1       SurI            GGATCC          1       5
+        1       OkrAI           GGATCC          1       5
+        1       NspSAIV         GGATCC          1       5
+        1       RspLKII         GGATCC          1       5
+        1       BamHI           GGATCC          1       5
+        1       Bce751I         GGATCC          1       5
+        17      BssSI           CACGAG          17      21
+        17      BsiI            CACGAG          17      21
+        17      Bst2BI          CACGAG          17      21
+        24      NsbI            TGCGCA          26      26
+        24      AviII           TGCGCA          26      26
+        24      MstI            TGCGCA          26      26
+        24      Acc16I          TGCGCA          26      26
+        24      PamI            TGCGCA          26      26
+        24      AosI            TGCGCA          26      26
+        24      FspI            TGCGCA          26      26
+        24      FdiII           TGCGCA          26      26
+
+Data files
+
+   The data files are stored in the REBASE directory of the standard
+   EMBOSS data directory. The names are:
+     * embossre.enz Cleavage information
+     * embossre.ref Reference/methylation information
+     * embossre.sup Supplier information
+       
+   The column information is described at the top of the data files
+   
+Notes
+
+   Output file size is related to the size of the recognition site and
+   the maximum number of allowed cutting positions. Setting the site
+   length to six and restricting the cuts to two is a common choice of
+   parameters. The size of the output can sometimes be reduced by
+   specifying the -noambiguity switch.
+   
+References
+
+    1. Nucleic Acids Research 27: 312-313 (1999).
+       
+Warnings
+
+   The program will warn you if a protein sequence is given.
+   
+Diagnostic Error Messages
+
+Exit status
+
+   It exits with status 0 unless an error is reported.
+   
+Known bugs
+
+See also
+
+   Program name Description
+   chaos Create a chaos game representation plot for a sequence
+   cpgplot Plot CpG rich areas
+   cpgreport Reports all CpG rich regions
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   einverted Finds DNA inverted repeats
+   equicktandem Finds tandem repeats
+   etandem Looks for tandem repeats in a nucleotide sequence
+   isochore Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   palindrome Looks for inverted repeats in a nucleotide sequence
+   polydot Displays all-against-all dotplots of a set of sequences
+   rebaseextract Extract data from REBASE
+   redata Search REBASE for enzyme name, references, suppliers etc
+   remap Display a sequence with restriction cut sites, translation etc
+   showseq Display a sequence with features, translation etc
+   tfscan Scans DNA sequences for transcription factors
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+   Completed 16th April 1999
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
+
+   The data files must have been created before running this program.
+   This is done by running the REBASEEXTRACT program with the "withrefm"
+   file from an REBASE release. You may have to ask your system manager
+   to do this.

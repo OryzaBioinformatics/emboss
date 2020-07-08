@@ -1,0 +1,35 @@
+# megamerger application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+appl: megamerger [
+        doc: "Merge two large overlapping nucleic acid sequences"
+        groups: "alignment, sequence editing"
+]
+
+  sequence: seqa [
+        param: Y
+        type: DNA
+  ]
+
+  sequence: seqb [ 
+        param: Y
+        type: DNA
+  ]
+
+  seqout: outseq [ 
+        param: Y
+	ext: "merged"
+  ]
+
+  outfile: report [
+        req: Y 
+        def: stdout
+        info: "Output report"
+  ]
+
+  int: wordsize [
+	req: Y
+	def: 20
+	min: 2
+	info: "Word size"
+  ]

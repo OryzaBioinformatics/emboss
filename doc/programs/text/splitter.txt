@@ -1,0 +1,123 @@
+
+                              EMBOSS: splitter
+     _________________________________________________________________
+   
+                               Program splitter
+                                       
+Function
+
+   Split a sequence into (overlapping) smaller sequences
+   
+Description
+
+   This simple editing program allows you to split a long sequence into
+   smaller, optionally overlapping, subsequences.
+   
+Usage
+
+   To split a sequence into sub-sequences of 10,000 bases (the default
+   size) with no overlap between the sub-sequences:
+        % splitter one_huge.seq many_small.seq
+
+   To split a sequence into sub-sequences of 50,000 bases with an overlap
+   of 3,000 bases on each sub-sequence.
+        % splitter one_huge.seq many_small.seq -size=50000 -over=3000
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outseq]            seqoutall  Output sequence(s) USA
+
+   Optional qualifiers:
+   -size               integer    Size to split at
+   -overlap            integer    Overlap between split sequences
+
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outseq]
+   (Parameter 2) Output sequence(s) USA Writeable sequence(s)
+   <sequence>.format
+   Optional qualifiers Allowed values Default
+   -size Size to split at Any integer value 10000
+   -overlap Overlap between split sequences Any integer value 0
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input File Format
+
+   One or more sequences
+   
+Output File Format
+
+   Many sequences.
+   
+   The names of the sequences are the same as the original sequence, with
+   '_start-end' appended, where 'start', and 'end' are the start and end
+   positions of the sub-sequence. eg: The name HSHBB would be changed in
+   the sub-sequences to: HSHBB_1-50000 and HSHBB_50001-73308 if they were
+   split at the size of 50000 with no overlap.
+   
+Data files
+
+   None.
+   
+Notes
+
+   There should be little requirement to split sequences into smaller
+   sub-sequences in EMBOSS, but there may be circumstances where memory
+   usage becomes restrictive when dealing with truly large sequences.
+   
+References
+
+   None
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0
+   
+Known bugs
+
+   Bugs noted but not yet fixed. None.
+   
+See also
+
+   Program name Description
+   cutseq Removes a specified section from a sequence
+   extractseq Extract regions from a sequence
+   maskfeat Mask off features of a sequence
+   maskseq Mask off regions of a sequence
+   merger Merge two overlapping nucleic acid sequences
+   newseq Type in a short new sequence
+   noreturn Removes carriage return from ASCII files
+   nthseq Writes one sequence from a multiple set of sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a sequence
+   trimseq Trim ambiguous bits off the ends of sequences
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Completed 22 March 1999
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

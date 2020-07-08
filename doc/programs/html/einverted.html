@@ -1,0 +1,374 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: einverted
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: einverted
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program einverted
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Finds DNA inverted repeats
+
+
+<H2>
+    Description
+</H2>
+
+
+This looks for inverted repeats (stem loops) in a nucleotide sequence. 
+
+<p>
+It will find inverted repeats that include a proprtion of mismatches and
+gaps (bulges in the stem loop). 
+
+<p>
+It works by finding alignments between the sequence and its reverse
+complement that exceed a threshold score.  The score is calculated by
+summing the values of each match, the penalties of each mismatch and the
+large penalties of any gaps. 
+
+<p>
+Secondary structures like inverted repeats in genomic sequences may be
+implicated in initiation of DNA replication.
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with einverted.
+
+<pre>
+
+% einverted
+Input sequence: embl:hsts1
+Output file [hsts1.inv]: 
+Gap penalty [12]: 
+Minimum score threshold [50]: 
+Match score [3]: 
+Mismatch score [-4]: 
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-outfile]           outfile    Output file name
+   -gap                integer    Gap penalty
+   -threshold          integer    Minimum score threshold
+   -match              integer    Match score
+   -mismatch           integer    Mismatch score
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence USA</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.einverted</td>
+</tr>
+
+<tr>
+<td>-gap</td>
+<td>Gap penalty</td>
+<td>Any integer value</td>
+<td>12</td>
+</tr>
+
+<tr>
+<td>-threshold</td>
+<td>Minimum score threshold</td>
+<td>Any integer value</td>
+<td>50</td>
+</tr>
+
+<tr>
+<td>-match</td>
+<td>Match score</td>
+<td>Any integer value</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>-mismatch</td>
+<td>Mismatch score</td>
+<td>Any integer value</td>
+<td>-4</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+The input for einverted is a nucleotide sequence
+
+<H2>
+    Output file format
+</H2>
+
+
+Here is the output form the example run. The first two hits are
+removed to avoid the output lines being too wide.
+
+<pre>
+
+......................
+
+Score 80: 44/51 ( 86%) matches, 2 gaps
+   12246 ctcctgcctcag-cctccaagtagctgggattaca-gcatgtgccaccatgcc 12296   
+         |||||| ||||| | |||||   |||||||||||| ||||| |||||||| ||
+   13938 gaggacagagtcagaaggtttcacgaccctaatgtccgtactcggtggtatgg 13886   
+
+Score 99: 53/65 ( 81%) matches, 1 gaps
+   13884 tgggtatggtggctcatgcctgtaatcccagcactttggaagactgagacaggagcaattgcttga 13949   
+         ||||| |||||||   ||||||||||||||||    ||| || ||||| ||| || ||||||||||
+   14692 acccacaccaccgtacacggacattagggtcgatggaccctccgactccgtcttc-ttaacgaact 14628   
+
+</pre>
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+Some references on inverted repeats:
+
+<p>
+
+<ol>
+
+<li>
+Pearson CE, Zorbas H, Price GB, Zannis-Hadjopoulos M
+Inverted repeats, stem-loops, and cruciforms: significance for initiation of DNA replication. 
+J Cell Biochem 1996 Oct;63(1):1-22
+
+<li>
+Waldman AS, Tran H, Goldsmith EC, Resnick MA.	q
+Long inverted repeats are an at-risk motif for recombination in mammalian cells.
+Genetics. 1999 Dec;153(4):1873-83.
+PMID: 10581292; UI: 20050682
+
+<li>
+Jacobsen SE 
+Gene silencing: Maintaining methylation patterns. 
+Curr Biol 1999 Aug 26;9(16):R617-9
+
+<li>
+Lewis S, Akgun E, Jasin M. 
+Palindromic DNA and genome stability. Further studies.
+Ann N Y Acad Sci. 1999 May 18;870:45-57.
+PMID: 10415472; UI: 99343961
+
+<li>
+Dai X, Greizerstein MB, Nadas-Chinni K, Rothman-Denes LB 
+Supercoil-induced extrusion of a regulatory DNA hairpin. 
+Proc Natl Acad Sci U S A 1997 Mar 18;94(6):2174-9
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="chaos.html">chaos</a></td><td>Create a chaos game representation plot for a sequence</td></tr>
+<tr><td><a href="cpgplot.html">cpgplot</a></td><td>Plot CpG rich areas</td></tr>
+<tr><td><a href="cpgreport.html">cpgreport</a></td><td>Reports all CpG rich regions</td></tr>
+<tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td></tr>
+<tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
+<tr><td><a href="equicktandem.html">equicktandem</a></td><td>Finds tandem repeats</td></tr>
+<tr><td><a href="etandem.html">etandem</a></td><td>Looks for tandem repeats in a nucleotide sequence</td></tr>
+<tr><td><a href="isochore.html">isochore</a></td><td>Plots isochores in large DNA sequences</td></tr>
+<tr><td><a href="newcpgreport.html">newcpgreport</a></td><td>Report CpG rich areas</td></tr>
+<tr><td><a href="newcpgseek.html">newcpgseek</a></td><td>Reports CpG rich regions</td></tr>
+<tr><td><a href="palindrome.html">palindrome</a></td><td>Looks for inverted repeats in a nucleotide sequence</td></tr>
+<tr><td><a href="polydot.html">polydot</a></td><td>Displays all-against-all dotplots of a set of sequences</td></tr>
+<tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
+<tr><td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td></tr>
+<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This program was originally written by Richard Durbin and Jean
+Thierry-Mieg as part of the ACEDB genome database package.
+<p>
+
+This application was modified for inclusion in EMBOSS by Peter Rice <a
+href="mailto:pmr@sanger.ac.uk">(pmr@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

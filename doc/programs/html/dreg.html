@@ -1,0 +1,388 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: dreg
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: dreg
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program dreg
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+regular expression search of a nucleotide sequence
+
+
+<H2>
+    Description
+</H2>
+
+
+This searches for matches of a regular expression to a nucleic acid sequence.
+
+<p>
+A regular expression is a way of specifying an ambiguous pattern to
+search for.  Regular expressions are commonly used in some computer
+programming languages and may be more familiar to some users than to
+others. 
+
+<p>
+The following is a short guide to regular expressions in EMBOSS:
+
+
+<dl>
+<dt>^</dt><dd>
+use this at the start of a pattern to insist that the pattern can only
+match at the start of a sequence.  (eg.  '^AUG' matches a start codon at
+the start of the sequence)
+
+
+<dt>$</dt><dd>
+use this at the end of a pattern to insist that the pattern can only
+match at the end of a sequence (eg.  'A+$' matches a poly-A sequence at
+the end of the sequence)
+
+<dt>()</dt><dd>
+groups a pattern.  This is commonly used with '|' (eg.  '(AUG)|(ATG)'
+matches either the DNA or RNA form of the initiation codon )
+
+<dt>|</dt><dd>
+This is the OR operator to enable a match to be made to either one
+pattern OR another.  There is no AND operator in this version of regular
+expressions. 
+</dl>
+
+<p>
+
+The following quantifier characters specify the number of time that
+the character before (in this case 'x') matches:
+
+<dl>
+<dt>x?</dt><dd>
+matches 0 or 1 times (ie, '' or 'x')
+<dt>x*</dt><dd>
+matches 0 or more times (ie, '' or 'x' or 'xx' or 'xxx', etc)
+<dt>x+</dt><dd>
+matches 1 or more times (ie, 'x' or 'xx' or 'xxx', etc)
+
+</dl>
+
+<p>
+Quantifiers can follow any of the following types of character specification:
+
+<dl>
+<dt>x</dt><dd>
+any character (ie 'A')
+
+<dt>\x</dt><dd>
+the character after the backslash is used instead of its normal
+regular expression meaning.  This is commonly used to turn off the
+special meaning of the characters '^$()|?*+[]-.'.  It may be especially
+useful when searching for gap characters in a sequence (eg '\.' matches
+only a dot character '.')
+
+<dt>[xy]</dt><dd>
+match one of the characters 'x' or 'y'.  You may have one or more
+characters in this set. 
+
+<dt>[x-z]</dt><dd>
+match any one of the set of characters starting with 'x' and
+ending in 'y' in ASCII order (eg '[A-G]' matches any one of: 'A', 'B',
+'C', 'D', 'E', 'F', 'G')
+
+<dt>[^x-z]</dt><dd>
+matches anything except any one of the group of characters in
+ASCII order (eg '[^A-G]' matches anything EXCEPT any one of: 'A', 'B',
+'C', 'D', 'E', 'F', 'G')
+
+<dt>.</dt><dd>
+the dot character matches any other character (eg: 'A.G' matches
+'AAG', 'AaG', 'AZG', 'A-G' 'A G', etc.)
+</dl>
+
+Combining some of these features gives the example:
+
+<pre>
+'([AGC]+GGG)|(TTTGGG)'
+</pre>
+
+which matches one or more of any one of 'A' or
+'G' or 'C' followed by three 'G's or it matches just 'TTTGGG'. 
+
+<p>
+Regular expressions are case-sensitive.
+The pattern 'AAAA' will not match the sequence 'aaaa'.
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with dreg.
+
+<pre>
+
+% dreg
+Input sequence: embl:paamir
+Output file [paamir.dreg]: 
+Regular expression pattern: ggtacc
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outfile]           outfile    Output file name
+  [-pattern]           regexp     Regular expression pattern
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.dreg</td>
+</tr>
+
+<tr>
+<td>[-pattern]<br>(Parameter 3)</td>
+<td>Regular expression pattern</td>
+<td>Any regular epression pattern is accepted</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+Any sequence.
+
+
+<H2>
+    Output file format
+</H2>
+
+
+This is the output from the example run. Sequence embl:paamir begins
+at a restriction site with the sequence pattern GGTACC.
+
+<pre>
+
+dreg search of embl:paamir with pattern GGTACC
+Matches in PAAMIR
+         PAAMIR     1 GGTACC
+
+</pre>
+
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+Regular expressions are case-sensitive.
+The pattern 'AAAA' will not match the sequence 'aaaa'.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+Always returns 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="fuzznuc.html">fuzznuc</a></td><td>Nucleic acid pattern search</td></tr>
+<tr><td><a href="fuzzpro.html">fuzzpro</a></td><td>Protein pattern search</td></tr>
+<tr><td><a href="fuzztran.html">fuzztran</a></td><td>Protein pattern search after translation</td></tr>
+<tr><td><a href="patmatdb.html">patmatdb</a></td><td>Search a protein sequence with a motif</td></tr>
+<tr><td><a href="patmatmotifs.html">patmatmotifs</a></td><td>Search a PROSITE motif database with a protein sequence</td></tr>
+<tr><td><a href="preg.html">preg</a></td><td>regular expression search of a protein sequence</td></tr>
+<tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
+<tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<p>
+Other EMBOSS programs allow you to search for simple patterns and may be
+easier for the user who has never used regular expressions before:
+
+<ul>
+<li><a href="fuzznuc.html">fuzznuc</a>  - Nucleic acid pattern search
+<li><a href="fuzzpro.html">fuzzpro</a>  - Protein pattern search
+<li><a href="fuzztran.html">fuzztran</a> - Protein pattern search after translation
+</ul>
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Peter Rice <a
+href="mailto:pmr@sanger.ac.uk">(pmr@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,3 @@
+appl: demostring [ doc: "demonstration of the string functions"  group: demo ]
+
+string: instring [ required: Y prompt: "Value for instr" ]

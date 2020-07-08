@@ -1,0 +1,333 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: wordcount
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: wordcount
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program wordcount
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Counts words of a specified size in a DNA sequence
+
+
+<H2>
+    Description
+</H2>
+
+<pre>
+Displays all the words of the specified length with the number of
+times it occurs.
+</pre>
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with wordcount.
+
+<pre>
+% wordcount embl:rnu68037 -wordsize=3
+
+Counts words of a specified size in a DNA sequence
+ctg     54
+gcc     53
+tgg     53
+ggc     51
+cgc     47
+gct     47
+gtg     40
+tgc     39
+cct     38
+gcg     36
+cca     29
+ggg     26
+ctt     25
+tcc     25
+cag     25
+ggt     24
+ccc     24
+tgt     23
+ctc     23
+ccg     22
+cac     22
+gca     22
+cgt     22
+agc     21
+cgg     19
+acg     19
+ttg     19
+tcg     18
+agg     17
+ttc     17
+cat     17
+gag     16
+act     16
+gtc     16
+aac     15
+gga     14
+tct     14
+atc     14
+cta     13
+tca     13
+atg     12
+gtt     11
+gta     11
+acc     11
+aca     10
+tga     10
+caa     10
+tac     10
+tag     9
+gac     9
+agt     9
+ttt     8
+cga     7
+taa     6
+gat     6
+aga     5
+tat     5
+gaa     4
+tta     3
+aat     3
+ata     3
+att     3
+aag     2
+aaa     1
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+   -wordsize           integer    Word size
+   -outfile            outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence USA</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-wordsize</td>
+<td>Word size</td>
+<td>Integer 2 or more</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.wordcount</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+Any sequence USA.
+
+<H2>
+    Output file format
+</H2>
+
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+    0 if successfull.
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="chaos.html">chaos</a></td><td>Create a chaos game representation plot for a sequence</td></tr>
+<tr><td><a href="chips.html">chips</a></td><td>Codon usage statistics</td></tr>
+<tr><td><a href="codcmp.html">codcmp</a></td><td>Codon usage table comparison</td></tr>
+<tr><td><a href="compseq.html">compseq</a></td><td>Counts the composition of dimer/trimer/etc words in a sequence</td></tr>
+<tr><td><a href="cusp.html">cusp</a></td><td>Create a codon usage table</td></tr>
+<tr><td><a href="freak.html">freak</a></td><td>Residue/base frequency table or plot</td></tr>
+<tr><td><a href="geecee.html">geecee</a></td><td>Calculates the fractional GC content of nucleic acid sequences</td></tr>
+<tr><td><a href="isochore.html">isochore</a></td><td>Plots isochores in large DNA sequences</td></tr>
+<tr><td><a href="newcpgreport.html">newcpgreport</a></td><td>Report CpG rich areas</td></tr>
+<tr><td><a href="newcpgseek.html">newcpgseek</a></td><td>Reports CpG rich regions</td></tr>
+<tr><td><a href="wobble.html">wobble</a></td><td>Wobble base plot</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Ian Longden <a
+href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+    History
+</H2>
+
+Completed 27th November 1998.
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

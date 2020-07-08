@@ -1,0 +1,24 @@
+appl: pepwindow [
+        doc: "Displays protein hydropathy"
+        groups: "protein: sequence properties, hydropathy"
+]
+
+  sequence: sequencea [ param: Y type: pureprotein]
+
+  xygraph: graph [required:Y  multi:1 gxtitle: $(sequencea.name)
+	gytitle: "Hydropathy" gtitle: "Kyte-Doolittle Plot" ]
+
+  datafile: datafile [
+        optional: Y
+        info: "nakai database file"
+        def: "Enakai.dat"
+  ]
+
+  int: length [
+        optional: Y 
+        info: "window size"
+        def : "7"
+        min : "1"
+        max : "200"
+  ]
+

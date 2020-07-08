@@ -1,0 +1,15 @@
+# pK values for amino acids
+# O=Ornithine J=Hydroxyproline
+#
+# Amino acid	pK
+Amino		8.6
+Carboxyl	3.6
+
+C		8.5
+D		3.9
+E		4.1
+H		6.5
+K		10.8
+R		12.5
+Y		10.1
+

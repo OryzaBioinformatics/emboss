@@ -1,0 +1,47 @@
+appl: merger [
+        doc: "Merge two overlapping nucleic acid sequences"
+        groups: "alignment, sequence editing"
+]
+
+  sequence: seqa [
+	param: Y
+	type: DNA
+  ]
+
+  sequence: seqb [ 
+	param: Y
+	type: DNA
+  ]
+
+  seqout: outseq [ 
+        param: Y
+  ]
+
+  matrixf: datafile [
+	opt: Y
+	info: "Matrix file"
+        protein: $(seqa.protein)
+  ]
+
+  float: gapopen [ 
+	opt: Y 
+	info: "Gap opening penalty" 
+	min: 1. 
+	max: 100.
+        def: 50.0 
+  ]
+
+  float: gapextend [ 
+	opt: Y 
+	info: "Gap extension penalty" 
+	min: .1 
+	max: 10.
+        def: 5 
+  ]
+
+  outfile: report [
+	req: Y 
+        def: stdout
+	info: "Output alignment and explanation"
+  ]
+

@@ -1,0 +1,28 @@
+appl: banana [
+        doc: "Bending and curvature plot in B-DNA"
+        groups: "DNA: sequence properties"
+]
+
+  sequence: sequence [ param: y type: puredna ]
+
+  datafile: datafile [
+        optional: Y
+        info: "angles file"
+        def: "Eangles_tri.dat"
+  ]
+
+  graph: graph [
+        req: y
+	gtitle: "Bending and curvature plot of $(sequence.name)"
+  ]
+
+  int:    residuesperline [
+        opt: Y 
+        def: "50"
+        info: "Number of residues to be displayed on each line" 
+  ]
+
+  outfile: outfile [ 
+	opt: Y 
+	def: "banana.profile"
+  ]

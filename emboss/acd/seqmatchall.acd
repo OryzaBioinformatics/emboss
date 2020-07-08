@@ -1,0 +1,30 @@
+# seqmatchall application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# pmr 22-apr-98
+
+appl: seqmatchall [
+	doc: "Does an all-against-all comparison of a set of sequences"
+	groups: "sequence comparison"
+]
+
+seqset: sequence [
+  param: Y
+  type: any
+]
+
+int: wordsize [
+  required: Y
+  default: 4
+  minimum: 2
+  info: "Word size"
+]
+
+outfile: outfile [
+  param: Y
+]

@@ -1,0 +1,102 @@
+
+                               EMBOSS: wobble
+     _________________________________________________________________
+   
+                                Program wobble
+                                       
+Function
+
+   Wobble base plot
+   
+Description
+
+   Wobble plots the third position variability as an indicator of a
+   potential coding region.
+   
+Usage
+
+   Here is a sample session with wobble. The example sequence is from
+   Pseudomonas aeruginosa, which has a high G+C content and a very biased
+   third codon position (if it can be G or C, it usually is).
+
+% wobble
+Wobble base plot
+Input sequence: embl:paamir
+Graph type [x11]:
+Output file [paamir.wobble]:
+
+   click here for the result
+   
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+   -graph              xygraph    Graph type
+   -outf               outfile    Output file name
+
+   Optional qualifiers:
+   -window             integer    Window size in codons
+
+   Advanced qualifiers:
+   -bases              string     Bases used
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence USA Readable sequence Required
+   -graph Graph type EMBOSS has a list of known devices, including
+   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
+   EMBOSS_GRAPHICS value, or x11
+   -outf Output file name Output file <sequence>.wobble
+   Optional qualifiers Allowed values Default
+   -window Window size in codons Integer 1 or more 30
+   Advanced qualifiers Allowed values Default
+   -bases Bases used Any string is accepted GC
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   chaos Create a chaos game representation plot for a sequence
+   chips Codon usage statistics
+   codcmp Codon usage table comparison
+   compseq Counts the composition of dimer/trimer/etc words in a sequence
+   cusp Create a codon usage table
+   freak Residue/base frequency table or plot
+   geecee Calculates the fractional GC content of nucleic acid sequences
+   isochore Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   tfscan Scans DNA sequences for transcription factors
+   wordcount Counts words of a specified size in a DNA sequence
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

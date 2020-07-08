@@ -1,0 +1,117 @@
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# GWW 12 May 1999
+
+appl: wossname [
+	doc: "Finds programs by keywords in their one-line documentation"
+	group: "utilities:keyword:search"
+]
+
+  string: search [
+	param: Y
+	def: ""
+	prompt: "Keyword to search for, or blank to list all programs"
+	help: "Enter a word or words here and a case-independent search
+for it will be made in the one-line documentation of all of the EMBOSS
+programs. If no keyword is specified, all programs will be listed."
+  ]
+
+  outfile: outfile [
+        opt: Y
+	def: "stdout"
+        prompt: "Output program details to a file"
+        help: "If you enter the name of a file here then this program
+will write the program names and brief descriptions into that file."
+  ]
+
+
+  bool: html [
+        opt: Y
+        def: N
+        prompt: "Format the output for HTML"
+        help: "If you are sending the output to a file, this will format
+it for displaying as a table in a WWW document."
+  ]
+
+  string: prelink [
+	opt: $(html)
+	def: ""
+	prompt: "String to form the first half of an HTML link"
+	help "If you are outputting to a file in HTML format, you can
+make the program names into hyper-links by setting this to be the first
+half of the URL. \ For example, if you wish the program name to be a
+hyperlink to the URL: \
+http://www.sanger.ac.uk/Software/EMBOSS/Apps/programname.shtml \ then if
+you enter \ http://www.sanger.ac.uk/Software/EMBOSS/Apps/ here, then the
+first half of the URL before the programname will be set."
+  ]
+
+  string: postlink [
+	opt: $(html)
+	def: ""
+	prompt: "String to form the second half of an HTML link"
+	help "If you are outputting to a file in HTML format, you can
+make the program names into hyper-links by setting this to be the second
+half of the URL. \ For example, if you wish the program name to be a
+hyperlink to the URL: \
+http://www.sanger.ac.uk/Software/EMBOSS/Apps/programname.shtml \ then if
+you enter '.shtml' here, the second half of the URL after the
+programname will be set."
+  ]
+
+  bool: groups [
+        opt: Y
+        def: N
+        prompt: "Output only the group names"
+        help: "If you use this option, then only the group names will
+output to the file"
+  ]
+
+  bool: alphabetic [
+	opt: Y
+	def: N
+	prompt: "Output an alphabetic list of programs"
+	help: "If you use this option, then you will get a single list
+of the program names and descriptions instead of the programs being
+listed in their functional groups."
+  ]
+
+  bool: emboss [
+	def: Y
+	info: "Search the EMBOSS programs"
+	help: "If you use this option then EMBOSS program documentation
+will be searched.  If this option is set to be false, then only the
+EMBASSY programs will be searched (if the -embassy option is true). 
+EMBASSY programs are not strictly part of EMBOSS, but use the same code
+libraries and share the same look and feel, but are generally developed
+by people who wish the programs to be outside of the GNU Public Licence
+sheme, ie.  they may wish to charge money for them."
+  ]
+
+  bool: embassy [
+	def: Y
+	info: "Search the EMBASSY programs"
+	help: "If you use this option then EMBASSY program documentation
+will be searched.  If this option is set to be false, then only the
+EMBOSS programs will be searched (if the -emboss option is true). 
+EMBASSY programs are not strictly part of EMBOSS, but use the same code
+libraries and share the same look and feel, but are generally developed
+by people who wish the programs to be outside of the GNU Public Licence
+sheme, ie.  they may wish to charge money for them."
+  ]
+
+
+  bool: explode [
+	opt: Y
+	def: N
+	prompt: "Use the expanded group names"
+	help: "The groups that EMBOSS applications belong to have two
+forms, exploded and not exploded.  The exploded group names are more
+numerous and often vaguely phrased than the non-exploded ones.  The
+exploded names are formed from definitions of the group names that start
+like NAME1:NAME2 and which are then expanded into many combinations of
+the names as: 'NAME1', 'NAME2', 'NAME1 NAME2', NAME2 NAME1'.  The
+non-expanded names are simply like: 'NAME1 NAME2'."
+  ]
+
+

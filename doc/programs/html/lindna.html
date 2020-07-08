@@ -1,0 +1,491 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: lindna
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: lindna
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program lindna
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Draws linear maps of DNA constructs
+
+
+<H2>
+    Description
+</H2>
+
+
+The program 'lindna' draws linear maps of DNA constructs.
+
+<p>
+It uses the graphical shapes: ticks, ranges, and blocks to
+represent genetic markers (e.g, genes and ESTs) and places them
+according to their position in a DNA fragment.  The markers can be
+organized in different groups. 
+
+<p>
+The program reads in one input file in which the user specifies the
+names and positions of the genetic markers.  In this file the user also
+enters data for controlling the appearance of the markers. 
+
+<p>
+A refined customization of the drawing can be achieved by running the
+program with '-options' on the command line and changing the values of
+the desired parameters. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with lindna.
+
+<pre>
+
+Graph type [x11]: 
+Input file [inputfile]: data.linp
+ticks inside or outside the circle (enter In or Out) [Out]: 
+text inside or outside the blocks (enter In or Out) [In]: 
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+   -graphout           graph      Graph type
+   -inputfile          infile     input file containing mapping data
+
+   Optional qualifiers:
+   -intersymbol        string     type of junctions between blocks (enter
+                                  Straight, Up, Down, or No)
+   -intercolor         integer    color of junctions between blocks (enter a
+                                  color number)
+   -interticks         string     do you want horizontal junctions between
+                                  ticks (Y or N)
+   -gapsize            integer    interval between ticks in the ruler (enter
+                                  an integer)
+   -ticklines          string     do you want vertical lines at the ruler's
+                                  ticks (Y or N)
+   -tickheight         float      height of ticks (enter a number to multiply
+                                  the default height)
+   -blockheight        float      height of blocks (enter a number to multiply
+                                  the default height)
+   -rangeheight        float      height of range ends (enter a number to
+                                  multiply the default height)
+   -gapgroup           float      space between groups (enter a number to
+                                  multiply the default space)
+   -postext            float      space between text and ticks, blocks, and
+                                  ranges (enter a number to multiply the
+                                  default space)
+
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-graphout</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr>
+<td>-inputfile</td>
+<td>input file containing mapping data</td>
+<td>Input file</td>
+<td>inputfile</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-intersymbol</td>
+<td>type of junctions between blocks (enter Straight, Up, Down, or No)</td>
+<td>Any string is accepted</td>
+<td>Straight</td>
+</tr>
+
+<tr>
+<td>-intercolor</td>
+<td>color of junctions between blocks (enter a color number)</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-interticks</td>
+<td>do you want horizontal junctions between ticks (Y or N)</td>
+<td>Any string is accepted</td>
+<td>N</td>
+</tr>
+
+<tr>
+<td>-gapsize</td>
+<td>interval between ticks in the ruler (enter an integer)</td>
+<td>Any integer value</td>
+<td>500</td>
+</tr>
+
+<tr>
+<td>-ticklines</td>
+<td>do you want vertical lines at the ruler's ticks (Y or N)</td>
+<td>Any string is accepted</td>
+<td>N</td>
+</tr>
+
+<tr>
+<td>-tickheight</td>
+<td>height of ticks (enter a number to multiply the default height)</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-blockheight</td>
+<td>height of blocks (enter a number to multiply the default height)</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-rangeheight</td>
+<td>height of range ends (enter a number to multiply the default height)</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-gapgroup</td>
+<td>space between groups (enter a number to multiply the default space)</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-postext</td>
+<td>space between text and ticks, blocks, and ranges (enter a number to multiply the default space)</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+Here is the input file data.linp for the example run: 
+
+<p>
+<pre>
+
+----------------------------------------------------------------------
+Start   1001
+End     4270
+
+
+group
+exons
+label
+Block   1011    1362    3       H
+ex1
+endlabel
+label
+Tick    1610    8       H
+EcoR1
+endlabel
+label
+Block   1647    1815    1       H
+endlabel
+label
+Tick    2459    8       H
+BamH1
+endlabel
+label
+Block   4139    4258    3       H
+ex2
+endlabel
+endgroup
+
+
+group
+repeat-regions
+label
+Range   2541    2812    [       ]       5       V
+Alu
+endlabel
+label
+Range   3322    3497    &gt;       &lt;       5       V
+MER13
+endlabel
+endgroup
+-------------------------------------------------------------------------
+
+</pre>
+
+<p>
+Blank lines in the input file are ignored. 
+
+<p>
+The file is organized in several fields separated by one or more space
+or TAB characters.
+
+<p>
+The first non-blank line gives the start position of the DNA fragment to
+be drawn after the keyword 'Start'.  The end position is on the second
+line following the keyword 'End'. 
+
+<p>
+Then, one or more groups (up to a maximum of 100) of genetic markers are
+defined.  Each group begins with a line consisting of the keyword
+'group' and ends with a line consisting of the keyword 'endgroup'. 
+
+<p>
+If desired, a group name can be given on the very next line. Spaces 
+and tabulations are allowed but only the first 20 characters of that name 
+(including spaces) will be displayed. 
+
+<p>
+Next, the individual markers (up to a maximum of 100) of the group are
+described.  Each marker begins with a line consisting of the keyword
+'label' and ends with a line consisting of the keyword 'endlabel'.
+
+<p>
+Do not start a new marker (by using a 'label' line) before you have
+closed the previous marker (by using an 'endlabel' line).  You must end
+a previous marker specification before starting a new one.  i.e.  do not
+overlap marker specifications in the input file. 
+
+<p>
+For each marker, the line following the 'label' line describes the
+marker. Three types of markers can be drawn: ticks, blocks, and ranges. 
+
+<p>
+For a tick, the descriptive line begins with the keyword 'Tick',
+followed by the position of the tick in the DNA fragment, and a number
+from 0 to 15 specifying the color in which the tick will be drawn (a
+list of available colors is given below).  If desired, one or more names
+can be written above the tick.  In this case an optional letter H or V
+should be added to the line.  H or V indicate whether the text will be
+horizontal or vertical, respectively.  If no letter is specified, H is
+assumed by default.  A list of one or more names can be given on the
+next lines with one name per line. 
+
+<p>
+For a block, the descriptive line begins with the keyword 'Block',
+followed by the start and end positions of the block in the DNA
+fragment, and the number of the block's color.  If desired, one or more
+names can be written above the block.  Names are given on the following
+lines.  An optional letter H or V can be added to the end of the
+descriptive line to specify the orientation of the name(s). 
+
+<p>
+For a range, the descriptive line begins with the keyword 'Range',
+followed by the start and end positions of the range in the DNA
+fragment.  Next on the line are the types of boundaries that are to be
+drawn.  The user can choose among '&gt;', '&lt;', '[', and ']' for both start
+and end boundaries.  If none of these types is wanted for a given
+boundary, then a point '.' must be entered.  Next is the color number. 
+If desired, one or more names can be written above the range.  Names are
+given on the following lines.  An optional letter H or V can be added to
+the end of the descriptive line to specify the orientation of the
+name(s). 
+
+<p>
+For any type of markers, try to avoid long names.
+
+<p>
+The colors defined in the PLPLOT graphics library are:
+
+<p>
+0 "BLACK", 1 "RED", 2 "YELLOW", 3 "GREEN", 4 "AQUAMARINE",
+5 "PINK", 6 "WHEAT", 7 "GREY", 8 "BROWN", 9 "BLUE", 10 "BLUEVIOLET",
+11 "CYAN", 12 "TURQUOISE", 13 "MAGENTA", 14 "SALMON", and 15 "WHITE".
+
+<p>
+This format can also be used for the program <a
+href="cirdna.html">"cirdna". </a>
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="cirdna.html">cirdna</a></td><td>Draws circular maps of DNA constructs</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Nicolas Tourasse <a
+href="mailto:nicolas.tourasse@biotek.uio.no">(nicolas.tourasse@biotek.uio.no)</a>
+at <a href="http://www.no.embnet.org/">the Norwegian EMBnet node.</a>
+
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

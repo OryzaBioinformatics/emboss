@@ -1,0 +1,21 @@
+appl: simplesw [
+        doc: "Simple Smith-Waterman alignment."
+        groups: "alignment: local"
+]
+
+  sequence: sequencea [ param: Y type: any ]
+
+  sequence: sequenceb [ param: Y
+     type: "@($(sequencea.protein) ? protein : nucleotide)" ]
+
+  matrix: datafile [
+	optional: Y
+	help: "Matrix file"
+        protein: $(sequencea.protein)
+  ]
+
+  bool: showinternals [
+	optional: Y
+	def: "N"
+        info: "Show internals of calculation"
+  ]

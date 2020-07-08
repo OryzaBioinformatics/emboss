@@ -1,0 +1,451 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: cpgplot
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: cpgplot
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program cpgplot
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Plot CpG rich areas
+
+
+<H2>
+    Description
+</H2>
+
+
+CpG refers to a C nucleotide immediately followed by a G.  The 'p' in
+'CpG' refers to the phosphate group linking the two bases. 
+
+<p>
+Detection of regions of genomic sequences that are rich in the CpG
+pattern is important because such regions are resistant to methylation
+and tend to be associated with genes which are frequently switched on. 
+Regions rich in the CpG pattern are known as CpG islands.  
+
+<p>
+It has been estimated that about half of all mammalian genes have a
+CpG-rich region around their 5' end.  It is said that all mammalian
+house-keeping genes have a CpG island!
+
+<p>
+Non-mammalian vertebrates have some CpG islands that are associated with
+genes, but the association gets equivocal in the farther taxonomic
+groups. 
+
+<p>
+Finding a CpG island upstream of predicted exons or genes is good
+contributory evidence. 
+
+<p>
+By default, this program defines a CpG island as a region where, over an
+average of 10 windows, the calculated % composition is over 50% and the
+calculated Obs/Exp ratio is over 0.6 and the conditions hold for a
+minimum of 200 bases.  These conditions can be modified by setting the
+values of the appropriate parameters. 
+
+<p>
+The Expected number of CpG patterns in a window is calculated as the
+number of 'C's in the window multiplied by the number of 'G's in the
+window, divided by the window length. 
+
+<p>
+This program reads in one or more sequences and calculates the Obs/Exp
+ratio, the percentage CpG over a window which is moved along the
+sequence.  These calculated values can be plotted, together with the
+regions which match this program's definition of a CpG island. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with cpgplot.
+
+<pre>
+
+% cpgplot embl:rnu68037
+Plot CpG rich areas
+Window size [100]: 
+Shift increment [1]: 
+Minimum Length [200]: 
+Minimum observed/expected [0.6]: 
+Minimum percentage [50.]: 
+Output file [rnu68037.cpgplot]: 
+Graph type [x11]: 
+
+</pre>
+<a href="./cpgplot0.gif">click here for result</a>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -window             integer    The percentage CG content and the Observed
+                                  frequency of CG is calculated within a
+                                  window whose size is set by this parameter.
+                                  The window is moved down the sequence and
+                                  these statistics are calculated at each
+                                  postition that the window is moved to.
+   -shift              integer    This determines the number of bases that the
+                                  window is moved each time after values of
+                                  the percentage CG content and the Observed
+                                  frequency of CG are calculated within the
+                                  window.
+   -minlen             integer    This sets the minimum length that a CpG
+                                  island has to be before it is reported.
+   -minoe              float      This sets the minimum average observed to
+                                  expected ratio of C plus G to CpG in a set
+                                  of 10 windows that are required before a CpG
+                                  island is reported.
+   -minpc              float      This sets the minimum average percentage of
+                                  G plus C a set of 10 windows that are
+                                  required before a CpG island is reported.
+  [-outfile]           outfile    This sets the name of the file holding the
+                                  report of the input sequence name, CpG
+                                  island parameters and the output details of
+                                  any CpG islands that are found.
+  [-graph]             xygraph    Graph type
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -[no]obsexp         bool       If this is set to true then the graph of the
+                                  observed to expected ratio of C plus G to
+                                  CpG within a window is displayed.
+   -[no]cg             bool       If this is set to true then the graph of the
+                                  regions which have been determined to be
+                                  CpG islands is displayed.
+   -[no]pc             bool       If this is set to true then the graph of the
+                                  percentage C plus G within a window is
+                                  displayed.
+   -featout            featout    File for output features
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-window</td>
+<td>The percentage CG content and the Observed frequency of CG is calculated within a window whose size is set by this parameter. The window is moved down the sequence and these statistics are calculated at each postition that the window is moved to.</td>
+<td>Integer 1 or more</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>-shift</td>
+<td>This determines the number of bases that the window is moved each time after values of the percentage CG content and the Observed frequency of CG are calculated within the window.</td>
+<td>Integer 1 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-minlen</td>
+<td>This sets the minimum length that a CpG island has to be before it is reported.</td>
+<td>Integer 1 or more</td>
+<td>200</td>
+</tr>
+
+<tr>
+<td>-minoe</td>
+<td>This sets the minimum average observed to expected ratio of C plus G to CpG in a set of 10 windows that are required before a CpG island is reported.</td>
+<td>Number from 0.000 to 10.000</td>
+<td>0.6</td>
+</tr>
+
+<tr>
+<td>-minpc</td>
+<td>This sets the minimum average percentage of G plus C a set of 10 windows that are required before a CpG island is reported.</td>
+<td>Number from 0.000 to 100.000</td>
+<td>50.</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>This sets the name of the file holding the report of the input sequence name, CpG island parameters and the output details of any CpG islands that are found.</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.cpgplot</td>
+</tr>
+
+<tr>
+<td>[-graph]<br>(Parameter 3)</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]obsexp</td>
+<td>If this is set to true then the graph of the observed to expected ratio of C plus G to CpG within a window is displayed.</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]cg</td>
+<td>If this is set to true then the graph of the regions which have been determined to be CpG islands is displayed.</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]pc</td>
+<td>If this is set to true then the graph of the percentage C plus G within a window is displayed.</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-featout</td>
+<td>File for output features</td>
+<td>Writeable feature table</td>
+<td><i>unknown.gff</i></td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+Any DNA sequence USA.
+
+<H2>
+    Output file format
+</H2>
+
+
+The output file from the above example (rnu68037.cpgplot) follows:
+
+<pre>
+
+CPGPLOT islands of unusual CG composition
+RNU68037 from 51 to 1168
+
+     Observed/Expected ratio &gt; 0.60
+     Percent C + Percent G &gt; 50.00
+     Length &gt; 200
+
+ Length 233 (157..389)
+
+ Length 310 (654..963)
+
+</pre>
+
+<p>
+The first non-blank line of the output file is the title of the output
+file.  It is followed by the name of the sequence and the region
+analysed (from the centre of the first window to the centre of the last
+window).  The conditions for specifying a CpG island follow
+(Observed/Expected ratio, Percent C + Percent G, Length).
+
+<p>
+The length and start and end positions of any predicted CpG islands are
+then output.
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+The original program was described in:
+
+<p>
+Larsen F, Gundersen G, Lopez R, Prydz H
+"CpG islands as gene markers in the human genome."
+Genomics 1992 Aug;13(4):1095-107
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+    0 if successful.
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="chaos.html">chaos</a></td><td>Create a chaos game representation plot for a sequence</td></tr>
+<tr><td><a href="cpgreport.html">cpgreport</a></td><td>Reports all CpG rich regions</td></tr>
+<tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td></tr>
+<tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
+<tr><td><a href="einverted.html">einverted</a></td><td>Finds DNA inverted repeats</td></tr>
+<tr><td><a href="equicktandem.html">equicktandem</a></td><td>Finds tandem repeats</td></tr>
+<tr><td><a href="etandem.html">etandem</a></td><td>Looks for tandem repeats in a nucleotide sequence</td></tr>
+<tr><td><a href="geecee.html">geecee</a></td><td>Calculates the fractional GC content of nucleic acid sequences</td></tr>
+<tr><td><a href="isochore.html">isochore</a></td><td>Plots isochores in large DNA sequences</td></tr>
+<tr><td><a href="newcpgreport.html">newcpgreport</a></td><td>Report CpG rich areas</td></tr>
+<tr><td><a href="newcpgseek.html">newcpgseek</a></td><td>Reports CpG rich regions</td></tr>
+<tr><td><a href="palindrome.html">palindrome</a></td><td>Looks for inverted repeats in a nucleotide sequence</td></tr>
+<tr><td><a href="polydot.html">polydot</a></td><td>Displays all-against-all dotplots of a set of sequences</td></tr>
+<tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
+<tr><td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td></tr>
+<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+<pre>
+Completed 23rd March 1999.
+Last modified 28th July 1999.
+</pre>
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

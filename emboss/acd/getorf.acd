@@ -1,0 +1,125 @@
+# getorf application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# GWW 12 Aug 1999
+
+appl: getorf [
+	doc: "Finds and extracts open reading frames (ORFs)"
+	group: "translation, gene finding"
+]
+
+  seqall: sequence [
+	param: Y
+        type: DNA
+  ]
+
+  seqoutall: outseq [
+	param: Y
+	ext: "orf"
+  ]
+
+  list: table [
+	opt: Y
+	default: "0"
+	min: 1
+	max: 1
+	header: "Genetic codes"
+	values: 
+		"0:Standard;
+		1:Standard (with alternative initiation codons); 
+		2:Vertebrate Mitochondrial;
+		3:Yeast Mitochondrial;
+		4:Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma;
+		5:Invertebrate Mitochondrial;
+		6:Ciliate Macronuclear and Dasycladacean;
+		9:Echinoderm Mitochondrial;
+		10:Euplotid Nuclear;
+		11:Bacterial;
+		12:Alternative Yeast Nuclear;
+		13:Ascidian Mitochondrial;
+		14:Flatworm Mitochondrial; 
+		15:Blepharisma Macronuclear"
+	delim: ";"
+	codedelim: ":"
+	info: "Code to use"
+  ]
+
+
+  int: minsize [
+	opt: Y
+	default: 30
+	info: "Minimum nucleotide size of ORF to report"
+  ]
+
+  list: find [
+	opt: Y
+	default: "0"
+	min: 1
+	max: 1
+	header: "Type of sequence to output"
+	values:
+		"0:Translation of regions between STOP codons;
+		1:Translation of regions between START and STOP codons;
+		2:Nucleic sequences between STOP codons;
+		3:Nucleic sequences between START and STOP codons;
+		4:Nucleotides flanking START codons;
+		5:Nucleotides flanking initial STOP codons;
+		6:Nucleotides flanking ending STOP codons"
+	delim: ";"
+	codedelim: ":"
+	info: "Type of output"
+	help: "This is a small menu of possible output options.  The
+               first four options are to select either the protein
+               translation or the original nucleic acid sequence of
+               the open reading frame.  There are two possible
+               definitions of an open reading frame: it can either be
+               a region that is free of STOP codons or a region that
+               begins with a START codon and ends with a STOP codon.
+               The last three options are probably only of interest to
+               people who wish to investigate the statistical
+               properties of the regions around potential START or
+               STOP codons.  The last option assumes that ORF lengths
+               are calculated between two STOP codons."
+  ]
+
+
+  bool: methionine [
+	default: Y
+	info: "Change initial START codons to Methionine"
+	help: "START codons at the beginning of protein products will
+               usually code for Methionine, despite what the codon
+               will code for when it is internal to a protein.  This
+               qualifier sets all such START codons to code for
+               Methionine by default."
+  ]
+
+  bool: circular [
+	default: N
+	info: "Is the sequence circular"
+  ]
+
+
+  bool: reverse [
+        default: Y
+        info: "Find ORFs in the reverse sequence"
+        help: "Set this to be false if you do not wish to find ORFs in
+               the reverse complement of the sequence."
+  ]
+
+  int: flanking [
+	default: 100
+	info: "Number of flanking nucleotides to report"
+
+	help: "If you have chosen one of the options of the type of
+               sequence to find that gives the flanking sequence
+               around a STOP or START codon, this allows you to set
+               the number of nucleotides either side of that codon to
+               output.  If the region of flanking nucleotides crosses
+               the start or end of the sequence, no output is given
+               for this codon."
+  ]

@@ -1,0 +1,118 @@
+appl: est2genome [
+	doc: "Align EST and genomic DNA sequences"
+	groups: "alignment"
+]
+
+  seqall: est [ 
+	param: Y 
+	type: dna 
+	prompt: "EST sequence(s)" 
+  ]
+
+  sequence: genome [ 
+	param: Y 
+	type: dna 
+	prompt: "Genomic sequence" 
+  ]
+
+  int: match [ 
+	def: 1 
+	info: "Score for matching two bases"
+  ]
+
+  int: mismatch [ 
+	def: 1 
+	info: "Cost for mismatching two bases"
+  ]
+
+  int: gappenalty [ 
+	def: 2 
+	info: "Gap penalty"
+        help: "Cost for deleting a single base in either sequence,
+excluding introns"
+  ]
+
+  int: intronpenalty [ 
+	def: 40 
+	info: "Intron penalty"
+	help: "Cost for an intron, independent of length." 
+  ]
+
+  int: splicepenalty [ 
+	def: 20 
+	info: "Splice site penalty"
+	help: "Cost for an intron, independent of length and
+starting/ending on donor-acceptor sites"
+  ]
+
+  int: minscore [ 
+	def: 30 
+	info: "Minimum accepted score" 
+	help: "You can exclude alignments with scores below a threshold
+by setting this to be false."
+  ]
+
+  bool: reverse [ 
+	info: "Reverse orientation" 
+  ]
+
+  bool: splice [ 
+	def: Y 
+	info: "Use donor and acceptor splice sites" 
+	help: "Use donor and acceptor splice sites.  If you want to
+ignore donor-acceptor sites then set this to be false."
+  ]
+
+  bool: align [ 
+	info: "Show the alignment" 
+	help: "Show the alignment.  The alignment includes the first and
+last 5 bases of each intron, together with the intron width.  The
+direction of splicing is indicated by angle brackets (forward or reverse)
+or ???? (unknown)."
+  ]
+
+  int: width [ 
+	def: 50 
+	info: "Alignment width" 
+  ]
+
+  string: mode [ 
+	def: both 
+	info: "Comparison mode"
+	help: "This determines the comparion mode.  The default value is
+'both', in which case both strands of the est are compared assuming a
+forward gene direction (ie GT/AG splice sites), and the best comparsion
+redone assuming a reversed (CT/AC) gene splicing direction.  The other
+allowed modes are 'forward', when just the forward strand is searched,
+and 'reverse', ditto for the reverse strand."
+  ]
+
+  bool: best [ 
+	def: Y 
+	info: "Print out only best alignment" 
+	help: "You can print out all comparisons instead of just the
+best one by setting this to be false."
+  ]
+
+  float: space [ 
+	def: 10.0 
+	info: "Space threshold (in megabytes)" help: "for linear-space
+recursion.  If product of sequence lengths divided by 4 exceeds this
+then a divide-and-conquer strategy is used to control the memory
+requirements.  In this way very long sequences can be aligned.  \ If you
+have a machine with plenty of memory you can raise this parameter (but
+do not exceed the machine's physical RAM)"
+               ]
+
+  int: shuffle [ 
+	info: "Shuffle" 	
+  ]
+
+  int: seed [ 
+	def: 20825 
+	info: "Random number seed" 
+  ]
+
+  outfile: outfile [
+	req: y 
+  ]

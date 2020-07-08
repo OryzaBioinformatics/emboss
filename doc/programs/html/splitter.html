@@ -1,0 +1,305 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: splitter
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: splitter
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program splitter
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Split a sequence into (overlapping) smaller sequences
+
+
+<H2>
+    Description
+</H2>
+
+
+	This simple editing program allows you to split a long sequence
+	into smaller, optionally overlapping, subsequences. 
+
+<H2>
+    Usage
+</H2>
+
+
+	To split a sequence into sub-sequences of 10,000 bases (the
+	default size) with no overlap between the sub-sequences:
+
+<pre>
+	% splitter one_huge.seq many_small.seq
+</pre>
+
+	To split a sequence into sub-sequences of 50,000 bases with an
+	overlap of 3,000 bases on each sub-sequence. 
+
+<pre>
+	% splitter one_huge.seq many_small.seq -size=50000 -over=3000
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outseq]            seqoutall  Output sequence(s) USA
+
+   Optional qualifiers:
+   -size               integer    Size to split at
+   -overlap            integer    Overlap between split sequences
+
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Output sequence(s) USA</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-size</td>
+<td>Size to split at</td>
+<td>Any integer value</td>
+<td>10000</td>
+</tr>
+
+<tr>
+<td>-overlap</td>
+<td>Overlap between split sequences</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input File Format
+</H2>
+
+
+	One or more sequences
+
+<H2>
+    Output File Format
+</H2>
+
+
+
+	Many sequences.
+<p>
+	The names of the sequences are the same as the original
+	sequence, with '_start-end' appended, where 'start', and 'end' are the
+	start and end positions of the sub-sequence. eg:
+	The name HSHBB would be changed in the sub-sequences to:
+	HSHBB_1-50000 and HSHBB_50001-73308 if they were split at the
+	size of 50000 with no overlap. 
+
+<H2>
+    Data files
+</H2>
+
+
+	None.	
+
+<H2>
+    Notes
+</H2>
+
+
+	There should be little requirement to split sequences into
+	smaller sub-sequences in EMBOSS, but there may be circumstances where
+	memory usage becomes restrictive when dealing with truly large
+	sequences. 
+
+<H2>
+    References
+</H2>
+
+
+	None
+
+<H2>
+    Warnings
+</H2>
+
+
+	None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+	None.
+
+<H2>
+    Exit status
+</H2>
+
+
+	It always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+
+        Bugs noted but not yet fixed.
+	None.
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="cutseq.html">cutseq</a></td><td>Removes a specified section from a sequence</td></tr>
+<tr><td><a href="extractseq.html">extractseq</a></td><td>Extract regions from a sequence</td></tr>
+<tr><td><a href="maskfeat.html">maskfeat</a></td><td>Mask off features of a sequence</td></tr>
+<tr><td><a href="maskseq.html">maskseq</a></td><td>Mask off regions of a sequence</td></tr>
+<tr><td><a href="merger.html">merger</a></td><td>Merge two overlapping nucleic acid sequences</td></tr>
+<tr><td><a href="newseq.html">newseq</a></td><td>Type in a short new sequence</td></tr>
+<tr><td><a href="noreturn.html">noreturn</a></td><td>Removes carriage return from ASCII files</td></tr>
+<tr><td><a href="nthseq.html">nthseq</a></td><td>Writes one sequence from a multiple set of sequences</td></tr>
+<tr><td><a href="pasteseq.html">pasteseq</a></td><td>Insert one sequence into another</td></tr>
+<tr><td><a href="revseq.html">revseq</a></td><td>Reverse and complement a sequence</td></tr>
+<tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Gary Williams <a
+href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+	Completed 22 March 1999
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

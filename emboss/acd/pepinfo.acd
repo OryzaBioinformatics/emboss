@@ -1,0 +1,64 @@
+appl: pepinfo [
+  documentation: "Plots simple amino acid properties in parallel"
+  groups: "protein: sequence properties"
+]
+
+sequence: inseq  [
+  parameter: "Y"
+  type: "protein"
+]
+
+xygraph: graph  [
+  req: Y
+  multiple: "3"
+]
+
+outfile: outfile  [
+  parameter: "Y"
+  default: "pepinfo.out"
+]
+
+bool: generalplot [ def: Y info: "plot histogram of general properties" ]
+bool: hydropathyplot [ def: Y info: "plot graphs of hydropathy" ]
+
+integer: hwindow  [
+  optional: Y
+  default: "9"
+  minimum: "1"
+  maximum: "$(inseq.length)"
+  information: "Window size for hydropathy averaging"
+]
+
+# currently unused - so commenetd out - Gary Williams 24 May 2000
+#integer: geswindow  [
+#  optional: Y
+#  default: "20"
+#  minimum: "1"
+#  maximum: "$(inseq.length)"
+#  information: "Window size for GES scale averaging"
+#]
+
+string: aaproperties  [
+  optional: Y
+  default: "Eaa_properties.dat"
+  information: "User defined amino acid properties"
+  prompt: "Enter user defined file of amino acid properties or leave blank"
+]
+
+string: aahydropathy  [
+  optional: Y
+  default: "Eaa_hydropathy.dat"
+  information: "User defined hydropathy data"
+  prompt: "Enter user defined file of hydropathy data or leave blank"
+]
+
+# currently unused - so commenetd out - Gary Williams 24 May 2000
+#string: aaaccsurface  [
+#  optional: Y
+#  default: "Eaa_acc_surface.dat"
+#  information: "User defined accessible surface area data"
+#  prompt: "Enter user defined file of accessible surface area data or leave blank"
+#]
+
+
+

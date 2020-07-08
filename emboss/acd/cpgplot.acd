@@ -1,0 +1,108 @@
+# CpGPLOT
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+
+# ajb 14th March 1999
+appl: cpgplot [
+	doc: "Plot CpG rich areas"
+	groups: "CpG islands, DNA: sequence features"
+]
+
+  seqall: sequence [ 
+	param: Y 
+	type: DNA 
+  ]
+
+  int: window [ 
+	req: Y 
+	min: 1 
+	max: $(sequence.end) 
+	def: 100
+  	info: "Window size" 
+	help: "The percentage CG content and the Observed frequency of
+CG is calculated within a window whose size is set by this parameter. 
+The window is moved down the sequence and these statistics are
+calculated at each postition that the window is moved to."
+  ]
+
+  int: shift [ 
+	req: Y 
+	min: 1 
+	max: $(window) 
+	def: 1 
+	info: "Window shift increment" 
+	help: "This determines the number of bases that the window is
+moved each time after values of the percentage CG content and the
+Observed frequency of CG are calculated within the window."
+  ]
+
+  int: minlen [ 
+	req: Y 
+	min: 1 
+	max: $(sequence.end) 
+	def: 200
+	info: "Minimum length of an island" 
+	help: "This sets the minimum length that a CpG island has to be
+before it is reported."
+  ]
+
+  float: minoe [ 
+	req: Y 
+	min: 0. 
+	max: 10. 
+	def: 0.6
+	info: "Minimum observed/expected" 
+	help: "This sets the minimum average observed to expected ratio
+of C plus G to CpG in a set of 10 windows that are required before a CpG
+island is reported."
+  ]
+
+  float: minpc [
+	req: Y 
+	min: 0. 
+	max: 100. 
+	def: 50.
+	info: "Minimum percentage" 
+	help: "This sets the minimum average percentage of G plus C a
+set of 10 windows that are required before a CpG island is reported."
+  ]
+
+  outfile: outfile [ 
+	param: Y 
+	help: "This sets the name of the file holding the report of the
+input sequence name, CpG island parameters and the output details of any
+CpG islands that are found."
+  ]
+
+  xygraph: graph [
+	param: Y  
+	multi:3 
+  ]
+
+  bool: obsexp [ 
+	def: Y 
+	info: "Show observed/expected threshold line" 
+	help: "If this is set to true then the graph of the observed to
+expected ratio of C plus G to CpG within a window is displayed."
+  ]
+
+  bool: cg [ 
+	def: Y 
+	info: "Show CpG rich regions" 
+	help: "If this is set to true then the graph of the regions
+which have been determined to be CpG islands is displayed."
+  ]
+
+  bool: pc [ 
+	def: Y 
+	info: "Show percentage line" 
+	help: "If this is set to true then the graph of the percentage C
+plus G within a window is displayed."
+  ]
+
+  featout: featout [
+        parameter: N
+	info: "feature file for output "
+        help: "File for output features"
+        ]
+

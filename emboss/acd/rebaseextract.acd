@@ -1,0 +1,11 @@
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# Last Edited March 25 1999 AJB
+
+appl: rebaseextract [
+	doc: "Extract data from REBASE"
+	groups: "utilities, restriction enzymes"
+]
+	 
+	infile: inf [param: Y  req: Y
+		prompt: "Full pathname of WITHREFM"]

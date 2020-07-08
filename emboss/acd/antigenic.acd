@@ -1,0 +1,22 @@
+# ANTIGENIC antigenic site determination
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+
+# ajb 9th March 1999
+appl: antigenic [ 
+	doc: "Finds antigenic sites in proteins" 
+	groups: "protein: sequence features"
+]
+
+  seqall: sequence [ param: Y type: PureProtein ]
+
+  int: minlen [ req: Y min: 1 max: 50 def: 6
+                  info: "Minimum length" ]
+
+  outfile: outfile [ param: Y  ]
+
+featout: featout [
+        parameter: N
+        info: "feature file for output "
+        help: "File for output features"
+        ]

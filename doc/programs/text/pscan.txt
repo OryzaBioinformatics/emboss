@@ -1,0 +1,299 @@
+
+                               EMBOSS: pscan
+     _________________________________________________________________
+   
+                                 Program pscan
+                                       
+Function
+
+   Scans proteins using PRINTS
+   
+Description
+
+   PRINTS is a database of diagnostic protein signatures, or
+   fingerprints.
+   
+   Fingerprints are groups of conserved motifs or elements that together
+   form a diagnostic signature for particular protein families.
+   
+   An uncharacterised sequence matching all motifs or elements can then
+   be readily diagnosed as a true match to a particular family
+   fingerprint.
+   
+   They can be used to diagnose family relationships in newly-determined
+   sequences (especially from genome projects).
+   
+   Usually the motifs or elements do not overlap, but are separated along
+   a sequence, though they may be contiguous in 3D-space. Fingerprints
+   can encode protein folds and functionalities more flexibly and
+   powerfully than can single motifs, full diagnostic potency deriving
+   from the mutual context provided by motif neighbours.
+   
+   Diagnostically, this is more powerful than using single motifs by
+   virtue of the biological context afforded by matching motif
+   neighbours.
+   
+   pscan finds matches between a query protein sequence and the motifs or
+   elements in the PRINTS database. It reports various classes of
+   matches:
+   
+     * Matches where all elements of a motif exist in the correct order
+     * Matches where all elements exist but some are in the incorrect
+       order
+     * Matches where some elements match and are in the correct order
+     * Miscellaneous matches.
+       
+   The home web page of the PRINTS database is:
+   http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/
+   
+Usage
+
+   Here is a sample session with pscan.
+
+% pscan
+Scans proteins using PRINTS
+Input sequence(s): sw:OPSD_HUMAN
+Minimum number of elements per fingerprint [2]:
+Maximum number of elements per fingerprint [20]:
+Output file [opsd_human.pscan]:
+%
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -emin               integer    Minimum number of elements per fingerprint
+   -emax               integer    Maximum number of elements per fingerprint
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   -emin Minimum number of elements per fingerprint Integer from 1 to 20
+   2
+   -emax Maximum number of elements per fingerprint Integer up to 20 20
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.pscan
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   The input sequence can be one or more protein sequences.
+   
+Output file format
+
+   The program reports hits in four classes.
+   
+   Class1:
+          Matches where all elements of a motif exist in the correct
+          order
+          
+   Class2:
+          Matches where all elements exist but some are in the incorrect
+          order
+          
+   Class3:
+          Matches where some elements match and are in the correct order
+          
+   Class4:
+          Miscellaneous matches
+          
+   Here is part of a sample output:
+
+CLASS 1
+Fingerprints with all elements in order
+
+Fingerprint GPCRRHODOPSN Elements 7
+    Accession number PR00237
+    Rhodopsin-like GPCR superfamily signature
+  Element 1 Threshold 54% Score 64%
+             Start position 39 Length 25
+  Element 2 Threshold 49% Score 75%
+             Start position 72 Length 22
+  Element 3 Threshold 48% Score 56%
+             Start position 117 Length 23
+  Element 4 Threshold 50% Score 69%
+             Start position 152 Length 22
+  Element 5 Threshold 51% Score 74%
+             Start position 204 Length 24
+  Element 6 Threshold 42% Score 75%
+             Start position 250 Length 25
+  Element 7 Threshold 46% Score 67%
+             Start position 288 Length 27
+
+
+CLASS 2
+All elements match but not all in the correct order
+
+Fingerprint RHODOPSIN Elements 6
+    Accession number PR00579
+    Rhodopsin signature
+  Element 1 Threshold 80% Score 96%
+             Start position 3 Length 19
+  Element 2 Threshold 76% Score 100%
+             Start position 22 Length 17
+  Element 3 Threshold 53% Score 92%
+             Start position 85 Length 17
+  Element 4 Threshold 71% Score 100%
+             Start position 191 Length 17
+  Element 5 Threshold 56% Score 99%
+             Start position 271 Length 19
+  Element 6 Threshold 81% Score 93%
+             Start position 319 Length 14
+
+
+CLASS 3
+Not all elements match but those that do are in order
+
+Fingerprint PROFILIN Elements 6
+    Accession number PR00392
+    Profilin signature
+  Element 6 Threshold 31% Score 31%
+             Start position 18 Length 18
+  Element 6 Threshold 37% Score 37%
+             Start position 318 Length 15
+
+
+CLASS 4
+Remaining partial matches
+
+Fingerprint NANEUSMPORT Elements 8
+    Accession number PR00176
+    Sodium/chloride neurotransmitter symporter signature
+  Element 2 Threshold 47% Score 47%
+             Start position 38 Length 20
+
+Data files
+
+   The data file is stored in the PRINTS directory of the standard EMBOSS
+   data directory.
+     * prints.mat Matrices derived from PRINTS
+     * Pxxxxx Information for each fingerprint
+       
+   The column information is described at the top of the matrix data file
+   
+Notes
+
+   The matrix information used to scan a sequence is derived from the
+   final motif sets in the PRINTS database. The matrices are of the
+   simple frequency type and contain the number of times a residue occurs
+   in each position of the alignment. Each matrix therefore has a highest
+   possible score, being the sum of the maximum score of each column. A
+   match to the sequence window is obtained if it has a score equal to or
+   greater than the percentage of the maximum score of the lowest scoring
+   sequence in the final motif set.
+   
+References
+
+    1. Attwood, T.K., Flower, D.R., Lewis, A.P., Mabey, J.E., Morgan,
+       S.R., Scordis, P., Selley, J. and Wright, W. (1999) PRINTS
+       prepares for the new millennium. Nucleic Acids Research, 27(1),
+       220-225.
+    2. Attwood, T.K., Beck, M.E., Flower, D.R., Scordis, P. and Selley,
+       J. (1998) The PRINTS protein fingerprint database in its fifth
+       year. Nucleic Acids Research, 26(1), 304-308.
+    3. Attwood, T.K., Beck, M.E., Bleasby, A.J., Degtyarenko, K., Michie,
+       A.D. and Parry-Smith, D.J. (1997) Novel developments with the
+       PRINTS protein motif fingerprint database. Nucleic Acids Research,
+       25 (1), 212-216.
+    4. Attwood, T.K. and Beck, M.E. (1994) PRINTS - A protein motif
+       fingerprint database. Protein Engineering, 7(7), 841-848.
+    5. Bleasby, A.J., Akrigg, D.A. and Attwood, T.K. (1994) OWL - A
+       non-redundant composite protein sequence database. Nucleic Acids
+       Research, 22(17), 3574-77.
+    6. Bleasby, A.J. and Wootton, J.C. (1990) Constructing validated,
+       non- redundant composite protein sequence databases. Protein
+       Engineering, 3(3), 153-159.
+    7. Parry-Smith, D.J. and Attwood, T.K. (1992) ADSP - A new package
+       for computational sequence analysis. CABIOS, 8(5), 451-459.
+    8. Attwood, T.K. and Findlay, J.B.C. (1994) Fingerprinting
+       G-protein-coupled receptors. Prot.Engng. 7(2), 195-203.
+    9. Attwood, T.K. and Findlay, J.B.C. (1993) Design of a
+       discriminating finger- print for G-protein-coupled receptors.
+       Prot.Engng. 6(2) 167-176.
+   10. Akrigg, D., Attwood, T.K., Bleasby, A.J., Findlay, J.B.C, North,
+       A.C.T., Maughan, N.A., Parry-Smith, D.J., Perkins, D.N. and
+       Wootton, J.C. (1992) SERPENT - An information storage and analysis
+       resource for protein sequences. CABIOS 8(3) 295-296.
+   11. Parry-Smith, D.J. and Attwood, T.K. (1991) SOMAP - A novel
+       interactive approach to multiple protein sequence aligment.
+       CABIOS, 7(2), 233-235.
+   12. Perkins, D.N. and Attwood, T.K. (1995) VISTAS - A package for
+       VIsualising STructures And Sequences of proteins. J.Mol.Graph.,
+       13, 73-75.
+   13. Parry-Smith, D.J., Payne, A.W.R, Michie, A.D. and Attwood, T.K.
+       (1998) CINEMA - A novel Colour INteractive Editor for Multiple
+       Alignments. Gene, 211(2), GC45-56.
+       
+Warnings
+
+   The program will warn you if a DNA sequence is given.
+   
+Diagnostic Error Messages
+
+   If you get the following EMBOSS FATAL ERROR message:
+
+"prints.mat file not found. Create it with printsextract."
+
+   then your local PRINTS data has not been set up correctly in your
+   EMBOSS DATA directory. Use 'printsextract' to do this.
+   
+Exit status
+
+   It exits with status 0 unless an error is reported.
+   
+Known bugs
+
+See also
+
+   Program name Description
+   antigenic Finds antigenic sites in proteins
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   dreg regular expression search of a nucleotide sequence
+   fuzznuc Nucleic acid pattern search
+   fuzzpro Protein pattern search
+   fuzztran Protein pattern search after translation
+   garnier Predicts protein secondary structure
+   helixturnhelix Report nucleic acid binding motifs
+   oddcomp Finds protein sequence regions with a biased composition
+   patmatdb Search a protein sequence with a motif
+   patmatmotifs Search a PROSITE motif database with a protein sequence
+   pepcoil Predicts coiled coil regions
+   polydot Displays all-against-all dotplots of a set of sequences
+   preg regular expression search of a protein sequence
+   printsextract Extract data from PRINTS
+   prosextract Builds the PROSITE motif database for patmatmotifs to
+   search
+   showseq Display a sequence with features, translation etc
+   sigcleave Reports protein signal cleavage sites
+   tfscan Scans DNA sequences for transcription factors
+   tmap Displays membrane spanning regions
+   
+     * printsextract - Extract data from PRINTS. pscan uses the PRINTS
+       data. Until printsextract has been run to set up the PRINTS data,
+       pscan will not run correctly.
+       
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
+
+   The data files must have been created before running this program.
+   This is done by running the PRINTSEXTRACT program with the
+   "prints.dat" file from a PRINTS release. You may have to ask your
+   system manager to do this.

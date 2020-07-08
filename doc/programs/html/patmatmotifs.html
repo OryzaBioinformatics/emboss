@@ -1,0 +1,469 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: patmatmotifs
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: patmatmotifs
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program patmatmotifs
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Search a PROSITE motif database with a protein sequence
+
+
+<H2>
+    Description
+</H2>
+
+
+This takes a protein sequence and compares it to the PROSITE database of
+motifs. 
+
+<p>
+For a description of PROSITE, we can do no better than to quote the
+PROSITE user's documentation:
+
+<i>
+<p>
+   PROSITE is a method of determining what is the function of uncharacterized
+   proteins translated  from genomic  or cDNA  sequences. It  consists  of  a
+   database of biologically significant sites and patterns formulated in such
+   a way  that with  appropriate  computational  tools  it  can  rapidly  and
+   reliably identify  to which  known family  of protein  (if  any)  the  new
+   sequence belongs.
+
+<p>
+   In some  cases the sequence of an unknown protein is too distantly related
+   to any  protein of  known structure  to detect  its resemblance by overall
+   sequence alignment,  but it  can be  identified by  the occurrence  in its
+   sequence of a particular cluster of residue types which is variously known
+   as a pattern, motif, signature, or fingerprint. These motifs arise because
+   of particular  requirements on  the structure  of specific  region(s) of a
+   protein which  may be important, for example, for their binding properties
+   or for  their enzymatic  activity. These  requirements impose  very  tight
+   constraints on  the evolution  of those  limited (in  size) but  important
+   portion(s) of a protein sequence. To paraphrase Orwell, in Animal Farm, we
+   can say  that "some  regions of  a protein  sequence are  more equal  than
+   others" !
+
+<p>
+   The use  of  protein  sequence  patterns  (or  motifs)  to  determine  the
+   function(s) of  proteins is  becoming very  rapidly one  of the  essential
+   tools of  sequence analysis.  This reality  has been  recognized  by  many
+   authors, as it can be illustrated from the following citations from two of
+   the most  well known  experts of protein sequence analysis, R.F. Doolittle
+   and A.M. Lesk:
+
+<pre>
+      "There are  many short  sequences  that  are  often  (but  not  always)
+      diagnostics of certain binding properties or active sites. These can be
+      set into a small subcollection and searched against your sequence (1)".
+
+      "In some  cases, the structure and function of an unknown protein which
+      is too  distantly related  to any  protein of known structure to detect
+      its affinity  by overall  sequence alignment  may be  identified by its
+      possession of  a particular  cluster of  residues types classified as a
+      motifs. The  motifs, or  templates, or  fingerprints, arise  because of
+      particular  requirements  of  binding  sites  that  impose  very  tight
+      constraint on the evolution of portions of a protein sequence (2)."
+</pre>
+</i>
+
+<p>
+The home web page of PROSITE is: <a
+href="http://www.expasy.ch/prosite/">http://www.expasy.ch/prosite/</a>
+
+<p>
+It is common to find that a search of the PROSITE database against a
+protein sequence will report many matches to the short motifs that are
+indicative of the post-translational modification sites, such as
+glycolsylation, myristylation and phosphorylation sites.  These reports
+are often unwanted and can optionally be turned off. 
+
+<p>
+Your EMBOSS administrator must have set up the local EMBOSS PROSITE
+database using the utility 'prosextract' before this program will run. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with patmatmotifs.
+
+<pre>
+
+% patmatmotifs -full
+Matching Prosite Motif Database to a single sequence.
+Input sequence: sw:12s1_arath
+Output file [12s1_arath.patmatmotifs]: 
+
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -full               bool       Provide documentation for matching patterns
+   -[no]prune          bool       Don't use simple patterns. It this is true
+                                  then these simple post-translational
+                                  modification sites are not reported:
+                                  myristyl, asn_glycosylation,
+                                  camp_phospho_site, pkc_phospho_site,
+                                  ck2_phospho_site, and tyr_phospho_site.
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence USA</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.patmatmotifs</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-full</td>
+<td>Provide documentation for matching patterns</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]prune</td>
+<td>Don't use simple patterns. It this is true then these simple post-translational modification sites are not reported: myristyl, asn_glycosylation, camp_phospho_site, pkc_phospho_site, ck2_phospho_site, and tyr_phospho_site.</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+A protein sequence USA.
+
+<H2>
+    Output file format
+</H2>
+
+
+<p>
+The output is a report of the start and end position of any matches of
+PROSITE entries to the input sequence. 
+
+<p>
+Optionally (using the qualifier '-full'), the full description of the
+prosite entry is also reported. 
+
+<p>
+The output from the above example follows:
+
+<p>
+<pre>
+
+Number of matches found in this Sequence = 1
+
+Length of the sequence = 472 basepairs
+Start of match = position 282 of sequence
+End of match = position 304 of sequence
+Length of motif = 23
+
+patmatmotifs of 11S_SEED_STORAGE with 12S1_ARATH from 282 to 304
+HGRHGNGLEETICSARCTDNLDDPSRADVYKPQ
+     |                     |
+   282                     304
+
+**********************************************
+* 11-S plant seed storage proteins signature *
+**********************************************
+
+Plant seed storage proteins, whose  principal function appears to be the major
+nitrogen  source for the developing plant,  can be classified, on the basis of
+their structure, into different families.  11-S are non-glycosylated  proteins
+which form hexameric structures [1,2].  Each of the subunits in the hexamer is
+itself composed of an acidic and a basic chain derived from a single precursor
+and linked  by a  disulfide bond.   This  structure is  shown in the following
+representation.
+
+                   +-------------------------+
+                   |                         |
+        xxxxxxxxxxxCxxxxxxxxxxxxxxxxxxxxxxNGxCxxxxxxxxxxxxxxxxxxxxxxx
+                                          *********
+        &lt;------Acidic-subunit-------------^gt;&lt;-----Basic-subunit------&gt;
+        &lt;-----------------About-480-to-500-residues-----------------&gt;
+
+'C': conserved cysteine involved in a disulfide bond.
+'*': position of the pattern.
+
+Proteins that belong to the 11-S family are: pea and broad bean legumins, rape
+cruciferin, rice glutelins,  cotton beta-globulins, soybean glycinins, pumpkin
+11-S globulin, oat globulin, sunflower helianthinin G3, etc.
+
+As a signature  pattern  for  this  family of proteins we used the region that
+includes the  conserved  cleavage  site between  the acidic and basic subunits
+(Asn-Gly) and a  proximal cysteine residue which is involved in the interchain
+disulfide bond.
+
+-Consensus pattern: N-G-x-[DE](2)-x-[LIVMF]-C-[ST]-x(11,12)-[PAG]-D
+                    [C is involved in a disulfide bond]
+-Sequences known to belong to this class detected by the pattern: ALL.
+-Other sequence(s) detected in SWISS-PROT: NONE.
+-Last update: June 1994 / Pattern and text revised.
+
+[ 1] Hayashi M., Mori H., Nishimura M., Akazawa T., Hara-Nishimura I.
+     Eur. J. Biochem. 172:627-632(1988).
+[ 2] Shotwell M.A., Afonso C., Davies E., Chesnut R.S., Larkins B.A.
+     Plant Physiol. 87:698-704(1988).
+***************
+
+</pre>
+
+<H2>
+    Data files
+</H2>
+
+
+Data and documentation from PROSITE files is automatically read. This
+has been generated and formatted by running prosextract before running
+patmatmotifs.
+
+<H2>
+    Notes
+</H2>
+
+
+Program is only useful when prosextract is used beforehand.  
+
+<H2>
+    References
+</H2>
+
+
+If you want to refer to PROSITE in a publication you can do so by citing:
+
+<p>
+      Bairoch A., Bucher P., Hofmann K.
+      The PROSITE datatase, its status in 1997.
+      Nucleic Acids Res. 24:217-221(1997).
+
+<p>
+<ol>
+<li>Bairoch, A., Bucher P. (1994) PROSITE: recent developments. Nucleic 
+Acids Research, Vol 22, No.17 3583-3589.
+
+<li>Bairoch, A., (1992) PROSITE: a dictionary of sites and patterns in 
+proteins. Nucleic Acids Research, Vol 20, Supplement, 2013-2018.
+
+<li>Peek, J., O'Reilly, T., Loukides, M., (1997) Unix Power Tools, 2nd 
+Edition.
+
+<li>Doolittle R.F.  (In) Of URFs and ORFs: a primer on how to analyze
+derived amino acid sequences., University Science Books, Mill Valley,
+California, (1986).
+
+<li>Lesk A.M.  (In) Computational Molecular Biology, Lesk A.M., Ed.,
+pp17-26, Oxford University Press, Oxford (1988).
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+Your EMBOSS administrator must have set up the local EMBOSS PROSITE
+database using the utility 'prosextract' before this program will run.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+The error message: 
+
+<pre>
+
+"Either EMBOSS_DATA undefined or PROSEXTRACT needs running"
+
+</pre>
+
+<p>
+indicates that your local EMBOSS administrator has not yet correctly
+set up the local EMBOSS PROSITE database using the utility <a
+href="prosextract.html">'prosextract'.</a>
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="dreg.html">dreg</a></td><td>regular expression search of a nucleotide sequence</td></tr>
+<tr><td><a href="fuzznuc.html">fuzznuc</a></td><td>Nucleic acid pattern search</td></tr>
+<tr><td><a href="fuzzpro.html">fuzzpro</a></td><td>Protein pattern search</td></tr>
+<tr><td><a href="fuzztran.html">fuzztran</a></td><td>Protein pattern search after translation</td></tr>
+<tr><td><a href="helixturnhelix.html">helixturnhelix</a></td><td>Report nucleic acid binding motifs</td></tr>
+<tr><td><a href="patmatdb.html">patmatdb</a></td><td>Search a protein sequence with a motif</td></tr>
+<tr><td><a href="preg.html">preg</a></td><td>regular expression search of a protein sequence</td></tr>
+<tr><td><a href="printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
+<tr><td><a href="prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
+<tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
+<tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Sinead O'Leary <a
+href="mailto:soleary@hgmp.mrc.ac.uk">(soleary@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+Completed May 13 1999.
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

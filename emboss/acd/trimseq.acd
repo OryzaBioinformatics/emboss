@@ -1,0 +1,73 @@
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# GWW 3 Aug 1999
+
+appl: trimseq [
+	doc: "Trim ambiguous bits off the ends of sequences"
+	group: "sequence editing"
+]
+
+  seqall: sequence [
+	param: Y
+	type: any
+  ]
+
+  seqoutall: outseq [
+	param: Y
+  ]
+
+  int: window [ 
+	opt: Y
+	def: 1 
+	prompt: "Window size"
+
+	help: "This determines the size of the region that is
+               considered when deciding whether the percentage of
+               ambiguity is greater than the threshold.  A value of 5
+               means that a region of 5 letters in the sequence is
+               shifted along the sequence from the ends and trimming
+               is done only if there is a greater or equal percentage
+               of ambiguity than the threshold percentage."
+  ]
+
+  float: percent [
+	opt: Y
+	def: 100.0
+	prompt: "Percent threshold of ambiguity in window"
+	help: "This is the threshold of the percentage ambiguity in the
+	       window required in order to trim a sequence."
+  ]
+
+  bool: strict [
+	opt: Y
+	def: N
+	prompt: "Trim off all ambiguity codes, not just N or X"
+
+	help: "In nucleic sequences, trim off not only N's and X's,
+	       but also the nucleotide IUPAC ambiguity codes M, R, W,
+	       S, Y, K, V, H, D and B.  In protein sequences, trim off
+	       not only X's but also B and Z."
+  ]
+
+  bool: star [
+	opt: Y
+	def: N
+	prompt: "Trim off asterisks"
+	help: "In protein sequences, trim off not only X's, but
+	       also the *'s"
+  ]
+
+  bool: left [
+	def: Y 
+	prompt: "Trim at the start"
+  ]
+
+  bool: right [
+	def: Y
+	prompt: "Trim at the end"
+  ]

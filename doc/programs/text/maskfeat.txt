@@ -1,0 +1,112 @@
+
+                              EMBOSS: maskfeat
+     _________________________________________________________________
+   
+                               Program maskfeat
+                                       
+Function
+
+   Mask off features of a sequence
+   
+Description
+
+Usage
+
+   Here is a sample session with maskfeat.
+
+% maskfeat
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outseq]            seqout     Output sequence USA
+
+   Optional qualifiers:
+   -type               string     By default any feature in the feature table
+                                  with a type starting 'repeat' is masked. You
+                                  can set this to be any feature type you
+                                  wish to mask.
+                                  See http://www3.ebi.ac.uk/Services/WebFeat/
+                                  for a list of the EMBL feature types and see
+                                  Appendix A of the Swissprot user manual in
+                                  http://www.expasy.ch/txt/userman.txt for a
+                                  list of the Swissprot feature types.
+                                  The type may be wildcarded by using '*'.
+                                  If you wish to mask more than one type,
+                                  separate their names with spaces or commas,
+                                  eg:
+                                  *UTR repeat*
+   -maskchar           string     Character to use when masking.
+                                  Default is 'X' for protein sequences, 'N'
+                                  for nucleic sequences.
+
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outseq]
+   (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
+   Optional qualifiers Allowed values Default
+   -type By default any feature in the feature table with a type starting
+   'repeat' is masked. You can set this to be any feature type you wish
+   to mask. See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the
+   EMBL feature types and see Appendix A of the Swissprot user manual in
+   http://www.expasy.ch/txt/userman.txt for a list of the Swissprot
+   feature types. The type may be wildcarded by using '*'. If you wish to
+   mask more than one type, separate their names with spaces or commas,
+   eg: *UTR repeat* Any string is accepted repeat*
+   -maskchar Character to use when masking. Default is 'X' for protein
+   sequences, 'N' for nucleic sequences. Any string is accepted 'X' for
+   protein, 'N' for nucleic
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   cutseq Removes a specified section from a sequence
+   descseq Alter the name or description of a sequence
+   extractseq Extract regions from a sequence
+   maskseq Mask off regions of a sequence
+   merger Merge two overlapping nucleic acid sequences
+   newseq Type in a short new sequence
+   noreturn Removes carriage return from ASCII files
+   nthseq Writes one sequence from a multiple set of sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a sequence
+   splitter Split a sequence into (overlapping) smaller sequences
+   trimseq Trim ambiguous bits off the ends of sequences
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

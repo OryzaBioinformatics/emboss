@@ -1,0 +1,18 @@
+# AJFEATEST check application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# rbsk 8-Jun-99
+
+appl: ajfeatest [
+	doc: "Reads and writes (returns) a sequence and its features"
+	groups: "reformatting, sequence display, database: entry extraction"
+]
+
+  sequence: sequence [ param: Y type: any features: Y]
+
+  seqout: outseq [ param: Y ]

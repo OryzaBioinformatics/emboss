@@ -1,0 +1,13 @@
+appl: equicktandem [
+	doc: "Finds tandem repeats"
+	groups: "DNA: sequence features, repeats"
+]
+
+
+  sequence: sequence [ param: Y type: dna ]
+
+  outfile: outfile [ param: Y  ext: qtan ]
+
+  int: maxrepeat  [ req: Y  def: 600 info: "Maximum repeat size" ]
+
+  int: threshold [ req: Y  def: 20 info: "Threshold score" ]

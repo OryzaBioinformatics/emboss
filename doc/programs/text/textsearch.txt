@@ -1,0 +1,171 @@
+
+                             EMBOSS: textsearch
+     _________________________________________________________________
+   
+                              Program textsearch
+                                       
+Function
+
+   Search sequence documentation text. SRS and Entrez are faster!
+   
+Description
+
+   This is a small utility search for words in the description text of a
+   sequence and for each match list the sequence's name and/or
+   description. NB. It only searches the description line of the
+   annotation, not the full annotation.
+   
+Usage
+
+   Search for matches to 'lacZ'
+% textsearch swissprot:\*  'lacz'
+
+   Search for matches to 'lacz' or 'permease' in E.coli proteins
+% textsearch swissprot:\*_ecoli 'lacZ | permease'
+
+   Output a search for 'transport' formatted with HTML to a file
+% textsearch embl:\* 'transport' -html -outfile embl.transport
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-pattern]           string     The search pattern is a regular expression.
+                                  Use a | to indicate OR.
+                                  For example:
+                                  human|mouse
+                                  will find text with either 'human' OR
+                                  'mouse' in the text
+
+   Optional qualifiers:
+   -outfile            outfile    If you enter the name of a file here then
+                                  this program will write the sequence details
+                                  into that file.
+   -html               bool       Format output as an HTML table
+   -casesensitive      bool       Do a case-sensitive search
+
+   Advanced qualifiers:
+   -only               bool       This is a way of shortening the command line
+                                  if you only want a few things to be
+                                  displayed. Instead of specifying:
+                                  '-nohead -noname -nousa -noacc -nodesc'
+                                  to get only the name output, you can specify
+                                  '-only -name'
+   -heading            bool       Display column headings
+   -usa                bool       Display the USA of the sequence
+   -accession          bool       Display 'accession' column
+   -name               bool       Display 'name' column
+   -description        bool       Display 'description' column
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-pattern]
+   (Parameter 2) The search pattern is a regular expression. Use a | to
+   indicate OR. For example: human|mouse will find text with either
+   'human' OR 'mouse' in the text Any string is accepted An empty string
+   is accepted
+   Optional qualifiers Allowed values Default
+   -outfile If you enter the name of a file here then this program will
+   write the sequence details into that file. Output file stdout
+   -html Format output as an HTML table Yes/No No
+   -casesensitive Do a case-sensitive search Yes/No No
+   Advanced qualifiers Allowed values Default
+   -only This is a way of shortening the command line if you only want a
+   few things to be displayed. Instead of specifying: '-nohead -noname
+   -nousa -noacc -nodesc' to get only the name output, you can specify
+   '-only -name' Yes/No No
+   -heading Display column headings Yes/No @(!$(only))
+   -usa Display the USA of the sequence Yes/No @(!$(only))
+   -accession Display 'accession' column Yes/No @(!$(only))
+   -name Display 'name' column Yes/No @(!$(only))
+   -description Display 'description' column Yes/No @(!$(only))
+   
+Input file format
+
+   Normal sequence
+   
+Output file format
+
+   The output is displayed on the screen (stdout) by default. A typical
+   output file is:
+---------------------------------------------------------------------------
+# Search for: TRANSPORT
+ANSP_SALTY    L-ASPARAGINE PERMEASE (L-ASPARAGINE TRANSPORT PROTEIN).
+CYST_SALTY    SULFATE TRANSPORT SYSTEM PERMEASE PROTEIN CYST (FRAGMENT).
+HISM_SALTY    HISTIDINE TRANSPORT SYSTEM PERMEASE PROTEIN HISM.
+HISQ_SALTY    HISTIDINE TRANSPORT SYSTEM PERMEASE PROTEIN HISQ.
+LIVH_SALTY    HIGH-AFFINITY BRANCHED-CHAIN AMINO ACID TRANSPORT PERMEASE ...
+LIVM_SALTY    HIGH-AFFINITY BRANCHED-CHAIN AMINO ACID TRANSPORT PERMEASE ...
+MALF_SALTY    MALTOSE TRANSPORT SYSTEM PERMEASE PROTEIN MALF.
+MALG_SALTY    MALTOSE TRANSPORT SYSTEM PERMEASE PROTEIN MALG.
+MELB_SALTY    MELIBIOSE CARRIER PROTEIN (THIOMETHYLGALACTOSIDE PERMEASE II) ...
+MGLC_SALTY    GALACTOSIDE TRANSPORT SYSTEM PERMEASE PROTEIN MGLC.
+OPPB_SALTY    OLIGOPEPTIDE TRANSPORT SYSTEM PERMEASE PROTEIN OPPB.
+OPPC_SALTY    OLIGOPEPTIDE TRANSPORT SYSTEM PERMEASE PROTEIN OPPC.
+POTB_SALTY    SPERMIDINE/PUTRESCINE TRANSPORT SYSTEM PERMEASE PROTEIN POTB ...
+PROW_SALTY    GLYCINE BETAINE/L-PROLINE TRANSPORT SYSTEM PERMEASE PROTEIN ...
+SAPB_SALTY    PEPTIDE TRANSPORT SYSTEM PERMEASE PROTEIN SAPB.
+SAPC_SALTY    PEPTIDE TRANSPORT SYSTEM PERMEASE PROTEIN SAPC.
+---------------------------------------------------------------------------
+
+   The first column in the name or ID of each sequence. The remaining
+   text is the description line of the sequence.
+   
+   When the -html qualifier is specified, then the output will be wrapped
+   in HTML tags, ready for inclusion in a Web page. Note that tags such
+   as <HTML>, <BODY>, </BODY> and </HTML> are not output by this program
+   as the table of databases is expected to form only part of the
+   contents of a web page - the rest of the web page must be supplier by
+   the user.
+   
+   The lines of out information are guaranteed not to have trailing
+   white-space at the end. So if '-nodesc' is used, there will not be any
+   whitespace after the ID name.
+   
+Data files
+
+   None.
+   
+Notes
+
+   This is a rather slow way to search for text in databases. If you are
+   searching for text in public databases, you should consider using
+   either Entrez (http://www.ncbi.nlm.nih.gov/Entrez/) or SRS
+   (http://srs.hgmp.mrc.ac.uk/ or http://www.sanger.ac.uk/srs6/ etc.)
+   
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+   It always exits with status 0
+   
+Known bugs
+
+   None noted.
+   
+See also
+
+   Program name Description
+   infoseq Displays some simple information about sequences
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Finished.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

@@ -1,0 +1,40 @@
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# GWW 26 Jan 1999
+
+appl: pasteseq [
+	doc: "Insert one sequence into another"
+	group: "sequence editing"
+]
+
+  sequence: sequence [ 
+	param: Y
+        type: any
+  ]
+
+  sequence: insseq [
+	param: Y
+	info: "Sequence to insert"
+        type: "@($(sequence.protein) ? protein : nucleotide)"
+  ]
+
+  seqout: outseq [
+	param: Y
+	req: Y
+  ]
+
+
+  int: pos [
+	req: Y
+        def: $(sequence.end)
+        max: $(sequence.end)
+        min: 0
+        info: "Position to insert after"
+	help: "The position in the main input sequence to insert after. \
+               To insert before the start use the position 0."
+  ]

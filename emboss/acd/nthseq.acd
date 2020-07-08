@@ -1,0 +1,22 @@
+# NTHSEQ application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+appl: nthseq [
+	doc: "Writes one sequence from a multiple set of sequences"
+	groups: "sequence editing"
+]
+
+  seqall: sequence [
+	param: Y 
+  ]
+
+  int: number [ 
+	req: Y
+	min: 1
+	def: 1
+	prompt: "The number of the sequence to output"
+  ]
+
+  seqout: outseq [ 
+	param: Y 
+  ]

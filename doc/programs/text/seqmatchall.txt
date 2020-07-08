@@ -1,0 +1,128 @@
+
+                            EMBOSS: seqmatchall
+     _________________________________________________________________
+   
+                              Program seqmatchall
+                                       
+Function
+
+   Does an all-against-all comparison of a set of sequences
+   
+Description
+
+   This takes a set of sequences and does an all-against-all pairwise
+   comparison of words (fragments of the sequences of a specified fixed
+   size) in the sequences, finding regions of identity between any two
+   sequences.
+   
+   The larger the specified word size, the faster the comparison will
+   proceed. Regions whose stretches of identity are shorter than the word
+   size will be missed. You should therefore choose a word size that is
+   small enough to find those regions of similarity you are interested in
+   within a reasonable time-frame.
+   
+Usage
+
+   Here is a sample session with seqmatchall. We use an increased word
+   size to avoid accidental matches.
+
+% seqmatchall
+Does an all-against-all comparison of a set of sequences
+Input sequence set: embl:eclac*
+Word size [4]: 15
+Output file [outfile.seqmatchall]:
+
+Command line arguments
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence set USA Readable sequences Required
+   -wordsize Word size Integer 2 or more 4
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.seqmatchall
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   A set of sequences. This can be a list file of sequence or a
+   wildcarded set of sequences from a database or all sequences from a
+   database, or a wildcarded set of sequence files.
+   
+   The sequences must be all either protein or nucleic.
+   
+Output file format
+
+   Here is the output from the example run.
+   
+   ECLAC (the complete E.coli lac operon) matches ECLACI ECLACZ ECLACY
+   and ECLACA (the individual genes), and there is a short overlap
+   between ECLACY and the flanking genes ECLACZ and ECLACA
+
+1832  5645 7477 ECLAC 0 1832 ECLACA
+1113  48 1161 ECLAC 0 1113 ECLACI
+1500  4304 5804 ECLAC 0 1500 ECLACY
+3078  1286 4364 ECLAC 0 3078 ECLACZ
+158  1 159 ECLACA 1342 1500 ECLACY
+59  1 60 ECLACY 3019 3078 ECLACZ
+
+   The output is a list of regions of identity in pairs of sequences,
+   each consisting of one line with 7 columns of data separated by TABs
+   or space characters. The columns of data consist of:
+     * The length of the region of identity.
+     * The start position in sequence 1.
+     * The end position in sequence 1.
+     * The name of sequence 1.
+     * The start position in sequence 2.
+     * The end position in sequence 2.
+     * The name of sequence 2.
+       
+Data files
+
+Notes
+
+   The larger the word size, the faster the comparisons will proceed, but
+   regions of identitly smaller than the word size will not be reported.
+   
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+   It exits with a status of 0.
+   
+Known bugs
+
+See also
+
+   Program name Description
+   dotmatcher Displays a thresholded dotplot of two sequences
+   polydot Displays all-against-all dotplots of a set of sequences
+   stssearch Searches a DNA database for matches with a set of STS
+   primers
+   supermatcher Finds a match of a large sequence against one or more
+   sequences
+   wordmatch Finds all exact matches of a given size between 2 sequences
+   
+   polydot will give a graphical view of the same matches.
+   
+Author(s)
+
+   This application was written by Ian Longden (il@sanger.ac.uk)
+   Informatics Division, The Sanger Centre, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge, CB10 1SA, UK.
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

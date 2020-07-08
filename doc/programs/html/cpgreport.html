@@ -1,0 +1,350 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: cpgreport
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: cpgreport
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program cpgreport
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Reports all CpG rich regions
+
+
+<H2>
+    Description
+</H2>
+
+
+cpgreport scans a nucleotide sequence for regions with higher than
+expected frequencies of the dinucleotide CG. 
+
+<p>
+CpG refers to a C nucleotide immediately followed by a G.  The 'p' in
+'CpG' refers to the phosphate group linking the two bases. 
+
+<p>
+Detection of regions of genomic sequences that are rich in the CpG
+pattern is important because such regions are resistant to methylation
+and tend to be associated with genes which are frequently switched on. 
+Regions rich in the CpG pattern are known as CpG islands. 
+
+<p>
+This program does not find CpG islands as normally defined (see cpgplot).
+
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with cpgreport.
+
+<pre>
+
+% cpgreport embl:rnu68037
+Reports CpG rich regions
+CpG score [17]: 
+Output file [rnu68037.cpgreport]: 
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -score              integer    This sets the score for each CG sequence
+                                  found. A value of 17 is more sensitive, but
+                                  28 has also been used with some success.
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -featout            featout    File for output features
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-score</td>
+<td>This sets the score for each CG sequence found. A value of 17 is more sensitive, but 28 has also been used with some success.</td>
+<td>Integer from 1 to 200</td>
+<td>17</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.cpgreport</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-featout</td>
+<td>File for output features</td>
+<td>Writeable feature table</td>
+<td><i>unknown.gff</i></td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+Any DNA sequence USA.
+
+<H2>
+    Output file format
+</H2>
+
+
+The output file from the above example (rnu68037.cpgreport) follows: 
+
+<pre>
+
+CPGREPORT of RNU68037 from 1 to 1218
+
+Sequence              Begin    End Score        CpG   %CG  CG/GC
+RNU68037                 12     13    17          1 100.0    -
+RNU68037                 47     48    17          1 100.0    -
+RNU68037                 96   1032   630         87  66.1   0.65
+RNU68037               1072   1100    26          3  62.1   0.00
+RNU68037               1139   1140    17          1 100.0    -
+RNU68037               1183   1193    26          2  72.7   2.00
+
+</pre>
+
+<p>
+The first non-blank line of the output file is the title line giving the
+program name, the name of sequence being analysed and the start and end
+positions of the sequence. 
+
+<p>
+The second non-blank line contains the headings of teh columns.
+
+<p>
+Subsequent lines contain columns with the following information:
+
+<ul>
+<li>The name of the sequence.
+<li>The begin position and the end position of the CpG-rich region.
+<li>The score of the CpG-rich region.
+<li>The number of CpG's in the CpG-rich region.
+<li>The %(G+C) in the CpG-rich region.
+<li>The ratio of CpG to GpC in the CpG-rich region.
+</ul>
+
+<p>
+If the count of GpC in the region is zero, then the ratio of CG/GC is
+reported as '-'. 
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+
+This program does not find CpG islands as normally defined (see cpgplot).
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+    0 if successfull.
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="chaos.html">chaos</a></td><td>Create a chaos game representation plot for a sequence</td></tr>
+<tr><td><a href="cpgplot.html">cpgplot</a></td><td>Plot CpG rich areas</td></tr>
+<tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td></tr>
+<tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
+<tr><td><a href="einverted.html">einverted</a></td><td>Finds DNA inverted repeats</td></tr>
+<tr><td><a href="equicktandem.html">equicktandem</a></td><td>Finds tandem repeats</td></tr>
+<tr><td><a href="etandem.html">etandem</a></td><td>Looks for tandem repeats in a nucleotide sequence</td></tr>
+<tr><td><a href="geecee.html">geecee</a></td><td>Calculates the fractional GC content of nucleic acid sequences</td></tr>
+<tr><td><a href="isochore.html">isochore</a></td><td>Plots isochores in large DNA sequences</td></tr>
+<tr><td><a href="newcpgreport.html">newcpgreport</a></td><td>Report CpG rich areas</td></tr>
+<tr><td><a href="newcpgseek.html">newcpgseek</a></td><td>Reports CpG rich regions</td></tr>
+<tr><td><a href="palindrome.html">palindrome</a></td><td>Looks for inverted repeats in a nucleotide sequence</td></tr>
+<tr><td><a href="polydot.html">polydot</a></td><td>Displays all-against-all dotplots of a set of sequences</td></tr>
+<tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
+<tr><td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td></tr>
+<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This program was originally written by Gos Micklem (E-mail:
+gos@sanger.ac.uk Post: Informatics Division, The Sanger Centre, Wellcome
+Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK). 
+
+<p>
+It was modified for inclusion in EGCG under the name 'CPGSPANS' by
+Rodrigo Lopez S.  (E-mail: rls@ebi.ac.uk Post: EMBL Outstation Hinxton,
+The European Bioinformatics Institute, Wellcome Trust Genome Campus,
+Hinxton, Cambridge, CB10 1SD, UK). 
+
+<p>
+This application was modified for inclusion in EMBOSS by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+Completed 22nd March 1999.
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

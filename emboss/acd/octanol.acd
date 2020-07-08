@@ -1,0 +1,41 @@
+appl: octanol [
+        doc: "Displays protein hydropathy"
+        groups: "protein: sequence properties, hydropathy"
+]
+
+  sequence: sequencea [ param: Y type: pureprotein ]
+
+  xygraph: graph [param:Y  multi:3 gxtitle: $(sequencea.name)
+	gytitle: "Total Free Energy (Kcal/mol)" gtitle: "White-Wimley Plot" ]
+
+  datafile: datafile [
+        optional: Y
+        info: "White-Wimley data file (Ewhite-wimley.dat)"
+        def: "Ewhite-wimley.dat"
+  ]
+
+  int: width [
+        optional: Y 
+        info: "window size"
+        def : "19"
+        min : "1"
+        max : "200"
+  ]
+
+  bool: octanolplot [ 
+        optional: Y
+        def : N
+        info: "Display the octanol plot"
+  ]
+
+  bool: interfaceplot [ 
+        optional: Y
+        def : N
+        info: "Display the interface plot"
+  ]
+
+  bool: differenceplot [ 
+        optional: Y
+        def : Y
+        info: "Do not display the difference plot"
+  ]

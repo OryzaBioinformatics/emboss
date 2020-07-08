@@ -1,0 +1,159 @@
+
+                           EMBOSS: printsextract
+     _________________________________________________________________
+   
+                             Program printsextract
+                                       
+Function
+
+   Extract data from PRINTS
+   
+Description
+
+   Preprocesses the PRINTS database for use with the program PSCAN.
+   
+   This program derives matrix information from the final motif sets of
+   the PRINTS data file (prints.dat). It creates files in the EMBOSS data
+   subdirectory PRINTS these being a matrix file and files containing
+   text information for each fingerprint. Running this program may be the
+   job of your system manager.
+   
+Usage
+
+   Here is a sample session with printsextract.
+
+% printsextract
+Full pathname of PRINTS.DAT: /data/prints/prints.dat
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-inf]               infile     Full pathname of prints.dat
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-inf]
+   (Parameter 1) Full pathname of prints.dat Input file Required
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   The input file must be the "prints.dat" file of a PRINTS distribution.
+   
+   The PRINTS database is currently available via the anonymous ftp
+   servers at:
+     * Manchester ftp://bioinf.man.ac.uk/pub/prints/
+     * EBI ftp://ftp.ebi.ac.uk/pub/databases/
+     * EMBL ftp://ftp.embl-heidelberg.de/
+     * NCBI ftp://ncbi.nlm.nih.gov/
+       
+   It is also distributed on the EMBL CD-ROMs.
+   
+   The home page for PRINTS is:
+   http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/
+   
+Output file format
+
+   The output files are held in the PRINTS subdirectory of the EMBOSS
+   data directory.
+     * prints.mat matrices calculated from PRINTS
+     * Pxxxxx text information for each fingerprint
+     * embossre.sup Enzyme suppliers
+       
+Data files
+
+   The "prints.dat" file of a PRINTS distribution is the input file for
+   this program.
+   
+Notes
+
+References
+
+    1. Attwood, T.K., Flower, D.R., Lewis, A.P., Mabey, J.E., Morgan,
+       S.R., Scordis, P., Selley, J. and Wright, W. (1999) PRINTS
+       prepares for the new millennium. Nucleic Acids Research, 27(1),
+       220-225.
+    2. Attwood, T.K., Beck, M.E., Flower, D.R., Scordis, P. and Selley,
+       J. (1998) The PRINTS protein fingerprint database in its fifth
+       year. Nucleic Acids Research, 26(1), 304-308.
+    3. Attwood, T.K., Beck, M.E., Bleasby, A.J., Degtyarenko, K., Michie,
+       A.D. and Parry-Smith, D.J. (1997) Novel developments with the
+       PRINTS protein motif fingerprint database. Nucleic Acids Research,
+       25 (1), 212-216.
+    4. Attwood, T.K. and Beck, M.E. (1994) PRINTS - A protein motif
+       fingerprint database. Protein Engineering, 7(7), 841-848.
+    5. Bleasby, A.J., Akrigg, D.A. and Attwood, T.K. (1994) OWL - A
+       non-redundant composite protein sequence database. Nucleic Acids
+       Research, 22(17), 3574-77.
+    6. Bleasby, A.J. and Wootton, J.C. (1990) Constructing validated,
+       non- redundant composite protein sequence databases. Protein
+       Engineering, 3(3), 153-159.
+    7. Parry-Smith, D.J. and Attwood, T.K. (1992) ADSP - A new package
+       for computational sequence analysis. CABIOS, 8(5), 451-459.
+    8. Attwood, T.K. and Findlay, J.B.C. (1994) Fingerprinting
+       G-protein-coupled receptors. Prot.Engng. 7(2), 195-203.
+    9. Attwood, T.K. and Findlay, J.B.C. (1993) Design of a
+       discriminating finger- print for G-protein-coupled receptors.
+       Prot.Engng. 6(2) 167-176.
+   10. Akrigg, D., Attwood, T.K., Bleasby, A.J., Findlay, J.B.C, North,
+       A.C.T., Maughan, N.A., Parry-Smith, D.J., Perkins, D.N. and
+       Wootton, J.C. (1992) SERPENT - An information storage and analysis
+       resource for protein sequences. CABIOS 8(3) 295-296.
+   11. Parry-Smith, D.J. and Attwood, T.K. (1991) SOMAP - A novel
+       interactive approach to multiple protein sequence aligment.
+       CABIOS, 7(2), 233-235.
+   12. Perkins, D.N. and Attwood, T.K. (1995) VISTAS - A package for
+       VIsualising STructures And Sequences of proteins. J.Mol.Graph.,
+       13, 73-75.
+   13. Parry-Smith, D.J., Payne, A.W.R, Michie, A.D. and Attwood, T.K.
+       (1998) CINEMA - A novel Colour INteractive Editor for Multiple
+       Alignments. Gene, 211(2), GC45-56.
+       
+Warnings
+
+   The program will warn you if the input file is incorrectly formatted.
+   
+Diagnostic Error Messages
+
+Exit status
+
+   It exits with status 0 unless an error is reported.
+   
+Known bugs
+
+See also
+
+   Program name Description
+   embossdata Finds or fetches the data files read in by the EMBOSS
+   programs
+   helixturnhelix Report nucleic acid binding motifs
+   patmatdb Search a protein sequence with a motif
+   patmatmotifs Search a PROSITE motif database with a protein sequence
+   prosextract Builds the PROSITE motif database for patmatmotifs to
+   search
+   pscan Scans proteins using PRINTS
+   rebaseextract Extract data from REBASE
+   tfextract Extract data from TRANSFAC
+   tfscan Scans DNA sequences for transcription factors
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+   Completed 8th April 1999
+   
+Target users
+
+   This program is intended to be used by administrators responsible for
+   software and database installation and maintenance.
+   
+Comments
+
+   You may have to ask your system manager to run this program.

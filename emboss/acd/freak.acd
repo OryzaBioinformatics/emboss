@@ -1,0 +1,18 @@
+appl: freak [
+        doc: "Residue/base frequency table or plot"
+        groups: "DNA: sequence composition"
+]
+
+ seqall: seqall [ param: Y type: any ]
+
+ bool: plot [ opt: N def: N info: "Produce graphic" ]
+
+ string: letters [ req: Y def: gc info: "Residue letters" ]
+
+ int:  step [ opt: Y def: 1 info: "Stepping value" ]
+
+ int: window [ opt: Y def: 30 info: "Averaging window" ]
+
+ xygraph: graph [ req: $(plot) ]
+
+ outfile: outfile [ req: @(!$(plot)) ]

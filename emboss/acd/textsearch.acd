@@ -1,0 +1,91 @@
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# GWW 23 April 1999
+
+appl: textsearch [
+  doc: "Search sequence documentation text. SRS and Entrez are faster!"
+  group: "sequence information, text search"
+]
+
+seqall: sequence [
+  param: Y
+]
+
+string: pattern [
+  param: Y
+  prompt: "Enter a pattern to search for"
+  help: "The search pattern is a regular expression.  Use a | to
+indicate OR. \ For example: \ human|mouse \ will find text with 
+either 'human' OR 'mouse' in the text "
+]
+
+outfile: outfile [
+  opt: Y
+  def: "stdout"
+  prompt: "Output sequence details to a file"
+  help: "If you enter the name of a file here then this program
+will write the sequence details into that file."
+]
+
+
+bool: html [ 
+  opt: Y
+  default: N 
+  prompt: "Format output as an HTML table"
+]
+
+
+bool: casesensitive [ 
+  opt: Y
+  default: N 
+  prompt: "Do a case-sensitive search"
+]
+
+
+# Not very interesting set of qualifiers to display various columns
+# Leave these as 'advanced' qualifiers (i.e. not required or optional)
+
+# The 'only' qualifier negates the behaviour of the following qualifiers
+# It is only used in the ACD file, it is not read by the program itself
+bool: only [ 
+  default: N 
+  info: "Display the inverse of the specified columns"
+  help: "This is a way of shortening the command line if you only want a
+few things to be displayed.  Instead of specifying: \ 
+'-nohead -noname -nousa -noacc -nodesc' \ 
+to get only the name output, you can specify \ 
+'-only -name'"
+]
+
+
+bool: heading [ 
+# the default is the inverse of 'only' in order to shorten the command line
+  default: @(!$(only))
+  info: "Display column headings"
+]
+
+bool: usa [ 
+# the default is the inverse of 'only' in order to shorten the command line
+  default: @(!$(only))
+  info: "Display the USA of the sequence"
+]
+
+bool: accession [ 
+# the default is the inverse of 'only' in order to shorten the command line
+  default: @(!$(only))
+  info: "Display 'accession' column"
+]
+
+bool: name [ 
+# the default is the inverse of 'only' in order to shorten the command line
+  default: @(!$(only))
+  info: "Display 'name' column"
+]
+
+bool: description [ 
+# the default is the inverse of 'only' in order to shorten the command line
+  default: @(!$(only))
+  prompt: "Display 'description' column"
+]
+
+

@@ -1,0 +1,46 @@
+# POLYDOT application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# il 14-jun-98
+
+appl: polydot [
+	doc: "Displays all-against-all dotplots of a set of sequences"
+	groups: "sequence comparison, DNA: sequence features, protein: sequence features"
+]
+
+  seqset: sequences [ 
+        param: Y
+	type: any
+        info: "Sequences file to be read in"
+        help: "File containing a sequence alignment"
+  ]
+
+  int: wordsize [ req: Y def: 6 min: 2
+                    info: "Word size" ]
+
+  graph: graph [ 
+	req: Y 
+        gtitle: "Polydot:" 
+  ]
+
+  int: gap [ 
+	def: "10" 
+	min: 0 
+	info: "Gap (in residues) between dotplots"
+	help: "This specifies the size of the gap that is used to
+separate the individual dotplots in the display.  The size is measured
+in residues, as displayed in the output."
+  ]
+
+  bool: boxit [def: Y opt: Y info: "Draw a box around each dotplot" ]
+
+  bool: dumpfeat [def: N opt: Y info: "Dump all matches as feature files" ]
+
+  string: format [ def: "gff" opt: Y info: "format to Dump out as" ]
+
+  string: ext    [ def: "gff"  opt: Y info: "Extension for feature file" ]

@@ -1,0 +1,30 @@
+# CLUSTER application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# il 03-08-98
+
+appl: cluster [
+	doc: "DNA sequence clustering"
+	groups: "cluster analysis, alignment: multiple"
+]
+
+  infile: infile [
+    param: Y
+    info: "match file"
+# def: "/nfs/disk42/pmr/emboss/cluster/rat/OUT@98.script.100"
+  ]
+
+  bool: consensus [
+    def: Y
+    req: Y
+    info: "make consensus after clustering"
+  ]
+
+  outfile: outfile [
+    required: Y
+  ]

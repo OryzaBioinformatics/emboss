@@ -1,0 +1,193 @@
+
+                               EMBOSS: msbar
+     _________________________________________________________________
+   
+                                 Program msbar
+                                       
+Function
+
+   Mutate sequence beyond all recognition
+   
+Description
+
+   This program changes a sequence a lot or a little, attempting to
+   emulate various forms of mutation. You can set the number and types of
+   mutations.
+   
+   It can act on the following sizes of sequence:
+     * Point (single base or residue change)
+     * Codon (not applicable in proteins)
+     * Block of sequence (of a specified minimum and maximum random size)
+       
+   If the sequence is nucleic, the codon and block-sized operations can
+   optionally be done in-frame. This causes the minimum block size to be
+   set to 3 and the randomly chosen positions to be multiples of 3.
+   
+   For each of the above size of sequence it can produce the effects of
+   any of the following types of mutation at a randomly chosen position:
+     * Insertion of a randomly generated sequence
+     * Deletion
+     * Change (deletion then insertion of a random sequence of the same
+       size)
+     * Duplication at an adjacent position
+     * Move region from one position to another (without deletion of the
+       original)
+     * Any of the above, chosen at random.
+     * None of the above
+       
+   The input and output sequences may not differ if only a few changes
+   are chosen as (for example) one in four nucleic acid point
+   substitutions will not change the sequence.
+   
+   N.B. There is no selection of the types of mutation to produce viable
+   sequence as there would be in a real organism. In particular, there is
+   no attempt to bias mutations of nucleic acid sequences to conform to
+   the C+G ratio in the sequence or to bias the codons in the direction
+   of the frequencies used in the organism. This program emulates
+   mutation, not selection.
+   
+   This program was named from the acronym of "Mutate Sequence Beyond All
+   Recognition", by analogy with the acronym "fubar" commonly used in the
+   US and UK armies.
+   
+Usage
+
+   Here is a sample session with msbar. This asks for 5 mutations, with
+   point mutations as changes (substitutions), and the codon and block
+   mutations ignored.
+
+% msbar
+Input sequence: embl:eclaci
+Output sequence [eclaci.fasta]:
+Number of times to perform the mutation operations [1]: 5
+Point mutation operations
+         0 : None
+         1 : Any of the following
+         2 : Insertions
+         3 : Deletions
+         4 : Changes
+         5 : Duplications
+         6 : Moves
+Types of point mutations to perform [0]: 4
+Codon mutation operations
+         0 : None
+         1 : Any of the following
+         2 : Insertions
+         3 : Deletions
+         4 : Changes
+         5 : Duplications
+         6 : Moves
+Types of codon mutations to perform [0]:
+Block mutation operations
+         0 : None
+         1 : Any of the following
+         2 : Insertions
+         3 : Deletions
+         4 : Changes
+         5 : Duplications
+         6 : Moves
+Types of block mutations to perform [0]:
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-sequence]          seqall     Sequence database USA
+  [-outseq]            seqoutall  Output sequence(s) USA
+   -count              integer    Number of times to perform the mutation
+                                  operations
+   -point              list       Types of point mutations to perform
+*  -codon              list       Types of codon mutations to perform. These
+                                  are only done if the sequence is nucleic.
+   -block              list       Types of block mutations to perform
+
+   Optional qualifiers (* if not always prompted):
+*  -inframe            bool       Do 'codon' and 'block' operations in frame
+
+   Advanced qualifiers:
+   -minimum            integer    Minimum size for a block mutation
+   -maximum            integer    Maximum size for a block mutation
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outseq]
+   (Parameter 2) Output sequence(s) USA Writeable sequence(s)
+   <sequence>.format
+   -count Number of times to perform the mutation operations Integer 0 or
+   more 1
+   -point Types of point mutations to perform
+   0 (None)
+   1 (Any of the following)
+   2 (Insertions)
+   3 (Deletions)
+   4 (Changes)
+   5 (Duplications)
+   6 (Moves)
+   0
+   -codon Types of codon mutations to perform. These are only done if the
+   sequence is nucleic.
+   0 (None)
+   1 (Any of the following)
+   2 (Insertions)
+   3 (Deletions)
+   4 (Changes)
+   5 (Duplications)
+   6 (Moves)
+   0
+   -block Types of block mutations to perform
+   0 (None)
+   1 (Any of the following)
+   2 (Insertions)
+   3 (Deletions)
+   4 (Changes)
+   5 (Duplications)
+   6 (Moves)
+   0
+   Optional qualifiers Allowed values Default
+   -inframe Do 'codon' and 'block' operations in frame Yes/No No
+   Advanced qualifiers Allowed values Default
+   -minimum Minimum size for a block mutation Integer 0 or more 1
+   -maximum Maximum size for a block mutation Any integer value 10
+   
+Input file format
+
+   Any sequence USA.
+   
+Output file format
+
+   The output is a sequence file with 5 substitutions relative to the
+   original sequence.
+   
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   shuffleseq Shuffles a set of sequences maintaining composition
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

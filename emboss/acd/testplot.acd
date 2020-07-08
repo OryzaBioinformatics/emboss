@@ -1,0 +1,12 @@
+appl: testplot [
+        doc: "test"
+        groups: "debugging"
+]
+
+
+int: points [ req:y def:90 min=2 max=360 info: "Number of degrees to plot"]
+
+bool: overlap [ req:y def:y info: "Overlap the graphs"]
+
+xygraph: graph [ req: y  multi:3 ]
+

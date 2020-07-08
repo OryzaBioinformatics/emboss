@@ -1,0 +1,28 @@
+appl: pepwindowall [
+        doc: "Displays protein hydropathy of a set of sequences"
+        groups: "protein: sequence properties, hydropathy"
+]
+
+  seqset: msf [ 
+        param: Y 
+        info: "Sequences file to be read in"
+        help: "File containing a sequence alignment"
+	type: gapprotein
+  ]
+
+  xygraph: graph [param:Y  multi:$(msf.count) ]
+
+  datafile: datafile [
+        optional: Y
+        info: "nakia database file"
+        def: "Enakai.dat"
+  ]
+
+  int: length [
+        optional: Y 
+        info: "window size"
+        def : "7"
+        min : "1"
+        max : "200"
+  ]
+

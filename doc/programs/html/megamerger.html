@@ -1,0 +1,525 @@
+<!--
+Edit this file to replace 'megamerger' with the name of the program.
+-->
+
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: megamerger
+</H2>
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+
+<!--END OF HEADER-->
+
+
+
+
+
+<H1>
+Program megamerger
+</H1>
+<H2>
+    Function
+</H2>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Merge two large overlapping nucleic acid sequences
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+
+        This is what the user looks at to find out if this program will
+        do what he wants. 
+
+        Long description.
+
+        Why it is useful.
+
+        When it should/shouldn't be used.
+
+        Algorithms
+
+        Expanded description.
+
+        eg: Reverse engineers Wheedle's 'talpsgob' program. This does a 
+        splurge of the 5' end of the sequence followed by a durm.
+        The net effect is a 5' end splurt.
+        etc. for as long as is required (several pages is not unreasonable)
+  -->
+
+<b>megamerger</b> takes two overlapping sequences and merges them into one sequence. 
+It could thus be regarded as the opposite of what splitter does.
+<P>
+
+The sequences can be very long.
+The program does a match of all sequence words of size 20 (by default). It then reduces
+this to the minimum set of overlapping matches by sorting the matches in order of size (largest size first)
+and then for each such match it removes any smaller matches that overlap. The result is a set of the longest
+ungapped alignments between the two sequences that do not overlap with each other. If the two sequences are
+identical in their region of overlap then there will be one region of match and no mismatches.
+<P>
+
+It should be possible to merge sequences that are Mega bytes long.
+Compare this with the program <b>merger</b> which does a more accurate
+alignment of more divergent sequences using the Needle and Wunsch algorithm but which uses much more memory.
+<P>
+
+The sequences should ideally be identical in their region of overlap.
+If there are any mismatches between the two sequences then <b>megamerger</b> will still attempt to
+create a merged sequence, but you should check that this is what you required.
+<P>
+
+A report of the actions of <b>megamerger</b> is written out.
+Any actions that require a choice between using regions of the two sequences
+where they have a mismatch is marked with the word <b>WARNING!</b>.
+The sequence in these regions is written out in uppercase.
+All other regions of the output sequence are written in lowercase.
+<p>
+
+Where there is a mismatch then the sequence that is chosen to supply the region of the mismatch in the
+final merged sequence is that sequence whose mismatch region is furthest from the start of end of the sequence.
+
+
+
+<p>
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+
+Here is a sample session with megamerger, there are many mismatches between these two sequences and the
+merged sequence should therefore be treated with great caution:
+
+<pre>
+
+% megamerger embl:ap000504 embl:af129756
+Merge two large overlapping nucleic acid sequences
+Output sequence [ap000504.merged]: 
+Output file [stdout]: report
+Word size [20]: 
+
+
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-seqa]              sequence   Sequence USA
+  [-seqb]              sequence   Sequence USA
+  [-outseq]            seqout     Output sequence USA
+   -report             outfile    Output report
+   -wordsize           integer    Word size
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-seqa]<br>(Parameter 1)</td>
+<td>Sequence USA</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-seqb]<br>(Parameter 2)</td>
+<td>Sequence USA</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 3)</td>
+<td>Output sequence USA</td>
+<td>Writeable sequence</td>
+<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr>
+<td>-report</td>
+<td>Output report</td>
+<td>Output file</td>
+<td>stdout</td>
+</tr>
+
+<tr>
+<td>-wordsize</td>
+<td>Word size</td>
+<td>Integer 2 or more</td>
+<td>20</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        Except for sequences which can be described by 'sequence USA',
+        this should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+Sequence USAs.
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats 
+        Except for sequences which can be described by 'sequence USA',
+        this should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+   -->
+
+
+A merged sequence is written out.
+<P>
+
+Where there has been a mismatch between the two sequences, the merged sequence is written out in uppercase
+and the sequence whose mismatch region is furthest from the edges of the sequence is used in the merged sequence.
+<P>
+
+The name and description of the first input sequence is used for the name and description of the output sequence.
+
+A report of the merger is written out.
+<P>
+
+A typical report where there are many mismatches, taken from the example above follows:
+<P>
+<PRE>
+# Report of megamerger of: AP000504 and AF129756
+
+AP000504 overlap starts at 1
+AF129756 overlap starts at 6036
+
+Using AF129756 1-6035 as the initial sequence
+
+Matching region AP000504 1-846 : AF129756 6036-6881
+Length of match: 846
+
+WARNING!
+Mismatch region found:
+Mismatch AP000504 847-847
+Mismatch AF129756 6882-6882
+Mismatch is closer to the ends of AP000504, so use AF129756 in the merged sequence
+
+Matching region AP000504 848-1794 : AF129756 6883-7829
+Length of match: 947
+
+WARNING!
+Mismatch region found:
+Mismatch AP000504 1795-1795
+Mismatch AF129756 7830-7830
+Mismatch is closer to the ends of AP000504, so use AF129756 in the merged sequence
+
+Matching region AP000504 1796-2272 : AF129756 7831-8307
+Length of match: 477
+
+[many lines removed for brevity]
+
+Matching region AP000504 97717-97826 : AF129756 103745-103854
+Length of match: 110
+
+WARNING!
+Mismatch region found:
+Mismatch AP000504 97827-97827
+Mismatch AF129756 103855-103855
+Mismatch is closer to the ends of AP000504, so use AF129756 in the merged sequence
+
+Matching region AP000504 97828-100000 : AF129756 103856-106028
+Length of match: 2173
+
+AP000504 overlap ends at 100000
+AF129756 overlap ends at 106028
+
+Using AF129756 106029-184666 as the final sequence
+</PRE>
+<P>
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+        eg:
+        data file format:
+
+	blank lines and comment lines are ignored.
+        comment lines start with '#'
+        There are three columns separated by one or more space or TAB
+	characters for X and Y values of durm, followed by energy
+        all coefficients are given as floating point values
+        An example is:
+
+        # Durm coefficient enery file
+        # X     Y       Energy
+        0.1     0.2     0.331
+        0.2     0.4     0.332
+        0.3     0.6     0.333
+        0.3     0.8     0.334
+
+   -->
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+If you run out of memory, use a larger wordsize.
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+None.
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+        eg:
+        It doesn't check to see if the sequence is a protein sequence or not.
+   -->
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program.
+        eg:
+
+        "Threshold value greater than 1." - means that the threshold has
+        been set to be greater than 1 but a burgle exception has
+        occurred making this invalid - you should reduce the wobble
+        parameter and try again. 
+
+   -->
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+        eg:
+        "It always exits with status 0"
+   -->
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="cutseq.html">cutseq</a></td><td>Removes a specified section from a sequence</td></tr>
+<tr><td><a href="descseq.html">descseq</a></td><td>Alter the name or description of a sequence</td></tr>
+<tr><td><a href="est2genome.html">est2genome</a></td><td>Align EST and genomic DNA sequences</td></tr>
+<tr><td><a href="extractseq.html">extractseq</a></td><td>Extract regions from a sequence</td></tr>
+<tr><td><a href="maskfeat.html">maskfeat</a></td><td>Mask off features of a sequence</td></tr>
+<tr><td><a href="maskseq.html">maskseq</a></td><td>Mask off regions of a sequence</td></tr>
+<tr><td><a href="merger.html">merger</a></td><td>Merge two overlapping nucleic acid sequences</td></tr>
+<tr><td><a href="newseq.html">newseq</a></td><td>Type in a short new sequence</td></tr>
+<tr><td><a href="noreturn.html">noreturn</a></td><td>Removes carriage return from ASCII files</td></tr>
+<tr><td><a href="nthseq.html">nthseq</a></td><td>Writes one sequence from a multiple set of sequences</td></tr>
+<tr><td><a href="pasteseq.html">pasteseq</a></td><td>Insert one sequence into another</td></tr>
+<tr><td><a href="revseq.html">revseq</a></td><td>Reverse and complement a sequence</td></tr>
+<tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
+<tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+<P>
+Compare this with the program <b>merger</b> which does a more accurate
+alignment of more divergent sequences using the Needle and Wunsch algorithm but which uses much more memory.
+<P>
+
+A graphical dotplot of the matches used in this merge can be displayed using the 
+program <b>dotpath</b>.
+
+<H2>
+    Author(s)
+</H2>
+<!--
+        Who has worked on the program in the past.
+e.g.
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+   -->
+
+This application was written by Gary Williams <a
+href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+<!--
+        What changes have been made.
+   -->
+
+Written Aug 2000 by Gary Williams.
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+<H2>
+    Comments
+</H2>
+
+<!--
+	Any comments, requests etc. that people have about the program
+   -->
+
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

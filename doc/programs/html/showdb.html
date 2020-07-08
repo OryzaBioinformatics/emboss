@@ -1,0 +1,475 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: showdb
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: showdb
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program showdb
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Displays information on the currently available databases
+
+
+<H2>
+    Description
+</H2>
+
+
+This writes out a simple table displaying the names, contents and
+available ways of accessing the sequence databases.
+
+<p>
+The available ways of accessing the databases are 'ID', 'Query' and
+'All'.  These refer to the way that you can search the databases to
+get entries from them, which is governed by the ways the database has
+been set up and the way it is organised and indexed.
+
+<p>
+Different databases may have different access capabilities, depending
+on how your local site is organised.
+
+<p>
+EMBOSS has been designed to be extremely flexible in its use of
+sequence databases formats, so that it is easy to set EMBOSS up to use
+your site's existing databases.  Sometimes this means that it is hard
+to extract entries from some databases in particular ways.  For
+example, a flat file database with no index is only useful for reading
+all entries, while a database located in another site that is
+available via the WWW may only provide single entries.
+
+<p>
+'ID' (also known as 'single entry') allows the programs to extract a
+single explicitly named entry from the database, for example
+embl:x13776
+
+<p>
+'Query' (also known as 'wild') indicates that programs can extract a
+set of matching wildcard entry names (this may be slow for some
+methods of access).  For example you can look at all of the human PAX
+proteins in SWISS_PROT by: swissprot:pax*_human
+
+<p>
+'All' allows the programs to analyse all the entries in the database
+sequentially.  For example this lets you look at all entries in the
+database with the notation: embl:*
+
+<p>
+A database may have several different methods of access available.
+Ideally all of the databases available on your site will be available
+in all three ways, but this is not the best of all posssible worlds
+and so you might like to check how you can access the databases by
+running this program and having a look.
+
+<H2>
+    Usage
+</H2>
+
+
+Display information on the currently available databases:
+
+<pre>
+% showdb
+</pre>
+
+<p>
+Write out the display to a file:
+
+<pre>
+% showdb -outfile showdb.out
+</pre>
+
+<p>
+Display information on one explicit database:
+
+<pre>
+% showdb -database swissprot
+</pre>
+
+<p>
+Display information on the databases formatted for inclusion in HTML:
+
+<pre>
+% showdb -html
+</pre>
+
+<p>
+Display protein databases only:
+
+<pre>
+% showdb -nonucleic
+</pre>
+
+<p>
+Display the information with no headings
+
+<pre>
+% showdb -noheading
+</pre>
+
+<p>
+Display just a list of the available database names
+
+<pre>
+% showdb -noheading -notype -noid -noquery -noall -nocomment -auto
+</pre>
+
+<p>
+Display only the names and types
+<pre>
+% showdb -only -type
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers: (none)
+   Optional qualifiers:
+   -database           string     Name of a single database to give
+                                  information on
+   -outfile            outfile    If you enter the name of a file here then
+                                  this program will write the database details
+                                  into that file.
+   -html               bool       Format output as an HTML table
+   -[no]protein        bool       Display protein databases
+   -[no]nucleic        bool       Display nucleic acid databases
+
+   Advanced qualifiers:
+   -only               bool       This is a way of shortening the command line
+                                  if you only want a few things to be
+                                  displayed. Instead of specifying:
+                                  '-nohead -notype -noid -noquery -noall'
+                                  to get only the comment output, you can
+                                  specify
+                                  '-only -comment'
+   -heading            bool       Display column headings
+   -type               bool       Display 'type' column
+   -id                 bool       Display 'id' column
+   -query              bool       Display 'qry' column
+   -all                bool       Display 'all' column
+   -comment            bool       Display 'comment' column
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-database</td>
+<td>Name of a single database to give information on</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>If you enter the name of a file here then this program will write the database details into that file.</td>
+<td>Output file</td>
+<td>stdout</td>
+</tr>
+
+<tr>
+<td>-html</td>
+<td>Format output as an HTML table</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]protein</td>
+<td>Display protein databases</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]nucleic</td>
+<td>Display nucleic acid databases</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-only</td>
+<td>This is a way of shortening the command line if you only want a few things to be displayed. Instead of specifying:
+'-nohead -notype -noid -noquery -noall'
+to get only the comment output, you can specify
+'-only -comment'</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-heading</td>
+<td>Display column headings</td>
+<td>Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-type</td>
+<td>Display 'type' column</td>
+<td>Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-id</td>
+<td>Display 'id' column</td>
+<td>Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-query</td>
+<td>Display 'qry' column</td>
+<td>Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-all</td>
+<td>Display 'all' column</td>
+<td>Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-comment</td>
+<td>Display 'comment' column</td>
+<td>Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+    None.
+<H2>
+    Output file format
+</H2>
+
+
+The output is a simple table, e.g.:
+
+<pre>
+
+------------------------------------------------------------------------------
+# Name        Type ID  Qry All Comment
+# ====        ==== ==  === === =======
+swissprot     P    OK  OK  OK  -
+sw            P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+em            N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+------------------------------------------------------------------------------
+
+</pre>
+
+<p>
+Type 'P' indicates that this is a Protein database.
+
+<p>
+Type 'N' indicates that this is a Nucleic database.
+
+<p>
+'OK' under ID, Qry or All indicates that that access method can be
+used on this database.  A '-' indicates that you cannot access this
+database in that way.
+
+<p>
+When the -html qualifier is specified, then the output will be wrapped
+in HTML tags, ready for inclusion in a Web page.  Note that tags such
+as &lt;HTML&gt;, &lt;BODY&gt;, &lt;/BODY&gt; and &lt;/HTML&gt; are not
+output by this program as the table of databases is expected to form
+only part of the contents of a web page - the rest of the web page
+must be supplied by the user.
+
+
+<H2>
+    Data files
+</H2>
+
+
+The databases are specified in the files <i>"emboss.defaults"</i> for
+site wide definitions, and <i>"~/.embossrc"</i> for the user's own
+settings.
+	
+<H2>
+    Notes
+</H2>
+
+
+        None.
+
+<H2>
+    References
+</H2>
+
+
+	None.
+
+<H2>
+    Warnings
+</H2>
+
+
+	None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+"The database 'xyz' does not exist" You have supplied the name of a
+database with the -database qualifier, but that database does not
+exist as far as EMBOSS is concerned.
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0, unless the above diagnostic message is
+displayed.
+
+<H2>
+    Known bugs
+</H2>
+
+
+        None noted.
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Gary Williams <a
+href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+Completed 6th August 1999.
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

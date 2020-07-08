@@ -1,0 +1,87 @@
+
+                              EMBOSS: plotorf
+     _________________________________________________________________
+   
+                                Program plotorf
+                                       
+Function
+
+   Plot potential open reading frames
+   
+Description
+
+   Plot potential open reading frames
+   
+Usage
+
+   Here is a sample session with plotorf.
+
+% plotorf
+Input sequence: embl:paamir
+Graph type [x11]:
+
+   Click here to see the graph
+   
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+   -graph              xygraph    Graph type
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence USA Readable sequence Required
+   -graph Graph type EMBOSS has a list of known devices, including
+   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
+   EMBOSS_GRAPHICS value, or x11
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   backtranseq Back translate a protein sequence
+   cusp Create a codon usage table
+   getorf Finds and extracts open reading frames (ORFs)
+   prettyseq Output sequence with translated ranges
+   remap Display a sequence with restriction cut sites, translation etc
+   showorf Pretty output of DNA translations
+   showseq Display a sequence with features, translation etc
+   transeq Translate nucleic acid sequences
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

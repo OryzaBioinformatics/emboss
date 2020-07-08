@@ -1,0 +1,24 @@
+appl: primersearch [
+  documentation: "Searches DNA sequences for matches with primer pairs"
+  groups: "primers, comparison"
+]
+
+seqall: sequences  [
+  parameter: "Y"
+  type: "dna"
+]
+
+infile: primers  [
+  parameter: "Y"
+  prompt: "Primer file"
+]
+
+outfile: out  [
+  parameter: "Y"
+]
+
+int: mismatchpercent [
+  parameter: Y
+  default: "0"
+  prompt: "Allowed percent mismatch"
+]

@@ -1,0 +1,307 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: prosextract
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: prosextract
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program prosextract
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Builds the PROSITE motif database for patmatmotifs to search
+
+
+<H2>
+    Description
+</H2>
+
+
+Takes the IDentity, ACcession number and motif PAttern line 
+contents from prosite entries. Also converts the PAttern into a regular 
+expression and writes these four pieces to an output file -  defaulted to 
+be called 'prosite.lines'. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with prosextract.
+
+<pre>
+
+% prosextract
+Extracting ID, AC & PA lines from the Prosite motif Database.
+Enter name of prosite directory: data/PROSITE
+	
+% more prosite.lines
+ASN_GLYCOSYLATION PS00001
+N-glycosylation
+N-{P}-[ST]-{P}
+^N[^P][ST][^P]
+
+CAMP_PHOSPHO_SITE PS00004
+cAMP-
+[RK](2)-x-[ST]
+^[RK]{2}[^BJOUXZ][ST]
+
+PKC_PHOSPHO_SITE PS00005
+Protein
+[ST]-x-[RK]
+^[ST][^BJOUXZ][RK]
+
+CK2_PHOSPHO_SITE PS00006
+Casein
+[ST]-x(2)-[DE]
+^[ST][^BJOUXZ]{2}[DE]
+
+etc.......
+
+</pre>
+
+The output files named after the prosite accession numbers can now
+also be seen in the prosite directory. This files are automatically
+created after prosextract is run.
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-infdat]            string     Enter name of prosite directory
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infdat]<br>(Parameter 1)</td>
+<td>Enter name of prosite directory</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+These files must be the "prosite.dat" and "prosite.doc" file of a
+Prosite distribution, containing all current prosite data.
+
+<H2>
+    Output file format
+</H2>
+
+
+These files are held in the prosite subdirectory of the emboss data
+directory. The default names are "prosite.lines" and "PS*****"
+(accession number documentation files)
+
+<H2>
+    Data files
+</H2>
+
+
+See Input file format above.
+
+<H2>
+    Notes
+</H2>
+
+
+Program is most useful when used as a prerequisite for patmatmotifs.
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+<li>Bairoch, A., Bucher P. (1994) PROSITE: recent developments. Nucleic 
+Acids Research, Vol 22, No.17 3583-3589.
+
+<li>Bairoch, A., (1992) PROSITE: a dictionary of sites and patterns in 
+proteins. Nucleic Acids Research, Vol 20, Supplement, 2013-2018.
+
+<li>Peek, J., O'Reilly, T., Loukides, M., (1997) Unix Power Tools, 2nd 
+Edition.
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+The program will warn the user if the input file is incorrectly
+formatted.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+As in warnings.
+
+<H2>
+    Exit status
+</H2>
+
+
+Always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="embossdata.html">embossdata</a></td><td>Finds or fetches the data files read in by the EMBOSS programs</td></tr>
+<tr><td><a href="helixturnhelix.html">helixturnhelix</a></td><td>Report nucleic acid binding motifs</td></tr>
+<tr><td><a href="patmatdb.html">patmatdb</a></td><td>Search a protein sequence with a motif</td></tr>
+<tr><td><a href="patmatmotifs.html">patmatmotifs</a></td><td>Search a PROSITE motif database with a protein sequence</td></tr>
+<tr><td><a href="printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
+<tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
+<tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
+<tr><td><a href="tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
+<tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Sinead O'Leary <a
+href="mailto:soleary@hgmp.mrc.ac.uk">(soleary@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+Completed March 24 1999.
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by administrators responsible
+for software and database installation and maintenance. 
+
+<H2>
+    Comments
+</H2>
+
+
+PAextract is a similar program, not in EMBOSS, which extracts the
+PAttern lines only and writes them to an output file, default name -
+prosite.PAlines.
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

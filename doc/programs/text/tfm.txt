@@ -1,0 +1,146 @@
+
+                                EMBOSS: tfm
+     _________________________________________________________________
+   
+                                  Program tfm
+                                       
+Function
+
+   Displays a program's help documentation manual
+   
+Description
+
+   This program displays the help documentation for an EMBOSS program.
+   
+   The contributors of the EMBOSS programs do attempt to provide an
+   adequate description of the programs. This documentation is primarily
+   held as HTML pages at http://www.hgmp.mrc.ac.uk/Software/EMBOSS/Apps/
+   
+   The documentation is also available however through the program tfm as
+   normal text.
+   
+   tfm is unusual for an EMBOSS program in that it expects to be used
+   interactively and so it displays the documentation text a page at a
+   time, pausing after every page for the user to proess the SPACE bar on
+   their keyboard. (i.e. it uses the UNIX program more to display the
+   information). This behaviour can be turned off by using the qualifier
+   -nomore.
+   
+   If you have problems understanding the function or usage of an EMBOSS
+   program, then you should contact the EMBOSS mailing list
+   (emboss@embnet.org).
+   
+   The unusual name of this program comes from the common computing
+   science expression: RTFM. This acronym, as you probably already know,
+   stands for Read The Fine* Manual; so this is The Fine* Manual.
+   
+   * Insert the expletive of your choice here!
+   
+Usage
+
+   Here is a sample session with tfm:
+
+% tfm wossname
+
+   You will see a page of documentation on the wossname program. To see
+   further pages, you should press the SPACE bar on your keyboard. To
+   stop seeing the documentation before you get to the end of the text,
+   you can press the key q to quit.
+   
+Command line arguments
+
+   Mandatory qualifiers:
+  [-program]           string     Enter the name of an EMBOSS program
+
+   Optional qualifiers:
+   -outfile            outfile    If you enter the name of a file here then
+                                  this program will write the program names
+                                  and brief descriptions into that file.
+   -html               bool       This will format the output for displaying
+                                  as a WWW document.
+   -more               bool       This uses the standard UNIX utility 'more'
+                                  to display the text page-by-page, waiting
+                                  for you to read one screen-full before going
+                                  on to the next page. When you have finished
+                                  reading a page, press the SPACE bar to
+                                  proceed to the next page.
+
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-program]
+   (Parameter 1) Enter the name of an EMBOSS program Any string is
+   accepted An empty string is accepted
+   Optional qualifiers Allowed values Default
+   -outfile If you enter the name of a file here then this program will
+   write the program names and brief descriptions into that file. Output
+   file stdout
+   -html This will format the output for displaying as a WWW document.
+   Yes/No No
+   -more This uses the standard UNIX utility 'more' to display the text
+   page-by-page, waiting for you to read one screen-full before going on
+   to the next page. When you have finished reading a page, press the
+   SPACE bar to proceed to the next page. Yes/No @(!$(html))
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   None.
+   
+Output file format
+
+   Text documentation is output.
+   
+   The table of command line arguments can be a bit difficult to read.
+   This is the result of changing HTML Web pages to text.
+   
+Data files
+
+   The original data for the documentation can be found in:
+   http://www.hgmp.mrc.ac.uk/Software/EMBOSS/Apps/
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   tfm will warn you if you have supplied the name of a program which is
+   not documented yet or which doesn't exist in EMBOSS.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Written: 4 Aug 2000.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

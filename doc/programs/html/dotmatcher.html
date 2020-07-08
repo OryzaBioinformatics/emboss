@@ -1,0 +1,340 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: dotmatcher
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: dotmatcher
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program dotmatcher
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Displays a thresholded dotplot of two sequences
+
+
+<H2>
+    Description
+</H2>
+
+
+A dotplot is a graphical representation of the regions of similarity
+between two sequences. 
+
+<p>
+The two sequences are placed on the axes of a rectangular image and
+(subject to threshold conditions) wherever there is a similarity between
+the sequences a dot is placed on the image. 
+
+<p>
+Where the two sequences have substantial regions of similarity, many
+dots align to form diagonal lines.  It is therefore possible to see at a
+glance where there are local regions of similarity.
+
+<p>
+dotmatcher uses a threshold to define whether a match is plotted
+(calculated from the substitution matrix).  A window of specified length
+is moved up all possible diagonals and a score is calculated within each
+window for each position along the diagonals.  The score is the sum of
+the comparisons of the two sequences using the given similarity matrix
+along the window.  If the score is above the threshold, then a line is
+plotted on the image over the position of the window. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with dotmatcher.
+
+<pre>
+
+% dotmatcher sw:hba_human sw:hbb_human
+
+</pre>
+ <a href="dotmatcher0.gif">click here for result</a>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequencea]         sequence   Sequence USA
+  [-sequenceb]         sequence   Sequence USA
+  [-graph]             graph      Graph type
+
+   Optional qualifiers:
+   -windowsize         integer    window size over which to test threshhold
+   -threshold          float      threshold
+   -datafile           matrix     Matrix file
+
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequencea]<br>(Parameter 1)</td>
+<td>Sequence USA</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-sequenceb]<br>(Parameter 2)</td>
+<td>Sequence USA</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-graph]<br>(Parameter 3)</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-windowsize</td>
+<td>window size over which to test threshhold</td>
+<td>Integer 3 or more</td>
+<td>10</td>
+</tr>
+
+<tr>
+<td>-threshold</td>
+<td>threshold</td>
+<td>Number 0.000 or more</td>
+<td>17.0</td>
+</tr>
+
+<tr>
+<td>-datafile</td>
+<td>Matrix file</td>
+<td>Comparison matrix file in EMBOSS data path</td>
+<td>EBLOSUM62 for protein<br>EDNAMAT for DNA</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+Any 2 sequence USAs of the same type (DNA or protein).
+
+<H2>
+    Output file format
+</H2>
+
+
+A .ps file is produced if postscript output is requested.
+
+<H2>
+    Data files
+</H2>
+
+
+Matrix substitution file. 
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+0 upon successful completion.
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="antigenic.html">antigenic</a></td><td>Finds antigenic sites in proteins</td></tr>
+<tr><td><a href="chaos.html">chaos</a></td><td>Create a chaos game representation plot for a sequence</td></tr>
+<tr><td><a href="cpgplot.html">cpgplot</a></td><td>Plot CpG rich areas</td></tr>
+<tr><td><a href="cpgreport.html">cpgreport</a></td><td>Reports all CpG rich regions</td></tr>
+<tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
+<tr><td><a href="einverted.html">einverted</a></td><td>Finds DNA inverted repeats</td></tr>
+<tr><td><a href="equicktandem.html">equicktandem</a></td><td>Finds tandem repeats</td></tr>
+<tr><td><a href="etandem.html">etandem</a></td><td>Looks for tandem repeats in a nucleotide sequence</td></tr>
+<tr><td><a href="garnier.html">garnier</a></td><td>Predicts protein secondary structure</td></tr>
+<tr><td><a href="helixturnhelix.html">helixturnhelix</a></td><td>Report nucleic acid binding motifs</td></tr>
+<tr><td><a href="isochore.html">isochore</a></td><td>Plots isochores in large DNA sequences</td></tr>
+<tr><td><a href="newcpgreport.html">newcpgreport</a></td><td>Report CpG rich areas</td></tr>
+<tr><td><a href="newcpgseek.html">newcpgseek</a></td><td>Reports CpG rich regions</td></tr>
+<tr><td><a href="oddcomp.html">oddcomp</a></td><td>Finds protein sequence regions with a biased composition</td></tr>
+<tr><td><a href="palindrome.html">palindrome</a></td><td>Looks for inverted repeats in a nucleotide sequence</td></tr>
+<tr><td><a href="pepcoil.html">pepcoil</a></td><td>Predicts coiled coil regions</td></tr>
+<tr><td><a href="polydot.html">polydot</a></td><td>Displays all-against-all dotplots of a set of sequences</td></tr>
+<tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
+<tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
+<tr><td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td></tr>
+<tr><td><a href="seqmatchall.html">seqmatchall</a></td><td>Does an all-against-all comparison of a set of sequences</td></tr>
+<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>
+<tr><td><a href="stssearch.html">stssearch</a></td><td>Searches a DNA database for matches with a set of STS primers</td></tr>
+<tr><td><a href="supermatcher.html">supermatcher</a></td><td>Finds a match of a large sequence against one or more sequences</td></tr>
+<tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
+<tr><td><a href="tmap.html">tmap</a></td><td>Displays membrane spanning regions</td></tr>
+<tr><td><a href="wordmatch.html">wordmatch</a></td><td>Finds all exact matches of a given size between 2 sequences</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<a href="dottup.html">dottup,</a> by comparison, has no threshold.
+
+<p>
+This is really just the <a href="wordmatch.html">wordmatch</a> method
+with a grahical output.
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Ian Longden <a
+href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+    History
+</H2>
+
+<pre>
+ Completed 1st June 1999. 
+ Last modified 16th June 1999.
+</pre>
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,99 @@
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# GWW 23 April 1999
+
+appl: showdb [
+	doc: "Displays information on the currently available databases"
+	group: "database: information"
+]
+
+string:	database [
+  default: ""
+  opt: Y
+  prompt: "Name of a single database to give information on"
+]
+
+
+outfile: outfile [
+  opt: Y
+  def: "stdout"
+  prompt: "Output database details to a file"
+  help: "If you enter the name of a file here then this program
+will write the database details into that file."
+]
+
+
+
+bool: html [ 
+  opt: Y
+  default: N 
+  prompt: "Format output as an HTML table"
+]
+
+bool: protein [ 
+  opt: Y
+  default: Y
+  prompt: "Display protein databases"
+]
+
+bool: nucleic [ 
+  opt: Y
+  default: Y
+  prompt: "Display nucleic acid databases"
+]
+
+
+
+# Not very interesting set of qualifiers to display various columns
+# Leave these as 'advanced' qualifiers (i.e. not required or optional)
+
+# The 'only' qualifier negates the behaviour of the following qualifiers
+# It is only used in the ACD file, it is not read by the program itself
+bool: only [ 
+  default: N 
+  info: "Display the inverse of the specified columns"
+  help: "This is a way of shortening the command line if you only want a
+few things to be displayed.  Instead of specifying: \ 
+'-nohead -notype -noid -noquery -noall' \ 
+to get only the comment output, you can specify \ 
+'-only -comment'"
+]
+
+
+bool: heading [ 
+# the default is the inverse of 'only' in order to shorten the command line
+  default: @(!$(only))
+  prompt: "Display column headings"
+]
+
+bool: type [ 
+# the default is the inverse of 'only' in order to shorten the command line
+  default: @(!$(only))
+  prompt: "Display 'type' column"
+]
+
+bool: id [ 
+# the default is the inverse of 'only' in order to shorten the command line
+  default: @(!$(only))
+  prompt: "Display 'id' column"
+]
+
+bool: query [ 
+# the default is the inverse of 'only' in order to shorten the command line
+  default: @(!$(only))
+  prompt: "Display 'qry' column"
+]
+
+bool: all [ 
+# the default is the inverse of 'only' in order to shorten the command line
+  default: @(!$(only))
+  prompt: "Display 'all' column"
+]
+
+bool: comment [ 
+# the default is the inverse of 'only' in order to shorten the command line
+  default: @(!$(only))
+  prompt: "Display 'comment' column"
+]
+
+

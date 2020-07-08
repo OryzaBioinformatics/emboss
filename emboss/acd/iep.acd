@@ -1,0 +1,22 @@
+appl: iep [
+        doc: "Calculates the isoelectric point of a protein"
+        groups: "protein: sequence properties"
+]
+
+ seqall: sequencea [ param: Y type: pureprotein ]
+
+
+ bool: plot [ req: N def: N info: "Plot charge vs pH" ]
+
+ bool: report [ req: N def: Y info: "Write results to a file" ]
+
+ float: step [ req: N info: "pH step value" min: .01 max: 1.
+                  def: .5 ]
+
+ int: amino [ req: N info: "Number of N-termini" def: 1 ]
+
+ bool: termini [ req: N def: Y info: "Include charge at N and C terminus" ]
+
+ xygraph: graph [ req: $(plot)  ]
+
+ outfile: outfile [req: $(report) ]

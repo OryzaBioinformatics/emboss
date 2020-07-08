@@ -1,0 +1,24 @@
+# HELIXTURNHELIX nucleic acid binding site determination
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+
+# ajb 11th March 1999
+appl: helixturnhelix [
+	doc: "Report nucleic acid binding motifs"
+	groups: "protein: sequence features, secondary structure, motifs"
+]
+
+  seqall: sequence [ param: Y type: PureProtein  ]
+
+  float: mean [ opt: Y min: 1. max: 10000. def: 238.71
+                 info: "Mean value" ]
+
+  float: sd [ opt: Y min: 1. max: 10000. def: 293.61
+                 info: "Standard Deviation value" ]
+
+  float: minsd [ opt: Y min: 0. max: 100. def: 2.5
+                 info: "Minimum SD" ]
+
+  bool: eightyseven [ opt: Y info: "Use the old (1987) weight data" ]
+
+  outfile: outfile [ param: Y ext: "hth" expect: "seqname.hth" ]

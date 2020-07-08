@@ -1,0 +1,10 @@
+appl: codcmp [
+        doc: "Codon usage table comparison"
+        groups: "DNA: sequence composition"
+]
+
+ codon: first [ param: Y info: "First codon usage file" ]
+
+ codon: second [ param: Y info: "Second codon usage file" ]
+
+ outfile: outfile [ param: Y ]

@@ -1,0 +1,429 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: palindrome
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: palindrome
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program palindrome
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Looks for inverted repeats in a nucleotide sequence
+
+
+<H2>
+    Description
+</H2>
+
+
+This looks for inverted repeats (stem loops) in a nucleotide sequence. 
+
+<p>
+It will find inverted repeats that include a proportion of mismatches
+and gaps (bulges in the stem loop). 
+
+<p>
+It works by finding all possible inverted matches satisfying the
+specified conditions of minimum and maximum length of palindrome,
+maximum gap between repeated regions and number of mismatches allowed. 
+
+<p>
+Secondary structures like inverted repeats in genomic sequences may be
+implicated in initiation of DNA replication. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with palindrome. As there are a number of
+overlapping possibilties in this sequence, we choose a longer minimum
+repeat length.
+
+<pre>
+
+% palindrome
+Input sequence: embl:hsts1
+Enter minimum length of palindrome [10]: 15
+Enter maximum length of palindrome [100]: 
+Enter maximum gap between repeated regions [100]: 
+Number of mismatches allowed [0]: 
+Output file [hsts1.pal]: 
+Report overlapping matches [Y]: 
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-insequence]        sequence   Sequence USA
+   -minpallen          integer    Enter minimum length of palindrome
+   -maxpallen          integer    Enter maximum length of palindrome
+   -gaplimit           integer    Enter maximum gap between repeated regions
+   -nummismatches      integer    Number of mismatches allowed
+  [-outfile]           outfile    Output file name
+   -[no]overlap        bool       Report overlapping matches
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-insequence]<br>(Parameter 1)</td>
+<td>Sequence USA</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-minpallen</td>
+<td>Enter minimum length of palindrome</td>
+<td>Integer 1 or more</td>
+<td>10</td>
+</tr>
+
+<tr>
+<td>-maxpallen</td>
+<td>Enter maximum length of palindrome</td>
+<td>Any integer value</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>-gaplimit</td>
+<td>Enter maximum gap between repeated regions</td>
+<td>Integer 0 or more</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>-nummismatches</td>
+<td>Number of mismatches allowed</td>
+<td>Positive integer</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.palindrome</td>
+</tr>
+
+<tr>
+<td>-[no]overlap</td>
+<td>Report overlapping matches</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+The input for palindrome is a nucleotide sequence.
+
+<H2>
+    Output file format
+</H2>
+
+
+Here is the output file from the example run:
+
+<pre>
+
+Palindromes of:  HSTS1 
+Sequence length is: 18596 
+Start at position: 1
+End at position: 18596
+Minimum length of Palindromes is: 15 
+Maximum length of Palindromes is: 100 
+Maximum gap between elements is: 100 
+Number of mismatches allowed in Palindrome: 0
+
+
+
+Palindromes:
+126   caaaaaaaaaaaaaaaa   142
+      |||||||||||||||||
+217   gtttttttttttttttt   201
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+215   tttttttttttttttt   200
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+214   tttttttttttttttt   199
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+213   tttttttttttttttt   198
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+212   tttttttttttttttt   197
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+211   tttttttttttttttt   196
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+210   tttttttttttttttt   195
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+209   tttttttttttttttt   194
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+208   tttttttttttttttt   193
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+207   tttttttttttttttt   192
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+206   tttttttttttttttt   191
+
+127   aaaaaaaaaaaaaaaa   142
+      ||||||||||||||||
+205   tttttttttttttttt   190
+
+127   aaaaaaaaaaaaaaaagaccgccagggct   155
+      |||||||||||||||||||||||||||||
+204   ttttttttttttttttctggcggtcccga   176
+
+
+</pre>
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+
+Unless the qualifier '-nooverlap' is specified, palindrome makes no
+attempt to exclude subsets of previously found palindromes. 
+
+<p>
+Several examples can be seen in the sample output above.
+
+<H2>
+    References
+</H2>
+
+
+Some references on inverted repeats: 
+
+<ol>
+
+<li>Pearson CE, Zorbas H, Price GB, Zannis-Hadjopoulos M Inverted
+      repeats, stem-loops, and cruciforms: significance for initiation
+      of DNA replication. J Cell Biochem 1996 Oct;63(1):1-22
+
+<li>Waldman AS, Tran H, Goldsmith EC, Resnick MA. q Long inverted
+      repeats are an at-risk motif for recombination in mammalian
+      cells. Genetics. 1999 Dec;153(4):1873-83. PMID: 10581292; UI:
+      20050682
+
+<li>Jacobsen SE Gene silencing: Maintaining methylation patterns. Curr
+      Biol 1999 Aug 26;9(16):R617-9
+
+<li>Lewis S, Akgun E, Jasin M. Palindromic DNA and genome
+      stability. Further studies. Ann N Y Acad Sci. 1999 May
+      18;870:45-57. PMID: 10415472; UI: 99343961
+
+<li>Dai X, Greizerstein MB, Nadas-Chinni K, Rothman-Denes LB
+      Supercoil-induced extrusion of a regulatory DNA hairpin. Proc
+      Natl Acad Sci U S A 1997 Mar 18;94(6):2174-9
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="chaos.html">chaos</a></td><td>Create a chaos game representation plot for a sequence</td></tr>
+<tr><td><a href="cpgplot.html">cpgplot</a></td><td>Plot CpG rich areas</td></tr>
+<tr><td><a href="cpgreport.html">cpgreport</a></td><td>Reports all CpG rich regions</td></tr>
+<tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td></tr>
+<tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
+<tr><td><a href="einverted.html">einverted</a></td><td>Finds DNA inverted repeats</td></tr>
+<tr><td><a href="equicktandem.html">equicktandem</a></td><td>Finds tandem repeats</td></tr>
+<tr><td><a href="etandem.html">etandem</a></td><td>Looks for tandem repeats in a nucleotide sequence</td></tr>
+<tr><td><a href="isochore.html">isochore</a></td><td>Plots isochores in large DNA sequences</td></tr>
+<tr><td><a href="newcpgreport.html">newcpgreport</a></td><td>Report CpG rich areas</td></tr>
+<tr><td><a href="newcpgseek.html">newcpgseek</a></td><td>Reports CpG rich regions</td></tr>
+<tr><td><a href="polydot.html">polydot</a></td><td>Displays all-against-all dotplots of a set of sequences</td></tr>
+<tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
+<tr><td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td></tr>
+<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Mark Faller <a
+href="mailto:mfaller@hgmp.mrc.ac.uk">(mfaller@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,33 @@
+appl: tfscan [
+  documentation: "Scans DNA sequences for transcription factors"
+  groups: "DNA: sequence features, transcription, pattern matching, motifs"
+]
+
+seqall: sequence  [
+  parameter: "Y"
+  type: "DNA"
+]
+
+list: menu  [
+  required: "Y"
+  default: "V"
+  minimum: "1"
+  maximum: "1"
+  values: "F:fungi,I:insect,P:plant,V:vertebrate,O:other"
+  delimiter: ","
+  codedelim: ":"
+  header: "Transcription Factor Class"
+  prompt: "Select class"
+  button: "Y"
+]
+
+integer: mismatch  [
+  required: "Y"
+  default: "0"
+  minimum: "0"
+  information: "Number of mismatches"
+]
+
+outfile: outfile  [
+  parameter: "Y"
+]

@@ -1,0 +1,169 @@
+
+                              EMBOSS: maskseq
+     _________________________________________________________________
+   
+                                Program maskseq
+                                       
+Function
+
+   Mask off regions of a sequence
+   
+Description
+
+   This simple editing program allows you to mask off regions of a
+   sequence with a specified letter.
+   
+   Why would you wish to do this? It is common for database searches to
+   mask out low-complexity or biased composition regions of a sequence so
+   that spurious matches do not occur. It is just possible that you have
+   a program that has reported such biased regions but which has not
+   masked the sequence itself. In that case, you can use this program to
+   do the masking.
+   
+   You may find other uses for it.
+   
+Usage
+
+   To mask off bases 10 to 12 from a sequence 'gatta.seq' and write to
+   the new sequence file 'gatta2.seq':
+% maskseq gatta.seq gatta2.seq -reg=10-12
+
+   To mask off bases 20 to 30 from a sequence 'hdh.seq' using the
+   character 'n' and write to the new sequence file 'hdh2.seq':
+% maskseq hdh.seq hdh2.seq -reg=20-30 -mask=n
+
+   To mask off the regions 20 to 23, 34 to 45 and 88 to 90 in 'yuy.seq':
+% maskseq yuy.seq yuy2.seq -reg=20-23,34-45,88-90
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-outseq]            seqout     Output sequence USA
+   -regions            range      Regions to mask.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are separated by any non-digit,
+                                  non-alpha character.
+                                  Examples of region specifications are:
+                                  24-45, 56-78
+                                  1:45, 67=99;765..888
+                                  1,5,8,10,23,45,57,99
+
+   Optional qualifiers:
+   -maskchar           string     Character to use when masking.
+                                  Default is 'X' for protein sequences, 'N'
+                                  for nucleic sequences.
+
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence USA Readable sequence Required
+   [-outseq]
+   (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
+   -regions Regions to mask. A set of regions is specified by a set of
+   pairs of positions. The positions are integers. They are separated by
+   any non-digit, non-alpha character. Examples of region specifications
+   are: 24-45, 56-78 1:45, 67=99;765..888 1,5,8,10,23,45,57,99 Sequence
+   range None
+   Optional qualifiers Allowed values Default
+   -maskchar Character to use when masking. Default is 'X' for protein
+   sequences, 'N' for nucleic sequences. Any string is accepted 'X' for
+   protein, 'N' for nucleic
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   This program reads in a single sequence file.
+   
+   You can specifiy a file of ranges to mask out by giving the '-regions'
+   qualifier the value '@' followed by the name of the file containing
+   the ranges. (eg: '-regions @myfile').
+   
+   The format of the range file is:
+     * Comment lines start with '#' in the first column.
+     * Comment lines and blank lines are ignored.
+     * The line may start with white-space.
+     * There are two positive (integer) numbers per line separated by one
+       or more space or TAB characters.
+     * The second number must be greater or equal to the first number.
+     * There can be optional text after the two numbers to annotate the
+       line.
+     * White-space before or after the text is removed.
+       
+   An example range file is:
+
+# this is my set of ranges
+12   23
+ 4   5       this is like 12-23, but smaller
+67   10348   interesting region
+
+Output file format
+
+   Single sequence file.
+   
+Data files
+
+Notes
+
+   This can be used as a simple sequence editor.
+   
+References
+
+Warnings
+
+   You can mask out a complete sequence.
+   
+Diagnostic Error Messages
+
+   Several warning messages about malformed region specifications:
+     * Non-digit found in region ...
+     * Unpaired start of a region found in ...
+     * Non-digit found in region ...
+     * The start of a pair of region positions must be smaller than the
+       end in ...
+       
+Exit status
+
+   It exits with status 0, unless a region is badly constructed.
+   
+Known bugs
+
+   Bugs noted but not yet fixed.
+   
+   None.
+   
+See also
+
+   Program name Description
+   cutseq Removes a specified section from a sequence
+   descseq Alter the name or description of a sequence
+   extractseq Extract regions from a sequence
+   maskfeat Mask off features of a sequence
+   merger Merge two overlapping nucleic acid sequences
+   newseq Type in a short new sequence
+   noreturn Removes carriage return from ASCII files
+   nthseq Writes one sequence from a multiple set of sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a sequence
+   splitter Split a sequence into (overlapping) smaller sequences
+   trimseq Trim ambiguous bits off the ends of sequences
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Completed 3 March 1999
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

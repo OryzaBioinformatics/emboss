@@ -1,0 +1,222 @@
+
+                             EMBOSS: prettyseq
+     _________________________________________________________________
+   
+                               Program prettyseq
+                                       
+Function
+
+   Output sequence with translated ranges
+   
+Description
+
+   This writes out a nicely formatted display of the sequence with the
+   translation (within specified ranges) displayed beneath it.
+   
+   Slightly unusually, this application uses the codon usage tables to
+   translate the codons.
+   
+Usage
+
+   Here is a sample session with prettyseq.
+
+% prettyseq
+Input sequence: embl:paamir
+Range(s) to translate [1-2167]: 135-1292
+Output file [paamir.prettyseq]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+   -range              range      Range(s) to translate
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers:
+   -[no]ruler          bool       Add a ruler
+   -[no]plabel         bool       Number translations
+   -[no]nlabel         bool       Number DNA sequence
+
+   Advanced qualifiers:
+   -cfile              codon      Codon usage file
+   -width              integer    Width of screen
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence USA Readable sequence Required
+   -range Range(s) to translate Sequence range Whole sequence
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.prettyseq
+   Optional qualifiers Allowed values Default
+   -[no]ruler Add a ruler Yes/No Yes
+   -[no]plabel Number translations Yes/No Yes
+   -[no]nlabel Number DNA sequence Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   -cfile Codon usage file Codon usage file in EMBOSS data path Ehum.cut
+   -width Width of screen Integer 10 or more 60
+   
+Input file format
+
+   You can specifiy a file of ranges to extract by giving the '-range'
+   qualifier the value '@' followed by the name of the file containing
+   the ranges. (eg: '-range @myfile').
+   
+   The format of the range file is:
+     * Comment lines start with '#' in the first column.
+     * Comment lines and blank lines are ignored.
+     * The line may start with white-space.
+     * There are two positive (integer) numbers per line separated by one
+       or more space or TAB characters.
+     * The second number must be greater or equal to the first number.
+     * There can be optional text after the two numbers to annotate the
+       line.
+     * White-space before or after the text is removed.
+       
+   An example range file is:
+
+# this is my set of ranges
+12   23
+ 4   5       this is like 12-23, but smaller
+67   10348   interesting region
+
+Output file format
+
+   Here is the output from the example run.
+   
+
+PRETTYSEQ of PAAMIR from 1 to 2167
+
+           ---------|---------|---------|---------|---------|---------|
+         1 GGTACCGCTGGCCGAGCATCTGCTCGATCACCACCAGCCGGGCGACGGGAACTGCACGAT 60
+
+
+           ---------|---------|---------|---------|---------|---------|
+        61 CTACCTGGCGAGCCTGGAGCACGAGCGGGTTCGCTTCGTACGGCGCTGAGCGACAGTCAC 120
+
+
+           ---------|---------|---------|---------|---------|---------|
+       121 AGGAGAGGAAACGGatgggatcgcaccaggagcggccgctgatcggcctgctgttctccg 180
+         1               M  G  S  H  Q  E  R  P  L  I  G  L  L  F  S  E 16
+
+           ---------|---------|---------|---------|---------|---------|
+       181 aaaccggcgtcaccgccgatatcgagcgctcgcacgcgtatggcgcattgctcgcggtcg 240
+        17   T  G  V  T  A  D  I  E  R  S  H  A  Y  G  A  L  L  A  V  E 36
+
+           ---------|---------|---------|---------|---------|---------|
+       241 agcaactgaaccgcgagggcggcgtcggcggtcgcccgatcgaaacgctgtcccaggacc 300
+        37   Q  L  N  R  E  G  G  V  G  G  R  P  I  E  T  L  S  Q  D  P 56
+
+           ---------|---------|---------|---------|---------|---------|
+       301 ccggcggcgacccggaccgctatcggctgtgcgccgaggacttcattcgcaaccgggggg 360
+        57   G  G  D  P  D  R  Y  R  L  C  A  E  D  F  I  R  N  R  G  V 76
+
+           ---------|---------|---------|---------|---------|---------|
+       361 tacggttcctcgtgggctgctacatgtcgcacacgcgcaaggcggtgatgccggtggtcg 420
+        77   R  F  L  V  G  C  Y  M  S  H  T  R  K  A  V  M  P  V  V  E 96
+
+           ---------|---------|---------|---------|---------|---------|
+       421 agcgcgccgacgcgctgctctgctacccgaccccctacgagggcttcgagtattcgccga 480
+        97   R  A  D  A  L  L  C  Y  P  T  P  Y  E  G  F  E  Y  S  P  N 116
+
+           ---------|---------|---------|---------|---------|---------|
+       481 acatcgtctacggcggtccggcgccgaaccagaacagtgcgccgctggcggcgtacctga 540
+       117   I  V  Y  G  G  P  A  P  N  Q  N  S  A  P  L  A  A  Y  L  I 136
+
+           ---------|---------|---------|---------|---------|---------|
+       541 ttcgccactacggcgagcgggtggtgttcatcggctcggactacatctatccgcgggaaa 600
+       137   R  H  Y  G  E  R  V  V  F  I  G  S  D  Y  I  Y  P  R  E  S 156
+
+           ---------|---------|---------|---------|---------|---------|
+       601 gcaaccatgtgatgcgccacctgtatcgccagcacggcggcacggtgctcgaggaaatct 660
+       157   N  H  V  M  R  H  L  Y  R  Q  H  G  G  T  V  L  E  E  I  Y 176
+
+           ---------|---------|---------|---------|---------|---------|
+       661 acattccgctgtatccctccgacgacgacttgcagcgcgccgtcgagcgcatctaccagg 720
+       177   I  P  L  Y  P  S  D  D  D  L  Q  R  A  V  E  R  I  Y  Q  A 196
+
+           ---------|---------|---------|---------|---------|---------|
+       721 cgcgcgccgacgtggtcttctccaccgtggtgggcaccggcaccgccgagctgtatcgcg 780
+       197   R  A  D  V  V  F  S  T  V  V  G  T  G  T  A  E  L  Y  R  A 216
+
+           ---------|---------|---------|---------|---------|---------|
+       781 ccatcgcccgtcgctacggcgacggcaggcggccgccgatcgccagcctgaccaccagcg 840
+       217   I  A  R  R  Y  G  D  G  R  R  P  P  I  A  S  L  T  T  S  E 236
+
+           ---------|---------|---------|---------|---------|---------|
+       841 aggcggaggtggcgaagatggagagtgacgtggcagaggggcaggtggtggtcgcgcctt 900
+       237   A  E  V  A  K  M  E  S  D  V  A  E  G  Q  V  V  V  A  P  Y 256
+
+           ---------|---------|---------|---------|---------|---------|
+       901 acttctccagcatcgatacgcccgccagccgggccttcgtccaggcctgccatggtttct 960
+       257   F  S  S  I  D  T  P  A  S  R  A  F  V  Q  A  C  H  G  F  F 276
+
+           ---------|---------|---------|---------|---------|---------|
+       961 tcccggagaacgcgaccatcaccgcctgggccgaggcggcctactggcagaccttgttgc 1020
+       277   P  E  N  A  T  I  T  A  W  A  E  A  A  Y  W  Q  T  L  L  L 296
+
+           ---------|---------|---------|---------|---------|---------|
+      1021 tcggccgcgccgcgcaggccgcaggcaactggcgggtggaagacgtgcagcggcacctgt 1080
+       297   G  R  A  A  Q  A  A  G  N  W  R  V  E  D  V  Q  R  H  L  Y 316
+
+           ---------|---------|---------|---------|---------|---------|
+      1081 acgacatcgacatcgacgcgccacaggggccggtccgggtggagcgccagaacaaccaca 1140
+       317   D  I  D  I  D  A  P  Q  G  P  V  R  V  E  R  Q  N  N  H  S 336
+
+           ---------|---------|---------|---------|---------|---------|
+      1141 gccgcctgtcttcgcgcatcgcggaaatcgatgcgcgcggcgtgttccaggtccgctggc 1200
+       337   R  L  S  S  R  I  A  E  I  D  A  R  G  V  F  Q  V  R  W  Q 356
+
+           ---------|---------|---------|---------|---------|---------|
+      1201 agtcgcccgaaccgattcgccccgacccttatgtcgtcgtgcataacctcgacgactggt 1260
+       357   S  P  E  P  I  R  P  D  P  Y  V  V  V  H  N  L  D  D  W  S 376
+
+           ---------|---------|---------|---------|---------|---------|
+      1261 ccgccagcatgggcgggggaccgctcccatgaGCGCCAACTCGCTGCTCGGCAGCCTGCG 1320
+       377   A  S  M  G  G  G  P  L  P  *                               385
+
+           ---------|---------|---------|---------|---------|---------|
+      1321 CGAGTTGCAGGTGCTGGTCCTCAACCCGCCGGGGGAGGTCAGCGACGCCCTGGTCTTGCA 1380
+
+
+
+...............
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   backtranseq Back translate a protein sequence
+   cusp Create a codon usage table
+   getorf Finds and extracts open reading frames (ORFs)
+   plotorf Plot potential open reading frames
+   remap Display a sequence with restriction cut sites, translation etc
+   showorf Pretty output of DNA translations
+   showseq Display a sequence with features, translation etc
+   transeq Translate nucleic acid sequences
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

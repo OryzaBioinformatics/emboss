@@ -1,0 +1,39 @@
+# Genetic Code Table
+#
+# Obtained from: http://www.ncbi.nlm.nih.gov/collab/FT/genetic_codes.html
+# and: http://www3.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wprintgc?mode=c
+#
+# Differences from the Standard Code: 
+# 
+#            Code 12      Standard
+# 
+#  CUG       Ser          Leu
+#        
+# 
+# Alternative Initiation Codons: 
+# 
+# CAG may be used in Candida albicans (Santos et al., 1993). 
+# 
+# Systematic Range: 
+# 
+# Endomycetales (yeasts): Candida albicans, Candida cylindracea, Candida
+# melibiosica, Candida parapsilosis, and Candida rugosa (Ohama et al.,
+# 1993). 
+# 
+# Comment: 
+# 
+# However, other yeast, including Saccharomyces cerevisiae, Candida azyma,
+# Candida diversa, Candida magnoliae, Candida rugopelliculosa, Yarrowia
+# lipolytica, and Zygoascus hellenicus, definitely use the standard
+# (nuclear) code (Ohama et al., 1993). 
+
+
+Genetic Code [12]
+  
+Alternative Yeast Nuclear
+
+AAs  =   FFLLSSSSYY**CC*WLLLSPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG
+Starts = -------------------M---------------M----------------------------
+Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
+Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
+Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG

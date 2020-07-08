@@ -1,0 +1,161 @@
+
+                             EMBOSS: checktrans
+     _________________________________________________________________
+   
+                              Program checktrans
+                                       
+Function
+
+   Reports STOP codons and ORF statistics of a protein sequence
+   
+Description
+
+   Reads in a protein sequence containing stops, and writes a report of
+   any open reading frames (continuous protein sequence with no stops)
+   that are greater than a minimum size. The default minimum ORF size is
+   100 residues. It writes out any ORF sequences.
+   
+Usage
+
+   Here is a sample session with checktrans, using the output from a
+   transeq run.
+
+% transeq embl:paamir paamir.pep -auto
+% checktrans
+Input sequence: paamir.pep
+Minimum ORF Length to report [100]: 30
+Output file [paamir_1.checktrans]:
+Output sequence [paamir_1.fasta]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -orfml              integer    Minimum ORF Length to report
+  [-report]            outfile    Output file name
+   -outseq             seqoutall  Sequence file to hold output ORF sequences
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -featout            featout    File for output features
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   -orfml Minimum ORF Length to report Integer 1 or more 100
+   [-report]
+   (Parameter 2) Output file name Output file <sequence>.checktrans
+   -outseq Sequence file to hold output ORF sequences Writeable
+   sequence(s) <sequence>.format
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -featout File for output features Writeable feature table unknown.gff
+   
+Input file format
+
+   This program reads the USA of a protein sequence with STOP codons in
+   it.
+   
+Output file format
+
+   This program writes two files: the ORF report file and the output
+   sequence file.
+   
+   The ORF report file from the above example run is:
+
+CHECKTRANS of PAAMIR_1 from 1 to 723
+
+        ORF#    Pos     Len     ORF Range       Sequence name
+
+        1       54      53      1-53            PAAMIR_1_1
+        3       136     52      84-135          PAAMIR_1_3
+        4       180     43      137-179         PAAMIR_1_4
+        6       277     72      205-276         PAAMIR_1_6
+        7       635     357     278-634         PAAMIR_1_7
+
+        Total STOPS:     7
+
+   This gives the numeric count of the ORF, the position of the
+   terminating STOP codon, the length of the ORF, its start and end
+   positions and the name of the sequence it has been written out as.
+   
+   The name of the output sequences is constructed from the name of the
+   input sequence followed by an underscore and then the numeric count of
+   the ORF.
+   
+   The output sequence file is:
+
+>PAAMIR_1_1
+GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR
+>PAAMIR_1_3
+TARAASAVARSKRCPRTPAATRTAIGCAPRTSFATGGYGSSWAATCRTRARR
+>PAAMIR_1_4
+CRWSSAPTRCSATRPPTRASSIRRTSSTAVRRRTRTVRRWRRT
+>PAAMIR_1_6
+CATCIASTAARCSRKSTFRCIPPTTTCSAPSSASTRRAPTWSSPPWWAPAPPSCIAPSPV
+ATATAGGRRSPA
+>PAAMIR_1_7
+PPARRRWRRWRVTWQRGRWWSRLTSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGR
+PCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR
+SAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRP
+GLAADPHRLFGAPVLAAAGSLRRAGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGV
+RKPRGALADHRAGVPRRDHPAARCPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGP
+DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+   This program always exits with a status of 0.
+   
+Known bugs
+
+See also
+
+   Program name Description
+   digest Protein proteolytic enzyme or reagent cleavage digest
+   iep Calculates the isoelectric point of a protein
+   octanol Displays protein hydropathy
+   pepinfo Plots simple amino acid properties in parallel
+   pepnet Displays proteins as a helical net
+   pepstats Protein statistics
+   pepwheel Shows protein sequences as helices
+   pepwindow Displays protein hydropathy
+   pepwindowall Displays protein hydropathy of a set of sequences
+   
+     * transeq : Translate nucleic acid sequences
+     * getorf : Finds and extracts open reading frames (ORFs)
+     * plotorf : Plot potential open reading frames
+     * showseq : Display a sequence with features, translation etc..
+       
+Author(s)
+
+   This application was written by Rodrigo Lopez (rls@ebi.ac.uk) European
+   Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton,
+   Cambridge, CB10 1SD, UK.
+   
+   It was rewritten by Gary Williams(gwilliam@hgmp.mrc.ac.uk) to output
+   the sequence data to a single file in the conventional EMBOSS style.
+   
+History
+
+   Completed 24 Feb 2000 - Rodrigo Lopez
+   
+   Rewritten 2 March 2000 - Gary Williams
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

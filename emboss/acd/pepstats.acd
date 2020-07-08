@@ -1,0 +1,10 @@
+appl: pepstats [
+        doc: "Protein statistics"
+        groups: "protein: sequence properties"
+]
+
+  sequence: sequencea [ param: Y type: PureProtein ]
+
+  bool: termini [ req: N def: Y  info: "Include charge at N and C terminus"]
+
+  outfile: outfile [req: Y ]

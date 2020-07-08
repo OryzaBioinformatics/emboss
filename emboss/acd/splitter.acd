@@ -1,0 +1,34 @@
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# GWW 22 March 1999
+
+appl: splitter [
+	doc: "Split a sequence into (overlapping) smaller sequences"
+	group: "sequence editing"
+]
+
+  seqall: sequence [ 
+	param: Y
+	type: any
+  ]
+
+  seqoutall: outseq [ 
+	param: Y
+  ]
+
+  int: size [ 
+	opt: Y 
+	def: 10000 
+	prompt: "Size to split at" 
+  ]
+
+  int: overlap [ 
+	opt: Y 
+	def: 0 
+	prompt: "Overlap between split sequences" 
+  ]

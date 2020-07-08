@@ -1,0 +1,183 @@
+
+                               EMBOSS: dottup
+     _________________________________________________________________
+   
+                                Program dottup
+                                       
+Function
+
+   Displays a wordmatch dotplot of two sequences
+   
+Description
+
+   A dotplot is a graphical representation of the regions of similarity
+   between two sequences.
+   
+   The two sequences are placed on the axes of a rectangular image and
+   wherever there is a similarity between the sequences a dot is placed
+   on the image.
+   
+   Where the two sequences have substantial regions of similarity, many
+   dots align to form diagonal lines. It is therefore possible to see at
+   a glance where there are local regions of similarity.
+   
+   dottup looks for places where words (tuples) of a specified length
+   have an exact match in both sequences and draws a diagonal line over
+   the position of these words.
+   
+   Using a longer word (tuple) size thus displays less random noise, runs
+   extremely quickly, but is less sensitive.
+   
+Usage
+
+   Here is a sample session with dottup.
+
+% dottup embl:eclac embl:eclaci -wordsize=6 -gtitle="eclaci vs eclac"
+
+   click here for result
+   
+   Here is a session writing the results to a data file:
+
+% dottup embl:eclac embl:eclaci -wordsize=6 -text -outfile=eclac.dottup
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-sequencea]         sequence   Sequence USA
+  [-sequenceb]         sequence   Sequence USA
+   -wordsize           integer    Word size
+   -graph              graph      Graph type
+*  -outfile            outfile    Output file name
+
+   Optional qualifiers:
+   -text               bool       Display as text
+   -[no]boxit          bool       Draw a box around dotplot
+
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequencea]
+   (Parameter 1) Sequence USA Readable sequence Required
+   [-sequenceb]
+   (Parameter 2) Sequence USA Readable sequence Required
+   -wordsize Word size Integer 2 or more 4
+   -graph Graph type EMBOSS has a list of known devices, including
+   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
+   EMBOSS_GRAPHICS value, or x11
+   -outfile Output file name Output file <sequence>.dottup
+   Optional qualifiers Allowed values Default
+   -text Display as text Yes/No No
+   -[no]boxit Draw a box around dotplot Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   Any two sequence USAs of the same type (DNA or protein).
+   
+Output file format
+
+   A .ps file is created if postscipt output is requested.
+   
+   If an output data file is requested using the '-text' qualifier, as in
+   the example usage given above, the file looks like:
+
+2250 matches found
+
+     ECLAC     ECLACI Length
+        49           1       1113
+      5510         195         12
+      2128         307         11
+      2329         212         11
+      2648         547         11
+      5250         394         11
+      5288         625         11
+      5572         776         11
+      1829        1034         10
+      3183         919         10
+      4546         503         10
+      4619         810         10
+      7366         973         10
+       193         332          9
+       353         926          9
+       380         145          9
+       670         626          9
+       674         622          9
+       864        1049          9
+etc.
+
+   The first line gives the number of matching words. The next non-blank
+   line is the column heading. The rest of the file is composed of three
+   columns of data on the positions of matching diagonals sorted by
+   length:
+     * The start position in the first sequence
+     * The start position in the second sequence
+     * The length of the alignment
+       
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+   0 upon successful completion.
+   
+Known bugs
+
+See also
+
+   Program name Description
+   antigenic Finds antigenic sites in proteins
+   chaos Create a chaos game representation plot for a sequence
+   cpgplot Plot CpG rich areas
+   cpgreport Reports all CpG rich regions
+   dotmatcher Displays a thresholded dotplot of two sequences
+   einverted Finds DNA inverted repeats
+   equicktandem Finds tandem repeats
+   etandem Looks for tandem repeats in a nucleotide sequence
+   garnier Predicts protein secondary structure
+   helixturnhelix Report nucleic acid binding motifs
+   isochore Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   oddcomp Finds protein sequence regions with a biased composition
+   palindrome Looks for inverted repeats in a nucleotide sequence
+   pepcoil Predicts coiled coil regions
+   polydot Displays all-against-all dotplots of a set of sequences
+   primersearch Searches DNA sequences for matches with primer pairs
+   pscan Scans proteins using PRINTS
+   redata Search REBASE for enzyme name, references, suppliers etc
+   restrict Finds restriction enzyme cleavage sites
+   showseq Display a sequence with features, translation etc
+   sigcleave Reports protein signal cleavage sites
+   tfscan Scans DNA sequences for transcription factors
+   tmap Displays membrane spanning regions
+   
+   dotmatcher, by comparison, moves a window of specified length up each
+   diagonal and displays a line over the window if the sum of the
+   comparisons (using a substitution matrix) exceeds a threshold. It is
+   slower but much more sensitive.
+   
+Author(s)
+
+   This application was written by Ian Longden (il@sanger.ac.uk)
+   Informatics Division, The Sanger Centre, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge, CB10 1SA, UK.
+   
+History
+
+   Completed 24th March 1999.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

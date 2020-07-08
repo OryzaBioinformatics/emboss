@@ -1,0 +1,274 @@
+
+                             EMBOSS: embossdata
+     _________________________________________________________________
+   
+                              Program embossdata
+                                       
+Function
+
+   Finds or fetches the data files read in by the EMBOSS programs
+   
+Description
+
+   This is a utility to indicate which directories can hold EMBOSS data
+   files and what the names of these files are.
+   
+   The names of EMBOSS data files all start with the character 'E', by
+   convention, to distinguish them somewhat from any other files,
+   especially files in your home directory.
+   
+   EMBOSS data files are read in by assorted EMBOSS programs, for example
+   the files holding the various genetic codes to translate from nucleic
+   acid codons to amino acids are held in files called "EGC.0", "EGC.1",
+   "EGC.2", etc. These files normally are kept in a standard data
+   directory under the EMBOSS package installation position:
+   ".../emboss/emboss/data/". When EMBOSS programs require a data file,
+   they search for it, in order, through the following set of
+   directories:
+     * The current directory
+     * '.embossdata' in the current directory
+     * Your home directory
+     * '.embossdata' in your home directory
+     * The EMBOSS standard data directory
+       
+   If a data file is placed in the current directory, EMBOSS programs
+   will use it in preference to the file of the same name in the EMBOSS
+   standard data directory. Thus if you wish to modify a data file to
+   change the behaviour of an EMBOSS program, you should obtain it from
+   the EMBOSS standard data directory, edit it, and place it in one of
+   the other directories, such as the current directory or your home
+   directory.
+   
+   The program embossdata is a utility to enable you to check on the
+   location of the directories which could hold data files, to display
+   the names of data files in those directories and to make local copies
+   of the data files from the EMBOSS standard data directory in order for
+   you to modify them.
+   
+Usage
+
+   Display the directories searched for EMBOSS data files:
+% embossdata
+
+   Display the names of data file in all of the possible data
+   directories:
+% embossdata -showall
+
+   Display the directories which contain a particular EMBOSS data file:
+% embossdata -filename EPAM60
+
+   Make a copy of an EMBOSS data file in the current directory:
+% embossdata -fetch -filename Epepcoil.dat
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+*  -filename           string     This specifies the name of the file that
+                                  should be fetched into the current directory
+                                  or searched for in all of the directories
+                                  that EMBOSS programs search when looking for
+                                  a data file. The name of the file is not
+                                  altered when it is fetched.
+
+   Optional qualifiers (* if not always prompted):
+   -outf               outfile    This specifies the name of the file that the
+                                  results of a search for a file in the
+                                  various data directories is written to. By
+                                  default these results are written to the
+                                  screen (stdout).
+   -showall            bool       Show all potential EMBOSS data files
+*  -fetch              bool       Fetch a data file
+
+   Advanced qualifiers:
+   -reject             select     This specifies the names of the
+                                  sub-directories of the EMBOSS data directory
+                                  that should be ignored when displaying data
+                                  directories.
+
+
+   Mandatory qualifiers Allowed values Default
+   -filename This specifies the name of the file that should be fetched
+   into the current directory or searched for in all of the directories
+   that EMBOSS programs search when looking for a data file. The name of
+   the file is not altered when it is fetched. Any string is accepted An
+   empty string is accepted
+   Optional qualifiers Allowed values Default
+   -outf This specifies the name of the file that the results of a search
+   for a file in the various data directories is written to. By default
+   these results are written to the screen (stdout). Output file stdout
+   -showall Show all potential EMBOSS data files Yes/No No
+   -fetch Fetch a data file Yes/No No
+   Advanced qualifiers Allowed values Default
+   -reject This specifies the names of the sub-directories of the EMBOSS
+   data directory that should be ignored when displaying data
+   directories. None
+   PROSITE
+   PRINTS
+   CVS
+   CODONS
+   2, 3, 4
+   
+Input file format
+
+   None.
+   
+Output file format
+
+   All output is to stdout.
+   
+   When reporting the directories searched for EMBOSS data files:
+----------------------------------------------------------------------
+# The following directories can contain EMBOSS data files.
+# They are searched in the following order until the file is found.
+# If the directory does not exist, then this is noted below.
+# '.' is the UNIX name for your current working directory.
+
+.                                                            Exists
+.embossdata                                                  Does not exist
+/people/gwilliam                                             Exists
+/people/gwilliam/.embossdata                                 Does not exist
+/packages/emboss_dev/gwilliam/emboss/emboss/data             Exists
+----------------------------------------------------------------------
+
+   When reporting the datafiles found in directories:
+----------------------------------------------------------------------
+DIRECTORY: /packages/emboss/emboss/data
+
+  Ebases.iub
+  Eamino.dat
+  Epk.dat
+  Edna.melt
+  Erna.melt
+  EDNAFULL
+  EDNAMAT
+  Edayhoff.freq
+  Ewhite-wimley.dat
+  Eembossre.equ
+  Eantigenic.dat
+  Ehth.dat
+  Ehth87.dat
+  Esig.euk
+  Esig.pro
+  Epepcoil.dat
+  EGC.0
+  EGC.1
+  EGC.2
+  EGC.3
+  EGC.4
+  EGC.5
+  EGC.6
+  EBLOSUM62
+  EGC.9
+  EGC.10
+  EGC.12
+  EGC.11
+  EGC.13
+  EGC.14
+  EGC.15
+  Enakai.dat
+  Eaa_acc_surface.dat
+  Eaa_hydropathy.dat
+  Eaa_properties.dat
+  Eangles_tri.dat
+  EBLOSUM30
+  EBLOSUM35
+  EBLOSUM40
+  EBLOSUM45
+
+etc.
+
+DIRECTORY: /packages/emboss/emboss/data/CODONS
+
+  Eacc.cut
+  Eadenovirus5.cut
+  Eadenovirus7.cut
+  Eaidlav.cut
+  Eanasp.cut
+  Eani.cut
+  Eani_h.cut
+  Eanidmit.cut
+  Easn.cut
+  Eath.cut
+  Eatu.cut
+  Eavi.cut
+  Ebja.cut
+  Ebly.cut
+  Ebme.cut
+
+
+----------------------------------------------------------------------
+
+   When reporting the location of a particular EMBOSS data file:
+----------------------------------------------------------------------
+# The following directories can contain EMBOSS data files.
+# They are searched in the following order until the file is found.
+# If the directory does not exist, then this is noted below.
+# '.' is the UNIX name for your current working directory.
+
+File ./EPAM60                                           Exists
+File .embossdata/EPAM60                                 Does not exist
+File /people/gwilliam/EPAM60                            Does not exist
+File /people/gwilliam/.embossdata/EPAM60                Does not exist
+File /packages/emboss/emboss/data/EPAM60                Exists
+----------------------------------------------------------------------
+
+Data files
+
+   No data files are read by this program.
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   When copying a file, this program will report if the file has been
+   copied successfully, e.g.:
+"'Epepcoil.dat' has been copied successfully."
+
+Exit status
+
+   It always exits with status 0
+   
+Known bugs
+
+   None noted.
+   
+See also
+
+   Program name Description
+   printsextract Extract data from PRINTS
+   prosextract Builds the PROSITE motif database for patmatmotifs to
+   search
+   rebaseextract Extract data from REBASE
+   tfextract Extract data from TRANSFAC
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Finished.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
+
+
+It should be possible to send the output to a named file instead of
+just to stdout.
+
+It should be possible to format the output for html.

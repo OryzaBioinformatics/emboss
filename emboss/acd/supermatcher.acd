@@ -1,0 +1,74 @@
+# SUPERMATCHER application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# il 14-jun-98
+
+appl: supermatcher [
+	doc: "Finds a match of a large sequence against one or more sequences"
+	groups: "sequence comparison"
+]
+
+  seqall: seqa [ param: Y type: any ]
+
+  seqset: seqb [ param: Y
+     type: "@($(seqa.protein) ? protein : nucleotide)"]
+
+  matrixf: datafile [
+        optional: Y
+        info: "Matrix file"
+        protein: $(seqa.protein)
+  ]
+
+ float: gapopen [ req: Y info: "Gap opening penalty" min: 1.0 max: 100.0
+                  def: "@($(seqa.protein)? 10.0 : 10.0)"
+                  expect: "10.0 for any sequence type"
+ ]
+
+ float: gapextend [ req: Y info: "Gap extension penalty" min: 0.1 max: 10.0
+                  def: "@($(seqa.protein)? 0.5 : 0.5)"
+                   expect: "0.5 for any sequence type"
+ ]
+
+ outfile: outfile [req: Y ]
+
+ outfile: errorfile [
+         opt: Y 
+	 def: "supermatcher.error"
+         info: "Error file to be written too"
+ ]
+
+ bool: showinternals [
+        optional: Y
+        def: "N"
+	info: "Show internals"
+  ]
+
+ bool: scoreonly [
+        optional: Y
+        def: "N"
+	info: "Calculate score only"
+  ]
+
+ bool: showalign [
+        optional: Y
+        def: "Y"
+	info: "Show alignment"
+  ]
+
+ int: width [
+        optional: Y
+	def: 16
+	info: "Alignment width"
+  ]
+
+ int: wordlen [
+        optional: Y
+	def: 6
+        min: 3
+	info: "word length for initial matching"
+  ]

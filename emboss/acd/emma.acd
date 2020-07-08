@@ -1,0 +1,303 @@
+appl: emma [
+  documentation: "Multiple alignment program - interface to ClustalW program"
+  groups: "alignment: multiple"
+]
+
+seqall: inseqs  [
+  parameter: "Y"
+  type: "gapany"
+]
+
+seqoutset: outseq  [
+  parameter: "Y"
+  extension: "aln"
+  information: "The sequence alignment output filename"
+]
+
+outfile: dendoutfile [
+  parameter: "Y"
+  extension: "dnd"
+  information: "The dendogram output filename"
+]
+
+bool: onlydend  [
+  optional: Y
+  default: "No"
+  information: "only produce dendrogram file"
+  prompt: "Do you want to produce only the dendrogram file?"
+]
+
+bool: dend  [
+  optional: "@(!$(onlydend))"
+  default: "No"
+  information: "select if you want to do alignment using an old dendrogram"
+  prompt: "Do you want to use an old dendogram file?"
+]
+
+string: dendfile  [
+  required: "$(dend)"
+  default: "NULL"
+  information: "name of old dendrogram file"
+  prompt: "What is the name of the old dendrogram file"
+]
+
+bool: insist  [
+  optional: Y
+  default: "No"
+  information: "Insist that the sequence type is changed to protein"
+]
+
+bool: tmpprot  [
+  required: "N"
+  default: "@(!$(inseqs.protein))"
+  expect: "Yes for protein sequences"
+  info: "Temporary holder for input protein sequence type"
+]
+
+bool: prot  [
+  required: "N"
+  default: "@($(insist)?$(tmpprot):$(inseqs.protein))"
+  expect: "Yes if -insist was set"
+  info: "Protein input sequence"
+]
+
+select: slowfast  [
+  optional: Y
+  default: "slow"
+  header: "Do you want to carry out slow or fast pairwise alignment"
+  minimum: "1"
+  maximum: "1"
+  values: "slow, fast"
+  delim: ","
+  prompt: "Please select one"
+  button: "Y"
+]
+
+bool: slow  [
+  default: "@($(slowfast)= slow : True fast : False else : True )"
+  expect: "Yes unless -slowfast is 'fast'"
+  info: "Slow and accurate alignment"
+]
+
+bool: displayslow  [
+  default: "@($(options)?$(slow):False)"
+  expect: "Yes if -options and -slow are both set"
+  info: "Prompt for slow alignment options"
+]
+
+float: pwgapc  [
+  required: "$(displayslow)"
+  default: "10.0"
+  minimum: "0.0"
+  information: "slow pairwise alignment: gap opening penalty"
+  prompt: "Input value for gap open penalty"
+]
+
+float: pwgapv  [
+  required: "$(displayslow)"
+  default: "0.1"
+  minimum: "0.0"
+  information: "slow pairwise alignment: gap extension penalty"
+  prompt: "Input value for gap extension penalty"
+]
+
+select: pwmatrix  [
+  required: "@($(prot)?$(displayslow):False)"
+  default: "blosum"
+  minimum: "1"
+  maximum: "1"
+  header: "Protein pairwise alignment matrix options"
+  values: "blosum, pam, gonnet, id, own"
+  delim: ","
+  prompt: "Select matrix"
+  button: "Y"
+]
+
+bool: usermatrix  [
+  default: "@($(pwmatrix)= own : True else : False)"
+  expect: "Yes if -pwmatrix is set"
+  info: "User defined matrix required"
+]
+
+select: pwdnamatrix  [
+  required: "@($(prot)?False:$(displayslow))"
+  default: "iub"
+  minimum: "1"
+  maximum: "1"
+  header: "DNA pairwise alignment matrix options"
+  values: "iub, clustalw, own"
+  delim: ","
+  prompt: "Select matrix"
+  button: "Y"
+]
+
+bool: umatrix  [
+  default: "@($(pwdnamatrix)= own : True else : False)"
+  expect: "Yes if -pwdnamatrix is set"
+  info: "User defined matrix (not used)"
+]
+
+string: pairwisedata  [
+  required: "$(usermatrix)"
+  default: "NULL"
+  information: "Filename of user pairwise matrix"
+  prompt: "Input the filename of your pairwise matrix"
+]
+
+bool: displayfast  [
+  default: "@($(slow)?False:$(options))"
+  expect: "Yes if -options is true and -slow is false"
+  info: "Prompt for fast alignment options"
+]
+
+integer: ktup  [
+  required: "$(displayfast)"
+  default: "@($(prot)?1:2)"
+  minimum: "0"
+  maximum: "4"
+  information: "fast pairwise alignment: similarity scores: K-Tuple size"
+  expect: "1 for protein, 2 for nucleic"
+  valid: "integer from 0 to 4"
+]
+
+integer: gapw  [
+  required: "$(displayfast)"
+  default: "@($(prot)?3:5)"
+  minimum: "0"
+  information: "fast pairwise alignment: similarity scores: gap penalty"
+  expect: "3 for protein, 5 for nucleic"
+  valid: "Positive integer"
+]
+
+integer: topdiags  [
+  required: "$(displayfast)"
+  default: "@($(prot)?5:4)"
+  minimum: "0"
+  information: "fast pairwise alignment: similarity scores: number of diagonals to be considered"
+  expect: "5 for protein, 4 for nucleic"
+  valid: "Positive integer"
+]
+
+integer: window  [
+  required: "$(displayfast)"
+  default: "@($(prot)?5:4)"
+  minimum: "0"
+  information: "fast pairwise alignment: similarity scores: diagonal window size"
+  expect: "5 for protein, 4 for nucleic"
+  valid: "Positive integer"
+]
+
+bool: nopercent  [
+  required: "$(displayfast)"
+  default: "No"
+  information: "fast pairwise alignment: similarity scores: suppresses percentage score"
+]
+
+select: matrix  [
+  optional: "$(prot)"
+  default: "blosum"
+  minimum: "1"
+  maximum: "1"
+  header: "Protein multiple alignment matrix options"
+  values: "blosum, pam, gonnet, id, own"
+  delim: ","
+  prompt: "Select matrix"
+  button: "Y"
+]
+
+bool: usermamatrix  [
+  default: "@($(matrix)= own : True else : False)"
+  expect: "True if -matrix was set" 
+  info: "Prompt for user multiple alignment matrix"
+]
+
+select: dnamatrix  [
+  optional: "@(!$(prot))"
+  default: "iub"
+  minimum: "1"
+  maximum: "1"
+  header: "Nucleotide multiple alignment matrix options"
+  values: "iub, clustalw, own"
+  delim: ","
+  prompt: "Select matrix"
+  button: "Y"
+]
+
+bool: umamatrix  [
+  default: "@($(dnamatrix)= own : True else : False)"
+  expect: "True if -dnamatrix was set" 
+  info: "User defined multiple alignment matrix"
+]
+
+string: mamatrix  [
+  required: "@($(usermamatrix)?True:$(umamatrix))"
+  default: "NULL"
+  information: "Filename of user multiple alignment matrix"
+  prompt: "Input the filename of your alignment matrix"
+]
+
+float: gapc  [
+  optional: Y
+  default: "10.0"
+  minimum: "0.0"
+  information: "Multiple alignment: gap penalty"
+  prompt: "Enter gap penalty"
+  valid: "Positive foating point number"
+]
+
+float: gapv  [
+  optional: Y
+  default: "5.0"
+  minimum: "0.00"
+  information: "Multiple alignment: variable gap penalty"
+  prompt: "Enter variable gap penalty"
+  valid: "Positive foating point number"
+]
+
+bool: unweighted  [
+  optional: "@(!$(prot))"
+  default: "No"
+  information: "Transitions are unweighted"
+]
+
+bool: endgaps  [
+  optional: Y
+  default: "Yes"
+  information: "use end gap separation penalty"
+]
+
+integer: gapdist  [
+  optional: Y
+  default: "8"
+  minimum: "0"
+  information: "gap separation penalty range"
+  valid: "Positive integer"
+]
+
+bool: norgap  [
+  optional: "$(prot)"
+  default: "No"
+  information: "no residue specific gaps"
+]
+
+string: hgapres  [
+  optional: "$(prot)"
+  default: "GPSNDQEKR"
+  information: "list of hydrophilic residues"
+]
+
+bool: nohgap  [
+  optional: "$(prot)"
+  default: "No"
+  information: "no hydrophilic gaps"
+]
+
+integer: maxdiv  [
+  optional: Y
+  default: "30"
+  minimum: "0"
+  maximum: "100"
+  information: "cut-off to delay the alignment of the most divergent
+                sequences in a data set"
+  valid: "Integer from 0 to 100"
+]

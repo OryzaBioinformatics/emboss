@@ -1,0 +1,14 @@
+# DREG application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+
+appl: dreg [
+	doc: "regular expression search of a nucleotide sequence"
+	groups: "pattern matching"
+]
+
+  seqall: sequence [ param: Y type: dna ]
+
+  outfile: outfile [ param: Y ]
+
+  regexp: pattern [ param: Y upper: Y info: "Regular expression pattern" ]

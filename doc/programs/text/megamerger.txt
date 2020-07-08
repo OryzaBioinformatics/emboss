@@ -1,0 +1,223 @@
+
+                             EMBOSS: megamerger
+     _________________________________________________________________
+   
+                              Program megamerger
+                                       
+Function
+
+   Merge two large overlapping nucleic acid sequences
+   
+Description
+
+   megamerger takes two overlapping sequences and merges them into one
+   sequence. It could thus be regarded as the opposite of what splitter
+   does.
+   
+   The sequences can be very long. The program does a match of all
+   sequence words of size 20 (by default). It then reduces this to the
+   minimum set of overlapping matches by sorting the matches in order of
+   size (largest size first) and then for each such match it removes any
+   smaller matches that overlap. The result is a set of the longest
+   ungapped alignments between the two sequences that do not overlap with
+   each other. If the two sequences are identical in their region of
+   overlap then there will be one region of match and no mismatches.
+   
+   It should be possible to merge sequences that are Mega bytes long.
+   Compare this with the program merger which does a more accurate
+   alignment of more divergent sequences using the Needle and Wunsch
+   algorithm but which uses much more memory.
+   
+   The sequences should ideally be identical in their region of overlap.
+   If there are any mismatches between the two sequences then megamerger
+   will still attempt to create a merged sequence, but you should check
+   that this is what you required.
+   
+   A report of the actions of megamerger is written out. Any actions that
+   require a choice between using regions of the two sequences where they
+   have a mismatch is marked with the word WARNING!. The sequence in
+   these regions is written out in uppercase. All other regions of the
+   output sequence are written in lowercase.
+   
+   Where there is a mismatch then the sequence that is chosen to supply
+   the region of the mismatch in the final merged sequence is that
+   sequence whose mismatch region is furthest from the start of end of
+   the sequence.
+   
+Usage
+
+   Here is a sample session with megamerger, there are many mismatches
+   between these two sequences and the merged sequence should therefore
+   be treated with great caution:
+
+% megamerger embl:ap000504 embl:af129756
+Merge two large overlapping nucleic acid sequences
+Output sequence [ap000504.merged]:
+Output file [stdout]: report
+Word size [20]:
+
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-seqa]              sequence   Sequence USA
+  [-seqb]              sequence   Sequence USA
+  [-outseq]            seqout     Output sequence USA
+   -report             outfile    Output report
+   -wordsize           integer    Word size
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-seqa]
+   (Parameter 1) Sequence USA Readable sequence Required
+   [-seqb]
+   (Parameter 2) Sequence USA Readable sequence Required
+   [-outseq]
+   (Parameter 3) Output sequence USA Writeable sequence <sequence>.format
+   -report Output report Output file stdout
+   -wordsize Word size Integer 2 or more 20
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   Sequence USAs.
+   
+Output file format
+
+   A merged sequence is written out.
+   
+   Where there has been a mismatch between the two sequences, the merged
+   sequence is written out in uppercase and the sequence whose mismatch
+   region is furthest from the edges of the sequence is used in the
+   merged sequence.
+   
+   The name and description of the first input sequence is used for the
+   name and description of the output sequence. A report of the merger is
+   written out.
+   
+   A typical report where there are many mismatches, taken from the
+   example above follows:
+   
+# Report of megamerger of: AP000504 and AF129756
+
+AP000504 overlap starts at 1
+AF129756 overlap starts at 6036
+
+Using AF129756 1-6035 as the initial sequence
+
+Matching region AP000504 1-846 : AF129756 6036-6881
+Length of match: 846
+
+WARNING!
+Mismatch region found:
+Mismatch AP000504 847-847
+Mismatch AF129756 6882-6882
+Mismatch is closer to the ends of AP000504, so use AF129756 in the merged seque
+nce
+
+Matching region AP000504 848-1794 : AF129756 6883-7829
+Length of match: 947
+
+WARNING!
+Mismatch region found:
+Mismatch AP000504 1795-1795
+Mismatch AF129756 7830-7830
+Mismatch is closer to the ends of AP000504, so use AF129756 in the merged seque
+nce
+
+Matching region AP000504 1796-2272 : AF129756 7831-8307
+Length of match: 477
+
+[many lines removed for brevity]
+
+Matching region AP000504 97717-97826 : AF129756 103745-103854
+Length of match: 110
+
+WARNING!
+Mismatch region found:
+Mismatch AP000504 97827-97827
+Mismatch AF129756 103855-103855
+Mismatch is closer to the ends of AP000504, so use AF129756 in the merged seque
+nce
+
+Matching region AP000504 97828-100000 : AF129756 103856-106028
+Length of match: 2173
+
+AP000504 overlap ends at 100000
+AF129756 overlap ends at 106028
+
+Using AF129756 106029-184666 as the final sequence
+
+Data files
+
+   None.
+   
+Notes
+
+   If you run out of memory, use a larger wordsize.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   cutseq Removes a specified section from a sequence
+   descseq Alter the name or description of a sequence
+   est2genome Align EST and genomic DNA sequences
+   extractseq Extract regions from a sequence
+   maskfeat Mask off features of a sequence
+   maskseq Mask off regions of a sequence
+   merger Merge two overlapping nucleic acid sequences
+   newseq Type in a short new sequence
+   noreturn Removes carriage return from ASCII files
+   nthseq Writes one sequence from a multiple set of sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a sequence
+   splitter Split a sequence into (overlapping) smaller sequences
+   trimseq Trim ambiguous bits off the ends of sequences
+   
+   Compare this with the program merger which does a more accurate
+   alignment of more divergent sequences using the Needle and Wunsch
+   algorithm but which uses much more memory.
+   
+   A graphical dotplot of the matches used in this merge can be displayed
+   using the program dotpath.
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Written Aug 2000 by Gary Williams.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

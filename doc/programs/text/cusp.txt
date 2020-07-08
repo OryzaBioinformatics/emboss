@@ -1,0 +1,122 @@
+
+                                EMBOSS: cusp
+     _________________________________________________________________
+   
+                                 Program cusp
+                                       
+Function
+
+   Create a codon usage table
+   
+Description
+
+   Reads one or more coding sequences (CDS sequence only) and calculates
+   a codon frequency table.
+   
+   The output file can be used as a codon usage table in other
+   applications.
+   
+Usage
+
+   Here is a sample session with cusp, using just one sequence. Normal
+   use would be to extract a set of coding sequences and to use these as
+   input.
+
+% cusp -sbeg 135 -send 1292
+Create a codon usage table
+Input sequence: embl:paamir
+Output file [paamir.cusp]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -cfile              codon      Codon usage table name
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.cusp
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -cfile Codon usage table name Codon usage file in EMBOSS data path
+   Ehum.cut
+   
+Input file format
+
+Output file format
+
+   Here is the start of the output from the example run, which used a
+   single CDS from Pseudomonas aeruginosa which has a very high GC
+   content ands a strong coding bias, as shown by the codons for Alanine
+   where those ending with G or C are used almost exclusively.
+
+# CUSP codon usage file
+# Codon Amino acid      Fract   /1000   Number
+GCA     A               0.077   7.772   3
+GCC     A               0.462   46.632  18
+GCG     A               0.462   46.632  18
+GCT     A               0.000   0.000   0
+
+.........
+
+Data files
+
+   cusp reads a codon usage file, but only as a template and does not use
+   any of the data so any file will give the same results.
+   
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   backtranseq Back translate a protein sequence
+   chaos Create a chaos game representation plot for a sequence
+   chips Codon usage statistics
+   codcmp Codon usage table comparison
+   compseq Counts the composition of dimer/trimer/etc words in a sequence
+   freak Residue/base frequency table or plot
+   geecee Calculates the fractional GC content of nucleic acid sequences
+   getorf Finds and extracts open reading frames (ORFs)
+   isochore Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   plotorf Plot potential open reading frames
+   prettyseq Output sequence with translated ranges
+   remap Display a sequence with restriction cut sites, translation etc
+   showorf Pretty output of DNA translations
+   showseq Display a sequence with features, translation etc
+   syco Synonymous codon usage Gribskov statistic plot
+   transeq Translate nucleic acid sequences
+   wobble Wobble base plot
+   wordcount Counts words of a specified size in a DNA sequence
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

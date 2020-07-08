@@ -1,0 +1,171 @@
+
+                               EMBOSS: tfscan
+     _________________________________________________________________
+   
+                                Program tfscan
+                                       
+Function
+
+   Scans DNA sequences for transcription factors
+   
+Description
+
+Usage
+
+   Here is a sample session with tfscan.
+
+% tfscan
+Input sequence(s): embl:hsfos
+Transcription Factor Class
+         F : fungi
+         I : insect
+         P : plant
+         V : vertebrate
+         O : other
+Select class [V]: v
+Number of mismatches [0]:
+Output file [hsfos.tfscan]:
+
+Scanning HSFOS...
+
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -menu               list       Select class
+   -mismatch           integer    Number of mismatches
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   -menu Select class
+   F (fungi)
+   I (insect)
+   P (plant)
+   V (vertebrate)
+   O (other)
+   V
+   -mismatch Number of mismatches Integer 0 or more 0
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.tfscan
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+   Here is part of the output from the example run. Some of the sites in
+   TRANSFAC are extremely short.
+
+TFSCAN of HSFOS from 1 to 6210
+
+XENLA$VITB1_14       R04490   5200  5206  gcaaaca
+XENLA$VITB1_14       R04490   4481  4487  gcaaaca
+
+.................
+
+HS$CFOS_19           R04047   412   438   caggatgtccatattaggacatctgcg
+HS$CFOS_18           R04046   412   438   caggatgtccatattaggacatctgcg
+
+.................
+
+HS$CFOS_17           R03425   749   770   gagcaactgagaagccaagact
+
+.................
+
+HS$CFOS_16           R01889   420   429   ccatattagg
+
+.................
+
+HS$CFOS_15           R01640   412   419   caggatgt
+MOUSE$CFOS_04        R00475   415   434   gatgtccatattaggacatc
+MOUSE$CFOS_03        R00474   415   434   gatgtccatattaggacatc
+MOUSE$CFOS_02        R00473   415   434   gatgtccatattaggacatc
+MOUSE$CFOS_01        R00472   414   436   ggatgtccatattaggacatctg
+HS$CFOS_14           R00471   669   676   gtgacgtt
+HS$CFOS_13           R00470   649   656   gcgccacc
+HS$CFOS_13           R00470   635   642   gcgccacc
+HS$CFOS_12           R00469   1496  1502  tgcgtca
+HS$CFOS_12           R00469   435   441   tgcgtca
+HS$CFOS_11           R00468   1496  1502  tgcgtca
+HS$CFOS_11           R00468   435   441   tgcgtca
+HS$CFOS_10           R00467   415   434   gatgtccatattaggacatc
+HS$CFOS_09           R00466   412   434   caggatgtccatattaggacatc
+HS$CFOS_08           R00465   415   421   gatgtcc
+HS$CFOS_07           R00464   415   434   gatgtccatattaggacatc
+HS$CFOS_06           R00463   420   429   ccatattagg
+HS$CFOS_05           R00462   415   434   gatgtccatattaggacatc
+HS$CFOS_04           R00461   415   434   gatgtccatattaggacatc
+HS$CFOS_03           R00460   401   440   ccccccttacacaggatgtccatattaggacatctgc
+g
+tc
+HS$CFOS_02           R00459   387   395   tcccgtcaa
+HS$CFOS_01           R00458   383   397   cagttcccgtcaatc
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   chaos Create a chaos game representation plot for a sequence
+   cpgplot Plot CpG rich areas
+   cpgreport Reports all CpG rich regions
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   dreg regular expression search of a nucleotide sequence
+   einverted Finds DNA inverted repeats
+   equicktandem Finds tandem repeats
+   etandem Looks for tandem repeats in a nucleotide sequence
+   fuzznuc Nucleic acid pattern search
+   fuzzpro Protein pattern search
+   fuzztran Protein pattern search after translation
+   helixturnhelix Report nucleic acid binding motifs
+   isochore Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   palindrome Looks for inverted repeats in a nucleotide sequence
+   patmatdb Search a protein sequence with a motif
+   patmatmotifs Search a PROSITE motif database with a protein sequence
+   polydot Displays all-against-all dotplots of a set of sequences
+   preg regular expression search of a protein sequence
+   printsextract Extract data from PRINTS
+   prosextract Builds the PROSITE motif database for patmatmotifs to
+   search
+   pscan Scans proteins using PRINTS
+   redata Search REBASE for enzyme name, references, suppliers etc
+   restrict Finds restriction enzyme cleavage sites
+   showseq Display a sequence with features, translation etc
+   wobble Wobble base plot
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

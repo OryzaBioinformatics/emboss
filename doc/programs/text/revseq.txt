@@ -1,0 +1,119 @@
+
+                               EMBOSS: revseq
+     _________________________________________________________________
+   
+                                Program revseq
+                                       
+Function
+
+   Reverse and complement a sequence
+   
+Description
+
+   This takes a sequence and outputs the reverse complement (also known
+   as the anti-sense or reverse sense) sequence.
+   
+   It can also output just the reversed sequence or just the complement
+   of the sequence.
+   
+Usage
+
+   To create the reverse sense of the sequence 'rcr.seq' and output to
+   the file 'rcr.rev':
+% revseq rcr.seq rcr.rev
+
+   To create the complement of the sequence 'rcr.seq' and output to the
+   file 'rcr.rev':
+% revseq rcr.seq rcr.rev -norev
+
+   To create the reverse of the sequence 'rcr.seq' and output to the file
+   'rcr.rev':
+% revseq rcr.seq rcr.rev -nocomp
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outseq]            seqoutall  Output sequence(s) USA
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -[no]reverse        bool       Set this to be false if you do not wish to
+                                  reverse the output sequence
+   -[no]complement     bool       Set this to be false if you do not wish to
+                                  complement the output sequence
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outseq]
+   (Parameter 2) Output sequence(s) USA Writeable sequence(s)
+   <sequence>.format
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -[no]reverse Set this to be false if you do not wish to reverse the
+   output sequence Yes/No Yes
+   -[no]complement Set this to be false if you do not wish to complement
+   the output sequence Yes/No Yes
+   
+Input file format
+
+   The input sequence can be one or more sequences.
+   
+Output file format
+
+   One or more sequences are written out.
+   
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   Bugs noted but not yet fixed.
+   
+   None.
+   
+See also
+
+   Program name Description
+   cutseq Removes a specified section from a sequence
+   descseq Alter the name or description of a sequence
+   extractseq Extract regions from a sequence
+   maskfeat Mask off features of a sequence
+   maskseq Mask off regions of a sequence
+   merger Merge two overlapping nucleic acid sequences
+   newseq Type in a short new sequence
+   noreturn Removes carriage return from ASCII files
+   nthseq Writes one sequence from a multiple set of sequences
+   pasteseq Insert one sequence into another
+   splitter Split a sequence into (overlapping) smaller sequences
+   trimseq Trim ambiguous bits off the ends of sequences
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Completed 26 Jan 1999
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

@@ -1,0 +1,358 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: maskseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: maskseq
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program maskseq
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Mask off regions of a sequence
+
+
+<H2>
+    Description
+</H2>
+
+
+	This simple editing program allows you to mask off regions of a
+	sequence with a specified letter. 
+<p>
+	Why would you wish to do this? It is common for database
+	searches to mask out low-complexity or biased composition
+	regions of a sequence so that spurious matches do not occur.
+	It is just possible that you have a program that has reported
+	such biased regions but which has not masked the sequence
+	itself.  In that case, you can use this program to do the
+	masking.
+<p>
+	You may find other uses for it.
+
+<H2>
+    Usage
+</H2>
+
+
+	To mask off bases 10 to 12 from a sequence 'gatta.seq' and write
+	to the new sequence file 'gatta2.seq':
+	<pre>% maskseq gatta.seq gatta2.seq -reg=10-12 </pre>
+<p>
+	To mask off bases 20 to 30 from a sequence 'hdh.seq' using the
+	character 'n' and write to the new sequence file 'hdh2.seq':
+	<pre>% maskseq hdh.seq hdh2.seq -reg=20-30 -mask=n</pre>
+<p>
+	To mask off the regions 20 to 23, 34 to 45 and 88 to 90 in 'yuy.seq':
+	<pre>% maskseq yuy.seq yuy2.seq -reg=20-23,34-45,88-90</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-outseq]            seqout     Output sequence USA
+   -regions            range      Regions to mask.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are separated by any non-digit,
+                                  non-alpha character.
+                                  Examples of region specifications are:
+                                  24-45, 56-78
+                                  1:45, 67=99;765..888
+                                  1,5,8,10,23,45,57,99
+
+   Optional qualifiers:
+   -maskchar           string     Character to use when masking.
+                                  Default is 'X' for protein sequences, 'N'
+                                  for nucleic sequences.
+
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence USA</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Output sequence USA</td>
+<td>Writeable sequence</td>
+<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr>
+<td>-regions</td>
+<td>Regions to mask.
+A set of regions is specified by a set of pairs of positions.
+The positions are integers.
+They are separated by any non-digit, non-alpha character.
+Examples of region specifications are:
+24-45, 56-78
+1:45, 67=99;765..888
+1,5,8,10,23,45,57,99</td>
+<td>Sequence range</td>
+<td>None</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-maskchar</td>
+<td>Character to use when masking.
+Default is 'X' for protein sequences, 'N' for nucleic sequences.</td>
+<td>Any string is accepted</td>
+<td>'X' for protein, 'N' for nucleic</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+This program reads in a single sequence file.
+
+<p>
+You can specifiy a file of ranges to mask out by giving the '-regions'
+qualifier the value '@' followed by the name of the file containing the
+ranges. (eg: '-regions @myfile').
+
+<p>
+The format of the range file is:
+
+<ul>
+<li>Comment lines start with '#' in the first column.
+<li>Comment lines and blank lines are ignored.
+<li>The line may start with white-space.
+<li>There are two positive (integer) numbers per line separated by one or
+	more space or TAB characters. 
+<li>The second number must be greater or equal to the first number.
+<li>There can be optional text after the two numbers to annotate the line. 
+<li>White-space before or after the text is removed.
+</ul>
+
+<p>
+An example range file is:
+
+<pre>
+
+# this is my set of ranges
+12   23
+ 4   5       this is like 12-23, but smaller
+67   10348   interesting region
+
+</pre>
+
+<H2>
+    Output file format
+</H2>
+
+
+	Single sequence file.
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+
+	This can be used as a simple sequence editor.
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+	You can mask out a complete sequence.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+	Several warning messages about malformed region specifications:
+<ul>
+	<li>Non-digit found in region ...
+	<li>Unpaired start of a region found in ...
+	<li>Non-digit found in region ...
+	<li>The start of a pair of region positions must be smaller than the
+		end in ... 
+</ul>
+
+<H2>
+    Exit status
+</H2>
+
+
+	It exits with status 0, unless a region is badly constructed.
+
+<H2>
+    Known bugs
+</H2>
+
+
+        Bugs noted but not yet fixed.
+<p>
+	None.
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="cutseq.html">cutseq</a></td><td>Removes a specified section from a sequence</td></tr>
+<tr><td><a href="descseq.html">descseq</a></td><td>Alter the name or description of a sequence</td></tr>
+<tr><td><a href="extractseq.html">extractseq</a></td><td>Extract regions from a sequence</td></tr>
+<tr><td><a href="maskfeat.html">maskfeat</a></td><td>Mask off features of a sequence</td></tr>
+<tr><td><a href="merger.html">merger</a></td><td>Merge two overlapping nucleic acid sequences</td></tr>
+<tr><td><a href="newseq.html">newseq</a></td><td>Type in a short new sequence</td></tr>
+<tr><td><a href="noreturn.html">noreturn</a></td><td>Removes carriage return from ASCII files</td></tr>
+<tr><td><a href="nthseq.html">nthseq</a></td><td>Writes one sequence from a multiple set of sequences</td></tr>
+<tr><td><a href="pasteseq.html">pasteseq</a></td><td>Insert one sequence into another</td></tr>
+<tr><td><a href="revseq.html">revseq</a></td><td>Reverse and complement a sequence</td></tr>
+<tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
+<tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Gary Williams <a
+href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+	Completed 3 March 1999
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,309 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: pepwindowall
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: pepwindowall
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program pepwindowall
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Displays protein hydropathy of a set of sequences
+
+
+<H2>
+    Description
+</H2>
+
+
+This produces a set of superimposed Kyte & Doolittle hydropathy plots
+from an aligned set of protein sequences. 
+
+<p>
+It is useful for visualising the average hydropathy and its variability
+along the alignment. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with pepwindowall.
+
+<pre>
+
+% pepwindowall globin.msf -gxtitle="Base Number" -gytitle="hydropathy"
+
+</pre>
+<a href="./pepwindowall0.gif">click here for result</a>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-msf]               seqset     File containing a sequence alignment
+  [-graph]             xygraph    Graph type
+
+   Optional qualifiers:
+   -datafile           datafile   nakia database file
+   -length             integer    window size
+
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-msf]<br>(Parameter 1)</td>
+<td>File containing a sequence alignment</td>
+<td>Readable sequences</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-graph]<br>(Parameter 2)</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-datafile</td>
+<td>nakia database file</td>
+<td>Data file</td>
+<td>Enakai.dat</td>
+</tr>
+
+<tr>
+<td>-length</td>
+<td>window size</td>
+<td>Integer from 1 to 200</td>
+<td>7</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+Any protein sequence USA for one or more aligned sequences.
+
+<H2>
+    Output file format
+</H2>
+
+.ps file if postscipt output requested.
+
+<H2>
+    Data files
+</H2>
+
+
+The EMBOSS data file 'Enakai.dat' contains :-
+<p>
+<pre>
+D Hydropathy index (Kyte-Doolittle, 1982)
+R 0807099
+A Kyte, J. and Doolittle, R.F.
+T A simple method for displaying the hydropathic character of a protein
+J J. Mol. Biol. 157, 105-132 (1982)
+C CHOC760103    0.964  JANJ780102    0.922  DESM900102    0.898
+  EISD860103    0.897  CHOC760104    0.889  WOLR810101    0.885
+  RADA880101    0.884  MANP780101    0.881  EISD840101    0.878
+  PONP800103    0.870  NAKH920108    0.868  JANJ790101    0.867
+  JANJ790102    0.866  PONP800102    0.861  MEIH800103    0.856
+  PONP800101    0.851  PONP800108    0.850  WARP780101    0.845
+  RADA880108    0.842  ROSG850102    0.841  DESM900101    0.837
+  BIOV880101    0.829  RADA880107    0.828  LIFS790102    0.824
+  KANM800104    0.824  CIDH920104    0.824  MIYS850101    0.821
+  RADA880104    0.819  NAKH900111    0.817  NISK800101    0.812
+  FAUJ830101    0.811  ARGP820103    0.806  NAKH920105    0.803
+  ARGP820102    0.803  KRIW790101   -0.805  CHOC760102   -0.838
+  GUYH850101   -0.843  RACS770102   -0.844  JANJ780103   -0.845
+  ROSM880101   -0.845  PRAM900101   -0.850  JANJ780101   -0.852
+  GRAR740102   -0.859  MEIH800102   -0.871  ROSM880102   -0.878
+  OOBM770101   -0.899
+I   A/L    R/K    N/M    D/F    C/P    Q/S    E/T    G/W    H/Y    I/V
+    1.8   -4.5   -3.5   -3.5    2.5   -3.5   -3.5   -0.4   -3.2    4.5
+    3.8   -3.9    1.9    2.8   -1.6   -0.8   -0.7   -0.9   -1.3    4.2
+//
+</pre>
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+0 upon successfull completion.
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein sequence</td></tr>
+<tr><td><a href="digest.html">digest</a></td><td>Protein proteolytic enzyme or reagent cleavage digest</td></tr>
+<tr><td><a href="iep.html">iep</a></td><td>Calculates the isoelectric point of a protein</td></tr>
+<tr><td><a href="octanol.html">octanol</a></td><td>Displays protein hydropathy</td></tr>
+<tr><td><a href="pepinfo.html">pepinfo</a></td><td>Plots simple amino acid properties in parallel</td></tr>
+<tr><td><a href="pepnet.html">pepnet</a></td><td>Displays proteins as a helical net</td></tr>
+<tr><td><a href="pepstats.html">pepstats</a></td><td>Protein statistics</td></tr>
+<tr><td><a href="pepwheel.html">pepwheel</a></td><td>Shows protein sequences as helices</td></tr>
+<tr><td><a href="pepwindow.html">pepwindow</a></td><td>Displays protein hydropathy</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Ian Longden <a
+href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+    History
+</H2>
+
+<pre>
+Completed 4th June 1999.
+</pre>
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

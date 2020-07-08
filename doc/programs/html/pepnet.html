@@ -1,0 +1,308 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: pepnet
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: pepnet
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program pepnet
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Displays proteins as a helical net
+
+
+<H2>
+    Description
+</H2>
+
+
+This is a method of displaying the residues of a protein in a simple
+3,4,3,4 repeating pattern that emulates at a simple level the
+arrangement of residues around an alpha helix. 
+
+<p>
+It is therefore easy to see patterns of amphipathicity that you may wish
+to investigate in more detail by using displays such as pepwheel. 
+
+<p>
+You can specify which residues to mark up in squares, diamonds and
+octagons. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with pepnet.
+
+<pre>
+
+% pepnet -sask
+Input sequence: sw:gcn4_yeast
+     Begin at position [start]: 253
+       End at position [end]: 274
+Graph type [x11]: 
+
+</pre>
+
+<p>
+<a href="pepnet0.gif">CLick here for the graph</a>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -graph              graph      Graph type
+
+   Optional qualifiers (* if not always prompted):
+*  -squares            string     By default the aliphatic residues ILVM are
+                                  marked with squares.
+*  -diamonds           string     By default the residues DENQST are marked
+                                  with diamonds.
+*  -octags             string     By default the positively charged residues
+                                  HKR are marked with octagons.
+
+   Advanced qualifiers:
+   -amphipathic        bool       If this is true then the residues ACFGILMVWY
+                                  are marked as squares and all other
+                                  residues are unmarked. This overrides any
+                                  other markup that you may have specified
+                                  using the qualifiers '-squares', '-diamonds'
+                                  and '-octags'.
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-squares</td>
+<td>By default the aliphatic residues ILVM are marked with squares.</td>
+<td>Any string is accepted</td>
+<td>ILVM</td>
+</tr>
+
+<tr>
+<td>-diamonds</td>
+<td>By default the residues DENQST are marked with diamonds.</td>
+<td>Any string is accepted</td>
+<td>DENQST</td>
+</tr>
+
+<tr>
+<td>-octags</td>
+<td>By default the positively charged residues HKR are marked with octagons.</td>
+<td>Any string is accepted</td>
+<td>HKR</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-amphipathic</td>
+<td>If this is true then the residues ACFGILMVWY are marked as squares and all other residues are unmarked. This overrides any other markup that you may have specified using the qualifiers '-squares', '-diamonds' and '-octags'.</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein sequence</td></tr>
+<tr><td><a href="digest.html">digest</a></td><td>Protein proteolytic enzyme or reagent cleavage digest</td></tr>
+<tr><td><a href="garnier.html">garnier</a></td><td>Predicts protein secondary structure</td></tr>
+<tr><td><a href="helixturnhelix.html">helixturnhelix</a></td><td>Report nucleic acid binding motifs</td></tr>
+<tr><td><a href="iep.html">iep</a></td><td>Calculates the isoelectric point of a protein</td></tr>
+<tr><td><a href="octanol.html">octanol</a></td><td>Displays protein hydropathy</td></tr>
+<tr><td><a href="pepcoil.html">pepcoil</a></td><td>Predicts coiled coil regions</td></tr>
+<tr><td><a href="pepinfo.html">pepinfo</a></td><td>Plots simple amino acid properties in parallel</td></tr>
+<tr><td><a href="pepstats.html">pepstats</a></td><td>Protein statistics</td></tr>
+<tr><td><a href="pepwheel.html">pepwheel</a></td><td>Shows protein sequences as helices</td></tr>
+<tr><td><a href="pepwindow.html">pepwindow</a></td><td>Displays protein hydropathy</td></tr>
+<tr><td><a href="pepwindowall.html">pepwindowall</a></td><td>Displays protein hydropathy of a set of sequences</td></tr>
+<tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

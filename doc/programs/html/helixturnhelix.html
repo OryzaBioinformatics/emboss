@@ -1,0 +1,396 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: helixturnhelix
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: helixturnhelix
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program helixturnhelix
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Report nucleic acid binding motifs
+
+
+<H2>
+    Description
+</H2>
+
+
+Helixturnhelix uses the method of Dodd and Egan and finds helix-turn-helix
+nucleic acid binding motifs in proteins.
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with helixturnhelix.
+
+<pre>
+
+% helixturnhelix
+Input sequence: sw:laci_ecoli
+Output file [laci_ecoli.hth]: 
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers:
+   -mean               float      Mean value
+   -sd                 float      Standard Deviation value
+   -minsd              float      Minimum SD
+   -eightyseven        bool       Use the old (1987) weight data
+
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>seqname.hth</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-mean</td>
+<td>Mean value</td>
+<td>Number from 1.000 to 10000.000</td>
+<td>238.71</td>
+</tr>
+
+<tr>
+<td>-sd</td>
+<td>Standard Deviation value</td>
+<td>Number from 1.000 to 10000.000</td>
+<td>293.61</td>
+</tr>
+
+<tr>
+<td>-minsd</td>
+<td>Minimum SD</td>
+<td>Number from 0.000 to 100.000</td>
+<td>2.5</td>
+</tr>
+
+<tr>
+<td>-eightyseven</td>
+<td>Use the old (1987) weight data</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+The input sequence can be one or more protein sequences.
+
+<H2>
+    Output file format
+</H2>
+
+
+The output from helixturnhelix is a simple text one. It reports the highest
+scoring hit followed by all hits above the minimum standard deviation.
+
+Here is a sample output:
+
+<pre>
+
+HELIXTURNHELIX: Nucleic Acid Binding Domain search
+
+
+Hits above +2.50 SD (972.73)
+
+Score 2178 (+6.60 SD) in GALR_ECOLI at residue 2
+
+ Sequence:  ATIKDVARLAGVSVATVSRVIN
+            |                    |
+            2                    23
+
+</pre>
+
+<H2>
+    Data files
+</H2>
+
+
+The data files are stored in the standard EMBOSS data directory. The
+names are:
+
+<ul>
+   <li> Ehth.dat          matrix file
+   <li> Ehth87.dat        1987 shorter matrix file
+</ul>
+
+With care these can be replaced to suit your data sets. If the files are
+placed in the following directories they will be used in preference to
+the files in the EMBOSS distribution data directory:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+
+Here is the default file:
+
+<pre>
+
+# Amino acid counts for 91 Helix-turn-helix (presumed) protein motifs
+# from Dodd IB and Egan JB (1990) Nucl. Acids. Res. 18:5019-5026.
+#
+Sample: 91 aligned sequences
+#
+# R  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 Total Exp
+# - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ----- ---
+  A  2  1  3 14 10 12 75  6 15  9  1  1  4  3  8 15  4  4  4 11  0 10   212 995
+  C  0  0  1  1  0  0  0  0  0  3  3  1  1  0  0  0  0  0  0  1  0  3    14 106
+  D  0  1  0  1 14  0  0 14  1  0  5  0  1  2  0  0  0  0  1  1  0  2    43 556
+  E  4  5  0 11 26  0  0 16  9  3  3  0  3 12 13  0  0  2  0  1 13  6   127 669
+  F  4  0  4  0  0  4  0  1  0 10  0  0  0  0  1  0  0  1  1  1 22  0    49 358
+  G  9  7  1  4  0  0  8  0  0  0 50  0  6  0  7  1  0  3  1  1  0  4   102 761
+  H  4  3  1  1  2  0  0  3  2  0  5  0  3  3  0  2  0  2  4  5  0  2    42 225
+  I 10  0 13  3  2 15  0  4  9  4  0 17  0  2  0  1 31  1  4  8 16  1   141 583
+  K  4  4  6 11 12  1  1 14 11  0  5  2  2  7  2  1  0  5  8  4  5 15   120 516
+  L 16  1 17  0  1 35  0  3 12 31  0 22  0  2  1  1 22  1  1 12 20  0   198 954
+  M  7  0  2  1  1  1  0  0  5  7  1 10  0  0  2  0  2  0  0  2  0  1    42 275
+  N  0  8  0  1  0  0  0  2  1  1 14  0  8  1  4  2  0  4  9  0  0 11    66 383
+  P  1  6  0  1  0  0  0  0  0  0  0  0  3 13  7  0  0  0  0  0  0  3    34 403
+  Q  2  1 21  9 11  0  0  9  8  0  0  2  1 17  7 12  0  3 12  5  3  9   132 437
+  R  9 10 14  9  5  0  1 16 10  0  1  0  1 17  8  7  0 17 28  3  0 16   172 609
+  S  2 17  0  8  4  1  6  1  2  2  3  0 37  1 25  5  0 29  3  0  1  5   152 552
+  T  6 24  3 12  1  5  0  2  2  4  0  5 20  4  3 39  0  4  1  0  4  3   142 512
+  V  7  3  1  1  2 16  0  0  2 12  0 29  0  5  3  3 32  0  7  8  7  0   138 724
+  W  2  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  2 21  0  0    27 105
+  Y  2  0  4  3  0  1  0  0  2  4  0  1  1  2  0  2  0 15  5  7  0  0    49 267
+
+</pre>
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+<ol>
+
+<li>
+Dodd I.B., Egan J.B. (1987)
+"Systematic method for the detection of potential lambda cro-like
+DNA-binding regions in proteins."
+J. Mol. Biol. 194: 557-564.
+
+<li>
+Dodd I.B., Egan J.B. (1990)
+"Improved detection of helix-turn-helix DNA-binding motifs in
+protein sequences."
+Nucleic Acids Res. 18: 5019-5026.
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+The program will warn you if a nucleic acid sequence is given or if the
+data file is not mathematically accurate.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0 unless an error is reported.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="antigenic.html">antigenic</a></td><td>Finds antigenic sites in proteins</td></tr>
+<tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td></tr>
+<tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
+<tr><td><a href="garnier.html">garnier</a></td><td>Predicts protein secondary structure</td></tr>
+<tr><td><a href="oddcomp.html">oddcomp</a></td><td>Finds protein sequence regions with a biased composition</td></tr>
+<tr><td><a href="patmatdb.html">patmatdb</a></td><td>Search a protein sequence with a motif</td></tr>
+<tr><td><a href="patmatmotifs.html">patmatmotifs</a></td><td>Search a PROSITE motif database with a protein sequence</td></tr>
+<tr><td><a href="pepcoil.html">pepcoil</a></td><td>Predicts coiled coil regions</td></tr>
+<tr><td><a href="pepnet.html">pepnet</a></td><td>Displays proteins as a helical net</td></tr>
+<tr><td><a href="pepwheel.html">pepwheel</a></td><td>Shows protein sequences as helices</td></tr>
+<tr><td><a href="polydot.html">polydot</a></td><td>Displays all-against-all dotplots of a set of sequences</td></tr>
+<tr><td><a href="printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
+<tr><td><a href="prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
+<tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
+<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>
+<tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
+<tr><td><a href="tmap.html">tmap</a></td><td>Displays membrane spanning regions</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+
+<p>
+Original program "HELIXTURNHELIX" by Peter Rice (EGCG 1990)
+
+
+<H2>
+    History
+</H2>
+
+
+Completed 11th March 1999
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

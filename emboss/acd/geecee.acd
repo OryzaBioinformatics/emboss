@@ -1,0 +1,22 @@
+# GEECEE application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+#
+# GC content is optionally calculated for a specified window,
+# and displacement, and exported as a GFF file
+#
+# rbsk 15-jun-99
+
+appl: geecee [
+	doc: "Calculates the fractional GC content of nucleic acid sequences"
+	groups: "CpG islands, DNA: sequence composition"
+]
+
+  seqall: sequence [ param: Y type: dna ]
+  outfile: outfile [ param: Y]
+
+

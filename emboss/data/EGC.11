@@ -1,0 +1,41 @@
+# Genetic Code Table
+#
+# Obtained from: http://www.ncbi.nlm.nih.gov/collab/FT/genetic_codes.html
+# and: http://www3.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wprintgc?mode=c
+#
+# Differences from the Standard Code: 
+# 
+# None 
+# 
+# Alternative Initiation Codons: 
+# 
+# GUG, UUG, AUU, CUG 
+# 
+# Systematic Range: 
+# 
+# Prokaryotes including the eubacteria (Kozak, 1983) and archaebacteria
+# (Brown et al.  1989; Noelling et al., unpublished). 
+# 
+# Comments: 
+# 
+# UGA codes at low efficiency for Trp in Bacillus subtilis and,
+# presumably, in Escherichia coli (Hatfiled and Diamond, 1993). 
+# 
+# CUG is known to function as an initiator for one plasmid-encoded protein
+# (RepA) in Escherichia coli (Spiers and Bergquist, 1992) and possibly in
+# Methanobacterium thermoautotrophicum (Noelling et al., unpublished)
+# 
+# There is no record of AUU initition codon for the archaebacteria. 
+
+
+Genetic Code [11]
+
+Bacterial
+ 
+AAs  =   FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG
+Starts = ---M---------------M------------MMMM---------------M------------
+Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
+Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
+Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
+
+

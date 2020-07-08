@@ -1,0 +1,392 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: antigenic
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: antigenic
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program antigenic
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Finds antigenic sites in proteins
+
+
+<H2>
+    Description
+</H2>
+
+
+Antigenic predicts potentially antigenic regions of a protein
+sequence, using the method of Kolaskar and Tongaonkar.
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with antigenic.
+
+<pre>
+
+% antigenic
+Finds antigenic sites in proteins
+Input sequence: sw:act1_fugru
+Minimum length [6]: 
+Output file [act1_fugru.antigenic]: 
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -minlen             integer    Minimum length
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -featout            featout    File for output features
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-minlen</td>
+<td>Minimum length</td>
+<td>Integer from 1 to 50</td>
+<td>6</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.antigenic</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-featout</td>
+<td>File for output features</td>
+<td>Writeable feature table</td>
+<td><i>unknown.gff</i></td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+The input sequence can be one or more protein sequences.
+
+<H2>
+    Output file format
+</H2>
+
+
+Here is a sample output:
+
+<pre>
+
+ANTIGENIC of ACT1_FUGRU  from: 1  to: 375
+
+Length 375 residues, score calc from 4 to 372
+Reporting all peptides over 6 residues
+
+Found 18 hits scoring over 1.00 (true average 1.02)
+Maximum length 24 at residues 160-&gt;183
+
+ Sequence:  THTVPIYEGYALPHAILRLDLAGR
+            |                      |
+          160                      183
+
+Entries in score order, max score at "*"
+
+
+[1] Score 1.207 length 9 at residues 214-&gt;222
+                *    
+ Sequence:  EKLCYVALD
+            |       |
+          214       222
+
+[2] Score 1.187 length 15 at residues 131-&gt;145
+                  *        
+ Sequence:  AMYVAIQAVLSLYAS
+            |             |
+          131             145
+
+[3] Score 1.166 length 8 at residues 5-&gt;12
+               *    
+ Sequence:  IAALVVDN
+            |      |
+            5      12
+
+
+</pre>
+
+<H2>
+    Data files
+</H2>
+
+
+Antigenic uses a data file called <em>Eantigenic.dat</em>.
+
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+
+<p>
+Here is the default <em>Eantigenic.dat</em> file:
+
+<pre>
+
+#                                               Antigenic  Surface  Antigenic
+# Amino     -- Occurrence of amino acids in --   frequency frequency propensity
+# Acid       Epitopes      Surface     Protein   f(Ag)    f(s)      A(p)
+  A             135          328         524     0.065    0.061     1.064
+  C              53           97         186     0.026    0.018     1.412
+  D             118          352         414     0.057    0.066     0.866
+  E             132          401         499     0.064    0.075     0.851
+  F              76          180         365     0.037    0.034     1.091
+  G             116          343         487     0.056    0.064     0.874
+  H              59          138         191     0.029    0.026     1.105
+  I              86          193         437     0.042    0.036     1.152
+  K             158          439         523     0.076    0.082     0.930
+  L             149          308         684     0.072    0.058     1.250
+  M              23           72         152     0.011    0.013     0.826
+  N              94          313         407     0.045    0.058     0.776
+  P             135          328         411     0.065    0.061     1.064
+  Q              99          252         332     0.048    0.047     1.015
+  R             106          314         394     0.051    0.058     0.873
+  S             168          429         553     0.081    0.080     1.012
+  T             141          401         522     0.068    0.075     0.909
+  V             128          239         515     0.062    0.045     1.383
+  W              19           55         103     0.009    0.010     0.893
+  Y              71          158         245     0.034    0.029     1.161
+Total          2066         5340        7944
+
+</pre>
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+<li>
+Kolaskar,AS and Tongaonkar,PC (1990).
+A semi-empirical method for prediction of antigenic determinants
+on protein antigens.
+FEBS Letters 276: 172-174.
+
+<li>
+Parker,JMR, Guo,D and Hodges,RS (1986).
+Biochemistry 25: 5425-5432.
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+The program will warn you if the sequence is not a protein or has
+ambiguity codes.
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0, unless a region is badly constructed.
+
+<H2>
+    Known bugs
+</H2>
+
+
+None.
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td></tr>
+<tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
+<tr><td><a href="garnier.html">garnier</a></td><td>Predicts protein secondary structure</td></tr>
+<tr><td><a href="helixturnhelix.html">helixturnhelix</a></td><td>Report nucleic acid binding motifs</td></tr>
+<tr><td><a href="oddcomp.html">oddcomp</a></td><td>Finds protein sequence regions with a biased composition</td></tr>
+<tr><td><a href="pepcoil.html">pepcoil</a></td><td>Predicts coiled coil regions</td></tr>
+<tr><td><a href="polydot.html">polydot</a></td><td>Displays all-against-all dotplots of a set of sequences</td></tr>
+<tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
+<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>
+<tr><td><a href="tmap.html">tmap</a></td><td>Displays membrane spanning regions</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+
+<p>
+Original program "ANTIGENIC" by Peter Rice (EGCG 1991)
+
+<H2>
+    History
+</H2>
+
+
+Completed 9th March 1999
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

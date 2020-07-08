@@ -1,0 +1,189 @@
+
+                              EMBOSS: fuzznuc
+     _________________________________________________________________
+   
+                                Program fuzznuc
+                                       
+Function
+
+   Nucleic acid pattern search
+   
+Description
+
+   fuzznuc uses PROSITE style patterns to search nucleotide sequences.
+   
+   Patterns are specifications of a (typically short) length of sequence
+   to be found. They can specify a search for an exact sequence or they
+   can allow various ambiguities, matches to variable lengths of sequence
+   and repeated subsections of the sequence.
+   
+   fuzznuc intelligently selects the optimum searching algorithm to use,
+   depending on the complexity of the search pattern specified.
+   
+Usage
+
+   Here is a sample session with fuzznuc.
+
+% fuzznuc
+Input sequence: embl:hhtetra
+Search pattern: AAGCTT
+Number of mismatches [0]:
+Output file [hhtetra.fuzznuc]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -pattern            string     Search pattern
+   -mismatch           integer    Number of mismatches
+  [-outf]              outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -mmshow             bool       Show mismatches
+   -accshow            bool       Show accession numbers
+   -descshow           bool       Show descriptions
+   -complement         bool       Search complementary strand
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   -pattern Search pattern Any string is accepted An empty string is
+   accepted
+   -mismatch Number of mismatches Integer 0 or more 0
+   [-outf]
+   (Parameter 2) Output file name Output file <sequence>.fuzznuc
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -mmshow Show mismatches Yes/No No
+   -accshow Show accession numbers Yes/No No
+   -descshow Show descriptions Yes/No No
+   -complement Search complementary strand Yes/No No
+   
+Input file format
+
+   Patterns for fuzznuc are based on the format of pattern used in the
+   PROSITE database, with the difference that the terminating dot '.' and
+   the hyphens, '-', between the characters are optional.
+   
+   The PROSITE pattern definition from the PROSITE documentation (amended
+   to refer to nucleic acid sequences, not proteins) follows.
+     * The standard IUPAC one-letter codes for the nucleotides are used.
+     * The symbol `n' is used for a position where any nucleotide is
+       accepted.
+     * Ambiguities are indicated by listing the acceptable nucleotides
+       for a given position, between square parentheses `[ ]'. For
+       example: [ACG] stands for A or C or G.
+     * Ambiguities are also indicated by listing between a pair of curly
+       brackets `{ }' the nucleotides that are not accepted at a given
+       position. For example: {AG} stands for any nucleotides except A
+       and G.
+     * Each element in a pattern is separated from its neighbor by a `-'.
+       (Optional in fuzznuc).
+     * Repetition of an element of the pattern can be indicated by
+       following that element with a numerical value or a numerical range
+       between parenthesis. Examples: N(3) corresponds to N-N-N, N(2,4)
+       corresponds to N-N or N-N-N or N-N-N-N.
+     * When a pattern is restricted to either the 5' or 3' end of a
+       sequence, that pattern either starts with a `<' symbol or
+       respectively ends with a `>' symbol.
+     * A period ends the pattern. (Optional in fuzznuc).
+       
+   For example, in the EMBL entry ECLAC you can look for the pattern:
+
+[CG](5)TG{A}N(1,5)C
+
+   This searches for "C or G" 5 times, followed by T and G, then anything
+   except A, then any base (1 to 5 times) before a C.
+   
+   You can use ambiguity codes for nucleic acid searches but not within
+   [] or {} as they expand to bracketed counterparts. For example, "s" is
+   expanded to "[GC]" therefore [S] would be expanded to [[GC]] which is
+   illegal.
+   
+   Note the use of X is reserved for proteins. You must use N for nucleic
+   acids to refer to any base.
+   
+   The search is case-independent, so 'AAA' matches 'aaa'.
+   
+Output file format
+
+   Here is the output from the example search:
+   
+
+        HHTETRA     1 AAGCTT
+        HHTETRA  1267 AAGCTT
+
+   It is composed of three columns of data.
+     * The first column is the name of the sequence being searched.
+     * The second is the start position of the match found.
+     * The third is the actual sequence that was matched by the search
+       pattern.
+       
+   If the option '-mmshow' is used, then an extra column of data is
+   output indicating how many mismatches there are in the match, for
+   example:
+
+% fuzznuc embl:hhtetra -mmshow
+Nucleic acid pattern search
+Search pattern: AAGCTT
+Number of mismatches [0]: 1
+Output file [hhtetra.fuzznuc]: stdout
+
+
+        HHTETRA       53     1 AAGCTG
+        HHTETRA      140     1 AAGCAT
+        HHTETRA      314     1 AACCTT
+        HHTETRA      350     1 AAGCCT
+        HHTETRA      374     1 AAGTTT
+        HHTETRA     1009     1 AAGTTT
+        HHTETRA     1259     1 AAGTTT
+        HHTETRA     1267     0 AAGCTT
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   dreg regular expression search of a nucleotide sequence
+   fuzzpro Protein pattern search
+   fuzztran Protein pattern search after translation
+   patmatdb Search a protein sequence with a motif
+   patmatmotifs Search a PROSITE motif database with a protein sequence
+   preg regular expression search of a protein sequence
+   pscan Scans proteins using PRINTS
+   tfscan Scans DNA sequences for transcription factors
+   
+   Other EMBOSS programs allow you to search for regular expression
+   patterns but may be less easy for the user who has never used regular
+   expressions before:
+   
+     * dreg - Regular expression search of a nucleotide sequence
+     * preg - Regular expression search of a protein sequence
+       
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

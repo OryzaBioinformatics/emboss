@@ -1,0 +1,299 @@
+
+                              EMBOSS: transeq
+     _________________________________________________________________
+   
+                                Program transeq
+                                       
+Function
+
+   Translate nucleic acid sequences
+   
+Description
+
+   This translate nucleic acid sequences to the corresponding peptide
+   sequence.
+   
+   It can translate in any of the 3 forward or three reverse sense
+   frames, or in all three forward or reverse frames, or in all six
+   frames.
+   
+   It can translate specified regions corersponding to the coding regions
+   of your sequences.
+   
+   It can translate using the standard ('Universal') genetic code and
+   also with a selection of non-standard codes.
+   
+   Termination (STOP) codons are translated as the character '*'.
+   
+   The output peptide sequence is always in the standard one-letter IUPAC
+   code.
+   
+Usage
+
+   To translate a sequence 'pop.seq' in the first frame (starting at the
+   first base and proceeding to the end):
+% transeq pop.seq pop.pep
+
+   To translate a sequence 'pop.seq' in the second frame:
+% transeq pop.seq pop.pep -frame=2
+
+   To translate a sequence 'pop.seq' in the third frame in the reverse
+   sense (starting at the last base and proceeding to the start):
+% transeq pop.seq pop.pep -frame=-1
+
+   To translate a sequence 'pop.seq' in all three forward frames:
+% transeq pop.seq pop.pep -frame=F
+
+   To translate a sequence 'pop.seq' in all three reverse frames:
+% transeq pop.seq pop.pep -frame=R
+
+   To translate a sequence 'pop.seq' in all six forward and reverse
+   frames:
+% transeq pop.seq pop.pep -frame=6
+
+   To translate a specific set of regions corresponding to a known set of
+   coding sequences:
+% transeq pop.seq pop.pep -reg=2-45,67-201,328-509
+
+   To translate a sequence 'mito.seq' using the mammalian mitochondrion
+   genetic code table:
+% transeq mito.seq mito.pep -table=2
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outseq]            seqoutall  Output sequence(s) USA
+
+   Optional qualifiers:
+   -frame              list       Frame(s) to translate
+   -table              list       Code to use
+   -regions            range      Regions to translate.
+                                  If this is left blank, then the complete
+                                  sequence is translated.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are separated by any non-digit,
+                                  non-alpha character.
+                                  Examples of region specifications are:
+                                  24-45, 56-78
+                                  1:45, 67=99;765..888
+                                  1,5,8,10,23,45,57,99
+   -trim               bool       This removes all X and * characters from the
+                                  right end of the translation. The trimming
+                                  process starts at the end and continues
+                                  until the next character is not a X or a *
+
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outseq]
+   (Parameter 2) Output sequence(s) USA Writeable sequence(s)
+   <sequence>.format
+   Optional qualifiers Allowed values Default
+   -frame Frame(s) to translate
+   1 (1)
+   2 (2)
+   3 (3)
+   F (Forward three frames)
+   -1 (-1)
+   -2 (-2)
+   -3 (-3)
+   R (Reverse three frames)
+   6 (All six frames)
+   1
+   -table Code to use
+   0 (Standard)
+   1 (Standard (with alternative initiation codons))
+   2 (Vertebrate Mitochondrial)
+   3 (Yeast Mitochondrial)
+   4 (Mold, Protozoan, Coelenterate Mitochondrial and
+   Mycoplasma/Spiroplasma)
+   5 (Invertebrate Mitochondrial)
+   6 (Ciliate Macronuclear and Dasycladacean)
+   9 (Echinoderm Mitochondrial)
+   10 (Euplotid Nuclear)
+   11 (Bacterial)
+   12 (Alternative Yeast Nuclear)
+   13 (Ascidian Mitochondrial)
+   14 (Flatworm Mitochondrial)
+   15 (Blepharisma Macronuclear)
+   0
+   -regions Regions to translate. If this is left blank, then the
+   complete sequence is translated. A set of regions is specified by a
+   set of pairs of positions. The positions are integers. They are
+   separated by any non-digit, non-alpha character. Examples of region
+   specifications are: 24-45, 56-78 1:45, 67=99;765..888
+   1,5,8,10,23,45,57,99 Sequence range Whole sequence
+   -trim This removes all X and * characters from the right end of the
+   translation. The trimming process starts at the end and continues
+   until the next character is not a X or a * Yes/No No
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   The input sequence can be one or more nucleic acid sequences.
+   
+Output file format
+
+   One or more peptide sequences are written out.
+   
+Data files
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by EMBOSS
+   environment variable EMBOSS_DATA.
+   
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+   
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+       
+   The Genetic Code data files are based on the NCBI genetic code tables.
+   Their names and descriptions are:
+   
+   EGC.0
+          Standard (Differs from GC.1 in that it only has initiation site
+          'AUG')
+          
+   EGC.1
+          Standard
+          
+   EGC.2
+          Vertebrate Mitochodrial
+          
+   EGC.3
+          Yeast Mitochondrial
+          
+   EGC.4
+          Mold, Protozoan, Coelenterate Mitochondrial and
+          Mycoplasma/Spiroplasma
+          
+   EGC.5
+          Invertebrate Mitochondrial
+          
+   EGC.6
+          Ciliate Macronuclear and Dasycladacean
+          
+   EGC.9
+          Echinoderm Mitochondrial
+          
+   EGC.10
+          Euplotid Nuclear
+          
+   EGC.11
+          Bacterial
+          
+   EGC.12
+          Alternative Yeast Nuclear
+          
+   EGC.13
+          Ascidian Mitochondrial
+          
+   EGC.14
+          Flatworm Mitochondrial
+          
+   EGC.15
+          Blepharisma Macronuclear
+          
+   The format of these files is very simple.
+   
+   It consists of several lines of optional comments, each starting with
+   a '#' character.
+   
+   These are followed the line: 'Genetic Code [n]', where 'n' is the
+   number of the genetic code file.
+   
+   This is followed by the description of the code and then by four lines
+   giving the IUPAC one-letter code of the translated amino acid, the
+   start codons (indicdated by an 'M') and the three bases of the codon,
+   lined up one on top of the other.
+   
+   For example:
+
+------------------------------------------------------------------------------
+# Genetic Code Table
+#
+# Obtained from: http://www.ncbi.nlm.nih.gov/collab/FT/genetic_codes.html
+# and: http://www3.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wprintgc?mode=c
+#
+# Differs from Genetic Code [1] only in that the initiation sites have been
+# changed to only 'AUG'
+
+Genetic Code [0]
+Standard
+
+AAs  =   FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG
+Starts = -----------------------------------M----------------------------
+Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
+Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
+Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
+------------------------------------------------------------------------------
+
+Notes
+
+References
+
+Warnings
+
+   When translation using non-standard genetic code table, always check
+   the table carefully for deviations from your particular organism's
+   code.
+   
+Diagnostic Error Messages
+
+   Several warning messages about malformed region specifications:
+     * Non-digit found in region ...
+     * Unpaired start of a region found in ...
+     * Non-digit found in region ...
+     * The start of a pair of region positions must be smaller than the
+       end in ...
+       
+Exit status
+
+   It exits with status 0, unless a region is badly constructed.
+   
+Known bugs
+
+   Bugs noted but not yet fixed.
+   
+   None.
+   
+See also
+
+   Program name Description
+   backtranseq Back translate a protein sequence
+   cusp Create a codon usage table
+   getorf Finds and extracts open reading frames (ORFs)
+   plotorf Plot potential open reading frames
+   prettyseq Output sequence with translated ranges
+   remap Display a sequence with restriction cut sites, translation etc
+   showorf Pretty output of DNA translations
+   showseq Display a sequence with features, translation etc
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Completed 4 March 1999
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

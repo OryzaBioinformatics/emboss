@@ -1,0 +1,20 @@
+# SEQRET application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# pmr 22-apr-98
+
+appl: stssearch [
+	doc: "Searches a DNA database for matches with a set of STS primers"
+	groups: "primers, sequence comparison"
+]
+
+  seqall: sequences [ param: Y type: dna ]
+
+  infile: primers [ param: Y  prompt: "Primer file" ]
+
+  outfile: out [ param: Y ]

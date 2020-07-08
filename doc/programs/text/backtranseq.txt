@@ -1,0 +1,126 @@
+
+                            EMBOSS: backtranseq
+     _________________________________________________________________
+   
+                              Program backtranseq
+                                       
+Function
+
+   Back translate a protein sequence
+   
+Description
+
+   Backtranseq takes a protein sequence and makes a best estimate of the
+   likely nucleic acid sequence it could have come from. It does this by
+   using a codon frequency table. For each amino acid, the corresponding
+   most frequently occuring codon is used in the construction of the
+   nucleic acid sequence.
+   
+Usage
+
+   Here is a sample session with backtranseq.
+
+% backtranseq
+Input sequence: sw:opsd_human
+Output sequence [opsd_human.fasta]:
+
+   Here is a session using a drosophila sequence and codon table:
+
+% backtranseq -seq sw:ach2_drome -out stdout -cfile Edrosophila
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-outfile]           seqout     Output sequence USA
+
+   Optional qualifiers:
+   -cfile              codon      Codon usage table name
+
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence USA Readable sequence Required
+   [-outfile]
+   (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
+   Optional qualifiers Allowed values Default
+   -cfile Codon usage table name Codon usage file in EMBOSS data path
+   Ehum.cut
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   Any DNA sequence USA.
+   
+Output file format
+
+   The output is a nucleotide sequence containing the most favoured back
+   translation of the specified protein, and using the specified
+   translation table (which defaults to human).
+   
+Data files
+
+   The codon usage table is read by default from "Ehum.cut" in the
+   'data/CODONS' directory of the EMBOSS distribution. If the name of a
+   codon usage file is specified on the command line, then this file will
+   first be searched for in the current directory and then in the
+   'data/CODONS' directory of the EMBOSS distribution.
+   
+   To see the available EMBOSS codon usage files, run:
+
+% embossdata -showall
+
+   To fetch one of the codon usage tables (for example 'Emus.cut') into
+   your current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Emus.cut
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+   "Corrupt codon index file" - the codon usage file is incomplete or
+   empty.
+   
+   "The file 'drosoph.cut' does not exist" - the codon usage file cannot
+   be opened.
+   
+Exit status
+
+   This program always exits with a status of 0, unless the codon usage
+   table cannot be opened.
+   
+Known bugs
+
+See also
+
+   Program name Description
+   cusp Create a codon usage table
+   getorf Finds and extracts open reading frames (ORFs)
+   plotorf Plot potential open reading frames
+   prettyseq Output sequence with translated ranges
+   remap Display a sequence with restriction cut sites, translation etc
+   showorf Pretty output of DNA translations
+   showseq Display a sequence with features, translation etc
+   transeq Translate nucleic acid sequences
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+   Completed 6 Oct 1999
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

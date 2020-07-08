@@ -1,0 +1,185 @@
+/*  Last edited: Jan 17 17:51 2000 (pmr) */
+/* @source pepwindow application
+**
+** Displays protein hydropathy.
+** @author: Copyright (C) Ian Longden (il@sanger.ac.uk)
+** @@
+** Original program by Jack Kyte and Russell F. Doolittle.
+**
+** This program is free software; you can redistribute it and/or
+** modify it under the terms of the GNU General Public License
+** as published by the Free Software Foundation; either version 2
+** of the License, or (at your option) any later version.
+** 
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+** 
+** You should have received a copy of the GNU General Public License
+** along with this program; if not, write to the Free Software
+** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+******************************************************************************/
+
+#include "emboss.h"
+
+#define AZ 28
+
+AjBool getnakaidata(AjPFile file, float matrix[]){
+  static AjPStr buffer = NULL;
+  static AjPStr buf2 = NULL;
+  static AjPStr delim = NULL; 
+  static AjPStr description = NULL; 
+  AjPStrTok token;
+  int line =0;
+  char *ptr;
+
+  delim = ajStrNewC(" :\t\n");
+
+  if(!file)
+    return 0;
+  while (ajFileGets(file,&buffer)){
+    ptr = ajStrStr(buffer);
+    if(*ptr == 'D') /* save description */
+      ajStrAssS(&description, buffer);
+    else if(*ptr == 'I')
+      line = 1;
+    else if(line == 1){
+      line++;
+      token = ajStrTokenInit(buffer,ajStrStr(delim));
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[0]);
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[17]);
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[13]);
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[3]);
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[2]);
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[16]);
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[4]);
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[6]);
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[7]);
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[8]);
+
+    }
+    else if(line == 2){
+      line++;
+      token = ajStrTokenInit(buffer,ajStrStr(delim));
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[11]);
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[10]);
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[12]);
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[5]);
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[15]);
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[18]);
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[19]);
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[22]);
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[24]);
+
+      ajStrToken(&buf2,&token,ajStrStr(delim));
+      ajStrToFloat(buf2,&matrix[21]);
+
+    }
+  }
+  ajFileClose (&file);
+
+  return ajTrue;
+}
+  
+int main (int argc, char * argv[]) {
+  AjPFile datafile;
+  AjPStr aa0str=0;
+  char *s1;
+  AjPSeq seq;
+  int llen;
+  float matrix[AZ];
+  int i,midpoint,j;
+  AjPGraphData graphdata;
+  AjPGraph mult;
+  float min= 555.5,max = -555.5,total;
+
+  (void) ajGraphInit("pepwindow", argc, argv);
+
+  seq = ajAcdGetSeq ("sequencea");
+
+  mult = ajAcdGetGraphxy ("graph");
+  datafile  = ajAcdGetDatafile("datafile");
+  llen = ajAcdGetInt("length");
+
+  s1 = ajStrStr(ajSeqStr(seq));
+
+  aa0str = ajStrNewL(ajSeqLen(seq));
+
+  graphdata = ajGraphxyDataNewI(ajSeqLen(seq)-llen);
+
+  midpoint = (int)((llen+1)/2);
+
+  ajGraphxyAddGraph(mult,graphdata);
+  
+  for(i=0;i<ajSeqLen(seq);i++)
+    ajStrAppK(&aa0str,(char)ajAZToInt(*s1++));
+
+
+  if(!getnakaidata(datafile,&matrix[0]))
+    exit(-1);
+
+  s1 = ajStrStr(aa0str);
+
+  for(i=0;i<ajSeqLen(seq)-llen;i++){
+    total = 0;
+    for(j=0;j<llen;j++)
+      total = total + matrix[(int)s1[j]];
+    total=total/(float)llen;
+    graphdata->x[i] = (float)i+midpoint;
+    graphdata->y[i] = total;
+    if(total > max)
+      max= total;
+    if(total < min)
+      min = total;
+
+    s1++;
+  }
+
+  min=min*1.1;
+  max=max*1.1;
+
+  ajGraphxySetMaxMin(mult,0.0,(float)ajSeqLen(seq),min,max);
+
+  ajGraphxyDisplay(mult,AJTRUE);
+  ajExit();
+  return 0;
+}  
+			    

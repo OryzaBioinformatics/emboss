@@ -1,0 +1,779 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: remap
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: remap
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program remap
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Display a sequence with restriction cut sites, translation etc
+
+
+<H2>
+    Description
+</H2>
+
+
+The Restriction Enzyme database (REBASE) is a collection of information
+about restriction enzymes and related proteins.  It contains published
+and unpublished references, recognition and cleavage sites,
+isoschizomers, commercial availability, methylation sensitivity, crystal
+and sequence data.  DNA methyltransferases, homing endonucleases,
+nicking enzymes, specificity subunits and control proteins are also
+included.  Most recently, putative DNA methyltransferases and
+restriction enzymes, as predicted from analysis of genomic sequences,
+are also listed. 
+
+<p>
+The home page of REBASE is: <a
+href="http://rebase.neb.com/rebase/rebase.html">http://rebase.neb.com/rebase/rebase.html</a>
+
+<p>
+This program uses REBASE data to find the recognition sites and/or cut
+sites of restriction enzymes in a nucleic acid sequence. 
+
+<p>
+This program displays the cut sites on both strands by default.
+It will optionally also display the translation of the sequence.
+
+<p>
+There are many options to change the style of display to aid in making
+clear presentations. 
+
+<p>
+One potentially very useful option is '-flatreformat' that displays not
+only the cut sites which many other restriction cut-site programs will
+show, but also shows the recognition site. 
+
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with remap. We only look at a small section
+of the sequence to save space.
+
+<pre>
+
+% remap -notran -sbeg 1 -send 60
+Display a sequence with restriction cut sites, translation etc..
+Input sequence(s): embl:eclac
+Output file [eclac.remap]: 
+Comma separated enzyme list [all]: taqi,bsu6i,acii,bsski
+Minimum recognition site length [4]: 
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outfile]           outfile    If you enter the name of a file here then
+                                  this program will write the sequence details
+                                  into that file.
+   -enzymes            string     The name 'all' reads in all enzyme names
+                                  from the REBASE database. You can specify
+                                  enzymes by giving their names with commas
+                                  between then, such as:
+                                  'HincII,hinfI,ppiI,hindiii'.
+                                  The case of the names is not important. You
+                                  can specify a file of enzyme names to read
+                                  in by giving the name of the file holding
+                                  the enzyme names with a '@' character in
+                                  front of it, for example, '@enz.list'.
+                                  Blank lines and lines starting with a hash
+                                  character or '!' are ignored and all other
+                                  lines are concatenated together with a comma
+                                  character ',' and then treated as the list
+                                  of enzymes to search for.
+                                  An example of a file of enzyme names is:
+                                  ! my enzymes
+                                  HincII, ppiII
+                                  ! other enzymes
+                                  hindiii
+                                  HinfI
+                                  PpiI
+   -sitelen            integer    Minimum recognition site length
+
+   Optional qualifiers:
+   -[no]cutlist        bool       List the enzymes that cut
+   -flatreformat       bool       Display RE sites in flat format
+   -mincuts            integer    Minimum cuts per RE
+   -maxcuts            integer    Maximum cuts per RE
+   -single             bool       Force single site only cuts
+   -[no]blunt          bool       Allow blunt end cutters
+   -[no]sticky         bool       Allow sticky end cutters
+   -[no]ambiguity      bool       Allow ambiguous matches
+   -plasmid            bool       Allow circular DNA
+   -[no]commercial     bool       Only enzymes with suppliers
+   -[no]limit          bool       Limits reports to one isoschizomer
+   -preferred          bool       Report preferred isoschizomers
+
+   Advanced qualifiers:
+   -[no]translation    bool       Display translation
+   -[no]reverse        bool       Display cut sites and translation of reverse
+                                  sense
+   -orfminsize         integer    Minimum size of Open Reading Frames (ORFs)
+                                  to display in the translations.
+   -uppercase          range      Regions to put in uppercase.
+                                  If this is left blank, then the sequence
+                                  case is left alone.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are separated by any non-digit,
+                                  non-alpha character.
+                                  Examples of region specifications are:
+                                  24-45, 56-78
+                                  1:45, 67=99;765..888
+                                  1,5,8,10,23,45,57,99
+   -highlight          range      Regions to colour if formatting for HTML.
+                                  If this is left blank, then the sequence is
+                                  left alone.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are followed by any valid HTML font
+                                  colour.
+                                  Examples of region specifications are:
+                                  24-45 blue 56-78 orange
+                                  1-100 green 120-156 red
+                                  A file of ranges to colour (one range per
+                                  line) can be specifed as '@filename'.
+   -table              list       Translation table genetic code to use
+   -threeletter        bool       Display protein sequences in three-letter
+                                  code
+   -number             bool       Number the sequences
+   -width              integer    Width of sequence to display
+   -length             integer    Line length of page (0 for indefinite)
+   -margin             integer    Margin around sequence for numbering
+   -[no]name           bool       Set this to be false if you do not wish to
+                                  display the ID name of the sequence
+   -[no]description    bool       Set this to be false if you do not wish to
+                                  display the description of the sequence
+   -offset             integer    Offset to start numbering the sequence from
+   -html               bool       Use HTML formatting
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>If you enter the name of a file here then this program will write the sequence details into that file.</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.remap</td>
+</tr>
+
+<tr>
+<td>-enzymes</td>
+<td>The name 'all' reads in all enzyme names from the REBASE database. You can specify enzymes by giving their names with commas between then, such as: 'HincII,hinfI,ppiI,hindiii'.
+The case of the names is not important. You can specify a file of enzyme names to read in by giving the name of the file holding the enzyme names with a '@' character in front of it, for example, '@enz.list'.
+Blank lines and lines starting with a hash character or '!' are ignored and all other lines are concatenated together with a comma character ',' and then treated as the list of enzymes to search for.
+An example of a file of enzyme names is:
+! my enzymes
+HincII, ppiII
+! other enzymes
+hindiii
+HinfI
+PpiI</td>
+<td>Any string is accepted</td>
+<td>all</td>
+</tr>
+
+<tr>
+<td>-sitelen</td>
+<td>Minimum recognition site length</td>
+<td>Integer from 2 to 20</td>
+<td>4</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]cutlist</td>
+<td>List the enzymes that cut</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-flatreformat</td>
+<td>Display RE sites in flat format</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-mincuts</td>
+<td>Minimum cuts per RE</td>
+<td>Integer from 1 to 1000</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-maxcuts</td>
+<td>Maximum cuts per RE</td>
+<td>Integer up to 2000000000</td>
+<td>2000000000</td>
+</tr>
+
+<tr>
+<td>-single</td>
+<td>Force single site only cuts</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]blunt</td>
+<td>Allow blunt end cutters</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]sticky</td>
+<td>Allow sticky end cutters</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]ambiguity</td>
+<td>Allow ambiguous matches</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-plasmid</td>
+<td>Allow circular DNA</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]commercial</td>
+<td>Only enzymes with suppliers</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]limit</td>
+<td>Limits reports to one isoschizomer</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-preferred</td>
+<td>Report preferred isoschizomers</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]translation</td>
+<td>Display translation</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]reverse</td>
+<td>Display cut sites and translation of reverse sense</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-orfminsize</td>
+<td>Minimum size of Open Reading Frames (ORFs) to display in the translations.</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-uppercase</td>
+<td>Regions to put in uppercase.
+If this is left blank, then the sequence case is left alone.
+A set of regions is specified by a set of pairs of positions.
+The positions are integers.
+They are separated by any non-digit, non-alpha character.
+Examples of region specifications are:
+24-45, 56-78
+1:45, 67=99;765..888
+1,5,8,10,23,45,57,99</td>
+<td>Sequence range</td>
+<td>If this is left blank, then the sequence case is left alone.</td>
+</tr>
+
+<tr>
+<td>-highlight</td>
+<td>Regions to colour if formatting for HTML.
+If this is left blank, then the sequence is left alone.
+A set of regions is specified by a set of pairs of positions.
+The positions are integers.
+They are followed by any valid HTML font colour.
+Examples of region specifications are:
+24-45 blue 56-78 orange
+1-100 green 120-156 red
+A file of ranges to colour (one range per line) can be specifed as '@filename'.</td>
+<td>Sequence range</td>
+<td><i>full sequence</i></td>
+</tr>
+
+<tr>
+<td>-table</td>
+<td>Translation table genetic code to use</td>
+<td><table><tr><td>0</td> <td><i>(Standard)</i></td></tr><tr><td>1</td> <td><i>(Standard (with alternative initiation codons))</i></td></tr><tr><td>2</td> <td><i>(Vertebrate Mitochondrial)</i></td></tr><tr><td>3</td> <td><i>(Yeast Mitochondrial)</i></td></tr><tr><td>4</td> <td><i>(Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma)</i></td></tr><tr><td>5</td> <td><i>(Invertebrate Mitochondrial)</i></td></tr><tr><td>6</td> <td><i>(Ciliate Macronuclear and Dasycladacean)</i></td></tr><tr><td>9</td> <td><i>(Echinoderm Mitochondrial)</i></td></tr><tr><td>10</td> <td><i>(Euplotid Nuclear)</i></td></tr><tr><td>11</td> <td><i>(Bacterial)</i></td></tr><tr><td>12</td> <td><i>(Alternative Yeast Nuclear)</i></td></tr><tr><td>13</td> <td><i>(Ascidian Mitochondrial)</i></td></tr><tr><td>14</td> <td><i>(Flatworm Mitochondrial)</i></td></tr><tr><td>15</td> <td><i>(Blepharisma Macronuclear)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-threeletter</td>
+<td>Display protein sequences in three-letter code</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-number</td>
+<td>Number the sequences</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-width</td>
+<td>Width of sequence to display</td>
+<td>Integer 1 or more</td>
+<td>60</td>
+</tr>
+
+<tr>
+<td>-length</td>
+<td>Line length of page (0 for indefinite)</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-margin</td>
+<td>Margin around sequence for numbering</td>
+<td>Integer 0 or more</td>
+<td>10</td>
+</tr>
+
+<tr>
+<td>-[no]name</td>
+<td>Set this to be false if you do not wish to display the ID name of the sequence</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]description</td>
+<td>Set this to be false if you do not wish to display the description of the sequence</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-offset</td>
+<td>Offset to start numbering the sequence from</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-html</td>
+<td>Use HTML formatting</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+You can specifiy a file of ranges to display in uppercase by giving the
+'-uppercase' qualifier the value '@' followed by the name of the file
+containing the ranges.  (eg: '-upper @myfile'). 
+
+<p>
+The format of the range file is: 
+
+<ul>
+<li>      Comment lines start with '#' in the first column. 
+<li>      Comment lines and blank lines are ignored. 
+<li>      The line may start with white-space. 
+<li>      There are two positive (integer) numbers per line separated by one or more
+      space or TAB characters. 
+<li>      The second number must be greater or equal to the first number. 
+<li>      There can be optional text after the two numbers to annotate the line. 
+<li>      White-space before or after the text is removed. 
+</ul>
+
+<p>
+
+An example range file is: 
+
+<pre>
+
+# this is my set of ranges
+12   23
+ 4   5       this is like 12-23, but smaller
+67   10348   interesting region
+
+</pre>
+
+<p>
+You can specifiy a file of ranges to highlight in a different colour
+when outputting in HTML format (using the '-html' qualifier) by giving
+the '-highlight' qualifier the value '@' followed by the name of the
+file containing the ranges.  (eg: '-highlight @myfile'). 
+
+<p>
+The format of this file is very similar to the format of the above
+uppercase range file, except that the text after the start and end
+positions is used as the HTML colour name.  This colour name is used 'as
+is' when specifying the colour in HTML in a '&lt;FONT COLOR=xxx&gt;'
+construct, (where 'xxx' is the name of the colour). 
+
+<p>
+The standard names of HTML font colours are given in: <a
+href="http://www.iconbazaar.com/color_tables/named_colors.html">http://www.iconbazaar.com/color_tables/named_colors.html</a>
+
+<p>
+An example highlight range file is:
+
+<pre>
+
+# this is my set of ranges
+12   23		red
+ 4   5		darkturquoise
+67   10348	#FFE4E1
+
+</pre>
+
+<H2>
+    Output file format
+</H2>
+
+
+The output file from the example above follows:
+
+<pre>
+
+ECLAC
+E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+
+                                                      Hin6I
+                                                      | Bsu6I
+                 TaqI   Hin6I         AciI            | BssKI 
+                 \      \             \               \ \
+          GACACCATCGAATGGCGCAAAACCTTTCGCGGTATGGCATGATAGCGCCCGGAAGAGAGT
+                   10        20        30        40        50        60        
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          CTGTGGTAGCTTACCGCGTTTTGGAAAGCGCCATACCGTACTATCGCGGGCCTTCTCTCA
+                   /      /             /               /  / /
+                   TaqI   Hin6I         AciI            |  | BssKI
+                                                        |  Bsu6I
+                                                        Hin6I
+
+          D  T  I  E  W  R  K  T  F  R  G  M  A  *  *  R  P  E  E  S  
+           T  P  S  N  G  A  K  P  F  A  V  W  H  D  S  A  R  K  R  V 
+            H  H  R  M  A  Q  N  L  S  R  Y  G  M  I  A  P  G  R  E  S
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+            V  G  D  F  P  A  F  G  K  A  T  H  C  S  L  A  R  F  L  T
+           S  V  M  S  H  R  L  V  K  R  P  I  A  H  Y  R  G  S  S  L 
+          X  C  W  R  I  A  C  F  R  E  R  Y  P  M  I  A  G  P  L  S  
+
+
+Enzymes that cut
+
+      AciI  1
+     BssKI  1
+     Bsu6I  1
+     Hin6I  2
+      TaqI  1
+
+</pre>
+
+
+<p>
+The name of the sequence is displayed, followed by the description of
+the sequence.
+
+<p>
+The formatted display of cut sites on the sequence follows, with the
+six-frame translation below it.  The cut sites are indicated by a slash
+character '\' that points to the poition between the nucleotides where
+the cuts occur.  Cuts by many enzymes at the same position are indicated
+by stacking the enzyme names on top of each other. 
+
+<p>
+At the end the section header 'Enzymes that cut' is displayed followed
+by a list of the enzymes that cut the specified sequence and the number
+of times that they cut. 
+
+
+<p>
+The '-flatreformat' qualifier changes the display to emphasise the
+recognition site of the restriction enzyme, which is indicated by a row
+of '=' characters.  The cut site if pointed to by a '&gt;' or '&lt;' character
+and if the cut site is not within or imemdiately adjacent to the
+recognition site, they are linked by a row or '.' characters.  
+
+<p>
+The name of the enzyme is displayed above (or below when the reverse
+sense site if displayed) the recognition site.  The name of the enzyme
+is also displayed above the cut site if this occurs on a different
+display line to the recognition site (i.e.  if it wraps onto the next
+line of sequence). 
+
+<p>
+An example of this display follows with the translation turned off to
+save space:
+
+<pre>
+
+% remap embl:eclac stdout -enz taqi,bsu6i,acii,hin6i,bsski -site 4
+-sbeg 1 -send 60 -flat -notran
+Display a sequence with restriction cut sites, translation etc..
+
+ECLAC
+E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+
+                                                                  Bsu6I
+                                                        &gt;.........====
+                                                         BssKI
+                                                        &gt;=====
+                 TaqI   Hin6I            AciI         Hin6I
+                 &gt;===   &gt;===          &gt;..====         &gt;===
+          GACACCATCGAATGGCGCAAAACCTTTCGCGGTATGGCATGATAGCGCCCGGAAGAGAGT
+                   10        20        30        40        50        60        
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          CTGTGGTAGCTTACCGCGTTTTGGAAAGCGCCATACCGTACTATCGCGGGCCTTCTCTCA
+                 ===&lt;   ===&lt;             &lt;===         ===&lt;
+                 TaqI   Hin6I            AciI         Hin6I
+                                                         =====&lt;
+                                                         BssKI
+                                                            &lt;.....====
+                                                                  Bsu6I
+
+
+Enzymes that cut
+
+      AciI  1
+     BssKI  1
+     Bsu6I  1
+     Hin6I  2
+      TaqI  1
+
+</pre>
+
+<H2>
+    Data files
+</H2>
+
+
+This uses the EMBOSS REBASE data files in 'data/REBASE/*' under the
+EMBOSS installation directory. 
+
+<p>
+These files must first be set up using the program <a
+href="rebaseextract.html">'rebaseextract'.</a> Running
+'rebaseextract' may be the job of your system manager.
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="backtranseq.html">backtranseq</a></td><td>Back translate a protein sequence</td></tr>
+<tr><td><a href="cusp.html">cusp</a></td><td>Create a codon usage table</td></tr>
+<tr><td><a href="getorf.html">getorf</a></td><td>Finds and extracts open reading frames (ORFs)</td></tr>
+<tr><td><a href="plotorf.html">plotorf</a></td><td>Plot potential open reading frames</td></tr>
+<tr><td><a href="prettyseq.html">prettyseq</a></td><td>Output sequence with translated ranges</td></tr>
+<tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
+<tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
+<tr><td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td></tr>
+<tr><td><a href="seqret.html">seqret</a></td><td>Reads and writes (returns) sequences</td></tr>
+<tr><td><a href="seqretall.html">seqretall</a></td><td>Reads and writes (returns) a set of sequences one at a time</td></tr>
+<tr><td><a href="seqretset.html">seqretset</a></td><td>Reads and writes (returns) a set of sequences all at once</td></tr>
+<tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
+<tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
+<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="transeq.html">transeq</a></td><td>Translate nucleic acid sequences</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Gary Williams <a
+href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

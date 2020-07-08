@@ -1,0 +1,154 @@
+
+                            EMBOSS: newcpgreport
+     _________________________________________________________________
+   
+                             Program newcpgreport
+                                       
+Function
+
+   Report CpG rich areas
+   
+Description
+
+   This application is used in the production of the CpG Island database
+   'CPGISLE'. It produces CPGISLE database entry format reports for a
+   potential CpG island.
+   
+   See the FTP site: ftp://ftp.ebi.ac.uk/pub/databases/cpgisle/ for the
+   finished database.
+   
+Usage
+
+   Here is a sample session with newcpgreport.
+
+% newcpgreport
+Input sequence: embl:rnu68037
+Window size [100]:
+Shift increment [1]:
+Minimum Length [200]:
+Minimum observed/expected [0.6]:
+Minimum percentage [50.]:
+Output file [rnu68037.newcpgreport]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -window             integer    Window size
+   -shift              integer    Shift increment
+   -minlen             integer    Minimum Length
+   -minoe              float      Minimum observed/expected
+   -minpc              float      Minimum percentage
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -[no]obsexp         bool       Show observed/expected threshold line
+   -[no]cg             bool       Show CpG rich regions
+   -[no]pc             bool       Show percentage line
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   -window Window size Integer 1 or more 100
+   -shift Shift increment Integer 1 or more 1
+   -minlen Minimum Length Integer 1 or more 200
+   -minoe Minimum observed/expected Number from 0.000 to 10.000 0.6
+   -minpc Minimum percentage Number from 0.000 to 100.000 50.
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.newcpgreport
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -[no]obsexp Show observed/expected threshold line Yes/No Yes
+   -[no]cg Show CpG rich regions Yes/No Yes
+   -[no]pc Show percentage line Yes/No Yes
+   
+Input file format
+
+Output file format
+
+   Here is the output file from the example run:
+
+ID   RNU68037  1118 BP.
+XX
+DE   CpG Island report.
+XX
+CC   Obs/Exp ratio > 0.60.
+CC   % C + % G > 50.00.
+CC   Length > 200.
+XX
+FH   Key              Location/Qualifiers
+FT   CpG island       157..389
+FT                    /size=232
+FT                    /Sum C+G=152
+FT                    /Percent CG=65.24
+FT                    /ObsExp=0.73
+FT   CpG island       654..963
+FT                    /size=309
+FT                    /Sum C+G=206
+FT                    /Percent CG=66.45
+FT                    /ObsExp=0.96
+FT   numislands       2
+//
+
+Data files
+
+Notes
+
+References
+
+    1. Larsen F., Gundersen, G., Lopez L., Prydz H. CpG island as Gene
+       Markers in the Human Genome Genomics 13:1095-1107 (1992)
+       
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   chaos Create a chaos game representation plot for a sequence
+   chips Codon usage statistics
+   codcmp Codon usage table comparison
+   compseq Counts the composition of dimer/trimer/etc words in a sequence
+   cpgplot Plot CpG rich areas
+   cpgreport Reports all CpG rich regions
+   cusp Create a codon usage table
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   einverted Finds DNA inverted repeats
+   equicktandem Finds tandem repeats
+   etandem Looks for tandem repeats in a nucleotide sequence
+   freak Residue/base frequency table or plot
+   geecee Calculates the fractional GC content of nucleic acid sequences
+   isochore Plots isochores in large DNA sequences
+   newcpgseek Reports CpG rich regions
+   palindrome Looks for inverted repeats in a nucleotide sequence
+   polydot Displays all-against-all dotplots of a set of sequences
+   redata Search REBASE for enzyme name, references, suppliers etc
+   restrict Finds restriction enzyme cleavage sites
+   showseq Display a sequence with features, translation etc
+   tfscan Scans DNA sequences for transcription factors
+   wobble Wobble base plot
+   wordcount Counts words of a specified size in a DNA sequence
+   
+Author(s)
+
+   This application was written by Rodrigo Lopez (rls@ebi.ac.uk) European
+   Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton,
+   Cambridge, CB10 1SD, UK.
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

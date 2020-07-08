@@ -1,0 +1,89 @@
+
+appl: matcher [
+        doc: "Finds the best local alignments between two sequences"
+        groups: "alignment: local"
+]
+
+  sequence: sequencea [ param: Y type: any ]
+
+  sequence: sequenceb [ param: Y 
+     type: "@($(sequencea.protein) ? protein : nucleotide)" ]
+
+  outfile: outfile [param: Y ]
+
+  matrix: datafile [
+        optional: Y
+        info: "Matrix file"
+	protein: $(sequencea.protein)
+  ]
+
+  int: alternatives [
+	optional: Y
+	info: "Number of alternative matches"
+	def: "1"
+	min: "1"
+	help: "This sets the number of alternative matches output.  By
+default only the highest scoring alignment is shown.  A value of 2 gves
+you other reasonable alignments.  In some cases, for example multidomain
+proteins of cDNA and gemomic DNA comparisons, there may be other
+interesting and significant alignments."
+  ]
+
+  int: gappenalty [
+	optional: Y 
+	info: "gap penalty"
+        def : "@($(sequencea.protein)? 14 : 16)"
+        min : "0"
+	valid: "Positive integer"
+	expect: "14 for protein, 16 for nucleic"
+	help: "The gap penalty is the score taken away when a gap is
+created.  The best value depends on the choice of comparison matrix. 
+The default value of 14 assumes you are using the EBLOSUM62 matrix for
+protein sequences, or a value of 16 and the EDNAMAT matrix for nucleotide
+sequences."
+  ]
+
+  int: gaplength [
+	optional: Y 
+	info: "gap length penalty"
+        def : "@($(sequencea.protein)? 4 : 4)"
+        min : "0"
+	valid: "Positive integer"
+	expect: "4 for any sequence"
+	help: "The gap length, or gap extension, penalty is added to the
+standard gap penalty for each base or residue in the gap.  This is how
+long gaps are penalized.  Usually you will expect a few long gaps rather
+than many short gaps, so the gap extension penalty should be lower than
+the gap penalty.  An exception is where one or both sequences are single
+reads with possible sequencing errors in which case you would expect
+many single base gaps.  You can get this result by setting the gap
+penalty to zero (or very low) and using the gap extension penalty to
+control gap scoring."
+  ]
+
+  int: markx [
+	optional: Y 
+	info: "alternative displays"
+        def : "0"
+        max : "10"
+	help: "This sets the alternate display of matches and mismatches
+in alignments.
+ \ -markx=0 uses ':','.',' ', for identities, conservative
+replacements, and non-conservative replacements, respectively. 
+ \ -markx=1 uses ' ','x', and 'X'.
+ \ -markx=2 does not show the second sequence, but uses the second 
+alignment line to display matches with a '.' for identity, or with
+the mismatched residue for mismatches.
+ \ -markx=3 outputs a title line with the percentage identity and score and then outputs the gapped sequences in multiple FASTA format.
+ \ -markx=4 outputs only the title line  with the percentage identity and score.
+ \ -markx=5,6,7,8 and 9 are the same as -markx=1
+ \ -markx=10 outputs a parseable output."
+  ]
+
+  int: length [
+	optional: Y 
+	info: "number of residues per line"
+        def : "60"
+        min : "1"
+	max : "200"
+  ]

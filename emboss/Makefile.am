@@ -1,0 +1,205 @@
+
+SUBDIRS = acd data
+
+check_PROGRAMS = ajtest ajtest2 ajtest3 ajtestajnam \
+cluster \
+demofeatures demolist demosequence demostring demotable \
+entrails histogramtest messtest \
+patmattest plplottest proteinmotifsearch \
+seqinfo \
+seqretallfeat seqretfeat seqtofeat \
+simplesw testplot treetypedisplay 
+
+bin_PROGRAMS = acdc antigenic \
+backtranseq banana \
+chaos checktrans chips cirdna codcmp complex \
+compseq cpgplot cpgreport cusp cutseq \
+dan dbiblast dbifasta dbiflat dbigcg \
+descseq diffseq digest dotmatcher dotpath dottup dreg \
+einverted embossdata emma \
+equicktandem est2genome etandem extractseq \
+findkm freak fuzznuc fuzzpro fuzztran \
+garnier geecee getorf helixturnhelix \
+iep infoseq isochore lindna \
+maskfeat maskseq matcher megamerger merger msbar \
+needle newcpgreport newcpgseek newseq \
+noreturn nthseq \
+octanol oddcomp \
+palindrome pasteseq patmatdb patmatmotifs \
+pepcoil pepinfo pepnet pepstats \
+pepwheel pepwindow pepwindowall \
+plotorf polydot preg \
+prettyplot prettyseq prima primersearch printsextract \
+profit prophecy prophet \
+prosextract pscan \
+rebaseextract redata remap restrict revseq \
+seealso seqmatchall seqret seqretall seqretset seqretsplit \
+showdb showfeat showorf showseq \
+shuffleseq sigcleave splitter stretcher \
+stssearch supermatcher syco \
+textsearch tfextract tfm tfscan \
+tmap transeq trimseq \
+vectorstrip \
+water wobble wordcount wordmatch \
+wossname
+
+
+
+#FLAGS=-lX11
+
+INCLUDES = -I$(top_srcdir)/nucleus -I$(top_srcdir)/ajax -I$(top_srcdir)/plplot
+
+acdc_SOURCES = acdc.c
+antigenic_SOURCES = antigenic.c
+backtranseq_SOURCES = backtranseq.c
+banana_SOURCES = banana.c
+chaos_SOURCES = chaos.c
+checktrans_SOURCES = checktrans.c
+chips_SOURCES = chips.c
+cirdna_SOURCES = cirdna.c
+codcmp_SOURCES = codcmp.c
+complex_SOURCES = complex.c
+compseq_SOURCES = compseq.c
+cpgplot_SOURCES = cpgplot.c
+cpgreport_SOURCES = cpgreport.c
+cusp_SOURCES = cusp.c
+cutseq_SOURCES = cutseq.c
+dan_SOURCES = dan.c
+dbiblast_SOURCES = dbiblast.c
+dbifasta_SOURCES = dbifasta.c
+dbiflat_SOURCES = dbiflat.c
+dbigcg_SOURCES = dbigcg.c
+descseq_SOURCES = descseq.c
+diffseq_SOURCES = diffseq.c
+digest_SOURCES = digest.c
+dotmatcher_SOURCES = dotmatcher.c
+dottup_SOURCES = dottup.c
+dreg_SOURCES = dreg.c
+einverted_SOURCES = einverted.c
+embossdata_SOURCES = embossdata.c
+emma_SOURCES = emma.c
+entrails_SOURCES = entrails.c
+equicktandem_SOURCES = equicktandem.c
+est2genome_SOURCES = est2genome.c
+etandem_SOURCES = etandem.c
+extractseq_SOURCES = extractseq.c
+findkm_SOURCES = findkm.c
+freak_SOURCES = freak.c
+fuzznuc_SOURCES = fuzznuc.c
+fuzzpro_SOURCES = fuzzpro.c
+fuzztran_SOURCES = fuzztran.c
+garnier_SOURCES = garnier.c
+geecee_SOURCES = geecee.c
+getorf_SOURCES = getorf.c
+helixturnhelix_SOURCES = helixturnhelix.c
+iep_SOURCES = iep.c
+infoseq_SOURCES = infoseq.c
+isochore_SOURCES = isochore.c
+lindna_SOURCE = lindna.c
+maskfeat_SOURCES = maskfeat.c
+maskseq_SOURCES = maskseq.c
+matcher_SOURCES = matcher.c
+msbar_SOURCES = msbar.c
+megamerger_SOURCES = megamerger.c
+merger_SOURCES = merger.c
+needle_SOURCES = needle.c
+newcpgreport_SOURCES = newcpgreport.c
+newcpgseek_SOURCES = newcpgseek.c
+newseq_SOURCES = newseq.c
+noreturn_SOURCES = noreturn.c
+nthseq_SOURCES = nthseq.c
+octanol_SOURCES = octanol.c
+oddcomp_SOURCES = oddcomp.c
+palindrome_SOURCES = palindrome.c
+pasteseq_SOURCES = pasteseq.c
+patmatdb_SOURCES = patmatdb.c
+patmatmotifs_SOURCES = patmatmotifs.c
+pepcoil_SOURCES = pepcoil.c
+pepinfo_SOURCE = pepinfo.c
+pepnet_SOURCES = pepnet.c
+pepstats_SOURCES = pepstats.c
+pepwheel_SOURCES = pepwheel.c
+pepwindow_SOURCES = pepwindow.c
+pepwindowall_SOURCES = pepwindowall.c
+plotorf_SOURCES = plotorf.c
+polydot_SOURCES = polydot.c
+preg_SOURCES = preg.c
+prettyplot_SOURCES = prettyplot.c
+prettyseq_SOURCES = prettyseq.c
+prima_SOURCES = prima.c
+primersearch_SOURCES = primersearch.c
+printsextract_SOURCES = printsextract.c
+profit_SOURCES = profit.c
+prophecy_SOURCES = prophecy.c
+prophet_SOURCES = prophet.c
+prosextract_SOURCES = prosextract.c
+proteinmotifsearch_SOURCES = proteinmotifsearch.c
+pscan_SOURCES = pscan.c
+rebaseextract_SOURCES = rebaseextract.c
+redata_SOURCES = redata.c
+remap_SOURCES = remap.c
+restrict_SOURCES = restrict.c
+revseq_SOURCES = revseq.c
+seealso_SOURCES = seealso.c
+seqmatchall_SOURCES = seqmatchall.c
+seqret_SOURCES = seqret.c
+seqinfo_SOURCES = seqinfo.c
+seqretall_SOURCES = seqretall.c
+seqretset_SOURCES = seqretset.c
+seqretsplit_SOURCES = seqretsplit.c
+showdb_SOURCES = showdb.c
+showfeat_SOURCES = showfeat.c
+showorf_SOURCES = showorf.c
+showseq_SOURCES = showseq.c
+shuffleseq_SOURCES = shuffleseq.c
+sigcleave_SOURCES = sigcleave.c
+splitter_SOURCES = splitter.c
+stretcher_SOURCES = stretcher.c
+stssearch_SOURCES = stssearch.c
+supermatcher_SOURCES = supermatcher.c
+syco_SOURCES = syco.c
+textsearch_SOURCES = textsearch.c
+tfextract_SOURCES = tfextract.c
+tfm_SOURCES = tfm.c
+tfscan_SOURCES = tfscan.c
+tmap_SOURCES = tmap.c
+transeq_SOURCES = transeq.c
+trimseq_SOURCES = trimseq.c
+vectorstrip_SOURCES = vectorstrip.c
+water_SOURCES = water.c
+wobble_SOURCES = wobble.c
+wordcount_SOURCES = wordcount.c
+wordmatch_SOURCES = wordmatch.c
+wossname_SOURCES = wossname.c
+
+ajtest_SOURCES = ajtest.c
+ajtest2_SOURCES = ajtest2.c
+ajtest3_SOURCES = ajtest3.c
+ajtestajnam_SOURCES = ajtestajnam.c
+cluster_SOURCES = cluster.c
+demofeatures_SOURCES = demofeatures.c
+demolist_SOURCES = demolist.c
+demosequence_SOURCES = demosequence.c
+demostring_SOURCES = demostring.c
+demotable_SOURCES = demotable.c
+histogramtest_SOURCES = histogramtest.c
+messtest_SOURCES = messtest.c
+patmattest_SOURCES = patmattest.c
+plplottest_SOURCES = plplottest.c
+simplesw_SOURCES = simplesw.c
+seqretallfeat_SOURCES = seqretallfeat.c
+seqretfeat_SOURCES = seqretfeat.c
+seqtofeat_SOURCES = seqtofeat.c
+testplot_SOURCES = testplot.c
+treetypedisplay_SOURCES = treetypedisplay.c
+
+LDADD = ../nucleus/libnucleus.la ../ajax/libajaxg.la ../ajax/libajax.la ../plplot/libplplot.la $(XLIB)
+
+if PURIFY
+  LINK = purify $(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(LDFLAGS) -o $@
+else
+
+endif
+
+
+

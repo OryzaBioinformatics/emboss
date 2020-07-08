@@ -1,0 +1,379 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: msbar
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: msbar
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program msbar
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Mutate sequence beyond all recognition
+
+
+<H2>
+    Description
+</H2>
+
+
+This program changes a sequence a lot or a little, attempting to emulate
+various forms of mutation.  You can set the number and types of mutations.
+
+<p>
+It can act on the following sizes of sequence:
+
+<ul>
+<li>Point (single base or residue change)
+<li>Codon (not applicable in proteins)
+<li>Block of sequence (of a specified minimum and maximum random size)
+</ul>
+
+<p>
+If the sequence is nucleic, the codon and block-sized operations can
+optionally be done in-frame.  This causes the minimum block size to be
+set to 3 and the randomly chosen positions to be multiples of 3. 
+
+<p>
+For each of the above size of sequence it can produce the effects of any
+of the following types of mutation at a randomly chosen position:
+
+<ul>
+<li>Insertion of a randomly generated sequence
+<li>Deletion
+<li>Change (deletion then insertion of a random sequence of the same size)
+<li>Duplication at an adjacent position
+<li>Move region from one position to another (without deletion of the original)
+<li>Any of the above, chosen at random.
+<li>None of the above
+</ul>
+
+<p>
+The input and output sequences may not differ if only a few changes are
+chosen as (for example) one in four nucleic acid point substitutions
+will not change the sequence. 
+
+<p>
+N.B.  There is no selection of the types of mutation to produce viable
+sequence as there would be in a real organism.  In particular, there is
+no attempt to bias mutations of nucleic acid sequences to conform to the
+C+G ratio in the sequence or to bias the codons in the direction of the
+frequencies used in the organism.  This program emulates mutation, not
+selection. 
+
+<p>
+This program was named from the acronym of "Mutate Sequence Beyond All
+Recognition", by analogy with the acronym "fubar" commonly used in the
+US and UK armies. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with msbar. This asks for 5 mutations, with
+point mutations as changes (substitutions), and the codon and block
+mutations ignored.
+
+<pre>
+
+% msbar
+Input sequence: embl:eclaci
+Output sequence [eclaci.fasta]: 
+Number of times to perform the mutation operations [1]: 5 
+Point mutation operations
+         0 : None
+         1 : Any of the following
+         2 : Insertions
+         3 : Deletions
+         4 : Changes
+         5 : Duplications
+         6 : Moves
+Types of point mutations to perform [0]: 4
+Codon mutation operations
+         0 : None
+         1 : Any of the following
+         2 : Insertions
+         3 : Deletions
+         4 : Changes
+         5 : Duplications
+         6 : Moves
+Types of codon mutations to perform [0]: 
+Block mutation operations
+         0 : None
+         1 : Any of the following
+         2 : Insertions
+         3 : Deletions
+         4 : Changes
+         5 : Duplications
+         6 : Moves
+Types of block mutations to perform [0]: 
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers (* if not always prompted):
+  [-sequence]          seqall     Sequence database USA
+  [-outseq]            seqoutall  Output sequence(s) USA
+   -count              integer    Number of times to perform the mutation
+                                  operations
+   -point              list       Types of point mutations to perform
+*  -codon              list       Types of codon mutations to perform. These
+                                  are only done if the sequence is nucleic.
+   -block              list       Types of block mutations to perform
+
+   Optional qualifiers (* if not always prompted):
+*  -inframe            bool       Do 'codon' and 'block' operations in frame
+
+   Advanced qualifiers:
+   -minimum            integer    Minimum size for a block mutation
+   -maximum            integer    Maximum size for a block mutation
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Output sequence(s) USA</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr>
+<td>-count</td>
+<td>Number of times to perform the mutation operations</td>
+<td>Integer 0 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-point</td>
+<td>Types of point mutations to perform</td>
+<td><table><tr><td>0</td> <td><i>(None)</i></td></tr><tr><td>1</td> <td><i>(Any of the following)</i></td></tr><tr><td>2</td> <td><i>(Insertions)</i></td></tr><tr><td>3</td> <td><i>(Deletions)</i></td></tr><tr><td>4</td> <td><i>(Changes)</i></td></tr><tr><td>5</td> <td><i>(Duplications)</i></td></tr><tr><td>6</td> <td><i>(Moves)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-codon</td>
+<td>Types of codon mutations to perform. These are only done if the sequence is nucleic.</td>
+<td><table><tr><td>0</td> <td><i>(None)</i></td></tr><tr><td>1</td> <td><i>(Any of the following)</i></td></tr><tr><td>2</td> <td><i>(Insertions)</i></td></tr><tr><td>3</td> <td><i>(Deletions)</i></td></tr><tr><td>4</td> <td><i>(Changes)</i></td></tr><tr><td>5</td> <td><i>(Duplications)</i></td></tr><tr><td>6</td> <td><i>(Moves)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-block</td>
+<td>Types of block mutations to perform</td>
+<td><table><tr><td>0</td> <td><i>(None)</i></td></tr><tr><td>1</td> <td><i>(Any of the following)</i></td></tr><tr><td>2</td> <td><i>(Insertions)</i></td></tr><tr><td>3</td> <td><i>(Deletions)</i></td></tr><tr><td>4</td> <td><i>(Changes)</i></td></tr><tr><td>5</td> <td><i>(Duplications)</i></td></tr><tr><td>6</td> <td><i>(Moves)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-inframe</td>
+<td>Do 'codon' and 'block' operations in frame</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-minimum</td>
+<td>Minimum size for a block mutation</td>
+<td>Integer 0 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-maximum</td>
+<td>Maximum size for a block mutation</td>
+<td>Any integer value</td>
+<td>10</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+Any sequence USA.
+
+<H2>
+    Output file format
+</H2>
+
+
+The output is a sequence file with 5 substitutions relative to the
+original sequence.
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="shuffleseq.html">shuffleseq</a></td><td>Shuffles a set of sequences maintaining composition</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Gary Williams <a
+href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,24 @@
+appl: etandem [
+	doc: "Looks for tandem repeats in a nucleotide sequence"
+	groups: "DNA: sequence features, repeats"
+]
+
+  sequence: sequence [ param: Y type: dna ]
+
+  outfile: outfile [ param: Y ext: tan ]
+
+  int: minrepeat [ req: Y  def: 10 min: 2
+                    info: "Minimum repeat size"
+                    valid: "Integer, 2 or higher" ]
+
+  int: maxrepeat  [ req: Y def: "$(minrepeat)"  min: "$(minrepeat)"
+                     info: "Maximum repeat size"
+		     valid: "Integer, same as -minrepeat or higher"
+                     expect: "Same as -minrepeat" ]
+
+  int: threshold [ def: 20 info: "Threshold score" ]
+
+  bool: mismatch [ info: "Allow N as a mismatch" ]
+
+  bool: uniform [ info: "Allow uniform consensus" ]
+

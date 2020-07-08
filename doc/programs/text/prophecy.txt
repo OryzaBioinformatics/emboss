@@ -1,0 +1,91 @@
+
+                              EMBOSS: prophecy
+     _________________________________________________________________
+   
+                               Program prophecy
+                                       
+Function
+
+   Creates matrices/profiles from multiple alignments
+   
+Description
+
+Usage
+
+   Here is a sample session with prophecy.
+
+% prophecy
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-sequence]          seqset     Sequence set USA
+   -type               list       Select type
+   -name               string     Enter a name for the profile
+*  -threshold          integer    Enter threshold reporting percentage
+*  -datafile           matrixf    Scoring matrix
+*  -open               float      Gap opening penalty
+*  -extension          float      Gap extension penalty
+  [-outf]              outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence set USA Readable sequences Required
+   -type Select type
+   F (Frequency)
+   G (Gribskov)
+   H (Henikoff)
+   F
+   -name Enter a name for the profile Any string is accepted mymatrix
+   -threshold Enter threshold reporting percentage Integer from 1 to 100
+   75
+   -datafile Scoring matrix Comparison matrix file in EMBOSS data path
+   'Epprofile' for Gribskov type, or EBLOSUM62
+   -open Gap opening penalty Any integer value 3.0
+   -extension Gap extension penalty Any integer value 0.3
+   [-outf]
+   (Parameter 2) Output file name Output file <sequence>.prophecy
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   profit Scan a sequence or database with a matrix or profile
+   prophet Gapped alignment for profiles
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

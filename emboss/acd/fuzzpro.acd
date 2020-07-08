@@ -1,0 +1,46 @@
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+
+appl: fuzzpro [
+	doc: "Protein pattern search"
+	group: "pattern matching"
+]
+
+seqall: sequence [
+	param: Y
+        type: protein
+]
+
+string: pattern [
+	req: Y
+	prompt: "Search pattern"
+]
+
+int: mismatch [ 
+	req: Y
+	def: 0
+	min: 0
+	prompt: "Number of mismatches"
+]
+
+bool: mmshow [
+	opt: N
+	def: 0
+	info: "Show mismatches"
+]
+
+bool: accshow [
+	opt: N
+	def: 0
+	info: "Show accession numbers"
+]
+
+bool: descshow [
+	opt: N
+	def: 0
+	info: "Show descriptions"
+]
+
+outfile: outf [
+	param: Y
+]

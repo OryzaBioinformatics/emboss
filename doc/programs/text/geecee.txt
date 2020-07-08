@@ -1,0 +1,107 @@
+
+                               EMBOSS: geecee
+     _________________________________________________________________
+   
+                                Program geecee
+                                       
+Function
+
+   Calculates the fractional GC content of nucleic acid sequences
+   
+Description
+
+   This calculates the percentage G+C of the input nucleic acid
+   sequence(s).
+   
+Usage
+
+   Here is a sample session with geecee.
+
+% geecee embl:hhtetra
+Output file [hhtetra.geecee]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.geecee
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   Any DNA sequence USA.
+   
+Output file format
+
+   Here is the output from the example usage:
+
+#Sequence   GC content
+HHTETRA       0.53
+
+   The first non-blank line is the title line. Subsequent lines consist
+   of two columns of data.
+     * The first column is the name of the sequence.
+     * The second column is the percentage G+C content of the sequence.
+       
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+   0 on successful completion.
+   
+Known bugs
+
+See also
+
+   Program name Description
+   chaos Create a chaos game representation plot for a sequence
+   chips Codon usage statistics
+   codcmp Codon usage table comparison
+   compseq Counts the composition of dimer/trimer/etc words in a sequence
+   cpgplot Plot CpG rich areas
+   cpgreport Reports all CpG rich regions
+   cusp Create a codon usage table
+   freak Residue/base frequency table or plot
+   isochore Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   wobble Wobble base plot
+   wordcount Counts words of a specified size in a DNA sequence
+   
+Author(s)
+
+   This application was written by Richard Bruskiewich
+   (rbsk@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+History
+
+Completed 18th June 1999.
+Last Modified 18th July 1999.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

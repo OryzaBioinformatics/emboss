@@ -1,0 +1,11 @@
+appl: patmattest [
+	doc: "test of pattern matching"
+	groups: "debugging"
+]
+
+  sequence: sequence [ param: Y type: any ]
+
+  string: expression [ param: Y def: "" req: Y minlen: 2
+                       info:"Regular expression to search sequence for." ]
+
+

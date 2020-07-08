@@ -1,0 +1,149 @@
+# DAN dna melt application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+
+# ajb 17th February 1999
+# GWW - 8 May 2000 - some help added
+
+appl: dan [
+	doc: "Calculates DNA RNA/DNA melting temperature"
+	groups: "DNA: sequence properties"
+]
+
+  seqall: sequence [
+	param: Y 
+	type: DNA 
+  ]
+
+  int: windowSize [
+	req: Y 
+	min: 1 
+	max: 100 
+	def:20 
+	info:"Enter window size" 
+	help: "The values of melting point and other thermodynamic
+properties of the sequence are determined by taking a short length of
+sequence known as a window and determining the properties of the
+sequence in that window.  The window is incrementally moved along the
+sequence with the properties being calcualted at each new position."
+  ]
+
+  int: shiftIncrement [
+	req: Y 
+	min: 1 
+	max: $(windowSize) 
+	def: 1
+        info:"Enter Shift Increment"
+        expect: "Window size (20)" 
+	help: "This is the amount by which the window is moved at each
+increment in order to find the melting point and other properties along
+the sequence."
+  ]
+
+  float: dnaConc [
+	req: Y 
+	min: 1. 
+	max: 100000. 
+	def: 50.
+        info:"Enter DNA concentration (nM)"
+  ]
+
+  float: saltConc [
+	req: Y 
+	min: 1. 
+	max: 1000. 
+	def: 50.
+        info:"Enter salt concentration (mM)"
+  ]
+
+  bool: plot [
+	info: "Produce a plot"
+	help: "If this is not specified then the file of output data is
+produced, else a plot of the melting point along the sequence is
+produced."
+  ]
+
+  float: mintemp [
+	req: $(plot) 
+	min: 0. 
+	max: 150. 
+	def: 55.
+	info:"Enter minimum temperature"
+	help: "Enter a minimum value for the temperature scale (y-axis)
+of the plot."
+  ]
+
+  xygraph: graph [
+	req: $(plot)  
+	multi:1
+  ]
+
+
+
+  bool: rna [
+	opt: N 
+	info: "Use RNA data values"
+	help: "This specifies that the sequence is an RNA sequnce and
+not a DNA sequence."
+  ]
+
+  bool: product [
+	opt: N 
+	info: "Prompt for product values"
+	help: "This prompts for percent formamide, percent of mismatches
+allowed and product length."
+  ]
+
+  float: formamide [
+	req: $(product)
+	min: 0. 
+	max: 100. 
+	def: 0.
+        info:"Enter percentage of formamide"
+	help: "This specifies the percent formamide to be used in
+calculations (it is ignored unless -product is used)."
+  ]
+
+  float: mismatch [
+	req: $(product)
+	min: 0.
+	max: 100.
+	def: 0.
+        info:"Enter percent mismatch"
+	help: "This specifies the percent mismatch to be used in
+calculations (it is ignored unless -product is used)."
+  ]
+
+  int:   prodLen [
+	req: $(product)
+	min: $(windowSize)  
+        def: $(windowSize)
+        info:"Enter the product length"
+        expect: "Window size (20)"
+	help: "This specifies the product length to be used in
+calculations (it is ignored unless -product is used)."
+  ]
+
+  bool: thermo [
+	opt: N
+	info: "Thermodynamic calculations"
+	help: "Output the DeltaG, DeltaH and DeltaS values of the
+sequence windows to the output data file."
+  ]
+
+  float: temperature [
+	opt: $(thermo)
+	min: 0.
+	max: 100.
+	def: 25.
+        info:"Enter temperature"
+	help: "If -thermo has been specified then this specifies the
+temperature at which to calculate the DeltaG, DeltaH and DeltaS values."
+  ]
+
+  outfile: outfile [
+	req: @($(plot)!=True)
+	info: "Output data file"
+	help: "If a plot is not being produced then data on the melting
+point etc.  in each window along the sequence is output to the file."
+  ]

@@ -1,0 +1,368 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: checktrans
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: checktrans
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program checktrans
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Reports STOP codons and ORF statistics of a protein sequence
+
+
+<H2>
+    Description
+</H2>
+
+
+Reads in a protein sequence containing stops, and writes a report of any
+open reading frames (continuous protein sequence with no stops) that are
+greater than a minimum size.  The default minimum ORF size is 100
+residues. It writes out any ORF sequences.
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with checktrans, using the output from a transeq run.
+
+<pre>
+
+% transeq embl:paamir paamir.pep -auto
+% checktrans
+Input sequence: paamir.pep
+Minimum ORF Length to report [100]: 30
+Output file [paamir_1.checktrans]: 
+Output sequence [paamir_1.fasta]: 
+
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -orfml              integer    Minimum ORF Length to report
+  [-report]            outfile    Output file name
+   -outseq             seqoutall  Sequence file to hold output ORF sequences
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -featout            featout    File for output features
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-orfml</td>
+<td>Minimum ORF Length to report</td>
+<td>Integer 1 or more</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>[-report]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.checktrans</td>
+</tr>
+
+<tr>
+<td>-outseq</td>
+<td>Sequence file to hold output ORF sequences</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-featout</td>
+<td>File for output features</td>
+<td>Writeable feature table</td>
+<td><i>unknown.gff</i></td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+This program reads the USA of a protein sequence with STOP codons in it.
+
+<H2>
+    Output file format
+</H2>
+
+
+This program writes two files: the ORF report file and the output
+sequence file. 
+
+<p>
+The ORF report file from the above example run is:
+
+<pre>
+
+CHECKTRANS of PAAMIR_1 from 1 to 723
+
+        ORF#    Pos     Len     ORF Range       Sequence name
+
+        1       54      53      1-53    	PAAMIR_1_1
+        3       136     52      84-135  	PAAMIR_1_3
+        4       180     43      137-179 	PAAMIR_1_4
+        6       277     72      205-276 	PAAMIR_1_6
+        7       635     357     278-634 	PAAMIR_1_7
+
+        Total STOPS:     7
+
+</pre>
+
+<p>
+This gives the numeric count of the ORF, the position of the terminating
+STOP codon, the length of the ORF, its start and end positions and the
+name of the sequence it has been written out as. 
+
+<p>
+The name of the output sequences is constructed from the name of the
+input sequence followed by an underscore and then the numeric count of
+the ORF.
+
+<p>
+The output sequence file is:
+
+<pre>
+
+&gt;PAAMIR_1_1
+GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR
+&gt;PAAMIR_1_3
+TARAASAVARSKRCPRTPAATRTAIGCAPRTSFATGGYGSSWAATCRTRARR
+&gt;PAAMIR_1_4
+CRWSSAPTRCSATRPPTRASSIRRTSSTAVRRRTRTVRRWRRT
+&gt;PAAMIR_1_6
+CATCIASTAARCSRKSTFRCIPPTTTCSAPSSASTRRAPTWSSPPWWAPAPPSCIAPSPV
+ATATAGGRRSPA
+&gt;PAAMIR_1_7
+PPARRRWRRWRVTWQRGRWWSRLTSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGR
+PCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR
+SAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRP
+GLAADPHRLFGAPVLAAAGSLRRAGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGV
+RKPRGALADHRAGVPRRDHPAARCPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGP
+DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
+
+</pre>
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+This program always exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="digest.html">digest</a></td><td>Protein proteolytic enzyme or reagent cleavage digest</td></tr>
+<tr><td><a href="iep.html">iep</a></td><td>Calculates the isoelectric point of a protein</td></tr>
+<tr><td><a href="octanol.html">octanol</a></td><td>Displays protein hydropathy</td></tr>
+<tr><td><a href="pepinfo.html">pepinfo</a></td><td>Plots simple amino acid properties in parallel</td></tr>
+<tr><td><a href="pepnet.html">pepnet</a></td><td>Displays proteins as a helical net</td></tr>
+<tr><td><a href="pepstats.html">pepstats</a></td><td>Protein statistics</td></tr>
+<tr><td><a href="pepwheel.html">pepwheel</a></td><td>Shows protein sequences as helices</td></tr>
+<tr><td><a href="pepwindow.html">pepwindow</a></td><td>Displays protein hydropathy</td></tr>
+<tr><td><a href="pepwindowall.html">pepwindowall</a></td><td>Displays protein hydropathy of a set of sequences</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<ul>
+
+<li>
+<a href="transeq.html">transeq</a> : Translate nucleic acid sequences
+
+<li>
+<a href="getorf.html">getorf</a> : Finds and extracts open reading frames (ORFs)
+
+<li>
+<a href="plotorf.html">plotorf</a> : Plot potential open reading frames
+
+<li>
+<a href="showseq.html">showseq</a> : Display a sequence with features, translation etc..
+
+</ul>
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Rodrigo Lopez <a
+href="mailto:rls@ebi.ac.uk">(rls@ebi.ac.uk)</a> European
+Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SD, UK.
+<p>
+It was rewritten by Gary Williams<a
+href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+to output
+the sequence data to a single file in the conventional EMBOSS style. 
+
+<H2>
+    History
+</H2>
+
+
+Completed 24 Feb 2000 - Rodrigo Lopez
+
+<p>
+Rewritten 2 March 2000 - Gary Williams
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,446 @@
+<!--
+Edit this file to replace 'tfm' with the name of the program.
+-->
+
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: tfm
+</H2>
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+
+<!--END OF HEADER-->
+
+
+
+
+
+<H1>
+Program tfm
+</H1>
+<H2>
+    Function
+</H2>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Displays a program's help documentation manual
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+
+        This is what the user looks at to find out if this program will
+        do what he wants. 
+
+        Long description.
+
+        Why it is useful.
+
+        When it should/shouldn't be used.
+
+        Algorithms
+
+        Expanded description.
+
+        eg: Reverse engineers Wheedle's 'talpsgob' program. This does a 
+        splurge of the 5' end of the sequence followed by a durm.
+        The net effect is a 5' end splurt.
+        etc. for as long as is required (several pages is not unreasonable)
+  -->
+
+This program displays the help documentation for an EMBOSS program.
+<P>
+
+The contributors of the EMBOSS programs do attempt to provide an adequate
+description of the programs. This documentation is primarily held as HTML pages
+at
+<A HREF="http://www.hgmp.mrc.ac.uk/Software/EMBOSS/Apps/">http://www.hgmp.mrc.ac.uk/Software/EMBOSS/Apps/</A>
+
+<P>
+The documentation is also available however through the program
+<B>tfm</B> as normal text.
+
+<P>
+<B>tfm</B> is unusual for an EMBOSS program in that it expects to be used
+interactively and so it displays the documentation text a page at a time,
+pausing after every page for the user to proess the <B>SPACE</B> bar on
+their keyboard. (i.e. it uses the UNIX program <B>more</B> to display the
+information). This behaviour can be turned off by using the qualifier
+<b>-nomore</b>.
+
+
+ 
+<P>
+If you have problems understanding the function
+or usage of an EMBOSS program, then you should contact the EMBOSS mailing
+list (emboss@embnet.org).
+
+<P>
+The unusual name of this program comes from the common computing science
+expression: <b>RTFM</B>. This acronym, as you probably already know, stands for
+<B>Read The Fine* Manual</B>; so this is <B>The Fine* Manual</B>.
+<P>
+
+* Insert the expletive of your choice here!
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+
+Here is a sample session with tfm:
+
+<pre>
+
+% tfm wossname
+
+</pre>
+
+
+You will see a page of documentation on the <b>wossname</B> program.
+To see further pages, you should press the <B>SPACE</B> bar on your keyboard.
+To stop seeing the documentation before you get to the end of the text, you
+can press the key <b>q</b> to quit.
+
+<H2>
+    Command line arguments
+</H2>
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-program]           string     Enter the name of an EMBOSS program
+
+   Optional qualifiers:
+   -outfile            outfile    If you enter the name of a file here then
+                                  this program will write the program names
+                                  and brief descriptions into that file.
+   -html               bool       This will format the output for displaying
+                                  as a WWW document.
+   -more               bool       This uses the standard UNIX utility 'more'
+                                  to display the text page-by-page, waiting
+                                  for you to read one screen-full before going
+                                  on to the next page. When you have finished
+                                  reading a page, press the SPACE bar to
+                                  proceed to the next page.
+
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-program]<br>(Parameter 1)</td>
+<td>Enter the name of an EMBOSS program</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>If you enter the name of a file here then this program will write the program names and brief descriptions into that file.</td>
+<td>Output file</td>
+<td>stdout</td>
+</tr>
+
+<tr>
+<td>-html</td>
+<td>This will format the output for displaying as a WWW document.</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-more</td>
+<td>This uses the standard UNIX utility 'more' to display the text page-by-page, waiting for you to read one screen-full before going on to the next page. When you have finished reading a page, press the SPACE bar to proceed to the next page.</td>
+<td>Yes/No</td>
+<td>@(!$(html))</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        Except for sequences which can be described by 'sequence USA',
+        this should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+None.
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats 
+        Except for sequences which can be described by 'sequence USA',
+        this should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+   -->
+
+Text documentation is output.
+<P>
+
+The table of command line arguments can be a bit difficult to read. This is the
+result of changing HTML Web pages to text.
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+        eg:
+        data file format:
+
+	blank lines and comment lines are ignored.
+        comment lines start with '#'
+        There are three columns separated by one or more space or TAB
+	characters for X and Y values of durm, followed by energy
+        all coefficients are given as floating point values
+        An example is:
+
+        # Durm coefficient enery file
+        # X     Y       Energy
+        0.1     0.2     0.331
+        0.2     0.4     0.332
+        0.3     0.6     0.333
+        0.3     0.8     0.334
+
+   -->
+
+The original data for the documentation can be found in:
+<A HREF="http://www.hgmp.mrc.ac.uk/Software/EMBOSS/Apps/">http://www.hgmp.mrc.ac.uk/Software/EMBOSS/Apps/</A>
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+        eg:
+        It doesn't check to see if the sequence is a protein sequence or not.
+   -->
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program.
+        eg:
+
+        "Threshold value greater than 1." - means that the threshold has
+        been set to be greater than 1 but a burgle exception has
+        occurred making this invalid - you should reduce the wobble
+        parameter and try again. 
+
+   -->
+   
+tfm will warn you if you have supplied the name of a program which is not
+documented yet or which doesn't exist in EMBOSS.
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+        eg:
+        "It always exits with status 0"
+   -->
+It always exits with status 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+<!--
+        Who has worked on the program in the past.
+e.g.
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+   -->
+
+This application was written by Gary Williams <a
+href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+<!--
+        What changes have been made.
+   -->
+Written: 4 Aug 2000.
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+<H2>
+    Comments
+</H2>
+
+<!--
+	Any comments, requests etc. that people have about the program
+   -->
+
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,22 @@
+# SEQRET application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+# all files are written by default as single sequences even
+# if the format supports multiple sequences
+
+# pmr 22-apr-98
+
+appl: seqretsplit [
+	doc: "Reads and writes (returns) sequences"
+	groups: "reformatting, sequence display, database: entry extraction"
+]
+
+  seqall: sequence [ param: Y]
+
+  seqoutall: outseq [ param: Y ossingle: Y ]
+
+  bool: firstonly [ info: "Read one sequence and stop" ]

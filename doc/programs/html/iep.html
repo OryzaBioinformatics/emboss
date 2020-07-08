@@ -1,0 +1,344 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: iep
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: iep
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program iep
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Calculates the isoelectric point of a protein
+
+
+<H2>
+    Description
+</H2>
+
+
+This calculates the isoelectric point of a protein from its amino acid
+composition assuming that no electrostatic interactions change the
+propensity for ionization. 
+
+<p>
+The application can make a plot of the ionization curve with respect to
+pH and can write an output file of the data. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with iep.
+
+<pre>
+
+% iep sw:laci_ecoli
+Output file [laci_ecoli.iep]:
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers (* if not always prompted):
+  [-sequencea]         seqall     Sequence database USA
+*  -graph              xygraph    Graph type
+*  -outfile            outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -plot               bool       Plot charge vs pH
+   -[no]report         bool       Write results to a file
+   -step               float      pH step value
+   -amino              integer    Number of N-termini
+   -[no]termini        bool       Include charge at N and C terminus
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequencea]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.iep</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-plot</td>
+<td>Plot charge vs pH</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]report</td>
+<td>Write results to a file</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-step</td>
+<td>pH step value</td>
+<td>Number from 0.010 to 1.000</td>
+<td>.5</td>
+</tr>
+
+<tr>
+<td>-amino</td>
+<td>Number of N-termini</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-[no]termini</td>
+<td>Include charge at N and C terminus</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+Any protein sequence USA.
+
+<H2>
+    Output file format
+</H2>
+
+
+This is the output file from the example:
+
+<pre>
+
+IEP of LACI_ECOLI from 1 to 360
+Isoelectric Point = 6.8820
+
+   pH     Bound    Charge
+  1.00    81.96    37.96
+  1.50    81.89    37.89
+  2.00    81.65    37.65
+  2.50    80.91    36.91
+  3.00    78.79    34.79
+  3.50    73.70    29.70
+  4.00    65.15    21.15
+  4.50    56.73    12.73
+  5.00    51.75     7.75
+  5.50    49.36     5.36
+  6.00    47.63     3.63
+  6.50    45.56     1.56
+  7.00    43.59    -0.41
+  7.50    42.27    -1.73
+  8.00    41.22    -2.78
+  8.50    39.87    -4.13
+  9.00    38.26    -5.74
+  9.50    36.24    -7.76
+ 10.00    33.03   -10.97
+ 10.50    28.46   -15.54
+ 11.00    23.58   -20.42
+ 11.50    19.41   -24.59
+ 12.00    15.19   -28.81
+ 12.50     9.75   -34.25
+ 13.00     4.64   -39.36
+ 13.50     1.75   -42.25
+ 14.00     0.59   -43.41
+
+</pre>
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+    0 if successfull.
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein sequence</td></tr>
+<tr><td><a href="digest.html">digest</a></td><td>Protein proteolytic enzyme or reagent cleavage digest</td></tr>
+<tr><td><a href="octanol.html">octanol</a></td><td>Displays protein hydropathy</td></tr>
+<tr><td><a href="pepinfo.html">pepinfo</a></td><td>Plots simple amino acid properties in parallel</td></tr>
+<tr><td><a href="pepnet.html">pepnet</a></td><td>Displays proteins as a helical net</td></tr>
+<tr><td><a href="pepstats.html">pepstats</a></td><td>Protein statistics</td></tr>
+<tr><td><a href="pepwheel.html">pepwheel</a></td><td>Shows protein sequences as helices</td></tr>
+<tr><td><a href="pepwindow.html">pepwindow</a></td><td>Displays protein hydropathy</td></tr>
+<tr><td><a href="pepwindowall.html">pepwindowall</a></td><td>Displays protein hydropathy of a set of sequences</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+Completed 1st August 1999.
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,141 @@
+
+                              EMBOSS: polydot
+     _________________________________________________________________
+   
+                                Program polydot
+                                       
+Function
+
+   Displays all-against-all dotplots of a set of sequences
+   
+Description
+
+   A dotplot is a graphical representation of the regions of similarity
+   between two sequences.
+   
+   The two sequences are placed on the axes of a rectangular image and
+   (subject to threshold conditions) wherever there is a similarity
+   between the sequences a dot is placed on the image.
+   
+   Where the two sequences have substantial regions of similarity, many
+   dots align to form diagonal lines. It is therefore possible to see at
+   a glance where there are local regions of similarity.
+   
+   polydot compares all sequences in a set of sequences, draws a dotplot
+   for each pair of sequences by marking where words (tuples) of a
+   specified length have an exact match in both sequences and optionally
+   reports all identical matches to feature files.
+   
+Usage
+
+   Here is a sample session with polydot.
+
+% polydot globin.fasta -gtitle="Polydot of globin.fasta"
+
+   click here for result
+   
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequences]         seqset     File containing a sequence alignment
+   -wordsize           integer    Word size
+   -graph              graph      Graph type
+
+   Optional qualifiers:
+   -[no]boxit          bool       Draw a box around each dotplot
+   -dumpfeat           bool       Dump all matches as feature files
+   -format             string     format to Dump out as
+   -ext                string     Extension for feature file
+
+   Advanced qualifiers:
+   -gap                integer    This specifies the size of the gap that is
+                                  used to separate the individual dotplots in
+                                  the display. The size is measured in
+                                  residues, as displayed in the output.
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequences]
+   (Parameter 1) File containing a sequence alignment Readable sequences
+   Required
+   -wordsize Word size Integer 2 or more 6
+   -graph Graph type EMBOSS has a list of known devices, including
+   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
+   EMBOSS_GRAPHICS value, or x11
+   Optional qualifiers Allowed values Default
+   -[no]boxit Draw a box around each dotplot Yes/No Yes
+   -dumpfeat Dump all matches as feature files Yes/No No
+   -format format to Dump out as Any string is accepted gff
+   -ext Extension for feature file Any string is accepted gff
+   Advanced qualifiers Allowed values Default
+   -gap This specifies the size of the gap that is used to separate the
+   individual dotplots in the display. The size is measured in residues,
+   as displayed in the output. Integer 0 or more 10
+   
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+   0 if successfull.
+   
+Known bugs
+
+See also
+
+   Program name Description
+   antigenic Finds antigenic sites in proteins
+   chaos Create a chaos game representation plot for a sequence
+   cpgplot Plot CpG rich areas
+   cpgreport Reports all CpG rich regions
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   einverted Finds DNA inverted repeats
+   equicktandem Finds tandem repeats
+   etandem Looks for tandem repeats in a nucleotide sequence
+   garnier Predicts protein secondary structure
+   helixturnhelix Report nucleic acid binding motifs
+   isochore Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   oddcomp Finds protein sequence regions with a biased composition
+   palindrome Looks for inverted repeats in a nucleotide sequence
+   pepcoil Predicts coiled coil regions
+   pscan Scans proteins using PRINTS
+   redata Search REBASE for enzyme name, references, suppliers etc
+   restrict Finds restriction enzyme cleavage sites
+   seqmatchall Does an all-against-all comparison of a set of sequences
+   showseq Display a sequence with features, translation etc
+   sigcleave Reports protein signal cleavage sites
+   stssearch Searches a DNA database for matches with a set of STS
+   primers
+   supermatcher Finds a match of a large sequence against one or more
+   sequences
+   tfscan Scans DNA sequences for transcription factors
+   tmap Displays membrane spanning regions
+   wordmatch Finds all exact matches of a given size between 2 sequences
+   
+Author(s)
+
+   This application was written by Ian Longden (il@sanger.ac.uk)
+   Informatics Division, The Sanger Centre, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge, CB10 1SA, UK.
+   
+History
+
+Completed 2nd June 1999.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

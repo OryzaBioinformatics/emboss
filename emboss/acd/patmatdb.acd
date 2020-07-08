@@ -1,0 +1,30 @@
+#  PATMATDB - pattern match of Motif / DataBase Application
+#  AJAX COMMAND DEFINTION (ACD) FILE
+
+#  LAST EDITED MARCH 22 1999 SOL
+
+appl: patmatdb [
+	doc: "Search a protein sequence with a motif"
+	groups: "motifs, pattern matching"
+]
+
+seqall: sequence [
+	param: Y
+	type: Protein   
+]
+        
+string: motif [
+	param: Y
+	minlen: 2
+	info: "Protein motif to search for" 
+	help: "Patterns for patmatdb are based on the format of pattern
+used in the PROSITE database.  For example: '[DE](2)HS{P}X(2)PX(2,4)C'
+means two Asps or Glus in any order followed by His, Ser, any residue
+other then Pro, then two of any residue followed by Pro followed by two
+to four of any residue followed by Cys.  The search is case-independent,
+so 'AAA' matches 'aaa'."
+]
+
+outfile: outfile [
+	param: Y
+]

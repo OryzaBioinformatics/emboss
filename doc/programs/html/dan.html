@@ -1,0 +1,524 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: dan
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: dan
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program dan
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Calculates DNA RNA/DNA melting temperature
+
+
+<H2>
+    Description
+</H2>
+
+
+Dan calculates the melting temperature (Tm) and the percent G+C of a
+nucleic acid sequence (optionally plotting them).  For the Melting
+temperature profile, free energy values calculated from nearest neighbor
+thermodynamics are used (Breslauer et al.  Proc.  Natl.  Acad.  Sci. 
+USA 83, 3746-3750 and Baldino et al.  Methods in Enzymol.  168,
+761-777). 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with dan.
+
+<pre>
+
+% dan
+Input sequence: embl:paamir
+Enter window size [20]: 
+Enter Shift Increment [1]: 
+Enter DNA concentration (nM) [50.]: 
+Enter salt concentration (mM) [50.]: 
+Output file [paamir.dan]: 
+
+</pre>
+
+An example of producing a plot of Tm:
+
+<pre>
+
+% dan -plot
+Input sequence(s): embl:paamir
+Enter window size [20]: 
+Enter Shift Increment [1]: 
+Enter DNA concentration (nM) [50.]: 
+Enter salt concentration (mM) [50.]: 
+Enter minimum temperature [55.]: 
+Graph type [x11]: 
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers (* if not always prompted):
+  [-sequence]          seqall     Sequence database USA
+   -windowsize         integer    The values of melting point and other
+                                  thermodynamic properties of the sequence are
+                                  determined by taking a short length of
+                                  sequence known as a window and determining
+                                  the properties of the sequence in that
+                                  window. The window is incrementally moved
+                                  along the sequence with the properties being
+                                  calcualted at each new position.
+   -shiftincrement     integer    This is the amount by which the window is
+                                  moved at each increment in order to find the
+                                  melting point and other properties along
+                                  the sequence.
+   -dnaconc            float      Enter DNA concentration (nM)
+   -saltconc           float      Enter salt concentration (mM)
+*  -mintemp            float      Enter a minimum value for the temperature
+                                  scale (y-axis) of the plot.
+*  -graph              xygraph    Graph type
+*  -formamide          float      This specifies the percent formamide to be
+                                  used in calculations (it is ignored unless
+                                  -product is used).
+*  -mismatch           float      This specifies the percent mismatch to be
+                                  used in calculations (it is ignored unless
+                                  -product is used).
+*  -prodlen            integer    This specifies the product length to be used
+                                  in calculations (it is ignored unless
+                                  -product is used).
+*  -outfile            outfile    If a plot is not being produced then data on
+                                  the melting point etc. in each window along
+                                  the sequence is output to the file.
+
+   Optional qualifiers (* if not always prompted):
+*  -temperature        float      If -thermo has been specified then this
+                                  specifies the temperature at which to
+                                  calculate the DeltaG, DeltaH and DeltaS
+                                  values.
+
+   Advanced qualifiers:
+   -plot               bool       If this is not specified then the file of
+                                  output data is produced, else a plot of the
+                                  melting point along the sequence is
+                                  produced.
+   -rna                bool       This specifies that the sequence is an RNA
+                                  sequnce and not a DNA sequence.
+   -product            bool       This prompts for percent formamide, percent
+                                  of mismatches allowed and product length.
+   -thermo             bool       Output the DeltaG, DeltaH and DeltaS values
+                                  of the sequence windows to the output data
+                                  file.
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-windowsize</td>
+<td>The values of melting point and other thermodynamic properties of the sequence are determined by taking a short length of sequence known as a window and determining the properties of the sequence in that window. The window is incrementally moved along the sequence with the properties being calcualted at each new position.</td>
+<td>Integer from 1 to 100</td>
+<td>20</td>
+</tr>
+
+<tr>
+<td>-shiftincrement</td>
+<td>This is the amount by which the window is moved at each increment in order to find the melting point and other properties along the sequence.</td>
+<td>Integer 1 or more</td>
+<td>Window size (20)</td>
+</tr>
+
+<tr>
+<td>-dnaconc</td>
+<td>Enter DNA concentration (nM)</td>
+<td>Number from 1.000 to 100000.000</td>
+<td>50.</td>
+</tr>
+
+<tr>
+<td>-saltconc</td>
+<td>Enter salt concentration (mM)</td>
+<td>Number from 1.000 to 1000.000</td>
+<td>50.</td>
+</tr>
+
+<tr>
+<td>-mintemp</td>
+<td>Enter a minimum value for the temperature scale (y-axis) of the plot.</td>
+<td>Number from 0.000 to 150.000</td>
+<td>55.</td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr>
+<td>-formamide</td>
+<td>This specifies the percent formamide to be used in calculations (it is ignored unless -product is used).</td>
+<td>Number from 0.000 to 100.000</td>
+<td>0.</td>
+</tr>
+
+<tr>
+<td>-mismatch</td>
+<td>This specifies the percent mismatch to be used in calculations (it is ignored unless -product is used).</td>
+<td>Number from 0.000 to 100.000</td>
+<td>0.</td>
+</tr>
+
+<tr>
+<td>-prodlen</td>
+<td>This specifies the product length to be used in calculations (it is ignored unless -product is used).</td>
+<td>Any integer value</td>
+<td>Window size (20)</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>If a plot is not being produced then data on the melting point etc. in each window along the sequence is output to the file.</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.dan</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-temperature</td>
+<td>If -thermo has been specified then this specifies the temperature at which to calculate the DeltaG, DeltaH and DeltaS values.</td>
+<td>Number from 0.000 to 100.000</td>
+<td>25.</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-plot</td>
+<td>If this is not specified then the file of output data is produced, else a plot of the melting point along the sequence is produced.</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-rna</td>
+<td>This specifies that the sequence is an RNA sequnce and not a DNA sequence.</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-product</td>
+<td>This prompts for percent formamide, percent of mismatches allowed and product length.</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-thermo</td>
+<td>Output the DeltaG, DeltaH and DeltaS values of the sequence windows to the output data file.</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+Any DNA or RNA sequence USA. 
+
+<H2>
+    Output file format
+</H2>
+
+
+If a plot is not being produced, dan reports the sequence of each
+oligomer window, its melting temperature under the specified conditions
+and its GC content. 
+
+<p>
+This is the start of the output file from the example. 
+
+<pre>
+
+DAN of: PAAMIR   from: 1  to: 2167
+
+   1 GGTACCGCTGGCCGAGCATC   20 Tm=64.9 GC%=70.0
+   2 GTACCGCTGGCCGAGCATCT   21 Tm=63.7 GC%=65.0
+   3 TACCGCTGGCCGAGCATCTG   22 Tm=63.7 GC%=65.0
+   4 ACCGCTGGCCGAGCATCTGC   23 Tm=66.9 GC%=70.0
+   5 CCGCTGGCCGAGCATCTGCT   24 Tm=66.7 GC%=70.0
+   6 CGCTGGCCGAGCATCTGCTC   25 Tm=65.5 GC%=70.0
+   7 GCTGGCCGAGCATCTGCTCG   26 Tm=65.5 GC%=70.0
+   8 CTGGCCGAGCATCTGCTCGA   27 Tm=63.7 GC%=65.0
+etc.
+
+</pre>
+
+<p>
+The first non-blank line is the title containing the program name, the
+sequence name and the start and end positions of the sequence to be
+considered. 
+
+<p>
+Subsequent lines contain columns of data for each window into the
+sequence as it is moved along, giving:
+
+<p>
+<ul>
+<li> The start postion of the window
+<li> The sequence of the window
+<li> The end position of the window
+<li> The melting temperature of the window
+<li> The percentage C+G of the window
+</ul>
+
+<p>
+If the qualifier '-product' is used to make the program prompt for
+percent formamide percent of mismatches allowed and product length, then
+the output includes the melting temperature of the specified product:
+
+<pre>
+
+DAN of: PAAMIR   from: 1  to: 2167
+
+   1 GGTACCGCTGGCCGAGCATC   20 Tm=64.9 GC%=70.0 Tm(prod)=54.9
+   2 GTACCGCTGGCCGAGCATCT   21 Tm=63.7 GC%=65.0 Tm(prod)=52.8
+   3 TACCGCTGGCCGAGCATCTG   22 Tm=63.7 GC%=65.0 Tm(prod)=52.8
+   4 ACCGCTGGCCGAGCATCTGC   23 Tm=66.9 GC%=70.0 Tm(prod)=54.9
+   5 CCGCTGGCCGAGCATCTGCT   24 Tm=66.7 GC%=70.0 Tm(prod)=54.9
+   6 CGCTGGCCGAGCATCTGCTC   25 Tm=65.5 GC%=70.0 Tm(prod)=54.9
+   7 GCTGGCCGAGCATCTGCTCG   26 Tm=65.5 GC%=70.0 Tm(prod)=54.9
+   8 CTGGCCGAGCATCTGCTCGA   27 Tm=63.7 GC%=65.0 Tm(prod)=52.8
+etc.
+</pre>
+
+
+<p>
+If the qualifier '-thermo' is givedn then the DeltaG, DeltaH and DeltaS
+of the sequence in the window is also output. 
+
+<H2>
+    Data files
+</H2>
+
+
+The EMBOSS data files "Edna.melt" and "Erna.melt" are used to read in the
+entropy/enthalpy/energy data for DNA and RNA respectively. 
+
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>
+Breslauer, K.J., Frank, R., Blocker, H., and Marky, L.A.  (1986). 
+"Predicting DNA Duplex Stability from the Base Sequence." Proceedings of
+the National Academy of Sciences USA 83, 3746-3750. 
+
+<li>
+Baldino, M., Jr.  (1989).  "High Resolution In Situ Hybridization
+Histochemistry." In Methods in Enzymology, (P.M.  Conn, ed.), 168,
+761-777, Academic Press, San Diego, California, USA. 
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+RNA sequences must be submited to this application with the '-rna'
+qualifier on the command line, otherwise the sequence will be assumed to
+be DNA. 
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+0 if successful. 
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="banana.html">banana</a></td><td>Bending and curvature plot in B-DNA</td></tr>
+<tr><td><a href="complex.html">complex</a></td><td>Find the linguistic complexity in nucleotide sequences</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This program was originally included in EGCG under the names "MELT"
+and "MELTPLOT", written by Rodrigo Lopez.
+
+<p>
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

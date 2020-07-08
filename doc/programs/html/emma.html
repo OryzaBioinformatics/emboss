@@ -1,0 +1,654 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: emma
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: emma
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program emma
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Multiple alignment program - interface to ClustalW program
+
+
+<H2>
+    Description
+</H2>
+
+
+EMMA calculates the multiple alignment of nucleic acid or protein
+sequences according to the method of Thompson, J.D., Higgins, D.G.
+and Gibson, T.J. (1994).
+
+<p>
+
+This is an interface to the ClustalW distribution.
+
+<H2>
+    Usage
+</H2>
+
+
+Here is an example session with emma.
+<pre>
+
+% emma
+Input sequence: globins.fasta
+Output sequence [hbahum.aln]: 
+Output file [hbahum.dnd]: 
+..clustalw17 -infile=5345A -outfile=5345B -align -type=protein ...
+
+
+
+
+ CLUSTAL W (1.74) Multiple Sequence Alignments
+
+
+
+Sequence type explicitly set to Protein
+Sequence format is Pearson
+Sequence 1: hbahum          141 aa
+Sequence 2: hbbhum          146 aa
+Sequence 3: hbghum          146 aa
+Sequence 4: hbhagf          148 aa
+Sequence 5: hbrlam          149 aa
+Sequence 6: mycrhi          151 aa
+Sequence 7: myohum          153 aa
+Start of Pairwise alignments
+Aligning...
+Sequences (1:2) Aligned. Score:  41
+Sequences (1:3) Aligned. Score:  39
+Sequences (1:4) Aligned. Score:  21
+Sequences (1:5) Aligned. Score:  27
+Sequences (1:6) Aligned. Score:  13
+Sequences (1:7) Aligned. Score:  26
+Sequences (2:3) Aligned. Score:  73
+Sequences (2:4) Aligned. Score:  19
+Sequences (2:5) Aligned. Score:  19
+Sequences (2:6) Aligned. Score:  15
+Sequences (2:7) Aligned. Score:  24
+Sequences (3:4) Aligned. Score:  21
+Sequences (3:5) Aligned. Score:  21
+Sequences (3:6) Aligned. Score:  15
+Sequences (3:7) Aligned. Score:  23
+Sequences (4:5) Aligned. Score:  41
+Sequences (4:6) Aligned. Score:  12
+Sequences (4:7) Aligned. Score:  16
+Sequences (5:6) Aligned. Score:  17
+Sequences (5:7) Aligned. Score:  18
+Sequences (6:7) Aligned. Score:  11
+Guide tree        file created:   [5345C]
+Start of Multiple Alignment
+There are 6 groups
+Aligning...
+Group 1: Sequences:   2      Score:883
+Group 2: Sequences:   2      Score:2344
+Group 3: Sequences:   3      Score:934
+Group 4:                     Delayed
+Group 5: Sequences:   5      Score:950
+Group 6:                     Delayed
+Sequence:7     Score:1046
+Sequence:6     Score:986
+Alignment Score 1746
+GCG-Alignment file created      [5345B]
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers (* if not always prompted):
+  [-inseqs]            seqall     Sequence database USA
+  [-outseq]            seqoutset  The sequence alignment output filename
+  [-dendoutfile]       outfile    The dendogram output filename
+*  -dendfile           string     name of old dendrogram file
+*  -pwgapc             float      slow pairwise alignment: gap opening penalty
+*  -pwgapv             float      slow pairwise alignment: gap extension
+                                  penalty
+*  -pwmatrix           select     Select matrix
+*  -pwdnamatrix        select     Select matrix
+*  -pairwisedata       string     Filename of user pairwise matrix
+*  -ktup               integer    fast pairwise alignment: similarity scores:
+                                  K-Tuple size
+*  -gapw               integer    fast pairwise alignment: similarity scores:
+                                  gap penalty
+*  -topdiags           integer    fast pairwise alignment: similarity scores:
+                                  number of diagonals to be considered
+*  -window             integer    fast pairwise alignment: similarity scores:
+                                  diagonal window size
+*  -nopercent          bool       fast pairwise alignment: similarity scores:
+                                  suppresses percentage score
+*  -mamatrix           string     Filename of user multiple alignment matrix
+
+   Optional qualifiers (* if not always prompted):
+   -onlydend           bool       only produce dendrogram file
+*  -dend               bool       select if you want to do alignment using an
+                                  old dendrogram
+   -insist             bool       Insist that the sequence type is changed to
+                                  protein
+   -slowfast           select     Please select one
+*  -matrix             select     Select matrix
+*  -dnamatrix          select     Select matrix
+   -gapc               float      Multiple alignment: gap penalty
+   -gapv               float      Multiple alignment: variable gap penalty
+*  -unweighted         bool       Transitions are unweighted
+   -[no]endgaps        bool       use end gap separation penalty
+   -gapdist            integer    gap separation penalty range
+*  -norgap             bool       no residue specific gaps
+*  -hgapres            string     list of hydrophilic residues
+*  -nohgap             bool       no hydrophilic gaps
+   -maxdiv             integer    cut-off to delay the alignment of the most
+                                  divergent sequences in a data set
+
+   Advanced qualifiers:
+   -tmpprot            bool       Temporary holder for input protein sequence
+                                  type
+   -prot               bool       Protein input sequence
+   -slow               bool       Slow and accurate alignment
+   -displayslow        bool       Prompt for slow alignment options
+   -usermatrix         bool       User defined matrix required
+   -umatrix            bool       User defined matrix (not used)
+   -displayfast        bool       Prompt for fast alignment options
+   -usermamatrix       bool       Prompt for user multiple alignment matrix
+   -umamatrix          bool       User defined multiple alignment matrix
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-inseqs]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>The sequence alignment output filename</td>
+<td>Writeable sequences</td>
+<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr>
+<td>[-dendoutfile]<br>(Parameter 3)</td>
+<td>The dendogram output filename</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.emma</td>
+</tr>
+
+<tr>
+<td>-dendfile</td>
+<td>name of old dendrogram file</td>
+<td>Any string is accepted</td>
+<td>NULL</td>
+</tr>
+
+<tr>
+<td>-pwgapc</td>
+<td>slow pairwise alignment: gap opening penalty</td>
+<td>Number 0.000 or more</td>
+<td>10.0</td>
+</tr>
+
+<tr>
+<td>-pwgapv</td>
+<td>slow pairwise alignment: gap extension penalty</td>
+<td>Number 0.000 or more</td>
+<td>0.1</td>
+</tr>
+
+<tr>
+<td>-pwmatrix</td>
+<td>Select matrix</td>
+<td>blosum<br>pam<br>gonnet<br>id<br>own<br></td>
+<td>blosum</td>
+</tr>
+
+<tr>
+<td>-pwdnamatrix</td>
+<td>Select matrix</td>
+<td>iub<br>clustalw<br>own<br></td>
+<td>iub</td>
+</tr>
+
+<tr>
+<td>-pairwisedata</td>
+<td>Filename of user pairwise matrix</td>
+<td>Any string is accepted</td>
+<td>NULL</td>
+</tr>
+
+<tr>
+<td>-ktup</td>
+<td>fast pairwise alignment: similarity scores: K-Tuple size</td>
+<td>integer from 0 to 4</td>
+<td>1 for protein, 2 for nucleic</td>
+</tr>
+
+<tr>
+<td>-gapw</td>
+<td>fast pairwise alignment: similarity scores: gap penalty</td>
+<td>Positive integer</td>
+<td>3 for protein, 5 for nucleic</td>
+</tr>
+
+<tr>
+<td>-topdiags</td>
+<td>fast pairwise alignment: similarity scores: number of diagonals to be considered</td>
+<td>Positive integer</td>
+<td>5 for protein, 4 for nucleic</td>
+</tr>
+
+<tr>
+<td>-window</td>
+<td>fast pairwise alignment: similarity scores: diagonal window size</td>
+<td>Positive integer</td>
+<td>5 for protein, 4 for nucleic</td>
+</tr>
+
+<tr>
+<td>-nopercent</td>
+<td>fast pairwise alignment: similarity scores: suppresses percentage score</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-mamatrix</td>
+<td>Filename of user multiple alignment matrix</td>
+<td>Any string is accepted</td>
+<td>NULL</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-onlydend</td>
+<td>only produce dendrogram file</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-dend</td>
+<td>select if you want to do alignment using an old dendrogram</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-insist</td>
+<td>Insist that the sequence type is changed to protein</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-slowfast</td>
+<td>Please select one</td>
+<td>slow<br>fast<br></td>
+<td>slow</td>
+</tr>
+
+<tr>
+<td>-matrix</td>
+<td>Select matrix</td>
+<td>blosum<br>pam<br>gonnet<br>id<br>own<br></td>
+<td>blosum</td>
+</tr>
+
+<tr>
+<td>-dnamatrix</td>
+<td>Select matrix</td>
+<td>iub<br>clustalw<br>own<br></td>
+<td>iub</td>
+</tr>
+
+<tr>
+<td>-gapc</td>
+<td>Multiple alignment: gap penalty</td>
+<td>Positive foating point number</td>
+<td>10.0</td>
+</tr>
+
+<tr>
+<td>-gapv</td>
+<td>Multiple alignment: variable gap penalty</td>
+<td>Positive foating point number</td>
+<td>5.0</td>
+</tr>
+
+<tr>
+<td>-unweighted</td>
+<td>Transitions are unweighted</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]endgaps</td>
+<td>use end gap separation penalty</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-gapdist</td>
+<td>gap separation penalty range</td>
+<td>Positive integer</td>
+<td>8</td>
+</tr>
+
+<tr>
+<td>-norgap</td>
+<td>no residue specific gaps</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-hgapres</td>
+<td>list of hydrophilic residues</td>
+<td>Any string is accepted</td>
+<td>GPSNDQEKR</td>
+</tr>
+
+<tr>
+<td>-nohgap</td>
+<td>no hydrophilic gaps</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-maxdiv</td>
+<td>cut-off to delay the alignment of the most divergent sequences in a data set</td>
+<td>Integer from 0 to 100</td>
+<td>30</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-tmpprot</td>
+<td>Temporary holder for input protein sequence type</td>
+<td>Yes/No</td>
+<td>Yes for protein sequences</td>
+</tr>
+
+<tr>
+<td>-prot</td>
+<td>Protein input sequence</td>
+<td>Yes/No</td>
+<td>Yes if -insist was set</td>
+</tr>
+
+<tr>
+<td>-slow</td>
+<td>Slow and accurate alignment</td>
+<td>Yes/No</td>
+<td>Yes unless -slowfast is 'fast'</td>
+</tr>
+
+<tr>
+<td>-displayslow</td>
+<td>Prompt for slow alignment options</td>
+<td>Yes/No</td>
+<td>Yes if -options and -slow are both set</td>
+</tr>
+
+<tr>
+<td>-usermatrix</td>
+<td>User defined matrix required</td>
+<td>Yes/No</td>
+<td>Yes if -pwmatrix is set</td>
+</tr>
+
+<tr>
+<td>-umatrix</td>
+<td>User defined matrix (not used)</td>
+<td>Yes/No</td>
+<td>Yes if -pwdnamatrix is set</td>
+</tr>
+
+<tr>
+<td>-displayfast</td>
+<td>Prompt for fast alignment options</td>
+<td>Yes/No</td>
+<td>Yes if -options is true and -slow is false</td>
+</tr>
+
+<tr>
+<td>-usermamatrix</td>
+<td>Prompt for user multiple alignment matrix</td>
+<td>Yes/No</td>
+<td>True if -matrix was set</td>
+</tr>
+
+<tr>
+<td>-umamatrix</td>
+<td>User defined multiple alignment matrix</td>
+<td>Yes/No</td>
+<td>True if -dnamatrix was set</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+The input is two or more sequences.
+
+<H2>
+    Output file format
+</H2>
+
+
+emma writes the aligned sequences and a dendrogram file showing how
+the sequences were clusterd during the progressive alignments.
+
+<p>
+The clustalw output sequeces are reformatted into EMBOSS output.
+
+<H2>
+    Data files
+</H2>
+
+
+The comparison matrices available for clustalw in carrying out a
+protein sequence alignment are:
+
+<ul>
+<li>blosum
+<li>pam
+<li>gonnet
+<li>id
+<li>user defined
+</ul>
+
+The comparison matrices available for clustalw in carrying out a
+nucleotide sequence alignment are:
+
+<ul>
+<li>iub
+<li>clustalw
+<li>user defined
+</ul>
+
+<H2>
+    Notes
+</H2>
+
+
+This is an interface to the ClustalW application 
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>Thompson, J.D., Higgins, D.G. and Gibson, T.J. (1994)
+"CLUSTAL W: improving the sensitivity of progressive multiple sequence
+alignment through sequence weighting, positions-specific gap penalties
+and weight matrix choice."
+Nucleic Acids Research, 22:4673-4680.
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+<P>
+        Other EMBOSS intefaces to the ClustalW package
+        functions. 
+<ul>
+        <li>clustree
+</ul>
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Mark Faller <a
+href="mailto:mfaller@hgmp.mrc.ac.uk">(mfaller@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+Completed  18 February 1999
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

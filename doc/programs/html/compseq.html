@@ -1,0 +1,471 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: compseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: compseq
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program compseq
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Counts the composition of dimer/trimer/etc words in a sequence
+
+
+<H2>
+    Description
+</H2>
+
+
+This takes a specified length of sequence and counts the number of
+distinct subsequences of that length that there are in the input
+sequence(s).
+
+It can read in the result of a previous compseq analysis and use this
+to set the expected frequencies of the subsequences.
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with compseq.
+
+<pre>
+
+To count the frequencies of dinucleotides in a file:
+
+% compseq  embl:hsfau  2  result3.comp 
+
+To count the frequencies of hexanucleotides, without outputting
+the results of hexanucleotides that do not occur in the sequence:
+
+% compseq  embl:hsfau  6  result6.comp  -nozero
+
+To count the frequencies of trinucleotides in frame 2 of a sequence
+and use a previously prepared compseq output to show the expected
+frequencies:
+
+% compseq  embl:hsfau  3  result3.comp  -frame 2  -in prev.comp
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-word]              integer    This is the size of word (n-mer) to count.
+                                  Thus if you want to count codon frequencies,
+                                  you should enter 3 here.
+  [-outfile]           outfile    This is the results file.
+
+   Optional qualifiers (* if not always prompted):
+   -infile             infile     This is a file previously produced by
+                                  'compseq' that can be used to set the
+                                  expected frequencies of words in this
+                                  analysis.
+                                  The word size in the current run must be the
+                                  same as the one in this results file.
+                                  Obviously, you should use a file produced
+                                  from protein sequences if you are counting
+                                  protein sequence word frequencies, and you
+                                  must use one made from nucleotide
+                                  frequencies if you and analysing a
+                                  nucleotide sequence.
+   -[no]zerocount      bool       You can make the output results file much
+                                  smaller if you do not display the words with
+                                  a zero count.
+   -frame              integer    The normal behaviour of 'compseq' is to
+                                  count the frequencies of all words that
+                                  occur by moving a window of length 'word' up
+                                  by one each time.
+                                  This option allows you to move the window up
+                                  by the length of the word each time,
+                                  skipping over the intervening words.
+                                  You can count only those words that occur in
+                                  a single frame of the word by setting this
+                                  value to a number other than zero.
+                                  If you set it to 1 it will only count the
+                                  words in frame 1, 2 will only count the
+                                  words in frame 2 and so on.
+*  -[no]ignorebz       bool       The amino acid code B represents Asparagine
+                                  or Aspartic acid and the code Z represents
+                                  Glutamine or Glutamic acid.
+                                  These are not commonly used codes and you
+                                  may wish not to count words containing them,
+                                  just noting them in the count of 'Other'
+                                  words.
+*  -reverse            bool       Set this to be false if you do not wish to
+                                  also count words in the reverse complement
+                                  of the sequence.
+
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-word]<br>(Parameter 2)</td>
+<td>This is the size of word (n-mer) to count.
+Thus if you want to count codon frequencies, you should enter 3 here.</td>
+<td>Integer from 1 to 10</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>This is the results file.</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.compseq</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-infile</td>
+<td>This is a file previously produced by 'compseq' that can be used to set the expected frequencies of words in this analysis.
+The word size in the current run must be the same as the one in this results file. Obviously, you should use a file produced from protein sequences if you are counting protein sequence word frequencies, and you must use one made from nucleotide frequencies if you and analysing a nucleotide sequence.</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-[no]zerocount</td>
+<td>You can make the output results file much smaller if you do not display the words with a zero count.</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-frame</td>
+<td>The normal behaviour of 'compseq' is to count the frequencies of all words that occur by moving a window of length 'word' up by one each time.
+This option allows you to move the window up by the length of the word each time, skipping over the intervening words.
+You can count only those words that occur in a single frame of the word by setting this value to a number other than zero.
+If you set it to 1 it will only count the words in frame 1, 2 will only count the words in frame 2 and so on.</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-[no]ignorebz</td>
+<td>The amino acid code B represents Asparagine or Aspartic acid and the code Z represents Glutamine or Glutamic acid.
+These are not commonly used codes and you may wish not to count words containing them, just noting them in the count of 'Other' words.</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-reverse</td>
+<td>Set this to be false if you do not wish to also count words in the reverse complement of the sequence.</td>
+<td>Yes/No</td>
+<td>Yes for nucleic acid, No for protein</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+Normal sequence(s) USA.
+
+<H2>
+    Output file format
+</H2>
+
+
+The output format consists of:
+<p>
+Header information and comments are preceeded by a '#' character
+at the start of the line.
+<p>
+The Word size and the Total count are then given on separate lines,
+<p>
+The headers of the columns of results are preceeded by a '#'
+<p>
+The results columns are: the sub-sequence word, the observed
+frequency, the expected frequency (which will be read from the input
+file if one is given, else it is a simple inverse of the number of words
+of the size specified that can be constructed), the ratio of the
+observed to expected frequency.
+<p>
+After a blank line at the end, the results of 'Other' words is
+given - this is the number of words with a sequence which has
+IUPAC ambiguity codes or other unusual characters in. 
+<p>
+Example:	
+<pre>
+#
+# Output from 'compseq'
+#
+# The Expected frequencies are taken from the file: jjj.composition
+#
+# The input sequences are:
+#       jjj
+
+
+Word size       2
+Total count     196
+
+#
+# Word  Obs Count       Obs Frequency   Exp Frequency   Obs/Exp Frequency
+#
+AA      0               0.0000000       0.0000000       10000000000.0000000
+AC      18              0.0918367       0.0918367       1.0000004
+AG      8               0.0408163       0.0408163       1.0000007
+AT      12              0.0612245       0.0612245       0.9999998
+CA      3               0.0153061       0.0153061       1.0000015
+CC      1               0.0051020       0.0051020       1.0000080
+CG      16              0.0816327       0.0816327       0.9999994
+CT      15              0.0765306       0.0765306       1.0000002
+GA      16              0.0816327       0.0816327       0.9999994
+GC      13              0.0663265       0.0663265       1.0000005
+GG      5               0.0255102       0.0255102       1.0000002
+GT      18              0.0918367       0.0918367       1.0000004
+TA      19              0.0969388       0.0969388       0.9999997
+TC      4               0.0204082       0.0204082       0.9999982
+TG      22              0.1122449       0.1122449       1.0000000
+TT      5               0.0255102       0.0255102       1.0000002
+
+Other   21              0.0255102       0.1071429       0.2380951
+
+</pre>
+
+<H2>
+    Data files
+</H2>
+
+
+The input data file is not required.
+<p>
+The input data file format is exactly the same as the output
+file format. 
+<p>
+It expects to read in a previous output file of this program.
+An error is produced if the word size of the current compseq job
+and that of the output file being read in are different.
+
+<H2>
+    Notes
+</H2>
+
+
+The results are held in an array in memory before being written
+to a file.  For large values of wordsize, you may run out of memory.
+<p>
+You can produce very large output files if you choose large values
+of wordsize.
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<dl>
+<dt>"The word size is too large for the data structure available."
+</dt><dd>You chose a word size that cannot be stored by the program.
+
+<dt>"Insufficient memory - aborting."
+</dt><dd>You do not have enough memory - use a machine with more memory.
+
+<dt>"The word size you are counting (n) is different to the word
+size in the file of expected frequencies (n)."	
+</dt><dd>You chose different word sizes in the run of compseq that produced
+your results file used to display the expected word frequencies
+to the word size used in this run of compseq.
+
+<dt>"The 'Word size' line was not found, instead found:"
+</dt><dd>You appear to be trying to read a corrupted compseq results file
+</dl>
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0 unless one of the above error conditions
+is found
+
+<H2>
+    Known bugs
+</H2>
+
+
+This program can use a large amount of memory is you specify a large
+word size (7 or above).  This may impact the behaviour of other programs
+on your machine. 
+
+<p>
+If you run out of memory, you may see the program crash with a generic
+error message that will be specific to your machine's operating system,
+but will probably be a warning about writing to memory that the program
+does not own (eg "Segmentation fault" on a Solaris machine)
+
+<p>
+This is not a bug, it is a feature of the way this program grabs large
+amounts of memory. 
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="chaos.html">chaos</a></td><td>Create a chaos game representation plot for a sequence</td></tr>
+<tr><td><a href="chips.html">chips</a></td><td>Codon usage statistics</td></tr>
+<tr><td><a href="codcmp.html">codcmp</a></td><td>Codon usage table comparison</td></tr>
+<tr><td><a href="cusp.html">cusp</a></td><td>Create a codon usage table</td></tr>
+<tr><td><a href="freak.html">freak</a></td><td>Residue/base frequency table or plot</td></tr>
+<tr><td><a href="geecee.html">geecee</a></td><td>Calculates the fractional GC content of nucleic acid sequences</td></tr>
+<tr><td><a href="isochore.html">isochore</a></td><td>Plots isochores in large DNA sequences</td></tr>
+<tr><td><a href="newcpgreport.html">newcpgreport</a></td><td>Report CpG rich areas</td></tr>
+<tr><td><a href="newcpgseek.html">newcpgseek</a></td><td>Reports CpG rich regions</td></tr>
+<tr><td><a href="oddcomp.html">oddcomp</a></td><td>Finds protein sequence regions with a biased composition</td></tr>
+<tr><td><a href="wobble.html">wobble</a></td><td>Wobble base plot</td></tr>
+<tr><td><a href="wordcount.html">wordcount</a></td><td>Counts words of a specified size in a DNA sequence</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Gary Williams <a
+href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+Completed 2 March 2000
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

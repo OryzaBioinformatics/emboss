@@ -1,0 +1,217 @@
+
+                              EMBOSS: infoseq
+     _________________________________________________________________
+   
+                                Program infoseq
+                                       
+Function
+
+   Displays some simple information about sequences
+   
+Description
+
+   This is a small utility to list the sequences' USA, name, accession
+   number, type (nucleic or protein), length, percentage C+G, and/or
+   description.
+   
+   Any combination of these types of information can be easily selected
+   or unselected.
+   
+   By default, the output file starts each line with the USA of the
+   sequence being described, so the output file is a list file that can
+   be manually edited and read in by any other EMBOSS program that can
+   read in one or more sequence to be analysed.
+   
+Usage
+
+   Display information on a sequence
+
+% infoseq embl:\*
+
+   Don't display the USA of a sequence
+
+% infoseq embl:paamir -nousa
+
+   Display only the name and length of a sequence
+
+% infoseq embl:paamir -only -name -length
+
+   Display only the description of a sequence
+
+% infoseq embl:paamir -only -desc
+
+   Display the type of a sequence
+
+% infoseq embl:paamir -only -type
+
+   Display information formatted with HTML
+
+% infoseq embl:paamir -html
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+
+   Optional qualifiers:
+   -outfile            outfile    If you enter the name of a file here then
+                                  this program will write the sequence details
+                                  into that file.
+   -html               bool       Format output as an HTML table
+
+   Advanced qualifiers:
+   -only               bool       This is a way of shortening the command line
+                                  if you only want a few things to be
+                                  displayed. Instead of specifying:
+                                  '-nohead -noname -noacc -notype -nopgc
+                                  -nodesc'
+                                  to get only the length output, you can
+                                  specify
+                                  '-only -length'
+   -heading            bool       Display column headings
+   -usa                bool       Display the USA of the sequence
+   -name               bool       Display 'name' column
+   -accession          bool       Display 'accession' column
+   -type               bool       Display 'type' column
+   -length             bool       Display 'length' column
+   -pgc                bool       Display 'percent GC content' column
+   -description        bool       Display 'description' column
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   Optional qualifiers Allowed values Default
+   -outfile If you enter the name of a file here then this program will
+   write the sequence details into that file. Output file stdout
+   -html Format output as an HTML table Yes/No No
+   Advanced qualifiers Allowed values Default
+   -only This is a way of shortening the command line if you only want a
+   few things to be displayed. Instead of specifying: '-nohead -noname
+   -noacc -notype -nopgc -nodesc' to get only the length output, you can
+   specify '-only -length' Yes/No No
+   -heading Display column headings Yes/No @(!$(only))
+   -usa Display the USA of the sequence Yes/No @(!$(only))
+   -name Display 'name' column Yes/No @(!$(only))
+   -accession Display 'accession' column Yes/No @(!$(only))
+   -type Display 'type' column Yes/No @(!$(only))
+   -length Display 'length' column Yes/No @(!$(only))
+   -pgc Display 'percent GC content' column Yes/No @(!$(only))
+   -description Display 'description' column Yes/No @(!$(only))
+   
+Input file format
+
+   Any sequence(s).
+   
+Output file format
+
+   The output is displayed on the screen (stdout) by default. A typical
+   output file is:
+
+# USA             Name        Accession Type Length     Description
+tsw-id:5H1D_FUGRU 5H1D_FUGRU    P79748  P    379        5-HYDROXYTRYPTAMINE 1D
+RECEPTOR (5-HT-1D) (SEROTONIN RECEPTOR).
+tsw-id:ACT1_FUGRU ACT1_FUGRU    P53484  P    375        ACTIN, CYTOPLASMIC 1 (B
+ETA-ACTIN 1).
+tsw-id:ACT2_FUGRU ACT2_FUGRU    P53485  P    375        ACTIN, CYTOPLASMIC 2 (B
+ETA-ACTIN 2).
+tsw-id:ACT3_FUGRU ACT3_FUGRU    P53486  P    375        ACTIN, CYTOPLASMIC 3 (B
+ETA-ACTIN 3).
+tsw-id:ACTC_FUGRU ACTC_FUGRU    P53480  P    377        ACTIN, ALPHA CARDIAC.
+tsw-id:ACTS_FUGRU ACTS_FUGRU    P53481  P    377        ACTIN, ALPHA SKELETAL M
+USCLE 1.
+tsw-id:ACTT_FUGRU ACTT_FUGRU    P53482  P    377        ACTIN, ALPHA SKELETAL M
+USCLE 2.
+tsw-id:ACTX_FUGRU ACTX_FUGRU    P53483  P    376        ACTIN, ALPHA ANOMALOUS.
+tsw-id:ARF3_HUMAN ARF3_HUMAN    P16587  P    180        ADP-RIBOSYLATION FACTOR
+ 3.
+
+   The first non-blank line is the heading. This is followed by one line
+   per sequence containing the following columns of data separated by one
+   of more space or TAB characters:
+     * The USA (Uniform Sequence Address) that EMBOSS can use to read in
+       the sequence.
+     * The name or ID of the sequence. If this is not known then '-' is
+       output.
+     * The accession number. If this is not known then '-' is output.
+     * The type ('N' is nucleic, 'P' is protein).
+     * The sequence length.
+     * The description line of the sequence. This may be blank.
+       
+   If qualifiers to inhibit various columns of information are used, then
+   the remaining columns of information are output in the same order as
+   shown above, so if '-nolength' is used, the order of output is: usa,
+   name, accession, type, description.
+   
+   When the -html qualifier is specified, then the output will be wrapped
+   in HTML tags, ready for inclusion in a Web page. Note that tags such
+   as <HTML> and <BODY> are not output by this program as the table of
+   databases is expected to form only part of the contents of a web page
+   - the rest of the web page must be supplier by the user.
+   
+   The lines of out information are guaranteed not to have trailing
+   white-space at the end.
+   
+Data files
+
+   None.
+   
+Notes
+
+   This program was written to make it easier to get some specific bits
+   of information on a sequence for use in small perl scripts. This Perl
+   code fragment to get the type of a sequence is typical:
+$type = `$PATH_TO_EMBOSS/infoseq $sequence -auto -only -type`;
+chomp $type;
+
+   You may find other uses for it, of course.
+   
+   By default, the output file starts each line with the USA of the
+   sequence being described, so the output file is a list file that can
+   be manually edited and read in by other EMBOSS programs using the
+   list-file specification of '@filename'.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0
+   
+Known bugs
+
+   None noted.
+   
+See also
+
+   Program name Description
+   textsearch Search sequence documentation text. SRS and Entrez are
+   faster!
+   
+     * geecee - Calculates the fractional GC content of a nucleic acid
+       sequence
+       
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Finished.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

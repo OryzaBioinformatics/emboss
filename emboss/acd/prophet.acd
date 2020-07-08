@@ -1,0 +1,43 @@
+# PROPHET application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# AJB 28 June 1999
+
+appl: prophet [
+	doc: "Gapped alignment for profiles"
+	group: "profiles"
+  ]
+
+
+  infile: infile [
+	param: Y
+	prompt: "Profile or matrix file"
+ ]
+
+
+  float: gapopen [
+        req: Y
+        def: 1.0
+        prompt: "Gap opening coefficient"
+  ]
+
+  float: gapextend [
+        req: Y
+        def: 0.1
+        prompt: "Gap extension coefficient"
+  ]
+
+  seqall: sequence [
+	param: Y
+	type: any
+  ]
+
+  outfile: outfile [
+	param: Y
+  ]
+

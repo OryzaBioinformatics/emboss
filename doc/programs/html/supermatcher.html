@@ -1,0 +1,360 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: supermatcher
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: supermatcher
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program supermatcher
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Finds a match of a large sequence against one or more sequences
+
+
+<H2>
+    Description
+</H2>
+
+This is a rough and ready local alignment program for large
+    sequences. The reason it is rough and ready is that wordmatch is
+    used to find all the wordmatches between the first sequence and
+    another sequence. Then by calculating the highest score for a
+    diagonal we can then use this as the centre point for a
+    smith-waterman type calculation of a width given by the user.
+    So a narrow diagonal smith-waterman is calculated hence the
+    results will be rough but due to the space saving much larger
+    sequences can be aligned.   
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with supermatcher.
+
+<pre>
+
+ supermatcher ~/wordtest/U68037 ~/wordtest/AB003171 -noscoreonly
+
+Finds a match of a large sequence against one or more sequences
+Gap opening penalty [10.0]: 
+Gap extension penalty [0.5]: 3.0
+Output file [stdout]: 
+Local: RNU68037 vs EM:AB003171
+Score: 30.00
+
+RNU68037        820   tcaaccacagctgccctccgcagctctcggggag.gcggc.tccg 862  
+                      ||||| ||||   || |  ||||     |||||| ||  | ||| 
+EM:AB003171     2492  tcaactacag.aaccatgtgcag....aggggagagctccatcct 2531 
+
+RNU68037        863   cgcgcagggttcacgcacacga.cgtgg.aaatggtgggccagct 905  
+                       |  ||  ||| | || || || | ||| ||   ||||   |  |
+EM:AB003171     2532  tgaaca..gttaaagc.ca.gagcttggtaacaagtggataaatt 2572 
+
+RNU68037        906   .cgtgggcatcatggtggtgtc.gtg..catctgctggagc     942  
+                       | |    |||||  ||  ||| | |  ||  |||  ||||
+EM:AB003171     2573  acat....atcattttgcggtctgagaacacatgc.agagc      2608 
+
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-seqa]              seqall     Sequence database USA
+  [-seqb]              seqset     Sequence set USA
+   -gapopen            float      Gap opening penalty
+   -gapextend          float      Gap extension penalty
+   -outfile            outfile    Output file name
+
+   Optional qualifiers:
+   -datafile           matrixf    Matrix file
+   -errorfile          outfile    Error file to be written too
+   -showinternals      bool       Show internals
+   -scoreonly          bool       Calculate score only
+   -[no]showalign      bool       Show alignment
+   -width              integer    Alignment width
+   -wordlen            integer    word length for initial matching
+
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-seqa]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-seqb]<br>(Parameter 2)</td>
+<td>Sequence set USA</td>
+<td>Readable sequences</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-gapopen</td>
+<td>Gap opening penalty</td>
+<td>Number from 1.000 to 100.000</td>
+<td>10.0 for any sequence type</td>
+</tr>
+
+<tr>
+<td>-gapextend</td>
+<td>Gap extension penalty</td>
+<td>Number from 0.100 to 10.000</td>
+<td>0.5 for any sequence type</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.supermatcher</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-datafile</td>
+<td>Matrix file</td>
+<td>Comparison matrix file in EMBOSS data path</td>
+<td>EBLOSUM62 for protein<br>EDNAMAT for DNA</td>
+</tr>
+
+<tr>
+<td>-errorfile</td>
+<td>Error file to be written too</td>
+<td>Output file</td>
+<td>supermatcher.error</td>
+</tr>
+
+<tr>
+<td>-showinternals</td>
+<td>Show internals</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-scoreonly</td>
+<td>Calculate score only</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]showalign</td>
+<td>Show alignment</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-width</td>
+<td>Alignment width</td>
+<td>Any integer value</td>
+<td>16</td>
+</tr>
+
+<tr>
+<td>-wordlen</td>
+<td>word length for initial matching</td>
+<td>Integer 3 or more</td>
+<td>6</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<H2>
+    Output file format
+</H2>
+
+    supermatcher.error will contain any errors that occured during the
+    program. This maybe that wordmatch could not find any matches
+    hence no suitable start point is found for the smith-waterman
+    calculation.
+
+
+<H2>
+    Data files
+</H2>
+
+For protein sequences EBLOSUM62 is used for the substitution
+    matrix. For nucleotide sequence, EDNAMAT is used. Others can be specified.
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td></tr>
+<tr><td><a href="polydot.html">polydot</a></td><td>Displays all-against-all dotplots of a set of sequences</td></tr>
+<tr><td><a href="seqmatchall.html">seqmatchall</a></td><td>Does an all-against-all comparison of a set of sequences</td></tr>
+<tr><td><a href="stssearch.html">stssearch</a></td><td>Searches a DNA database for matches with a set of STS primers</td></tr>
+<tr><td><a href="wordmatch.html">wordmatch</a></td><td>Finds all exact matches of a given size between 2 sequences</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Ian Longden <a
+href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,15 @@
+# treetypedisplay application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+
+appl: treetypedisplay [
+	doc: "test of graphics"
+	groups: "debugging"
+]
+
+  graph: graph [ req: Y ]

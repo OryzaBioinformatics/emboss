@@ -1,0 +1,95 @@
+# SEQRET application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# GWW 15 Feb 1999
+
+appl: transeq [
+	doc: "Translate nucleic acid sequences"
+	group: "translation"
+]
+
+  seqall: sequence [
+	param: Y
+	type: nucleotide
+  ]
+
+  seqoutall: outseq [
+	param: Y
+	ext: "pep"
+  ]
+
+  list: frame [
+	opt: Y
+	default: "1"
+	min: 1
+	max: 1
+	header: "Translation frames"
+	values: 
+		"1:1, 
+		2:2, 
+		3:3, 
+		F:Forward three frames, 
+		-1:-1, 
+		-2:-2, 
+		-3:-3, 
+		R:Reverse three frames, 
+		6:All six frames"
+	delim: ","
+	codedelim: ":"
+	prompt: "Frame(s) to translate"
+  ]
+
+  list: table [
+	opt: Y
+	default: "0"
+	min: 1
+	max: 1
+	header: "Genetic codes"
+	values: 
+		"0:Standard;
+		1:Standard (with alternative initiation codons); 
+		2:Vertebrate Mitochondrial;
+		3:Yeast Mitochondrial;
+		4:Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma;
+		5:Invertebrate Mitochondrial;
+		6:Ciliate Macronuclear and Dasycladacean;
+		9:Echinoderm Mitochondrial;
+		10:Euplotid Nuclear;
+		11:Bacterial;
+		12:Alternative Yeast Nuclear;
+		13:Ascidian Mitochondrial;
+		14:Flatworm Mitochondrial; 
+		15:Blepharisma Macronuclear"
+	delim: ";"
+	codedelim: ":"
+	prompt: "Code to use"
+  ]
+
+
+  range: regions [ 
+        opt: Y
+        def: $(sequence.begin)-$(sequence.end)
+	prompt: "Regions to translate (eg: 4-57,78-94)" 
+	help: "Regions to translate. \ If this is left blank, then the
+complete sequence is translated. \ A set of regions is specified by a set
+of pairs of positions. \ The positions are integers. \ They are separated
+by any non-digit, non-alpha character. \ Examples of region
+specifications are: \ 24-45, 56-78 \ 1:45, 67=99;765..888 \
+1,5,8,10,23,45,57,99"
+       expect: "Whole sequence"
+  ]
+
+
+  bool: trim [ 
+        opt: Y
+        def: N
+	prompt: "Trim trailing X's and *'s"
+	help: "This removes all X and * characters from the right end of
+the translation.  The trimming process starts at the end and continues
+until the next character is not a X or a *"
+  ]

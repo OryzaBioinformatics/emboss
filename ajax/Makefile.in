@@ -1,0 +1,593 @@
+# Makefile.in generated automatically by automake 1.4 from Makefile.am
+
+# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# This Makefile.in is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+
+SHELL = @SHELL@
+
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+datadir = @datadir@
+sysconfdir = @sysconfdir@
+sharedstatedir = @sharedstatedir@
+localstatedir = @localstatedir@
+libdir = @libdir@
+infodir = @infodir@
+mandir = @mandir@
+includedir = @includedir@
+oldincludedir = /usr/include
+
+DESTDIR =
+
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
+
+top_builddir = ..
+
+ACLOCAL = @ACLOCAL@
+AUTOCONF = @AUTOCONF@
+AUTOMAKE = @AUTOMAKE@
+AUTOHEADER = @AUTOHEADER@
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+transform = @program_transform_name@
+
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
+host_alias = @host_alias@
+host_triplet = @host@
+AJAX_FIXED_ROOT = @AJAX_FIXED_ROOT@
+AS = @AS@
+AWK = @AWK@
+CC = @CC@
+CPP = @CPP@
+CXX = @CXX@
+DLLTOOL = @DLLTOOL@
+LD = @LD@
+LIBTOOL = @LIBTOOL@
+LN_S = @LN_S@
+MAKEINFO = @MAKEINFO@
+NM = @NM@
+OBJDUMP = @OBJDUMP@
+PACKAGE = @PACKAGE@
+RANLIB = @RANLIB@
+VERSION = @VERSION@
+XLIB = @XLIB@
+
+lib_LTLIBRARIES = libajax.la libajaxg.la
+
+INCLUDES = -DAJAX_FIXED_ROOT=$(AJAX_FIXED_ROOT) -DPREFIX=\"$(prefix)\" -I$(top_srcdir)/plplot
+
+AJAXSRC = ajacd.c ajarr.c ajassert.c ajbase.c ajcall.c ajcod.c ajdan.c ajexcept.c ajfeat.c ajfile.c ajfmt.c ajlist.c ajmath.c ajmatrices.c ajmem.c ajmess.c ajnam.c ajposreg.c ajrange.c ajreg.c ajseq.c ajseqdb.c ajseqread.c ajseqtype.c ajseqwrite.c ajsort.c ajstr.c ajsys.c ajtable.c ajtime.c ajtranslate.c ajutil.c hsp_debug.c hsp_regcomp.c hsp_regerror.c hsp_regexec.c hsp_regfree.c hsp_split.c hsregerror.c hsregexp.c hsregsub.c 
+
+
+AJAXGSRC = ajgraph.c ajhist.c
+
+noinst_HEADERS = ajax.h ajdefine.h ajacd.h ajarr.h ajassert.h ajbase.h ajcall.h ajcod.h ajdan.h ajexcept.h ajfeat.h ajfile.h ajfmt.h ajgraph.h ajgraphstruct.h ajhist.h ajlist.h ajmath.h ajmatrices.h ajmem.h ajmess.h ajnam.h ajposreg.h ajrange.h ajreg.h ajsort.h ajseq.h ajseqdata.h ajseqdb.h ajseqread.h ajseqtype.h ajseqwrite.h ajstr.h ajsys.h ajtable.h ajtime.h ajtranslate.h ajutil.h hsregmagic.h hsregexp.h hsp_cclass.h hsp_cname.h hsp_engine.c hsp_engine.h hsp_regcomp.h hsp_regerror.h hsp_regex.h hsp_regex2.h hsp_utils.h 
+
+
+libajax_la_SOURCES = $(AJAXSRC)
+libajax_la_LDFLAGS = -version-info 1:0:1
+libajaxg_la_SOURCES = $(AJAXGSRC)
+libajaxg_la_LDFLAGS = -version-info 1:0:1
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_CLEAN_FILES = 
+LTLIBRARIES =  $(lib_LTLIBRARIES)
+
+
+DEFS = @DEFS@ -I. -I$(srcdir) 
+CPPFLAGS = @CPPFLAGS@
+LDFLAGS = @LDFLAGS@
+LIBS = @LIBS@
+X_CFLAGS = @X_CFLAGS@
+X_LIBS = @X_LIBS@
+X_EXTRA_LIBS = @X_EXTRA_LIBS@
+X_PRE_LIBS = @X_PRE_LIBS@
+libajax_la_LIBADD = 
+libajax_la_OBJECTS =  ajacd.lo ajarr.lo ajassert.lo ajbase.lo ajcall.lo \
+ajcod.lo ajdan.lo ajexcept.lo ajfeat.lo ajfile.lo ajfmt.lo ajlist.lo \
+ajmath.lo ajmatrices.lo ajmem.lo ajmess.lo ajnam.lo ajposreg.lo \
+ajrange.lo ajreg.lo ajseq.lo ajseqdb.lo ajseqread.lo ajseqtype.lo \
+ajseqwrite.lo ajsort.lo ajstr.lo ajsys.lo ajtable.lo ajtime.lo \
+ajtranslate.lo ajutil.lo hsp_debug.lo hsp_regcomp.lo hsp_regerror.lo \
+hsp_regexec.lo hsp_regfree.lo hsp_split.lo hsregerror.lo hsregexp.lo \
+hsregsub.lo
+libajaxg_la_LIBADD = 
+libajaxg_la_OBJECTS =  ajgraph.lo ajhist.lo
+CFLAGS = @CFLAGS@
+COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+HEADERS =  $(noinst_HEADERS)
+
+DIST_COMMON =  COPYING Makefile.am Makefile.in
+
+
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
+
+TAR = tar
+GZIP_ENV = --best
+SOURCES = $(libajax_la_SOURCES) $(libajaxg_la_SOURCES)
+OBJECTS = $(libajax_la_OBJECTS) $(libajaxg_la_OBJECTS)
+
+all: all-redirect
+.SUFFIXES:
+.SUFFIXES: .S .c .lo .o .s
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps ajax/Makefile
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+
+mostlyclean-libLTLIBRARIES:
+
+clean-libLTLIBRARIES:
+	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+
+distclean-libLTLIBRARIES:
+
+maintainer-clean-libLTLIBRARIES:
+
+install-libLTLIBRARIES: $(lib_LTLIBRARIES)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(libdir)
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    echo "$(LIBTOOL)  --mode=install $(INSTALL) $$p $(DESTDIR)$(libdir)/$$p"; \
+	    $(LIBTOOL)  --mode=install $(INSTALL) $$p $(DESTDIR)$(libdir)/$$p; \
+	  else :; fi; \
+	done
+
+uninstall-libLTLIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  $(LIBTOOL)  --mode=uninstall rm -f $(DESTDIR)$(libdir)/$$p; \
+	done
+
+.c.o:
+	$(COMPILE) -c $<
+
+.s.o:
+	$(COMPILE) -c $<
+
+.S.o:
+	$(COMPILE) -c $<
+
+mostlyclean-compile:
+	-rm -f *.o core *.core
+
+clean-compile:
+
+distclean-compile:
+	-rm -f *.tab.c
+
+maintainer-clean-compile:
+
+.c.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+.s.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+.S.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+mostlyclean-libtool:
+	-rm -f *.lo
+
+clean-libtool:
+	-rm -rf .libs _libs
+
+distclean-libtool:
+
+maintainer-clean-libtool:
+
+libajax.la: $(libajax_la_OBJECTS) $(libajax_la_DEPENDENCIES)
+	$(LINK) -rpath $(libdir) $(libajax_la_LDFLAGS) $(libajax_la_OBJECTS) $(libajax_la_LIBADD) $(LIBS)
+
+libajaxg.la: $(libajaxg_la_OBJECTS) $(libajaxg_la_DEPENDENCIES)
+	$(LINK) -rpath $(libdir) $(libajaxg_la_LDFLAGS) $(libajaxg_la_OBJECTS) $(libajaxg_la_LIBADD) $(LIBS)
+
+tags: TAGS
+
+ID: $(HEADERS) $(SOURCES) $(LISP)
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	here=`pwd` && cd $(srcdir) \
+	  && mkid -f$$here/ID $$unique $(LISP)
+
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
+	tags=; \
+	here=`pwd`; \
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
+	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
+
+mostlyclean-tags:
+
+clean-tags:
+
+distclean-tags:
+	-rm -f TAGS ID
+
+maintainer-clean-tags:
+
+distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+
+subdir = ajax
+
+distdir: $(DISTFILES)
+	@for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  if test -d $$d/$$file; then \
+	    cp -pr $$/$$file $(distdir)/$$file; \
+	  else \
+	    test -f $(distdir)/$$file \
+	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	  fi; \
+	done
+ajacd.lo ajacd.o : ajacd.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajarr.lo ajarr.o : ajarr.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajassert.lo ajassert.o : ajassert.c ajassert.h ajexcept.h
+ajbase.lo ajbase.o : ajbase.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajcall.lo ajcall.o : ajcall.c ajcall.h ajax.h ajassert.h ajexcept.h \
+	ajdefine.h ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h \
+	ajfeat.h ajmem.h ajreg.h hsregexp.h hsregmagic.h ajfmt.h \
+	ajseq.h ajseqdata.h ajseqtype.h ajseqread.h ajseqwrite.h \
+	ajseqdb.h ajmatrices.h ajrange.h ajcod.h ajmath.h ajutil.h \
+	ajnam.h ajmess.h ajposreg.h hsp_regex.h ajtranslate.h ajsys.h \
+	ajbase.h ajdan.h ajsort.h ajarr.h ajgraphstruct.h ajacd.h \
+	ajgraph.h ../plplot/plplot.h
+ajcod.lo ajcod.o : ajcod.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajdan.lo ajdan.o : ajdan.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajexcept.lo ajexcept.o : ajexcept.c ajax.h ajassert.h ajexcept.h \
+	ajdefine.h ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h \
+	ajfeat.h ajmem.h ajreg.h hsregexp.h hsregmagic.h ajfmt.h \
+	ajseq.h ajseqdata.h ajseqtype.h ajseqread.h ajseqwrite.h \
+	ajseqdb.h ajmatrices.h ajrange.h ajcod.h ajmath.h ajutil.h \
+	ajnam.h ajmess.h ajposreg.h hsp_regex.h ajtranslate.h ajsys.h \
+	ajbase.h ajdan.h ajsort.h ajarr.h ajgraphstruct.h ajacd.h \
+	ajcall.h
+ajfeat.lo ajfeat.o : ajfeat.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajfile.lo ajfile.o : ajfile.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajfmt.lo ajfmt.o : ajfmt.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajgraph.lo ajgraph.o : ajgraph.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h ajgraph.h \
+	../plplot/plplot.h
+ajhist.lo ajhist.o : ajhist.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h ajgraph.h \
+	../plplot/plplot.h ajhist.h
+ajlist.lo ajlist.o : ajlist.c ajstr.h ajdefine.h ajtable.h ajassert.h \
+	ajexcept.h ajmem.h ajlist.h ajmess.h
+ajmath.lo ajmath.o : ajmath.c ajmath.h ajax.h ajassert.h ajexcept.h \
+	ajdefine.h ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h \
+	ajfeat.h ajmem.h ajreg.h hsregexp.h hsregmagic.h ajfmt.h \
+	ajseq.h ajseqdata.h ajseqtype.h ajseqread.h ajseqwrite.h \
+	ajseqdb.h ajmatrices.h ajrange.h ajcod.h ajutil.h ajnam.h \
+	ajmess.h ajposreg.h hsp_regex.h ajtranslate.h ajsys.h ajbase.h \
+	ajdan.h ajsort.h ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajmatrices.lo ajmatrices.o : ajmatrices.c ajax.h ajassert.h ajexcept.h \
+	ajdefine.h ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h \
+	ajfeat.h ajmem.h ajreg.h hsregexp.h hsregmagic.h ajfmt.h \
+	ajseq.h ajseqdata.h ajseqtype.h ajseqread.h ajseqwrite.h \
+	ajseqdb.h ajmatrices.h ajrange.h ajcod.h ajmath.h ajutil.h \
+	ajnam.h ajmess.h ajposreg.h hsp_regex.h ajtranslate.h ajsys.h \
+	ajbase.h ajdan.h ajsort.h ajarr.h ajgraphstruct.h ajacd.h \
+	ajcall.h
+ajmem.lo ajmem.o : ajmem.c ajdefine.h ajassert.h ajexcept.h ajmem.h
+ajmess.lo ajmess.o : ajmess.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajnam.lo ajnam.o : ajnam.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajposreg.lo ajposreg.o : ajposreg.c ajax.h ajassert.h ajexcept.h \
+	ajdefine.h ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h \
+	ajfeat.h ajmem.h ajreg.h hsregexp.h hsregmagic.h ajfmt.h \
+	ajseq.h ajseqdata.h ajseqtype.h ajseqread.h ajseqwrite.h \
+	ajseqdb.h ajmatrices.h ajrange.h ajcod.h ajmath.h ajutil.h \
+	ajnam.h ajmess.h ajposreg.h hsp_regex.h ajtranslate.h ajsys.h \
+	ajbase.h ajdan.h ajsort.h ajarr.h ajgraphstruct.h ajacd.h \
+	ajcall.h
+ajrange.lo ajrange.o : ajrange.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajreg.lo ajreg.o : ajreg.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajseq.lo ajseq.o : ajseq.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajseqdb.lo ajseqdb.o : ajseqdb.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajseqread.lo ajseqread.o : ajseqread.c ajax.h ajassert.h ajexcept.h \
+	ajdefine.h ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h \
+	ajfeat.h ajmem.h ajreg.h hsregexp.h hsregmagic.h ajfmt.h \
+	ajseq.h ajseqdata.h ajseqtype.h ajseqread.h ajseqwrite.h \
+	ajseqdb.h ajmatrices.h ajrange.h ajcod.h ajmath.h ajutil.h \
+	ajnam.h ajmess.h ajposreg.h hsp_regex.h ajtranslate.h ajsys.h \
+	ajbase.h ajdan.h ajsort.h ajarr.h ajgraphstruct.h ajacd.h \
+	ajcall.h
+ajseqtype.lo ajseqtype.o : ajseqtype.c ajax.h ajassert.h ajexcept.h \
+	ajdefine.h ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h \
+	ajfeat.h ajmem.h ajreg.h hsregexp.h hsregmagic.h ajfmt.h \
+	ajseq.h ajseqdata.h ajseqtype.h ajseqread.h ajseqwrite.h \
+	ajseqdb.h ajmatrices.h ajrange.h ajcod.h ajmath.h ajutil.h \
+	ajnam.h ajmess.h ajposreg.h hsp_regex.h ajtranslate.h ajsys.h \
+	ajbase.h ajdan.h ajsort.h ajarr.h ajgraphstruct.h ajacd.h \
+	ajcall.h
+ajseqwrite.lo ajseqwrite.o : ajseqwrite.c ajax.h ajassert.h ajexcept.h \
+	ajdefine.h ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h \
+	ajfeat.h ajmem.h ajreg.h hsregexp.h hsregmagic.h ajfmt.h \
+	ajseq.h ajseqdata.h ajseqtype.h ajseqread.h ajseqwrite.h \
+	ajseqdb.h ajmatrices.h ajrange.h ajcod.h ajmath.h ajutil.h \
+	ajnam.h ajmess.h ajposreg.h hsp_regex.h ajtranslate.h ajsys.h \
+	ajbase.h ajdan.h ajsort.h ajarr.h ajgraphstruct.h ajacd.h \
+	ajcall.h
+ajsort.lo ajsort.o : ajsort.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajstr.lo ajstr.o : ajstr.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajsys.lo ajsys.o : ajsys.c ajsys.h ajax.h ajassert.h ajexcept.h \
+	ajdefine.h ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h \
+	ajfeat.h ajmem.h ajreg.h hsregexp.h hsregmagic.h ajfmt.h \
+	ajseq.h ajseqdata.h ajseqtype.h ajseqread.h ajseqwrite.h \
+	ajseqdb.h ajmatrices.h ajrange.h ajcod.h ajmath.h ajutil.h \
+	ajnam.h ajmess.h ajposreg.h hsp_regex.h ajtranslate.h ajbase.h \
+	ajdan.h ajsort.h ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajtable.lo ajtable.o : ajtable.c ajmem.h ajexcept.h ajassert.h ajtable.h \
+	ajstr.h ajdefine.h ajmess.h
+ajtime.lo ajtime.o : ajtime.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+ajtranslate.lo ajtranslate.o : ajtranslate.c ajax.h ajassert.h \
+	ajexcept.h ajdefine.h ajtime.h ajstr.h ajtable.h ajfile.h \
+	ajlist.h ajfeat.h ajmem.h ajreg.h hsregexp.h hsregmagic.h \
+	ajfmt.h ajseq.h ajseqdata.h ajseqtype.h ajseqread.h \
+	ajseqwrite.h ajseqdb.h ajmatrices.h ajrange.h ajcod.h ajmath.h \
+	ajutil.h ajnam.h ajmess.h ajposreg.h hsp_regex.h ajtranslate.h \
+	ajsys.h ajbase.h ajdan.h ajsort.h ajarr.h ajgraphstruct.h \
+	ajacd.h ajcall.h
+ajutil.lo ajutil.o : ajutil.c ajax.h ajassert.h ajexcept.h ajdefine.h \
+	ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajmem.h \
+	ajreg.h hsregexp.h hsregmagic.h ajfmt.h ajseq.h ajseqdata.h \
+	ajseqtype.h ajseqread.h ajseqwrite.h ajseqdb.h ajmatrices.h \
+	ajrange.h ajcod.h ajmath.h ajutil.h ajnam.h ajmess.h ajposreg.h \
+	hsp_regex.h ajtranslate.h ajsys.h ajbase.h ajdan.h ajsort.h \
+	ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+hsp_debug.lo hsp_debug.o : hsp_debug.c hsp_regex.h hsp_utils.h \
+	hsp_regex2.h
+hsp_regcomp.lo hsp_regcomp.o : hsp_regcomp.c hsp_regex.h hsp_utils.h \
+	hsp_regex2.h hsp_cclass.h hsp_cname.h
+hsp_regerror.lo hsp_regerror.o : hsp_regerror.c hsp_regex.h hsp_utils.h
+hsp_regexec.lo hsp_regexec.o : hsp_regexec.c hsp_regex.h hsp_utils.h \
+	hsp_regex2.h hsp_engine.c hsp_engine.h
+hsp_regfree.lo hsp_regfree.o : hsp_regfree.c hsp_regex.h hsp_utils.h \
+	hsp_regex2.h
+hsp_split.lo hsp_split.o : hsp_split.c
+hsregerror.lo hsregerror.o : hsregerror.c ajax.h ajassert.h ajexcept.h \
+	ajdefine.h ajtime.h ajstr.h ajtable.h ajfile.h ajlist.h \
+	ajfeat.h ajmem.h ajreg.h hsregexp.h hsregmagic.h ajfmt.h \
+	ajseq.h ajseqdata.h ajseqtype.h ajseqread.h ajseqwrite.h \
+	ajseqdb.h ajmatrices.h ajrange.h ajcod.h ajmath.h ajutil.h \
+	ajnam.h ajmess.h ajposreg.h hsp_regex.h ajtranslate.h ajsys.h \
+	ajbase.h ajdan.h ajsort.h ajarr.h ajgraphstruct.h ajacd.h \
+	ajcall.h
+hsregexp.lo hsregexp.o : hsregexp.c hsregexp.h hsregmagic.h ajmem.h \
+	ajexcept.h ajsys.h ajax.h ajassert.h ajdefine.h ajtime.h \
+	ajstr.h ajtable.h ajfile.h ajlist.h ajfeat.h ajreg.h ajfmt.h \
+	ajseq.h ajseqdata.h ajseqtype.h ajseqread.h ajseqwrite.h \
+	ajseqdb.h ajmatrices.h ajrange.h ajcod.h ajmath.h ajutil.h \
+	ajnam.h ajmess.h ajposreg.h hsp_regex.h ajtranslate.h ajbase.h \
+	ajdan.h ajsort.h ajarr.h ajgraphstruct.h ajacd.h ajcall.h
+hsregsub.lo hsregsub.o : hsregsub.c hsregexp.h hsregmagic.h
+
+info-am:
+info: info-am
+dvi-am:
+dvi: dvi-am
+check-am: all-am
+check: check-am
+installcheck-am:
+installcheck: installcheck-am
+install-exec-am: install-libLTLIBRARIES
+install-exec: install-exec-am
+
+install-data-am:
+install-data: install-data-am
+
+install-am: all-am
+	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+install: install-am
+uninstall-am: uninstall-libLTLIBRARIES
+uninstall: uninstall-am
+all-am: Makefile $(LTLIBRARIES) $(HEADERS)
+all-redirect: all-am
+install-strip:
+	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
+installdirs:
+	$(mkinstalldirs)  $(DESTDIR)$(libdir)
+
+
+mostlyclean-generic:
+
+clean-generic:
+
+distclean-generic:
+	-rm -f Makefile $(CONFIG_CLEAN_FILES)
+	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+
+maintainer-clean-generic:
+mostlyclean-am:  mostlyclean-libLTLIBRARIES mostlyclean-compile \
+		mostlyclean-libtool mostlyclean-tags \
+		mostlyclean-generic
+
+mostlyclean: mostlyclean-am
+
+clean-am:  clean-libLTLIBRARIES clean-compile clean-libtool clean-tags \
+		clean-generic mostlyclean-am
+
+clean: clean-am
+
+distclean-am:  distclean-libLTLIBRARIES distclean-compile \
+		distclean-libtool distclean-tags distclean-generic \
+		clean-am
+	-rm -f libtool
+
+distclean: distclean-am
+
+maintainer-clean-am:  maintainer-clean-libLTLIBRARIES \
+		maintainer-clean-compile maintainer-clean-libtool \
+		maintainer-clean-tags maintainer-clean-generic \
+		distclean-am
+	@echo "This command is intended for maintainers to use;"
+	@echo "it deletes files that may require special tools to rebuild."
+
+maintainer-clean: maintainer-clean-am
+
+.PHONY: mostlyclean-libLTLIBRARIES distclean-libLTLIBRARIES \
+clean-libLTLIBRARIES maintainer-clean-libLTLIBRARIES \
+uninstall-libLTLIBRARIES install-libLTLIBRARIES mostlyclean-compile \
+distclean-compile clean-compile maintainer-clean-compile \
+mostlyclean-libtool distclean-libtool clean-libtool \
+maintainer-clean-libtool tags mostlyclean-tags distclean-tags \
+clean-tags maintainer-clean-tags distdir info-am info dvi-am dvi check \
+check-am installcheck-am installcheck install-exec-am install-exec \
+install-data-am install-data install-am install uninstall-am uninstall \
+all-redirect all-am all installdirs mostlyclean-generic \
+distclean-generic clean-generic maintainer-clean-generic clean \
+mostlyclean distclean maintainer-clean
+
+
+# Tell versions [3.59,3.63) of GNU make to not export all variables.
+# Otherwise a system limit (for SysV at least) may be exceeded.
+.NOEXPORT:

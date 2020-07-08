@@ -1,0 +1,140 @@
+
+                               EMBOSS: water
+     _________________________________________________________________
+   
+                                 Program water
+                                       
+Function
+
+   Smith-Waterman local alignment
+   
+Description
+
+   Uses the smith-waterman algorithm (modified for speed enhancments) to
+   calculate the local alignment.
+   
+Usage
+
+   Here is a sample session with water.
+
+% water sw:hba_human sw:hbb_human
+Gap opening penalty [10.0]:
+Gap extension penalty [0.5]:
+Output file [hba_human.water]:
+
+% more hba_human.water
+
+Local: HBA_HUMAN vs HBB_HUMAN
+Score: 293.50
+
+HBA_HUMAN       2     LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF 46
+                      |:| :|: | | ||||  :  | | ||| |: : :| |: :|  |
+HBB_HUMAN       3     LTPEEKSAVTALWGKV..NVDEVGGEALGRLLVVYPWTQRFFESF 45
+
+HBA_HUMAN       47    .DLS.....HGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSD 85
+                       |||      |: :|| |||||  | :: :||:|::    : ||:
+HBB_HUMAN       46    GDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSE 90
+
+HBA_HUMAN       86    LHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLA 130
+                      ||  || ||| ||:|| : |:  || |   |||| | |:  | :|
+HBB_HUMAN       91    LHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVA 135
+
+HBA_HUMAN       131   SVSTVLTSKY                                    140
+                       |:  |  ||
+HBB_HUMAN       136   GVANALAHKY                                    145
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequencea]         sequence   Sequence USA
+  [-seqall]            seqall     Sequence database USA
+   -gapopen            float      Gap opening penalty
+   -gapextend          float      Gap extension penalty
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers:
+   -datafile           matrixf    Matrix file
+   -showinternals      bool       Show internals
+
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequencea]
+   (Parameter 1) Sequence USA Readable sequence Required
+   [-seqall]
+   (Parameter 2) Sequence database USA Readable sequence(s) Required
+   -gapopen Gap opening penalty Number from 1.000 to 100.000 10.0 for any
+   sequence
+   -gapextend Gap extension penalty Number from 0.100 to 10.000 0.5 for
+   any sequence
+   [-outfile]
+   (Parameter 3) Output file name Output file <sequence>.water
+   Optional qualifiers Allowed values Default
+   -datafile Matrix file Comparison matrix file in EMBOSS data path
+   EBLOSUM62 for protein
+   EDNAMAT for DNA
+   -showinternals Show internals Yes/No No
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   Any two sequence USAs of the same type (DNA or protein).
+   
+Output file format
+
+Data files
+
+   For protein sequences EBLOSUM62 is used for the substitution matrix.
+   For nucleotide sequence, EDNAMAT is used. Others can be specified.
+   
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by EMBOSS
+   environment variable EMBOSS_DATA.
+   
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+   
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+       
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+   0 if successfull.
+   
+Known bugs
+
+See also
+
+   Program name Description
+   matcher Finds the best local alignments between two sequences
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+Completed 7th July 1999.
+Last modified 27th July 1999.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

@@ -1,0 +1,40 @@
+appl: dbiflat [ group: "database: indexing" doc: "Index a flat file database" ]
+
+bool: staden [ prompt: "Use staden index file names" ]
+
+list: idformat [ req: y 
+   prompt: "Entry format"
+   value: "EMBL:EMBL;
+           SWISS:Swiss-Prot, SpTrEMBL, TrEMBLnew;
+           GB:Genbank, DDBJ;"
+   max: 1 min: 1
+   def: "SWISS"
+  ]
+
+
+string: dbname [ param: Y max: 19 min: 1 prompt: "Database name" ]
+
+var: dbknown "@(is: $(dbname))"
+
+string: directory [ req: "$(dbknown)" def: "." prompt: "Database directory" ]
+
+string: filenames [ req: "$(dbknown)" def: "*.dat"
+       prompt: "Wildcard database filename" ]
+
+string: exclude [ 
+       prompt: "wildcard filename(s) to exclude" ]
+
+string: indexdirectory [ def: "." prompt: "Index directory" ]
+
+string: sortoptions [ def: "-T . -k 1,1" prompt: "Sort option(s)"
+      help "Sort options, typically '-T .' to use current directory for
+      work files and '-k 1,1' to force GNU sort to use the first field" ]
+
+string: release [ req: Y def: "0.0" max: 9 prompt: "Release number" ]
+
+string: date [ req: Y def: "00/00/00" valid: "Date string dd/mm/yy"
+        prompt: "Index date" pattern: "^([0-9]+.[0-9]+.[0-9]+)?$" ]
+
+bool: systemsort [def: Y info: "Use system sort utility" ]
+
+bool: cleanup [def: Y info: "Clean up temporary files" ]

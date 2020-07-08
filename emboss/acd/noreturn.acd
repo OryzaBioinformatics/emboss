@@ -1,0 +1,8 @@
+appl: noreturn [
+        doc: "Removes carriage return from ASCII files"
+        groups: "sequence editing"
+]
+
+  infile:  infile  [ param: Y ]
+
+  outfile: outfile [ param: Y ]

@@ -1,0 +1,20 @@
+appl: tmap [
+        doc: "Displays membrane spanning regions"
+        groups: "protein: sequence features"
+]
+
+        seqset: msf [ 
+        param: Y
+	type: gapprotein
+        prompt: "Sequences file to be read in"
+        help: "File containing a sequence alignment"
+        ]
+
+
+        xygraph: graph [ req: y  
+		        multi:2 
+			gxtitle: "Residue number"  
+			goutfile: "tmap" ]
+        
+
+	outfile: outfile [ opt: Y def: "tmap.res" ]

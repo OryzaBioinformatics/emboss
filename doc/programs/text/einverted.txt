@@ -1,0 +1,155 @@
+
+                             EMBOSS: einverted
+     _________________________________________________________________
+   
+                               Program einverted
+                                       
+Function
+
+   Finds DNA inverted repeats
+   
+Description
+
+   This looks for inverted repeats (stem loops) in a nucleotide sequence.
+   
+   It will find inverted repeats that include a proprtion of mismatches
+   and gaps (bulges in the stem loop).
+   
+   It works by finding alignments between the sequence and its reverse
+   complement that exceed a threshold score. The score is calculated by
+   summing the values of each match, the penalties of each mismatch and
+   the large penalties of any gaps.
+   
+   Secondary structures like inverted repeats in genomic sequences may be
+   implicated in initiation of DNA replication.
+   
+Usage
+
+   Here is a sample session with einverted.
+
+% einverted
+Input sequence: embl:hsts1
+Output file [hsts1.inv]:
+Gap penalty [12]:
+Minimum score threshold [50]:
+Match score [3]:
+Mismatch score [-4]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-outfile]           outfile    Output file name
+   -gap                integer    Gap penalty
+   -threshold          integer    Minimum score threshold
+   -match              integer    Match score
+   -mismatch           integer    Mismatch score
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence USA Readable sequence Required
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.einverted
+   -gap Gap penalty Any integer value 12
+   -threshold Minimum score threshold Any integer value 50
+   -match Match score Any integer value 3
+   -mismatch Mismatch score Any integer value -4
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   The input for einverted is a nucleotide sequence
+   
+Output file format
+
+   Here is the output form the example run. The first two hits are
+   removed to avoid the output lines being too wide.
+
+......................
+
+Score 80: 44/51 ( 86%) matches, 2 gaps
+   12246 ctcctgcctcag-cctccaagtagctgggattaca-gcatgtgccaccatgcc 12296
+         |||||| ||||| | |||||   |||||||||||| ||||| |||||||| ||
+   13938 gaggacagagtcagaaggtttcacgaccctaatgtccgtactcggtggtatgg 13886
+
+Score 99: 53/65 ( 81%) matches, 1 gaps
+   13884 tgggtatggtggctcatgcctgtaatcccagcactttggaagactgagacaggagcaattgcttga 139
+49
+         ||||| |||||||   ||||||||||||||||    ||| || ||||| ||| || ||||||||||
+   14692 acccacaccaccgtacacggacattagggtcgatggaccctccgactccgtcttc-ttaacgaact 146
+28
+
+Data files
+
+Notes
+
+References
+
+   Some references on inverted repeats:
+   
+    1. Pearson CE, Zorbas H, Price GB, Zannis-Hadjopoulos M Inverted
+       repeats, stem-loops, and cruciforms: significance for initiation
+       of DNA replication. J Cell Biochem 1996 Oct;63(1):1-22
+    2. Waldman AS, Tran H, Goldsmith EC, Resnick MA. q Long inverted
+       repeats are an at-risk motif for recombination in mammalian cells.
+       Genetics. 1999 Dec;153(4):1873-83. PMID: 10581292; UI: 20050682
+    3. Jacobsen SE Gene silencing: Maintaining methylation patterns. Curr
+       Biol 1999 Aug 26;9(16):R617-9
+    4. Lewis S, Akgun E, Jasin M. Palindromic DNA and genome stability.
+       Further studies. Ann N Y Acad Sci. 1999 May 18;870:45-57. PMID:
+       10415472; UI: 99343961
+    5. Dai X, Greizerstein MB, Nadas-Chinni K, Rothman-Denes LB
+       Supercoil-induced extrusion of a regulatory DNA hairpin. Proc Natl
+       Acad Sci U S A 1997 Mar 18;94(6):2174-9
+       
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   chaos Create a chaos game representation plot for a sequence
+   cpgplot Plot CpG rich areas
+   cpgreport Reports all CpG rich regions
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   equicktandem Finds tandem repeats
+   etandem Looks for tandem repeats in a nucleotide sequence
+   isochore Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   palindrome Looks for inverted repeats in a nucleotide sequence
+   polydot Displays all-against-all dotplots of a set of sequences
+   redata Search REBASE for enzyme name, references, suppliers etc
+   restrict Finds restriction enzyme cleavage sites
+   showseq Display a sequence with features, translation etc
+   tfscan Scans DNA sequences for transcription factors
+   
+Author(s)
+
+   This program was originally written by Richard Durbin and Jean
+   Thierry-Mieg as part of the ACEDB genome database package.
+   
+   This application was modified for inclusion in EMBOSS by Peter Rice
+   (pmr@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

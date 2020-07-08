@@ -1,0 +1,12 @@
+# PROSEXTRACT - Extracting  AC, ID and PA lines from Prosite motif Database
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# Last Edited March 25 1999 SOL
+
+appl: prosextract [
+	doc: "Builds the PROSITE motif database for patmatmotifs to search"
+	groups: "motifs, utilities"
+]
+	 
+string: infdat [ param: Y prompt: "Enter name of prosite directory" ]
+

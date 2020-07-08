@@ -1,0 +1,89 @@
+
+                             EMBOSS: tfextract
+     _________________________________________________________________
+   
+                               Program tfextract
+                                       
+Function
+
+   Extract data from TRANSFAC
+   
+Description
+
+Usage
+
+   Here is a sample session with tfextract.
+
+% tfextract
+Extract data from TRANSFAC
+Full pathname of transfac SITE.DAT: /data/transfac/site.dat
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-inf]               infile     Full pathname of transfac SITE.DAT
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-inf]
+   (Parameter 1) Full pathname of transfac SITE.DAT Input file Required
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+   The output from tfextract is a set of files in the emboss/data
+   directory containing reformatted sites from the transfac database.
+   
+   These files are used by the tfscan program to search for TRANSFAC
+   sites in sequences.
+
+% ls -1s emboss/data/tf*
+ 18 emboss/data/tffungi
+ 17 emboss/data/tfinsect
+ 56 emboss/data/tfother
+  4 emboss/data/tfplant
+112 emboss/data/tfvertebrate
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   embossdata Finds or fetches the data files read in by the EMBOSS
+   programs
+   printsextract Extract data from PRINTS
+   prosextract Builds the PROSITE motif database for patmatmotifs to
+   search
+   rebaseextract Extract data from REBASE
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by administrators responsible for
+   software and database installation and maintenance.
+   
+Comments

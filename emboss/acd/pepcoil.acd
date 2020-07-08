@@ -1,0 +1,27 @@
+# PEPCOIL Coiled coil prediction
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+
+# ajb 27th March 1999
+appl: pepcoil [
+	doc: "Predicts coiled coil regions"
+	groups: "protein: sequence features, secondary structure"
+]
+
+  seqall: sequence [ param: Y type: PureProtein ]
+
+  int: window [ req: Y min: 7 max: 28 def: 28 info: "Window size" ]
+
+#  bool: plot [ def: Y info: "Do the plot" ]
+
+  bool: coil [ def: Y info: "Report coiled coil regions" ]
+
+  bool: frame [ def: $(coil) info: "Show coil frameshifts" 
+        expect: "Yes if -coil is true" ]
+
+  bool: other [ def: Y info: "Report non coiled coil regions" ]
+
+  outfile: outfile [ param: Y ]
+
+#  xygraph: graph [ req: Y ]
+

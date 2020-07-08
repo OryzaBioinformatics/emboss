@@ -1,0 +1,122 @@
+
+                            EMBOSS: equicktandem
+     _________________________________________________________________
+   
+                             Program equicktandem
+                                       
+Function
+
+   Finds tandem repeats
+   
+Description
+
+   equicktandem scans a sequence for potential tandem repeats up to a
+   specified size. The results can be used to run etandem on the
+   candidate repeat lengths to identify genuine tandem repeats.
+   
+Usage
+
+   Here is a sample session with equicktandem. The input sequence is the
+   human herpesvirus tandem repeat.
+
+% equicktandem
+Input sequence: embl:hhtetra
+Output file [hhtetra.qtan]:
+Maximum repeat size [600]:
+Threshold score [20]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-outfile]           outfile    Output file name
+   -maxrepeat          integer    Maximum repeat size
+   -threshold          integer    Threshold score
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence USA Readable sequence Required
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.equicktandem
+   -maxrepeat Maximum repeat size Any integer value 600
+   -threshold Threshold score Any integer value 20
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   The input for equicktandem is a nucleotide sequence
+   
+Output file format
+
+   The output from equicktandem is an uncommented list of identified
+   repeats. In a future version this will change to be annotated sequence
+   features.
+   
+   The columns of the report show:
+    1. Score
+    2. Start base position
+    3. End base position
+    4. Repeat size
+    5. Repeat count
+       
+   339        191        935  6 124
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   chaos Create a chaos game representation plot for a sequence
+   cpgplot Plot CpG rich areas
+   cpgreport Reports all CpG rich regions
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   einverted Finds DNA inverted repeats
+   etandem Looks for tandem repeats in a nucleotide sequence
+   isochore Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   palindrome Looks for inverted repeats in a nucleotide sequence
+   polydot Displays all-against-all dotplots of a set of sequences
+   redata Search REBASE for enzyme name, references, suppliers etc
+   restrict Finds restriction enzyme cleavage sites
+   showseq Display a sequence with features, translation etc
+   tfscan Scans DNA sequences for transcription factors
+   
+Author(s)
+
+   This program was originally written by Richard Durbin and Jean
+   Thierry-Mieg as part of the ACEDB genome database package.
+   
+   This application was modified for inclusion in EMBOSS by Peter Rice
+   (pmr@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+History
+
+   Completed 25 May 1999
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

@@ -1,0 +1,276 @@
+
+                              EMBOSS: compseq
+     _________________________________________________________________
+   
+                                Program compseq
+                                       
+Function
+
+   Counts the composition of dimer/trimer/etc words in a sequence
+   
+Description
+
+   This takes a specified length of sequence and counts the number of
+   distinct subsequences of that length that there are in the input
+   sequence(s). It can read in the result of a previous compseq analysis
+   and use this to set the expected frequencies of the subsequences.
+   
+Usage
+
+   Here is a sample session with compseq.
+
+To count the frequencies of dinucleotides in a file:
+
+% compseq  embl:hsfau  2  result3.comp
+
+To count the frequencies of hexanucleotides, without outputting
+the results of hexanucleotides that do not occur in the sequence:
+
+% compseq  embl:hsfau  6  result6.comp  -nozero
+
+To count the frequencies of trinucleotides in frame 2 of a sequence
+and use a previously prepared compseq output to show the expected
+frequencies:
+
+% compseq  embl:hsfau  3  result3.comp  -frame 2  -in prev.comp
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-word]              integer    This is the size of word (n-mer) to count.
+                                  Thus if you want to count codon frequencies,
+                                  you should enter 3 here.
+  [-outfile]           outfile    This is the results file.
+
+   Optional qualifiers (* if not always prompted):
+   -infile             infile     This is a file previously produced by
+                                  'compseq' that can be used to set the
+                                  expected frequencies of words in this
+                                  analysis.
+                                  The word size in the current run must be the
+                                  same as the one in this results file.
+                                  Obviously, you should use a file produced
+                                  from protein sequences if you are counting
+                                  protein sequence word frequencies, and you
+                                  must use one made from nucleotide
+                                  frequencies if you and analysing a
+                                  nucleotide sequence.
+   -[no]zerocount      bool       You can make the output results file much
+                                  smaller if you do not display the words with
+                                  a zero count.
+   -frame              integer    The normal behaviour of 'compseq' is to
+                                  count the frequencies of all words that
+                                  occur by moving a window of length 'word' up
+                                  by one each time.
+                                  This option allows you to move the window up
+                                  by the length of the word each time,
+                                  skipping over the intervening words.
+                                  You can count only those words that occur in
+                                  a single frame of the word by setting this
+                                  value to a number other than zero.
+                                  If you set it to 1 it will only count the
+                                  words in frame 1, 2 will only count the
+                                  words in frame 2 and so on.
+*  -[no]ignorebz       bool       The amino acid code B represents Asparagine
+                                  or Aspartic acid and the code Z represents
+                                  Glutamine or Glutamic acid.
+                                  These are not commonly used codes and you
+                                  may wish not to count words containing them,
+                                  just noting them in the count of 'Other'
+                                  words.
+*  -reverse            bool       Set this to be false if you do not wish to
+                                  also count words in the reverse complement
+                                  of the sequence.
+
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-word]
+   (Parameter 2) This is the size of word (n-mer) to count. Thus if you
+   want to count codon frequencies, you should enter 3 here. Integer from
+   1 to 10 2
+   [-outfile]
+   (Parameter 3) This is the results file. Output file <sequence>.compseq
+   Optional qualifiers Allowed values Default
+   -infile This is a file previously produced by 'compseq' that can be
+   used to set the expected frequencies of words in this analysis. The
+   word size in the current run must be the same as the one in this
+   results file. Obviously, you should use a file produced from protein
+   sequences if you are counting protein sequence word frequencies, and
+   you must use one made from nucleotide frequencies if you and analysing
+   a nucleotide sequence. Input file Required
+   -[no]zerocount You can make the output results file much smaller if
+   you do not display the words with a zero count. Yes/No Yes
+   -frame The normal behaviour of 'compseq' is to count the frequencies
+   of all words that occur by moving a window of length 'word' up by one
+   each time. This option allows you to move the window up by the length
+   of the word each time, skipping over the intervening words. You can
+   count only those words that occur in a single frame of the word by
+   setting this value to a number other than zero. If you set it to 1 it
+   will only count the words in frame 1, 2 will only count the words in
+   frame 2 and so on. Integer 0 or more 0
+   -[no]ignorebz The amino acid code B represents Asparagine or Aspartic
+   acid and the code Z represents Glutamine or Glutamic acid. These are
+   not commonly used codes and you may wish not to count words containing
+   them, just noting them in the count of 'Other' words. Yes/No Yes
+   -reverse Set this to be false if you do not wish to also count words
+   in the reverse complement of the sequence. Yes/No Yes for nucleic
+   acid, No for protein
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   Normal sequence(s) USA.
+   
+Output file format
+
+   The output format consists of:
+   
+   Header information and comments are preceeded by a '#' character at
+   the start of the line.
+   
+   The Word size and the Total count are then given on separate lines,
+   
+   The headers of the columns of results are preceeded by a '#'
+   
+   The results columns are: the sub-sequence word, the observed
+   frequency, the expected frequency (which will be read from the input
+   file if one is given, else it is a simple inverse of the number of
+   words of the size specified that can be constructed), the ratio of the
+   observed to expected frequency.
+   
+   After a blank line at the end, the results of 'Other' words is given -
+   this is the number of words with a sequence which has IUPAC ambiguity
+   codes or other unusual characters in.
+   
+   Example:
+#
+# Output from 'compseq'
+#
+# The Expected frequencies are taken from the file: jjj.composition
+#
+# The input sequences are:
+#       jjj
+
+
+Word size       2
+Total count     196
+
+#
+# Word  Obs Count       Obs Frequency   Exp Frequency   Obs/Exp Frequency
+#
+AA      0               0.0000000       0.0000000       10000000000.0000000
+AC      18              0.0918367       0.0918367       1.0000004
+AG      8               0.0408163       0.0408163       1.0000007
+AT      12              0.0612245       0.0612245       0.9999998
+CA      3               0.0153061       0.0153061       1.0000015
+CC      1               0.0051020       0.0051020       1.0000080
+CG      16              0.0816327       0.0816327       0.9999994
+CT      15              0.0765306       0.0765306       1.0000002
+GA      16              0.0816327       0.0816327       0.9999994
+GC      13              0.0663265       0.0663265       1.0000005
+GG      5               0.0255102       0.0255102       1.0000002
+GT      18              0.0918367       0.0918367       1.0000004
+TA      19              0.0969388       0.0969388       0.9999997
+TC      4               0.0204082       0.0204082       0.9999982
+TG      22              0.1122449       0.1122449       1.0000000
+TT      5               0.0255102       0.0255102       1.0000002
+
+Other   21              0.0255102       0.1071429       0.2380951
+
+Data files
+
+   The input data file is not required.
+   
+   The input data file format is exactly the same as the output file
+   format.
+   
+   It expects to read in a previous output file of this program. An error
+   is produced if the word size of the current compseq job and that of
+   the output file being read in are different.
+   
+Notes
+
+   The results are held in an array in memory before being written to a
+   file. For large values of wordsize, you may run out of memory.
+   
+   You can produce very large output files if you choose large values of
+   wordsize.
+   
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+   "The word size is too large for the data structure available."
+          You chose a word size that cannot be stored by the program.
+          
+   "Insufficient memory - aborting."
+          You do not have enough memory - use a machine with more memory.
+          
+   "The word size you are counting (n) is different to the word size in
+          the file of expected frequencies (n)."
+          You chose different word sizes in the run of compseq that
+          produced your results file used to display the expected word
+          frequencies to the word size used in this run of compseq.
+          
+   "The 'Word size' line was not found, instead found:"
+          You appear to be trying to read a corrupted compseq results
+          file
+          
+Exit status
+
+   It always exits with status 0 unless one of the above error conditions
+   is found
+   
+Known bugs
+
+   This program can use a large amount of memory is you specify a large
+   word size (7 or above). This may impact the behaviour of other
+   programs on your machine.
+   
+   If you run out of memory, you may see the program crash with a generic
+   error message that will be specific to your machine's operating
+   system, but will probably be a warning about writing to memory that
+   the program does not own (eg "Segmentation fault" on a Solaris
+   machine)
+   
+   This is not a bug, it is a feature of the way this program grabs large
+   amounts of memory.
+   
+See also
+
+   Program name Description
+   chaos Create a chaos game representation plot for a sequence
+   chips Codon usage statistics
+   codcmp Codon usage table comparison
+   cusp Create a codon usage table
+   freak Residue/base frequency table or plot
+   geecee Calculates the fractional GC content of nucleic acid sequences
+   isochore Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   oddcomp Finds protein sequence regions with a biased composition
+   wobble Wobble base plot
+   wordcount Counts words of a specified size in a DNA sequence
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Completed 2 March 2000
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

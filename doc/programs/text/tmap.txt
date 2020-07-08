@@ -1,0 +1,110 @@
+
+                                EMBOSS: tmap
+     _________________________________________________________________
+   
+                                 Program tmap
+                                       
+Function
+
+   Displays membrane spanning regions
+   
+Description
+
+   This program predicts transmembrane segments in proteins, utilising
+   the algorithm described in: "Persson, B. & Argos, P. (1994) Prediction
+   of transmembrane segments in proteins utilsing multiple sequence
+   alignments J. Mol. Biol. 237, 182-192."
+   
+Usage
+
+   Here is a sample session with tmap.
+
+  % tmap sw:opsd_human
+
+   click here for result
+   
+Command line arguments
+
+   Mandatory qualifiers:
+  [-msf]               seqset     File containing a sequence alignment
+   -graph              xygraph    Graph type
+
+   Optional qualifiers:
+   -outfile            outfile    Output file name
+
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-msf]
+   (Parameter 1) File containing a sequence alignment Readable sequences
+   Required
+   -graph Graph type EMBOSS has a list of known devices, including
+   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
+   EMBOSS_GRAPHICS value, or x11
+   Optional qualifiers Allowed values Default
+   -outfile Output file name Output file tmap.res
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   Any protein sequence USA for one or more aligned sequences.
+   
+Output file format
+
+   .ps file if postscipt output requested.
+   
+Data files
+
+Notes
+
+References
+
+   "Persson, B. & Argos, P. (1994) Prediction of transmembrane segments
+   in proteins utilsing multiple sequence alignments J. Mol. Biol. 237,
+   182-192."
+   
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+   0 if successfull.
+   
+Known bugs
+
+See also
+
+   Program name Description
+   antigenic Finds antigenic sites in proteins
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   garnier Predicts protein secondary structure
+   helixturnhelix Report nucleic acid binding motifs
+   oddcomp Finds protein sequence regions with a biased composition
+   pepcoil Predicts coiled coil regions
+   polydot Displays all-against-all dotplots of a set of sequences
+   pscan Scans proteins using PRINTS
+   showseq Display a sequence with features, translation etc
+   sigcleave Reports protein signal cleavage sites
+   
+Author(s)
+
+   Original program by Bengt Persson and Patrick Argos.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+History
+
+   Completed 17th June 1999.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

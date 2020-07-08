@@ -1,0 +1,223 @@
+
+                             EMBOSS: sigcleave
+     _________________________________________________________________
+   
+                               Program sigcleave
+                                       
+Function
+
+   Reports protein signal cleavage sites
+   
+Description
+
+   SigCleave uses the method of von Heijne as modified by von Heijne in
+   his later book where treatment of positions -1 and -3 in the matrix is
+   slightly altered (see references).
+   
+Usage
+
+   Here is a sample session with sigcleave.
+
+% sigcleave
+Reports peptide signal cleavage sites
+Input sequence: sw:ach2_drome
+Output file [ach2_drome.out]:
+Minimum weight [3.5]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outfile]           outfile    Output file name
+   -minweight          float      Minimum scoring weight value for the
+                                  predicted cleavage site
+
+   Optional qualifiers:
+   -prokaryote         bool       Specifies the sequence is prokaryotic and
+                                  changes the default scoring data file name
+
+   Advanced qualifiers:
+   -pval               integer    Specifies the number of columns before the
+                                  residue at the cleavage site in the weight
+                                  matrix table
+   -nval               integer    specifies the number of columns after the
+                                  residue at the cleavage site in the weight
+                                  matrix table
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.sigcleave
+   -minweight Minimum scoring weight value for the predicted cleavage
+   site Number from 0.000 to 100.000 3.5
+   Optional qualifiers Allowed values Default
+   -prokaryote Specifies the sequence is prokaryotic and changes the
+   default scoring data file name Yes/No No
+   Advanced qualifiers Allowed values Default
+   -pval Specifies the number of columns before the residue at the
+   cleavage site in the weight matrix table Integer from -13 to -1 -13
+   -nval specifies the number of columns after the residue at the
+   cleavage site in the weight matrix table Integer 1 or more Pval+15 (2)
+   
+Input file format
+
+   The input sequence can be one or more protein sequences.
+   
+Output file format
+
+   The output from sigcleave is a simple text one. Maxsite is the amino
+   acid position immediately after the predicted cleavage site. Score is
+   the calculated weight value for the predicted cleavage site. Sequence
+   shows the amino acid positions used to calculate the score with "-"
+   used to indicate the predicted cleavage site. Here is a sample output:
+
+SIGCLEAVE of ACH2_DROME from 1 to 576
+
+
+Reporting scores over 3.50
+Maximum score 13.7 at residue 42
+
+ Sequence:  LLVLLLLCETVQA-NPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKDQIL
+            | (signal)    | (mature peptide)
+           29             42
+
+
+
+ Other entries above 3.50
+
+
+Score 12.1 at residue 39
+
+ Sequence:  LCLLLVLLLLCET-VQANPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKD
+            | (signal)    | (mature peptide)
+           26             39
+
+
+Score 10.5 at residue 41
+
+ Sequence:  LLLVLLLLCETVQ-ANPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKDQI
+            | (signal)    | (mature peptide)
+           28             41
+
+
+
+Data files
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by EMBOSS
+   environment variable EMBOSS_DATA.
+   
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+   
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+       
+   The data file names are:
+     * Esig.euk Eukaryotic signal data
+     * Esig.pro Prokaryotic signal data
+       
+   Here is the default file for eukaryotic signals:
+# Amino acid counts for 161 Eukaryotic Signal Peptides,
+# from von Heijne (1986), Nucl. Acids. Res. 14:4683-4690
+#
+# The cleavage site is between +1 and -1
+#
+Sample: 161 aligned sequences
+#
+# R -13 -12 -11 -10  -9  -8  -7  -6  -5  -4  -3  -2  -1  +1  +2 Expect
+# - --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ------
+  A  16  13  14  15  20  18  18  17  25  15  47   6  80  18   6  14.5
+  C   3   6   9   7   9  14   6   8   5   6  19   3   9   8   3   4.5
+  D   0   0   0   0   0   0   0   0   5   3   0   5   0  10  11   8.9
+  E   0   0   0   1   0   0   0   0   3   7   0   7   0  13  14  10.0
+  F  13   9  11  11   6   7  18  13   4   5   0  13   0   6   4   5.6
+  G   4   4   3   6   3  13   3   2  19  34   5   7  39  10   7  12.1
+  H   0   0   0   0   0   1   1   0   5   0   0   6   0   4   2   3.4
+  I  15  15   8   6  11   5   4   8   5   1  10   5   0   8   7   7.4
+  K   0   0   0   1   0   0   1   0   0   4   0   2   0  11   9  11.3
+  L  71  68  72  79  78  45  64  49  10  23   8  20   1   8   4  12.1
+  M   0   3   7   4   1   6   2   2   0   0   0   1   0   1   2   2.7
+  N   0   1   0   1   1   0   0   0   3   3   0  10   0   4   7   7.1
+  P   2   0   2   0   0   4   1   8  20  14   0   1   3   0  22   7.4
+  Q   0   0   0   1   0   6   1   0  10   8   0  18   3  19  10   6.3
+  R   2   0   0   0   0   1   0   0   7   4   0  15   0  12   9   7.6
+  S   9   3   8   6  13  10  15  16  26  11  23  17  20  15  10  11.4
+  T   2  10   5   4   5  13   7   7  12   6  17   8   6   3  10   9.7
+  V  20  25  15  18  13  15  11  27   0  12  32   3   0   8  17  11.1
+  W   4   3   3   1   1   2   6   3   1   3   0   9   0   2   0   1.8
+  Y   0   1   4   0   0   1   3   1   1   2   0   5   0   1   7   5.6
+
+Notes
+
+   The value of minweight should be at least 3.5. At this level, the
+   method should correctly identify 95% of signal peptides, and reject
+   95% of non-signal peptides. The cleavage site should be correctly
+   predicted in 75-80% of cases.
+   
+References
+
+    1. von Heijne, G. Nucleic Acids Res.: 14:4683 (1986)
+    2. von Heijne, G. "Sequence Analysis in Molecular Biology: Treasure
+       Trove or Trivial Pursuit" (Acad. Press, (1987), 113-117)
+       
+Warnings
+
+   The program will warn you if a nucleic acid sequence is given or if
+   the data file is not mathematically accurate.
+   
+Diagnostic Error Messages
+
+Exit status
+
+   It exits with status 0 unless an error is reported.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   antigenic Finds antigenic sites in proteins
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   garnier Predicts protein secondary structure
+   helixturnhelix Report nucleic acid binding motifs
+   oddcomp Finds protein sequence regions with a biased composition
+   pepcoil Predicts coiled coil regions
+   pepnet Displays proteins as a helical net
+   pepwheel Shows protein sequences as helices
+   polydot Displays all-against-all dotplots of a set of sequences
+   pscan Scans proteins using PRINTS
+   showseq Display a sequence with features, translation etc
+   tmap Displays membrane spanning regions
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+   Original program "SIGCLEAVE" by Peter Rice (EGCG 1989)
+   
+History
+
+   Completed 10th March 1999
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
+
+   If you use matrix tables with a different number of residues before or
+   after the cleavage site, you must also set the advanced parameters
+   nval and pval.

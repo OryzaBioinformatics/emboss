@@ -1,0 +1,20 @@
+# SEQTOFEAT application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# pmr 22-apr-98
+
+appl: seqtofeat [
+	doc: "Reads a sequence, finds a pattern, and reports hits as features"
+	groups: "debugging"
+]
+
+  sequence: sequence [ param: Y feat: Y ]
+
+  featout: outfeat [ param: Y ]
+
+  string: pattern [required: Y info: "Pattern to search for" min: 1 ]

@@ -1,0 +1,427 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: showorf
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: showorf
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program showorf
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Pretty output of DNA translations
+
+
+<H2>
+    Description
+</H2>
+
+
+Showorf displays a nucleic acid sequence with its protein translation in
+a style suitable for publication.  The translation can be done in any
+frame or combination of frames. 
+
+<p>
+It uses codon frequency files to do the translation.  You can specify
+the codon frequency file that you use with the '-cfile' option.  The
+default table is 'Ehum.cut'. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with showorf.
+
+<pre>
+
+% showorf
+Pretty output of DNA translations
+Input sequence: embl:paamir
+Select Frames To Translate
+         0 : None
+         1 : F1
+         2 : F2
+         3 : F3
+         4 : R1
+         5 : R2
+         6 : R3
+Select one or more values [1,2,3,4,5,6]: 
+Output file [paamir.showorf]: 
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+   -frames             list       Select one or more values
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers:
+   -[no]ruler          bool       Add a ruler
+   -[no]plabel         bool       Number translations
+   -[no]nlabel         bool       Number DNA sequence
+
+   Advanced qualifiers:
+   -cfile              codon      Codon usage file
+   -width              integer    Width of screen
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence USA</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-frames</td>
+<td>Select one or more values</td>
+<td><table><tr><td>0</td> <td><i>(None)</i></td></tr><tr><td>1</td> <td><i>(F1)</i></td></tr><tr><td>2</td> <td><i>(F2)</i></td></tr><tr><td>3</td> <td><i>(F3)</i></td></tr><tr><td>4</td> <td><i>(R1)</i></td></tr><tr><td>5</td> <td><i>(R2)</i></td></tr><tr><td>6</td> <td><i>(R3)</i></td></tr></table></td>
+<td>1,2,3,4,5,6</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.showorf</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]ruler</td>
+<td>Add a ruler</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]plabel</td>
+<td>Number translations</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]nlabel</td>
+<td>Number DNA sequence</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-cfile</td>
+<td>Codon usage file</td>
+<td>Codon usage file in EMBOSS data path</td>
+<td>Ehum.cut</td>
+</tr>
+
+<tr>
+<td>-width</td>
+<td>Width of screen</td>
+<td>Integer 10 or more</td>
+<td>50</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+Nucleic acid sequence USA
+
+<H2>
+    Output file format
+</H2>
+
+
+Here is some of the output from the example run. As a sequence
+with high GC content (from Pseudmonas aeruginosa) PAAMIR has several
+overlapping open reading frames.
+
+<p>
+The true ORFs are 1..109 (amiB partial) 135..1292 (amiC) 1289..1879 (amiR)
+1925..end (amiS partial)
+
+<pre>
+
+SHOWORF of PAAMIR from 1 to 2167
+
+           ---------|---------|---------|---------|---------|
+         1 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacggga 50
+F1       1 G  T  A  G  R  A  S  A  R  S  P  P  A  G  R  R  E  17
+F2       1  V  P  L  A  E  H  L  L  D  H  H  Q  P  G  D  G  N 17
+F3       1   Y  R  W  P  S  I  C  S  I  T  T  S  R  A  T  G   16
+
+           ---------|---------|---------|---------|---------|
+        51 actgcacgatctacctggcgagcctggagcacgagcgggttcgcttcgta 100
+F1      18  L  H  D  L  P  G  E  P  G  A  R  A  G  S  L  R  T 34
+F2      18   C  T  I  Y  L  A  S  L  E  H  E  R  V  R  F  V   33
+F3      17 T  A  R  S  T  W  R  A  W  S  T  S  G  F  A  S  Y  33
+
+           ---------|---------|---------|---------|---------|
+       101 cggcgctgagcgacagtcacaggagaggaaacggatgggatcgcaccagg 150
+F1      35   A  L  S  D  S  H  R  R  G  N  G  W  D  R  T  R   50
+F2      34 R  R  *  A  T  V  T  G  E  E  T  D  G  I  A  P  G  14
+F3      34  G  A  E  R  Q  S  Q  E  R  K  R  M  G  S  H  Q  E 50
+
+......................
+
+
+           ---------|---------|---------|---------|---------|
+      1851 agttgctgggaaacgagccgtccgcctgagcgatccgggccgaccagaac 1900
+F1     341  V  A  G  K  R  A  V  R  L  S  D  P  G  R  P  E  Q 357
+F2     203   L  L  G  N  E  P  S  A  *  A  I  R  A  D  Q  N   7
+F3       5 S  C  W  E  T  S  R  P  P  E  R  S  G  P  T  R  T  21
+
+           ---------|---------|---------|---------|---------|
+      1901 aataacaagaggggtatcgtcatcatgctgggactggttctgctgtacgt 1950
+F1       1   *  Q  E  G  Y  R  H  H  A  G  T  G  S  A  V  R   15
+F2       8 N  N  K  R  G  I  V  I  M  L  G  L  V  L  L  Y  V  24
+F3      22  I  T  R  G  V  S  S  S  C  W  D  W  F  C  C  T  L 38
+
+           ---------|---------|---------|---------|---------|
+      1951 tggcgcggtgctgtttctcaatgccgtctggttgctgggcaagatcagcg 2000
+F1      16 W  R  G  A  V  S  Q  C  R  L  V  A  G  Q  D  Q  R  32
+F2      25  G  A  V  L  F  L  N  A  V  W  L  L  G  K  I  S  G 41
+F3      39   A  R  C  C  F  S  M  P  S  G  C  W  A  R  S  A   54
+
+           ---------|---------|---------|---------|---------|
+      2001 gtcgggaggtggcggtgatcaacttcctggtcggcgtgctgagcgcctgc 2050
+F1      33  S  G  G  G  G  D  Q  L  P  G  R  R  A  E  R  L  R 49
+F2      42   R  E  V  A  V  I  N  F  L  V  G  V  L  S  A  C   57
+F3      55 V  G  R  W  R  *  S  T  S  W  S  A  C  *  A  P  A  3
+
+           ---------|---------|---------|---------|---------|
+      2051 gtcgcgttctacctgatcttttccgcagcagccgggcagggctcgctgaa 2100
+F1      50   R  V  L  P  D  L  F  R  S  S  R  A  G  L  A  E   65
+F2      58 V  A  F  Y  L  I  F  S  A  A  A  G  Q  G  S  L  K  74
+F3       4  S  R  S  T  *  S  F  P  Q  Q  P  G  R  A  R  *  R 1
+
+           ---------|---------|---------|---------|---------|
+      2101 ggccggagcgctgaccctgctattcgcttttacctatctgtgggtggccg 2150
+F1      66 G  R  S  A  D  P  A  I  R  F  Y  L  S  V  G  G  R  82
+F2      75  A  G  A  L  T  L  L  F  A  F  T  Y  L  W  V  A  A 91
+F3       2   P  E  R  *  P  C  Y  S  L  L  P  I  C  G  W  P   12
+
+           ---------|-------
+      2151 ccaaccagttcctcgag 2167
+F1      83  Q  P  V  P  R    87
+F2      92   N  Q  F  L  E   96
+F3      13 P  T  S  S  S     17
+
+</pre>
+
+<H2>
+    Data files
+</H2>
+
+
+Showorf uses the codon frequency files to translate the sequence. 
+
+<p>
+The codon usage table is read by default from "Ehum.cut" in the 'data/CODONS'
+directory of the EMBOSS distribution.  If the name of a codon usage file
+is specified on the command line with the '-cfile' option, then this
+file will first be searched for in the current directory and then in the
+'data/CODONS' directory of the EMBOSS distribution. 
+
+<p>
+To see the available EMBOSS codon usage files, run:
+
+
+<pre>
+
+% embossdata -showall
+
+</pre>
+
+<p>
+To fetch one of the codon usage tables (for example 'Emus.cut') into your
+current directory for you to inspect or modify, run:
+
+
+<pre>
+
+% embossdata -fetch -file Emus.cut
+
+</pre>
+
+
+
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0. 
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="backtranseq.html">backtranseq</a></td><td>Back translate a protein sequence</td></tr>
+<tr><td><a href="cusp.html">cusp</a></td><td>Create a codon usage table</td></tr>
+<tr><td><a href="getorf.html">getorf</a></td><td>Finds and extracts open reading frames (ORFs)</td></tr>
+<tr><td><a href="plotorf.html">plotorf</a></td><td>Plot potential open reading frames</td></tr>
+<tr><td><a href="prettyseq.html">prettyseq</a></td><td>Output sequence with translated ranges</td></tr>
+<tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
+<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="transeq.html">transeq</a></td><td>Translate nucleic acid sequences</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

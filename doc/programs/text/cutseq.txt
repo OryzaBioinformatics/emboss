@@ -1,0 +1,121 @@
+
+                               EMBOSS: cutseq
+     _________________________________________________________________
+   
+                                Program cutseq
+                                       
+Function
+
+   Removes a specified section from a sequence
+   
+Description
+
+   This simple editing program allows you to cut out a region from your
+   sequence by specifying the begin and end positions of the sequence to
+   remove.
+   
+Usage
+
+   To remove bases 10 to 12 from a sequence 'gatta.seq' and write to the
+   new sequence file 'gatta2.seq':
+% cutseq gatta.seq gatta2.seq -from=10 -to=12
+
+   To remove the first 20 bases from 'hatta.seq' and write it to
+   'jsh.seq':
+% cutseq -seq=hatta.seq -from=1 -to=20 -out=jsh.seq
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-outseq]            seqout     Output sequence USA
+   -from               integer    This is the start position (inclusive) of
+                                  the section of the sequence that you wish to
+                                  remove.
+   -to                 integer    This is the end position (inclusive) of the
+                                  section of the sequence that you wish to
+                                  remove.
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence USA Readable sequence Required
+   [-outseq]
+   (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
+   -from This is the start position (inclusive) of the section of the
+   sequence that you wish to remove. Any integer value Start of sequence
+   (0)
+   -to This is the end position (inclusive) of the section of the
+   sequence that you wish to remove. Any integer value End of sequence
+   (0)
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   Single sequence.
+   
+Output file format
+
+   Single sequence file.
+   
+Data files
+
+Notes
+
+   This can be used as a simple sequence editor.
+   
+References
+
+Warnings
+
+   You can delete a complete sequence and write out an empty sequence
+   file.
+   
+Diagnostic Error Messages
+
+Exit status
+
+   It always exits with status 0
+   
+Known bugs
+
+   Bugs noted but not yet fixed.
+   
+   None.
+   
+See also
+
+   Program name Description
+   descseq Alter the name or description of a sequence
+   extractseq Extract regions from a sequence
+   maskfeat Mask off features of a sequence
+   maskseq Mask off regions of a sequence
+   merger Merge two overlapping nucleic acid sequences
+   newseq Type in a short new sequence
+   noreturn Removes carriage return from ASCII files
+   nthseq Writes one sequence from a multiple set of sequences
+   pasteseq Insert one sequence into another
+   revseq Reverse and complement a sequence
+   splitter Split a sequence into (overlapping) smaller sequences
+   trimseq Trim ambiguous bits off the ends of sequences
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Completed 26 Jan 1999
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

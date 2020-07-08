@@ -1,0 +1,316 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: seqmatchall
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: seqmatchall
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program seqmatchall
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Does an all-against-all comparison of a set of sequences
+
+
+<H2>
+    Description
+</H2>
+
+
+This takes a set of sequences and does an all-against-all pairwise
+comparison of words (fragments of the sequences of a specified fixed
+size) in the sequences, finding regions of identity between any two
+sequences. 
+
+<p>
+The larger the specified word size, the faster the comparison will
+proceed.  Regions whose stretches of identity are shorter than the word
+size will be missed.  You should therefore choose a word size that is
+small enough to find those regions of similarity you are interested in
+within a reasonable time-frame. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with seqmatchall. We use an increased word
+size to avoid accidental matches.
+
+<pre>
+
+% seqmatchall
+Does an all-against-all comparison of a set of sequences
+Input sequence set: embl:eclac*
+Word size [4]: 15
+Output file [outfile.seqmatchall]: 
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence set USA</td>
+<td>Readable sequences</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-wordsize</td>
+<td>Word size</td>
+<td>Integer 2 or more</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.seqmatchall</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+A set of sequences.  This can be a list file of sequence or a wildcarded
+set of sequences from a database or all sequences from a database, or a
+wildcarded set of sequence files. 
+
+<p>
+The sequences must be all either protein or nucleic.
+
+<H2>
+    Output file format
+</H2>
+
+
+Here is the output from the example run.
+
+<p>
+ECLAC (the complete E.coli lac operon) matches ECLACI ECLACZ ECLACY
+and ECLACA (the individual genes), and there is a short overlap
+between ECLACY and the flanking genes ECLACZ and ECLACA
+
+<pre>
+
+1832  5645 7477 ECLAC 0 1832 ECLACA
+1113  48 1161 ECLAC 0 1113 ECLACI
+1500  4304 5804 ECLAC 0 1500 ECLACY
+3078  1286 4364 ECLAC 0 3078 ECLACZ
+158  1 159 ECLACA 1342 1500 ECLACY
+59  1 60 ECLACY 3019 3078 ECLACZ
+
+</pre>
+
+The output is a list of regions of identity in pairs of sequences, each
+consisting of one line with 7 columns of data separated by TABs or space
+characters. 
+
+The columns of data consist of:
+
+<ul>
+<li>The length of the region of identity.
+<li>The start position in sequence 1.
+<li>The end position in sequence 1.
+<li>The name of sequence 1.
+<li>The start position in sequence 2.
+<li>The end position in sequence 2.
+<li>The name of sequence 2.
+</ul>
+
+<H2>
+    Data files
+</H2>
+
+
+<H2>
+    Notes
+</H2>
+
+
+The larger the word size, the faster the comparisons will proceed, but
+regions of identitly smaller than the word size will not be reported.
+
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with a status of 0.
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td></tr>
+<tr><td><a href="polydot.html">polydot</a></td><td>Displays all-against-all dotplots of a set of sequences</td></tr>
+<tr><td><a href="stssearch.html">stssearch</a></td><td>Searches a DNA database for matches with a set of STS primers</td></tr>
+<tr><td><a href="supermatcher.html">supermatcher</a></td><td>Finds a match of a large sequence against one or more sequences</td></tr>
+<tr><td><a href="wordmatch.html">wordmatch</a></td><td>Finds all exact matches of a given size between 2 sequences</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+<P>
+<a href="polydot.html">polydot</A> will give a graphical view of the same matches.
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Ian Longden <a
+href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

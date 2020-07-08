@@ -1,0 +1,429 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: seealso
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: seealso
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program seealso
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Finds programs sharing group names
+
+
+<H2>
+    Description
+</H2>
+
+
+This program takes the name of an existing program in EMBOSS (or a
+program in one the associated EMBASSY packages) and gives a list of the
+programs which share some functionality with it. 
+
+<p>
+It does this by noting the functional groups that the program belongs to
+and reporting any programs which share those functional groups.
+<p>
+
+The functional groups of a program are set in the ACD file (this is the
+part of the program in the EMBOSS system which specifies the required
+parameters, some help on the parameters, the one-line description of the
+program, etc.) Normally the names of the groups are fairly specific,
+such as: "DNA COMPOSITION", resulting in the reporting of only a tightly
+restricted set of other programs also dealing with the analysis of "DNA
+COMPOSITION".  The '-explode' qualifier will increase the number of
+groups that the program belongs to by splitting the group name at
+selected points to produce such groups as: "DNA", "DNA COMPOSITION" and
+"COMPOSITION".  All programs with the exploded group names which also
+include "DNA" and "COMPOSITION" will now be reported.  The result of
+this qualifier is thus a report of a larger number of programs with a
+more tenuous link to the specified program.  In other words, use the
+'-explode' qualifier to decrease the specificity of the search. 
+
+<p>
+The groups that the program belongs to can be output by using the
+'-groups' qualifier. 
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with seealso.
+
+<pre>
+
+% seealso
+Program to search for: matcher
+SEE ALSO
+simplesw         Simple Smith-Waterman alignment
+water            Smith-Waterman local alignment
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-search]            string     Enter the name of an EMBOSS program
+
+   Optional qualifiers (* if not always prompted):
+   -outfile            outfile    If you enter the name of a file here then
+                                  this program will write the program names
+                                  and brief descriptions into that file.
+   -html               bool       If you are sending the output to a file,
+                                  this will format it for displaying as a
+                                  table in a WWW document.
+*  -prelink            string     If you are outputting to a file in HTML
+                                  format, you can make the program names into
+                                  hyper-links by setting this to be the first
+                                  half of the URL.
+                                  For example, if you wish the program name to
+                                  be a hyperlink to the URL:
+                                  http://www.sanger.ac.uk/Software/EMBOSS/Apps/programname.shtml
+                                  then if you enter
+                                  http://www.sanger.ac.uk/Software/EMBOSS/Apps/
+                                  here, then the first half of the URL before
+                                  the programname will be set.
+*  -postlink           string     If you are outputting to a file in HTML
+                                  format, you can make the program names into
+                                  hyper-links by setting this to be the second
+                                  half of the URL.
+                                  For example, if you wish the program name to
+                                  be a hyperlink to the URL:
+                                  http://www.sanger.ac.uk/Software/EMBOSS/Apps/programname.shtml
+                                  then if you enter '.shtml' here, the second
+                                  half of the URL after the programname will
+                                  be set.
+   -groups             bool       If you use this option, then only the group
+                                  names will output to the file
+   -explode            bool       The groups that EMBOSS applications belong
+                                  to have two forms, exploded and not
+                                  exploded. The exploded group names are more
+                                  numerous and often vaguely phrased than the
+                                  non-exploded ones. The exploded names are
+                                  formed from definitions of the group names
+                                  that start like NAME1:NAME2 and which are
+                                  then expanded into many combinations of the
+                                  names as: 'NAME1', 'NAME2', 'NAME1 NAME2',
+                                  NAME2 NAME1'. The non-expanded names are
+                                  simply like: 'NAME1 NAME2'.
+                                  Using expanded group names will find many
+                                  more programs which share at least some of
+                                  the expanded names than using the
+                                  non-exploded names and so you will get more
+                                  programs reported as sharing a similar
+                                  function than you will if you specify that
+                                  you wish to use non-exploded names
+
+   Advanced qualifiers:
+   -[no]emboss         bool       If you use this option then EMBOSS program
+                                  documentation will be searched. If this
+                                  option is set to be false, then only the
+                                  EMBASSY programs will be searched (if the
+                                  -embassy option is true). EMBASSY programs
+                                  are not strictly part of EMBOSS, but use the
+                                  same code libraries and share the same look
+                                  and feel, but are generally developed by
+                                  people who wish the programs to be outside
+                                  of the GNU Public Licence scheme, ie. they
+                                  may wish to charge money for them.
+   -[no]embassy        bool       If you use this option then EMBASSY program
+                                  documentation will be searched. If this
+                                  option is set to be false, then only the
+                                  EMBOSS programs will be searched (if the
+                                  -emboss option is true). EMBASSY programs
+                                  are not strictly part of EMBOSS, but use the
+                                  same code libraries and share the same look
+                                  and feel, but are generally developed by
+                                  people who wish the programs to be outside
+                                  of the GNU Public Licence scheme, ie. they
+                                  may wish to charge money for them.
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-search]<br>(Parameter 1)</td>
+<td>Enter the name of an EMBOSS program</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>If you enter the name of a file here then this program will write the program names and brief descriptions into that file.</td>
+<td>Output file</td>
+<td>stdout</td>
+</tr>
+
+<tr>
+<td>-html</td>
+<td>If you are sending the output to a file, this will format it for displaying as a table in a WWW document.</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-prelink</td>
+<td>If you are outputting to a file in HTML format, you can make the program names into hyper-links by setting this to be the first half of the URL.
+For example, if you wish the program name to be a hyperlink to the URL:
+http://www.sanger.ac.uk/Software/EMBOSS/Apps/programname.shtml
+then if you enter
+http://www.sanger.ac.uk/Software/EMBOSS/Apps/ here, then the first half of the URL before the programname will be set.</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-postlink</td>
+<td>If you are outputting to a file in HTML format, you can make the program names into hyper-links by setting this to be the second half of the URL.
+For example, if you wish the program name to be a hyperlink to the URL:
+http://www.sanger.ac.uk/Software/EMBOSS/Apps/programname.shtml
+then if you enter '.shtml' here, the second half of the URL after the programname will be set.</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-groups</td>
+<td>If you use this option, then only the group names will output to the file</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-explode</td>
+<td>The groups that EMBOSS applications belong to have two forms, exploded and not exploded. The exploded group names are more numerous and often vaguely phrased than the non-exploded ones. The exploded names are formed from definitions of the group names that start like NAME1:NAME2 and which are then expanded into many combinations of the names as: 'NAME1', 'NAME2', 'NAME1 NAME2', NAME2 NAME1'. The non-expanded names are simply like: 'NAME1 NAME2'.
+Using expanded group names will find many more programs which share at least some of the expanded names than using the non-exploded names and so you will get more programs reported as sharing a similar function than you will if you specify that you wish to use non-exploded names</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]emboss</td>
+<td>If you use this option then EMBOSS program documentation will be searched. If this option is set to be false, then only the EMBASSY programs will be searched (if the -embassy option is true). EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence scheme, ie. they may wish to charge money for them.</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]embassy</td>
+<td>If you use this option then EMBASSY program documentation will be searched. If this option is set to be false, then only the EMBOSS programs will be searched (if the -emboss option is true). EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence scheme, ie. they may wish to charge money for them.</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+<H2>
+    Output file format
+</H2>
+
+
+The result is header line 'SEE ALSO' then a simple list of program names
+followed by the one-line description of the program. 
+
+<p>
+If the '-html' qualifier is used, then the result is an HTML-formatted
+table, lacking the HTML document structures such as &lt;HTML&gt;,
+&lt;BODY&gt;, &lt;/BODY&gt;, &lt;/HTML&gt; which the user is expected
+to provide as the table will usually be included in the middle of a
+larger HTML document.
+
+<H2>
+    Data files
+</H2>
+
+
+&nbsp;
+
+<H2>
+    Notes
+</H2>
+
+
+&nbsp;
+
+<H2>
+    References
+</H2>
+
+
+&nbsp;
+
+<H2>
+    Warnings
+</H2>
+
+
+&nbsp;
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+The error message:
+
+<pre>
+
+FATAL ERROR: No application specified.
+
+</pre>
+
+is output if a non-existent program name is specified.
+
+<H2>
+    Exit status
+</H2>
+
+
+The program exits with exist status '0' unless a non-existent program name
+is specified, when the exit status is '1'.
+
+<H2>
+    Known bugs
+</H2>
+
+
+&nbsp;
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="wossname.html">wossname</a></td><td>Finds programs by keywords in their one-line documentation</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Gary Williams <a
+href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+
+
+<H2>
+    History
+</H2>
+
+
+Written 16 June 2000 in response to a need to improve the automatic
+construction of EMBOSS documentation web pages. 
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+
+<H2>
+    Comments
+</H2>
+
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

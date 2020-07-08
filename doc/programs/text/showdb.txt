@@ -1,0 +1,209 @@
+
+                               EMBOSS: showdb
+     _________________________________________________________________
+   
+                                Program showdb
+                                       
+Function
+
+   Displays information on the currently available databases
+   
+Description
+
+   This writes out a simple table displaying the names, contents and
+   available ways of accessing the sequence databases.
+   
+   The available ways of accessing the databases are 'ID', 'Query' and
+   'All'. These refer to the way that you can search the databases to get
+   entries from them, which is governed by the ways the database has been
+   set up and the way it is organised and indexed.
+   
+   Different databases may have different access capabilities, depending
+   on how your local site is organised.
+   
+   EMBOSS has been designed to be extremely flexible in its use of
+   sequence databases formats, so that it is easy to set EMBOSS up to use
+   your site's existing databases. Sometimes this means that it is hard
+   to extract entries from some databases in particular ways. For
+   example, a flat file database with no index is only useful for reading
+   all entries, while a database located in another site that is
+   available via the WWW may only provide single entries.
+   
+   'ID' (also known as 'single entry') allows the programs to extract a
+   single explicitly named entry from the database, for example
+   embl:x13776
+   
+   'Query' (also known as 'wild') indicates that programs can extract a
+   set of matching wildcard entry names (this may be slow for some
+   methods of access). For example you can look at all of the human PAX
+   proteins in SWISS_PROT by: swissprot:pax*_human
+   
+   'All' allows the programs to analyse all the entries in the database
+   sequentially. For example this lets you look at all entries in the
+   database with the notation: embl:*
+   
+   A database may have several different methods of access available.
+   Ideally all of the databases available on your site will be available
+   in all three ways, but this is not the best of all posssible worlds
+   and so you might like to check how you can access the databases by
+   running this program and having a look.
+   
+Usage
+
+   Display information on the currently available databases:
+% showdb
+
+   Write out the display to a file:
+% showdb -outfile showdb.out
+
+   Display information on one explicit database:
+% showdb -database swissprot
+
+   Display information on the databases formatted for inclusion in HTML:
+% showdb -html
+
+   Display protein databases only:
+% showdb -nonucleic
+
+   Display the information with no headings
+% showdb -noheading
+
+   Display just a list of the available database names
+% showdb -noheading -notype -noid -noquery -noall -nocomment -auto
+
+   Display only the names and types
+% showdb -only -type
+
+Command line arguments
+
+   Mandatory qualifiers: (none)
+   Optional qualifiers:
+   -database           string     Name of a single database to give
+                                  information on
+   -outfile            outfile    If you enter the name of a file here then
+                                  this program will write the database details
+                                  into that file.
+   -html               bool       Format output as an HTML table
+   -[no]protein        bool       Display protein databases
+   -[no]nucleic        bool       Display nucleic acid databases
+
+   Advanced qualifiers:
+   -only               bool       This is a way of shortening the command line
+                                  if you only want a few things to be
+                                  displayed. Instead of specifying:
+                                  '-nohead -notype -noid -noquery -noall'
+                                  to get only the comment output, you can
+                                  specify
+                                  '-only -comment'
+   -heading            bool       Display column headings
+   -type               bool       Display 'type' column
+   -id                 bool       Display 'id' column
+   -query              bool       Display 'qry' column
+   -all                bool       Display 'all' column
+   -comment            bool       Display 'comment' column
+
+
+   Mandatory qualifiers Allowed values Default
+   (none)
+   Optional qualifiers Allowed values Default
+   -database Name of a single database to give information on Any string
+   is accepted An empty string is accepted
+   -outfile If you enter the name of a file here then this program will
+   write the database details into that file. Output file stdout
+   -html Format output as an HTML table Yes/No No
+   -[no]protein Display protein databases Yes/No Yes
+   -[no]nucleic Display nucleic acid databases Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   -only This is a way of shortening the command line if you only want a
+   few things to be displayed. Instead of specifying: '-nohead -notype
+   -noid -noquery -noall' to get only the comment output, you can specify
+   '-only -comment' Yes/No No
+   -heading Display column headings Yes/No @(!$(only))
+   -type Display 'type' column Yes/No @(!$(only))
+   -id Display 'id' column Yes/No @(!$(only))
+   -query Display 'qry' column Yes/No @(!$(only))
+   -all Display 'all' column Yes/No @(!$(only))
+   -comment Display 'comment' column Yes/No @(!$(only))
+   
+Input file format
+
+   None.
+   
+Output file format
+
+   The output is a simple table, e.g.:
+
+------------------------------------------------------------------------------
+# Name        Type ID  Qry All Comment
+# ====        ==== ==  === === =======
+swissprot     P    OK  OK  OK  -
+sw            P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+em            N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+------------------------------------------------------------------------------
+
+   Type 'P' indicates that this is a Protein database.
+   
+   Type 'N' indicates that this is a Nucleic database.
+   
+   'OK' under ID, Qry or All indicates that that access method can be
+   used on this database. A '-' indicates that you cannot access this
+   database in that way.
+   
+   When the -html qualifier is specified, then the output will be wrapped
+   in HTML tags, ready for inclusion in a Web page. Note that tags such
+   as <HTML>, <BODY>, </BODY> and </HTML> are not output by this program
+   as the table of databases is expected to form only part of the
+   contents of a web page - the rest of the web page must be supplied by
+   the user.
+   
+Data files
+
+   The databases are specified in the files "emboss.defaults" for site
+   wide definitions, and "~/.embossrc" for the user's own settings.
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   "The database 'xyz' does not exist" You have supplied the name of a
+   database with the -database qualifier, but that database does not
+   exist as far as EMBOSS is concerned.
+   
+Exit status
+
+   It always exits with status 0, unless the above diagnostic message is
+   displayed.
+   
+Known bugs
+
+   None noted.
+   
+See also
+
+   Program name Description
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Completed 6th August 1999.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

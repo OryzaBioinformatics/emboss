@@ -1,0 +1,129 @@
+
+                              EMBOSS: pepcoil
+     _________________________________________________________________
+   
+                                Program pepcoil
+                                       
+Function
+
+   Predicts coiled coil regions
+   
+Description
+
+   Coiled coils are formed by two or three alpha helices in parallel and
+   in register that cross at an angle of approximately 20 degrees, are
+   strongly amphipathic and display a pattern of hydrophilic and
+   hydrophobic residues that is repeated every seven residues. The seven
+   positions of the heptad repeat are designated a through g, a and d
+   being generally hydrophobic, while the others are hydrophilic.
+   
+   The parallel two-stranded alpha-helical coiled coil is the most
+   frequently encountered subunit-oligomerization motif in proteins.
+   
+   pepcoil calculates the probability of a coiled-coil structure for
+   windows of 28 residues through a protein sequence using the method of
+   Lupas A, van Dyke M & Stock J (1991); Science 252:1162-4
+   
+Usage
+
+   Here is a sample session with pepcoil.
+
+% pepcoil
+Input sequence: sw:gcn4_yeast
+Window size [28]:
+Output file [gcn4_yeast.pepcoil]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -window             integer    Window size
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -[no]coil           bool       Report coiled coil regions
+   -frame              bool       Show coil frameshifts
+   -[no]other          bool       Report non coiled coil regions
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   -window Window size Integer from 7 to 28 28
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.pepcoil
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -[no]coil Report coiled coil regions Yes/No Yes
+   -frame Show coil frameshifts Yes/No Yes if -coil is true
+   -[no]other Report non coiled coil regions Yes/No Yes
+   
+Input file format
+
+Output file format
+
+   Here is the output file from the example run. The SwissProt annotation
+   marks the true leucine zipper motif as from 253 to 274. The leucine
+   zipper is a special case of a coiled-coil region.
+
+PEPCOIL of GCN4_YEAST
+   using a window of 28 residues
+
+
+Other structures from 1 to 232 (232 residues)
+   Max score: 1.283 (probability 0.21)
+
+Prediction starts at 233
+Probable coiled-coil from 233 to 281 (49 residues)
+   Max score: 1.910 (probability 1.00)
+
+Data files
+
+Notes
+
+References
+
+    1. Lupas A, van Dyke M & Stock J; Predicting Coiled Coils from
+       Protein Sequences. Science 252:1162-4 (1991)
+       
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   antigenic Finds antigenic sites in proteins
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   garnier Predicts protein secondary structure
+   helixturnhelix Report nucleic acid binding motifs
+   oddcomp Finds protein sequence regions with a biased composition
+   pepnet Displays proteins as a helical net
+   pepwheel Shows protein sequences as helices
+   polydot Displays all-against-all dotplots of a set of sequences
+   pscan Scans proteins using PRINTS
+   showseq Display a sequence with features, translation etc
+   sigcleave Reports protein signal cleavage sites
+   tmap Displays membrane spanning regions
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+   Original program "PEPCOIL" by Peter Rice (EGCG 1991)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

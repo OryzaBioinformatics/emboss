@@ -1,0 +1,139 @@
+
+                            EMBOSS: supermatcher
+     _________________________________________________________________
+   
+                             Program supermatcher
+                                       
+Function
+
+   Finds a match of a large sequence against one or more sequences
+   
+Description
+
+   This is a rough and ready local alignment program for large sequences.
+   The reason it is rough and ready is that wordmatch is used to find all
+   the wordmatches between the first sequence and another sequence. Then
+   by calculating the highest score for a diagonal we can then use this
+   as the centre point for a smith-waterman type calculation of a width
+   given by the user. So a narrow diagonal smith-waterman is calculated
+   hence the results will be rough but due to the space saving much
+   larger sequences can be aligned.
+   
+Usage
+
+   Here is a sample session with supermatcher.
+
+ supermatcher ~/wordtest/U68037 ~/wordtest/AB003171 -noscoreonly
+
+Finds a match of a large sequence against one or more sequences
+Gap opening penalty [10.0]:
+Gap extension penalty [0.5]: 3.0
+Output file [stdout]:
+Local: RNU68037 vs EM:AB003171
+Score: 30.00
+
+RNU68037        820   tcaaccacagctgccctccgcagctctcggggag.gcggc.tccg 862
+                      ||||| ||||   || |  ||||     |||||| ||  | |||
+EM:AB003171     2492  tcaactacag.aaccatgtgcag....aggggagagctccatcct 2531
+
+RNU68037        863   cgcgcagggttcacgcacacga.cgtgg.aaatggtgggccagct 905
+                       |  ||  ||| | || || || | ||| ||   ||||   |  |
+EM:AB003171     2532  tgaaca..gttaaagc.ca.gagcttggtaacaagtggataaatt 2572
+
+RNU68037        906   .cgtgggcatcatggtggtgtc.gtg..catctgctggagc     942
+                       | |    |||||  ||  ||| | |  ||  |||  ||||
+EM:AB003171     2573  acat....atcattttgcggtctgagaacacatgc.agagc      2608
+
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-seqa]              seqall     Sequence database USA
+  [-seqb]              seqset     Sequence set USA
+   -gapopen            float      Gap opening penalty
+   -gapextend          float      Gap extension penalty
+   -outfile            outfile    Output file name
+
+   Optional qualifiers:
+   -datafile           matrixf    Matrix file
+   -errorfile          outfile    Error file to be written too
+   -showinternals      bool       Show internals
+   -scoreonly          bool       Calculate score only
+   -[no]showalign      bool       Show alignment
+   -width              integer    Alignment width
+   -wordlen            integer    word length for initial matching
+
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-seqa]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-seqb]
+   (Parameter 2) Sequence set USA Readable sequences Required
+   -gapopen Gap opening penalty Number from 1.000 to 100.000 10.0 for any
+   sequence type
+   -gapextend Gap extension penalty Number from 0.100 to 10.000 0.5 for
+   any sequence type
+   -outfile Output file name Output file <sequence>.supermatcher
+   Optional qualifiers Allowed values Default
+   -datafile Matrix file Comparison matrix file in EMBOSS data path
+   EBLOSUM62 for protein
+   EDNAMAT for DNA
+   -errorfile Error file to be written too Output file supermatcher.error
+   -showinternals Show internals Yes/No No
+   -scoreonly Calculate score only Yes/No No
+   -[no]showalign Show alignment Yes/No Yes
+   -width Alignment width Any integer value 16
+   -wordlen word length for initial matching Integer 3 or more 6
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+   supermatcher.error will contain any errors that occured during the
+   program. This maybe that wordmatch could not find any matches hence no
+   suitable start point is found for the smith-waterman calculation.
+   
+Data files
+
+   For protein sequences EBLOSUM62 is used for the substitution matrix.
+   For nucleotide sequence, EDNAMAT is used. Others can be specified.
+   
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   dotmatcher Displays a thresholded dotplot of two sequences
+   polydot Displays all-against-all dotplots of a set of sequences
+   seqmatchall Does an all-against-all comparison of a set of sequences
+   stssearch Searches a DNA database for matches with a set of STS
+   primers
+   wordmatch Finds all exact matches of a given size between 2 sequences
+   
+Author(s)
+
+   This application was written by Ian Longden (il@sanger.ac.uk)
+   Informatics Division, The Sanger Centre, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge, CB10 1SA, UK.
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

@@ -1,0 +1,282 @@
+
+                              EMBOSS: diffseq
+     _________________________________________________________________
+   
+                                Program diffseq
+                                       
+Function
+
+   Find differences (SNPs) between nearly identical sequences
+   
+Description
+
+   diffseq takes two overlapping, nearly identical sequences and reports
+   the differences between them, together with any features that overlap
+   with these regions. GFF files of the differences in each sequence are
+   also produced.
+   
+   diffseq should be of value when looking for SNPs, differences between
+   strains of an organism and anything else that requires the differences
+   between sequences to be highlighted.
+   
+   The sequences can be very long. The program does a match of all
+   sequence words of size 10 (by default). It then reduces this to the
+   minimum set of overlapping matches by sorting the matches in order of
+   size (largest size first) and then for each such match it removes any
+   smaller matches that overlap. The result is a set of the longest
+   ungapped alignments between the two sequences that do not overlap with
+   each other. The mismatched regions between these matches are reported.
+   
+   It should be possible to find differences between sequences that are
+   Mega bytes long.
+   
+Usage
+
+   Here is a sample session with diffseq:
+
+% diffseq embl:ap000504 embl:af129756
+Find differences (SNPs) between nearly identical sequences
+Word size [10]:
+Output file [ap000504.diffseq]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-asequence]         sequence   Sequence USA
+  [-bsequence]         sequence   Sequence USA
+   -wordsize           integer    Word size
+   -outfile            outfile    Output report file
+
+   Optional qualifiers:
+   -afeatout           featout    File for output of first sequence's normal
+                                  tab delimted gff's
+   -bfeatout           featout    File for output of second sequence's normal
+                                  tab delimted gff's
+
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-asequence]
+   (Parameter 1) Sequence USA Readable sequence Required
+   [-bsequence]
+   (Parameter 2) Sequence USA Readable sequence Required
+   -wordsize Word size Integer 2 or more 10
+   -outfile Output report file Output file <sequence>.diffseq
+   Optional qualifiers Allowed values Default
+   -afeatout File for output of first sequence's normal tab delimted
+   gff's Writeable feature table $(asequence.name).diffgff
+   -bfeatout File for output of second sequence's normal tab delimted
+   gff's Writeable feature table $(bsequence.name).diffgff
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   This program reads in two nucleic acid sequence USAs or two protein
+   sequence USAs.
+   
+Output file format
+
+   A report of the differences between the two sequences is produced,
+   together with any features that overlap with these differing regions.
+   
+   An example follows:
+  __________________________________________________________________________
+
+# Report of diffseq of: AP000504 and AF129756
+
+AP000504 overlap starts at 1
+AF129756 overlap starts at 6036
+
+AP000504 847-847 Length: 1
+Sequence: a
+Sequence: t
+AF129756 6882-6882 Length: 1
+
+AP000504 1795-1795 Length: 1
+Sequence: g
+Sequence: a
+AF129756 7830-7830 Length: 1
+
+AP000504 2273-2273 Length: 1
+Sequence: t
+Sequence:
+Feature: repeat_region 7920-8351 rpt_family="MSTB"
+AF129756 8307 Length: 0
+
+AP000504 2466-2466 Length: 1
+Sequence: g
+Sequence: a
+Feature: repeat_region 8391-8686 rpt_family="AluSg"
+AF129756 8500-8500 Length: 1
+
+AP000504 2655-2658 Length: 4
+Sequence: tgtg
+Sequence:
+Feature: repeat_region 8687-8731 rpt_family="(CA)n"
+AF129756 8688 Length: 0
+
+AP000504 4914 Length: 0
+Sequence:
+Sequence: gtgtgtgtgtgtgtgtgt
+Feature: repeat_region 10910-10972 rpt_family="(CA)n"
+AF129756 10945-10962 Length: 18
+
+AP000504 4951-4953 Length: 3
+Sequence: aaa
+Sequence: tat
+Feature: repeat_region 10991-11020 rpt_family="AT_rich"
+AF129756 10999-11001 Length: 3
+
+AP000504 6600-6600 Length: 1
+Sequence: t
+Sequence:
+Feature: repeat_region 12628-12930 rpt_family="AluSq"
+AF129756 12647 Length: 0
+
+AP000504 6868-6868 Length: 1
+Sequence: g
+Sequence: a
+Feature: repeat_region 12628-12930 rpt_family="AluSq"
+AF129756 12915-12915 Length: 1
+
+AP000504 8218-8221 Length: 4
+Sequence: tgtg
+Sequence:
+AF129756 14264 Length: 0
+
+[many lines removed for brevity]
+
+AP000504 overlap ends at 100000
+AF129756 overlap ends at 106028
+  __________________________________________________________________________
+
+   The first line is the title giving the names of the sequences used.
+   
+   The next two non-blank lines state the positions in each sequence
+   where the detected overlap between them starts.
+   
+   There then follows a set of reports of the mismatches between the
+   sequences.
+   Each report consists of 4 or more lines.
+     * The first line has the name of the first sequence followed by the
+       start and end positions of the mismatched region in that sequence,
+       followed by the length of the mismatched region. If the mismatched
+       region is of zero length in this sequence, then only the position
+       of the last matching base before the mismatch is given.
+     * If a feature of the first sequence overlaps with this mismatch
+       region, then one or more lines starting with 'Feature:' comes next
+       with the type, position and tag field of the feature.
+     * Next is a line starting "Sequence:" giving the sequence of the
+       mismatch in the first sequence.
+       
+   This is followed by the equivalent information for the second
+   sequence, but in the reverse order, namely 'Sequence:' line,
+   'Feature:' lines and line giving the position of the mismatch in the
+   second sequence.
+   
+   The last two non-blank lines of the report give the positions in each
+   sequence where the detected overlap between them ends.
+   
+   It should be noted that not all features are reported.
+   
+   The 'source' feature found in all EMBL/Genbank feature table entries
+   is not reported as this covers all of the sequence and so overlaps
+   with any difference found in that sequence and so is uninformative and
+   irritating. It has therefore been removed from the output report.
+   
+   The translation information of CDS features is often extremely long
+   and does not add useful information to the report. It has therefore
+   been removed from the output report.
+   
+Data files
+
+Notes
+
+   It should be noted that not all features are reported.
+   
+   The 'source' feature found in all EMBL/Genbank feature table entries
+   is not reported as this covers all of the sequence and so overlaps
+   with any difference found in that sequence and so is uninformative and
+   irritating. It has therefore been removed from the output report.
+   
+   The translation information of CDS features is often extremely long
+   and does not add useful information to the report. It has therefore
+   been removed from the output report.
+   
+   If you run out of memory, use a larger word size.
+   
+   Using a larger word size increases the length between mismatches that
+   will be reported as one event. Thus a word size of 50 will report two
+   SNP that are with 50 bases of each other as one mismatch.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   antigenic Finds antigenic sites in proteins
+   chaos Create a chaos game representation plot for a sequence
+   cpgplot Plot CpG rich areas
+   cpgreport Reports all CpG rich regions
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   einverted Finds DNA inverted repeats
+   equicktandem Finds tandem repeats
+   etandem Looks for tandem repeats in a nucleotide sequence
+   garnier Predicts protein secondary structure
+   helixturnhelix Report nucleic acid binding motifs
+   isochore Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   oddcomp Finds protein sequence regions with a biased composition
+   palindrome Looks for inverted repeats in a nucleotide sequence
+   pepcoil Predicts coiled coil regions
+   polydot Displays all-against-all dotplots of a set of sequences
+   primersearch Searches DNA sequences for matches with primer pairs
+   pscan Scans proteins using PRINTS
+   redata Search REBASE for enzyme name, references, suppliers etc
+   restrict Finds restriction enzyme cleavage sites
+   showseq Display a sequence with features, translation etc
+   sigcleave Reports protein signal cleavage sites
+   tfscan Scans DNA sequences for transcription factors
+   tmap Displays membrane spanning regions
+   
+   A graphical dotplot of the matches used in this program can be
+   displayed using the program dotpath.
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Written 15th Aug 2000 - Gary Williams.
+   18th Aug 2000 - Added writing out GFF files of the mismatched regions
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

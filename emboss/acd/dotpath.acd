@@ -1,0 +1,32 @@
+# dotpath application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+appl: dotpath [
+	doc: "Displays a non-overlapping wordmatch dotplot of two sequences"
+	groups: "comparison, DNA: sequence features, protein: sequence features"
+]
+
+  sequence: sequencea [ param: y type: any ]
+
+  sequence: sequenceb [ param: y 
+     type: "@($(sequencea.protein) ? protein : nucleotide)" ]
+
+  int: wordsize [ req: Y def: 4 min: 2
+                    info: "Word size" ]
+
+  bool: overlaps [
+	opt: Y
+	def: N
+	info: "Display the overlapping matches"
+	help: "Displays the overlapping matches (in red) as well as the
+minimal set of non-overlapping matches"
+  ]
+
+  graph: graph [ req: Y
+  gxtitle: $(sequenceb.name) gytitle: $(sequencea.name) ]
+
+  bool: text [def: N opt: Y info: "Display as text" ]
+
+  bool: boxit [def: Y opt: Y info: "Draw a box around dotplot" ]
+
+  outfile: outfile [ req: "$(text)" nullok: Y ]

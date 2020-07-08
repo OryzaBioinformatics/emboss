@@ -1,0 +1,335 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: findkm
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: findkm
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program findkm
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Calculates Km and Vmax for an enzyme reaction using a Hanes/Woolf plot
+
+
+<H2>
+    Description
+</H2>
+
+
+Takes a file of enzymatic data and plots Michaelkis Menten and
+Hanes Woolf plots of the data. From these ot calculates the Michaelis
+Menten constant (Km) and the maximum velocity (Vmax) of the reaction.
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with findkm.
+
+<pre>
+
+%findkm
+Calculates Km and Vmax for an enzyme reaction.
+Enter name of file containing data: enztest.dat   
+Display on device [xwin]: 
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-infile]            infile     Enter name of file containing data
+  [-outfile]           outfile    Output file name
+   -graphlb            xygraph    Graph type
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -[no]plot           bool       S/V vs S
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>Enter name of file containing data</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>findkm.out</td>
+</tr>
+
+<tr>
+<td>-graphlb</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]plot</td>
+<td>S/V vs S</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+The input file is a file of enzymatic data, [S] against V, Substrate
+concentration against reaction velocity.
+
+<p>
+The data for the example run are shown below:
+
+<pre>
+
+  0.10   2
+  0.20   4
+  0.50   9
+  1.00  17
+  2.00  29
+  5.00  50
+ 10.00  67
+ 20.00  80
+ 50.00  91
+100.00  95
+
+
+</pre>
+
+<H2>
+    Output file format
+</H2>
+
+
+Here is a sample output from the example above, together with the plots:
+        
+<pre>
+
+---Hanes Woolf Plot Calculations---
+Slope of best fit line is a = 0.01
+Coefficient in Eqn of line y = ma +b is b = 0.05
+Where line cuts x axis = (-0.20, 0)
+Where line cuts y axis = (0, 0.05)
+Limit-point of graph for plot = (103.00, 1.08)
+
+Vmax = 99.70, Km = 4.894612
+        
+</pre>
+
+<a href="findkm0.gif">Click here for the graphical output</a>
+      
+<H2>
+    Data files
+</H2>
+
+
+See Input File Format
+        
+<H2>
+    Notes
+</H2>
+
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+
+<li>
+Voet & Voet (1993) 'Biochemistry' 
+
+<li>
+Dawes 'Quantitative Problems in Biochemistry' 5th Edition.
+
+<li>
+Manuel G. Claros, Francisco M. Canovas 
+'Lines&amp;Kinetics: a graphic tool to deal with linear regressions and
+enzyme kinetics.'
+EMBnet.news vol 5.1
+<a href="http://www.uk.embnet.org/embnet.news/vol5_1/kinetics.html">
+http://www.uk.embnet.org/embnet.news/vol5_1/kinetics.html</a>
+
+<li>
+Cornish-Bowden (1996) 'Fundamentals of Enzyme kinetics'
+Portland Press, London.
+
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Sinead O'Leary <a
+href="mailto:soleary@hgmp.mrc.ac.uk">(soleary@hgmp.mrc.ac.uk)</a>
+
+<p>
+This application was modified for inclusion in EMBOSS by David Martin <a
+href="mailto:david.martin@biotek.uio.no">(david.martin@biotek.uio.no)</a>
+at the Norwegian EMBnet node.
+
+
+<H2>
+    History
+</H2>
+
+
+Completed November 1999
+
+<p>
+Modified May 2000
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

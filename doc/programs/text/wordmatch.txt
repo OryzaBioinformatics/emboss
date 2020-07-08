@@ -1,0 +1,109 @@
+
+                             EMBOSS: wordmatch
+     _________________________________________________________________
+   
+                               Program wordmatch
+                                       
+Function
+
+   Finds all exact matches of a given size between 2 sequences
+   
+Description
+
+   Finds all exact matches of a given minimum size between 2 sequences
+   displaying the start points in each sequence and the match length.
+   
+Usage
+
+   Here is a sample session with wordmatch.
+
+% wordmatch sw:hba_human sw:hbb_human
+Output file [hba_human.wordmatch]:
+Word size [4]:
+
+% more hba_human.wordmatch
+FINALLY length = 3
+ HBA_HUMAN  HBB_HUMAN Length
+        58          63          5
+        14          15          4
+       116         121          4
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-asequence]         sequence   Sequence USA
+  [-bsequence]         sequence   Sequence USA
+  [-outfile]           outfile    Output file name
+   -wordsize           integer    Word size
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -afeatout           featout    File for output of normal tab delimted gff's
+   -bfeatout           featout    File for output of normal tab delimted gff's
+
+
+   Mandatory qualifiers Allowed values Default
+   [-asequence]
+   (Parameter 1) Sequence USA Readable sequence Required
+   [-bsequence]
+   (Parameter 2) Sequence USA Readable sequence Required
+   [-outfile]
+   (Parameter 3) Output file name Output file <sequence>.wordmatch
+   -wordsize Word size Integer 2 or more 4
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -afeatout File for output of normal tab delimted gff's Writeable
+   feature table unknown.gff
+   -bfeatout File for output of normal tab delimted gff's Writeable
+   feature table unknown.gff
+   
+Input file format
+
+   Any two sequence USAs of the same type (DNA or protein).
+   
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+   0 if successfull.
+   
+Known bugs
+
+See also
+
+   Program name Description
+   dotmatcher Displays a thresholded dotplot of two sequences
+   polydot Displays all-against-all dotplots of a set of sequences
+   seqmatchall Does an all-against-all comparison of a set of sequences
+   stssearch Searches a DNA database for matches with a set of STS
+   primers
+   supermatcher Finds a match of a large sequence against one or more
+   sequences
+   
+Author(s)
+
+   This application was written by Ian Longden (il@sanger.ac.uk)
+   Informatics Division, The Sanger Centre, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge, CB10 1SA, UK.
+   
+History
+
+   Completed 27th November 1998.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

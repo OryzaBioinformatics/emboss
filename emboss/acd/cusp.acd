@@ -1,0 +1,10 @@
+appl: cusp [
+        doc: "Create a codon usage table"
+        groups: "translation,gene finding,DNA: sequence composition"
+]
+
+ seqall: sequence [ param: Y type: DNA ]
+
+ codon: cfile [ req: N ]
+
+ outfile: outfile [ param: Y ]

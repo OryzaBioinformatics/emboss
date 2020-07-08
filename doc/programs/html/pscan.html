@@ -1,0 +1,514 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: pscan
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: pscan
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program pscan
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Scans proteins using PRINTS
+
+
+<H2>
+    Description
+</H2>
+
+
+PRINTS is a database of diagnostic protein signatures, or fingerprints.
+
+<p>
+Fingerprints are groups of conserved motifs or elements that together
+form a diagnostic signature for particular protein families. 
+
+<p>
+An uncharacterised sequence matching all motifs or elements can then be
+readily diagnosed as a true match to a particular family fingerprint. 
+
+<p>
+They can be used to diagnose family relationships in newly-determined
+sequences (especially from genome projects). 
+
+<p>
+Usually the motifs or elements do not overlap, but are separated along a
+sequence, though they may be contiguous in 3D-space.  Fingerprints can
+encode protein folds and functionalities more flexibly and powerfully
+than can single motifs, full diagnostic potency deriving from the mutual
+context provided by motif neighbours. 
+
+<p>
+Diagnostically, this is more powerful than using single motifs by virtue
+of the biological context afforded by matching motif neighbours. 
+
+<p>
+pscan finds matches between a query protein sequence and the motifs or
+elements in the PRINTS database.  It reports various classes of matches:
+
+<p>
+<ul>
+
+<li>Matches where all elements of a motif exist in the correct order
+<li>Matches where all elements exist but some are in the incorrect order
+<li>Matches where some elements match and are in the correct order
+<li>Miscellaneous matches. 
+
+</ul>
+
+<p>
+The home web page of the PRINTS database is:
+<a href="http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/">http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/</a>
+
+<H2>
+    Usage
+</H2>
+
+
+Here is a sample session with pscan.
+
+<pre>
+
+% pscan
+Scans proteins using PRINTS
+Input sequence(s): sw:OPSD_HUMAN
+Minimum number of elements per fingerprint [2]: 
+Maximum number of elements per fingerprint [20]: 
+Output file [opsd_human.pscan]:
+%
+
+</pre>
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -emin               integer    Minimum number of elements per fingerprint
+   -emax               integer    Maximum number of elements per fingerprint
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-emin</td>
+<td>Minimum number of elements per fingerprint</td>
+<td>Integer from 1 to 20</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>-emax</td>
+<td>Maximum number of elements per fingerprint</td>
+<td>Integer up to 20</td>
+<td>20</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.pscan</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+The input sequence can be one or more protein sequences.
+
+<H2>
+    Output file format
+</H2>
+
+
+The program reports hits in four classes.
+
+<dl>
+
+
+	<dt> Class1:</dt><dd>Matches where all elements of a motif
+	exist in the correct order
+
+        <dt> Class2:</dt><dd>Matches where all elements exist but some
+        are in the incorrect order
+
+        <dt> Class3:</dt><dd>Matches where some elements match and are
+        in the correct order
+
+        <dt> Class4:</dt><dd>Miscellaneous matches
+
+</dl>
+
+Here is part of a sample output:
+
+<pre>
+
+CLASS 1
+Fingerprints with all elements in order
+
+Fingerprint GPCRRHODOPSN Elements 7
+    Accession number PR00237
+    Rhodopsin-like GPCR superfamily signature
+  Element 1 Threshold 54% Score 64%
+             Start position 39 Length 25
+  Element 2 Threshold 49% Score 75%
+             Start position 72 Length 22
+  Element 3 Threshold 48% Score 56%
+             Start position 117 Length 23
+  Element 4 Threshold 50% Score 69%
+             Start position 152 Length 22
+  Element 5 Threshold 51% Score 74%
+             Start position 204 Length 24
+  Element 6 Threshold 42% Score 75%
+             Start position 250 Length 25
+  Element 7 Threshold 46% Score 67%
+             Start position 288 Length 27
+
+
+CLASS 2
+All elements match but not all in the correct order
+
+Fingerprint RHODOPSIN Elements 6
+    Accession number PR00579
+    Rhodopsin signature
+  Element 1 Threshold 80% Score 96%
+             Start position 3 Length 19
+  Element 2 Threshold 76% Score 100%
+             Start position 22 Length 17
+  Element 3 Threshold 53% Score 92%
+             Start position 85 Length 17
+  Element 4 Threshold 71% Score 100%
+             Start position 191 Length 17
+  Element 5 Threshold 56% Score 99%
+             Start position 271 Length 19
+  Element 6 Threshold 81% Score 93%
+             Start position 319 Length 14
+
+
+CLASS 3
+Not all elements match but those that do are in order
+
+Fingerprint PROFILIN Elements 6
+    Accession number PR00392
+    Profilin signature
+  Element 6 Threshold 31% Score 31%
+             Start position 18 Length 18
+  Element 6 Threshold 37% Score 37%
+             Start position 318 Length 15
+
+
+CLASS 4
+Remaining partial matches
+
+Fingerprint NANEUSMPORT Elements 8
+    Accession number PR00176
+    Sodium/chloride neurotransmitter symporter signature
+  Element 2 Threshold 47% Score 47%
+             Start position 38 Length 20
+
+</pre>
+
+<H2>
+    Data files
+</H2>
+
+
+The data file is stored in the PRINTS directory of the standard EMBOSS
+data directory.
+
+<ul>
+   <li> prints.mat       Matrices derived from PRINTS
+   <li> Pxxxxx           Information for each fingerprint
+</ul>
+
+The column information is described at the top of the matrix data file
+
+<H2>
+    Notes
+</H2>
+
+
+The matrix information used to scan a sequence is derived from the final
+motif sets in the PRINTS database. The matrices are of the simple frequency
+type and contain the number of times a residue occurs in each position of
+the alignment. Each matrix therefore has a highest possible score, being
+the sum of the maximum score of each column. A match to the sequence
+window is obtained if it has a score equal to or greater than the percentage
+of the maximum score of the lowest scoring sequence in the final motif
+set.
+
+<H2>
+    References
+</H2>
+
+
+<ol>
+<li>
+Attwood, T.K., Flower, D.R., Lewis, A.P., Mabey, J.E., Morgan, S.R., 
+   Scordis, P., Selley, J. and Wright, W. (1999) PRINTS prepares for the new
+   millennium. Nucleic Acids Research, 27(1), 220-225. 
+<li>
+Attwood, T.K., Beck, M.E., Flower, D.R., Scordis, P. and Selley, J. (1998)
+   The PRINTS protein fingerprint database in its fifth year. Nucleic Acids 
+   Research, 26(1), 304-308. 
+<li>
+Attwood, T.K., Beck, M.E., Bleasby, A.J., Degtyarenko, K., Michie, A.D. and 
+   Parry-Smith, D.J. (1997) Novel developments with the PRINTS protein motif
+   fingerprint database. Nucleic Acids Research, 25 (1), 212-216.
+<li>
+Attwood, T.K. and Beck, M.E. (1994) PRINTS - A protein motif fingerprint
+   database. Protein Engineering, 7(7), 841-848.
+<li>
+Bleasby, A.J., Akrigg, D.A. and Attwood, T.K. (1994) OWL - A non-redundant
+   composite protein sequence database. Nucleic Acids Research, 22(17), 3574-77.
+<li>
+Bleasby, A.J. and Wootton, J.C. (1990) Constructing validated, non-
+   redundant composite protein sequence databases. Protein Engineering, 3(3), 
+   153-159. 
+<li>
+Parry-Smith, D.J. and Attwood, T.K. (1992) ADSP - A new package for
+   computational sequence analysis. CABIOS, 8(5), 451-459.
+<li>
+Attwood, T.K. and Findlay, J.B.C. (1994) Fingerprinting G-protein-coupled
+   receptors. Prot.Engng. 7(2), 195-203.
+<li>
+Attwood, T.K. and Findlay, J.B.C. (1993) Design of a discriminating finger-
+   print for G-protein-coupled receptors. Prot.Engng. 6(2) 167-176.
+<li>
+ Akrigg, D., Attwood, T.K., Bleasby, A.J., Findlay, J.B.C, North, A.C.T.,
+   Maughan, N.A., Parry-Smith, D.J., Perkins, D.N. and Wootton, J.C. (1992)
+   SERPENT - An information storage and analysis resource for protein
+   sequences. CABIOS 8(3) 295-296.
+<li>
+ Parry-Smith, D.J. and Attwood, T.K. (1991) SOMAP - A novel interactive
+    approach to multiple protein sequence aligment. CABIOS, 7(2), 233-235.
+<li>
+ Perkins, D.N. and Attwood, T.K. (1995) VISTAS - A package for VIsualising
+    STructures And Sequences of proteins. J.Mol.Graph., 13, 73-75. 
+<li>
+ Parry-Smith, D.J., Payne, A.W.R, Michie, A.D. and Attwood, T.K. (1998) 
+    CINEMA - A novel Colour INteractive Editor for Multiple Alignments.
+    Gene, 211(2), GC45-56. 
+</ol>
+
+<H2>
+    Warnings
+</H2>
+
+
+The program will warn you if a DNA sequence is given.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+If you get the following EMBOSS FATAL ERROR message: 
+
+<pre>
+
+"prints.mat file not found. Create it with printsextract."
+
+</pre>
+
+<p>
+then your local PRINTS data has not been set up correctly in your
+EMBOSS DATA directory.  Use <a
+href="printsextract.html">'printsextract'</a> to do this.
+
+<H2>
+    Exit status
+</H2>
+
+
+It exits with status 0 unless an error is reported.
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="antigenic.html">antigenic</a></td><td>Finds antigenic sites in proteins</td></tr>
+<tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td></tr>
+<tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
+<tr><td><a href="dreg.html">dreg</a></td><td>regular expression search of a nucleotide sequence</td></tr>
+<tr><td><a href="fuzznuc.html">fuzznuc</a></td><td>Nucleic acid pattern search</td></tr>
+<tr><td><a href="fuzzpro.html">fuzzpro</a></td><td>Protein pattern search</td></tr>
+<tr><td><a href="fuzztran.html">fuzztran</a></td><td>Protein pattern search after translation</td></tr>
+<tr><td><a href="garnier.html">garnier</a></td><td>Predicts protein secondary structure</td></tr>
+<tr><td><a href="helixturnhelix.html">helixturnhelix</a></td><td>Report nucleic acid binding motifs</td></tr>
+<tr><td><a href="oddcomp.html">oddcomp</a></td><td>Finds protein sequence regions with a biased composition</td></tr>
+<tr><td><a href="patmatdb.html">patmatdb</a></td><td>Search a protein sequence with a motif</td></tr>
+<tr><td><a href="patmatmotifs.html">patmatmotifs</a></td><td>Search a PROSITE motif database with a protein sequence</td></tr>
+<tr><td><a href="pepcoil.html">pepcoil</a></td><td>Predicts coiled coil regions</td></tr>
+<tr><td><a href="polydot.html">polydot</a></td><td>Displays all-against-all dotplots of a set of sequences</td></tr>
+<tr><td><a href="preg.html">preg</a></td><td>regular expression search of a protein sequence</td></tr>
+<tr><td><a href="printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
+<tr><td><a href="prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
+<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>
+<tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
+<tr><td><a href="tmap.html">tmap</a></td><td>Displays membrane spanning regions</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<ul>
+
+<li>
+<a href="printsextract.html">printsextract</a> - Extract data from
+PRINTS.  pscan uses the PRINTS data.  Until printsextract has been run
+to set up the PRINTS data, pscan will not run correctly.
+
+</ul>
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+The data files must have been created before running this program. This is
+done by running the PRINTSEXTRACT program with the "prints.dat" file from
+a PRINTS release. You may have to ask your system manager to do this.
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

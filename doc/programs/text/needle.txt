@@ -1,0 +1,221 @@
+
+                               EMBOSS: needle
+     _________________________________________________________________
+   
+                                Program needle
+                                       
+Function
+
+   Needleman-Wunsch global alignment
+   
+Description
+
+   This program uses the Needleman-Wunsch global alignment algorithm to
+   find the optimum alignment (including gaps) of two sequences when
+   considering their entire length.
+   
+   The Needleman-Wunsch algorithm is a member of the class of algorithms
+   that can calculate the best score and alignment in the order of mn
+   steps, (where 'n' and 'm' are the lengths of the two sequences). These
+   dynamic programming algorithms were first developed for protein
+   sequence comparison by Needleman and Wunsch, though similar methods
+   were independently devised during the late 1960's and early 1970's for
+   use in the fields of speech processing and computer science.
+   
+   What is the optimal alignment? Dynamic programming methods ensure the
+   optimal global alignment by exploring all possible alignments and
+   choosing the best. It does this by reading in a scoring matrix that
+   contains values for every possible residue or nucleotide match. Needle
+   finds an alignment with the maximum possible score where the score of
+   an alignment is equal to the sum of the matches taken from the scoring
+   matrix.
+   
+   An important problem is the treatment of gaps, i.e., spaces inserted
+   to optimise the alignment score. A penalty is subtracted from the
+   score for each gap opened (the 'gap open' penalty) and a penalty is
+   subtracted from the score for the total number of gap spaces
+   multiplied by a cost (the 'gap extension' penalty).
+   
+   Typically, the cost of extending a gap is set to be 5-10 times lower
+   than the cost for opening a gap.
+   
+Usage
+
+   Here is a sample session with needle.
+
+% needle sw:hba_human sw:hbb_human
+
+Gap opening penalty [10.0]:
+Gap extension penalty [0.5]:
+Output file [hba_human.needle]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequencea]         sequence   Sequence USA
+  [-seqall]            seqall     Sequence database USA
+   -gapopen            float      The gap open penalty is the score taken away
+                                  when a gap is created. The best value
+                                  depends on the choice of comparison matrix.
+                                  The default value assumes you are using the
+                                  EBLOSUM62 matrix for protein sequences, and
+                                  the EDNAMAT matrix for nucleotide sequences.
+   -gapextend          float      The gap extension, penalty is added to the
+                                  standard gap penalty for each base or
+                                  residue in the gap. This is how long gaps
+                                  are penalized. Usually you will expect a few
+                                  long gaps rather than many short gaps, so
+                                  the gap extension penalty should be lower
+                                  than the gap penalty. An exception is where
+                                  one or both sequences are single reads with
+                                  possible sequencing errors in which case you
+                                  would expect many single base gaps. You can
+                                  get this result by setting the gap open
+                                  penalty to zero (or very low) and using the
+                                  gap extension penalty to control gap
+                                  scoring.
+   -outfile            outfile    Output file name
+
+   Optional qualifiers:
+   -datafile           matrixf    Matrix file
+
+   Advanced qualifiers:
+   -showinternals      bool       Show debugging information on the internal
+                                  state of the search.
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequencea]
+   (Parameter 1) Sequence USA Readable sequence Required
+   [-seqall]
+   (Parameter 2) Sequence database USA Readable sequence(s) Required
+   -gapopen The gap open penalty is the score taken away when a gap is
+   created. The best value depends on the choice of comparison matrix.
+   The default value assumes you are using the EBLOSUM62 matrix for
+   protein sequences, and the EDNAMAT matrix for nucleotide sequences.
+   Floating point number from 1.0 to 100.0 10.0 for any sequence
+   -gapextend The gap extension, penalty is added to the standard gap
+   penalty for each base or residue in the gap. This is how long gaps are
+   penalized. Usually you will expect a few long gaps rather than many
+   short gaps, so the gap extension penalty should be lower than the gap
+   penalty. An exception is where one or both sequences are single reads
+   with possible sequencing errors in which case you would expect many
+   single base gaps. You can get this result by setting the gap open
+   penalty to zero (or very low) and using the gap extension penalty to
+   control gap scoring. Floating point number from 0.0 to 10.0 0.5 for
+   any sequence
+   -outfile Output file name Output file <sequence>.needle
+   Optional qualifiers Allowed values Default
+   -datafile Matrix file Comparison matrix file in EMBOSS data path
+   EBLOSUM62 for protein
+   EDNAMAT for DNA
+   Advanced qualifiers Allowed values Default
+   -showinternals Show debugging information on the internal state of the
+   search. Yes/No No
+   
+Input file format
+
+   Any 2 sequence USAs of the same type (DNA or protein).
+   
+Output file format
+
+   Here is the output file from the example run:
+
+Global: HBA_HUMAN vs HBB_HUMAN
+Score: 290.50
+
+HBA_HUMAN       1      VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFP 44
+                        |:| :|: | | ||||  :  | | ||| |: : :| |: :|
+HBB_HUMAN       1     VHLTPEEKSAVTALWGKV..NVDEVGGEALGRLLVVYPWTQRFFE 43
+
+HBA_HUMAN       45    HF.DLS.....HGSAQVKGHGKKVADALTNAVAHVDDMPNALSAL 83
+                       | |||      |: :|| |||||  | :: :||:|::    : |
+HBB_HUMAN       44    SFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATL 88
+
+HBA_HUMAN       84    SDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKF 128
+                      |:||  || ||| ||:|| : |:  || |   |||| | |:  |
+HBB_HUMAN       89    SELHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKV 133
+
+HBA_HUMAN       129   LASVSTVLTSKYR                                 141
+                      :| |:  |  ||
+HBB_HUMAN       134   VAGVANALAHKYH                                 146
+
+Data files
+
+   For protein sequences EBLOSUM62 is used for the substitution matrix.
+   For nucleotide sequence, EDNAMAT is used. Others can be specified.
+   
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by EMBOSS
+   environment variable EMBOSS_DATA.
+   
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+   
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+       
+Notes
+
+References
+
+    1. Needleman, S. B. and Wunsch, C. D. (1970) J. Mol. Biol. 48,
+       443-453.
+    2. Kruskal, J. B. (1983) An overview of squence comparison In D.
+       Sankoff and J. B. Kruskal, (ed.), Time warps, string edits and
+       macromolecules: the theory and practice of sequence comparison,
+       pp. 1-44 Addison Wesley.
+       
+Warnings
+
+   needle is for aligning two sequences over their entire length. This
+   works best with closely related sequences. If you use needle to align
+   very distantly-related sequences, it will produce a result but much of
+   the alignment may have little or no biological significance.
+   
+   The memory and time required to do the search is proportional to (on
+   the order of) mn, where 'n' and 'm' are the lengths of the two
+   sequences. This means that aligning two 1000-residue sequences takes
+   roughly 100 times longer and uses 100 times more memory than aligning
+   two 100-residue sequences.
+   
+Diagnostic Error Messages
+
+Exit status
+
+   0 upon successful completion.
+   
+Known bugs
+
+See also
+
+   Program name Description
+   stretcher Finds the best global alignment between two sequences
+   
+   When you want an alignment that covers the whole length of both
+   sequences, use needle. 
+   
+   When you are trying to find the best region of similarity between two
+   sequences, use water.
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+Completed 8th July 1999.
+Last modified 26th July 1999.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

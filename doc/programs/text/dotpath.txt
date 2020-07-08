@@ -1,0 +1,188 @@
+
+                              EMBOSS: dotpath
+     _________________________________________________________________
+   
+                                Program dotpath
+                                       
+Function
+
+   Displays a non-overlapping wordmatch dotplot of two sequences
+   
+Description
+
+   A dotplot is a graphical representation of the regions of similarity
+   between two sequences.
+   
+   The two sequences are placed on the axes of a rectangular image and
+   wherever there is a similarity between the sequences a dot is placed
+   on the image.
+   
+   Where the two sequences have substantial regions of similarity, many
+   dots align to form diagonal lines. It is therefore possible to see at
+   a glance where there are local regions of similarity.
+   
+   dotpath is very similar to the program dottup which looks for places
+   where words (tuples) of a specified length have an exact match in both
+   sequences and draws a diagonal line over the position of these words.
+   
+   Using a longer word size thus displays less random noise, runs
+   extremely quickly, but is less sensitive.
+   
+   dotpath finds all matches of size -wordsize or greater between two
+   sequences. It then reduces the matches found to the minimal set of
+   long matches that do not overlap. This is a way of finding the
+   (nearly) optimal path aligning two sequences. It is not the true
+   optimal path as produced by the algorithms used in water or needle,
+   but for very closely related sequences it will produce the same result
+   and will work well with very long sequences.
+   
+   If you wish to compare the path found by dotpath to the set of all
+   matches found then the qualifier -overlaps will show all matches in
+   red except for the matches in the minimal path which are shown in
+   black, as normal.
+   
+Usage
+
+   Here is a sample session with dotpath:
+
+% dotpath embl:AF129756 embl:AP000504 -word 20
+Displays a non-overlapping wordmatch dotplot of two sequences
+Graph type [x11]:
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-sequencea]         sequence   Sequence USA
+  [-sequenceb]         sequence   Sequence USA
+   -wordsize           integer    Word size
+   -graph              graph      Graph type
+*  -outfile            outfile    Output file name
+
+   Optional qualifiers:
+   -overlaps           bool       Displays the overlapping matches (in red) as
+                                  well as the minimal set of non-overlapping
+                                  matches
+   -text               bool       Display as text
+   -[no]boxit          bool       Draw a box around dotplot
+
+   Advanced qualifiers: (none)
+
+   Mandatory qualifiers Allowed values Default
+   [-sequencea]
+   (Parameter 1) Sequence USA Readable sequence Required
+   [-sequenceb]
+   (Parameter 2) Sequence USA Readable sequence Required
+   -wordsize Word size Integer 2 or more 4
+   -graph Graph type EMBOSS has a list of known devices, including
+   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
+   EMBOSS_GRAPHICS value, or x11
+   -outfile Output file name Output file <sequence>.dotpath
+   Optional qualifiers Allowed values Default
+   -overlaps Displays the overlapping matches (in red) as well as the
+   minimal set of non-overlapping matches Yes/No No
+   -text Display as text Yes/No No
+   -[no]boxit Draw a box around dotplot Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+   In normal operation, a dotplot image is displayed.
+   
+   With the -text -out qualifiers a file of the positions of the matches
+   in the minimal non-overlapping set of matches is output.
+   
+
+% dotpath embl:AF129756 embl:AP000504 -word 20 -text -out af.path
+Displays a non-overlapping wordmatch dotplot of two sequences
+Graph type [x11]:
+
+   Produces the output file:
+   
+119 matches found
+
+  AF129756   AP000504 Length
+      6036           1        846
+      6883         848        947
+      7831        1796        477
+      8308        2274        192
+      8501        2467        188
+      8689        2659       2256
+     10963        4915         36
+     11002        4954       1646
+     12648        6601        267
+     12916        6869       1349
+     14265        8222        874
+     15140        9097       2052
+     17193       11150       2568
+     19762       13719        529
+etc.
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+   If you give a small word size with a very large sequence you will run
+   out of memory. If this happens, try again with a larger word size.
+   
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   antigenic Finds antigenic sites in proteins
+   chaos Create a chaos game representation plot for a sequence
+   cpgplot Plot CpG rich areas
+   cpgreport Reports all CpG rich regions
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   einverted Finds DNA inverted repeats
+   equicktandem Finds tandem repeats
+   etandem Looks for tandem repeats in a nucleotide sequence
+   garnier Predicts protein secondary structure
+   helixturnhelix Report nucleic acid binding motifs
+   isochore Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   oddcomp Finds protein sequence regions with a biased composition
+   palindrome Looks for inverted repeats in a nucleotide sequence
+   pepcoil Predicts coiled coil regions
+   polydot Displays all-against-all dotplots of a set of sequences
+   primersearch Searches DNA sequences for matches with primer pairs
+   pscan Scans proteins using PRINTS
+   redata Search REBASE for enzyme name, references, suppliers etc
+   restrict Finds restriction enzyme cleavage sites
+   showseq Display a sequence with features, translation etc
+   sigcleave Reports protein signal cleavage sites
+   tfscan Scans DNA sequences for transcription factors
+   tmap Displays membrane spanning regions
+   
+   This program is closely based on dottup with the addition of by
+   default displaying only the minimal set of non-overlapping matches.
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Written 14 Aug 2000.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

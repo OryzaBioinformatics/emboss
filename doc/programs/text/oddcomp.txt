@@ -1,0 +1,206 @@
+
+                              EMBOSS: oddcomp
+     _________________________________________________________________
+   
+                                Program oddcomp
+                                       
+Function
+
+   Finds protein sequence regions with a biased composition
+   
+Description
+
+   Oddcomp searches a series of protein files, reporting the identifier
+   for those that exceed a certain amino acid composition threshold in a
+   portion of the sequence.
+   
+   Oddcomp was written to answer the question 'which proteins contain at
+   least n X and m Y in p residues'.
+   
+   One could search for serine rich or polyglutamine rich, collagen
+   helix, or similar proteins using this program.
+   
+   Oddcomp takes as input an amino acid composition data file in the same
+   format as the output from compseq. It can tolerate any word length
+   within reason for the memory capacity of the machine in question. Only
+   the first two fields in the composition data file are used: the word
+   and the number of occurrences. Any word not mentioned is initialised
+   to a threshold of zero.
+   
+   Oddcomp measures the amino acid composition (this can be dimers etc as
+   well as monomers) in a sliding window. If and when composition meets
+   or exceeds all the specified thresholds, the sequence is reported and
+   oddcomp moves to the next sequence. It does not report where in the
+   sequence it found the matching region, merely the sequence ID.
+   
+   Oddcomp was originally written to identify SR/RS containing proteins.
+   eg. specifying a window of forty amino acids containing at least 3 SR
+   and 4 RS words.
+   
+   To search for a specific set of words in a sequence, edit the input
+   composition data file to delete any words from the input file in which
+   you are not interested. The search is a boolean AND so there must be
+   (from the short example above) at least 3 SR AND at least 4 RS for the
+   sequence to be reported. If your total words specified exceeds
+   window-wordlength+1 you will never get any hits. Only one word size
+   can be used and is specified at the top of the file in compseq-style
+   output.
+   
+Usage
+
+   An example of the use of oddcomp to search for entries in swissprot
+   with at least 1 SR AND at least 2 RS follows:
+
+% oddcomp
+Finds protein sequence regions with a biased composition
+Input sequence(s): sw:*
+Output file [5h1d_fugru.oddcomp]: out.odd
+Input file: test.comp
+Window size to consider (e.g. 30 aa) [30]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outfile]           outfile    This is the results file.
+  [-compdata]          infile     This is a file in the format of the output
+                                  produced by 'compseq' that is used to set
+                                  the minimum frequencies of words in this
+                                  analysis.
+  [-window]            integer    This is the size of window in which to
+                                  count.
+                                  Thus if you want to count frequencies in a
+                                  40 aa stretch you should enter 40 here.
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -[no]ignorebz       bool       The amino acid code B represents Asparagine
+                                  or Aspartic acid and the code Z represents
+                                  Glutamine or Glutamic acid.
+                                  These are not commonly used codes and you
+                                  may wish not to count words containing them,
+                                  just noting them in the count of 'Other'
+                                  words.
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outfile]
+   (Parameter 2) This is the results file. Output file <sequence>.oddcomp
+   [-compdata]
+   (Parameter 3) This is a file in the format of the output produced by
+   'compseq' that is used to set the minimum frequencies of words in this
+   analysis. Input file Required
+   [-window]
+   (Parameter 4) This is the size of window in which to count. Thus if
+   you want to count frequencies in a 40 aa stretch you should enter 40
+   here. Integer 10 or more 30
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -[no]ignorebz The amino acid code B represents Asparagine or Aspartic
+   acid and the code Z represents Glutamine or Glutamic acid. These are
+   not commonly used codes and you may wish not to count words containing
+   them, just noting them in the count of 'Other' words. Yes/No Yes
+   
+Input file format
+
+   The data file ('test.comp') used in the example follows:
+
+# Example input file for oddcomp
+Word size       2
+Total count     0
+
+#
+# Word  Obs Count       Obs Frequency   Exp Frequency   Obs/Exp Frequency
+#
+RS      2               0               0               0
+SR      1               0               0               0
+
+Other   0               0               0               0
+
+   A minimal composition data file would look like this:
+
+Word size       2
+Total count     0
+RS      2
+SR      1
+
+   Blank lines and lines starting with '#' are ignored.
+   
+   The first non-comment line should start with 'Word size' and will
+   specify the word size to use.
+   
+   A line starting with the word 'Total' is required.
+   
+   Anything after the line starting with the word 'Total' will be read as
+   word count data.
+   
+   Word count data consists of a word to search for and the count of that
+   word to search for within the sliding window. The columns are
+   separated by one or more spaces or TAB characters. Anything after
+   these two columns will be ignored.
+   
+Output file format
+
+   A list of sequence name identifiers.
+   
+   The output from the above example follows:
+
+#
+# Output from 'oddcomp'
+#
+# The Expected frequencies are taken from the file: test.comp
+#
+#       Word size: 2
+        CB1B_FUGRU
+        CO9_FUGRU
+        FOS_FUGRU
+        RS7_FUGRU
+
+#       END     #
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   antigenic Finds antigenic sites in proteins
+   compseq Counts the composition of dimer/trimer/etc words in a sequence
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   garnier Predicts protein secondary structure
+   helixturnhelix Report nucleic acid binding motifs
+   pepcoil Predicts coiled coil regions
+   polydot Displays all-against-all dotplots of a set of sequences
+   pscan Scans proteins using PRINTS
+   showseq Display a sequence with features, translation etc
+   sigcleave Reports protein signal cleavage sites
+   tmap Displays membrane spanning regions
+   
+Author(s)
+
+   This application was written by David Martin
+   (david.martin@biotek.uio.no) at the Norwegian EMBnet node.
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

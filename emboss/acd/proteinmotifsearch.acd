@@ -1,0 +1,10 @@
+appl: proteinmotifsearch [
+	doc: "test of pattern matching"
+	groups: "debugging"
+]
+
+  sequence: sequence [ param: Y type: protein]
+
+  string: motifs [ param: Y def: "" minlen: 2 info:"Motifs file" ]
+
+

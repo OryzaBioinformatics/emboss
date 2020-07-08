@@ -1,0 +1,402 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: textsearch
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="../index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="../emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: textsearch
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program textsearch
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+Search sequence documentation text. SRS and Entrez are faster!
+
+
+<H2>
+    Description
+</H2>
+
+
+This is a small utility search for words in the description text of a
+sequence and for each match list the sequence's name and/or
+description.  NB. It only searches the description line of the
+annotation, not the full annotation.
+
+<H2>
+    Usage
+</H2>
+
+
+Search for matches to 'lacZ'
+<pre>
+% textsearch swissprot:\*  'lacz'
+</pre>
+
+<p>
+Search for matches to 'lacz' or 'permease' in E.coli proteins
+<pre>
+% textsearch swissprot:\*_ecoli 'lacZ | permease'
+</pre>
+
+<p>
+Output a search for 'transport' formatted with HTML to a file
+<pre>
+% textsearch embl:\* 'transport' -html -outfile embl.transport
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-pattern]           string     The search pattern is a regular expression.
+                                  Use a | to indicate OR.
+                                  For example:
+                                  human|mouse
+                                  will find text with either 'human' OR
+                                  'mouse' in the text
+
+   Optional qualifiers:
+   -outfile            outfile    If you enter the name of a file here then
+                                  this program will write the sequence details
+                                  into that file.
+   -html               bool       Format output as an HTML table
+   -casesensitive      bool       Do a case-sensitive search
+
+   Advanced qualifiers:
+   -only               bool       This is a way of shortening the command line
+                                  if you only want a few things to be
+                                  displayed. Instead of specifying:
+                                  '-nohead -noname -nousa -noacc -nodesc'
+                                  to get only the name output, you can specify
+                                  '-only -name'
+   -heading            bool       Display column headings
+   -usa                bool       Display the USA of the sequence
+   -accession          bool       Display 'accession' column
+   -name               bool       Display 'name' column
+   -description        bool       Display 'description' column
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-pattern]<br>(Parameter 2)</td>
+<td>The search pattern is a regular expression. Use a | to indicate OR.
+For example:
+human|mouse
+will find text with either 'human' OR 'mouse' in the text</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>If you enter the name of a file here then this program will write the sequence details into that file.</td>
+<td>Output file</td>
+<td>stdout</td>
+</tr>
+
+<tr>
+<td>-html</td>
+<td>Format output as an HTML table</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-casesensitive</td>
+<td>Do a case-sensitive search</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-only</td>
+<td>This is a way of shortening the command line if you only want a few things to be displayed. Instead of specifying:
+'-nohead -noname -nousa -noacc -nodesc'
+to get only the name output, you can specify
+'-only -name'</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-heading</td>
+<td>Display column headings</td>
+<td>Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-usa</td>
+<td>Display the USA of the sequence</td>
+<td>Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-accession</td>
+<td>Display 'accession' column</td>
+<td>Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-name</td>
+<td>Display 'name' column</td>
+<td>Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+<tr>
+<td>-description</td>
+<td>Display 'description' column</td>
+<td>Yes/No</td>
+<td>@(!$(only))</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+Normal sequence
+
+<H2>
+    Output file format
+</H2>
+
+
+The output is displayed on the screen (stdout) by default.
+	
+A typical output file is:
+
+<pre>
+---------------------------------------------------------------------------
+# Search for: TRANSPORT
+ANSP_SALTY    L-ASPARAGINE PERMEASE (L-ASPARAGINE TRANSPORT PROTEIN).
+CYST_SALTY    SULFATE TRANSPORT SYSTEM PERMEASE PROTEIN CYST (FRAGMENT).
+HISM_SALTY    HISTIDINE TRANSPORT SYSTEM PERMEASE PROTEIN HISM.
+HISQ_SALTY    HISTIDINE TRANSPORT SYSTEM PERMEASE PROTEIN HISQ.
+LIVH_SALTY    HIGH-AFFINITY BRANCHED-CHAIN AMINO ACID TRANSPORT PERMEASE ...
+LIVM_SALTY    HIGH-AFFINITY BRANCHED-CHAIN AMINO ACID TRANSPORT PERMEASE ...
+MALF_SALTY    MALTOSE TRANSPORT SYSTEM PERMEASE PROTEIN MALF.
+MALG_SALTY    MALTOSE TRANSPORT SYSTEM PERMEASE PROTEIN MALG.
+MELB_SALTY    MELIBIOSE CARRIER PROTEIN (THIOMETHYLGALACTOSIDE PERMEASE II) ...
+MGLC_SALTY    GALACTOSIDE TRANSPORT SYSTEM PERMEASE PROTEIN MGLC.
+OPPB_SALTY    OLIGOPEPTIDE TRANSPORT SYSTEM PERMEASE PROTEIN OPPB.
+OPPC_SALTY    OLIGOPEPTIDE TRANSPORT SYSTEM PERMEASE PROTEIN OPPC.
+POTB_SALTY    SPERMIDINE/PUTRESCINE TRANSPORT SYSTEM PERMEASE PROTEIN POTB ...
+PROW_SALTY    GLYCINE BETAINE/L-PROLINE TRANSPORT SYSTEM PERMEASE PROTEIN ...
+SAPB_SALTY    PEPTIDE TRANSPORT SYSTEM PERMEASE PROTEIN SAPB.
+SAPC_SALTY    PEPTIDE TRANSPORT SYSTEM PERMEASE PROTEIN SAPC.
+---------------------------------------------------------------------------
+</pre>
+
+<p>
+The first column in the name or ID of each sequence.  The remaining
+text is the description line of the sequence.
+
+<p>
+When the -html qualifier is specified, then the output will be wrapped
+in HTML tags, ready for inclusion in a Web page.  Note that tags such
+as &lt;HTML&gt;, &lt;BODY&gt;, &lt;/BODY&gt; and &lt;/HTML&gt; are not
+output by this program as the table of databases is expected to form
+only part of the contents of a web page - the rest of the web page
+must be supplier by the user.
+
+<p>
+The lines of out information are guaranteed not to have trailing
+white-space at the end. So if '-nodesc' is used, there will not be any
+whitespace after the ID name.
+
+<H2>
+    Data files
+</H2>
+
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+
+This is a rather slow way to search for text in databases.  If you are
+searching for text in public databases, you should consider using
+either Entrez (<a
+href="http://www.ncbi.nlm.nih.gov/Entrez/">http://www.ncbi.nlm.nih.gov/Entrez/</a>)
+or SRS (<a
+href="http://srs.hgmp.mrc.ac.uk/">http://srs.hgmp.mrc.ac.uk/</a> or <a
+href="http://www.sanger.ac.uk/srs6/">http://www.sanger.ac.uk/srs6/</a>
+etc.)
+	
+<H2>
+    References
+</H2>
+
+
+<H2>
+    Warnings
+</H2>
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0
+
+<H2>
+    Known bugs
+</H2>
+
+
+None noted.
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="infoseq.html">infoseq</a></td><td>Displays some simple information about sequences</td></tr>
+</table>
+
+<!--
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find.
+   -->
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Gary Williams <a
+href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+
+
+<H2>
+    History
+</H2>
+
+
+Finished.
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by everyone and everything,
+from naive users to embedded scripts. 
+
+<H2>
+    Comments
+</H2>
+
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

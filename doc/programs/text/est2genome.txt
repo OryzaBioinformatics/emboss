@@ -1,0 +1,389 @@
+
+                             EMBOSS: est2genome
+     _________________________________________________________________
+   
+                              Program est2genome
+                                       
+Function
+
+   Align EST and genomic DNA sequences
+   
+Description
+
+   est2genome is a software tool to aid the prediction of genes by
+   sequence homology. The program will align a set of spliced nucleotide
+   sequences (ESTs cDNAs or mRNAs) to an unspliced genomic DNA sequence,
+   inserting introns of arbitrary length when needed. In addition, where
+   feasible introns start and stop at the splice consensus dinucleotides
+   GT and AG.
+   
+   Unless instructed otherwise, the program makes three alignments: First
+   it compares both stands of the spliced sequence against the forward
+   strand of the genomic, assuming the splice consensus GT/AG (ie in the
+   forward gene direction). The maximum-scoring orientation is then
+   realigned assuming the splice consensus CT/AC (ie in the reversed gene
+   direction). Only the overall maximum-scoring alignment is reported.
+   
+   The program outputs a list of the exons and introns it has found. The
+   format is like that of MSPcrunch, ie a list of matching segments. This
+   format is easy to parse into other software. The program also
+   indicates, based on the splice site information, the gene's predicted
+   direction of transcription. Optionally the full sequence alignment is
+   printed as well (see the example).
+   
+Usage
+
+   Here is a sample session with est2genome.
+
+% est2genome
+Align EST and genomic DNA sequences
+EST sequence(s): embl:hs989235
+Genomic sequence: embl:hsnfg9
+Output file [hs989235.est2genome]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-est]               seqall     EST sequence(s)
+  [-genome]            sequence   Genomic sequence
+   -outfile            outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -match              integer    Score for matching two bases
+   -mismatch           integer    Cost for mismatching two bases
+   -gappenalty         integer    Cost for deleting a single base in either
+                                  sequence, excluding introns
+   -intronpenalty      integer    Cost for an intron, independent of length.
+   -splicepenalty      integer    Cost for an intron, independent of length
+                                  and starting/ending on donor-acceptor sites
+   -minscore           integer    You can exclude alignments with scores below
+                                  a threshold by setting this to be false.
+   -reverse            bool       Reverse orientation
+   -[no]splice         bool       Use donor and acceptor splice sites. If you
+                                  want to ignore donor-acceptor sites then set
+                                  this to be false.
+   -align              bool       Show the alignment. The alignment includes
+                                  the first and last 5 bases of each intron,
+                                  together with the intron width. The
+                                  direction of splicing is indicated by angle
+                                  brackets (forward or reverse) or ????
+                                  (unknown).
+   -width              integer    Alignment width
+   -mode               string     This determines the comparion mode. The
+                                  default value is 'both', in which case both
+                                  strands of the est are compared assuming a
+                                  forward gene direction (ie GT/AG splice
+                                  sites), and the best comparsion redone
+                                  assuming a reversed (CT/AC) gene splicing
+                                  direction. The other allowed modes are
+                                  'forward', when just the forward strand is
+                                  searched, and 'reverse', ditto for the
+                                  reverse strand.
+   -[no]best           bool       You can print out all comparisons instead of
+                                  just the best one by setting this to be
+                                  false.
+   -space              float      for linear-space recursion. If product of
+                                  sequence lengths divided by 4 exceeds this
+                                  then a divide-and-conquer strategy is used
+                                  to control the memory requirements. In this
+                                  way very long sequences can be aligned.
+                                  If you have a machine with plenty of memory
+                                  you can raise this parameter (but do not
+                                  exceed the machine's physical RAM)
+   -shuffle            integer    Shuffle
+   -seed               integer    Random number seed
+
+
+   Mandatory qualifiers Allowed values Default
+   [-est]
+   (Parameter 1) EST sequence(s) Readable sequence(s) Required
+   [-genome]
+   (Parameter 2) Genomic sequence Readable sequence Required
+   -outfile Output file name Output file <sequence>.est2genome
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -match Score for matching two bases Any integer value 1
+   -mismatch Cost for mismatching two bases Any integer value 1
+   -gappenalty Cost for deleting a single base in either sequence,
+   excluding introns Any integer value 2
+   -intronpenalty Cost for an intron, independent of length. Any integer
+   value 40
+   -splicepenalty Cost for an intron, independent of length and
+   starting/ending on donor-acceptor sites Any integer value 20
+   -minscore You can exclude alignments with scores below a threshold by
+   setting this to be false. Any integer value 30
+   -reverse Reverse orientation Yes/No No
+   -[no]splice Use donor and acceptor splice sites. If you want to ignore
+   donor-acceptor sites then set this to be false. Yes/No Yes
+   -align Show the alignment. The alignment includes the first and last 5
+   bases of each intron, together with the intron width. The direction of
+   splicing is indicated by angle brackets (forward or reverse) or ????
+   (unknown). Yes/No No
+   -width Alignment width Any integer value 50
+   -mode This determines the comparion mode. The default value is 'both',
+   in which case both strands of the est are compared assuming a forward
+   gene direction (ie GT/AG splice sites), and the best comparsion redone
+   assuming a reversed (CT/AC) gene splicing direction. The other allowed
+   modes are 'forward', when just the forward strand is searched, and
+   'reverse', ditto for the reverse strand. Any string is accepted both
+   -[no]best You can print out all comparisons instead of just the best
+   one by setting this to be false. Yes/No Yes
+   -space for linear-space recursion. If product of sequence lengths
+   divided by 4 exceeds this then a divide-and-conquer strategy is used
+   to control the memory requirements. In this way very long sequences
+   can be aligned. If you have a machine with plenty of memory you can
+   raise this parameter (but do not exceed the machine's physical RAM)
+   Any integer value 10.0
+   -shuffle Shuffle Any integer value 0
+   -seed Random number seed Any integer value 20825
+   
+Input file format
+
+   est2genome reads two nucleotide sequences. The first is an EST
+   sequence (a single read or a finished cDNA). The second is a genomic
+   finished sequence.
+   
+Output file format
+
+  MSP type segments
+  
+   There are four types of segment,
+    1. each gapped Exon
+    2. each Intron (marked with a ? if it does not start GT and end AG)
+    3. the complete alignment Span
+    4. individual ungapped matching Segments.
+       
+   In the above example:
+
+Type     score    %  gstart gstop genome estart estop EST EST doc
+
+Note Best alignment is between forward est and forward genome, but splice  site
+s imply REVERSED GENE
+Exon       163  91.8 25685 25874 HSNFG9   1 193 HS989235 yo13c02.s1 Soares adul
+t brain N2b5HB55Y ...
+-Intron    -20   0.0 25875 26278 HSNFG9
+Exon       207  98.1 26279 26492 HSNFG9 194 407 HS989235 yo13c02.s1 Soares adul
+t brain N2b5HB55Y ...
+-Intron    -20   0.0 26493 27390 HSNFG9
+Exon        63  86.4 27391 27476 HSNFG9 408 494 HS989235 yo13c02.s1 Soares adul
+t brain N2b5HB55Y ...
+
+Span       393  93.6 25685 27476 HSNFG9   1 494 HS989235 yo13c02.s1 Soares adul
+t brain N2b5HB55Y ...
+
+Segment     14  83.3 25685 25702 HSNFG9   1  18 HS989235 yo13c02.s1 Soares adul
+t brain N2b5HB55Y ...
+Segment     28  85.7 25703 25737 HSNFG9  20  54 HS989235 yo13c02.s1 Soares adul
+t brain N2b5HB55Y ...
+Segment      4 100.0 25738 25741 HSNFG9  56  59 HS989235 yo13c02.s1 Soares adul
+t brain N2b5HB55Y ...
+Segment     13 100.0 25742 25754 HSNFG9  61  73 HS989235 yo13c02.s1 Soares adul
+t brain N2b5HB55Y ...
+Segment      4 100.0 25756 25759 HSNFG9  74  77 HS989235 yo13c02.s1 Soares adul
+t brain N2b5HB55Y ...
+Segment    110  97.4 25760 25874 HSNFG9  79 193 HS989235 yo13c02.s1 Soares adul
+t brain N2b5HB55Y ...
+Segment     37 100.0 26279 26315 HSNFG9 194 230 HS989235 yo13c02.s1 Soares adul
+t brain N2b5HB55Y ...
+Segment    162  98.8 26317 26480 HSNFG9 231 394 HS989235 yo13c02.s1 Soares adul
+t brain N2b5HB55Y ...
+Segment     12 100.0 26481 26492 HSNFG9 396 407 HS989235 yo13c02.s1 Soares adul
+t brain N2b5HB55Y ...
+Segment     16 100.0 27391 27406 HSNFG9 408 423 HS989235 yo13c02.s1 Soares adul
+t brain N2b5HB55Y ...
+Segment     10  91.7 27407 27418 HSNFG9 425 436 HS989235 yo13c02.s1 Soares adul
+t brain N2b5HB55Y ...
+Segment     19  95.2 27419 27439 HSNFG9 438 458 HS989235 yo13c02.s1 Soares adul
+t brain N2b5HB55Y ...
+Segment     24  80.6 27441 27476 HSNFG9 459 494 HS989235 yo13c02.s1 Soares adul
+t brain N2b5HB55Y ...
+
+   The score for Exon segments is the alignment score excluding flanking
+   intron penalties. The Span score is the total including the intron
+   costs.
+   
+   The coordinates of the genomic sequence always refer to the positive
+   strand, but are swapped if the est has been reversed. The splice
+   direction of Introns are indicated as +Intron (forward, splice sites
+   GT/AG) or -Intron (reverse, splice sites CT/AC), or ?Intron (unknown
+   direction). Segment entries give the alignment as a series of ungapped
+   matching segments.
+   
+  Full alignment
+  
+   You get the alignment if the -align switch is set. The alignment
+   includes the first and last 5 bases of each intron, together with the
+   intron width. The direction of splicing is indicated by >>>> (forward)
+   or <<<< (reverse) or ???? (unknown):
+
+HSNFG9 vs HS989235:
+
+  HSNFG9  25685 cccggaagctcatcttgg-ccaccgactctcgcttgcgccgccgcgggag  25733
+                || | ||||||| ||||| |||||||||||||  ||   |||||||||||
+HS989235      1 ccggnaagctcancttggaccaccgactctcgantgnntcgccgcgggag     50
+
+  HSNFG9  25734 ccgg-tgga-aacctgagcgggagctgg-agaaggagcagagggaggcag  25780
+                |||| |||| ||||||||||||| |||| |||||||||||||||||||||
+HS989235     51 ccggntgganaacctgagcggga-ctggnagaaggagcagagggaggcag     99
+
+  HSNFG9  25781 cacccggcgtgacgggagtgtgtggggcactcaggccttccgcagtgtca  25830
+                ||||||||||||||| ||||||||||||||||||||||||||||||||||
+HS989235    100 cacccggcgtgacggnagtgtgtggggcactcaggccttccgcagtgtca    149
+
+  HSNFG9  25831 tctgccacacggaaggcacggccacgggccagggggtctatgatctgga.  25874
+                |||||||||||||||||||||||||||||  |||||||||||||<<<<<
+HS989235    150 tctgccacacggaaggcacggccacgggcaggggggtctatgat......    193
+
+  HSNFG9  25874 ....cataccttctgcatgcccagctggcatggccccacgtagagtgggg  26319
+                404 <<<<<||||||||||||||||||||||||||||||||||||| ||
+HS989235    193 .........cttctgcatgcccagctggcatggccccacgtagagt-ggn    233
+
+  HSNFG9  26320 gtggcgtctcggtgctggtcagcgacacgttgtcctggctgggcaggtcc  26369
+                 |||||||||||||||||||||||||||||||||||||||||||||||||
+HS989235    234 ntggcgtctcggtgctggtcagcgacacgttgtcctggctgggcaggtcc    283
+
+  HSNFG9  26370 agctcccggaggacctggggcttcagcttcccgtagcgctggctgcagtg  26419
+                ||||||||||||||||||||||||||||||||||||||||||||||||||
+HS989235    284 agctcccggaggacctggggcttcagcttcccgtagcgctggctgcagtg    333
+
+  HSNFG9  26420 acggatgctcttgcgctgccatttctgggtgctgtcactgtccttgctca  26469
+                ||||||||||||||||||||||||||||||||||||||||||||||||||
+HS989235    334 acggatgctcttgcgctgccatttctgggtgctgtcactgtccttgctca    383
+
+  HSNFG9  26470 ctccaaaccag-tcggcggtccccctggc.....ggtacctgcggatggt  27401
+                ||||||||||| ||||||||||||<<<<< 898 <<<<<|||||||||||
+HS989235    384 ctccaaaccagttcggcggtcccc...............ctgcggatggt    418
+
+  HSNFG9  27402 ctgtg-tgatggacgtct-ggcgttgcagcaccggccgccggagctcatg  27449
+                ||||| |||||||||| | ||| ||||||||||||||||| ||| |||||
+HS989235    419 ctgtgttgatggacgtttgggctttgcagcaccggccgcc-gagttcatg    467
+
+  HSNFG9  27450 gtggggtgaagagatgtgggctgtctc  27476
+                || |||| ||||||| |||| | | ||
+HS989235    468 gtngggtnaagagatttgggttttttc    494
+
+
+Alignment Score: 393
+
+   In this example there are two reverse introns, of lengths 404 and 898
+   bp.
+   
+Data files
+
+Notes
+
+   est2genome uses a linear-space dynamic-programming algorithm. It has
+   the following parameters:
+parameter               default         description
+
+match                   1               score for matching two bases
+mismatch                1               cost for mismatching two bases
+gap_penalty             2               cost for deleting a single base in
+                                        either sequence,
+                                        excluding introns
+intron_penalty          40              cost for an intron, independent of
+                                        length.
+splice_penalty          20              cost for an intron, independent of
+                                        length and starting/ending on
+                                        donor-acceptor sites.
+
+space                   10              Space threshold (in  megabytes)
+                                        for linear-space recursion. If the
+                                        product of the two sequence
+                                        lengths divided by 4 exceeds this then
+                                        a divide-and-conquer strategy is used
+                                        to control the memory requirements.
+                                        In this way very long sequences can
+                                        be aligned.
+                                        If you have a machine with plenty of
+                                        memory you can raise this parameter
+                                        (but do not exceed the machine's
+                                        physical RAM)
+                                        However, normally you should not need
+                                        to change this parameter.
+
+   There is no gap initiation cost for short gaps, just a penalty
+   proportional to the length of the gap. Thus the cost of inserting a
+   gap of length L in the EST is
+ L*gap_penalty
+
+   and the cost in the genome is
+
+min { L*gap_penalty, intron_penalty } or
+min { L*gap_penalty, splice_penalty } if the gap starts with GT and ends with A
+G
+                                     (or CT/AC if splice direction reversed)
+
+   Introns are not allowed in the EST. The difference between the
+   intron_penalty and splice_penalty allows for some slack in marking the
+   intron end-points. It is often the case that the best intron
+   boundaries, from the point of view of minimising mismatches, will not
+   coincide exactly with the splice consensus, so provided the difference
+   between the intron/splice penalties outweighs the extra mismatch/indel
+   costs the alignment will respect the proper boundaries. If the
+   alignment still prefers boundaries which don't start and end with the
+   splice consensus then this may indicate errors in the sequences.
+   
+   The default parameters work well, except for very short exons (length
+   less than the splice_penalty, approx) which may be skipped. The intron
+   penalties should not be set to less that the maximum expected random
+   match between the sequences (typically 10-15 bp) in order to avoid
+   spurious matches. The algorithm has the following steps:
+    1. A first-pass Smith-Waterman scan is done to locate the score,
+       start and end of the maximal scoring segment (including introns of
+       course). No other alignment information is retained.
+    2. Subsequences corresponding to the maximal-scoring segments are
+       extracted. If the product of these subsequences' lengths is less
+       than the area parameter then the segments are re-aligned using the
+       Needleman-Wunsch algorithm, which in this instance will give the
+       same result as the Smith-Waterman since they are guaranteed to
+       align end-to-end.
+    3. If the product of lengths exceeds the area threshold then the
+       alignment is recursively broken down by splitting the EST in half
+       and finding the genome position which aligns with the EST
+       mid-point. The problem then reduces to aligning the left-hand and
+       right-hand portions of the sequences separately and merging the
+       result.
+       
+   The worst-case run-time for the algorithm is about 3 times as long as
+   would be taken to align using a quadratic-space program. In practice
+   the maximal-scoring segment is often much shorter than the full genome
+   length so the program runs only about 1.5 times slower.
+   
+References
+
+   Mott, R (19) CABIOS.
+   
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   merger Merge two overlapping nucleic acid sequences
+   
+Author(s)
+
+   This application was modified for inclusion in EMBOSS by Peter Rice
+   (pmr@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+   The original program was est_genome, written by Richard Mott at the
+   Sanger Centre. The original version is available from
+   ftp://ftp.sanger.ac.uk/pub/pmr/est_genome.4.tar.Z
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

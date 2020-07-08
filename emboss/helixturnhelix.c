@@ -1,0 +1,381 @@
+/* @source helixturnhelix application
+**
+** Reports nucleic acid binding domains
+** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @@
+**
+** Original program "HELIXTURNHELIX" by Peter Rice (EGCG 1990)
+** This program uses the method of Dodd and Egan (1987) J. Mol. Biol.
+** 194:557-564 to determine the significance of possible helix-turn-helix 
+** matches in protein sequences
+**
+** This program is free software; you can redistribute it and/or
+** modify it under the terms of the GNU General Public License
+** as published by the Free Software Foundation; either version 2
+** of the License, or (at your option) any later version.
+** 
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+** 
+** You should have received a copy of the GNU General Public License
+** along with this program; if not, write to the Free Software
+** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+******************************************************************************/
+
+#include "emboss.h"
+#include <math.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#define HTHFILE "Ehth.dat"
+#define HTH87FILE "Ehth87.dat"
+
+typedef struct DNAB DNAB;
+struct DNAB
+{
+    int pos;
+    AjPStr name;
+    AjPStr seq;
+    float  sd;
+    int    wt;
+}
+;
+
+
+
+int readNab(AjPInt2d *matrix,AjBool eightyseven);
+void print_hits(AjPList *ajb, int n, float minsd, int lastcol,
+		AjBool eightyseven, AjPFile outf);
+
+
+
+
+
+
+int main( int argc, char **argv, char **env)
+{
+    AjPSeqall seqall;
+    AjPSeq    seq=NULL;
+    AjPFile   outf=NULL;
+    AjPList   ajb=NULL;
+    AjPStr    strand=NULL;
+    AjPStr    substr=NULL;
+    AjBool    eightyseven=ajFalse;
+    float     mean;
+    float     sd;
+    float     minsd;
+    static DNAB      *lp;
+    
+    AjPInt2d matrix=NULL;
+    
+    int begin;
+    int end;
+    int len;
+
+    char *p;
+    char *q;
+    
+    int i;
+    int j;
+    int cols;
+    int lastcol;
+
+    int n;
+
+    int sp;
+    int se;
+    int weight;
+
+    float minscore;
+    float thissd;
+    
+
+    embInit("helixturnhelix",argc,argv);
+    
+    seqall    = ajAcdGetSeqall("sequence");
+    outf      = ajAcdGetOutfile("outfile");
+    mean      = ajAcdGetFloat("mean");
+    sd        = ajAcdGetFloat("sd");
+    minsd     = ajAcdGetFloat("minsd");
+    
+    substr = ajStrNew();
+    matrix = ajInt2dNew();
+    
+    eightyseven = ajAcdGetBool("eightyseven");
+
+    cols=readNab(&matrix,eightyseven);
+    ajDebug("cols = %d\n",cols);
+
+    lastcol = cols-3;
+
+    n = 0;
+    minscore = mean + (minsd*sd);    
+
+    ajb=ajListNew();
+    
+
+    while(ajSeqallNext(seqall, &seq))
+    {
+	begin = ajSeqallBegin(seqall);
+	end   = ajSeqallEnd(seqall);
+
+	strand = ajSeqStrCopy(seq);
+	ajStrToUpper(&strand);
+
+	ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
+	len    = ajStrLen(substr);
+
+	q = p = ajStrStr(substr);
+	for(i=0;i<len;++i,++p)
+	    *p = (char) ajAZToInt(*p);
+	p=q;
+	
+	se = (len-lastcol)+1;
+	for(i=0;i<se;++i)
+	{
+	    weight=0;
+	    for(j=0;j<lastcol;++j)
+		weight+=ajInt2dGet(matrix,(int)*(p+i+j),j);
+	    thissd=((float)weight-mean)/sd;
+	    if(thissd>minsd)
+	    {
+		AJNEW(lp);
+		lp->name=ajStrNewC(ajSeqName(seq));
+		lp->seq =ajStrNew();
+		sp = begin - 1 + i;
+		lp->pos = sp+1;
+		ajStrAssSubC(&lp->seq,ajStrStr(strand),sp,sp+lastcol-1);
+		lp->sd = thissd;
+		lp->wt = weight;
+		ajListPush(ajb,(void *)lp);
+		++n;
+	    }
+	}
+	ajStrDel(&strand);
+    }
+    
+    if(!n)
+	ajFmtPrintF(outf,"\nNo hits above +%.2f SD (%.2f)\n",minsd,minscore);
+    else
+    {
+        ajFmtPrintF(outf,"\nHELIXTURNHELIX: Nucleic Acid Binding Domain search\n\n");
+	ajFmtPrintF(outf,"\nHits above +%.2f SD (%.2f)\n",minsd,minscore);
+	print_hits(&ajb, n, minsd, lastcol, eightyseven, outf);
+    }
+    
+
+    ajInt2dDel(&matrix);
+
+    ajSeqDel(&seq);
+    ajStrDel(&substr);
+    ajListDel(&ajb);
+    ajFileClose(&outf);
+    
+    ajExit();
+    return 0;
+}
+
+
+
+
+
+int readNab(AjPInt2d *matrix,AjBool eightyseven)
+{
+    AjPFile mfptr=NULL;
+    AjPStr  line=NULL;
+    AjPStr  delim=NULL;
+    AjBool  pass;
+    
+    char *p;
+    char *q;
+    
+    int xcols=0;
+    int cols=0;
+    
+    float sample;
+    float expected;
+    float pee;
+    float exptot;
+    int   rt;
+
+    int   i;
+    int   j;
+    int   c=0;
+    int   v;
+    
+    int d1;
+    int d2;
+    
+    int **mat;
+
+    if(eightyseven)
+	ajFileDataNewC(HTH87FILE,&mfptr);
+    else
+	ajFileDataNewC(HTHFILE,&mfptr);
+    if(!mfptr) ajFatal("HTH file not found\n");
+
+    line=ajStrNew();
+    delim=ajStrNewC(" :\t\n");
+
+    pass = ajTrue;
+    
+    while(ajFileGets(mfptr, &line))
+    {
+	p=ajStrStr(line);
+	if(*p=='#' || *p=='!' || *p=='\n') continue;
+	if(ajStrPrefixC(line,"Sample:"))
+	{
+	    if(sscanf(p,"%*s%f",&sample)!=1)
+		ajFatal("No sample size given");
+	    continue;
+	}
+	while((*p!='\n') && (*p<'A' || *p>'Z')) ++p;
+	cols = ajStrTokenCount(&line,ajStrStr(delim));
+	if(pass)
+	{
+	    pass=ajFalse;
+	    xcols = cols;
+	}
+	else
+	    if(xcols!=cols)
+		ajFatal("Assymetric table");
+
+	d1 = ajAZToInt((char)toupper((int)*p));
+	
+	q=ajStrStr(line);
+	c = 0;
+	q = ajSysStrtok(q,ajStrStr(delim));
+	while((q=ajSysStrtok(NULL,ajStrStr(delim))))
+	{
+	    (void) sscanf(q,"%d",&v);
+	    ajInt2dPut(matrix,d1,c++,v);
+	}
+
+	for(i=0,rt=0;i<c-2;++i) rt+=ajInt2dGet(*matrix,d1,i);
+	
+	if(rt!=ajInt2dGet(*matrix,d1,c-2))
+	    ajFatal("Row didn't match total");
+    }
+
+
+    mat = ajInt2dInt(*matrix);
+    ajInt2dLen(*matrix,&d1,&d2);
+
+
+    for(j=0;j<d2-2;++j)
+    {
+	rt=0;
+	for(i=0;i<d1;++i)
+	{
+	    if(!mat[i][d2-1]) continue;
+	    rt += mat[i][j];
+	}
+	if(rt!=(int)sample)
+	    ajFatal("Column doesn't match sample size");
+    }
+    
+    exptot=0.0;
+    for(i=0;i<d1;++i)
+    {
+	if(!mat[i][d2-1]) continue;
+	expected = mat[i][c-1];
+	expected *= 0.0001;
+	exptot += expected;
+	for(j=0;j<c-2;++j)
+	{
+	    if(!mat[i][j]) pee=(1.0<1.0/((sample+1.0)*expected)) ? 1.0 :
+		1.0/((sample+1.0)*expected);
+	    else
+		pee = ((float)mat[i][j])/(sample*expected);
+	    mat[i][j]=(int)((double)100.0*log(pee));
+	}
+    }
+    if((float)fabs((double)(1.0-exptot)) > 0.05)
+	ajFatal("Expected column total != 1.0");
+
+    for(i=0;i<d1;++i)
+	for(j=0;j<d2;++j)
+	    ajInt2dPut(matrix,i,j,mat[i][j]);
+
+    for(i=0;i<d1;++i)
+	AJFREE(mat[i]);
+    AJFREE(mat);
+
+    ajStrDel(&line);
+    ajStrDel(&delim);
+    ajFileClose(&mfptr);
+
+    return cols;
+}
+
+
+
+
+
+
+void print_hits(AjPList *ajb, int n, float minsd, int lastcol,
+		AjBool eightyseven, AjPFile outf)
+{
+    DNAB     **lp;
+
+    AjPInt   hp=NULL;
+    AjPFloat hsd=NULL;
+
+    int   i;
+    
+    AJCNEW (lp, n);
+
+    hp  = ajIntNew();
+    hsd = ajFloatNew();
+
+    for(i=0;i<n;++i)
+    {
+	if(!ajListPop(*ajb,(void **)&lp[i]))
+	    ajFatal("Poppa doesn't live here anymore");
+	ajIntPut(&hp,i,i);
+	ajFloatPut(&hsd,i,lp[i]->sd);
+    }
+    ajSortFloatDecI(ajFloatFloat(hsd),ajIntInt(hp),n);
+    ajFloatDel(&hsd);
+    
+    for(i=0;i<n;++i)
+    {
+	ajFmtPrintF(outf,"\nScore %d (+%.2f SD) in %s at residue %d\n",
+		   lp[ajIntGet(hp,i)]->wt,lp[ajIntGet(hp,i)]->sd,
+		    ajStrStr(lp[ajIntGet(hp,i)]->name),
+		   lp[ajIntGet(hp,i)]->pos);
+	ajFmtPrintF(outf,"\n Sequence:  %s\n",
+		    ajStrStr(lp[ajIntGet(hp,i)]->seq));
+	if(eightyseven)
+	{
+	    ajFmtPrintF(outf,"            |                  |\n");
+	    ajFmtPrintF(outf,"%13d                  %d\n",
+			lp[ajIntGet(hp,i)]->pos,
+			lp[ajIntGet(hp,i)]->pos+lastcol-1);
+	}
+	else
+	{
+	    ajFmtPrintF(outf,"            |                    |\n");
+	    ajFmtPrintF(outf,"%13d                    %d\n",
+			lp[ajIntGet(hp,i)]->pos,
+			lp[ajIntGet(hp,i)]->pos+lastcol-1);
+	}
+    }
+
+    /*
+     *  Tidy up memory
+     */
+    for(i=0;i<n;++i)
+    {
+	ajStrDel(&lp[i]->name);
+	ajStrDel(&lp[i]->seq);
+    }
+    AJFREE (lp);
+    ajIntDel(&hp);
+    
+    return;
+}
+

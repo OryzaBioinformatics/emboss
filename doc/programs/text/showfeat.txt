@@ -1,0 +1,418 @@
+
+                              EMBOSS: showfeat
+     _________________________________________________________________
+   
+                               Program showfeat
+                                       
+Function
+
+   Show features of a sequence
+   
+Description
+
+   Showfeat reads a sequence and a feature table, and writes a text
+   representation of the features to standard output.
+   
+Usage
+
+   Here is a sample session with showfeat. The feature table is specified
+   as a -ufo qualifier (uniform feature object), in this case a file
+   containing an EMBL feature table.
+
+% showfeat -ufo paamir.ft
+Show features of a sequence.
+Input sequence(s): embl:paamir
+Output file [stdout]:
+PAAMIR
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+|==========================================================| 2167
+|----------------------------------------------------------> source
+>                                                            promoter
+|>                                                           promoter
+  >                                                          RBS
+  |------------------------------->                          CDS
+                |>                                           misc_feature
+                        |------>                             mutation
+                                  |---------------->         CDS
+|                                                            misc_feature
+                                  |                          conflict
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outfile]           outfile    If you enter the name of a file here then
+                                  this program will write the feature details
+                                  into that file.
+
+   Optional qualifiers:
+   -matchsource        string     By default any feature source in the feature
+                                  table is shown. You can set this to match
+                                  any feature source you wish to show.
+                                  The source name is usually either the name
+                                  of the program that detected the feature or
+                                  it is the feature table (eg: EMBL) that the
+                                  feature came from.
+                                  The source may be wildcarded by using '*'.
+                                  If you wish to show more than one source,
+                                  separate their names with the character '|',
+                                  eg:
+                                  gene* | embl
+   -matchtype          string     By default any feature type in the feature
+                                  table is shown. You can set this to match
+                                  any feature type you wish to show.
+                                  See http://www3.ebi.ac.uk/Services/WebFeat/
+                                  for a list of the EMBL feature types and see
+                                  Appendix A of the Swissprot user manual in
+                                  http://www.expasy.ch/txt/userman.txt for a
+                                  list of the Swissprot feature types.
+                                  The type may be wildcarded by using '*'.
+                                  If you wish to show more than one type,
+                                  separate their names with the character '|',
+                                  eg:
+                                  *UTR | intron
+   -matchtag           string     Tags are the types of extra values that a
+                                  feature may have. For example in the EMBL
+                                  feature table, a 'CDS' type of feature may
+                                  have the tags '/codon', '/codon_start',
+                                  '/db_xref', '/EC_number', '/evidence',
+                                  '/exception', '/function', '/gene',
+                                  '/label', '/map', '/note', '/number',
+                                  '/partial', '/product', '/protein_id',
+                                  '/pseudo', '/standard_name', '/translation',
+                                  '/transl_except', '/transl_table', or
+                                  '/usedin'. Some of these tags also have
+                                  values, for example '/gene' can have the
+                                  value of the gene name.
+                                  By default any feature tag in the feature
+                                  table is shown. You can set this to match
+                                  any feature tag you wish to show.
+                                  The tag may be wildcarded by using '*'.
+                                  If you wish to show more than one tag,
+                                  separate their names with the character '|',
+                                  eg:
+                                  gene | label
+   -matchvalue         string     Tag values are the values associated with a
+                                  feature tag. Tags are the types of extra
+                                  values that a feature may have. For example
+                                  in the EMBL feature table, a 'CDS' type of
+                                  feature may have the tags '/codon',
+                                  '/codon_start', '/db_xref', '/EC_number',
+                                  '/evidence', '/exception', '/function',
+                                  '/gene', '/label', '/map', '/note',
+                                  '/number', '/partial', '/product',
+                                  '/protein_id', '/pseudo', '/standard_name',
+                                  '/translation', '/transl_except',
+                                  '/transl_table', or '/usedin'. Only some of
+                                  these tags can have values, for example
+                                  '/gene' can have the value of the gene name.
+                                  By default any feature tag value in the
+                                  feature table is shown. You can set this to
+                                  match any feature tag valueyou wish to show.
+                                  The tag value may be wildcarded by using
+                                  '*'.
+                                  If you wish to show more than one tag value,
+                                  separate their names with the character
+                                  '|', eg:
+                                  pax* | 10
+   -sort               list       Sort features by Type, Start or Source
+
+   Advanced qualifiers:
+   -html               bool       Use HTML formatting
+   -[no]id             bool       Set this to be false if you do not wish to
+                                  display the ID name of the sequence.
+   -[no]description    bool       Set this to be false if you do not wish to
+                                  display the description of the sequence.
+   -[no]scale          bool       Set this to be false if you do not wish to
+                                  display the scale line.
+   -width              integer    You can expand (or contract) the width of
+                                  the ASCII-character graphics display of the
+                                  positions of the features using this value.
+                                  For example, a width of 80 characters would
+                                  cover a standard page width and a width a 10
+                                  characters would be nearly unreadable.
+                                  If the width is set to less than 4, the
+                                  graphics lines and the scale line will not
+                                  be displayed.
+   -collapse           bool       If this is set, then features from the same
+                                  source and of the same type and sense are
+                                  all printed on the same line. For instance
+                                  if there are several features from the EMBL
+                                  feature table (ie. the same source) which
+                                  are all of type 'exon' in the same sense,
+                                  then they will all be displayed on the same
+                                  line. This makes it hard to distinguish
+                                  overlapping features.
+                                  If this is set to false then each feature is
+                                  displayed on a separate line making it
+                                  easier to distinguish where features start
+                                  and end.
+   -[no]forward        bool       Set this to be false if you do not wish to
+                                  display forward sense features.
+   -[no]reverse        bool       Set this to be false if you do not wish to
+                                  display reverse sense features.
+   -[no]unknown        bool       Set this to be false if you do not wish to
+                                  display unknown sense features. (ie.
+                                  features with no directionality - all
+                                  protein features are of this type and some
+                                  nucleic features (for example, CG-rich
+                                  regions)).
+   -strand             bool       Set this if you wish to display the strand
+                                  of the features. Protein features are always
+                                  directionless (indicated by '0'), forward
+                                  is indicated by '+' and reverse is '-'.
+   -source             bool       Set this if you wish to display the source
+                                  of the features.
+                                  The source name is usually either the name
+                                  of the program that detected the feature or
+                                  it is the name of the feature table (eg:
+                                  EMBL) that the feature came from.
+   -position           bool       Set this if you wish to display the start
+                                  and end position of the features. If several
+                                  features are being displayed on the same
+                                  line, then the start and end positions will
+                                  be joined by a comma, for example:
+                                  '189-189,225-225'.
+   -[no]type           bool       Set this to be false if you do not wish to
+                                  display the type of the features.
+   -tags               bool       Set this to be false if you do not wish to
+                                  display the tags and values of the features.
+   -[no]values         bool       Set this to be false if you do not wish to
+                                  display the tag values of the features. If
+                                  this is set to be false, only the tag names
+                                  will be displayed. If the tags are not
+                                  displayed, then the values will not be
+                                  displayed. The value of the 'translation'
+                                  tag is never displayed as it is often
+                                  extremely long.
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outfile]
+   (Parameter 2) If you enter the name of a file here then this program
+   will write the feature details into that file. Output file stdout
+   Optional qualifiers Allowed values Default
+   -matchsource By default any feature source in the feature table is
+   shown. You can set this to match any feature source you wish to show.
+   The source name is usually either the name of the program that
+   detected the feature or it is the feature table (eg: EMBL) that the
+   feature came from. The source may be wildcarded by using '*'. If you
+   wish to show more than one source, separate their names with the
+   character '|', eg: gene* | embl Any string is accepted *
+   -matchtype By default any feature type in the feature table is shown.
+   You can set this to match any feature type you wish to show. See
+   http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature
+   types and see Appendix A of the Swissprot user manual in
+   http://www.expasy.ch/txt/userman.txt for a list of the Swissprot
+   feature types. The type may be wildcarded by using '*'. If you wish to
+   show more than one type, separate their names with the character '|',
+   eg: *UTR | intron Any string is accepted *
+   -matchtag Tags are the types of extra values that a feature may have.
+   For example in the EMBL feature table, a 'CDS' type of feature may
+   have the tags '/codon', '/codon_start', '/db_xref', '/EC_number',
+   '/evidence', '/exception', '/function', '/gene', '/label', '/map',
+   '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo',
+   '/standard_name', '/translation', '/transl_except', '/transl_table',
+   or '/usedin'. Some of these tags also have values, for example '/gene'
+   can have the value of the gene name. By default any feature tag in the
+   feature table is shown. You can set this to match any feature tag you
+   wish to show. The tag may be wildcarded by using '*'. If you wish to
+   show more than one tag, separate their names with the character '|',
+   eg: gene | label Any string is accepted *
+   -matchvalue Tag values are the values associated with a feature tag.
+   Tags are the types of extra values that a feature may have. For
+   example in the EMBL feature table, a 'CDS' type of feature may have
+   the tags '/codon', '/codon_start', '/db_xref', '/EC_number',
+   '/evidence', '/exception', '/function', '/gene', '/label', '/map',
+   '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo',
+   '/standard_name', '/translation', '/transl_except', '/transl_table',
+   or '/usedin'. Only some of these tags can have values, for example
+   '/gene' can have the value of the gene name. By default any feature
+   tag value in the feature table is shown. You can set this to match any
+   feature tag valueyou wish to show. The tag value may be wildcarded by
+   using '*'. If you wish to show more than one tag value, separate their
+   names with the character '|', eg: pax* | 10 Any string is accepted *
+   -sort Sort features by Type, Start or Source
+   source (Sort by Source)
+   start (Sort by Start position)
+   type (Sort by Type)
+   start
+   Advanced qualifiers Allowed values Default
+   -html Use HTML formatting Yes/No No
+   -[no]id Set this to be false if you do not wish to display the ID name
+   of the sequence. Yes/No Yes
+   -[no]description Set this to be false if you do not wish to display
+   the description of the sequence. Yes/No Yes
+   -[no]scale Set this to be false if you do not wish to display the
+   scale line. Yes/No Yes
+   -width You can expand (or contract) the width of the ASCII-character
+   graphics display of the positions of the features using this value.
+   For example, a width of 80 characters would cover a standard page
+   width and a width a 10 characters would be nearly unreadable. If the
+   width is set to less than 4, the graphics lines and the scale line
+   will not be displayed. Integer 0 or more 60
+   -collapse If this is set, then features from the same source and of
+   the same type and sense are all printed on the same line. For instance
+   if there are several features from the EMBL feature table (ie. the
+   same source) which are all of type 'exon' in the same sense, then they
+   will all be displayed on the same line. This makes it hard to
+   distinguish overlapping features. If this is set to false then each
+   feature is displayed on a separate line making it easier to
+   distinguish where features start and end. Yes/No No
+   -[no]forward Set this to be false if you do not wish to display
+   forward sense features. Yes/No Yes
+   -[no]reverse Set this to be false if you do not wish to display
+   reverse sense features. Yes/No Yes
+   -[no]unknown Set this to be false if you do not wish to display
+   unknown sense features. (ie. features with no directionality - all
+   protein features are of this type and some nucleic features (for
+   example, CG-rich regions)). Yes/No Yes
+   -strand Set this if you wish to display the strand of the features.
+   Protein features are always directionless (indicated by '0'), forward
+   is indicated by '+' and reverse is '-'. Yes/No No
+   -source Set this if you wish to display the source of the features.
+   The source name is usually either the name of the program that
+   detected the feature or it is the name of the feature table (eg: EMBL)
+   that the feature came from. Yes/No No
+   -position Set this if you wish to display the start and end position
+   of the features. If several features are being displayed on the same
+   line, then the start and end positions will be joined by a comma, for
+   example: '189-189,225-225'. Yes/No No
+   -[no]type Set this to be false if you do not wish to display the type
+   of the features. Yes/No Yes
+   -tags Set this to be false if you do not wish to display the tags and
+   values of the features. Yes/No No
+   -[no]values Set this to be false if you do not wish to display the tag
+   values of the features. If this is set to be false, only the tag names
+   will be displayed. If the tags are not displayed, then the values will
+   not be displayed. The value of the 'translation' tag is never
+   displayed as it is often extremely long. Yes/No Yes
+   
+Input file format
+
+   The feature input is the feature table lines from the database entry
+   in EMBL format.
+   
+   Here is the file:
+
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2167
+FT                   /db_xref="taxon:287"
+FT                   /organism="Pseudomonas aeruginosa"
+FT                   /strain="PAC"
+FT                   /isolate="PAC 1"
+FT                   /map="38 min"
+FT   CDS             1289..1879
+FT                   /db_xref="SWISS-PROT:P10932"
+FT                   /note="aliphatic amidase regulator, positive  regulator of
+FT                   amiE"
+FT                   /transl_table=11
+FT                   /gene="amiR"
+FT                   /protein_id="CAA32023.1"
+FT                   /translation="MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWP
+P
+FT                   PEAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECH
+G
+FT                   VITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGW
+D
+FT                   EREAHQHLSREAMKRREPILKIAQELLGNEPSA"
+FT   CDS             135..1292
+FT                   /db_xref="SWISS-PROT:P27017"
+FT                   /note="negative regulator of amiR"
+FT                   /transl_table=11
+FT                   /gene="amiC"
+FT                   /protein_id="CAA32024.1"
+FT                   /translation="MGSHQERPLIGLLFSETGVTADIERSHAYGALLAVEQLNREGGV
+G
+FT                   GRPIETLSQDPGGDPDRYRLCAEDFIRNRGVRFLVGCYMSHTRKAVMPVVERADALLC
+Y
+FT                   PTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLIRHYGERVVFIGSDYIYPRESNHVMRH
+L
+FT                   YRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQARADVVFSTVVGTGTAELYRAIARRY
+G
+FT                   DGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPYFSSIDTPASRAFVQACHGFFPENA
+T
+FT                   ITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLYDIDIDAPQGPVRVERQNNHSRLS
+S
+FT                   RIAEIDARGVFQVRWQSPEPIRPDPYVVVHNLDDWSASMGGGPLP"
+FT   promoter        8..24
+FT                   /note="proposed rpoN-dependent promoter"
+FT   promoter        65..81
+FT                   /note="proposed rpoN-dependent promoter"
+FT   RBS             121..126
+FT                   /note="proposed Shine-Dalgarno sequence"
+FT   mutation        912..1167
+FT                   /note="ClaI fragment deleted in pSW36,  constitutive
+FT                   phenotype"
+FT                   /replace=""
+FT                   /gene="amiC"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 cause
+s
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+
+Output file format
+
+   The output is a text representation of the feature table, and goes by
+   default to standard output (the terminal).
+   
+   Here is the output from the example run:
+
+PAAMIR
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+|==========================================================| 2167
+|----------------------------------------------------------> source
+>                                                            promoter
+|>                                                           promoter
+  >                                                          RBS
+  |------------------------------->                          CDS
+                |>                                           misc_feature
+                        |------>                             mutation
+                                  |---------------->         CDS
+|                                                            misc_feature
+                                  |                          conflict
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+Known bugs
+
+See also
+
+   Program name Description
+   remap Display a sequence with restriction cut sites, translation etc
+   seqret Reads and writes (returns) sequences
+   seqretall Reads and writes (returns) a set of sequences one at a time
+   seqretset Reads and writes (returns) a set of sequences all at once
+   showseq Display a sequence with features, translation etc
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

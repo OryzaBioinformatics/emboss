@@ -1,0 +1,16 @@
+# plplottest application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# use "" for missing values - these are required.
+# values in "" are trimmed to single spaces.
+# everything is treated as single tokens delimited by white space
+# (space, tab, newline)
+
+# il 14-jun-98
+
+appl: plplottest [
+	doc: "test of PLPLOT graphics library"
+	groups: "debugging"
+]
+
+  graph: graph [ req: Y ]

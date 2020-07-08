@@ -1,0 +1,28 @@
+appl: patmatmotifs [
+  documentation: "Search a PROSITE motif database with a protein sequence"
+  groups: "motifs, pattern matching"
+]
+
+sequence: sequence  [
+  param: "Y"
+  type: "PureProtein"
+]
+
+outfile: outfile  [
+  param: "Y"
+]
+
+bool: full  [
+  default: "N"
+  info: "Provide documentation for matching patterns"
+]
+
+bool: prune  [
+  default: "Y"
+  info: "Use simple patterns"
+  help: "Don't use simple patterns.  It this is true then these simple
+post-translational modification sites are not reported: myristyl,
+asn_glycosylation, camp_phospho_site, pkc_phospho_site,
+ck2_phospho_site, and tyr_phospho_site. 
+"
+]

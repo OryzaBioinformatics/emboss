@@ -1,0 +1,20 @@
+# CpG REPORT
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+
+# ajb 14th March 1999
+# rls 9th September 1999
+
+appl: newcpgseek [
+	doc: "Reports CpG rich regions"
+	groups: "CpG islands, DNA: sequence features, DNA: sequence composition"
+]
+
+  seqall: sequence [ param: Y type: DNA ]
+
+  int: score [ req: Y min: 1 max: 200 def: 17
+                info: "CpG score" ]
+
+  outfile: outfile [ param: Y ]
+
+
