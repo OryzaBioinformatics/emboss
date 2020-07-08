@@ -1,0 +1,1476 @@
+% latex file for the long version of the EMBOSS tutorial
+% You need: latex2e (or you need to modify documentclass etc 
+%           to be compatible with latex2.09 I haven't tested this,
+%           it might not be as simple as that)
+% You need latex2html (http://www-texdev.mpce.mq.edu.au/l2h/docs/manual/) 
+%           installed if you want to run the auto conversion to html
+% You need to put html.sty, heqn.sty, htmllist.sty (part of the 
+%           latex2html distribution) either in the same directory 
+%	    as this latex file, or in the place where latex looks 
+%           for all the other .sty files. You need these even if 
+%           you aren't producing html or you will get latex errors.
+%           Download latex2html 
+%           (http://www-texdev.mpce.mq.edu.au/l2h/docs/manual/) and 
+%           grab just these files out of the distribution.
+% You need the postscript figure files: dottup.ps, pepinfo1.ps, 
+%           pepinfo2.ps, plotorf.ps, tmap.ps
+% You need float.sty, epsfig.sty, alltt.sty etc - but you probably 
+%           have those already in your latex installation
+% You need biblio.bib to insert the bibliography
+% I compile it like this:
+% latex emboss_tutorial.tex; bibtex emboss_tutorial; latex emboss_tutorial.tex
+% dvips emboss_tutorial -o
+% latex2html -no_math -html_version 3.2,math -t "EMBOSS tutorial" -split +1 emboss_tutorial.tex
+% but you should do it however you like :-)
+% Have fun!  Val Curwen August 2000
+\documentclass[12pt]{report}
+\usepackage{float,epsfig,alltt,html,heqn,htmllist}
+\begin{document}
+%\newcommand{\type}[1]{{\ttfamily\bfseries #1}}
+\newcommand{\type}[1]{{\bfseries #1}}
+\newcommand{\unix}[1]{{\noindent\ttfamily unix \% #1}}
+\newcommand{\screendump}[1]{{\noindent\ttfamily #1}}
+\newcommand{\scr}[1]{{\screendump{#1}}}
+%\newcommand{\ex}[1]{{\subsection*{Exercise: #1}}}
+\newcommand{\file}[1]{{{\tt #1}}}
+\newcommand{\prog}[1]{{{\tt #1}}}
+\newcommand{\hsp}{{\hspace{0.5cm}}}
+\newcommand{\first}[1]{{\htmladdnormallink{\scr{#1}}{http://www.uk.embnet.org/Software/EMBOSS/Apps/#1.html}}}
+\begin{latexonly}
+\restylefloat{table}
+\end{latexonly}
+
+\title{Introduction to Sequence Analysis using EMBOSS}
+\date{}
+
+\maketitle
+%\tableofcontents
+
+\chapter{What is EMBOSS?}
+\label{chap:what_is}
+Since 1988, the sequence analysis package EGCG has provided extensions
+to the market leading commercial sequence analysis package GCG. EGCG
+development was a collaboration of groups within EMBnet and elsewhere.
+
+EGCG provided support for core sequence activities at the Sanger
+Centre, and has been the basis of new sequence analysis software for
+internal use, as well as providing advanced features in use at
+approximately 150 sites, and for more than 10,000 users of EMBnet
+national services.
+
+That project has reached the limits of what we can achieve using the
+GCG package. Specifically, it is no longer possible to distribute
+academic software source code which uses the GCG libraries and has
+become difficult even to distribute binaries.
+
+As a result, the former EGCG developers have been designing a totally
+new generation of academic sequence analysis software. This has
+resulted in the present EMBOSS project.
+
+\section{So, what is EMBOSS?}
+
+EMBOSS is a new, free Open Source software analysis package specially
+ developed for the needs of the molecular biology (e.g.
+EMBnet) user community. The software automatically copes with data 
+in a variety of formats and even allows transparent retrieval of
+sequence data from the web. Also, as extensive libraries are provided 
+with the package, it is a platform to allow other scientists to
+develop and release software in true open source spirit. EMBOSS also 
+integrates a range of currently available packages and tools for
+sequence analysis into a seamless whole. EMBOSS breaks the historical 
+trend towards commercial software packages. 
+
+The EMBOSS suite: 
+\begin{itemize}
+\item Provides a comprehensive set of sequence analysis programs (approximately 100) 
+\item Provides a set of core software libraries (AJAX and NUCLEUS) 
+\item Integrates other publicly available packages 
+\item Encourages the use of EMBOSS in sequence analysis training. 
+\item Encourages developers elsewhere to use the EMBOSS libraries. 
+\item Supports all common Unix platforms including Linux, Digital Unix, Irix and Solaris. 
+\end{itemize}
+
+Within EMBOSS you will find around 100 programs (applications). These
+are just some of the areas covered:
+\begin{itemize}
+\item Sequence alignment 
+\item Rapid database searching with sequence patterns 
+\item Protein motif identification, including domain analysis 
+\item EST analysis 
+\item Nucleotide sequence pattern analysis, for example to identify CpG islands. 
+\item Simple and species-specific repeat identification 
+\item Codon usage analysis for small genomes 
+\item Rapid identification of sequence patterns in large scale sequence sets. 
+\item Presentation tools for publication 
+\item And much more. 
+\end{itemize}
+
+More information about EMBOSS can be found at\\
+ \htmladdnormallink{http://www.uk.embnet.org/Software/EMBOSS/}{http://www.uk.embnet.org/Software/EMBOSS/}
+
+\section{Working with EMBOSS}
+
+\subsection{How this tutorial is organised}
+
+We assume that you are familiar with basic Unix commands for
+manipulating files and directories. EMBOSS contains many more
+applications than we can describe in the time available. We will
+introduce some of these and will show you how to find out about the
+others. There are many exercises for you to try, and we'll present the
+results you will see so that you know all is going well. Please feel
+free to experiment with the programs!  That is definitely the best way
+to learn what they can do.
+
+Much of the text in this document is what you will see on your screen;
+the Unix prompt is represented as \unix{} - don't type this in! The
+commands you need to type are printed in \type{bold}. If no input is
+specified, just press \type{return}. Pressing \type{return} will also
+dismiss graphics windows. The symbol $\vdots$ means we have
+truncated the program output to save space.
+
+\section{\prog{wossname}: a first EMBOSS application}
+All EMBOSS programs run from the Unix command line. We'll introduce
+the basics with a specific example: the EMBOSS utility
+\first{wossname} will produce a list of all the various EMBOSS
+applications.
+
+\subsection*{Exercise: \prog{wossname}}
+
+Type \type{wossname} at the \unix{}prompt:\\
+
+\unix{}\type{wossname}\\
+ 
+EMBOSS programs start up with a one line description and then prompt you for information; in this case you see:\\
+
+\scr{Finds programs by keywords in their one-line documentation}\\
+\scr{Keyword to search for: }\type{protein}\\
+\scr{SEARCH FOR 'PROTEIN'}
+
+\begin{tabular}{ll}
+\scr{antigenic}	&\scr{Finds antigenic sites in proteins}\\
+\scr{backtranseq}&\scr{Back translate a protein sequence}\\
+\scr{checktrans}	&\scr{Reports STOP codons and ORF statistics of a protein sequence}\\
+\scr{digest}	&\scr{Protein proteolytic enzyme or reagent cleavage digest}\\
+\scr{eprotdist}	&\scr{Protein distance algorithm}\\
+\scr{eprotpars}	&\scr{Protein parsimony algorithm}\\
+\scr{fuzzpro}	&\scr{Protein pattern search}\\
+\scr{fuzztran}	&\scr{Protein pattern search after translation}\\
+\scr{garnier}	&\scr{GARNIER predicts protein secondary structure.}\\
+\scr{iep}	&\scr{Calculates the isoelectric point of a protein}\\
+\scr{octanol}	&\scr{Displays protein hydropathy}\\
+\scr{oddcomp}	&\scr{Finds protein sequence regions with a biased composition}\\
+\scr{patmatdb}	&\scr{Search a protein sequence database with a motif}\\
+\scr{patmatmotifs}&\scr{Search a motif database with a protein sequence}\\
+\scr{pepnet}	&\scr{Displays proteins as a helical net}\\
+\scr{pepstats}	&\scr{Protein statistics}\\
+\scr{pepwheel}	&\scr{Shows protein sequences as helices}\\
+\scr{pepwindow}	&\scr{Displays protein hydropathy}\\
+\scr{pepwindowall}&\scr{Displays protein hydropathy of a set of sequences}\\
+\scr{pscan}	&\scr{Scans proteins using PRINTS}\\
+\scr{sigcleave}	&\scr{Reports protein signal cleavage sites}\\
+\scr{topo}	&\scr{Draws an image of a transmembrane protein}
+\end{tabular}
+\\
+\\
+Many EMBOSS programs have additional, optional parameters that
+offer more functionality. As a rule, you can force the program to
+present this information to you by appending the flag \type{-opt} to
+the program name as follows:\\
+
+\unix{}\type{wossname -opt}\\
+
+You will now be presented with a variety of additional options. The
+default value for each option is given in square brackets, and you can
+either press \type{return} to accept the default, or enter the
+value you require:\\
+
+\scr{Keyword to search for:} \type{protein}\\
+\scr{Output program details to a file [stdout]:} \type{myfile}\\
+\scr{Format the output for HTML [N]:} \type{Y}\\
+\scr{String to form the first half of an HTML link:} \\
+\scr{String to form the second half of an HTML link:} \\
+\scr{Output only the group names [N]: }\\
+\scr{Output an alphabetic list of programs [N]: }\\
+\scr{Use the expanded group names [N]: }\\
+
+This set of commands will cause \prog{wossname} to write out the
+list of programs to a file called \file{myfile}, in HTML format
+ready for viewing in a web browser.
+
+To produce a list of all the current EMBOSS programs, start up
+\prog{wossname} again but instead of specifying a keyword, 
+press \scr{return}. A list of programs will scroll onto your screen,
+divided up into groups according to their functions. Scroll up and
+down to see them all. Can you think of how to get this data into a
+file? (Hint: use \prog{-opt})
+
+If you append the flag \type{-help} to the name of any EMBOSS program
+you will see a list of all the command flags available for this
+program. For example:\\
+
+\unix{}\type{wossname -help}\\
+
+We'll see some more flags later. Let's move on to some sequence analysis \dots
+
+\chapter{Working with sequences}
+\label{chap:seqret}
+Throughout this tutorial, we're going to look at members of the
+rhodopsin family of G-protein coupled receptors. The general
+principles are, of course, applicable to any sequences you would like
+to analyse. We will be working with sequences retrieved from EMBL and
+SwissProt but you can also use EMBOSS with sequences in text
+files.
+
+We will begin with two EMBL sequences whose identifiers are XL23808
+and XLRHODOP; these sequences are the genomic and the corresponding
+cDNA sequence for {\em Xenopus laevis} rhodopsin. 
+
+You need to tell EMBOSS where to read the sequence(s) you want to
+analyse. EMBOSS can read sequences either from text files or directly
+from a sequence database. The easiest way to see this is with examples.
+
+\section{Retrieving sequences from databases}
+The EMBOSS programs can read sequences from various sequence databases
+provided the sequence is referred to in the form {\bf
+database:entry}. You can see the databases we have set up for you using the program
+\first{showdb}:
+
+\subsection*{Exercise: \prog{showdb}}
+
+As an example, here are the first few databases available using EMBOSS
+at the HGMP. Your local site will probably have a different selection
+of databases depending on what the local EMBOSS maintainer has set up.
+
+\unix{}\type{showdb}\\
+\scr{Displays information on the currently available databases}
+
+\begin{tabular}{llllll}
+\scr{\#Name}	&\scr{Type}	&\scr{ID}	&\scr{Qry}	&\scr{All}	&\scr{Comment}\\
+\scr{\#====}	&\scr{====}		&\scr{==}	&\scr{===}	&\scr{===}	&\scr{=======}\\
+\scr{nbrf}	&\scr{P}	&\scr{OK}	&\scr{OK}	&\scr{OK}	&\scr{PIR/NBRF}\\
+\scr{pir}	&\scr{P}	&\scr{OK}	&\scr{OK}	&\scr{OK}	&\scr{PIR/NBRF}\\
+\scr{remtrembl}	&\scr{P}	&\scr{OK}	&\scr{OK}	&\scr{OK}	&\scr{REMTREMBL sequences}\\
+\scr{sptrembl}	&\scr{P}	&\scr{OK}	&\scr{OK}	&\scr{OK}	&\scr{SPTREMBL sequences}\\
+\scr{sw}	&\scr{P}	&\scr{OK}	&\scr{OK}	&\scr{OK}	&\scr{SWISSPROT sequences}\\
+\scr{swissprot}	&\scr{P}	&\scr{OK}	&\scr{OK}	&\scr{OK}	&\scr{SWISSPROT sequences}\\
+\scr{trarc}	&\scr{P}	&\scr{OK}	&\scr{OK}	&\scr{OK}	&\scr{TREMBL ARC sequences}\\
+\scr{trembl}	&\scr{P}	&\scr{OK}	&\scr{OK}	&\scr{OK}	&\scr{TREMBL sequences}\\
+\scr{tremblnew}	&\scr{P}	&\scr{OK}	&\scr{OK}	&\scr{OK}	&\scr{New TREMBL sequences}\\
+\end{tabular}
+\\
+\\
+\prog{showdb} writes out a simple table displaying the names, contents
+and access methods for the databases. 
+\begin{itemize}
+\item [] {\bf ID} allows programs to
+extract a single explicitly named entry from the database, for
+example:
+\scr{embl:x13776}
+\item [] {\bf Query} indicates that programs can extract a set of matching
+wildcard entry names. For example:
+\scr{swissprot:pax*\_human}
+\item [] {\bf All} allows programs to analyse all the entries in the
+database sequentially. For example: 
+\scr{embl:*}
+\end{itemize}
+
+\noindent You can access EMBL by either identifier eg xlrhodop, or
+accession number eg L07770. Let's try these now.
+
+\subsection{\prog{seqret}}
+\first{seqret} reads in a sequence, and writes
+it out, in effect being the EMBOSS equivalent of \prog{readseq}. It is
+probably the most used EMBOSS program.
+
+\subsection*{Exercise: \prog{seqret}}
+
+\unix{}\type{seqret}\\
+\scr{Reads and writes (returns) a sequence}\\
+\scr{Input sequence: }\type{embl:xlrhodop}\\
+\scr{Output sequence [xlrhodop.fasta]: }\\
+
+\unix{}\type{more xlrhodop.fasta }
+\begin{verbatim}
+>XLRHODOP L07770 Xenopus laevis rhodopsin mRNA, complete cds.
+ggtagaacagcttcagttgggatcacaggcttctagggatcctttgggcaaaaaagaaac
+acagaaggcattctttctatacaagaaaggactttatagagctgctaccatgaacggaac
+\end{verbatim}
+$\vdots$
+\\
+\\
+\noindent Now let's retrieve the sequence using its the accession 
+number:\\
+
+\unix{}\type{seqret}\\
+\scr{Reads and writes (returns) a sequence}\\
+\scr{Input sequence: }\type{embl:L07770}\\
+\scr{Output sequence [xlrhodop.fasta]: }\type{xlrhodop2.fasta}\\
+
+\unix{}\type{more xlrhodop2.fasta}
+\begin{verbatim}
+>XLRHODOP L07770 Xenopus laevis rhodopsin mRNA, complete cds.
+ggtagaacagcttcagttgggatcacaggcttctagggatcctttgggcaaaaaagaaac
+acagaaggcattctttctatacaagaaaggactttatagagctgctaccatgaacggaac
+\end{verbatim}
+$\vdots$
+\\
+\\
+\noindent You could also run this example entirely from the command line:\\
+
+\unix{}\type{seqret embl:xlrhodop -outseq xlrhodop.fasta}
+\\
+\\
+By default, \prog{seqret} writes the sequence in fasta
+format. You can also tell it to use a different output format:\\
+
+\unix{}\type{seqret embl:L07770 -outseq gcg::xlrhodop.gcg}\\
+
+\unix{}\type{more xlrhodop.gcg }
+\begin{verbatim}
+!!NA_SEQUENCE 1.0
+
+Xenopus laevis rhodopsin mRNA, complete cds.
+
+XLRHODOP  Length: 1684  Type: N  Check: 9453 ..
+
+    1 ggtagaacag cttcagttgg gatcacaggc ttctagggat cctttgggca
+
+   51 aaaaagaaac acagaaggca ttctttctat acaagaaagg actttataga
+\end{verbatim}
+$\vdots$
+\\
+\\
+\noindent A list of the various formats that EMBOSS understands is 
+given at\\
+ \htmladdnormallink{http://www.uk.embnet.org/Software/EMBOSS/Usa/formats.html}{http://www.uk.embnet.org/Software/EMBOSS/Usa/formats.html}
+
+\section{Reading sequences from files}
+EMBOSS can also read sequences from files. For example, if we wanted
+to reformat the fasta sequence we have downloaded into gcg format, we
+could say:\\
+
+\unix{}\type{seqret xlrhodop.fasta -outseq gcg::myseq.gcg}
+
+\section{\prog{infoseq}}
+\first{infoseq} is a small utility to list the sequences' USA, name, accession number, type (nucleic or protein), length, percentage C+G(for nucleic), and/or
+description. We can view this information for our sequence:
+
+\unix{}\type{infoseq embl:xlrhodop}\\
+\scr{Displays some simple information about sequences}\\
+\begin{tabular}{lllllll}
+\scr{\# USA}	&\scr{Name}	&\scr{Accession}	&\scr{Type}	&\scr{Length}	&\scr{GC} &\scr{Description}\\
+\scr{embl-id:XLRHODOP}	&\scr{XLRHODOP}	&\scr{L07770}	&\scr{N}	&\scr{1684}	&\scr{45.72}	&\scr{X.laevis rhodopsin}\\
+\end{tabular}
+
+\section{Using multiple sequences }
+
+EMBOSS programs can also deal with multiple sequences. A quick search
+using SRS will tell you that the SwissProt sequence corresponding to
+the EMBL sequence we've been looking at has the identifier
+OPSD\_XENLA. To retrieve the information about all the other OPSD
+sequences in SwissProt we can use the wild card character:
+
+\unix{}\type{infoseq}\\
+\scr{Displays some simple information about sequences}\\
+\scr{Input sequence(s):} \type{sw:opsd\_*}\\
+\begin{tabular}{llllll}
+\scr{\# USA}	&\scr{Name}	&\scr{Accession}	&\scr{Type}	&\scr{Length} &\scr{Description}\\
+\scr{sw-id:OPSD\_ABYKO}	&\scr{OPSD\_ABYKO}	&\scr{O42294}	&\scr{P}	&\scr{289}	&\scr{RHODOPSIN (FRAGMENT).}\\
+\scr{sw-id:OPSD\_ALLMI}	&\scr{OPSD\_ALLMI}	&\scr{P52202}	&\scr{P}	&\scr{352}	&\scr{RHODOPSIN.}\\
+\scr{sw-id:OPSD\_AMBTI}	&\scr{OPSD\_AMBTI}	&\scr{Q90245}	&\scr{P}	&\scr{354}	&\scr{RHODOPSIN.}\\
+\scr{sw-id:OPSD\_ANGAN}	&\scr{OPSD\_ANGAN}	&\scr{Q90214}	&\scr{P}	&\scr{352}	&\scr{RHODOPSIN, DEEP-SEA}\\
+\scr{sw-id:OPSD\_ANOCA}	&\scr{OPSD\_ANOCA}	&\scr{P41591}	&\scr{P}	&\scr{352}	&\scr{RHODOPSIN.}\\
+\scr{sw-id:OPSD\_APIME}	&\scr{OPSD\_APIME}	&\scr{Q17053}	&\scr{P}	&\scr{377}	&\scr{RHODOPSIN.}\\
+\scr{sw-id:OPSD\_ASTFA}	&\scr{OPSD\_ASTFA}	&\scr{P41590}	&\scr{P}	&\scr{352}	&\scr{RHODOPSIN.}\\
+\scr{sw-id:OPSD\_BATMU}	&\scr{OPSD\_BATMU}	&\scr{O42300}	&\scr{P}	&\scr{289}	&\scr{RHODOPSIN (FRAGMENT).}\\
+\scr{sw-id:OPSD\_BATNI}	&\scr{OPSD\_BATNI}	&\scr{O42301}	&\scr{P}	&\scr{289}	&\scr{RHODOPSIN (FRAGMENT).}\\
+\scr{sw-id:OPSD\_BOVIN}	&\scr{OPSD\_BOVIN}	&\scr{P02699}	&\scr{P}	&\scr{348}	&\scr{RHODOPSIN.}\\
+\end{tabular}\\
+\\
+
+We can also use the wild card character on the command line, but here we must enclose the specification in quotation marks:
+
+\unix{}\type{infoseq ``sw:opsd\_*''}\\
+
+You can use \prog{seqret} to retrieve multiple sequences into a file; for exmaple:
+
+\unix{}\type{seqret ``sw:opsd\_a*'' -outseq opsd\_a.seqs}\\
+
+retrieves all the sequences whose identifiers start ``opsd\_a'' into a
+file called \file{opsd\_a.seqs}. If we wanted to have each sequence in a
+separate file, we could type:
+
+\unix{}\type{seqret ``sw:opsd\_a*'' -ossingle}\\
+
+Filenames are generated based on the identifiers of the sequences.
+
+\section{Listfiles}
+It is also possible to use list files within EMBOSS. Instead of
+containing the sequences themselves, a list file contains
+"references" to sequences - so, for example, you might include
+database entries, the names of files containing sequences, or even the
+names of other list files. For example, here's a valid list file,
+called \file{seq.list}:
+
+\unix{}\type{more seq.list}
+\begin{verbatim}
+opsd_abyko.fasta
+sw:opsd_xenla
+sw:opsd_c*
+@another_list
+\end{verbatim}
+
+This looks a bit odd, but it's really very straightforward; the file contains:
+\begin{itemize}
+\item \scr{opsd\_abyko.fasta} - this is the name of a sequence file. The file is read in from the current directory.
+\item \scr{sw:opsd\_xenla} - this is a reference to a specific sequence in the SwissProt database
+\item \scr{sw:opsd\_c*} - this represents all the sequences in SwissProt whose identifiers start with ``opsd\_c''
+\item \scr{another\_list} - this is the name of a second list file
+\end{itemize}
+
+Notice the {\bf @} in front of the last entry. This is the way you
+tell EMBOSS that this file is a list file, not a regular sequence
+file. Let's demonstrate this by using this file as the input to
+\prog{seqret} and get the sequences into a new file, perhaps
+for use in a multiple sequence alignment (see Section~\ref{sec:MSA}). You'll
+need to use a text editor such as \prog{pico} to create the appropriate
+sequence and list files if you'd like to try this yourself.
+
+First of all, we'll make the file \file{opsd\_abyko.fasta} using
+\prog{seqret}:
+
+\unix{}\type{seqret sw:opsd\_abyko -outseq opsd\_abyko.fasta}
+
+Now let's look at \file{another\_list}. Note that its structure is very
+similar to that of seq.list but this time only contains database
+references:
+
+\unix{}\type{more another\_list} 
+\begin{verbatim}
+sw:opsd_anoca
+sw:opsd_apime
+sw:opsd_astfa
+\end{verbatim}
+
+Finally, let's run \prog{seqret} with \file{seq.list} (not forgetting the @
+sign) and look at the results:
+
+\unix{}\type{seqret @seq.list -outseq outfile}
+
+\unix{}\type{more outfile}
+\begin{verbatim}
+>OPSD_ABYKO O42294 RHODOPSIN (FRAGMENT).
+YLVNPAAYAALGAYMFLLILIGFPINFLTLYVTLEHKKLRTPLNYILLNLAVANLFMVLG
+GFTTTMYTSMHGYFVLGRLGCNLEAFFATLGGEIALWSLVVLAIERWIVVCKPISNFRFT
+EDHAIMGLAFTWVMALACAVPPLVGWSRYIPEGMQCSCGVDYYTRAEGFNNESFVIYMFI
+VHFLIPLSVIFFCYGRLLCAVKEAPAAQQESETTQRAEKEVSRMVVIMVIGFLVCWLPYA
+SVAWWIFCNQGSDFGPIFMTLPSFFAKSAAIYNPMIYICMNKQFRHCMI
+>OPSD_XENLA P29403 RHODOPSIN.
+MNGTEGPNFYVPMSNKTGVVRSPFDYPQYYLAEPWQYSALAAYMFLLILLGLPINFMTLF
+VTIQHKKLRTPLNYILLNLVFANHFMVLCGFTVTMYTSMHGYFIFGPTGCYIEGFFATLG
+GEVALWSLVVLAVERYIVVCKPMANFRFGENHAIMGVAFTWIMALSCAAPPLFGWSRYIP
+EGMQCSCGVDYYTLKPEVNNESFVIYMFIVHFTIPLIVIFFCYGRLLCTVKEAAAQQQES
+LTTQKAEKEVTRMVVIMVVFFLICWVPYAYVAFYIFTHQGSNFGPVFMTVPAFFAKSSAI
+YNPVIYIVLNKQFRNCLITTLCCGKNPFGDEDGSSAATSKTEASSVSSSQVSPA
+>OPSD_CAMAB Q17292 RHODOPSIN.
+MMSIASGPSHAAYTWASQGGGFGNQTVVDKVPPEMLHMVDAHWYQFPPMNPLWHALLGFV
+IGVLGVISVIGNGMVIYIFTTTKSLRTPSNLLVVNLAISDFLMMLCMSPAMVINCYYETW
+VLGPLFCELYGLAGSLFGCASIWTMTMIAFDRYNVIVKGLSAKPMTINGALIRILTIWFF
+TLAWTIAPMFGWNRYVPEGNMTACGTDYLTKDLFSRSYILIYSIFVYFTPLFLIIYSYFF
+IIQAVAAHEKNMREQAKKMNVASLRSAENQSTSAECKLAKVALMTISLWFMAWTPYLVIN
+YSGIFETTKISPLFTIWGSLFAKANAVYNPIVYGISHPKYRAALFQKFPSLACTTEPTGA
+DTMSTTTTVTEGNEKPAA
+>OPSD_CAMHU O18312 RHODOPSIN (FRAGMENT).
+LHMIHLHWYQYPPMNPMMYPLLLIFMLFTGILCLAGNFVTIWVFMNTKSLRTPANLLVVN
+LAMSDFLMMFTMFPPMMVTCYYHTWTLGPTFCQVYAFLGNLCGCASIWTMVFITFDRYNV
+IVKGVAGEPLSTKKASLWILSVWVLSTAWCIAPFFGWNHYVPEGNLTGCGTDYLSEDILS
+RSYLYIYSTWVYFLPLAITIYCYVFIIKAVAAHEKGMRDQAKKMGIKSLRNEEAQKTSAE
+CRLAKNAMTTVALWFIAWTPCLLINWVGMFARSYLSPVYTIWGYVFAKANAVYNPIVYAI
+S
+\end{verbatim}
+$\vdots$
+\\
+\\
+\noindent Note that the output file contains all the sequences we specified in
+\file{seq.list}, as we had expected.
+
+\chapter{Pairwise sequence alignment}
+
+This chapter is about sequence similarity.  Let us start with a
+warning: there is no unique, precise, or universally applicable notion
+of similarity. An alignment is an arrangement of two sequences which
+shows where the two sequences are similar, and where they differ.  An
+optimal alignment, of course, is one that exhibits the most
+similarities, and the least differences. Broadly, there are three
+categories of methods for sequence comparison.
+
+\begin{itemize}
+\item Segment methods compare all overlapping segments of a predetermined
+length (e.g., 10 amino acids) from one sequence to all segments from
+the other. This is the approach used in dotplots.
+\item Optimal global alignment methods allow the best overall score for the comparison of
+the two sequences to be obtained, including a consideration of gaps.
+\item Optimal local alignment algorithms seek to identify the best local 
+similarities between two sequences but,
+unlike segment methods, include explicit consideration of gaps.  
+\end{itemize}
+
+\section{Dotplots}
+The most intuitive representation of the comparison between two
+sequences uses dot-plots. One sequence is represented on each axis
+and significant matching regions are distributed along diagonals
+in the matrix.
+
+\subsection*{Exercise: Making a dotplot}
+
+\unix{}\type{ dottup}\\
+\scr{DNA sequence dot plot}\\
+\scr{Input sequence: }\type{embl:xl23808}\\
+\scr{Second sequence: }\type{embl:xlrhodop}\\
+\scr{Word size [4]: }\type{10}\\
+\scr{Graph type [x11]:}\\
+
+A window will pop up on your screen that should look something like this:
+
+\begin{figure}[H]
+\begin{center}
+\epsfig{figure=dottup.ps,width=5in}
+\end{center}
+\label{fig:image-hierarchy}
+\end{figure}
+
+%(Could put in a bit about defaults if space)
+
+The diagonal lines represent areas where the two sequences align
+well. You can see that there are five clear diagonals. You will
+remember that we are aligning genomic and cDNA - these five diagonals
+represent the five exons of the gene! If you look at the original
+EMBL entry for the genomic sequence using SRS, you will
+see that the annotated entry says that there are five exons in this
+gene. So our results are in agreement.
+
+But the dotplot doesn't give us any detailed sequence information. For
+this, we need to use different programs. The algorithms we will be
+using are more rigorous than those used for searching databases; so
+even if you have retrieved a sequence from a database using something
+like BLAST, it will be well worth your while performing a careful
+pairwise alignment afterwards. The basic idea behind the sequence
+alignment programs is to align the two sequences in such a way as to
+produce the highest score - a scoring matrix is used to add points to
+the score for each match and subtract them for each mismatch. The
+matrices used for nucleic acid alignments tend to involve fairly
+simple match/mismatch scoring schemes, while the matrices commonly
+used for scoring protein alignments are more complex, with scores
+designed to reflect similarity between the different amino acids
+rather than simply scoring identities. Over time various mutations
+occur in sequences; the scoring matrices attempt to cope with
+mutations, but insertions and deletions require some extra parameters
+to allow the introduction of gaps in the alignment. There are
+penalties both for the creation of gaps and for the extension of
+existing ones; the default gap parameters given in alignment programs
+have been found to be empirically correct with test sequences but you
+should experiment with different gap penalties.
+
+\section{Global alignment}
+
+A global alignment is one that compares the two sequences over their
+entire lengths, and is appropriate for comparing sequences that are
+expected to share similarity over the whole length. The alignment
+maximises regions of similarity and minimises gaps using the scoring
+matrices and gap parameters provided to the program. The EMBOSS
+program \first{needle} is an implementation of the Needleman-Wunsch~\cite{Needle:70} algorithm for global alignment; the computation is rigorous and needle
+can be time consuming to run if the sequences are long. 
+
+\subsection*{Exercise: \prog{needle}}
+
+\unix{}\type{needle}\\
+\scr{Needleman-Wunsch global alignment.}\\
+\scr{Input sequence:}\type{ embl:xlrhodop}\\
+\scr{Second sequence:}\type{ embl:xl23808}\\
+\scr{Gap opening penalty [10.0]: }\\
+\scr{Gap extension penalty [0.5]: }\\
+\scr{Output file [xlrhodop.needle]: }\\
+
+\unix{}\type{more xlrhodop.needle}
+\begin{verbatim}
+Global: XLRHODOP vs XL23808
+Score: 7471.00
+
+XLRHODOP                                                               
+                                                                      
+XL23808         1        cgtaactaggaccccaggtcgacacgacaccttccctttcccagt 45      
+
+XLRHODOP                                                               
+                                                                      
+XL23808         46       tatttcccctgtagacgttagaaggggaaggggtgtacttatgtc 90      
+
+XLRHODOP                                                               
+                                                                      
+XL23808         91       acgacgaactacgtccttgactacttagggccagagagacgaggt 135     
+\end{verbatim}
+$\vdots$
+\\
+\\
+\noindent Note that as this is a global alignment, the entire genomic sequence
+is given in the output, even in regions where it does not line up with
+the cDNA. Scroll down the output until you reach an area of alignment.
+
+\begin{verbatim}
+XLRHODOP        1                  ggtagaacagcttcagttgggatcacaggcttcta 35      
+                                    ||||||||||||||||||||||||||||||||||
+XL23808         1171     tgggtcatactgtagaacagcttcagttgggatcacaggcttcta 1215    
+
+XLRHODOP        36       gggatcctttgggcaaaaaagaaacacagaaggcattctttctat 80      
+                         |||||||||||||||||||||||||||||||||||||||||||||
+XL23808         1216     gggatcctttgggcaaaaaagaaacacagaaggcattctttctat 1260    
+
+XLRHODOP        81       acaagaaaggactttatagagctgctaccatgaacggaacagaag 125     
+                         |||||||||||||||||||||||||||||||||||||||||||||
+XL23808         1261     acaagaaaggactttatagagctgctaccatgaacggaacagaag 1305    
+
+XLRHODOP        126      gtccaaatttttatgtccccatgtccaacaaaactggggtggtac 170     
+                         |||||||||||||||||||||||||||||||||||||||||||||
+XL23808         1306     gtccaaatttttatgtccccatgtccaacaaaactggggtggtac 1350   \end{verbatim}
+$\vdots$
+\\
+\\
+\noindent We've only shown part of the output as it is very long. You should
+look at the whole output and note that there are five aligned regions
+that represent the five exons as predicted from the dotplot.
+
+\section{Local alignment}
+As we mentioned above, global sequence alignment algorithms align
+sequences over their entire lengths. You do need to think about
+whether that type of alignment makes sense for your sequences. For our
+example, where we expect each exon to be represented in the sequences
+and in the same order, it has worked well - however, how well do you
+think this approach would work with, for example, multidomain proteins
+that share one domain but not others, or sequences where there have
+been regions of duplication? A second comparison method, local
+alignment, searches for regions of local similarity and need not
+include the entire length of the sequences. Local alignment methods
+are very useful for scanning databases or when you do not know that
+the sequences are similar over their entire lengths. The EMBOSS
+program \first{water} is a rigorous implementation of the Smith Waterman
+algorithm for local alignments~\cite{Smith:81}.
+
+\subsection*{Exercise: \prog{water}}
+
+\unix{}\type{water}\\
+\scr{Smith-Waterman local alignment.}\\
+\scr{Input sequence: }\type{embl:xlrhodop}\\
+\scr{Second sequence: }\type{embl:xl23808}\\
+\scr{Gap opening penalty [10.0]: }\\
+\scr{Gap extension penalty [0.5]: }\\
+\scr{Output file [xlrhodop.water]: }
+
+\unix{}\type{more xlrhodop.water}
+\begin{verbatim}
+Local: XLRHODOP vs XL23808
+Score: 7448.00
+
+XLRHODOP        2     gtagaacagcttcagttgggatcacaggcttctagggatcctttg 46   
+                      |||||||||||||||||||||||||||||||||||||||||||||
+XL23808         1182  gtagaacagcttcagttgggatcacaggcttctagggatcctttg 1226 
+
+XLRHODOP        47    ggcaaaaaagaaacacagaaggcattctttctatacaagaaagga 91   
+                      |||||||||||||||||||||||||||||||||||||||||||||
+XL23808         1227  ggcaaaaaagaaacacagaaggcattctttctatacaagaaagga 1271 
+
+XLRHODOP        92    ctttatagagctgctaccatgaacggaacagaaggtccaaatttt 136  
+                      |||||||||||||||||||||||||||||||||||||||||||||
+XL23808         1272  ctttatagagctgctaccatgaacggaacagaaggtccaaatttt 1316 
+
+XLRHODOP        137   tatgtccccatgtccaacaaaactggggtggtacgaagcccattc 181  
+                      |||||||||||||||||||||||||||||||||||||||||||||
+XL23808         1317  tatgtccccatgtccaacaaaactggggtggtacgaagcccattc 1361 
+
+XLRHODOP        182   gattaccctcagtattacttagcagagccatggcaatattcagca 226  
+                      |||||||||||||||||||||||||||||||||||||||||||||
+XL23808         1362  gattaccctcagtattacttagcagagccatggcaatattcagca 1406 
+
+XLRHODOP        227   ctggctgcttacatgttcctgctcatcctgcttgggttaccaatc 271  
+                      |||||||||||||||||||||||||||||||||||||||||||||
+XL23808         1407  ctggctgcttacatgttcctgctcatcctgcttgggttaccaatc 1451 
+
+XLRHODOP        272   aacttcatgaccttgtttgttaccatccagcacaagaaactcaga 316  
+                      |||||||||||||||||||||||||||||||||||||||||||||
+XL23808         1452  aacttcatgaccttgtttgttaccatccagcacaagaaactcaga 1496 
+
+XLRHODOP        317   acacccctaaactacatcctgctgaacctggtatttgccaatcac 361  
+                      |||||||||||||||||||||||||||||||||||||||||||||
+XL23808         1497  acacccctaaactacatcctgctgaacctggtatttgccaatcac 1541 
+\end{verbatim}
+$\vdots$
+\\
+\\
+\noindent Again, note that five exons have been found.
+
+In these cases we have not had to adjust the gap parameters form the
+defaults used in these programs. You should be aware that you may need
+to do so with your own sequences.
+
+ EMBOSS contains other pairwise alignment programs - \first{stretcher}
+ and \first{matcher} are global and local alignment programs that are
+ less rigorous than \prog{needle} and \prog{water} and therefore run
+ more quickly; they may be useful for database
+ searching. \first{supermatcher} is designed for local alignments of
+ very large sequences and is even less rigorous in its
+ implementation. The documentation pages for all these programs can be
+ found at\\
+ \htmladdnormallink{http://www.uk.embnet.org/Software/EMBOSS/Apps/index.html}{http://www.uk.embnet.org/Software/EMBOSS/Apps/index.html}
+ 
+\chapter{Protein analysis}
+
+This chapter will introduce you to a few of the EMBOSS application
+sthat can be used to analyse protein sequences. Obviously, the
+pairwise sequence comparison methods illustraetd in the previous
+chapter with nucleic acid sequences can also be used with protein
+sequences.
+%BLURB.
+
+\section{Identifying the ORF}
+In this section we'll show you some simple EMBOSS applications for
+translating your cDNA sequence into protein. You should be aware that
+gene structure prediction is a tough problem, and recognising exon/intron
+boundaries in genomic sequence is not easy; for now, rather than deal
+with that side of things we'll use the cDNA sequence in our
+practical. First, we need to identify our open reading frame. We can
+get a rapid visual overview of the distribution of ORFs in the six
+frames of our sequence using the EMBOSS program \first{plotorf}.
+
+\subsection*{Exercise: \prog{plotorf}}
+
+\unix{}\type{plotorf}\\
+\scr{Plot potential open reading frames}\\
+\scr{Input sequence: }\type{embl:xlrhodop}\\
+\scr{Graph type [x11]: }
+
+You will see a graphical output that shows the potential open reading
+frames (ORF) in all six frames:
+
+\begin{figure}[H]
+\begin{center}
+\epsfig{figure=plotorf.ps,height=3in}
+\end{center}
+\label{fig:plotorf}
+\end{figure}
+
+The longest ORF is in frame 2 from around position 100 to 1200. We
+will now identify the exact start and end points for our
+translation. To do this, we can use the EMBOSS program
+\first{getorf}.
+
+\subsection*{Exercise: \prog{getorf}}
+
+\unix{}\type{ getorf -opt}\\
+\scr{Finds and extracts open reading frames (ORFs)}\\
+\scr{Input sequence: }\type{embl:xlrhodop}\\
+\scr{Output sequence [xlrhodop.orf]:}\\ 
+\scr{Genetic codes}\\
+\scr{         0 : Standard}\\
+\scr{         1 : Standard (with alternative initiation codons)}\\
+\scr{         2 : Vertebrate Mitochondrial}\\
+\scr{         3 : Yeast Mitochondrial}\\
+\scr{         4 : Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma}\\
+\scr{         5 : Invertebrate Mitochondrial}\\
+\scr{         6 : Ciliate Macronuclear and Dasycladacean}\\
+\scr{         9 : Echinoderm Mitochondrial}\\
+\scr{        10 : Euplotid Nuclear}\\
+\scr{        11 : Bacterial}\\
+\scr{        12 : Alternative Yeast Nuclear}\\
+\scr{        13 : Ascidian Mitochondrial}\\
+\scr{        14 : Flatworm Mitochondrial}\\
+\scr{        15 : Blepharisma Macronuclear}\\
+\scr{Code to use [0]: }\\
+\scr{Minimum nucleotide size of ORF to report [30]: }\\
+\scr{Type of sequence to output}\\
+\scr{         0 : Translation of regions between STOP codons}\\
+\scr{         1 : Translation of regions between START and STOP codons}\\
+\scr{         2 : Nucleic sequences between STOP codons}\\
+\scr{         3 : Nucleic sequences between START and STOP codons}\\
+\scr{         4 : Nucleotides flanking START codons}\\
+\scr{         5 : Nucleotides flanking initial STOP codons}\\
+\scr{         6 : Nucleotides flanking ending STOP codons}\\
+\scr{Type of output [0]: }\type{3}\\
+
+Notice that you can specify the organism whose codon usage table is
+most appropriate for your sequence, and you can also choose the type
+of information that is reported to you. In our case, we are simply
+interested in the positions of the start and stop codons for this
+sequence.
+
+\prog{plotorf} is just a graphical representation of the textual 
+information produced by \prog{getorf}. Since we asked for all ORFs
+above a minimum size to be reported, \prog{getorf} is telling us about
+a number of potential ORFs. We know from \prog{plotorf} that our ORF
+will be in the region 100 to 1200, so scroll through the output file,
+{\em xlrhodop.orf}, until you identify this. What are the actual start
+and end positions?
+
+\unix{}\type{more xlrhodop.orf}
+\begin{verbatim}
+>XLRHODOP_7 [110 - 1171] Xenopus laevis rhodopsin mRNA, complete cds.
+atgaacggaacagaaggtccaaatttttatgtccccatgtccaacaaaactggggtggta
+cgaagcccattcgattaccctcagtattacttagcagagccatggcaatattcagcactg
+\end{verbatim}
+$\vdots$
+
+\section{Translating the sequence}
+
+From the previous exercise you should have found that the region to be
+translated is from 110 to 1171 in our cDNA sequence. Now we can use
+\first{transeq} to translate that region and use the translated
+peptide for some further analyses. 
+
+\subsection*{Exercise: \prog{transeq}}
+
+Let's practice using command line flags again. The new ones here are
+\type{-sbegin} and \type{-send}. These allow you to specify a
+subregion of you sequence; in this case we will ask
+\prog{transeq} to translate only the part of
+\file{embl:xlrhodop} that we have identified as the coding
+region. You should remember \type{-outseq} from
+Chapter~\ref{chap:seqret}.\\
+
+\unix{}\type{transeq embl:xlrhodop -sbegin 110 -send 1171 -outseq xlrhodop.pep}\\
+\scr{Translate nucleic acid sequences}
+
+\unix{}\type{ more xlrhodop.pep}
+\begin{verbatim}
+>XLRHODOP+1 Xenopus laevis rhodopsin mRNA, complete cds.
+MNGTEGPNFYVPMSNKTGVVRSPFDYPQYYLAEPWQYSALAAYMFLLILLGLPINFMTLF
+VTIQHKKLRTPLNYILLNLVFANHFMVLCGFTVTMYTSMHGYFIFGQTGCYIEGFFATLG
+GEVALWSLVVLAVERYMVVCKPMANFRFGENHAIMGVAFTWIMALSCAAPPLFGWSRYIP
+EGMQCSCGVDYYTLKPEVNNESFVIYMFIVHFTIPLIVIFFCYGRLLCTVKEAAAQQQES
+ATTQKAEKEVTRMVVIMVVFFLICWVPYAYVAFYIFTHQGSNFGPVFMTVPAFFAKSSAI
+YNPVIYIVLNKQFRNCLITTLCCGKNPFGDEDGSSAATSKTEASSVSSSQVSPA
+\end{verbatim}
+
+We saw earlier that the SwissProt entry for this protein has the 
+identifier \scr{opsd\_xenla}; test your understanding of EMBOSS so 
+far by using \prog{needle} to compare your translated product with 
+the database sequence. Compare your findings with the SwissProt
+ entry using SRS.
+
+\section{Secondary structure prediction}
+
+The question of how DNA sequence determines specific protein structure
+has been a constant source of fascination and speculation since the
+problem was identified. It remains an extremely difficult area;
+generally referred to as the ``folding problem'', it is one of the major
+outstanding questions inl molecular biology. Many attempts
+have been made to predict the tertiary structure of a protein from its
+sequence. These fall into two distinct approaches:
+
+\begin{itemize}
+\item One approach is to set up a realistic mechanical model of
+the protein chain and simulate the
+folding process.  
+\item Other approaches are empirical as they proceed by inference
+from known tertiary structures. 
+\end{itemize}
+
+The approach to structure prediction based on mechanical models has
+the innate (possibly fatal) attraction that, in theory, it requires no
+prior knowledge of protein tertiary structure. If successful it could
+be applied uniformly to all sequences. By contrast, all methods based
+on inference from known structures are inherently limited in their
+applicability. They will only be appropriate for predicting structures
+similar to those which were used in the inference process.
+Fortunately there are often biophysical or biochemical clues that aid
+in this decision and these are often integrated in the methods for
+structure prediction.
+
+Currently the best way to achieve reasonable secondary structure
+predictions is to run a variety of prediction algorithms over your
+sequence and determine a consensus among the results. There are
+various web servers that will do these multiple analyses for you,
+including PIX at the HGMP and Jpred at the EBI:
+
+\noindent\htmladdnormallink{http://www.hgmp.mrc.ac.uk/Registered/Webapp/pix/}{http://www.hgmp.mrc.ac.uk/Registered/Webapp/pix/}\\
+\htmladdnormallink{http://jura.ebi.ac.uk:8888/}{http://jura.ebi.ac.uk:8888/}
+
+As yet, coverage of secondary structure prediction within EMBOSS is
+limited. More algorithms will be added to enable the conesensus
+approach described above. We'll take a look now at some of the
+predictions you can currently perform using EMBOSS.
+
+\subsection{garnier}
+
+\first{garnier} uses the Garnier-Osguthorpe-Robson (GOR)~\cite{Garnier:78} 
+method to predict 
+secondary structure. It considers the effect that residues within the
+region eight residues N-terminal to eight residues C-terminal of a
+given position have on the structure at that position.  For each
+residue, four ``probabilities'', PH, PE, PT and PC (H = helix T = turn,
+C = coil, E = sheet) and for any residue the predicted state is the
+one with the largest probability value.
+
+\subsection*{Exercise: \prog{garnier}}
+
+\unix{}\type{garnier}\\
+\scr{GARNIER predicts protein secondary structure.}\\
+\scr{Version 2.0u66 Sep. 1998}\\
+\scr{Input sequence: }\type{xlrhodop.pep}\\
+\scr{Output file [1.garnier]: }\type{xlrhodop.garnier}\\
+
+\unix{}\type{more xlrhodop.garnier}
+\begin{verbatim}
+ GARNIER plot of XLRHODOP+1, 355 aa; DCH = 0, DCS = 0
+ Please cite:
+ Garnier, Osguthorpe and Robson (1978) J. Mol. Biol. 120:97-120
+
+           .   10    .   20    .   30    .   40    .   50    .   60
+       MNGTEGPNFYVPMSNKTGVVRSPFDYPQYYLAEPWQYSALAAYMFLLILLGLPINFMTLF
+ helix                                    HHHHHHHHHHH   H        HH
+ sheet         EEEE     EEEEE       EEEE             EEE     EEEE  
+ turns        T    TTTTT     TTT TTT    TT                       
+ coil  CCCCCCC                  C                        CCCC    
+\end{verbatim}
+$\vdots$
+
+\subsection{pepinfo}
+
+\first{pepinfo} produces information on amino acid properties (size, polarity, aromaticity, charge
+etc). Hydrophobicity profiles are also available and are useful for
+locating turns, potential antigenic peptides and transmembrane
+helices. Various algorithms are employed including the Kyte and
+Doolittle hydropathy measure - this curve is the average of a
+residue-specific hydrophobicity index over a window of nine residues.
+When the line is in the upper half of the frame, it indicates a
+hydrophobic region, and when it is in the lower half, a hydrophilic
+region.
+
+\subsection*{Exercise: \prog{pepinfo}}
+
+\unix{}\type{pepinfo xlrhodop.pep}\\
+\scr{Plots simple amino acid properties in parallel}\\
+\scr{Graph type [x11]: }\\
+\scr{Output file [pepinfo.out]: }\\
+\\
+You will see two screens (press \type{return} to move from the first
+to the second screen) that look like this:
+
+\begin{figure}[H]
+\begin{center}
+\epsfig{figure=pepinfo1.ps,width=5in}
+\end{center}
+\label{fig:pepinfo1}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\epsfig{figure=pepinfo2.ps,width=5in}
+\end{center}
+\label{fig:pepinfo2}
+\end{figure}
+
+%BLURB
+
+\subsection{Predicting transmembrane regions}
+
+The results from the \prog{pepinfo} hydropathy plot showed seven
+highly hydrophobic regions within \file{xlrhodop.pep}. Could these be
+transmembrane domains? We can use the EMBOSS program \first{tmap}
+to investigate this possibility:
+
+\subsection*{Exercise: \prog{tmap}}
+
+\unix{}\type{tmap}\\
+\scr{Displays membrane spanning regions}\\
+\scr{Sequences file to be read in: }\type{xlrhodop.pep}\\
+\scr{Graph type [x11]: }\\
+
+You will see a window that looks like this:
+
+\begin{figure}[H]
+\begin{center}
+\epsfig{figure=tmap.ps,width=5in}
+\end{center}
+\label{fig:tmap}
+\end{figure}
+
+The bars across the top represent areas where transmembrane segments
+are predicted. Taken in combination with the results from pepinfo, we
+can see that there may be seven transmembrane helices in this
+protein. This corresponds well with both the SwissProt entry for this
+sequence (\type{opsd\_xenla}) and with some information we will gather
+about patterns and profiles in the next chapter.
+
+There are various other programs you can use to analyse your peptide
+sequence - to find out what is available, try rerunning
+\prog{wossname} as we did in the first chapter.
+
+\chapter{Patterns, profiles and multiple sequence alignment}
+We have not covered BLAST or FASTA searching in this tutorial because
+they are not currently part of EMBOSS; these searches are offered at
+many web sites worldwide. However, database searches are an important
+part of the bioinformatician's arsenal. When we screen a new sequence
+against a database of known sequences, we are trying to answer the
+following questions:
+
+\begin{itemize}
+\item Is there any protein of known structure that
+has sufficient similarity to the sequence of the unknown protein to
+suggest a familial relationship? 
+\item If not, which sequence of any known proteins is most similar 
+to the sequence of the unknown protein?
+\end{itemize}
+
+If we can identify a relationship to a protein of known structure, it
+is possible to infer that the new protein shares a common structure
+with its relative and to assign its general fold. However, what if the
+homologue has no known structure?  If its function has been identified
+then we might expect our unknown protein to have a similar or related
+function. However, exceptions do exist, however. A classic example is
+lysozyme, which shares around 50\% sequence identity and 70\% sequence
+similarity with $\alpha$-lactalbumin. The two proteins also share
+similar folds, but their functions are entirely different: the two key
+catalytic residues of lysozyme are not conserved in
+$\alpha$-lactalbumin, and the acidic calcium binding motif important
+to the function of $\alpha$-lactalbumin is not present in most
+lysoszymes. It is essential that you confirm any computer based
+predictions with benchwork.
+
+What can you do if sequence similarity does not identify a relative?
+In this chapter we will show you a few more applications within EMBOSS
+that can help you predict the function of your sequence.
+
+\section{Pattern matching}
+In a number of cases, the active site of a protein can be recognized
+by a specific ``fingerprint'' or ``template'', a fairly small set of
+residues that are unique to a family of proteins. An example is the
+sequence GXGXXG (where G=glycine and X=any amino acid) which defines a
+GTP binding site. Searching for a (rather loose) predefined string of
+characters in a sequence is called Pattern Matching. 
+
+The EMBOSS program \first{patmatmotifs} looks for sequence motifs by
+searching with a pattern search algorithm through the given protein
+sequence for the patterns defined in the PROSITE database, compiled by
+Dr. Amos Bairoch at the University of Geneva. PROSITE is a database of
+protein families and domains, based on the observation that,
+while there is a huge number of different proteins, most of them can
+be grouped, on the basis of similarities in their sequences, into a
+limited number of families. Proteins or protein domains belonging to a
+particular family generally share functional attributes and are
+derived from a common ancestor.
+
+\subsection*{Exercise: \prog{patmatmotifs}}
+
+\unix{}\type{patmatmotifs}\\
+\scr{Search a motif database with a protein sequence}\\
+\scr{Input sequence: }\type{xlrhodop.pep}\\
+\scr{Output file [xlrhodop\_1.patmatmotifs]: }\type{xlrhodop.patmatmotifs}\\
+
+\unix{}\type{more xlrhodop.patmatmotifs }
+\begin{verbatim}
+Number of matches found in this Sequence = 1
+
+Length of the sequence = 354 basepairs
+Start of match = position 123 of sequence
+End of match = position 139 of sequence
+Length of motif = 17
+
+patmatmotifs of G_PROTEIN_RECEPTOR with XLRHODOP+1 from 123 to 139\\
+TLGGEVALWSLVVLAVERYMVVCKPMA
+     |               |
+   123               139
+
+Number of matches found in this Sequence = 1
+
+Length of the sequence = 354 basepairs
+Start of match = position 290 of sequence
+End of match = position 306 of sequence
+Length of motif = 17
+
+patmatmotifs of OPSIN with XLRHODOP+1 from 290 to 306
+PVFMTVPAFFAKSSAIYNPVIYIVLNK
+     |               |
+   290               306
+\end{verbatim}
+
+In our case we already know that our sequence is a rhodopsin. However,
+if you had an unknown sequence, we hope you can see that identifying
+motifs might provide you with information to help you plan further
+experiments.
+
+\section{Protein fingerprints}
+PRINTS is a database that defines functional protein families,
+identifying each domain by a number of short, particularly well
+conserved sequences. A full match to one of these "fingerprints" will
+match all the relevant short sequences in the correct order. A partial
+match is recorded if some are missing or if they occur in an incorrect
+order. The PRINTS database can be searched using the pscan program
+which is available within EMBOSS.
+
+\subsection*{Exercise: \prog{pscan}}
+
+\unix{}\type{pscan}\\
+\scr{Scans proteins using PRINTS}\\
+\scr{Input sequence: }\type{xlrhodop.pep}\\
+\scr{Minimum number of elements per fingerprint [2]: }\\
+\scr{Maximum number of elements per fingerprint [20]: }\\
+\scr{Output file [xlrhodop\_1.pscan]: }\type{xlrhodop.pscan}\\
+\\
+\scr{Scanning XLRHODOP+1...}\\
+
+\unix{}\type{more xlrhodop.pscan }
+\begin{verbatim}
+CLASS 1
+Fingerprints with all elements in order
+
+Fingerprint GPCRRHODOPSN Elements 7
+    Accession number PR00237
+    Rhodopsin-like GPCR superfamily signature
+  Element 1 Threshold 54% Score 61%
+             Start position 39 Length 25
+  Element 2 Threshold 49% Score 49%
+             Start position 72 Length 22
+  Element 3 Threshold 48% Score 55%
+             Start position 117 Length 23
+  Element 4 Threshold 50% Score 69%
+             Start position 152 Length 22
+  Element 5 Threshold 51% Score 82%
+             Start position 204 Length 24
+  Element 6 Threshold 42% Score 72%
+             Start position 250 Length 25
+  Element 7 Threshold 46% Score 68%
+             Start position 288 Length 27
+
+CLASS 2
+All elements match but not all in the correct order
+
+Fingerprint RHODOPSIN Elements 6
+    Accession number PR00579
+    Rhodopsin signature
+  Element 1 Threshold 80% Score 100%
+             Start position 3 Length 19
+  Element 2 Threshold 76% Score 94%
+             Start position 22 Length 17
+  Element 3 Threshold 53% Score 90%
+             Start position 85 Length 17
+  Element 4 Threshold 71% Score 100%
+             Start position 191 Length 17
+  Element 5 Threshold 56% Score 97%
+             Start position 271 Length 19
+  Element 6 Threshold 81% Score 95%
+             Start position 319 Length 14
+
+CLASS 3
+Not all elements match but those that do are in order
+
+Fingerprint PROFILIN Elements 6
+    Accession number PR00392
+    Profilin signature
+  Element 2 Threshold 41% Score 41%
+             Start position 100 Length 10
+
+CLASS 4
+Remaining partial matches
+
+Fingerprint  Elements 6
+    Accession number 
+    
+  Element 2 Threshold 41% Score 41%
+             Start position 100 Length 10
+\end{verbatim}
+
+\section{Multiple Sequence Analysis}
+\label{sec:MSA}
+The simultaneous alignment of many nucleotide or amino acid sequences
+is now an essential tool in molecular biology.  Multiple alignments are
+used to find diagnostic patterns to characterize protein families; to
+detect or demonstrate homology between new sequences and existing
+families of sequences; to help predict the secondary and tertiary
+structures of the new sequences; to suggest oligonucleotide primers
+for PCR; and as an essential prelude to molecular evolutionary
+analysis.
+
+One of the most popular programs for performing multiple sequence
+alignments is clustalw (ref). EMBOSS has an interface to clustal
+called \first{emma}
+%this is what pileup does - is clustal exactly the same?
+\prog{clustal} (and thus \prog{emma}) creates a 
+multiple sequence alignment from a group of related sequences using
+progressive pairwise alignments. It can also produces a dendogram
+showing the clustering relationships used to create the alignment.
+The dendogram shows the order of the pairwise alignments of sequences
+and clusters of sequences that together generate the final alignment,
+but it is not an evolutionary tree, although the length of the
+branches is related to the relative distance of the sequences.
+\prog{clustal} finds global optimal alignments. The alignment 
+procedure begins with the pairwise alignment of the two most similar
+sequences, producing a cluster of two aligned sequences.  This cluster
+can then be aligned to the next most related sequence or cluster of
+aligned sequences.Two clusters of sequences can be aligned by a simple
+extension of the pairwise alignment of two individual sequences.  The
+final alignment is achieved by a series of progressive, pairwise
+alignments that include increasingly dissimilar sequences and
+clusters, until all sequences have been included in the final pairwise
+alignment.  When gaps are inserted into a sequence to produce an
+alignment, they are inserted at the same position in all the sequences
+of the cluster. Each pairwise alignment uses the method of Needleman
+and Wunsch extended for use with clusters of aligned sequences. 
+
+\prog{pscan} has told us that our sequence belongs to the 
+rhodopsin family. This is a very large family of sequences - for
+example, you can see the Pfam entry for rhodopsin by doing a keyword
+search at\\
+\htmladdnormallink{http://www.sanger.ac.uk/Software/Pfam}{http://www.sanger.ac.uk/Software/Pfam}
+
+We will now retrieve some further members of the family from SwissProt
+and produce a multiple alignment; we'll then use this multiple
+alignment to produce a profile of this group of sequences and use that
+to align them all to our original sequence.
+
+First, let's retrieve the sequences using \prog{seqret}:
+
+\subsection*{Exercise: Retrieving a set of sequences}
+
+\unix{}\type{seqret}\\
+\scr{Reads and writes (returns) a set of sequences all at once}\\
+\scr{Input sequence: }\type{sw:ops2\_*}\\
+\scr{Output sequence [outfile.fasta]: }\type{ops2.fasta}
+
+Note our use of the wild card character {\bf *} to retrieve all
+swissprot sequences whose identifiers begin {\em ops2\_}.
+
+\subsection*{Exercise: \prog{emma}}
+
+\unix{}\type{emma}\\
+\scr{Multiple alignment program - interface to ClustalW program}\\
+\scr{Input sequence: }\type{ops2.fasta}\\
+\scr{Output sequence [ops2\_drome.aln]: }\type{ops2.aln}\\
+\scr{Output file [ops2\_drome.dnd]: }\type{ops2.dnd}\\
+\scr{..clustalw -infile=21665A -outfile=21665B -align }\\
+\scr{-type=protein -output=gcg -pwmatrix=blosum -pwgapopen=10.000 }\\
+\scr{-pwgapext=0.100 -newtree=21665C -matrix=blosum -gapopen=10.000 }\\
+\scr{-gapext=5.000 -gapdist=8 -hgapresidues=GPSNDQEKR -maxdiv=30..}\\
+\\
+\scr{CLUSTAL W (1.74) Multiple Sequence Alignments}\\
+\\
+\scr{Sequence type explicitly set to Protein}\\
+\scr{Sequence format is Pearson}\\
+\scr{Sequence 1: OPS2\_DROME      381 aa}\\
+\scr{Sequence 2: OPS2\_DROPS      381 aa}\\
+\scr{Sequence 3: OPS2\_HEMSA      377 aa}\\
+\scr{Sequence 4: OPS2\_LIMPO      376 aa}\\
+\scr{Sequence 5: OPS2\_PATYE      399 aa}\\
+\scr{Sequence 6: OPS2\_SCHGR      380 aa}\\
+\scr{Start of Pairwise alignments}\\
+\scr{Aligning...}\\
+\scr{Sequences (1:2) Aligned. Score:  91}\\
+\scr{Sequences (1:3) Aligned. Score:  37}\\
+\scr{Sequences (1:4) Aligned. Score:  48}\\
+\scr{Sequences (1:5) Aligned. Score:  20}\\
+\scr{Sequences (1:6) Aligned. Score:  32}\\
+\scr{Sequences (2:3) Aligned. Score:  37}\\
+\scr{Sequences (2:4) Aligned. Score:  48}\\
+\scr{Sequences (2:5) Aligned. Score:  22}\\
+\scr{Sequences (2:6) Aligned. Score:  31}\\
+\scr{Sequences (3:4) Aligned. Score:  40}\\
+\scr{Sequences (3:5) Aligned. Score:  23}\\
+\scr{Sequences (3:6) Aligned. Score:  32}\\
+\scr{Sequences (4:5) Aligned. Score:  20}\\
+\scr{Sequences (4:6) Aligned. Score:  34}\\
+\scr{Sequences (5:6) Aligned. Score:  18}\\
+\scr{Guide tree        file created:   [21665C]}\\
+\scr{Start of Multiple Alignment}\\
+\scr{There are 5 groups}\\
+\scr{Aligning...}\\
+\scr{Group 1: Sequences:   2      Score:6084}\\
+\scr{Group 2: Sequences:   3      Score:3046}\\
+\scr{Group 3: Sequences:   4      Score:2772}\\
+\scr{Group 4: Sequences:   5      Score:2489}\\
+\scr{Group 5:                     Delayed}\\
+\scr{Sequence:5     Score:2819}\\
+\scr{Alignment Score 11778}\\
+\scr{GCG-Alignment file created      [21665B]}\\
+
+We have aligned ops2 sequences from two fruit fly species, two crab
+species, locust and scallop. Lete's see what \prog{emma} made of them:
+
+\unix{}\type{more ops2.aln}
+\begin{verbatim}
+>OPS2_DROME
+MERSHLPETPFDLAHSGPRFQAQSSGNGSVLD-NVLPDMAHLVNPYWSRFAPMDPMMSKI
+LGLFTLAIMIISCCGNGVVVYIFGGTKSLRTPANLLVLNLAFSDFCMMASQSPVMIINFY
+Y-ETWVLGPLWCDIYAGCGSLFGCVSIWSMCMIAFDRYNVIVKGINGTPMTIKTSIMKIL
+FIWMMAVFWTVMPLIGWSAYVPEGNLTACSIDYMTRMWNPRSYLITYSLFVYYTPLFLIC
+YSYWFIIAAVAAHEKAMREQAKKMNVKSLRSSEDCDK-SAEGKLAKVALTTISLWFMAWT
+PYLVICYFGLFKIDG-LTPLTTIWGATFAKTSAVYNPIVYGISHPKYRIVLKEKCPMCVF
+GNTDEPKPDAPASDTETTSEADSKA-----------------------------------
+---------------------------
+>OPS2_DROPS
+MERSLLPEPPLAMALLGPRFEAQTGGNRSVLD-NVLPDMAPLVNPHWSRFAPMDPTMSKI
+LGLFTLVILIISCCGNGVVVYIFGGTKSLRTPANLLVLNLAFSDFCMMASQSPVMIINFY
+Y-ETWVLGPLWCDIYAACGSLFGCVSIWSMCMIAFDRYNVIVKGINGTPMTIKTSIMKIA
+FIWMMAVFWTIMPLIGWSSYVPEGNLTACSIDYMTRQWNPRSYLITYSLFVYYTPLFMIC
+YSYWFIIATVAAHEKAMRDQAKKMNVKSLRSSEDCDK-SAENKLAKVALTTISLWFMAWT
+PYLIICYFGLFKIDG-LTPLTTIWGATFAKTSAVYNPIVYGISHPNDRLVLKEKCPMCVC
+GTTDEPKPDAPPSDTETTSEAESKD-----------------------------------
+---------------------------
+>OPS2_LIMPO
+----------MANQLSYSSLGWPYQPNASVVD-TMPKEMLYMIHEHWYAFPPMNPLWYSI
+LGVAMIILGIICVLGNGMVIYLMMTTKSLRTPTNLLVVNLAFSDFCMMAFMMPTMASNCF
+A-ETWILGPFMCEVYGMAGSLFGCASIWSMVMITLDRYNVIVRGMAAAPLTHKKATLLLL
+FVWIWSGGWTILPFFGWSRYVPEGNLTSCTVDYLTKDWSSASYVIIYGLAVYFLPLITMI
+YCYFFIVHAVAEHEKQLREQAKKMNVASLRANADQQKQSAECRLAKVAMMTVGLWFMAWT
+PYLIIAWAGVFSSGTRLTPLATIWGSVFAKANSCYNPIVYGISHPRYKAALYQRFPSLAC
+GSGESGSDVKSEASATMTMEEKPKSPEA--------------------------------
+---------------------------
+>OPS2_HEMSA
+---MTNATGPQMAYYGAASMDFGYPEGVSIVD-FVRPEIKPYVHQHWYNYPPVNPMWHYL
+LGVIYLFLGTVSIFGNGLVIYLFNKSAALRTPANILVVNLALSDLIMLTTNVPFFTYNCF
+SGGVWMFSPQYCEIYACLGAITGVCSIWLLCMISFDRYNIICNGFNGPKLTTGKAVVFAL
+ISWVIAIGCALPPFFGWGNYILEGILDSCSYDYLTQDFNTFSYNIFIFVFDYFLPAAIIV
+FSYVFIVKAIFAHEAAMRAQAKKMNVSTLRSNEADAQ-RAEIRIAKTALVNVSLWFICWT
+PYALISLKGVMGDTSGITPLVSTLPALLAKSCSCYNPFVYAISHPKYRLAITQHLPWFCV
+HETETKSNDDSQSNSTVAQDKA--------------------------------------
+---------------------------
+>OPS2_SCHGR
+------MVNTTDFYPVPAAMAYESSVGLPLLGWNVPTEHLDLVHPHWRSFQVPNKYWHFG
+LAFVYFMLMCMSSLGNGIVLWIYATTKSIRTPSNMFIVNLALFDVLMLLEMPMLVVSSLF
+Y-QRPVGWELGCDIYAALGSVAGIGSAINNAAIAFDRYRTISCPIDGRLTQGQVLALIAG
+TWVWTLPFTLMPLLRIWSRFTAEGFLTTCSFDYLTDDEDTKVFVGCIFAWSYAFPLCLIC
+CFYYRLIGAVREHEKMLRDQAKKMNVKSLQSNADTEAQSAEIRIAKVALTIFFLFLCSWT
+PYAVVAMIGAFGNRAALTPLSTMIPAVTAKIVSCIDPWVYAINHPRFRAEVQKRMKWLHL
+GEDARSSKSDTSSTATDRTVGNVSASA---------------------------------
+---------------------------
+>OPS2_PATYE
+---------------------------------------MPFPLNRTDTALVISPSEFRI
+IGIFISICCIIGVLGNLLIIIVFAKRRSVRRPINFFVLNLAVSDLIVALLGYPMTAASAF
+S-NRWIFDNIGCKIYAFLCFNSGVISIMTHAALSFCRYIIICQYGYRKKITQTTVLRTLF
+SIWSFAMFWTLSPLFGWSSYVIEVVPVSCSVNWYGHGLGDVSYTISVIVAVYVFPLSIIV
+FSYGMIL-----QEKVCKDSRKNGIRAQQRYTPRFIQ-DIEQRVTFISFLMMAAFMVAWT
+PYAIMSALAIGSFNV--ENSFAALPTLFAKASCAYNPFIYAFTNANFRDTVVEIMAPWTT
+RRVGVSTLPWPQVTYYPRRRTSAVNTTDIEFPDDNIFIVNSSVNGPTVKREKIVQRNPIN
+VRLGIKIEPRDSRAATENTFTADFSVI
+\end{verbatim}
+
+The sequences are very similar, but there are some differences - note
+the gaps that have been inserted. Also note that since this is a
+global alignment algorithm, gaps have been inserted to make all the
+sequences the same length.
+
+\section{Profiles}
+A very powerful technique for characterizing the putative structure
+and function of a sequence is the Profile Analysis (Gribskov et al.,
+1987).  Profile analysis is a sequence comparison method for finding
+and aligning distantly related sequences. The comparison allows a new
+sequence to be aligned optimally to a family of similar sequences.
+The comparison uses a scoring matrix and an existing optimal alignment
+of two or more similar protein sequences.  The group or ``family'' of
+similar sequences are first aligned together to create a multiple
+sequence alignment. The information in the multiple sequence alignment
+is then represented as a table of position-specific
+symbol comparison values and gap penalties.  This table is called a
+profile. The similarity of new sequences to an existing profile can
+be tested by comparing each new sequence to the profile using a
+modification of the Smith/Waterman algorithm.
+
+\subsection*{Exercise: \prog{prophecy}}
+
+\first{prophecy} is an EMBOSS program for creating 
+a profile from a set of multiply aligned sequences. We'll use our ops2
+alignment to show you \prog{prophecy}
+
+\unix{}\type{prophecy}\\
+\scr{Creates matrices/profiles from multiple alignments}\\
+\scr{Input sequence: }\type{ops2.aln}\\
+\scr{Profile type}\\
+\scr{         F : Frequency}\\
+\scr{         G : Gribskov}\\
+\scr{         H : Henikoff}\\
+\scr{Select type [F]: }\type{g}\\
+\scr{Enter a name for the profile [My matrix]: }\type{ops2 sequences}\\
+\scr{Scoring matrix [Epprofile]: }\\
+\scr{Gap opening penalty [3.0]: }\\
+\scr{Gap extension penalty [0.3]: }\\
+\scr{Output file [outfile.prophecy]: }\type{ops2.prophecy       }\\
+
+\subsection*{Exercise: \prog{prophet}}
+
+Now let's use the profile we just created to align {\em xlrhodop.pep} to our opsin2 sequences.
+
+\unix{}\type{prophet}\\
+\scr{Gapped alignment for profiles}\\
+\scr{Profile or matrix file: }\type{ops2.prophecy}\\
+\scr{Gap opening coefficient [1.0]: }\type{3}\\
+\scr{Gap extension coefficient [0.1]: }\type{0.3}\\
+\scr{Input sequence(s): }\type{xlrhodop.pep}\\
+\scr{Output file [ops2.prophet]: \\}
+
+Note that rather than accepting the defaults, we are choosing the same
+gap parameters as we used to create the original profile.
+
+\unix{}\type{more ops2.prophet}
+\begin{verbatim}
+Local: XLRHODOP+1 vs Consensus
+Score: 5.00
+
+XLRHODOP+1      1     MN.GT..EGP.NFY.V.P.M....S.NKTGV....VRSPFD.... 25   
+                      |: ::  ||| ::: : : :    | | : |    |: | :    
+Consensus       1     MERSHLPEGPFAAALSGARFAAQSSGN.ASVLDWNVL.P.EMAPL 42   
+
+XLRHODOP+1      26    ....YPQYYLAEPWQYSALAAYMFLLILLGLPINFMTLFVTIQHK 66   
+                          :::   : |: :: |: ::::| ::: ::|: :: ::   |
+Consensus       43    VHPHWSRFAPMNPMWHKILGLFTLILGIISCLGNGLVIYIFAGTK 87   
+
+XLRHODOP+1      67    KLRTPLNYILLNLVFANHFMVLCGFTVTMYTSMH.GYFIFGQTGC 110  
+                      :||||:|: :||| |:  :|::  ::|::::: :  :  :| :||
+Consensus       88    SLRTPANLLVLNLAFSDFCMMASMSPVMAINCFYGETWVLGPLGC 132  
+
+XLRHODOP+1      111   YIEGFFATLGGEVALWSLVVLAVERYMVVCKPMANFRFGENHAIM 155  
+                       | : :::|:| |::||::: | :||:|::|:::    ::  ||:
+Consensus       133   DIYAALGSLFGCVSIWSMCMIAFDRYNVIVKGINGTPLTIKTAIL 177  
+
+XLRHODOP+1      156   GVAFTWIMALSCAAPPLFGWSRYIPEGMQCSCGVDYYTLKPEVNN 200  
+                       : |:|:||:  :  |||||||| |||  :|| :|| |  :: | 
+Consensus       178   KALFIWMMAVFWTIMPLFGWSRYVPEGNLTSCSIDYLT..RDWNP 220  
+
+XLRHODOP+1      201   ESFVIYMFIVHFTIPLIVIFFCYGRLLCTV.......KEAA.... 234  
+                       |::|  |:: :::||: |:::|: :  :|       : :|    
+Consensus       221   RSYLITYFLFVYFFPLFIICYSYWFIIAAVAAHEKAMRDQAKKMN 265  
+
+XLRHODOP+1      235   .AQQQESATTQK..AEKEVTRMVVIMVVFFLICWVPYAYVAFY.I 275  
+                       ::: ::::::|  || ::: ::: ::::  : |:||| :| : :
+Consensus       266   VKSLRSNEDCDKQSAEIRLAKVALTTISLWFMAWTPYAIIAYFGL 310  
+
+XLRHODOP+1      276   FTHQGSNFGPVFMTVPAFFAKSSAIYNPVIYIVLNKQFRNCL... 317  
+                      |  :|: : |:::: :| |||:|::|||  |: :: : | :|   
+Consensus       311   FGIDGA.LTPLTTIWGALFAKASSCYNPIVYAISHPKYRAALKEK 354  
+
+XLRHODOP+1      318   ITTLCCGKNPFGDEDGS.SAATSKTEASSVSSSQ..........V 351  
+                       ::  ||::: :::|:: |:||:::||:|  :::          |
+Consensus       355   CPMCVCGETDEPSPDAPQSDATTTSEAASKAPAAIEFPDDNIFIV 399  
+
+XLRHODOP+1      352   ..S...PA                                      354  
+                        |   | 
+Consensus       400   NSSVNGPT                                      40
+\end{verbatim}  
+
+The vertical bars (\type{|}) represent residues that are identical
+between the ops2 consensus and our rhodopsin, while the colons
+(\type{:}) represent conservative substitutions. We hope you can see
+that aligning members of a family can reveal conserved regions that
+may be important for structure and/or function.
+
+\chapter{Conclusion}
+We have shown you some of the programs available within EMBOSS, and
+have introduced you to the way you can run these programs from the
+command line. We have not explored all the options available with
+these programs, and certainly have not completely covered all the
+applications currently available. We hope you have enjoyed learning
+about EMBOSS, and that you now have a better idea of the types of
+problems it can help you to solve.
+
+We encourage you to visit the EMBOSS web pages at \\
+\htmladdnormallink{http://www.uk.embnet.org/Software/EMBOSS/}{http://www.uk.embnet.org/Software/EMBOSS/}
+
+
+
+\bibliographystyle{plain}
+\bibliography{biblio}
+\end{document}
