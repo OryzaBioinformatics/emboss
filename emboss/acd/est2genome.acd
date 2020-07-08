@@ -16,16 +16,19 @@ appl: est2genome [
   ]
 
   int: match [ 
+	opt: Y
 	def: 1 
 	info: "Score for matching two bases"
   ]
 
   int: mismatch [ 
+	opt: Y
 	def: 1 
 	info: "Cost for mismatching two bases"
   ]
 
   int: gappenalty [ 
+	opt: Y
 	def: 2 
 	info: "Gap penalty"
         help: "Cost for deleting a single base in either sequence,
@@ -33,12 +36,14 @@ excluding introns"
   ]
 
   int: intronpenalty [ 
+	opt: Y
 	def: 40 
 	info: "Intron penalty"
 	help: "Cost for an intron, independent of length." 
   ]
 
   int: splicepenalty [ 
+	opt: Y
 	def: 20 
 	info: "Splice site penalty"
 	help: "Cost for an intron, independent of length and
@@ -46,6 +51,7 @@ starting/ending on donor-acceptor sites"
   ]
 
   int: minscore [ 
+	opt: Y
 	def: 30 
 	info: "Minimum accepted score" 
 	help: "You can exclude alignments with scores below a threshold
@@ -54,6 +60,7 @@ by setting this to be false."
 
   bool: reverse [ 
 	info: "Reverse orientation" 
+	help: "Reverse the orientation of the EST sequence"
   ]
 
   bool: splice [ 

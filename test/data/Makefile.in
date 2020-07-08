@@ -75,7 +75,7 @@ RANLIB = @RANLIB@
 VERSION = @VERSION@
 XLIB = @XLIB@
 
-pkgdata_DATA = *
+pkgdata_DATA = dna.* prot.*
 pkgdatadir = $(prefix)/share/$(PACKAGE)/test/data
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 

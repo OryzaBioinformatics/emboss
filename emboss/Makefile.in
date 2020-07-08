@@ -82,7 +82,7 @@ SUBDIRS = acd data
 check_PROGRAMS = ajtest ajtest2 ajtest3 ajtestajnam cluster demofeatures demolist demosequence demostring demotable entrails histogramtest messtest patmattest plplottest proteinmotifsearch seqinfo seqretallfeat seqretfeat seqtofeat simplesw testplot treetypedisplay 
 
 
-bin_PROGRAMS = acdc antigenic backtranseq banana chaos checktrans chips cirdna codcmp complex compseq cpgplot cpgreport cusp cutseq dan dbiblast dbifasta dbiflat dbigcg descseq diffseq digest dotmatcher dotpath dottup dreg einverted embossdata emma equicktandem est2genome etandem extractseq findkm freak fuzznuc fuzzpro fuzztran garnier geecee getorf helixturnhelix iep infoseq isochore lindna maskfeat maskseq matcher megamerger merger msbar needle newcpgreport newcpgseek newseq noreturn nthseq octanol oddcomp palindrome pasteseq patmatdb patmatmotifs pepcoil pepinfo pepnet pepstats pepwheel pepwindow pepwindowall plotorf polydot preg prettyplot prettyseq prima primersearch printsextract profit prophecy prophet prosextract pscan rebaseextract redata remap restrict revseq seealso seqmatchall seqret seqretall seqretset seqretsplit showdb showfeat showorf showseq shuffleseq sigcleave silent splitter stretcher stssearch supermatcher syco textsearch tfextract tfm tfscan tmap transeq trimseq vectorstrip water wobble wordcount wordmatch wossname
+bin_PROGRAMS = acdc antigenic backtranseq banana btwisted chaos checktrans chips cirdna codcmp complex compseq cpgplot cpgreport cusp cutseq dan dbiblast dbifasta dbiflat dbigcg descseq diffseq digest dotmatcher dotpath dottup dreg einverted embossdata emma emowse equicktandem est2genome etandem extractseq findkm freak fuzznuc fuzzpro fuzztran garnier geecee getorf helixturnhelix iep infoseq isochore lindna maskfeat maskseq matcher megamerger merger msbar needle newcpgreport newcpgseek newseq noreturn nthseq octanol oddcomp palindrome pasteseq patmatdb patmatmotifs pepcoil pepinfo pepnet pepstats pepwheel pepwindow pepwindowall plotorf polydot preg prettyplot prettyseq prima primersearch printsextract profit prophecy prophet prosextract pscan rebaseextract redata remap restrict revseq seealso seqmatchall seqret seqretall seqretset seqretsplit showdb showfeat showorf showseq shuffleseq sigcleave silent splitter stretcher stssearch supermatcher syco textsearch tfextract tfm tfscan tmap transeq trimseq vectorstrip water wobble wordcount wordmatch wossname
 
 
 #FLAGS=-lX11
@@ -93,6 +93,7 @@ acdc_SOURCES = acdc.c
 antigenic_SOURCES = antigenic.c
 backtranseq_SOURCES = backtranseq.c
 banana_SOURCES = banana.c
+btwisted_SOURCES = btwisted.c
 chaos_SOURCES = chaos.c
 checktrans_SOURCES = checktrans.c
 chips_SOURCES = chips.c
@@ -118,6 +119,7 @@ dreg_SOURCES = dreg.c
 einverted_SOURCES = einverted.c
 embossdata_SOURCES = embossdata.c
 emma_SOURCES = emma.c
+emowse_SOURCES = emowse.c
 entrails_SOURCES = entrails.c
 equicktandem_SOURCES = equicktandem.c
 est2genome_SOURCES = est2genome.c
@@ -268,6 +270,11 @@ banana_LDADD = $(LDADD)
 banana_DEPENDENCIES =  ../nucleus/libnucleus.la ../ajax/libajaxg.la \
 ../ajax/libajax.la ../plplot/libplplot.la
 banana_LDFLAGS = 
+btwisted_OBJECTS =  btwisted.o
+btwisted_LDADD = $(LDADD)
+btwisted_DEPENDENCIES =  ../nucleus/libnucleus.la ../ajax/libajaxg.la \
+../ajax/libajax.la ../plplot/libplplot.la
+btwisted_LDFLAGS = 
 chaos_OBJECTS =  chaos.o
 chaos_LDADD = $(LDADD)
 chaos_DEPENDENCIES =  ../nucleus/libnucleus.la ../ajax/libajaxg.la \
@@ -399,6 +406,11 @@ emma_LDADD = $(LDADD)
 emma_DEPENDENCIES =  ../nucleus/libnucleus.la ../ajax/libajaxg.la \
 ../ajax/libajax.la ../plplot/libplplot.la
 emma_LDFLAGS = 
+emowse_OBJECTS =  emowse.o
+emowse_LDADD = $(LDADD)
+emowse_DEPENDENCIES =  ../nucleus/libnucleus.la ../ajax/libajaxg.la \
+../ajax/libajax.la ../plplot/libplplot.la
+emowse_LDFLAGS = 
 equicktandem_OBJECTS =  equicktandem.o
 equicktandem_LDADD = $(LDADD)
 equicktandem_DEPENDENCIES =  ../nucleus/libnucleus.la \
@@ -983,8 +995,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-SOURCES = $(acdc_SOURCES) $(antigenic_SOURCES) $(backtranseq_SOURCES) $(banana_SOURCES) $(chaos_SOURCES) $(checktrans_SOURCES) $(chips_SOURCES) $(cirdna_SOURCES) $(codcmp_SOURCES) $(complex_SOURCES) $(compseq_SOURCES) $(cpgplot_SOURCES) $(cpgreport_SOURCES) $(cusp_SOURCES) $(cutseq_SOURCES) $(dan_SOURCES) $(dbiblast_SOURCES) $(dbifasta_SOURCES) $(dbiflat_SOURCES) $(dbigcg_SOURCES) $(descseq_SOURCES) $(diffseq_SOURCES) $(digest_SOURCES) $(dotmatcher_SOURCES) dotpath.c $(dottup_SOURCES) $(dreg_SOURCES) $(einverted_SOURCES) $(embossdata_SOURCES) $(emma_SOURCES) $(equicktandem_SOURCES) $(est2genome_SOURCES) $(etandem_SOURCES) $(extractseq_SOURCES) $(findkm_SOURCES) $(freak_SOURCES) $(fuzznuc_SOURCES) $(fuzzpro_SOURCES) $(fuzztran_SOURCES) $(garnier_SOURCES) $(geecee_SOURCES) $(getorf_SOURCES) $(helixturnhelix_SOURCES) $(iep_SOURCES) $(infoseq_SOURCES) $(isochore_SOURCES) lindna.c $(maskfeat_SOURCES) $(maskseq_SOURCES) $(matcher_SOURCES) $(megamerger_SOURCES) $(merger_SOURCES) $(msbar_SOURCES) $(needle_SOURCES) $(newcpgreport_SOURCES) $(newcpgseek_SOURCES) $(newseq_SOURCES) $(noreturn_SOURCES) $(nthseq_SOURCES) $(octanol_SOURCES) $(oddcomp_SOURCES) $(palindrome_SOURCES) $(pasteseq_SOURCES) $(patmatdb_SOURCES) $(patmatmotifs_SOURCES) $(pepcoil_SOURCES) pepinfo.c $(pepnet_SOURCES) $(pepstats_SOURCES) $(pepwheel_SOURCES) $(pepwindow_SOURCES) $(pepwindowall_SOURCES) $(plotorf_SOURCES) $(polydot_SOURCES) $(preg_SOURCES) $(prettyplot_SOURCES) $(prettyseq_SOURCES) $(prima_SOURCES) $(primersearch_SOURCES) $(printsextract_SOURCES) $(profit_SOURCES) $(prophecy_SOURCES) $(prophet_SOURCES) $(prosextract_SOURCES) $(pscan_SOURCES) $(rebaseextract_SOURCES) $(redata_SOURCES) $(remap_SOURCES) $(restrict_SOURCES) $(revseq_SOURCES) $(seealso_SOURCES) $(seqmatchall_SOURCES) $(seqret_SOURCES) $(seqretall_SOURCES) $(seqretset_SOURCES) $(seqretsplit_SOURCES) $(showdb_SOURCES) $(showfeat_SOURCES) $(showorf_SOURCES) $(showseq_SOURCES) $(shuffleseq_SOURCES) $(sigcleave_SOURCES) $(silent_SOURCES) $(splitter_SOURCES) $(stretcher_SOURCES) $(stssearch_SOURCES) $(supermatcher_SOURCES) $(syco_SOURCES) $(textsearch_SOURCES) $(tfextract_SOURCES) $(tfm_SOURCES) $(tfscan_SOURCES) $(tmap_SOURCES) $(transeq_SOURCES) $(trimseq_SOURCES) $(vectorstrip_SOURCES) $(water_SOURCES) $(wobble_SOURCES) $(wordcount_SOURCES) $(wordmatch_SOURCES) $(wossname_SOURCES) $(ajtest_SOURCES) $(ajtest2_SOURCES) $(ajtest3_SOURCES) $(ajtestajnam_SOURCES) $(cluster_SOURCES) $(demofeatures_SOURCES) $(demolist_SOURCES) $(demosequence_SOURCES) $(demostring_SOURCES) $(demotable_SOURCES) $(entrails_SOURCES) $(histogramtest_SOURCES) $(messtest_SOURCES) $(patmattest_SOURCES) $(plplottest_SOURCES) $(proteinmotifsearch_SOURCES) $(seqinfo_SOURCES) $(seqretallfeat_SOURCES) $(seqretfeat_SOURCES) $(seqtofeat_SOURCES) $(simplesw_SOURCES) $(testplot_SOURCES) $(treetypedisplay_SOURCES)
-OBJECTS = $(acdc_OBJECTS) $(antigenic_OBJECTS) $(backtranseq_OBJECTS) $(banana_OBJECTS) $(chaos_OBJECTS) $(checktrans_OBJECTS) $(chips_OBJECTS) $(cirdna_OBJECTS) $(codcmp_OBJECTS) $(complex_OBJECTS) $(compseq_OBJECTS) $(cpgplot_OBJECTS) $(cpgreport_OBJECTS) $(cusp_OBJECTS) $(cutseq_OBJECTS) $(dan_OBJECTS) $(dbiblast_OBJECTS) $(dbifasta_OBJECTS) $(dbiflat_OBJECTS) $(dbigcg_OBJECTS) $(descseq_OBJECTS) $(diffseq_OBJECTS) $(digest_OBJECTS) $(dotmatcher_OBJECTS) dotpath.o $(dottup_OBJECTS) $(dreg_OBJECTS) $(einverted_OBJECTS) $(embossdata_OBJECTS) $(emma_OBJECTS) $(equicktandem_OBJECTS) $(est2genome_OBJECTS) $(etandem_OBJECTS) $(extractseq_OBJECTS) $(findkm_OBJECTS) $(freak_OBJECTS) $(fuzznuc_OBJECTS) $(fuzzpro_OBJECTS) $(fuzztran_OBJECTS) $(garnier_OBJECTS) $(geecee_OBJECTS) $(getorf_OBJECTS) $(helixturnhelix_OBJECTS) $(iep_OBJECTS) $(infoseq_OBJECTS) $(isochore_OBJECTS) lindna.o $(maskfeat_OBJECTS) $(maskseq_OBJECTS) $(matcher_OBJECTS) $(megamerger_OBJECTS) $(merger_OBJECTS) $(msbar_OBJECTS) $(needle_OBJECTS) $(newcpgreport_OBJECTS) $(newcpgseek_OBJECTS) $(newseq_OBJECTS) $(noreturn_OBJECTS) $(nthseq_OBJECTS) $(octanol_OBJECTS) $(oddcomp_OBJECTS) $(palindrome_OBJECTS) $(pasteseq_OBJECTS) $(patmatdb_OBJECTS) $(patmatmotifs_OBJECTS) $(pepcoil_OBJECTS) pepinfo.o $(pepnet_OBJECTS) $(pepstats_OBJECTS) $(pepwheel_OBJECTS) $(pepwindow_OBJECTS) $(pepwindowall_OBJECTS) $(plotorf_OBJECTS) $(polydot_OBJECTS) $(preg_OBJECTS) $(prettyplot_OBJECTS) $(prettyseq_OBJECTS) $(prima_OBJECTS) $(primersearch_OBJECTS) $(printsextract_OBJECTS) $(profit_OBJECTS) $(prophecy_OBJECTS) $(prophet_OBJECTS) $(prosextract_OBJECTS) $(pscan_OBJECTS) $(rebaseextract_OBJECTS) $(redata_OBJECTS) $(remap_OBJECTS) $(restrict_OBJECTS) $(revseq_OBJECTS) $(seealso_OBJECTS) $(seqmatchall_OBJECTS) $(seqret_OBJECTS) $(seqretall_OBJECTS) $(seqretset_OBJECTS) $(seqretsplit_OBJECTS) $(showdb_OBJECTS) $(showfeat_OBJECTS) $(showorf_OBJECTS) $(showseq_OBJECTS) $(shuffleseq_OBJECTS) $(sigcleave_OBJECTS) $(silent_OBJECTS) $(splitter_OBJECTS) $(stretcher_OBJECTS) $(stssearch_OBJECTS) $(supermatcher_OBJECTS) $(syco_OBJECTS) $(textsearch_OBJECTS) $(tfextract_OBJECTS) $(tfm_OBJECTS) $(tfscan_OBJECTS) $(tmap_OBJECTS) $(transeq_OBJECTS) $(trimseq_OBJECTS) $(vectorstrip_OBJECTS) $(water_OBJECTS) $(wobble_OBJECTS) $(wordcount_OBJECTS) $(wordmatch_OBJECTS) $(wossname_OBJECTS) $(ajtest_OBJECTS) $(ajtest2_OBJECTS) $(ajtest3_OBJECTS) $(ajtestajnam_OBJECTS) $(cluster_OBJECTS) $(demofeatures_OBJECTS) $(demolist_OBJECTS) $(demosequence_OBJECTS) $(demostring_OBJECTS) $(demotable_OBJECTS) $(entrails_OBJECTS) $(histogramtest_OBJECTS) $(messtest_OBJECTS) $(patmattest_OBJECTS) $(plplottest_OBJECTS) $(proteinmotifsearch_OBJECTS) $(seqinfo_OBJECTS) $(seqretallfeat_OBJECTS) $(seqretfeat_OBJECTS) $(seqtofeat_OBJECTS) $(simplesw_OBJECTS) $(testplot_OBJECTS) $(treetypedisplay_OBJECTS)
+SOURCES = $(acdc_SOURCES) $(antigenic_SOURCES) $(backtranseq_SOURCES) $(banana_SOURCES) $(btwisted_SOURCES) $(chaos_SOURCES) $(checktrans_SOURCES) $(chips_SOURCES) $(cirdna_SOURCES) $(codcmp_SOURCES) $(complex_SOURCES) $(compseq_SOURCES) $(cpgplot_SOURCES) $(cpgreport_SOURCES) $(cusp_SOURCES) $(cutseq_SOURCES) $(dan_SOURCES) $(dbiblast_SOURCES) $(dbifasta_SOURCES) $(dbiflat_SOURCES) $(dbigcg_SOURCES) $(descseq_SOURCES) $(diffseq_SOURCES) $(digest_SOURCES) $(dotmatcher_SOURCES) dotpath.c $(dottup_SOURCES) $(dreg_SOURCES) $(einverted_SOURCES) $(embossdata_SOURCES) $(emma_SOURCES) $(emowse_SOURCES) $(equicktandem_SOURCES) $(est2genome_SOURCES) $(etandem_SOURCES) $(extractseq_SOURCES) $(findkm_SOURCES) $(freak_SOURCES) $(fuzznuc_SOURCES) $(fuzzpro_SOURCES) $(fuzztran_SOURCES) $(garnier_SOURCES) $(geecee_SOURCES) $(getorf_SOURCES) $(helixturnhelix_SOURCES) $(iep_SOURCES) $(infoseq_SOURCES) $(isochore_SOURCES) lindna.c $(maskfeat_SOURCES) $(maskseq_SOURCES) $(matcher_SOURCES) $(megamerger_SOURCES) $(merger_SOURCES) $(msbar_SOURCES) $(needle_SOURCES) $(newcpgreport_SOURCES) $(newcpgseek_SOURCES) $(newseq_SOURCES) $(noreturn_SOURCES) $(nthseq_SOURCES) $(octanol_SOURCES) $(oddcomp_SOURCES) $(palindrome_SOURCES) $(pasteseq_SOURCES) $(patmatdb_SOURCES) $(patmatmotifs_SOURCES) $(pepcoil_SOURCES) pepinfo.c $(pepnet_SOURCES) $(pepstats_SOURCES) $(pepwheel_SOURCES) $(pepwindow_SOURCES) $(pepwindowall_SOURCES) $(plotorf_SOURCES) $(polydot_SOURCES) $(preg_SOURCES) $(prettyplot_SOURCES) $(prettyseq_SOURCES) $(prima_SOURCES) $(primersearch_SOURCES) $(printsextract_SOURCES) $(profit_SOURCES) $(prophecy_SOURCES) $(prophet_SOURCES) $(prosextract_SOURCES) $(pscan_SOURCES) $(rebaseextract_SOURCES) $(redata_SOURCES) $(remap_SOURCES) $(restrict_SOURCES) $(revseq_SOURCES) $(seealso_SOURCES) $(seqmatchall_SOURCES) $(seqret_SOURCES) $(seqretall_SOURCES) $(seqretset_SOURCES) $(seqretsplit_SOURCES) $(showdb_SOURCES) $(showfeat_SOURCES) $(showorf_SOURCES) $(showseq_SOURCES) $(shuffleseq_SOURCES) $(sigcleave_SOURCES) $(silent_SOURCES) $(splitter_SOURCES) $(stretcher_SOURCES) $(stssearch_SOURCES) $(supermatcher_SOURCES) $(syco_SOURCES) $(textsearch_SOURCES) $(tfextract_SOURCES) $(tfm_SOURCES) $(tfscan_SOURCES) $(tmap_SOURCES) $(transeq_SOURCES) $(trimseq_SOURCES) $(vectorstrip_SOURCES) $(water_SOURCES) $(wobble_SOURCES) $(wordcount_SOURCES) $(wordmatch_SOURCES) $(wossname_SOURCES) $(ajtest_SOURCES) $(ajtest2_SOURCES) $(ajtest3_SOURCES) $(ajtestajnam_SOURCES) $(cluster_SOURCES) $(demofeatures_SOURCES) $(demolist_SOURCES) $(demosequence_SOURCES) $(demostring_SOURCES) $(demotable_SOURCES) $(entrails_SOURCES) $(histogramtest_SOURCES) $(messtest_SOURCES) $(patmattest_SOURCES) $(plplottest_SOURCES) $(proteinmotifsearch_SOURCES) $(seqinfo_SOURCES) $(seqretallfeat_SOURCES) $(seqretfeat_SOURCES) $(seqtofeat_SOURCES) $(simplesw_SOURCES) $(testplot_SOURCES) $(treetypedisplay_SOURCES)
+OBJECTS = $(acdc_OBJECTS) $(antigenic_OBJECTS) $(backtranseq_OBJECTS) $(banana_OBJECTS) $(btwisted_OBJECTS) $(chaos_OBJECTS) $(checktrans_OBJECTS) $(chips_OBJECTS) $(cirdna_OBJECTS) $(codcmp_OBJECTS) $(complex_OBJECTS) $(compseq_OBJECTS) $(cpgplot_OBJECTS) $(cpgreport_OBJECTS) $(cusp_OBJECTS) $(cutseq_OBJECTS) $(dan_OBJECTS) $(dbiblast_OBJECTS) $(dbifasta_OBJECTS) $(dbiflat_OBJECTS) $(dbigcg_OBJECTS) $(descseq_OBJECTS) $(diffseq_OBJECTS) $(digest_OBJECTS) $(dotmatcher_OBJECTS) dotpath.o $(dottup_OBJECTS) $(dreg_OBJECTS) $(einverted_OBJECTS) $(embossdata_OBJECTS) $(emma_OBJECTS) $(emowse_OBJECTS) $(equicktandem_OBJECTS) $(est2genome_OBJECTS) $(etandem_OBJECTS) $(extractseq_OBJECTS) $(findkm_OBJECTS) $(freak_OBJECTS) $(fuzznuc_OBJECTS) $(fuzzpro_OBJECTS) $(fuzztran_OBJECTS) $(garnier_OBJECTS) $(geecee_OBJECTS) $(getorf_OBJECTS) $(helixturnhelix_OBJECTS) $(iep_OBJECTS) $(infoseq_OBJECTS) $(isochore_OBJECTS) lindna.o $(maskfeat_OBJECTS) $(maskseq_OBJECTS) $(matcher_OBJECTS) $(megamerger_OBJECTS) $(merger_OBJECTS) $(msbar_OBJECTS) $(needle_OBJECTS) $(newcpgreport_OBJECTS) $(newcpgseek_OBJECTS) $(newseq_OBJECTS) $(noreturn_OBJECTS) $(nthseq_OBJECTS) $(octanol_OBJECTS) $(oddcomp_OBJECTS) $(palindrome_OBJECTS) $(pasteseq_OBJECTS) $(patmatdb_OBJECTS) $(patmatmotifs_OBJECTS) $(pepcoil_OBJECTS) pepinfo.o $(pepnet_OBJECTS) $(pepstats_OBJECTS) $(pepwheel_OBJECTS) $(pepwindow_OBJECTS) $(pepwindowall_OBJECTS) $(plotorf_OBJECTS) $(polydot_OBJECTS) $(preg_OBJECTS) $(prettyplot_OBJECTS) $(prettyseq_OBJECTS) $(prima_OBJECTS) $(primersearch_OBJECTS) $(printsextract_OBJECTS) $(profit_OBJECTS) $(prophecy_OBJECTS) $(prophet_OBJECTS) $(prosextract_OBJECTS) $(pscan_OBJECTS) $(rebaseextract_OBJECTS) $(redata_OBJECTS) $(remap_OBJECTS) $(restrict_OBJECTS) $(revseq_OBJECTS) $(seealso_OBJECTS) $(seqmatchall_OBJECTS) $(seqret_OBJECTS) $(seqretall_OBJECTS) $(seqretset_OBJECTS) $(seqretsplit_OBJECTS) $(showdb_OBJECTS) $(showfeat_OBJECTS) $(showorf_OBJECTS) $(showseq_OBJECTS) $(shuffleseq_OBJECTS) $(sigcleave_OBJECTS) $(silent_OBJECTS) $(splitter_OBJECTS) $(stretcher_OBJECTS) $(stssearch_OBJECTS) $(supermatcher_OBJECTS) $(syco_OBJECTS) $(textsearch_OBJECTS) $(tfextract_OBJECTS) $(tfm_OBJECTS) $(tfscan_OBJECTS) $(tmap_OBJECTS) $(transeq_OBJECTS) $(trimseq_OBJECTS) $(vectorstrip_OBJECTS) $(water_OBJECTS) $(wobble_OBJECTS) $(wordcount_OBJECTS) $(wordmatch_OBJECTS) $(wossname_OBJECTS) $(ajtest_OBJECTS) $(ajtest2_OBJECTS) $(ajtest3_OBJECTS) $(ajtestajnam_OBJECTS) $(cluster_OBJECTS) $(demofeatures_OBJECTS) $(demolist_OBJECTS) $(demosequence_OBJECTS) $(demostring_OBJECTS) $(demotable_OBJECTS) $(entrails_OBJECTS) $(histogramtest_OBJECTS) $(messtest_OBJECTS) $(patmattest_OBJECTS) $(plplottest_OBJECTS) $(proteinmotifsearch_OBJECTS) $(seqinfo_OBJECTS) $(seqretallfeat_OBJECTS) $(seqretfeat_OBJECTS) $(seqtofeat_OBJECTS) $(simplesw_OBJECTS) $(testplot_OBJECTS) $(treetypedisplay_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -1084,6 +1096,10 @@ backtranseq: $(backtranseq_OBJECTS) $(backtranseq_DEPENDENCIES)
 banana: $(banana_OBJECTS) $(banana_DEPENDENCIES)
 	@rm -f banana
 	$(LINK) $(banana_LDFLAGS) $(banana_OBJECTS) $(banana_LDADD) $(LIBS)
+
+btwisted: $(btwisted_OBJECTS) $(btwisted_DEPENDENCIES)
+	@rm -f btwisted
+	$(LINK) $(btwisted_LDFLAGS) $(btwisted_OBJECTS) $(btwisted_LDADD) $(LIBS)
 
 chaos: $(chaos_OBJECTS) $(chaos_DEPENDENCIES)
 	@rm -f chaos
@@ -1188,6 +1204,10 @@ embossdata: $(embossdata_OBJECTS) $(embossdata_DEPENDENCIES)
 emma: $(emma_OBJECTS) $(emma_DEPENDENCIES)
 	@rm -f emma
 	$(LINK) $(emma_LDFLAGS) $(emma_OBJECTS) $(emma_LDADD) $(LIBS)
+
+emowse: $(emowse_OBJECTS) $(emowse_DEPENDENCIES)
+	@rm -f emowse
+	$(LINK) $(emowse_LDFLAGS) $(emowse_OBJECTS) $(emowse_LDADD) $(LIBS)
 
 equicktandem: $(equicktandem_OBJECTS) $(equicktandem_DEPENDENCIES)
 	@rm -f equicktandem
@@ -1777,7 +1797,7 @@ acdc.o: acdc.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 antigenic.o: antigenic.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -1796,7 +1816,7 @@ antigenic.o: antigenic.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 backtranseq.o: backtranseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -1815,7 +1835,7 @@ backtranseq.o: backtranseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 banana.o: banana.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -1834,7 +1854,26 @@ banana.o: banana.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
+btwisted.o: btwisted.c ../nucleus/emboss.h ../ajax/ajax.h \
+	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
+	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
+	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
+	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
+	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajseq.h \
+	../ajax/ajseqdata.h ../ajax/ajseqtype.h ../ajax/ajseqread.h \
+	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajmatrices.h \
+	../ajax/ajrange.h ../ajax/ajcod.h ../ajax/ajmath.h \
+	../ajax/ajutil.h ../ajax/ajnam.h ../ajax/ajmess.h \
+	../ajax/ajposreg.h ../ajax/hsp_regex.h ../ajax/ajtranslate.h \
+	../ajax/ajsys.h ../ajax/ajbase.h ../ajax/ajdan.h \
+	../ajax/ajsort.h ../ajax/ajarr.h ../ajax/ajgraphstruct.h \
+	../ajax/ajacd.h ../ajax/ajcall.h ../ajax/ajgraph.h \
+	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
+	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
+	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
+	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 chaos.o: chaos.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -1853,7 +1892,7 @@ chaos.o: chaos.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 checktrans.o: checktrans.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -1872,7 +1911,7 @@ checktrans.o: checktrans.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 chips.o: chips.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -1891,7 +1930,7 @@ chips.o: chips.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 cirdna.o: cirdna.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -1910,7 +1949,7 @@ cirdna.o: cirdna.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 codcmp.o: codcmp.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -1929,7 +1968,7 @@ codcmp.o: codcmp.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 complex.o: complex.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -1948,7 +1987,7 @@ complex.o: complex.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 compseq.o: compseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -1967,7 +2006,7 @@ compseq.o: compseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 cpgplot.o: cpgplot.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -1986,7 +2025,7 @@ cpgplot.o: cpgplot.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 cpgreport.o: cpgreport.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2005,7 +2044,7 @@ cpgreport.o: cpgreport.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 cusp.o: cusp.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2024,7 +2063,7 @@ cusp.o: cusp.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 cutseq.o: cutseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2043,7 +2082,7 @@ cutseq.o: cutseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 dan.o: dan.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2062,7 +2101,7 @@ dan.o: dan.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 dbiblast.o: dbiblast.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2081,7 +2120,7 @@ dbiblast.o: dbiblast.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 dbifasta.o: dbifasta.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2100,7 +2139,7 @@ dbifasta.o: dbifasta.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 dbiflat.o: dbiflat.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2119,7 +2158,7 @@ dbiflat.o: dbiflat.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 dbigcg.o: dbigcg.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2138,7 +2177,7 @@ dbigcg.o: dbigcg.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 descseq.o: descseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2157,7 +2196,7 @@ descseq.o: descseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 diffseq.o: diffseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2176,7 +2215,7 @@ diffseq.o: diffseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 digest.o: digest.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2195,7 +2234,7 @@ digest.o: digest.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 dotmatcher.o: dotmatcher.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2214,7 +2253,7 @@ dotmatcher.o: dotmatcher.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 dotpath.o: dotpath.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2233,7 +2272,7 @@ dotpath.o: dotpath.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 dottup.o: dottup.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2252,7 +2291,7 @@ dottup.o: dottup.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 dreg.o: dreg.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2271,7 +2310,7 @@ dreg.o: dreg.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 einverted.o: einverted.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2290,7 +2329,7 @@ einverted.o: einverted.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 embossdata.o: embossdata.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2309,7 +2348,7 @@ embossdata.o: embossdata.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 emma.o: emma.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2328,7 +2367,26 @@ emma.o: emma.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
+emowse.o: emowse.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
+	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
+	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
+	../ajax/ajlist.h ../ajax/ajfeat.h ../ajax/ajmem.h \
+	../ajax/ajreg.h ../ajax/hsregexp.h ../ajax/hsregmagic.h \
+	../ajax/ajfmt.h ../ajax/ajseq.h ../ajax/ajseqdata.h \
+	../ajax/ajseqtype.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
+	../ajax/ajseqdb.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
+	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
+	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
+	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
+	../ajax/ajbase.h ../ajax/ajdan.h ../ajax/ajsort.h \
+	../ajax/ajarr.h ../ajax/ajgraphstruct.h ../ajax/ajacd.h \
+	../ajax/ajcall.h ../ajax/ajgraph.h ../plplot/plplot.h \
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmol.h
 equicktandem.o: equicktandem.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2347,7 +2405,7 @@ equicktandem.o: equicktandem.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 est2genome.o: est2genome.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2366,7 +2424,8 @@ est2genome.o: est2genome.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embest.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embest.h
 etandem.o: etandem.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2385,7 +2444,7 @@ etandem.o: etandem.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 extractseq.o: extractseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2404,7 +2463,7 @@ extractseq.o: extractseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 findkm.o: findkm.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2423,7 +2482,7 @@ findkm.o: findkm.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 freak.o: freak.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2442,7 +2501,7 @@ freak.o: freak.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 fuzznuc.o: fuzznuc.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2461,7 +2520,7 @@ fuzznuc.o: fuzznuc.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 fuzzpro.o: fuzzpro.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2480,7 +2539,7 @@ fuzzpro.o: fuzzpro.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 fuzztran.o: fuzztran.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2499,7 +2558,7 @@ fuzztran.o: fuzztran.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 garnier.o: garnier.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2518,7 +2577,7 @@ garnier.o: garnier.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 geecee.o: geecee.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2537,7 +2596,7 @@ geecee.o: geecee.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 getorf.o: getorf.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2556,7 +2615,7 @@ getorf.o: getorf.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 helixturnhelix.o: helixturnhelix.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2575,7 +2634,7 @@ helixturnhelix.o: helixturnhelix.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 iep.o: iep.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2594,7 +2653,7 @@ iep.o: iep.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 infoseq.o: infoseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2613,7 +2672,7 @@ infoseq.o: infoseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 isochore.o: isochore.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2632,7 +2691,7 @@ isochore.o: isochore.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 lindna.o: lindna.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2651,7 +2710,7 @@ lindna.o: lindna.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 maskfeat.o: maskfeat.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2670,7 +2729,7 @@ maskfeat.o: maskfeat.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 maskseq.o: maskseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2689,7 +2748,7 @@ maskseq.o: maskseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 matcher.o: matcher.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2708,7 +2767,7 @@ matcher.o: matcher.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 megamerger.o: megamerger.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2727,7 +2786,7 @@ megamerger.o: megamerger.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 merger.o: merger.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2746,7 +2805,7 @@ merger.o: merger.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 msbar.o: msbar.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2765,7 +2824,7 @@ msbar.o: msbar.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 needle.o: needle.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2784,7 +2843,7 @@ needle.o: needle.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 newcpgreport.o: newcpgreport.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2803,7 +2862,7 @@ newcpgreport.o: newcpgreport.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 newcpgseek.o: newcpgseek.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2822,7 +2881,7 @@ newcpgseek.o: newcpgseek.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 newseq.o: newseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2841,7 +2900,7 @@ newseq.o: newseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 noreturn.o: noreturn.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2860,7 +2919,7 @@ noreturn.o: noreturn.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 nthseq.o: nthseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -2879,7 +2938,7 @@ nthseq.o: nthseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 octanol.o: octanol.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2898,7 +2957,7 @@ octanol.o: octanol.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 oddcomp.o: oddcomp.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2917,7 +2976,7 @@ oddcomp.o: oddcomp.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 palindrome.o: palindrome.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2936,7 +2995,7 @@ palindrome.o: palindrome.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 pasteseq.o: pasteseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2955,7 +3014,7 @@ pasteseq.o: pasteseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 patmatdb.o: patmatdb.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2974,7 +3033,7 @@ patmatdb.o: patmatdb.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 patmatmotifs.o: patmatmotifs.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2993,7 +3052,7 @@ patmatmotifs.o: patmatmotifs.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 pepcoil.o: pepcoil.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3012,7 +3071,7 @@ pepcoil.o: pepcoil.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 pepinfo.o: pepinfo.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3031,7 +3090,8 @@ pepinfo.o: pepinfo.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../ajax/ajhist.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../ajax/ajhist.h
 pepnet.o: pepnet.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -3050,7 +3110,7 @@ pepnet.o: pepnet.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 pepstats.o: pepstats.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3069,7 +3129,7 @@ pepstats.o: pepstats.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 pepwheel.o: pepwheel.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3088,7 +3148,7 @@ pepwheel.o: pepwheel.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 pepwindow.o: pepwindow.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3107,7 +3167,7 @@ pepwindow.o: pepwindow.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 pepwindowall.o: pepwindowall.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3126,7 +3186,7 @@ pepwindowall.o: pepwindowall.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 plotorf.o: plotorf.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3145,7 +3205,7 @@ plotorf.o: plotorf.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 polydot.o: polydot.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3164,7 +3224,7 @@ polydot.o: polydot.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 preg.o: preg.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -3183,7 +3243,7 @@ preg.o: preg.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 prettyplot.o: prettyplot.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3202,7 +3262,7 @@ prettyplot.o: prettyplot.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 prettyseq.o: prettyseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3221,7 +3281,7 @@ prettyseq.o: prettyseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 prima.o: prima.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -3240,7 +3300,7 @@ prima.o: prima.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 primersearch.o: primersearch.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3259,7 +3319,7 @@ primersearch.o: primersearch.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 printsextract.o: printsextract.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3278,7 +3338,7 @@ printsextract.o: printsextract.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 profit.o: profit.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -3297,7 +3357,7 @@ profit.o: profit.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 prophecy.o: prophecy.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3316,7 +3376,7 @@ prophecy.o: prophecy.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 prophet.o: prophet.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3335,7 +3395,7 @@ prophet.o: prophet.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 prosextract.o: prosextract.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3354,7 +3414,7 @@ prosextract.o: prosextract.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 pscan.o: pscan.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -3373,7 +3433,7 @@ pscan.o: pscan.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 rebaseextract.o: rebaseextract.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3392,7 +3452,7 @@ rebaseextract.o: rebaseextract.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 redata.o: redata.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -3411,7 +3471,7 @@ redata.o: redata.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 remap.o: remap.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -3430,7 +3490,7 @@ remap.o: remap.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 restrict.o: restrict.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3449,7 +3509,7 @@ restrict.o: restrict.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 revseq.o: revseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -3468,7 +3528,7 @@ revseq.o: revseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 seealso.o: seealso.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3487,7 +3547,7 @@ seealso.o: seealso.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 seqmatchall.o: seqmatchall.c ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -3506,7 +3566,7 @@ seqmatchall.o: seqmatchall.c ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 seqret.o: seqret.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -3525,7 +3585,7 @@ seqret.o: seqret.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 seqretall.o: seqretall.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3544,7 +3604,7 @@ seqretall.o: seqretall.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 seqretset.o: seqretset.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3563,7 +3623,7 @@ seqretset.o: seqretset.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 seqretsplit.o: seqretsplit.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3582,7 +3642,7 @@ seqretsplit.o: seqretsplit.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 showdb.o: showdb.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -3601,7 +3661,7 @@ showdb.o: showdb.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 showfeat.o: showfeat.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3620,7 +3680,7 @@ showfeat.o: showfeat.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 showorf.o: showorf.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3639,7 +3699,7 @@ showorf.o: showorf.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 showseq.o: showseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3658,7 +3718,7 @@ showseq.o: showseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 shuffleseq.o: shuffleseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3677,7 +3737,7 @@ shuffleseq.o: shuffleseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 sigcleave.o: sigcleave.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3696,7 +3756,7 @@ sigcleave.o: sigcleave.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 silent.o: silent.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -3715,7 +3775,7 @@ silent.o: silent.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 splitter.o: splitter.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3734,7 +3794,7 @@ splitter.o: splitter.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 stretcher.o: stretcher.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3753,7 +3813,7 @@ stretcher.o: stretcher.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 stssearch.o: stssearch.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3772,7 +3832,7 @@ stssearch.o: stssearch.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 supermatcher.o: supermatcher.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3791,7 +3851,7 @@ supermatcher.o: supermatcher.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 syco.o: syco.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -3810,7 +3870,7 @@ syco.o: syco.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 textsearch.o: textsearch.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3829,7 +3889,7 @@ textsearch.o: textsearch.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 tfextract.o: tfextract.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3848,7 +3908,7 @@ tfextract.o: tfextract.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 tfm.o: tfm.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -3867,7 +3927,7 @@ tfm.o: tfm.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 tfscan.o: tfscan.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -3886,7 +3946,7 @@ tfscan.o: tfscan.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 tmap.o: tmap.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -3905,7 +3965,7 @@ tmap.o: tmap.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 transeq.o: transeq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3924,7 +3984,7 @@ transeq.o: transeq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 trimseq.o: trimseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3943,7 +4003,7 @@ trimseq.o: trimseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 vectorstrip.o: vectorstrip.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3962,7 +4022,7 @@ vectorstrip.o: vectorstrip.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 water.o: water.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -3981,7 +4041,7 @@ water.o: water.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 wobble.o: wobble.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -4000,7 +4060,7 @@ wobble.o: wobble.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
 	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
 	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h
+	../nucleus/embshow.h ../nucleus/embmol.h
 wordcount.o: wordcount.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -4019,7 +4079,7 @@ wordcount.o: wordcount.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 wordmatch.o: wordmatch.c ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -4038,7 +4098,7 @@ wordmatch.o: wordmatch.c ../ajax/ajax.h ../ajax/ajassert.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 wossname.o: wossname.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -4057,7 +4117,7 @@ wossname.o: wossname.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
 	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
 	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h
+	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h
 
 info-am:
 info: info-recursive

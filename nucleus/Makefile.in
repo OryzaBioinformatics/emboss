@@ -81,14 +81,14 @@ lib_LTLIBRARIES = libnucleus.la
 
 INCLUDES = -I$(top_srcdir)/plplot $(X_CFLAGS) -I$(srcdir)/ -I$(top_srcdir)/ajax
 
-NUCLSRC = embaln.c embcom.c embdata.c embest.c embexit.c 	   embgroup.c embiep.c 	   embinit.c embmat.c embnmer.c embpat.c embprop.c embread.c 	   embshow.c embword.c
+NUCLSRC = embaln.c embcom.c embdata.c embest.c embexit.c 	   embgroup.c embiep.c 	   embinit.c embmat.c embmol.c embnmer.c embpat.c embprop.c embread.c 	   embshow.c embword.c
 
 
 libnucleus_la_SOURCES = $(NUCLSRC)
 
 libnucleus_la_LDFLAGS = -version-info 1:0:1
 
-noinst_HEADERS = emboss.h 		 embaln.h embcom.h embdata.h embest.h embexit.h 		 embgroup.h embiep.h 		 embinit.h embmat.h embnmer.h embpat.h embprop.h embread.h 		 embshow.h embword.h
+noinst_HEADERS = emboss.h 		 embaln.h embcom.h embdata.h embest.h embexit.h 		 embgroup.h embiep.h 		 embinit.h embmat.h embmol.h embnmer.h embpat.h embprop.h                  embread.h embshow.h embword.h
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 
@@ -105,8 +105,8 @@ X_EXTRA_LIBS = @X_EXTRA_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
 libnucleus_la_LIBADD = 
 libnucleus_la_OBJECTS =  embaln.lo embcom.lo embdata.lo embest.lo \
-embexit.lo embgroup.lo embiep.lo embinit.lo embmat.lo embnmer.lo \
-embpat.lo embprop.lo embread.lo embshow.lo embword.lo
+embexit.lo embgroup.lo embiep.lo embinit.lo embmat.lo embmol.lo \
+embnmer.lo embpat.lo embprop.lo embread.lo embshow.lo embword.lo
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -260,7 +260,8 @@ embaln.lo embaln.o : embaln.c emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajarr.h ../ajax/ajgraphstruct.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajgraph.h ../plplot/plplot.h embaln.h \
 	embcom.h embread.h embiep.h embprop.h embinit.h embword.h \
-	embpat.h embmat.h embdata.h embnmer.h embgroup.h embshow.h
+	embpat.h embmat.h embdata.h embnmer.h embgroup.h embshow.h \
+	embmol.h
 embcom.lo embcom.o : embcom.c emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -276,7 +277,8 @@ embcom.lo embcom.o : embcom.c emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajarr.h ../ajax/ajgraphstruct.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajgraph.h ../plplot/plplot.h embaln.h \
 	embcom.h embread.h embiep.h embprop.h embinit.h embword.h \
-	embpat.h embmat.h embdata.h embnmer.h embgroup.h embshow.h
+	embpat.h embmat.h embdata.h embnmer.h embgroup.h embshow.h \
+	embmol.h
 embdata.lo embdata.o : embdata.c emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -293,7 +295,7 @@ embdata.lo embdata.o : embdata.c emboss.h ../ajax/ajax.h \
 	../ajax/ajacd.h ../ajax/ajcall.h ../ajax/ajgraph.h \
 	../plplot/plplot.h embaln.h embcom.h embread.h embiep.h \
 	embprop.h embinit.h embword.h embpat.h embmat.h embdata.h \
-	embnmer.h embgroup.h embshow.h
+	embnmer.h embgroup.h embshow.h embmol.h
 embest.lo embest.o : embest.c emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -310,7 +312,7 @@ embest.lo embest.o : embest.c emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajcall.h ../ajax/ajgraph.h ../plplot/plplot.h embaln.h \
 	embcom.h embread.h embiep.h embprop.h embinit.h embword.h \
 	embpat.h embmat.h embdata.h embnmer.h embgroup.h embshow.h \
-	embest.h
+	embmol.h embest.h
 embexit.lo embexit.o : embexit.c emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -327,7 +329,7 @@ embexit.lo embexit.o : embexit.c emboss.h ../ajax/ajax.h \
 	../ajax/ajacd.h ../ajax/ajcall.h ../ajax/ajgraph.h \
 	../plplot/plplot.h embaln.h embcom.h embread.h embiep.h \
 	embprop.h embinit.h embword.h embpat.h embmat.h embdata.h \
-	embnmer.h embgroup.h embshow.h
+	embnmer.h embgroup.h embshow.h embmol.h
 embgroup.lo embgroup.o : embgroup.c emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -344,7 +346,7 @@ embgroup.lo embgroup.o : embgroup.c emboss.h ../ajax/ajax.h \
 	../ajax/ajacd.h ../ajax/ajcall.h ../ajax/ajgraph.h \
 	../plplot/plplot.h embaln.h embcom.h embread.h embiep.h \
 	embprop.h embinit.h embword.h embpat.h embmat.h embdata.h \
-	embnmer.h embgroup.h embshow.h
+	embnmer.h embgroup.h embshow.h embmol.h
 embiep.lo embiep.o : embiep.c emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -360,7 +362,8 @@ embiep.lo embiep.o : embiep.c emboss.h ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajarr.h ../ajax/ajgraphstruct.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajgraph.h ../plplot/plplot.h embaln.h \
 	embcom.h embread.h embiep.h embprop.h embinit.h embword.h \
-	embpat.h embmat.h embdata.h embnmer.h embgroup.h embshow.h
+	embpat.h embmat.h embdata.h embnmer.h embgroup.h embshow.h \
+	embmol.h
 embinit.lo embinit.o : embinit.c emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -377,7 +380,7 @@ embinit.lo embinit.o : embinit.c emboss.h ../ajax/ajax.h \
 	../ajax/ajacd.h ../ajax/ajcall.h ../ajax/ajgraph.h \
 	../plplot/plplot.h embaln.h embcom.h embread.h embiep.h \
 	embprop.h embinit.h embword.h embpat.h embmat.h embdata.h \
-	embnmer.h embgroup.h embshow.h
+	embnmer.h embgroup.h embshow.h embmol.h
 embmat.lo embmat.o : embmat.c ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -392,6 +395,20 @@ embmat.lo embmat.o : embmat.c ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajbase.h ../ajax/ajdan.h ../ajax/ajsort.h \
 	../ajax/ajarr.h ../ajax/ajgraphstruct.h ../ajax/ajacd.h \
 	../ajax/ajcall.h embmat.h
+embmol.lo embmol.o : embmol.c ../ajax/ajax.h ../ajax/ajassert.h \
+	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
+	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
+	../ajax/ajlist.h ../ajax/ajfeat.h ../ajax/ajmem.h \
+	../ajax/ajreg.h ../ajax/hsregexp.h ../ajax/hsregmagic.h \
+	../ajax/ajfmt.h ../ajax/ajseq.h ../ajax/ajseqdata.h \
+	../ajax/ajseqtype.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
+	../ajax/ajseqdb.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
+	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
+	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
+	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
+	../ajax/ajbase.h ../ajax/ajdan.h ../ajax/ajsort.h \
+	../ajax/ajarr.h ../ajax/ajgraphstruct.h ../ajax/ajacd.h \
+	../ajax/ajcall.h embmol.h embprop.h
 embnmer.lo embnmer.o : embnmer.c emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -408,7 +425,7 @@ embnmer.lo embnmer.o : embnmer.c emboss.h ../ajax/ajax.h \
 	../ajax/ajacd.h ../ajax/ajcall.h ../ajax/ajgraph.h \
 	../plplot/plplot.h embaln.h embcom.h embread.h embiep.h \
 	embprop.h embinit.h embword.h embpat.h embmat.h embdata.h \
-	embnmer.h embgroup.h embshow.h
+	embnmer.h embgroup.h embshow.h embmol.h
 embpat.lo embpat.o : embpat.c ../ajax/ajax.h ../ajax/ajassert.h \
 	../ajax/ajexcept.h ../ajax/ajdefine.h ../ajax/ajtime.h \
 	../ajax/ajstr.h ../ajax/ajtable.h ../ajax/ajfile.h \
@@ -439,7 +456,7 @@ embprop.lo embprop.o : embprop.c emboss.h ../ajax/ajax.h \
 	../ajax/ajacd.h ../ajax/ajcall.h ../ajax/ajgraph.h \
 	../plplot/plplot.h embaln.h embcom.h embread.h embiep.h \
 	embprop.h embinit.h embword.h embpat.h embmat.h embdata.h \
-	embnmer.h embgroup.h embshow.h
+	embnmer.h embgroup.h embshow.h embmol.h
 embread.lo embread.o : embread.c emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -456,7 +473,7 @@ embread.lo embread.o : embread.c emboss.h ../ajax/ajax.h \
 	../ajax/ajacd.h ../ajax/ajcall.h ../ajax/ajgraph.h \
 	../plplot/plplot.h embaln.h embcom.h embread.h embiep.h \
 	embprop.h embinit.h embword.h embpat.h embmat.h embdata.h \
-	embnmer.h embgroup.h embshow.h
+	embnmer.h embgroup.h embshow.h embmol.h
 embshow.lo embshow.o : embshow.c emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -473,7 +490,7 @@ embshow.lo embshow.o : embshow.c emboss.h ../ajax/ajax.h \
 	../ajax/ajacd.h ../ajax/ajcall.h ../ajax/ajgraph.h \
 	../plplot/plplot.h embaln.h embcom.h embread.h embiep.h \
 	embprop.h embinit.h embword.h embpat.h embmat.h embdata.h \
-	embnmer.h embgroup.h embshow.h
+	embnmer.h embgroup.h embshow.h embmol.h
 embword.lo embword.o : embword.c emboss.h ../ajax/ajax.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -490,7 +507,7 @@ embword.lo embword.o : embword.c emboss.h ../ajax/ajax.h \
 	../ajax/ajacd.h ../ajax/ajcall.h ../ajax/ajgraph.h \
 	../plplot/plplot.h embaln.h embcom.h embread.h embiep.h \
 	embprop.h embinit.h embword.h embpat.h embmat.h embdata.h \
-	embnmer.h embgroup.h embshow.h
+	embnmer.h embgroup.h embshow.h embmol.h
 
 info-am:
 info: info-am

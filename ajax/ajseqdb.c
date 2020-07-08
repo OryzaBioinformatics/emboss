@@ -2730,9 +2730,9 @@ static AjBool seqBlastReadTable (const AjPSeqin seqin, AjPStr* hline,
   char* sptr;
   int c_len;
   int a_len;
-  int astart;
-  int fstart;
-  int fend;
+  int astart=0;
+  int fstart=0;
+  int fend=0;
   int i;
   int j;
   size_t tmp;
@@ -2756,7 +2756,7 @@ static AjBool seqBlastReadTable (const AjPSeqin seqin, AjPStr* hline,
   int char_bit = 8;
   unsigned char nt_magic_byte = 0xfc;
   int nsentinels = 2;
-  char* seq;
+  char* seq=NULL;
 
   AjPSeqQuery qry = seqin->Query;
   SeqPCdQry qryd = qry->QryData;
@@ -3143,7 +3143,7 @@ static void seqBlastStripNcbi (AjPStr* line) {
 /*  static AjPRegexp gnlexp = NULL;
   static AjPRegexp giexp = NULL;*/
   static AjPStr tmpline = NULL;
-  static AjPStr tmpstr = NULL;
+/*  static AjPStr tmpstr = NULL;*/
 
 /*  if (!gnlexp)
     gnlexp = ajRegCompC("^gnl[|][^|]+[|][^ ]+ +");

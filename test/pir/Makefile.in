@@ -75,7 +75,7 @@ RANLIB = @RANLIB@
 VERSION = @VERSION@
 XLIB = @XLIB@
 
-pkgdata_DATA = *
+pkgdata_DATA = pir*
 pkgdatadir = $(prefix)/share/$(PACKAGE)/test/pir
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 

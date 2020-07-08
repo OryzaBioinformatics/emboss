@@ -48,8 +48,7 @@ Command line arguments
   [-genome]            sequence   Genomic sequence
    -outfile            outfile    Output file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
+   Optional qualifiers:
    -match              integer    Score for matching two bases
    -mismatch           integer    Cost for mismatching two bases
    -gappenalty         integer    Cost for deleting a single base in either
@@ -59,7 +58,9 @@ Command line arguments
                                   and starting/ending on donor-acceptor sites
    -minscore           integer    You can exclude alignments with scores below
                                   a threshold by setting this to be false.
-   -reverse            bool       Reverse orientation
+
+   Advanced qualifiers:
+   -reverse            bool       Reverse the orientation of the EST sequence
    -[no]splice         bool       Use donor and acceptor splice sites. If you
                                   want to ignore donor-acceptor sites then set
                                   this to be false.
@@ -102,8 +103,6 @@ Command line arguments
    (Parameter 2) Genomic sequence Readable sequence Required
    -outfile Output file name Output file <sequence>.est2genome
    Optional qualifiers Allowed values Default
-   (none)
-   Advanced qualifiers Allowed values Default
    -match Score for matching two bases Any integer value 1
    -mismatch Cost for mismatching two bases Any integer value 1
    -gappenalty Cost for deleting a single base in either sequence,
@@ -114,7 +113,8 @@ Command line arguments
    starting/ending on donor-acceptor sites Any integer value 20
    -minscore You can exclude alignments with scores below a threshold by
    setting this to be false. Any integer value 30
-   -reverse Reverse orientation Yes/No No
+   Advanced qualifiers Allowed values Default
+   -reverse Reverse the orientation of the EST sequence Yes/No No
    -[no]splice Use donor and acceptor splice sites. If you want to ignore
    donor-acceptor sites then set this to be false. Yes/No Yes
    -align Show the alignment. The alignment includes the first and last 5
@@ -358,12 +358,20 @@ References
    
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It return 0 unless an error occurs.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description
@@ -382,6 +390,8 @@ Author(s)
    
 History
 
+   Finished.
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

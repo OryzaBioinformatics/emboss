@@ -24,7 +24,12 @@ struct traccia {
     float pc;
    };
 
-typedef struct traccia trace;
+/*
+** Gary Williams - 5 Aug 2000
+** changed struct trace to struct comtrace
+** to avoid conflict with 'trace' in ncurses.h
+*/
+typedef struct traccia comtrace;
 
 
 struct ujwin{

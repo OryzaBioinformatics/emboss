@@ -140,7 +140,7 @@ void WordMatchListConvDiffToFeat(AjPList list, AjPFeatTable *tab1,
         feature = ajFeatureNew(*tab1, source, type,
                            misstart1+1, misend1+1, score, 
                            strand, frame, desc, 0, 0) ;
-        if (misstart1 == misend1 && misstart2 <= misend2) {
+        if (misstart1 == misend1 && misstart2 == misend2) {
           ajFmtPrintS(&notestr, "SNP in %S", seq2name);
         } else if (misstart2 > misend2) {
           ajFmtPrintS(&notestr, "Insertion of %d bases in %S", misend1 - misstart1 +1, seq1name);
@@ -167,7 +167,7 @@ void WordMatchListConvDiffToFeat(AjPList list, AjPFeatTable *tab1,
                            misstart2+1, misend2+1, score, 
                            strand, frame, desc, 0, 0) ;
 
-        if (misstart2 == misend2 && misstart1 <= misend1) {
+        if (misstart2 == misend2 && misstart1 == misend1) {
           ajFmtPrintS(&notestr, "SNP in %S", seq1name);
         } else if (misstart1 > misend1) {
           ajFmtPrintS(&notestr, "Insertion of %d bases in %S", misend2 - misstart2 +1, seq2name);

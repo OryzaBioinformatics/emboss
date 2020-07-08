@@ -30,18 +30,28 @@ appl: diffseq [
 	info: "Output report file"
   ]
 
-featout: afeatout [
+  featout: afeatout [
         opt: Y
 	def: "$(asequence.name).diffgff"
         info: "Feature file for output asequence"
         help: "File for output of first sequence's normal tab delimted gff's"
   ]
 
-featout: bfeatout [
+  featout: bfeatout [
         opt: Y
 	def: "$(bsequence.name).diffgff"
         info: "Feature file for output bsequence"
         help: "File for output of second sequence's normal tab delimted gff's"
   ]
 
+  bool: columns [
+	opt: Y
+	def: N
+	info: "Output in columns format"
 
+	help: "The default format for the output report file is to have
+several lines per difference giving the sequence positions, sequences
+and features.  \ If this option is set true then the output report
+file's format is changed to a set of columns and no feature information
+is given."
+  ]

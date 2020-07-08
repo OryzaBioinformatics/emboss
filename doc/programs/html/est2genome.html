@@ -118,8 +118,7 @@ IT IS DONE FOR YOU.
   [-genome]            sequence   Genomic sequence
    -outfile            outfile    Output file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
+   Optional qualifiers:
    -match              integer    Score for matching two bases
    -mismatch           integer    Cost for mismatching two bases
    -gappenalty         integer    Cost for deleting a single base in either
@@ -129,7 +128,9 @@ IT IS DONE FOR YOU.
                                   and starting/ending on donor-acceptor sites
    -minscore           integer    You can exclude alignments with scores below
                                   a threshold by setting this to be false.
-   -reverse            bool       Reverse orientation
+
+   Advanced qualifiers:
+   -reverse            bool       Reverse the orientation of the EST sequence
    -[no]splice         bool       Use donor and acceptor splice sites. If you
                                   want to ignore donor-acceptor sites then set
                                   this to be false.
@@ -204,16 +205,6 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
-</tr>
-
-<tr bgcolor="#FFFFD0">
-<th align="left" colspan=2>Advanced qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
-<tr>
 <td>-match</td>
 <td>Score for matching two bases</td>
 <td>Any integer value</td>
@@ -255,9 +246,15 @@ IT IS DONE FOR YOU.
 <td>30</td>
 </tr>
 
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
 <tr>
 <td>-reverse</td>
-<td>Reverse orientation</td>
+<td>Reverse the orientation of the EST sequence</td>
 <td>Yes/No</td>
 <td>No</td>
 </tr>
@@ -564,21 +561,25 @@ Mott, R (19) CABIOS.
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
 </H2>
 
+It return 0 unless an error occurs. 
 
 <H2>
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -618,6 +619,7 @@ ftp://ftp.sanger.ac.uk/pub/pmr/est_genome.4.tar.Z</a>
     History
 </H2>
 
+Finished.
 
 <H2>
     Target users

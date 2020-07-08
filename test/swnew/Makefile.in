@@ -75,7 +75,7 @@ RANLIB = @RANLIB@
 VERSION = @VERSION@
 XLIB = @XLIB@
 
-pkgdata_DATA = *
+pkgdata_DATA = *.dat acnum.hit acnum.trg division.lkp entrynam.idx
 pkgdatadir = $(prefix)/share/$(PACKAGE)/test/swnew
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 

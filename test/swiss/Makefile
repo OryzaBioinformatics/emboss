@@ -72,10 +72,10 @@ NM = /usr/ccs/bin/nm -p
 OBJDUMP = @OBJDUMP@
 PACKAGE = EMBOSS
 RANLIB = ranlib
-VERSION = 1.4.3
+VERSION = 1.5.0
 XLIB =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib -lX11 -lsocket -lsocket  -lnsl -lnsl
 
-pkgdata_DATA = *
+pkgdata_DATA = *.dat acnum.hit acnum.trg division.lkp entrynam.idx
 pkgdatadir = $(prefix)/share/$(PACKAGE)/test/swiss
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 

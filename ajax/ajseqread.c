@@ -1199,7 +1199,6 @@ static AjBool seqReadGcg (AjPSeq thys, AjPSeqin seqin) {
 static AjBool seqReadNcbi (AjPSeq thys, AjPSeqin seqin) {
 
   static AjPStrTok handle = NULL;
-  static AjPStr token = NULL;
   static AjPStr rdline = NULL;
   static AjPStr id = NULL;
   static AjPStr acc = NULL;
@@ -1207,8 +1206,6 @@ static AjBool seqReadNcbi (AjPSeq thys, AjPSeqin seqin) {
   
   AjPFileBuff buff = seqin->Filebuff;
 
-  int i = 0;
-  int nt = 0;
   int bufflines = 0;
   AjBool ok;
 
@@ -3944,7 +3941,6 @@ AjBool ajSeqParseNcbi(AjPStr str, AjPStr* id, AjPStr* acc, AjPStr* desc)
     static AjPStr token=NULL;
     char *p;
     char *q;
-    int  gid;
     int  i;
     int  nt;
     

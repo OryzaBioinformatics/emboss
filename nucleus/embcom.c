@@ -1,4 +1,3 @@
-/*  Last edited: Mar  6 13:11 2000 (pmr) */
 /* @source embcom.c
 **
 ** General routines for program Complex
@@ -55,9 +54,9 @@ static void comComplexOnSeq(char *seqsim,char *seq,int lseq,int lwin,
 			    int step,float *ComplexOfSeq);
 static void comComplexOnSeq2(char *seq,int lseq,int lwin,int NumOfWin,
 			     int jmin,int jmax, int step,float *ComplexOfSeq);
-static void comSimulSeq(char *seq,char *seqsim,int lseq,trace *Freq,
+static void comSimulSeq(char *seq,char *seqsim,int lseq,comtrace *Freq,
 			char *ACN,int freq);
-static void comSortFreq(trace *set);
+static void comSortFreq(comtrace *set);
 static void comCalcComplexMed(float *ComplexOfSeq,int NumOfWin,
 			      float *MedValue);
 static void comReadWin(char *seq,int bwin,int ewin,char *win);
@@ -111,7 +110,7 @@ void embComComplexity(char *seq,char *name,int len,int jmin,int jmax,
     char    ACN[] = "ACGT";
     char    *seqsim=NULL;
     
-    trace   SortedFreq[4];
+    comtrace   SortedFreq[4];
     SEQSim  *SetSeqSim=NULL;
     UJSim   *SetUjSim=NULL;
     UJWin   *MedValueUj=NULL;
@@ -766,14 +765,14 @@ static void comComplexOnSeq2(char *seq,int lseq,int lwin,int NumOfWin,
 ** @param [r] seq [char *] Sequence
 ** @param [r] seqsim [char *] Simulation sequence
 ** @param [r] lseq [int] Sequence length
-** @param [r] Freq [trace *] Frequency values
+** @param [r] Freq [comtrace *] Frequency values
 ** @param [r] ACN [char *] ACN value
 ** @param [r] freq [int] Frequency count
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void comSimulSeq(char *seq,char *seqsim,int lseq,trace *Freq,
+static void comSimulSeq(char *seq,char *seqsim,int lseq,comtrace *Freq,
 		     char *ACN,int freq)
 
 {
@@ -839,16 +838,16 @@ static void comSimulSeq(char *seq,char *seqsim,int lseq,trace *Freq,
 **
 ** Sort frequencies for complexity calculation
 **
-** @param [r] set [trace *] Frequency values
+** @param [r] set [comtrace *] Frequency values
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void comSortFreq(trace *set)
+static void comSortFreq(comtrace *set)
 {
 
     int a,b;
-    trace strutt;
+    comtrace strutt;
   
     for(a=1;a<4;++a)
 	for(b=3;b>=a;--b){

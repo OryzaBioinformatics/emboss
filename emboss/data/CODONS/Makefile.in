@@ -75,7 +75,7 @@ RANLIB = @RANLIB@
 VERSION = @VERSION@
 XLIB = @XLIB@
 
-pkgdata_DATA = *
+pkgdata_DATA = E*.cut
 pkgdatadir = $(prefix)/share/$(PACKAGE)/data/CODONS
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 

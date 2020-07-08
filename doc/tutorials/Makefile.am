@@ -1,3 +1,3 @@
-pkgdata_DATA = *
+pkgdata_DATA = *.bib *.tex *.ps
 pkgdatadir=$(prefix)/share/$(PACKAGE)/doc/tutorials
 

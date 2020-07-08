@@ -1,3 +1,3 @@
-pkgdata_DATA = *
+pkgdata_DATA = *.dat acnum.hit acnum.trg division.lkp entrynam.idx
 pkgdatadir=$(prefix)/share/$(PACKAGE)/test/embl
 

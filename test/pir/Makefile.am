@@ -1,3 +1,3 @@
-pkgdata_DATA = *
+pkgdata_DATA = pir*
 pkgdatadir=$(prefix)/share/$(PACKAGE)/test/pir
 

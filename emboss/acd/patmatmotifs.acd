@@ -5,7 +5,7 @@ appl: patmatmotifs [
 
 sequence: sequence  [
   param: "Y"
-  type: "PureProtein"
+  type: "Protein"
 ]
 
 outfile: outfile  [

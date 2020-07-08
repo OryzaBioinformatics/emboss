@@ -1218,7 +1218,34 @@ LPFeatTagValue ajFeatSetTagValue (AjPFeature thys, AjPStr tag, AjPStr value, AjB
       iter2 = ajListIter(key->limitedValues) ;
       while(ajListIterMore(iter2)) {
 	limited = (AjPStr) ajListIterNext (iter2) ;
-	if(!ajStrCmp(&limited,&value))
+/*
+** Gary Williams - 4 Sept 2000
+** 
+** This routine wasn't recognising features in uppercase in EMBL faeture tables
+** The EMBL feature table document says:
+** http://www.ebi.ac.uk/embl/Documentation/FT_definitions/feature_table.html
+> 3.3.3.2 Controlled vocabulary or enumerated values
+>
+> Some qualifiers require values from a controlled vocabulary and are
+> entered without quotation marks.  For example, the '/direction'
+> qualifier has only three values: 'left', 'right' or 'both'.  Qualifier
+> value controlled vocabularies, like feature table component names, must
+> be treated as completely case insensitive: they may be entered and
+> displayed in any combination of upper and lower case ('/direction=Left'
+> '/direction=left' and '/direction=LEFT' are all legal and all convey the
+> same meaning).  The database staffs reserve the right to regularize the
+> case of qualifier values in the interest of readability, unlike the case
+> of feature labels where the databases will maintain the case as
+> originally entered (see Section 3.4.2).
+**
+** so this line changed from:
+**     if(!ajStrCmp(&limited,&value))
+** to
+**     if(!ajStrCmpCase(limited, value))
+**
+*/
+
+	if(!ajStrCmpCase(limited, value))
 	  found= ajTrue;
       }
       ajListIterFree(iter2) ;   

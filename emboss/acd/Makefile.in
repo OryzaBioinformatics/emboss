@@ -75,8 +75,7 @@ RANLIB = @RANLIB@
 VERSION = @VERSION@
 XLIB = @XLIB@
 
-pkgdata_DATA = *
-
+pkgdata_DATA = *.acd codes.english emboss.default
 pkgdatadir = $(prefix)/share/$(PACKAGE)/acd
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 

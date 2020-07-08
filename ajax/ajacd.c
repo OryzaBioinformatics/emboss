@@ -7480,7 +7480,7 @@ static AjBool acdSet (AcdPAcd thys, AjPStr* attrib, AjPStr value) {
   AcdPAttr attr = acdType[thys->Type].Attr;
   AjPStr* attrstr = thys->AttrStr;
   AcdPAcd aqual;
-  static AjPStr defattrib=NULL;
+/*  static AjPStr defattrib=NULL; */
 
   i = acdFindAttr (attr, *attrib);
 

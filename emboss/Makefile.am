@@ -11,12 +11,12 @@ seqretallfeat seqretfeat seqtofeat \
 simplesw testplot treetypedisplay 
 
 bin_PROGRAMS = acdc antigenic \
-backtranseq banana \
+backtranseq banana btwisted \
 chaos checktrans chips cirdna codcmp complex \
 compseq cpgplot cpgreport cusp cutseq \
 dan dbiblast dbifasta dbiflat dbigcg \
 descseq diffseq digest dotmatcher dotpath dottup dreg \
-einverted embossdata emma \
+einverted embossdata emma emowse \
 equicktandem est2genome etandem extractseq \
 findkm freak fuzznuc fuzzpro fuzztran \
 garnier geecee getorf helixturnhelix \
@@ -53,6 +53,7 @@ acdc_SOURCES = acdc.c
 antigenic_SOURCES = antigenic.c
 backtranseq_SOURCES = backtranseq.c
 banana_SOURCES = banana.c
+btwisted_SOURCES = btwisted.c
 chaos_SOURCES = chaos.c
 checktrans_SOURCES = checktrans.c
 chips_SOURCES = chips.c
@@ -78,6 +79,7 @@ dreg_SOURCES = dreg.c
 einverted_SOURCES = einverted.c
 embossdata_SOURCES = embossdata.c
 emma_SOURCES = emma.c
+emowse_SOURCES = emowse.c
 entrails_SOURCES = entrails.c
 equicktandem_SOURCES = equicktandem.c
 est2genome_SOURCES = est2genome.c

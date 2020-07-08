@@ -75,7 +75,7 @@ RANLIB = @RANLIB@
 VERSION = @VERSION@
 XLIB = @XLIB@
 
-pkgdata_DATA = *
+pkgdata_DATA = *.html *.gif
 pkgdatadir = $(prefix)/share/$(PACKAGE)/doc/programs/html
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 
