@@ -50,3 +50,18 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# EMACS files
+*~
+#*
+.cvsignore
+.cproject
+.classpath
+
+build
+bundlewin
+autom4te.cache
+
+*.m4
+configure
+*.dmp
