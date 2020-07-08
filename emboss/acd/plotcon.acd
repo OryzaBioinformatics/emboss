@@ -1,0 +1,46 @@
+appl: plotcon [
+	doc: "Plots the quality of conservation of a multiple sequence alignment"
+	groups: "display: alignment: multiple"
+]
+
+  seqset: msf [ 
+	param: Y
+	type: gapany
+	info: "Sequences file to be read in"
+	help: "File containing a sequence alignment"
+  ]
+	
+  int: winsize [
+         req: Y
+         info: "Window size"
+         help: "Number of columns to average alignment quality over. 
+The larger this value is, the smoother the plot will be."
+         def : "4"
+  ]
+
+  matrix: scorefile [
+        optional: Y
+        info: "Comparison matrix file"
+        protein: "$(msf.protein)"
+  ]
+
+  bool: data [ 
+        req: N
+        def: N
+        info: "Display as data"
+        help: "Output the match data to a file instead of plotting it"
+  ]
+
+  xygraph: graph [
+	req: @(!$(data))
+        opt: N
+        gxtitle: "Relative Residue Position"
+  ]
+ 
+
+  outfile: outfile [
+	req: $(data)
+        nullok: Y
+        info: "Display as data"
+  ]
+
