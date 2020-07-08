@@ -1,0 +1,127 @@
+
+                               EMBOSS: emowse
+     _________________________________________________________________
+   
+                                Program emowse
+                                       
+Function
+
+   Protein identification by mass spectrometry
+   
+Description
+
+   Given a one-per-line file of molecular weights this program will
+   search a protein database for matches with the mass spectrometry data.
+   Eight enzymes/reagents can be specified and an optional whole sequence
+   molecular weight.
+   
+Usage
+
+   Here is a sample session with emowse:
+
+% emowse
+
+****************
+EDIT HERE
+****************
+
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequences]         seqall     Sequence database USA
+  [-infile]            infile     Name of molecular weight data file
+   -weight             integer    Whole sequence molwt
+   -outfile            outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -enzyme             list       Enzyme or reagent
+   -pcrange            integer    Allowed whole sequence weight variability
+   -frequencies        string     Frequencies file
+   -tolerance          float      (no help text) float value
+   -partials           float      Partials factor
+
+
+   Mandatory qualifiers Allowed values Default
+   [-sequences]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-infile]
+   (Parameter 2) Name of molecular weight data file Input file Required
+   -weight Whole sequence molwt Any integer value 0
+   -outfile Output file name Output file <sequence>.emowse
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -enzyme Enzyme or reagent
+   1 (Trypsin)
+   2 (Lys-C)
+   3 (Arg-C)
+   4 (Asp-N)
+   5 (V8-bicarb)
+   6 (V8-phosph)
+   7 (Chymotrypsin)
+   8 (CNBr)
+   1
+   -pcrange Allowed whole sequence weight variability Integer from 0 to
+   75 25
+   -frequencies Frequencies file Any string is accepted Efreqs.dat
+   -tolerance (no help text) float value Number from 0.100 to 1.000 0.1
+   -partials Partials factor Number from 0.100 to 1.000 0.4
+   
+Input file format
+
+   **************** EDIT HERE ****************
+   
+Output file format
+
+   **************** EDIT HERE ****************
+   
+Data files
+
+   **************** EDIT HERE ****************
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   compseq Counts the composition of dimer/trimer/etc words in a sequence
+   oddcomp Finds protein sequence regions with a biased composition
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (Sept 2000) - author.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

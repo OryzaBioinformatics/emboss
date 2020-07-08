@@ -1,0 +1,641 @@
+<!--START OF HEADER - DON'T ALTER -->
+
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: btwisted
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
+</a>
+</td>
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: btwisted
+</H2>
+</font>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<p><hr><p>
+
+<!--END OF HEADER-->
+
+<H1>
+Program btwisted
+</H1>
+<H2>
+    Function
+</H2>
+Calculates the twisting in a B-DNA sequence
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+        Algorithms
+  -->
+
+
+
+   <b>btwisted</b> takes a region of a pure DNA sequence and calculates by simple 
+   arithmetic the probable overall twist of the sequence and the stacking 
+   energy.
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+
+Here is a sample session with btwisted:
+
+<pre>
+
+% btwisted embl:ab000095 -sbegin 100 -send 120
+Calculates the twisting in a B-DNA sequence 
+Output file [ab000095.btwisted]:
+
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -angledata          string     File containing base pair twist angles
+   -energydata         string     File containing base pair stacking energies
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence USA</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.btwisted</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-angledata</td>
+<td>File containing base pair twist angles</td>
+<td>Any string is accepted</td>
+<td>Eangles.dat</td>
+</tr>
+
+<tr>
+<td>-energydata</td>
+<td>File containing base pair stacking energies</td>
+<td>Any string is accepted</td>
+<td>Eenergy.dat</td>
+</tr>
+
+</table>
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+Nucleic acid sequence USA.
+
+
+
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+   -->
+
+This is the output from the example usage above:
+<p>
+
+<pre>
+# Output from BTWISTED
+# Twisting calculated from 100 to 120 of AB000095
+Total twist (degrees): 646.6
+Total turns : 1.80
+Average bases per turn: 11.69
+Total stacking energy : -172.77
+Average stacking energy per dinucleotide: -8.64 
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+   -->
+
+The program reads in two data files.
+<P>
+The first is prompted for by:
+<P>
+"File containing base pair twist angles"
+<P>
+<br>
+This is the data file 'Eangles.dat' by default.
+<P>
+This consists of the data:
+<P>
+<pre>
+aa      35.6    0.1
+ac      34.4    1.3
+ag      27.7    1.5
+at      31.5    1.1
+ca      34.5    0.9
+cc      33.7    0.1
+cg      29.8    1.1
+ct      27.7    1.5
+ga      36.9    0.9
+gc      40.0    1.2
+gg      33.7    0.1
+gt      34.4    1.3
+ta      36.0    1.0
+tc      36.9    0.9
+tg      34.5    0.9
+tt      35.6    0.1
+</pre>
+<p>
+
+
+
+
+The second is prompted for by:
+<P>
+"File containing base pair stacking energies"
+<br>
+This is the data file 'Eenergy.dat' by default.
+<P>
+This consists of the data:
+<P>
+<pre>
+#base pair stacking energy for B-DNA
+aa      -5.37
+ac      -10.51
+ag      -6.78
+at      -6.57
+ca      -6.57
+cc      -8.26
+cg      -9.69
+ct      -6.78
+ga      -9.81
+gc      -14.59
+gg      -8.26
+gt      -10.51
+ta      -3.82
+tc      -9.81
+tg      -6.57
+tt      -5.37
+</pre>
+<P>
+
+  No check is made that all dinucleotides have been read for the energy and 
+  twist. Attempting to run btwisted with an incomplete data file will result
+  a fatal error if the sequence contains a dinucleotide not in the data files. 
+ 
+
+<P>
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+
+  No check is made that all dinucleotides have been read for the energy and 
+  twist. Attempting to run btwisted with an incomplete data file will result
+  a fatal error if the sequence contains a dinucleotide not in the data files. 
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+"Incomplete table" 
+
+<BR> 
+
+You have supplied data files for either the angles or energies that do
+not contain the fulll required set of possible dinucleotides. 
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+  No check is made that all dinucleotides have been read for the energy and 
+  twist. Attempting to run btwisted with an incomplete data file will result
+  a fatal error if the sequence contains a dinucleotide not in the data files. 
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="banana.html">banana</a></td><td>Bending and curvature plot in B-DNA</td></tr>
+<tr><td><a href="complex.html">complex</a></td><td>Find the linguistic complexity in nucleotide sequences</td></tr>
+<tr><td><a href="dan.html">dan</a></td><td>Calculates DNA RNA/DNA melting temperature</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+<!--
+        Who has worked on the program in the past.
+   -->
+
+
+
+   This application was written by David Martin
+   (<a href="mailto:dmartin@hgmp.mrc.ac.uk">dmartin@hgmp.mrc.ac.uk</a>) and
+   Alan Bleasby (<a href="mailto:ableasby@hgmp.mrc.ac.uk">ableasby@hgmp.mrc.ac.uk</a>) 
+   during the first Scandinavian EMBOSS Workshop.
+
+
+
+
+
+
+
+
+
+<H2>
+    History
+</H2>
+
+<!--
+        What changes have been made.
+   -->
+
+Written (Sept 2000) - David Martin & Alan Bleasby.
+
+
+
+
+
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Comments
+</H2>
+
+<!--
+	Any comments, requests etc. that people have about the program
+   -->
+
+
+
+
+
+
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+
