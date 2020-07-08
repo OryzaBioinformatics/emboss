@@ -2563,6 +2563,15 @@ static AjBool seqReadEmbl (AjPSeq thys, AjPSeqin seqin) {
 
   bufflines++;
 
+
+  while (ajStrPrefixC(rdline, "WP ")) {
+      if (!ajFileBuffGet (buff, &rdline))
+	  return ajFalse;
+  }
+
+
+
+
   ajDebug ("seqReadEmbl first line '%S'\n", rdline);
 
   if (!ajStrPrefixC(rdline, "ID   ")) {

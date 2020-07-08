@@ -47,6 +47,7 @@ with octagons."
 	req: N
 	def: N
 	info: "Display as data"
+        help: "Output the data to a file instead of plotting it"
   ]
 
   graph: graph [

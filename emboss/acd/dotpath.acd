@@ -23,7 +23,12 @@ minimal set of non-overlapping matches"
   ]
 
 
-  bool: data [def: N opt: Y info: "Display as data" ]
+  bool: data [
+	req: N
+	def: N 
+	info: "Display as data" 
+	help: "Output the match data to a file instead of plotting it"
+  ]
 
   graph: graph [ req: @(!$(data))
   gxtitle: $(sequenceb.name) gytitle: $(sequencea.name) ]

@@ -29,9 +29,10 @@ Graph type [xwin]:
    
 Command line arguments
 
-   Mandatory qualifiers:
-  [-sequence]          seqall     Sequence database USA
-   -graph              graph      Graph type
+   Mandatory qualifiers (* if not always prompted):
+  [-sequence]          sequence   Sequence USA
+*  -graph              graph      Graph type
+*  -outfile            outfile    Output file name
 
    Optional qualifiers (* if not always prompted):
    -steps              integer    The number of residues plotted per turn is
@@ -53,15 +54,18 @@ Command line arguments
                                   using the qualifiers '-squares', '-diamonds'
                                   and '-octags'.
    -[no]wheel          bool       Plot the wheel
+   -data               bool       Output the match data to a file instead of
+                                  plotting it
 
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   (Parameter 1) Sequence USA Readable sequence Required
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
    EMBOSS_GRAPHICS value, or x11
+   -outfile Output file name Output file <sequence>.pepwheel
    Optional qualifiers Allowed values Default
    -steps The number of residues plotted per turn is this value divided
    by the 'turns' value. Integer from 2 to 100 18
@@ -79,6 +83,7 @@ Command line arguments
    other markup that you may have specified using the qualifiers
    '-squares', '-diamonds' and '-octags'. Yes/No No
    -[no]wheel Plot the wheel Yes/No Yes
+   -data Output the match data to a file instead of plotting it Yes/No No
    
 Input file format
 

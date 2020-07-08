@@ -36,10 +36,11 @@ Usage
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Mandatory qualifiers (* if not always prompted):
   [-sequences]         seqset     File containing a sequence alignment
    -wordsize           integer    Word size
-   -graph              graph      Graph type
+*  -graph              graph      Graph type
+*  -outfile            outfile    Output file name
 
    Optional qualifiers:
    -[no]boxit          bool       Draw a box around each dotplot
@@ -48,6 +49,8 @@ Command line arguments
    -ext                string     Extension for feature file
 
    Advanced qualifiers:
+   -data               bool       Output the match data to a file instead of
+                                  plotting it
    -gap                integer    This specifies the size of the gap that is
                                   used to separate the individual dotplots in
                                   the display. The size is measured in
@@ -63,12 +66,14 @@ Command line arguments
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
    EMBOSS_GRAPHICS value, or x11
+   -outfile Output file name Output file <sequence>.polydot
    Optional qualifiers Allowed values Default
    -[no]boxit Draw a box around each dotplot Yes/No Yes
    -dumpfeat Dump all matches as feature files Yes/No No
    -format format to Dump out as Any string is accepted gff
    -ext Extension for feature file Any string is accepted gff
    Advanced qualifiers Allowed values Default
+   -data Output the match data to a file instead of plotting it Yes/No No
    -gap This specifies the size of the gap that is used to separate the
    individual dotplots in the display. The size is measured in residues,
    as displayed in the output. Integer 0 or more 10

@@ -97,9 +97,10 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
-  [-sequence]          seqall     Sequence database USA
-   -graph              graph      Graph type
+   Mandatory qualifiers (* if not always prompted):
+  [-sequence]          sequence   Sequence USA
+*  -graph              graph      Graph type
+*  -outfile            outfile    Output file name
 
    Optional qualifiers (* if not always prompted):
    -steps              integer    The number of residues plotted per turn is
@@ -121,6 +122,8 @@ IT IS DONE FOR YOU.
                                   using the qualifiers '-squares', '-diamonds'
                                   and '-octags'.
    -[no]wheel          bool       Plot the wheel
+   -data               bool       Output the match data to a file instead of
+                                  plotting it
 
 
 </pre>
@@ -136,8 +139,8 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
-<td>Readable sequence(s)</td>
+<td>Sequence USA</td>
+<td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
 
@@ -146,6 +149,13 @@ IT IS DONE FOR YOU.
 <td>Graph type</td>
 <td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.pepwheel</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -207,6 +217,13 @@ IT IS DONE FOR YOU.
 <td>Plot the wheel</td>
 <td>Yes/No</td>
 <td>Yes</td>
+</tr>
+
+<tr>
+<td>-data</td>
+<td>Output the match data to a file instead of plotting it</td>
+<td>Yes/No</td>
+<td>No</td>
 </tr>
 
 </table>

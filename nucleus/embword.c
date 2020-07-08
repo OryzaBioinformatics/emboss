@@ -1117,7 +1117,7 @@ those that extend into the live-zone */
 /* need to free up the match structure and remove the current node of the list */
         matchListDelete((void **)&match, NULL);
       	ajListRemove(iter);
-      } else if (result = 2) {	/* it is partially in the dead zone - now truncated */
+      } else if (result == 2) {	/* it is partially in the dead zone - now truncated */
         truncated = ajTrue;
       }
     }

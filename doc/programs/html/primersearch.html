@@ -88,12 +88,16 @@ primersearch reads in primer pairs from an input file and searches
 them against sequence(s) specified by the user. Each of the primers in
 a pair is searched against the sequence and potential amplimers are
 reported.
+<p>
 
 The user can specify a maximum percent mismatch level; for example,
 10% mismatch on a primer of length 20bp means that the program will
 classify a primer as matching a sequence if 18 of the 20 base pairs
 matches.
+<p>
 
+It will only report matches if both primers in the pair have a match in
+opposite orientations. 
 
 <H2>
     Usage
@@ -134,9 +138,12 @@ Amplimer 1
         Amplimer length: 261 bp
 
 </pre>
+<p>
 
 Here we run the same example but allowing 20% mismatch between the 
 primers and the sequence.
+<p>
+
 <pre>
 unix % primersearch embl:Z52466
 Searches DNA sequences for matches with primer pairs
@@ -169,8 +176,10 @@ Amplimer 2
         Amplimer length: 261 bp
 
 </pre>
+<p>
 
 Here is an example of running with a file containing a list of sequences.
+<p>
 <pre>
 curium % primersearch @seqs.list
 Searches DNA sequences for matches with primer pairs
@@ -326,6 +335,8 @@ IT IS DONE FOR YOU.
    -->
 
 The input primer file used in the example above has the following format:
+<p>
+<hr>
 <pre>
 # This is my primer file
 D1S243  cacacaggctcacatgcc      gctccagcgtcatggact
@@ -335,13 +346,20 @@ D1S1608 gatggcttttggggactatt    cactgagccaagtgacacag
 D1S2893 aaaacatcaactctcccctg    ctcaaaccccaataagcctt
 D1S2660 cacacatgcacatgcac       agtgacaccagcaggg    
 </pre>
+<hr>
+<p>
+
 Comments can be inserted provided they are prefaced with "#"
+<p>
 
 Empty files will cause primersearch to note that no primers have 
 been found, and to exit.
+<p>
 
 In this example, seqs.list contains the following sequences:
+<p>
 
+<hr>
 <pre>
 embl:Z16979
 embl:Z23994  
@@ -350,7 +368,8 @@ embl:G07829
 embl:Z50993  
 embl:Z52466
 </pre>
-
+<hr>
+<p>
 
 <H2>
     Output file format
@@ -365,6 +384,8 @@ embl:Z52466
    -->
 
 Here is an exmaple of the output file:
+<p>
+<hr>
 <pre>
 Primer name D1S243
 
@@ -384,6 +405,7 @@ Amplimer 1
         AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
         Amplimer length: 261 bp
 </pre>
+<hr>
 
 <H2>
     Data files
@@ -413,7 +435,7 @@ Amplimer 1
 
    -->
 
-
+None.
 
 <H2>
     Notes
@@ -429,6 +451,7 @@ Every potential amplimer will be reported; if one primer matches the
 forward strand twice and the other matches the reverse strand only
 once, two potential amplimers are reported. If the reverse primer
 matches twice, four potential amplimers are reported.
+<p>
 
 Each primer pair consists of a name, followed by two primer sequences,
 primerA and primerB. The program first compares primerA to the forward
@@ -445,6 +468,7 @@ possible amplimers are reported.
         Bibliography for methods used.
    -->
 
+None.
 
 <H2>
     Warnings
@@ -455,6 +479,17 @@ possible amplimers are reported.
         eg:
         It doesn't check to see if the sequence is a protein sequence or not.
    -->
+
+This program is slow.
+<br>
+Don't try searching all of EMBL!
+<br>
+It might not be sensible to search all of the human section of EMBL - in 2000, this would take a day to do with one primer pair.
+<br>
+It will take longer with more primer pairs.
+<br>
+It will take longer if you allow mismatches.
+
 
 <H2>
     Diagnostic Error Messages
@@ -485,6 +520,7 @@ file was empty or there were no compilable primer pairs contained in it.
         "It always exits with status 0"
    -->
 It always exits with status 0
+
 <H2>
     Known bugs
 </H2>
@@ -494,7 +530,7 @@ It always exits with status 0
         Bugs noted but not yet fixed.
    -->
 
-
+None.
 
 <!--
 <H2>
@@ -517,6 +553,9 @@ It always exits with status 0
    -->
 
 
+<a href="stssearch">stssearch</a> does something similar, but doesn't
+allow you to find mismatches and will report any match in any
+orientation and doesn't require you to have both primers matching. 
 
 
 <H2>
@@ -541,6 +580,7 @@ href="mailto:vcurwen@hgmp.mrc.ac.uk">(vcurwen@hgmp.mrc.ac.uk)</a>
         What changes have been made.
    -->
 
+Written Aug 2000 - Val Curwen
 
 <H2>
     Target users

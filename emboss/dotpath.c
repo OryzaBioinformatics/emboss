@@ -68,7 +68,6 @@ int main(int argc, char **argv)
     int wordlen;
     AjPTable seq1MatchTable =0 ;
     AjPList matchlist=NULL ;
-    AjPList garymatchlist=NULL;
     AjPGraph graph = 0;
     AjPFile outfile;
     AjBool boxit,text,overlaps;
@@ -85,7 +84,7 @@ int main(int argc, char **argv)
     int i;
     float k,max;
     char ptr[10];
-    int oldcolour;
+    int oldcolour=-1;
     int np=0;
     
     ajGraphInit("dotpath", argc, argv);
@@ -101,6 +100,8 @@ int main(int argc, char **argv)
 
     ajSeqTrim(seq1);
     ajSeqTrim(seq2);
+
+    matchlist = ajListNew();
 
     embWordLength (wordlen);
     if(embWordGetTable(&seq1MatchTable, seq1))
@@ -124,7 +125,7 @@ int main(int argc, char **argv)
 	ajGraphSetCharSize(0.5);
 
 	/* display the overlapping matches in red */
-	if(overlaps && matchlist)
+	if(overlaps && ajListLength(matchlist))
 	{
 	    oldcolour = ajGraphSetFore(RED);
 	    plotMatches(matchlist); 
@@ -132,11 +133,13 @@ int main(int argc, char **argv)
 	}
 
 	/* get the minimal set of overlapping matches */    
-	(void) embWordMatchMin(garymatchlist, ajSeqLen(seq1), ajSeqLen(seq2));
-                                
+	(void) embWordMatchMin(matchlist, ajSeqLen(seq1), ajSeqLen(seq2));
+
+	
+	
 	/* display them */
-	if (garymatchlist)
-	    plotMatches(garymatchlist);
+	if (ajListLength(matchlist))
+	    plotMatches(matchlist);
 
 	if(boxit)
 	{
@@ -225,30 +228,25 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outfile,"##Xtitle %s\n##Ytitle %s\n",ajSeqName(seq1),
 		    ajSeqName(seq2));
 
+	if(overlaps && (np=ajListLength(matchlist)))
+	    ajListMap(matchlist,objtofile1, outfile);	
 
 	/* get the minimal set of overlapping matches */    
-	(void) embWordMatchMin(garymatchlist, ajSeqLen(seq1), ajSeqLen(seq2));
+	(void) embWordMatchMin(matchlist, ajSeqLen(seq1), ajSeqLen(seq2));
 	embWordFreeTable(seq1MatchTable); /* free table of words */
-	np = ajListLength(garymatchlist);
-	if(overlaps && matchlist)
-	    np += ajListLength(garymatchlist);
+	np += ajListLength(matchlist);
 
 
 	ajFmtPrintF(outfile,"##DataObjects\n##Number %d\n",np);
 
-	if(matchlist && overlaps)
-	    ajListMap(matchlist,objtofile1, outfile);	
-	if(garymatchlist)
-	    ajListMap(garymatchlist,objtofile2, outfile);	
-
+/* output the minal overlapping set of data with colour=BLACK */	
+	ajListMap(matchlist,objtofile2, outfile);	
 
 	ajFmtPrintF(outfile,"##GraphObjects\n##Number 0\n");
     }
   
     if(matchlist) 
 	embWordMatchListDelete(matchlist); /* free the match structures */
-    if(garymatchlist) 
-	embWordMatchListDelete(garymatchlist); /* free the match structures */
  
     ajExit();
     return 0;

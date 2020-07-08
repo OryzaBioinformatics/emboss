@@ -34,9 +34,9 @@ Graph type [x11]:
    
 Command line arguments
 
-   Mandatory qualifiers:
-  [-sequence]          seqall     Sequence database USA
-   -graph              graph      Graph type
+   Mandatory qualifiers (* if not always prompted):
+  [-sequence]          sequence   Sequence USA
+*  -graph              graph      Graph type
 
    Optional qualifiers (* if not always prompted):
 *  -squares            string     By default the aliphatic residues ILVM are
@@ -53,11 +53,13 @@ Command line arguments
                                   other markup that you may have specified
                                   using the qualifiers '-squares', '-diamonds'
                                   and '-octags'.
+   -data               bool       Output the data to a file instead of
+                                  plotting it
 
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   (Parameter 1) Sequence USA Readable sequence Required
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
@@ -74,6 +76,7 @@ Command line arguments
    as squares and all other residues are unmarked. This overrides any
    other markup that you may have specified using the qualifiers
    '-squares', '-diamonds' and '-octags'. Yes/No No
+   -data Output the data to a file instead of plotting it Yes/No No
    
 Input file format
 

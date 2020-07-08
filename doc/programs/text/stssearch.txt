@@ -14,6 +14,12 @@ Description
    expected matches and possible mismatches. A replacement for stssearch
    in the EGCG package.
    
+   This reads in one or more sequences to be searched. For each pair of
+   primers, this looks for exact matches between a the primers and the
+   query sequence in either orientation.
+   
+   Any matches found will be reported. Only one primer need match.
+   
 Usage
 
    Here is a sample session with stssearch.
@@ -47,17 +53,26 @@ Command line arguments
 Input file format
 
    Here is the primer input file for the example run:
-
+     _________________________________________________________________
+   
 PrimA ACCAGACACCCATCAACAG    TATTTATGCCAGCCAGCCAG
 PrimB CGAAAGAATAAGAGCAGGCAAG GTAAGAGAAATAGACAGGCGG
 PrimC CGTCAGTATCCCCGTTTACAG  TATCGCCAAAATCACCGCC
 PrimD AATACGCAAACCGCCTCTCC   TTATCCGCTCACAATTCCACAC
 PrimE AATACGCAAACCGCCTCTCC   CACAACCCGCTCACAATTCCA
-
+     _________________________________________________________________
+   
+   It consists of three columns separated by tabs or spaces.
+   
+   The first column is the name of the primer pair.
+   The second column is the sequence of the first primer.
+   The third column is the sequence of the second primer.
+   
 Output file format
 
    Here is the output from the example run:
-
+     _________________________________________________________________
+   
 ECLAC: PrimA PrimerA matched at 532
 ECLAC: (rev) PrimA PrimerB matched at 689
 ECLAC: PrimB PrimerA matched at 5743
@@ -76,21 +91,45 @@ ECLACI: PrimE PrimerA matched at 1026
 ECLACY: PrimB PrimerA matched at 1439
 ECLACZ: PrimC PrimerA matched at 1668
 ECLACZ: (rev) PrimC PrimerB matched at 1783
-
+     _________________________________________________________________
+   
+   This consists of one line per match. This consists of:
+   
+     * The name of the sequence that the match is found in, followed by a
+       ':'.
+     * If the match is in the reverse sense, it has a '(rev)'.
+     * The name of the primer pair.
+     * 'PrimerA' or 'PrimerB'.
+     * 'matched at' the start of the match position.
+       
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   None.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description
@@ -103,6 +142,9 @@ See also
    sequences
    wordmatch Finds all exact matches of a given size between 2 sequences
    
+   If you want something that only reports matches of both primer pairs
+   and can find mismatches, use primersearch.
+   
 Author(s)
 
    This application was written by Peter Rice (pmr@sanger.ac.uk)
@@ -111,6 +153,8 @@ Author(s)
    
 History
 
+   Finished.
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

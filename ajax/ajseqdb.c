@@ -1674,14 +1674,24 @@ static AjBool seqGcgReadSeq (const AjPSeqin seqin) {
   AjPSeqQuery qry = seqin->Query;
   SeqPCdQry qryd = qry->QryData;
   static AjPRegexp idexp = NULL;
+  static AjPRegexp contexp = NULL;
   static AjPRegexp idexp2 = NULL;
   static AjPStr gcgtype = NULL;
   static AjPStr tmpstr = NULL;
+  static AjPStr dstr = NULL;
+  static AjPStr id = NULL;
+  static AjPStr idc = NULL;
+  static AjPStr contseq=NULL;
+  
   int gcglen;
+  int pos;
   int rblock;
   long spos;
   AjBool ispir = ajFalse;
-
+  char *p=NULL;
+  char *q=NULL;
+  AjBool continued=ajFalse;
+  
   if (!idexp) {
     idexp = ajRegCompC("^>...([^ ]+) +([^ ]+) +([^ ]+) +([^ ]+) +([0-9]+)");
     idexp2 = ajRegCompC("^>[PF]1;([^ ]+)");
@@ -1695,9 +1705,23 @@ static AjBool seqGcgReadSeq (const AjPSeqin seqin) {
   ajDebug("test ID line\n'%S'\n", line);
 
   if (ajRegExec(idexp, line)) {
-
+    continued = ajFalse;
     ajRegSubI (idexp, 3, &gcgtype);
     ajRegSubI (idexp, 5, &tmpstr);
+    ajRegSubI (idexp, 1, &id);
+    if(ajStrSuffixC(id,"_0") || ajStrSuffixC(id,"_00"))
+    {
+	continued = ajTrue;
+	p = q = ajStrStr(id);
+	p = strrchr(p,(int)'_');
+	*(++p)='\0';
+	(void) ajStrAssC(&id,q);
+	if(!contseq)
+	    contseq = ajStrNew();
+	if(!dstr)
+	    dstr = ajStrNew();
+    }
+	
     ajStrToInt (tmpstr, &gcglen);
   }
   else if (ajRegExec(idexp2, line)) {
@@ -1750,7 +1774,62 @@ static AjBool seqGcgReadSeq (const AjPSeqin seqin) {
     }
     ajFileGets (qryd->libs, &line); /* newline at end */
 
+    if(continued)
+    {
+	while(ajFileGets(qryd->libs,&line))
+	{
+            ajRegExec(idexp, line);
+	    ajRegSubI (idexp, 5, &tmpstr);
+	    ajRegSubI (idexp, 1, &idc);
+
+	    if(!ajStrPrefix(idc,id))
+		break;
+
+
+
+	    ajStrToInt (tmpstr, &gcglen);
+	    if (!ajFileGets (qryd->libs, &dstr)) /* desc line */
+		return ajFalse;
+
+	    ajStrModL (&contseq, gcglen+1);	    
+
+	    rblock = gcglen;
+	    if (ajStrChar(gcgtype, 0) == '2')
+		rblock = (rblock+3)/4;
+
+	    ajFileRead (ajStrStr(contseq), 1, rblock, qryd->libs);
+
+	    if (ajStrChar(gcgtype, 0) == '2') { /* convert 2bit to ascii */
+		seqGcgBinDecode (contseq, gcglen);
+	    }
+	    else if (ajStrChar(gcgtype, 0) == 'A') { /* are seq chars OK? */
+		ajStrFixI (contseq, gcglen);
+	    }
+	    else {
+		ajRegSubI (idexp, 1, &tmpstr);
+		ajFatal ("Unknown GCG entry: name '%S'",
+			 tmpstr);
+	    }
+	    ajFileGets (qryd->libs, &line); /* newline at end */
+
+	    if(!contexp)
+		contexp = ajRegCompC("^([^ ]+) +([^ ]+) +([^ ]+) +"
+				     "([^ ]+) +([^ ]+) +([^ ]+) +([^ ]+) +"
+				     "([^ ]+) +([0-9]+)");
+
+            ajRegExec(contexp, dstr);
+	    ajRegSubI (contexp, 9, &tmpstr);
+	    ajStrToInt (tmpstr, &pos);
+	    seqin->Inseq->Len = pos-1;
+	    
+	    ajStrApp(&seqin->Inseq,contseq);
+	}
+    }
+    
+
+    ajFileGets (qryd->libs, &line);
   }
+  
 
   return ajTrue;
 }

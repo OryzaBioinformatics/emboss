@@ -55,17 +55,19 @@ Command line arguments
   [-sequencea]         sequence   Sequence USA
   [-sequenceb]         sequence   Sequence USA
    -wordsize           integer    Word size
-   -graph              graph      Graph type
+*  -graph              graph      Graph type
 *  -outfile            outfile    Output file name
 
    Optional qualifiers:
    -overlaps           bool       Displays the overlapping matches (in red) as
                                   well as the minimal set of non-overlapping
                                   matches
-   -text               bool       Display as text
    -[no]boxit          bool       Draw a box around dotplot
 
-   Advanced qualifiers: (none)
+   Advanced qualifiers:
+   -data               bool       Output the match data to a file instead of
+                                  plotting it
+
 
    Mandatory qualifiers Allowed values Default
    [-sequencea]
@@ -81,10 +83,9 @@ Command line arguments
    Optional qualifiers Allowed values Default
    -overlaps Displays the overlapping matches (in red) as well as the
    minimal set of non-overlapping matches Yes/No No
-   -text Display as text Yes/No No
    -[no]boxit Draw a box around dotplot Yes/No Yes
    Advanced qualifiers Allowed values Default
-   (none)
+   -data Output the match data to a file instead of plotting it Yes/No No
    
 Input file format
 

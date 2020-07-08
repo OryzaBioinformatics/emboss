@@ -120,14 +120,16 @@ IT IS DONE FOR YOU.
   [-sequencea]         sequence   Sequence USA
   [-sequenceb]         sequence   Sequence USA
    -wordsize           integer    Word size
-   -graph              graph      Graph type
+*  -graph              graph      Graph type
 *  -outfile            outfile    Output file name
 
    Optional qualifiers:
-   -text               bool       Display as text
    -[no]boxit          bool       Draw a box around dotplot
 
-   Advanced qualifiers: (none)
+   Advanced qualifiers:
+   -data               bool       Output the match data to a file instead of
+                                  plotting it
+
 
 </pre>
 </td></tr></table>
@@ -182,13 +184,6 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-text</td>
-<td>Display as text</td>
-<td>Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
 <td>-[no]boxit</td>
 <td>Draw a box around dotplot</td>
 <td>Yes/No</td>
@@ -202,7 +197,10 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td>-data</td>
+<td>Output the match data to a file instead of plotting it</td>
+<td>Yes/No</td>
+<td>No</td>
 </tr>
 
 </table>

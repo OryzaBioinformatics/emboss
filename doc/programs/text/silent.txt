@@ -138,12 +138,11 @@ See also
    
 Author(s)
 
-   This application was written by Amy Williams (bmbawi@leeds.ac.uk) and
-   Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
    
 History
 
-   Written (Aug 2000) - Amy Williams and Alan Bleasby.
+   Written (Aug 2000) - Alan Bleasby.
    
 Target users
 

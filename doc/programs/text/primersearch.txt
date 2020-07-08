@@ -13,10 +13,15 @@ Description
    primersearch reads in primer pairs from an input file and searches
    them against sequence(s) specified by the user. Each of the primers in
    a pair is searched against the sequence and potential amplimers are
-   reported. The user can specify a maximum percent mismatch level; for
-   example, 10% mismatch on a primer of length 20bp means that the
-   program will classify a primer as matching a sequence if 18 of the 20
-   base pairs matches.
+   reported.
+   
+   The user can specify a maximum percent mismatch level; for example,
+   10% mismatch on a primer of length 20bp means that the program will
+   classify a primer as matching a sequence if 18 of the 20 base pairs
+   matches.
+   
+   It will only report matches if both primers in the pair have a match
+   in opposite orientations.
    
 Usage
 
@@ -49,6 +54,7 @@ Amplimer 1
 
    Here we run the same example but allowing 20% mismatch between the
    primers and the sequence.
+   
 unix % primersearch embl:Z52466
 Searches DNA sequences for matches with primer pairs
 Primer file: primers
@@ -83,6 +89,7 @@ Amplimer 2
 
    Here is an example of running with a file containing a list of
    sequences.
+   
 curium % primersearch @seqs.list
 Searches DNA sequences for matches with primer pairs
 Primer file: primers
@@ -172,6 +179,8 @@ Input file format
 
    The input primer file used in the example above has the following
    format:
+     _________________________________________________________________
+   
 # This is my primer file
 D1S243  cacacaggctcacatgcc      gctccagcgtcatggact
 D1S468 aattaaccgttttggtcct     gcgacacacacttccc
@@ -179,21 +188,29 @@ D1S2845 ccaaagggtgcttctc        gtggcattccaacctc
 D1S1608 gatggcttttggggactatt    cactgagccaagtgacacag
 D1S2893 aaaacatcaactctcccctg    ctcaaaccccaataagcctt
 D1S2660 cacacatgcacatgcac       agtgacaccagcaggg
-
-   Comments can be inserted provided they are prefaced with "#" Empty
-   files will cause primersearch to note that no primers have been found,
-   and to exit. In this example, seqs.list contains the following
-   sequences:
+     _________________________________________________________________
+   
+   Comments can be inserted provided they are prefaced with "#"
+   
+   Empty files will cause primersearch to note that no primers have been
+   found, and to exit.
+   
+   In this example, seqs.list contains the following sequences:
+     _________________________________________________________________
+   
 embl:Z16979
 embl:Z23994
 embl:Z51474
 embl:G07829
 embl:Z50993
 embl:Z52466
-
+     _________________________________________________________________
+   
 Output file format
 
    Here is an exmaple of the output file:
+     _________________________________________________________________
+   
 Primer name D1S243
 
 Primer name D1S468
@@ -212,26 +229,39 @@ Amplimer 1
         CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
         AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
         Amplimer length: 261 bp
-
+     _________________________________________________________________
+   
 Data files
 
+   None.
+   
 Notes
 
    Every potential amplimer will be reported; if one primer matches the
    forward strand twice and the other matches the reverse strand only
    once, two potential amplimers are reported. If the reverse primer
-   matches twice, four potential amplimers are reported. Each primer pair
-   consists of a name, followed by two primer sequences, primerA and
-   primerB. The program first compares primerA to the forward strand and
-   if it matches, primerB is compared to the reverse strand. The approach
-   is then reversed, with the primerB being compared to the forward
-   strand and primerA to the reverse. In this way all possible amplimers
-   are reported.
+   matches twice, four potential amplimers are reported.
+   
+   Each primer pair consists of a name, followed by two primer sequences,
+   primerA and primerB. The program first compares primerA to the forward
+   strand and if it matches, primerB is compared to the reverse strand.
+   The approach is then reversed, with the primerB being compared to the
+   forward strand and primerA to the reverse. In this way all possible
+   amplimers are reported.
    
 References
 
+   None.
+   
 Warnings
 
+   This program is slow.
+   Don't try searching all of EMBL!
+   It might not be sensible to search all of the human section of EMBL -
+   in 2000, this would take a day to do with one primer pair.
+   It will take longer with more primer pairs.
+   It will take longer if you allow mismatches.
+   
 Diagnostic Error Messages
 
    "No suitable primers found - exiting" means that either the primers
@@ -244,6 +274,8 @@ Exit status
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description
@@ -254,12 +286,18 @@ See also
    stssearch Searches a DNA database for matches with a set of STS
    primers
    
+   stssearch does something similar, but doesn't allow you to find
+   mismatches and will report any match in any orientation and doesn't
+   require you to have both primers matching.
+   
 Author(s)
 
    This application was written by Val Curwen (vcurwen@hgmp.mrc.ac.uk)
    
 History
 
+   Written Aug 2000 - Val Curwen
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

@@ -46,14 +46,16 @@ Command line arguments
   [-sequencea]         sequence   Sequence USA
   [-sequenceb]         sequence   Sequence USA
    -wordsize           integer    Word size
-   -graph              graph      Graph type
+*  -graph              graph      Graph type
 *  -outfile            outfile    Output file name
 
    Optional qualifiers:
-   -text               bool       Display as text
    -[no]boxit          bool       Draw a box around dotplot
 
-   Advanced qualifiers: (none)
+   Advanced qualifiers:
+   -data               bool       Output the match data to a file instead of
+                                  plotting it
+
 
    Mandatory qualifiers Allowed values Default
    [-sequencea]
@@ -67,10 +69,9 @@ Command line arguments
    EMBOSS_GRAPHICS value, or x11
    -outfile Output file name Output file <sequence>.dottup
    Optional qualifiers Allowed values Default
-   -text Display as text Yes/No No
    -[no]boxit Draw a box around dotplot Yes/No Yes
    Advanced qualifiers Allowed values Default
-   (none)
+   -data Output the match data to a file instead of plotting it Yes/No No
    
 Input file format
 

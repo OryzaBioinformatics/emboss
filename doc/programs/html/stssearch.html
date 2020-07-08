@@ -60,6 +60,17 @@ Searches a DNA database for matches with a set of STS primers
 Searches a DNA sequence database with a set of STS primers and reports
 expected matches and possible mismatches. A replacement for stssearch
 in the EGCG package.
+<P>
+
+This reads in one or more sequences to be searched.  For each pair of
+primers, this looks for exact matches between a the primers and the
+query sequence in either orientation.
+<p>
+
+Any matches found will be reported. Only one primer need match.
+<p>
+
+
 
 <H2>
     Usage
@@ -161,15 +172,26 @@ IT IS DONE FOR YOU.
 
 Here is the primer input file for the example run:
 
+<hr>
 <pre>
-
 PrimA ACCAGACACCCATCAACAG    TATTTATGCCAGCCAGCCAG
 PrimB CGAAAGAATAAGAGCAGGCAAG GTAAGAGAAATAGACAGGCGG
 PrimC CGTCAGTATCCCCGTTTACAG  TATCGCCAAAATCACCGCC
 PrimD AATACGCAAACCGCCTCTCC   TTATCCGCTCACAATTCCACAC
 PrimE AATACGCAAACCGCCTCTCC   CACAACCCGCTCACAATTCCA
-
 </pre>
+<hr>
+<p>
+
+It consists of three columns separated by tabs or spaces.
+<P>
+
+The first column is the name of the primer pair.
+<br>
+The second column is the sequence of the first primer.
+<br>
+The third column is the sequence of the second primer.
+
 
 <H2>
     Output file format
@@ -178,8 +200,8 @@ PrimE AATACGCAAACCGCCTCTCC   CACAACCCGCTCACAATTCCA
 
 Here is the output from the example run:
 
+<hr>
 <pre>
-
 ECLAC: PrimA PrimerA matched at 532
 ECLAC: (rev) PrimA PrimerB matched at 689
 ECLAC: PrimB PrimerA matched at 5743
@@ -198,42 +220,66 @@ ECLACI: PrimE PrimerA matched at 1026
 ECLACY: PrimB PrimerA matched at 1439
 ECLACZ: PrimC PrimerA matched at 1668
 ECLACZ: (rev) PrimC PrimerB matched at 1783
-
 </pre>
+<hr>
+<p>
+
+This consists of one line per match. This consists of:
+<p>
+<ul>
+<li>The name of the sequence that the match is found in, followed by a ':'.
+<li>If the match is in the reverse sense, it has a '(rev)'.
+<li>The name of the primer pair.
+<li>'PrimerA' or 'PrimerB'.
+<li>'matched at' the start of the match position.
+</ul>
 
 <H2>
     Data files
 </H2>
 
+None.
 
 <H2>
     Notes
 </H2>
 
 
+None.
+
 <H2>
     References
 </H2>
+
+None.
 
 
 <H2>
     Warnings
 </H2>
 
+None.
+
 
 <H2>
     Diagnostic Error Messages
 </H2>
+
+None.
 
 
 <H2>
     Exit status
 </H2>
 
+None.
+
 
 <H2>
     Known bugs
 </H2>
+
+None.
 
 
 <!--
@@ -257,7 +303,10 @@ ECLACZ: (rev) PrimC PrimerB matched at 1783
         Add any comments about other associated programs (to prepare
         data files?) that seealso doesn't find.
    -->
+<p>
 
+If you want something that only reports matches of both primer pairs and
+can find mismatches, use <A href="primersearch">primersearch</a>. 
 
 <H2>
     Author(s)
@@ -272,6 +321,8 @@ Cambridge, CB10 1SA, UK.
 <H2>
     History
 </H2>
+
+Finished.
 
 
 <H2>

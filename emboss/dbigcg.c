@@ -26,6 +26,7 @@
 #include "emboss.h"
 #include <dirent.h>
 #include <sys/wait.h>
+#include <string.h>
 
 #define BIGOVERLAP 10000;
 
@@ -294,6 +295,10 @@ int main (int argc, char * argv[]) {
     ajFileClose (&elistfile);
     ajFileClose (&alistfile);
   }
+
+
+  
+
   if (systemsort) {
     sortfile ("list", "idsrt", nfiles);
     sortfile ("acid", "acsrt", nfiles);
@@ -721,7 +726,9 @@ static Pentry nextentry (AjPFile libr, AjPFile libs, int ifile) {
   int ir;
   int is;
   static AjPStr id = NULL;
+  static AjPStr tmpline2 = NULL;
   char* ac;
+  char *p;
   int i;
   static AjPList acl = NULL;
 
@@ -738,7 +745,14 @@ static Pentry nextentry (AjPFile libr, AjPFile libs, int ifile) {
   /* id to ret->entry */
 
   if (systemsort) {
-    ajFmtPrintF (elistfile, "%S %d %d %d\n", id, ir, is, ifile+1);
+      ajStrAssC(&tmpline2,ajStrStr(id));
+      if(ajStrSuffixC(id,"_0") || ajStrSuffixC(id,"_00"))
+      {
+	  p = strrchr(ajStrStr(tmpline2),'_');
+	  *p = '\0';
+      }
+    ajFmtPrintF (elistfile, "%s %d %d %d\n", ajStrStr(tmpline2),
+		 ir, is, ifile+1);
   }
   else {
     ret->entry = newcharS(id);
@@ -928,6 +942,10 @@ static int gcggetent(AjPFile libr, AjPFile libs,
     return 0;
 
   ajRegSubI(sexp, 1, libstr);
+
+  
+
+
   ajRegSubI(sexp, 2, &gcgdate);
   ajRegSubI(sexp, 3, &gcgtype);
   ajRegSubI(sexp, 5, &tmpstr);
@@ -957,9 +975,12 @@ static int gcggetent(AjPFile libr, AjPFile libs,
   /*  iac = 0;*/
   ajFileGets(libr, &rline);
   while (ajStrChar(rline,0)!='>') {
-
+      ajStrAssS(&tmpstr,*libstr);
+      
     parser[iparser].Parser(rline, libstr, acl); /* writes alistfile data */
 
+      ajStrAssS(libstr,tmpstr);
+      
     rpos = ajFileTell(libr);
     if (!ajFileGets(libr, &rline)) {
       /*      ddone = 1;*/
@@ -991,11 +1012,9 @@ static int gcggetent(AjPFile libr, AjPFile libs,
   */
 
   i = ajStrLen(*libstr);
-  if (!ajStrSuffixC(*libstr, "_0")) return gcglen;
-
-  ajDebug ("continued entry '%s'\n", libstr);
-  libstr[i-2] = '\0';		/* up to the underscore */
-
+  if (!ajStrSuffixC(*libstr, "_0") && !ajStrSuffixC(*libstr,"_00"))
+      return gcglen;
+  
   gcglen += gcgappent (libr, libs, libstr);
 
   return gcglen;
@@ -1116,7 +1135,7 @@ static int pirgetent(AjPFile libr, AjPFile libs,
 
 /* @funcstatic gcgappent ******************************************************
 **
-** Appends the next part of a split GCG entry
+** Go to end of a split GCG entry
 **
 ** @param [r] libr [AjPFile] Reference file
 ** @param [r] libs [AjPFile] Sequence file
@@ -1140,75 +1159,67 @@ static int gcgappent (AjPFile libr, AjPFile libs, AjPStr* libstr) {
   long thislen;
   static AjPStr tmpstr = NULL;
 
-  ajFmtPrintS(&testlibstr, "%S_", *libstr);
+  AjBool isend;
+  char *p;
+  char *q;
+  
+  if(!testlibstr)
+      testlibstr = ajStrNew();
+
+  ajStrAssS(&tmpstr,*libstr);
+  
+
+  p = ajStrStr(tmpstr);
+  q = strrchr(p,'_');
+  *q='\0';
+  
+
+  ajFmtPrintS(&testlibstr, "%s_",p);
   ilen = ajStrLen(testlibstr);
 
-  for(;;) {
-    while (ajStrChar(sline,0)!='>') {
-      spos = ajFileTell(libs);
-      if (!ajFileGets(libs, &sline)) {
-	return applen;
+  isend = ajFalse;
+  
+  while(!isend)
+  {
+      ajFileGets(libs,&sline);
+/*      while (ajStrChar(sline,0)!='>')*/
+      while (strncmp(ajStrStr(sline),">>>>",4))
+      {
+	  if (!ajFileGets(libs, &sline))
+	      return 1;
       }
-    }
-    ajRegExec (sexp, sline);
-    ajRegSubI(sexp, 1, libstr);
-    ajRegSubI(sexp, 3, &gcgtype);
-    ajRegSubI(sexp, 5, &tmpstr);
-    ajStrToLong (tmpstr, &thislen);
+      
+      ajRegExec (sexp, sline);
+      ajRegSubI(sexp, 1, &seqlibstr);
 
-    while (ajStrChar(rline,0)!='>') {
-      rpos = ajFileTell(libr);
-      if (!ajFileGets(libr, &rline)) {
-	ajErr ("ref ended before seq\n");
-	break;
-      }
-    }
-    ajRegExec (rexp, rline);
-    ajRegSubI (rexp, 1, &reflibstr);
-
-    /* test whether this is still the same entry */
-
-    if (ajStrNCmpO(reflibstr, testlibstr, ilen) ||
-	ajStrNCmpO(seqlibstr, testlibstr, ilen)) return applen;
-
-    /* hungry for more - skip through this one and add the length */
-
-    applen += thislen;
-    applen -= BIGOVERLAP;
-
-    /* ajDebug ("append '%s' %s' %d now %d\n",
-       seqlibstr, reflibstr, thislen, applen);*/
-
-    /* seek to the end of the ref */
-
-    ajFileGets(libr, &rline);
-    while (ajStrChar(rline,0)!='>') {
       ajFileGets(libr, &rline);
-      rpos = ajFileTell(libr);
-      if (!ajFileGets(libr, &rline)) {
-	break;
+      
+      while (ajStrChar(rline,0)!='>')
+      {
+	  if (!ajFileGets(libr, &rline))
+	  {
+	      ajErr ("ref ended before seq\n");
+	      break;
+	  }
       }
-    }
+      ajRegExec (rexp, rline);
+      ajRegSubI (rexp, 1, &reflibstr);
 
-    /* seek to the end of the sequence; +1 to jump over newline */
-    if (ajStrChar(gcgtype,0)=='2') {
-      rblock = (thislen+3)/4;
-      ajFileSeek(libs,rblock+1,SEEK_CUR);
-    }
-    else ajFileSeek(libs,thislen+1,SEEK_CUR);
-
-    /*
-    if (ajStrMatch(reflibstr, seqlibstr))
-      ajDebug ( "APPEND refid: '%s' seqid: '%s'", reflibstr, seqlibstr);
-    */
-
-    spos = ajFileTell(libs);
-    ajFileGets(libs, &sline);
-    
+      if (ajStrNCmpO(reflibstr, testlibstr, ilen) ||
+	  ajStrNCmpO(seqlibstr, testlibstr, ilen))
+	  isend = ajTrue;
   }
+  
 
-/*  return applen;*/ /* Unreachable */
+
+  ajStrAssC(libstr,p);
+  
+  
+  return 1;
 }
+  
+
+
 
 /* @funcstatic parseEmbl ********************************************
 **
@@ -1228,9 +1239,11 @@ static AjBool parseEmbl (AjPStr line, AjPStr* id, AjPList acl) {
   static AjPRegexp acexp = NULL;
   static AjPRegexp ac2exp = NULL;
   static AjPStr tmpline = NULL;
+  static AjPStr tmpline2 = NULL;
   static AjPStr tmpac = NULL;
   char* ac;
-
+  char *p;
+  
   if (!idexp)
     idexp = ajRegCompC ("^ID   ([^ \t]+)");
 
@@ -1249,8 +1262,16 @@ static AjBool parseEmbl (AjPStr line, AjPStr* id, AjPList acl) {
     ajRegPost (acexp, &tmpline);
     while (ajRegExec(ac2exp, tmpline)) {
       ajRegSubI (ac2exp, 1, &tmpac);
+
+      ajStrAssC(&tmpline2,ajStrStr(*id));
+      if(ajStrSuffixC(*id,"_0") || ajStrSuffixC(*id,"_00"))
+      {
+	  p = strrchr(ajStrStr(tmpline2),'_');
+	  *p = '\0';
+      }
+      
       if (systemsort) {
-	ajFmtPrintF (alistfile, "%S %S\n", *id, tmpac);
+	ajFmtPrintF (alistfile, "%s %S\n", ajStrStr(tmpline2), tmpac);
       }
       else {
 	ac = newcharS (tmpac);

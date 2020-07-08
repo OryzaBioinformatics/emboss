@@ -377,7 +377,7 @@ static void datapoints(AjPList *l,AjPFile outf)
 
     while(ajListPop(*l,(void **)&p))
     {
-	ajFmtPrintF(outf,"Line x1 %f y1 %f x2 %f y2 %f\n",
+	ajFmtPrintF(outf,"Line x1 %f y1 %f x2 %f y2 %f colour 0\n",
 		    p->x1,p->y1,p->x2,p->y2);
 	AJFREE(p);
     }

@@ -28,8 +28,11 @@ appl: dotmatcher [
         protein: $(sequencea.protein)
   ]
 
-  bool: data [ req: N
+  bool: data [ 
+	req: N
         def: N
+        info: "Display as data"
+        help: "Output the match data to a file instead of plotting it"
   ]
 
   graph: graph [ req: @(!$(data))
