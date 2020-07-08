@@ -65,3 +65,8 @@ autom4te.cache
 *.m4
 configure
 *.dmp
+
+**/CVS/
+**/CVS/Entries
+**/CVS/Repository
+**/CVS/Root
