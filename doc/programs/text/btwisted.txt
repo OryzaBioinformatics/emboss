@@ -1,0 +1,84 @@
+
+                               EMBOSS: btwisted
+     _________________________________________________________________
+   
+                                Program btwisted
+                                       
+Function
+
+   Calculates the overall twist and stacking energy of a DNA sequence 
+   assuming it is B-DNA.
+   
+Description
+
+   btwisted takes a region of a pure DNA sequence and calculates by simple 
+   arithmetic the probable overall twist of the sequence and the stacking 
+   energy.
+
+Usage
+
+   Here is a sample session with btwisted.
+
+% btwisted embl:ab000095 -sbegin 100 -send 120 
+calculates the twisting in a B-DNA sequence 
+Output file [ab000095.btwisted]:
+
+Output file format
+
+# Output from BTWISTED
+# Twisting calculated from 100 to 120 of AB000095
+Total twist (degrees): 646.6
+Total turns : 1.80
+Average bases per turn: 11.69
+Total stacking energy : -172.77
+Average stacking energy per dinucleotide: -8.64 
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-outfile]           outfile    Output file name
+ 
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -angledata          infile     file containing base pair twist angles
+   -energydata         infile     file containing base pair stacking energies
+
+Input file format
+
+  The data files for btwisted have the following format:
+
+# at the beginning of a line is a comment and is ignored
+dinucleotide	float
+
+  No check is made that all dinucleotides have been read for the energy and 
+  twist. Attempting to run btwisted with an incomplete data file will result
+  a fatal error if the sequence contains a dinucleotide not in the data files. 
+         
+Exit status
+
+  Returns 0 on success.
+
+Known bugs
+
+See also
+
+  banana           Bending and curvature plot in B-DNA
+  complex          Find the linguistic complexity in nucleotide sequences
+  dan              Calculates DNA RNA/DNA melting temperature
+      
+
+Author(s)
+
+   This application was written by David Martin (dmartin@hgmp.mrc.ac.uk) and
+   Alan Bleasby (ableasby@hgmp.mrc.ac.uk) during the first Scandinavian 
+   EMBOSS Workshop.
+   
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
