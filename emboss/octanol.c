@@ -136,9 +136,9 @@ int main (int argc, char * argv[]) {
   if(octanol){
     ajGraphxyAddGraph(mult,graphdata2);
     ajGraphxyDataSetYtitleC(graphdata2,"octanol");
-    ajGraphDataxySetTypeC(graphdata,"Multi 2D Plot");
-    ajGraphDataxySetTypeC(graphdata2,"Multi 2D Plot");
-    ajGraphDataxySetTypeC(graphdata3,"Multi 2D Plot");
+    ajGraphDataxySetTypeC(graphdata,"Overlay 2D Plot");
+    ajGraphDataxySetTypeC(graphdata2,"Overlay 2D Plot");
+    ajGraphDataxySetTypeC(graphdata3,"Overlay 2D Plot");
   }
 
 

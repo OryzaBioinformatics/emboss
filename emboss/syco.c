@@ -169,7 +169,7 @@ int main(int argc, char **argv)
 	if(plot)
 	{
 	    this = ajGraphxyDataNewI(count);
-	    ajGraphDataxySetTypeC(this,"2D plot");
+	    ajGraphDataxySetTypeC(this,"Multi 2D plot");
 
 	    ajGraphxySetOverLap(graph,ajFalse);
 	    for(i=0;i<count;++i)

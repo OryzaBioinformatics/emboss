@@ -76,22 +76,25 @@ int main(int argc, char **argv)
     {
 	norfs(ajStrStr(str),ajStrStr(rev),i,x,y,&cnt,beg);
 	data = ajGraphxyDataNewI(2);
-	data->x[0]=(float)beg;
+	data->numofpoints = 0;
+	
+/*	data->x[0]=(float)beg;
 	data->y[0]=0.0;
 	data->x[1]=(float)end;
-	data->y[1]=0.0;
+	data->y[1]=0.0; */
 	
 	ajGraphxyAddGraph(graph,data);
 	ajGraphxySetOverLap(graph,ajFalse);
 	ajGraphxySetYTick(graph, ajFalse);
-	
+	ajGraphDataxySetMaxima(data,(float)beg,(float)end,0.0,1.0);
+	ajGraphDataxySetTypeC(data,"Multi 2D Plot");
 	ajGraphxyDataSetYtitleC(data,"Orf");
 	ajGraphxyDataSetXtitleC(data,"Sequence");
 	ajGraphxyDataSetTitleC(data,ftit[i]);
 
 	for(j=0;j<ajIntGet(cnt,i);++j)
-	    ajGraphDataObjAddRect(data,x[i][j],0.0,
-					      y[i][j],1.0,4,1);
+	    ajGraphDataObjAddRect(data,y[i][j],0.0,
+					      x[i][j],1.0,4,1);
     }
     
 

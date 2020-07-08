@@ -165,7 +165,7 @@ int main (int argc, char * argv[]) {
 	    i,ajSeqsetSize(seqset),ajSeqsetLen(seqset));
     
     graphdata = ajGraphxyDataNewI(ajSeqsetLen(seqset));
-    ajGraphDataxySetTypeC(graphdata,"Multi 2D Plot");
+    ajGraphDataxySetTypeC(graphdata,"Overlay 2D Plot");
     ymin = 64000.;
     ymax = -64000.;
     

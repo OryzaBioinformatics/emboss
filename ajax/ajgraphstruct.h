@@ -26,6 +26,7 @@ typedef struct AjSGraphData {
   AjBool ycalc;			/* as with x. So you do not delete data */
 				/*   if it was passed as a ptr. */
   int numofpoints;
+  int numofobjects;
   float minX,maxX;
   float minY,maxY;
   float tminX,tmaxX;
@@ -49,6 +50,7 @@ typedef struct AjSGraphData {
 
 typedef struct AjSGraph {
   int numofgraphs;
+  int numofobjects;
   int numofgraphsmax;
   int flags;           /* over rides the EmbGraphData flags */
   float minX,maxX;     /* min max over all graphs */ 

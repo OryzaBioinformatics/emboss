@@ -399,7 +399,7 @@ void plotit(char *seq, int begin, int len, int shift, float *obsexp,
 			       min,max);
 	ajGraphDataxySetMaxima(tmGraph2,(float)begin,(float)begin+len-1,
 			       0.0,max);
-	ajGraphDataxySetTypeC(tmGraph2,"2D Plot");
+	ajGraphDataxySetTypeC(tmGraph2,"Multi 2D Plot");
 
 	ajGraphxySetXStart(graphs,(float)begin);
 	ajGraphxySetXEnd(graphs,(float)(begin+len-1));
@@ -432,7 +432,7 @@ void plotit(char *seq, int begin, int len, int shift, float *obsexp,
 			       min,max);
 	ajGraphDataxySetMaxima(tmGraph3,(float)begin,(float)begin+len-1,
 			      0.0,max);
-	ajGraphDataxySetTypeC(tmGraph3,"2D Plot");
+	ajGraphDataxySetTypeC(tmGraph3,"Multi 2D Plot");
     
 	ajGraphxySetXStart(graphs,(float)begin);
 	ajGraphxySetXEnd(graphs,(float)(begin+len-1));
@@ -463,7 +463,7 @@ void plotit(char *seq, int begin, int len, int shift, float *obsexp,
 
 	ajGraphDataxySetMaxMin(tmGraph,(float)begin,(float)begin+len-1,
 			       0.,1.);
-	ajGraphDataxySetTypeC(tmGraph,"Histogram");
+	ajGraphDataxySetTypeC(tmGraph,"Multi 2D Plot");
 
     
 	ajGraphxySetXStart(graphs,(float)begin);

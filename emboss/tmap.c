@@ -205,7 +205,7 @@ void plot2(AjPGraph mult){
       }
     }
     graph = ajGraphxyDataNew();
-    ajGraphDataxySetTypeC(graph,"Multi 2D Plot");
+    ajGraphDataxySetTypeC(graph,"Overlay 2D Plot");
     
     ajGraphxyAddDataCalcPtr(graph,poss,0.0,1.0,&profile[j][0]);
 
@@ -232,13 +232,16 @@ void plot2(AjPGraph mult){
 
   ajGraphxySetMaxMin(mult,0.0,(float)poss,min,max);
   ajGraphxyTitleC(mult,"Tmap");
-  ajGraphxyDisplay(mult,AJFALSE);
+
   max=max *0.95;
   
   for (i=1; i<=tm_number; i++) {
-    ajGraphRectFill((float)tm_segment[i][0],max,(float)tm_segment[i][1],
-		    max+((max-min)*0.01));
+/*    ajGraphRectFill((float)tm_segment[i][0],max,(float)tm_segment[i][1],
+		    max+((max-min)*0.01));*/
+    ajGraphObjAddRect(mult,(float)tm_segment[i][0],max,(float)tm_segment[i][1],
+		      max+((max-min)*0.01),BLACK,1);
   }  
+  ajGraphxyDisplay(mult,AJFALSE);
   ajGraphCloseWin();
   ajExit();
 }

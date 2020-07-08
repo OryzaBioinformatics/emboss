@@ -2042,14 +2042,16 @@ static void GraphxyDisplayToFile (AjPGraph graphs, AjBool closeit, char *ext) {
 ** @@
 ******************************************************************************/
 static void GraphxyDisplayToData (AjPGraph graphs, AjBool closeit, char *ext) {
-  AjPFile outf;
-  AjPGraphData g;
+  AjPFile outf=NULL;
+  AjPGraphData g=NULL;
+  AjPGraphObj ptr=NULL;
   AjPStr temp;
   int i,j;
   float minxa=64000.;
   float minya=64000.;
   float maxxa=-64000.;
   float maxya=-64000.;
+  int type=0;
   
   ajDebug ("ajGraphxyDisplayToData '%S'\n", graphs->outputfile);
 
@@ -2112,6 +2114,72 @@ static void GraphxyDisplayToData (AjPGraph graphs, AjBool closeit, char *ext) {
     /* Dump out the data points */
     for(j=0;j<g->numofpoints;j++)
       (void) ajFmtPrintF(outf,"%f\t%f\n",g->x[j],g->y[j]);
+
+
+    /* Now for the Data graphobjs */
+    ajFmtPrintF(outf,"##DataObjects\n##Number %d\n",g->numofobjects);
+    
+    if(g->numofobjects)
+    {
+	ptr = g->Obj;
+	for(j=0;j<g->numofobjects;++j)
+	{
+	    type = ptr->type;
+	    if(type==LINE || type==RECTANGLE || type==RECTANGLEFILL)
+	    {
+		if(type==LINE)
+		    ajFmtPrintF(outf,"Line ");
+		else if(type==RECTANGLE)
+		    ajFmtPrintF(outf,"Rectangle ");
+		else
+		    ajFmtPrintF(outf,"Filled Rectangle ");
+		ajFmtPrintF(outf,"x1 %f y1 %f x2 %f y2 %f colour %d\n",
+			    ptr->x1,ptr->y1,ptr->x2,ptr->y2,ptr->colour);
+	    }
+	    else if(type==TEXT)
+	    {
+		ajFmtPrintF(outf,"Text ");
+		ajFmtPrintF(outf,"x1 %f y1 %f x2 %f y2 %f colour %d text %S\n",
+			    ptr->x1,ptr->y1,ptr->x2,ptr->y2,ptr->colour,
+			    ptr->text);
+	    }
+	    ptr = ptr->next;
+	}
+    }
+    
+
+    /* Now for the Graph graphobjs */
+    ajFmtPrintF(outf,"##GraphObjects\n##Number %d\n",graphs->numofobjects);
+    
+    if(graphs->numofobjects)
+    {
+	ptr = graphs->Obj;
+	for(j=0;j<graphs->numofobjects;++j)
+	{
+	    type = ptr->type;
+	    if(type==LINE || type==RECTANGLE || type==RECTANGLEFILL)
+	    {
+		if(type==LINE)
+		    ajFmtPrintF(outf,"Line ");
+		else if(type==RECTANGLE)
+		    ajFmtPrintF(outf,"Rectangle ");
+		else
+		    ajFmtPrintF(outf,"Filled Rectangle ");
+		ajFmtPrintF(outf,"x1 %f y1 %f x2 %f y2 %f colour %d\n",
+			    ptr->x1,ptr->y1,ptr->x2,ptr->y2,ptr->colour);
+	    }
+	    else if(type==TEXT)
+	    {
+		ajFmtPrintF(outf,"Text ");
+		ajFmtPrintF(outf,"x1 %f y1 %f x2 %f y2 %f colour %d text %S\n",
+			    ptr->x1,ptr->y1,ptr->x2,ptr->y2,ptr->colour,
+			    ptr->text);
+	    }
+	    ptr = ptr->next;
+	}
+    }
+    
+
     ajFileClose(&outf);
     ajStrDel(&temp);
     }      
@@ -3511,6 +3579,10 @@ void ajGraphObjAddRect(AjPGraph graphs, float x1, float y1,
     AJNEW(Obj->next);
     Obj = Obj->next;
   }
+
+  ++graphs->numofobjects;
+
+
   if(fill)
     Obj->type = RECTANGLEFILL;
   else
@@ -3553,6 +3625,10 @@ void ajGraphObjAddText(AjPGraph graphs, float x1, float y1,
     AJNEW(Obj->next);
     Obj = Obj->next;
   }
+
+  ++graphs->numofobjects;
+
+
   Obj->type = TEXT;
   Obj->text = 0;
   (void) ajStrSetC(&Obj->text,text);
@@ -3594,6 +3670,9 @@ void ajGraphObjAddLine(AjPGraph graphs, float x1, float y1,
     AJNEW(Obj->next);
     Obj = Obj->next;
   }
+
+  ++graphs->numofobjects;
+  
   Obj->type = LINE;
   Obj->text = 0;
   Obj->x1 = x1;
@@ -3757,6 +3836,10 @@ void ajGraphDataObjAddRect (AjPGraphData graphs,
     AJNEW(Obj->next);
     Obj = Obj->next;
   }
+
+  ++graphs->numofobjects;
+
+
   if(fill)
     Obj->type = RECTANGLEFILL;
   else
@@ -3799,6 +3882,10 @@ void ajGraphDataObjAddText(AjPGraphData graphs, float x1, float y1,
     AJNEW(Obj->next);
     Obj = Obj->next;
   }
+
+  ++graphs->numofobjects;
+
+
   Obj->type = TEXT;
   Obj->text = 0;
   (void) ajStrSetC(&Obj->text,text);
@@ -3840,6 +3927,9 @@ void ajGraphDataObjAddLine(AjPGraphData graphs, float x1, float y1,
     AJNEW(Obj->next);
     Obj = Obj->next;
   }
+
+  ++graphs->numofobjects;
+
   Obj->type = LINE;
   Obj->text = 0;
   Obj->x1 = x1;
