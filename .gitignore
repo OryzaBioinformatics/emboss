@@ -62,6 +62,4 @@ build
 bundlewin
 autom4te.cache
 
-*.m4
-configure
 *.dmp
