@@ -9,7 +9,18 @@ extern "C"
 #include <stdarg.h>
 #include <stdio.h>
 #include "ajexcept.h"
-typedef void (*Fmt_T)(int code, va_list *app,
+
+#if defined(__PPC__) && defined(_CALL_SYSV)
+#define VALIST va_list
+#define VA_P(x) (x)
+#define VA_V(x) (x)
+#else
+#define VALIST va_list*
+#define VA_P(x) (&x)
+#define VA_V(x) (*x)
+#endif
+
+typedef void (*Fmt_T)(int code, VALIST ap,
 	int put(int c, void *cl), void *cl,
 	unsigned int flags[256], int width, int precision);
 

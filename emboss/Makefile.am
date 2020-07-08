@@ -28,7 +28,7 @@ octanol oddcomp \
 palindrome pasteseq patmatdb patmatmotifs \
 pepcoil pepinfo pepnet pepstats \
 pepwheel pepwindow pepwindowall \
-plotorf polydot preg \
+plotcon plotorf polydot preg \
 prettyplot prettyseq prima primersearch printsextract \
 profit prophecy prophet \
 prosextract pscan \
@@ -123,6 +123,7 @@ pepstats_SOURCES = pepstats.c
 pepwheel_SOURCES = pepwheel.c
 pepwindow_SOURCES = pepwindow.c
 pepwindowall_SOURCES = pepwindowall.c
+plotcon_SOURCES = plotcon.c
 plotorf_SOURCES = plotorf.c
 polydot_SOURCES = polydot.c
 preg_SOURCES = preg.c

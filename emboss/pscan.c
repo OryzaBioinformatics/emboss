@@ -76,7 +76,7 @@ int main( int argc, char **argv, char **env)
     
     while(ajSeqallNext(seqall, &seq))
     {
-	ajUser("Scanning %s...",ajSeqName(seq));
+/*	ajUser("Scanning %s...",ajSeqName(seq)); */
 	begin=ajSeqallBegin(seqall);
 	end=ajSeqallEnd(seqall);
 	
@@ -102,7 +102,7 @@ int main( int argc, char **argv, char **env)
 
 	ajListPop(l,(void **)&mm);
 
-	ajUser("");
+/*	ajUser(""); */
 	print_hits(&outf, &l, nmotifs, &name, begin, end);
 	ajListDel(&l);
 

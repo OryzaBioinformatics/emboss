@@ -47,24 +47,24 @@ DB tpir [ type: P dir: $emboss_tempdata/pir
 #############################################
 
 #######################################################################
-# GENBANK from CAOS/CAMM using the Netherlands EMBnet node SRSWWW server
+# GENBANK from the Canadian EMBnet node SRSWWW server
 #######################################################################
 
-# DB genbank [ type: N method: url format: genbank
-#   url: "http://www.caos.kun.nl/srs5bin/cgi-bin/wgetz?-e+[genbank-id:%s]"
-#   comment: "CAOS/CAMM Genbank IDs" ]
+#DB genbank [ type: N method: url format: genbank
+#   url: "http://www.ca.embnet.org/srs6.1bin/cgi-bin/wgetz?-e+[genbank-id:%s]"
+#   comment: "Genbank IDs" ]
 
-# DB gb [ type: N method: url format: genbank
-#   url: "http://www.caos.kun.nl/srs5bin/cgi-bin/wgetz?-e+[genbank-id:%s]"
-#   comment: "CAOS/CAMM Genbank IDs" ]
+#DB gb [ type: N method: url format: genbank
+#   url: "http://www.ca.embnet.org/srs6.1bin/cgi-bin/wgetz?-e+[genbank-id:%s]"
+#   comment: "Genbank IDs" ]
 
-# DB genbanka [ type: N method: url format: genbank
-#   url: "http://www.caos.kun.nl/srs5bin/cgi-bin/wgetz?-e+[genbank-acc:%s]"
-#   comment: "CAOS/CAMM Genbank ACs" ]
+#DB genbanka [ type: N method: url format: genbank
+#   url: "http://www.ca.embnet.org/srs6.1bin/cgi-bin/wgetz?-e+[genbank-acc:%s]"
+#   comment: "Genbank ACs" ]
 
-# DB gba [ type: N method: url format: genbank
-#   url: "http://www.caos.kun.nl/srs5bin/cgi-bin/wgetz?-e+[genbank-acc:%s]"
-#   comment: "CAOS/CAMM Genbank ACs" ]
+#DB gba [ type: N method: url format: genbank
+#   url: "http://www.ca.embnet.org/srs6.1bin/cgi-bin/wgetz?-e+[genbank-acc:%s]"
+#   comment: "Genbank ACs" ]
 
 
 #######################################################################

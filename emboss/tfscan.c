@@ -94,7 +94,7 @@ int main( int argc, char **argv, char **env)
     
     while(ajSeqallNext(seqall, &seq))
     {
-	ajUser ("\nScanning %s...",ajSeqName(seq));
+/*	ajUser ("\nScanning %s...",ajSeqName(seq));*/
 	begin=ajSeqallBegin(seqall);
 	end=ajSeqallEnd(seqall);
 	ajStrAssC(&name,ajSeqName(seq));
@@ -130,7 +130,7 @@ int main( int argc, char **argv, char **env)
 	    sum += v;
 	}
 
-	ajUser("");
+/*	ajUser(""); */
 	if(sum)
 	    print_hits(name,&l,sum,outf,begin,end,atable,seq);
 	ajFileSeek(inf,0L,0);
