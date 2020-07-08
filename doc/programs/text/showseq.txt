@@ -64,6 +64,11 @@ Description
    not only the cut sites which many other restriction cut-site programs
    will show, but also shows the recognition site.
    
+   If the sequence is in EMBL, Genbank or SwissProt format, the feature
+   table of the sequence can be dispalyed with the sequence. GFF file
+   features can also be displayed if they are included on the command
+   line with the -ufo=file qualifier.
+   
 Usage
 
    Here is a sample session with showseq. By default the output appears
@@ -76,12 +81,14 @@ Output file [stdout]:
 Things to display
          0 : Enter your own list of things to display
          1 : Sequence only
-         2 : Default sequence
-         3 : One frame translation
-         4 : Three frame translations
-         5 : Six frame translations
-         6 : Restriction enzyme map
-         7 : Baroque
+         2 : Default sequence with features
+         3 : Pretty sequence
+         4 : One frame translation
+         5 : Three frame translations
+         6 : Six frame translations
+         7 : Restriction enzyme map
+         8 : Baroque
+
 Display format [2]:
 ECLAC
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
@@ -89,10 +96,18 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
                    10        20        30        40        50        60
           ----:----|----:----|----:----|----:----|----:----|----:----|
           gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
+                         |
+          variation note="c in wild-type; t in 'up' promoter mutant I-Q [11]"
+                                                            |=========
+          mRNA note="lacI (repressor) mRNA; preferred in vivo 3' end [12],[29]"
 
                    70        80        90        100       110       120
           ----:----|----:----|----:----|----:----|----:----|----:----|
           caattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgcagagtatgccggt
+          ============================================================
+          mRNA note="lacI (repressor) mRNA; preferred in vivo 3' end [12],[29]"
+                            |=========================================
+          CDS codon_start="1" db_xref="SWISS-PROT:P03023" note="lac repressor p
 
    Note that although we asked for the sequence display to end at
    position '100', it has displayed the sequence up to the end of the
@@ -110,12 +125,13 @@ Output file [stdout]:
 Things to display
          0 : Enter your own list of things to display
          1 : Sequence only
-         2 : Default sequence
-         3 : One frame translation
-         4 : Three frame translations
-         5 : Six frame translations
-         6 : Restriction enzyme map
-         7 : Baroque
+         2 : Default sequence with features
+         3 : Pretty sequence
+         4 : One frame translation
+         5 : Three frame translations
+         6 : Six frame translations
+         7 : Restriction enzyme map
+         8 : Baroque
 Display format [2]: 0
 Specify your own things to display
          S : Sequence
@@ -157,6 +173,7 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
    
 Sequence only:                  S
 Default sequence:               B N T S F
+Pretty sequence:                B N T S
 One frame translation:          B N T S B 1 F
 Three frame translations:       B N T S B 1 2 3 F
 Six frame translations:         B N T S B 1 2 3 T -3 -2 -1 F
@@ -248,7 +265,7 @@ heavy chain mRNA.
 
    Translate selected regions:
    
-% showseq embl:mmam stdout -format 3 -send 120 -trans 25-49,66-76
+% showseq embl:mmam stdout -format 4 -send 120 -trans 25-49,66-76
 Display a sequence with features, translation etc..
 MMAM
 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody
@@ -383,12 +400,13 @@ Command line arguments
    -format Display format
    0 (Enter your own list of things to display)
    1 (Sequence only)
-   2 (Default sequence)
-   3 (One frame translation)
-   4 (Three frame translations)
-   5 (Six frame translations)
-   6 (Restriction enzyme map)
-   7 (Baroque)
+   2 (Default sequence with features)
+   3 (Pretty sequence)
+   4 (One frame translation)
+   5 (Three frame translations)
+   6 (Six frame translations)
+   7 (Restriction enzyme map)
+   8 (Baroque)
    2
    -things Specify a list of one or more code characters in the order in
    which you wish things to be displayed one above the other down the
@@ -586,7 +604,7 @@ Output file format
    '-format 6' option or the '-format 0 -thing b,r,s,-r' style of
    options.
    
-   The option '-format 6' will produce a formatted display of cut sites
+   The option '-format 7' will produce a formatted display of cut sites
    on the sequence, with the six-frame translation below it. The cut
    sites are indicated by a slash character '\' that points to the
    poition between the nucleotides where the cuts occur. Cuts by many
@@ -637,6 +655,10 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
             V  G  D  F  P  A  F  G  K  A  T  H  C  S  L  A  R  F  L  T
            S  V  M  S  H  R  L  V  K  R  P  I  A  H  Y  R  G  S  S  L
           X  C  W  R  I  A  C  F  R  E  R  Y  P  M  I  A  G  P  L  S
+                         |
+          variation note="c in wild-type; t in 'up' promoter mutant I-Q [11]"
+                                                            |=========
+          mRNA note="lacI (repressor) mRNA; preferred in vivo 3' end [12],[29]"
 
 Data files
 
@@ -751,14 +773,12 @@ See also
 
    Program name Description
    antigenic Finds antigenic sites in proteins
-   backtranseq Back translate a protein sequence
    chaos Create a chaos game representation plot for a sequence
    cpgplot Plot CpG rich areas
    cpgreport Reports all CpG rich regions
    cusp Create a codon usage table
    diffseq Find differences (SNPs) between nearly identical sequences
    dotmatcher Displays a thresholded dotplot of two sequences
-   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
    dottup Displays a wordmatch dotplot of two sequences
    einverted Finds DNA inverted repeats
    equicktandem Finds tandem repeats
@@ -787,7 +807,7 @@ See also
    showfeat Show features of a sequence
    showorf Pretty output of DNA translations
    sigcleave Reports protein signal cleavage sites
-   silent Silent mutation RE scan
+   silent Silent mutation restriction enzyme scan
    tfscan Scans DNA sequences for transcription factors
    tmap Displays membrane spanning regions
    transeq Translate nucleic acid sequences
@@ -799,7 +819,8 @@ Author(s)
    
 History
 
-   Finished.
+   Written 1999 - GWW
+   23 Aug 2000 - features display added - GWW
    
 Target users
 

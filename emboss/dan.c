@@ -1,4 +1,3 @@
-/*  Last edited: Feb 21 12:56 2000 (pmr) */
 /* @source dan application
 **
 ** Displays and plots nucleic acid duplex melting temperatures
@@ -71,7 +70,6 @@ int main( int argc, char ** argv, char ** env)
     AjPSeq seq;
     AjPStr strand=NULL;
     int len;
-    /*    int offset;*/
     
     static float *xa;
     static float *ta;
@@ -113,7 +111,6 @@ int main( int argc, char ** argv, char ** env)
     {
 	mintemp = ajAcdGetFloat("mintemp");
 	mult = ajAcdGetGraphxy ("graph");
-	/*sdevice = ajAcdGetString("device");*/
     }
     
 
@@ -288,19 +285,17 @@ void plotit(AjPSeq *seq, float *xa, float *ta, float *cga, float *tpa,
 	    int npoints, int ibegin, int iend, AjPGraph graphs,
 	    float mintemp)
 {
-  /*    AjPGraph graphs=NULL;*/
     AjPGraphData tmGraph=NULL;
-
-
-    /*    graphs = ajGraphxyNewI(2);*/
-    /*    ajGraphSet(graphs,*device);*/
+    float max = -64000.;
+    float min = 64000.;
     
-
-/*
- *    Library feature
- *
- *    ajGraphSetFore(2);
- */
+    int i;
+    
+    for(i=0;i<npoints;++i)
+    {
+	min = (min<ta[i]) ? min : ta[i];
+	max = (max>ta[i]) ? max : ta[i];
+    }
 
     tmGraph=ajGraphxyDataNewI(npoints);
     ajGraphxySetTitleDo(graphs,ajTrue);
@@ -317,6 +312,11 @@ void plotit(AjPSeq *seq, float *xa, float *ta, float *cga, float *tpa,
     ajGraphxySetYEnd(graphs,100.0);
     ajGraphxySetXRangeII(graphs,ibegin,iend);
     ajGraphxySetYRangeII(graphs,(int)mintemp,100);
+
+    ajGraphDataxySetTypeC(tmGraph,"2D Plot");
+    ajGraphDataxySetMaxMin(tmGraph,(float)ibegin,(float)iend,min,max);
+    ajGraphDataxySetMaxima(tmGraph,(float)ibegin,(float)iend,min,max);
+    
     
     ajGraphxyAddDataPtrPtr(tmGraph,xa,ta);
     ajGraphxyAddGraph(graphs,tmGraph);

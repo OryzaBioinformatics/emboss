@@ -1,4 +1,3 @@
-/*  Last edited: Mar  1 16:02 2000 (pmr) */
 #ifndef ajgraphstruct_h
 #define ajgraphstruct_h
 
@@ -29,10 +28,13 @@ typedef struct AjSGraphData {
   int numofpoints;
   float minX,maxX;
   float minY,maxY;
+  float tminX,tmaxX;
+  float tminY,tmaxY;
   AjPStr title;
   AjPStr subtitle;
   AjPStr xaxis;
   AjPStr yaxis;
+  AjPStr gtype;			/* 2D, Tick etc */
   int colour;         
   int lineType;
   AjPGraphObj Obj;

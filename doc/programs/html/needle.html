@@ -303,6 +303,10 @@ The directories are searched in the following order:
     Notes
 </H2>
 
+<b>needle</b> is a true imple,entation of the Needleman-Wunsch algorithm 
+and so produces a full path
+matrix. It therefore cannot be used with genome sized
+sequences unless you've a lot of memory and a lot of time.
 
 <H2>
     References
@@ -377,6 +381,11 @@ sequences, use <a href="needle.html">needle. </A>
 <p>
 When you are trying to find the best region of similarity between two
 sequences, use <a href="water.html">water.</a>
+<p>
+
+<a href="stretcher.html">stretcher</a> is a more suitable program to use to
+find global alignments of very long sequences.
+
 
 <H2>
     Author(s)

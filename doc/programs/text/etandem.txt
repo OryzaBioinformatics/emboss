@@ -122,7 +122,7 @@ See also
    redata Search REBASE for enzyme name, references, suppliers etc
    restrict Finds restriction enzyme cleavage sites
    showseq Display a sequence with features, translation etc
-   silent Silent mutation RE scan
+   silent Silent mutation restriction enzyme scan
    tfscan Scans DNA sequences for transcription factors
    
 Authors

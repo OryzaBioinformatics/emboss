@@ -1,4 +1,3 @@
-/*  Last edited: Feb 21 12:33 2000 (pmr) */
 /* @source cpgplot application
 **
 ** Plots CpG island areas
@@ -377,15 +376,31 @@ void plotit(char *seq, int begin, int len, int shift, float *obsexp,
     AjPGraphData tmGraph3 = NULL;   
     float *tmp=NULL;
     int i;
+    float min=0.;
+    float max=0.;
     
     if(doobsexp)
     {
 
 	tmGraph2=ajGraphxyDataNew();
-	ajGraphxyDataSetTitleC(tmGraph2,seq);
+	ajGraphxyDataSetTitleC(tmGraph2,"Observed vs Expected");
 	ajGraphxyDataSetXtitleC(tmGraph2,"Base number");
 	ajGraphxyDataSetYtitleC(tmGraph2,"Obs/Exp");
-    
+
+	min = 64000.;
+	max = -64000.;
+	for(i=0;i<len;++i)
+	{
+	    min = (min<obsexp[i]) ? min : obsexp[i];
+	    max = (max>obsexp[i]) ? max : obsexp[i];
+	}
+
+	ajGraphDataxySetMaxMin(tmGraph2,(float)begin,(float)begin+len-1,
+			       min,max);
+	ajGraphDataxySetMaxima(tmGraph2,(float)begin,(float)begin+len-1,
+			       0.0,max);
+	ajGraphDataxySetTypeC(tmGraph2,"2D Plot");
+
 	ajGraphxySetXStart(graphs,(float)begin);
 	ajGraphxySetXEnd(graphs,(float)(begin+len-1));
     
@@ -401,9 +416,23 @@ void plotit(char *seq, int begin, int len, int shift, float *obsexp,
     if(dopc)
     {
 	tmGraph3=ajGraphxyDataNew();
-	ajGraphxyDataSetTitleC(tmGraph3,seq);
+	ajGraphxyDataSetTitleC(tmGraph3,"Percentage");
 	ajGraphxyDataSetXtitleC(tmGraph3,"Base number");
 	ajGraphxyDataSetYtitleC(tmGraph3,"Percentage");
+
+	min = 64000.;
+	max = -64000.;
+	for(i=0;i<len;++i)
+	{
+	    min = (min<xypc[i]) ? min : xypc[i];
+	    max = (max>xypc[i]) ? max : xypc[i];
+	}
+
+	ajGraphDataxySetMaxMin(tmGraph3,(float)begin,(float)begin+len-1,
+			       min,max);
+	ajGraphDataxySetMaxima(tmGraph3,(float)begin,(float)begin+len-1,
+			      0.0,max);
+	ajGraphDataxySetTypeC(tmGraph3,"2D Plot");
     
 	ajGraphxySetXStart(graphs,(float)begin);
 	ajGraphxySetXEnd(graphs,(float)(begin+len-1));
@@ -428,9 +457,14 @@ void plotit(char *seq, int begin, int len, int shift, float *obsexp,
 	}
 	
 	tmGraph=ajGraphxyDataNew();
-	ajGraphxyDataSetTitleC(tmGraph,seq);
+	ajGraphxyDataSetTitleC(tmGraph,"Putative Islands");
 	ajGraphxyDataSetXtitleC(tmGraph,"Base Number");
 	ajGraphxyDataSetYtitleC(tmGraph,"Threshold");
+
+	ajGraphDataxySetMaxMin(tmGraph,(float)begin,(float)begin+len-1,
+			       0.,1.);
+	ajGraphDataxySetTypeC(tmGraph,"Histogram");
+
     
 	ajGraphxySetXStart(graphs,(float)begin);
 	ajGraphxySetXEnd(graphs,(float)(begin+len-1));
@@ -439,8 +473,9 @@ void plotit(char *seq, int begin, int len, int shift, float *obsexp,
 	ajGraphxySetXRangeII(graphs,begin,begin+len-1);
 	ajGraphxySetYRangeII(graphs,0,2);
 	ajGraphDataxySetMaxMin(tmGraph,(float)begin,(float)(begin+len-1),
-			       0.0,1.5);
-	
+			       0.0,1.2);
+	ajGraphDataxySetMaxima(tmGraph,(float)begin,(float)(begin+len-1),
+			       0.0,1.0);
     
 	ajGraphxyAddDataCalcPtr(tmGraph,len,(float)begin,1.0,tmp);
 	ajGraphxyAddGraph(graphs,tmGraph);
@@ -449,6 +484,7 @@ void plotit(char *seq, int begin, int len, int shift, float *obsexp,
 
     if(docg || dopc || doobsexp)
     {
+	ajGraphxyTitleC(graphs,seq);
 	ajGraphxySetOverLap(graphs,ajFalse);    
 	ajGraphxyDisplay(graphs, AJTRUE);
     }

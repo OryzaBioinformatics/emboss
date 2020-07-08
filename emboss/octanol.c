@@ -1,5 +1,4 @@
-/*  Last edited: Feb 21 15:39 2000 (pmr) */
-/* @source mempred application
+/* @source octanol application
 **
 ** Displays protein hydropathy.
 ** @author: Copyright (C) Ian Longden (il@sanger.ac.uk)
@@ -85,7 +84,20 @@ int main (int argc, char * argv[]) {
   char *s1;
   float midpoint;
   AjBool interface,octanol,difference;
-
+  float xmin1=64000.;
+  float xmax1=-64000.;
+  float xmin2=64000.;
+  float xmax2=-64000.;
+  float xmin3=64000.;
+  float xmax3=-64000.;
+  float ymin1=64000.;
+  float ymax1=-64000.;
+  float ymin2=64000.;
+  float ymax2=-64000.;
+  float ymin3=64000.;
+  float ymax3=-64000.;
+  float v;
+  
   ajGraphInit("octanol", argc, argv);
 
   seq = ajAcdGetSeq ("sequencea");
@@ -107,6 +119,16 @@ int main (int argc, char * argv[]) {
   if(interface){
     ajGraphxyAddGraph(mult,graphdata);
     ajGraphxyDataSetYtitleC(graphdata,"interface");
+    ajGraphDataxySetTypeC(graphdata,"2D Plot");
+  }
+
+
+  graphdata3 = ajGraphxyDataNewI(ajSeqLen(seq)-llen);
+  ajGraphxySetColour(graphdata3,BLACK);
+  if(difference){
+    ajGraphxyAddGraph(mult,graphdata3);
+    ajGraphxyDataSetYtitleC(graphdata3,"difference");
+    ajGraphDataxySetTypeC(graphdata3,"2D Plot");
   }
 
   graphdata2 = ajGraphxyDataNewI(ajSeqLen(seq)-llen);
@@ -114,14 +136,12 @@ int main (int argc, char * argv[]) {
   if(octanol){
     ajGraphxyAddGraph(mult,graphdata2);
     ajGraphxyDataSetYtitleC(graphdata2,"octanol");
+    ajGraphDataxySetTypeC(graphdata,"Multi 2D Plot");
+    ajGraphDataxySetTypeC(graphdata2,"Multi 2D Plot");
+    ajGraphDataxySetTypeC(graphdata3,"Multi 2D Plot");
   }
 
-  graphdata3 = ajGraphxyDataNewI(ajSeqLen(seq)-llen);
-  ajGraphxySetColour(graphdata3,BLACK);
-  if(difference){
-    ajGraphxyAddGraph(mult,graphdata3);
-    ajGraphxyDataSetYtitleC(graphdata3,"difference");
-  }
+
   ajGraphObjAddLine(mult,0.0,0.0,(float)ajSeqLen(seq),0.0,BLACK);
 
   midpoint = ((float)llen+1.0)/2.0;
@@ -137,12 +157,29 @@ int main (int argc, char * argv[]) {
 
   for(i=0;i<ajSeqLen(seq)-llen;i++){
 
-    graphdata->x[i] = (float)i+midpoint;
-    graphdata->y[i] = -total;
-    graphdata2->x[i] = (float)i+midpoint;
-    graphdata2->y[i] = -total2;
-    graphdata3->x[i] = (float)i+midpoint;
-    graphdata3->y[i] = -(total2-total);
+    v = graphdata->x[i] = (float)i+midpoint;
+    xmin1 = (xmin1<v) ? xmin1 : v;
+    xmax1 = (xmax1>v) ? xmax1 : v;
+    
+    v = graphdata->y[i] = -total;
+    ymin1 = (ymin1<v) ? ymin1 : v;
+    ymax1 = (ymax1>v) ? ymax1 : v;
+
+    v = graphdata2->x[i] = (float)i+midpoint;
+    xmin2 = (xmin2<v) ? xmin2 : v;
+    xmax2 = (xmax2>v) ? xmax2 : v;
+
+    v = graphdata2->y[i] = -total2;
+    ymin2 = (ymin2<v) ? ymin2 : v;
+    ymax2 = (ymax2>v) ? ymax2 : v;
+
+    v = graphdata3->x[i] = (float)i+midpoint;
+    xmin3 = (xmin3<v) ? xmin3 : v;
+    xmax3 = (xmax3>v) ? xmax3 : v;
+
+    v = graphdata3->y[i] = -(total2-total);
+    ymin3 = (ymin3<v) ? ymin3 : v;
+    ymax3 = (ymax3>v) ? ymax3 : v;
       
     if(-total > max)
       max= -total;
@@ -165,7 +202,10 @@ int main (int argc, char * argv[]) {
   max=max*1.1;
 
   ajGraphxySetMaxMin(mult,0.0,(float)ajSeqLen(seq),min,max);
-
+  ajGraphDataxySetMaxima(graphdata,xmin1,xmax1,ymin1,ymax1);
+  ajGraphDataxySetMaxima(graphdata2,xmin2,xmax2,ymin2,ymax2);
+  ajGraphDataxySetMaxima(graphdata3,xmin3,xmax3,ymin3,ymax3);
+  
   ajGraphxyDisplay(mult,AJTRUE);
 
   ajExit();

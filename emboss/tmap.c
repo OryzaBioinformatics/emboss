@@ -1,4 +1,3 @@
-/*  Last edited: Feb 21 13:18 2000 (pmr) */
 /*
 
  +-------------------------------+
@@ -206,12 +205,23 @@ void plot2(AjPGraph mult){
       }
     }
     graph = ajGraphxyDataNew();
+    ajGraphDataxySetTypeC(graph,"Multi 2D Plot");
+    
     ajGraphxyAddDataCalcPtr(graph,poss,0.0,1.0,&profile[j][0]);
+
+    ajGraphDataxySetMaxima(graph,0.,(float)poss,min,max);
+
+    ajGraphxyDataSetXtitleC(graph,"Residue no.");
+    ajGraphxyDataSetYtitleC(graph,"");
+    ajGraphxyDataSetTitleC(graph,"");
+    ajGraphxyDataSetSubtitleC(graph,"");
+    
     ajGraphxyAddGraph(mult,graph);
   }
   ajGraphxySetLineType(graph, 2);
   ajGraphxySetGaps(mult,AJTRUE);
   ajGraphxySetOverLap(mult,AJTRUE);
+
   
   if(min > 0.0)
     min=min*0.9;
@@ -221,7 +231,7 @@ void plot2(AjPGraph mult){
   max=max*1.1;
 
   ajGraphxySetMaxMin(mult,0.0,(float)poss,min,max);
-
+  ajGraphxyTitleC(mult,"Tmap");
   ajGraphxyDisplay(mult,AJFALSE);
   max=max *0.95;
   

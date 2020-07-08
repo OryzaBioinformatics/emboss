@@ -1,4 +1,3 @@
-/*  Last edited: Feb 21 12:56 2000 (pmr) */
 /* @source syco application
 **
 ** Gribskov statistical plot of synonymous codon usage
@@ -69,6 +68,11 @@ int main(int argc, char **argv)
 
     float miny;
     float maxy;
+
+    float amin;
+    float amax;
+    float v;
+    
     
     int beg;
     int end;
@@ -165,14 +169,18 @@ int main(int argc, char **argv)
 	if(plot)
 	{
 	    this = ajGraphxyDataNewI(count);
-	    ajGraphxyAddGraph(graph,this);
+	    ajGraphDataxySetTypeC(this,"2D plot");
+
 	    ajGraphxySetOverLap(graph,ajFalse);
 	    for(i=0;i<count;++i)
 	    {
 		this->x[i]=xarr[base][i];
 		this->y[i]=farr[base][i];
 	    }
+	    ajGraphDataxyMaxMin(this->y,count,&amin,&amax);
+	    ajGraphDataxySetMaxima(this,(float)beg,(float)end,amin,amax);
 
+	    ajGraphxyAddGraph(graph,this);
 	    if(show)
 	    {
 		for(i=0;i<count;++i)

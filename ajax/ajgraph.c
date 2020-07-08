@@ -1,4 +1,3 @@
-/*  Last edited: May 16 09:40 2000 (pmr) */
 /********************************************************************
 ** @source AJAX GRAPH (ajax graphics) functions
 ** @author Ian Longden
@@ -2047,8 +2046,24 @@ static void GraphxyDisplayToData (AjPGraph graphs, AjBool closeit, char *ext) {
   AjPGraphData g;
   AjPStr temp;
   int i,j;
-
+  float minxa=64000.;
+  float minya=64000.;
+  float maxxa=-64000.;
+  float maxya=-64000.;
+  
   ajDebug ("ajGraphxyDisplayToData '%S'\n", graphs->outputfile);
+
+
+  /* Calculate maxima and minima */
+  for(i=0;i<graphs->numofgraphs;i++)
+  {
+      g = (graphs->graphs)[i];
+      minxa = (minxa<g->minX) ? minxa : g->minX;
+      minya = (minya<g->minY) ? minya : g->minY;
+      maxxa = (maxxa>g->maxX) ? maxxa : g->maxX;
+      maxya = (maxya>g->maxY) ? maxya : g->maxY;
+  }
+
 
 
   for(i=0;i<graphs->numofgraphs;i++){
@@ -2063,10 +2078,38 @@ static void GraphxyDisplayToData (AjPGraph graphs, AjBool closeit, char *ext) {
     }
     else
       ajMessOut("Writing graph %d data to %S\n",i+1,temp);
+
     
+    (void) ajFmtPrintF(outf,"##%S\n",g->gtype);
+    (void) ajFmtPrintF(outf,"##Title %S\n",graphs->title);
+    (void) ajFmtPrintF(outf,"##Graphs %d\n",graphs->numofgraphs);
+    (void) ajFmtPrintF(outf,"##Number %d\n",i+1);
+    (void) ajFmtPrintF(outf,"##Points %d\n",g->numofpoints);
+
+
+    (void) ajFmtPrintF(outf,"##XminA %f XmaxA %f YminA %f YmaxA %f\n",
+		       minxa,maxxa,minya,maxya);
+    (void) ajFmtPrintF(outf,"##Xmin %f Xmax %f Ymin %f Ymax %f\n",
+		       g->tminX,g->tmaxX,g->tminY,g->tmaxY);
+    (void) ajFmtPrintF(outf,"##ScaleXmin %f ScaleXmax %f ScaleYmin %f "
+		       "ScaleYmax %f\n",g->minX,g->maxX,g->minY,g->maxY);
+
+    (void) ajFmtPrintF(outf,"##Maintitle %S\n",g->title);
+
+    if(graphs->numofgraphs == 1)
+    {
+	(void) ajFmtPrintF(outf,"##Xtitle %S\n",graphs->xaxis);
+	(void) ajFmtPrintF(outf,"##Ytitle %S\n",graphs->yaxis);
+
+    }
+    else
+    {
+	(void) ajFmtPrintF(outf,"##Subtitle %S\n",g->subtitle);
+	(void) ajFmtPrintF(outf,"##Xtitle %S\n",g->xaxis);
+	(void) ajFmtPrintF(outf,"##Ytitle %S\n",g->yaxis);
+    }
+
     /* Dump out the data points */
-    if(graphs->numofgraphs > 1)
-      (void) ajFmtPrintF(outf,"#Ytitle %S\n",g->yaxis);
     for(j=0;j<g->numofpoints;j++)
       (void) ajFmtPrintF(outf,"%f\t%f\n",g->x[j],g->y[j]);
     ajFileClose(&outf);
@@ -2423,6 +2466,8 @@ void ajGraphxyDel (AjPGraph mult) {
       AJFREE (graphdata->x);
     if(!graphdata->ycalc)
       AJFREE (graphdata->y);
+    if(!graphdata->gtype)
+	ajStrDel(&graphdata->gtype);
     GraphDataObjDel(graphdata); 
     ajStrDel(&mult->title);
     ajStrDel(&mult->subtitle);
@@ -2461,6 +2506,7 @@ static void GraphxyInitData (AjPGraphData graph) {
   (void) ajStrSetC(&graph->subtitle,"");
   (void) ajStrSetC(&graph->xaxis,"");
   (void) ajStrSetC(&graph->yaxis,"");
+  (void) ajStrSetC(&graph->gtype,"");
   graph->minX = graph->maxX = 0;
   graph->minY = graph->maxY = 0;
   graph->lineType = 1;
@@ -3196,6 +3242,74 @@ void ajGraphDataxySetMaxMin(AjPGraphData graphdata, float xmin, float xmax,
     graphdata->maxY = ymax;
 
 }
+
+/* @func ajGraphDataxyMaxMin *********************************************
+**
+** Get the max and min of the data points you wish to display. 
+**
+** @param [r] array [float*] array
+** @param [r] npoints
+** @param [w] min [float]  min.
+** @param [w] max [float]  max.
+** @return [void]
+** @@
+******************************************************************************/
+void ajGraphDataxyMaxMin(float *array, int npoints, float *min, float *max)
+{
+    int i;
+
+    *min = 64000.;
+    *max = -64000.;
+    
+    for(i=0;i<npoints;++i)
+    {
+	*min = (*min < array[i]) ? *min : array[i];
+	*max = (*max > array[i]) ? *max : array[i];
+    }
+
+    return;
+}
+
+
+/* @func ajGraphDataxySetMaxima *********************************************
+**
+** Set the scale max and min of the data points you wish to display. 
+**
+** @param [rw] graphdata [AjPGraphData] multple graph structure.
+** @param [r] xmin [float]  true x min.
+** @param [r] xmax [float]  true x max.
+** @param [r] ymin [float]  true y min.
+** @param [r] ymax [float]  true y max.
+** @return [void]
+** @@
+******************************************************************************/
+void ajGraphDataxySetMaxima(AjPGraphData graphdata, float xmin, float xmax,
+			   float ymin, float ymax){
+
+    graphdata->tminX = xmin; 
+    graphdata->tminY = ymin;
+    graphdata->tmaxX = xmax;
+    graphdata->tmaxY = ymax;
+
+}
+
+
+/* @func ajGraphDataxySetTypeC *********************************************
+**
+** Set the type of the graph for data output. 
+**
+** @param [rw] graphdata [AjPGraphData] multple graph structure.
+** @param [r] type [char*]  Type e.g. "2D Plot", "Histogram".
+** @return [void]
+** @@
+******************************************************************************/
+void ajGraphDataxySetTypeC(AjPGraphData graphdata, char* type)
+{
+
+    (void) ajStrAssC(&graphdata->gtype,type);
+    return;
+}
+
 
 /* @func ajGraphxyCheckMaxMin **********************************************
 **

@@ -5,6 +5,7 @@ appl: showseq [
 
   seqall: sequence [ 
 	param: Y
+	feat: Y
   ]
 
   outfile: outfile [
@@ -25,12 +26,13 @@ appl: showseq [
         values: 
 		"0:Enter your own list of things to display,
 		1:Sequence only,
-		2:Default sequence,
-		3:One frame translation,
-		4:Three frame translations,
-		5:Six frame translations,
-		6:Restriction enzyme map,
-		7:Baroque"
+		2:Default sequence with features,
+		3:Pretty sequence,
+		4:One frame translation,
+		5:Three frame translations,
+		6:Six frame translations,
+		7:Restriction enzyme map,
+		8:Baroque"
         delim: ","
         codedelim: ":"
         info: "Display format"

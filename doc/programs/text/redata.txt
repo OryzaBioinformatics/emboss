@@ -187,7 +187,7 @@ See also
    remap Display a sequence with restriction cut sites, translation etc
    restrict Finds restriction enzyme cleavage sites
    showseq Display a sequence with features, translation etc
-   silent Silent mutation RE scan
+   silent Silent mutation restriction enzyme scan
    tfscan Scans DNA sequences for transcription factors
    
 Author(s)

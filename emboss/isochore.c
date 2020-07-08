@@ -1,4 +1,3 @@
-/*  Last edited: Feb 21 15:31 2000 (pmr) */
 #include "emboss.h"
 #ifndef NO_PLOT
 #include "ajgraph.h"
@@ -58,7 +57,9 @@ int main (int argc, char * argv[]) {
   int ibeg;
   int iend;
   int ilen;
-
+  float amin=0.;
+  float amax=0.;
+  
   (void) ajGraphInit ("isochore", argc, argv);
 
   seq = ajAcdGetSeq ("sequence");
@@ -114,6 +115,18 @@ int main (int argc, char * argv[]) {
   /* create the graph */
 
   graphdata = ajGraphxyDataNew();
+
+  ajGraphDataxyMaxMin(results->Array,isize,&amin,&amax);
+  
+  ajGraphDataxySetMaxima(graphdata,(float)ipos,(float)(ipos+(ishift*isize)),
+			 amin,amax);
+  ajGraphDataxySetMaxMin(graphdata,(float)ipos,(float)(ipos+(ishift*isize)),
+			 amin,amax);
+  ajGraphDataxySetTypeC(graphdata,"2D Plot");
+  ajGraphxyDataSetTitleC(graphdata,"");
+  
+  
+
   ajGraphxyAddGraph(plot,graphdata);
   ajGraphxyAddDataCalcPtr(graphdata, isize,(float)(ipos),(float)ishift,
 			results->Array);

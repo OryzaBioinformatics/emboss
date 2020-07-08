@@ -30,7 +30,7 @@ appl: palindrome [
                    info:"Enter minimum length of palindrome" 
                  ]
 
-  int: maxpalLen [ req: Y default: 100  min: $(minpallen)
+  int: maxpalLen [ req: Y default: 100  min: $(minpalLen)
                    max: "@($(insequence.length)/2)"
                    info:"Enter maximum length of palindrome" 
                  ]

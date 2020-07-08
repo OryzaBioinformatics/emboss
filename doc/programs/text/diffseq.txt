@@ -258,7 +258,7 @@ See also
    restrict Finds restriction enzyme cleavage sites
    showseq Display a sequence with features, translation etc
    sigcleave Reports protein signal cleavage sites
-   silent Silent mutation RE scan
+   silent Silent mutation restriction enzyme scan
    tfscan Scans DNA sequences for transcription factors
    tmap Displays membrane spanning regions
    

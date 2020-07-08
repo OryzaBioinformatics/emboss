@@ -1,4 +1,3 @@
-/*  Last edited: Jan 24 15:05 2000 (pmr) */
 /* @source pepwindowall application
 **
 ** Displays protein hydropathy.
@@ -138,6 +137,9 @@ int main (int argc, char * argv[]) {
   float total;
   float matrix[AZ];
   float min= 555.5,max = -555.5;
+  float v=0.;
+  float ymin=64000.;
+  float ymax=-64000.;
   
   (void) ajGraphInit("pepwindowall", argc, argv);
   
@@ -163,7 +165,10 @@ int main (int argc, char * argv[]) {
 	    i,ajSeqsetSize(seqset),ajSeqsetLen(seqset));
     
     graphdata = ajGraphxyDataNewI(ajSeqsetLen(seqset));
-
+    ajGraphDataxySetTypeC(graphdata,"Multi 2D Plot");
+    ymin = 64000.;
+    ymax = -64000.;
+    
     
     for(k=0;k<ajSeqsetLen(seqset) ;k++)
       graphdata->x[k] = FLT_MIN; 
@@ -179,6 +184,8 @@ int main (int argc, char * argv[]) {
       s1++;
     }
 
+
+
     s1 = ajStrStr(aa0str);    
     for(j=0;j<k-llen;j++){
       total = 0;
@@ -187,13 +194,22 @@ int main (int argc, char * argv[]) {
       } 
       total=total/(float)llen;
       graphdata->x[position[j]] = (float)position[j];
-      graphdata->y[position[j]] = total;
+      v = graphdata->y[position[j]] = total;
+      ymin = (ymin<v) ? ymin : v;
+      ymax = (ymax>v) ? ymax : v;
+      
       if(total > max)
 	max= total;
       if(total < min)
 	min = total;
       s1++;
     }
+
+    ajGraphDataxySetMaxima(graphdata,0.0,(float)ajSeqsetLen(seqset),ymin,ymax);
+
+    ajGraphxyDataSetYtitleC(graphdata,"Hydropathy");
+    ajGraphxyDataSetXtitleC(graphdata,"Sequence");
+
     ajGraphxyAddGraph(mult,graphdata);
   }
 
@@ -204,6 +220,8 @@ int main (int argc, char * argv[]) {
   ajGraphxySetOverLap(mult,AJTRUE);
 
   ajGraphxySetMaxMin(mult,0.0,(float)ajSeqsetLen(seqset),min,max);
+  ajGraphxyTitleC(mult,"Pepwindowall");
+  
 
   ajGraphxyDisplay(mult,AJTRUE);
   ajExit();

@@ -151,18 +151,21 @@ int main (int argc, char * argv[]) {
     (void) ajStrAssC(&format, "B N T S F ");
 
   } else if (!ajStrCmpC(formatlist[0], "3")) {
-    (void) ajStrAssC(&format, "B N T S B 1 F ");
+    (void) ajStrAssC(&format, "B N T S ");
 
   } else if (!ajStrCmpC(formatlist[0], "4")) {
-    (void) ajStrAssC(&format, "B N T S B 1 2 3 F ");
+    (void) ajStrAssC(&format, "B N T S B 1 F ");
 
   } else if (!ajStrCmpC(formatlist[0], "5")) {
-    (void) ajStrAssC(&format, "B N T S B 1 2 3 T -3 -2 -1 F ");
+    (void) ajStrAssC(&format, "B N T S B 1 2 3 F ");
 
   } else if (!ajStrCmpC(formatlist[0], "6")) {
+    (void) ajStrAssC(&format, "B N T S B 1 2 3 T -3 -2 -1 F ");
+
+  } else if (!ajStrCmpC(formatlist[0], "7")) {
     (void) ajStrAssC(&format, "B R S N T C -R B 1 2 3 T -3 -2 -1 ");
     
-  } else if (!ajStrCmpC(formatlist[0], "7")) {
+  } else if (!ajStrCmpC(formatlist[0], "8")) {
     (void) ajStrAssC(&format, "B 1 2 3 N T R S T C -R T -3 -2 -1 F ");
     
   } else {

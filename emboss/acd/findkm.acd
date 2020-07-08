@@ -12,14 +12,12 @@ appl: 	    findkm [
             ]
 
 infile:     infile [ 
-            req: Y
             param: Y
             prompt: "Enter name of file containing data"]
         
 outfile:    outfile [
-            opt: Y
             param: Y
-            def:findkm.out]
+]
         
 bool:       plot [ 
             req: N 

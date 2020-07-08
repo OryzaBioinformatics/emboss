@@ -1,8 +1,8 @@
 # silent mutation application 
 #
 appl: silent [
-          doc: "Silent mutation RE scan"
-          groups: "DNA: sequence features, restriction enzymes, SDM"
+          doc: "Silent mutation restriction enzyme scan"
+          groups: "DNA: sequence features, restriction enzymes, site-directed mutagenesis"
 ]
 
   sequence: seq [ param: Y ]

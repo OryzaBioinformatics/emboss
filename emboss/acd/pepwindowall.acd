@@ -10,7 +10,8 @@ appl: pepwindowall [
 	type: gapprotein
   ]
 
-  xygraph: graph [param:Y  multi:$(msf.count) ]
+  xygraph: graph [param:Y  multi:$(msf.count)
+           gytitle: "Hydropathy" gtitle: "Kyte-Doolittle Plot" ]
 
   datafile: datafile [
         optional: Y

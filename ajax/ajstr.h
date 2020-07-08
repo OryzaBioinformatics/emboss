@@ -197,16 +197,16 @@ typedef struct AjSStr {
 ** @cast ajStrIterBegin returns result of first iteration
 ** @cast ajStrIterEnd   returns result of last iteration
 ** @cast ajStrIterDone  Tests whether iteration is complete
-** @cast ajStrIterGet   returns the current string from the iterator
+** @cast ajStrIterGetCC   returns the character from the iterator
+** @cast ajStrIterGetC   returns the character* from the iterator
 ** @@
 ******************************************************************************/
 typedef struct AjSStrIter {
   size_t Begin;
   size_t End;
   size_t Curr;
-  AjOStr Obj;
-  AjPStr Orig;
-} AjIStr;
+  AjPStr Obj;
+} *AjIStr;
 
 
 /* @data AjPStrTok *******************************************************
@@ -315,12 +315,13 @@ AjBool     ajStrIsSpace (const AjPStr thys);
 AjBool     ajStrIsWild (const AjPStr thys);
 AjBool     ajStrIsWord (const AjPStr thys);
 AjIStr     ajStrIter (const AjPStr thys);
-#define    ajStrIterBegin(iter) iter.Begin
-#define    ajStrIterDone(iter) (iter.Curr >= iter.End)
-#define    ajStrIterEnd(iter) iter.End
+#define    ajStrIterBegin(iter) iter->Begin
+#define    ajStrIterDone(iter) (iter->Curr >= iter->End)
+#define    ajStrIterEnd(iter) iter->End
 void       ajStrIterFree (AjIStr *iter);
-#define    ajStrIterGet(iter) &(iter.Obj)
-AjIStr     ajStrIterNext (AjIStr *iter);
+#define    ajStrIterGetK(iter) (*AJSTRSTR(iter->Obj))
+#define    ajStrIterGetC(iter) (AJSTRSTR(iter->Obj))
+AjIStr     ajStrIterNext (AjIStr iter);
 
 AjBool     ajStrJoin  (AjPStr* pthis, int pos1, const AjPStr addbit, int pos2);
 AjBool     ajStrJoinC (AjPStr* pthis, int pos1, const char* addbit, int pos2);

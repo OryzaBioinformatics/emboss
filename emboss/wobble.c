@@ -1,4 +1,3 @@
-/*  Last edited: Feb 21 12:56 2000 (pmr) */
 /* @source wobble application
 **
 ** Plot wobble base percentage
@@ -48,6 +47,8 @@ int main(int argc, char **argv)
     float      *y[6];
     float      xt;
     float      mean;
+    float      ymin;
+    float      ymax;
     
     int        count[6];
     
@@ -102,8 +103,9 @@ int main(int argc, char **argv)
 	       window);
 
 	data = ajGraphxyDataNewI(count[i]);
-	ajGraphxyAddGraph(graph,data);
+
 	ajGraphxySetOverLap(graph,ajFalse);
+
 	for(j=0;j<count[i];++j)
 	{
 	    xt = x[i][j];
@@ -115,6 +117,12 @@ int main(int argc, char **argv)
 	    data->x[j]=x[i][j];
 	    data->y[j]=y[i][j];
 	}
+
+	ajGraphDataxyMaxMin(data->y,count[i],&ymin,&ymax);
+	ajGraphDataxySetMaxima(data,(float)beg,(float)end,ymin,ymax);
+	
+	ajGraphDataxySetTypeC(data,"2D Plot");
+	ajGraphxyAddGraph(graph,data);
 
 	ajGraphxySetYTick(graph, ajTrue);
 	

@@ -223,7 +223,7 @@ void gribskov_profile(AjPSeqset seqset, float **sub,
     int *gaps;
 
     
-    mname=ajStrNewC("pprofile");
+    mname=ajStrNewC("Epprofile");
     ajMatrixfRead(&imtx,mname);
     ajStrDel(&mname);
 		 

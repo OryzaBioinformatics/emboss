@@ -117,7 +117,7 @@ See also
    seqmatchall Does an all-against-all comparison of a set of sequences
    showseq Display a sequence with features, translation etc
    sigcleave Reports protein signal cleavage sites
-   silent Silent mutation RE scan
+   silent Silent mutation restriction enzyme scan
    stssearch Searches a DNA database for matches with a set of STS
    primers
    supermatcher Finds a match of a large sequence against one or more

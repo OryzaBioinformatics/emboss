@@ -781,6 +781,10 @@ AjBool ajRangeOrdered (AjPRange thys)
 /* @func ajRangeDefault ******************************************************
 **
 ** Test whether the default range has been set for a string
+**
+** IE tests whether the given range is a single range from the start to
+** the end of a sequence string. 
+**
 ** @param [r] thys [AjPRange] range object
 ** @param [r] s [AjPStr] string
 **
@@ -789,7 +793,7 @@ AjBool ajRangeOrdered (AjPRange thys)
 ******************************************************************************/
 AjBool ajRangeDefault(AjPRange thys, AjPStr s)
 {
-    if(thys->n==1 && thys->start[0]==1 && thys->end[0]==ajStrLen(s))
+    if (thys->n==1 && thys->start[0]==1 && thys->end[0]==ajStrLen(s))
 	return ajTrue;
     return ajFalse;
 }

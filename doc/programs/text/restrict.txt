@@ -226,7 +226,7 @@ See also
    redata Search REBASE for enzyme name, references, suppliers etc
    remap Display a sequence with restriction cut sites, translation etc
    showseq Display a sequence with features, translation etc
-   silent Silent mutation RE scan
+   silent Silent mutation restriction enzyme scan
    tfscan Scans DNA sequences for transcription factors
    
 Author(s)

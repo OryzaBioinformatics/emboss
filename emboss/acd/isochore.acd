@@ -20,4 +20,4 @@ appl: isochore [
   int: window [ opt: Y def: 1000 min: 1 max: "@($(sequence.end)/2)" info: "Window size" ]
   int: shift [ opt: Y def: 100 min: 1 max: "@($(sequence.end)/10)" info: "Shift increment" ]
 
-  xygraph: graph [ ]
+  xygraph: graph [ req: Y ]

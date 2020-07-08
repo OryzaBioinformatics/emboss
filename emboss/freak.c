@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     int step;
     int window;
     int t;
-    /*    int len;*/
+
     int i;
     int j;
     int k;
@@ -52,6 +52,8 @@ int main(int argc, char **argv)
     float *x=NULL;
     float *y=NULL;
     
+    float max=0.;
+    float min=0.;
     
     
     ajGraphInit("freak", argc, argv);
@@ -126,9 +128,14 @@ int main(int argc, char **argv)
 	    ajGraphxySetXStart(graph,x[0]);
 	    ajGraphxySetXEnd(graph,x[c-1]);
 	    ajGraphxySetYStart(graph,0.);
-	    ajGraphxySetXEnd(graph,y[c-1]);
+	    ajGraphxySetYEnd(graph,y[c-1]);
 	    ajGraphxySetXRangeII(graph,x[0],x[c-1]);
 	    ajGraphxySetYRangeII(graph,0.,y[c-1]);
+	    ajGraphDataxySetMaxMin(fgraph,x[0],x[c-1],0.,1.0);
+	    ajGraphDataxyMaxMin(y,c,&min,&max);
+	    ajGraphDataxySetMaxima(fgraph,x[0],x[c-1],min,max);
+	    ajGraphDataxySetTypeC(fgraph,"2D Plot");
+	    
 	    ajGraphxyAddDataPtrPtr(fgraph,x,y);
 	    ajGraphxyAddGraph(graph,fgraph);
 	    ajGraphxyDisplay(graph,ajTrue);

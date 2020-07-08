@@ -1,4 +1,3 @@
-/*  Last edited: Mar  1 16:35 2000 (pmr) */
 /* @source pepinfo application
 **
 ** Displays properties of the amino acid residues in a peptide sequence
@@ -355,6 +354,7 @@ int main( int argc, char **argv, char ** env) {
       ajGraphNewPage (ajFalse);
 
     ajGraphSetCharSize(0.50);
+    ajGraphxyTitleC(graphs,"Pepinfo");
     
     ajGraphxyDisplay(graphs,AJTRUE);
   }
@@ -464,10 +464,15 @@ static void plotGraph2Float(AjPGraph graphs, AjPSeq seq, float * results,
     AjPGraphData plot;
 
     int npts = 0;
-
+    int i;
+    
+    float ymin=64000.;
+    float ymax=-64000.;
+    
     npts = seq_end - seq_start;
 
-   
+    ajGraphDataxyMaxMin(results,npts,&ymin,&ymax);
+    
     /*
      *  initialise plot, the number of points will be the length of the data
      *  in the results structure
@@ -478,7 +483,9 @@ static void plotGraph2Float(AjPGraph graphs, AjPSeq seq, float * results,
     ajGraphxyDataSetTitleC( plot, title_text);
     ajGraphxyDataSetXtitleC( plot, xtext);
     ajGraphxyDataSetYtitleC( plot, ytext);
-
+    ajGraphDataxySetMaxMin(plot,(float)1,(float)npts,ymin,ymax);
+    ajGraphDataxySetMaxima(plot,(float)1,(float)npts,ymin,ymax);
+    ajGraphDataxySetTypeC(plot,"2D Plot");
 
     ajGraphxyAddDataCalcPtr(plot, npts, seq_begin, 1.0, results);
     ajGraphxyAddGraph( graphs, plot);

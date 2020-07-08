@@ -1,4 +1,3 @@
-/*  Last edited: Jan 17 17:51 2000 (pmr) */
 /* @source pepwindow application
 **
 ** Displays protein hydropathy.
@@ -147,6 +146,8 @@ int main (int argc, char * argv[]) {
 
   midpoint = (int)((llen+1)/2);
 
+  ajGraphDataxySetTypeC(graphdata,"2D Plot");
+  
   ajGraphxyAddGraph(mult,graphdata);
   
   for(i=0;i<ajSeqLen(seq);i++)
@@ -173,9 +174,12 @@ int main (int argc, char * argv[]) {
     s1++;
   }
 
+  ajGraphDataxySetMaxima(graphdata,0.,(float)ajSeqLen(seq),min,max);
+  
   min=min*1.1;
   max=max*1.1;
 
+  ajGraphDataxySetMaxMin(graphdata,0.0,(float)ajSeqLen(seq),min,max);
   ajGraphxySetMaxMin(mult,0.0,(float)ajSeqLen(seq),min,max);
 
   ajGraphxyDisplay(mult,AJTRUE);

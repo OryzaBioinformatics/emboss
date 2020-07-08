@@ -6,7 +6,7 @@
                                        
 Function
 
-   Silent mutation RE scan
+   Silent mutation restriction enzyme scan
    
 Description
 

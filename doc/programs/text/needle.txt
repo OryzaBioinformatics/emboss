@@ -163,6 +163,11 @@ Data files
        
 Notes
 
+   needle is a true imple,entation of the Needleman-Wunsch algorithm and
+   so produces a full path matrix. It therefore cannot be used with
+   genome sized sequences unless you've a lot of memory and a lot of
+   time.
+   
 References
 
     1. Needleman, S. B. and Wunsch, C. D. (1970) J. Mol. Biol. 48,
@@ -203,6 +208,9 @@ See also
    
    When you are trying to find the best region of similarity between two
    sequences, use water.
+   
+   stretcher is a more suitable program to use to find global alignments
+   of very long sequences.
    
 Author(s)
 

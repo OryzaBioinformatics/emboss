@@ -126,6 +126,13 @@ only the cut sites which many other restriction cut-site programs will
 show, but also shows the recognition site.
 <p>
 
+If the sequence is in EMBL, Genbank or SwissProt format, the feature table
+of the sequence can be dispalyed with the sequence. GFF file features can also
+be displayed if they are included on the command line with the <b>-ufo=file</b>
+qualifier.
+<p>
+
+
 <H2>
     Usage
 </H2>
@@ -143,23 +150,34 @@ Output file [stdout]:
 Things to display
          0 : Enter your own list of things to display
          1 : Sequence only
-         2 : Default sequence
-         3 : One frame translation
-         4 : Three frame translations
-         5 : Six frame translations
-         6 : Restriction enzyme map
-         7 : Baroque   
+         2 : Default sequence with features
+         3 : Pretty sequence
+         4 : One frame translation
+         5 : Three frame translations
+         6 : Six frame translations
+         7 : Restriction enzyme map
+         8 : Baroque
+
 Display format [2]:
 ECLAC
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
-                   10        20        30        40        50        60
+                   10        20        30        40        50        60        
           ----:----|----:----|----:----|----:----|----:----|----:----|
           gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
-         
-                   70        80        90        100       110       120
+                         |
+          variation note="c in wild-type; t in 'up' promoter mutant I-Q [11]"
+                                                            |=========
+          mRNA note="lacI (repressor) mRNA; preferred in vivo 3' end [12],[29]"
+
+                   70        80        90        100       110       120       
           ----:----|----:----|----:----|----:----|----:----|----:----|
           caattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgcagagtatgccggt
+          ============================================================
+          mRNA note="lacI (repressor) mRNA; preferred in vivo 3' end [12],[29]"
+                            |=========================================
+          CDS codon_start="1" db_xref="SWISS-PROT:P03023" note="lac repressor p
+
 </pre>
 <p>    
         
@@ -182,12 +200,13 @@ Output file [stdout]:
 Things to display
          0 : Enter your own list of things to display
          1 : Sequence only
-         2 : Default sequence
-         3 : One frame translation
-         4 : Three frame translations
-         5 : Six frame translations
-         6 : Restriction enzyme map
-         7 : Baroque
+         2 : Default sequence with features
+         3 : Pretty sequence
+         4 : One frame translation
+         5 : Three frame translations
+         6 : Six frame translations
+         7 : Restriction enzyme map
+         8 : Baroque
 Display format [2]: 0
 Specify your own things to display
          S : Sequence
@@ -234,6 +253,7 @@ The 'thing' codes used in the list of standard formats are:
 <pre>
 Sequence only:                  S
 Default sequence:               B N T S F
+Pretty sequence:                B N T S
 One frame translation:          B N T S B 1 F
 Three frame translations:       B N T S B 1 2 3 F
 Six frame translations:         B N T S B 1 2 3 T -3 -2 -1 F
@@ -339,7 +359,7 @@ heavy chain mRNA.
 Translate selected regions:
 <p>
 <pre>
-% showseq embl:mmam stdout -format 3 -send 120 -trans 25-49,66-76
+% showseq embl:mmam stdout -format 4 -send 120 -trans 25-49,66-76
 Display a sequence with features, translation etc..
 MMAM
 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody
@@ -508,7 +528,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-format</td>
 <td>Display format</td>
-<td><table><tr><td>0</td> <td><i>(Enter your own list of things to display)</i></td></tr><tr><td>1</td> <td><i>(Sequence only)</i></td></tr><tr><td>2</td> <td><i>(Default sequence)</i></td></tr><tr><td>3</td> <td><i>(One frame translation)</i></td></tr><tr><td>4</td> <td><i>(Three frame translations)</i></td></tr><tr><td>5</td> <td><i>(Six frame translations)</i></td></tr><tr><td>6</td> <td><i>(Restriction enzyme map)</i></td></tr><tr><td>7</td> <td><i>(Baroque)</i></td></tr></table></td>
+<td><table><tr><td>0</td> <td><i>(Enter your own list of things to display)</i></td></tr><tr><td>1</td> <td><i>(Sequence only)</i></td></tr><tr><td>2</td> <td><i>(Default sequence with features)</i></td></tr><tr><td>3</td> <td><i>(Pretty sequence)</i></td></tr><tr><td>4</td> <td><i>(One frame translation)</i></td></tr><tr><td>5</td> <td><i>(Three frame translations)</i></td></tr><tr><td>6</td> <td><i>(Six frame translations)</i></td></tr><tr><td>7</td> <td><i>(Restriction enzyme map)</i></td></tr><tr><td>8</td> <td><i>(Baroque)</i></td></tr></table></td>
 <td>2</td>
 </tr>
 
@@ -884,7 +904,7 @@ A display of the restriction enzyme cut sites can be selected via
 '-format 6' option or the '-format 0 -thing b,r,s,-r' style of options.
 <p>
 
-The option '-format 6' will produce a formatted display of cut sites on
+The option '-format 7' will produce a formatted display of cut sites on
 the sequence, with the six-frame translation below it.  The cut sites
 are indicated by a slash character '\' that points to the poition
 between the nucleotides where the cuts occur.  Cuts by many enzymes at
@@ -940,6 +960,11 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
             V  G  D  F  P  A  F  G  K  A  T  H  C  S  L  A  R  F  L  T
            S  V  M  S  H  R  L  V  K  R  P  I  A  H  Y  R  G  S  S  L
           X  C  W  R  I  A  C  F  R  E  R  Y  P  M  I  A  G  P  L  S
+                         |
+          variation note="c in wild-type; t in 'up' promoter mutant I-Q [11]"
+                                                            |=========
+          mRNA note="lacI (repressor) mRNA; preferred in vivo 3' end [12],[29]"
+
 </pre>
 <p>
 
@@ -1099,14 +1124,12 @@ It is not a bug. Please don't report it.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="antigenic.html">antigenic</a></td><td>Finds antigenic sites in proteins</td></tr>
-<tr><td><a href="backtranseq.html">backtranseq</a></td><td>Back translate a protein sequence</td></tr>
 <tr><td><a href="chaos.html">chaos</a></td><td>Create a chaos game representation plot for a sequence</td></tr>
 <tr><td><a href="cpgplot.html">cpgplot</a></td><td>Plot CpG rich areas</td></tr>
 <tr><td><a href="cpgreport.html">cpgreport</a></td><td>Reports all CpG rich regions</td></tr>
 <tr><td><a href="cusp.html">cusp</a></td><td>Create a codon usage table</td></tr>
 <tr><td><a href="diffseq.html">diffseq</a></td><td>Find differences (SNPs) between nearly identical sequences</td></tr>
 <tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td></tr>
-<tr><td><a href="dotpath.html">dotpath</a></td><td>Displays a non-overlapping wordmatch dotplot of two sequences</td></tr>
 <tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
 <tr><td><a href="einverted.html">einverted</a></td><td>Finds DNA inverted repeats</td></tr>
 <tr><td><a href="equicktandem.html">equicktandem</a></td><td>Finds tandem repeats</td></tr>
@@ -1135,7 +1158,7 @@ It is not a bug. Please don't report it.
 <tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
 <tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
 <tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>
-<tr><td><a href="silent.html">silent</a></td><td>Silent mutation RE scan</td></tr>
+<tr><td><a href="silent.html">silent</a></td><td>Silent mutation restriction enzyme scan</td></tr>
 <tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
 <tr><td><a href="tmap.html">tmap</a></td><td>Displays membrane spanning regions</td></tr>
 <tr><td><a href="transeq.html">transeq</a></td><td>Translate nucleic acid sequences</td></tr>
@@ -1159,7 +1182,9 @@ href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
     History
 </H2>
 
-Finished.
+Written 1999 - GWW
+<br>
+23 Aug 2000 - features display added - GWW
 
 <H2>
     Target users

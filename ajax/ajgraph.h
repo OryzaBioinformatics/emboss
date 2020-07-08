@@ -1,4 +1,3 @@
-/*  Last edited: May 16 09:35 2000 (pmr) */
 #ifdef __cplusplus
 extern "C"
 {
@@ -93,6 +92,13 @@ void          ajGraphDataObjAddText (AjPGraphData graphs, float x1, float y1,
 				    int colour, char *text);
 void          ajGraphDataxySetMaxMin (AjPGraphData graphdata, float xmin, 
 				      float xmax, float ymin, float ymax);
+void          ajGraphDataxyMaxMin(float *array, int npoints, float *min,
+				  float *max);
+		  
+void          ajGraphDataxySetMaxima(AjPGraphData graphdata, float xmin,
+				     float xmax, float ymin, float ymax);
+void          ajGraphDataxySetTypeC(AjPGraphData graphdata, char* type);
+		  
 void          ajGraphDia (PLFLT x0, PLFLT y0, PLFLT size);
 void          ajGraphDiaFill (PLFLT x0, PLFLT y0, PLFLT size);
 void          ajGraphDots (PLFLT *x1,PLFLT *y1, int numofdots);

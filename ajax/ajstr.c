@@ -3937,18 +3937,15 @@ int ajCharPos (const char* thys, int ipos) {
 
 AjIStr ajStrIter (const AjPStr thys) {
 
-  AjIStr* iter;
+  AjIStr iter;
 
   iter = AJNEW0(iter);
   iter->Begin = 0;
   iter->End = thys->Len;
   iter->Curr = 0;
-  iter->Orig = thys;
-  iter->Obj = *thys;
+  iter->Obj = thys;
 
-  iter->Orig->Use++;		/* make sure we keep the string allocated */
-
-  return *iter;
+  return iter;
 
 }
 
@@ -3956,7 +3953,7 @@ AjIStr ajStrIter (const AjPStr thys) {
 **
 ** Start condition for a string iterator.
 **
-** @param [P] iter [AjIStr*] String iterator.
+** @param [P] iter [AjIStr] String iterator.
 ** @return [AjIStr] Begin
 ** @@
 ******************************************************************************/
@@ -3965,37 +3962,46 @@ AjIStr ajStrIter (const AjPStr thys) {
 **
 ** Step to next character in string iterator.
 **
-** @param [P] iter [AjIStr*] String iterator.
+** @param [P] iter [AjIStr] String iterator.
 ** @return [AjIStr] Updated iterator duplicated as return value.
 ** @@
 ******************************************************************************/
 
-AjIStr ajStrIterNext (AjIStr* iter) {
+AjIStr ajStrIterNext (AjIStr iter) {
 
   if (iter->Curr < iter->End) {
     iter->Curr++;
-    iter->Obj.Ptr++;
-    iter->Obj.Len--;
-    iter->Obj.Res--;
+    iter->Obj->Ptr++;
+    iter->Obj->Len--;
+    iter->Obj->Res--;
   }
-  return *iter;
+  return iter;
 }
 
 /* @macro ajStrIterEnd ******************************************************
 **
 ** Stop condition for a string iterator.
 **
-** @param [P] iter [AjIStr*] String iterator.
+** @param [P] iter [AjIStr] String iterator.
 ** @return [AjIStr] End
 ** @@
 ******************************************************************************/
 
-/* @macro ajStrIterGet ******************************************************
+/* @macro ajStrIterGetC ******************************************************
 **
 ** Current value for a string iterator.
 **
-** @param [P] iter [AjIStr*] String iterator.
+** @param [P] iter [AjIStr] String iterator.
 ** @return [char*] Current text string within iterator
+** @@
+******************************************************************************/
+
+/* @macro ajStrIterGetK ******************************************************
+**
+** Current value for a string iterator.
+**
+** @param [P] iter [AjIStr] String iterator.
+** @return [char] Current character within iterator
 ** @@
 ******************************************************************************/
 
@@ -4010,8 +4016,7 @@ AjIStr ajStrIterNext (AjIStr* iter) {
 
 void ajStrIterFree (AjIStr* iter) {
 
-  iter->Orig->Use--;		/* make sure we keep the string allocated */
-  AJFREE(iter);
+  AJFREE(*iter);
 
   return;
 }

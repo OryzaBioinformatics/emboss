@@ -113,7 +113,15 @@ int main (int argc, char * argv[])
     
     /* read in primers from primerfile, classify and compile them */
     read_primers(&primerList,primerFile, mmp);
-    
+
+    /* check there are primers to be searched */
+    if(!ajListLength(primerList))
+       {
+	 ajUser("\nNo suitable primers found - exiting\n");
+	 ajExit();
+	 return 0;
+  
+       }
     /* query sequences one by one */
     while(ajSeqallNext(seqall,&seq)) 
       primer_search(primerList, seq, outf); 
@@ -285,9 +293,7 @@ static void read_primers(AjPList *primerList, AjPFile primerFile, int mmp)
 
   ajStrDel(&rdline);
   ajFileClose(&primerFile);
-  if (!nprimers)
-    ajFatal ("No primers read\n");
-  
+
 }
 
 /* determines pattern type and compiles it */

@@ -676,6 +676,14 @@ static AjBool MatchPatternTags (AjPList taglist, AjPStr tpattern, AjPStr vpatter
   AjBool tval;			/* tags result */
   AjBool vval;			/* value result */
 
+
+/* if there are no tags to match, but the patterns are both '*', then
+allow this as a match */
+  if (!ajListLength(taglist) && 
+      !ajStrCmpC(tpattern, "*") &&
+      !ajStrCmpC(vpattern, "*")) 
+      return ajTrue;
+
 /* iterate through the tags and test for match to patterns */
   titer = ajListIter(taglist);
   while (ajListIterMore(titer)) {

@@ -53,7 +53,7 @@ hindiii \ HinfI \ PpiI"
 
   int: mincuts [ opt: Y min: 1 max: 1000 def: 1 info:"Minimum cuts per RE" ]
 
-  int: maxcuts [ opt: Y min: $(min) max: 2000000000 def: 2000000000
+  int: maxcuts [ opt: Y min: $(mincuts) max: 2000000000 def: 2000000000
              info:"Maximum cuts per RE" ]
 
   bool: single [ opt: Y def: N info: "Force single site only cuts"]

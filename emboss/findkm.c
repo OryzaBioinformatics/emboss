@@ -1,4 +1,3 @@
-/*  Last edited: May  5 09:22 2000 (pmr) */
 /** @source findkm.c
 ** @author: Copyright (C) Sinead O'Leary (soleary@hgmp.mrc.ac.uk), David Martin (david.martin@biotek.uio.no)
 ** @@
@@ -72,6 +71,11 @@ int main (int argc, char *argv[])
     float Km;
     float cutx;                
     float cuty;
+
+    float amin=0.;
+    float amax=0.;
+    float bmin=0.;
+    float bmax=0.;
     
     
     (void)ajGraphInit("findkm", argc, argv);
@@ -227,7 +231,12 @@ int main (int argc, char *argv[])
 	    (xygraph, 0.0, 0.0, S[0], V[0], (int)BLACK);
     ajGraphxySetCirclePoints(graphLB, ajTrue);
     ajGraphDataxySetMaxMin(xygraph,0.0,xmax2,0.0,ymax2);
-    
+
+
+    ajGraphDataxyMaxMin(S,N,&amin,&amax);
+    ajGraphDataxyMaxMin(V,N,&bmin,&bmax);
+    ajGraphDataxySetMaxima(xygraph,amin,amax,bmin,bmax);
+    ajGraphDataxySetTypeC(xygraph,"2D Plot");
     
     xygraph2 = ajGraphxyDataNewI(N);    
     ajGraphxyAddDataPtrPtr(xygraph2, xdata, ydata);  
@@ -247,9 +256,14 @@ int main (int argc, char *argv[])
 	  (xygraph2, cutx, 0.0, upperXlimit, upperYlimit, (int)RED);*/
     ajGraphxySetCirclePoints(graphLB, ajTrue);
     ajGraphDataxySetMaxMin(xygraph2, cutx,upperXlimit,0.0,upperYlimit);
+    ajGraphDataxyMaxMin(xdata,N,&amin,&amax);
+    ajGraphDataxyMaxMin(ydata,N,&bmin,&bmax);
+    ajGraphDataxySetMaxima(xygraph2,amin,amax,bmin,bmax);
+    ajGraphDataxySetTypeC(xygraph2,"2D Plot");
+
     
 
-	
+    ajGraphxyTitleC(graphLB,"FindKm");
     ajGraphxySetOverLap(graphLB,ajFalse);    
     ajGraphxyDisplay(graphLB, ajTrue);
     }      
