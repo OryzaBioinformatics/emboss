@@ -189,6 +189,11 @@ Notes
    greater than the percentage of the maximum score of the lowest scoring
    sequence in the final motif set.
    
+   The data files must have been created before running this program.
+   This is done by running the printsextract program with the
+   "prints.dat" file from a PRINTS release. You may have to ask your
+   system manager to do this.
+   
 References
 
     1. Attwood, T.K., Flower, D.R., Lewis, A.P., Mabey, J.E., Morgan,
@@ -254,7 +259,9 @@ See also
 
    Program name Description
    antigenic Finds antigenic sites in proteins
+   diffseq Find differences (SNPs) between nearly identical sequences
    dotmatcher Displays a thresholded dotplot of two sequences
+   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
    dottup Displays a wordmatch dotplot of two sequences
    dreg regular expression search of a nucleotide sequence
    fuzznuc Nucleic acid pattern search
@@ -292,8 +299,3 @@ Target users
    naive users to embedded scripts.
    
 Comments
-
-   The data files must have been created before running this program.
-   This is done by running the PRINTSEXTRACT program with the
-   "prints.dat" file from a PRINTS release. You may have to ask your
-   system manager to do this.

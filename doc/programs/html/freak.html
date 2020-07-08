@@ -1,8 +1,12 @@
+<!--
+Edit this file to replace 'freak' with the name of the program.
+-->
+
 <HTML>
 
 <HEAD>
   <TITLE>
-  EMBOSS: freak
+  EMBOSS
   </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
@@ -22,8 +26,6 @@
 <H2>
 EMBOSS: freak
 </H2>
-
-
 </font>
 </td>
 
@@ -35,15 +37,19 @@ EMBOSS: freak
 </table>
 
 <p><hr><p>
+
+<!--END OF HEADER-->
+
+
+
+
+
 <H1>
 Program freak
 </H1>
-
 <H2>
     Function
 </H2>
-
-
 
 <!--
 DON'T WRITE ANYTHING HERE.
@@ -56,13 +62,41 @@ Residue/base frequency table or plot
     Description
 </H2>
 
+<!-- 
+	This is the main part of the document.
+
+        This is what the user looks at to find out if this program will
+        do what he wants. 
+
+        Long description.
+
+        Why it is useful.
+
+        When it should/shouldn't be used.
+
+        Algorithms
+
+        Expanded description.
+
+        eg: Reverse engineers Wheedle's 'talpsgob' program. This does a 
+        splurge of the 5' end of the sequence followed by a durm.
+        The net effect is a 5' end splurt.
+        etc. for as long as is required (several pages is not unreasonable)
+  -->
+
+
 
 <H2>
     Usage
 </H2>
 
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
 
-Here is a sample session with freak.
+
+Here is a sample session with freak:
 
 <pre>
 
@@ -71,12 +105,9 @@ Here is a sample session with freak.
 </pre>
 
 
-
 <H2>
     Command line arguments
 </H2>
-
-
 
 <!--
 DON'T WRITE ANYTHING HERE.
@@ -179,45 +210,123 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
+<!-- 
+        This includes example input file formats.
+        Except for sequences which can be described by 'sequence USA',
+        this should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
 
 <H2>
     Output file format
 </H2>
+
+<!-- 
+        This includes example output file formats 
+        Except for sequences which can be described by 'sequence USA',
+        this should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+   -->
+
 
 
 <H2>
     Data files
 </H2>
 
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+        eg:
+        data file format:
+
+	blank lines and comment lines are ignored.
+        comment lines start with '#'
+        There are three columns separated by one or more space or TAB
+	characters for X and Y values of durm, followed by energy
+        all coefficients are given as floating point values
+        An example is:
+
+        # Durm coefficient enery file
+        # X     Y       Energy
+        0.1     0.2     0.331
+        0.2     0.4     0.332
+        0.3     0.6     0.333
+        0.3     0.8     0.334
+
+   -->
+
+
 
 <H2>
     Notes
 </H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
 
 
 <H2>
     References
 </H2>
 
+<!-- 
+        Bibliography for methods used.
+   -->
+
 
 <H2>
     Warnings
 </H2>
 
+<!-- 
+        Potentially stupid things the program will let you do.
+        eg:
+        It doesn't check to see if the sequence is a protein sequence or not.
+   -->
 
 <H2>
     Diagnostic Error Messages
 </H2>
+
+<!-- 
+        Error messages specific to this program.
+        eg:
+
+        "Threshold value greater than 1." - means that the threshold has
+        been set to be greater than 1 but a burgle exception has
+        occurred making this invalid - you should reduce the wobble
+        parameter and try again. 
+
+   -->
 
 
 <H2>
     Exit status
 </H2>
 
+<!-- 
+        Description of the exit status for various error conditions
+        eg:
+        "It always exits with status 0"
+   -->
 
 <H2>
     Known bugs
 </H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
 
 
 <!--
@@ -241,42 +350,61 @@ IT IS DONE FOR YOU.
 <tr><td><a href="wordcount.html">wordcount</a></td><td>Counts words of a specified size in a DNA sequence</td></tr>
 </table>
 
-<!--
+<!-- 
         Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
+        data files?) that seealso doesn't find. 
    -->
+
+
 
 
 <H2>
     Author(s)
 </H2>
-
+<!--
+        Who has worked on the program in the past.
+e.g.
 
 This application was written by Alan Bleasby <a
 href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+   -->
+
 
 
 <H2>
     History
 </H2>
 
+<!--
+        What changes have been made.
+   -->
+
 
 <H2>
     Target users
 </H2>
 
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
 
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
+   -->
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
 
 <H2>
     Comments
 </H2>
 
+<!--
+	Any comments, requests etc. that people have about the program
+   -->
 
-<pre>
-
-</pre>
 
 
 </TD></TR></TABLE>

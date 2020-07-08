@@ -734,8 +734,9 @@ static int seqReadFmt (AjPSeq thys, AjPSeqin seqin,
       if (seqin->Features && !thys->Fttable) {
 	(void) ajStrSet (&seqin->Ftquery->Seqname, thys->Name);
 	if (!ajFeatRead (&seqin->Fttable, seqin->Ftquery, seqin->Ufo)) {
-	  ajWarn ("seqReadFmt features input failed UFO: '%S'",
-		  seqin->Ufo);
+          /* GWW 21 Aug 2000 - don't warn about missing feature tables. Caveat emptor! */
+	  /* ajWarn ("seqReadFmt features input failed UFO: '%S'",
+		  seqin->Ufo); */
 	  /* return ajFalse;*/
 	}
 	else {

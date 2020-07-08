@@ -1324,7 +1324,7 @@ void ajFeatTabAdd ( AjPFeatTable thys, AjPFeature feature )
 **
 ** Parses a UFO, opens an input file, and reads a feature table
 **
-** @param [w] pthis [AjPFeatTable*] Feature table created
+** @param [w] pthis [AjPFeatTable*] Feature table created, (or NULL if failed)
 ** @param [r] tabin [AjPFeatTabIn] Feature input object
 ** @param [r] ufo [AjPStr] UFO feature spec
 ** @return [AjBool] ajTrue on success.

@@ -138,7 +138,9 @@ See also
    chaos Create a chaos game representation plot for a sequence
    cpgplot Plot CpG rich areas
    cpgreport Reports all CpG rich regions
+   diffseq Find differences (SNPs) between nearly identical sequences
    dotmatcher Displays a thresholded dotplot of two sequences
+   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
    einverted Finds DNA inverted repeats
    equicktandem Finds tandem repeats
    etandem Looks for tandem repeats in a nucleotide sequence
@@ -157,6 +159,7 @@ See also
    restrict Finds restriction enzyme cleavage sites
    showseq Display a sequence with features, translation etc
    sigcleave Reports protein signal cleavage sites
+   silent Silent mutation RE scan
    tfscan Scans DNA sequences for transcription factors
    tmap Displays membrane spanning regions
    

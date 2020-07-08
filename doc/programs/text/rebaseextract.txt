@@ -171,6 +171,7 @@ See also
    remap Display a sequence with restriction cut sites, translation etc
    restrict Finds restriction enzyme cleavage sites
    showseq Display a sequence with features, translation etc
+   silent Silent mutation RE scan
    tfextract Extract data from TRANSFAC
    
 Author(s)
@@ -187,5 +188,3 @@ Target users
    software and database installation and maintenance.
    
 Comments
-
-   You may have to ask your system manager to run this program.

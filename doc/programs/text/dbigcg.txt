@@ -58,7 +58,7 @@ Command line arguments
    -idformat Entry format
    EMBL (EMBL)
    SWISS (Swiss-Prot, SpTrEMBL, TrEMBLnew)
-   GB (Genbank, DDBJ)
+   GENBANK (Genbank, DDBJ)
    PIR (NBRF)
    EMBL
    [-dbname]
@@ -125,6 +125,7 @@ See also
 
    Program name Description
    dbiblast Index a BLAST database
+   dbifasta Index a fasta database
    dbiflat Index a flat file database
    
 Author(s)

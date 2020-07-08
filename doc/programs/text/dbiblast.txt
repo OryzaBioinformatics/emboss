@@ -57,7 +57,6 @@ Blast index version [unknown]: 2
 Command line arguments
 
    Mandatory qualifiers:
-   -idformat           list       Entry format
   [-dbname]            string     Database name
    -directory          string     Database directory
    -filename           string     database base filename
@@ -80,13 +79,6 @@ Command line arguments
 
 
    Mandatory qualifiers Allowed values Default
-   -idformat Entry format
-   NCBI (NCBI with | characters)
-   GCG (GCG format dbname:entryname)
-   SIMPLE (ID and accession)
-   ID (entryname)
-   UNKNOWN (unknown)
-   unknown
    [-dbname]
    (Parameter 1) Database name A string from 1 to 19 characters Required
    -directory Database directory Any string is accepted .
@@ -161,6 +153,7 @@ Known bugs
 See also
 
    Program name Description
+   dbifasta Index a fasta database
    dbiflat Index a flat file database
    dbigcg Index a GCG formatted database
    

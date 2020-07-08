@@ -81,7 +81,9 @@ See also
    cpgplot Plot CpG rich areas
    cpgreport Reports all CpG rich regions
    cusp Create a codon usage table
+   diffseq Find differences (SNPs) between nearly identical sequences
    dotmatcher Displays a thresholded dotplot of two sequences
+   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
    dottup Displays a wordmatch dotplot of two sequences
    einverted Finds DNA inverted repeats
    equicktandem Finds tandem repeats
@@ -95,6 +97,7 @@ See also
    redata Search REBASE for enzyme name, references, suppliers etc
    restrict Finds restriction enzyme cleavage sites
    showseq Display a sequence with features, translation etc
+   silent Silent mutation RE scan
    tfscan Scans DNA sequences for transcription factors
    wobble Wobble base plot
    wordcount Counts words of a specified size in a DNA sequence

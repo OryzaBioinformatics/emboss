@@ -72,6 +72,8 @@ Data files
    
 Notes
 
+   You may have to ask your system manager to run this program.
+   
 References
 
     1. Attwood, T.K., Flower, D.R., Lewis, A.P., Mabey, J.E., Morgan,
@@ -120,12 +122,16 @@ Warnings
    
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    It exits with status 0 unless an error is reported.
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description
@@ -155,5 +161,3 @@ Target users
    software and database installation and maintenance.
    
 Comments
-
-   You may have to ask your system manager to run this program.

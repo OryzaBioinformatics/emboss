@@ -35,6 +35,10 @@ appl: restrict [
 
   bool: alphabetic [ opt: N def: N info: "Sort output alphabetically" ]
 
+  bool: fragments [ opt: N def: N info: "Show fragment lengths" ]
+
+  bool: name [ opt: N def: N info: "Show sequence name" ]
+
   string: enzymes [
         req: Y
         def: all

@@ -84,7 +84,8 @@ Data files
    
 Notes
 
-   Program is most useful when used as a prerequisite for patmatmotifs.
+   This program is most useful when used as a prerequisite for
+   patmatmotifs.
    
 References
 
@@ -139,7 +140,3 @@ Target users
    software and database installation and maintenance.
    
 Comments
-
-   PAextract is a similar program, not in EMBOSS, which extracts the
-   PAttern lines only and writes them to an output file, default name -
-   prosite.PAlines.

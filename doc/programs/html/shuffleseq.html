@@ -56,20 +56,28 @@ Shuffles a set of sequences maintaining composition
     Description
 </H2>
 
+        This takes a sequence as input and outputs one or more sequences
+        whose order has been randomly shuffled.  No bases or residues
+        are changed, only their order.
+<p>
+        The number of shuffled sequences output can be set by the
+        '-shuffle' qualifier. 
 
 <H2>
     Usage
 </H2>
 
 
-Here is a sample session with shuffleseq.
+Here is a sample session with shuffleseq making two randomised copies of
+the input sequence.
+<p>
 
 <pre>
 
-% shuffleseq
+% shuffleseq -shuffle 2
 Shuffles a set of sequences maintaining composition
-Input sequence(s): embl:paamir
-Output sequence [paamir.fasta]: 
+Input sequence(s): embl:mmam
+Output sequence [mmam.fasta]: 
 
 </pre>
 
@@ -152,7 +160,7 @@ IT IS DONE FOR YOU.
 <H2>
     Input file format
 </H2>
-
+The USA of one or more sequences.
 
 <H2>
     Output file format
@@ -164,41 +172,76 @@ with the same base composition as the input.
 
 <p>
 Each run will produce a different sequence.
+Here is the output from the example above:
+<p>
+<pre>
+>MMAM L48662 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody 
+heavy chain mRNA.
+ggcggcctccggtcaccaacctaattcggtgtcagtggcggccaagcatcctttatcaca
+agtcgacccattttcttcgtaccacacaatagctctaacgttcttgtgatagtttaggag
+ttgcagagcttcgagaggtacactaacaaggaaagagtgcgacaggaaccaaggagcatg
+aaatgaaacagctcctaaatctccaacgctaagactcggccattgctagtattantataa
+attcattcacagcccgttagcggccttttaatcacctgaaggcccccatatattaggcgt
+gacaggtatccaggcggacctttcgttcgtggtaagggtcgaatggagtgctacagtatn
+ctgaac
+>MMAM L48662 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody 
+heavy chain mRNA.
+ccaaaacaatcctagatgaacctctgccgattcaaggcagntagctttctgtaagctcgt
+ttgagatgctaatgtagccggtgaatagaagcctaggactcgcttcccactttctgcttt
+aagattatcgagccctacggaatgagctggaatctggtcttaggcattacgaacagnacg
+ggtggacgggggaccaaaagtggaggggatttctccctgctgacaaaagacactatagta
+tccccctggcattctagccgtcccgtctcgtgctagtaacggtcacagcaatgggagtct
+tgtagaacaataacggccgtctatgataccaagtcactttagacgtacaatcaaatctca
+tcaacc
+</pre>
+<p>
+
+Note that these two sequences have the same name.
+<p>
 
 <H2>
     Data files
 </H2>
 
+None.
 
 <H2>
     Notes
 </H2>
 
+        This program may be useful for producing sets of sequences which
+        can be used to check the statistics of sequence similarity
+        finding software. 
 
 <H2>
     References
 </H2>
 
+None.
 
 <H2>
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
 </H2>
 
+        It always exits with status 0.
 
 <H2>
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -229,6 +272,7 @@ href="mailto:mschmitz@lbl.gov">(mschmitz@lbl.gov)</a>
     History
 </H2>
 
+Finished.
 
 <H2>
     Target users

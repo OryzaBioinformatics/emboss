@@ -168,6 +168,7 @@ Known bugs
 See also
 
    Program name Description
+   primersearch Searches DNA sequences for matches with primer pairs
    stssearch Searches a DNA database for matches with a set of STS
    primers
    

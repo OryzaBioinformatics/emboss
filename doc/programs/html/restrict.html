@@ -138,6 +138,8 @@ IT IS DONE FOR YOU.
    -[no]limit          bool       Limits reports to one isoschizomer
    -preferred          bool       Report preferred isoschizomers
    -alphabetic         bool       Sort output alphabetically
+   -fragments          bool       Show fragment lengths
+   -name               bool       Show sequence name
    -datafile           string     Alternative RE data file
 
 
@@ -283,6 +285,20 @@ PpiI</td>
 </tr>
 
 <tr>
+<td>-fragments</td>
+<td>Show fragment lengths</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-name</td>
+<td>Show sequence name</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
 <td>-datafile</td>
 <td>Alternative RE data file</td>
 <td>Any string is accepted</td>
@@ -385,6 +401,11 @@ maximum number of allowed cutting positions. Setting the site length
 to six and restricting the cuts to two is a common choice of parameters.
 The size of the output can sometimes be reduced by specifying
 the -noambiguity switch.
+<p>
+
+The data files must have been created before running this program. This is
+done by running the <b>rebaseextract</b> program with the "withrefm" file from
+an REBASE release. You may have to ask your system manager to do this.
 
 <H2>
     References
@@ -433,7 +454,9 @@ It exits with status 0 unless an error is reported.
 <tr><td><a href="chaos.html">chaos</a></td><td>Create a chaos game representation plot for a sequence</td></tr>
 <tr><td><a href="cpgplot.html">cpgplot</a></td><td>Plot CpG rich areas</td></tr>
 <tr><td><a href="cpgreport.html">cpgreport</a></td><td>Reports all CpG rich regions</td></tr>
+<tr><td><a href="diffseq.html">diffseq</a></td><td>Find differences (SNPs) between nearly identical sequences</td></tr>
 <tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td></tr>
+<tr><td><a href="dotpath.html">dotpath</a></td><td>Displays a non-overlapping wordmatch dotplot of two sequences</td></tr>
 <tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
 <tr><td><a href="einverted.html">einverted</a></td><td>Finds DNA inverted repeats</td></tr>
 <tr><td><a href="equicktandem.html">equicktandem</a></td><td>Finds tandem repeats</td></tr>
@@ -447,6 +470,7 @@ It exits with status 0 unless an error is reported.
 <tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
 <tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="silent.html">silent</a></td><td>Silent mutation RE scan</td></tr>
 <tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
 </table>
 
@@ -486,13 +510,6 @@ from naive users to embedded scripts.
 </H2>
 
 
-The data files must have been created before running this program. This is
-done by running the REBASEEXTRACT program with the "withrefm" file from
-an REBASE release. You may have to ask your system manager to do this.
-
-<pre>
-
-</pre>
 
 
 </TD></TR></TABLE>

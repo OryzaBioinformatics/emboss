@@ -119,7 +119,9 @@ See also
    Program name Description
    chaos Create a chaos game representation plot for a sequence
    cpgplot Plot CpG rich areas
+   diffseq Find differences (SNPs) between nearly identical sequences
    dotmatcher Displays a thresholded dotplot of two sequences
+   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
    dottup Displays a wordmatch dotplot of two sequences
    einverted Finds DNA inverted repeats
    equicktandem Finds tandem repeats
@@ -133,6 +135,7 @@ See also
    redata Search REBASE for enzyme name, references, suppliers etc
    restrict Finds restriction enzyme cleavage sites
    showseq Display a sequence with features, translation etc
+   silent Silent mutation RE scan
    tfscan Scans DNA sequences for transcription factors
    
 Author(s)

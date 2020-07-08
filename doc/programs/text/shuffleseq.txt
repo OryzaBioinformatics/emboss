@@ -10,14 +10,23 @@ Function
    
 Description
 
+   This takes a sequence as input and outputs one or more sequences whose
+   order has been randomly shuffled. No bases or residues are changed,
+   only their order.
+   
+   The number of shuffled sequences output can be set by the '-shuffle'
+   qualifier.
+   
 Usage
 
-   Here is a sample session with shuffleseq.
+   Here is a sample session with shuffleseq making two randomised copies
+   of the input sequence.
+   
 
-% shuffleseq
+% shuffleseq -shuffle 2
 Shuffles a set of sequences maintaining composition
-Input sequence(s): embl:paamir
-Output sequence [paamir.fasta]:
+Input sequence(s): embl:mmam
+Output sequence [mmam.fasta]:
 
 Command line arguments
 
@@ -43,27 +52,69 @@ Command line arguments
    
 Input file format
 
+   The USA of one or more sequences.
+   
 Output file format
 
    The output is a sequence (by default in FASTA format) with the same
    base composition as the input.
    
-   Each run will produce a different sequence.
+   Each run will produce a different sequence. Here is the output from
+   the example above:
+   
+>MMAM L48662 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody
+
+heavy chain mRNA.
+ggcggcctccggtcaccaacctaattcggtgtcagtggcggccaagcatcctttatcaca
+agtcgacccattttcttcgtaccacacaatagctctaacgttcttgtgatagtttaggag
+ttgcagagcttcgagaggtacactaacaaggaaagagtgcgacaggaaccaaggagcatg
+aaatgaaacagctcctaaatctccaacgctaagactcggccattgctagtattantataa
+attcattcacagcccgttagcggccttttaatcacctgaaggcccccatatattaggcgt
+gacaggtatccaggcggacctttcgttcgtggtaagggtcgaatggagtgctacagtatn
+ctgaac
+>MMAM L48662 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody
+
+heavy chain mRNA.
+ccaaaacaatcctagatgaacctctgccgattcaaggcagntagctttctgtaagctcgt
+ttgagatgctaatgtagccggtgaatagaagcctaggactcgcttcccactttctgcttt
+aagattatcgagccctacggaatgagctggaatctggtcttaggcattacgaacagnacg
+ggtggacgggggaccaaaagtggaggggatttctccctgctgacaaaagacactatagta
+tccccctggcattctagccgtcccgtctcgtgctagtaacggtcacagcaatgggagtct
+tgtagaacaataacggccgtctatgataccaagtcactttagacgtacaatcaaatctca
+tcaacc
+
+   Note that these two sequences have the same name.
    
 Data files
 
+   None.
+   
 Notes
 
+   This program may be useful for producing sets of sequences which can
+   be used to check the statistics of sequence similarity finding
+   software.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with status 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description
@@ -75,6 +126,8 @@ Author(s)
    
 History
 
+   Finished.
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

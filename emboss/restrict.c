@@ -37,7 +37,8 @@
 void printHits(AjPFile *outf, AjPList *l, AjPStr *name, int hits, int begin,
 	       int end, AjBool ambiguity, int mincut, int maxcut, AjBool
 	       plasmid, AjBool blunt, AjBool sticky, int sitelen,
-	       AjBool limit, AjBool equiv, AjPTable table, AjBool alpha);
+	       AjBool limit, AjBool equiv, AjPTable table, AjBool alpha,
+	       AjBool frags, AjBool nameit);
 void read_equiv(AjPFile *equfile, AjPTable *table);
 static void read_file_of_enzyme_names(AjPStr *enzymes);
 
@@ -59,8 +60,10 @@ int main( int argc, char **argv)
     AjBool ambiguity;
     AjBool plasmid;
     AjBool commercial;
+    AjBool nameit;
     AjBool limit;
     AjBool equiv;
+    AjBool frags;
     AjPStr dfile;
     
     AjPFile   enzfile=NULL;
@@ -73,7 +76,6 @@ int main( int argc, char **argv)
     int       hits;
 
     
-    /*    EmbPPatRestrict enz;*/
     AjPList     l;
 
     embInit("restrict", argc, argv);
@@ -93,6 +95,8 @@ int main( int argc, char **argv)
     commercial = ajAcdGetBool("commercial");
     limit      = ajAcdGetBool("limit");
     equiv      = ajAcdGetBool("preferred");
+    frags      = ajAcdGetBool("fragments");
+    nameit     = ajAcdGetBool("name");
     dfile      = ajAcdGetString("datafile");
     
     if(single) max=min=1;
@@ -129,9 +133,6 @@ int main( int argc, char **argv)
     
 
     
-    /*    enz = embPatRestrictNew(); NOT USED ?? */
-    
-
     while(ajSeqallNext(seqall, &seq))
     {
 	begin=ajSeqallBegin(seqall);
@@ -147,7 +148,8 @@ int main( int argc, char **argv)
 	{
 	    name = ajStrNewC(ajSeqName(seq));
 	    printHits(&outf,&l,&name,hits,begin,end,ambiguity,min,max,
-		      plasmid,blunt,sticky,sitelen,limit,equiv,table,alpha);
+		      plasmid,blunt,sticky,sitelen,limit,equiv,table,alpha,
+		      frags,nameit);
 	    ajStrDel(&name);
 	}
 
@@ -171,19 +173,29 @@ int main( int argc, char **argv)
 void printHits(AjPFile *outf, AjPList *l, AjPStr *name, int hits, int begin,
 	       int end, AjBool ambiguity, int mincut, int maxcut, AjBool
 	       plasmid, AjBool blunt, AjBool sticky, int sitelen,
-	       AjBool limit, AjBool equiv, AjPTable table, AjBool alpha)
+	       AjBool limit, AjBool equiv, AjPTable table, AjBool alpha,
+	       AjBool frags,AjBool nameit)
 {
     EmbPMatMatch m=NULL;
     AjPStr  ps=NULL;
-
+    int *fa=NULL;
+    int *fx=NULL;
+    int fc=0;
+    int fn=0;
+    int fb=0;
+    int last=0;
+    
     AjPStr value=NULL;
 
     int i;
+    int c=0;
 
     ps=ajStrNew();
+    fn = 0;
     
-    ajFmtPrintF(*outf,"# Restrict of %s from %d to %d\n#\n",
-		ajStrStr(*name),begin,end);
+    
+    ajFmtPrintF(*outf,"# Restrict of %S from %d to %d\n#\n",
+		*name,begin,end);
     ajFmtPrintF(*outf,"# Minimum cuts per enzyme: %d\n",mincut);
     ajFmtPrintF(*outf,"# Maximum cuts per enzyme: %d\n",maxcut);
     ajFmtPrintF(*outf,"# Minimum length of recognition site: %d\n",
@@ -204,8 +216,13 @@ void printHits(AjPFile *outf, AjPList *l, AjPStr *name, int hits, int begin,
     
 
     hits = embPatRestrictRestrict(l,hits,!limit,alpha);
-    
 
+    if(frags)
+    {
+	fa = AJALLOC(hits*2*sizeof(int));
+	fx = AJALLOC(hits*2*sizeof(int));
+    }
+    
 
     ajFmtPrintF(*outf,"# Number of hits: %d\n",hits);
     ajFmtPrintF(*outf,"# Base Number\tEnzyme\t\tSite\t\t5'\t3'\t[5'\t3']\n");    
@@ -226,20 +243,68 @@ void printHits(AjPFile *outf, AjPList *l, AjPStr *name, int hits, int begin,
 	    if(value)
 		ajStrAss(&m->cod,value);
 	}
-	
+
 	
 	ajFmtPrintF(*outf,"\t%-d\t%-16s%-16s%d\t%d\t",m->start,
 		    ajStrStr(m->cod),ajStrStr(m->pat),m->cut1,
 		    m->cut2);
+	if(frags)
+	    fa[fn++] = m->cut1;
+	    
 	if(m->cut3 && m->cut4)
+	{
+	    if(frags)
+		fa[fn++] = m->cut3;
 	    ajFmtPrintF(*outf,"%d\t%d",m->cut3,m->cut4);
+	}
+	if(nameit)
+	    ajFmtPrintF(*outf,"  %S",*name);
+	
 	ajFmtPrintF(*outf,"\n");
 
-	embMatMatchDel(&m);
     }
 
+
+
+    if(frags)
+    {
+	ajSortIntDec(fa,fn);
+	ajFmtPrintF(*outf,"\n\nFragment lengths:\n");
+	if(!fn || (fn==1 && plasmid))
+	    ajFmtPrintF(*outf,"    %d\n",end-begin+1);
+	else
+	{
+	    last = -1;
+	    fb=0;
+	    for(i=0;i<fn;++i)
+	    {
+		if((c=fa[i])!=last)
+		    fa[fb++]=c;
+		last=c;
+	    }
+	    fn=fb;
+	    /* Calc lengths */
+	    for(i=0;i<fn-1;++i)
+		fx[fc++]=fa[i+1]-fa[i];
+	    if(!plasmid)
+	    {
+		fx[fc++]=fa[0]-begin+1;
+		fx[fc++]=end-fa[fn-1];
+	    }
+	    else
+		fx[fc++]=(fa[0]-begin+1)+(end-fa[fn-1]);
+	    ajSortIntInc(fx,fc);
+	    for(i=0;i<fc;++i)
+		ajFmtPrintF(*outf,"    %d\n",fx[i]);
+	}
+	AJFREE(fa);
+	AJFREE(fx);
+    }
+    
+    
     ajListDel(l);
     ajStrDel(&ps);
+
     
     return;
 }
@@ -276,36 +341,38 @@ void read_equiv(AjPFile *equfile, AjPTable *table)
 ** If the list of enzymes starts with a '@' if opens that file, reads in
 ** the list of enzyme names and replaces the input string with the enzyme names
 **  
-** @param [r] enzymes [AjPStr*] names of enzymes to search for or 'all' or '@file'
+** @param [r] enzymes [AjPStr*] enzymes to search for or 'all' or '@file'
 ** @return [void]
 ** @@
 ******************************************************************************/
       
-static void read_file_of_enzyme_names(AjPStr *enzymes) {
+static void read_file_of_enzyme_names(AjPStr *enzymes)
+{
+    AjPFile file=NULL;
+    AjPStr line;
+    char   *p=NULL;
 
-  AjPFile file=NULL;
-  AjPStr line;
-  char   *p=NULL;
+    if (ajStrFindC(*enzymes, "@") == 0)
+    {
+	ajStrTrimC(enzymes, "@");	/* remove the @ */
+	file = ajFileNewIn(*enzymes);
+	if (file == NULL)
+	    ajDie("Cannot open the file of enzyme names: '%S'", enzymes);
 
-  if (ajStrFindC(*enzymes, "@") == 0) {
-    ajStrTrimC(enzymes, "@");   /* remove the @ */
-    file = ajFileNewIn(*enzymes);
-    if (file == NULL) {
-      ajDie("Cannot open the file of enzyme names: '%S'", enzymes);
+	/* blank off the enzyme file name and replace with the enzyme names */
+	ajStrClear(enzymes);
+	line = ajStrNew();
+	while(ajFileReadLine(file, &line))
+	{
+	    p = ajStrStr(line);
+	    if (!*p || *p == '#' || *p == '!') continue;
+	    ajStrApp(enzymes, line);
+	    ajStrAppC(enzymes, ",");
+	}
+	ajStrDel(&line);
+
+	ajFileClose(&file);
     }
-/* blank off the enzyme file name and replace with the enzyme names */
-    ajStrClear(enzymes);
-    line = ajStrNew();
-    while(ajFileReadLine(file, &line)) {
-      p = ajStrStr(line);
-      if (!*p || *p == '#' || *p == '!') continue;
-      ajStrApp(enzymes, line);
-      ajStrAppC(enzymes, ",");
-    }
-    ajStrDel(&line);
 
-    ajFileClose(&file);
-  }
-
+    return;
 }
-

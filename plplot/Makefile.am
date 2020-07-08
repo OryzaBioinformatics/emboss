@@ -4,7 +4,7 @@ SUBDIRS = lib
 
 lib_LTLIBRARIES = libplplot.la
 
-INCLUDES = $(X_CFLAGS) -I$(srcdir)/
+INCLUDES = $(X_CFLAGS) -I$(srcdir)/ -I/usr/include/gd
 
 PLPLOTSRC = pdfutils.c plargs.c plbox.c plcont.c plcore.c \
 plctrl.c plcvt.c pldtik.c plfill.c plhist.c plline.c plmap.c \

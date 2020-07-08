@@ -97,6 +97,7 @@ See also
    dotmatcher Displays a thresholded dotplot of two sequences
    polydot Displays all-against-all dotplots of a set of sequences
    prima Selects primers for PCR and DNA amplification
+   primersearch Searches DNA sequences for matches with primer pairs
    seqmatchall Does an all-against-all comparison of a set of sequences
    supermatcher Finds a match of a large sequence against one or more
    sequences

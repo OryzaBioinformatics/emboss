@@ -180,7 +180,9 @@ See also
    Program name Description
    antigenic Finds antigenic sites in proteins
    compseq Counts the composition of dimer/trimer/etc words in a sequence
+   diffseq Find differences (SNPs) between nearly identical sequences
    dotmatcher Displays a thresholded dotplot of two sequences
+   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
    dottup Displays a wordmatch dotplot of two sequences
    garnier Predicts protein secondary structure
    helixturnhelix Report nucleic acid binding motifs

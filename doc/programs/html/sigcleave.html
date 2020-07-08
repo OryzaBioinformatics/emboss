@@ -313,6 +313,12 @@ The value of minweight should be at least 3.5. At this level,
 the method should correctly identify 95% of signal peptides, and
 reject 95% of non-signal peptides. The cleavage site should be
 correctly predicted in 75-80% of cases.
+<p>
+
+If you use matrix tables with a different number of residues before or
+after the cleavage site, you must also set the advanced parameters nval
+and pval. 
+
 
 <H2>
     References
@@ -366,7 +372,9 @@ None.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="antigenic.html">antigenic</a></td><td>Finds antigenic sites in proteins</td></tr>
+<tr><td><a href="diffseq.html">diffseq</a></td><td>Find differences (SNPs) between nearly identical sequences</td></tr>
 <tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td></tr>
+<tr><td><a href="dotpath.html">dotpath</a></td><td>Displays a non-overlapping wordmatch dotplot of two sequences</td></tr>
 <tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
 <tr><td><a href="garnier.html">garnier</a></td><td>Predicts protein secondary structure</td></tr>
 <tr><td><a href="helixturnhelix.html">helixturnhelix</a></td><td>Report nucleic acid binding motifs</td></tr>
@@ -416,10 +424,6 @@ from naive users to embedded scripts.
     Comments
 </H2>
 
-
-If you use matrix tables with a different number of residues before or after
-the cleavage site, you must also set the advanced parameters nval and
-pval.
 
 <pre>
 

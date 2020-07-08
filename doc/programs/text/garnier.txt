@@ -189,7 +189,9 @@ See also
 
    Program name Description
    antigenic Finds antigenic sites in proteins
+   diffseq Find differences (SNPs) between nearly identical sequences
    dotmatcher Displays a thresholded dotplot of two sequences
+   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
    dottup Displays a wordmatch dotplot of two sequences
    helixturnhelix Report nucleic acid binding motifs
    oddcomp Finds protein sequence regions with a biased composition

@@ -66,7 +66,7 @@ Command line arguments
    gcgid (>db:ID)
    gcgidacc (>db:ID ACC)
    dbid (>db ID)
-   ncbi (>blah|...[|ACC]|ID)
+   ncbi (| formats)
    idacc
    [-dbname]
    (Parameter 1) Database name A string from 1 to 19 characters Required

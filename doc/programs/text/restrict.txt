@@ -71,6 +71,8 @@ Command line arguments
    -[no]limit          bool       Limits reports to one isoschizomer
    -preferred          bool       Report preferred isoschizomers
    -alphabetic         bool       Sort output alphabetically
+   -fragments          bool       Show fragment lengths
+   -name               bool       Show sequence name
    -datafile           string     Alternative RE data file
 
 
@@ -105,6 +107,8 @@ Command line arguments
    -[no]limit Limits reports to one isoschizomer Yes/No Yes
    -preferred Report preferred isoschizomers Yes/No No
    -alphabetic Sort output alphabetically Yes/No No
+   -fragments Show fragment lengths Yes/No No
+   -name Show sequence name Yes/No No
    -datafile Alternative RE data file Any string is accepted An empty
    string is accepted
    
@@ -179,6 +183,11 @@ Notes
    parameters. The size of the output can sometimes be reduced by
    specifying the -noambiguity switch.
    
+   The data files must have been created before running this program.
+   This is done by running the rebaseextract program with the "withrefm"
+   file from an REBASE release. You may have to ask your system manager
+   to do this.
+   
 References
 
     1. Nucleic Acids Research 27: 312-313 (1999).
@@ -201,7 +210,9 @@ See also
    chaos Create a chaos game representation plot for a sequence
    cpgplot Plot CpG rich areas
    cpgreport Reports all CpG rich regions
+   diffseq Find differences (SNPs) between nearly identical sequences
    dotmatcher Displays a thresholded dotplot of two sequences
+   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
    dottup Displays a wordmatch dotplot of two sequences
    einverted Finds DNA inverted repeats
    equicktandem Finds tandem repeats
@@ -215,6 +226,7 @@ See also
    redata Search REBASE for enzyme name, references, suppliers etc
    remap Display a sequence with restriction cut sites, translation etc
    showseq Display a sequence with features, translation etc
+   silent Silent mutation RE scan
    tfscan Scans DNA sequences for transcription factors
    
 Author(s)
@@ -231,8 +243,3 @@ Target users
    naive users to embedded scripts.
    
 Comments
-
-   The data files must have been created before running this program.
-   This is done by running the REBASEEXTRACT program with the "withrefm"
-   file from an REBASE release. You may have to ask your system manager
-   to do this.

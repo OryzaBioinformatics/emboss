@@ -163,6 +163,10 @@ Notes
    95% of non-signal peptides. The cleavage site should be correctly
    predicted in 75-80% of cases.
    
+   If you use matrix tables with a different number of residues before or
+   after the cleavage site, you must also set the advanced parameters
+   nval and pval.
+   
 References
 
     1. von Heijne, G. Nucleic Acids Res.: 14:4683 (1986)
@@ -188,7 +192,9 @@ See also
 
    Program name Description
    antigenic Finds antigenic sites in proteins
+   diffseq Find differences (SNPs) between nearly identical sequences
    dotmatcher Displays a thresholded dotplot of two sequences
+   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
    dottup Displays a wordmatch dotplot of two sequences
    garnier Predicts protein secondary structure
    helixturnhelix Report nucleic acid binding motifs
@@ -217,7 +223,3 @@ Target users
    naive users to embedded scripts.
    
 Comments
-
-   If you use matrix tables with a different number of residues before or
-   after the cleavage site, you must also set the advanced parameters
-   nval and pval.

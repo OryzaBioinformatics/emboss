@@ -56,41 +56,309 @@ Display a sequence with features, translation etc
     Description
 </H2>
 
+<b>showseq</b> displays a protein or a nucleic acid sequence in a style
+suitable for publication.
+<p>
+
+The output is sent to the screen by default for the user to view, but it
+can write the results to a file.
+<p>
+
+The display style of the output is very flexible.  The user can select a
+style from the pre-set choice of formats, or can design a style to suit
+their purposes and aesthetic tastes.
+<p>
+
+The displayed sequence can be numbered either by numbering the start and
+ending positions, or by placing a ruler with ticks above or below the
+sequence.
+<p>
+
+The width of a line can be set.  The width of a margin around the
+sequence reserved for numbering can be set.  The initial position to
+start numbering from can be set.
+<p>
+
+The sequence can be translated, using the selectable genetic code
+tables.  The translation can be done in one, three or six frames.  The
+translation can be displayed in one-letter or three-letter amino acid
+codes.  The translation can optionally be displayed only when it is in
+open reading frames (ORFs) of a specified minimum size.  One or more
+specified regions of the sequence can be individually translated.
+<p>
+
+Specified regions of the sequence can be displayed in uppercase to
+highlight them.
+<p>
+
+The output can be formatted for HTML.
+<p>
+
+If the output is being formatted for HTML, then specified regions of the
+sequence can be displayed in any valid HTML colours.
+<p>
+
+The Restriction Enzyme database (REBASE) is a collection of information
+about restriction enzymes and related proteins.  It contains published
+and unpublished references, recognition and cleavage sites,
+isoschizomers, commercial availability, methylation sensitivity, crystal
+and sequence data.  DNA methyltransferases, homing endonucleases,
+nicking enzymes, specificity subunits and control proteins are also
+included.  Most recently, putative DNA methyltransferases and
+restriction enzymes, as predicted from analysis of genomic sequences,
+are also listed.
+<p>
+
+The home page of REBASE is: 
+<A HREF="http://rebase.neb.com/rebase/rebase.htm">
+http://rebase.neb.com/rebase/rebase.html</A>
+<p>
+
+This program can use REBASE data to find the recognition sites and/or
+cut sites of restriction enzymes in a nucleic acid sequence.
+<p>
+
+This program can display the cut sites on both strands.
+<p>
+
+One potentially very useful option is '-flatreformat' that displays not
+only the cut sites which many other restriction cut-site programs will
+show, but also shows the recognition site.
+<p>
 
 <H2>
     Usage
 </H2>
 
 
-Here is a sample session with showseq. By default the output appears
-on standard output (the terminal) but can be saved to a file.
+Here is a sample session with <b>showseq</b>. By default the output appears
+on standard output (the terminal) but can be saved to a file. We only look at a
+small section of the sequence to save space.
+<p>
 
 <pre>
-
-% showseq
+% showseq embl:eclac -sbeg 1 -send 100
 Display a sequence with features, translation etc..
-Input sequence(s): embl:paamir
-Output file [stdout]: 
-PAAMIR
-Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
-regulation
+Output file [stdout]:
+Things to display
+         0 : Enter your own list of things to display
+         1 : Sequence only
+         2 : Default sequence
+         3 : One frame translation
+         4 : Three frame translations
+         5 : Six frame translations
+         6 : Restriction enzyme map
+         7 : Baroque   
+Display format [2]:
+ECLAC
+E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
-                   10        20        30        40        50        60        
+                   10        20        30        40        50        60
           ----:----|----:----|----:----|----:----|----:----|----:----|
-          ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
-
-                   70        80        90        100       110       120       
+          gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
+         
+                   70        80        90        100       110       120
           ----:----|----:----|----:----|----:----|----:----|----:----|
-          ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
-
-                   130       140       150       160       170       180       
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          aggagaggaaacggatgggatcgcaccaggagcggccgctgatcggcctgctgttctccg
-
-.........
-
+          caattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgcagagtatgccggt
 </pre>
+<p>    
+        
+Note that although we asked for the sequence display to end at position
+'100', it has displayed the sequence up to the end of the line -
+position '120'.  This is a feature of this program to make the display
+of things like restriction enzyme cutting sites easier.
+<p>
+          
+The standard list of output formats are only a small selection of the 
+possible ways in which a sequence might be displayed.  Precise control
+over the output format is acheived by selecting the qualifier '-format
+0' (Option 0 in the list of things to display).  For example:
+<p>
 
+<pre>
+% showseq embl:eclac -sbeg 1 -send 120
+Display a sequence with features, translation etc..
+Output file [stdout]:
+Things to display
+         0 : Enter your own list of things to display
+         1 : Sequence only
+         2 : Default sequence
+         3 : One frame translation
+         4 : Three frame translations
+         5 : Six frame translations
+         6 : Restriction enzyme map
+         7 : Baroque
+Display format [2]: 0
+Specify your own things to display
+         S : Sequence
+         B : Blank line
+         1 : Frame1 translation
+         2 : Frame2 translation
+         3 : Frame3 translation
+        -1 : CompFrame1 translation
+        -2 : CompFrame2 translation
+        -3 : CompFrame3 translation
+         T : Ticks line
+         N : Number ticks line
+         C : Complement sequence
+         F : Features
+         R : Restriction enzyme cut sites in forward sense
+        -R : Restriction enzyme cut sites in reverse sense
+Enter a list of things to display [B N T S F]: b,s,t,c
+ECLAC
+E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+          
+          gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ctgtggtagcttaccgcgttttggaaagcgccataccgtactatcgcgggccttctctca
+
+          caattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgcagagtatgccggt
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          gttaagtcccaccacttacactttggtcattgcaatatgctacagcgtctcatacggcca
+</pre>
+<p>
+
+By choosing format '0' and then specifying that we want to display the
+things: 'b,s,t,c', we will output the sequence in the following way:
+<p>
+
+For every new line that the sequence starts to write, the output display
+will contain first a blank line ('b'), then the sequence itself ('s')
+then a line of with ticks every 10 characters ('t') then the reverse
+complement of the sequence ('c').  Subsequent lines of the sequence
+output will repeat this format.
+<p>
+         
+The 'thing' codes used in the list of standard formats are:
+<p>
+<pre>
+Sequence only:                  S
+Default sequence:               B N T S F
+One frame translation:          B N T S B 1 F
+Three frame translations:       B N T S B 1 2 3 F
+Six frame translations:         B N T S B 1 2 3 T -3 -2 -1 F
+Restriction enzyme map:         B R S N T C -R B 1 2 3 T -3 -2 -1
+Baroque:                        B 1 2 3 N T R S T C -R T -3 -2 -1 F
+</pre>          
+<p>          
+        
+The following are some examples of different formats:
+<p>
+<pre>
+Just sequence:
+
+% showseq embl:eclac stdout -sbeg 1 -send 120 -noname -nodesc -format 0 -thing S
+Display a sequence with features, translation etc..
+          gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
+          caattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgcagagtatgccggt
+</pre>
+<p>
+
+Protein sequence displayed in three-letter codes.  (The codes are
+displayed downwards, so the first code is 'Met'):
+<p>
+<pre>
+% showseq sw:rs24_fugru stdout -three -format 2
+RS24_FUGRU
+40S RIBOSOMAL PROTEIN S24.   
+         
+                   10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          MAATVTVATALPMTAALLGALGMVVAVLHPGLATVPLTGIAGLLALMTLTTPAVVPVPGP
+          esshaharhryhehsreelryleaasaeirlylharyhllrlyelyeyyhhrsaahahlh
+          tnprlrlgrgsetrnguungsntllplusoysarlosruegusuastrsrroplleleye
+
+                   70        80        90        100       110       120
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ATGPGGGLTTGPAMVTASLATALLAGPLHALAAHGLPGLLLTSALGALGALAAMLLVAGT
+          rhlhlllyhhlhleayseesylyyslryirelrilehlyyyherylrylrysreyyarlh
+          grneyyysrryeatlrpruprassnuossguagsyueusssrrgsngsugsngtsslgyr
+        
+                   130       140       150       160       170       180
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          LLASVGASLLLA 
+          yylealleyyys
+          ssarlyarsssp
+</pre>
+<p>
+Number the sequence lines in the margin:
+<p>
+<pre>
+% showseq embl:mmam stdout -format 1 -number
+Display a sequence with features, translation etc..
+Output file [stdout]:
+MMAM      
+Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody
+heavy chain mRNA.
+        1 gagnnccagctgcagcagtctggacctgagctggtaaagcctggggcttcagtgaagatg 60
+       61 tcctgcaaggcttctggatacacattcactagctatgttatgcactgggtgaatcagaag 120
+      121 cctgggcagggccttgagtggattggatatattaatccttacaatgatggtactaactac 180
+      181 aatgagaagttcaaaggcaaggccacactgacttcagacaaatcctccagcacagcctac 240
+      241 atggagttcagcagcctgacctctgaggactctgcggtctattactgtgcaagaaaaact 300
+      301 tcctactatagtaacctatattactttgactactggggccaaggcaccactctcacagtc 360
+      361 tcctca                                                       366
+</pre>
+<p>
+
+Start the numbering at a specified value ('123' in this case):
+<p>
+<pre>
+% showseq embl:mmam stdout -format 1 -number -offset 123
+Display a sequence with features, translation etc..
+MMAM
+Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody 
+heavy chain mRNA.
+      123 gagnnccagctgcagcagtctggacctgagctggtaaagcctggggcttcagtgaagatg 182
+      183 tcctgcaaggcttctggatacacattcactagctatgttatgcactgggtgaatcagaag 242
+      243 cctgggcagggccttgagtggattggatatattaatccttacaatgatggtactaactac 302
+      303 aatgagaagttcaaaggcaaggccacactgacttcagacaaatcctccagcacagcctac 362
+      363 atggagttcagcagcctgacctctgaggactctgcggtctattactgtgcaagaaaaact 422
+      423 tcctactatagtaacctatattactttgactactggggccaaggcaccactctcacagtc 482
+      483 tcctca                                                       488
+</pre>
+<p>
+
+Make selected regions uppercase.  (Use '-slower' to force the rest of
+the sequence to be lowercase).
+<p>
+<pre>          
+% showseq embl:mmam stdout -format 1 -slower -upper '25-45,101-203,333-362'
+Display a sequence with features, translation etc..  
+MMAM
+Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody
+heavy chain mRNA.
+          gagnnccagctgcagcagtctggaCCTGAGCTGGTAAAGCCTGGGgcttcagtgaagatg
+          tcctgcaaggcttctggatacacattcactagctatgttaTGCACTGGGTGAATCAGAAG
+          CCTGGGCAGGGCCTTGAGTGGATTGGATATATTAATCCTTACAATGATGGTACTAACTAC
+          AATGAGAAGTTCAAAGGCAAGGCcacactgacttcagacaaatcctccagcacagcctac
+          atggagttcagcagcctgacctctgaggactctgcggtctattactgtgcaagaaaaact
+          tcctactatagtaacctatattactttgactaCTGGGGCCAAGGCACCACTCTCACAGTC
+          TCctca
+</pre>
+<p>
+Translate selected regions:
+<p>
+<pre>
+% showseq embl:mmam stdout -format 3 -send 120 -trans 25-49,66-76
+Display a sequence with features, translation etc..
+MMAM
+Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody
+heavy chain mRNA.
+          
+                   10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          gagnnccagctgcagcagtctggacctgagctggtaaagcctggggcttcagtgaagatg
+
+                                  P  E  L  V  K  P  G  A  S
+          
+                   70        80        90        100       110       120
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          tcctgcaaggcttctggatacacattcactagctatgttatgcactgggtgaatcagaag
+        
+                 R  L  L
+</pre>
+<p>          
+          
 
 
 <H2>
@@ -493,73 +761,333 @@ PpiI</td>
     Input file format
 </H2>
 
+You can specifiy a file of ranges to display in uppercase by giving the
+'-uppercase' qualifier the value '@' followed by the name of the file
+containing the ranges.  (eg: '-upper @myfile').
+<p>
+          
+The format of the range file is:
+<p>
+<ul>
+      <li>Comment lines start with '#' in the first column.
+      <li>Comment lines and blank lines are ignored.
+      <li>The line may start with white-space.
+      <li>There are two positive (integer) numbers per line separated by one
+                or more space or
+      <li>TAB characters.
+      <li>The second number must be greater or equal to the first number.  
+      <li>There can be optional text after the two numbers to annotate the line.
+      <li>White-space before or after the text is removed.
+</ul>
+<p>
+An example range file is:
+<p>
+
+<pre>          
+# this is my set of ranges
+12   23                           
+ 4   5       this is like 12-23, but smaller
+67   10348   interesting region
+</pre>
+<p>
+
+You can specifiy a file of ranges to highlight in a different colour
+when outputting in HTML format (using the '-html' qualifier) by giving
+the '-highlight' qualifier the value '@' followed by the name of the
+file containing the ranges.  (eg: '-highlight @myfile').
+<p>
+
+The format of this file is very similar to the format of the above
+uppercase range file, except that the text after the start and end
+positions is used as the HTML colour name.  This colour name is used 'as
+is' when specifying the colour in HTML in a '<FONT COLOR=xxx>'
+construct, (where 'xxx' is the name of the colour).
+<p>
+
+The standard names of HTML font colours are given in:
+<A HREF="http://www.iconbazaar.com/color_tables/named_colors.html">
+http://www.iconbazaar.com/color_tables/named_colors.html</A>
+<p>
+
+An example highlight range file is:
+<p>
+
+<pre>          
+# this is my set of ranges
+12   23         red
+ 4   5          darkturquoise
+67   10348      #FFE4E1
+</pre>
+<p>
+
+
+You can specify a file of enzyme names to read in by giving the
+'-enzymes' qualifier the name of the file holding the enzyme names with
+a '@' character in front of it, for example, '@enz.list'.
+<p>
+
+Blank lines and lines starting with a '#' or '!' character are ignored
+and all other lines are concatenated together with a comma character ','
+and then treated as the list of enzymes to search for.
+<p>
+         
+An example of a file of enzyme names is:
+<p>
+
+<pre>      
+# my enzymes
+HincII, ppiI
+# other enzymes
+hindiii
+HinfI
+</pre>
+<p>            
+
 
 <H2>
     Output file format
 </H2>
 
-
-The output from showseq is a numbered pretty report of the sequence.
-There are many options to select and highlight parts of the sequence.
-
+Most of the variants of the output format have already been described in
+the 'Description' and 'Usage' sections, but here is some more just to
+fill out this section ;-)
 <p>
-Part of the output from the example run is shown below.
+
+The output format is extremely variable and under the control of the 
+qualifiers used.
+<p>
+          
+The sequence can be formatted for HTML display by using the '-html'
+qualifier.  The top and tail html tags &lt;HEAD&gt;, &lt;BODY&gt; etc.  are not
+included as it is expected that the output of this program will be
+included in a more extensive HTML page and so these parts are left to
+the user to provide.
+<p>
+
+The name of the sequence is displayed, followed by the description of
+the sequence.  These can be turned off with the '-noname' and
+'-nodescription' qualifiers.
+<p>
+      
+Then the sequence is output, one line at a time.  Any associated
+information to be displayed is also output above and below the sequence
+line, as specified by the '-format' and or '-things' qualifiers.  (See
+the 'Description' section for detals).
+<p>
+          
+The margins around the sequence are specified by the use of the
+'-margin' qaulifier and any numbering of the sequence and its
+translations are placed in the margin.
+<p>
+
+A display of the restriction enzyme cut sites can be selected via
+'-format 6' option or the '-format 0 -thing b,r,s,-r' style of options.
+<p>
+
+The option '-format 6' will produce a formatted display of cut sites on
+the sequence, with the six-frame translation below it.  The cut sites
+are indicated by a slash character '\' that points to the poition
+between the nucleotides where the cuts occur.  Cuts by many enzymes at
+the same position are indicated by stacking the enzyme names on top of
+each other.
+<p>
+
+At the end the section header 'Enzymes that cut' is displayed followed
+by a list of the enzymes that cut the specified sequence and the number
+of times that they cut.
+<p>
+
+The '-flatreformat' qualifier changes the display to emphasise the
+recognition site of the restriction enzyme, which is indicated by a row
+of '=' characters.  The cut site if pointed to by a '>' or '<' character
+and if the cut site is not within or imemdiately adjacent to the
+recognition site, they are linked by a row or '.' characters.
+<p>
+
+The name of the enzyme is displayed above (or below when the reverse
+sense site if displayed) the recognition site.  The name of the enzyme
+is also displayed above the cut site if this occurs on a different
+display line to the recognition site (i.e.  if it wraps onto the next
+line of sequence).
+<p>
+
+An example of this display follows:
+<p>
 
 <pre>
-
-PAAMIR
-Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
-regulation
-
-                   10        20        30        40        50        60        
+% showseq embl:eclac stdout -send 60 -format 6 -enz TaqI,Hin6I,AciI,Hin6I,BssKI,Bsu6
+Display a sequence with features, translation etc..
+ECLAC
+E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+          
+                                                      Hin6I
+                                                      | BssKI
+                 TaqI   Hin6I         AciI            | Bsu6I
+                 \      \             \               \ \
+          GACACCATCGAATGGCGCAAAACCTTTCGCGGTATGGCATGATAGCGCCCGGAAGAGAGT
+                   10        20        30        40        50        60
           ----:----|----:----|----:----|----:----|----:----|----:----|
-          ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
+          CTGTGGTAGCTTACCGCGTTTTGGAAAGCGCCATACCGTACTATCGCGGGCCTTCTCTCA
+                   /      /             /               /  / /
+                   TaqI   Hin6I         AciI            |  | BssKI
+                                                        |  Bsu6I
+                                                        Hin6I
 
-                   70        80        90        100       110       120       
+          D  T  I  E  W  R  K  T  F  R  G  M  A  *  *  R  P  E  E  S 
+           T  P  S  N  G  A  K  P  F  A  V  W  H  D  S  A  R  K  R  V
+            H  H  R  M  A  Q  N  L  S  R  Y  G  M  I  A  P  G  R  E  S
           ----:----|----:----|----:----|----:----|----:----|----:----|
-          ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
-
-                   130       140       150       160       170       180       
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          aggagaggaaacggatgggatcgcaccaggagcggccgctgatcggcctgctgttctccg
-
-
+            V  G  D  F  P  A  F  G  K  A  T  H  C  S  L  A  R  F  L  T
+           S  V  M  S  H  R  L  V  K  R  P  I  A  H  Y  R  G  S  S  L
+          X  C  W  R  I  A  C  F  R  E  R  Y  P  M  I  A  G  P  L  S
 </pre>
+<p>
+
+
 
 
 <H2>
     Data files
 </H2>
 
+EMBOSS data files are distributed with the application and stored in the
+standard EMBOSS data directory, which is defined by EMBOSS environment
+variable EMBOSS_DATA.
+<p>
+     
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called ".embossdata".  Files
+for all EMBOSS runs can be put in the user's home directory, or again in
+a subdirectory called ".embossdata".
+<p>
+      
+The directories are searched in the following order:
+<p>
+<pre>
+      . (your current directory)
+      .embossdata (under your current directory)
+      ~/ (your home directory)
+      ~/.embossdata
+</pre>
+<p>
+The Genetic Code data files are based on the NCBI genetic code tables.
+Their names and descriptions are:                       
+<p>
+<pre>
+
+EGC.0      Standard (Differs from GC.1 in that it only has initiation site 'AUG')
+EGC.1      Standard
+EGC.2      Vertebrate Mitochondrial
+EGC.3      Yeast Mitochondrial
+EGC.4      Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma
+EGC.5      Invertebrate Mitochondrial
+EGC.6      Ciliate Macronuclear and Dasycladacean
+EGC.9      Echinoderm Mitochondrial
+EGC.10     Euplotid Nuclear
+EGC.11     Bacterial
+EGC.12     Alternative Yeast Nuclear
+EGC.13     Ascidian Mitochondrial
+EGC.14     Flatworm Mitochondrial
+EGC.15     Blepharisma Macronuclear
+</pre>
+<p>
+The format of these files is very simple.
+<p>
+
+It consists of several lines of optional comments, each starting with a
+'#' character.
+<p>
+
+These are followed the line: 'Genetic Code [n]', where 'n' is the number
+of the genetic code file.
+<p>
+
+This is followed by the description of the code and then by four lines
+giving the IUPAC one-letter code of the translated amino acid, the start
+codons (indicdated by an 'M') and the three bases of the codon, lined up
+one on top of the other.
+<p>
+      
+For example:
+<p>
+
+<pre>
+# Genetic Code Table
+#     
+# Obtained from: http://www.ncbi.nlm.nih.gov/collab/FT/genetic_codes.html
+# and: http://www3.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wprintgc?mode=c
+#
+# Differs from Genetic Code [1] only in that the initiation sites have been
+# changed to only 'AUG'
+
+Genetic Code [0]
+Standard
+
+AAs  =   FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG
+Starts = -----------------------------------M----------------------------
+Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
+Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
+Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
+</pre>
+<p>      
+      
+<b>showseq</b> uses the EMBOSS REBASE data files in 'data/REBASE/*' under the
+EMBOSS installation directory.
+<p>
+
+These files must first be set up using the program '<b>rebaseextract</b>'.
+Running 'rebaseextract' may be the job of your system manager.
+<p>
+      
+
 
 <H2>
     Notes
 </H2>
 
+None.
 
 <H2>
     References
 </H2>
 
+None.
 
 <H2>
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
 </H2>
 
+It always exits with status 0.
 
 <H2>
     Known bugs
 </H2>
+
+None known.
+<p>
+
+If you ask for the sequence display to end at position '100', with the
+qualifier '-send 100', it will display the sequence up to the end of the
+line - position '120'.  This is a feature of this program to make the
+display of things like restriction enzyme cutting sites easier.
+<p>
+
+It is not a bug. Please don't report it.
+<p>
+      
 
 
 <!--
@@ -576,7 +1104,9 @@ regulation
 <tr><td><a href="cpgplot.html">cpgplot</a></td><td>Plot CpG rich areas</td></tr>
 <tr><td><a href="cpgreport.html">cpgreport</a></td><td>Reports all CpG rich regions</td></tr>
 <tr><td><a href="cusp.html">cusp</a></td><td>Create a codon usage table</td></tr>
+<tr><td><a href="diffseq.html">diffseq</a></td><td>Find differences (SNPs) between nearly identical sequences</td></tr>
 <tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td></tr>
+<tr><td><a href="dotpath.html">dotpath</a></td><td>Displays a non-overlapping wordmatch dotplot of two sequences</td></tr>
 <tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
 <tr><td><a href="einverted.html">einverted</a></td><td>Finds DNA inverted repeats</td></tr>
 <tr><td><a href="equicktandem.html">equicktandem</a></td><td>Finds tandem repeats</td></tr>
@@ -601,9 +1131,11 @@ regulation
 <tr><td><a href="seqret.html">seqret</a></td><td>Reads and writes (returns) sequences</td></tr>
 <tr><td><a href="seqretall.html">seqretall</a></td><td>Reads and writes (returns) a set of sequences one at a time</td></tr>
 <tr><td><a href="seqretset.html">seqretset</a></td><td>Reads and writes (returns) a set of sequences all at once</td></tr>
+<tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences</td></tr>
 <tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
 <tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
 <tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>
+<tr><td><a href="silent.html">silent</a></td><td>Silent mutation RE scan</td></tr>
 <tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
 <tr><td><a href="tmap.html">tmap</a></td><td>Displays membrane spanning regions</td></tr>
 <tr><td><a href="transeq.html">transeq</a></td><td>Translate nucleic acid sequences</td></tr>
@@ -627,6 +1159,7 @@ href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
     History
 </H2>
 
+Finished.
 
 <H2>
     Target users

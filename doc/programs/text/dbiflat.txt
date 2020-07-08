@@ -60,7 +60,6 @@ Command line arguments
    EMBL (EMBL)
    SWISS (Swiss-Prot, SpTrEMBL, TrEMBLnew)
    GB (Genbank, DDBJ)
-   FASTA (FASTA format)
    SWISS
    [-dbname]
    (Parameter 1) Database name A string from 1 to 19 characters Required
@@ -131,6 +130,9 @@ Known bugs
 See also
 
    Program name Description
+   dbiblast Index a BLAST database
+   dbifasta Index a fasta database
+   dbigcg Index a GCG formatted database
    
 Author(s)
 

@@ -34,6 +34,13 @@ Output file [outfile.seqmatchall]:
 
 Command line arguments
 
+   Mandatory qualifiers:
+  [-sequence]          seqset     Sequence set USA
+   -wordsize           integer    Word size
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
 
    Mandatory qualifiers Allowed values Default
    [-sequence]

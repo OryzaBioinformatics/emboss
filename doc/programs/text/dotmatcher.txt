@@ -105,6 +105,8 @@ See also
    chaos Create a chaos game representation plot for a sequence
    cpgplot Plot CpG rich areas
    cpgreport Reports all CpG rich regions
+   diffseq Find differences (SNPs) between nearly identical sequences
+   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
    dottup Displays a wordmatch dotplot of two sequences
    einverted Finds DNA inverted repeats
    equicktandem Finds tandem repeats
@@ -124,6 +126,7 @@ See also
    seqmatchall Does an all-against-all comparison of a set of sequences
    showseq Display a sequence with features, translation etc
    sigcleave Reports protein signal cleavage sites
+   silent Silent mutation RE scan
    stssearch Searches a DNA database for matches with a set of STS
    primers
    supermatcher Finds a match of a large sequence against one or more

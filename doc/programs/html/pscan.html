@@ -333,6 +333,12 @@ the sum of the maximum score of each column. A match to the sequence
 window is obtained if it has a score equal to or greater than the percentage
 of the maximum score of the lowest scoring sequence in the final motif
 set.
+<p>
+
+The data files must have been created before running this program.  This
+is done by running the <b>printsextract</b> program with the
+"prints.dat" file from a PRINTS release.  You may have to ask your
+system manager to do this. 
 
 <H2>
     References
@@ -434,7 +440,9 @@ It exits with status 0 unless an error is reported.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="antigenic.html">antigenic</a></td><td>Finds antigenic sites in proteins</td></tr>
+<tr><td><a href="diffseq.html">diffseq</a></td><td>Find differences (SNPs) between nearly identical sequences</td></tr>
 <tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td></tr>
+<tr><td><a href="dotpath.html">dotpath</a></td><td>Displays a non-overlapping wordmatch dotplot of two sequences</td></tr>
 <tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
 <tr><td><a href="dreg.html">dreg</a></td><td>regular expression search of a nucleotide sequence</td></tr>
 <tr><td><a href="fuzznuc.html">fuzznuc</a></td><td>Nucleic acid pattern search</td></tr>
@@ -461,6 +469,7 @@ It exits with status 0 unless an error is reported.
         data files?) that seealso doesn't find.
    -->
 
+<p>
 
 <ul>
 
@@ -496,10 +505,6 @@ from naive users to embedded scripts.
     Comments
 </H2>
 
-
-The data files must have been created before running this program. This is
-done by running the PRINTSEXTRACT program with the "prints.dat" file from
-a PRINTS release. You may have to ask your system manager to do this.
 
 <pre>
 

@@ -35,7 +35,7 @@ prosextract pscan \
 rebaseextract redata remap restrict revseq \
 seealso seqmatchall seqret seqretall seqretset seqretsplit \
 showdb showfeat showorf showseq \
-shuffleseq sigcleave splitter stretcher \
+shuffleseq sigcleave silent splitter stretcher \
 stssearch supermatcher syco \
 textsearch tfextract tfm tfscan \
 tmap transeq trimseq \
@@ -153,6 +153,7 @@ showorf_SOURCES = showorf.c
 showseq_SOURCES = showseq.c
 shuffleseq_SOURCES = shuffleseq.c
 sigcleave_SOURCES = sigcleave.c
+silent_SOURCES = silent.c
 splitter_SOURCES = splitter.c
 stretcher_SOURCES = stretcher.c
 stssearch_SOURCES = stssearch.c

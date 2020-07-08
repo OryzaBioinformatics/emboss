@@ -143,6 +143,7 @@ See also
    descseq Alter the name or description of a sequence
    extractseq Extract regions from a sequence
    maskfeat Mask off features of a sequence
+   megamerger Merge two large overlapping nucleic acid sequences
    merger Merge two overlapping nucleic acid sequences
    newseq Type in a short new sequence
    noreturn Removes carriage return from ASCII files
@@ -151,6 +152,7 @@ See also
    revseq Reverse and complement a sequence
    splitter Split a sequence into (overlapping) smaller sequences
    trimseq Trim ambiguous bits off the ends of sequences
+   vectorstrip Strips out DNA between a pair of vector sequences
    
 Author(s)
 
