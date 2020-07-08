@@ -1,0 +1,43 @@
+appl: emowse [
+        doc: "Protein identification by mass spectrometry"
+        groups: "PROTEIN:sequence composition"
+]
+
+ seqall: sequences [ param: Y type: protein ]
+
+ infile: infile [ param: Y info: "Name of molecular weight data file" ]
+
+list: enzyme [
+        opt: N
+        default: "1"
+        min: 1
+        max: 1
+        header: "Enzymes and reagents"
+        values: 
+                "1:Trypsin, 
+                2:Lys-C, 
+                3:Arg-C, 
+                4:Asp-N, 
+                5:V8-bicarb, 
+                6:V8-phosph, 
+                7:Chymotrypsin, 
+                8:CNBr" 
+        delim: ","
+        codedelim: ":"
+        prompt: "Enzyme or reagent"
+ ]
+
+ int: weight [ req: Y def: 0 info: "Whole sequence molwt" ]
+
+ int: pcrange [ req: N def: 25 min: 0 max: 75
+                info: "Allowed whole sequence weight variability" ]
+
+
+ string: frequencies [ req: N def: "Efreqs.dat" info: "Frequencies file" ]
+
+ float: tolerance [ req: N def: 0.1 min: 0.1 max: 1.0 ]
+
+ float: partials [ req: N def: 0.4 min: 0.1 max: 1.0
+		   info: "Partials factor" ]
+
+ outfile: outfile [ req: Y ]
