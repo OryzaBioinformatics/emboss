@@ -429,7 +429,7 @@ static void diffseq_Features(AjPFile outfile, AjPFeattable feat, ajint start,
     return;
 }
 
-/* @funcstatic diffseq_Features *****************************************
+/* @funcstatic diffseq_FeaturesRpt *****************************************
 **
 ** Write out any features which overlap this region.
 ** Don't write out the source feature - far too irritating!

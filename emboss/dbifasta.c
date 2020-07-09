@@ -56,15 +56,15 @@ static AjPStr release = NULL;
 static AjPStr datestr = NULL;
 static AjPStr sortopt = NULL;
 
-static AjBool dbifastaParseFasta   (AjPFile libr, ajint *dpos,
+static AjBool dbifasta_ParseFasta   (AjPFile libr, ajint *dpos,
 			    AjPStr* id, AjPList acl, AjPRegexp exp,
 			    ajint type);
 
-static EmbPentry dbifastaNextFlatEntry (AjPFile libr, ajint ifile,
+static EmbPentry dbifasta_NextFlatEntry (AjPFile libr, ajint ifile,
 					AjPStr idformat, AjPRegexp exp,
 					ajint type);
 
-static AjPRegexp getExpr(AjPStr idformat, ajint *type);
+static AjPRegexp dbifasta_getExpr(AjPStr idformat, ajint *type);
 
 
 
@@ -169,9 +169,9 @@ int main(int argc, char **argv)
   cleanup = ajAcdGetBool ("cleanup");
   sortopt = ajAcdGetString ("sortoptions");
 
+  ajStrCleanWhite(&dbname);	/* used for temp filenames */
 
-  exp = getExpr(idformat, &idtype);
-
+  exp = dbifasta_getExpr(idformat, &idtype);
 
   if (ajRegExec (datexp, datestr)) {
     for (i=1; i<4; i++) {
@@ -222,7 +222,7 @@ int main(int argc, char **argv)
 
     if (ajStrLen(curfilename) >= maxfilelen)
       maxfilelen = ajStrLen(curfilename) + 1;
-    while ((entry=dbifastaNextFlatEntry(libr, ifile, idformat,exp,idtype))) {
+    while ((entry=dbifasta_NextFlatEntry(libr, ifile, idformat,exp,idtype))) {
       if (systemsort) {
 	nid++;
       }
@@ -566,7 +566,7 @@ int main(int argc, char **argv)
   return 0;
 }
 
-/* @funcstatic dbifastaNextFlatEntry ******************************************
+/* @funcstatic dbifasta_NextFlatEntry *****************************************
 **
 ** Returns next database entry as an EmbPentry object
 **
@@ -579,7 +579,7 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-static EmbPentry dbifastaNextFlatEntry (AjPFile libr, ajint ifile,
+static EmbPentry dbifasta_NextFlatEntry (AjPFile libr, ajint ifile,
 					AjPStr idformat, AjPRegexp exp,
 					ajint type)
 {
@@ -598,7 +598,7 @@ static EmbPentry dbifastaNextFlatEntry (AjPFile libr, ajint ifile,
   if (!ret || !systemsort)
     ret = embDbiEntryNew();
 
-  if (!dbifastaParseFasta(libr, &ir, &id, acl, exp, type))
+  if (!dbifasta_ParseFasta(libr, &ir, &id, acl, exp, type))
      return NULL;
 
   /* id to ret->entry */
@@ -638,7 +638,7 @@ static EmbPentry dbifastaNextFlatEntry (AjPFile libr, ajint ifile,
   return ret;
 }
 
-/* @funcstatic getExpr *****************************************************
+/* @funcstatic dbifasta_getExpr ***********************************************
 **
 ** Compile regular expression
 **
@@ -647,7 +647,7 @@ static EmbPentry dbifastaNextFlatEntry (AjPFile libr, ajint ifile,
 ** @return [AjPRegexp] ajTrue on success.
 ** @@
 ******************************************************************************/
-static AjPRegexp getExpr(AjPStr idformat, ajint *type)
+static AjPRegexp dbifasta_getExpr(AjPStr idformat, ajint *type)
 {
     AjPRegexp exp=NULL;
     
@@ -659,7 +659,7 @@ static AjPRegexp getExpr(AjPStr idformat, ajint *type)
     else if(ajStrMatchC(idformat,"idacc"))
     {
 	*type = IDACC;
-	exp = ajRegCompC("^>([A-Za-z0-9_-]+)+[ \t]+([A-Za-z0-9-]+)");
+	exp = ajRegCompC("^>([.A-Za-z0-9_-]+)+[ \t]+([A-Za-z0-9-]+)");
     }
     else if(ajStrMatchC(idformat,"accid"))
     {
@@ -699,7 +699,7 @@ static AjPRegexp getExpr(AjPStr idformat, ajint *type)
     return exp;
 }
 
-/* @funcstatic dbifastaParseFasta *********************************************
+/* @funcstatic dbifasta_ParseFasta ********************************************
 **
 ** Parse the ID, accession from a FASTA format sequence
 **
@@ -713,7 +713,7 @@ static AjPRegexp getExpr(AjPStr idformat, ajint *type)
 ** @@
 ******************************************************************************/
 
-static AjBool dbifastaParseFasta (AjPFile libr, ajint* dpos,
+static AjBool dbifasta_ParseFasta (AjPFile libr, ajint* dpos,
 				  AjPStr* id, AjPList acl, AjPRegexp exp,
 				  ajint type)
 {

@@ -198,6 +198,13 @@
 ** DS003__
 ** WARN  Could not open for reading cpdb file s003.pxyz
 **
+** Important Note
+**
+** domainer is designed to work with OLD FORMAT clean pdb files - i.e. the 
+** ones currently found in /data/cpdb/ on the HGMP server.  To convert to 
+** parsing of new format files (when available) change ajXyzCpdbReadOld to 
+** ajXyzCpdbRead().
+**
 ******************************************************************************/
 
 
@@ -310,7 +317,7 @@ int main(int argc, char **argv)
 	
 	
 	/* Write pdb structure */
-	if(!ajXyzCpdbRead(cpdb_inf, &pdb))	       
+	if(!ajXyzCpdbReadOld(cpdb_inf, &pdb))	       
 	{
 	    ajFmtPrintS(&msg, "Error reading cpdb file %S", cpdb_name);
 	    ajWarn(ajStrStr(msg));

@@ -128,6 +128,13 @@
 ** Notes
 ** Should describe scoring schemes in above.
 **
+** Important Note
+**
+** siggen is designed to work with OLD FORMAT clean pdb files - i.e. the 
+** ones currently found in /data/cpdb/ on the HGMP server.  To convert to 
+** parsing of new format files (when available) change ajXyzCpdbReadOld to 
+** ajXyzCpdbRead().
+**
 ******************************************************************************/
 
 
@@ -140,26 +147,40 @@
 
 #include "emboss.h"
 
-AjBool  siggen_ScoreSeqMat(AjPScopalg alg, AjPScorealg *scores, AjPMatrixf mat, 
-                        AjPInt2d seq_pos);
-AjBool  siggen_ScoreSeqVar(AjPScopalg alg, AjPScorealg *scores, AjPInt2d seq_pos);
-AjBool  siggen_ScoreNcon(AjPScopalg alg, AjPScorealg *scores, AjPCmap *cmaps, 
-                         AjPInt2d seq_pos);
-AjBool  siggen_ScoreCcon(AjPScopalg alg, AjPScorealg *scores, AjPCmap *cmaps, 
-                         AjPInt2d seq_pos);
-AjBool  siggen_ScoreNCCon(AjPScopalg alg, AjPScorealg *scores, AjPCmap *cmaps,  
-
-                          AjPInt2d seq_pos);
-AjBool  siggen_ScoreCombined(AjPScorealg *scores);
-AjPSignature  siggen_SigSelect(AjPScopalg alg, AjPScorealg scores, 
-                               AjPInt2d seq_pos, ajint sig_sparse);
-AjBool siggen_CalcSeqpos(AjPScopalg alg, AjPInt2d *seq_pos);
-AjBool siggen_ScoreAlignment(AjPScorealg *scores, AjPScopalg alg, AjPCmap *cmaps, 
-                             AjPMatrixf  mat, AjBool *ace, AjPInt2d seq_pos);
-AjBool  siggen_ScoreNcon_Filter(AjPScopalg alg, AjPScorealg *scores, AjPCmap *cmaps, 
-                         AjPInt2d seq_pos);                  
-AjBool siggen_Con_Thresh(AjPScopalg alg, AjPScorealg *scores, AjPCmap *cmaps, ajint conthresh,
-			 AjBool *ace, AjPInt2d seq_pos);
+static AjBool  siggen_ScoreSeqMat(AjPScopalg alg, AjPScorealg *scores,
+				  AjPMatrixf mat, 
+				  AjPInt2d seq_pos);
+static AjBool  siggen_ScoreSeqVar(AjPScopalg alg, AjPScorealg *scores,
+				  AjPInt2d seq_pos);
+static AjBool  siggen_ScoreNcon(AjPScopalg alg, AjPScorealg *scores,
+				AjPCmap *cmaps, 
+				AjPInt2d seq_pos);
+static AjBool  siggen_ScoreCcon(AjPScopalg alg, AjPScorealg *scores,
+				AjPCmap *cmaps, 
+				AjPInt2d seq_pos);
+/*
+static AjBool  siggen_ScoreNCCon(AjPScopalg alg, AjPScorealg *scores,
+				 AjPCmap *cmaps,  
+				 AjPInt2d seq_pos);
+*/
+/*
+static AjBool  siggen_ScoreCombined(AjPScorealg *scores);
+*/
+static AjPSignature  siggen_SigSelect(AjPScopalg alg, AjPScorealg scores, 
+				      AjPInt2d seq_pos, ajint sig_sparse);
+static AjBool siggen_CalcSeqpos(AjPScopalg alg, AjPInt2d *seq_pos);
+static AjBool siggen_ScoreAlignment(AjPScorealg *scores, AjPScopalg alg,
+				    AjPCmap *cmaps, 
+				    AjPMatrixf  mat, AjBool *ace,
+				    AjPInt2d seq_pos);
+/*
+static AjBool  siggen_ScoreNcon_Filter(AjPScopalg alg, AjPScorealg *scores,
+				       AjPCmap *cmaps, 
+				       AjPInt2d seq_pos);
+*/
+static AjBool siggen_Con_Thresh(AjPScopalg alg, AjPScorealg *scores,
+				AjPCmap *cmaps, ajint conthresh,
+				AjBool *ace, AjPInt2d seq_pos);
 
 
 
@@ -485,7 +506,7 @@ int main(ajint argc, char **argv)
                 }   
 
 		/* Read coordinate data file */ 
-		ajXyzCpdbRead(fptr_cpdb, &pdb);
+		ajXyzCpdbReadOld(fptr_cpdb, &pdb);
 		
 
 		/* Determine the chain number */
@@ -704,7 +725,7 @@ int main(ajint argc, char **argv)
 
 
 
-/* @func siggen_ScoreSeqMat ****************************************************
+/* @funcstatic siggen_ScoreSeqMat *********************************************
  **
 
  ** Reada a Scopalg object and writes a Scorealg object. Each residue in 
@@ -720,8 +741,9 @@ int main(ajint argc, char **argv)
  ** @@
  ****************************************************************************/
 
-AjBool  siggen_ScoreSeqMat(AjPScopalg alg, AjPScorealg *scores, AjPMatrixf mat, 
-                 AjPInt2d seq_pos)
+static AjBool  siggen_ScoreSeqMat(AjPScopalg alg, AjPScorealg *scores,
+				  AjPMatrixf mat, 
+				  AjPInt2d seq_pos)
 {
     ajint       memb_cnt     =0;    /* Counter for members of the family (alignment) */
     ajint       res_cnt      =0;    /* Counter for residue in the alignment */
@@ -826,7 +848,7 @@ AjBool  siggen_ScoreSeqMat(AjPScopalg alg, AjPScorealg *scores, AjPMatrixf mat,
 
 
 
-/* @func siggen_ScoreSeqVar**************************************************
+/* @funcstatic siggen_ScoreSeqVar *********************************************
  **
  ** Reada a Scopalg object and writes a Scorealg object. Each residue in 
  ** the alignment is scored on the basis of a variability function.
@@ -840,7 +862,8 @@ AjBool  siggen_ScoreSeqMat(AjPScopalg alg, AjPScorealg *scores, AjPMatrixf mat,
  ** @return [AjBool] True on succcess
  ** @@
  ****************************************************************************/
-AjBool  siggen_ScoreSeqVar(AjPScopalg alg, AjPScorealg *scores, AjPInt2d seq_pos)
+static AjBool  siggen_ScoreSeqVar(AjPScopalg alg, AjPScorealg *scores,
+				  AjPInt2d seq_pos)
 {
     ajint       memb_cnt     =0;    /* Counter for members of the family (alignment) */
 
@@ -1053,7 +1076,7 @@ AjBool  siggen_ScoreSeqVar(AjPScopalg alg, AjPScorealg *scores, AjPInt2d seq_pos
 
 
 
-/* @func siggen_ScoreNcon *****************************************************
+/* @funcstatic siggen_ScoreNcon ***********************************************
  **
  ** Reads a Scopalg object and writes a Scorealg object. Each residue in 
 
@@ -1061,7 +1084,7 @@ AjBool  siggen_ScoreSeqVar(AjPScopalg alg, AjPScorealg *scores, AjPInt2d seq_pos
  ** (residue-residue) it makes in the structure. Contacts are read from a
  ** Cmaps object.
  **
- ** @param [r] alg     [AjPScopalg ]    Alignment
+ ** @param [r] alg     [AjPScopalg]    Alignment
  ** @param [w] scores  [AjPScorealg*]   Scores for alignment
  ** @param [r] cmaps   [AjPCmap*]       Residue contacts
  ** @param [r] seq_pos [AjPInt2d]       Index for alignment
@@ -1069,8 +1092,9 @@ AjBool  siggen_ScoreSeqVar(AjPScopalg alg, AjPScorealg *scores, AjPInt2d seq_pos
  ** @return [AjBool] True on succcess
  ** @@
  ******************************************************************************/
-AjBool  siggen_ScoreNcon(AjPScopalg alg, AjPScorealg *scores, AjPCmap *cmaps, 
-                         AjPInt2d seq_pos)
+static AjBool  siggen_ScoreNcon(AjPScopalg alg, AjPScorealg *scores,
+				AjPCmap *cmaps, 
+				AjPInt2d seq_pos)
 {
 
     ajint       memb_cnt     =0;    /* Counter for members of the family (alignment) */
@@ -1222,14 +1246,14 @@ AjBool  siggen_ScoreNcon(AjPScopalg alg, AjPScorealg *scores, AjPCmap *cmaps,
 
 
 
-/* @func siggen_ScoreCcon *****************************************************
+/* @funcstatic siggen_ScoreCcon ***********************************************
  **
  ** Reada a Scopalg object and writes a Scorealg object. Each residue in 
  ** the alignment is scored on the basis of the conservation of phsyical 
  ** contacts (residue-residue) it makes in the structures. Contacts are 
  ** read from a Cmaps object.
  **
- ** @param [r] alg     [AjPScopalg ]    Alignment
+ ** @param [r] alg     [AjPScopalg]    Alignment
  ** @param [w] scores  [AjPScorealg*]   Scores for alignment
  ** @param [r] cmaps   [AjPCmap*]       Residue contacts
  ** @param [r] seq_pos [AjPInt2d]       Index for alignment
@@ -1237,8 +1261,9 @@ AjBool  siggen_ScoreNcon(AjPScopalg alg, AjPScorealg *scores, AjPCmap *cmaps,
  ** @return [AjBool] True on succcess
  ** @@
  ******************************************************************************/
-AjBool  siggen_ScoreCcon(AjPScopalg alg, AjPScorealg *scores, AjPCmap *cmaps, 
-                  AjPInt2d seq_pos)
+static AjBool  siggen_ScoreCcon(AjPScopalg alg, AjPScorealg *scores,
+				AjPCmap *cmaps, 
+				AjPInt2d seq_pos)
 {
     ajint       memb_cnt     =0;    /* Counter for members of the family (alignment) */
     ajint       post_cnt     =0;    /* Counter for post_similar line */
@@ -1394,14 +1419,14 @@ AjBool  siggen_ScoreCcon(AjPScopalg alg, AjPScorealg *scores, AjPCmap *cmaps,
 
 
 
-/* @func siggen_ScoreNCCon ****************************************************
+/* @funcstatic siggen_ScoreNCCon **********************************************
  **
  ** Reada a Scopalg object and writes a Scorealg object. Each residue in 
  ** the alignment is scored on the basis of a combination of the the number 
  ** and conservation of phsyical contacts (residue-residue) it makes in the 
  ** structure. Contacts are read from a Cmaps object.
  ** 
- ** @param [r] alg     [AjPScopalg ]    Alignment
+ ** @param [r] alg     [AjPScopalg]    Alignment
  ** @param [w] scores  [AjPScorealg*]   Scores for alignment
  ** @param [r] cmaps   [AjPCmap*]       Residue contacts
  ** @param [r] seq_pos [AjPInt2d]       Index for alignment
@@ -1410,18 +1435,19 @@ AjBool  siggen_ScoreCcon(AjPScopalg alg, AjPScorealg *scores, AjPCmap *cmaps,
  ** @return [AjBool] True on succcess
  ** @@
  ******************************************************************************/
-AjBool  siggen_ScoreNCCon(AjPScopalg alg, AjPScorealg *scores, AjPCmap *cmaps,  
-                   AjPInt2d seq_pos)
+/*
+static AjBool  siggen_ScoreNCCon(AjPScopalg alg, AjPScorealg *scores,
+				 AjPCmap *cmaps,  
+				 AjPInt2d seq_pos)
 {
-    /*JC added to stop make bitching */
     return ajFalse;
 }
+*/
 
 
 
 
-
-/* @func siggen_ScoreCombined *****************************************************
+/* @funcstatic siggen_ScoreCombined *******************************************
  **
  ** Read the Scorealg structure and calculates the combined scores for 
 
@@ -1433,17 +1459,17 @@ AjBool  siggen_ScoreNCCon(AjPScopalg alg, AjPScorealg *scores, AjPCmap *cmaps,
  ** @return [AjBool] True on succcess
  ** @@
  *****************************************************************************/
-AjBool  siggen_ScoreCombined(AjPScorealg *scores)
+/*
+static AjBool  siggen_ScoreCombined(AjPScorealg *scores)
 {
-    /*JC added to stop make bitching */
     return ajFalse;
 }
+*/
 
 
 
 
-
-/* @func siggen_SigSelect *************************************************
+/* @funcstatic siggen_SigSelect ***********************************************
  **
  ** Read Scopalg and Scorealg objects and returns a pointer to a Signature
  ** object. The signature generated is derived from a number, determined
@@ -1458,8 +1484,8 @@ AjBool  siggen_ScoreCombined(AjPScorealg *scores)
  ** @return [AjPSignature] Pointer to Signature structure or NULL on failure
  ** @@
  *****************************************************************************/
-AjPSignature  siggen_SigSelect(AjPScopalg alg, AjPScorealg scores, 
-                               AjPInt2d seq_pos, ajint sig_sparse)
+static AjPSignature  siggen_SigSelect(AjPScopalg alg, AjPScorealg scores, 
+				      AjPInt2d seq_pos, ajint sig_sparse)
 {
     ajint       nseqs=0;                /*Number of sequences*/
     ajint       idx              =0;    /*Index*/
@@ -2287,12 +2313,12 @@ AjPSignature  siggen_SigSelect(AjPScopalg alg, AjPScorealg scores,
 
 
 
-/* @func siggen_ScoreAlignment ************************************************
+/* @funcstatic siggen_ScoreAlignment ******************************************
  **
  ** Convenience routine - calls several functions to score an alignment.
  **
- ** @param [r] alg     [AjPScopalg ]    Alignment
  ** @param [w] scores  [AjPScorealg*]   Scores for alignment
+ ** @param [r] alg     [AjPScopalg]    Alignment
  ** @param [r] cmaps   [AjPCmap*]       Residue contacts
  ** @param [r] mat     [AjPMatrixf]     Subsitution matrix
  ** @param [r] ace     [AjBool *]       Bool array for ACE groups
@@ -2301,9 +2327,9 @@ AjPSignature  siggen_SigSelect(AjPScopalg alg, AjPScorealg scores,
  ** @return [AjBool] True on succcess
  ** @@
  ******************************************************************************/
-AjBool siggen_ScoreAlignment(AjPScorealg *scores, AjPScopalg alg, 
-                             AjPCmap *cmaps, AjPMatrixf  mat, 
-			     AjBool *ace, AjPInt2d seq_pos)
+static AjBool siggen_ScoreAlignment(AjPScorealg *scores, AjPScopalg alg, 
+				    AjPCmap *cmaps, AjPMatrixf  mat, 
+				    AjBool *ace, AjPInt2d seq_pos)
 {
     /*Check args */
     if( !(*scores) || !alg || !mat || !seq_pos)
@@ -2346,17 +2372,17 @@ AjBool siggen_ScoreAlignment(AjPScorealg *scores, AjPScopalg alg,
 
 
 
-/* @func siggen_CalcSeqpos ****************************************************
+/* @funcstatic siggen_CalcSeqpos **********************************************
  **
  ** Reads a Scopalg object and calculates an index for the alignment.
  **
  ** @param [r] alg     [AjPScopalg]   Alignment
- ** @param [w] seq_pos [AjPInt2d]     Index for alignment
+ ** @param [w] seq_pos [AjPInt2d*]     Index for alignment
  **
  ** @return [AjBool] True on succcess
  ** @@
  ******************************************************************************/
-AjBool siggen_CalcSeqpos(AjPScopalg alg, AjPInt2d *seq_pos)
+static AjBool siggen_CalcSeqpos(AjPScopalg alg, AjPInt2d *seq_pos)
 {
     ajint       z             =0;       /* Loop counter */
     ajint       memb_cnt      =0;       /* Counter for members of the family (alignment) */
@@ -2438,7 +2464,7 @@ AjBool siggen_CalcSeqpos(AjPScopalg alg, AjPInt2d *seq_pos)
 
 
 
-/* @func siggen_Con_thresh ***********************************************
+/* @funcstatic siggen_Con_Thresh **********************************************
  **
  ** Reads Cmaps object, and determines whether each position in the 
  ** structural alignment displays greater than a threshold (conthresh)
@@ -2446,7 +2472,7 @@ AjBool siggen_CalcSeqpos(AjPScopalg alg, AjPInt2d *seq_pos)
  ** in the corresponding element of the ncon_thresh array (within 
  ** the scores structure), otherwise the element = '0'
  **
- ** @param [r] alg         [AjPScopalg ]  Alignment
+ ** @param [r] alg         [AjPScopalg]  Alignment
  ** @param [w] scores      [AjPScorealg*] Scores for alignment
  ** @param [r] cmaps       [AjPCmap*]     Residue contacts
  ** @param [r] conthresh   [ajint]        contact threshold
@@ -2456,8 +2482,9 @@ AjBool siggen_CalcSeqpos(AjPScopalg alg, AjPInt2d *seq_pos)
  ** @return [AjBool] True on succcess
  ** @@
  ******************************************************************************/
-AjBool siggen_Con_Thresh(AjPScopalg alg, AjPScorealg *scores, AjPCmap *cmaps, 
-ajint conthresh, AjBool *ace, AjPInt2d seq_pos)
+static AjBool siggen_Con_Thresh(AjPScopalg alg, AjPScorealg *scores,
+				AjPCmap *cmaps, 
+				ajint conthresh, AjBool *ace, AjPInt2d seq_pos)
 {
 
     ajint       memb_cnt     =0;    /* Counter for members of the family (alignment) */

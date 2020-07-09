@@ -122,28 +122,12 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic demolist_sourcecomp *******************************************
-**
-** Comparison routines used for sorting
-**
-** @return [ajint] Undocumented
-** @@
-******************************************************************************/
-/*
-static ajint demolist_sourcecomp(const void *a, const void *b)
-{
-    gffptr *gfa = (gffptr *) a;  
-    gffptr *gfb = (gffptr *) b;  
-
-    return ajStrCmp(&(*gfa)->source,&(*gfb)->source);
-}
-*/
-
-
 /* @funcstatic demolist_typecomp *********************************************
 **
 ** Undocumented.
 **
+** @param [r] a [const void*] Undocumented
+** @param [r] b [const void*] Undocumented
 ** @return [ajint] Undocumented
 ** @@
 ******************************************************************************/
@@ -163,6 +147,8 @@ static ajint demolist_typecomp(const void *a, const void *b)
 **
 ** Undocumented.
 **
+** @param [r] a [const void*] Undocumented
+** @param [r] b [const void*] Undocumented
 ** @return [ajint] Undocumented
 ** @@
 ******************************************************************************/
@@ -186,6 +172,9 @@ static ajint demolist_startcomp(const void *a, const void *b)
 **
 ** Undocumented.
 **
+** @param [r] x [void**] Undocumented
+** @param [r] cl [void*] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -206,6 +195,9 @@ static void  demolist_dumpOut(void **x, void *cl)
 **
 ** Undocumented.
 **
+** @param [r] x [void**] Undocumented
+** @param [r] cl [void*] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -223,10 +215,16 @@ static void  demolist_freegff (void **x, void *cl)
 
 
 
-/*
- *  Not important to understand for demo but this function
-    merely passes back a gff struct
-*/
+/* @funcstatic  demolist_creategff ********************************************
+**
+** Not important to understand for demo but this function
+** merely passes back a gff struct
+**
+** @param [?] line [AjPStr] Undocumented
+** @return [gffptr] Undocumented
+** @@
+******************************************************************************/
+
 static gffptr demolist_creategff(AjPStr line)
 {
     static AjPRegexp gffexp=NULL;

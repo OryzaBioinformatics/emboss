@@ -1,4 +1,4 @@
-#SET emboss_tempdata path_to_ditrectory_$EMBOSS/test
+#SET emboss_tempdata path_to_directory_$EMBOSS/test
 
 # Logfile - set this to a file that any user can append to
 # and EMBOSS applications will automatically write log information

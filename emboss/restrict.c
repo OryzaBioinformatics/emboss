@@ -387,7 +387,7 @@ static void restrict_printHits(AjPFile *outf, AjPList *l, AjPStr *name,
 **
 ** @param [w] report [AjPReport] report
 ** @param [r] seq [AjPSeq] sequence object
-** @param [w] TabRpt [AjPfeattable] feature table object to store results
+** @param [w] TabRpt [AjPFeattable] feature table object to store results
 ** @param [w] l [AjPList*] hits
 ** @param [r] hits [ajint] number of hits
 ** @param [r] begin [ajint] start position

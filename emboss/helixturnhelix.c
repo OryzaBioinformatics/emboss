@@ -438,9 +438,10 @@ static void hth_print_hits(AjPList *ajb, ajint n, float minsd, ajint lastcol,
 ** Undocumented.
 **
 ** @param [?] ajb [AjPList*] Undocumented
-** @param [?] n [ajint] Undocumented
 ** @param [?] lastcol [ajint] Undocumented
 ** @param [?] report [AjPReport] Undocumented
+** @param [?] TabRpt [AjPFeattable] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 

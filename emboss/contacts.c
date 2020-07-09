@@ -126,7 +126,12 @@
 ** DS003__
 ** WARN  Could not open for reading cpdb file s003.pxyz
 **
-** Notes
+** Important Note
+**
+** Contacts is designed to work with OLD FORMAT clean pdb files - i.e. the 
+** ones currently found in /data/cpdb/ on the HGMP server.  To convert to 
+** parsing of new format files (when available) change ajXyzCpdbReadOld to 
+** ajXyzCpdbRead().
 **
 ******************************************************************************/
 
@@ -138,21 +143,18 @@
 #include "emboss.h"
 #include "math.h"
 
-static AjBool contacts_ContactsWrite(AjPFile logf, AjPFile outf, float thresh, 
+static AjBool contacts_WriteFile(AjPFile logf, AjPFile outf, float thresh, 
 				     float ignore, AjPPdb pdb, AjPVdwall vdw);
-static AjBool contacts_PrintContactMap(AjPFile outf, AjPInt2d mat, char *txt, 
+
+static AjBool contacts_ContactMapWrite(AjPFile outf, AjPInt2d mat, char *txt, 
 				       ajint mod, ajint chn, AjPPdb pdb);
 
-static AjBool new_contacts_WriteContactMap(AjPInt2d *mat, ajint *ncon, ajint dim, 
+static AjBool contacts_ContactMapCalc(AjPInt2d *mat, ajint *ncon, ajint dim, 
 				       float thresh, float ignore, ajint mod, ajint chn,
 					   AjPPdb pdb, AjPVdwall vdw);
 
-static float contacts_Distance(AjPAtom atm1, AjPAtom atm2, AjPVdwall vdw);
 
 
-
-/*    AjPFile    xxxtemp=NULL;
-    AjPStr     xxxtempstr=NULL;   */
 
 
 /* @prog contacts *******************************************************
@@ -267,7 +269,7 @@ int main(ajint argc, char **argv)
 
 
 	/* Read pdb structure */
-	if(!ajXyzCpdbRead(cpdb_inf, &pdb))	       
+	if(!ajXyzCpdbReadOld(cpdb_inf, &pdb))	       
 	{
 	    ajFmtPrintS(&msg, "ERROR file read error %S", temp);
 	    ajWarn(ajStrStr(msg));
@@ -302,7 +304,7 @@ int main(ajint argc, char **argv)
     
 	
 	/* Write contacts file */
-	if(!contacts_ContactsWrite(logf, con_outf, thresh, ignore, pdb, vdw))
+	if(!contacts_WriteFile(logf, con_outf, thresh, ignore, pdb, vdw))
 	{
 	    ajFmtPrintS(&msg, "ERROR  file write error %S", con_name);
 	    ajWarn(ajStrStr(msg));
@@ -362,10 +364,10 @@ int main(ajint argc, char **argv)
 
 
 
-/* @funcstatic contact_ContactsWrite *****************************************
+/* @funcstatic contacts_WriteFile *****************************************
 **
-** Writes a file of residue contact data in embl-like format for a pdb 
-** structure.
+** Writes a file of INTRA-chain residue contact data in embl-like format 
+** for a pdb structure.
 **
 ** @param [w] logf   [AjPFile] Output file stream (log file)
 ** @param [w] outf   [AjPFile] Output file stream (contact file)
@@ -379,7 +381,7 @@ int main(ajint argc, char **argv)
 **
 ******************************************************************************/
 
-static AjBool contacts_ContactsWrite(AjPFile logf, AjPFile outf, float thresh, 
+static AjBool contacts_WriteFile(AjPFile logf, AjPFile outf, float thresh, 
 				     float ignore, AjPPdb pdb, AjPVdwall vdw)
 {
     AjPInt2d    mat   =NULL;		/* Contact map */
@@ -415,49 +417,68 @@ static AjBool contacts_ContactsWrite(AjPFile logf, AjPFile outf, float thresh,
 
 	for(y=0;y<pdb->Nchn;y++)
 	{
-	    /* Allocate memory for the contact map (a SQUARE 2d int array) */
-	    mat = ajInt2dNewL((ajint)pdb->Chains[y]->Nres);   	
-	    for(z=0;z<pdb->Chains[y]->Nres;++z)
-		ajInt2dPut(&mat, z, pdb->Chains[y]->Nres-1, (ajint) 0);
-
-	    
-	    /* Write the contact map */
-	    
-	    if(!new_contacts_WriteContactMap(&mat, &ncon, pdb->Chains[y]->Nres, 
-					 thresh, ignore, x+1, y+1, pdb,  vdw))
+	    /* Cope with chains with no residues */
+	    if(pdb->Chains[y]->Nres == 0)
 	    {
-		ajFmtPrintF(logf, "ERROR  Writing contact map\n");
-		ajInt2dDel(&mat);
-		return ajFalse;
-	    }
-
-
-	    /* Print out chain-specific data */
-	    ajFmtPrintF(outf, "%-5s[%d]\n", "CN", y+1);	
-	    ajFmtPrintF(outf, "XX\n");	
-	    ajFmtPrintF(outf, "%-5sID %c; NR %d; NSMCON %d;\n", 
-			"IN", 
- 			pdb->Chains[y]->Id,
-			pdb->Chains[y]->Nres,
-			ncon);
-	    ajFmtPrintF(outf, "XX\n");	
-
-
-	    if(ncon)
-	    {
-		/*Matrix written OK and has at least 1 contact*/
-		contacts_PrintContactMap(outf, mat, "SM", x+1, y+1, pdb);   
+		/* Print out chain-specific data */
+		ajFmtPrintF(outf, "%-5s[%d]\n", "CN", y+1);	
 		ajFmtPrintF(outf, "XX\n");	
-	    }
-	    else 
-	    {
+		ajFmtPrintF(outf, "%-5sID %c; NR %d; NSMCON 0;\n", 
+			    "IN", 
+			    pdb->Chains[y]->Id,
+			    pdb->Chains[y]->Nres);
+		ajFmtPrintF(outf, "XX\n");	
+
 		/* Empty matrix ! */
 		ajFmtPrintF(outf, ".\nXX\n");	
 	    }
+	    else
+	    {
+		/* Allocate memory for the contact map (a SQUARE 2d int array) */
+		mat = ajInt2dNewL((ajint)pdb->Chains[y]->Nres);   	
+		for(z=0;z<pdb->Chains[y]->Nres;++z)
+		    ajInt2dPut(&mat, z, pdb->Chains[y]->Nres-1, (ajint) 0);
+
+	    
+		/* Write the contact map */
+	    
+		if(!contacts_ContactMapCalc(&mat, &ncon, pdb->Chains[y]->Nres, 
+					     thresh, ignore, x+1, y+1, pdb,  vdw))
+		{
+		    ajFmtPrintF(logf, "ERROR  Writing contact map\n");
+		    ajInt2dDel(&mat);
+		    return ajFalse;
+		}
 
 
-	    /* Free memory for matrix */
-	    ajInt2dDel(&mat);
+		/* Print out chain-specific data */
+		ajFmtPrintF(outf, "%-5s[%d]\n", "CN", y+1);	
+		ajFmtPrintF(outf, "XX\n");	
+		ajFmtPrintF(outf, "%-5sID %c; NR %d; NSMCON %d;\n", 
+			    "IN", 
+			    pdb->Chains[y]->Id,
+			    pdb->Chains[y]->Nres,
+			    ncon);
+		ajFmtPrintF(outf, "XX\n");	
+
+
+		if(ncon)
+		{
+		    /*Matrix written OK and has at least 1 contact*/
+		    contacts_ContactMapWrite(outf, mat, "SM", x+1, y+1, pdb);   
+		    ajFmtPrintF(outf, "XX\n");	
+		}
+		else 
+		{
+		    /* Empty matrix ! */
+		    ajFmtPrintF(outf, ".\nXX\n");	
+		}
+
+
+		/* Free memory for matrix */
+		ajInt2dDel(&mat);
+	    }
+	    
 	}
     }
     /* End of loop to print out data for each model / chain */
@@ -472,10 +493,11 @@ static AjBool contacts_ContactsWrite(AjPFile logf, AjPFile outf, float thresh,
 
 
 
-/* @funcstatic contacts_PrintContactMap **************************************
+/* @funcstatic contacts_ContactMapWrite **************************************
 **
 ** Writes data in a contact map to file for a certain model and chain in a pdb 
-** structure.
+** structure. The contact map must contain intra-chain contacts. Rows and
+** columns in the square contact map correspond to residues in the chain.
 **
 ** @param [w] outf [AjPFile]     Output file stream (contact file)
 ** @param [r] mat  [AjPInt2d]    Contact map
@@ -494,7 +516,7 @@ static AjBool contacts_ContactsWrite(AjPFile logf, AjPFile outf, float thresh,
 ** @@
 **
 ****************************************************************************/
-static AjBool contacts_PrintContactMap(AjPFile outf, AjPInt2d mat, char *txt,
+static AjBool contacts_ContactMapWrite(AjPFile outf, AjPInt2d mat, char *txt,
 				       ajint mod, ajint chn, AjPPdb pdb)
 {
     ajint      x,y;			/* Loop counters */    
@@ -505,7 +527,7 @@ static AjBool contacts_PrintContactMap(AjPFile outf, AjPInt2d mat, char *txt,
     /* Error checking on args */
     if(!outf || !mat || !pdb || !txt)
     {
-	ajWarn("Null arg. passed to contacts_PrintContactMap");
+	ajWarn("Null arg. passed to contacts_ContactMapWrite");
 	return ajFalse;
     }
     
@@ -560,58 +582,34 @@ static AjBool contacts_PrintContactMap(AjPFile outf, AjPInt2d mat, char *txt,
 
 
 
-
-
-
-
-
-
-/* @funcstatic contacts_Distance ********************************************
+/* @funcstatic contacts_ContactMapCalc **************************************
 **
-** Returns the distance (Angstroms) between two atoms.
+** Write a contact map for a certain model and chain in a pdb structure. The
+** contact map must contain intra-chain contacts. Rows and columns in the 
+** square contact map correspond to residues in the chain.
 **
-** @param [r] atm1   [AjPAtom]     Atom 1 object
-** @param [r] atm2   [AjPAtom]     Atom 1 object
-** @param [r] vdw    [AjPVdwall]   Vdwall object
-**
-** Returns the distance (Angstroms) between the van der Waals surface of two
-** atoms.
-**
-** @return [float] Distance (Angstroms) between two atoms.
+** @param [w] mat    [AjPInt2d*]  Contact map
+** @param [w] ncon   [ajint*]     No. contacts
+** @param [r] dim    [ajint]      Dimension of matrix (no. residues) 
+** @param [r] thresh [float]      Threshold distance at which contact between 
+**                                two residues is defined.
+** @param [r] ignore [float]      Threshold "ignore" distance - this is a 
+**                                speed-up.  Contact is not checked for between 
+**                                residues with CA atoms a further distance 
+**                                apart than this.
+** @param [r] mod    [ajint]      Model number
+** @param [r] chn    [ajint]      Chain number
+** @param [r] pdb    [AjPPdb]     Pdb object
+** @param [r] vdw    [AjPVdwall]  Vdw object
+** 
+** @return [AjBool] True if file was succesfully written.
 ** @@
 **
-******************************************************************************/
-
-static float contacts_Distance(AjPAtom atm1, AjPAtom atm2, AjPVdwall vdw)
-{
-    float val =0.0;
-    float val1=0.0;
-
-    
-    val=((atm1->X -  atm2->X) * (atm1->X -  atm2->X)) +
-	((atm1->Y -  atm2->Y) * (atm1->Y -  atm2->Y)) +
-	    ((atm1->Z -  atm2->Z) * (atm1->Z -  atm2->Z));
-
-
-    /*  This calculation uses square root */
-    val1= sqrt(val) - ajXyzVdwRad(atm1, vdw) - ajXyzVdwRad(atm2, vdw);
-    
-        
-    return val1;
-} 
-
-
-
-
-
-
-
-
-
-
-static AjBool new_contacts_WriteContactMap(AjPInt2d *mat, ajint *ncon, ajint dim, 
-				       float thresh, float ignore, ajint mod, ajint chn,
-				       AjPPdb pdb, AjPVdwall vdw)
+****************************************************************************/
+static AjBool contacts_ContactMapCalc(AjPInt2d *mat, ajint *ncon, ajint dim, 
+				      float thresh, float ignore, ajint mod,
+				      ajint chn,
+				      AjPPdb pdb, AjPVdwall vdw)
 {	
     /* Contact is checked for between two residues, residue 1 and residue 2 */
     
@@ -657,7 +655,7 @@ static AjBool new_contacts_WriteContactMap(AjPInt2d *mat, ajint *ncon, ajint dim
     /* Error checking on args */
     if(!mat || !pdb || !chn || !mod)
     {	
-	ajWarn("Null or zero arg. passed to contacts_WriteContactMap");
+	ajWarn("Null or zero arg. passed to contacts_ContactMapCalc");
 	return ajFalse;
     }
     
@@ -671,7 +669,7 @@ static AjBool new_contacts_WriteContactMap(AjPInt2d *mat, ajint *ncon, ajint dim
 			   (void ***)&arr)))
     {
 	ajWarn("Zero sized list of sequences passed into "
-	       "contacts_WriteContactMap");
+	       "contacts_ContactMapCalc");
 	return ajFalse;
     }
 
@@ -708,7 +706,7 @@ static AjBool new_contacts_WriteContactMap(AjPInt2d *mat, ajint *ncon, ajint dim
     /* Find index in <arr> of first atom belonging to correct model */
     for(done=ajFalse, idxfirst=0; idxfirst<siz; idxfirst++) 
 	/* Find the correct model */
-	if(arr[idxfirst]->Mod==mod)
+	if(arr[idxfirst]->Mod==mod && arr[idxfirst]->Type=='P')
 	{
 	    done=ajTrue;
 	    resfirst=arr[idxfirst]->Idx;
@@ -716,7 +714,7 @@ static AjBool new_contacts_WriteContactMap(AjPInt2d *mat, ajint *ncon, ajint dim
 	}
     if(!done)
     {
-	ajWarn("Model not found in contacts_WriteContactMap");
+	ajWarn("Model not found in contacts_ContactMapCalc");
 	AJFREE(arr);
 	return ajFalse;
     } 
@@ -738,7 +736,7 @@ static AjBool new_contacts_WriteContactMap(AjPInt2d *mat, ajint *ncon, ajint dim
 	idxlast--;
     if(idxlast == idxfirst)
     {
-	ajWarn("No atoms for the chain in contacts_WriteContactMap");
+	ajWarn("No atoms for the chain in contacts_ContactMapCalc");
 	AJFREE(arr);
 	return ajFalse;
     } 
@@ -792,7 +790,7 @@ static AjBool new_contacts_WriteContactMap(AjPInt2d *mat, ajint *ncon, ajint dim
 		    
 		    
 /*		    if(ajXyzInContact(arr[idx1], arr[idx2], thresh, vdw))		 */
-		    if((dis = contacts_Distance(arr[idx1], arr[idx2], vdw))<=thresh)
+		    if((dis = ajXyzAtomDistance(arr[idx1], arr[idx2], vdw))<=thresh)
 		    {
 /*			ajFmtPrintF(xxxtemp, "CONTACT\n");
 			fflush(xxxtemp->fp);  */

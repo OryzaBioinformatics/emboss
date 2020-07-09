@@ -199,7 +199,7 @@ int main(int argc, char **argv)
 
 
 
-void digest_print_hits(AjPList l, AjPFile outf, ajint be, char *s)
+static void digest_print_hits(AjPList l, AjPFile outf, ajint be, char *s)
 {
     EmbPPropFrag fr;
     AjPStr  t;
@@ -243,7 +243,7 @@ void digest_print_hits(AjPList l, AjPFile outf, ajint be, char *s)
 **
 ** @param [w] report [AjPReport] report
 ** @param [r] seq [AjPSeq] sequence object
-** @param [w] TabRpt [AjPfeattable] feature table object to store results
+** @param [w] TabRpt [AjPFeattable] feature table object to store results
 ** @param [?] l [AjPList] Undocumented
 ** @param [?] be [ajint] Undocumented
 ** @param [?] s [char*] Undocumented
@@ -252,9 +252,9 @@ void digest_print_hits(AjPList l, AjPFile outf, ajint be, char *s)
 
 
 
-void digest_report_hits(AjPReport report, AjPSeq seq,
-			AjPFeattable TabRpt, AjPList l, ajint be,
-			char* s)
+static void digest_report_hits(AjPReport report, AjPSeq seq,
+			       AjPFeattable TabRpt, AjPList l, ajint be,
+			       char* s)
 {
     AjPFeature gf = NULL;
     EmbPPropFrag fr;

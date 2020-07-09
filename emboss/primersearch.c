@@ -196,6 +196,7 @@ static void psearch_initialise_pguts(PGuts* primer)
 ** Frees up all the internal members of a PGuts struct
 **
 ** @param [?] primer [PGuts*] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -223,14 +224,16 @@ static void psearch_free_pguts(PGuts* primer)
 
 
 
-/* @func psearch_free_primer *************************************************
+/* @funcstatic psearch_free_primer ********************************************
 **
 ** frees up the internal members of a Primer
 **
+** @param [r] x [void**] Undocumented
+** @param [r] cl [void*] Undocumented
 ** @@
 ******************************************************************************/
 
-void psearch_free_primer(void **x, void *cl)
+static void psearch_free_primer(void **x, void *cl)
 {
     Primer* p;
     Primer primdata;
@@ -754,4 +757,3 @@ static void psearch_print_hits(AjPList primerList, AjPFile outf)
 
     return;
 }
-

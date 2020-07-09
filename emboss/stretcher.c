@@ -25,25 +25,25 @@
 #include "emboss.h"
 
 
-/* @macro gap *****************************************************************
+/* @macro stretchergap ********************************************************
 **
-** Undocumented
+** k-symbol indel score
 **
 ** @param [r] k [ajint] Symbol
-** @return [] k-symbol indel score 
+** @return [void]  
 ******************************************************************************/
 
-#define gap(k)  ((k) <= 0 ? 0 : g+hh*(k))	/* k-symbol indel score */
+#define stretchergap(k)  ((k) <= 0 ? 0 : g+hh*(k)) /* k-symbol indel score */
 
 
-static ajint stretcherEalign(char *A, char *B, ajint M, ajint N, ajint G,
+static ajint stretcher_Ealign(char *A, char *B, ajint M, ajint N, ajint G,
 			      ajint H,ajint *S, ajint* NC);
-static ajint stretcherCalcons(char *aa0, ajint n0, char *aa1, ajint n1,
+static ajint stretcher_Calcons(char *aa0, ajint n0, char *aa1, ajint n1,
 			       ajint* res);
-static ajint stretcherDiscons(char* seqc0, char *seqc1, ajint nc);
-static ajint stretcherAlign(char *A, char *B, ajint M, ajint N, ajint tb,
+static ajint stretcher_Discons(char* seqc0, char *seqc1, ajint nc);
+static ajint stretcher_Align(char *A, char *B, ajint M, ajint N, ajint tb,
 			     ajint te);
-static ajint stretcherCheckScore(unsigned char *A,unsigned char *B,ajint M,
+static ajint stretcher_CheckScore(unsigned char *A,unsigned char *B,ajint M,
 				   ajint N,ajint *S,ajint *NC);
 
 
@@ -58,7 +58,7 @@ static ajint hh;
 static ajint m;					/* g = G, hh = H, m = g+h */
 
 
-/* @macro DEL *******************************************************
+/* @macro STRETCHERDEL *******************************************************
 **
 ** Macro for a "Delete k" operation
 **
@@ -66,14 +66,14 @@ static ajint m;					/* g = G, hh = H, m = g+h */
 ** @return [void]
 ******************************************************************************/
 
-#define DEL(k)				\
+#define STRETCHERDEL(k)				\
 { if (last < 0)				\
     last = sapp[-1] -= (k);		\
   else					\
     last = *sapp++ = -(k);		\
 }
 						/* Append "Insert k" op */
-/* @macro INS *******************************************************
+/* @macro STRETCHERINS *******************************************************
 **
 ** Macro for an "Insert k" operation
 **
@@ -81,21 +81,21 @@ static ajint m;					/* g = G, hh = H, m = g+h */
 ** @return [void]
 ******************************************************************************/
 
-#define INS(k)				\
+#define STRETCHERINS(k)				\
 { if (last < 0)				\
     { sapp[-1] = (k); *sapp++ = last; }	\
   else					\
     last = *sapp++ = (k);		\
 }
 
-/* @macro REP *******************************************************
+/* @macro STRETCHERREP *******************************************************
 **
 ** Macro for a "Replace" operation
 **
 ** @return [void]
 ******************************************************************************/
 
-#define REP { last = *sapp++ = 0; }		/* Append "Replace" op */
+#define STRETCHERREP { last = *sapp++ = 0; } /* Append "Replace" op */
 
 
 static AjPSeq seq;
@@ -196,11 +196,11 @@ int main(int argc, char **argv)
     AJCNEW(seqc0, ajSeqLen(seq)+ajSeqLen(seq2));
     AJCNEW(seqc1, ajSeqLen(seq)+ajSeqLen(seq2));
 
-    gscore = stretcherEalign(ajStrStr(aa0str),ajStrStr(aa1str),
+    gscore = stretcher_Ealign(ajStrStr(aa0str),ajStrStr(aa1str),
 			      ajSeqLen(seq),ajSeqLen(seq2),
 			      (gdelval-ggapval),ggapval,res,&nres);
 
-    nc=stretcherCalcons(ajStrStr(aa0str),ajSeqLen(seq),ajStrStr(aa1str),
+    nc=stretcher_Calcons(ajStrStr(aa0str),ajSeqLen(seq),ajStrStr(aa1str),
 			 ajSeqLen(seq2),res);
     percent = (double)nd*100.0/(double)nc;
 
@@ -216,7 +216,7 @@ int main(int argc, char **argv)
     }
 
     if (outf)
-      stretcherDiscons(seqc0,seqc1,nc);
+      stretcher_Discons(seqc0,seqc1,nc);
 
     seqset = ajSeqsetNew();
     res1 = ajSeqNewS(seq);
@@ -265,7 +265,7 @@ int main(int argc, char **argv)
 
 static ajint nmax=0;
 
-/* @funcstatic stretcherEalign ********************************************
+/* @funcstatic stretcher_Ealign ********************************************
 **
 ** Undocumented
 **
@@ -280,7 +280,7 @@ static ajint nmax=0;
 ** @return [ajint] Undocumented
 ******************************************************************************/
 
-static ajint stretcherEalign(char *A,char *B,ajint M,ajint N,ajint G,
+static ajint stretcher_Ealign(char *A,char *B,ajint M,ajint N,ajint G,
 			      ajint H,ajint *S,ajint *NC)
 { 
     ajint c;
@@ -318,8 +318,8 @@ static ajint stretcherEalign(char *A,char *B,ajint M,ajint N,ajint G,
 	exit(1);
     }
 
-    c = stretcherAlign(A,B,M,N,-g,-g);		/* OK, do it */
-    ck = stretcherCheckScore((unsigned char *)A,(unsigned char *)B,M,N,S,NC);
+    c = stretcher_Align(A,B,M,N,-g,-g);		/* OK, do it */
+    ck = stretcher_CheckScore((unsigned char *)A,(unsigned char *)B,M,N,S,NC);
     if (c != ck) ajWarn("stretcher CheckScore failed");
     return c;
 }
@@ -329,7 +329,7 @@ static ajint stretcherEalign(char *A,char *B,ajint M,ajint N,ajint G,
 
 
 
-/* @funcstatic stretcherAlign ********************************************
+/* @funcstatic stretcher_Align ********************************************
 **
 ** align(A,B,M,N,tb,te) returns the cost of an optimum conversion between
 ** A[1..M] and B[1..N] that begins(ends) with a delete if tb(te) is zero
@@ -344,7 +344,7 @@ static ajint stretcherEalign(char *A,char *B,ajint M,ajint N,ajint G,
 ** @return [ajint] Undocumented
 ******************************************************************************/
 
-static ajint stretcherAlign(char *A,char *B,ajint M,ajint N,ajint tb,ajint te)
+static ajint stretcher_Align(char *A,char *B,ajint M,ajint N,ajint tb,ajint te)
 {
     ajint midi;
     ajint midj;
@@ -368,27 +368,27 @@ static ajint stretcherAlign(char *A,char *B,ajint M,ajint N,ajint tb,ajint te)
     if (N <= 0)
     {
 	if (M > 0)
-	    DEL(M);
-	return -gap(M);
+	    STRETCHERDEL(M);
+	return -stretchergap(M);
     }
 
     if (M <= 1)
     {
 	if (M <= 0)
 	{
-	    INS(N)
-	    return -gap(N);
+	    STRETCHERINS(N)
+	    return -stretchergap(N);
 	}
 
 	if (tb < te)
 	    tb = te;
 
-	midc = (tb-hh) - gap(N);
+	midc = (tb-hh) - stretchergap(N);
 	midj = 0;
 	wa = sub[(ajint)A[1]];
 	for (j = 1; j <= N; j++)
         {
-	    c = -gap(j-1) + wa[(ajint)B[j]] - gap(N-j);
+	    c = -stretchergap(j-1) + wa[(ajint)B[j]] - stretchergap(N-j);
 	    if (c > midc)
             {
 		midc = c;
@@ -397,15 +397,15 @@ static ajint stretcherAlign(char *A,char *B,ajint M,ajint N,ajint tb,ajint te)
         }
 	if (midj == 0)
         {
-	    INS(N) DEL(1)
+	    STRETCHERINS(N) STRETCHERDEL(1)
 	}
 	else
         {
 	    if (midj > 1)
-		INS(midj-1)
-	      REP
+		STRETCHERINS(midj-1)
+	    STRETCHERREP
 	    if (midj < N)
-		INS(N-midj)
+		STRETCHERINS(N-midj)
         }
 	return midc;
     }
@@ -494,22 +494,22 @@ static ajint stretcherAlign(char *A,char *B,ajint M,ajint N,ajint tb,ajint te)
 
     if (type == 1)
     {
-	c1 = stretcherAlign(A,B,midi,midj,tb,-g);
-	c2 = stretcherAlign(A+midi,B+midj,M-midi,N-midj,-g,te);
+	c1 = stretcher_Align(A,B,midi,midj,tb,-g);
+	c2 = stretcher_Align(A+midi,B+midj,M-midi,N-midj,-g,te);
 	ajDebug("c1=%d, c2 = %d\n",c1,c2);
     }
     else
     {
-	stretcherAlign(A,B,midi-1,midj,tb,0);
-	DEL(2);
-	stretcherAlign(A+midi+1,B+midj,M-midi-1,N-midj,0,te);
+	stretcher_Align(A,B,midi-1,midj,tb,0);
+	STRETCHERDEL(2);
+	stretcher_Align(A+midi+1,B+midj,M-midi-1,N-midj,0,te);
     }
 
     return midc;
 }
 
 
-/* @funcstatic stretcherCalcons ********************************************
+/* @funcstatic stretcher_Calcons ********************************************
 **
 ** Undocumented
 **
@@ -521,7 +521,7 @@ static ajint stretcherAlign(char *A,char *B,ajint M,ajint N,ajint tb,ajint te)
 ** @return [ajint] Undocumented
 ******************************************************************************/
 
-static ajint stretcherCalcons(char *aa0,ajint n0,char *aa1,ajint n1,
+static ajint stretcher_Calcons(char *aa0,ajint n0,char *aa1,ajint n1,
 			       ajint *res)
 {
     ajint i0;
@@ -590,7 +590,7 @@ static ajint stretcherCalcons(char *aa0,ajint n0,char *aa1,ajint n1,
 
 
 
-/* @funcstatic stretcherDiscons ********************************************
+/* @funcstatic stretcher_Discons ********************************************
 **
 ** Undocumented
 **
@@ -600,9 +600,7 @@ static ajint stretcherCalcons(char *aa0,ajint n0,char *aa1,ajint n1,
 ** @return [ajint] Undocumented
 ******************************************************************************/
 
-#define MAXOUT 201
-
-static ajint stretcherDiscons(char *seqc0, char *seqc1, ajint nc)
+static ajint stretcher_Discons(char *seqc0, char *seqc1, ajint nc)
 {
 #define MAXOUT 201
 
@@ -924,7 +922,7 @@ static ajint **sub;
 
 
 
-/* @funcstatic stretcherCheckScore ******************************************
+/* @funcstatic stretcher_CheckScore ******************************************
 **
 ** return the score of the alignment stored in S
 **
@@ -937,7 +935,7 @@ static ajint **sub;
 ** @return [ajint] Undocumented
 ******************************************************************************/
 
-static ajint stretcherCheckScore(unsigned char *A,unsigned char *B,ajint M,
+static ajint stretcher_CheckScore(unsigned char *A,unsigned char *B,ajint M,
 				   ajint N,ajint *S,ajint *NC)
 { 
     register ajint i;

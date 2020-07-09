@@ -122,6 +122,10 @@ static AjPStr demotable_getsubfromstring(AjPStr line, ajint which)
 **
 ** Undocumented.
 **
+** @param [?] key [const void*] Undocumented
+** @param [?] value [void**] Undocumented
+** @param [?] cl [void*] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -142,6 +146,10 @@ static void demotable_typePrint (const void* key, void** value, void* cl)
 **
 ** Undocumented.
 **
+** @param [?] key [const void*] Undocumented
+** @param [?] value [void**] Undocumented
+** @param [?] cl [void*] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 

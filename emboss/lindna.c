@@ -1239,31 +1239,31 @@ static float lindna_VerTextSeqHeightMax(AjPStr Name, float postext,
 
 
 
-/* @funcstatic lindna_VerTextSeqLength ***************************************
+/* #funcstatic lindna_VerTextSeqLength ***************************************
 **
 ** compute the length of a sequence of vertical text strings
 **
-** @param [?] postext [float] Undocumented
-** @param [?] NumNames [ajint] Undocumented
-** @return [float] Undocumented
-** @@
+** #param [?] postext [float] Undocumented
+** #param [?] NumNames [ajint] Undocumented
+** #return [float] Undocumented
+** ##
 ******************************************************************************/
 /*
-static float lindna_VerTextSeqLength(float postext, ajint NumNames)
-{
-    float stringHeight;
-    float totalHeight;
-    ajint i;
-
-    totalHeight = 0.0;
-    for(i=0; i<NumNames; i++)
-    {
-	stringHeight = ajGraphTextHeight(0, 0, 0, 1);
-	totalHeight+=(stringHeight+postext);
-    }
-
-    return (totalHeight-postext);
-}
+//static float lindna_VerTextSeqLength(float postext, ajint NumNames)
+//{
+//    float stringHeight;
+//    float totalHeight;
+//    ajint i;
+//
+//    totalHeight = 0.0;
+//    for(i=0; i<NumNames; i++)
+//    {
+//	stringHeight = ajGraphTextHeight(0, 0, 0, 1);
+//	totalHeight+=(stringHeight+postext);
+//    }
+//
+//    return (totalHeight-postext);
+//}
 */
 
 
@@ -1423,7 +1423,7 @@ static AjPStr lindna_ReadGroup(AjPFile infile, float *From, float *To,
 
 
 
-/* @funcstatic Tlindna_extGroup **********************************************
+/* @funcstatic lindna_TextGroup **********************************************
 **
 ** compute the character size that fits all elements of a group provided that
 ** the height and the length of all strings are at most TextHeight and

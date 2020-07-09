@@ -78,7 +78,14 @@
 ** Retained
 ** D2PRGC_
 ** Rejected
-******************************************************************************/
+**
+** Important Note
+**
+** nrscope is designed to work with OLD FORMAT clean pdb files - i.e. the 
+** ones currently found in /data/cpdb/ on the HGMP server.  To convert to 
+** parsing of new format files (when available) change ajXyzCpdbReadOld to 
+** ajXyzCpdbRead().
+********************************************************************************/
 
 
 
@@ -301,7 +308,7 @@ int main(int argc, char **argv)
 
 
 	/*Read the coordinate file for the domain*/
-	if(!ajXyzCpdbRead(dpdb_inf, &pdb))
+	if(!ajXyzCpdbReadOld(dpdb_inf, &pdb))
 	{
 	    ajFmtPrintF(errf, "ERROR %S file read error\n", dpdb_name);
 	    ajFmtPrintS(&msg, "Error reading dpdb file %S", dpdb_name);

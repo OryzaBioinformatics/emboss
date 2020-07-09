@@ -329,6 +329,7 @@ int main(int argc, char **argv)
 ** Undocumented.
 **
 ** @param [?] agp [AjPFloat*] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 

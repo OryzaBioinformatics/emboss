@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 	ajStrToUpper(&str);
 	ajDebug ("Testing '%s' len: %d %d\n",
 		 ajSeqName(seq), ajSeqLen(seq), ajStrLen(str));
-	while (ajRegExec (patexp, str))
+	while (ajStrLen(str) && ajRegExec (patexp, str))
 	{
 	    if (!found)
 	    {
@@ -69,12 +69,18 @@ int main(int argc, char **argv)
 	    }
 	    ioff = ajRegOffset (patexp);
 	    ilen = ajRegLenI (patexp, 0);
-	    ajRegSubI (patexp, 0, &substr);
-	    ajRegPost (patexp, &tmpstr);
-	    ajStrAssS (&str, tmpstr);
-	    ipos += ioff;
-	    ajFmtPrintF (outf, "%15s %5d %S\n", ajSeqName(seq), ipos, substr);
-	    ipos += ilen;
+	    if (ioff || ilen) {
+	      ajRegSubI (patexp, 0, &substr);
+	      ajRegPost (patexp, &tmpstr);
+	      ajStrAssS (&str, tmpstr);
+	      ipos += ioff;
+	      ajFmtPrintF (outf, "%15s %5d %S\n", ajSeqName(seq), ipos, substr);
+	      ipos += ilen;
+	    }
+	    else {
+	      ipos++;
+	      ajStrTrim(&str, 1);
+	    }
 	}
     }
 

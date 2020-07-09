@@ -495,7 +495,7 @@ static void showseq_read_file_of_enzyme_names(AjPStr *enzymes)
     return;
 }
 
-/* @funcstatic showseq_showseq_FeatureFilter *******************************
+/* @funcstatic showseq_FeatureFilter *******************************
 **
 ** Removes unwanted features from a feature table
 **
@@ -507,13 +507,15 @@ static void showseq_read_file_of_enzyme_names(AjPStr *enzymes)
 ** @param [r] maxscore [float] Max required Score pattern
 ** @param [r] matchtag [AjPStr] Required Tag pattern
 ** @param [r] matchvalue [AjPStr] Required Value pattern
-** @return [AjBool] True if feature matches criteria
+** @return [void]
 ** @@
 ******************************************************************************/
 
 static void showseq_FeatureFilter(AjPFeattable featab, AjPStr
-				  matchsource, AjPStr matchtype, ajint matchsense, float minscore,
-				  float maxscore, AjPStr matchtag, AjPStr matchvalue)
+				  matchsource, AjPStr matchtype,
+				  ajint matchsense, float minscore,
+				  float maxscore, AjPStr matchtag,
+				  AjPStr matchvalue)
 {
 
     AjIList iter = NULL;

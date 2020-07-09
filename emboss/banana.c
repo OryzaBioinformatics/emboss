@@ -260,10 +260,11 @@ int main(int argc, char **argv)
     }
  
 
+    ajFmtPrintF(outf,"Base   Bend      Curve\n");
     ptr= ajStrStr(sstr);
     for(i=1;i<=ajStrLen(sstr);i++)
     {
-	ajFmtPrintF(outf,"%c %6.1f   %6.1f\n",*ptr, bend[i], curve[i]);
+	ajFmtPrintF(outf,"%c    %6.1f   %6.1f\n",*ptr, bend[i], curve[i]);
 	ptr++;
     } 
     ajFileClose(&outf);

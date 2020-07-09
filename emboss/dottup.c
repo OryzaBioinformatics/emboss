@@ -3,6 +3,7 @@
 ** Dotplot of two sequences
 **
 ** @author: Copyright (C) Ian Longden
+** @modified: Alan Bleasby. Added non-proportional plot
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -26,10 +27,9 @@
 static void dottup_objtofile(void **x,void *cl);
 static void dottup_drawPlotlines(void **x, void *cl);
 static void dottup_plotMatches(AjPList list);
-
-
-
-#include "ajgraph.h"
+static void dottup_stretchplot(AjPGraph graph, AjPList matchlist, AjPSeq seq1,
+			AjPSeq seq2, ajint begin1, ajint begin2, ajint end1,
+			ajint end2);
 
 
 
@@ -49,6 +49,7 @@ int main(int argc, char **argv)
     AjPTable seq1MatchTable=0;
     AjPList matchlist=NULL;
     AjPGraph graph = NULL;
+    AjPGraph xygraph = NULL;
     AjPFile outfile;
     AjBool boxit,text;
     /* Different ticks as they need to be different for x and y due to
@@ -74,6 +75,7 @@ int main(int argc, char **argv)
     ajint begin2;
     ajint end1;
     ajint end2;
+    AjBool stretch;
     
     ajGraphInit("dottup", argc, argv);
 
@@ -84,6 +86,12 @@ int main(int argc, char **argv)
     text = ajAcdGetBool("data");
     boxit = ajAcdGetBool("boxit");
     outfile = ajAcdGetOutfile ("outfile");
+    stretch = ajAcdGetBool("stretch");
+    if(stretch)
+	xygraph = ajAcdGetGraphxy ("xygraph");
+    else
+	graph = ajAcdGetGraph ("graph");
+
 
     begin1 = ajSeqBegin(seq1);
     begin2 = ajSeqBegin(seq2);
@@ -96,6 +104,17 @@ int main(int argc, char **argv)
     embWordLength (wordlen);
     if(embWordGetTable(&seq1MatchTable, seq1))
 	matchlist = embWordBuildMatchTable(&seq1MatchTable, seq2, ajTrue);
+
+
+    if(stretch)
+    {
+	dottup_stretchplot(xygraph,matchlist,seq1,seq2,begin1,begin2,end1,
+			   end2);
+	if(matchlist) 
+	    embWordMatchListDelete(&matchlist); /* free the match structures */
+	ajExit();
+	return 0;
+    }
 
 
     max= ajSeqLen(seq1);
@@ -243,6 +262,9 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
+** @param [r] x [void**] Undocumented
+** @param [r] cl [void*] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -272,6 +294,9 @@ static void dottup_objtofile(void **x,void *cl)
 **
 ** Undocumented.
 **
+** @param [r] x [void**] Undocumented
+** @param [r] cl [void*] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -298,6 +323,7 @@ static void dottup_drawPlotlines(void **x, void *cl)
 ** Undocumented.
 **
 ** @param [?] list [AjPList] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -309,3 +335,93 @@ static void dottup_plotMatches(AjPList list)
 }
 
 #endif
+
+
+
+
+
+
+
+/* @funcstatic dottup_stretchplot *********************************************
+**
+** Undocumented.
+**
+** @param [?] graph [AjPGraph] Undocumented
+** @param [?] matchlist [AjPList] Undocumented
+** @param [?] seq1 [AjPSeq] Undocumented
+** @param [?] seq2 [AjPSeq] Undocumented
+** @param [?] begin1 [ajint] Undocumented
+** @param [?] begin2 [ajint] Undocumented
+** @param [?] end1 [ajint] Undocumented
+** @param [?] end2 [ajint] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
+static void dottup_stretchplot(AjPGraph graph, AjPList matchlist, AjPSeq seq1,
+			AjPSeq seq2, ajint begin1, ajint begin2, ajint end1,
+			ajint end2)
+{
+    EmbPWordMatch wmp=NULL;
+    float xa[1];
+    float ya[2];
+    AjPGraphData gdata=NULL;
+    AjPStr tit=NULL;
+    float x1;
+    float y1;
+    float x2;
+    float y2;
+    AjIList iter=NULL;
+    
+    tit = ajStrNew();
+    ajFmtPrintS(&tit,"%S",graph->title);
+    
+
+    gdata = ajGraphxyDataNewI(1);
+    xa[0] = (float)begin1;
+    ya[0] = (float)begin2;
+    
+    ajGraphxyTitleC(graph,ajStrStr(tit));
+
+    ajGraphxyXtitleC(graph,ajSeqName(seq1));
+    ajGraphxyYtitleC(graph,ajSeqName(seq2));
+
+    ajGraphDataxySetTypeC(gdata,"2D Plot Float");
+    ajGraphDataxySetMaxMin(gdata,(float)begin1,(float)end1,(float)begin2,
+			   (float)end2);
+    ajGraphDataxySetMaxima(gdata,(float)begin1,(float)end1,(float)begin2,
+			   (float)end2);
+    ajGraphxySetXStart(graph,(float)begin1);
+    ajGraphxySetXEnd(graph,(float)end1);
+    ajGraphxySetYStart(graph,(float)begin2);
+    ajGraphxySetYEnd(graph,(float)end2);
+    
+    ajGraphxySetXRangeII(graph,begin1,end1);
+    ajGraphxySetYRangeII(graph,begin2,end2);
+
+
+    if(matchlist)
+    {
+	iter = ajListIter(matchlist);
+	while((wmp = ajListIterNext(iter)))
+	{
+	    x1 = x2 = (float) (wmp->seq1start + begin1);
+	    y1 = y2 = (float) (wmp->seq2start + begin2);
+	    x2 += (float) wmp->length-1;
+	    y2 += (float) wmp->length-1;
+	    ajGraphObjAddLine(graph,x1,y1,x2,y2,0);
+	}
+	ajListIterFree(iter);
+    }
+
+    ajGraphxyAddDataPtrPtr(gdata,xa,ya);
+    ajGraphxyReplaceGraph(graph,gdata);
+
+
+    ajGraphxyDisplay(graph,ajFalse);
+    ajGraphClose();    
+
+    ajStrDel(&tit);
+ 
+    return;
+}

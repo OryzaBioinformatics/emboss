@@ -33,18 +33,26 @@
 #define DATANAME "PRINTS/prints.mat"
 
 
-AjBool  prints_entry(AjPStr *s, AjPFile *fp);
-void    write_code(AjPFile *fp, AjPStr *s, AjPStr *c);
-void    write_accession(AjPFile *inf, AjPFile *outf, AjPStr *s, AjPStr *acc);
-ajint     write_sets(AjPFile *inf, AjPFile *outf, AjPStr *s);
-void    write_title(AjPFile *inf, AjPFile *outf, AjPStr *s);
-void    write_desc(AjPFile *inf, AjPStr *s, AjPStr *acc, AjPStr *code);
-void    skipToDn(AjPFile *inf, AjPStr *s);
-ajlong    skipToFm(AjPFile *inf, AjPStr *s);
-void    getSeqNumbers(AjPFile *inf, ajint *cnts, ajint *lens, AjPStr *s, ajint n);
-void    calcMatrices(AjPFile *inf, AjPFile *outf, ajint *cnts, ajint *lens,
-		     AjPStr *s, ajint n);
-void    printHeader(AjPFile outf);
+static AjBool  printsextract_prints_entry(AjPStr *s, AjPFile *fp);
+static void    printsextract_write_code(AjPFile *fp, AjPStr *s, AjPStr *c);
+static void    printsextract_write_accession(AjPFile *inf, AjPFile *outf,
+					     AjPStr *s,
+					     AjPStr *acc);
+static ajint     printsextract_write_sets(AjPFile *inf, AjPFile *outf,
+					  AjPStr *s);
+static void    printsextract_write_title(AjPFile *inf, AjPFile *outf,
+					 AjPStr *s);
+static void    printsextract_write_desc(AjPFile *inf, AjPStr *s,
+					AjPStr *acc, AjPStr *code);
+static void    printsextract_skipToDn(AjPFile *inf, AjPStr *s);
+static ajlong    printsextract_skipToFm(AjPFile *inf, AjPStr *s);
+static void    printsextract_getSeqNumbers(AjPFile *inf, ajint *cnts,
+					   ajint *lens,
+					   AjPStr *s, ajint n);
+static void    printsextract_calcMatrices(AjPFile *inf, AjPFile *outf,
+					  ajint *cnts,
+					  ajint *lens, AjPStr *s, ajint n);
+static void    printsextract_printHeader(AjPFile outf);
 
 
 
@@ -75,27 +83,27 @@ int main(int argc, char **argv)
     inf = ajAcdGetInfile("inf");
     pfname = ajStrNewC(DATANAME);
     ajFileDataNewWrite(pfname,&outf);
-    printHeader(outf);
+    printsextract_printHeader(outf);
     ajStrDel(&pfname);
     
     line = ajStrNew();
     acc  = ajStrNew();
     code = ajStrNew();
     
-    while(prints_entry(&line,&inf))
+    while(printsextract_prints_entry(&line,&inf))
     {
-	write_code(&outf,&line,&code);
-	write_accession(&inf,&outf,&line,&acc);
-	nsets = write_sets(&inf,&outf,&line);
+	printsextract_write_code(&outf,&line,&code);
+	printsextract_write_accession(&inf,&outf,&line,&acc);
+	nsets = printsextract_write_sets(&inf,&outf,&line);
 	AJCNEW (cnts, nsets);
 	AJCNEW (lens, nsets);
-	write_title(&inf,&outf,&line);
-	write_desc(&inf,&line,&acc,&code);
-	skipToDn(&inf,&line);
-	pos = skipToFm(&inf,&line);
-        getSeqNumbers(&inf, cnts, lens, &line, nsets);
+	printsextract_write_title(&inf,&outf,&line);
+	printsextract_write_desc(&inf,&line,&acc,&code);
+	printsextract_skipToDn(&inf,&line);
+	pos = printsextract_skipToFm(&inf,&line);
+        printsextract_getSeqNumbers(&inf, cnts, lens, &line, nsets);
 	ajFileSeek(inf,pos,SEEK_SET);
-	calcMatrices(&inf, &outf, cnts, lens, &line, nsets);
+	printsextract_calcMatrices(&inf, &outf, cnts, lens, &line, nsets);
 	AJFREE (lens);
 	AJFREE (cnts);
 	ajFmtPrintF(outf,"//\n");
@@ -109,7 +117,7 @@ int main(int argc, char **argv)
 
 
 
-/* @func prints_entry *********************************************************
+/* @funcstatic printsextract_prints_entry *************************************
 **
 ** Undocumented.
 **
@@ -120,7 +128,7 @@ int main(int argc, char **argv)
 ******************************************************************************/
 
 
-AjBool prints_entry(AjPStr *s, AjPFile *fp)
+static AjBool printsextract_prints_entry(AjPStr *s, AjPFile *fp)
 {
     while(ajFileReadLine(*fp,s))
 	if(ajStrPrefixC(*s,"gc;"))
@@ -129,7 +137,7 @@ AjBool prints_entry(AjPStr *s, AjPFile *fp)
 }
 
 
-/* @func write_code ***********************************************************
+/* @funcstatic printsextract_write_code ***************************************
 **
 ** Undocumented.
 **
@@ -139,7 +147,7 @@ AjBool prints_entry(AjPStr *s, AjPFile *fp)
 ** @@
 ******************************************************************************/
 
-void write_code(AjPFile *fp, AjPStr *s, AjPStr *c)
+static void printsextract_write_code(AjPFile *fp, AjPStr *s, AjPStr *c)
 {
     char *p;
 
@@ -150,7 +158,7 @@ void write_code(AjPFile *fp, AjPStr *s, AjPStr *c)
 }
 
 
-/* @func write_accession ******************************************************
+/* @funcstatic printsextract_write_accession **********************************
 **
 ** Undocumented.
 **
@@ -162,7 +170,8 @@ void write_code(AjPFile *fp, AjPStr *s, AjPStr *c)
 ******************************************************************************/
 
 
-void write_accession(AjPFile *inf, AjPFile *outf, AjPStr *s, AjPStr *a)
+static void printsextract_write_accession(AjPFile *inf, AjPFile *outf,
+					  AjPStr *s, AjPStr *a)
 {
     char *p;
     
@@ -177,7 +186,7 @@ void write_accession(AjPFile *inf, AjPFile *outf, AjPStr *s, AjPStr *a)
     ajFmtPrintF(*outf,"%s\n",ajStrStr(*s)+4);
 }
 
-/* @func write_sets ***********************************************************
+/* @funcstatic printsextract_write_sets ***************************************
 **
 ** Undocumented.
 **
@@ -189,7 +198,7 @@ void write_accession(AjPFile *inf, AjPFile *outf, AjPStr *s, AjPStr *a)
 ******************************************************************************/
 
 
-ajint write_sets(AjPFile *inf, AjPFile *outf, AjPStr *s)
+static ajint printsextract_write_sets(AjPFile *inf, AjPFile *outf, AjPStr *s)
 {
     char *p;
     ajint n;
@@ -210,7 +219,7 @@ ajint write_sets(AjPFile *inf, AjPFile *outf, AjPStr *s)
 
 
 
-/* @func write_title **********************************************************
+/* @funcstatic printsextract_write_title **************************************
 **
 ** Undocumented.
 **
@@ -220,7 +229,7 @@ ajint write_sets(AjPFile *inf, AjPFile *outf, AjPStr *s)
 ** @@
 ******************************************************************************/
 
-void write_title(AjPFile *inf, AjPFile *outf, AjPStr *s)
+static void printsextract_write_title(AjPFile *inf, AjPFile *outf, AjPStr *s)
 {
     if(!ajFileReadLine(*inf,s)) ajFatal("Premature EOF");
     if(!ajFileReadLine(*inf,s)) ajFatal("Premature EOF");
@@ -229,7 +238,7 @@ void write_title(AjPFile *inf, AjPFile *outf, AjPStr *s)
 }
     
 
-/* @func write_desc ***********************************************************
+/* @funcstatic printsextract_write_desc ***************************************
 **
 ** Undocumented.
 **
@@ -240,7 +249,8 @@ void write_title(AjPFile *inf, AjPFile *outf, AjPStr *s)
 ** @@
 ******************************************************************************/
 
-void write_desc(AjPFile *inf, AjPStr *s, AjPStr *a, AjPStr *c)
+static void printsextract_write_desc(AjPFile *inf, AjPStr *s, AjPStr *a,
+				     AjPStr *c)
 {
     AjPFile fp;
     AjPStr  fname;
@@ -267,7 +277,7 @@ void write_desc(AjPFile *inf, AjPStr *s, AjPStr *a, AjPStr *c)
     return;
 }
 
-/* @func skipToDn *************************************************************
+/* @funcstatic printsextract_skipToDn *****************************************
 **
 ** Undocumented.
 **
@@ -277,7 +287,7 @@ void write_desc(AjPFile *inf, AjPStr *s, AjPStr *a, AjPStr *c)
 ******************************************************************************/
 
 
-void skipToDn(AjPFile *inf, AjPStr *s)
+static void printsextract_skipToDn(AjPFile *inf, AjPStr *s)
 {
     while(ajFileReadLine(*inf,s))
     {
@@ -287,7 +297,7 @@ void skipToDn(AjPFile *inf, AjPStr *s)
     ajFatal("Premature EOF");
 }
 
-/* @func skipToFm *************************************************************
+/* @funcstatic printsextract_skipToFm *****************************************
 **
 ** Undocumented.
 **
@@ -298,7 +308,7 @@ void skipToDn(AjPFile *inf, AjPStr *s)
 ******************************************************************************/
 
 
-ajlong skipToFm(AjPFile *inf, AjPStr *s)
+static ajlong printsextract_skipToFm(AjPFile *inf, AjPStr *s)
 {
     while(ajFileReadLine(*inf,s))
     {
@@ -311,7 +321,7 @@ ajlong skipToFm(AjPFile *inf, AjPStr *s)
 }
 
 
-/* @func getSeqNumbers ********************************************************
+/* @funcstatic printsextract_getSeqNumbers ************************************
 **
 ** Undocumented.
 **
@@ -323,7 +333,8 @@ ajlong skipToFm(AjPFile *inf, AjPStr *s)
 ** @@
 ******************************************************************************/
 
-void getSeqNumbers(AjPFile *inf, ajint *cnts, ajint *lens, AjPStr *s, ajint n)
+static void printsextract_getSeqNumbers(AjPFile *inf, ajint *cnts,
+					ajint *lens, AjPStr *s, ajint n)
 {
     ajint i;
     ajint c;
@@ -359,7 +370,7 @@ void getSeqNumbers(AjPFile *inf, ajint *cnts, ajint *lens, AjPStr *s, ajint n)
 }
 
 
-/* @func calcMatrices *********************************************************
+/* @funcstatic printsextract_calcMatrices *************************************
 **
 ** Undocumented.
 **
@@ -373,8 +384,9 @@ void getSeqNumbers(AjPFile *inf, ajint *cnts, ajint *lens, AjPStr *s, ajint n)
 ******************************************************************************/
 
 
-void calcMatrices(AjPFile *inf, AjPFile *outf, ajint *cnts, ajint *lens,
-		  AjPStr *s, ajint n)
+static void printsextract_calcMatrices(AjPFile *inf, AjPFile *outf,
+				       ajint *cnts, ajint *lens,
+				       AjPStr *s, ajint n)
 {
     ajint i;
     ajint j;
@@ -466,7 +478,7 @@ void calcMatrices(AjPFile *inf, AjPFile *outf, ajint *cnts, ajint *lens,
 
 
 
-/* @func printHeader **********************************************************
+/* @funcstatic printsextract_printHeader *************************************
 **
 ** Undocumented.
 **
@@ -475,7 +487,7 @@ void calcMatrices(AjPFile *inf, AjPFile *outf, ajint *cnts, ajint *lens,
 ******************************************************************************/
 
 
-void printHeader(AjPFile outf)
+static void printsextract_printHeader(AjPFile outf)
 {
     ajFmtPrintF(outf,"# PRINTS matrix file for EMBOSS extracted from prints.dat\n");
     

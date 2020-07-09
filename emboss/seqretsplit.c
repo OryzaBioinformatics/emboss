@@ -23,7 +23,7 @@
 
 #include "emboss.h"
 
-static AjPStr seqretsplitName (AjPTable table, AjPSeq seq);
+static AjPStr seqretsplit_Name (AjPTable table, AjPSeq seq);
 
 /* @prog seqretsplit **********************************************************
 **
@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 
     while (ajSeqallNext(seqall, &seq))
     {
-      name = seqretsplitName (table, seq);
+      name = seqretsplit_Name (table, seq);
       ajSeqAllWrite (seqout, seq);
       if (firstonly) break;
     }
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-/* @funcstatic seqretsplitName ***********************************************
+/* @funcstatic seqretsplit_Name ***********************************************
 **
 ** Catches duplicate names, and builds a new unique name for this run
 **
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 ** @return [AjPStr] Pointer to old name, or NULL if unchanged
 ******************************************************************************/
 
-static AjPStr seqretsplitName (AjPTable table, AjPSeq seq) {
+static AjPStr seqretsplit_Name (AjPTable table, AjPSeq seq) {
 
   static AjPStr oldname = NULL;
   static AjPStr newname = NULL;
@@ -88,7 +88,7 @@ static AjPStr seqretsplitName (AjPTable table, AjPSeq seq) {
   if (ajTableGet(table, ajSeqGetName(seq)))
   {
     nseq++;
-    ajDebug("seqretsplitName test nseq:%d name '%S'\n",
+    ajDebug("seqretsplit_Name test nseq:%d name '%S'\n",
 	    nseq, ajSeqGetName(seq));
 
     for (i=2; i <= nseq; i++) {
@@ -98,7 +98,7 @@ static AjPStr seqretsplitName (AjPTable table, AjPSeq seq) {
 	ajSeqAssName(seq, newname);
 	ajWarn("Duplicate name '%S' changed to '%S'",
 		oldname, newname);
-	ajDebug("seqretsplitName oldname '%S' newname '%S'\n",
+	ajDebug("seqretsplit_Name oldname '%S' newname '%S'\n",
 		oldname, newname);
 	ret = oldname;
 	break;
@@ -113,7 +113,7 @@ static AjPStr seqretsplitName (AjPTable table, AjPSeq seq) {
   }
   else
   {
-    ajDebug("seqretsplitName OK name '%S'\n",
+    ajDebug("seqretsplit_Name OK name '%S'\n",
 	    ajSeqGetName(seq));
   }
 
@@ -121,7 +121,7 @@ static AjPStr seqretsplitName (AjPTable table, AjPSeq seq) {
   ajStrAssC (&tabvalue, "");	/* can't be NULL - needed to test Get result */
   ajTablePut (table, tabname, tabvalue);
 
-  ajDebug("seqretsplitName add to table '%S'\n", tabname);
+  ajDebug("seqretsplit_Name add to table '%S'\n", tabname);
   ajStrTableTrace(table);
 
   return ret;

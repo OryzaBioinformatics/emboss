@@ -67,6 +67,12 @@ static void  est2genome_make_output( AjPFile ofile, AjPSeq genome, AjPSeq est,
 				    ajint align, ajint width, ajint reverse);
 
 
+/* @prog est2genome *********************************************************
+**
+** Align EST and genomic DNA sequences
+**
+******************************************************************************/
+
 
 int main(int argc, char **argv)
 {

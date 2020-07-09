@@ -751,10 +751,12 @@ static void silent_split_hits(AjPList *hits, AjPList *silents,
 
 
 
-/* @funcstatic  silent_basecompare *******************************************
+/* @funcstatic silent_basecompare *******************************************
 **
 ** Comparison function for ajListSort
 **
+** @param [r] a [const void*] Undocumented
+** @param [r] b [const void*] Undocumented
 ** @return [ajint] 0 = bases match
 ** @@
 ******************************************************************************/

@@ -293,7 +293,7 @@ int main(int argc, char **argv)
         
  
 
- /* @funcstatic findkm_summation *********************************************
+/* @funcstatic findkm_summation *********************************************
 **
 ** Undocumented.
 **

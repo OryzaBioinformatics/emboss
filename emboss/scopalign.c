@@ -1,8 +1,8 @@
 /* @source scopalign application
 **
 ** Runs STAMP over SCOP families
-** @author: Copyright (C) Jon Ison (jison@hgmp.mrc.ac.uk)
 ** @author: Copyright (C) Ranjeeva Ranasinghe (rranasin@hgmp.mrc.ac.uk)
+** @author: Copyright (C) Jon Ison (jison@hgmp.mrc.ac.uk)
 ** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
@@ -47,7 +47,33 @@
 ** BEFORE SCOPALIGN IS RUN.  This will ensure that the modified version of 
 ** stamp is used.
 ** 
+** stamp searches for pdb files with a certain prefix, extension and path as 
+** specified in the stamp "pdb.directories" file.  For the HGMP, this file is
+** /packages/stamp/defs/pdb.directories and should look like :
 **
+** /data/pdb - -
+** /data/pdb _ .ent
+** /data/pdb _ .pdb
+** /data/pdb pdb .ent
+** /data/pdbscop _ _
+** /data/pdbscop _ .ent
+** /data/pdbscop _ .pdb
+** /data/pdbscop pdb .ent
+** ./ _ _
+** ./ _ .ent
+** ./ _ .ent.z
+** ./ _ .ent.gz
+** ./ _ .pdb
+** ./ _ .pdb.Z
+** ./ _ .pdb.gz
+** ./ pdb .ent
+** ./ pdb .ent.Z
+** ./ pdb .ent.gz
+** /data/CASS1/pdb/coords/ _ .pdb
+** /data/CASS1/pdb/coords/ _ .pdb.Z
+** /data/CASS1/pdb/coords/ _ .pdb.gz
+
+** 
 ** The names of the output files are identical to the names of the families
 ** given in the SCOP classification records, except that if a file of a 
 ** certain name already exists, then an "_1", "_2" etc will be added as 
@@ -143,6 +169,7 @@ int main(int argc, char **argv)
     AjPStr    name      = NULL;	/* Base name of STAMP temp files */
     AjPStr    line      = NULL;	/* Holds a line from the log file*/
     AjPStr    path      = NULL;	/* Path of alignment files for output */
+    AjPStr    extn      = NULL;	/* Extension of alignment files for output */
     AjPStr    temp      = NULL;	/* A temporary string */
     AjPStr    temp1     = NULL;	/* A temporary string */
 
@@ -172,6 +199,7 @@ int main(int argc, char **argv)
     name     = ajStrNew();
     line     = ajStrNew();
     path     = ajStrNew();
+    extn     = ajStrNew();
     temp     = ajStrNew();
     temp1    = ajStrNew();
 
@@ -180,6 +208,7 @@ int main(int argc, char **argv)
     embInit("scopalign",argc,argv);
     scopf     = ajAcdGetInfile("scopf");
     path      = ajAcdGetString("path");
+    extn      = ajAcdGetString("extn");
 
     
     /* Check directory is OK*/
@@ -261,7 +290,7 @@ int main(int argc, char **argv)
 		ajStrSubstituteCC(&align, " ", "_");
 		ajStrSubstituteCC(&align, "&", "_");
 		ajStrInsert(&align, 0, path);	
-		ajStrAppC(&align, ".align");
+		ajStrApp(&align, extn);
 
 		
 		/* If a file of that name exists, then append _1 or _2 etc 
@@ -382,7 +411,7 @@ int main(int argc, char **argv)
     ajStrAss(&align, scop->Family);	
     ajStrSubstituteCC(&align, " ", "_");
     ajStrInsert(&align, 0, path);	
-    ajStrAppC(&align, ".align");
+    ajStrApp(&align, extn);
 
 
     /* If a file of that name exists, then append _1 or _2 etc 
@@ -465,6 +494,7 @@ int main(int argc, char **argv)
     ajStrDel(&align);
     ajStrDel(&line);
     ajStrDel(&path); 
+    ajStrDel(&extn); 
     ajStrDel(&temp); 
     ajStrDel(&temp1); 
 

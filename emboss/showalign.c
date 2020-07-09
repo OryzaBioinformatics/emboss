@@ -266,7 +266,7 @@ static ajint showalign_Getrefseq (AjPStr refseq, AjPSeqset seqset)
 ** the longest name to be displayed plus one extra space after it
 **
 ** @param [r] seqset [AjPSeqset] the sequences 
-** @param [rw] margin [*ajint] margin
+** @param [rw] margin [ajint*] margin
 ** @param [r] docon [AjBool] displaying the consensus line
 ** @param [r] nrefseq [ajint] the sequence being displayed
 ** @return [void] 
@@ -314,10 +314,10 @@ static void showalign_NiceMargin(AjPSeqset seqset, ajint *margin,
 ** Convert all sequences except the refseq to the required symbols
 **
 ** @param [r] seqset [AjPSeqset] the sequences
-** @param [r] show [AjPStr *] type of thing to show 
-** @param [r] similarcase [*AjPStr] change case according to similarity
+** @param [r] show [AjPStr*] type of thing to show 
+** @param [r] similarcase [AjBool] change case according to similarity
 ** @param [r] nrefseq [ajint] number of the refseq
-** @param [r] sub [ajint **] scoring matrix
+** @param [r] sub [ajint**] scoring matrix
 ** @param [r] cvt [AjPSeqCvt] conversion table for scoring matrix
 ** @param [r] consensus [AjPSeq] consensus sequence
 ** @return [void]

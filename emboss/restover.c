@@ -193,6 +193,8 @@ int main(int argc, char **argv)
 **
 ** Print restover hits
 **
+** @param [r] seq [AjPSeq] Sequence
+** @param [w] seqcmp [AjPStr] Undocumented
 ** @param [w] outf [AjPFile*] outfile
 ** @param [w] l [AjPList*] hits
 ** @param [r] name [AjPStr*] sequence name

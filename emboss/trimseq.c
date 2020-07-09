@@ -270,26 +270,26 @@ static void trimseq_parole(AjBool *gang, char *good_guys)
 }
 	
 
-/* @funcstatic trimseq_arrest ************************************************
+/* #funcstatic trimseq_arrest ************************************************
 **
 **  resets the upper and lowercase characters in the array 'gang' to be ajTrue
 ** 
-** @param [w] gang [AjBool*] array of flags for whether a character
+** #param [w] gang [AjBool*] array of flags for whether a character
 **                           is required or not
-** @param [r] bad_guys [char*] string of chars that are not required
-** @@
+** #param [r] bad_guys [char*] string of chars that are not required
+** ##
 ******************************************************************************/
 /*
-static void trimseq_arrest(AjBool *gang, char *bad_guys)
-{
-    ajint i;
-
-    for (i=0; bad_guys[i]; i++)
-    {
-	gang[tolower((ajint) bad_guys[i])] = ajTrue;
-	gang[toupper((ajint) bad_guys[i])] = ajTrue;
-    }
-
-    return;
-}
+//static void trimseq_arrest(AjBool *gang, char *bad_guys)
+//{
+//    ajint i;
+//
+//    for (i=0; bad_guys[i]; i++)
+//    {
+//	gang[tolower((ajint) bad_guys[i])] = ajTrue;
+//	gang[toupper((ajint) bad_guys[i])] = ajTrue;
+//   }
+//
+//    return;
+//}
 */

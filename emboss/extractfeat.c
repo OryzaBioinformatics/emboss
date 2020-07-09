@@ -293,7 +293,7 @@ static void extractfeat_WriteFeat (AjPSeq seq, AjPSeqout seqout,
 }
 
 
-/* @funcstatic extractfeat_extractfeat_FeatureFilter *******************************
+/* @funcstatic extractfeat_FeatureFilter *******************************
 **
 ** Removes unwanted features from a feature table
 **
@@ -305,7 +305,7 @@ static void extractfeat_WriteFeat (AjPSeq seq, AjPSeqout seqout,
 ** @param [r] maxscore [float] Max required Score pattern
 ** @param [r] tag [AjPStr] Required Tag pattern
 ** @param [r] value [AjPStr] Required Value pattern
-** @return [AjBool] True if feature matches criteria
+** @return [void]
 ** @@
 ******************************************************************************/
 

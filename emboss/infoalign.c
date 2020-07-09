@@ -44,7 +44,11 @@ static void infoalign_Compare(AjPSeq ref, AjPSeq seq, ajint **sub,
 #define NOLIMIT -1
 
 
-
+/* @prog infoalign *******************************************************
+**
+** Information on a multiple sequence alignment
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -552,6 +556,8 @@ static int infoalign_Getrefseq (AjPStr refseq, AjPSeqset seqset)
 ** @param [r] seq [AjPSeq] the sequence to be changed
 ** @param [r] sub [ajint **] scoring matrix
 ** @param [r] cvt [AjPSeqCvt] conversion table for scoring matrix
+** @param [r] seqlength [ajint *] sequence length
+** @param [r] alignlength [ajint *] alignment length
 ** @param [r] gaps [ajint *] number of gaps
 ** @param [r] gapcount [ajint *] number of gap characters
 ** @param [r] idcount [ajint *] number of identical positions

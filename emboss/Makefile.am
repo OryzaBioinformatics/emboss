@@ -17,7 +17,7 @@ demoalign demofeatures demolist demoreport demosequence demostring demotable \
 entrails histogramtest intconv \
 patmattest \
 prima primers \
-seqinfo seqretsingle \
+seqinfo seqretall seqretallfeat seqretset seqretsingle \
 sigplot \
 testplot treetypedisplay
 
@@ -29,31 +29,31 @@ dan dbiblast dbifasta dbiflat dbigcg \
 degapseq descseq dichet diffseq digest distmat domainer \
 dotmatcher dotpath dottup dreg \
 einverted embossdata embossversion emma emowse entret \
-equicktandem est2genome etandem extractfeat extractseq \
+eprimer3 equicktandem est2genome etandem extractfeat extractseq \
 findkm freak fuzznuc fuzzpro fuzztran \
 garnier geecee getorf helixturnhelix hmoment \
-iep infoalign infoseq isochore lindna listor \
+iep infoalign infoseq interface isochore jembossctl lindna listor \
 marscan maskfeat maskseq matcher megamerger merger msbar \
 mwfilter \
 needle newcpgreport newcpgseek newseq \
 noreturn notseq nrscope nthseq \
 octanol oddcomp \
 palindrome pasteseq patmatdb patmatmotifs \
-pepcoil pepinfo pepnet pepstats \
+pdbtosp pepcoil pepinfo pepnet pepstats \
 pepwheel pepwindow pepwindowall \
 plotcon plotorf polydot preg \
-prettyplot prettyseq primer3 primersearch printsextract \
+prettyplot prettyseq primersearch printsextract \
 profit prophecy prophet \
 prosextract pscan psiblasts \
-rebaseextract recoder redata remap restover restrict revseq scope \
-seealso seqmatchall seqret seqretall seqretallfeat seqretset seqretsplit \
+rebaseextract recoder redata remap restover restrict revseq scope scopparse \
+seealso seqmatchall seqnr seqret seqretsplit seqsort\
 showalign showdb showfeat showorf showseq \
 shuffleseq sigcleave siggen sigscan silent splitter scopalign stretcher \
 stssearch supermatcher swissparse syco \
 textsearch tfextract tfm tfscan \
 tmap transeq trimest trimseq \
 vectorstrip \
-water wobble wordcount wordmatch \
+water whichdb wobble wordcount wordmatch \
 wossname
 
 INCLUDES = -I$(top_srcdir)/nucleus -I$(top_srcdir)/ajax -I$(top_srcdir)/plplot
@@ -103,6 +103,7 @@ emma_SOURCES = emma.c
 emowse_SOURCES = emowse.c
 entrails_SOURCES = entrails.c
 entret_SOURCES = entret.c
+eprimer3_SOURCES = eprimer3.c
 equicktandem_SOURCES = equicktandem.c
 est2genome_SOURCES = est2genome.c
 etandem_SOURCES = etandem.c
@@ -123,7 +124,9 @@ iep_SOURCES = iep.c
 infoalign_SOURCES = infoalign.c
 infoseq_SOURCES = infoseq.c
 intconv_SOURCES = intconv.c
+interface_SOURCES = interface.c
 isochore_SOURCES = isochore.c
+jembossctl_SOURCES = jembossctl.c
 lindna_SOURCE = lindna.c
 listor_SOURCE = listor.c
 marscan_SOURCE = marscan.c
@@ -148,6 +151,7 @@ palindrome_SOURCES = palindrome.c
 pasteseq_SOURCES = pasteseq.c
 patmatdb_SOURCES = patmatdb.c
 patmatmotifs_SOURCES = patmatmotifs.c
+pdbtosp_SOURCES = pdbtosp.c
 pepcoil_SOURCES = pepcoil.c
 pepinfo_SOURCE = pepinfo.c
 pepnet_SOURCES = pepnet.c
@@ -162,7 +166,6 @@ preg_SOURCES = preg.c
 prettyplot_SOURCES = prettyplot.c
 prettyseq_SOURCES = prettyseq.c
 prima_SOURCES = prima.c
-primer3_SOURCES = primer3.c
 primers_SOURCES = primers.c
 primersearch_SOURCES = primersearch.c
 printsextract_SOURCES = printsextract.c
@@ -178,10 +181,13 @@ remap_SOURCES = remap.c
 restover_SOURCES = restover.c
 restrict_SOURCES = restrict.c
 revseq_SOURCES = revseq.c
+scopparse_SOURCES = scopparse.c
 scope_SOURCES = scope.c
 seealso_SOURCES = seealso.c
 seqmatchall_SOURCES = seqmatchall.c
+seqnr_SOURCES = seqnr.c
 seqret_SOURCES = seqret.c
+seqsort_SOURCES = seqsort.c
 seqinfo_SOURCES = seqinfo.c
 seqretall_SOURCES = seqretall.c
 seqretallfeat_SOURCES = seqretallfeat.c
@@ -213,6 +219,7 @@ trimest_SOURCES = trimest.c
 trimseq_SOURCES = trimseq.c
 vectorstrip_SOURCES = vectorstrip.c
 water_SOURCES = water.c
+whichdb_SOURCES = whichdb.c
 wobble_SOURCES = wobble.c
 wordcount_SOURCES = wordcount.c
 wordmatch_SOURCES = wordmatch.c

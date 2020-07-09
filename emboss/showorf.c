@@ -402,7 +402,7 @@ static void showorf_CalcProteinPos(ajint **ppos, AjPStr *pseqs, ajint len)
 
 
 
-/* @funcstatic  showorf_showTrans ********************************************
+/* @funcstatic showorf_showTrans ********************************************
 **
 ** Output translations using given width
 **
@@ -456,7 +456,7 @@ static void showorf_showTrans(ajint **ppos, ajint *npos, AjPStr *pseqs,
 
 
 
-/* @funcstatic  showorf_showTransb *******************************************
+/* @funcstatic showorf_showTransb *******************************************
 **
 ** Low level output
 **
@@ -472,8 +472,8 @@ static void showorf_showTrans(ajint **ppos, ajint *npos, AjPStr *pseqs,
 ** @param [r] isrule [AjBool] show ruler
 ** @param [r] isp [AjBool] protein
 ** @param [r] isn [AjBool] dna
-** @param [r] width [ajint] print width
-** @param [r] name [char*] seq name
+** @param [r] start [ajint] start
+** @param [r] end [ajint] end
 ** @@
 ******************************************************************************/
 

@@ -278,6 +278,9 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
+** @param [r] x [void**] Undocumented
+** @param [r] cl [void*] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -329,6 +332,7 @@ static void supermatcher_matchListOrder(void **x,void *cl)
 **
 ** @param [r] list [AjPList] unordered input list
 ** @param [w] ordered [AjPList] ordered output list
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -343,6 +347,9 @@ static void supermatcher_orderandconcat(AjPList list,AjPList ordered)
 **
 ** Undocumented.
 **
+** @param [r] x [void**] Undocumented
+** @param [r] cl [void*] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -360,6 +367,9 @@ static void supermatcher_removelists(void **x,void *cl)
 **
 ** Undocumented.
 **
+** @param [r] x [void**] Undocumented
+** @param [r] cl [void*] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 

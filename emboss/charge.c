@@ -32,6 +32,16 @@ static void  charge_addgraph(AjPGraph graph, ajint limit, float *x,
 			     ajint window, char *sname);
 static AjPFloat charge_read_amino(AjPFile* fp);
 
+/* @prog charge ***************************************************************
+**
+** Protein charge plot
+**
+** @param [?] argc [int] Undocumented
+** @param [?] argv [char**] Undocumented
+** @return [int] Undocumented
+** @@
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     AjPSeqall  seqall;
@@ -173,6 +183,21 @@ int main(int argc, char **argv)
 
 
 
+/* @funcstatic charge_addgraph ***********************************************
+**
+** Undocumented.
+**
+** @param [?] graph [AjPGraph] Undocumented
+** @param [?] limit [ajint] Undocumented
+** @param [?] x [float*] Undocumented
+** @param [?] y [float*] Undocumented
+** @param [?] ymax [float] Undocumented
+** @param [?] ymin [float] Undocumented
+** @param [?] window [ajint] Undocumented
+** @param [?] sname [char*] Undocumented
+** @@
+******************************************************************************/
+
 static void charge_addgraph(AjPGraph graph, ajint limit, float *x,
 			    float *y, float ymax, float ymin,
 			    ajint window, char *sname)
@@ -220,6 +245,15 @@ static void charge_addgraph(AjPGraph graph, ajint limit, float *x,
     return;
 }
 
+
+/* @funcstatic charge_read_amino *********************************************
+**
+** Undocumented.
+**
+** @param [?] fp [AjPFile*] Undocumented
+** @return [AjPFloat] Undocumented
+** @@
+******************************************************************************/
 
 static AjPFloat charge_read_amino(AjPFile* fp)
 {

@@ -301,9 +301,6 @@ int main(int argc, char **argv)
 	/* add a gratuitous newline at the end of the sequence */
 	(void) ajFmtPrintF(outfile, "\n");
 
-	if (html)
-	    (void) ajFmtPrintF(outfile, "<PRE>");
-
 	/* tidy up */
 	(void) embShowDel(&ss);
 
@@ -462,7 +459,7 @@ static void remap_CutList (AjPFile outfile,
 	(void) ajFmtPrintF(outfile, "\n");
 
     if (html)
-	(void) ajFmtPrintF(outfile, "</H2>");  
+	(void) ajFmtPrintF(outfile, "</H2>\n");  
 
     if (ajTableLength(hittable))
     {
@@ -483,7 +480,7 @@ static void remap_CutList (AjPFile outfile,
         }  
         (void) ajFmtPrintF (outfile, "\n");
         if (html)
-	    (void) ajFmtPrintF(outfile, "</PRE>");
+	    (void) ajFmtPrintF(outfile, "</PRE>\n");
     }
 /* enzymes that cut <mincuts */
     /* print title */
@@ -496,7 +493,7 @@ static void remap_CutList (AjPFile outfile,
 	(void) ajFmtPrintF(outfile, "\n");
 
     if (html)
-	(void) ajFmtPrintF(outfile, "</H2>");  
+	(void) ajFmtPrintF(outfile, "</H2>\n");  
 
     if (ajTableLength(hittable))
     {
@@ -514,7 +511,7 @@ static void remap_CutList (AjPFile outfile,
 	}  
         (void) ajFmtPrintF (outfile, "\n");
         if (html)
-	    (void) ajFmtPrintF(outfile, "</PRE>");
+	    (void) ajFmtPrintF(outfile, "</PRE>\n");
     }
 
 /* enzymes that cut >maxcuts */
@@ -528,7 +525,7 @@ static void remap_CutList (AjPFile outfile,
 	(void) ajFmtPrintF(outfile, "\n");
 
     if (html)
-	(void) ajFmtPrintF(outfile, "</H2>");  
+	(void) ajFmtPrintF(outfile, "</H2>\n");  
 
     if (ajTableLength(hittable))
     {
@@ -547,7 +544,7 @@ static void remap_CutList (AjPFile outfile,
 
         (void) ajFmtPrintF (outfile, "\n");
         if (html)
-	    (void) ajFmtPrintF(outfile, "</PRE>");
+	    (void) ajFmtPrintF(outfile, "</PRE>\n");
 
 /* tidy up */
 	AJFREE(array);
@@ -800,7 +797,7 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
 	(void) ajFmtPrintF(outfile, "<H2>");  
     (void) ajFmtPrintF(outfile, "\n\n# Enzymes that do not cut\n\n");
     if (html)
-	(void) ajFmtPrintF(outfile, "</H2>");  
+	(void) ajFmtPrintF(outfile, "</H2>\n");  
     
     if (html)
 	(void) ajFmtPrintF(outfile, "<PRE>");
@@ -823,7 +820,7 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
     
     /* end the output */
     (void) ajFmtPrintF (outfile, "\n");
-    if (html) {(void) ajFmtPrintF(outfile, "</PRE>");} 
+    if (html) {(void) ajFmtPrintF(outfile, "</PRE>\n");} 
     
 
 
@@ -837,7 +834,7 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
         (void) ajFmtPrintF(outfile, "<H2>");
     (void) ajFmtPrintF(outfile, "\n\n# Number of enzymes not matching SITELEN, BLUNT, STICKY, COMMERCIAL criteria\n\n");
     if (html)
-	(void) ajFmtPrintF(outfile, "</H2>");  
+	(void) ajFmtPrintF(outfile, "</H2>\n");  
     (void) ajFmtPrintF(outfile, "%d\n", rejected_count);
     
 /* 

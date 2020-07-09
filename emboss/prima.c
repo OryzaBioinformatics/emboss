@@ -1,5 +1,5 @@
 /* @source prima.c
- ** @author: Copyright (C) Sinead O'Leary (soleary@hgmp.mrc.ac.uk)
+** @author: Copyright (C) Sinead O'Leary (soleary@hgmp.mrc.ac.uk)
 ** @@
 ** Application for selecting forward and reverse primers for PCR and 
 ** DNA amplification.
@@ -569,49 +569,49 @@ static ajint prima_primalign(char *a, char *b)
 }
 
 
-/* @funcstatic prima_probAlign ************************************************
+/* #funcstatic prima_probAlign ************************************************
 **
 ** prob score
 **
-** @param [r] seq1 [AjPStr*] seq1
-** @param [r] seq2 [AjPStr*] seq2
-** @return [float] probability
-** @@
+** #param [r] seq1 [AjPStr*] seq1
+** #param [r] seq2 [AjPStr*] seq2
+** #return [float] probability
+** ##
 ******************************************************************************/
 /*
-static float prima_probAlign(AjPStr *seq1, AjPStr *seq2)
-{
-
-    float score;
-    ajint i;
-    ajint x;
-    ajint y;
-    char *p;
-    char *q;
-    ajint len;
-    
-
-    len = (ajStrLen(*seq1) <= ajStrLen(*seq2)) ? ajStrLen(*seq1) :
-	ajStrLen(*seq2);
-
-   
-    if(!aj_base_I) ajBaseInit();
-    score = 0.0;
-    if(!len) return score;
-
-    score = 1.0;
-    p = ajStrStr(*seq1);
-    q = ajStrStr(*seq2);
-    
-    for(i=0; i<len; ++i)
-    {
-	x = ajAZToInt(*(p+i));
-	y = ajAZToInt(*(q+i));
-	score *= aj_base_prob[x][y];
-    }
-
-    return score;
-}
+//static float prima_probAlign(AjPStr *seq1, AjPStr *seq2)
+//{
+//
+//    float score;
+//    ajint i;
+//    ajint x;
+//    ajint y;
+//    char *p;
+//    char *q;
+//    ajint len;
+//    
+//
+//    len = (ajStrLen(*seq1) <= ajStrLen(*seq2)) ? ajStrLen(*seq1) :
+//	ajStrLen(*seq2);
+//
+//   
+//    if(!aj_base_I) ajBaseInit();
+//    score = 0.0;
+//    if(!len) return score;
+//
+//    score = 1.0;
+//    p = ajStrStr(*seq1);
+//    q = ajStrStr(*seq2);
+//    
+//    for(i=0; i<len; ++i)
+//    {
+//	x = ajAZToInt(*(p+i));
+//	y = ajAZToInt(*(q+i));
+//	score *= aj_base_prob[x][y];
+//    }
+//
+//    return score;
+//}
 */
 
 
@@ -1010,6 +1010,8 @@ static void prima_PrimerDel(AjPPrimer *p)
 **
 ** Undocumented.
 **
+** @param [r] a [const void*] Undocumented
+** @param [r] b [const void*] Undocumented
 ** @return [ajint] Undocumented
 ** @@
 ******************************************************************************/
@@ -1026,6 +1028,8 @@ static ajint prima_Compare(const void *a, const void *b)
 **
 ** Undocumented.
 **
+** @param [r] a [const void*] Undocumented
+** @param [r] b [const void*] Undocumented
 ** @return [ajint] Undocumented
 ** @@
 ******************************************************************************/
@@ -1037,6 +1041,16 @@ static ajint prima_PosCompare(const void *a, const void *b)
 	   ((*(AjPPair *)b)->f->start + (*(AjPPair *)b)->f->primerlen - 1);
 }
 
+
+/* @funcstatic  prima_PosEndCompare *******************************************
+**
+** Undocumented.
+**
+** @param [r] a [const void*] Undocumented
+** @param [r] b [const void*] Undocumented
+** @return [ajint] Undocumented
+** @@
+******************************************************************************/
 
 static ajint prima_PosEndCompare(const void *a, const void *b)
 {

@@ -226,9 +226,9 @@ static void vectorstrip_initialise_vector(Vector* vec, AjPStr name,
     return;
 }
 
-/* @funcstatic read_vector_data ***********************************************
+/* @funcstatic vectorstrip_read_vector_data ***********************************
 **
-** REads vector data from a file into a list of Vectors. 
+** Reads vector data from a file into a list of Vectors. 
 **
 ** @param [r] vectorfile [AjPFile] the file containing vector data
 ** @param [w] vectorlist [AjPList*] list to store vector data
@@ -283,6 +283,7 @@ static void vectorstrip_read_vector_data(AjPFile vectorfile,
 }
  
 /* "destructors" */
+
 /* @funcstatic vectorstrip_free_list *****************************************
 **
 ** Frees a list of EmbPMatMatch. 
@@ -307,7 +308,7 @@ static void vectorstrip_free_list(AjPList list)
     return;  
 }
 
-/* @funcstatic vectorstrp_free_cp ********************************************
+/* @funcstatic vectorstrip_free_cp ********************************************
 **
 ** Frees a CPattern. 
 **
@@ -355,6 +356,7 @@ static void vectorstrip_free_cp(CPattern* pat)
 }*/
 
 /* data processing */
+
 /* @funcstatic vectorstrip_process_pattern ***********************************
 **
 ** searches pattern against sequence starting with no mismatches

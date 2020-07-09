@@ -39,7 +39,8 @@ static AjBool palindrome_AInB( Palindrome a, Palindrome b);
 static AjBool palindrome_AOverB( Palindrome a, Palindrome b);
 static AjBool palindrome_Over ( ajint astart, ajint aend, ajint bstart,
 			       ajint bend);
-static void palindrome_Print( AjPFile outfile, AjPStr seq, Palindrome pal);
+static void palindrome_Print( AjPFile outfile, AjPStr seq, Palindrome pal,
+			     ajint maxLen);
 static AjBool palindrome_Longer( Palindrome a, Palindrome b );
 static void palindrome_Swap ( Palindrome a, Palindrome b );
 
@@ -222,7 +223,7 @@ int main(int argc, char **argv)
     ppal = pfirstpal;
     while (ppal != NULL)
     {
-	palindrome_Print( outfile, seqstr, ppal);
+	palindrome_Print( outfile, seqstr, ppal, maxLen);
 	ppal = ppal->next;
     }
 
@@ -391,13 +392,18 @@ static void palindrome_Swap ( Palindrome a, Palindrome b )
 ** @param [?] outfile [AjPFile] Undocumented
 ** @param [?] seq [AjPStr] Undocumented
 ** @param [?] pal [Palindrome] Undocumented
+** @param [r] maxLen [ajint] Maximum palindrome length
 ** @@
 ******************************************************************************/
 
-static void palindrome_Print( AjPFile outfile, AjPStr seq, Palindrome pal)
+static void palindrome_Print( AjPFile outfile, AjPStr seq, Palindrome pal,
+			     ajint maxLen)
 {
 
     ajint i;
+
+    if(pal->forwardEnd - pal->forwardStart +1 > maxLen)
+	return;
 
     ajFmtPrintF( outfile, "%-5d ", (pal->forwardStart+1));
     for (i = pal->forwardStart; i < pal->forwardEnd; i++)

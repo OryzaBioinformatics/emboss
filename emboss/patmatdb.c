@@ -65,7 +65,7 @@ int main(int argc, char **argv)
     outf        = ajAcdGetOutfile("outfile");
 
     temp=ajStrNew();
-    
+    ajStrToUpper(&motif);
 
     /*converting the Prosite motif to a reg exps */		
     regexp =embPatPrositeToRegExp(&motif);
@@ -75,6 +75,7 @@ int main(int argc, char **argv)
     while (ajSeqallNext(seqall, &seq))
     {
 	str = ajSeqStr(seq); 
+	ajStrToUpper(&str);
 	
 	/* comparing the reg exps to sequence for matches. */
 	match 	= embPatPosMatchFind(regexp, str);

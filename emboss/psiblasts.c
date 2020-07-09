@@ -165,11 +165,13 @@
 
 
 
-AjPHitlist psiblasts_ajXyzHitlistPsiblast(AjPScopalg scopalg, AjPFile psif);
-AjPFile psiblasts_ajXyzScopalgPsiblast(AjPScopalg scopalg, AjPFile alignf, 
-				       AjPStr *psiname, ajint niter, 
-				       ajint maxhits, float evalue, 
-				       AjPStr database);
+static AjPHitlist psiblasts_ajXyzHitlistPsiblast(AjPScopalg scopalg,
+						 AjPFile psif);
+static AjPFile psiblasts_ajXyzScopalgPsiblast(AjPScopalg scopalg,
+					      AjPFile alignf, 
+					      AjPStr *psiname, ajint niter, 
+					      ajint maxhits, float evalue, 
+					      AjPStr database);
 
 
 
@@ -357,7 +359,8 @@ int main(int argc, char **argv)
 ** @param [r] evalue     [float]       Threshold E-value for psiblast
 ** @param [r] database   [AjPStr]      Database name
 **
-** @return [AjPFile] Pointer to  psiblast output file for reading or NULL for error.
+** @return [AjPFile] Pointer to psiblast output file for reading or
+** NULL for error.
 ** @@
 ** 
 ** Note
@@ -365,9 +368,11 @@ int main(int argc, char **argv)
 ** need to pass in a pointer to the alignment file itself. Write ScopalgWrite
 ** and modify this function accordingly - not urgent.
 ******************************************************************************/
-AjPFile psiblasts_ajXyzScopalgPsiblast(AjPScopalg scopalg, AjPFile alignf, 
-				       AjPStr *psiname, ajint niter, ajint maxhits, 
-				       float evalue,  AjPStr database)
+static AjPFile psiblasts_ajXyzScopalgPsiblast(AjPScopalg scopalg,
+					      AjPFile alignf, 
+					      AjPStr *psiname, ajint niter,
+					      ajint maxhits, 
+					      float evalue,  AjPStr database)
 {
     AjPStr    line      = NULL;	 /* Temp string for reading alignment file */
     AjPStr    name      = NULL;	 /* Base name of STAMP temp files */
@@ -520,7 +525,8 @@ AjPFile psiblasts_ajXyzScopalgPsiblast(AjPScopalg scopalg, AjPFile alignf,
 ** @@
 ** 
 ******************************************************************************/
-AjPHitlist psiblasts_ajXyzHitlistPsiblast(AjPScopalg scopalg, AjPFile psif)
+static AjPHitlist psiblasts_ajXyzHitlistPsiblast(AjPScopalg scopalg,
+						 AjPFile psif)
 {
     /* The hits are organised into blocks, each block contains hits to 
        a protein with a unique accession number.  

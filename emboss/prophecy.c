@@ -28,14 +28,17 @@
 #define GRIBSKOV_LENGTH 27
 #define HENIKOFF_LENGTH 27
 
-void simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
-		   ajint thresh);
-void gribskov_profile(AjPSeqset seqset, float **sub,
-		      AjPFile outf, AjPStr name, ajint thresh,
-		      float gapopen, float gapextend, AjPStr *cons);
-void henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx, float **sub,
-		      ajint thresh, AjPSeqCvt cvt, AjPFile outf, AjPStr name,
-		      float gapopen, float gapextend, AjPStr *cons);
+static void prophecy_simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
+				   ajint thresh);
+static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
+				      AjPFile outf, AjPStr name, ajint thresh,
+				      float gapopen, float gapextend,
+				      AjPStr *cons);
+static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
+				      float **sub, ajint thresh, AjPSeqCvt cvt,
+				      AjPFile outf, AjPStr name,
+				      float gapopen, float gapextend,
+				      AjPStr *cons);
 
 
 
@@ -83,10 +86,10 @@ int main(int argc, char **argv)
     cons = ajStrNewC("");
 
     
-    if(*p=='F') simple_matrix(seqset,outf,name,thresh);
-    if(*p=='G') gribskov_profile(seqset,sub,outf,name,thresh,
+    if(*p=='F') prophecy_simple_matrix(seqset,outf,name,thresh);
+    if(*p=='G') prophecy_gribskov_profile(seqset,sub,outf,name,thresh,
 				 gapopen,gapextend,&cons);
-    if(*p=='H') henikoff_profile(seqset,imtx,sub,thresh,cvt,outf,name,
+    if(*p=='H') prophecy_henikoff_profile(seqset,imtx,sub,thresh,cvt,outf,name,
 				 gapopen,gapextend,&cons);
   
 
@@ -98,7 +101,7 @@ int main(int argc, char **argv)
 
 
 
-/* @func simple_matrix ********************************************************
+/* @funcstatic prophecy_simple_matrix *****************************************
 **
 ** Undocumented.
 **
@@ -110,7 +113,7 @@ int main(int argc, char **argv)
 ******************************************************************************/
 
 
-void simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
+static void prophecy_simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
 		   ajint thresh)
 {
     char *p;
@@ -206,7 +209,7 @@ void simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
 }
 
     
-/* @func gribskov_profile *****************************************************
+/* @funcstatic prophecy_gribskov_profile **************************************
 **
 ** Undocumented.
 **
@@ -222,9 +225,10 @@ void simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
 ******************************************************************************/
 
     
-void gribskov_profile(AjPSeqset seqset, float **sub,
-		      AjPFile outf, AjPStr name, ajint thresh,
-		      float gapopen, float gapextend, AjPStr *cons)
+static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
+				      AjPFile outf, AjPStr name, ajint thresh,
+				      float gapopen, float gapextend,
+				      AjPStr *cons)
 {
     AjPMatrixf imtx=0;
     AjPSeqCvt cvt=0;
@@ -427,7 +431,7 @@ void gribskov_profile(AjPSeqset seqset, float **sub,
 
 
 
-/* @func henikoff_profile *****************************************************
+/* @funcstatic prophecy_henikoff_profile **************************************
 **
 ** Undocumented.
 **
@@ -445,9 +449,12 @@ void gribskov_profile(AjPSeqset seqset, float **sub,
 ******************************************************************************/
 
 
-void henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx, float **sub,
-		      ajint thresh, AjPSeqCvt cvt, AjPFile outf, AjPStr name,
-		      float gapopen, float gapextend, AjPStr *cons)
+static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
+				      float **sub,
+				      ajint thresh, AjPSeqCvt cvt,
+				      AjPFile outf, AjPStr name,
+				      float gapopen, float gapextend,
+				      AjPStr *cons)
 {
     float **mat;
     ajint nseqs;

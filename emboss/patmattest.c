@@ -24,7 +24,7 @@ static char *testset[] =
     "GAN","GAATTC","CCSGG","GANTC","GABNNNNNVTC","GA", "GANN","TC"
 };
 
-/* @prog patmettest *******************************************************
+/* @prog patmattest *******************************************************
 **
 ** Testing
 **

@@ -32,6 +32,11 @@ static void cutgextract_readcodons(AjPFile inf, AjPInt *count);
 
 
 
+/* @prog cutgextract **********************************************************
+**
+** Extract data from CUTG
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -186,7 +191,17 @@ int main(int argc, char **argv)
 
 
 
-static char *cutgextract_next(AjPFile inf, AjPInt *array)
+/* @funcstatic  cutgextract_next **********************************************
+**
+** Undocumented.
+**
+** @param [?] inf [AjPFile] Undocumented
+** @param [?] array [AjPInt*] Undocumented
+** @return [char*] Undocumented
+** @@
+******************************************************************************/
+
+static char* cutgextract_next(AjPFile inf, AjPInt *array)
 {
     static AjPStr line=NULL;
     static AjPStr org=NULL;
@@ -231,6 +246,15 @@ static char *cutgextract_next(AjPFile inf, AjPInt *array)
     return p;
 }
 
+
+/* @funcstatic  cutgextract_readcodons ****************************************
+**
+** Undocumented.
+**
+** @param [?] inf [AjPFile] Undocumented
+** @param [?] count [AjPInt*] Undocumented
+** @@
+******************************************************************************/
 
 static void cutgextract_readcodons(AjPFile inf, AjPInt *count)
 {

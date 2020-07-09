@@ -126,12 +126,15 @@ typedef struct AjSScopdata
 
 
 
-AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data);
-AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data, AjPFloat2d *prob_array);
-AjBool  sigplot_DataWrite(AjPFile datafile, AjPScopdata data, AjPFloat2d prob_array, 
-			  AjPStr true, AjPStr false, AjPStr cross, AjPStr unknown);
-void sigplot_ScopdataDel(AjPScopdata *pthis);
-AjPScopdata  sigplot_ScopdataNew();
+static AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data);
+static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
+				     AjPFloat2d *prob_array);
+static AjBool  sigplot_DataWrite(AjPFile datafile, AjPScopdata data,
+				 AjPFloat2d prob_array, 
+				 AjPStr true, AjPStr false, AjPStr cross,
+				 AjPStr unknown);
+static void sigplot_ScopdataDel(AjPScopdata *pthis);
+static AjPScopdata  sigplot_ScopdataNew();
 
 
 
@@ -226,7 +229,7 @@ int main(int argc, char **argv)
 }
 
 
-/* @funcstatic sigplot_CountHits  *****************************************
+/* @funcstatic sigplot_CountHits *****************************************
  **
  ** Read signature hits file and count the number of hits, by reading the 
  ** HI line and storing the value for the rank of the hit.
@@ -237,7 +240,7 @@ int main(int argc, char **argv)
  ** @return [AjBool] True on succcess
  ** @@
  ******************************************************************************/
-AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data)
+static AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data)
 {
     
     AjPStr   line           = NULL;     /* Line of text */    
@@ -322,19 +325,20 @@ AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data)
 
 
 
-/* @funcstatic sigplot_HitProportion  *****************************************
+/* @funcstatic sigplot_HitProportion *****************************************
  **
  ** Read signature hits file and count the number of hits, by reading the 
  ** HI line and storing the value for the rank of the hit.
  **
  ** @param [r] hitsin     [AjPFile]      File pointer to signature hits file
  ** @param [r] data       [AjPScopdata*] Scopdata object pointer
- ** @param [w] prob_array [AjPInt2d]     Probability of four classifications
+ ** @param [w] prob_array [AjPFloat2d*]  Probability of four classifications
  ** 
  ** @return [AjBool] True on succcess
  ** @@
  ******************************************************************************/
-AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data, AjPFloat2d *prob_array)
+static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
+				     AjPFloat2d *prob_array)
 {
 
 
@@ -567,24 +571,27 @@ AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data, AjPFloat2d *pro
 
 
 
-/* @funcstatic sigplot_DataWrite  *****************************************
+/* @funcstatic sigplot_DataWrite *****************************************
  **
  ** Read prob_array and Scopdata structure, and write a data file suitable
  ** for plotting using the application GNUPLOT
  **
  ** @param [w] datafile   [AjPFile]     File pointer to output datafile
  ** @param [r] data       [AjPScopdata] Scopdata object pointer
- ** @param [r] prob_array [AjPInt2d]    Array of probability of four classifications
- ** @param [r] true       [AjPStr  ]    Name of sigplot data file for true hits
- ** @param [r] false      [AjPStr  ]    Name of sigplot data file for true hits
- ** @param [r] cross      [AjPStr  ]    Name of sigplot data file for true hits
- ** @param [r] unknown    [AjPStr  ]    Name of sigplot data file for true hits
+ ** @param [r] prob_array [AjPFloat2d]  Array of probability of four
+ **                                     classifications
+ ** @param [r] true       [AjPStr]    Name of sigplot data file for true hits
+ ** @param [r] false      [AjPStr]    Name of sigplot data file for true hits
+ ** @param [r] cross      [AjPStr]    Name of sigplot data file for true hits
+ ** @param [r] unknown    [AjPStr]    Name of sigplot data file for true hits
  **
  ** @return [AjBool] True on succcess
  ** @@
  ******************************************************************************/
-AjBool  sigplot_DataWrite(AjPFile datafile, AjPScopdata data, AjPFloat2d prob_array, 
-			  AjPStr true, AjPStr false, AjPStr cross, AjPStr unknown)
+static AjBool  sigplot_DataWrite(AjPFile datafile, AjPScopdata data,
+				 AjPFloat2d prob_array, 
+				 AjPStr true, AjPStr false, AjPStr cross,
+				 AjPStr unknown)
 {
     ajint       x          = 0;     /* Loop counter */
     AjPFile     truePtr    = NULL;  /* Pointer to true data file */
@@ -652,7 +659,7 @@ AjBool  sigplot_DataWrite(AjPFile datafile, AjPScopdata data, AjPFloat2d prob_ar
 
 
 
-/* @func sigplot_ScopdataNew ***********************************************************
+/* @funcstatic sigplot_ScopdataNew *******************************************
 **
 ** Scopdata object constructor.
 **
@@ -660,7 +667,7 @@ AjBool  sigplot_DataWrite(AjPFile datafile, AjPScopdata data, AjPFloat2d prob_ar
 ** @return [AjPScopdata] Pointer to a Scopdata object
 ** @@
 ******************************************************************************/
-AjPScopdata  sigplot_ScopdataNew()
+static AjPScopdata  sigplot_ScopdataNew()
 {
     AjPScopdata ret = NULL;
     
@@ -677,7 +684,7 @@ AjPScopdata  sigplot_ScopdataNew()
 }
 
 
-/* @func sigplot_ScopdataDel *******************************************************
+/* @funcstatic sigplot_ScopdataDel ********************************************
 **
 ** Destructor for Scopdata object.
 **
@@ -687,7 +694,7 @@ AjPScopdata  sigplot_ScopdataNew()
 ** @@
 ******************************************************************************/
 
-void sigplot_ScopdataDel(AjPScopdata *pthis)
+static void sigplot_ScopdataDel(AjPScopdata *pthis)
 {
 
     ajStrDel(&(*pthis)->Class);

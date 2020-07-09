@@ -87,7 +87,7 @@ int main(int argc, char **argv)
     gapopen   = ajAcdGetFloat("gapopen");
     gapextend = ajAcdGetFloat("gapextend");
     dosim     = ajAcdGetBool("similarity");
-    fasta     = ajAcdGetBool("fasta");
+    /* fasta     = ajAcdGetBool("fasta");*/
     align     = ajAcdGetAlign("outfile");
 
     /* obsolete. Can be uncommented in acd file and here to reuse */

@@ -264,10 +264,13 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic dotpath_objtofile1 **********************************************
+/* @funcstatic dotpath_objtofile1 *********************************************
 **
 ** Undocumented.
 **
+** @param [r] x [void**] Undocumented
+** @param [r] cl [void*] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -299,6 +302,9 @@ static void dotpath_objtofile1(void **x,void *cl)
 **
 ** Undocumented.
 **
+** @param [r] x [void**] Undocumented
+** @param [r] cl [void*] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -330,6 +336,9 @@ static void dotpath_objtofile2(void **x,void *cl)
 **
 ** Undocumented.
 **
+** @param [r] x [void**] Undocumented
+** @param [r] cl [void*] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -352,6 +361,7 @@ static void dotpath_drawPlotlines(void **x, void *cl)
 ** Undocumented.
 **
 ** @param [?] list [AjPList] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 

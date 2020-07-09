@@ -194,7 +194,6 @@ static OParser parser[] =
   {NULL, NULL}
 };
 
-/* static void   stripncbi (AjPStr* line); */
 static EmbPentry dbiblast_nextblastentry (PBlastDb db, ajint ifile);
 static AjBool dbiblast_blastopenlib(AjPStr lname, PBlastDb* pdb);
 
@@ -320,6 +319,8 @@ int main(int argc, char **argv)
     version = ajAcdGetListI ("blastversion",1);
     seqtype = ajAcdGetListI ("seqtype",1);
     usesrc = ajAcdGetBool ("sourcefile");
+
+    ajStrCleanWhite(&dbname);	/* used for temp filenames */
 
     if (ajRegExec (datexp, datestr))
 	for (i=1; i<4; i++)
@@ -822,9 +823,6 @@ static EmbPentry dbiblast_nextblastentry (PBlastDb db, ajint ifile)
 
     j = dbiblast_ncblreadhdr(&hline, db, tabhdr[jpos], tabhdr[jpos+1]);
 
-    /*  if (db->IsBlast2)
-	stripncbi (&hline);*/
-  
     if (!parser[iparser].Parser(hline, db, &id, acl))
 	ajFatal("failed to parse '%S'", hline);
 
@@ -1051,53 +1049,6 @@ static AjBool dbiblast_blastopenlib (AjPStr name, PBlastDb* pdb)
 
 
 
-/* #funcstatic stripncbi ********************************************
-**
-** trim the ncbi line.
-**
-** #param [r] line [AjPStr*] Input line
-** #return [void] 
-** ##
-******************************************************************************/
-/*
-static void stripncbi (AjPStr* line)
-{
-  static AjPRegexp gnlexp = NULL;
-  static AjPRegexp giexp = NULL;
-  static AjPStr tmpline = NULL;
-  static AjPStr tmpstr = NULL;
-
-  if (!gnlexp)
-    gnlexp = ajRegCompC("^gnl[|][^|]+[|][^ ]+ +");
-
-  if (!giexp)
-    giexp = ajRegCompC("^gi[|][^|]+[|]");
-
-  ajStrAssS (&tmpline, *line);
-
-  ajDebug ("parseNCBI '%S'\n", tmpline);
-  if (ajRegExec(gnlexp, tmpline))
-  {
-    ajRegPost(gnlexp, &tmpstr);
-    ajStrAssS (&tmpline, tmpstr);
-  }
-
-  if (ajRegExec(giexp, tmpline))
-  {
-    ajRegPost(giexp, &tmpstr);
-    ajStrAssS (&tmpline, tmpstr);
-  }
-
-  ajStrAssS (line, tmpline);
-  ajDebug ("trim to   '%S'\n", tmpline);
-
-  return;
-}
-*/
-
-
-
-
 /* @funcstatic dbiblast_parseNcbi ********************************************
 **
 ** Parses an NCBI style header from the BLAST header table.
@@ -1128,9 +1079,12 @@ static AjBool dbiblast_parseNcbi (AjPStr line, PBlastDb db, AjPStr* id,
     if(!ajSeqParseNcbi(t,id,&tmpac,&desc))
 	return ajFalse;
 
-    if(!ajStrLen(tmpac))
-	(void) ajFmtPrintS(&tmpac,"ZZ%07d",v++);
+    if(ajStrLen(tmpac))
+      (void) ajStrToUpper(&tmpac);
+    else
+      (void) ajFmtPrintS(&tmpac,"ZZ%07d",v++);
   
+    (void) ajStrToUpper(id);
 
     /*ajDebug ("parseNCBI success\n");*/
 
@@ -1177,7 +1131,8 @@ static AjBool dbiblast_parseGcg (AjPStr line, PBlastDb db, AjPStr* id,
 
     ajRegSubI (idexp, 1, id);
     ajRegSubI (idexp, 3, &tmpac);
-    ajStrToUpper (&tmpac);	/* GCG mixes case on new SwissProt acnums */
+    (void) ajStrToUpper(id);
+    (void) ajStrToUpper (&tmpac); /* GCG mixes case on new SwissProt acnums */
 
     if (systemsort)
 	ajFmtPrintF (alistfile, "%S %S\n", *id, tmpac);
@@ -1222,7 +1177,8 @@ static AjBool dbiblast_parseSimple (AjPStr line, PBlastDb db, AjPStr* id,
 
     ajRegSubI (idexp, 1, id);
     ajRegSubI (idexp, 3, &tmpac);
-    ajStrToUpper (&tmpac);	/* GCG mixes case on new SwissProt acnums */
+    (void) ajStrToUpper(id);
+    (void) ajStrToUpper (&tmpac); /* GCG mixes case on new SwissProt acnums */
 
     if (systemsort)
 	ajFmtPrintF (alistfile, "%S %S\n", *id, tmpac);

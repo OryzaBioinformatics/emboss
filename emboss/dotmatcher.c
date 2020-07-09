@@ -3,6 +3,7 @@
 ** dotmatcher displays a dotplot for two sequences.
 **
 ** @author: Copyright (C) Ian Longden (il@sanger.ac.uk)
+** @modified: Added non-proportional plot. Copyright (C) Alan Bleasby
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -26,7 +27,7 @@
 
 
 static void dotmatcher_pushpoint(AjPList *l, float x1, float y1, float x2,
-				 float y2, AjBool text);
+				 float y2, AjBool text, AjBool stretch);
 static void dotmatcher_datapoints(AjPList *l, AjPFile outf, ajint b1,
 				  ajint b2);
 
@@ -104,6 +105,17 @@ int main(int argc, char **argv)
     AjPStr se1;
     AjPStr se2;
     ajint ithresh;
+    AjBool stretch;
+    PPoint ppt=NULL;
+    float xa[1];
+    float ya[1];
+    AjPGraphData gdata=NULL;
+    AjPStr tit=NULL;
+    AjIList iter=NULL;
+    float x1=0.;
+    float x2=0.;
+    float y1=0.;
+    float y2=0.;
     
     se1 = ajStrNew();
     se2 = ajStrNew();
@@ -116,7 +128,11 @@ int main(int argc, char **argv)
 
     seq = ajAcdGetSeq ("sequencea");
     seq2 = ajAcdGetSeq ("sequenceb");
-    graph = ajAcdGetGraph ("graph");
+    stretch = ajAcdGetBool("stretch");
+    if(!stretch)
+	graph = ajAcdGetGraph ("graph");
+    else
+	graph = ajAcdGetGraphxy("xygraph");
     windowsize = ajAcdGetInt("windowsize");
     ithresh = ajAcdGetInt("threshold");  
     matrix  = ajAcdGetMatrix("matrixfile");
@@ -168,12 +184,12 @@ int main(int argc, char **argv)
 			      windowsize,thresh,&ajtime)));
     
 
-    if(!text)
+    if(!text && !stretch)
 	if( ajStrLen(graph->subtitle) <=1)
 	    ajStrApp(&graph->subtitle,subt);
 
 
-    if(!text)
+    if(!text && !stretch)
     {
 	ajGraphOpenWin(graph, 0.0-ymargin,(max*1.35)+ymargin,
 		       0.0-xmargin,(float)max+xmargin);
@@ -224,7 +240,7 @@ int main(int argc, char **argv)
 		    abovethresh = 0;
 		    /* draw the line */
 		    dotmatcher_pushpoint(&list,(float)starti,(float)startj,
-					 (float)i-1,(float)k-1,text);
+					 (float)i-1,(float)k-1,text,stretch);
 		}	    
 	    }
 	    else if (total >= thresh)
@@ -240,7 +256,7 @@ int main(int argc, char **argv)
 	    /* draw the line */
 	    dotmatcher_pushpoint(&list,(float)starti,(float)startj,
 				 (float)i-1,(float)k-1,
-		      text);
+		      text,stretch);
 	}
     }
 
@@ -272,7 +288,7 @@ int main(int argc, char **argv)
 		    abovethresh = 0;
 		    /* draw the line */
 		    dotmatcher_pushpoint(&list,(float)starti,(float)startj,
-					 (float)k-1,(float)j-1,text);
+					 (float)k-1,(float)j-1,text,stretch);
 		}	    
 	    }
 	    else if (total >= thresh)
@@ -289,11 +305,11 @@ int main(int argc, char **argv)
 	    /*      printf("line (%d,%d) (%d,%d)\n",starti,startj,i-1,k-1);*/
 	    dotmatcher_pushpoint(&list,(float)starti,(float)startj,
 				 (float)k-1,(float)j-1,
-		      text);
+		      text,stretch);
 	}
     }
 
-    if(!text && boxit)
+    if(!text && boxit && !stretch)
     {
 	ajGraphRect( 0.0,0.0,(float)ajSeqLen(seq),(float)ajSeqLen(seq2));
 
@@ -360,9 +376,9 @@ int main(int argc, char **argv)
     }
 
 
-    if(!text)
+    if(!text && !stretch)
 	ajGraphClose();
-    else
+    else if(text && !stretch)
     {
 	ajFmtPrintF(outf,"##2D Plot\n##Title dotmatcher: %s vs %s\n",
 		    ajSeqName(seq),ajSeqName(seq2));
@@ -385,7 +401,61 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf,"##GraphObjects\n##Number 0\n");
 
     }
-  
+    else
+    {
+	tit = ajStrNew();
+	ajFmtPrintS(&tit,"%S",graph->title);
+    
+
+	gdata = ajGraphxyDataNewI(1);
+	xa[0] = (float)b1;
+	ya[0] = (float)b2;
+    
+	ajGraphxyTitleC(graph,ajStrStr(tit));
+
+	ajGraphxyXtitleC(graph,ajSeqName(seq));
+	ajGraphxyYtitleC(graph,ajSeqName(seq2));
+
+	ajGraphDataxySetTypeC(gdata,"2D Plot Float");
+	ajGraphDataxySetMaxMin(gdata,(float)b1,(float)e1,(float)b2,
+			       (float)e2);
+	ajGraphDataxySetMaxima(gdata,(float)b1,(float)e1,(float)b2,
+			       (float)e2);
+	ajGraphxySetXStart(graph,(float)b1);
+	ajGraphxySetXEnd(graph,(float)e1);
+	ajGraphxySetYStart(graph,(float)b2);
+	ajGraphxySetYEnd(graph,(float)e2);
+    
+	ajGraphxySetXRangeII(graph,b1,e1);
+	ajGraphxySetYRangeII(graph,b2,e2);
+
+
+	if(list)
+	{
+	    iter = ajListIter(list);
+	    while((ppt = ajListIterNext(iter)))
+	    {
+		x1 = ppt->x1+b1-1;
+		y1 = ppt->y1+b2-1;
+		x2 = ppt->x2+b1-1;
+		y2 = ppt->y2+b2-1;
+		ajGraphObjAddLine(graph,x1,y1,x2,y2,0);
+	    }
+	    ajListIterFree(iter);
+	}
+
+	ajGraphxyAddDataPtrPtr(gdata,xa,ya);
+	ajGraphxyReplaceGraph(graph,gdata);
+
+
+	ajGraphxyDisplay(graph,ajFalse);
+	ajGraphClose();    
+
+	ajStrDel(&tit);
+    }
+    
+    
+
     ajListDel(&list);
 
 
@@ -411,16 +481,18 @@ int main(int argc, char **argv)
 ** @param [?] x2 [float] Undocumented
 ** @param [?] y2 [float] Undocumented
 ** @param [?] text [AjBool] Undocumented
+** @param [r] stretch [AjBool] Do a stretch plot
+** @return [void]
 ** @@
 ******************************************************************************/
 
 
 static void dotmatcher_pushpoint(AjPList *l, float x1, float y1, float x2,
-				 float y2, AjBool text)
+				 float y2, AjBool text, AjBool stretch)
 {
     PPoint p;
 
-    if(!text)
+    if(!text && !stretch)
     {
 	ajGraphLine(x1+1,y1+1,x2+1,y2+1);
 	return;
@@ -442,6 +514,8 @@ static void dotmatcher_pushpoint(AjPList *l, float x1, float y1, float x2,
 **
 ** @param [?] l [AjPList*] Undocumented
 ** @param [?] outf [AjPFile] Undocumented
+** @param [?] b1 [ajint] Undocumented
+** @param [?] b2 [ajint] Undocumented
 ** @@
 ******************************************************************************/
 

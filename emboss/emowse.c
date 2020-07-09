@@ -190,6 +190,7 @@ int main(int argc, char **argv)
 **
 ** @param [?] ffile [AjPStr] Undocumented
 ** @param [?] freqs [AjPDouble*] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -303,6 +304,8 @@ static ajint emowse_read_data(AjPFile inf, EmbPMdata** data)
 **
 ** Undocumented.
 **
+** @param [r] a [const void*] Undocumented
+** @param [r] b [const void*] Undocumented
 ** @return [ajint] Undocumented
 ** @@
 ******************************************************************************/
@@ -318,6 +321,8 @@ static ajint emowse_sort_data(const void *a, const void *b)
 **
 ** Undocumented.
 **
+** @param [r] a [const void*] Undocumented
+** @param [r] b [const void*] Undocumented
 ** @return [ajint] Undocumented
 ** @@
 ******************************************************************************/

@@ -111,7 +111,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-/* @funcstatic trimseq_trim ***************************************************
+/* @funcstatic trimest_get_tail **********************************************
 **
 ** Trim sequence
 **

@@ -122,79 +122,7 @@
 
 #include "emboss.h"
 
-
-
-
-
-
-
-
-
-/* @data AjPDichetent ***********************************************************
-**
-** Ajax Dichetent object.
-**
-** Holds a single entry from a dictionary of heterogen groups.
-**
-** AjPDichetent is implemented as a pointer to a C data structure.
-**
-** @alias AjSDichetent
-** @alias AjODichetent
-**
-** @@
-******************************************************************************/
-typedef struct AjSDichetent
-{
-    AjPStr   abv;   /* 3-letter abbreviation of heterogen */
-    AjPStr   syn;   /* Synonym */
-    AjPStr   ful;   /* Full name */
-    ajint    cnt;   /* No. of occurences (files) of this heterogen in a directory */
-} AjODichetent, *AjPDichetent;
-
-
-
-
-/* @data AjPDichet ***********************************************************
-**
-** Ajax Dichet object.
-**
-** Holds a dictionary of heterogen groups.
-**
-** AjPDichet is implemented as a pointer to a C data structure.
-**
-** @alias AjSDichet
-** @alias AjODichet
-**
-** @@
-******************************************************************************/
-typedef struct AjSDichet
-{
-    ajint         n;        /* Number of entries */
-    AjPDichetent *entries;  /* Array of entries */
-} AjODichet, *AjPDichet;
-
-
-
-
-
-
-AjPDichetent  ajXyzDichetentNew(void);
-void          ajXyzDichetentDel(AjPDichetent *ptr);
-AjPDichet     ajXyzDichetNew(ajint n);
-void          ajXyzDichetDel(AjPDichet *ptr);
-AjBool        ajXyzDichetRawRead(AjPFile fptr, AjPDichet *ptr);
-AjBool        ajXyzDichetRead(AjPFile fptr, AjPDichet *ptr);
-AjBool        ajXyzDichetWrite(AjPFile fptr, AjPDichet ptr, AjBool dogrep);
-AjBool        ajXyzDichetScan(AjPStr path, AjPStr extn, AjPDichet ptr);
-
-
-
-
-
-
-
-
-
+static AjBool        dichet_Scan(AjPStr path, AjPStr extn, AjPDichet ptr);
 
 
 
@@ -238,7 +166,7 @@ int main(int argc, char **argv)
     
     /* Search pdb files for heterogens if appropriate */
     if(dogrep)
-	ajXyzDichetScan(path, extn, dic);
+	dichet_Scan(path, extn, dic);
     
 			
     /* Write output file */
@@ -263,298 +191,19 @@ int main(int argc, char **argv)
 
 
 
-/* @func ajXyzDichetentNew ******************************************************
-**
-** Dichetent object constructor. 
-**
-** 
-** @return [AjPDichetent] Pointer to a Dichetent object
-** @@
-******************************************************************************/
-AjPDichetent  ajXyzDichetentNew(void)
-{
-    AjPDichetent ret=NULL;
-    
-    AJNEW0(ret);
-    
-    /*Create strings*/
-    ret->abv = ajStrNew();
-    ret->syn = ajStrNew();
-    ret->ful = ajStrNew();
-    
-    return ret;
-}
-
-
-
-
-/* @func ajXyzDichetentDel ******************************************************
-**
-** Destructor for Dichetent object.
-**
-** @param [w] ptr [AjPDichetent*] Dichetent object pointer
-**
-** @return [void]
-** @@
-******************************************************************************/
-void   ajXyzDichetentDel(AjPDichetent *ptr)
-{
-    /* Check arg's */
-    if(*ptr==NULL)
-	return;
-
-   
-    if((*ptr)->abv)
-	ajStrDel( &((*ptr)->abv)); 
-    if((*ptr)->syn)
-	ajStrDel( &((*ptr)->syn)); 
-    if((*ptr)->ful)
-	ajStrDel( &((*ptr)->ful)); 
-
-    AJFREE(*ptr);
-    *ptr=NULL;
-    
-    return;
-}
-
-
-
-/* @func ajXyzDichetent ******************************************************
-**
-** Dichet object constructor. 
-**
-** @param [w] n [ajint] Number of entries in dictionary.
-** 
-** @return [AjPDichet] Pointer to a Dichet object
-** @@
-******************************************************************************/
-AjPDichet     ajXyzDichetNew(ajint n)
-{
-    ajint i=0;
-    AjPDichet ret=NULL;
-    
-    AJNEW0(ret);
-
-    if(n)
-    {
-	ret->n=n;
-	AJCNEW0(ret->entries, n);
-	for(i=0;i<n;i++)
-	    ret->entries[i]=ajXyzDichetentNew();
-    }
-    else
-    {
-	ajWarn("Arg with value zero passed to ajXyzDichetNew\n");
-	ret->n=0;
-	ret->entries=NULL;
-    }
-    
-
-    return ret;
-}
-
-
-/* @func ajXyzDichetDel ******************************************************
-**
-** Destructor for Dichet object.
-**
-** @param [w] ptr [AjPDichet*] Dichet object pointer
-**
-** @return [void]
-** @@
-******************************************************************************/
-void          ajXyzDichetDel(AjPDichet *ptr)
-{
-    ajint i=0;
-    
-    /* Check arg's */
-    if(*ptr==NULL)
-	return;
-
-    if((*ptr)->entries)
-    {
-        for(i=0;i<(*ptr)->n;i++)
-	{
-	    if((*ptr)->entries[i])
-		ajXyzDichetentDel(&((*ptr)->entries[i]));
-	}	
-	
-	AJFREE((*ptr)->entries);
-    }
-    AJFREE(*ptr);
-    *ptr=NULL;
-
-    return;
-}
-
-
-
-
-/* @func ajXyzDichetRawRead **************************************************
-**
-** Reads a dictionary of heterogen groups available at 
-** http://pdb.rutgers.edu/het_dictionary.txt and writes a Dichet object.
-**
-** @param [w] ptr  [AjPDichet*] Dichet object pointer
-** @param [r] fptr [AjPFile]    Pointer to dictionary
-**
-** @return [AjBool] True on success
-** @@
-******************************************************************************/
-AjBool        ajXyzDichetRawRead(AjPFile fptr, AjPDichet *ptr)
-{
-    AjPStr        line=NULL;   /* A line from the file */
-    AjPDichetent entry=NULL;   /* The current entry */
-    AjPDichetent tmp=NULL;   /* Temp. pointer */
-    AjPList       list=NULL;   /* List of entries */
-    ajint       het_cnt=0;     /* Count of number of HET records in file */
-    ajint       formul_cnt=0;  /* Count of number of FORMUL records in file */
-    
-
-    /* Check arg's */
-    if((!fptr)||(*ptr))
-    {
-	ajWarn("Bad args passed to ajXyzDichetRawRead\n");
-	return ajFalse;
-    }
-    
-    /* Create strings etc */
-    line = ajStrNew();
-    list = ajListNew();
-
-    
-    /* Read lines from file */
-    while(ajFileReadLine(fptr, &line))
-    {
-	if(ajStrPrefixC(line,"HET "))
-	{
-	    het_cnt++;
-	    
-	    entry=ajXyzDichetentNew();
-	    ajFmtScanS(line, "%*s %S", &entry->abv);
-	}
-	else if(ajStrPrefixC(line,"HETNAM"))
-	{
-	    ajStrAppC(&entry->ful, &line->Ptr[14]);
-	}
-	else if(ajStrPrefixC(line,"HETSYN"))
-	{
-	    ajStrAppC(&entry->syn, &line->Ptr[14]);
-	}
-	else if(ajStrPrefixC(line,"FORMUL"))
-	{
-	    formul_cnt++;
-
-	    /* In cases where HETSYN or FORMUL were not
-	       specified, assign a value of '.' */
-	    if(MAJSTRLEN(entry->ful)==0)
-		ajStrAssC(&entry->ful, ".");
-
-	    if(MAJSTRLEN(entry->syn)==0)
-		ajStrAssC(&entry->syn, ".");
-	    
-
-	    /* Push entry onto list */
-	    ajListPush(list, (AjPDichetent) entry);
-	}
-    }
-
-    if(het_cnt != formul_cnt)
-    {	
-	while(ajListPop(list, (void **) &tmp))
-	    ajXyzDichetentDel(&tmp);
-	
-	ajListDel(&list);	    
-	ajStrDel(&line);
-
-	ajFatal("Fatal discrepancy in count of HET and FORMUL records\n"
-		"Email wawan@hgmp.mrc.ac.uk\n");
-    }	
-    
-   
-    
-
-    *ptr=ajXyzDichetNew(0);
-    (*ptr)->n=ajListToArray(list, (void ***) &((*ptr)->entries));
-    
-   
-    
-    /* Tidy up and return */
-    ajStrDel(&line);
-    ajListDel(&list);
-    return ajTrue;
-}
-
-
-
-/* @func ajXyzDichetRead **************************************************
-**
-** Reads a dictionary of heterogen groups available that has been written 
-** by a call to ajXyzDichetWrite and writes a Dichet object.
-**
-** @param [w] ptr  [AjPDichet*] Dichet object pointer
-** @param [r] fptr [AjPFile]    Pointer to dictionary
-**
-** @return [AjBool] True on success
-** @@
-******************************************************************************/
-AjBool        ajXyzDichetRead(AjPFile fptr, AjPDichet *ptr)
-{
-    return ajTrue;
-}
-
-
-
-
-/* @func ajXyzDichetWrite **************************************************
-**
-** Writes the contents of a Dichet object to file. 
-**
-** @param [r] ptr     [AjPDichet] Dichet object
-** @param [r] dogrep  [AjBool]    Flag (True if we are to write <cnt> element of
-** the Dichet object to file)
-** @param [w] fptr    [AjPFile]   Output file
-**
-** @return [AjBool] True on success
-** @@
-******************************************************************************/
-AjBool        ajXyzDichetWrite(AjPFile fptr, AjPDichet ptr, AjBool dogrep)
-{
-    ajint i=0;
-    
-    /* Check arg's */
-    if(!fptr || !ptr)
-	return ajFalse;
-    
-    
-    for(i=0;i<ptr->n; i++)
-    {
-	ajFmtPrintF(fptr, "ID   %S\n", ptr->entries[i]->abv);
-	ajFmtPrintSplit(fptr, ptr->entries[i]->ful, "DE   ", 70, " \t\n\r");
-	ajFmtPrintSplit(fptr, ptr->entries[i]->syn, "SY   ", 70, " \t\n\r");
-	if(dogrep)
-	    ajFmtPrintF(fptr, "NN   %d\n", ptr->entries[i]->cnt);
-	ajFmtPrintF(fptr, "//\n");
-    }
-
-    return ajTrue;
-}
-
-
-
-/* @func ajXyzDichetScan **********************************************
+/* @funcstatic dichet_Scan **********************************************
 **
 ** Search a directory of pdb files and count the number of files that each 
 ** heterogen (from a Dichet object) appears in.
 **
-** @param [w] ptr  [AjPDichet] Dichet object
 ** @param [r] path [AjPStr]    Path of pdb files
 ** @param [r] extn [AjPStr]    Extension of pdb files
+** @param [w] ptr  [AjPDichet] Dichet object
 **
 ** @return [AjBool] True on success
 ** @@
 ******************************************************************************/
-AjBool        ajXyzDichetScan(AjPStr path, AjPStr extn, AjPDichet ptr)
+static AjBool        dichet_Scan(AjPStr path, AjPStr extn, AjPDichet ptr)
 {
     AjPList     listfiles=NULL;    /* List of files in  directory */   
     AjPList     listhet=NULL; /* List of names of different heterogens in the current file */
@@ -574,7 +223,7 @@ AjBool        ajXyzDichetScan(AjPStr path, AjPStr extn, AjPDichet ptr)
     /* Check args */
     if(!path || !extn || !ptr)
     {
-	ajWarn("Bad arg's passed to ajXyzDichetScan");
+	ajWarn("Bad arg's passed to dichet_Scan");
 	return ajFalse;
     }
     
@@ -608,7 +257,7 @@ AjBool        ajXyzDichetScan(AjPStr path, AjPStr extn, AjPDichet ptr)
         /* Open pdb file */
         if((fptr=ajFileNewIn(fname))==NULL)
 	{
-	    ajWarn("Could not open file in ajXyzDichetScan\n");
+	    ajWarn("Could not open file in dichet_Scan\n");
 	    continue;
 	}
 	else 

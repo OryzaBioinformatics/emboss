@@ -1261,7 +1261,24 @@ static void cirdna_ReadInput(AjPFile infile, float *Start, float *End)
 
 
 
-/* read a group */
+/* @funcstatic  cirdna_ReadGroup **********************************************
+**
+** read a group
+**
+** @param [?] infile [AjPFile] Undocumented
+** @param [?] From [float*] Undocumented
+** @param [?] To [float*] Undocumented
+** @param [?] Name [AjPStr*] Undocumented
+** @param [?] FromSymbol [char*] Undocumented
+** @param [?] ToSymbol [char*] Undocumented
+** @param [?] Style2 [AjPStr*] Undocumented
+** @param [?] NumLabels [ajint*] Undocumented
+** @param [?] NumNames [ajint*] Undocumented
+** @param [?] Color [ajint*] Undocumented
+** @return [AjPStr] Undocumented
+** @@
+******************************************************************************/
+
 static AjPStr cirdna_ReadGroup(AjPFile infile, float *From, float *To,
 			       AjPStr *Name, char *FromSymbol,
 			       char *ToSymbol, AjPStr *Style2,
@@ -1370,11 +1387,27 @@ static AjPStr cirdna_ReadGroup(AjPFile infile, float *From, float *To,
 
 
 
-/*
- *  compute the character size that fits all elements of a group
- *  provided that the height and the length of all strings are at most
- *  TextHeight and TextLength, respectively
- */
+/* @funcstatic  cirdna_TextGroup **********************************************
+**
+**  compute the character size that fits all elements of a group
+**  provided that the height and the length of all strings are at most
+**  TextHeight and TextLength, respectively
+**
+** @param [?] TextHeight [float] Undocumented
+** @param [?] TextLength [float] Undocumented
+** @param [?] Name [AjPStr*] Undocumented
+** @param [?] NumLabels [ajint] Undocumented
+** @param [?] NumNames [ajint*] Undocumented
+** @param [?] GroupName [AjPStr] Undocumented
+** @param [?] Style2 [AjPStr*] Undocumented
+** @param [?] From [float*] Undocumented
+** @param [?] To [float*] Undocumented
+** @param [?] BlockHeight [float] Undocumented
+** @param [?] PosTicks [AjPStr] Undocumented
+** @return [float] Undocumented
+** @@
+******************************************************************************/
+
 static float cirdna_TextGroup(float TextHeight, float TextLength,
 			      AjPStr *Name, ajint NumLabels, ajint *NumNames,
 			      AjPStr GroupName, AjPStr *Style2, float *From,
@@ -1422,10 +1455,25 @@ static float cirdna_TextGroup(float TextHeight, float TextLength,
 
 
 
-/* 
- *  compute the character size that fits all elements of a group provided that
- *  the height and the length of all strings are multiplied by TextCoef
- */
+/* @funcstatic  cirdna_TextGroupStr *******************************************
+**
+** compute the character size that fits all elements of a group provided that
+** the height and the length of all strings are multiplied by TextCoef
+**
+** @param [?] Name2 [AjPStr*] Undocumented
+** @param [?] NumLabels [ajint] Undocumented
+** @param [?] NumNames [ajint*] Undocumented
+** @param [?] GroupName [AjPStr] Undocumented
+** @param [?] TextCoef [float] Undocumented
+** @param [?] Style2 [AjPStr*] Undocumented
+** @param [?] From [float*] Undocumented
+** @param [?] To [float*] Undocumented
+** @param [?] BlockHeight [float] Undocumented
+** @param [?] PosTicks [AjPStr] Undocumented
+** @return [float] Undocumented
+** @@
+******************************************************************************/
+
 static float cirdna_TextGroupStr(AjPStr *Name2, ajint NumLabels,
 				 ajint *NumNames, AjPStr GroupName,
 				 float TextCoef, AjPStr *Style2,
@@ -1481,7 +1529,27 @@ static float cirdna_TextGroupStr(AjPStr *Name2, ajint NumLabels,
 
 
 
-/* compute the height of a group depending on what's in it */
+/* @funcstatic  cirdna_HeightGroup ********************************************
+**
+** compute the height of a group depending on what's in it
+**
+** @param [?] posblock [float] Undocumented
+** @param [?] posrange [float] Undocumented
+** @param [?] postext [float] Undocumented
+** @param [?] TickHeight [float] Undocumented
+** @param [?] BlockHeight [float] Undocumented
+** @param [?] RangeHeight [float] Undocumented
+** @param [?] Name2 [AjPStr*] Undocumented
+** @param [?] Style2 [AjPStr*] Undocumented
+** @param [?] NumLabels [ajint] Undocumented
+** @param [?] NumNames [ajint*] Undocumented
+** @param [?] PosTicks [AjPStr] Undocumented
+** @param [?] PosBlocks [AjPStr] Undocumented
+** @param [?] Adjust [ajint] Undocumented
+** @return [float] Undocumented
+** @@
+******************************************************************************/
+
 static float cirdna_HeightGroup(float posblock, float posrange, float postext,
 				float TickHeight, float BlockHeight,
 				float RangeHeight, AjPStr *Name2,
@@ -1545,7 +1613,23 @@ static float cirdna_HeightGroup(float posblock, float posrange, float postext,
 
 
 
-/* find whether horizontal text strings overlap within a group */
+/* @funcstatic  cirdna_OverlapTextGroup ***************************************
+**
+** find whether horizontal text strings overlap within a group
+**
+** @param [?] Name2 [AjPStr*] Undocumented
+** @param [?] Style2 [AjPStr*] Undocumented
+** @param [?] NumLabels [ajint] Undocumented
+** @param [?] From [float*] Undocumented
+** @param [?] To [float*] Undocumented
+** @param [?] Start [float] Undocumented
+** @param [?] End [float] Undocumented
+** @param [?] PosTicks [AjPStr] Undocumented
+** @param [?] Adjust [ajint*] Undocumented
+** @return [ajint] Undocumented
+** @@
+******************************************************************************/
+
 static ajint cirdna_OverlapTextGroup(AjPStr *Name2, AjPStr *Style2,
 				     ajint NumLabels, float *From, float *To,
 				     float Start, float End,
@@ -1683,7 +1767,19 @@ static ajint cirdna_OverlapTextGroup(AjPStr *Name2, AjPStr *Style2,
 
 
 
-/* find whether group ticks and ruler's ticks overlap */
+/* @funcstatic  cirdna_OverlapTickRuler ***************************************
+**
+** find whether group ticks and ruler's ticks overlap
+**
+** @param [?] NumGroups [ajint] Undocumented
+** @param [?] NumLabels [ajint*] Undocumented
+** @param [?] From [float*] Undocumented
+** @param [?] PosTicks [AjPStr] Undocumented
+** @param [?] RulerTick [ajint] Undocumented
+** @return [AjBool] Undocumented
+** @@
+******************************************************************************/
+
 static AjBool cirdna_OverlapTickRuler(ajint NumGroups, ajint *NumLabels,
 				      float *From, AjPStr PosTicks,
 				      ajint RulerTick)
@@ -1714,7 +1810,43 @@ static AjBool cirdna_OverlapTickRuler(ajint NumGroups, ajint *NumLabels,
 
 
 
-/* draw a group */
+/* @funcstatic  cirdna_DrawGroup **********************************************
+**
+** draw a group
+**
+** @param [?] xDraw [float] Undocumented
+** @param [?] yDraw [float] Undocumented
+** @param [?] posblock [float] Undocumented
+** @param [?] posrange [float] Undocumented
+** @param [?] postext [float] Undocumented
+** @param [?] TickHeight [float] Undocumented
+** @param [?] BlockHeight [float] Undocumented
+** @param [?] RangeHeight [float] Undocumented
+** @param [?] RealLength [float] Undocumented
+** @param [?] TextLength [float] Undocumented
+** @param [?] TextHeight [float] Undocumented
+** @param [?] Radius [float] Undocumented
+** @param [?] RadiusMax [float] Undocumented
+** @param [?] From [float*] Undocumented
+** @param [?] To [float*] Undocumented
+** @param [?] Name2 [AjPStr*] Undocumented
+** @param [?] FromSymbol [char*] Undocumented
+** @param [?] ToSymbol [char*] Undocumented
+** @param [?] Style2 [AjPStr*] Undocumented
+** @param [?] InterSymbol [AjPStr] Undocumented
+** @param [?] InterTicks [AjPStr] Undocumented
+** @param [?] NumLabels [ajint] Undocumented
+** @param [?] GroupName [AjPStr] Undocumented
+** @param [?] OriginAngle [float] Undocumented
+** @param [?] NumNames [ajint*] Undocumented
+** @param [?] PosTicks [AjPStr] Undocumented
+** @param [?] PosBlocks [AjPStr] Undocumented
+** @param [?] Adjust [ajint*] Undocumented
+** @param [?] InterColor [ajint] Undocumented
+** @param [?] Color [ajint*] Undocumented
+** @@
+******************************************************************************/
+
 static void cirdna_DrawGroup(float xDraw, float yDraw, float posblock,
 			     float posrange, float postext, float TickHeight,
 			     float BlockHeight, float RangeHeight,

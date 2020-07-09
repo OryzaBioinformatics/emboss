@@ -289,6 +289,9 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
+** @param [r] x [void**] Undocumented
+** @param [r] cl [void*] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -314,6 +317,9 @@ static void polydot_drawPlotlines(void **x, void *cl)
 **
 ** Undocumented.
 **
+** @param [r] x [void**] Undocumented
+** @param [r] cl [void*] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -341,6 +347,7 @@ static void polydot_dataPlotlines(void **x, void *cl)
 **
 ** @param [?] list [AjPList] Undocumented
 ** @param [?] text [AjBool] Undocumented
+** @return [void]
 ** @@
 ******************************************************************************/
 

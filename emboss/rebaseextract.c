@@ -67,7 +67,8 @@ int main(int argc, char **argv)
     AjPStr  sou;
     AjPStr  comm;
     AjPStr  pfname;
-
+    AjBool  isrefm = ajFalse;
+    AjBool  isref  = ajFalse;
     AjBool hassup;
     
     ajint     count;
@@ -106,8 +107,24 @@ int main(int argc, char **argv)
      *  Extract Supplier information
      */
     while(ajFileReadLine(inf,&line))
+    {
+	if(ajStrFindC(line,"withrefm.")>=0)
+	    isrefm = ajTrue;
+	if(ajStrFindC(line,"withref.")>=0)
+	    isref = ajTrue;
+	
 	if(strstr(ajStrStr(line),"REBASE codes"))
 	    break;
+    }
+
+    if(!isrefm)
+    {
+	if(isref)
+	    ajFatal("WITHREF file specified by mistake. Use WITHREFM instead");
+	else
+	    ajFatal("Invalid withrefm file");
+    }
+    
 	
     if(!ajFileReadLine(inf,&line))
 	ajFatal("No Supplier Information Found");

@@ -27,6 +27,7 @@
 
 static void transeq_GetRegions(AjPRange regions, AjPSeq seq);
 static void transeq_Trim (AjPSeq seq);
+static void transeq_GetFrames (AjPStr *framelist, AjBool *frames);
 
 
 /* @prog transeq **************************************************************
@@ -43,16 +44,16 @@ int main(int argc, char **argv)
     AjPTrn trnTable;
     AjPSeq pep;
     AjPStr *framelist;
-    AjPStr frame;
+    AjBool frames[6];	/* frames to be translated 1 to 3, -1 to -3 */
     AjPStr *tablelist;
     ajint table;
     AjPRange regions;
     AjBool trim;
     AjBool defr=ajFalse; /* true if the range covers the whole sequence */
     AjBool first=ajTrue; /* true if this is the first sequence done     */
+
+    int i;
     
-    ajint frameno;
-  
     (void) embInit ("transeq", argc, argv);
 
     seqout = ajAcdGetSeqoutall ("outseq");
@@ -62,8 +63,8 @@ int main(int argc, char **argv)
     regions = ajAcdGetRange ("regions");
     trim = ajAcdGetBool ("trim");
 
-    /* get first item from the frames list */
-    frame = framelist[0];
+    /* get the frames to be translated */
+    transeq_GetFrames(framelist, frames);
 
     /* initialise the translation table */
     (void) ajStrToInt(tablelist[0], &table);
@@ -72,139 +73,32 @@ int main(int argc, char **argv)
     /* shift values of translate region to match -sbegin=n parameter */
     /*  (void) ajRangeBegin (regions, ajSeqallBegin(seqall));*/
 
-    /* get multi-frame special cases */
-    if (!ajStrCmpC(frame, "F"))
+
+    while (ajSeqallNext(seqall, &seq))
     {
-	while (ajSeqallNext(seqall, &seq))
-	{
-	    if (first)
-	    {
-		first=ajFalse;
-		if (ajRangeDefault(regions, ajSeqStr(seq)))
-		    defr = ajTrue;
-	    }
-
-	    /* get regions to translate */
-	    if (!defr)
-		(void) transeq_GetRegions(regions, seq);
-
-	    pep = ajTrnSeqOrig(trnTable, seq, 1);
-	    if (trim)
-		transeq_Trim(pep);
-	    (void) ajSeqAllWrite (seqout, pep);
-	    (void) ajSeqDel (&pep);
-	    pep = ajTrnSeqOrig(trnTable, seq, 2);
-	    if (trim)
-		transeq_Trim(pep);
-	    (void) ajSeqAllWrite (seqout, pep);
-	    (void) ajSeqDel (&pep);
-	    pep = ajTrnSeqOrig(trnTable, seq, 3);
-	    if (trim)
-		transeq_Trim(pep);
-	    (void) ajSeqAllWrite (seqout, pep);
-	    (void) ajSeqDel (&pep);
+        if (first)
+        {
+            first=ajFalse;
+	    if (ajRangeDefault(regions, ajSeqStr(seq)))
+	        defr = ajTrue;
 	}
-    }
-    else if (!ajStrCmpC(frame, "R"))
-    {
-	while (ajSeqallNext(seqall, &seq))
-	{
-	    if (first)
-	    {
-		first=ajFalse;
-		if (ajRangeDefault(regions,ajSeqStr(seq)))
-		    defr = ajTrue;
+
+	/* get regions to translate */
+	if (!defr)
+	    (void) transeq_GetRegions(regions, seq);
+
+        for (i=0; i<6; i++) {
+            ajDebug("try frame: %d\n", i);
+            if (frames[i]) {
+                if (i<3)
+	            pep = ajTrnSeqOrig(trnTable, seq, i+1);
+	        else 
+	            pep = ajTrnSeqOrig(trnTable, seq, 2-i);
+	        if (trim)
+	            transeq_Trim(pep);
+	        (void) ajSeqAllWrite (seqout, pep);
+	        (void) ajSeqDel (&pep);
 	    }
-
-	    /* get regions to translate */
-	    if (!defr)
-		(void) transeq_GetRegions(regions, seq);
-
-	    pep = ajTrnSeqOrig(trnTable, seq, -1);
-	    if (trim)
-		transeq_Trim(pep);
-	    (void) ajSeqAllWrite (seqout, pep);
-	    (void) ajSeqDel (&pep);
-	    pep = ajTrnSeqOrig(trnTable, seq, -2);
-	    if (trim)
-		transeq_Trim(pep);
-	    (void) ajSeqAllWrite (seqout, pep);
-	    (void) ajSeqDel (&pep);
-	    pep = ajTrnSeqOrig(trnTable, seq, -3);
-	    if (trim)
-		transeq_Trim(pep);
-	    (void) ajSeqAllWrite (seqout, pep);
-	    (void) ajSeqDel (&pep);
-	}
-    }
-    else if (!ajStrCmpC(frame, "6"))
-    {
-	while (ajSeqallNext(seqall, &seq))
-	{
-	    if (first)
-	    {
-		first=ajFalse;
-		if (ajRangeDefault(regions,ajSeqStr(seq)))
-		    defr = ajTrue;
-	    }
-
-	    /* get regions to translate */
-	    if (!defr)
-		(void) transeq_GetRegions(regions, seq);
-  
-	    pep = ajTrnSeqOrig(trnTable, seq, 1);
-	    if (trim)
-		transeq_Trim(pep);
-	    (void) ajSeqAllWrite (seqout, pep);
-	    (void) ajSeqDel (&pep);
-	    pep = ajTrnSeqOrig(trnTable, seq, 2);
-	    if (trim)
-		transeq_Trim(pep);
-	    (void) ajSeqAllWrite (seqout, pep);
-	    (void) ajSeqDel (&pep);
-	    pep = ajTrnSeqOrig(trnTable, seq, 3);
-	    if (trim)
-		transeq_Trim(pep);
-	    (void) ajSeqAllWrite (seqout, pep);
-	    (void) ajSeqDel (&pep);
-	    pep = ajTrnSeqOrig(trnTable, seq, -1);
-	    if (trim)
-		transeq_Trim(pep);
-	    (void) ajSeqAllWrite (seqout, pep);
-	    (void) ajSeqDel (&pep);
-	    pep = ajTrnSeqOrig(trnTable, seq, -2);
-	    if (trim)
-		transeq_Trim(pep);
-	    (void) ajSeqAllWrite (seqout, pep);
-	    (void) ajSeqDel (&pep);
-	    pep = ajTrnSeqOrig(trnTable, seq, -3);
-	    if (trim)
-		transeq_Trim(pep);
-	    (void) ajSeqAllWrite (seqout, pep);
-	    (void) ajSeqDel (&pep);
-	}
-    }
-    else
-    {
-	(void) ajStrToInt(frame, &frameno);
-	while (ajSeqallNext(seqall, &seq))
-	{
-	    if (first)
-	    {
-		first=ajFalse;
-		if (ajRangeDefault(regions,ajSeqStr(seq)))
-		    defr = ajTrue;
-	    }
-
-	    /* get regions to translate */
-	    if (!defr)
-		(void) transeq_GetRegions(regions, seq);
-
-	    pep = ajTrnSeqOrig(trnTable, seq, frameno);
-	    if (trim)
-		transeq_Trim(pep);
-	    (void) ajSeqAllWrite (seqout, pep);
-	    (void) ajSeqDel (&pep);
 	}
     }
   
@@ -282,3 +176,60 @@ static void transeq_Trim (AjPSeq seq)
     return;
 }
 
+
+
+/* @funcstatic transeq_GetFrames **************************************************
+**
+** Converts the list of frame numbers into a boolean vector.
+** Frame numbers are ordered in the vector as:
+** 1, 2, 3 -1, -2, -3
+**
+** @param [r] framelist [AjPStr*] list of frame numbers
+** @param [u] frames [AjBool*] Boolean vector
+** @return [void]
+** @@
+******************************************************************************/
+
+static void transeq_GetFrames (AjPStr *framelist, AjBool *frames)
+{
+
+    int i;
+    
+    /* reset the vector */
+    for (i=0; i<6; i++)
+        frames[i] = ajFalse;
+
+
+    for (i=0; framelist[i]; i++) {
+        if (ajStrMatchC(framelist[i], "1")) {
+            frames[0] = ajTrue;
+        } else if (ajStrMatchC(framelist[i], "2")) {
+            frames[1] = ajTrue;
+        } else if (ajStrMatchC(framelist[i], "3")) {
+            frames[2] = ajTrue;
+        } else if (ajStrMatchC(framelist[i], "-1")) {
+            frames[3] = ajTrue;
+        } else if (ajStrMatchC(framelist[i], "-2")) {
+            frames[4] = ajTrue;
+        } else if (ajStrMatchC(framelist[i], "-3")) {
+            frames[5] = ajTrue;
+        } else if (ajStrMatchC(framelist[i], "F")) {
+            frames[0] = ajTrue;
+            frames[1] = ajTrue;
+            frames[2] = ajTrue;
+        } else if (ajStrMatchC(framelist[i], "R")) {
+            frames[3] = ajTrue;
+            frames[4] = ajTrue;
+            frames[5] = ajTrue;
+        } else if (ajStrMatchC(framelist[i], "6")) {
+            frames[0] = ajTrue;
+            frames[1] = ajTrue;
+            frames[2] = ajTrue;
+            frames[3] = ajTrue;
+            frames[4] = ajTrue;
+            frames[5] = ajTrue;
+	} else {
+	    ajErr("Unknown frame: '%S'", framelist[i]);
+	}
+    }
+}

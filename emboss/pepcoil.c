@@ -408,7 +408,7 @@ static float pepcoil_probcoil(float score)
 ** @@
 ******************************************************************************/
 
-ajint pepcoil_inframe(ajint start, ajint pos, ajint frame, ajint len)
+static ajint pepcoil_inframe(ajint start, ajint pos, ajint frame, ajint len)
 {
     return 1+ajPosMod(frame-pos+start-1,len);
 }

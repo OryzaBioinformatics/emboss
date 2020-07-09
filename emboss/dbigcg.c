@@ -215,6 +215,8 @@ int main(int argc, char **argv)
     cleanup = ajAcdGetBool ("cleanup");
     sortopt = ajAcdGetString ("sortoptions");
 
+    ajStrCleanWhite(&dbname);	/* used for temp filenames */
+
     if (ajRegExec (datexp, datestr))
 	for (i=1; i<4; i++)
 	{

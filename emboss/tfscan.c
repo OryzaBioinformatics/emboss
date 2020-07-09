@@ -176,8 +176,9 @@ int main(int argc, char **argv)
 ******************************************************************************/
 
 
-void tfscan_print_hits(AjPStr name, AjPList *l, ajint hits, AjPFile outf,
-		       ajint begin, ajint end, AjPTable t, AjPSeq seq)
+static void tfscan_print_hits(AjPStr name, AjPList *l,
+			      ajint hits, AjPFile outf,
+			      ajint begin, ajint end, AjPTable t, AjPSeq seq)
 {
     ajint i;
     EmbPMatMatch m;

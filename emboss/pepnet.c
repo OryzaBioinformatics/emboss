@@ -307,8 +307,8 @@ static void pepnet_drawocta(float x, float y, float size, AjBool text,
 ** Plot a residue
 **
 ** @param [r] c [char] char to plot
-** @param [r] r [float] radius
-** @param [r] a [float] angle
+** @param [r] x [float] x coordinate
+** @param [r] y [float] y coordinate
 ** @param [r] squares [char*] residues for squares
 ** @param [r] octags [char*] residues for octagons
 ** @param [r] diamonds [char*] residues for diamonds

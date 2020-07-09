@@ -1,9 +1,9 @@
 #include "emboss.h"
 
 
-/* @prog seqret ***************************************************************
+/* @prog seqretsingle *********************************************************
 **
-** Reads and writes (returns) sequences
+** Reads and writes (returns) a single sequence
 **
 ******************************************************************************/
 
