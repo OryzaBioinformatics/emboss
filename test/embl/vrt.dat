@@ -13,9 +13,8 @@ KW   G protein-coupled receptor; phototransduction protein; retinal protein;
 KW   rhodopsin; transmembrane protein.
 XX
 OS   Xenopus laevis (African clawed frog)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Teleostomi;
-OC   Euteleostomi; Amphibia; Batrachia; Anura; Mesobatrachia; Pipoidea; Pipidae;
-OC   Xenopodinae; Xenopus.
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Amphibia;
+OC   Batrachia; Anura; Mesobatrachia; Pipoidea; Pipidae; Xenopodinae; Xenopus.
 XX
 RN   [1]
 RP   1-1684
@@ -104,9 +103,8 @@ XX
 KW   .
 XX
 OS   Xenopus laevis (African clawed frog)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Teleostomi;
-OC   Euteleostomi; Amphibia; Batrachia; Anura; Mesobatrachia; Pipoidea; Pipidae;
-OC   Xenopodinae; Xenopus.
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Amphibia;
+OC   Batrachia; Anura; Mesobatrachia; Pipoidea; Pipidae; Xenopodinae; Xenopus.
 XX
 RN   [1]
 RP   1-4734

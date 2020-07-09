@@ -12,8 +12,8 @@ XX
 KW   cadherin.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia; Eutheria;
-OC   Primates; Catarrhini; Hominidae; Homo.
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
 XX
 RN   [1]
 RP   1-3169
@@ -131,14 +131,13 @@ XX
 DT   15-DEC-1993 (Rel. 38, Created)
 DT   02-JUL-1999 (Rel. 60, Last updated, Version 2)
 XX
-DE   Homo sapiens acidic growth fibroblast growth factor (aFGF) gene
-DE   sequence.
+DE   Homo sapiens acidic growth fibroblast growth factor (aFGF) gene sequence.
 XX
 KW   acidic fibroblast growth factor.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia; Eutheria;
-OC   Primates; Catarrhini; Hominidae; Homo.
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
 XX
 RN   [1]
 RP   1-781
@@ -186,8 +185,8 @@ XX
 KW   epsilon-globin; germ line; globin.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia; Eutheria;
-OC   Primates; Catarrhini; Hominidae; Homo.
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
 XX
 RN   [1]
 RP   1640-3919
@@ -203,6 +202,7 @@ RA   Baralle F.E., Shoulders C.C., Goodbourn S., Jeffreys A., Proudfoot N.J.;
 RT   "The 5' flanking region of human epsilon-globin gene";
 RL   Nucleic Acids Res. 8:4393-4404(1980).
 XX
+DR   EPD; EP11110; HS_HBE.
 DR   SWISS-PROT; P02100; HBE_HUMAN.
 DR   TRANSFAC; R03113; HS$EG_01.
 DR   TRANSFAC; R03114; HS$EG_02.
@@ -298,7 +298,7 @@ ID   HSFAU      standard; RNA; HUM; 518 BP.
 XX
 AC   X65923;
 XX
-NI   g31302
+SV   X65923.1
 XX
 DT   13-MAY-1992 (Rel. 31, Created)
 DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
@@ -308,8 +308,8 @@ XX
 KW   fau gene.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Vertebrata; Mammalia; Eutheria; Primates;
-OC   Catarrhini; Hominidae; Homo.
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
 XX
 RN   [1]
 RP   1-518
@@ -322,11 +322,9 @@ XX
 RN   [2]
 RP   1-518
 RX   MEDLINE; 93368957.
-RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K.,
-RA   Merregaert J.;
-RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed
-RT   as an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma
-RT   virus";
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
 RL   Oncogene 8:2537-2546(1993).
 XX
 DR   SWISS-PROT; P35544; UBIM_HUMAN.
@@ -335,8 +333,9 @@ XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..518
-FT                   /organism="Homo sapiens"
 FT                   /chromosome="11q"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
 FT                   /tissue_type="placenta"
 FT                   /clone_lib="cDNA"
 FT                   /clone="pUIA 631"
@@ -344,10 +343,10 @@ FT                   /map="13"
 FT   misc_feature    57..278
 FT                   /note="ubiquitin like part"
 FT   CDS             57..458
-FT                   /db_xref="PID:g31303"
 FT                   /db_xref="SWISS-PROT:P35544"
 FT                   /db_xref="SWISS-PROT:Q05472"
 FT                   /gene="fau"
+FT                   /protein_id="CAA46716.1"
 FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
 FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
 FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
@@ -482,18 +481,18 @@ ID   HSFOS      standard; DNA; HUM; 6210 BP.
 XX
 AC   K00650; M16287;
 XX
-NI   g182734
+SV   K00650.1
 XX
 DT   26-JUL-1991 (Rel. 28, Created)
-DT   15-NOV-1994 (Rel. 41, Last updated, Version 2)
+DT   02-JUL-1999 (Rel. 60, Last updated, Version 3)
 XX
 DE   Human fos proto-oncogene (c-fos), complete cds.
 XX
 KW   c-myc proto-oncogene; fos oncogene; proto-oncogene.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Vertebrata; Mammalia; Eutheria; Primates;
-OC   Catarrhini; Hominidae; Homo.
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
 XX
 RN   [1]
 RP   1-4165
@@ -501,26 +500,25 @@ RX   MEDLINE; 83221560.
 RA   van Straaten F., Muller R., Curran T., Van Beveren C., Verma I.M.;
 RT   "Complete nucleotide sequence of a human c-onc gene: deduced amino acid
 RT   sequence of the human c-fos protein";
-RL   Proc. Natl. Acad. Sci. U.S.A. 80:3183-3187(1983).
+RL   Proc. Natl. Acad. Sci. U.S.A. 80(11):3183-3187(1983).
 XX
 RN   [2]
 RX   MEDLINE; 86028185.
 RA   Treisman R.;
-RT   "Transient accumulation of c-fos RNA following serum stimulation
-RT   requires a conserved 5' element and c-fos 3' sequences";
-RL   Cell 42:889-902(1985).
+RT   "Transient accumulation of c-fos RNA following serum stimulation requires a
+RT   conserved 5' element and c-fos 3' sequences";
+RL   Cell 42(3):889-902(1985).
 XX
 RN   [3]
 RP   4166-6210
 RX   MEDLINE; 87217118.
 RA   Verma I.M., Deschamps J., Van Beveren C., Sassone-Corsi P.;
 RT   "Human fos gene";
-RL   Cold Spring Harb. Symp. Quant. Biol. 51:949-958(1986).
+RL   Cold Spring Harb. Symp. Quant. Biol. 51:0-0(0).
 XX
-DR   CPGISLE; HSFOS; Release 3.0.
+DR   EPD; EP11145; HS_FOS.
 DR   GDB; 119917; FOS.
 DR   SWISS-PROT; P01100; FOS_HUMAN.
-DR   TFD; C00625; Release 7.0.
 DR   TRANSFAC; R00458; HS$CFOS_01.
 DR   TRANSFAC; R00459; HS$CFOS_02.
 DR   TRANSFAC; R00460; HS$CFOS_03.
@@ -540,37 +538,41 @@ DR   TRANSFAC; R04046; HS$CFOS_18.
 DR   TRANSFAC; R04047; HS$CFOS_19.
 DR   TRANSFAC; T00123; T00123.
 XX
-CC   [2] sites; promoter region. C-fos is the human cellular homolog of
-CC   the v-fos oncogene of Finkel-Biskis-Jinkins murine osteosarcoma
-CC   virus (FBJ-MuSV). [2] It was found that both human and murine c-fos
-CC   genes contained an enhancer-like element in their 5' noncoding
-CC   regions that was necessary for increased transcription following
-CC   serum activation. The FBJ-MuSV v-fos oncogene contains a deletion
-CC   relative to murine and human c-fos proto-oncogenes that causes
-CC   complete divergence of the COOH terminal protein sequences encoded.
-CC   That deletion corresponds to positions 3182-3285 inclusive of this
-CC   sequence. The FBJ-MuSV v-fos sequence is more closely related to
-CC   murine than human c-fos sequences. The FBJ-MuSV v-fos coding
-CC   sequence ends at a 'tag' stop codon coresponding to positions
-CC   3434-2436 of this sequence [1]. [1] notes two alu repeats beginning
-CC   aproximately 500 and 1700 nucleotides downstream of the last base
-CC   in this sequence. A TATA box is located at positions 701-707. Two
-CC   potential polyadenylation signals are present in the 3'
-CC   untranslated region. NCBI gi: 182734
+CC   [2]  sites; promoter region.
+CC   C-fos is the human cellular homolog of the v-fos oncogene of
+CC   Finkel-Biskis-Jinkins murine osteosarcoma virus (FBJ-MuSV).  [2] It
+CC   was found that both human and murine c-fos genes contained an
+CC   enhancer-like element in their 5' noncoding regions that was
+CC   necessary for increased transcription following serum activation.
+CC   The FBJ-MuSV v-fos oncogene contains a deletion relative to murine
+CC   and human c-fos proto-oncogenes that causes complete divergence of
+CC   the COOH terminal protein sequences encoded.  That deletion
+CC   corresponds to positions 3182-3285 inclusive of this sequence.  The
+CC   FBJ-MuSV v-fos sequence is more closely related to murine than
+CC   human c-fos sequences.  The FBJ-MuSV v-fos coding sequence ends at
+CC   a 'tag' stop codon coresponding to positions 3434-2436 of this
+CC   sequence [1].  [1] notes two alu repeats beginning aproximately 500
+CC   and 1700 nucleotides downstream of the last base in this sequence.
+CC   A TATA box is located at positions 701-707.  Two potential
+CC   polyadenylation signals are present in the 3' untranslated region.
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..6210
+FT                   /db_xref="taxon:9606"
 FT                   /organism="Homo sapiens"
+FT                   /map="14q24.3"
 FT   misc_feature    402..453
 FT                   /note="transcriptional activator region [2]"
 FT   prim_transcript 734..>3329
 FT                   /note="c-fos mRNA [1]"
+FT   gene            889..1029
+FT                   /gene="FOS"
 FT   CDS             join(889..1029,1783..2034,2466..2573,2688..3329)
 FT                   /codon_start=1
-FT                   /db_xref="PID:g182735"
 FT                   /db_xref="SWISS-PROT:P01100"
-FT                   /note="c-fos protein;  NCBI gi: 182735"
+FT                   /note="c-fos protein"
+FT                   /protein_id="AAA52471.1"
 FT                   /translation="MMFSGFNADYEASSSRCSSASPAGDSLSYYHSPADSFSSMGSPVN
 FT                   AQDFCTDLAVSSANFIPTVTAISTSPDLQWLVQPALVSSVAPSQTRAPHPFGVPAPSAG
 FT                   AYSRAGVVKTMTGGRAQSIGRRGKVEQLSPEEEEKRRIRRERNKMAAAKCRNRRRELTD
@@ -582,7 +584,6 @@ FT   exon            <889..1029
 FT                   /note="c-fos protein; G00-119-917"
 FT                   /number=1
 FT                   /gene="FOS"
-FT                   /map="14q24.3"
 FT   intron          1030..1782
 FT                   /note="c-fos intron A"
 FT   exon            1783..2034
@@ -707,7 +708,7 @@ ID   HSEF2      standard; RNA; HUM; 3075 BP.
 XX
 AC   X51466; M30456;
 XX
-NI   g31105
+SV   X51466.1
 XX
 DT   28-JUN-1990 (Rel. 24, Created)
 DT   12-SEP-1993 (Rel. 36, Last updated, Version 8)
@@ -717,8 +718,8 @@ XX
 KW   elongation factor; elongation factor 2.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Vertebrata; Mammalia; Eutheria; Primates;
-OC   Catarrhini; Hominidae; Homo.
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
 XX
 RN   [1]
 RP   1-3075
@@ -731,9 +732,8 @@ RN   [2]
 RP   1-3075
 RX   MEDLINE; 90121741.
 RA   Rapp G.G., Klaudiny J.J., Hagendorff G.G., Luck M.M., Scheit K.K.;
-RT   "Complete sequence of the coding region of human elongation factor
-RT   2(EF-2) by enzymatic amplification of cDNA from human ovarian granulosa
-RT   cells";
+RT   "Complete sequence of the coding region of human elongation factor 2(EF-2)
+RT   by enzymatic amplification of cDNA from human ovarian granulosa cells";
 RL   Biol. Chem. Hoppe-Seyler 370:1071-1075(1989).
 XX
 DR   GDB; 119104; EEF2.
@@ -748,14 +748,15 @@ XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..3075
+FT                   /db_xref="taxon:9606"
 FT                   /organism="Homo sapiens"
 FT                   /dev_stage="adult"
 FT                   /tissue_type="ovary"
 FT                   /cell_type="granulosa"
 FT   CDS             1..2577
-FT                   /db_xref="PID:g31106"
 FT                   /db_xref="SWISS-PROT:P13639"
 FT                   /product="elongation factor 2"
+FT                   /protein_id="CAA35829.1"
 FT                   /translation="MVNFTVDQIRAIMDKKANIRNMSVIAHVDHGKSTLTDSLVCKAGI
 FT                   IASARAGETRFTDTRKDEQERCITIKSTAISLFYELSENDLNFIKQSKDGAGFLINLID
 FT                   SPGHVDFSSEVTAALRVTDGALVVVDCVSGVCVQTETVLRQAIAERIKPVLMMNKMDRA
@@ -828,28 +829,28 @@ SQ   Sequence 3075 BP; 678 A; 906 C; 924 G; 567 T; 0 other;
 //
 ID   HSHT       standard; RNA; HUM; 1658 BP.
 XX
-AC   X07523; Y00716;
+AC   X07523;
 XX
-NI   g32492
+SV   X07523.1
 XX
 DT   16-JUL-1988 (Rel. 16, Created)
-DT   31-MAR-1995 (Rel. 43, Last updated, Version 2)
+DT   11-MAR-2001 (Rel. 67, Last updated, Version 3)
 XX
 DE   Human mRNA for truncated form of complement factor H
 XX
 KW   complement factor H.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Vertebrata; Mammalia; Eutheria; Primates;
-OC   Catarrhini; Hominidae; Homo.
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
 XX
 RN   [1]
 RP   1-1658
 RA   Day A.J.;
 RT   ;
 RL   Submitted (03-MAY-1988) to the EMBL/GenBank/DDBJ databases.
-RL   Day A.J., Dept. of Biochemistry, University of Oxford, MRC
-RL   Immunochemistry Unit, South Parks Road, Oxford OX1 3QU .
+RL   Day A.J., Dept. of Biochemistry, University of Oxford, MRC Immunochemistry
+RL   Unit, South Parks Road, Oxford OX1 3QU .
 XX
 RN   [2]
 RX   MEDLINE; 88134059.
@@ -857,13 +858,14 @@ RA   Ripoche J., Day A.J., Harris T.J.R., Sim R.B.;
 RT   "The complete amino acid sequence of human complement factor H";
 RL   Biochem. J. 249:593-602(1988).
 XX
-DR   SPTREMBL; Q14570; Q14570.
+DR   SWISS-PROT; P08603; CFAH_HUMAN.
 XX
 CC   Data kindly reviewed (06-JUN-1988) by Day A.J.
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..1658
+FT                   /db_xref="taxon:9606"
 FT                   /organism="Homo sapiens"
 FT                   /clone_lib="pat153/PvuII/8"
 FT                   /clone="B-38-1 tissue=liver"
@@ -874,9 +876,9 @@ FT                   /note="5'-UT region"
 FT   sig_peptide     74..127
 FT                   /note="put. signal peptide"
 FT   CDS             74..1423
-FT                   /db_xref="PID:g758073"
-FT                   /db_xref="SPTREMBL:Q14570"
+FT                   /db_xref="SWISS-PROT:P08603"
 FT                   /product="complement factor H"
+FT                   /protein_id="CAA30403.1"
 FT                   /translation="MRLLAKIICLMLWAICVAEDCNELPPRRNTEILTGSWSDQTYPEG
 FT                   TQAIYKCRPGYRSLGNVIMVCRKGEWVALNPLRKCQKRPCGHPGDTPFGTFTLTGGNVF
 FT                   EYGVKAVYTCNEGYQLLGEINYRECDTDGWTNDIPICEVVKCLPVTAPENGKIVSSAME
@@ -936,14 +938,14 @@ XX
 DT   17-JUL-1991 (Rel. 28, Created)
 DT   27-OCT-1998 (Rel. 57, Last updated, Version 2)
 XX
-DE   Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5,
-DE   6, 7, complete cds.
+DE   Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7,
+DE   complete cds.
 XX
 KW   thymidylate syntase.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia; Eutheria;
-OC   Primates; Catarrhini; Hominidae; Homo.
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
 XX
 RN   [1]
 RP   1-18596
@@ -1378,17 +1380,17 @@ XX
 DT   26-FEB-1996 (Rel. 46, Created)
 DT   22-NOV-1999 (Rel. 61, Last updated, Version 3)
 XX
-DE   Human DNA sequence from cosmid NFG9 from a contig from the tip
-DE   of the short arm of chromosome 16, spanning 2Mb of 16p13.3.
-DE   Contains Interleukin 9 Receptor Pseudogene, repeat polymorphism,
-DE   ESTs, CpG islands and endogenous retroviral DNA.
+DE   Human DNA sequence from cosmid NFG9 from a contig from the tip of the short
+DE   arm of chromosome 16, spanning 2Mb of 16p13.3. Contains Interleukin 9
+DE   Receptor Pseudogene, repeat polymorphism, ESTs, CpG islands and endogenous
+DE   retroviral DNA.
 XX
 KW   16p13.3; CpG island; Interleukin 9 Receptor Pseudogene;
 KW   repeat polymorphism.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Teleostomi;
-OC   Euteleostomi; Mammalia; Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
 XX
 RN   [1]
 RP   1-33760
@@ -2099,14 +2101,14 @@ XX
 DT   10-MAR-1998 (Rel. 54, Created)
 DT   10-MAR-1998 (Rel. 54, Last updated, Version 1)
 XX
-DE   Homo sapiens mRNA for hepatocyte growth factor activator
-DE   inhibitor, complete cds.
+DE   Homo sapiens mRNA for hepatocyte growth factor activator inhibitor,
+DE   complete cds.
 XX
 KW   hepatocyte growth factor activator inhibitor.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia; Eutheria;
-OC   Primates; Catarrhini; Hominidae; Homo.
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
 XX
 RN   [1]
 RP   1-2399
@@ -2124,7 +2126,7 @@ RT   "Hepatocyte growth factor activator inhibitor, a novel Kunitz-type serine
 RT   protease inhibitor";
 RL   J. Biol. Chem. 272:6370-6376(1997).
 XX
-DR   SPTREMBL; O43278; O43278.
+DR   SWISS-PROT; O43278; SPT1_HUMAN.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -2133,7 +2135,7 @@ FT                   /db_xref="taxon:9606"
 FT                   /sequenced_mol="cDNA to mRNA"
 FT                   /organism="Homo sapiens"
 FT   CDS             176..1717
-FT                   /db_xref="SPTREMBL:O43278"
+FT                   /db_xref="SWISS-PROT:O43278"
 FT                   /product="hepatocyte growth factor activator inhibitor"
 FT                   /protein_id="BAA25014.1"
 FT                   /translation="MAPARTMARARLAPAGIPAVALWLLCTLGLQGTQAGPPPAPPGLP
@@ -2189,7 +2191,6 @@ SQ   Sequence 2399 BP; 490 A; 777 C; 684 G; 448 T; 0 other;
      gcctagacca gcagacagag ccaggagagg ctcagctgca ttccgcagcc cccaccccca      2340
      aggttctcca acatcacagc ccagcccacc cactgggtaa taaaagtggt ttgtggaaa       2399
 //
-
 ID   AB009062   standard; DNA; HUM; 532 BP.
 XX
 AC   AB009062;
@@ -2204,8 +2205,8 @@ XX
 KW   HERG.
 XX
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia; Eutheria;
-OC   Primates; Catarrhini; Hominidae; Homo.
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
 XX
 RN   [1]
 RP   1-532
@@ -2224,7 +2225,7 @@ RT   "Genomic organization and mutational analysis of HERG, a gene responsible
 RT   for familial long QT syndrome";
 RL   Hum. Genet. 102:435-439(1998).
 XX
-DR   SPTREMBL; Q12809; Q12809.
+DR   SWISS-PROT; Q12809; HERG_HUMAN.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -2247,7 +2248,6 @@ SQ   Sequence 532 BP; 87 A; 187 C; 146 G; 112 T; 0 other;
      actacttcaa gggctggttc ctcatcgaca tggtggccgc catccccttc gacctgctca       480
      tcttcggctc tggctctgag gaggtggggt cagcaaggag gcaggtggtg ta               532
 //
-
 ID   HSFERG1    standard; DNA; HUM; 512 BP.
 XX
 AC   X03487;
@@ -2315,7 +2315,6 @@ SQ   Sequence 512 BP; 80 A; 212 C; 152 G; 64 T; 4 other;
      actaccacca ggactcagag gccgccatca accgccagat caacctggag ctctacgcct       480
      cctacgttta cctgtccatg gtgagcgcgg gc                                     512
 //
-
 ID   HSFERG2    standard; DNA; HUM; 1132 BP.
 XX
 AC   X03488;
@@ -2389,15 +2388,14 @@ SQ   Sequence 1132 BP; 315 A; 235 C; 250 G; 320 T; 12 other;
      aaatctatcc aggctatctt ccagattcct taagtgccgt tgttcagttc taatcacact      1080
      aatcaaaaag aaacgagtat ttgtatttat taaactcatt agtttgggca gt              1132
 //
-
 ID   AP000504   standard; DNA; HUM; 100000 BP.
 XX
-AC   AP000504;
+AC   AP000504; BA000025;
 XX
 SV   AP000504.1
 XX
 DT   28-SEP-1999 (Rel. 61, Created)
-DT   30-MAR-2000 (Rel. 63, Last updated, Version 2)
+DT   22-AUG-2001 (Rel. 68, Last updated, Version 3)
 XX
 DE   Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section
 DE   3/20.
@@ -2423,6 +2421,13 @@ RA   Shiina S., Tamiya G., Oka A., Inoko H.;
 RT   "Homo sapiens 2,229,817bp genomic DNA of 6p21.3 HLA class I region";
 RL   Unpublished.
 XX
+DR   SWISS-PROT; O00299; CLI1_HUMAN.
+DR   SWISS-PROT; O43196; MSH5_HUMAN.
+DR   SWISS-PROT; O95445; APOM_HUMAN.
+DR   SWISS-PROT; O95865; DDH2_HUMAN.
+DR   SWISS-PROT; O95867; NG24_HUMAN.
+DR   SWISS-PROT; P13862; KC2B_HUMAN.
+XX
 CC   This sequence is conducted by Tokai University as a JST sequencing
 CC   Team.
 CC   Principal Investigator: Hidetoshi Inoko Ph.D
@@ -2443,6 +2448,201 @@ FT                   /db_xref="taxon:9606"
 FT                   /sequenced_mol="DNA"
 FT                   /organism="Homo sapiens"
 FT                   /map="6p21.3"
+FT   CDS             join(complement(3425..3571),complement(2752..2875),
+FT                   complement(1081..1161),complement(868..930),
+FT                   complement(13..134),complement(AP000503.1:99739..99848),
+FT                   complement(AP000503.1:99457..99492),
+FT                   complement(AP000503.1:98719..98801),
+FT                   complement(AP000503.1:96594..96639),
+FT                   complement(AP000503.1:90590..90728),
+FT                   complement(AP000503.1:90400..90462),
+FT                   complement(AP000503.1:85724..85852),
+FT                   complement(AP000503.1:85397..85469),
+FT                   complement(AP000503.1:85142..85251),
+FT                   complement(AP000503.1:84840..84920),
+FT                   complement(AP000503.1:84505..84592),
+FT                   complement(AP000503.1:84042..84231),
+FT                   complement(AP000503.1:83801..83927),
+FT                   complement(AP000503.1:83178..83327),
+FT                   complement(AP000503.1:82755..82829),
+FT                   complement(AP000503.1:82402..82545),
+FT                   complement(AP000503.1:82062..82199),
+FT                   complement(AP000503.1:81832..81905),
+FT                   complement(AP000503.1:81486..81597))
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:O43196"
+FT                   /note="alternative name: G7, MutS"
+FT                   /transl_table=1
+FT                   /function="mismatch repair"
+FT                   /gene="MSH5"
+FT                   /protein_id="BAB63375.1"
+FT                   /translation="MASLGANPRRTPQGPRPGAASSGFPSPAPVPGPREAEEEEVEEEE
+FT                   ELAEIHLCVLWNSGYLGIAYYDTSDSTIHFMPDAPDHESLKLLQRVLDEINPQSVVTSA
+FT                   KQDENMTRFLGKLASQEHREPKRPEIIFLPSVDFGLEISKQRLLSGNYSFIPDAMTATE
+FT                   KILFLSSIIPFDCLLTVRALGGLLKFLGRRRIGVELEDYNVSVPILGFKKFMLTHLVNI
+FT                   DQDTYSVLQIFKSESHPSVYKVASGLKEGLSLFGILNRCHCKWGEKLLRLWFTRPTHDL
+FT                   GELSSRLDVIQFFLLPQNLDMAQMLHRLLGHIKNVPLILKRMKLSHTKVSDWQVLYKTV
+FT                   YSALGLRDACRSLPQSIQLFRDIAQEFSDDLHHIASLIGKVVDFEGSLAENRFTVLPNI
+FT                   DPEIDEKKRRLMGLPSFLTEVARKELENLDSRIPSCSVIYIPLIGFLLSIPRLPSMVEA
+FT                   SDFEINGLDFMFLSEEKLHYRSARTKELDALLGDLHCEIRDQETLLMYQLQCQVLARAA
+FT                   VLTRVLDLASRLDVLLALASAARDYGYSRPRYSPQVLGVRIQNGRHPLMELCARTFVPN
+FT                   STECGGDKGRVKVITGPNSSGKSIYLKQVGLITFMALVGSFVPAEEAEIGAVDAIFTRI
+FT                   HSCESISLGLSTFMIDLNQVAKAVNNATAQSLVLIDEFGKGTNTVDGLALLAAVLRHWL
+FT                   ARGPTCPHIFVATNFLSLVQLQLLPQGPLVQYLTMETCEDGNDLVFFYQVCEGVAKASH
+FT                   ASHTAAQAGLPDKLVARGKEVSDLIRSGKPIKPVKDLLKKNQMENCQTLVDKFMKLDLE
+FT                   DPNLDLNVFMSQEVLPAATSIL"
+FT   exon            13..134
+FT                   /number=6
+FT                   /gene="MSH5"
+FT   exon            868..930
+FT                   /number=5
+FT                   /gene="MSH5"
+FT   exon            1081..1161
+FT                   /number=4
+FT                   /gene="MSH5"
+FT   exon            2752..2875
+FT                   /number=3
+FT                   /gene="MSH5"
+FT   exon            3425..3584
+FT                   /number=2
+FT                   /gene="MSH5"
+FT   exon            3818..4038
+FT                   /number=1
+FT                   /gene="MSH5"
+FT   exon            7507..7763
+FT                   /number=1
+FT                   /gene="CLIC1"
+FT   CDS             join(7725..7763,9766..9875,10068..10193,10357..10463,
+FT                   11631..11812,13026..13187)
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:O00299"
+FT                   /note="alternative name: NCC27, G6, CLCP, p64"
+FT                   /transl_table=1
+FT                   /gene="CLIC1"
+FT                   /product="nuclear chloride ion channel protein"
+FT                   /protein_id="BAB63376.1"
+FT                   /translation="MAEEQPQVELFVKAGSDGAKIGNCPFSQRLFMVLWLKGVTFNVTT
+FT                   VDTKRRTETVQKLCPGGQLPFLLYGTEVHTDTNKIEEFLEAVLCPPRYPKLAALNPESN
+FT                   TAGLDIFAKFSAYIKNSNPALNDNLEKGLLKALKVLDNYLTSPLPEEVDETSAEDEGVS
+FT                   QRKFLDGNELTLADCNLLPKLHIVQVVCKKYRGFTIPEAFRGVHRYLSNAYAREEFAST
+FT                   CPDDEEIELAYEQVAKALK"
+FT   exon            9766..9875
+FT                   /number=2
+FT                   /gene="CLIC1"
+FT   exon            10068..10193
+FT                   /number=3
+FT                   /gene="CLIC1"
+FT   exon            10357..10463
+FT                   /number=4
+FT                   /gene="CLIC1"
+FT   exon            11631..11812
+FT                   /number=5
+FT                   /gene="CLIC1"
+FT   exon            13026..13434
+FT                   /number=6
+FT                   /gene="CLIC1"
+FT   exon            14850..15164
+FT                   /number=1
+FT                   /gene="DDAH"
+FT   CDS             join(14868..15164,15284..15383,15505..15578,15737..15856,
+FT                   16337..16486,16676..16792)
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:O95865"
+FT                   /note="alternative name: NG30, G6a"
+FT                   /transl_table=1
+FT                   /gene="DDAH"
+FT                   /product="NG-dimethylarginine dimethylamino hydrolase
+FT                   homolog"
+FT                   /protein_id="BAB63377.1"
+FT                   /translation="MGTPGEGLGRCSHALIRGVPESLASGEGAGAGLPALDLAKAQREH
+FT                   GVLGGKLRQRLGLQLLELPPEESLPLGPLLGDTAVIQGDTALITRPWSPARRPEVDGVR
+FT                   KALQDLGLRIVEIGDENATLDGTDVLFTGREFFVGLSKWTNHRGAEIVADTFRDFAVST
+FT                   VPVSGPSHLRGLCGMGGPRTVVAGSSDAAQKAVRAMAVLTDHPYASLTLPDDAAADCLF
+FT                   LRPGLPGVPPFLLHRGGGDLPNSQEALQKLSDVTLVPVSCSELEKAGAGLSSLCLVLST
+FT                   RPHS"
+FT   exon            15284..15383
+FT                   /number=2
+FT                   /gene="DDAH"
+FT   exon            15505..15578
+FT                   /number=3
+FT                   /gene="DDAH"
+FT   exon            15737..15856
+FT                   /number=4
+FT                   /gene="DDAH"
+FT   exon            16337..16486
+FT                   /number=5
+FT                   /gene="DDAH"
+FT   exon            16676..16987
+FT                   /number=6
+FT                   /gene="DDAH"
+FT   CDS             join(complement(20585..20645),complement(20043..20390),
+FT                   complement(19797..19887),complement(19402..19442),
+FT                   complement(19185..19264),complement(18955..19059))
+FT                   /codon_start=1
+FT                   /note="alternative name: NG31"
+FT                   /note="unknown function"
+FT                   /transl_table=1
+FT                   /gene="G6B"
+FT                   /protein_id="BAB63378.1"
+FT                   /translation="MAVFLQLLPLLLSRAQGNPGASLDGRPGDRVNLSCGGVSHPIRWV
+FT                   WAPSFPACKGLSKGRRPILWASSSGTPTVPPLQPFVGRLRSLDSGIRRLELLLSAGDSG
+FT                   TFFCKGRHEDESRTVLHVLGDRTYCKAPGPTHGSVYPQLLIPLLGAGLVLGLGALGLVW
+FT                   WLHRRLPPQPIRPLPRFAPLVKTEPQRPVKEEEPKIPGDLDQEPSLLYADLDHLALSRP
+FT                   RRLSTADPADASTIYAVVV"
+FT   exon            18955..19059
+FT                   /number=6
+FT                   /gene="G6B"
+FT   exon            19185..19264
+FT                   /number=5
+FT                   /gene="G6B"
+FT   exon            19402..19442
+FT                   /number=4
+FT                   /gene="G6B"
+FT   exon            19797..19887
+FT                   /number=3
+FT                   /gene="G6B"
+FT   exon            20043..20390
+FT                   /number=2
+FT                   /gene="G6B"
+FT   exon            20585..20645
+FT                   /number=1
+FT                   /gene="G6B"
+FT   exon            22296..22401
+FT                   /number=1
+FT                   /gene="G6C"
+FT   CDS             join(22350..22401,23826..23936,24719..24933)
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:O95867"
+FT                   /note="Ly6 family member"
+FT                   /note="alternative name: NG24"
+FT                   /transl_table=1
+FT                   /function="Leukocyte maturation"
+FT                   /gene="G6C"
+FT                   /protein_id="BAB63379.1"
+FT                   /translation="MKALMLLTLSVLLCWVSADIRCHSCYKVPVLGCVDRQSCRLEPGQ
+FT                   QCLTTHAYLGKMWVFSNLRCGTPEEPCQEAFNQTNRKLGLTYNTTCCNKDNCNSAGPRP
+FT                   TPALGLVFLTSLAGLGLWLLH"
+FT   exon            23826..23936
+FT                   /number=2
+FT                   /gene="G6C"
+FT   exon            24719..25381
+FT                   /number=3
+FT                   /gene="G6C"
+FT   exon            26111..26448
+FT                   /number=3
+FT                   /gene="G6D"
+FT   CDS             join(complement(28617..28671),complement(28403..28525),
+FT                   complement(26225..26448))
+FT                   /codon_start=1
+FT                   /note="Ly6 family member"
+FT                   /note="alternative name: NG25, MEGT1"
+FT                   /transl_table=1
+FT                   /function="Leukocyte maturation"
+FT                   /gene="G6D"
+FT                   /protein_id="BAB63380.1"
+FT                   /translation="MKPQFVGILLSSLLGAALGNRMRCYNCGGSPSSSCKEAVTTCGEG
+FT                   RPQPGLEQIKLPGNPPVTLIHQHPACVAAHHCNQVETESVGDVTYPAHRDCYLGDLCNS
+FT                   AVASHVAPAGILAAAATALTCLLPGLWSG"
 FT   STS             complement(27976..28119)
 FT                   /note="142.3/142.5;The location is between each flanking
 FT                   site of PCR primers."
@@ -2451,6 +2651,141 @@ FT   STS             27986..28119
 FT                   /note="AFM142xh6;Genethon Marker;The location is between
 FT                   each flanking site of PCR primers."
 FT                   /standard_name="D6S273"
+FT   exon            28403..28525
+FT                   /number=2
+FT                   /gene="G6D"
+FT   exon            28617..28671
+FT                   /number=1
+FT                   /gene="G6D"
+FT   CDS             join(30215..30266,31238..31363,31486..>31691)
+FT                   /codon_start=1
+FT                   /note="Partial coding region"
+FT                   /transl_table=1
+FT                   /gene="G6E"
+FT                   /protein_id="BAB63381.1"
+FT                   /translation="MGTSSIFLCVLFLCGALGLTMSPARGRLRCYICGFTKPCHPVPTE
+FT                   CRDDEACGISIGTSVKKLPLKGPVPSARLCHLLAALLHSVAPLLRAGPVQHSRFPTAAH
+FT                   QPPRLPAPLCGQLRWERTPPPLAS"
+FT   exon            30215..30266
+FT                   /number=1
+FT                   /gene="G6E"
+FT   exon            31238..31363
+FT                   /number=2
+FT                   /gene="G6E"
+FT   exon            31486..31691
+FT                   /number=3
+FT                   /gene="G6E"
+FT   CDS             join(complement(37069..37120),complement(36240..36569),
+FT                   complement(35893..36156),complement(33846..34001),
+FT                   complement(33605..33675))
+FT                   /codon_start=1
+FT                   /note="alternative name: NG32, MEGT1"
+FT                   /note="unknown function"
+FT                   /transl_table=1
+FT                   /gene="G6F"
+FT                   /protein_id="BAB63382.1"
+FT                   /translation="MAVLFLLLFLCGTPQAADNMQAIYVALGEAVELPCPSPPTLHGDE
+FT                   HLSWFCSPAAGSFTTLVAQVQVGRPAPDPGKPGRESRLRLLGNYSLWLEGSKEEDAGRY
+FT                   WCAVLGQHHNYQNWRVYDVLVLKGSQLSARAADGSPCNVLLCSVVPSRRMDSVTWQEGK
+FT                   GPVRGRVQSFWGSEAALLLVCPGEGLSEPRSRRPRIIRCLMTHNKGVSFSLAASIDASP
+FT                   ALCAPSTGWDMPWILMLLLTMGQGVVILALSIVLWRQRVRGAPGRDASIPQFKPEIQVY
+FT                   ENIHLARLG"
+FT   exon            33605..33675
+FT                   /number=5
+FT                   /gene="G6F"
+FT   exon            33846..34001
+FT                   /number=4
+FT                   /gene="G6F"
+FT   exon            35893..36156
+FT                   /number=3
+FT                   /gene="G6F"
+FT   exon            36240..36569
+FT                   /number=2
+FT                   /gene="G6F"
+FT   exon            37069..37123
+FT                   /number=1
+FT                   /gene="G6F"
+FT   exon            40724..40877
+FT                   /number=1
+FT                   /gene="BAT5"
+FT   CDS             join(40746..40877,41897..41953,42687..42753,42999..43085,
+FT                   46996..47081,50596..50669,50879..51001,52110..52224,
+FT                   52348..52449,53426..53489,53901..53950,54324..54447,
+FT                   54909..55013,55242..55305,55723..55779,55925..55987,
+FT                   56128..56204,56288..56386,56484..56530,56733..56816)
+FT                   /codon_start=1
+FT                   /note="alternative name: NG26"
+FT                   /note="unknown function"
+FT                   /transl_table=1
+FT                   /gene="BAT5"
+FT                   /protein_id="BAB63383.1"
+FT                   /translation="MAKLLSCVLGPRLYKIYRERDSERAPASVPETPTAVTAPHSSSWD
+FT                   TYYQPRALEKHADSILALASVFWSISYYSSPFAFFYLYRKGYLSLSKVVPFSHYAGTLL
+FT                   LLLAGVACLRGIGRWTNPQYRQFITILEATHRNQSSENKRQLANYNFDFRSWPVDFHWE
+FT                   EPSSRKESRGGPSRRGVALLRPEPLHRGTADTLLNRVKKLPCQITSYLVAHTLGRRMLY
+FT                   PGSVYLLQKALMPVLLQGQARLVEECNGRRAKLLACDGNEIDTMFVDRRGTAEPQGQKL
+FT                   VICCEGNAGFYEVGCVSTPLEAGYSVLGWNHPGFAGSTGVPFPQNEANAMDVVVQFAIH
+FT                   RLGFQPQDIIIYAWSIGGFTATWAAMSYPDVSAMILDASFDDLVPLALKVMPDSWRGLV
+FT                   TRTVRQHLNLNNAEQLCRYQGPVLLIRRTKDEIITTTVPEDIMSNRGNDLLLKLLQHRY
+FT                   PRVMAEEGLRVVRQWLEASSQLEEASIYSRWEVEEDWCLSVLRSYQAEHGPDFPWSVGE
+FT                   DMSADGRRQLALFLARKHLHNFEATHCTPLPAQNFQMPWHL"
+FT   exon            41897..41953
+FT                   /number=2
+FT                   /gene="BAT5"
+FT   exon            42687..42753
+FT                   /number=3
+FT                   /gene="BAT5"
+FT   exon            42999..43085
+FT                   /number=4
+FT                   /gene="BAT5"
+FT   exon            46996..47081
+FT                   /number=5
+FT                   /gene="BAT5"
+FT   exon            50596..50669
+FT                   /number=6
+FT                   /gene="BAT5"
+FT   exon            50879..51001
+FT                   /number=7
+FT                   /gene="BAT5"
+FT   exon            52110..52224
+FT                   /number=8
+FT                   /gene="BAT5"
+FT   exon            52348..52449
+FT                   /number=9
+FT                   /gene="BAT5"
+FT   exon            53426..53489
+FT                   /number=10
+FT                   /gene="BAT5"
+FT   exon            53901..53950
+FT                   /number=11
+FT                   /gene="BAT5"
+FT   exon            54324..54447
+FT                   /number=12
+FT                   /gene="BAT5"
+FT   exon            54909..55013
+FT                   /number=13
+FT                   /gene="BAT5"
+FT   exon            55242..55305
+FT                   /number=14
+FT                   /gene="BAT5"
+FT   exon            55723..55779
+FT                   /number=15
+FT                   /gene="BAT5"
+FT   exon            55925..55987
+FT                   /number=16
+FT                   /gene="BAT5"
+FT   exon            56128..56204
+FT                   /number=17
+FT                   /gene="BAT5"
+FT   exon            56288..56386
+FT                   /number=18
+FT                   /gene="BAT5"
+FT   exon            56484..56530
+FT                   /number=19
+FT                   /gene="BAT5"
+FT   exon            56733..57055
+FT                   /number=20
+FT                   /gene="BAT5"
 FT   STS             complement(56785..57036)
 FT                   /note="WI-6920;The location is between each flanking site
 FT                   of PCR primers."
@@ -2464,19 +2799,210 @@ FT                   of PCR primers."
 FT   STS             complement(56851..57019)
 FT                   /note="RH20292;The location is between each flanking site
 FT                   of PCR primers."
+FT   CDS             join(59988..60040,63714..63775,64760..64927,66908..67071)
+FT                   /codon_start=1
+FT                   /note="Ly6 family member"
+FT                   /note="alternative name: NG33"
+FT                   /transl_table=1
+FT                   /gene="G5C"
+FT                   /protein_id="BAB63384.1"
+FT                   /translation="MQTFPVAGALDPAILDTSSPQALYTVLLIVLVMMSLVFGKFVPVN
+FT                   WEPPQPLPFPKYLRCYRCLLETKELGCLLGSDICLTPAGSSCITLHKKNSSGSDVMVSD
+FT                   CRSKEQMSDCSNTRTSPVSGFWIFSQYCFLDFCNDPQNRGLYTP"
+FT   exon            59988..60040
+FT                   /number=1
+FT                   /gene="G5C"
 FT   STS             complement(63189..63342)
 FT                   /note="stSG2609;The location is between each flanking site
 FT                   of PCR primers."
+FT   exon            63714..63775
+FT                   /number=2
+FT                   /gene="G5C"
+FT   exon            64760..64927
+FT                   /number=3
+FT                   /gene="G5C"
+FT   exon            66908..67344
+FT                   /number=4
+FT                   /gene="G5C"
+FT   exon            71741..72164
+FT                   /number=2
+FT                   /gene="G5B"
+FT   CDS             join(complement(72744..72765),complement(71746..72164))
+FT                   /codon_start=1
+FT                   /note="Ly6 family member"
+FT                   /transl_table=1
+FT                   /gene="G5B"
+FT                   /protein_id="BAB63385.1"
+FT                   /translation="MVITIYYDVKVRFIVRGCGQYISYRCQEKRNTYFAEYWYQAQCCQ
+FT                   YDYCNSWSSPQLQSSLPEPHDRPLALPLSDSQIQWFYQALNLSLPLPNFHAGTEPDGLD
+FT                   PMVTLSLNLGLSFAELRRMYLFLNSSGLLVLPQAGLLTPHPS"
 FT   STS             71948..72053
 FT                   /note="SHGC-7078;The location is between each flanking site
 FT                   of PCR primers."
 FT                   /standard_name="D6S2007"
+FT   exon            72744..73649
+FT                   /number=1
+FT                   /gene="G5B"
+FT   exon            73962..74192
+FT                   /number=7
+FT                   /gene="CSNK2B"
+FT   CDS             join(complement(77125..77196),complement(76058..76160),
+FT                   complement(75374..75489),complement(74856..74931),
+FT                   complement(74520..74709),complement(74102..74192))
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:P13862"
+FT                   /note="alternative name: G5a, phosvitin"
+FT                   /transl_table=1
+FT                   /gene="CSNK2B"
+FT                   /product="Casein kinase II beta subunit"
+FT                   /protein_id="BAB63386.1"
+FT                   /translation="MSSSEEVSWISWFCGLRGNEFFCEVDEDYIQDKFNLTGLNEQVPH
+FT                   YRQALDMILDLEPDEELEDNPNQSDLIEQAAEMLYGLIHARYILTNRGIAQMLEKYQQG
+FT                   DFGYCPRVYCENQPMLPIGLSDIPGEAMVKLYCPKCMDVYTPKSSRHHHTDGAYFGTGF
+FT                   PHMLFMVHPEYRPKRPANQFVPRLYGFKIHPMAYQLQLQAASNFKSPVKTIR"
+FT   exon            74520..74709
+FT                   /number=6
+FT                   /gene="CSNK2B"
+FT   exon            74856..74931
+FT                   /number=5
+FT                   /gene="CSNK2B"
+FT   exon            75374..75489
+FT                   /number=4
+FT                   /gene="CSNK2B"
+FT   exon            76058..76160
+FT                   /number=3
+FT                   /gene="CSNK2B"
+FT   exon            77125..77207
+FT                   /number=2
+FT                   /gene="CSNK2B"
+FT   exon            77820..78148
+FT                   /number=1
+FT                   /gene="CSNK2B"
+FT   exon            79023..79187
+FT                   /number=1
+FT                   /gene="BAT4"
+FT   exon            79451..80175
+FT                   /number=2
+FT                   /gene="BAT4"
+FT   CDS             join(79550..80175,81318..81762)
+FT                   /codon_start=1
+FT                   /note="alternative name: G5"
+FT                   /note="unknown function"
+FT                   /transl_table=1
+FT                   /gene="BAT4"
+FT                   /protein_id="BAB63387.1"
+FT                   /translation="MSRPLLITFTPATDPSDLWKDGQQQPQPEKPESTLDGAAARAFYE
+FT                   ALIGDESSAPDSQRSQTEPARERKRKKRRIMKAPAAEAVAEGASGRHGQGRSLEAEDKM
+FT                   THRILRAAQEGDLPELRRLLEPHEAGGAGGNINARDAFWWTPLMCAARAGQGAAVSYLL
+FT                   GRGAAWVGVCELSGRDAAQLAEEAGFPEVARMVRESHGETRSPENRSPTPSLQYCENCD
+FT                   THFQDSNHRTSTAHLLSLSQGPQPPNLPLGVPISSPGFKLLLRGGWEPGMGLGPRGEGR
+FT                   ANPIPTVLKRDQEGLGYRSAPQPRVTHFPAWDTRAVAGRERPPRVATLSWREERRREEK
+FT                   DRAWERDLRTYMNLEF"
 FT   STS             complement(79567..79695)
 FT                   /note="stSG8393;The location is between each flanking site
 FT                   of PCR primers."
+FT   exon            81318..81943
+FT                   /number=3
+FT                   /gene="BAT4"
+FT   exon            83295..85730
+FT                   /number=1
+FT                   /gene="G4"
+FT   CDS             84081..84965
+FT                   /codon_start=1
+FT                   /note="alternative name: NG34"
+FT                   /note="unknown function"
+FT                   /transl_table=1
+FT                   /gene="G4"
+FT                   /protein_id="BAB63388.1"
+FT                   /translation="MFLRRLGGWLPRPWGRRKPMRPDPPYPEPRRVDSSSENSGSDWDS
+FT                   APETMEDVGHPKTKDSGALRVSRAASEPSKEEPQVEQLGSKRMDSLKWDQPISSTQESG
+FT                   RLEAGGASPKLRWDHVDSGGTRRPGVSPEGGLSVPGPGAPLEKPGRREKLLGWLRGEPG
+FT                   APSRYLGGPEECLQISTNLTLHLLELLASALLALCSRPLRAALDTLGLRGPLGLWLHGL
+FT                   LSFLAALHGLHAVLSLLTAHPLHFACLFGLLQALVLAVSLREPNGDEAATDWESEGLER
+FT                   EGEEQRGDPGKGL"
+FT   exon            85819..85964
+FT                   /number=6
+FT                   /gene="APOM"
 FT   STS             85833..85947
 FT                   /note="TIGR-A007I39;The location is between each flanking
 FT                   site of PCR primers."
+FT   CDS             join(complement(87948..88061),complement(87402..87556),
+FT                   complement(86730..86803),complement(86550..86648),
+FT                   complement(86305..86403),complement(85939..85964))
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:O95445"
+FT                   /note="alternative name: G3a, NG20"
+FT                   /transl_table=1
+FT                   /gene="APOM"
+FT                   /product="Apolipoprotein M"
+FT                   /protein_id="BAB63389.1"
+FT                   /translation="MFHQIWAALLYFYGIILNSIYQCPEHSQLTTLGVDGKEFPEVHLG
+FT                   QWYFIAGAAPTKEELATFDPVDNIVFNMAAGSAPMQLHLRATIRMKDGLCVPRKWIYHL
+FT                   TEGSTDLRTEGRPDMKTELFSSSCPGGIMLNETGQGYQRFLLYNRSPHPPEKCVEEFKS
+FT                   LTSCLDSKAFLLTPRNQEACELSNN"
+FT   exon            86305..86403
+FT                   /number=5
+FT                   /gene="APOM"
+FT   exon            86550..86648
+FT                   /number=4
+FT                   /gene="APOM"
+FT   exon            86730..86803
+FT                   /number=3
+FT                   /gene="APOM"
+FT   exon            87402..87556
+FT                   /number=2
+FT                   /gene="APOM"
+FT   exon            87948..88090
+FT                   /number=1
+FT                   /gene="APOM"
+FT   exon            91393..91628
+FT                   /note="CDS is reported in Acc# AP000505"
+FT                   /number=1
+FT                   /gene="BAT3"
+FT   exon            92264..92384
+FT                   /note="CDS is reported in Acc# AP000505"
+FT                   /number=2
+FT                   /gene="BAT3"
+FT   exon            94413..94530
+FT                   /note="CDS is reported in Acc# AP000505"
+FT                   /number=3
+FT                   /gene="BAT3"
+FT   exon            94645..94841
+FT                   /note="CDS is reported in Acc# AP000505"
+FT                   /number=4
+FT                   /gene="BAT3"
+FT   exon            95076..95129
+FT                   /note="CDS is reported in Acc# AP000505"
+FT                   /number=5
+FT                   /gene="BAT3"
+FT   exon            95289..95363
+FT                   /note="CDS is reported in Acc# AP000505"
+FT                   /number=6
+FT                   /gene="BAT3"
+FT   exon            96214..96449
+FT                   /note="CDS is reported in Acc# AP000505"
+FT                   /number=7
+FT                   /gene="BAT3"
+FT   exon            97518..97647
+FT                   /note="CDS is reported in Acc# AP000505"
+FT                   /number=8
+FT                   /gene="BAT3"
+FT   exon            98437..98634
+FT                   /note="CDS is reported in Acc# AP000505"
+FT                   /number=9
+FT                   /gene="BAT3"
+FT   exon            98843..99095
+FT                   /note="CDS is reported in Acc# AP000505"
+FT                   /number=10
+FT                   /gene="BAT3"
+FT   exon            99439..99516
+FT                   /note="CDS is reported in Acc# AP000505"
+FT                   /number=11
+FT                   /gene="BAT3"
+FT   exon            99847..99959
+FT                   /note="CDS is reported in Acc# AP000505"
+FT                   /number=12
+FT                   /gene="BAT3"
 XX
 SQ   Sequence 100000 BP; 23515 A; 25717 C; 26015 G; 24753 T; 0 other;
      gaccaatctc actgtgagga ggcagtcaaa gggaataatg gaagagagga agaggatttt        60
@@ -4147,7 +4673,6 @@ SQ   Sequence 100000 BP; 23515 A; 25717 C; 26015 G; 24753 T; 0 other;
      ccactcctcc acaggctcgg ccttcccatc ctggagggcc cccagtctct gggacactgg     99960
      tgagcaaggg tcggggagtt ctagtgcgta acagtctagg                          100000
 //
-
 ID   AF129756   standard; DNA; HUM; 184666 BP.
 XX
 AC   AF129756;
@@ -4194,7 +4719,6 @@ DR   EPD; EP11158; HS_TNFA.
 DR   EPD; EP11159; HS_TNFB.
 DR   SPTREMBL; O00452; O00452.
 DR   SPTREMBL; O14931; O14931.
-DR   SPTREMBL; O95445; O95445.
 DR   SPTREMBL; O95866; O95866.
 DR   SPTREMBL; O95868; O95868.
 DR   SPTREMBL; O95869; O95869.
@@ -4210,6 +4734,7 @@ DR   SPTREMBL; Q9UKT0; Q9UKT0.
 DR   SPTREMBL; Q9UKT1; Q9UKT1.
 DR   SWISS-PROT; O00299; CLI1_HUMAN.
 DR   SWISS-PROT; O43196; MSH5_HUMAN.
+DR   SWISS-PROT; O95445; APOM_HUMAN.
 DR   SWISS-PROT; O95865; DDH2_HUMAN.
 DR   SWISS-PROT; O95867; NG24_HUMAN.
 DR   SWISS-PROT; P01375; TNFA_HUMAN.
@@ -4773,7 +5298,7 @@ FT   CDS             join(complement(93995..94108),complement(93449..93603),
 FT                   complement(92777..92850),complement(92597..92695),
 FT                   complement(92352..92450),complement(91986..92011))
 FT                   /codon_start=1
-FT                   /db_xref="SPTREMBL:O95445"
+FT                   /db_xref="SWISS-PROT:O95445"
 FT                   /note="NG20; apolipoprotein; This gene was annotated as
 FT                   NG20 in mouse AF109719.  Subsequent to this, AF118393
 FT                   suggests that the gene is a novel apolipoprotein.  This
@@ -8609,7 +9134,6 @@ SQ   Sequence 184666 BP; 43878 A; 47035 C; 47743 G; 46010 T; 0 other;
      ttgtttcccc tcacaatgga tgcagtgcat cttccattct gaattccaga ggcaacaacc    184620
      tcctgctcct agaagctaaa ctctccagac ttagtcttct gaattc                   184666
 //
-
 ID   AB000360   standard; DNA; HUM; 2582 BP.
 XX
 AC   AB000360;
@@ -8643,7 +9167,7 @@ RT   glycosylphosphatidylinositol synthesis gene PIGC and its pseudogene
 RT   PIGCP1";
 RL   Genomics 44:347-349(1997).
 XX
-DR   SPTREMBL; Q92535; Q92535.
+DR   SWISS-PROT; Q92535; PIGC_HUMAN.
 XX
 FH   Key             Location/Qualifiers
 FH
@@ -8656,7 +9180,7 @@ FT                   /map="1q23-q25"
 FT   exon            808..2266
 FT   CDS             1101..1994
 FT                   /codon_start=1
-FT                   /db_xref="SPTREMBL:Q92535"
+FT                   /db_xref="SWISS-PROT:Q92535"
 FT                   /transl_table=1
 FT                   /gene="PIGC"
 FT                   /standard_name="glycosylphosphatidylinositol-synthesis

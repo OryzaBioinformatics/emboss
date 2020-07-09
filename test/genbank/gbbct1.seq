@@ -1,0 +1,1169 @@
+LOCUS       ECOLAC                  7477 bp    DNA     linear   BCT 05-MAY-1993
+DEFINITION  E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+ACCESSION   J01636 J01637 K01483 K01793
+VERSION     J01636.1  GI:146575
+KEYWORDS    acetyltransferase; beta-D-galactosidase; galactosidase; lac operon;
+            lac repressor protein; lacA gene; lacI gene; lacY gene; lacZ gene;
+            lactose permease; mutagenesis; palindrome; promoter region;
+            thiogalactoside acetyltransferase.
+SOURCE      Escherichia coli DNA; mRNA; clone lambda-h80dlac DNA; clone puk217;
+            pgm8 (see comment).
+  ORGANISM  Escherichia coli
+            Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+            Escherichia.
+REFERENCE   1  (bases 1243 to 1266)
+  AUTHORS   Gilbert,W. and Maxam,A.
+  TITLE     The nucleotide sequence of the lac operator
+  JOURNAL   Proc. Natl. Acad. Sci. U.S.A. 70, 3581-3584 (1973)
+  MEDLINE   74055539
+REFERENCE   2  (bases 1246 to 1308)
+  AUTHORS   Maizels,N.M.
+  TITLE     The nucleotide sequence of the lactose messenger ribonucleic acid
+            transcribed from the UV5 promoter mutant of Escherichia coli
+  JOURNAL   Proc. Natl. Acad. Sci. U.S.A. 70, 3585-3589 (1973)
+  MEDLINE   74055540
+REFERENCE   3  (sites)
+  AUTHORS   Gilbert,W., Maizels,N. and Maxam,A.
+  TITLE     Sequences of controlling regions of the lactose operon
+  JOURNAL   Cold Spring Harb. Symp. Quant. Biol. 38, 845-855 (1974)
+  MEDLINE   74174501
+REFERENCE   4  (sites)
+  AUTHORS   Gilbert,W., Gralla,J., Majors,A.J. and Maxam,A.
+  TITLE     Lactose operator sequences and the action of lac repressor
+  JOURNAL   (in) Sund,H. and Blauer,G. (Eds.);
+            PROTEIN-LIGAND INTERACTIONS: 193-207;
+            Walter de Gruyter, New York (1975)
+REFERENCE   5  (bases 1146 to 1282)
+  AUTHORS   Dickson,R.C., Abelson,J.N., Barnes,W.M. and Reznikoff,W.S.
+  TITLE     Genetic regulation: The lac control region
+  JOURNAL   Science 187, 27-35 (1975)
+  MEDLINE   75048325
+REFERENCE   6  (bases 1227 to 1271)
+  AUTHORS   Gilbert,W., Maxam,A. and Mirzabekov,A.
+  TITLE     Contacts between the lac repressor and DNA revealed by methylation
+  JOURNAL   (in) Kjeldgaard,N.C. and Maaloe,O. (Eds.);
+            CONTROL OF RIBOSOME SYNTHESIS: 138-143;
+            Academic Press, New York (1976)
+REFERENCE   7  (sites)
+  AUTHORS   Marians,K.J. and Wu,R.
+  TITLE     Structure of the lactose operator
+  JOURNAL   Nature 260, 360-363 (1976)
+  MEDLINE   76150089
+REFERENCE   8  (bases 1242 to 1268)
+  AUTHORS   Heyneker,H.L., Shine,J., Goodman,H.M., Boyer,H.W., Rosenberg,J.,
+            Dickerson,R.E., Narang,S.A., Itakura,K., Lin,S. and Riggs,A.D.
+  TITLE     Synthetic lac operator is functional in vivo
+  JOURNAL   Nature 263, 748-752 (1976)
+  MEDLINE   77056376
+REFERENCE   9  (sites)
+  AUTHORS   Dickson,R.C., Abelson,J.N., Johnson,P., Reznikoff,W.S. and
+            Barnes,W.M.
+  TITLE     Nucleotide sequence changes produced by mutations in the lac
+            promoter of Escherichia coli
+  JOURNAL   J. Mol. Biol. 111, 65-75 (1977)
+  MEDLINE   77168230
+REFERENCE   10 (bases 51 to 264)
+  AUTHORS   Steege,D.A.
+  TITLE     5'-terminal nucleotide sequence of Escherichia coli lactose
+            repressor mRNA: Features of translational initiation and
+            reinitiation sites
+  JOURNAL   Proc. Natl. Acad. Sci. U.S.A. 74, 4163-4167 (1977)
+  MEDLINE   78052881
+REFERENCE   11 (bases 1 to 81)
+  AUTHORS   Calos,M.P.
+  TITLE     DNA sequence for a low-level promoter of the lac repressor and an
+            'up' promoter mutation
+  JOURNAL   Nature 274, 762-765 (1978)
+  MEDLINE   78246990
+REFERENCE   12 (bases 49 to 1161)
+  AUTHORS   Farabaugh,P.J.
+  TITLE     Sequence of the lacI gene
+  JOURNAL   Nature 274, 765-769 (1978)
+  MEDLINE   78246991
+REFERENCE   13 (sites)
+  AUTHORS   Miller,J.H., Coulondre,C. and Farabaugh,P.J.
+  TITLE     Correlation of nonsense sites in the lacI gene with specific codons
+            in the nucleotide sequence
+  JOURNAL   Nature 274, 770-775 (1978)
+  MEDLINE   78246992
+REFERENCE   14 (sites)
+  AUTHORS   Calos,M.P. and Miller,J.H.
+  TITLE     DNA sequence alteration resulting from a mutation impairing
+            promoter function in the lac repressor gene
+  JOURNAL   Mol. Gen. Genet. 178, 225-227 (1980)
+  MEDLINE   80209248
+REFERENCE   15 (bases 4306 to 5804)
+  AUTHORS   Buechel,D.E., Gronenborn,B. and Mueller-Hill,B.
+  TITLE     Sequence of the lactose permease gene
+  JOURNAL   Nature 283, 541-545 (1980)
+  MEDLINE   80120651
+REFERENCE   16 (sites)
+  AUTHORS   Miller,J.H., Calos,M.P. and Galas,D.J.
+  TITLE     Genetic and sequencing studies of the specificity of transposition
+            into the lac region of E. coli
+  JOURNAL   Cold Spring Harb. Symp. Quant. Biol. 45, 243-257 (1981)
+  MEDLINE   82049502
+REFERENCE   17 (sites)
+  AUTHORS   Chenchick,A., Beabealashvilli,R.S. and Mirzabekov,A.
+  TITLE     Topography of interaction of Escherichia coli RNA polymerase
+            subunits with lac UV5 promoter
+  JOURNAL   FEBS Lett. 128, 46-50 (1981)
+  MEDLINE   82004657
+REFERENCE   18 (sites)
+  AUTHORS   Betz,J.L. and Sadler,J.R.
+  TITLE     Variants of a cloned synthetic lactose operator: I. A palindromic
+            dimer lactose operator derived from one strand of the cloned
+            40-base pair operator
+  JOURNAL   Gene 13, 1-12 (1981)
+  MEDLINE   81213459
+REFERENCE   19 (sites)
+  AUTHORS   Sadler,J.R. and Tecklenburg,M.
+  TITLE     Cloning and characterization of the natural lactose operator
+  JOURNAL   Gene 13, 13-23 (1981)
+  MEDLINE   81213463
+REFERENCE   20 (sites)
+  AUTHORS   Betz,J.L. and Sadler,J.R.
+  TITLE     Variants of a cloned synthetic lactose operator: II.
+            Chloramphenicol-resistant revertants retaining a lactose opeator in
+            the CAT gene of plasmid pBR325
+  JOURNAL   Gene 15, 187-200 (1981)
+  MEDLINE   82051311
+REFERENCE   21 (sites)
+  AUTHORS   Calos,M.P. and Miller,J.H.
+  TITLE     The DNA sequence change resulting from the I-Q1 mutation, which
+            greatly increases promoter strength
+  JOURNAL   Mol. Gen. Genet. 183, 559-560 (1981)
+  MEDLINE   82147746
+REFERENCE   22 (sites)
+  AUTHORS   Mieschendahl,M., Buechel,D.E., Bocklage,H. and Mueller-Hill,B.
+  TITLE     Mutations in the lacY gene of Escherichia coli define functional
+            organization of lactose permease
+  JOURNAL   Proc. Natl. Acad. Sci. U.S.A. 78, 7652-7656 (1981)
+  MEDLINE   82150928
+REFERENCE   23 (sites)
+  AUTHORS   Russell,D.R. and Bennett,G.N.
+  TITLE     Construction and analysis of in vivo activity of E. coli promoter
+            hybrids and promoter mutants that alter the -35 to -10 spacing
+  JOURNAL   Gene 20, 231-243 (1982)
+  MEDLINE   83158761
+REFERENCE   24 (sites)
+  AUTHORS   Horowitz,H. and Platt,T.
+  TITLE     A termination site for lacI transcription is between the CAP site
+            and the lac promoter
+  JOURNAL   J. Biol. Chem. 257, 11740-11746 (1982)
+  MEDLINE   83007251
+REFERENCE   25 (sites)
+  AUTHORS   Klein,R.D. and Wells,R.D.
+  TITLE     Effects of neighboring DNA homopolymers on the biochemical and
+            physical properties of the Escherichia coli lactose promoter: I.
+            Cloning and characterization studies
+  JOURNAL   J. Biol. Chem. 257, 12954-12961 (1982)
+  MEDLINE   83030833
+REFERENCE   26 (bases 1183 to 1291)
+  AUTHORS   Weiher,H. and Schaller,H.
+  TITLE     Segment-specific mutagenesis: Extensive mutagenesis of a lac
+            promoter/operator element
+  JOURNAL   Proc. Natl. Acad. Sci. U.S.A. 79, 1408-1412 (1982)
+  MEDLINE   82174608
+REFERENCE   27 (sites)
+  AUTHORS   Van Dyke,M.W. and Dervan,P.B.
+  TITLE     Footprinting with MPE-Fe(II). Complementary-strand analyses of
+            distamycin- and actinomycin-binding sites on heterogeneous DNA
+  JOURNAL   Cold Spring Harb. Symp. Quant. Biol. 47, 347-353 (1983)
+  MEDLINE   83233528
+REFERENCE   28 (bases 1287 to 4364)
+  AUTHORS   Kalnins,A., Otto,K., Ruether,U. and Mueller-Hill,B.
+  TITLE     Sequence of the lacZ gene of Escherichia coli
+  JOURNAL   EMBO J. 2, 593-597 (1983)
+  MEDLINE   84028567
+REFERENCE   29 (sites)
+  AUTHORS   Cone,K.C., Sellitti,M.A. and Steege,D.A.
+  TITLE     Lac repressor mRNA transcription terminates in vivo in the lac
+            control region
+  JOURNAL   J. Biol. Chem. 258, 11296-11304 (1983)
+  MEDLINE   83291093
+REFERENCE   30 (sites)
+  AUTHORS   Sadler,J.R., Sasmor,H. and Betz,J.L.
+  TITLE     A perfectly symmetric lac operator binds the lac repressor very
+            tightly
+  JOURNAL   Proc. Natl. Acad. Sci. U.S.A. 80, 6785-6789 (1983)
+  MEDLINE   84070714
+REFERENCE   31 (sites)
+  AUTHORS   Glickman,B.W. and Ripley,L.S.
+  TITLE     Structural intermediates of deletion mutagenesis: A role for
+            palindromic DNA
+  JOURNAL   Proc. Natl. Acad. Sci. U.S.A. 81, 512-516 (1984)
+  MEDLINE   84119517
+REFERENCE   32 (sites)
+  AUTHORS   Spassky,A., Kirkegaard,K. and Buc,H.
+  TITLE     Changes in the DNA structure of the lac UV5 promoter during
+            formation of an open complex with Escherichia coli RNA polymerase
+  JOURNAL   Biochemistry 24, 2723-2731 (1985)
+  MEDLINE   85280412
+REFERENCE   33 (sites)
+  AUTHORS   Straney,D.C. and Crothers,D.M.
+  TITLE     Intermediates in transcription initiation from the E. coli lac UV5
+            promoter
+  JOURNAL   Cell 43, 449-459 (1985)
+  MEDLINE   86079527
+REFERENCE   34 (sites)
+  AUTHORS   Looman,A.C., de Gruyter,M., Vogelaar,A. and van Knippenberg,P.H.
+  TITLE     Effects of heterologous ribosomal binding sites on the
+            transcription and translation of the lacZ gene of Escherichia coli
+  JOURNAL   Gene 37, 145-154 (1985)
+  MEDLINE   86031346
+REFERENCE   35 (sites)
+  AUTHORS   Mandecki,W., Goldman,R.A., Powell,B.S. and Caruthers,M.H.
+  TITLE     Lac up-promoter mutants with increased homology to the consensus
+            promoter sequence
+  JOURNAL   J. Bacteriol. 164, 1353-1355 (1985)
+  MEDLINE   86059235
+REFERENCE   36 (sites)
+  AUTHORS   Malamy,M.H., Rahaim,P.T., Hoffman,C.S., Baghdoyan,D., O'Connor,M.B.
+            and Miller,J.F.
+  TITLE     A frameshift mutation at the junction of an IS1 insertion within
+            lacZ restores beta-galactosidase activity via formation of an
+            active lacZ-IS1 fusion protein
+  JOURNAL   J. Mol. Biol. 181, 551-555 (1985)
+  MEDLINE   85210885
+REFERENCE   37 (bases 5646 to 7477)
+  AUTHORS   Hediger,M.A., Johnson,D.F., Nierlich,D.P. and Zabin,I.
+  TITLE     DNA sequence of the lactose operon: The lacA gene and the
+            transcriptional termination region
+  JOURNAL   Proc. Natl. Acad. Sci. U.S.A. 82, 6414-6418 (1985)
+  MEDLINE   86016712
+COMMENT     [3]  sites; UV5 mRNA transcripts and operator mutants. [(in)
+            Sund,H. and Blauer,G. (eds.);Protein-Ligand Interactions:
+            193-207;Walter de]  sites; operator mutational analysis. [7]
+            sites; S1 and mung bean nuclease action on operator DNA. [9]
+            sites; class I, II and III promoter mutant analysis. [13]  sites;
+            lacI mutant analysis.
+            [16]  sites; Tn5, Tn9 and Tn10 insertion sites in lac region. [14] 
+            sites; lacI promoter mutation UJ177.
+            [18]  sites; palindromic dimer operator;.
+            [19]  sites; natural operator sequence.
+            [20]  sites; operator mutational analysis.
+            [21]  sites; lacI-Q deletion.
+            [17]  sites; RNA polymerase UV5 promoter interaction. [22]  sites;
+            lacY mutational analysis.
+            [24]  sites; lacI-promoted transcription termination. [25]  sites;
+            wt and UV5 promoter sequence studies. [23]  sites; UV5 promoter
+            mutational analysis.
+            [30]  sites; perfectly symmetric operator sequence. [29]  sites;
+            lacI mRNA termination site.
+            [27]  sites; distamycin and actinomycin binding to promoter. [31]
+            sites; lacI deletion studies.
+            [35]  sites; promoter mutational studies.
+            [33]  sites; DNAase I studies with promoter sequence. [34]  sites;
+            ribosomal binding and translation initiation for lacZ. [36]  sites;
+            insertion sequence IS1 integration in lacZ;. [32]  sites; DNAase I
+            studies with promoter.
+            [1] first reports a 27 bp operator(sites 1240-1266) with two-fold
+            symmetries; the operator has also been defined to be bases
+            1246-1266 or bases 1239-1273 [8]. [(in) Kjeldgaard,N.C. and Maaloe,
+            O.(eds);Control of ribosome synthesis: 138-143;A] explores the
+            ability of lac
+            repressor protein to affect methylation of operator DNA.  [8]
+            argues that DNA on both sides of the 21 bp operator (bases
+            1246-1266) affects repressor binding but that the sequences of this
+            DNA are probably not critical. [5] gives a larger sequence known as
+            the promoter-operator region for the wild-type, whereas [2] and
+            [26] give portions of this region for the mutant strain UV5. Within
+            the promoter region, bases 1162-1199 are identified as the
+            catabolite gene activator protein binding site (cap) and bases
+            1200-1245 are the RNA polymerase interaction site. [10] reports a
+            sequence for the 5'end of the lacI (repressor) gene and discusses
+            restart in mutant strains. [11] presents a sequence for the lacI
+            promoter region and identifies an I-Q mutation which enhances lacI
+            transcription approximately ten-fold. [12] gives a complete
+            sequence
+            for lacI which agrees with the known lac repressor sequence. [26]
+            examines the promoter-operator region in the UV5 strain (lac109)
+            and studies 23 mutant derivatives of this sequence. This sequence
+            agrees with known protein sequences for the lacZ, lacY and lacA
+            enzymes. [15] notes that the fMet codon is not present
+            for lacA and suggests that the 'ttg' codon (5727-5729), which
+            immediately precedes the mature N-terminal asparagine codon, is the
+            start codon. The cds for lacZ, lacY and lacA are included on a
+            single mRNA transcript.
+            Complete source information:
+            Escherichia coli DNA [1],[(in) Kjeldgaard,N.C. and Maaloe,O.(eds);
+            Control of ribosome synthesis: 138-143;A],[8],[12],[26]; mRNA [2],
+            [5],[10]; clone
+            lambda-h80dlac DNA [11],[15]; clone puk217 [28]; pgm8 [37].
+FEATURES             Location/Qualifiers
+     source          1..7477
+                     /organism="Escherichia coli"
+                     /db_xref="taxon:562"
+     variation       16
+                     /note="c in wild-type; t in 'up' promoter mutant I-Q [11]"
+     mRNA            51..1230
+                     /note="lacI (repressor) mRNA; preferred in vivo 3' end
+                     [12],[29]"
+     gene            79..1161
+                     /gene="lacI"
+     CDS             79..1161
+                     /gene="lacI"
+                     /note="lac repressor protein (gtg start codon)"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="AAA24052.1"
+                     /db_xref="GI:146576"
+                     /translation="MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAE
+                     LNYIPNRVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERS
+                     GVEACKAAVHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSII
+                     FSHEDGTRLGVEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREG
+                     DWSAMSGFQQTMQMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDT
+                     EDSSCYIPPSTTIKQDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNT
+                     QTASPRALADSLMQLARQVSRLESGQ"
+     misc_signal     1162..1199
+                     /note="cap protein binding site"
+     variation       1183..1186
+                     /note="ttag in wild-type; aatt in strain UV5 [26]"
+     variation       1209..1211
+                     /note="gct in wild-type; gt in mutant l305 [5]"
+     variation       1212
+                     /note="t in wild-type; a in mutant l241 [5]"
+     variation       1230
+                     /note="c in wild-type; a in mutant p-r-1a [5]"
+     variation       1237..1238
+                     /note="gt in wild-type; aa in strain UV5 [26]"
+     variation       1242..1245
+                     /note="gtgg in wild-type; ttca in synthetic operator [8]"
+     misc_signal     1246..1266
+                     /note="lac repressor protein binding site"
+     mRNA            1246..>4358
+                     /note="lacZ mRNA [2],[5]"
+     variation       1267..1268
+                     /note="tc in wild-type; tg in synthetic operator [8]"
+     variation       1282..1291
+                     /note="ctatgaccat in wild-type; gatccggcca in strain UV5
+                     [26]"
+     gene            1284..4358
+                     /gene="lacZ"
+     CDS             1284..4358
+                     /gene="lacZ"
+                     /note="beta-d-galactosidase"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="AAA24053.1"
+                     /db_xref="GI:146577"
+                     /translation="MTMITDSLAVVLQRRDWENPGVTQLNRLAAHPPFASWRNSEEAR
+                     TDRPSQQLRSLNGEWRFAWFPAPEAVPESWLECDLPEADTVVVPSNWQMHGYDAPIYT
+                     NVTYPITVNPPFVPTENPTGCYSLTFNVDESWLQEGQTRIIFDGVNSAFHLWCNGRWV
+                     GYGQDSRLPSEFDLSAFLRAGENRLAVMVLRWSDGSYLEDQDMWRMSGIFRDVSLLHK
+                     PTTQISDFHVATRFNDDFSRAVLEAEVQMCGELRDYLRVTVSLWQGETQVASGTAPFG
+                     GEIIDERGGYADRVTLRLNVENPKLWSAEIPNLYRAVVELHTADGTLIEAEACDVGFR
+                     EVRIENGLLLLNGKPLLIRGVNRHEHHPLHGQVMDEQTMVQDILLMKQNNFNAVRCSH
+                     YPNHPLWYTLCDRYGLYVVDEANIETHGMVPMNRLTDDPRWLPAMSERVTRMVQRDRN
+                     HPSVIIWSLGNESGHGANHDALYRWIKSVDPSRPVQYEGGGADTTATDIICPMYARVD
+                     EDQPFPAVPKWSIKKWLSLPGETRPLILCEYAHAMGNSLGGFAKYWQAFRQYPRLQGG
+                     FVWDWVDQSLIKYDENGNPWSAYGGDFGDTPNDRQFCMNGLVFADRTPHPALTEAKHQ
+                     QQFFQFRLSGQTIEVTSEYLFRHSDNELLHWMVALDGKPLASGEVPLDVAPQGKQLIE
+                     LPELPQPESAGQLWLTVRVVQPNATAWSEAGHISAWQQWRLAENLSVTLPAASHAIPH
+                     LTTSEMDFCIELGNKRWQFNRQSGFLSQMWIGDKKQLLTPLRDQFTRAPLDNDIGVSE
+                     ATRIDPNAWVERWKAAGHYQAEAALLQCTADTLADAVLITTAHAWQHQGKTLFISRKT
+                     YRIDGSGQMAITVDVEVASDTPHPARIGLNCQLAQVAERVNWLGLGPQENYPDRLTAA
+                     CFDRWDLPLSDMYTPYVFPSENGLRCGTRELNYGPHQWRGDFQFNISRYSQQQLMETS
+                     HRHLLHAEEGTWLNIDGFHMGIGGDDSWSPSVSAEFQLSAGRYHYQLVWCQK"
+     gene            4410..5663
+                     /gene="lacY"
+     CDS             4410..5663
+                     /gene="lacY"
+                     /note="lactose permease"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="AAA24054.1"
+                     /db_xref="GI:146578"
+                     /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSD
+                     TGIIFAAISLFSLLFQPLFGLLSDKLGLRKYLLWIITGMLVMFAPFFIFIFGPLLQYN
+                     ILVGSIVGGIYLGFCFNAGAPAVEAFIEKVSRRSNFEFGRARMFGCVGWALCASIVGI
+                     MFTINNQFVFWLGSGCALILAVLLFFAKTDAPSSATVANAVGANHSAFSLKLALELFR
+                     QPKLWFLSLYVIGVSCTYDVFDQQFANFFTSFFATGEQGTRVFGYVTTMGELLNASIM
+                     FFAPLIINRIGGKNALLLAGTIMSVRIIGSSFATSALEVVILKTLHMFEVPFLLVGCF
+                     KYITSQFEVRFSATIYLVCFCFFKQLAMIFMSVLAGNMYESIGFQGAYLVLGLVALGF
+                     TLISVFTLSGPGPLSLLRRQVNEVA"
+     gene            5727..6338
+                     /gene="lacA"
+     CDS             5727..6338
+                     /gene="lacA"
+                     /note="thiogalactoside acetyltransferase (ttg start
+                     codon)"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="AAA24055.1"
+                     /db_xref="GI:551814"
+                     /translation="MNMPMTERIRAGKLFTDMCEGLPEKRLRGKTLMYEFNHSHPSEV
+                     EKRESLIKEMFATVGENAWVEPPVYFSYGSNIHIGRNFYANFNLTIVDDYTVTIGDNV
+                     LIAPNVTLSVTGHPVHHELRKNGEMYSFPITIGNNVWIGSHVVINPGVTIGDNSVIGA
+                     GSIVTKDIPPNVVAAGVPCRVIREINDRDKHYYFKDYKVESSV"
+BASE COUNT     1739 a   1991 c   2004 g   1743 t
+ORIGIN
+       1  gacaccatcg aatggcgcaa aacctttcgc ggtatggcat gatagcgccc ggaagagagt
+      61  caattcaggg tggtgaatgt gaaaccagta acgttatacg atgtcgcaga gtatgccggt
+     121  gtctcttatc agaccgtttc ccgcgtggtg aaccaggcca gccacgtttc tgcgaaaacg
+     181  cgggaaaaag tggaagcggc gatggcggag ctgaattaca ttcccaaccg cgtggcacaa
+     241  caactggcgg gcaaacagtc gttgctgatt ggcgttgcca cctccagtct ggccctgcac
+     301  gcgccgtcgc aaattgtcgc ggcgattaaa tctcgcgccg atcaactggg tgccagcgtg
+     361  gtggtgtcga tggtagaacg aagcggcgtc gaagcctgta aagcggcggt gcacaatctt
+     421  ctcgcgcaac gcgtcagtgg gctgatcatt aactatccgc tggatgacca ggatgccatt
+     481  gctgtggaag ctgcctgcac taatgttccg gcgttatttc ttgatgtctc tgaccagaca
+     541  cccatcaaca gtattatttt ctcccatgaa gacggtacgc gactgggcgt ggagcatctg
+     601  gtcgcattgg gtcaccagca aatcgcgctg ttagcgggcc cattaagttc tgtctcggcg
+     661  cgtctgcgtc tggctggctg gcataaatat ctcactcgca atcaaattca gccgatagcg
+     721  gaacgggaag gcgactggag tgccatgtcc ggttttcaac aaaccatgca aatgctgaat
+     781  gagggcatcg ttcccactgc gatgctggtt gccaacgatc agatggcgct gggcgcaatg
+     841  cgcgccatta ccgagtccgg gctgcgcgtt ggtgcggata tctcggtagt gggatacgac
+     901  gataccgaag acagctcatg ttatatcccg ccgtcaacca ccatcaaaca ggattttcgc
+     961  ctgctggggc aaaccagcgt ggaccgcttg ctgcaactct ctcagggcca ggcggtgaag
+    1021  ggcaatcagc tgttgcccgt ctcactggtg aaaagaaaaa ccaccctggc gcccaatacg
+    1081  caaaccgcct ctccccgcgc gttggccgat tcattaatgc agctggcacg acaggtttcc
+    1141  cgactggaaa gcgggcagtg agcgcaacgc aattaatgtg agttagctca ctcattaggc
+    1201  accccaggct ttacacttta tgcttccggc tcgtatgttg tgtggaattg tgagcggata
+    1261  acaatttcac acaggaaaca gctatgacca tgattacgga ttcactggcc gtcgttttac
+    1321  aacgtcgtga ctgggaaaac cctggcgtta cccaacttaa tcgccttgca gcacatcccc
+    1381  ctttcgccag ctggcgtaat agcgaagagg cccgcaccga tcgcccttcc caacagttgc
+    1441  gcagcctgaa tggcgaatgg cgctttgcct ggtttccggc accagaagcg gtgccggaaa
+    1501  gctggctgga gtgcgatctt cctgaggccg atactgtcgt cgtcccctca aactggcaga
+    1561  tgcacggtta cgatgcgccc atctacacca acgtaaccta tcccattacg gtcaatccgc
+    1621  cgtttgttcc cacggagaat ccgacgggtt gttactcgct cacatttaat gttgatgaaa
+    1681  gctggctaca ggaaggccag acgcgaatta tttttgatgg cgttaactcg gcgtttcatc
+    1741  tgtggtgcaa cgggcgctgg gtcggttacg gccaggacag tcgtttgccg tctgaatttg
+    1801  acctgagcgc atttttacgc gccggagaaa accgcctcgc ggtgatggtg ctgcgttgga
+    1861  gtgacggcag ttatctggaa gatcaggata tgtggcggat gagcggcatt ttccgtgacg
+    1921  tctcgttgct gcataaaccg actacacaaa tcagcgattt ccatgttgcc actcgcttta
+    1981  atgatgattt cagccgcgct gtactggagg ctgaagttca gatgtgcggc gagttgcgtg
+    2041  actacctacg ggtaacagtt tctttatggc agggtgaaac gcaggtcgcc agcggcaccg
+    2101  cgcctttcgg cggtgaaatt atcgatgagc gtggtggtta tgccgatcgc gtcacactac
+    2161  gtctgaacgt cgaaaacccg aaactgtgga gcgccgaaat cccgaatctc tatcgtgcgg
+    2221  tggttgaact gcacaccgcc gacggcacgc tgattgaagc agaagcctgc gatgtcggtt
+    2281  tccgcgaggt gcggattgaa aatggtctgc tgctgctgaa cggcaagccg ttgctgattc
+    2341  gaggcgttaa ccgtcacgag catcatcctc tgcatggtca ggtcatggat gagcagacga
+    2401  tggtgcagga tatcctgctg atgaagcaga acaactttaa cgccgtgcgc tgttcgcatt
+    2461  atccgaacca tccgctgtgg tacacgctgt gcgaccgcta cggcctgtat gtggtggatg
+    2521  aagccaatat tgaaacccac ggcatggtgc caatgaatcg tctgaccgat gatccgcgct
+    2581  ggctaccggc gatgagcgaa cgcgtaacgc gaatggtgca gcgcgatcgt aatcacccga
+    2641  gtgtgatcat ctggtcgctg gggaatgaat caggccacgg cgctaatcac gacgcgctgt
+    2701  atcgctggat caaatctgtc gatccttccc gcccggtgca gtatgaaggc ggcggagccg
+    2761  acaccacggc caccgatatt atttgcccga tgtacgcgcg cgtggatgaa gaccagccct
+    2821  tcccggctgt gccgaaatgg tccatcaaaa aatggctttc gctacctgga gagacgcgcc
+    2881  cgctgatcct ttgcgaatac gcccacgcga tgggtaacag tcttggcggt ttcgctaaat
+    2941  actggcaggc gtttcgtcag tatccccgtt tacagggcgg cttcgtctgg gactgggtgg
+    3001  atcagtcgct gattaaatat gatgaaaacg gcaacccgtg gtcggcttac ggcggtgatt
+    3061  ttggcgatac gccgaacgat cgccagttct gtatgaacgg tctggtcttt gccgaccgca
+    3121  cgccgcatcc agcgctgacg gaagcaaaac accagcagca gtttttccag ttccgtttat
+    3181  ccgggcaaac catcgaagtg accagcgaat acctgttccg tcatagcgat aacgagctcc
+    3241  tgcactggat ggtggcgctg gatggtaagc cgctggcaag cggtgaagtg cctctggatg
+    3301  tcgctccaca aggtaaacag ttgattgaac tgcctgaact accgcagccg gagagcgccg
+    3361  ggcaactctg gctcacagta cgcgtagtgc aaccgaacgc gaccgcatgg tcagaagccg
+    3421  ggcacatcag cgcctggcag cagtggcgtc tggcggaaaa cctcagtgtg acgctccccg
+    3481  ccgcgtccca cgccatcccg catctgacca ccagcgaaat ggatttttgc atcgagctgg
+    3541  gtaataagcg ttggcaattt aaccgccagt caggctttct ttcacagatg tggattggcg
+    3601  ataaaaaaca actgctgacg ccgctgcgcg atcagttcac ccgtgcaccg ctggataacg
+    3661  acattggcgt aagtgaagcg acccgcattg accctaacgc ctgggtcgaa cgctggaagg
+    3721  cggcgggcca ttaccaggcc gaagcagcgt tgttgcagtg cacggcagat acacttgctg
+    3781  atgcggtgct gattacgacc gctcacgcgt ggcagcatca ggggaaaacc ttatttatca
+    3841  gccggaaaac ctaccggatt gatggtagtg gtcaaatggc gattaccgtt gatgttgaag
+    3901  tggcgagcga tacaccgcat ccggcgcgga ttggcctgaa ctgccagctg gcgcaggtag
+    3961  cagagcgggt aaactggctc ggattagggc cgcaagaaaa ctatcccgac cgccttactg
+    4021  ccgcctgttt tgaccgctgg gatctgccat tgtcagacat gtataccccg tacgtcttcc
+    4081  cgagcgaaaa cggtctgcgc tgcgggacgc gcgaattgaa ttatggccca caccagtggc
+    4141  gcggcgactt ccagttcaac atcagccgct acagtcaaca gcaactgatg gaaaccagcc
+    4201  atcgccatct gctgcacgcg gaagaaggca catggctgaa tatcgacggt ttccatatgg
+    4261  ggattggtgg cgacgactcc tggagcccgt cagtatcggc ggaattccag ctgagcgccg
+    4321  gtcgctacca ttaccagttg gtctggtgtc aaaaataata ataaccgggc aggccatgtc
+    4381  tgcccgtatt tcgcgtaagg aaatccatta tgtactattt aaaaaacaca aacttttgga
+    4441  tgttcggttt attctttttc ttttactttt ttatcatggg agcctacttc ccgtttttcc
+    4501  cgatttggct acatgacatc aaccatatca gcaaaagtga tacgggtatt atttttgccg
+    4561  ctatttctct gttctcgcta ttattccaac cgctgtttgg tctgctttct gacaaactcg
+    4621  ggctgcgcaa atacctgctg tggattatta ccggcatgtt agtgatgttt gcgccgttct
+    4681  ttatttttat cttcgggcca ctgttacaat acaacatttt agtaggatcg attgttggtg
+    4741  gtatttatct aggcttttgt tttaacgccg gtgcgccagc agtagaggca tttattgaga
+    4801  aagtcagccg tcgcagtaat ttcgaatttg gtcgcgcgcg gatgtttggc tgtgttggct
+    4861  gggcgctgtg tgcctcgatt gtcggcatca tgttcaccat caataatcag tttgttttct
+    4921  ggctgggctc tggctgtgca ctcatcctcg ccgttttact ctttttcgcc aaaacggatg
+    4981  cgccctcttc tgccacggtt gccaatgcgg taggtgccaa ccattcggca tttagcctta
+    5041  agctggcact ggaactgttc agacagccaa aactgtggtt tttgtcactg tatgttattg
+    5101  gcgtttcctg cacctacgat gtttttgacc aacagtttgc taatttcttt acttcgttct
+    5161  ttgctaccgg tgaacagggt acgcgggtat ttggctacgt aacgacaatg ggcgaattac
+    5221  ttaacgcctc gattatgttc tttgcgccac tgatcattaa tcgcatcggt gggaaaaacg
+    5281  ccctgctgct ggctggcact attatgtctg tacgtattat tggctcatcg ttcgccacct
+    5341  cagcgctgga agtggttatt ctgaaaacgc tgcatatgtt tgaagtaccg ttcctgctgg
+    5401  tgggctgctt taaatatatt accagccagt ttgaagtgcg tttttcagcg acgatttatc
+    5461  tggtctgttt ctgcttcttt aagcaactgg cgatgatttt tatgtctgta ctggcgggca
+    5521  atatgtatga aagcatcggt ttccagggcg cttatctggt gctgggtctg gtggcgctgg
+    5581  gcttcacctt aatttccgtg ttcacgctta gcggccccgg cccgctttcc ctgctgcgtc
+    5641  gtcaggtgaa tgaagtcgct taagcaatca atgtcggatg cggcgcgacg cttatccgac
+    5701  caacatatca taacggagtg atcgcattga acatgccaat gaccgaaaga ataagagcag
+    5761  gcaagctatt taccgatatg tgcgaaggct taccggaaaa aagacttcgt gggaaaacgt
+    5821  taatgtatga gtttaatcac tcgcatccat cagaagttga aaaaagagaa agcctgatta
+    5881  aagaaatgtt tgccacggta ggggaaaacg cctgggtaga accgcctgtc tatttctctt
+    5941  acggttccaa catccatata ggccgcaatt tttatgcaaa tttcaattta accattgtcg
+    6001  atgactacac ggtaacaatc ggtgataacg tactgattgc acccaacgtt actctttccg
+    6061  ttacgggaca ccctgtacac catgaattga gaaaaaacgg cgagatgtac tcttttccga
+    6121  taacgattgg caataacgtc tggatcggaa gtcatgtggt tattaatcca ggcgtcacca
+    6181  tcggggataa ttctgttatt ggcgcgggta gtatcgtcac aaaagacatt ccaccaaacg
+    6241  tcgtggcggc tggcgttcct tgtcgggtta ttcgcgaaat aaacgaccgg gataagcact
+    6301  attatttcaa agattataaa gttgaatcgt cagtttaaat tataaaaatt gcctgatacg
+    6361  ctgcgcttat caggcctaca agttcagcga tctacattag ccgcatccgg catgaacaaa
+    6421  gcgcaggaac aagcgtcgca tcatgcctct ttgacccaca gctgcggaaa acgtactggt
+    6481  gcaaaacgca gggttatgat catcagccca acgacgcaca gcgcatgaaa tgcccagtcc
+    6541  atcaggtaat tgccgctgat actacgcagc acgccagaaa accacggggc aagcccggcg
+    6601  atgataaaac cgattccctg cataaacgcc accagcttgc cagcaatagc cggttgcaca
+    6661  gagtgatcga gcgccagcag caaacagagc ggaaacgcgc cgcccagacc taacccacac
+    6721  accatcgccc acaataccgg caattgcatc ggcagccaga taaagccgca gaaccccacc
+    6781  agttgtaaca ccagcgccag cattaacagt ttgcgccgat cctgatggcg agccatagca
+    6841  ggcatcagca aagctcctgc ggcttgccca agcgtcatca atgccagtaa ggaaccgctg
+    6901  tactgcgcgc tggcaccaat ctcaatatag aaagcgggta accaggcaat caggctggcg
+    6961  taaccgccgt taatcagacc gaagtaaaca cccagcgtcc acgcgcgggg agtgaatacc
+    7021  acgcgaaccg gagtggttgt tgtcttgtgg gaagaggcga cctcgcgggc gctttgccac
+    7081  caccaggcaa agagcgcaac aacggcaggc agcgccacca ggcgagtgtt tgataccagg
+    7141  tttcgctatg ttgaactaac cagggcgtta tggcggcacc aagcccaccg ccgcccatca
+    7201  gagccgcgga ccacagcccc atcaccagtg gcgtgcgctg ctgaaaccgc cgtttaatca
+    7261  ccgaagcatc accgcctgaa tgatgccgat ccccacccca ccaagcagtg cgctgctaag
+    7321  cagcagcgca ctttgcgggt aaagctcacg catcaatgca ccgacggcaa tcagcaacag
+    7381  actgatggcg acactgcgac gttcgctgac atgctgatga agccagcttc cggccagcgc
+    7441  cagcccgccc atggtaacca ccggcagagc ggtcgac
+//
+LOCUS       ECLACA                  1832 bp    DNA     linear   BCT 05-JUL-1999
+DEFINITION  Escherichia coli lacA gene for thiogalactoside transacetylase.
+ACCESSION   X51872
+VERSION     X51872.1  GI:41891
+KEYWORDS    lac operon; lacA gene; lacY gene; thiogalactoside transacetylase.
+SOURCE      Escherichia coli.
+  ORGANISM  Escherichia coli
+            Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+            Escherichia.
+REFERENCE   1  (bases 1 to 1832)
+  AUTHORS   Hediger,M.A., Johnson,D.F., Nierlich,D.P. and Zabin,I.
+  TITLE     DNA sequence of the lactose operon: The lacA gene and the
+            transcriptional termination region
+  JOURNAL   Proc. Natl. Acad. Sci. U.S.A. 82, 6414-6418 (1985)
+  MEDLINE   86016712
+  REMARK    (1-1832)
+FEATURES             Location/Qualifiers
+     source          1..1832
+                     /organism="Escherichia coli"
+                     /db_xref="taxon:562"
+     CDS             <1..18
+                     /codon_start=1
+                     /transl_table=11
+                     /product="lacY gene product"
+                     /protein_id="CAA36161.1"
+                     /db_xref="GI:4377496"
+                     /translation="VNEVA"
+     gene            82..693
+                     /gene="lacA"
+     CDS             82..693
+                     /gene="lacA"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="thiogalactoside transacetylase"
+                     /protein_id="CAA36162.1"
+                     /db_xref="GI:581122"
+                     /db_xref="SWISS-PROT:P07464"
+                     /translation="MNMPMTERIRAGKLFTDMCEGLPEKRLRGKTLMYEFNHSHPSEV
+                     EKRESLIKEMFATVGENAWVEPPVYFSYGSNIHIGRNFYANFNLTIVDDYTVTIGDNV
+                     LIAPNVTLSVTGHPVHHELRKNGEMYSFPITIGNNVWIGSHVVINPGVTIGDNSVIGA
+                     GSIVTKDIPPNVVAAGVPCRVIREINDRDKHYYFKDYKVESSV"
+BASE COUNT      519 a    510 c    450 g    353 t
+ORIGIN
+       1  gtgaatgaag tcgcttaagc aatcaatgtc ggatgcggcg cgacgcttat ccgaccaaca
+      61  tatcataacg gagtgatcgc attgaacatg ccaatgaccg aaagaataag agcaggcaag
+     121  ctatttaccg atatgtgcga aggcttaccg gaaaaaagac ttcgtgggaa aacgttaatg
+     181  tatgagttta atcactcgca tccatcagaa gttgaaaaaa gagaaagcct gattaaagaa
+     241  atgtttgcca cggtagggga aaacgcctgg gtagaaccgc ctgtctattt ctcttacggt
+     301  tccaacatcc atataggccg caatttttat gcaaatttca atttaaccat tgtcgatgac
+     361  tacacggtaa caatcggtga taacgtactg attgcaccca acgttactct ttccgttacg
+     421  ggacaccctg tacaccatga attgagaaaa aacggcgaga tgtactcttt tccgataacg
+     481  attggcaata acgtctggat cggaagtcat gtggttatta atccaggcgt caccatcggg
+     541  gataattctg ttattggcgc gggtagtatc gtcacaaaag acattccacc aaacgtcgtg
+     601  gcggctggcg ttccttgtcg ggttattcgc gaaataaacg accgggataa gcactattat
+     661  ttcaaagatt ataaagttga atcgtcagtt taaattataa aaattgcctg atacgctgcg
+     721  cttatcaggc ctacaagttc agcgatctac attagccgca tccggcatga acaaagcgca
+     781  ggaacaagcg tcgcatcatg cctctttgac ccacagctgc ggaaaacgta ctggtgcaaa
+     841  acgcagggtt atgatcatca gcccaacgac gcacagcgca tgaaatgccc agtccatcag
+     901  gtaattgccg ctgatactac gcagcacgcc agaaaaccac ggggcaagcc cggcgatgat
+     961  aaaaccgatt ccctgcataa acgccaccag cttgccagca atagccggtt gcacagagtg
+    1021  atcgagcgcc agcagcaaac agagcggaaa cgcgccgccc agacctaacc cacacaccat
+    1081  cgcccacaat accggcaatt gcatcggcag ccagataaag ccgcagaacc ccaccagttg
+    1141  taacaccagc gccagcatta acagtttgcg ccgatcctga tggcgagcca tagcaggcat
+    1201  cagcaaagct cctgcggctt gcccaagcgt catcaatgcc agtaaggaac cgctgtactg
+    1261  cgcgctggca ccaatctcaa tatagaaagc gggtaaccag gcaatcaggc tggcgtaacc
+    1321  gccgttaatc agaccgaagt aaacacccag cgtccacgcg cggggagtga ataccacgcg
+    1381  aaccggagtg gttgttgtct tgtgggaaga ggcgacctcg cgggcgcttt gccaccacca
+    1441  ggcaaagagc gcaacaacgg caggcagcgc caccaggcga gtgtttgata ccaggtttcg
+    1501  ctatgttgaa ctaaccaggg cgttatggcg gcaccaagcc caccgccgcc catcagagcc
+    1561  gcggaccaca gccccatcac cagtggcgtg cgctgctgaa accgccgttt aatcaccgaa
+    1621  gcatcaccgc ctgaatgatg ccgatcccca ccccaccaag cagtgcgctg ctaagcagca
+    1681  gcgcactttg cgggtaaagc tcacgcatca atgcaccgac ggcaatcagc aacagactga
+    1741  tggcgacact gcgacgttcg ctgacatgct gatgaagcca gcttccggcc agcgccagcc
+    1801  cgcccatggt aaccaccggc agagcggtcg ac
+//
+LOCUS       ECLACI                  1113 bp    DNA     linear   BCT 10-FEB-1999
+DEFINITION  E. coli laci gene (codes for the lac repressor).
+ACCESSION   V00294
+VERSION     V00294.1  GI:41893
+KEYWORDS    DNA binding protein; repressor.
+SOURCE      Escherichia coli.
+  ORGANISM  Escherichia coli
+            Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+            Escherichia.
+REFERENCE   1  (bases 1 to 1113)
+  AUTHORS   Farabaugh,P.J.
+  TITLE     Sequence of the lacI gene
+  JOURNAL   Nature 274 (5673), 765-769 (1978)
+  MEDLINE   78246991
+COMMENT     KST ECO.LACI.
+FEATURES             Location/Qualifiers
+     source          1..1113
+                     /organism="Escherichia coli"
+                     /db_xref="taxon:562"
+     CDS             31..1113
+                     /note="reading frame"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA23569.1"
+                     /db_xref="GI:581123"
+                     /db_xref="SWISS-PROT:P03023"
+                     /translation="MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAE
+                     LNYIPNRVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERS
+                     GVEACKAAVHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSII
+                     FSHEDGTRLGVEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREG
+                     DWSAMSGFQQTMQMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDT
+                     EDSSCYIPPSTTIKQDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNT
+                     QTASPRALADSLMQLARQVSRLESGQ"
+BASE COUNT      249 a    304 c    322 g    238 t
+ORIGIN
+       1  ccggaagaga gtcaattcag ggtggtgaat gtgaaaccag taacgttata cgatgtcgca
+      61  gagtatgccg gtgtctctta tcagaccgtt tcccgcgtgg tgaaccaggc cagccacgtt
+     121  tctgcgaaaa cgcgggaaaa agtggaagcg gcgatggcgg agctgaatta cattcccaac
+     181  cgcgtggcac aacaactggc gggcaaacag tcgttgctga ttggcgttgc cacctccagt
+     241  ctggccctgc acgcgccgtc gcaaattgtc gcggcgatta aatctcgcgc cgatcaactg
+     301  ggtgccagcg tggtggtgtc gatggtagaa cgaagcggcg tcgaagcctg taaagcggcg
+     361  gtgcacaatc ttctcgcgca acgcgtcagt gggctgatca ttaactatcc gctggatgac
+     421  caggatgcca ttgctgtgga agctgcctgc actaatgttc cggcgttatt tcttgatgtc
+     481  tctgaccaga cacccatcaa cagtattatt ttctcccatg aagacggtac gcgactgggc
+     541  gtggagcatc tggtcgcatt gggtcaccag caaatcgcgc tgttagcggg cccattaagt
+     601  tctgtctcgg cgcgtctgcg tctggctggc tggcataaat atctcactcg caatcaaatt
+     661  cagccgatag cggaacggga aggcgactgg agtgccatgt ccggttttca acaaaccatg
+     721  caaatgctga atgagggcat cgttcccact gcgatgctgg ttgccaacga tcagatggcg
+     781  ctgggcgcaa tgcgcgccat taccgagtcc gggctgcgcg ttggtgcgga tatctcggta
+     841  gtgggatacg acgataccga agacagctca tgttatatcc cgccgtcaac caccatcaaa
+     901  caggattttc gcctgctggg gcaaaccagc gtggaccgct tgctgcaact ctctcagggc
+     961  caggcggtga agggcaatca gctgttgccc gtctcactgg tgaaaagaaa aaccaccctg
+    1021  gcgcccaata cgcaaaccgc ctctccccgc gcgttggccg attcattaat gcagctggca
+    1081  cgacaggttt cccgactgga aagcgggcag tga
+//
+LOCUS       ECLACY                  1500 bp    DNA     linear   BCT 07-JUL-1995
+DEFINITION  E. coli lacY gene (codes for lactose permease).
+ACCESSION   V00295
+VERSION     V00295.1  GI:41897
+KEYWORDS    membrane protein.
+SOURCE      Escherichia coli.
+  ORGANISM  Escherichia coli
+            Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+            Escherichia.
+REFERENCE   1  (bases 1 to 1500)
+  AUTHORS   Buchel,D.E., Gronenborn,B. and Muller-Hill,B.
+  TITLE     Sequence of the lactose permease gene
+  JOURNAL   Nature 283 (5747), 541-545 (1980)
+  MEDLINE   80120651
+COMMENT     lacZ is a beta-galactosidase and lacA is transacetylase. KST
+            ECO.LACY.
+FEATURES             Location/Qualifiers
+     source          1..1500
+                     /organism="Escherichia coli"
+                     /db_xref="taxon:562"
+     CDS             <1..54
+                     /note="reading frame (lacZ)"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA23570.1"
+                     /db_xref="GI:41898"
+                     /db_xref="SWISS-PROT:P00722"
+                     /translation="FQLSAGRYHYQLVWCQK"
+     CDS             106..1359
+                     /note="reading frame (lacY)"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA23571.1"
+                     /db_xref="GI:41899"
+                     /db_xref="SWISS-PROT:P02920"
+                     /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSD
+                     TGIIFAAISLFSLLFQPLFGLLSDKLGLRKYLLWIITGMLVMFAPFFIFIFGPLLQYN
+                     ILVGSIVGGIYLGFCFNAGAPAVEAFIEKVSRRSNFEFGRARMFGCVGWALCASIVGI
+                     MFTINNQFVFWLGSGCALILAVLLFFAKTDAPSSATVANAVGANHSAFSLKLALELFR
+                     QPKLWFLSLYVIGVSCTYDVFDQQFANFFTSFFATGEQGTRVFGYVTTMGELLNASIM
+                     FFAPLIINRIGGKNALLLAGTIMSVRIIGSSFATSALEVVILKTLHMFEVPFLLVGCF
+                     KYITSQFEVRFSATIYLVCFCFFKQLAMIFMSVLAGNMYESIGFQGAYLVLGLVALGF
+                     TLISVFTLSGPGPLSLLRRQVNEVA"
+     CDS             1423..>1500
+                     /note="reading frame (lacA)"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA23572.1"
+                     /db_xref="GI:581124"
+                     /db_xref="SWISS-PROT:P07464"
+                     /translation="MNMPMTERIRAGKLFTDMCEGLPEKR"
+BASE COUNT      315 a    342 c    357 g    486 t
+ORIGIN
+       1  ttccagctga gcgccggtcg ctaccattac cagttggtct ggtgtcaaaa ataataataa
+      61  ccgggcaggc catgtctgcc cgtatttcgc gtaaggaaat ccattatgta ctatttaaaa
+     121  aacacaaact tttggatgtt cggtttattc tttttctttt acttttttat catgggagcc
+     181  tacttcccgt ttttcccgat ttggctacat gacatcaacc atatcagcaa aagtgatacg
+     241  ggtattattt ttgccgctat ttctctgttc tcgctattat tccaaccgct gtttggtctg
+     301  ctttctgaca aactcgggct gcgcaaatac ctgctgtgga ttattaccgg catgttagtg
+     361  atgtttgcgc cgttctttat ttttatcttc gggccactgt tacaatacaa cattttagta
+     421  ggatcgattg ttggtggtat ttatctaggc ttttgtttta acgccggtgc gccagcagta
+     481  gaggcattta ttgagaaagt cagccgtcgc agtaatttcg aatttggtcg cgcgcggatg
+     541  tttggctgtg ttggctgggc gctgtgtgcc tcgattgtcg gcatcatgtt caccatcaat
+     601  aatcagtttg ttttctggct gggctctggc tgtgcactca tcctcgccgt tttactcttt
+     661  ttcgccaaaa cggatgcgcc ctcttctgcc acggttgcca atgcggtagg tgccaaccat
+     721  tcggcattta gccttaagct ggcactggaa ctgttcagac agccaaaact gtggtttttg
+     781  tcactgtatg ttattggcgt ttcctgcacc tacgatgttt ttgaccaaca gtttgctaat
+     841  ttctttactt cgttctttgc taccggtgaa cagggtacgc gggtatttgg ctacgtaacg
+     901  acaatgggcg aattacttaa cgcctcgatt atgttctttg cgccactgat cattaatcgc
+     961  atcggtggga aaaacgccct gctgctggct ggcactatta tgtctgtacg tattattggc
+    1021  tcatcgttcg ccacctcagc gctggaagtg gttattctga aaacgctgca tatgtttgaa
+    1081  gtaccgttcc tgctggtggg ctgctttaaa tatattacca gccagtttga agtgcgtttt
+    1141  tcagcgacga tttatctggt ctgtttctgc ttctttaagc aactggcgat gatttttatg
+    1201  tctgtactgg cgggcaatat gtatgaaagc atcggtttcc agggcgctta tctggtgctg
+    1261  ggtctggtgg cgctgggctt caccttaatt tccgtgttca cgcttagcgg ccccggcccg
+    1321  ctttccctgc tgcgtcgtca ggtgaatgaa gtcgcttaag caatcaatgt cggatgcggc
+    1381  gcgacgctta tccgaccaac atatcataac ggagtgatcg cattgaacat gccaatgacc
+    1441  gaaagaataa gagcaggcaa gctatttacc gatatgtgcg aaggcttacc ggaaaaaaga
+//
+LOCUS       ECLACZ                  3078 bp    DNA     linear   BCT 06-MAR-1996
+DEFINITION  E. coli gene lacZ coding for beta-galactosidase (EC 3.2.1.23).
+ACCESSION   V00296
+VERSION     V00296.1  GI:41901
+KEYWORDS    galactosidase.
+SOURCE      Escherichia coli.
+  ORGANISM  Escherichia coli
+            Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+            Escherichia.
+REFERENCE   1  (bases 1 to 3078)
+  AUTHORS   Kalnins,A., Otto,K., Ruther,U. and Muller-Hill,B.
+  TITLE     Sequence of the lacZ gene of Escherichia coli
+  JOURNAL   EMBO J. 2 (4), 593-597 (1983)
+  MEDLINE   84028567
+REFERENCE   2  (bases 1 to 3078)
+  AUTHORS   Zell,R. and Fritz,H.J.
+  TITLE     DNA mismatch-repair in Escherichia coli counteracting the
+            hydrolytic deamination of 5-methyl-cytosine residues
+  JOURNAL   EMBO J. 6 (6), 1809-1815 (1987)
+  MEDLINE   87275876
+COMMENT     Data kindly reviewed (18-MAY-1983) by U. Ruether.
+FEATURES             Location/Qualifiers
+     source          1..3078
+                     /organism="Escherichia coli"
+                     /db_xref="taxon:562"
+     mat_peptide     1..3069
+                     /product="unnamed"
+     CDS             <1..3072
+                     /note="galactosidase"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA23573.1"
+                     /db_xref="GI:1197203"
+                     /db_xref="SWISS-PROT:P00722"
+                     /translation="TMITDSLAVVLQRRDWENPGVTQLNRLAAHPPFASWRNSEEART
+                     DRPSQQLRSLNGEWRFAWFPAPEAVPESWLECDLPEADTVVVPSNWQMHGYDAPIYTN
+                     VTYPITVNPPFVPTENPTGCYSLTFNVDESWLQEGQTRIIFDGVNSAFHLWCNGRWVG
+                     YGQDSRLPSEFDLSAFLRAGENRLAVMVLRWSDGSYLEDQDMWRMSGIFRDVSLLHKP
+                     TTQISDFHVATRFNDDFSRAVLEAEVQMCGELRDYLRVTVSLWQGETQVASGTAPFGG
+                     EIIDERGGYADRVTLRLNVENPKLWSAEIPNLYRAVVELHTADGTLIEAEACDVGFRE
+                     VRIENGLLLLNGKPLLIRGVNRHEHHPLHGQVMDEQTMVQDILLMKQNNFNAVRCSHY
+                     PNHPLWYTLCDRYGLYVVDEANIETHGMVPMNRLTDDPRWLPAMSERVTRMVQRDRNH
+                     PSVIIWSLGNESGHGANHDALYRWIKSVDPSRPVQYEGGGADTTATDIICPMYARVDE
+                     DQPFPAVPKWSIKKWLSLPGETRPLILCEYAHAMGNSLGGFAKYWQAFRQYPRLQGGF
+                     VWDWVDQSLIKYDENGNPWSAYGGDFGDTPNDRQFCMNGLVFADRTPHPALTEAKHQQ
+                     QFFQFRLSGQTIEVTSEYLFRHSDNELLHWMVALDGKPLASGEVPLDVAPQGKQLIEL
+                     PELPQPESAGQLWLTVRVVQPNATAWSEAGHISAWQQWRLAENLSVTLPAASHAIPHL
+                     TTSEMDFCIELGNKRWQFNRQSGFLSQMWIGDKKQLLTPLRDQFTRAPLDNDIGVSEA
+                     TRIDPNAWVERWKAAGHYQAEAALLQCTADTLADAVLITTAHAWQHQGKTLFISRKTY
+                     RIDGSGQMAITVDVEVASDTPHPARIGLNCQLAQVAERVNWLGLGPQENYPDRLTAAC
+                     FDRWDLPLSDMYTPYVFPSENGLRCGTRELNYGPHQWRGDFQFNISRYSQQQLMETSH
+                     RHLLHAEEGTWLNIDGFHMGIGGDDSWSPSVSAEFQLSAGRYHYQLVWCQK"
+BASE COUNT      682 a    841 c    886 g    669 t
+ORIGIN
+       1  accatgatta cggattcact ggccgtcgtt ttacaacgtc gtgactggga aaaccctggc
+      61  gttacccaac ttaatcgcct tgcagcacat ccccctttcg ccagctggcg taatagcgaa
+     121  gaggcccgca ccgatcgccc ttcccaacag ttgcgcagcc tgaatggcga atggcgcttt
+     181  gcctggtttc cggcaccaga agcggtgccg gaaagctggc tggagtgcga tcttcctgag
+     241  gccgatactg tcgtcgtccc ctcaaactgg cagatgcacg gttacgatgc gcccatctac
+     301  accaacgtaa cctatcccat tacggtcaat ccgccgtttg ttcccacgga gaatccgacg
+     361  ggttgttact cgctcacatt taatgttgat gaaagctggc tacaggaagg ccagacgcga
+     421  attatttttg atggcgttaa ctcggcgttt catctgtggt gcaacgggcg ctgggtcggt
+     481  tacggccagg acagtcgttt gccgtctgaa tttgacctga gcgcattttt acgcgccgga
+     541  gaaaaccgcc tcgcggtgat ggtgctgcgt tggagtgacg gcagttatct ggaagatcag
+     601  gatatgtggc ggatgagcgg cattttccgt gacgtctcgt tgctgcataa accgactaca
+     661  caaatcagcg atttccatgt tgccactcgc tttaatgatg atttcagccg cgctgtactg
+     721  gaggctgaag ttcagatgtg cggcgagttg cgtgactacc tacgggtaac agtttcttta
+     781  tggcagggtg aaacgcaggt cgccagcggc accgcgcctt tcggcggtga aattatcgat
+     841  gagcgtggtg gttatgccga tcgcgtcaca ctacgtctga acgtcgaaaa cccgaaactg
+     901  tggagcgccg aaatcccgaa tctctatcgt gcggtggttg aactgcacac cgccgacggc
+     961  acgctgattg aagcagaagc ctgcgatgtc ggtttccgcg aggtgcggat tgaaaatggt
+    1021  ctgctgctgc tgaacggcaa gccgttgctg attcgaggcg ttaaccgtca cgagcatcat
+    1081  cctctgcatg gtcaggtcat ggatgagcag acgatggtgc aggatatcct gctgatgaag
+    1141  cagaacaact ttaacgccgt gcgctgttcg cattatccga accatccgct gtggtacacg
+    1201  ctgtgcgacc gctacggcct gtatgtggtg gatgaagcca atattgaaac ccacggcatg
+    1261  gtgccaatga atcgtctgac cgatgatccg cgctggctac cggcgatgag cgaacgcgta
+    1321  acgcgaatgg tgcagcgcga tcgtaatcac ccgagtgtga tcatctggtc gctggggaat
+    1381  gaatcaggcc acggcgctaa tcacgacgcg ctgtatcgct ggatcaaatc tgtcgatcct
+    1441  tcccgcccgg tgcagtatga aggcggcgga gccgacacca cggccaccga tattatttgc
+    1501  ccgatgtacg cgcgcgtgga tgaagaccag cccttcccgg ctgtgccgaa atggtccatc
+    1561  aaaaaatggc tttcgctacc tggagagacg cgcccgctga tcctttgcga atacgcccac
+    1621  gcgatgggta acagtcttgg cggtttcgct aaatactggc aggcgtttcg tcagtatccc
+    1681  cgtttacagg gcggcttcgt ctgggactgg gtggatcagt cgctgattaa atatgatgaa
+    1741  aacggcaacc cgtggtcggc ttacggcggt gattttggcg atacgccgaa cgatcgccag
+    1801  ttctgtatga acggtctggt ctttgccgac cgcacgccgc atccagcgct gacggaagca
+    1861  aaacaccagc agcagttttt ccagttccgt ttatccgggc aaaccatcga agtgaccagc
+    1921  gaatacctgt tccgtcatag cgataacgag ctcctgcact ggatggtggc gctggatggt
+    1981  aagccgctgg caagcggtga agtgcctctg gatgtcgctc cacaaggtaa acagttgatt
+    2041  gaactgcctg aactaccgca gccggagagc gccgggcaac tctggctcac agtacgcgta
+    2101  gtgcaaccga acgcgaccgc atggtcagaa gccgggcaca tcagcgcctg gcagcagtgg
+    2161  cgtctggcgg aaaacctcag tgtgacgctc cccgccgcgt cccacgccat cccgcatctg
+    2221  accaccagcg aaatggattt ttgcatcgag ctgggtaata agcgttggca atttaaccgc
+    2281  cagtcaggct ttctttcaca gatgtggatt ggcgataaaa aacaactgct gacgccgctg
+    2341  cgcgatcagt tcacccgtgc accgctggat aacgacattg gcgtaagtga agcgacccgc
+    2401  attgacccta acgcctgggt cgaacgctgg aaggcggcgg gccattacca ggccgaagca
+    2461  gcgttgttgc agtgcacggc agatacactt gctgatgcgg tgctgattac gaccgctcac
+    2521  gcgtggcagc atcaggggaa aaccttattt atcagccgga aaacctaccg gattgatggt
+    2581  agtggtcaaa tggcgattac cgttgatgtt gaagtggcga gcgatacacc gcatccggcg
+    2641  cggattggcc tgaactgcca gctggcgcag gtagcagagc gggtaaactg gctcggatta
+    2701  gggccgcaag aaaactatcc cgaccgcctt actgccgcct gttttgaccg ctgggatctg
+    2761  ccattgtcag acatgtatac cccgtacgtc ttcccgagcg aaaacggtct gcgctgcggg
+    2821  acgcgcgaat tgaattatgg cccacaccag tggcgcggcg acttccagtt caacatcagc
+    2881  cgctacagtc aacagcaact gatggaaacc agccatcgcc atctgctgca cgcggaagaa
+    2941  ggcacatggc tgaatatcga cggtttccat atggggattg gtggcgacga ctcctggagc
+    3001  ccgtcagtat cggcggaatt ccagctgagc gccggtcgct accattacca gttggtctgg
+    3061  tgtcaaaaat aataataa
+//
+LOCUS       PAAMIB                  1212 bp    DNA     linear   BCT 10-AUG-1995
+DEFINITION  P.aeruginosa (PAC1) amiB gene.
+ACCESSION   X77160
+VERSION     X77160.1  GI:473108
+KEYWORDS    amiB gene.
+SOURCE      Pseudomonas aeruginosa.
+  ORGANISM  Pseudomonas aeruginosa
+            Bacteria; Proteobacteria; gamma subdivision; Pseudomonadaceae;
+            Pseudomonas.
+REFERENCE   1  (bases 1 to 1212)
+  AUTHORS   Wilson,S.A., Wachira,S.M., Drew,R.E., Jones,D. and Pearl,L.H.
+  TITLE     Identification of a putative ABC transporter in the Pseudomonas
+            aeruginosa amidase operon
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 1212)
+  AUTHORS   Wilson,S.A.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (17-JAN-1994) S.A. Wilson, University College London,
+            Dept of Biochemistry, Gower Street, London WC1E 6BT, UK
+REFERENCE   3  (bases 1 to 1212)
+  AUTHORS   Wilson,S.A., Williams,R.J., Pearl,L.H. and Drew,R.E.
+  TITLE     Identification of two new genes in the Pseudomonas aeruginosa
+            amidase operon, encoding an ATPase (AmiB) and a putative integral
+            membrane protein (AmiS)
+  JOURNAL   J. Biol. Chem. 270 (32), 18818-18824 (1995)
+  MEDLINE   95370186
+FEATURES             Location/Qualifiers
+     source          1..1212
+                     /organism="Pseudomonas aeruginosa"
+                     /strain="PAC1"
+                     /db_xref="taxon:287"
+                     /clone="plasmid pAS20"
+     gene            97..1212
+                     /gene="amiB"
+     CDS             97..1212
+                     /gene="amiB"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA54405.1"
+                     /db_xref="GI:473109"
+                     /db_xref="SWISS-PROT:Q51416"
+                     /translation="MPFLSDMLDQSRRQQDEEQALARENLAEASLLQAHLSHRSALHS
+                     RFRFDPAAVMDCLRAEVLGQEPALQAVEDMLKVVRADIADPRRPLFSALFLGPTGVGK
+                     TEIVRALARALHGDAEGFCRVDMNTLSQEHYAAALTGAPPGYVGAKEGTTLLEQDKLD
+                     GSPGRPGIVLFDELEKASPEVVHALLNVLDNGLLRVASGERTYHFRNTLVFMTSNLCA
+                     HEIQRYDERRQRLPWRLLPVGGERRRRDIDGMVRARLLKTFSPEFVNRLDSVVTFNWI
+                     ERDVVARLVELEVQRLNRRLEKHRCRLEATPEVLAKIARAGFDRQFGARALRRSVRHH
+                     LEVPLAEHLLDHHQPGDGNCTIYLASLEHERVRFVRR"
+BASE COUNT      193 a    426 c    403 g    190 t
+ORIGIN
+       1  gaaggaagcc tgacggcaga cgccgccagc ccggcgtgcc gtcgtgcggc acgccgtctc
+      61  cgccatttcc cccctgtggc agaaggagtt tcatccatgc cttttctgag cgacatgctc
+     121  gaccagtccc gccggcagca ggacgaggaa caggccctgg cgcgggagaa tcttgccgag
+     181  gcaagtctgc tccaggccca cctgagtcac cgcagcgccc tgcacagccg tttccgtttc
+     241  gacccggcgg cggtgatgga ctgcctgcgc gccgaggtgc tcggccagga accggcgcta
+     301  caggccgtcg aggacatgct caaggtggtt cgcgcggaca tcgccgaccc gcgccgtccg
+     361  ctgttcagcg cgctgttcct cggccccacc ggagtcggca agaccgagat cgtgcgcgcc
+     421  ctggccaggg ccctgcacgg cgacgccgag gggttctgcc gggtggacat gaacaccctg
+     481  tcccaggagc actatgccgc cgccctcacc ggtgcgccgc cgggctacgt cggggcgaag
+     541  gagggcacca ccctgttgga gcaggacaag ctggacggca gtcccgggcg ccccggcatc
+     601  gttctcttcg acgaactgga aaaggccagc ccggaagtgg tccatgcgtt gctcaacgta
+     661  ctcgacaacg gcctgctacg ggtcgcttcc ggcgaacgca cctaccattt ccgcaacacc
+     721  ctggtgttca tgaccagcaa tctctgcgcc catgagatcc agcgctacga cgagcgtcgc
+     781  cagcgcctgc cctggcgcct gctgccggtc ggcggcgagc gccggcggcg ggacatcgac
+     841  gggatggtcc gggcccggct gctgaagacc ttctcgccgg agttcgtcaa tcgtctcgat
+     901  agcgtggtca ccttcaactg gatcgaacgc gacgtcgtcg cgcgcctggt cgagctggag
+     961  gtgcagcggc tcaaccggcg cctggagaag catcgctgcc gcctggaggc gaccccggag
+    1021  gtgctggcga agatcgcccg cgccggcttc gaccggcagt tcggcgcccg tgcgttgcgc
+    1081  cgcagcgtcc gtcatcatct cgaggtaccg ctggccgagc atctgctcga tcaccaccag
+    1141  ccgggcgacg ggaactgcac gatctacctg gcgagcctgg agcacgagcg ggttcgcttc
+    1201  gtacggcgct ga
+//
+LOCUS       PSEAIME                 1065 bp    DNA     linear   BCT 26-APR-1993
+DEFINITION  P.aeruginosa aimE gene encoding alphatic amidase, complete cds.
+ACCESSION   M27612
+VERSION     M27612.1  GI:150979
+KEYWORDS    alphatic amidase.
+SOURCE      P.aeruginosa (strain PAC433) DNA.
+  ORGANISM  Pseudomonas aeruginosa
+            Bacteria; Proteobacteria; gamma subdivision; Pseudomonadaceae;
+            Pseudomonas.
+REFERENCE   1  (bases 1 to 1065)
+  AUTHORS   Brammar,W.J., Charles,I.G., Matfield,M., Cheng-Pin,L., Drew,R.E.
+            and Clarke,P.H.
+  TITLE     The nucleotide sequence of the amiE gene of Pseudomonas aeruginosa
+  JOURNAL   FEBS Lett. 215, 291-294 (1987)
+  MEDLINE   87219102
+FEATURES             Location/Qualifiers
+     source          1..1065
+                     /organism="Pseudomonas aeruginosa"
+                     /db_xref="taxon:287"
+     CDS             25..1065
+                     /note="alphatic amidase (EC 3.5.1.4)"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="AAA25697.1"
+                     /db_xref="GI:150980"
+                     /translation="MRHGDISSSNDTVGVAVVNYKMPRLHTAAEVLDNARKIADMIVG
+                     MKQGLPGMDLVVFPEYSLQGIMYDPAEMMETAVAIPGEETEIFSRACRKANVWGVFSL
+                     TGERHEEHPRKAPYNTLVLIDNNGEIVQKYRKIIPWCPIEGWYPGGQTYVSEGPKGMK
+                     ISLIICDDPNYPEIWRDCAMKGAELIVRCQGYMYPAKDQQVMMAKAMAWANNCYVAVA
+                     NAAGFDGVYSYFGHSAIIGFDGRTLGECGEEEMGIQYAQLSLSQIRDARANDQSQNHL
+                     FKILHRGYSGLQASGDGDRGLAECPFEFYRTWVTDAEKARDNVERLTRSTTGVAQCPV
+                     GRLPYEGLEKEA"
+BASE COUNT      220 a    337 c    343 g    165 t
+ORIGIN
+       1  aaataacaac aggaggtgat acccatgcgt cacggcgata tttccagcag caacgacacc
+      61  gtcggagtgg ccgtggtcaa ctacaagatg ccgcgcctgc acaccgcggc ggaggtcctg
+     121  gacaacgccc ggaagatcgc cgacatgatc gtcggcatga agcagggcct gcccggcatg
+     181  gacctggtgg tgttcccgga gtacagcctg cagggcatca tgtacgatcc ggcggagatg
+     241  atggaaaccg cggtggcgat ccccggcgag gaaaccgaga tattctcccg cgcctgccgc
+     301  aaggccaacg tctggggcgt attctccctc accggcgaac ggcacgagga gcatccgcgc
+     361  aaggcgccgt acaacaccct ggtgctgatc gacaacaacg gcgagatcgt ccagaagtac
+     421  cgcaagatca ttccctggtg ccccatcgag ggctggtatc ccggtggcca gacctacgtc
+     481  agcgaagggc cgaagggcat gaagatcagc ctgatcatct gcgacgaccc caattacccg
+     541  gagatctggc gcgactgcgc gatgaagggc gccgagctga tcgtgcgctg ccagggctac
+     601  atgtacccgg ccaaggacca gcaggtgatg atggccaagg ccatggcctg ggccaacaac
+     661  tgctatgtgg cggtggccaa cgcggccggc ttcgacggtg tctattccta cttcggccac
+     721  tcggcgatca tcggcttcga cggccgtacc ctcggtgagt gcggcgagga ggaaatgggt
+     781  atccagtacg cccagctgtc cctttcgcag atccgcgatg cgcgcgccaa cgatcagtcg
+     841  cagaaccacc tgttcaagat cctccaccgc ggctacagcg gcttgcaggc gtccggcgac
+     901  ggcgaccggg gcctggcgga gtgtccgttc gagttctacc gcacctgggt caccgacgcc
+     961  gagaaggcgc gcgacaatgt cgagcgactg acccgctcga ccaccggcgt ggcgcaatgc
+    1021  ccggtcggcc ggctgcccta tgagggactg gagaaggaag cctga
+//
+LOCUS       PAAMIR                  2167 bp    DNA     linear   BCT 17-FEB-1997
+DEFINITION  Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+            regulation.
+ACCESSION   X13776 M43175
+VERSION     X13776.1  GI:45269
+KEYWORDS    aliphatic amidase regulator; amiC gene; amiR gene.
+SOURCE      Pseudomonas aeruginosa.
+  ORGANISM  Pseudomonas aeruginosa
+            Bacteria; Proteobacteria; gamma subdivision; Pseudomonadaceae;
+            Pseudomonas.
+REFERENCE   1  (bases 1167 to 2167)
+  AUTHORS   Rice,P.M.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (16-DEC-1988) Rice P.M., EMBL, Postfach 10-2209,
+            Meyerhofstrasse 1, 6900 Heidelberg, FRG
+REFERENCE   2  (bases 1167 to 2167)
+  AUTHORS   Lowe,N., Rice,P.M. and Drew,R.E.
+  TITLE     Nucleotide sequence of the aliphatic amidase regulator gene (amiR)
+            of Pseudomonas aeruginosa
+  JOURNAL   FEBS Lett. 246 (1-2), 39-43 (1989)
+  MEDLINE   89211409
+REFERENCE   3  (bases 1 to 1292)
+  AUTHORS   Wilson,S. and Drew,R.
+  TITLE     Cloning and DNA sequence of amiC, a new gene regulating expression
+            of the Pseudomonas aeruginosa aliphatic amidase, and purification
+            of the amiC product
+  JOURNAL   J. Bacteriol. 173 (16), 4914-4921 (1991)
+  MEDLINE   91317707
+REFERENCE   4  (bases 1 to 2167)
+  AUTHORS   Rice,P.M.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (04-SEP-1991) Rice P.M., EMBL, Postfach 10-2209,
+            Meyerhofstrasse 1, 6900 Heidelberg, FRG
+COMMENT     Data kindly reviewed (04-SEP-1991) by Rice P. M.
+FEATURES             Location/Qualifiers
+     source          1..2167
+                     /organism="Pseudomonas aeruginosa"
+                     /strain="PAC"
+                     /isolate="PAC 1"
+                     /db_xref="taxon:287"
+                     /map="38 min"
+     misc_feature    1
+                     /note="last base of an XhoI site"
+     promoter        8..24
+                     /note="proposed rpoN-dependent promoter"
+     promoter        65..81
+                     /note="proposed rpoN-dependent promoter"
+     RBS             121..126
+                     /note="proposed Shine-Dalgarno sequence"
+     gene            135..1292
+                     /gene="amiC"
+     CDS             135..1292
+                     /gene="amiC"
+                     /note="negative regulator of amiR"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA32024.1"
+                     /db_xref="GI:45271"
+                     /db_xref="SWISS-PROT:P27017"
+                     /translation="MGSHQERPLIGLLFSETGVTADIERSHAYGALLAVEQLNREGGV
+                     GGRPIETLSQDPGGDPDRYRLCAEDFIRNRGVRFLVGCYMSHTRKAVMPVVERADALL
+                     CYPTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLIRHYGERVVFIGSDYIYPRESNHVM
+                     RHLYRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQARADVVFSTVVGTGTAELYRAIA
+                     RRYGDGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPYFSSIDTPASRAFVQACHGFF
+                     PENATITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLYDIDIDAPQGPVRVERQNN
+                     HSRLSSRIAEIDARGVFQVRWQSPEPIRPDPYVVVHNLDDWSASMGGGPLP"
+     misc_feature    648..653
+                     /gene="amiC"
+                     /note="end of 658bp XhoI fragment, deletion in  pSW3
+                     causes constitutive expression of amiE"
+     variation       912..1167
+                     /gene="amiC"
+                     /note="ClaI fragment deleted in pSW36,  constitutive
+                     phenotype"
+                     /replace=""
+     conflict        1281
+                     /gene="amiC"
+                     /citation=[3]
+                     /replace="g"
+     gene            1289..1879
+                     /gene="amiR"
+     CDS             1289..1879
+                     /gene="amiR"
+                     /note="aliphatic amidase regulator, positive  regulator of
+                     amiE"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA32023.1"
+                     /db_xref="GI:45270"
+                     /db_xref="SWISS-PROT:P10932"
+                     /translation="MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWP
+                     PPEAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELEC
+                     HGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRH
+                     GWDEREAHQHLSREAMKRREPILKIAQELLGNEPSA"
+BASE COUNT      363 a    712 c    730 g    362 t
+ORIGIN
+       1  ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat
+      61  ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac
+     121  aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg
+     181  aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg
+     241  agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc
+     301  ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg
+     361  tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg
+     421  agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga
+     481  acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga
+     541  ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa
+     601  gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct
+     661  acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg
+     721  cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg
+     781  ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg
+     841  aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt
+     901  acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct
+     961  tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc
+    1021  tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt
+    1081  acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca
+    1141  gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc
+    1201  agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt
+    1261  ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg
+    1321  cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca
+    1381  gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt
+    1441  gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc
+    1501  gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc
+    1561  cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga
+    1621  tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa
+    1681  gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca
+    1741  ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct
+    1801  gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg
+    1861  aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt
+    1921  catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg
+    1981  gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct
+    2041  gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa
+    2101  ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt
+    2161  cctcgag
+//
+LOCUS       PAAMIS                  1130 bp    DNA     linear   BCT 10-AUG-1995
+DEFINITION  P.aeruginosa (PAC1) amiS gene.
+ACCESSION   X77161
+VERSION     X77161.1  GI:473110
+KEYWORDS    amiS gene.
+SOURCE      Pseudomonas aeruginosa.
+  ORGANISM  Pseudomonas aeruginosa
+            Bacteria; Proteobacteria; gamma subdivision; Pseudomonadaceae;
+            Pseudomonas.
+REFERENCE   1  (bases 1 to 1130)
+  AUTHORS   Wilson,S.A., Wachira,S.M., Drew,R.E., Jones,D. and Pearl,L.H.
+  TITLE     Identification of a putative ABC transporter in the Pseudomonas
+            aeruginosa amidase operon
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 1130)
+  AUTHORS   Wilson,S.A.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (17-JAN-1994) S.A. Wilson, University College London,
+            Dept of Biochemistry, Gower Street, London WC1E 6BT, UK
+REFERENCE   3  (bases 1 to 1130)
+  AUTHORS   Wilson,S.A., Williams,R.J., Pearl,L.H. and Drew,R.E.
+  TITLE     Identification of two new genes in the Pseudomonas aeruginosa
+            amidase operon, encoding an ATPase (AmiB) and a putative integral
+            membrane protein (AmiS)
+  JOURNAL   J. Biol. Chem. 270 (32), 18818-18824 (1995)
+  MEDLINE   95370186
+FEATURES             Location/Qualifiers
+     source          1..1130
+                     /organism="Pseudomonas aeruginosa"
+                     /strain="PAC1"
+                     /db_xref="taxon:287"
+                     /clone="plasmid pAS20"
+     gene            61..576
+                     /gene="amiS"
+     CDS             61..576
+                     /gene="amiS"
+                     /codon_start=1
+                     /transl_table=11
+                     /protein_id="CAA54406.1"
+                     /db_xref="GI:473111"
+                     /db_xref="SWISS-PROT:Q51417"
+                     /translation="MLGLVLLYVGAVLFLNAVWLLGKISGREVAVINFLVGVLSACVA
+                     FYLIFSAAAGQGSLKAGALTLLFAFTYLWVAANQFLEVDGKGLGWFCLFVSLTACTVA
+                     IESFAGASGPFGLWNAVNWTVWALLWFCFFLLLGLSRGIQKPVAYLTLASAIFTAWLP
+                     GLLLLGQVLKA"
+BASE COUNT      167 a    335 c    377 g    251 t
+ORIGIN
+       1  gagccgtccg cctgagcgat ccgggccgac cagaacaata acaagagggg tatcgtcatc
+      61  atgctgggac tggttctgct gtacgttggc gcggtgctgt ttctcaatgc cgtctggttg
+     121  ctgggcaaga tcagcggtcg ggaggtggcg gtgatcaact tcctggtcgg cgtgctgagc
+     181  gcctgcgtcg cgttctacct gatcttttcc gcagcagccg ggcagggctc gctgaaggcc
+     241  ggagcgctga ccctgctatt cgcttttacc tatctgtggg tggccgccaa ccagttcctc
+     301  gaggtggacg gcaagggcct cggctggttc tgcctgttcg tcagcctcac cgcctgcacc
+     361  gtggcgatcg agtcgttcgc cggcgccagt ggtccgttcg gcctgtggaa cgcggtcaac
+     421  tggacagtct gggcgttgct ctggttctgt ttcttcctgc tgctggggct gtcccgcggc
+     481  atccagaagc cggtggccta cctgaccctg gccagcgcca tattcaccgc ctggttgccc
+     541  ggcctgctgc tgctcggaca ggtgctcaag gcatagcagg aagtcggaaa gggatgacgg
+     601  cttgccgcca tcccgtccct tccgaacgcc tagccgagcg gccagttgat caccacgacg
+     661  gcgtcgttgt agtcgttgtc ggtgccgtct tcagagccga ccagggcgaa gttcagctcg
+     721  ttggtcagga ttacctgtgc cgagaccaga tccgaggggc ggccgttgac gctgacctgg
+     781  acctgtacct tgccactgct gccggagttg agcacctggg tgccgatgac ggcgttattg
+     841  gtgctttgcc cgctgaaggt cgcggccgtg ctcgttgttg accagcacgt tcaccgtctg
+     901  ggttccggac gagttggcga aggcggtgac gccggaacct ggttgttggc gggaagggtg
+     961  aacactcctt gtggttgcca tggtggtatc tccactgaat acctggcccc ttccttttca
+    1021  ggcagccgtc tggcgcgcgg tatggcgtgt cgggagaaat ccgcagtcct tggcggcagg
+    1081  cgatgcgcag gcaggaagga cgcatcgttc agccaatcta cgccgtcgac
+//

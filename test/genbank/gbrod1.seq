@@ -1,0 +1,174 @@
+LOCUS       MUSAM                    366 bp    mRNA    linear   ROD 07-JAN-1997
+DEFINITION  Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody
+            heavy chain mRNA.
+ACCESSION   L48662
+VERSION     L48662.1  GI:1050271
+KEYWORDS    .
+SOURCE      house mouse.
+  ORGANISM  Mus musculus
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Rodentia; Sciurognathi; Muridae; Murinae; Mus.
+REFERENCE   1  (bases 1 to 366)
+  AUTHORS   Wloch,M.K., Alexander,A.L., Pippen,A.M., Pisetsky,D.S. and
+            Gilkeson,G.S.
+  TITLE     Differences in V kappa gene utilization and VH CDR3 sequence among
+            anti-DNA from C3H-lpr mice and lupus mice with nephritis
+  JOURNAL   Eur. J. Immunol. 26 (9), 2225-2233 (1996)
+  MEDLINE   96409289
+FEATURES             Location/Qualifiers
+     source          1..366
+                     /organism="Mus musculus"
+                     /strain="C3H/HeJ-lpr/lpr"
+                     /db_xref="taxon:10090"
+                     /cell_line="C3H/F2-11"
+                     /cell_type="hybridoma"
+                     /tissue_type="spleen"
+BASE COUNT      100 a     90 c     85 g     89 t      2 others
+ORIGIN
+       1  gagnnccagc tgcagcagtc tggacctgag ctggtaaagc ctggggcttc agtgaagatg
+      61  tcctgcaagg cttctggata cacattcact agctatgtta tgcactgggt gaatcagaag
+     121  cctgggcagg gccttgagtg gattggatat attaatcctt acaatgatgg tactaactac
+     181  aatgagaagt tcaaaggcaa ggccacactg acttcagaca aatcctccag cacagcctac
+     241  atggagttca gcagcctgac ctctgaggac tctgcggtct attactgtgc aagaaaaact
+     301  tcctactata gtaacctata ttactttgac tactggggcc aaggcaccac tctcacagtc
+     361  tcctca
+//
+LOCUS       RNOPS                   1493 bp    mRNA    linear   ROD 27-AUG-1996
+DEFINITION  R.norvegicus mRNA for rhodopsin.
+ACCESSION   Z46957
+VERSION     Z46957.1  GI:603874
+KEYWORDS    rhodopsin.
+SOURCE      Norway rat.
+  ORGANISM  Rattus norvegicus
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Rodentia; Sciurognathi; Muridae; Murinae;
+            Rattus.
+REFERENCE   1  (bases 1 to 1493)
+  AUTHORS   Huber,A., Sander,P. and Paulsen,R.
+  TITLE     Phosphorylation of the InaD gene product, a photoreceptor membrane
+            protein required for recovery of visual excitation
+  JOURNAL   J. Biol. Chem. 271 (20), 11710-11717 (1996)
+  MEDLINE   96216082
+REFERENCE   2  (bases 1 to 1493)
+  AUTHORS   Huber,A.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (20-DEC-1994) Huber A., Universitaet Karlsruhe, Zoologie
+            I, Kornblumenstr. 13, 76128 Karlsruhe, Germany
+FEATURES             Location/Qualifiers
+     source          1..1493
+                     /organism="Rattus norvegicus"
+                     /strain="Sprague-Dawley"
+                     /db_xref="taxon:10116"
+                     /clone="pRO4"
+                     /cell_type="rod"
+                     /tissue_type="retina"
+                     /clone_lib="rat retinal library"
+                     /dev_stage="adult"
+     5'UTR           1..83
+     CDS             84..1130
+                     /function="phototransduction"
+                     /citation=[1]
+                     /codon_start=1
+                     /product="rhodopsin"
+                     /protein_id="CAA87081.1"
+                     /db_xref="GI:603875"
+                     /db_xref="SWISS-PROT:P51489"
+                     /translation="MNGTEGPNFYVPFSNITGVVRSPFEQPQYYLAEPWQFSMLAAYM
+                     FLLIVLGFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVFGGFTTTLYTSLHGY
+                     FVFGPTGCNLEGFFATLGGEIGLWSLVVLAIERYVVVCKPMSNFRFGENHAIMGVAFT
+                     WVMALACAAPPLVGWSRYIPEGMQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIV
+                     IFFCYGQLVFTVKEAAAQQQESATTQKAEKEVTRMVIIMVIFFLICWLPYASVAMYIF
+                     THQGSNFGPIFMTLPAFFAKTASIYNPIIYIMMNKQFRNCMLTTLCCGKNPLGDDEAS
+                     ATASKTETSQVAPA"
+     3'UTR           1128..1493
+BASE COUNT      309 a    475 c    365 g    344 t
+ORIGIN
+       1  ggagccgtag gtagctgagc tcgccaggca gccttggtct ctgtctacga acagcccgtg
+      61  gggcagcctc aagggccgca gccatgaacg gcacagaggg ccccaatttt tatgtgccct
+     121  tctccaacat cacgggcgtg gtgcgcagcc cctttgagca gccgcagtac tacctggcgg
+     181  agccatggca gttctccatg ctggcagcct acatgttcct gctcatcgtg ctgggcttcc
+     241  ccatcaactt cctcacgctc tacgtcaccg tacagcacaa gaagctgcgc acaccactca
+     301  actacatcct gctcaacttg gctgtggctg acctcttcat ggtcttcgga ggattcacca
+     361  ccaccctcta cacctcactg catggctact ttgtctttgg gcccacaggc tgcaaccttg
+     421  agggcttctt tgccaccctt ggaggtgaaa tcggcctgtg gtccctggta gtcctggcca
+     481  ttgagcgcta cgtggtggtc tgcaagccca tgagcaactt ccgctttggg gagaatcatg
+     541  ccattatggg tgtggccttc acctgggtca tggcgttggc ctgtgctgct cccccactgg
+     601  ttggctggtc caggtacatc cccgagggca tgcagtgttc atgtgggatt gactactata
+     661  cactcaagcc tgaggtcaac aatgagtcct tcgtcatcta catgttcgtg gtccacttca
+     721  ccatccccat gatcgtcatc ttcttctgct acgggcagct ggtcttcacc gtcaaggagg
+     781  ccgccgccca gcaacaggag tcggctacca ctcagaaggc agagaaggaa gtcacgcgca
+     841  tggtcatcat catggtcatc ttcttcctga tctgctggct tccctatgcc agtgtggcca
+     901  tgtacatctt tacccaccag ggctccaact tcggccccat cttcatgacc cttcccgctt
+     961  tctttgctaa gaccgcctcc atctacaacc caatcatcta catcatgatg aacaagcagt
+    1021  tccggaactg catgctcacc acgctctgct gcggcaagaa tccactggga gatgatgagg
+    1081  cctctgccac tgcctccaag acggagacca gccaggtggc tccagcctaa gcctggccag
+    1141  agactgtggc tgactgtagg agtctcctgt ccccactcac cccagccaca gcccccacca
+    1201  ggagcagcac ccgttggaat gaggtcatgc aggctccctc agtgttcttt tctttgtttt
+    1261  taatgaattc atgaaagcaa aatgaggctc cccactcaac agggacagcc tgacaaagga
+    1321  catccatcca ccaagacccc cagcctggag tccccaattc ccgggggcca gcgggatctg
+    1381  tacccctccc ctcagcttgt gtctcaggaa catgacaagt gtcccggctt acggctaagt
+    1441  gtctaggaca gaatggaaca catagtagct gattaataaa tgctacctgg atg
+//
+LOCUS       RNU68037                1218 bp    mRNA    linear   ROD 10-SEP-1996
+DEFINITION  Rattus norvegicus EP1 prostanoid receptor mRNA, complete cds.
+ACCESSION   U68037
+VERSION     U68037.1  GI:1527212
+KEYWORDS    .
+SOURCE      Norway rat.
+  ORGANISM  Rattus norvegicus
+            Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+            Mammalia; Eutheria; Rodentia; Sciurognathi; Muridae; Murinae;
+            Rattus.
+REFERENCE   1  (bases 1 to 1218)
+  AUTHORS   Abramovitz,M. and Boie,Y.
+  TITLE     Cloning of the rat EP1 prostanoid receptor
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 1218)
+  AUTHORS   Abramovitz,M. and Boie,Y.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (26-AUG-1996) Biochemistry & Molecular Biology, Merck
+            Frosst Center for Therapeutic Research, P. O. Box 1005, Pointe
+            Claire - Dorval, Quebec H9R 4P8, Canada
+FEATURES             Location/Qualifiers
+     source          1..1218
+                     /organism="Rattus norvegicus"
+                     /strain="Sprague-Dawley"
+                     /db_xref="taxon:10116"
+     CDS             1..1218
+                     /note="family 1 G-protein coupled receptor"
+                     /codon_start=1
+                     /product="EP1 prostanoid receptor"
+                     /protein_id="AAB07735.1"
+                     /db_xref="GI:1527213"
+                     /translation="MSPYGLNLSLVDEATTCVTPRVPNTSVVLPTGGNGTSPALPIFS
+                     MTLGAVSNVLALALLAQVAGRLRRRRSTATFLLFVASLLAIDLAGHVIPGALVLRLYT
+                     AGRAPAGGACHFLGGCMVFFGLCPLLLGCGMAVERCVGVTQPLIHAARVSVARARLAL
+                     ALLAAMALAVALLPLVHVGHYELQYPGTWCFISLGPPGGWRQALLAGLFAGLGLAALL
+                     AALVCNTLSGLALLRARWRRRRSRRFRENAGPDDRRRWGSRGLRLASASSASSITSTT
+                     AALRSSRGGGSARRVHAHDVEMVGQLVGIMVVSCICWSPLLVLVVLAIGGWNSNSLQR
+                     PLFLAVRLASWNQILDPWVYILLRQAMLRQLLRLLPLRVSAKGGPTELSLTKSAWEAS
+                     SLRSSRHSGFSHL"
+BASE COUNT      162 a    397 c    387 g    272 t
+ORIGIN
+       1  atgagcccct acgggcttaa cctgagccta gtggatgagg caacaacgtg tgtaacaccc
+      61  agggtcccca atacatctgt ggtgctgcca acaggcggta acggcacatc accagcgctg
+     121  cctatcttct ccatgacgct gggtgctgtg tccaacgtgc tggcgctggc gctgctggcc
+     181  caggttgcag gcagactgcg gcgccgccgc tcgactgcca ccttcctgtt gttcgtcgcc
+     241  agcctgcttg ccatcgacct agcaggccat gtgatcccgg gcgccttggt gcttcgcctg
+     301  tatactgcag gacgtgcgcc cgctggcggg gcctgtcatt tcctgggcgg ctgtatggtc
+     361  ttctttggcc tgtgcccact tttgcttggc tgtggcatgg ccgtggagcg ctgcgtgggt
+     421  gtcacgcagc cgctgatcca cgcggcgcgc gtgtccgtag cccgcgcacg cctggcacta
+     481  gccctgctgg ccgccatggc tttggcagtg gcgctgctgc cactagtgca cgtgggtcac
+     541  tacgagctac agtaccctgg cacttggtgt ttcattagcc ttgggcctcc tggaggttgg
+     601  cgccaggcgt tgcttgcggg cctcttcgcc ggccttggcc tggctgcgct ccttgccgca
+     661  ctagtgtgta atacgctcag cggcctggcg ctccttcgtg cccgctggag gcggcgtcgc
+     721  tctcgacgtt tccgagagaa cgcaggtccc gatgatcgcc ggcgctgggg gtcccgtgga
+     781  ctccgcttgg cctccgcctc gtctgcgtca tccatcactt caaccacagc tgccctccgc
+     841  agctctcggg gaggcggctc cgcgcgcagg gttcacgcac acgacgtgga aatggtgggc
+     901  cagctcgtgg gcatcatggt ggtgtcgtgc atctgctgga gccccctgct ggtattggtg
+     961  gtgttggcca tcgggggctg gaactctaac tccctgcagc ggccgctctt tctggctgta
+    1021  cgcctcgcgt cgtggaacca gatcctggac ccatgggtgt acatcctgct gcgccaggct
+    1081  atgctgcgcc aacttcttcg cctcctaccc ctgagggtta gtgccaaggg tggtccaacg
+    1141  gagctgagcc taaccaagag tgcctgggag gccagttcac tgcgtagctc ccggcacagt
+    1201  ggcttcagcc acttgtga
+//

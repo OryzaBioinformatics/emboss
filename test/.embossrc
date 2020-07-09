@@ -2,43 +2,176 @@
 
 SET emboss_qadata /srsuser/rice/hgmp/emboss/test
 
-DB qangcg  [ type: N format: embl method: gcg
-  dir: $emboss_qadata/embl
-  indexdir: $emboss_qadata/qa/dbigcg-ex ]
+#######################################
+### Access method EMBLCD, flatfile data
+#######################################
 
-DB qanfasta  [ type: N format: fasta method: emblcd
-  dir: $emboss_qadata/data
-  indexdir: $emboss_qadata/qa/dbifasta-ex ]
-
-DB qapfasta  [ type: P format: fasta method: emblcd
-  dir: $emboss_qadata/data
-  indexdir: $emboss_qadata/qa/dbifasta-swiss ]
-
-DB qawfasta  [ type: N format: fasta method: emblcd
-  dir: $emboss_qadata/data
-  indexdir: $emboss_qadata/qa/dbifasta-worm ]
-
-DB qanblast [ type: N format: ncbi method: blast
-  dir: $emboss_qadata/data
-  indexdir: $emboss_qadata/qa/dbiblast-ex ]
-
-DB qapblast  [ type: P format: ncbi method: blast
-  dir: $emboss_qadata/data
-  indexdir: $emboss_qadata/qa/dbiblast-ex ]
+# Nucleotide data (1 file)
+# ===============
 
 DB qanflat  [ type: N format: embl method: emblcd
   dir: $emboss_qadata/embl
-  indexdir: $emboss_qadata/qa/dbiflat-ex ]
+  indexdir: $emboss_qadata/qa/dbiflat-ex-keep
+  comment: "EMBL flatfiles"
+]
+
+# Protein data (3 files)
+# ============
 
 DB qapflat  [ type: P format: swiss method: emblcd
   dir: $emboss_qadata/swnew
-  indexdir: $emboss_qadata/qa/dbiflat-swiss ]
+  indexdir: $emboss_qadata/qa/dbiflat-swiss-keep
+  comment: "Swissnew flatfiles"
+]
 
-DB qanmito [ type: N format: ncbi method: blast
+DB qapflatexc  [ type: P format: swiss method: emblcd
+  dir: $emboss_qadata/swnew
+  exclude: upd_seq.dat
+  indexdir: $emboss_qadata/qa/dbiflat-swiss-keep
+  comment: "Swissnew flatfiles, no updated sequence file"
+]
+
+DB qapflatinc  [ type: P format: swiss method: emblcd
+  dir: $emboss_qadata/swnew
+  file: upd_seq.dat
+  exclude: *.dat
+  indexdir: $emboss_qadata/qa/dbiflat-swiss-keep
+  comment: "Swissnew flatfiles, only updated sequence file"
+]
+
+DB qapflatall  [ type: P format: swiss method: emblcd
+  dir: $emboss_qadata/swnew
+  indexdir: $emboss_qadata/qa/dbiflat-swiss-allsys-keep
+  comment: "Swissnew flatfiles, all fields indexed"
+  fields: "sv des org key"
+]
+
+###########################################
+### Access method EMBLCD, FASTA format data
+###########################################
+
+DB qanfasta  [ type: N format: fasta method: emblcd
   dir: $emboss_qadata/data
-  indexdir: $emboss_qadata/qa/dbiblast-ex/mitont ]
+  indexdir: $emboss_qadata/qa/dbifasta-ex-keep
+  comment: "FASTA file EMBL rodents"
+]
 
-DB qapmito [ type: P format: ncbi method: blast
+DB qapfasta  [ type: P format: fasta method: emblcd
   dir: $emboss_qadata/data
-  indexdir: $emboss_qadata/qa/dbiblast-ex/mitoaa ]
+  indexdir: $emboss_qadata/qa/dbifasta-swiss-keep
+  comment: "FASTA file swissnew entries"
+]
 
+DB qawfasta  [ type: N format: fasta method: emblcd
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbifasta-worm-keep
+  comment: "FASTA file wormpep entries"
+]
+
+DB qanfastaall  [ type: N format: fasta method: emblcd
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbifasta-allsys-keep
+  comment: "FASTA file EMBL rodents, all fields indexed"
+  fields: "sv des"
+]
+
+#######################
+### Access method BLAST
+#######################
+
+DB qapblast  [ type: P format: ncbi method: blast
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbiblast-ex-keep
+  comment: "BLAST swissnew"
+]
+
+DB qapblastsplit  [ type: P format: ncbi method: blast
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbiblast-split-keep
+  comment: "BLAST swissnew split in 5 files"
+]
+
+DB qapblastsplitexc  [ type: P format: ncbi method: blast
+  dir: $emboss_qadata/data
+  exclude: swsplit.02.*
+  indexdir: $emboss_qadata/qa/dbiblast-split-keep
+  comment: "BLAST swissnew split in 5 files, not file 02"
+]
+
+DB qapblastsplitinc  [ type: P format: ncbi method: blast
+  dir: $emboss_qadata/data
+  file: swsplit.02.*
+  exclude: *
+  indexdir: $emboss_qadata/qa/dbiblast-split-keep
+  comment: "BLAST swissnew split in 5 files, only file 02"
+]
+
+DB qapblastall  [ type: P format: ncbi method: blast
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbiblast-allsys-keep
+  comment: "BLAST swissnew, all fields indexed"
+  fields: "sv des"
+]
+
+#####################
+### access method GCG
+#####################
+
+DB qangcg  [ type: N format: embl method: gcg
+  dir: $emboss_qadata/embl
+  indexdir: $emboss_qadata/qa/dbigcg-ex-keep
+  comment: "GCG format EMBL"
+]
+
+DB qangcgexc  [ type: N format: embl method: gcg
+  dir: $emboss_qadata/embl
+  exclude: eem_ba1.*
+  indexdir: $emboss_qadata/qa/dbigcg-ex-keep
+  comment: "GCG format EMBL without prokaryotes"
+]
+
+DB qangcginc  [ type: N format: embl method: gcg
+  dir: $emboss_qadata/embl
+  file: eem_ba1.*
+  exclude: *
+  indexdir: $emboss_qadata/qa/dbigcg-ex-keep
+  comment: "GCG format EMBL only prokaryotes"
+]
+
+DB qangcgall  [ type: N format: embl method: gcg
+  dir: $emboss_qadata/embl
+  indexdir: $emboss_qadata/qa/dbigcg-allsys-keep
+  comment: "GCG format EMBL"
+  fields: "sv des org key"
+]
+
+#####################
+### access method SRS
+#####################
+
+DB qasrs [ type: N format: embl method: srs
+  dbalias: embl
+  fields: "sv des org"     # key omitted to test error messages
+  comment: "EMBL in local srs installation"
+]
+
+##########################
+### access method SRSFASTA
+##########################
+
+DB qasrsfasta [ type: N format: fasta method: srsfasta
+  dbalias: embl
+  fields: "sv des org key"
+  comment: "EMBL in local srs installation, fasta format"
+]
+
+########################
+### access method SRSWWW
+########################
+
+DB qasrswww [ type: N format: embl method: srswww
+  dbalias: embl
+  fields: "sv des org key"
+  url: http://srs.ebi.ac.uk/srs6bin/cgi-bin/wgetz
+  comment: "Remote SRS web server"
+]

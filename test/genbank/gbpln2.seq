@@ -1,0 +1,104 @@
+LOCUS       GMGL01                  3400 bp    DNA     linear   PLN 01-OCT-1996
+DEFINITION  Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+ACCESSION   V00451 L00005 L00006
+VERSION     V00451.1  GI:18592
+KEYWORDS    leghemoglobin; pseudogene.
+SOURCE      soybean.
+  ORGANISM  Glycine max
+            Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+            Spermatophyta; Magnoliophyta; eudicotyledons; core eudicots;
+            Rosidae; eurosids I; Fabales; Fabaceae; Papilionoideae; Phaseoleae;
+            Glycine.
+REFERENCE   1  (bases 1 to 3400)
+  AUTHORS   Wiborg,O., Hyldig-Nielsen,J.J., Jensen,E.O., Paludan,K. and
+            Marcker,K.A.
+  TITLE     the structure of an unusual leghemoglobin gene from soybean
+  JOURNAL   EMBO J. 2, 449-452 (1983)
+COMMENT     On Jan 11, 2002 this sequence version replaced gi:170001 gi:170002.
+FEATURES             Location/Qualifiers
+     source          1..3400
+                     /organism="Glycine max"
+                     /db_xref="taxon:3847"
+     CDS             join(363..460,555..663,2182..2286,3065..3208)
+                     /codon_start=1
+                     /product="leghemoglobin"
+                     /protein_id="CAA23729.1"
+                     /db_xref="GI:313502"
+                     /db_xref="SPTREMBL:Q42801"
+                     /translation="MGAFTEKQEALVNSSFEAFKANLPHHSVVFFNSILEKAPAAKNM
+                     FSFLGDAVDPKNPKLAGHAEKLFGLVRDSAVQLQTKGLVVADATLGPIHTQKGVTDLQ
+                     FAVVKEALLKTIKEAVGDKWSEELSNPWEVAYDEIAAAIKKAMAIGSLV"
+     exon            <363..460
+                     /number=1
+     intron          461..554
+                     /number=1
+     exon            555..663
+                     /number=2
+     intron          664..2181
+                     /number=2
+     exon            2182..2286
+                     /number=3
+     intron          2287..3064
+                     /number=3
+     exon            3065..>3208
+                     /number=4
+BASE COUNT      931 a    310 c    334 g    975 t    850 others
+ORIGIN
+       1  ttttactcaa atcaatgata tatattttgg taactttttt tcttttactt ataattttgt
+      61  ttacgttaaa agtcaaaaaa gaatacatta aaaaattaaa aattcaccga acaacttaaa
+     121  ttatttattt actttgacta agtgaaaaat tacttgatta agtttttgaa aaggtcgttg
+     181  tgtcttcata atgccgattg atacgctcca cattcaataa gccaagagag acatattcaa
+     241  taacaatcgc aacaaatttt ttttcagtct ccaaaccatc tatataaaca agtattggat
+     301  gtgaacttat aactggattg aaaatagaaa ttaaataaca gaaaattaca aaagatcgaa
+     361  atatgggtgc ttttacagag aagcaagagg ctttggtgaa tagctcgttt gaagcattca
+     421  aggcaaacct tcctcaccac agcgttgtat tcttcaattc gtaatttttc tctctcaccc
+     481  tatgtttccc ttgagttgaa aagaggtagt gtacataata gtgtctttgg tttgattaaa
+     541  aaacaaaata ataggatatt ggagaaagca ccagcagcaa agaacatgtt ctcattttta
+     601  ggtgatgcag tagatccgaa aaatcctaag ctcgcgggcc atgctgaaaa gctttttgga
+     661  ttggtaagtg ttagtcaact aaaattatag ttattttatg tgattttagg gatgtatact
+     721  ggattagatt ttaaaagatt attttagtgt ttgtatattt taaaaattat ataagaatat
+     781  tatgatttat taaatttttt tataagaatt ttatgatagt ttaaatttta atgtatttat
+     841  atcataaaat ttnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn
+     901  nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn
+     961  nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn
+    1021  nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn
+    1081  nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn
+    1141  nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn
+    1201  nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn
+    1261  nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn
+    1321  nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn
+    1381  nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn
+    1441  nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn
+    1501  nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn
+    1561  nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn
+    1621  nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn
+    1681  nnnnnnnnnn nnnnnnnnnn nntagaaagg gtttgataga catttaatac taaaaagtca
+    1741  tataaaatcc atcaaattta tcttaaaaag tagtctatcg aaatttgtat attttttaaa
+    1801  tgtttcaaaa ctttttttta aagttataaa aaacttaatt gaataccacc aaattttgtt
+    1861  gaattcatta aaaaaaattt aaaaatatta attgaatatt ataagactta tttatagcat
+    1921  ttaaaaattc tcattaaata ccagaaaaaa aaatttataa ttttttttta aaatgttaat
+    1981  ccagtatact ccgctcttaa aattaaacat gcacttatat aatactctta aaatatcaat
+    2041  gaacatttgt taaattgtat tttatatctt taacatatct cgtactaggg attaataatg
+    2101  tataaaatta tattagtatt tcttgattag ttttctttaa tgatcatctt atcatatatt
+    2161  atgatatttt tcaaattgta ggtgcgtgac tcagctgttc aacttcaaac aaagggatta
+    2221  gtggtggctg atgccacact tggtcctatc cacacccaaa aaggagttac cgatcttcaa
+    2281  tttgcggtat gataaataaa ttgttataat aaatgcatac ttaaatctaa catggtgtat
+    2341  tctgtaatga tcatcacttc ttttgtttag taatgaattt actaaacata taacatttaa
+    2401  tgtcctcaat attatattat tgtaattttc aatgattttt ttaattaata attctttgag
+    2461  caatgtttaa agaaattgat ttaacactgc aataactagc ttcctctttc tcaattttta
+    2521  tataaattat cacatatact atggaaataa aataagctaa actatgtgat tatttatttt
+    2581  tggattaggt tattaatagc attttataat ctattggcta ttgcaacgtt gattgattac
+    2641  tcaaaaaaaa aaaactttga ttgattatta attatcattt ctttttgcat tgattctcgc
+    2701  ctgtcgacat ttttctttga agttaagatt caattcaaat attttcattt atttattcat
+    2761  atttattaaa gtcaacttaa ttttgtttat aaatactatt attttttttc tatttattgt
+    2821  attagtatga agtaggtctc gtaaaaaaca gacaaattat ttcatagtca accagtattt
+    2881  tatttaattt taaattattt aattaaaaaa cacaaaacct tattacttgt atcaacagtt
+    2941  gctgatttat aaacattact actacaactt cttgggatat taatagcatt actgcgaaac
+    3001  tttaatatga aaatttaatt ataaggaaaa atgtaagagc taaaacatca ttattgattc
+    3061  gtaggtggtt aaagaagcac tgcttaaaac aataaaggaa gcagttgggg acaaatggag
+    3121  cgaagaattg agcaatcctt gggaagtagc ctacgatgaa attgcagccg caattaagaa
+    3181  ggcaatggct ataggatcat tagtataaag tctagtagta ataaataaat tttgtttcac
+    3241  taaaatttgt tattaacttc ttgatataaa tgtcggttac attaggtaaa atacagtact
+    3301  tgtctttgaa taaacaatat taaattattt gcctcagggt ttatgtttat gaatcacaat
+    3361  cgatacttta tacatgtttt aaaattattt taataagctt
+//

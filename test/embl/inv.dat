@@ -2,49 +2,42 @@ ID   CEZK637    standard; DNA; INV; 40699 BP.
 XX
 AC   Z11115;
 XX
-NI   g6953
+SV   Z11115.1
 XX
 DT   04-MAY-1991 (Rel. 28, Created)
-DT   31-JUL-1998 (Rel. 56, Last updated, Version 43)
+DT   24-JAN-2002 (Rel. 70, Last updated, Version 55)
 XX
 DE   Caenorhabditis elegans cosmid ZK637
 XX
 KW   HTG.
 XX
 OS   Caenorhabditis elegans
-OC   Eukaryota; Metazoa; Nematoda; Secernentea; Rhabditia; Rhabditida;
-OC   Rhabditina; Rhabditoidea; Rhabditidae; Peloderinae; Caenorhabditis.
+OC   Eukaryota; Metazoa; Nematoda; Chromadorea; Rhabditida; Rhabditoidea;
+OC   Rhabditidae; Peloderinae; Caenorhabditis.
 XX
 RN   [1]
 RP   1-40699
 RA   Craxton M.;
 RT   ;
-RL   Submitted (03-MAY-1991) to the EMBL/GenBank/DDBJ databases.
-RL   Louis, MO 63110, USA. E-mail: jes@sanger.ac.uk or rw@nematode.wustl.edu
+RL   Submitted (04-MAY-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Nematode Sequencing Project, Sanger Institute, Hinxton, Cambridge CB10 1SA,
+RL   England and Department of Genetics, Washington University, St. Louis, MO
+RL   63110, USA. E-mail: jes@sanger.ac.uk or rw@nematode.wustl.edu
 XX
 RN   [2]
-RA   Wilson R., Ainscough R., Anderson K., Baynes C., Berks M., Bonfield J.,
-RA   Burton J., Connell M., Copsey T., Cooper J., Coulson A., Craxton M.,
-RA   Dear S., Du Z., Durbin R., Favello A., Fulton L., Gardner A., Green P.,
-RA   Hawkins T., Hillier L., Jier M., Johnston L., Jones M., Kershaw J.,
-RA   Kirsten J., Laister N., Latreille P., Lightning J., Lloyd C.,
-RA   McMurray A., Mortimore B., O'Callaghan M., Parsons J., Percy C.,
-RA   Rifken L., Roopra A., Saunders D., Shownkeen R., Smaldon N., Smith A.,
-RA   Sonnhammer E., Staden R., Sulston J., Thierry-Mieg J., Thomas K.,
-RA   Vaudin M., Vaughan K., Waterston R., Watson A., Weinstock L.,
-RA   Wilkinson-Sproat J., Wohldman P.;
-RT   "2.2 Mb of contiguous nucleotide sequence from chromosome III of C.
-RT   elegans";
-RL   Nature 368:32-38(1994).
+RC   The C.elegans Sequencing Consortium.;
+RA   none;
+RT   "Genome sequence of the nematode C.elegans: A platform for investigating
+RT   biology";
+RL   Science 282:2012-2018(1998).
 XX
-DR   SPTREMBL; Q23555; Q23555.
 DR   SPTREMBL; Q23556; Q23556.
 DR   SWISS-PROT; P30627; GLBH_CAEEL.
 DR   SWISS-PROT; P30628; VPP1_CAEEL.
 DR   SWISS-PROT; P30629; YOU2_CAEEL.
 DR   SWISS-PROT; P30630; LIN9_CAEEL.
 DR   SWISS-PROT; P30631; YOUD_CAEEL.
-DR   SWISS-PROT; P30632; YOU5_CAEEL.
+DR   SWISS-PROT; P30632; ARSA_CAEEL.
 DR   SWISS-PROT; P30634; YOUA_CAEEL.
 DR   SWISS-PROT; P30635; GSHR_CAEEL.
 DR   SWISS-PROT; P30636; YOU9_CAEEL.
@@ -53,71 +46,179 @@ DR   SWISS-PROT; P30638; YOU1_CAEEL.
 DR   SWISS-PROT; P30639; YOU3_CAEEL.
 DR   SWISS-PROT; P34658; YOUB_CAEEL.
 XX
+CC   Coding sequences below are predicted from computer analysis, using
+CC   predictions from Genefinder (P. Green, U. Washington), and other
+CC   available information.
+XX
 CC   Current sequence finishing criteria for the C. elegans genome
 CC   sequencing consortium are that all bases are either sequenced
-CC   unambiguously on both strands, or on a single strand with both
-CC   a dye primer and dye terminator reaction, from distinct
-CC   subclones.  Exceptions are indicated by an explicit note.
+CC   unambiguously on both strands, or on a single strand with both a
+CC   dye primer and dye terminator reaction, from distinct subclones.
+CC   Exceptions are indicated by an explicit note.
 XX
-CC   IMPORTANT:  This sequence is NOT necessarily the entire insert
-CC   of clone ZK637.  It may be shorter because we only sequence
+CC   IMPORTANT: This sequence is not the entire insert of clone ZK637.
+CC   It may be shorter because we only sequence overlapping
+CC   sections once, or longer because we arrange for a small
+CC   overlap between neighbouring submissions.
+CC   The start of this sequence (1..180) overlaps with the end of
+CC   sequence Z22175.
+CC   The end of this sequence (40696..40699) overlaps with the start of
+CC   sequence Z11126.
+XX
+CC   For a graphical representation of this sequence and its analysis
+CC   see:- http://wormbase.sanger.ac.uk/perl/ace/elegans/seq/sequence?
+CC   name=ZK637
+XX
+CC   IMPORTANT:  This sequence is NOT necessarily the entire insert of
+CC   the specified clone.  It may be shorter because we only sequence
 CC   overlapping sections once, or longer because we arrange for a
 CC   small overlap between neighbouring submissions.
-CC   Coding sequences below are predicted from computer analysis,
-CC   using the program Genefinder (P. Green, ms in preparation),
-CC   and other available information.
-CC   The start of this sequence (1..180) overlaps with the end of
-CC   sequence CEK01F9.
-CC   The end of this sequence (40696..40699) overlaps with the start of
-CC   sequence CEZK643.
 XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..40699
-FT                   /organism="Caenorhabditis elegans"
 FT                   /chromosome="III"
+FT                   /db_xref="taxon:6239"
+FT                   /organism="Caenorhabditis elegans"
 FT                   /clone="ZK637"
-FT   CDS             join(complement(5021..5078),complement(4825..4974),
-FT                   complement(4451..4728))
-FT                   /db_xref="PID:g1067096"
-FT                   /db_xref="SWISS-PROT:P30631"
-FT                   /note="protein predicted using Genefinder"
-FT                   /note="similar to HSV11 IE110"
-FT                   /product="ZK637.14"
-FT                   /translation="MSERDAIRAFSHMLETIFVRMRAEGTGSQTDAMQRWLDLYNVGSL
-FT                   PIDKKSYKALRLMDRETTDQQKEDATCAICLDNLQNNVDIPEDHVIKEELKIDPTTFGT
-FT                   TVIVMPCKHRFHYFCLTLWLEAQQTCPTCRQKVKTDKEVEEEERQRNLEELHDSMYG"
-FT   CDS             complement(15286..15486)
-FT                   /db_xref="PID:e80845"
-FT                   /note="ArsA homologous, pseudogene?"
-FT                   /pseudo
-FT                   /product="ZK637.6"
-FT                   /translation="GVGKTTGSCSLATQLSKVRESVLIVSTDTAHKISDAFSQEFTKFP
-FT                   TLVEGFKNLFVMEIDSKPDGED"
+FT   CDS             join(29817..30077,30126..30262,30309..30393,30743..31279,
+FT                   31330..31672,32242..32390)
+FT                   /db_xref="SWISS-PROT:P30635"
+FT                   /note="predicted using Genefinder"
+FT                   /note="similar to glutathione reductase, contains
+FT                   similarity to Pfam domain: PF00070 (Pyridine
+FT                   nucleotide-disulphide oxidoreductase), Score=295.7,
+FT                   E-value=4.6e-87, N=1"
+FT                   /note="cDNA EST yk156d3.5 comes from this gene"
+FT                   /note="cDNA EST yk156d3.3 comes from this gene"
+FT                   /gene="ZK637.10"
+FT                   /protein_id="CAA77459.1"
+FT                   /translation="MLLSTFKRHLPIRRLFSSNKFDLIVIGAGSGGLSCSKRAADLGAN
+FT                   VALIDAVEPTPHGHSWGIGGTCANVGCIPKKLMHQAAIVGKELKHADKYGWNGIDQEKI
+FT                   KHDWNVLSKNVNDRVKANNWIYRVQLNQKKINYFNAYAEFVDKDKIVITGTDKNKTKNF
+FT                   LSAPNVVISTGLRPKYPNIPGAELGITSDDLFTLASVPGKTLIVGGGYVALECAGFLSA
+FT                   FNQNVEVLVRSIPLKGFDRDCVHFVMEHLKTTGVKVKEHVEVERVEAVGSKKKVTFTGN
+FT                   GGVEEYDTVIWAAGRVPNLKSLNLDNAGVRTDKRSGKILADEFDRASCNGVYAVGDIVQ
+FT                   DRQELTPLAIQSGKLLADRLFSNSKQIVRFDGVATTVFTPLELSTVGLTEEEAIQKHGE
+FT                   DSIEVFHSHFTPFEYVVPQNKDSGFCYVKAVCTRDESQKILGLHFVGPNAAEVIQGYAV
+FT                   AFRVGISMSDLQNTIAIHPCSSEEFVKLHITKRSGQDPRTQGCCG"
+FT   CDS             join(complement(20104..20160),complement(19876..19994),
+FT                   complement(19694..19826),complement(19051..19647),
+FT                   complement(18848..19006),complement(17962..18372),
+FT                   complement(17779..17883),complement(17583..17732),
+FT                   complement(16630..16827))
+FT                   /db_xref="SWISS-PROT:P30630"
+FT                   /note="predicted using Genefinder"
+FT                   /note="cDNA EST yk34b2.3 comes from this gene"
+FT                   /note="cDNA EST yk24e1.3 comes from this gene"
+FT                   /note="cDNA EST yk12h1.3 comes from this gene"
+FT                   /note="cDNA EST yk24e1.5 comes from this gene"
+FT                   /note="cDNA EST yk12h1.5 comes from this gene"
+FT                   /note="cDNA EST yk34b2.5 comes from this gene"
+FT                   /note="cDNA EST yk353h6.3 comes from this gene"
+FT                   /note="cDNA EST yk353h6.5 comes from this gene"
+FT                   /note="cDNA EST yk270e5.3 comes from this gene"
+FT                   /note="cDNA EST yk270e5.5 comes from this gene"
+FT                   /note="cDNA EST yk224d7.3 comes from this gene"
+FT                   /note="cDNA EST yk224d7.5 comes from this gene"
+FT                   /note="cDNA EST yk212f5.3 comes from this gene"
+FT                   /note="cDNA EST yk212f5.5 comes from this gene"
+FT                   /note="cDNA EST yk220e8.3 comes from this gene"
+FT                   /note="cDNA EST yk220e8.5 comes from this gene"
+FT                   /note="cDNA EST yk207e10.5 comes from this gene"
+FT                   /note="cDNA EST yk296g5.5 comes from this gene"
+FT                   /note="cDNA EST yk350b7.5 comes from this gene"
+FT                   /note="cDNA EST yk430g11.5 comes from this gene"
+FT                   /note="cDNA EST yk561d3.3 comes from this gene"
+FT                   /note="cDNA EST EMBL:AF269694 comes from this gene"
+FT                   /gene="ZK637.7a"
+FT                   /protein_id="CAA77454.2"
+FT                   /translation="MSSAVRSPRKKAASDTSDPDRTSSPYSLRETSKVPSRYRNEELYL
+FT                   SPSRSIKRTGSPKKSPAKRLNGGRDSPSVNSLTRNSSLTMLAKAALDYESSSCALEYIP
+FT                   KEERRPPRRALALSPPPAPSNDLLAKDLEMIEMHQNLVAGLDDLDNPANMTNEAVEHRD
+FT                   TQSFFNMFSTDQERSAMMKQFKTYKNQTSEDVSTFMRANIKKLYNLLRYKKARQWVMCE
+FT                   FFYSAIDEQIFKEENEFATIIRESFPNLKNWNLTRIEWRSIRKLLGKPRRCSKVFFEEE
+FT                   RMYLEEKRMKIRSVYEGSYLNDPSIDLKDLPAKLPRPMVVGNRVFARIRNPYDGIYSGI
+FT                   IDAVIPKGFRIIFDKPDIPPTLVSDTEILLDGKLDLLSIAYFIEQANSKLPSGVRPFVA
+FT                   AVRDSSHPHLVRDVLVSRKIERSGGPLMGPNDERLNGKNAEMVGNFPLKFLVNLVKLTK
+FT                   LIDIKKGLIRQLNELNADAEIQNMTSDKYSKAFQEKYAKTIIDLEHVNQNIDINMNGIQ
+FT                   DHHMYFSSNDISTSNMKPEAVRQMCSQQAGRFVEHCNQGLNVENVHALTLIQSLTAVLL
+FT                   QVRTMGTQKISAVDLQSLGDAISEIRTAIHPRNVAFFQDYVEVHMKQFHTIMLESGALA
+FT                   GTVSNRK"
+FT   CDS             join(36246..36305,36470..36667,36886..36987,37038..37196)
+FT                   /db_xref="SPTREMBL:Q23556"
+FT                   /note="predicted using Genefinder"
+FT                   /gene="ZK637.15"
+FT                   /protein_id="CAA77457.1"
+FT                   /translation="MDNEKLIREARRMEDVQQLKMQIPKPVDKKPRPPPSENNLKLISC
+FT                   EETCMDETLKNSSKPRMIYNKQLGRAESIDFDVPSLSYESSTFKKSNNSSGGALVLDNH
+FT                   YLINNDDGTVKKLPMKVYVKQRLEDGSLDVQLVFFDENSQKVMDISMLVNGKKIRNVQF
+FT                   CGKDGKLVN"
+FT   CDS             join(complement(39128..39321),complement(38544..38829))
+FT                   /db_xref="SWISS-PROT:P30627"
+FT                   /note="predicted using Genefinder"
+FT                   /note="similar to globins, contains similarity to Pfam
+FT                   domain: PF00042 (Globin), Score=124.2, E-value=7.8e-35,
+FT                   N=1"
+FT                   /note="cDNA EST yk66b9.3 comes from this gene"
+FT                   /note="cDNA EST yk138h12.5 comes from this gene"
+FT                   /note="cDNA EST yk476d2.3 comes from this gene"
+FT                   /gene="ZK637.13"
+FT                   /protein_id="CAA77458.1"
+FT                   /translation="MSMNRQEISDLCVKSLEGRMVGTEAQNIENGNAFFRYFFTNFPDL
+FT                   RVYFKGAEKYTADDVKKSERFDKQGQRILLACHLLANVYTNEEVFKGYVRETINRHRIY
+FT                   KMDPALWMAFFTVFTGYLESVGCLNDQQKAAWMALGKEFNAESQTHLKNSNLPHV"
+FT   CDS             join(11124..11557,11606..11864,12073..12282,12411..12536)
+FT                   /db_xref="SWISS-PROT:P30632"
+FT                   /note="predicted using Genefinder"
+FT                   /note="ArsA homologue"
+FT                   /note="cDNA EST yk62f10.5 comes from this gene"
+FT                   /note="cDNA EST yk62f10.3 comes from this gene"
+FT                   /note="cDNA EST yk140f3.3 comes from this gene"
+FT                   /note="cDNA EST yk176c11.3 comes from this gene"
+FT                   /note="cDNA EST yk140f3.5 comes from this gene"
+FT                   /note="cDNA EST yk176c11.5 comes from this gene"
+FT                   /note="cDNA EST yk221f9.3 comes from this gene"
+FT                   /note="cDNA EST yk221f9.5 comes from this gene"
+FT                   /note="cDNA EST yk267c10.5 comes from this gene"
+FT                   /note="cDNA EST yk507e12.3 comes from this gene"
+FT                   /note="cDNA EST yk191h10.5 comes from this gene"
+FT                   /note="cDNA EST yk507e12.5 comes from this gene"
+FT                   /gene="ZK637.5"
+FT                   /protein_id="CAA77452.1"
+FT                   /translation="MSDQLEASIKNILEQKTLKWIFVGGKGGVGKTTCSCSLAAQLSKV
+FT                   RERVLLISTDPAHNISDAFSQKFTKTPTLVEGFKNLFAMEIDSNPNGEGVEMGNIEEML
+FT                   QNAAQNEGGSGGFSMGKDFLQSFAGGLPGIDEAMSFGEMIKLIDSLDFDVVVFDTAPTG
+FT                   HTLRLLQFPTLLEKVFTKILSLQGMFGPMMNQFGGMFGMGGGSMNEMIEKMTTTLESVK
+FT                   KMNAQFKDPNCTTFVCVCIAEFLSLYETERLIQELSKQGIDTHNIIVNQLLFPDTDANG
+FT                   TVSCRKCASRQAIQSKYLTDIDELYEDFHVVKLPLLEAEVRGGPAILQFSERMVDPEAN
+FT                   KN"
 FT   CDS             join(21664..21816,21898..22074,22182..22310,22560..22844,
 FT                   23347..23468,23629..23838,23893..25147,25269..25391,
 FT                   26117..26257,26370..26589,26754..26925,27145..27250)
-FT                   /db_xref="PID:g1067097"
 FT                   /db_xref="SWISS-PROT:P30628"
-FT                   /note="protein predicted using Genefinder"
+FT                   /note="predicted using Genefinder"
 FT                   /note="TJ6/proton pump homologue, exon 4 is alternatively
-FT                   spliced"
-FT                   /note="cDNA EST cm08g12 comes from this gene"
-FT                   /note="cDNA EST yk11a12.3 comes from this gene"
+FT                   spliced, contains similarity to Pfam domain: PF01496
+FT                   (V-type ATPase 116kDa subunit family), Score=1668.9,
+FT                   E-value=0, N=1"
+FT                   /note="cDNA EST EMBL:M89454 comes from this gene"
+FT                   /note="cDNA EST yk42b11.3 comes from this gene"
 FT                   /note="cDNA EST yk11a12.5 comes from this gene"
-FT                   /note="cDNA EST yk15a11.3 comes from this gene"
-FT                   /note="cDNA EST yk15a11.5 comes from this gene"
-FT                   /note="cDNA EST yk20d9.5 comes from this gene"
 FT                   /note="cDNA EST yk39g5.3 comes from this gene"
 FT                   /note="cDNA EST yk39g5.5 comes from this gene"
-FT                   /note="cDNA EST yk42b11.3 comes from this gene"
-FT                   /note="cDNA EST yk5d7.3 comes from this gene"
+FT                   /note="cDNA EST yk11a12.3 comes from this gene"
+FT                   /note="cDNA EST yk15a11.5 comes from this gene"
+FT                   /note="cDNA EST yk20d9.5 comes from this gene"
+FT                   /note="cDNA EST yk15a11.3 comes from this gene"
 FT                   /note="cDNA EST yk5d7.5 comes from this gene"
-FT                   /note="cDNA EST yk119c7.3 comes from this gene"
+FT                   /note="cDNA EST yk5d7.3 comes from this gene"
 FT                   /note="cDNA EST yk119c7.5 comes from this gene"
+FT                   /note="cDNA EST yk119c7.3 comes from this gene"
 FT                   /note="cDNA EST yk244c11.3 comes from this gene"
 FT                   /note="cDNA EST yk244c11.5 comes from this gene"
-FT                   /product="ZK637.8a"
+FT                   /gene="ZK637.8a"
+FT                   /protein_id="CAA77448.1"
 FT                   /translation="MGDYVTPGEEPPQPGIYRSEQMCLAQLYLQSDASYQCVAELGELG
 FT                   LVQFRDLNPDVSSFQRKYVNEVRRCDEMERKLRYLEREIKKDQIPMLDTGENPDAPLPR
 FT                   EMIDLEATFEKLENELREVNKNEETLKKNFSELTELKHILRKTQTFFEEVDHDRWRILE
@@ -136,20 +237,47 @@ FT                   GGHRQLATIEIILVVLALVQVPIMLFAKPYFLYRRDKQQSRYSTLTAESNQHQSVRADI
 FT                   NQDDAEVVHAPEQTPKPSGHGHGHGDGPLEMGDVMVYQAIHTIEFVLGCVSHTASYLRL
 FT                   WALSLAHAQLSDVLWTMVFRNAFVLDGYTGAIATYILFFIFGSLSVFILVLMEGLSAFL
 FT                   HALRLHWVEFQSKFYGGLGYEFAPFSFEKILAEEREAEENL"
+FT   CDS             join(complement(5021..5078),complement(4825..4974),
+FT                   complement(4451..4728))
+FT                   /db_xref="SWISS-PROT:P30631"
+FT                   /note="predicted using Genefinder"
+FT                   /note="similar to HSV11 IE110, contains similarity to Pfam
+FT                   domain: PF00097 (Zinc finger, C3HC4 type (RING finger)),
+FT                   Score=19.8, E-value=2.8e-05, N=2"
+FT                   /note="cDNA EST yk598g4.3 comes from this gene"
+FT                   /note="cDNA EST yk598g4.5 comes from this gene"
+FT                   /gene="ZK637.14"
+FT                   /protein_id="CAA77447.1"
+FT                   /translation="MSERDAIRAFSHMLETIFVRMRAEGTGSQTDAMQRWLDLYNVGSL
+FT                   PIDKKSYKALRLMDRETTDQQKEDATCAICLDNLQNNVDIPEDHVIKEELKIDPTTFGT
+FT                   TVIVMPCKHRFHYFCLTLWLEAQQTCPTCRQKVKTDKEVEEEERQRNLEELHDSMYG"
 FT   CDS             join(3794..3918,4033..4240)
-FT                   /db_xref="PID:g6955"
 FT                   /db_xref="SWISS-PROT:P30629"
-FT                   /note="protein predicted using Genefinder"
-FT                   /product="ZK637.2"
+FT                   /note="predicted using Genefinder"
+FT                   /note="cDNA EST yk217b5.3 comes from this gene"
+FT                   /note="cDNA EST yk217b5.5 comes from this gene"
+FT                   /note="cDNA EST yk340g12.3 comes from this gene"
+FT                   /note="cDNA EST yk340g12.5 comes from this gene"
+FT                   /note="cDNA EST yk428c5.5 comes from this gene"
+FT                   /note="cDNA EST yk428c5.3 comes from this gene"
+FT                   /gene="ZK637.2"
+FT                   /protein_id="CAA77449.1"
 FT                   /translation="MSNSTMEATQMKVKLAVDEMIDDLDKTYLRDMQKSMFQCSARCCD
 FT                   NKKTTRDAVENCVESCNDGMKKAQGYLEKELGGLQDQLSRCAMTCYDKLVQQFGPDVNK
 FT                   YSESQV"
 FT   CDS             join(6271..6465,6523..6642,7346..7658,7714..7775,
 FT                   7824..8153,8767..9252,9311..9472,9779..9910)
-FT                   /db_xref="PID:g6957"
 FT                   /db_xref="SWISS-PROT:P30639"
-FT                   /note="protein predicted using Genefinder"
-FT                   /product="ZK637.3"
+FT                   /note="predicted using Genefinder"
+FT                   /note="cDNA EST yk281d4.5 comes from this gene"
+FT                   /note="cDNA EST yk288c12.5 comes from this gene"
+FT                   /note="cDNA EST yk406g11.5 comes from this gene"
+FT                   /note="cDNA EST yk281d4.3 comes from this gene"
+FT                   /note="cDNA EST yk288c12.3 comes from this gene"
+FT                   /note="cDNA EST yk406g11.3 comes from this gene"
+FT                   /note="cDNA EST yk435b9.3 comes from this gene"
+FT                   /gene="ZK637.3"
+FT                   /protein_id="CAA77450.1"
 FT                   /translation="MKKILPIIWLINLVSGSLSLEKKAPDLLGKVCAFGDFNADRNTDI
 FT                   LVFANGTLTINYQETKLLDVLEASKFTPGTSFAISKPSLNADFVECSVGDFNGDSRLDV
 FT                   LVSIRDKDTEIYNHTLWTSEIEDEKEIFRPFHVAMLQQHAMAIDVSDDGWTDVLGFYPN
@@ -162,39 +290,28 @@ FT                   FSMTDGWGGSTQSVACQVPASSNRALYLPFLLYGLGRSPNFVDELNIAIPKYADRKEDW
 FT                   KHSLKQIVPNSRIIVLPPSDQYPHWTSRLYVTPSALIVQSLAVIALVCCMLLMVVVFLH
 FT                   YREKKEDRYERQQQSHRFHFDAM"
 FT   CDS             join(10248..10316,10369..10436,10486..10539,10595..10691)
-FT                   /db_xref="PID:g6958"
 FT                   /db_xref="SWISS-PROT:P30637"
-FT                   /note="protein predicted using Genefinder"
-FT                   /product="ZK637.4"
+FT                   /note="predicted using Genefinder"
+FT                   /gene="ZK637.4"
+FT                   /protein_id="CAA77451.1"
 FT                   /translation="MKSNPKYFLMNDVERQSKYSPKYVPNNSLKERILEFLDYYIAPLK
 FT                   LYLLSYPMPDCLWDNRKLRLKASGVQVTPSSEPVHIDDRLIHISQKQPSE"
-FT   CDS             join(11124..11557,11606..11864,12073..12282,12411..12536)
-FT                   /db_xref="PID:g6959"
-FT                   /db_xref="SWISS-PROT:P30632"
-FT                   /note="protein predicted using Genefinder"
-FT                   /note="ArsA homologue"
-FT                   /note="cDNA EST yk140f3.3 comes from this gene"
-FT                   /note="cDNA EST yk176c11.3 comes from this gene"
-FT                   /note="cDNA EST yk140f3.5 comes from this gene"
-FT                   /note="cDNA EST yk176c11.5 comes from this gene"
-FT                   /note="cDNA EST yk62f10.3 comes from this gene"
-FT                   /note="cDNA EST yk62f10.5 comes from this gene"
-FT                   /note="cDNA EST yk221f9.3 comes from this gene"
-FT                   /note="cDNA EST yk221f9.5 comes from this gene"
-FT                   /product="ZK637.5"
-FT                   /translation="MSDQLEASIKNILEQKTLKWIFVGGKGGVGKTTCSCSLAAQLSKV
-FT                   RERVLLISTDPAHNISDAFSQKFTKTPTLVEGFKNLFAMEIDSNPNGEGVEMGNIEEML
-FT                   QNAAQNEGGSGGFSMGKDFLQSFAGGLPGIDEAMSFGEMIKLIDSLDFDVVVFDTAPTG
-FT                   HTLRLLQFPTLLEKVFTKILSLQGMFGPMMNQFGGMFGMGGGSMNEMIEKMTTTLESVK
-FT                   KMNAQFKDPNCTTFVCVCIAEFLSLYETERLIQELSKQGIDTHNIIVNQLLFPDTDANG
-FT                   TVSCRKCASRQAIQSKYLTDIDELYEDFHVVKLPLLEAEVRGGPAILQFSERMVDPEAN
-FT                   KN"
 FT   CDS             join(21664..21816,21898..22074,22182..22310,23347..23468,
 FT                   23629..23838,23893..25147,25269..25391,26117..26257,
 FT                   26370..26589,26754..26925,27145..27250)
-FT                   /db_xref="PID:g6961"
-FT                   /db_xref="SPTREMBL:Q23555"
-FT                   /product="ZK637.8b"
+FT                   /db_xref="SWISS-PROT:P30628"
+FT                   /note="contains similarity to Pfam domain: PF01496 (V-type
+FT                   ATPase 116kDa subunit family), Score=1633.2, E-value=0,
+FT                   N=1"
+FT                   /note="cDNA EST EMBL:T00125 comes from this gene"
+FT                   /note="cDNA EST yk307a1.5 comes from this gene"
+FT                   /note="cDNA EST yk469d12.5 comes from this gene"
+FT                   /note="cDNA EST yk499g12.5 comes from this gene"
+FT                   /note="cDNA EST yk521e4.5 comes from this gene"
+FT                   /note="cDNA EST yk546h9.5 comes from this gene"
+FT                   /note="cDNA EST yk594f1.5 comes from this gene"
+FT                   /gene="ZK637.8b"
+FT                   /protein_id="CAA77453.1"
 FT                   /translation="MGDYVTPGEEPPQPGIYRSEQMCLAQLYLQSDASYQCVAELGELG
 FT                   LVQFRDLNPDVSSFQRKYVNEVRRCDEMERKLRYLEREIKKDQIPMLDTGENPDAPLPR
 FT                   EMIDLEATFEKLENELREVNKNEETLKKNFSELTELKHILRKTQTFFEEHEDMIASSAE
@@ -212,127 +329,93 @@ FT                   KQQSRYSTLTAESNQHQSVRADINQDDAEVVHAPEQTPKPSGHGHGHGDGPLEMGDVMV
 FT                   YQAIHTIEFVLGCVSHTASYLRLWALSLAHAQLSDVLWTMVFRNAFVLDGYTGAIATYI
 FT                   LFFIFGSLSVFILVLMEGLSAFLHALRLHWVEFQSKFYGGLGYEFAPFSFEKILAEERE
 FT                   AEENL"
-FT   CDS             join(complement(20104..20160),complement(19876..19994),
-FT                   complement(19694..19826),complement(19132..19647),
-FT                   complement(18848..19006),complement(17962..18372),
-FT                   complement(17779..17883),complement(17657..17732),
-FT                   complement(17524..17582),complement(16630..16827))
-FT                   /db_xref="PID:g6960"
-FT                   /db_xref="SWISS-PROT:P30630"
-FT                   /note="protein predicted using Genefinder"
-FT                   /note="cDNA EST yk12h1.3 comes from this gene"
-FT                   /note="cDNA EST yk12h1.5 comes from this gene"
-FT                   /note="cDNA EST yk24e1.3 comes from this gene"
-FT                   /note="cDNA EST yk24e1.5 comes from this gene"
-FT                   /note="cDNA EST yk34b2.3 comes from this gene"
-FT                   /note="cDNA EST yk34b2.5 comes from this gene"
-FT                   /note="cDNA EST yk220e8.3 comes from this gene"
-FT                   /note="cDNA EST yk212f5.3 comes from this gene"
-FT                   /note="cDNA EST yk224d7.3 comes from this gene"
-FT                   /note="cDNA EST yk270e5.3 comes from this gene"
-FT                   /note="cDNA EST yk353h6.3 comes from this gene"
-FT                   /note="cDNA EST yk220e8.5 comes from this gene"
-FT                   /note="cDNA EST yk212f5.5 comes from this gene"
-FT                   /note="cDNA EST yk224d7.5 comes from this gene"
-FT                   /note="cDNA EST yk270e5.5 comes from this gene"
-FT                   /note="cDNA EST yk353h6.5 comes from this gene"
-FT                   /product="ZK637.7"
-FT                   /gene="lin-9"
-FT                   /translation="MSSAVRSPRKKAASDTSDPDRTSSPYSLRETSKVPSRYRNEELYL
-FT                   SPSRSIKRTGSPKKSPAKRLNGGRDSPSVNSLTRNSSLTMLAKAALDYESSSCALEYIP
-FT                   KEERRPPRRALALSPPPAPSNDLLAKDLEMIEMHQNLVAGLDDLDNPANMTNEAVEHRD
-FT                   TQSFFNMFSTDQERSAMMKQFKTYKNQTSEDVSTFMRANIKKLYNLLRYKKARQWVMCE
-FT                   FFYSAIDEQIFKEENEFATIIRESFPNLKNWNLTRIEWRSIRKLLGKPRRCSKDPSIDL
-FT                   KDLPAKLPRPMVVGNRVFARIRNPYDGIYSGIIDAVIPKGFRIIFDKPDIPPTLVSDTE
-FT                   ILLDGKLDLLSIAYFIEQANSKLPSGVRPFVAAVRDSSHPHLVRDVLVSRKIERSGGPL
-FT                   MGPNDERLNGKNAEMVGNFPLKFLVNLVKLTKLIDIKKGLIRQLNELNADAEIQNMTSD
-FT                   KYSKAFQEKYAKTIIDLEHVNQNIDINMNGIQDHHMYFSSNDISTSNMKPEAVRQMCSQ
-FT                   QAGRFVEHCLWHYRLQNNNLLMKKKIENVRTMGTQKISAVDLQSLGDAISEIRTAIHPR
-FT                   NVAFFQDYVEVHMKQFHTIMLESGALAGTVSNRK"
 FT   CDS             join(28186..28352,28407..28487,28897..29083,29173..29253,
 FT                   29334..29405)
-FT                   /db_xref="PID:g6962"
 FT                   /db_xref="SWISS-PROT:P30636"
-FT                   /note="protein predicted using Genefinder"
-FT                   /product="ZK637.9"
+FT                   /note="predicted using Genefinder"
+FT                   /gene="ZK637.9"
+FT                   /protein_id="CAA77455.1"
 FT                   /translation="MSKKLKPFEILEDSCASVCIWLNGEPTAISNRAENLWNKAKYRVA
 FT                   TDGAVNEILKRKSFVEWPHIICGDFDSINKQIDTKNAKVVHLPDQDYTDLSKSVQWCLE
 FT                   QKTLTSWEFENIVVLGGLNGRFDHTMSTLSSLIRFVDSQTPGDSNLDVNLEMTTKMCGI
 FT                   IPIVQKETIKTLLLNLENLSARRMKLPRAKYF"
 FT   CDS             join(complement(33832..33932),complement(33415..33784),
 FT                   complement(32541..33020))
-FT                   /db_xref="PID:g6964"
 FT                   /db_xref="SWISS-PROT:P30634"
-FT                   /note="protein predicted using Genefinder"
-FT                   /note="similar to CDC25/string"
-FT                   /product="ZK637.11"
+FT                   /note="predicted using Genefinder"
+FT                   /note="similar to CDC25/string, contains similarity to Pfam
+FT                   domain: PF00581 (Rhodanese-like domain), Score=112.6,
+FT                   E-value=2.5e-30, N=1"
+FT                   /note="cDNA EST yk631b11.3 comes from this gene"
+FT                   /note="cDNA EST yk631b11.5 comes from this gene"
+FT                   /gene="ZK637.11"
+FT                   /protein_id="CAA77456.1"
 FT                   /translation="MCVDVPCENCIVRNDGLRLKCSECAEGSSKLFPRQNRQHSSAISH
 FT                   ISNSSPPTRKRSIDGGYTSGTDSANTSEIVIKKRLTFSKKSHSTSEIETWNAHLQVDYH
 FT                   LETVTPSCSTVYQKITSETLIEIMQKLSQIEFMQKYILIDCRYDYEYNGGHIKGAQSLF
 FT                   NPETAADFFFNKDGSKKINRIPIFYCEYSQKRGPTMANNLREVDRKLNSNIYPRCDYEE
 FT                   IYLLEGGYKNFYAFTRGLEKEQRVQLCEPDNYVIMFDDRYKAELRKHQFHKKNVSKPMK
 FT                   KWSSTTSVISILTTSGTRISTLRQTCDPIHEHDAH"
-FT   CDS             join(36246..36305,36470..36667,36886..36987,37038..37196)
-FT                   /db_xref="PID:e249697"
-FT                   /db_xref="SPTREMBL:Q23556"
-FT                   /note="protein predicted using Genefinder"
+FT   CDS             join(complement(20104..20160),complement(19876..19994),
+FT                   complement(19694..19826),complement(19051..19653),
+FT                   complement(18848..19006),complement(17962..18372),
+FT                   complement(17779..17883),complement(17583..17732),
+FT                   complement(16630..16827))
+FT                   /note="cDNA EST EMBL:AF269693 comes from this gene"
+FT                   /gene="ZK637.7b"
+FT                   /protein_id="CAC42391.1"
+FT                   /translation="MSSAVRSPRKKAASDTSDPDRTSSPYSLRETSKVPSRYRNEELYL
+FT                   SPSRSIKRTGSPKKSPAKRLNGGRDSPSVNSLTRNSSLTMLAKAALDYESSSCALEYIF
+FT                   QPKEERRPPRRALALSPPPAPSNDLLAKDLEMIEMHQNLVAGLDDLDNPANMTNEAVEH
+FT                   RDTQSFFNMFSTDQERSAMMKQFKTYKNQTSEDVSTFMRANIKKLYNLLRYKKARQWVM
+FT                   CEFFYSAIDEQIFKEENEFATIIRESFPNLKNWNLTRIEWRSIRKLLGKPRRCSKVFFE
+FT                   EERMYLEEKRMKIRSVYEGSYLNDPSIDLKDLPAKLPRPMVVGNRVFARIRNPYDGIYS
+FT                   GIIDAVIPKGFRIIFDKPDIPPTLVSDTEILLDGKLDLLSIAYFIEQANSKLPSGVRPF
+FT                   VAAVRDSSHPHLVRDVLVSRKIERSGGPLMGPNDERLNGKNAEMVGNFPLKFLVNLVKL
+FT                   TKLIDIKKGLIRQLNELNADAEIQNMTSDKYSKAFQEKYAKTIIDLEHVNQNIDINMNG
+FT                   IQDHHMYFSSNDISTSNMKPEAVRQMCSQQAGRFVEHCNQGLNVENVHALTLIQSLTAV
+FT                   LLQVRTMGTQKISAVDLQSLGDAISEIRTAIHPRNVAFFQDYVEVHMKQFHTIMLESGA
+FT                   LAGTVSNRK"
+FT   CDS             join(40427..40486,40571..40699,Z11126.1:5..73,
+FT                   Z11126.1:120..242,Z11126.1:288..389,Z11126.1:440..598)
+FT                   /db_xref="SWISS-PROT:P34658"
 FT                   /note="cDNA EST yk65f9.5 comes from this gene"
-FT                   /product="ZK637.15"
-FT                   /translation="MDNEKLIREARRMEDVQQLKMQIPKPVDKKPRPPPSENNLKLISC
-FT                   EETCMDETLKNSSKPRMIYNKQLGRAESIDFDVPSLSYESSTFKKSNNSSGGALVLDNH
-FT                   YLINNDDGTVKKLPMKVYVKQRLEDGSLDVQLVFFDENSQKVMDISMLVNGKKIRNVQF
-FT                   CGKDGKLVN"
-FT   CDS             join(complement(39128..39321),complement(38544..38829))
-FT                   /db_xref="PID:g6965"
-FT                   /db_xref="SWISS-PROT:P30627"
-FT                   /note="protein predicted using Genefinder"
-FT                   /note="similar to globins"
-FT                   /note="cDNA EST yk138h12.5 comes from this gene"
-FT                   /note="cDNA EST yk66b9.3 comes from this gene"
-FT                   /note="cDNA EST yk476d2.3 comes from this gene"
-FT                   /product="ZK637.13"
-FT                   /translation="MSMNRQEISDLCVKSLEGRMVGTEAQNIENGNAFFRYFFTNFPDL
-FT                   RVYFKGAEKYTADDVKKSERFDKQGQRILLACHLLANVYTNEEVFKGYVRETINRHRIY
-FT                   KMDPALWMAFFTVFTGYLESVGCLNDQQKAAWMALGKEFNAESQTHLKNSNLPHV"
-FT   CDS             join(29817..30077,30126..30262,30309..30393,30743..31279,
-FT                   31330..31672,32242..32390)
-FT                   /db_xref="PID:e317392"
-FT                   /db_xref="SWISS-PROT:P30635"
-FT                   /note="protein predicted using Genefinder"
-FT                   /note="similar to glutathione reductase"
-FT                   /note="cDNA EST yk156d3.5 comes from this gene"
-FT                   /product="ZK637.10"
-FT                   /translation="MLLSTFKRHLPIRRLFSSNKFDLIVIGAGSGGLSCSKRAADLGAN
-FT                   VALIDAVEPTPHGHSWGIGGTCANVGCIPKKLMHQAAIVGKELKHADKYGWNGIDQEKI
-FT                   KHDWNVLSKNVNDRVKANNWIYRVQLNQKKINYFNAYAEFVDKDKIVITGTDKNKTKNF
-FT                   LSAPNVVISTGLRPKYPNIPGAELGITSDDLFTLASVPGKTLIVGGGYVALECAGFLSA
-FT                   FNQNVEVLVRSIPLKGFDRDCVHFVMEHLKTTGVKVKEHVEVERVEAVGSKKKVTFTGN
-FT                   GGVEEYDTVIWAAGRVPNLKSLNLDNAGVRTDKRSGKILADEFDRASCNGVYAVGDIVQ
-FT                   DRQELTPLAIQSGKLLADRLFSNSKQIVRFDGVATTVFTPLELSTVGLTEEEAIQKHGE
-FT                   DSIEVFHSHFTPFEYVVPQNKDSGFCYVKAVCTRDESQKILGLHFVGPNAAEVIQGYAV
-FT                   AFRVGISMSDLQNTIAIHPCSSEEFVKLHITKRSGQDPRTQGCCG"
+FT                   /note="cDNA EST yk223b1.3 comes from this gene"
+FT                   /note="cDNA EST yk223b1.5 comes from this gene"
+FT                   /note="cDNA EST yk264a4.3 comes from this gene"
+FT                   /note="cDNA EST yk264a4.5 comes from this gene"
+FT                   /gene="ZK637.12"
+FT                   /protein_id="CAA77461.1"
+FT                   /translation="MDNEKLIREARRMEEVQQLKMQIPKPVDKKPRPPPSENNLKLISC
+FT                   EETCMDETLKNSSKPRMIYNKQLGRAESIDFDVPSLSYESSEKCAGETSPYTSASVSNS
+FT                   KKATSSSNFTKSETTTITELTTSTFKKSNNSSGGALVLDNHYLINNDDGTVKKLPMKVY
+FT                   VKQRLEDGSLDVQLVFFDENSQKVMDISMLVNGKKIRNVQFCGKDAKLVN"
 FT   CDS             join(complement(1418..1509),complement(1188..1374),
 FT                   complement(787..870),complement(660..746),
 FT                   complement(486..610),complement(238..427),
-FT                   complement(<1..137))
-FT                   /db_xref="PID:g6954"
+FT                   complement(Z22175.1:19292..19791),
+FT                   complement(Z22175.1:19027..19177),
+FT                   complement(Z22175.1:18703..18876))
 FT                   /db_xref="SWISS-PROT:P30638"
-FT                   /note="protein predicted using Genefinder"
-FT                   /note="similar to Sugar transporter"
-FT                   /product="ZK637.1"
+FT                   /note="predicted using Genefinder"
+FT                   /note="contains similarity to Pfam domain: PF00083 (Sugar
+FT                   (and other) transporter), Score=321.5, E-value=3.1e-93,
+FT                   N=1; PF00939 (Sodium:sulfate symporter transmembrane
+FT                   region), Score=1.3, E-value=3.2, N=1"
+FT                   /note="cDNA EST yk311g8.3 comes from this gene"
+FT                   /note="cDNA EST yk311g8.5 comes from this gene"
+FT                   /gene="ZK637.1"
+FT                   /protein_id="CAA77460.1"
 FT                   /translation="MGDKAILTEVLEASNLTEAYVDLTAKQLIKEIRHVGDDFAVRYSN
 FT                   LDDRTELGEPTDQRSPDSEKTFTVDEAVEALGFGRFQLKLSILTGMAWMADAMEMMLLS
 FT                   LISPALACEWGISSVQQALVTTCVFSGMMLSSTFWGKICDRFGRRKGLTFSTLVACIMG
 FT                   VISGMSPHFYVLLFFRGLTGFGIGGVPQSVTLYAEFLPTAQRAKCVVLIESFWAIGAVF
 FT                   EALLAYFVMESFGWRALMFLSSLPLGIFAVASFWLPESARFDMASGHPERALETLQAAA
-FT                   RMNRVQLPTGRLVSSTKAGS"
-FT   CDS             join(40427..40486,40571..>40699)
-FT                   /db_xref="PID:e228925"
-FT                   /db_xref="SWISS-PROT:P34658"
-FT                   /note="cDNA EST yk65f9.5 comes from this gene"
-FT                   /product="ZK637.12"
-FT                   /translation="MDNEKLIREARRMEEVQQLKMQIPKPVDKKPRPPPSENNLKLISC
-FT                   EETCMDETLKNSSKPRMI"
+FT                   RMNRVQLPTGRLVSSTKAGSESRGDIANLLSPDLRKTTILLWCIWAITAFSYYGMVLFT
+FT                   TVLFQSHDECHGGLFSNGTQMEVCQPLTRSDYFDLLSTTLAEFPGLIITVLIIEWFGRK
+FT                   KTMALEYAVFAIFTFLLYFCLDRFTVTVLIFVARAFISGAFQCAYVYTPEVYPTTLRAV
+FT                   GLGTCSAMARIGAIVASEKSLSLPIGIYGTAAILGLIASLSLPIETKGRQMMVRLTSEK
+FT                   SSIFSNFFQDSH"
 XX
 SQ   Sequence 40699 BP; 12909 A; 7116 C; 7279 G; 13395 T; 0 other;
      gatccagctt ttgttgaaga cactaatctt ccagttggca actgtactct attcattctc        60
@@ -1019,7 +1102,7 @@ ID   PDRHOD     standard; RNA; INV; 1675 BP.
 XX
 AC   X07797;
 XX
-NI   g9822
+SV   X07797.1
 XX
 DT   01-AUG-1988 (Rel. 17, Created)
 DT   17-FEB-1997 (Rel. 50, Last updated, Version 4)
@@ -1029,8 +1112,8 @@ XX
 KW   rhodopsin.
 XX
 OS   Octopus dofleini
-OC   Eukaryota; Metazoa; Mollusca; Cephalopoda; Coleoidea; Octopoda;
-OC   Incirrata; Octopodidae; Octopus.
+OC   Eukaryota; Metazoa; Mollusca; Cephalopoda; Coleoidea; Octopoda; Incirrata;
+OC   Octopodidae; Octopus.
 XX
 RN   [1]
 RP   1-1675
@@ -1052,12 +1135,13 @@ XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..1675
+FT                   /db_xref="taxon:6644"
 FT                   /organism="Octopus dofleini"
 FT                   /clone="pORh462"
 FT   CDS             75..1442
-FT                   /db_xref="PID:g9823"
 FT                   /db_xref="SWISS-PROT:P09241"
 FT                   /product="rhodopsin"
+FT                   /protein_id="CAA30644.1"
 FT                   /translation="MVESTTLVNQTWWYNPTVDIHPHWAKFDPIPDAVYYSVGIFIGVV
 FT                   GIIGILGNGVVIYLFSKTKSLQTPANMFIINLAMSDLSFSAINGFPLKTISAFMKKWIF
 FT                   GKVACQLYGLLGGIFGFMSINTMAMISIDRYNVIGRPMAASKKMSHRRAFLMIIFVWMW
@@ -1067,8 +1151,8 @@ FT                   ALLAQFGPAEWVTPYAAELPVLFAKASAIHNPIVYSVSHPKFREAIQTTFPWLLTCCQF
 FT                   DEKECEDANDAEEEVVASERGGESRDAAQMKEMMAMMQKMQAQQAAYQPPPPPQGYPPQ
 FT                   GYPPQGAYPPPQGYPPQGYPPQGYPPQGYPPQGAPPQVEAPQGAPPQGVDNQAYQA"
 FT   old_sequence    1270
-FT                   /citation=[1]
 FT                   /replace="c"
+FT                   /citation=[1]
 FT   polyA_site      1675..1675
 FT                   /note="polyA site"
 XX

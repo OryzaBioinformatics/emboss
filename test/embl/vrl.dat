@@ -5,7 +5,7 @@ XX
 SV   L46634.1
 XX
 DT   06-NOV-1995 (Rel. 45, Created)
-DT   30-APR-1996 (Rel. 47, Last updated, Version 2)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 3)
 XX
 DE   Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
 XX
@@ -18,12 +18,10 @@ RN   [1]
 RP   1-1272
 RX   MEDLINE; 96079055.
 RA   Secchiero P., Nicholas J., Deng H., Xiaopeng T., van Loon N., Ruvolo V.R.,
-RA   Berneman Z.N., Reitz M.S., Dewhurst S.;
+RA   Berneman Z.N., Reitz M.S. Jr., Dewhurst S.;
 RT   "Identification of human telomeric repeat motifs at the genome termini of
 RT   human herpesvirus 7: structural analysis and heterogeneity";
-RL   J. Virol. 69:8041-8045(1995).
-XX
-CC   NCBI gi: 1019148
+RL   J. Virol. 69(12):8041-8045(1995).
 XX
 FH   Key             Location/Qualifiers
 FH

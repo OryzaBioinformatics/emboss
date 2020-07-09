@@ -1,0 +1,46 @@
+LOCUS       AB009602                 561 bp    mRNA    linear   PLN 18-DEC-1997
+DEFINITION  Schizosaccharomyces pombe mRNA for MET1 homolog, partial cds.
+ACCESSION   AB009602
+VERSION     AB009602.1  GI:2696651
+KEYWORDS    MET1 homolog.
+SOURCE      Schizosaccharomyces pombe cDNA to mRNA, clone_lib:pGAD GH.
+  ORGANISM  Schizosaccharomyces pombe
+            Eukaryota; Fungi; Ascomycota; Schizosaccharomycetes;
+            Schizosaccharomycetales; Schizosaccharomycetaceae;
+            Schizosaccharomyces.
+REFERENCE   1  (bases 1 to 561)
+  AUTHORS   Kawamukai,M.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (07-DEC-1997) Makoto Kawamukai, Shimane University, Life
+            and Environmental Science; 1060 Nishikawatsu, Matsue, Shimane 690,
+            Japan (E-mail:kawamuka@life.shimane-u.ac.jp, Tel:0852-32-6587,
+            Fax:0852-32-6499)
+REFERENCE   2  (bases 1 to 561)
+  AUTHORS   Kawamukai,M.
+  TITLE     S.pmbe MET1 homolog
+  JOURNAL   Published Only in DataBase (1997) In press
+FEATURES             Location/Qualifiers
+     source          1..561
+                     /organism="Schizosaccharomyces pombe"
+                     /db_xref="taxon:4896"
+                     /clone_lib="pGAD GH"
+     CDS             <1..275
+                     /codon_start=3
+                     /product="MET1 homolog"
+                     /protein_id="BAA23999.1"
+                     /db_xref="GI:2696652"
+                     /translation="SMPKIPSFVPTQTTVFLMALHRLEILVQALIESGWPRVLPVCIA
+                     ERVSCPDQRFIFSTLEDVVEEYNKYESLPPGLLITGYSCNTLRNTA"
+BASE COUNT      135 a    106 c     98 g    222 t
+ORIGIN
+       1  gttcgatgcc taaaatacct tcttttgtcc ctacacagac cacagttttc ctaatggctt
+      61  tacaccgact agaaattctt gtgcaagcac taattgaaag cggttggcct agagtgttac
+     121  cggtttgtat agctgagcgc gtctcttgcc ctgatcaaag gttcattttc tctactttgg
+     181  aagacgttgt ggaagaatac aacaagtacg agtctctccc ccctggtttg ctgattactg
+     241  gatacagttg taataccctt cgcaacaccg cgtaactatc tatatgaatt attttccctt
+     301  tattatatgt agtaggttcg tctttaatct tcctttagca agtcttttac tgttttcgac
+     361  ctcaatgttc atgttcttag gttgttttgg ataatatgcg gtcagtttaa tcttcgttgt
+     421  ttcttcttaa aatatttatt catggtttaa tttttggttt gtacttgttc aggggccagt
+     481  tcattattta ctctgtttgt atacagcagt tcttttattt ttagtatgat tttaatttaa
+     541  aacaattcta atggtcaaaa a
+//
