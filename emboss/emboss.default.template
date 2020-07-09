@@ -1,4 +1,4 @@
-#SET emboss_tempdata name_of_emboss_test_database_directory
+#SET emboss_tempdata path_to_ditrectory_$EMBOSS/test
 
 # Logfile - set this to a file that any user can append to
 # and EMBOSS applications will automatically write log information
@@ -43,7 +43,7 @@ DB tpir [ type: P dir: $emboss_tempdata/pir
    comment: "PIR using NBRF access for 4 files" ]
 
 DB tgb [ type: N method: url format: genbank
-   url: "http://www.cbr.nrc.ca/srs6.1bin/cgi-bin/wgetz?-e+[genbank-id:%s]"
+   url: "http://www.ca.embnet.org/srs6bin/cgi-bin/wgetz?-id+-e+[genbank-id:'%s']+-vn+2"
    comment: "Genbank IDs" ]
 
 #############################################
@@ -54,21 +54,30 @@ DB tgb [ type: N method: url format: genbank
 # GENBANK from the Canadian EMBnet node SRSWWW server
 #######################################################################
 
+
 #DB genbank [ type: N method: url format: genbank
-#   url: "http://www.ca.embnet.org/srs6.1bin/cgi-bin/wgetz?-e+[genbank-id:%s]"
+#   url: "http://www.ca.embnet.org/srs6bin/cgi-bin/wgetz?-id+-e+[genbank-id:'%s']+-vn+2"
 #   comment: "Genbank IDs" ]
 
 #DB gb [ type: N method: url format: genbank
-#   url: "http://www.ca.embnet.org/srs6.1bin/cgi-bin/wgetz?-e+[genbank-id:%s]"
+#   url: "http://www.ca.embnet.org/srs6bin/cgi-bin/wgetz?-id+-e+[genbank-id:'%s']+-vn+2"
 #   comment: "Genbank IDs" ]
 
 #DB genbanka [ type: N method: url format: genbank
-#   url: "http://www.ca.embnet.org/srs6.1bin/cgi-bin/wgetz?-e+[genbank-acc:%s]"
+#   url: "http://www.ca.embnet.org/srs6bin/cgi-bin/wgetz?-id+-e+[genbank-acc:'%s']+-vn+2"
 #   comment: "Genbank ACs" ]
 
 #DB gba [ type: N method: url format: genbank
-#   url: "http://www.ca.embnet.org/srs6.1bin/cgi-bin/wgetz?-e+[genbank-acc:%s]"
+#   url: "http://www.ca.embnet.org/srs6bin/cgi-bin/wgetz?-id+-e+[genbank-acc:'%s']+-vn+2"
 #   comment: "Genbank ACs" ]
+
+## N.B.
+# For older SRS servers use e.g.
+#DB gb [ type: N method: url format: genbank
+#   url: "http://srs.csc.fi:8002/srs6bin/cgi-bin/wgetz?-e+[genbank-id:%s]"
+#   comment: "Genbank IDs" ]
+
+
 
 
 #######################################################################
@@ -133,15 +142,15 @@ DB tgb [ type: N method: url format: genbank
 # Assumed the dbiflat index files are in the same directory
 # Second definition is another name for the first.
 
-DB embl [ type: N method: emblcd release: "61.0"
-         format: embl dir: /data/embl/
-         file: *.dat comment: "EMBL sequences"
-]
+#DB embl [ type: N method: emblcd release: "61.0"
+#         format: embl dir: /data/embl/
+#         file: *.dat comment: "EMBL sequences"
+#]
 
-DB em [ type: N method: emblcd release: "61.0"
-         format: embl dir: /data/embl/
-         file: *.dat comment: "EMBL sequences"
-]
+#DB em [ type: N method: emblcd release: "61.0"
+#         format: embl dir: /data/embl/
+#         file: *.dat comment: "EMBL sequences"
+#]
 
 
 ## Old EMBL definitions (for historical reasons) using SRSWWW
