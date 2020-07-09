@@ -69,9 +69,10 @@ cd ..
 source ~/srs6/etc/prep_srs
 
 srsbuild efunc -nn
-srsbuild efunc -rel '1.13.0'
+srsbuild efunc -rel '2.1.0'
 
 srsbuild edata -nn
-srsbuild edata -rel '1.13.0'
+srsbuild edata -rel '2.1.0'
 
 srsbuild -l efunc
+srsbuild -l edata
