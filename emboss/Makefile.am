@@ -3,15 +3,24 @@ SUBDIRS = acd data
 
 EXTRA_DIST = emboss.default.template
 
-check_PROGRAMS = ajtest \
+if ISSHARED
+if ISAIXIA64
+AM_CFLAGS = -Wl,-bdynamic -Wl,-brtl -L../ajax/.libs -lajax
+else
+AM_CFLAGS =
+endif
+endif
+
+check_PROGRAMS = alignwrap ajtest \
 complex corbatest \
-demofeatures demolist demosequence demostring demotable \
+demoalign demofeatures demolist demoreport demosequence demostring demotable dichet \
 entrails histogramtest intconv \
 patmattest \
+prima primers \
 psiblasts \
-seqinfo \
-sigscan \
-testplot treetypedisplay 
+seqinfo seqretsingle \
+sigplot sigscan \
+testplot treetypedisplay
 
 bin_PROGRAMS = abiview acdc antigenic \
 backtranseq banana btwisted \
@@ -21,11 +30,12 @@ dan dbiblast dbifasta dbiflat dbigcg \
 degapseq descseq diffseq digest distmat domainer \
 dotmatcher dotpath dottup dreg \
 einverted embossdata embossversion emma emowse entret \
-equicktandem est2genome etandem extractseq \
+equicktandem est2genome etandem extractfeat extractseq \
 findkm freak fuzznuc fuzzpro fuzztran \
 garnier geecee getorf helixturnhelix hmoment \
-iep infoalign infoseq isochore lindna \
+iep infoalign infoseq isochore lindna listor \
 marscan maskfeat maskseq matcher megamerger merger msbar \
+mwfilter \
 needle newcpgreport newcpgseek newseq \
 noreturn notseq nrscope nthseq \
 octanol oddcomp \
@@ -33,7 +43,7 @@ palindrome pasteseq patmatdb patmatmotifs \
 pepcoil pepinfo pepnet pepstats \
 pepwheel pepwindow pepwindowall \
 plotcon plotorf polydot preg \
-prettyplot prettyseq prima primersearch printsextract \
+prettyplot prettyseq primer3 primersearch printsextract \
 profit prophecy prophet \
 prosextract pscan \
 rebaseextract recoder redata remap restover restrict revseq scope \
@@ -42,7 +52,7 @@ showalign showdb showfeat showorf showseq \
 shuffleseq sigcleave siggen silent splitter scopalign stretcher \
 stssearch supermatcher swissparse syco \
 textsearch tfextract tfm tfscan \
-tmap transeq trimseq \
+tmap transeq trimest trimseq \
 vectorstrip \
 water wobble wordcount wordmatch \
 wossname
@@ -97,6 +107,7 @@ equicktandem_SOURCES = equicktandem.c
 est2genome_SOURCES = est2genome.c
 etandem_SOURCES = etandem.c
 embossversion_SOURCES = embossversion.c
+extractfeat_SOURCES = extractfeat.c
 extractseq_SOURCES = extractseq.c
 findkm_SOURCES = findkm.c
 freak_SOURCES = freak.c
@@ -114,6 +125,7 @@ infoseq_SOURCES = infoseq.c
 intconv_SOURCES = intconv.c
 isochore_SOURCES = isochore.c
 lindna_SOURCE = lindna.c
+listor_SOURCE = listor.c
 marscan_SOURCE = marscan.c
 maskfeat_SOURCES = maskfeat.c
 maskseq_SOURCES = maskseq.c
@@ -121,6 +133,7 @@ matcher_SOURCES = matcher.c
 msbar_SOURCES = msbar.c
 megamerger_SOURCES = megamerger.c
 merger_SOURCES = merger.c
+mwfilter_SOURCES = mwfilter.c
 needle_SOURCES = needle.c
 newcpgreport_SOURCES = newcpgreport.c
 newcpgseek_SOURCES = newcpgseek.c
@@ -149,6 +162,8 @@ preg_SOURCES = preg.c
 prettyplot_SOURCES = prettyplot.c
 prettyseq_SOURCES = prettyseq.c
 prima_SOURCES = prima.c
+primer3_SOURCES = primer3.c
+primers_SOURCES = primers.c
 primersearch_SOURCES = primersearch.c
 printsextract_SOURCES = printsextract.c
 profit_SOURCES = profit.c
@@ -169,17 +184,17 @@ seqmatchall_SOURCES = seqmatchall.c
 seqret_SOURCES = seqret.c
 seqinfo_SOURCES = seqinfo.c
 seqretall_SOURCES = seqretall.c
+seqretallfeat_SOURCES = seqretallfeat.c
 seqretset_SOURCES = seqretset.c
 seqretsplit_SOURCES = seqretsplit.c
-scope_SOURCES = scope.c
 showalign_SOURCES = showalign.c
 showdb_SOURCES = showdb.c
 showfeat_SOURCES = showfeat.c
 showorf_SOURCES = showorf.c
 showseq_SOURCES = showseq.c
 shuffleseq_SOURCES = shuffleseq.c
-siggen_SOURCES = siggen.c
 sigcleave_SOURCES = sigcleave.c
+siggen_SOURCES = siggen.c
 silent_SOURCES = silent.c
 splitter_SOURCES = splitter.c
 scopalign_SOURCES = scopalign.c
@@ -194,6 +209,7 @@ tfm_SOURCES = tfm.c
 tfscan_SOURCES = tfscan.c
 tmap_SOURCES = tmap.c
 transeq_SOURCES = transeq.c
+trimest_SOURCES = trimest.c
 trimseq_SOURCES = trimseq.c
 vectorstrip_SOURCES = vectorstrip.c
 water_SOURCES = water.c
@@ -202,16 +218,21 @@ wordcount_SOURCES = wordcount.c
 wordmatch_SOURCES = wordmatch.c
 wossname_SOURCES = wossname.c
 
+alignwrap_SOURCES = alignwrap.c
 ajtest_SOURCES = ajtest.c
+demoalign_SOURCES = demoalign.c
 demofeatures_SOURCES = demofeatures.c
 demolist_SOURCES = demolist.c
+demoreport_SOURCES = demoreport.c
 demosequence_SOURCES = demosequence.c
 demostring_SOURCES = demostring.c
 demotable_SOURCES = demotable.c
+dichet_SOURCES = dichet.c
 histogramtest_SOURCES = histogramtest.c
 patmattest_SOURCES = patmattest.c
 psiblasts_SOURCES = psiblasts.c
-seqretallfeat_SOURCES = seqretallfeat.c
+seqretsingle_SOURCES = seqretsingle.c
+sigplot_SOURCES = sigplot.c
 sigscan_SOURCES = sigscan.c
 testplot_SOURCES = testplot.c
 treetypedisplay_SOURCES = treetypedisplay.c
@@ -221,8 +242,8 @@ LDADD = ../nucleus/libnucleus.la ../ajax/libajaxg.la ../ajax/libajax.la ../plplo
 pkgdata_DATA = emboss.default.template
 pkgdatadir=$(prefix)/share/$(PACKAGE)
 
-if PURIFY
-  LINK = purify $(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(LDFLAGS) -o $@
-else
-
-endif
+#if PURIFY
+#  LINK = purify $(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(LDFLAGS) -o $@
+#else
+#
+#endif

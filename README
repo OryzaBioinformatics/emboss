@@ -12,9 +12,9 @@ script:
 
      CC=cc
 
-or by defining a shell variable:
+or by defining an environment variable:
 
-     set CC="cc"
+     setenv CC cc
 
 The file 'config.cache' seems to retain the value for this option. If you
 have already run 'configure' you may need to delete the 'config.cache' file

@@ -61,6 +61,10 @@ the first line of `configure' :
 
 CC=cc
 
+or by this csh command:
+
+setenv CC cc
+
    Some systems require unusual options for compilation or linking that
 the `configure' script does not know about.  You can give `configure'
 initial values for variables by setting them in the environment.  Using
