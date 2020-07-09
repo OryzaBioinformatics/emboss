@@ -385,10 +385,10 @@ AjBool ajSeqAllRead (AjPSeq thys, AjPSeqin seqin) {
   AjBool ret = ajFalse;
   
   if (!seqin->Filebuff) {
-    if (!seqUsaProcess (thys, seqin))
+      if (!seqUsaProcess (thys, seqin))
       return ajFalse;
   }
-
+  
   ret = seqRead (thys, seqin);
   if (ret) {
     (void) ajStrSet (&thys->Db, seqin->Db);
@@ -561,14 +561,14 @@ AjBool ajSeqRead (AjPSeq thys, AjPSeqin seqin) {
       ajDebug("ajSeqRead: no file yet - test USA '%S'\n", seqin->Usa);
     }
     /* (c) Must be a USA - decode it */
-    if (!seqUsaProcess (thys, seqin))
+    if (!seqUsaProcess (thys, seqin))    
 	return ajFalse;
   }
 
   /* Now read whatever we got */
 
   ret = seqRead (thys, seqin);
-
+  
   while (!ret && ajListstrLength (seqin->List)) {
 
     /* Failed, but we have a list still - keep trying it */
@@ -1182,7 +1182,9 @@ static AjBool seqReadGcg (AjPSeq thys, AjPSeqin seqin) {
   AjBool ok;
   int len=0;
   AjPFileBuff buff = seqin->Filebuff;
-
+  AjBool seqed=ajFalse;
+  char *p=NULL;
+  
   ok = ajFileBuffGet (buff, &rdline);
   bufflines++;
 
@@ -1202,17 +1204,35 @@ static AjBool seqReadGcg (AjPSeq thys, AjPSeqin seqin) {
   }
   ajDebug ("   Gcg dots read ok len: %d\n", len);
 
+
   while (ok &&  (ajSeqLen(thys) < len)) {
     ok = ajFileBuffGet (buff, &rdline);
     if (ok) {
-      (void) seqAppend (&thys->Seq, rdline);
-      bufflines++;
+	if(!seqed)
+	{
+	    p = ajStrStr(rdline);
+	    if(strstr(p,"<seqed") || strstr(p,">seqed"))
+		seqed = ajTrue;
+	    else
+		(void) seqAppend (&thys->Seq, rdline);
+	    bufflines++;
+	    continue;
+	}
+	else
+	{
+	    ajStrCleanWhite(&rdline);
+	    p = ajStrLen(rdline) + ajStrStr(rdline) - 1;
+	    if(*p=='>' || *p=='<')
+		seqed = ajFalse;
+	    ++bufflines;
+	}
     }
     ajDebug ("line %d seqlen: %d ok: %B\n", bufflines, ajSeqLen(thys), ok);
    }
   ajDebug ("lines: %d ajSeqLen : %d len: %d ok: %B\n",
 	   bufflines, ajSeqLen(thys), len, ok);
   ajFileBuffClear (buff, 0);
+
 
   return ok;
 }
@@ -3483,7 +3503,7 @@ static AjBool seqUsaProcess (AjPSeq thys, AjPSeqin seqin) {
     }
     ajDebug ("\n");
   }
-
+  
   return accstat;
 }
 
