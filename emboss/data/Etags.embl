@@ -52,6 +52,8 @@ direction  LIMITED left,right,both
 
 EC_number QTEXT
 
+environmental_sample VOID
+
 evidence LIMITED experimental,not_experimental
 
 exception QTEXT
@@ -71,6 +73,8 @@ haplotype QTEXT
 insertion_seq QTEXT
 
 isolate QTEXT
+
+isolation_source QTEXT
 
 # removed in FTv3.0 Jan 2001
 # kinetoplast VOID  
@@ -94,6 +98,7 @@ organelle QLIMITED mitochondrion,nucleomorph,plastid,mitochondrion:kinetoplast,p
 
 organism QTEXT
 
+# obsolete, but used in old entries
 partial VOID
 
 PCR_conditions QTEXT
@@ -129,6 +134,8 @@ sequenced_mol QLIMITED cDNA,cDNA to genomic RNA,cDNA to mRNA,cDNA to other RNA,c
 
 serotype QTEXT
 
+serovar QTEXT
+
 sex QTEXT
 #       male,female, hermaphrodite, ...
 
@@ -157,6 +164,8 @@ transl_except SPECIAL
 
 transl_table LIMITED 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,21,22,23
 # FTv3.0 has no definition for 17, 18, 19, 20
+
+transgenic VOID
 
 transposon QTEXT
 

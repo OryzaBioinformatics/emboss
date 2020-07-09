@@ -569,6 +569,19 @@ sig_peptide
         /pseudo
         /standard_name
         /usedin
+snoRNA
+        /citation
+        /db_xref        
+        /evidence
+        /function
+        /gene
+        /label
+        /map
+        /note
+        /product
+        /pseudo
+        /standard_name
+        /usedin
 snRNA
         /citation
         /db_xref        
@@ -600,16 +613,20 @@ source
 #        /cyanelle
         /db_xref                    
         /dev_stage                     
+# /environmental_sample and /isolation_source should appear together
+	/environmental_sample                  
         /evidence
         /focus
         /frequency
         /germline
         /haplotype
-        /lab_host
         /insertion_seq
         /isolate
+# /environmental_sample and /isolation_source should appear together
+	/isolation_source
 # replace by /organelle in FTv3.0 Jan 2001
 #        /kinetoplast
+        /lab_host
         /label
         /macronuclear
         /map
@@ -632,6 +649,8 @@ source
         /sub_strain
         /tissue_lib
         /tissue_type
+# transgenic is supposed to be only in one of two source keys for one entry
+	/transgenic
         /transposon
         /usedin
         /variety
@@ -646,6 +665,7 @@ stem_loop
         /map
         /note
         /partial
+	/serovar
         /standard_name
         /usedin
 STS
