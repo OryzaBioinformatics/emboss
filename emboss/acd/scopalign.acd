@@ -1,0 +1,20 @@
+appl: scopalign
+[
+        doc: "Generate alignments for SCOP families"
+	groups: "PROTEIN: structure"
+]
+
+infile: scopf 	
+[ 
+	param: Y
+	prompt: "Name of scop file for input (embl-like format)"
+	def: "Escop.dat"
+]
+
+string: path
+[
+	param: Y
+	prompt: "Location of alignment files for output"
+	def: "./"
+]
+

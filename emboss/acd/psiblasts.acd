@@ -1,0 +1,63 @@
+appl: psiblasts
+[
+	doc: "Runs PSI-BLAST given scopalign alignments"
+	groups: "PROTEIN: structure"
+]
+
+string: align
+[
+	param: Y
+	prompt: "Location of alignment files for input"
+	def: "./"
+]
+
+string: alignextn
+[
+	param: Y
+	prompt: "File extension of alignment files"
+	def: ".align"
+]
+
+string: database 	
+[ 
+	param: Y
+	prompt: "BLAST database to search"
+	def: "./swissprot"
+]
+
+int: niter
+[
+	param: Y
+	prompt: "Number of PSIBLAST iterations"
+	def: 1
+]
+
+float: evalue
+[
+	param: Y
+	prompt: "Threshold E-value for inclusion in family"
+	def: "0.001"
+]
+
+string: submatrix
+[
+	param: Y
+	prompt: "Residue substitution matrix"
+	default: "./BLOSUM62"
+]	
+
+outfile: families
+[ 
+	param: Y
+	prompt: "Name of families file for output"
+	def: "scop.hits"
+]
+
+outfile: logf
+[ 
+	param: Y
+	prompt: "Name of log file for the build"
+	def: "psiblasts.log"
+]
+
+
