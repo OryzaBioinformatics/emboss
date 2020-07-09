@@ -1,0 +1,17 @@
+appl: pdbtosp [
+  documentation: "Convert raw swissprot:pdb equivalence file to embl-like format"
+  groups: "Utils:Database creation"
+]
+
+infile: infilea  [
+  prompt: "Name of raw swissprot:pdb equivalence file (input)"
+  default: "pdbtosp.txt"
+  parameter: "Y"
+]
+
+
+outfile: outfile  [
+  prompt: "Name of swissprot:pdb equivalence file (output)"
+  default: "Epdbtosp.dat"
+  parameter: "Y"
+]

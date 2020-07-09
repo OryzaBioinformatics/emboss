@@ -1,0 +1,38 @@
+appl: interface [
+  documentation: "Reads coordinate files and writes inter-chain contact files"
+  groups: "Protein:3D Structure"
+]
+
+infile: in  [
+  parameter: "Y"
+  information: "Coordinate file for input (embl-like format)"
+  default: "test.pxyz"
+]
+
+outfile: out  [
+  parameter: "Y"
+  information: "Contact file for output"
+  default: "test.con"
+]
+
+float: thresh  [
+  parameter: "Y"
+  information: "Threshold contact distance"
+  default: "6.0"
+]
+
+float: ignore  [
+  information: "Threshold ignore distance"
+  help: "If any two atoms from two different residues are at least this distance apart then no futher inter-atomic contacts will be checked for for that residue pair . This speeds the calculation up considerably."
+  default: "20.0"
+]
+
+string: vdwf  [
+  prompt: "Name of data file with van der Waals radii"
+  default: "Evdw.dat"
+]
+
+outfile: conerrf  [
+  prompt: "Name of log file for the build"
+  default: "interface.log"
+]
