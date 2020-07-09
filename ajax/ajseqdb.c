@@ -2734,11 +2734,13 @@ AjBool ajSeqAccessFile (AjPSeqin seqin) {
   ajDebug ("ajSeqAccessFile %S\n", qry->Filename);
 
   ajStrTraceT (qry->Filename, "qry->Filename (before):");
+
   seqin->Filebuff = ajFileBuffNewIn (qry->Filename);
   if (!seqin->Filebuff) {
     ajDebug ("FILE access: unable to open file '%S'\n", qry->Filename);
     return ajFalse;
   }
+
   ajStrTraceT (seqin->Filename, "seqin->Filename:");
   ajStrTraceT (qry->Filename, "qry->Filename (after):");
   (void) ajStrAss (&seqin->Filename, qry->Filename);

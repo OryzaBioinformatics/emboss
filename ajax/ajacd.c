@@ -494,6 +494,7 @@ AcdOAttr acdAttrXxxx[] = {
 
 AcdOAttr acdAttrAppl[] = { {"documentation", VT_STR},
 			   {"groups", VT_STR},
+			   {"comment", VT_STR},
 			   {NULL, VT_NULL} };
 
 AcdOAttr acdAttrArray[] = { {"minimum", VT_FLOAT},
@@ -504,25 +505,43 @@ AcdOAttr acdAttrArray[] = { {"minimum", VT_FLOAT},
 			    {"size", VT_INT},
 			    {"sum", VT_FLOAT},
 			    {"tolerance", VT_FLOAT},
+			    {"comment", VT_STR},
+			    {"corba", VT_STR},
+			    {"style",VT_STR},
 			  {NULL, VT_NULL} };
 
 AcdOAttr acdAttrBool[] = {
+			    {"comment", VT_STR},
+			    {"corba", VT_STR},
+			    {"style",VT_STR},
 			  {NULL, VT_NULL} };
 
 AcdOAttr acdAttrCodon[] = { {"name", VT_STR},
+			    {"comment", VT_STR},
+			    {"corba", VT_STR},
+			    {"style",VT_STR},
 			    {NULL, VT_NULL} };
 
 
 AcdOAttr acdAttrDirectory[] = { {"fullpath", VT_BOOL},
 				{"nullok", VT_BOOL},
+				{"comment", VT_STR},
+				{"corba", VT_STR},
+				{"style",VT_STR},
 				{NULL, VT_NULL} };
 
 AcdOAttr acdAttrFeat[] = { {"name", VT_STR},
 			   {"extension", VT_STR},
+			   {"comment", VT_STR},
+			   {"corba", VT_STR},
+			   {"style",VT_STR},
 			   {NULL, VT_NULL} };
 
 AcdOAttr acdAttrFeatout[] = { {"name", VT_STR},
 			      {"extension", VT_STR},
+			      {"comment", VT_STR},
+			      {"corba", VT_STR},
+			      {"style",VT_STR},
 			      {NULL, VT_NULL} };
 
 AcdOAttr acdAttrFloat[] = { {"minimum", VT_FLOAT},
@@ -530,6 +549,9 @@ AcdOAttr acdAttrFloat[] = { {"minimum", VT_FLOAT},
 			    {"increment", VT_FLOAT},
 			    {"precision", VT_INT},
 			    {"warnrange", VT_BOOL},
+			    {"comment", VT_STR},
+			    {"corba", VT_STR},
+			    {"style",VT_STR},
 			    {NULL, VT_NULL} };
 
 AcdOAttr acdAttrGraph[] = { {"type", VT_STR},
@@ -538,6 +560,9 @@ AcdOAttr acdAttrGraph[] = { {"type", VT_STR},
 			    {"gxtitle",VT_STR}, 
 			    {"gytitle",VT_STR}, 
 			    {"goutfile",VT_STR},
+			    {"comment", VT_STR},
+			    {"corba", VT_STR},
+			    {"style",VT_STR},
 			    {NULL, VT_NULL} };
 
 AcdOAttr acdAttrGraphxy[] = { {"type", VT_STR},
@@ -547,24 +572,36 @@ AcdOAttr acdAttrGraphxy[] = { {"type", VT_STR},
 			      {"gytitle",VT_STR}, 
 			      {"goutfile",VT_STR},
 			      {"multiple", VT_INT},
+			      {"comment", VT_STR},
+			      {"corba", VT_STR},
+			      {"style",VT_STR},
 			      {NULL, VT_NULL} };
 
 AcdOAttr acdAttrInt[] = { {"minimum", VT_INT},
 			  {"maximum", VT_INT},
 			  {"increment", VT_INT},
 			  {"warnrange", VT_BOOL},
+			  {"comment", VT_STR},
+			  {"corba", VT_STR},
+			  {"style",VT_STR},
 			  {NULL, VT_NULL} };
 
 AcdOAttr acdAttrDatafile[] = { {"name", VT_STR},
 			       {"extension", VT_STR},
 			       {"type", VT_STR},
 			       {"nullok", VT_BOOL},
+			       {"comment", VT_STR},
+			       {"corba", VT_STR},
+			       {"style",VT_STR},
 			       {NULL, VT_NULL} };
 
 AcdOAttr acdAttrInfile[] = { {"name", VT_STR},
 			     {"extension", VT_STR},
 			     {"type", VT_STR},
 			     {"nullok", VT_BOOL},
+			     {"comment", VT_STR},
+			     {"corba", VT_STR},
+			     {"style",VT_STR},
 			     {NULL, VT_NULL} };
 
 AcdOAttr acdAttrList[] = { {"minimum", VT_INT},
@@ -575,25 +612,40 @@ AcdOAttr acdAttrList[] = { {"minimum", VT_INT},
 			   {"delimiter", VT_STR},
 			   {"codedelimiter", VT_STR},
 			   {"values", VT_STR},
+			   {"comment", VT_STR},
+			   {"corba", VT_STR},
+			   {"style",VT_STR},
 			   {NULL, VT_NULL} };
 
 AcdOAttr acdAttrMatrix[] = { {"pname", VT_STR},
 			   {"nname", VT_STR},
 			   {"protein", VT_BOOL},
+			   {"comment", VT_STR},
+			   {"corba", VT_STR},
+			   {"style",VT_STR},
 			   {NULL, VT_NULL} };
 
 AcdOAttr acdAttrMatrixf[] = { {"pname", VT_STR},
 			    {"nname", VT_STR},
 			    {"protein", VT_BOOL},
+			    {"comment", VT_STR},
+			    {"corba", VT_STR},
+			    {"style",VT_STR},
 			    {NULL, VT_NULL} };
 
 AcdOAttr acdAttrOutfile[] = { {"name", VT_STR},
 			      {"extension", VT_STR},
 			      {"type", VT_STR},
 			      {"nullok", VT_BOOL},
+			      {"comment", VT_STR},
+			      {"corba", VT_STR},
+			      {"style",VT_STR},
 			      {NULL, VT_NULL} };
 
 AcdOAttr acdAttrRange[] = { 
+			    {"comment", VT_STR},
+			    {"corba", VT_STR},
+			    {"style",VT_STR},
 			    {NULL, VT_NULL} };
 
 
@@ -601,6 +653,9 @@ AcdOAttr acdAttrRegexp[] = { {"minlength", VT_INT},
 			     {"maxlength", VT_INT},
 			     {"upper", VT_BOOL},
 			     {"lower", VT_BOOL},
+			     {"comment", VT_STR},
+			     {"corba", VT_STR},
+			     {"style",VT_STR},
 			     {NULL, VT_NULL} };
 
 AcdOAttr acdAttrSelect[] = { {"minimum", VT_INT},
@@ -610,33 +665,54 @@ AcdOAttr acdAttrSelect[] = { {"minimum", VT_INT},
 			     {"header", VT_STR},
 			     {"delimiter", VT_STR},
 			     {"values", VT_STR},
+			     {"comment", VT_STR},
+			     {"corba", VT_STR},
+			     {"style",VT_STR},
 			     {NULL, VT_NULL} };
 
 AcdOAttr acdAttrSeqout[] = { {"name", VT_STR},
 			     {"extension", VT_STR},
 			     {"features", VT_BOOL},
+			     {"comment", VT_STR},
+			     {"corba", VT_STR},
+			     {"style",VT_STR},
 			     {NULL, VT_NULL} };
 
 AcdOAttr acdAttrSeqoutset[] = { {"name", VT_STR},
 				{"extension", VT_STR},
 				{"features", VT_BOOL},
+			        {"comment", VT_STR},
+			        {"corba", VT_STR},
+			        {"style",VT_STR},
 				{NULL, VT_NULL} };
 
 AcdOAttr acdAttrSeqoutall[] = { {"name", VT_STR},
 				{"extension", VT_STR},
 				{"features", VT_BOOL},
+			        {"comment", VT_STR},
+			        {"corba", VT_STR},
+			        {"style",VT_STR},
 				{NULL, VT_NULL} };
 
 AcdOAttr acdAttrSeq[] = { {"type", VT_STR},
 			  {"features", VT_BOOL},
+			  {"comment", VT_STR},
+			  {"corba", VT_STR},
+			  {"style",VT_STR},
 			  {NULL, VT_NULL} };
 
 AcdOAttr acdAttrSeqset[] = { {"type", VT_STR},
 			     {"features", VT_BOOL},
+			     {"comment", VT_STR},
+			     {"corba", VT_STR},
+			     {"style",VT_STR},
 			     {NULL, VT_NULL} };
 
 AcdOAttr acdAttrSeqall[] = { {"type", VT_STR},
 			     {"features", VT_BOOL},
+			     {"comment", VT_STR},
+			     {"corba", VT_STR},
+			     {"style",VT_STR},
 			     {NULL, VT_NULL} };
 
 AcdOAttr acdAttrString[] = { {"minlength", VT_INT},
@@ -644,9 +720,15 @@ AcdOAttr acdAttrString[] = { {"minlength", VT_INT},
 			     {"pattern", VT_STR},
        			     {"upper", VT_BOOL},
 			     {"lower", VT_BOOL},
+			     {"comment", VT_STR},
+			     {"corba", VT_STR},
+			     {"style",VT_STR},
 		     {NULL, VT_NULL} };
 
 AcdOAttr acdAttrVar[] = {
+                             {"comment", VT_STR},
+			     {"corba", VT_STR},
+			     {"style",VT_STR},
                           {NULL, VT_NULL} };
 
 typedef struct AcdSKey {

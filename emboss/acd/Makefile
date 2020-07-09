@@ -62,7 +62,6 @@ AS = @AS@
 AWK = gawk
 CC = gcc
 CPP = gcc -E
-CXX = c++
 DLLTOOL = @DLLTOOL@
 LD = /usr/ccs/bin/ld
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
@@ -72,7 +71,7 @@ NM = /usr/ccs/bin/nm -p
 OBJDUMP = @OBJDUMP@
 PACKAGE = EMBOSS
 RANLIB = ranlib
-VERSION = 1.6.1
+VERSION = 1.6.2
 XLIB =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib -lX11 -lsocket -lsocket  -lnsl -lnsl
 
 pkgdata_DATA = *.acd codes.english emboss.default

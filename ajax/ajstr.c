@@ -3135,7 +3135,7 @@ AjBool ajStrCheck (const AjPStr thys) {
 
 void ajStrTraceT (const AjPStr thys, char* title) {
 
-  ajDebug("%s\n");
+  ajDebug("%s\n",title);
   ajStrTrace(thys);
 
   return;
@@ -3150,32 +3150,35 @@ void ajStrTraceT (const AjPStr thys, char* title) {
 ** @@
 ******************************************************************************/
 
-void ajStrTrace (const AjPStr thys) {
+void ajStrTrace (const AjPStr thys)
+{
 
-  if (!thys) {
-   ajDebug("String trace NULL\n");
-    return;
-  }
+    if (!thys)
+    {
+	ajDebug("String trace NULL\n");
+	return;
+    }
+  
+    (void) ajStrCheck (thys);
 
-  (void) ajStrCheck (thys);
-
-  ajDebug("String trace use: %d size: %d len: %d string: ",
-	  thys->Use, thys->Res, thys->Len);
-
-  if (thys->Ptr) {
-    if (thys->Len <= 20)
-      ajDebug("<%s>\n", thys->Ptr);
+    ajDebug("String trace use: %d size: %d len: %d string: ",
+	    thys->Use, thys->Res, thys->Len);
+  
+    if (thys->Ptr)
+    {
+	if (thys->Len <= 20)
+	    ajDebug("<%s>\n", thys->Ptr);
+	else
+	    ajDebug("<%10.10s>..<%s>\n",
+		    thys->Ptr, thys->Ptr + thys->Len-10);
+    }
     else
-      ajDebug("<%10.10s>..<%s>\n",
-	       thys->Ptr, thys->Ptr + thys->Len-10);
-  }
-  else
-    ajDebug("<NULL>\n");
+	ajDebug("<NULL>\n");
 
-  ajDebug("             ptr: %x    charptr: %x\n",
-	   thys, thys->Ptr);
+    ajDebug("             ptr: %x    charptr: %x\n",
+	    thys, thys->Ptr);
 
-  return;
+    return;
 }
 
 /* @func ajStrStat ************************************************************

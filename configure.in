@@ -6,7 +6,7 @@ dnl Process this file with autoconf to produce a configure script.
 #CC=cc
 
 AC_INIT(ajax/ajacd.c)
-AM_INIT_AUTOMAKE(EMBOSS, 1.6.1)
+AM_INIT_AUTOMAKE(EMBOSS, 1.6.2)
 
 dnl Use libtool to make a shared library.
 AM_PROG_LIBTOOL
@@ -16,7 +16,7 @@ AC_SUBST(AJAX_FIXED_ROOT)
 AJAX_FIXED_ROOT="\\\"`pwd`/emboss\\\""
 
 dnl Program checks
-AC_PROG_CXX
+#AC_PROG_CXX
 AC_PROG_AWK
 AC_PROG_CC
 AC_PROG_CPP

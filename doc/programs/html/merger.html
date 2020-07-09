@@ -99,11 +99,12 @@ sequence reads.
 <p>
 This program was originally written to aid in the reconstruction of mRNA
 sequences which had been sequenced from both ends as a 5' and 3' EST
-(cDNA). 
+(cDNA). eg. joining two reads produced by primer walking sequencing.
 
 <p>
 Care should be taken to reverse one of the sequences (e.g.  using the
-qualifier '-sreverse2') if this is required. 
+qualifier '-sreverse2') if this is required to get them both in the
+correct orientation. 
 
 <p>
 Because it uses a Needleman & Wunsch alignment the required memory may
@@ -121,6 +122,7 @@ the best results with a set of poor quality EST test sequences.
 
 
 Here is a sample session with merger.
+
 
 <pre>
 
@@ -169,6 +171,13 @@ ECLACY
                                                                    
 </pre>
 
+<p>
+Typically, one of the sequences will need to be reverse-complemented to put it
+into the correct orientation to make it join. For example:
+<p>
+<pre>
+% merger file1.seq file2.seq -sreverse2 -out merged.seq
+</pre>
 
 <H2>
     Command line arguments

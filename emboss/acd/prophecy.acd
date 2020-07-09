@@ -28,7 +28,7 @@ list: type  [
   button: "Y"
 ]
 
-  variable: dogap "@($(type) != f)"
+  var: dogap "@($(type) != f)"
 
   string: name [ req: Y def: "mymatrix"
                  info: "Enter a name for the profile" ]

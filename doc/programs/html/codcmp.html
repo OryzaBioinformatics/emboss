@@ -81,14 +81,13 @@ the number of unused codons.
 
 Here is a sample session with codcmp, comparing the codon usage tables
 for Escherichia coli and Haemophilus influenzae.
+<P>
 
 <pre>
-
 % codcmp
 Codon usage file [Ehum.cut]: Eeco.cut
 Codon usage file [Ehum.cut]: Ehin.cut
 Output file [outfile.codcmp]: 
-
 </pre>
 
 
@@ -174,6 +173,8 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
+It reads in the Codon Usage Tables - these are available as EMBOSS data files.
+See below for details.
 
 <H2>
     Output file format
@@ -181,17 +182,21 @@ IT IS DONE FOR YOU.
 
 
 This is the result of the example run:
+<P>
 
+<HR>
 <pre>
-
 # CODCMP codon usage table comparison
 # Eeco.cut vs Ehin.cut
 
-Sum Difference Squared = 2.337
-Sum Difference         = 0.040
+Sum Squared Difference = 2.337
+Mean Squared Difference = 0.037
+Root Mean Squared Difference = 0.191
+Sum Difference         = 9.840
+Mean Difference         = 0.154
 Codons not appearing   = 0
-
 </pre>
+<HR>
 
 <H2>
     Data files
@@ -229,20 +234,28 @@ current directory for you to inspect or modify, run:
 </H2>
 
 
+None.
+
 <H2>
     References
 </H2>
 
+
+None.
 
 <H2>
     Warnings
 </H2>
 
 
+None.
+
 <H2>
     Diagnostic Error Messages
 </H2>
 
+
+None.
 
 <H2>
     Exit status
@@ -255,6 +268,7 @@ This program always exits with a status of 0.
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -291,6 +305,9 @@ This program always exits with a status of 0.
 
 This application was written by Alan Bleasby <a
 href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+<p>
+Some more statistics were add by David Martin <a
+href="mailto:david.martin@biotek.uio.no">(david.martin@biotek.uio.no)</a>
 
 <H2>
     History
@@ -298,6 +315,8 @@ href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
 
 
 Completed 9 Sept 1999
+<br>
+20 Oct 2000 - David Martin added a couple more statistics to the output.
 
 <H2>
     Target users

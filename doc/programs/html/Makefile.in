@@ -62,7 +62,6 @@ AS = @AS@
 AWK = @AWK@
 CC = @CC@
 CPP = @CPP@
-CXX = @CXX@
 DLLTOOL = @DLLTOOL@
 LD = @LD@
 LIBTOOL = @LIBTOOL@

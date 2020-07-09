@@ -28,7 +28,7 @@ Usage
 
    Here is a sample session with codcmp, comparing the codon usage tables
    for Escherichia coli and Haemophilus influenzae.
-
+   
 % codcmp
 Codon usage file [Ehum.cut]: Eeco.cut
 Codon usage file [Ehum.cut]: Ehin.cut
@@ -43,7 +43,7 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
-
+   
    Mandatory qualifiers Allowed values Default
    [-first]
    (Parameter 1) First codon usage file Codon usage file in EMBOSS data
@@ -60,17 +60,25 @@ Command line arguments
    
 Input file format
 
+   It reads in the Codon Usage Tables - these are available as EMBOSS
+   data files. See below for details.
+   
 Output file format
 
    This is the result of the example run:
-
+     _________________________________________________________________
+   
 # CODCMP codon usage table comparison
 # Eeco.cut vs Ehin.cut
 
-Sum Difference Squared = 2.337
-Sum Difference         = 0.040
+Sum Squared Difference = 2.337
+Mean Squared Difference = 0.037
+Root Mean Squared Difference = 0.191
+Sum Difference         = 9.840
+Mean Difference         = 0.154
 Codons not appearing   = 0
-
+     _________________________________________________________________
+   
 Data files
 
    The codon usage tables are read by default from "Ehum.cut" in the
@@ -91,40 +99,55 @@ Data files
 
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    This program always exits with a status of 0.
    
 Known bugs
 
+   None.
+   
 See also
 
-   Program name Description
-   chaos Create a chaos game representation plot for a sequence
-   chips Codon usage statistics
-   compseq Counts the composition of dimer/trimer/etc words in a sequence
-   cusp Create a codon usage table
-   freak Residue/base frequency table or plot
-   geecee Calculates the fractional GC content of nucleic acid sequences
-   isochore Plots isochores in large DNA sequences
+   Program name                          Description
+   chaos        Create a chaos game representation plot for a sequence
+   chips        Codon usage statistics
+   compseq      Counts the composition of dimer/trimer/etc words in a sequence
+   cusp         Create a codon usage table
+   freak        Residue/base frequency table or plot
+   geecee       Calculates the fractional GC content of nucleic acid sequences
+   isochore     Plots isochores in large DNA sequences
    newcpgreport Report CpG rich areas
-   newcpgseek Reports CpG rich regions
-   wobble Wobble base plot
-   wordcount Counts words of a specified size in a DNA sequence
+   newcpgseek   Reports CpG rich regions
+   wobble       Wobble base plot
+   wordcount    Counts words of a specified size in a DNA sequence
    
 Author(s)
 
    This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
    
+   Some more statistics were add by David Martin
+   (david.martin@biotek.uio.no)
+   
 History
 
    Completed 9 Sept 1999
+   20 Oct 2000 - David Martin added a couple more statistics to the
+   output.
    
 Target users
 

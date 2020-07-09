@@ -12,19 +12,6 @@ appl: palindrome [
 
   sequence: insequence [ param: Y type: nucleotide ]
 
-#  int: begin [ req: Y default: 1 min: 1 info:" Begin at position" 
-#               valid: "Positive integer"
-#             ]
-
-#  var: seqlen: @sequence.length
-#  var: seqstart: $(insequence.begin)
-
-#  int: end [ req: Y  default: "$(insequence.length)" min: $(begin)
-#             info:"End at position"
-#             valid: "Positive integer"
-#             expect: "Sequence length"
-#           ]
-
   int: minpalLen [ req: Y default: 10  min: 1
                    max: "@($(insequence.length)/2)"
                    info:"Enter minimum length of palindrome" 

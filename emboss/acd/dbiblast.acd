@@ -13,7 +13,7 @@ string: filename [ req: Y prompt: "database base filename" def: $(dbname)
 string: indexdirectory [ def: "." prompt: "Index directory" ]
 
 string: sortoptions [ def: "-T . -k 1,1" prompt: "Sort option(s)"
-      help "Sort options, typically '-T .' to use current directory for
+      help: "Sort options, typically '-T .' to use current directory for
       work files and '-k 1,1' to force GNU sort to use the first field" ]
 
 string: release [ req: Y def: "0.0" max: 9 prompt: "Release number" ]

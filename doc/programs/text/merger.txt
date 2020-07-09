@@ -44,10 +44,12 @@ Description
    
    This program was originally written to aid in the reconstruction of
    mRNA sequences which had been sequenced from both ends as a 5' and 3'
-   EST (cDNA).
+   EST (cDNA). eg. joining two reads produced by primer walking
+   sequencing.
    
    Care should be taken to reverse one of the sequences (e.g. using the
-   qualifier '-sreverse2') if this is required.
+   qualifier '-sreverse2') if this is required to get them both in the
+   correct orientation.
    
    Because it uses a Needleman & Wunsch alignment the required memory may
    be greater than the available memory when attempting to merge large
@@ -104,6 +106,11 @@ ECLACA          190   aatcactcgcatccatcagaagttgaaaaaagagaaagcctgatt 234
 
 ECLACY
 
+   Typically, one of the sequences will need to be reverse-complemented
+   to put it into the correct orientation to make it join. For example:
+   
+% merger file1.seq file2.seq -sreverse2 -out merged.seq
+
 Command line arguments
 
    Mandatory qualifiers:
@@ -118,7 +125,7 @@ Command line arguments
    -gapextend          float      Gap extension penalty
 
    Advanced qualifiers: (none)
-
+   
    Mandatory qualifiers Allowed values Default
    [-seqa]
    (Parameter 1) Sequence USA Readable sequence Required
@@ -192,22 +199,22 @@ Known bugs
 
 See also
 
-   Program name Description
-   cutseq Removes a specified section from a sequence
-   descseq Alter the name or description of a sequence
-   est2genome Align EST and genomic DNA sequences
-   extractseq Extract regions from a sequence
-   maskfeat Mask off features of a sequence
-   maskseq Mask off regions of a sequence
-   megamerger Merge two large overlapping nucleic acid sequences
-   newseq Type in a short new sequence
-   noreturn Removes carriage return from ASCII files
-   nthseq Writes one sequence from a multiple set of sequences
-   pasteseq Insert one sequence into another
-   revseq Reverse and complement a sequence
-   splitter Split a sequence into (overlapping) smaller sequences
-   trimseq Trim ambiguous bits off the ends of sequences
-   vectorstrip Strips out DNA between a pair of vector sequences
+   Program name                      Description
+   cutseq       Removes a specified section from a sequence
+   descseq      Alter the name or description of a sequence
+   est2genome   Align EST and genomic DNA sequences
+   extractseq   Extract regions from a sequence
+   maskfeat     Mask off features of a sequence
+   maskseq      Mask off regions of a sequence
+   megamerger   Merge two large overlapping nucleic acid sequences
+   newseq       Type in a short new sequence
+   noreturn     Removes carriage return from ASCII files
+   nthseq       Writes one sequence from a multiple set of sequences
+   pasteseq     Insert one sequence into another
+   revseq       Reverse and complement a sequence
+   splitter     Split a sequence into (overlapping) smaller sequences
+   trimseq      Trim ambiguous bits off the ends of sequences
+   vectorstrip  Strips out DNA between a pair of vector sequences
    
 Author(s)
 

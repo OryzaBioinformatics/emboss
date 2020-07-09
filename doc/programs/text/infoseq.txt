@@ -26,7 +26,7 @@ Usage
 
    Display information on a sequence
 
-% infoseq embl:\*
+% infoseq embl:paamir
 
    Don't display the USA of a sequence
 
@@ -76,7 +76,7 @@ Command line arguments
    -length             bool       Display 'length' column
    -pgc                bool       Display 'percent GC content' column
    -description        bool       Display 'description' column
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -105,9 +105,11 @@ Input file format
    
 Output file format
 
-   The output is displayed on the screen (stdout) by default. A typical
-   output file is:
-
+   The output is displayed on the screen (stdout) by default.
+   
+   A typical output file is:
+     _________________________________________________________________
+   
 # USA             Name        Accession Type Length     Description
 tsw-id:5H1D_FUGRU 5H1D_FUGRU    P79748  P    379        5-HYDROXYTRYPTAMINE 1D
 RECEPTOR (5-HT-1D) (SEROTONIN RECEPTOR).
@@ -125,7 +127,8 @@ USCLE 2.
 tsw-id:ACTX_FUGRU ACTX_FUGRU    P53483  P    376        ACTIN, ALPHA ANOMALOUS.
 tsw-id:ARF3_HUMAN ARF3_HUMAN    P16587  P    180        ADP-RIBOSYLATION FACTOR
  3.
-
+     _________________________________________________________________
+   
    The first non-blank line is the heading. This is followed by one line
    per sequence containing the following columns of data separated by one
    of more space or TAB characters:

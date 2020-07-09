@@ -19,6 +19,6 @@ appl: histogramtest [
 
   int: xend [ opt: y def: "@($(xstart)+$(points))"
               min: "@($(xstart)+1)" info: "end value for x axis"
-              expect: "Start value plus number of data points" "]
+              expect: "Start value plus number of data points"]
 
   xygraph: graph [ req: Y ]
