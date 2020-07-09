@@ -1,0 +1,13 @@
+# ENTRET application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+appl: entret [
+	doc: "Reads and writes (returns) flatfile entries"
+	groups: "sequence display, database: entry extraction"
+]
+
+  seqall: sequence [ param: Y entry: Y ]
+
+  outfile: outfile [ param: Y ]
+
+  bool: firstonly [ info: "Read one sequence and stop" ]

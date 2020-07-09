@@ -1,0 +1,211 @@
+
+                               EMBOSS: entret
+     _________________________________________________________________
+   
+                                Program entret
+                                       
+Function
+
+   Reads and writes (returns) flatfile entries
+   
+Description
+
+   entret reads a sequence from a database or a file and writes the
+   complete sequence entry to a text file.
+   
+   The difference between entret and such programs as seqret which also
+   read entries from databases or files and write them to files, is that
+   entret reads and writes the complete sequence entry together with the
+   heading annotation (documentation). entret therefore is very useful
+   for looking at the annotation of sequences from databases, which
+   seqret does not provide.
+   
+   The other main difference is that when it writes out the sequence
+   entry to a file, the information is treated as text, not sequence, and
+   so options that you would normally use to change the aspects of the
+   sequence to be written will either not be recognised and will cause an
+   error message to be written (e.g. '-osformat') or will be quietly
+   ignored (e.g. '-sbegin', '-send').
+   
+Usage
+
+   Here is a sample session with entret:
+   
+% entret embl:hsfau
+Reads and writes (returns) flatfile entries
+Output file [hsfau.entret]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -firstonly          bool       Read one sequence and stop
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.entret
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -firstonly Read one sequence and stop Yes/No No
+   
+Input file format
+
+   Normal sequence USA.
+   
+Output file format
+
+   The output from the example above is show:
+     _________________________________________________________________
+   
+% more hsfau.entret
+ID   HSFAU      standard; RNA; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+SV   X65923.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   MEDLINE; 93368957.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8:2537-2546(1993).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /chromosome="11q"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /tissue_type="placenta"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /map="13"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /db_xref="SWISS-PROT:P35544"
+FT                   /db_xref="SWISS-PROT:Q05472"
+FT                   /gene="fau"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
+G
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
+G
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
+0
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
+0
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
+0
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
+0
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
+0
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
+0
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
+0
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
+0
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
+8
+//
+     _________________________________________________________________
+   
+Data files
+
+   None.
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name                          Description
+   cirdna       Draws circular maps of DNA constructs
+   lindna       Draws linear maps of DNA constructs
+   remap        Display a sequence with restriction cut sites, translation etc
+   seqret       Reads and writes (returns) sequences
+   seqretall    Reads and writes (returns) a set of sequences one at a time
+   seqretset    Reads and writes (returns) a set of sequences all at once
+   seqretsplit  Reads and writes (returns) sequences in individual files
+   showfeat     Show features of a sequence
+   showseq      Display a sequence with features, translation etc
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (Oct 2000) - Alan Bleasby.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
