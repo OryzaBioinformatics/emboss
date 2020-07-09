@@ -1,0 +1,155 @@
+
+                               EMBOSS: biosed
+     _________________________________________________________________
+   
+                                Program biosed
+                                       
+Function
+
+   Replace or delete sequence sections
+   
+Description
+
+   biosed is a simple sequence editing utility that searches for a target
+   subsequence in one or more input sequences and replaces it with a
+   specified second subsequence (or optionally just deletes the found
+   target subsequence).
+   
+   biosed was inspired by the useful UNIX utility sed which searches for
+   a pattern in text and can replace or delete the found pattern.
+   
+   If the target subsequence occurs more than once, then each instance of
+   the target is replaced.
+   
+   The target subsequence is not any sort of an ambiguity pattern, it is
+   just a short sequence. A simple string match is done and if it exactly
+   matches then the replacement is done. The matching is independent of
+   the case of the sequence or the target - both uppercase and lowercase
+   will match.
+   
+Usage
+
+   Here is a sample session with biosed:
+   
+   Replace all 'T's with 'U's to create a RNA sequence
+   
+% biosed em:hsfau hsfau.rna -target T -replace U
+
+   Replace all 'RGD' protein motifs with 'XXRGDXX'
+   
+% biosed sw:A4M1_HUMAN A4M1_HUMAN.pep -target RGD -replace XXRGDXX
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-sequence]          seqall     Sequence database USA
+   -target             string     Sequence section to match
+*  -replace            string     Replacement sequence section
+  [-outseq]            seqout     Output sequence USA
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -delete             bool       Delete the target sequence sections
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   -target Sequence section to match Any string is accepted N
+   -replace Replacement sequence section Any string is accepted A
+   [-outseq]
+   (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -delete Delete the target sequence sections Yes/No No
+   
+Input file format
+
+   It reads the USA of one or more nucleic acid or protein sequences.
+   
+Output file format
+
+   The edited sequence is output.
+   
+   The sequence will be in uppercase.
+   
+Data files
+
+   None.
+   
+Notes
+
+   The edited sequence will be output in uppercase.
+   
+References
+
+   None.
+   
+Warnings
+
+   No check is made on the replacement subsequence.
+   Any text can be used as the replacement, including characters only
+   used in proteins (e.g. D, E, F, etc.), characters not used in proteins
+   (e.g. J, O, etc), digits and punctuation characters.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name                          Description
+   cutseq       Removes a specified section from a sequence
+   degapseq     Removes gap characters from sequences
+   descseq      Alter the name or description of a sequence
+   entret       Reads and writes (returns) flatfile entries
+   extractfeat  Extract features from a sequence
+   extractseq   Extract regions from a sequence
+   infoseq      Displays some simple information about sequences
+   listor       Writes a list file of the logical OR of two sets of sequences
+   maskfeat     Mask off features of a sequence
+   maskseq      Mask off regions of a sequence
+   newseq       Type in a short new sequence
+   noreturn     Removes carriage return from ASCII files
+   notseq       Excludes a set of sequences and writes out the remaining ones
+   nthseq       Writes one sequence from a multiple set of sequences
+   pasteseq     Insert one sequence into another
+   revseq       Reverse and complement a sequence
+   seqret       Reads and writes (returns) sequences
+   seqretall    Reads and writes (returns) a set of sequences one at a time
+   seqretset    Reads and writes (returns) a set of sequences all at once
+   seqretsplit  Reads and writes (returns) sequences in individual files
+   splitter     Split a sequence into (overlapping) smaller sequences
+   swissparse   Retrieves sequences from swissprot using keyword search
+   trimest      Trim poly-A tails off EST sequences
+   trimseq      Trim ambiguous bits off the ends of sequences
+   vectorstrip  Strips out DNA between a pair of vector sequences
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (Jan 2002) - Alan Bleasby
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

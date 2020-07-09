@@ -1,0 +1,33 @@
+appl: biosed [
+  documentation: "Replace or delete sequence sections"
+  groups: "Edit"
+]
+
+seqall: sequence  [
+  parameter: "Y"
+]
+
+
+bool: delete  [
+  optional: "N"
+  info: "Delete the target sequence sections"
+  default: "N"
+]
+
+
+string: target  [
+  required: "Y"
+  info: "Sequence section to match"
+  default: "N"
+]
+
+
+string: replace  [
+  required: @(!$(delete))
+  info: "Replacement sequence section"
+  default: "A"
+]
+
+seqout: outseq  [
+  parameter: "Y"
+]
