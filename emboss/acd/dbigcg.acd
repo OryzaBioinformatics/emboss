@@ -9,7 +9,7 @@ appl: dbigcg [
 section: input [ info: "input Section" type: page ]
 list: idformat  [
   required: "y"
-  prompt: "Entry format"
+  information: "Entry format"
   values: "EMBL:EMBL; SWISS:Swiss-Prot, SpTrEMBL, TrEMBLnew; GENBANK:Genbank, DDBJ; PIR:NBRF"
   maximum: "1"
   minimum: "1"
@@ -19,13 +19,13 @@ list: idformat  [
 string: directory  [
   required: "Y"
   default: "."
-  prompt: "Database directory"
+  information: "Database directory"
 ]
 
-string: filename  [
+string: filenames  [
   required: "Y"
   default: "*.seq"
-  prompt: "Wildcard database filename"
+  information: "Wildcard database filename"
 ]
 
 endsection: input
@@ -36,14 +36,14 @@ string: dbname  [
   parameter: "Y"
   maxlength: "19"
   minlength: "1"
-  prompt: "Database name"
+  information: "Database name"
 ]
 
 string: release  [
   required: "Y"
   default: "0.0"
   maxlength: "9"
-  prompt: "Release number"
+  information: "Release number"
 ]
 
 string: date  [
@@ -51,25 +51,41 @@ string: date  [
   default: "00/00/00"
   maxlength: "8"
   valid: "Date string dd/mm/yy"
-  prompt: "Index date"
+  information: "Index date"
   pattern: "^([0-9]+.[0-9]+.[0-9]+)?$"
 ]
 
 endsection: required
 
 section: advanced [ info: "advanced Section" type: page ]
-bool: staden  [
-  prompt: "Use staden index file names"
+
+list: fields  [
+  required: "n"
+  information: "Index fields"
+  values: "acnum:Accession number;seqvn:Sequence Version and GI;des:Description;keyword:Keywords;taxon:Taxonomy"
+  minimum: 0
+  maximum: 5
+  default: "acnum"
+]
+
+string: exclude  [
+  information: "wildcard filename(s) to exclude"
 ]
 
 string: indexdirectory  [
   default: "."
-  prompt: "Index directory"
+  information: "Index directory"
+]
+
+int: maxindex  [
+  default: "0"
+  minimum: "0"
+  information: "Maximum index length"
 ]
 
 string: sortoptions  [
   default: "-T . -k 1,1"
-  prompt: "Sort option(s)"
+  information: "Sort option(s)"
   help: "Sort options, typically '-T .' to use current directory for work files and '-k 1,1' to force GNU sort to use the first field"
 ]
 

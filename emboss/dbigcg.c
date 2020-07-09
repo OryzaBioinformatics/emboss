@@ -2,7 +2,7 @@
 **
 ** Index gcg/pir/accelrys databases
 **
-** @author: Copyright (C) Peter Rice & Alan Bleasby
+** @author: Copyright (C) Peter Rice, Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -43,64 +43,65 @@
 **
 ******************************************************************************/
 
-
 #include "emboss.h"
 #include <dirent.h>
 #include <sys/wait.h>
 #include <string.h>
 
-#define BIGOVERLAP 10000;
+#define GCGTYPE_OTHER 0
+#define GCGTYPE_ID 1
+#define GCGTYPE_ACC 2
+#define GCGTYPE_DES 3
+#define GCGTYPE_KEY 4
+#define GCGTYPE_TAX 5
+#define GCGTYPE_VER 6
 
-static AjPList idlist;
-static AjPList aclist;
+static EmbPEntry dbigcg_nextentry (AjPFile libr, AjPFile libs,
+				   ajint ifile, AjPStr idformat,
+				   AjBool systemsort,
+				   AjPStr* fields, ajint* maxFieldLen,
+				   ajint* maxidlen,
+				   AjPFile elistfile, AjPFile* alistfile);
+static AjBool dbigcg_gcgopenlib(AjPStr lname, AjPFile* libr, AjPFile* lib);
+static ajint dbigcg_gcggetent(AjPStr idformat,
+			      AjPFile libr, AjPFile libs,
+			      AjPFile* alistfile,
+			      AjBool systemsort, AjPStr* fields,
+			      ajint* maxFieldLen,
+			      AjPStr* libstr, AjPList* fdl);
+static ajint dbigcg_pirgetent(AjPStr idformat,
+			      AjPFile libr, AjPFile libs, AjPFile* alistfile,
+			      AjBool systemsort, AjPStr* fields,
+			      ajint* maxFieldLen,
+			      AjPStr* libstr, AjPList* fdl);
+static ajint dbigcg_gcgappent(AjPFile libr, AjPFile libs,
+			      AjPRegexp rexp, AjPRegexp sexp,
+			      AjPStr* libstr);
 
-static AjBool systemsort;
-static AjBool cleanup;
-
-static AjPStr gcgtype = NULL;
-static ajint gcglen;
-
-static ajint maxidlen = 12;
-static ajint maxaclen = 12;
-
-static AjPStr rline = NULL;
-static AjPStr sline = NULL;
-
-static ajint rpos;
-static ajint spos;
-
-static AjPRegexp rexp = NULL;
-static AjPRegexp pirexp = NULL;
-static AjPRegexp sexp = NULL;
-static AjPStr lastidstr = NULL;
-
-static AjPFile elistfile=NULL;
-static AjPFile alistfile=NULL;
-static AjPFile blistfile=NULL;
-
-static AjPStr dbname = NULL;
-static AjPStr release = NULL;
-static AjPStr datestr = NULL;
-static AjPStr sortopt = NULL;
-
-static EmbPentry dbigcg_nextentry (AjPFile libr, AjPFile libs, ajint ifile);
-static AjBool dbigcg_gcgopenlib(AjPStr lname, AjPFile* libr, AjPFile* libs);
-static ajint dbigcg_gcggetent(AjPFile libr, AjPFile libs, ajint *d_pos,
-			      ajint *s_pos, AjPStr* libstr, AjPList alc);
-static ajint dbigcg_pirgetent(AjPFile libr, AjPFile libs, ajint *d_pos,
-			      ajint *s_pos, AjPStr* libstr, AjPList alc);
-static ajint dbigcg_gcgappent( AjPFile libr, AjPFile libs, AjPStr* libstr);
-
-static AjPStr idformat = NULL;
-
-static AjBool dbigcg_ParseEmbl (AjPStr line, AjPStr* id, AjPList acl);
-static AjBool dbigcg_ParsePir (AjPStr line, AjPStr* id, AjPList acl);
-static AjBool dbigcg_ParseGenbank (AjPStr line, AjPStr* id, AjPList acl);
+static AjBool dbigcg_ParseEmbl (AjPFile libr,
+				AjPFile* alistfile,
+				AjBool systemsort, AjPStr* fields,
+				ajint* maxFieldLen,
+				AjPStr *id, AjPList* fdl);
+static AjBool dbigcg_ParsePir (AjPFile libr,
+			       AjPFile* alistfile,
+			       AjBool systemsort, AjPStr* fields,
+			       ajint* maxFieldLen,
+			       AjPStr *id, AjPList* fdl);
+static AjBool dbigcg_ParseGenbank (AjPFile libr,
+				   AjPFile* alistfile,
+				   AjBool systemsort, AjPStr* fields,
+				   ajint* maxFieldLen,
+				   AjPStr *id, AjPList* fdl);
 
 typedef struct SParser
 {
   char* Name;
-  AjBool (*Parser) (AjPStr line, AjPStr* id, AjPList acl);
+  AjBool (*Parser) (AjPFile libr,
+		    AjPFile* alistfile,
+		    AjBool systemsort, AjPStr* fields,
+		    ajint* maxFieldLen,
+		    AjPStr *id, AjPList* fdl);
 } OParser;
 
 static OParser parser[] =
@@ -123,622 +124,308 @@ static OParser parser[] =
 int main(int argc, char **argv)
 {
 
-    AjBool staden;
+    AjPList idlist;
+    AjPList* fieldList=NULL;
+
+    AjBool systemsort;
+    AjBool cleanup;
+
+    ajint maxindex;
+    ajint maxidlen = 0;
+    ajint maxlen;
+
+    AjPFile elistfile=NULL;
+    AjPFile* alistfile=NULL;
+
+    AjPStr dbname = NULL;
+    AjPStr release = NULL;
+    AjPStr datestr = NULL;
+    AjPStr sortopt = NULL;
+    void **entryIds = NULL;
+
     AjPStr directory;
     AjPStr indexdir;
     AjPStr filename;
+    AjPStr exclude;
     AjPStr curfilename = NULL;
-    AjPStr elistfname = NULL;
-    AjPStr alistfname = NULL;
-    AjPStr blistfname = NULL;
 
     AjPFile libr=NULL;
     AjPFile libs=NULL;
+    AjPStr idformat = NULL;
 
-    EmbPentry entry;
-    EmbPac acnum=NULL;
-    EmbPac acnumtmp=NULL;
-    char* lastac=NULL;
+    EmbPEntry entry;
 
-    ajint i;
-    ajint j;
-    ajint k;
-    ajint nac;
-    ajint nid=0;
-    ajint iac=0;
-    void **ids = NULL;
-    void **acs = NULL;
-    AjPList inlist = NULL;
-    void ** files = NULL;
+    ajint idCount=0;
+    AjPList listInputFiles = NULL;
+    void ** inputFiles = NULL;
     ajint nfiles;
     ajint ifile;
 
-    ajint dsize;
-    ajint esize;
-    ajint asize;
-    ajint ahsize;
+    ajint filesize;
     short recsize;
-    short elen;
-    short alen;
     ajint maxfilelen=20;
     char date[4] = {0,0,0,0};
-    char padding[256];
-    ajint ient;
-    ajint filenum;
-    ajint rpos;
-    ajint spos;
-    ajint idnum;
 
-    AjPStr rdline = NULL;
-    AjPStr tmpstr = NULL;
-    AjPStr idstr = NULL;
-    AjPStr acstr = NULL;
+    AjPStr tmpfname = NULL;
+    AjPStr* fields = NULL;
 
-    AjPRegexp datexp = NULL;
-    AjPRegexp idsrtexp = NULL;
-    AjPRegexp acsrtexp = NULL;
-    AjPRegexp acsrt2exp = NULL;
-
-    AjPStr  dfname = NULL;
-    AjPStr  efname = NULL;
-    AjPStr atfname = NULL;
-    AjPStr ahfname = NULL;
-
-    AjPFile  dfile = NULL;
-    AjPFile  efile = NULL;
-    AjPFile atfile = NULL;
-    AjPFile ahfile = NULL;
+    AjPFile entFile = NULL;
 
     AjPStr* reffiles = NULL;
     AjPStr* seqfiles = NULL;
-    AjPStr* twofiles = NULL;
+    ajint* maxFieldLen = NULL;
 
-    datexp = ajRegCompC("^([0-9]+).([0-9]+).([0-9]+)");
-    idsrtexp = ajRegCompC ("^([^ ]+) +([0-9]+) +([0-9]+) +([0-9]+)");
-    acsrtexp = ajRegCompC ("^([^ ]+) +([^ \n]+)");
-    acsrt2exp = ajRegCompC ("^([^ ]+) +([0-9]+)");
-
-    for (i=0;i<256;i++)
-	padding[i] = ' ';
+    ajint ifield=0;
+    ajint nfields=0;
 
     embInit ("dbigcg", argc, argv);
 
-    staden = ajAcdGetBool ("staden");
     idformat = ajAcdGetListI ("idformat",1);
+    fields = ajAcdGetList ("fields");
     directory = ajAcdGetString ("directory");
     indexdir = ajAcdGetString ("indexdirectory");
-    filename = ajAcdGetString ("filename");
+    filename = ajAcdGetString ("filenames");
+    exclude = ajAcdGetString ("exclude");
     dbname = ajAcdGetString ("dbname");
     release = ajAcdGetString ("release");
     datestr = ajAcdGetString ("date");
     systemsort = ajAcdGetBool ("systemsort");
     cleanup = ajAcdGetBool ("cleanup");
     sortopt = ajAcdGetString ("sortoptions");
+    maxindex = ajAcdGetInt ("maxindex");
+
+    while(fields[nfields])	/* array ends with a NULL */
+      nfields++;
+
+    if (nfields) {
+
+      AJCNEW(maxFieldLen, nfields);
+      for (ifield=0; ifield < nfields; ifield++)
+	  maxFieldLen[ifield] = -maxindex;
+
+      if (systemsort)
+	  AJCNEW(alistfile, nfields);
+      else
+      {
+	  AJCNEW(fieldList, nfields);
+	  for (ifield=0; ifield < nfields; ifield++)
+	      fieldList[ifield] = ajListNew ();
+      }
+    }
 
     ajStrCleanWhite(&dbname);	/* used for temp filenames */
+    embDbiDateSet (datestr, date);
+    idlist = ajListNew ();
 
-    if (ajRegExec (datexp, datestr))
-	for (i=1; i<4; i++)
-	{
-	    ajRegSubI (datexp, i+1, &tmpstr);
-	    ajStrToInt (tmpstr, &j);
-	    date[3-i] = j;
-	}
-
-    ajDebug ("staden: %B idformat: '%S'\n", staden, idformat);
     ajDebug ("reading '%S/%S'\n", directory, filename);
     ajDebug ("writing '%S/'\n", indexdir);
 
-    idlist = ajListNew ();
-    aclist = ajListNew ();
-
-    inlist = embDbiFileList (directory, filename, ajFalse);
-    ajListSort (inlist, ajStrCmp);
-    nfiles = ajListToArray(inlist, &files);
+    listInputFiles = embDbiFileListExc (directory, filename, exclude);
+    ajListSort (listInputFiles, ajStrCmp);
+    nfiles = ajListToArray(listInputFiles, &inputFiles);
+    if (!nfiles)
+	ajFatal ("No files selected");
 
     AJCNEW0(reffiles, nfiles);
     AJCNEW0(seqfiles, nfiles);
-    AJCNEW0(twofiles, nfiles);
 
-    if (systemsort)
-	acnum = acnumtmp = embDbiAcnumNew();
+    /*
+    ** process each input file, one at a time
+    */
 
-    for (ifile=0; ifile<nfiles; ifile++)
+    for (ifile=0; ifile < nfiles; ifile++)
     {
-	curfilename = (AjPStr) files[ifile];
+	curfilename = (AjPStr) inputFiles[ifile];
 	dbigcg_gcgopenlib (curfilename, &libr, &libs);
-	ajDebug ("processing '%S' ...\n", curfilename);
-	ajDebug ("processing '%F' ...\n", libr);
-	ajDebug ("processing '%F' ...\n", libs);
+
 	ajFmtPrintS(&reffiles[ifile], "%F", libr);
 	ajFileNameTrim(&reffiles[ifile]);
 	ajFmtPrintS(&seqfiles[ifile], "%F", libs);
 	ajFileNameTrim(&seqfiles[ifile]);
-	ajDebug ("processing '%S' ...\n", reffiles[ifile]);
-	ajDebug ("processing '%S' ...\n", seqfiles[ifile]);
+	ajDebug ("processing filename '%S' ...\n", curfilename);
+	ajDebug ("processing reffile '%S' ...\n", reffiles[ifile]);
+	ajDebug ("processing seqfile '%S' ...\n", seqfiles[ifile]);
+	if ((ajStrLen(reffiles[ifile])+
+	     ajStrLen(seqfiles[ifile])) >= maxfilelen)
+	  maxfilelen = ajStrLen(reffiles[ifile])+ajStrLen(seqfiles[ifile])+2;
+
+	if (systemsort)		/* elistfile for entries, alist for fields */
+	  elistfile = embDbiSortOpen (alistfile, ifile,
+				      dbname, fields, nfields);
+
+	while ((entry=dbigcg_nextentry(libr, libs,
+				       ifile, idformat,
+				       systemsort, fields, maxFieldLen,
+				       &maxidlen, elistfile, alistfile)))
+	{
+	    idCount++;
+	    if (!systemsort)	/* save the entry data in lists */
+	      embDbiMemEntry (idlist, fieldList, nfields, entry, ifile);
+	}
 	if (systemsort)
-	{
-	    ajFmtPrintS (&elistfname, "%S%02d.list", dbname, ifile+1);
-	    elistfile = ajFileNewOut (elistfname);
-	    if (!elistfile)
-		ajFatal("Failed to open %S for writing", elistfname);
-	    ajDebug ("elistfile %F\n", elistfile);
-	    ajFmtPrintS (&alistfname, "%S%02d.acid", dbname, ifile+1);
-	    alistfile = ajFileNewOut (alistfname);
-	    if (!alistfile)
-		ajFatal("Failed to open %S for writing", alistfname);
-	    ajDebug ("alistfile %F\n", alistfile);
-	}
-	ajFmtPrintS(&twofiles[ifile], "%S %S",
-		    reffiles[ifile], seqfiles[ifile]);
-	if (ajStrLen(twofiles[ifile]) >= maxfilelen)
-	    maxfilelen = ajStrLen(twofiles[ifile]) +1;
-
-	while ((entry=dbigcg_nextentry(libr, libs, ifile)))
-	    if (systemsort)
-		nid++;
-	    else
-	    {
-		entry->filenum = ifile+1;
-		ajListPushApp (idlist, entry);
-		for (i=0;i<entry->nac; i++)
-		{
-		    if (!systemsort)
-			acnum = embDbiAcnumNew();
-		    acnum->entry = entry->entry;
-		    acnum->ac = entry->ac[i];
-		    ajListPushApp (aclist, acnum);
-		}
-	    }
-
-	ajFileClose (&elistfile);
-	ajFileClose (&alistfile);
+	  embDbiSortClose (&elistfile, alistfile, nfields);
     }
 
+    /*
+    ** write the division.lkp file
+    */
 
-  
+    embDbiWriteDivision (indexdir, dbname, release, date,
+			 maxfilelen, nfiles, reffiles, seqfiles);
+
+    /*
+    ** Write the entryname.idx index
+    */
+
+    ajStrAssC (&tmpfname, "entrynam.idx");
+    entFile = ajFileNewOutD(indexdir, tmpfname);
+
+    recsize = maxidlen+10;
+    filesize = 300 + (idCount*(ajint)recsize);
+    embDbiHeader (entFile, filesize, idCount, recsize, dbname, release, date);
 
     if (systemsort)
+        idCount = embDbiSortWriteEntry (entFile, maxidlen,
+					dbname, nfiles, cleanup, sortopt);
+    else			/* save entries in entryIds array */
+        embDbiMemWriteEntry (entFile, maxidlen,
+			     idlist, &entryIds);
+
+    ajFileClose (&entFile);
+
+    /*
+    ** Write the fields index files
+    */
+
+    for (ifield=0; ifield < nfields; ifield++)
     {
-	embDbiSortFile (dbname, "list", "idsrt", nfiles, cleanup, sortopt);
-	embDbiSortFile (dbname, "acid", "acsrt", nfiles, cleanup, sortopt);
+        if (maxindex)
+	  maxlen = maxindex;
+	else
+	  maxlen = maxFieldLen[ifield];
 
-	/* put in the entry numbers and remove the names */
-	/* read dbname.acsrt, for each entry, increment the count */
-
-	ajFmtPrintS (&alistfname, "%S.acsrt", dbname);
-	alistfile = ajFileNewIn (alistfname);
-	if(!alistfile)
-	    ajFatal("Failed to open %S for reading",alistfname);
-	ajFmtPrintS (&blistfname, "%S.acid2", dbname);
-	blistfile = ajFileNewOut (blistfname);
-	if (!blistfile)
-	    ajFatal("Failed to open %S for writing", blistfname);
-
-	ient=0;
-	nac = 0;
-	while (ajFileGets (alistfile, &rdline))
-	{
-	    ajRegExec (acsrtexp, rdline);
-	    ajRegSubI (acsrtexp, 1, &idstr);
-	    ajRegSubI (acsrtexp, 2, &acstr);
-	    if (!nac)
-		ajStrAssS (&lastidstr, idstr);
-	    if (!ajStrMatch (idstr, lastidstr))
-	    {
-		ient++;
-		ajStrAssS (&lastidstr, idstr);
-	    }
-	    ajFmtPrintF (blistfile, "%S %d\n", acstr, ient+1);
-	    nac++;
-	}
-
-	ajFileClose (&alistfile);
-	ajFileClose (&blistfile);
-
-	/* sort again */
-
-	embDbiRmFile (dbname, "acsrt", 0, cleanup);
-	embDbiSortFile (dbname, "acid2", "acsrt2", 0, cleanup, sortopt);
- 
+        if (systemsort)
+	  embDbiSortWriteFields (dbname, release, date, indexdir,
+				 fields[ifield], maxlen,
+				 nfiles, idCount, cleanup, sortopt);
+	else
+	  embDbiMemWriteFields (dbname, release, date, indexdir,
+				fields[ifield], maxlen,
+				fieldList[ifield], entryIds);
     }
-    else
-    {
-	nid = ajListToArray (idlist, &ids);
-	nac = ajListToArray (aclist, &acs);
-
-	ajDebug ("ids: %d %x acs: %d %x\n", nid, ids, nac, acs);
-	/*
-	 *  for (i=0; i<nid; i++)
-	 *  {
-	 *      ajDebug("ids %3d %x %x '%s'\n",
-	 *      i, &ids[i], ids[i], ((EmbPentry)ids[i])->entry);
-	 *  }
-	 */
-	qsort (ids, nid, sizeof(void*), embDbiCmpId);
-	ajDebug ("ids sorted\n");
-
-	/*
-	 *  for (i=0; i<nid; i++)
-	 *  {
-	 *      ajDebug("sort ids %3d %x %x '%s'\n",
-	 *       i, &ids[i], ids[i], ((EmbPentry)ids[i])->entry);
-	 *  }
-	 */
-
-	qsort (acs, nac, sizeof(void*), embDbiCmpAcId);
-	ajDebug ("acs sorted by id\n");
-	/*
-	 *  for (i=0; i<nac; i++)
-	 *  {
-	 *      ajDebug("sort acs %3d %x %x '%s' '%s'\n",
-	 *      i, &acs[i], acs[i], ((EmbPac)acs[i])->entry,((EmbPac)acs[i])->
-	 *      ac);
-	 *  }
-	 */
-	i=0;
-	j=0;
-
-	while (ids[i] && acs[j])
-	{
-	    k = strcmp(((EmbPentry)ids[i])->entry, ((EmbPac)acs[j])->entry);
-	    if (k < 0)
-	    {
-		ajDebug("ids[%d] '%S' < acd[%d] '%S'\n",
-			i, ((EmbPentry)ids[i])->entry,
-			j, ((EmbPac)acs[j])->entry);
-		i++;
-	    }
-	    else if (k > 0)
-	    {
-		ajDebug("ids[%d] '%S' >> acd[%d] '%S'\n",
-			i, ((EmbPentry)ids[i])->entry,
-			j, ((EmbPac)acs[j])->entry);
-		j++;
-	    }
-	    else
-	    {
-		ajDebug("ids[%d] '%S' == acd[%d] '%S'\n",
-			i, ((EmbPentry)ids[i])->entry,
-			j, ((EmbPac)acs[j])->entry);
-		((EmbPac)acs[j++])->nid = i+1; /* we need (i+1) */
-	    }
-	}
-	ajDebug ("checked ids: %d %d acs: %d %d\n", i, nid, j, nac);
-
-	qsort (acs, nac, sizeof(void*), embDbiCmpAcAc);
-	ajDebug ("acs sorted by ac\n");
-	/*
-	 *  for (i=0; i<nac; i++)
-	 *  {
-	 *      ajDebug("sort acs %3d %x %x '%s' '%s' %d\n",
-	 *      i, &acs[i], acs[i], ((EmbPac)acs[i])->entry,((EmbPac)acs[i])->ac,
-	 *      ((EmbPac)acs[i])->nid);
-	 *  }
-	 */
-
-    }
-
-    /* write the division file */
-
-    ajStrAssC (&dfname, "division.lkp");
-    dfile = ajFileNewOutD(indexdir, dfname);
-    if (!dfile)
-	ajFatal("Failed to open %S for writing", dfname);
-
-    dsize = 256 + 44 + (nfiles * (maxfilelen+2));
-    ajFileWriteInt4 (dfile, dsize);	/* filesize */
-
-    ajFileWriteInt4 (dfile, nfiles);	/* #records */
-
-    recsize = maxfilelen + 2;
-    ajFileWriteInt2 (dfile, recsize);	/* recordsize */
-
-    /* rest of the header */
-    ajFileWriteStr  (dfile, dbname,  20); /* dbname */
-    ajFileWriteStr  (dfile, release, 10); /* release */
-    ajFileWriteByte (dfile, date[0]);	/* release date */
-    ajFileWriteByte (dfile, date[1]);	/* release date */
-    ajFileWriteByte (dfile, date[2]);	/* release date */
-    ajFileWriteByte (dfile, date[3]);	/* release date */
-    ajFileWrite (dfile, padding, 256, 1); /* padding 256 bytes */
-
-    for (i=0; i<nfiles; i++)
-    {
-	ajFileWriteInt2 (dfile, (short)(i+1));
-	ajFileWriteStr (dfile, twofiles[i], maxfilelen);
-    }
-    ajFileClose (&dfile);
-
-    /* write the entry file */
-
-    ajStrAssC (&efname, "entrynam.idx");
-    efile = ajFileNewOutD(indexdir, efname);
-    if (!efile)
-	ajFatal("Failed to open %S for writing", efname);
-
-    ajDebug("writing entrynam.idx %d\n", nid);
-
-    elen = maxidlen+10;
-    esize = 300 + (nid*(ajint)elen);
-    ajFileWriteInt4 (efile, esize);
-    ajFileWriteInt4 (efile, nid);
-    ajFileWriteInt2 (efile, elen);
-
-    /* rest of the header */
-    ajFileWriteStr  (efile, dbname,  20); /* dbname */
-    ajFileWriteStr  (efile, release, 10); /* release */
-    ajFileWriteByte (efile, date[0]);	/* release date */
-    ajFileWriteByte (efile, date[1]);	/* release date */
-    ajFileWriteByte (efile, date[2]);	/* release date */
-    ajFileWriteByte (efile, date[3]);	/* release date */
-    ajFileWrite (efile, padding, 256, 1); /* padding 256 bytes */
 
     if (systemsort)
-    {
-	ajFmtPrintS (&elistfname, "%S.idsrt", dbname);
-	elistfile = ajFileNewIn (elistfname);
-	if(!elistfile)
-	    ajFatal("Failed to open %S for reading",elistfname);
-	while (ajFileGets (elistfile, &rdline))
-	{
-	    ajRegExec (idsrtexp, rdline);
-	    ajRegSubI (idsrtexp, 1, &idstr);
-	    ajRegSubI (idsrtexp, 2, &tmpstr);
-	    ajStrToInt (tmpstr, &rpos);
-	    ajRegSubI (idsrtexp, 3, &tmpstr);
-	    ajStrToInt (tmpstr, &spos);
-	    ajRegSubI (idsrtexp, 4, &tmpstr);
-	    ajStrToInt (tmpstr, &filenum);
-	    ajFileWriteStr (efile, idstr, maxidlen);
-	    ajFileWriteInt4 (efile, rpos);
-	    ajFileWriteInt4 (efile, spos);
-	    ajFileWriteInt2 (efile, filenum);
-	}
-	ajFileClose (&elistfile);
-	embDbiRmFile (dbname, "idsrt", 0, cleanup);
-    }
-    else
-	for (i = 0; i < nid; i++)
-	{
-	    entry = (EmbPentry)ids[i];
-	    ajFileWriteChar (efile, entry->entry, maxidlen);
-	    ajFileWriteInt4 (efile, entry->rpos);
-	    ajFileWriteInt4 (efile, entry->spos);
-	    ajFileWriteInt2 (efile, entry->filenum);
-	}
+      embDbiRmEntryFile (dbname, cleanup);
 
-    ajFileClose (&efile);
+    ajListDel(&listInputFiles);    
 
-    /* write the accession files */
-
-    ajStrAssC (&atfname, "acnum.trg");
-    atfile = ajFileNewOutD(indexdir, atfname);
-    if (!atfile)
-	ajFatal("Failed to open %S for writing", atfname);
-    ajStrAssC (&ahfname, "acnum.hit");
-    ahfile = ajFileNewOutD(indexdir, ahfname);
-    if (!ahfile)
-	ajFatal("Failed to open %S for writing", ahfname);
-
-    if (!systemsort)
-	lastac = ((EmbPac)acs[0])->ac;
-
-    ajDebug("writing acnum.hit %d\n", nac);
-
-    alen = maxaclen+8;
-    asize = 300 + (nac*(ajint)alen);	/* to be fixed later */
-    ajFileWriteInt4 (atfile, asize);
-    ajFileWriteInt4 (atfile, nac);
-    ajFileWriteInt2 (atfile, alen);
-
-    /* rest of the header */
-    ajFileWriteStr  (atfile, dbname,  20); /* dbname */
-    ajFileWriteStr  (atfile, release, 10); /* release */
-    ajFileWriteByte (atfile, date[0]);	/* release date */
-    ajFileWriteByte (atfile, date[1]);	/* release date */
-    ajFileWriteByte (atfile, date[2]);	/* release date */
-    ajFileWriteByte (atfile, date[3]);	/* release date */
-    ajFileWrite (atfile, padding, 256, 1); /* padding 256 bytes */
-
-    ahsize = 300 + (nac*4);
-    ajFileWriteInt4 (ahfile, ahsize);
-    ajFileWriteInt4 (ahfile, nac);
-    ajFileWriteInt2 (ahfile, 4);
-
-    /* rest of the header */
-    ajFileWriteStr  (ahfile, dbname,  20); /* dbname */
-    ajFileWriteStr  (ahfile, release, 10); /* release */
-    ajFileWriteByte (ahfile, date[0]);	/* release date */
-    ajFileWriteByte (ahfile, date[1]);	/* release date */
-    ajFileWriteByte (ahfile, date[2]);	/* release date */
-    ajFileWriteByte (ahfile, date[3]);	/* release date */
-    ajFileWrite (ahfile, padding, 256, 1); /* padding 256 bytes */
-
-    iac=0;
-    j = 0;
-    k = 1;
-    if (systemsort)
-    {
-	i=0;
-	ajFmtPrintS (&alistfname, "%S.acsrt2", dbname);
-	alistfile = ajFileNewIn (alistfname);
-	if(!alistfile)
-	    ajFatal("Failed to open %S for reading",alistfname);
-	while (ajFileGets (alistfile, &rdline))
-	{
-	    ajRegExec (acsrt2exp, rdline);
-	    ajRegSubI (acsrt2exp, 1, &idstr);
-	    ajRegSubI (acsrt2exp, 2, &tmpstr);
-	    ajStrToInt (tmpstr, &idnum);
-	    ajFileWriteInt4 (ahfile, idnum);
-	    if (!i)
-		ajStrAssS (&lastidstr, idstr);
-	    if (!ajStrMatch(lastidstr, idstr))
-	    {
-		ajFileWriteInt4 (atfile, j);
-		ajFileWriteInt4 (atfile, k);
-		ajFileWriteStr (atfile, lastidstr, maxaclen);
-		j = 0;			/* number of hits */
-		k = i+1;		/* first hit */
-		ajStrAssS(&lastidstr, idstr);
-		iac++;
-	    }
-	    j++;
-	    i++;
-	}
-	ajFileClose (&alistfile);
-	embDbiRmFile (dbname, "acsrt2", 0, cleanup);
-	ajFileWriteInt4 (atfile, j);
-	ajFileWriteInt4 (atfile, k);
-	ajFileWriteStr (atfile, lastidstr, maxaclen);
-	iac++;
-    }
-    else
-    {
-	for (i = 0; i < nac; i++)
-	{
-	    acnum = (EmbPac)acs[i];
-	    ajFileWriteInt4 (ahfile, acnum->nid);
-	    if (strcmp(lastac, acnum->ac))
-	    {
-		ajFileWriteInt4 (atfile, j);
-		ajFileWriteInt4 (atfile, k);
-		ajFileWriteChar (atfile, lastac, maxaclen);
-		j = 0;
-		k = i;
-		lastac = acnum->ac;
-		iac++;
-	    }
-	    j++;
-	}
-	ajFileWriteInt4 (atfile, j);
-	ajFileWriteInt4 (atfile, k);
-	ajFileWriteChar (atfile, lastac, maxaclen);
-	iac++;
-    }
-
-    ajDebug ("wrote acnum.trg %d\n", iac);
-    ajFileSeek (atfile, 0, 0);		/* fix up the record count */
-    ajFileWriteInt4 (atfile, 300+iac*(ajint)alen);
-    ajFileWriteInt4 (atfile, iac);
-
-    ajFileClose (&atfile);
-    ajFileClose (&ahfile);
-
-    ajDebug ("finished...\n%7d files\n%7d entries\n%7d acnum.trg\n%7d "
-	     "acnum.hit\n", nfiles, nid, iac, nac);
-
-
-    ajRegFree(&datexp);
-    ajRegFree(&idsrtexp);
-    ajRegFree(&acsrtexp);
-    ajRegFree(&acsrt2exp);
-
-
-    for(i=0;i<nfiles;++i)
-    {
-	ajStrDel(&seqfiles[i]);
-	ajStrDel(&reffiles[i]);
-	ajStrDel(&twofiles[i]);
-    }
-    AJFREE(seqfiles);
-    AJFREE(reffiles);
-    AJFREE(twofiles);
-
-
-    /* Peter. Probably needs more work here */
-    ajListDel(&inlist);
-    if(acnumtmp)
-	AJFREE(acnumtmp);
-    
     ajExit ();
     return 0;
 }
 
-
-
-
 /* @funcstatic dbigcg_nextentry ********************************************
 **
-** Returns next database entry as an EmbPentry object
+** Returns next database entry as an EmbPEntry object
 **
 ** @param [r] libr [AjPFile] Reference file
 ** @param [r] libs [AjPFile] Sequence file
 ** @param [r] ifile [ajint] File number.
-** @return [EmbPentry] Entry data object.
+** @return [EmbPEntry] Entry data object.
 ** @@
 ******************************************************************************/
 
-static EmbPentry dbigcg_nextentry (AjPFile libr, AjPFile libs, ajint ifile)
+static EmbPEntry dbigcg_nextentry (AjPFile libr, AjPFile libs,
+				   ajint ifile, AjPStr idformat,
+				   AjBool systemsort,
+				   AjPStr* fields, ajint* maxFieldLen,
+				   ajint* maxidlen,
+				   AjPFile elistfile, AjPFile* alistfile)
 {
-    static EmbPentry ret=NULL;
+    static EmbPEntry ret=NULL;
     ajint ir;
-    ajint is;
+    ajint is = 0;
     static AjPStr id = NULL;
     static AjPStr tmpline2 = NULL;
-    char* ac;
+    char* token;
     char *p;
     ajint i;
-    static AjPList acl = NULL;
+    static AjPList* fdl = NULL;
+    static ajint nfields;
+    ajint ifield;
 
-    if (!acl)
-	acl = ajListNew();
-
+    if (!fdl)
+    {
+      nfields=0;
+      while (fields[nfields])
+	nfields++;
+      if (nfields)
+	AJCNEW(fdl, nfields);
+      for (i=0; i < nfields; i++)
+      {
+	fdl[i] = ajListNew();
+      }
+    }
     if (!ret || !systemsort)
-	ret = embDbiEntryNew();
+	ret = embDbiEntryNew(nfields);
 
-    if (!dbigcg_gcggetent (libr, libs, &ir, &is, &id, acl) &&
-	!dbigcg_pirgetent (libr, libs, &ir, &is, &id, acl))
+    ir = ajFileTell(libr);
+    is = ajFileTell(libs);
+
+    if (!dbigcg_gcggetent (idformat, libr, libs,
+			   alistfile, systemsort, fields, maxFieldLen,
+			   &id, fdl) &&
+	!dbigcg_pirgetent (idformat, libr, libs,
+			   alistfile, systemsort, fields, maxFieldLen,
+			   &id, fdl))
 	return NULL;
 
-    /* id to ret->entry */
+    ajDebug("id '%S' ir:%d is:%d nfields: %d\n",
+	    id, ir, is, nfields);
+
+    ajStrAssC(&tmpline2,ajStrStr(id));
+    if(ajStrSuffixC(id,"_0") ||
+       ajStrSuffixC(id,"_00") ||
+       ajStrSuffixC(id,"_000"))
+    {
+	p = strrchr(ajStrStr(tmpline2),'_');
+	*p = '\0';
+    }
+
+    if (ajStrLen(id) > *maxidlen)
+      *maxidlen = ajStrLen(id);
 
     if(systemsort)
     {
-	ajStrAssC(&tmpline2,ajStrStr(id));
-	if(ajStrSuffixC(id,"_0") || ajStrSuffixC(id,"_00"))
-	{
-	    p = strrchr(ajStrStr(tmpline2),'_');
-	    *p = '\0';
-	}
 	ajFmtPrintF (elistfile, "%s %d %d %d\n", ajStrStr(tmpline2),
 		     ir, is, ifile+1);
     }
     else
     {
-	ret->entry = ajCharNew(id);
+	ret->entry = ajCharNew(tmpline2);
 	ret->rpos = ir;
 	ret->spos = is;
 	ret->filenum = ifile+1;
 
-	/* ac as list, then move to ret->ac */
-
-	ret->nac = ajListLength(acl);
-
-	if(ret->nac)
+	/* field tokens as list, then move to ret->field */
+	for (ifield=0; ifield < nfields; ifield++)
 	{
-	    AJCNEW(ret->ac,ret->nac);
+	    ret->nfield[ifield] = ajListLength(fdl[ifield]);
 
-	    i=0;
-	    while (ajListPop(acl, (void**) &ac))
-		ret->ac[i++] = ac;
+	    if (ret->nfield[ifield])
+	    {
+	        AJCNEW(ret->field[ifield],ret->nfield[ifield]);
 
+		i=0;
+		while (ajListPop(fdl[ifield], (void**) &token))
+		    ret->field[ifield][i++] = token;
+	    }
+	    else
+	        ret->field[ifield] = NULL;
 	}
-	else
-	    ret->ac = NULL;
-
-	/*
-	 *  ajDebug("id '%s' %d %d nac: %d\n", ret->entry, ir, is, ret->nac);
-	 *  for (i=0; i<ret->nac; i++)
-	 *  ajDebug("   %3d %s\n", i, ret->ac[i]);
-	 */
-    }
+   }
 
     return ret;
 }
-
-
 
 
 /* @funcstatic dbigcg_gcgopenlib ********************************************
@@ -752,7 +439,7 @@ static EmbPentry dbigcg_nextentry (AjPFile libr, AjPFile libs, ajint ifile)
 ** @@
 ******************************************************************************/
 
-static AjBool dbigcg_gcgopenlib(AjPStr lname, AjPFile* libr, AjPFile* libs)
+static AjBool dbigcg_gcgopenlib (AjPStr lname, AjPFile* libr, AjPFile* libs)
 {
 
     static AjPStr rname = NULL;
@@ -770,33 +457,13 @@ static AjBool dbigcg_gcgopenlib(AjPStr lname, AjPFile* libr, AjPFile* libs)
     *libr = ajFileNewIn(rname);
     if(!*libr)
 	ajFatal("Failed to open %S for reading",rname);
-
-    if (!*libr)
-    {
-	ajErr(" cannot open GCG library: %S\n",
-	      rname);
-	return ajFalse;
-    }
   
     *libs = ajFileNewIn(sname);
-    if(!libs)
+    if(!*libs)
 	ajFatal("Failed to open %S for reading",sname);
-    if (!*libs)
-    {
-	ajErr(" cannot open GCG library sequence file: %S\n",
-	      sname);
-	return ajFalse;
-    }
-  
-    rpos = ajFileTell(*libr);
-    spos = ajFileTell(*libs);
-    if (!ajFileGets(*libr, &rline)) return ajFalse;
-    if (!ajFileGets(*libs, &sline)) return ajFalse;
 
     return ajTrue;
 }
-
-
 
 
 /* @funcstatic dbigcg_gcggetent **********************************************
@@ -805,17 +472,21 @@ static AjBool dbigcg_gcgopenlib(AjPStr lname, AjPFile* libr, AjPFile* libs)
 **
 ** @param [r] libr [AjPFile] Reference file
 ** @param [r] libs [AjPFile] Sequence file
-** @param [w] d_pos [ajint*] Reference file offset returned
-** @param [w] s_pos [ajint*] Sequence  file offset returned
 ** @param [w] libstr [AjPStr*] ID
-** @param [w] acl [AjPList] Accession number list
+** @param [w] fdl [AjPList*] Lists of field tokens
 ** @return [ajint] Sequence length
 ** @@
 ******************************************************************************/
 
-static ajint dbigcg_gcggetent(AjPFile libr, AjPFile libs, ajint *d_pos,
-			      ajint *s_pos, AjPStr* libstr, AjPList acl)
+static ajint dbigcg_gcggetent(AjPStr idformat,
+			      AjPFile libr, AjPFile libs,
+			      AjPFile* alistfile,
+			      AjBool systemsort, AjPStr* fields,
+			      ajint* maxFieldLen,
+			      AjPStr* libstr, AjPList* fdl)
 {
+    static AjPStr gcgtype = NULL;
+    static ajint gcglen;
     static AjPStr gcgdate = NULL;
     ajint rblock;
     /*  ajint ddone = 0;*/
@@ -825,6 +496,10 @@ static ajint dbigcg_gcggetent(AjPFile libr, AjPFile libs, ajint *d_pos,
     static AjPStr tmpstr = NULL;
     static ajint called = 0;
     static ajint iparser = -1;
+    static AjPRegexp rexp = NULL;
+    static AjPRegexp sexp = NULL;
+    static AjPStr rline=NULL;
+    static AjPStr sline=NULL;
 
     if (!called)
     {
@@ -847,29 +522,27 @@ static ajint dbigcg_gcggetent(AjPFile libr, AjPFile libs, ajint *d_pos,
 	sexp = ajRegCompC("^....([^ \t]+)[ \t]+([^ \t]+)[ \t]+([^ \t]+)"
 			  "[ \t]+([^ \t]+)[ \t]+([0-9]+)");
 
-    ajDebug("dbigcg_gcggetent .seq (%S) %d '%S'\n", idformat, spos, sline);
+    ajStrAssC(&sline, "");
 
-    /* check for seqid line */
+    /* check for seqid first line */
     while (ajStrChar(sline,0)!='>')
     {
-	spos = ajFileTell(libs);
 	if (!ajFileGets(libs, &sline))
 	{
-	    *s_pos = spos;		/* end of file */
-	    return 0;
+	    return 0;		/* end of file */
 	}
-	ajDebug("... read until next seq %d '%S'\n", spos, sline);
+	ajDebug("... read until next seq %d '%S'\n",
+		ajFileTell(libs), sline);
     }
-    *s_pos = spos;
 
+    ajDebug("dbigcg_gcggetent .seq (%S) %d '%S'\n",
+	    idformat, ajFileTell(libs), sline);
     /* get the encoding/sequence length info */
 
     if (!ajRegExec(sexp, sline))
 	return 0;
 
-    ajRegSubI(sexp, 1, libstr);
-
-
+    ajRegSubI(sexp, 1, libstr);	/* Entry ID returned */
 
     ajRegSubI(sexp, 2, &gcgdate);
     ajRegSubI(sexp, 3, &gcgtype);
@@ -879,21 +552,21 @@ static ajint dbigcg_gcggetent(AjPFile libr, AjPFile libs, ajint *d_pos,
     ajDebug("new entry '%S' date:'%S' type:'%S' len:'%S'=%d\n",
 	    *libstr, gcgdate, gcgtype, tmpstr, gcglen);
 
-    ajDebug("dbigcg_gcggetent .ref (%S) %d '%S'\n", idformat, rpos, rline);
+    ajStrAssC (&rline, "");
 
-    /* check for refid line */
+    ajDebug("dbigcg_gcggetent .ref (%S) %d '%S'\n",
+	    idformat, ajFileTell(libr), rline);
+
+    /* check for refid first line */
     while (ajStrChar(rline,0)!='>')
     {
-	rpos = ajFileTell(libr);
 	if (!ajFileGets(libr, &rline))
 	{
-	    *d_pos = rpos;		/* end of file */
 	    ajErr("ref ended before seq");
-	    break;
+	    break;		/* end of file */
 	}
-	ajDebug("... read until next ref %d '%S'\n", rpos, rline);
+	ajDebug("... read until next ref %d '%S'\n", ajFileTell(libr), rline);
     }
-    *d_pos = rpos;
 
     /* get the encoding/sequence length info */
 
@@ -906,22 +579,9 @@ static ajint dbigcg_gcggetent(AjPFile libr, AjPFile libs, ajint *d_pos,
      */
 
     /*  iac = 0;*/
-    ajFileGets(libr, &rline);
-    while (ajStrChar(rline,0)!='>')
-    {
-	ajStrAssS(&tmpstr,*libstr);
-      
-	parser[iparser].Parser(rline, libstr, acl); /* writes alistfile data */
-
-	ajStrAssS(libstr,tmpstr);
-      
-	rpos = ajFileTell(libr);
-	if (!ajFileGets(libr, &rline))
-	{
-	    /*      ddone = 1;*/
-	    break;
-	}
-    }
+    parser[iparser].Parser(libr, alistfile, systemsort,
+			   fields, maxFieldLen,
+			   &reflibstr, fdl); /* writes alistfile data */
 
     /*
      *  if (ajStrMatch(*libstr, reflibstr))
@@ -939,9 +599,6 @@ static ajint dbigcg_gcggetent(AjPFile libr, AjPFile libs, ajint *d_pos,
     }
     else ajFileSeek(libs,gcglen+1,SEEK_CUR);
 
-    spos = ajFileTell(libs);
-    ajFileGets(libs, &sline);
-
     /*
      *  for big entries, need to append until we have all the parts.
      *  They are named with _0 on the first part, _1 on the second and so on.
@@ -958,7 +615,8 @@ static ajint dbigcg_gcggetent(AjPFile libr, AjPFile libs, ajint *d_pos,
 	!ajStrSuffixC(*libstr,"_000"))
       return gcglen;
   
-    gcglen += dbigcg_gcgappent (libr, libs, libstr);
+    gcglen += dbigcg_gcgappent (libr, libs, rexp, sexp,
+				libstr);
 
     return gcglen;
 }
@@ -972,21 +630,28 @@ static ajint dbigcg_gcggetent(AjPFile libr, AjPFile libs, ajint *d_pos,
 **
 ** @param [r] libr [AjPFile] Reference file
 ** @param [r] libs [AjPFile] Sequence file
-** @param [w] d_pos [ajint*] Reference file offset returned
-** @param [w] s_pos [ajint*] Sequence file offset  returned
 ** @param [w] libstr [AjPStr*] ID
-** @param [w] acl [AjPList] Accession number list
+** @param [w] fdl [AjPList*] Lists of field tokens
 ** @return [ajint] Sequence length
 ** @@
 ******************************************************************************/
 
-static ajint dbigcg_pirgetent(AjPFile libr, AjPFile libs, ajint *d_pos,
-			      ajint *s_pos, AjPStr* libstr, AjPList acl)
+static ajint dbigcg_pirgetent(AjPStr idformat,
+			      AjPFile libr, AjPFile libs,
+			      AjPFile* alistfile,
+			      AjBool systemsort, AjPStr* fields,
+			      ajint* maxFieldLen,
+			      AjPStr* libstr, AjPList* fdl)
 {
     static AjPStr reflibstr = NULL;
     ajint i;
     static ajint called = 0;
     static ajint iparser = -1;
+    static AjPRegexp pirexp = NULL;
+    ajint gcglen;
+    static AjPStr rline=NULL;
+    static AjPStr sline=NULL;
+    ajint spos = 0;
 
     if (!called)
     {
@@ -1006,36 +671,33 @@ static ajint dbigcg_pirgetent(AjPFile libr, AjPFile libs, ajint *d_pos,
     if (!pirexp)
 	pirexp = ajRegCompC ("^>..;([^ \t\n]+)");
 
-    /* skip to seqid line */
+    ajStrAssC(&sline, "");
+    ajStrAssC(&rline, "");
+
+    /* skip to seqid first line */
     while (ajStrChar(sline,0)!='>')
     {
-	spos = ajFileTell(libs);
 	if (!ajFileGets(libs, &sline))
 	{
-	    *s_pos = spos;		/* end of file */
-	    return 0;
+	    return 0;		/* end of file */
 	}
     }
-    *s_pos = spos;
+
     /* get the encoding/sequence length info */
 
-    ajDebug ("pirgetent '%S' \n", sline);
-    ajDebug ("pirgetent '%S' spos: %ld\n", *libstr, spos);
+    ajDebug ("pirgetent line '%S' \n", sline);
 
     ajRegExec(pirexp, sline);
 
-    /* skip to refid line */
+    /* skip to refid first line */
     while (ajStrChar(rline,0)!='>')
     {
-	rpos = ajFileTell(libr);
 	if (!ajFileGets(libr, &rline))
 	{
-	    *d_pos = rpos;		/* end of file */
-	    ajErr("ref ended before seq");
+	    ajErr("ref ended before seq");		/* end of file */
 	    break;
 	}
     }
-    *d_pos = rpos;
 
     /* get the encoding/sequence length info */
 
@@ -1043,24 +705,18 @@ static ajint dbigcg_pirgetent(AjPFile libr, AjPFile libs, ajint *d_pos,
     ajRegSubI(pirexp, 1, &reflibstr);
     ajRegSubI(pirexp, 1, libstr);
 
+    ajDebug ("pirgetent seqid '%S' spos: %ld\n", *libstr, ajFileTell(libs));
+    ajDebug ("pirgetent refid '%S' spos: %ld\n", *libstr, ajFileTell(libr));
+
     /*
      *  if (!ajStrMatch(*libstr, reflibstr))
      *  ajDebug ("refid: '%S' seqid: '%S'\n", reflibstr, *libstr);
      */
 
     /*  iac = 0;*/
-    ajFileGets(libr, &rline);
-    while (ajStrChar(rline,0)!='>')
-    {
-	parser[iparser].Parser(rline, libstr, acl); /* writes alistfile data */
-
-	rpos = ajFileTell(libr);
-	if (!ajFileGets(libr, &rline))
-	{
-	    /*      ddone = 1;*/
-	    break;
-	}
-    }
+    parser[iparser].Parser (libr, alistfile,
+			    systemsort, fields, maxFieldLen,
+			    &reflibstr, fdl); /* writes alistfile data */
 
     /*
      *  if (ajStrMatch(*libstr, reflibstr))
@@ -1076,16 +732,20 @@ static ajint dbigcg_pirgetent(AjPFile libr, AjPFile libs, ajint *d_pos,
     {
 	spos = ajFileTell(libs);
 	if (!ajFileGets(libs, &sline))
+	{
+	    spos=0;
 	    break;
+	}
 	gcglen += ajStrLen(sline);
     }
 
+    if (spos)
+      ajFileSeek(libs, spos, 0);
 
     ajDebug ("pirgetent end spos %ld line '%S'\n", spos, sline);
 
     return gcglen;
 }
-
 
 
 
@@ -1100,7 +760,9 @@ static ajint dbigcg_pirgetent(AjPFile libr, AjPFile libs, ajint *d_pos,
 ** @@
 ******************************************************************************/
 
-static ajint dbigcg_gcgappent (AjPFile libr, AjPFile libs, AjPStr* libstr)
+static ajint dbigcg_gcgappent (AjPFile libr, AjPFile libs,
+			       AjPRegexp rexp, AjPRegexp sexp,
+			       AjPStr* libstr)
 {
 
     /* keep reading until we reach the end of entry
@@ -1111,10 +773,14 @@ static ajint dbigcg_gcgappent (AjPFile libr, AjPFile libs, AjPStr* libstr)
     static AjPStr testlibstr = NULL;
     ajint ilen;
     static AjPStr tmpstr = NULL;
+    static AjPStr rline=NULL;
+    static AjPStr sline=NULL;
 
     AjBool isend;
     char *p;
     char *q;
+    ajint rpos;
+    ajint spos;
   
     if(!testlibstr)
 	testlibstr = ajStrNew();
@@ -1177,11 +843,11 @@ static ajint dbigcg_gcgappent (AjPFile libr, AjPFile libs, AjPStr* libstr)
 
     ajStrAssC(libstr,p);
   
-  
+    ajFileSeek (libr, rpos, 0);
+    ajFileSeek (libs, spos, 0);
+
     return 1;
 }
-  
-
 
 
 /* @funcstatic dbigcg_ParseEmbl ********************************************
@@ -1190,63 +856,225 @@ static ajint dbigcg_gcgappent (AjPFile libr, AjPFile libs, AjPStr* libstr)
 **
 ** @param [r] line [AjPStr] Input line
 ** @param [w] id [AjPStr*] ID
-** @param [w] acl [AjPList] List of accession numbers
+** @param [w] fdl [AjPList*] Lists of field tokens
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
-
-static AjBool dbigcg_ParseEmbl (AjPStr line, AjPStr* id, AjPList acl)
+static AjBool dbigcg_ParseEmbl (AjPFile libr,
+				AjPFile* alistfile,
+				AjBool systemsort, AjPStr* fields,
+				ajint* maxFieldLen,
+				AjPStr* id, AjPList* fdl)
 {
+    static AjPRegexp typexp = NULL;
     static AjPRegexp idexp = NULL;
-    static AjPRegexp acexp = NULL;
-    static AjPRegexp ac2exp = NULL;
+    static AjPRegexp verexp = NULL;
+    static AjPRegexp wrdexp = NULL;
+    static AjPRegexp phrexp = NULL;
+    static AjPRegexp taxexp = NULL;
+    static AjPStr tmpstr = NULL;
     static AjPStr tmpline = NULL;
-    static AjPStr tmpline2 = NULL;
-    static AjPStr tmpac = NULL;
-    char* ac;
-    char *p;
+    static AjPStr tmpfd = NULL;
+    static AjPStr typStr = NULL;
+    AjPStr tmpacnum = NULL;
+    char* fd;
+    ajint lineType;
+    ajint rpos;
+    static AjPStr rline=NULL;
+    static ajint numFields;
+    static ajint accfield=-1;
+    static ajint desfield=-1;
+    static ajint keyfield=-1;
+    static ajint taxfield=-1;
+    static ajint svnfield=-1;
+    static AjBool reset = AJTRUE;
   
+    if (!fields)
+    {
+      reset = ajTrue;
+      accfield = svnfield = desfield = keyfield = taxfield = -1;
+      return ajFalse;
+    }
+
+    if (reset)
+    {
+      numFields = 0;
+      while (fields[numFields])
+      {
+	if (ajStrMatchCaseC(fields[numFields], "acnum"))
+	  accfield=numFields;
+	else if (ajStrMatchCaseC(fields[numFields], "seqvn"))
+	  svnfield=numFields;
+	else if (ajStrMatchCaseC(fields[numFields], "des"))
+	  desfield=numFields;
+	else if (ajStrMatchCaseC(fields[numFields], "keyword"))
+	  keyfield=numFields;
+	else if (ajStrMatchCaseC(fields[numFields], "taxon"))
+	  taxfield=numFields;
+	else
+	  ajWarn ("EMBL parsing unknown field '%S' ignored",
+		  fields[numFields]);
+	numFields++;
+      }
+      reset = ajFalse;
+    }
+
+    if (!typexp)
+	typexp = ajRegCompC ("^([A-Z][A-Z]) +");
+
+    if (!wrdexp)
+	wrdexp = ajRegCompC ("([A-Za-z0-9]+)");
+
+    if (!verexp)
+	verexp = ajRegCompC ("([A-Za-z0-9]+[.][0-9]+)");
+
+    if (!phrexp)
+	phrexp = ajRegCompC (" *([^;.\n\r]+)");
+
+    if (!taxexp)
+	taxexp = ajRegCompC (" *([^;.\n\r()]+)");
+
     if (!idexp)
 	idexp = ajRegCompC ("^ID   ([^ \t]+)");
 
-    if (!acexp)
-	acexp = ajRegCompC ("^AC   ");
-
-    if (!ac2exp)
-	ac2exp = ajRegCompC ("([A-Za-z0-9]+)");
-
-    if (ajRegExec (idexp, line))
+    rpos = ajFileTell(libr);
+    while (ajFileGets(libr, &rline) && ajStrChar(rline,0)!='>')
     {
-	ajRegSubI (idexp, 1, id);
-	return ajTrue;
-    }
-
-    if (ajRegExec (acexp, line))
-    {
-	ajRegPost (acexp, &tmpline);
-	while (ajRegExec(ac2exp, tmpline))
-	{
-	    ajRegSubI (ac2exp, 1, &tmpac);
-
-	    ajStrAssC(&tmpline2,ajStrStr(*id));
-	    if(ajStrSuffixC(*id,"_0") || ajStrSuffixC(*id,"_00"))
-	    {
-		p = strrchr(ajStrStr(tmpline2),'_');
-		*p = '\0';
-	    }
+        rpos = ajFileTell(libr);
+	ajStrAssS(&tmpstr,rline);
       
-	    if (systemsort)
-		ajFmtPrintF (alistfile, "%s %S\n", ajStrStr(tmpline2), tmpac);
-	    else
-	    {
-		ac = ajCharNew(tmpac);
-		ajListPushApp (acl, ac);
-	    }
-	    ajRegPost (ac2exp, &tmpline);
+	if (ajRegExec (typexp, tmpstr))
+	{
+	    ajRegSubI (typexp, 1, &typStr);
+	    if (ajStrMatchC(typStr, "ID")) lineType = GCGTYPE_ID;
+	    else if (ajStrMatchC(typStr, "SV")) lineType = GCGTYPE_VER;
+	    else if (ajStrMatchC(typStr, "AC")) lineType = GCGTYPE_ACC;
+	    else if (ajStrMatchC(typStr, "DE")) lineType = GCGTYPE_DES;
+	    else if (ajStrMatchC(typStr, "KW")) lineType = GCGTYPE_KEY;
+	    else if (ajStrMatchC(typStr, "OS")) lineType = GCGTYPE_TAX;
+	    else if (ajStrMatchC(typStr, "OC")) lineType = GCGTYPE_TAX;
+	    else lineType=GCGTYPE_OTHER;
+	    if (lineType != GCGTYPE_OTHER)
+	      ajRegPost (typexp, &tmpline);
 	}
-	return ajTrue;
+	else
+	  lineType = GCGTYPE_OTHER;
+
+	if (lineType == GCGTYPE_ID)
+	{
+	    ajRegExec (idexp, rline);
+	    ajRegSubI (idexp, 1, id);
+	    ajDebug("++id '%S'\n", *id);
+	    continue;
+	}
+
+	if (lineType == GCGTYPE_ACC && accfield >= 0)
+	{
+	    while (ajRegExec(wrdexp, tmpline))
+	    {
+		ajRegSubI (wrdexp, 1, &tmpfd);
+		ajStrToUpper(&tmpfd);
+		ajDebug("++acc '%S'\n", tmpfd);
+		if (!tmpacnum)
+		  ajStrAssS(&tmpacnum, tmpfd);
+		embDbiMaxlen(&tmpfd, &maxFieldLen[accfield]);
+		if (systemsort)
+		    ajFmtPrintF (alistfile[accfield], "%S %S\n", *id, tmpfd);
+		else
+		{
+		    fd = ajCharNew(tmpfd);
+		    ajListPushApp (fdl[accfield], fd);
+		}
+		ajRegPost (wrdexp, &tmpline);
+	    }
+	    continue;
+	}
+	else if (lineType == GCGTYPE_DES && desfield >= 0)
+	{
+	    while (ajRegExec(wrdexp, tmpline))
+	    {
+		ajRegSubI (wrdexp, 1, &tmpfd);
+		ajStrToUpper(&tmpfd);
+		ajDebug("++des '%S'\n", tmpfd);
+		embDbiMaxlen(&tmpfd, &maxFieldLen[desfield]);
+		if (systemsort)
+		    ajFmtPrintF (alistfile[desfield], "%S %S\n", *id, tmpfd);
+		else
+		{
+		    fd = ajCharNew(tmpfd);
+		    ajListPushApp (fdl[desfield], fd);
+		}
+		ajRegPost (wrdexp, &tmpline);
+	    }
+	    continue;
+	}
+	else if (lineType == GCGTYPE_VER && svnfield >= 0)
+	{
+	    while (ajRegExec(verexp, tmpline))
+	    {
+		ajRegSubI (verexp, 1, &tmpfd);
+		ajStrToUpper(&tmpfd);
+		ajDebug("++sv '%S'\n", tmpfd);
+		embDbiMaxlen(&tmpfd, &maxFieldLen[svnfield]);
+		if (systemsort)
+		    ajFmtPrintF (alistfile[svnfield], "%S %S\n", *id, tmpfd);
+		else
+		{
+		    fd = ajCharNew(tmpfd);
+		    ajListPushApp (fdl[svnfield], fd);
+		}
+		ajRegPost (verexp, &tmpline);
+	    }
+	    continue;
+	}
+	else if (lineType == GCGTYPE_KEY && keyfield >= 0)
+	{
+	    while (ajRegExec(phrexp, tmpline))
+	    {
+		ajRegSubI (phrexp, 1, &tmpfd);
+		ajRegPost (phrexp, &tmpline);
+		ajStrChompEnd(&tmpfd);
+		if (!ajStrLen(tmpfd)) continue;
+		ajStrToUpper(&tmpfd);
+		ajDebug("++key '%S'\n", tmpfd);
+		embDbiMaxlen(&tmpfd, &maxFieldLen[keyfield]);
+		if (systemsort)
+		    ajFmtPrintF (alistfile[keyfield], "%S %S\n", *id, tmpfd);
+		else
+		{
+		    fd = ajCharNew(tmpfd);
+		    ajListPushApp (fdl[keyfield], fd);
+		}
+	    }
+	    continue;
+	}
+	else if (lineType == GCGTYPE_TAX && taxfield >= 0)
+	{
+	    while (ajRegExec(taxexp, tmpline))
+	    {
+		ajRegSubI (taxexp, 1, &tmpfd);
+		ajRegPost (taxexp, &tmpline);
+		ajStrToUpper(&tmpfd);
+		ajStrChompEnd(&tmpfd);
+		if (!ajStrLen(tmpfd)) continue;
+		ajDebug("++tax '%S'\n", tmpfd);
+		embDbiMaxlen(&tmpfd, &maxFieldLen[taxfield]);
+		if (systemsort)
+		    ajFmtPrintF (alistfile[taxfield], "%S %S\n", *id, tmpfd);
+		else
+		{
+		    fd = ajCharNew(tmpfd);
+		    ajListPushApp (fdl[taxfield], fd);
+		}
+	    }
+	    continue;
+	}
     }
+    if (rpos)
+        ajFileSeek(libr, rpos, 0);
+
+    ajStrDel(&tmpacnum);
 
     return ajFalse;
 }
@@ -1260,53 +1088,241 @@ static AjBool dbigcg_ParseEmbl (AjPStr line, AjPStr* id, AjPList acl)
 **
 ** @param [r] line [AjPStr] Input line
 ** @param [w] id [AjPStr*] ID
-** @param [w] acl [AjPList] List of accession numbers
+** @param [w] fdl [AjPList*] Lists of field tokens
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
 
-static AjBool dbigcg_ParseGenbank (AjPStr line, AjPStr* id, AjPList acl)
+static AjBool dbigcg_ParseGenbank (AjPFile libr,
+				   AjPFile* alistfile,
+				    AjBool systemsort, AjPStr* fields,
+				    ajint* maxFieldLen,
+				    AjPStr* id, AjPList* fdl)
 {
-    static AjPRegexp idexp = NULL;
-    static AjPRegexp acexp = NULL;
-    static AjPRegexp ac2exp = NULL;
+    static AjPRegexp typexp = NULL;
+    static AjPRegexp morexp = NULL;
+    static AjPRegexp wrdexp = NULL;
+    static AjPRegexp phrexp = NULL;
+    static AjPRegexp taxexp = NULL;
+    static AjPRegexp verexp = NULL;
+    ajint rpos = 0;
+    static AjPStr tmpstr = NULL;
     static AjPStr tmpline = NULL;
-    static AjPStr tmpac = NULL;
-    char* ac;
+    static AjPStr rline=NULL;
+    static AjPStr tmpfd = NULL;
+    static AjPStr typStr=NULL;
+    ajint lineType=GCGTYPE_OTHER;
+    char* fd;
+    static ajint numFields;
+    static ajint accfield=-1;
+    static ajint desfield=-1;
+    static ajint keyfield=-1;
+    static ajint taxfield=-1;
+    static ajint svnfield=-1;
+    static AjBool reset = AJTRUE;
 
-    if (!idexp)
-	idexp = ajRegCompC ("^ID   ([^ \t]+)");
-
-    if (!acexp)
-	acexp = ajRegCompC ("^ACCESSION   ");
-
-    if (!ac2exp)
-	ac2exp = ajRegCompC ("([A-Za-z0-9]+)");
-
-    if (ajRegExec (idexp, line))
+    if (!fields)
     {
-	ajRegSubI (idexp, 1, id);
-	return ajTrue;
+      reset = ajTrue;
+      accfield = svnfield = desfield = keyfield = taxfield = -1;
+      return ajFalse;
     }
 
-    if (ajRegExec (acexp, line))
+    if (reset)
     {
-	ajRegPost (acexp, &tmpline);
-	while (ajRegExec(ac2exp, tmpline))
+      numFields = 0;
+      while (fields[numFields])
+      {
+	if (ajStrMatchCaseC(fields[numFields], "acnum"))
+	  accfield=numFields;
+	else if (ajStrMatchCaseC(fields[numFields], "seqvn"))
+	  svnfield=numFields;
+	else if (ajStrMatchCaseC(fields[numFields], "des"))
+	  desfield=numFields;
+	else if (ajStrMatchCaseC(fields[numFields], "keyword"))
+	  keyfield=numFields;
+	else if (ajStrMatchCaseC(fields[numFields], "taxon"))
+	  taxfield=numFields;
+	else
+	  ajWarn ("EMBL parsing unknown field '%S' ignored",
+		  fields[numFields]);
+	numFields++;
+      }
+      reset = ajFalse;
+    }
+
+    if (!typexp)
+	typexp = ajRegCompC ("^(  )?([A-Z]+)");
+
+    if (!morexp)
+	morexp = ajRegCompC ("^            ");
+
+    if (!wrdexp)
+	wrdexp = ajRegCompC ("([A-Za-z0-9]+)");
+
+    if (!phrexp)
+	phrexp = ajRegCompC (" *([^;.\n\r]+)");
+
+    if (!taxexp)
+	taxexp = ajRegCompC (" *([^;.\n\r()]+)");
+
+    if (!verexp)
+	verexp = ajRegCompC ("([A-Za-z0-9]+)( +GI:([0-9]+))?");
+
+    while (ajFileGets(libr, &rline) && ajStrChar(rline,0)!='>')
+    {
+        rpos = ajFileTell(libr);
+	ajStrAssS(&tmpstr,rline);
+      
+	if (ajRegExec (typexp, tmpstr))
 	{
-	    ajRegSubI (ac2exp, 1, &tmpac);
-	    if (systemsort)
-		ajFmtPrintF (alistfile, "%S %S\n", *id, tmpac);
-	    else
-	    {
-		ac = ajCharNew(tmpac);
-		ajListPushApp (acl, ac);
-	    }
-	    ajRegPost (ac2exp, &tmpline);
+	    ajRegSubI (typexp, 2, &typStr);
+	    if (ajStrMatchC(typStr, "LOCUS")) lineType = GCGTYPE_ID;
+	    else if (ajStrMatchC(typStr, "VERSION")) lineType = GCGTYPE_VER;
+	    else if (ajStrMatchC(typStr, "ACCESSION")) lineType = GCGTYPE_ACC;
+	    else if (ajStrMatchC(typStr, "DEFINITION")) lineType = GCGTYPE_DES;
+	    else if (ajStrMatchC(typStr, "KEYWORDS")) lineType = GCGTYPE_KEY;
+	    else if (ajStrMatchC(typStr, "ORGANISM")) lineType = GCGTYPE_TAX;
+	    else lineType=GCGTYPE_OTHER;
+	    if (lineType != GCGTYPE_OTHER)
+	      ajRegPost (typexp, &tmpline);
+	    ajDebug("++type line %d\n", lineType);
 	}
-	return ajTrue;
+	else if (lineType != GCGTYPE_OTHER && ajRegExec (morexp, rline))
+	{
+	  ajRegPost (morexp, &tmpline);
+	  ajDebug("++more line %d\n", lineType);
+	}
+	else
+	  lineType = GCGTYPE_OTHER;
+
+	if (lineType == GCGTYPE_ID)
+	{
+	  ajRegExec (wrdexp, tmpline);
+	  ajRegSubI (wrdexp, 1, id);
+	}
+
+	else if (lineType == GCGTYPE_ACC && accfield >= 0)
+	{
+	    while (ajRegExec(wrdexp, tmpline))
+	    {
+		ajRegSubI (wrdexp, 1, &tmpfd);
+		ajStrToUpper(&tmpfd);
+		ajDebug("++acc '%S'\n", tmpfd);
+		embDbiMaxlen (&tmpfd, &maxFieldLen[accfield]);
+		if (systemsort)
+		    ajFmtPrintF (alistfile[accfield], "%S %S\n", *id, tmpfd);
+		else
+		{
+		    fd = ajCharNew(tmpfd);
+		    ajListPushApp (fdl[accfield], fd);
+		}
+		ajRegPost (wrdexp, &tmpline);
+	    }
+	    continue;
+	}
+
+	else if (lineType == GCGTYPE_DES && desfield >= 0)
+	{
+	    while (ajRegExec(wrdexp, tmpline))
+	    {
+	        ajRegSubI (wrdexp, 1, &tmpfd);
+		ajStrToUpper(&tmpfd);
+		ajDebug("++des '%S'\n", tmpfd);
+		embDbiMaxlen (&tmpfd, &maxFieldLen[desfield]);
+		if (systemsort)
+		    ajFmtPrintF (alistfile[desfield],
+				 "%S %S\n", *id, tmpfd);
+		else
+		{
+		    fd = ajCharNew(tmpfd);
+		    ajListPushApp (fdl[desfield], fd);
+		}
+		ajRegPost (wrdexp, &tmpline);
+	    }
+	    continue;
+	}
+
+	else if (lineType == GCGTYPE_KEY && keyfield >= 0)
+	{
+	    while (ajRegExec(phrexp, tmpline))
+	    {
+	        ajRegSubI (phrexp, 1, &tmpfd);
+		ajRegPost (phrexp, &tmpline);
+		ajStrChompEnd(&tmpfd);
+		if (!ajStrLen(tmpfd)) continue;
+		ajStrToUpper(&tmpfd);
+		ajDebug("++key '%S'\n", tmpfd);
+		embDbiMaxlen (&tmpfd, &maxFieldLen[keyfield]);
+		if (systemsort)
+		    ajFmtPrintF (alistfile[keyfield],
+				 "%S %S\n", *id, tmpfd);
+		else
+		{
+		    fd = ajCharNew(tmpfd);
+		    ajListPushApp (fdl[keyfield], fd);
+		}
+	    }
+	    continue;
+	}
+
+	else if (lineType == GCGTYPE_TAX && taxfield >= 0)
+	{
+	    while (ajRegExec(taxexp, tmpline))
+	    {
+	        ajRegSubI (taxexp, 1, &tmpfd);
+		ajRegPost (taxexp, &tmpline);
+		ajStrChompEnd(&tmpfd);
+		if (!ajStrLen(tmpfd)) continue;
+		ajStrToUpper(&tmpfd);
+		ajDebug("++tax '%S'\n", tmpfd);
+		embDbiMaxlen (&tmpfd, &maxFieldLen[taxfield]);
+		if (systemsort)
+		    ajFmtPrintF (alistfile[taxfield],
+				 "%S %S\n", *id, tmpfd);
+		else
+		{
+		    fd = ajCharNew(tmpfd);
+		    ajListPushApp (fdl[taxfield], fd);
+		}
+	    }
+	    continue;
+	}
+
+	else if (lineType == GCGTYPE_VER && svnfield >= 0)
+	{
+	    if (ajRegExec(verexp, tmpline))
+	    {
+		ajRegSubI (verexp, 1, &tmpfd);
+		ajStrToUpper(&tmpfd);
+		ajDebug("++ver '%S'\n", tmpfd);
+		embDbiMaxlen (&tmpfd, &maxFieldLen[svnfield]);
+		if (systemsort)
+		    ajFmtPrintF (alistfile[svnfield], "%S %S\n", *id, tmpfd);
+		else
+		{
+		    fd = ajCharNew(tmpfd);
+		    ajListPushApp (fdl[svnfield], fd);
+		}
+		ajRegSubI (verexp, 3, &tmpfd);
+		if (!ajStrLen(tmpfd)) continue;
+		ajStrToUpper(&tmpfd);
+		ajDebug("++ver gi: '%S'\n", tmpfd);
+		if (systemsort)
+		    ajFmtPrintF (alistfile[svnfield], "%S %S\n", *id, tmpfd);
+		else
+		{
+		    fd = ajCharNew(tmpfd);
+		    ajListPushApp (fdl[svnfield], fd);
+		}
+	    }
+	    continue;
+	}
+
     }
+    if (rpos)
+      ajFileSeek(libr, rpos, 0);
 
     return ajFalse;
 }
@@ -1318,23 +1334,77 @@ static AjBool dbigcg_ParseGenbank (AjPStr line, AjPStr* id, AjPList acl)
 **
 ** @param [r] line [AjPStr] Input line
 ** @param [w] id [AjPStr*] ID
-** @param [w] acl [AjPList] List of accession numbers
+** @param [w] fdl [AjPList*] Lists of field tokens
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
 
 
-static AjBool dbigcg_ParsePir (AjPStr line, AjPStr* id, AjPList acl)
+static AjBool dbigcg_ParsePir (AjPFile libr,
+			       AjPFile* alistfile,
+			       AjBool systemsort, AjPStr* fields,
+			       ajint* maxFieldLen,
+			       AjPStr* id, AjPList* fdl)
 {
     static AjPRegexp idexp = NULL;
     static AjPRegexp acexp = NULL;
     static AjPRegexp ac2exp = NULL;
+    static AjPRegexp keyexp = NULL;
+    static AjPRegexp taxexp = NULL;
+    static AjPRegexp wrdexp = NULL;
+    static AjPRegexp phrexp = NULL;
+    ajint rpos;
+    static AjPStr tmpstr = NULL;
     static AjPStr tmpline = NULL;
-    static AjPStr tmpac = NULL;
-    char* ac;
+    static AjPStr rline = NULL;
+    static AjPStr tmpfd = NULL;
+    char* fd;
+    static ajint numFields;
+    static ajint accfield=-1;
+    static ajint desfield=-1;
+    static ajint keyfield=-1;
+    static ajint taxfield=-1;
+    static ajint svnfield=-1;
+    static AjBool reset = AJTRUE;
+
+    if (!fields)
+    {
+      reset = ajTrue;
+      accfield = svnfield = desfield = keyfield = taxfield = -1;
+      return ajFalse;
+    }
+
+    if (reset)
+    {
+      numFields = 0;
+      while (fields[numFields])
+      {
+	if (ajStrMatchCaseC(fields[numFields], "acnum"))
+	  accfield=numFields;
+	else if (ajStrMatchCaseC(fields[numFields], "seqvn"))
+	  svnfield=numFields;
+	else if (ajStrMatchCaseC(fields[numFields], "des"))
+	  desfield=numFields;
+	else if (ajStrMatchCaseC(fields[numFields], "keyword"))
+	  keyfield=numFields;
+	else if (ajStrMatchCaseC(fields[numFields], "taxon"))
+	  taxfield=numFields;
+	else
+	  ajWarn ("EMBL parsing unknown field '%S' ignored",
+		  fields[numFields]);
+	numFields++;
+      }
+      reset = ajFalse;
+    }
+
+    if (!wrdexp)
+	wrdexp = ajRegCompC ("([A-Za-z0-9]+)");
 
     if (!idexp)
-	idexp = ajRegCompC ("^ID   ([^ \t]+)");
+	idexp = ajRegCompC ("^>..;([^;.\n\r]+)");
+
+    if (!phrexp)		/* allow . for "sp." */
+	phrexp = ajRegCompC (" *([^,;\n\r]+)");
 
     if (!acexp)
 	acexp = ajRegCompC ("^C;Accession:");
@@ -1342,29 +1412,119 @@ static AjBool dbigcg_ParsePir (AjPStr line, AjPStr* id, AjPList acl)
     if (!ac2exp)
 	ac2exp = ajRegCompC ("([A-Za-z0-9]+)");
 
-    if (ajRegExec (idexp, line))
+    if (!taxexp)
+	taxexp = ajRegCompC ("^C;Species:");
+
+    if (!keyexp)
+	keyexp = ajRegCompC ("^C;Keywords:");
+
+    rpos = ajFileTell(libr);
+
+    ajDebug ("++id '%S'\n", *id);
+
+    /*
+    ajFileGets(libr, &rline);
+    ajDebug ("line-1 '%S'\n", rline);
+    if (!ajRegExec(idexp, rline))
+      return ajFalse;
+    ajRegSubI (idexp, 1, id);
+
+    ajDebug ("++id '%S'\n", *id);
+    */
+
+    ajFileGets(libr, &rline);
+    ajDebug ("line-2 '%S'\n", rline);
+    while (ajRegExec(wrdexp, rline))
     {
-	ajRegSubI (idexp, 1, id);
-	return ajTrue;
+	ajRegSubI (wrdexp, 1, &tmpfd);
+	ajStrToUpper(&tmpfd);
+	ajDebug("++des '%S'\n", tmpfd);
+	embDbiMaxlen(&tmpfd, &maxFieldLen[desfield]);
+	if (systemsort)
+	  ajFmtPrintF (alistfile[desfield], "%S %S\n", *id, tmpfd);
+	else
+	{
+	    fd = ajCharNew(tmpfd);
+	    ajListPushApp (fdl[desfield], fd);
+	}
+	ajRegPost (wrdexp, &rline);
     }
 
-    if (ajRegExec (acexp, line))
+    while (ajStrChar(rline,0)!='>')
     {
-	ajRegPost (acexp, &tmpline);
-	while (ajRegExec(ac2exp, tmpline))
+        rpos = ajFileTell(libr);
+	ajStrAssS(&tmpstr,rline);
+      
+	if (ajRegExec (acexp, rline))
 	{
-	    ajRegSubI (ac2exp, 1, &tmpac);
-	    if (systemsort)
-		ajFmtPrintF (alistfile, "%S %S\n", *id, tmpac);
-	    else
+	    ajRegPost (acexp, &tmpline);
+	    while (ajRegExec(ac2exp, tmpline))
 	    {
-		ac = ajCharNew(tmpac);
-		ajListPushApp (acl, ac);
+		ajRegSubI (ac2exp, 1, &tmpfd);
+		ajStrToUpper(&tmpfd);
+		ajDebug("++acc '%S'\n", tmpfd);
+		embDbiMaxlen(&tmpfd, &maxFieldLen[accfield]);
+		if (systemsort)
+		    ajFmtPrintF (alistfile[accfield], "%S %S\n", *id, tmpfd);
+		else
+		{
+		    fd = ajCharNew(tmpfd);
+		    ajListPushApp (fdl[accfield], fd);
+		}
+		ajRegPost (ac2exp, &tmpline);
 	    }
-	    ajRegPost (ac2exp, &tmpline);
 	}
-	return ajTrue;
+
+	if (ajRegExec (keyexp, rline))
+	{
+	    ajRegPost (keyexp, &tmpline);
+	    while (ajRegExec(phrexp, tmpline))
+	    {
+		ajRegSubI (phrexp, 1, &tmpfd);
+		ajStrToUpper(&tmpfd);
+		ajDebug("++key '%S'\n", tmpfd);
+		embDbiMaxlen(&tmpfd, &maxFieldLen[keyfield]);
+		if (systemsort)
+		    ajFmtPrintF (alistfile[keyfield], "%S %S\n", *id, tmpfd);
+		else
+		{
+		    fd = ajCharNew(tmpfd);
+		    ajListPushApp (fdl[keyfield], fd);
+		}
+		ajRegPost (phrexp, &tmpline);
+	    }
+	}
+
+	if (ajRegExec (taxexp, rline))
+	{
+	    ajRegPost (taxexp, &tmpline);
+	    while (ajRegExec(phrexp, tmpline))
+	    {
+		ajRegSubI (phrexp, 1, &tmpfd);
+		ajStrToUpper(&tmpfd);
+		ajDebug("++tax '%S'\n", tmpfd);
+		embDbiMaxlen(&tmpfd, &maxFieldLen[taxfield]);
+		if (systemsort)
+		    ajFmtPrintF (alistfile[taxfield], "%S %S\n", *id, tmpfd);
+		else
+		{
+		    fd = ajCharNew(tmpfd);
+		    ajListPushApp (fdl[taxfield], fd);
+		}
+		ajRegPost (phrexp, &tmpline);
+	    }
+	}
+
+	if (!ajFileGets(libr, &rline))
+	{
+	    /*      ddone = 1;*/
+	    rpos = 0;
+	    break;
+	}
     }
+
+    if (rpos)
+      ajFileSeek (libr, rpos, 0);
 
     return ajFalse;
 }

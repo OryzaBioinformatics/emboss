@@ -12,18 +12,18 @@ string: dbname  [
   parameter: "Y"
   maxlength: "19"
   minlength: "1"
-  prompt: "Database name"
+  information: "Database name"
 ]
 
 string: directory  [
   required: "Y"
   default: "."
-  prompt: "Database directory"
+  information: "Database directory"
 ]
 
-string: filename  [
+string: filenames  [
   required: "Y"
-  prompt: "database base filename"
+  information: "Wildcard database filename"
   default: "$(dbname)"
   expected: "Database name"
 ]
@@ -35,20 +35,20 @@ string: release  [
   required: "Y"
   default: "0.0"
   maxlength: "9"
-  prompt: "Release number"
+  information: "Release number"
 ]
 
 string: date  [
   required: "Y"
   default: "00/00/00"
   valid: "Date string dd/mm/yy"
-  prompt: "Index date"
+  information: "Index date"
   pattern: "^([0-9]+.[0-9]+.[0-9]+)?$"
 ]
 
 list: seqtype  [
   required: "Y"
-  prompt: "Sequence type"
+  information: "Sequence type"
   values: "N:nucleic;P:protein;?:unknown"
   maximum: "1"
   minimum: "1"
@@ -57,7 +57,7 @@ list: seqtype  [
 
 list: blastversion  [
   required: "Y"
-  prompt: "Blast index version"
+  information: "Blast index version"
   values: "1:wublast and setdb/pressdb;2:formatdb;0:unknown"
   maximum: "1"
   minimum: "1"
@@ -67,19 +67,35 @@ list: blastversion  [
 endsection: required
 
 section: advanced [ info: "advanced Section" type: page ]
-bool: staden  [
-  prompt: "Use staden index file names"
+
+list: fields  [
+  required: "n"
+  information: "Index fields"
+  values: "acnum:Accession number;seqvn:Sequence Version and GI;des:Description"
+  minimum: 0
+  maximum: 5
+  default: "acnum"
+]
+
+string: exclude  [
+  information: "wildcard filename(s) to exclude"
 ]
 
 string: indexdirectory  [
   default: "."
-  prompt: "Index directory"
+  information: "Index directory"
 ]
 
 string: sortoptions  [
   default: "-T . -k 1,1"
-  prompt: "Sort option(s)"
+  information: "Sort option(s)"
   help: "Sort options, typically '-T .' to use current directory for work files and '-k 1,1' to force GNU sort to use the first field"
+]
+
+int: maxindex  [
+  default: "0"
+  minimum: "0"
+  information: "Maximum index length"
 ]
 
 bool: systemsort  [
