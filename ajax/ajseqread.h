@@ -37,8 +37,10 @@ AjBool       ajSeqGetFromUsa (AjPStr thys, AjBool protein, AjPSeq *seq);
 void         ajSeqinClear (AjPSeqin thys);
 void         ajSeqinDel (AjPSeqin* pthis);
 AjPSeqin     ajSeqinNew (void);
-AjBool       ajSeqParseFasta(AjPStr str, AjPStr* id, AjPStr* acc, AjPStr* desc);
-AjBool       ajSeqParseNcbi(AjPStr str, AjPStr* id, AjPStr* acc, AjPStr* desc);
+AjBool       ajSeqParseFasta(AjPStr str, AjPStr* id, AjPStr* acc,
+			     AjPStr* sv, AjPStr* desc);
+AjBool       ajSeqParseNcbi(AjPStr str, AjPStr* id, AjPStr* acc,
+			    AjPStr* sv, AjPStr* gi, AjPStr* desc);
 void         ajSeqinSetNuc (AjPSeqin seqin);
 void         ajSeqinSetProt (AjPSeqin seqin);
 void         ajSeqinSetRange (AjPSeqin seqin, ajint ibegin, ajint iend);

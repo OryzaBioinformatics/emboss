@@ -90,7 +90,7 @@ static AjPPosRegexp posregCompFlagsC (const char* exp, ajint cflags) {
   AJNEW0(ret);
   AJNEW0(ret->Regex);
 
-  ajDebug ("posregCompFlagsC '%s' %x\n", exp, cflags);
+  /* ajDebug ("posregCompFlagsC '%s' %x\n", exp, cflags); */
   rval = hsp_regcomp (ret->Regex, exp, cflags|REG_EXTENDED);
 
   if (cflags & REG_NOSUB)
@@ -98,7 +98,7 @@ static AjPPosRegexp posregCompFlagsC (const char* exp, ajint cflags) {
   else
     nsub = ret->Regex->re_nsub + 1;
 
-  ajDebug ("    rval: %d nsub: %d\n", rval, ret->Regex->re_nsub);
+  /* ajDebug ("    rval: %d nsub: %d\n", rval, ret->Regex->re_nsub); */
   switch (rval) {
   case 0:
     if (nsub) AJCNEW0(ret->Match, nsub);
@@ -232,14 +232,14 @@ AjBool ajPosRegExecC (AjPPosRegexp prog, const char* str) {
   ajint nsub;
   ajint ret;
 
-  ajDebug ("ajPosRegExecC '%s'\n", str);
+  /* ajDebug ("ajPosRegExecC '%s'\n", str); */
 
   nsub = prog->Regex->re_nsub+1;
   prog->Regex->orig = str;
 
   ret = hsp_regexec (prog->Regex, str, nsub, match, 0);
 
-  ajDebug ("   result %d\n", ret);
+  /* ajDebug ("   result %d\n", ret); */
 
   switch (ret) {
   case REG_OKAY:
@@ -508,21 +508,21 @@ void ajPosRegTrace (AjPPosRegexp exp) {
   const char* orig = exp->Regex->orig;
   static AjPStr str = NULL;
 
-  ajDebug ("  REGEXP trace\n");
+  /* ajDebug ("  REGEXP trace\n"); */
   for (isub=0; isub <= exp->Regex->re_nsub; isub++) {
     if (rm[isub].rm_so >= 0) {
       ilen = rm[isub].rm_eo - rm[isub].rm_so;
       (void) ajStrAssCI (&str, &orig[rm[isub].rm_so], ilen);
       if (!isub) {
-	ajDebug ("    string match '%S'\n", str);
+	/* ajDebug ("    string match '%S'\n", str); */
       }
       else {
 	ipos = rm[isub].rm_so - rm[0].rm_so;
-	ajDebug ("    substring %2d '%S' at %d\n", isub, str, ipos);
+	/* ajDebug ("    substring %2d '%S' at %d\n", isub, str, ipos); */
       }
     }
   }
-  ajDebug ("\n");
+  /* ajDebug ("\n"); */
   ajStrDel (&str);
   return;
 }

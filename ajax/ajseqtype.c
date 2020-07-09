@@ -199,7 +199,7 @@ AjBool ajSeqTypeCheck (AjPSeq thys, AjPSeqin seqin) {
   if (seqin->IsProt)
     ajSeqSetProt(thys);
 
-  if (seqin->Query) {
+  if (seqin->Query && ajStrLen(seqin->Query->DbType)) {
     seqTypeSet(thys, seqin->Query->DbType);
   }
 
@@ -294,9 +294,9 @@ char ajSeqTypeDna (AjPSeq thys) {
   if (i < ajSeqLen(thys))
     return ajStrChar(thys->Seq, i);
 
-  ajDebug ("convert '%S'\n", thys->Seq);
+  /* ajDebug ("convert '%S'\n", thys->Seq); */
   (void) ajStrConvertCC (&thys->Seq, seqCharNucRNA, seqCharNucDNA);
-  ajDebug (" result '%S'\n", thys->Seq);
+  /* ajDebug (" result '%S'\n", thys->Seq); */
 
   return '\0';
 }
@@ -329,9 +329,9 @@ char ajSeqTypeRna (AjPSeq thys) {
   if (i < ajSeqLen(thys))
     return ajStrChar(thys->Seq, i);
 
-  ajDebug ("convert '%S'\n", thys->Seq);
+  /* ajDebug ("convert '%S'\n", thys->Seq); */
   (void) ajStrConvertCC (&thys->Seq, seqCharNucDNA, seqCharNucRNA);
-  ajDebug (" result '%S'\n", thys->Seq);
+  /* ajDebug (" result '%S'\n", thys->Seq); */
 
   return '\0';
 }
@@ -359,9 +359,9 @@ char ajSeqTypePuredna (AjPSeq thys) {
   if (i < ajSeqLen(thys))
     return ajStrChar(thys->Seq, i);
 
-  ajDebug ("convert '%S'\n", thys->Seq);
+  /* ajDebug ("convert '%S'\n", thys->Seq); */
   (void) ajStrConvertCC (&thys->Seq, seqCharNucRNA, seqCharNucDNA);
-  ajDebug (" result '%S'\n", thys->Seq);
+  /* ajDebug (" result '%S'\n", thys->Seq); */
 
   return '\0';
 }
@@ -388,9 +388,9 @@ char ajSeqTypePurerna (AjPSeq thys) {
   i = strspn(ajStrStr(thys->Seq), seqchars);
   if (i < ajSeqLen(thys))
     return ajStrChar(thys->Seq, i);
-  ajDebug ("convert '%S'\n", thys->Seq);
+  /* ajDebug ("convert '%S'\n", thys->Seq); */
   (void) ajStrConvertCC (&thys->Seq, seqCharNucDNA, seqCharNucRNA);
-  ajDebug (" result '%S'\n", thys->Seq);
+  /* ajDebug (" result '%S'\n", thys->Seq); */
 
   return '\0';
 }
@@ -515,9 +515,9 @@ char ajSeqTypeGapdna (AjPSeq thys) {
     return ajStrChar(thys->Seq, i);
 
 
-  ajDebug ("convert '%S'\n", thys->Seq);
+  /* ajDebug ("convert '%S'\n", thys->Seq); */
   (void) ajStrConvertCC (&thys->Seq, seqCharNucRNA, seqCharNucDNA);
-  ajDebug (" result '%S'\n", thys->Seq);
+  /* ajDebug (" result '%S'\n", thys->Seq); */
 
   return '\0';
 }
@@ -551,9 +551,9 @@ char ajSeqTypeGaprna (AjPSeq thys) {
   if (i < ajSeqLen(thys))
     return ajStrChar(thys->Seq, i);
 
-  ajDebug ("convert '%S'\n", thys->Seq);
+  /* ajDebug ("convert '%S'\n", thys->Seq); */
   (void) ajStrConvertCC (&thys->Seq, seqCharNucDNA, seqCharNucRNA);
-  ajDebug (" result '%S'\n", thys->Seq);
+  /* ajDebug (" result '%S'\n", thys->Seq); */
 
   return '\0';
 }
