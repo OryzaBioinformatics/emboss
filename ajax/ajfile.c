@@ -2795,50 +2795,36 @@ AjBool ajFileNameExt (AjPStr* filename, const AjPStr extension) {
 ** @@
 ******************************************************************************/
 
-AjBool ajFileNameExtC (AjPStr* filename, const char* extension) {
+AjBool ajFileNameExtC (AjPStr* filename, const char* extension)
+{
+    static AjPStr tmpstr=NULL;
+    AjBool doext = ajTrue;
+    char   *p=NULL;
+    
+    doext = ajTrue;
+    if (!extension || !*extension)
+	doext = ajFalse;
 
-  static AjPRegexp fileexp = NULL;
-  static AjPStr tmpstr = NULL;
-  static AjPStr tmpnam = NULL;
-  static AjPStr tmpdir = NULL;
-  static AjPStr tmpext = NULL;
 
-  AjBool doext = ajTrue;
-  if (!extension || !*extension)
-    doext = ajFalse;
-  
-  if (!fileexp)
-    fileexp = ajRegCompC ("(.*/)?([^./]*)([.]([^./]*))?$");
-
-  ajDebug ("ajFileNameExtC '%S' '%s'\n", *filename, extension);
-
-  ajStrAssS (&tmpstr, *filename);
-
-  if (ajRegExec(fileexp, tmpstr)) {
-    ajRegSubI(fileexp, 1, &tmpdir);
-    ajRegSubI(fileexp, 2, &tmpnam);
-    ajRegSubI(fileexp, 3, &tmpext);
-    if (!ajStrLen(tmpdir))
-      ajStrAssC(&tmpdir, "");
-    if (ajStrLen(tmpext)) {
-      ajDebug ("replace extension '%S', '%S', <%S>\n",
-	       tmpdir, tmpnam, tmpext);
-      if (doext)
-	ajFmtPrintS (filename, "%S%S.%s", tmpdir, tmpnam, extension);
-      else
-	ajFmtPrintS (filename, "%S%S", tmpdir, tmpnam);
+    ajDebug ("ajFileNameExtC '%S' '%s'\n", *filename, extension);
+    (void) ajStrAssC(&tmpstr,ajStrStr(*filename));
+    p = strrchr(ajStrStr(tmpstr),'.');
+    if(p)
+    {
+	*p='\0';
+	tmpstr->Len = p - ajStrStr(tmpstr);
     }
-    else {
-      ajDebug ("new extension '%S', '%S', <%S>\n",
-	       tmpdir, tmpnam, tmpext);
-      if (doext)
-	ajFmtPrintS (filename, "%S%S.%s", tmpdir, tmpnam, extension);
-      else
-	ajFmtPrintS (filename, "%S%S", tmpdir, tmpnam);
-    }
-  }
+    
 
-  return ajTrue;
+    if(doext)
+    {
+	ajStrAppC(&tmpstr,".");
+	ajStrAppC(&tmpstr,extension);
+    }
+
+    ajStrAssC(filename,ajStrStr(tmpstr));
+
+    return ajTrue;
 }
 
 /* @func ajFileScan ******************************************************

@@ -2062,7 +2062,7 @@ static AjBool seqBlastOpen (AjPSeqQuery qry) {
   qryd = qry->QryData;
 
   qryd->type = 0;
-  qryd->div = 1;
+/*  qryd->div = 1;*/	/* Messes things up with multi-volume index */
   HeaderLen = 0;
 
   (void) seqCdFileSeek (qryd->dfp, (qryd->div - 1)); /* first (only) file */

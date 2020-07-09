@@ -3,6 +3,11 @@ appl: prettyplot [
 	groups: "display: alignment: multiple"
 ]
 
+	bool: data [
+	opt: N
+	def: N
+	]
+
 	seqset: msf [ 
 	param: Y
 	type: gapany
@@ -177,7 +182,7 @@ appl: prettyplot [
 	def: N
 	]
 
-	matrix: datafile [
+	matrix: matrixfile [
 	optional: Y
 	info: "Matrix file"
 	protein: "$(msf.protein)"
@@ -190,5 +195,5 @@ appl: prettyplot [
 	]
 
 	graph: graph [
-	req: y
+	req: @(!$(data))
 	]

@@ -105,6 +105,7 @@ void          ajGraphDots (PLFLT *x1,PLFLT *y1, int numofdots);
 void          ajGraphDumpDevices (void);
 int*          ajGraphGetBaseColour (void);
 void          ajGraphGetCharSize (float *defheight, float *currentheight);
+int           ajGraphGetColour(void);
 void          ajGraphGetOut (float *xp,float *yp,int
 			     *xleng,int *yleng,int *xoff,int *yoff);
 void          ajGraphGetOutputDeviceParams(float *xp,float *yp,

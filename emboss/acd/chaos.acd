@@ -13,4 +13,6 @@ appl: chaos [
 
 
   sequence: sequence [ param: Y type: dna ]
-  graph: graph [ req: Y  ]
+  bool: data [ opt: N def: N info: "Display as data" ]
+  graph: graph [ req: @(!$(data)) ]
+  outfile: outfile [ req: $(data) nullok: Y ]

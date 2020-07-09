@@ -72,10 +72,10 @@ NM = /usr/ccs/bin/nm -p
 OBJDUMP = @OBJDUMP@
 PACKAGE = EMBOSS
 RANLIB = ranlib
-VERSION = 1.5.3
+VERSION = 1.5.4
 XLIB =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib -lX11 -lsocket -lsocket  -lnsl -lnsl
 
-pkgdata_DATA = *.bib *.tex *.ps
+pkgdata_DATA = *.bib *.tex *.ps.gz
 pkgdatadir = $(prefix)/share/$(PACKAGE)/doc/tutorials
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 

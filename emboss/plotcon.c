@@ -106,13 +106,13 @@ int main (int argc, char * argv[]) {
 
   (void) ajGraphInit ("plotcon", argc, argv);
   
-  seqset = ajAcdGetSeqset("msf"); (seqset);   /* Pads seq set with gap characters */
+  seqset = ajAcdGetSeqset("msf"); 	/* Pads seq set with gap characters */
   numseq = ajSeqsetSize (seqset);
   lenseq = ajSeqsetLen(seqset);
 
   winsize = ajAcdGetInt("winsize");
   cmpmatrix = ajAcdGetMatrix("scorefile");
-//  showscore   = ajAcdGetInt("showscore");
+/*  showscore   = ajAcdGetInt("showscore"); */
   text = ajAcdGetBool("data");
   graphs = ajAcdGetGraphxy( "graph");
   outf = ajAcdGetOutfile("outfile");
@@ -151,7 +151,7 @@ int main (int argc, char * argv[]) {
 
       for(j=i+1;j<numseq;j++) {
         m2 = ajSeqCvtK(cvt, seqcharptr[j][k]);
-        // ajUser("m1 %d m2 %d matrix[m1][m2] %d",i+1,j+1, matrix[m1][m2] );
+        /* ajUser("m1 %d m2 %d matrix[m1][m2] %d",i+1,j+1, matrix[m1][m2] );*/
         if(m1 && m2){
           contrj = (float)matrix[m1][m2]*ajSeqsetWeight(seqset, j)+ajFloat2dGet(score,i,k);
           contri = (float)matrix[m1][m2]*ajSeqsetWeight(seqset, i)+ajFloat2dGet(score,j,k);
@@ -179,16 +179,6 @@ int main (int argc, char * argv[]) {
     /* find the highest score */
     highindex = -1;
     scoremax = -3;
-
-    //if(showscore==k+1) ajUser("Score--------->");
-    //for(i=0;i<numseq;i++){
-    //  if(showscore==k+1)
-    //   ajUser("seq %d %c score %f",i,seqcharptr[i][k],ajFloat2dGet(score,i,k)); 
-    //  if(ajFloat2dGet(score,i,k)> scoremax){
-    //    scoremax = ajFloat2dGet(score,i,k);
-    //    highindex = i;
-    //  }
-    //}
   }
 
 /*************** End of Loop ***************/

@@ -5,14 +5,20 @@ appl: banana [
 
   sequence: sequence [ param: y type: puredna ]
 
-  datafile: datafile [
+  datafile: anglesfile [
         optional: Y
         info: "angles file"
         def: "Eangles_tri.dat"
   ]
 
+  bool: data [
+	opt: N
+	info: "Output as data"
+	def: N
+  ]
+
   graph: graph [
-        req: y
+        req: @(!$(data))
 	gtitle: "Bending and curvature plot of $(sequence.name)"
   ]
 

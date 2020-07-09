@@ -6,26 +6,28 @@
 # SEPTEMBER 1999 SOL
 # MAY 2000 rewritten to use a Hanes Woolf plot instead of Lineweaver Burke by David Martin.
 
-appl: 	    findkm [
-            doc: "Calculates Km and Vmax for an enzyme reaction using a Hanes/Woolf plot" 
-            groups: "enzyme kinetics"
-            ]
+appl:	findkm [
+	doc: "Find Km and Vmax for an enzyme reaction by a Hanes/Woolf plot" 
+	groups: "enzyme kinetics"
+]
 
-infile:     infile [ 
-            param: Y
-            prompt: "Enter name of file containing data"]
-        
-outfile:    outfile [
-            param: Y
+infile:	infile [ 
+	param: Y
+	prompt: "Enter name of file containing data"
 ]
         
-bool:       plot [ 
-            req: N 
-            def: Y 
-            info: "S/V vs S" ]
+outfile: outfile [
+	param: Y
+]
+        
+bool:	plot [ 
+	req: N 
+	def: Y 
+	info: "S/V vs S" 
+]
       
-xygraph:    graphLB [
-            req: Y
-            multi:2
-            ]
+xygraph: graphLB [
+	req: Y
+	multi:2
+]
 

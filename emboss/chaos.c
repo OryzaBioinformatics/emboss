@@ -1,4 +1,3 @@
-/*  Last edited: Jun  4 11:33 2000 (pmr) */
 /* @source chaos application
 ** @author Ian Longden
 ** @@
@@ -32,13 +31,21 @@ int main (int argc, char *argv[]) {
   char *ptr;
   int i,a=0,c=0,t=0,g=0,n=0;
   char line[40];
-
+  AjBool data=ajFalse;
+  AjPFile outf=NULL;
+  
   ajGraphInit ("chaos", argc, argv);
   
   sequence = ajAcdGetSeq ("sequence");
   graph = ajAcdGetGraph ("graph");
-
-  ajGraphOpenWin(graph,-0.1,1.4,-0.1,1.1);
+  data  = ajAcdGetBool("data");
+  outf  = ajAcdGetOutfile("outfile");
+  
+  if(!data)
+      ajGraphOpenWin(graph,-0.1,1.4,-0.1,1.1);
+  else
+      ajFmtPrintF(outf,"##Graphic\n##Screen x1 %f y1 %f x2 %f y2 %f\n",
+		  -0.1,-0.1,1.4,1.1);
 
   ajSeqToLower(sequence);
   ptr = ajSeqChar(sequence);
@@ -69,42 +76,103 @@ int main (int argc, char *argv[]) {
       n++;
     }
     x2 = x + 0.0001;
-    ajGraphLines(&x,&y,&x2,&y,1);
+    if(!data)
+	ajGraphLines(&x,&y,&x2,&y,1);
+    else
+	ajFmtPrintF(outf,"Line x1 %f y1 %f x2 %f y2 %f colour 0\n",
+		    x,y,x2,y);
     ptr++;
   }
  
-  ajGraphTextEnd (0.0,0.0,"A");
-  ajGraphTextEnd (0.0,1.0,"C");
-  ajGraphTextStart (1.0,0.0,"T");
-  ajGraphTextStart (1.0,1.0,"G");
+  if(!data)
+  {
+      ajGraphTextEnd (0.0,0.0,"A");
+      ajGraphTextEnd (0.0,1.0,"C");
+      ajGraphTextStart (1.0,0.0,"T");
+      ajGraphTextStart (1.0,1.0,"G");
 
 
-  ajGraphSetCharSize(0.5);
-  sprintf(line,"A %d",a);
-  ajGraphTextStart (1.1,0.75,line);
-  sprintf(line,"C %d",c);
-  ajGraphTextStart (1.1,0.70,line);
-  sprintf(line,"T %d",t);
-  ajGraphTextStart (1.1,0.65,line);
-  sprintf(line,"G %d",t);
-  ajGraphTextStart (1.1,0.60,line);
-  sprintf(line,"N %d",n);
-  ajGraphTextStart (1.1,0.55,line);
+      ajGraphSetCharSize(0.5);
+      sprintf(line,"A %d",a);
+      ajGraphTextStart (1.1,0.75,line);
+      sprintf(line,"C %d",c);
+      ajGraphTextStart (1.1,0.70,line);
+      sprintf(line,"T %d",t);
+      ajGraphTextStart (1.1,0.65,line);
+      sprintf(line,"G %d",t);
+      ajGraphTextStart (1.1,0.60,line);
+      sprintf(line,"N %d",n);
+      ajGraphTextStart (1.1,0.55,line);
 
 
-  sprintf(line,"%cA %3.2f",'%',((float)a/(float)ajSeqLen(sequence))*100.0);
-  ajGraphTextStart (1.1,0.45,line);
-  sprintf(line,"%cC %3.2f",'%',((float)c/(float)ajSeqLen(sequence))*100.0);
-  ajGraphTextStart (1.1,0.40,line);
-   sprintf(line,"%cT %3.2f",'%',((float)t/(float)ajSeqLen(sequence))*100.0);
-  ajGraphTextStart (1.1,0.35,line);
-   sprintf(line,"%cG %3.2f",'%',((float)g/(float)ajSeqLen(sequence))*100.0);
-  ajGraphTextStart (1.1,0.30,line);
-   sprintf(line,"%cN %3.2f",'%',((float)n/(float)ajSeqLen(sequence))*100.0);
-  ajGraphTextStart (1.1,0.25,line);
+      sprintf(line,"%cA %3.2f",'%',((float)a/(float)ajSeqLen(sequence))*100.0);
+      ajGraphTextStart (1.1,0.45,line);
+      sprintf(line,"%cC %3.2f",'%',((float)c/(float)ajSeqLen(sequence))*100.0);
+      ajGraphTextStart (1.1,0.40,line);
+      sprintf(line,"%cT %3.2f",'%',((float)t/(float)ajSeqLen(sequence))*100.0);
+      ajGraphTextStart (1.1,0.35,line);
+      sprintf(line,"%cG %3.2f",'%',((float)g/(float)ajSeqLen(sequence))*100.0);
+      ajGraphTextStart (1.1,0.30,line);
+      sprintf(line,"%cN %3.2f",'%',((float)n/(float)ajSeqLen(sequence))*100.0);
+      ajGraphTextStart (1.1,0.25,line);
 
   
-  ajGraphCloseWin();
+      ajGraphCloseWin();
+  }
+  else
+  {
+      ajFmtPrintF(outf,"Text3 x1 %f y1 %f colour 0 size 1.0 %s\n",0.0,0.0,"A");
+      ajFmtPrintF(outf,"Text3 x1 %f y1 %f colour 0 size 1.0 %s\n",0.0,1.0,"C");
+      ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour 0 size 1.0 %s\n",1.0,0.0,"T");
+      ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour 0 size 1.0 %s\n",1.0,1.0,"G");
+      
+
+
+      sprintf(line,"A %d",a);
+      ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour 0 size 0.5 %s\n",
+		  1.1,0.75,line);
+
+      sprintf(line,"C %d",c);
+      ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour 0 size 0.5 %s\n",
+		  1.1,0.70,line);
+
+      sprintf(line,"T %d",t);
+      ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour 0 size 0.5 %s\n",
+		  1.1,0.65,line);
+
+      sprintf(line,"G %d",t);
+      ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour 0 size 0.5 %s\n",
+		  1.1,0.60,line);
+
+      sprintf(line,"N %d",n);
+      ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour 0 size 0.5 %s\n",
+		  1.1,0.55,line);
+
+
+
+      sprintf(line,"%cA %3.2f",'%',((float)a/(float)ajSeqLen(sequence))*100.0);
+      ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour 0 size 0.5 %s\n",
+		  1.1,0.45,line);
+
+      sprintf(line,"%cC %3.2f",'%',((float)c/(float)ajSeqLen(sequence))*100.0);
+      ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour 0 size 0.5 %s\n",
+		  1.1,0.40,line);
+
+      sprintf(line,"%cT %3.2f",'%',((float)t/(float)ajSeqLen(sequence))*100.0);
+      ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour 0 size 0.5 %s\n",
+		  1.1,0.35,line);
+
+      sprintf(line,"%cG %3.2f",'%',((float)g/(float)ajSeqLen(sequence))*100.0);
+      ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour 0 size 0.5 %s\n",
+		  1.1,0.30,line);
+
+      sprintf(line,"%cN %3.2f",'%',((float)n/(float)ajSeqLen(sequence))*100.0);
+      ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour 0 size 0.5 %s\n",
+		  1.1,0.25,line);
+  
+      ajFileClose(&outf);
+  }
+
   ajExit();
   return 0;
 }

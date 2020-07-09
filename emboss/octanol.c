@@ -110,8 +110,7 @@ int main (int argc, char * argv[]) {
   difference = ajAcdGetBool("differenceplot");
 
   if(!getwhitewimbleydata(datafile,&matrix[0],&err[0],&matrix2[0],&err2[0])){
-    ajUser("Error could not read data file");
-    exit(0);
+    ajDie("Could not read data file");
   }
   
   graphdata = ajGraphxyDataNewI(ajSeqLen(seq)-llen);

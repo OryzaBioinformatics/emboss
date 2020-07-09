@@ -1,5 +1,5 @@
 appl: plotcon [
-	doc: "Plots the quality of conservation of a multiple sequence alignment"
+	doc: "Plots the quality of conservation of a sequence alignment"
 	groups: "display: alignment: multiple"
 ]
 

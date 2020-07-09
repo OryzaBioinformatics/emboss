@@ -1648,6 +1648,19 @@ static void GraphCheckFlags (int flags) {
   return;
 }
 
+/* @func ajGraphGetColour **********************************************
+**
+** Return current foreground colour
+**
+** @return [int] colour.
+** @@
+******************************************************************************/
+
+int ajGraphGetColour(void)
+{
+    return currentfgcolour;
+}
+
 /* @func ajGraphSetLineStyle **********************************************
 **
 ** Set the line style.
