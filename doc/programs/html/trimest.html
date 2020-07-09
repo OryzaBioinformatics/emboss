@@ -1,0 +1,653 @@
+<!--START OF HEADER - DON'T ALTER -->
+
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: trimest
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
+</a>
+</td>
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: trimest
+</H2>
+</font>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<p><hr><p>
+
+<!--END OF HEADER-->
+
+<H1>
+Program trimest
+</H1>
+<H2>
+    Function
+</H2>
+Trim poly-A tails off EST sequences
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+        Algorithms
+  -->
+
+EST and mRNA sequences often have poy-A tails at the end of them.  This
+utility removes those poly-A tails. 
+
+<p>
+
+EST sequences are often the reverse complement of the corresponding
+mRNA's forward sense and have poly-T tails at their 5' end.  By default,
+this program also detects and removes these and writes out the reverse
+complement of the sequence. 
+
+<p>
+
+<b>trimest</b> is not infallible.  There are often repeats of 'A' (or
+'T') in a sequence that just happen by chance to occur at the 3' (or 5')
+end of the EST sequence.  <b>trimest</b> has no way of determining if the
+A's it finds are part of a real poly-A tail or are a part of the
+transcribed genomic sequence.  It removes any apparent poly-A tails that
+match its criteria for a poly-A tail. 
+
+<p>
+
+<b>trimest</b> looks for a repeat of at least '-minlength' A's at the 3'
+end (and, by default, '-minlength' T's at the 5' end).  If there are an
+apparent 5' poly-T tail and a poly-A tail, then it removes whichever is
+the longer of the two. 
+
+<p>
+
+By default, it will allow '-mismatches' non-A (or non-T) bases in the
+tail.  If a mismatch is found, then there has to be at least
+'-minlength' A's (or T's) past the mismatch (working from the end) for
+the mismatch to be considered part of the tail.  If '-mismatches' is
+greater than 1 then that number of contiguous non-A (or non-T) bases
+will be allowed as part of the tail. 
+
+<p>
+
+If a 5' poly-T tail is found, then the sequence will be optionally
+reverse-complemented when it is written out. 
+
+<p>
+
+If a poly-A tail is reomved then '[poly-A tail removed]' is appended to
+the description of the sequence.  If poly-T is removed, then '[poly-T
+tail removed]' is appended and if the sequence is reversed, '[reverse
+complement]' is appended. 
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+
+Here is a sample session with trimest:
+
+<pre>
+
+% trimest embl:hsfau hsfau.seq
+
+</pre>
+
+
+
+
+
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outseq]            seqoutall  Output sequence(s) USA
+
+   Optional qualifiers:
+   -minlength          integer    This is the minimum length that a poly-A (or
+                                  poly-T) tail must have before it is
+                                  removed. If there are mismatches in the tail
+                                  than there must be at least this length of
+                                  poly-A tail before the mismatch for the
+                                  mismatch to be considered part of the tail.
+   -mismatches         integer    If there are this number or fewer contiguous
+                                  non-A bases in a poly-A tail then, if there
+                                  are '-minlength' 'A' bases before them,
+                                  they will be considered part of the tail and
+                                  removed .
+                                  For example the terminal 4 A's of GCAGAAAA
+                                  would be removed with the default values of
+                                  -minlength=4 and -mismatches=1 (There are
+                                  not at least 4 A's before the last 'G' and
+                                  so only the A's after it are considered to
+                                  be part of the tail). The terminal 9 bases
+                                  of GCAAAAGAAAA would be removed; There are
+                                  at least -minlength A's preceeding the last
+                                  'G', so it is part of the tail.
+   -[no]reverse        bool       When a poly-T region at the 5' end of the
+                                  sequence is found and removed, it is likely
+                                  that the sequence is in the reverse sense.
+                                  This option will change the sequence to the
+                                  forward sense when it is written out. If
+                                  this option is not set, then the sense will
+                                  not be changed.
+
+   Advanced qualifiers:
+   -[no]fiveprime      bool       If this is set true, then the 5' end of teh
+                                  sequence is inspected for poly-T tails.
+                                  These will be removed if they are longer
+                                  than any 3' poly-A tails. If this is false,
+                                  then the 5' end is ignored.
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Output sequence(s) USA</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-minlength</td>
+<td>This is the minimum length that a poly-A (or poly-T) tail must have before it is removed. If there are mismatches in the tail than there must be at least this length of poly-A tail before the mismatch for the mismatch to be considered part of the tail.</td>
+<td>Integer 1 or more</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>-mismatches</td>
+<td>If there are this number or fewer contiguous non-A bases in a poly-A tail then, if there are '-minlength' 'A' bases before them, they will be considered part of the tail and removed .
+For example the terminal 4 A's of GCAGAAAA would be removed with the default values of -minlength=4 and -mismatches=1 (There are not at least 4 A's before the last 'G' and so only the A's after it are considered to be part of the tail). The terminal 9 bases of GCAAAAGAAAA would be removed; There are at least -minlength A's preceeding the last 'G', so it is part of the tail.</td>
+<td>Integer 0 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-[no]reverse</td>
+<td>When a poly-T region at the 5' end of the sequence is found and removed, it is likely that the sequence is in the reverse sense. This option will change the sequence to the forward sense when it is written out. If this option is not set, then the sense will not be changed.</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]fiveprime</td>
+<td>If this is set true, then the 5' end of teh sequence is inspected for poly-T tails. These will be removed if they are longer than any 3' poly-A tails. If this is false, then the 5' end is ignored.</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+</table>
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+Normal nucleic acid sequences USA.
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+   -->
+
+The output is a set of sequences with the poly-A (or poly-T) tails
+removed.  If the sequences had a 5' poly-T tail then are
+reverse-complemented by default.  The description line has a comment
+appended about the changes made to the sequence. 
+
+<p>
+
+For example, the sequence embl:hsfau is writetn out as:
+
+<p>
+
+<hr>
+<pre>
+>HSFAU X65923 H.sapiens fau mRNA [poly-A tail removed]
+ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttcagtc
+</pre>
+<hr>
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+It will trim any run of more than -minlength A's or T's at the 3' or 5'
+end, whether or not they are a true poly-A tail. 
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="cutseq.html">cutseq</a></td><td>Removes a specified section from a sequence</td></tr>
+<tr><td><a href="degapseq.html">degapseq</a></td><td>Removes gap characters from sequences</td></tr>
+<tr><td><a href="descseq.html">descseq</a></td><td>Alter the name or description of a sequence</td></tr>
+<tr><td><a href="entret.html">entret</a></td><td>Reads and writes (returns) flatfile entries</td></tr>
+<tr><td><a href="extractseq.html">extractseq</a></td><td>Extract regions from a sequence</td></tr>
+<tr><td><a href="infoseq.html">infoseq</a></td><td>Displays some simple information about sequences</td></tr>
+<tr><td><a href="listor.html">listor</a></td><td>Writes a list file of the logical OR of two sets of sequences</td></tr>
+<tr><td><a href="maskfeat.html">maskfeat</a></td><td>Mask off features of a sequence</td></tr>
+<tr><td><a href="maskseq.html">maskseq</a></td><td>Mask off regions of a sequence</td></tr>
+<tr><td><a href="newseq.html">newseq</a></td><td>Type in a short new sequence</td></tr>
+<tr><td><a href="noreturn.html">noreturn</a></td><td>Removes carriage return from ASCII files</td></tr>
+<tr><td><a href="notseq.html">notseq</a></td><td>Excludes a set of sequences and writes out the remaining ones</td></tr>
+<tr><td><a href="nthseq.html">nthseq</a></td><td>Writes one sequence from a multiple set of sequences</td></tr>
+<tr><td><a href="pasteseq.html">pasteseq</a></td><td>Insert one sequence into another</td></tr>
+<tr><td><a href="revseq.html">revseq</a></td><td>Reverse and complement a sequence</td></tr>
+<tr><td><a href="seqret.html">seqret</a></td><td>Reads and writes (returns) sequences</td></tr>
+<tr><td><a href="seqretall.html">seqretall</a></td><td>Reads and writes (returns) a set of sequences one at a time</td></tr>
+<tr><td><a href="seqretset.html">seqretset</a></td><td>Reads and writes (returns) a set of sequences all at once</td></tr>
+<tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
+<tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
+<tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
+<tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
+<tr><td><a href="vectorstrip.html">vectorstrip</a></td><td>Strips out DNA between a pair of vector sequences</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+<!--
+        Who has worked on the program in the past.
+   -->
+
+This application was written by Gary Williams <a
+href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    History
+</H2>
+
+<!--
+        What changes have been made.
+   -->
+
+Written (3 Oct 2001) - Gary Williams
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Comments
+</H2>
+
+<!--
+	Any comments, requests etc. that people have about the program
+   -->
+
+
+
+
+
+
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+
