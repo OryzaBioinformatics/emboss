@@ -25,17 +25,18 @@
 
 
 static void getACDfiles (AjPList glist, AjPList alpha, char **env,
-			 AjPStr acddir, AjBool explode);
+			 AjPStr acddir, AjBool explode, AjBool colon);
 static void getACDdirs (AjPList glist, AjPList alpha, char **env,
-			 AjPStr acddir, AjBool explode);
+			 AjPStr acddir, AjBool explode, AjBool colon);
 static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
-			AjBool explode);
+			AjBool explode, AjBool colon);
 static void groupNoComment (AjPStr* text);	
 static AjPStr grpParseValueRB (AjPStrTok* tokenhandle, char* delim);
-static void splitlist (AjPList groups, AjPStr value, AjBool explode);
+static void splitlist (AjPList groups, AjPStr value, AjBool explode,
+		        AjBool colon);
 static void subsplitlist (AjPList groups, AjPList sublist);
 static void addGroupsToList(AjPList alpha, AjPList glist,
-			    AjPList groups, AjPStr appl, AjPStr doc);
+			AjPList groups, AjPStr appl, AjPStr doc);
 
 
 /* @func embGrpGetProgGroups ************************************************
@@ -49,13 +50,14 @@ static void addGroupsToList(AjPList alpha, AjPList glist,
 ** @param [r] env [char **] Environment passed in from C main() parameters
 ** @param [r] emboss [AjBool] Read in EMBOSS ACD data
 ** @param [r] embassy [AjBool] Read in EMBASSY ACD data
-** @param [r]  explode [AjBool] Expand group names around ':'
+** @param [r] explode [AjBool] Expand group names around ':'
+** @param [r] colon [AjBool] Retain ':' in group names
 ** @return [void] 
 ** @@
 ******************************************************************************/
 
 void embGrpGetProgGroups (AjPList glist, AjPList alpha, char **env,
-			  AjBool emboss, AjBool embassy, AjBool explode)
+	  AjBool emboss, AjBool embassy, AjBool explode, AjBool colon)
 {
 
     AjPStr acdroot = NULL;
@@ -109,7 +111,7 @@ void embGrpGetProgGroups (AjPList glist, AjPList alpha, char **env,
 	}
 
 	/* normal EMBOSS ACD */
-	getACDfiles(glist, alpha, env, acdroot, explode);
+	getACDfiles(glist, alpha, env, acdroot, explode, colon);
     }
   
     if (embassy && !doneinstall)
@@ -120,7 +122,7 @@ void embGrpGetProgGroups (AjPList glist, AjPList alpha, char **env,
 		     acdrootinst, acdpack);
 	if (ajFileDir(&acdroot))
 	    /* embassadir ACD files */
-	    getACDfiles(glist, alpha, env, acdroot, explode);
+	    getACDfiles(glist, alpha, env, acdroot, explode, colon);
 	else
 	{   /* look for all source directories */
 	    /*      ajDebug ("acd directory '%S' not opened\n", acdroot); */
@@ -128,7 +130,7 @@ void embGrpGetProgGroups (AjPList glist, AjPList alpha, char **env,
 	    (void) ajFileDirUp (&acdrootdir);
 	    ajFmtPrintS (&acdroot, "%Sembassy/", acdrootdir);
 	    /* embassadir ACD files */
-	    getACDdirs(glist, alpha, env, acdroot, explode);
+	    getACDdirs(glist, alpha, env, acdroot, explode, colon);
 	}
   	
     }
@@ -157,12 +159,13 @@ void embGrpGetProgGroups (AjPList glist, AjPList alpha, char **env,
 ** @param [r] env [char **] Environment passed in from C main() parameters
 ** @param [r] acddir [AjPStr] path of directory holding ACD files to read in
 ** @param [r] explode [AjBool] Expand group names around ':'
+** @param [r] colon [AjBool] Retain ':' in group names
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void getACDdirs (AjPList glist, AjPList alpha, char **env,
-			 AjPStr acddir, AjBool explode) {
+			 AjPStr acddir, AjBool explode, AjBool colon) {
 
   DIR *dirp;
   DIR *dirpa;
@@ -184,7 +187,7 @@ static void getACDdirs (AjPList glist, AjPList alpha, char **env,
     (void) ajFmtPrintS(&dirname, "%S%s/emboss_acd/", acddir, dp->d_name);
     if ((dirpa = opendir(ajStrStr(dirname)))) {
 /*      ajDebug ("testing directory '%S'\n", dirname); */
-      getACDfiles (glist, alpha, env, dirname, explode);
+      getACDfiles (glist, alpha, env, dirname, explode, colon);
       closedir (dirpa);
     }
     else {
@@ -209,12 +212,13 @@ static void getACDdirs (AjPList glist, AjPList alpha, char **env,
 ** @param [r] env [char **] Environment passed in from C main() parameters
 ** @param [r] acddir [AjPStr] path of directory holding ACD files to read in
 ** @param [r] explode [AjBool] Expand group names around ':'
+** @param [r] colon [AjBool] Retain ':' in group names
 ** @return [void] 
 ** @@
 ******************************************************************************/
 
 static void getACDfiles (AjPList glist, AjPList alpha, char **env,
-			 AjPStr acddir, AjBool explode) {
+			 AjPStr acddir, AjBool explode, AjBool colon) {
 
   DIR *dirp;
   struct dirent *dp;
@@ -244,7 +248,7 @@ static void getACDfiles (AjPList glist, AjPList alpha, char **env,
 /* open the file and parse it */
           if ((file = ajFileNewIn(progpath)) != NULL) {
             groups = ajListstrNew();
-            parse(file, &appl, &doc, groups, explode);
+            parse(file, &appl, &doc, groups, explode, colon);
 
 /* see if the appl is the name of a real program */
 	    (void) ajStrAss(&applpath, appl);
@@ -282,12 +286,13 @@ static void getACDfiles (AjPList glist, AjPList alpha, char **env,
 ** @param [w] doc  [AjPStr*]  Documentation string
 ** @param [w] groups [AjPList] Program groups string
 ** @param [r] explode [AjBool] Expand group names around ':'
+** @param [r] colon [AjBool] Retain ':' in group names
 **
 ** @return [void] 
 ** @@
 **************************************************************************/
 static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
-	AjBool explode) {
+	AjBool explode, AjBool colon) {
 
   AjPStr line = NULL;
   AjPStr text = NULL;
@@ -355,7 +360,7 @@ static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
 
         } else if (ajStrPrefixC(token, "group")) {
           donegroup = ajTrue;
-          splitlist (groups, value, explode);
+          splitlist (groups, value, explode, colon);
         }
       }
       if (done) break;
@@ -503,16 +508,18 @@ static AjPStr grpParseValueRB (AjPStrTok* tokenhandle, char* delim) {
 ** @param [rw] groups [AjPList] List of groups
 ** @param [r]  value  [AjPStr] Groups string from ACD file
 ** @param [r]  explode [AjBool] Expand group names around ':'
+** @param [r]  colon [AjBool] Retain ':' in group names
 **
 ** @return [void]
 ** @@
 **********************************************************************/
-static void splitlist (AjPList groups, AjPStr value, AjBool explode) {
+static void splitlist (AjPList groups, AjPStr value, AjBool explode,
+	AjBool colon) {
 	
   AjPStrTok tokenhandle;
   char delim[] = ",;";
   AjPStrTok colontokenhandle;
-  char colon[] = ":";
+  char colonstring[] = ":";
   AjPList subnames;
   AjPStr tmpstr = NULL;
   AjPStr substr = NULL;
@@ -532,7 +539,7 @@ static void splitlist (AjPList groups, AjPStr value, AjBool explode) {
 combinations of name */
     if (explode) {
       subnames = ajListstrNew();
-      colontokenhandle  = ajStrTokenInit (tmpstr, colon);
+      colontokenhandle  = ajStrTokenInit (tmpstr, colonstring);
       while (ajStrToken (&substr, &colontokenhandle, NULL)) {
         copystr = ajStrDup(substr);	/* make new copy of the string for the list to hold */
 /*        ajDebug("Next sub group: %S\n", copystr); */
@@ -557,7 +564,12 @@ combinations of name */
 
 /* don't explode, just remove ':'s and excess spaces and add to 'groups' list */
       copystr = ajStrDup(tmpstr);	/* make new copy of the string for the list to hold */
-      ajStrConvertCC(&copystr, ":", " ");
+/*
+** we might want to retain the ':' in the output if it is being parsed by
+** other programs that create 2-level menus for an interface etc.
+*/
+      if (!colon)
+          ajStrConvertCC(&copystr, ":", " ");
 /*      ajDebug("After removing : from group name, it is: %S\n", 
         	copystr); */
       ajStrClean(&copystr);
