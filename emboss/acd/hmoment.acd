@@ -1,0 +1,22 @@
+appl: hmoment [
+        doc: "Hydrophobic moment calculation"
+        groups: "PROTEIN: sequence properties"
+]
+
+ seqall: seqall [ param: Y type: pureprotein ]
+
+ bool: plot [ opt: N def: N info: "Produce graphic" ]
+
+ int: window [ opt: Y def: 10 info: "Window" ]
+
+ int: aangle [ opt: N def: 100 info: "Alpha helix angle (degrees)" ]
+
+ int: bangle [ opt: Y def: 160 info: "Beta sheet angle (degrees)" ]
+
+ float: baseline [ opt: N def: 0.35 info: "Graph marker line" ]
+
+ bool: double [ opt: N def: N info: "Plot two graphs" ]
+
+ xygraph: graph [ req: $(plot) ]
+
+ outfile: outfile [ req: @(!$(plot)) ]
