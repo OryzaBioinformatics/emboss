@@ -1784,6 +1784,29 @@ AjBool ajStrSubstituteKK(AjPStr *pthis, char replace,
   return ret;
 }
   
+/* @func ajStrChompEnd ********************************************************
+** 
+** Remove white space chars from the end of the String.
+**
+** @param [uP] pthis [AjPStr*] String
+** @return [AjBool] ajTrue if string was reallocated
+** @@
+******************************************************************************/
+
+AjBool ajStrChompEnd (AjPStr* pthis){
+
+  AjBool ret = ajFalse;
+  static AjPStr spaces = NULL;
+
+  if (!spaces)
+    (void) ajStrAssC(&spaces,"\t \n");
+    
+  ret = ajStrMod (pthis);
+  (void) ajStrTrimEndC(pthis, spaces->Ptr);
+
+  return ret;
+}
+
 /* @func ajStrChomp ***********************************************************
 ** 
 ** Remove start and end white space chars from the String.
@@ -1925,6 +1948,42 @@ AjBool ajStrTrimC (AjPStr* pthis, const char* chars) {
   if (!thys->Len) return ret;  /* changed to ! (il) 10/2/98 */
                            /* if there is still something there, then */
                            /* see if the end needs trimming */
+
+  cp = &thys->Ptr[thys->Len-1];
+  i = 0;
+  while (strchr(chars, *cp)) {
+    thys->Len--;
+    cp--;
+    i++;
+  }
+  if (i) thys->Ptr[thys->Len] = '\0';
+
+  return ret;
+}
+
+/* @func ajStrTrimEndC ********************************************************
+**
+** Removes a set of characters from the end of a string
+**
+** @param [uP] pthis [AjPStr*] string
+** @param [r] chars [const char*] Characters to delete from the end
+** @return [AjBool] ajTrue if string was reallocated
+** @@
+******************************************************************************/
+
+AjBool ajStrTrimEndC (AjPStr* pthis, const char* chars) {
+
+  AjBool ret = ajFalse;
+  AjPStr thys;
+  const char* cp;
+  ajint i;
+
+  if (!pthis) return ret;
+  if (!*pthis) return ret;
+
+  ret = ajStrMod (pthis);
+  thys = *pthis;
+  if (!thys->Len) return ret;
 
   cp = &thys->Ptr[thys->Len-1];
   i = 0;

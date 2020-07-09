@@ -89,11 +89,13 @@ extern "C"
 **                        another char* in the string object.
 ** @mod ajStrSubstituteKK Replace all occurances of char text  with
 **                        another char in the string object.
+** @mod ajStrChompEnd Removes white space from end of string.
 ** @mod ajStrChomp Removes white space from front and end of string.
 ** @mod ajStrChompC Removes white space from front and end of string.
 ** @mod ajStrChop  Removes the last character from a string
 ** @mod ajStrTrim  Removes a number of characters from start of end of a string
 ** @mod ajStrTrimC Removes a set of characters from start of end of a string
+** @mod ajStrTrimEndC Removes a set of characters from end of a string
 ** @mod ajStrCut Removes a range of character positions from a string
 ** @mod ajStrMask Masks out a range of characters from a string
 ** @mod ajStrRev Reverses the order of characters in a string
@@ -274,6 +276,7 @@ char       ajStrChar (const AjPStr thys, ajint pos);
 AjBool     ajStrCheck (const AjPStr thys);
 AjBool     ajStrChomp (AjPStr* pthis);
 AjBool     ajStrChompC (AjPStr* pthis, char* delim);
+AjBool     ajStrChompEnd (AjPStr* pthis);
 AjBool     ajStrChop  (AjPStr* pthis);
 AjBool     ajStrClean (AjPStr* s);
 AjBool     ajStrCleanWhite (AjPStr* s);
@@ -444,6 +447,7 @@ void       ajStrTrace (const AjPStr thys);
 void       ajStrTraceT (const AjPStr thys, char* title);
 AjBool     ajStrTrim  (AjPStr* pthis, ajint num);
 AjBool     ajStrTrimC (AjPStr* pthis, const char* chars);
+AjBool     ajStrTrimEndC (AjPStr* pthis, const char* chars);
 AjBool     ajStrTruncate (AjPStr* pthis, ajint pos);
 AjBool     ajStrWildPrefix (AjPStr* str);
 AjBool     ajStrWrap (AjPStr* pthis, ajint width);
