@@ -32,6 +32,7 @@ typedef struct AjSSeqCvt {
 /* ======= prototypes ==================*/
 
 AjBool       ajIsAccession (AjPStr accnum);
+AjPStr       ajIsSeqversion (AjPStr sv);
 AjPSelex     ajSelexNew(ajint n);
 void         ajSelexDel(AjPSelex *thys);
 AjPSelexdata ajSelexdataNew(void);
@@ -41,6 +42,7 @@ AjPSelexSQ   ajSelexSQNew(void);
 AjPStockholm ajStockholmNew(ajint i);
 void         ajStockholmDel(AjPStockholm *thys);
 void         ajStockholmdataDel(AjPStockholmdata *thys);
+
 
 AjPStockholmdata ajStockholmdataNew(void);
 
@@ -67,11 +69,15 @@ void         ajSeqAssEntryC (AjPSeq thys, char* text);
 void         ajSeqAssFile (AjPSeq thys, AjPStr str);
 void         ajSeqAssFull (AjPSeq thys, AjPStr str);
 void         ajSeqAssFullC (AjPSeq thys, char* text);
+void         ajSeqAssGi (AjPSeq thys, AjPStr str);
+void         ajSeqAssGiC (AjPSeq thys, char* text);
 void         ajSeqAssName (AjPSeq thys, AjPStr str);
 void         ajSeqAssNameC (AjPSeq thys, char* text);
 void         ajSeqAssSeq (AjPSeq thys, AjPStr str);
 void         ajSeqAssSeqC (AjPSeq thys, char* text);
 void         ajSeqAssSeqCI (AjPSeq thys, char* text, ajint ilen);
+void         ajSeqAssSv (AjPSeq thys, AjPStr str);
+void         ajSeqAssSvC (AjPSeq thys, char* text);
 void         ajSeqAssUfo (AjPSeq thys, AjPStr str);
 void         ajSeqAssUfoC (AjPSeq thys, char* text);
 void         ajSeqAssUsa (AjPSeq thys, AjPStr str);
@@ -106,8 +112,11 @@ AjPStr       ajSeqGetAcc (AjPSeq thys);
 AjPStr       ajSeqGetDesc (AjPSeq thys);
 AjPStr       ajSeqGetEntry (AjPSeq thys);
 AjPFeattable ajSeqGetFeat (AjPSeq thys);
+AjPStr       ajSeqGetGi (AjPSeq thys);
 AjPStr       ajSeqGetName (AjPSeq thys);
 ajint        ajSeqGetRange (AjPSeq thys, ajint* begin, ajint* end);
+AjBool       ajSeqGetReverse (AjPSeq thys);
+AjPStr       ajSeqGetSv (AjPSeq thys);
 AjPStr       ajSeqGetUsa (AjPSeq thys);
 void         ajSeqinTrace (AjPSeqin thys);
 AjBool       ajSeqIsNuc (AjPSeq thys);

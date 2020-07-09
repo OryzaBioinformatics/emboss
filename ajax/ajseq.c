@@ -233,7 +233,7 @@ void ajSeqallToLower (AjPSeqall seqall)
 
 /* @func ajSeqallToUpper ******************************************************
 **
-** Convertes the latest sequence in a stream to upper case.
+** Converts the latest sequence in a stream to upper case.
 **
 ** @param [P] seqall [AjPSeqall] Sequence stream object
 ** @return [void]
@@ -1099,6 +1099,9 @@ AjPSeq ajSeqNewL (size_t size)
 
     pthis->Name = ajStrNew();
     pthis->Acc = ajStrNew();
+    pthis->Sv = ajStrNew();
+    pthis->Gi = ajStrNew();
+    pthis->Tax = ajStrNew();
     pthis->Type = ajStrNew();
     pthis->Db = ajStrNew();
     pthis->Full = ajStrNew();
@@ -1125,6 +1128,8 @@ AjPSeq ajSeqNewL (size_t size)
     pthis->Offend = 0;
     pthis->Weight = 1.0;
     pthis->Acclist = ajListstrNew();
+    pthis->Keylist = ajListstrNew();
+    pthis->Taxlist = ajListstrNew();
     pthis->Selexdata = NULL;
   
     return pthis;
@@ -1148,6 +1153,9 @@ AjPSeq ajSeqNewS (AjPSeq seq)
 
     (void) ajStrAssS(&pthis->Name, seq->Name);
     (void) ajStrAssS(&pthis->Acc, seq->Acc);
+    (void) ajStrAssS(&pthis->Sv, seq->Sv);
+    (void) ajStrAssS(&pthis->Gi, seq->Gi);
+    (void) ajStrAssS(&pthis->Tax, seq->Tax);
     (void) ajStrAssS(&pthis->Type, seq->Type);
     (void) ajStrAssS(&pthis->Db, seq->Db);
     (void) ajStrAssS(&pthis->Full, seq->Full);
@@ -1173,6 +1181,10 @@ AjPSeq ajSeqNewS (AjPSeq seq)
     pthis->Weight = seq->Weight;
     ajListstrDel(&pthis->Acclist);
     pthis->Acclist = ajListstrNew();
+    ajListstrDel(&pthis->Keylist);
+    pthis->Keylist = ajListstrNew();
+    ajListstrDel(&pthis->Taxlist);
+    pthis->Taxlist = ajListstrNew();
 
     if(seq->Selexdata)
 	pthis->Selexdata = seqSelexClone(seq->Selexdata);
@@ -1480,6 +1492,9 @@ void ajSeqDel (AjPSeq* pthis)
 
     ajStrDel (&thys->Name);
     ajStrDel (&thys->Acc);
+    ajStrDel (&thys->Sv);
+    ajStrDel (&thys->Gi);
+    ajStrDel (&thys->Tax);
     ajStrDel (&thys->Type);
     ajStrDel (&thys->Db);
     ajStrDel (&thys->Full);
@@ -1501,13 +1516,19 @@ void ajSeqDel (AjPSeq* pthis)
 	ajStrDel(&ptr);
     ajListDel(&thys->Acclist);
 
+    while(ajListstrPop(thys->Keylist,&ptr))
+	ajStrDel(&ptr);
+    ajListDel(&thys->Keylist);
+
+    while(ajListstrPop(thys->Taxlist,&ptr))
+	ajStrDel(&ptr);
+    ajListDel(&thys->Taxlist);
+
     if(thys->Selexdata)
 	ajSelexdataDel(&thys->Selexdata);
     if(thys->Stock)
 	ajStockholmdataDel(&thys->Stock);
   
-    /*  ajListstrDel(&thys->Acclist);*/
-
     AJFREE (*pthis);
     return;
 }
@@ -1640,6 +1661,9 @@ void ajSeqClear (AjPSeq thys)
 
     (void) ajStrClear (&thys->Name);
     (void) ajStrClear (&thys->Acc);
+    (void) ajStrClear (&thys->Sv);
+    (void) ajStrClear (&thys->Gi);
+    (void) ajStrClear (&thys->Tax);
     (void) ajStrClear (&thys->Type);
     (void) ajStrClear (&thys->Db);
     (void) ajStrClear (&thys->Full);
@@ -1660,6 +1684,12 @@ void ajSeqClear (AjPSeq thys)
     thys->Rev = ajFalse;
 
     while(ajListstrPop(thys->Acclist,&ptr))
+	ajStrDel(&ptr);
+
+    while(ajListstrPop(thys->Keylist,&ptr))
+	ajStrDel(&ptr);
+
+    while(ajListstrPop(thys->Taxlist,&ptr))
 	ajStrDel(&ptr);
 
     ajFeattableDel(&thys->Fttable);
@@ -1690,7 +1720,7 @@ void ajSeqClear (AjPSeq thys)
 
 void ajSeqAssName (AjPSeq thys, AjPStr str)
 {
-    (void) ajStrAss(&thys->Name, str);
+    (void) ajStrAssS (&thys->Name, str);
 
     return;
 }
@@ -1718,14 +1748,14 @@ void ajSeqAssNameC (AjPSeq thys, char* text)
 ** Assigns the sequence accession number.
 **
 ** @param [u] thys [AjPSeq] Sequence object.
-** @param [r] str [AjPStr] Accesion number as a string.
+** @param [r] str [AjPStr] Accession number as a string.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 void ajSeqAssAcc (AjPSeq thys, AjPStr str)
 {
-    (void) ajStrAss(&thys->Acc, str);
+    (void) ajStrAssS (&thys->Acc, str);
 
     return;
 }
@@ -1735,7 +1765,7 @@ void ajSeqAssAcc (AjPSeq thys, AjPStr str)
 ** Assigns the sequence accession number.
 **
 ** @param [u] thys [AjPSeq] Sequence object.
-** @param [r] text [char*] Accesion number as a C character string.
+** @param [r] text [char*] Accession number as a C character string.
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -1743,6 +1773,74 @@ void ajSeqAssAcc (AjPSeq thys, AjPStr str)
 void ajSeqAssAccC (AjPSeq thys, char* text)
 {
     (void) ajStrAssC(&thys->Acc, text);
+
+    return;
+}
+
+/* @func ajSeqAssSv ********************************************************
+**
+** Assigns the sequence version number.
+**
+** @param [u] thys [AjPSeq] Sequence object.
+** @param [r] str [AjPStr] SeqVersion number as a string.
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajSeqAssSv (AjPSeq thys, AjPStr str)
+{
+    (void) ajStrAssS (&thys->Sv, str);
+
+    return;
+}
+
+/* @func ajSeqAssSvC ********************************************************
+**
+** Assigns the sequence version number.
+**
+** @param [u] thys [AjPSeq] Sequence object.
+** @param [r] text [char*] SeqVersion number as a C character string.
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajSeqAssSvC (AjPSeq thys, char* text)
+{
+    (void) ajStrAssC(&thys->Sv, text);
+
+    return;
+}
+
+/* @func ajSeqAssGi ********************************************************
+**
+** Assigns the GI version number.
+**
+** @param [u] thys [AjPSeq] Sequence object.
+** @param [r] str [AjPStr] GI number as a string.
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajSeqAssGi (AjPSeq thys, AjPStr str)
+{
+    (void) ajStrAssS (&thys->Gi, str);
+
+    return;
+}
+
+/* @func ajSeqAssGiC ********************************************************
+**
+** Assigns the GI version number.
+**
+** @param [u] thys [AjPSeq] Sequence object.
+** @param [r] text [char*] GI number as a C character string.
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajSeqAssGiC (AjPSeq thys, char* text)
+{
+    (void) ajStrAssC(&thys->Gi, text);
 
     return;
 }
@@ -1759,7 +1857,7 @@ void ajSeqAssAccC (AjPSeq thys, char* text)
 
 void ajSeqAssUfo (AjPSeq thys, AjPStr str)
 {
-    (void) ajStrAss(&thys->Ufo, str);
+    (void) ajStrAssS (&thys->Ufo, str);
 
     return;
 }
@@ -1793,7 +1891,7 @@ void ajSeqAssUfoC (AjPSeq thys, char* text)
 
 void ajSeqAssUsa (AjPSeq thys, AjPStr str)
 {
-    (void) ajStrAss(&thys->Usa, str);
+    (void) ajStrAssS (&thys->Usa, str);
 
     return;
 }
@@ -1827,7 +1925,7 @@ void ajSeqAssUsaC (AjPSeq thys, char* text)
 
 void ajSeqAssEntry (AjPSeq thys, AjPStr str)
 {
-    (void) ajStrAss(&thys->Entryname, str);
+    (void) ajStrAssS (&thys->Entryname, str);
 
     return;
 }
@@ -1861,7 +1959,7 @@ void ajSeqAssEntryC (AjPSeq thys, char* text)
 
 void ajSeqAssFull (AjPSeq thys, AjPStr str)
 {
-    (void) ajStrAss(&thys->Full, str);
+    (void) ajStrAssS (&thys->Full, str);
 
     return;
 }
@@ -1895,7 +1993,7 @@ void ajSeqAssFullC (AjPSeq thys, char* text)
 
 void ajSeqAssFile (AjPSeq thys, AjPStr str)
 {
-    (void) ajStrAss(&thys->Filename, str);
+    (void) ajStrAssS (&thys->Filename, str);
 
     return;
 }
@@ -1930,7 +2028,7 @@ void ajSeqAssFileC (AjPSeq thys, char* text)
 
 void ajSeqAssSeq (AjPSeq thys, AjPStr str)
 {
-    (void) ajStrAss(&thys->Seq, str);
+    (void) ajStrAssS (&thys->Seq, str);
     thys->Begin = 0;
     thys->End = 0;
     thys->Rev = ajFalse;
@@ -1985,7 +2083,7 @@ void ajSeqAssSeqCI (AjPSeq thys, char* text, ajint ilen)
 
 void ajSeqAssDesc (AjPSeq thys, AjPStr str)
 {
-    (void) ajStrAss(&thys->Desc, str);
+    (void) ajStrAssS (&thys->Desc, str);
 
     return;
 }
@@ -2036,7 +2134,7 @@ void ajSeqMod (AjPSeq thys)
 
 void ajSeqReplace (AjPSeq thys, AjPStr seq)
 {
-    (void) ajStrAss (&thys->Seq, seq);
+    (void) ajStrAssS (&thys->Seq, seq);
     thys->Begin = 0;
     thys->End = 0;
     thys->Rev = ajFalse;
@@ -2104,6 +2202,8 @@ void ajSeqSetRange (AjPSeq seq, ajint ibegin, ajint iend)
 
 void ajSeqMakeUsa (AjPSeq thys, AjPSeqin seqin)
 {
+    AjPStr tmpstr = NULL;
+
     ajDebug ("ajSeqMakeUsa (Name <%S> Formatstr <%S> Db <%S> "
 	     "Entryname <%S> Filename <%S>)\n",
 	     thys->Name, thys->Formatstr, thys->Db,
@@ -2129,6 +2229,37 @@ void ajSeqMakeUsa (AjPSeq thys, AjPSeqin seqin)
     
     }
 
+    ajFmtPrintS (&tmpstr, "[");
+
+    if (thys->Rev)
+    {
+      if (thys->End)
+	ajFmtPrintAppS (&tmpstr, "%d", -thys->End);
+
+      ajFmtPrintAppS (&tmpstr, ":");
+
+      if (thys->Begin)
+	ajFmtPrintAppS (&tmpstr, "%d", -thys->Begin);
+
+      ajFmtPrintAppS (&tmpstr, ":r");
+    }
+    else
+    {
+      if (thys->Begin)
+	ajFmtPrintAppS (&tmpstr, "%d", thys->Begin);
+
+      ajFmtPrintAppS (&tmpstr, ":");
+
+      if (thys->End)
+	ajFmtPrintAppS (&tmpstr, "%d", thys->End);
+    }
+
+    ajFmtPrintAppS (&tmpstr, "]");
+
+    if (ajStrLen(tmpstr) > 3)
+      ajStrApp (&thys->Usa, tmpstr);
+
+    ajStrDel(&tmpstr);
     ajDebug ("      result: <%S>\n",
 	     thys->Usa);
 
@@ -2395,8 +2526,9 @@ AjBool ajSeqIsProt (AjPSeq thys)
 /* @func ajIsAccession ********************************************************
 **
 ** Tests whether a string is a potential sequence accession number.
-** The current definition is one or two alpha characters, followed
-** by a string of digits and a minimum length of 6.
+** The current definition is one or two alpha characters,
+** then a possible underscore (for REFSEQ accessions),
+** followed by a string of digits and a minimum length of 6.
 **
 ** Revised for new Swiss-Prot accession number format AnXXXn
 **
@@ -2430,8 +2562,10 @@ AjBool ajIsAccession (AjPStr accnum)
     {					/* EMBL/GenBank AAnnnnnn */
 	cp++;
 
-	while(*cp)			/* optional trailing .version */
-	    if(isdigit((ajint)*cp) || *cp=='.')
+	if (*cp == '_') cp++;	/* REFSEQ NM_nnnnnn */
+
+	while(*cp)
+	    if(isdigit((ajint)*cp))
 		++cp;
 	    else
 		return ajFalse;
@@ -2451,8 +2585,8 @@ AjBool ajIsAccession (AjPStr accnum)
 	if (!isdigit((ajint)*cp))
 	    return ajFalse;
 
-	while(*cp)			/* optional trailing .version */
-	    if(isdigit((ajint)*cp) || *cp=='.')
+	while(*cp)
+	    if(isdigit((ajint)*cp))
 		++cp;
 	    else
 		return ajFalse;
@@ -2463,6 +2597,128 @@ AjBool ajIsAccession (AjPStr accnum)
     return ajFalse;
 }
 
+
+/* @func ajIsSeqversion *******************************************************
+**
+** Tests whether a string is a potential sequence version number.
+** The current definition is an accession number, followed by a dot and
+** a number.
+**
+** Revised for new Swiss-Prot accession number format AnXXXn
+** Revised for REFSEQ accession number format NM_nnnnnn
+**
+** @param [P] sv [AjPStr] String to be tested
+** @return [AjPStr] accession number part of the string if successful
+** @@
+******************************************************************************/
+
+AjPStr ajIsSeqversion (AjPStr sv)
+{
+    ajint i;
+    char *cp;
+    AjBool dot = ajFalse;	/* have we found the '.' */
+    AjBool v = 0;		/* number of digits of version after '.' */
+    static AjPStr accnum=NULL;
+
+    if (!sv)
+	return NULL;
+
+    i = ajStrLen(sv);
+    if (i < 8)
+	return NULL;
+
+    cp = ajStrStr(sv);
+    ajStrAssCL (&accnum, "", 12);
+
+    /* must have an alphabetic start */
+
+    if (!isalpha((ajint)*cp))
+	return NULL;
+
+    ajStrAppK(&accnum, *cp++);
+
+    /* two choices for the next character */
+
+    if (isalpha((ajint)*cp))
+    {					/* EMBL/GenBank AAnnnnnn */
+        ajStrAppK(&accnum, *cp);
+	cp++;
+
+	if (*cp == '_') cp++;	/* REFSEQ NM_nnnnnn */
+
+	while(*cp)			/* optional trailing .version */
+	{
+	    if(isdigit((ajint)*cp) || *cp=='.')
+	    {
+	      if (*cp == '.')
+	      {
+		if (dot) return NULL; /* one '.' only */
+		dot = ajTrue;
+	      }
+	      else
+	      {
+		if (dot)
+		  v++;
+		else
+		  ajStrAppK(&accnum, *cp);
+	      }
+		++cp;
+	    }
+	    else
+		return NULL;
+	}
+	if (v)
+	  return accnum;
+	else
+	  return NULL;
+    }
+    else if (isdigit((ajint)*cp))
+    {					/* EMBL/GenBank old Annnnn */
+                                        /* or SWISS AnXXXn */
+        ajStrAppK(&accnum, *cp);
+	cp++;				
+
+	for (i=0; i<3; i++)
+	    if (isalpha((ajint)*cp) || isdigit((ajint)*cp))
+	    {
+	        ajStrAppK(&accnum, *cp);
+		cp++;
+	    }
+	    else
+		return NULL;
+
+	if (!isdigit((ajint)*cp))
+	    return NULL;
+
+	while(*cp)			/* optional trailing .version */
+	{
+	    if(isdigit((ajint)*cp) || *cp=='.')
+	    {
+	      if (*cp == '.')
+	      {
+		if (dot) return NULL; /* one '.' only */
+		dot = ajTrue;
+	      }
+	      else
+	      {
+		if (dot)
+		  v++;
+		else
+		  ajStrAppK(&accnum, *cp);
+	      }
+		++cp;
+	    }
+	    else
+		return NULL;
+	}
+	if (v)
+	  return accnum;
+	else
+	  return NULL;
+    }
+
+    return NULL;
+}
 
 /* @func ajSeqTrace ***********************************************************
 **
@@ -2485,18 +2741,44 @@ void ajSeqTrace (AjPSeq seq)
 	ajDebug ( "  Accession: '%S'\n", seq->Acc);
     if (ajListLength(seq->Acclist))
     {
-	ajDebug ( "  Acclist: (%d) '", ajListLength(seq->Acclist));
+	ajDebug ( "  Acclist: (%d) ", ajListLength(seq->Acclist));
 	it = ajListIter(seq->Acclist);
 	while ((cur = (AjPStr) ajListIterNext(it)))
 	    ajDebug(" %S", cur);
 
 	ajListIterFree (it);
-	ajDebug(" '\n");
+	ajDebug(" \n");
     }
+    if (ajStrLen(seq->Sv))
+	ajDebug ( "  SeqVersion: '%S'\n", seq->Sv);
+    if (ajStrLen(seq->Gi))
+	ajDebug ( "  GI Version: '%S'\n", seq->Gi);
     if (ajStrLen(seq->Type))
 	ajDebug ( "  Type: '%S' (%d)\n", seq->Type, seq->EType);
     if (ajStrLen(seq->Desc))
 	ajDebug ( "  Description: '%S'\n", seq->Desc);
+    if (ajStrLen(seq->Tax))
+	ajDebug ( "  Taxonomy: '%S'\n", seq->Tax);
+    if (ajListLength(seq->Taxlist))
+    {
+	ajDebug ( "  Taxlist: (%d)", ajListLength(seq->Taxlist));
+	it = ajListIter(seq->Taxlist);
+	while ((cur = (AjPStr) ajListIterNext(it)))
+	    ajDebug(" '%S'", cur);
+
+	ajListIterFree (it);
+	ajDebug("\n");
+    }
+    if (ajListLength(seq->Keylist))
+    {
+	ajDebug ( "  Keywordlist: (%d)", ajListLength(seq->Keylist));
+	it = ajListIter(seq->Keylist);
+	while ((cur = (AjPStr) ajListIterNext(it)))
+	    ajDebug(" '%S'", cur);
+
+	ajListIterFree (it);
+	ajDebug("\n");
+    }
     if (ajSeqLen(seq))
 	ajDebug ( "  Length: %d\n", ajSeqLen(seq));
     if (seq->Rev)
@@ -2558,7 +2840,7 @@ void ajSeqinTrace (AjPSeqin thys)
     if (ajStrLen(thys->Desc))
 	ajDebug ( "  Description: '%S'\n", thys->Desc);
     if (ajStrLen(thys->Inseq))
-	ajDebug ( "  Inseq: '%S'\n", thys->Inseq);
+	ajDebug ( "  Inseq len: %d\n", ajStrLen(thys->Inseq));
     if (thys->Rev)
 	ajDebug ( "     Rev: %B\n", thys->Rev);
     if (thys->Begin)
@@ -2634,12 +2916,19 @@ void ajSeqQueryTrace (AjPSeqQuery thys)
 	ajDebug ( "    DbName: '%S'\n", thys->DbName);
     if (ajStrLen(thys->DbType))
 	ajDebug ( "    DbType: '%S' (%d)\n", thys->DbType, thys->Type);
+    ajDebug ( "   QryDone: %B\n", thys->QryDone);
     if (ajStrLen(thys->Id))
 	ajDebug ( "    Id: '%S'\n", thys->Id);
     if (ajStrLen(thys->Acc))
 	ajDebug ( "    Acc: '%S'\n", thys->Acc);
+    if (ajStrLen(thys->Sv))
+	ajDebug ( "    Sv: '%S'\n", thys->Sv);
     if (ajStrLen(thys->Des))
 	ajDebug ( "    Des: '%S'\n", thys->Des);
+    if (ajStrLen(thys->Key))
+	ajDebug ( "    Key: '%S'\n", thys->Key);
+    if (ajStrLen(thys->Org))
+	ajDebug ( "    Org: '%S'\n", thys->Org);
     if (ajStrLen(thys->Method))
 	ajDebug ( "    Method: '%S'\n", thys->Method);
     if (ajStrLen(thys->Formatstr))
@@ -2770,6 +3059,20 @@ ajint ajSeqLen (AjPSeq seq)
     return ajStrLen(seq->Seq);
 }
 
+/* @func ajSeqGetReverse *************************************************************
+**
+** Returns the sequence direction.
+**
+** @param [P] seq [AjPSeq] Sequence object
+** @return [AjBool] Sequence Direction.
+** @@
+******************************************************************************/
+
+AjBool ajSeqGetReverse (AjPSeq seq)
+{
+    return seq->Rev;
+}
+
 /* @func ajSeqCharCopy ********************************************************
 **
 ** Returns a sequence as a C character string. This is a copy of the string
@@ -2821,7 +3124,7 @@ AjBool ajSeqNum (AjPSeq thys, AjPSeqCvt cvt, AjPStr* numseq)
     char *cp = ajSeqChar(thys);
     char *ncp;
 
-    (void) ajStrAss (numseq, thys->Seq);
+    (void) ajStrAssS (numseq, thys->Seq);
     ncp = ajStrStr(*numseq);
 
     while (*cp)
@@ -3078,7 +3381,7 @@ AjPStr ajSeqStrCopy (AjPSeq thys)
     static AjPStr str;
 
     str= 0;
-    (void) ajStrAss (&str, thys->Seq);
+    (void) ajStrAssS (&str, thys->Seq);
 
     return str;
 }
@@ -3120,6 +3423,42 @@ char* ajSeqChar (AjPSeq thys)
 AjPStr ajSeqGetAcc (AjPSeq thys)
 {
     return thys->Acc;
+}
+
+/* @func ajSeqGetSv *********************************************************
+**
+** Returns the sequence version number.
+** Because this is a pointer to the real internal string
+** the caller must take care not to change the character string in any way.
+** If the string is to be changed (case for example) then it must first
+** be copied.
+**
+** @param [u] thys [AjPSeq] Sequence object.
+** @return [AjPStr] SeqVersion number as a string.
+** @@
+******************************************************************************/
+
+AjPStr ajSeqGetSv (AjPSeq thys)
+{
+    return thys->Sv;
+}
+
+/* @func ajSeqGetGi *********************************************************
+**
+** Returns the GI version number.
+** Because this is a pointer to the real internal string
+** the caller must take care not to change the character string in any way.
+** If the string is to be changed (case for example) then it must first
+** be copied.
+**
+** @param [u] thys [AjPSeq] Sequence object.
+** @return [AjPStr] SeqVersion number as a string.
+** @@
+******************************************************************************/
+
+AjPStr ajSeqGetGi (AjPSeq thys)
+{
+    return thys->Gi;
 }
 
 /* @func ajSeqGetDesc ********************************************************
@@ -3247,7 +3586,10 @@ AjPSeqout ajSeqoutNew (void)
     AJNEW0(pthis);
 
     pthis->Name = ajStrNew();
-    pthis->Acc = ajStrNew();
+    /* pthis->Acc = ajStrNew(); */
+    pthis->Sv = ajStrNew();
+    pthis->Gi = ajStrNew();
+    pthis->Tax = ajStrNew();
     pthis->Desc = ajStrNew();
     pthis->Type = ajStrNew();
     pthis->EType = 0;
@@ -3273,6 +3615,10 @@ AjPSeqout ajSeqoutNew (void)
 
     pthis->Ftquery = ajFeattabOutNew();
     pthis->Fttable = NULL;
+
+    pthis->Acclist = ajListstrNew();
+    pthis->Keylist = ajListstrNew();
+    pthis->Taxlist = ajListstrNew();
 
     return pthis;
 }
@@ -3310,9 +3656,13 @@ void ajSeqoutDel (AjPSeqout* pthis)
 {
     AjPSeqout thys = *pthis;
     AjPSeq    seq=NULL;
-    
+    AjPStr    tmpstr=NULL;
+
     ajStrDel (&thys->Name);
-    ajStrDel (&thys->Acc);
+    /* ajStrDel (&thys->Acc); */
+    ajStrDel (&thys->Sv);
+    ajStrDel (&thys->Gi);
+    ajStrDel (&thys->Tax);
     ajStrDel (&thys->Desc);
     ajStrDel (&thys->Type);
     ajStrDel (&thys->Db);
@@ -3327,6 +3677,18 @@ void ajSeqoutDel (AjPSeqout* pthis)
     ajStrDel (&thys->Entryname);
     ajStrDel (&thys->Seq);
     ajStrDel (&thys->Extension);
+
+    while(ajListPop(thys->Acclist,(void **)&tmpstr))
+	ajStrDel(&tmpstr);
+    ajListDel(&thys->Acclist);
+
+    while(ajListPop(thys->Keylist,(void **)&tmpstr))
+	ajStrDel(&tmpstr);
+    ajListDel(&thys->Keylist);
+
+    while(ajListPop(thys->Taxlist,(void **)&tmpstr))
+	ajStrDel(&tmpstr);
+    ajListDel(&thys->Taxlist);
 
     while(ajListPop(thys->Savelist,(void **)&seq))
 	ajSeqDel(&seq);
