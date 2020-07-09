@@ -3144,7 +3144,7 @@ static void acdSetDirlist (AcdPAcd thys)
     n = ajListLength(val);
     for(i=0;i<n;++i)
     {
-	ajFmtPrintS(&t,"%S/",reply);
+	ajFmtPrintS(&t,"");
 	ajListPop(val,(void **)&v);
 	ajStrApp(&t,v);
 	ajStrAssC(&v,ajStrStr(t));
