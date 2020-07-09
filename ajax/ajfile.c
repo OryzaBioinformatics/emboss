@@ -712,6 +712,9 @@ void ajFileDataNewC(const char *s, AjPFile *f)
 **
 ** Sets the current position in an open file.
 **
+** Resets the end-of-file flag End for cases where end-of-file was
+** reached and then we seek back somewhere in the file.
+**
 ** @param [r] thys [const AjPFile] File.
 ** @param [r] offset [ajlong] Offset
 ** @param [r] wherefrom [ajint] Start of offset, as defined for 'fseek'.
@@ -720,7 +723,14 @@ void ajFileDataNewC(const char *s, AjPFile *f)
 ******************************************************************************/
 
 ajint ajFileSeek (const AjPFile thys, ajlong offset, ajint wherefrom) {
-  return fseek (thys->fp, offset, wherefrom);
+  ajint ret;
+  clearerr(thys->fp);
+  ret = fseek (thys->fp, offset, wherefrom);
+  if (feof(thys->fp))
+    thys->End = ajTrue;
+  else
+    thys->End = ajFalse;
+  return ret;
 }
 
 /* @func ajFileRead *******************************************************
@@ -2926,6 +2936,7 @@ AjBool ajFileNameExtC (AjPStr* filename, const char* extension)
 
     ajStrAssC(filename,ajStrStr(tmpstr));
 
+    ajDebug ("result '%S'\n", *filename);
     return ajTrue;
 }
 
