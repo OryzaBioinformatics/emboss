@@ -466,7 +466,7 @@ static AjBool dbiflat_ParseEmbl (AjPFile libr, AjPFile* alistfile,
 	typexp = ajRegCompC ("^([A-Z][A-Z]) +");
 
     if (!wrdexp)
-	wrdexp = ajRegCompC ("([A-Za-z0-9]+)");
+	wrdexp = ajRegCompC ("([A-Za-z0-9_]+)");
 
     if (!phrexp)
 	phrexp = ajRegCompC (" *([^;.\n\r]+)");
@@ -722,7 +722,7 @@ static AjBool dbiflat_ParseGenbank (AjPFile libr, AjPFile* alistfile,
 	morexp = ajRegCompC ("^            ");
 
     if (!wrdexp)
-	wrdexp = ajRegCompC ("([A-Za-z0-9]+)");
+	wrdexp = ajRegCompC ("([A-Za-z0-9_]+)");
 
     if (!phrexp)
 	phrexp = ajRegCompC (" *([^;.\n\r]+)");

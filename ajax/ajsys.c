@@ -719,9 +719,8 @@ char *ajSysFgets(char *buf, int size, FILE *fp)
 
     *p ='\0';
 
-    if(c==EOF)
-        return NULL;
-
+    if(c==EOF && !cnt)
+	return NULL;
 
     if(cnt == size)
         return buf;

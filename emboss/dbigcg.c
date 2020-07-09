@@ -924,7 +924,7 @@ static AjBool dbigcg_ParseEmbl (AjPFile libr,
 	typexp = ajRegCompC ("^([A-Z][A-Z]) +");
 
     if (!wrdexp)
-	wrdexp = ajRegCompC ("([A-Za-z0-9]+)");
+	wrdexp = ajRegCompC ("([A-Za-z0-9_]+)");
 
     if (!verexp)
 	verexp = ajRegCompC ("([A-Za-z0-9]+[.][0-9]+)");
@@ -1159,7 +1159,7 @@ static AjBool dbigcg_ParseGenbank (AjPFile libr,
 	morexp = ajRegCompC ("^            ");
 
     if (!wrdexp)
-	wrdexp = ajRegCompC ("([A-Za-z0-9]+)");
+	wrdexp = ajRegCompC ("([A-Za-z0-9_]+)");
 
     if (!phrexp)
 	phrexp = ajRegCompC (" *([^;.\n\r]+)");
@@ -1398,7 +1398,7 @@ static AjBool dbigcg_ParsePir (AjPFile libr,
     }
 
     if (!wrdexp)
-	wrdexp = ajRegCompC ("([A-Za-z0-9]+)");
+	wrdexp = ajRegCompC ("([A-Za-z0-9_]+)");
 
     if (!idexp)
 	idexp = ajRegCompC ("^>..;([^;.\n\r]+)");

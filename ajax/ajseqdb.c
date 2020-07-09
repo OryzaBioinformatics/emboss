@@ -384,7 +384,7 @@ static AjBool seqAccessEmblcd (AjPSeqin seqin)
 	{
 /*	    if(seqin->Ftquery->Handle)
 		ajFileBuffClear(seqin->Ftquery->Handle,0); */
-	    AJFREE(qryd);
+	    AJFREE(qry->QryData);
 	}
 
     }
@@ -990,14 +990,17 @@ static ajint seqCdTrgSearch (SeqPCdTrg trgLine, AjPStr entry, SeqPCdFile fp)
 static char* seqCdIdxName (ajint ipos, SeqPCdFile fil)
 {
     static char* name = NULL;
-    static ajint nameSize = 0;
+    static ajint maxNameSize = 0;
+    ajint nameSize;
 
-    if (!nameSize)
+    nameSize = fil->RecSize-10;
+
+    if (maxNameSize < nameSize)
     {
-	nameSize = fil->RecSize-10;
+	maxNameSize = nameSize;
 	if (name)
 	    (void) ajCharFree(name);
-	name = ajCharNewL (nameSize);
+	name = ajCharNewL (maxNameSize);
     }
 
     (void) seqCdFileSeek (fil, ipos);
@@ -1020,14 +1023,17 @@ static char* seqCdIdxName (ajint ipos, SeqPCdFile fil)
 static void seqCdIdxLine (SeqPCdIdx idxLine, ajint ipos, SeqPCdFile fil)
 {
     static char* name = NULL;
-    static ajint nameSize = 0;
+    static ajint maxNameSize = 0;
+    ajint nameSize;
 
-    if (!nameSize)
+    nameSize = fil->RecSize-10;
+
+    if (maxNameSize < nameSize)
     {
-	nameSize = fil->RecSize - 10;
+	maxNameSize = nameSize;
 	if (name)
 	    (void) ajCharFree(name);
-	name = ajCharNewL (nameSize);
+	name = ajCharNewL (maxNameSize);
     }
 
     (void) seqCdFileSeek (fil, ipos);
@@ -1055,14 +1061,17 @@ static void seqCdIdxLine (SeqPCdIdx idxLine, ajint ipos, SeqPCdFile fil)
 static char* seqCdTrgName (ajint ipos, SeqPCdFile fil)
 {
     static char* name = NULL;
-    static ajint nameSize = 0;
+    static ajint maxNameSize = 0;
+    ajint nameSize;
 
-    if (!nameSize)
+    nameSize = fil->RecSize-8;
+
+    if (maxNameSize < nameSize)
     {
-	nameSize = fil->RecSize - 8;
+	maxNameSize = nameSize;
 	if (name)
 	    (void) ajCharFree(name);
-	name = ajCharNewL (nameSize);
+	name = ajCharNewL (maxNameSize);
     }
 
     (void) seqCdFileSeek (fil, ipos);
@@ -1086,14 +1095,17 @@ static char* seqCdTrgName (ajint ipos, SeqPCdFile fil)
 static void seqCdTrgLine (SeqPCdTrg trgLine, ajint ipos, SeqPCdFile fil)
 {
     static char* name = NULL;
-    static ajint nameSize = 0;
+    static ajint maxNameSize = 0;
+    ajint nameSize;
 
-    if (!nameSize)
+    nameSize = fil->RecSize-8;
+
+    if (maxNameSize < nameSize)
     {
-	nameSize = fil->RecSize - 8;
+	maxNameSize = nameSize;
 	if (name)
 	    (void) ajCharFree(name);
-	name = ajCharNewL (nameSize);
+	name = ajCharNewL (maxNameSize);
     }
 
     (void) seqCdFileSeek (fil, ipos);
@@ -1586,6 +1598,7 @@ static AjBool seqCdQryReuse (AjPSeqQuery qry)
     {
 	ajDebug ("query data all finished\n");
 	AJFREE (qry->QryData);
+	qry->QryData = NULL;
 	return ajFalse;
     }
     else
