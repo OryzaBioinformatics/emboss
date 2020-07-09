@@ -1,17 +1,17 @@
 #!/usr/local/bin/perl -w
 
 ##########################
-# THINGS TO DO
+# DONE
 ##########################
 # Timeout (TI line to set) default 60secs, diffseq needs more
 # Preprocess (PP line) command
 # Postprocess (QQ line) command - e.g. testing database builds, reusing output
+# EMBOSS_RC variable to read and extra .embossrc file (for new test dbs)
 #
 ##########################
 # THINGS TO DO
 ##########################
 #
-# EMBOSS_RC variable to read and extra .embossrc file (for new test dbs)
 #
 
 # EMBOSS QA Test Processing
@@ -292,6 +292,8 @@ sub runtest ($) {
     if ($file eq "stdin") {next} # stdin we created
     if ($file eq "testdef") {next} # test definition
 
+    $testfile{$file} = 1;
+
 # stdout and stderr are present (system call creates them)
 # and expected to be empty unless the test definition say otherwise
 # this tests they are empty if they are not defined
@@ -409,7 +411,7 @@ sub runtest ($) {
 # simple pattern, compile using qr//m
 
 	else {
-	  ##print STDERR "standard /m pattern '$pattest{$k}'\n";
+	  ##print STDERR "standard m pattern '$pattest{$k}'\n";
 	  $qpat = qr/$pattest{$k}/m;
 	}
 
@@ -478,6 +480,16 @@ sub runtest ($) {
 
     }
 
+  }
+
+  foreach $outtest (keys (%outfile)) {
+    if (!defined($testfile{$outtest})) {
+      $testerr = "$retcode{18} $testid/$outtest\n";
+      print STDERR $testerr;
+      print LOG $testerr;
+      chdir ("..");
+      return 18;
+    }
   }
 
 # done with checking all files in the test directory
@@ -583,10 +595,11 @@ $SIG{ALRM} = sub { print STDERR "+++ timeout handler\n"; die "qatest timeout" };
 	    "15" => "Duplicate test file size",
 	    "16" => "Duplicate filename definition",
 	    "17" => "No patterns to test file contents",
+	    "18" => "File not found",
             "99" => "Testing"
 );
 
-# The relative path ios fixed, as are the paths of files in the qatest.dat
+# The relative path is fixed, as are the paths of files in the qatest.dat
 # file, so best to keep everything running in the test/qa directory
 
 open (IN, "../qatest.dat") || die "Cannot open qatest.dat";
