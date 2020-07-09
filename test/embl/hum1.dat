@@ -1981,3 +1981,303 @@ SQ   Sequence 33760 BP; 8532 A; 9139 C; 9245 G; 6844 T; 0 other;
      acagacactg aggtggggga actggagccg gtgtggcgga ggccctcaca gccaagagca     33720
      actgggggtg ccctgggcag ggactgtagc tgggaagatc                           33760
 //
+ID   AB000095   standard; RNA; HUM; 2399 BP.
+XX
+AC   AB000095;
+XX
+SV   AB000095.1
+XX
+DT   10-MAR-1998 (Rel. 54, Created)
+DT   10-MAR-1998 (Rel. 54, Last updated, Version 1)
+XX
+DE   Homo sapiens mRNA for hepatocyte growth factor activator
+DE   inhibitor, complete cds.
+XX
+KW   hepatocyte growth factor activator inhibitor.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia; Eutheria;
+OC   Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-2399
+RA   Denda K.;
+RT   ;
+RL   Submitted (24-DEC-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Kimitoshi Denda, Tokyo Institute of Technology, Department of Life Science;
+RL   4259 Nagatsuta, Midori-ku, Yokohama, Kanagawa 227, Japan
+RL   (E-mail:kdenda@bio.titech.ac.jp, Tel:45-924-5702, Fax:45-924-5771)
+XX
+RN   [2]
+RA   Shimomura T., Denda K., Kitamura A., Kawaguchi T., Kito M., Kondo J.,
+RA   Kagaya S., Qin L., Takata H., Miyazawa K., Kitamura N.;
+RT   "Hepatocyte growth factor activator inhibitor, a novel Kunitz-type serine
+RT   protease inhibitor";
+RL   J. Biol. Chem. 272:6370-6376(1997).
+XX
+DR   SPTREMBL; O43278; O43278.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2399
+FT                   /db_xref="taxon:9606"
+FT                   /sequenced_mol="cDNA to mRNA"
+FT                   /organism="Homo sapiens"
+FT   CDS             176..1717
+FT                   /db_xref="SPTREMBL:O43278"
+FT                   /product="hepatocyte growth factor activator inhibitor"
+FT                   /protein_id="BAA25014.1"
+FT                   /translation="MAPARTMARARLAPAGIPAVALWLLCTLGLQGTQAGPPPAPPGLP
+FT                   AGADCLNSFTAGVPGFVLDTNASVSNGATFLESPTVRRGWDCVRACCTTQNCNLALVEL
+FT                   QPDRGEDAIAACFLINCLYEQNFVCKFAPREGFINYLTREVYRSYRQLRTQGFGGSGIP
+FT                   KAWAGIDLKVQPQEPLVLKDVENTDWRLLRGDTDVRVERKDPNQVELWGLKEGTYLFQL
+FT                   TVTSSDHPEDTANVTVTVLSTKQTEDYCLASNKVGRCRGSFPRWYYDPTEQICKSFVYG
+FT                   GCLGNKNNYLREEECILACRGVQGPSMERRHPVCSGTCQPTQFRCSNGCCIDSFLECDD
+FT                   TPNCPDASDEAACEKYTSGFDELQRIHFPSDKGHCVDLPDTGLCKESIPRWYYNPFSEH
+FT                   CARFTYGGCYGNKNNFEEEQQCLESCRGISKKDVFGLRREIPIPSTGSVEMAVAVFLVI
+FT                   CIVVVVAILGYCFFKNQRKDFHGHHHHPPPTPASSTVSTTEDTEHLVYNHTTRPL"
+FT   polyA_signal    2379..2384
+XX
+SQ   Sequence 2399 BP; 490 A; 777 C; 684 G; 448 T; 0 other;
+     cggccgagcc cagctctccg agcaccgggt cggaagccgc gacccgagcc gcgcaggaag        60
+     ctgggaccgg aacctcggcg gacccggccc cacccaactc acctgcgcag gtcaccagca       120
+     ccctcggaac ccagaggccc gcgctctgaa ggtgaccccc ctggggagga aggcgatggc       180
+     ccctgcgagg acgatggccc gcgcccgcct cgccccggcc ggcatccctg ccgtcgcctt       240
+     gtggcttctg tgcacgctcg gcctccaggg cacccaggcc gggccaccgc ccgcgccccc       300
+     tgggctgccc gcgggagccg actgcctgaa cagctttacc gccggggtgc ctggcttcgt       360
+     gctggacacc aacgcctcgg tcagcaacgg agctaccttc ctggagtccc ccaccgtgcg       420
+     ccggggctgg gactgcgtgc gcgcctgctg caccacccag aactgcaact tggcgctagt       480
+     ggagctgcag cccgaccgcg gggaggacgc catcgccgcc tgcttcctca tcaactgcct       540
+     ctacgagcag aacttcgtgt gcaagttcgc gcccagggag ggcttcatca actacctcac       600
+     gagggaagtg taccgctcct accgccagct gcggacccag ggctttggag ggtctgggat       660
+     ccccaaggcc tgggcaggca tagacttgaa ggtacaaccc caggaacccc tggtgctgaa       720
+     ggatgtggaa aacacagatt ggcgcctact gcggggtgac acggatgtca gggtagagag       780
+     gaaagaccca aaccaggtgg aactgtgggg actcaaggaa ggcacctacc tgttccagct       840
+     gacagtgact agctcagacc acccagagga cacggccaac gtcacagtca ctgtgctgtc       900
+     caccaagcag acagaagact actgcctcgc atccaacaag gtgggtcgct gccggggctc       960
+     tttcccacgc tggtactatg accccacgga gcagatctgc aagagtttcg tttatggagg      1020
+     ctgcttgggc aacaagaaca actaccttcg ggaagaagag tgcattctag cctgtcgggg      1080
+     tgtgcaaggc ccctccatgg aaaggcgcca tccagtgtgc tctggcacct gtcagcccac      1140
+     ccagttccgc tgcagcaatg gctgctgcat cgacagtttc ctggagtgtg acgacacccc      1200
+     caactgcccc gacgcctccg acgaggctgc ctgtgaaaaa tacacgagtg gctttgacga      1260
+     gctccagcgc atccatttcc ccagtgacaa agggcactgc gtggacctgc cagacacagg      1320
+     actctgcaag gagagcatcc cgcgctggta ctacaacccc ttcagcgaac actgcgcccg      1380
+     ctttacctat ggtggttgtt atggcaacaa gaacaacttt gaggaagagc agcagtgcct      1440
+     cgagtcttgt cgcggcatct ccaagaagga tgtgtttggc ctgaggcggg aaatccccat      1500
+     tcccagcaca ggctctgtgg agatggctgt cgcagtgttc ctggtcatct gcattgtggt      1560
+     ggtggtagcc atcttgggtt actgcttctt caagaaccag agaaaggact tccacggaca      1620
+     ccaccaccac ccaccaccca cccctgccag ctccactgtc tccactaccg aggacacgga      1680
+     gcacctggtc tataaccaca ccacccggcc cctctgagcc tgggtctcac cggctctcac      1740
+     ctggccctgc ttcctgcttg ccaaggcaga ggcctgggct gggaaaaact ttggaaccag      1800
+     actcttgcct gtttcccagg cccactgtgc ctcagagacc agggctccag cccctcttgg      1860
+     agaagtctca gctaagctca cgtcctgaga aagctcaaag gtttggaagg agcagaaaac      1920
+     ccttgggcca gaagtaccag actagatgga cctgcctgca taggagtttg gaggaagttg      1980
+     gagttttgtt tcctctgttc aaagctgcct gtccctaccc catggtgcta ggaagaggag      2040
+     tggggtggtg tcagaccctg gaggccccaa ccctgtcctc ccgagctcct cttccatgct      2100
+     gtgcgcccag ggctgggagg aaggacttcc ctgtgtagtt tgtgctgtaa agagttgctt      2160
+     tttgtttatt taatgctgtg gcatgggtga agaggagggg aagaggcctg tttggcctct      2220
+     ctgtcctctc ttcctcttcc cccaagattg agctctctgc ccttgatcag ccccaccctg      2280
+     gcctagacca gcagacagag ccaggagagg ctcagctgca ttccgcagcc cccaccccca      2340
+     aggttctcca acatcacagc ccagcccacc cactgggtaa taaaagtggt ttgtggaaa       2399
+//
+
+ID   AB009062   standard; DNA; HUM; 532 BP.
+XX
+AC   AB009062;
+XX
+SV   AB009062.1
+XX
+DT   15-JAN-1999 (Rel. 58, Created)
+DT   24-MAR-1999 (Rel. 59, Last updated, Version 2)
+XX
+DE   Homo sapiens HERG gene, exon 6.
+XX
+KW   HERG.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia; Eutheria;
+OC   Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-532
+RA   Tanaka T.;
+RT   ;
+RL   Submitted (21-NOV-1997) to the EMBL/GenBank/DDBJ databases.
+RL   Toshihiro Tanaka, Institute of Medical Science, University of Tokyo,
+RL   Laboratory of Molecular Medicine; 4-6-1 Shirokanedai, Minato-ku, Tokyo
+RL   108-8639, Japan (E-mail:toshitan@ims.u-tokyo.ac.jp, Tel:81-3-5449-5374,
+RL   Fax:81-3-5449-5406)
+XX
+RN   [2]
+RA   Itoh T., Tanaka T., Nagai R., Kamiya T., Sawayama T., Nakayama T.,
+RA   Tomoike H., Sakurada H., Yazaki Y., Nakamura Y.;
+RT   "Genomic organization and mutational analysis of HERG, a gene responsible
+RT   for familial long QT syndrome";
+RL   Hum. Genet. 102:435-439(1998).
+XX
+DR   SPTREMBL; Q12809; Q12809.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..532
+FT                   /db_xref="taxon:9606"
+FT                   /sequenced_mol="DNA"
+FT                   /organism="Homo sapiens"
+FT   exon            75..503
+FT                   /number=6
+FT                   /gene="HERG"
+XX
+SQ   Sequence 532 BP; 87 A; 187 C; 146 G; 112 T; 0 other;
+     cagagatgtc atcgctcctg cccccgaggt cccatggcct gcctcaccca cacctccgcc        60
+     ttccccgggt gcaggtcctg tccctgggcg ccgacgtgct gcctgagtac aagctgcagg       120
+     caccgcgcat ccaccgctgg accatcctgc attacagccc cttcaaggcc gtgtgggact       180
+     ggctcatcct gctgctggtc atctacacgg ctgtcttcac accctactcg gctgccttcc       240
+     tgctgaagga gacggaagaa ggcccgcctg ctaccgagtg tggctacgcc tgccagccgc       300
+     tggctgtggt ggacctcatc gtggacatca tgttcattgt ggacatcctc atcaacttcc       360
+     gcaccaccta cgtcaatgcc aacgaggagg tggtcagcca ccccggccgc attgccgtcc       420
+     actacttcaa gggctggttc ctcatcgaca tggtggccgc catccccttc gacctgctca       480
+     tcttcggctc tggctctgag gaggtggggt cagcaaggag gcaggtggtg ta               532
+//
+
+ID   HSFERG1    standard; DNA; HUM; 512 BP.
+XX
+AC   X03487;
+XX
+SV   X03487.1
+XX
+DT   02-JUL-1986 (Rel. 09, Created)
+DT   04-APR-1995 (Rel. 43, Last updated, Version 2)
+XX
+DE   Human apoferritin H gene exon 1
+XX
+KW   ferritin.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-512
+RX   MEDLINE; 86120367.
+RA   Costanzo F., Colombo M., Staempfli S., Santoro C., Marone M., Frank R.,
+RA   Delius H., Cortese R.;
+RT   "Structure of gene and pseudogenes of human apoferritin H";
+RL   Nucleic Acids Res. 14:721-736(1986).
+XX
+DR   EPD; EP11112; HS_FRIH.
+DR   SWISS-PROT; P02794; FRIH_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..512
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT   misc_feature    65..70
+FT                   /note="GGGCGG box"
+FT   misc_feature    103..108
+FT                   /note="GGGCGG box"
+FT   misc_feature    126..131
+FT                   /note="GGGCGG box"
+FT   promoter        150..154
+FT                   /note="put. TATA box"
+FT   mRNA            179..500
+FT                   /note="exon 1"
+FT   CDS             join(387..500,X03488.1:50..196,X03488.1:453..578,
+FT                   X03488.1:674..838)
+FT                   /db_xref="SWISS-PROT:P02794"
+FT                   /label=apoh_cds
+FT                   /product="apoferritin H subunit"
+FT                   /protein_id="CAA27205.1"
+FT                   /translation="MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDRD
+FT                   DVALKNFAKYFLHQSHEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMECA
+FT                   LHLEKNVNQSLLELHKLATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPE
+FT                   SGLAEYLFDKHTLGDSDNES"
+FT   intron          501..>512
+FT                   /note="intron I"
+XX
+SQ   Sequence 512 BP; 80 A; 212 C; 152 G; 64 T; 4 other;
+     agnncaaacc tnagctccgc cagagcgcgc gaggcctcca gcggccgccc ctcccccaca        60
+     gcaggggcgg ggntcccgcg cccaccggaa ggagcgggct cggggcgggc ggcgctgatt       120
+     ggccggggcg ggcctgacgc cgacgcggct ataagagacc acaagcgacc cgcagggcca       180
+     gacgttcttc gccgagagtc gtcggggttt cctgcttcaa cagtgcttgg acggaacccg       240
+     gcgctcgttc cccaccccgg ccggccgccc atagccagcc ctccgtcgac ctcttcaccg       300
+     caccctcgga ctgccccaag gcccccgccg ccgctccagc gccgcgcagc caccgccgcc       360
+     gccgccgcct ctccttagtc gccgccatga cgaccgcgtc cacctcgcag gtgcgccaga       420
+     actaccacca ggactcagag gccgccatca accgccagat caacctggag ctctacgcct       480
+     cctacgttta cctgtccatg gtgagcgcgg gc                                     512
+//
+
+ID   HSFERG2    standard; DNA; HUM; 1132 BP.
+XX
+AC   X03488;
+XX
+SV   X03488.1
+XX
+DT   02-JUL-1986 (Rel. 09, Created)
+DT   04-APR-1995 (Rel. 43, Last updated, Version 2)
+XX
+DE   Human apoferritin H gene exons 2-4
+XX
+KW   ferritin.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-1132
+RX   MEDLINE; 86120367.
+RA   Costanzo F., Colombo M., Staempfli S., Santoro C., Marone M., Frank R.,
+RA   Delius H., Cortese R.;
+RT   "Structure of gene and pseudogenes of human apoferritin H";
+RL   Nucleic Acids Res. 14:721-736(1986).
+XX
+DR   SWISS-PROT; P02794; FRIH_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1132
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT   intron          <1..49
+FT                   /note="intron I"
+FT   exon            50..196
+FT                   /note="apoferritin H subunit (aa 39-87) (exon 2)"
+FT                   /usedin=X03487:apoh_cds
+FT   intron          197..452
+FT                   /note="intron II"
+FT   exon            453..578
+FT                   /note="apoferritin H subunit (exon 3) (aa 88-129)"
+FT                   /usedin=X03487:apoh_cds
+FT   intron          579..673
+FT                   /note="intron III"
+FT   exon            674..999
+FT                   /note="exon 4"
+FT   -               674..838
+FT                   /note="apoferritin H subunit (aa 130-183)"
+FT                   /usedin=X03487:apoh_cds
+FT   intron          1000..>1132
+FT                   /note="intron IV"
+XX
+SQ   Sequence 1132 BP; 315 A; 235 C; 250 G; 320 T; 12 other;
+     ggatccctag tataacacat tcagtgttcc ccntttcagc ccntttcagt cttactactt        60
+     tgaccgcgat gatgtggctt tgaagaactt tgccaaatac tttcttcacc aatctcatga       120
+     ggagagggaa catgctgaga aactgatgaa gctgcagaac caacgaggtg gccgaatctt       180
+     ccttcaggat atcaaggtga acaaaagatc ctagggtgtc atacttcatc atctggcagt       240
+     gttcggtatc agaaatcnct taaactagca attgccctta taaagtgatg atacactggg       300
+     cttttgcctt ttgtgctttt ttaggcttac catctaaact aaattaggca aatagtaatg       360
+     ncccttttgc caaaacgtgg tggttagagn tngatgggct tgctgacttc tnaggttagt       420
+     tggtagagat gcattaacct attctcattc agaaaccaga ctgtgatgac tgggagagcg       480
+     ggctgaatgc aatggagtgt gcattacatt tggaaaaaaa tgtgaatcag tcactactgg       540
+     aactgcacaa actggccact gacaaaaatg acccccatgt gagtattgga accccaggaa       600
+     ataaatggag gaaatcattt gccttaggga ttgggaaagc tgcccactaa ctgtcttccc       660
+     cattgttttg cagttgtgtg acttcattga gacacattac ctgaatgagc aggtgaaagc       720
+     catcaaagaa ttgggtgacc acgtgaccaa cttgcgcaag atgggagcgc ccgaatctgg       780
+     cttggcggaa tatctctttg acaagcacac cctgggagac agtgataatg aaagctaagc       840
+     ctcgggctaa tttccccata gccgtggggt gacttccctg gtcaccaagg cagtgcatgc       900
+     atgttggggt ttcctttacc ttttctataa gttgtaccaa aacatccact taagttcttt       960
+     gatttgtacc attccttcaa ataaagaaat ttggtacccn nnnnggtctg ggtgaatgag      1020
+     aaatctatcc aggctatctt ccagattcct taagtgccgt tgttcagttc taatcacact      1080
+     aatcaaaaag aaacgagtat ttgtatttat taaactcatt agtttgggca gt              1132
+//
+
