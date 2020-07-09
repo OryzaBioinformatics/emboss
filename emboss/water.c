@@ -30,6 +30,7 @@
 
 int main(int argc, char **argv)
 {
+    AjPAlign align;
     AjPSeqall seqall;
     AjPSeq a;
     AjPSeq b;
@@ -37,8 +38,8 @@ int main(int argc, char **argv)
     AjPStr n;
     AjPStr ss;
     
-    AjPFile outf;
-    AjBool  show;
+    AjPFile outf=NULL;
+    AjBool  show=ajFalse;
     
     ajint    lena;
     ajint    lenb;
@@ -83,12 +84,16 @@ int main(int argc, char **argv)
     a         = ajAcdGetSeq("sequencea");
     ajSeqTrim(a);
     seqall    = ajAcdGetSeqall("seqall");
-    show      = ajAcdGetBool("showinternals");
     gapopen   = ajAcdGetFloat("gapopen");
     gapextend = ajAcdGetFloat("gapextend");
     dosim     = ajAcdGetBool("similarity");
     fasta     = ajAcdGetBool("fasta");
-    outf      = ajAcdGetOutfile("outfile");
+    align     = ajAcdGetAlign("outfile");
+
+    /* obsolete. Can be uncommented in acd file and here to reuse */
+
+    /* outf      = ajAcdGetOutfile("originalfile"); */
+    /* show      = ajAcdGetBool("showinternals"); */
 
     m  = ajStrNew();
     n  = ajStrNew();
@@ -140,29 +145,28 @@ int main(int argc, char **argv)
 	embAlignWalkSWMatrix(path,compass,gapopen,gapextend,a,b,&m,&n,lena,
 			    lenb,sub,cvt,&start1,&start2);
 
-	if(!fasta)
+	if(outf && !fasta)
 	{
-	    embAlignPrintLocal(outf,ajSeqChar(a),ajSeqChar(b),m,n,start1,
-			       start2,score,1,sub,cvt,ajSeqName(a),
-			       ajSeqName(b),begina,beginb);
+	  embAlignPrintLocal(outf,ajSeqChar(a),ajSeqChar(b),m,n,start1,
+			     start2,score,1,sub,cvt,ajSeqName(a),
+			     ajSeqName(b),begina,beginb);
 
-	    if(dosim)
-	    {
-		embAlignCalcSimilarity(m,n,sub,cvt,lena,lenb,&id,&sim,&idx,
-				       &simx);
-		ajFmtPrintF(outf,"\n%%id = %5.2f\t\t\t%%similarity = %5.2f\n",
-			    id,sim);
-		ajFmtPrintF(outf,"Overall %%id = %5.2f\t\tOverall "
-			    "%%similarity = %5.2f\n",idx,simx);
-	    }
+	  if(dosim)
+	  {
+	    embAlignCalcSimilarity(m,n,sub,cvt,lena,lenb,&id,&sim,&idx,
+				   &simx);
+	    ajFmtPrintF(outf,"\n%%id = %5.2f\t\t\t%%similarity = %5.2f\n",
+			id,sim);
+	    ajFmtPrintF(outf,"Overall %%id = %5.2f\t\tOverall "
+			"%%similarity = %5.2f\n",idx,simx);
+	  }
 	}
-	else
-	{
-	    ajFmtPrintF(outf,">%s\n",ajSeqName(a));
+	else if (outf)	{
+	  ajFmtPrintF(outf,">%s\n",ajSeqName(a));
 
-	    len = ajStrLen(m);
-	    for (i=0;i<len; i+=60)
-	    {
+	  len = ajStrLen(m);
+	  for (i=0;i<len; i+=60)
+	  {
 		(void) ajStrAssSub (&ss,m,i,i+60-1);
 		(void) ajFmtPrintF (outf,"%S\n", ss);
 	    }
@@ -174,11 +178,21 @@ int main(int argc, char **argv)
 		(void) ajFmtPrintF (outf,"%S\n", ss);
 	    }
 	}
+
+	embAlignReportLocal (align, a, b, m, n,
+			     start1, start2, gapopen, gapextend,
+			     score, matrix);
     }
+
+    ajAlignClose(align);
+    ajAlignDel(&align);
 
     AJFREE (compass);
     AJFREE (path);
     
+    AJFREE(compass);
+    AJFREE(path);
+
     ajStrDel(&n);
     ajStrDel(&m);
     ajStrDel(&ss);

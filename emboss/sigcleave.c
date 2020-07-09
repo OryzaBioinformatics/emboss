@@ -1,7 +1,7 @@
 /* @source sigcleave application
 **
 ** Displays protein signal cleavage sites
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+
 ** @@
 **
 ** Original program "SIGCLEAVE" Peter Rice (EGCG 1988)
@@ -50,11 +50,16 @@ int main(int argc, char **argv)
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
     AjPFile   outf=NULL;
+    AjPReport report=NULL;
+    AjPFeattable TabRpt = NULL;
+    AjPFeature gf = NULL;
+
     AjPStr    strand=NULL;
     AjPStr    substr=NULL;
     AjPStr    stmp=NULL;
     AjPStr    sstr=NULL;
-    
+    AjPStr    tmpStr=NULL;
+
     AjBool    prokaryote=ajFalse;
 
     AjPFloat2d matrix=NULL;
@@ -88,14 +93,20 @@ int main(int argc, char **argv)
     ajint isite;
     ajint se;
 
+    AjPStr fthit = NULL;
+
     embInit("sigcleave",argc,argv);
     
     seqall    = ajAcdGetSeqall("sequence");
     opval     = ajAcdGetInt("pval");
     nval      = ajAcdGetInt("nval");
-    outf      = ajAcdGetOutfile("outfile");
     prokaryote   = ajAcdGetBool("prokaryote");
     minweight    = ajAcdGetFloat("minweight");
+    report      = ajAcdGetReport("outfile");
+
+    /* obsolete. Can be uncommented in acd file and here to reuse */
+
+    /* outf      = ajAcdGetOutfile("originalfile"); */
 
     matrix = ajFloat2dNew();
     hwt    = ajFloatNew();
@@ -106,7 +117,8 @@ int main(int argc, char **argv)
     stmp   = ajStrNew();
     sstr   = ajStrNew();
 
-    
+    ajStrAssC(&fthit, "hit");
+
     sigcleave_readSig(&matrix,prokaryote);
 
 
@@ -115,6 +127,8 @@ int main(int argc, char **argv)
 	begin=ajSeqallBegin(seqall);
 	end=ajSeqallEnd(seqall);
 	pval = opval;
+
+	TabRpt = ajFeattableNewSeq(seq);
 
 	ajStrAssS(&strand, ajSeqStr(seq));
 	ajStrToUpper(&strand);
@@ -167,39 +181,74 @@ int main(int argc, char **argv)
 	    }
 	}
 
-	ajFmtPrintF(outf,"\n\nSIGCLEAVE of %s from %d to %d\n\n",
+	(void) ajFmtPrintAppS(&tmpStr,
+			      "Reporting scores over %.2f",
+			      minweight);
+
+	ajReportSetHeader(report, tmpStr);
+
+	if (outf)
+	  ajFmtPrintF(outf,"\n\nSIGCLEAVE of %s from %d to %d\n\n",
 		    ajSeqName(seq),begin,end);
-	ajFmtPrintF(outf,"\nReporting scores over %.2f\n",minweight);
+	if (outf)
+	  ajFmtPrintF(outf,"\nReporting scores over %.2f\n",minweight);
 	if(!n)
 	{
+	  if (outf)
 	    ajFmtPrintF(outf,"\nNo scores over %.2f\n",minweight);
+	  ajFmtPrintS(&tmpStr,"\nNo scores over %.2f\n",minweight);
+	  ajReportSetTail(report, tmpStr);
 	}
 	else
 	{
-	    ajFmtPrintF(outf,"Maximum score %.1f at residue %d\n\n",
-			maxweight, maxsite+begin);
+	    if (outf)
+	      ajFmtPrintF(outf,"Maximum score %.1f at residue %d\n\n",
+			  maxweight, maxsite+begin);
 	    if(maxsite+pval<0) pval = -maxsite;
 
+	    /* end of signal peptide */
             ajStrAssSubC(&stmp,ajStrStr(sstr),maxsite+pval,maxsite-1);
-	    ajFmtPrintF(outf," Sequence:  %s-",ajStrStr(stmp));
+
+	    if (outf)
+	      ajFmtPrintF(outf," Sequence:  %s-",ajStrStr(stmp));
 
 	    if(maxsite+49<len)
 	      se=maxsite+49;
 	    else
 	      se = len-1;
 
+	    gf = ajFeatNewProt(TabRpt, NULL, fthit,
+			       maxsite+pval+begin, maxsite+begin-1,
+			       maxweight);
+
+	    /* start of mature peptide */
 	    ajStrAssSubC(&stmp,ajStrStr(sstr),maxsite,se);
-	    ajFmtPrintF(outf,"%s\n",ajStrStr(stmp));
-	    ajFmtPrintF(outf,"            | (signal)    | (mature peptide)\n");
-	    ajFmtPrintF(outf,"%13d             %d\n",maxsite+pval+begin,
-		      maxsite+begin);
+
+	    ajFmtPrintS(&tmpStr, "*mature_peptide %S", stmp);
+
+	    ajFeatTagAdd(gf,  NULL, tmpStr);
+
+	    if (outf)
+	      ajFmtPrintF(outf,"%s\n",ajStrStr(stmp));
+	    if (outf)
+	      ajFmtPrintF(outf,
+			  "            | (signal)    | (mature peptide)\n");
+	    if (outf)
+	      ajFmtPrintF(outf,
+			  "%13d             %d\n",maxsite+pval+begin,
+			  maxsite+begin);
 	    ajSortFloatIncI(ajFloatFloat(hwt),ajIntInt(hi),n);
-	    if (n <= 1)
-		ajFmtPrintF(outf,"\n\n\n No other entries above %.2f\n",
-			    minweight);
+	    if (n <= 1) {
+	      if (outf) {
+	          ajFmtPrintF(outf,"\n\n\n No other entries above %.2f\n",
+			      minweight);
+	      }
+	    }
 	    else
 	    {
-	      ajFmtPrintF(outf,"\n\n\n Other entries above %.2f\n",minweight);
+	      if (outf)
+		ajFmtPrintF(outf,"\n\n\n Other entries above %.2f\n",
+			    minweight);
 	      for(i=0;i<n;++i)
 	      {
 		isite=ajIntGet(hp,ajIntGet(hi,i));
@@ -208,28 +257,46 @@ int main(int argc, char **argv)
 		    if(isite+pval<0) /*pval = -isite*/ continue;
 
 		    xweight=ajFloatGet(hwt,ajIntGet(hi,i));
-		    ajFmtPrintF(outf,"\n\nScore %.1f at residue %d\n\n",
-				xweight,isite+begin);
+		    if (outf)
+		      ajFmtPrintF(outf,"\n\nScore %.1f at residue %d\n\n",
+				  xweight,isite+begin);
 
 		    
 		    ajStrAssSubC(&stmp,ajStrStr(sstr),isite+pval,isite-1);
-		    ajFmtPrintF(outf," Sequence:  %s-",ajStrStr(stmp));
+		    if (outf)
+		      ajFmtPrintF(outf," Sequence:  %s-",ajStrStr(stmp));
 		    if(isite+49<len) se=isite+49;
 		    else se = len-1;
+		    gf = ajFeatNewProt(TabRpt, NULL, fthit,
+				       isite+pval+begin, isite+begin-1,
+				       xweight);
+
 		    ajStrAssSubC(&stmp,ajStrStr(sstr),isite,se);
-		    ajFmtPrintF(outf,"%s\n",ajStrStr(stmp));
-		    ajFmtPrintF(outf,
-			   "            | (signal)    | (mature peptide)\n");
-		    ajFmtPrintF(outf,"%13d             %d\n",isite+pval+begin,
-				isite+begin);
+		    ajFmtPrintS(&tmpStr, "*mature_peptide %S", stmp);
+
+		    ajFeatTagAdd(gf,  NULL, tmpStr);
+
+		    if (outf)
+		      ajFmtPrintF(outf,"%s\n",ajStrStr(stmp));
+		    if (outf)
+		      ajFmtPrintF(outf,
+			    "            | (signal)    | (mature peptide)\n");
+		    if (outf)
+		      ajFmtPrintF(outf,"%13d             %d\n",
+				  isite+pval+begin,
+				  isite+begin);
 		}
 	      }
 	    }
 	}
 
+	ajReportWrite(report, TabRpt, seq);
+
+	ajFeattableDel(&TabRpt);
 	ajStrDelReuse(&strand);
     }
     
+
     ajSeqDel(&seq);
     ajStrDel(&substr);
     ajStrDel(&sstr);
@@ -240,8 +307,11 @@ int main(int argc, char **argv)
     ajIntDel(&hi);
     ajIntDel(&hp);
 
-    ajFileClose(&outf);
+    if (outf)
+      ajFileClose(&outf);
     
+    (void) ajReportClose(report);
+
     ajExit();
     return 0;
 }

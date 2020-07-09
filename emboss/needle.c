@@ -30,6 +30,7 @@
 
 int main(int argc, char **argv)
 {
+    AjPAlign align;
     AjPSeqall seqall;
     AjPSeq a;
     AjPSeq b;
@@ -37,8 +38,8 @@ int main(int argc, char **argv)
     AjPStr n;
     AjPStr ss;
     
-    AjPFile outf;
-    AjBool show;
+    AjPFile outf=NULL;
+    AjBool show=ajFalse;
     
     ajint    lena;
     ajint    lenb;
@@ -82,19 +83,22 @@ int main(int argc, char **argv)
     a         = ajAcdGetSeq("sequencea");
     ajSeqTrim(a);
     seqall    = ajAcdGetSeqall("seqall");
-    show      = ajAcdGetBool("showinternals");
     gapopen   = ajAcdGetFloat("gapopen");
     gapextend = ajAcdGetFloat("gapextend");
     dosim     = ajAcdGetBool("similarity");
     fasta     = ajAcdGetBool("fasta");
-    outf      = ajAcdGetOutfile("outfile");
+    align     = ajAcdGetAlign("outfile");
+
+    /* obsolete. Can be uncommented in acd file and here to reuse */
+
+    /* outf      = ajAcdGetOutfile("originalfile"); */
+    /* show      = ajAcdGetBool("showinternals"); */
 
     gapopen = ajRoundF(gapopen, 8);
     gapextend = ajRoundF(gapextend, 8);
 
     AJCNEW(path, maxarr);
     AJCNEW(compass, maxarr);
-
 
     m  = ajStrNew();
     n  = ajStrNew();
@@ -141,7 +145,7 @@ int main(int argc, char **argv)
 	embAlignWalkNWMatrix(path,a,b,&m,&n,lena,lenb,&start1,&start2,gapopen,
 			    gapextend,cvt,compass,sub);
 
-	if(!fasta)
+	if(!fasta && outf)
 	{
 	    embAlignPrintGlobal(outf,p,q,m,n,start1,start2,score,1,sub,cvt,
 				ajSeqName(a),ajSeqName(b),begina,beginb);
@@ -156,7 +160,7 @@ int main(int argc, char **argv)
 			    "%%similarity = %5.2f\n",idx,simx);
 	    }
 	}
-	else
+	else if (outf)
 	{
 	    ajFmtPrintF(outf,">%s\n",ajSeqName(a));
 
@@ -174,9 +178,15 @@ int main(int argc, char **argv)
 		(void) ajFmtPrintF (outf,"%S\n", ss);
 	    }
 	}
+
+	embAlignReportGlobal(align, a, b ,m, n,
+			     start1,start2,gapopen, gapextend,
+			     score, matrix);
+
     }
     
-
+    ajAlignClose(align);
+    ajAlignDel(&align);
 
     AJFREE(compass);
     AJFREE(path);

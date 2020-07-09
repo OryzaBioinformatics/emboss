@@ -19,6 +19,7 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
+
 /* supermatcher
 ** Create a word table for the first sequence.
 ** Then go down second sequence checking to see if the word matches.
@@ -56,12 +57,16 @@ concat *conmax = NULL;
 ajint maxgap = 0;
 
 
-
-
-
 /* @prog supermatcher *********************************************************
 **
 ** Finds a match of a large sequence against one or more sequences
+**
+** Create a word table for the first sequence.
+** Then go down second sequence checking to see if the word matches.
+** If word matches then check to see if the position lines up with the last
+** position if it does continue else stop.
+** This gives us the start (offset) for the smith-waterman match by finding
+** the biggest match and calculating start and ends for both sequences. 
 **
 ******************************************************************************/
 
@@ -74,11 +79,11 @@ int main(int argc, char **argv)
     AjPStr m=0;
     AjPStr n=0;
 
-    AjPFile outf;
+    AjPFile outf = NULL;
     AjPFile errorf;
-    AjBool show;
-    AjBool scoreonly;
-    AjBool showalign;
+    AjBool show=ajFalse;
+    AjBool scoreonly=ajFalse;
+    AjBool showalign=ajTrue;
     
     ajint    lena=0;
     ajint    lenb=0;
@@ -110,20 +115,26 @@ int main(int argc, char **argv)
     ajint wordlen=6;
     ajint oldmax = 0;
 
+    AjPAlign align = NULL;
+
     embInit("supermatcher", argc, argv);
 
     matrix    = ajAcdGetMatrixf("datafile");
     seq1      = ajAcdGetSeqall("seqa");
     seq2      = ajAcdGetSeqset("seqb");
-    show      = ajAcdGetBool("showinternals");
     gapopen   = ajAcdGetFloat("gapopen");
     gapextend = ajAcdGetFloat("gapextend");
-    scoreonly = ajAcdGetBool("scoreonly");
-    showalign = ajAcdGetBool("showalign");
-    width     = ajAcdGetInt("width");
     wordlen   = ajAcdGetInt("wordlen");
-    outf      = ajAcdGetOutfile("outfile");
+    align     = ajAcdGetAlign("outfile");
     errorf    = ajAcdGetOutfile("errorfile");
+    width     = ajAcdGetInt("width"); /* not the same as awidth */
+
+    /* obsolete. Can be uncommented in acd file and here to reuse */
+
+    /* outf      = ajAcdGetOutfile("originalfile"); */
+    /* show      = ajAcdGetBool("showinternals");*/
+    /* scoreonly = ajAcdGetBool("scoreonly"); */
+    /* showalign = ajAcdGetBool("showalign"); */
 
     gapopen   = ajRoundF (gapopen, 8);
     gapextend = ajRoundF (gapextend, 8);
@@ -213,8 +224,11 @@ int main(int argc, char **argv)
 					      sub,cvt,&start1,&start2,width);
 	  
 	    if(scoreonly)
+	    {
+	      if (outf)
 		ajFmtPrintF(outf,"%s %s %.2f\n",ajSeqName(a),ajSeqName(b),
 			    score); 
+	    }
 	    else
 	    {
 		ajDebug ("Calling embAlignWalkSWMatrixFast\n");
@@ -223,10 +237,14 @@ int main(int argc, char **argv)
 					 sub,cvt,&start1,&start2,width);
 	    
 		ajDebug ("Calling embAlignPrintLocal\n");
-		embAlignPrintLocal(outf,ajSeqChar(a),ajSeqChar(b),
+		if (outf)
+		  embAlignPrintLocal(outf,ajSeqChar(a),ajSeqChar(b),
 				   m,n,start1,start2,
 				   score,1,sub,cvt,ajSeqName(a),ajSeqName(b),
 				   begina,beginb);
+		embAlignReportLocal(align, a, b,
+				    m,n,start1,start2,gapopen, gapextend,
+				    score,matrix);
 	    }
 	    ajStrDel(&n);
 	}
@@ -237,6 +255,9 @@ int main(int argc, char **argv)
 	ajStrDel(&m);
 
     }
+
+    ajAlignClose(align);
+    ajAlignDel(&align);
 
     ajExit();
     return 0;

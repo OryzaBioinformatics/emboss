@@ -286,6 +286,10 @@ ajint pam2[MAXSQ][MAXSQ];
 ajint pamh1[MAXSQ];		/* used for kfact replacement */
 
 
+static void garnier_report(AjPReport report, AjPFeattable TabRpt,
+			   AjPSeq seqobj,
+			   ajint from, ajint to, char *seq,
+			   ajint begin, ajint Idc);
 static void garnier_do(AjPFile outf, ajint s, ajint len, char *seq, char *name,
 		       ajint begin, ajint Idc);
 static void garnier_makemap (char *input, ajint *map, ajint n);
@@ -302,6 +306,8 @@ int main(int argc, char **argv)
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
     AjPFile   outf=NULL;
+    AjPReport report=NULL;
+    AjPFeattable TabRpt=NULL;
     AjPStr    strand=NULL;
     AjPStr    substr=NULL;
     
@@ -314,7 +320,7 @@ int main(int argc, char **argv)
     
     seqall    = ajAcdGetSeqall("sequencea");
     Idc       = ajAcdGetInt("idc");
-    outf      = ajAcdGetOutfile("outfile");
+    report    = ajAcdGetReport("outfile");
 
     
     substr = ajStrNew();
@@ -324,7 +330,9 @@ int main(int argc, char **argv)
     {
 	begin=ajSeqallBegin(seqall);
 	end=ajSeqallEnd(seqall);
-	
+
+	TabRpt = ajFeattableNewSeq(seq);
+
 	strand = ajSeqStrCopy(seq);
 	ajStrToUpper(&strand);
 
@@ -332,15 +340,23 @@ int main(int argc, char **argv)
 
 	len=ajStrLen(substr);
 
-	garnier_do(outf,0,len,ajStrStr(substr),ajSeqName(seq),begin,Idc);
+	garnier_report(report, TabRpt, seq, 0,len, ajStrStr(substr),begin,Idc);
+	if (outf)
+	  garnier_do(outf,0,len,ajStrStr(substr),ajSeqName(seq),begin,Idc);
 
 	ajStrDel(&strand);
+
+	ajReportWrite (report, TabRpt, seq);
+	ajFeattableDel(&TabRpt);
     }
     
     
     ajSeqDel(&seq);
     ajStrDel(&substr);
-    ajFileClose(&outf);
+    if (outf)
+      ajFileClose(&outf);
+    (void) ajReportClose(report);
+
     ajExit();
     return 0;
 }
@@ -371,7 +387,7 @@ static void garnier_do(AjPFile outf, ajint from, ajint to, char *seq,
     ajint nna=20;
     ajint parr[4];
     char carr[]="HETC";
-    char type[5000];
+    char *type;
     ajint iarr[4];
     ajint dharr[]=
     {
@@ -390,7 +406,10 @@ static void garnier_do(AjPFile outf, ajint from, ajint to, char *seq,
     idc=Idc;
     end=to-from+1;
     n0=end;
-      
+
+/* GWW - 28 Sept 2001 - changed 'type' to dynamic allocation */
+    type = AJALLOC0(n0*sizeof(char));
+
     sascii = aascii;
     
     if (idc<=0) dcs=dch=0;
@@ -491,12 +510,235 @@ static void garnier_do(AjPFile outf, ajint from, ajint to, char *seq,
          (float)iarr[3]/fn0);
     ajFmtPrintF(outf,"-----------------------------------------------"
 		"---------------------\n\n");
+
+    AJFREE(type);
     
     return;
 }
 
 
+/* @funcstatic garnier_report *************************************************
+**
+** Undocumented.
+**
+** @param [?] report [AjPReport] Undocumented
+** @param [?] TabRpt [AjPFeattable] Undocumented
+** @param [?] seqobj [AjPSeq] Undocumented
+** @param [?] from [ajint] Undocumented
+** @param [?] to [ajint] Undocumented
+** @param [?] seq [char*] Undocumented
+** @param [?] begin [ajint] Undocumented
+** @param [?] Idc [ajint] Undocumented
+** @@
+******************************************************************************/
 
+
+static void garnier_report(AjPReport report, AjPFeattable TabRpt,
+			   AjPSeq seqobj,
+			   ajint from, ajint to, char *seq,
+			   ajint begin, ajint Idc)
+{
+    char *refstr="\n Please cite:\n Garnier, Osguthorpe and Robson (1978) J. Mol. Biol. 120:97-120\n";
+    
+    ajint i;
+    ajint end;
+    ajint amap[20];
+    ajint nna=20;
+    ajint parr[4];
+    char carr[]="HETC";
+    char type[5000];
+    ajint iarr[4];
+    ajint dharr[]=
+    {
+	0,158,-75,-100
+    }
+    ;
+    ajint dsarr[]=
+    {
+	0,50,-88,-88
+    }
+    ;
+    ajint n0;
+    ajint j, k, l0, l1, idc, dcs, dch, lastk;
+    float fn0;
+    AjPStr tmpStr=NULL;
+    AjPStr strHelix=NULL;
+    AjPStr strExtend=NULL;
+    AjPStr strTurns=NULL;
+    AjPStr strCoil=NULL;
+    AjPFeature gf=NULL;
+    char testch = ' ';
+
+    if (!strHelix) {
+      ajStrAssC (&strHelix, "helix");
+      ajStrAssC (&strExtend, "strand");
+      ajStrAssC (&strTurns, "turn");
+      ajStrAssC (&strCoil, "coil");
+    }
+
+    idc=Idc;
+    end=to-from+1;
+    n0=end;
+      
+    sascii = aascii;
+    
+    if (idc<=0) dcs=dch=0;
+    else if (idc <4) 
+    {
+	dch=dharr[idc];
+	dcs=0;
+    }
+    else if (idc<=6)
+    {
+	dch=0;
+	dcs=dsarr[idc-3];
+    }
+    else dcs=dch=0;
+    
+    garnier_makemap(amino,amap,nna);  
+
+    
+/* copy from garnier.c original */
+    --n0;  /* AJB: Added as n0 was one greater than the sequence length */
+    
+  for (i=0; i<n0; i++)  {
+/*      ajDebug("seq[%d] '%c' %x", i, seq[i], seq[i]);
+*/      
+    seq[i] = amap[aascii[(ajint)seq[i]]];
+/*
+    ajDebug(" -> %x\n", seq[i]);
+*/
+  }	
+    
+  for(k=0;k<4;++k) iarr[k]=0;
+
+  lastk = 0;
+  for (i=0; i<n0; i++) {
+    parr[0]=helix[(ajint)seq[i]][8];
+    parr[1]=extend[(ajint)seq[i]][8];
+    parr[2]=turns[(ajint)seq[i]][8];
+    parr[3]=coil[(ajint)seq[i]][8];
+
+    for (j=1; j<9; j++) {
+      if ((i-j)>=0) {
+        parr[0] += helix[(ajint)seq[i-j]][8+j];
+        parr[1] += extend[(ajint)seq[i-j]][8+j];
+        parr[2] += turns[(ajint)seq[i-j]][8+j];
+        parr[3] += coil[(ajint)seq[i-j]][8+j];
+      }
+      if ((i+j)<n0) {
+        parr[0] += helix[(ajint)seq[i+j]][8-j];
+        parr[1] += extend[(ajint)seq[i+j]][8-j];
+        parr[2] += turns[(ajint)seq[i+j]][8-j];
+        parr[3] += coil[(ajint)seq[i+j]][8-j];
+      }
+    }
+    parr[0] -= dch;
+    parr[1] -= dcs;
+
+    k = 0;
+
+    for (j=1; j<4; j++) if (parr[j]>parr[k]) k=j;
+    if (parr[lastk]>=parr[k]) k=lastk;
+    lastk = k;
+    type[i]=carr[k];
+    iarr[k]++;
+  }
+
+  ajStrAssC (&tmpStr, "");
+  ajFmtPrintAppS (&tmpStr,
+		  "DCH = %d, DCS = %d\n",
+		  dch,dcs);
+  ajFmtPrintAppS (&tmpStr, "%s\n",refstr);
+
+  ajReportSetHeader (report, tmpStr);
+  
+  /*
+  l1 = n0/60 + 1;
+  for (l0=0; l0<l1; l0++) {
+    ajFmtPrintF(outf,"       ");
+    for (i=l0*60+9; i<n0 && i<(l0+1)*60; i+=10)
+      ajFmtPrintF(outf,"    .%5d",i+1);
+    ajFmtPrintF(outf,"\n       ");
+    for (i=l0*60; i<n0 && i<(l0+1)*60; i++) 
+      ajFmtPrintF(outf,"%c",amino[(ajint)seq[i]]);
+    ajFmtPrintF(outf,"\n helix ");
+    for (i=l0*60; i<n0 && i<(l0+1)*60; i++)
+      ajFmtPrintF(outf,"%c",(type[i]=='H')?'H':' ');
+    ajFmtPrintF(outf,"\n sheet ");
+    for (i=l0*60; i<n0 && i<(l0+1)*60; i++)
+      ajFmtPrintF(outf,"%c",(type[i]=='E')?'E':' ');
+    ajFmtPrintF(outf,"\n turns ");
+    for (i=l0*60; i<n0 && i<(l0+1)*60; i++)
+      ajFmtPrintF(outf,"%c",(type[i]=='T')?'T':' ');
+    ajFmtPrintF(outf,"\n coil  ");
+    for (i=l0*60; i<n0 && i<(l0+1)*60; i++)
+      ajFmtPrintF(outf,"%c",(type[i]=='C')?'C':' ');
+    ajFmtPrintF(outf,"\n\n");
+  }
+  */
+
+  testch = ' ';
+  l0=1;
+  l1=0;
+
+  for (i=0; i<=n0; i++) {
+    if (i==n0 || type[i] != testch) {
+      if (i) {
+	switch (testch) {
+	case 'H':
+	  gf = ajFeatNewProt (TabRpt, NULL, strHelix, l0, i, 0.0);
+	  ajFmtPrintS(&tmpStr, "*helix H");
+	  ajFeatTagAdd(gf,  NULL, tmpStr);
+	  break;
+	case 'E':
+	  gf = ajFeatNewProt (TabRpt, NULL, strExtend, l0, i, 0.0);
+	  ajFmtPrintS(&tmpStr, "*sheet E");
+	  ajFeatTagAdd(gf,  NULL, tmpStr);
+	  break;
+	case 'T':
+	  gf = ajFeatNewProt (TabRpt, NULL, strTurns, l0, i, 0.0);
+	  ajFmtPrintS(&tmpStr, "*turns T");
+	  ajFeatTagAdd(gf,  NULL, tmpStr);
+	  break;
+	case 'C':
+	  gf = ajFeatNewProt (TabRpt, NULL, strCoil, l0, i, 0.0);
+	  ajFmtPrintS(&tmpStr, "*coil C");
+	  ajFeatTagAdd(gf,  NULL, tmpStr);
+	  break;
+	default:
+	  break;
+	}
+	l0=i+1;
+      }
+      if (i < n0) testch = type[i];
+    }
+
+  }
+
+
+
+  ajStrAssC (&tmpStr, "");
+
+  ajFmtPrintAppS (&tmpStr,
+		  " Residue totals: H:%3d   E:%3d   T:%3d   C:%3d\n",
+		  iarr[0],iarr[1],iarr[2],iarr[3]);
+  fn0 = (float)(n0-16)/100.0;
+  ajFmtPrintAppS (&tmpStr,
+		  "        percent: H: %4.1f E: %4.1f T: %4.1f C: %4.1f\n",
+		  (float)iarr[0]/fn0,(float)iarr[1]/fn0,(float)iarr[2]/fn0,
+		  (float)iarr[3]/fn0);
+
+  ajReportSetTail (report, tmpStr);
+
+    ajStrDel(&tmpStr);
+    ajStrDel(&strExtend);
+    ajStrDel(&strHelix);
+    ajStrDel(&strTurns);
+    ajStrDel(&strCoil);
+
+  return;
+}
 
 /* @funcstatic garnier_makemap ***********************************************
 **

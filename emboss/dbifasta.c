@@ -40,8 +40,8 @@ AjPList aclist;
 AjBool systemsort;
 AjBool cleanup;
 
-static ajint maxidlen = 20;
-static ajint maxaclen = 20;
+static ajint maxidlen = 30;
+static ajint maxaclen = 30;
 
 static AjPStr rline = NULL;
 

@@ -56,8 +56,10 @@ int main(int argc, char **argv)
 	    (void) ajSeqReverse(seq);	/* reverses and complements */
 	else if (reverse)
 	    (void) ajSeqRevOnly(seq);
-	else
+	else if (complement)
 	    (void) ajSeqCompOnly(seq);
+	else
+	  (void) ajDebug("Are you kidding ... you want to do nothing!!!\n");
 
 	(void) ajSeqAllWrite (seqout, seq);
 

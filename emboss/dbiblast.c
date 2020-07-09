@@ -1132,7 +1132,7 @@ static AjBool dbiblast_parseNcbi (AjPStr line, PBlastDb db, AjPStr* id,
 	(void) ajFmtPrintS(&tmpac,"ZZ%07d",v++);
   
 
-    ajDebug ("parseNCBI success\n");
+    /*ajDebug ("parseNCBI success\n");*/
 
     if (systemsort)
 	ajFmtPrintF (alistfile, "%S %S\n", *id, tmpac);
@@ -1142,7 +1142,7 @@ static AjBool dbiblast_parseNcbi (AjPStr line, PBlastDb db, AjPStr* id,
 	ajListPushApp (acl, ac);
     }
 
-    ajDebug ("parseNCBI '%S' '%S'\n", *id, tmpac);
+    /*ajDebug ("parseNCBI '%S' '%S'\n", *id, tmpac);*/
 
     return ajTrue;
 }
@@ -1508,9 +1508,9 @@ static ajint dbiblast_loadtable (ajuint* table, ajint isize, PBlastDb db,
     j=0;
     for (i=pos; i<=imax; i++)
     {
-	ajDebug ("reading at %d\n", ajFileTell(db->TFile->File));
+      /*	ajDebug ("reading at %d\n", ajFileTell(db->TFile->File));*/
 	dbiblast_memreadUInt4(db->TFile,&table[j++]);
-	ajDebug ("read i: %d j: %d value: %d\n", i, j-1, table[j-1]);
+	/* ajDebug ("read i: %d j: %d value: %d\n", i, j-1, table[j-1]);*/
     }
 
     return imax - pos + 1;
@@ -1549,7 +1549,7 @@ static ajint dbiblast_ncblreadhdr (AjPStr* hline, PBlastDb db, ajint start,
     else
 	llen = size;
 
-    ajDebug ("ncblreadhdr start %d end %d llen %d\n", start, end, llen);
+    /*ajDebug ("ncblreadhdr start %d end %d llen %d\n", start, end, llen);*/
 
     if (db->IsBlast2)
     {

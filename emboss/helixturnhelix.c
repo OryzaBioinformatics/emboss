@@ -49,10 +49,9 @@ struct DNAB
 static ajint hth_readNab(AjPInt2d *matrix,AjBool eightyseven);
 static void hth_print_hits(AjPList *ajb, ajint n, float minsd, ajint lastcol,
 			   AjBool eightyseven, AjPFile outf);
-
-
-
-
+static void hth_report_hits(AjPList *ajb, ajint lastcol,
+			    AjPReport report,
+			    AjPFeattable TabRpt);
 
 
 
@@ -67,6 +66,7 @@ int main(int argc, char **argv)
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
     AjPFile   outf=NULL;
+    AjPReport report=NULL;
     AjPList   ajb=NULL;
     AjPStr    strand=NULL;
     AjPStr    substr=NULL;
@@ -77,6 +77,8 @@ int main(int argc, char **argv)
     static DNAB      *lp;
     
     AjPInt2d matrix=NULL;
+    AjPStr    tmpStr = NULL;
+    AjPFeattable TabRpt = NULL;
     
     ajint begin;
     ajint end;
@@ -99,15 +101,18 @@ int main(int argc, char **argv)
     float minscore;
     float thissd;
     
-
     embInit("helixturnhelix",argc,argv);
     
     seqall    = ajAcdGetSeqall("sequence");
-    outf      = ajAcdGetOutfile("outfile");
+    report    = ajAcdGetReport("outfile");
     mean      = ajAcdGetFloat("mean");
     sd        = ajAcdGetFloat("sd");
     minsd     = ajAcdGetFloat("minsd");
     
+    /* obsolete. Can be uncommented in acd file and here to reuse */
+
+    /* outf      = ajAcdGetOutfile("originalfile"); */
+
     substr = ajStrNew();
     matrix = ajInt2dNew();
     
@@ -123,12 +128,17 @@ int main(int argc, char **argv)
 
     ajb=ajListNew();
     
+    (void) ajFmtPrintAppS(&tmpStr,
+			  "Hits above +%.2f SD (%.2f)",
+			  minsd,minscore);
+    ajReportSetHeader(report, tmpStr);
 
     while(ajSeqallNext(seqall, &seq))
     {
 	begin = ajSeqallBegin(seqall);
 	end   = ajSeqallEnd(seqall);
 
+	TabRpt = ajFeattableNewSeq(seq);
 	strand = ajSeqStrCopy(seq);
 	ajStrToUpper(&strand);
 
@@ -161,26 +171,40 @@ int main(int argc, char **argv)
 		++n;
 	    }
 	}
+	hth_report_hits(&ajb, lastcol, report, TabRpt);
+
+	ajReportWrite(report, TabRpt, seq);
+	ajFeattableDel(&TabRpt);
 	ajStrDel(&strand);
     }
     
-    if(!n)
-	ajFmtPrintF(outf,"\nNo hits above +%.2f SD (%.2f)\n",minsd,minscore);
+
+    if(!n) {
+	if (outf) {
+	  ajFmtPrintF(outf,"\nNo hits above +%.2f SD (%.2f)\n",
+		      minsd,minscore);
+	}
+    }
     else
     {
-        ajFmtPrintF(outf,"\nHELIXTURNHELIX: Nucleic Acid Binding Domain search\n\n");
-	ajFmtPrintF(outf,"\nHits above +%.2f SD (%.2f)\n",minsd,minscore);
-	hth_print_hits(&ajb, n, minsd, lastcol, eightyseven, outf);
+        if (outf) {
+	  ajFmtPrintF(outf,
+		      "\nHELIXTURNHELIX: Nucleic Acid Binding Domain search\n\n");
+	  ajFmtPrintF(outf,"\nHits above +%.2f SD (%.2f)\n",minsd,minscore);
+	  hth_print_hits(&ajb, n, minsd, lastcol, eightyseven, outf);
+	}
     }
-    
 
     ajInt2dDel(&matrix);
 
     ajSeqDel(&seq);
     ajStrDel(&substr);
     ajListDel(&ajb);
-    ajFileClose(&outf);
+    if (outf)
+      ajFileClose(&outf);
     
+    (void) ajReportClose(report);
+
     ajExit();
     return 0;
 }
@@ -409,3 +433,81 @@ static void hth_print_hits(AjPList *ajb, ajint n, float minsd, ajint lastcol,
     return;
 }
 
+/* @funcstatic hth_report_hits ************************************************
+**
+** Undocumented.
+**
+** @param [?] ajb [AjPList*] Undocumented
+** @param [?] n [ajint] Undocumented
+** @param [?] lastcol [ajint] Undocumented
+** @param [?] report [AjPReport] Undocumented
+** @@
+******************************************************************************/
+
+
+static void hth_report_hits(AjPList *ajb, ajint lastcol,
+			    AjPReport report,
+			    AjPFeattable TabRpt)
+{
+    DNAB     **lp;
+
+    AjPInt   hp=NULL;
+    AjPFloat hsd=NULL;
+
+    ajint n;
+    ajint i;
+    AjPFeature gf = NULL;
+    
+    AjPStr tmpStr = NULL;
+    static AjPStr fthit = NULL;
+
+    if (!fthit)
+      ajStrAssC(&fthit, "hit");
+
+    /* AJCNEW (lp, n);*/
+
+    hp  = ajIntNew();
+    hsd = ajFloatNew();
+
+    n = ajListToArray(*ajb, (void***) &lp);
+
+    if (!n) return;
+
+    for(i=0;i<n;++i)
+    {
+      /*
+	if(!ajListPop(*ajb,(void **)&lp[i]))
+	    ajFatal("Fatal bug. List of hits ended too soon");
+      */
+	ajIntPut(&hp,i,i);
+	ajFloatPut(&hsd,i,lp[i]->sd);
+    }
+    ajSortFloatIncI(ajFloatFloat(hsd),ajIntInt(hp),n);
+    ajFloatDel(&hsd);
+    
+    for(i=0;i<n;++i)
+    {
+        gf = ajFeatNewProt (TabRpt, NULL, fthit,
+			    lp[ajIntGet(hp,i)]->pos,
+			    lp[ajIntGet(hp,i)]->pos+lastcol-1,
+			    lp[ajIntGet(hp,i)]->wt);
+	ajFmtPrintS(&tmpStr, "*pos %.2f", lp[ajIntGet(hp,i)]->pos);
+	ajFeatTagAdd (gf, NULL, tmpStr);
+	ajFmtPrintS(&tmpStr, "*sd %.2f", lp[ajIntGet(hp,i)]->sd);
+	ajFeatTagAdd (gf, NULL, tmpStr);
+
+    }
+
+    /*
+     *  Tidy up memory
+     */
+    for(i=0;i<n;++i)
+    {
+	ajStrDel(&lp[i]->name);
+	ajStrDel(&lp[i]->seq);
+    }
+    AJFREE (lp);
+    ajIntDel(&hp);
+    
+    return;
+}

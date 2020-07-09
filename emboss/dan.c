@@ -29,6 +29,15 @@
 
 
 
+static void dan_reportgc(AjPReport report, AjPSeq seq,
+			 AjPFeattable TabRpt, ajint window,
+			 ajint shift, float formamide, float mismatch,
+			 ajint prodLen, float dna, float salt,
+			 float temperature, AjBool isDNA, AjBool isProduct, 
+			 AjBool dothermo, AjBool doplot,
+			 float *xa, float *ta, float *tpa, float *cga,
+			 ajint *npoints);
+
 static void dan_findgc(AjPStr *strand, ajint begin, ajint end, ajint window,
 		       ajint shift, float formamide, float mismatch,
 		       ajint prodLen, float dna, float salt,
@@ -58,6 +67,8 @@ int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPFile    outf=NULL;
+    AjPReport report=NULL;
+    AjPFeattable TabRpt=NULL;
     ajint begin;
     ajint end;
     ajint window;
@@ -91,7 +102,7 @@ int main(int argc, char **argv)
     (void) ajGraphInit("dan", argc, argv);
 
     seqall    = ajAcdGetSeqall("sequence");
-    outf      = ajAcdGetOutfile("outfile");
+    report    = ajAcdGetReport("outfile");
     window    = ajAcdGetInt("windowSize");
     shift     = ajAcdGetInt("shiftIncrement");
     DNAConc   = ajAcdGetFloat("dnaConc");
@@ -101,6 +112,10 @@ int main(int argc, char **argv)
     isRNA     = ajAcdGetBool("rna");
     doplot    = ajAcdGetBool("plot");
     
+    /* obsolete. Can be uncommented in acd file and here to reuse */
+
+    /* outf      = ajAcdGetOutfile("originalfile"); */
+
     if(isProduct)
     {
 	formamide = ajAcdGetFloat("formamide");
@@ -136,10 +151,12 @@ int main(int argc, char **argv)
 	begin = ajSeqallBegin(seqall);
 	end = ajSeqallEnd(seqall);
 	
+	TabRpt = ajFeattableNewSeq(seq);
 
-	if(!doplot)
-	    ajFmtPrintF(outf,"DAN of: %s   from: %d  to: %d\n\n",
-			ajSeqName(seq), begin, end);
+	if(!doplot) {
+	  if (outf) ajFmtPrintF(outf,"DAN of: %s   from: %d  to: %d\n\n",
+				ajSeqName(seq), begin, end);
+	}
 	ajStrToUpper(&strand);
 
 
@@ -150,9 +167,15 @@ int main(int argc, char **argv)
 	AJCNEW (tpa, n);
 	AJCNEW (cga, n);
 
-	dan_findgc(&strand,begin,end,window,shift,formamide,mismatch,
+	if (outf) dan_findgc(&strand, begin, end,
+		   window,shift,formamide,mismatch,
 		   prodLen,DNAConc,saltConc, temperature, isDNA, isProduct, 
 		   doThermo, outf, doplot, xa, ta, tpa, cga, &npoints);
+
+	dan_reportgc (report, seq, TabRpt,
+		      window,shift,formamide,mismatch,
+		      prodLen,DNAConc,saltConc, temperature, isDNA, isProduct, 
+		      doThermo, doplot, xa, ta, tpa, cga, &npoints);
 
 	/*	offset  = window/2;*/
 
@@ -161,11 +184,17 @@ int main(int argc, char **argv)
 		       mintemp);
 	dan_unfmall(xa, ta, tpa, cga);
 	ajStrDel(&strand);
+
+	if (!doplot) ajReportWrite(report, TabRpt, seq);
+	ajFeattableDel(&TabRpt);
     }
     
     ajSeqDel(&seq);
-    ajFileClose(&outf);
+    if (outf)
+      ajFileClose(&outf);
     
+    (void) ajReportClose(report);
+
     ajExit();
     return 0;
 }
@@ -177,7 +206,6 @@ int main(int argc, char **argv)
 /* @funcstatic dan_findgc ****************************************************
 **
 ** Undocumented
-**
 **
 ** @param [R] strand [AjPStr*] Undocumented
 ** @param [R] begin [ajint] Undocumented
@@ -304,8 +332,143 @@ static void dan_findgc(AjPStr *strand, ajint begin, ajint end, ajint window,
     return;
 }
 
+/* @funcstatic dan_reportgc **************************************************
+**
+** Undocumented
+**
+** @param [R] report [AjPReport] Undocumented
+** @param [R] seq [AjPSeq] Undocumented
+** @param [R] fttab [AjPFeattab] Undocumented
+** @param [R] window [ajint] Undocumented
+** @param [R] shift [ajint] Undocumented
+** @param [R] formamide [float] Undocumented
+** @param [R] mismatch [float] Undocumented
+** @param [R] prodLen [ajint] Undocumented
+** @param [R] dna [float] Undocumented
+** @param [R] salt [float] Undocumented
+** @param [R] temperature [float] Undocumented
+** @param [R] isDNA [AjBool] Undocumented
+** @param [R] isproduct [AjBool] Undocumented
+** @param [R] dothermo [AjBool] Undocumented
+** @param [R] doplot [AjBool] Undocumented
+** @param [R] xa [float*] Undocumented
+** @param [R] ta [float*] Undocumented
+** @param [R] tpa [float*] Undocumented
+** @param [R] cga [float*] Undocumented
+** @param [R] np [ajint*] Undocumented
+** @@
+******************************************************************************/
 
 
+static void dan_reportgc(AjPReport report, AjPSeq seq, AjPFeattable TabRpt,
+			 ajint window,
+			 ajint shift, float formamide, float mismatch,
+			 ajint prodLen, float dna, float salt,
+			 float temperature,
+			 AjBool isDNA, AjBool isproduct,  AjBool dothermo,
+			 AjBool doplot, float xa[], 
+			 float ta[], float tpa[], float cga[], ajint *np)
+{
+ 
+    AjPFeature gf = NULL;
+    static AjPStr tmpStr=NULL;
+    static AjBool initialised=0;
+    AjPStr type=NULL;
+    AjPStr substr=NULL;
+    float  fwindow;
+    ajint    i;
+    ajint ibegin;
+    ajint iend;
+    float fprodlen;
+    float TmP1;
+    float TmP2;
+    ajint   e;
+
+    float DeltaG=0.0;
+    float DeltaH;
+    float DeltaS;
+
+    ajint begin = ajSeqBegin(seq);
+    ajint end = ajSeqEnd(seq);
+
+    --begin;
+    --end;
+    
+    if(!initialised)
+    {
+	type = ajStrNew();
+	if(isDNA)
+	    ajStrAssC(&type,"dna");
+	else
+	    ajStrAssC(&type,"rna");
+	ajMeltInit(&type, window);
+	ajStrDel(&type);
+    }
+    
+    fwindow = (float) window;
+    fprodlen = (float) prodLen;
+    substr = ajStrNew();
+
+    e = (end - window) + 2;
+    for(i=begin; i < e; i+=shift)
+    {
+	ibegin = i;
+	iend = i + window -1;
+	ajStrAssSub(&substr, ajSeqStr(seq), ibegin, iend);
+
+	xa[*np] = (float)(i+1);
+	ta[*np] = ajTm(&substr, (iend-ibegin)+1, shift, salt, dna, isDNA);
+	cga[*np] = 100.0 * ajMeltGC(&substr, window);
+
+	if (dothermo) 
+	{
+	    DeltaG = -1. * ajMeltEnergy(&substr, (iend-ibegin)+1, shift, isDNA,
+					ajFalse, &DeltaH, &DeltaS);
+
+	    DeltaH = -1. * DeltaH;
+	    DeltaS = -1. * DeltaS;
+	    DeltaG = DeltaH - 0.001*DeltaS*(273.15+temperature); 
+	}
+
+	if(!doplot)
+	{
+	  gf = ajFeatNewII (TabRpt,
+			    ibegin+1, iend+1);
+	  ajFmtPrintS (&tmpStr, "*tm %4.1f", ta[*np]);
+	  ajFeatTagAdd(gf,  NULL, tmpStr);
+	  ajFmtPrintS (&tmpStr, "*gc %4.1f", cga[*np]);
+	  ajFeatTagAdd(gf,  NULL, tmpStr);
+	  if (dothermo) {
+	    ajFmtPrintS (&tmpStr, "*dg %.3f", DeltaG);
+	    ajFeatTagAdd(gf,  NULL, tmpStr);
+	    ajFmtPrintS (&tmpStr, "*dh %.3f", DeltaH);
+	    ajFeatTagAdd(gf,  NULL, tmpStr);
+	    ajFmtPrintS (&tmpStr, "*ds %.3f", DeltaS);
+	    ajFeatTagAdd(gf,  NULL, tmpStr);
+	  }
+	}
+	if(isproduct)
+	{
+	    TmP1 = 81.5 + 16.6 * (float)log10((double)(salt/1000.0)) + 0.41 *
+		cga[*np];
+	    TmP2 = -(0.65 * formamide) - (675.0/fprodlen) - mismatch;
+	    tpa[*np] = TmP1 + TmP2;
+	    if(!doplot) {
+	      ajFmtPrintS (&tmpStr, "*tmprod %4.1f", tpa[*np]);
+	      ajFeatTagAdd(gf,  NULL, tmpStr);
+	    }
+	}
+
+	if(doplot) xa[*np] += fwindow / 2.0;
+	
+	++(*np);
+    }
+
+    ajStrDel(&substr);
+
+    return;
+}
+	
 /* @funcstatic dan_unfmall ***************************************************
 **
 ** Undocumented.

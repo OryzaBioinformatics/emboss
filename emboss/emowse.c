@@ -105,8 +105,10 @@ int main(int argc, char **argv)
     AjPList      flist;
     EmbPMdata    *data;
     ajint 	 dno;
-    ajint          nfrags;    
+    ajint        nfrags;    
     AjPList      hlist=NULL;
+    AjPStr       datafn = NULL;
+    AjPFile      mfptr=NULL;
 
     
 
@@ -121,6 +123,15 @@ int main(int argc, char **argv)
     tol      = ajAcdGetFloat("tolerance");
     partials = ajAcdGetFloat("partials");
     outf     = ajAcdGetOutfile("outfile");
+    datafn   = ajAcdGetString("aadata");
+    
+
+   ajFileDataNew(datafn, &mfptr);
+    if(!mfptr)
+	ajFatal("%S  not found\n",datafn);
+
+    embPropAminoRead(mfptr);
+
 
 
     freqs = ajDoubleNewL(FGUESS);
@@ -164,7 +175,8 @@ int main(int argc, char **argv)
     emowse_print_hits(outf,hlist,dno,data);
 
     ajListDel(&hlist);
-    
+
+    ajFileClose(&mfptr);
     
     ajExit();
     return 0;

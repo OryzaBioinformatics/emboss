@@ -54,11 +54,16 @@ int main(int argc, char **argv)
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
     AjPFile   outf=NULL;
-
+    AjPReport report=NULL;
     AjPStr    strand=NULL;
     AjPStr    sstr=NULL;
     AjPStr    stmp=NULL;
     AjPStr    substr=NULL;
+    AjPStr    tmpStr = NULL;
+    AjPFeattable TabRpt = NULL;
+    AjPFeature gf = NULL;
+
+    AjPStr fthit = NULL;
 
     AjPFeattabOut featout=NULL;    
 
@@ -95,6 +100,7 @@ int main(int argc, char **argv)
     float minap;
     float score;
     float v;
+    ajint maxscorepos;
     
     AjPFloat agp=NULL;
 
@@ -112,12 +118,17 @@ int main(int argc, char **argv)
 
     seqall    = ajAcdGetSeqall("sequence");
     minlen    = ajAcdGetInt("minlen");
-    outf      = ajAcdGetOutfile("outfile");
-    featout   = ajAcdGetFeatout("featout");
+    report    = ajAcdGetReport("outfile");
+
+    /* obsolete. Can be uncommented in acd file and here to reuse */
+
+    /* outf      = ajAcdGetOutfile("originalfile"); */
+    /* featout   = ajAcdGetFeatout("featout"); */
 
     substr = ajStrNew();
     sstr = ajStrNew();
     stmp = ajStrNew();
+    ajStrAssC(&fthit, "hit");
 
     while(ajSeqallNext(seqall, &seq))
     {
@@ -126,6 +137,7 @@ int main(int argc, char **argv)
 	start = begin-1;
 	stop  = end-1;
 
+	TabRpt = ajFeattableNewSeq(seq);
 	strand = ajSeqStrCopy(seq);
 	
 	ajStrToUpper(&strand);
@@ -188,66 +200,100 @@ int main(int argc, char **argv)
 		}
 		lenap=0;
 	    }
-	    
-	
-	ajFmtPrintF(outf,"ANTIGENIC of %s  from: %d  to: %d\n\n",
-		    ajSeqName(seq),begin,end);
-	ajFmtPrintF(outf,"Length %d residues, score calc from %d to %d\n",
-		ajSeqLen(seq),fpos+3+begin,lpos+3+begin);
-	ajFmtPrintF(outf,"Reporting all peptides over %d residues\n\n",minlen);
-	ajFmtPrintF(outf,
-		    "Found %d hits scoring over %.2f (true average %.2f)\n",
-		nhits,minap,averap);
+
+	ajReportSetHeader(report, tmpStr);
+
+	if (outf) {
+	  ajFmtPrintF(outf,"ANTIGENIC of %s  from: %d  to: %d\n\n",
+		      ajSeqName(seq),begin,end);
+	  ajFmtPrintF(outf,"Length %d residues, score calc from %d to %d\n",
+		      ajSeqLen(seq),fpos+3+begin,lpos+3+begin);
+	  ajFmtPrintF(outf,"Reporting all peptides over %d residues\n\n",minlen);
+	  ajFmtPrintF(outf,
+		      "Found %d hits scoring over %.2f (true average %.2f)\n",
+		      nhits,minap,averap);
+	}
+
 	istart=maxpos;
 	iend=maxpos+maxlen-1;
-	ajFmtPrintF(outf,"Maximum length %d at residues %d->%d\n\n", maxlen,
-		istart+begin, iend+begin);
-	ajStrAssSubC(&stmp,ajStrStr(sstr),istart,iend);    
-	ajFmtPrintF(outf," Sequence:  %S\n",stmp);
-	ajFmtPrintF(outf,"            |");
-	antigenic_padit(&outf,istart,iend);
-	ajFmtPrintF(outf,"|\n");
-	ajFmtPrintF(outf,"%13d",istart+begin);
-	antigenic_padit(&outf,istart,iend);
-	ajFmtPrintF(outf,"%d\n",iend+begin);
+
+	if (outf) {
+	  ajFmtPrintF(outf,"Maximum length %d at residues %d->%d\n\n", maxlen,
+		      istart+begin, iend+begin);
+	  ajStrAssSubC(&stmp,ajStrStr(sstr),istart,iend);    
+	  ajFmtPrintF(outf," Sequence:  %S\n",stmp);
+	  ajFmtPrintF(outf,"            |");
+	  antigenic_padit(&outf,istart,iend);
+	  ajFmtPrintF(outf,"|\n");
+	  ajFmtPrintF(outf,"%13d",istart+begin);
+	  antigenic_padit(&outf,istart,iend);
+	  ajFmtPrintF(outf,"%d\n",iend+begin);
+	}
 
 	if(nhits)
 	{
 	    ajSortFloatIncI(ajFloatFloat(hwt),ajIntInt(hp),nhits);
-	    ajFmtPrintF(outf,
-			"\nEntries in score order, max score at \"*\"\n\n");
+	    if (outf) {
+	      ajFmtPrintF(outf,
+			  "\nEntries in score order, max score at \"*\"\n\n");
+	    }
 	    for(i=nhits-1,j=0;i>-1;--i)
 	    {
 		k = ajIntGet(hp,i);
 		istart = ajIntGet(hpos,k);
 	    
 		iend = istart + ajIntGet(hlen,k) -1;
-		ajFmtPrintF(outf,
-			    "\n[%d] Score %.3f length %d at residues %d->%d\n",
-			    ++j,ajFloatGet(hwt,k),ajIntGet(hlen,k),
-			    istart+begin,iend+begin);
-		ajFmtPrintF(outf,"            ");
-		for(m=istart;m<=iend;++m)
+		if (outf) {
+		  ajFmtPrintF(outf,
+			      "\n[%d] Score %.3f length %d at residues %d->%d\n",
+			      ++j,ajFloatGet(hwt,k),ajIntGet(hlen,k),
+			      istart+begin,iend+begin);
+		  ajFmtPrintF(outf,"            ");
+		  for(m=istart;m<=iend;++m)
 		    if(ajFloatGet(thisap,m) == ajFloatGet(hwt,k))
-			ajFmtPrintF(outf,"*");
+		      ajFmtPrintF(outf,"*");
 		    else
-			ajFmtPrintF(outf," ");
-		ajFmtPrintF(outf,"\n");
-		ajStrAssSubC(&stmp,ajStrStr(sstr),istart,iend);	   ;
-		ajFmtPrintF(outf," Sequence:  %S\n",stmp);
-		ajFmtPrintF(outf,"            |");
-		antigenic_padit(&outf,istart,iend);
-		ajFmtPrintF(outf,"|\n");
-		ajFmtPrintF(outf,"%13d",istart+begin);
-		antigenic_padit(&outf,istart,iend);
-		ajFmtPrintF(outf,"%d\n",iend+begin);
+		      ajFmtPrintF(outf," ");
+		  ajFmtPrintF(outf,"\n");
+		  ajStrAssSubC(&stmp,ajStrStr(sstr),istart,iend);	   ;
+		  ajFmtPrintF(outf," Sequence:  %S\n",stmp);
+		  ajFmtPrintF(outf,"            |");
+		  antigenic_padit(&outf,istart,iend);
+		  ajFmtPrintF(outf,"|\n");
+		  ajFmtPrintF(outf,"%13d",istart+begin);
+		  antigenic_padit(&outf,istart,iend);
+		  ajFmtPrintF(outf,"%d\n",iend+begin);
+		}
+
+		gf = ajFeatNewProt(TabRpt, NULL, fthit,
+				   istart+begin, iend+begin,
+				   ajFloatGet(hwt,k));
+
+		/* highest scoring position */
+
+		maxscorepos=iend+1+1; /* 1 beyond end as a safe default */
+
+		for(m=istart;m<=iend;++m) {
+		  if(ajFloatGet(thisap,m) == ajFloatGet(hwt,k)) {
+		    maxscorepos=m+1;
+		    break;
+		  }
+		}
+		ajFmtPrintS(&tmpStr, "*pos %d", maxscorepos);
+		ajFeatTagAdd (gf, NULL, tmpStr);
 	    }
-	    antigenic_dumptoFeat(nhits,hp,hpos,hlen,thisap,hwt,featout,
-				 ajSeqName(seq),begin);
+
+	    /* obsolete - use -rf with a feature format to get this output */
+
+	    if (featout)
+	      antigenic_dumptoFeat(nhits,hp,hpos,hlen,thisap,hwt,featout,
+				   ajSeqName(seq),begin);
 	}
 	
+	ajReportWrite(report, TabRpt, seq);
 
 	ajStrDel(&strand);
+	ajFeattableDel(&TabRpt);
 
     }
     
@@ -257,7 +303,9 @@ int main(int argc, char **argv)
     ajStrDel(&sstr);
     ajSeqDel(&seq);
     ajStrDel(&strand);
-    ajFileClose(&outf);
+
+    if (outf)
+      ajFileClose(&outf);
 
     ajFloatDel(&thisap);
     ajFloatDel(&hwt);
@@ -267,6 +315,8 @@ int main(int argc, char **argv)
     ajIntDel(&hp);
     ajIntDel(&hlen);
     
+    (void) ajReportClose(report);
+
     ajExit();
     return 0;
 }
@@ -491,7 +541,7 @@ static void antigenic_dumptoFeat(ajint nhits, AjPInt hp, AjPInt hpos,
     ajFeatSortByStart(feattable);
     (void) ajFeatWrite (featout, feattable);
 
-    ajFeattabDel(&feattable);
+    ajFeattableDel(&feattable);
 
     ajStrDel(&name);
     ajStrDel(&source);

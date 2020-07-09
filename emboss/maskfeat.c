@@ -117,7 +117,6 @@ static void maskfeat_FeatSeqMask (AjPSeq seq, AjPStr type, AjPStr maskchar)
     (void) ajSeqReplace(seq, str);
 
     /* tidy up */
-    (void) ajFeattabDel(&feat);
     (void) ajStrDel(&str);
     (void) ajStrDel(&key);
 

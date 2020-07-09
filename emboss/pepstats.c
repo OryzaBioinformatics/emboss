@@ -63,20 +63,29 @@ int main(int argc, char **argv)
     ajint len;
     ajint sum;
     
-    float *dhstat=NULL;
-
+    float   *dhstat=NULL;
+    AjPStr  datafn=NULL;
+    AjPFile mfptr=NULL;
+    
     embInit("pepstats", argc, argv);
 
     a         = ajAcdGetSeq("sequencea");
     termini   = ajAcdGetBool("termini");
     outf      = ajAcdGetOutfile("outfile");
-
+    datafn    = ajAcdGetString("aadata");
 
     substr=ajStrNew();
     be=ajSeqBegin(a);
     en=ajSeqEnd(a);
     ajStrAssSubC(&substr,ajSeqChar(a),be-1,en-1);
     len = en-be+1;
+
+
+   ajFileDataNew(datafn, &mfptr);
+    if(!mfptr)
+	ajFatal("%S  not found\n",datafn);
+
+    embPropAminoRead(mfptr);
 
 
     if(!embReadAminoDataFloatC(DAYHOFF_FILE,&dhstat,0.001))
@@ -136,7 +145,8 @@ int main(int argc, char **argv)
     ajSeqDel(&a);
     ajStrDel(&substr);
     ajFileClose(&outf);
-
+    ajFileClose(&mfptr);
+    
     ajExit();
     return 0;
 }

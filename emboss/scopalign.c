@@ -256,9 +256,10 @@ int main(int argc, char **argv)
 		
 
 		/* Create the output file for the alignment - the name will
-		  be the same as the SCOP family but with ' ' replaced by '_'*/
+		  be the same as the SCOP family but with ' ' and '&' replaced by '_'*/
 		ajStrAss(&align, last_fam);	
 		ajStrSubstituteCC(&align, " ", "_");
+		ajStrSubstituteCC(&align, "&", "_");
 		ajStrInsert(&align, 0, path);	
 		ajStrAppC(&align, ".align");
 

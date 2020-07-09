@@ -3,6 +3,8 @@
 ** Calculate protein charge within a sliding window
 **
 ** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @modified: David Martin July 2001 (dmartin@hgmp.mrc.ac.uk)
+** @modified: Alan Bleasby Oct 2001 (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -25,17 +27,10 @@
 
 #define AMINOFILE "Eamino.dat"
 
-static void  charge_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
-			     float ymax, float ymin, ajint window,
-			     char *sname);
-static AjPFloat charge_read_amino(void);
-
-
-/* @prog charge ***************************************************************
-**
-** Protein charge plot
-**
-******************************************************************************/
+static void  addgraph(AjPGraph graph, ajint limit, float *x, float *y,
+		      float ymax, float ymin,
+		      ajint window, char *sname);
+static AjPFloat read_amino(AjPFile* fp);
 
 int main(int argc, char **argv)
 {
@@ -45,7 +40,9 @@ int main(int argc, char **argv)
     AjPFloat   chg=NULL;
     
     AjPFile    outf;
+    AjPFile    cdata;
     AjPStr     str=NULL;
+    AjPStr     aadata=NULL;
     
     AjBool     plot;
     AjPGraph   graph=NULL;
@@ -78,15 +75,19 @@ int main(int argc, char **argv)
     seqall    = ajAcdGetSeqall("seqall");
     plot      = ajAcdGetBool("plot");
     window    = ajAcdGetInt("window");
-
+    aadata    = ajAcdGetString("aadata");
+    
     
     if(!plot)
 	outf  = ajAcdGetOutfile("outfile");
     else
 	graph = ajAcdGetGraphxy("graph");
+     ajFileDataNew(aadata,&cdata);
+    if(!cdata)
+	ajFatal("Cannot open amino acid data file %S",aadata);
 
 
-    chg = charge_read_amino();
+    chg = read_amino(&cdata);
 
     str = ajStrNew();
     
@@ -143,7 +144,7 @@ int main(int argc, char **argv)
 	    ajGraphSetMulti(graph,1);
 
 	    ajGraphxySetOverLap(graph,ajFalse);
-	    charge_addgraph(graph,limit,x,y,ymax,ymin,window,sname);
+	    addgraph(graph,limit,x,y,ymax,ymin,window,sname);
 
 	    ajGraphxyDisplay(graph,ajTrue);
 	}
@@ -157,29 +158,17 @@ int main(int argc, char **argv)
 	ajFileClose(&outf);
     ajStrDel(&str);
 
+    ajFileClose(&cdata);
+    
     ajExit();
     return 0;
 }
 
-/* @funcstatic charge_addgraph ***********************************************
-**
-** Undocumented.
-**
-** @param [?] graph [AjPGraph] Undocumented
-** @param [?] limit [ajint] Undocumented
-** @param [?] x [float*] Undocumented
-** @param [?] y [float*] Undocumented
-** @param [?] ymax [float] Undocumented
-** @param [?] ymin [float] Undocumented
-** @param [?] window [ajint] Undocumented
-** @param [?] sname [char*] Undocumented
-** @@
-******************************************************************************/
 
 
-
-static void charge_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
-			    float ymax, float ymin, ajint window, char *sname)
+static void  addgraph(AjPGraph graph, ajint limit, float *x, float *y,
+		      float ymax, float ymin,
+		      ajint window, char *sname)
 {
     ajint i;
 
@@ -220,34 +209,26 @@ static void charge_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
     return;
 }
 
-/* @funcstatic charge_read_amino *********************************************
-**
-** Undocumented.
-**
-** @return [AjPFloat] Undocumented
-** @@
-******************************************************************************/
 
-
-static AjPFloat charge_read_amino(void)
+static AjPFloat read_amino(AjPFile* fp)
 {
-    AjPFile  fp=NULL;
+  /*    AjPFile  fp=NULL; */
     AjPStr   line;
     AjPFloat chg=NULL;
     char     c;
     float    v=0.;
     ajint    idx;
     
-    ajFileDataNewC(AMINOFILE,&fp);
-    if(!fp)
+    /*    ajFileDataNewC(AMINOFILE,fp);
+    if(!*fp)
 	ajFatal("Cannot find data file %s\n",AMINOFILE);
-    
+    */
 
     line = ajStrNew();
     chg  = ajFloatNew();
     
 
-    while(ajFileReadLine(fp,&line))
+    while(ajFileReadLine(*fp,&line))
     {
 	if(*ajStrStr(line)=='#' || !ajStrLen(line))
 	    continue;
@@ -257,7 +238,7 @@ static AjPFloat charge_read_amino(void)
 	ajFloatPut(&chg,idx,v);
     }
 
-    ajFileClose(&fp);
+    ajFileClose(fp);
     ajStrDel(&line);
     
     return chg;

@@ -634,6 +634,17 @@ int main(int argc, char **argv)
     ajRegFree(&acsrt2exp);
 
 
+    for(i=0;i<nfiles;++i)
+    {
+	ajStrDel(&seqfiles[i]);
+	ajStrDel(&reffiles[i]);
+	ajStrDel(&twofiles[i]);
+    }
+    AJFREE(seqfiles);
+    AJFREE(reffiles);
+    AJFREE(twofiles);
+
+
     /* Peter. Probably needs more work here */
     ajListDel(&inlist);
     if(acnumtmp)

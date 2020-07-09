@@ -69,9 +69,12 @@ int main(int argc, char **argv, char **env)
 	ajDie ("No application specified.");
 
 
-    /* get the groups and program information */
+    /* 
+    ** get the groups and program information - don't want to ignore
+    ** applications that don't work well under GUIs
+    */
     (void) embGrpGetProgGroups (glist, alpha, env, emboss, embassy,
-		explode, colon);
+		explode, colon, ajFalse);
 
     newlist = ajListNew();
     (void) embGrpKeySearchSeeAlso(newlist, &appgroups, alpha, glist, search); 

@@ -25,30 +25,34 @@
 
 #include "emboss.h"
 
-#define min(x,y) ((x)<=(y) ? (x) : (y))
-#define YES 1 
-#define NO 0
 
-
-static ajint matcher_SIM(char A[], char B[], ajint M, ajint N, ajint K,
-			 ajint Q, ajint R, ajint nseq);
-static ajint matcher_big_pass(char A[], char B[], ajint M, ajint N, ajint K,
+static ajint matcherSim(AjPAlign align,
+			char A[], char B[], ajint M, ajint N, ajint K,
+			ajint Q, ajint R, ajint nseq);
+static ajint matcherBigPass(char A[], char B[], ajint M, ajint N, ajint K,
 			      ajint nseq);
-static ajint matcher_locate(char A[], char B[], ajint nseq);
-static ajint matcher_small_pass(char A[], char B[], ajint count, ajint nseq);
-static ajint matcher_diff(char A[], char B[], ajint M, ajint N, ajint tb,
+static ajint matcherLocate(char A[], char B[], ajint nseq);
+static ajint matcherSmallPass(char A[], char B[], ajint count, ajint nseq);
+static ajint matcherDiff(char A[], char B[], ajint M, ajint N, ajint tb,
 			  ajint te);
-static ajint matcher_calcons(char *aa0, ajint n0, char *aa1, ajint n1,
+static ajint matcherCalcons(char *aa0, ajint n0, char *aa1, ajint n1,
 			     ajint *res, ajint *nc, ajint *nident);
-static ajint matcher_discons(char *seqc0, char *seqc1, ajint nc);
-static ajint matcher_addnode(ajint c, ajint ci, ajint cj, ajint i, ajint j,
+static ajint matcherDiscons(char *seqc0, char *seqc1, ajint nc);
+static ajint matcherAddnode(ajint c, ajint ci, ajint cj, ajint i, ajint j,
 			     ajint K, ajint cost);
-static ajint matcher_no_cross();
+static ajint matcherNoCross(void);
 
 
-
+/* @macro gap *****************************************************************
+**
+** Undocumented
+**
+** @param [r] k [ajint] Symbol
+** @return [] k-symbol indel score 
+******************************************************************************/
 
 #define gap(k)  ((k) <= 0 ? 0 : q+r*(k))	/* k-symbol indel score */
+
 static ajint tt;
 
 static ajint markx;                               /* what to display ? */
@@ -61,7 +65,15 @@ static ajint I, J;				/* current positions of A ,B */
 static ajint no_mat; 				/* number of matches */ 
 static ajint no_mis; 				/* number of mismatches */ 
 static ajint al_len; 				/* length of alignment */
-						/* Append "Delete k" op */
+
+/* @macro DEL *******************************************************
+**
+** Macro for a "Delete k" operation
+**
+** @param [r] k [ajint] Undocumented
+** @return [void]
+******************************************************************************/
+
 #define DEL(k)				\
 { I += k;				\
   al_len += k;				\
@@ -70,7 +82,15 @@ static ajint al_len; 				/* length of alignment */
   else					\
     last = *sapp++ = -(k);		\
 }
-						/* Append "Insert k" op */
+
+/* @macro INS *******************************************************
+**
+** Macro for an "Insert k" operation
+**
+** @param [r] k [ajint] Undocumented
+** @return [void]
+******************************************************************************/
+
 #define INS(k)				\
 { J += k;				\
   al_len += k;				\
@@ -80,12 +100,29 @@ static ajint al_len; 				/* length of alignment */
     last = *sapp++ = (k);		\
 }
 
-						/* Append "Replace" op */
+/* @macro REP *******************************************************
+**
+** Macro for a "Replace" operation
+**
+** @return [void]
+******************************************************************************/
+
 #define REP 				\
 { last = *sapp++ = 0; 			\
   al_len += 1;				\
 }
-/* DIAG() assigns value to x if (ii,jj) is never used before */
+
+/* @macro DIAG *******************************************************
+**
+** assigns value to x if (ii,jj) is never used before
+**
+** @param [r] ii [ajint] Undocumented
+** @param [r] jj [ajint] Undocumented
+** @param [r] x [ajint] Undocumented
+** @param [r] value [ajint] Undocumented
+** @return [void]
+******************************************************************************/
+
 #define DIAG(ii, jj, x, value)				\
 {                                                \
  for ( tt = 1, z = row[(ii)]; z != PAIRNULL; z = z->NEXT )	\
@@ -95,7 +132,19 @@ static ajint al_len; 				/* length of alignment */
     x = ( value );					\
 }
 
-/* replace (ss1, xx1, yy1) by (ss2, xx2, yy2) if the latter is large */
+/* @macro ORDER *******************************************************
+**
+** replace (ss1, xx1, yy1) by (ss2, xx2, yy2) if the latter is large
+**
+** @param [r] ss1 [ajint] Undocumented
+** @param [r] xx1 [ajint] Undocumented
+** @param [r] yy1 [ajint] Undocumented
+** @param [r] ss2 [ajint] Undocumented
+** @param [r] xx2 [ajint] Undocumented
+** @param [r] yy2 [ajint] Undocumented
+** @return [void]
+******************************************************************************/
+
 #define ORDER(ss1, xx1, yy1, ss2, xx2, yy2)		\
 { if ( ss1 < ss2 )					\
     { ss1 = ss2; xx1 = xx2; yy1 = yy2; }		\
@@ -124,7 +173,7 @@ typedef struct NODE
 	  ajint  RIGHT; }  vertex,
      *vertexptr;
 
-static vertexptr matcher_findmax();
+static vertexptr matcherFindmax(void);
 
 		
 vertexptr  *LIST;			/* an array for saving k best scores */
@@ -144,13 +193,14 @@ static ajint q, r;			/* gap penalties */
 static ajint qr;				/* qr = q + r */
 typedef struct ONE { ajint COL ;  struct ONE  *NEXT ;} pair, *pairptr;
 pairptr *row, z; 			/* for saving used aligned pairs */
+
 #define PAIRNULL (pairptr)NULL
 
-char *seqc0, *seqc1;   /* aligned sequences */
+static char *seqc0, *seqc1;   /* aligned sequences */
 
 ajint min0,min1,max0,max1;
 ajint smin0, smin1;
-AjPFile outf;
+AjPFile outf = NULL;
 AjPMatrix matrix=NULL;
 AjPSeqCvt cvt = NULL;
 
@@ -172,6 +222,8 @@ int main(int argc, char **argv)
     ajint i;
     ajint K;
 
+    AjPAlign align = NULL;
+
     embInit("matcher", argc, argv);
     seq = ajAcdGetSeq ("sequencea");
     ajSeqTrim(seq);
@@ -181,14 +233,19 @@ int main(int argc, char **argv)
     K = ajAcdGetInt("alternatives");
     gdelval = ajAcdGetInt("gappenalty");
     ggapval = ajAcdGetInt("gaplength");
-    markx = ajAcdGetInt("markx");
-    llen = ajAcdGetInt("length");
-    outf = ajAcdGetOutfile("outfile");
+    align = ajAcdGetAlign("outfile");
 
-    /* create sequences indexes. i.e. A->0, B->1 ... Z->25 etc.
-       This is done so that ajAZToInt has only to be done once for
-       each residue in the sequence
-       */
+    /* obsolete. Can be uncommented in acd file and here to reuse */
+
+    /* outf      = ajAcdGetOutfile("originalfile"); */
+    /* llen = ajAcdGetInt("length"); */ /* use awidth */
+    /* markx = ajAcdGetInt("markx"); */ /* use aformat markx0 */
+
+    /*
+      create sequence indices. i.e. A->0, B->1 ... Z->25 etc.
+      This is done so that ajAZToInt has only to be done once for
+      each residue in the sequence
+    */
 
     ajSeqToUpper(seq);
     ajSeqToUpper(seq2);
@@ -215,21 +272,42 @@ int main(int argc, char **argv)
     for(i=0;i<ajSeqLen(seq2);i++)
 	ajStrAppK(&aa1str,ajSeqCvtK(cvt, *s2++));
 
-    matcher_SIM(ajStrStr(aa0str),ajStrStr(aa1str),ajSeqLen(seq),ajSeqLen(seq2),
-		K,(gdelval-ggapval),ggapval,2);
+    matcherSim(align, ajStrStr(aa0str),ajStrStr(aa1str),
+	       ajSeqLen(seq),ajSeqLen(seq2),
+	       K,(gdelval-ggapval),ggapval,2);
+
+    if (outf)
+      ajFileClose(&outf);
 
     ajStrDel(&aa0str);
     ajStrDel(&aa1str);
+
+    AJFREE(seqc0);
+    AJFREE(seqc1);
 
     ajExit();
     return 0;
 }
 
 
+/* @funcstatic matcherSim ****************************************************
+**
+** Undocumented
+**
+** @param [r] align [AjPAlign] Alignment object
+** @param [r] A [char*] Undocumented
+** @param [r] B [char*] Undocumented
+** @param [r] M [ajint] Undocumented
+** @param [r] N [ajint] Undocumented
+** @param [r] K [ajint] Undocumented
+** @param [r] Q [ajint] Undocumented
+** @param [r] R [ajint] Undocumented
+** @param [r] nseq [ajint] Number of sequences
+** @return [ajint] Undocumented
+******************************************************************************/
 
-
-
-static ajint matcher_SIM(char *A,char *B,ajint M,ajint N,ajint K,ajint Q,
+static ajint matcherSim (AjPAlign align,
+			 char *A,char *B,ajint M,ajint N,ajint K,ajint Q,
 			 ajint R,ajint nseq)
 {
     ajint endi, endj, stari, starj; 	/* endpoint and startpoint */ 
@@ -241,9 +319,13 @@ static ajint matcher_SIM(char *A,char *B,ajint M,ajint N,ajint K,ajint Q,
     vertexptr cur; 			/* temporary pointer */
     double percent;
   
+    AjPSeq res1  = NULL;
+    AjPSeq res2 = NULL;
+
+    AjPSeqset seqset = NULL;
 
     /* allocate space for consensus */
-    i = (min(M,N))*2;
+    i = (AJMIN(M,N))*2;
     AJCNEW(seqc0,i);
     AJCNEW(seqc1,i);
 
@@ -264,7 +346,7 @@ static ajint matcher_SIM(char *A,char *B,ajint M,ajint N,ajint K,ajint Q,
     AJCNEW(JJ, i);
     AJCNEW(XX, i);
     AJCNEW(YY, i);
-    AJCNEW(S,  min(i,j)*5/4);
+    AJCNEW(S,  AJMIN(i,j)*5/4);
     AJCNEW0(row, (M + 1));
 
     /* set up list for each row (already zeroed by AJCNEW0 macro) */
@@ -280,7 +362,7 @@ static ajint matcher_SIM(char *A,char *B,ajint M,ajint N,ajint K,ajint Q,
 	AJNEW0(LIST[i]);
 
     numnode = lmin = 0;
-    matcher_big_pass(A,B,M,N,K,nseq);
+    matcherBigPass(A,B,M,N,K,nseq);
 
     /* Report the K best alignments one by one. After each alignment is
        output, recompute part of the matrix. First determine the size
@@ -290,7 +372,7 @@ static ajint matcher_SIM(char *A,char *B,ajint M,ajint N,ajint K,ajint Q,
     {
 	if ( numnode == 0 )
 	    ajFatal("The number of alignments computed is too large");
-	cur = matcher_findmax();
+	cur = matcherFindmax();
 	score = cur->SCORE;
 	stari = ++cur->STARI;
 	starj = ++cur->STARJ;
@@ -309,42 +391,75 @@ static ajint matcher_SIM(char *A,char *B,ajint M,ajint N,ajint K,ajint Q,
 	al_len = 0;
 	no_mat = 0;
 	no_mis = 0;
-	matcher_diff(&A[stari]-1, &B[starj]-1,rl,cl,q,q);
+	matcherDiff(&A[stari]-1, &B[starj]-1,rl,cl,q,q);
 
 	min0 = stari;
 	min1 = starj;
 	max0 = stari+rl-1;
 	max1 = starj+cl-1;
-	ns=matcher_calcons(A+1,M,B+1,N,S,&nc,&nident);
+	ns=matcherCalcons(A+1,M,B+1,N,S,&nc,&nident);
 	percent = (double)nident*100.0/(double)nc;
 
-	if (markx < 10) 
+	
+	if (outf)
+	{
+	  if (markx < 10) 
 	    ajFmtPrintF(outf,
 			"\n %5.1f%% identity in %d %s overlap; score: %4d\n",
 			percent,nc,ajSeqName(seq),score);
-	else if (markx==10)
-	{
+	  else if (markx==10)
+	  {
 	    ajFmtPrintF(outf,">>#%d\n",K-count);
 	    ajFmtPrintF(outf,"; sw_score: %d\n",score);
 	    ajFmtPrintF(outf,"; sw_ident: %5.3f\n",percent/100.0);
 	    ajFmtPrintF(outf,"; sw_overlap: %d\n",nc);
+	  }
 	}
 
-	matcher_discons(seqc0,seqc1,ns);
-	if (markx < 10)
+	if (outf)
+	{
+	  matcherDiscons(seqc0,seqc1,ns);
+	  if (markx < 10)
 	    ajFmtPrintF(outf, "\n----------\n");
+	}
+
+	seqset = ajSeqsetNew();
+	res1 = ajSeqNew();
+	res2 = ajSeqNew();
+	ajSeqAssName (res1, ajSeqGetName(seq));
+	ajSeqAssName (res2, ajSeqGetName(seq2));
+	ajSeqAssUsa (res1, ajSeqGetUsa(seq));
+	ajSeqAssUsa (res2, ajSeqGetUsa(seq2));
+	ajSeqAssSeqCI (res1, seqc0, nc);
+	ajSeqAssSeqCI (res2, seqc1, nc);
+	ajSeqsetFromPair (seqset, res1, res2);
+
+	ajAlignDefine (align, seqset);
+
+	ajAlignSetGapI(align, Q, R);
+	ajAlignSetScoreI(align, score);
+	ajAlignSetMatrixInt (align, matrix);
+	ajAlignSetRange (align, min0+1, max0, min1+1, max1);
+	ajAlignSetStats(align, -1, nc, nident, -1, -1, NULL);
+	ajSeqsetDel (&seqset);
 
 	if ( count )
 	{
 	    flag = 0;
-	    matcher_locate(A,B,nseq);
+	    matcherLocate(A,B,nseq);
 	    if ( flag )
-		matcher_small_pass(A,B,count,nseq);
+		matcherSmallPass(A,B,count,nseq);
 	}
     }
+
+    ajAlignWrite (align);
+
     /* now free all the memory */
-    AJFREE(seqc0);
-    AJFREE(seqc1);
+
+    ajAlignClose (align);
+
+    ajAlignDel (&align);
+
     AJFREE(CC);
     AJFREE(DD);
     AJFREE(RR);
@@ -381,14 +496,22 @@ static ajint matcher_SIM(char *A,char *B,ajint M,ajint N,ajint K,ajint Q,
 	AJFREE(LIST[i]);
     AJFREE(LIST);
 
+    ajSeqDel(&res1);
+    ajSeqDel(&res2);
+
     return 0;
 }
 
 
 
+/* @funcstatic matcherNoCross ******************************************
+**
+** return 1 if no node in LIST share vertices with the area
+**
+** @return [ajint] 1 if no node shares vertices
+******************************************************************************/
 
-/* return 1 if no node in LIST share vertices with the area */
-static ajint matcher_no_cross()
+static ajint matcherNoCross(void)
 {
     vertexptr  cur;
     register ajint i;
@@ -415,9 +538,20 @@ static ajint matcher_no_cross()
 }
 
 
+/* @funcstatic matcherBigPass ********************************************
+**
+** Undocumented
+**
+** @param [r] A [char*] Undocumented
+** @param [r] B [char*] Undocumented
+** @param [r] M [ajint] Undocumented
+** @param [r] N [ajint] Undocumented
+** @param [r] K [ajint] Undocumented
+** @param [r] nseq [ajint] Number of sequences
+** @return [ajint] Undocumented
+******************************************************************************/
 
-
-static ajint matcher_big_pass(char *A,char *B,ajint M,ajint N,ajint K,
+static ajint matcherBigPass(char *A,char *B,ajint M,ajint N,ajint K,
 			      ajint nseq)
 { 
     register  ajint  i, j;		/* row and column indices */
@@ -499,17 +633,24 @@ static ajint matcher_big_pass(char *A,char *B,ajint M,ajint N,ajint K,
 	    SS[j] = di;
 	    FF[j] = dj;
 	    if ( c > lmin )		/* add the score into list */
-		lmin = matcher_addnode(c, ci, cj, i, j, K, lmin);
+		lmin = matcherAddnode(c, ci, cj, i, j, K, lmin);
 	}
     }
 
     return 0;
 }
 
+/* @funcstatic matcherLocate ************************************************
+**
+** Undocumented
+**
+** @param [r] A [char*] Undocumented
+** @param [r] B [char*] Undocumented
+** @param [r] nseq [ajint] Number of sequences
+** @return [ajint] Undocumented
+******************************************************************************/
 
-
-
-static ajint matcher_locate(char *A,char *B,ajint nseq)
+static ajint matcherLocate(char *A,char *B,ajint nseq)
 {
     register  ajint  i, j;		/* row and column indices */
     register  ajint  c;			/* best score at current point */
@@ -759,7 +900,7 @@ static ajint matcher_locate(char *A,char *B,ajint nseq)
 		    rflag = 1;
 	    }
 	}
-	if ( (m1 == 1 && n1 == 1) || matcher_no_cross() )
+	if ( (m1 == 1 && n1 == 1) || matcherNoCross() )
 	    break;
     }
     m1--;
@@ -769,9 +910,18 @@ static ajint matcher_locate(char *A,char *B,ajint nseq)
 }
 
 
+/* @funcstatic matcherSmallPass ********************************************
+**
+** Undocumented
+**
+** @param [r] A []char*] Undocumented
+** @param [r] B [char*] Undocumented
+** @param [r] count [ajint] Undocumented
+** @param [r] nseq [ajint] Number of sequences
+** @return [ajint] Undocumented
+******************************************************************************/
 
-
-static ajint matcher_small_pass(char *A,char *B,ajint count,ajint nseq)
+static ajint matcherSmallPass(char *A,char *B,ajint count,ajint nseq)
 {
     register  ajint  i, j;		/* row and column indices */
     register  ajint  c;			/* best score at current point */
@@ -852,16 +1002,28 @@ static ajint matcher_small_pass(char *A,char *B,ajint count,ajint nseq)
 	    SS[j] = di;
 	    FF[j] = dj;
 	    if ( c > lmin )		/* add the score into list */
-		lmin = matcher_addnode(c, ci, cj, i, j, count, lmin);
+		lmin = matcherAddnode(c, ci, cj, i, j, count, lmin);
 	}
     }
     return 0;
 }
 
 
+/* @funcstatic matcherAddnode ********************************************
+**
+** Undocumented
+**
+** @param [r] c [ajint] Undocumented
+** @param [r] ci [ajint] Undocumented
+** @param [r] cj [ajint] Undocumented
+** @param [r] i [ajint] Undocumented
+** @param [r] j [ajint] Undocumented
+** @param [r] K [ajint] Undocumented
+** @param [r] cost [ajint] Undocumented
+** @return [ajint] Undocumented
+******************************************************************************/
 
-
-static ajint matcher_addnode(ajint c, ajint ci, ajint cj, ajint i, ajint j,
+static ajint matcherAddnode(ajint c, ajint ci, ajint cj, ajint i, ajint j,
 			     ajint K, ajint cost)
 {
     ajint found;			/* 1 if the node is in LIST */
@@ -929,9 +1091,14 @@ static ajint matcher_addnode(ajint c, ajint ci, ajint cj, ajint i, ajint j,
     return cost;
 }
 
+/* @funcstatic matcherFindmax *********************************
+**
+** Undocumented
+**
+** @return [vertexpr] Undocumented
+******************************************************************************/
 
-
-static vertexptr matcher_findmax()
+static vertexptr matcherFindmax(void)
 {
     vertexptr  cur;
     register ajint i, j;
@@ -953,10 +1120,21 @@ static vertexptr matcher_findmax()
     return ( cur );
 }
 
+/* @funcstatic matcherDiff ********************************************
+**
+** Undocumented
+**
+** @param [r] A [char*] Undocumented
+** @param [r] B [char*] Undocumented
+** @param [r] M [ajint] Undocumented
+** @param [r] N [ajint] Undocumented
+** @param [r] tb [ajint] Undocumented
+** @param [r] te [ajint] Undocumented
+** @return [ajint] Undocumented
+******************************************************************************/
 
 
-
-static ajint matcher_diff(char *A,char *B,ajint M,ajint N,ajint tb,ajint te)
+static ajint matcherDiff(char *A,char *B,ajint M,ajint N,ajint tb,ajint te)
 {
     ajint   midi, midj, type;		/* Midpoint, type, and cost */
     ajint midc;
@@ -1120,14 +1298,14 @@ static ajint matcher_diff(char *A,char *B,ajint M,ajint N,ajint tb,ajint te)
 
     if (type == 1)
     {
-	matcher_diff(A,B,midi,midj,tb,q);
-	matcher_diff(A+midi,B+midj,M-midi,N-midj,q,te);
+	matcherDiff(A,B,midi,midj,tb,q);
+	matcherDiff(A+midi,B+midj,M-midi,N-midj,q,te);
     }
     else
     {
-	matcher_diff(A,B,midi-1,midj,tb,zero);
+	matcherDiff(A,B,midi-1,midj,tb,zero);
 	DEL(2);
-	matcher_diff(A+midi+1,B+midj,M-midi-1,N-midj,zero,te);
+	matcherDiff(A+midi+1,B+midj,M-midi-1,N-midj,zero,te);
     }
 
     return midc;
@@ -1135,9 +1313,21 @@ static ajint matcher_diff(char *A,char *B,ajint M,ajint N,ajint tb,ajint te)
 }
 
 
+/* @funcstatic matcherCalcons ********************************************
+**
+** Undocumented
+**
+** @param [r] aa0 [char*] Undocumented
+** @param [r] n0 [ajint] Undocumented
+** @param [r] aa1 [char*] Undocumented
+** @param [r] n1 [ajint] Undocumented
+** @param [r] res [ajint*] Undocumented
+** @param [r] nc [ajint*] Undocumented
+** @param [r] nident [ajint*] Undocumented
+** @return [ajint] Undocumented
+******************************************************************************/
 
-
-static ajint matcher_calcons(char *aa0,ajint n0,char *aa1,ajint n1,ajint *res,
+static ajint matcherCalcons(char *aa0,ajint n0,char *aa1,ajint n1,ajint *res,
 			     ajint *nc,ajint *nident)
 {
     ajint i0;
@@ -1214,12 +1404,19 @@ static ajint matcher_calcons(char *aa0,ajint n0,char *aa1,ajint n1,ajint *res,
 }
 
 
-
-
+/* @funcstatic matcherDiscons ********************************************
+**
+** Undocumented
+**
+** @param [r] seqc0 [char*] Undocumented
+** @param [r] seqc1 [char*] Undocumented
+** @param [r] nc [ajint] Undocumented
+** @return [ajint] Undocumented
+******************************************************************************/
 
 #define MAXOUT 201
 
-static ajint matcher_discons(char *seqc0, char *seqc1, ajint nc)
+static ajint matcherDiscons(char *seqc0, char *seqc1, ajint nc)
 {
     char line[3][MAXOUT], cline[2][MAXOUT+10];
     ajint il, i, lend, loff, il1, il2;
@@ -1335,54 +1532,54 @@ static ajint matcher_discons(char *seqc0, char *seqc1, ajint nc)
     for (il=0; il<(nc+llen-1)/llen; il++)
     {
 	loff=il*llen;
-	lend=min(llen,nc-loff);
+	lend=AJMIN(llen,nc-loff);
 
-	ll0 = NO; ll1 = NO;
+	ll0 = ajFalse; ll1 = ajFalse;
 
 	for (i=0; i<2; i++) memset(cline[i],' ',MAXOUT);
 
 	for (i=0; i<lend; i++, ic++,ioff0++,ioff1++)
 	{
-	    cl0 =  cl1 = rl0 = rl1 = YES;
+	    cl0 =  cl1 = rl0 = rl1 = ajTrue;
 	    if ((line[0][i]=seqc0[ic])=='-')
 	    {
 		del0++;
-		cl0=rl0=NO;
+		cl0=rl0=ajFalse;
 	    }
 	    if ((line[2][i]=seqc1[ic])=='-')
 	    {
 		del1++;
-		cl1=rl1=NO;
+		cl1=rl1=ajFalse;
 	    }
 
 	    if (seqc0[ic]==' ')
 	    {
 		del0++;
-		cl0=rl0=NO;
+		cl0=rl0=ajFalse;
 	    }
 	    else
-		ll0 = YES;
+		ll0 = ajTrue;
 
 	    if (seqc1[ic]==' ')
 	    {
 		del1++;
-		cl1=rl1=NO;
+		cl1=rl1=ajFalse;
 	    }
 	    else
-		ll1 = YES;
+		ll1 = ajTrue;
 
 	    qqoff = ajSeqBegin(seq) - 1 + (ajlong)(ioff0-del0)+seq->Offset;
 	    if (cl0 && qqoff%10 == 9)
 	    {
 		sprintf(&cline[0][i],"%8ld",(long)qqoff+1l);
 		cline[0][i+8]=' ';
-		rl0 = NO;
+		rl0 = ajFalse;
 	    }
 	    else if (cl0 && qqoff== -1)
 	    {
 		sprintf(&cline[0][i],"%8ld",0l);
 		cline[0][i+8]=' ';
-		rl0 = NO;
+		rl0 = ajFalse;
 	    }
 	    else if (rl0 && (qqoff+1)%10 == 0)
 	    {
@@ -1395,13 +1592,13 @@ static ajint matcher_discons(char *seqc0, char *seqc1, ajint nc)
 	    {
 		sprintf(&cline[1][i],"%8ld",(long)(lloff+1l));
 		cline[1][i+8]=' ';
-		rl1 = NO;
+		rl1 = ajFalse;
 	    }
 	    else if (cl1 && lloff== -1)
 	    {
 		sprintf(&cline[1][i],"%8ld",0l);
 		cline[1][i+8]=' ';
-		rl1 = NO;
+		rl1 = ajFalse;
 	    }
 	    else if (rl1 && (lloff+1)%10 == 0)
 	    {

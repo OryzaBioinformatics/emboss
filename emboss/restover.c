@@ -97,8 +97,9 @@ int main(int argc, char **argv)
     /* Some of these are not needed but I left them in case someone wants to 
        use them some time ... */
     enzymes   = ajStrNewC("all");
-    min       = 1;
-    max       = 2000000000;
+
+    min       = ajAcdGetInt("min");
+    max       = ajAcdGetInt("max");
     sitelen   = 2;
     threeprime = ajAcdGetBool("threeprime");
     blunt     = ajAcdGetBool("blunt");

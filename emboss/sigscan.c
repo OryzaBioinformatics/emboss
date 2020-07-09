@@ -351,6 +351,7 @@ int main(int argc, char **argv)
     ajXyzHitlistClassify(&hits, listtargets, thresh);
     ajFmtPrint("Hit classified ok\n");
 
+
     
     /*WRITE HITS OUTPUT FILE */
     ajXyzSignatureHitsWrite(hitsf, sig, hits);
@@ -358,6 +359,7 @@ int main(int argc, char **argv)
 
 
     /*WRITE HITS OUTPUT FILE */
+  
     ajXyzSignatureAlignWrite(alignf, sig, hits);
     ajFmtPrint("Alignments file written ok\n");
 

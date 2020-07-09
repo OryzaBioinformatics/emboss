@@ -395,12 +395,12 @@ static void infoalign_OutputFloat (AjPFile outfile, float num, AjBool html,
 				   AjBool after)
 {
     if (html)
-	(void) ajFmtPrintF(outfile, "<tr>");	
+	(void) ajFmtPrintF(outfile, "<td>");	
 
     (void) ajFmtPrintF(outfile, "%f", num);  
 
     if (html)
-	(void) ajFmtPrintF(outfile, "</tr>\n");	
+	(void) ajFmtPrintF(outfile, "</td>\n");	
     else
 	if (after)
 	    (void) ajFmtPrintF(outfile, "\t");
@@ -431,11 +431,11 @@ static void infoalign_OutputInt (AjPFile outfile, ajint num, AjBool html,
 {
 
     if (html)
-	(void) ajFmtPrintF(outfile, "<tr>");	
+	(void) ajFmtPrintF(outfile, "<td>");	
 
     (void) ajFmtPrintF(outfile, "%d", num);  
     if (html)
-	(void) ajFmtPrintF(outfile, "</tr>\n");	
+	(void) ajFmtPrintF(outfile, "</td>\n");	
     else
 	if (after)
 	    (void) ajFmtPrintF(outfile, "\t");
@@ -472,7 +472,7 @@ static void infoalign_OutputStr (AjPFile outfile, AjPStr str, AjBool html,
     ajFmtPrintS(&marginfmt, "%%-%dS", minlength);
      
     if (html)
-	(void) ajFmtPrintF(outfile, "<tr>");	
+	(void) ajFmtPrintF(outfile, "<td>");	
 
     if (html || !after || minlength == NOLIMIT)
 	(void) ajFmtPrintF(outfile, "%S", str);
@@ -486,7 +486,7 @@ static void infoalign_OutputStr (AjPFile outfile, AjPStr str, AjBool html,
 	(void) ajFmtPrintF(outfile, ajStrStr(marginfmt), str);
 
     if (html)
-	(void) ajFmtPrintF(outfile, "</tr>\n");	
+	(void) ajFmtPrintF(outfile, "</td>\n");	
     else
 	if (after &&  ajStrLen(str) >= minlength)
 	    (void) ajFmtPrintF(outfile, "\t");

@@ -257,7 +257,7 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
     AjBool gotoutput = ajFalse;		/* have a line to output */
       
     /* get the feature table of the sequence */
-    feat = ajSeqGetFeat(seq);
+    feat = ajSeqCopyFeat(seq);
     if(!feat)
 	return;
 
@@ -271,19 +271,25 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 	    /* sort by: sense, source, type, start */
 	    ajListSort(feat->Features, showfeat_CompareFeatSource);
 	else if (!ajStrCmpC(sortlist[0], "start"))
-	    /* sort by: sense, source, type, start */
+	    /* sort by: sense, start, type, source, source */
 	    ajListSort(feat->Features, showfeat_CompareFeatPos);
-	else
+	else if (!ajStrCmpC(sortlist[0], "start"))
 	    /* type */
 	    /* sort by: sense, type, source, start */
 	    ajListSort(feat->Features, showfeat_CompareFeatType);
-  
+/*      else */
+            /* no sort */
+
 	iter = ajListIter(feat->Features) ;
 
 	while(ajListIterMore(iter))
 	{
 	    gf = ajListIterNext (iter) ;
 
+            /* ignore remote IDs */
+            if (!ajFeatIsLocal(gf))
+                continue;
+            
 	    /* check that we want to output this sense */
 	    if (!forward && gf->Strand == '+')
 		continue;
@@ -350,7 +356,7 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 
 
     /* tidy up */
-/*    (void) ajFeattabDel(&feat); ajb */
+    (void) ajFeattableDel(&feat);
 
     ajStrDel(&tagsout);
     ajStrDel(&posout);
@@ -662,8 +668,8 @@ static AjBool showfeat_MatchPatternTags (AjPFeature feat, AjPStr tpattern,
 					 AjPStr vpattern)
 {
     AjIList titer;			/* iterator for feat */
-    AjPStr tagnam;			/* tag structure */
-    AjPStr tagval;			/* tag structure */
+    static AjPStr tagnam=NULL;			/* tag structure */
+    static AjPStr tagval=NULL;			/* tag structure */
     AjBool val = ajFalse;		/* returned value */
     AjBool tval;			/* tags result */
     AjBool vval;			/* value result */

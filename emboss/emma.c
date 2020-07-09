@@ -60,6 +60,18 @@ int main(int argc, char **argv, char **env)
     AjPStr pairwise_matrix = NULL;
     float pw_gapc, pw_gapv;
 
+    AjPStr *slowstr;
+    AjPStr pwmstr=NULL;
+    char   pwmc='\0';
+    AjPStr pwdstr=NULL;
+    char   pwdc='\0';
+
+    AjPStr m1str=NULL;
+    AjPStr m2str=NULL;
+    AjPStr m3str=NULL;
+    char   m1c='\0';
+    char   m2c='\0';
+    
     AjPStr *matrix, *dna_matrix;
     AjPStr ma_matrix = NULL;
     float gapc, gapv;
@@ -83,6 +95,13 @@ int main(int argc, char **argv, char **env)
 
     embInit("emma", argc, argv);
 
+    pwmstr = ajStrNew();
+    pwdstr = ajStrNew();
+    m1str  = ajStrNew();
+    m2str  = ajStrNew();
+    m3str  = ajStrNew();
+    
+
     seqall = ajAcdGetSeqall( "inseqs");
     seqout = ajAcdGetSeqoutset( "outseq");
 
@@ -92,7 +111,12 @@ int main(int argc, char **argv, char **env)
     use_dend = ajAcdGetBool( "dend");
     dend_file = ajAcdGetString( "dendfile");
     are_prot = ajAcdGetBool( "prot");
-    do_slow = ajAcdGetBool( "slow");
+
+    slowstr = ajAcdGetList("slowfast");
+    if(*ajStrStr(*slowstr)=='s')
+	do_slow = ajTrue;
+    else
+	do_slow = ajFalse;
 
     ktup = ajAcdGetInt( "ktup");
     gapw = ajAcdGetInt( "gapw");
@@ -100,14 +124,57 @@ int main(int argc, char **argv, char **env)
     window = ajAcdGetInt( "window");
     nopercent = ajAcdGetBool( "nopercent");
 
-    pw_matrix = ajAcdGetSelect( "pwmatrix");
-    pw_dna_matrix = ajAcdGetSelect( "pwdnamatrix");
+    pw_matrix = ajAcdGetList( "pwmatrix");
+    pwmc = *ajStrStr(*pw_matrix);
+    if(pwmc=='b')
+	ajStrAssC(&pwmstr,"blosum");
+    else if(pwmc=='p')
+	ajStrAssC(&pwmstr,"pam");
+    else if(pwmc=='g')
+	ajStrAssC(&pwmstr,"gonnet");
+    else if(pwmc=='i')
+	ajStrAssC(&pwmstr,"id");
+    else if(pwmc=='o')
+	ajStrAssC(&pwmstr,"own");
+
+
+    pw_dna_matrix = ajAcdGetList( "pwdnamatrix");
+    pwdc = *ajStrStr(*pw_dna_matrix);
+    if(pwdc=='i')
+	ajStrAssC(&pwdstr,"iub");
+    else if(pwdc=='c')
+	ajStrAssC(&pwdstr,"clustalw");
+    else if(pwdc=='o')
+	ajStrAssC(&pwdstr,"own");
+
     pairwise_matrix = ajAcdGetString( "pairwisedata");
     pw_gapc = ajAcdGetFloat( "pwgapc");
     pw_gapv = ajAcdGetFloat( "pwgapv");
 
-    matrix = ajAcdGetSelect( "matrix");
-    dna_matrix = ajAcdGetSelect( "dnamatrix");
+    matrix = ajAcdGetList( "matrix");
+    m1c = *ajStrStr(*matrix);
+    if(m1c=='b')
+	ajStrAssC(&m1str,"blosum");
+    else if(m1c=='p')
+	ajStrAssC(&m1str,"pam");
+    else if(m1c=='g')
+	ajStrAssC(&m1str,"gonnet");
+    else if(m1c=='i')
+	ajStrAssC(&m1str,"id");
+    else if(m1c=='o')
+	ajStrAssC(&m1str,"own");
+    
+
+    dna_matrix = ajAcdGetList( "dnamatrix");
+    m2c = *ajStrStr(*dna_matrix);
+    if(m2c=='b')
+	ajStrAssC(&m2str,"iub");
+    else if(m2c=='p')
+	ajStrAssC(&m2str,"clustalw");
+    else if(m2c=='g')
+	ajStrAssC(&m2str,"own");
+
+
     ma_matrix = ajAcdGetString( "mamatrix");
     gapc = ajAcdGetFloat( "gapc");
     gapv = ajAcdGetFloat( "gapv");
@@ -225,12 +292,12 @@ int main(int argc, char **argv, char **env)
 		if (are_prot)
 		{
 		    ajStrAppC( &cmd, " -pwmatrix=");
-		    ajStrApp( &cmd, *pw_matrix);
+		    ajStrApp( &cmd, pwmstr);
 		}
 		else
 		{
 		    ajStrAppC( &cmd, " -pwdnamatrix=");
-		    ajStrApp( &cmd, *pw_dna_matrix);
+		    ajStrApp( &cmd, pwdstr);
 		}
             }
             else
@@ -270,12 +337,12 @@ int main(int argc, char **argv, char **env)
 	if (are_prot)
 	{
 	    ajStrAppC( &cmd, " -matrix=");
-	    ajStrApp( &cmd, *matrix);
+	    ajStrApp( &cmd, m1str);
 	}
 	else
 	{
 	    ajStrAppC( &cmd, " -dnamatrix=");
-	    ajStrApp( &cmd, *dna_matrix);
+	    ajStrApp( &cmd, m2str);
 	}
     }
     else 

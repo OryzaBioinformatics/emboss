@@ -69,7 +69,8 @@ int main(int argc, char **argv)
   
     ajint  begin;
     ajint  end;
-  
+    ajint  len;
+    
     embInit ("equicktandem", argc, argv);
     outfile = ajAcdGetOutfile ("outfile");
     sequence = ajAcdGetSeq ("sequence");
@@ -90,14 +91,14 @@ int main(int argc, char **argv)
 
     /* careful - sequence can be shgorter than the maximum repeat length */
 
-    if (ajStrLen(substr) < maxrepeat)
+    if ((len=ajStrLen(substr)) < maxrepeat)
       maxrepeat = ajStrLen(substr);
 
     for (gap = 1 ; gap <= maxrepeat ; ++gap)
     {
-	back = sq ; front = back + gap ;
+	back = sq ; front = back + gap;
 	score = max = 0 ;
-	while (*front)
+	while (front-sq<=len)
 	{
 	    if (*front == 'Z')
 	    {

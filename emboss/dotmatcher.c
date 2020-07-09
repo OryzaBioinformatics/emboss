@@ -102,7 +102,8 @@ int main(int argc, char **argv)
     ajint e2;
     AjPStr se1;
     AjPStr se2;
-
+    ajint ithresh;
+    
     se1 = ajStrNew();
     se2 = ajStrNew();
     
@@ -116,13 +117,15 @@ int main(int argc, char **argv)
     seq2 = ajAcdGetSeq ("sequenceb");
     graph = ajAcdGetGraph ("graph");
     windowsize = ajAcdGetInt("windowsize");
-    thresh = ajAcdGetFloat("threshold");  
+    ithresh = ajAcdGetInt("threshold");  
     matrix  = ajAcdGetMatrix("matrixfile");
     text = ajAcdGetBool("data");
     outf = ajAcdGetOutfile("outfile");
   
     sub = ajMatrixArray(matrix);
     cvt = ajMatrixCvt(matrix);
+
+    thresh = (float)ithresh;
 
     b1 = ajSeqBegin(seq);
     b2 = ajSeqBegin(seq2);

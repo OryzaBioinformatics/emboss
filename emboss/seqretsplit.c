@@ -23,6 +23,7 @@
 
 #include "emboss.h"
 
+static AjPStr seqretsplitName (AjPTable table, AjPSeq seq);
 
 /* @prog seqretsplit **********************************************************
 **
@@ -37,6 +38,8 @@ int main(int argc, char **argv)
     AjPSeqout seqout;
     AjPSeq seq = NULL;
     AjBool firstonly;
+    AjPTable table=NULL;
+    AjPStr name=NULL;
 
     embInit ("seqretsplit", argc, argv);
 
@@ -44,14 +47,85 @@ int main(int argc, char **argv)
     seqall = ajAcdGetSeqall ("sequence");
 
     firstonly = ajAcdGetBool ("firstonly");
+    table = ajStrTableNewCase (1000); /* 1000 sequences. Number not critical */
+
     while (ajSeqallNext(seqall, &seq))
     {
-	ajSeqAllWrite (seqout, seq);
-	if (firstonly) break;
+      name = seqretsplitName (table, seq);
+      ajSeqAllWrite (seqout, seq);
+      if (firstonly) break;
     }
 
     ajSeqWriteClose (seqout);
+    ajStrTableFree(&table);
 
     ajExit ();
     return 0;
 }
+
+/* @funcstatic seqretsplitName ***********************************************
+**
+** Catches duplicate names, and builds a new unique name for this run
+**
+** @param [w] table [AjPTable] Table of names used so far
+** @param [r] seq [AjPSeq] Sequence object
+** @return [AjPStr] Pointer to old name, or NULL if unchanged
+******************************************************************************/
+
+static AjPStr seqretsplitName (AjPTable table, AjPSeq seq) {
+
+  static AjPStr oldname = NULL;
+  static AjPStr newname = NULL;
+  AjPStr tabname=NULL;
+  AjPStr tabvalue=NULL;
+  static ajint nseq=1;
+  AjPStr ret=NULL;
+
+  ajint i;
+
+  ajStrDel(&oldname);
+
+  if (ajTableGet(table, ajSeqGetName(seq)))
+  {
+    nseq++;
+    ajDebug("seqretsplitName test nseq:%d name '%S'\n",
+	    nseq, ajSeqGetName(seq));
+
+    for (i=2; i <= nseq; i++) {
+      ajFmtPrintS(&newname, "%S.%03d", ajSeqGetName(seq), i);
+      if (!ajTableGet(table, newname)) {
+	ajStrAssS(&oldname, ajSeqGetName(seq));
+	ajSeqAssName(seq, newname);
+	ajWarn("Duplicate name '%S' changed to '%S'",
+		oldname, newname);
+	ajDebug("seqretsplitName oldname '%S' newname '%S'\n",
+		oldname, newname);
+	ret = oldname;
+	break;
+      }
+    }
+
+    if (!ret)
+    {
+      ajWarn("Unable to set new name for duplicate sequence number %d '%S'",
+	     nseq, ajSeqGetName(seq));
+    }
+  }
+  else
+  {
+    ajDebug("seqretsplitName OK name '%S'\n",
+	    ajSeqGetName(seq));
+  }
+
+  ajStrAssS (&tabname, ajSeqGetName(seq));
+  ajStrAssC (&tabvalue, "");	/* can't be NULL - needed to test Get result */
+  ajTablePut (table, tabname, tabvalue);
+
+  ajDebug("seqretsplitName add to table '%S'\n", tabname);
+  ajStrTableTrace(table);
+
+  return ret;
+}
+
+
+

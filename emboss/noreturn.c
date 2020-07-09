@@ -36,6 +36,7 @@ int main(int argc, char **argv)
     AjPFile outf = NULL;
     AjPStr  line = NULL;
     ajint   len;
+    ajint i;
     char    *p;
     
     embInit("noreturn", argc, argv);
@@ -50,8 +51,25 @@ int main(int argc, char **argv)
 	p   = MAJSTRSTR(line);
 	len = ajStrLen(line);
 	if(len)
-	    if(p[len-1] == 0x0d)
-		p[len-1] = 0x00;
+	{
+	  if(p[len-1] == 0x0d)
+	  {
+	    p[len-1] = 0x00;
+	  }
+
+	  /* for files with 0d but no newline,
+	  ** we have everything in one line
+	  ** so we should replace the rest directly
+	  */
+
+	  for (i=0;i<len;i++)
+	  {
+	    if (p[i] ==  0x0d)
+	    {
+	      p[i] = 0x0a;
+	    }
+	  }
+	}
 
 	ajFmtPrintF(outf,"%s\n",p);
     }
@@ -63,3 +81,4 @@ int main(int argc, char **argv)
     ajExit();
     return 0;
 }
+

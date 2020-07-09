@@ -261,29 +261,23 @@ int main(int argc, char **argv)
 
 	    /* write features and tidy up */
 	    (void) ajFeatWrite(outf, tab);        
-	    ajFeattabDel(&tab);
+	    ajFeattableDel(&tab);
 	}
 	
         while(ajListPop(l16,(void **)&aptr))
             embMatMatchDel(&aptr);
-        while(ajListPop(l16rev,(void **)&aptr))
-            embMatMatchDel(&aptr);
+
         while(ajListPop(l8,(void **)&aptr))
             embMatMatchDel(&aptr);
-        while(ajListPop(l8rev,(void **)&aptr))
-            embMatMatchDel(&aptr);
-                
 	
 	/*
 	 *  tidy up - (l8rev and l16rev have already been deleted in
 	 *  ajListPushList)
-	 *  but not if the routine was never called. Doesn't hurt trying
-	 *  to delete  a null ptr though
+	 *  but not if the routine was never called.
 	 */
 	ajListDel(&l16);
 	ajListDel(&l8);
-        ajListDel(&l16rev);
-        ajListDel(&l8rev);
+
     }
     
     if(type16==6)

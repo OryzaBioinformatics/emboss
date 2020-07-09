@@ -31,11 +31,18 @@ static void showseq_FormatShow(EmbPShow ss, AjPStr format, AjPTrn trnTable,
 			       AjPRange highlight, AjBool threeletter,
 			       AjBool numberseq, AjPFeattable feat,
 			       ajint orfminsize, AjPList restrictlist,
-			       AjBool flat);
+			       AjBool flat, AjPRange annotation);
 
 static void showseq_read_equiv(AjPFile *equfile, AjPTable *table);
 static void showseq_read_file_of_enzyme_names(AjPStr *enzymes);
-
+static AjBool showseq_MatchFeature (AjPFeature gf, AjPStr
+        matchsource, AjPStr matchtype, ajint matchsense, float minscore,
+        float maxscore, AjPStr matchtag, AjPStr matchvalue);
+static AjBool showseq_MatchPatternTags (AjPFeature feat, AjPStr tpattern,
+                                         AjPStr vpattern);
+static void showseq_FeatureFilter(AjPFeattable featab, AjPStr
+        matchsource, AjPStr matchtype, ajint matchsense, float minscore,
+        float maxscore, AjPStr matchtag, AjPStr matchvalue);
 
 #define ENZDATA "REBASE/embossre.enz"
 #define EQUDATA "embossre.equ"
@@ -78,6 +85,7 @@ int main(int argc, char **argv)
     ajint orfminsize;
     AjBool flat;
     AjPTrn trnTable;
+    AjPRange annotation;
 
     /* holds ACD or constructed format for output */
     AjPStr format=ajStrNew();
@@ -102,6 +110,15 @@ int main(int argc, char **argv)
     ajint       hits;
     AjPList   restrictlist=NULL;
 
+    /* feature filter criteria */
+    AjPStr matchsource = NULL;
+    AjPStr matchtype = NULL;
+    ajint matchsense;
+    float minscore;
+    float maxscore;
+    AjPStr matchtag = NULL;
+    AjPStr matchvalue = NULL;
+
 
     (void) embInit ("showseq", argc, argv);
 
@@ -113,6 +130,7 @@ int main(int argc, char **argv)
     translaterange = ajAcdGetRange ("translate");
     uppercase = ajAcdGetRange ("uppercase");
     highlight = ajAcdGetRange ("highlight");
+    annotation = ajAcdGetRange ("annotation");
     threeletter = ajAcdGetBool ("threeletter");
     numberseq = ajAcdGetBool ("number");
     width = ajAcdGetInt ("width");
@@ -139,6 +157,15 @@ int main(int argc, char **argv)
     enzymes = ajAcdGetString ("enzymes");
     equiv = ajAcdGetBool("preferred");       
   
+    /* feature filter criteria */
+    matchsource = ajAcdGetString ("matchsource");
+    matchtype = ajAcdGetString ("matchtype");
+    matchsense = ajAcdGetInt ("matchsense");
+    minscore = ajAcdGetFloat ("minscore");
+    maxscore = ajAcdGetFloat ("maxscore");
+    matchtag = ajAcdGetString ("matchtag");
+    matchvalue = ajAcdGetString ("matchvalue");
+
     /* read the local file of enzymes names */
     showseq_read_file_of_enzyme_names(&enzymes);
   
@@ -156,21 +183,21 @@ int main(int argc, char **argv)
 	    (void) ajStrAppC(&format, " ");
 	}
     else if (!ajStrCmpC(formatlist[0], "1"))
-	(void) ajStrAssC(&format, "S ");
+	(void) ajStrAssC(&format, "S A ");
     else if (!ajStrCmpC(formatlist[0], "2"))
-	(void) ajStrAssC(&format, "B N T S F ");
+	(void) ajStrAssC(&format, "B N T S A F ");
     else if (!ajStrCmpC(formatlist[0], "3"))
-	(void) ajStrAssC(&format, "B N T S ");
+	(void) ajStrAssC(&format, "B N T S A ");
     else if (!ajStrCmpC(formatlist[0], "4"))
-	(void) ajStrAssC(&format, "B N T S B 1 F ");
+	(void) ajStrAssC(&format, "B N T S B 1 A F ");
     else if (!ajStrCmpC(formatlist[0], "5"))
-	(void) ajStrAssC(&format, "B N T S B 1 2 3 F ");
+	(void) ajStrAssC(&format, "B N T S B 1 2 3 A F ");
     else if (!ajStrCmpC(formatlist[0], "6"))
-	(void) ajStrAssC(&format, "B N T S B 1 2 3 T -3 -2 -1 F ");
+	(void) ajStrAssC(&format, "B N T S B 1 2 3 T -3 -2 -1 A F ");
     else if (!ajStrCmpC(formatlist[0], "7"))
-	(void) ajStrAssC(&format, "B R S N T C -R B 1 2 3 T -3 -2 -1 ");
+	(void) ajStrAssC(&format, "B R S N T C -R B 1 2 3 T -3 -2 -1 A ");
     else if (!ajStrCmpC(formatlist[0], "8"))
-	(void) ajStrAssC(&format, "B 1 2 3 N T R S T C -R T -3 -2 -1 F ");
+	(void) ajStrAssC(&format, "B 1 2 3 N T R S T C -R T -3 -2 -1 A F ");
     else
 	(void) ajFatal("Invalid format type: %S", formatlist[0]);
 
@@ -217,7 +244,11 @@ int main(int argc, char **argv)
 	}
 
 	/* get the feature table of the sequence */
-	feat = ajSeqGetFeat(seq);
+	feat = ajSeqCopyFeat(seq);
+
+        /* delete features in the table that don't match our criteria */
+        showseq_FeatureFilter(feat, matchsource, matchtype, matchsense,
+                              minscore, maxscore, matchtag, matchvalue);
 
 	/* get the restriction cut sites */
 	/*
@@ -269,14 +300,13 @@ int main(int argc, char **argv)
 	(void) showseq_FormatShow(ss, format, trnTable, translaterange,
 				  uppercase, highlight, threeletter,
 				  numberseq, feat, orfminsize, restrictlist,
-				  flat);
+				  flat, annotation);
 
 	(void) embShowPrint(outfile, ss);
 
 	/* tidy up */
 	(void) embShowDel(&ss);
-	/* AJB fixed: trying to delete memory already deleted */
-	/*   (void) ajFeattabDel(&feat); */
+
 	(void) ajListDel(&restrictlist);
 
 	/* add a gratuitous newline at the end of the sequence */
@@ -316,6 +346,7 @@ int main(int argc, char **argv)
 **                              (0 for no ORFs)
 ** @param [r] restrictlist [AjPList] restriction enzyme cut site list (or NULL)
 ** @param [r] flat [AjBool] show restriction sites in flat format
+** @param [r] annotation [AjPRange] ranges to annotate
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -325,7 +356,7 @@ static void showseq_FormatShow(EmbPShow ss, AjPStr format, AjPTrn trnTable,
 			       AjPRange highlight,  AjBool threeletter,
 			       AjBool numberseq, AjPFeattable feat,
 			       ajint orfminsize, AjPList restrictlist,
-			       AjBool flat)
+			       AjBool flat, AjPRange annotation)
 {
     AjPStrTok tok;
     char white[] = " \t\n\r";
@@ -373,6 +404,8 @@ static void showseq_FormatShow(EmbPShow ss, AjPStr format, AjPTrn trnTable,
 	    (void) embShowAddRE (ss, 1, restrictlist, flat);
 	else if (!ajStrCmpC(code, "-R"))
 	    (void) embShowAddRE (ss, -1, restrictlist, flat);
+	else if (!ajStrCmpC(code, "A"))
+	    (void) embShowAddNote (ss, annotation);
 	else
 	    (void) ajDie("Formatting code not recognised: '%S'", code);
     }
@@ -461,3 +494,148 @@ static void showseq_read_file_of_enzyme_names(AjPStr *enzymes)
 
     return;
 }
+
+/* @funcstatic showseq_showseq_FeatureFilter *******************************
+**
+** Removes unwanted features from a feature table
+**
+** @param [r] featab [AjPFeattable] Feature table to filter
+** @param [r] matchsource [AjPStr] Required Source pattern
+** @param [r] matchtype [AjPStr] Required Type pattern
+** @param [r] matchsense [ajint] Required Sense pattern +1,0,-1 (or other value$
+** @param [r] minscore [float] Min required Score pattern
+** @param [r] maxscore [float] Max required Score pattern
+** @param [r] matchtag [AjPStr] Required Tag pattern
+** @param [r] matchvalue [AjPStr] Required Value pattern
+** @return [AjBool] True if feature matches criteria
+** @@
+******************************************************************************/
+
+static void showseq_FeatureFilter(AjPFeattable featab, AjPStr
+				  matchsource, AjPStr matchtype, ajint matchsense, float minscore,
+				  float maxscore, AjPStr matchtag, AjPStr matchvalue)
+{
+
+    AjIList iter = NULL;
+    AjPFeature gf = NULL;
+
+    /* foreach feature in the feature table */
+    if (featab)
+    {
+	iter = ajListIter(featab->Features);
+	while(ajListIterMore(iter))
+	{
+	    gf = (AjPFeature)ajListIterNext(iter);
+	    if (!showseq_MatchFeature(gf, matchsource, matchtype, matchsense,
+				      minscore, maxscore, matchtag,
+				      matchvalue))
+	    {
+		/* no match, so delete feature from feature table */
+		ajFeatDel(&gf);
+		ajListRemove(iter);
+	    }  
+	}
+	ajListIterFree(iter);
+    }
+
+    return;
+}
+
+/* @funcstatic showseq_MatchFeature *****************************************
+**
+** Test if a feature matches a set of criteria
+**
+** @param [r] gf [AjPFeature] Feature to test
+** @param [r] matchsource [AjPStr] Required Source pattern
+** @param [r] matchtype [AjPStr] Required Type pattern
+** @param [r] matchsense [ajint] Required Sense pattern +1,0,-1 (or other value$
+** @param [r] minscore [float] Min required Score pattern
+** @param [r] maxscore [float] Max required Score pattern
+** @param [r] matchtag [AjPStr] Required Tag pattern
+** @param [r] matchvalue [AjPStr] Required Value pattern
+** @return [AjBool] True if feature matches criteria
+** @@
+******************************************************************************/
+
+static AjBool showseq_MatchFeature (AjPFeature gf, AjPStr
+        matchsource, AjPStr matchtype, ajint matchsense, float minscore,
+        float maxscore, AjPStr matchtag, AjPStr matchvalue)
+{
+
+/* if maxscore < minscore, then don't test the scores */
+AjBool scoreok = (minscore < maxscore);
+
+/* ignore remote IDs */
+  if (!ajFeatIsLocal(gf))
+    return ajFalse;
+  
+/* check source, type, sense, score, tags, values */
+/* Match anything:
+**      for strings, '*'
+**      for sense, 0
+**      for score, maxscore <= minscore
+*/
+  if (!embMiscMatchPattern (gf->Source, matchsource) ||
+      !embMiscMatchPattern (gf->Type, matchtype) ||
+      (gf->Strand == '+' && matchsense == -1) ||
+      (gf->Strand == '-' && matchsense == +1) ||
+      (scoreok && gf->Score < minscore) ||
+      (scoreok && gf->Score > maxscore) ||
+      !showseq_MatchPatternTags(gf, matchtag, matchvalue))
+    return ajFalse;
+
+  return ajTrue;                        
+}
+        
+/* @funcstatic showseq_MatchPatternTags **************************************
+**
+** Checks for a match of the tagpattern and valuepattern to at least one
+** tag=value pair
+**
+** @param [r] feat [AjPFeature] Feature to process
+** @param [r] tpattern [AjPStr] tags pattern to match with
+** @param [r] vpattern [AjPStr] values pattern to match with
+**
+** @return [AjBool] ajTrue = found a match
+** @@
+******************************************************************************/
+
+static AjBool showseq_MatchPatternTags (AjPFeature feat, AjPStr tpattern,
+                                         AjPStr vpattern)
+{
+    AjIList titer;                      /* iterator for feat */
+    static AjPStr tagnam=NULL;          /* tag structure */
+    static AjPStr tagval=NULL;          /* tag structure */
+    AjBool val = ajFalse;               /* returned value */
+    AjBool tval;                        /* tags result */
+    AjBool vval;                        /* value result */
+
+
+    /*
+     *  if there are no tags to match, but the patterns are
+     *  both '*', then allow this as a match
+     */
+    if (!ajStrCmpC(tpattern, "*") &&
+        !ajStrCmpC(vpattern, "*"))
+        return ajTrue;
+
+    /* iterate through the tags and test for match to patterns */
+    titer = ajFeatTagIter(feat);
+    while (ajFeatTagval(titer, &tagnam, &tagval))
+    {
+        tval = embMiscMatchPattern(tagnam, tpattern);
+        if(!ajStrLen(tagval))           /* if tag has no value */
+            return val;
+        vval = embMiscMatchPattern(tagval, vpattern);
+        if (tval && vval)
+        {
+            val = ajTrue;
+            break;
+        }
+    }
+    (void) ajListIterFree(titer);
+
+    return val;
+}
+
+

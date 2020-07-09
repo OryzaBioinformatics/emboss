@@ -23,7 +23,8 @@
 
 #include "emboss.h"
 
-static void merger_Merge (AjPStr *merged, AjPFile outf, char *a, char *b,
+static void merger_Merge (AjPAlign align,
+			  AjPStr *merged, AjPFile outf, char *a, char *b,
 			  AjPStr m, AjPStr n, ajint start1, ajint start2,
 			  float score, AjBool mark, float **sub, AjPSeqCvt cvt,
 			  char *namea, char *nameb, ajint begina,
@@ -42,6 +43,7 @@ static AjBool merger_bestquality (char * a, char *b, ajint apos, ajint bpos);
 
 int main(int argc, char **argv)
 {
+    AjPAlign align;
     AjPSeq a;
     AjPSeq b;
     AjPSeqout seqout;
@@ -51,7 +53,7 @@ int main(int argc, char **argv)
 
     AjPStr merged=NULL;
     
-    AjPFile outf;
+    AjPFile outf=NULL;
     
     ajint    lena;
     ajint    lenb;
@@ -86,7 +88,11 @@ int main(int argc, char **argv)
     matrix    = ajAcdGetMatrixf("datafile");
     gapopen   = ajAcdGetFloat("gapopen");
     gapextend = ajAcdGetFloat("gapextend");
-    outf      = ajAcdGetOutfile("report");
+    align     = ajAcdGetAlign("outfile");
+
+    /* obsolete. Can be uncommented in acd file and here to reuse */
+
+    /* outf      = ajAcdGetOutfile("originalfile"); */
 
     gapopen = ajRoundF(gapopen, 8);
     gapextend = ajRoundF(gapextend, 8);
@@ -114,8 +120,13 @@ int main(int argc, char **argv)
     lena = ajSeqLen(a);
     lenb = ajSeqLen(b);
     len = lena*lenb;
+
     if(len>maxarr)
     {
+
+      ajDebug("merger: resize path, len to %d (%d * $d)\n",
+	      len, lena, lenb);
+
         AJCRESIZE(path,len);
         AJCRESIZE(compass,len);
         maxarr=len;
@@ -140,17 +151,25 @@ int main(int argc, char **argv)
 
     /* now construct the merged sequence, uppercase the bits of the two
        input sequences which are used in the merger */
-    (void) merger_Merge(&merged, outf,p,q,m,n,start1,start2,score,1,sub,cvt,
+    (void) merger_Merge(align,
+			&merged, outf,p,q,m,n,start1,start2,score,1,sub,cvt,
 			ajSeqName(a),ajSeqName(b),begina,beginb);
 
     /* print the alignment */
-    (void) embAlignPrintGlobal(outf,p,q,m,n,start1,start2,score,1,sub,cvt,
-			       ajSeqName(a),ajSeqName(b),begina,beginb);
+    if (outf)
+      (void) embAlignPrintGlobal(outf,p,q,m,n,start1,start2,score,1,sub,cvt,
+				 ajSeqName(a),ajSeqName(b),begina,beginb);
+    embAlignReportGlobal(align, a, b, m, n,
+			 start1, start2, gapopen, gapextend,
+			 score, matrix);
 
     /* write the merged sequence */    
     (void) ajSeqReplace(a, merged);
     (void) ajSeqWrite (seqout, a);
     (void) ajSeqWriteClose (seqout);
+
+    (void) ajAlignClose(align);
+    (void) ajAlignDel(&align);
 
     AJFREE(compass);
     AJFREE(path);
@@ -170,6 +189,7 @@ int main(int argc, char **argv)
 ** Print a global alignment
 ** Nucleotides or proteins as needed.   
 ** 
+** @param [w] align [AjPAlign] Alignment object
 ** @param [w] ms [AjPStr *] output merged sequence
 ** @param [w] outf [AjPFile] output stream
 ** @param [r] a [char *] complete first sequence
@@ -190,7 +210,8 @@ int main(int argc, char **argv)
 ** @return [void]
 ******************************************************************************/
 
-static void merger_Merge (AjPStr *ms, AjPFile outf, char *a, char *b,
+static void merger_Merge (AjPAlign align,
+			  AjPStr *ms, AjPFile outf, char *a, char *b,
 			  AjPStr m, AjPStr n, ajint start1, ajint start2,
 			  float score, AjBool mark, float **sub, AjPSeqCvt cvt,
 			  char *namea, char *nameb, ajint begina, ajint beginb)
@@ -206,6 +227,7 @@ static void merger_Merge (AjPStr *ms, AjPFile outf, char *a, char *b,
     /* lengths of the sequences after the aligned region */
     ajint alen;
     ajint blen;
+    static AjPStr tmpstr;
 
     /* output the left hand side */
     if (start1 > start2)
@@ -215,13 +237,19 @@ static void merger_Merge (AjPStr *ms, AjPFile outf, char *a, char *b,
 
 	if (start2)
 	{
-	    (void) ajFmtPrintF(outf, "WARNING: *************************"
-			       "********");
-	    (void) ajFmtPrintF(outf,
-			       "The region of alignment only starts at "
-			       "position %d of sequence %s", start2+1, nameb);
-	    (void) ajFmtPrintF(outf, "Only the sequence of %s is being used "
-			       "before this point\n\n", namea);
+	    (void) ajFmtPrintAppS(&tmpstr, "WARNING: *************************"
+			       "********\n");
+	    (void) ajFmtPrintAppS(&tmpstr,
+				  "The region of alignment only starts at "
+				  "position %d of sequence %s\n",
+				  start2+1, nameb);
+	    (void) ajFmtPrintAppS(&tmpstr,
+				  "Only the sequence of %s is being used "
+				  "before this point\n\n", namea);
+	    ajAlignSetTailApp(align, tmpstr);
+	    if (outf)
+	      ajFmtPrintF (outf, "%S", tmpstr);
+	    ajStrDel(&tmpstr);
 	}
     }
     else if (start2 > start1)
@@ -231,32 +259,50 @@ static void merger_Merge (AjPStr *ms, AjPFile outf, char *a, char *b,
 
 	if (start1)
 	{
-	    (void) ajFmtPrintF(outf, "WARNING: **************************"
-			       "*******");
-	    (void) ajFmtPrintF(outf, "The region of alignment only starts at "
-			       "position %d of sequence %s", start1+1, namea);
-	    (void) ajFmtPrintF(outf, "Only the sequence of %s is being used "
-			       "before this point\n\n", nameb);
+	    (void) ajFmtPrintAppS(&tmpstr,
+				  "WARNING: **************************"
+				  "*******\n");
+	    (void) ajFmtPrintAppS(&tmpstr,
+				  "The region of alignment only starts at "
+				  "position %d of sequence %s\n",
+				  start1+1, namea);
+	    (void) ajFmtPrintAppS(&tmpstr,
+				  "Only the sequence of %s is being used "
+				  "before this point\n\n", nameb);
+	    ajAlignSetTailApp(align, tmpstr);
+	    if (outf)
+	      ajFmtPrintF (outf, "%S", tmpstr);
+	    ajStrDel(&tmpstr);
 	}
     }
     else if (start1 && start2)
     {	/* both the same length and */
 	/* > 1 before the aligned region */
-	(void) ajFmtPrintF(outf, "WARNING: *********************************");
-	(void) ajFmtPrintF(outf, "There is an equal amount of unaligned "
-			   "sequence (%d) at the start of the sequences."
-			   ,start1);
-	(void) ajFmtPrintF(outf, "Sequence %s is being arbitrarily chosen "
-			   "for the merged sequence\n\n", namea);
+	(void) ajFmtPrintAppS(&tmpstr,
+			      "WARNING: *********************************\n");
+	(void) ajFmtPrintAppS(&tmpstr,
+			      "There is an equal amount of unaligned "
+			      "sequence (%d) at the start of the sequences.\n",
+			      start1);
+	(void) ajFmtPrintAppS(&tmpstr,
+			      "Sequence %s is being arbitrarily chosen "
+			      "for the merged sequence\n\n", namea);
+	ajAlignSetTailApp(align, tmpstr);
+	if (outf)
+	  ajFmtPrintF (outf, "%S", tmpstr);
+	ajStrDel(&tmpstr);
 
 	for (i=0; i<start1; i++)
 	    (void) ajStrAppK(ms, a[i]);
     }
 
     /* header */
-    (void) ajFmtPrintF(outf, "# %s position base\t\t%s position base\t"
-		       "Using\n", namea, nameb);
-
+      (void) ajFmtPrintS(&tmpstr,
+			      "%s position base\t\t%s position base\t"
+			      "Using\n", namea, nameb);
+      ajAlignSetTailApp(align, tmpstr);
+      if (outf)
+	ajFmtPrintF (outf, "%S", tmpstr);
 
     /* make the merged sequence */
     /*
@@ -274,15 +320,23 @@ static void merger_Merge (AjPStr *ms, AjPFile outf, char *a, char *b,
 	    {
 		p[i] = toupper((ajint)p[i]);
 		if (p[i] != '.' && p[i] != ' ') (void) ajStrAppK(ms, p[i]); 
-		(void) ajFmtPrintF(outf, "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
-				   apos+1, p[i],bpos+1, q[i], p[i]);
+		  (void) ajFmtPrintS(&tmpstr,
+				     "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
+				     apos+1, p[i],bpos+1, q[i], p[i]);
+		  ajAlignSetTailApp(align, tmpstr);
+		  if (outf)
+		    ajFmtPrintF (outf, "%S", tmpstr);
 	    }
 	    else
 	    {
 		q[i] = toupper((ajint)q[i]);
 		if (q[i] != '.' && q[i] != ' ') (void) ajStrAppK(ms, q[i]); 
-		(void) ajFmtPrintF(outf, "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
-				   apos+1, p[i],bpos+1, q[i], q[i]);
+		  (void) ajFmtPrintS(&tmpstr,
+				     "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
+				     apos+1, p[i],bpos+1, q[i], q[i]);
+		  ajAlignSetTailApp(align, tmpstr);
+		  if (outf)
+		    ajFmtPrintF (outf, "%S", tmpstr);
 	    }      	      	
 
 	}
@@ -314,15 +368,23 @@ static void merger_Merge (AjPStr *ms, AjPFile outf, char *a, char *b,
 	    {
 		p[i] = toupper((ajint)p[i]);
 		(void) ajStrAppK(ms, p[i]);   
-		(void) ajFmtPrintF(outf, "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
+		(void) ajFmtPrintS(&tmpstr,
+				   "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
 				   apos+1, p[i],bpos+1, q[i], p[i]);
+		ajAlignSetTailApp(align, tmpstr);
+		if (outf)
+		  ajFmtPrintF (outf, "%S", tmpstr);
 	    }
 	    else
 	    {
 		q[i] = toupper((ajint)q[i]);
 		(void) ajStrAppK(ms, q[i]);   
-		(void) ajFmtPrintF(outf, "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
+		(void) ajFmtPrintS(&tmpstr,
+				   "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
 				   apos+1, p[i],bpos+1, q[i], q[i]);
+		ajAlignSetTailApp(align, tmpstr);
+		if (outf)
+		  ajFmtPrintF (outf, "%S", tmpstr);
 	    }
 
 	}
@@ -345,12 +407,20 @@ static void merger_Merge (AjPStr *ms, AjPFile outf, char *a, char *b,
 	(void) ajStrAppC(ms, &a[apos]);
 	if (blen)
 	{
-	    (void) ajFmtPrintF(outf, "WARNING: ***************************"
-			       "******");
-	    (void) ajFmtPrintF(outf, "The region of alignment ends at "
-			       "position %d of sequence %s", bpos+1, nameb);
-	    (void) ajFmtPrintF(outf, "Only the sequence of %s is being used "
-			       "after this point\n\n", namea);
+	    (void) ajFmtPrintAppS(&tmpstr,
+				  "WARNING: ***************************"
+			       "******\n");
+	    (void) ajFmtPrintAppS(&tmpstr,
+				  "The region of alignment ends at "
+				  "position %d of sequence %s\n",
+				  bpos+1, nameb);
+	    (void) ajFmtPrintAppS(&tmpstr,
+				  "Only the sequence of %s is being used "
+				  "after this point\n\n", namea);
+	    ajAlignSetTailApp(align, tmpstr);
+	    if (outf)
+	      ajFmtPrintF (outf, "%S", tmpstr);
+	    ajStrDel(&tmpstr);
 	}
     
     }
@@ -360,22 +430,38 @@ static void merger_Merge (AjPStr *ms, AjPFile outf, char *a, char *b,
 	(void) ajStrAppC(ms, &b[bpos]);
 	if (alen)
 	{
-	    (void) ajFmtPrintF(outf, "WARNING: ***************************"
-			       "******");
-	    (void) ajFmtPrintF(outf, "The region of alignment ends at "
-			       "position %d of sequence %s", apos+1, namea);
-	    (void) ajFmtPrintF(outf, "Only the sequence of %s is being used "
-			       "after this point\n\n", nameb);
+	    (void) ajFmtPrintAppS(&tmpstr,
+				  "WARNING: ***************************"
+				  "******\n");
+	    (void) ajFmtPrintAppS(&tmpstr,
+				  "The region of alignment ends at "
+				  "position %d of sequence %s\n",
+				  apos+1, namea);
+	    (void) ajFmtPrintAppS(&tmpstr,
+				  "Only the sequence of %s is being used "
+				  "after this point\n\n", nameb);
+	    ajAlignSetTailApp(align, tmpstr);
+	    if (outf)
+	      ajFmtPrintF (outf, "%S", tmpstr);
+	    ajStrDel(&tmpstr);
 	}
     }
     else if (alen && blen)
     {	/* both the same length and > 1 */
-	(void) ajFmtPrintF(outf, "WARNING: *********************************");
-	(void) ajFmtPrintF(outf, "There is an equal amount of unaligned "
-			   "sequence (%d) at the end of the sequences.", alen);
-	(void) ajFmtPrintF(outf, "Sequence %s is being arbitrarily chosen "
-			   "for the merged sequence\n\n", namea);
+	(void) ajFmtPrintAppS(&tmpstr,
+			      "WARNING: *********************************\n");
+	(void) ajFmtPrintAppS(&tmpstr,
+			      "There is an equal amount of unaligned "
+			      "sequence (%d) at the end of the sequences.\n",
+			      alen);
+	(void) ajFmtPrintAppS(&tmpstr,
+			      "Sequence %s is being arbitrarily chosen "
+			      "for the merged sequence\n\n", namea);
 	(void) ajStrAppC(ms, &a[apos]);
+	ajAlignSetTailApp(align, tmpstr);
+	if (outf)
+	  ajFmtPrintF (outf, "%S", tmpstr);
+	ajStrDel(&tmpstr);
     }
     
     return;
