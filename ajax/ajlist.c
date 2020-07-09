@@ -508,6 +508,44 @@ AjPList ajListCopy(AjPList thys)
     return newlist;
 }
 
+/* @func ajListstrClone ************************************************
+**
+** Copy a string list. The destination list should be empty.
+** If it is not, new entries are appended.
+**
+** WARNING: Makes new copies of the strings. No good general solution
+**          so this is a strings-only function.
+**
+** @param [r] thys [AjPList] list to be copied
+** @param [r] newlist [AjPList] (empty) target list
+** @return [AjPList] new copied list.
+** @@
+*******************************************************************/
+
+ajint ajListstrClone(AjPList thys, AjPList newlist)
+{
+    AjPListNode node;
+    ajint ret=0;
+    AjPStr newstr;
+
+    if(!thys)
+	return 0;
+
+    if(!newlist)
+	return 0;
+
+    for ( node=thys->First; node->Next; node=node->Next)
+    {
+        newstr = NULL;
+	ajStrAssS(&newstr, node->Item);
+	ajListPushApp (newlist, newstr);
+	ret++;
+    }
+
+
+    return ret;
+}
+
 /* @func ajListFirst **********************************************
 **
 ** Set pointer to first node's data. Does NOT remove the first node.
@@ -1705,6 +1743,55 @@ void ajListSort (AjPList thys, int (*compar) (const void*, const void*))
 }
 
 
+/* @func ajListUnique *******************************************************
+**
+** Sort the items in a list, and remove duplicates
+**
+** @param [r] thys [AjPList] List.
+** @param [r] compar [int* function] Function to compare two list items.
+** @param [r] nodelete [void function] Function to delete an item
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajListUnique (AjPList thys,
+		   int (*compar) (const void* x, const void* cl),
+		   void nodedelete (void** x, void* cl))
+{
+    void* item;
+    void* previtem=NULL;
+    AjIList iter;
+
+    ajDebug ("ajListUnique %d items\n", thys->Count);
+
+    if (thys->Count <= 1)	/* no duplicates */
+	return;
+
+   (void) ajListSort(thys, compar);
+   ajListTrace(thys);
+
+   iter = ajListIter(thys);
+   while (ajListIterMore(iter))
+   {
+       item = ajListIterNext(iter);
+       if (previtem && !compar(&item, &previtem))
+       {
+	   nodedelete (&item, NULL);
+	   ajListRemove(iter);
+       }
+       else
+	 previtem=item;
+   }
+
+   ajListIterFree (iter);
+
+    ajDebug ("ajListUnique result %d items\n", thys->Count);
+    ajListTrace(thys);
+
+    return;
+}
+
+
 /* @func ajListPopEnd **********************************************
 **
 ** remove the last node but set pointer to data first.
@@ -1825,12 +1912,18 @@ void ajListGarbageCollect(AjPList list, void (*destruct)(const void **),
 {
     AjIList iter=NULL;
     void    *ret;
+    const void **rret;
     
 
     iter = ajListIter(list);
     while((ret=ajListIterNext(iter)))
 	if(compar(ret))
+	{
+	    rret = (const void **)&ret;
+	    destruct(rret);
 	    ajListRemove(iter);
+	}
+    
 
     ajListIterFree(iter);
 

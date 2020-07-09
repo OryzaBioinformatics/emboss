@@ -107,95 +107,86 @@ typedef struct AjSIList {
 } *AjIList;
 
 
+void        ajListAppend (AjPList list, AjPListNode tail);
+AjPList     ajListCopy   (AjPList list);      /* new list returned */
+void        ajListDel   (AjPList *list);
+AjBool      ajListFirst (AjPList thys, void** x);
+void        ajListFree   (AjPList *list);
+void        ajListGarbageCollect (AjPList list,
+				  void (*destruct)(const void **),
+				  AjBool (*compar)(const void *));
+void        ajListInsert (AjIList iter, void* x);
+void        ajListInsertOld (AjIList iter, void* x);
 
+AjIList     ajListIter (AjPList listhead);
+AjIList     ajListIterBack (AjPList thys);
+AjBool      ajListIterBackDone (AjIList iter);
+AjBool      ajListIterBackMore (AjIList iter);
+void*       ajListIterBackNext (AjIList iter);
+void        ajListIterFree (AjIList iter);
+void*       ajListIterNext (AjIList iter);
+AjBool      ajListIterMore (AjIList iter);
+AjBool      ajListIterDone (AjIList iter);
+void        ajListIterTrace (AjIList iter);
 
-AjPList ajListNew (void);          /* return header */
-AjPList ajListstrNew (void);          /* return header */
-
-void ajListFree   (AjPList *list);
-void ajListstrFree   (AjPList *list);
-
-void ajListDel   (AjPList *list);
-void ajListstrDel   (AjPList *list);
-
-void ajListGarbageCollect(AjPList list, void (*destruct)(const void **),
-			  AjBool (*compar)(const void *));
-
-void ajListPush   (AjPList list, void* x);      /* " " */
-void ajListstrPush (AjPList list, AjPStr x);
-
-void ajListPushApp(AjPList list, void* x);
-void ajListstrPushApp(AjPList list, AjPStr x);
-
-AjBool ajListFirst(AjPList thys, void** x);
-AjBool ajListLast(AjPList thys, void** x);
-AjBool ajListNth(AjPList thys, ajint n, void** x);
-
-AjPList ajListCopy   (AjPList list);      /* new list returned */
-AjPList ajListstrCopy   (AjPList list);
-
-void ajListTrace   (AjPList list);
-void ajListstrTrace   (AjPList list);
-
-AjBool ajListPop    (AjPList list, void** x);
-AjBool ajListstrPop    (AjPList list, AjPStr* x);
-AjBool ajListPopEnd(AjPList thys, void** x);
-AjBool ajListstrPopEnd(AjPList thys, AjPStr *x);
-
-ajint ajListToArray (AjPList list, void*** array);
-ajint ajListstrToArray (AjPList list, AjPStr** array);
-
-void ajListReverse(AjPList list);
-void ajListstrReverse(AjPList list);
-
-AjPList ajListNewArgs   (void* x, ...);  /* new header returned */
-AjPList ajListstrNewArgs   (AjPStr x, ...);  /* new header returned */
-
-ajint ajListLength (AjPList list);
-ajint ajListstrLength (AjPList list);
-
+AjBool      ajListLast (AjPList thys, void** x);
+ajint       ajListLength (AjPList list);
+void        ajListMap    (AjPList list,
+			  void apply(void **x, void *cl), void *cl);
+AjPList     ajListNew (void);          /* return header */
+AjPList     ajListNewArgs   (void* x, ...);  /* new header returned */
 AjPListNode ajListNodesNew (void *x, ...);  /* same as NewArgs but no header */
+AjBool      ajListNth (AjPList thys, ajint n, void** x);
+AjBool      ajListPop    (AjPList list, void** x);
+AjBool      ajListPopEnd(AjPList thys, void** x);
+void        ajListPush   (AjPList list, void* x);      /* " " */
+void        ajListPushApp(AjPList list, void* x);
+void        ajListReverse(AjPList list);
 
-void ajListMap    (AjPList list,
-		   void apply(void **x, void *cl), void *cl);
-void ajListstrMap(AjPList thys,
-		  void apply(AjPStr* x, void* cl), void* cl);
+AjPList     ajListstrCopy   (AjPList list);
+void        ajListstrDel   (AjPList *list);
+void        ajListstrFree   (AjPList *list);
+void        ajListstrIterTrace (AjIList iter);
+ajint       ajListstrLength (AjPList list);
+AjPList     ajListstrNew (void);          /* return header */
+AjPList     ajListstrNewArgs   (AjPStr x, ...);  /* new header returned */
+void        ajListstrMap (AjPList thys,
+			  void apply(AjPStr* x, void* cl), void* cl);
+AjBool      ajListstrPop    (AjPList list, AjPStr* x);
+AjBool      ajListstrPopEnd (AjPList thys, AjPStr *x);
+void        ajListstrPush (AjPList list, AjPStr x);
+void        ajListstrPushApp (AjPList list, AjPStr x);
+void        ajListstrReverse(AjPList list);
+ajint       ajListstrToArray (AjPList list, AjPStr** array);
+void        ajListstrTrace   (AjPList list);
 
-AjIList ajListIter (AjPList listhead);
-void ajListIterFree (AjIList iter);
-void* ajListIterNext (AjIList iter);
-AjBool ajListIterMore (AjIList iter);
-AjBool ajListIterDone (AjIList iter);
-void ajListIterTrace (AjIList iter);
-void ajListstrIterTrace (AjIList iter);
+ajint       ajListToArray (AjPList list, void*** array);
+void        ajListTrace   (AjPList list);
 
-AjIList ajListIterBack (AjPList thys);
-AjBool  ajListIterBackDone (AjIList iter);
-AjBool  ajListIterBackMore (AjIList iter);
-void*   ajListIterBackNext (AjIList iter);
+AjBool      ajListFind (AjPList listhead,
+			AjBool apply(void **x, void *cl), void *cl);
+AjBool      ajListstrFind (AjPList listhead,
+			   AjBool apply(AjPStr* x, void *cl), void *cl);
 
+void        ajListPushList (AjPList list, AjPList* pmore);
+void        ajListstrPushList (AjPList list, AjPList* pmore);
+void        ajListRemove (AjIList iter);
+ajint       ajListstrClone (AjPList thys, AjPList newlist);
+void        ajListstrInsert (AjIList iter, AjPStr x);
+void        ajListstrRemove (AjIList iter);
+void        ajListSort (AjPList thys,
+			int (*compar) (const void*, const void*));
+void        ajListSort2 (AjPList thys,
+			 int (*sort1) (const void*, const void*),
+			 int (*sort2) (const void*, const void*));
+void        ajListSort3 (AjPList thys,
+			 int (*sort1) (const void*, const void*),
+			 int (*sort2) (const void*, const void*),
+			 int (*sort3) (const void*, const void*));
 
-void ajListAppend (AjPList list, AjPListNode tail);
-
-AjBool ajListFind(AjPList listhead,
-	       AjBool apply(void **x, void *cl), void *cl);
-AjBool ajListstrFind(AjPList listhead,
-	       AjBool apply(AjPStr* x, void *cl), void *cl);
-
-void ajListPushList (AjPList list, AjPList* pmore);
-void ajListstrPushList (AjPList list, AjPList* pmore);
-void ajListInsert (AjIList iter, void* x);
-void ajListInsertOld (AjIList iter, void* x);
-void ajListRemove (AjIList iter);
-void ajListstrInsert (AjIList iter, AjPStr x);
-void ajListstrRemove (AjIList iter);
-void ajListSort (AjPList thys, int (*compar) (const void*, const void*));
-void ajListSort2(AjPList thys, int (*sort1) (const void*, const void*),
-		 int (*sort2) (const void*, const void*));
-void ajListSort3(AjPList thys, int (*sort1) (const void*, const void*),
-		 int (*sort2) (const void*, const void*),
-		 int (*sort3) (const void*, const void*));
-
+void        ajListUnique (AjPList thys,
+			  int (*compar) (const void* x, const void* cl),
+			  void nodedelete (void** x, void* cl));
 #endif
 
 #ifdef __cplusplus
