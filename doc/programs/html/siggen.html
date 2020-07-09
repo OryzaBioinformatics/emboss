@@ -77,9 +77,22 @@ The resulting protein signature file is used by the application
 <b>sigscan</b> to find examples of the signature in other proteins. 
 
 
+<h3>Signatures</h3>
 
 
-
+Signatures extend the comcept of the motif as a tool for characterizing
+protein families.  They consist of a set of N key residue postitions
+(A1, A2 ...An) preceeded by gaps (G) thus G1A1G2A2...GnAn.  Both a
+residue and a gap can be variable.  A signature is matched to a protein
+sequence and scored using a dynamic programming algorithm which permits
+variability in gap distance and residue type.  Generating a signature
+involves identifying residues associated with points of contact in
+interactions between secondary structure alements.  A raw signature
+consists of a set of positions with potential key structural roles
+sampled from a sequence alignment constructed with reference to this
+contact data.  Raw signatures are refined by samplinfg different
+gap-residue pairs until the specificity of a signature for the family
+cannot be further improved. 
 
 
 
@@ -552,7 +565,10 @@ None.
         Bibliography for methods used.
    -->
 
-None.
+Ison JC, Blades MJ, Bleasby AJ, Daniel SC, Parish JH "Key residues
+approach to the definition of protein families and analysis of sparse
+family signatures" (2000) PROTEINS: Structure, Function and Genetics
+40:330-341
 
 
 
@@ -637,6 +653,8 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="contacts.html">contacts</a></td><td>Reads coordinate files and writes contact files</td></tr>
+<tr><td><a href="scopalign.html">scopalign</a></td><td>Generate alignments for SCOP families</td></tr>
 <tr><td><a href="sigscan.html">sigscan</a></td><td>Scans a sparse protein signature against swissprot</td></tr>
 </table>
 

@@ -282,17 +282,17 @@ PLSRLHLRGSWDRRSVANMQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVL
 LAGAPLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKK
 TGRAKRRMQYNRRFVNVVPTFGKKKGPNANS*VFCNSGFL**KSHLVQSKKK
 >HSFAU_4 H.sapiens fau mRNA
-FFF*LN*VAFLLEKARITKDLRVGIGALLLAKGGHNVDKAPVVLHPPLSPTCLLLLLLLF
-GHLRSLTSHFSSTGQGTMNFTSKHAACYFQGSQGLHPALAQSGLILQGRACQEHDLIFRG
-NALQ*GYMSLDLGDRFLAGHLEGV*LLGADKELHIGD*TAVPATAKMESRKRX
+FFLTELSGFFIRESQNYKRLKSWHWGPSSCQRWAQR*QSAGCTASAA*PDLSSSSSSPVW
+PP*ESDLSLFQHGPGNHELYLQACGLLLPG*SGPPPRTGPEWPHPPGARLPGARLDLPGQ
+CPPVRLHEP*SGRPFPGRSPRRCVAPGRGQRAAYWRLNGGPSYREDGVEKEE
 >HSFAU_5 H.sapiens fau mRNA
 FFFD*TKWLFY*RKPELQKT*ELALGPFFLPKVGTTLTKRRLYCIRRLARPVFFFFFSCL
 ATLGV*PLTFPARAREP*TLPPSMRPATSRVVRASTPHWPRVASSSRGAPARSTT*SSGA
 MPSSEAT*ALIWATVSWPVTSKVCSSWARTKSCILATERRSQLPRRWSRERGX
 >HSFAU_6 H.sapiens fau mRNA
-FFLTELSGFFIRESQNYKRLKSWHWGPSSCQRWAQR*QSAGCTASAA*PDLSSSSSSPVW
-PP*ESDLSLFQHGPGNHELYLQACGLLLPG*SGPPPRTGPEWPHPPGARLPGARLDLPGQ
-CPPVRLHEP*SGRPFPGRSPRRCVAPGRGQRAAYWRLNGGPSYREDGVEKEE
+FFF*LN*VAFLLEKARITKDLRVGIGALLLAKGGHNVDKAPVVLHPPLSPTCLLLLLLLF
+GHLRSLTSHFSSTGQGTMNFTSKHAACYFQGSQGLHPALAQSGLILQGRACQEHDLIFRG
+NALQ*GYMSLDLGDRFLAGHLEGV*LLGADKELHIGD*TAVPATAKMESRKRX
 </pre>
 <hr>
 <p>
@@ -412,7 +412,45 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
     Notes
 </H2>
 
-None.
+The reverse frame '-1' is defined as the translation you get when you
+use the reverse-complement of the sequence withthe same codon phase as
+the codon in frame '1'. 
+
+<p>
+
+Thus the sequence ACTGG in frame -1 is the translation of CCAGT (the
+reverse complement of ACTGG) using the codon 'AGT' (the first bases 'CC' are
+ignored). The result is the peptide 'S'.
+
+<p>
+
+Similarly frame -2 is the phase used by frame 2, 'CAG T' (the first base
+'C' is ignored). The last base cannot be successfully translated and is
+output as the unknown residue 'X'. The result is the peptide 'QX'.
+
+<p>
+
+Frame -3 is the phase used by frame 3, 'CCA GT'.  The last two bases
+will translate to 'V' as it does not matter what the next base is. 
+(GTA, GTC, GTG, GTT all code for 'V').  The result is the peptide 'PV'. 
+
+<p>
+
+Before version 2.0.0 transeq used the alternate way of generating the
+reverse translation frames which is that frame -1 is made by taking the
+frame '1' of the reverse complement. 
+
+<p>
+
+There does not appear to be a convention on which definition to use.
+
+<p>
+
+The current definition makes it slightly simpler to generate peptides to
+align under sequences when displaying translation in all 6 frames.  It
+appears to be the definition used by the majority of other sequence
+analysis packages.  The switch to the current definition was therefore
+made. 
 
 <H2>
     References
@@ -505,7 +543,12 @@ href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
 </H2>
 
 
-	Completed 4 March 1999
+Written 4 March 1999 - Gary Williams
+<br>
+
+July 2001 - changed definition of reverse frames to use the same codon
+phase as forward frames.  - Gary Williams
+
 
 <H2>
     Target users

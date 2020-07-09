@@ -127,6 +127,16 @@ Command line arguments
                                   people who wish the programs to be outside
                                   of the GNU Public Licence sheme, ie. they
                                   may wish to charge money for them.
+   -colon              bool       The groups that EMBOSS applications belong
+                                  to up to two levels, for example the primary
+                                  group 'ALIGNMENT' has several sub-groups,
+                                  or second-level groups, e.g.: CONSENSUS,
+                                  DIFFERENCES, DOT PLOTS, GLOBAL, LOCAL,
+                                  MULTIPLE. To aid programs that parse the
+                                  output of wossname that require the names of
+                                  these subgroups, a colon ':' will be placed
+                                  between the first and second level of the
+                                  group name if this option is true.
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -191,6 +201,13 @@ Command line arguments
    developed by people who wish the programs to be outside of the GNU
    Public Licence sheme, ie. they may wish to charge money for them.
    Yes/No Yes
+   -colon The groups that EMBOSS applications belong to up to two levels,
+   for example the primary group 'ALIGNMENT' has several sub-groups, or
+   second-level groups, e.g.: CONSENSUS, DIFFERENCES, DOT PLOTS, GLOBAL,
+   LOCAL, MULTIPLE. To aid programs that parse the output of wossname
+   that require the names of these subgroups, a colon ':' will be placed
+   between the first and second level of the group name if this option is
+   true. Yes/No No
    
 Input file format
 

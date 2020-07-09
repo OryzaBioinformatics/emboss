@@ -191,6 +191,16 @@ IT IS DONE FOR YOU.
                                   people who wish the programs to be outside
                                   of the GNU Public Licence sheme, ie. they
                                   may wish to charge money for them.
+   -colon              bool       The groups that EMBOSS applications belong
+                                  to up to two levels, for example the primary
+                                  group 'ALIGNMENT' has several sub-groups,
+                                  or second-level groups, e.g.: CONSENSUS,
+                                  DIFFERENCES, DOT PLOTS, GLOBAL, LOCAL,
+                                  MULTIPLE. To aid programs that parse the
+                                  output of wossname that require the names of
+                                  these subgroups, a colon ':' will be placed
+                                  between the first and second level of the
+                                  group name if this option is true.
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -296,6 +306,13 @@ then if you enter '.html' here, the second half of the URL after the programname
 <td>If you use this option then EMBASSY program documentation will be searched. If this option is set to be false, then only the EMBOSS programs will be searched (if the -emboss option is true). EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence sheme, ie. they may wish to charge money for them.</td>
 <td>Yes/No</td>
 <td>Yes</td>
+</tr>
+
+<tr>
+<td>-colon</td>
+<td>The groups that EMBOSS applications belong to up to two levels, for example the primary group 'ALIGNMENT' has several sub-groups, or second-level groups, e.g.: CONSENSUS, DIFFERENCES, DOT PLOTS, GLOBAL, LOCAL, MULTIPLE. To aid programs that parse the output of wossname that require the names of these subgroups, a colon ':' will be placed between the first and second level of the group name if this option is true.</td>
+<td>Yes/No</td>
+<td>No</td>
 </tr>
 
 </table>

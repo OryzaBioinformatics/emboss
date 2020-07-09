@@ -19,6 +19,22 @@ Description
    explanation of the scop families file and groups for information on
    how to group it.
    
+  Signatures
+  
+   Signatures extend the comcept of the motif as a tool for
+   characterizing protein families. They consist of a set of N key
+   residue postitions (A1, A2 ...An) preceeded by gaps (G) thus
+   G1A1G2A2...GnAn. Both a residue and a gap can be variable. A signature
+   is matched to a protein sequence and scored using a dynamic
+   programming algorithm which permits variability in gap distance and
+   residue type. Generating a signature involves identifying residues
+   associated with points of contact in interactions between secondary
+   structure alements. A raw signature consists of a set of positions
+   with potential key structural roles sampled from a sequence alignment
+   constructed with reference to this contact data. Raw signatures are
+   refined by samplinfg different gap-residue pairs until the specificity
+   of a signature for the family cannot be further improved.
+   
 Usage
 
    Here is a sample session with sigscan:
@@ -298,7 +314,10 @@ Notes
    
 References
 
-   None.
+   Ison JC, Blades MJ, Bleasby AJ, Daniel SC, Parish JH "Key residues
+   approach to the definition of protein families and analysis of sparse
+   family signatures" (2000) PROTEINS: Structure, Function and Genetics
+   40:330-341
    
 Warnings
 
@@ -318,7 +337,9 @@ Known bugs
    
 See also
 
-   Program name             Description
+   Program name                   Description
+   contacts     Reads coordinate files and writes contact files
+   scopalign    Generate alignments for SCOP families
    siggen       Generates a sparse protein signature
    
 Author(s)

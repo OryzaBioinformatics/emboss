@@ -70,16 +70,17 @@ The functional groups of a program are set in the ACD file (this is the
 part of the program in the EMBOSS system which specifies the required
 parameters, some help on the parameters, the one-line description of the
 program, etc.) Normally the names of the groups are fairly specific,
-such as: "DNA COMPOSITION", resulting in the reporting of only a tightly
-restricted set of other programs also dealing with the analysis of "DNA
-COMPOSITION".  The '-explode' qualifier will increase the number of
-groups that the program belongs to by splitting the group name at
-selected points to produce such groups as: "DNA", "DNA COMPOSITION" and
-"COMPOSITION".  All programs with the exploded group names which also
-include "DNA" and "COMPOSITION" will now be reported.  The result of
-this qualifier is thus a report of a larger number of programs with a
-more tenuous link to the specified program.  In other words, use the
-'-explode' qualifier to decrease the specificity of the search. 
+such as: "NUCLEIC COMPOSITION", resulting in the reporting of only a
+tightly restricted set of other programs also dealing with the analysis
+of "NUCLEIC COMPOSITION".  The '-explode' qualifier will increase the
+number of groups that the program belongs to by splitting the group name
+at selected points to produce such groups as: "NUCLEIC", "NUCLEIC
+COMPOSITION" and "COMPOSITION".  All programs with the exploded group
+names which also include "NUCLEIC" and "COMPOSITION" will now be
+reported.  The result of this qualifier is thus a report of a larger
+number of programs with a more tenuous link to the specified program. 
+In other words, use the '-explode' qualifier to decrease the specificity
+of the search. 
 
 <p>
 The groups that the program belongs to can be output by using the
@@ -97,8 +98,10 @@ Here is a sample session with seealso.
 % seealso
 Program to search for: matcher
 SEE ALSO
-simplesw         Simple Smith-Waterman alignment
+seqmatchall      Does an all-against-all comparison of a set of sequences
+supermatcher     Finds a match of a large sequence against one or more sequences
 water            Smith-Waterman local alignment
+wordmatch        Finds all exact matches of a given size between 2 sequences
 
 </pre>
 
@@ -194,6 +197,16 @@ IT IS DONE FOR YOU.
                                   people who wish the programs to be outside
                                   of the GNU Public Licence scheme, ie. they
                                   may wish to charge money for them.
+   -colon              bool       The groups that EMBOSS applications belong
+                                  to have up to two levels, for example the
+                                  primary group 'ALIGNMENT' has several
+                                  sub-groups, or second-level groups, e.g.:
+                                  CONSENSUS, DIFFERENCES, DOT PLOTS, GLOBAL,
+                                  LOCAL, MULTIPLE. To aid programs that parse
+                                  the output of seealso that require the names
+                                  of these subgroups, a colon ':' will be
+                                  placed between the first and second level of
+                                  the group name if this option is true.
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -297,6 +310,13 @@ Using expanded group names will find many more programs which share at least som
 <td>Yes</td>
 </tr>
 
+<tr>
+<td>-colon</td>
+<td>The groups that EMBOSS applications belong to have up to two levels, for example the primary group 'ALIGNMENT' has several sub-groups, or second-level groups, e.g.: CONSENSUS, DIFFERENCES, DOT PLOTS, GLOBAL, LOCAL, MULTIPLE. To aid programs that parse the output of seealso that require the names of these subgroups, a colon ':' will be placed between the first and second level of the group name if this option is true.</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
 </table>
 
 
@@ -326,28 +346,28 @@ larger HTML document.
 </H2>
 
 
-&nbsp;
+None.
 
 <H2>
     Notes
 </H2>
 
 
-&nbsp;
+None.
 
 <H2>
     References
 </H2>
 
 
-&nbsp;
+None.
 
 <H2>
     Warnings
 </H2>
 
 
-&nbsp;
+None.
 
 <H2>
     Diagnostic Error Messages
@@ -377,7 +397,7 @@ is specified, when the exit status is '1'.
 </H2>
 
 
-&nbsp;
+None.
 
 <!--
 <H2>
