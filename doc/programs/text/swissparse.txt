@@ -1,0 +1,128 @@
+
+                             EMBOSS: swissparse
+     _________________________________________________________________
+   
+                              Program swissparse
+                                       
+Function
+
+   Retrieves sequences from swissprot using keyword search
+   
+Description
+
+   **************** EDIT HERE ****************
+   
+Usage
+
+   Here is a sample session with swissparse:
+
+% swissparse
+
+   **************** EDIT HERE ****************
+   
+Command line arguments
+
+   Mandatory qualifiers:
+  [-keyfile]           infile     Name of keywords file for input
+  [-spfile]            infile     Name of swissprot database to read
+  [-outfile]           outfile    Name of search results file for output
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-keyfile]
+   (Parameter 1) Name of keywords file for input Input file scop.terms
+   [-spfile]
+   (Parameter 2) Name of swissprot database to read Input file ./seq.dat
+   [-outfile]
+   (Parameter 3) Name of search results file for output Output file
+   scop.seqs
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   **************** EDIT HERE ****************
+   
+Output file format
+
+   **************** EDIT HERE ****************
+   
+Data files
+
+   **************** EDIT HERE ****************
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name                          Description
+   coderet      Extract CDS, mRNA and translations from feature tables
+   cutseq       Removes a specified section from a sequence
+   degapseq     Removes gap characters from sequences
+   descseq      Alter the name or description of a sequence
+   entret       Reads and writes (returns) flatfile entries
+   extractseq   Extract regions from a sequence
+   infoseq      Displays some simple information about sequences
+   maskfeat     Mask off features of a sequence
+   maskseq      Mask off regions of a sequence
+   newseq       Type in a short new sequence
+   noreturn     Removes carriage return from ASCII files
+   notseq       Excludes a set of sequences and writes out the remaining ones
+   nthseq       Writes one sequence from a multiple set of sequences
+   pasteseq     Insert one sequence into another
+   revseq       Reverse and complement a sequence
+   seqret       Reads and writes (returns) sequences
+   seqretall    Reads and writes (returns) a set of sequences one at a time
+   seqretset    Reads and writes (returns) a set of sequences all at once
+   seqretsplit  Reads and writes (returns) sequences in individual files
+   showfeat     Show features of a sequence
+   splitter     Split a sequence into (overlapping) smaller sequences
+   trimseq      Trim ambiguous bits off the ends of sequences
+   vectorstrip  Strips out DNA between a pair of vector sequences
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   **************** EDIT HERE ****************
+   
+History
+
+   Written (date) - author. **************** EDIT HERE ****************
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

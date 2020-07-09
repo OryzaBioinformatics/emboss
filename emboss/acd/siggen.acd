@@ -1,0 +1,100 @@
+appl: siggen
+[
+        doc: "Generates a sparse protein signature"
+        groups: "PROTEIN: structure"
+]
+
+string: algpath
+[
+        param: Y
+        prompt: "Location of alignment files for input"
+        def: "./"
+]
+
+string: algextn
+[
+        param: Y
+        prompt: "Extension of alignment files for input"
+        def: ".align"
+]
+
+string: conpath
+[ 
+        param: Y
+        info: "Location of contact files for input"
+        def: "./"
+]
+
+string: conextn
+[ 
+        param: Y
+        info: "Extension of contact files"
+        def: ".con"
+]
+
+int: sparsity
+[
+        param: Y
+        info: "% sparsity of signature"
+        def: 10
+]
+
+bool: randomize
+[
+        param: Y
+        info: "Generate a randomized signature"
+        def: N
+]
+
+matrixf: datafile
+[
+        param: Y
+        info: "Substitution matrix to be used"
+        def: "./EBLOSUM62"
+]
+
+bool: scoreseq
+[
+        param: Y
+        info: "Score alignment on basis of residue conservation"
+        def: Y
+]
+
+
+bool: scorencon
+[
+        param: Y
+        info: "Score alignment on basis of number of contacts"
+
+        def: Y
+]
+
+bool: scoreccon
+[
+        param: Y
+
+        info: "Score alignment on basis of conservation of contacts"
+        def: Y
+]
+
+bool: scoreboth
+[
+        param: Y
+        info: "Score alignment on a combined measure of number and conservation of contacts"
+        def: N
+]
+
+bool: postsim
+[
+        param: Y
+        info: "Ignore alignment postitions with post_similar value of 0"
+        def: Y
+]
+
+
+outfile: sigfile
+[ 
+        param: Y
+        prompt: "Name of signature file for output"
+        def: "sig.sig"
+]
