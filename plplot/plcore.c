@@ -2142,3 +2142,8 @@ void
 c_plxtrace (FILE* outf) {
   plPX_trace (plsc, outf);
 }
+
+int
+c_plfileinfo (char* tmp) {
+  return plFileInfo (plsc, tmp);
+}

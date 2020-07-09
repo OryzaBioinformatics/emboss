@@ -512,6 +512,7 @@ typedef struct {
 #define    plxsfnam	c_plxsfnam
 #define    plxswin	c_plxswin
 #define    plxtrace	c_plxtrace
+#define    plfileinfo	c_plfileinfo
 #define    plstrlW      c_plstrlW
 #define    plgchrW      c_plgchrW
 
@@ -1531,6 +1532,9 @@ c_plxswin(const char *window);
 
 void
 c_plxtrace(FILE* outf);
+
+int
+c_plfileinfo(char *tmp);
 
 /* Computes the length of a string in pixels, including escape sequences. */
 

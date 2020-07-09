@@ -2234,3 +2234,22 @@ void plPX_trace (PLStream *pls, FILE* outf) {
 	   "...");
     
 }
+
+int plFileInfo (PLStream *pls, char* tmp) {
+
+  if (pls->family && pls->BaseName != NULL) {  /* family names*/
+    (void) sprintf(tmp, "%s.%%0%1dd%s",
+		   pls->BaseName, (int) pls->fflen,pls->Ext);
+    return pls->member;
+  }
+
+  if (pls->FileName == NULL) {
+    *tmp='\0';
+    return 0;
+  }
+
+  /* simple filenames */
+  (void) sprintf(tmp, pls->FileName);
+  return -1;
+}
+

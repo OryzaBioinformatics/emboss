@@ -615,6 +615,9 @@ plPX_swin(PLStream *pls, const char *window);
 void
 plPX_plxtrace (PLStream *pls, FILE* outf);
 
+int
+plFileInfo (PLStream *pls, char* tmp);
+
 #ifdef __cplusplus
 };
 #endif
