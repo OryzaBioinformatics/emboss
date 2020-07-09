@@ -1,0 +1,134 @@
+
+                              EMBOSS: seqsort
+     _________________________________________________________________
+   
+                                Program seqsort
+                                       
+Function
+
+   Removes ambiguities from a set of hits resulting from a database
+   search
+   
+Description
+
+   This is part of Jon Ison's protein structure analysis package.
+   
+   This package is still being developed.
+   
+   Please ignore this program until further details can be documented.
+   
+   All further queries should go to Jon Ison. (Jon Ison)
+   
+Usage
+
+   Here is a sample session with seqsort:
+
+% seqsort
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-mode]              menu       Select mode
+  [-overlap]           integer    number of overlapping residues required for
+                                  merging of two hits
+*  -psipath            string     Location of psiblasts hits files
+*  -psiextn            string     Extension of psiblasts hits files
+*  -swisspath          string     Location of swissparse hits files
+*  -swissextn          string     Extension of swissparse input files
+*  -psifile            string     Name of file containing sorted psiblasts
+                                  results
+*  -swissfile          string     Name of file containing sorted swissparse
+                                  results
+  [-outfile]           string     Name of output file
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-mode]
+   (Parameter 1) Select mode
+   1 (Process psiblast hits)
+   2 (Process swissparse hits)
+   3 (Merge psiblast and swissparse hits)
+   1
+   [-overlap]
+   (Parameter 2) number of overlapping residues required for merging of
+   two hits Any integer value 10
+   -psipath Location of psiblasts hits files Any string is accepted ./
+   -psiextn Extension of psiblasts hits files Any string is accepted
+   .psiblasts
+   -swisspath Location of swissparse hits files Any string is accepted ./
+   -swissextn Extension of swissparse input files Any string is accepted
+   .swissparse
+   -psifile Name of file containing sorted psiblasts results Any string
+   is accepted An empty string is accepted
+   -swissfile Name of file containing sorted swissparse results Any
+   string is accepted An empty string is accepted
+   [-outfile]
+   (Parameter 3) Name of output file Any string is accepted An empty
+   string is accepted
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name                         Description
+   contacts     Reads coordinate files and writes contact files
+   dichet       Parse dictionary of heterogen groups
+   interface    Reads coordinate files and writes inter-chain contact files
+   psiblasts    Runs PSI-BLAST given scopalign alignments
+   scopalign    Generate alignments for SCOP families
+   siggen       Generates a sparse protein signature
+   sigscan      Scans a sparse protein signature against swissprot
+   
+Author(s)
+
+   This application was written by Jon Ison (jison@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (date) - author.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

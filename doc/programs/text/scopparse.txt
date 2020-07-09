@@ -1,0 +1,119 @@
+
+                             EMBOSS: scopparse
+     _________________________________________________________________
+   
+                               Program scopparse
+                                       
+Function
+
+   Reads raw-, and writes EMBL-like, scop classification files
+   
+Description
+
+   This is part of Jon Ison's protein structure analysis package.
+   
+   This package is still being developed.
+   
+   Please ignore this program until further details can be documented.
+   
+   All further queries should go to Jon Ison. (Jon Ison)
+   
+Usage
+
+   Here is a sample session with scopparse:
+
+% scopparse
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-infilea]           infile     Name of scop classification file for input
+                                  (raw format dir.cla.scop.txt_X.XX file)
+  [-infileb]           infile     Name of description file for input (raw
+                                  format dir.des.scop.txt_X.XX file)
+  [-outfile]           outfile    Name of scop file for output (embl-like
+                                  format)
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-infilea]
+   (Parameter 1) Name of scop classification file for input (raw format
+   dir.cla.scop.txt_X.XX file) Input file dir.cla.scop.txt_1.57
+   [-infileb]
+   (Parameter 2) Name of description file for input (raw format
+   dir.des.scop.txt_X.XX file) Input file dir.des.scop.txt_1.57
+   [-outfile]
+   (Parameter 3) Name of scop file for output (embl-like format) Output
+   file Escop.dat
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   cutgextract Extract data from CUTG
+   domainer Build domain coordinate files
+   nrscope Converts redundant EMBL-format SCOP file to non-redundant one
+   pdbtosp Convert raw swissprot:pdb equivalence file to embl-like format
+   printsextract Extract data from PRINTS
+   prosextract Builds the PROSITE motif database for patmatmotifs to
+   search
+   rebaseextract Extract data from REBASE
+   scope Convert raw scop classification file to embl-like format
+   seqnr Converts redundant database results to a non-redundant set of
+   hits
+   tfextract Extract data from TRANSFAC
+   
+Author(s)
+
+   This application was written by Jon Ison (jison@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (date) - author.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

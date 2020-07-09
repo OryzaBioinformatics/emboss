@@ -1,0 +1,124 @@
+
+                             EMBOSS: interface
+     _________________________________________________________________
+   
+                               Program interface
+                                       
+Function
+
+   Reads coordinate files and writes inter-chain contact files
+   
+Description
+
+   This is part of Jon Ison's protein structure analysis package.
+   
+   This package is still being developed.
+   
+   Please ignore this program until further details can be documented.
+   
+   All further queries should go to Jon Ison. (Jon Ison)
+   
+Usage
+
+   Here is a sample session with interface:
+
+% interface
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-in]                infile     Coordinate file for input (embl-like format)
+  [-out]               outfile    Contact file for output
+  [-thresh]            float      Threshold contact distance
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -ignore             float      If any two atoms from two different residues
+                                  are at least this distance apart then no
+                                  futher inter-atomic contacts will be checked
+                                  for for that residue pair . This speeds the
+                                  calculation up considerably.
+   -vdwf               string     Name of data file with van der Waals radii
+   -conerrf            outfile    Name of log file for the build
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-in]
+   (Parameter 1) Coordinate file for input (embl-like format) Input file
+   test.pxyz
+   [-out]
+   (Parameter 2) Contact file for output Output file test.con
+   [-thresh]
+   (Parameter 3) Threshold contact distance Any integer value 6.0
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -ignore If any two atoms from two different residues are at least this
+   distance apart then no futher inter-atomic contacts will be checked
+   for for that residue pair . This speeds the calculation up
+   considerably. Any integer value 20.0
+   -vdwf Name of data file with van der Waals radii Any string is
+   accepted Evdw.dat
+   -conerrf Name of log file for the build Output file interface.log
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   contacts Reads coordinate files and writes contact files
+   dichet Parse dictionary of heterogen groups
+   psiblasts Runs PSI-BLAST given scopalign alignments
+   scopalign Generate alignments for SCOP families
+   seqsort Removes ambiguities from a set of hits resulting from a
+   database search
+   siggen Generates a sparse protein signature
+   sigscan Scans a sparse protein signature against swissprot
+   
+Author(s)
+
+   This application was written by Jon Ison (jison@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (date) - author.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

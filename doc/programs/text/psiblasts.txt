@@ -1,0 +1,128 @@
+
+                             EMBOSS: psiblasts
+     _________________________________________________________________
+   
+                               Program psiblasts
+                                       
+Function
+
+   Runs PSI-BLAST given scopalign alignments
+   
+Description
+
+   This is part of Jon Ison's protein structure analysis package.
+   
+   This package is still being developed.
+   
+   Please ignore this program until further details can be documented.
+   
+   All further queries should go to Jon Ison. (Jon Ison)
+   
+Usage
+
+   Here is a sample session with psiblasts:
+
+% psiblasts
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-align]             string     Location of alignment files for input
+  [-alignextn]         string     File extension of alignment files
+  [-niter]             integer    Number of PSIBLAST iterations
+  [-evalue]            float      Threshold E-value for inclusion in family
+  [-maxhits]           integer    Maximum number of hits
+  [-submatrix]         string     Residue substitution matrix
+  [-families]          outfile    Name of families file for output
+  [-logf]              outfile    Name of log file for the build
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-align]
+   (Parameter 1) Location of alignment files for input Any string is
+   accepted ./
+   [-alignextn]
+   (Parameter 2) File extension of alignment files Any string is accepted
+   .align
+   [-niter]
+   (Parameter 3) Number of PSIBLAST iterations Any integer value 1
+   [-evalue]
+   (Parameter 4) Threshold E-value for inclusion in family Any integer
+   value 0.001
+   [-maxhits]
+   (Parameter 5) Maximum number of hits Any integer value 1000
+   [-submatrix]
+   (Parameter 6) Residue substitution matrix Any string is accepted
+   ./EBLOSUM62
+   [-families]
+   (Parameter 7) Name of families file for output Output file scop.hits
+   [-logf]
+   (Parameter 8) Name of log file for the build Output file psiblasts.log
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   contacts Reads coordinate files and writes contact files
+   dichet Parse dictionary of heterogen groups
+   interface Reads coordinate files and writes inter-chain contact files
+   scopalign Generate alignments for SCOP families
+   seqsort Removes ambiguities from a set of hits resulting from a
+   database search
+   siggen Generates a sparse protein signature
+   sigscan Scans a sparse protein signature against swissprot
+   
+Author(s)
+
+   This application was written by Jon Ison (jison@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (date) - author.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
