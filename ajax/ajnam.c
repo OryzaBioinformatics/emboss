@@ -119,6 +119,8 @@ NamOAttr namAttr[] = {
   {"appquery", ""},
   {"appall", ""},
   {"exclude", ""},
+  {"fields", ""},
+  {"proxy", ""},
   {NULL, NULL}
 };
 
@@ -1363,18 +1365,23 @@ AjBool ajNamDbGetDbalias (AjPStr dbname, AjPStr* dbalias) {
   return ajFalse;
 }
   
-/* @func ajNamDbQuery *********************************************************
+/* @func ajNamDbData *********************************************************
 **
 ** Given a query with database name and search fields,
-** fill in the access method and some common fields according
-** to the query level.
+** fill in the some common fields. The query fields are set later.
+**
+** This part of the database definition is required (specifically
+** the "fields" definition) for setting the query details.
+**
+** See also ajNamDbQuery, which calls this function if the common
+** query data is not yet set.
 **
 ** @param [u] qry [AjPSeqQuery] Query structure with at least dbname filled in
 ** @return [AjBool] ajTrue if success.
 ** @@
 ******************************************************************************/
 
-AjBool ajNamDbQuery (AjPSeqQuery qry) {
+AjBool ajNamDbData (AjPSeqQuery qry) {
 
   AjPNamStandards data;
 
@@ -1399,7 +1406,50 @@ AjBool ajNamDbQuery (AjPSeqQuery qry) {
   (void) namDbSetAttr(dbattr, "directory", &qry->Directory);
   (void) namDbSetAttr(dbattr, "exclude", &qry->Exclude);
   (void) namDbSetAttr(dbattr, "filename", &qry->Filename);
+  (void) namDbSetAttr(dbattr, "fields", &qry->DbFields);
+  (void) namDbSetAttr(dbattr, "proxy", &qry->DbProxy);
 
+  /*
+  ajDebug ("ajNamDbQuery DbName '%S'\n", qry->DbName);
+  ajDebug ("    Id '%S' Acc '%S' Des '%S'\n", qry->Id, qry->Acc, qry->Des);
+  ajDebug ("    Method      '%S'\n", qry->Method);
+  ajDebug ("    Formatstr   '%S'\n", qry->Formatstr);
+  ajDebug ("    Application '%S'\n", qry->Application);
+  ajDebug ("    IndexDir    '%S'\n", qry->IndexDir);
+  ajDebug ("    Directory   '%S'\n", qry->Directory);
+  ajDebug ("    Filename    '%S'\n", qry->Filename);
+  */
+
+  return ajTrue;
+}
+
+/* @func ajNamDbQuery *********************************************************
+**
+** Given a query with database name and search fields,
+** fill in the access method and some common fields according
+** to the query level.
+**
+** @param [u] qry [AjPSeqQuery] Query structure with at least dbname filled in
+** @return [AjBool] ajTrue if success.
+** @@
+******************************************************************************/
+
+AjBool ajNamDbQuery (AjPSeqQuery qry) {
+
+  AjPNamStandards data;
+
+  AjPStr* dbattr;
+
+  data = ajTableGet(standardNames, ajStrStr(qry->DbName));
+
+  if (!data || (data->type != TYPE_DB))
+    ajFatal ("database %S unknown\n", qry->DbName);
+
+  dbattr = data->data;
+
+  if (!ajStrLen(qry->DbType))
+    (void) ajNamDbData (qry);
+ 
   if (!ajSeqQueryIs(qry)) { /* must have a method for all entries */
 
     (void) namDbSetAttr(dbattr, "methodall", &qry->Method);
@@ -1427,16 +1477,6 @@ AjBool ajNamDbQuery (AjPSeqQuery qry) {
     }
   }
 
-  /*
-  ajDebug ("ajNamDbQuery DbName '%S'\n", qry->DbName);
-  ajDebug ("    Id '%S' Acc '%S' Des '%S'\n", qry->Id, qry->Acc, qry->Des);
-  ajDebug ("    Method      '%S'\n", qry->Method);
-  ajDebug ("    Formatstr   '%S'\n", qry->Formatstr);
-  ajDebug ("    Application '%S'\n", qry->Application);
-  ajDebug ("    IndexDir    '%S'\n", qry->IndexDir);
-  ajDebug ("    Directory   '%S'\n", qry->Directory);
-  ajDebug ("    Filename    '%S'\n", qry->Filename);
-  */
 
   if (!ajStrLen(qry->Formatstr)) {
     ajErr("No format defined for database '%S'", qry->DbName);

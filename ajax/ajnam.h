@@ -13,6 +13,7 @@ AjBool ajNamDbDetails (AjPStr name, AjPStr* type, AjBool* id,
 AjBool ajNamDbGetAlias (AjPStr dbname, AjPStr* dbalias);
 AjBool ajNamDbGetDbalias (AjPStr dbname, AjPStr* dbalias);
 AjBool ajNamDbGetUrl (AjPStr dbname, AjPStr* url);
+AjBool ajNamDbData (AjPSeqQuery qry);
 AjBool ajNamDbQuery (AjPSeqQuery qry);
 AjBool ajNamDbTest (AjPStr dbname);
 void   ajNamDebugOrigin (void);
