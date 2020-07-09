@@ -972,7 +972,7 @@ IN
 FI stderr
 FC = 2
 FI ap000504.diffseq
-FZ = 13953
+FZ = 13839
 FP /^AP000504 overlap starts at 1\n/
 FP /^AF129756 overlap starts at 6036\n/
 FP /^AP000504 2655-2658 Length: 4\nSequence: tgtg\n/
@@ -1364,6 +1364,106 @@ FP 6 /^          RNOPS  1 +\d+ RA\n/
 FP 2 /^          RNOPS  2 +\d+ RA\n/
 FP 1 /^          RNOPS  3 +\d+ RA\n/
 //
+
+ID feat-embl
+AP seqretallfeat
+CL ../../data/feat.fasta -ufo ../../data/feat.emft embl::test.out -auto
+FI test.out
+FZ = 78140
+## Internal quotes
+FP /^FT                   ""amiE"" gene"\n/
+## Bad features type (CODS) to misc_feature
+FP /^FT   misc_feature    135\.\.1292\n/
+## Case fix for tag /Translation
+FP /^FT                   \/translation="MSANSL/
+## Case fix for type Cds
+FP /^FT   CDS             1289\.\.1879\n/
+## Cleanup of extra white space 'positive  regulator'
+FP /\/note="aliphatic amidase regulator, positive regulator of\n/
+//
+
+ID feat-embl-togff
+AP seqretallfeat
+CL ../../data/feat.fasta -ufo ../../data/feat.emft gff::test.out -auto
+FI test.out
+FZ = 60755
+## Internal quotes
+FP /\tCDS\t1289\t1879\t0\.000\t\+\t\.\tSequence "AB036666.58" ; .* of \\"amiE\\" /
+//
+
+ID feat-embl-togb
+AP seqretallfeat
+CL ../../data/feat.fasta -ufo ../../data/feat.emft gb::test.out -auto
+FI test.out
+FZ = 75351
+## Internal quotes
+FP /^                     ""amiE"" gene"\n/
+## Bad features type (CODS) to misc_feature
+FP /^     misc_feature    135..1292\n/
+## Case fix for tag /Translation
+FP /^                     \/translation="MSANSL/
+## Case fix for type Cds
+FP /^     CDS             1289..1879\n/
+## Cleanup of extra white space 'positive  regulator'
+FP /\/note="aliphatic amidase regulator, positive regulator of\n/
+//
+
+ID feat-pir
+AP seqretallfeat
+CL ../../data/featprot.fasta -ufo ../../data/feat.pir sw::test.out -auto
+FI test.out
+FZ = 4834
+## active site two locations with copied annotation (note and comment)
+FP /^FT   ACT_SITE     38     38       Cys, His \(status experimental\)\.\n/
+FP /^FT   ACT_SITE     90     90       Cys, His \(status experimental\)\.\n/
+//
+
+ID feat-pir-togff
+AP seqretallfeat
+CL ../../data/featprot.fasta -ufo ../../data/feat.pir gff::test.out -auto
+FI test.out
+FZ = 5019
+## active site two locations with copied annotation (note and comment)
+FP /^OPSD_HUMAN\tPIR\tact_site\t38\t38\t0\.000\t\+\t\.\tSequence "OPSD_HUMAN\.11" ; note "Cys, His" ; comment "status experimental"\n/
+FP /^OPSD_HUMAN\tPIR\tact_site\t90\t90\t0\.000\t\+\t\.\tSequence "OPSD_HUMAN.11" ; FeatFlags "0x4"\n/
+//
+
+ID feat-pir-topir
+AP seqretallfeat
+CL ../../data/featprot.fasta -ufo ../../data/feat.pir pir::test.out -auto
+FI test.out
+FZ = 1921
+## active site two locations with copied annotation (note and comment)
+FP /^F;38,90\/Active site: Cys, His, act_site #status experimental\n/
+//
+
+ID feat-swiss
+AP seqretallfeat
+CL tsw:laci_ecoli sw::test.out -auto
+FI test.out
+FZ = 1031
+FP /^FT   DNA_BIND      6     25       H-T-H MOTIF\.\n/
+FP /^FT   HELIX        32     44\n/
+//
+
+ID feat-swiss-topir
+AP seqretallfeat
+CL tsw:laci_ecoli pir::test.out -auto
+FI test.out
+FZ = 823
+FP /^F;6-25\/Binding site: H-T-H MOTIF, dna_bind\n/
+FP /^F;32-44\/Region: helix\n/
+//
+
+ID feat-swiss-togff
+AP seqretallfeat
+CL tsw:laci_ecoli gff::test.out -auto
+FI test.out
+FZ = 1424
+FP /^LACI_ECOLI\tSWISSPROT\tdna_bind\t6\t25\t0\.000\t\+\t\.\tSequence "LACI_ECOLI\.1" ; note "H-T-H MOTIF"\n/
+FP /^LACI_ECOLI\tSWISSPROT\thelix\t32\t44\t0.000\t\+\t\.\tSequence "LACI_ECOLI\.9"\n/
+//
+
 
 ID garnier-ex
 AP garnier
@@ -2339,6 +2439,7 @@ FP /^HBA_HUMAN +1 +VLSPADKTNVKAAWG\.GKVGAHAGEYGAEALERMFLSFPTTKTYF 44 +\n/
 
 # example needs modifying - what is prosite.lines
 ID prosextract-ex
+CC needs local copy of prosite
 AP prosextract
 IN /srsdata/flatfiles/prosite
 FI stderr
@@ -2361,6 +2462,7 @@ FP /^             Start position 39 Length 25\n/
 //
 
 ID rebaseextract-ex
+CC needs local copy of REBASE withrefm file
 AP rebaseextract
 IN /srsdata/flatfiles/rebase/withrefm
 FI stderr
@@ -2489,7 +2591,7 @@ FP /^cagggtcgatggcgcttctacctcagctctttctcctt\n/
 
 ID scopalign-ex
 CC missing input file(s)
-CC needs stamp
+CC needs stamp to be installed
 AP scopalign
 IN ../../data/scop.orig
 IN
@@ -4442,7 +4544,7 @@ IN
 FI stderr
 FC = 12
 FI stdout 
-FZ = 799
+FZ = 793
 FP 2 /^\s+\|=+\|\n\s+promoter note="/
 //
 
@@ -4514,13 +4616,14 @@ FP /^>AP000504_50001-100000/
 FP 2 /^>/
 //
 
-ID stamps-ex
-AP stamps
-IN ../../data/scop.orig
-IN
-FI stderr
-FC = 2
-//
+#not an EMBOSS program, but needed for scopalign
+#ID stamps-ex
+#AP stamps
+#IN ../../data/scop.orig
+#IN
+#FI stderr
+#FC = 2
+#//
 
 # update example
 ID stretcher-ex
@@ -4621,6 +4724,7 @@ FP /^tembl-id:ECLAC    ECLAC         J01636\s+E.coli lactose operon/
 FP /^tembl-id:ECLACZ   ECLACZ        V00296\s+E. coli gene lacZ coding for/
 
 ID tfextract-ex
+CC Needs local copy of TRANSFAC site.dat file
 AP tfextract
 IN /srsdata/flatfiles/transfac/site.dat
 FI stderr
@@ -4635,7 +4739,7 @@ CL wossname
 FI stderr
 FC = 1
 FI stdout
-FZ = 13299
+FZ = 14512
 FP /EMBOSS: wossname/
 FP /Program wossname/
 //
