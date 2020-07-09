@@ -1,24 +1,11 @@
 \documentclass{report}
 \usepackage{verbatim}
-\usepackage{admin}
-\newcommand{\ilcomm}[1]{{\tt #1}}
-\newcommand{\filename}[1]{{\sf\textsl #1}}
-\newcommand{\progname}[1]{{\sc #1}}
-\newcommand{\URL}[1]{\footnote{{\tt #1}}}
-\newcommand{\EMBOSS}{{\sf\bfseries EMBOSS}}
-%page formatting
-\renewcommand{\chaptername}{}
+\usepackage{emboss}
 
-\setlength{\hoffset}{-0.8in}
-\setlength{\textwidth}{6in}
-\setlength{\voffset}{-0.5in}
-\setlength{\topmargin}{12pt}
-\setlength{\textheight}{9in}
-\setlength{\parsep}{0.8\baselineskip}
 \begin{document}
 \title{The \EMBOSS\ Administrators Guide}
 \author{David Martin \\ EMBnet Norway}
-\date{This guide relates to \EMBOSS\ 1.3.0}
+\date{This guide relates to \EMBOSS\ 1.9.1}
 
 \maketitle
 \tableofcontents
@@ -26,21 +13,39 @@
 \chapter{Introduction}
 \section{About this document}
 This guide has been writen to assist system administrators and developers with the installation and configuration of \EMBOSS. If you are reading this to find out how to do bioinformatics then you are wasting your time. You are referred instead to the Resources chapter below where there is a list of more relevant literature and web sites. 
-Experienced users may find this document useful for configuring their own databases and customising their \EMBOSS\ experience.
+Experienced users may find this document useful for configuring their own 
+databases and customising their \EMBOSS\ experience.
 
 
 \subsection{Credits}
-The principal author of this guide is David Martin\URL{damartin\@@hgmp.mrc.ac.uk} at the Norwegian EMBnet node.\URL{http://www.no.embnet.org} It is however the result of a team effort. Thanks are due in particular to Alan Bleasby who answered a lot of silly questions, killed more than a few bugs, and provided clear explanations, and to the other \EMBOSS\ developers at the `Hinxton triangle'. I would also like to thank Johann Visagie for the FreeBSD information and Peter Rice for the SRS information. 
+The principal author of this guide is David Martin\URL{damartin\@@hgmp.mrc.ac.uk} 
+at the Norwegian EMBnet node.\URL{http://www.no.embnet.org} It is however the 
+result of a team effort. Thanks are due in particular to Alan Bleasby who 
+answered a lot of silly questions, killed more than a few bugs, and provided 
+clear explanations, and to the other \EMBOSS\ developers at the `Hinxton 
+triangle'. I would also like to thank Johann Visagie for the FreeBSD 
+information and Peter Rice for the SRS information. Other contributors are 
+acknowledged in the text. 
 
 \subsection{Reproduction}
-The obligatory bit of legalese. This guide is not in the public domain but a non-exclusive license is granted for the document to be copied and reproduced free of charge in electronic or other form according to the following conditions:
+The obligatory bit of legalese. This guide is not in the public domain but a 
+non-exclusive license is granted for the document to be copied and reproduced 
+free of charge in electronic or other form according to the following 
+conditions:
 \begin{enumerate}
-\item The text may not be altered without the prior agreement of the author. Additional footnotes and annotation may be appended but should be clearly marked to indicate that they are not the original authors work.
-\item No charge above that reasonably made for duplication may be made for this document or any compendium including this document.
+\item The text may not be altered without the prior agreement of the author. 
+Additional footnotes and annotation may be appended but should be clearly 
+marked to indicate that they are not the original authors work.
+\item No charge above that reasonably made for duplication may be made for 
+this document or any compendium including this document.
 \item The copyright of this document rests with the original author.
 \end{enumerate}
 
 If you wish to include this document or a derivation thereof in a published work then please contact the author.
+
+If you find this document useful and happen to meet the author or any of 
+the other contributors at a meeting, they would be willing to accept a beer 
+as a token of your appreciation.
 
 \section{What is \EMBOSS?}
 
@@ -98,7 +103,7 @@ Move to the \EMBOSS\ directory and list the files. The output has been truncated
 ftp> cd /pub/EMBOSS
 ftp> ls
 200 PORT command successful.
-150 Opening ASCII mode data connection for /bin/ls.
+150 Opening BINARY mode data connection for /bin/ls.
 total 5264
 ...  1871128 Aug  9 22:25 EMBOSS-1.1.0.tar.gz
 ...   133557 Aug  9 22:31 MSE-0.0.4.tar.gz
@@ -189,6 +194,7 @@ Building \EMBOSS\ is easy. It follows the usual GNU style of \ilcomm{./configure
 
 To accept the default configuration, just type \ilcomm{./configure} and let \EMBOSS\ get on with it. You may however want to make some changes to the configuration parameters according to your local policy. This section will not cover all the possibilities, just some of the more common. The configuration script will attempt to find the neccessary components in your system to determine how to successfully build \EMBOSS. It typically expects the GNU C compiler (gcc) and several standard libraries that should already be part of your Unix/Linux system. \EMBOSS\ should configure, compile and run on most modern Linux distributions straight out of the box.
 
+
 \subsubsection{Installation directory}
 
 You need to have write permission on the directory in which you eventually wish to install \EMBOSS. You may also wish to put it somewhere else other than the standard location of \filename{/usr/local/emboss}.
@@ -197,13 +203,16 @@ The installation directory is controlled by the \ilcomm{--prefix} argument. In m
 \begin{verbatim}
 % ./configure --prefix=/site/prog/emboss
 \end{verbatim}
-will install \EMBOSS\ under \filename{/site/prog/emboss}. The binaries will be installed in \filename{/site/prog/emboss/bin} with shared libraries installed in \filename{/site/prog/emboss/lib}. System wide data are installed in \filename{/site/prog/emboss/data}, and the configuration files (ACD files) for the applications will be installed in \filename{/site/prog/emboss/share} in directories corresponding to the package name. Documentation is installed in  \filename{/site/prog/emboss/doc}.
+will install \EMBOSS\ under \filename{/site/prog/emboss}. The binaries will be installed in \filename{/site/prog/emboss/bin} with shared libraries installed in \filename{/site/prog/emboss/lib}. System wide data are installed in \filename{/site/prog/emboss/share/EMBOSS/data}, and the configuration files (ACD files) for the applications will be installed in \filename{/site/prog/emboss/share/EMBOSS/acd} (or for EMBASSY in directories corresponding to the package name.) Documentation is installed in  \filename{/site/prog/emboss/share/EMBOSS/doc}. 
+The installation directory should be specified using a full path otherwise interesting failures may occur.
 
 The individual directories for installation can be modified with other configuration commands but this is usually not neccessary. Run \ilcomm{./configure --help} to get more information on the directories that can be changed and other configuration options.
 
 Run \ilcomm{./configure} with the options you wish to use. This may take a short time as various messages scroll up the screen.
 
-Depending on your system you may need to explicitly configure the graphics. Please see the section 'Configuring \EMBOSS\ graphics' below.
+Depending on your system you may need to explicitly configure the graphics. Please see the section 'Configuring \EMBOSS\ graphics' below. 
+
+As I am not an expert in the use of Gnu tools I have not yet worked out how to persuade \ilcomm{make} to look in non standard directories for include files.
 
 All should be well with this and configure should exit with a message like this:
 \begin{verbatim}
@@ -232,6 +241,11 @@ creating Makefile
 \end{verbatim}
 Configuration is now complete.
 
+\subsubsection{Reconfiguration}
+
+If at first you don't succeed, try, try and try again. It is not uncommon to make typos or other mistakes when running \ilcomm{./configure}. If you want to run configure again you should delete the file \filename{config.cache} and run \ilcomm{make clean} before running \ilcomm{./configure} with (hopefully) the correct options.
+
+
 \subsubsection{Configuring \EMBOSS\ graphics}
 
 The PLPLOT library can produce output to many devices but requires certain libraries that are NOT distributed with \EMBOSS
@@ -245,7 +259,7 @@ To explicitly configure PLPLOT without X-windows, use \ilcomm{--without-x}.
 
 
 
-To get PLPLOT to produce PNG images you will need to have the \filename{z}, \filename{png} and \filename{gd}
+To get PLPLOT to produce PNG images you will need to have the \filename{z}\URL{http://www.info-zip.org/pub/infozip/zlib/}, \filename{png}\URL{http://libpng.sourceforge.net/} and \filename{gd}\URL{http://www.boutell.com/gd/}
 librarys installed. \filename{gd} version $>=$  1.6.3 must be used as
 the older versions support GIF which is NOT supported in later
 versions.
@@ -254,6 +268,8 @@ system support group will not update them for the system then install all three 
 new directory and then add this new directory to your configure
 line for \EMBOSS\ --- \verb+./configure --with-pngdriver=my_dir+
 where the  \filename{z}, \filename{png} and \filename{gd} libraries were each installed using \verb+./configure --prefix=my_dir+ 
+
+It may also be helpful to ensure that the \ilcomm{LD\_LIBRARY\_PATH} environment variable is set appropriately to include the libraries in the path. 
 
 You can explicitly tell \EMBOSS\ to not include PNG support with \ilcomm{--without-pngdriver}
 You can tell if \ilcomm{./configure} has found a suitable PNG library
@@ -265,6 +281,62 @@ checking for png_destroy_read_struct in -lpng... (cached) yes
 checking for gdImageCreateFromPng in -lgd... (cached) yes
 \end{verbatim}
 This means that the configuration script has located the PNG libraries on your system. If you see a message indicating that \ilcomm{./configure} could not find the libraries or that the version of \filename{gd} was too old then you should install the latest versions of the libraries yourself and rerun configure with the correct \ilcomm{--with-pngdriver} value.
+
+\subsection{Configuring for 64 bit systems}
+
+\EMBOSS\ configure looks for \progname{gcc} and uses this of preference when compiling \EMBOSS\. This is not ideal for those who wish to have a compiled and linked 64bit version of \EMBOSS\. THe current version is NOT 64 bit clean (ie. it does not neccesarily use 64 bit representation internally) but will compile and run quite happily on 64 bit systems.
+
+Additional notes are appended below for the various operating systems I have information on. 
+
+\subsubsection{IRIX 6.5.10}
+
+In order to compile for 64 bit on IRIX you have to specify the native compiler in 64 bit mode (\ilcomm{cc -64}) and the linker in 64 bit mode (\ilcomm{/bin/ld -64}). The following notes were provided by Jose Ramon Valverde\footnote{jrvalverde\@@cnb.uam.es}. 
+
+
+{\it I have succeeded in compiling EMBOSS for IRIX using 64 bit
+compilation.
+
+It required some tweaking, but works. The recipe for those willing to
+give it a try is: }
+
+\begin{itemize}
+	\item remove '\filename{gcc}' from your path
+	\item define \filename{COMPILER\_DEFAULTS\_PATH} appropriately (see \filename{pe\_environ}) to look for a \filename{compiler.defaults} file containing e.g. \ilcomm{:abi=64:isa=4:proc=r10k}
+	\item \ilcomm{./configure} in \EMBOSS\ and all EMBASSY subdirs
+	\item search in all files for '\ilcomm{CC = cc}' and substitute it for '\ilcomm{CC = cc -64}'
+	\item same for '\ilcomm{LD = /bin/ld}' to '\ilcomm{LD = /bin/ld -64}'
+	\item \ilcomm{make}
+\end{itemize}
+
+{\it The reason is that compiling depends on the Makefile and on libtool,
+as well as linking. I didn't spend much in looking at configure since
+the above steps where so straightforward. I know I should look into
+the configure script and add an option for 64-bit-irix-compile or some
+such, but that'll have to wait till I have time for it.
+
+Yes, I know, the search and substitute thing looks tedious, but it
+isn't, honest: create a 'chfile.sh' out of the EMBOSS source hierarchy
+containing: }
+\begin{verbatim}
+#/bin/sh
+cp $1 $1.orig
+mv $1 tmpfile
+sed -e 's/CC="cc"/CC="cc -64"/g' tmpfile | \
+sed -e 's/CC = cc/CC = cc -64/g' | \
+sed -e 's/\/bin\/ld/\/bin\/ld -64/g' $1 
+rm tmpfile
+## if you are sure, uncomment this 
+#rm $1.orig
+\end{verbatim}
+
+{\it
+'\ilcomm{cd}' to the \filename{emboss} directory and run}
+\begin{verbatim}
+	find . -type f -exec /path/to/chfile.sh {} \; -print
+\end{verbatim}
+{\it and you are done with the \progname{CC} changes. \progname{Libtool} requires special 
+treatment since it uses quotes.
+}
 
 \subsection{Building \EMBOSS}
 
@@ -279,22 +351,38 @@ Assuming that compilation was successful, you can\footnote{You don't have to do 
 \subsection{Post compilation setup}
 
 You will now need to make a few adjustments to your enviromnent to ensure that \EMBOSS\ runs smoothly.
-EMBOSS looks for certain environment variables to determine where the libraries and data are found. These instructions assumed you installed \EMBOSS\ in \filename{/site/prog/emboss}. Adjust these instructions to suit your installation.
+\EMBOSS\ looks for certain environment variables to determine where the libraries and data are found. These instructions assumed you installed \EMBOSS\ in \filename{/site/prog/emboss}. Adjust these instructions to suit your installation.
 Insert the following lines at the end of \filename{/etc/cshrc} (or \filename{\~/.cshrc} for a personal installation)
 \begin{verbatim}
-setenv EMBOSS_DATA /site/prog/emboss/data
 setenv PLPLOT_LIB /site/prog/emboss/lib
 set path=( /site/prog/emboss/bin ${path} )
 \end{verbatim}
 Or for bash/ksh/sh users, insert the following at the end of \filename{/etc/profile} or \filename{\~/.bashrc}
 \begin{verbatim}
-EMBOSS_DATA=/site/prog/emboss/data
 PLPLOT_LIB=/site/prog/emboss/lib
 PATH=/site/prog/emboss/bin:$PATH
-export EMBOSS_DATA PLPLOT_LIB PATH
+export PLPLOT_LIB PATH
 \end{verbatim}
 
 \EMBOSS\ should now be ready for use.
+If you want to place your data files elsewhere or have a seperate set of 
+datafiles you wish to use you can set the \ilcomm{EMBOSS\_DATA} variable, 
+either as an environment variable in your \progname{cshrc/profile} or in 
+\progname{emboss.default}. It is essential to set \ilcomm{EMBOSS\_DATA} 
+otherwise \EMBOSS\ will as default install the data files (including those 
+installed with \progname{Rebaseextract}, \progname{Prosextract} or 
+\progname{Printsextract}) in the default directory \filename{emboss/data} in 
+the unpacked source code. This `feature' is due to the definition 
+\begin{verbatim}
+AJAX_FIXED_ROOT ="\\\"`pwd`/emboss\\\""
+\end{verbatim} 
+in \filename{Configure}. This will probably be altered in future versions to be
+ \begin{verbatim}
+AJAX_FIXED_ROOT="\\\"${datadir}/${PACKAGE}\\\""
+\end{verbatim} 
+which will remove the need for specifically defining \ilcomm{EMBOSS\_DATA}.
+
+
 
 \subsection{Testing your \EMBOSS\ installation}
 
@@ -319,11 +407,31 @@ To install an EMBASSY package, go to the relevant directory. For example to inst
 ... output not shown
 \end{verbatim}
 
-Note. You MUST use the same arguments for configure that you used for the installation of the main \EMBOSS\ package.
+Note. You {\bf MUST} use the same arguments for \ilcomm{./configure} that you used for the installation of the main \EMBOSS\ package. It may be neccessary to add other options as required by individual packages (see below).
 
-Repeat as neccessary for the other EMBASSY packages.
+Repeat as neccessary for the other EMBASSY packages. It should also be noted that certain EMBASSY packages may require additional libraries.
  
 You should now find that running \progname{wossname} as before lists the EMBASSY programs.
+
+\subsection{EMBASSY package specific notes}
+
+If a package has no notes below then it either should compile without a hitch 
+or I don't know about it/haven't written it up yet. So far \progname{TOPO}, 
+\progname{MEME}, \progname{PHYLIP} and \progname{MSE} appear to install 
+without a problem using the same arguments to \ilcomm{configure}. 
+
+\subsubsection{\progname{EMNU}}
+
+\progname{EMNU} requires the \filename{curses} or \filename{ncurses} libraries 
+that come as standard on most Unix-like systems. In particular \progname{EMNU} 
+requires two header files \filename{form.h} and \filename{menu.h} that are not 
+distributed with all implementations. If your \filename{curses/ncurses} 
+library is installed in a strange place then you may need to instruct 
+\ilcomm{configure} with the option 
+\begin{verbatim}
+--with-curses=/path/to/curses
+\end{verbatim}
+
 
 \section{Installing \EMBOSS\ in package format}
 \label{sec:FreeBSD}
@@ -429,6 +537,8 @@ Configuration options
 
 The configuration options are tag/value pairs and must contain at least a description of the access method (using \ilcomm{method:} or one or more of \ilcomm{methodsingle:}, \ilcomm{methodquery:} and \ilcomm{methodall:}) and a description of the original format of the sequences (using \ilcomm{format:}). 
 In addition to these tags there will be other tags that are needed for particular methods and other tags that are optional.
+
+
 \subsubsection{Database access methods}
 
 The scope of each method is:
@@ -663,7 +773,7 @@ embl          N    OK  OK  OK  EMBL release 63.0
 \label{sec:finetune}
 It is probably a good idea to set up subsections of the database so that end users can search just the regions they wish to search. This section applies to all access methods that use EMBLCD style indexes and probably to others as well.
 
-Files can be included with the declaration \ilcomm{file:} or excluded with the declaration \ilcomm{exclude:}
+Files can be included with the declaration \ilcomm{file:} or excluded with the declaration \ilcomm{exclude:}. It is a good idea to put the wild card directory specifier (\filename{*/})in front of the filename to ensure that any path that may be included in \filename{division.lkp} will be matched. Please note especially the notes for \progname{GcG} formatted databases indexed with \progname{dbigcg}.  
 
 In order to just take the EST files in our EMBL database try the following:
 \begin{verbatim}
@@ -744,7 +854,7 @@ DB gcgembl [
 \end{verbatim}
 \progname{showdb} should show your newly configured database.
 
-You can configure subsets of the databases in the same way as for the original format databases, described in section \ref{sec:finetune} above.
+You can configure subsets of the databases in the same way as for the original format databases, described in section \ref{sec:finetune} above. One difference to \progname{dbiflat} indexing is that both the \filename{.seq} and \filename{.header} files are listed in the \filename{division.lkp} file. \ilcomm{file:} and \ilcomm{exclude:} directives should therefore be of the form \ilcomm{exclude: */em\_est*} instead of just \ilcomm{*/em\_est*.seq}.
 
 \subsection{Indexing and configuring BLAST databases}
 BLAST format databases are generated for efficient homology searching using the BLAST programs. It can be convenient to avoid redundant copies of databases so \EMBOSS\ provides a mechanism for accessing these databases.
@@ -947,7 +1057,7 @@ DB mydb [
 ]
 \end{verbatim}
 
-\ilcomm{format:} should be \ilcomm{fasta}, \ilcomm{ncbi} or \ilcomm{dbid}, possibly not the format you specified when running \progname{dbifasta}. The same \ilcomm{file:} and \ilcomm{include:} tags can be used as for the other database indexing programs.
+\ilcomm{format:} should be \ilcomm{dbid}, \ilcomm{ncbi} or \ilcomm{fasta} (for every format except \ilcomm{dbid} or \ilcomm{ncbi}. The same \ilcomm{file:} and \ilcomm{include:} tags can be used as for the other database indexing programs.
 
 
 \subsection{Configuring \EMBOSS\ to use SRS for database lookup.}
@@ -1125,8 +1235,12 @@ set emboss_logfile /dev/null
 \end{verbatim}
 This behaviour may change in the future to prevent users redefining some system settings.
 
-\chapter{Resources}
+\chapter{Graphical interfaces to EMBOSS}
 
+This chapter needs to be written. It will be written when the available GUIs are stable enough to document.
+
+\chapter{Resources}
+\section{Web sites}
 \subsection{Programs}
 \begin{description}
 \item[\EMBOSS\ source code]ftp://ftp.uk.embnet.org/pub/EMBOSS
@@ -1196,12 +1310,12 @@ if ( `wget -m 'ftp://ftp.uk.embnet.org/pub/EMBOSS' |& \
 
     cd ${packages_dir}/EMBOSS
     echo 'new EMBOSS programs found .. installing'
-    set latest_emboss=`ls -t EMBOSS*|tail -1`
+    set latest_emboss=`ls -t EMBOSS*|head -1`
 
     cd $packages_dir
     rm -Rf EMBOSS-*
     tar zxf EMBOSS/$latest_emboss
-    set emboss_dir=`ls -dt EMBOSS-*[^z]|tail -1`
+    set emboss_dir=`ls -dt EMBOSS-*[^z]|head -1`
 
 #the next line is necessary on my system but may not be for yours.
     setenv LD_LIBRARYN32_PATH /site/lib
@@ -1280,4 +1394,6 @@ It just happens to work for me.
 The acknowledgements and credits are found at the front of this guide because no one ever reads them if they are at the back. 
 
 \end{document}
+
+
 
