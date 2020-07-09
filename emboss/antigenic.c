@@ -34,13 +34,13 @@
 #define DATAFILE "Eantigenic.dat"
 
 void readAunty(AjPFloat *agp);
-void padit(AjPFile *outf, int b, int e);
-void dumptoFeat(int nhits, AjPInt hp,AjPInt hpos,AjPInt hlen,AjPFloat thisap,
+void padit(AjPFile *outf, ajint b, ajint e);
+void dumptoFeat(ajint nhits, AjPInt hp,AjPInt hpos,AjPInt hlen,AjPFloat thisap,
 		AjPFloat hwt, AjPFeatTabOut featout,char *seqname,int begin);
 
 
 
-int main( int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
@@ -53,26 +53,26 @@ int main( int argc, char **argv, char **env)
 
     AjPFeatTabOut featout=NULL;    
 
-    int begin;
-    int end;
-    int len;
-    int start;
-    int stop;
+    ajint begin;
+    ajint end;
+    ajint len;
+    ajint start;
+    ajint stop;
     char *p;
     char *q;
-    int i;
-    int j;
-    int k;
-    int m;
-    int fpos;
-    int lpos;
-    int maxlen;
-    int maxpos;
-    int minlen;
-    int lenap;
-    int istart;
-    int iend;
-    int nhits;
+    ajint i;
+    ajint j;
+    ajint k;
+    ajint m;
+    ajint fpos;
+    ajint lpos;
+    ajint maxlen;
+    ajint maxpos;
+    ajint minlen;
+    ajint lenap;
+    ajint istart;
+    ajint iend;
+    ajint nhits;
 
     AjPFloat thisap=NULL;
     AjPFloat hwt=NULL;
@@ -138,14 +138,14 @@ int main( int argc, char **argv, char **env)
 	p=q;
 	for(i=0;i<len;++i)
 	{
-	    resap = ajFloatGet(agp,(int)*(p+i));
+	    resap = ajFloatGet(agp,(ajint)*(p+i));
 	    totap += resap;
 	    if( (i>=fpos) && (i<=lpos))
 	    {
 		ajFloatPut(&thisap,i+3,resap);
 		for(j=i+1;j<=i+6;++j)
 		    ajFloatPut(&thisap,i+3,ajFloatGet(thisap,i+3) +
-			       ajFloatGet(agp,(int) *(p+j)));
+			       ajFloatGet(agp,(ajint) *(p+j)));
 		ajFloatPut(&thisap,i+3,ajFloatGet(thisap,i+3)/7.0);
 	    }
 	}
@@ -270,21 +270,21 @@ void readAunty(AjPFloat *agp)
 {
     AjPFile mfptr=NULL;
     AjPStr  line=NULL;
-    int Etot;
-    int Stot;
-    int Ptot;
-    int n;
+    ajint Etot;
+    ajint Stot;
+    ajint Ptot;
+    ajint n;
 
-    int v1;
-    int v2;
-    int v3;
+    ajint v1;
+    ajint v2;
+    ajint v3;
     float vf1;
     float vf2;
     float vf3;
     
-    int deltae;
-    int deltas;
-    int deltap;
+    ajint deltae;
+    ajint deltas;
+    ajint deltap;
     float deltaaf;
     float deltasf;
     
@@ -357,9 +357,9 @@ void readAunty(AjPFloat *agp)
 
 
 
-void padit(AjPFile *outf, int b, int e)
+void padit(AjPFile *outf, ajint b, ajint e)
 {
-    int i;
+    ajint i;
 
     for(i=0;i<e-b-1;++i)
 	ajFmtPrintF(*outf," ");
@@ -367,7 +367,7 @@ void padit(AjPFile *outf, int b, int e)
 }
 
 
-void dumptoFeat(int nhits, AjPInt hp, AjPInt hpos, AjPInt hlen,AjPFloat thisap,
+void dumptoFeat(ajint nhits, AjPInt hp, AjPInt hpos, AjPInt hlen,AjPFloat thisap,
 		AjPFloat hwt, AjPFeatTabOut featout, char *seqname,int begin)
 {
     AjPFeatLexicon dict=NULL;
@@ -381,12 +381,12 @@ void dumptoFeat(int nhits, AjPInt hp, AjPInt hpos, AjPInt hlen,AjPFloat thisap,
     AjPStr val=NULL;
     AjEFeatStrand strand=AjStrandWatson;
     AjEFeatFrame frame=AjFrameUnknown;
-    int i=0;
-    int k=0;
-    int m=0;
-    int iend;
-    int istart;
-    int new;
+    ajint i=0;
+    ajint k=0;
+    ajint m=0;
+    ajint iend;
+    ajint istart;
+    ajint new;
     AjPFeature feature;
 
     name = ajStrNew();

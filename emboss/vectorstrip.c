@@ -27,18 +27,18 @@
 typedef struct clip_pattern{
   AjPStr patstr;
   AjPStr origpat;
-  int type;
-  int len;
-  int real_len;
+  ajint type;
+  ajint len;
+  ajint real_len;
   AjBool amino;
   AjBool carboxyl;
 
-  int* buf;
-  unsigned int* sotable;
-  unsigned int solimit;
+  ajint* buf;
+  ajuint* sotable;
+  ajuint solimit;
   EmbOPatBYPNode off[AJALPHA];
   AjPStr re;
-  int **skipm;
+  ajint **skipm;
   void* tidy;
 }*CPattern;
 
@@ -63,27 +63,27 @@ static void free_cp(CPattern* pat);
 /* data processing */
 static void process_pattern(AjPStr pat, AjPList* hitlist, 
 			    AjPStr seqname, AjPStr seqstr, 
-			    int threshold, int begin, AjBool besthits);
+			    ajint threshold, ajint begin, AjBool besthits);
 static void process_hits(AjPList fivelist, AjPList threelist, 
 			 AjPSeq sequence, AjPSeqout seqout, AjPFile outf);
 static void scan_sequence(Vector vector, AjPSeqout seqout, AjPFile outf, 
-			  AjPSeq sequence, int mis_per, AjBool besthits);
+			  AjPSeq sequence, ajint mis_per, AjBool besthits);
 static void ccs_pattern(AjPStr pattern, AjPList* hitlist, AjPStr seqname, 
-			AjPStr seqstr, int begin, int* hits, int mm);
+			AjPStr seqstr, ajint begin, ajint* hits, ajint mm);
 /* result output */
 static void write_sequence(AjPSeq sequence, AjPSeqout seqout, 
-			   int start, int end, AjPFile outf);
-static void print_hits(AjPList l, AjPFile outf, AjPStr seq, int begin);
+			   ajint start, ajint end, AjPFile outf);
+static void print_hits(AjPList l, AjPFile outf, AjPStr seq, ajint begin);
 static void reportseq(AjPStr seqstr, AjPFile outf);
 
-int main (int argc, char * argv[])
+int main(int argc, char **argv)
 {
   /* sequence related */
   AjPSeqall seqall;
   AjPSeq seq;
   AjPSeqout seqout;
   AjPFile outf;
-  int threshold;
+  ajint threshold;
   AjBool vec = AJFALSE;
   AjPFile vectorfile;
   AjPList vectorlist = NULL;
@@ -313,7 +313,7 @@ static void free_list(AjPList list)
 ******************************************************************************/
 static void free_cp(CPattern* pat)
 {
-  int i=0;
+  ajint i=0;
 
   ajStrDel(&(*pat)->patstr);
   ajStrDel(&(*pat)->origpat);
@@ -370,8 +370,8 @@ static void free_cp(CPattern* pat)
 ** AjPList* hitlist - list to which hits will be written
 ** AjPStr seqname - the name of the sequence
 ** AjPStr seqstr - string representing the sequence to be searched
-** int threshold - max allowable % mismatch based on length of pattern
-** int begin - start position of sequence
+** ajint threshold - max allowable % mismatch based on length of pattern
+** ajint begin - start position of sequence
 ** AjBool besthits - 
 **
 ** Parameters modified:
@@ -382,15 +382,15 @@ static void free_cp(CPattern* pat)
 ******************************************************************************/
 static void process_pattern(AjPStr pattern, AjPList* hitlist, 
 			    AjPStr seqname, AjPStr seqstr, 
-			    int threshold, int begin, AjBool besthits)
+			    ajint threshold, ajint begin, AjBool besthits)
 {
-  int mm = 0;
-  int max_mm = 1;
-  int hits = 0;
+  ajint mm = 0;
+  ajint max_mm = 1;
+  ajint hits = 0;
   
   /* calculate max allowed mismatches based on threshold */
   if(threshold)
-    max_mm = (int) (ajStrLen(pattern) * threshold)/100;
+    max_mm = (ajint) (ajStrLen(pattern) * threshold)/100;
   else max_mm = 0;
 
   if(!besthits)
@@ -430,9 +430,9 @@ static void process_hits(AjPList fivelist, AjPList threelist,
 			 AjPSeq sequence, AjPSeqout seqout, 
 			 AjPFile outf)
 {
-  int i=0;
-  int j=0;
-  int type = 0;
+  ajint i=0;
+  ajint j=0;
+  ajint type = 0;
 
   AjPInt five = ajIntNew(); /* start positions for hits with 5' pattern */
   AjPInt three = ajIntNew(); /* start positions for hits with 3' pattern */
@@ -491,7 +491,7 @@ static void process_hits(AjPList fivelist, AjPList threelist,
 	 It's a bit back to front ... */
       for(i=0; i<ajIntLen(five); i++)
 	{
-	  int hit = 0;
+	  ajint hit = 0;
 	  for(j=0; j<ajIntLen(three); j++)
 	    {
 	      if(ajIntGet(five,i) <= ajIntGet(three,j))
@@ -510,7 +510,7 @@ static void process_hits(AjPList fivelist, AjPList threelist,
 
       for(i=0; i<ajIntLen(three); i++)
 	{
-	  int hit = 0;
+	  ajint hit = 0;
 	  for(j=0; j<ajIntLen(five); j++)
 	    if(ajIntGet(three,i) >= ajIntGet(five,j))
 	      hit=1;
@@ -552,7 +552,7 @@ static void process_hits(AjPList fivelist, AjPList threelist,
 ** AjPSeqout seqout - where toi write out subsequences
 ** AjPFile outf - file for writing results details
 ** AjPSeq sequence - the sequence to be scanned
-** int mis_per - max mistmatch percentage
+** ajint mis_per - max mistmatch percentage
 ** AjBool besthits - stop scanning when we get hits, even if mis_per 
 **                   not reached yet?
 **
@@ -563,10 +563,10 @@ static void process_hits(AjPList fivelist, AjPList threelist,
 ** void
 ******************************************************************************/
 static void scan_sequence(Vector vector, AjPSeqout seqout, AjPFile outf, 
-			  AjPSeq sequence, int mis_per, AjBool besthits)
+			  AjPSeq sequence, ajint mis_per, AjBool besthits)
 {
-  int begin = 0;
-  int end = 0;
+  ajint begin = 0;
+  ajint end = 0;
   
   /* set up seq related vars */
   AjPStr seqname=ajStrNew();
@@ -625,9 +625,9 @@ static void scan_sequence(Vector vector, AjPSeqout seqout, AjPFile outf,
 ** AjPList* hitlist - list of hits
 ** AjPStr seqname - name of sequence to be searched
 ** AjPStr seqstr - string representing sequence to be searched
-** int begin - start position of sequence
-** int* hits - number of hits
-** int mm - number of mismatches
+** ajint begin - start position of sequence
+** ajint* hits - number of hits
+** ajint mm - number of mismatches
 **
 ** Parameters modified:
 ** hits and hitlist hold the number of hits and the hits 
@@ -637,7 +637,7 @@ static void scan_sequence(Vector vector, AjPSeqout seqout, AjPFile outf,
 ** void
 ******************************************************************************/
 static void ccs_pattern(AjPStr pattern, AjPList* hitlist, AjPStr seqname, 
-			AjPStr seqstr, int begin, int* hits, int mm)
+			AjPStr seqstr, ajint begin, ajint* hits, ajint mm)
 {
   /* set up CPattern */
   CPattern cpat = NULL;
@@ -686,8 +686,8 @@ static void ccs_pattern(AjPStr pattern, AjPList* hitlist, AjPStr seqname,
 **
 ** AjPSeq sequence - the entire sequence
 ** AjPSeqout seqout - where to write out subsequences
-** int start - start position of desired subsequence relative to sequence
-** int end - end position of desired subsequence relative to sequence 
+** ajint start - start position of desired subsequence relative to sequence
+** ajint end - end position of desired subsequence relative to sequence 
 ** AjPFile outf - file to write details of output subsequence
 **
 ** Parameters modified:
@@ -698,7 +698,7 @@ static void ccs_pattern(AjPStr pattern, AjPList* hitlist, AjPStr seqname,
 ** Returns:
 ** void
 ******************************************************************************/
-static void write_sequence(AjPSeq sequence, AjPSeqout seqout, int start, int end, AjPFile outf)
+static void write_sequence(AjPSeq sequence, AjPSeqout seqout, ajint start, ajint end, AjPFile outf)
 {
   AjPStr name = NULL;
   AjPStr num = NULL;
@@ -767,7 +767,7 @@ static void write_sequence(AjPSeq sequence, AjPSeqout seqout, int start, int end
 ** AjPFile outf - file for writing information about the hits
 ** AjPStr seq - string representation of sequence
 ** AjPSeqout seqout - place to write sequence
-** int begin - start of sequence
+** ajint begin - start of sequence
 ** 
 ** Parameters modified:
 ** results written to outf
@@ -775,7 +775,7 @@ static void write_sequence(AjPSeq sequence, AjPSeqout seqout, int start, int end
 ** Returns:
 ** void
 ******************************************************************************/
-static void print_hits(AjPList hitlist, AjPFile outf, AjPStr seq, int begin)
+static void print_hits(AjPList hitlist, AjPFile outf, AjPStr seq, ajint begin)
 {
     EmbPMatMatch m;
     AjPStr s;
@@ -819,8 +819,8 @@ static void print_hits(AjPList hitlist, AjPFile outf, AjPStr seq, int begin)
 static void reportseq(AjPStr seqstr, AjPFile outf)
 {
   AjPStr tmp = NULL;
-  int x=0;
-  int linelen = 50;
+  ajint x=0;
+  ajint linelen = 50;
   
   for(x=0; x<ajStrLen(seqstr); x+= linelen)
     {

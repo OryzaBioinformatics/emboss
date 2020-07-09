@@ -2,7 +2,7 @@
  * First, the stuff that ends up in the outside-world include file
  = typedef off_t regoff_t;
  = typedef struct {
- = 	int re_magic;
+ = 	ajint re_magic;
  = 	size_t re_nsub;		// number of parenthesized subexpressions
  = 	const char *re_endp;	// end pointer for REG_PEND
  = 	REGUTSSTRUCT *re_g;	// none of your business :-)
@@ -37,8 +37,8 @@
  * immediately *preceding* "execution" of that operator.
  */
 
-typedef long sop;		/* strip operator */
-typedef long sopno;
+typedef ajlong sop;		/* strip operator */
+typedef ajlong sopno;
 #define	OPRMASK	0x7c000000
 #define	OPDMASK	0x03ffffff
 #define	OPSHIFT	(26)
@@ -140,29 +140,29 @@ typedef unsigned char cat_t;
  * main compiled-expression structure
  */
 struct re_guts {
-	int magic;
+	ajint magic;
 #		define	MAGIC2	((('R'^0200)<<8)|'E')
 	sop *strip;		/* malloced area for strip */
-	int csetsize;		/* number of bits in a cset vector */
-	int ncsets;		/* number of csets in use */
+	ajint csetsize;		/* number of bits in a cset vector */
+	ajint ncsets;		/* number of csets in use */
 	cset *sets;		/* -> cset [ncsets] */
 	UCH *setbits;		/* -> UCH[csetsize][ncsets/CHAR_BIT] */
-	int cflags;		/* copy of regcomp() cflags argument */
+	ajint cflags;		/* copy of regcomp() cflags argument */
 	sopno nstates;		/* = number of sops */
 	sopno firststate;	/* the initial OEND (normally 0) */
 	sopno laststate;	/* the final OEND */
-	int iflags;		/* internal flags */
+	ajint iflags;		/* internal flags */
 #		define	USEBOL	01	/* used ^ */
 #		define	USEEOL	02	/* used $ */
 #		define	BAD	04	/* something wrong */
-	int nbol;		/* number of ^ used */
-	int neol;		/* number of $ used */
-	int ncategories;	/* how many character categories */
+	ajint nbol;		/* number of ^ used */
+	ajint neol;		/* number of $ used */
+	ajint ncategories;	/* how many character categories */
 	cat_t *categories;	/* ->catspace[-CHAR_MIN] */
 	char *must;		/* match must contain this string */
-	int mlen;		/* length of must */
+	ajint mlen;		/* length of must */
 	size_t nsub;		/* copy of re_nsub */
-	int backrefs;		/* does it use back references? */
+	ajint backrefs;		/* does it use back references? */
 	sopno nplus;		/* how deep does it nest +s? */
 	/* catspace must be last */
 	cat_t catspace[1];	/* actually [NC] */

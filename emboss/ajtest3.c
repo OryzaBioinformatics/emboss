@@ -19,14 +19,14 @@
 #include <ctype.h>
 
 void wf(char *, FILE *);
-int first(int c);
-int rest (int c);
-int compare(const void *x, const void *y);
+ajint first(ajint c);
+ajint rest (ajint c);
+ajint compare(const void *x, const void *y);
  void vfree(const void *, void **, void *);
 
-int getword(FILE *fp, char *buf, int size,
-        int first(int c), int rest(int c)) {
-        int i = 0, c;
+ajint getword(FILE *fp, char *buf, ajint size,
+        ajint first(ajint c), ajint rest(ajint c)) {
+        ajint i = 0, c;
         assert(fp && buf && size > 1 && first && rest);
         c = getc(fp);
         for ( ; c != EOF; c = getc(fp))
@@ -54,8 +54,9 @@ int getword(FILE *fp, char *buf, int size,
 
 
 
-int main(int argc, char *argv[]) {
-        int i;
+int main(int argc, char **argv)
+{
+        ajint i;
 	ajNamInit("emboss");
         for (i = 1; i < argc; i++) {
                 FILE *fp = fopen(argv[i], "r");
@@ -80,7 +81,7 @@ void wf(char *name, FILE *fp) {
         char buf[128];
         while (getword(fp, buf, sizeof buf, first, rest)) {
                 AjPStr word;
-                int i, *count;
+                ajint i, *count;
                 for (i = 0; buf[i] != '\0'; i++)
                         buf[i] = tolower(buf[i]);
                 word = ajStrNewC(buf);
@@ -97,23 +98,23 @@ void wf(char *name, FILE *fp) {
         }
         if (name)
 	  ajUser("%s:", name);
-        { int i;
+        { ajint i;
           void **array = ajTableToarray(table, NULL);
 	  /*          qsort(array, ajTableLength(table), 2*sizeof (*array),
                 compare);*/
           for (i = 0; array[i]; i += 2)
-                ajFmtPrint("%d\t%S\n", *(int *)array[i+1],
+                ajFmtPrint("%d\t%S\n", *(ajint *)array[i+1],
                         (AjPStr) array[i]);
           AJFREE(array); }
 	ajTableMap(table, vfree, NULL);
         ajTableFree(&table);
 }
 
-int first(int c) {
+ajint first(ajint c) {
         return isalpha(c);
 }
 
-int rest(int c) {
+ajint rest(ajint c) {
         return isalpha(c) || c == '_';
 }
 
@@ -123,7 +124,7 @@ void vfree(const void *key, void **count, void *cl) {
   AJFREE(*count);
   ajStrDel(&sy);
 }
-int compare(const void *x, const void *y) {
+ajint compare(const void *x, const void *y) {
   AjPStr sx = (AjPStr) x;
   AjPStr sy = (AjPStr) y;
 

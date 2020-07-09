@@ -42,8 +42,8 @@
 ******************************************************************************/
 
 AjPMatrix ajMatrixNew (char* codes, AjPStr filename) {
-  int isize;
-  int i;
+  ajint isize;
+  ajint i;
 
   AjPMatrix ret;
 
@@ -79,8 +79,8 @@ AjPMatrix ajMatrixNew (char* codes, AjPStr filename) {
 ******************************************************************************/
 
 AjPMatrixf ajMatrixfNew (char* codes, AjPStr filename) {
-  int isize;
-  int i;
+  ajint isize;
+  ajint i;
 
   AjPMatrixf ret;
 
@@ -112,8 +112,8 @@ AjPMatrixf ajMatrixfNew (char* codes, AjPStr filename) {
 
 void ajMatrixfDel (AjPMatrixf *thys)
 {
-  int isize;
-  int i;
+  ajint isize;
+  ajint i;
 
   if(!*thys || !thys)
       return;
@@ -142,7 +142,7 @@ void ajMatrixfDel (AjPMatrixf *thys)
 ** @@
 ******************************************************************************/
 
-int** ajMatrixArray (AjPMatrix thys) {
+ajint** ajMatrixArray (AjPMatrix thys) {
   return thys->Matrix;
 }
 
@@ -166,11 +166,11 @@ float** ajMatrixfArray (AjPMatrixf thys) {
 ** Returns the comparison matrix size.
 **
 ** @param [r] thys [AjPMatrix] Matrix object
-** @return [int] .
+** @return [ajint] .
 ** @@
 ******************************************************************************/
 
-int ajMatrixSize (AjPMatrix thys) {
+ajint ajMatrixSize (AjPMatrix thys) {
   return thys->Size;
 }
 
@@ -179,11 +179,11 @@ int ajMatrixSize (AjPMatrix thys) {
 ** Returns the comparison matrix size.
 **
 ** @param [r] thys [AjPMatrixf] Matrix object
-** @return [int] .
+** @return [ajint] .
 ** @@
 ******************************************************************************/
 
-int ajMatrixfSize (AjPMatrixf thys) {
+ajint ajMatrixfSize (AjPMatrixf thys) {
   return thys->Size;
 }
 
@@ -224,12 +224,12 @@ AjPSeqCvt ajMatrixfCvt (AjPMatrixf thys) {
 ** positive integer, and any other character is converted to zero.
 **
 ** @param [r] thys [AjPMatrix] Matrix object
-** @param [r] i [int] Character index
+** @param [r] i [ajint] Character index
 ** @return [char] sequence character code
 ** @@
 ******************************************************************************/
 
-char ajMatrixChar (AjPMatrix thys, int i) {
+char ajMatrixChar (AjPMatrix thys, ajint i) {
   if (i >= thys->Size) return '?';
   if (i < 0) return '?';
   return ajStrChar(thys->Codes,i);
@@ -242,12 +242,12 @@ char ajMatrixChar (AjPMatrix thys, int i) {
 ** positive integer, and any other character is converted to zero.
 **
 ** @param [r] thys [AjPMatrixf] Matrix object
-** @param [r] i [int] Character index
+** @param [r] i [ajint] Character index
 ** @return [char] sequence character code
 ** @@
 ******************************************************************************/
 
-char ajMatrixfChar (AjPMatrixf thys, int i) {
+char ajMatrixfChar (AjPMatrixf thys, ajint i) {
   if (i >= thys->Size) return '?';
   if (i < 0) return '?';
   return ajStrChar(thys->Codes,i);
@@ -297,16 +297,16 @@ AjBool ajMatrixRead (AjPMatrix* pthis, AjPStr filename) {
   AjPStr delim = NULL; 
   AjPFile file = NULL;
   char *ptr;
-  int i = 0;
-  int l=0,k;
+  ajint i = 0;
+  ajint l=0,k;
   AjBool first = ajTrue;
-  int cols=0;
-  int *templine;
+  ajint cols=0;
+  ajint *templine;
   char* orderstring=NULL;
   AjPMatrix thys=NULL;
 
-  int** matrix=NULL;
-  int minval=-1;
+  ajint** matrix=NULL;
+  ajint minval=-1;
 
   delim = ajStrNewC(" :\t\n");
 
@@ -323,7 +323,7 @@ AjBool ajMatrixRead (AjPMatrix* pthis, AjPStr filename) {
 	orderstring = ajCharNewL(cols+1);
         first = ajFalse;
         while(*ptr){
-          if(!isspace((int)*ptr)){
+          if(!isspace((ajint)*ptr)){
             orderstring[l++]= *ptr;
           }
           ptr++;
@@ -381,10 +381,10 @@ AjBool ajMatrixfRead (AjPMatrixf* pthis, AjPStr filename) {
   AjPStr delim = NULL; 
   AjPFile file = NULL;
   char *ptr;
-  int i = 0;
-  int l=0,k;
+  ajint i = 0;
+  ajint l=0,k;
   AjBool first = ajTrue;
-  int cols=0;
+  ajint cols=0;
   float *templine;
   char* orderstring=NULL;
   AjPMatrixf thys=NULL;
@@ -407,7 +407,7 @@ AjBool ajMatrixfRead (AjPMatrixf* pthis, AjPStr filename) {
 	orderstring = ajCharNewL(cols+1);
         first = ajFalse;
         while(*ptr){
-          if(!isspace((int)*ptr)){
+          if(!isspace((ajint)*ptr)){
             orderstring[l++]= *ptr;
           }
           ptr++;

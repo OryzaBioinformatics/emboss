@@ -44,7 +44,7 @@ typedef struct SHits
     double score;
     double mwt;
     EmbPMolFrag* frags;
-    int    nf;
+    ajint    nf;
 } OHits, *PHits;
 
 
@@ -52,25 +52,25 @@ typedef struct SHits
 
 void read_freqs(AjPStr ffile, AjPDouble *freqs);
 AjBool molwt_outofrange(double thys, double given, double range);
-int read_data(AjPFile inf, EmbPMdata** data);
-int sort_data(const void *a, const void *b);
-int hit_sort(const void *a, const void *b);
-void match(EmbPMdata* data, int dno, AjPList flist, int nfrags,
+ajint read_data(AjPFile inf, EmbPMdata** data);
+ajint sort_data(const void *a, const void *b);
+ajint hit_sort(const void *a, const void *b);
+void match(EmbPMdata* data, ajint dno, AjPList flist, ajint nfrags,
 	   double tol, AjPSeq seq, AjPList* hlist, double partials,
-	   double cmw, int enz, AjPDouble freqs);
+	   double cmw, ajint enz, AjPDouble freqs);
 
-int seq_comp(int bidx, int thys, AjPSeq seq, EmbPMdata *data,
+ajint seq_comp(ajint bidx, ajint thys, AjPSeq seq, EmbPMdata *data,
 	     EmbPMolFrag *frags);
-int get_index(double actmw, double maxmw, double minmw, EmbPMolFrag *frags,
-	      int fno, double *bestmw, int *index, int thys, AjPSeq seq,
+ajint get_index(double actmw, double maxmw, double minmw, EmbPMolFrag *frags,
+	      ajint fno, double *bestmw, ajint *index, ajint thys, AjPSeq seq,
 	      EmbPMdata *data);
 
-int seq_search(AjPStr substr, char *s);
+ajint seq_search(AjPStr substr, char *s);
 AjBool msearch(char *seq, char *pat, AjBool term);
 void mreverse(char *s);
-int get_orc(AjPStr *orc, char *s, int pos);
+ajint get_orc(AjPStr *orc, char *s, ajint pos);
 AjBool comp_search(AjPStr substr, char *s);
-void print_hits(AjPFile outf, AjPList hlist, int dno, EmbPMdata* data);
+void print_hits(AjPFile outf, AjPList hlist, ajint dno, EmbPMdata* data);
 
 
 
@@ -82,20 +82,20 @@ int main(int argc, char **argv)
     AjPFile      mwinf;
     AjPStr       ffile;
     AjPStr       *enzyme;
-    int          smolwt;
-    int 	 range;
+    ajint          smolwt;
+    ajint 	 range;
     float        tol;
     float        partials;
     AjPDouble    freqs;
-    int 	 begin;
-    int 	 end;
+    ajint 	 begin;
+    ajint 	 end;
     double 	 smw;
-    int 	 rno;
+    ajint 	 rno;
 
     AjPList      flist;
     EmbPMdata    *data;
-    int 	 dno;
-    int          nfrags;    
+    ajint 	 dno;
+    ajint          nfrags;    
     AjPList      hlist=NULL;
 
     
@@ -165,7 +165,7 @@ int main(int argc, char **argv)
 void read_freqs(AjPStr ffile, AjPDouble *freqs)
 {
     AjPFile finf=NULL;
-    int c;
+    ajint c;
     AjPStr  str;
     double f;
     
@@ -206,15 +206,15 @@ AjBool molwt_outofrange(double thys, double given, double range)
 
 
 
-int read_data(AjPFile inf, EmbPMdata** data)
+ajint read_data(AjPFile inf, EmbPMdata** data)
 {
-    int c;
+    ajint c;
     AjPStr str=NULL;
     double v;
     AjPStrTok token=NULL;
     EmbPMdata ptr=NULL;
     AjPList l;
-    int n;
+    ajint n;
 
     c=0;
     str = ajStrNew();
@@ -246,14 +246,14 @@ int read_data(AjPFile inf, EmbPMdata** data)
 
 
 
-int sort_data(const void *a, const void *b)
+ajint sort_data(const void *a, const void *b)
 {
-    return (int)((*(EmbPMdata*)a)->mwt - (*(EmbPMdata*)b)->mwt);
+    return (ajint)((*(EmbPMdata*)a)->mwt - (*(EmbPMdata*)b)->mwt);
 }
 
 
 
-int hit_sort(const void *a, const void *b)
+ajint hit_sort(const void *a, const void *b)
 {
     double x;
     double y;
@@ -270,30 +270,30 @@ int hit_sort(const void *a, const void *b)
 
 
 
-void match(EmbPMdata* data, int dno, AjPList flist, int nfrags,
+void match(EmbPMdata* data, ajint dno, AjPList flist, ajint nfrags,
 	   double tol, AjPSeq seq, AjPList* hlist, double partials,
-	   double cmw, int rno, AjPDouble freqs)
+	   double cmw, ajint rno, AjPDouble freqs)
 {
     double actmw;
     double minmw;
     double maxmw;
     double smw;
-    int ft;
+    ajint ft;
     double qtol;
     double f;
     double sumf;
     double bestmw;
     static double min=(double)0.;
-    static int    n = 0;
+    static ajint    n = 0;
     
-    int    i;
-    int    j;
-    int    nd;
+    ajint    i;
+    ajint    j;
+    ajint    nd;
     
-    int    x;
-    int    index;
+    ajint    x;
+    ajint    index;
     AjBool ispart=ajFalse;
-    int    isumf;
+    ajint    isumf;
     AjPInt found=NULL;
     PHits  hits=NULL;
     EmbPMolFrag *frags=NULL;
@@ -358,10 +358,10 @@ void match(EmbPMdata* data, int dno, AjPList flist, int nfrags,
 	else
 	{
 	    f = bestmw / (double)100.;
-	    if((int)f >= 200)
+	    if((ajint)f >= 200)
 		f = (double) 199.;
 
-	    ft = (rno-1)*16000 + (int)cmw*200 + (int)f;
+	    ft = (rno-1)*16000 + (ajint)cmw*200 + (ajint)f;
 	    f = ajDoubleGet(freqs,ft);
 	    if(!f)
 		continue;
@@ -373,7 +373,7 @@ void match(EmbPMdata* data, int dno, AjPList flist, int nfrags,
     }
 
 
-    isumf = (int)sumf;
+    isumf = (ajint)sumf;
     
     sumf = (double)1. / sumf;
     sumf *= (double)50000. / (cmw*(double)10000.);
@@ -441,16 +441,16 @@ void match(EmbPMdata* data, int dno, AjPList flist, int nfrags,
 
 
 
-int get_index(double actmw, double maxmw, double minmw, EmbPMolFrag *frags,
-	      int fno, double *bestmw, int *index, int thys, AjPSeq seq,
+ajint get_index(double actmw, double maxmw, double minmw, EmbPMolFrag *frags,
+	      ajint fno, double *bestmw, ajint *index, ajint thys, AjPSeq seq,
 	      EmbPMdata *data)
 {
     double mw1;
     double mw2;
     double best;
-    int cnt;
-    int fl;
-    int bidx=0;
+    ajint cnt;
+    ajint fl;
+    ajint bidx=0;
 
 
     cnt = fl = 0;
@@ -559,7 +559,7 @@ int get_index(double actmw, double maxmw, double minmw, EmbPMolFrag *frags,
 	return -1;
 
     *bestmw = best + MILLION;
-    *index = bidx + (int)MILLION;
+    *index = bidx + (ajint)MILLION;
 
     return *index;
 }
@@ -567,12 +567,12 @@ int get_index(double actmw, double maxmw, double minmw, EmbPMolFrag *frags,
 
 
 
-int seq_comp(int bidx, int thys, AjPSeq seq, EmbPMdata *data,
+ajint seq_comp(ajint bidx, ajint thys, AjPSeq seq, EmbPMdata *data,
 	     EmbPMolFrag *frags)
 {
-    int beg;
-    int end;
-    int len;
+    ajint beg;
+    ajint end;
+    ajint len;
     AjPStr result=NULL;
     AjPStr str=NULL;
     AjPStr substr=NULL;
@@ -632,8 +632,8 @@ int seq_comp(int bidx, int thys, AjPSeq seq, EmbPMdata *data,
 
 void mreverse(char *s)
 {
-    int i;
-    int len;
+    ajint i;
+    ajint len;
     char *p;
     AjPStr rev;
     
@@ -708,13 +708,13 @@ AjBool msearch(char *seq, char *pat, AjBool term)
 {
     AjPStr orc=NULL;
     
-    int qpos;
-    int fpos;
+    ajint qpos;
+    ajint fpos;
     
     AjBool fl;
-    int i;
-    int t;
-    int ofpos;
+    ajint i;
+    ajint t;
+    ajint ofpos;
     char *p;
     
     qpos = ofpos = fpos = 0;
@@ -792,13 +792,13 @@ AjBool msearch(char *seq, char *pat, AjBool term)
 AjBool comp_search(AjPStr substr, char *s)
 {
     AjPInt arr;
-    int i;
-    int len;
-    int v;
-    int n;
-    int w;
+    ajint i;
+    ajint len;
+    ajint v;
+    ajint n;
+    ajint w;
     
-    int qpos;
+    ajint qpos;
     char c;
     AjPStr orc;
     char *r;
@@ -817,8 +817,8 @@ AjBool comp_search(AjPStr substr, char *s)
     
     for(i=0;i<len;++i)
     {
-	v = ajIntGet(arr,(int)p[i]);
-	ajIntPut(&arr,(int)p[i],v+1);
+	v = ajIntGet(arr,(ajint)p[i]);
+	ajIntPut(&arr,(ajint)p[i],v+1);
     }
 
 
@@ -863,7 +863,7 @@ AjBool comp_search(AjPStr substr, char *s)
 	qpos += (n+3);
 	w = 0;
 	for(i=0;i<n;++i)
-	    w += ajIntGet(arr,(int)r[i]);
+	    w += ajIntGet(arr,(ajint)r[i]);
 	if(w!=v)
 	{
 	    ajStrDel(&t);
@@ -882,9 +882,9 @@ AjBool comp_search(AjPStr substr, char *s)
 }
 
 
-int get_orc(AjPStr *orc, char *s, int pos)
+ajint get_orc(AjPStr *orc, char *s, ajint pos)
 {
-    int i;
+    ajint i;
 
     i=0;
     if(s[++pos]!='[')
@@ -904,21 +904,21 @@ int get_orc(AjPStr *orc, char *s, int pos)
 
 
 
-void print_hits(AjPFile outf, AjPList hlist, int dno, EmbPMdata* data)
+void print_hits(AjPFile outf, AjPList hlist, ajint dno, EmbPMdata* data)
 {
     PHits hits=NULL;
     AjIList iter=NULL;
-    int   n;
-    int   c;
-    int   i;
-    int   j;
-    int   pvt;
+    ajint   n;
+    ajint   c;
+    ajint   i;
+    ajint   j;
+    ajint   pvt;
     double conf;
     AjBool partial;
     AjPFloat nmarray=NULL;
-    int    nmn;
-    int    len;
-    int    v;
+    ajint    nmn;
+    ajint    len;
+    ajint    v;
     AjPStr substr=NULL;
     
 
@@ -971,8 +971,8 @@ void print_hits(AjPFile outf, AjPList hlist, int dno, EmbPMdata* data)
 
 	    if((v=ajIntGet(hits->found,i))>-1)
 	    {
-		if(v>=(int)MILLION)
-		    v -= (int)MILLION;
+		if(v>=(ajint)MILLION)
+		    v -= (ajint)MILLION;
 		
 		ajStrAssSubC(&substr,ajStrStr(hits->seq),
 			     hits->frags[v]->begin-1,

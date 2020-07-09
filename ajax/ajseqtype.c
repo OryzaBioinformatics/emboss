@@ -3,7 +3,7 @@
 typedef struct SeqSType {
   char *Name;
   AjBool Gaps;
-  int Type;
+  ajint Type;
   char (*Test) (AjPSeq thys);  
   char *Desc;
 } SeqOType, *SeqPType;
@@ -48,7 +48,7 @@ static SeqOType seqType[] = {
   {NULL,             AJFALSE, ISANY, NULL,            
                      NULL} };
 
-static void       seqGapSL (AjPStr* seq, char gapc, char padc, int ilen);
+static void       seqGapSL (AjPStr* seq, char gapc, char padc, ajint ilen);
 static AjBool     seqTypeStopTrim (AjPSeq thys);
 static void       seqTypeSet (AjPSeq thys, AjPStr Type);
 
@@ -89,7 +89,7 @@ char seqGap = '-';		/* the (only) EMBOSS gap character */
 
 AjBool ajSeqTypeTest (AjPSeq thys, AjPStr Type) {
 
-  int i = 0;
+  ajint i = 0;
   char ret;
 
   ajDebug ("testing sequence '%s' type '%S'\n", ajSeqName(thys), Type);
@@ -176,7 +176,7 @@ static void seqTypeSet (AjPSeq thys, AjPStr Type) {
 
 AjBool ajSeqTypeCheck (AjPSeq thys, AjPSeqin seqin) {
 
-  int i = 0;
+  ajint i = 0;
   char ret;
 
   AjPStr Type = seqin->Inputtype; /* ACD file had a predefined seq type */
@@ -237,7 +237,7 @@ AjBool ajSeqTypeCheck (AjPSeq thys, AjPSeqin seqin) {
 ******************************************************************************/
 
 char ajSeqTypeAny (AjPSeq thys) {
-  int i;
+  ajint i;
   static char seqchars[256] = "";
 
   if (!*seqchars) {
@@ -268,7 +268,7 @@ char ajSeqTypeAny (AjPSeq thys) {
 ******************************************************************************/
 
 char ajSeqTypeDna (AjPSeq thys) {
-  int i;
+  ajint i;
   static char seqchars[256] = "";
 
   if (!*seqchars) {
@@ -303,7 +303,7 @@ char ajSeqTypeDna (AjPSeq thys) {
 ******************************************************************************/
 
 char ajSeqTypeRna (AjPSeq thys) {
-  int i;
+  ajint i;
   static char seqchars[256] = "";
 
   if (!*seqchars) {
@@ -338,7 +338,7 @@ char ajSeqTypeRna (AjPSeq thys) {
 ******************************************************************************/
 
 char ajSeqTypePuredna (AjPSeq thys) {
-  int i;
+  ajint i;
   static char* seqchars = seqCharNucPure;
 
   ajDebug ("seqTypePureDna test for '%s'\n", seqchars);
@@ -368,7 +368,7 @@ char ajSeqTypePuredna (AjPSeq thys) {
 ******************************************************************************/
 
 char ajSeqTypePurerna (AjPSeq thys) {
-  int i;
+  ajint i;
   static char* seqchars = seqCharNucPure;
 
   ajDebug ("seqTypePureRna test for '%s'\n", seqchars);
@@ -397,7 +397,7 @@ char ajSeqTypePurerna (AjPSeq thys) {
 ******************************************************************************/
 
 char ajSeqTypeNuc (AjPSeq thys) {
-  int i;
+  ajint i;
   static char seqchars[256] = "";
 
   if (!*seqchars) {
@@ -428,7 +428,7 @@ char ajSeqTypeNuc (AjPSeq thys) {
 ******************************************************************************/
 
 char ajSeqTypePurenuc (AjPSeq thys) {
-  int i;
+  ajint i;
   static char* seqchars = seqCharNucPure;
 
   ajDebug ("seqTypePureNuc test for '%s'\n", seqchars);
@@ -454,7 +454,7 @@ char ajSeqTypePurenuc (AjPSeq thys) {
 ******************************************************************************/
 
 char ajSeqTypeGapnuc (AjPSeq thys) {
-  int i;
+  ajint i;
   static char seqchars[256] = "";
 
   if (!*seqchars) {
@@ -487,7 +487,7 @@ char ajSeqTypeGapnuc (AjPSeq thys) {
 ******************************************************************************/
 
 char ajSeqTypeGapdna (AjPSeq thys) {
-  int i;
+  ajint i;
   static char seqchars[256] = "";
 
   if (!*seqchars) {
@@ -524,7 +524,7 @@ char ajSeqTypeGapdna (AjPSeq thys) {
 ******************************************************************************/
 
 char ajSeqTypeGaprna (AjPSeq thys) {
-  int i;
+  ajint i;
   static char seqchars[256] = "";
 
   if (!*seqchars) {
@@ -560,7 +560,7 @@ char ajSeqTypeGaprna (AjPSeq thys) {
 ******************************************************************************/
 
 char ajSeqTypeProt (AjPSeq thys) {
-  int i;
+  ajint i;
   static char seqchars[256] = "";
 
   if (!*seqchars) {
@@ -593,7 +593,7 @@ char ajSeqTypeProt (AjPSeq thys) {
 ******************************************************************************/
 
 char ajSeqTypePureprot (AjPSeq thys) {
-  int i;
+  ajint i;
   static char* seqchars = seqCharProtPure;
 
   ajDebug ("seqTypePureprot test for '%s'\n", seqchars);
@@ -621,7 +621,7 @@ char ajSeqTypePureprot (AjPSeq thys) {
 ******************************************************************************/
 
 char ajSeqTypeAnyprot (AjPSeq thys) {
-  int i;
+  ajint i;
   static char seqchars[256] = "";
 
   if (!*seqchars) {
@@ -654,7 +654,7 @@ char ajSeqTypeAnyprot (AjPSeq thys) {
 ******************************************************************************/
 
 char ajSeqTypeGapprot (AjPSeq thys) {
-  int i;
+  ajint i;
   static char seqchars[256] = "";
 
   if (!*seqchars) {
@@ -687,7 +687,7 @@ char ajSeqTypeGapprot (AjPSeq thys) {
 ******************************************************************************/
 
 char ajSeqTypeStopprot (AjPSeq thys) {
-  int i;
+  ajint i;
   static char seqchars[256] = "";
 
   if (!*seqchars) {
@@ -723,7 +723,7 @@ char ajSeqTypeStopprot (AjPSeq thys) {
 ******************************************************************************/
 
 char ajSeqTypeGapany (AjPSeq thys) {
-  int i;
+  ajint i;
   static char seqchars[512] = "";
 
   if (!*seqchars) {
@@ -771,13 +771,13 @@ void ajSeqGap (AjPSeq thys, char gapc, char padc) {
 ** @param [u] thys [AjPSeq] Sequence
 ** @param [r] gapc [char] Standard gap character
 ** @param [r] padc [char] Gap character for ends of sequence
-** @param [r] ilen [int] Sequence length. Expanded if longer than
+** @param [r] ilen [ajint] Sequence length. Expanded if longer than
 **                       current length
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajSeqGapLen (AjPSeq thys, char gapc, char padc, int ilen) {
+void ajSeqGapLen (AjPSeq thys, char gapc, char padc, ajint ilen) {
   seqGapSL (&thys->Seq, gapc, padc, ilen);
 }
 
@@ -804,17 +804,17 @@ void ajSeqGapS (AjPStr* seq, char gapc) {
 ** @param [u] seq [AjPStr*] String of sequence characters
 ** @param [r] gapc [char] Standard gap character
 ** @param [r] padc [char] Gap character for ends of sequence
-** @param [r] ilen [int] Sequence length. Expanded if longer than
+** @param [r] ilen [ajint] Sequence length. Expanded if longer than
 **                       current length
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void seqGapSL (AjPStr* seq, char gapc, char padc, int ilen) {
+static void seqGapSL (AjPStr* seq, char gapc, char padc, ajint ilen) {
 
-  int i;
+  ajint i;
   static char* newgap;
-  static int igap;
+  static ajint igap;
   char* cp;
   char endc = gapc;
 

@@ -219,20 +219,36 @@ endgroup
    
 Output file format
 
+   It produces a graphical image.
+   
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                          Description
@@ -255,6 +271,8 @@ Author(s)
    
 History
 
+   Written 1999 - Nicolas Tourasse
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

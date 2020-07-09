@@ -22,15 +22,15 @@
 
 #include "emboss.h"
 
-static void WriteORF(AjPSeq seq, int len, int seqlen, AjBool sense, int find,
-		     int *orf_no, int start, int pos, AjPStr str,
-		     AjPSeqout seqout, int around);
+static void WriteORF(AjPSeq seq, ajint len, ajint seqlen, AjBool sense, ajint find,
+		     ajint *orf_no, ajint start, ajint pos, AjPStr str,
+		     AjPSeqout seqout, ajint around);
 
-static void AppORF(int find, AjPStr *str, char *chrseq, int pos, char aa);
+static void AppORF(ajint find, AjPStr *str, char *chrseq, ajint pos, char aa);
 
-static void FindORFs(AjPSeq seq, int len, AjPTrn trnTable, int minsize,
+static void FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable, ajint minsize,
 		     AjPSeqout seqout, AjBool sense, AjBool circular,
-		     int find, int *orf_no, AjBool methionine, int around);
+		     ajint find, ajint *orf_no, AjBool methionine, ajint around);
 
 
 /* types of control codon */
@@ -46,31 +46,31 @@ static void FindORFs(AjPSeq seq, int len, AjPTrn trnTable, int minsize,
 #define AROUND_INIT_STOP 5
 #define AROUND_END_STOP 6
 
-int main (int argc, char * argv[])
+int main(int argc, char **argv)
 {
 
     AjPSeqall seqall;
     AjPSeqout seqout;
     AjPStr *tablelist;
-    int table;
-    int minsize;
+    ajint table;
+    ajint minsize;
     AjPStr *findlist;
-    int find;
+    ajint find;
     AjBool methionine;
     AjBool circular;
     AjBool reverse;
-    int around;
+    ajint around;
   
     AjPSeq seq=NULL;
     AjPTrn trnTable;
     AjPStr sseq=NULL;			/* sequence string */
 
-    int orf_no;				/* ORF number to append to name of
+    ajint orf_no;				/* ORF number to append to name of
 					   sequence to create unique name */
 
     AjBool sense;			/* ajTrue = forward sense,
 					   ajFalse = reverse sense */
-    int len;
+    ajint len;
 
     (void) embInit ("getorf", argc, argv);
 
@@ -150,9 +150,9 @@ int main (int argc, char * argv[])
 /******************************************************************************/
 /* finds all orfs in the current sense and writes them out */
 
-static void FindORFs(AjPSeq seq, int len, AjPTrn trnTable, int minsize,
+static void FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable, ajint minsize,
 		     AjPSeqout seqout, AjBool sense, AjBool circular,
-		     int find, int *orf_no, AjBool methionine, int around)
+		     ajint find, ajint *orf_no, AjBool methionine, ajint around)
 {
 
     AjBool ORF[3];			/* true if found an ORF */
@@ -163,18 +163,18 @@ static void FindORFs(AjPSeq seq, int len, AjPTrn trnTable, int minsize,
 					   genome's frame when
 					   find = P_STOP2STOP or
 					   N_STOP2STOP */
-    int start[3];			/* possible starting position of the
+    ajint start[3];			/* possible starting position of the
 					   three frames */
-    int pos;
-    int codon;
+    ajint pos;
+    ajint codon;
     char aa;
-    int frame;
+    ajint frame;
     AjPStr newstr[3];			/* strings of the three frames of ORF
 					   sequences that we are growing */
     AjPSeq pep=NULL;
-    int i;
+    ajint i;
   
-    int seqlen=ajSeqLen(seq);		/* length of the sequence passed
+    ajint seqlen=ajSeqLen(seq);		/* length of the sequence passed
 					   over - this will differ from 'len'
 					   if circular=true */
     char *chrseq = ajSeqChar(seq);
@@ -303,7 +303,7 @@ static void FindORFs(AjPSeq seq, int len, AjPTrn trnTable, int minsize,
 		    /* reset the newstr to zero length so that we can start
 		       storing the ORF for this frame in it */
 		    (void) ajStrClear(&newstr[frame]);
-		    ORF[frame] = ajTrue; /* we are now in an ORF (as long as
+		    ORF[frame] = ajTrue; /* we are now in an ORF (as ajlong as
 					    we are not circular and past the
 					    length of the genome) */
 		    start[frame] = pos;	/* start of the ORF for this frame */
@@ -419,19 +419,19 @@ static void FindORFs(AjPSeq seq, int len, AjPTrn trnTable, int minsize,
 }
 
 /******************************************************************************/
-static void WriteORF(AjPSeq seq, int len, int seqlen, AjBool sense,
-		     int find, int *orf_no, int start, int pos, AjPStr str,
-		     AjPSeqout seqout, int around)
+static void WriteORF(AjPSeq seq, ajint len, ajint seqlen, AjBool sense,
+		     ajint find, ajint *orf_no, ajint start, ajint pos, AjPStr str,
+		     AjPSeqout seqout, ajint around)
 {
     /* pos is the sequence position of the last nucleotide in the ORF */
 
     AjPSeq new;
     AjPStr name=NULL;			/* name of the ORF */
     AjPStr value=NULL;			/* string value of the ORF number */
-    int s, e;				/* start and end positions */
+    ajint s, e;				/* start and end positions */
     AjPStr aroundstr=NULL;		/* holds sequence string around the
 					   codon of interest */
-    int codonpos=0;			/* holds position of start of codon
+    ajint codonpos=0;			/* holds position of start of codon
 					   of interest */
 
     /* convert numbers in the range 0..seqlen+1 into numbers in the
@@ -563,7 +563,7 @@ static void WriteORF(AjPSeq seq, int len, int seqlen, AjBool sense,
 
 /***************************************************************************/
 /* append aa to ORF sequence string */
-static void AppORF(int find, AjPStr *str, char *chrseq, int pos, char aa)
+static void AppORF(ajint find, AjPStr *str, char *chrseq, ajint pos, char aa)
 {
 
     if (find == N_STOP2STOP || find == N_START2STOP ||

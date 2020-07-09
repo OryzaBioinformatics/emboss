@@ -38,11 +38,11 @@ typedef struct AjSRinfo
 {
     AjPStr code;              /* structure for RE info */ 
     AjPStr site;
-    int ncuts;
-    int cut1;
-    int cut2;
-    int cut3;
-    int cut4;
+    ajint ncuts;
+    ajint cut1;
+    ajint cut2;
+    ajint cut3;
+    ajint cut4;
 } AjORinfo, *AjPRinfo;
 
 
@@ -50,8 +50,8 @@ typedef struct Mutant
 {
     AjPStr code;              /* structure for mutation sites */
     AjPStr site;
-    int match;
-    int base;
+    ajint match;
+    ajint base;
     AjPStr seqaa;
     AjPStr reaa;
     char   obase;
@@ -60,21 +60,21 @@ typedef struct Mutant
 
 
 
-static int  readRE(AjPList *relist, AjPStr enzymes);
+static ajint  readRE(AjPList *relist, AjPStr enzymes);
 static AjPList rematch(AjPStr sstr, AjPList ressite, AjPFile outf,
-                       AjPStr sname, int RStotal, int radj, AjBool rev,
-                       int begin, int end, AjBool tshow);
+                       AjPStr sname, ajint RStotal, ajint radj, AjBool rev,
+                       ajint begin, ajint end, AjBool tshow);
 static AjPList checkTrans(AjPStr seq,AjPFile outf,EmbPMatMatch match,
-                        AjPRinfo rlp, int begin,int radj, AjBool rev,
-	                int end, int pos,AjBool* empty);
+                        AjPRinfo rlp, ajint begin,int radj, AjBool rev,
+	                ajint end, ajint pos,AjBool* empty);
 static AjBool checkPat(AjPStr seq,AjPFile outf,EmbPMatMatch match, 
-                     AjPRinfo rlp, int radj, AjBool rev, int begin,
-                     int end);
-static int  changebase(char pbase, char* tbase);
+                     AjPRinfo rlp, ajint radj, AjBool rev, ajint begin,
+                     ajint end);
+static ajint  changebase(char pbase, char* tbase);
 static void mutFree(Mutant* mut);
-static int basecompare(const void *a, const void *b);
+static ajint basecompare(const void *a, const void *b);
 
-static void fmt_seq(AjPStr seq, AjPFile outf, int start, AjBool num);
+static void fmt_seq(AjPStr seq, AjPFile outf, ajint start, AjBool num);
 static void fmt_muts(AjPList muts, AjPFile outf);
  
 
@@ -89,11 +89,11 @@ int main(int argc, char **argv)
     AjPStr revcomp=NULL;	     /* rev complement of seq */ 
     AjPStr enzymes=NULL;             /* string for RE selection */    
 
-    int    RStotal;
-    int    begin;                    /* specified start by user */ 
-    int    end;                      /* specified end by user */ 
-    int    radj;
-    int    start; 
+    ajint    RStotal;
+    ajint    begin;                    /* specified start by user */ 
+    ajint    end;                      /* specified end by user */ 
+    ajint    radj;
+    ajint    start; 
     AjBool sshow; 
     AjBool tshow;
  
@@ -208,8 +208,8 @@ int main(int argc, char **argv)
 *************************************************************************/
 
 static AjPList rematch(AjPStr sstr, AjPList relist, AjPFile outf, 
-                 AjPStr sname, int RStotal, int radj, AjBool rev,
-	         int begin, int end, AjBool tshow)
+                 AjPStr sname, ajint RStotal, ajint radj, AjBool rev,
+	         ajint begin, ajint end, AjBool tshow)
 { 
     AjPList res;
     AjPList results; 
@@ -220,12 +220,12 @@ static AjPList rematch(AjPStr sstr, AjPList relist, AjPFile outf,
     AjBool dummy=ajFalse;              /* need a bool for ajPatClassify */
     AjBool empty;
 
-    int mm;                            /* no. of mismatches */
-    int pats;                          /* no. of pattern matches */
-    int patlen;
-    int pos;
-    int aw;                             
-    int start;                         
+    ajint mm;                            /* no. of mismatches */
+    ajint pats;                          /* no. of pattern matches */
+    ajint patlen;
+    ajint pos;
+    ajint aw;                             
+    ajint start;                         
 
     AjPList patlist=NULL;              /* list for pattern matches of.. */
     EmbPMatMatch match;                /* ..AjMatMatch structures*/
@@ -334,16 +334,16 @@ static AjPList rematch(AjPStr sstr, AjPList relist, AjPFile outf,
 ** returns: restriction site information as a list
 **
 *************************************************************************/
-static int readRE(AjPList *relist,AjPStr enzymes)
+static ajint readRE(AjPList *relist,AjPStr enzymes)
 {
     EmbPPatRestrict rptr=NULL;		/* store RE info */
     AjPFile fin=NULL;			/* file pointer to RE file data */
     AjPStr refilename=NULL;		/* .. & string for the filename */
-    register int RStotal=0;		/* counts no of RE */  
+    register ajint RStotal=0;		/* counts no of RE */  
     AjPRinfo rinfo=NULL;
     AjBool isall=ajFalse;
-    int ne=0;
-    int i;
+    ajint ne=0;
+    ajint i;
     AjPStr *ea=NULL;
 
   
@@ -415,13 +415,13 @@ static int readRE(AjPList *relist,AjPStr enzymes)
 **
 *************************************************************************/
 static AjBool checkPat(AjPStr seq,AjPFile outf,EmbPMatMatch match, 
-            AjPRinfo rlp, int radj, AjBool rev, int begin, int end)
+            AjPRinfo rlp, ajint radj, AjBool rev, ajint begin, ajint end)
 {
-    int mpos;
-    int rmpos;
+    ajint mpos;
+    ajint rmpos;
 
-    int  min=INT_MAX;             /* reverse sense intentional! */
-    int  max=-INT_MAX;
+    ajint  min=INT_MAX;             /* reverse sense intentional! */
+    ajint  max=-INT_MAX;
 
 
     mpos  = match->start;         /* start posn of match in seq */
@@ -468,8 +468,8 @@ static AjBool checkPat(AjPStr seq,AjPFile outf,EmbPMatMatch match,
 **          
 *************************************************************************/
 static AjPList checkTrans(AjPStr seq,AjPFile outf,EmbPMatMatch match, 
-                  AjPRinfo rlp, int begin,int radj, AjBool rev, 
-		  int end, int pos, AjBool* empty)
+                  AjPRinfo rlp, ajint begin,int radj, AjBool rev, 
+		  ajint end, ajint pos, AjBool* empty)
 {
     char *pseq;
     char *pseqm;
@@ -479,9 +479,9 @@ static AjPList checkTrans(AjPStr seq,AjPFile outf,EmbPMatMatch match,
     Mutant  tresult;
     AjPList res;
 
-    int mpos;
-    int framep;
-    int i;
+    ajint mpos;
+    ajint framep;
+    ajint i;
     AjPTrn table=NULL;
     AjPStr s1=NULL;
     AjPStr s2=NULL;
@@ -489,9 +489,9 @@ static AjPList checkTrans(AjPStr seq,AjPFile outf,EmbPMatMatch match,
     char pbase;
     char tbase[4];
     
-    int  rmpos;
-    int  x;   
-    int  nb;
+    ajint  rmpos;
+    ajint  x;   
+    ajint  nb;
 
 
 
@@ -573,24 +573,24 @@ static AjPList checkTrans(AjPStr seq,AjPFile outf,EmbPMatMatch match,
 ** returns: alternative bases in tbase and the number of bases
 **
 *************************************************************************/
-static int changebase(char pbase, char* tbase)
+static ajint changebase(char pbase, char* tbase)
 {
-    int setBase[] = {1,1,1,1};
+    ajint setBase[] = {1,1,1,1};
     AjIStr splits = NULL;
     AjPStr bt = NULL;
     char bs;
-    int i;
-    int nb;
-    int len;
+    ajint i;
+    ajint nb;
+    ajint len;
 
     
 
     ajBaseInit();
 
-    len = ajStrLen(aj_base_iubS[(int)pbase].list)-1; 
+    len = ajStrLen(aj_base_iubS[(ajint)pbase].list)-1; 
 
     bt = ajStrNew();
-    ajStrAssI(&bt,aj_base_iubS[(int)pbase].list,len);
+    ajStrAssI(&bt,aj_base_iubS[(ajint)pbase].list,len);
     splits = ajStrIter(bt);
 
     while(!ajStrIterDone(splits)) 
@@ -636,12 +636,12 @@ static int changebase(char pbase, char* tbase)
 ** Write sequence to the output file.
 **
 *************************************************************************/
-static void fmt_seq(AjPStr seq, AjPFile outf, int start, AjBool num)
+static void fmt_seq(AjPStr seq, AjPFile outf, ajint start, AjBool num)
 {
     char *p;
-    int m;
-    int i;
-    int tlen;
+    ajint m;
+    ajint i;
+    ajint tlen;
 
 
     if(num)
@@ -711,7 +711,7 @@ static void fmt_muts(AjPList muts, AjPFile outf)
 ** Combare 2 base positions in the nucleotide sequence
 **
 *************************************************************************/
-static int basecompare(const void *a, const void *b)
+static ajint basecompare(const void *a, const void *b)
 {
     return((*(Mutant *)a)->base)-((*(Mutant *)b)->base);
 }	

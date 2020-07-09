@@ -57,33 +57,48 @@ Back translate a protein sequence
 </H2>
 
 
-Backtranseq takes a protein sequence and makes a best estimate of the
+<b>backtranseq</b> takes a protein sequence and makes a best estimate of the
 likely nucleic acid sequence it could have come from.  It does this by
 using a codon frequency table. For each amino acid, the corresponding
 most frequently occuring codon is used in the construction of the nucleic
 acid sequence.
+
+<h3>Codon usage table name</h3>
+
+<b>backtranseq</b> reads in a data file containing the codon frequency
+tables.  The default codon frequency table is 'Ehum.cut' - the human
+codon frequency table.  It is important to use a codon frequency table
+that is appropriate for the species that your protein comes from. 
+See the <b>Data Files</b> section below for more details on these files.
 
 <H2>
     Usage
 </H2>
 
 
-Here is a sample session with backtranseq.
+Here is a sample session with backtranseq.  Note that this is a human
+protein and so the default (human) codon frequency file is used (i.e. 
+is not specified). 
+<p>
 
 <pre>
-
 % backtranseq
+Back translate a protein sequence
 Input sequence: sw:opsd_human
 Output sequence [opsd_human.fasta]: 
-
 </pre>
+
+<p>
 
 Here is a session using a drosophila sequence and codon table:
 
+<p>
+
 <pre>
-
-% backtranseq -seq sw:ach2_drome -out stdout -cfile Edrosophila
-
+% backtranseq -cfile Edrosophila.cut
+Back translate a protein sequence
+Input sequence: sw:ach2_drome
+Output sequence [ach2_drome.fasta]: 
 </pre>
 
 
@@ -177,6 +192,37 @@ The output is a nucleotide sequence containing the most favoured back
 translation of the specified protein, and using the specified
 translation table (which defaults to human).
 
+<p>
+
+The output from the backtranslation of the human protein <b>sw:opsd_human</b>
+follows:
+
+<p>
+
+<hr>
+<pre>
+% more opsd_human.fasta
+>OPSD_HUMAN P08100 RHODOPSIN.
+ATGAACGGCACCGAGGGCCCCAACTTCTACGTGCCCTTCAGCAACGCCACCGGCGTGGTG
+AGAAGCCCCTTCGAGTACCCCCAGTACTACCTGGCCGAGCCCTGGCAGTTCAGCATGCTG
+GCCGCCTACATGTTCCTGCTGATCGTGCTGGGCTTCCCCATCAACTTCCTGACCCTGTAC
+GTGACCGTGCAGCACAAGAAGCTGAGAACCCCCCTGAACTACATCCTGCTGAACCTGGCC
+GTGGCCGACCTGTTCATGGTGCTGGGCGGCTTCACCAGCACCCTGTACACCAGCCTGCAC
+GGCTACTTCGTGTTCGGCCCCACCGGCTGCAACCTGGAGGGCTTCTTCGCCACCCTGGGC
+GGCGAGATCGCCCTGTGGAGCCTGGTGGTGCTGGCCATCGAGAGATACGTGGTGGTGTGC
+AAGCCCATGAGCAACTTCAGATTCGGCGAGAACCACGCCATCATGGGCGTGGCCTTCACC
+TGGGTGATGGCCCTGGCCTGCGCCGCCCCCCCCCTGGCCGGCTGGAGCAGATACATCCCC
+GAGGGCCTGCAGTGCAGCTGCGGCATCGACTACTACACCCTGAAGCCCGAGGTGAACAAC
+GAGAGCTTCGTGATCTACATGTTCGTGGTGCACTTCACCATCCCCATGATCATCATCTTC
+TTCTGCTACGGCCAGCTGGTGTTCACCGTGAAGGAGGCCGCCGCCCAGCAGCAGGAGAGC
+GCCACCACCCAGAAGGCCGAGAAGGAGGTGACCAGAATGGTGATCATCATGGTGATCGCC
+TTCCTGATCTGCTGGGTGCCCTACGCCAGCGTGGCCTTCTACATCTTCACCCACCAGGGC
+AGCAACTTCGGCCCCATCTTCATGACCATCCCCGCCTTCTTCGCCAAGAGCGCCGCCATC
+TACAACCCCGTGATCTACATCATGATGAACAAGCAGTTCAGAAACTGCATGCTGACCACC
+ATCTGCTGCGGCAAGAACCCCCTGGGCGACGACGAGGCCAGCGCCACCGTGAGCAAGACC
+GAGACCAGCCAGGTGGCCCCCGCC
+</pre>
+<hr>
 
 <H2>
     Data files
@@ -212,16 +258,19 @@ current directory for you to inspect or modify, run:
     Notes
 </H2>
 
+None.
 
 <H2>
     References
 </H2>
 
+None.
 
 <H2>
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
@@ -245,6 +294,8 @@ table cannot be opened.
     Known bugs
 </H2>
 
+
+None.
 
 <!--
 <H2>

@@ -60,6 +60,21 @@ Finds antigenic sites in proteins
 Antigenic predicts potentially antigenic regions of a protein
 sequence, using the method of Kolaskar and Tongaonkar.
 
+<p>
+
+Analysis of data from experimentally determined antigenic sites on
+proteins has revealed that the hydrophobic residues Cys, Leu and Val, if
+they occur on the surface of a protein, are more likely to be a part of
+antigenic sites.  A semi-empirical method which makes use of
+physicochemical properties of amino acid residues and their frequencies
+of occurrence in experimentally known segmental epitopes was developed
+by Kolaskar and Tongaonkar
+to predict antigenic determinants on proteins.  Application of this
+method to a large number of proteins has shown that their method can
+predict antigenic determinants with about 75% accuracy which is better
+than most of the known methods.  This method is based on a single
+parameter and thus very simple to use. 
+
 <H2>
     Usage
 </H2>
@@ -175,8 +190,10 @@ The input sequence can be one or more protein sequences.
 
 Here is a sample output:
 
-<pre>
+<p>
 
+<hr>
+<pre>
 ANTIGENIC of ACT1_FUGRU  from: 1  to: 375
 
 Length 375 residues, score calc from 4 to 372
@@ -210,7 +227,42 @@ Entries in score order, max score at "*"
             |      |
             5      12
 
+</pre>
+<hr>
 
+By using the '-featout' qualifier, a GFF file of the predicted regions
+can be produced. For example:
+<p>
+
+<pre>
+% antigenic -featout eg.gff
+Finds antigenic sites in proteins
+Input sequence(s): sw:act1_fugru
+Minimum length [6]: 
+Output file [act1_fugru.antigenic]: 
+
+% more eg.gff
+##gff-version 0.0
+##date 2001-02-13
+##sequence-region ACT1_FUGRU 0 0
+ACT1_FUGRU      antigenic       misc_feature    5       12      1.166   +	.       note "max score at 7"
+ACT1_FUGRU      antigenic       misc_feature    27      38      1.164   +	.       note "max score at 31"
+ACT1_FUGRU      antigenic       misc_feature    40      46      1.066   +	.       note "max score at 42"
+ACT1_FUGRU      antigenic       misc_feature    51      57      1.034   +	.       note "max score at 51"
+ACT1_FUGRU      antigenic       misc_feature    62      76      1.102   +	.       note "max score at 67"
+ACT1_FUGRU      antigenic       misc_feature    93      108     1.116   +	.       note "max score at 102 ,103"
+ACT1_FUGRU      antigenic       misc_feature    131     145     1.187   +	.       note "max score at 136"
+ACT1_FUGRU      antigenic       misc_feature    160     183     1.136   +	.       note "max score at 172"
+ACT1_FUGRU      antigenic       misc_feature    186     192     1.068   +	.       note "max score at 190"
+ACT1_FUGRU      antigenic       misc_feature    214     222     1.207   +	.       note "max score at 217"
+ACT1_FUGRU      antigenic       misc_feature    232     250     1.086   +	.       note "max score at 244"
+ACT1_FUGRU      antigenic       misc_feature    256     266     1.110   +	.       note "max score at 263"
+ACT1_FUGRU      antigenic       misc_feature    269     275     1.045   +	.       note "max score at 268"
+ACT1_FUGRU      antigenic       misc_feature    295     301     1.113   +	.       note "max score at 295"
+ACT1_FUGRU      antigenic       misc_feature    317     323     1.074   +	.       note "max score at 319"
+ACT1_FUGRU      antigenic       misc_feature    327     332     1.083   +	.       note "max score at 329"
+ACT1_FUGRU      antigenic       misc_feature    336     352     1.107   +	.       note "max score at 346"
+ACT1_FUGRU      antigenic       misc_feature    367     372     1.135   +	.       note "max score at 371"
 </pre>
 
 <H2>

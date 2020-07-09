@@ -25,30 +25,31 @@ extern "C"
 typedef struct AjSCod
 {
     AjPStr name;		/* Name of codon file                   */
-    int *aa;			/* Amino acid represented by codon      */
-    int *num;			/* Number of codons                     */
+    ajint *aa;			/* Amino acid represented by codon      */
+    ajint *num;			/* Number of codons                     */
     double *tcount;		/* Codons per thousand                  */
     double *fraction;		/* Fraction of amino acids of this type */
-    int *back;			/* Index of favoured amino acid         */
+    ajint *back;			/* Index of favoured amino acid         */
 } AjOCod, *AjPCod;
 
 
 void    ajCodBacktranslate(AjPStr *b, AjPStr a, AjPCod thys);
-int     ajCodBase(int c);
+ajint   ajCodBase(ajint c);
 void    ajCodCalcGribskov(AjPCod *nrm, AjPStr s);
+double  ajCodCalcCai(AjPCod *thys);
 double  ajCodCalcNc(AjPCod *thys);
-void    ajCodCalculateUsage(AjPCod *thys, int c);
+void    ajCodCalculateUsage(AjPCod *thys, ajint c);
 void    ajCodClear(AjPCod *thys);
-void    ajCodComp(int *NA, int *NC, int *NG, int *NT, char *str);
-void    ajCodCountTriplets(AjPCod *thys, AjPStr s, int *c);
+void    ajCodComp(ajint *NA, ajint *NC, ajint *NG, ajint *NT, char *str);
+void    ajCodCountTriplets(AjPCod *thys, AjPStr s, ajint *c);
 void    ajCodDel (AjPCod *thys);
 AjPCod  ajCodDup (AjPCod thys);
-int     ajCodIndexC(char *codon);
-int     ajCodIndex(AjPStr s);
+ajint     ajCodIndexC(char *codon);
+ajint     ajCodIndex(AjPStr s);
 AjPCod	ajCodNew(void);
 AjBool  ajCodRead(AjPStr fn, AjPCod *thys);
 void    ajCodSetBacktranslate(AjPCod *thys);
-char*   ajCodTriplet(int idx);
+char*   ajCodTriplet(ajint idx);
 void 	ajCodWrite(AjPFile outf, AjPCod thys);
 
 #endif

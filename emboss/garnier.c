@@ -6,7 +6,7 @@
 
 char amino[]="GAVLISTDENQKHRFYWCMP";
 
-int helix[20][17]=
+ajint helix[20][17]=
 {
   { -5,-10,-15,-20,-30,-40,-50,-60,-86,-60,-50,-40,-30,-20,-15,-10, -5},
   { 5, 10, 15, 20, 30, 40, 50, 60, 65, 60, 50, 40, 30, 20, 15, 10,  5},
@@ -30,7 +30,7 @@ int helix[20][17]=
   { -10,-20,-40,-60,-80,-100,-120,-140,-77,-60,-30,-20,-10, 0, 0, 0,  0}
 };
 
-int extend [20][17]=
+ajint extend [20][17]=
 {
   { 10, 20, 30, 40, 40, 20,  0,-20,-42,-20,  0, 20, 40, 40, 30, 20,-10},
   {  0,  0,  0,  0, -5,-10,-15,-20,-23,-20,-15,-10, -5,  0,  0,  0,  0},
@@ -54,7 +54,7 @@ int extend [20][17]=
   { 10, 20, 30, 30, 20, 10,  0,-10,-18,-20,-10, 10, 30, 40, 30, 20, 10}
 };
 
-int turns[20][17]=
+ajint turns[20][17]=
 {
  {  0,  0,  0,  0, 10, 30, 55, 55, 57, 40,  0,  0,  0,  0,  0,  0,  0},
  {  0,  0,  0,-10,-20,-30,-40,-50,-50,-40,-30,-20,-10,  0,  0,  0,  0},
@@ -78,7 +78,7 @@ int turns[20][17]=
  { 10, 20, 30, 40, 50, 70, 10,-90, 36, 90, 10,  0,  0,  0,  0,  0,  0}
 };
 
-int coil[20][17]=
+ajint coil[20][17]=
 {
   {  0,  0,  0,  0, 10, 30, 40, 45, 49, 45, 40, 30, 10,  0,  0,  0,  0},
   {  0,  0,  0,  0, -5,-10,-20,-25,-25,-25,-20,-15,-10, -5,  0,  0,  0},
@@ -110,7 +110,7 @@ int coil[20][17]=
 #define ES 126
 
 /*      0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15	*/
-int aascii[]={
+ajint aascii[]={
 	EL,NA,NA,NA,NA,NA,NA,NA,NA,NA,EL,NA,NA,EL,NA,NA,
 	NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
 	NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
@@ -120,10 +120,10 @@ int aascii[]={
 	NA, 0,20, 4, 3, 6,13, 7, 8, 9,NA,11,10,12, 2,NA,
 	14, 5, 1,15,16,NA,19,17,22,18,21,NA,NA,NA,NA,NA};
 
-int *sascii;
+ajint *sascii;
 #define AAMASK 127
 
-int nascii[]={
+ajint nascii[]={
 /*	 0  1  2  3  5  6  7  8  9 10 11 12 13 14 15 15
 	 @  A  B  C  D  E  F  G  H  I  J  K  L  M  N  O
 	 P  Q  R  S  T  U  V  W  X  Y  Z		*/
@@ -139,14 +139,14 @@ int nascii[]={
 
 /*	20-June-1986	universal pam file */
 
-int gdelval= -12;
-int del_set=0;
+ajint gdelval= -12;
+ajint del_set=0;
 
-int ggapval= -2;
-int gap_set=0;
+ajint ggapval= -2;
+ajint gap_set=0;
 
-int gshift = -30;
-int shift_set=0;
+ajint gshift = -30;
+ajint shift_set=0;
 
 #define EOSEQ 31
 #define MAXSQ 32
@@ -158,13 +158,13 @@ char sqtype[]={"protein"};
 char *sq;
 char aa[MAXSQ] = {"ARNDCQEGHILKMFPSTWYVBZX"};
 
-int naa = 23;
-int nsq;
+ajint naa = 23;
+ajint nsq;
 
-int haa[MAXSQ] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,2,6,0};
-int *hsq;
+ajint haa[MAXSQ] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,2,6,0};
+ajint *hsq;
 
-int apam250[450] = {
+ajint apam250[450] = {
   2,
  -2, 6,
   0, 0, 2,
@@ -189,7 +189,7 @@ int apam250[450] = {
   0, 0, 1, 3,-5, 3, 3,-1, 2,-2,-3, 0,-2,-5, 0, 0,-1,-6,-4,-2, 2, 3,
  -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 
-int abl50[] = {
+ajint abl50[] = {
   5,
  -2, 7,
  -1,-1, 7,
@@ -214,7 +214,7 @@ int abl50[] = {
  -1, 0, 0, 1,-3, 4, 5,-2, 0,-3,-3, 1,-1,-4,-1, 0,-1,-2,-2,-3, 2, 5,
  -1,-1,-1,-1,-2,-1,-1,-2,-1,-1,-1,-1,-1,-2,-2,-1, 0,-3,-1,-1,-1,-1,-1};
 
-int abl62[] = {
+ajint abl62[] = {
   4,
  -1, 5,
  -2, 0, 6,
@@ -256,11 +256,11 @@ int abl62[] = {
 
 char nt[MAXSQ]={"ACGTURYMWSKDHVBNX"};
 
-int nnt = 17;
+ajint nnt = 17;
 
-int hnt[MAXSQ] = {0,1,2,3,3,0,1,0,0,1,2,0,0,0,1,0,0};
+ajint hnt[MAXSQ] = {0,1,2,3,3,0,1,0,0,1,2,0,0,0,1,0,0};
 
-int npam[450] = {
+ajint npam[450] = {
 /*       A  C  G  T  U  R  Y  M  W  S  K  D  H  V  B  N  X  */
 	 5,						/* A */
 	-4, 5,						/* C */
@@ -281,16 +281,16 @@ int npam[450] = {
 	-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}; /* X */
 /*       A  C  G  T  U  R  Y  M  W  S  K  D  H  V  B  N  */
 
-int *pam;
-int pam2[MAXSQ][MAXSQ];
-int pamh1[MAXSQ];		/* used for kfact replacement */
+ajint *pam;
+ajint pam2[MAXSQ][MAXSQ];
+ajint pamh1[MAXSQ];		/* used for kfact replacement */
 
 
-void dogarnier(AjPFile outf, int s, int len, char *seq, char *name,
-	       int begin, int Idc);
-void makemap (char *input, int *map, int n);
+void dogarnier(AjPFile outf, ajint s, ajint len, char *seq, char *name,
+	       ajint begin, ajint Idc);
+void makemap (char *input, ajint *map, ajint n);
 
-int main( int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
@@ -298,10 +298,10 @@ int main( int argc, char **argv, char **env)
     AjPStr    strand=NULL;
     AjPStr    substr=NULL;
     
-    int begin;
-    int end;
-    int len;
-    int Idc;
+    ajint begin;
+    ajint end;
+    ajint len;
+    ajint Idc;
 
     embInit("garnier",argc,argv);
     
@@ -339,31 +339,31 @@ int main( int argc, char **argv, char **env)
 }
 
 
-void dogarnier(AjPFile outf, int from, int to, char *seq, char *name,
-	       int begin, int Idc)
+void dogarnier(AjPFile outf, ajint from, ajint to, char *seq, char *name,
+	       ajint begin, ajint Idc)
 {
     char *refstr="\n Please cite:\n Garnier, Osguthorpe and Robson (1978) J. Mol. Biol. 120:97-120\n";
     
-    int i;
-    int end;
-    int amap[20];
-    int nna=20;
-    int parr[4];
+    ajint i;
+    ajint end;
+    ajint amap[20];
+    ajint nna=20;
+    ajint parr[4];
     char carr[]="HETC";
     char type[5000];
-    int iarr[4];
-    int dharr[]=
+    ajint iarr[4];
+    ajint dharr[]=
     {
 	0,158,-75,-100
     }
     ;
-    int dsarr[]=
+    ajint dsarr[]=
     {
 	0,50,-88,-88
     }
     ;
-    int n0;
-    int j, k, l0, l1, idc, dcs, dch, lastk;
+    ajint n0;
+    ajint j, k, l0, l1, idc, dcs, dch, lastk;
     float fn0;
     
     idc=Idc;
@@ -394,7 +394,7 @@ void dogarnier(AjPFile outf, int from, int to, char *seq, char *name,
   for (i=0; i<n0; i++)  {
 /*      ajDebug("seq[%d] '%c' %x", i, seq[i], seq[i]);
 */      
-    seq[i] = amap[aascii[(int)seq[i]]];
+    seq[i] = amap[aascii[(ajint)seq[i]]];
 /*
     ajDebug(" -> %x\n", seq[i]);
 */
@@ -403,23 +403,23 @@ void dogarnier(AjPFile outf, int from, int to, char *seq, char *name,
 
   lastk = 0;
   for (i=0; i<n0; i++) {
-    parr[0]=helix[(int)seq[i]][8];
-    parr[1]=extend[(int)seq[i]][8];
-    parr[2]=turns[(int)seq[i]][8];
-    parr[3]=coil[(int)seq[i]][8];
+    parr[0]=helix[(ajint)seq[i]][8];
+    parr[1]=extend[(ajint)seq[i]][8];
+    parr[2]=turns[(ajint)seq[i]][8];
+    parr[3]=coil[(ajint)seq[i]][8];
 
     for (j=1; j<9; j++) {
       if ((i-j)>=0) {
-        parr[0] += helix[(int)seq[i-j]][8+j];
-        parr[1] += extend[(int)seq[i-j]][8+j];
-        parr[2] += turns[(int)seq[i-j]][8+j];
-        parr[3] += coil[(int)seq[i-j]][8+j];
+        parr[0] += helix[(ajint)seq[i-j]][8+j];
+        parr[1] += extend[(ajint)seq[i-j]][8+j];
+        parr[2] += turns[(ajint)seq[i-j]][8+j];
+        parr[3] += coil[(ajint)seq[i-j]][8+j];
       }
       if ((i+j)<n0) {
-        parr[0] += helix[(int)seq[i+j]][8-j];
-        parr[1] += extend[(int)seq[i+j]][8-j];
-        parr[2] += turns[(int)seq[i+j]][8-j];
-        parr[3] += coil[(int)seq[i+j]][8-j];
+        parr[0] += helix[(ajint)seq[i+j]][8-j];
+        parr[1] += extend[(ajint)seq[i+j]][8-j];
+        parr[2] += turns[(ajint)seq[i+j]][8-j];
+        parr[3] += coil[(ajint)seq[i+j]][8-j];
       }
     }
     parr[0] -= dch;
@@ -447,7 +447,7 @@ void dogarnier(AjPFile outf, int from, int to, char *seq, char *name,
       ajFmtPrintF(outf,"    .%5d",i+1);
     ajFmtPrintF(outf,"\n       ");
     for (i=l0*60; i<n0 && i<(l0+1)*60; i++) 
-      ajFmtPrintF(outf,"%c",amino[(int)seq[i]]);
+      ajFmtPrintF(outf,"%c",amino[(ajint)seq[i]]);
     ajFmtPrintF(outf,"\n helix ");
     for (i=l0*60; i<n0 && i<(l0+1)*60; i++)
       ajFmtPrintF(outf,"%c",(type[i]=='H')?'H':' ');
@@ -475,13 +475,13 @@ void dogarnier(AjPFile outf, int from, int to, char *seq, char *name,
 }
 
 
-void makemap (char *input, int *map, int n)
+void makemap (char *input, ajint *map, ajint n)
 {
-    int i;
+    ajint i;
     
     for (i=0;i<n;i++) 
     {
-	map[aascii[(int)input[i]]]=i;
+	map[aascii[(ajint)input[i]]]=i;
 /*	ajDebug("i: %d map...[i] %x input[i] %x '%c'\n",
 		i, map[aascii[input[i]]], input[i], input[i]);
 */	

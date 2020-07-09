@@ -10,8 +10,18 @@ Function
    
 Description
 
-   Calculates Frank Wright's Nc statistic for the effective number of
-   codons used (ref 1).
+   chips calculates Frank Wright's Nc statistic for the effective number
+   of codons used (ref 1).
+   
+   This is a simple measure that quantifies how far the codon usage of a
+   gene departs from equal usage of synonymous codons. This measure of
+   synonymous codon usage bias, the 'effective number of codons used in a
+   gene', Nc, can be easily calculated from codon usage data alone, and
+   is independent of gene length and amino acid (aa) composition. Nc can
+   take values from 20, in the case of extreme bias where one codon is
+   exclusively used for each aa, to 61 when the use of alternative
+   synonymous codons is equally likely. Nc thus provides an intuitively
+   meaningful measure of the extent of codon preference in a gene.
    
    The Nc statistic has problems in very short sequences (20 amino acids
    or less) which are yet to be fully resolved. They are caused by the
@@ -28,7 +38,7 @@ Usage
    Here is a sample session with chips. If the sequence extends beyond
    the coding region then the start and/or end positions of the CDS must
    be provided because chips analyses exclusively protein coding regions.
-
+   
 % chips -sbeg 135 -send 1292
 Input sequence: embl:paamir
 Output file [paamir.chips]:
@@ -58,14 +68,18 @@ Command line arguments
    
 Input file format
 
+   A nucleic acid sequence USA.
+   
 Output file format
 
    This is the output from the example run:
-
+     _________________________________________________________________
+   
 # CHIPS codon usage statistics
 
 Nc = 32.951
-
+     _________________________________________________________________
+   
    If all codons are used, the Nc value will be 61. If only one codon is
    used for each amino acid the Nc value will be 20. Low values therefor
    indicate a strong codon bias, and high values indicate a low bias and
@@ -97,6 +111,8 @@ Data files
        
 Notes
 
+   None.
+   
 References
 
     1. Wright, F. (1990) Gene 87:23-29 "The 'effective number of codons'
@@ -104,12 +120,20 @@ References
        
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                          Description
@@ -121,6 +145,7 @@ See also
    geecee       Calculates the fractional GC content of nucleic acid sequences
    getorf       Finds and extracts open reading frames (ORFs)
    isochore     Plots isochores in large DNA sequences
+   marscan      Finds MAR/SAR sites in nucleic sequences
    newcpgreport Report CpG rich areas
    newcpgseek   Reports CpG rich regions
    syco         Synonymous codon usage Gribskov statistic plot
@@ -133,6 +158,8 @@ Author(s)
    
 History
 
+   1999 - Written - Alan Bleasby.
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

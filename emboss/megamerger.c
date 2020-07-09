@@ -28,11 +28,12 @@ static void merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
 	AjPSeqout seqout, AjPFile outfile);
 
 
-int main(int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
   
   AjPSeq seq1,seq2;
   AjPSeqout seqout;
-  int wordlen;
+  ajint wordlen;
   AjPTable seq1MatchTable =0 ;
   AjPList matchlist=NULL ;
   AjPFile outfile;
@@ -94,12 +95,12 @@ static void merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
 
   AjIList iter=NULL;		/* match list iterator */
   EmbPWordMatch p=NULL;  		/* match structure */
-  int count=0;			/* count of matches */
+  ajint count=0;			/* count of matches */
   AjPStr seqstr = ajStrNew();	/* merged sequence string */
   AjPStr s1 = ajSeqStr(seq1);	/* string of seq1 */
   AjPStr s2 = ajSeqStr(seq2);	/* string of seq2 */
-  int prev1end=0, prev2end=0;	/* end positions (+1) of previous match */
-  int mid1, mid2;		/* middle of a mismatch region */
+  ajint prev1end=0, prev2end=0;	/* end positions (+1) of previous match */
+  ajint mid1, mid2;		/* middle of a mismatch region */
   AjPStr tmp = ajStrNew();	/* holds sequence string while uppercasing */
 
 /* change the sequences to lowercase so we can highlight problem areas */

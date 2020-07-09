@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include "hsp_regex.h"
-extern char ajSysItoC(int v);
+extern char ajSysItoC(ajint v);
 
 #include "hsp_utils.h"
 #include "hsp_regex2.h"
@@ -13,7 +13,7 @@ extern char ajSysItoC(int v);
 /* == include debug.ih pasted in here == */
 
 static void s_print(register REGUTSSTRUCT *g, FILE *d);
-static char *regchar(int ch);
+static char *regchar(ajint ch);
 
 /* == end debug.ih == */
 
@@ -29,10 +29,10 @@ static char *regchar(int ch);
 void hsp_regprint(regex_t *r, FILE *d)
 {
 	register REGUTSSTRUCT *g = r->re_g;
-	register int i;
-	register int c;
-	register int last;
-	int nincat[NC];
+	register ajint i;
+	register ajint c;
+	register ajint last;
+	ajint nincat[NC];
 
 	(void) fprintf(d, "%ld states, %d categories", (long)g->nstates,
 							g->ncategories);
@@ -47,7 +47,7 @@ void hsp_regprint(regex_t *r, FILE *d)
 	if (g->nsub > 0)
 		(void) fprintf(d, ", nsub=%ld", (long)g->nsub);
 	if (g->must != NULL)
-		(void) fprintf(d, ", must(%ld) `%*s'", (long)g->mlen, (int)g->mlen,
+		(void) fprintf(d, ", must(%ld) `%*s'", (long)g->mlen, (ajint)g->mlen,
 			       g->must);
 	if (g->backrefs)
 	    (void) fprintf(d, ", backrefs");
@@ -59,7 +59,7 @@ void hsp_regprint(regex_t *r, FILE *d)
 	{
 	    nincat[i] = 0;
 	    for (c = CHAR_MIN; c <= CHAR_MAX; c++)
-		if ((int) g->categories[c] == i)
+		if ((ajint) g->categories[c] == i)
 		    nincat[i]++;
 	}
 	(void) fprintf(d, "cc0#%d", nincat[0]);
@@ -67,7 +67,7 @@ void hsp_regprint(regex_t *r, FILE *d)
 	    if (nincat[i] == 1)
 	    {
 		for (c = CHAR_MIN; c <= CHAR_MAX; c++)
-		    if ((int)g->categories[c] == i)
+		    if ((ajint)g->categories[c] == i)
 			break;
 		(void) fprintf(d, ", %d=%s", i, regchar(c));
 	    }
@@ -77,7 +77,7 @@ void hsp_regprint(regex_t *r, FILE *d)
 		(void) fprintf(d, "cc%d\t", i);
 		last = -1;
 		for (c = CHAR_MIN; c <= CHAR_MAX+1; c++) /* +1 does flush */
-		    if (c <= CHAR_MAX && (int) g->categories[c] == i)
+		    if (c <= CHAR_MAX && (ajint) g->categories[c] == i)
 		    {
 			if (last < 0)
 			{
@@ -107,11 +107,11 @@ static void s_print(register REGUTSSTRUCT *g, FILE *d)
 {
     register sop *s;
     register cset *cs;
-    register int i;
-    register int done = 0;
+    register ajint i;
+    register ajint done = 0;
     register sop opnd;
-    register int col = 0;
-    register int last;
+    register ajint col = 0;
+    register ajint last;
     register sopno offset = 2;
 #define	GAP()	{	if (offset % 5 == 0) { \
     if (col > 40) { \
@@ -130,7 +130,7 @@ static void s_print(register REGUTSSTRUCT *g, FILE *d)
 	(void) fprintf(d, "missing initial OEND!\n");
     for (s = &g->strip[1]; !done; s++) {
 	opnd = OPND(*s);
-	switch ((int)SWOP(*s)) {
+	switch ((ajint)SWOP(*s)) {
 	case AJ_OEND:
 	    (void) fprintf(d, "\n");
 	    done = 1;
@@ -234,7 +234,7 @@ static void s_print(register REGUTSSTRUCT *g, FILE *d)
 	    (void) fprintf(d, ">");
 	    break;
 	default:
-	    (void) fprintf(d, "!%d(%d)!", (int)OP(*s), (int)opnd);
+	    (void) fprintf(d, "!%d(%d)!", (ajint)OP(*s), (ajint)opnd);
 	    break;
 	}
 	if (!done)
@@ -244,9 +244,9 @@ static void s_print(register REGUTSSTRUCT *g, FILE *d)
 
 /*
    - regchar - make a character printable
-   == static char *regchar(int ch);
+   == static char *regchar(ajint ch);
    */
-static char * regchar(int ch)
+static char * regchar(ajint ch)
 {
     static char buf[10];
 

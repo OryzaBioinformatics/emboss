@@ -24,11 +24,12 @@
 #define numsets 3
 #define numpoints 360
 
-int ipoints;
+ajint ipoints;
 
-int main(int argc, char *argv[]){
+int main(int argc, char **argv)
+{
   AjPGraphData graphdata;
-  int i;
+  ajint i;
   AjPGraph mult;
   AjBool overlap;
   /*  AjPStr device;*/
@@ -135,7 +136,8 @@ int main(int argc, char *argv[]){
   return 0;
 }
 #else
-int main(int argc, char *argv[]){
+int main(int argc, char **argv)
+{
   ajFatal("Sorry no PLplot was found on compilation hence NO graph\n");
 }
 #endif

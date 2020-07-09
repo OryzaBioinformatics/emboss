@@ -22,7 +22,7 @@
 
 #include "emboss.h"
 
-void put_seq(AjPSeq seq, AjPStr strseq, int n, char *name, int type,
+void put_seq(AjPSeq seq, AjPStr strseq, ajint n, char *name, ajint type,
 	     AjPSeqout seqout);
 
 
@@ -33,10 +33,10 @@ int main(int argc, char **argv)
     AjPSeq seq=NULL;
     AjPSeqout seqout=NULL;
     
-    int ncds=0;
-    int nmrna=0;
-    int ntran=0;
-    int i=0;
+    ajint ncds=0;
+    ajint nmrna=0;
+    ajint ntran=0;
+    ajint i=0;
 
     AjPStr cds=NULL;
     AjPStr mrna=NULL;
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
 
 
 
-void put_seq(AjPSeq seq, AjPStr strseq, int n, char *name, int type,
+void put_seq(AjPSeq seq, AjPStr strseq, ajint n, char *name, ajint type,
 	     AjPSeqout seqout)
 {
     AjPSeq nseq=NULL;

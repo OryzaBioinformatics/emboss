@@ -133,12 +133,12 @@ AjBool ajRegExecC (AjPRegexp prog, const char* str) {
 ** This information is normally lost during processing.
 **
 ** @param [r] rp [AjPRegexp] Compiled regular expression.
-** @return [int] Offset of match from start of string. 
+** @return [ajint] Offset of match from start of string. 
 **               -1 if the string and the expression do not match.
 ** @@
 ******************************************************************************/
 
-int ajRegOffset (AjPRegexp rp) {
+ajint ajRegOffset (AjPRegexp rp) {
 
   return (rp->startp[0] - rp->orig);
 }
@@ -152,13 +152,13 @@ int ajRegOffset (AjPRegexp rp) {
 ** This information is normally lost during processing.
 **
 ** @param [r] rp [AjPRegexp] Compiled regular expression.
-** @param [r] isub [int] Substring number.
-** @return [int] Offset of match from start of string. 
+** @param [r] isub [ajint] Substring number.
+** @return [ajint] Offset of match from start of string. 
 **               -1 if the string and the expression do not match.
 ** @@
 ******************************************************************************/
 
-int ajRegOffsetI (AjPRegexp rp, int isub) {
+ajint ajRegOffsetI (AjPRegexp rp, ajint isub) {
 
   return (rp->startp[isub] - rp->orig);
 }
@@ -172,12 +172,12 @@ int ajRegOffsetI (AjPRegexp rp, int isub) {
 ** This information is normally lost during processing.
 **
 ** @param [r] rp [AjPRegexp] Compiled regular expression.
-** @return [int] Offset of match from start of string. 
+** @return [ajint] Offset of match from start of string. 
 **               -1 if the string and the expression do not match.
 ** @@
 ******************************************************************************/
 
-int ajRegOffsetC (AjPRegexp rp) {
+ajint ajRegOffsetC (AjPRegexp rp) {
 
   return (rp->startp[0] - rp->orig);
 }
@@ -191,13 +191,13 @@ int ajRegOffsetC (AjPRegexp rp) {
 ** This information is normally lost during processing.
 **
 ** @param [r] rp [AjPRegexp] Compiled regular expression.
-** @param [r] isub [int] Substring number.
-** @return [int] Offset of match from start of string. 
+** @param [r] isub [ajint] Substring number.
+** @return [ajint] Offset of match from start of string. 
 **               -1 if the string and the expression do not match.
 ** @@
 ******************************************************************************/
 
-int ajRegOffsetIC (AjPRegexp rp, int isub) {
+ajint ajRegOffsetIC (AjPRegexp rp, ajint isub) {
 
   return (rp->startp[isub] - rp->orig);
 }
@@ -207,12 +207,12 @@ int ajRegOffsetIC (AjPRegexp rp, int isub) {
 ** After a successful comparison, returns the length of a substring.
 **
 ** @param [r] rp [AjPRegexp] Compiled regular expression.
-** @param [r] isub [int] Substring number.
-** @return [int] Substring length, or 0 if not found.
+** @param [r] isub [ajint] Substring number.
+** @return [ajint] Substring length, or 0 if not found.
 ** @@
 ******************************************************************************/
 
-int ajRegLenI (AjPRegexp rp, int isub) {
+ajint ajRegLenI (AjPRegexp rp, ajint isub) {
 
   if (!rp->startp[isub])
     return 0;
@@ -269,15 +269,15 @@ AjBool ajRegPostC (AjPRegexp rp, const char** post) {
 ** After a successful match, returns a substring.
 **
 ** @param [r] rp [AjPRegexp] Compiled regular expression.
-** @param [r] isub [int] Substring number.
+** @param [r] isub [ajint] Substring number.
 ** @param [w] dest [AjPStr*] String to hold the result.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajRegSubI (AjPRegexp rp, int isub, AjPStr* dest) {
+void ajRegSubI (AjPRegexp rp, ajint isub, AjPStr* dest) {
 
-  int ilen;
+  ajint ilen;
 
   if (!rp->startp[isub]) {
     (void) ajStrDelReuse (dest);
@@ -333,7 +333,7 @@ void ajRegSubC (AjPRegexp rp, const char* source, AjPStr* dest) {
   register char *src = (char *)source;
   register char *dst;
   register char c;
-  register int no;
+  register ajint no;
   register size_t len;
   register size_t dstfree;
 
@@ -353,7 +353,7 @@ void ajRegSubC (AjPRegexp rp, const char* source, AjPStr* dest) {
   while ((c = *src++) != '\0') {
     if (c == '&')
       no = 0;
-    else if (c == '\\' && isdigit((int)*src))
+    else if (c == '\\' && isdigit((ajint)*src))
       no = *src++ - '0';
     else
       no = -1;
@@ -430,9 +430,9 @@ void ajRegFree (AjPRegexp* pexp) {
 ******************************************************************************/
 
 void ajRegTrace (AjPRegexp exp) {
-  int isub;
-  int ilen;
-  int ipos;
+  ajint isub;
+  ajint ilen;
+  ajint ipos;
   static AjPStr str = NULL;
 
   ajDebug ("  REGEXP trace\n");

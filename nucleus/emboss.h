@@ -17,5 +17,6 @@
 #include "embgroup.h"
 #include "embshow.h"
 #include "embmol.h"
+#include "embxyz.h"
 
 #endif

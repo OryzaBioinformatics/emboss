@@ -36,18 +36,18 @@
 typedef struct DNAB DNAB;
 struct DNAB
 {
-    int pos;
+    ajint pos;
     AjPStr name;
     AjPStr seq;
     float  sd;
-    int    wt;
+    ajint    wt;
 }
 ;
 
 
 
-int readNab(AjPInt2d *matrix,AjBool eightyseven);
-void print_hits(AjPList *ajb, int n, float minsd, int lastcol,
+ajint readNab(AjPInt2d *matrix,AjBool eightyseven);
+void print_hits(AjPList *ajb, ajint n, float minsd, ajint lastcol,
 		AjBool eightyseven, AjPFile outf);
 
 
@@ -55,7 +55,7 @@ void print_hits(AjPList *ajb, int n, float minsd, int lastcol,
 
 
 
-int main( int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
@@ -71,23 +71,23 @@ int main( int argc, char **argv, char **env)
     
     AjPInt2d matrix=NULL;
     
-    int begin;
-    int end;
-    int len;
+    ajint begin;
+    ajint end;
+    ajint len;
 
     char *p;
     char *q;
     
-    int i;
-    int j;
-    int cols;
-    int lastcol;
+    ajint i;
+    ajint j;
+    ajint cols;
+    ajint lastcol;
 
-    int n;
+    ajint n;
 
-    int sp;
-    int se;
-    int weight;
+    ajint sp;
+    ajint se;
+    ajint weight;
 
     float minscore;
     float thissd;
@@ -138,7 +138,7 @@ int main( int argc, char **argv, char **env)
 	{
 	    weight=0;
 	    for(j=0;j<lastcol;++j)
-		weight+=ajInt2dGet(matrix,(int)*(p+i+j),j);
+		weight+=ajInt2dGet(matrix,(ajint)*(p+i+j),j);
 	    thissd=((float)weight-mean)/sd;
 	    if(thissd>minsd)
 	    {
@@ -182,7 +182,7 @@ int main( int argc, char **argv, char **env)
 
 
 
-int readNab(AjPInt2d *matrix,AjBool eightyseven)
+ajint readNab(AjPInt2d *matrix,AjBool eightyseven)
 {
     AjPFile mfptr=NULL;
     AjPStr  line=NULL;
@@ -192,24 +192,24 @@ int readNab(AjPInt2d *matrix,AjBool eightyseven)
     char *p;
     char *q;
     
-    int xcols=0;
-    int cols=0;
+    ajint xcols=0;
+    ajint cols=0;
     
     float sample;
     float expected;
     float pee;
     float exptot;
-    int   rt;
+    ajint   rt;
 
-    int   i;
-    int   j;
-    int   c=0;
-    int   v;
+    ajint   i;
+    ajint   j;
+    ajint   c=0;
+    ajint   v;
     
-    int d1;
-    int d2;
+    ajint d1;
+    ajint d2;
     
-    int **mat;
+    ajint **mat;
 
     if(eightyseven)
 	ajFileDataNewC(HTH87FILE,&mfptr);
@@ -243,7 +243,7 @@ int readNab(AjPInt2d *matrix,AjBool eightyseven)
 	    if(xcols!=cols)
 		ajFatal("Assymetric table");
 
-	d1 = ajAZToInt((char)toupper((int)*p));
+	d1 = ajAZToInt((char)toupper((ajint)*p));
 	
 	q=ajStrStr(line);
 	c = 0;
@@ -273,7 +273,7 @@ int readNab(AjPInt2d *matrix,AjBool eightyseven)
 	    if(!mat[i][d2-1]) continue;
 	    rt += mat[i][j];
 	}
-	if(rt!=(int)sample)
+	if(rt!=(ajint)sample)
 	    ajFatal("Column doesn't match sample size");
     }
     
@@ -290,7 +290,7 @@ int readNab(AjPInt2d *matrix,AjBool eightyseven)
 		1.0/((sample+1.0)*expected);
 	    else
 		pee = ((float)mat[i][j])/(sample*expected);
-	    mat[i][j]=(int)((double)100.0*log(pee));
+	    mat[i][j]=(ajint)((double)100.0*log(pee));
 	}
     }
     if((float)fabs((double)(1.0-exptot)) > 0.05)
@@ -316,7 +316,7 @@ int readNab(AjPInt2d *matrix,AjBool eightyseven)
 
 
 
-void print_hits(AjPList *ajb, int n, float minsd, int lastcol,
+void print_hits(AjPList *ajb, ajint n, float minsd, ajint lastcol,
 		AjBool eightyseven, AjPFile outf)
 {
     DNAB     **lp;
@@ -324,7 +324,7 @@ void print_hits(AjPList *ajb, int n, float minsd, int lastcol,
     AjPInt   hp=NULL;
     AjPFloat hsd=NULL;
 
-    int   i;
+    ajint   i;
     
     AJCNEW (lp, n);
 

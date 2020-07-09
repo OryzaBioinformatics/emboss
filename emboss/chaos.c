@@ -24,12 +24,13 @@
 #include "emboss.h"
 #include "ajax.h"
 
-int main (int argc, char *argv[]) {
+int main(int argc, char **argv)
+{
   AjPSeq sequence = NULL ;
   AjPGraph graph = NULL;
   float x=0.5,y=0.5,x2;
   char *ptr;
-  int i,a=0,c=0,t=0,g=0,n=0;
+  ajint i,a=0,c=0,t=0,g=0,n=0;
   char line[40];
   AjBool data=ajFalse;
   AjPFile outf=NULL;

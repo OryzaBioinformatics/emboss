@@ -1,4 +1,5 @@
-25/01/2001      Version 1.9.1 List bugfix
+18/02/2001      Version 1.10.0 SCOPE, NRSCOPE, DOMAINER added.
+                               Initial large file model support.
 22/01/2001      Version 1.9.0 ABIVIEW RECODE added. Linked list and
                               string iterator code rewritten.
 20/11/2000      Version 1.8.0 CODERET added. Corba test routines

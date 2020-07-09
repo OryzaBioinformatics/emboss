@@ -35,7 +35,7 @@ static char *regatoi(const regex_t *preg, char *localbuf);
    = #define	REG_ITOA	0400	// convert number to name (!)
    */
 static struct rerr {
-    int code;
+    ajint code;
     char *name;
     char *explain;
 } rerrs[] = {
@@ -64,12 +64,12 @@ static struct rerr {
    = extern size_t regerror(int, const regex_t *, char *, size_t);
    */
 /* ARGSUSED */
-size_t hsp_regerror(int errcode,const regex_t *preg,char *errbuf,
+size_t hsp_regerror(ajint errcode,const regex_t *preg,char *errbuf,
 		    size_t errbuf_size)
 {
     register struct rerr *r;
     register size_t len;
-    register int target = errcode &~ REG_ITOA;
+    register ajint target = errcode &~ REG_ITOA;
     register char *s;
     char convbuf[50];
 

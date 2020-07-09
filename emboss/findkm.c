@@ -24,15 +24,15 @@
 #include <stdlib.h>
 #include <limits.h>
 
-float summation(float *arr, int number);
-float multisum (float *arr1, float *arr2, int number);
-float findmax(float *arr1, int number);
-float findmin(float *arr1, int number);
+float summation(float *arr, ajint number);
+float multisum (float *arr1, float *arr2, ajint number);
+float findmax(float *arr1, ajint number);
+float findmin(float *arr1, ajint number);
 
 
 /*Func declarations */
 
-int main (int argc, char *argv[])
+int main(int argc, char **argv)
 {
     AjPFile infile = NULL;
     AjPFile outfile = NULL;
@@ -42,7 +42,7 @@ int main (int argc, char *argv[])
     AjPGraphData xygraph2 =NULL; 
     AjBool doplot;
 
-    int N=0;
+    ajint N=0;
     
     float *xdata=NULL;
     float *ydata=NULL;
@@ -136,15 +136,15 @@ int main (int argc, char *argv[])
     /* Incase the casted ints turn out to be same number on the axis, 
     make the max number larger than the min so graph can be seen. */
     
-    if ((int)xmax == (int)xmin)
+    if ((ajint)xmax == (ajint)xmin)
         ++xmax;    
-    if ((int)ymax == (int)ymin)
+    if ((ajint)ymax == (ajint)ymin)
         ++ymax;    
 
     
-    if ((int)xmax2 == (int)xmin2)
+    if ((ajint)xmax2 == (ajint)xmin2)
         ++xmax2;    
-    if ((int)ymax2 == (int)ymin2)
+    if ((ajint)ymax2 == (ajint)ymin2)
         ++ymax2;    
 
     
@@ -225,10 +225,10 @@ int main (int argc, char *argv[])
     ajGraphxySetXEnd(graphLB, xmax2);
 	ajGraphxySetYStart(graphLB, 0.0);        
 	ajGraphxySetYEnd(graphLB, ymax2);
-	ajGraphxySetXRangeII(graphLB, (int)0.0, (int)xmax2);
-	ajGraphxySetYRangeII(graphLB, (int)0.0, (int)ymax2);
+	ajGraphxySetXRangeII(graphLB, (ajint)0.0, (ajint)xmax2);
+	ajGraphxySetYRangeII(graphLB, (ajint)0.0, (ajint)ymax2);
     ajGraphDataObjAddLine
-	    (xygraph, 0.0, 0.0, S[0], V[0], (int)BLACK);
+	    (xygraph, 0.0, 0.0, S[0], V[0], (ajint)BLACK);
     ajGraphxySetCirclePoints(graphLB, ajTrue);
     ajGraphDataxySetMaxMin(xygraph,0.0,xmax2,0.0,ymax2);
 
@@ -250,10 +250,10 @@ int main (int argc, char *argv[])
     ajGraphxySetXEnd(graphLB, upperXlimit);
     ajGraphxySetYStart(graphLB, 0.0);        
     ajGraphxySetYEnd(graphLB, upperYlimit);
-    ajGraphxySetXRangeII(graphLB, (int)cutx, (int)upperXlimit);
-    ajGraphxySetYRangeII(graphLB, (int)0.0, (int)upperYlimit); 
+    ajGraphxySetXRangeII(graphLB, (ajint)cutx, (ajint)upperXlimit);
+    ajGraphxySetYRangeII(graphLB, (ajint)0.0, (ajint)upperYlimit); 
     /*    ajGraphDataObjAddLine
-	  (xygraph2, cutx, 0.0, upperXlimit, upperYlimit, (int)RED);*/
+	  (xygraph2, cutx, 0.0, upperXlimit, upperYlimit, (ajint)RED);*/
     ajGraphxySetCirclePoints(graphLB, ajTrue);
     ajGraphDataxySetMaxMin(xygraph2, cutx,upperXlimit,0.0,upperYlimit);
     ajGraphDataxyMaxMin(xdata,N,&amin,&amax);
@@ -286,9 +286,9 @@ int main (int argc, char *argv[])
  
 
        
-float summation(float *arr, int number)
+float summation(float *arr, ajint number)
 {
-int i;
+ajint i;
 float sum=0;
     for (i = 0; i < number; i++) {
         sum += arr[i];
@@ -297,9 +297,9 @@ float sum=0;
 } 
 
        
-float multisum(float *arr1, float *arr2, int number)
+float multisum(float *arr1, float *arr2, ajint number)
 {
-int i;
+ajint i;
 float sum=0;
     for (i = 0; i < number; i++) {
         sum += arr1[i]*arr2[i];
@@ -308,9 +308,9 @@ float sum=0;
    
 }
 
-float findmax(float *arr, int number)
+float findmax(float *arr, ajint number)
 {
-int i;
+ajint i;
 float max=arr[0];
     for (i=1; i<number; ++i){
         if (arr[i] > max) {
@@ -320,9 +320,9 @@ float max=arr[0];
     return max;
 }
 
-float findmin(float *arr, int number)
+float findmin(float *arr, ajint number)
 {
-    int i;
+    ajint i;
     float min=arr[0];
     for (i=1; i<number; ++i){
         if (arr[i] < min) {

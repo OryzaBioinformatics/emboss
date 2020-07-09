@@ -69,15 +69,15 @@
 
 
 
-int count,weight;
+ajint count,weight;
 
 float profile[MAX_PROF][LENGTH+1];
 
 
 /* P values and spans */
 
-int pp_antal=2;
-int span[2] = { 15, 4 };
+ajint pp_antal=2;
+ajint span[2] = { 15, 4 };
 
 float P[2][26] = {
 
@@ -142,58 +142,58 @@ float P[2][26] = {
 
 
 char s[NUMBER][LENGTH];            /* Sequences  */
-int relc[LENGTH], reln[LENGTH];
+ajint relc[LENGTH], reln[LENGTH];
 
-int nr,pos,poss;
+ajint nr,pos,poss;
 
-int start[TM_NUMBER], stopp[TM_NUMBER];
+ajint start[TM_NUMBER], stopp[TM_NUMBER];
 
 float norm_skillnad[NUMBER];
 
-int tm_number,tm_segment[TM_NUMBER][2];
-int npos[MAXHIT],cpos[MAXHIT];
+ajint tm_number,tm_segment[TM_NUMBER][2];
+ajint npos[MAXHIT],cpos[MAXHIT];
 
-int pred_mode[TM_NUMBER];
-int e_spann_min, e_spann_max;
+ajint pred_mode[TM_NUMBER];
+ajint e_spann_min, e_spann_max;
 
 float mx_limit, me_limit;
 
-int ali_ok[LENGTH];
+ajint ali_ok[LENGTH];
 
 /*
  * Function prototypes
  */
 
-void profile2(int prof, int antal, int poss, int span);
+void profile2(ajint prof, ajint antal, ajint poss, ajint span);
 
-float length1(int nr, int start, int stopp);
+float length1(ajint nr, ajint start, ajint stopp);
 
-void present3p(int antal, int *npos, int *cpos, int poss, int nr, AjPSeqset seqset, AjPFile outfile);
+void present3p(ajint antal, ajint *npos, ajint *cpos, ajint poss, ajint nr, AjPSeqset seqset, AjPFile outfile);
 
-int peak1(int start, int stopp, float *parameter);
+ajint peak1(ajint start, ajint stopp, float *parameter);
 
-int vec_to_stst(int *vec, int *start, int *stopp, int length);
+ajint vec_to_stst(ajint *vec, ajint *start, ajint *stopp, ajint length);
 
 void weights(char [][LENGTH], int, int, float *);
 
 void refpos2(int, int);
 
-float summa1(int start, int stopp, float *parameter);
+float summa1(ajint start, ajint stopp, float *parameter);
 
-void plot1(char *, int, char [][60], int , int , int [][2]);
-int pred1(float, float, float, int);
-int pred1a(float, float, float, int);
+void plot1(char *, int, char [][60], ajint , ajint , ajint [][2]);
+ajint pred1(float, float, float, int);
+ajint pred1a(float, float, float, int);
 
-int insert_in_vector(int *start, int *stopp, int max, int starttmp, int stopptmp, int *pred, int predparameter);
-int tm_in_vector(int *start, int *stopp, int max, int starttmp, int stopptmp);
+ajint insert_in_vector(ajint *start, ajint *stopp, ajint max, ajint starttmp, ajint stopptmp, ajint *pred, ajint predparameter);
+ajint tm_in_vector(ajint *start, ajint *stopp, ajint max, ajint starttmp, ajint stopptmp);
 
-void align_rel(int antal, int poss, int span);
+void align_rel(ajint antal, ajint poss, ajint span);
 
 
 void plot2(AjPGraph mult){
   AjPGraphData graph=NULL;
   float max=-10.0,min=10.0;
-  int i,j;
+  ajint i,j;
   
   for(j=0;j<pp_antal;j++){
     for (i=1; i<=poss; i++) {
@@ -248,13 +248,13 @@ void plot2(AjPGraph mult){
 
 /* Start of main program */
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
   AjPSeqset seqset;
   AjPGraph mult;
   AjPFile outfile;
-  int i,j;
-  /*  int n_spann,  m_spann,  c_spann;*/
+  ajint i,j;
+  /*  ajint n_spann,  m_spann,  c_spann;*/
   float m_limit, ml_limit, e_limit;
 
   (void) ajGraphInit("tmap", argc, argv);
@@ -263,6 +263,9 @@ int main(int argc, char *argv[])
   mult = ajAcdGetGraphxy ("graph");
   outfile = ajAcdGetOutfile("outfile");
 
+if(!ajSeqsetLen(seqset))
+    ajFatal("No useable sequences were specified");
+  
 /* 
    22 March 2000 - GWW
    EMBOSS programs shouldn't write to stdout, unless the user specifies it.
@@ -350,10 +353,10 @@ int main(int argc, char *argv[])
  *
  */
 
-void refpos2(int refnr, int poss)
+void refpos2(ajint refnr, ajint poss)
 
 {
-  int i,temp;
+  ajint i,temp;
 
   for (i=0; i<LENGTH; i++)
     relc[i]=reln[i]=0;
@@ -384,9 +387,9 @@ void refpos2(int refnr, int poss)
  * Returns 1 if so, otherwise 0
  */
 
-int all_charged(int pos, int nr)
+ajint all_charged(ajint pos, ajint nr)
   {
-    int i,likhet;
+    ajint i,likhet;
     for (i=1,likhet=1; i<=nr; i++) { 
       if (s[0][pos]!=s[i][pos])
 	likhet=0;
@@ -414,10 +417,10 @@ int all_charged(int pos, int nr)
  *
  */
 
-float length1(int nr, int start, int stopp)
+float length1(ajint nr, ajint start, ajint stopp)
 {
-  int i,j,l,ll;
-  int correct_sequence[MAXHIT], nr_correct;
+  ajint i,j,l,ll;
+  ajint correct_sequence[MAXHIT], nr_correct;
 
 /* First, check for sequences with less than 10 a. a. residues */
   for (i=0; i<MAXHIT; i++)
@@ -455,10 +458,10 @@ float length1(int nr, int start, int stopp)
  * Presents results from predictions
  */
 
-void present3p(int antal, int *npos, int *cpos,  int poss, int nr, AjPSeqset seqset, AjPFile outfile)
+void present3p(ajint antal, ajint *npos, ajint *cpos,  ajint poss, ajint nr, AjPSeqset seqset, AjPFile outfile)
 
 {
-  int i,j;
+  ajint i,j;
  
   ajFmtPrintF( outfile,"RESULTS from program TMAP, edition %s'\n\n",UTGAVA); 
 
@@ -497,24 +500,24 @@ void present3p(int antal, int *npos, int *cpos,  int poss, int nr, AjPSeqset seq
  * cpos[]
  */
 
-int pred1(float m_limit, float ml_limit, float e_limit, int nr)
+ajint pred1(float m_limit, float ml_limit, float e_limit, ajint nr)
 {
-  int i,j,k;
-  int tm_ant;
+  ajint i,j,k;
+  ajint tm_ant;
 
-  int flag,length;
+  ajint flag,length;
 
-  int start[MAXHIT], stopp[MAXHIT], hitposs[LENGTH];
+  ajint start[MAXHIT], stopp[MAXHIT], hitposs[LENGTH];
 
-  int avstand,mitt,start0;
+  ajint avstand,mitt,start0;
 
-  int start_e_pos[MAXHIT], stopp_e_pos[MAXHIT];
+  ajint start_e_pos[MAXHIT], stopp_e_pos[MAXHIT];
 
   float sum;
   
-  int count,count2,tempN,tempC;
+  ajint count,count2,tempN,tempC;
 
-  int starttmp,stopptmp,temp;
+  ajint starttmp,stopptmp,temp;
 
 
   for (i=0; i<TM_NUMBER; i++)
@@ -601,7 +604,7 @@ int pred1(float m_limit, float ml_limit, float e_limit, int nr)
   /* 3.
      Starting in 'start[]' and 'stopp[]', expand N- and C-terminally
      - each step is taken in the direction of highest profile[0] value
-     - as long 'over_limit' is true
+     - as ajlong 'over_limit' is true
      until langd=M_SPAN
      */
 
@@ -744,7 +747,7 @@ int pred1(float m_limit, float ml_limit, float e_limit, int nr)
 
   /* 
    * 6.3.
-   * Divide segments long enough to contain several tm segments 
+   * Divide segments ajlong enough to contain several tm segments 
    */
 
   for (i=1; i<=tm_ant; i++) {
@@ -849,9 +852,9 @@ int pred1(float m_limit, float ml_limit, float e_limit, int nr)
  * and returns position of peak value
  */
 
-int peak1(int start, int stopp, float *parameter)
+ajint peak1(ajint start, ajint stopp, float *parameter)
 {
-  int i,maxpos=0;
+  ajint i,maxpos=0;
   float maximum;
 
   maximum=0;
@@ -879,10 +882,10 @@ int peak1(int start, int stopp, float *parameter)
  *  Sums the values for 'parameter' in span 'start' to 'stopp'
  */
 
-float summa1(int start, int stopp, float *parameter)
+float summa1(ajint start, ajint stopp, float *parameter)
 {
   float summa=0;
-  int i;
+  ajint i;
 
   for (i=start; i<=stopp; i++)
     summa+=parameter[i];
@@ -898,9 +901,9 @@ float summa1(int start, int stopp, float *parameter)
  * Checks if segment already in TM vector
  */
 
-int tm_in_vector(int *start, int *stopp, int max, int starttmp, int stopptmp)
+ajint tm_in_vector(ajint *start, ajint *stopp, ajint max, ajint starttmp, ajint stopptmp)
 {
-  int i,temp;
+  ajint i,temp;
 
   temp=0;
   for (i=1; i<=max; i++)
@@ -916,9 +919,9 @@ int tm_in_vector(int *start, int *stopp, int max, int starttmp, int stopptmp)
  * Insert segment in TM vector
  */
 
-int insert_in_vector(int *start, int *stopp, int max, int starttmp, int stopptmp, int *pred, int predparameter)
+ajint insert_in_vector(ajint *start, ajint *stopp, ajint max, ajint starttmp, ajint stopptmp, ajint *pred, ajint predparameter)
 {
-  int i,j;
+  ajint i,j;
 
   for (i=1; i<=max-1; i++)
     if (starttmp>start[i])
@@ -957,11 +960,11 @@ int insert_in_vector(int *start, int *stopp, int max, int starttmp, int stopptmp
  * Returns number of elements in start[] and stopp[]
  */
 
-int vec_to_stst(int *vec, int *start, int *stopp, int length)
+ajint vec_to_stst(ajint *vec, ajint *start, ajint *stopp, ajint length)
 {
 
 
-  int flagga,i,index;
+  ajint flagga,i,index;
 
   flagga=0;
   index=0;
@@ -1003,10 +1006,10 @@ int vec_to_stst(int *vec, int *start, int *stopp, int length)
  */
 
 
-void weights(char s[][LENGTH], int poss, int nr, float *norm_sk)
+void weights(char s[][LENGTH], ajint poss, ajint nr, float *norm_sk)
 {
-  int i,j,testnr;
-  int skillnad[NUMBER+1];
+  ajint i,j,testnr;
+  ajint skillnad[NUMBER+1];
   float summa;
   
   for (testnr=0; testnr<=nr; testnr++) 
@@ -1057,10 +1060,10 @@ void weights(char s[][LENGTH], int poss, int nr, float *norm_sk)
  *             to centre of segment
  */
 
-void profile2(int prof, int antal, int poss, int span)
+void profile2(ajint prof, ajint antal, ajint poss, ajint span)
 {
-  int bin=0,count,i,j,nr;	     
-  int flagga[LENGTH+1];
+  ajint bin=0,count,i,j,nr;	     
+  ajint flagga[LENGTH+1];
   float prof_temp;
   float summa_vikt[LENGTH+1];
 
@@ -1106,10 +1109,10 @@ void profile2(int prof, int antal, int poss, int span)
  * ---------
  */
 
-void align_rel(int antal, int poss, int span)
+void align_rel(ajint antal, ajint poss, ajint span)
 
 {
-  int nr,ok,pos;
+  ajint nr,ok,pos;
 
   for (pos=1; pos<=poss-span+1; pos++) {
     for (nr=0,ok=0; nr<=antal; nr++)

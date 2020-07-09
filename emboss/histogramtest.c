@@ -3,15 +3,15 @@
 #include "ajhist.h"
 
 void ajGraphHistogram
-(int numofdatapoints, int numofsets, PLFLT *data,int sidebyside, int xmin, int xmax,int bins);
+(ajint numofdatapoints, ajint numofsets, PLFLT *data,int sidebyside, ajint xmin, ajint xmax,int bins);
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
   AjPHist hist=NULL;
   AjPGraph graph=NULL;
   PLFLT **data,*data2;
-  int i,j,k=1;
-  int sets,points;
+  ajint i,j,k=1;
+  ajint sets,points;
   char temp[20];
 
   (void) ajGraphInit ("histogramtest", argc, argv);

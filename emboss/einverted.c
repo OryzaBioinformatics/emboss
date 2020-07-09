@@ -22,30 +22,30 @@
 #define MAXSAVE 2000
 #define TEST
 
-int match;
-int mismatch;
-int threshold;
-int gap;
+ajint match;
+ajint mismatch;
+ajint threshold;
+ajint gap;
 AjPFile outfile;
 static AjPSeqCvt cvt;
-int rogue = 1000000;
+ajint rogue = 1000000;
 
 static char base[] = "acgt-" ;
 
 char *sq ;
-int *revmatch[5] ;
-int length ;
-int matrix[MAXSAVE][MAXSAVE] ;
+ajint *revmatch[5] ;
+ajint length ;
+ajint matrix[MAXSAVE][MAXSAVE] ;
 
-void report (int max, int imax) ;
+void report (ajint max, ajint imax) ;
 
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
-  int i, j, irel, imax, jmax=0, *ip, *t1Base ;
-  int lastReported = -1 ;
+  ajint i, j, irel, imax, jmax=0, *ip, *t1Base ;
+  ajint lastReported = -1 ;
   char *cp ;
-  register int a, c, d, *t0, *t1, max ;
-  int localMax[MAXSAVE], back[MAXSAVE] ;
+  register ajint a, c, d, *t0, *t1, max ;
+  ajint localMax[MAXSAVE], back[MAXSAVE] ;
 
   AjPSeq sequence = NULL ;
   AjPStr nseq = NULL;
@@ -118,7 +118,7 @@ int main (int argc, char **argv)
       else
 	t0 = matrix[(i-1) % MAXSAVE] - 1 ; /* NB offset by 1 */
       t1 = matrix[irel] ;
-      memcpy (t1, &revmatch[(int)sq[i]][length-i], (MAXSAVE-1)*sizeof(int)) ;
+      memcpy (t1, &revmatch[(ajint)sq[i]][length-i], (MAXSAVE-1)*sizeof(ajint)) ;
       t1[MAXSAVE-2] = t1[MAXSAVE-1] = rogue ;
 
 /* Gene Myers' version of dynamic progamming: 
@@ -126,7 +126,7 @@ int main (int argc, char **argv)
 */
 
 #ifdef TEST
-      ajDebug ("\n%2d %c: ", i, base[(int)sq[i]]) ;
+      ajDebug ("\n%2d %c: ", i, base[(ajint)sq[i]]) ;
       for (j = length-i ; --j ;)
 	ajDebug ("      ") ;
       ajDebug (" ") ;
@@ -198,12 +198,12 @@ int main (int argc, char **argv)
   return 0;
 }
 
-void report (int max, int imax)
+void report (ajint max, ajint imax)
 {
-  int *t1, *ip, *jp, i, j ;
-  static int align1[2*MAXSAVE], align2[2*MAXSAVE] ;
-  int nmatch = 0, nmis = 0, ngap = 0 ;
-  int saveMax = max ;
+  ajint *t1, *ip, *jp, i, j ;
+  static ajint align1[2*MAXSAVE], align2[2*MAXSAVE] ;
+  ajint nmatch = 0, nmis = 0, ngap = 0 ;
+  ajint saveMax = max ;
 
   ajDebug ("report (%d %d)\n", max, imax);
 
@@ -219,7 +219,7 @@ void report (int max, int imax)
       *jp++ = i-j ;		/* seqpt + 1 */
 #ifdef TEST
       ajDebug ("i j, max (local): %d %d, %4d (%2d)\n", 
-	      i, j, max, revmatch[(int)sq[i]][length-i+j]) ;
+	      i, j, max, revmatch[(ajint)sq[i]][length-i+j]) ;
 #endif
       if (t1[j-1] == max + gap)
 	{ max += gap ; ++ngap ;
@@ -230,8 +230,8 @@ void report (int max, int imax)
 	{ max += gap ; ++ngap ;
 	  --i ; --j ; continue ;
 	}
-      max -= revmatch[(int)sq[i]][length-i+j] ;
-      if (revmatch[(int)sq[i]][length-i+j] == match)
+      max -= revmatch[(ajint)sq[i]][length-i+j] ;
+      if (revmatch[(ajint)sq[i]][length-i+j] == match)
 	++nmatch ;
       else
 	++nmis ;
@@ -252,7 +252,7 @@ void report (int max, int imax)
     if (*jp == *(jp+1))
       ajFmtPrintF (outfile, "-") ;
     else
-      ajFmtPrintF (outfile, "%c", base[(int)sq[*jp-1]]) ;
+      ajFmtPrintF (outfile, "%c", base[(ajint)sq[*jp-1]]) ;
   ajFmtPrintF (outfile, " %-8d\n", *(jp-1)) ;
 
   ajFmtPrintF (outfile, "         ") ;
@@ -270,7 +270,7 @@ void report (int max, int imax)
     if (*ip == *(ip+1))
       ajFmtPrintF (outfile, "-") ;
     else
-      ajFmtPrintF (outfile, "%c", base[(int)sq[*ip]]) ;
+      ajFmtPrintF (outfile, "%c", base[(ajint)sq[*ip]]) ;
   ajFmtPrintF (outfile, " %-8d\n", *(ip-1)+1) ;
 }
 

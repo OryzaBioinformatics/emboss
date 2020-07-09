@@ -57,8 +57,16 @@ Index a GCG formatted database
 </H2>
 
 
-dbigcg indexes a flat file database of one or more files, and builds
-EMBL CD-ROM format index files. This format is used by the software on
+<b>dbigcg</b> indexes a GCG-format database 
+of one or more files, and builds EMBL CD-ROM format index files. 
+<p>
+
+A GCG-format database consists of *.seq and *.ref files - only the *.seq
+files are used.  The data in these is often compressed. 
+
+<p>
+
+The resulting index-file format is used by the software on
 the EMBL database CD-ROM distribution and by the Staden package in
 addition to EMBOSS, and appears to be the most generally used and
 publicly available index file format for these databases.
@@ -68,7 +76,7 @@ publicly available index file format for these databases.
 </H2>
 
 
-Here is a sample session with dbigcg.
+Here is a sample session with <b>dbigcg</b>.
 
 <pre>
 
@@ -233,13 +241,16 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
+<b>dbigcg</b> reads in a GCG-format database.
+A GCG-format database consists of *.seq and *.ref files - only the *.seq
+files are used.  The data in these is often compressed. 
 
 <H2>
     Output file format
 </H2>
 
 
-dbigcg creates four index files. All are binary but with a simple format.
+<b>dbigcg</b> creates four index files. All are binary but with a simple format.
 
 <ul>
 
@@ -275,34 +286,47 @@ read the entryname.idx records for each entry in turn.
 </H2>
 
 
+None.
+
 <H2>
     Notes
 </H2>
 
 
+None.
+
 <H2>
     References
 </H2>
+
+None.
 
 
 <H2>
     Warnings
 </H2>
 
+None.
+
 
 <H2>
     Diagnostic Error Messages
 </H2>
+
+None.
 
 
 <H2>
     Exit status
 </H2>
 
+It exits with a status of 0 if no errors.
 
 <H2>
     Known bugs
 </H2>
+
+None.
 
 
 <!--

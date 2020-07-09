@@ -24,13 +24,13 @@
 #include "stdlib.h"
 
 
-void print_hits(AjPList *l, int hits, AjPFile outf, AjPStr seq, AjBool mms,
-		int begin, AjPStr desc, AjBool dodesc, AjPStr acc,
+void print_hits(AjPList *l, ajint hits, AjPFile outf, AjPStr seq, AjBool mms,
+		ajint begin, AjPStr desc, AjBool dodesc, AjPStr acc,
 		AjBool doacc);
 
 
 
-int main (int argc, char * argv[])
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq seq;
@@ -42,19 +42,19 @@ int main (int argc, char * argv[])
     
     AjPList l;
     
-    int plen;
-    int mismatch;
+    ajint plen;
+    ajint mismatch;
 
     AjBool amino;
     AjBool carboxyl;
     AjBool mms;
-    int    type=0;
-    int    *buf=NULL;
-    int    hits=0;
-    int    m;
-    int    i;
-    int    end;
-    int    begin;
+    ajint    type=0;
+    ajint    *buf=NULL;
+    ajint    hits=0;
+    ajint    m;
+    ajint    i;
+    ajint    end;
+    ajint    begin;
     AjPStr desc=NULL;
     AjPStr acc=NULL;
     AjBool dodesc;
@@ -62,12 +62,12 @@ int main (int argc, char * argv[])
     
     EmbOPatBYPNode off[AJALPHA];
 
-    unsigned int *sotable=NULL;
-    unsigned int solimit;
+    ajuint *sotable=NULL;
+    ajuint solimit;
 
     AjPStr	regexp=NULL;
 
-    int **skipm=NULL;
+    ajint **skipm=NULL;
     
 
     void   *tidy=NULL;
@@ -138,11 +138,11 @@ int main (int argc, char * argv[])
 
 
 
-void print_hits(AjPList *l, int hits, AjPFile outf, AjPStr seq, AjBool mms,
-		int begin, AjPStr desc, AjBool dodesc, AjPStr acc,
+void print_hits(AjPList *l, ajint hits, AjPFile outf, AjPStr seq, AjBool mms,
+		ajint begin, AjPStr desc, AjBool dodesc, AjPStr acc,
 		AjBool doacc)
 {
-    int i;
+    ajint i;
     EmbPMatMatch m;
     AjPStr s;
 

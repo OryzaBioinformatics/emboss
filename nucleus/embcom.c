@@ -33,27 +33,27 @@
 
 static void comWriteTable(AjPFile fp,char *name,
 		       UJWin *RUj,UJWin *MedUj,UJWin *SDUj, UJWin *RatUj,
-		       int Nwin,int jmin,int jmax);
+		       ajint Nwin,int jmin,int jmax);
 static void comCalcComplex(UJWin *RUj,UJWin *MedUj,UJWin *RatUj,
-			int Nwin,int Nword, float *CompSeq);
+			ajint Nwin,int Nword, float *CompSeq);
 static void comCalcMedValue(UJSim *SetUj,UJWin *MedUj,UJWin *SDUj,
-			 int Nsim,int Nwin, int Nword);
+			 ajint Nsim,int Nwin, ajint Nword);
 static void comElabSetSim(SEQSim* SetSeqSim,UJSim *SetUjSim,int Nwin,
-		       int lseq,int nsim,
-		       int jmin,int jmax,int lwin,int step);
+		       ajint lseq,int nsim,
+		       ajint jmin,int jmax,int lwin,int step);
 static void comElabSeq(char *seq,UJWin *ujwin,int jmin,int jmax,
-		       int lwin,int lseq,
-		       int step);
-static int comCalcNOfWin(int lseq,int lwin,int step);
+		       ajint lwin,int lseq,
+		       ajint step);
+static ajint comCalcNOfWin(ajint lseq,int lwin,int step);
 static void comWriteSimValue(float *ComplexOfSim,int nsim,AjPFile fp);
 static void comWriteValue(char *name,int lseq,float *ComplexOfSeq,
-			  int NumOfWin,int l, int step,int jmin,int jmax,
-			  int sim,float MedValue, AjPFile fp);
+			  ajint NumOfWin,int l, ajint step,int jmin,int jmax,
+			  ajint sim,float MedValue, AjPFile fp);
 static void comComplexOnSeq(char *seqsim,char *seq,int lseq,int lwin,
-			    int NumOfWin, int jmin,int jmax,
-			    int step,float *ComplexOfSeq);
+			    ajint NumOfWin, ajint jmin,int jmax,
+			    ajint step,float *ComplexOfSeq);
 static void comComplexOnSeq2(char *seq,int lseq,int lwin,int NumOfWin,
-			     int jmin,int jmax, int step,float *ComplexOfSeq);
+			     ajint jmin,int jmax, ajint step,float *ComplexOfSeq);
 static void comSimulSeq(char *seq,char *seqsim,int lseq,comtrace *Freq,
 			char *ACN,int freq);
 static void comSortFreq(comtrace *set);
@@ -62,12 +62,12 @@ static void comCalcComplexMed(float *ComplexOfSeq,int NumOfWin,
 static void comReadWin(char *seq,int bwin,int ewin,char *win);
 static void comRead_j_mer(char *win,int lwin,int jlen,STRING *str);
 static void comWinComplex2(char *win,int lwin,float *ComplexOfWin,
-			   int jmin,int jmax);
+			   ajint jmin,int jmax);
 static void comWinComplex (char *win,char *winsim,int lwin,
-			   float *ComplexOfWin,int jmin, int jmax);
-static void comCalcUj2(int lwin,int jlen,char *win,float *Ujvalue);
-static void comCalcUj(int lwin,int jlen,char *win,float *Ujvalue);
-static int comCounter (STRING* str,int k);
+			   float *ComplexOfWin,int jmin, ajint jmax);
+static void comCalcUj2(ajint lwin,int jlen,char *win,float *Ujvalue);
+static void comCalcUj(ajint lwin,int jlen,char *win,float *Ujvalue);
+static ajint comCounter (STRING* str,int k);
 static void comAmbiguity (char *seq,int l);
 static void comReplace(char *vet,char *seq,char *ch);
 static void comCalcFreqACN(char *seq,int lseq,float *Freq);
@@ -79,34 +79,34 @@ static void comCalcFreqACN(char *seq,int lseq,float *Freq);
 **
 ** @param [r] seq [char *] Sequence
 ** @param [r] name [char *] Sequence name
-** @param [r] len [int] Sequence length
-** @param [r] jmin [int] Minimum
-** @param [r] jmax [int] Maximum
-** @param [r] l [int] Window length
-** @param [r] step [int] Step size
-** @param [r] sim [int] Simulation count
-** @param [r] freq [int] Frequency calculation (boolean)
-** @param [r] omnia [int] All sequences (boolean)
+** @param [r] len [ajint] Sequence length
+** @param [r] jmin [ajint] Minimum
+** @param [r] jmax [ajint] Maximum
+** @param [r] l [ajint] Window length
+** @param [r] step [ajint] Step size
+** @param [r] sim [ajint] Simulation count
+** @param [r] freq [ajint] Frequency calculation (boolean)
+** @param [r] omnia [ajint] All sequences (boolean)
 ** @param [r] fp [AjPFile] Output file
 ** @param [r] pf [AjPFile] Temp file
-** @param [r] print [int] Print (boolean)
-** @param [r] num_seq [int] Number of sequence
+** @param [r] print [ajint] Print (boolean)
+** @param [r] num_seq [ajint] Number of sequence
 ** @param [r] MedValue [float *] Results
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 void embComComplexity(char *seq,char *name,int len,int jmin,int jmax,
-		      int l,int step,
-		      int sim,int freq,int omnia,
+		      ajint l,int step,
+		      ajint sim,int freq,int omnia,
 		      AjPFile fp,  AjPFile pf,int print,int num_seq,
 		      float *MedValue){
     
     float   *ComplexOfSeq;
     float   Freq[4];
     
-    int     NumOfWin;
-    int     i,j;
+    ajint     NumOfWin;
+    ajint     i,j;
     char    ACN[] = "ACGT";
     char    *seqsim=NULL;
     
@@ -260,11 +260,11 @@ void embComComplexity(char *seq,char *name,int len,int jmin,int jmax,
 ** Write output file for complexity calculation
 **
 ** @param [r] fp [AjPFile] Output file
-** @param [r] jmin [int] Minimum
-** @param [r] jmax [int] Maximum
-** @param [r] lwin [int] Window
-** @param [r] step [int] Step size
-** @param [r] sim [int] Simulation count
+** @param [r] jmin [ajint] Minimum
+** @param [r] jmax [ajint] Maximum
+** @param [r] lwin [ajint] Window
+** @param [r] step [ajint] Step size
+** @param [r] sim [ajint] Simulation count
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -296,9 +296,9 @@ void embComWriteFile (AjPFile fp,int jmin,int jmax,int lwin,int step,int sim)
 ** Output sequence values for complexity calculation
 **
 ** @param [r] fp [AjPFile] Output file
-** @param [r] n [int] Sequence number
+** @param [r] n [ajint] Sequence number
 ** @param [r] name [char *] Sequence name
-** @param [r] len [int] Sequece length
+** @param [r] len [ajint] Sequece length
 ** @param [r] MedValue [float] Mean value
 ** @return [void]
 ** @@
@@ -323,20 +323,20 @@ void embComWriteValueOfSeq(AjPFile fp,int n,char *name,int len,float MedValue)
 ** @param [r] MedUj [UJWin *] MedUj values
 ** @param [r] SDUj [UJWin *] SDUj values
 ** @param [r] RatUj [UJWin *] RatUj values
-** @param [r] Nwin [int] Number
-** @param [r] jmin [int] Minimum
-** @param [r] jmax [int] Maximum
+** @param [r] Nwin [ajint] Number
+** @param [r] jmin [ajint] Minimum
+** @param [r] jmax [ajint] Maximum
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void comWriteTable(AjPFile fp,char *name,
 		       UJWin *RUj,UJWin *MedUj,UJWin *SDUj, UJWin *RatUj,
-		       int Nwin,int jmin,int jmax){
+		       ajint Nwin,int jmin,int jmax){
     
     
     
-    int i,j,k;
+    ajint i,j,k;
     
     
     
@@ -357,7 +357,7 @@ static void comWriteTable(AjPFile fp,char *name,
 	(void) ajFmtPrintF (fp,"w%-2d ",i+1);
 	for(k=0;k<jmax-jmin+1;k++)
 	    (void) ajFmtPrintF (fp,"%4d  %5.2f+/-%-5.2f",
-				(int)(RUj[i].Ujwin[k]),MedUj[i].Ujwin[k],
+				(ajint)(RUj[i].Ujwin[k]),MedUj[i].Ujwin[k],
 				SDUj[i].Ujwin[k]);
 	for(k=0;k<jmax-jmin+1;k++)
 	    (void) ajFmtPrintF (fp,"%5.2f ",RatUj[i].Ujwin[k]);
@@ -375,17 +375,17 @@ static void comWriteTable(AjPFile fp,char *name,
 ** @param [r] RUj [UJWin *] RUj values
 ** @param [r] MedUj [UJWin *] MedUj values
 ** @param [r] RatUj [UJWin *] RatUj values
-** @param [r] Nwin [int] Window number
-** @param [r] Nword [int] Word number
+** @param [r] Nwin [ajint] Window number
+** @param [r] Nword [ajint] Word number
 ** @param [r] CompSeq [float*] Results
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void comCalcComplex(UJWin *RUj,UJWin *MedUj,UJWin *RatUj,
-			int Nwin,int Nword, float *CompSeq){
+			ajint Nwin,int Nword, float *CompSeq){
     
-    int i,k;
+    ajint i,k;
     
     for(i=0;i<Nwin;i++)
 	CompSeq[i] = 1.0;
@@ -411,17 +411,17 @@ static void comCalcComplex(UJWin *RUj,UJWin *MedUj,UJWin *RatUj,
 ** @param [r] SetUj [UJSim *] SetUj values
 ** @param [r] MedUj [UJWin *] MedUj values
 ** @param [r] SDUj [UJWin *] SDUj values
-** @param [r] Nsim [int] Number of simulations
-** @param [r] Nwin [int] Window number
-** @param [r] Nword [int] Word number
+** @param [r] Nsim [ajint] Number of simulations
+** @param [r] Nwin [ajint] Window number
+** @param [r] Nword [ajint] Word number
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void comCalcMedValue(UJSim *SetUj,UJWin *MedUj,UJWin *SDUj,
-			 int Nsim,int Nwin, int Nword){
+			 ajint Nsim,int Nwin, ajint Nword){
     
-    int i,j,k;
+    ajint i,j,k;
     float *sum;
     float *var;
     
@@ -472,23 +472,23 @@ static void comCalcMedValue(UJSim *SetUj,UJWin *MedUj,UJWin *SDUj,
 **
 ** @param [r] SetSeqSim [SEQSim*] SeqSim values
 ** @param [r] SetUjSim [UJSim *] SetUj values
-** @param [r] Nwin [int] Window number
-** @param [r] lseq [int] Sequence length
-** @param [r] nsim [int] Number of simulations
-** @param [r] jmin [int] Minimum
-** @param [r] jmax [int] Maximum
-** @param [r] lwin [int] Window length
-** @param [r] step [int] Window step size
+** @param [r] Nwin [ajint] Window number
+** @param [r] lseq [ajint] Sequence length
+** @param [r] nsim [ajint] Number of simulations
+** @param [r] jmin [ajint] Minimum
+** @param [r] jmax [ajint] Maximum
+** @param [r] lwin [ajint] Window length
+** @param [r] step [ajint] Window step size
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void comElabSetSim(SEQSim* SetSeqSim,UJSim *SetUjSim,int Nwin,
-		       int lseq,int nsim,
-		       int jmin,int jmax,int lwin,int step){
+		       ajint lseq,int nsim,
+		       ajint jmin,int jmax,int lwin,int step){
     
     
-    int i;
+    ajint i;
     
     for(i=0;i<nsim;i++){
 	comElabSeq(SetSeqSim[i].Sqsim,SetUjSim[i].Ujsim,jmin,jmax,
@@ -503,24 +503,24 @@ static void comElabSetSim(SEQSim* SetSeqSim,UJSim *SetUjSim,int Nwin,
 **
 ** @param [r] seq [char *] Sequence
 ** @param [r] ujwin [UJWin *] UjWin values
-** @param [r] jmin [int] Minimum
-** @param [r] jmax [int] Maximum
-** @param [r] lwin [int] Window length
-** @param [r] lseq [int] Sequence length
-** @param [r] step [int] Window step size
+** @param [r] jmin [ajint] Minimum
+** @param [r] jmax [ajint] Maximum
+** @param [r] lwin [ajint] Window length
+** @param [r] lseq [ajint] Sequence length
+** @param [r] step [ajint] Window step size
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void comElabSeq(char *seq,UJWin *ujwin,int jmin,int jmax,
-		       int lwin,int lseq,
-		       int step){
+		       ajint lwin,int lseq,
+		       ajint step){
     
-    int j;
-    int k = 0;
-    int bwin;
-    int ewin;
-    int nwin = 0;
+    ajint j;
+    ajint k = 0;
+    ajint bwin;
+    ajint ewin;
+    ajint nwin = 0;
     char *wind;
     float Uj = 0.0;
     
@@ -549,19 +549,19 @@ static void comElabSeq(char *seq,UJWin *ujwin,int jmin,int jmax,
 **
 ** Calculate number of windws for complexity
 **
-** @param [r] lseq [int] Sequence length
-** @param [r] lwin [int] Window length
-** @param [r] step [int] Window step size
-** @return [int] Result
+** @param [r] lseq [ajint] Sequence length
+** @param [r] lwin [ajint] Window length
+** @param [r] step [ajint] Window step size
+** @return [ajint] Result
 ** @@
 ******************************************************************************/
 
-static int comCalcNOfWin(int lseq,int lwin,int step){
+static ajint comCalcNOfWin(ajint lseq,int lwin,int step){
 
 
-    int bwin;
-    int ewin;
-    int nwin;
+    ajint bwin;
+    ajint ewin;
+    ajint nwin;
 
     bwin=0;
     ewin=lwin-1;
@@ -579,7 +579,7 @@ static int comCalcNOfWin(int lseq,int lwin,int step){
 ** Output simulation value for complexity calculation
 **
 ** @param [r] ComplexOfSim [float *] Calcualted values
-** @param [r] nsim [int] Number of simulations
+** @param [r] nsim [ajint] Number of simulations
 ** @param [r] fp [AjPFile] Output file
 ** @return [void]
 ** @@
@@ -588,7 +588,7 @@ static int comCalcNOfWin(int lseq,int lwin,int step){
 static void comWriteSimValue(float *ComplexOfSim,int nsim,AjPFile fp)
 {
 
-    int i;
+    ajint i;
  
     (void) ajFmtPrintF (fp,"VALUES FOR EACH SIMULATION\n\n");
     for (i=0;i<nsim;i++)
@@ -601,14 +601,14 @@ static void comWriteSimValue(float *ComplexOfSim,int nsim,AjPFile fp)
 ** Output of values for complexity calculation
 **
 ** @param [r] name [char *] Sequence name
-** @param [r] lseq [int] Sequence length
+** @param [r] lseq [ajint] Sequence length
 ** @param [r] ComplexOfSeq [float *] Results array
-** @param [r] NumOfWin [int] Number of windows
-** @param [r] l [int] Window length
-** @param [r] step [int] Window step size
-** @param [r] jmin [int] Minimum
-** @param [r] jmax [int] Maximum
-** @param [r] sim [int] Number of simulations
+** @param [r] NumOfWin [ajint] Number of windows
+** @param [r] l [ajint] Window length
+** @param [r] step [ajint] Window step size
+** @param [r] jmin [ajint] Minimum
+** @param [r] jmax [ajint] Maximum
+** @param [r] sim [ajint] Number of simulations
 ** @param [r] MedValue [float] Mean value
 ** @param [r] fp [AjPFile] Output file
 ** @return [void]
@@ -616,12 +616,12 @@ static void comWriteSimValue(float *ComplexOfSim,int nsim,AjPFile fp)
 ******************************************************************************/
 
 static void comWriteValue(char *name,int lseq,float *ComplexOfSeq,
-		       int NumOfWin,int l, int step,int jmin,int jmax,
-		       int sim,float MedValue,AjPFile fp){
+		       ajint NumOfWin,int l, ajint step,int jmin,int jmax,
+		       ajint sim,float MedValue,AjPFile fp){
     
-    int i;
-    int bwin ;
-    int ewin; 
+    ajint i;
+    ajint bwin ;
+    ajint ewin; 
     
     (void) ajFmtPrintF (fp,"Name of sequence:   %s \n",name);
     (void) ajFmtPrintF (fp,"Length of sequence: %d \n",lseq);
@@ -667,24 +667,24 @@ static void comWriteValue(char *name,int lseq,float *ComplexOfSeq,
 **
 ** @param [r] seqsim [char *] Simulated sequence
 ** @param [r] seq [char *] Sequence
-** @param [r] lseq [int] Sequence length
-** @param [r] lwin [int] Window length
-** @param [r] NumOfWin [int] Number of windows
-** @param [r] jmin [int] Minimum
-** @param [r] jmax [int] Maximum
-** @param [r] step [int] Window step size
+** @param [r] lseq [ajint] Sequence length
+** @param [r] lwin [ajint] Window length
+** @param [r] NumOfWin [ajint] Number of windows
+** @param [r] jmin [ajint] Minimum
+** @param [r] jmax [ajint] Maximum
+** @param [r] step [ajint] Window step size
 ** @param [r] ComplexOfSeq [float *] Results array
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void comComplexOnSeq(char *seqsim,char *seq,int lseq,
-			    int lwin,int NumOfWin,
-			    int jmin,int jmax,int step,float *ComplexOfSeq){
+			    ajint lwin,int NumOfWin,
+			    ajint jmin,int jmax,int step,float *ComplexOfSeq){
     
     
     
-    int bwin,ewin,nwin;
+    ajint bwin,ewin,nwin;
     char *wind;
     char *winsim;
     float ComplexOfWin = 0.0;
@@ -716,23 +716,23 @@ static void comComplexOnSeq(char *seqsim,char *seq,int lseq,
 ** Complexity of sequence.
 **
 ** @param [r] seq [char *] Sequence
-** @param [r] lseq [int] Sequence length
-** @param [r] lwin [int] Window length
-** @param [r] NumOfWin [int] Number of windows
-** @param [r] jmin [int] Minimum
-** @param [r] jmax [int] Maximum
-** @param [r] step [int] Window step size
+** @param [r] lseq [ajint] Sequence length
+** @param [r] lwin [ajint] Window length
+** @param [r] NumOfWin [ajint] Number of windows
+** @param [r] jmin [ajint] Minimum
+** @param [r] jmax [ajint] Maximum
+** @param [r] step [ajint] Window step size
 ** @param [r] ComplexOfSeq [float *] Results array
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void comComplexOnSeq2(char *seq,int lseq,int lwin,int NumOfWin,
-			  int jmin,int jmax, int step,float *ComplexOfSeq){
+			  ajint jmin,int jmax, ajint step,float *ComplexOfSeq){
     
     
     
-    int bwin,ewin,nwin;
+    ajint bwin,ewin,nwin;
     char *wind;
     float ComplexOfWin = 0.0;
     
@@ -764,10 +764,10 @@ static void comComplexOnSeq2(char *seq,int lseq,int lwin,int NumOfWin,
 **
 ** @param [r] seq [char *] Sequence
 ** @param [r] seqsim [char *] Simulation sequence
-** @param [r] lseq [int] Sequence length
+** @param [r] lseq [ajint] Sequence length
 ** @param [r] Freq [comtrace *] Frequency values
 ** @param [r] ACN [char *] ACN value
-** @param [r] freq [int] Frequency count
+** @param [r] freq [ajint] Frequency count
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -777,7 +777,7 @@ static void comSimulSeq(char *seq,char *seqsim,int lseq,comtrace *Freq,
 
 {
 
-    int x,k;
+    ajint x,k;
     float x1,n1,n2,n3;
 
 
@@ -846,7 +846,7 @@ static void comSimulSeq(char *seq,char *seqsim,int lseq,comtrace *Freq,
 static void comSortFreq(comtrace *set)
 {
 
-    int a,b;
+    ajint a,b;
     comtrace strutt;
   
     for(a=1;a<4;++a)
@@ -865,7 +865,7 @@ static void comSortFreq(comtrace *set)
 ** Calculate mean for complexity
 **
 ** @param [r] ComplexOfSeq [float *] Sequence complexity values
-** @param [r] NumOfWin [int] Number of windows
+** @param [r] NumOfWin [ajint] Number of windows
 ** @param [r] MedValue [float *] Mean value result
 ** @return [void]
 ** @@
@@ -874,7 +874,7 @@ static void comSortFreq(comtrace *set)
 static void comCalcComplexMed(float *ComplexOfSeq,int NumOfWin,float *MedValue)
 
 {
-    int i;
+    ajint i;
     float sum = 0.0;
 
     ajDebug ("CalcComplexMed NumOfWin: %d\n", NumOfWin);
@@ -891,8 +891,8 @@ static void comCalcComplexMed(float *ComplexOfSeq,int NumOfWin,float *MedValue)
 ** Read sequence for complexity
 **
 ** @param [r] seq [char *] Sequence
-** @param [r] bwin [int] Begin
-** @param [r] ewin [int] End
+** @param [r] bwin [ajint] Begin
+** @param [r] ewin [ajint] End
 ** @param [r] win [char *] Sequence in window
 ** @return [void]
 ** @@
@@ -900,7 +900,7 @@ static void comCalcComplexMed(float *ComplexOfSeq,int NumOfWin,float *MedValue)
 
 static void comReadWin(char *seq,int bwin,int ewin,char *win)
 {
-    int i,k;
+    ajint i,k;
   
 
     k=0;
@@ -917,8 +917,8 @@ static void comReadWin(char *seq,int bwin,int ewin,char *win)
 ** Read jmer for complexity
 **
 ** @param [r] win [char *] Sequence for window
-** @param [r] lwin [int] Window length
-** @param [r] jlen [int] Word length
+** @param [r] lwin [ajint] Window length
+** @param [r] jlen [ajint] Word length
 ** @param [r] str [STRING *] Words
 ** @return [void]
 ** @@
@@ -928,7 +928,7 @@ static void comRead_j_mer(char *win,int lwin,int jlen,STRING *str)
 
 {
  
-    int i,r,k,t;
+    ajint i,r,k,t;
     char *temp;
 
     AJCNEW (temp, jlen+1);
@@ -954,18 +954,18 @@ static void comRead_j_mer(char *win,int lwin,int jlen,STRING *str)
 ** Complexity over window
 **
 ** @param [r] win [char *] Sequence in window
-** @param [r] lwin [int] Window length
+** @param [r] lwin [ajint] Window length
 ** @param [r] ComplexOfWin [float *] Results
-** @param [r] jmin [int] Minimum
-** @param [r] jmax [int] Maximum
+** @param [r] jmin [ajint] Minimum
+** @param [r] jmax [ajint] Maximum
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void comWinComplex2(char *win,int lwin,float *ComplexOfWin,
-			int jmin,int jmax)
+			ajint jmin,int jmax)
 {
-    int j;
+    ajint j;
  
     float Ujvalue = 0.0;
     float WinValue = 1.0;
@@ -987,19 +987,19 @@ static void comWinComplex2(char *win,int lwin,float *ComplexOfWin,
 **
 ** @param [r] win [char *] Sequence for window
 ** @param [r] winsim [char *] Simulation sequence for window
-** @param [r] lwin [int] Window length
+** @param [r] lwin [ajint] Window length
 ** @param [r] ComplexOfWin [float *] Results
-** @param [r] jmin [int] Minimum
-** @param [r] jmax [int] Maximum
+** @param [r] jmin [ajint] Minimum
+** @param [r] jmax [ajint] Maximum
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void comWinComplex (char *win,char *winsim,int lwin,
-			float *ComplexOfWin,int jmin, int jmax)
+			float *ComplexOfWin,int jmin, ajint jmax)
 
 {
-    int j;
+    ajint j;
  
     float Ujreal = 0.0;
     float Ujsim  = 0.0;
@@ -1026,35 +1026,35 @@ static void comWinComplex (char *win,char *winsim,int lwin,
 **
 ** Uj calculation for complexity
 **
-** @param [r] lwin [int] Window length
-** @param [r] jlen [int] Word length
+** @param [r] lwin [ajint] Window length
+** @param [r] jlen [ajint] Word length
 ** @param [r] win [char *] Sequece for window
 ** @param [r] Ujvalue [float *] Results
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void comCalcUj2(int lwin,int jlen,char *win,float *Ujvalue)
+static void comCalcUj2(ajint lwin,int jlen,char *win,float *Ujvalue)
 {
  
-    int unlikej_mer = 0;
-    int k;
+    ajint unlikej_mer = 0;
+    ajint k;
     float z = 0.0;
     float n = 0.0;
     STRING *str;
-    int njmer;
+    ajint njmer;
 
     njmer = (lwin-jlen+1);
     AJCNEW (str, njmer);
 
     comRead_j_mer(win,lwin,jlen,str);
-    (void) qsort(str,njmer,sizeof(STRING),(int (*)(const void *str_1,
+    (void) qsort(str,njmer,sizeof(STRING),(ajint (*)(const void *str_1,
 						   const void *str_2)) strcmp);
     unlikej_mer = comCounter (str,lwin-jlen+1);
     /*(void) ajDebug("unlikejmer = %d \n",unlikej_mer);*/
     n=(float)pow((double)4,(double)jlen);
     /*    n=powf((float)(4),(float)(jlen));*/
-    k=(int)(n);
+    k=(ajint)(n);
     if(lwin > k+jlen-1){
 	z=((float)(unlikej_mer)/n);
     }
@@ -1072,8 +1072,8 @@ static void comCalcUj2(int lwin,int jlen,char *win,float *Ujvalue)
 **
 ** Uj calculation for complexity
 **
-** @param [r] lwin [int] Window length
-** @param [r] jlen [int] Word length
+** @param [r] lwin [ajint] Window length
+** @param [r] jlen [ajint] Word length
 ** @param [r] win [char *] Sequece for window
 ** @param [r] Ujvalue [float *] Results
 ** @return [void]
@@ -1082,13 +1082,13 @@ static void comCalcUj2(int lwin,int jlen,char *win,float *Ujvalue)
 
 
 
-static void comCalcUj(int lwin,int jlen,char *win,float *Ujvalue)
+static void comCalcUj(ajint lwin,int jlen,char *win,float *Ujvalue)
 
 {
-    int unlikej_mer = 0;
+    ajint unlikej_mer = 0;
     float z = 0.0;
     STRING *str;
-    int njmer;
+    ajint njmer;
 
     njmer = (lwin-jlen+1);
     AJCNEW (str, njmer);
@@ -1098,7 +1098,7 @@ static void comCalcUj(int lwin,int jlen,char *win,float *Ujvalue)
       } */
 
     comRead_j_mer(win,lwin,jlen,str);
-    (void) qsort(str,njmer,sizeof(STRING),(int (*)(const void *str_1,
+    (void) qsort(str,njmer,sizeof(STRING),(ajint (*)(const void *str_1,
 						   const void *str_2))strcmp);
     unlikej_mer = comCounter (str,lwin-jlen+1);
 
@@ -1121,15 +1121,15 @@ static void comCalcUj(int lwin,int jlen,char *win,float *Ujvalue)
 ** Counter of matches for complexity
 **
 ** @param [r] str [STRING*] Words
-** @param [r] k [int] Number of words
-** @return [int] Counter returned
+** @param [r] k [ajint] Number of words
+** @return [ajint] Counter returned
 ** @@
 ******************************************************************************/
 
-static int comCounter (STRING* str,int k)
+static ajint comCounter (STRING* str,int k)
 
 {
-    int i,count=1;
+    ajint i,count=1;
   
 
     for(i=0;i<k-1;i++)
@@ -1146,7 +1146,7 @@ static int comCounter (STRING* str,int k)
 ** Ambiguity for complexity
 **
 ** @param [r] seq [char*]  Sequence
-** @param [r] l [int] Window length
+** @param [r] l [ajint] Window length
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -1227,7 +1227,7 @@ static void comReplace(char *vet,char *seq,char *ch)
 
 {
 
-    int      dim,x,x1;
+    ajint      dim,x,x1;
     time_t   tm;
 
     dim = strlen(vet);
@@ -1244,7 +1244,7 @@ static void comReplace(char *vet,char *seq,char *ch)
 ** ACN Frequency calculation for complexity
 **
 ** @param [r] seq [char*] Sequence
-** @param [r] lseq [int] Sequence length
+** @param [r] lseq [ajint] Sequence length
 ** @param [r] Freq [float*] Results
 ** @return [void]
 ** @@
@@ -1253,10 +1253,10 @@ static void comReplace(char *vet,char *seq,char *ch)
 static void comCalcFreqACN(char *seq,int lseq,float *Freq)
 {
 
-    int countA = 0;
-    int countC = 0;
-    int countG = 0;
-    int countT = 0;
+    ajint countA = 0;
+    ajint countC = 0;
+    ajint countG = 0;
+    ajint countT = 0;
     char *ch;
 
     ch = seq;
@@ -1295,7 +1295,7 @@ static void comCalcFreqACN(char *seq,int lseq,float *Freq)
 
 void embComUnused (void) {
   float cos=0.0;
-  int nsim=0, lseq=0, lwin=0, NumOfWin=0, jmin=0, jmax=0, step=0;
+  ajint nsim=0, lseq=0, lwin=0, NumOfWin=0, jmin=0, jmax=0, step=0;
   AjPFile fp=NULL;
   char* seqsim=NULL;
   char* seq=NULL;

@@ -30,30 +30,30 @@
 #define NO 0
 
 
-int SIM(char A[], char B[], int M, int N, int K, int Q, int R, int nseq);
-int big_pass(char A[], char B[], int M, int N, int K, int nseq);
-int locate(char A[], char B[], int nseq);
-int small_pass(char A[], char B[], int count, int nseq);
-int diff(char A[], char B[], int M, int N, int tb, int te);
-int calcons(char *aa0, int n0, char *aa1, int n1, int *res,
-	    int *nc, int *nident);
-int discons(char *seqc0, char *seqc1, int nc);
+ajint SIM(char A[], char B[], ajint M, ajint N, ajint K, ajint Q, ajint R, ajint nseq);
+ajint big_pass(char A[], char B[], ajint M, ajint N, ajint K, ajint nseq);
+ajint locate(char A[], char B[], ajint nseq);
+ajint small_pass(char A[], char B[], ajint count, ajint nseq);
+ajint diff(char A[], char B[], ajint M, ajint N, ajint tb, ajint te);
+ajint calcons(char *aa0, ajint n0, char *aa1, ajint n1, ajint *res,
+	    ajint *nc, ajint *nident);
+ajint discons(char *seqc0, char *seqc1, ajint nc);
 
 
 
 #define gap(k)  ((k) <= 0 ? 0 : q+r*(k))	/* k-symbol indel score */
-static int tt;
+static ajint tt;
 
-static int markx;                               /* what to display ? */
-static int llen;
+static ajint markx;                               /* what to display ? */
+static ajint llen;
 
-static int *sapp;				/* Current script append ptr */
-static int  last;				/* Last script op appended */
+static ajint *sapp;				/* Current script append ptr */
+static ajint  last;				/* Last script op appended */
 
-static int I, J;				/* current positions of A ,B */
-static int no_mat; 				/* number of matches */ 
-static int no_mis; 				/* number of mismatches */ 
-static int al_len; 				/* length of alignment */
+static ajint I, J;				/* current positions of A ,B */
+static ajint no_mat; 				/* number of matches */ 
+static ajint no_mis; 				/* number of mismatches */ 
+static ajint al_len; 				/* length of alignment */
 						/* Append "Delete k" op */
 #define DEL(k)				\
 { I += k;				\
@@ -103,53 +103,54 @@ static int al_len; 				/* length of alignment */
 }
 
 static  AjPSeq seq,seq2;
-static int **sub;
+static ajint **sub;
 
 typedef struct NODE
-	{ int  SCORE;
-	  int  STARI;
-	  int  STARJ;
-	  int  ENDI;
-	  int  ENDJ;
-	  int  TOP;
-	  int  BOT;
-	  int  LEFT;
-	  int  RIGHT; }  vertex,
+	{ ajint  SCORE;
+	  ajint  STARI;
+	  ajint  STARJ;
+	  ajint  ENDI;
+	  ajint  ENDJ;
+	  ajint  TOP;
+	  ajint  BOT;
+	  ajint  LEFT;
+	  ajint  RIGHT; }  vertex,
      *vertexptr;
 
 		
 vertexptr  *LIST;			/* an array for saving k best scores */
 vertexptr  low = 0;			/* lowest score node in LIST */
 vertexptr  most = 0;			/* latestly accessed node in LIST */
-static int numnode;			/* the number of nodes in LIST */
-static int *CC, *DD;			/* saving matrix scores */
-static int *RR, *SS, *EE, *FF; 		/* saving start-points */
-static int *HH, *WW;		 	/* saving matrix scores */
-static int *II, *JJ, *XX, *YY; 		/* saving start-points */
-static int  m1, mm, n1, nn;		/* boundaries of recomputed area */
-static int  rl, cl;			/* left and top boundaries */
-static int  lmin;			/* minimum score in LIST */
-static int flag;			/* indicate if recomputation necessary*/
+static ajint numnode;			/* the number of nodes in LIST */
+static ajint *CC, *DD;			/* saving matrix scores */
+static ajint *RR, *SS, *EE, *FF; 		/* saving start-points */
+static ajint *HH, *WW;		 	/* saving matrix scores */
+static ajint *II, *JJ, *XX, *YY; 		/* saving start-points */
+static ajint  m1, mm, n1, nn;		/* boundaries of recomputed area */
+static ajint  rl, cl;			/* left and top boundaries */
+static ajint  lmin;			/* minimum score in LIST */
+static ajint flag;			/* indicate if recomputation necessary*/
 
-static int q, r;			/* gap penalties */
-static int qr;				/* qr = q + r */
-typedef struct ONE { int COL ;  struct ONE  *NEXT ;} pair, *pairptr;
+static ajint q, r;			/* gap penalties */
+static ajint qr;				/* qr = q + r */
+typedef struct ONE { ajint COL ;  struct ONE  *NEXT ;} pair, *pairptr;
 pairptr *row, z; 			/* for saving used aligned pairs */
 #define PAIRNULL (pairptr)NULL
 
 char *seqc0, *seqc1;   /* aligned sequences */
 
-int min0,min1,max0,max1;
-int smin0, smin1;
+ajint min0,min1,max0,max1;
+ajint smin0, smin1;
 AjPFile outf;
 AjPMatrix matrix=NULL;
 AjPSeqCvt cvt = NULL;
 
-int main (int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
   AjPStr aa0str=0,aa1str=0;
   char *s1,*s2;
-  int gdelval,ggapval;
-  int i,K;
+  ajint gdelval,ggapval;
+  ajint i,K;
 
   embInit("matcher", argc, argv);
   seq = ajAcdGetSeq ("sequencea");
@@ -203,17 +204,17 @@ int main (int argc, char * argv[]) {
   return 0;
 }
 
-int SIM(A,B,M,N,K,Q,R,nseq)
+ajint SIM(A,B,M,N,K,Q,R,nseq)
 	char A[],B[];
-	int M,N,K,nseq;
-	int Q,R;
+	ajint M,N,K,nseq;
+	ajint Q,R;
 {
-  int endi, endj, stari, starj; 	/* endpoint and startpoint */ 
-  int  score;   			/* the max score in LIST */
-  int count;				/* maximum size of list */	
-  register  int  i, j;			/* row and column indices */
-  int  *S;				/* saving operations for diff */
-  int nc, ns, nident;		        /* for display */
+  ajint endi, endj, stari, starj; 	/* endpoint and startpoint */ 
+  ajint  score;   			/* the max score in LIST */
+  ajint count;				/* maximum size of list */	
+  register  ajint  i, j;			/* row and column indices */
+  ajint  *S;				/* saving operations for diff */
+  ajint nc, ns, nident;		        /* for display */
   vertexptr cur; 			/* temporary pointer */
   vertexptr findmax();	 		/* return the largest score node */
   double percent;
@@ -226,7 +227,7 @@ int SIM(A,B,M,N,K,Q,R,nseq)
 
   /* allocate space for all vectors */
 
-  j = (N + 1) /* * sizeof(int)*/;
+  j = (N + 1) /* * sizeof(ajint)*/;
   AJCNEW(CC, j);
   AJCNEW(DD, j);
   AJCNEW(RR, j);
@@ -234,7 +235,7 @@ int SIM(A,B,M,N,K,Q,R,nseq)
   AJCNEW(EE, j);
   AJCNEW(FF, j);
 
-  i = (M + 1) /* * sizeof(int)*/;
+  i = (M + 1) /* * sizeof(ajint)*/;
   AJCNEW(HH, i);
   AJCNEW(WW, i);
   AJCNEW(II, i);
@@ -355,9 +356,9 @@ int SIM(A,B,M,N,K,Q,R,nseq)
 }
 
 /* return 1 if no node in LIST share vertices with the area */
-int no_cross()
+ajint no_cross()
 { vertexptr  cur;
-  register int i;
+  register ajint i;
 
       for ( i = 0; i < numnode; i++ )
 	{ cur = LIST[i];
@@ -376,19 +377,19 @@ int no_cross()
 }
 
 
-int big_pass(A,B,M,N,K,nseq) char A[],B[]; int M,N,K,nseq;
+ajint big_pass(A,B,M,N,K,nseq) char A[],B[]; ajint M,N,K,nseq;
 { 
-  register  int  i, j;			/* row and column indices */
-  register  int  c;			/* best score at current point */
-  register  int  f;			/* best score ending with insertion */
-  register  int  d;			/* best score ending with deletion */
-  register  int  p;			/* best score at (i-1, j-1) */
-  register  int  ci, cj;		/* end-point associated with c */ 
-  register  int  di, dj;		/* end-point associated with d */
-  register  int  fi, fj;		/* end-point associated with f */
-  register  int  pi, pj;		/* end-point associated with p */
-  int  *va;				/* pointer to vv(A[i], B[j]) */
-  int   addnode();			/* function for inserting a node */
+  register  ajint  i, j;			/* row and column indices */
+  register  ajint  c;			/* best score at current point */
+  register  ajint  f;			/* best score ending with insertion */
+  register  ajint  d;			/* best score ending with deletion */
+  register  ajint  p;			/* best score at (i-1, j-1) */
+  register  ajint  ci, cj;		/* end-point associated with c */ 
+  register  ajint  di, dj;		/* end-point associated with d */
+  register  ajint  fi, fj;		/* end-point associated with f */
+  register  ajint  pi, pj;		/* end-point associated with p */
+  ajint  *va;				/* pointer to vv(A[i], B[j]) */
+  ajint   addnode();			/* function for inserting a node */
   
 	/* Compute the matrix and save the top K best scores in LIST
 	   CC : the scores of the current row
@@ -409,7 +410,7 @@ int big_pass(A,B,M,N,K,nseq) char A[],B[]; int M,N,K,nseq;
     {  c = 0;				/* Initialize column 0 */
     f = - (q);
     ci = fi = i;
-    va = sub[(int)A[i]];
+    va = sub[(ajint)A[i]];
     if ( nseq == 2 )
       { p = 0;
       pi = i - 1;
@@ -433,7 +434,7 @@ int big_pass(A,B,M,N,K,nseq) char A[],B[]; int M,N,K,nseq;
       dj = FF[j];
       ORDER(d, di, dj, c, ci, cj)
 	c = 0;
-      DIAG(i, j, c, p+va[(int)B[j]])		/* diagonal */
+      DIAG(i, j, c, p+va[(ajint)B[j]])		/* diagonal */
 	/*		    ajDebug("     B[%d]=%d",j,B[j]);*/
 	if ( c <= 0 )
 	  { c = 0; ci = i; cj = j; }
@@ -457,20 +458,20 @@ int big_pass(A,B,M,N,K,nseq) char A[],B[]; int M,N,K,nseq;
   return 0;
 }
 
-int locate(A,B,nseq) char A[],B[]; int nseq;
-{ register  int  i, j;			/* row and column indices */
-  register  int  c;			/* best score at current point */
-  register  int  f;			/* best score ending with insertion */
-  register  int  d;			/* best score ending with deletion */
-  register  int  p;			/* best score at (i-1, j-1) */
-  register  int  ci, cj;		/* end-point associated with c */ 
-  register  int  di=0, dj=0;		/* end-point associated with d */
-  register  int  fi, fj;		/* end-point associated with f */
-  register  int  pi, pj;		/* end-point associated with p */
-  int  cflag, rflag;			/* for recomputation */
-  int  *va;				/* pointer to vv(A[i], B[j]) */
-  int   addnode();			/* function for inserting a node */
-  int  limit;				/* the bound on j */
+ajint locate(A,B,nseq) char A[],B[]; ajint nseq;
+{ register  ajint  i, j;			/* row and column indices */
+  register  ajint  c;			/* best score at current point */
+  register  ajint  f;			/* best score ending with insertion */
+  register  ajint  d;			/* best score ending with deletion */
+  register  ajint  p;			/* best score at (i-1, j-1) */
+  register  ajint  ci, cj;		/* end-point associated with c */ 
+  register  ajint  di=0, dj=0;		/* end-point associated with d */
+  register  ajint  fi, fj;		/* end-point associated with f */
+  register  ajint  pi, pj;		/* end-point associated with p */
+  ajint  cflag, rflag;			/* for recomputation */
+  ajint  *va;				/* pointer to vv(A[i], B[j]) */
+  ajint   addnode();			/* function for inserting a node */
+  ajint  limit;				/* the bound on j */
 
 	/* Reverse pass
 	   rows
@@ -503,7 +504,7 @@ int locate(A,B,nseq) char A[],B[]; int nseq;
     ci = fi = i;
     pi = i + 1;
     cj = fj = pj = nn + 1;
-    va = sub[(int)A[i]];
+    va = sub[(ajint)A[i]];
     if ( nseq == 2 || n1 > i )
       limit = n1;
     else
@@ -520,7 +521,7 @@ int locate(A,B,nseq) char A[],B[]; int nseq;
       dj = FF[j];
       ORDER(d, di, dj, c, ci, cj)
 	c = 0;
-      DIAG(i, j, c, p+va[(int)B[j]])		/* diagonal */
+      DIAG(i, j, c, p+va[(ajint)B[j]])		/* diagonal */
 	if ( c <= 0 )
 	  { c = 0; ci = i; cj = j; }
 	else
@@ -559,7 +560,7 @@ int locate(A,B,nseq) char A[],B[]; int nseq;
 	ci = fi = m1;
 	pi = m1 + 1;
 	cj = fj = pj = nn + 1;
-	va = sub[(int)A[m1]];
+	va = sub[(ajint)A[m1]];
 	for ( j = nn; j >= n1 ; j-- )  
 	  { f = f - r;
 	  c = c - qr;
@@ -572,7 +573,7 @@ int locate(A,B,nseq) char A[],B[]; int nseq;
 	  dj = FF[j];
 	  ORDER(d, di, dj, c, ci, cj)
 	    c = 0;
-	  DIAG(m1, j, c, p+va[(int)B[j]])		/* diagonal */
+	  DIAG(m1, j, c, p+va[(ajint)B[j]])		/* diagonal */
 	    if ( c <= 0 )
 	      { c = 0; ci = m1; cj = j; }
 	    else
@@ -613,7 +614,7 @@ int locate(A,B,nseq) char A[],B[]; int nseq;
 	c = 0;
 	f = - (q);
 	cj = fj = n1;
-	va = sub[(int)B[n1]];
+	va = sub[(ajint)B[n1]];
 	if ( nseq == 2 || mm < n1 )
 	  { p = 0;
 	  ci = fi = pi = mm + 1;
@@ -639,7 +640,7 @@ int locate(A,B,nseq) char A[],B[]; int nseq;
 	  dj = YY[i];
 	  ORDER(d, di, dj, c, ci, cj)
 	    c = 0;
-	  DIAG(i, n1, c, p+va[(int)A[i]])
+	  DIAG(i, n1, c, p+va[(ajint)A[i]])
 	    if ( c <= 0 )
 	      { c = 0; ci = i; cj = n1; }
 	    else
@@ -680,19 +681,19 @@ int locate(A,B,nseq) char A[],B[]; int nseq;
   return 0;
 }
 
-int small_pass(A,B,count,nseq) char A[], B[]; int count, nseq;
-{ register  int  i, j;			/* row and column indices */
-  register  int  c;			/* best score at current point */
-  register  int  f;			/* best score ending with insertion */
-  register  int  d;			/* best score ending with deletion */
-  register  int  p;			/* best score at (i-1, j-1) */
-  register  int  ci, cj;		/* end-point associated with c */ 
-  register  int  di, dj;		/* end-point associated with d */
-  register  int  fi, fj;		/* end-point associated with f */
-  register  int  pi, pj;		/* end-point associated with p */
-  int  *va;				/* pointer to vv(A[i], B[j]) */
-  int   addnode();			/* function for inserting a node */
-  int  limit;				/* lower bound on j */
+ajint small_pass(A,B,count,nseq) char A[], B[]; ajint count, nseq;
+{ register  ajint  i, j;			/* row and column indices */
+  register  ajint  c;			/* best score at current point */
+  register  ajint  f;			/* best score ending with insertion */
+  register  ajint  d;			/* best score ending with deletion */
+  register  ajint  p;			/* best score at (i-1, j-1) */
+  register  ajint  ci, cj;		/* end-point associated with c */ 
+  register  ajint  di, dj;		/* end-point associated with d */
+  register  ajint  fi, fj;		/* end-point associated with f */
+  register  ajint  pi, pj;		/* end-point associated with p */
+  ajint  *va;				/* pointer to vv(A[i], B[j]) */
+  ajint   addnode();			/* function for inserting a node */
+  ajint  limit;				/* lower bound on j */
 
   for ( j = n1 + 1; j <= nn ; j++ )
     {  CC[j] = 0;
@@ -706,7 +707,7 @@ int small_pass(A,B,count,nseq) char A[], B[]; int count, nseq;
     {  c = 0;				/* Initialize column 0 */
     f = - (q);
     ci = fi = i;
-    va = sub[(int)A[i]];
+    va = sub[(ajint)A[i]];
     if ( nseq == 2 || i <= n1 )
       { p = 0;
       pi = i - 1;
@@ -732,7 +733,7 @@ int small_pass(A,B,count,nseq) char A[], B[]; int count, nseq;
       dj = FF[j];
       ORDER(d, di, dj, c, ci, cj)
 	c = 0;
-      DIAG(i, j, c, p+va[(int)B[j]])		/* diagonal */
+      DIAG(i, j, c, p+va[(ajint)B[j]])		/* diagonal */
 	if ( c <= 0 )
 	  { c = 0; ci = i; cj = j; }
 	else
@@ -755,9 +756,9 @@ int small_pass(A,B,count,nseq) char A[], B[]; int count, nseq;
   return 0;
 }
 
-int addnode(c, ci, cj, i, j, K, cost)  int c, ci, cj, i, j, K, cost;
-{ int found;				/* 1 if the node is in LIST */
-  register int d;
+ajint addnode(c, ci, cj, i, j, K, cost)  ajint c, ci, cj, i, j, K, cost;
+{ ajint found;				/* 1 if the node is in LIST */
+  register ajint d;
 
   found = 0;
   if ( most != 0 && most->STARI == ci && most->STARJ == cj )
@@ -808,7 +809,7 @@ int addnode(c, ci, cj, i, j, K, cost)  int c, ci, cj, i, j, K, cost;
 
 vertexptr findmax()
 { vertexptr  cur;
-  register int i, j;
+  register ajint i, j;
 
   for ( j = 0, i = 1; i < numnode ; i++ )
     if ( LIST[i]->SCORE > LIST[j]->SCORE )
@@ -825,14 +826,14 @@ vertexptr findmax()
 
 }
 
-int diff(A,B,M,N,tb,te) char *A, *B; int M, N; int tb, te;
+ajint diff(A,B,M,N,tb,te) char *A, *B; ajint M, N; ajint tb, te;
 {int   midi, midj, type;	/* Midpoint, type, and cost */
-  int midc;
-  int  zero = 0;				/* int type zero        */
+  ajint midc;
+  ajint  zero = 0;				/* ajint type zero        */
 
-{ register int   i, j;
-  register int c, e, d, s;
-  int t, *va;
+{ register ajint   i, j;
+  register ajint c, e, d, s;
+  ajint t, *va;
 
 /* Boundary cases: M <= 1 or N == 0 */
 
@@ -848,13 +849,13 @@ int diff(A,B,M,N,tb,te) char *A, *B; int M, N; int tb, te;
       if (tb > te) tb = te;
       midc = - (tb + r + gap(N) );
       midj = 0;
-      va = sub[(int)A[1]];
+      va = sub[(ajint)A[1]];
       for (j = 1; j <= N; j++)
         {  for ( tt = 1, z = row[I+1]; z != PAIRNULL; z = z->NEXT )	
               if ( z->COL == j+J )			
 	         { tt = 0; break; }		
            if ( tt )			
-            { c = va[(int)B[j]] - ( gap(j-1) + gap(N-j) );
+            { c = va[(ajint)B[j]] - ( gap(j-1) + gap(N-j) );
               if (c > midc)
                { midc = c;
                  midj = j;
@@ -895,11 +896,11 @@ int diff(A,B,M,N,tb,te) char *A, *B; int M, N; int tb, te;
     { s = CC[0];
       CC[0] = c = t = t-r;
       e = t-q;
-      va = sub[(int)A[i]];
+      va = sub[(ajint)A[i]];
       for (j = 1; j <= N; j++)
         { if ((c = c - qr) > (e = e - r)) e = c;
           if ((c = CC[j] - qr) > (d = DD[j] - r)) d = c;
-	  DIAG(i+I, j+J, c, s+va[(int)B[j]])
+	  DIAG(i+I, j+J, c, s+va[(ajint)B[j]])
           if (c < d) c = d;
           if (c < e) c = e;
           s = CC[j];
@@ -920,11 +921,11 @@ int diff(A,B,M,N,tb,te) char *A, *B; int M, N; int tb, te;
     { s = RR[N];
       RR[N] = c = t = t-r;
       e = t-q;
-      va = sub[(int)A[i+1]];
+      va = sub[(ajint)A[i+1]];
       for (j = N-1; j >= 0; j--)
         { if ((c = c - qr) > (e = e - r)) e = c;
           if ((c = RR[j] - qr) > (d = SS[j] - r)) d = c;
-	  DIAG(i+1+I, j+1+J, c, s+va[(int)B[j+1]])
+	  DIAG(i+1+I, j+1+J, c, s+va[(ajint)B[j+1]])
           if (c < d) c = d;
           if (c < e) c = e;
           s = RR[j];
@@ -966,18 +967,18 @@ int diff(A,B,M,N,tb,te) char *A, *B; int M, N; int tb, te;
 
 }
 
-int calcons(aa0,n0,aa1,n1,res,nc,nident)
+ajint calcons(aa0,n0,aa1,n1,res,nc,nident)
      char *aa0, *aa1;
-     int n0, n1;
-     int *res;
-     int *nc;
-     int *nident;
+     ajint n0, n1;
+     ajint *res;
+     ajint *nc;
+     ajint *nident;
 {
-  int i0, i1;
-  int op, nid, lenc, nd;
+  ajint i0, i1;
+  ajint op, nid, lenc, nd;
   char *sp0, *sp1;
-  int *rp;
-  /*  int mins =0; always 0 so why bother ? */
+  ajint *rp;
+  /*  ajint mins =0; always 0 so why bother ? */
   char *sq1,*sq2;
 
   /* first fill in the ends */
@@ -1036,22 +1037,22 @@ int calcons(aa0,n0,aa1,n1,res,nc,nident)
 
 #define MAXOUT 201
 
-int discons(seqc0, seqc1, nc)
+ajint discons(seqc0, seqc1, nc)
      char *seqc0, *seqc1;
-     int nc;
+     ajint nc;
 {
   char line[3][MAXOUT], cline[2][MAXOUT+10];
-  int il, i, lend, loff, il1, il2;
-  int del0, del1, ic, ll0, ll1, ll01, cl0, cl1, rl0, rl1;
-  int i00, i0n, i10, i1n;
-  int ioff0, ioff1;
-  long qqoff, lloff;
-  int have_res;
+  ajint il, i, lend, loff, il1, il2;
+  ajint del0, del1, ic, ll0, ll1, ll01, cl0, cl1, rl0, rl1;
+  ajint i00, i0n, i10, i1n;
+  ajint ioff0, ioff1;
+  ajlong qqoff, lloff;
+  ajint have_res;
   char *name01;
   char *name0= ajSeqName(seq);
   char *name1= ajSeqName(seq2);
   char n0 = ajSeqLen(seq);
-  int smark[4] = {-10000,-10000,-10000,-10000}; /* BIT WEIRD THIS */
+  ajint smark[4] = {-10000,-10000,-10000,-10000}; /* BIT WEIRD THIS */
 
   if (markx==2) name01=name1; else name01 = "\0";
 
@@ -1150,9 +1151,9 @@ int discons(seqc0, seqc1, nc)
       if (seqc1[ic]==' ') {del1++; cl1=rl1=NO;}
       else ll1 = YES;
 
-      qqoff = ajSeqBegin(seq) - 1 + (long)(ioff0-del0)+seq->Offset;
+      qqoff = ajSeqBegin(seq) - 1 + (ajlong)(ioff0-del0)+seq->Offset;
       if (cl0 && qqoff%10 == 9)  {
-	sprintf(&cline[0][i],"%8ld",qqoff+1l);
+	sprintf(&cline[0][i],"%8ld",(long)qqoff+1l);
 	cline[0][i+8]=' ';
 	rl0 = NO;
       }
@@ -1162,13 +1163,13 @@ int discons(seqc0, seqc1, nc)
 	rl0 = NO;
       }
       else if (rl0 && (qqoff+1)%10 == 0) {
-	sprintf(&cline[0][i],"%8ld",qqoff+1);
+	sprintf(&cline[0][i],"%8ld",(long)(qqoff+1));
 	cline[0][i+8]=' ';
       }
       
-      lloff = ajSeqBegin(seq2)-1 + /*loffset +*/ (long)(ioff1-del1)+seq2->Offset;
+      lloff = ajSeqBegin(seq2)-1 + /*loffset +*/ (ajlong)(ioff1-del1)+seq2->Offset;
       if (cl1 && lloff%10 == 9)  {
-	sprintf(&cline[1][i],"%8ld",lloff+1l);
+	sprintf(&cline[1][i],"%8ld",(long)(lloff+1l));
 	cline[1][i+8]=' ';
 	rl1 = NO;
       }
@@ -1178,14 +1179,14 @@ int discons(seqc0, seqc1, nc)
 	rl1 = NO;
       }
       else if (rl1 && (lloff+1)%10 == 0) {
-	sprintf(&cline[1][i],"%8ld",lloff+1);
+	sprintf(&cline[1][i],"%8ld",(long)(lloff+1));
 	cline[1][i+8]=' ';
       }
       
 
       line[1][i] = ' ';
       if (ioff0-del0 >= min0 && ioff0-del0 <= max0) {
-	if (toupper((int)line[0][i])==toupper((int)line[2][i]) /*|| (dnaseq && (
+	if (toupper((ajint)line[0][i])==toupper((ajint)line[2][i]) /*|| (dnaseq && (
 	    (toupper(line[0][i])=='T' && toupper(line[2][i])=='U') ||
 	    (toupper(line[0][i])=='U' && toupper(line[2][i])=='T')))*/)
 	  switch (markx) {

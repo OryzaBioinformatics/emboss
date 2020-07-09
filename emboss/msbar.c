@@ -23,14 +23,15 @@
 #include "emboss.h"
 #include <ctype.h>	/* for tolower, toupper */
 
-static void blockmutn(AjPStr *str, AjBool isnuc, AjPStr *blocklist, int min, int max, AjBool inframe);
+static void blockmutn(AjPStr *str, AjBool isnuc, AjPStr *blocklist, ajint min, ajint max, AjBool inframe);
 static void codonmutn(AjPStr *str, AjBool isnuc, AjPStr *codonlist, AjBool inframe);
 static void pointmutn(AjPStr *str, AjBool isnuc, AjPStr *pointlist);
-static void Insert(AjPStr *str, AjBool isnuc, int start, int end);
-static void Move(AjPStr *str, int start, int end, int destination);
-static void Duplicate(AjPStr *str, int start, int end);
+static void Insert(AjPStr *str, AjBool isnuc, ajint start, ajint end);
+static void Move(AjPStr *str, ajint start, ajint end, ajint destination);
+static void Duplicate(AjPStr *str, ajint start, ajint end);
 
-int main (int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
 
   AjPSeqall seqall;
   AjPSeqout seqout;
@@ -43,7 +44,7 @@ int main (int argc, char * argv[]) {
   AjPStr *codonlist;
   AjPStr *blocklist;
 
-  int i, count, min, max;
+  ajint i, count, min, max;
   AjBool inframe;
 
   (void) embInit ("msbar", argc, argv);
@@ -93,11 +94,11 @@ int main (int argc, char * argv[]) {
 
 /*******************************************************************************/
 
-static void blockmutn(AjPStr *str, AjBool isnuc, AjPStr *blocklist, int min, int max, AjBool inframe) {
+static void blockmutn(AjPStr *str, AjBool isnuc, AjPStr *blocklist, ajint min, ajint max, AjBool inframe) {
 	
-int i=-1;
-int rposstart, rposend, rpos2;
-int opt;
+ajint i=-1;
+ajint rposstart, rposend, rpos2;
+ajint opt;
 
   while (blocklist[++i]) {
     (void) ajDebug("Next block mutation operation = %S\n", blocklist[i]);
@@ -179,9 +180,9 @@ int opt;
 
 static void codonmutn(AjPStr *str, AjBool isnuc, AjPStr *codonlist, AjBool inframe) {
 	
-int rpos, rpos2;
-int i=-1;
-int opt;
+ajint rpos, rpos2;
+ajint i=-1;
+ajint opt;
 
   while (codonlist[++i]) {
     (void) ajDebug("Next codon mutation operation = %S\n", codonlist[i]);
@@ -259,9 +260,9 @@ int opt;
 
 static void pointmutn(AjPStr *str, AjBool isnuc, AjPStr *pointlist) {
 	
-int i=-1;
-int rpos, rpos2;
-int opt;
+ajint i=-1;
+ajint rpos, rpos2;
+ajint opt;
 
   while (pointlist[++i]) {
     (void) ajDebug("Next point mutation operation = %S\n", pointlist[i]);
@@ -321,13 +322,13 @@ int opt;
 
 /*******************************************************************************/
 
-static void Insert(AjPStr *str, AjBool isnuc, int start, int end) {
+static void Insert(AjPStr *str, AjBool isnuc, ajint start, ajint end) {
 
 char nuc[] = "ACGT";
 char prot[] = "ARNDCQEGHILKMFPSTWYV";
 AjPStr ins=NULL;
-int count = end - start +1;
-int r;
+ajint count = end - start +1;
+ajint r;
 
   while (count--) {
     if (isnuc) {
@@ -346,7 +347,7 @@ int r;
 
 /*******************************************************************************/
 
-static void Move(AjPStr *str, int start, int end, int destination) {
+static void Move(AjPStr *str, ajint start, ajint end, ajint destination) {
 
 AjPStr mov=NULL;
 
@@ -359,7 +360,7 @@ AjPStr mov=NULL;
 
 /*******************************************************************************/
 
-static void Duplicate(AjPStr *str, int start, int end) {
+static void Duplicate(AjPStr *str, ajint start, ajint end) {
 
   (void) Move(str, start, end, start);
                  

@@ -16,7 +16,7 @@
 
 #include "ajax.h"
 
-static int seqMaxGcglines = 5000;
+static ajint seqMaxGcglines = 5000;
 static AjPRegexp qrywildexp = 0;
 
 typedef struct SeqSInFormat
@@ -30,16 +30,16 @@ typedef struct SeqSMsfData
 {
   AjPTable Table;
   AjPStr* Names;
-  int Count;
-  int Nseq;
-  int Bufflines;
+  ajint Count;
+  ajint Nseq;
+  ajint Bufflines;
 } SeqOMsfData, *SeqPMsfData;
 
 typedef struct SeqSMsfItem
 {
   AjPStr Name;
-  int Len;
-  int Check;
+  ajint Len;
+  ajint Check;
   float Weight;
   AjPStr Seq;
 } SeqOMsfItem, *SeqPMsfItem;
@@ -47,28 +47,28 @@ typedef struct SeqSMsfItem
 
 static AjBool     seqReadAbi (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqABISampleName(AjPFile fp, AjPStr *sample);
-static AjBool     seqReadABIInt4(AjPFile fp,long int*i4);
+static AjBool     seqReadABIInt4(AjPFile fp,ajlong*i4);
 static AjBool     seqABIReadFloat4(AjPFile fp,float* f4);
-static AjBool     seqABIReadInt2(AjPFile fp,short int*i2);
-static AjBool     seqABIGetFlag(AjPFile fp, long int flagLabel,
-				long int flagInstance,long int word,
-				long int* val);
-static AjBool     seqABIGetFlagF(AjPFile fp, long int flagLabel,
-				 long int flagInstance,long int word,
+static AjBool     seqABIReadInt2(AjPFile fp,ajshort* i2);
+static AjBool     seqABIGetFlag(AjPFile fp, ajlong flagLabel,
+				ajlong flagInstance, ajlong word,
+				ajlong* val);
+static AjBool     seqABIGetFlagF(AjPFile fp, ajlong flagLabel,
+				 ajlong flagInstance,ajlong word,
 				 float* val);
-static AjBool     seqABIGetFlagW(AjPFile fp, long int flagLabel,
-				 long int word,short int* val);
-static short      seqABIBaseIdx(char B);
+static AjBool     seqABIGetFlagW(AjPFile fp, ajlong flagLabel,
+				 ajlong word,ajshort* val);
+static ajshort    seqABIBaseIdx(char B);
 
 static void       seqAccSave (AjPSeq thys, AjPStr acc);
-static int        seqAppend (AjPStr* seq, AjPStr line);
+static ajint        seqAppend (AjPStr* seq, AjPStr line);
 static AjBool     seqClustalReadseq (AjPStr rdline, AjPTable msftable);
-static AjBool     seqFindInFormat (AjPStr format, int *iformat);
+static AjBool     seqFindInFormat (AjPStr format, ajint *iformat);
 static AjBool     seqFormatSet (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqGcgDots (AjPSeq thys, AjPSeqin seqin, AjPStr* pline,
-			  int maxlines, int *len);
+			  ajint maxlines, ajint *len);
 static AjBool     seqGcgMsfDots (AjPSeq thys, AjPSeqin seqin, AjPStr* pline,
-			     int maxlines, int *len);
+			     ajint maxlines, ajint *len);
 static AjBool     seqGcgMsfHeader (AjPStr line, SeqPMsfItem* msfitem);
 static AjBool     seqGcgMsfReadseq(AjPStr rdline, AjPTable msftable);
 static AjBool     seqHennig86Readseq (AjPStr rdline, AjPTable msftable);
@@ -88,7 +88,7 @@ static AjBool     seqReadDbId (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadEmbl (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadFasta (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadFmt (AjPSeq thys, AjPSeqin seqin,
-			      SeqPInFormat inform, int format);
+			      SeqPInFormat inform, ajint format);
 static AjBool     seqReadGcg (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadGenbank (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadHennig86 (AjPSeq thys, AjPSeqin seqin);
@@ -332,13 +332,13 @@ void ajSeqinSetProt (AjPSeqin seqin)
 ** Sets the start and end positions for a sequence input object
 **
 ** @param [P] seqin [AjPSeqin] Sequence input object to be set.
-** @param [r] ibegin [int] Start position. Negative values are from the end.
-** @param [r] iend [int] End position. Negative values are from the end.
+** @param [r] ibegin [ajint] Start position. Negative values are from the end.
+** @param [r] iend [ajint] End position. Negative values are from the end.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajSeqinSetRange (AjPSeqin seqin, int ibegin, int iend)
+void ajSeqinSetRange (AjPSeqin seqin, ajint ibegin, ajint iend)
 {
 
     if (ibegin)
@@ -608,8 +608,8 @@ AjBool ajSeqRead (AjPSeq thys, AjPSeqin seqin)
     AjPStr tmpformat = NULL;
     AjBool ret = ajFalse;
     AjPStr usa = NULL;
-    int i;
-    static int calls = 0;
+    ajint i;
+    static ajint calls = 0;
 
     if (!calls)
     {					/* we need a copy of the formatlist */
@@ -731,8 +731,8 @@ AjBool ajSeqsetRead (AjPSeqset thys, AjPSeqin seqin)
     AjPList setlist;
     AjIList iter;
 
-    int iseq = 0;
-    int i;
+    ajint iseq = 0;
+    ajint i;
 
     seq = ajSeqNew();
 
@@ -821,14 +821,14 @@ AjBool ajSeqsetRead (AjPSeqset thys, AjPSeqin seqin)
 ** @param [r] thys [AjPSeq] Sequence object
 ** @param [r] seqin [AjPSeqin] Sequence input object
 ** @param [r] inform [SeqPInFormat] Input format structure
-** @param [r] format [int] input format code
-** @return [int] 0 if successful. 1 if the query match failed.
+** @param [r] format [ajint] input format code
+** @return [ajint] 0 if successful. 1 if the query match failed.
 **               2 if the sequence type failed
 ** @@
 ******************************************************************************/
 
-static int seqReadFmt (AjPSeq thys, AjPSeqin seqin, SeqPInFormat inform,
-		       int format)
+static ajint seqReadFmt (AjPSeq thys, AjPSeqin seqin, SeqPInFormat inform,
+		       ajint format)
 {
     if (inform[format].Read (thys, seqin))
     {
@@ -893,8 +893,8 @@ static int seqReadFmt (AjPSeq thys, AjPSeqin seqin, SeqPInFormat inform,
 ******************************************************************************/
 static AjBool seqRead (AjPSeq thys, AjPSeqin seqin)
 {
-    int i;
-    int stat;
+    ajint i;
+    ajint stat;
 
     AjPFileBuff buff = seqin->Filebuff;
     SeqPInFormat inform = seqInFormat;
@@ -1006,9 +1006,9 @@ static AjBool seqReadFasta (AjPSeq thys, AjPSeqin seqin)
     AjPFileBuff buff = seqin->Filebuff;
 
     char *cp;
-    int bufflines = 0;
-    long fpos = 0;
-    long fposb = 0;
+    ajint bufflines = 0;
+    ajlong fpos = 0;
+    ajlong fposb = 0;
     AjBool ok = ajTrue;
 
     ajDebug ("seqReadFasta\n");
@@ -1105,9 +1105,9 @@ static AjBool seqReadDbId (AjPSeq thys, AjPSeqin seqin)
     AjPFileBuff buff = seqin->Filebuff;
 
     char *cp;
-    int bufflines = 0;
-    long fpos = 0;
-    long fposb = 0;
+    ajint bufflines = 0;
+    ajlong fpos = 0;
+    ajlong fposb = 0;
     AjBool ok = ajTrue;
 
     ajDebug ("seqReadDbId\n");
@@ -1203,7 +1203,7 @@ static AjBool seqReadNbrf (AjPSeq thys, AjPSeqin seqin)
     static AjPStr rdline = NULL;
     AjPFileBuff buff = seqin->Filebuff;
 
-    int bufflines = 0;
+    ajint bufflines = 0;
     AjBool ok;
 
     static AjPRegexp idexp = NULL;
@@ -1234,7 +1234,7 @@ static AjBool seqReadNbrf (AjPSeq thys, AjPSeqin seqin)
      ** or, for GCG databases, thys is just '>>'
      */
 
-    switch (toupper((int) ajStrChar(token, 0)))
+    switch (toupper((ajint) ajStrChar(token, 0)))
     {
     case 'P':
     case 'F':
@@ -1309,9 +1309,9 @@ static AjBool seqReadNbrf (AjPSeq thys, AjPSeqin seqin)
 static AjBool seqReadGcg (AjPSeq thys, AjPSeqin seqin)
 {
     static AjPStr rdline = NULL;
-    int bufflines = 0;
+    ajint bufflines = 0;
     AjBool ok;
-    int len=0;
+    ajint len=0;
     AjPFileBuff buff = seqin->Filebuff;
     AjBool seqed=ajFalse;
     char *p=NULL;
@@ -1392,7 +1392,7 @@ static AjBool seqReadNcbi (AjPSeq thys, AjPSeqin seqin)
   
     AjPFileBuff buff = seqin->Filebuff;
 
-    int bufflines = 0;
+    ajint bufflines = 0;
     AjBool ok;
 
     (void) ajFileBuffGet (buff, &rdline);
@@ -1457,7 +1457,7 @@ static AjBool seqReadStaden (AjPSeq thys, AjPSeqin seqin)
 {
     static AjPStr rdline = NULL;
     static AjPStr token = NULL;
-    int bufflines = 0;
+    ajint bufflines = 0;
     AjPFileBuff buff = seqin->Filebuff;
     static AjPRegexp idexp = NULL;
 
@@ -1509,7 +1509,7 @@ static AjBool seqReadStaden (AjPSeq thys, AjPSeqin seqin)
 static AjBool seqReadText (AjPSeq thys, AjPSeqin seqin)
 {
     static AjPStr rdline = NULL;
-    int bufflines = 0;
+    ajint bufflines = 0;
     AjPFileBuff buff = seqin->Filebuff;
 
     ajDebug ("seqReadText\n");
@@ -1543,7 +1543,7 @@ static AjBool seqReadText (AjPSeq thys, AjPSeqin seqin)
 static AjBool seqReadRaw (AjPSeq thys, AjPSeqin seqin)
 {
     static AjPStr rdline = NULL;
-    int bufflines = 0;
+    ajint bufflines = 0;
     AjPFileBuff buff = seqin->Filebuff;
     static AjPRegexp rawexp = NULL;
 
@@ -1586,7 +1586,7 @@ static AjBool seqReadRaw (AjPSeq thys, AjPSeqin seqin)
 static AjBool seqReadIg (AjPSeq thys, AjPSeqin seqin)
 {
     static AjPStr rdline = NULL;
-    int bufflines = 0;
+    ajint bufflines = 0;
     AjPFileBuff buff = seqin->Filebuff;
     AjBool ok = ajTrue;
 
@@ -1628,9 +1628,9 @@ static AjBool seqReadClustal (AjPSeq thys, AjPSeqin seqin)
 {
     static AjPStr rdline = NULL;
     static AjPStr seqstr = NULL;
-    int bufflines = 0;
+    ajint bufflines = 0;
     AjBool ok = ajFalse;
-    int iseq = 0;
+    ajint iseq = 0;
     AjPFileBuff buff = seqin->Filebuff;
     AjPTable alntable = NULL;
     SeqPMsfItem alnitem = NULL;
@@ -1639,7 +1639,7 @@ static AjBool seqReadClustal (AjPSeq thys, AjPSeqin seqin)
     static AjPRegexp blankexp = NULL;
     static AjPRegexp markexp = NULL;
     static AjPRegexp seqexp = NULL;
-    int i;
+    ajint i;
 
     ajDebug("seqReadClustal seqin->Data %x\n", seqin->Data);
 
@@ -1815,11 +1815,11 @@ static AjBool seqReadPhylip (AjPSeq thys, AjPSeqin seqin)
     static AjPStr rdline = NULL;
     static AjPStr seqstr = NULL;
     static AjPStr tmpstr = NULL;
-    int bufflines = 0;
+    ajint bufflines = 0;
     AjBool ok = ajFalse;
-    int iseq = 0;
-    int jseq = 0;
-    int len = 0;
+    ajint iseq = 0;
+    ajint jseq = 0;
+    ajint len = 0;
     AjPFileBuff buff = seqin->Filebuff;
     AjPTable phytable = NULL;
     SeqPMsfItem phyitem = NULL;
@@ -1828,7 +1828,7 @@ static AjBool seqReadPhylip (AjPSeq thys, AjPSeqin seqin)
     static AjPRegexp topexp = NULL;
     static AjPRegexp headexp = NULL;
     static AjPRegexp seqexp = NULL;
-    int i;
+    ajint i;
 
     ajDebug("seqReadPhylip seqin->Data %x\n", seqin->Data);
 
@@ -1996,10 +1996,10 @@ static AjBool seqReadHennig86 (AjPSeq thys, AjPSeqin seqin)
     static AjPStr rdline = NULL;
     static AjPStr seqstr = NULL;
     static AjPStr tmpstr = NULL;
-    int bufflines = 0;
+    ajint bufflines = 0;
     AjBool ok = ajFalse;
-    int iseq = 0;
-    int len = 0;
+    ajint iseq = 0;
+    ajint len = 0;
     AjPFileBuff buff = seqin->Filebuff;
     AjPTable fmttable = NULL;
     SeqPMsfItem fmtitem = NULL;
@@ -2012,8 +2012,8 @@ static AjBool seqReadHennig86 (AjPSeq thys, AjPSeqin seqin)
     static AjPRegexp topexp = NULL;
     static AjPRegexp headexp = NULL;
 
-    int i;
-    int jseq=0;
+    ajint i;
+    ajint jseq=0;
 
     ajDebug("seqReadHennig86 seqin->Data %x\n", seqin->Data);
 
@@ -2259,7 +2259,7 @@ static AjBool seqReadCodata (AjPSeq thys, AjPSeqin seqin)
     static AjPStrTok handle = NULL;
     static AjPStr token = NULL;
     static AjPStr rdline = NULL;
-    int bufflines = 0;
+    ajint bufflines = 0;
     AjPFileBuff buff = seqin->Filebuff;
     AjBool ok = ajTrue;
 
@@ -2341,7 +2341,7 @@ static AjBool seqReadAcedb (AjPSeq thys, AjPSeqin seqin)
     static AjPStrTok handle = NULL;
     static AjPStr token = NULL;
     static AjPStr rdline = NULL;
-    int bufflines = 0;
+    ajint bufflines = 0;
     AjPFileBuff buff = seqin->Filebuff;
     AjBool ok = ajTrue;
 
@@ -2431,7 +2431,7 @@ static AjBool seqReadStrider (AjPSeq thys, AjPSeqin seqin)
     static AjPStrTok handle = NULL;
     static AjPStr token = NULL;
     static AjPStr rdline = NULL;
-    int bufflines = 0;
+    ajint bufflines = 0;
     AjPFileBuff buff = seqin->Filebuff;
     AjBool ok = ajTrue;
 
@@ -2485,17 +2485,17 @@ static AjBool seqReadStrider (AjPSeq thys, AjPSeqin seqin)
 static AjBool seqReadMsf (AjPSeq thys, AjPSeqin seqin)
 {
     static AjPStr rdline = NULL;
-    int bufflines = 0;
-    int len;
+    ajint bufflines = 0;
+    ajint len;
     AjBool ok = ajFalse;
-    int iseq = 0;
+    ajint iseq = 0;
     AjPFileBuff buff = seqin->Filebuff;
     AjPTable msftable = NULL;
     SeqPMsfItem msfitem = NULL;
     AjPList msflist = NULL;
     SeqPMsfData msfdata = NULL;
 
-    int i;
+    ajint i;
 
     ajDebug("seqReadMsf seqin->Data %x\n", seqin->Data);
 
@@ -2689,7 +2689,7 @@ static AjBool seqReadSwiss (AjPSeq thys, AjPSeqin seqin)
     static AjPStrTok handle = NULL;
     static AjPStr token = NULL;
     static AjPStr rdline = NULL;
-    int bufflines = 0;
+    ajint bufflines = 0;
     AjBool ok;
     AjPFileBuff buff = seqin->Filebuff;
     AjPFileBuff ftfile = NULL;
@@ -2818,7 +2818,7 @@ static AjBool seqReadEmbl (AjPSeq thys, AjPSeqin seqin)
     static AjPStrTok handle = NULL;
     static AjPStr token = NULL;
     static AjPStr rdline = NULL;
-    int bufflines = 0;
+    ajint bufflines = 0;
     AjBool ok;
     AjPFileBuff buff = seqin->Filebuff;
     AjPFileBuff ftfile = NULL;
@@ -2956,7 +2956,7 @@ static AjBool seqReadGenbank (AjPSeq thys, AjPSeqin seqin)
     static AjPStrTok handle = NULL;
     static AjPStr token = NULL;
     static AjPStr rdline = NULL;
-    int bufflines = 0;
+    ajint bufflines = 0;
     AjBool ok;
     AjBool done = ajFalse;
     AjPFileBuff buff = seqin->Filebuff;
@@ -3123,7 +3123,7 @@ static AjBool seqReadGenbank (AjPSeq thys, AjPSeqin seqin)
 
 void ajSeqPrintInFormat (AjPFile outf, AjBool full)
 {
-    int i=0;
+    ajint i=0;
 
     ajFmtPrintF (outf, "\n");
     ajFmtPrintF (outf, "# sequence input formats\n");
@@ -3159,10 +3159,10 @@ void ajSeqPrintInFormat (AjPFile outf, AjBool full)
 ******************************************************************************/
 
 
-static AjBool seqFindInFormat (AjPStr format, int* iformat)
+static AjBool seqFindInFormat (AjPStr format, ajint* iformat)
 {
     AjPStr tmpformat = NULL;
-    int i = 0;
+    ajint i = 0;
 
     /* ajDebug ("seqFindInFormat '%S'\n", format); */
     if (!ajStrLen(format))
@@ -3203,10 +3203,10 @@ static AjBool seqFindInFormat (AjPStr format, int* iformat)
 
 static AjBool seqSetInFormat (AjPStr format, SeqPInFormat inform)
 {
-    int i;
+    ajint i;
     AjPStr fmtstr = NULL;
     static AjPStrTok handle = NULL;
-    int ifound;
+    ajint ifound;
     AjBool ret = ajTrue;
 
     for (i=0; inform[i].Name; i++)
@@ -3250,16 +3250,16 @@ static AjBool seqSetInFormat (AjPStr format, SeqPInFormat inform)
 **
 ** @param [uP] pseq [AjPStr*] Sequence as a string
 ** @param [r] line [AjPStr] Input line.
-** @return [int] Sequence length to date.
+** @return [ajint] Sequence length to date.
 ** @@
 ******************************************************************************/
 
-static int seqAppend (AjPStr* pseq, AjPStr line)
+static ajint seqAppend (AjPStr* pseq, AjPStr line)
 {
     static AjPStr token = NULL;
     const char* cp;
     static AjPRegexp seqexp = NULL;
-    int i=0;
+    ajint i=0;
 
     if (!seqexp)
 	seqexp = ajRegCompC ("[A-Za-z*.~-]+");
@@ -3291,18 +3291,18 @@ static int seqAppend (AjPStr* pseq, AjPStr line)
 ** @param [P] thys [AjPSeq] Sequence.
 ** @param [P] seqin [AjPSeqin] Sequence input.
 ** @param [P] pline [AjPStr*] Input buffer.
-** @param [r] maxlines [int] Maximum number of lines to read before giving up.
+** @param [r] maxlines [ajint] Maximum number of lines to read before giving up.
 ** @param [w] len [int*] Length of sequence read.
 ** @return [AjBool] ajTrue on success. ajFalse on failure or aborting.
 ** @@
 ******************************************************************************/
 
 static AjBool seqGcgDots (AjPSeq thys, AjPSeqin seqin, AjPStr* pline,
-			  int maxlines, int* len)
+			  ajint maxlines, ajint* len)
 {
     static AjPStr token = NULL;
-    int check=0;
-    int nlines=0;
+    ajint check=0;
+    ajint nlines=0;
 
     AjPFileBuff buff = seqin->Filebuff;
 
@@ -3386,18 +3386,18 @@ static AjBool seqGcgDots (AjPSeq thys, AjPSeqin seqin, AjPStr* pline,
 ** @param [P] thys [AjPSeq] Sequence.
 ** @param [P] seqin [AjPSeqin] Sequence input.
 ** @param [P] pline [AjPStr*] Input buffer.
-** @param [r] maxlines [int] Maximum number of lines to read before giving up.
+** @param [r] maxlines [ajint] Maximum number of lines to read before giving up.
 ** @param [w] len [int*] Length of sequence read.
 ** @return [AjBool] ajTrue on success. ajFalse on failure or aborting.
 ** @@
 ******************************************************************************/
 
 static AjBool seqGcgMsfDots (AjPSeq thys, AjPSeqin seqin, AjPStr* pline,
-			     int maxlines, int* len)
+			     ajint maxlines, ajint* len)
 {
     static AjPStr token = NULL;
-    int check=0;
-    int nlines=0;
+    ajint check=0;
+    ajint nlines=0;
 
     AjPFileBuff buff = seqin->Filebuff;
 
@@ -3809,8 +3809,8 @@ static AjBool seqListProcess (AjPSeq seq, AjPSeqin seqin, AjPStr listfile)
     static AjPStrTok handle = NULL;
     AjBool ret = ajFalse;
 
-    static int depth = 0;
-    static int MAXDEPTH = 16;
+    static ajint depth = 0;
+    static ajint MAXDEPTH = 16;
 
     depth++;
     ajDebug ("seqListProcess %S depth %d\n", listfile, depth);
@@ -3885,7 +3885,7 @@ static AjBool seqListProcess (AjPSeq seq, AjPSeqin seqin, AjPStr listfile)
 
 static void seqListNoComment (AjPStr* text)
 {
-    int i;
+    ajint i;
     char *cp;
 
     i = ajStrLen (*text);
@@ -4361,10 +4361,10 @@ AjBool ajSeqParseNcbi(AjPStr str, AjPStr* id, AjPStr* acc, AjPStr* desc)
     static AjPStrTok handle = NULL;
     static AjPStr token=NULL;
     char *q;
-    int  i;
-    int  nt;
+    ajint  i;
+    ajint  nt;
     
-    if(!strchr((q=AJSTRSTR(str)),(int)'|') || *AJSTRSTR(str)!='>')
+    if(!strchr((q=AJSTRSTR(str)),(ajint)'|') || *AJSTRSTR(str)!='>')
 	return ajFalse;
 
     (void) ajStrTokenAss(&handle,str,"| \r");
@@ -4543,21 +4543,21 @@ AjBool ajSeqABITest(AjPFile fp)
 ** Read in a sequence from an ABI trace file.
 **
 ** @param [r] fp [AjPStr ] ABI datafile name
-** @param [r] baseO [long int ] BASE offset in an ABI file
-** @param [r] numBases [long int ] number of bases
+** @param [r] baseO [ajlong ] BASE offset in an ABI file
+** @param [r] numBases [ajlong ] number of bases
 ** @param [w] nseq [AjPStr* ] read sequence
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 
-AjBool ajSeqABIReadSeq(AjPFile fp,long int baseO,long int numBases,
+AjBool ajSeqABIReadSeq(AjPFile fp,ajlong baseO,ajlong numBases,
 	AjPStr* nseq)
 {
-    int i;
+    ajint i;
     char pseq;
 
     ajFileSeek(fp,baseO,SEEK_SET);
-    for (i=0;i<(int)numBases;i++)
+    for (i=0;i<(ajint)numBases;i++)
     {
           ajFileRead(&pseq,1,1,fp);
         
@@ -4580,8 +4580,8 @@ AjBool ajSeqABIReadSeq(AjPFile fp,long int baseO,long int numBases,
 
 AjBool ajSeqABIMachineName(AjPFile fp,AjPStr *machine)
 {
-    long int mchn;
-    const long MCHNtag = ((long) ((((('M'<<8)+'C')<<8)+'H')<<8)+'N');
+    ajlong mchn;
+    const ajlong MCHNtag = ((ajlong) ((((('M'<<8)+'C')<<8)+'H')<<8)+'N');
     unsigned char l;
 
 
@@ -4615,12 +4615,12 @@ AjBool ajSeqABIMachineName(AjPFile fp,AjPStr *machine)
 ** @@
 ******************************************************************************/
 
-int ajSeqABIGetNData(AjPFile fp)
+ajint ajSeqABIGetNData(AjPFile fp)
 {
 
-    long int numPoints;
-    const long DATAtag = ((long) ((((('D'<<8)+'A')<<8)+'T')<<8)+'A');
-    const short TRACE_INDEX = 9;
+    ajlong numPoints;
+    const ajlong DATAtag = ((ajlong) ((((('D'<<8)+'A')<<8)+'T')<<8)+'A');
+    const ajshort TRACE_INDEX = 9;
 
     if (!seqABIGetFlag(fp,DATAtag,TRACE_INDEX,3,&numPoints))
           ajFatal("Error - locating DATA tag");
@@ -4638,11 +4638,11 @@ int ajSeqABIGetNData(AjPFile fp)
 ** @@
 ******************************************************************************/
 
-int ajSeqABIGetNBase(AjPFile fp)
+ajint ajSeqABIGetNBase(AjPFile fp)
 {
 
-    long int numBases;
-    const long BASEtag = ((long) ((((('P'<<8)+'B')<<8)+'A')<<8)+'S');
+    ajlong numBases;
+    const ajlong BASEtag = ((ajlong) ((((('P'<<8)+'B')<<8)+'A')<<8)+'S');
 
     if (!seqABIGetFlag(fp,BASEtag,1,3,&numBases))
          ajFatal("Error - locating BASE tag");
@@ -4656,27 +4656,27 @@ int ajSeqABIGetNBase(AjPFile fp)
 ** Read in the processed trace data from an ABI file.
 **
 ** @param [r] fp [AjPStr ] ABI datafile name
-** @param [r] Offset [long int ] data offset in ABI file
-** @param [r] numPoints [long int ] number of data points
+** @param [r] Offset [ajlong] data offset in ABI file
+** @param [r] numPoints [ajlong] number of data points
 ** @param [w] trace [AjPInt2d ] (4xnumPoints) array of trace data
 ** @return [void] 
 ** @@
 ******************************************************************************/
 
-void ajSeqABIGetData(AjPFile fp,long int *Offset,long int numPoints,
+void ajSeqABIGetData(AjPFile fp,ajlong *Offset,ajlong numPoints,
                      AjPInt2d trace)
 {
-    int i;
-    int j;
-    short int traceValue;
+    ajint i;
+    ajint j;
+    ajshort traceValue;
 
     /* Read in data  */
     for (i=0;i<4;i++)
     {
         if (ajFileSeek(fp,Offset[i],SEEK_SET)) ajFatal("Error - reading trace");
-        for (j=0;j<(int)numPoints;j++)
+        for (j=0;j<(ajint)numPoints;j++)
             if (seqABIReadInt2(fp,&traceValue))
-                ajInt2dPut(&trace,i,j,(int)traceValue);
+                ajInt2dPut(&trace,i,j,(ajint)traceValue);
             else
                 ajFatal("Error - reading trace");
     }
@@ -4690,20 +4690,20 @@ void ajSeqABIGetData(AjPFile fp,long int *Offset,long int numPoints,
 ** Read in the base positions from an ABI file.
 **
 ** @param [r] fp [AjPStr ] ABI datafile name
-** @param [r] numBases [long int] number of bases
+** @param [r] numBases [ajlong] number of bases
 ** @param [w] basePositions [AjPShort* ] base positions
 ** @return [void] 
 ** @@
 ******************************************************************************/
 
-void ajSeqABIGetBasePosition(AjPFile fp,long int numBases,
+void ajSeqABIGetBasePosition(AjPFile fp,ajlong numBases,
                              AjPShort* basePositions)
 {
-    int i;
-    short int bP;
+    ajint i;
+    ajshort bP;
      
     /* Read in base positions   */
-    for (i=0;i<(int)numBases;i++)
+    for (i=0;i<(ajint)numBases;i++)
     {
         if (!seqABIReadInt2(fp,&bP)) 
          ajFatal("Error - in finding Base Position");
@@ -4719,23 +4719,23 @@ void ajSeqABIGetBasePosition(AjPFile fp,long int numBases,
 ** Read in the signal strength information from an ABI file.
 **
 ** @param [r] fp [AjPStr ] ABI datafile name
-** @param [r] fwo_ [long int] field order 
-** @param [w] sigC [short int] average signal strength for C
-** @param [w] sigA [short int] average signal strength for A
-** @param [w] sigG [short int] average signal strength for G
-** @param [w] sigT [short int] average signal strength for T
+** @param [r] fwo_ [ajlong] field order 
+** @param [w] sigC [ajshort] average signal strength for C
+** @param [w] sigA [ajshort] average signal strength for A
+** @param [w] sigG [ajshort] average signal strength for G
+** @param [w] sigT [ajshort] average signal strength for T
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajSeqABIGetSignal(AjPFile fp,long int fwo_,
-                  short int sigC,short int sigA,
-                  short int sigG,short int sigT)
+void ajSeqABIGetSignal(AjPFile fp,ajlong fwo_,
+                  ajshort sigC,ajshort sigA,
+                  ajshort sigG,ajshort sigT)
 {
-    long int signalO;
-    short int* base[4];
+    ajlong signalO;
+    ajshort* base[4];
 
-    const long SIGNALtag    = ((long) ((((('S'<<8)+'/')<<8)+'N')<<8)+'%');
+    const ajlong SIGNALtag    = ((ajlong) ((((('S'<<8)+'/')<<8)+'N')<<8)+'%');
 
     /* Get signal strength info */
     if (seqABIGetFlag(fp,SIGNALtag,1,5,&signalO))
@@ -4773,7 +4773,7 @@ float ajSeqABIGetBaseSpace(AjPFile fp)
 {
 
     float spacing;
-    const long SPACINGtag = ((long) ((((('S'<<8)+'P')<<8)+'A')<<8)+'C');
+    const ajlong SPACINGtag = ((ajlong) ((((('S'<<8)+'P')<<8)+'A')<<8)+'C');
 
     seqABIGetFlagF(fp,SPACINGtag,1,5,&spacing);
 
@@ -4786,14 +4786,14 @@ float ajSeqABIGetBaseSpace(AjPFile fp)
 ** Routine to get the 'BASE' tag offset in an ABI file.
 **
 ** @param [r] fp [AjPStr ] ABI datafile name
-** @return [int] 'BASE' tag offset in an ABI file
+** @return [ajint] 'BASE' tag offset in an ABI file
 ** @@
 ******************************************************************************/
 
-int ajSeqABIGetBaseOffset(AjPFile fp)
+ajint ajSeqABIGetBaseOffset(AjPFile fp)
 {
-    long int baseO;
-    const long BASEtag = ((long) ((((('P'<<8)+'B')<<8)+'A')<<8)+'S');
+    ajlong baseO;
+    const ajlong BASEtag = ((ajlong) ((((('P'<<8)+'B')<<8)+'A')<<8)+'S');
 
     /* Find BASE tag & get offset                                */
     if (!seqABIGetFlag(fp,BASEtag,1,5,&baseO))
@@ -4808,14 +4808,14 @@ int ajSeqABIGetBaseOffset(AjPFile fp)
 ** Routine to get the 'PLOC', base position, tag offset in an ABI file
 **
 ** @param [r] fp [AjPStr ] ABI datafile name
-** @return [int] base position offset in an ABI file
+** @return [ajint] base position offset in an ABI file
 ** @@
 ******************************************************************************/
 
-int ajSeqABIGetBasePosOffset(AjPFile fp)
+ajint ajSeqABIGetBasePosOffset(AjPFile fp)
 {
-    long int basePosO;
-    const long BASEPOStag = ((long) ((((('P'<<8)+'L')<<8)+'O')<<8)+'C');
+    ajlong basePosO;
+    const ajlong BASEPOStag = ((ajlong) ((((('P'<<8)+'L')<<8)+'O')<<8)+'C');
 
     /* Find BASEPOS tag & get base position offset               */
     if (!seqABIGetFlag(fp,BASEPOStag,1,5,&basePosO))
@@ -4830,15 +4830,15 @@ int ajSeqABIGetBasePosOffset(AjPFile fp)
 ** Routine to get the "FWO" tag, field order ("GATC"), tag. 
 **
 ** @param [r] fp [AjPStr ] ABI datafile name
-** @return [int] field order
+** @return [ajint] field order
 ** @@
 ******************************************************************************/
 
-int ajSeqABIGetFWO(AjPFile fp)
+ajint ajSeqABIGetFWO(AjPFile fp)
 {
 
-    long int fwo_;
-    const long FWO_tag = ((long) ((((('F'<<8)+'W')<<8)+'O')<<8)+'_');
+    ajlong fwo_;
+    const ajlong FWO_tag = ((ajlong) ((((('F'<<8)+'W')<<8)+'O')<<8)+'_');
 
     /* Find FWO tag */
     if (!seqABIGetFlag(fp,FWO_tag,1,5,&fwo_))
@@ -4853,15 +4853,15 @@ int ajSeqABIGetFWO(AjPFile fp)
 ** Routine to get the primer offset in an ABI file.
 **
 ** @param [r] fp [AjPStr ] ABI datafile name
-** @return [short int] primer offset
+** @return [ajshort] primer offset
 ** @@
 ******************************************************************************/
 
-int ajSeqABIGetPrimerOffset(AjPFile fp)
+ajint ajSeqABIGetPrimerOffset(AjPFile fp)
 {
 
-    short int primerPos;
-    const long PPOStag = ((long) ((((('P'<<8)+'P')<<8)+'O')<<8)+'S');
+    ajshort primerPos;
+    const ajlong PPOStag = ((ajlong) ((((('P'<<8)+'P')<<8)+'O')<<8)+'S');
 
 
     /* Find PPOS tag (Primer Position) & get offset              */
@@ -4877,14 +4877,14 @@ int ajSeqABIGetPrimerOffset(AjPFile fp)
 ** Routine to get the primer position in an ABI file.
 **
 ** @param [r] fp [AjPStr ] ABI datafile name
-** @return [int] primer position
+** @return [ajint] primer position
 ** @@
 ******************************************************************************/
 
-int ajSeqABIGetPrimerPosition(AjPFile fp)
+ajint ajSeqABIGetPrimerPosition(AjPFile fp)
 {
-    long int primerPosition;
-    const long PPOStag = ((long) ((((('P'<<8)+'P')<<8)+'O')<<8)+'S');
+    ajlong primerPosition;
+    const ajlong PPOStag = ((ajlong) ((((('P'<<8)+'P')<<8)+'O')<<8)+'S');
 
 
     if (!seqABIGetFlag(fp,PPOStag,1,5,&primerPosition))
@@ -4905,20 +4905,20 @@ int ajSeqABIGetPrimerPosition(AjPFile fp)
 ** Get the processed trace data ('DATA' tag) offset in an ABI file.
 **
 ** @param [r] fp [AjPStr ] ABI datafile name
-** @param [w] Offset [long int * ] trace data offset, used in ajSeqABIGetData
+** @param [w] Offset [ajlong * ] trace data offset, used in ajSeqABIGetData
 ** @return [AjBool]  ajTrue on success
 ** @@
 ******************************************************************************/
 
-AjBool ajSeqABIGetTraceOffset(AjPFile fp,long int *Offset)
+AjBool ajSeqABIGetTraceOffset(AjPFile fp, ajlong *Offset)
 {
-    long int dataxO[4];
-    long int fwo_;
+    ajlong dataxO[4];
+    ajlong fwo_;
 
     /* BYTE[i] is a byte mask for byte i */
-    const long int BYTE[] = { 0x000000ff };
-    const short TRACE_INDEX = 9;
-    const long DATAtag      = ((long) ((((('D'<<8)+'A')<<8)+'T')<<8)+'A');
+    const ajlong BYTE[] = { 0x000000ff };
+    const ajshort TRACE_INDEX = 9;
+    const ajlong DATAtag      = ((ajlong) ((((('D'<<8)+'A')<<8)+'T')<<8)+'A');
 
     /* Find FWO tag - Field order "GATC"                         */
     fwo_ = ajSeqABIGetFWO(fp);
@@ -4951,22 +4951,22 @@ AjBool ajSeqABIGetTraceOffset(AjPFile fp,long int *Offset)
 ** Routine to read 4 bytes from a file and return the integer. 
 **
 ** @param [r] fp [AjPStr ] ABI datafile name
-** @param [w] i4 [long int * ] long integer read in from ABI file
+** @param [w] i4 [ajlong * ] ajlong integer read in from ABI file
 ** @return [AjBool] true if read successfully
 ** @@
 ******************************************************************************/
 
-static AjBool seqReadABIInt4(AjPFile fp,long int*i4)
+static AjBool seqReadABIInt4(AjPFile fp,ajlong *i4)
 {
 
-    unsigned char buf[sizeof(long int)];
+    unsigned char buf[sizeof(ajlong)];
 
     if (ajFileRead((void *)buf,sizeof(buf),1,fp) != 1) return ajFalse;
-    *i4 = (long int)
-        (((unsigned long)buf[3]) +
-         ((unsigned long)buf[2]<<8) +
-         ((unsigned long)buf[1]<<16) +
-         ((unsigned long)buf[0]<<24));
+    *i4 = (ajlong)
+        (((ajulong)buf[3]) +
+         ((ajulong)buf[2]<<8) +
+         ((ajulong)buf[1]<<16) +
+         ((ajulong)buf[0]<<24));
 
     ajDebug("seqReadABIInt4 %c %c %c %c",buf[0],buf[1],buf[2],buf[3]);  
     return (AJTRUE);
@@ -4978,7 +4978,7 @@ static AjBool seqReadABIInt4(AjPFile fp,long int*i4)
 ** Routine to read 4 bytes from a file and return the float.
 **
 ** @param [r] fp [AjPStr ] ABI datafile name
-** @param [w] f4 [float * ] long integer read in from ABI file
+** @param [w] f4 [float * ] float read in from ABI file
 ** @return [AjBool] true if read successfully
 ** @@
 ******************************************************************************/
@@ -4986,15 +4986,15 @@ static AjBool seqReadABIInt4(AjPFile fp,long int*i4)
 static AjBool seqABIReadFloat4(AjPFile fp,float* f4)
 {
 
-    unsigned char buf[sizeof(long int)];
+    unsigned char buf[sizeof(ajlong)];
 
     if (ajFileRead((void *)buf,sizeof(buf),1,fp) != 1)
          return ajFalse;
-    *f4 = (long int)
-        (((unsigned long)buf[3]) +
-         ((unsigned long)buf[2]<<8) +
-         ((unsigned long)buf[1]<<16) +
-         ((unsigned long)buf[0]<<24));
+    *f4 = (ajlong)
+        (((ajulong)buf[3]) +
+         ((ajulong)buf[2]<<8) +
+         ((ajulong)buf[1]<<16) +
+         ((ajulong)buf[0]<<24));
 
     return ajTrue;
 }
@@ -5005,20 +5005,20 @@ static AjBool seqABIReadFloat4(AjPFile fp,float* f4)
 ** Routine to read 2 bytes from a file and return the short integer.
 **
 ** @param [r] fp [AjPStr ] ABI datafile name
-** @param [w] i2 [short int * ] short integer read in from ABI file
+** @param [w] i2 [ajshort * ] short integer read in from ABI file
 ** @return [AjBool] true if read successfully
 ** @@
 ******************************************************************************/
 
-static AjBool seqABIReadInt2(AjPFile fp,short int*i2)
+static AjBool seqABIReadInt2(AjPFile fp, ajshort *i2)
 {
-     unsigned char buf[sizeof(short int)];
+     unsigned char buf[sizeof(ajshort)];
 
     if (ajFileRead((void *)buf,sizeof(buf),1,fp) != 1)
          return ajFalse;
-    *i2 = (short int)
-        (((unsigned short)buf[1]) +
-         ((unsigned short)buf[0]<<8));
+    *i2 = (ajshort)
+        (((ajushort)buf[1]) +
+         ((ajushort)buf[0]<<8));
 
     return ajTrue;
 }
@@ -5033,23 +5033,23 @@ static AjBool seqABIReadInt2(AjPFile fp,short int*i2)
 ** that flag record.
 **
 ** @param [r] fp [AjPStr ] ABI datafile name
-** @param [r] flagLabel [long int ] flag in the ABI file
-** @param [r] flagInstance [long int ] flag instance in the ABI file
-** @param [r] word [long int ] number of fields to ignore in this record
-** @param [w] val [long int* ] integer value of the word+1
+** @param [r] flagLabel [ajlong] flag in the ABI file
+** @param [r] flagInstance [ajlong] flag instance in the ABI file
+** @param [r] word [ajlong] number of fields to ignore in this record
+** @param [w] val [ajlong*] integer value of the word+1
 ** @return [AjBool] true if read successfully
 ** @@
 ******************************************************************************/
 
 
-static AjBool seqABIGetFlag(AjPFile fp, long int flagLabel,
-         long int flagInstance,long int word,long int* val)
+static AjBool seqABIGetFlag(AjPFile fp, ajlong flagLabel,
+         ajlong flagInstance, ajlong word, ajlong* val)
 {
-    int     flagNum=-1;
-    int     i;
-    long int  Label, Instance;
-    long int indexO;
-    const int INDEX_ENTRY_LENGTH= 28;
+    ajint     flagNum=-1;
+    ajint     i;
+    ajlong Label, Instance;
+    ajlong indexO;
+    const ajint INDEX_ENTRY_LENGTH= 28;
 
 
     if(ajFileSeek(fp,26,SEEK_SET) ||
@@ -5066,8 +5066,8 @@ static AjBool seqABIGetFlag(AjPFile fp, long int flagLabel,
         
         if (!seqReadABIInt4(fp, &Instance))
             return ajFalse;
-    } while (!(Label == (long int)flagLabel && 
-               Instance == (long int)flagInstance));
+    } while (!(Label == (ajlong)flagLabel && 
+               Instance == (ajlong)flagInstance));
 
     for (i=2; i<=word; i++) {
         if (!seqReadABIInt4(fp, val))
@@ -5088,22 +5088,22 @@ static AjBool seqABIGetFlag(AjPFile fp, long int flagLabel,
 ** that flag record.
 **
 ** @param [r] fp [AjPStr ] ABI datafile name
-** @param [r] flagLabel [long int ] flag in the ABI file
-** @param [r] flagInstance [long int ] flag instance in the ABI file
-** @param [r] word [long int ] number of fields to ignore in this record
+** @param [r] flagLabel [ajlong] flag in the ABI file
+** @param [r] flagInstance [ajlong] flag instance in the ABI file
+** @param [r] word [ajlong] number of fields to ignore in this record
 ** @param [w] val [float* ] integer value of the word+1
 ** @return [AjBool] true if read successfully
 ** @@
 ******************************************************************************/
 
-static AjBool seqABIGetFlagF(AjPFile fp, long int flagLabel,
-         long int flagInstance,long int word,float* val)
+static AjBool seqABIGetFlagF(AjPFile fp, ajlong flagLabel,
+         ajlong flagInstance, ajlong word,float* val)
 {
-    int     flagNum=-1;
-    int     i;
-    long int  Label, Instance;
-    long int indexO;
-    const int INDEX_ENTRY_LENGTH= 28;
+    ajint     flagNum=-1;
+    ajint     i;
+    ajlong Label, Instance;
+    ajlong indexO;
+    const ajint INDEX_ENTRY_LENGTH= 28;
 
 
     if(ajFileSeek(fp,26,SEEK_SET) ||
@@ -5120,8 +5120,8 @@ static AjBool seqABIGetFlagF(AjPFile fp, long int flagLabel,
 
         if (!seqReadABIInt4(fp, &Instance))
             return ajFalse;
-    } while (!(Label == (long int)flagLabel &&
-               Instance == (long int)flagInstance));
+    } while (!(Label == (ajlong)flagLabel &&
+               Instance == (ajlong)flagInstance));
 
     for (i=2; i<=word; i++) {
         if (!seqABIReadFloat4(fp, val))
@@ -5137,27 +5137,27 @@ static AjBool seqABIGetFlagF(AjPFile fp, long int flagLabel,
 ** Routine to read through an ABI trace file until it reaches a flag
 ** (flagLabel). If there are multiple flags in the file it will search
 ** to find the correct instance of that flag (flagInstance).
-** It  will then return the *short int* value (val) of the word+1 from
+** It  will then return the *short ajint* value (val) of the word+1 from
 ** that flag record.
 **
 ** @param [r] fp [AjPStr ] ABI datafile name
-** @param [r] flagLabel [long int ] flag in the ABI file
-** @param [r] flagInstance [long int ] flag instance in the ABI file
-** @param [r] word [long int ] number of fields to ignore in this record
-** @param [w] val [short int* ] integer value of the word+1
+** @param [r] flagLabel [ajlong] flag in the ABI file
+** @param [r] flagInstance [ajlong] flag instance in the ABI file
+** @param [r] word [ajlong] number of fields to ignore in this record
+** @param [w] val [ajshort*] integer value of the word+1
 ** @return [AjBool] true if read successfully
 ** @@
 ******************************************************************************/
 
-static AjBool seqABIGetFlagW(AjPFile fp, long int flagLabel,
-         long int word,short int* val)
+static AjBool seqABIGetFlagW(AjPFile fp, ajlong flagLabel,
+         ajlong word, ajshort* val)
 {
-    int     flagNum=-1;
-    int     i;
-    long int  Label;
-    long int  jval;
-    long int indexO;
-    const int   INDEX_ENTRY_LENGTH= 28;
+    ajint     flagNum=-1;
+    ajint     i;
+    ajlong Label;
+    ajlong jval;
+    ajlong indexO;
+    const ajint   INDEX_ENTRY_LENGTH= 28;
 
 
     if(ajFileSeek(fp,26,SEEK_SET) ||
@@ -5171,7 +5171,7 @@ static AjBool seqABIGetFlagW(AjPFile fp, long int flagLabel,
         if (!seqReadABIInt4(fp, &Label))
             return ajFalse;
         }
-        while (Label != (long int)flagLabel);
+        while (Label != (ajlong)flagLabel);
 
 
     for (i=2; i<word; i++)
@@ -5188,11 +5188,11 @@ static AjBool seqABIGetFlagW(AjPFile fp, long int flagLabel,
 ** Returns: 0 if C, 1 if A, 2 if G, 3 if anything else
 **
 ** @param [r] B [char ] base (C, A, G or T)
-** @return [short int] 0 if C, 1 if A, 2 if G, 3 if anything else
+** @return [ajshort] 0 if C, 1 if A, 2 if G, 3 if anything else
 ** @@
 ******************************************************************************/
 
-static short seqABIBaseIdx(char B)
+static ajshort seqABIBaseIdx(char B)
 {
    return ((B)=='C'?0:(B)=='A'?1:(B)=='G'?2:3);
 }
@@ -5210,8 +5210,8 @@ static short seqABIBaseIdx(char B)
 
 static AjBool seqABISampleName(AjPFile fp, AjPStr *sample)
 {
-    long int mchn;
-    const long SMPLtag = ((long) ((((('S'<<8)+'M')<<8)+'P')<<8)+'L');
+    ajlong mchn;
+    const ajlong SMPLtag = ((ajlong) ((((('S'<<8)+'M')<<8)+'P')<<8)+'L');
     unsigned char l;
 
 
@@ -5243,8 +5243,8 @@ static AjBool seqReadAbi (AjPSeq thys, AjPSeqin seqin)
     AjPFileBuff buff = seqin->Filebuff;
     AjPFile fp=NULL;
     AjBool  ok=ajFalse;
-    long int baseO=0L;
-    long int numBases=0L;
+    ajlong baseO=0L;
+    ajlong numBases=0L;
     AjPStr sample=NULL;
     AjPStr smpl=NULL;
     static AjPRegexp dotsexp = NULL;

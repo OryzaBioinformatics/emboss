@@ -2,11 +2,11 @@
 #include "stdlib.h"
 
 
-void print_hits(AjPList *l, int hits, AjPFile outf);
+void print_hits(AjPList *l, ajint hits, AjPFile outf);
 
 
 
-int main (int argc, char * argv[])
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq seq;
@@ -18,9 +18,9 @@ int main (int argc, char * argv[])
     
     AjPList l;
     
-    int plen;
-    int slen=0;
-    int mismatch;
+    ajint plen;
+    ajint slen=0;
+    ajint mismatch;
 
     AjBool amino;
     AjBool carboxyl;
@@ -28,24 +28,24 @@ int main (int argc, char * argv[])
     AjBool compl;
     AjBool dontcare;
     AjBool range;
-    int    type=0;
-    int    *buf=NULL;
-    int    hits=0;
-    int    m;
-    int    n;
-    int    i;
-    int    start;
-    int    end;
+    ajint    type=0;
+    ajint    *buf=NULL;
+    ajint    hits=0;
+    ajint    m;
+    ajint    n;
+    ajint    i;
+    ajint    start;
+    ajint    end;
     
     EmbOPatBYPNode off[AJALPHA];
 
-    unsigned int *sotable;
-    unsigned int solimit;
+    ajuint *sotable;
+    ajuint solimit;
 
     EmbPPatMatch ppm;
     AjPStr	   regexp=NULL;
 
-    int **skipm=NULL;
+    ajint **skipm=NULL;
     
 
     void   *tidy=NULL;
@@ -78,7 +78,7 @@ int main (int argc, char * argv[])
 
     if(!range && !dontcare && !fclass && !compl && !mismatch && plen>4)
     {
-	/* Boyer Moore Horspool is the choice for long exact patterns */
+	/* Boyer Moore Horspool is the choice for ajlong exact patterns */
 	type = 1;
 	plen = ajStrLen(pattern);
 	AJCNEW(buf, AJALPHA);
@@ -233,9 +233,9 @@ int main (int argc, char * argv[])
 
 
 
-void print_hits(AjPList *l, int hits, AjPFile outf)
+void print_hits(AjPList *l, ajint hits, AjPFile outf)
 {
-    int i;
+    ajint i;
     EmbPMatMatch m;
 
     for(i=0;i<hits;++i)

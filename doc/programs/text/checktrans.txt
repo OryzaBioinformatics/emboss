@@ -15,11 +15,18 @@ Description
    that are greater than a minimum size. The default minimum ORF size is
    100 residues. It writes out any ORF sequences.
    
+   The input sequence might typically have been produced by transeq.
+   
+   Note that if you have only translated a nucleic sequence in one frame,
+   checktrans will miss possible ORFs in other frames. You have to give
+   checktrans translations in all three (six?) frames in order for it to
+   be effective at finding all possible ORFs.
+   
 Usage
 
    Here is a sample session with checktrans, using the output from a
    transeq run.
-
+   
 % transeq embl:paamir paamir.pep -auto
 % checktrans
 Input sequence: paamir.pep
@@ -64,7 +71,8 @@ Output file format
    sequence file.
    
    The ORF report file from the above example run is:
-
+     _________________________________________________________________
+   
 CHECKTRANS of PAAMIR_1 from 1 to 723
 
         ORF#    Pos     Len     ORF Range       Sequence name
@@ -76,7 +84,8 @@ CHECKTRANS of PAAMIR_1 from 1 to 723
         7       635     357     278-634         PAAMIR_1_7
 
         Total STOPS:     7
-
+     _________________________________________________________________
+   
    This gives the numeric count of the ORF, the position of the
    terminating STOP codon, the length of the ORF, its start and end
    positions and the name of the sequence it has been written out as.
@@ -86,7 +95,8 @@ CHECKTRANS of PAAMIR_1 from 1 to 723
    the ORF.
    
    The output sequence file is:
-
+     _________________________________________________________________
+   
 >PAAMIR_1_1
 GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR
 >PAAMIR_1_3
@@ -103,23 +113,36 @@ SAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRP
 GLAADPHRLFGAPVLAAAGSLRRAGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGV
 RKPRGALADHRAGVPRRDHPAARCPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGP
 DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
-
+     _________________________________________________________________
+   
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    This program always exits with a status of 0.
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name                      Description

@@ -32,12 +32,12 @@
 **
 ** The assert() macro inserts diagnostics into programs. 
 **
-** @param [r] e [int] test for asseretion.
+** @param [r] e [ajint] test for asseretion.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void (assert)(int e) {
+void (assert)(ajint e) {
 	assert(e);
 }
 

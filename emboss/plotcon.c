@@ -62,16 +62,16 @@ typedef struct SPoint
 
 
 
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
   
     AjPSeqset seqset;
     AjPFile outf=NULL;
-    int i;
-    int numseq;
-    int lenseq;
-    int j=0;
-    int k;
+    ajint i;
+    ajint numseq;
+    ajint lenseq;
+    ajint j=0;
+    ajint k;
     AjPMatrix cmpmatrix=0;
     AjPSeqCvt cvt=0;
     AjBool text;
@@ -89,17 +89,17 @@ int main (int argc, char **argv)
     float ymax;
     float contri=0;
     float contrj=0;
-    int **matrix;
-    int m1=0;
-    int m2=0;
-    int highindex=0;
-    int winsize;	/* window size */
-    int numbins;	/* total no. of bins making up the seq length */
-    int binup;            
-    int binlo;
-    int binmid;
-    int bin;
-    int bin2;
+    ajint **matrix;
+    ajint m1=0;
+    ajint m2=0;
+    ajint highindex=0;
+    ajint winsize;	/* window size */
+    ajint numbins;	/* total no. of bins making up the seq length */
+    ajint binup;            
+    ajint binlo;
+    ajint binmid;
+    ajint bin;
+    ajint bin2;
     AjPGraph graphs = NULL;
     AjPGraphData gdata;
     AjPList list=NULL;
@@ -111,7 +111,9 @@ int main (int argc, char **argv)
 
     (void) ajGraphInit ("plotcon", argc, argv);
   
-    seqset = ajAcdGetSeqset("msf");	/* Pads seq set with gap characters */
+    seqset = ajAcdGetSeqset("msf");	
+
+    ajSeqsetFill(seqset);               /* Pads seq set with gap characters */
     numseq = ajSeqsetSize (seqset);
     lenseq = ajSeqsetLen(seqset);
 
@@ -136,7 +138,7 @@ int main (int argc, char **argv)
     AJCNEW(x,numbins);			/* x data                        */
     AJCNEW(y,numbins);			/* y data                        */
 
-    bin2 = (int)((float)winsize/2.);
+    bin2 = (ajint)((float)winsize/2.);
 
     for(i=0;i<numseq;i++)
     {
@@ -157,7 +159,7 @@ int main (int argc, char **argv)
 	/* Generate a score for each column */
 	for(i=0;i<numseq;i++)
 	{
-	    /* get int code from conversion table */
+	    /* get ajint code from conversion table */
 	    m1 = ajSeqCvtK(cvt, seqcharptr[i][k]);
 
 	    for(j=i+1;j<numseq;j++)

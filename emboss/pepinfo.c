@@ -28,23 +28,24 @@
 
 
 static void plotHistInt2( AjPHist hist, AjPSeq seq,
-			  int * results, int hist_num,
+			  ajint * results, ajint hist_num,
 			  char* header, char* xtext, char * ytext);
 static void plotGraph2Float(AjPGraph graphs, AjPSeq seq, float * results,
 			    char* title_text, char * xtext, char * ytext,
-			    int plotcolour);
+			    ajint plotcolour);
 static void printFloatResults( AjPFile outfile, AjPSeq seq, float * results,
 			       char* header);
-static void printIntResults( AjPFile outfile, AjPSeq seq, int * results,
+static void printIntResults( AjPFile outfile, AjPSeq seq, ajint * results,
 			     char* header);
 
-static int seq_start, seq_end, win_mid, seq_begin;
+static ajint seq_start, seq_end, win_mid, seq_begin;
 
-int main( int argc, char **argv, char ** env) {
+int main(int argc, char **argv)
+{
 
   AjPSeq inseq;
   AjPFile outfile;
-  int hwindow/*, geswindow*/;
+  ajint hwindow/*, geswindow*/;
   AjPStr aa_properties, aa_hydropathy/*, aa_acc_surface*/;
 
   AjBool do_seq, do_general, do_hydropathy, do_plot;
@@ -54,18 +55,18 @@ int main( int argc, char **argv, char ** env) {
 
   AjPStr tmpa=NULL;
   AjPStr tmpb=NULL;
-  int i, j, k;
-  int cnt;
+  ajint i, j, k;
+  ajint cnt;
 
-  int * ival;
-  int * iv[9];
+  ajint * ival;
+  ajint * iv[9];
   float * pfloat;
   float * pf[3];
   float num, total;
 
   AjPGraph graphs = NULL;
   AjPHist hist = NULL;
-  int numGraphs = 0;
+  ajint numGraphs = 0;
    
   /*   Data_table aa_props, aa_hydro, aa_acc;*/
   AjPList aa_props, aa_hydro/*, aa_acc*/;
@@ -155,7 +156,7 @@ int main( int argc, char **argv, char ** env) {
 	 
       if (!ajListIterDone( listIter)) {
 		  
-	/* ajalloc new int array for storing results */
+	/* ajalloc new ajint array for storing results */
 	AJCNEW(ival,(seq_end-seq_start));
 	iv[i] = ival;
 	table = ajListIterNext(listIter);
@@ -376,17 +377,17 @@ int main( int argc, char **argv, char ** env) {
 **
 ** @param [r] outfile [AjPFile] file to output to.
 ** @param [r] seq     [AjPSeq]  Sequence
-** @param [r] results [int*]    int array of reuslts.
+** @param [r] results [int*]    ajint array of reuslts.
 ** @param [r] header  [char*]   header line
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void printIntResults( AjPFile outfile, AjPSeq seq,
-			     int * results, char * header)
+			     ajint * results, char * header)
 {
 
-    int i;
+    ajint i;
     AjPStr aa;
 
     aa = ajStrNew();
@@ -422,7 +423,7 @@ static void printFloatResults( AjPFile outfile, AjPSeq seq, float * results,
 			       char * header)
 {
 
-    int i;
+    ajint i;
     AjPStr aa;
 
     aa = ajStrNew();
@@ -452,18 +453,18 @@ static void printFloatResults( AjPFile outfile, AjPSeq seq, float * results,
 ** @param [r] title_text [char*] title for graph
 ** @param [r] xtext      [char*] x label.      
 ** @param [r] ytext      [char*] y label.
-** @param [r] plotcolour [int]   Pen colour to plot the graph in.
+** @param [r] plotcolour [ajint]   Pen colour to plot the graph in.
 ** @return [void]
 **
 ******************************************************************************/
 
 static void plotGraph2Float(AjPGraph graphs, AjPSeq seq, float * results, 
-      char * title_text, char * xtext, char * ytext, int plotcolour)
+      char * title_text, char * xtext, char * ytext, ajint plotcolour)
 {
 
     AjPGraphData plot;
 
-    int npts = 0;
+    ajint npts = 0;
     
     float ymin=64000.;
     float ymax=-64000.;
@@ -499,7 +500,7 @@ static void plotGraph2Float(AjPGraph graphs, AjPSeq seq, float * results,
 ** @param [rw] hist   [AjPHist] Histogram set to add new set to.
 ** @param [r] seq     [AjPSeq]  Sequence
 ** @param [r] results [int*]  float array of results.
-** @param [r] hist_num [int] the number of the histogram set. 
+** @param [r] hist_num [ajint] the number of the histogram set. 
 ** @param [r] header  [char*] title.      
 ** @param [r] xtext   [char*] x label.      
 ** @param [r] ytext   [char*] y label.
@@ -508,11 +509,11 @@ static void plotGraph2Float(AjPGraph graphs, AjPSeq seq, float * results,
 ******************************************************************************/
 
 
-static void plotHistInt2( AjPHist hist, AjPSeq seq, int * results,
-			  int hist_num, char * header,
+static void plotHistInt2( AjPHist hist, AjPSeq seq, ajint * results,
+			  ajint hist_num, char * header,
 			  char * xtext, char * ytext)
 {
-   int npts, i;
+   ajint npts, i;
 
    float *farray;
 

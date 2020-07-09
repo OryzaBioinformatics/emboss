@@ -31,9 +31,9 @@ int main(int argc, char **argv)
     AjPCod     codon;
     AjPStr     substr;
     
-    int ccnt;
-    int beg;
-    int end;
+    ajint ccnt;
+    ajint beg;
+    ajint end;
     
     float Nc;
     

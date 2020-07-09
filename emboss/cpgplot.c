@@ -26,26 +26,26 @@
 #include <stdlib.h>
 
 
-void findbases(AjPStr *substr, int begin, int len, int window, int shift,
+void findbases(AjPStr *substr, ajint begin, ajint len, ajint window, ajint shift,
                float *obsexp, float *xypc, AjPStr *bases, float *obsexpmax,
-	       int *plstart, int *plend);
-void countbases(char *seq, char *bases, int window, int *cx, int *cy,
-		int *cxpy);
+	       ajint *plstart, ajint *plend);
+void countbases(char *seq, char *bases, ajint window, ajint *cx, ajint *cy,
+		ajint *cxpy);
 void identify(AjPFile outf, float *obsexp, float *xypc, AjBool *thresh,
-	      int begin, int len, int shift, char *bases, char *name,
-	      int minlen, float minobsexp, float minpc,AjPFeatTabOut featout);
+	      ajint begin, ajint len, ajint shift, char *bases, char *name,
+	      ajint minlen, float minobsexp, float minpc,AjPFeatTabOut featout);
 void reportislands(AjPFile outf, AjBool *thresh, char *bases, char *name,
-		   float minobsexp, float minpc, int minlen, int begin,
-		   int len);
-void plotit(char *seq, int begin, int len, int shift, float *obsexp,
+		   float minobsexp, float minpc, ajint minlen, ajint begin,
+		   ajint len);
+void plotit(char *seq, ajint begin, ajint len, ajint shift, float *obsexp,
 	    float *xypc, AjBool *thresh, char *bases, float obsexpmax,
-	    int plstart, int plend, AjBool doobsexp,
+	    ajint plstart, ajint plend, AjBool doobsexp,
 	    AjBool docg, AjBool dopc, AjPGraph mult);
 
 void dumpfeatout(AjPFeatTabOut featout, AjBool *thresh, char *seqname,int begin,int len);
 
 
-int main( int argc, char **argv)
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
@@ -58,26 +58,26 @@ int main( int argc, char **argv)
     AjBool    dopc;
     AjBool    docg;
     
-    int begin;
-    int end;
-    int len;
+    ajint begin;
+    ajint end;
+    ajint len;
 
-    int minlen;
+    ajint minlen;
     float minobsexp;
     float minpc;
 
-    int window;
-    int shift;
-    int plstart;
-    int plend;
+    ajint window;
+    ajint shift;
+    ajint plstart;
+    ajint plend;
     
     float  *xypc=NULL;
     float  *obsexp=NULL;
     AjBool *thresh=NULL;
     float  obsexpmax;
     
-    int i;
-    int maxarr;
+    ajint i;
+    ajint maxarr;
     AjPFeatTabOut featout=NULL;
 
     
@@ -151,13 +151,13 @@ int main( int argc, char **argv)
 
 
 
-void findbases(AjPStr *substr, int begin, int len, int window, int shift,
+void findbases(AjPStr *substr, ajint begin, ajint len, ajint window, ajint shift,
                float *obsexp, float *xypc, AjPStr *bases, float *obsexpmax,
-	       int *plstart, int *plend)
+	       ajint *plstart, ajint *plend)
 {
-    int cxpy;
-    int cx;
-    int cy;
+    ajint cxpy;
+    ajint cx;
+    ajint cy;
     float cxf;
     float cyf;
     float windowf;
@@ -165,9 +165,9 @@ void findbases(AjPStr *substr, int begin, int len, int window, int shift,
 
     float obs;
     float exp;
-    int i;
-    int j=0;
-    int offset;
+    ajint i;
+    ajint j=0;
+    ajint offset;
 
     char *p;
     char *q;
@@ -204,15 +204,15 @@ void findbases(AjPStr *substr, int begin, int len, int window, int shift,
 
 
 
-void countbases(char *seq, char *bases, int window, int *cx, int *cy,
-		int *cxpy)
+void countbases(char *seq, char *bases, ajint window, ajint *cx, ajint *cy,
+		ajint *cxpy)
 {
-    int i;
+    ajint i;
     
-    int codex;
-    int codey;
-    int codea;
-    int codeb;
+    ajint codex;
+    ajint codey;
+    ajint codea;
+    ajint codeb;
 
     *cxpy = *cx = *cy = 0;
 
@@ -244,19 +244,19 @@ void countbases(char *seq, char *bases, int window, int *cx, int *cy,
 */
 
 void identify(AjPFile outf, float *obsexp, float *xypc, AjBool *thresh,
-	      int begin, int len, int shift, char *bases, char *name,
-	      int minlen, float minobsexp, float minpc, AjPFeatTabOut featout) {
-  static int avwindow=10;
+	      ajint begin, ajint len, ajint shift, char *bases, char *name,
+	      ajint minlen, float minobsexp, float minpc, AjPFeatTabOut featout) {
+  static ajint avwindow=10;
   float avpc;
   float avobsexp;
   float sumpc;
   float sumobsexp;
     
-  int i;
-  int pos;
-  int posmin;
-  int sumlen;
-  int first;
+  ajint i;
+  ajint pos;
+  ajint posmin;
+  ajint sumlen;
+  ajint first;
   
   for(i=0; i<len; ++i) thresh[i]=ajFalse;
 
@@ -286,7 +286,7 @@ void identify(AjPFile outf, float *obsexp, float *xypc, AjBool *thresh,
     }
     else
     {
-      if(sumlen >= minlen) {/* island long enough? */
+      if(sumlen >= minlen) {/* island ajlong enough? */
 	for(i=first; i<=pos-shift;++i)
 	  thresh[i]=ajTrue;
       }
@@ -310,14 +310,14 @@ void identify(AjPFile outf, float *obsexp, float *xypc, AjBool *thresh,
 
 
 void reportislands(AjPFile outf, AjBool *thresh, char *bases, char *name,
-		   float minobsexp, float minpc, int minlen, int begin,
-		   int len)
+		   float minobsexp, float minpc, ajint minlen, ajint begin,
+		   ajint len)
 {
     AjBool island;
-    int startpos=0;
-    int endpos;
-    int slen;
-    int i;
+    ajint startpos=0;
+    ajint endpos;
+    ajint slen;
+    ajint i;
 
 
     (void) ajFmtPrintF(outf,"\n\nCPGPLOT islands of unusual %s composition\n",
@@ -365,9 +365,9 @@ void reportislands(AjPFile outf, AjBool *thresh, char *bases, char *name,
 
 
 
-void plotit(char *seq, int begin, int len, int shift, float *obsexp,
+void plotit(char *seq, ajint begin, ajint len, ajint shift, float *obsexp,
 	    float *xypc, AjBool *thresh, char *bases, float obsexpmax,
-	    int plstart, int plend, AjBool doobsexp,
+	    ajint plstart, ajint plend, AjBool doobsexp,
 	    AjBool docg, AjBool dopc, AjPGraph graphs)
 
 {
@@ -375,7 +375,7 @@ void plotit(char *seq, int begin, int len, int shift, float *obsexp,
     AjPGraphData tmGraph2 = NULL; 
     AjPGraphData tmGraph3 = NULL;   
     float *tmp=NULL;
-    int i;
+    ajint i;
     float min=0.;
     float max=0.;
     
@@ -407,7 +407,7 @@ void plotit(char *seq, int begin, int len, int shift, float *obsexp,
 	ajGraphxySetYStart(graphs,0.0);
 	ajGraphxySetYEnd(graphs,obsexpmax);
 	ajGraphxySetXRangeII(graphs,begin,begin+len-1);
-	ajGraphxySetYRangeII(graphs,0,(int)(obsexpmax+1.0));
+	ajGraphxySetYRangeII(graphs,0,(ajint)(obsexpmax+1.0));
 
 	ajGraphxyAddDataCalcPtr(tmGraph2,len,(float)begin,1.0,obsexp);    
 	ajGraphxyAddGraph(graphs,tmGraph2);
@@ -495,12 +495,12 @@ void plotit(char *seq, int begin, int len, int shift, float *obsexp,
 }
 
 void dumpfeatout(AjPFeatTabOut featout, AjBool *thresh, char *seqname,
-		 int begin,int len)
+		 ajint begin,int len)
 {
     AjBool island;
-    int startpos=0;
-    int endpos;
-    int i;
+    ajint startpos=0;
+    ajint endpos;
+    ajint i;
     AjPFeatTable feattable;
     AjPFeatLexicon dict=NULL;
     AjPStr name=NULL,score=NULL,desc=NULL,source=NULL,type=NULL;

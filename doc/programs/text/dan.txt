@@ -223,6 +223,8 @@ Data files
        
 Notes
 
+   None.
+   
 References
 
     1. Breslauer, K.J., Frank, R., Blocker, H., and Marky, L.A. (1986).
@@ -240,12 +242,16 @@ Warnings
    
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    0 if successful.
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name                      Description
@@ -262,6 +268,8 @@ Author(s)
    
 History
 
+   Written (1999) - Alan Bleasby
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

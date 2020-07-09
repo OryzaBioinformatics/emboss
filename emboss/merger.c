@@ -24,13 +24,13 @@
 #include "emboss.h"
 
 void merge(AjPStr *merged, AjPFile outf, char *a, char *b, AjPStr m, AjPStr n,
-                        int start1, int start2, float score, AjBool mark,
+                        ajint start1, ajint start2, float score, AjBool mark,
                         float **sub, AjPSeqCvt cvt, char *namea,
-                        char *nameb, int begina, int beginb);
+                        char *nameb, ajint begina, ajint beginb);
 
-float quality (char * seq, int pos, int window);
+float quality (char * seq, ajint pos, ajint window);
 
-AjBool bestquality (char * a, char *b, int apos, int bpos);
+AjBool bestquality (char * a, char *b, ajint apos, ajint bpos);
 
 int main(int argc, char **argv)
 {
@@ -45,17 +45,17 @@ int main(int argc, char **argv)
     
     AjPFile outf;
     
-    int    lena;
-    int    lenb;
+    ajint    lena;
+    ajint    lenb;
 
     char   *p;
     char   *q;
 
-    int start1=0;
-    int start2=0;
+    ajint start1=0;
+    ajint start2=0;
     
     float  *path;
-    int    *compass;
+    ajint    *compass;
     
     AjPMatrixf matrix;
     AjPSeqCvt  cvt=0;
@@ -63,12 +63,12 @@ int main(int argc, char **argv)
 
     float gapopen;
     float gapextend;
-    int maxarr=1000;
-    int len;			/* arbitrary. realloc'd if needed */
+    ajint maxarr=1000;
+    ajint len;			/* arbitrary. realloc'd if needed */
 
     float score;
-    int begina;
-    int beginb;
+    ajint begina;
+    ajint beginb;
     
     (void) embInit("merger", argc, argv);
 
@@ -163,33 +163,33 @@ input sequences which are used in the merger */
 ** @param [r] b [char *] complete second sequence
 ** @param [r] m [AjPStr] Walk alignment for first sequence
 ** @param [r] n [AjPStr] Walk alignment for second sequence
-** @param [r] start1 [int] start of alignment in first sequence
-** @param [r] start2 [int] start of alignment in second sequence
+** @param [r] start1 [ajint] start of alignment in first sequence
+** @param [r] start2 [ajint] start of alignment in second sequence
 ** @param [r] score [float] alignment score from AlignScoreX
 ** @param [r] mark [AjBool] mark matches and conservatives
 ** @param [r] sub [float **] substitution matrix
 ** @param [r] cvt [AjPSeqCvt] conversion table for matrix
 ** @param [r] namea [char *] name of first sequence
 ** @param [r] nameb [char *] name of second sequence
-** @param [r] begina [int] first sequence offset
-** @param [r] beginb [int] second sequence offset
+** @param [r] begina [ajint] first sequence offset
+** @param [r] beginb [ajint] second sequence offset
 **
 ** @return [void]
 ******************************************************************************/
 
 void merge(AjPStr *ms, AjPFile outf, char *a, char *b, AjPStr m, AjPStr n,
-                        int start1, int start2, float score, AjBool mark,
+                        ajint start1, ajint start2, float score, AjBool mark,
                         float **sub, AjPSeqCvt cvt, char *namea,
-                        char *nameb, int begina, int beginb) {
+                        char *nameb, ajint begina, ajint beginb) {
 
-  int apos, bpos;
-  int i;                                                                        
+  ajint apos, bpos;
+  ajint i;                                                                        
 
   char *p = ajStrStr(m);
   char *q = ajStrStr(n);
   
-  int olen = ajStrLen(m);	/* length of walk alignment */
-  int alen, blen;	/* lengths of the sequences after the aligned region */
+  ajint olen = ajStrLen(m);	/* length of walk alignment */
+  ajint alen, blen;	/* lengths of the sequences after the aligned region */
 
 /* output the left hand side */
   if (start1 > start2) {
@@ -243,36 +243,36 @@ void merge(AjPStr *ms, AjPFile outf, char *a, char *b, AjPStr m, AjPStr n,
   for(i=0; i<olen; i++) {
     if (p[i]=='.' || p[i]==' ' || q[i]=='.' || q[i]==' ') {	/* gap! */
       if (bestquality(a, b, apos, bpos)) {
-      	p[i] = toupper((int)p[i]);
+      	p[i] = toupper((ajint)p[i]);
       	if (p[i] != '.' && p[i] != ' ') (void) ajStrAppK(ms, p[i]); 
         (void) ajFmtPrintF(outf, "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
 		    apos+1, p[i],bpos+1, q[i], p[i]);
       } else {
-      	q[i] = toupper((int)q[i]);
+      	q[i] = toupper((ajint)q[i]);
       	if (q[i] != '.' && q[i] != ' ') (void) ajStrAppK(ms, q[i]); 
         (void) ajFmtPrintF(outf, "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
 		    apos+1, p[i],bpos+1, q[i], q[i]);
       }      	      	
 
     } else if (p[i]=='n' || p[i]=='N') {
-      q[i] = toupper((int)q[i]);
+      q[i] = toupper((ajint)q[i]);
       (void) ajStrAppK(ms, q[i]);
 /*      (void) ajFmtPrintF(outf, "Sequence %s position %d is 'n' - using Sequence %s: %c\n\n", namea, apos+1, nameb, q[i]);
 */
     } else if (q[i]=='n' || q[i]=='N') {
-      p[i] = toupper((int)p[i]);
+      p[i] = toupper((ajint)p[i]);
       (void) ajStrAppK(ms, p[i]);
 /*      (void) ajFmtPrintF(outf, "Sequence %s position %d is 'n' - using Sequence %s: %c\n\n", nameb, bpos+1, namea, p[i]);
 */
     } else if (p[i] != q[i]) {
 /* get the sequence with the best quality and use the base from that one */   
       if (bestquality(a, b, apos, bpos)) {
-        p[i] = toupper((int)p[i]);
+        p[i] = toupper((ajint)p[i]);
         (void) ajStrAppK(ms, p[i]);   
         (void) ajFmtPrintF(outf, "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
 		    apos+1, p[i],bpos+1, q[i], p[i]);
       } else {
-        q[i] = toupper((int)q[i]);
+        q[i] = toupper((ajint)q[i]);
         (void) ajStrAppK(ms, q[i]);   
         (void) ajFmtPrintF(outf, "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
 		    apos+1, p[i],bpos+1, q[i], q[i]);
@@ -329,13 +329,13 @@ void merge(AjPStr *ms, AjPFile outf, char *a, char *b, AjPStr m, AjPStr n,
 **
 ** @param [r] a [char*] First sequence
 ** @param [r] b [char*] Second sequence
-** @param [r] apos [int] Position in first sequence
-** @param [r] bpos [int] Position in second sequence
+** @param [r] apos [ajint] Position in first sequence
+** @param [r] bpos [ajint] Position in second sequence
 ** @return [AjBool] ajTrue = first sequence is the best quality at this point
 **
 ******************************************************************************/
 
-AjBool bestquality (char * a, char *b, int apos, int bpos) {
+AjBool bestquality (char * a, char *b, ajint apos, ajint bpos) {
 
   float qa, qb;
 
@@ -380,16 +380,16 @@ AjBool bestquality (char * a, char *b, int apos, int bpos) {
 ** SEQUENCE READS
 **
 ** @param [r] seq [char*] Sequence
-** @param [r] pos [int] Position
-** @param [r] window [int] Window size
+** @param [r] pos [ajint] Position
+** @param [r] window [ajint] Window size
 ** @return [float] quality of the window
 **
 ******************************************************************************/
 
-float quality (char * seq, int pos, int window) {
+float quality (char * seq, ajint pos, ajint window) {
 
-  int value=0;
-  int i;	
+  ajint value=0;
+  ajint i;	
 
   for (i=pos; i<pos+window && i < strlen(seq); i++) {
     if (strchr("aAcCgGtTuU", seq[i])) {

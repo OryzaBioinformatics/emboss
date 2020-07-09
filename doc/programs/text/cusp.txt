@@ -118,6 +118,7 @@ See also
    geecee       Calculates the fractional GC content of nucleic acid sequences
    getorf       Finds and extracts open reading frames (ORFs)
    isochore     Plots isochores in large DNA sequences
+   marscan      Finds MAR/SAR sites in nucleic sequences
    newcpgreport Report CpG rich areas
    newcpgseek   Reports CpG rich regions
    plotorf      Plot potential open reading frames

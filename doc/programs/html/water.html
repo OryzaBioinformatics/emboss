@@ -376,12 +376,18 @@ other; you should use <b>needle</b> if you wish to align closely related
 sequences along their whole lengths. 
 <P>
 
-The memory and time required to do the search is proportional to (on the
-order of) mn, where 'n' and 'm' are the lengths of the two sequences. 
-This means that aligning two 1000-residue sequences takes roughly 100
-times longer and uses 100 times more memory than aligning two
-100-residue sequences. 
-<P>
+A true Smith Waterman implementation like <b>water</b> needs memory
+proportional to the product of the sequence lengths.  For two sequences
+of length 10,000,000 and 1,000 it therefore needs memory proportional to
+10,000,000,000 characters.  Two arrays of this size are produced, one of
+ints and one of floats so multiply that figure by 8 to get the memory
+usage in bytes.  That doesn't include other overheads.  Therefore only
+use water and needle for accurate alignment of reasonably short
+sequences. 
+
+<p>
+
+
 
 If you run out of memory, try using <b>supermatcher</b> or
 <b>matcher</b>.

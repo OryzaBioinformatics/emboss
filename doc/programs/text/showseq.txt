@@ -775,55 +775,56 @@ Known bugs
    
 See also
 
-   Program name Description
-   abiview Reads ABI file and display the trace
-   antigenic Finds antigenic sites in proteins
-   backtranseq Back translate a protein sequence
-   chaos Create a chaos game representation plot for a sequence
-   cirdna Draws circular maps of DNA constructs
-   cpgplot Plot CpG rich areas
-   cpgreport Reports all CpG rich regions
-   cusp Create a codon usage table
-   diffseq Find differences (SNPs) between nearly identical sequences
-   dotmatcher Displays a thresholded dotplot of two sequences
-   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
-   dottup Displays a wordmatch dotplot of two sequences
-   einverted Finds DNA inverted repeats
-   entret Reads and writes (returns) flatfile entries
-   equicktandem Finds tandem repeats
-   etandem Looks for tandem repeats in a nucleotide sequence
-   garnier Predicts protein secondary structure
-   getorf Finds and extracts open reading frames (ORFs)
-   helixturnhelix Report nucleic acid binding motifs
-   isochore Plots isochores in large DNA sequences
-   lindna Draws linear maps of DNA constructs
-   newcpgreport Report CpG rich areas
-   newcpgseek Reports CpG rich regions
-   notseq Excludes a set of sequences and writes out the remaining ones
-   oddcomp Finds protein sequence regions with a biased composition
-   palindrome Looks for inverted repeats in a nucleotide sequence
-   pepcoil Predicts coiled coil regions
-   plotorf Plot potential open reading frames
-   polydot Displays all-against-all dotplots of a set of sequences
-   prettyseq Output sequence with translated ranges
-   pscan Scans proteins using PRINTS
-   rebaseextract Extract data from REBASE
-   recode Find and remove restriction sites but maintain the same
-   translation
-   redata Search REBASE for enzyme name, references, suppliers etc
-   remap Display a sequence with restriction cut sites, translation etc
-   restrict Finds restriction enzyme cleavage sites
-   seqret Reads and writes (returns) sequences
-   seqretall Reads and writes (returns) a set of sequences one at a time
-   seqretset Reads and writes (returns) a set of sequences all at once
-   seqretsplit Reads and writes (returns) sequences in individual files
-   showfeat Show features of a sequence
-   showorf Pretty output of DNA translations
-   sigcleave Reports protein signal cleavage sites
-   silent Silent mutation restriction enzyme scan
-   tfscan Scans DNA sequences for transcription factors
-   tmap Displays membrane spanning regions
-   transeq Translate nucleic acid sequences
+   Program name                           Description
+  abiview        Reads ABI file and display the trace
+  antigenic      Finds antigenic sites in proteins
+  backtranseq    Back translate a protein sequence
+  chaos          Create a chaos game representation plot for a sequence
+  cirdna         Draws circular maps of DNA constructs
+  cpgplot        Plot CpG rich areas
+  cpgreport      Reports all CpG rich regions
+  cusp           Create a codon usage table
+  diffseq        Find differences (SNPs) between nearly identical sequences
+  dotmatcher     Displays a thresholded dotplot of two sequences
+  dotpath        Displays a non-overlapping wordmatch dotplot of two sequences
+  dottup         Displays a wordmatch dotplot of two sequences
+  einverted      Finds DNA inverted repeats
+  entret         Reads and writes (returns) flatfile entries
+  equicktandem   Finds tandem repeats
+  etandem        Looks for tandem repeats in a nucleotide sequence
+  garnier        Predicts protein secondary structure
+  getorf         Finds and extracts open reading frames (ORFs)
+  helixturnhelix Report nucleic acid binding motifs
+  isochore       Plots isochores in large DNA sequences
+  lindna         Draws linear maps of DNA constructs
+  marscan        Finds MAR/SAR sites in nucleic sequences
+  newcpgreport   Report CpG rich areas
+  newcpgseek     Reports CpG rich regions
+  notseq         Excludes a set of sequences and writes out the remaining ones
+  oddcomp        Finds protein sequence regions with a biased composition
+  palindrome     Looks for inverted repeats in a nucleotide sequence
+  pepcoil        Predicts coiled coil regions
+  plotorf        Plot potential open reading frames
+  polydot        Displays all-against-all dotplots of a set of sequences
+  prettyseq      Output sequence with translated ranges
+  pscan          Scans proteins using PRINTS
+  rebaseextract  Extract data from REBASE
+  recode         Remove restriction sites but maintain the same translation
+  redata         Search REBASE for enzyme name, references, suppliers etc
+  remap          Display a sequence with restriction cut sites, translation etc
+  restover       Finds restriction enzymes that produce a specific overhang
+  restrict       Finds restriction enzyme cleavage sites
+  seqret         Reads and writes (returns) sequences
+  seqretall      Reads and writes (returns) a set of sequences one at a time
+  seqretset      Reads and writes (returns) a set of sequences all at once
+  seqretsplit    Reads and writes (returns) sequences in individual files
+  showfeat       Show features of a sequence
+  showorf        Pretty output of DNA translations
+  sigcleave      Reports protein signal cleavage sites
+  silent         Silent mutation restriction enzyme scan
+  tfscan         Scans DNA sequences for transcription factors
+  tmap           Displays membrane spanning regions
+  transeq        Translate nucleic acid sequences
    
 Author(s)
 

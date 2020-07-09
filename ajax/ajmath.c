@@ -13,7 +13,7 @@
 
 
 static AjBool aj_rand_i = 0;
-static int    aj_rand_index;
+static ajint    aj_rand_index;
 static double aj_rand_poly[101];
 static double aj_rand_other;
 
@@ -23,14 +23,14 @@ static double aj_rand_other;
 **
 ** Rounds an integer to be a multiple of a given number.
 **
-** @param [r] i [int] Integer to round.
-** @param [r] round [int] Rounding multiple.
-** @return [int] Result.
+** @param [r] i [ajint] Integer to round.
+** @param [r] round [ajint] Rounding multiple.
+** @return [ajint] Result.
 ******************************************************************************/
 
-int ajRound (int i, int round) {
+ajint ajRound (ajint i, ajint round) {
 
-  return round * ((int)(i+round-1)/round);
+  return round * ((ajint)(i+round-1)/round);
 }
 
 
@@ -39,15 +39,15 @@ int ajRound (int i, int round) {
 ** Rounds a floating point number to have bits free for cumulative addition
 **
 ** @param [r] a [float] Float to round.
-** @param [r] nbits [int] Number of bits to free.
+** @param [r] nbits [ajint] Number of bits to free.
 ** @return [float] Result.
 ******************************************************************************/
 
-float ajRoundF (float a, int nbits) {
+float ajRoundF (float a, ajint nbits) {
 
   double w, x, y, z, b, c;
-  int i;
-  int bitsused;
+  ajint i;
+  ajint bitsused;
 
   bitsused = FLT_MANT_DIG - nbits; /* save 16 bits for cumulative error */
                                 /* usually leave 8 bits */
@@ -163,13 +163,13 @@ double ajGaussProb(float mean, float sd, float score)
 ** Calculate a geometric mean
 **
 ** @param [r] s [float*] array of values
-** @param [r] n [int] number of values
+** @param [r] n [ajint] number of values
 ** @return [float] geometric mean
 *****************************************************************************/
-float ajGeoMean(float *s, int n)
+float ajGeoMean(float *s, ajint n)
 {
     float x;
-    int   i;
+    ajint   i;
 
     for(i=0,x=1.0;i<n;++i) x*=s[i];
     return (float)pow((double)x,(double)(1.0/(float)n));
@@ -182,13 +182,13 @@ float ajGeoMean(float *s, int n)
 **
 ** Modulo always returning positive number
 **
-** @param [r] a [int] value1
-** @param [r] b [int] value2
-** @return [int] value1 modulo value2
+** @param [r] a [ajint] value1
+** @param [r] b [ajint] value2
+** @return [ajint] value1 modulo value2
 *****************************************************************************/
-int ajPosMod(int a, int b)
+ajint ajPosMod(ajint a, ajint b)
 {
-    int t;
+    ajint t;
 
     if(b<=0)
 	ajFatal("ajPosMod given non-positive divisor");
@@ -217,9 +217,9 @@ int ajPosMod(int a, int b)
 
 void ajRandomSeed(void)
 {
-    int ix, iy, iz, i;
+    ajint ix, iy, iz, i;
     double x=0.0;
-    int seed;
+    ajint seed;
     
     /*
      *  seed should be set to an integer between 0 and 9999 inclusive; a value
@@ -264,12 +264,12 @@ void ajRandomSeed(void)
 **
 ** Generate a pseudo-random number between 0-32767
 **
-** @return [int] Random number
+** @return [ajint] Random number
 ******************************************************************************/
 
-int ajRandomNumber(void)
+ajint ajRandomNumber(void)
 {
-    return (int) (floor(ajRandomNumberD()*32768.0));
+    return (ajint) (floor(ajRandomNumberD()*32768.0));
 }
 
 /* @func ajRandomNumberD *****************************************************
@@ -296,7 +296,7 @@ double ajRandomNumberD(void)
     static double xmod2  = 2.0*AjRandomXmod;
     static double xmod4  = 4.0*AjRandomXmod;
 
-    int n;
+    ajint n;
     double x, y;
 
     /*

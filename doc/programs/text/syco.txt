@@ -137,6 +137,7 @@ See also
    chips        Codon usage statistics
    cusp         Create a codon usage table
    getorf       Finds and extracts open reading frames (ORFs)
+   marscan      Finds MAR/SAR sites in nucleic sequences
    
    wobble does the analysis of the third base.
    

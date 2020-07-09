@@ -61,13 +61,13 @@
 **
 ** Default constructor for empty AJAX corba feature objects.
 **
-** @param [r] ntypes [int] Number of keys e.g. CDS
+** @param [r] ntypes [ajint] Number of keys e.g. CDS
 **
 ** @return [AjPCorbafeat] Pointer to an codon object
 ** @@
 ******************************************************************************/
 
-AjPCorbafeat ajCorbafeatNew(int ntypes)
+AjPCorbafeat ajCorbafeatNew(ajint ntypes)
 {
     AjPCorbafeat feat;
     
@@ -86,17 +86,17 @@ AjPCorbafeat ajCorbafeatNew(int ntypes)
 **
 ** Default constructor for empty AJAX corba feature type objects.
 **
-** @param [r] ntags [int] Number of tags e.g. note
-** @param [r] nlocs [int] Number of location positions
+** @param [r] ntags [ajint] Number of tags e.g. note
+** @param [r] nlocs [ajint] Number of location positions
 **
 ** @return [AjPCorbatype] Pointer to an codon object
 ** @@
 ******************************************************************************/
 
-AjPCorbatype ajCorbatypeNew(int ntags, int nlocs)
+AjPCorbatype ajCorbatypeNew(ajint ntags, ajint nlocs)
 {
     AjPCorbatype Ctype=NULL;
-    int i;
+    ajint i;
 
 
     AJNEW0(Ctype);
@@ -146,11 +146,11 @@ AjPCorbatype ajCorbatypeNew(int ntags, int nlocs)
 void ajCorbatypeDel(AjPCorbatype *thys)
 {
     AjPCorbatype pthis=NULL;
-    int ntags;
-    int nval;
+    ajint ntags;
+    ajint nval;
     
-    int i;
-    int j;
+    ajint i;
+    ajint j;
     
     if(!thys)
 	return;
@@ -206,8 +206,8 @@ void ajCorbatypeDel(AjPCorbatype *thys)
 void ajCorbafeatDel(AjPCorbafeat *thys)
 {
     AjPCorbafeat pthis=NULL;
-    int i;
-    int ntypes;
+    ajint i;
+    ajint ntypes;
     
 
     if(!thys)
@@ -238,7 +238,7 @@ void ajCorbafeatDel(AjPCorbafeat *thys)
 ** @@
 ******************************************************************************/
 
-AjPStr ajSeqCorbaEmbl(char *code, char **exerr, int *exint, AjPCorbafeat *feat,
+AjPStr ajSeqCorbaEmbl(char *code, char **exerr, ajint *exint, AjPCorbafeat *feat,
 		      AjBool dofeat)
 {
     AjPFile inf      = NULL;
@@ -264,7 +264,7 @@ AjPStr ajSeqCorbaEmbl(char *code, char **exerr, int *exint, AjPCorbafeat *feat,
     CORBA_ORB orb;
     CORBA_Environment Cenv;
 
-    int          Eargc   = 1;
+    ajint          Eargc   = 1;
     static char *Eargv[] = {"E"};
 
 
@@ -298,13 +298,13 @@ AjPStr ajSeqCorbaEmbl(char *code, char **exerr, int *exint, AjPCorbafeat *feat,
     org_biocorba_seqcore_SeqFeatureLocationList *Ell;
     org_biocorba_seqcore_SeqFeatureLocation *Esfl;
     
-    int i;
-    int j;
-    unsigned long len;
-    unsigned long qlen;
-    int fcnt  = 0;
-    int ntags = 0;
-    int nlocs = 0;
+    ajint i;
+    ajint j;
+    unsigned ajlong len;
+    unsigned ajlong qlen;
+    ajint fcnt  = 0;
+    ajint ntags = 0;
+    ajint nlocs = 0;
     
     
 
@@ -554,8 +554,8 @@ AjPStr ajSeqCorbaEmbl(char *code, char **exerr, int *exint, AjPCorbafeat *feat,
 
 	    for(i=0;i<nlocs;++i)
 	    {
-		(*feat)->Types[fcnt]->LStrand[i] = (int) ((short)Esfl->strand);
-		printf("STRAND=%d\n", (int) ((short)Esfl->strand));
+		(*feat)->Types[fcnt]->LStrand[i] = (ajint) ((short)Esfl->strand);
+		printf("STRAND=%d\n", (ajint) ((short)Esfl->strand));
 		(*feat)->Types[fcnt]->LSpos[i]   = Esfl->start.position;
 		(*feat)->Types[fcnt]->LEpos[i]   = Esfl->end.position;
 		(*feat)->Types[fcnt]->LSex[i]    = Esfl->start.extension;

@@ -33,7 +33,7 @@ AjMessOutRoutine  ajMessErrorReg (AjMessOutRoutine func) ;
 AjMessOutRoutine  ajMessExitReg (AjMessOutRoutine func) ;
 AjMessOutRoutine  ajMessCrashReg (AjMessOutRoutine func) ;
 
-void ajMessSetErr(char *filename, int line_num);
+void ajMessSetErr(char *filename, ajint line_num);
 void ajMessCrashFL (char *format, ...);
 void ajMessVCrashFL (char *format, va_list args);
 void ajMessCrashCodeFL (char *code);
@@ -64,7 +64,7 @@ void ajMessVError (char *format, va_list args) ; /* error message and write to l
 void ajMessErrorCode(char *name);      /* as above but uses code to get message */
 void ajMessExit(char *format, ...) ;  /* error message, write to log file & exit */
 void ajMessWarning (char *format, ...); /* warning message */
-void ajMessSetErr (char *filename, int line_num);
+void ajMessSetErr (char *filename, ajint line_num);
 
 #define ajMessCrash   ajMessSetErr(__FILE__, __LINE__), ajMessCrashFL
 #define ajMessCrashCode ajMessSetErr(__FILE__, __LINE__), ajMessCrashCodeFL
@@ -90,7 +90,7 @@ AjBool ajMessPrompt (char *prompt, char *dfault, char *fmt) ;
 char* ajMessSysErrorText (void) ; 
         /* wrapped system error message for use in ajMesserror/crash() */
 
-int ajMessErrorCount (void);
+ajint ajMessErrorCount (void);
         /* return numbers of error so far */
 
 /**** routines to catch crashes if necessary, e.g. when acedb dumping ****/
@@ -111,7 +111,7 @@ char*     ajMessCaughtMessage (void) ;
 
 void        ajDebug (char *fmt, ...);
 FILE*       ajDebugFile (void);
-int         ajUserGet (AjPStr *pthis, char *fmt, ...);
+ajint         ajUserGet (AjPStr *pthis, char *fmt, ...);
 
 #endif /* defined(DEF_REGULAR_H) */
 

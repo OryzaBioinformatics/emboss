@@ -24,8 +24,8 @@
 #include <string.h>
 
 
-void norfs(char *seq, char *rev, int n, float **x, float **y, AjPInt *cnt,
-	   int beg);
+void norfs(char *seq, char *rev, ajint n, float **x, float **y, AjPInt *cnt,
+	   ajint beg);
 
 
 int main(int argc, char **argv)
@@ -40,11 +40,11 @@ int main(int argc, char **argv)
     float      *x[6];
     float      *y[6];
     AjPInt     cnt;
-    int        beg;
-    int	       end;
+    ajint        beg;
+    ajint	       end;
     
-    int        i;
-    int        j;
+    ajint        i;
+    ajint        j;
     
     char *ftit[6]=
     {
@@ -117,15 +117,15 @@ int main(int argc, char **argv)
 
 
 
-void norfs(char *seq, char *rev, int n, float **x, float **y, AjPInt *cnt,
-	   int beg)
+void norfs(char *seq, char *rev, ajint n, float **x, float **y, AjPInt *cnt,
+	   ajint beg)
 {
 
-    int len;
-    int i;
-    int count;
+    ajint len;
+    ajint i;
+    ajint count;
     AjBool inframe;
-    int po;
+    ajint po;
     char *p;
     
 

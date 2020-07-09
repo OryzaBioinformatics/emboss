@@ -21,7 +21,7 @@ appl: compseq [
 	param: Y 
 	min: 1
 	def: "2"
-        max: 10
+        max: 20
 	info: "Word size to consider (e.g. 2=dimer)"
 	help: "This is the size of word (n-mer) to count. \
                Thus if you want to count codon frequencies,

@@ -20,9 +20,12 @@ extern "C"
 #define VA_V(x) (*x)
 #endif
 
-typedef void (*Fmt_T)(int code, VALIST ap,
+typedef void (*Fmt_T)(ajint code, VALIST ap,
 	int put(int c, void *cl), void *cl,
-	unsigned int flags[256], int width, int precision);
+	ajuint flags[256], ajint width, ajint precision);
+
+typedef void (*Fmt_S)(char *fmt, char **pos, VALIST ap, int width,
+		      AjBool convert, AjBool *ok);
 
 extern void ajFmtFmt (int put(int c, void *cl), void *cl,
 	const char *fmt, ...);
@@ -40,28 +43,32 @@ extern void ajFmtPrintF(AjPFile file,
 	const char *fmt, ...);
 extern void ajFmtVPrintF(AjPFile file,
 	const char *fmt, va_list ap);
-extern int ajFmtPrintCL (char *buf, int size,
+extern ajint ajFmtPrintCL (char *buf, ajint size,
 	const char *fmt, ...);
-extern int ajFmtVPrintCL (char *buf, int size,
+extern ajint ajFmtVPrintCL (char *buf, ajint size,
 	const char *fmt, va_list ap);
-extern void ajFmtPrintSplit(AjPFile outf, AjPStr str, char *prefix, int len,
+extern void ajFmtPrintSplit(AjPFile outf, AjPStr str, char *prefix, ajint len,
 			    char *delim);
-extern int ajFmtVFmtS(char *buf, int size,
+extern ajint ajFmtVFmtS(char *buf, ajint size,
 	const char *fmt, va_list ap);
 extern char *ajFmtString (const char *fmt, ...);
 extern char *ajFmtVString(const char *fmt, va_list ap);
-extern Fmt_T ajFmtRegister(int code, Fmt_T cvt);
-extern void ajFmtPutd(const char *str, int len,
+extern Fmt_T ajFmtRegister(ajint code, Fmt_T cvt);
+extern void ajFmtPutd(const char *str, ajint len,
 	int put(int c, void *cl), void *cl,
-	unsigned int flags[256], int width, int precision);
-extern void ajFmtPuts(const char *str, int len,
+	ajuint flags[256], ajint width, ajint precision);
+extern void ajFmtPuts(const char *str, ajint len,
 	int put(int c, void *cl), void *cl,
-	unsigned int flags[256], int width, int precision);
+	ajuint flags[256], ajint width, ajint precision);
 extern AjPStr ajFmtStr(const char *fmt, ...);
 extern AjPStr ajFmtPrintS(AjPStr *pthis, const char *fmt, ...) ;
 extern AjPStr ajFmtPrintAppS(AjPStr *pthis, const char *fmt, ...) ;
-int ajFmtVfmtCL(char* buf, int size, const char* fmt,
+ajint ajFmtVfmtCL(char* buf, ajint size, const char* fmt,
 	va_list ap);
+
+ajint ajFmtScanS(AjPStr thys, const char* fmt, ...);
+
+
 #endif
 
 #ifdef __cplusplus

@@ -127,11 +127,14 @@ Graph type [x11]:
   [-outseq]            seqout     Sequence file
    -graph              xygraph    Graph type
 
-   Optional qualifiers: (none)
+   Optional qualifiers:
+   -yticks             bool       Display y-axis ticks
+   -[no]sequence       bool       Display the sequence on the graph
+   -window             integer    Sequence display window size
+   -bases              string     Base graphs to be displayed
+
    Advanced qualifiers:
    -separate           bool       Separate the trace graphs for the 4 bases
-   -yticks             bool       Display y-axis ticks
-   -window             integer    Sequence display window size
 
 
 </pre>
@@ -172,7 +175,31 @@ Graph type [x11]:
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td>-yticks</td>
+<td>Display y-axis ticks</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]sequence</td>
+<td>Display the sequence on the graph</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-window</td>
+<td>Sequence display window size</td>
+<td>Any integer value</td>
+<td>40</td>
+</tr>
+
+<tr>
+<td>-bases</td>
+<td>Base graphs to be displayed</td>
+<td>Any string is accepted</td>
+<td>GATC</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -186,20 +213,6 @@ Graph type [x11]:
 <td>Separate the trace graphs for the 4 bases</td>
 <td>Yes/No</td>
 <td>No</td>
-</tr>
-
-<tr>
-<td>-yticks</td>
-<td>Display y-axis ticks</td>
-<td>Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-window</td>
-<td>Sequence display window size</td>
-<td>Any integer value</td>
-<td>40</td>
 </tr>
 
 </table>

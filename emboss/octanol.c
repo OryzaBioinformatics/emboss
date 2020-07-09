@@ -24,15 +24,15 @@
 
 #define AZ 28
 
-int getwhitewimbleydata(AjPFile file, float matrix[], float err[],
+ajint getwhitewimbleydata(AjPFile file, float matrix[], float err[],
 			float matrix2[], float err2[]){
   AjPStr buffer = NULL;
   AjPStr buf2 = NULL;
   AjPStr delim = NULL; 
   AjPStrTok token;
   char *s1;
-  int cols;
-  int matpos;
+  ajint cols;
+  ajint matpos;
 
 
 
@@ -58,7 +58,7 @@ int getwhitewimbleydata(AjPFile file, float matrix[], float err[],
     ajStrToLower(&buf2);
 
     s1 = ajStrStr(buf2);         /* convert code to integer */
-    matpos = (int)s1[0];
+    matpos = (ajint)s1[0];
     matpos -= 97;                
     
     ajStrToken(&buf2,&token,ajStrStr(delim)); /* get interface value */
@@ -84,13 +84,14 @@ int getwhitewimbleydata(AjPFile file, float matrix[], float err[],
   return 1;
 }
 
-int main (int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
   AjPFile datafile;
   float matrix[AZ],err[AZ];      /* interface values */       
   float matrix2[AZ],err2[AZ];    /* octanol values   */
   AjPSeq seq;
-  int llen;
-  int i,j;
+  ajint llen;
+  ajint i,j;
   AjPGraphData graphdata,graphdata2,graphdata3;
   AjPGraph mult;
   float min= 555.5,max = -555.5,total=0;

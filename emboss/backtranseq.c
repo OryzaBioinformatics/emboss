@@ -31,8 +31,8 @@ int main(int argc, char **argv)
     AjPStr     substr;
     AjPStr     back;
     
-    int beg;
-    int end;
+    ajint beg;
+    ajint end;
     
     embInit("backtranseq", argc, argv);
 

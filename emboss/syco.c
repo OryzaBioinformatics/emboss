@@ -48,23 +48,23 @@ int main(int argc, char **argv)
     
     float *xarr[3];
     float *farr[3];
-    int   *unc[3];
+    ajint   *unc[3];
     
     float sum;
 
     char *p;
     char *q;
     
-    int base;
-    int limit;
-    int startp;
-    int len;
-    int i;
-    int j;
-    int count;
-    int pos;
-    int idx;
-    int w;
+    ajint base;
+    ajint limit;
+    ajint startp;
+    ajint len;
+    ajint i;
+    ajint j;
+    ajint count;
+    ajint pos;
+    ajint idx;
+    ajint w;
 
     float miny;
     float maxy;
@@ -72,9 +72,9 @@ int main(int argc, char **argv)
     float amin;
     float amax;
     
-    int beg;
-    int end;
-    int window;
+    ajint beg;
+    ajint end;
+    ajint window;
     
     (void) ajGraphInit("syco", argc, argv);
 
@@ -207,7 +207,7 @@ int main(int argc, char **argv)
 	    ajFmtPrintF(outf,"\n\n%s\n",frames[base]);
 	    ajFmtPrintF(outf,"Mid base\tGribskov value\n");
 	    for(i=0;i<count;++i)
-		ajFmtPrintF(outf,"%-8d\t%.3f\n",(int)xarr[base][i],
+		ajFmtPrintF(outf,"%-8d\t%.3f\n",(ajint)xarr[base][i],
 			    farr[base][i]);
 	}
     }

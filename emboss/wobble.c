@@ -26,8 +26,8 @@
 
 
 void checkstring(AjPStr *str);
-void calcpc(char *seq, char *rev, int n, float **x, float **y, int *count,
-	    int beg, char *gc, int window);
+void calcpc(char *seq, char *rev, ajint n, float **x, float **y, ajint *count,
+	    ajint beg, char *gc, ajint window);
 float get_mean(char *bases, char *s);
 
 
@@ -50,16 +50,16 @@ int main(int argc, char **argv)
     float      ymin;
     float      ymax;
     
-    int        count[6];
+    ajint        count[6];
     
-    int        window;
+    ajint        window;
 
 
-    int        beg;
-    int	       end;
+    ajint        beg;
+    ajint	       end;
     
-    int        i;
-    int        j;
+    ajint        i;
+    ajint        j;
     
     char *ftit[6]=
     {
@@ -154,23 +154,23 @@ int main(int argc, char **argv)
 
 
 
-void calcpc(char *seq, char *rev, int n, float **x, float **y, int *count,
-	    int beg, char *gc, int window)
+void calcpc(char *seq, char *rev, ajint n, float **x, float **y, ajint *count,
+	    ajint beg, char *gc, ajint window)
 {
 
-    int len;
-    int limit;
+    ajint len;
+    ajint limit;
     
-    int i;
-    int j;
+    ajint i;
+    ajint j;
     
-    int po;
+    ajint po;
     char *p;
     float sum;
     
-    int nb;
-    int cds;
-    int z;
+    ajint nb;
+    ajint cds;
+    ajint z;
     
     limit = window*3;
     
@@ -210,7 +210,7 @@ void calcpc(char *seq, char *rev, int n, float **x, float **y, int *count,
 	{
 	    z = (i*3)+j+po+2;
 	    if(z<len)
-		if(strchr(gc,(int)p[z]))
+		if(strchr(gc,(ajint)p[z]))
 		    ++sum;
 	}
 	
@@ -228,11 +228,11 @@ void checkstring(AjPStr *str)
 {
     AjPStr tmp;
     static char *bases="GCAT";
-    int i;
+    ajint i;
     
     tmp = ajStrNewC("");
     for(i=0;i<4;++i)
-	if(strchr(ajStrStr(*str),(int)bases[i]))
+	if(strchr(ajStrStr(*str),(ajint)bases[i]))
 	    ajStrAppK(&tmp,bases[i]);
     (void) ajStrAssC(str,ajStrStr(tmp));
     
@@ -250,14 +250,14 @@ void checkstring(AjPStr *str)
 
 float get_mean(char *bases, char *s)
 {
-    int na;
-    int nc;
-    int ng;
-    int nt;
+    ajint na;
+    ajint nc;
+    ajint ng;
+    ajint nt;
     float tot;
     float sum;
     char  *p;
-    int   c;
+    ajint   c;
 
     na=nc=ng=nt=0;
     ajCodComp(&na,&nc,&ng,&nt,s);

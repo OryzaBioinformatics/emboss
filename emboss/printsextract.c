@@ -36,14 +36,14 @@
 AjBool  prints_entry(AjPStr *s, AjPFile *fp);
 void    write_code(AjPFile *fp, AjPStr *s, AjPStr *c);
 void    write_accession(AjPFile *inf, AjPFile *outf, AjPStr *s, AjPStr *acc);
-int     write_sets(AjPFile *inf, AjPFile *outf, AjPStr *s);
+ajint     write_sets(AjPFile *inf, AjPFile *outf, AjPStr *s);
 void    write_title(AjPFile *inf, AjPFile *outf, AjPStr *s);
 void    write_desc(AjPFile *inf, AjPStr *s, AjPStr *acc, AjPStr *code);
 void    skipToDn(AjPFile *inf, AjPStr *s);
-long    skipToFm(AjPFile *inf, AjPStr *s);
-void    getSeqNumbers(AjPFile *inf, int *cnts, int *lens, AjPStr *s, int n);
-void    calcMatrices(AjPFile *inf, AjPFile *outf, int *cnts, int *lens,
-		     AjPStr *s, int n);
+ajlong    skipToFm(AjPFile *inf, AjPStr *s);
+void    getSeqNumbers(AjPFile *inf, ajint *cnts, ajint *lens, AjPStr *s, ajint n);
+void    calcMatrices(AjPFile *inf, AjPFile *outf, ajint *cnts, ajint *lens,
+		     AjPStr *s, ajint n);
 void    printHeader(AjPFile outf);
 
 
@@ -57,11 +57,11 @@ int main(int argc, char **argv)
     AjPStr  line;
     AjPStr  acc;
     AjPStr  code;
-    int nsets;
+    ajint nsets;
 
-    long pos;
-    int *cnts=NULL;
-    int *lens=NULL;
+    ajlong pos;
+    ajint *cnts=NULL;
+    ajint *lens=NULL;
     
     embInit("printsextract",argc,argv);
     
@@ -139,16 +139,16 @@ void write_accession(AjPFile *inf, AjPFile *outf, AjPStr *s, AjPStr *a)
 }
 
 
-int write_sets(AjPFile *inf, AjPFile *outf, AjPStr *s)
+ajint write_sets(AjPFile *inf, AjPFile *outf, AjPStr *s)
 {
     char *p;
-    int n;
+    ajint n;
     
     if(!ajFileReadLine(*inf,s)) ajFatal("Premature EOF");
     if(!ajStrPrefixC(*s,"gn;")) ajFatal("No gn; (%s)",ajStrStr(*s));
     p=ajStrStr(*s);
     n=1;
-    p=strchr(p,(int)'(');
+    p=strchr(p,(ajint)'(');
     if(!p) ajFmtPrintF(*outf,"1\n");
     else 
     {
@@ -208,7 +208,7 @@ void skipToDn(AjPFile *inf, AjPStr *s)
 }
 
 
-long skipToFm(AjPFile *inf, AjPStr *s)
+ajlong skipToFm(AjPFile *inf, AjPStr *s)
 {
     while(ajFileReadLine(*inf,s))
     {
@@ -221,11 +221,11 @@ long skipToFm(AjPFile *inf, AjPStr *s)
 }
 
 
-void getSeqNumbers(AjPFile *inf, int *cnts, int *lens, AjPStr *s, int n)
+void getSeqNumbers(AjPFile *inf, ajint *cnts, ajint *lens, AjPStr *s, ajint n)
 {
-    int i;
-    int c;
-    int len;
+    ajint i;
+    ajint c;
+    ajint len;
     
     for(i=0;i<n;++i)
     {
@@ -258,21 +258,21 @@ void getSeqNumbers(AjPFile *inf, int *cnts, int *lens, AjPStr *s, int n)
 
 
 
-void calcMatrices(AjPFile *inf, AjPFile *outf, int *cnts, int *lens,
-		  AjPStr *s, int n)
+void calcMatrices(AjPFile *inf, AjPFile *outf, ajint *cnts, ajint *lens,
+		  AjPStr *s, ajint n)
 {
-    int i;
-    int j;
-    int k;
-    int c;
-    static int *mat[AZ];
+    ajint i;
+    ajint j;
+    ajint k;
+    ajint c;
+    static ajint *mat[AZ];
     char *p;
-    int sum;
-    int max;
-    int min;
-    int fmin;
-    long pos;
-    int  t;
+    ajint sum;
+    ajint max;
+    ajint min;
+    ajint fmin;
+    ajlong pos;
+    ajint  t;
     
     for(i=0;i<n;++i)
     {

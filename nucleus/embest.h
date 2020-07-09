@@ -17,7 +17,7 @@ WHAT_KIND_OF_DATABASE;
 typedef struct hash_list
 {
   char *name;
-  unsigned long offset, text_offset;
+  ajulong offset, text_offset;
   struct hash_list *next;
 }
 HASH_LIST;
@@ -26,8 +26,8 @@ typedef struct
 {
   char *database;
   WHAT_KIND_OF_DATABASE type;
-  int sequences;
-  unsigned long length;
+  ajint sequences;
+  ajulong length;
   FILE *datafile;
   FILE *textfile;
   FILE *indexfile;
@@ -41,7 +41,7 @@ typedef struct
   char *name;
   DATABASE *database;
   char *desc;
-  int len;
+  ajint len;
   char *s;
 }
 SEQUENCE;
@@ -51,23 +51,23 @@ typedef enum { NOT_A_SITE=0, DONOR=2, ACCEPTOR=4 } donor_acceptor;
 
 typedef struct 
 {
-  int gstart, estart;
-  int gstop, estop;
-  int score;
-  int len;
-  int *align_path;
+  ajint gstart, estart;
+  ajint gstop, estop;
+  ajint score;
+  ajint len;
+  ajint *align_path;
 }
 ge_alignment;
 
 typedef struct
 {
-  int left, right;
+  ajint left, right;
 }
 coords;
 
 typedef struct remember_pair
 {
-  int col, row;
+  ajint col, row;
 }
 RPAIR;
 
@@ -82,10 +82,10 @@ enum base_types /* just defines a, c, g, t as 0-3, for indexing purposes. */
 #define proper_base(n)  ( (n) >= base_a && (n) <= base_t ) /* test if base is a c g t */
 
 
-/* interconvert between char and int representations of nucleotides */
+/* interconvert between char and ajint representations of nucleotides */
 
-char c_base( int base ); /* int to char */
-int i_base( char base ); /* char to int */
+char c_base( ajint base ); /* ajint to char */
+ajint i_base( char base ); /* char to ajint */
 
 
 FILE *openfile( char *filename, char *mode );
@@ -118,7 +118,7 @@ char *extension ( char *filename, char *ext);
 	
 	produces file
 	
-	Note: filename MUST be long enough to cope ! 
+	Note: filename MUST be ajlong enough to cope ! 
 
         Returns the modified string */
 
@@ -163,19 +163,19 @@ char *rootname( char *filename );
      
 char *make_legal( char *filename );
 
-FILE *argfile( char *format, char *mode, int argc, char **argv, char *filename );
+FILE *argfile( char *format, char *mode, ajint argc, char **argv, char *filename );
      
      /* parses the command-line using format, attempts to get a filename and open
 	it. If format does not match any argument then NULL is returned. If format
 	matchs an argument but the file will not open then the program stops*/
      
-FILE *argfile_force( char *format, char *mode, int argc, char **argv, char *filename );
+FILE *argfile_force( char *format, char *mode, ajint argc, char **argv, char *filename );
      
      /* parses the command-line using format, attempts to get a filename and open
 	it. If format does not match any argument or if format matchs an argument
 	but the file will not open then the program stops*/
 
-int file_time( char *filename );
+ajint file_time( char *filename );
      
      /* returns the time that filename was last modified, or 0 if filename
 	cannot be opened for reading or if the call to stat fails */
@@ -184,100 +184,100 @@ char *file_date( char *filename );
      
      /* similar to file_time() execpt that a pointer to the date (in English) */
 
-int legal_string( char *string, char **strings, int size, int *value );
+ajint legal_string( char *string, char **strings, ajint size, ajint *value );
 
 /* checks if string is a member os strings, and sets value to the index in the array strings
 returns 1 on success and 0 on failure */
 
-char *next_arg( char *format, int argc, char **argv );
+char *next_arg( char *format, ajint argc, char **argv );
 char *cl_stub( char *format );
 
-int add_commands_from_file( int argc, char **argv, int *nargc, char ***nargv );
-void print_usage( int argc, char **argv, int stop );
-void append_usage( char *format, char *text, char *def, int overide );
-void gethelp( int argc, char **argv );
+ajint add_commands_from_file( ajint argc, char **argv, ajint *nargc, char ***nargv );
+void print_usage( ajint argc, char **argv, ajint stop );
+void append_usage( char *format, char *text, char *def, ajint overide );
+void gethelp( ajint argc, char **argv );
 
 
 char 
-**split_on_separator( char *string, char separator, int *items);
+**split_on_separator( char *string, char separator, ajint *items);
 
 /* headers for simple cmp functions */
 
-int icmp(int *a,int *b);  /* int   */
-int iicmp(int **a,int **b);   /* int** */
-int fcmp(float *a,float *b);  /* float* */
-int ifcmp(float **a,float **b);  /* float** */
-int Rstrcmp(char *a,char *b); /* Reversed strcmp */
-int istrcmp(char **a,char **b); /* for char** */
-int SStrcmp(char ***a,char ***b); /* for char *** !!!! */
+ajint icmp(ajint *a,int *b);  /* ajint   */
+ajint iicmp(ajint **a,int **b);   /* ajint** */
+ajint fcmp(float *a,float *b);  /* float* */
+ajint ifcmp(float **a,float **b);  /* float** */
+ajint Rstrcmp(char *a,char *b); /* Reversed strcmp */
+ajint istrcmp(char **a,char **b); /* for char** */
+ajint SStrcmp(char ***a,char ***b); /* for char *** !!!! */
 
-int uscmp(unsigned short *a,unsigned short *b); /* unsigned short */
+ajint uscmp(ajushort *a,ajushort *b); /* unsigned short */
 
-int IUBunequal(char x,char y);
-int IUBcmp(char *a,char *b);
+ajint IUBunequal(char x,char y);
+ajint IUBcmp(char *a,char *b);
 
 
 #define MINUS_INFINITY -10000000
 
-int matches_extension( char *name, char *ext );
-int matches_suffix( char *name, char *suffix );
-int add_database ( DATABASE *db );
-int hash_name( char *string );
+ajint matches_extension( char *name, char *ext );
+ajint matches_suffix( char *name, char *suffix );
+ajint add_database ( DATABASE *db );
+ajint hash_name( char *string );
 char *has_extension( char *name );
-int uncomment( char *string );
+ajint uncomment( char *string );
 void indent( void );
 
 void print_align( AjPFile ofile, SEQUENCE *genome, SEQUENCE *est,
-		  ge_alignment *ge, int width );
+		  ge_alignment *ge, ajint width );
 
 void blast_style_output( AjPFile ofile, SEQUENCE *genome, SEQUENCE *est,
-			 ge_alignment *ge, int match, int mismatch,
-			 int gap_penalty, int intron_penalty,
-			 int splice_penalty, int gapped, int reverse  );
+			 ge_alignment *ge, ajint match, ajint mismatch,
+			 ajint gap_penalty, ajint intron_penalty,
+			 ajint splice_penalty, ajint gapped, ajint reverse  );
 
-void write_MSP( AjPFile ofile, int *matches, int *len, int *tsub,
-		SEQUENCE *genome, int gsub, int gpos, SEQUENCE *est,
-		int esub, int epos, int reverse, int gapped );
+void write_MSP( AjPFile ofile, ajint *matches, ajint *len, ajint *tsub,
+		SEQUENCE *genome, ajint gsub, ajint gpos, SEQUENCE *est,
+		ajint esub, ajint epos, ajint reverse, ajint gapped );
 
 ge_alignment *linear_space_est_to_genome( SEQUENCE *est, SEQUENCE *genome,
-					  int match, int mismatch,
-					  int gap_penalty, int intron_penalty,
-					  int splice_penalty,
+					  ajint match, ajint mismatch,
+					  ajint gap_penalty, ajint intron_penalty,
+					  ajint splice_penalty,
 					  SEQUENCE *splice_sites,
 					  float max_area );
 
 ge_alignment * recursive_est_to_genome( SEQUENCE *est, SEQUENCE *genome,
-					int match, int mismatch,
-					int gap_penalty, int intron_penalty,
-					int splice_penalty,
+					ajint match, ajint mismatch,
+					ajint gap_penalty, ajint intron_penalty,
+					ajint splice_penalty,
 					SEQUENCE *splice_sites,
-					float max_area, int init_path );
+					float max_area, ajint init_path );
 
 ge_alignment *non_recursive_est_to_genome( SEQUENCE *est, SEQUENCE *genome,
-					   int match, int mismatch,
-					   int gap_penalty, int intron_penalty,
-					   int splice_penalty,
+					   ajint match, ajint mismatch,
+					   ajint gap_penalty, ajint intron_penalty,
+					   ajint splice_penalty,
 					   SEQUENCE *splice_sites,
-					   int backtrack, int needleman,
-					   int init_path );
+					   ajint backtrack, ajint needleman,
+					   ajint init_path );
 
-int midpt_est_to_genome( SEQUENCE *est, SEQUENCE *genome, int match,
-			 int mismatch, int gap_penalty, int intron_penalty,
-			 int splice_penalty, SEQUENCE *splice_sites,
-			 int middle, int *gleft, int *gright );
+ajint midpt_est_to_genome( SEQUENCE *est, SEQUENCE *genome, ajint match,
+			 ajint mismatch, ajint gap_penalty, ajint intron_penalty,
+			 ajint splice_penalty, SEQUENCE *splice_sites,
+			 ajint middle, ajint *gleft, ajint *gright );
 
-SEQUENCE *find_splice_sites( SEQUENCE *genome, int direction );
+SEQUENCE *find_splice_sites( SEQUENCE *genome, ajint direction );
 
-void matinit(int match, int mismatch, int gap, int neutral, char pad_char);
+void matinit(ajint match, ajint mismatch, ajint gap, ajint neutral, char pad_char);
 
 
-int do_not_forget( int col, int row );
+ajint do_not_forget( ajint col, ajint row );
 
-int remember( int col, int row );
+ajint remember( ajint col, ajint row );
 
 void free_rpairs(void);
 
-void rpair_init( int max );
+void rpair_init( ajint max );
 
 #define PRIME_NUM 10007
 #define MAX_BUF 10000
@@ -288,18 +288,18 @@ SEQUENCE *seq_to_sequence( AjPSeq ajseq );
 
 SEQUENCE *read_sequence(char *name, DATABASE *database);
 SEQUENCE *read_seq(char *name);
-SEQUENCE *read_embl_sq(char *name, DATABASE *database, unsigned long offset);
+SEQUENCE *read_embl_sq(char *name, DATABASE *database, ajulong offset);
 SEQUENCE *read_nbrf_sq(char *name, DATABASE *database,
-		       unsigned long offset, unsigned long text_offset);
-SEQUENCE *read_fasta_sq(char *name, DATABASE *database, unsigned long offset);
+		       ajulong offset, ajulong text_offset);
+SEQUENCE *read_fasta_sq(char *name, DATABASE *database, ajulong offset);
 SEQUENCE *next_seq_from_list_file(FILE *list_file);
 SEQUENCE *next_seq_from_database_spec(char *spec);
 SEQUENCE *next_seq(char *spec_or_file);
 SEQUENCE *get_seq_from_file(char *filename);
 SEQUENCE *seqdup(SEQUENCE *seq);
-SEQUENCE *shuffle_seq( SEQUENCE *seq, int in_place, int *seed );
+SEQUENCE *shuffle_seq( SEQUENCE *seq, ajint in_place, ajint *seed );
 
-char *shuffle_s( char *s, int *seed );
+char *shuffle_s( char *s, ajint *seed );
 
 DATABASE *open_database(char *name);
 DATABASE *which_database(char *database_name);
@@ -310,10 +310,10 @@ DATABASE *open_fasta_database(char *name);
 
 FILE *which_file_of_sequences(char *filename);
 
-unsigned long get_offset(char *name, DATABASE *database,
-			 unsigned long *text_offset);
-unsigned long seekto(FILE *fp, char *text);
-unsigned long find_next(FILE *fp, char *text, char *line);
+ajulong get_offset(char *name, DATABASE *database,
+		   ajulong *text_offset);
+ajulong seekto(FILE *fp, char *text);
+ajulong find_next(FILE *fp, char *text, char *line);
 char *downcase(char *s);
 char *upcase(char *s);
 char *complement_seq(char *seq);
@@ -323,7 +323,7 @@ char *embl_seq_comment(SEQUENCE *seq, char *key);
 char *nbrf_seq_comment(SEQUENCE *seq, char *key);
 
 char *iubtoregexp(char *iubstring);
-char *iub2regexp(char *iubstring, char *regexp, int maxlen);
+char *iub2regexp(char *iubstring, char *regexp, ajint maxlen);
 char *iub_regexp( char c);
 
 
@@ -333,14 +333,14 @@ FILE *openfile_in_seqpath_arg(char *basename, char *ext, char *mode,
 			      char *fullname);
 
 SEQUENCE *into_sequence( char *name, char *desc, char *s );
-SEQUENCE *subseq( SEQUENCE *seq, int start, int stop );
+SEQUENCE *subseq( SEQUENCE *seq, ajint start, ajint stop );
 void free_seq( SEQUENCE *seq );
 void free_seq_copy( SEQUENCE *seq );
 
 void make_embl_index( DATABASE *db );
 void make_fasta_index( DATABASE *db );
 void make_nbrf_index( DATABASE *db );
-int getseed( int *seed, int argc, char **argv );
+ajint getseed( ajint *seed, ajint argc, char **argv );
 void free_ge( ge_alignment *ge );
 
 

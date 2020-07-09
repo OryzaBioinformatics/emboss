@@ -3,7 +3,9 @@
 lib_LTLIBRARIES = libajax.la libajaxg.la
 
 INCLUDES = -DAJAX_FIXED_ROOT=$(AJAX_FIXED_ROOT) -DPREFIX=\"$(prefix)\" -I$(top_srcdir)/plplot
+
 LDFLAGS = -no-undefined
+LIBS =
 
 AJAXSRC = ajacd.c ajarr.c ajassert.c \
 ajbase.c ajcall.c ajcod.c \
@@ -21,7 +23,7 @@ hsregerror.c hsregexp.c hsregsub.c
 
 AJAXGSRC = ajgraph.c ajhist.c
 
-noinst_HEADERS = ajax.h ajdefine.h \
+noinst_HEADERS = ajax.h ajarch.h ajdefine.h \
 ajacd.h ajarr.h ajassert.h \
 ajbase.h ajcall.h ajcod.h \
 ajcorba.h ajcorbaembl.h \

@@ -30,11 +30,11 @@
 
 void readcoildat(AjPFloat2d *rdat);
 float probcoil(float score);
-int inframe(int start, int pos, int frame, int len);
+ajint inframe(ajint start, ajint pos, ajint frame, ajint len);
 
 
 
-int main(int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
@@ -44,17 +44,17 @@ int main(int argc, char **argv, char **env)
     AjPStr    stmp=NULL;
     AjPStr    substr=NULL;
    
-    int begin;
-    int end;
-    int len;
+    ajint begin;
+    ajint end;
+    ajint len;
     
     char *p;
     char *q;
     
-    int i;
-    int j;
-    int k;
-    int window;
+    ajint i;
+    ajint j;
+    ajint k;
+    ajint window;
 
     /*    AjBool plot;*/
     AjBool coil;
@@ -74,19 +74,19 @@ int main(int argc, char **argv, char **env)
     float maxmaxscore;
     float maxcoil;
     
-    int maxframe;
-    int rescode;
-    int wstart;
-    int wend;
-    int lwin;
-    int win;
-    int isub;
-    int startcoil;
-    int endcoil;
-    int lencoil;
-    int startframe;
-    int coilframe;
-    int fframe;
+    ajint maxframe;
+    ajint rescode;
+    ajint wstart;
+    ajint wend;
+    ajint lwin;
+    ajint win;
+    ajint isub;
+    ajint startcoil;
+    ajint endcoil;
+    ajint lencoil;
+    ajint startframe;
+    ajint coilframe;
+    ajint fframe;
     
     AjBool     iscoil;
     AjPFloat2d rdat=NULL;
@@ -322,8 +322,8 @@ void readcoildat(AjPFloat2d *rdat)
     
     char *p;
     char *q;
-    int  n;
-    int  c;
+    ajint  n;
+    ajint  c;
     
     float v;
     
@@ -371,7 +371,7 @@ float probcoil(float score)
 
 
 
-int inframe(int start, int pos, int frame, int len)
+ajint inframe(ajint start, ajint pos, ajint frame, ajint len)
 {
     return 1+ajPosMod(frame-pos+start-1,len);
 }

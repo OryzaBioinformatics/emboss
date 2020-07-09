@@ -567,31 +567,31 @@ Known bugs
    
 See also
 
-   Program name Description
-   abiview Reads ABI file and display the trace
-   backtranseq Back translate a protein sequence
-   cirdna Draws circular maps of DNA constructs
-   cusp Create a codon usage table
-   entret Reads and writes (returns) flatfile entries
-   getorf Finds and extracts open reading frames (ORFs)
-   lindna Draws linear maps of DNA constructs
-   notseq Excludes a set of sequences and writes out the remaining ones
-   plotorf Plot potential open reading frames
-   prettyseq Output sequence with translated ranges
+   Program name                           Description
+   abiview       Reads ABI file and display the trace
+   backtranseq   Back translate a protein sequence
+   cirdna        Draws circular maps of DNA constructs
+   cusp          Create a codon usage table
+   entret        Reads and writes (returns) flatfile entries
+   getorf        Finds and extracts open reading frames (ORFs)
+   lindna        Draws linear maps of DNA constructs
+   notseq        Excludes a set of sequences and writes out the remaining ones
+   plotorf       Plot potential open reading frames
+   prettyseq     Output sequence with translated ranges
    rebaseextract Extract data from REBASE
-   recode Find and remove restriction sites but maintain the same
-   translation
-   redata Search REBASE for enzyme name, references, suppliers etc
-   restrict Finds restriction enzyme cleavage sites
-   seqret Reads and writes (returns) sequences
-   seqretall Reads and writes (returns) a set of sequences one at a time
-   seqretset Reads and writes (returns) a set of sequences all at once
-   seqretsplit Reads and writes (returns) sequences in individual files
-   showfeat Show features of a sequence
-   showorf Pretty output of DNA translations
-   showseq Display a sequence with features, translation etc
-   silent Silent mutation restriction enzyme scan
-   transeq Translate nucleic acid sequences
+   recode        Remove restriction sites but maintain the same translation
+   redata        Search REBASE for enzyme name, references, suppliers etc
+   restover      Finds restriction enzymes that produce a specific overhang
+   restrict      Finds restriction enzyme cleavage sites
+   seqret        Reads and writes (returns) sequences
+   seqretall     Reads and writes (returns) a set of sequences one at a time
+   seqretset     Reads and writes (returns) a set of sequences all at once
+   seqretsplit   Reads and writes (returns) sequences in individual files
+   showfeat      Show features of a sequence
+   showorf       Pretty output of DNA translations
+   showseq       Display a sequence with features, translation etc
+   silent        Silent mutation restriction enzyme scan
+   transeq       Translate nucleic acid sequences
    
 Author(s)
 

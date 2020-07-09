@@ -100,7 +100,7 @@ void embIepPkRead(void)
     double  amino=8.6;
     double  carboxyl=3.6;
     char    ch;
-    int     i;
+    ajint     i;
     
     if(AjIEPinit) return;
     
@@ -133,7 +133,7 @@ void embIepPkRead(void)
 	    continue;
 	}
 	p=ajSysStrtok(p," \t\n");
-	ch=ajSysItoC(toupper((int)*p));
+	ch=ajSysItoC(toupper((ajint)*p));
 	p=ajSysStrtok(NULL," \t\n");
 	(void) sscanf(p,"%lf",&AjpK[ajAZToInt(ch)]);
     }
@@ -154,14 +154,14 @@ void embIepPkRead(void)
 ** Calculate the amino acid composition of a protein sequence
 **
 ** @param [r] s [char *] protein sequence
-** @param [r] amino [int] number of amino termini
+** @param [r] amino [ajint] number of amino termini
 ** @param [w] c [int *] amino acid composition
 **
 ** @return [void]
 ******************************************************************************/
-void embIepComp(char *s, int amino, int *c)
+void embIepComp(char *s, ajint amino, ajint *c)
 {
-    int i;
+    ajint i;
     char *p;
     
     for(i=0;i<EMBIEPSIZE;++i)
@@ -170,7 +170,7 @@ void embIepComp(char *s, int amino, int *c)
     p=s;
     while(*p)
     {
-	++c[ajAZToInt(ajSysItoC(toupper((int)*p)))];
+	++c[ajAZToInt(ajSysItoC(toupper((ajint)*p)))];
 	++p;
     }
     
@@ -191,7 +191,7 @@ void embIepComp(char *s, int amino, int *c)
 ******************************************************************************/
 void embIepCalcK(double *K)
 {
-    int i;
+    ajint i;
     
     if(!AjIEPinit)
 	embIepPkRead();
@@ -219,9 +219,9 @@ void embIepCalcK(double *K)
 ** @return [void]
 ******************************************************************************/
 
-void embIepGetProto(double *K, int *c, int *op, double H, double *pro)
+void embIepGetProto(double *K, ajint *c, ajint *op, double H, double *pro)
 {
-    int i;
+    ajint i;
 
     for(i=0;i<EMBIEPSIZE;++i)
 	if(!K[i])
@@ -253,9 +253,9 @@ void embIepGetProto(double *K, int *c, int *op, double H, double *pro)
 ** @return [double] charge
 ******************************************************************************/
 
-double embIepGetCharge(int *c, double *pro, double *total)
+double embIepGetCharge(ajint *c, double *pro, double *total)
 {
-    int i;
+    ajint i;
     double C;
     
     for(i=0,*total=0.0;i<EMBIEPSIZE;++i)
@@ -286,7 +286,7 @@ double embIepGetCharge(int *c, double *pro, double *total)
 ** @return [double] IEP or 0.0
 ******************************************************************************/
 
-double embIepPhConverge(int *c, double *K, int *op, double *pro)
+double embIepPhConverge(ajint *c, double *K, ajint *op, double *pro)
 {
     double sum=0.0;
     double charge;
@@ -336,16 +336,16 @@ double embIepPhConverge(int *c, double *K, int *op, double *pro)
 ** Calculate the pH nearest the IEP.
 **
 ** @param [r] s [char *] sequence
-** @param [r] amino [int] number of N-termini
+** @param [r] amino [ajint] number of N-termini
 ** @param [w] iep [double *] IEP
 ** @param [r] termini [AjBool] use termini
 **
 ** @return [AjBool] True if IEP exists
 ******************************************************************************/
-AjBool embIepIEP(char *s, int amino, double *iep, AjBool termini)
+AjBool embIepIEP(char *s, ajint amino, double *iep, AjBool termini)
 {
-    int *c=NULL;
-    int *op=NULL;
+    ajint *c=NULL;
+    ajint *op=NULL;
     double *K=NULL;
     double *pro=NULL;
     

@@ -10,21 +10,305 @@ Function
    
 Description
 
-   Given a one-per-line file of molecular weights this program will
-   search a protein database for matches with the mass spectrometry data.
-   Eight enzymes/reagents can be specified and an optional whole sequence
-   molecular weight.
+   Peptide mass information can provide a 'fingerprint' signature
+   sufficiently discriminating to allow for the unique and rapid
+   identification of unknown sample proteins, independent of other
+   analytical methods such as protein sequence analysis. Practical
+   experience has shown that sample proteins can be uniquely identified
+   using as few as 3-4 experimentally determined peptide masses when
+   screened against a fragment database derived from over 50,000
+   proteins.
+   
+   Given a one-per-line file of molecular weights cut by
+   enzymes/reagents, emowse will search a protein database for matches
+   with the mass spectrometry data.
+   
+   One of eight cutting enzymes/reagents can be specified and an optional
+   whole sequence molecular weight.
+   
+   Determination of molecular weight has always been an important aspect
+   of the characterization of biological molecules. Protein molecular
+   weight data, historically obtained by SDS gel electrophoresis or gel
+   permeation chromatography, has been used establish purity, detect
+   post-translational modification (such as phosphorylation or
+   glycosylation) and aid identification. Until just over a decade ago,
+   mass spectrometric techniques were typically limited to relatively
+   small biomolecules, as proteins and nucleic acids were too large and
+   fragile to withstand the harsh physical processes required to induce
+   ionization. This began to change with the development of 'soft'
+   ionization methods such as fast atom bombardment (FAB)[1],
+   electrospray ionisation (ESI) [2,3] and matrix-assisted laser
+   desorption ionisation (MALDI)[4], which can effect the efficient
+   transition of large macromolecules from solution or solid crystalline
+   state into intact, naked molecular ions in the gas phase. As an added
+   bonus to the protein chemist, sample handling requirements are minimal
+   and the amounts required for MS analysis are in the same range, or
+   less, than existing analytical methods.
+   
+   As well as providing accurate mass information for intact proteins,
+   such techniques have been routinely used to produce accurate peptide
+   molecular weight 'fingerprint' maps following digestion of known
+   proteins with specific proteases. Such maps have been used to confirm
+   protein sequences (allowing the detection of errors of translation,
+   mutation or insertion), characterise post-translational modifications
+   or processing events and assign disulphide bonds [5,6].
+   
+   Less well appreciated, however, is the extent to which such peptide
+   mass information can provide a 'fingerprint' signature sufficiently
+   discriminating to allow for the unique and rapid identification of
+   unknown sample proteins, independent of other analytical methods such
+   as protein sequence analysis.
+   
+   Practical experience has shown that sample proteins can be uniquely
+   identified using as few as 3- 4 experimentally determined peptide
+   masses when screened against a fragment database derived from over
+   50,000 proteins. Experimental errors of a few Daltons are tolerated by
+   the scoring algorithms, permitting the use of inexpensive
+   time-of-flight mass spectrometers. As with other types of physical
+   data, such as amino acid composition or linear sequence, peptide
+   masses can clearly provide a set of determinants sufficiently unique
+   to identify or match unknown sample proteins. Peptide mass
+   fingerprints can prove as discriminating as linear peptide sequence,
+   but can be obtained in a fraction of the time using less material. In
+   many cases, this allows for a rapid identification of a sample protein
+   before committing to protein sequence analysis. Fragment masses also
+   provide structural information, at the protein level, fully
+   complementary to large-scale DNA sequencing or mapping projects
+   [7,8,9].
+   
+   For each entry in the specified set of sequences to search, emowse
+   derives both whole sequence molecular weight and calculated peptide
+   molecular weights for complete digests using the range of cleavage
+   reagents and rules detailed in Table 1. Cleavage is disallowed if the
+   target residue is followed by proline (except for CNBr or Asp N). Glu
+   C (S. aureus V8 protease) cleavages are also inhibited if the adjacent
+   residue is glutamic acid. Peptide mass calculations are based entirely
+   on the linear sequence and use the average isotopic masses of
+   amide-bonded amino acid residues (IUPAC 1987 relative atomic masses).
+   To allow for N-terminal hydrogen and C-terminal hydroxyl the final
+   calculated molecular weight of a peptide of N residues is given by the
+   equation:
+   
+        N
+        __
+        \
+        /  Residue mass + 18.0153
+        --
+        n=1
+
+   Molecular weights are rounded to the nearest integer value before
+   being used. Cysteine residues are calculated as the free thiol,
+   anticipating that samples are reduced prior to mass analysis. CNBr
+   fragments are calculated as the homoserine lactone form. Information
+   relating to post- translational modification (phosphorylation,
+   glycosylation etc.) is not incorporated into calculation of peptide
+   masses.
+   
+  Table 1: Cleavage reagents modelled by emowse.
+  
+Reagent no.     Reagent                 Cleavage rule
+
+        1       Trypsin                 C-term to K/R
+        2       Lys-C                   C-term to K
+        3       Arg-C                   C-term to R
+        4       Asp-N                   N-term to D
+        5       V8-bicarb               C-term to E
+        6       V8-phosph               C-term to E/D
+        7       Chymotrypsin            C-term to F/W/Y/L/M
+        8       CNBr                    C-term to M
+
+   Current versions of emowse also incorporate calculated peptide Mw's
+   resulting from incomplete or partial cleavages. At present, this is
+   achieved by computing all nearest-neighbour pairs for each enzyme or
+   reagent detailed in table 1.
+   
+  Tolerance
+  
+   The supplied number specifies the error allowed for mass accuracy of
+   experimental mass determination. If no figure is specified, a default
+   tolerance of 2 Daltons will be assumed. If you wish to specify a
+   different tolerance then follow the qualifier '-tolerance' with the
+   required number of Daltons. eg: '-tolerance 1'. In this case, supplied
+   peptide masses will be matched to +/- 1 Daltons. Values of 2-4 are
+   suggested for data obtained by laser- desorption TOF instruments.
+   Accuracies of +/- 2 Daltons or better are generally only possible
+   using an appropriate internal standard (e.g. oxidised insulin B chain)
+   with TOF instruments. For electrospray or FAB data, a value of 1 can
+   be selected in most cases. If you have real confidence in mass
+   determination, specify '0' (zero) to limit matches to the nearest
+   integer value (effectively +/- 0.5 Daltons). Discrimination is
+   significantly improved by the selection of a small error tolerance.
+   
+  Whole sequence molecular weight
+  
+   This option allows you to give the molwt of the whole protein (if
+   known). This allows you to limit the search to proteins of this molwt
+   plus/minus a 'limit' (see below). If unspecified, a whole protein
+   molwt of 0 is assumed which emowse interprets as "search the whole
+   database". This will include all proteins up to the maximum size of
+   just under 700,000 Daltons. You can specify any molwt in Daltons with
+   this command e.g. '-weight 90000'.
+   
+  Allowed whole sequence weight variability
+  
+   This option is used in conjunction with the '-weight' option and is
+   meaningless without it. It specifies a percentage. Only proteins of
+   the given Sequence molecular weight +/- this percentage will be
+   searched. If a Sequence molecular weight is specified but '-pcrange'
+   is unspecified then '-pcrange ' will default to 25%. To specify a
+   percentage of 30% use: '-pcrange 30'. In this case, a molecular weight
+   of 90,000 Daltons was specified and the selection of 30 for the filter
+   restricts the search to those proteins with masses from 63,000 to
+   117,000 Daltons. A value of 25 is suggested for initial searches,
+   which can be progressively widened for subsequent search attempts if
+   no matches are found. Discrimination is best when the filter
+   percentage is narrow, but some Mw estimates (particularly from SDS
+   gels) should be given considerable allowance for error.
+   
+  Partials factor
+  
+   This specifies the weighting given to partially-cleaved peptide
+   fragments, with a range from 0.1 to 1.0. If not specified, the default
+   value is 0.4. The factor effectively down-weights the score awarded to
+   a partial fragment by the specified amount. For example, a '-partials'
+   of 0.25 will reduce the score of partial fragments to 25% (one
+   quarter) of the score of a complete ('perfect') peptide cleavage
+   fragment of equal mass.
+   
+   Computing all possible nearest-neighbour partial fragments adds
+   significantly to the number of peptides entered in the database (by a
+   factor of two). The major effect of this is to increase the background
+   score by increasing the number of random Mw matches, which can
+   significantly reduce discrimination. The use of a low '-partials'
+   factor (eg 0.1 - 0.3) is a useful way of limiting this effect -
+   partial peptide matches will add a little to the cumulative frequency
+   score, but without compromising discrimination.
+   
+   More experienced users can utilise the '-partials' factor to optimize
+   searches where the peptide Mw data contain a significant proportion of
+   partial cleavage fragments (eg > 30%). In such cases, setting the
+   '-partials' factor within the range 0.4 - 0.6 can help to improve
+   discrimination. Conversely, if the digestion is perfect, with no
+   partial fragments present, the lowest '-partials' factor of 0.1 will
+   give maximum discrimination.
+   
+  Program requirements
+  
+   The emowse search program accepts a single text file containing a list
+   of experimentally-determined masses, generally selected from the range
+   700-4,000 Daltons to reduce the influence of partial cleavage
+   products. The program outputs a ranked hit list comprising the top 30
+   scores, with information including the protein entry name, text
+   identifiers, final accumulated scores, matching peptide sequences and
+   hit versus miss tallies. User-selectable search parameters include an
+   error tolerance (default +/- 2 Daltons), selection of the enzyme or
+   reagent used and an intact protein Mw (optional, if known).
+   
+   For each peptide Mw entry in the data file, emowse matches individual
+   fragment molecular weights (FMWs) with database entry molecular
+   weights (DBMWs). A 'hit' is scored when the following criterion is
+   met:
+   
+        DBMW-tolerance-1 < FMW < DBMW+tolerance+1
+
+   If an intact protein Mw is specified (SMW) then the program prompts
+   for a molecular weight filter percentage (MWFP). emowse then restricts
+   the search to those entries which match the following criteria:
+   
+        R = SMW x MWFP / 100
+        0 < SMW-R < emowse entry Mol.wt. < SMW+R
+
+   Default search parameters are a tolerance of +/- 2 Daltons, intact Mw
+   specified and the MWFP set to 25.
+   
+  emowse Scoring scheme
+  
+   The final scoring scheme is based on the frequency of a fragment
+   molecular weight being found in a protein of a given range of
+   molecular weight. OWL database sequence entries were initially grouped
+   into 10 kDalton intact molecular weight intervals. For each 10 kDalton
+   protein interval, peptide fragment molecular weights were assigned to
+   cells of 100 Dalton intervals. The cells therefore contained the
+   number of times a particular fragment molecular weight occurred in a
+   protein of any given size. This operation was performed for each
+   enzyme. Cell frequency values were calculated by dividing each cell
+   value by the total number of peptides in each 10 kD protein interval.
+   Cell frequency values for each 10 kDalton interval were then
+   normalised to the largest cell value (Fmax), with all the cell values
+   recalculated as:
+   
+        Cell value = Old value / Fmax
+
+   to yield floating point numbers between 0 and 1. These distribution
+   frequency values, calculated for each cleavage reagent, were then
+   built into the emowse search program. For every database entry
+   scanned, all matching fragments contribute to the final score. In the
+   current implementation, non-matching fragments are ignored (neutral).
+   For each matching peptide Mw a score is assigned by looking up the
+   appropriate normalised distribution frequency value. In the case of
+   multiple 'hits' in any one target protein (i.e. more than one matching
+   peptide Mw), the distribution frequency scores are multiplied. The
+   final product score is inverted and then normalised to an 'average'
+   protein Mw of 50 kDaltons to reduce the influence of random score
+   accumulation in large proteins (>200 kDaltons). The final score is
+   thus calculated as:
+   
+Score = 50/(Pn x H)
+
+   Where Pn is the product of n distribution scores and H the 'hit'
+   protein molecular weight in kD.
+   
+   Important consequences of this type of scoring scheme are that matches
+   with peptides of higher Mw carry more scoring weight, and that the
+   non-random distribution of fragment molecular weights in proteins of
+   different sizes is compensated for.
+   
+  Simulation studies
+  
+   In a simulation of scoring properties, 100 test proteins with masses
+   between 10 kD and 100 kD were randomly selected from the OWL sequence
+   database. The sets of all possible tryptic peptide masses for each
+   protein were randomized and database searches performed with
+   increasing numbers of fragments (default search parameters) until the
+   test protein reached the top of the ranked scoring list. 99% of the
+   test proteins were correctly identified using only five peptides or
+   less (mean=3.6 peptides), with one example requiring six. These
+   figures were surprisingly small considering that some of the proteins
+   in the test sample generated more than 100 possible tryptic fragments.
+   All 100 test examples were identified using 30% or less of the maximum
+   number of available peptides.
+   
+   This distribution was somewhat dependent on protein size, as smaller
+   proteins generally yield fewer peptide fragments. Thus, all proteins
+   of 30 kD and over were identified using 13% or less of possible
+   fragments (1 in 8), with all proteins of 40 kD and above requiring
+   less than 10% (1 in 10). In this latter group, therefore, more than
+   90% of the potential information (all possible peptides) was
+   redundant. For the simulation a 'unique' identification required
+   matching not only of protein type (e.g. globin) but correct
+   discrimination of type, species, and isoform or isozyme.
+   Discrimination could be further improved by reducing the error
+   tolerance to only +/- 1 Dalton (mean=2.7 peptides). Such accuracies
+   are easily bettered using more sophisticated ESI/quadrupole or
+   high-field FAB spectrometers, but the default search value (+/- 2
+   Daltons) compensates for the reduced accuracy obtainable from the
+   smaller time-of-flight (TOF) instruments. Mass accuracies better than
+   +/- 1 Dalton were not essential, and in fact the error tolerance could
+   be relaxed to +/- 5 Daltons in many cases with little degradation in
+   performance. The simulation thus clearly demonstrated the high degree
+   of discrimination afforded by relatively few peptide masses, even with
+   generous allowance for error.
    
 Usage
 
    Here is a sample session with emowse:
 
 % emowse
-
-****************
-EDIT HERE
-****************
-
+Protein identification by mass spectrometry
+Input sequence(s): sw:*
+Input file: test.mowse
+Whole sequence molwt [0]:
+Output file [100k_rat.emowse]:
 
 Command line arguments
 
@@ -71,15 +355,649 @@ Command line arguments
    
 Input file format
 
-   **************** EDIT HERE ****************
+   The input file is a list of molecular weights of the peptide
+   fragments. One weight is allowed per line. For example, some weights
+   taken from a Trypsin digest of the protein sw:100K_rat (produced by
+   using the program digest are):
+     _________________________________________________________________
+   
+6082.8
+5423.0
+3086.3
+2930.3
+2424.7
+2030.2
+1399.6
+1086.2
+     _________________________________________________________________
+   
+   Each molecular weight must be on a line of its own. Masses (M not
+   M[H+]) are accepted in any order (ascending,descending or mixed).
+   Peptide masses can be entered as integers or floating-point values,
+   the latter being rounded to the nearest integer value for the search.
+   
+   It is suggested that peptide masses should be selected from the range
+   700-4000 Daltons. This range balances the fact that very small
+   peptides give little discrimination and minimizes the frequency of
+   partially-cleaved peptides.
+   
+   As a general rule, users are advised to identify and remove peptide
+   masses resulting from autodigestion of the cleavage enzyme (e.g
+   tryptic fragments of trypsin), best obtained by MS analysis of control
+   digests containing only the enzyme.
+   
+   Further information on the partial sequence and/or composition of the
+   peptides can be given after the weight with a 'seq()' or 'comp()'
+   specification. This should be formatted like:
+   
+mw seq(...) comp(...)
+
+   where mw is the molecular mass of the fragment, seq(...) is sequence
+   information and comp(...) is composition information. A line may
+   contain more than one sequence information qualifiers. For example:
+     _________________________________________________________________
+   
+7176 seq(b-t[pqt]ln)
+1744
+1490
+1433   comp(3[ed]1[p]) seq(gmde)
+  __________________________________________________________________________
+
+
+
+
+  Sequence information
+
+The sequence information should be given in standard
+One-character code. It should be preceded by a prefix
+as outlined in the table below, to indicate what type of sequence
+it is.
+
+
+CAPTION: Prefixes to use with sequence information for
+emowse
+
+
+ Prefix Meaning Example
+
+ b- N->C sequence
+ seq(b-DEFG)
+
+ y- C->N sequence
+ seq(y-GFED)
+
+ *-
+ Orientation unknown
+ seq(*-DEFG)
+seq(*-GFED)
+
+ n- N terminal sequence
+ seq(n-ACDE)
+
+ c- C terminal sequence
+ seq(c-FGHI)
+
+ The examples are all correct data for a
+peptide with a sequence ACDEFGHI.
+ Note that *-DEFG
+will search for both DEFG and GFED
+
+
+
+Both lower and upper case characters may be used for amino-acids.
+An unknown amino acid may be indicated by an 'X'.
+More than one amino acid may be specified for a position by
+putting them between square brackets.
+A line may contain several sequence information
+qualifiers. An example for a peptide with the actual
+sequence ACDEFGHI might look like:
+12345 seq(n-AC[DE]) seq(c-HI)
+
+  Composition Information
+  
+   Composition should consist of a number, followed by the corresponding
+   amino acid between square brackets. For example
+comp(2[H]0[M]3[DE]*[K])
+
+   indicates a peptide which contains 2 histidines, no methionines, 3
+   acidic residues (glutamic or aspartic acid) and at least 1 lysine.
    
 Output file format
 
-   **************** EDIT HERE ****************
+   The emowse search program outputs a listing file containing the
+   following information.
+   
+  Specified search parameters
+  
+   Includes all specified parameters such as digest reagent, specified
+   error tolerance, specified intact protein Mw and Mw filter percentage.
+   All supplied peptide Mws are listed in descending order, followed by
+   the total number of entries scanned during the search.
+   
+  Short 'hit' listing
+  
+   The top 50 scoring proteins are then listed in descending order,
+   details include the sequence ID name and brief text identifiers.
+   Details are limited to the top 50 scores as a deliberate compromise to
+   keep the result listings as short as possible.
+   
+  Detailed 'hit' listing
+  
+   The top 50 entries are then listed in more detail.The first line
+   includes the sequence ID name, the emowse search score (typically a
+   few powers of 10), the 'hit' protein Mw and finally an 'accuracy'
+   ratio calculated by dividing 'hits' by the total number of peptides
+   used for the search. This cannot be used to ascribe significance, but
+   experience has shown that anything below 0.3 is generally not worth
+   pursuing. Line 2 is the protein text identifier. Subsequent lines list
+   'hit' and 'miss' peptides, with the appropriate start, end and
+   corresponding sequences of correct peptide matches. 'miss' peptides
+   are indicated by 'No match' at the start of the last line for that
+   protein.
+   
+   Matching peptides marked with a '*' denote partially-cleaved
+   fragments.
+   
+   This is the output from search all of the SwissProt database with the
+   input file above:
+     _________________________________________________________________
+   
+Using data fragments of:
+          1086.2
+          1399.6
+          2030.2
+          2424.7
+          2930.3
+          3086.3
+          5423.0
+          6082.8
+
+1   100K_RAT     100 KDA PROTEIN (EC 6.3.2.-).
+2   POLG_MCFA    GENOME POLYPROTEIN [CONTAINS: CAPSID PROTEIN C (CORE PROTEIN);
+3   PGCV_HUMAN   VERSICAN CORE PROTEIN PRECURSOR (LARGE FIBROBLAST PROTEOGLYCAN
+4   POL1_BAYMJ   GENOME POLYPROTEIN 1 [CONTAINS: CYTOPLASMIC INCLUSION PROTEIN
+5   RRPB_CVMJH   RNA-DIRECTED RNA POLYMERASE (EC 2.7.7.48) (ORF1B).
+6   DMD_HUMAN    DYSTROPHIN.
+7   STRH_STRPN   BETA-N-ACETYLHEXOSAMINIDASE PRECURSOR (EC 3.2.1.52).
+8   NGCA_CHICK   NEURONAL-GLIAL CELL ADHESION MOLECULE PRECURSOR (NG-CAM).
+9   RIR1_ASFB7   RIBONUCLEOSIDE-DIPHOSPHATE REDUCTASE LARGE CHAIN (EC 1.17.4.1)
+10  YMW6_YEAST   HYPOTHETICAL 147.0 KDA PROTEIN IN ABF2-CHL12 INTERGENIC REGION
+11  UBR1_YEAST   N-END-RECOGNIZING PROTEIN (UBIQUITIN-PROTEIN LIGASE E3 COMPONE
+12  MCR_RAT      MINERALOCORTICOID RECEPTOR (MR).
+13  CD8A_FELCA   T-CELL SURFACE GLYCOPROTEIN CD8 ALPHA CHAIN PRECURSOR.
+14  YM27_MYCTU   HYPOTHETICAL 26.6 KDA PROTEIN RV2227.
+15  CD52_MACFA   CAMPATH-1 ANTIGEN PRECURSOR (CD52 ANTIGEN) (CDW52) (CAMBRIDGE
+16  POL1_BAYMG   GENOME POLYPROTEIN 1 [CONTAINS: CYTOPLASMIC INCLUSION PROTEIN
+17  CP7B_RAT     CYTOCHROME P450 7B1 (OXYSTEROL 7-ALPHA-HYDROXYLASE) (EC 1.14.1
+18  CCAE_RAT     VOLTAGE-DEPENDENT R-TYPE CALCIUM CHANNEL ALPHA-1E SUBUNIT (CAL
+19  CCAE_MOUSE   VOLTAGE-DEPENDENT R-TYPE CALCIUM CHANNEL ALPHA-1E SUBUNIT (CAL
+20  GCST_MYCTU   PROBABLE AMINOMETHYLTRANSFERASE (EC 2.1.2.10) (GLYCINE CLEAVAG
+21  LYST_HUMAN   LYSOSOMAL TRAFFICKING REGULATOR (BEIGE HOMOLOG).
+22  FIXI_BRAJA   NITROGEN FIXATION PROTEIN FIXI (E1-E2 TYPE CATION ATPASE FIXI)
+23  MAP4_MOUSE   MICROTUBULE-ASSOCIATED PROTEIN 4.
+24  RAD3_SCHPO   DNA REPAIR PROTEIN RAD3.
+25  MTHR_SCHPO   PROBABLE METHYLENETETRAHYDROFOLATE REDUCTASE 1 (EC 1.5.1.20).
+26  BCA1_RAT     CRK-ASSOCIATED SUBSTRATE (P130CAS) (BREAST CANCER ANTI-ESTROGE
+27  G6PE_RABIT   GDH/6PGL ENDOPLASMIC BIFUNCTIONAL PROTEIN [INCLUDES: GLUCOSE 1
+28  MRP3_RAT     CANALICULAR MULTISPECIFIC ORGANIC ANION TRANSPORTER 2 (MULTIDR
+29  PTVB_ECOLI   PTS SYSTEM, FRUCTOSE-LIKE-1 IIBC COMPONENT (PHOSPHOTRANSFERASE
+30  YMHA_CAEEL   HYPOTHETICAL 83.2 KDA PROTEIN F58A4.11 IN CHROMOSOME III.
+31  DAB_DROME    DISABLED PROTEIN.
+32  EGLN_HUMAN   ENDOGLIN PRECURSOR (CD105 ANTIGEN).
+33  DPOZ_YEAST   DNA POLYMERASE ZETA CATALYTIC SUBUNIT (EC 2.7.7.7).
+34  C166_BRARE   CD166 ANTIGEN HOMOLOG PRECURSOR (NEUROLIN) (DM-GRASP HOMOLOG).
+35  YAHB_ECOLI   HYPOTHETICAL TRANSCRIPTIONAL REGULATOR IN BETT-PRPR INTERGENIC
+36  ACSB_ACEXY   CELLULOSE SYNTHASE 93 KDA SUBUNIT PRECURSOR (CELLULOSE SYNTHAS
+37  CIN5_RAT     SODIUM CHANNEL PROTEIN, CARDIAC MUSCLE ALPHA-SUBUNIT.
+38  SUIS_SUNMU   SUCRASE-ISOMALTASE, INTESTINAL [CONTAINS: SUCRASE (EC 3.2.1.48
+39  TEGP_HSVEA   PROBABLE TEGUMENT PHOSPHOPROTEIN (ORF5) (FRAGMENT).
+40  YDT2_SCHPO   HYPOTHETICAL 217.4 KDA PROTEIN C6B12.02C IN CHROMOSOME I.
+41  YHFC_ECOLI   HYPOTHETICAL 43.2 KDA PROTEIN IN PPIA-NIRB INTERGENIC REGION (
+42  TBX5_HUMAN   TBX5 PROTEIN (T-BOX PROTEIN 5).
+43  YEX0_YEAST   HYPOTHETICAL 64.8 KDA PROTEIN IN GDI1-COX15 INTERGENIC REGION.
+44  Y323_MYCPN   HYPOTHETICAL PROTEIN MG323 HOMOLOG.
+45  VP42_ROTS1   OUTER CAPSID PROTEIN VP4 (HEMAGGLUTININ) (OUTER LAYER PROTEIN
+46  NOEC_AZOCA   NODULATION PROTEIN NOEC.
+47  BIB_DROME    NEUROGENIC PROTEIN BIG BRAIN.
+48  NB35_YEAST   NBP35 PROTEIN.
+49  HSCA_RICPR   CHAPERONE PROTEIN HSCA HOMOLOG.
+50  SYL_AERPE    LEUCYL-TRNA SYNTHETASE (EC 6.1.1.4) (LEUCINE--TRNA LIGASE) (LE
+
+    1  : 100K_RAT       1.277e+06 100368.6   0.750
+         100 KDA PROTEIN (EC 6.3.2.-).
+         Mw     Start  End    Seq
+         1086.3 358    367    CATTPMAVHR
+         1399.6 6      17     GDFLNYALSLMR
+         2424.7 290    312    VFMEDVGAEPGSILTELGGFEVK
+         2930.3 671    698    QLILASQSSDADAVFSAMDLAFAVDLCK
+         3086.3 458    485    QLSIDTRPFRPASEGNPSDDPDPLPAHR
+        *6082.8 817    870    QDLVYFWTSSPSLPASEEGFQPMPSITIRPPDDQHLPTANTCISR...
+         No Match      2030.2 5423.0
+
+    2  : POLG_MCFA      2.612e+05 373265.6   0.500
+         GENOME POLYPROTEIN [CONTAINS: CAPSID PROTEIN C (CORE PROTEIN); MATRIX
+PROTEIN (ENVELOPE PROTEIN M); MAJOR ENVELOPE PROTEIN E; NONSTRUCTURAL PROTEINS
+NS1, NS2A, NS2B, NS4A AND NS4B; HELICASE (NS3); RNA-DIRECTED RNA POLYMERASE (EC
+ 2.7.7.48) (NS5)].
+         Mw     Start  End    Seq
+         2423.7 3233   3251   TSWSVHQYHEWMTTDDMLR
+         2931.2 951    977    EYTPDTLSDPSDQALFIPPAWGGPISR
+        *3088.7 2174   2200   SYMDSDLVKWVILGSCLICGVLAWEMR
+         6084.9 1327   1382   AHQPTVAAVLAFTMVVLFLYMEQTNVSMELEFISAGETPEGVSTE...
+         No Match      1086.2 1399.6 2030.2 5423.0
+
+    3  : PGCV_HUMAN     2.202e+05 372819.0   0.625
+         VERSICAN CORE PROTEIN PRECURSOR (LARGE FIBROBLAST PROTEOGLYCAN) (CHOND
+ROITIN SULFATE PROTEOGLYCAN CORE PROTEIN 2) (GLIAL HYALURONATE- BINDING PROTEIN
+) (GHAP).
+         Mw     Start  End    Seq
+         1398.5 651    662    TEIELFPYSGDK
+        *2029.2 1334   1352   TGRMSDLSVIGHPIDSESK
+         2426.6 842    863    DIPSFTEDGADEFTLIPDSTQK
+        *2928.3 1190   1216   ATELIEFSTIKVTVPSDITTAFSSVDR
+         6081.6 3037   3092   ILDSNDQATVNPVEFNTEVATPPFSLLETSNETDFLIGINEESVE...
+         No Match      1086.2 3086.3 5423.0
+
+    4  : POL1_BAYMJ     5.410e+04 270769.3   0.500
+         GENOME POLYPROTEIN 1 [CONTAINS: CYTOPLASMIC INCLUSION PROTEIN (CI); RN
+A-DIRECTED RNA POLYMERASE (EC 2.7.7.48); COAT PROTEIN (CP)].
+         Mw     Start  End    Seq
+        *2031.3 368    385    ISRLSSYLLDDHQGIASR
+        *2423.7 1531   1551   RNEFQPFTQEVVDFINGPGTK
+         5422.0 1970   2016   FAISPQFDEEFGHDFSPELVELGLTYEFDDITSDICENPYMSLTM...
+         6077.8 1552   1606   IPYCPWVFDRPACGYASHTALFEKPTTLTDIIHMQASDGLHNINN...
+         No Match      1086.2 1399.6 2930.3 3086.3
+
+    5  : RRPB_CVMJH     4.449e+04 308836.3   0.625
+         RNA-DIRECTED RNA POLYMERASE (EC 2.7.7.48) (ORF1B).
+         Mw     Start  End    Seq
+        *1085.4 639    648    IVSSLVLARK
+         2030.2 172    187    DWYDFVENPDIINVYK
+         2422.7 414    433    FQTVKPGNFNQDFYEFILSK
+        *2932.2 2162   2187   YTDLQCIESLNVLFDGRDNGALEAFK
+         6077.9 662    721    LANECAQVLGEIVMCGGCYYVKPGGTSSGDATTAFANSVFNICQA...
+         No Match      1399.6 3086.3 5423.0
+
+    6  : DMD_HUMAN      3.824e+04 426675.4   0.625
+         DYSTROPHIN.
+         Mw     Start  End    Seq
+        *1399.6 436    447    VASMEKQSNLHR
+         2031.3 2478   2494   AWTELTDWLSLLDQVIK
+         2426.6 1165   1183   DLSEMHEWMTQAEEEYLER
+        *3083.4 1159   1183   TVSLQKDLSEMHEWMTQAEEEYLER
+         5428.2 1979   2026   EETMMVMTEDMPLEISYVPSTYLTEITHVSQALLEVEQLLNAPDL...
+         No Match      1086.2 2930.3 6082.8
+
+    7  : STRH_STRPN     2.144e+04 144521.5   0.625
+         BETA-N-ACETYLHEXOSAMINIDASE PRECURSOR (EC 3.2.1.52).
+         Mw     Start  End    Seq
+         1400.6 827    839    FAEYANTLAAMAK
+         2029.2 655    673    ASELGYSDVHLLLGNDGLR
+         2423.9 729    751    DIGLIPAINSPGHMDAMLVAMEK
+        *2930.4 1280   1308   LPETGTHDSAGLVVAGLMSTLAAYGLTKR
+         3089.2 255    281    GTNDYYNDPNGNHLTESQMTDLINYAK
+         No Match      1086.2 5423.0 6082.8
+
+    8  : NGCA_CHICK     1.849e+04 136570.2   0.375
+         NEURONAL-GLIAL CELL ADHESION MOLECULE PRECURSOR (NG-CAM).
+         Mw     Start  End    Seq
+         2930.1 1036   1062   GGFHGAAVEFGAAQEDDVEFEVQFMNK
+        *3087.4 110    138    CFATNALGTAVSPEANVIAENTPQWPKEK
+         6077.2 1      57     MALPMVGLLLLLLLGGPGAAITIPPEYGAHDFLQPPELTEEPPEQ...
+         No Match      1086.2 1399.6 2030.2 2424.7 5423.0
+
+    9  : RIR1_ASFB7     1.768e+04 87491.8    0.375
+         RIBONUCLEOSIDE-DIPHOSPHATE REDUCTASE LARGE CHAIN (EC 1.17.4.1) (RIBONU
+CLEOTIDE REDUCTASE).
+         Mw     Start  End    Seq
+        *2423.6 568    589    CGDLSSSWEERVAQTTQGVLTR
+         2931.3 407    433    SNLSHVGTITNSNLCIEVTIPCWEGDK
+         5422.1 243    289    SNGIQNYIMLQNASQCYANQGGLRPGAYAVYLELWHQDIFTFLQM...
+         No Match      1086.2 1399.6 2030.2 3086.3 6082.8
+
+    10 : YMW6_YEAST     1.760e+04 147040.9   0.375
+         HYPOTHETICAL 147.0 KDA PROTEIN IN ABF2-CHL12 INTERGENIC REGION.
+         Mw     Start  End    Seq
+         2028.4 977    993    FLPLVFFTAYEPDVELK
+         3086.6 135    161    SIVLLADLPSSNNLLIELFHIFYDPNK
+         5423.0 441    485    EIWEIIDTIPSTLYNLYYINDLNINEQVDSVIFEYLLPFEPDNDK
+         No Match      1086.2 1399.6 2424.7 2930.3 6082.8
+
+    11 : UBR1_YEAST     1.661e+04 224837.6   0.375
+         N-END-RECOGNIZING PROTEIN (UBIQUITIN-PROTEIN LIGASE E3 COMPONENT) (N-
+RECOGNIN).
+         Mw     Start  End    Seq
+        *1400.6 258    268    EMTQQGKMYER
+         3089.3 939    965    SVPDYLTEDTTEFDEALEEVSVFVEPK
+         5421.5 1830   1881   IPPTDEDDEDMEEGEDGFFTEGNDEMDVDDETGQAANLFGVGAEG...
+         No Match      1086.2 2030.2 2424.7 2930.3 6082.8
+
+    12 : MCR_RAT        1.463e+04 106736.9   0.375
+         MINERALOCORTICOID RECEPTOR (MR).
+         Mw     Start  End    Seq
+        *2031.2 19     36     WSQVSQTLERSSLGPAER
+         3088.4 466    495    DYYSLSGILGPPVPGFDGSCEDSAFPVGIK
+         5423.0 191    244    SSSVSSPLNMASSVCSPVGINSMSSSTTSFGSFPVHSPITQGTSL...
+         No Match      1086.2 1399.6 2424.7 2930.3 6082.8
+
+    13 : CD8A_FELCA     1.074e+04 26120.3    0.250
+         T-CELL SURFACE GLYCOPROTEIN CD8 ALPHA CHAIN PRECURSOR.
+         Mw     Start  End    Seq
+         2422.8 42     63     VELQCEVLLSSAAPGCTWLFQK
+         5421.2 112    160    EEEGYYFCSVVSNSVLYFSAFVPVFLPVKPTTTPAPRPPTQAPIT...
+         No Match      1086.2 1399.6 2030.2 2930.3 3086.3 6082.8
+
+    14 : YM27_MYCTU     1.054e+04 26614.4    0.250
+         HYPOTHETICAL 26.6 KDA PROTEIN RV2227.
+         Mw     Start  End    Seq
+         2426.6 99     120    EAPWPDSLDDWLASCHAAGQTR
+         5424.0 128    174    YGTNDWNALHQDLYGELVFPLQVVINLSDPETDYTGGEFLLVEQR...
+         No Match      1086.2 1399.6 2030.2 2930.3 3086.3 6082.8
+
+    15 : CD52_MACFA     1.038e+04 6502.6     0.125
+         CAMPATH-1 ANTIGEN PRECURSOR (CD52 ANTIGEN) (CDW52) (CAMBRIDGE PATHOLOG
+Y 1 ANTIGEN).
+         Mw     Start  End    Seq
+         6087.0 4      60     FLFLLLTISLLVMVQIQTGVTSQNATSQSSPSASSNLSGGGFLFF...
+         No Match      1086.2 1399.6 2030.2 2424.7 2930.3 3086.3 5423.0
+
+    16 : POL1_BAYMG     9.354e+03 270875.5   0.625
+         GENOME POLYPROTEIN 1 [CONTAINS: CYTOPLASMIC INCLUSION PROTEIN (CI); RN
+A-DIRECTED RNA POLYMERASE (EC 2.7.7.48); COAT PROTEIN (CP)].
+         Mw     Start  End    Seq
+        *1398.5 899    909    DEIPHELRYAR
+        *2031.2 1308   1325   MEISQHDPDFLKQNGSGK
+        *2423.8 910    931    VPFSVTTLSKFDWPALALACEK
+         5422.0 1972   2018   FAISPQFDEEFGHDFSPELVELGLTYEFDDITSDICENPYMSLTM...
+        *6082.9 550    603    MGDHCIQVMTYGSALQCHAMDPSFISTFDAIFLDEAHDVKEHSLV...
+         No Match      1086.2 2930.3 3086.3
+
+    17 : CP7B_RAT       9.319e+03 48226.8    0.375
+         CYTOCHROME P450 7B1 (OXYSTEROL 7-ALPHA-HYDROXYLASE) (EC 1.14.13.-) (HC
+T-1) (FRAGMENT).
+         Mw     Start  End    Seq
+         2030.4 249    266    EQLDSLVCLESAILEVLR
+        *2928.4 85     110    VFDFCSSLVFEITFTTIYGKILAANK
+         5421.2 179    224    YYGHEEFEIGAHHLGLLWASLANTIPAMFWAMYYLLQHPEAMEVL...
+         No Match      1086.2 1399.6 2424.7 3086.3 6082.8
+
+    18 : CCAE_RAT       9.273e+03 252115.4   0.375
+         VOLTAGE-DEPENDENT R-TYPE CALCIUM CHANNEL ALPHA-1E SUBUNIT (CALCIUM CHA
+NNEL, L TYPE, ALPHA-1 POLYPEPTIDE, ISOFORM 6) (RBE-II) (RBE2) (BRAIN CALCIUM CH
+ANNEL II) (BII).
+         Mw     Start  End    Seq
+         2424.9 1711   1731   IHYTEMYEMLTLMSPPLGLGK
+        *5424.5 1349   1393   MEMSIFYVVYFVVFPFFFVNIFVALIIITFQEQGDKMMEECSLEK
+         6081.2 426    477    SQVFYWIVLSVVALNTACVAIVHHNQPQWLTHLLYYAEFLFLGLF...
+         No Match      1086.2 1399.6 2030.2 2930.3 3086.3
+
+    19 : CCAE_MOUSE     9.088e+03 257235.0   0.375
+         VOLTAGE-DEPENDENT R-TYPE CALCIUM CHANNEL ALPHA-1E SUBUNIT (CALCIUM CHA
+NNEL, L TYPE, ALPHA-1 POLYPEPTIDE, ISOFORM 6) (BRAIN CALCIUM CHANNEL II) (BII).
+         Mw     Start  End    Seq
+         2424.9 1762   1782   IHYTEMYEMLTLMSPPLGLGK
+        *5424.5 1400   1444   MEMSIFYVVYFVVFPFFFVNIFVALIIITFQEQGDKMMEECSLEK
+         6081.2 476    527    SQVFYWIVLSVVALNTACVAIVHHNQPQWLTHLLYYAEFLFLGLF...
+         No Match      1086.2 1399.6 2030.2 2930.3 3086.3
+
+    20 : GCST_MYCTU     8.954e+03 39628.9    0.250
+         PROBABLE AMINOMETHYLTRANSFERASE (EC 2.1.2.10) (GLYCINE CLEAVAGE SYSTEM
+ T PROTEIN).
+         Mw     Start  End    Seq
+         3085.4 30     58     ELGASFAEFGGWLMPVSYAGTVSEHNATR
+         5422.1 307    360    GVLRPGLAVLVGDETVGVTTSGTFSPTLQVGIGLALIDSDAGIED...
+         No Match      1086.2 1399.6 2030.2 2424.7 2930.3 6082.8
+
+    21 : LYST_HUMAN     8.339e+03 429123.8   0.625
+         LYSOSOMAL TRAFFICKING REGULATOR (BEIGE HOMOLOG).
+         Mw     Start  End    Seq
+         1400.6 3733   3743   LWSTWDLKPVR
+        *2031.2 690    705    WDALKAYQNFVFEEDR
+        *2928.2 2981   3006   SEDVVKPPLSYLFEDKTHSSFSSTVK
+         3086.5 3703   3732   EIICSVAFSNQPEGVSINVIAGGLENGIVR
+        *5424.1 3106   3151   VRDDVYHNILTNNLPNLLEYGNITALTNLWYTGQITNFEYLTHLN...
+         No Match      1086.2 2424.7 6082.8
+
+    22 : FIXI_BRAJA     7.585e+03 77338.3    0.250
+         NITROGEN FIXATION PROTEIN FIXI (E1-E2 TYPE CATION ATPASE FIXI) (EC 3.6
+.1.-).
+         Mw     Start  End    Seq
+         2932.4 244    271    FVGPDEISQVPVAAISPGDIVLLRPGER
+         6087.3 356    415    LYAPVVHATALITILGWVIAGASWHDAIVTGVAVLIITCPCALGL...
+         No Match      1086.2 1399.6 2030.2 2424.7 3086.3 5423.0
+
+    23 : MAP4_MOUSE     7.184e+03 117675.3   0.250
+         MICROTUBULE-ASSOCIATED PROTEIN 4.
+         Mw     Start  End    Seq
+         3087.5 431    458    DVTLPLEAERPLVTDMTPSLETEMTLGK
+         6085.7 272    327    DIEEITKPDVILANVTQPSTESDMFLAQDMELLTGTEAAHANNII...
+         No Match      1086.2 1399.6 2030.2 2424.7 2930.3 5423.0
+
+    24 : RAD3_SCHPO     6.503e+03 121973.3   0.250
+         DNA REPAIR PROTEIN RAD3.
+         Mw     Start  End    Seq
+         3085.4 860    888    LQPLYVDAATAIANTGAHSAYDCYDILSK
+         6087.7 713    765    VLQEIYAGIDDPDEIEAVSLNFHDYSFDQQLLLHENSGTWDSALS...
+         No Match      1086.2 1399.6 2030.2 2424.7 2930.3 5423.0
+
+    25 : MTHR_SCHPO     6.242e+03 69012.0    0.375
+         PROBABLE METHYLENETETRAHYDROFOLATE REDUCTASE 1 (EC 1.5.1.20).
+         Mw     Start  End    Seq
+         1399.4 118    129    DTDWTEGESGFR
+        *3085.5 400    426    ISSLPWSDLPISDEADLIRDQLLSMNR
+         6079.9 43     98     TWGRPMFVDVTWGAGGTSSELTPGIVNVIQTDFEVDTCMHLTCTN...
+         No Match      1086.2 2030.2 2424.7 2930.3 5423.0
+
+    26 : BCA1_RAT       5.803e+03 104261.8   0.375
+         CRK-ASSOCIATED SUBSTRATE (P130CAS) (BREAST CANCER ANTI-ESTROGEN RESIST
+ANCE 1 PROTEIN).
+         Mw     Start  End    Seq
+        *1399.5 14     26     RAGGLEDVSWGPR
+         5422.9 249    299    QTPHHSFPSPATDLYQVPPGPGSPAQDIYQVPPSAGTGHDIYQVP...
+        *6086.8 422    477    EETYDVPPAFAKPKPFDPTRHPLILAAPPPDSPPAEDVYDVPPPA...
+         No Match      1086.2 2030.2 2424.7 2930.3 3086.3
+
+    27 : G6PE_RABIT     5.630e+03 85285.1    0.250
+         GDH/6PGL ENDOPLASMIC BIFUNCTIONAL PROTEIN [INCLUDES: GLUCOSE 1- DEHYDR
+OGENASE (EC 1.1.1.47) (HEXOSE-6-PHOSPHATE DEHYDROGENASE); 6- PHOSPHOGLUCONOLACT
+ONASE (EC 3.1.1.31) (6PGL)].
+         Mw     Start  End    Seq
+         2929.4 453    477    ESFVPTEHLLASWVFWTPLLESLAR
+         5428.1 564    614    VGTFHLALSGGSSPIALFQQLASGHYGFPVPLSDPESNFQGLQAH...
+         No Match      1086.2 1399.6 2030.2 2424.7 3086.3 6082.8
+
+    28 : MRP3_RAT       5.465e+03 168977.6   0.625
+         CANALICULAR MULTISPECIFIC ORGANIC ANION TRANSPORTER 2 (MULTIDRUG RESIS
+TANCE-ASSOCIATED PROTEIN 3) (MRP-LIKE PROTEIN-2) (MLP-2).
+         Mw     Start  End    Seq
+         1086.2 279    288    IAGEDEVLLK
+         2426.8 1494   1517   GVVAEFDSPVNLIAAGGIFYGMAK
+        *2930.4 1359   1384   SQLTIIPQDPILFSGTLRMNLDPFGR
+        *3087.5 757    785    VSLARAVYSDANIFLLDDPLSAVDSHVAK
+        *6086.0 165    217    ILDPFRFTTFYIYFALVLCAFILSCFQEKPPLFSPENLDTNPCPE...
+         No Match      1399.6 2030.2 5423.0
+
+    29 : PTVB_ECOLI     5.278e+03 51322.6    0.250
+         PTS SYSTEM, FRUCTOSE-LIKE-1 IIBC COMPONENT (PHOSPHOTRANSFERASE ENZYME
+II, BC COMPONENT) (EC 2.7.1.69).
+         Mw     Start  End    Seq
+         3084.7 340    368    HIYDWYAIVGVVALMPPVAAGLATFIAPK
+         5419.7 257    306    ALQPLLGSMLIPFVTLLVFGVLTYYVIGPVMSDLMGGLLHFLNTI...
+         No Match      1086.2 1399.6 2030.2 2424.7 2930.3 6082.8
+
+    30 : YMHA_CAEEL     5.268e+03 83221.0    0.375
+         HYPOTHETICAL 83.2 KDA PROTEIN F58A4.11 IN CHROMOSOME III.
+         Mw     Start  End    Seq
+        *1400.6 277    288    SVFSTNLKVHLR
+         2030.2 559    579    GGGNVTTPPTPNSSSFPSTPK
+         5428.2 5      50     LFVFGSGADDPSHFNYYHCSDLILSSTFSSFSFLILIYLYIFIFY...
+         No Match      1086.2 2424.7 2930.3 3086.3 6082.8
+
+    31 : DAB_DROME      5.168e+03 264048.0   0.500
+         DISABLED PROTEIN.
+         Mw     Start  End    Seq
+         2029.1 1588   1604   MNSCDEDYDYDGEFVAR
+        *2423.5 2159   2179   FDDNVKVSQFDDAAFEDDFAK
+        *3087.6 1018   1045   LNVPASKLSTMTLVQLTAYLSEYLSSEK
+         5426.0 2305   2357   CVNDTTFILPSQSLLSAAATAQPATELESPCLLQLASPAVAGASE...
+         No Match      1086.2 1399.6 2930.3 6082.8
+
+    32 : EGLN_HUMAN     4.635e+03 70577.9    0.250
+         ENDOGLIN PRECURSOR (CD105 ANTIGEN).
+         Mw     Start  End    Seq
+         2930.4 305    333    MLNASIVASFVELPLASIVSLHASSCGGR
+         5418.3 94     143    EVLLVLSVNSSVFLHLQALGIPLHLAYNSSLVTFQEPPGVNTTEL...
+         No Match      1086.2 1399.6 2030.2 2424.7 3086.3 6082.8
+
+    33 : DPOZ_YEAST     4.530e+03 172956.7   0.375
+         DNA POLYMERASE ZETA CATALYTIC SUBUNIT (EC 2.7.7.7).
+         Mw     Start  End    Seq
+         1398.7 1169   1180   VTQNNPKPIFLK
+         2028.4 1358   1375   LFNLIGINVGNWAQEIVK
+         6078.9 730    780    IQHCINEIPVMFYESEFEMFEALTDLVLLLDPDILSGFEIHNFSW...
+         No Match      1086.2 2424.7 2930.3 3086.3 5423.0
+
+    34 : C166_BRARE     4.297e+03 61273.4    0.250
+         CD166 ANTIGEN HOMOLOG PRECURSOR (NEUROLIN) (DM-GRASP HOMOLOG).
+         Mw     Start  End    Seq
+         3085.5 306    334    CSLLDNDVMESTQIVTVSFLDASLTPTGK
+         5426.4 1      52     MHSVICLFGAFIAAALFAPGSCLPTVIGLYGETIEVPCNNGNNKP...
+         No Match      1086.2 1399.6 2030.2 2424.7 2930.3 6082.8
+
+    35 : YAHB_ECOLI     4.268e+03 34865.9    0.250
+         HYPOTHETICAL TRANSCRIPTIONAL REGULATOR IN BETT-PRPR INTERGENIC REGION.
+         Mw     Start  End    Seq
+         2029.3 1      18     MNSIFTEENLLAFTTAAR
+         5424.0 121    171    QFPTCQITVTTEVYNGVWDAIINNQANIAIGAPDTLLDGGGIDYT...
+         No Match      1086.2 1399.6 2424.7 2930.3 3086.3 6082.8
+
+    36 : ACSB_ACEXY     4.019e+03 85381.9    0.500
+         CELLULOSE SYNTHASE 93 KDA SUBUNIT PRECURSOR (CELLULOSE SYNTHASE PROTEI
+N B).
+         Mw     Start  End    Seq
+         1087.2 186    195    LNFSFASSSK
+         2424.8 541    562    MPNLAFMASAGYPFTTYADLSR
+        *2928.4 359    385    MDVAPIDVGARVAYDAPSFIPTNRPVR
+         3083.5 739    764    SSPLYTVGTVPLWLEPDWYMHNHPSR
+         No Match      1399.6 2030.2 5423.0 6082.8
+
+    37 : CIN5_RAT       3.905e+03 227366.6   0.375
+         SODIUM CHANNEL PROTEIN, CARDIAC MUSCLE ALPHA-SUBUNIT.
+         Mw     Start  End    Seq
+        *2425.7 661    682    QRALSAVSVLTSALEELEESHR
+         2928.0 1096   1122   AWSQVSETTSSEAGASTSQADWQQEQK
+         3084.8 251    278    LADVMVLTVFCLSVFALIGLQLFMGNLR
+         No Match      1086.2 1399.6 2030.2 5423.0 6082.8
+
+    38 : SUIS_SUNMU     3.806e+03 208173.0   0.500
+         SUCRASE-ISOMALTASE, INTESTINAL [CONTAINS: SUCRASE (EC 3.2.1.48); ISOMA
+LTASE (EC 3.2.1.10)].
+         Mw     Start  End    Seq
+        *2028.3 365    381    IPFDAQVTDIDYMEDKK
+         2424.7 1551   1571   QDPVSWNETFASMSTDILNIR
+         3086.4 1226   1250   QLYEDMVSAQIPYDVQYTDIDYMER
+        *6083.9 301    354    VIGGILDFYIFLGDTPGQVVQQYQELTGRPAMPSYWSLGFQLSRW...
+         No Match      1086.2 1399.6 2930.3 5423.0
+
+    39 : TEGP_HSVEA     3.789e+03 7633.1     0.125
+         PROBABLE TEGUMENT PHOSPHOPROTEIN (ORF5) (FRAGMENT).
+         Mw     Start  End    Seq
+         5418.5 22     76     GSGMSDQEVSEEQSAGDAWVSAAMAAAEAVAAAATSTGIDNTNDY...
+         No Match      1086.2 1399.6 2030.2 2424.7 2930.3 3086.3 6082.8
+
+    40 : YDT2_SCHPO     3.706e+03 217433.0   0.500
+         HYPOTHETICAL 217.4 KDA PROTEIN C6B12.02C IN CHROMOSOME I.
+         Mw     Start  End    Seq
+        *1398.6 1073   1083   LQPLHSRQYTR
+        *2422.9 1461   1482   SVHLNLLTAVFCNMAKLYADAK
+         5421.9 1483   1530   TNGFASSQYLQSLFIHYLSSLLSSMQHSYETNGHSSDTHSLFVIN...
+        *6083.6 1477   1530   LYADAKTNGFASSQYLQSLFIHYLSSLLSSMQHSYETNGHSSDTH...
+         No Match      1086.2 2030.2 2930.3 3086.3
+
+    41 : YHFC_ECOLI     3.697e+03 43166.3    0.250
+         HYPOTHETICAL 43.2 KDA PROTEIN IN PPIA-NIRB INTERGENIC REGION (O393).
+         Mw     Start  End    Seq
+         5418.4 273    323    ILTVLAGLAAILMYVFNTGTPAHMAWSILALGFFSSAIYTTIITL...
+        *6083.3 329    385    LVNFVLTCGTIGTMLTFVVTGPIVEHSGPQAALLTANGLYAVVFV...
+         No Match      1086.2 1399.6 2030.2 2424.7 2930.3 3086.3
+
+    42 : TBX5_HUMAN     3.628e+03 57438.9    0.250
+         TBX5 PROTEIN (T-BOX PROTEIN 5).
+         Mw     Start  End    Seq
+         2028.3 1      19     MADADEALAGAHLWSLTQK
+         6083.7 373    429    QACMYASSAPPSEPVPSLEDISCNTWPSMPSYSSCTVTTVQPWTG...
+         No Match      1086.2 1399.6 2424.7 2930.3 3086.3 5423.0
+
+    43 : YEX0_YEAST     3.609e+03 64793.9    0.250
+         HYPOTHETICAL 64.8 KDA PROTEIN IN GDI1-COX15 INTERGENIC REGION.
+         Mw     Start  End    Seq
+         2930.5 328    355    STLSIVINILCGPMVSVVGSEVLVDWAK
+         5423.5 223    271    CLLVSMSLTYVTIHGYVLVYQAISLNIAVNSYSNALLTLLLSMQF...
+         No Match      1086.2 1399.6 2030.2 2424.7 3086.3 6082.8
+
+    44 : Y323_MYCPN     3.263e+03 25772.7    0.250
+         HYPOTHETICAL PROTEIN MG323 HOMOLOG.
+         Mw     Start  End    Seq
+         1398.6 171    182    EHTNANLISIMR
+         5426.1 39     89     TNTAAQEFDHVVCCDGSNLTALAELQLEEFSAVIVGVTNIEASIM...
+         No Match      1086.2 2030.2 2424.7 2930.3 3086.3 6082.8
+
+    45 : VP42_ROTS1     3.237e+03 86774.3    0.375
+         OUTER CAPSID PROTEIN VP4 (HEMAGGLUTININ) (OUTER LAYER PROTEIN VP4) [CO
+NTAINS: OUTER CAPSID PROTEINS VP5 AND VP8] (VERSION 2).
+         Mw     Start  End    Seq
+         2030.2 648    666    STQISPNTIPDIVTEASEK
+         2931.2 186    210    TAHYSTTNYDSVNMTAFCDFYIIPR
+        *6077.9 370    427    SLAANLNSVMCTGGSYNFSLPVGQWPVLTGGAVSLHSAGVTLSTQ...
+         No Match      1086.2 1399.6 2424.7 3086.3 5423.0
+
+    46 : NOEC_AZOCA     3.086e+03 33615.6    0.250
+         NODULATION PROTEIN NOEC.
+         Mw     Start  End    Seq
+         1400.7 27     39     NGLLFVPVLICGR
+         6081.1 204    260    GYELSDHSIVALICVSAGYAAVVFLELFVQMSSVAQGPAPIFVSN...
+         No Match      1086.2 2030.2 2424.7 2930.3 3086.3 5423.0
+
+    47 : BIB_DROME      3.070e+03 76951.0    0.375
+         NEUROGENIC PROTEIN BIG BRAIN.
+         Mw     Start  End    Seq
+         2425.5 570    593    GQSAQSDDSSYGSYHGSAVTPPAR
+         2932.4 214    241    FMGNSAASIGCAYSACCFVSMPYLNPAR
+        *6083.5 316    375    YQQSQGTYPRGQSNGNGGGQAAGNGQHQAANMGQMPGVVANAGQG...
+         No Match      1086.2 1399.6 2030.2 3086.3 5423.0
+
+    48 : NB35_YEAST     3.035e+03 35253.1    0.500
+         NBP35 PROTEIN.
+         Mw     Start  End    Seq
+        *1398.7 281    293    FLGSVPLDPRIGK
+         2031.2 56     74     GPDPDIPLITDNLSGIEHK
+        *2931.3 48     74     EICESLPKGPDPDIPLITDNLSGIEHK
+         3087.4 294    322    SCDMGESFLDNYPDSPASSAVLNVVEALR
+         No Match      1086.2 2424.7 5423.0 6082.8
+
+    49 : HSCA_RICPR     2.923e+03 66019.3    0.375
+         CHAPERONE PROTEIN HSCA HOMOLOG.
+         Mw     Start  End    Seq
+        *1399.6 549    560    DAVQTRDQILIK
+         2028.3 467    484    ISNISHNIEIKPNHGINK
+         5426.1 195    244    YLVYDLGGGTFDVSILNIQEGIFQVIATNGDNMLGGDDIDVVITQ...
+         No Match      1086.2 2424.7 2930.3 3086.3 6082.8
+
+    50 : SYL_AERPE      2.902e+03 110518.7   0.500
+         LEUCYL-TRNA SYNTHETASE (EC 6.1.1.4) (LEUCINE--TRNA LIGASE) (LEURS).
+         Mw     Start  End    Seq
+         1085.3 476    484    MEFLPGHVR
+         2928.3 770    795    FIEVQTLLIAPFAPHTAEEAWEAMGR
+        *3084.5 769    795    RFIEVQTLLIAPFAPHTAEEAWEAMGR
+         5419.0 214    261    DGLVYPALTYRPETVFGVTNLWVHPDATYLVAEVDGEERWIIGEQ...
+         No Match      1399.6 2030.2 2424.7 6082.8
+     _________________________________________________________________
    
 Data files
 
-   **************** EDIT HERE ****************
+   emowse reads in the pre-computed "Frequencies" data file 'Efreqs.dat',
+   (See the section "emowse Scoring scheme", above for a description of
+   the frequency scores.)
    
 Notes
 
@@ -87,8 +1005,47 @@ Notes
    
 References
 
-   None.
+   The paper describing the original 'MOWSE' program is:
+   D.J.C. Pappin, P. Hojrup and A.J. Bleasby 'Rapid Identification of
+   Proteins by Peptide-Mass Fingerprinting'. Current Biology (1993), vol
+   3, 327-332.
    
+  General references
+  
+    1. Barber M, Bordoli RS, Sedgwick RD, Tyler AN: Fast atom bombardment
+       of solids: a new ion source for mass spectrometry. J Chem Soc Chem
+       Commun 1981, 7: 325-327.
+    2. Dole M, Mack LL, Hines RL, Mobley RC, Ferguson LD, Alice MB:
+       Molecular beams of macroions. J Chem Phys 1968, 49:2240-2249.
+    3. Meng CK, Mann M, Fenn JB: Of protons or proteins. Z Phys D 1988,
+       10: 361-368.
+    4. Karas M, Hillenkamp F: Laser desorption ionisation of proteins
+       with molecular masses exceeding 10,000 Daltons. Analytical
+       Chemistry 1988, 60:2299-2301.
+    5. Morris H, Panico M, Taylor GW: FAB-mapping of recombinant-DNA
+       protein products. Biochem Biophys Res Commun 1983, 117:299-305.
+    6. Morris H, Greer FM: Mass spectrometry of natural and recombinant
+       proteins and glycoproteins. Trends in Biotechnology 1988,
+       6:140-147.
+    7. Weissenbach J, Gyapay G, Dib C, Vignal J, Morissette J, Millasseau
+       P, Vaysseix G, Lathrop M: A second generation linkage map of the
+       human genome. Nature 1992, 359:794-801.
+    8. Adams MD, Kelley JM, Gocayne JD, Dubnick M, Polymeropoulos MH,
+       Xiao H, Merril CR, Wu A, Olde B, Moreno RF, Kerlavage AR, McCombie
+       WR, Venter JC: Complementary DNA sequencing: expressed sequence
+       tags and human genome project. Science 1991, 252:1651-1656.
+    9. Lehrach H, Drmanac R, Hoheisel J, Larin Z, Lennon G, Monaco AP,
+       Nizetic D, Zehetner G, Poustka A: Hybridization fingerprinting in
+       genome mapping and sequencing. In Genome Analysis Volume 1:
+       Genetic and Physical Mapping. Cold Spring Harbor Laboratory Press;
+       1990:39-81 .
+   10. Akrigg D, Bleasby AJ, Dix NIM, Findlay JBC, North ACT, Parry-
+       Smith D, Wootton JC, Blundell TI, Gardner SP, Hayes F, Sternberg
+       MJE, Thornton JM, Tickle IJ, Murray-Rust P: A protein
+       sequence/structure database. Nature 1988, 335:745-746.
+   11. Bleasby AJ, Wootton JC: Construction of validated, non- redundant
+       composite protein databases. Protein Engineering 1990, 3:153-159.
+       
 Warnings
 
    None.

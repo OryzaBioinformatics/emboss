@@ -34,9 +34,9 @@ AjBool getnakaidata(AjPFile file, float matrix[])
     AjPStr delim = NULL; 
     AjBool description = ajFalse;
     AjPStrTok token;
-    int line =0;
+    ajint line =0;
     char *ptr;
-    int cols;
+    ajint cols;
 
     
     if(!file)
@@ -58,6 +58,7 @@ AjBool getnakaidata(AjPFile file, float matrix[])
 	else if(line == 1)
 	{
 	    line++;
+            ajStrClean(&buffer);
 	    token = ajStrTokenInit(buffer,ajStrStr(delim));
 	    cols = ajStrTokenCount(&buffer,ajStrStr(delim));
 	    ajDebug("num of cols = %d\n",cols);
@@ -97,6 +98,7 @@ AjBool getnakaidata(AjPFile file, float matrix[])
 	else if(line == 2)
 	{
 	    line++;
+	    ajStrClean(&buffer);
 	    token = ajStrTokenInit(buffer,ajStrStr(delim));
 	    cols = ajStrTokenCount(&buffer,ajStrStr(delim));
 	    ajStrToken(&buf2,&token,ajStrStr(delim));
@@ -141,7 +143,7 @@ AjBool getnakaidata(AjPFile file, float matrix[])
     return description;
 }
 
-int main (int argc, char * argv[])
+int main(int argc, char **argv)
 {
     AjPFile datafile;
     AjPStr aa0str=0;
@@ -150,10 +152,10 @@ int main (int argc, char * argv[])
     AjPGraph mult;
     char *seq;
     char *s1;
-    int *position;
-    int i,j,k,w;
-    int a;
-    int midpoint,llen,maxlen;
+    ajint *position;
+    ajint i,j,k,w;
+    ajint a;
+    ajint midpoint,llen,maxlen;
     float total;
     float matrix[AZ];
     float min= 555.5,max = -555.5;
@@ -161,8 +163,8 @@ int main (int argc, char * argv[])
     float v1=0.;
     float ymin=64000.;
     float ymax=-64000.;
-    int   beg;
-    int   end;
+    ajint   beg;
+    ajint   end;
     
     (void) ajGraphInit("pepwindowall", argc, argv);
   
@@ -177,7 +179,7 @@ int main (int argc, char * argv[])
   
     maxlen = ajSeqsetLen(seqset);
     aa0str = ajStrNewL(maxlen);
-    midpoint = (int)((llen+1)/2);
+    midpoint = (ajint)((llen+1)/2);
 
     AJCNEW(position, ajSeqsetLen(seqset));
   
@@ -217,7 +219,7 @@ int main (int argc, char * argv[])
 	{
 	    total = 0;
 	    for(w=0;w<llen;w++)
-		total = total + matrix[(int)s1[w]];
+		total = total + matrix[(ajint)s1[w]];
 
 	    total=total/(float)llen;
 	    v1 = (float)position[j];

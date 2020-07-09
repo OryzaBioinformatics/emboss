@@ -35,7 +35,7 @@ static void drawocta(float x, float y, float size, AjBool text,
 
 
 
-int main( int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
     AjPSeq    seq=NULL;
     AjPStr    strand=NULL;
@@ -47,18 +47,18 @@ int main( int argc, char **argv, char **env)
     AjPStr    txt=NULL;
     AjPGraph  graph=NULL;
 
-    int begin;
-    int end;
+    ajint begin;
+    ajint end;
 
-    int lc;
+    ajint lc;
     
-    int i;
-    int j;
-    int r;
+    ajint i;
+    ajint j;
+    ajint r;
     
-    int count;
-    int pstart;
-    int pstop;
+    ajint count;
+    ajint pstart;
+    ajint pstop;
     
     float xmin=   0.0;
     float xmax= 150.0;
@@ -72,7 +72,7 @@ int main( int argc, char **argv, char **env)
     float yinc;
     AjBool text;
     AjPFile outf=NULL;
-    int fno;
+    ajint fno;
     AjPStr fstr=NULL;
     
 
@@ -263,7 +263,7 @@ static void drawocta(float x, float y, float size, AjBool text,
 	0.1, 0.1, 0.05, -0.05, -0.1, -0.1, -0.05, 0.05, 0.1
     };
 
-    int i;
+    ajint i;
 
     for(i=0;i<8;++i)
     {

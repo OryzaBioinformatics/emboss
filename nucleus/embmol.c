@@ -25,7 +25,7 @@
 #include "stdio.h"
 #include "math.h"
 
-static int embMolFragSort(const void* a, const void* b);
+static ajint embMolFragSort(const void* a, const void* b);
 
 
 
@@ -35,13 +35,13 @@ static int embMolFragSort(const void* a, const void* b);
 ** Create a sorted list of molwt fragments
 **
 ** @param [r] thys [AjPStr] sequence
-** @param [r] rno [int] 1=Trypsin 2=LysC 3=ArgC 4=AspN 5=V8b 6=V8p 7=Chy 8=CNBr
+** @param [r] rno [ajint] 1=Trypsin 2=LysC 3=ArgC 4=AspN 5=V8b 6=V8p 7=Chy 8=CNBr
 ** @param [w] l [AjPList*] list for results
 ** 
-** @return [int] number of fragments
+** @return [ajint] number of fragments
 ******************************************************************************/
 
-int embMolGetFrags(AjPStr thys, int rno, AjPList *l)
+ajint embMolGetFrags(AjPStr thys, ajint rno, AjPList *l)
 {
     static struct enz
     {
@@ -63,16 +63,16 @@ int embMolGetFrags(AjPStr thys, int rno, AjPList *l)
     EmbPMolFrag frag=NULL;
     EmbPMolFrag *ptr=NULL;
     
-    int len;
-    int pos;
+    ajint len;
+    ajint pos;
     char *p;
 
     static AjPInt defcut=NULL;
-    int defcnt;
+    ajint defcnt;
 
-    int beg;
-    int end;
-    int i;
+    ajint beg;
+    ajint end;
+    ajint i;
     double mw;
     
 
@@ -89,7 +89,7 @@ int embMolGetFrags(AjPStr thys, int rno, AjPList *l)
     /* Positions of complete digest cuts */
     for(pos=0;pos<len;++pos)
     {
-	if(!strchr(zyme[rno].residues,(int)p[pos]))
+	if(!strchr(zyme[rno].residues,(ajint)p[pos]))
 	    continue;
 	if(len==pos+1)
 	    continue;
@@ -106,7 +106,7 @@ int embMolGetFrags(AjPStr thys, int rno, AjPList *l)
     for(i=0;i<defcnt;++i)
     {
 	end = ajIntGet(defcut,i);
-	if(strchr(zyme[rno].type,(int)'N'))
+	if(strchr(zyme[rno].type,(ajint)'N'))
 	    --end;
 	mw = embPropCalcMolwt(p,beg,end);
 	if(rno==7)
@@ -166,10 +166,10 @@ int embMolGetFrags(AjPStr thys, int rno, AjPList *l)
 ** @param [r] a [const void*] EmbPMolFrag pointer
 ** @param [r] b [const void*] EmbPMolFrag pointer
 ** 
-** @return [int] molwt difference
+** @return [ajint] molwt difference
 ******************************************************************************/
 
-static int embMolFragSort(const void* a, const void* b)
+static ajint embMolFragSort(const void* a, const void* b)
 {
-    return (int)((*(EmbPMolFrag*)a)->mwt - (*(EmbPMolFrag*)b)->mwt);
+    return (ajint)((*(EmbPMolFrag*)a)->mwt - (*(EmbPMolFrag*)b)->mwt);
 }

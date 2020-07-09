@@ -24,7 +24,7 @@
 
 AjPTable getdinucdata(AjPFile anglesfile);
 
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
 
     AjPSeq   seq = NULL;
@@ -39,10 +39,10 @@ int main (int argc, char **argv)
     AjPStr   valstr=NULL;
 
     char * dinuc=NULL;
-    int    len;
-    int    begin;
-    int    end;
-    int    i;
+    ajint    len;
+    ajint    begin;
+    ajint    end;
+    ajint    i;
     float  val;
     float  anglesum=0.0;
     float  energysum=0.0;

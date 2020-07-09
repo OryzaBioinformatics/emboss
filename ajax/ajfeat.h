@@ -165,7 +165,7 @@ typedef struct AjSFeatQuery {
   AjPStr Ufo;
   AjPStr Filename;
   AjPStr Formatstr;
-  int Format;
+  ajint Format;
 } AjOFeatQuery, *AjPFeatQuery;
 
 
@@ -206,7 +206,7 @@ typedef struct AjSFeatQuery {
   /* List of possible tag's in the dictionary */
 typedef struct AjSFeatVocTag {
   AjPStr name;                 /* Name */
-  int flags;                   /* Flags used for what type it is. i.e. TEXT QTEXT VOID etc */
+  ajint flags;                   /* Flags used for what type it is. i.e. TEXT QTEXT VOID etc */
   AjPList limitedValues;       /* Values allowed for LIMITED types */
 } AjOFeatVocTag, *AjPFeatVocTag ;
 
@@ -220,7 +220,7 @@ typedef struct AjSFeatVocTagForFeat {
   /* list of all features in the dictionary */
 typedef struct AjSFeatVocFeat {
   AjPStr name;                 /* Name */
-  int flags;                   /* used if feature has a Mandatory Tag */
+  ajint flags;                   /* used if feature has a Mandatory Tag */
   AjPList Tags;                /* List of Tags allowed (stored as the key to AjSFeatTag) */
 } AjOFeatVocFeat, *AjPFeatVocFeat ;
 
@@ -228,7 +228,7 @@ typedef struct AjSFeatLexicon {
   AjBool    ReadOnly ;
   AjPTable  FeatVocTable ;                  /* FEATURES */
   AjPTable  TagVocTable ;                   /* Tags     */
-  int       format;                         /* NO_DICT_FORMAT 0, EMBL_DICT_FORMAT 1, GFF_DICT_FORMAT 2 */ 
+  ajint       format;                         /* NO_DICT_FORMAT 0, EMBL_DICT_FORMAT 1, GFF_DICT_FORMAT 2 */ 
 } AjOFeatLexicon,  *AjPFeatLexicon ;
 
 
@@ -280,7 +280,7 @@ typedef struct AjSFeatTabIn {
    AjPStr        Ufo;
    AjPStr        Formatstr;
    AjEFeatClass  Type ; 
-   int           Format;
+   ajint           Format;
    AjPStr        Filename;
    AjPStr        Entryname;
    AjPFileBuff   Handle ;
@@ -304,7 +304,7 @@ typedef struct AjSFeatTabOut {
    AjPStr        Ufo;
    AjPStr        Formatstr;
    AjEFeatClass  Type ; 
-   int           Format;
+   ajint           Format;
    AjPStr        Filename;
    AjPStr        Entryname;
    AjPFile       Handle ;
@@ -416,13 +416,13 @@ typedef struct AjSFeatTable {
                                       Tag identifiers in contained
                                       Features; keyed by
                                       AjOFeatureKey's */
-   int               DefFormat ; /* Original input or 'source' format
+   ajint               DefFormat ; /* Original input or 'source' format
 				    of the feature table */
    AjPFeatVocFeat    DefSource ;
    AjPFeatVocFeat    DefType ;
    AjPList           Features ;	/* IsA List of AjPFeatures... */
-   int               Start;	/* a.k.a. GFF region... */
-   int               End;
+   ajint               Start;	/* a.k.a. GFF region... */
+   ajint               End;
 }  AjOFeatTable, *AjPFeatTable ;  
 
 /* @enum AjEFeatStrand *******************************************************
@@ -550,19 +550,19 @@ typedef struct AjSFeature {
   AjPFeatTable      Owner ;
   AjPFeatVocFeat     Source ;
   AjPFeatVocFeat     Type ;
-  int               Start ;
-  int               End;
-  int               Start2;
-  int               End2;
+  ajint               Start ;
+  ajint               End;
+  ajint               Start2;
+  ajint               End2;
   AjPStr            Score ;
   AjPList           Tags ; /* a.k.a. the [group] field tag-values of GFF2 */
   AjPStr            Comment ;
   AjEFeatStrand     Strand ;
   AjEFeatFrame      Frame ;
   AjPStr            desc ;
-  int               Flags;
-  int               Group;
-  int               Exon;
+  ajint               Flags;
+  ajint               Group;
+  ajint               Exon;
 } AjOFeature, *AjPFeature ;
 
 typedef struct FeatTagValueStruct {
@@ -591,9 +591,9 @@ AjPFeatTable         ajFeatTabNewOut ( AjPStr name ) ;
   /* Feature Creation */
 AjPFeature            ajFeatureNew(AjPFeatTable owner,
 				   AjPStr source, AjPStr type,
-				   int Start, int End,  AjPStr score,
+				   ajint Start, ajint End,  AjPStr score,
 				   AjEFeatStrand strand, AjEFeatFrame frame,
-				   AjPStr desc , int Start2, int End2) ;
+				   AjPStr desc , ajint Start2, ajint End2) ;
 
   /* Dictionary Creation */
 AjPFeatLexicon ajFeatEmblDictionaryCreate();
@@ -611,11 +611,11 @@ void                 ajFeatDeleteDict(AjPFeatLexicon dict);
 AjBool               ajFeaturesWrite ( AjPFeatTabOut ftout, AjPFeatTable ft) ; 
 
 AjBool               ajFeatIsProt (AjPFeatTable thys);
-int                  ajFeatLen (AjPFeatTable thys);
+ajint                  ajFeatLen (AjPFeatTable thys);
 AjBool               ajFeatObjCheck(void *pObj, AjEFeatClass crass,
-				    const char *file, int line) ;
+				    const char *file, ajint line) ;
 void                 ajFeatObjAssert(void *pObj, AjEFeatClass crass,
-				     const char *file, int line) ;
+				     const char *file, ajint line) ;
 
 LPFeatTagValue       ajFeatSetTagValue(AjPFeature thys, AjPStr tag, AjPStr value,AjBool nomult) ;
 void                 ajFeatTabAdd (AjPFeatTable thys, AjPFeature feature) ;
@@ -625,8 +625,8 @@ AjBool               ajFeatWrite (AjPFeatTable thys,
 				   AjPFeatTabOut tabout, AjPStr Ufo);
 void                 ajFeatTrace (AjPFeatTable thys);
 AjPStr               ajFeatGetName (AjPFeatTable thys);
-int                  ajFeatLen (AjPFeatTable thys);
-int                  ajFeatSize (AjPFeatTable thys);
+ajint                  ajFeatLen (AjPFeatTable thys);
+ajint                  ajFeatSize (AjPFeatTable thys);
 void                 ajFeatIgnoreFeat(AjPFeatTable FeatTab, AjPList featignore);
 void                 ajFeatOnlyAllowFeat(AjPFeatTable FeatTab, AjPList featonlyallow);
 void                 ajFeatOnlyAllowTag(AjPFeatTable FeatTab, AjPList list);
@@ -650,8 +650,8 @@ void                 ajFeatDickTracy(AjPFeatLexicon dictionary);
 AjPFeatLexicon       ajFeatTableDict(AjPFeatTable thys);
 
 AjBool ajFeatLocToSeq(AjPStr seq, AjPStr line, AjPStr *res, AjPStr usa);
-int    ajFeatGetLocs(AjPStr str, AjPStr **cds, char *type);
-int    ajFeatGetTrans(AjPStr str, AjPStr **cds);
+ajint    ajFeatGetLocs(AjPStr str, AjPStr **cds, char *type);
+ajint    ajFeatGetTrans(AjPStr str, AjPStr **cds);
 
 
 #define              ajFeatObjClass(p)  \

@@ -21,11 +21,11 @@ extern "C"
 AjBool ajSysArglist (AjPStr cmdline, char** pgm, char*** arglist);
 void ajSysArgListFree (char*** arglist);
 void ajSysBasename(AjPStr *filename);
-char ajSysItoC(int v);
-unsigned char ajSysItoUC(int v);
+char ajSysItoC(ajint v);
+unsigned char ajSysItoUC(ajint v);
 AjBool ajSysIsDirectory(const char *s);
 AjBool ajSysIsRegular(const char *s);
-FILE *ajSysFdopen(int filedes, const char *mode);
+FILE *ajSysFdopen(ajint filedes, const char *mode);
 void ajSystem(AjPStr *cl);
 void ajSystemEnv(AjPStr *cl, char **environment);
 char *ajSysStrdup(const char *s);

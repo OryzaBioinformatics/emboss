@@ -46,7 +46,7 @@ double *EmbPropTable[EMBPROPSIZE];
 static char propPurines[] = "agrAGR";
 static char propPyrimidines[] = "ctuyCTUY";
 
-static int propFragCompare(const void *a, const void *b);
+static ajint propFragCompare(const void *a, const void *b);
 
 
 
@@ -66,7 +66,7 @@ void embPropAminoRead(void)
     
     char *p;
 
-    int cols=0;
+    ajint cols=0;
 
 
     if(propInit)
@@ -84,7 +84,7 @@ void embPropAminoRead(void)
 	if(*p=='#' || *p=='!' || !*p) continue;
 	while(*p && (*p<'A' || *p>'Z')) ++p;
 	cols = ajStrTokenCount(&line,ajStrStr(delim));
-	EmbPropTable[ajAZToInt(toupper((int)*p))] =
+	EmbPropTable[ajAZToInt(toupper((ajint)*p))] =
 	    ajArrDoubleLine(&line,ajStrStr(delim),cols,2,cols);
     }
 
@@ -104,18 +104,18 @@ void embPropAminoRead(void)
 ** Calculate the molecular weight of a protein sequence
 **
 ** @param [r] s [char *] sequence
-** @param [r] start [int] start position
-** @param [r] end [int] end position
+** @param [r] start [ajint] start position
+** @param [r] end [ajint] end position
 **
 ** @return [double] molecular weight
 ** @@
 ******************************************************************************/
-double embPropCalcMolwt(char *s, int start, int end)
+double embPropCalcMolwt(char *s, ajint start, ajint end)
 {
     char *p;
     double sum;
-    int i;
-    int len;
+    ajint i;
+    ajint len;
     
     if(!propInit)
 	embPropAminoRead();
@@ -126,7 +126,7 @@ double embPropCalcMolwt(char *s, int start, int end)
     sum=0.0;
 
     for(i=0;i<len;++i)
-	sum += EmbPropTable[ajAZToInt(toupper((int)p[i]))][EMBPROPMOLWT];
+	sum += EmbPropTable[ajAZToInt(toupper((ajint)p[i]))][EMBPROPMOLWT];
 
     return sum+18.0153;
 }
@@ -154,12 +154,12 @@ char* embPropCharToThree(char c)
 **
 ** Return 3 letter amino acid code 0=Ala 1=Asx 2=Cys etc
 **
-** @param [r] c [int] integer code
+** @param [r] c [ajint] integer code
 **
 ** @return [char*] three letter amino acid code
 ** @@
 ******************************************************************************/
-char* embPropIntToThree(int c)
+char* embPropIntToThree(ajint c)
 {
     static char *tab[]=
     {
@@ -178,8 +178,8 @@ char* embPropIntToThree(int c)
 ** Read amino acd properties
 **
 ** @param [r] s [char *] sequence
-** @param [r] n [int] "enzyme" number
-** @param [r] begin [int] sequence offset
+** @param [r] n [ajint] "enzyme" number
+** @param [r] begin [ajint] sequence offset
 ** @param [w] l [AjPList *] list to push hits to
 ** @param [w] pa [AjPList *] list to push partial hits to
 ** @param [r] unfavoured [AjBool] allow unfavoured cuts
@@ -192,9 +192,9 @@ char* embPropIntToThree(int c)
 ** @return [void]
 ** @@
 ******************************************************************************/
-void embPropCalcFragments(char *s, int n, int begin, AjPList *l, AjPList *pa,
+void embPropCalcFragments(char *s, ajint n, ajint begin, AjPList *l, AjPList *pa,
 			 AjBool unfavoured, AjBool overlap,
-			 AjBool allpartials, int *ncomp, int *npart,
+			 AjBool allpartials, ajint *ncomp, ajint *npart,
 			 AjPStr *rname)
 {
     static char *PROPENZReagent[]=
@@ -219,22 +219,22 @@ void embPropCalcFragments(char *s, int n, int begin, AjPList *l, AjPList *pa,
     };
 
 
-    int i;
-    int j;
-    int lim;
-    int len;
+    ajint i;
+    ajint j;
+    ajint lim;
+    ajint len;
     AjPList t;
     EmbPPropFrag fr;
-    int *begsa=NULL;
-    int *endsa=NULL;
+    ajint *begsa=NULL;
+    ajint *endsa=NULL;
     double molwt;
     double *molwtsa=NULL;
-    int v;
-    int mark;
-    int bwp;
-    int ewp;
+    ajint v;
+    ajint mark;
+    ajint bwp;
+    ajint ewp;
     
-    int defcnt;
+    ajint defcnt;
 
 
     (void) ajStrAssC(rname,PROPENZReagent[n]);
@@ -374,12 +374,12 @@ void embPropCalcFragments(char *s, int n, int begin, AjPList *l, AjPList *pa,
 ** @param [r] a [const void*] First element
 ** @param [r] b [const void*] Second element
 **
-** @return [int] 0=equal +ve=(a greater than b) -ve=(a less than b)
+** @return [ajint] 0=equal +ve=(a greater than b) -ve=(a less than b)
 ** @@
 ******************************************************************************/
-static int propFragCompare(const void *a, const void *b)
+static ajint propFragCompare(const void *a, const void *b)
 {
-    return (int)((*(EmbPPropFrag *)b)->molwt - (*(EmbPPropFrag *)a)->molwt);
+    return (ajint)((*(EmbPPropFrag *)b)->molwt - (*(EmbPPropFrag *)a)->molwt);
 }
 
 /* @func embPropProtGaps ******************************************************
@@ -389,16 +389,16 @@ static int propFragCompare(const void *a, const void *b)
 ** nucleic sequence
 **
 ** @param [u] seq [AjPSeq] protein sequence to add spaces into
-** @param [r] pad [int] number of spaces to insert at the start of the result
+** @param [r] pad [ajint] number of spaces to insert at the start of the result
 ** @return [AjPStr] New string with the padded sequence
 ** @@
 ******************************************************************************/
 
-AjPStr embPropProtGaps (AjPSeq seq, int pad) {
+AjPStr embPropProtGaps (AjPSeq seq, ajint pad) {
   
   char *p;
   AjPStr temp = ajStrNewL(ajSeqLen(seq)*3 + pad+1);
-  int i;
+  ajint i;
 
 /* put any required padding spaces at the start */
   for (i=0; i<pad; i++) {
@@ -421,16 +421,16 @@ AjPStr embPropProtGaps (AjPSeq seq, int pad) {
 ** when displaying translations.
 **   
 ** @param [u] seq [AjPSeq] protein sequence to convert to 3-letter codes
-** @param [r] pad [int] number of spaces to insert at the start of the result
+** @param [r] pad [ajint] number of spaces to insert at the start of the result
 ** @return [AjPStr] string containing 3-letter protein sequence
 ** @@
 ******************************************************************************/
 
-AjPStr embPropProt1to3 (AjPSeq seq, int pad) {
+AjPStr embPropProt1to3 (AjPSeq seq, ajint pad) {
 
   char *p, *p3;
   AjPStr temp = ajStrNewL(ajSeqLen(seq)*3 + pad+1);
-  int i;
+  ajint i;
 
 /* put any required padding spaces at the start */
   for (i=0; i<pad; i++) {
@@ -444,7 +444,7 @@ AjPStr embPropProt1to3 (AjPSeq seq, int pad) {
       (void) ajStrAppC(&temp, "...");
     } else if (*p == '-') {
       (void) ajStrAppC(&temp, "---");
-    } else if (!isalpha((int)*p)) {
+    } else if (!isalpha((ajint)*p)) {
       (void) ajStrAppC(&temp, "???");
     } else {
       p3 = embPropCharToThree(*p);
@@ -469,7 +469,7 @@ AjPStr embPropProt1to3 (AjPSeq seq, int pad) {
 
 AjBool embPropPurine (char base) {
 
-  return (strchr(propPurines, (int)base) != NULL);
+  return (strchr(propPurines, (ajint)base) != NULL);
 
 }
 
@@ -486,7 +486,7 @@ AjBool embPropPurine (char base) {
 
 AjBool embPropPyrimidine (char base) {
 
-  return (strchr(propPyrimidines, (int)base) != NULL);
+  return (strchr(propPyrimidines, (ajint)base) != NULL);
 
 }
 

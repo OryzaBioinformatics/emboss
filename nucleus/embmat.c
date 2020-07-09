@@ -4,8 +4,8 @@
 #include "limits.h"
 
 
-static void matPushHitInt(AjPStr *n, EmbPMatPrints *m, AjPList *l, int pos,
-			       int score, int elem, int hpe, int hpm);
+static void matPushHitInt(AjPStr *n, EmbPMatPrints *m, AjPList *l, ajint pos,
+			       ajint score, ajint elem, ajint hpe, ajint hpm);
 
 
 
@@ -18,17 +18,17 @@ static void matPushHitInt(AjPStr *n, EmbPMatPrints *m, AjPList *l, int pos,
 ** @param [r] n [AjPStr *] Sequence name
 ** @param [r] m [EmbPMatPrints *] Matching fingerprint element
 ** @param [w] l [AjPList *] List to push hits to
-** @param [r] pos [int] Sequence position of element
-** @param [r] score [int] Score of element
-** @param [r] elem [int] Element number (0 to n)
-** @param [r] hpe [int] Hits per element (so far)
-** @param [r] hpm [int] Hits per motif (so far)
+** @param [r] pos [ajint] Sequence position of element
+** @param [r] score [ajint] Score of element
+** @param [r] elem [ajint] Element number (0 to n)
+** @param [r] hpe [ajint] Hits per element (so far)
+** @param [r] hpm [ajint] Hits per motif (so far)
 **
 ** @return [void]
 ******************************************************************************/
 
-static void matPushHitInt(AjPStr *n, EmbPMatPrints *m, AjPList *l, int pos,
-			       int score, int elem, int hpe, int hpm)
+static void matPushHitInt(AjPStr *n, EmbPMatPrints *m, AjPList *l, ajint pos,
+			       ajint score, ajint elem, ajint hpe, ajint hpm)
 {
     EmbPMatMatch mat;
 
@@ -118,9 +118,9 @@ AjBool embMatProtReadInt(AjPFile *fp, EmbPMatPrints *s)
 {
     AjPStr line;
 
-    int i;
-    int j;
-    int m;
+    ajint i;
+    ajint j;
+    ajint m;
     char *p;
 
     line = ajStrNewC("#");
@@ -194,9 +194,9 @@ AjBool embMatProtReadInt(AjPFile *fp, EmbPMatPrints *s)
 
 void embMatProtDelInt(EmbPMatPrints *s)
 {
-    int n;
-    int i;
-    int j;
+    ajint n;
+    ajint i;
+    ajint j;
     
     n = (*s)->n;
     
@@ -228,39 +228,39 @@ void embMatProtDelInt(EmbPMatPrints *s)
 ** @param [w] ordered [AjBool *] Set if all elements are in order
 ** @param [r] overlap [AjBool] True if overlaps are allowed
 **
-** @return [int] number of hits
+** @return [ajint] number of hits
 ******************************************************************************/
 
-int embMatProtScanInt(AjPStr *s, AjPStr *n, EmbPMatPrints *m, AjPList *l,
+ajint embMatProtScanInt(AjPStr *s, AjPStr *n, EmbPMatPrints *m, AjPList *l,
 			   AjBool *all, AjBool *ordered, AjBool overlap)
 {
     EmbPMatMatch mm;
     AjPStr t;
     char   *p;
     char   *q;
-    int slen;
-    int score;
-    int mlen;
-    int elem;
-    int minpc;
-    int maxscore;
-    int limit;
-    int sum;
-    int hpe;
-    int hpm;
+    ajint slen;
+    ajint score;
+    ajint mlen;
+    ajint elem;
+    ajint minpc;
+    ajint maxscore;
+    ajint limit;
+    ajint sum;
+    ajint hpe;
+    ajint hpm;
     
-    int lastelem;
-    int lastpos;
-    int op;
+    ajint lastelem;
+    ajint lastpos;
+    ajint op;
     
-    int i;
-    int j;
+    ajint i;
+    ajint j;
     
     t = ajStrNewC(ajStrStr(*s));
     (void) ajStrToUpper(&t);
     p = q = ajStrStr(t);
     slen = ajStrLen(t);
-    for(i=0;i<slen;++i,++p) *p=ajSysItoC(ajAZToInt((int)*p));
+    for(i=0;i<slen;++i,++p) *p=ajSysItoC(ajAZToInt((ajint)*p));
     p=q;
     
     *all = *ordered = ajTrue;
@@ -281,7 +281,7 @@ int embMatProtScanInt(AjPStr *s, AjPStr *n, EmbPMatPrints *m, AjPList *l,
 	{
 	    sum=0;
 	    for(j=0;j<mlen;++j)
-		sum+=(*m)->matrix[elem][(int) p[i+j]][j];
+		sum+=(*m)->matrix[elem][(ajint) p[i+j]][j];
 	    score=(sum*100)/maxscore;
 	    if(score>=minpc)
 	    {

@@ -37,7 +37,7 @@ typedef struct AjSSeqout {
   AjPStr Date;
   AjPStr Doc;
   AjBool Rev;
-  int Offset;
+  ajint Offset;
   AjPStr Usa;
   AjPStr Ufo;
   AjPFeatTable Fttable;
@@ -54,13 +54,13 @@ typedef struct AjSSeqout {
   AjBool Single;
   AjBool Features;
   AjPStr Extension;
-  int Count;
+  ajint Count;
   AjPList Savelist;
 } AjOSeqout, *AjPSeqout;
 
 void         ajSeqAllWrite (AjPSeqout outseq, AjPSeq seq);
 AjBool       ajSeqFileNewOut (AjPSeqout seqout, AjPStr name);
-int          ajSeqoutCheckGcg (AjPSeqout outseq);
+ajint          ajSeqoutCheckGcg (AjPSeqout outseq);
 void         ajSeqoutClear (AjPSeqout thys);
 void         ajSeqoutDel (AjPSeqout* thys);
 AjBool       ajSeqOutFormatDefault (AjPStr* pformat);

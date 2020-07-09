@@ -10,9 +10,20 @@ Function
    
 Description
 
-   This alters the name or the description of a sequence, either by
-   replacing the previous one with a new name or description, or by
-   appending some text to the existing one.
+   Most sequence formats allow, at the very minimum, a name for the
+   sequence and some comments to be stored in the sequence file.
+   
+   Rather than using an editor to alter the name or the comments, descseq
+   allows you to simply change them and write out a new file with the
+   changes in and the sequence left unaltered.
+   
+   The default action is to replace the existing name or description with
+   your new one, but by using the qualifier '-append' what you enter is
+   appended to the existing name or description.
+   
+   Note that is you append to a description, no space is inserted by
+   default bewteen the existing description and your appended text - you
+   have to put in a space yourself if you require one.
    
 Usage
 
@@ -63,7 +74,7 @@ Input file format
    
 Output file format
 
-   Normal sequence file.
+   The sequence file with a changed name or description.
    
 Data files
 

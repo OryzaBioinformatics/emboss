@@ -33,19 +33,19 @@ AjBool ajPosRegExecC (AjPPosRegexp prog, const char* str);
 
 /* test substrings */
 
-int ajPosRegLenI (AjPPosRegexp rp, int isub);
+ajint ajPosRegLenI (AjPPosRegexp rp, ajint isub);
 AjBool ajPosRegPost (AjPPosRegexp rp, AjPStr* post);
 AjBool ajPosRegPostC (AjPPosRegexp rp, const char** post);
 
 /* substitute substrings */
 
-int ajPosRegOffset (AjPPosRegexp rp);
-int ajPosRegOffsetI (AjPPosRegexp rp, int isub);
-int ajPosRegOffsetC (AjPPosRegexp rp);
-int ajPosRegOffsetIC (AjPPosRegexp rp, int isub);
+ajint ajPosRegOffset (AjPPosRegexp rp);
+ajint ajPosRegOffsetI (AjPPosRegexp rp, ajint isub);
+ajint ajPosRegOffsetC (AjPPosRegexp rp);
+ajint ajPosRegOffsetIC (AjPPosRegexp rp, ajint isub);
 
 void ajPosRegSub (AjPPosRegexp rp, AjPStr source, AjPStr* dest);
-void ajPosRegSubI (AjPPosRegexp rp, int isub, AjPStr* dest);
+void ajPosRegSubI (AjPPosRegexp rp, ajint isub, AjPStr* dest);
 void ajPosRegSubC (AjPPosRegexp rp, const char* source, AjPStr* dest);
 
 /* destructor */
@@ -55,7 +55,7 @@ void ajPosRegTrace (AjPPosRegexp exp);
 
 /* error messages */
 
-void ajPosRegErr (AjPPosRegexp prog, int errcode);
+void ajPosRegErr (AjPPosRegexp prog, ajint errcode);
 
 #endif
 

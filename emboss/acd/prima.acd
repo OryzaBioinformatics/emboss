@@ -29,7 +29,7 @@ int:	minprimerlen [req: N default: 18
 			info:"Minimum primer length"]
 
 int:	maxprimerlen [req: N default: 22
-			info:"Minimum primer length"]        
+			info:"Maximum primer length"]        
 
 float: 	minpmGCcont [req: N min: .30 max: .70 default: .40
 			info:"Minimum primer GC fraction"]

@@ -19,7 +19,7 @@
 ******************************************************************************/
 #include "emboss.h"
 
-int main (int argc, char *argv[])
+int main(int argc, char **argv)
 {
   
     char *charseq;
@@ -31,14 +31,14 @@ int main (int argc, char *argv[])
     AjPFile   outfile; 
     AjPFile   pfile;
   
-    int len;
-    int Num_seq = 0;
+    ajint len;
+    ajint Num_seq = 0;
 
-    int lwin;
-    int step;
-    int sim;
-    int jmin;
-    int jmax;
+    ajint lwin;
+    ajint step;
+    ajint sim;
+    ajint jmin;
+    ajint jmax;
   
     AjBool print;
     AjBool freq;

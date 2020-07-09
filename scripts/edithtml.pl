@@ -213,5 +213,11 @@ if ($ans !~ /^y/) {
     system "cvs commit -m'documentation created' html/$application.html";
     print "$application.html *created*\n";
 }
+
+print "Create make files\n";
+chdir "/packages/emboss_dev/$ENV{'USER'}/emboss/emboss/scripts";
+system("./makeMake.pl");        # no parameter == do text
+system("./makeMake.pl html");
+
 print "Done.\n";
     

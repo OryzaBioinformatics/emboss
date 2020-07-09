@@ -19,9 +19,9 @@ extern "C"
 
 
 typedef struct EmbSPatMatch {
-  int number;
-  int *start;
-  int *len;
+  ajint number;
+  ajint *start;
+  ajint *len;
 } EmbOPatMatch, *EmbPPatMatch;
 
 
@@ -31,13 +31,13 @@ typedef struct EmbSPatRestrict
     AjPStr cod;				/* RE name                         */
     AjPStr pat;				/* Recognition site                */
     AjPStr bin;				/* Binary converted site           */
-    int    len;				/* Pattern length                  */
+    ajint    len;				/* Pattern length                  */
     AjBool blunt;			/* Blunt true, sticky false        */
-    int    ncuts;			/* Number of cuts                  */
-    int    cut1;			/* First  3' cut                   */
-    int    cut2;			/* First  5' cut                   */
-    int    cut3;			/* Second 3' cut		   */
-    int    cut4;			/* Second 5' cut                   */
+    ajint    ncuts;			/* Number of cuts                  */
+    ajint    cut1;			/* First  3' cut                   */
+    ajint    cut2;			/* First  5' cut                   */
+    ajint    cut3;			/* Second 3' cut		   */
+    ajint    cut4;			/* Second 5' cut                   */
     AjPStr org;				/* Organism                        */
     AjPStr iso;                         /* Isoschizomers                   */
     AjPStr meth;                        /* Methylation                     */
@@ -53,32 +53,32 @@ typedef struct EmbSPatRestrict
  */
 typedef struct EmbSPatBYPNode
 {
-    int offset;
+    ajint offset;
     struct EmbSPatBYPNode *next;
 } EmbOPatBYPNode, *EmbPPatBYPNode;
 
 
 
 
-void        embPatBMHInit (AjPStr *pat, int len, int *next);
-int         embPatBMHSearch (AjPStr *str, AjPStr *pat, int slen, int plen,
-			     int *skip, int start, AjBool left, AjBool right,
-			     AjPList *l, AjPStr *name, int begin);
+void        embPatBMHInit (AjPStr *pat, ajint len, ajint *next);
+ajint         embPatBMHSearch (AjPStr *str, AjPStr *pat, ajint slen, ajint plen,
+			     ajint *skip, ajint start, AjBool left, AjBool right,
+			     AjPList *l, AjPStr *name, ajint begin);
 
-int         embPatBruteForce (AjPStr *seq, AjPStr *pat, AjBool amino,
+ajint         embPatBruteForce (AjPStr *seq, AjPStr *pat, AjBool amino,
 			      AjBool carboxyl,
-			      AjPList *l, int begin, int mm, AjPStr *name);
+			      AjPList *l, ajint begin, ajint mm, AjPStr *name);
 
-void        embPatBYGCInit (AjPStr *pat, int *m, unsigned int *table,
-			    unsigned int *limit);
-int         embPatBYGSearch (AjPStr *str, AjPStr *name, int begin, int plen,
-			     unsigned int *table, unsigned int limit,
+void        embPatBYGCInit (AjPStr *pat, ajint *m, ajuint *table,
+			    ajuint *limit);
+ajint         embPatBYGSearch (AjPStr *str, AjPStr *name, ajint begin, ajint plen,
+			     ajuint *table, ajuint limit,
 			     AjPList l, AjBool amino, AjBool carboxyl);
 
-void        embPatBYPInit (AjPStr *pat, int len, EmbPPatBYPNode offset,
-			   int *buf);
-int         embPatBYPSearch (AjPStr *str, AjPStr *name, int begin, int slen,
-			     int plen, int mm, EmbPPatBYPNode offset, int *buf,
+void        embPatBYPInit (AjPStr *pat, ajint len, EmbPPatBYPNode offset,
+			   ajint *buf);
+ajint         embPatBYPSearch (AjPStr *str, AjPStr *name, ajint begin, ajint slen,
+			     ajint plen, ajint mm, EmbPPatBYPNode offset, ajint *buf,
 			     AjPList l, AjBool amino, AjBool carboxyl,
 			     AjPStr pat);
 
@@ -86,40 +86,40 @@ AjBool      embPatClassify (AjPStr *pat, AjBool *amino, AjBool *carboxyl,
 			    AjBool *fclass, AjBool *ajcompl, AjBool *dontcare,
 			    AjBool *range, AjBool protein);
 
-void embPatCompile(int type, AjPStr pattern, AjPStr opattern, int* plen,
-		   int** buf, EmbOPatBYPNode* off, unsigned int** sotable,
-		   int* solimit, int* m, AjPStr* regexp, int*** skipm,
-		   int mismatch);
+void embPatCompile(ajint type, AjPStr pattern, AjPStr opattern, ajint* plen,
+		   ajint** buf, EmbOPatBYPNode* off, ajuint** sotable,
+		   ajint* solimit, ajint* m, AjPStr* regexp, ajint*** skipm,
+		   ajint mismatch);
 
-void embPatFuzzSearch(int type, int begin, AjPStr pattern,
+void embPatFuzzSearch(ajint type, ajint begin, AjPStr pattern,
 		      AjPStr opattern, AjPStr name, AjPStr text, AjPList *l,
-		      int plen, int mismatch, AjBool left, AjBool right,
-		      int *buf, EmbOPatBYPNode *off, unsigned int *sotable,
-		      int solimit, AjPStr regexp, int **skipm,
-		      int *hits, int m, void **tidy);
+		      ajint plen, ajint mismatch, AjBool left, AjBool right,
+		      ajint *buf, EmbOPatBYPNode *off, ajuint *sotable,
+		      ajint solimit, AjPStr regexp, ajint **skipm,
+		      ajint *hits, ajint m, void **tidy);
 
-int embPatGetType(AjPStr *pattern, int mismatch, AjBool protein, int *m,
+ajint embPatGetType(AjPStr *pattern, ajint mismatch, AjBool protein, ajint *m,
 		  AjBool *left, AjBool *right);
 
-void        embPatKMPInit (AjPStr *pat, int len, int *next);
-int         embPatKMPSearch (AjPStr *str, AjPStr *pat, int slen, int plen,
-			     int *next, int start);
+void        embPatKMPInit (AjPStr *pat, ajint len, ajint *next);
+ajint         embPatKMPSearch (AjPStr *str, AjPStr *pat, ajint slen, ajint plen,
+			     ajint *next, ajint start);
 
 void        embPatMatchDel (EmbPPatMatch* pthis);
 EmbPPatMatch embPatMatchFind  (AjPStr regexp, AjPStr string);
 EmbPPatMatch embPatMatchFindC (AjPStr regexp, char *sptr);
-int         embPatMatchGetEnd (EmbPPatMatch data, int index);
-int         embPatMatchGetLen (EmbPPatMatch data, int index);
-int         embPatMatchGetNumber (EmbPPatMatch data);
-int         embPatMatchGetStart (EmbPPatMatch data, int index);
+ajint         embPatMatchGetEnd (EmbPPatMatch data, ajint index);
+ajint         embPatMatchGetLen (EmbPPatMatch data, ajint index);
+ajint         embPatMatchGetNumber (EmbPPatMatch data);
+ajint         embPatMatchGetStart (EmbPPatMatch data, ajint index);
 
 EmbPPatMatch embPatPosMatchFind  (AjPStr regexp, AjPStr string);
 EmbPPatMatch embPatPosMatchFindC (AjPStr regexp, char *sptr);
 void        embPatPosMatchDel (EmbPPatMatch* pthis);
-int         embPatPosMatchGetEnd (EmbPPatMatch data, int index);
-int         embPatPosMatchGetNumber (EmbPPatMatch data);
-int         embPatPosMatchGetLen (EmbPPatMatch data, int index);
-int         embPatPosMatchGetStart (EmbPPatMatch data, int index);
+ajint         embPatPosMatchGetEnd (EmbPPatMatch data, ajint index);
+ajint         embPatPosMatchGetNumber (EmbPPatMatch data);
+ajint         embPatPosMatchGetLen (EmbPPatMatch data, ajint index);
+ajint         embPatPosMatchGetStart (EmbPPatMatch data, ajint index);
 AjPStr      embPatPosSeqCreateRegExp  (AjPStr thys, AjBool protein);
 AjPStr      embPatPosSeqCreateRegExpC (char *ptr, AjBool protein);
 EmbPPatMatch embPatPosSeqMatchFind  (AjPSeq seq, AjPStr reg);
@@ -127,55 +127,55 @@ EmbPPatMatch embPatPosSeqMatchFindC (AjPSeq seq, char *reg);
 
 AjPStr      embPatPrositeToRegExp (AjPStr *s);
 
-void        embPatPushHit (AjPList l, AjPStr *name, int pos, int plen,
-			   int begin, int mm);
+void        embPatPushHit (AjPList l, AjPStr *name, ajint pos, ajint plen,
+			   ajint begin, ajint mm);
 
 void        embPatRestrictDel (EmbPPatRestrict *thys);
 EmbPPatRestrict embPatRestrictNew (void);
-int         embPatRestrictMatch (AjPSeq seq, int begin, int end,
+ajint         embPatRestrictMatch (AjPSeq seq, ajint begin, ajint end,
 				 AjPFile enzfile, AjPStr enzymes,
-				 int sitelen, AjBool plasmid,
-				 AjBool ambiguity, int min, int max,
+				 ajint sitelen, AjBool plasmid,
+				 AjBool ambiguity, ajint min, ajint max,
 				 AjBool blunt, AjBool sticky,
 				 AjBool commercial, AjPList *l);
 AjBool      embPatRestrictReadEntry (EmbPPatRestrict *re, AjPFile *inf);
 
-int         embPatRestrictRestrict (AjPList *l, int hits, AjBool isos,
+ajint         embPatRestrictRestrict (AjPList *l, ajint hits, AjBool isos,
 				    AjBool alpha);
-int         embPatRestrictScan (EmbPPatRestrict *enz, AjPStr *substr,
+ajint         embPatRestrictScan (EmbPPatRestrict *enz, AjPStr *substr,
 				AjPStr *binstr, AjPStr *revstr,
-				AjPStr *binrev, int len,
-				AjBool ambiguity, AjBool plasmid, int min,
-				int max, int begin, AjPList *l);
+				AjPStr *binrev, ajint len,
+				AjBool ambiguity, AjBool plasmid, ajint min,
+				ajint max, ajint begin, AjPList *l);
 
 EmbPPatMatch embPatSeqMatchFind  (AjPSeq seq, AjPStr reg);
 EmbPPatMatch embPatSeqMatchFindC (AjPSeq seq, char *reg);
 AjPStr      embPatSeqCreateRegExp  (AjPStr thys, AjBool protein);
 AjPStr      embPatSeqCreateRegExpC (char *ptr, AjBool protein);
 
-void        embPatSOInit (AjPStr *pat, unsigned int *table,
-			  unsigned int *limit);
-int         embPatSOSearch (AjPStr *str, AjPStr *name, unsigned int first,
-			    int begin, int plen, unsigned int *table,
-			    unsigned int limit, AjPList l,
+void        embPatSOInit (AjPStr *pat, ajuint *table,
+			  ajuint *limit);
+ajint         embPatSOSearch (AjPStr *str, AjPStr *name, ajuint first,
+			    ajint begin, ajint plen, ajuint *table,
+			    ajuint limit, AjPList l,
 			    AjBool amino, AjBool carboxyl);
 
-void        embPatTUBInit (AjPStr *pat, int **skipm, int m, int k, int plen);
-int         embPatTUBSearch (AjPStr *pat,AjPStr *text, int slen,
-			     int **skipm, int m,
-			     int k, int begin, AjPList l, AjBool amino,
-			     AjBool carboxyl, AjPStr *name, int plen);
+void        embPatTUBInit (AjPStr *pat, ajint **skipm, ajint m, ajint k, ajint plen);
+ajint         embPatTUBSearch (AjPStr *pat,AjPStr *text, ajint slen,
+			     ajint **skipm, ajint m,
+			     ajint k, ajint begin, AjPList l, AjBool amino,
+			     AjBool carboxyl, AjPStr *name, ajint plen);
 
-void        embPatTUInit (AjPStr *pat, int **skipm, int m, int k);
-int         embPatTUSearch (AjPStr *pat,AjPStr *text, int slen,
-			    int **skipm, int m,
-			    int k, int begin, AjPList l, AjBool amino,
+void        embPatTUInit (AjPStr *pat, ajint **skipm, ajint m, ajint k);
+ajint         embPatTUSearch (AjPStr *pat,AjPStr *text, ajint slen,
+			    ajint **skipm, ajint m,
+			    ajint k, ajint begin, AjPList l, AjBool amino,
 			    AjBool carboxyl, AjPStr *name);
 
-int         embPatVariablePattern (AjPStr *pattern, AjPStr opattern,
+ajint         embPatVariablePattern (AjPStr *pattern, AjPStr opattern,
 				   AjPStr text,
-				   AjPStr patname, AjPList l, int mode,
-				   int mismatch, int begin);
+				   AjPStr patname, AjPList l, ajint mode,
+				   ajint mismatch, ajint begin);
 
 #endif
 

@@ -26,9 +26,9 @@ typedef struct sgff{
   AjPStr clone;
   AjPStr source;
   AjPStr type;
-  int    start;
-  int    end;
-  int    score;
+  ajint    start;
+  ajint    end;
+  ajint    score;
   /*not complete but okay for a demo purposes */
 } gff,*gffptr;
 
@@ -36,21 +36,21 @@ gffptr creategff(AjPStr line);
 
 
 /* Comparison routines used for sorting */
-int sourcecomp(const void *a, const void *b){
+ajint sourcecomp(const void *a, const void *b){
   gffptr *gfa = (gffptr *) a;  
   gffptr *gfb = (gffptr *) b;  
 
   return ajStrCmp(&(*gfa)->source,&(*gfb)->source);
 }
 
-int typecomp(const void *a, const void *b){
+ajint typecomp(const void *a, const void *b){
   gffptr *gfa = (gffptr *) a;  
   gffptr *gfb = (gffptr *) b;  
 
   return ajStrCmp(&(*gfa)->type,&(*gfb)->type);
 }
 
-int startcomp(const void *a, const void *b){
+ajint startcomp(const void *a, const void *b){
   gffptr *gfa = (gffptr *) a;  
   gffptr *gfb = (gffptr *) b;  
 
@@ -80,14 +80,15 @@ static void  freegff (void **x, void *cl){
 }
 
 
-int main (int argc, char **argv) {
+int main(int argc, char **argv)
+{
   AjPList list=NULL;
   AjPFile gfffile;
   AjPStr  line=NULL;
   gffptr  gffnew;
   AjIList iter=NULL;
   void **array = NULL;
-  int i,ia;
+  ajint i,ia;
 
   embInit ("demolist", argc, argv);
 

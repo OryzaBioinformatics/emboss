@@ -54,7 +54,7 @@ typedef struct AjSTrn {
 
 
 /* table to convert character of base to translation array element value */
-/*static int trnconv[] = {*/
+/*static ajint trnconv[] = {*/
 /* characters less than 64 */
 /*  14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
   14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
@@ -80,31 +80,31 @@ typedef struct AjSTrn {
 
 void ajTrnDel (AjPTrn* pthis);
 AjPTrn ajTrnNew (AjPStr trnFileName);
-AjPTrn ajTrnNewI (int trnFileNameInt);
+AjPTrn ajTrnNewI (ajint trnFileNameInt);
 AjPTrn ajTrnNewC (char *trnFileName);
 void ajTrnReadFile (AjPTrn trnObj, AjPFile trnFile);
-AjPSeq ajTrnNewPep(AjPSeq nucleicSeq, int frame);
+AjPSeq ajTrnNewPep(AjPSeq nucleicSeq, ajint frame);
 AjPStr ajTrnCodon (AjPTrn trnObj, AjPStr codon);
 AjPStr ajTrnRevCodon (AjPTrn trnObj, AjPStr codon);
 AjPStr ajTrnCodonC (AjPTrn trnObj, char *codon);
 AjPStr ajTrnRevCodonC (AjPTrn trnObj, char *codon);
 char ajTrnCodonK (AjPTrn trnObj, char *codon);
 char ajTrnRevCodonK (AjPTrn trnObj, char *codon);
-void ajTrnC (AjPTrn trnObj, char *str, int len, AjPStr *pep);
-void ajTrnRevC (AjPTrn trnObj, char *str, int len, AjPStr *pep);
+void ajTrnC (AjPTrn trnObj, char *str, ajint len, AjPStr *pep);
+void ajTrnRevC (AjPTrn trnObj, char *str, ajint len, AjPStr *pep);
 void ajTrnStr (AjPTrn trnObj, AjPStr str, AjPStr *pep);
 void ajTrnRevStr (AjPTrn trnObj, AjPStr str, AjPStr *pep);
 void ajTrnSeq (AjPTrn trnObj, AjPSeq seq, AjPStr *pep);
 void ajTrnRevSeq (AjPTrn trnObj, AjPSeq seq, AjPStr *pep);
-void ajTrnCFrame (AjPTrn trnObj, char *seq, int len, int frame, AjPStr *pep);
-void ajTrnStrFrame (AjPTrn trnObj, AjPStr seq, int frame, AjPStr *pep);
-void ajTrnSeqFrame (AjPTrn trnObj, AjPSeq seq, int frame, AjPStr *pep);
-AjPSeq ajTrnSeqOrig (AjPTrn trnObj, AjPSeq trnSeq, int frame);
-AjPStr ajTrnStrOrig (AjPTrn trnObj, AjPStr trnSeq, int frame);
+void ajTrnCFrame (AjPTrn trnObj, char *seq, ajint len, ajint frame, AjPStr *pep);
+void ajTrnStrFrame (AjPTrn trnObj, AjPStr seq, ajint frame, AjPStr *pep);
+void ajTrnSeqFrame (AjPTrn trnObj, AjPSeq seq, ajint frame, AjPStr *pep);
+AjPSeq ajTrnSeqOrig (AjPTrn trnObj, AjPSeq trnSeq, ajint frame);
+AjPStr ajTrnStrOrig (AjPTrn trnObj, AjPStr trnSeq, ajint frame);
 AjPStr ajTrnGetTitle (AjPTrn thys);
 AjPStr ajTrnGetFileName (AjPTrn thys);
-int ajTrnStartStop (AjPTrn trnObj, AjPStr codon, char *aa);
-int ajTrnStartStopC (AjPTrn trnObj, char *codon, char *aa);
+ajint ajTrnStartStop (AjPTrn trnObj, AjPStr codon, char *aa);
+ajint ajTrnStartStopC (AjPTrn trnObj, char *codon, char *aa);
        	 
 #endif
 

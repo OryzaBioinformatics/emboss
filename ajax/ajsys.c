@@ -42,7 +42,7 @@ void ajSysBasename(AjPStr *s)
 {
     char *p;
     char *t;
-    int  len;
+    ajint  len;
 
     len=ajStrLen(*s);
     if(!len) return;
@@ -69,12 +69,12 @@ void ajSysBasename(AjPStr *s)
 ** Convert Int to Char
 ** Needed for very fussy compilers i.e. Digital C
 **
-** @param [r] v [int] integer
+** @param [r] v [ajint] integer
 ** @return [char] Character cast
 ** @@
 ******************************************************************************/
 
-char ajSysItoC(int v)
+char ajSysItoC(ajint v)
 {
     char c;
 
@@ -88,12 +88,12 @@ char ajSysItoC(int v)
 ** Convert Int to Unsigned Char
 ** Needed for very fussy compilers i.e. Digital C
 **
-** @param [r] v [int] integer
+** @param [r] v [ajint] integer
 ** @return [unsigned char] Unisigned character cast
 ** @@
 ******************************************************************************/
 
-unsigned char ajSysItoUC(int v)
+unsigned char ajSysItoUC(ajint v)
 {
     char c;
 
@@ -175,7 +175,7 @@ AjBool ajSysWhich(AjPStr *s)
 
 AjBool ajSysWhichEnv(AjPStr *s, char **env)
 {
-    int count;
+    ajint count;
     char *p;
     AjPStr tname=NULL;
     AjPStr fname=NULL;
@@ -260,10 +260,10 @@ AjBool ajSysWhichEnv(AjPStr *s, char **env)
 void ajSystem(AjPStr *cl)
 {
     pid_t pid;
-    int status;
+    ajint status;
     char *pgm;
     char **argptr;
-    int i;
+    ajint i;
 
     AjPStr pname=NULL;
 
@@ -305,7 +305,7 @@ void ajSystem(AjPStr *cl)
 ** Exec a command line as if from the C shell
 **
 ** This routine must be passed the environment received from
-** main(int argc, char **argv, char **env)
+** main(ajint argc, char **argv, char **env)
 ** The environment is used to extract the PATH list (see ajWhich)
 **
 ** Note that the environment is passed through unaltered. The exec'd
@@ -320,10 +320,10 @@ void ajSystem(AjPStr *cl)
 void ajSystemEnv (AjPStr *cl, char **env)
 {
     pid_t pid;
-    int status;
+    ajint status;
     char *pgm;
     char **argptr;
-    int i;
+    ajint i;
     
 
     AjPStr pname=NULL;
@@ -426,10 +426,10 @@ AjBool ajSysArglist (AjPStr cmdline, char** pgm, char*** arglist) {
   static AjPRegexp argexp = NULL;
   AjPStr tmpline = NULL;
   char* cp;
-  int ipos = 0;
-  int iarg = 0;
-  int ilen = 0;
-  int i;
+  ajint ipos = 0;
+  ajint iarg = 0;
+  ajint ilen = 0;
+  ajint i;
   char** al;
   AjPStr argstr = NULL;
 
@@ -490,7 +490,7 @@ AjBool ajSysArglist (AjPStr cmdline, char** pgm, char*** arglist) {
 void ajSysArgListFree (char*** arglist) {
 
   char** ca = *arglist;
-  int i;
+  ajint i;
 
   i=0;
   while (ca[i]) {
@@ -506,13 +506,13 @@ void ajSysArgListFree (char*** arglist) {
 **
 ** Place non-ANSI fdopen here
 **
-** @param [r] filedes [int] file descriptor
+** @param [r] filedes [ajint] file descriptor
 ** @param [r] mode [const char *] file mode
 ** @return [FILE*] file pointer
 ** @@
 ******************************************************************************/
 
-FILE* ajSysFdopen(int filedes, const char *mode)
+FILE* ajSysFdopen(ajint filedes, const char *mode)
 {
     return fdopen(filedes,(char *)mode);
 }
@@ -555,7 +555,7 @@ AjBool ajSysIsRegular(const char *s)
     if(stat(s,&buf)==-1)
 	return ajFalse;
     
-    if((int)buf.st_mode & AJ_FILE_REG)
+    if((ajint)buf.st_mode & AJ_FILE_REG)
 	return ajTrue;
 
     return ajFalse;
@@ -578,7 +578,7 @@ AjBool ajSysIsDirectory(const char *s)
     if(stat(s,&buf)==-1)
 	return ajFalse;
     
-    if((int)buf.st_mode & AJ_FILE_DIR)
+    if((ajint)buf.st_mode & AJ_FILE_DIR)
 	return ajTrue;
 
     return ajFalse;
@@ -602,7 +602,7 @@ char* ajSysStrtok(const char *s, const char *t)
     static AjPStr rets=NULL;
     static AjPStr sou =NULL;
     static char *p;
-    int len;
+    ajint len;
 
     if(s)
     {

@@ -1,15 +1,17 @@
 appl: scope [
-        doc: "Convert SCOP to EMBL format"
-        groups: "PROTEIN:protein structure"
+        doc: "Convert raw scop classification file to embl-like format"
+        groups: "PROTEIN: structure"
 ]
 
 
 infile: infile [
-	prompt: "Scop input file"
+	prompt: "Name of scop file for input (raw format)"
+	def: "scop.orig"
 	param: Y
 ]
 
 outfile: outfile [
-	prompt: "EMBL format output file"
+	prompt: "Name of scop file for output (embl-like format)"
+	def: "Escop.dat"
 	param: Y
 ]

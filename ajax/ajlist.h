@@ -90,7 +90,7 @@ struct AjSListNode {
 typedef struct AjSList {
   AjPListNode First;	/* first node */
   AjPListNode Last;	/* dummy last node */
-  int Count;
+  ajint Count;
   AjEnum Type;
 } AjOList, *AjPList;
 
@@ -121,7 +121,7 @@ void ajListstrPushApp(AjPList list, AjPStr x);
 
 AjBool ajListFirst(AjPList thys, void** x);
 AjBool ajListLast(AjPList thys, void** x);
-AjBool ajListNth(AjPList thys, int n, void** x);
+AjBool ajListNth(AjPList thys, ajint n, void** x);
 
 AjPList ajListCopy   (AjPList list);      /* new list returned */
 AjPList ajListstrCopy   (AjPList list);
@@ -132,8 +132,8 @@ void ajListstrTrace   (AjPList list);
 AjBool ajListPop    (AjPList list, void** x);
 AjBool ajListstrPop    (AjPList list, AjPStr* x);
 
-int ajListToArray (AjPList list, void*** array);
-int ajListstrToArray (AjPList list, AjPStr** array);
+ajint ajListToArray (AjPList list, void*** array);
+ajint ajListstrToArray (AjPList list, AjPStr** array);
 
 void ajListReverse(AjPList list);
 void ajListstrReverse(AjPList list);
@@ -141,8 +141,8 @@ void ajListstrReverse(AjPList list);
 AjPList ajListNewArgs   (void* x, ...);  /* new header returned */
 AjPList ajListstrNewArgs   (AjPStr x, ...);  /* new header returned */
 
-int ajListLength (AjPList list);
-int ajListstrLength (AjPList list);
+ajint ajListLength (AjPList list);
+ajint ajListstrLength (AjPList list);
 
 AjPListNode ajListNodesNew (void *x, ...);  /* same as NewArgs but no header */
 

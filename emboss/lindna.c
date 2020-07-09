@@ -31,67 +31,67 @@
 void ReadInput(AjPFile infile, float *Start, float *End);
 AjPStr ReadGroup(AjPFile infile, float *From, float *To, AjPStr *Name,
 		 char *FromSymbol, char *ToSymbol, AjPStr *Style,
-		 char *TextOri, int *NumLabels, int *NumNames, int *Color);
+		 char *TextOri, ajint *NumLabels, ajint *NumNames, ajint *Color);
 float TextGroup(float Margin, float TextHeight, float TextLength,
-		AjPStr *Name, char *TextOri, int NumLabels, int *NumNames,
+		AjPStr *Name, char *TextOri, ajint NumLabels, ajint *NumNames,
 		AjPStr GroupName);
 float TextGroupStr(float Margin, float TextHeight, AjPStr *Name,
-		   char *TextOri, int NumLabels, int *NumNames,
+		   char *TextOri, ajint NumLabels, ajint *NumNames,
 		   AjPStr GroupName, float TextCoef);
 float HeightGroup(float posblock, float posrange, float postext,
 		  float TickHeight, float BlockHeight, float RangeHeight,
-		  AjPStr *Name, AjPStr *Style, char *TextOri, int NumLabels,
-		  int *NumNames, int Adjust);
-int OverlapTextGroup(AjPStr *Name, AjPStr *Style, char *TextOri,
-		     int NumLabels, float *From, float *To, int *Adjust);
+		  AjPStr *Name, AjPStr *Style, char *TextOri, ajint NumLabels,
+		  ajint *NumNames, ajint Adjust);
+ajint OverlapTextGroup(AjPStr *Name, AjPStr *Style, char *TextOri,
+		     ajint NumLabels, float *From, float *To, ajint *Adjust);
 void DrawGroup(float xDraw, float yDraw, float Border, float posblock,
 	       float posrange, float postext, float DrawLength,
 	       float TickHeight, float BlockHeight, float RangeHeight,
 	       float TextLength, float TextHeight, float *From,
 	       float *To, AjPStr *Name, char *FromSymbol, char *ToSymbol,
 	       AjPStr *Style, AjPStr InterSymbol, AjPStr InterTicks,
-	       char *TextOri, int NumLabels, int *NumNames,
-	       AjPStr GroupName, int *Adjust, int InterColor, int *Color);
-float TextRuler(float Start, float End, int GapSize, float TextLength,
+	       char *TextOri, ajint NumLabels, ajint *NumNames,
+	       AjPStr GroupName, ajint *Adjust, ajint InterColor, ajint *Color);
+float TextRuler(float Start, float End, ajint GapSize, float TextLength,
 		float TextHeight, char TextOri);
-float TextRulerStr(float Start, float End, int GapSize, char TextOri,
+float TextRulerStr(float Start, float End, ajint GapSize, char TextOri,
 		   float TextCoef);
-float HeightRuler(float Start, float End, int GapSize, float postext,
+float HeightRuler(float Start, float End, ajint GapSize, float postext,
 		  float TickHeight, char TextOri);
 void DrawRuler(float xDraw, float yDraw, float Start, float End,
 	       float ReduceCoef, float TickHeight, float DrawLength,
-	       float RealLength, float Border, int GapSize, AjPStr TickLines,
+	       float RealLength, float Border, ajint GapSize, AjPStr TickLines,
 	       float TextLength, float TextHeight, float postext,
-	       char TextOri, int Color);
+	       char TextOri, ajint Color);
 void DrawTicks(float xDraw, float yDraw, float TickHeight, float From,
 	       AjPStr Name, float TextLength, float TextHeight,
-	       float postext, char TextOri, int NumNames, int Adjust,
-	       int Color);
+	       float postext, char TextOri, ajint NumNames, ajint Adjust,
+	       ajint Color);
 void DrawBlocks(float xDraw, float yDraw, float BlockHeight,
 		float TextHeight, float From, float To, AjPStr Name,
-		float postext, char TextOri, int NumNames, int Adjust,
-		int Color);
+		float postext, char TextOri, ajint NumNames, ajint Adjust,
+		ajint Color);
 void DrawRanges(float xDraw, float yDraw, float RangeHeight, float From,
 		float To, AjPStr Name, char FromSymbol, char ToSymbol,
 		float TextLength, float TextHeight, float postext,
-		char TextOri, int NumNames, int Adjust, int Color);
+		char TextOri, ajint NumNames, ajint Adjust, ajint Color);
 void InterBlocks(float xDraw, float yDraw, float BlockHeight, float From,
-		 float To, AjPStr InterSymbol, int Color);
+		 float To, AjPStr InterSymbol, ajint Color);
 void DrawArrowHeadsOnLine(float xDraw, float yDraw, float Height,
-			  float Length, int Way);
+			  float Length, ajint Way);
 void DrawBracketsOnLine(float xDraw, float yDraw, float Height,
-			float Length, int Way);
+			float Length, ajint Way);
 void HorTextPile(float x, float y, AjPStr Name, float postext,
-		 int NumNames);
-float HorTextPileHeight(float postext, int NumNames);
+		 ajint NumNames);
+float HorTextPileHeight(float postext, ajint NumNames);
 void VerTextPile(float x, float y, AjPStr Name, float postext,
-		 int NumNames);
-float VerTextPileHeight(AjPStr Name, float postext, int NumNames);
+		 ajint NumNames);
+float VerTextPileHeight(AjPStr Name, float postext, ajint NumNames);
 void VerTextSeq(float x, float y, AjPStr Name, float postext,
-		int NumNames);
+		ajint NumNames);
 float VerTextSeqHeightMax(AjPStr Name, float postext,
-			  int NumNames);
-float VerTextSeqLength(float postext, int NumNames);
+			  ajint NumNames);
+float VerTextSeqLength(float postext, ajint NumNames);
 
 
 
@@ -101,16 +101,16 @@ float VerTextSeqLength(float postext, int NumNames);
 int main(int argc, char **argv)
 {
     AjPGraph graph;
-    int i;
-    int j;
-    int GapSize;
-    int NumLabels[MAXLABELS];
-    int NumNames[MAXLABELS][MAXLABELS];
-    int NumGroups;
-    int InterColor;
-    int Color[MAXLABELS][MAXLABELS];
-    int Adjust[MAXLABELS][MAXLABELS];
-    int AdjustMax[MAXLABELS];
+    ajint i;
+    ajint j;
+    ajint GapSize;
+    ajint NumLabels[MAXLABELS];
+    ajint NumNames[MAXLABELS][MAXLABELS];
+    ajint NumGroups;
+    ajint InterColor;
+    ajint Color[MAXLABELS][MAXLABELS];
+    ajint Adjust[MAXLABELS][MAXLABELS];
+    ajint AdjustMax[MAXLABELS];
     char FromSymbol[MAXLABELS][MAXLABELS];
     char ToSymbol[MAXLABELS][MAXLABELS];
     char TextOri[MAXLABELS][MAXLABELS];
@@ -375,10 +375,10 @@ int main(int argc, char **argv)
  * that the height and the length of all strings are at most TextHeight and
  *  TextLength, respectively
  */
-float TextRuler(float Start, float End, int GapSize, float TextLength,
+float TextRuler(float Start, float End, ajint GapSize, float TextLength,
 		float TextHeight, char TextOri)
 {
-    int i;
+    ajint i;
     AjPStr string = ajStrNew();
     float charsize, minsize = 100.0;
 
@@ -432,10 +432,10 @@ float TextRuler(float Start, float End, int GapSize, float TextLength,
  *  compute the character size that fits all elements of the ruler provided
  *  that the height and the length of all strings are multiplied by TextCoef
  */
-float TextRulerStr(float Start, float End, int GapSize, char TextOri,
+float TextRulerStr(float Start, float End, ajint GapSize, char TextOri,
 		   float TextCoef)
 {
-    int i;
+    ajint i;
     AjPStr string = ajStrNew();
     float charsize;
     float minsize = 100.0;
@@ -522,11 +522,11 @@ float TextRulerStr(float Start, float End, int GapSize, char TextOri,
 
 
 /* compute the ruler's height */
-float HeightRuler(float Start, float End, int GapSize, float postext,
+float HeightRuler(float Start, float End, ajint GapSize, float postext,
 		  float TickHeight, char TextOri)
 {
-    int i;
-    int j;
+    ajint i;
+    ajint j;
     float RulerHeight;
     AjPStr string = ajStrNew();
     AjPStr totalstring = ajStrNew();
@@ -565,11 +565,11 @@ float HeightRuler(float Start, float End, int GapSize, float postext,
 /* draw a ruler */
 void DrawRuler(float xDraw, float yDraw, float Start, float End,
 	       float ReduceCoef, float TickHeight, float DrawLength,
-	       float RealLength, float Border, int GapSize,
+	       float RealLength, float Border, ajint GapSize,
 	       AjPStr TickLines, float TextLength, float TextHeight,
-	       float postext, char TextOri, int Color)
+	       float postext, char TextOri, ajint Color)
 {
-    int i;
+    ajint i;
     AjPStr string = ajStrNew();
     
     ajGraphSetFore(Color);
@@ -619,8 +619,8 @@ void DrawRuler(float xDraw, float yDraw, float Start, float End,
 /* draw a Tick */
 void DrawTicks(float xDraw, float yDraw, float TickHeight, float From,
 	       AjPStr Name, float TextLength, float TextHeight,
-	       float postext, char TextOri, int NumNames, int Adjust,
-	       int Color)
+	       float postext, char TextOri, ajint NumNames, ajint Adjust,
+	       ajint Color)
 {
     float x1Ticks = xDraw+From;
     float y1Ticks = yDraw;
@@ -651,8 +651,8 @@ void DrawTicks(float xDraw, float yDraw, float TickHeight, float From,
 /* draw a Block */
 void DrawBlocks(float xDraw, float yDraw, float BlockHeight,
 		float TextHeight, float From, float To, AjPStr Name,
-		float postext, char TextOri, int NumNames, int Adjust,
-		int Color)
+		float postext, char TextOri, ajint NumNames, ajint Adjust,
+		ajint Color)
 {
     float x1Blocks = xDraw+From;
     float y1Blocks = yDraw+(1.0*BlockHeight/2);
@@ -684,7 +684,7 @@ void DrawBlocks(float xDraw, float yDraw, float BlockHeight,
 void DrawRanges(float xDraw, float yDraw, float RangeHeight, float From,
 		float To, AjPStr Name, char FromSymbol, char ToSymbol,
 		float TextLength, float TextHeight, float postext,
-		char TextOri, int NumNames, int Adjust, int Color)
+		char TextOri, ajint NumNames, ajint Adjust, ajint Color)
 {
     float x1Ranges = xDraw+From;
     float y1Ranges = yDraw;
@@ -745,7 +745,7 @@ void DrawRanges(float xDraw, float yDraw, float RangeHeight, float From,
 
 /* draw an InterBlock */
 void InterBlocks(float xDraw, float yDraw, float BlockHeight, float From,
-		 float To, AjPStr InterSymbol, int Color)
+		 float To, AjPStr InterSymbol, ajint Color)
 {
     float x1Inter = xDraw+From;
     float y1Inter = yDraw+(1.0*BlockHeight/2);
@@ -780,7 +780,7 @@ void InterBlocks(float xDraw, float yDraw, float BlockHeight, float From,
 
 /* draw arrowheads on a line */
 void DrawArrowHeadsOnLine(float xDraw, float yDraw, float Height,
-			  float Length, int Way)
+			  float Length, ajint Way)
 {
     float middle = 1.0*Height/2;
 
@@ -805,7 +805,7 @@ void DrawArrowHeadsOnLine(float xDraw, float yDraw, float Height,
 
 /* draw brackets on a line */
 void DrawBracketsOnLine(float xDraw, float yDraw, float Height, float Length,
-			int Way)
+			ajint Way)
 {
     float middle = 1.0*Height/2;
 
@@ -831,14 +831,14 @@ void DrawBracketsOnLine(float xDraw, float yDraw, float Height, float Length,
 
 
 /* write a pile of horizontal text strings */
-void HorTextPile(float x, float y, AjPStr Name, float postext, int NumNames)
+void HorTextPile(float x, float y, AjPStr Name, float postext, ajint NumNames)
 {
     float yupper;
     float stringLength;
     float stringHeight;
     float totalHeight;
     static AjPStr token=NULL;
-    int i;
+    ajint i;
 
     totalHeight = y+postext;
     for(i=0; i<NumNames; i++)
@@ -864,10 +864,10 @@ void HorTextPile(float x, float y, AjPStr Name, float postext, int NumNames)
 
 
 /* compute the height of a pile of horizontal text strings */
-float HorTextPileHeight(float postext, int NumNames)
+float HorTextPileHeight(float postext, ajint NumNames)
 {
     float stringHeight, totalHeight;
-    int i;
+    ajint i;
 
     totalHeight = 0.0;
     for(i=0; i<NumNames; i++)
@@ -885,11 +885,11 @@ float HorTextPileHeight(float postext, int NumNames)
 
 
 /* write a pile of vertical text strings */
-void VerTextPile(float x, float y, AjPStr Name, float postext, int NumNames)
+void VerTextPile(float x, float y, AjPStr Name, float postext, ajint NumNames)
 {
     float stringLength, totalLength;
     AjPStr token;
-    int i;
+    ajint i;
 
     totalLength = postext;
     for(i=0; i<NumNames; i++)
@@ -914,12 +914,12 @@ void VerTextPile(float x, float y, AjPStr Name, float postext, int NumNames)
 
 
 /* compute the height of a pile of vertical text strings */
-float VerTextPileHeight(AjPStr Name, float postext, int NumNames)
+float VerTextPileHeight(AjPStr Name, float postext, ajint NumNames)
 {
     float stringLength;
     float totalLength;
     AjPStr token;
-    int i;
+    ajint i;
 
     totalLength = postext;
     for(i=0; i<NumNames; i++)
@@ -941,11 +941,11 @@ float VerTextPileHeight(AjPStr Name, float postext, int NumNames)
 
 
 /* write a sequence of vertical text strings */
-void VerTextSeq(float x, float y, AjPStr Name, float postext, int NumNames)
+void VerTextSeq(float x, float y, AjPStr Name, float postext, ajint NumNames)
 {
     float stringHeight;
     AjPStr token;
-    int i;
+    ajint i;
 
     stringHeight = ajGraphTextHeight(0, 0, 0, 1)+postext;
     for(i=0; i<NumNames; i++)
@@ -972,12 +972,12 @@ void VerTextSeq(float x, float y, AjPStr Name, float postext, int NumNames)
 
 
 /* compute the height of a sequence of vertical text strings (this is the height of the longest string) */
-float VerTextSeqHeightMax(AjPStr Name, float postext, int NumNames)
+float VerTextSeqHeightMax(AjPStr Name, float postext, ajint NumNames)
 {
     float stringLength;
     float maxLength;
     AjPStr token;
-    int i;
+    ajint i;
 
     maxLength = 0.0;
     for(i=0; i<NumNames; i++)
@@ -1000,11 +1000,11 @@ float VerTextSeqHeightMax(AjPStr Name, float postext, int NumNames)
 
 
 /* compute the length of a sequence of vertical text strings */
-float VerTextSeqLength(float postext, int NumNames)
+float VerTextSeqLength(float postext, ajint NumNames)
 {
     float stringHeight;
     float totalHeight;
-    int i;
+    ajint i;
 
     totalHeight = 0.0;
     for(i=0; i<NumNames; i++)
@@ -1048,15 +1048,15 @@ void ReadInput(AjPFile infile, float *Start, float *End)
 /* read a group */
 AjPStr ReadGroup(AjPFile infile, float *From, float *To, AjPStr *Name,
 		 char *FromSymbol, char *ToSymbol, AjPStr *Style,
-		 char *TextOri, int *NumLabels, int *NumNames, int *Color)
+		 char *TextOri, ajint *NumLabels, ajint *NumNames, ajint *Color)
 {
-    int i;
-    int j;
+    ajint i;
+    ajint j;
     AjPStr GroupName;
     AjPStr line;
     AjPStr token;
     char *style;
-    long pos;
+    ajlong pos;
 
     line = ajStrNew();
     GroupName = ajStrNew();
@@ -1158,11 +1158,11 @@ AjPStr ReadGroup(AjPFile infile, float *From, float *To, AjPStr *Name,
  *  TextLength, respectively
  */
 float TextGroup(float Margin, float TextHeight, float TextLength,
-		AjPStr *Name, char *TextOri, int NumLabels, int *NumNames,
+		AjPStr *Name, char *TextOri, ajint NumLabels, ajint *NumNames,
 		AjPStr GroupName)
 {
-    int i;
-    int j;
+    ajint i;
+    ajint j;
     float charsize;
     float minsize = 100.0;
     AjPStr token;
@@ -1204,11 +1204,11 @@ float TextGroup(float Margin, float TextHeight, float TextLength,
  *  the height and the length of all strings are multiplied by TextCoef
  */
 float TextGroupStr(float Margin, float TextHeight, AjPStr *Name,
-		   char *TextOri, int NumLabels, int *NumNames,
+		   char *TextOri, ajint NumLabels, ajint *NumNames,
 		   AjPStr GroupName, float TextCoef)
 {
-    int i;
-    int j;
+    ajint i;
+    ajint j;
     float charsize;
     float minsize = 100.0;
     float stringLength;
@@ -1263,10 +1263,10 @@ float TextGroupStr(float Margin, float TextHeight, AjPStr *Name,
 /* compute the height of a group depending on what's in it */
 float HeightGroup(float posblock, float posrange, float postext,
 		  float TickHeight, float BlockHeight, float RangeHeight,
-		  AjPStr *Name, AjPStr *Style, char *TextOri, int NumLabels,
-		  int *NumNames, int Adjust)
+		  AjPStr *Name, AjPStr *Style, char *TextOri, ajint NumLabels,
+		  ajint *NumNames, ajint Adjust)
 {
-    int i;
+    ajint i;
     float GroupHeight;
     float uheight;
     float umaxheight = 0.0;
@@ -1331,12 +1331,12 @@ float HeightGroup(float posblock, float posrange, float postext,
 
 
 /* find whether horizontal text strings overlap within a group */
-int OverlapTextGroup(AjPStr *Name, AjPStr *Style, char *TextOri,
-		     int NumLabels, float *From, float *To, int *Adjust)
+ajint OverlapTextGroup(AjPStr *Name, AjPStr *Style, char *TextOri,
+		     ajint NumLabels, float *From, float *To, ajint *Adjust)
 {
-    int i;
-    int j;
-    int AdjustMax;
+    ajint i;
+    ajint j;
+    ajint AdjustMax;
     AjPStr token;
     float FromText[MAXLABELS];
     float ToText[MAXLABELS];
@@ -1456,13 +1456,13 @@ void DrawGroup(float xDraw, float yDraw, float Border, float posblock,
 	       float TextLength, float TextHeight, float *From, float *To,
 	       AjPStr *Name, char *FromSymbol, char *ToSymbol,
 	       AjPStr *Style, AjPStr InterSymbol, AjPStr InterTicks,
-	       char *TextOri, int NumLabels, int *NumNames, AjPStr GroupName,
-	       int *Adjust, int InterColor, int *Color)
+	       char *TextOri, ajint NumLabels, ajint *NumNames, AjPStr GroupName,
+	       ajint *Adjust, ajint InterColor, ajint *Color)
 {
-    int i;
-    int j;
-    int NumBlocks;
-    int Inter[MAXLABELS];
+    ajint i;
+    ajint j;
+    ajint NumBlocks;
+    ajint Inter[MAXLABELS];
 
     /*ajGraphSetBackgroundWhite();*/
     ajGraphSetFore(1);

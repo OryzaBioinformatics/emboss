@@ -22,11 +22,11 @@
 #include "emboss.h"
 
 
-void spaces(AjPFile *outf, int length);
+void spaces(AjPFile *outf, ajint length);
 
 
 
-int main (int argc, char *argv[] )
+int main(int argc, char **argv)
 {
     AjPFile outf 		=NULL;	
 
@@ -41,15 +41,15 @@ int main (int argc, char *argv[] )
     EmbPPatMatch match 	=NULL;
 	
 	
-    int i;
-    int number;
-    int start;
-    int end;
-    int length;
-    int zstart;
-    int zend;    
-    int seqlength;
-    int j;
+    ajint i;
+    ajint number;
+    ajint start;
+    ajint end;
+    ajint length;
+    ajint zstart;
+    ajint zend;    
+    ajint seqlength;
+    ajint j;
 	
     embInit ("patmatdb", argc, argv);
 	
@@ -151,9 +151,9 @@ int main (int argc, char *argv[] )
 
 /* spaces - add spaces under sequence between the count bars. */
 
-void spaces(AjPFile *outf, int length)
+void spaces(AjPFile *outf, ajint length)
 {
-    int i;
+    ajint i;
 
     for (i=0; i < length-2; ++i)
 	ajFmtPrintF(*outf, " ");

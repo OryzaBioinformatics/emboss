@@ -29,13 +29,13 @@
 #include <unistd.h>
 #include <limits.h>
 
-static int fileBuffSize = 2048;
+static ajint fileBuffSize = 2048;
 
-static int fileHandle = 0;
-static int fileOpenCnt = 0;
-static int fileOpenMax = 0;
-static int fileCloseCnt = 0;
-static int fileOpenTot = 0;
+static ajint fileHandle = 0;
+static ajint fileOpenCnt = 0;
+static ajint fileOpenMax = 0;
+static ajint fileCloseCnt = 0;
+static ajint fileOpenTot = 0;
 
 static void fileClose (const AjPFile thys);
 static DIR* fileOpenDir (AjPStr *dir);
@@ -101,8 +101,8 @@ AjPFile ajFileNewInPipe (const AjPStr name) {
 
   AjPFile thys;
 
-  int pid;
-  int pipefds[2];  /* file descriptors for a pipe */
+  ajint pid;
+  ajint pipefds[2];  /* file descriptors for a pipe */
   static AjPStr tmpname = NULL;
   char** arglist = NULL;
   char* pgm;
@@ -713,13 +713,13 @@ void ajFileDataNewC(const char *s, AjPFile *f)
 ** Sets the current position in an open file.
 **
 ** @param [r] thys [const AjPFile] File.
-** @param [r] offset [long] Offset
-** @param [r] wherefrom [int] Start of offset, as defined for 'fseek'.
-** @return [int] Result of 'fseek'
+** @param [r] offset [ajlong] Offset
+** @param [r] wherefrom [ajint] Start of offset, as defined for 'fseek'.
+** @return [ajint] Result of 'fseek'
 ** @@
 ******************************************************************************/
 
-int ajFileSeek (const AjPFile thys, long offset, int wherefrom) {
+ajint ajFileSeek (const AjPFile thys, ajlong offset, ajint wherefrom) {
   return fseek (thys->fp, offset, wherefrom);
 }
 
@@ -747,16 +747,16 @@ size_t ajFileRead (void* ptr, size_t element_size, size_t count,
 **
 ** @param [r] thys [const AjPFile] Input file.
 ** @param [r] Bigendian [AjBool] Big endian or not.
-** @return [unsigned int] Converted integer value
+** @return [ajuint] Converted integer value
 ** @@
 ******************************************************************************/
 
-unsigned int ajFileReadUint (const AjPFile thys, AjBool Bigendian) {
+ajuint ajFileReadUint (const AjPFile thys, AjBool Bigendian) {
 
-  static int called = 0;
+  static ajint called = 0;
   static AjBool bigend = AJFALSE;
-  unsigned int ret;
-  int ret2;
+  ajuint ret;
+  ajint ret2;
 
   if (!called)
     bigend = ajUtilBigendian();
@@ -770,9 +770,9 @@ unsigned int ajFileReadUint (const AjPFile thys, AjBool Bigendian) {
   }
 
   /*ajDebug ("Reversed: %u", ret);*/
-  ret2 = (int) ret;
+  ret2 = (ajint) ret;
   ajUtilRev4(&ret2);
-  ret = (unsigned int) ret2;
+  ret = (ajuint) ret2;
   /*ajDebug (" => %u\n", ret);*/
   return ret;
 }
@@ -874,7 +874,7 @@ AjBool ajFileReadLine (const AjPFile thys, AjPStr* pdest) {
 ** @@
 ******************************************************************************/
 
-AjBool ajFileGetsTrimL (const AjPFile thys, AjPStr* pdest, long* fpos) {
+AjBool ajFileGetsTrimL (const AjPFile thys, AjPStr* pdest, ajlong* fpos) {
   AjBool ok;
   AjPStr dest = *pdest;
 
@@ -932,7 +932,7 @@ AjBool ajFileGetsTrim (const AjPFile thys, AjPStr* pdest) {
 
 AjBool ajFileGets (const AjPFile thys, AjPStr* pdest) {
 
-  long fpos = 0;
+  ajlong fpos = 0;
 
   return ajFileGetsL (thys, pdest, &fpos);
 }
@@ -948,14 +948,14 @@ AjBool ajFileGets (const AjPFile thys, AjPStr* pdest) {
 ** @@
 ******************************************************************************/
 
-AjBool ajFileGetsL (const AjPFile thys, AjPStr* pdest, long* fpos) {
+AjBool ajFileGetsL (const AjPFile thys, AjPStr* pdest, ajlong* fpos) {
 
   char *cp;
   char *buff;
-  int isize;
-  int ilen;
-  int jlen;
-  int ipos;
+  ajint isize;
+  ajint ilen;
+  ajint jlen;
+  ajint ipos;
 
   (void) ajStrModL (&thys->Buff, fileBuffSize);
   buff = ajStrStr(thys->Buff);
@@ -1144,7 +1144,7 @@ AjBool ajFileNameTrim (AjPStr* fname) {
   return ajFalse;
 */
 
-  if((p=strrchr(ajStrStr(*fname),(int)'/')))
+  if((p=strrchr(ajStrStr(*fname),(ajint)'/')))
   {
       (void) ajStrAssC(&tmpstr,p+1);
       (void) ajStrAssS(fname,tmpstr);
@@ -1422,11 +1422,11 @@ void ajFileTrace (const AjPFile thys) {
 **
 ** Returns the standard record buffer size for a file
 **
-** @return [int] File record buffer size
+** @return [ajint] File record buffer size
 ** @@
 ******************************************************************************/
 
-int ajFileBuffSize (void) {
+ajint ajFileBuffSize (void) {
   return fileBuffSize;
 }
 
@@ -1466,12 +1466,12 @@ AjPStr ajFileGetName (const AjPFile thys) {
 ** as determined by AJ_FILE_R AJ_FILE_W AJ_FILE_X file modes
 **
 ** @param [r] fname [AjPStr*] Filename.
-** @param [r] mode [int] file mode.
+** @param [r] mode [ajint] file mode.
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 
-AjBool ajFileStat(AjPStr *fname, int mode)
+AjBool ajFileStat(AjPStr *fname, ajint mode)
 {
     struct stat buf;
 
@@ -1487,11 +1487,11 @@ AjBool ajFileStat(AjPStr *fname, int mode)
 ** Returns the current position in an open file.
 **
 ** @param [r] thys [const AjPFile] File.
-** @return [long] Result of 'ftell'
+** @return [ajlong] Result of 'ftell'
 ** @@
 ******************************************************************************/
 
-long ajFileTell (const AjPFile thys)
+ajlong ajFileTell (const AjPFile thys)
 {
   if (!thys->fp)
     return 0;
@@ -1760,7 +1760,7 @@ AjPFileBuff ajFileBuffNewDW (const AjPStr dir, const AjPStr wildfile) {
 
   DIR* dp;
   struct dirent* de;
-  int dirsize;
+  ajint dirsize;
   AjPList list = NULL;
   AjPStr name = NULL;
   static AjPStr dirfix = NULL;
@@ -1869,7 +1869,7 @@ AjPFile ajFileNewDW (const AjPStr dir, const AjPStr wildfile) {
 
   DIR* dp;
   struct dirent* de;
-  int dirsize;
+  ajint dirsize;
   AjPList list = NULL;
   AjPStr name = NULL;
   static AjPStr dirfix = NULL;
@@ -2062,7 +2062,7 @@ void ajFileBuffDel (AjPFileBuff* pthis) {
 ******************************************************************************/
 
 AjBool ajFileBuffGet (const AjPFileBuff thys, AjPStr* pdest) {
-  long fpos = 0;
+  ajlong fpos = 0;
 
   return ajFileBuffGetL (thys, pdest, &fpos);
 }
@@ -2087,7 +2087,7 @@ AjBool ajFileBuffGet (const AjPFileBuff thys, AjPStr* pdest) {
 AjBool ajFileBuffGetStore (const AjPFileBuff thys, AjPStr* pdest,
 			   AjBool store, AjPStr *astr)
 {
-  long fpos = 0;
+  ajlong fpos = 0;
   AjBool ret;
   
   ret =  ajFileBuffGetL (thys, pdest, &fpos);
@@ -2114,7 +2114,7 @@ AjBool ajFileBuffGetStore (const AjPFileBuff thys, AjPStr* pdest,
 ** @@
 ******************************************************************************/
 
-AjBool ajFileBuffGetL (const AjPFileBuff thys, AjPStr* pdest, long* fpos) {
+AjBool ajFileBuffGetL (const AjPFileBuff thys, AjPStr* pdest, ajlong* fpos) {
 
   AjBool ok;
 
@@ -2237,7 +2237,7 @@ void ajFileBuffStripHtml (const AjPFileBuff thys) {
   AjPStr s1 = NULL;
   AjPStr s2 = NULL;
   AjPStr s3 = NULL;
-  int i;
+  ajint i;
   /*  AjBool dochunk = ajFalse;*/
 
   tagexp = ajRegCompC("^(.*)(<[!/A-Za-z][^>]*>)(.*)$");
@@ -2514,18 +2514,18 @@ void ajFileBuffFreeClear (const AjPFileBuff thys) {
 ** If this runs it to zero, we may want to save the last line read.
 **
 ** @param [u] thys [const AjPFileBuff] File buffer
-** @param [r] lines [int] Number of lines to retain. -1 deletes everything.
+** @param [r] lines [ajint] Number of lines to retain. -1 deletes everything.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajFileBuffClear (const AjPFileBuff thys, int lines) {
+void ajFileBuffClear (const AjPFileBuff thys, ajint lines) {
 
-  int i=0;
+  ajint i=0;
   AjPFileBuffList list;
   AjPFileBuffList next;
-  int first;
-  int ifree=0;
+  ajint first;
+  ajint ifree=0;
 
   ajDebug ("ajFileBuffClear (%d) Nobuff: %B\n", lines, thys->Nobuff);
   /*FileBuffTraceFull (thys, thys->Size, 100);*/
@@ -2657,8 +2657,8 @@ void ajFileBuffNobuff (const AjPFileBuff thys) {
 void ajFileBuffTrace (const AjPFileBuff thys) {
 
   AjPFileBuffList test;
-  int i = 0;
-  int j = -1;
+  ajint i = 0;
+  ajint j = -1;
 
   ajDebug ("Trace buffer file '%S'\n"
 	   "             Pos: %d Size: %d End: %b\n",
@@ -2693,7 +2693,7 @@ void ajFileBuffTrace (const AjPFileBuff thys) {
 void ajFileBuffTraceFull (const AjPFileBuff thys, size_t nlines,
 			  size_t nfree) {
 
-  int i;
+  ajint i;
   AjPFileBuffList line;
   AjBool last = ajFalse;
 
@@ -2933,6 +2933,12 @@ void ajFileScan(AjPStr path, AjPStr filename, AjPList *result,
     AjPStr s=NULL;
     AjPStr t=NULL;
     AjBool flag;
+    AjPStr tpath=NULL;
+
+
+    tpath = ajStrNew();
+    ajStrAssC(&tpath,ajStrStr(path));
+
     
     if(dolist)
     {
@@ -2943,11 +2949,19 @@ void ajFileScan(AjPStr path, AjPStr filename, AjPList *result,
     if(show)
 	ajFmtPrintF(outf,"\n\nDIRECTORY: %s\n\n",ajStrStr(path));
 
-    if(!ajFileDir(&path))
+    if(!ajFileDir(&tpath))
+    {
+	ajStrDel(&tpath);
 	return;
+    }
+    
 
-    if(!(indir=opendir(ajStrStr(path))))
+    if(!(indir=opendir(ajStrStr(tpath))))
+    {
+	ajStrDel(&tpath);
 	return;
+    }
+    
 
     s = ajStrNew();
     dirs = ajListNew();
@@ -2956,7 +2970,7 @@ void ajFileScan(AjPStr path, AjPStr filename, AjPList *result,
     {
 	if(!dp->d_ino || !strcmp(dp->d_name,".") || !strcmp(dp->d_name,".."))
 	    continue;
-	ajStrAssC(&s,ajStrStr(path));
+	ajStrAssC(&s,ajStrStr(tpath));
 /*	ajStrAppC(&s,"/");*/
 	ajStrAppC(&s,dp->d_name);
 	if(ajFileStat(&s,AJ_FILE_DIR))  /* Its a directory */
@@ -3019,6 +3033,7 @@ void ajFileScan(AjPStr path, AjPStr filename, AjPList *result,
     }
 
     ajStrDel(&s);
+    ajStrDel(&tpath);
     ajListDel(&dirs);
 
     return;
@@ -3108,7 +3123,7 @@ char *ajFileTempName(const char *dir)
     struct  stat buf;
     static  AjPStr  dt=NULL;
     AjPStr  direct;
-    int     retry;
+    ajint     retry;
     AjBool  ok;
     AjPFile outf;
     

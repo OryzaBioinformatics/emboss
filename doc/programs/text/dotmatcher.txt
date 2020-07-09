@@ -118,6 +118,7 @@ See also
    garnier Predicts protein secondary structure
    helixturnhelix Report nucleic acid binding motifs
    isochore Plots isochores in large DNA sequences
+   marscan Finds MAR/SAR sites in nucleic sequences
    newcpgreport Report CpG rich areas
    newcpgseek Reports CpG rich regions
    oddcomp Finds protein sequence regions with a biased composition
@@ -125,9 +126,9 @@ See also
    pepcoil Predicts coiled coil regions
    polydot Displays all-against-all dotplots of a set of sequences
    pscan Scans proteins using PRINTS
-   recode Find and remove restriction sites but maintain the same
-   translation
+   recode Remove restriction sites but maintain the same translation
    redata Search REBASE for enzyme name, references, suppliers etc
+   restover Finds restriction enzymes that produce a specific overhang
    restrict Finds restriction enzyme cleavage sites
    seqmatchall Does an all-against-all comparison of a set of sequences
    showseq Display a sequence with features, translation etc

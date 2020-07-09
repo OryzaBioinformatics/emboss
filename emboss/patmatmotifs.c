@@ -21,9 +21,9 @@
 
 #include "emboss.h"
    
-void spaces(AjPFile *outf, int length); 
+void spaces(AjPFile *outf, ajint length); 
   
-int main (int argc, char *argv[] )
+int main(int argc, char **argv)
 {
 
     AjPFile inf	      = NULL;
@@ -47,16 +47,16 @@ int main (int argc, char *argv[] )
     AjBool full;
     AjBool prune;
     
-    int i;
-    int number;
-    int start;
-    int end;
-    int length;
-    int zstart;
-    int zend;
+    ajint i;
+    ajint number;
+    ajint start;
+    ajint end;
+    ajint length;
+    ajint zstart;
+    ajint zend;
     char *p;
-    int seqlength;
-    int j;
+    ajint seqlength;
+    ajint j;
 
 
     embInit ("patmatmotifs", argc, argv);
@@ -224,9 +224,9 @@ int main (int argc, char *argv[] )
 
 /* Functions */
 
-void spaces(AjPFile *outf, int length)
+void spaces(AjPFile *outf, ajint length)
 {
-    int i;
+    ajint i;
 
     for (i=0; i < length-2; ++i)
 	ajFmtPrintF(*outf, " ");

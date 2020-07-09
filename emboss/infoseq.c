@@ -22,7 +22,7 @@
 ******************************************************************************/
 #include "emboss.h"
 
-int main (int argc, char * argv[]) 
+int main(int argc, char **argv)
 {
     
     AjPSeqall seqall;
@@ -47,7 +47,7 @@ int main (int argc, char * argv[])
 					   is not known */
     AjPStr altname=ajStrNewC("-");
     AjPStr altacc=ajStrNewC("-     ");
-    int length;
+    ajint length;
     AjBool type=ajTrue;			/* ajTrue if Protein */
     float pgc = 0.0;
     AjPStr desc;

@@ -28,39 +28,40 @@ static void read_equiv(AjPFile *equfile, AjPTable *table);
 static void CutList (AjPFile outfile, AjPList restrictlist, AjBool isos,
 	AjBool html);
 static void NoCutList (AjPFile outfile, AjPList restrictlist, AjBool
-	html, AjPStr enzymes, AjBool blunt, AjBool sticky, int sitelen);
+	html, AjPStr enzymes, AjBool blunt, AjBool sticky, ajint sitelen);
 static void read_file_of_enzyme_names(AjPStr *enzymes);
 
 /* structure for counts and isoschizomers of a restriction enzyme hit */
 typedef struct SValue {
-    int    count;
+    ajint    count;
     AjPStr iso;
 } OValue, *PValue;
 
 
-int main (int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
 
-  int begin, end;
+  ajint begin, end;
   AjPSeqall seqall;
   AjPSeq seq;
   EmbPShow ss;
   AjPFile outfile;
   AjPStr * tablelist;
-  int table;
+  ajint table;
   AjPRange uppercase;
   AjPRange highlight;
   AjBool threeletter;
   AjBool numberseq;
   AjBool nameseq;
-  int width;
-  int length;
-  int margin;
+  ajint width;
+  ajint length;
+  ajint margin;
   AjBool description;
-  int offset;
+  ajint offset;
   AjBool html;
   AjPStr descriptionline;
   AjPFeatTable feat;
-  int orfminsize;
+  ajint orfminsize;
   AjPTrn trnTable;
   AjBool translation;
   AjBool reverse;
@@ -70,9 +71,9 @@ int main (int argc, char * argv[]) {
     
 /* stuff lifted from Alan's 'restrict.c' */
     AjPStr    enzymes=NULL;
-    int mincuts;
-    int maxcuts;
-    int sitelen;
+    ajint mincuts;
+    ajint maxcuts;
+    ajint sitelen;
     AjBool single;
     AjBool blunt;
     AjBool sticky;
@@ -84,7 +85,7 @@ int main (int argc, char * argv[]) {
     AjPFile   enzfile=NULL;
     AjPFile   equfile=NULL;
     AjPTable  retable=NULL;
-    int       hits;
+    ajint       hits;
     AjPList     restrictlist=NULL;
 #define ENZDATA "REBASE/embossre.enz"
 #define EQUDATA "embossre.equ"
@@ -284,7 +285,7 @@ static void CutList (AjPFile outfile, AjPList restrictlist, AjBool isos,
   AjIList miter;	/* iterator for matches list */
   EmbPMatMatch m=NULL;	/* restriction enzyme match structure */
   void **array;		/* array for table */  
-  int i;
+  ajint i;
 
 /* print title */
   if (html) (void) ajFmtPrintF(outfile, "<H2>");  
@@ -332,7 +333,7 @@ static void CutList (AjPFile outfile, AjPList restrictlist, AjBool isos,
     value = (PValue) array[i+1];
     (void) ajFmtPrintF (outfile, "%10S\t    %d\t%S\n", (AjPStr) array[i], value->count, value->iso);
     ajStrDel(&(value->iso));
-    AJFREE(array[i+1]);		/* free the int* value */
+    AJFREE(array[i+1]);		/* free the ajint* value */
   }  
   AJFREE(array);
   (void) ajFmtPrintF (outfile, "\n");
@@ -354,25 +355,25 @@ static void CutList (AjPFile outfile, AjPList restrictlist, AjBool isos,
 ** @param [r] enzymes [AjPStr] names of enzymes to search for or 'all'
 ** @param [r] blunt [AjBool] Allow blunt cutters
 ** @param [r] sticky [AjBool] Allow sticky cutters
-** @param [r] sitelen [int] minimum length of recognition site
+** @param [r] sitelen [ajint] minimum length of recognition site
 
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void NoCutList (AjPFile outfile, AjPList restrictlist, AjBool
-	html, AjPStr enzymes, AjBool blunt, AjBool sticky, int sitelen) {
+	html, AjPStr enzymes, AjBool blunt, AjBool sticky, ajint sitelen) {
 
   AjPFile enzfile=NULL;
   AjPStr  *ea;
-  int ne;		/* number of enzymes */
+  ajint ne;		/* number of enzymes */
   AjBool isall=ajTrue;
-  int i,j;
+  ajint i,j;
   AjIList miter;	/* iterator for matches list */
   EmbPMatMatch m=NULL;	/* restriction enzyme match structure */
   EmbPPatRestrict enz;
   char *p;
-  int netmp;
+  ajint netmp;
   AjPList iso=ajListstrNew();	/* list of isoschizomers that cut */
   AjIList iter;		/* iterator for isoschizomers list */
   AjPStrTok tok;

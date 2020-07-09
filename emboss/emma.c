@@ -30,7 +30,7 @@ AjPStr getUniqueFileName();
 
 
 
-int main( int argc, char ** argv, char ** env)
+int main(int argc, char **argv, char **env)
 {
 
     AjPSeqall seqall;
@@ -46,7 +46,7 @@ int main( int argc, char ** argv, char ** env)
     AjBool only_dend, are_prot, do_slow, use_dend;
     AjPStr dend_file = NULL;
 
-    int ktup, gapw, topdiags, window;
+    ajint ktup, gapw, topdiags, window;
     AjBool nopercent;
 
     AjPStr *pw_matrix,  *pw_dna_matrix ;
@@ -57,7 +57,7 @@ int main( int argc, char ** argv, char ** env)
     AjPStr ma_matrix = NULL;
     float gapc, gapv;
     AjBool endgaps, norgap, nohgap;
-    int gap_dist, maxdiv;
+    ajint gap_dist, maxdiv;
     AjPStr hgapres = NULL;
  
 
@@ -69,7 +69,7 @@ int main( int argc, char ** argv, char ** env)
     AjPStr cmd = NULL;
     AjPStr tmp, tmpFilename;
     AjPStr line = NULL;
-    int nb=0;
+    ajint nb=0;
     
    
     /*Lets get all the parameters*/

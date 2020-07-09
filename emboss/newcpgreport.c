@@ -3,22 +3,22 @@
 #include <stdlib.h>
 
 
-void findbases(AjPStr *substr, int begin, int len, int window, int shift,
+void findbases(AjPStr *substr, ajint begin, ajint len, ajint window, ajint shift,
                float *obsexp, float *xypc, AjPStr *bases, float *obsexpmax,
-	       int *plstart, int *plend, char *seq);
-void countbases(char *seq, char *bases, int window, int *cx, int *cy,
-		int *cxpy);
+	       ajint *plstart, ajint *plend, char *seq);
+void countbases(char *seq, char *bases, ajint window, ajint *cx, ajint *cy,
+		ajint *cxpy);
 void identify(AjPFile outf, float *obsexp, float *xypc, AjBool *thresh,
-	      int begin, int len, int shift, char *bases, char *name,
-	      int minlen, float minobsexp, float minpc, char *seq);
+	      ajint begin, ajint len, ajint shift, char *bases, char *name,
+	      ajint minlen, float minobsexp, float minpc, char *seq);
 void reportislands(AjPFile outf, AjBool *thresh, char *bases, char *name,
-		   float minobsexp, float minpc, int minlen, int begin,
-		   int len, char *seq);
-void compisl(AjPFile outf, char *p, int begin1, int end1);
+		   float minobsexp, float minpc, ajint minlen, ajint begin,
+		   ajint len, char *seq);
+void compisl(AjPFile outf, char *p, ajint begin1, ajint end1);
 
 
 
-int main( int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
@@ -30,26 +30,26 @@ int main( int argc, char **argv, char **env)
     AjBool    dopc;
         AjBool    docg; NOT USED*/
     
-    int begin;
-    int end;
-    int len;
+    ajint begin;
+    ajint end;
+    ajint len;
 
-    int minlen;
+    ajint minlen;
     float minobsexp;
     float minpc;
 
-    int window;
-    int shift;
-    int plstart;
-    int plend;
+    ajint window;
+    ajint shift;
+    ajint plstart;
+    ajint plend;
     
     float  *xypc=NULL;
     float  *obsexp=NULL;
     AjBool *thresh=NULL;
     float  obsexpmax;
     
-    int i;
-    int maxarr;
+    ajint i;
+    ajint maxarr;
 
     
     embInit("newcpgreport",argc,argv);
@@ -110,13 +110,13 @@ int main( int argc, char **argv, char **env)
 
 
 
-void findbases(AjPStr *substr, int begin, int len, int window, int shift,
+void findbases(AjPStr *substr, ajint begin, ajint len, ajint window, ajint shift,
                float *obsexp, float *xypc, AjPStr *bases, float *obsexpmax,
-	       int *plstart, int *plend, char *seq)
+	       ajint *plstart, ajint *plend, char *seq)
 {
-    int cxpy;
-    int cx;
-    int cy;
+    ajint cxpy;
+    ajint cx;
+    ajint cy;
     float cxf;
     float cyf;
     float windowf;
@@ -124,11 +124,11 @@ void findbases(AjPStr *substr, int begin, int len, int window, int shift,
 
     float obs;
     float exp;
-    int i;
-    int j=0;
-    int offset;
-    /*    int start;
-	  int stop;*/
+    ajint i;
+    ajint j=0;
+    ajint offset;
+    /*    ajint start;
+	  ajint stop;*/
 
     char *p;
     char *q;
@@ -167,15 +167,15 @@ void findbases(AjPStr *substr, int begin, int len, int window, int shift,
 
 
 
-void countbases(char *seq, char *bases, int window, int *cx, int *cy,
-		int *cxpy)
+void countbases(char *seq, char *bases, ajint window, ajint *cx, ajint *cy,
+		ajint *cxpy)
 {
-    int i;
+    ajint i;
     
-    int codex;
-    int codey;
-    int codea;
-    int codeb;
+    ajint codex;
+    ajint codey;
+    ajint codea;
+    ajint codeb;
 
     *cxpy = *cx = *cy = 0;
 
@@ -207,21 +207,21 @@ void countbases(char *seq, char *bases, int window, int *cx, int *cy,
 */
 
 void identify(AjPFile outf, float *obsexp, float *xypc, AjBool *thresh,
-	      int begin, int len, int shift, char *bases, char *name,
-	      int minlen, float minobsexp, float minpc, char *seq) 
+	      ajint begin, ajint len, ajint shift, char *bases, char *name,
+	      ajint minlen, float minobsexp, float minpc, char *seq) 
 {
-  static int avwindow=10;
+  static ajint avwindow=10;
   float avpc;
   float avobsexp;
   float sumpc;
   float sumobsexp;
     
-  int i;
-  int pos;
-  int posmin;
-  /*  int posmax;*/
-  int sumlen;
-  int first;
+  ajint i;
+  ajint pos;
+  ajint posmin;
+  /*  ajint posmax;*/
+  ajint sumlen;
+  ajint first;
 
 
   for(i=0; i<len; ++i) thresh[i]=ajFalse;
@@ -249,7 +249,7 @@ void identify(AjPFile outf, float *obsexp, float *xypc, AjBool *thresh,
       ajDebug(" ** hit first: %d sumlen: %d\n", first, sumlen);
     }
     else {
-      if(sumlen >= minlen) {/* island long enough? */
+      if(sumlen >= minlen) {/* island ajlong enough? */
 	for(i=first; i<=pos-shift;++i)
 	  thresh[i]=ajTrue;
       }
@@ -275,15 +275,15 @@ void identify(AjPFile outf, float *obsexp, float *xypc, AjBool *thresh,
 
 
 void reportislands(AjPFile outf, AjBool *thresh, char *bases, char *name,
-		   float minobsexp, float minpc, int minlen, int begin,
-		   int len, char *seq)
+		   float minobsexp, float minpc, ajint minlen, ajint begin,
+		   ajint len, char *seq)
 {
     AjBool island;
-    int startpos=0;
-    int endpos;
-    /*    int slen;*/
-    int i;
-    int cnt=0;
+    ajint startpos=0;
+    ajint endpos;
+    /*    ajint slen;*/
+    ajint i;
+    ajint cnt=0;
     
     ajFmtPrintF(outf,"ID   %s  %d BP.\n",name, len);
     ajFmtPrintF(outf,"XX\n");
@@ -350,14 +350,14 @@ void reportislands(AjPFile outf, AjBool *thresh, char *bases, char *name,
     return;
 }
 
-void compisl(AjPFile outf, char *p, int begin1, int end1)
+void compisl(AjPFile outf, char *p, ajint begin1, ajint end1)
 {
-    int C=0;
-    int G=0;
-    int CG=0;
-    int i=0;
-    int sumcg=0;
-    int len=0;
+    ajint C=0;
+    ajint G=0;
+    ajint CG=0;
+    ajint i=0;
+    ajint sumcg=0;
+    ajint len=0;
     float pcg;
     float oe;
 

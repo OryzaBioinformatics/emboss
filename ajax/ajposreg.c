@@ -42,7 +42,7 @@
 #include "ajposreg.h"
 #include "hsp_regex.h"
 
-static AjPPosRegexp posregCompFlagsC (const char* exp, int cflags);
+static AjPPosRegexp posregCompFlagsC (const char* exp, ajint cflags);
 
 /* constructors */
 
@@ -77,15 +77,15 @@ AjPPosRegexp ajPosRegCompC (const char* exp) {
 ** Compiles a regular expression.
 **
 ** @param [r] exp [const char*] Regular expression character string.
-** @param [r] cflags [int] Regular expression compilation bit flag(s).
+** @param [r] cflags [ajint] Regular expression compilation bit flag(s).
 ** @return [AjPPosRegexp] Compiled POSIX regular expression.
 ** @@
 ******************************************************************************/
 
-static AjPPosRegexp posregCompFlagsC (const char* exp, int cflags) {
+static AjPPosRegexp posregCompFlagsC (const char* exp, ajint cflags) {
   AjPPosRegexp ret = NULL;
-  int nsub;
-  int rval;
+  ajint nsub;
+  ajint rval;
 
   AJNEW0(ret);
   AJNEW0(ret->Regex);
@@ -229,8 +229,8 @@ AjBool ajPosRegExec (AjPPosRegexp prog, AjPStr str) {
 AjBool ajPosRegExecC (AjPPosRegexp prog, const char* str) {
 
   AjPPosRegmatch match = prog->Match;
-  int nsub;
-  int ret;
+  ajint nsub;
+  ajint ret;
 
   ajDebug ("ajPosRegExecC '%s'\n", str);
 
@@ -261,12 +261,12 @@ AjBool ajPosRegExecC (AjPPosRegexp prog, const char* str) {
 ** This information is normally lost during processing.
 **
 ** @param [r] rp [AjPPosRegexp] Compiled POSIX regular expression.
-** @return [int] Offset of match from start of string. 
+** @return [ajint] Offset of match from start of string. 
 **               -1 if the string and the expression do not match.
 ** @@
 ******************************************************************************/
 
-int ajPosRegOffset (AjPPosRegexp rp) {
+ajint ajPosRegOffset (AjPPosRegexp rp) {
 
   AjPPosRegmatch rm = rp->Match;
 
@@ -279,13 +279,13 @@ int ajPosRegOffset (AjPPosRegexp rp) {
 ** of a substring from the start of the string.
 **
 ** @param [r] rp [AjPPosRegexp] Compiled POSIX regular expression.
-** @param [r] isub [int] Substring number.
-** @return [int] Offset of match from start of string. 
+** @param [r] isub [ajint] Substring number.
+** @return [ajint] Offset of match from start of string. 
 **               -1 if the string and the expression do not match.
 ** @@
 ******************************************************************************/
 
-int ajPosRegOffsetI (AjPPosRegexp rp, int isub) {
+ajint ajPosRegOffsetI (AjPPosRegexp rp, ajint isub) {
 
   AjPPosRegmatch rm = rp->Match;
 
@@ -298,12 +298,12 @@ int ajPosRegOffsetI (AjPPosRegexp rp, int isub) {
 ** of the match from the start of the string.
 **
 ** @param [r] rp [AjPPosRegexp] Compiled POSIX regular expression.
-** @return [int] Offset of match from start of string. 
+** @return [ajint] Offset of match from start of string. 
 **               -1 if the string and the expression do not match.
 ** @@
 ******************************************************************************/
 
-int ajPosRegOffsetC (AjPPosRegexp rp) {
+ajint ajPosRegOffsetC (AjPPosRegexp rp) {
 
   AjPPosRegmatch rm = rp->Match;
   return (rm[0].rm_so);
@@ -315,13 +315,13 @@ int ajPosRegOffsetC (AjPPosRegexp rp) {
 ** of a substring from the start of the string.
 **
 ** @param [r] rp [AjPPosRegexp] Compiled POSIX regular expression.
-** @param [r] isub [int] Substring number.
-** @return [int] Offset of match from start of string. 
+** @param [r] isub [ajint] Substring number.
+** @return [ajint] Offset of match from start of string. 
 **               -1 if the string and the expression do not match.
 ** @@
 ******************************************************************************/
 
-int ajPosRegOffsetIC (AjPPosRegexp rp, int isub) {
+ajint ajPosRegOffsetIC (AjPPosRegexp rp, ajint isub) {
 
   AjPPosRegmatch rm = rp->Match;
   return (rm[isub].rm_so);
@@ -332,12 +332,12 @@ int ajPosRegOffsetIC (AjPPosRegexp rp, int isub) {
 ** After a successful comparison, returns the length of a substring.
 **
 ** @param [r] rp [AjPPosRegexp] Compiled POSIX regular expression.
-** @param [r] isub [int] Substring number.
-** @return [int] Substring length, or 0 if not found.
+** @param [r] isub [ajint] Substring number.
+** @return [ajint] Substring length, or 0 if not found.
 ** @@
 ******************************************************************************/
 
-int ajPosRegLenI (AjPPosRegexp rp, int isub) {
+ajint ajPosRegLenI (AjPPosRegexp rp, ajint isub) {
 
   AjPPosRegmatch rm = rp->Match;
   if (rm[isub].rm_so < 0)
@@ -402,16 +402,16 @@ AjBool ajPosRegPostC (AjPPosRegexp rp, const char** post) {
 ** After a successful match, returns a substring.
 **
 ** @param [r] rp [AjPPosRegexp] Compiled POSIX regular expression.
-** @param [r] isub [int] Substring number.
+** @param [r] isub [ajint] Substring number.
 ** @param [w] dest [AjPStr*] String to hold the result.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajPosRegSubI (AjPPosRegexp rp, int isub, AjPStr* dest) {
+void ajPosRegSubI (AjPPosRegexp rp, ajint isub, AjPStr* dest) {
 
   AjPPosRegmatch rm = rp->Match;
-  int ilen;
+  ajint ilen;
   const char* orig;
 
   orig = rp->Regex->orig;
@@ -502,9 +502,9 @@ void ajPosRegFree (AjPPosRegexp* exp) {
 void ajPosRegTrace (AjPPosRegexp exp) {
 
   AjPPosRegmatch rm = exp->Match;
-  int isub;
-  int ilen;
-  int ipos;
+  ajint isub;
+  ajint ilen;
+  ajint ipos;
   const char* orig = exp->Regex->orig;
   static AjPStr str = NULL;
 
@@ -532,12 +532,12 @@ void ajPosRegTrace (AjPPosRegexp exp) {
 ** Reports an error message from a POSIX 1003.2 regular expression operation
 **
 ** @param [r] prog [AjPPosRegexp] POSIX regular expression
-** @param [r] errcode [int] Internal error code.
+** @param [r] errcode [ajint] Internal error code.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajPosRegErr (AjPPosRegexp prog, int errcode) {
+void ajPosRegErr (AjPPosRegexp prog, ajint errcode) {
 
   static char msg[128];
 

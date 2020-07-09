@@ -8,7 +8,7 @@
 * 
 * compseq counts the frequency of n-mers (or words) in a sequence.
 *
-* The easiest way to do this was to make a big unsigned long int array 
+* The easiest way to do this was to make a big unsigned ajlong ajint array 
 * to hold the counts of each type of word. 
 *
 * I needed a way of converting a sequence word into an integer so that I 
@@ -30,25 +30,25 @@
 
 /* @func embNmerNuc2int ************************************************
 **
-** Encodes a word of a nucleic sequence into a unsigned long int number.
-** For a 4-byte unsigned long int this will work if the word size
+** Encodes a word of a nucleic sequence into a unsigned ajlong ajint number.
+** For a 4-byte unsigned ajlong ajint this will work if the word size
 ** is less than 16, otherwise there aren't enough bits to hold the number.
 **
 ** @param [r] seq [char *] the sequence to use
-** @param [r] wordsize [int] the size of word of sequence to convert to int
-** @param [r] offset [int] the offset into the sequence of the start of
+** @param [r] wordsize [ajint] the size of word of sequence to convert to int
+** @param [r] offset [ajint] the offset into the sequence of the start of
 **                         the word
 ** @param [w] otherflag [AjBool *] set true if the sequence contains
 **                                 anything except A,G,C or T
 ** 
-** @return [unsigned long int] the encoded word
+** @return [ajulong] the encoded word
 ******************************************************************************/
 
-unsigned long int embNmerNuc2int(char *seq, int wordsize, int offset,
+ajulong embNmerNuc2int(char *seq, ajint wordsize, ajint offset,
 				AjBool *otherflag) {
 
-  int i;
-  unsigned long int result = 0;
+  ajint i;
+  ajulong result = 0;
   char c;
 
   *otherflag = ajFalse;
@@ -75,19 +75,19 @@ unsigned long int embNmerNuc2int(char *seq, int wordsize, int offset,
 
 /* @func embNmerInt2nuc ************************************************
 **
-** Decodes a unsigned long int number into a word of a nucleic sequence.
+** Decodes a unsigned ajlong ajint number into a word of a nucleic sequence.
 **
 ** @param [w] seq [AjPStr *] the returned sequence
-** @param [r] wordsize [int] the size of word to produce
-** @param [r] value [unsigned long int] the number to decode
+** @param [r] wordsize [ajint] the size of word to produce
+** @param [r] value [ajulong] the number to decode
 ** 
-** @return [int] not used
+** @return [ajint] not used
 ******************************************************************************/
 
-int embNmerInt2nuc(AjPStr *seq, int wordsize, unsigned long int value) {
+ajint embNmerInt2nuc(AjPStr *seq, ajint wordsize, ajulong value) {
 char bases[] = "ACGT"; 
 char store[2];
-int i;
+ajint i;
 
   store[1] = '\0';	/* make a one-character NULL-teminated char* */
 
@@ -101,42 +101,42 @@ return 1;
 
 /* @func embNmerProt2int ************************************************
 **
-** Encodes a word of a protein sequence into a unsigned long int number.
-** For a 4-byte unsigned long int this will work if the word size
+** Encodes a word of a protein sequence into a unsigned ajlong ajint number.
+** For a 4-byte unsigned ajlong ajint this will work if the word size
 ** is less than 8, otherwise there aren't enough bits to hold the number.
 **
 ** @param [r] seq [char *] the sequence to use
-** @param [r] wordsize [int] the size of word of sequence to convert to int
-** @param [r] offset [int] the offset into the sequence of the start of
+** @param [r] wordsize [ajint] the size of word of sequence to convert to int
+** @param [r] offset [ajint] the offset into the sequence of the start of
 **                         the word
 ** @param [w] otherflag [AjBool *] set true if the sequence contains
 **                                 anything other than valid amino acid codes
 ** @param [r] ignorebz [AjBool] true if B and Z are to be treated as
 **                              non-valid residues
 ** 
-** @return [unsigned long int] the encoded word
+** @return [ajulong] the encoded word
 ******************************************************************************/
 
-unsigned long int embNmerProt2int(char *seq, int wordsize, int offset,
-				 AjBool *otherflag, AjBool ignorebz) {
-  int i;
-  unsigned long int result = 0;
-/* MATHOG, it's used as an int, so let it be an int 
+ajulong embNmerProt2int(char *seq, ajint wordsize, ajint offset,
+			AjBool *otherflag, AjBool ignorebz) {
+  ajint i;
+  ajulong result = 0;
+/* MATHOG, it's used as an int, so let it be an ajint 
   signed char c;
 */
-  int c;
-  int aa;
-  int noaa;
-  int *table;
+  ajint c;
+  ajint aa;
+  ajint noaa;
+  ajint *table;
   
 /*                  a   b  c  d  e  f  g  h  i   j  k  l  m   n    o  p   q   
   r   s   t   u   v   w    x  y    z */
-  int table21[] = { 0, -1, 1, 2, 3, 4, 5, 6, 7, -1, 8, 9, 10, 11, -1, 12, 13, 
+  ajint table21[] = { 0, -1, 1, 2, 3, 4, 5, 6, 7, -1, 8, 9, 10, 11, -1, 12, 13, 
   14, 15, 16, 17, 18, 19, -1, 20, -1, -1, -1, -1, -1, -1};
 
 /*                  a  b  c  d  e  f  g  h  i   j  k  l   m   n    o  p   q   
   r   s   t   u   v   w    x  y    z */
-  int table23[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, -1, 9, 10, 11, 12, -1, 13, 14, 
+  ajint table23[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, -1, 9, 10, 11, 12, -1, 13, 14, 
   15, 16, 17, 18, 19, 20, -1, 21, 22, -1, -1, -1, -1, -1};
 
 /* see whether we are including B and Z as acceptable amino acids or not */
@@ -150,9 +150,9 @@ unsigned long int embNmerProt2int(char *seq, int wordsize, int offset,
 
   *otherflag = ajFalse;
   for (i=0; i<wordsize; i++) { 
-    c = (int) seq[offset+i];
+    c = (ajint) seq[offset+i];
     result *= noaa;
-    c = c - (int) 'A';
+    c = c - (ajint) 'A';
     if (c < 0 || c > 31) {
       *otherflag = ajTrue;
       return 0;
@@ -172,25 +172,25 @@ unsigned long int embNmerProt2int(char *seq, int wordsize, int offset,
 
 /* @func embNmerInt2prot ************************************************
 **
-** Decodes a unsigned long int number into a word of a protein sequence.
+** Decodes a unsigned ajlong ajint number into a word of a protein sequence.
 **
 ** @param [w] seq [AjPStr *] the returned sequence
-** @param [r] wordsize [int] the size of word to produce
-** @param [r] value [unsigned long int] the number to decode
+** @param [r] wordsize [ajint] the size of word to produce
+** @param [r] value [ajulong] the number to decode
 ** @param [r] ignorebz [AjBool] true if B and Z are to be treated
 **                                as non-valid residues
 ** 
-** @return [int] not used
+** @return [ajint] not used
 ******************************************************************************/
 
-int embNmerInt2prot(AjPStr *seq, int wordsize, unsigned long int value,
+ajint embNmerInt2prot(AjPStr *seq, ajint wordsize, ajulong value,
 		   AjBool ignorebz) {
 
 char aas21[] = "ACDEFGHIKLMNPQRSTUVWY"; 
 char aas23[] = "ABCDEFGHIKLMNPQRSTUVWYZ"; 
 char store[2];
-int i;
-int noaa;
+ajint i;
+ajint noaa;
 char *aas;
 
 /* see whether we are including B and Z as acceptable amino acids or not */
@@ -216,28 +216,28 @@ return 1;
 **
 ** Calculates the maximum number required to encode a sequence of size 'word'.
 **
-** @param [w] no_elements [unsigned long int *] the returned number
-** @param [r] word [int] the size of word to produce
+** @param [w] no_elements [ajulong ] the returned number
+** @param [r] word [ajint] the size of word to produce
 ** @param [r] seqisnuc [AjBool] True is the sequence is nucleic,
 **                              False if protein
 ** @param [r] ignorebz [AjBool] true if B and Z are to be treated as
 **                                non-valid residues
 ** 
 ** @return [AjBool] True if the word is small enough to be encoded
-**                   in a unsigned long int
+**                   in an ajulong
 ******************************************************************************/
 
-AjBool embNmerGetNoElements(unsigned long int *no_elements, int word,
+AjBool embNmerGetNoElements(ajulong *no_elements, ajint word,
 			   AjBool seqisnuc, AjBool ignorebz) {
 
   double result;
   float ccfix = (float) word; /* (il) cc on alphas screws up otherwise */
-   static unsigned long int maxlong = UINT_MAX;
+   static ajulong maxlong = UINT_MAX;
 
   /* we use UINT_MAX here because the gcc compiler defines ULONG_MAX
      as a strange expression including LONG_MAX which is signed
      and this makes the whole conversion use signed values, and
-     maybe even int rather than long */
+     maybe even ajint rather than ajlong */
 
   ajDebug ("embNmerGetNoElements ( %d, %b, %b )\n", word, seqisnuc, ignorebz);
   if (seqisnuc) {
@@ -252,10 +252,10 @@ AjBool embNmerGetNoElements(unsigned long int *no_elements, int word,
 
   ajDebug ("...result: %.3f max: %.3f\n", result, (double) maxlong);
 
-/* if the resulting number is too long for a unsigned long int, return false */
+/* if the resulting number is too long for an ajulong, return false */
   if (result-1 > (double)maxlong) return ajFalse;
 
-  *no_elements = (unsigned long int)result;
+  *no_elements = (ajulong)result;
   return ajTrue;
 
 }

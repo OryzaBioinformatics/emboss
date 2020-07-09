@@ -9,9 +9,9 @@
 #include "ajgraph.h"
 
 float xstart=0,ystart=0;
-int *lines;
-int *pts;
-int which;
+ajint *lines;
+ajint *pts;
+ajint which;
 AjPFile outf=NULL;
 
 static void drawPlotlines(void **x, void *cl)
@@ -63,16 +63,16 @@ int main(int argc, char **argv)
   
     AjPSeqset seqset;
     AjPSeq seq1,seq2;
-    int wordlen;
+    ajint wordlen;
     AjPTable seq1MatchTable =0 ;
     AjPList matchlist ;
     AjPGraph graph = 0;
-    int i,j;
+    ajint i,j;
     float total=0;
-    int acceptableticks[]={1,10,50,100,200,500,1000,1500,10000,50000,
+    ajint acceptableticks[]={1,10,50,100,200,500,1000,1500,10000,50000,
 			       100000,500000,1000000,5000000};
-    int numbofticks = 10;
-    int gap,tickgap;
+    ajint numbofticks = 10;
+    ajint gap,tickgap;
     AjBool boxit = AJTRUE, dumpfeat = AJFALSE;
     float xmargin,ymargin;
     float k;
@@ -188,7 +188,7 @@ int main(int argc, char **argv)
 					xstart+k,ystart,xstart+k,
 					ystart-ticklen);
 
-			sprintf(ptr,"%d",(int)k);
+			sprintf(ptr,"%d",(ajint)k);
 			if(!text)
 			    ajGraphTextMid (xstart+k,ystart-(onefifth),ptr);
 			else
@@ -221,7 +221,7 @@ int main(int argc, char **argv)
 					xstart-ticklen,
 					ystart+k);
 
-			sprintf(ptr,"%d",(int)k);
+			sprintf(ptr,"%d",(ajint)k);
 			if(!text)
 			    ajGraphTextEnd (xstart-(onefifth),ystart+k,ptr);
 			else

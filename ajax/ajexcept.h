@@ -6,6 +6,8 @@ extern "C"
 #ifndef ajexcept_h
 #define ajexcept_h
 
+#include "ajarch.h"
+
 #include <setjmp.h>
 
 
@@ -18,7 +20,7 @@ struct Except_Frame {
 	jmp_buf env;
 	Except_Frame *prev;
 	const char *file;
-	int line;
+	ajint line;
 	const T *exception;
 };
 enum { Except_entered=0, Except_raised,
@@ -34,7 +36,7 @@ void ajExceptRaise(const T *e, const char *file,int line);
 	Except_frame.file, Except_frame.line)
 #define AJRETURN switch (Except_stack = Except_stack->prev,0) default: return
 #define AJTRY do { \
-	volatile int Except_flag; \
+	volatile ajint Except_flag; \
 	Except_Frame Except_frame; \
 	Except_frame.prev = Except_stack; \
 	Except_stack = &Except_frame;  \

@@ -28,14 +28,14 @@
 #define	match	lmat
 #endif
 
-extern int nope;
+extern ajint nope;
 
 
 
 /* another structure passed up and down to avoid zillions of parameters */
 struct match {
     REGUTSSTRUCT *g;
-    int eflags;
+    ajint eflags;
     regmatch_t *pmatch;			/* [nsub+1] (0 element unused) */
     char *offp;				/* offsets work from here */
     char *beginp;			/* start of string -- virtual NUL precedes */
@@ -64,15 +64,15 @@ struct match {
 
 /*
    - matcher - the actual matching engine
-   == static int matcher(register REGUTSSTRUCT *g, char *string, \
-			 ==	size_t nmatch, regmatch_t pmatch[], int eflags);
+   == static ajint matcher(register REGUTSSTRUCT *g, char *string, \
+			 ==	size_t nmatch, regmatch_t pmatch[], ajint eflags);
 			 */
 /* 0 success, REG_NOMATCH failure */
-static int matcher(register REGUTSSTRUCT *g, char *string, size_t nmatch,
-		   regmatch_t pmatch[], int eflags)
+static ajint matcher(register REGUTSSTRUCT *g, char *string, size_t nmatch,
+		   regmatch_t pmatch[], ajint eflags)
 {
     register char *endp;
-    register int i;
+    register ajint i;
     struct match mv;
     register struct match *m = &mv;
     register char *dp;
@@ -250,7 +250,7 @@ static int matcher(register REGUTSSTRUCT *g, char *string, size_t nmatch,
 static char *dissect(register struct match *m, char *start, char *stop,
 		     sopno startst, sopno stopst)
 {
-    register int i;
+    register ajint i;
     register sopno ss;			/* start sop of current subRE */
     register sopno es;			/* end sop of current subRE */
     register char *sp;			/* start of string matched by it */
@@ -270,7 +270,7 @@ static char *dissect(register struct match *m, char *start, char *stop,
     {
 	/* identify end of subRE */
 	es = ss;
-	switch ((int)SWOP(m->g->strip[es]))
+	switch ((ajint)SWOP(m->g->strip[es]))
 	{
 	case AJ_OPLUS_:
 	case AJ_OQUEST_:
@@ -284,7 +284,7 @@ static char *dissect(register struct match *m, char *start, char *stop,
 	es++;
 
 	/* figure out what it matched */
-	switch ((int)OP(m->g->strip[ss]))
+	switch ((ajint)OP(m->g->strip[ss]))
 	{
 	case AJ_OEND:
 	    assert(nope);
@@ -310,7 +310,7 @@ static char *dissect(register struct match *m, char *start, char *stop,
 	    stp = stop;
 	    for (;;)
 	    {
-		/* how long could this one be? */
+		/* how ajlong could this one be? */
 		rest = slow(m, sp, stp, ss, es);
 		assert(rest != NULL);	/* it did match */
 		/* could the rest match the rest? */
@@ -337,7 +337,7 @@ static char *dissect(register struct match *m, char *start, char *stop,
 	    stp = stop;
 	    for (;;)
 	    {
-		/* how long could this one be? */
+		/* how ajlong could this one be? */
 		rest = slow(m, sp, stp, ss, es);
 		assert(rest != NULL);	/* it did match */
 		/* could the rest match the rest? */
@@ -376,7 +376,7 @@ static char *dissect(register struct match *m, char *start, char *stop,
 	    stp = stop;
 	    for (;;)
 	    {
-		/* how long could this one be? */
+		/* how ajlong could this one be? */
 		rest = slow(m, sp, stp, ss, es);
 		assert(rest != NULL);	/* it did match */
 		/* could the rest match the rest? */
@@ -445,7 +445,7 @@ static char *dissect(register struct match *m, char *start, char *stop,
 static char *backref(register struct match *m, char *start, char *stop,
 		     sopno startst, sopno stopst, sopno lev)
 {
-    register int i;
+    register ajint i;
     register sopno ss;			/* start sop of current subRE */
     register char *sp;			/* start of string matched by it */
     register sopno ssub;		/* start sop of subsubRE */
@@ -453,7 +453,7 @@ static char *backref(register struct match *m, char *start, char *stop,
     register char *ssp;			/* start of string matched by subsubRE */
     register char *dp;
     register size_t len;
-    register int hard;
+    register ajint hard;
     register sop s;
     register regoff_t offsave;
     register cset *cs;
@@ -464,7 +464,7 @@ static char *backref(register struct match *m, char *start, char *stop,
     /* get as far as we can with easy stuff */
     hard = 0;
     for (ss = startst; !hard && ss < stopst; ss++)
-	switch ((int)SWOP(s = m->g->strip[ss]))
+	switch ((ajint)SWOP(s = m->g->strip[ss]))
 	{
 	case AJ_OCHAR:
 	    if (sp == stop || *sp++ != ajSysItoC(OPND(s)))
@@ -501,8 +501,8 @@ static char *backref(register struct match *m, char *start, char *stop,
 		 (sp < m->endp && *(sp-1) == '\n' &&
 		  (m->g->cflags&REG_NEWLINE)) ||
 		 (sp > m->beginp &&
-		  !ISWORD((int)*(sp-1))) ) &&
-		(sp < m->endp && ISWORD((int)*sp)) )
+		  !ISWORD((ajint)*(sp-1))) ) &&
+		(sp < m->endp && ISWORD((ajint)*sp)) )
 	    {				/* yes */ }
 	    else
 		return(NULL);
@@ -511,8 +511,8 @@ static char *backref(register struct match *m, char *start, char *stop,
 	    if (( (sp == m->endp && !(m->eflags&REG_NOTEOL)) ||
 		 (sp < m->endp && *sp == '\n' &&
 		  (m->g->cflags&REG_NEWLINE)) ||
-		 (sp < m->endp && !ISWORD((int)*sp)) ) &&
-		(sp > m->beginp && ISWORD((int)*(sp-1))) )
+		 (sp < m->endp && !ISWORD((ajint)*sp)) ) &&
+		(sp > m->beginp && ISWORD((ajint)*(sp-1))) )
 	    {				/* yes */ }
 	    else
 		return(NULL);
@@ -544,7 +544,7 @@ static char *backref(register struct match *m, char *start, char *stop,
     /* the hard stuff */
     AT("hard", sp, stop, ss, stopst);
     s = m->g->strip[ss];
-    switch ((int)SWOP(s))
+    switch ((ajint)SWOP(s))
     {
     case AJ_OBACK_:			/* the vilest depths */
 	i = OPND(s);
@@ -653,10 +653,10 @@ static char *fast(register struct match *m, char *start, char *stop,
     register states fresh = m->fresh;
     register states tmp = m->tmp;
     register char *p = start;
-    register int c = (start == m->beginp) ? OUT : *(start-1);
-    register int lastc;			/* previous c */
-    register int flagch;
-    register int i;
+    register ajint c = (start == m->beginp) ? OUT : *(start-1);
+    register ajint lastc;			/* previous c */
+    register ajint flagch;
+    register ajint i;
     register char *coldp;		/* last p after which no match was underway */
 
     (void) CLEAR(st);
@@ -747,10 +747,10 @@ static char *slow(register struct match *m, char *start, char *stop,
     register states empty = m->empty;
     register states tmp = m->tmp;
     register char *p = start;
-    register int c = (start == m->beginp) ? OUT : *(start-1);
-    register int lastc;			/* previous c */
-    register int flagch;
-    register int i;
+    register ajint c = (start == m->beginp) ? OUT : *(start-1);
+    register ajint lastc;			/* previous c */
+    register ajint flagch;
+    register ajint i;
     register char *matchp;		/* last p at which a match ended */
 
     AT("slow", start, stop, startst, stopst);
@@ -827,7 +827,7 @@ static char *slow(register struct match *m, char *start, char *stop,
 /*
    - step - map set of states reachable before char to set reachable after
    == static states step(register REGUTSSTRUCT *g, sopno start, sopno stop, \
-			 ==	register states bef, int ch, register states aft);
+			 ==	register states bef, ajint ch, register states aft);
 			 == #define	BOL	(OUT+1)
 			 == #define	EOL	(BOL+1)
 			 == #define	BOLEOL	(BOL+2)
@@ -840,19 +840,19 @@ static char *slow(register struct match *m, char *start, char *stop,
 			 */
 
 static states step(register REGUTSSTRUCT *g, sopno start, sopno stop,
-		   register states bef, int ch, register states aft)
+		   register states bef, ajint ch, register states aft)
 {
     register cset *cs;
     register sop s;
     register sopno pc;
     register onestate here;		/* note, macros know this name */
     register sopno look;
-    register long i;
+    register ajlong i;
 
     for (pc = start, INIT(here, pc); pc != stop; pc++, INC(here))
     {
 	s = g->strip[pc];
-	switch ((int)SWOP(s))
+	switch ((ajint)SWOP(s))
 	{
 	case AJ_OEND:
 	    assert(pc == stop-1);
@@ -957,15 +957,15 @@ static states step(register REGUTSSTRUCT *g, sopno start, sopno stop,
    - print - print a set of states
    == #ifdef REDEBUG
    == static void print(struct match *m, char *caption, states st, \
-			==	int ch, FILE *d);
+			==	ajint ch, FILE *d);
 			== #endif
 			*/
 
-static void print(struct match m, char *caption, states st, int ch, FILE *d)
+static void print(struct match m, char *caption, states st, ajint ch, FILE *d)
 {
     register REGUTSSTRUCT *g = m->g;
-    register int i;
-    register int first = 1;
+    register ajint i;
+    register ajint first = 1;
 
     if (!(m->eflags&REG_TRACE))
 	return;
@@ -998,7 +998,7 @@ static void at(struct match *m, char *title, char *start, char *stop,
 
     (void) printf("%s %s-", title, pchar(*start));
     (void) printf("%s ", pchar(*stop));
-    (void) printf("%ld-%ld\n", (long)startst, (long)stopst);
+    (void) printf("%ld-%ld\n", (ajlong)startst, (ajlong)stopst);
 }
 
 #ifndef PCHARDONE
@@ -1006,7 +1006,7 @@ static void at(struct match *m, char *title, char *start, char *stop,
 /*
    - pchar - make a character printable
    == #ifdef REDEBUG
-   == static char *pchar(int ch);
+   == static char *pchar(ajint ch);
    == #endif
    *
    * Is this identical to regchar() over in debug.c?  Well, yes.  But a
@@ -1015,7 +1015,7 @@ static void at(struct match *m, char *title, char *start, char *stop,
    * the non-debug compilation anyway, so it doesn't matter much.
  */
 			/* -> representation */
-static char *pchar(int ch)
+static char *pchar(ajint ch)
 {
     static char pbuf[10];
 

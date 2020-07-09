@@ -9,7 +9,7 @@
 #include <pwd.h>
 
 static AjBool utilBigendian;
-static int utilBigendCalled = 0;
+static ajint utilBigendCalled = 0;
 
 /* @func ajExit ***************************************************************
 **
@@ -38,11 +38,11 @@ void ajExit (void) {
 **
 ** No cleanup or reporting routines are called. Simply crashes.
 **
-** @return [int] Exit code
+** @return [ajint] Exit code
 ** @@
 ******************************************************************************/
 
-int ajExitBad (void) {
+ajint ajExitBad (void) {
   exit (-1);
   return -1;
 }
@@ -85,7 +85,7 @@ void ajLogInfo (void) {
 
 AjBool ajUtilUid (AjPStr* dest) {
 
-  int uid;
+  ajint uid;
   struct passwd* pwd;
 
   ajDebug ("ajUtilUid\n");
@@ -119,8 +119,8 @@ AjBool ajUtilUid (AjPStr* dest) {
 
 AjBool ajUtilBigendian (void) {
   static union lbytes {
-    char chars[sizeof(int)];
-    int i;
+    char chars[sizeof(ajint)];
+    ajint i;
   } data;
 
   if (!utilBigendCalled) {
@@ -146,14 +146,14 @@ AjBool ajUtilBigendian (void) {
 ** @@
 ******************************************************************************/
 
-void ajUtilRev4 (int* ival) {
+void ajUtilRev4 (ajint* ival) {
   union lbytes {
     char chars[4];
-    int i;
+    ajint i;
   } data, revdata;
   char* cs;
   char* cd;
-  int i;
+  ajint i;
 
   data.i = *ival;
   cs = data.chars;
@@ -186,7 +186,7 @@ void ajUtilRev2 (short* sval) {
   } data, revdata;
   char* cs;
   char* cd;
-  int i;
+  ajint i;
 
   data.s = *sval;
   cs = data.chars;

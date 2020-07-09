@@ -32,13 +32,13 @@
 #define EUKFILE "Esig.euk"
 #define PROFILE "Esig.pro"
 
-int readSig(AjPFloat2d *matrix,AjBool prokaryote);
+ajint readSig(AjPFloat2d *matrix,AjBool prokaryote);
 
 
 
 
 
-int main( int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
@@ -52,12 +52,12 @@ int main( int argc, char **argv, char **env)
 
     AjPFloat2d matrix=NULL;
     
-    int begin;
-    int end;
-    int len;
-    int pval;
-    int nval;
-    int opval;			/* save value from updating */
+    ajint begin;
+    ajint end;
+    ajint len;
+    ajint pval;
+    ajint nval;
+    ajint opval;			/* save value from updating */
     float minweight;
     float xweight;
     float weight;
@@ -70,16 +70,16 @@ int main( int argc, char **argv, char **env)
     char *p;
     char *q;
     
-    int i;
-    int j;
+    ajint i;
+    ajint j;
 
-    int n;
-    int maxsite;
-    int istart;
-    int iend;
-    int ic;
-    int isite;
-    int se;
+    ajint n;
+    ajint maxsite;
+    ajint istart;
+    ajint iend;
+    ajint ic;
+    ajint isite;
+    ajint se;
 
     embInit("sigcleave",argc,argv);
     
@@ -140,7 +140,7 @@ int main( int argc, char **argv, char **env)
 	        if(j>=0 && j<len) {
 	            ajDebug ("j: %d ic: %d aa: '%c'\n",
 			     j, ic, ajStrChar(ajSeqStr(seq), j));
-		    weight += ajFloat2dGet(matrix,(int)*(p+j),ic);
+		    weight += ajFloat2dGet(matrix,(ajint)*(p+j),ic);
 	        }
 		++ic;
 		++j;
@@ -243,7 +243,7 @@ int main( int argc, char **argv, char **env)
 
 
 
-int readSig(AjPFloat2d *matrix,AjBool prokaryote)
+ajint readSig(AjPFloat2d *matrix,AjBool prokaryote)
 {
     AjPFile mfptr=NULL;
     AjPStr  line=NULL;
@@ -255,20 +255,20 @@ int readSig(AjPFloat2d *matrix,AjBool prokaryote)
     char *p;
     char *q;
     
-    int xcols=0;
-    int cols=0;
+    ajint xcols=0;
+    ajint cols=0;
     float rt;
     float v;
     
     float sample;
     float expected;
 
-    int   i;
-    int   j;
-    int   c;
+    ajint   i;
+    ajint   j;
+    ajint   c;
     
-    int d1;
-    int d2;
+    ajint d1;
+    ajint d2;
     
     if(prokaryote)
 	ajFileDataNewC(PROFILE,&mfptr);
@@ -306,7 +306,7 @@ int readSig(AjPFloat2d *matrix,AjBool prokaryote)
 	q=ajStrStr(line);
 	q=ajSysStrtok(q,ajStrStr(delim));
 
-	d1 = ajAZToInt((char)toupper((int)*p));
+	d1 = ajAZToInt((char)toupper((ajint)*p));
 	c  = 0;
 	while((q=ajSysStrtok(NULL,ajStrStr(delim))))
 	{
@@ -345,11 +345,11 @@ int readSig(AjPFloat2d *matrix,AjBool prokaryote)
 	    {
 		if(j==10 || j==12)
 		{
-		    if(!(int)mat[i][j]) mat[i][j]=1.0e-10;
+		    if(!(ajint)mat[i][j]) mat[i][j]=1.0e-10;
 		}
 		else
 		{
-		    if(!(int)mat[i][j]) mat[i][j]=1.0;
+		    if(!(ajint)mat[i][j]) mat[i][j]=1.0;
 		}
 		mat[i][j] = (float)(log((double)(mat[i][j]/expected)));
 	    }

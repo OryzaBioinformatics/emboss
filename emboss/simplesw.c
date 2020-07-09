@@ -20,17 +20,18 @@
 ******************************************************************************/
 #include "emboss.h"
 
-int main (int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
 
-  int i,j,top,penalty=-8,nogap;
+  ajint i,j,top,penalty=-8,nogap;
   AjPSeq seq,seq2;
   char *s1,*s2,res[2]="-";
-  int **sub;
+  ajint **sub;
   AjPStr str1,str2;
   AjPStr newseq1=0,newseq2=0;
   AjBool showinternals;
-  int **mat=0;
-  int imax=0,jmax=0,max;
+  ajint **mat=0;
+  ajint imax=0,jmax=0,max;
   AjPMatrix matrix=0;
   AjPSeqCvt cvt=0;
   static AjPStr outstr = NULL;

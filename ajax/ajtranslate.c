@@ -130,7 +130,7 @@
 #define TGC "EGC."
 
 /* table to convert character of base to translation array element value */
-static int trnconv[] = {
+static ajint trnconv[] = {
 /* characters less than 64 */
   14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
   14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
@@ -154,7 +154,7 @@ static int trnconv[] = {
 
 /* table to convert character of COMPLEMENT of base to translation array
 element value */
-static int trncomp[] = {
+static ajint trncomp[] = {
 /* characters less than 64 */
   14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
   14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14,
@@ -233,15 +233,15 @@ AjPTrn ajTrnNewC (char * filename) {
 /* @func ajTrnNewI ************************************************************
 **
 ** Initialises translation. Reads a translation data file called 'EGC.x'
-** where 'x' is supplied as an int parameter in the range 0 to 15.
+** where 'x' is supplied as an ajint parameter in the range 0 to 15.
 ** ajTrnDel (AjPTrn); should be called when translation has ceased.
 **
-** @param [r] trnFileNameInt [int] translation table file name number
+** @param [r] trnFileNameInt [ajint] translation table file name number
 ** @return [AjPTrn] Translation object
 ** @@
 ******************************************************************************/
 
-AjPTrn ajTrnNewI (int trnFileNameInt) {
+AjPTrn ajTrnNewI (ajint trnFileNameInt) {
 
   AjPStr trnFileName = NULL;
   AjPStr value = NULL;
@@ -272,7 +272,7 @@ AjPTrn ajTrnNew (AjPStr trnFileName) {
 
   AjPFile trnFile = NULL;
   AjPTrn pthis;
-  int i, j, k;
+  ajint i, j, k;
 
   /* open the translation table file */
 
@@ -336,9 +336,9 @@ void ajTrnReadFile (AjPTrn trnObj, AjPFile trnFile) {
   char *base1;
   char *base2;
   char *base3;
-  int dlen;
-  int i, j;
-  int firstaa[256];	/* positions of first use of a residue in the aa line */
+  ajint dlen;
+  ajint i, j;
+  ajint firstaa[256];	/* positions of first use of a residue in the aa line */
   AjBool w1a, w1c, w1g, w1t, w3a, w3c, w3g, w3t; /* first and last base wobble results */
 /* NB '-' and '*' are valid characters,
    don't skip over then when parsing tokens */
@@ -428,7 +428,7 @@ void ajTrnReadFile (AjPTrn trnObj, AjPFile trnFile) {
 /* populate the Starts (Initiation sites) table */
   dlen = ajStrLen(startsline);
   for (i=0; i<dlen; i++) {
-    trnObj->Starts[trnconv[(int)base1[i]]][trnconv[(int)base2[i]]][trnconv[(int)base3[i]]]
+    trnObj->Starts[trnconv[(ajint)base1[i]]][trnconv[(ajint)base2[i]]][trnconv[(ajint)base3[i]]]
       = starts[i];
   }
 
@@ -440,17 +440,17 @@ void ajTrnReadFile (AjPTrn trnObj, AjPFile trnFile) {
   for (i=0; i<256; i++) firstaa[i] = -1;
   for (i=0; i<dlen; i++) {
 /* put the residue in the table using the unambiguous codon */
-    trnObj->GC[trnconv[(int)base1[i]]][trnconv[(int)base2[i]]][trnconv[(int)base3[i]]]
+    trnObj->GC[trnconv[(ajint)base1[i]]][trnconv[(ajint)base2[i]]][trnconv[(ajint)base3[i]]]
       = aa[i];
 /* now work out the ambiguous codons for this residue so far */
 /* is this the first use of the residue in the aa line? */
-    if (firstaa[(int)aa[i]] == -1) {
+    if (firstaa[(ajint)aa[i]] == -1) {
 /* yes - note its position */
-      firstaa[(int)aa[i]] = i;
+      firstaa[(ajint)aa[i]] = i;
     } else {
 /* no - see if we can construct some ambiguous codons */
       getwobblebases(trnObj, &w1a, &w1c, &w1g, &w1t, &w3a, &w3c, &w3g, &w3t, base1[i], base2[i], base3[i], aa[i]);
-      for (j=i-1; j>=firstaa[(int)aa[i]]; j--) {
+      for (j=i-1; j>=firstaa[(ajint)aa[i]]; j--) {
 /* if previous aa is the same as aa[i] then construct abiguity codon */
         if (aa[i] == aa[j]) {
 /* there are no ambiguous codons with a differing middle base */
@@ -492,7 +492,7 @@ void ajTrnReadFile (AjPTrn trnObj, AjPFile trnFile) {
 ******************************************************************************/
 
 static void trnNoComment (AjPStr* text) {
-  int i;
+  ajint i;
   char *cp;
 
   (void) ajStrChomp (text);
@@ -539,29 +539,29 @@ static void getwobblebases(AjPTrn trnObj, AjBool *w1a, AjBool *w1c,
 
   *w1a = *w1c = *w1g = *w1t = *w3a = *w3c = *w3g = *w3t = ajFalse;
 
-  if (trnObj->GC[trnconv[(int)'A']][trnconv[(int)base2]][trnconv[(int)base3]] == aa) {
+  if (trnObj->GC[trnconv[(ajint)'A']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] == aa) {
     *w1a = ajTrue;
   }
-  if (trnObj->GC[trnconv[(int)'C']][trnconv[(int)base2]][trnconv[(int)base3]] == aa) {
+  if (trnObj->GC[trnconv[(ajint)'C']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] == aa) {
     *w1c = ajTrue;
   }
-  if (trnObj->GC[trnconv[(int)'G']][trnconv[(int)base2]][trnconv[(int)base3]] == aa) {
+  if (trnObj->GC[trnconv[(ajint)'G']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] == aa) {
     *w1g = ajTrue;
   }
-  if (trnObj->GC[trnconv[(int)'T']][trnconv[(int)base2]][trnconv[(int)base3]] == aa) {
+  if (trnObj->GC[trnconv[(ajint)'T']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] == aa) {
     *w1t = ajTrue;
   }
 
-  if (trnObj->GC[trnconv[(int)base1]][trnconv[(int)base2]][trnconv[(int)'A']] == aa) {
+  if (trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'A']] == aa) {
     *w3a = ajTrue;
   }
-  if (trnObj->GC[trnconv[(int)base1]][trnconv[(int)base2]][trnconv[(int)'C']] == aa) {
+  if (trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'C']] == aa) {
     *w3c = ajTrue;
   }
-  if (trnObj->GC[trnconv[(int)base1]][trnconv[(int)base2]][trnconv[(int)'G']] == aa) {
+  if (trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'G']] == aa) {
     *w3g = ajTrue;
   }
-  if (trnObj->GC[trnconv[(int)base1]][trnconv[(int)base2]][trnconv[(int)'T']] == aa) {
+  if (trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'T']] == aa) {
     *w3t = ajTrue;
   }
 
@@ -591,28 +591,28 @@ static void explode(AjPTrn trnObj, AjBool wa, AjBool wc, AjBool wg,
 
   if (start) {
     if (wt && wc) {
-      trnObj->GC[trnconv[(int)'Y']][trnconv[(int)base2]][trnconv[(int)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'Y']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
       doneone = ajTrue;
     }
  
     if (wt && wa) {
-      trnObj->GC[trnconv[(int)'W']][trnconv[(int)base2]][trnconv[(int)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'W']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
     doneone = ajTrue;
     }
     if (wt && wg) {
-      trnObj->GC[trnconv[(int)'K']][trnconv[(int)base2]][trnconv[(int)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'K']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
       doneone = ajTrue;
     }
     if (wc && wa) {
-      trnObj->GC[trnconv[(int)'M']][trnconv[(int)base2]][trnconv[(int)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'M']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
       doneone = ajTrue;
     }
     if (wc && wg) {
-      trnObj->GC[trnconv[(int)'S']][trnconv[(int)base2]][trnconv[(int)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'S']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
       doneone = ajTrue;
     }
     if (wa && wg) {
-      trnObj->GC[trnconv[(int)'R']][trnconv[(int)base2]][trnconv[(int)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'R']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
       doneone = ajTrue;
     }
 
@@ -621,47 +621,47 @@ then there is no point in testing triples */
     if (!doneone) return;
 
     if (wc && wa && wg) {
-      trnObj->GC[trnconv[(int)'V']][trnconv[(int)base2]][trnconv[(int)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'V']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
     }
     if (wt && wc && wa) {
-      trnObj->GC[trnconv[(int)'H']][trnconv[(int)base2]][trnconv[(int)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'H']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
     }
     if (wt && wa && wg) {
-      trnObj->GC[trnconv[(int)'D']][trnconv[(int)base2]][trnconv[(int)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'D']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
     }
     if (wt && wc && wg) {
-      trnObj->GC[trnconv[(int)'B']][trnconv[(int)base2]][trnconv[(int)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'B']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
     }
 
 
     if (wt && wc && wa && wg) {
-      trnObj->GC[trnconv[(int)'N']][trnconv[(int)base2]][trnconv[(int)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'N']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
     }
   } else {	/* not start */
   
 
     if (wt && wc) {
-      trnObj->GC[trnconv[(int)base1]][trnconv[(int)base2]][trnconv[(int)'Y']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'Y']] = aa;
       doneone = ajTrue;
     }
     if (wt && wa) {
-      trnObj->GC[trnconv[(int)base1]][trnconv[(int)base2]][trnconv[(int)'W']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'W']] = aa;
       doneone = ajTrue;
     }
     if (wt && wg) {
-      trnObj->GC[trnconv[(int)base1]][trnconv[(int)base2]][trnconv[(int)'K']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'K']] = aa;
       doneone = ajTrue;
     }
     if (wc && wa) {
-      trnObj->GC[trnconv[(int)base1]][trnconv[(int)base2]][trnconv[(int)'M']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'M']] = aa;
       doneone = ajTrue;
     }
     if (wc && wg) {
-      trnObj->GC[trnconv[(int)base1]][trnconv[(int)base2]][trnconv[(int)'S']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'S']] = aa;
       doneone = ajTrue;
     }
     if (wa && wg) {
-      trnObj->GC[trnconv[(int)base1]][trnconv[(int)base2]][trnconv[(int)'R']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'R']] = aa;
       doneone = ajTrue;
     }
 
@@ -670,21 +670,21 @@ then there is no point in testing triples */
     if (!doneone) return;
 
     if (wc && wa && wg) {
-      trnObj->GC[trnconv[(int)base1]][trnconv[(int)base2]][trnconv[(int)'V']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'V']] = aa;
     }
     if (wt && wc && wa) {
-      trnObj->GC[trnconv[(int)base1]][trnconv[(int)base2]][trnconv[(int)'H']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'H']] = aa;
     }    
     if (wt && wa && wg) {
-      trnObj->GC[trnconv[(int)base1]][trnconv[(int)base2]][trnconv['D']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv['D']] = aa;
     }    
     if (wt && wc && wg) {
-      trnObj->GC[trnconv[(int)base1]][trnconv[(int)base2]][trnconv[(int)'B']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'B']] = aa;
     }    
 
 
     if (wt && wc && wa && wg) {
-      trnObj->GC[trnconv[(int)base1]][trnconv[(int)base2]][trnconv[(int)'N']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'N']] = aa;
     }    
 
   } /* end start */
@@ -714,12 +714,12 @@ then there is no point in testing triples */
 **
 **
 ** @param [r] nucleicSeq [AjPSeq] nucleic sequence being translated
-** @param [r] frame [int] frame of translation (-3,-2,-1,0,1,2,3,4,5,6)
+** @param [r] frame [ajint] frame of translation (-3,-2,-1,0,1,2,3,4,5,6)
 ** @return [AjPSeq] New peptide object
 ** @@
 ******************************************************************************/
 
-AjPSeq ajTrnNewPep(AjPSeq nucleicSeq, int frame) {
+AjPSeq ajTrnNewPep(AjPSeq nucleicSeq, ajint frame) {
 
   AjPSeq trnPeptide=NULL;
   AjPStr name = NULL;	/* name of the translation */
@@ -769,7 +769,7 @@ AjPStr ajTrnCodon (AjPTrn trnObj, AjPStr codon) {
   store[1] = '\0';	/* end the char * of store */
 
   res = ajStrStr(codon);
-  store[0] = trnObj->GC[trnconv[(int)res[0]]][trnconv[(int)res[1]]][trnconv[(int)res[2]]];
+  store[0] = trnObj->GC[trnconv[(ajint)res[0]]][trnconv[(ajint)res[1]]][trnconv[(ajint)res[2]]];
 
   (void) ajStrAssC (&trnResidue, store);
 
@@ -795,7 +795,7 @@ AjPStr ajTrnRevCodon (AjPTrn trnObj, AjPStr codon) {
   store[1] = '\0';	/* end the char * of store */
 
   res = ajStrStr(codon);
-  store[0] = trnObj->GC[trncomp[(int)res[2]]][trncomp[(int)res[1]]][trncomp[(int)res[0]]];
+  store[0] = trnObj->GC[trncomp[(ajint)res[2]]][trncomp[(ajint)res[1]]][trncomp[(ajint)res[0]]];
 
   (void) ajStrAssC (&trnResidue, store);
 
@@ -818,7 +818,7 @@ AjPStr ajTrnCodonC (AjPTrn trnObj, char *codon) {
   char store[2];
   
   store[1] = '\0';	/* end the char * of store */
-  store[0] = trnObj->GC[trnconv[(int)codon[0]]][trnconv[(int)codon[1]]][trnconv[(int)codon[2]]];
+  store[0] = trnObj->GC[trnconv[(ajint)codon[0]]][trnconv[(ajint)codon[1]]][trnconv[(ajint)codon[2]]];
   
   (void) ajStrAssC (&trnResidue, store);
 
@@ -841,7 +841,7 @@ AjPStr ajTrnRevCodonC (AjPTrn trnObj, char *codon) {
   char store[2];
   
   store[1] = '\0';	/* end the char * of store */
-  store[0] = trnObj->GC[trncomp[(int)codon[2]]][trncomp[(int)codon[1]]][trncomp[(int)codon[0]]];
+  store[0] = trnObj->GC[trncomp[(ajint)codon[2]]][trncomp[(ajint)codon[1]]][trncomp[(ajint)codon[0]]];
   
   (void) ajStrAssC (&trnResidue, store);
 
@@ -860,7 +860,7 @@ AjPStr ajTrnRevCodonC (AjPTrn trnObj, char *codon) {
 
 char ajTrnCodonK (AjPTrn trnObj, char *codon) {
 
-  return trnObj->GC[trnconv[(int)codon[0]]][trnconv[(int)codon[1]]][trnconv[(int)codon[2]]];
+  return trnObj->GC[trnconv[(ajint)codon[0]]][trnconv[(ajint)codon[1]]][trnconv[(ajint)codon[2]]];
 
 }
 
@@ -876,7 +876,7 @@ char ajTrnCodonK (AjPTrn trnObj, char *codon) {
 
 char ajTrnRevCodonK (AjPTrn trnObj, char *codon) {
 
-  return trnObj->GC[trncomp[(int)codon[2]]][trncomp[(int)codon[1]]][trncomp[(int)codon[0]]];
+  return trnObj->GC[trncomp[(ajint)codon[2]]][trncomp[(ajint)codon[1]]][trncomp[(ajint)codon[0]]];
 
 }
 
@@ -892,26 +892,26 @@ char ajTrnRevCodonK (AjPTrn trnObj, char *codon) {
 ** 
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] str [char *] sequence string to translate
-** @param [r] len [int] length of sequence string to translate
+** @param [r] len [ajint] length of sequence string to translate
 ** @param [u] pep [AjPStr *] returned peptide translation (appended to input contents)
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajTrnC (AjPTrn trnObj, char *str, int len, AjPStr *pep) {
+void ajTrnC (AjPTrn trnObj, char *str, ajint len, AjPStr *pep) {
 
-  int i;
-  int lenmod3;
+  ajint i;
+  ajint lenmod3;
 
   lenmod3 = len - (len % 3);
 
   for (i=0; i < lenmod3; i+=3) {
 /* speed up slightly by putting the routine in-line */
 /*  (void) ajStrApp(pep, ajTrnCodonC (trnObj, &str[i])); */
-    (void) ajStrAppK(pep, trnObj->GC[trnconv[(int)str[i]]]
-    				     [trnconv[(int)str[i+1]]]
-    				     [trnconv[(int)str[i+2]]]);
+    (void) ajStrAppK(pep, trnObj->GC[trnconv[(ajint)str[i]]]
+    				     [trnconv[(ajint)str[i+1]]]
+    				     [trnconv[(ajint)str[i+2]]]);
   }
 
 }
@@ -927,23 +927,23 @@ void ajTrnC (AjPTrn trnObj, char *str, int len, AjPStr *pep) {
 ** 
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] str [char *] sequence string to translate
-** @param [r] len [int] length of sequence string to translate
+** @param [r] len [ajint] length of sequence string to translate
 ** @param [u] pep [AjPStr *] returned peptide translation (appended to input contents)
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajTrnRevC (AjPTrn trnObj, char *str, int len, AjPStr *pep) {
+void ajTrnRevC (AjPTrn trnObj, char *str, ajint len, AjPStr *pep) {
 
-  int i;
-  int ajb;
+  ajint i;
+  ajint ajb;
   
   ajb = (len/3)*3-1;
   for(i=ajb;i>1;i-=3)
-    (void) ajStrAppK(pep, trnObj->GC[trncomp[(int)str[i]]]
-    				     [trncomp[(int)str[i-1]]]
-    				     [trncomp[(int)str[i-2]]]);
+    (void) ajStrAppK(pep, trnObj->GC[trncomp[(ajint)str[i]]]
+    				     [trncomp[(ajint)str[i-1]]]
+    				     [trncomp[(ajint)str[i-2]]]);
 
 }
 /* @func ajTrnStr ************************************************************
@@ -1059,15 +1059,15 @@ void ajTrnRevSeq (AjPTrn trnObj, AjPSeq seq, AjPStr *pep) {
 **
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] seq [char *] sequence string to translate
-** @param [r] len [int] length of sequence string to translate
-** @param [r] frame [int] frame to translate in
+** @param [r] len [ajint] length of sequence string to translate
+** @param [r] frame [ajint] frame to translate in
 ** @param [u] pep [AjPStr *] returned peptide translation (appended to input contents)
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajTrnCFrame (AjPTrn trnObj, char *seq, int len, int frame, AjPStr *pep) {
+void ajTrnCFrame (AjPTrn trnObj, char *seq, ajint len, ajint frame, AjPStr *pep) {
 
   if (frame > 3) frame = -frame + 3;
 
@@ -1099,14 +1099,14 @@ void ajTrnCFrame (AjPTrn trnObj, char *seq, int len, int frame, AjPStr *pep) {
 ** 
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] seq [AjPStr] sequence string to translate
-** @param [r] frame [int] frame to translate in
+** @param [r] frame [ajint] frame to translate in
 ** @param [u] pep [AjPStr *] returned peptide translation (appended to input contents)
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajTrnStrFrame (AjPTrn trnObj, AjPStr seq, int frame, AjPStr *pep) {
+void ajTrnStrFrame (AjPTrn trnObj, AjPStr seq, ajint frame, AjPStr *pep) {
 
   ajTrnCFrame(trnObj, ajStrStr(seq), ajStrLen(seq), frame, pep);
 
@@ -1130,14 +1130,14 @@ void ajTrnStrFrame (AjPTrn trnObj, AjPStr seq, int frame, AjPStr *pep) {
 ** 
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] seq [AjPSeq] sequence string to translate
-** @param [r] frame [int] frame to translate in
+** @param [r] frame [ajint] frame to translate in
 ** @param [u] pep [AjPStr *] returned peptide translation (appended to input contents)
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajTrnSeqFrame (AjPTrn trnObj, AjPSeq seq, int frame, AjPStr *pep) {
+void ajTrnSeqFrame (AjPTrn trnObj, AjPSeq seq, ajint frame, AjPStr *pep) {
 
   ajTrnCFrame(trnObj, ajSeqChar(seq), ajSeqLen(seq), frame, pep);
 
@@ -1169,25 +1169,25 @@ void ajTrnSeqFrame (AjPTrn trnObj, AjPSeq seq, int frame, AjPStr *pep) {
 ** 
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] trnSeq [AjPSeq] sequence to translate
-** @param [r] frame [int] frame to translate in (-3, -2, -1, 1, 2, 3, 4, 5, 6)
+** @param [r] frame [ajint] frame to translate in (-3, -2, -1, 1, 2, 3, 4, 5, 6)
 **
 ** @return [AjPSeq] Peptide translation
 ** @@
 ******************************************************************************/
 
-AjPSeq ajTrnSeqOrig (AjPTrn trnObj, AjPSeq trnSeq, int frame) {
+AjPSeq ajTrnSeqOrig (AjPTrn trnObj, AjPSeq trnSeq, ajint frame) {
 
   AjPSeq trnPeptide=NULL;
   AjPStr seq=NULL; /* the string holding the nucleic sequence */
   AjPStr trn=NULL; /* the string holding the peptide sequence */
   char *seqc;	/* pointer to char sequence */
-  int realframe;
-  int nameframe;	/* frame number appended to name */
-  int i;
+  ajint realframe;
+  ajint nameframe;	/* frame number appended to name */
+  ajint i;
   AjPStr name = NULL;	/* name of the translation */
   AjPStr value = NULL;	/* value of frame of the translation */
-  int framelen;	/* length of sequence after the frame-start position */
-  int lenmod3;	/* length of sequence with no dangling bases of incomplete codons */
+  ajint framelen;	/* length of sequence after the frame-start position */
+  ajint lenmod3;	/* length of sequence with no dangling bases of incomplete codons */
   
 /* get a COPY of the sequence string */
   (void) ajStrAss (&seq, ajSeqStr(trnSeq));
@@ -1236,12 +1236,12 @@ of the sequence */
   for (i=realframe-1; i < lenmod3; i+=3) {
 /* speed up slightly by putting the routine in-line */
 /*  (void) ajStrApp(&trn, ajTrnCodonC (trnObj, &seqc[i])); */
-    (void) ajStrAppK(&trn, trnObj->GC[trnconv[(int)seqc[i]]][trnconv[(int)seqc[i+1]]][trnconv[(int)seqc[i+2]]]);
+    (void) ajStrAppK(&trn, trnObj->GC[trnconv[(ajint)seqc[i]]][trnconv[(ajint)seqc[i+1]]][trnconv[(ajint)seqc[i+2]]]);
   }
 
 /* translate any dangling pair of bases at the end */
   if (framelen % 3 == 2) {
-    (void) ajStrAppK(&trn, trnObj->GC[trnconv[(int)seqc[i]]][trnconv[(int)seqc[i+1]]][trnconv[0]]);
+    (void) ajStrAppK(&trn, trnObj->GC[trnconv[(ajint)seqc[i]]][trnconv[(ajint)seqc[i+1]]][trnconv[0]]);
   } else if (framelen % 3 == 1) {
 /* I don't seriously expect a single base to translate sensibly, but they asked for it... */
     (void) ajStrAppK(&trn, 'X');
@@ -1283,23 +1283,23 @@ alignment displays with the original nucleic acid sequence */
 ** 
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] trnSeq [AjPStr] sequence to translate
-** @param [r] frame [int] frame to translate in (-3, -2, -1, 1, 2, 3, 4, 5, 6)
+** @param [r] frame [ajint] frame to translate in (-3, -2, -1, 1, 2, 3, 4, 5, 6)
 **
 ** @return [AjPStr] Peptide translation
 ** @@
 ******************************************************************************/
 
-AjPStr ajTrnStrOrig (AjPTrn trnObj, AjPStr trnSeq, int frame)
+AjPStr ajTrnStrOrig (AjPTrn trnObj, AjPStr trnSeq, ajint frame)
 {
     AjPStr seq=NULL;		/* the string holding the nucleic sequence */
     AjPStr trn=NULL;		/* the string holding the peptide sequence */
     char *seqc;			/* pointer to char sequence */
-    int realframe;
-    int i;
+    ajint realframe;
+    ajint i;
     AjPStr value = NULL;	/* value of frame of the translation */
-    int framelen;		/* length of sequence after the frame-start
+    ajint framelen;		/* length of sequence after the frame-start
                                    position */
-    int lenmod3;		/* length of sequence with no dangling bases
+    ajint lenmod3;		/* length of sequence with no dangling bases
                                    of incomplete codons */
   
     /* get a COPY of the sequence string */
@@ -1342,16 +1342,16 @@ AjPStr ajTrnStrOrig (AjPTrn trnObj, AjPStr trnSeq, int frame)
     {
 	/* speed up slightly by putting the routine in-line */
 	/*  (void) ajStrApp(&trn, ajTrnCodonC (trnObj, &seqc[i])); */
-	(void) ajStrAppK(&trn, trnObj->GC[trnconv[(int)seqc[i]]]
-			 [trnconv[(int)seqc[i+1]]]
-			 [trnconv[(int)seqc[i+2]]]);
+	(void) ajStrAppK(&trn, trnObj->GC[trnconv[(ajint)seqc[i]]]
+			 [trnconv[(ajint)seqc[i+1]]]
+			 [trnconv[(ajint)seqc[i+2]]]);
     }
 
     /* translate any dangling pair of bases at the end */
     if (framelen % 3 == 2)
     {
-	(void) ajStrAppK(&trn, trnObj->GC[trnconv[(int)seqc[i]]]
-			 [trnconv[(int)seqc[i+1]]]
+	(void) ajStrAppK(&trn, trnObj->GC[trnconv[(ajint)seqc[i]]]
+			 [trnconv[(ajint)seqc[i+1]]]
 			 [trnconv[0]]);
     }
     else if (framelen % 3 == 1)
@@ -1416,17 +1416,17 @@ AjPStr ajTrnGetFileName (AjPTrn thys) {
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] codon [AjPStr] codon to checks
 ** @param [w] aa [char *] returned translated amino acid (a char*, not a NULL-terminated array of char)
-** @return [int] 1 if it is a start codon, -1 if it is a stop codon, else 0
+** @return [ajint] 1 if it is a start codon, -1 if it is a stop codon, else 0
 ** @@
 ******************************************************************************/
 
-int ajTrnStartStop (AjPTrn trnObj, AjPStr codon, char *aa) {
+ajint ajTrnStartStop (AjPTrn trnObj, AjPStr codon, char *aa) {
 
   char * res=NULL;
   
-int tc1 = trnconv[(int)res[0]];
-int tc2 = trnconv[(int)res[1]];
-int tc3 = trnconv[(int)res[2]];
+int tc1 = trnconv[(ajint)res[0]];
+int tc2 = trnconv[(ajint)res[1]];
+int tc3 = trnconv[(ajint)res[2]];
 
   *aa = trnObj->GC[tc1][tc2][tc3];
   
@@ -1448,15 +1448,15 @@ int tc3 = trnconv[(int)res[2]];
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] codon [char *] codon to translate (these 3 characters need not be NULL-terminated)
 ** @param [w] aa [char *] returned translated amino acid (a char*, not a NULL-terminated array of char)
-** @return [int] 1 if it is a start codon, -1 if it is a stop codon, else 0
+** @return [ajint] 1 if it is a start codon, -1 if it is a stop codon, else 0
 ** @@
 ******************************************************************************/
 
-int ajTrnStartStopC (AjPTrn trnObj, char *codon, char *aa) {
+ajint ajTrnStartStopC (AjPTrn trnObj, char *codon, char *aa) {
 
-int tc1 = trnconv[(int)codon[0]];
-int tc2 = trnconv[(int)codon[1]];
-int tc3 = trnconv[(int)codon[2]];
+int tc1 = trnconv[(ajint)codon[0]];
+int tc2 = trnconv[(ajint)codon[1]];
+int tc3 = trnconv[(ajint)codon[2]];
 
   *aa = trnObj->GC[tc1][tc2][tc3];
   

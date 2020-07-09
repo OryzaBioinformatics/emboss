@@ -8,6 +8,8 @@
 #ifndef hsregexp_h
 #define hsregexp_h
 
+#include "ajarch.h"
+
 #define NSUBEXP  10
 
 /* @data AjPRegexp *******************************************************
@@ -48,12 +50,12 @@ typedef struct regexp {
 	char reganch;		/* Internal use only. */
         char padding[2];        /* Some chumminess with compiler */
 	char *regmust;		/* Internal use only. */
-	int regmlen;		/* Internal use only. */
+	ajint regmlen;		/* Internal use only. */
 	char program[1];	/* more chumminess with compiler. */
 } regexp, AjORegexp, *AjPRegexp;
 
 extern regexp *hsregcomp(const char *re);
-extern int hsregexec(regexp *rp, const char *s);
+extern ajint hsregexec(regexp *rp, const char *s);
 extern void hsregsub(const regexp *rp, const char *src, char *dst);
 extern void hsregerror(const char *message);
 extern void hsregerror2(const char* fmt, const char *str);

@@ -31,7 +31,7 @@
 #include "limits.h"
 #include "float.h"
 
-int aj_hist_mark=GRAPH_HIST;
+ajint aj_hist_mark=GRAPH_HIST;
 
 
 /* @func ajHistDisplay **********************************************
@@ -46,7 +46,7 @@ int aj_hist_mark=GRAPH_HIST;
 void ajHistDisplay (AjPHist hist){
   PLFLT *data=NULL,*totals=NULL,*totals2=NULL; 
   float ptsperbin,max=FLT_MIN,min=0.0;
-  int i,j,ratioint,num,old;
+  ajint i,j,ratioint,num,old;
   float bin_range,bar_width,offset,start,tot;
   float percent5;
 
@@ -65,7 +65,7 @@ void ajHistDisplay (AjPHist hist){
     return;
   }
   /* is the ratio a whole number? */
-  ratioint = (int)ptsperbin;
+  ratioint = (ajint)ptsperbin;
   if((ptsperbin - (float)ratioint) != 0.0){
     ajErr("number of data points needs to be a multiple of bins");
     return;
@@ -313,7 +313,7 @@ void ajHistClose (void) {
 ***********************************************************************/
 
 void ajHistDelete(AjPHist hist){
-  int i;
+  ajint i;
 
   for(i=0;i<hist->numofsets; i++){
     if(hist->hists[i]->deletedata)
@@ -335,14 +335,14 @@ void ajHistDelete(AjPHist hist){
 ** Create a histogram Object. Which can hold "numofsets" set of data of which
 ** all must have "numofpoints" data points in them.
 **
-** @param [r] numofsets [int] Number of sets of data.
-** @param [r] numofpoints [int] Number of data points per set.
+** @param [r] numofsets [ajint] Number of sets of data.
+** @param [r] numofpoints [ajint] Number of data points per set.
 ** @return [AjPHist] histogram structure.
 ** @@
 **************************************************************************/
-AjPHist ajHistNew(int numofsets, int numofpoints){
+AjPHist ajHistNew(ajint numofsets, ajint numofpoints){
   static AjPHist hist=NULL;
-  int i;
+  ajint i;
   
   AJNEW0(hist);
 
@@ -380,13 +380,13 @@ AjPHist ajHistNew(int numofsets, int numofpoints){
 ** Create a histogram Object which has the histogram data and graph data
 ** storage capacity.
 **
-** @param [r] numofsets [int] Number of sets of data.
-** @param [r] numofpoints [int] Number of data points per set.
+** @param [r] numofsets [ajint] Number of sets of data.
+** @param [r] numofpoints [ajint] Number of data points per set.
 ** @param [r] graph [AjPGraph] Graph object.
 ** @return [AjPHist] histogram structure.
 ** @@
 **************************************************************************/
-AjPHist ajHistNewG (int numofsets, int numofpoints, AjPGraph graph){
+AjPHist ajHistNewG (ajint numofsets, ajint numofpoints, AjPGraph graph){
 
   AjPHist hist = ajHistNew (numofsets, numofpoints);
   hist->graph = graph;
@@ -401,7 +401,7 @@ AjPHist ajHistNewG (int numofsets, int numofpoints, AjPGraph graph){
 ** Set ptr for title for index'th set..
 **
 ** @param [rw] hist [AjPHist]   Histogram to have ptr set.
-** @param [r] index [int]       Index for the set number.
+** @param [r] index [ajint]       Index for the set number.
 ** @param [r] title [AjPStr]    Title.
 ** @return [void]
 ** @@
@@ -421,7 +421,7 @@ void ajHistSetMultiTitle(AjPHist hist,int index, AjPStr title){
 ** Store title for the index'th set.  
 **
 ** @param [rw] hist [AjPHist]   Histogram to have ptr set.
-** @param [r]  index [int]      Index for the set number.
+** @param [r]  index [ajint]      Index for the set number.
 ** @param [r]  title  [char *]  Title.
 ** @return [void]
 ** @@
@@ -441,7 +441,7 @@ void ajHistSetMultiTitleC(AjPHist hist,int index, char *title){
 ** Set ptr for X axis title for index'th set..
 **
 ** @param [rw] hist [AjPHist]   Histogram to have ptr set.
-** @param [r] index [int]       Index for the set number.
+** @param [r] index [ajint]       Index for the set number.
 ** @param [r] title [AjPStr]    x Title.
 ** @return [void]
 ** @@
@@ -461,7 +461,7 @@ void ajHistSetMultiXTitle(AjPHist hist,int index, AjPStr title){
 ** Store X axis title for the index'th set.  
 **
 ** @param [rw] hist [AjPHist]   Histogram to have ptr set.
-** @param [r] index [int]       Index for the set number.
+** @param [r] index [ajint]       Index for the set number.
 ** @param [r] title [char *]    x Title.
 ** @return [void]
 ** @@
@@ -481,7 +481,7 @@ void ajHistSetMultiXTitleC(AjPHist hist,int index, char *title){
 ** Set ptr for Y axis title for index'th set..
 **
 ** @param [rw] hist [AjPHist]   Histogram to have ptr set.
-** @param [r] index [int]       Index for the set number.
+** @param [r] index [ajint]       Index for the set number.
 ** @param [r] title [AjPStr]    Y Title.
 ** @return [void]
 ** @@
@@ -501,7 +501,7 @@ void ajHistSetMultiYTitle(AjPHist hist,int index, AjPStr title){
 ** Store Y axis title for the index'th set.  
 **
 ** @param [rw] hist [AjPHist]   Histogram to have ptr set.
-** @param [r] index [int]       Index for the set number.
+** @param [r] index [ajint]       Index for the set number.
 ** @param [r] title [char *]    Y Title.
 ** @return [void]
 ** @@
@@ -521,7 +521,7 @@ void ajHistSetMultiYTitleC(AjPHist hist,int index, char *title){
 ** Set ptr to data for a set of data points for index'th set..
 **
 ** @param [rw] hist [AjPHist] Histogram to have ptr set.
-** @param [r] index [int]     Index for the set number.
+** @param [r] index [ajint]     Index for the set number.
 ** @param [r] data  [PLFLT*]  Ptr to the data.
 ** @return [void]
 ** @@
@@ -543,13 +543,13 @@ void ajHistSetPtrToData(AjPHist hist,int index, PLFLT *data){
 ** Copy data from data ptr to histogram for index'th set.
 **
 ** @param [rw] hist [AjPHist] Histogram to have ptr set.
-** @param [r] index [int]     Index for the set number.
+** @param [r] index [ajint]     Index for the set number.
 ** @param [r] data  [PLFLT*]  Ptr to the data.
 ** @return [void]
 ** @@
 *************************************************************************/
-void ajHistCopyData(AjPHist hist, int index, PLFLT *data){
-  int i;
+void ajHistCopyData(AjPHist hist, ajint index, PLFLT *data){
+  ajint i;
 
   if(index >= hist->numofdatapoints || index < 0){
     ajErr("Histograms can only be allocated from 0 to %d. NOT %d", hist->numofdatapoints-1,index);
@@ -626,12 +626,12 @@ void ajHistSetYAxisRightC(AjPHist hist, char* string){
 ** Set colour for bars in histogram for index'th set.
 **
 ** @param [rw] hist [AjPHist] Histogram to have ptr set.
-** @param [r] index [int]     Index for the set number.
-** @param [r] colour [int]    Colour for bar set.
+** @param [r] index [ajint]     Index for the set number.
+** @param [r] colour [ajint]    Colour for bar set.
 ** @return [void]
 ** @@
 *************************************************************************/
-void ajHistSetColour(AjPHist hist, int index, int colour){
+void ajHistSetColour(AjPHist hist, ajint index, ajint colour){
 
   if(index >= hist->numofdatapoints || index < 0){
     ajErr("Histograms can only be allocated from 0 to %d. NOT %d",
@@ -648,12 +648,12 @@ void ajHistSetColour(AjPHist hist, int index, int colour){
 ** Set colour for bars in histogram for index'th set.
 **
 ** @param [rw] hist [AjPHist] Histogram to have ptr set.
-** @param [r] index [int]     Index for the set number.
-** @param [r] style [int]    Line style number for bar set.
+** @param [r] index [ajint]     Index for the set number.
+** @param [r] style [ajint]    Line style number for bar set.
 ** @return [void]
 ** @@
 *************************************************************************/
-void ajHistSetPattern(AjPHist hist, int index, int style){
+void ajHistSetPattern(AjPHist hist, ajint index, ajint style){
 
   if(index >= hist->numofdatapoints || index < 0){
     ajErr("Histograms can only be allocated from 0 to %d. NOT %d",

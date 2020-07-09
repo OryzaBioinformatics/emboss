@@ -36,7 +36,7 @@
 
 
 
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
     AjPSeq seq;
     AjPGraph graph = 0;
@@ -54,7 +54,7 @@ int main (int argc, char **argv)
     float pi    = 3.14159;
     float pifac = (pi/180.0);
     float pi2   = pi/2.0;
-    int *iseq   = NULL;
+    ajint *iseq   = NULL;
     float *x;
     float *y;
     float *xave;
@@ -62,9 +62,9 @@ int main (int argc, char **argv)
     float *curve;
     float *bend;
     char *ptr;
-    int i;
-    int k;
-    int j;
+    ajint i;
+    ajint k;
+    ajint j;
     char residue[2];
     float maxbend;
     float minbend;
@@ -74,23 +74,23 @@ int main (int argc, char **argv)
     float curvefactor;
 
     float fxp,fyp,yincr,y1;
-    int ixlen;
-    int iylen;
-    int ixoff;
-    int iyoff;
+    ajint ixlen;
+    ajint iylen;
+    ajint ixoff;
+    ajint iyoff;
     float ystart;
     float defheight;
     float currentheight;
-    int count;
-    int portrait = 0,title=0;
-    int numres;
-    int ibeg;
-    int iend;
-    int ilen;
+    ajint count;
+    ajint portrait = 0,title=0;
+    ajint numres;
+    ajint ibeg;
+    ajint iend;
+    ajint ilen;
     AjPStr  sstr  = NULL;
     AjPFile goutf = NULL;
     AjPStr  fname = NULL;
-    int     fno=1;
+    ajint     fno=1;
     AjBool  data;
     
 
@@ -234,22 +234,22 @@ int main (int argc, char **argv)
 	yave[i] = rysum*0.1;
     }
 
-    for(i=(int)rbend+1;i<=ajStrLen(sstr)-(int)rbend-1;i++)
+    for(i=(ajint)rbend+1;i<=ajStrLen(sstr)-(ajint)rbend-1;i++)
     {
-	bend[i] = sqrt(((x[i+(int)rbend]-x[i-(int)rbend])*(x[i+(int)rbend]-
-							   x[i-(int)rbend])) +
-		       ((y[i+(int)rbend]-y[i-(int)rbend])*(y[i+(int)rbend]-
-							   y[i-(int)rbend])));
+	bend[i] = sqrt(((x[i+(ajint)rbend]-x[i-(ajint)rbend])*(x[i+(ajint)rbend]-
+							   x[i-(ajint)rbend])) +
+		       ((y[i+(ajint)rbend]-y[i-(ajint)rbend])*(y[i+(ajint)rbend]-
+							   y[i-(ajint)rbend])));
 	bend[i]*=bendscale;
     }
 
-    for(i=(int)rcurve+6;i<=ajStrLen(sstr)-(int)rcurve-6;i++)
+    for(i=(ajint)rcurve+6;i<=ajStrLen(sstr)-(ajint)rcurve-6;i++)
     {
-	curve[i] = sqrt(((xave[i+(int)rcurve]-
-			  xave[i-(int)rcurve])*(xave[i+(int)rcurve]-
-						xave[i-(int)rcurve]))+
-			((yave[i+(int)rcurve]-yave[i-(int)rcurve])*
-			 (yave[i+(int)rcurve]-yave[i-(int)rcurve])));
+	curve[i] = sqrt(((xave[i+(ajint)rcurve]-
+			  xave[i-(ajint)rcurve])*(xave[i+(ajint)rcurve]-
+						xave[i-(ajint)rcurve]))+
+			((yave[i+(ajint)rcurve]-yave[i-(ajint)rcurve])*
+			 (yave[i+(ajint)rcurve]-yave[i-(ajint)rcurve])));
     }
  
 
@@ -405,7 +405,7 @@ int main (int argc, char **argv)
 			    (float)count+1.5,yp1,(float)(count)+2.5,yp2);
 	    
 	}
-	if(i>(int)rcurve+5 && i< ajStrLen(sstr)-(int)rcurve-7)
+	if(i>(ajint)rcurve+5 && i< ajStrLen(sstr)-(ajint)rcurve-7)
 	{
 	    float yp1,yp2;
 	    yp1=y1+yincr + (curve[i]*curvefactor);

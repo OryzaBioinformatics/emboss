@@ -34,11 +34,14 @@ Command line arguments
   [-outseq]            seqout     Sequence file
    -graph              xygraph    Graph type
 
-   Optional qualifiers: (none)
+   Optional qualifiers:
+   -yticks             bool       Display y-axis ticks
+   -[no]sequence       bool       Display the sequence on the graph
+   -window             integer    Sequence display window size
+   -bases              string     Base graphs to be displayed
+
    Advanced qualifiers:
    -separate           bool       Separate the trace graphs for the 4 bases
-   -yticks             bool       Display y-axis ticks
-   -window             integer    Sequence display window size
    
 
    Mandatory qualifiers Allowed values Default
@@ -52,11 +55,12 @@ Command line arguments
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
    EMBOSS_GRAPHICS value, or x11
    Optional qualifiers Allowed values Default
-   (none)
+   -yticks Display y-axis ticks Yes/No No
+   -[no]sequence Display the sequence on the graph Yes/No Yes
+   -window Sequence display window size Any integer value 40
+   -bases Base graphs to be displayed Any string is accepted GATC
    Advanced qualifiers Allowed values Default
    -separate Separate the trace graphs for the 4 bases Yes/No No
-   -yticks Display y-axis ticks Yes/No No
-   -window Sequence display window size Any integer value 40
    
 Input file format
 

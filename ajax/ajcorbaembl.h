@@ -131,7 +131,7 @@ extern "C"
 #define _org_biocorba_seqcore_EndOfStream_defined 1
    typedef struct
    {
-      int dummy;
+      ajint dummy;
    }
    org_biocorba_seqcore_EndOfStream;
 

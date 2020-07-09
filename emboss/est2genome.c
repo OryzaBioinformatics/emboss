@@ -1,7 +1,7 @@
 /*
  * Revision 1.7 1997/03/17   15:26:00  pmr
  * when EST is reversed, need to reverse the EST sequence positions
- * also cleaned up long code lines
+ * also cleaned up ajlong code lines
 
  * Revision 1.6  1997/02/10  14:07:54  rmott
  * fixed bug so that splice sites in REVERSE direction
@@ -29,46 +29,46 @@
 #include "embest.h"
 #include <math.h>
 
-extern int lsimmat[256][256];
+extern ajint lsimmat[256][256];
 
 #define BOTH 0
 #define FORWARD_ONLY 1
 #define REVERSE_ONLY 2
 
-extern int verbose;
-extern int debug;
-extern int indentation;
+extern ajint verbose;
+extern ajint debug;
+extern ajint indentation;
 
 void 
 make_output( AjPFile ofile, SEQUENCE *genome, SEQUENCE *est, ge_alignment *ge,
-	    int match, int mismatch, int gap_penalty, int intron_penalty,
-	    int splice_penalty, int minscore, int align, int width,
-	    int reverse);
+	    ajint match, ajint mismatch, ajint gap_penalty, ajint intron_penalty,
+	    ajint splice_penalty, ajint minscore, ajint align, ajint width,
+	    ajint reverse);
 
-int 
-main( int argc, char *argv[])
+ajint 
+main( ajint argc, char *argv[])
 {
   SEQUENCE *genome;
   SEQUENCE *splice_sites, *reversed_splice_sites;
   SEQUENCE *est, *reversed_est=NULL;
   ge_alignment *fge=NULL, *rge=NULL, *bge=NULL;
-  int width=50;
-  int match=1;
-  int mismatch=1;
-  int gap_penalty=2;
-  int intron_penalty=40;
-  int splice_penalty=20;
-  int splice=1;
-  int align=0;
-  int reverse=0;
-  int isreverse=0;
-  int doreverse=0;		/* zero for first inclusion, set to 1 later */
+  ajint width=50;
+  ajint match=1;
+  ajint mismatch=1;
+  ajint gap_penalty=2;
+  ajint intron_penalty=40;
+  ajint splice_penalty=20;
+  ajint splice=1;
+  ajint align=0;
+  ajint reverse=0;
+  ajint isreverse=0;
+  ajint doreverse=0;		/* zero for first inclusion, set to 1 later */
   float megabytes=10.0;
-  int minscore=30;
-  int shuffles=0, max_score=0;
-  int seed;
-  int best=1;
-  int search_mode;
+  ajint minscore=30;
+  ajint shuffles=0, max_score=0;
+  ajint seed;
+  ajint best=1;
+  ajint search_mode;
   char *mode;
   AjPStr modestr;
   AjPFile outfile;
@@ -208,8 +208,8 @@ main( int argc, char *argv[])
 	  if ( shuffles > 0 )
 	    {
 	      SEQUENCE *shuffled_est = seqdup( est );
-	      int n;
-	      int score;
+	      ajint n;
+	      ajint score;
 	      double mean=0, std=0;
 	      ge_alignment *sge;
 
@@ -390,9 +390,9 @@ main( int argc, char *argv[])
 
 void 
 make_output( AjPFile ofile, SEQUENCE *genome, SEQUENCE *est, ge_alignment *ge,
-	    int match, int mismatch, int gap_penalty, int intron_penalty,
-	    int splice_penalty, int minscore, int align, int width,
-	    int reverse)
+	    ajint match, ajint mismatch, ajint gap_penalty, ajint intron_penalty,
+	    ajint splice_penalty, ajint minscore, ajint align, ajint width,
+	    ajint reverse)
 {
   if ( ge->score >= minscore )
     {

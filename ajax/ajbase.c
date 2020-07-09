@@ -28,7 +28,7 @@
 #define IUBFILE "Ebases.iub"
 
 AjIUB aj_base_iubS[256];	/* Base letters and their alternatives */
-int aj_base_table[256];		/* Base letter numerical codes         */
+ajint aj_base_table[256];		/* Base letter numerical codes         */
 float aj_base_prob[32][32];     /* Assym base probability matches      */
 
 
@@ -42,16 +42,16 @@ AjBool aj_base_I= 0;
 **
 ** Returns A=0 to Z=25  or 27 otherwise
 **
-** @param  [r] c [int] character to convert
+** @param  [r] c [ajint] character to convert
 **
-** @return [int] A=0 to Z=25 or 27 if unknown
+** @return [ajint] A=0 to Z=25 or 27 if unknown
 ** @@
 ******************************************************************************/
 
-int ajAZToInt(int c)
+ajint ajAZToInt(ajint c)
 {
   if((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') )
-    return(toupper(c)-(int)'A');
+    return(toupper(c)-(ajint)'A');
   return 27;
 }
 
@@ -64,15 +64,15 @@ int ajAZToInt(int c)
 **
 ** Returns 'A' for 0 to  'Z' for 25
 **
-** @param  [r] n [int] character to convert
+** @param  [r] n [ajint] character to convert
 **
-** @return [int] 0 as 'A' up to  25 as 'Z'
+** @return [ajint] 0 as 'A' up to  25 as 'Z'
 ** @@
 ******************************************************************************/
 
-int ajIntToAZ(int n)
+ajint ajIntToAZ(ajint n)
 {
-    return(n+(int)'A');
+    return(n+(ajint)'A');
 }
 
 
@@ -85,12 +85,12 @@ int ajIntToAZ(int n)
 ** G=4 and T=8
 ** Uses the base table set up by ajBaseInit
 **
-** @param  [r] c [int] character to convert
+** @param  [r] c [ajint] character to convert
 **
-** @return [int] Binary OR'd representation
+** @return [ajint] Binary OR'd representation
 ******************************************************************************/
 
-int ajAZToBin(int c)
+ajint ajAZToBin(ajint c)
 {
     if(!aj_base_I) ajBaseInit();
     return (aj_base_table[toupper(c)]);
@@ -112,7 +112,7 @@ int ajAZToBin(int c)
 char ajAZToBinC(char c)
 {
     if(!aj_base_I) ajBaseInit();
-    return ajSysItoC(aj_base_table[toupper((int) c)]);
+    return ajSysItoC(aj_base_table[toupper((ajint) c)]);
 }
 
 
@@ -139,19 +139,19 @@ void ajBaseInit(void)
     AjPStr  code=NULL;
     AjPStr  list=NULL;
 
-    int i;
-    int j;
-    int k;
+    ajint i;
+    ajint j;
+    ajint k;
 
-    int c;
+    ajint c;
     
-    int l1;
-    int l2;
+    ajint l1;
+    ajint l2;
     
-    int x;
-    int y;
+    ajint x;
+    ajint y;
     
-    int n;
+    ajint n;
     char *p;
     char *q;
     
@@ -195,12 +195,12 @@ void ajBaseInit(void)
 	(void) ajStrAssC(&list,p);
 	q=ajStrStr(code);
 	p=ajStrStr(list);
-	(void) ajStrAssC(&aj_base_iubS[toupper((int) *q)].code,q);
-	(void) ajStrAssC(&aj_base_iubS[toupper((int) *q)].list,p);
-	(void) ajStrAssC(&aj_base_iubS[tolower((int) *q)].code,q);
-	(void) ajStrAssC(&aj_base_iubS[tolower((int) *q)].list,p);
-	aj_base_table[toupper((int) *q)] = n;
-	aj_base_table[tolower((int) *q)] = n;
+	(void) ajStrAssC(&aj_base_iubS[toupper((ajint) *q)].code,q);
+	(void) ajStrAssC(&aj_base_iubS[toupper((ajint) *q)].list,p);
+	(void) ajStrAssC(&aj_base_iubS[tolower((ajint) *q)].code,q);
+	(void) ajStrAssC(&aj_base_iubS[tolower((ajint) *q)].list,p);
+	aj_base_table[toupper((ajint) *q)] = n;
+	aj_base_table[tolower((ajint) *q)] = n;
     }
     
     ajStrDel(&code);
@@ -230,11 +230,43 @@ void ajBaseInit(void)
 	    l1 = strlen(p);
 	    l2 = strlen(q);
 	    for(k=0,c=0;k<l1;++k)
-		if(strchr(q,(int)*(p+k))) ++c;
+		if(strchr(q,(ajint)*(p+k))) ++c;
 	    if(l2) aj_base_prob[i][j] = (float)c / (float)l2;
 	    else aj_base_prob[i][j]=0.0;
 	}
     }
 
     aj_base_I = ajTrue;
+}
+
+
+/* @func ajBaseAa1ToAa3 **********************************************************
+**
+** Writes an AjPStr with a amino acid 3 letter code
+** JCI - This should probably be an emb function and might replace the use 
+** of embPropCharToThree &  embPropIntToThree
+**
+** @param [w] aa3  [AjPStr *] AjPStr object
+** @param [r] char [aa1]    Single letter identifier of amino acid
+**
+** @return [AjBool] True on succcess
+** @@
+******************************************************************************/
+AjBool  ajBaseAa1ToAa3(char aa1, AjPStr *aa3)
+{
+    ajint idx;
+    
+    static char *tab[]=
+    {
+	"ALA\0","ASX\0","CYS\0","ASP\0","GLU\0","PHE\0","GLY\0","HIS\0",
+	"ILE\0","---\0","LYS\0","LEU\0","MET\0","ASN\0","---\0","PRO\0",
+	"GLN\0","ARG\0","SER\0","THR\0","---\0","VAL\0","TRP\0","XAA\0",
+	"TYR\0","GLX\0" 
+    };
+
+    if((idx=ajAZToInt(aa1))==27)
+	return ajFalse;
+
+    ajStrAssC(aa3, tab[idx]);
+    return ajTrue;
 }

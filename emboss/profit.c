@@ -26,34 +26,34 @@
 #define AZ 27
 
 
-static void read_profile(AjPFile inf, AjPStr *name, AjPStr *mname, int *mlen,
-			  float *gapopen, float *gapextend, int *thresh,
+static void read_profile(AjPFile inf, AjPStr *name, AjPStr *mname, ajint *mlen,
+			  float *gapopen, float *gapextend, ajint *thresh,
 			  float *maxs, AjPStr *cons);
 
-static void read_simple(AjPFile inf, AjPStr *name, int *mlen,
-			int *maxs, int *thresh,AjPStr *cons);
+static void read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
+			ajint *maxs, ajint *thresh,AjPStr *cons);
 
 void scan_profile(AjPStr substr, AjPStr pname, AjPStr name, AjPStr mname,
-		   int mlen, float **fmatrix, int thresh, float maxs,
+		   ajint mlen, float **fmatrix, ajint thresh, float maxs,
 		   float gapopen, float gapextend, AjPFile outf,
 		   AjPStr *cons);
 
 void scan_simple(AjPStr substr, AjPStr pname, AjPStr name,int mlen,int maxs,
-		 int thresh,int **matrix,AjPFile outf,AjPStr *cons);
+		 ajint thresh,int **matrix,AjPFile outf,AjPStr *cons);
 
-void printHits(AjPStr substr,AjPStr pname, int pos, AjPStr name, int score,
-	       int thresh,float maxs, AjPFile outf,AjPStr *cons);
+void printHits(AjPStr substr,AjPStr pname, ajint pos, AjPStr name, ajint score,
+	       ajint thresh,float maxs, AjPFile outf,AjPStr *cons);
 
-int getType(AjPFile inf);
-
-
+ajint getType(AjPFile inf);
 
 
 
 
 
 
-int main( int argc, char **argv, char **env)
+
+
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
@@ -68,22 +68,22 @@ int main( int argc, char **argv, char **env)
     AjPStr    line=NULL;
     AjPStr    cons=NULL;
     
-    int       type;
-    int       begin;
-    int       end;
-    /*    int       len;*/
-    int       i;
-    int       j;
+    ajint       type;
+    ajint       begin;
+    ajint       end;
+    /*    ajint       len;*/
+    ajint       i;
+    ajint       j;
     
-    int   **matrix=NULL;
+    ajint   **matrix=NULL;
     float **fmatrix=NULL;
 
     void  **fptr=NULL;
     
-    int mlen;
-    int maxs;
+    ajint mlen;
+    ajint maxs;
     float maxfs;
-    int thresh;
+    ajint thresh;
 
     float gapopen;
     float gapextend;
@@ -231,11 +231,11 @@ int main( int argc, char **argv, char **env)
 
 
 
-int getType(AjPFile inf)
+ajint getType(AjPFile inf)
 {
     AjPStr line=NULL;
     char *p=NULL;
-    int  ret=0;
+    ajint  ret=0;
     
     line=ajStrNew();
 
@@ -259,8 +259,8 @@ int getType(AjPFile inf)
 
 
 
-static void read_simple(AjPFile inf, AjPStr *name, int *mlen,
-		 int *maxs, int *thresh, AjPStr *cons)
+static void read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
+		 ajint *maxs, ajint *thresh, AjPStr *cons)
 {
     char *p;
     
@@ -315,8 +315,8 @@ static void read_simple(AjPFile inf, AjPStr *name, int *mlen,
 
 
 
-static void read_profile(AjPFile inf, AjPStr *name, AjPStr *mname, int *mlen,
-			  float *gapopen, float *gapextend, int *thresh,
+static void read_profile(AjPFile inf, AjPStr *name, AjPStr *mname, ajint *mlen,
+			  float *gapopen, float *gapextend, ajint *thresh,
 			  float *maxs, AjPStr *cons)
 {
     char *p;
@@ -399,16 +399,16 @@ static void read_profile(AjPFile inf, AjPStr *name, AjPStr *mname, int *mlen,
 
 
 void scan_simple(AjPStr substr, AjPStr pname, AjPStr name,int mlen,int maxs,
-		 int thresh,int **matrix,AjPFile outf, AjPStr *cons)
+		 ajint thresh,int **matrix,AjPFile outf, AjPStr *cons)
 {
-    int len;
-    int i;
-    int j;
-    int lim;
+    ajint len;
+    ajint i;
+    ajint j;
+    ajint lim;
     char *p;
 
-    int score;
-    int sum;
+    ajint score;
+    ajint sum;
 
     
     len = ajStrLen(substr);
@@ -430,8 +430,8 @@ void scan_simple(AjPStr substr, AjPStr pname, AjPStr name,int mlen,int maxs,
 
 
 
-void printHits(AjPStr substr,AjPStr pname, int pos, AjPStr name, int score,
-	       int thresh, float maxs, AjPFile outf, AjPStr *cons)
+void printHits(AjPStr substr,AjPStr pname, ajint pos, AjPStr name, ajint score,
+	       ajint thresh, float maxs, AjPFile outf, AjPStr *cons)
 {
 
     ajFmtPrintF(outf,"%s %d Percentage: %d\n",ajStrStr(pname),pos+1,score);
@@ -440,14 +440,14 @@ void printHits(AjPStr substr,AjPStr pname, int pos, AjPStr name, int score,
 
 
 void scan_profile(AjPStr substr, AjPStr pname, AjPStr name, AjPStr mname,
-		   int mlen, float **fmatrix, int thresh, float maxs,
+		   ajint mlen, float **fmatrix, ajint thresh, float maxs,
 		   float gapopen, float gapextend, AjPFile outf,
 		   AjPStr *cons)
 {
-    int len;
-    int i;
-    int j;
-    int lim;
+    ajint len;
+    ajint i;
+    ajint j;
+    ajint lim;
     char *p;
 
     float score;
@@ -464,8 +464,8 @@ void scan_profile(AjPStr substr, AjPStr pname, AjPStr name, AjPStr mname,
 	for(j=0;j<mlen;++j)
 	    sum += fmatrix[j][ajAZToInt(*(p+i+j))];
 	score = sum * 100. / maxs;
-	if((int)score >= thresh)
-	    printHits(substr,pname,i,name,(int)score,thresh,maxs,outf,
+	if((ajint)score >= thresh)
+	    printHits(substr,pname,i,name,(ajint)score,thresh,maxs,outf,
 		      cons);
     }
     return;

@@ -14,13 +14,13 @@
 ** Must be called in each EMBOSS program first.
 **
 ** @param [r] pgm [char*] Application name, used as the name of the ACD file
-** @param [r] argc [int] Number of arguments provided on the command line,
+** @param [r] argc [ajint] Number of arguments provided on the command line,
 **        usually passsed as-is by the calling application.
 ** @param [r] argv [char* []] Actual arguments as an array of text.
 ** @return [AjStatus] Always returns ajStatusOK or aborts.
 ** @@
 ******************************************************************************/
-AjStatus embInit (char *pgm, int argc, char *argv[]) {
+AjStatus embInit (char *pgm, ajint argc, char *argv[]) {
 
   ajNamInit("emboss");
   return ajAcdInit (pgm, argc, argv);
@@ -35,14 +35,14 @@ AjStatus embInit (char *pgm, int argc, char *argv[]) {
 ** Must be called in each EMBOSS program first.
 **
 ** @param [r] pgm [char*] Application name, used as the name of the ACD file
-** @param [r] argc [int] Number of arguments provided on the command line,
+** @param [r] argc [ajint] Number of arguments provided on the command line,
 **        usually passsed as-is by the calling application.
 ** @param [r] argv [char* []] Actual arguments as an array of text.
 ** @param [r] package [char*] Package name, used to find the ACD file
 ** @return [AjStatus] Always returns ajStatusOK or aborts.
 ** @@
 ******************************************************************************/
-AjStatus embInitP (char *pgm, int argc, char *argv[], char *package) {
+AjStatus embInitP (char *pgm, ajint argc, char *argv[], char *package) {
 
   ajNamInit(package);
   return ajAcdInit (pgm, argc, argv);

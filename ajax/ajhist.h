@@ -40,13 +40,13 @@ extern "C"
 
 #define GRAPH_HIST (AJGRAPH_X_BOTTOM + AJGRAPH_Y_LEFT + AJGRAPH_Y_RIGHT+ AJGRAPH_Y_INVERT_TICK + AJGRAPH_X_INVERT_TICK + AJGRAPH_Y_TICK + AJGRAPH_X_TICK + AJGRAPH_X_LABEL + AJGRAPH_Y_LABEL + AJGRAPH_TITLE )
 
-extern int aj_hist_mark;    
+extern ajint aj_hist_mark;    
 
 typedef struct AjSHistData {
   float *data; /* y coors */
   AjBool deletedata;
-  int colour;
-  int pattern;
+  ajint colour;
+  ajint pattern;
   /*  AjPStr label;*/
   AjPStr title;
   AjPStr xaxis;
@@ -55,12 +55,12 @@ typedef struct AjSHistData {
 } AjOHistData, *AjPHistData;
 
 typedef struct AjSHist {
-  int numofsets;        /* number of current sets */
-  int numofsetsmax;     /* maximum number of sets */
-  int numofdatapoints; 
+  ajint numofsets;        /* number of current sets */
+  ajint numofsetsmax;     /* maximum number of sets */
+  ajint numofdatapoints; 
   float xmin,xmax;
-  int displaytype;
-  int bins;
+  ajint displaytype;
+  ajint bins;
   AjBool BaW;           /* Black and White */
   AjPStr title;
   AjPStr xaxis;
@@ -71,20 +71,20 @@ typedef struct AjSHist {
 } AjOHist, *AjPHist;
 
 void    ajHistClose (void);
-void    ajHistCopyData (AjPHist hist, int index, PLFLT *data);
+void    ajHistCopyData (AjPHist hist, ajint index, PLFLT *data);
 void    ajHistDelete (AjPHist hist);
 void    ajHistDisplay (AjPHist hist);
-AjPHist ajHistNew (int numofsets, int numofpoints);
-AjPHist ajHistNewG (int numofsets, int numofpoints, AjPGraph graph);
+AjPHist ajHistNew (ajint numofsets, ajint numofpoints);
+AjPHist ajHistNewG (ajint numofsets, ajint numofpoints, AjPGraph graph);
 void    ajHistSetBlackandWhite (AjPHist hist, AjBool set);
-void    ajHistSetColour(AjPHist hist, int index, int colour);
+void    ajHistSetColour(AjPHist hist, ajint index, ajint colour);
 void    ajHistSetMultiTitle  (AjPHist hist,int index, AjPStr title);
 void    ajHistSetMultiTitleC (AjPHist hist,int index, char *title);
 void    ajHistSetMultiXTitle  (AjPHist hist,int index, AjPStr title);
 void    ajHistSetMultiXTitleC (AjPHist hist,int index, char *title);
 void    ajHistSetMultiYTitle  (AjPHist hist,int index, AjPStr title);
 void    ajHistSetMultiYTitleC (AjPHist hist,int index, char *title);
-void    ajHistSetPattern (AjPHist hist, int index, int style);
+void    ajHistSetPattern (AjPHist hist, ajint index, ajint style);
 void    ajHistSetPtrToData (AjPHist hist,int index, PLFLT *data);
 void    ajHistSetTitleC (AjPHist hist, char* string);
 void    ajHistSetXAxisC (AjPHist hist, char* string);

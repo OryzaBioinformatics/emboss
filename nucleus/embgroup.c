@@ -298,9 +298,9 @@ static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
   AjPStr tmpstr = NULL;
   AjPStr token = NULL;
   AjPStr value = NULL;
-  int done=0;
-  int donedoc = ajFalse;
-  int donegroup = ajFalse;
+  ajint done=0;
+  ajint donedoc = ajFalse;
+  ajint donegroup = ajFalse;
   AjPStr nullgroup = NULL;
   AjPStr newstr = NULL;
 
@@ -395,7 +395,7 @@ static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
 ******************************************************************************/
 
 static void trnNoComment (AjPStr* text) {
-  int i;
+  ajint i;
   char *cp;
 	    
   (void) ajStrChomp (text);
@@ -436,7 +436,7 @@ static AjPStr grpParseValueRB (AjPStrTok* tokenhandle, char* delim) {
   static AjPStr tmpstrp=NULL;
   char  endq[]=" ";
   char  endqbr[]=" ]"; 
-  int iquote;
+  ajint iquote;
   char *cq;
   AjBool done = ajFalse;
   AjBool rightb = ajFalse;
@@ -599,8 +599,8 @@ combinations of name */
 static void subsplitlist (AjPList groups, AjPList sublist) {
 
   AjPStr *sub;		/* array of sub-names */
-  int len;		/* length of array of sub-names */
-  int i, j;		/* loop counters */
+  ajint len;		/* length of array of sub-names */
+  ajint i, j;		/* loop counters */
   AjPStr head, tail, revhead, revtail;	/* constructed group names */
   AjPStr dummy;		/* dummy string for ajListstrPop() */
   
@@ -866,11 +866,11 @@ void embGrpSortGroupsList(AjPList groupslist) {
 ** @param [r] a [const void *] First node
 ** @param [r] b [const void *] Second node
 **
-** @return [int] Compare value (-1, 0, +1)
+** @return [ajint] Compare value (-1, 0, +1)
 ** @@
 ******************************************************************************/
 
-int embGrpCompareTwoGnodes(const void * a, const void * b) {
+ajint embGrpCompareTwoGnodes(const void * a, const void * b) {
   return ajStrCmpCase((*(GPnode *)a)->name, (*(GPnode *)b)->name);
 }
 

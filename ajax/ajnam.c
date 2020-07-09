@@ -77,7 +77,7 @@ static AjPStr namPrefixStr = NULL;
 static AjPStr namFileOrig = NULL;
 
 static AjPTable standardNames = NULL;
-static int namParseType = 0;
+static ajint namParseType = 0;
 
 typedef struct NamSAttr {
   char* Name;
@@ -115,23 +115,23 @@ NamOAttr namAttr[] = {
 typedef struct AjSNamStandards {
   AjPStr name;
   AjPStr value;
-  int type;
-  int scope;
+  ajint type;
+  ajint scope;
   void* data ;	     /* Attribute values for database*/
 } AjONamStandards, *AjPNamStandards;
 
 static void namListStandardsDelete(void);
 static void namPrintDatabase(AjPStr* dbattr);
-static void namListStandards(int which);
-static int namMethod2Scope (AjPStr method);
-static void namDebugStandards(int which);
+static void namListStandards(ajint which);
+static ajint namMethod2Scope (AjPStr method);
+static void namDebugStandards(ajint which);
 static void namDebugDatabases(void);
 static void namDebugEnvironmentals(void);
 static void namListParse(void **x,void *cl);
 static void namProcessFile(FILE *file);
 static void namNoColon (AjPStr *thys);
-static int namDbAttr (AjPStr thys);
-static int namDbAttrC (char* str);
+static ajint namDbAttr (AjPStr thys);
+static ajint namDbAttrC (char* str);
 static void namUser (char *fmt, ...);
 static void namEntryDelete (AjPNamStandards entry);
 static AjBool namDbSetAttr (AjPStr* dbattr, char* attrib, AjPStr* qrystr);
@@ -148,7 +148,7 @@ static AjBool namVarResolve (AjPStr* var);
 
 static void namEntryDelete (AjPNamStandards entry) {
 
-  int j; 
+  ajint j; 
   AjPStr* dbattr;
 
   if(entry->type == TYPE_DB){
@@ -190,7 +190,7 @@ static void namEntryDelete (AjPNamStandards entry) {
 
 static void namListStandardsDelete (void) {
 
-  int i;
+  ajint i;
   AjPNamStandards fnew = 0;
   void **array = ajTableToarray(standardNames, NULL);
 
@@ -215,7 +215,7 @@ static void namListStandardsDelete (void) {
 
 static void namPrintDatabase (AjPStr* dbattr){
 
-  int i;
+  ajint i;
 
   for (i=0; namAttr[i].Name; i++) {
     if (ajStrLen(dbattr[i])) {
@@ -230,14 +230,14 @@ static void namPrintDatabase (AjPStr* dbattr){
 **
 ** Lists databases or variables defined in the internal table.
 **
-** @param [r] which [int] Variable type, either TYPE_ENV for environment
+** @param [r] which [ajint] Variable type, either TYPE_ENV for environment
 **                        variables or TYPE_DB for databases.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void namListStandards (int which)
-{ int i;
+static void namListStandards (ajint which)
+{ ajint i;
   AjPNamStandards fnew;
   void **array = ajTableToarray(standardNames, NULL);
   char *key;
@@ -279,8 +279,8 @@ AjBool ajNamDbDetails (AjPStr name, AjPStr* type, AjBool* id, AjBool* qry,
 		       AjBool* all, AjPStr* comment) { 
   AjPNamStandards fnew = 0;
   AjPStr* dbattr = NULL;
-  int i;
-  int scope;
+  ajint i;
+  ajint scope;
 
 /* assume that the database can't be accessed by any method until we find otherwise */
   *id = *qry = *all = ajFalse;
@@ -335,12 +335,12 @@ AjBool ajNamDbDetails (AjPStr name, AjPStr* type, AjBool* id, AjBool* qry,
 **
 ** @param [r] method [AjPStr] Variable type, either TYPE_ENV for environment
 **
-** @return [int] OR'ed values for the valid scope of the access method given
+** @return [ajint] OR'ed values for the valid scope of the access method given
 ** @@
 ******************************************************************************/
-static int namMethod2Scope (AjPStr method) {
+static ajint namMethod2Scope (AjPStr method) {
 
-int result = 0;
+ajint result = 0;
 
  if (!ajStrCmpC(method, "direct"))
    result = (METHOD_ALL | SLOW_QUERY | SLOW_ENTRY );
@@ -377,14 +377,14 @@ int result = 0;
 ** Writes report to standard output of databases or variables defined
 ** in the internal table.
 **
-** @param [r] which [int] Variable type, either TYPE_ENV for environment
+** @param [r] which [ajint] Variable type, either TYPE_ENV for environment
 **                        variables or TYPE_DB for databases.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void namDebugStandards (int which)
-{ int i;
+static void namDebugStandards (ajint which)
+{ ajint i;
   AjPNamStandards fnew;
   void **array = ajTableToarray(standardNames, NULL);
   char *key;
@@ -453,7 +453,7 @@ void ajNamListDatabases (void)
 ******************************************************************************/
 
 void ajNamListListDatabases (AjPList dbnames) {
-  int i;
+  ajint i;
   AjPNamStandards fnew;
   void **array = ajTableToarray(standardNames, NULL);
 
@@ -541,12 +541,12 @@ static void namListParse (void** x,void* cl) {
   static AjPStr value = 0;
   static char quoteopen = 0, quoteclose = 0;
   static AjPStr* dbattr = 0;
-  static int  db_input = -1;
+  static ajint  db_input = -1;
   AjPNamStandards fnew = 0, entry=0;
   AjPStr *p = (AjPStr*)x;
   AjBool dbsave = ajFalse;
   AjBool saveit = ajFalse;
-  int nattr = 0;
+  ajint nattr = 0;
 
   for (nattr=0; namAttr[nattr].Name; nattr++) ;	/* nattr = count attributes */
 
@@ -841,7 +841,7 @@ static void namProcessFile (FILE* file) {
   char line[512];
   char word[512];
   char *ptr;
-  int i=0,j=0,len;
+  ajint i=0,j=0,len;
   char quote='\0';
   AjPList list1;
   AjPStr wordptr;
@@ -1078,15 +1078,15 @@ static void namNoColon (AjPStr* thys) {
 ** Return the index for an attribute name.
 **
 ** @param [P] thys [AjPStr] Attribute name.
-** @return [int] Index in namAttr, or 1 beyond the last known attribute
+** @return [ajint] Index in namAttr, or 1 beyond the last known attribute
 **               on failure.
 ** @@
 ******************************************************************************/
 
-static int namDbAttr (AjPStr thys) {
-  int i = 0;
-  int j = 0;
-  int ifound = 0;
+static ajint namDbAttr (AjPStr thys) {
+  ajint i = 0;
+  ajint j = 0;
+  ajint ifound = 0;
 
   for (i=0; namAttr[i].Name; i++) {
     if (ajStrMatchC (thys, namAttr[i].Name))
@@ -1108,15 +1108,15 @@ static int namDbAttr (AjPStr thys) {
 ** Return the index for an attribute name.
 **
 ** @param [P] str [char*] Attribute name.
-** @return [int] Index in namAttr, or 1 beyond the last known attribute
+** @return [ajint] Index in namAttr, or 1 beyond the last known attribute
 **               on failure.
 ** @@
 ******************************************************************************/
 
-static int namDbAttrC (char* str) {
-  int i = 0;
-  int j = 0;
-  int ifound = 0;
+static ajint namDbAttrC (char* str) {
+  ajint i = 0;
+  ajint j = 0;
+  ajint ifound = 0;
 
   for (i=0; namAttr[i].Name; i++) {
     if (!strcmp (str, namAttr[i].Name))
@@ -1183,8 +1183,8 @@ AjBool ajNamDbGetUrl (AjPStr dbname, AjPStr* url) {
 
   AjPNamStandards data;
   AjPStr* dbattr;
-  static int calls = 0;
-  static int iurl = 0;
+  static ajint calls = 0;
+  static ajint iurl = 0;
   if (!calls) {
     iurl = namDbAttrC("url");
     calls = 1;
@@ -1220,8 +1220,8 @@ AjBool ajNamDbGetDbalias (AjPStr dbname, AjPStr* dbalias) {
 
   AjPNamStandards data;
   AjPStr* dbattr;
-  static int calls = 0;
-  static int idba = 0;
+  static ajint calls = 0;
+  static ajint idba = 0;
   if (!calls) {
     idba = namDbAttrC("dbalias");
     calls = 1;
@@ -1344,7 +1344,7 @@ AjBool ajNamDbQuery (AjPSeqQuery qry) {
 
 static AjBool namDbSetAttr (AjPStr* dbattr, char* attrib, AjPStr* qrystr) {
 
-  int i = namDbAttrC(attrib);
+  ajint i = namDbAttrC(attrib);
 
   if (!i) {
     ajFatal("unknown attribute '%s' requested",  attrib);

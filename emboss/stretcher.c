@@ -31,22 +31,22 @@
 #define gap(k)  ((k) <= 0 ? 0 : g+hh*(k))	/* k-symbol indel score */
 
 
-int EALIGN(char A[], char B[], int M, int N, int G, int H, int S[], int* NC);
-int calcons(char *aa0, int n0, char *aa1, int n1, int* res);
-int discons(char* seqc0, char *seqc1, int nc);
-int align(char *A, char *B, int M, int N, int tb, int te);
-int CHECK_SCORE(unsigned char A[], unsigned char B[], int M,
-		int N, int S[], int *NC);
+ajint EALIGN(char A[], char B[], ajint M, ajint N, ajint G, ajint H, ajint S[], ajint* NC);
+ajint calcons(char *aa0, ajint n0, char *aa1, ajint n1, ajint* res);
+ajint discons(char* seqc0, char *seqc1, ajint nc);
+ajint align(char *A, char *B, ajint M, ajint N, ajint tb, ajint te);
+ajint CHECK_SCORE(unsigned char A[], unsigned char B[], ajint M,
+		ajint N, ajint S[], ajint *NC);
 
 
-static int markx;                               /* what to display ? */
-static int llen;
+static ajint markx;                               /* what to display ? */
+static ajint llen;
 
-static int *sapp;				/* Current script append ptr */
-static int  last;				/* Last script op appended */
+static ajint *sapp;				/* Current script append ptr */
+static ajint  last;				/* Last script op appended */
 
                                                 /* gap penalties */
-static int g, hh, m;				/* g = G, hh = H, m = g+h */
+static ajint g, hh, m;				/* g = G, hh = H, m = g+h */
 #define DEL(k)				\
 { if (last < 0)				\
     last = sapp[-1] -= (k);		\
@@ -65,30 +65,31 @@ static int g, hh, m;				/* g = G, hh = H, m = g+h */
 
 
 static  AjPSeq seq,seq2;
-static int **sub;
+static ajint **sub;
 
-static int *CC, *DD;			/* Forward cost-only vectors */
-static int *RR, *SS;		        /* Reverse cost-only vectors */
+static ajint *CC, *DD;			/* Forward cost-only vectors */
+static ajint *RR, *SS;		        /* Reverse cost-only vectors */
 
 char *seqc0, *seqc1;   /* aligned sequences */
 
-int min0,min1,max0,max1;
-int smin0, smin1;
+ajint min0,min1,max0,max1;
+ajint smin0, smin1;
 AjPFile outf;
 
-int nd;
-int *res,nres;
-int nc;
+ajint nd;
+ajint *res,nres;
+ajint nc;
 
 AjPMatrix matrix = NULL;
 AjPSeqCvt cvt = NULL;
 
-int main (int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
   AjPStr aa0str=0,aa1str=0;
   char *s1,*s2;
-  int gdelval,ggapval;
-  int i;
-  int gscore;
+  ajint gdelval,ggapval;
+  ajint i;
+  ajint gscore;
   float percent;
 
   embInit("stretcher", argc, argv);
@@ -166,14 +167,14 @@ int main (int argc, char * argv[]) {
 
 /* Interface and top level of comparator */
 
-static int nmax=0;
+static ajint nmax=0;
 
-int EALIGN(A,B,M,N,G,H,S,NC)
-     char A[],B[]; int M,N;
-     int G,H;
-     int S[], *NC;
+ajint EALIGN(A,B,M,N,G,H,S,NC)
+     char A[],B[]; ajint M,N;
+     ajint G,H;
+     ajint S[], *NC;
 { 
-  int c, ck;
+  ajint c, ck;
 
   /*  if (N > NMAX) return -1;*/	/* Error check */
 
@@ -213,15 +214,15 @@ int EALIGN(A,B,M,N,G,H,S,NC)
    A[1..M] and B[1..N] that begins(ends) with a delete if tb(te) is zero
    and appends such a conversion to the current script.                   */
 
-int align(A,B,M,N,tb,te) char *A, *B; int M, N; int tb, te;
+ajint align(A,B,M,N,tb,te) char *A, *B; ajint M, N; ajint tb, te;
 
-{        int   midi, midj, type;	/* Midpoint, type, and cost */
-         int midc;
-	 int c1, c2;
+{        ajint   midi, midj, type;	/* Midpoint, type, and cost */
+         ajint midc;
+	 ajint c1, c2;
 
-{ register int   i, j;
-  register int c, e, d, s;
-           int t, *wa;
+{ register ajint   i, j;
+  register ajint c, e, d, s;
+           ajint t, *wa;
 
 /* Boundary cases: M <= 1 or N == 0 */
 
@@ -237,9 +238,9 @@ int align(A,B,M,N,tb,te) char *A, *B; int M, N; int tb, te;
       if (tb < te) tb = te;
       midc = (tb-hh) - gap(N);
       midj = 0;
-      wa = sub[(int)A[1]];
+      wa = sub[(ajint)A[1]];
       for (j = 1; j <= N; j++)
-        { c = -gap(j-1) + wa[(int)B[j]] - gap(N-j);
+        { c = -gap(j-1) + wa[(ajint)B[j]] - gap(N-j);
           if (c > midc)
             { midc = c;
               midj = j;
@@ -269,11 +270,11 @@ int align(A,B,M,N,tb,te) char *A, *B; int M, N; int tb, te;
     { s = CC[0];
       CC[0] = c = t = t-hh;
       e = t-g;
-      wa = sub[(int)A[i]];
+      wa = sub[(ajint)A[i]];
       for (j = 1; j <= N; j++)
         { if ((c =   c   - m) > (e =   e   - hh)) e = c;
           if ((c = CC[j] - m) > (d = DD[j] - hh)) d = c;
-          c = s + wa[(int)B[j]];
+          c = s + wa[(ajint)B[j]];
           if (e > c) c = e;
           if (d > c) c = d;
           s = CC[j];
@@ -294,11 +295,11 @@ int align(A,B,M,N,tb,te) char *A, *B; int M, N; int tb, te;
     { s = RR[N];
       RR[N] = c = t = t-hh;
       e = t-g;
-      wa = sub[(int)A[i+1]];
+      wa = sub[(ajint)A[i+1]];
       for (j = N-1; j >= 0; j--)
         { if ((c =   c   - m) > (e =   e   - hh)) e = c;
           if ((c = RR[j] - m) > (d = SS[j] - hh)) d = c;
-          c = s + wa[(int)B[j+1]];
+          c = s + wa[(ajint)B[j+1]];
           if (e > c) c = e;
           if (d > c) c = d;
           s = RR[j];
@@ -340,16 +341,16 @@ int align(A,B,M,N,tb,te) char *A, *B; int M, N; int tb, te;
   return midc;
 }
 
-int calcons(aa0,n0,aa1,n1,res)
+ajint calcons(aa0,n0,aa1,n1,res)
      char *aa0, *aa1;
-     int n0, n1;
-     int *res;
+     ajint n0, n1;
+     ajint *res;
 
 {
-  int i0, i1;
-  int op, nc;
+  ajint i0, i1;
+  ajint op, nc;
   char *sp0, *sp1;
-  int *rp;
+  ajint *rp;
   char *sq1,*sq2;
   
   sp0 = seqc0;
@@ -391,22 +392,22 @@ int calcons(aa0,n0,aa1,n1,res)
 
 #define MAXOUT 201
 
-int discons(seqc0, seqc1, nc)
+ajint discons(seqc0, seqc1, nc)
      char *seqc0, *seqc1;
-     int nc;
+     ajint nc;
 {
   char line[3][MAXOUT], cline[2][MAXOUT+10];
-  int il, i, lend, loff, il1, il2;
-  int del0, del1, ic, ll0, ll1, ll01, cl0, cl1, rl0, rl1;
-  int i00, i0n, i10, i1n;
-  int ioff0, ioff1;
-  long qqoff, lloff;
-  int have_res;
+  ajint il, i, lend, loff, il1, il2;
+  ajint del0, del1, ic, ll0, ll1, ll01, cl0, cl1, rl0, rl1;
+  ajint i00, i0n, i10, i1n;
+  ajint ioff0, ioff1;
+  ajlong qqoff, lloff;
+  ajint have_res;
   char *name01;
   char *name0= ajSeqName(seq);
   char *name1= ajSeqName(seq2);
   char n0 = ajSeqLen(seq);
-  int smark[4] = {-10000,-10000,-10000,-10000}; /* BIT WEIRD THIS */
+  ajint smark[4] = {-10000,-10000,-10000,-10000}; /* BIT WEIRD THIS */
 
   if (markx==2) name01=name1; else name01 = "\0";
 
@@ -462,8 +463,8 @@ int discons(seqc0, seqc1, nc)
     ajFmtPrintF (outf,">%s ..\n",name1);
     ajFmtPrintF (outf,"; sq_len: %d\n",ajSeqLen(seq2));
     /*    ajFmtPrintF (outf,"; sq_type: %c\n",sqtype[0]);*/
-    ajFmtPrintF (outf,"; al_start: %ld\n",/*loffset+*/(long)min1+1);
-    ajFmtPrintF (outf,"; al_stop: %ld\n",/*loffset+*/(long)max1);
+    ajFmtPrintF (outf,"; al_start: %ld\n",/*loffset+*/(ajlong)min1+1);
+    ajFmtPrintF (outf,"; al_stop: %ld\n",/*loffset+*/(ajlong)max1);
     ajFmtPrintF (outf,"; al_display_start: %d\n",/*loffset+*/ioff1+1);
 
     have_res = 0;
@@ -505,9 +506,9 @@ int discons(seqc0, seqc1, nc)
       if (seqc1[ic]==' ') {del1++; cl1=rl1=NO;}
       else ll1 = YES;
 
-      qqoff = ajSeqBegin(seq) - 1 + (long)(ioff0-del0);
+      qqoff = ajSeqBegin(seq) - 1 + (ajlong)(ioff0-del0);
       if (cl0 && qqoff%10 == 9)  {
-	sprintf(&cline[0][i],"%8ld",qqoff+1l);
+	sprintf(&cline[0][i],"%8ld",(long)qqoff+1l);
 	cline[0][i+8]=' ';
 	rl0 = NO;
       }
@@ -517,13 +518,13 @@ int discons(seqc0, seqc1, nc)
 	rl0 = NO;
       }
       else if (rl0 && (qqoff+1)%10 == 0) {
-	sprintf(&cline[0][i],"%8ld",qqoff+1);
+	sprintf(&cline[0][i],"%8ld",(long)qqoff+1);
 	cline[0][i+8]=' ';
       }
       
-      lloff = ajSeqBegin(seq2)-1 + /*loffset +*/ (long)(ioff1-del1);
+      lloff = ajSeqBegin(seq2)-1 + /*loffset +*/ (ajlong)(ioff1-del1);
       if (cl1 && lloff%10 == 9)  {
-	sprintf(&cline[1][i],"%8ld",lloff+1l);
+	sprintf(&cline[1][i],"%8ld",(long)lloff+1l);
 	cline[1][i+8]=' ';
 	rl1 = NO;
       }
@@ -533,14 +534,14 @@ int discons(seqc0, seqc1, nc)
 	rl1 = NO;
       }
       else if (rl1 && (lloff+1)%10 == 0) {
-	sprintf(&cline[1][i],"%8ld",lloff+1);
+	sprintf(&cline[1][i],"%8ld",(long)lloff+1);
 	cline[1][i+8]=' ';
       }
       
 
       line[1][i] = ' ';
       if (ioff0-del0 >= min0 && ioff0-del0 <= max0) {
-	if (toupper((int)line[0][i])==toupper((int)line[2][i]) /*|| (dnaseq && (
+	if (toupper((ajint)line[0][i])==toupper((ajint)line[2][i]) /*|| (dnaseq && (
 	    (toupper(line[0][i])=='T' && toupper(line[2][i])=='U') ||
 	    (toupper(line[0][i])=='U' && toupper(line[2][i])=='T')))*/)
 	  switch (markx) {
@@ -600,14 +601,14 @@ int discons(seqc0, seqc1, nc)
 }
 /* CHECK_SCORE - return the score of the alignment stored in S */
 
-int CHECK_SCORE(A,B,M,N,S,NC)
+ajint CHECK_SCORE(A,B,M,N,S,NC)
      unsigned char A[], B[];
-     int M, N;
-     int S[];
-     int *NC;
+     ajint M, N;
+     ajint S[];
+     ajint *NC;
 { 
-  register int   i,  j, op, nc1;
-  int score;
+  register ajint   i,  j, op, nc1;
+  ajint score;
 
   score = i = j = op = nc1 = 0;
   while (i < M || j < N) {

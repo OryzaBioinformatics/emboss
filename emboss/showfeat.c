@@ -24,31 +24,31 @@
 #include "emboss.h"
 
 
-static void ShowFeatSeq (AjPFile outfile, AjPSeq seq, int beg, int end, AjPStr
+static void ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg, ajint end, AjPStr
 	matchsource, AjPStr matchtype, AjPStr matchtag, AjPStr matchvalue,
-	AjPStr *sortlist, int width, AjBool collapse, AjBool forward, AjBool
+	AjPStr *sortlist, ajint width, AjBool collapse, AjBool forward, AjBool
 	reverse, AjBool unknown, AjBool strand, AjBool source, AjBool
 	position, AjBool type, AjBool tags, AjBool values);
     	
-static void WriteFeat(AjPStr line, AjEFeatStrand strand, int fstart, int fend,
-	int width, int beg, int end);
+static void WriteFeat(AjPStr line, AjEFeatStrand strand, ajint fstart, ajint fend,
+	ajint width, ajint beg, ajint end);
 
 static void FeatOut(AjPFile outfile, AjPStr lineout, AjEFeatStrand strandout,
 	AjPStr sourceout, AjPStr posout, AjPStr typeout, AjPStr tagsout,
-	int width, AjBool strand, AjBool source, AjBool type, AjBool
+	ajint width, AjBool strand, AjBool source, AjBool type, AjBool
 	tags, AjBool position);
 
-static int CompareFeatSource (const void * a, const void * b);
+static ajint CompareFeatSource (const void * a, const void * b);
 
-static int CompareFeatType (const void * a, const void * b);
+static ajint CompareFeatType (const void * a, const void * b);
 
-static int CompareFeatPos (const void * a, const void * b);
+static ajint CompareFeatPos (const void * a, const void * b);
 
 static AjBool MatchPattern (AjPStr str, AjPStr pattern);
 
 static AjBool MatchPatternTags (AjPList taglist, AjPStr tpattern, AjPStr vpattern);
 
-static void AddPos(AjPStr *posout, int start, int end);
+static void AddPos(AjPStr *posout, ajint start, ajint end);
 
 static void AddTags(AjPStr *tagout, AjPList taglist, AjBool values);
 
@@ -56,7 +56,8 @@ static void AddTags(AjPStr *tagout, AjPList taglist, AjBool values);
 
 
 
-int main (int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
 
   AjPSeqall seqall;
   AjPFile outfile;
@@ -70,7 +71,7 @@ int main (int argc, char * argv[]) {
   AjBool id;
   AjBool description;
   AjBool scale;
-  int width;
+  ajint width;
   AjBool collapse;
   AjBool forward;
   AjBool reverse;
@@ -83,8 +84,8 @@ int main (int argc, char * argv[]) {
   AjBool values;
 
   
-  int i;  
-  int beg, end;
+  ajint i;  
+  ajint beg, end;
   AjPStr descriptionline;
 
   (void) embInit ("showfeat", argc, argv);
@@ -182,14 +183,14 @@ int main (int argc, char * argv[]) {
 **
 ** @param [u] outfile [AjPFile] output file
 ** @param [r] seq [AjPSeq] sequence
-** @param [r] beg [int] sequence start position
-** @param [r] end [int] sequence end position
+** @param [r] beg [ajint] sequence start position
+** @param [r] end [ajint] sequence end position
 ** @param [r] matchsource [AjPStr] source pattern to display
 ** @param [r] matchtype [AjPStr] type pattern to display
 ** @param [r] matchtag [AjPStr] tag pattern to display
 ** @param [r] matchvalue [AjPStr] tag's value pattern to display
 ** @param [r] sortlist [AjPStr *] type of sorting of features to do
-** @param [r] width [int] width of line of features
+** @param [r] width [ajint] width of line of features
 ** @param [r] collapse [AjBool] show all features on separate lines
 ** @param [r] forward [AjBool] show forward sense features
 ** @param [r] reverse [AjBool] show reverse sense features
@@ -205,9 +206,9 @@ int main (int argc, char * argv[]) {
 ******************************************************************************/
 
 
-static void ShowFeatSeq (AjPFile outfile, AjPSeq seq, int beg, int end, AjPStr
+static void ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg, ajint end, AjPStr
 	matchsource, AjPStr matchtype, AjPStr matchtag, AjPStr matchvalue,
-	AjPStr *sortlist, int width, AjBool collapse, AjBool forward, AjBool
+	AjPStr *sortlist, ajint width, AjBool collapse, AjBool forward, AjBool
 	reverse, AjBool unknown, AjBool strand, AjBool source, AjBool
 	position, AjBool type, AjBool tags, AjBool values) {
     	
@@ -215,7 +216,7 @@ static void ShowFeatSeq (AjPFile outfile, AjPSeq seq, int beg, int end, AjPStr
   AjPFeature gf   = NULL ;
   AjPFeatTable feat;
 
-  /*  int len = ajSeqLen(seq);*/
+  /*  ajint len = ajSeqLen(seq);*/
 
   AjPStr lineout   = ajStrNew();
   AjEFeatStrand strandout = AjStrandUnknown;
@@ -234,17 +235,17 @@ static void ShowFeatSeq (AjPFile outfile, AjPSeq seq, int beg, int end, AjPStr
 *  AjPFeatTable      Owner ;
 *  AjPFeatVocFeat     Source ;
 *  AjPFeatVocFeat     Type ;
-*  int               Start ;
-*  int               End; 
-*  int               Start2;
-*  int               End2;
+*  ajint               Start ;
+*  ajint               End; 
+*  ajint               Start2;
+*  ajint               End2;
 *  AjPStr            Score ;
 *  AjPList           Tags ; 	a.k.a. the [group] field tag-values of GFF2 
 *  AjPStr            Comment ;
 *  AjEFeatStrand     Strand ;
 *  AjEFeatFrame      Frame ;
 *  AjPStr            desc ;
-*  int               Flags;
+*  ajint               Flags;
 *
 */
 
@@ -352,22 +353,22 @@ static void ShowFeatSeq (AjPFile outfile, AjPSeq seq, int beg, int end, AjPStr
 **
 ** @param [w] line [AjPStr] Line of ASCII graphics to write in
 ** @param [r] strand [AjEFeatStrand] strand
-** @param [r] fstart [int] start of feature
-** @param [r] fend [int] end of feature
-** @param [r] width [int] width of line of features
-** @param [r] beg [int] sequence start position
-** @param [r] end [int] sequence end position
+** @param [r] fstart [ajint] start of feature
+** @param [r] fend [ajint] end of feature
+** @param [r] width [ajint] width of line of features
+** @param [r] beg [ajint] sequence start position
+** @param [r] end [ajint] sequence end position
 ** @return [void] 
 ** @@
 ******************************************************************************/
 
-static void WriteFeat(AjPStr line, AjEFeatStrand strand, int fstart, int fend,
-	int width, int beg, int end) {
+static void WriteFeat(AjPStr line, AjEFeatStrand strand, ajint fstart, ajint fend,
+	ajint width, ajint beg, ajint end) {
 
-  int i;
-  int len = end-beg+1;
-  int pos1 = ((float)(fstart-beg)/(float)len)*width-1;
-  int pos2 = ((float)(fend-beg)/(float)len)*width-1;
+  ajint i;
+  ajint len = end-beg+1;
+  ajint pos1 = ((float)(fstart-beg)/(float)len)*width-1;
+  ajint pos2 = ((float)(fend-beg)/(float)len)*width-1;
 
 /* write the '-'s */
   for (i=pos1; i<pos2; i++) {
@@ -419,7 +420,7 @@ static void WriteFeat(AjPStr line, AjEFeatStrand strand, int fstart, int fend,
 ** @param [r] posout [AjPStr] positions of feature 
 ** @param [r] typeout [AjPStr] type of feature 
 ** @param [r] tagsout [AjPStr] tags string
-** @param [r] width [int] width of graphics lines
+** @param [r] width [ajint] width of graphics lines
 ** @param [r] strand [AjBool] show strand of feature
 ** @param [r] source [AjBool] show source of feature
 ** @param [r] type [AjBool] show type of feature
@@ -431,7 +432,7 @@ static void WriteFeat(AjPStr line, AjEFeatStrand strand, int fstart, int fend,
 
 static void FeatOut(AjPFile outfile, AjPStr lineout, AjEFeatStrand strandout,
 	AjPStr sourceout, AjPStr posout, AjPStr typeout, AjPStr tagsout,
-	int width, AjBool strand, AjBool source, AjBool type, AjBool
+	ajint width, AjBool strand, AjBool source, AjBool type, AjBool
 	tags, AjBool position) {
 
 
@@ -494,13 +495,13 @@ static void FeatOut(AjPFile outfile, AjPStr lineout, AjEFeatStrand strandout,
 ** @param [r] a [const void *] First node
 ** @param [r] b [const void *] Second node
 **
-** @return [int] Compare value (-1, 0, +1)
+** @return [ajint] Compare value (-1, 0, +1)
 ** @@
 ******************************************************************************/
 
-static int CompareFeatSource (const void * a, const void * b) {
+static ajint CompareFeatSource (const void * a, const void * b) {
 
-  int val;
+  ajint val;
 
   AjPFeature c = *(AjPFeature *)a;
   AjPFeature d = *(AjPFeature *)b;
@@ -542,13 +543,13 @@ static int CompareFeatSource (const void * a, const void * b) {
 ** @param [r] a [const void *] First node
 ** @param [r] b [const void *] Second node
 **
-** @return [int] Compare value (-1, 0, +1)
+** @return [ajint] Compare value (-1, 0, +1)
 ** @@
 ******************************************************************************/
 
-static int CompareFeatType (const void * a, const void * b) {
+static ajint CompareFeatType (const void * a, const void * b) {
 
-  int val;
+  ajint val;
 
   AjPFeature c = *(AjPFeature *)a;
   AjPFeature d = *(AjPFeature *)b;
@@ -589,13 +590,13 @@ static int CompareFeatType (const void * a, const void * b) {
 ** @param [r] a [const void *] First node
 ** @param [r] b [const void *] Second node
 **
-** @return [int] Compare value (-1, 0, +1)
+** @return [ajint] Compare value (-1, 0, +1)
 ** @@
 ******************************************************************************/
 
-static int CompareFeatPos (const void * a, const void * b) {
+static ajint CompareFeatPos (const void * a, const void * b) {
 
-  int val;
+  ajint val;
 
   AjPFeature c = *(AjPFeature *)a;
   AjPFeature d = *(AjPFeature *)b;
@@ -719,14 +720,14 @@ allow this as a match */
 ** writes the positions to the positions string
 **
 ** @param [r] posout [AjPStr *] position string
-** @param [r] start [int] start position
-** @param [r] end [int] end position
+** @param [r] start [ajint] start position
+** @param [r] end [ajint] end position
 **
 ** @return [void] 
 ** @@
 ******************************************************************************/
 
-static void AddPos(AjPStr *posout, int start, int end) {
+static void AddPos(AjPStr *posout, ajint start, ajint end) {
 
 /* if the string already has positions in, separate them with commas */
   if (ajStrLen(*posout) > 0) {
@@ -758,7 +759,7 @@ static void AddTags(AjPStr *tagsout, AjPList taglist, AjBool values) {
   titer = ajListIter(taglist);
   while (ajListIterMore(titer)) {
     tagstr = (LPFeatTagValue)ajListIterNext(titer);
-/* don't display the translation tag - it is far too long :-) */
+/* don't display the translation tag - it is far too ajlong :-) */
     if (ajStrCmpC(tagstr->Tag->VocTag->name, "translation")) {
       if (values == ajTrue) {
         (void) ajFmtPrintAppS(tagsout, " %S=\"%S\"", tagstr->Tag->VocTag->name, tagstr->Value);

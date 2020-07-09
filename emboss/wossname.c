@@ -22,7 +22,8 @@
 
 #include "emboss.h"
 
-int main (int argc, char * argv[], char **env) {
+int main(int argc, char **argv, char **env)
+{
 
   AjPList newlist = NULL;
 

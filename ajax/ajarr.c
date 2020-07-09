@@ -40,21 +40,21 @@ static void* memmove (void *dst, const void* src, size_t len) {
 #define RESERVED_SIZE 32
 
 
-static AjBool ajIntResize(AjPInt *thys, int elem);
-static AjBool ajInt2dResize(AjPInt2d *thys, int elem);
-static AjBool ajInt3dResize(AjPInt3d *thys, int elem);
-static AjBool ajFloatResize(AjPFloat *thys, int elem);
-static AjBool ajFloat2dResize(AjPFloat2d *thys, int elem);
-static AjBool ajFloat3dResize(AjPFloat3d *thys, int elem);
-static AjBool ajDoubleResize(AjPDouble *thys, int elem);
-static AjBool ajDouble2dResize(AjPDouble2d *thys, int elem);
-static AjBool ajDouble3dResize(AjPDouble3d *thys, int elem);
-static AjBool ajShortResize(AjPShort *thys, int elem);
-static AjBool ajShort2dResize(AjPShort2d *thys, int elem);
-static AjBool ajShort3dResize(AjPShort3d *thys, int elem);
-static AjBool ajLongResize(AjPLong *thys, int elem);
-static AjBool ajLong2dResize(AjPLong2d *thys, int elem);
-static AjBool ajLong3dResize(AjPLong3d *thys, int elem);
+static AjBool ajIntResize(AjPInt *thys, ajint elem);
+static AjBool ajInt2dResize(AjPInt2d *thys, ajint elem);
+static AjBool ajInt3dResize(AjPInt3d *thys, ajint elem);
+static AjBool ajFloatResize(AjPFloat *thys, ajint elem);
+static AjBool ajFloat2dResize(AjPFloat2d *thys, ajint elem);
+static AjBool ajFloat3dResize(AjPFloat3d *thys, ajint elem);
+static AjBool ajDoubleResize(AjPDouble *thys, ajint elem);
+static AjBool ajDouble2dResize(AjPDouble2d *thys, ajint elem);
+static AjBool ajDouble3dResize(AjPDouble3d *thys, ajint elem);
+static AjBool ajShortResize(AjPShort *thys, ajint elem);
+static AjBool ajShort2dResize(AjPShort2d *thys, ajint elem);
+static AjBool ajShort3dResize(AjPShort3d *thys, ajint elem);
+static AjBool ajLongResize(AjPLong *thys, ajint elem);
+static AjBool ajLong2dResize(AjPLong2d *thys, ajint elem);
+static AjBool ajLong3dResize(AjPLong3d *thys, ajint elem);
 
 
 
@@ -71,7 +71,7 @@ AjPInt ajIntNew(void)
     AjPInt thys;
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(int));
+    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(ajint));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
     
@@ -84,19 +84,19 @@ AjPInt ajIntNew(void)
 **
 ** Constructor given an initial reserved size.
 **
-** @param [r] size [int] Reserved size
+** @param [r] size [ajint] Reserved size
 ** @return [AjPInt] Pointer to an empty integer array struct of specified size.
 ** @@
 ******************************************************************************/
 
-AjPInt ajIntNewL(int size)
+AjPInt ajIntNewL(ajint size)
 {
     AjPInt thys;
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(size*sizeof(int));
+    thys->Ptr = AJALLOC0(size*sizeof(ajint));
     thys->Len = 0;
-    thys->Res = (int)size;
+    thys->Res = (ajint)size;
     
     return thys;
 }
@@ -108,7 +108,7 @@ AjPInt ajIntNewL(int size)
 **
 ** If the given array is a NULL pointer, simply returns.
 **
-** @param  [w] thys [AjPInt*] Pointer to the int array to be deleted.
+** @param  [w] thys [AjPInt*] Pointer to the ajint array to be deleted.
 **         The pointer is always deleted.
 ** @return [void]
 ** @@
@@ -135,17 +135,17 @@ void ajIntDel(AjPInt *thys)
 **
 ** If the given array is a NULL pointer, simply returns.
 **
-** @param  [r] thys [AjPInt] Pointer to the int array.
-** @param  [r] elem [int] array element.
+** @param  [r] thys [AjPInt] Pointer to the ajint array.
+** @param  [r] elem [ajint] array element.
 **
-** @return [int] contents of array element
+** @return [ajint] contents of array element
 ** @@
 ******************************************************************************/
 
-int ajIntGet(AjPInt thys, int elem)
+ajint ajIntGet(AjPInt thys, ajint elem)
 {
     if(elem<0 || !thys || elem>=thys->Len)
-	ajErr("Attempt to access bad int array index %d\n",elem);
+	ajErr("Attempt to access bad ajint array index %d\n",elem);
     
     return thys->Ptr[elem];
 }
@@ -159,15 +159,15 @@ int ajIntGet(AjPInt thys, int elem)
 ** If the array is of insufficient size then the array is extended.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPInt*] Pointer to the int array.
-** @param  [r] elem [int] array element.
-** @param  [r] v [int] value to load.
+** @param  [w] thys [AjPInt*] Pointer to the ajint array.
+** @param  [r] elem [ajint] array element.
+** @param  [r] v [ajint] value to load.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-AjBool ajIntPut(AjPInt *thys, int elem, int v)
+AjBool ajIntPut(AjPInt *thys, ajint elem, ajint v)
 {
     if(!thys || !*thys || elem<0)
 	ajErr("Attempt to write to illegal array value %d\n",elem);
@@ -194,14 +194,14 @@ AjBool ajIntPut(AjPInt *thys, int elem, int v)
 ** If the given array is a NULL pointer an error is generated.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPInt*] Pointer to the int array.
-** @param  [r] elem [int] array element.
+** @param  [w] thys [AjPInt*] Pointer to the ajint array.
+** @param  [r] elem [ajint] array element.
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajIntInc(AjPInt *thys, int elem)
+void ajIntInc(AjPInt *thys, ajint elem)
 {
     if(!thys || !*thys || elem<0 || elem>(*thys)->Len)
 	ajErr("Attempt to write to illegal array value %d\n",elem);
@@ -219,14 +219,14 @@ void ajIntInc(AjPInt *thys, int elem)
 ** If the given array is a NULL pointer an error is generated.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPInt*] Pointer to the int array.
-** @param  [r] elem [int] array element.
+** @param  [w] thys [AjPInt*] Pointer to the ajint array.
+** @param  [r] elem [ajint] array element.
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajIntDec(AjPInt *thys, int elem)
+void ajIntDec(AjPInt *thys, ajint elem)
 {
     if(!thys || !*thys || elem<0 || elem>(*thys)->Len)
 	ajErr("Attempt to write to illegal array value %d\n",elem);
@@ -246,19 +246,19 @@ void ajIntDec(AjPInt *thys, int elem)
 ** If the given array is a NULL pointer an error is generated.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPInt*] Pointer to the int array.
-** @param  [r] size [int] new size.
+** @param  [w] thys [AjPInt*] Pointer to the ajint array.
+** @param  [r] size [ajint] new size.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-static AjBool ajIntResize(AjPInt *thys, int size)
+static AjBool ajIntResize(AjPInt *thys, ajint size)
 {
     AjPInt p=NULL;
-    int    s;
-    int    clen;
-    int    limit;
+    ajint    s;
+    ajint    clen;
+    ajint    limit;
     
 
     if(!thys || !*thys || size<0)
@@ -273,12 +273,12 @@ static AjBool ajIntResize(AjPInt *thys, int size)
 
     *thys = ajIntNewL(s);
     
-    if((int)size < p->Len-1)
+    if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
     
-    (void) memmove((*thys)->Ptr,p->Ptr,limit*sizeof(int));
+    (void) memmove((*thys)->Ptr,p->Ptr,limit*sizeof(ajint));
 
     (*thys)->Len = size+1;
     
@@ -292,14 +292,14 @@ static AjBool ajIntResize(AjPInt *thys, int size)
 
 /* @func ajIntInt *************************************************************
 **
-** Returns the current int* pointer. This will remain valid until
+** Returns the current ajint* pointer. This will remain valid until
 ** the array is resized or deleted.
 **
 ** @param [r] thys [AjPInt] Source array
 ** @return [int*] Current array pointer, or a null string if undefined.
 ** @@
 ******************************************************************************/
-int* ajIntInt(AjPInt thys)
+ajint* ajIntInt(AjPInt thys)
 {
     if(!thys || !thys->Len)
 	return NULL;
@@ -311,14 +311,14 @@ int* ajIntInt(AjPInt thys)
 
 /* @func ajIntLen *************************************************************
 **
-** Get length of dynamic 1d int array
+** Get length of dynamic 1d ajint array
 **
 ** @param [r] thys [AjPInt] Source array
-** @return [int] length
+** @return [ajint] length
 ** @@
 ******************************************************************************/
 
-int ajIntLen(AjPInt thys)
+ajint ajIntLen(AjPInt thys)
 {
     return thys->Len;
 }
@@ -351,19 +351,19 @@ AjPFloat ajFloatNew(void)
 **
 ** Constructor given an initial reserved size.
 **
-** @param [r] size [int] Reserved size
+** @param [r] size [ajint] Reserved size
 ** @return [AjPFloat] Pointer to an empty float array struct of specified size.
 ** @@
 ******************************************************************************/
 
-AjPFloat ajFloatNewL(int size)
+AjPFloat ajFloatNewL(ajint size)
 {
     AjPFloat thys;
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(float));
     thys->Len = 0;
-    thys->Res = (int)size;
+    thys->Res = (ajint)size;
     
     return thys;
 }
@@ -403,13 +403,13 @@ void ajFloatDel(AjPFloat *thys)
 ** If the given array is a NULL pointer, simply returns.
 **
 ** @param  [r] thys [AjPFloat] Pointer to the float array.
-** @param  [r] elem [int] array element.
+** @param  [r] elem [ajint] array element.
 **
 ** @return [float] contents of array element
 ** @@
 ******************************************************************************/
 
-float ajFloatGet(AjPFloat thys, int elem)
+float ajFloatGet(AjPFloat thys, ajint elem)
 {
     if(elem<0 || !thys || elem>=thys->Len)
 	ajErr("Attempt to access bad float array index %d\n",elem);
@@ -426,15 +426,15 @@ float ajFloatGet(AjPFloat thys, int elem)
 ** If the array is of insufficient size then the array is extended.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPFloat*] Pointer to the int array.
-** @param  [r] elem [int] array element.
+** @param  [w] thys [AjPFloat*] Pointer to the ajint array.
+** @param  [r] elem [ajint] array element.
 ** @param  [r] v [float] value to load.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-AjBool ajFloatPut(AjPFloat *thys, int elem, float v)
+AjBool ajFloatPut(AjPFloat *thys, ajint elem, float v)
 {
     if(!thys || !*thys || elem<0)
 	ajErr("Attempt to write to illegal array value %d\n",elem);
@@ -463,19 +463,19 @@ AjBool ajFloatPut(AjPFloat *thys, int elem, float v)
 ** If the given array is a NULL pointer an error is generated.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPFloat*] Pointer to the int array.
-** @param  [r] size [int] new size.
+** @param  [w] thys [AjPFloat*] Pointer to the ajint array.
+** @param  [r] size [ajint] new size.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-static AjBool ajFloatResize(AjPFloat *thys, int size)
+static AjBool ajFloatResize(AjPFloat *thys, ajint size)
 {
     AjPFloat p=NULL;
-    int    s;
-    int    clen;
-    int    limit;
+    ajint    s;
+    ajint    clen;
+    ajint    limit;
     
 
     if(!thys || !*thys || size<0)
@@ -490,7 +490,7 @@ static AjBool ajFloatResize(AjPFloat *thys, int size)
 
     *thys = ajFloatNewL(s);
     
-    if((int)size < p->Len-1)
+    if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
@@ -531,11 +531,11 @@ float* ajFloatFloat(AjPFloat thys)
 ** Get length of dynamic 1d float array
 **
 ** @param [r] thys [AjPFloat] Source array
-** @return [int] length
+** @return [ajint] length
 ** @@
 ******************************************************************************/
 
-int ajFloatLen(AjPFloat thys)
+ajint ajFloatLen(AjPFloat thys)
 {
     return thys->Len;
 }
@@ -568,19 +568,19 @@ AjPDouble ajDoubleNew(void)
 **
 ** Constructor given an initial reserved size.
 **
-** @param [r] size [int] Reserved size
+** @param [r] size [ajint] Reserved size
 ** @return [AjPDouble] Pointer to an empty double array struct of specified size.
 ** @@
 ******************************************************************************/
 
-AjPDouble ajDoubleNewL(int size)
+AjPDouble ajDoubleNewL(ajint size)
 {
     AjPDouble thys;
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(double));
     thys->Len = 0;
-    thys->Res = (int)size;
+    thys->Res = (ajint)size;
     
     return thys;
 }
@@ -620,13 +620,13 @@ void ajDoubleDel(AjPDouble *thys)
 ** If the given array is a NULL pointer, simply returns.
 **
 ** @param  [r] thys [AjPDouble] Pointer to the double array.
-** @param  [r] elem [int] array element.
+** @param  [r] elem [ajint] array element.
 **
 ** @return [double] contents of array element
 ** @@
 ******************************************************************************/
 
-double ajDoubleGet(AjPDouble thys, int elem)
+double ajDoubleGet(AjPDouble thys, ajint elem)
 {
     if(elem<0 || !thys || elem>=thys->Len)
 	ajErr("Attempt to access bad double array index %d\n",elem);
@@ -643,15 +643,15 @@ double ajDoubleGet(AjPDouble thys, int elem)
 ** If the array is of insufficient size then the array is extended.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPDouble*] Pointer to the int array.
-** @param  [r] elem [int] array element.
+** @param  [w] thys [AjPDouble*] Pointer to the ajint array.
+** @param  [r] elem [ajint] array element.
 ** @param  [r] v [double] value to load.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-AjBool ajDoublePut(AjPDouble *thys, int elem, double v)
+AjBool ajDoublePut(AjPDouble *thys, ajint elem, double v)
 {
     if(!thys || !*thys || elem<0)
 	ajErr("Attempt to write to illegal array value %d\n",elem);
@@ -680,19 +680,19 @@ AjBool ajDoublePut(AjPDouble *thys, int elem, double v)
 ** If the given array is a NULL pointer an error is generated.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPDouble*] Pointer to the int array.
-** @param  [r] size [int] new size.
+** @param  [w] thys [AjPDouble*] Pointer to the ajint array.
+** @param  [r] size [ajint] new size.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-static AjBool ajDoubleResize(AjPDouble *thys, int size)
+static AjBool ajDoubleResize(AjPDouble *thys, ajint size)
 {
     AjPDouble p=NULL;
-    int    s;
-    int    clen;
-    int    limit;
+    ajint    s;
+    ajint    clen;
+    ajint    limit;
     
 
     if(!thys || !*thys || size<0)
@@ -707,7 +707,7 @@ static AjBool ajDoubleResize(AjPDouble *thys, int size)
 
     *thys = ajDoubleNewL(s);
     
-    if((int)size < p->Len-1)
+    if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
@@ -748,11 +748,11 @@ double* ajDoubleDouble(AjPDouble thys)
 ** Get length of dynamic 1d double array
 **
 ** @param [r] thys [AjPDouble] Source array
-** @return [int] length
+** @return [ajint] length
 ** @@
 ******************************************************************************/
 
-int ajDoubleLen(AjPDouble thys)
+ajint ajDoubleLen(AjPDouble thys)
 {
     return thys->Len;
 }
@@ -785,19 +785,19 @@ AjPShort ajShortNew(void)
 **
 ** Constructor given an initial reserved size.
 **
-** @param [r] size [int] Reserved size
+** @param [r] size [ajint] Reserved size
 ** @return [AjPShort] Pointer to an empty short array struct of specified size.
 ** @@
 ******************************************************************************/
 
-AjPShort ajShortNewL(int size)
+AjPShort ajShortNewL(ajint size)
 {
     AjPShort thys;
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(short));
     thys->Len = 0;
-    thys->Res = (int)size;
+    thys->Res = (ajint)size;
     
     return thys;
 }
@@ -837,13 +837,13 @@ void ajShortDel(AjPShort *thys)
 ** If the given array is a NULL pointer, simply returns.
 **
 ** @param  [r] thys [AjPShort] Pointer to the short array.
-** @param  [r] elem [int] array element.
+** @param  [r] elem [ajint] array element.
 **
 ** @return [short] contents of array element
 ** @@
 ******************************************************************************/
 
-short ajShortGet(AjPShort thys, int elem)
+short ajShortGet(AjPShort thys, ajint elem)
 {
     if(elem<0 || !thys || elem>=thys->Len)
 	ajErr("Attempt to access bad short array index %d\n",elem);
@@ -860,15 +860,15 @@ short ajShortGet(AjPShort thys, int elem)
 ** If the array is of insufficient size then the array is extended.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPShort*] Pointer to the int array.
-** @param  [r] elem [int] array element.
+** @param  [w] thys [AjPShort*] Pointer to the ajint array.
+** @param  [r] elem [ajint] array element.
 ** @param  [r] v [short] value to load.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-AjBool ajShortPut(AjPShort *thys, int elem, short v)
+AjBool ajShortPut(AjPShort *thys, ajint elem, short v)
 {
     if(!thys || !*thys || elem<0)
 	ajErr("Attempt to write to illegal array value %d\n",elem);
@@ -897,19 +897,19 @@ AjBool ajShortPut(AjPShort *thys, int elem, short v)
 ** If the given array is a NULL pointer an error is generated.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPShort*] Pointer to the int array.
-** @param  [r] size [int] new size.
+** @param  [w] thys [AjPShort*] Pointer to the ajint array.
+** @param  [r] size [ajint] new size.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-static AjBool ajShortResize(AjPShort *thys, int size)
+static AjBool ajShortResize(AjPShort *thys, ajint size)
 {
     AjPShort p=NULL;
-    int    s;
-    int    clen;
-    int    limit;
+    ajint    s;
+    ajint    clen;
+    ajint    limit;
     
 
     if(!thys || !*thys || size<0)
@@ -924,7 +924,7 @@ static AjBool ajShortResize(AjPShort *thys, int size)
 
     *thys = ajShortNewL(s);
     
-    if((int)size < p->Len-1)
+    if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
@@ -965,11 +965,11 @@ short* ajShortShort(AjPShort thys)
 ** Get length of dynamic 1d short array
 **
 ** @param [r] thys [AjPShort] Source array
-** @return [int] length
+** @return [ajint] length
 ** @@
 ******************************************************************************/
 
-int ajShortLen(AjPShort thys)
+ajint ajShortLen(AjPShort thys)
 {
     return thys->Len;
 }
@@ -978,9 +978,9 @@ int ajShortLen(AjPShort thys)
 
 /* @func ajLongNew *************************************************************
 **
-** Default constructor for empty AJAX long arrays.
+** Default constructor for empty AJAX ajlong arrays.
 **
-** @return [AjPLong] Pointer to an empty long array structure
+** @return [AjPLong] Pointer to an empty ajlong array structure
 ** @@
 ******************************************************************************/
 
@@ -989,7 +989,7 @@ AjPLong ajLongNew(void)
     AjPLong thys;
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(long));
+    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(ajlong));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
     
@@ -1002,19 +1002,19 @@ AjPLong ajLongNew(void)
 **
 ** Constructor given an initial reserved size.
 **
-** @param [r] size [int] Reserved size
-** @return [AjPLong] Pointer to an empty long array struct of specified size.
+** @param [r] size [ajint] Reserved size
+** @return [AjPLong] Pointer to an empty ajlong array struct of specified size.
 ** @@
 ******************************************************************************/
 
-AjPLong ajLongNewL(int size)
+AjPLong ajLongNewL(ajint size)
 {
     AjPLong thys;
 
     AJNEW0(thys);
-    thys->Ptr = AJALLOC0(size*sizeof(long));
+    thys->Ptr = AJALLOC0(size*sizeof(ajlong));
     thys->Len = 0;
-    thys->Res = (int)size;
+    thys->Res = (ajint)size;
     
     return thys;
 }
@@ -1022,11 +1022,11 @@ AjPLong ajLongNewL(int size)
 
 /* @func ajLongDel *************************************************************
 **
-** Default destructor for AJAX long arrays.
+** Default destructor for AJAX ajlong arrays.
 **
 ** If the given array is a NULL pointer, simply returns.
 **
-** @param  [w] thys [AjPLong*] Pointer to the long array to be deleted.
+** @param  [w] thys [AjPLong*] Pointer to the ajlong array to be deleted.
 **         The pointer is always deleted.
 ** @return [void]
 ** @@
@@ -1049,21 +1049,21 @@ void ajLongDel(AjPLong *thys)
 
 /* @func ajLongGet *************************************************************
 **
-** Retrieve an element from an AJAX long array.
+** Retrieve an element from an AJAX ajlong array.
 **
 ** If the given array is a NULL pointer, simply returns.
 **
-** @param  [r] thys [AjPLong] Pointer to the long array.
-** @param  [r] elem [int] array element.
+** @param  [r] thys [AjPLong] Pointer to the ajlong array.
+** @param  [r] elem [ajint] array element.
 **
-** @return [long] contents of array element
+** @return [ajlong] contents of array element
 ** @@
 ******************************************************************************/
 
-long ajLongGet(AjPLong thys, int elem)
+ajlong ajLongGet(AjPLong thys, ajint elem)
 {
     if(elem<0 || !thys || elem>=thys->Len)
-	ajErr("Attempt to access bad long array index %d\n",elem);
+	ajErr("Attempt to access bad ajlong array index %d\n",elem);
     
     return thys->Ptr[elem];
 }
@@ -1071,21 +1071,21 @@ long ajLongGet(AjPLong thys, int elem)
 
 /* @func ajLongPut *************************************************************
 **
-** Load a long array element.
+** Load a ajlong array element.
 **
 ** If the given array is a NULL pointer an error is generated.
 ** If the array is of insufficient size then the array is extended.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPLong*] Pointer to the int array.
-** @param  [r] elem [int] array element.
-** @param  [r] v [long] value to load.
+** @param  [w] thys [AjPLong*] Pointer to the ajint array.
+** @param  [r] elem [ajint] array element.
+** @param  [r] v [ajlong] value to load.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-AjBool ajLongPut(AjPLong *thys, int elem, long v)
+AjBool ajLongPut(AjPLong *thys, ajint elem, ajlong v)
 {
     if(!thys || !*thys || elem<0)
 	ajErr("Attempt to write to illegal array value %d\n",elem);
@@ -1109,28 +1109,28 @@ AjBool ajLongPut(AjPLong *thys, int elem, long v)
 
 /* @funcstatic ajLongResize ***************************************************
 **
-** Resize a long array.
+** Resize a ajlong array.
 **
 ** If the given array is a NULL pointer an error is generated.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPLong*] Pointer to the int array.
-** @param  [r] size [int] new size.
+** @param  [w] thys [AjPLong*] Pointer to the ajint array.
+** @param  [r] size [ajint] new size.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-static AjBool ajLongResize(AjPLong *thys, int size)
+static AjBool ajLongResize(AjPLong *thys, ajint size)
 {
     AjPLong p=NULL;
-    int    s;
-    int    clen;
-    int    limit;
+    ajint    s;
+    ajint    clen;
+    ajint    limit;
     
 
     if(!thys || !*thys || size<0)
-	ajErr("Illegal attempt to resize long array");
+	ajErr("Illegal attempt to resize ajlong array");
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
@@ -1141,12 +1141,12 @@ static AjBool ajLongResize(AjPLong *thys, int size)
 
     *thys = ajLongNewL(s);
     
-    if((int)size < p->Len-1)
+    if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
     
-    (void) memmove((*thys)->Ptr,p->Ptr,limit*sizeof(long));
+    (void) memmove((*thys)->Ptr,p->Ptr,limit*sizeof(ajlong));
 
     (*thys)->Len = size+1;
     
@@ -1160,14 +1160,14 @@ static AjBool ajLongResize(AjPLong *thys, int size)
 
 /* @func ajLongLong *************************************************************
 **
-** Returns the current long* pointer. This will remain valid until
+** Returns the current ajlong* pointer. This will remain valid until
 ** the array is resized or deleted.
 **
 ** @param [r] thys [AjPLong] Source array
 ** @return [long*] Current array pointer, or a null string if undefined.
 ** @@
 ******************************************************************************/
-long* ajLongLong(AjPLong thys)
+ajlong* ajLongLong(AjPLong thys)
 {
     if(!thys || !thys->Len)
 	return NULL;
@@ -1179,14 +1179,14 @@ long* ajLongLong(AjPLong thys)
 
 /* @func ajLongLen *************************************************************
 **
-** Get length of dynamic 1d long array
+** Get length of dynamic 1d ajlong array
 **
 ** @param [r] thys [AjPLong] Source array
-** @return [long] length
+** @return [ajlong] length
 ** @@
 ******************************************************************************/
 
-long ajLongLen(AjPLong thys)
+ajlong ajLongLen(AjPLong thys)
 {
     return thys->Len;
 }
@@ -1208,7 +1208,7 @@ long ajLongLen(AjPLong thys)
 AjBool ajFloatParse (AjPStr str, AjPFloat* array) {
 
   static AjPRegexp numexp = NULL;
-  int i=0;
+  ajint i=0;
   float t=0.0;
   
   static AjPStr tmpstr = NULL;
@@ -1240,14 +1240,14 @@ AjBool ajFloatParse (AjPStr str, AjPFloat* array) {
 **
 ** @param [w] str [AjPStr*] Output string 
 ** @param [r] array [AjPFloat] Array 
-** @param [r] precision [int] floating point precision
+** @param [r] precision [ajint] floating point precision
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajFloatStr (AjPStr* str, AjPFloat array, int precision) {
+void ajFloatStr (AjPStr* str, AjPFloat array, ajint precision) {
 
-  int i;
+  ajint i;
 
   for (i=0; i < array->Len; i++) {
     if (i)
@@ -1262,15 +1262,15 @@ void ajFloatStr (AjPStr* str, AjPFloat array, int precision) {
 ** Writes a floating point array to the debug file
 **
 ** @param [r] array [AjPFloat] Array 
-** @param [r] precision [int] floating point precision
+** @param [r] precision [ajint] floating point precision
 ** @param [r] text [char*] Report title
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajFloatTrace (AjPFloat array, int precision, char* text) {
+void ajFloatTrace (AjPFloat array, ajint precision, char* text) {
 
-  int i;
+  ajint i;
 
   ajDebug ("%s\n", text);
   for (i=0; i < array->Len; i++) {
@@ -1289,15 +1289,15 @@ void ajFloatTrace (AjPFloat array, int precision, char* text) {
 ** @param [r] s [AjPStr] Line containing comma separated strings
 ** @param [w] a [AjPStr **] array pointer to create and load
 **
-** @return [int] number of array elements created
+** @return [ajint] number of array elements created
 ** @@
 ******************************************************************************/
-int ajArrCommaList(AjPStr s, AjPStr **a)
+ajint ajArrCommaList(AjPStr s, AjPStr **a)
 {
     AjPStr    x;
     AjPStrTok t;
-    int n;
-    int i;
+    ajint n;
+    ajint i;
 
     
     n = ajStrTokenCount(&s,",\n");
@@ -1326,21 +1326,21 @@ int ajArrCommaList(AjPStr s, AjPStr **a)
 **
 ** @param [r] line [AjPStr*] Line containing numbers
 ** @param [r] delim [const char*]  Delimiter string for tokens
-** @param [r] cols [int] Number of tokens in the string
-** @param [r] startcol [int] Start token (1 to n)
-** @param [r] endcol [int] End token (1 to n)
+** @param [r] cols [ajint] Number of tokens in the string
+** @param [r] startcol [ajint] Start token (1 to n)
+** @param [r] endcol [ajint] End token (1 to n)
 ** @return [double*] Allocated array of integers
 ** @@
 ******************************************************************************/
 
-double* ajArrDoubleLine(AjPStr *line, const char *delim, int cols, 
-			int startcol, int endcol) {
+double* ajArrDoubleLine(AjPStr *line, const char *delim, ajint cols, 
+			ajint startcol, ajint endcol) {
 
     AjPStrTok t=NULL;
     AjPStr tmp=NULL;
     static double *ret;
-    int ncols;
-    int i;
+    ajint ncols;
+    ajint i;
     
     
     t = ajStrTokenInit(*line, delim);
@@ -1375,21 +1375,21 @@ double* ajArrDoubleLine(AjPStr *line, const char *delim, int cols,
 **
 ** @param [r] line [AjPStr*] Line containing numbers
 ** @param [r] delim [const char*]  Delimiter string for tokens
-** @param [r] cols [int] Number of tokens in the string
-** @param [r] startcol [int] Start token (1 to n)
-** @param [r] endcol [int] End token (1 to n)
+** @param [r] cols [ajint] Number of tokens in the string
+** @param [r] startcol [ajint] Start token (1 to n)
+** @param [r] endcol [ajint] End token (1 to n)
 ** @return [int*] Allocated array of integers
 ** @@
 ******************************************************************************/
 
-int* ajArrIntLine(AjPStr *line, const char *delim, int cols, 
-		  int startcol, int endcol) {
+ajint* ajArrIntLine(AjPStr *line, const char *delim, ajint cols, 
+		  ajint startcol, ajint endcol) {
 
     AjPStrTok t=NULL;
     AjPStr tmp=NULL;
-    static int *ret;
-    int ncols;
-    int i;
+    static ajint *ret;
+    ajint ncols;
+    ajint i;
     
     
     t = ajStrTokenInit(*line, delim);
@@ -1423,21 +1423,21 @@ int* ajArrIntLine(AjPStr *line, const char *delim, int cols,
 **
 ** @param [r] line [AjPStr*] Line containing numbers
 ** @param [r] delim [const char*]  Delimiter string for tokens
-** @param [r] cols [int] Number of tokens in the string
-** @param [r] startcol [int] Start token (1 to n)
-** @param [r] endcol [int] End token (1 to n)
+** @param [r] cols [ajint] Number of tokens in the string
+** @param [r] startcol [ajint] Start token (1 to n)
+** @param [r] endcol [ajint] End token (1 to n)
 ** @return [float*] Allocated array of integers
 ** @@
 ******************************************************************************/
 
-float* ajArrFloatLine(AjPStr *line, const char *delim, int cols, 
-		      int startcol, int endcol) {
+float* ajArrFloatLine(AjPStr *line, const char *delim, ajint cols, 
+		      ajint startcol, ajint endcol) {
 
     AjPStrTok t=NULL;
     AjPStr tmp=NULL;
     static float *ret;
-    int ncols;
-    int i;
+    ajint ncols;
+    ajint i;
     
     
     t = ajStrTokenInit(*line, delim);
@@ -1477,7 +1477,7 @@ float* ajArrFloatLine(AjPStr *line, const char *delim, int cols,
 AjPInt2d ajInt2dNew(void)
 {
     AjPInt2d thys;
-    int    i;
+    ajint    i;
     
 
     AJNEW0(thys);
@@ -1497,22 +1497,22 @@ AjPInt2d ajInt2dNew(void)
 **
 ** Constructor given an initial reserved size.
 **
-** @param [r] size [int] Reserved size 1st dim
+** @param [r] size [ajint] Reserved size 1st dim
 ** @return [AjPInt2d] Pointer to an empty integer 2d array struct of
 **                    specified size.
 ** @@
 ******************************************************************************/
 
-AjPInt2d ajInt2dNewL(int size)
+AjPInt2d ajInt2dNewL(ajint size)
 {
     AjPInt2d thys;
-    int i;
+    ajint i;
     
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPInt*));
     thys->Len = 0;
-    thys->Res = (int)size;
+    thys->Res = (ajint)size;
 
     for(i=0;i<size;++i)
 	thys->Ptr[i] = NULL;
@@ -1528,7 +1528,7 @@ AjPInt2d ajInt2dNewL(int size)
 **
 ** If the given array is a NULL pointer, simply returns.
 **
-** @param  [w] thys [AjPInt2d*] Pointer to the int array to be deleted.
+** @param  [w] thys [AjPInt2d*] Pointer to the ajint array to be deleted.
 **         The pointer is always deleted.
 ** @return [void]
 ** @@
@@ -1536,7 +1536,7 @@ AjPInt2d ajInt2dNewL(int size)
 
 void ajInt2dDel(AjPInt2d *thys)
 {
-    int i;
+    ajint i;
 
     if(!thys || !*thys)
 	return;
@@ -1560,20 +1560,20 @@ void ajInt2dDel(AjPInt2d *thys)
 **
 ** If the given array is a NULL pointer, simply returns.
 **
-** @param  [r] thys [AjPInt2d] Pointer to the int array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
+** @param  [r] thys [AjPInt2d] Pointer to the ajint array.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
 **
-** @return [int] contents of array element
+** @return [ajint] contents of array element
 ** @@
 ******************************************************************************/
 
-int ajInt2dGet(AjPInt2d thys, int elem1, int elem2)
+ajint ajInt2dGet(AjPInt2d thys, ajint elem1, ajint elem2)
 {
     AjPInt t;
     
     if(elem1<0 || elem2<0 || !thys || elem1>=thys->Len)
-	ajErr("Attempt to access bad int array index [%d][%d]\n",elem1,
+	ajErr("Attempt to access bad ajint array index [%d][%d]\n",elem1,
 	      elem2);
 
     t = thys->Ptr[elem1];
@@ -1593,16 +1593,16 @@ int ajInt2dGet(AjPInt2d thys, int elem1, int elem2)
 ** If the array is of insufficient size then the array is extended.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPInt2d*] Pointer to the int array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
-** @param  [r] v [int] value to load.
+** @param  [w] thys [AjPInt2d*] Pointer to the ajint array.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
+** @param  [r] v [ajint] value to load.
 **
 ** @return [AjBool] true if any array was extended.
 ** @@
 ******************************************************************************/
 
-AjBool ajInt2dPut(AjPInt2d *thys, int elem1, int elem2, int v)
+AjBool ajInt2dPut(AjPInt2d *thys, ajint elem1, ajint elem2, ajint v)
 {
     if(!thys || !*thys || elem1<0 || elem2<0)
 	ajErr("Attempt to write to illegal array value [%d][%d]\n",elem1,
@@ -1636,21 +1636,21 @@ AjBool ajInt2dPut(AjPInt2d *thys, int elem1, int elem2, int v)
 ** If the given array is a NULL pointer an error is generated.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPInt2d*] Pointer to the int array.
-** @param  [r] size [int] new size.
+** @param  [w] thys [AjPInt2d*] Pointer to the ajint array.
+** @param  [r] size [ajint] new size.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-static AjBool ajInt2dResize(AjPInt2d *thys, int size)
+static AjBool ajInt2dResize(AjPInt2d *thys, ajint size)
 {
     AjPInt2d nthys;
     AjPInt2d p=NULL;
-    int    s;
-    int    clen;
-    int    limit;
-    int    i;
+    ajint    s;
+    ajint    clen;
+    ajint    limit;
+    ajint    i;
     
 
     if(!thys || !*thys || size<0)
@@ -1667,7 +1667,7 @@ static AjBool ajInt2dResize(AjPInt2d *thys, int size)
     nthys->Ptr = AJALLOC0(s*sizeof(AjPInt*));
     nthys->Res = s;
     
-    if((int)size < p->Len-1)
+    if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
@@ -1693,10 +1693,10 @@ static AjBool ajInt2dResize(AjPInt2d *thys, int size)
 
 /* @func ajInt2dLen ***************************************************
 **
-** Get lengths of 2d int array
+** Get lengths of 2d ajint array
 **
 **
-** @param  [r] thys [AjPInt2d] Pointer to the int array.
+** @param  [r] thys [AjPInt2d] Pointer to the ajint array.
 ** @param  [w] len1 [int*] Length of 1st dim
 ** @param  [w] len2 [int*] Length of 2nd dim
 **
@@ -1704,10 +1704,10 @@ static AjBool ajInt2dResize(AjPInt2d *thys, int size)
 ** @@
 ******************************************************************************/
 
-void ajInt2dLen(AjPInt2d thys, int* len1, int* len2)
+void ajInt2dLen(AjPInt2d thys, ajint* len1, ajint* len2)
 {
     AjPInt t;
-    int i;
+    ajint i;
     
     *len1 = thys->Len;
     *len2 = 0;
@@ -1722,21 +1722,21 @@ void ajInt2dLen(AjPInt2d thys, int* len1, int* len2)
 
 /* @func ajInt2dInt ***************************************************
 **
-** Convert AjPInt2d to int**
+** Convert AjPInt2d to ajint**
 **
-** @param  [r] thys [AjPInt2d] Pointer to the int array.
+** @param  [r] thys [AjPInt2d] Pointer to the ajint array.
 **
 ** @return [int**] coverted value.
 ** @@
 ******************************************************************************/
 
-int** ajInt2dInt(AjPInt2d thys)
+ajint** ajInt2dInt(AjPInt2d thys)
 {
     AjPInt t=NULL;
-    int **array;
-    int d1;
-    int d2;
-    int i;
+    ajint **array;
+    ajint d1;
+    ajint d2;
+    ajint i;
     
     ajInt2dLen(thys,&d1,&d2);
     
@@ -1745,7 +1745,7 @@ int** ajInt2dInt(AjPInt2d thys)
     {
 	AJCNEW0(array[i],d2);
 	if((t=thys->Ptr[i]))
-	    (void) memmove(array[i],t->Ptr,t->Len*sizeof(int));
+	    (void) memmove(array[i],t->Ptr,t->Len*sizeof(ajint));
     }
 
     return array;
@@ -1764,7 +1764,7 @@ int** ajInt2dInt(AjPInt2d thys)
 AjPInt3d ajInt3dNew(void)
 {
     AjPInt3d thys;
-    int    i;
+    ajint    i;
     
 
     AJNEW0(thys);
@@ -1784,22 +1784,22 @@ AjPInt3d ajInt3dNew(void)
 **
 ** Constructor given an initial reserved size.
 **
-** @param [r] size [int] Reserved size 1st dim
+** @param [r] size [ajint] Reserved size 1st dim
 ** @return [AjPInt3d] Pointer to an empty integer 3d array struct of
 **                    specified size.
 ** @@
 ******************************************************************************/
 
-AjPInt3d ajInt3dNewL(int size)
+AjPInt3d ajInt3dNewL(ajint size)
 {
     AjPInt3d thys;
-    int i;
+    ajint i;
     
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPInt2d*));
     thys->Len = 0;
-    thys->Res = (int)size;
+    thys->Res = (ajint)size;
 
     for(i=0;i<size;++i)
 	thys->Ptr[i] = NULL;
@@ -1815,7 +1815,7 @@ AjPInt3d ajInt3dNewL(int size)
 **
 ** If the given array is a NULL pointer, simply returns.
 **
-** @param  [w] thys [AjPInt3d*] Pointer to the int array to be deleted.
+** @param  [w] thys [AjPInt3d*] Pointer to the ajint array to be deleted.
 **         The pointer is always deleted.
 ** @return [void]
 ** @@
@@ -1823,7 +1823,7 @@ AjPInt3d ajInt3dNewL(int size)
 
 void ajInt3dDel(AjPInt3d *thys)
 {
-    int i;
+    ajint i;
 
     if(!thys || !*thys)
 	return;
@@ -1847,21 +1847,21 @@ void ajInt3dDel(AjPInt3d *thys)
 **
 ** If the given array is a NULL pointer, simply returns.
 **
-** @param  [r] thys [AjPInt3d] Pointer to the int array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
-** @param  [r] elem3 [int] array element.
+** @param  [r] thys [AjPInt3d] Pointer to the ajint array.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
+** @param  [r] elem3 [ajint] array element.
 **
-** @return [int] contents of array element
+** @return [ajint] contents of array element
 ** @@
 ******************************************************************************/
 
-int ajInt3dGet(AjPInt3d thys, int elem1, int elem2, int elem3)
+ajint ajInt3dGet(AjPInt3d thys, ajint elem1, ajint elem2, ajint elem3)
 {
     AjPInt2d t;
     
     if(elem1<0 || elem2<0 || elem3<0 || !thys || elem1>=thys->Len)
-	ajErr("Attempt to access bad int array index [%d][%d][%d]\n",elem1,
+	ajErr("Attempt to access bad ajint array index [%d][%d][%d]\n",elem1,
 	      elem2,elem3);
 
     t = thys->Ptr[elem1];
@@ -1881,17 +1881,17 @@ int ajInt3dGet(AjPInt3d thys, int elem1, int elem2, int elem3)
 ** If the array is of insufficient size then the array is extended.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPInt3d*] Pointer to the int array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
-** @param  [r] elem3 [int] array element.
-** @param  [r] v [int] value to load.
+** @param  [w] thys [AjPInt3d*] Pointer to the ajint array.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
+** @param  [r] elem3 [ajint] array element.
+** @param  [r] v [ajint] value to load.
 **
 ** @return [AjBool] true if any array was extended.
 ** @@
 ******************************************************************************/
 
-AjBool ajInt3dPut(AjPInt3d *thys, int elem1, int elem2, int elem3, int v)
+AjBool ajInt3dPut(AjPInt3d *thys, ajint elem1, ajint elem2, ajint elem3, ajint v)
 {
     if(!thys || !*thys || elem1<0 || elem2<0 || elem3<0)
 	ajErr("Attempt to write to illegal array value [%d][%d][%d]\n",elem1,
@@ -1925,21 +1925,21 @@ AjBool ajInt3dPut(AjPInt3d *thys, int elem1, int elem2, int elem3, int v)
 ** If the given array is a NULL pointer an error is generated.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPInt3d*] Pointer to the int array.
-** @param  [r] size [int] new size.
+** @param  [w] thys [AjPInt3d*] Pointer to the ajint array.
+** @param  [r] size [ajint] new size.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-static AjBool ajInt3dResize(AjPInt3d *thys, int size)
+static AjBool ajInt3dResize(AjPInt3d *thys, ajint size)
 {
     AjPInt3d nthys;
     AjPInt3d p=NULL;
-    int    s;
-    int    clen;
-    int    limit;
-    int    i;
+    ajint    s;
+    ajint    clen;
+    ajint    limit;
+    ajint    i;
     
 
     if(!thys || !*thys || size<0)
@@ -1956,7 +1956,7 @@ static AjBool ajInt3dResize(AjPInt3d *thys, int size)
     nthys->Ptr = AJALLOC0(s*sizeof(AjPInt2d*));
     nthys->Res = s;
     
-    if((int)size < p->Len-1)
+    if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
@@ -1982,10 +1982,10 @@ static AjBool ajInt3dResize(AjPInt3d *thys, int size)
 
 /* @func ajInt3dLen ***************************************************
 **
-** Get lengths of 3d int array
+** Get lengths of 3d ajint array
 **
 **
-** @param  [r] thys [AjPInt3d] Pointer to the int array.
+** @param  [r] thys [AjPInt3d] Pointer to the ajint array.
 ** @param  [w] len1 [int*] Length of 1st dim
 ** @param  [w] len2 [int*] Length of 2nd dim
 ** @param  [w] len3 [int*] Length of 3rd dim
@@ -1994,13 +1994,13 @@ static AjBool ajInt3dResize(AjPInt3d *thys, int size)
 ** @@
 ******************************************************************************/
 
-void ajInt3dLen(AjPInt3d thys, int* len1, int* len2, int* len3)
+void ajInt3dLen(AjPInt3d thys, ajint* len1, ajint* len2, ajint* len3)
 {
     AjPInt2d t2;
     AjPInt   t1;
-    int i;
-    int j;
-    int v;
+    ajint i;
+    ajint j;
+    ajint v;
     
     *len1 = thys->Len;
     *len2 = 0;
@@ -2024,24 +2024,24 @@ void ajInt3dLen(AjPInt3d thys, int* len1, int* len2, int* len3)
 
 /* @func ajInt3dInt ***************************************************
 **
-** Convert AjPInt3d to int***
+** Convert AjPInt3d to ajint***
 **
-** @param  [r] thys [AjPInt3d] Pointer to the int array.
+** @param  [r] thys [AjPInt3d] Pointer to the ajint array.
 **
 ** @return [int***] converted values.
 ** @@
 ******************************************************************************/
 
-int*** ajInt3dInt(AjPInt3d thys)
+ajint*** ajInt3dInt(AjPInt3d thys)
 {
     AjPInt2d t2=NULL;
     AjPInt   t1=NULL;
-    int ***array;
-    int d1;
-    int d2;
-    int d3;
-    int i;
-    int j;
+    ajint ***array;
+    ajint d1;
+    ajint d2;
+    ajint d3;
+    ajint i;
+    ajint j;
     
     ajInt3dLen(thys,&d1,&d2,&d3);
     
@@ -2058,7 +2058,7 @@ int*** ajInt3dInt(AjPInt3d thys)
 		if(j>=t2->Len) continue;
 		if((t1=t2->Ptr[j]))
 		    (void) memmove(array[i][j],t1->Ptr,
-				   t1->Len*sizeof(int));
+				   t1->Len*sizeof(ajint));
 	    }
 	}
     }
@@ -2079,7 +2079,7 @@ int*** ajInt3dInt(AjPInt3d thys)
 AjPFloat2d ajFloat2dNew(void)
 {
     AjPFloat2d thys;
-    int    i;
+    ajint    i;
     
 
     AJNEW0(thys);
@@ -2099,22 +2099,22 @@ AjPFloat2d ajFloat2dNew(void)
 **
 ** Constructor given an initial reserved size.
 **
-** @param [r] size [int] Reserved size 1st dim
+** @param [r] size [ajint] Reserved size 1st dim
 ** @return [AjPFloat2d] Pointer to an empty float 2d array struct of
 **                    specified size.
 ** @@
 ******************************************************************************/
 
-AjPFloat2d ajFloat2dNewL(int size)
+AjPFloat2d ajFloat2dNewL(ajint size)
 {
     AjPFloat2d thys;
-    int i;
+    ajint i;
     
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPFloat*));
     thys->Len = 0;
-    thys->Res = (int)size;
+    thys->Res = (ajint)size;
 
     for(i=0;i<size;++i)
 	thys->Ptr[i] = NULL;
@@ -2138,7 +2138,7 @@ AjPFloat2d ajFloat2dNewL(int size)
 
 void ajFloat2dDel(AjPFloat2d *thys)
 {
-    int i;
+    ajint i;
 
     if(!thys || !*thys)
 	return;
@@ -2163,14 +2163,14 @@ void ajFloat2dDel(AjPFloat2d *thys)
 ** If the given array is a NULL pointer, simply returns.
 **
 ** @param  [r] thys [AjPFloat2d] Pointer to the float array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
 **
 ** @return [float] contents of array element
 ** @@
 ******************************************************************************/
 
-float ajFloat2dGet(AjPFloat2d thys, int elem1, int elem2)
+float ajFloat2dGet(AjPFloat2d thys, ajint elem1, ajint elem2)
 {
     AjPFloat t;
     
@@ -2196,15 +2196,15 @@ float ajFloat2dGet(AjPFloat2d thys, int elem1, int elem2)
 ** Negative indices generate an error.
 **
 ** @param  [w] thys [AjPFloat2d*] Pointer to the float array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
 ** @param  [r] v [float] value to load.
 **
 ** @return [AjBool] true if any array was extended.
 ** @@
 ******************************************************************************/
 
-AjBool ajFloat2dPut(AjPFloat2d *thys, int elem1, int elem2, float v)
+AjBool ajFloat2dPut(AjPFloat2d *thys, ajint elem1, ajint elem2, float v)
 {
     if(!thys || !*thys || elem1<0 || elem2<0)
 	ajErr("Attempt to write to illegal array value [%d][%d]\n",elem1,
@@ -2239,20 +2239,20 @@ AjBool ajFloat2dPut(AjPFloat2d *thys, int elem1, int elem2, float v)
 ** Negative indices generate an error.
 **
 ** @param  [w] thys [AjPFloat2d*] Pointer to the float array.
-** @param  [r] size [int] new size.
+** @param  [r] size [ajint] new size.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-static AjBool ajFloat2dResize(AjPFloat2d *thys, int size)
+static AjBool ajFloat2dResize(AjPFloat2d *thys, ajint size)
 {
     AjPFloat2d nthys;
     AjPFloat2d p=NULL;
-    int    s;
-    int    clen;
-    int    limit;
-    int    i;
+    ajint    s;
+    ajint    clen;
+    ajint    limit;
+    ajint    i;
     
 
     if(!thys || !*thys || size<0)
@@ -2269,7 +2269,7 @@ static AjBool ajFloat2dResize(AjPFloat2d *thys, int size)
     nthys->Ptr = AJALLOC0(s*sizeof(AjPFloat*));
     nthys->Res = s;
     
-    if((int)size < p->Len-1)
+    if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
@@ -2306,10 +2306,10 @@ static AjBool ajFloat2dResize(AjPFloat2d *thys, int size)
 ** @@
 ******************************************************************************/
 
-void ajFloat2dLen(AjPFloat2d thys, int* len1, int* len2)
+void ajFloat2dLen(AjPFloat2d thys, ajint* len1, ajint* len2)
 {
     AjPFloat t;
-    int i;
+    ajint i;
     
     *len1 = thys->Len;
     *len2 = 0;
@@ -2336,9 +2336,9 @@ float** ajFloat2dFloat(AjPFloat2d thys)
 {
     AjPFloat t=NULL;
     float **array;
-    int d1;
-    int d2;
-    int i;
+    ajint d1;
+    ajint d2;
+    ajint i;
     
     ajFloat2dLen(thys,&d1,&d2);
     
@@ -2366,7 +2366,7 @@ float** ajFloat2dFloat(AjPFloat2d thys)
 AjPFloat3d ajFloat3dNew(void)
 {
     AjPFloat3d thys;
-    int    i;
+    ajint    i;
     
 
     AJNEW0(thys);
@@ -2386,22 +2386,22 @@ AjPFloat3d ajFloat3dNew(void)
 **
 ** Constructor given an initial reserved size.
 **
-** @param [r] size [int] Reserved size 1st dim
+** @param [r] size [ajint] Reserved size 1st dim
 ** @return [AjPFloat3d] Pointer to an empty float 3d array struct of
 **                    specified size.
 ** @@
 ******************************************************************************/
 
-AjPFloat3d ajFloat3dNewL(int size)
+AjPFloat3d ajFloat3dNewL(ajint size)
 {
     AjPFloat3d thys;
-    int i;
+    ajint i;
     
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPFloat2d*));
     thys->Len = 0;
-    thys->Res = (int)size;
+    thys->Res = (ajint)size;
 
     for(i=0;i<size;++i)
 	thys->Ptr[i] = NULL;
@@ -2425,7 +2425,7 @@ AjPFloat3d ajFloat3dNewL(int size)
 
 void ajFloat3dDel(AjPFloat3d *thys)
 {
-    int i;
+    ajint i;
 
     if(!thys || !*thys)
 	return;
@@ -2450,15 +2450,15 @@ void ajFloat3dDel(AjPFloat3d *thys)
 ** If the given array is a NULL pointer, simply returns.
 **
 ** @param  [r] thys [AjPFloat3d] Pointer to the float array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
-** @param  [r] elem3 [int] array element.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
+** @param  [r] elem3 [ajint] array element.
 **
 ** @return [float] contents of array element
 ** @@
 ******************************************************************************/
 
-float ajFloat3dGet(AjPFloat3d thys, int elem1, int elem2, int elem3)
+float ajFloat3dGet(AjPFloat3d thys, ajint elem1, ajint elem2, ajint elem3)
 {
     AjPFloat2d t;
     
@@ -2484,16 +2484,16 @@ float ajFloat3dGet(AjPFloat3d thys, int elem1, int elem2, int elem3)
 ** Negative indices generate an error.
 **
 ** @param  [w] thys [AjPFloat3d*] Pointer to the float array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
-** @param  [r] elem3 [int] array element.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
+** @param  [r] elem3 [ajint] array element.
 ** @param  [r] v [float] value to load.
 **
 ** @return [AjBool] true if any array was extended.
 ** @@
 ******************************************************************************/
 
-AjBool ajFloat3dPut(AjPFloat3d *thys, int elem1, int elem2, int elem3, float v)
+AjBool ajFloat3dPut(AjPFloat3d *thys, ajint elem1, ajint elem2, ajint elem3, float v)
 {
     if(!thys || !*thys || elem1<0 || elem2<0 || elem3<0)
 	ajErr("Attempt to write to illegal array value [%d][%d][%d]\n",elem1,
@@ -2528,20 +2528,20 @@ AjBool ajFloat3dPut(AjPFloat3d *thys, int elem1, int elem2, int elem3, float v)
 ** Negative indices generate an error.
 **
 ** @param  [w] thys [AjPFloat3d*] Pointer to the float array.
-** @param  [r] size [int] new size.
+** @param  [r] size [ajint] new size.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-static AjBool ajFloat3dResize(AjPFloat3d *thys, int size)
+static AjBool ajFloat3dResize(AjPFloat3d *thys, ajint size)
 {
     AjPFloat3d nthys;
     AjPFloat3d p=NULL;
-    int    s;
-    int    clen;
-    int    limit;
-    int    i;
+    ajint    s;
+    ajint    clen;
+    ajint    limit;
+    ajint    i;
     
 
     if(!thys || !*thys || size<0)
@@ -2558,7 +2558,7 @@ static AjBool ajFloat3dResize(AjPFloat3d *thys, int size)
     nthys->Ptr = AJALLOC0(s*sizeof(AjPFloat2d*));
     nthys->Res = s;
     
-    if((int)size < p->Len-1)
+    if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
@@ -2596,13 +2596,13 @@ static AjBool ajFloat3dResize(AjPFloat3d *thys, int size)
 ** @@
 ******************************************************************************/
 
-void ajFloat3dLen(AjPFloat3d thys, int* len1, int* len2, int* len3)
+void ajFloat3dLen(AjPFloat3d thys, ajint* len1, ajint* len2, ajint* len3)
 {
     AjPFloat2d t2;
     AjPFloat   t1;
-    int i;
-    int j;
-    int v;
+    ajint i;
+    ajint j;
+    ajint v;
     
     *len1 = thys->Len;
     *len2 = 0;
@@ -2639,11 +2639,11 @@ float*** ajFloat3dFloat(AjPFloat3d thys)
     AjPFloat2d t2=NULL;
     AjPFloat   t1=NULL;
     float ***array;
-    int d1;
-    int d2;
-    int d3;
-    int i;
-    int j;
+    ajint d1;
+    ajint d2;
+    ajint d3;
+    ajint i;
+    ajint j;
     
     ajFloat3dLen(thys,&d1,&d2,&d3);
     
@@ -2681,7 +2681,7 @@ float*** ajFloat3dFloat(AjPFloat3d thys)
 AjPDouble2d ajDouble2dNew(void)
 {
     AjPDouble2d thys;
-    int    i;
+    ajint    i;
     
 
     AJNEW0(thys);
@@ -2701,22 +2701,22 @@ AjPDouble2d ajDouble2dNew(void)
 **
 ** Constructor given an initial reserved size.
 **
-** @param [r] size [int] Reserved size 1st dim
+** @param [r] size [ajint] Reserved size 1st dim
 ** @return [AjPDouble2d] Pointer to an empty double 2d array struct of
 **                    specified size.
 ** @@
 ******************************************************************************/
 
-AjPDouble2d ajDouble2dNewL(int size)
+AjPDouble2d ajDouble2dNewL(ajint size)
 {
     AjPDouble2d thys;
-    int i;
+    ajint i;
     
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPDouble*));
     thys->Len = 0;
-    thys->Res = (int)size;
+    thys->Res = (ajint)size;
 
     for(i=0;i<size;++i)
 	thys->Ptr[i] = NULL;
@@ -2740,7 +2740,7 @@ AjPDouble2d ajDouble2dNewL(int size)
 
 void ajDouble2dDel(AjPDouble2d *thys)
 {
-    int i;
+    ajint i;
 
     if(!thys || !*thys)
 	return;
@@ -2765,14 +2765,14 @@ void ajDouble2dDel(AjPDouble2d *thys)
 ** If the given array is a NULL pointer, simply returns.
 **
 ** @param  [r] thys [AjPDouble2d] Pointer to the double array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
 **
 ** @return [double] contents of array element
 ** @@
 ******************************************************************************/
 
-double ajDouble2dGet(AjPDouble2d thys, int elem1, int elem2)
+double ajDouble2dGet(AjPDouble2d thys, ajint elem1, ajint elem2)
 {
     AjPDouble t;
     
@@ -2798,15 +2798,15 @@ double ajDouble2dGet(AjPDouble2d thys, int elem1, int elem2)
 ** Negative indices generate an error.
 **
 ** @param  [w] thys [AjPDouble2d*] Pointer to the double array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
 ** @param  [r] v [double] value to load.
 **
 ** @return [AjBool] true if any array was extended.
 ** @@
 ******************************************************************************/
 
-AjBool ajDouble2dPut(AjPDouble2d *thys, int elem1, int elem2, double v)
+AjBool ajDouble2dPut(AjPDouble2d *thys, ajint elem1, ajint elem2, double v)
 {
     if(!thys || !*thys || elem1<0 || elem2<0)
 	ajErr("Attempt to write to illegal array value [%d][%d]\n",elem1,
@@ -2841,20 +2841,20 @@ AjBool ajDouble2dPut(AjPDouble2d *thys, int elem1, int elem2, double v)
 ** Negative indices generate an error.
 **
 ** @param  [w] thys [AjPDouble2d*] Pointer to the double array.
-** @param  [r] size [int] new size.
+** @param  [r] size [ajint] new size.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-static AjBool ajDouble2dResize(AjPDouble2d *thys, int size)
+static AjBool ajDouble2dResize(AjPDouble2d *thys, ajint size)
 {
     AjPDouble2d nthys;
     AjPDouble2d p=NULL;
-    int    s;
-    int    clen;
-    int    limit;
-    int    i;
+    ajint    s;
+    ajint    clen;
+    ajint    limit;
+    ajint    i;
     
 
     if(!thys || !*thys || size<0)
@@ -2871,7 +2871,7 @@ static AjBool ajDouble2dResize(AjPDouble2d *thys, int size)
     nthys->Ptr = AJALLOC0(s*sizeof(AjPDouble*));
     nthys->Res = s;
     
-    if((int)size < p->Len-1)
+    if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
@@ -2908,10 +2908,10 @@ static AjBool ajDouble2dResize(AjPDouble2d *thys, int size)
 ** @@
 ******************************************************************************/
 
-void ajDouble2dLen(AjPDouble2d thys, int* len1, int* len2)
+void ajDouble2dLen(AjPDouble2d thys, ajint* len1, ajint* len2)
 {
     AjPDouble t;
-    int i;
+    ajint i;
     
     *len1 = thys->Len;
     *len2 = 0;
@@ -2938,9 +2938,9 @@ double** ajDouble2dDouble(AjPDouble2d thys)
 {
     AjPDouble t=NULL;
     double **array;
-    int d1;
-    int d2;
-    int i;
+    ajint d1;
+    ajint d2;
+    ajint i;
     
     ajDouble2dLen(thys,&d1,&d2);
     
@@ -2968,7 +2968,7 @@ double** ajDouble2dDouble(AjPDouble2d thys)
 AjPDouble3d ajDouble3dNew(void)
 {
     AjPDouble3d thys;
-    int    i;
+    ajint    i;
     
 
     AJNEW0(thys);
@@ -2988,22 +2988,22 @@ AjPDouble3d ajDouble3dNew(void)
 **
 ** Constructor given an initial reserved size.
 **
-** @param [r] size [int] Reserved size 1st dim
+** @param [r] size [ajint] Reserved size 1st dim
 ** @return [AjPDouble3d] Pointer to an empty double 3d array struct of
 **                    specified size.
 ** @@
 ******************************************************************************/
 
-AjPDouble3d ajDouble3dNewL(int size)
+AjPDouble3d ajDouble3dNewL(ajint size)
 {
     AjPDouble3d thys;
-    int i;
+    ajint i;
     
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPDouble2d*));
     thys->Len = 0;
-    thys->Res = (int)size;
+    thys->Res = (ajint)size;
 
     for(i=0;i<size;++i)
 	thys->Ptr[i] = NULL;
@@ -3027,7 +3027,7 @@ AjPDouble3d ajDouble3dNewL(int size)
 
 void ajDouble3dDel(AjPDouble3d *thys)
 {
-    int i;
+    ajint i;
 
     if(!thys || !*thys)
 	return;
@@ -3052,15 +3052,15 @@ void ajDouble3dDel(AjPDouble3d *thys)
 ** If the given array is a NULL pointer, simply returns.
 **
 ** @param  [r] thys [AjPDouble3d] Pointer to the double array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
-** @param  [r] elem3 [int] array element.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
+** @param  [r] elem3 [ajint] array element.
 **
 ** @return [double] contents of array element
 ** @@
 ******************************************************************************/
 
-double ajDouble3dGet(AjPDouble3d thys, int elem1, int elem2, int elem3)
+double ajDouble3dGet(AjPDouble3d thys, ajint elem1, ajint elem2, ajint elem3)
 {
     AjPDouble2d t;
     
@@ -3086,16 +3086,16 @@ double ajDouble3dGet(AjPDouble3d thys, int elem1, int elem2, int elem3)
 ** Negative indices generate an error.
 **
 ** @param  [w] thys [AjPDouble3d*] Pointer to the double array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
-** @param  [r] elem3 [int] array element.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
+** @param  [r] elem3 [ajint] array element.
 ** @param  [r] v [double] value to load.
 **
 ** @return [AjBool] true if any array was extended.
 ** @@
 ******************************************************************************/
 
-AjBool ajDouble3dPut(AjPDouble3d *thys, int elem1, int elem2, int elem3, double v)
+AjBool ajDouble3dPut(AjPDouble3d *thys, ajint elem1, ajint elem2, ajint elem3, double v)
 {
     if(!thys || !*thys || elem1<0 || elem2<0 || elem3<0)
 	ajErr("Attempt to write to illegal array value [%d][%d][%d]\n",elem1,
@@ -3130,20 +3130,20 @@ AjBool ajDouble3dPut(AjPDouble3d *thys, int elem1, int elem2, int elem3, double 
 ** Negative indices generate an error.
 **
 ** @param  [w] thys [AjPDouble3d*] Pointer to the double array.
-** @param  [r] size [int] new size.
+** @param  [r] size [ajint] new size.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-static AjBool ajDouble3dResize(AjPDouble3d *thys, int size)
+static AjBool ajDouble3dResize(AjPDouble3d *thys, ajint size)
 {
     AjPDouble3d nthys;
     AjPDouble3d p=NULL;
-    int    s;
-    int    clen;
-    int    limit;
-    int    i;
+    ajint    s;
+    ajint    clen;
+    ajint    limit;
+    ajint    i;
     
 
     if(!thys || !*thys || size<0)
@@ -3160,7 +3160,7 @@ static AjBool ajDouble3dResize(AjPDouble3d *thys, int size)
     nthys->Ptr = AJALLOC0(s*sizeof(AjPDouble2d*));
     nthys->Res = s;
     
-    if((int)size < p->Len-1)
+    if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
@@ -3198,13 +3198,13 @@ static AjBool ajDouble3dResize(AjPDouble3d *thys, int size)
 ** @@
 ******************************************************************************/
 
-void ajDouble3dLen(AjPDouble3d thys, int* len1, int* len2, int* len3)
+void ajDouble3dLen(AjPDouble3d thys, ajint* len1, ajint* len2, ajint* len3)
 {
     AjPDouble2d t2;
     AjPDouble   t1;
-    int i;
-    int j;
-    int v;
+    ajint i;
+    ajint j;
+    ajint v;
     
     *len1 = thys->Len;
     *len2 = 0;
@@ -3241,11 +3241,11 @@ double*** ajDouble3dDouble(AjPDouble3d thys)
     AjPDouble2d t2=NULL;
     AjPDouble   t1=NULL;
     double ***array;
-    int d1;
-    int d2;
-    int d3;
-    int i;
-    int j;
+    ajint d1;
+    ajint d2;
+    ajint d3;
+    ajint i;
+    ajint j;
     
     ajDouble3dLen(thys,&d1,&d2,&d3);
     
@@ -3283,7 +3283,7 @@ double*** ajDouble3dDouble(AjPDouble3d thys)
 AjPShort2d ajShort2dNew(void)
 {
     AjPShort2d thys;
-    int    i;
+    ajint    i;
     
 
     AJNEW0(thys);
@@ -3303,22 +3303,22 @@ AjPShort2d ajShort2dNew(void)
 **
 ** Constructor given an initial reserved size.
 **
-** @param [r] size [int] Reserved size 1st dim
+** @param [r] size [ajint] Reserved size 1st dim
 ** @return [AjPShort2d] Pointer to an empty short 2d array struct of
 **                    specified size.
 ** @@
 ******************************************************************************/
 
-AjPShort2d ajShort2dNewL(int size)
+AjPShort2d ajShort2dNewL(ajint size)
 {
     AjPShort2d thys;
-    int i;
+    ajint i;
     
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPShort*));
     thys->Len = 0;
-    thys->Res = (int)size;
+    thys->Res = (ajint)size;
 
     for(i=0;i<size;++i)
 	thys->Ptr[i] = NULL;
@@ -3342,7 +3342,7 @@ AjPShort2d ajShort2dNewL(int size)
 
 void ajShort2dDel(AjPShort2d *thys)
 {
-    int i;
+    ajint i;
 
     if(!thys || !*thys)
 	return;
@@ -3367,14 +3367,14 @@ void ajShort2dDel(AjPShort2d *thys)
 ** If the given array is a NULL pointer, simply returns.
 **
 ** @param  [r] thys [AjPShort2d] Pointer to the short array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
 **
 ** @return [short] contents of array element
 ** @@
 ******************************************************************************/
 
-short ajShort2dGet(AjPShort2d thys, int elem1, int elem2)
+short ajShort2dGet(AjPShort2d thys, ajint elem1, ajint elem2)
 {
     AjPShort t;
     
@@ -3400,15 +3400,15 @@ short ajShort2dGet(AjPShort2d thys, int elem1, int elem2)
 ** Negative indices generate an error.
 **
 ** @param  [w] thys [AjPShort2d*] Pointer to the short array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
 ** @param  [r] v [short] value to load.
 **
 ** @return [AjBool] true if any array was extended.
 ** @@
 ******************************************************************************/
 
-AjBool ajShort2dPut(AjPShort2d *thys, int elem1, int elem2, short v)
+AjBool ajShort2dPut(AjPShort2d *thys, ajint elem1, ajint elem2, short v)
 {
     if(!thys || !*thys || elem1<0 || elem2<0)
 	ajErr("Attempt to write to illegal array value [%d][%d]\n",elem1,
@@ -3443,20 +3443,20 @@ AjBool ajShort2dPut(AjPShort2d *thys, int elem1, int elem2, short v)
 ** Negative indices generate an error.
 **
 ** @param  [w] thys [AjPShort2d*] Pointer to the short array.
-** @param  [r] size [int] new size.
+** @param  [r] size [ajint] new size.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-static AjBool ajShort2dResize(AjPShort2d *thys, int size)
+static AjBool ajShort2dResize(AjPShort2d *thys, ajint size)
 {
     AjPShort2d nthys;
     AjPShort2d p=NULL;
-    int    s;
-    int    clen;
-    int    limit;
-    int    i;
+    ajint    s;
+    ajint    clen;
+    ajint    limit;
+    ajint    i;
     
 
     if(!thys || !*thys || size<0)
@@ -3473,7 +3473,7 @@ static AjBool ajShort2dResize(AjPShort2d *thys, int size)
     nthys->Ptr = AJALLOC0(s*sizeof(AjPShort*));
     nthys->Res = s;
     
-    if((int)size < p->Len-1)
+    if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
@@ -3510,10 +3510,10 @@ static AjBool ajShort2dResize(AjPShort2d *thys, int size)
 ** @@
 ******************************************************************************/
 
-void ajShort2dLen(AjPShort2d thys, int* len1, int* len2)
+void ajShort2dLen(AjPShort2d thys, ajint* len1, ajint* len2)
 {
     AjPShort t;
-    int i;
+    ajint i;
     
     *len1 = thys->Len;
     *len2 = 0;
@@ -3540,9 +3540,9 @@ short** ajShort2dShort(AjPShort2d thys)
 {
     AjPShort t=NULL;
     short **array;
-    int d1;
-    int d2;
-    int i;
+    ajint d1;
+    ajint d2;
+    ajint i;
     
     ajShort2dLen(thys,&d1,&d2);
     
@@ -3570,7 +3570,7 @@ short** ajShort2dShort(AjPShort2d thys)
 AjPShort3d ajShort3dNew(void)
 {
     AjPShort3d thys;
-    int    i;
+    ajint    i;
     
 
     AJNEW0(thys);
@@ -3590,22 +3590,22 @@ AjPShort3d ajShort3dNew(void)
 **
 ** Constructor given an initial reserved size.
 **
-** @param [r] size [int] Reserved size 1st dim
+** @param [r] size [ajint] Reserved size 1st dim
 ** @return [AjPShort3d] Pointer to an empty short 3d array struct of
 **                    specified size.
 ** @@
 ******************************************************************************/
 
-AjPShort3d ajShort3dNewL(int size)
+AjPShort3d ajShort3dNewL(ajint size)
 {
     AjPShort3d thys;
-    int i;
+    ajint i;
     
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPShort2d*));
     thys->Len = 0;
-    thys->Res = (int)size;
+    thys->Res = (ajint)size;
 
     for(i=0;i<size;++i)
 	thys->Ptr[i] = NULL;
@@ -3629,7 +3629,7 @@ AjPShort3d ajShort3dNewL(int size)
 
 void ajShort3dDel(AjPShort3d *thys)
 {
-    int i;
+    ajint i;
 
     if(!thys || !*thys)
 	return;
@@ -3654,15 +3654,15 @@ void ajShort3dDel(AjPShort3d *thys)
 ** If the given array is a NULL pointer, simply returns.
 **
 ** @param  [r] thys [AjPShort3d] Pointer to the short array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
-** @param  [r] elem3 [int] array element.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
+** @param  [r] elem3 [ajint] array element.
 **
 ** @return [short] contents of array element
 ** @@
 ******************************************************************************/
 
-short ajShort3dGet(AjPShort3d thys, int elem1, int elem2, int elem3)
+short ajShort3dGet(AjPShort3d thys, ajint elem1, ajint elem2, ajint elem3)
 {
     AjPShort2d t;
     
@@ -3688,16 +3688,16 @@ short ajShort3dGet(AjPShort3d thys, int elem1, int elem2, int elem3)
 ** Negative indices generate an error.
 **
 ** @param  [w] thys [AjPShort3d*] Pointer to the short array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
-** @param  [r] elem3 [int] array element.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
+** @param  [r] elem3 [ajint] array element.
 ** @param  [r] v [short] value to load.
 **
 ** @return [AjBool] true if any array was extended.
 ** @@
 ******************************************************************************/
 
-AjBool ajShort3dPut(AjPShort3d *thys, int elem1, int elem2, int elem3, short v)
+AjBool ajShort3dPut(AjPShort3d *thys, ajint elem1, ajint elem2, ajint elem3, short v)
 {
     if(!thys || !*thys || elem1<0 || elem2<0 || elem3<0)
 	ajErr("Attempt to write to illegal array value [%d][%d][%d]\n",elem1,
@@ -3732,20 +3732,20 @@ AjBool ajShort3dPut(AjPShort3d *thys, int elem1, int elem2, int elem3, short v)
 ** Negative indices generate an error.
 **
 ** @param  [w] thys [AjPShort3d*] Pointer to the short array.
-** @param  [r] size [int] new size.
+** @param  [r] size [ajint] new size.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-static AjBool ajShort3dResize(AjPShort3d *thys, int size)
+static AjBool ajShort3dResize(AjPShort3d *thys, ajint size)
 {
     AjPShort3d nthys;
     AjPShort3d p=NULL;
-    int    s;
-    int    clen;
-    int    limit;
-    int    i;
+    ajint    s;
+    ajint    clen;
+    ajint    limit;
+    ajint    i;
     
 
     if(!thys || !*thys || size<0)
@@ -3762,7 +3762,7 @@ static AjBool ajShort3dResize(AjPShort3d *thys, int size)
     nthys->Ptr = AJALLOC0(s*sizeof(AjPShort2d*));
     nthys->Res = s;
     
-    if((int)size < p->Len-1)
+    if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
@@ -3800,13 +3800,13 @@ static AjBool ajShort3dResize(AjPShort3d *thys, int size)
 ** @@
 ******************************************************************************/
 
-void ajShort3dLen(AjPShort3d thys, int* len1, int* len2, int* len3)
+void ajShort3dLen(AjPShort3d thys, ajint* len1, ajint* len2, ajint* len3)
 {
     AjPShort2d t2;
     AjPShort   t1;
-    int i;
-    int j;
-    int v;
+    ajint i;
+    ajint j;
+    ajint v;
     
     *len1 = thys->Len;
     *len2 = 0;
@@ -3843,11 +3843,11 @@ short*** ajShort3dShort(AjPShort3d thys)
     AjPShort2d t2=NULL;
     AjPShort   t1=NULL;
     short ***array;
-    int d1;
-    int d2;
-    int d3;
-    int i;
-    int j;
+    ajint d1;
+    ajint d2;
+    ajint d3;
+    ajint i;
+    ajint j;
     
     ajShort3dLen(thys,&d1,&d2,&d3);
     
@@ -3876,16 +3876,16 @@ short*** ajShort3dShort(AjPShort3d thys)
 
 /* @func ajLong2dNew **********************************************************
 **
-** Default constructor for empty AJAX 2D long arrays.
+** Default constructor for empty AJAX 2D ajlong arrays.
 **
-** @return [AjPLong2d] Pointer to an empty long array structure
+** @return [AjPLong2d] Pointer to an empty ajlong array structure
 ** @@
 ******************************************************************************/
 
 AjPLong2d ajLong2dNew(void)
 {
     AjPLong2d thys;
-    int    i;
+    ajint    i;
     
 
     AJNEW0(thys);
@@ -3905,22 +3905,22 @@ AjPLong2d ajLong2dNew(void)
 **
 ** Constructor given an initial reserved size.
 **
-** @param [r] size [int] Reserved size 1st dim
-** @return [AjPLong2d] Pointer to an empty long 2d array struct of
+** @param [r] size [ajint] Reserved size 1st dim
+** @return [AjPLong2d] Pointer to an empty ajlong 2d array struct of
 **                    specified size.
 ** @@
 ******************************************************************************/
 
-AjPLong2d ajLong2dNewL(int size)
+AjPLong2d ajLong2dNewL(ajint size)
 {
     AjPLong2d thys;
-    int i;
+    ajint i;
     
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPLong*));
     thys->Len = 0;
-    thys->Res = (int)size;
+    thys->Res = (ajint)size;
 
     for(i=0;i<size;++i)
 	thys->Ptr[i] = NULL;
@@ -3932,11 +3932,11 @@ AjPLong2d ajLong2dNewL(int size)
 
 /* @func ajLong2dDel ***********************************************************
 **
-** Default destructor for AJAX long arrays.
+** Default destructor for AJAX ajlong arrays.
 **
 ** If the given array is a NULL pointer, simply returns.
 **
-** @param  [w] thys [AjPLong2d*] Pointer to the long array to be deleted.
+** @param  [w] thys [AjPLong2d*] Pointer to the ajlong array to be deleted.
 **         The pointer is always deleted.
 ** @return [void]
 ** @@
@@ -3944,7 +3944,7 @@ AjPLong2d ajLong2dNewL(int size)
 
 void ajLong2dDel(AjPLong2d *thys)
 {
-    int i;
+    ajint i;
 
     if(!thys || !*thys)
 	return;
@@ -3964,24 +3964,24 @@ void ajLong2dDel(AjPLong2d *thys)
 
 /* @func ajLong2dGet *************************************************************
 **
-** Retrieve an element from an AJAX 2d long array.
+** Retrieve an element from an AJAX 2d ajlong array.
 **
 ** If the given array is a NULL pointer, simply returns.
 **
-** @param  [r] thys [AjPLong2d] Pointer to the long array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
+** @param  [r] thys [AjPLong2d] Pointer to the ajlong array.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
 **
-** @return [long] contents of array element
+** @return [ajlong] contents of array element
 ** @@
 ******************************************************************************/
 
-long ajLong2dGet(AjPLong2d thys, int elem1, int elem2)
+ajlong ajLong2dGet(AjPLong2d thys, ajint elem1, ajint elem2)
 {
     AjPLong t;
     
     if(elem1<0 || elem2<0 || !thys || elem1>=thys->Len)
-	ajErr("Attempt to access bad long array index [%d][%d]\n",elem1,
+	ajErr("Attempt to access bad ajlong array index [%d][%d]\n",elem1,
 	      elem2);
 
     t = thys->Ptr[elem1];
@@ -3995,22 +3995,22 @@ long ajLong2dGet(AjPLong2d thys, int elem1, int elem2)
 
 /* @func ajLong2dPut **********************************************************
 **
-** Load a long 2d array element.
+** Load a ajlong 2d array element.
 **
 ** If the given array is a NULL pointer an error is generated.
 ** If the array is of insufficient size then the array is extended.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPLong2d*] Pointer to the long array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
-** @param  [r] v [long] value to load.
+** @param  [w] thys [AjPLong2d*] Pointer to the ajlong array.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
+** @param  [r] v [ajlong] value to load.
 **
 ** @return [AjBool] true if any array was extended.
 ** @@
 ******************************************************************************/
 
-AjBool ajLong2dPut(AjPLong2d *thys, int elem1, int elem2, long v)
+AjBool ajLong2dPut(AjPLong2d *thys, ajint elem1, ajint elem2, ajlong v)
 {
     if(!thys || !*thys || elem1<0 || elem2<0)
 	ajErr("Attempt to write to illegal array value [%d][%d]\n",elem1,
@@ -4039,30 +4039,30 @@ AjBool ajLong2dPut(AjPLong2d *thys, int elem1, int elem2, long v)
 
 /* @funcstatic ajLong2dResize ***************************************************
 **
-** Resize a long array.
+** Resize a ajlong array.
 **
 ** If the given array is a NULL pointer an error is generated.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPLong2d*] Pointer to the long array.
-** @param  [r] size [int] new size.
+** @param  [w] thys [AjPLong2d*] Pointer to the ajlong array.
+** @param  [r] size [ajint] new size.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-static AjBool ajLong2dResize(AjPLong2d *thys, int size)
+static AjBool ajLong2dResize(AjPLong2d *thys, ajint size)
 {
     AjPLong2d nthys;
     AjPLong2d p=NULL;
-    int    s;
-    int    clen;
-    int    limit;
-    int    i;
+    ajint    s;
+    ajint    clen;
+    ajint    limit;
+    ajint    i;
     
 
     if(!thys || !*thys || size<0)
-	ajErr("Illegal attempt to resize long array");
+	ajErr("Illegal attempt to resize ajlong array");
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
@@ -4075,7 +4075,7 @@ static AjBool ajLong2dResize(AjPLong2d *thys, int size)
     nthys->Ptr = AJALLOC0(s*sizeof(AjPLong*));
     nthys->Res = s;
     
-    if((int)size < p->Len-1)
+    if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
@@ -4101,10 +4101,10 @@ static AjBool ajLong2dResize(AjPLong2d *thys, int size)
 
 /* @func ajLong2dLen ***************************************************
 **
-** Get lengths of 2d long array
+** Get lengths of 2d ajlong array
 **
 **
-** @param  [r] thys [AjPLong2d] Pointer to the long array.
+** @param  [r] thys [AjPLong2d] Pointer to the ajlong array.
 ** @param  [w] len1 [int*] Length of 1st dim
 ** @param  [w] len2 [int*] Length of 2nd dim
 **
@@ -4112,10 +4112,10 @@ static AjBool ajLong2dResize(AjPLong2d *thys, int size)
 ** @@
 ******************************************************************************/
 
-void ajLong2dLen(AjPLong2d thys, int* len1, int* len2)
+void ajLong2dLen(AjPLong2d thys, ajint* len1, ajint* len2)
 {
     AjPLong t;
-    int i;
+    ajint i;
     
     *len1 = thys->Len;
     *len2 = 0;
@@ -4130,21 +4130,21 @@ void ajLong2dLen(AjPLong2d thys, int* len1, int* len2)
 
 /* @func ajLong2dLong ***************************************************
 **
-** Convert AjPLong2d to long**
+** Convert AjPLong2d to ajlong**
 **
-** @param  [r] thys [AjPLong2d] Pointer to the long array.
+** @param  [r] thys [AjPLong2d] Pointer to the ajlong array.
 **
 ** @return [long**] converted values.
 ** @@
 ******************************************************************************/
 
-long** ajLong2dLong(AjPLong2d thys)
+ajlong** ajLong2dLong(AjPLong2d thys)
 {
     AjPLong t=NULL;
-    long **array;
-    int d1;
-    int d2;
-    int i;
+    ajlong **array;
+    ajint d1;
+    ajint d2;
+    ajint i;
     
     ajLong2dLen(thys,&d1,&d2);
     
@@ -4153,7 +4153,7 @@ long** ajLong2dLong(AjPLong2d thys)
     {
 	AJCNEW0(array[i],d2);
 	if((t=thys->Ptr[i]))
-	    (void) memmove(array[i],t->Ptr,t->Len*sizeof(long));
+	    (void) memmove(array[i],t->Ptr,t->Len*sizeof(ajlong));
     }
 
     return array;
@@ -4163,16 +4163,16 @@ long** ajLong2dLong(AjPLong2d thys)
 
 /* @func ajLong3dNew **********************************************************
 **
-** Default constructor for empty AJAX 3D long arrays.
+** Default constructor for empty AJAX 3D ajlong arrays.
 **
-** @return [AjPLong3d] Pointer to an empty long array structure
+** @return [AjPLong3d] Pointer to an empty ajlong array structure
 ** @@
 ******************************************************************************/
 
 AjPLong3d ajLong3dNew(void)
 {
     AjPLong3d thys;
-    int    i;
+    ajint    i;
     
 
     AJNEW0(thys);
@@ -4192,22 +4192,22 @@ AjPLong3d ajLong3dNew(void)
 **
 ** Constructor given an initial reserved size.
 **
-** @param [r] size [int] Reserved size 1st dim
-** @return [AjPLong3d] Pointer to an empty long 3d array struct of
+** @param [r] size [ajint] Reserved size 1st dim
+** @return [AjPLong3d] Pointer to an empty ajlong 3d array struct of
 **                    specified size.
 ** @@
 ******************************************************************************/
 
-AjPLong3d ajLong3dNewL(int size)
+AjPLong3d ajLong3dNewL(ajint size)
 {
     AjPLong3d thys;
-    int i;
+    ajint i;
     
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPLong2d*));
     thys->Len = 0;
-    thys->Res = (int)size;
+    thys->Res = (ajint)size;
 
     for(i=0;i<size;++i)
 	thys->Ptr[i] = NULL;
@@ -4219,11 +4219,11 @@ AjPLong3d ajLong3dNewL(int size)
 
 /* @func ajLong3dDel ***********************************************************
 **
-** Default destructor for AJAX long arrays.
+** Default destructor for AJAX ajlong arrays.
 **
 ** If the given array is a NULL pointer, simply returns.
 **
-** @param  [w] thys [AjPLong3d*] Pointer to the long array to be deleted.
+** @param  [w] thys [AjPLong3d*] Pointer to the ajlong array to be deleted.
 **         The pointer is always deleted.
 ** @return [void]
 ** @@
@@ -4231,7 +4231,7 @@ AjPLong3d ajLong3dNewL(int size)
 
 void ajLong3dDel(AjPLong3d *thys)
 {
-    int i;
+    ajint i;
 
     if(!thys || !*thys)
 	return;
@@ -4251,25 +4251,25 @@ void ajLong3dDel(AjPLong3d *thys)
 
 /* @func ajLong3dGet *************************************************************
 **
-** Retrieve an element from an AJAX 3d long array.
+** Retrieve an element from an AJAX 3d ajlong array.
 **
 ** If the given array is a NULL pointer, simply returns.
 **
-** @param  [r] thys [AjPLong3d] Pointer to the long array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
-** @param  [r] elem3 [int] array element.
+** @param  [r] thys [AjPLong3d] Pointer to the ajlong array.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
+** @param  [r] elem3 [ajint] array element.
 **
-** @return [long] contents of array element
+** @return [ajlong] contents of array element
 ** @@
 ******************************************************************************/
 
-long ajLong3dGet(AjPLong3d thys, int elem1, int elem2, int elem3)
+ajlong ajLong3dGet(AjPLong3d thys, ajint elem1, ajint elem2, ajint elem3)
 {
     AjPLong2d t;
     
     if(elem1<0 || elem2<0 || elem3<0 || !thys || elem1>=thys->Len)
-	ajErr("Attempt to access bad long array index [%d][%d][%d]\n",elem1,
+	ajErr("Attempt to access bad ajlong array index [%d][%d][%d]\n",elem1,
 	      elem2,elem3);
 
     t = thys->Ptr[elem1];
@@ -4283,23 +4283,23 @@ long ajLong3dGet(AjPLong3d thys, int elem1, int elem2, int elem3)
 
 /* @func ajLong3dPut **********************************************************
 **
-** Load a long 3d array element.
+** Load a ajlong 3d array element.
 **
 ** If the given array is a NULL pointer an error is generated.
 ** If the array is of insufficient size then the array is extended.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPLong3d*] Pointer to the long array.
-** @param  [r] elem1 [int] array element.
-** @param  [r] elem2 [int] array element.
-** @param  [r] elem3 [int] array element.
-** @param  [r] v [long] value to load.
+** @param  [w] thys [AjPLong3d*] Pointer to the ajlong array.
+** @param  [r] elem1 [ajint] array element.
+** @param  [r] elem2 [ajint] array element.
+** @param  [r] elem3 [ajint] array element.
+** @param  [r] v [ajlong] value to load.
 **
 ** @return [AjBool] true if any array was extended.
 ** @@
 ******************************************************************************/
 
-AjBool ajLong3dPut(AjPLong3d *thys, int elem1, int elem2, int elem3, long v)
+AjBool ajLong3dPut(AjPLong3d *thys, ajint elem1, ajint elem2, ajint elem3, ajlong v)
 {
     if(!thys || !*thys || elem1<0 || elem2<0 || elem3<0)
 	ajErr("Attempt to write to illegal array value [%d][%d][%d]\n",elem1,
@@ -4328,30 +4328,30 @@ AjBool ajLong3dPut(AjPLong3d *thys, int elem1, int elem2, int elem3, long v)
 
 /* @funcstatic ajLong3dResize ***************************************************
 **
-** Resize a long array.
+** Resize a ajlong array.
 **
 ** If the given array is a NULL pointer an error is generated.
 ** Negative indices generate an error.
 **
-** @param  [w] thys [AjPLong3d*] Pointer to the long array.
-** @param  [r] size [int] new size.
+** @param  [w] thys [AjPLong3d*] Pointer to the ajlong array.
+** @param  [r] size [ajint] new size.
 **
 ** @return [AjBool] true if the array was extended.
 ** @@
 ******************************************************************************/
 
-static AjBool ajLong3dResize(AjPLong3d *thys, int size)
+static AjBool ajLong3dResize(AjPLong3d *thys, ajint size)
 {
     AjPLong3d nthys;
     AjPLong3d p=NULL;
-    int    s;
-    int    clen;
-    int    limit;
-    int    i;
+    ajint    s;
+    ajint    clen;
+    ajint    limit;
+    ajint    i;
     
 
     if(!thys || !*thys || size<0)
-	ajErr("Illegal attempt to resize long array");
+	ajErr("Illegal attempt to resize ajlong array");
 
     clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
     s = ajRound(size+1,RESERVED_SIZE);
@@ -4364,7 +4364,7 @@ static AjBool ajLong3dResize(AjPLong3d *thys, int size)
     nthys->Ptr = AJALLOC0(s*sizeof(AjPLong2d*));
     nthys->Res = s;
     
-    if((int)size < p->Len-1)
+    if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
@@ -4390,10 +4390,10 @@ static AjBool ajLong3dResize(AjPLong3d *thys, int size)
 
 /* @func ajLong3dLen ***************************************************
 **
-** Get lengths of 3d long array
+** Get lengths of 3d ajlong array
 **
 **
-** @param  [r] thys [AjPLong3d] Pointer to the long array.
+** @param  [r] thys [AjPLong3d] Pointer to the ajlong array.
 ** @param  [w] len1 [int*] Length of 1st dim
 ** @param  [w] len2 [int*] Length of 2nd dim
 ** @param  [w] len3 [int*] Length of 3rd dim
@@ -4402,13 +4402,13 @@ static AjBool ajLong3dResize(AjPLong3d *thys, int size)
 ** @@
 ******************************************************************************/
 
-void ajLong3dLen(AjPLong3d thys, int* len1, int* len2, int* len3)
+void ajLong3dLen(AjPLong3d thys, ajint* len1, ajint* len2, ajint* len3)
 {
     AjPLong2d t2;
     AjPLong   t1;
-    int i;
-    int j;
-    int v;
+    ajint i;
+    ajint j;
+    ajint v;
     
     *len1 = thys->Len;
     *len2 = 0;
@@ -4432,24 +4432,24 @@ void ajLong3dLen(AjPLong3d thys, int* len1, int* len2, int* len3)
 
 /* @func ajLong3dLong ***************************************************
 **
-** Convert AjPLong3d to long***
+** Convert AjPLong3d to ajlong***
 **
-** @param  [r] thys [AjPLong3d] Pointer to the long array.
+** @param  [r] thys [AjPLong3d] Pointer to the ajlong array.
 **
 ** @return [long***] converted values.
 ** @@
 ******************************************************************************/
 
-long*** ajLong3dLong(AjPLong3d thys)
+ajlong*** ajLong3dLong(AjPLong3d thys)
 {
     AjPLong2d t2=NULL;
     AjPLong   t1=NULL;
-    long ***array;
-    int d1;
-    int d2;
-    int d3;
-    int i;
-    int j;
+    ajlong ***array;
+    ajint d1;
+    ajint d2;
+    ajint d3;
+    ajint i;
+    ajint j;
     
     ajLong3dLen(thys,&d1,&d2,&d3);
     
@@ -4466,7 +4466,7 @@ long*** ajLong3dLong(AjPLong3d thys)
 		if(j>=t2->Len) continue;
 		if((t1=t2->Ptr[j]))
 		    (void) memmove(array[i][j],t1->Ptr,
-				   t1->Len*sizeof(long));
+				   t1->Len*sizeof(ajlong));
 	    }
 	}
     }

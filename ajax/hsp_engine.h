@@ -5,8 +5,8 @@ extern "C"
 
 /* === engine.c === */
 
-static int matcher(register REGUTSSTRUCT *g, char *string, size_t nmatch,
-		   regmatch_t pmatch[], int eflags);
+static ajint matcher(register REGUTSSTRUCT *g, char *string, size_t nmatch,
+		   regmatch_t pmatch[], ajint eflags);
 static char *dissect(register struct match *m, char *start, char *stop,
 		     sopno startst, sopno stopst);
 static char *backref(register struct match *m, char *start, char *stop,
@@ -16,7 +16,7 @@ static char *fast(register struct match *m, char *start, char *stop,
 static char *slow(register struct match *m, char *start, char *stop,
 		  sopno startst, sopno stopst);
 static states step(register REGUTSSTRUCT *g, sopno start, sopno stop,
-		   register states bef, int ch, register states aft);
+		   register states bef, ajint ch, register states aft);
 
 
 #define	BOL	(OUT+1)
@@ -30,14 +30,14 @@ static states step(register REGUTSSTRUCT *g, sopno start, sopno stop,
 #define	NNONCHAR	(CODEMAX-CHAR_MAX)
 
 #ifdef REDEBUG
-static void print(struct match *m, char *caption, states st, int ch, FILE *d);
+static void print(struct match *m, char *caption, states st, ajint ch, FILE *d);
 #endif
 #ifdef REDEBUG
 static void at(struct match *m, char *title, char *start, char *stop,
 	       sopno startst, sopno stopst);
 #endif
 #ifdef REDEBUG
-static char *pchar(int ch);
+static char *pchar(ajint ch);
 #endif
 
 #ifdef __cplusplus

@@ -43,8 +43,8 @@ AjBool embReadAminoDataDoubleC(char *s, double **a, double fill)
     AjPStr  line;
     
     char *p;
-    int  idx;
-    int  i;
+    ajint  idx;
+    ajint  i;
     
     inf = ajFileNew();
     ajFileDataNewC(s,&inf);
@@ -116,8 +116,8 @@ AjBool embReadAminoDataFloatC(char *s, float **a, float fill)
     AjPStr  line;
     
     char *p;
-    int  idx;
-    int  i;
+    ajint  idx;
+    ajint  i;
     
     ajFileDataNewC(s,&inf);
     if(!inf)
@@ -178,19 +178,19 @@ AjBool embReadAminoDataFloatC(char *s, float **a, float fill)
 **
 ** @param [r] s [char*] datafile name
 ** @param [w] a [int**] array for amino acid values
-** @param [r] fill [int] initialisation value
+** @param [r] fill [ajint] initialisation value
 **
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
-AjBool embReadAminoDataIntC(char *s, int **a, int fill)
+AjBool embReadAminoDataIntC(char *s, ajint **a, ajint fill)
 {
     AjPFile inf;
     AjPStr  line;
     
     char *p;
-    int  idx;
-    int  i;
+    ajint  idx;
+    ajint  i;
     
     inf = ajFileNew();
     ajFileDataNewC(s,&inf);
@@ -200,7 +200,7 @@ AjBool embReadAminoDataIntC(char *s, int **a, int fill)
 	return ajFalse;
     }
 
-    *a = AJALLOC(AJREADAMINO*sizeof(int));
+    *a = AJALLOC(AJREADAMINO*sizeof(ajint));
     for(i=0;i<AJREADAMINO;++i)
 	(*a)[i]=fill;
     

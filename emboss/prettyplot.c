@@ -73,15 +73,15 @@
 #define BOXCOLOURED 0x0010
 
 char **seqcharptr;
-int **seqcolptr;
-int **seqboxptr;
-int *seqcount=0;
-int charlen;
+ajint **seqcolptr;
+ajint **seqboxptr;
+ajint *seqcount=0;
+ajint charlen;
 AjBool shownames;
 AjBool shownumbers;
 AjPSeqset seqset;
 AjPStr *seqnames;
-int numgaps;
+ajint numgaps;
 char *constr=0;
 
 
@@ -90,10 +90,10 @@ char *constr=0;
 
 
 
-int calcseqperpage(float yincr,float y,AjBool consensus)
+ajint calcseqperpage(float yincr,float y,AjBool consensus)
 {
     float yep=1.0;
-    int numallowed = 1;
+    ajint numallowed = 1;
 
     while(yep>0.0)
     {
@@ -112,22 +112,22 @@ int calcseqperpage(float yincr,float y,AjBool consensus)
 
 
 
-int fillinboxes(float ystart,int length,int numseq,int resbreak,
+ajint fillinboxes(float ystart,int length,int numseq,int resbreak,
 		AjPSeqCvt cvt, float yincr,int numres,AjBool consensus,
 		AjBool title,int start,int end,AjBool boxcol,
-		AjBool boxit,int seqstart, int seqend, AjPFile outf,
-		AjBool data, int datacol, float datacs)
+		AjBool boxit,int seqstart, ajint seqend, AjPFile outf,
+		AjBool data, ajint datacol, float datacs)
 {
-    int count = 1,gapcount=0,countforgap=0;
-    int table[16];
-    int i,j,k,w,old=0;
-    int oldcol=0,l;
+    ajint count = 1,gapcount=0,countforgap=0;
+    ajint table[16];
+    ajint i,j,k,w,old=0;
+    ajint oldcol=0,l;
     float y;
     char res[2]=" ";
-    /*  static int start =0;*/
+    /*  static ajint start =0;*/
     AjPStr strcon=0;
     char numberstring[10];
-    int thiscol=0;
+    ajint thiscol=0;
     float defcs=0.;
     float curcs=0.;
     
@@ -503,9 +503,9 @@ int fillinboxes(float ystart,int length,int numseq,int resbreak,
 
 
 
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
-    int i,numseq,j=0,numres,count,k;
+    ajint i,numseq,j=0,numres,count,k;
     float defheight,currentheight;
     AjPStr shade=0,pair=0;
     AjPGraph graph = 0;
@@ -521,59 +521,59 @@ int main (int argc, char **argv)
     AjBool portrait;
     AjBool collision;
     AjBool okay = AJTRUE;
-    int identity;
+    ajint identity;
     AjBool listoptions;
-    int alternative;
+    ajint alternative;
     AjPStr sidentity=0,ssimilarity=0,sother=0;
     AjPStr sboxcolval=0;
     AjPStr options=0;
-    int showscore = 0;
-    int iboxcolval=0;
-    int cidentity = RED;
-    int csimilarity = GREEN;
-    int cother = BLACK;
+    ajint showscore = 0;
+    ajint iboxcolval=0;
+    ajint cidentity = RED;
+    ajint csimilarity = GREEN;
+    ajint cother = BLACK;
     float fxp,fyp,yincr,y;
-    int ixlen,iylen,ixoff,iyoff;
+    ajint ixlen,iylen,ixoff,iyoff;
     char res[2]=" ";
     AjPFile outf=NULL;
     AjBool  data;
     AjPStr  fname=NULL;
-    int     fcnt=1;
-    int     datacol=0;
+    ajint     fcnt=1;
+    ajint     datacol=0;
     float   datacs=0.0;
     
     float *score=0;
     float scoremax=0;
   
     float* identical;
-    int   identicalmaxindex;
+    ajint   identicalmaxindex;
     float* matching;
-    int   matchingmaxindex;
+    ajint   matchingmaxindex;
   
     float* colcheck;
   
-    int **matrix;
-    int m1=0,m2=0,ms=0,highindex=0,index;
-    int *previous=0, con=0,currentstate=0,old=0;
-    int *colmat=0,*shadecolour=0;
+    ajint **matrix;
+    ajint m1=0,m2=0,ms=0,highindex=0,index;
+    ajint *previous=0, con=0,currentstate=0,old=0;
+    ajint *colmat=0,*shadecolour=0;
     float identthresh = 1.5;
     float simthresh = 1.0;
     float relthresh = 0.5;
     float part=0.0;
     char *cptr;
-    int resbreak;
+    ajint resbreak;
     float fplural;
     float ystart;
     AJTIME ajtime;
     const time_t tim = time(0);
-    int gapcount=0;
-    int countforgap=0;
-    int boxindex;
+    ajint gapcount=0;
+    ajint countforgap=0;
+    ajint boxindex;
     float max;
-    int matsize;
-    int seqperpage=0,startseq,endseq;
-    int newILend = 0;
-    int newILstart;
+    ajint matsize;
+    ajint seqperpage=0,startseq,endseq;
+    ajint newILend = 0;
+    ajint newILstart;
 
     ajtime.time = localtime(&tim);
     ajtime.format = 0;
@@ -691,7 +691,7 @@ int main (int argc, char **argv)
 		       shade);
 	}
 	else
-	    ajUser("Shade Selected but invalid must be 4 chars long %S",shade);
+	    ajUser("Shade Selected but invalid must be 4 chars ajlong %S",shade);
     }
   
   

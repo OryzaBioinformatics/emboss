@@ -37,7 +37,7 @@ extern "C"
 
 typedef struct AjSFile {
   FILE *fp;
-  int Handle;
+  ajint Handle;
   AjPStr Name;
   AjPList List;
   AjBool End;
@@ -56,7 +56,7 @@ typedef struct AjSFile {
 typedef struct AjSFileBuffList {
   AjPStr Line;
   struct AjSFileBuffList* Next;
-  long Fpos;
+  ajlong Fpos;
 } AjOFileBuffList, *AjPFileBuffList;
 
 /* @data AjPFileBuff *******************************************************
@@ -99,21 +99,21 @@ typedef struct AjSFileBuff {
   AjPFileBuffList Free;
   AjPFileBuffList Freelast;
   AjBool Nobuff;
-  int Pos;
-  int Size;
-  long Fpos;
+  ajint Pos;
+  ajint Size;
+  ajlong Fpos;
 } AjOFileBuff, *AjPFileBuff;
 
 /* ============= prototypes =========================*/
 
-void        ajFileBuffClear (const AjPFileBuff thys, int lines);
+void        ajFileBuffClear (const AjPFileBuff thys, ajint lines);
 void        ajFileBuffDel (AjPFileBuff* pthis);
 AjBool      ajFileBuffEmpty (const AjPFileBuff thys);
 AjPFile     ajFileBuffFile (const AjPFileBuff thys);
 FILE*       ajFileBuffFp (const AjPFileBuff thys);
 void        ajFileBuffFreeClear (const AjPFileBuff thys);
 AjBool      ajFileBuffGet  (const AjPFileBuff thys, AjPStr *pdest);
-AjBool      ajFileBuffGetL (const AjPFileBuff thys, AjPStr *pdest, long* fpos);
+AjBool      ajFileBuffGetL (const AjPFileBuff thys, AjPStr *pdest, ajlong* fpos);
 AjBool      ajFileBuffGetStore (const AjPFileBuff thys, AjPStr* pdest,
 				AjBool store, AjPStr *astr);
 void        ajFileBuffLoad (const AjPFileBuff thys);
@@ -131,7 +131,7 @@ AjPFileBuff ajFileBuffNewS (const AjPStr data);
 void        ajFileBuffNobuff (const AjPFileBuff thys);
 void        ajFileBuffReset (const AjPFileBuff thys);
 AjBool      ajFileBuffSetFile (AjPFileBuff* pthys, AjPFile file);
-int         ajFileBuffSize (void);
+ajint         ajFileBuffSize (void);
 void        ajFileBuffStripHtml (const AjPFileBuff thys);
 void        ajFileBuffTrace (const AjPFileBuff thys);
 void        ajFileBuffTraceFull (const AjPFileBuff thys, size_t nlines,
@@ -149,9 +149,9 @@ FILE*       ajFileFp (const AjPFile thys);
 AjBool      ajFileGetwd (AjPStr* dir);
 AjPStr      ajFileGetName (const AjPFile thys);
 AjBool      ajFileGets (const AjPFile thys, AjPStr *pdest);
-AjBool      ajFileGetsL (const AjPFile thys, AjPStr *pdest, long* fpos);
+AjBool      ajFileGetsL (const AjPFile thys, AjPStr *pdest, ajlong* fpos);
 AjBool      ajFileGetsTrim  (const AjPFile thys, AjPStr *pdest);
-AjBool      ajFileGetsTrimL (const AjPFile thys, AjPStr *pdest, long* fpos);
+AjBool      ajFileGetsTrimL (const AjPFile thys, AjPStr *pdest, ajlong* fpos);
 const char* ajFileName (const AjPFile thys);
 AjBool      ajFileNameDirSetC (AjPStr* filename, const char* dir);
 AjBool      ajFileNameDirSet (AjPStr* filename, const AjPStr dir);
@@ -175,16 +175,16 @@ size_t      ajFileRead (void* ptr, size_t element_size, size_t count,
 			const AjPFile thys);
 FILE*       ajFileReopen (const AjPFile thys, AjPStr name);
 AjBool      ajFileReadLine (const AjPFile thys, AjPStr *pdest);
-unsigned int ajFileReadUint (const AjPFile thys, AjBool Bigendian);
+ajuint      ajFileReadUint (const AjPFile thys, AjBool Bigendian);
 void 	    ajFileScan(AjPStr path, AjPStr filename, AjPList *result,
 		       AjBool show, AjBool dolist, AjPList *list,
 		       AjPList rlist, AjBool recurs, const AjPFile outf);
-int         ajFileSeek (const AjPFile thys, long offset, int wherefrom);
-AjBool      ajFileStat (AjPStr *filename, int mode);
+ajint       ajFileSeek (const AjPFile thys, ajlong offset, ajint wherefrom);
+AjBool      ajFileStat (AjPStr *filename, ajint mode);
 AjBool      ajFileStderr (const AjPFile file);
 AjBool      ajFileStdin (const AjPFile file);
 AjBool      ajFileStdout (const AjPFile file);
-long        ajFileTell (const AjPFile thys);
+ajlong        ajFileTell (const AjPFile thys);
 char*       ajFileTempName(const char *dir);
 AjBool      ajFileTestSkip (AjPStr fullname, AjPStr exc, AjPStr inc,
 			    AjBool keep);

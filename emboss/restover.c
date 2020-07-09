@@ -32,26 +32,26 @@
 
 
 void printHits(AjPSeq, AjPStr, AjPFile *outf, AjPList *l, AjPStr *name,
-	       int hits, int begin,
-	       int end, AjBool ambiguity, int mincut, int maxcut, AjBool
-	       plasmid, AjBool blunt, AjBool sticky, int sitelen,
+	       ajint hits, ajint begin,
+	       ajint end, AjBool ambiguity, ajint mincut, ajint maxcut, AjBool
+	       plasmid, AjBool blunt, AjBool sticky, ajint sitelen,
 	       AjBool limit, AjBool equiv, AjPTable table, AjBool alpha,
 	       AjBool frags, AjBool nameit, AjBool html);
 void read_equiv(AjPFile *equfile, AjPTable *table);
 static void read_file_of_enzyme_names(AjPStr *enzymes);
 
-int main( int argc, char **argv)
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
     AjPStr    seqcmp=NULL;
     AjPStr    enzymes=NULL;
     AjPFile   outf=NULL;
-    int begin;
-    int end;
-    int min;
-    int max;
-    int sitelen;
+    ajint begin;
+    ajint end;
+    ajint min;
+    ajint max;
+    ajint sitelen;
     AjBool alpha;
     AjBool single;
     AjBool blunt;
@@ -74,7 +74,7 @@ int main( int argc, char **argv)
 
     AjPTable  table=NULL;
     
-    int       hits;
+    ajint       hits;
 
     
     AjPList     l;
@@ -181,26 +181,26 @@ int main( int argc, char **argv)
 
 
 void printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf, AjPList *l,
-	       AjPStr *name, int hits, int begin,
-	       int end, AjBool ambiguity, int mincut, int maxcut, AjBool
-	       plasmid, AjBool blunt, AjBool sticky, int sitelen,
+	       AjPStr *name, ajint hits, ajint begin,
+	       ajint end, AjBool ambiguity, ajint mincut, ajint maxcut, AjBool
+	       plasmid, AjBool blunt, AjBool sticky, ajint sitelen,
 	       AjBool limit, AjBool equiv, AjPTable table, AjBool alpha,
 	       AjBool frags,AjBool nameit,AjBool html)
 {
     EmbPMatMatch m=NULL;
     AjPStr  ps=NULL;
-    int *fa=NULL;
-    int *fx=NULL;
-    int fc=0;
-    int fn=0;
-    int fb=0;
-    int last=0;
+    ajint *fa=NULL;
+    ajint *fx=NULL;
+    ajint fc=0;
+    ajint fn=0;
+    ajint fb=0;
+    ajint last=0;
     AjPStr overhead=NULL;
     
     AjPStr value=NULL;
     
-    int i;
-    int c=0;
+    ajint i;
+    ajint c=0;
     
     ps=ajStrNew();
     fn = 0;
@@ -242,8 +242,8 @@ void printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf, AjPList *l,
     
     if(frags)
     {
-	fa = AJALLOC(hits*2*sizeof(int));
-	fx = AJALLOC(hits*2*sizeof(int));
+	fa = AJALLOC(hits*2*sizeof(ajint));
+	fx = AJALLOC(hits*2*sizeof(ajint));
     }
     
     

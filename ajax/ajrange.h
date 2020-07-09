@@ -8,33 +8,33 @@ extern "C"
 
 typedef struct AjSRange
 {
-    int n;			/* Number of ranges */
-    int *start;			/* From positions   */
-    int *end;                   /* End positions    */
+    ajint n;			/* Number of ranges */
+    ajint *start;			/* From positions   */
+    ajint *end;                   /* End positions    */
     AjPStr *text;		/* Associated text for each range */
 } AjORange,*AjPRange;
 
 
-AjPRange  ajRangeNewI(int n);
+AjPRange  ajRangeNewI(ajint n);
 AjBool    ajRangeDefault(AjPRange thys, AjPStr s);
 
 void      ajRangeDel(AjPRange *thys);
 
 AjBool    ajRangeGet(AjPRange *r, AjPStr s);
 AjBool    ajRangeFile(AjPRange *r, AjPStr name);
-int       ajRangeNumber(AjPRange thys);
-AjBool    ajRangeText(AjPRange thys, int element, AjPStr * text);
-AjBool    ajRangeValues(AjPRange thys, int element, int *start, int *end);
-AjBool    ajRangeChange(AjPRange thys, int element, int start, int end);
+ajint       ajRangeNumber(AjPRange thys);
+AjBool    ajRangeText(AjPRange thys, ajint element, AjPStr * text);
+AjBool    ajRangeValues(AjPRange thys, ajint element, ajint *start, ajint *end);
+AjBool    ajRangeChange(AjPRange thys, ajint element, ajint start, ajint end);
 
-AjBool    ajRangeBegin (AjPRange thys, int begin);
+AjBool    ajRangeBegin (AjPRange thys, ajint begin);
 
 AjBool    ajRangeStrExtractList (AjPList outliststr, AjPRange thys, AjPStr instr);
 AjBool    ajRangeStrExtract (AjPStr *outstr, AjPRange thys, AjPStr instr);
 AjBool    ajRangeStrStuff (AjPStr *outstr, AjPRange thys, AjPStr instr);
 AjBool    ajRangeStrMask (AjPStr *str, AjPRange thys, AjPStr maskchar);
-int	  ajRangeOverlapSingle (int start, int end, int pos, int length);
-int	  ajRangeOverlaps (AjPRange thys, int pos, int length);
+ajint	  ajRangeOverlapSingle (ajint start, ajint end, ajint pos, ajint length);
+ajint	  ajRangeOverlaps (AjPRange thys, ajint pos, ajint length);
 AjBool    ajRangeOrdered (AjPRange thys);
 
 #endif

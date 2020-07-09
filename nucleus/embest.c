@@ -10,15 +10,15 @@
 #include <string.h>
 #include <stdio.h>
 static DATABASE *databases[100];
-static int database_count;
+static ajint database_count;
 
-int lsimmat[256][256];
-int verbose;
-int debug;
-int indentation;
+ajint lsimmat[256][256];
+ajint verbose;
+ajint debug;
+ajint indentation;
 
 /*command line option to suppress all comments*/
-int comment = 1;
+ajint comment = 1;
 
 /* @func openfile ************************************************************
 **
@@ -52,14 +52,14 @@ FILE* openfile (char *filename, char *mode) {
 **
 ** @param [r] format [char*] command line qualifier and format
 ** @param [w] variable [float*] float value.
-** @param [r] argc [int] number of command line arguments
+** @param [r] argc [ajint] number of command line arguments
 ** @param [r] argv [char**] the argument list.
 **        
-** @return [int] return 1 if successful 0 otherwise
+** @return [ajint] return 1 if successful 0 otherwise
 ** @@
 ******************************************************************************/
 
-int getfloat (char *format, float *variable, int argc, char **argv) {
+ajint getfloat (char *format, float *variable, ajint argc, char **argv) {
 
   float t; char *s;
   char Format[256];
@@ -102,14 +102,14 @@ int getfloat (char *format, float *variable, int argc, char **argv) {
 ** eg if format == "-max=%d", then argv == "-max 10" returns "10" 
 **
 ** @param [r] format [char*] command line qualifier and format
-** @param [rw] argc [int] number of command line arguments
+** @param [rw] argc [ajint] number of command line arguments
 ** @param [r] argv [char**] the argument list.
 **        
 ** @return [char*] next argument 
 ** @@
 ******************************************************************************/
 
-char* next_arg (char *format, int argc, char **argv) {
+char* next_arg (char *format, ajint argc, char **argv) {
 
   char *s = cl_stub( format );
 
@@ -166,7 +166,7 @@ char* cl_stub (char *format ) {
 **	
 **	produces file
 **	
-**	Note: filename MUST be long enough to cope ! 
+**	Note: filename MUST be ajlong enough to cope ! 
 **
 **        Returns the modified string
 **
@@ -179,7 +179,7 @@ char* cl_stub (char *format ) {
 
 char* extension (char *filename, char *ext) {
 
-  int n;
+  ajint n;
 
   if ( ! ext )
     return (char*)NULL;
@@ -228,7 +228,7 @@ char* extension (char *filename, char *ext) {
 
 char* base_name (char *filename) {
 
-  int n, m;
+  ajint n, m;
 
   n = strlen(filename);
 
@@ -342,7 +342,7 @@ char* rootname (char *filename ) {
 char* make_legal (char *filename ) {
 
   char *s = filename, *t;
-  int n=0;
+  ajint n=0;
 
   t = s;
   while( *s )
@@ -387,18 +387,18 @@ make_legal( char *filename )
 **
 ** @param [r] filename [char*] The filename
 **        
-** @return [int] time or 0 if fails.
+** @return [ajint] time or 0 if fails.
 ** @@
 ******************************************************************************/
 
-int file_time (char *filename ) {
+ajint file_time (char *filename ) {
 
   FILE *fp;
   struct stat buf;
 
   if ( ! (fp = fopen(filename,"r")) )return 0;
   (void) fclose(fp);
-  if ( ! stat( filename, &buf ) )return (int)buf.st_mtime;
+  if ( ! stat( filename, &buf ) )return (ajint)buf.st_mtime;
   return 0;
 }
 
@@ -459,13 +459,13 @@ static USE_LIST *use_begin=NULL, *use_end=NULL;
 ** @param [r] format [char*] command line qualifier and format
 ** @param [r] text [char*] text
 ** @param [r] def [char*] default value (as text)
-** @param [r] override [int] Override existing value if non zero
+** @param [r] override [ajint] Override existing value if non zero
 **        
 ** @return [void] 
 ** @@
 ******************************************************************************/
 
-void append_usage (char *format, char *text, char *def, int override ) {
+void append_usage (char *format, char *text, char *def, ajint override ) {
 
   USE_LIST *use;
 
@@ -513,16 +513,16 @@ void append_usage (char *format, char *text, char *def, int override ) {
 **
 ** @param [r] string [char*] string
 ** @param [r] strings [char**] list of strings
-** @param [r] size [int] size of strings.
+** @param [r] size [ajint] size of strings.
 ** @param [rw] value [int*] value of the index.
 **        
-** @return [int] returns 1 on success and 0 on failure
+** @return [ajint] returns 1 on success and 0 on failure
 ** @@
 ******************************************************************************/
 
-int legal_string (char *string, char **strings, int size, int *value ) {
+ajint legal_string (char *string, char **strings, ajint size, ajint *value ) {
 
-  int i;
+  ajint i;
 
   if ( string )
     for(i=0;i<size;i++)
@@ -549,11 +549,11 @@ int legal_string (char *string, char **strings, int size, int *value ) {
 ** @@
 ******************************************************************************/
 
-char** split_on_separator (char *string, char separator, int *items) {
+char** split_on_separator (char *string, char separator, ajint *items) {
 
   char **item=NULL;
   char *s, *t;
-  int len;
+  ajint len;
 
   *items = 0;
 
@@ -599,11 +599,11 @@ char** split_on_separator (char *string, char separator, int *items) {
 ** @param [r] a [int*] First value
 ** @param [r] b [int*] Second value
 **
-** @return [int] difference.
+** @return [ajint] difference.
 ** @@
 ******************************************************************************/
  
-int icmp (int *a,int *b) { 
+ajint icmp (ajint *a,int *b) { 
   return *a-*b;
 }
 
@@ -614,11 +614,11 @@ int icmp (int *a,int *b) {
 ** @param [r] a [int**] First value
 ** @param [r] b [int**] Second value
 **
-** @return [int] difference
+** @return [ajint] difference
 ** @@
 ******************************************************************************/
 
-int iicmp (int **a,int **b) {
+ajint iicmp (ajint **a,int **b) {
 
   return **a - **b;
 }
@@ -630,11 +630,11 @@ int iicmp (int **a,int **b) {
 ** @param [r] a [float*] First value
 ** @param [r] b [float*] Second value
 **
-** @return [int] -1 if diff is negative, +1 if positive else 0
+** @return [ajint] -1 if diff is negative, +1 if positive else 0
 ** @@
 ******************************************************************************/
 
-int fcmp (float *a,float *b) {
+ajint fcmp (float *a,float *b) {
 
   float x = *a - *b;
   if ( x > (float) 0.0 )return 1;
@@ -649,11 +649,11 @@ int fcmp (float *a,float *b) {
 ** @param  [r] a [float**] First value
 ** @param  [r] b [float**] Second value
 **
-** @return [int]  -1 if diff negative, +1 if positive, else 0
+** @return [ajint]  -1 if diff negative, +1 if positive, else 0
 ** @@
 ******************************************************************************/
 
-int ifcmp (float **a,float **b) {
+ajint ifcmp (float **a,float **b) {
 
   return fcmp(*a,*b);
 }
@@ -665,18 +665,18 @@ int ifcmp (float **a,float **b) {
 ** @param [r] a [char*] First value
 ** @param [r] b [char*] Second value
 **
-** @return [int] difference.
+** @return [ajint] difference.
 ** @@
 ******************************************************************************/
 
-int Rstrcmp (char *a,char *b) {
+ajint Rstrcmp (char *a,char *b) {
 
-  int la = strlen(a)-1;
-  int lb = strlen(b)-1;
-  int n;
+  ajint la = strlen(a)-1;
+  ajint lb = strlen(b)-1;
+  ajint n;
   while ( la && lb )
     {
-      if ((n = ( ((int)a[la--]) - ((int)b[lb--])) ) )
+      if ((n = ( ((ajint)a[la--]) - ((ajint)b[lb--])) ) )
 	return n;
     }
   return la-lb;
@@ -689,11 +689,11 @@ int Rstrcmp (char *a,char *b) {
 ** @param [r] a [char**] First value
 ** @param [r] b [char**] Second value
 **
-** @return [int] difference
+** @return [ajint] difference
 ** @@
 ******************************************************************************/
 
-int istrcmp (char **a,char **b) {
+ajint istrcmp (char **a,char **b) {
 
   return strcmp(*a,*b);
 }
@@ -708,11 +708,11 @@ int istrcmp (char **a,char **b) {
 ** @param [r] a [char*] First value
 ** @param [r] b [char*] Second value
 **
-** @return [int] difference
+** @return [ajint] difference
 ** @@
 ******************************************************************************/
 
-int nStrcmp (char *a, char *b ) {
+ajint nStrcmp (char *a, char *b ) {
 
   if ( a && b )return strcmp(a,b);
   return 0;
@@ -725,11 +725,11 @@ int nStrcmp (char *a, char *b ) {
 ** @param [r] a [char***] First value
 ** @param [r] b [char***] Second value
 **
-** @return [int] difference
+** @return [ajint] difference
 ** @@
 ******************************************************************************/
 
-int SStrcmp (char ***a,char ***b) {
+ajint SStrcmp (char ***a,char ***b) {
 
   return istrcmp(*a,*b);
 }
@@ -738,16 +738,16 @@ int SStrcmp (char ***a,char ***b) {
 ** 
 ** unsigned short compare
 **
-** @param [r] a [unsigned short*] First value
-** @param [r] b [unsigned short*] Second value
+** @param [r] a [ajushort*] First value
+** @param [r] b [ajushort*] Second value
 **
-** @return [int] difference
+** @return [ajint] difference
 ** @@
 ******************************************************************************/
 
-int uscmp (unsigned short *a,unsigned short *b) {
+ajint uscmp (ajushort *a,ajushort *b) {
 
-  return ((int)*a - (int)*b);
+  return ((ajint)*a - (ajint)*b);
 }
 
 /* @func next_file ************************************************************
@@ -757,13 +757,13 @@ int uscmp (unsigned short *a,unsigned short *b) {
 ** @param [r] dir [char*] directory
 ** @param [r] ext [char*] extension
 ** @param [r] name [char*] name of file
-** @param [r] restart [int] restart from the begining.
+** @param [r] restart [ajint] restart from the begining.
 **
 ** @return [FILE*] next file
 ** @@
 ******************************************************************************/
 
-FILE* next_file (char *dir, char *ext, char *name, int restart ) {
+FILE* next_file (char *dir, char *ext, char *name, ajint restart ) {
 
   static DIR *current_dir=NULL;
   char buf[256];
@@ -803,13 +803,13 @@ FILE* next_file (char *dir, char *ext, char *name, int restart ) {
 ** @param [r] dir [char*] directory
 ** @param [r] suffix [char*] extension
 ** @param [r] name [char*] name of file
-** @param [r] restart [int] restart from the begining.
+** @param [r] restart [ajint] restart from the begining.
 **
 ** @return [FILE*] the next file.
 ** @@
 ******************************************************************************/
 
-FILE* next_suffix_file( char *dir, char *suffix, char *name, int restart ) {
+FILE* next_suffix_file( char *dir, char *suffix, char *name, ajint restart ) {
 
   static DIR *current_dir=NULL;
   char buf[256];
@@ -847,13 +847,13 @@ FILE* next_suffix_file( char *dir, char *suffix, char *name, int restart ) {
 ** @param [r] name [char*] name of file
 ** @param [r] suffix [char*] extension
 **
-** @return [int] 1 if match successful, else 0
+** @return [ajint] 1 if match successful, else 0
 ** @@
 ******************************************************************************/
 
-int matches_suffix( char *name, char *suffix ) {
+ajint matches_suffix( char *name, char *suffix ) {
 
-  int pos = strlen(name)-strlen(suffix);
+  ajint pos = strlen(name)-strlen(suffix);
   if ( pos >= 0 )return ! strcmp( &name[pos], suffix );
   return 0;
 }
@@ -865,11 +865,11 @@ int matches_suffix( char *name, char *suffix ) {
 ** @param [r] name [char*] name of file
 ** @param [r] ext [char*] extension of file
 **
-** @return [int] 1 if match succesfull else 0
+** @return [ajint] 1 if match succesfull else 0
 ** @@
 ******************************************************************************/
 
-int matches_extension( char *name, char *ext ) {
+ajint matches_extension( char *name, char *ext ) {
 
   char *s = (char*)has_extension( name );
 
@@ -902,14 +902,14 @@ char* has_extension( char *name ) {
 ** @param [r] x [char] First base code
 ** @param [r] y [char] Second base code
 **
-** @return [int] Comparison score for bases X and Y
+** @return [ajint] Comparison score for bases X and Y
 ** @@
 ******************************************************************************/
 
-int IUBunequal(char x,char y) {
+ajint IUBunequal(char x,char y) {
 
   static char iub[256][256];
-  static int initialised=0;
+  static ajint initialised=0;
 
   if ( ! initialised )
     {
@@ -929,118 +929,118 @@ int IUBunequal(char x,char y) {
       char D = 'D';
       char N = 'N';
       char R = 'R';
-      int i, j;
+      ajint i, j;
 
-      iub[(int)A][(int)A] = A;
-      iub[(int)C][(int)C] = C;
-      iub[(int)G][(int)G] = G;
-      iub[(int)T][(int)T] = T;
+      iub[(ajint)A][(ajint)A] = A;
+      iub[(ajint)C][(ajint)C] = C;
+      iub[(ajint)G][(ajint)G] = G;
+      iub[(ajint)T][(ajint)T] = T;
 
-      iub[(int)R][(int)R] = R;
-      iub[(int)R][(int)A] = A;
-      iub[(int)R][(int)G] = G;
+      iub[(ajint)R][(ajint)R] = R;
+      iub[(ajint)R][(ajint)A] = A;
+      iub[(ajint)R][(ajint)G] = G;
 
-      iub[(int)R][(int)Y] = 0;
-      iub[(int)R][(int)M] = A;
-      iub[(int)R][(int)K] = G;
-      iub[(int)R][(int)S] = G;
-      iub[(int)R][(int)W] = A;
-      iub[(int)R][(int)H] = A;
-      iub[(int)R][(int)B] = G;
-      iub[(int)R][(int)V] = R;
-      iub[(int)R][(int)D] = R;
-      iub[(int)R][(int)N] = R;
+      iub[(ajint)R][(ajint)Y] = 0;
+      iub[(ajint)R][(ajint)M] = A;
+      iub[(ajint)R][(ajint)K] = G;
+      iub[(ajint)R][(ajint)S] = G;
+      iub[(ajint)R][(ajint)W] = A;
+      iub[(ajint)R][(ajint)H] = A;
+      iub[(ajint)R][(ajint)B] = G;
+      iub[(ajint)R][(ajint)V] = R;
+      iub[(ajint)R][(ajint)D] = R;
+      iub[(ajint)R][(ajint)N] = R;
 
-      iub[(int)Y][(int)C] = C;
-      iub[(int)Y][(int)T] = T;
-      iub[(int)Y][(int)Y] = Y;
+      iub[(ajint)Y][(ajint)C] = C;
+      iub[(ajint)Y][(ajint)T] = T;
+      iub[(ajint)Y][(ajint)Y] = Y;
 
-      iub[(int)Y][(int)U] = U;
-      iub[(int)Y][(int)M] = C;
-      iub[(int)Y][(int)K] = T;
-      iub[(int)Y][(int)S] = C;
-      iub[(int)Y][(int)W] = T;
-      iub[(int)Y][(int)H] = C;
-      iub[(int)Y][(int)B] = Y;
-      iub[(int)Y][(int)V] = C;
-      iub[(int)Y][(int)D] = T;
-      iub[(int)Y][(int)N] = Y;
+      iub[(ajint)Y][(ajint)U] = U;
+      iub[(ajint)Y][(ajint)M] = C;
+      iub[(ajint)Y][(ajint)K] = T;
+      iub[(ajint)Y][(ajint)S] = C;
+      iub[(ajint)Y][(ajint)W] = T;
+      iub[(ajint)Y][(ajint)H] = C;
+      iub[(ajint)Y][(ajint)B] = Y;
+      iub[(ajint)Y][(ajint)V] = C;
+      iub[(ajint)Y][(ajint)D] = T;
+      iub[(ajint)Y][(ajint)N] = Y;
 
-      iub[(int)M][(int)A] = A;
-      iub[(int)M][(int)C] = C;
-      iub[(int)M][(int)M] = M;
+      iub[(ajint)M][(ajint)A] = A;
+      iub[(ajint)M][(ajint)C] = C;
+      iub[(ajint)M][(ajint)M] = M;
 
-      iub[(int)M][(int)S] = C;
-      iub[(int)M][(int)W] = A;
-      iub[(int)M][(int)H] = M;
-      iub[(int)M][(int)B] = C;
-      iub[(int)M][(int)V] = M;
-      iub[(int)M][(int)D] = A;
-      iub[(int)M][(int)N] = M;
+      iub[(ajint)M][(ajint)S] = C;
+      iub[(ajint)M][(ajint)W] = A;
+      iub[(ajint)M][(ajint)H] = M;
+      iub[(ajint)M][(ajint)B] = C;
+      iub[(ajint)M][(ajint)V] = M;
+      iub[(ajint)M][(ajint)D] = A;
+      iub[(ajint)M][(ajint)N] = M;
       
-      iub[(int)K][(int)G] = G;
-      iub[(int)K][(int)T] = T;
-      iub[(int)K][(int)U] = U;
+      iub[(ajint)K][(ajint)G] = G;
+      iub[(ajint)K][(ajint)T] = T;
+      iub[(ajint)K][(ajint)U] = U;
 
-      iub[(int)S][(int)C] = C;
-      iub[(int)S][(int)G] = G;
-      iub[(int)S][(int)S] = S;
+      iub[(ajint)S][(ajint)C] = C;
+      iub[(ajint)S][(ajint)G] = G;
+      iub[(ajint)S][(ajint)S] = S;
 
-      iub[(int)S][(int)H] = C;
-      iub[(int)S][(int)B] = S;
-      iub[(int)S][(int)V] = S;
-      iub[(int)S][(int)D] = G;
-      iub[(int)S][(int)N] = S;
+      iub[(ajint)S][(ajint)H] = C;
+      iub[(ajint)S][(ajint)B] = S;
+      iub[(ajint)S][(ajint)V] = S;
+      iub[(ajint)S][(ajint)D] = G;
+      iub[(ajint)S][(ajint)N] = S;
       
-      iub[(int)W][(int)A] = A;
-      iub[(int)W][(int)T] = T;
-      iub[(int)W][(int)U] = U;
+      iub[(ajint)W][(ajint)A] = A;
+      iub[(ajint)W][(ajint)T] = T;
+      iub[(ajint)W][(ajint)U] = U;
 
-      iub[(int)W][(int)W] = W;
-      iub[(int)W][(int)H] = W;
-      iub[(int)W][(int)B] = T;
-      iub[(int)W][(int)V] = A;
-      iub[(int)W][(int)D] = W;
-      iub[(int)W][(int)N] = W;
+      iub[(ajint)W][(ajint)W] = W;
+      iub[(ajint)W][(ajint)H] = W;
+      iub[(ajint)W][(ajint)B] = T;
+      iub[(ajint)W][(ajint)V] = A;
+      iub[(ajint)W][(ajint)D] = W;
+      iub[(ajint)W][(ajint)N] = W;
 
-      iub[(int)B][(int)C] = C;
-      iub[(int)B][(int)G] = G;
-      iub[(int)B][(int)T] = T;
-      iub[(int)B][(int)U] = U;
+      iub[(ajint)B][(ajint)C] = C;
+      iub[(ajint)B][(ajint)G] = G;
+      iub[(ajint)B][(ajint)T] = T;
+      iub[(ajint)B][(ajint)U] = U;
 
-      iub[(int)H][(int)A] = A;
-      iub[(int)H][(int)C] = C;
-      iub[(int)H][(int)T] = T;
-      iub[(int)H][(int)U] = U;
+      iub[(ajint)H][(ajint)A] = A;
+      iub[(ajint)H][(ajint)C] = C;
+      iub[(ajint)H][(ajint)T] = T;
+      iub[(ajint)H][(ajint)U] = U;
 
-      iub[(int)H][(int)H] = H;
-      iub[(int)H][(int)B] = Y;
-      iub[(int)H][(int)V] = M;
-      iub[(int)H][(int)D] = W;
-      iub[(int)H][(int)N] = N;
+      iub[(ajint)H][(ajint)H] = H;
+      iub[(ajint)H][(ajint)B] = Y;
+      iub[(ajint)H][(ajint)V] = M;
+      iub[(ajint)H][(ajint)D] = W;
+      iub[(ajint)H][(ajint)N] = N;
 
-      iub[(int)V][(int)A] = A;
-      iub[(int)V][(int)C] = C;
-      iub[(int)V][(int)G] = G;
+      iub[(ajint)V][(ajint)A] = A;
+      iub[(ajint)V][(ajint)C] = C;
+      iub[(ajint)V][(ajint)G] = G;
 
-      iub[(int)V][(int)V] = V;
-      iub[(int)V][(int)D] = R;
-      iub[(int)V][(int)N] = V;
+      iub[(ajint)V][(ajint)V] = V;
+      iub[(ajint)V][(ajint)D] = R;
+      iub[(ajint)V][(ajint)N] = V;
       
-      iub[(int)D][(int)A] = A;
-      iub[(int)D][(int)G] = G;
-      iub[(int)D][(int)T] = T;
-      iub[(int)D][(int)U] = U;
+      iub[(ajint)D][(ajint)A] = A;
+      iub[(ajint)D][(ajint)G] = G;
+      iub[(ajint)D][(ajint)T] = T;
+      iub[(ajint)D][(ajint)U] = U;
 
-      iub[(int)D][(int)D] = D;
-      iub[(int)D][(int)N] = D;
+      iub[(ajint)D][(ajint)D] = D;
+      iub[(ajint)D][(ajint)N] = D;
 
-      iub[(int)N][(int)A] = A;
-      iub[(int)N][(int)C] = C;
-      iub[(int)N][(int)G] = G;
-      iub[(int)N][(int)T] = T;
+      iub[(ajint)N][(ajint)A] = A;
+      iub[(ajint)N][(ajint)C] = C;
+      iub[(ajint)N][(ajint)G] = G;
+      iub[(ajint)N][(ajint)T] = T;
 
-      iub[(int)N][(int)N] = N;
+      iub[(ajint)N][(ajint)N] = N;
       
       for(i=0;i<256;i++)
 	for(j=0;j<i;j++)
@@ -1056,7 +1056,7 @@ int IUBunequal(char x,char y) {
       initialised = 1;
     }
   
-  return iub[toupper((int) x)][toupper((int) y)];
+  return iub[toupper((ajint) x)][toupper((ajint) y)];
 }
 
 /* @func IUBcmp ************************************************************
@@ -1066,13 +1066,13 @@ int IUBunequal(char x,char y) {
 ** @param [r] a [char*] First base code
 ** @param [r] b [char*] Second base code
 **
-** @return [int] difference
+** @return [ajint] difference
 ** @@
 ******************************************************************************/
 
-int IUBcmp(char *a,char *b) {
+ajint IUBcmp(char *a,char *b) {
 
-  int n;
+  ajint n;
 
   while( *a && *b )
     {
@@ -1112,20 +1112,20 @@ int IUBcmp(char *a,char *b) {
 **     
 ** @param [r] est [SEQUENCE*] Sequence of EST
 ** @param [r] genome [SEQUENCE*] Sequence of genomic region
-** @param [r] match [int] Match score
-** @param [r] mismatch [int] Mismatch penalty (positive)
-** @param [r] gap_penalty [int] Gap penalty
-** @param [r] intron_penalty [int] Intron penalty
-** @param [r] splice_penalty [int] Splice site penalty
+** @param [r] match [ajint] Match score
+** @param [r] mismatch [ajint] Mismatch penalty (positive)
+** @param [r] gap_penalty [ajint] Gap penalty
+** @param [r] intron_penalty [ajint] Intron penalty
+** @param [r] splice_penalty [ajint] Splice site penalty
 ** @param [r] splice_sites [SEQUENCE*] Marked splice sites.
 **     The intron_penalty may be modified to splice_penalty if splice_sites is
 **     non-null and there are DONOR and ACCEPTOR sites at the start and
 **     end of the intron.
-** @param [r] backtrack [int] Boolean.
+** @param [r] backtrack [ajint] Boolean.
 **     If backtrack is 0 then only the start and end points and the score
 **     are computed, and no path matrix is allocated.
-** @param [r] needleman [int] Boolean 1 = global alignment 0 = local alignment
-** @param [r] init_path [int] Type of initialization for the path.
+** @param [r] needleman [ajint] Boolean 1 = global alignment 0 = local alignment
+** @param [r] init_path [ajint] Type of initialization for the path.
 **     If init_path  is DIAGONAL then the boundary conditions are adjusted  
 **     so that the optimal path enters the cell (0,0) diagonally. Otherwise
 **     it enters from the left (ie as a deletion in the EST)
@@ -1135,31 +1135,31 @@ int IUBcmp(char *a,char *b) {
 ******************************************************************************/
 
 ge_alignment* non_recursive_est_to_genome( SEQUENCE *est, SEQUENCE *genome,
-					   int match, int mismatch,
-					   int gap_penalty, int intron_penalty,
-					   int splice_penalty,
+					   ajint match, ajint mismatch,
+					   ajint gap_penalty, ajint intron_penalty,
+					   ajint splice_penalty,
 					   SEQUENCE *splice_sites,
-					   int backtrack, int needleman,
-					   int init_path ) {
+					   ajint backtrack, ajint needleman,
+					   ajint init_path ) {
 
   unsigned char **ppath=NULL, *path=NULL;
-  int *score1, *score2;
-  int *s1, *s2, *s3;
-  int *best_intron_score, *best_intron_coord;
-  int e_len_pack = est->len/4+1;
-  int gpos, epos;
-  int emax = -1, gmax = -1;
-  int max_score = 0;
-  int diagonal, delete_genome, delete_est, intron;
+  ajint *score1, *score2;
+  ajint *s1, *s2, *s3;
+  ajint *best_intron_score, *best_intron_coord;
+  ajint e_len_pack = est->len/4+1;
+  ajint gpos, epos;
+  ajint emax = -1, gmax = -1;
+  ajint max_score = 0;
+  ajint diagonal, delete_genome, delete_est, intron;
   char *gseq, *eseq, g;
-  int max, total=0;
-  int p, pos;
-  int *temp_path=NULL;
-  int is_acceptor;
+  ajint max, total=0;
+  ajint p, pos;
+  ajint *temp_path=NULL;
+  ajint is_acceptor;
   ge_alignment *ge;
   coords *start1=NULL, *start2=NULL, *t1=NULL, *t2=NULL, *t3;
   coords *best_intron_start=NULL, best_start;
-  int splice_type=0;
+  ajint splice_type=0;
 
   unsigned char direction;
   unsigned char diagonal_path[4] = { 1, 4, 16, 64 };
@@ -1272,7 +1272,7 @@ ge_alignment* non_recursive_est_to_genome( SEQUENCE *est, SEQUENCE *genome,
 	{
 	  /* align est and genome */
 
-	  diagonal = s2[epos-1] + lsimmat[(int)g][(int)eseq[epos]];
+	  diagonal = s2[epos-1] + lsimmat[(ajint)g][(ajint)eseq[epos]];
 	  
 	  /* single deletion in est */
 
@@ -1309,7 +1309,8 @@ ge_alignment* non_recursive_est_to_genome( SEQUENCE *est, SEQUENCE *genome,
 		  s1[epos] = diagonal;
 		  if ( backtrack ) {
 /*		    path[epos/4] |= diagonal_path[epos%4]; <mod> */
-		    path[epos/4] =  ajSysItoUC((unsigned int) path[epos/4] | (unsigned int) diagonal_path[epos%4]);
+		    path[epos/4] =  ajSysItoUC((ajuint) path[epos/4] |
+					       (ajuint) diagonal_path[epos%4]);
 		  }
 		  else
 		    {
@@ -1335,7 +1336,8 @@ ge_alignment* non_recursive_est_to_genome( SEQUENCE *est, SEQUENCE *genome,
 		{
 		  s1[epos] = delete_est;
 		  if ( backtrack ) { /* <mod> */
-		    path[epos/4]  =  ajSysItoUC((unsigned int) path[epos/4] | (unsigned int) delete_est_path[epos%4]);
+		    path[epos/4]  =  ajSysItoUC((ajuint) path[epos/4] |
+						(ajuint) delete_est_path[epos%4]);
 		  }
 		  else {
 		    t1[epos] = t1[epos-1];
@@ -1349,7 +1351,8 @@ ge_alignment* non_recursive_est_to_genome( SEQUENCE *est, SEQUENCE *genome,
 		{
 		  s1[epos] = delete_genome;
 		  if ( backtrack ) { /* <mod> */
-		    path[epos/4] = ajSysItoUC((unsigned int) path[epos/4] | (unsigned int) delete_genome_path[epos%4]);
+		    path[epos/4] = ajSysItoUC((ajuint) path[epos/4] |
+					      (ajuint) delete_genome_path[epos%4]);
 		  }
 		  else {
 		    t1[epos] = t2[epos];
@@ -1467,11 +1470,11 @@ ge_alignment* non_recursive_est_to_genome( SEQUENCE *est, SEQUENCE *genome,
 	  
       while( ( needleman || total < max_score) && epos >= 0 && gpos >= 0 )
 	{
-	  direction = ajSysItoUC(( (unsigned int)ppath[gpos][epos/4] & (unsigned int)mask[epos%4] ) >> (2*(epos%4))); 
+	  direction = ajSysItoUC(( (ajuint)ppath[gpos][epos/4] & (ajuint)mask[epos%4] ) >> (2*(epos%4))); 
 	  temp_path[pos++] = direction;
-	  if ( (unsigned int) direction == INTRON ) /* intron */
+	  if ( (ajuint) direction == INTRON ) /* intron */
 	    {
-	      int gpos1;
+	      ajint gpos1;
 
 	      if ( gpos-best_intron_coord[epos]  <= 0 )
 		{
@@ -1500,13 +1503,13 @@ ge_alignment* non_recursive_est_to_genome( SEQUENCE *est, SEQUENCE *genome,
 	      temp_path[pos++] = gpos-gpos1; /* intron this far */
 	      gpos = gpos1;
 	    }
-	  else if ( (unsigned int) direction == DIAGONAL ) /* diagonal */
+	  else if ( (ajuint) direction == DIAGONAL ) /* diagonal */
 	    {
-	      total += lsimmat[(int)gseq[gpos]][(int)eseq[epos]];
+	      total += lsimmat[(ajint)gseq[gpos]][(ajint)eseq[epos]];
 	      epos--;
 	      gpos--;
 	    }
-	  else if ( (unsigned int) direction == DELETE_EST ) /* delete_est */
+	  else if ( (ajuint) direction == DELETE_EST ) /* delete_est */
 	    {
 	      total -= gap_penalty;
 	      epos--;
@@ -1616,11 +1619,11 @@ void free_ge( ge_alignment *ge ) {
 **
 ** @param [r] est [SEQUENCE*] Sequence of EST
 ** @param [r] genome [SEQUENCE*] Sequence of genomic region
-** @param [r] match [int] Match score
-** @param [r] mismatch [int] Mismatch penalty (positive)
-** @param [r] gap_penalty [int] Gap penalty
-** @param [r] intron_penalty [int] Intron penalty
-** @param [r] splice_penalty [int] Splice site penalty
+** @param [r] match [ajint] Match score
+** @param [r] mismatch [ajint] Mismatch penalty (positive)
+** @param [r] gap_penalty [ajint] Gap penalty
+** @param [r] intron_penalty [ajint] Intron penalty
+** @param [r] splice_penalty [ajint] Splice site penalty
 ** @param [r] splice_sites [SEQUENCE*] Marked splice sites.
 **     The intron_penalty may be modified to splice_penalty if splice_sites is
 **     non-null and there are DONOR and ACCEPTOR sites at the start and
@@ -1628,7 +1631,7 @@ void free_ge( ge_alignment *ge ) {
 ** @param [r] max_area [float] Maximum memory available for alignment
 **            by standard method (allowing 4 bases per byte).
 **            Otherwise sequences are split and aligned recursively.
-** @param [r] init_path [int] Type of initialization for the path.
+** @param [r] init_path [ajint] Type of initialization for the path.
 **     If init_path  is DIAGONAL then the boundary conditions are adjusted  
 **     so that the optimal path enters the cell (0,0) diagonally. Otherwise
 **     it enters from the left (ie as a deletion in the EST)
@@ -1638,19 +1641,19 @@ void free_ge( ge_alignment *ge ) {
 ******************************************************************************/
 
 ge_alignment* recursive_est_to_genome( SEQUENCE *est, SEQUENCE *genome,
-				       int match, int mismatch,
-				       int gap_penalty, int intron_penalty,
-				       int splice_penalty,
+				       ajint match, ajint mismatch,
+				       ajint gap_penalty, ajint intron_penalty,
+				       ajint splice_penalty,
 				       SEQUENCE *splice_sites, float max_area,
-				       int init_path ) {
+				       ajint init_path ) {
 
-  int middle, gleft, gright, score, i, j;
+  ajint middle, gleft, gright, score, i, j;
   SEQUENCE *left_splice=NULL, *right_splice=NULL;
   SEQUENCE *left_genome, *right_genome;
   SEQUENCE *left_est, *right_est;
   ge_alignment *left_ge, *right_ge, *ge;
   float area;
-  int split_on_del;
+  ajint split_on_del;
 
   if (debug)
     ajDebug ("recursive_est_to_genome\n");
@@ -1793,11 +1796,11 @@ ge_alignment* recursive_est_to_genome( SEQUENCE *est, SEQUENCE *genome,
 **
 ** @param [r] est [SEQUENCE*] Sequence of EST
 ** @param [r] genome [SEQUENCE*] Sequence of genomic region
-** @param [r] match [int] Match score
-** @param [r] mismatch [int] Mismatch penalty (positive)
-** @param [r] gap_penalty [int] Gap penalty
-** @param [r] intron_penalty [int] Intron penalty
-** @param [r] splice_penalty [int] Splice site penalty
+** @param [r] match [ajint] Match score
+** @param [r] mismatch [ajint] Mismatch penalty (positive)
+** @param [r] gap_penalty [ajint] Gap penalty
+** @param [r] intron_penalty [ajint] Intron penalty
+** @param [r] splice_penalty [ajint] Splice site penalty
 ** @param [r] splice_sites [SEQUENCE*] Marked splice sites.
 **     The intron_penalty may be modified to splice_penalty if splice_sites is
 **     non-null and there are DONOR and ACCEPTOR sites at the start and
@@ -1810,9 +1813,9 @@ ge_alignment* recursive_est_to_genome( SEQUENCE *est, SEQUENCE *genome,
 ******************************************************************************/
 
 ge_alignment * linear_space_est_to_genome( SEQUENCE *est, SEQUENCE *genome,
-					  int match, int mismatch,
-					  int gap_penalty, int intron_penalty,
-					  int splice_penalty,
+					  ajint match, ajint mismatch,
+					  ajint gap_penalty, ajint intron_penalty,
+					  ajint splice_penalty,
 					  SEQUENCE *splice_sites,
 					  float megabytes ) {
 
@@ -1821,7 +1824,7 @@ ge_alignment * linear_space_est_to_genome( SEQUENCE *est, SEQUENCE *genome,
   float area;
   float max_area = megabytes*(float)1.0e6;
 
-  rpair_init( (int)((float)1.0e6*megabytes) );
+  rpair_init( (ajint)((float)1.0e6*megabytes) );
 
   area = ((float)genome->len+(float)1.0)*((float)est->len+(float)1.0)/(float)4; /* divide by 4
 							      as we pack 4
@@ -1920,16 +1923,16 @@ ge_alignment * linear_space_est_to_genome( SEQUENCE *est, SEQUENCE *genome,
 **     
 ** @param [r] est [SEQUENCE*] Sequence of EST
 ** @param [r] genome [SEQUENCE*] Sequence of genomic region
-** @param [r] match [int] Match score
-** @param [r] mismatch [int] Mismatch penalty (positive)
-** @param [r] gap_penalty [int] Gap penalty
-** @param [r] intron_penalty [int] Intron penalty
-** @param [r] splice_penalty [int] Splice site penalty
+** @param [r] match [ajint] Match score
+** @param [r] mismatch [ajint] Mismatch penalty (positive)
+** @param [r] gap_penalty [ajint] Gap penalty
+** @param [r] intron_penalty [ajint] Intron penalty
+** @param [r] splice_penalty [ajint] Splice site penalty
 ** @param [r] splice_sites [SEQUENCE*] Marked splice sites.
 **     The intron_penalty may be modified to splice_penalty if splice_sites is
 **     non-null and there are DONOR and ACCEPTOR sites at the start and
 **     end of the intron.
-** @param [r] middle [int] Sequence mid point position.
+** @param [r] middle [ajint] Sequence mid point position.
 **     This Function does not compute the path, instead it finds the
 **     genome coordinates where the best path crosses epos=middle, so this
 **     should be called recursively to generate the complete alignment in
@@ -1941,24 +1944,24 @@ ge_alignment * linear_space_est_to_genome( SEQUENCE *est, SEQUENCE *genome,
 **     If the alignment crosses middle in a diagonal fashion then
 **              gleft+1 == gright
 **
-** @return [int] alignment score
+** @return [ajint] alignment score
 ** @@
 ******************************************************************************/
 
-int midpt_est_to_genome( SEQUENCE *est, SEQUENCE *genome, int match,
-			int mismatch, int gap_penalty, int intron_penalty,
-			int splice_penalty, SEQUENCE *splice_sites,
-			int middle, int *gleft, int *gright ) {
+ajint midpt_est_to_genome( SEQUENCE *est, SEQUENCE *genome, ajint match,
+			ajint mismatch, ajint gap_penalty, ajint intron_penalty,
+			ajint splice_penalty, SEQUENCE *splice_sites,
+			ajint middle, ajint *gleft, ajint *gright ) {
 
-  int *score1, *score2;
-  int *s1, *s2, *s3;
-  int *best_intron_score, *best_intron_coord;
-  int gpos, epos;
-  int score;
-  int diagonal, delete_genome, delete_est, intron;
+  ajint *score1, *score2;
+  ajint *s1, *s2, *s3;
+  ajint *best_intron_score, *best_intron_coord;
+  ajint gpos, epos;
+  ajint score;
+  ajint diagonal, delete_genome, delete_est, intron;
   char *gseq, *eseq, g;
-  int max;
-  int is_acceptor;
+  ajint max;
+  ajint is_acceptor;
   coords *m1, *m2, *m3;
   coords *midpt1, *midpt2, *best_intron_midpt;
 
@@ -2015,7 +2018,7 @@ int midpt_est_to_genome( SEQUENCE *est, SEQUENCE *genome, int match,
 	{
 	  /* align est and genome */
 
-	  diagonal = s2[epos-1] + lsimmat[(int)g][(int)eseq[epos]];
+	  diagonal = s2[epos-1] + lsimmat[(ajint)g][(ajint)eseq[epos]];
 	  
 	  /* single deletion in est */
 
@@ -2119,26 +2122,26 @@ int midpt_est_to_genome( SEQUENCE *est, SEQUENCE *genome, int match,
 ** @param [r] genome [SEQUENCE*] Genomic sequence
 ** @param [r] est [SEQUENCE*] EST sequence
 ** @param [r] ge [ge_alignment*] Genomic EST alignment
-** @param [r] match [int] Match score
-** @param [r] mismatch [int] Mismatch penalty
-** @param [r] gap_penalty [int] Gap penalty
-** @param [r] intron_penalty [int] Intron penalty
-** @param [r] splice_penalty [int] Splice site penalty
-** @param [r] gapped [int] Boolean. 1 = write a gapped alignment
-** @param [r] reverse [int] Boolean. 1 = reverse alignment
+** @param [r] match [ajint] Match score
+** @param [r] mismatch [ajint] Mismatch penalty
+** @param [r] gap_penalty [ajint] Gap penalty
+** @param [r] intron_penalty [ajint] Intron penalty
+** @param [r] splice_penalty [ajint] Splice site penalty
+** @param [r] gapped [ajint] Boolean. 1 = write a gapped alignment
+** @param [r] reverse [ajint] Boolean. 1 = reverse alignment
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 void blast_style_output( AjPFile blast, SEQUENCE *genome, SEQUENCE *est,
-			ge_alignment *ge, int match, int mismatch,
-			int gap_penalty, int intron_penalty,
-			int splice_penalty, int gapped, int reverse  ) {
+			ge_alignment *ge, ajint match, ajint mismatch,
+			ajint gap_penalty, ajint intron_penalty,
+			ajint splice_penalty, ajint gapped, ajint reverse  ) {
 
-  int gsub, gpos, esub, epos, tsub, p;
-  int matches=0, len=0, m;
-  int total_matches=0, total_len=0;
+  ajint gsub, gpos, esub, epos, tsub, p;
+  ajint matches=0, len=0, m;
+  ajint total_matches=0, total_len=0;
   float percent;
 
   if (verbose)
@@ -2191,7 +2194,7 @@ void blast_style_output( AjPFile blast, SEQUENCE *genome, SEQUENCE *est,
 	  }
 	else if ( ge->align_path[p] == DIAGONAL )
 	  {
-	    m = lsimmat[(int)genome->s[(int)gpos]][(int)est->s[(int)epos]];
+	    m = lsimmat[(ajint)genome->s[(ajint)gpos]][(ajint)est->s[(ajint)epos]];
 	    tsub += m;
 	    if ( m > 0 )
 	      {
@@ -2221,7 +2224,7 @@ void blast_style_output( AjPFile blast, SEQUENCE *genome, SEQUENCE *est,
 		gsub = gpos;
 	      }
 	  }
-	else if ( ge->align_path[(int)p] == DELETE_GENOME )
+	else if ( ge->align_path[(ajint)p] == DELETE_GENOME )
 	  {
 	    if ( gapped )
 	      {
@@ -2274,22 +2277,22 @@ void blast_style_output( AjPFile blast, SEQUENCE *genome, SEQUENCE *est,
 ** @param [r] len [int*] Length of alignment
 ** @param [r] tsub [int*] Score
 ** @param [r] genome [SEQUENCE*] Genomic sequence
-** @param [r] gsub [int] Genomic start position
-** @param [r] gpos [int] Genomic end position
+** @param [r] gsub [ajint] Genomic start position
+** @param [r] gpos [ajint] Genomic end position
 ** @param [r] est [SEQUENCE*] EST sequence
-** @param [r] esub [int] EST start position
-** @param [r] epos [int] EST end position
-** @param [r] reverse [int] Boolean 1=reverse the EST sequence
-** @param [r] gapped [int] Boolean 1=full gapped alignment
+** @param [r] esub [ajint] EST start position
+** @param [r] epos [ajint] EST end position
+** @param [r] reverse [ajint] Boolean 1=reverse the EST sequence
+** @param [r] gapped [ajint] Boolean 1=full gapped alignment
 **                         0=display ungapped segment
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void write_MSP( AjPFile ofile, int *matches, int *len, int *tsub,
-	       SEQUENCE *genome, int gsub, int gpos, SEQUENCE *est,
-	       int esub, int epos, int reverse, int gapped) {
+void write_MSP( AjPFile ofile, ajint *matches, ajint *len, ajint *tsub,
+	       SEQUENCE *genome, ajint gsub, ajint gpos, SEQUENCE *est,
+	       ajint esub, ajint epos, ajint reverse, ajint gapped) {
 
   float percent;
 
@@ -2324,21 +2327,21 @@ void write_MSP( AjPFile ofile, int *matches, int *len, int *tsub,
 ** @param [r] genome [SEQUENCE*] Genomic sequence
 ** @param [r] est [SEQUENCE*] EST sequence
 ** @param [r] ge [ge_alignment*] Genomic EST alignment
-** @param [r] width [int] Output width (in bases)
+** @param [r] width [ajint] Output width (in bases)
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 void print_align(AjPFile ofile, SEQUENCE *genome, SEQUENCE *est,
-		 ge_alignment *ge, int width ) {
+		 ge_alignment *ge, ajint width ) {
 
-  int gpos, epos, pos, len, i, j, max, m;
+  ajint gpos, epos, pos, len, i, j, max, m;
   char *gbuf;
   char *ebuf;
   char *sbuf;
-  int *gcoord, *ecoord;
-  int namelen = strlen(genome->name) > strlen(est->name) ?
+  ajint *gcoord, *ecoord;
+  ajint namelen = strlen(genome->name) > strlen(est->name) ?
     strlen(genome->name): strlen(est->name)  ;
   char format[256];
   (void) sprintf(format, "%%%ds %%6d ", namelen );
@@ -2359,14 +2362,14 @@ void print_align(AjPFile ofile, SEQUENCE *genome, SEQUENCE *est,
       len = 0;
       for(pos=0;pos<ge->len;pos++)
 	{
-	  int way = ge->align_path[pos];
+	  ajint way = ge->align_path[pos];
 	  if ( way == DIAGONAL  ) /* diagonal */
 	    {
 	      gcoord[len] = gpos;
 	      ecoord[len] = epos;
 	      gbuf[len] = genome->s[gpos++];
 	      ebuf[len] = est->s[epos++];
-	      m = lsimmat[(int)gbuf[len]][(int)ebuf[len]];
+	      m = lsimmat[(ajint)gbuf[len]][(ajint)ebuf[len]];
 /* MATHOG, the triple form promotes char to arithmetic type, which 
 generates warnings as it might be able overflow the char type.  This is
 equivalent but doesn't trigger any compiler noise 
@@ -2400,11 +2403,11 @@ equivalent but doesn't trigger any compiler noise
 		 bases of the intron, plus a string containing the
 		 intron length */
 
-	      int intron_width = ge->align_path[pos+1];
-	      int half_width = intron_width > 10 ? 5 : intron_width/2;
-	      int g = gpos-1;
+	      ajint intron_width = ge->align_path[pos+1];
+	      ajint half_width = intron_width > 10 ? 5 : intron_width/2;
+	      ajint g = gpos-1;
 	      char number[30];
-	      int numlen;
+	      ajint numlen;
 	      (void) sprintf(number," %d ", intron_width );
 	      numlen = strlen(number);
 
@@ -2413,7 +2416,7 @@ equivalent but doesn't trigger any compiler noise
 		  g++;
 		  gcoord[j] = gpos-1;
 		  ecoord[j] = epos-1;
-		  gbuf[j] = ajSysItoC(tolower((int) genome->s[g]));
+		  gbuf[j] = ajSysItoC(tolower((ajint) genome->s[g]));
 		  ebuf[j] = '.';
 		  if ( way == FORWARD_SPLICED_INTRON )
 		    sbuf[j] = '>';
@@ -2438,7 +2441,7 @@ equivalent but doesn't trigger any compiler noise
 		  g++;
 		  gcoord[j] = gpos-1;
 		  ecoord[j] = epos-1;
-		  gbuf[j] = ajSysItoC(tolower((int) genome->s[g]));
+		  gbuf[j] = ajSysItoC(tolower((ajint) genome->s[g]));
 		  ebuf[j] = '.';
 		  if ( way == FORWARD_SPLICED_INTRON )
 		    sbuf[j] = '>';
@@ -2500,16 +2503,16 @@ equivalent but doesn't trigger any compiler noise
 **     else               search for CT/AC
 **
 ** @param [r] genome [SEQUENCE*] Genomic sequence
-** @param [r] forward [int] Boolean. 1 = forward direction
+** @param [r] forward [ajint] Boolean. 1 = forward direction
 **
 ** @return [SEQUENCE*] Sequence of bitmask codes for splice sites.
 ** @@
 ******************************************************************************/
 
-SEQUENCE* find_splice_sites (SEQUENCE *genome, int forward ) {
+SEQUENCE* find_splice_sites (SEQUENCE *genome, ajint forward ) {
 
   SEQUENCE *sites = seqdup( genome );
-  int pos;
+  ajint pos;
   char *s = genome->s;
 
   for(pos=0;pos<sites->len;pos++)
@@ -2519,24 +2522,24 @@ SEQUENCE* find_splice_sites (SEQUENCE *genome, int forward ) {
 		      -splice consensus is gt/ag */
     for(pos=1;pos<sites->len-2;pos++)
       {
-	if ( tolower((int) s[pos]) == 'g' &&
-	     tolower((int) s[pos+1]) == 't' ) /* donor */
-	  sites->s[pos-1] = ajSysItoC((unsigned int) sites->s[pos-1] | (unsigned int) DONOR); /* last position in exon */
-	if ( tolower((int) s[pos]) == 'a' &&
-	     tolower((int) s[pos+1]) == 'g' ) /* acceptor */
-	  sites->s[pos+1]  = ajSysItoC((unsigned int) sites->s[pos+1] | (unsigned int) ACCEPTOR); /* last position in intron */
+	if ( tolower((ajint) s[pos]) == 'g' &&
+	     tolower((ajint) s[pos+1]) == 't' ) /* donor */
+	  sites->s[pos-1] = ajSysItoC((ajuint) sites->s[pos-1] | (ajuint) DONOR); /* last position in exon */
+	if ( tolower((ajint) s[pos]) == 'a' &&
+	     tolower((ajint) s[pos+1]) == 'g' ) /* acceptor */
+	  sites->s[pos+1]  = ajSysItoC((ajuint) sites->s[pos+1] | (ajuint) ACCEPTOR); /* last position in intron */
       }
     (void) strcpy(sites->desc,"forward"); /* so that other functions know */
   }
   else { /* gene is on reverse strand so splice consensus looks like ct/ac */
     for(pos=1;pos<sites->len-2;pos++)
       {
-	if ( tolower((int) s[pos]) == 'c' &&
-	     tolower((int) s[pos+1]) == 't' ) /* donor */
-	  sites->s[pos-1] = ajSysItoC((unsigned int) sites->s[pos-1] | (unsigned int) DONOR); /* last position in exon */
-	if ( tolower((int) s[pos]) == 'a' &&
-	     tolower((int) s[pos+1]) == 'c' ) /* acceptor */
-	  sites->s[pos+1] = ajSysItoC((unsigned int) sites->s[pos+1] | (unsigned int) ACCEPTOR); /* last position in intron */
+	if ( tolower((ajint) s[pos]) == 'c' &&
+	     tolower((ajint) s[pos+1]) == 't' ) /* donor */
+	  sites->s[pos-1] = ajSysItoC((ajuint) sites->s[pos-1] | (ajuint) DONOR); /* last position in exon */
+	if ( tolower((ajint) s[pos]) == 'a' &&
+	     tolower((ajint) s[pos+1]) == 'c' ) /* acceptor */
+	  sites->s[pos+1] = ajSysItoC((ajuint) sites->s[pos+1] | (ajuint) ACCEPTOR); /* last position in intron */
       }
     (void) strcpy(sites->desc,"reverse"); /* so that other functions know */
   }
@@ -2548,19 +2551,19 @@ SEQUENCE* find_splice_sites (SEQUENCE *genome, int forward ) {
 **
 ** Comparison matrix initialisation.
 **
-** @param [r] match [int] Match code
-** @param [r] mismatch [int] Mismatch penalty
-** @param [r] gap [int] Gap penalty
-** @param [r] neutral [int] Score for ambiguous base positions.
+** @param [r] match [ajint] Match code
+** @param [r] mismatch [ajint] Mismatch penalty
+** @param [r] gap [ajint] Gap penalty
+** @param [r] neutral [ajint] Score for ambiguous base positions.
 ** @param [r] pad_char [char] Pad character for gaps in input sequences
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void matinit(int match, int mismatch, int gap, int neutral, char pad_char) {
+void matinit(ajint match, ajint mismatch, ajint gap, ajint neutral, char pad_char) {
 
-  int c1, c2;
+  ajint c1, c2;
   
   for(c1=0;c1<256;c1++)
     for(c2=0;c2<256;c2++)
@@ -2601,7 +2604,7 @@ void matinit(int match, int mismatch, int gap, int neutral, char pad_char) {
 
 void indent( void) {
 
-  int n = indentation;
+  ajint n = indentation;
 
   while(n--)
     (void) fputc(' ',stdout);
@@ -2619,12 +2622,12 @@ Needed for lin_align.c
 #define LIMIT_RPAIR_SIZE 10000
 
 static RPAIR *rpair=NULL;
-static int rpairs=0;
-static int rpair_size=0;
-static int rpairs_sorted=0;
-static int limit_rpair_size=LIMIT_RPAIR_SIZE;
+static ajint rpairs=0;
+static ajint rpair_size=0;
+static ajint rpairs_sorted=0;
+static ajint limit_rpair_size=LIMIT_RPAIR_SIZE;
 
-extern int verbose;
+extern ajint verbose;
 
 /* @func rpair_cmp ***********************************************************
 **
@@ -2636,15 +2639,15 @@ extern int verbose;
 ** @param [r] a [const void*] First value
 ** @param [r] b [const void*] Second value
 **
-** @return [int] difference.
+** @return [ajint] difference.
 ** @@
 ******************************************************************************/
 
-int rpair_cmp( const void *a, const void *b ) {
+ajint rpair_cmp( const void *a, const void *b ) {
 
   RPAIR *A = (RPAIR*)a;
   RPAIR *B = (RPAIR*)b;
-  int n = A->col - B->col;
+  ajint n = A->col - B->col;
 
   if ( n == 0 )
     n = A->row - B->row;
@@ -2656,13 +2659,13 @@ int rpair_cmp( const void *a, const void *b ) {
 **
 ** Initialise the rpair settings
 **
-** @param [r] max_bytes [int] Maximum memory size (bytes)
+** @param [r] max_bytes [ajint] Maximum memory size (bytes)
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void rpair_init( int max_bytes ) {
+void rpair_init( ajint max_bytes ) {
 
   limit_rpair_size = max_bytes/sizeof(RPAIR);
   free_rpairs();
@@ -2690,14 +2693,14 @@ void free_rpairs(void) {
 **
 ** Saving rpairs row and column values.
 **
-** @param [r] col [int] Current column
-** @param [r] row [int] Current row
+** @param [r] col [ajint] Current column
+** @param [r] row [ajint] Current row
 **
-** @return [int] o upon error.
+** @return [ajint] o upon error.
 ** @@
 ******************************************************************************/
 
-int do_not_forget( int col, int row ) {
+ajint do_not_forget( ajint col, ajint row ) {
 
   if ( rpairs >= limit_rpair_size ) {
     ajErr ("rpairs %d beyond maximum %d", rpairs+1, limit_rpair_size);
@@ -2738,18 +2741,18 @@ int do_not_forget( int col, int row ) {
 **
 ** Recall rpair values for row and column
 **
-** @param [r] col [int] Current column
-** @param [r] row [int] Current row
+** @param [r] col [ajint] Current column
+** @param [r] row [ajint] Current row
 **
-** @return [int] Row number
+** @return [ajint] Row number
 ** @@
 ******************************************************************************/
 
-int remember( int col, int row ) {
+ajint remember( ajint col, ajint row ) {
 
   RPAIR rp;
-  int left, right, middle, d;
-  int bad;
+  ajint left, right, middle, d;
+  ajint bad;
 
   if ( ! rpairs_sorted ) {
     qsort( rpair, rpairs, sizeof(RPAIR), rpair_cmp );
@@ -2834,13 +2837,13 @@ evident after careful reading of the code.  */
 ** @@
 ******************************************************************************/
 
-float rand3 (int *idum) {
+float rand3 (ajint *idum) {
 
-  static int inext,inextp;
-  static long ma[56];
-  static int iff=0;
-  long mj,mk;
-  int i,ii,k;
+  static ajint inext,inextp;
+  static ajlong ma[56];
+  static ajint iff=0;
+  ajlong mj,mk;
+  ajint i,ii,k;
   float ZZ;
 	
   if (*idum < 0 || iff == 0) {
@@ -2873,7 +2876,7 @@ float rand3 (int *idum) {
 /*	return mj*FAC; */
   ZZ = mj*FAC;
   ZZ = (ZZ < (float)0.0 ? -ZZ : ZZ );
-  ZZ = (ZZ > (float)1.0 ? ZZ-(int)ZZ : ZZ);
+  ZZ = (ZZ > (float)1.0 ? ZZ-(ajint)ZZ : ZZ);
   return(ZZ);
 	
 }
@@ -2892,14 +2895,14 @@ float rand3 (int *idum) {
 ** @param [r] file [FILE*] Input file
 ** @param [rw] string [char*] String buffer
 **
-** @return [int] number of chars read.
+** @return [ajint] number of chars read.
 ** @@
 ******************************************************************************/
 
-int read_line(FILE *file,char *string) {
+ajint read_line(FILE *file,char *string) {
 
-  int	c;
-  int	i=0;
+  ajint	c;
+  ajint	i=0;
 	
   while((c=getc(file)))  {
     if (!i && c==EOF)  return EOF;
@@ -2918,13 +2921,13 @@ int read_line(FILE *file,char *string) {
 **
 ** @param [r] file [FILE*] Input file
 **
-** @return [int] 1 if successful else 0
+** @return [ajint] 1 if successful else 0
 ** @@
 ******************************************************************************/
 
-int next_line(FILE *file) {
+ajint next_line(FILE *file) {
 
-  int	c;
+  ajint	c;
   while((c=getc(file))) {
     if (feof(file)) return 0;
     if (c=='\n') return 1;
@@ -2938,14 +2941,14 @@ int next_line(FILE *file) {
 **
 ** @param [r] string [char*] String
 **
-** @return [int] 1 if not all white space else 0.
+** @return [ajint] 1 if not all white space else 0.
 ** @@
 ******************************************************************************/
 
-int not_blank( char *string ) {
+ajint not_blank( char *string ) {
 
   while ( *string != 0 ) {
-    if ( ! isspace((int)*string) ) return 1;
+    if ( ! isspace((ajint)*string) ) return 1;
     string++;
   }
     
@@ -2959,13 +2962,13 @@ int not_blank( char *string ) {
 ** @param [r] fp [FILE*] Input file
 ** @param [rw] string [char*] String buffer
 **
-** @return [int] number of chars read.
+** @return [ajint] number of chars read.
 ** @@
 ******************************************************************************/
 
-int skip_comments( FILE *fp, char *string ) {
+ajint skip_comments( FILE *fp, char *string ) {
 
-  int n;
+  ajint n;
 
   *string = 0;
   while ( ( n = read_line( fp, string ) ) != EOF ) {
@@ -2982,11 +2985,11 @@ int skip_comments( FILE *fp, char *string ) {
 **
 ** @param [rw] string [char*] String
 **
-** @return [int] 1 for success
+** @return [ajint] 1 for success
 ** @@
 ******************************************************************************/
 
-int uncomment( char *string ) {
+ajint uncomment( char *string ) {
 
     while ( *string != '!'
           /*&& *string != '#'*/ &&
@@ -3079,7 +3082,7 @@ command-line option -s=65767 etc */
 /* (C) Richard Mott, ICRF */
 
 
-extern int comment;
+extern ajint comment;
 
 /* @func  getseed  ***********************************************************
 **
@@ -3088,23 +3091,23 @@ extern int comment;
 ** option -s=65767 etc
 **
 ** @param [rw] seed [int*] Seed
-** @param [r] argc [int] Number of command line arguments
+** @param [r] argc [ajint] Number of command line arguments
 ** @param [r] argv [char**] Array of command line arguments
 **
-** @return [int] seed.
+** @return [ajint] seed.
 ** @@
 ******************************************************************************/
 
-int getseed( int *seed, int argc, char **argv ) {
+ajint getseed( ajint *seed, ajint argc, char **argv ) {
 
     time_t *tloc;
-    int s;
+    ajint s;
 
     tloc = NULL;
 
     s = ajAcdGetInt("seed");
     if (!s)
-      s = *seed = ((int)time(tloc))% 100000; 
+      s = *seed = ((ajint)time(tloc))% 100000; 
 
     *seed = s;
 
@@ -3142,16 +3145,16 @@ char* Getdate (void) {
 }
 
 
-extern int verbose;
+extern ajint verbose;
 
 typedef struct
 {
   float key;
-  int value;
+  ajint value;
 }
 key_value;
 
-int kv_cmp( const void *a, const void *b );
+ajint kv_cmp( const void *a, const void *b );
 
 
 /* @func  openfile_in_seqpath *************************************************
@@ -3308,9 +3311,9 @@ char* seq_comment( SEQUENCE *seq, char *key ) {
 char* embl_seq_comment( SEQUENCE *seq, char *key ) {
 
   char line[256];
-  unsigned long text_offset;
-  unsigned long offset = get_offset( seq->name, seq->database, &text_offset );
-  unsigned long end_pos;
+  ajulong text_offset;
+  ajulong offset = get_offset( seq->name, seq->database, &text_offset );
+  ajulong end_pos;
   static char buf[MAX_BUF];
 
   *buf = 0;
@@ -3349,8 +3352,8 @@ char* embl_seq_comment( SEQUENCE *seq, char *key ) {
 char* nbrf_seq_comment( SEQUENCE *seq, char *key) {
 
   char line[256];
-  unsigned long text_offset=0;
-  unsigned long end_pos;
+  ajulong text_offset=0;
+  ajulong end_pos;
   static char buf[MAX_BUF];
 
   *buf = 0;
@@ -3464,7 +3467,7 @@ DATABASE* open_nbrf_database( char *name ) {
 
 DATABASE* which_database( char *database_name ) {
 
-  int n;
+  ajint n;
 
   for(n=0;n<database_count;n++)
     if ( ! strcmp( database_name, databases[n]->database ) )
@@ -3478,11 +3481,11 @@ DATABASE* which_database( char *database_name ) {
 **
 ** @param [r] db [DATABASE*] Database
 **
-** @return [int] 1 if successful.
+** @return [ajint] 1 if successful.
 ** @@
 ******************************************************************************/
 
-int add_database ( DATABASE *db ) {
+ajint add_database ( DATABASE *db ) {
 
   if ( database_count < 100 )
     databases[database_count++] = db;
@@ -3505,8 +3508,8 @@ int add_database ( DATABASE *db ) {
 
 void make_embl_index( DATABASE *db ) {
 
-  int n;
-  unsigned long offset;
+  ajint n;
+  ajulong offset;
   HASH_LIST *item;
   char name[256];
 
@@ -3544,8 +3547,8 @@ void make_embl_index( DATABASE *db ) {
 
 void make_fasta_index( DATABASE *db ) {
 
-  int n;
-  unsigned long offset;
+  ajint n;
+  ajulong offset;
   HASH_LIST *item;
   char name[256];
 
@@ -3583,8 +3586,8 @@ void make_fasta_index( DATABASE *db ) {
 
 void make_nbrf_index( DATABASE *db ) {
 
-  int n;
-  unsigned long offset1, offset2;
+  ajint n;
+  ajulong offset1, offset2;
   HASH_LIST *item;
   char name[256];
 
@@ -3648,8 +3651,8 @@ SEQUENCE* read_seq( char *name ) {
 
 SEQUENCE* read_sequence( char *name, DATABASE *database ) {
 
-  unsigned long text_offset;
-  unsigned long offset = get_offset( name, database, &text_offset );
+  ajulong text_offset;
+  ajulong offset = get_offset( name, database, &text_offset );
 
   if ( database->type == EMBL  )return read_embl_sq( name, database, offset );
   if ( database->type == NBRF  )return read_nbrf_sq( name, database, offset, text_offset );
@@ -3663,16 +3666,16 @@ SEQUENCE* read_sequence( char *name, DATABASE *database ) {
 **
 ** @param [r] name [char*] Sequence name
 ** @param [r] database [DATABASE*] Database pointer
-** @param [r] text_offset [unsigned long*] Offset
+** @param [r] text_offset [ajulong*] Offset
 **
-** @return [unsigned long] offset
+** @return [ajulong] offset
 ** @@
 ******************************************************************************/
 
-unsigned long get_offset( char *name, DATABASE *database,
-			  unsigned long *text_offset ) {
+ajulong get_offset( char *name, DATABASE *database,
+		   ajulong *text_offset ) {
 
-  int n;
+  ajint n;
   HASH_LIST *h;
 
   n = hash_name(name);
@@ -3699,19 +3702,19 @@ unsigned long get_offset( char *name, DATABASE *database,
 **
 ** @param [r] name [char*] Sequence name
 ** @param [r] database [DATABASE*] Database pointer
-** @param [r] offset [unsigned long] Offset
+** @param [r] offset [ajulong] Offset
 **
 ** @return [SEQUENCE*] sequence
 ** @@
 ******************************************************************************/
 
 SEQUENCE* read_embl_sq( char *name, DATABASE *database,
-			unsigned long offset ) {
+			ajulong offset ) {
 
   char sname[256], line[512];
-  int c;
+  ajint c;
   SEQUENCE *seq;
-  int len, n;
+  ajint len, n;
 
   AJNEW0 (seq);
   (void) fseek(database->datafile, offset, 0 );
@@ -3805,12 +3808,12 @@ SEQUENCE* seq_to_sequence( AjPSeq ajseq ) {
 
 SEQUENCE* get_fasta_sq( FILE *fp ) {
 
-  int c;
+  ajint c;
   SEQUENCE *seq=NULL;
   char name[256], desc[256];
-  int i;
+  ajint i;
   static char *buffer=NULL;
-  static int buflen=0;
+  static ajint buflen=0;
 
   if ( buffer == NULL ) {
     buflen = 100000;
@@ -3875,19 +3878,19 @@ SEQUENCE* get_fasta_sq( FILE *fp ) {
 **
 ** @param [r] name [char*] Name
 ** @param [r] database [DATABASE*] Database pointer
-** @param [r] offset [unsigned long] Offset
+** @param [r] offset [ajulong] Offset
 **
 ** @return [SEQUENCE*] sequence
 ** @@
 ******************************************************************************/
 
 SEQUENCE* read_fasta_sq( char *name, DATABASE *database,
-			 unsigned long offset ) {
+			 ajulong offset ) {
 
   char sname[256], line[512];
   SEQUENCE *seq;
-  int len, n, c;
-  unsigned long current;
+  ajint len, n, c;
+  ajulong current;
 
   AJNEW0 (seq);
   (void) fseek(database->datafile, offset, 0 );
@@ -3932,20 +3935,20 @@ SEQUENCE* read_fasta_sq( char *name, DATABASE *database,
 **
 ** @param [r] name [char*] Name
 ** @param [r] database [DATABASE*] Database pointer
-** @param [r] offset [unsigned long] Sequence file offset
-** @param [r] text_offset [unsigned long] Text offset
+** @param [r] offset [ajulong] Sequence file offset
+** @param [r] text_offset [ajulong] Text offset
 **
 ** @return [SEQUENCE*] sequence
 ** @@
 ******************************************************************************/
 
 SEQUENCE* read_nbrf_sq( char *name, DATABASE *database,
-	      unsigned long offset, unsigned long text_offset ) {
+		       ajulong offset, ajulong text_offset ) {
 
   char sname[256], line[512];
   SEQUENCE *seq;
-  unsigned long current;
-  int len, c;
+  ajulong current;
+  ajint len, c;
 
   AJNEW0 (seq);
   (void) fseek(database->datafile, offset, 0 );
@@ -3995,11 +3998,11 @@ SEQUENCE* read_nbrf_sq( char *name, DATABASE *database,
 ** @param [r] text [char*] Test to search for
 ** @param [r] line [char*] Input buffer
 **
-** @return [unsigned long] Offset in file
+** @return [ajulong] Offset in file
 ** @@
 ******************************************************************************/
 
-unsigned long find_next( FILE *fp, char *text, char *line ) {
+ajulong find_next( FILE *fp, char *text, char *line ) {
 
   while( read_line(fp,line) != EOF ) {
     (void) clean_line(line);
@@ -4017,17 +4020,17 @@ unsigned long find_next( FILE *fp, char *text, char *line ) {
 **
 ** @param [r] string [char*] String
 **
-** @return [int] hash value
+** @return [ajint] hash value
 ** @@
 ******************************************************************************/
 
-int hash_name( char *string ) {
+ajint hash_name( char *string ) {
 
-  int n=0;
+  ajint n=0;
 
   while( *string )
     {
-      n = (64*n + tolower((int) *string) ) % PRIME_NUM;
+      n = (64*n + tolower((ajint) *string) ) % PRIME_NUM;
       string++;
     }
 
@@ -4040,17 +4043,17 @@ int hash_name( char *string ) {
 **
 ** @param [r] name [char*] database name
 **
-** @return [int] 1 for success
+** @return [ajint] 1 for success
 ** @@
 ******************************************************************************/
 
-int compile_embl_index( char *name ) {
+ajint compile_embl_index( char *name ) {
 
   char buf[256];
   FILE *datafile, *indexfile;
   char sname[256];
-  int c;
-  unsigned long n, offset, state=-1;
+  ajint c;
+  ajulong n, offset, state=-1;
 
   datafile = openfile_in_seqpath( name, "dat", "r", buf);
   indexfile = openfile_in_seqpath( name, "index", "w", buf);
@@ -4105,8 +4108,8 @@ void compile_fasta_index( char *name ) {
   char buf[256];
   FILE *datafile, *indexfile;
   char sname[256];
-  int c;
-  unsigned long n, offset, state=-1;
+  ajint c;
+  ajulong n, offset, state=-1;
 
   datafile = openfile_in_seqpath( name, "fasta", "r", buf);
   indexfile = openfile_in_seqpath( name, "index", "w", buf);
@@ -4158,8 +4161,8 @@ void compile_nbrf_index( char *name ) {
   char buf[256];
   FILE *datafile, *textfile, *indexfile;
   char name1[256], name2[256];
-  unsigned long c, d;
-  unsigned long n;
+  ajulong c, d;
+  ajulong n;
 
   datafile = openfile_in_seqpath( name, "seq", "r",buf);
   textfile = openfile_in_seqpath( name, "ref", "r",buf);
@@ -4202,14 +4205,14 @@ void compile_nbrf_index( char *name ) {
 ** @param [r] fp [FILE*] Input file
 ** @param [r] text [char*] String to find
 **
-** @return [unsigned long] Offset at start of line
+** @return [ajulong] Offset at start of line
 ** @@
 ******************************************************************************/
 
-unsigned long seekto( FILE *fp, char *text ) {
+ajulong seekto( FILE *fp, char *text ) {
 
-  unsigned long p;
-  int c;
+  ajulong p;
+  ajint c;
   char *s;
 
   while(1) {
@@ -4294,8 +4297,8 @@ FILE* which_file_of_sequences( char *filename ) {
 
   static char *filenames[100];
   static FILE *fp[100];
-  static int files;
-  int n;
+  static ajint files;
+  ajint n;
 
   if ( *filename != '@' )
     return NULL;
@@ -4358,7 +4361,7 @@ SEQUENCE* next_seq_from_database_spec( char *spec ) {
 
   char wild[256], line[256], name[256];
   DATABASE *db = is_sequence_spec( spec, wild );
-  int len = strlen(wild);
+  ajint len = strlen(wild);
 
   while( read_line( db->indexfile, line ) != EOF ) {
     (void) sscanf( line, "%s", name );
@@ -4464,12 +4467,12 @@ SEQUENCE* next_seq ( char *spec_or_file ) {
 
 /*main(argc, argv)
 
-int argc;
+ajint argc;
 char **argv;
 {
   DATABASE *db;
   SEQUENCE *seq;
-  int n=2;
+  ajint n=2;
   char spec[256];
 
   while ( seq = next_seq_from_database_spec( argv[1] ) )
@@ -4495,7 +4498,7 @@ static char *complement_table;
 char complement_base( char c ) {
 
   if ( !complement_table) {
-    int x;
+    ajint x;
     AJCNEW0 (complement_table, 256);
 
     complement_table += 127;	/* start in the middle :-) */
@@ -4522,10 +4525,10 @@ char complement_base( char c ) {
     }
   }
 
-  if ( isupper((int) c) ) {
-    return ajSysItoC(toupper((int) complement_table[tolower((int) c)]));
+  if ( isupper((ajint) c) ) {
+    return ajSysItoC(toupper((ajint) complement_table[tolower((ajint) c)]));
   }
-  return complement_table[tolower((int) c)];
+  return complement_table[tolower((ajint) c)];
 }
 
 /* @func complement_seq ******************************************************
@@ -4570,19 +4573,19 @@ char* complement_seq( char *seq ) {
 ** If start and stop are out of range they are truncated
 **
 ** @param [r] seq [SEQUENCE*] Original sequence
-** @param [r] start [int] Start base
-** @param [r] stop [int] End base
+** @param [r] start [ajint] Start base
+** @param [r] stop [ajint] End base
 **
 ** @return [SEQUENCE*] sub sequence
 ** @@
 ******************************************************************************/
 
-SEQUENCE* subseq( SEQUENCE *seq, int start, int stop ) {
+SEQUENCE* subseq( SEQUENCE *seq, ajint start, ajint stop ) {
 
   SEQUENCE *subs = seqdup(seq);
   static char *s;
-  int i;
-  int reverse;
+  ajint i;
+  ajint reverse;
 
   if ( start > stop ) {
     reverse = 1;
@@ -4630,7 +4633,7 @@ char* downcase(char *s) {
 
   char *t = s;
   while (*s) {
-    *s = ajSysItoC(tolower((int) *s));
+    *s = ajSysItoC(tolower((ajint) *s));
     s++;
   }
   return t;
@@ -4650,7 +4653,7 @@ char* upcase(char *s) {
 
   char *t = s;
   while (*s) {
-    *s = ajSysItoC(toupper((int) *s));
+    *s = ajSysItoC(toupper((ajint) *s));
     s++;
   }
   return t;
@@ -4671,7 +4674,7 @@ char* clean_line(char *s) {
   char *t = s;
 
   while(*s) {
-    if ( ! isprint((int)*s) )
+    if ( ! isprint((ajint)*s) )
       *s = ' ';
     s++;
   }
@@ -4690,7 +4693,7 @@ char* clean_line(char *s) {
 
 char* iubtoregexp( char *iubstring ) {
 
-  int len=strlen(iubstring);
+  ajint len=strlen(iubstring);
   char *s = iubstring;
   char *t, *r;
 
@@ -4713,16 +4716,16 @@ char* iubtoregexp( char *iubstring ) {
 **
 ** @param [r] iubstring [char*] Sequence string
 ** @param [w] regexp [char*] Regular expression
-** @param [r] maxlen [int] Maximum regular expression length
+** @param [r] maxlen [ajint] Maximum regular expression length
 **
 ** @return [char*]  converted string or NULL if it fails.
 ** @@
 ******************************************************************************/
 
-char* iub2regexp( char *iubstring, char *regexp, int maxlen ) {
+char* iub2regexp( char *iubstring, char *regexp, ajint maxlen ) {
 
   char *s, c;
-  int len=0;
+  ajint len=0;
 
   maxlen--;
   while(*iubstring && len < maxlen) {
@@ -4757,7 +4760,7 @@ char* iub2regexp( char *iubstring, char *regexp, int maxlen ) {
 char* iub_regexp (char c ) {
 
   static char *iub[256];
-  static int initialised;
+  static ajint initialised;
 
   if ( ! initialised ) {
     iub['r']= "[ag]";
@@ -4774,7 +4777,7 @@ char* iub_regexp (char c ) {
     initialised = 1;
   }
 
-  return iub[tolower((int) c)];
+  return iub[tolower((ajint) c)];
 }
 
 #define MAXSEQLEN 100000
@@ -4797,7 +4800,7 @@ SEQUENCE* get_seq_from_file (char *filename) {
   char desc[256];
   char buf[MAXSEQLEN+1];
   char *s, *t;
-  int len;
+  ajint len;
 
   if ( (fp=openfile( filename, "r" )) ) {
     AJNEW0 (seq);
@@ -4812,8 +4815,8 @@ SEQUENCE* get_seq_from_file (char *filename) {
     t = buf;
     len = 0;
     while ( *s ) {
-      if ( isalpha((int)*s) ) {
-	*t++ = ajSysItoC(tolower((int) *s));
+      if ( isalpha((ajint)*s) ) {
+	*t++ = ajSysItoC(tolower((ajint) *s));
 	len++;
       }
       s++;
@@ -4901,11 +4904,11 @@ SEQUENCE* into_sequence( char *name, char *desc, char *s ) {
 ** @param [r] a [const void*] First value
 ** @param [r] b [const void*] Second value
 **
-** @return [int] comparison value.
+** @return [ajint] comparison value.
 ** @@
 ******************************************************************************/
 
-int kv_cmp ( const void *a, const void *b ) {
+ajint kv_cmp ( const void *a, const void *b ) {
 
   key_value *ka, *kb;
   ka = (key_value *) a;
@@ -4920,14 +4923,14 @@ int kv_cmp ( const void *a, const void *b ) {
 ** Shuffle the sequence.
 **
 ** @param [r] seq [SEQUENCE*] Original sequence
-** @param [r] in_place [int] Boolean 1=shuffle in place
+** @param [r] in_place [ajint] Boolean 1=shuffle in place
 ** @param [r] seed [int*] Random number seed.
 **
 ** @return [SEQUENCE*] shuffled sequence.
 ** @@
 ******************************************************************************/
 
-SEQUENCE* shuffle_seq( SEQUENCE *seq, int in_place, int *seed ) {
+SEQUENCE* shuffle_seq( SEQUENCE *seq, ajint in_place, ajint *seed ) {
 
   SEQUENCE *shuffled;
   if ( ! in_place )
@@ -4970,13 +4973,13 @@ SEQUENCE* shuffle_seq( SEQUENCE *seq, int in_place, int *seed ) {
 ** @@
 ******************************************************************************/
 
-char* shuffle_s( char *s, int *seed ) {
+char* shuffle_s( char *s, ajint *seed ) {
 
 /* in-place shuffle of a string */
 
   key_value *tmp;
-  int n;
-  int len = strlen(s);
+  ajint n;
+  ajint len = strlen(s);
 
   AJCNEW (tmp, len);
 

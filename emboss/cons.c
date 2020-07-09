@@ -38,16 +38,16 @@
 
 
 void calc_consensus(AjPSeqset seqset,AjPMatrix cmpmatrix,
-                    int nseqs, int mlen, float fplural, float setcase, 
-                    int identity, AjPStr *cons);
+                    ajint nseqs, ajint mlen, float fplural, float setcase, 
+                    ajint identity, AjPStr *cons);
 
 
-int main (int argc, char * argv[])
+int main(int argc, char **argv)
 {
-    int   nseqs;
-    int   mlen;
-    int   i;
-    int   identity;
+    ajint   nseqs;
+    ajint   mlen;
+    ajint   i;
+    ajint   identity;
     float fplural;
     float setcase;
     char  *p;
@@ -104,19 +104,19 @@ int main (int argc, char * argv[])
 }
 
 void calc_consensus(AjPSeqset seqset,AjPMatrix cmpmatrix,
-                    int nseqs,int mlen,float fplural,float setcase,
-                    int identity, AjPStr *cons)
+                    ajint nseqs,int mlen,float fplural,float setcase,
+                    ajint identity, AjPStr *cons)
 {
-    int   i; 
-    int   j; 
-    int   k;
-    int   **matrix;
-    int   m1=0;
-    int   m2=0;
-    int   highindex;
-    int   matsize;
-    int   matchingmaxindex;
-    int   identicalmaxindex;
+    ajint   i; 
+    ajint   j; 
+    ajint   k;
+    ajint   **matrix;
+    ajint   m1=0;
+    ajint   m2=0;
+    ajint   highindex;
+    ajint   matsize;
+    ajint   matchingmaxindex;
+    ajint   identicalmaxindex;
 
     float max;
     float contri=0;

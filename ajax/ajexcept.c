@@ -36,13 +36,13 @@ const Except_T Assert_Failed = { "Assertion failed" };
 **
 ** @param [r] e [const T*] Exception code
 ** @param [r] file [const char*] file exceptions called from
-** @param [r] line [int] line number exception called from
+** @param [r] line [ajint] line number exception called from
 ** @return [void]
 ** @@
 **********************************************************************/
 
 void ajExceptRaise(const T* e, const char* file,
-	int line) {
+	ajint line) {
 	Except_Frame *p = Except_stack;
 	assert(e);
 	if (p == NULL) {

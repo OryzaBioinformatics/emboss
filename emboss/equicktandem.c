@@ -22,12 +22,12 @@ static AjPSeqCvt cvt;
 static void report (AjPFile outf);
 char *back, *front, *maxback=NULL, *maxfront=NULL;
 char* sq;
-int gap, max, score ;
+ajint gap, max, score ;
 
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
-  int thresh;
-  int maxrepeat;
+  ajint thresh;
+  ajint maxrepeat;
   AjPSeq sequence = NULL ;
   AjPStr tseq = NULL;
 

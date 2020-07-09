@@ -32,15 +32,27 @@ appl: abiview [
   ]
 
   bool: yticks [
-        req: N
+        opt: Y
         def: N
         info: "Display y-axis ticks"
   ]
 
+  bool: sequence [
+        opt: Y
+        def: Y
+        info: "Display the sequence on the graph"
+  ]
+
   int: window [ 
-	opt: N 
+	opt: Y 
 	def: 40 
 	info: "Sequence display window size" 
+  ]
+
+  string: bases [
+        opt: Y
+        def: "GATC"
+        info: "Base graphs to be displayed"
   ]
 
 

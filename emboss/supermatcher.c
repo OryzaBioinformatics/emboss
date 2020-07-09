@@ -12,20 +12,20 @@
 #include <math.h>
 
 typedef struct concatS {
-  int offset;
-  int count;
-  int total;
+  ajint offset;
+  ajint count;
+  ajint total;
   AjPList list;
 } concat;
 
 concat *conmax = NULL;
-int maxgap = 0;
+ajint maxgap = 0;
 
 
 static void matchListOrder(void **x,void *cl) {
   EmbPWordMatch p = (EmbPWordMatch)*x;
   AjPList ordered = (AjPList) cl;
-  int offset;
+  ajint offset;
   AjIList listIter;
   concat *con,*c=NULL;
 
@@ -75,7 +75,7 @@ static void removelists(void **x,void *cl) {
 
 static void findmax(void **x,void *cl) {
   concat *p = (concat *)*x;
-  int *max = (int *) cl;
+  ajint *max = (ajint *) cl;
 
   if(p->total > *max){
     *max = p->total; 
@@ -84,13 +84,13 @@ static void findmax(void **x,void *cl) {
 
 }
 
-static int findstartpoints(AjPTable *seq1MatchTable,AjPSeq b,AjPSeq a,
-			   int *start1,int *start2,int *end1,int *end2,
-			   int width){
-  int hwidth=0,max=-10,offset=0;
+static ajint findstartpoints(AjPTable *seq1MatchTable,AjPSeq b,AjPSeq a,
+			   ajint *start1,int *start2,int *end1,int *end2,
+			   ajint width){
+  ajint hwidth=0,max=-10,offset=0;
   AjPList matchlist = NULL,ordered=NULL;
-  int amax=ajSeqLen(a)-1;
-  int bmax =ajSeqLen(b)-1;
+  ajint amax=ajSeqLen(a)-1;
+  ajint bmax =ajSeqLen(b)-1;
   ajDebug ("findstartpoints len %d %d\n", amax, bmax);
   matchlist = embWordBuildMatchTable(seq1MatchTable, b, ajTrue);
   
@@ -115,7 +115,7 @@ static int findstartpoints(AjPTable *seq1MatchTable,AjPSeq b,AjPSeq a,
   embWordMatchListDelete(matchlist); /* free the match structures */
   
   
-  hwidth = (int) width/2;
+  hwidth = (ajint) width/2;
   
   offset+=hwidth;
 
@@ -153,8 +153,8 @@ int main(int argc, char **argv)
     AjPFile outf,errorf;
     AjBool show,scoreonly, showalign;
     
-    int    lena=0;
-    int    lenb=0;
+    ajint    lena=0;
+    ajint    lenb=0;
 
     char   *p;
     char   *q;
@@ -162,7 +162,7 @@ int main(int argc, char **argv)
     AjPMatrixf matrix;
     AjPSeqCvt  cvt=0;
     float      **sub;
-    int      *compass=0;
+    ajint      *compass=0;
     float      *path=0;
 
     float gapopen;
@@ -170,12 +170,12 @@ int main(int argc, char **argv)
     float score;
 
 
-    int begina,i,k;
-    int beginb;
-    int start1=0,start2=0,end1=0,end2=0,width=0;
+    ajint begina,i,k;
+    ajint beginb;
+    ajint start1=0,start2=0,end1=0,end2=0,width=0;
     AjPTable seq1MatchTable =0 ;
-    int wordlen=6;
-    int oldmax = 0;
+    ajint wordlen=6;
+    ajint oldmax = 0;
 
     embInit("supermatcher", argc, argv);
 
@@ -239,7 +239,7 @@ int main(int argc, char **argv)
 	  if(!findstartpoints(&seq1MatchTable,b,a,&start1,&start2,
 			      &end1,&end2,width)){
 	    start1 =0; end1= lena-1;
-	    start2 = (int)(width/2); end2= lenb-1;
+	    start2 = (ajint)(width/2); end2= lenb-1;
 	    ajFmtPrintF(errorf,
 			"Could not find suitable start points for %s vs %s. Therefore ignoring\n",
 			ajSeqName(a),ajSeqName(b));
@@ -248,7 +248,7 @@ int main(int argc, char **argv)
 	  if(end1-start1 > oldmax){
 	    oldmax = ((end1-start1)+1)*width;
 	    AJRESIZE(path,oldmax*width*sizeof(float));
-	    AJRESIZE(compass,oldmax*width*sizeof(int));
+	    AJRESIZE(compass,oldmax*width*sizeof(ajint));
 	  }
 	  for(i=0;i<((end1-start1)+1)*width;i++)
 	    path[i] = 0.0;

@@ -70,7 +70,7 @@ static AjBool dataListNextLine( AjPFile pfile, char *commentLine,
 /*read routine to get the next line of data from the file. This is a private*/
 /*routine. It is called from ajGenReadData*/
 
-   int i;
+   ajint i;
    AjBool test;
 
    test = ajFileReadLine( pfile, line);
@@ -225,7 +225,7 @@ void embDataListInit( AjPList data, AjPStr file_name)
 ** @param [r] fullList [AjPList] The list containing all the tables of data
 ** @param [w] returnList [AjPList] The new list containing just the tables
 **        requested
-** @param [r] required [unsigned int] used to request tables. A value of 1 
+** @param [r] required [ajuint] used to request tables. A value of 1 
 **        requests the first table, a value of 16 requests the fifth table, 
 **        a value of 14 returns the second third and fourth tables in the 
 **        original list.
@@ -234,7 +234,7 @@ void embDataListInit( AjPList data, AjPStr file_name)
 ** @@
 ******************************************************************************/
 void embDataListGetTables( AjPList fullList, AjPList returnList,
-				 unsigned int required)
+			   ajuint required)
 {
 
 /*This is a public routine to return a list of data tables requested by the*/
@@ -271,14 +271,14 @@ void embDataListGetTables( AjPList fullList, AjPList returnList,
 ** a value of 66 would request the second table (not the seventh)
 **
 ** @param [r] fullList [AjPList] The list containing all the tables of data
-** @param [r] required [unsigned int] used to request a table. A value of 1 
+** @param [r] required [ajuint] used to request a table. A value of 1 
 **        requests the first table, a value of 16 requests the fifth table, 
 **        a value of 14 returns the second table in the original list.
 ** @return [AjPTable] the data table. Key and value are stored as AjPStrs
 **
 ** @@
 ******************************************************************************/
-AjPTable embDataListGetTable( AjPList fullList, unsigned int required)
+AjPTable embDataListGetTable( AjPList fullList, ajuint required)
 {
 
 /*This is a public routine to return a single table of data from a list of*/

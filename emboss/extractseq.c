@@ -25,7 +25,8 @@
 
 #include "emboss.h"
 
-int main (int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
 
   AjPSeqall seqall;
   AjPSeqout seqout;
@@ -34,10 +35,10 @@ int main (int argc, char * argv[]) {
   AjPStr newstr=NULL;
   AjBool separate;
   AjPList strlist;
-  int nr;
-  int i;
-  int st;
-  int en;
+  ajint nr;
+  ajint i;
+  ajint st;
+  ajint en;
   AjPStr str;
   AjPStr name = NULL;	/* new name of the sequence */
   AjPStr value = NULL;	/* string value of start or end position */

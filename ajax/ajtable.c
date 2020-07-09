@@ -36,10 +36,10 @@
 #include "ajstr.h"
 #include "ajmess.h"
 
-static int cmpatom(const void *x, const void *y) {
+static ajint cmpatom(const void *x, const void *y) {
 	return x != y;
 }
-static unsigned hashatom(const void *key, unsigned hashsize) {
+static ajuint hashatom(const void *key, ajuint hashsize) {
 	return ((unsigned long)key>>2) % hashsize;
 }
 
@@ -53,9 +53,9 @@ static void tableStrDel (const void* key, void** value, void* cl);
 ** arbitrary number of key-value pairs. NOTE if cmp=null or hash = null
 ** ajTableNew uses a function suitable for ajAtom Keys.
 ** 
-** @param [r] hint [int] estimate of number of base pairs
-** @param [fN] cmp  [int function] function for comparing
-** @param [fN] hash [unsigned function] function for hashing keys
+** @param [r] hint [ajint] estimate of number of base pairs
+** @param [fN] cmp  [ajint function] function for comparing
+** @param [fN] hash [ajuint function] function for hashing keys
 **
 ** @return [AjPTable] new table.
 **
@@ -63,12 +63,12 @@ static void tableStrDel (const void* key, void** value, void* cl);
 **
 ************************************************************************/
 
-AjPTable ajTableNew(int hint,
-	int cmp(const void *x, const void *y),
-	unsigned hash(const void *key, unsigned hashsize)) {
+AjPTable ajTableNew(ajint hint,
+	ajint cmp(const void *x, const void *y),
+	ajuint hash(const void *key, ajuint hashsize)) {
 	AjPTable table;
-	int i;
-	static int primes[] = { 509, 509, 1021, 2053, 4093,
+	ajint i;
+	static ajint primes[] = { 509, 509, 1021, 2053, 4093,
 		8191, 16381, 32771, 65521, INT_MAX };
 	assert(hint >= 0);
 	for (i = 1; primes[i] < hint; i++)
@@ -100,7 +100,7 @@ AjPTable ajTableNew(int hint,
 
 void * ajTableGet(AjPTable table, const void *key) {
 
-  int i;
+  ajint i;
   struct binding *p;
 
   assert(table);
@@ -126,9 +126,9 @@ void * ajTableGet(AjPTable table, const void *key) {
 
 void ajTableTrace (AjPTable table) {
 
-  int i;
-  int j;
-  int k=0;
+  ajint i;
+  ajint j;
+  ajint k=0;
   struct binding *p;
 
   assert(table);
@@ -167,7 +167,7 @@ void ajTableTrace (AjPTable table) {
 
 void * ajTablePut(AjPTable table, const void *key, void *value) {
 
-  int i;
+  ajint i;
   struct binding *p;
   void *prev;
 
@@ -202,11 +202,11 @@ void * ajTablePut(AjPTable table, const void *key, void *value) {
 ** returns the number of key-value pairs in table.
 **
 ** @param [r] table [AjPTable] Table to be applied.
-** @return [int] number of key-value pairs.
+** @return [ajint] number of key-value pairs.
 ** @@
 ***************************************************************************/
 
-int ajTableLength(AjPTable table) {
+ajint ajTableLength(AjPTable table) {
 
   assert(table);
 
@@ -229,8 +229,8 @@ void ajTableMap(AjPTable table,
 	void apply(const void *key, void **value, void *cl),
 	void *cl) {
 
-  int i;
-  unsigned stamp;
+  ajint i;
+  ajuint stamp;
   struct binding *p;
 
   assert(table);
@@ -262,7 +262,7 @@ void ajTableMap(AjPTable table,
 
 void * ajTableRemove(AjPTable table, const void *key) {
 
-  int i;
+  ajint i;
   struct binding **pp;
 
   assert(table);
@@ -299,7 +299,7 @@ void * ajTableRemove(AjPTable table, const void *key) {
 ***************************************************************************/
 
 void ** ajTableToarray(AjPTable table, void *end) {
-  int i, j = 0;
+  ajint i, j = 0;
   void **array;
   struct binding *p;
 
@@ -331,7 +331,7 @@ void ajTableFree(AjPTable* table) {
   assert(table && *table);
 
   if ((*table)->length > 0) {
-    int i;
+    ajint i;
     struct binding *p, *q;
     for (i = 0; i < (*table)->size; i++) {
       for (p = (*table)->buckets[i]; p; p = q) {
@@ -357,12 +357,12 @@ void ajTableFree(AjPTable* table) {
 **
 ** Creates a table with a character string key and case insensitive searching.
 **
-** @param [r] hint [int] Hash size estimate.
+** @param [r] hint [ajint] Hash size estimate.
 ** @return [AjPTable] New table object with a character string key.
 ** @@
 ******************************************************************************/
 
-AjPTable ajStrTableNewCaseC (int hint) {
+AjPTable ajStrTableNewCaseC (ajint hint) {
   return ajTableNew (hint, ajStrTableCmpCaseC, ajStrTableHashCaseC);
 }
 
@@ -370,12 +370,12 @@ AjPTable ajStrTableNewCaseC (int hint) {
 **
 ** Creates a table with a string key and case insensitive searching.
 **
-** @param [r] hint [int] Hash size estimate.
+** @param [r] hint [ajint] Hash size estimate.
 ** @return [AjPTable] New table object with a string key.
 ** @@
 ******************************************************************************/
 
-AjPTable ajStrTableNewCase (int hint) {
+AjPTable ajStrTableNewCase (ajint hint) {
   return ajTableNew (hint, ajStrTableCmpCase, ajStrTableHashCase);
 }
 
@@ -383,12 +383,12 @@ AjPTable ajStrTableNewCase (int hint) {
 **
 ** Creates a table with a character string key.
 **
-** @param [r] hint [int] Hash size estimate.
+** @param [r] hint [ajint] Hash size estimate.
 ** @return [AjPTable] New table object with a character string key.
 ** @@
 ******************************************************************************/
 
-AjPTable ajStrTableNewC (int hint) {
+AjPTable ajStrTableNewC (ajint hint) {
   return ajTableNew (hint, ajStrTableCmpC, ajStrTableHashC);
 }
 
@@ -396,12 +396,12 @@ AjPTable ajStrTableNewC (int hint) {
 **
 ** Creates a table with a string key
 **
-** @param [r] hint [int] Hash size estimate.
+** @param [r] hint [ajint] Hash size estimate.
 ** @return [AjPTable] New table object with a string key.
 ** @@
 ******************************************************************************/
 
-AjPTable ajStrTableNew (int hint) {
+AjPTable ajStrTableNew (ajint hint) {
   return ajTableNew (hint, ajStrTableCmp, ajStrTableHash);
 }
 
@@ -411,17 +411,17 @@ AjPTable ajStrTableNew (int hint) {
 ** case insensitivity.
 **
 ** @param [P] key [const void*] Standard argument. Table key.
-** @param [r] hashsize [unsigned int] Standard argument. Estimated Hash size.
-** @return [unsigned int] Hash value.
+** @param [r] hashsize [ajuint] Standard argument. Estimated Hash size.
+** @return [ajuint] Hash value.
 ** @@
 ******************************************************************************/
 
-unsigned int ajStrTableHashCaseC (const void* key, unsigned int hashsize) {
-  unsigned int hash;
+ajuint ajStrTableHashCaseC (const void* key, ajuint hashsize) {
+  ajuint hash;
   char* s = (char*) key;
 
   for (hash = 0; *s; s++) {
-    hash = (hash * 127 + toupper((int)*s)) % hashsize;
+    hash = (hash * 127 + toupper((ajint)*s)) % hashsize;
   }
 
   return hash;
@@ -433,19 +433,19 @@ unsigned int ajStrTableHashCaseC (const void* key, unsigned int hashsize) {
 ** case insensitivity.
 **
 ** @param [P] key [const void*] Standard argument. Table key.
-** @param [r] hashsize [unsigned int] Standard argument. Estimated Hash size.
-** @return [unsigned int] Hash value.
+** @param [r] hashsize [ajuint] Standard argument. Estimated Hash size.
+** @return [ajuint] Hash value.
 ** @@
 ******************************************************************************/
 
-unsigned int ajStrTableHashCase (const void* key, unsigned int hashsize) {
+ajuint ajStrTableHashCase (const void* key, ajuint hashsize) {
   AjPStr str = (AjPStr) key;
   char* s = ajStrStr(str);
 
-  unsigned int hash;
+  ajuint hash;
 
   for (hash = 0; *s; s++) {
-    hash = (hash * 127 + toupper((int)*s)) % hashsize;
+    hash = (hash * 127 + toupper((ajint)*s)) % hashsize;
   }
 
   return hash;
@@ -456,13 +456,13 @@ unsigned int ajStrTableHashCase (const void* key, unsigned int hashsize) {
 ** Hash function for a table with a character string key
 **
 ** @param [P] key [const void*] Standard argument. Table key.
-** @param [r] hashsize [unsigned int] Standard argument. Estimated Hash size.
-** @return [unsigned int] Hash value.
+** @param [r] hashsize [ajuint] Standard argument. Estimated Hash size.
+** @return [ajuint] Hash value.
 ** @@
 ******************************************************************************/
 
-unsigned int ajStrTableHashC (const void* key, unsigned int hashsize) {
-  unsigned int hash;
+ajuint ajStrTableHashC (const void* key, ajuint hashsize) {
+  ajuint hash;
   char* s = (char*) key;
 
   for (hash = 0; *s; s++) {
@@ -477,16 +477,16 @@ unsigned int ajStrTableHashC (const void* key, unsigned int hashsize) {
 ** Hash function for a table with a string key
 **
 ** @param [P] key [const void*] Standard argument. Table key.
-** @param [r] hashsize [unsigned int] Standard argument. Estimated Hash size.
-** @return [unsigned int] Hash value.
+** @param [r] hashsize [ajuint] Standard argument. Estimated Hash size.
+** @return [ajuint] Hash value.
 ** @@
 ******************************************************************************/
 
-unsigned int ajStrTableHash (const void* key, unsigned int hashsize) {
+ajuint ajStrTableHash (const void* key, ajuint hashsize) {
   AjPStr str = (AjPStr) key;
   char* s = ajStrStr(str);
 
-  unsigned int hash;
+  ajuint hash;
 
   for (hash = 0; *s; s++) {
     hash = (hash * 127 + *s) % hashsize;
@@ -502,16 +502,16 @@ unsigned int ajStrTableHash (const void* key, unsigned int hashsize) {
 **
 ** @param [P] x [const void*] Standard argument. Item value.
 ** @param [P] y [const void*] Standard argument. Comparison item value.
-** @return [int] Comparison result. 0 if equal, +1 if x is higher.
+** @return [ajint] Comparison result. 0 if equal, +1 if x is higher.
 **               -1 if x is lower.
 ** @@
 ******************************************************************************/
 
-int ajStrTableCmpCaseC (const void* x, const void* y) {
+ajint ajStrTableCmpCaseC (const void* x, const void* y) {
   char* sx = (char*) x;
   char* sy = (char*) y;
 
-  return ajStrCmpCaseCC (sx, sy);
+  return (ajint)ajStrCmpCaseCC (sx, sy);
 }
 
 /* @func ajStrTableCmpCase **************************************************
@@ -521,16 +521,16 @@ int ajStrTableCmpCaseC (const void* x, const void* y) {
 **
 ** @param [P] x [const void*] Standard argument. Item value.
 ** @param [P] y [const void*] Standard argument. Comparison item value.
-** @return [int] Comparison result. 0 if equal, +1 if x is higher.
+** @return [ajint] Comparison result. 0 if equal, +1 if x is higher.
 **               -1 if x is lower.
 ** @@
 ******************************************************************************/
 
-int ajStrTableCmpCase (const void* x, const void* y) {
+ajint ajStrTableCmpCase (const void* x, const void* y) {
   AjPStr sx = (AjPStr) x;
   AjPStr sy = (AjPStr) y;
 
-  return ajStrCmpCase (sx, sy);
+  return (ajint)ajStrCmpCase (sx, sy);
 }
 
 /* @func ajStrTableCmpC ******************************************************
@@ -539,16 +539,16 @@ int ajStrTableCmpCase (const void* x, const void* y) {
 **
 ** @param [P] x [const void*] Standard argument. Item value.
 ** @param [P] y [const void*] Standard argument. Comparison item value.
-** @return [int] Comparison result. 0 if equal, +1 if x is higher.
+** @return [ajint] Comparison result. 0 if equal, +1 if x is higher.
 **               -1 if x is lower.
 ** @@
 ******************************************************************************/
 
-int ajStrTableCmpC (const void* x, const void* y) {
+ajint ajStrTableCmpC (const void* x, const void* y) {
   char* sx = (char*) x;
   char* sy = (char*) y;
 
-  return strcmp (sx, sy);
+  return (ajint)strcmp (sx, sy);
 }
 
 /* @func ajStrTableCmp ******************************************************
@@ -557,16 +557,16 @@ int ajStrTableCmpC (const void* x, const void* y) {
 **
 ** @param [P] x [const void*] Standard argument. Item value.
 ** @param [P] y [const void*] Standard argument. Comparison item value.
-** @return [int] Comparison result. 0 if equal, +1 if x is higher.
+** @return [ajint] Comparison result. 0 if equal, +1 if x is higher.
 **               -1 if x is lower.
 ** @@
 ******************************************************************************/
 
-int ajStrTableCmp (const void* x, const void* y) {
+ajint ajStrTableCmp (const void* x, const void* y) {
   AjPStr sx = (AjPStr) x;
   AjPStr sy = (AjPStr) y;
 
-  return ajStrCmpO (sx, sy);
+  return (ajint)ajStrCmpO (sx, sy);
 }
 
 /* @func ajStrTablePrint ******************************************************

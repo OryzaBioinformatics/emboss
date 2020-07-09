@@ -1,7 +1,7 @@
 # recode application 
 #
 appl: recode [
-          doc: "Find and remove restriction sites but maintain the same translation"
+          doc: "Remove restriction sites but maintain the same translation"
           groups: "DNA: sequence features, restriction enzymes, site directed mutagenesis"
 ]
 

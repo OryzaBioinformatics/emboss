@@ -10,11 +10,16 @@ Function
    
 Description
 
-   dbigcg indexes a flat file database of one or more files, and builds
-   EMBL CD-ROM format index files. This format is used by the software on
-   the EMBL database CD-ROM distribution and by the Staden package in
-   addition to EMBOSS, and appears to be the most generally used and
-   publicly available index file format for these databases.
+   dbigcg indexes a GCG-format database of one or more files, and builds
+   EMBL CD-ROM format index files.
+   
+   A GCG-format database consists of *.seq and *.ref files - only the
+   *.seq files are used. The data in these is often compressed.
+   
+   The resulting index-file format is used by the software on the EMBL
+   database CD-ROM distribution and by the Staden package in addition to
+   EMBOSS, and appears to be the most generally used and publicly
+   available index file format for these databases.
    
 Usage
 
@@ -80,6 +85,10 @@ Command line arguments
    
 Input file format
 
+   dbigcg reads in a GCG-format database. A GCG-format database consists
+   of *.seq and *.ref files - only the *.seq files are used. The data in
+   these is often compressed.
+   
 Output file format
 
    dbigcg creates four index files. All are binary but with a simple
@@ -109,18 +118,32 @@ Output file format
        
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It exits with a status of 0 if no errors.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name        Description

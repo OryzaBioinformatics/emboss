@@ -40,7 +40,7 @@ AjPTable errorTable = 0;
 static jmp_buf *errorJmpBuf = 0 ;
 static jmp_buf *crashJmpBuf = 0 ;
 
-static int errorCount = 0 ;
+static ajint errorCount = 0 ;
 
 static char *messErrorFile;
 
@@ -135,13 +135,13 @@ static void messDump (char *message);
 typedef struct _MessErrorInfo {
   char *progname ;		/* Name of executable reporting error. */
   char *filename ;		/* Filename where error reported */
-  int line_num ;		/* line number of file where error
+  ajint line_num ;		/* line number of file where error
 				   reported. */
 } MessErrorInfo ;
 
 static MessErrorInfo messageG = {NULL, NULL, 0} ;
 
-static int messGetErrorLine(void) ;
+static ajint messGetErrorLine(void) ;
 static char *messGetErrorFile(void) ;
 static char *messGetErrorProgram(void) ;
 
@@ -385,11 +385,11 @@ static void messDump (char *message) {
 **
 ** Returns the number of times the error routines have been called.
 **
-** @return [int] Error function call count.
+** @return [ajint] Error function call count.
 ** @@
 ******************************************************************************/
 
-int ajMessErrorCount (void) {
+ajint ajMessErrorCount (void) {
   return errorCount ;
 }
 
@@ -673,9 +673,9 @@ void ajMessExit(char *format, ...) {
 
 void ajMessCrashFL (char *format, ...) {
   enum {MAXERRORS = 1} ;
-  static int internalErrors = 0 ;
+  static ajint internalErrors = 0 ;
   static char prefix[1024] ;
-  int rc ;
+  ajint rc ;
   char *mesg_buf = NULL ;
   va_list args ;
 
@@ -737,9 +737,9 @@ void ajMessCrashFL (char *format, ...) {
 
 void ajMessVCrashFL (char *format, va_list args) {
   enum {MAXERRORS = 1} ;
-  static int internalErrors = 0 ;
+  static ajint internalErrors = 0 ;
   static char prefix[1024] ;
-  int rc ;
+  ajint rc ;
   char *mesg_buf = NULL ;
 
   /* Check for recursive calls and abort if necessary. */
@@ -921,7 +921,7 @@ static char* messFormat(va_list args, char *format, char *prefix) {
 
   static char *new_buf = NULL ;
   char *buf_ptr ;
-  int num_bytes, prefix_len ;
+  ajint num_bytes, prefix_len ;
 
   /* Check arguments. */
 
@@ -1044,12 +1044,12 @@ void ajMessErrorInit (char *progname) {
 ** Invoked automatically by a macro (e.g. ajFatal) where needed.
 **
 ** @param [r] filename [char*] source filename, __FILE__
-** @param [r] line_num [int] source line number, __LINE__
+** @param [r] line_num [ajint] source line number, __LINE__
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajMessSetErr (char *filename, int line_num) {
+void ajMessSetErr (char *filename, ajint line_num) {
   
   assert(filename != NULL && line_num != 0) ;
     
@@ -1093,11 +1093,11 @@ static char* messGetErrorFile(void) {
 **
 ** Returns the stored error source line number.
 **
-** @return [int] Original source code line number
+** @return [ajint] Original source code line number
 ** @@
 ******************************************************************************/
 
-static int messGetErrorLine(void) {
+static ajint messGetErrorLine(void) {
   return(messageG.line_num) ;
 }  
 
@@ -1296,7 +1296,7 @@ void ajMessCrashCodeFL (char *code) {
 
 void ajMessCodesDelete (void) {
   void **array;
-  int i;
+  ajint i;
   
   if(!errorTable)
     return;
@@ -1330,8 +1330,8 @@ void ajMessCodesDelete (void) {
 
 void ajDebug (char* fmt, ...) {
   va_list args ;
-  static int debugset = 0;
-  static int depth = 0;
+  static ajint debugset = 0;
+  static ajint depth = 0;
 
   if (depth) {			/* recursive call, get out quick */
     if (fileDebugFile) {
@@ -1387,11 +1387,11 @@ FILE* ajDebugFile (void) {
 ** @param [w] pthis [AjPStr*] Buffer for the user response.
 ** @param [r] fmt [char*] Format string
 ** @param [v] [...] Variable argument list.
-** @return [int] Length of response string.
+** @return [ajint] Length of response string.
 ** @@
 ******************************************************************************/
 
-int ajUserGet (AjPStr* pthis, char* fmt, ...) {
+ajint ajUserGet (AjPStr* pthis, char* fmt, ...) {
   AjPStr thys;
   char *cp;
   va_list args ;

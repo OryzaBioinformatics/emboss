@@ -9,22 +9,22 @@
 AjBool overlap;
 
 typedef struct palindrome{
-   int forwardStart;
-   int forwardEnd;
-   int revStart;
-   int revEnd;
+   ajint forwardStart;
+   ajint forwardEnd;
+   ajint revStart;
+   ajint revEnd;
    struct palindrome *next;
 } *Palindrome;
 
-static Palindrome newPalindrome( int fstart, int fend, int rstart, int rend);
+static Palindrome newPalindrome( ajint fstart, ajint fend, ajint rstart, ajint rend);
 static AjBool palindromeAInB( Palindrome a, Palindrome b);
 static AjBool palindromeAOverB( Palindrome a, Palindrome b);
-static AjBool palindromeOver ( int astart, int aend, int bstart, int bend);
+static AjBool palindromeOver ( ajint astart, ajint aend, ajint bstart, ajint bend);
 static void printPalindrome( AjPFile outfile, AjPStr seq, Palindrome pal);
 static AjBool palindromeLonger( Palindrome a, Palindrome b );
 static void palindromeSwap ( Palindrome a, Palindrome b );
 
-static Palindrome newPalindrome( int fstart, int fend, int rstart, int rend) {
+static Palindrome newPalindrome( ajint fstart, ajint fend, ajint rstart, ajint rend) {
 
    Palindrome pal;
 
@@ -68,7 +68,7 @@ static AjBool palindromeAOverB( Palindrome a, Palindrome b) {
   return AJFALSE;
 }
 
-static AjBool palindromeOver( int astart, int aend, int bstart, int bend) {
+static AjBool palindromeOver( ajint astart, ajint aend, ajint bstart, ajint bend) {
   if (astart >= bstart && astart <= bend) return ajTrue;
   if (bstart >= astart && bstart <= aend) return ajTrue;
   return ajFalse;
@@ -92,7 +92,7 @@ static void palindromeSwap ( Palindrome a, Palindrome b ) {
 
 static void printPalindrome( AjPFile outfile, AjPStr seq, Palindrome pal) {
 
-   int i;
+   ajint i;
 
    ajFmtPrintF( outfile, "%-5d ", (pal->forwardStart+1));
    for (i = pal->forwardStart; i < pal->forwardEnd; i++) {
@@ -110,18 +110,19 @@ static void printPalindrome( AjPFile outfile, AjPStr seq, Palindrome pal) {
 
 }
 
-int main( int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
 
    AjPSeq sequence;
    AjPFile outfile;
-   int minLen, maxLen, /*minGap,*/ maxGap, beginPos, endPos, maxmismatches;
+   ajint minLen, maxLen, /*minGap,*/ maxGap, beginPos, endPos, maxmismatches;
 
    AjPStr seqstr = NULL;
-   int current, rev, count, gap;
+   ajint current, rev, count, gap;
 
-   int begin, end, mismatches, mismatchAtEnd;
-   int istart, iend;
-   int ic, ir;
+   ajint begin, end, mismatches, mismatchAtEnd;
+   ajint istart, iend;
+   ajint ic, ir;
 
    Palindrome pfirstpal = NULL;
    Palindrome plastpal = NULL;
@@ -197,7 +198,7 @@ int main( int argc, char * argv[]) {
          count -=mismatchAtEnd;
 	 gap = rev - current - count - count + 1;
 
-/* Find out if we have found reverse repeat long enough*/
+/* Find out if we have found reverse repeat ajlong enough*/
          if (count >= minLen && gap <= maxGap) {
 
 /*create new palindrome struct to hold new palindrome data*/ 

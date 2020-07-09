@@ -39,14 +39,14 @@ int main(int argc, char **argv)
     AjPGraph graph=NULL;
 
     float step;
-    int   amino=1;
+    ajint   amino=1;
 
     double H;
     double pH;
     double iep;
     
-    int    *c=NULL;
-    int    *op=NULL;
+    ajint    *c=NULL;
+    ajint    *op=NULL;
     double *K=NULL;
     double *pro=NULL;
     double sum;
@@ -60,11 +60,11 @@ int main(int argc, char **argv)
     float *ya=NULL;
     float minchg=0.0;
     float maxchg=0.0;
-    int   npoints;
-    int   k;
-    int   be;
-    int   en;
-    int   i;
+    ajint   npoints;
+    ajint   k;
+    ajint   be;
+    ajint   en;
+    ajint   i;
     
     (void) ajGraphInit("iep", argc, argv);
 
@@ -126,7 +126,7 @@ int main(int argc, char **argv)
 	}
 	if(doplot)
 	{
-	    npoints = (int) ((14.0-1.0)/(double)GSTEP) +1;
+	    npoints = (ajint) ((14.0-1.0)/(double)GSTEP) +1;
 	    AJCNEW (xa, npoints);
 	    AJCNEW (ya, npoints);
 	
@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 	    ajGraphxySetYStart(graph,minchg);
 	    ajGraphxySetYEnd(graph,maxchg);
 	    ajGraphxySetXRangeII(graph,1,14);
-	    ajGraphxySetYRangeII(graph,(int)minchg,(int)maxchg);
+	    ajGraphxySetYRangeII(graph,(ajint)minchg,(ajint)maxchg);
     
 	    ajGraphxyAddDataPtrPtr(phGraph,xa,ya);
 	    ajGraphxyReplaceGraph(graph,phGraph);

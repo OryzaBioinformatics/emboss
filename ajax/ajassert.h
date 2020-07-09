@@ -11,7 +11,7 @@ extern "C"
 #define assert(e) ((void)0)
 #else
 #include "ajexcept.h"
-extern void assert(int e);
+extern void assert(ajint e);
 #define assert(e) ((void)((e)||(AJRAISE(Assert_Failed),0)))
 #endif
 #endif

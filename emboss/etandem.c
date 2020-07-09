@@ -31,28 +31,28 @@
 #include "emboss.h"
 
 typedef struct cons {
-  int phase ;
-  int *tab ;
-  int *max ;
-  int start ;
-  int score ;
-  int bestScore ;
-  int ibest ;
-  int *bestMax ;
-  int repeat ; 
+  ajint phase ;
+  ajint *tab ;
+  ajint *max ;
+  ajint start ;
+  ajint score ;
+  ajint bestScore ;
+  ajint ibest ;
+  ajint *bestMax ;
+  ajint repeat ; 
   struct cons *next ;
 } *Cons ;
 
 AjPFile outfile;
 static struct cons rootStruct ;
 static Cons root = &rootStruct ;
-static int *ring ;
+static ajint *ring ;
 static char letter[5] = "acgtn" ;
 static AjBool mismatch = AJFALSE ;
 static AjBool uniform = AJFALSE ;
-static int thresh = 20 ;
-static int nbase;
-static int nmin, nmax;
+static ajint thresh = 20 ;
+static ajint nbase;
+static ajint nmin, nmax;
 static AjPSeqCvt cvt;
 
 static Cons consCreate (void);
@@ -65,7 +65,7 @@ static void finalReport (void);
 
 /***************************/
 
-static int nCons = 0 ;
+static ajint nCons = 0 ;
 
 static Cons consCreate (void) {
   static Cons res;
@@ -94,7 +94,7 @@ static struct cons reportRootStruct ;
 static Cons reportRoot = &reportRootStruct ;
 
 static void basicReport (Cons a) {
-  int j, copies, n = a->repeat ;
+  ajint j, copies, n = a->repeat ;
   float perc ;
 
   ajDebug("basicReport\n");
@@ -120,8 +120,8 @@ static void basicReport (Cons a) {
 }
 
 static void report (Cons a) { 
-  int j ;
-  int firstchar ;
+  ajint j ;
+  ajint firstchar ;
   
   if (a->bestScore >= thresh) {
     if (uniform)
@@ -144,7 +144,7 @@ static void report (Cons a) {
 }
 
 static void finalReport (void) {
-  int start, end ; 
+  ajint start, end ; 
   Cons a, top, olda ;
 
   ajDebug ("finalReport\n");
@@ -172,12 +172,13 @@ static void finalReport (void) {
 
 /**************************/
 
-int main (int argc, char *argv[]) {
+int main(int argc, char **argv)
+{
 
-  int ibase, base;
+  ajint ibase, base;
   char *cp ;
   AjPSeq sequence = NULL ;
-  int i, j, x, phase, n ;
+  ajint i, j, x, phase, n ;
   Cons new, a, b, olda, oldb ;
   AjPStr nseq = NULL;
 

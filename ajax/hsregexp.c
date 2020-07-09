@@ -127,9 +127,9 @@ static const char* statexp;
  */
 struct comp {
 	char *regparse;		/* Input-scan pointer. */
-	int regnpar;		/* () count. */
+	ajint regnpar;		/* () count. */
 	/* moved to avoid internal padding */
-	long regsize;		/* Code size. */ 
+	ajlong regsize;		/* Code size. */ 
 	char *regcode;		/* Code-emit pointer; &regdummy = don't. */
 	char regdummy[3];	/* NOTHING, 0 next ptr */
 };
@@ -138,10 +138,10 @@ struct comp {
 /*
  * Forward declarations for hsregcomp()'s friends.
  */
-static char *reg(struct comp *cp, int paren, int *flagp);
-static char *regbranch(struct comp *cp, int *flagp);
-static char *regpiece(struct comp *cp, int *flagp);
-static char *regatom(struct comp *cp, int *flagp);
+static char *reg(struct comp *cp, ajint paren, ajint *flagp);
+static char *regbranch(struct comp *cp, ajint *flagp);
+static char *regpiece(struct comp *cp, ajint *flagp);
+static char *regatom(struct comp *cp, ajint *flagp);
 static char *regnext(char *node);
 static void regtail(struct comp *cp, char *p, char *val);
 static void regoptail(struct comp *cp, char *p, char *val);
@@ -171,7 +171,7 @@ regexp * hsregcomp(const char *exp)
 {
     register regexp *r;
     register char *scan;
-    int flags;
+    ajint flags;
     struct comp co;
 
     statexp = exp;
@@ -242,7 +242,7 @@ regexp * hsregcomp(const char *exp)
 		    len = strlen(OPERAND(scan));
 		}
 	    r->regmust = longest;
-	    r->regmlen = (int)len;
+	    r->regmlen = (ajint)len;
 	}
     }
 
@@ -268,8 +268,8 @@ static char * reg(register struct comp *cp,int paren,int *flagp)
     register char *ret=NULL;
     register char *br;
     register char *ender;
-    register int parno=0;
-    int flags;
+    register ajint parno=0;
+    ajint flags;
 
     *flagp = HASWIDTH;			/* Tentatively. */
 
@@ -339,13 +339,13 @@ static char * reg(register struct comp *cp,int paren,int *flagp)
  *
  * Implements the concatenation operator.
  */
-static char * regbranch( register struct comp *cp, int *flagp)
+static char * regbranch( register struct comp *cp, ajint *flagp)
 {
     register char *ret;
     register char *chain;
     register char *latest;
-    int flags;
-    register int c;
+    ajint flags;
+    register ajint c;
 
     *flagp = WORST;			/* Tentatively. */
 
@@ -383,12 +383,12 @@ static char * regbranch( register struct comp *cp, int *flagp)
  * endmarker role is not redundant.
  */
 
-static char * regpiece(register struct comp *cp, int *flagp)
+static char * regpiece(register struct comp *cp, ajint *flagp)
 {
     register char *ret;
     register char op;
     register char *next;
-    int flags;
+    ajint flags;
 
     ret = regatom(cp, &flags);
     if (ret == NULL)
@@ -459,10 +459,10 @@ static char * regpiece(register struct comp *cp, int *flagp)
  * separate node; the code is simpler that way and it's not worth fixing.
  */
 
-static char * regatom(register struct comp *cp, int *flagp)
+static char * regatom(register struct comp *cp, ajint *flagp)
 {
     register char *ret;
-    int flags;
+    ajint flags;
 
     *flagp = WORST;			/* Tentatively. */
 
@@ -480,9 +480,9 @@ static char * regatom(register struct comp *cp, int *flagp)
 	break;
     case '[':
 	{
-	    register int range;
-	    register int rangeend;
-	    register int c;
+	    register ajint range;
+	    register ajint rangeend;
+	    register ajint c;
 
 	    if (*cp->regparse == '^')
 	    {				/* Complement of range. */
@@ -506,7 +506,7 @@ static char * regatom(register struct comp *cp, int *flagp)
 		{
 		    range = (unsigned char)*(cp->regparse-2);
 		    /* What's this cast in here for???? rangeend and c are both register 
-		       int from about 10 lines up
+		       ajint from about 10 lines up
 		       rangeend = (unsigned char)c;*/
 		    rangeend = c;
 		    if (range > rangeend)
@@ -654,7 +654,7 @@ static void regtail(register struct comp *cp,char *p,char *val)
 {
     register char *scan;
     register char *temp;
-    register int offset;
+    register ajint offset;
 
     if (!EMITTING(cp))
 	return;
@@ -708,12 +708,12 @@ struct exec {
 /*
  * Forwards.
  */
-static int regtry(struct exec *ep, regexp *rp, char *string);
-static int regmatch(struct exec *ep, char *prog);
+static ajint regtry(struct exec *ep, regexp *rp, char *string);
+static ajint regmatch(struct exec *ep, char *prog);
 static size_t regrepeat(struct exec *ep, char *node);
 
 #ifdef DEBUG
-int regnarrate = 0;
+ajint regnarrate = 0;
 void regdump();
 static char *regprop();
 #endif
@@ -721,7 +721,7 @@ static char *regprop();
 /*
  - hsregexec - match a regexp against a string
  */
-int hsregexec(register regexp *prog,const char *str)
+ajint hsregexec(register regexp *prog,const char *str)
 {
     register char *string = (char *)str; /* avert const poisoning */
     register char *s;
@@ -783,9 +783,9 @@ int hsregexec(register regexp *prog,const char *str)
  - regtry - try match at specific point
  */
 			/* 0 failure, 1 success */
-static int regtry(register struct exec *ep,regexp *prog,char *string)
+static ajint regtry(register struct exec *ep,regexp *prog,char *string)
 {
-    register int i;
+    register ajint i;
     register char **stp;
     register char **enp;
 
@@ -823,7 +823,7 @@ static int regtry(register struct exec *ep,regexp *prog,char *string)
  * by recursion.
  */
 		/* 0 failure, 1 success */
-static int regmatch(register struct exec *ep, char *prog)
+static ajint regmatch(register struct exec *ep, char *prog)
 {
     register char *scan;		/* Current node. */
     char *next;				/* Next node. */
@@ -889,7 +889,7 @@ static int regmatch(register struct exec *ep, char *prog)
 	case OPEN+4: case OPEN+5: case OPEN+6:
 	case OPEN+7: case OPEN+8: case OPEN+9:
 	    {
-		register const int no = OP(scan) - OPEN;
+		register const ajint no = OP(scan) - OPEN;
 		register char *const input = ep->reginput;
 
 		if (regmatch(ep, next))
@@ -910,7 +910,7 @@ static int regmatch(register struct exec *ep, char *prog)
 	case CLOSE+4: case CLOSE+5: case CLOSE+6:
 	case CLOSE+7: case CLOSE+8: case CLOSE+9:
 	    {
-		register const int no = OP(scan) - CLOSE;
+		register const ajint no = OP(scan) - CLOSE;
 		register char *const input = ep->reginput;
 
 		if (regmatch(ep, next))
@@ -1035,7 +1035,7 @@ static size_t regrepeat(register struct exec *ep,char *node)
  */
 static char *regnext(register char *p)
 {
-    register const int offset = NEXT(p);
+    register const ajint offset = NEXT(p);
 
     if (offset == 0)
 	return(NULL);

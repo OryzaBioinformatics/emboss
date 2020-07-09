@@ -35,16 +35,16 @@ int main(int argc, char **argv)
     AjPGraphData fgraph=NULL;
     AjPStr     st=NULL;
     
-    int c;
-    int pos;
-    int end;
-    int step;
-    int window;
-    int t;
+    ajint c;
+    ajint pos;
+    ajint end;
+    ajint step;
+    ajint window;
+    ajint t;
 
-    int i;
-    int j;
-    int k;
+    ajint i;
+    ajint j;
+    ajint k;
     char *p;
     char *q;
     float f;
@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 	--pos;
 	--end;
 	t = pos;
-	while(t+window < end)
+	while(t+window <= end+1)
 	{
 	    ++c;
 	    t += step;
@@ -114,7 +114,7 @@ int main(int argc, char **argv)
 	    ajFmtPrintF(outf,"FREAK of %s from %d to %d Window %d Step %d\n\n",
 			ajSeqName(seq),pos+1,end+1,window,step);
 	    for(i=0;i<c;++i)
-		ajFmtPrintF(outf,"%-10d %f\n",(int)x[i],y[i]);
+		ajFmtPrintF(outf,"%-10d %f\n",(ajint)x[i],y[i]);
 	}
 	else if(plot && c)
 	{

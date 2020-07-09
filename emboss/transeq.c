@@ -27,7 +27,7 @@
 static void GetRegions(AjPRange regions, AjPSeq seq);
 static void Trim (AjPSeq seq);
 
-int main (int argc, char * argv[])
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeqout seqout;
@@ -37,13 +37,13 @@ int main (int argc, char * argv[])
     AjPStr *framelist;
     AjPStr frame;
     AjPStr *tablelist;
-    int table;
+    ajint table;
     AjPRange regions;
     AjBool trim;
     AjBool defr=ajFalse;    /* true if the range covers the whole sequence */
     AjBool first=ajTrue;    /* true is this is the first sequence done */
     
-    int frameno;
+    ajint frameno;
   
     (void) embInit ("transeq", argc, argv);
 
@@ -239,8 +239,8 @@ static void Trim (AjPSeq seq)
   AjPStr s = ajSeqStr(seq);
   char * p = ajStrStr(s);
   char c;
-  int i;
-  int len = ajStrLen(s)-1;
+  ajint i;
+  ajint len = ajStrLen(s)-1;
   
   for (i=len; i>=0; i--) {
     c = *(p+i);

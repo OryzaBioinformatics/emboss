@@ -12,6 +12,9 @@ extern "C"
 #ifndef ajax_h
 #define ajax_h
 
+
+#include "ajarch.h"
+
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>

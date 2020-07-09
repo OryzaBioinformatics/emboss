@@ -23,11 +23,11 @@
 
 
 
-int main (int argc, char * argv[])
+int main(int argc, char **argv)
 {
 
-    int shuffles=1;
-    int n;
+    ajint shuffles=1;
+    ajint n;
     AjPSeqall seqall;
     AjPSeqout seqout;
     AjPSeq seq;

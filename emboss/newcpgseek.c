@@ -33,11 +33,11 @@
 #include <stdlib.h>
 
 
-void cpgsearch(AjPFile *outf, int s, int len, char *seq, char *name,
-	       int begin, int *score);
-void calcgc(int from, int to, char *p, int *dcg, int *dgc, int *gc);
+void cpgsearch(AjPFile *outf, ajint s, ajint len, char *seq, char *name,
+	       ajint begin, ajint *score);
+void calcgc(ajint from, ajint to, char *p, ajint *dcg, ajint *dgc, ajint *gc);
 
-int main( int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
@@ -45,10 +45,10 @@ int main( int argc, char **argv, char **env)
     AjPStr    strand=NULL;
     AjPStr    substr=NULL;
     
-    int begin;
-    int end;
-    int len;
-    int score;
+    ajint begin;
+    ajint end;
+    ajint len;
+    ajint score;
 
     embInit("newcpgseek",argc,argv);
     
@@ -95,22 +95,22 @@ int main( int argc, char **argv, char **env)
 }
 
 
-void cpgsearch(AjPFile *outf, int from, int to, char *p, char *name,
-	       int begin, int *score)
+void cpgsearch(AjPFile *outf, ajint from, ajint to, char *p, char *name,
+	       ajint begin, ajint *score)
 {
-    int i;
-    int c;
-    int z;
+    ajint i;
+    ajint c;
+    ajint z;
     
-    int sum;
-    int ssum; 
-    int lsum;
-    int t;
-    int top;
+    ajint sum;
+    ajint ssum; 
+    ajint lsum;
+    ajint t;
+    ajint top;
   
-    int dcg;
-    int dgc;
-    int gc;
+    ajint dcg;
+    ajint dgc;
+    ajint gc;
 
 
 
@@ -173,11 +173,11 @@ void cpgsearch(AjPFile *outf, int from, int to, char *p, char *name,
     }
 }
 
-void calcgc(int from, int to, char *p, int *dcg, int *dgc, int *gc)
+void calcgc(ajint from, ajint to, char *p, ajint *dcg, ajint *dgc, ajint *gc)
 {
 
-    int i;
-    int c;
+    ajint i;
+    ajint c;
 
     c=to-1;
 

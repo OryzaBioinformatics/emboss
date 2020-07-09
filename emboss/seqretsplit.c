@@ -1,6 +1,7 @@
 #include "emboss.h"
 
-int main (int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
 
   AjPSeqall seqall;
   AjPSeqout seqout;

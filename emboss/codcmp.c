@@ -34,9 +34,9 @@ int main(int argc, char **argv)
     
     double     t;
     
-    int        unused;
+    ajint        unused;
 
-    int i;
+    ajint i;
     
 
     

@@ -28,20 +28,20 @@
 #define POFF 1000000
 
 
-void ajSixTranslate(AjPStr substr, AjPStr revstr, int len,
-		    AjPStr *pseqs, int begin, AjPCod codon);
-void ajDoTrans(AjPStr s, AjPStr r, int n, int len, AjPStr *pseqs,
-	       AjPCod codon, int begin);
-void ajMakeRuler(int len, int begin, char *ruler, int *npos);
-void ajCalcProteinPos(int **ppos, AjPStr *pseqs, int len);
-static void showTrans(int **ppos, int *npos, AjPStr *pseqs, AjPStr substr,
-		 int len, int *mark, char *ruler, int begin,
+void ajSixTranslate(AjPStr substr, AjPStr revstr, ajint len,
+		    AjPStr *pseqs, ajint begin, AjPCod codon);
+void ajDoTrans(AjPStr s, AjPStr r, ajint n, ajint len, AjPStr *pseqs,
+	       AjPCod codon, ajint begin);
+void ajMakeRuler(ajint len, ajint begin, char *ruler, ajint *npos);
+void ajCalcProteinPos(ajint **ppos, AjPStr *pseqs, ajint len);
+static void showTrans(ajint **ppos, ajint *npos, AjPStr *pseqs, AjPStr substr,
+		 ajint len, ajint *mark, char *ruler, ajint begin,
 		 AjPFile outf, AjBool isrule, AjBool isp, AjBool isn,
-		 int width, char *name);
-static void showTransb(int **ppos, int *npos, AjPStr *pseqs, AjPStr substr,
-		  int len, int *mark, char *ruler, int begin,
+		 ajint width, char *name);
+static void showTransb(ajint **ppos, ajint *npos, AjPStr *pseqs, AjPStr substr,
+		  ajint len, ajint *mark, char *ruler, ajint begin,
 		  AjPFile outf, AjBool isrule, AjBool isp, AjBool isn,
-		  int start, int end);
+		  ajint start, ajint end);
 
 
 
@@ -64,19 +64,19 @@ int main(int argc, char **argv)
     AjPStr       pseqs[6];
     char	 *ruler;
 
-    int          *npos=NULL;
-    int		 *ppos[6];
-    int          mark[6];
+    ajint          *npos=NULL;
+    ajint		 *ppos[6];
+    ajint          mark[6];
     
-    int beg;
-    int end;
-    int len;
-    int i;
-    int v=0;
+    ajint beg;
+    ajint end;
+    ajint len;
+    ajint i;
+    ajint v=0;
     
     char *p;
     
-    int width;
+    ajint width;
     
     embInit("showorf", argc, argv);
 
@@ -153,10 +153,10 @@ int main(int argc, char **argv)
 
 
 
-void ajSixTranslate(AjPStr substr, AjPStr revstr, int len,
-		    AjPStr *pseqs, int begin, AjPCod codon)
+void ajSixTranslate(AjPStr substr, AjPStr revstr, ajint len,
+		    AjPStr *pseqs, ajint begin, AjPCod codon)
 {
-    int i;
+    ajint i;
     
 
 
@@ -172,17 +172,17 @@ void ajSixTranslate(AjPStr substr, AjPStr revstr, int len,
 
 
 
-void ajDoTrans(AjPStr s, AjPStr r, int n, int len, AjPStr *pseqs,
-	       AjPCod codon, int begin)
+void ajDoTrans(AjPStr s, AjPStr r, ajint n, ajint len, AjPStr *pseqs,
+	       AjPCod codon, ajint begin)
 {
     char *p;
     char *q;
 
-    int po;
+    ajint po;
     
-    int i;
-    int c;
-    int idx;
+    ajint i;
+    ajint c;
+    ajint idx;
     
     char tri[4];
     
@@ -229,9 +229,9 @@ void ajDoTrans(AjPStr s, AjPStr r, int n, int len, AjPStr *pseqs,
 
 
 
-void ajMakeRuler(int len, int begin, char *ruler, int *npos)
+void ajMakeRuler(ajint len, ajint begin, char *ruler, ajint *npos)
 {
-    int i;
+    ajint i;
 
     for(i=0;i<len;++i)
     {
@@ -246,13 +246,13 @@ void ajMakeRuler(int len, int begin, char *ruler, int *npos)
 
 
 
-void ajCalcProteinPos(int **ppos, AjPStr *pseqs, int len)
+void ajCalcProteinPos(ajint **ppos, AjPStr *pseqs, ajint len)
 {
-    int i;
-    int j;
+    ajint i;
+    ajint j;
     
-    int pos;
-    int v;
+    ajint pos;
+    ajint v;
     
     char *p;
     
@@ -348,12 +348,12 @@ void ajCalcProteinPos(int **ppos, AjPStr *pseqs, int len)
 
 
 
-static void showTrans(int **ppos, int *npos, AjPStr *pseqs, AjPStr substr,
-		 int len, int *mark, char *ruler, int begin,
+static void showTrans(ajint **ppos, ajint *npos, AjPStr *pseqs, AjPStr substr,
+		 ajint len, ajint *mark, char *ruler, ajint begin,
 		 AjPFile outf, AjBool isrule, AjBool isp, AjBool isn,
-		 int width, char *name)
+		 ajint width, char *name)
 {
-    int pos;
+    ajint pos;
 
     ajFmtPrintF(outf,"SHOWORF of %s from %d to %d\n\n",name,begin,
 		begin+len-1);
@@ -380,21 +380,21 @@ static void showTrans(int **ppos, int *npos, AjPStr *pseqs, AjPStr substr,
 
 
 
-static void showTransb(int **ppos, int *npos, AjPStr *pseqs, AjPStr substr,
-		  int len, int *mark, char *ruler, int begin,
+static void showTransb(ajint **ppos, ajint *npos, AjPStr *pseqs, AjPStr substr,
+		  ajint len, ajint *mark, char *ruler, ajint begin,
 		  AjPFile outf, AjBool isrule, AjBool isp, AjBool isn,
-		  int start, int end)
+		  ajint start, ajint end)
 {
     AjPStr s;
     static char *fr[]=
     {
 	"F1","F2","F3","R1","R2","R3"
     };
-    int i;
-    int b;
-    int e=0;
-    int v;
-    int pos;
+    ajint i;
+    ajint b;
+    ajint e=0;
+    ajint v;
+    ajint pos;
     
     s=ajStrNew();
     

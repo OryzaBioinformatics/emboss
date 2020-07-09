@@ -31,13 +31,13 @@
 typedef struct AjSPrimer
 {
   AjPStr substr;
-  int start;
-  int primerlen;
+  ajint start;
+  ajint primerlen;
   float primerTm;
   float primGCcont;
   float prodTm;
   float prodGC;
-  int   score;
+  ajint   score;
 } AjOPrimer, *AjPPrimer;
 
 
@@ -49,40 +49,40 @@ typedef struct AjSPair
 } AjOPair, *AjPPair;
 
 
-int primalign(char *a, char *b);
-void reject_self(AjPList *forlist,AjPList *revlist, int *neric, int *nfred);
-void best_primer(AjPList *forlist, AjPList *revlist, int *neric, int *nfred);
-void test_multi(AjPList *forlist, AjPList *revlist, int *neric, int *nfred,
-		AjPStr seq, AjPStr rseq, int len);
-int seq_align(char *a, char *b, int len);
+ajint primalign(char *a, char *b);
+void reject_self(AjPList *forlist,AjPList *revlist, ajint *neric, ajint *nfred);
+void best_primer(AjPList *forlist, AjPList *revlist, ajint *neric, ajint *nfred);
+void test_multi(AjPList *forlist, AjPList *revlist, ajint *neric, ajint *nfred,
+		AjPStr seq, AjPStr rseq, ajint len);
+ajint seq_align(char *a, char *b, ajint len);
 void ajPrimerDel(AjPPrimer *p);
-static int ajPrimaCompare(const void *a, const void *b);
-static int ajPrimaPosCompare(const void *a, const void *b);
-static int ajPrimaPosEndCompare(const void *a, const void *b);
+static ajint ajPrimaCompare(const void *a, const void *b);
+static ajint ajPrimaPosCompare(const void *a, const void *b);
+static ajint ajPrimaPosEndCompare(const void *a, const void *b);
 float probAlign(AjPStr *seq1, AjPStr *seq2);
-void prune_nearby(AjPList *pairlist, int *npair, int range);
-void check_overlap(AjPList *pairlist, int *npair, int overlap);
+void prune_nearby(AjPList *pairlist, ajint *npair, ajint range);
+void check_overlap(AjPList *pairlist, ajint *npair, ajint overlap);
 void TwoSortscorepos(AjPList *pairlist);
 void RevSort(AjPList *alist);
 
 
-void testproduct(AjPStr seqstr, int startpos, int endpos, int primerlen, 
-		 int minprimerlen, int maxprimerlen, float minpmGCcont, 
-		 float maxpmGCcont, int minprimerTm, int maxprimerTm, 
-		 int minprodlen, int maxprodlen, float prodTm, 
-		 float prodGC, int seqlen, AjPPrimer *eric, 
+void testproduct(AjPStr seqstr, ajint startpos, ajint endpos, ajint primerlen, 
+		 ajint minprimerlen, ajint maxprimerlen, float minpmGCcont, 
+		 float maxpmGCcont, ajint minprimerTm, ajint maxprimerTm, 
+		 ajint minprodlen, ajint maxprodlen, float prodTm, 
+		 float prodGC, ajint seqlen, AjPPrimer *eric, 
 		 AjPPrimer *fred, AjPList *forlist, AjPList *revlist, 
-		 int *neric, int *nfred, int stepping_value,
-		 float saltconc, float dnaconc, AjBool isDNA, int begin);      
+		 ajint *neric, ajint *nfred, ajint stepping_value,
+		 float saltconc, float dnaconc, AjBool isDNA, ajint begin);      
 
-void testtarget(AjPStr seqstr, AjPStr revstr, int targetstart, int targetend,  
-		 int minprimerlen, int maxprimerlen, int seqlen,
+void testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart, ajint targetend,  
+		 ajint minprimerlen, ajint maxprimerlen, ajint seqlen,
 		float minprimerTm, float maxprimerTm, float minpmGCcont, 
 		float maxpmGCcont, float minprodGCcont, float maxprodGCcont,
 		float saltconc, float dnaconc,
-		AjPList *pairlist, int *npair);
+		AjPList *pairlist, ajint *npair);
 
-int main (int argc, char *argv[] )
+int main(int argc, char **argv)
 {
     AjPFile outf=NULL;
 
@@ -109,31 +109,31 @@ int main (int argc, char *argv[] )
     AjBool isDNA=ajTrue;
     AjBool dolist=ajFalse;
     
-    int primerlen=0;
-    int minprimerlen=0;
-    int maxprimerlen=0;
-    int minprodlen=0;
-    int maxprodlen=0;
-    int prodlen=0;
+    ajint primerlen=0;
+    ajint minprimerlen=0;
+    ajint maxprimerlen=0;
+    ajint minprodlen=0;
+    ajint maxprodlen=0;
+    ajint prodlen=0;
     
-    int seqlen=0;	
-    int stepping_value=1;
+    ajint seqlen=0;	
+    ajint stepping_value=1;
   
-    int targetstart=0;
-    int targetend=0;
+    ajint targetstart=0;
+    ajint targetend=0;
        
-    int limit=0;
-    int limit2=0;
-    int lastpos=0;
-    int startpos=0;
-    int endpos=0;
+    ajint limit=0;
+    ajint limit2=0;
+    ajint lastpos=0;
+    ajint startpos=0;
+    ajint endpos=0;
 
-    int begin;
-    int end;
-    int v1;
-    int v2;
+    ajint begin;
+    ajint end;
+    ajint v1;
+    ajint v2;
 
-    int overlap;
+    ajint overlap;
     
     float minpmGCcont=0.;
     float maxpmGCcont=0.;
@@ -142,12 +142,12 @@ int main (int argc, char *argv[] )
     float prodTm;
     float prodGC;
     
-    int i;
-    int j;
+    ajint i;
+    ajint j;
 
-    int neric=0;
-    int nfred=0;
-    int npair=0;
+    ajint neric=0;
+    ajint nfred=0;
+    ajint npair=0;
     
     float minprimerTm=0.0;
     float maxprimerTm=0.0;
@@ -506,11 +506,11 @@ if(!targetrange)
 
 /* ************** FUNCTIONS *********************** */
 
-int primalign(char *a, char *b)
+ajint primalign(char *a, char *b)
 {
-    int plen, qlen, limit, i, n=0, mm=0, j;
+    ajint plen, qlen, limit, i, n=0, mm=0, j;
     char *p, *q;
-    int alen,blen;
+    ajint alen,blen;
     
     alen=strlen(a);
     blen=strlen(b);
@@ -543,7 +543,7 @@ int primalign(char *a, char *b)
         ++p;
     }
     
-    return (int)(((float)mm/(float)qlen)*100.0);
+    return (ajint)(((float)mm/(float)qlen)*100.0);
     
 }
 
@@ -554,12 +554,12 @@ float probAlign(AjPStr *seq1, AjPStr *seq2)
 {
 
     float score;
-    int i;
-    int x;
-    int y;
+    ajint i;
+    ajint x;
+    ajint y;
     char *p;
     char *q;
-    int len;
+    ajint len;
     
 
     len = (ajStrLen(*seq1) <= ajStrLen(*seq2)) ? ajStrLen(*seq1) :
@@ -591,24 +591,24 @@ float probAlign(AjPStr *seq1, AjPStr *seq2)
 
 
 void testproduct
- (AjPStr seqstr, int startpos, int endpos, int primerlen, 
- int minprimerlen, int maxprimerlen, float minpmGCcont, float maxpmGCcont, 
- int minprimerTm, int maxprimerTm, int minprodlen, int maxprodlen, 
- float prodTm, float prodGC, int seqlen, AjPPrimer *eric, 
- AjPPrimer *fred, AjPList *forlist, AjPList *revlist, int *neric,
- int *nfred, int stepping_value, float saltconc, float dnaconc, 
- AjBool isDNA, int begin)
+ (AjPStr seqstr, ajint startpos, ajint endpos, ajint primerlen, 
+ ajint minprimerlen, ajint maxprimerlen, float minpmGCcont, float maxpmGCcont, 
+ ajint minprimerTm, ajint maxprimerTm, ajint minprodlen, ajint maxprodlen, 
+ float prodTm, float prodGC, ajint seqlen, AjPPrimer *eric, 
+ AjPPrimer *fred, AjPList *forlist, AjPList *revlist, ajint *neric,
+ ajint *nfred, ajint stepping_value, float saltconc, float dnaconc, 
+ AjBool isDNA, ajint begin)
 
 {
     AjPStr substr=NULL;
     AjPPrimer rubbish=NULL;
-    int forpstart;
-    int forpend;
-    int revpstart;
-    int revpend;
-    int i;
-    int tnum=0;
-    int thisplen;
+    ajint forpstart;
+    ajint forpend;
+    ajint revpstart;
+    ajint revpend;
+    ajint i;
+    ajint tnum=0;
+    ajint thisplen;
     
     float primerTm=0.0;
     float primGCcont=0.0;
@@ -726,18 +726,18 @@ void testproduct
 
 /*******reject self complementary primers*******/
 
-void reject_self(AjPList *forlist,AjPList *revlist, int *neric, int *nfred)
+void reject_self(AjPList *forlist,AjPList *revlist, ajint *neric, ajint *nfred)
 {
-    int count;
-    int j;
-    int i;
+    ajint count;
+    ajint j;
+    ajint i;
     AjPPrimer tmp;
     
-    int len;
-    int cut;
+    ajint len;
+    ajint cut;
     AjPStr str1;
     AjPStr str2;
-    int x;
+    ajint x;
     
 
     str1=ajStrNew();
@@ -813,14 +813,14 @@ void reject_self(AjPList *forlist,AjPList *revlist, int *neric, int *nfred)
 
 /*******BEST PRIMER FUNCTION********/
 
-void best_primer(AjPList *forlist, AjPList *revlist, int *neric, int *nfred)
+void best_primer(AjPList *forlist, AjPList *revlist, ajint *neric, ajint *nfred)
 {
-    int bestf;
-    int bestr;
-    int lowx;
-    int i;
-    int j;
-    int x;
+    ajint bestf;
+    ajint bestr;
+    ajint lowx;
+    ajint i;
+    ajint j;
+    ajint x;
     
     AjPPrimer temp;
     AjPPrimer temp2;
@@ -929,7 +929,7 @@ void ajPrimerDel(AjPPrimer *p)
   
   
 
-static int ajPrimaCompare(const void *a, const void *b)
+static ajint ajPrimaCompare(const void *a, const void *b)
 {
     return (*(AjPPair *)a)->f->score -
 		   (*(AjPPair *)b)->f->score;
@@ -937,7 +937,7 @@ static int ajPrimaCompare(const void *a, const void *b)
 
 
 
-static int ajPrimaPosCompare(const void *a, const void *b)
+static ajint ajPrimaPosCompare(const void *a, const void *b)
 {
 
     return ((*(AjPPair *)a)->f->start + (*(AjPPair *)a)->f->primerlen - 1)  -
@@ -945,7 +945,7 @@ static int ajPrimaPosCompare(const void *a, const void *b)
 }
 
 
-static int ajPrimaPosEndCompare(const void *a, const void *b)
+static ajint ajPrimaPosEndCompare(const void *a, const void *b)
 {
 
     return ((*(AjPPair *)a)->r->start)  -
@@ -955,12 +955,12 @@ static int ajPrimaPosEndCompare(const void *a, const void *b)
 
 /***************IF THERE'S A TARGET RANGE *************************/
 
-void testtarget(AjPStr seqstr, AjPStr revstr, int targetstart, int targetend,  
-		 int minprimerlen, int maxprimerlen, int seqlen,
+void testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart, ajint targetend,  
+		 ajint minprimerlen, ajint maxprimerlen, ajint seqlen,
 		float minprimerTm, float maxprimerTm, float minpmGCcont, 
 		float maxpmGCcont, float minprodGCcont, float maxprodGCcont,
 		float saltconc, float dnaconc,
-		AjPList *pairlist, int *npair)
+		AjPList *pairlist, ajint *npair)
 {
     
 	
@@ -974,16 +974,16 @@ void testtarget(AjPStr seqstr, AjPStr revstr, int targetstart, int targetend,
     
     AjPPair   ppair;
 
-    int i;
-    int j;
-    int forstart=0;
-    int forend;
-    int revstart=0;
-    int revend;
-    int Limit;
-    int tnum;
-    int thisplen;
-    int cut;
+    ajint i;
+    ajint j;
+    ajint forstart=0;
+    ajint forend;
+    ajint revstart=0;
+    ajint revend;
+    ajint Limit;
+    ajint tnum;
+    ajint thisplen;
+    ajint cut;
     
     float primerTm=0.0;
     float primGCcont=0.0;
@@ -993,23 +993,23 @@ void testtarget(AjPStr seqstr, AjPStr revstr, int targetstart, int targetend,
     AjBool revfound=ajFalse;
     AjBool isDNA=ajTrue;
     
-    int flen=0;
-    int rlen=0;
+    ajint flen=0;
+    ajint rlen=0;
     
     float ftm=0.0;
     float rtm=0.0;
     float fgc=0.0;
     float rgc=0.0;
-    int fsc=0;
-    int rsc=0;
+    ajint fsc=0;
+    ajint rsc=0;
 
     char *s;
     char *s2;
     char *p;
-    int  pv;
-    int  plimit;
-    int  pcount;
-    int  k;
+    ajint  pv;
+    ajint  plimit;
+    ajint  pcount;
+    ajint  k;
 
     
     fstr  =ajStrNew();
@@ -1207,18 +1207,18 @@ void testtarget(AjPStr seqstr, AjPStr revstr, int targetstart, int targetend,
 }
 
 
-void test_multi(AjPList *forlist, AjPList *revlist, int *neric, int *nfred,
-		AjPStr seq, AjPStr rseq, int len)
+void test_multi(AjPList *forlist, AjPList *revlist, ajint *neric, ajint *nfred,
+		AjPStr seq, AjPStr rseq, ajint len)
 {
     AjPPrimer tmp;
     AjPStr st=ajStrNew();
     
-    int i;
-    int j;
-    int v;
-    int pc;
-    int count;
-    int limit;
+    ajint i;
+    ajint j;
+    ajint v;
+    ajint pc;
+    ajint count;
+    ajint limit;
     
     char *s;
     char *r;
@@ -1307,17 +1307,17 @@ void test_multi(AjPList *forlist, AjPList *revlist, int *neric, int *nfred,
 
 
 
-int seq_align(char *a, char *b, int len)
+ajint seq_align(char *a, char *b, ajint len)
 {
-    int i;
-    int count;
+    ajint i;
+    ajint count;
 
     count=0;
     for(i=0;i<len;++i)
 	if(a[i]==b[i])
 	    ++count;
     
-    return (int)(((float)count/(float)len)*(float)100.0);
+    return (ajint)(((float)count/(float)len)*(float)100.0);
 }
 
 
@@ -1325,20 +1325,20 @@ int seq_align(char *a, char *b, int len)
 
 
 
-void prune_nearby(AjPList *pairlist, int *npair, int range)
+void prune_nearby(AjPList *pairlist, ajint *npair, ajint range)
 {
     AjPPair pair;
 
-    int count;
-    int fst;
-    int fst2;
-    int blim;
-    int blim2;
-    int elim;
-    int elim2;
-    int i;
-    int j;
-    int len;
+    ajint count;
+    ajint fst;
+    ajint fst2;
+    ajint blim;
+    ajint blim2;
+    ajint elim;
+    ajint elim2;
+    ajint i;
+    ajint j;
+    ajint len;
 
     for(i=0;i<*npair;++i)
     {
@@ -1384,15 +1384,15 @@ void prune_nearby(AjPList *pairlist, int *npair, int range)
 
 
 
-void check_overlap(AjPList *pairlist, int *npair, int overlap)
+void check_overlap(AjPList *pairlist, ajint *npair, ajint overlap)
 {
     AjPPair pair;
     
-    int i;
-    int j;
-    int end;
-    int limit;
-    int count;
+    ajint i;
+    ajint j;
+    ajint end;
+    ajint limit;
+    ajint count;
     
     for(i=0;i<*npair;++i)
     {
@@ -1493,7 +1493,7 @@ void RevSort(AjPList *alist)
     AjPList intlist=NULL;
     AjPList filist=NULL;
     AjPPair save=NULL;
-    int     pos=-1;
+    ajint     pos=-1;
     
 
     intlist = ajListNew();

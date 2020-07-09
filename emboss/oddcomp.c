@@ -28,43 +28,44 @@
 #include "emboss.h"
 
 
-int readexpfreq(AjPTable *exptable, AjPFile compdata, int *size);
-int makebigarray(long int no_elements, long int **bigarray);
+ajint readexpfreq(AjPTable *exptable, AjPFile compdata, ajint *size);
+ajint makebigarray(ajlong no_elements, ajlong **bigarray);
 
 
 
-int main (int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
 
   AjPSeqall seqall;
   AjPSeq seq;
-  int word =2;
+  ajint word =2;
   /*  AjBool inwindow;*/
   AjPFile outfile;
   AjPFile compdata;
-  int window;
-  int pos;
+  ajint window;
+  ajint pos;
   char *s;
-  long int result;
-  long int *bigarray;
-  long int *windowbuffer; /* ring buffer for sliding window */
-  unsigned long int no_elements;
+  ajlong result;
+  ajlong *bigarray;
+  ajlong *windowbuffer; /* ring buffer for sliding window */
+  ajulong no_elements;
   AjBool first_time_round = ajTrue;
   AjBool ignorebz = ajTrue;
-  unsigned long int count;
+  ajulong count;
   AjPStr dispseq=NULL;
   AjPStr ajb=NULL;
-  unsigned long int total=0;
-  unsigned long int other=0;
+  ajulong total=0;
+  ajulong other=0;
   AjBool otherflag;
   AjBool seqisnuc=ajFalse;
-  int increment = 1;
-  int ringsize;
-  long int steps = 0;
-  /*  int count_of_sequence_names = 0;*/
+  ajint increment = 1;
+  ajint ringsize;
+  ajlong steps = 0;
+  /*  ajint count_of_sequence_names = 0;*/
   AjPTable exptable = NULL;	/* table of expected frequencies */
 
 
-long int exp_freq;
+  ajlong exp_freq;
   (void) embInit ("oddcomp", argc, argv);
 
   seqall = ajAcdGetSeqall ("sequence");
@@ -241,19 +242,19 @@ long int exp_freq;
 /******************************************************/
 
 
-int makebigarray(long int no_elements, long int **bigarray) {
+ajint makebigarray(ajlong no_elements, ajlong **bigarray) {
 
   AJCNEW(*bigarray, no_elements);
   return 0;
 }
 /******************************************************/
-int readexpfreq(AjPTable *exptable, AjPFile compdata, int *size) {
+ajint readexpfreq(AjPTable *exptable, AjPFile compdata, ajint *size) {
 
   AjPStr line = NULL;
   char whiteSpace[] = " \t\n\r";
   AjPStrTok tokens;
   AjPStr sizestr=NULL;
-  int thissize;
+  ajint thissize;
   AjPStr key;
   AjPStr value;
 

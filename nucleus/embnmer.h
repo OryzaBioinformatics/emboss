@@ -9,7 +9,7 @@ extern "C"
 * 
 * compseq counts the frequency of n-mers (or words) in a sequence.
 *
-* The easiest way to do this was to make a big unsigned long int array 
+* The easiest way to do this was to make a big ajulong array 
 * to hold the counts of each type of word. 
 *
 * I needed a way of converting a sequence word into an integer so that I 
@@ -32,17 +32,17 @@ extern "C"
 #define embnmer_h
 
 
-unsigned long int embNmerNuc2int (char *seq, int wordsize, int offset,
-				  AjBool *otherflag);
-int               embNmerInt2nuc (AjPStr *seq, int wordsize,
-				  unsigned long int value);
-unsigned long int embNmerProt2int (char *seq, int wordsize, int offset,
-				   AjBool *otherflag, AjBool ignorebz);
-int               embNmerInt2prot (AjPStr *seq, int wordsize,
-				   unsigned long int value, AjBool ignorebz);
-AjBool            embNmerGetNoElements (unsigned long int *no_elements,
-					int word, AjBool seqisnuc,
-					AjBool ignorebz);
+ajulong embNmerNuc2int (char *seq, ajint wordsize, ajint offset,
+			AjBool *otherflag);
+ajint   embNmerInt2nuc (AjPStr *seq, ajint wordsize,
+			ajulong value);
+ajulong embNmerProt2int (char *seq, ajint wordsize, ajint offset,
+			 AjBool *otherflag, AjBool ignorebz);
+ajint   embNmerInt2prot (AjPStr *seq, ajint wordsize,
+			ajulong value, AjBool ignorebz);
+AjBool  embNmerGetNoElements (ajulong *no_elements,
+			      ajint word, AjBool seqisnuc,
+			      AjBool ignorebz);
 
 
 #endif

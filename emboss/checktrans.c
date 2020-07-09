@@ -28,16 +28,16 @@
 #include <math.h>
 #include <stdlib.h>
 
-void findorfs( AjPSeqout *outseq, AjPFile *outf, int s, int len,
-	char *seq, char *name, int begin, int orfml);
+void findorfs( AjPSeqout *outseq, AjPFile *outf, ajint s, ajint len,
+	char *seq, char *name, ajint begin, ajint orfml);
 
-void ajbseq(AjPSeqout *outseq, char *seq, int begin, int
-	end, char *name, int count);
+void ajbseq(AjPSeqout *outseq, char *seq, ajint begin, int
+	end, char *name, ajint count);
 
-void dumptofeat(AjPFeatTabOut featout,int from, int to,
-	char *p, char *seqname, int begin, int min_orflength);
+void dumptofeat(AjPFeatTabOut featout,int from, ajint to,
+	char *p, char *seqname, ajint begin, ajint min_orflength);
 
-int main( int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
@@ -47,10 +47,10 @@ int main( int argc, char **argv, char **env)
     AjPSeqout outseq=NULL;
     AjPFeatTabOut featout=NULL;
     
-    int begin;
-    int end;
-    int len;
-    int orfml;
+    ajint begin;
+    ajint end;
+    ajint len;
+    ajint orfml;
 
     embInit("checktrans",argc,argv);
     seqall    = ajAcdGetSeqall("sequence");
@@ -95,14 +95,14 @@ int main( int argc, char **argv, char **env)
 
 /* findorfs - finds ORFs and prints report. */
 
-void findorfs (AjPSeqout *outseq, AjPFile *outf, int from, int to,
-	char *p, char *name, int begin, int min_orflength)
+void findorfs (AjPSeqout *outseq, AjPFile *outf, ajint from, ajint to,
+	char *p, char *name, ajint begin, ajint min_orflength)
 
 {
-    int i;
-    int count = 1;
-    int last_stop = 0;
-    int orflength = 0;
+    ajint i;
+    ajint count = 1;
+    ajint last_stop = 0;
+    ajint orflength = 0;
 
     ajFmtPrintF(*outf,"\tORF#\tPos\tLen\tORF Range\tSequence name\n\n");
 
@@ -134,8 +134,8 @@ void findorfs (AjPSeqout *outseq, AjPFile *outf, int from, int to,
 
 
 
-void ajbseq(AjPSeqout *outseq, char *seq, int begin, int
-	end, char *name, int count) {
+void ajbseq(AjPSeqout *outseq, char *seq, ajint begin, int
+	end, char *name, ajint count) {
     AjPSeq sq;
     AjPStr str;
     AjPStr nm;
@@ -159,12 +159,12 @@ void ajbseq(AjPSeqout *outseq, char *seq, int begin, int
     return;
 }
 
-void dumptofeat(AjPFeatTabOut featout,int from, int to,
-	char *p, char *seqname, int begin, int min_orflength){
-  int i;
-  int count = 1;
-  int last_stop = 0;
-  int orflength = 0;
+void dumptofeat(AjPFeatTabOut featout,int from, ajint to,
+	char *p, char *seqname, ajint begin, ajint min_orflength){
+  ajint i;
+  ajint count = 1;
+  ajint last_stop = 0;
+  ajint orflength = 0;
   AjPFeatTable feattable;
   AjPFeatLexicon dict=NULL;
   AjPStr name=NULL,score=NULL,desc=NULL,source=NULL,type=NULL;

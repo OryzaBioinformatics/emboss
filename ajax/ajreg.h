@@ -28,19 +28,19 @@ AjBool ajRegExecC (AjPRegexp prog, const char* str);
 
 /* test substrings */
 
-int ajRegLenI (AjPRegexp rp, int isub);
+ajint ajRegLenI (AjPRegexp rp, ajint isub);
 AjBool ajRegPost (AjPRegexp rp, AjPStr* post);
 AjBool ajRegPostC (AjPRegexp rp, const char** post);
 
 /* substitute substrings */
 
-int ajRegOffset (AjPRegexp rp);
-int ajRegOffsetI (AjPRegexp rp, int isub);
-int ajRegOffsetC (AjPRegexp rp);
-int ajRegOffsetIC (AjPRegexp rp, int isub);
+ajint ajRegOffset (AjPRegexp rp);
+ajint ajRegOffsetI (AjPRegexp rp, ajint isub);
+ajint ajRegOffsetC (AjPRegexp rp);
+ajint ajRegOffsetIC (AjPRegexp rp, ajint isub);
 
 void ajRegSub (AjPRegexp rp, AjPStr source, AjPStr* dest);
-void ajRegSubI (AjPRegexp rp, int isub, AjPStr* dest);
+void ajRegSubI (AjPRegexp rp, ajint isub, AjPStr* dest);
 void ajRegSubC (AjPRegexp rp, const char* source, AjPStr* dest);
 
 /* destructor */

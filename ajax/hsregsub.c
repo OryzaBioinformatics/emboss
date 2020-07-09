@@ -17,7 +17,7 @@ void hsregsub(const regexp *rp, const char *source, char *dest)
     register char *src = (char *)source;
     register char *dst = dest;
     register char c;
-    register int no;
+    register ajint no;
     register size_t len;
 
     if (prog == NULL || source == NULL || dest == NULL)
@@ -25,7 +25,7 @@ void hsregsub(const regexp *rp, const char *source, char *dest)
 	hsregerror("NULL parameter to regsub");
 	return;
     }
-    if ((int)((unsigned char)*(prog->program)) !=  MAGIC)
+    if ((ajint)((unsigned char)*(prog->program)) !=  MAGIC)
     {
 	hsregerror("damaged regexp");
 	return;
@@ -35,7 +35,7 @@ void hsregsub(const regexp *rp, const char *source, char *dest)
     {
 	if (c == '&')
 	    no = 0;
-	else if (c == '\\' && isdigit((int)*src))
+	else if (c == '\\' && isdigit((ajint)*src))
 	    no = *src++ - '0';
 	else
 	    no = -1;

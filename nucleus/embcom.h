@@ -19,7 +19,7 @@ typedef struct STR STRING;
 
 
 struct traccia {
-    int ind;
+    ajint ind;
     float pc;
    };
 
@@ -50,9 +50,9 @@ struct sqsim{
 typedef struct sqsim SEQSim;
 
 void embComComplexity(char *seq,char *name,int len,int jmin,int jmax,
-		      int l,int step, int sim,int freq,int omnia,
+		      ajint l,int step, ajint sim,int freq,int omnia,
 		      AjPFile fp,AjPFile pf,
-		      int print,int num_seq, float *MedValue);
+		      ajint print,int num_seq, float *MedValue);
 void embComWriteValueOfSeq(AjPFile fp,int n,char *name,int len,float MedValue);
 void embComWriteFile(AjPFile fp,int jmin,int jmax,int lwin,int step,int sim);
 void embComUnused (void);

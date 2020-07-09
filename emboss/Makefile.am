@@ -4,26 +4,26 @@ SUBDIRS = acd data
 check_PROGRAMS = ajtest ajtest2 ajtest3 ajtestajnam \
 cluster corbatest \
 demofeatures demolist demosequence demostring demotable \
-entrails histogramtest messtest \
+entrails histogramtest intconv messtest \
 patmattest plplottest proteinmotifsearch \
-scope seqinfo \
+seqinfo \
 seqretallfeat seqretfeat seqtofeat \
-simplesw testplot treetypedisplay 
+simplesw stamps testplot treetypedisplay 
 
 bin_PROGRAMS = abiview acdc antigenic \
 backtranseq banana btwisted \
 chaos checktrans chips cirdna codcmp coderet complex \
 compseq cons cpgplot cpgreport cusp cutseq \
 dan dbiblast dbifasta dbiflat dbigcg \
-descseq diffseq digest dotmatcher dotpath dottup dreg \
+descseq diffseq digest domainer dotmatcher dotpath dottup dreg \
 einverted embossdata emma emowse entret \
 equicktandem est2genome etandem extractseq \
 findkm freak fuzznuc fuzzpro fuzztran \
 garnier geecee getorf helixturnhelix \
 iep infoseq isochore lindna \
-maskfeat maskseq matcher megamerger merger msbar \
+marscan maskfeat maskseq matcher megamerger merger msbar \
 needle newcpgreport newcpgseek newseq \
-noreturn notseq nthseq \
+noreturn notseq nrscope nthseq \
 octanol oddcomp \
 palindrome pasteseq patmatdb patmatmotifs \
 pepcoil pepinfo pepnet pepstats \
@@ -32,7 +32,7 @@ plotcon plotorf polydot preg \
 prettyplot prettyseq prima primersearch printsextract \
 profit prophecy prophet \
 prosextract pscan \
-rebaseextract recode redata remap restover restrict revseq \
+rebaseextract recode redata remap restover restrict revseq scope \
 seealso seqmatchall seqret seqretall seqretset seqretsplit \
 showdb showfeat showorf showseq \
 shuffleseq sigcleave silent splitter stretcher \
@@ -42,10 +42,6 @@ tmap transeq trimseq \
 vectorstrip \
 water wobble wordcount wordmatch \
 wossname
-
-
-
-#FLAGS=-lX11
 
 INCLUDES = -I$(top_srcdir)/nucleus -I$(top_srcdir)/ajax -I$(top_srcdir)/plplot
 
@@ -77,6 +73,7 @@ dbigcg_SOURCES = dbigcg.c
 descseq_SOURCES = descseq.c
 diffseq_SOURCES = diffseq.c
 digest_SOURCES = digest.c
+domainer_SOURCES = domainer.c
 dotmatcher_SOURCES = dotmatcher.c
 dottup_SOURCES = dottup.c
 dreg_SOURCES = dreg.c
@@ -101,8 +98,10 @@ getorf_SOURCES = getorf.c
 helixturnhelix_SOURCES = helixturnhelix.c
 iep_SOURCES = iep.c
 infoseq_SOURCES = infoseq.c
+intconv_SOURCES = intconv.c
 isochore_SOURCES = isochore.c
 lindna_SOURCE = lindna.c
+marscan_SOURCE = marscan.c
 maskfeat_SOURCES = maskfeat.c
 maskseq_SOURCES = maskseq.c
 matcher_SOURCES = matcher.c
@@ -115,6 +114,7 @@ newcpgseek_SOURCES = newcpgseek.c
 newseq_SOURCES = newseq.c
 noreturn_SOURCES = noreturn.c
 notseq_SOURCES = notseq.c
+nrscope_SOURCES = nrscope.c
 nthseq_SOURCES = nthseq.c
 octanol_SOURCES = octanol.c
 oddcomp_SOURCES = oddcomp.c
@@ -151,6 +151,7 @@ remap_SOURCES = remap.c
 restover_SOURCES = restover.c
 restrict_SOURCES = restrict.c
 revseq_SOURCES = revseq.c
+scope_SOURCES = scope.c
 seealso_SOURCES = seealso.c
 seqmatchall_SOURCES = seqmatchall.c
 seqret_SOURCES = seqret.c
@@ -167,6 +168,7 @@ shuffleseq_SOURCES = shuffleseq.c
 sigcleave_SOURCES = sigcleave.c
 silent_SOURCES = silent.c
 splitter_SOURCES = splitter.c
+stamps_SOURCES = stamps.c
 stretcher_SOURCES = stretcher.c
 stssearch_SOURCES = stssearch.c
 supermatcher_SOURCES = supermatcher.c
@@ -213,6 +215,3 @@ if PURIFY
 else
 
 endif
-
-
-

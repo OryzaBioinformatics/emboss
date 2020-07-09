@@ -28,11 +28,11 @@ typedef struct AjSRinfo
 {
     AjPStr code;   /*structure for silent mutation info*/ 
     AjPStr site;
-    int ncuts;
-    int cut1;
-    int cut2;
-    int cut3;
-    int cut4;
+    ajint ncuts;
+    ajint cut1;
+    ajint cut2;
+    ajint cut3;
+    ajint cut4;
 } AjORinfo, *AjPRinfo;
 
 
@@ -40,8 +40,8 @@ typedef struct AjSSilent
 {
     AjPStr code;
     AjPStr site;
-    int match;
-    int base;
+    ajint match;
+    ajint base;
     AjPStr seqaa;
     AjPStr reaa;
     AjBool issilent; 
@@ -53,16 +53,16 @@ typedef struct AjSSilent
 /* Prototypes */
 
 AjPList mismatch(AjPStr sstr, AjPList ressite, AjPFile outf, AjPStr sname,
-                 int RStotal,int begin,int radj, AjBool rev, int end, 
+                 ajint RStotal,int begin,int radj, AjBool rev, ajint end, 
                  AjBool tshow);
-int restr_read(AjPList *relist, AjPStr enzymes);
+ajint restr_read(AjPList *relist, AjPStr enzymes);
 AjBool checktrans(AjPStr seq,AjPFile outf,EmbPMatMatch match, AjPRinfo rlp,
-		  int begin,int radj, AjBool rev, int end, AjPSilent *res);
-void fmt_sequence(AjPStr seq, AjPFile outf, int start, AjBool num);
+		  ajint begin,int radj, AjBool rev, ajint end, AjPSilent *res);
+void fmt_sequence(AjPStr seq, AjPFile outf, ajint start, AjBool num);
 void fmt_hits(AjPList hits, AjPFile outf);
 void split_hits(AjPList *hits, AjPList *silents, AjPList *nonsilents, 
                 AjBool allmut);
-static int basecompare(const void *a, const void *b);
+static ajint basecompare(const void *a, const void *b);
 
 
  
@@ -78,14 +78,14 @@ int main(int argc, char **argv)
                                          as an AjPStr so we need one*/
     AjPStr sname=NULL;		     /*and it wants a name as well*/
     AjPStr revcomp=NULL;	     /*to hold reverse complement of sequence*/ 
-    int RStotal;
+    ajint RStotal;
     AjPStr enzymes=NULL;                /* string for RE selection */    
 
     AjPList relist=NULL;
-    int   begin;                        /* specified start by user */ 
-    int   end;                          /* specified end by user */ 
-    int   radj;
-    int start; 
+    ajint   begin;                        /* specified start by user */ 
+    ajint   end;                          /* specified end by user */ 
+    ajint   radj;
+    ajint start; 
     AjBool sshow; 
     AjBool tshow;
     AjBool allmut; 
@@ -208,7 +208,7 @@ int main(int argc, char **argv)
 
 
 AjPList mismatch(AjPStr sstr, AjPList relist, AjPFile outf, AjPStr sname,
-	         int RStotal,int begin,int radj,AjBool rev,int end,
+	         ajint RStotal,int begin,int radj,AjBool rev,int end,
                  AjBool tshow)
 { 
     AjPSilent res;
@@ -216,11 +216,11 @@ AjPList mismatch(AjPStr sstr, AjPList relist, AjPFile outf, AjPStr sname,
     AjPStr str;                        /*holds RS patterns*/ 
     AjPStr tstr; 
     AjBool dummy=ajFalse;              /*need a bool for ajPatClassify*/
-    int mm;                            /*number of mismatches*/
-    int hits;                          /*number of pattern matches found*/
-    int i;
-    int aw;                             
-    int start;                         
+    ajint mm;                            /*number of mismatches*/
+    ajint hits;                          /*number of pattern matches found*/
+    ajint i;
+    ajint aw;                             
+    ajint start;                         
     AjPList patlist=NULL;              /*a list for pattern matches. 
                                              a list of ..*/
     EmbPMatMatch match;                /*..AjMatMatch structures*/
@@ -332,17 +332,17 @@ AjPList mismatch(AjPStr sstr, AjPList relist, AjPFile outf, AjPStr sname,
 
 
 
-int restr_read(AjPList *relist,AjPStr enzymes)
+ajint restr_read(AjPList *relist,AjPStr enzymes)
 {
     EmbPPatRestrict rptr=NULL;		/*somewhere to store RE info*/
     AjPFile fin=NULL;			/*we need an input file pointer to read
                                           in the RE file data*/
     AjPStr refilename=NULL;		/*...and a string for the filename*/
-    register int RStotal=0;		/*counts no of RE*/  
+    register ajint RStotal=0;		/*counts no of RE*/  
     AjPRinfo rinfo=NULL;
     AjBool isall=ajFalse;
-    int ne=0;
-    int i;
+    ajint ne=0;
+    ajint i;
     AjPStr *ea=NULL;
     
     /*open the RE file*/
@@ -425,27 +425,27 @@ int restr_read(AjPList *relist,AjPStr enzymes)
 
 
 AjBool checktrans(AjPStr seq,AjPFile outf,EmbPMatMatch match, AjPRinfo rlp,
-		  int begin,int radj, AjBool rev, int end, AjPSilent *res)
+		  ajint begin,int radj, AjBool rev, ajint end, AjPSilent *res)
 {
     char *p=NULL;
     char *q=NULL; 
     char *s=NULL;
     char *t;
     char *u;
-    int matchpos;
-    int framep;
+    ajint matchpos;
+    ajint framep;
 
-    int count;
+    ajint count;
     AjPTrn table=NULL;
     AjPStr s1=NULL;
     AjPStr s2=NULL;
     char c;
     char rc;
-    int  min=INT_MAX;          /* Reverse sense intentional! */ 
-    int  max=-INT_MAX;
-    int fpos;
-    int rpos;
-    int x;    
+    ajint  min=INT_MAX;          /* Reverse sense intentional! */ 
+    ajint  max=-INT_MAX;
+    ajint fpos;
+    ajint rpos;
+    ajint x;    
  
     matchpos = match->start;          /* posn of start of match in seq */ 
     fpos=matchpos;
@@ -558,12 +558,12 @@ AjBool checktrans(AjPStr seq,AjPFile outf,EmbPMatMatch match, AjPRinfo rlp,
 
 
 
-void fmt_sequence(AjPStr seq, AjPFile outf, int start, AjBool num)
+void fmt_sequence(AjPStr seq, AjPFile outf, ajint start, AjBool num)
 {
     char *p;
-    int m;
-    int i;
-    int tlen;
+    ajint m;
+    ajint i;
+    ajint tlen;
 
     if(num)
     { 
@@ -668,7 +668,7 @@ void split_hits(AjPList *hits, AjPList *silents, AjPList *nonsilents,
 
 
 
-static int basecompare(const void *a, const void *b)
+static ajint basecompare(const void *a, const void *b)
 {
     return((*(AjPSilent *)a)->base)-((*(AjPSilent *)b)->base);
 }	

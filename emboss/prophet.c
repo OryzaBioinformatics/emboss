@@ -26,21 +26,21 @@
 #define AZ 28
 
 
-int  getType(AjPFile inf, AjPStr *tname);
+ajint  getType(AjPFile inf, AjPStr *tname);
 
-static void read_profile(AjPFile inf, AjPStr *name, AjPStr *mname, int *mlen,
-			  float *gapopen, float *gapextend, int *thresh,
+static void read_profile(AjPFile inf, AjPStr *name, AjPStr *mname, ajint *mlen,
+			  float *gapopen, float *gapextend, ajint *thresh,
 			  float *maxs, AjPStr *cons);
 void scan_profile(AjPStr substr, AjPStr pname, AjPStr name, AjPStr mname,
-		  int mlen, float **fmatrix, int thresh, float maxs,
+		  ajint mlen, float **fmatrix, ajint thresh, float maxs,
 		  float gapopen, float gapextend, AjPFile outf,
 		  AjPStr *cons, float opencoeff, float extendcoeff,
-		  float *path, int *compass, AjPStr *m, AjPStr *n,
-		  int slen, int begin);
+		  float *path, ajint *compass, AjPStr *m, AjPStr *n,
+		  ajint slen, ajint begin);
 
 
 
-int main( int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
@@ -58,19 +58,19 @@ int main( int argc, char **argv, char **env)
     AjPStr    m=NULL;
     AjPStr    n=NULL;
     
-    int       type;
-    int       begin;
-    int       end;
-    int       len;
-    int       i;
-    int       j;
+    ajint       type;
+    ajint       begin;
+    ajint       end;
+    ajint       len;
+    ajint       i;
+    ajint       j;
     
     float **fmatrix=NULL;
 
-    int mlen;
-    int maxs=0;
+    ajint mlen;
+    ajint maxs=0;
     float maxfs;
-    int thresh;
+    ajint thresh;
 
     float gapopen;
     float gapextend;
@@ -79,10 +79,10 @@ int main( int argc, char **argv, char **env)
     
     char *p;
 
-    int maxarr=1000;
-    int alen;
+    ajint maxarr=1000;
+    ajint alen;
     float *path;
-    int   *compass;
+    ajint   *compass;
     
 
     embInit("prophet", argc, argv);
@@ -177,11 +177,11 @@ int main( int argc, char **argv, char **env)
 
 
 
-int getType(AjPFile inf, AjPStr *tname)
+ajint getType(AjPFile inf, AjPStr *tname)
 {
     AjPStr line=NULL;
     char *p=NULL;
-    int  ret=0;
+    ajint  ret=0;
     
     line=ajStrNew();
 
@@ -206,8 +206,8 @@ int getType(AjPFile inf, AjPStr *tname)
 
 
 
-static void read_profile(AjPFile inf, AjPStr *name, AjPStr *mname, int *mlen,
-			  float *gapopen, float *gapextend, int *thresh,
+static void read_profile(AjPFile inf, AjPStr *name, AjPStr *mname, ajint *mlen,
+			  float *gapopen, float *gapextend, ajint *thresh,
 			  float *maxs, AjPStr *cons)
 {
     char *p;
@@ -290,15 +290,15 @@ static void read_profile(AjPFile inf, AjPStr *name, AjPStr *mname, int *mlen,
 
 
 void scan_profile(AjPStr substr, AjPStr pname, AjPStr name, AjPStr mname,
-		  int mlen, float **fmatrix, int thresh, float maxs,
+		  ajint mlen, float **fmatrix, ajint thresh, float maxs,
 		  float gapopen, float gapextend, AjPFile outf,
 		  AjPStr *cons, float opencoeff, float extendcoeff,
-		  float *path, int *compass, AjPStr *m, AjPStr *n,
-		  int slen, int begin)
+		  float *path, ajint *compass, AjPStr *m, AjPStr *n,
+		  ajint slen, ajint begin)
 {
     float score;
-    int start1;
-    int start2;
+    ajint start1;
+    ajint start2;
     
     embAlignProfilePathCalc(ajStrStr(substr),mlen,slen,opencoeff,extendcoeff,
 			    path,fmatrix,compass,0);

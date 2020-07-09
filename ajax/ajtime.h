@@ -16,7 +16,7 @@ AjPTime ajTimeToday (void);
 AjPTime ajTimeTodayF (char* timefmt);
 void ajTimeTrace (AjPTime thys);
 
-AjPTime ajTimeSet( char *timefmt, int mday, int mon, int year) ;
+AjPTime ajTimeSet( char *timefmt, ajint mday, ajint mon, ajint year) ;
 
 #endif
 

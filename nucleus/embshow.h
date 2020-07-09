@@ -16,13 +16,13 @@ typedef struct EmbSShow {
 /* information about the sequence */
   AjPSeq seq;		/* the sequence */
   AjBool nucleic;	/* ajTrue = the sequence is nucleic */
-  int offset;  		/* offset to start numbering at */
-  int start;		/* sequence position to start printing at */
-  int end;		/* sequence position to stop printing at */
+  ajint offset;  		/* offset to start numbering at */
+  ajint start;		/* sequence position to start printing at */
+  ajint end;		/* sequence position to stop printing at */
 /* information about the page layout */
-  int width;		/* width of sequence to display on each line */
-  int length;		/* length of a page (0 = indefinite) */
-  int margin;		/* margin for numbers */
+  ajint width;		/* width of sequence to display on each line */
+  ajint length;		/* length of a page (0 = indefinite) */
+  ajint margin;		/* margin for numbers */
   AjBool html;		/* ajTrue = format page for HTML */
 } EmbOShow, *EmbPShow;
 
@@ -31,7 +31,7 @@ typedef struct EmbSShow {
 /****** struct for node of list of descriptors object pointers ******/
 
 typedef struct EmbSShowInfo {
-  int type;  
+  ajint type;  
   void * info;
 } EmbOShowInfo, *EmbPShowInfo;
 
@@ -83,12 +83,12 @@ pad the structure out
 typedef struct EmbSShowTran {
   AjPSeq transeq;	/* our stored translation */
   AjPTrn trnTable;	/* translation table */
-  int frame;		/* 1,2,3,-1,-2 or -3 = frame to translate */
+  ajint frame;		/* 1,2,3,-1,-2 or -3 = frame to translate */
   AjBool threeletter;	/* ajTrue = display in three letter code */
   AjBool number;	/* ajTrue = number the translation */
-  int tranpos;		/* store of translation position for numbering */
+  ajint tranpos;		/* store of translation position for numbering */
   AjPRange regions;	/* only translate in these regions, NULL = do all */
-  int orfminsize;	/* minimum size of ORF to display */
+  ajint orfminsize;	/* minimum size of ORF to display */
 } EmbOShowTran, *EmbPShowTran;
 
 /* sequence complement information, type = SH_COMP */
@@ -98,10 +98,10 @@ typedef struct EmbSShowComp {
 
 /* RE cut site information, type = SH_RE */
 typedef struct EmbSShowRE {
-  int sense;			/* 1 or -1 = sense to display */
+  ajint sense;			/* 1 or -1 = sense to display */
   AjBool flat;			/* ajTrue = display in flat format with recognition sites */
   AjPList matches;		/* list of AjPMatmatch matches */  
-  int hits;			/* number of hits in list */
+  ajint hits;			/* number of hits in list */
   AjPList sitelist;		/* list of EmbSShowREsite */
 } EmbOShowRE, *EmbPShowRE;
 
@@ -114,14 +114,14 @@ typedef struct EmbSShowFT {
 /********* assorted structures ***********/
 /* RE cut site position list node */
 typedef struct EmbSShowREsite {
-  int pos;		/* cut site position */
+  ajint pos;		/* cut site position */
   AjPStr name;		/* name of RE */
 } EmbOShowREsite, *EmbPShowREsite;
 
 
 /* declare functions **********************************************/
-EmbPShow embShowNew (AjPSeq seq, int begin, int end, int width,
-		    int length, int margin, AjBool html, int offset);
+EmbPShow embShowNew (AjPSeq seq, ajint begin, ajint end, ajint width,
+		    ajint length, ajint margin, AjBool html, ajint offset);
 void embShowDel (EmbPShow* pthis);
 
 void embShowAddSeq (EmbPShow thys, AjBool number, AjBool threeletter,
@@ -130,10 +130,10 @@ void embShowAddBlank (EmbPShow thys);
 void embShowAddTicks (EmbPShow thys);
 void embShowAddTicknum (EmbPShow thys);
 void embShowAddComp (EmbPShow thys, AjBool number);
-void embShowAddTran (EmbPShow thys, AjPTrn trnTable, int frame,
+void embShowAddTran (EmbPShow thys, AjPTrn trnTable, ajint frame,
 		     AjBool threeletter, AjBool number, AjPRange regions,
-		     int orfminsize);
-void embShowAddRE (EmbPShow thys, int sense, AjPList restrictlist, AjBool flat);
+		     ajint orfminsize);
+void embShowAddRE (EmbPShow thys, ajint sense, AjPList restrictlist, AjBool flat);
 void embShowAddFT (EmbPShow thys, AjPFeatTable feat);
 void embShowPrint (AjPFile out, EmbPShow thys);
 

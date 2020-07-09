@@ -32,7 +32,7 @@ static AjPStr data_dir(void);
 
 
 
-int main (int argc, char * argv[])
+int main(int argc, char **argv)
 {
     AjPList rlist=NULL;
     AjPList flocs=NULL;
@@ -40,7 +40,7 @@ int main (int argc, char * argv[])
     AjPStr  t=NULL;
     
     AjBool  recurs=ajTrue;
-    int i;
+    ajint i;
     
 
     AjPStr filename = NULL;
@@ -56,7 +56,7 @@ int main (int argc, char * argv[])
     AjPStr cmd = NULL;
     AjPStr *rstrs=NULL;
     
-    int result;
+    ajint result;
     char *p=NULL;
     
     (void) embInit ("embossdata", argc, argv);

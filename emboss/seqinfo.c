@@ -1,12 +1,13 @@
 #include "emboss.h"
 
-int main (int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
 
   AjPSeqall seqall;
   AjPFile outf;
   AjPSeq seq = NULL;
   AjPStr seqstr, seqdesc ;
-  int len ;
+  ajint len ;
   float pgc ;
 
   embInit ("seqinfo", argc, argv);

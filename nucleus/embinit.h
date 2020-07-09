@@ -6,7 +6,7 @@ extern "C"
 #ifndef embinit_h
 #define embinit_h
 
-AjStatus embInit (char *pgm, int argc, char *argv[]);
+AjStatus embInit (char *pgm, ajint argc, char *argv[]);
 
 #endif
 

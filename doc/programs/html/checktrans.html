@@ -62,6 +62,18 @@ open reading frames (continuous protein sequence with no stops) that are
 greater than a minimum size.  The default minimum ORF size is 100
 residues. It writes out any ORF sequences.
 
+<p>
+
+The input sequence might typically have been produced by <b>transeq</b>.
+
+<p>
+
+Note that if you have only translated a nucleic sequence in one frame,
+<b>checktrans</b> will miss possible ORFs in other frames.  You have to
+give <b>checktrans</b> translations in all three (six?) frames in order
+for it to be effective at finding all possible ORFs. 
+
+
 <H2>
     Usage
 </H2>
@@ -69,15 +81,15 @@ residues. It writes out any ORF sequences.
 
 Here is a sample session with checktrans, using the output from a transeq run.
 
-<pre>
+<p>
 
+<pre>
 % transeq embl:paamir paamir.pep -auto
 % checktrans
 Input sequence: paamir.pep
 Minimum ORF Length to report [100]: 30
 Output file [paamir_1.checktrans]: 
 Output sequence [paamir_1.fasta]: 
-
 </pre>
 
 
@@ -189,8 +201,10 @@ sequence file.
 <p>
 The ORF report file from the above example run is:
 
-<pre>
+<p>
 
+<hr>
+<pre>
 CHECKTRANS of PAAMIR_1 from 1 to 723
 
         ORF#    Pos     Len     ORF Range       Sequence name
@@ -202,8 +216,8 @@ CHECKTRANS of PAAMIR_1 from 1 to 723
         7       635     357     278-634 	PAAMIR_1_7
 
         Total STOPS:     7
-
 </pre>
+<hr>
 
 <p>
 This gives the numeric count of the ORF, the position of the terminating
@@ -218,8 +232,10 @@ the ORF.
 <p>
 The output sequence file is:
 
-<pre>
+<p>
 
+<hr>
+<pre>
 &gt;PAAMIR_1_1
 GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR
 &gt;PAAMIR_1_3
@@ -236,33 +252,39 @@ SAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRP
 GLAADPHRLFGAPVLAAAGSLRRAGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGV
 RKPRGALADHRAGVPRRDHPAARCPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGP
 DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
-
 </pre>
+<hr>
 
 <H2>
     Data files
 </H2>
+
+None.
 
 
 <H2>
     Notes
 </H2>
 
+None.
 
 <H2>
     References
 </H2>
 
+None.
 
 <H2>
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
@@ -275,6 +297,7 @@ This program always exits with a status of 0.
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>

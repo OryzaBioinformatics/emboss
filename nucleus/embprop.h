@@ -25,24 +25,24 @@ extern double *EmbPropTable[];
 
 typedef struct EmbSPropFrag	/* Enzyme digestion structure */
 {
-    int     start;
-    int     end;
+    ajint     start;
+    ajint     end;
     double  molwt;
 } EmbOPropFrag, *EmbPPropFrag;
 
 
 
 void    embPropAminoRead (void);
-void 	embPropCalcFragments (char *s, int n, int begin,
+void 	embPropCalcFragments (char *s, ajint n, ajint begin,
 			      AjPList *l, AjPList *pa,
 			      AjBool unfavoured, AjBool overlap,
-			      AjBool allpartials, int *ncomp, int *npart,
+			      AjBool allpartials, ajint *ncomp, ajint *npart,
 			      AjPStr *rname);
-double  embPropCalcMolwt (char *s, int start, int end);
+double  embPropCalcMolwt (char *s, ajint start, ajint end);
 char*   embPropCharToThree (char c);
-char*   embPropIntToThree (int c);
-AjPStr  embPropProtGaps (AjPSeq seq, int pad);
-AjPStr  embPropProt1to3 (AjPSeq seq, int pad);
+char*   embPropIntToThree (ajint c);
+AjPStr  embPropProtGaps (AjPSeq seq, ajint pad);
+AjPStr  embPropProt1to3 (AjPSeq seq, ajint pad);
 AjBool  embPropPurine (char base);
 AjBool  embPropPyrimidine (char base);
 AjBool  embPropTransversion (char base1, char base2);

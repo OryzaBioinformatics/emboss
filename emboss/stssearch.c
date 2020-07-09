@@ -12,12 +12,13 @@ AjPFile out = NULL;
 AjPSeq seq = NULL;
 AjPStr seqstr = NULL;
 AjPStr revstr = NULL;
-int nprimers = 0;
-int ntests = 0;
+ajint nprimers = 0;
+ajint ntests = 0;
 
 static void primTest (void **x,void *cl);
 
-int main (int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
 
   AjPSeqall seqall;
   AjPFile primfile;
@@ -91,11 +92,11 @@ static void primTest (void **x,void *cl) {
   Primer* p;
   Primer primdata;
 
-  static int calls = 0;
+  static ajint calls = 0;
 
   AjBool testa, testb;
   AjBool testc, testd;
-  int ioff;
+  ajint ioff;
 
   p = (Primer*) x;
   primdata = *p;

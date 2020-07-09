@@ -1,26 +1,26 @@
 #include <stdio.h>
 #include <string.h>
-
+#include "ajarch.h"
 /*
  - split - divide a string into fields, like awk split()
- = int split(char *string, char *fields[], int nfields, char *sep);
+ = ajint split(char *string, char *fields[], ajint nfields, char *sep);
  */
 /* number of fields, including overflow 
 char *string;
 char *fields[];			 list is not NULL-terminated 
-int nfields;			 number of entries available in fields[] 
+ajint nfields;			 number of entries available in fields[] 
 char *sep;			 "" white, "c" single char, "ab" [ab]+ */
 
-int split(char *string, char *fields[], int nfields, char *sep)
+ajint split(char *string, char *fields[], ajint nfields, char *sep)
 {
     register char *p = string;
     register char c;			/* latest character */
     register char sepc = sep[0];
     register char sepc2;
-    register int fn;
+    register ajint fn;
     register char **fp = fields;
     register char *sepp;
-    register int trimtrail;
+    register ajint trimtrail;
 
     /* white space */
     if (sepc == '\0')
@@ -29,7 +29,7 @@ int split(char *string, char *fields[], int nfields, char *sep)
 	    continue;
 	p--;
 	trimtrail = 1;
-	sep = " \t";			/* note, code below knows this is 2 long */
+	sep = " \t";			/* note, code below knows this is 2 ajlong */
 	sepc = ' ';
     }
     else
@@ -165,10 +165,10 @@ int split(char *string, char *fields[], int nfields, char *sep)
  * pgm str sep n	splits str by sep n times
  */
 
-int main(int argc, char **argv)
+ajint main(ajint argc, char **argv)
 {
     char buf[512];
-    register int n;
+    register ajint n;
 #	define	MNF	10
     char *fields[MNF];
 
@@ -201,11 +201,11 @@ int main(int argc, char **argv)
 
 
 
-int dosplit(char *string, char *seps)
+ajint dosplit(char *string, char *seps)
 {
 #	define	NF	5
     char *fields[NF];
-    register int nf;
+    register ajint nf;
 
     nf = split(string, fields, NF, seps);
     (void) print(nf, NF, fields);
@@ -217,10 +217,10 @@ int dosplit(char *string, char *seps)
 
 
 
-int print(int nf, int nfp, char *fields[])
+ajint print(ajint nf, ajint nfp, char *fields[])
 {
-    register int fn;
-    register int bound;
+    register ajint fn;
+    register ajint bound;
 
     bound = (nf > nfp) ? nfp : nf;
     (void) printf("%d:\t", nf);
@@ -236,7 +236,7 @@ int print(int nf, int nfp, char *fields[])
 struct {
 	char *str;
 	char *seps;
-	int nf;
+	ajint nf;
 	char *fi[RNF];
 } tests[] = {
 	"",		" ",	0,	{ "" },
@@ -305,14 +305,14 @@ struct {
 
 
 
-int regress()
+ajint regress()
 {
     char buf[512];
-    register int n;
+    register ajint n;
     char *fields[RNF+1];
-    register int nf;
-    register int i;
-    register int printit;
+    register ajint nf;
+    register ajint i;
+    register ajint printit;
     register char *f;
 
     for (n = 0; tests[n].str != NULL; n++)

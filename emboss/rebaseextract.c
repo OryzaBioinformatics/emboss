@@ -63,9 +63,9 @@ int main(int argc, char **argv)
 
   AjBool hassup;
     
-  int     count;
-  long    pos;
-  int     i;
+  ajint     count;
+  ajlong    pos;
+  ajint     i;
 
     
   embInit("rebaseextract",argc,argv);
@@ -221,17 +221,17 @@ void process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
   char   *r;
   char   *t;
     
-  /*  int    carat;*/
+  /*  ajint    carat;*/
   AjBool hascarat;
 
-  int cut1;
-  int cut2;
-  int cut3;
-  int cut4;
-  int len;
-  int ncuts;
-  int nc;
-  int i;
+  ajint cut1;
+  ajint cut2;
+  ajint cut3;
+  ajint cut4;
+  ajint len;
+  ajint ncuts;
+  ajint nc;
+  ajint i;
   AjBool blunt=ajFalse;
     
     
@@ -263,7 +263,7 @@ void process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 	{
 	  sscanf(p+1,"%d/%d",&cut1,&cut2);
 	  q=p+1;
-	  if(!(q=strchr(q,(int)'(')))
+	  if(!(q=strchr(q,(ajint)'(')))
 	    ajFatal("Bad pattern %s in %s",ajStrStr(*code),
 		    ajStrStr(*pattern));
 	  sscanf(q+1,"%d/%d",&cut3,&cut4);
@@ -272,7 +272,7 @@ void process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 	  --cut1;
 	  --cut2;
 
-	  if(!(p=strchr(p,(int)')')))
+	  if(!(p=strchr(p,(ajint)')')))
 	    ajFatal("%s mismatched parentheses",ajStrStr(*code));
 	
 	  p=ajStrStr(ppat);
@@ -297,7 +297,7 @@ void process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 	{
 	  ncuts=2;
 	  cut3=cut4=0;
-	  if((p=strchr(p,(int)'(')))
+	  if((p=strchr(p,(ajint)'(')))
 	    {
 	      sscanf(p+1,"%d/%d",&cut1,&cut2);
 	      if(cut1==cut2) blunt=ajTrue;

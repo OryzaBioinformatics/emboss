@@ -16,9 +16,9 @@
 #include "hsp_utils.h"
 #include "hsp_regex2.h"
 
-extern char ajSysItoC(int v);
+extern char ajSysItoC(ajint v);
 
-int nope=0;
+ajint nope=0;
 
 /* macros for manipulating states, small version */
 #define	states	unsigned
@@ -29,7 +29,7 @@ int nope=0;
 #define	ISSET(v, n)	((v) & ((unsigned)1 << (n)))
 #define	ASSIGN(d, s)	((d) = (s))
 #define	EQ(a, b)	((a) == (b))
-#define	STATEVARS	int dummy	/* dummy version */
+#define	STATEVARS	ajint dummy	/* dummy version */
 #define	STATESETUP(m, n)	/* nothing */
 #define	STATETEARDOWN(m)	/* nothing */
 #define	SETUP(v)	((v) = 0)
@@ -76,7 +76,7 @@ int nope=0;
 #define	ISSET(v, n)	((v)[n])
 #define	ASSIGN(d, s)	memcpy(d, s, m->g->nstates)
 #define	EQ(a, b)	(memcmp(a, b, m->g->nstates) == 0)
-#define	STATEVARS	int vn; char *space
+#define	STATEVARS	ajint vn; char *space
 #define	STATESETUP(m, nv)	{ (m)->space = malloc((nv)*(m)->g->nstates); \
 				if ((m)->space == NULL) return(REG_ESPACE); \
 				(m)->vn = 0; }
@@ -98,7 +98,7 @@ int nope=0;
 
 /*
  - regexec - interface for matching
- = extern int regexec(const regex_t *, const char *, size_t, \
+ = extern ajint regexec(const regex_t *, const char *, size_t, \
  =					regmatch_t [], int);
  = #define	REG_NOTBOL	00001
  = #define	REG_NOTEOL	00002
@@ -112,8 +112,8 @@ int nope=0;
  * have been prototyped.
  */
 				/* 0 success, REG_NOMATCH failure */
-int hsp_regexec(const regex_t *preg, const char *string, size_t nmatch,
-		regmatch_t pmatch[], int eflags)
+ajint hsp_regexec(const regex_t *preg, const char *string, size_t nmatch,
+		regmatch_t pmatch[], ajint eflags)
 {
     register REGUTSSTRUCT *g = preg->re_g;
 #ifdef REDEBUG

@@ -4,13 +4,13 @@
 #endif
 
 typedef struct AjSIntarr {
-  int Size;
-  int* Array;
+  ajint Size;
+  ajint* Array;
 } AjOIntarr, *AjPIntarr;
 
 
 typedef struct AjSFltarr {
-  int Size;
+  ajint Size;
   float* Array;
 } AjOFltarr, *AjPFltarr;
 
@@ -38,7 +38,8 @@ static AjPFltarr ajFltarrNew0(size_t size);
 **
 ******************************************************************************/
 
-int main (int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
 
   AjPSeq seq;
   AjPFile out;
@@ -47,16 +48,16 @@ int main (int argc, char * argv[]) {
   AjPGraph plot;
   AjPGraphData graphdata;
 
-  int iwin;
-  int ishift;
-  int i, j, k, ipos;
-  int isize;
+  ajint iwin;
+  ajint ishift;
+  ajint i, j, k, ipos;
+  ajint isize;
   char * sq;
-  int igc;
-  int imax;
-  int ibeg;
-  int iend;
-  int ilen;
+  ajint igc;
+  ajint imax;
+  ajint ibeg;
+  ajint iend;
+  ajint ilen;
   float amin=0.;
   float amax=0.;
   

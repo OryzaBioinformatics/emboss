@@ -35,25 +35,26 @@ static AjPStr getsubfromstring(AjPStr line,int which){
 
 static void typePrint (const void* key, void** value, void* cl){
   AjPStr keystr = (AjPStr) key;
-  int    *valptr = (int *) *value;
+  ajint    *valptr = (ajint *) *value;
 
   ajUser("type '%S' found %d times", keystr, *valptr);
 }
 
 static void freetype (const void* key, void** value, void* cl){
   AjPStr keystr = (AjPStr) key;
-  int    *valptr = (int *) *value;
+  ajint    *valptr = (ajint *) *value;
 
   ajStrDel(&keystr);
   AJFREE(valptr);
 }
  
-int main (int argc, char **argv) {
+int main(int argc, char **argv)
+{
   AjPStr temp;
   AjPFile gfffile;
   AjPStr  line=NULL;
   AjPTable type;
-  int *intptr;
+  ajint *intptr;
  
   embInit ("demotable", argc, argv);
 

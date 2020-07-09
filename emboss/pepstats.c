@@ -41,8 +41,8 @@ int main(int argc, char **argv)
 
     AjPSeq   a;
     AjPStr   substr;
-    int      be;
-    int      en;
+    ajint      be;
+    ajint      en;
     AjPFile  outf;
     AjBool   termini;
     
@@ -50,11 +50,11 @@ int main(int argc, char **argv)
     double charge;
     double iep;
     double molpc;
-    int *c;
-    int i;
-    int j;
-    int len;
-    int sum;
+    ajint *c;
+    ajint i;
+    ajint j;
+    ajint len;
+    ajint sum;
     
     float *dhstat=NULL;
 

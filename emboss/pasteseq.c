@@ -22,12 +22,12 @@
 
 #include "emboss.h"
 
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
   AjPSeq seq=NULL;
   AjPSeq insertseq=NULL;
   AjPSeqout seqout=NULL;
-  int pos=0;	/* position to insert after - can be 0 to sequence.length */
+  ajint pos=0;	/* position to insert after - can be 0 to sequence.length */
   AjPStr str=NULL;
 
   AjPSeq newseq=NULL; /* the new sequence */

@@ -24,23 +24,23 @@
 
 
 
-void print_hits(AjPFile *outf, AjPList *l, int nmotifs, AjPStr *name,
-		int begin, int end);
+void print_hits(AjPFile *outf, AjPList *l, ajint nmotifs, AjPStr *name,
+		ajint begin, ajint end);
 
 
 
 
 
 
-int main( int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
     AjPFile   outf=NULL;
-    int begin;
-    int end;
-    int emin;
-    int emax;
+    ajint begin;
+    ajint end;
+    ajint emin;
+    ajint emax;
     
     EmbPMatMatch mm=NULL;
     
@@ -54,8 +54,8 @@ int main( int argc, char **argv, char **env)
     AjBool    all;
     AjBool    ordered;
     
-    int hits;
-    int nmotifs;
+    ajint hits;
+    ajint nmotifs;
     
 
     embInit("pscan", argc, argv);
@@ -128,17 +128,17 @@ int main( int argc, char **argv, char **env)
 
 
 
-void print_hits(AjPFile *outf, AjPList *l, int nmotifs, AjPStr *name,
-		int begin, int end)
+void print_hits(AjPFile *outf, AjPList *l, ajint nmotifs, AjPStr *name,
+		ajint begin, ajint end)
 {
     EmbPMatMatch mm;
-    int i;
-    int j;
+    ajint i;
+    ajint j;
     AjBool found;
-    int nleft;
-    int maxelem=0;
-    int maxhpm;
-    int hpm=0;
+    ajint nleft;
+    ajint maxelem=0;
+    ajint maxhpm;
+    ajint hpm=0;
 
     nleft = nmotifs;
     

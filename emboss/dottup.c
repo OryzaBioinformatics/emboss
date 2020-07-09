@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 {
   
     AjPSeq seq1,seq2;
-    int wordlen;
+    ajint wordlen;
     AjPTable seq1MatchTable=0;
     AjPList matchlist=NULL;
     AjPGraph graph = NULL;
@@ -70,21 +70,21 @@ int main(int argc, char **argv)
     AjBool boxit,text;
     /* Different ticks as they need to be different for x and y due to
        length of string being important on x */
-    int acceptableticksx[]=
+    ajint acceptableticksx[]=
     {
 	1,10,50,100,500,1000,1500,10000,
 	500000,1000000,5000000
     };
-    int acceptableticks[]=
+    ajint acceptableticks[]=
     {
 	1,10,50,100,200,500,1000,2000,5000,10000,15000,
 	500000,1000000,5000000
     };
-    int numbofticks = 10;
+    ajint numbofticks = 10;
     float xmargin,ymargin;
     float ticklen,tickgap;
     float onefifth=0.0;
-    int i;
+    ajint i;
     float k,max;
     char ptr[10];
 
@@ -156,7 +156,7 @@ int main(int argc, char **argv)
 		for(k=0.0;k<ajSeqLen(seq1);k+=tickgap)
 		{
 		    ajGraphLine(k,0.0,k,0.0-ticklen);
-		    sprintf(ptr,"%d",(int)k+ajSeqOffset(seq1));
+		    sprintf(ptr,"%d",(ajint)k+ajSeqOffset(seq1));
 		    ajGraphTextMid ( k,0.0-(onefifth),ptr);
 		}
 	    }
@@ -188,7 +188,7 @@ int main(int argc, char **argv)
 		for(k=0.0;k<ajSeqLen(seq2);k+=tickgap)
 		{
 		    ajGraphLine(0.0,k,0.0-ticklen,k);
-		    sprintf(ptr,"%d",(int)k+ajSeqOffset(seq2));
+		    sprintf(ptr,"%d",(ajint)k+ajSeqOffset(seq2));
 		    ajGraphTextEnd ( 0.0-(onefifth),k,ptr);
 		}
 	    }
@@ -238,10 +238,10 @@ static void objtofile(void **x,void *cl)
 {
   EmbPWordMatch p = (EmbPWordMatch)*x;
   AjPFile file = (AjPFile) cl;
-  int x1;
-  int x2;
-  int y1;
-  int y2;
+  ajint x1;
+  ajint x2;
+  ajint y1;
+  ajint y2;
 
   x1 = (*p).seq1start;
   y1 = (*p).seq2start;

@@ -23,7 +23,7 @@
 
 #define DATANAME "PROSITE/prosite.lines" 
 
-int main (int argc, char *argv[] )
+int main(int argc, char **argv)
 {
     AjPFile infdat 	=NULL;
     AjPFile infdoc 	=NULL;
@@ -50,7 +50,7 @@ int main (int argc, char *argv[] )
     AjBool isopen;
     AjBool goback;
 
-    long storepos=0L;
+    ajlong storepos=0L;
     
 
     

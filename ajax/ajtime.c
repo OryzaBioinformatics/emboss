@@ -48,7 +48,7 @@ AjPTime ajTimeToday (void) {
 *******************************************************************/
 static char* TimeFormat(char *timefmt)
 {
-  int i;
+  ajint i;
   AjBool ok    = ajFalse;
   char *format = NULL ;
 
@@ -113,13 +113,13 @@ void ajTimeTrace (AjPTime thys) {
 ** The range validity of numbers given are not checked.
 **
 ** @param  [rN] timefmt [char*] Time format to use
-** @param  [rN] mday    [int]   Day of the month [1-31]
-** @param  [rN] mon     [int]   Month [1-12]
-** @param  [rN] year    [int]   Four digit year
+** @param  [rN] mday    [ajint]   Day of the month [1-31]
+** @param  [rN] mon     [ajint]   Month [1-12]
+** @param  [rN] year    [ajint]   Four digit year
 ** @return [AjPTime] An AjPTime object
 ** @@
 *******************************************************************/
-AjPTime ajTimeSet( char *timefmt, int mday, int mon, int year) {
+AjPTime ajTimeSet( char *timefmt, ajint mday, ajint mon, ajint year) {
    AjPTime thys = ajTimeTodayF (timefmt) ;
 
    thys->time->tm_mday  = mday ;

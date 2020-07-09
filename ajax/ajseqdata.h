@@ -49,7 +49,7 @@ typedef struct AjSSeqQuery {
   AjPStr Exclude;
   AjPStr Application;
   enum AjEQryType Type;
-  long Fpos;
+  ajlong Fpos;
   SeqSAccess* Access;
   void* QryData;
 } AjOSeqQuery, *AjPSeqQuery;
@@ -90,8 +90,8 @@ typedef struct AjSSeqin {
   AjPStr Desc;
   AjPStr Doc;
   AjPStr Inseq;			/* temporary input sequence holder */
-  int Begin;
-  int End;
+  ajint Begin;
+  ajint End;
   AjBool Rev;
   AjPList List;
   AjPStr Usa;
@@ -112,9 +112,9 @@ typedef struct AjSSeqin {
   AjBool Lower;
   AjBool Upper;
   AjBool Text;
-  int Count;
-  int Filecount;
-  long Fpos;
+  ajint Count;
+  ajint Filecount;
+  ajlong Fpos;
   AjPSeqQuery Query;
   void *Data;
 } AjOSeqin, *AjPSeqin;
@@ -193,11 +193,11 @@ typedef struct AjSSeq {
   AjPStr Desc;
   AjPStr Doc;
   AjBool Rev;
-  int Begin;
-  int End;
-  int Offset;
-  int Offend;
-  long Fpos;
+  ajint Begin;
+  ajint End;
+  ajint Offset;
+  ajint Offend;
+  ajlong Fpos;
   AjPStr Usa;
   AjPStr Ufo;
   AjPFeatTable Fttable;
@@ -244,10 +244,10 @@ typedef struct AjSSeq {
 ******************************************************************************/
 
 typedef struct AjSSeqset {
-  int Size;
-  int Len;
-  int Begin;
-  int End;
+  ajint Size;
+  ajint Len;
+  ajint Begin;
+  ajint End;
   AjBool Rev;
   float Totweight;
   AjPStr Type;
@@ -285,9 +285,9 @@ typedef struct AjSSeqset {
 typedef struct AjSSeqall {
   AjPSeq Seq;
   AjPSeqin Seqin;
-  int Count;
-  int Begin;
-  int End;
+  ajint Count;
+  ajint Begin;
+  ajint End;
   AjBool Rev;
 } AjOSeqall, *AjPSeqall;
 

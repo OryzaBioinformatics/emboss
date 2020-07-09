@@ -9,9 +9,9 @@ extern "C"
 
 
 void     embDataListDel( AjPList data);
-AjPTable embDataListGetTable( AjPList fullList, unsigned int required);
+AjPTable embDataListGetTable( AjPList fullList, ajuint required);
 void     embDataListGetTables( AjPList fullList, AjPList returnList,
-				 unsigned int required);
+			       ajuint required);
 void     embDataListInit( AjPList data, AjPStr file_name);
 
 #endif

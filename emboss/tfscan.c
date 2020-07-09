@@ -26,20 +26,20 @@
 #include "string.h"
 
 
-void print_hits(AjPStr name, AjPList *l, int hits, AjPFile outf, int begin,
-		int end, AjPTable t, AjPSeq seq);
+void print_hits(AjPStr name, AjPList *l, ajint hits, AjPFile outf, ajint begin,
+		ajint end, AjPTable t, AjPSeq seq);
 
 
 
-int main( int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
     AjPFile   outf=NULL;
     AjPFile   inf=NULL;
     
-    int begin;
-    int end;
+    ajint begin;
+    ajint end;
     
     AjPList   l=NULL;
 
@@ -56,9 +56,9 @@ int main( int argc, char **argv, char **env)
     AjPStr    value=NULL;
     AjPTable  atable=NULL;
     
-    int mismatch;
-    int sum;
-    int v;
+    ajint mismatch;
+    ajint sum;
+    ajint v;
     
     char *p;
 
@@ -153,10 +153,10 @@ int main( int argc, char **argv, char **env)
 }
 
 
-void print_hits(AjPStr name, AjPList *l, int hits, AjPFile outf, int begin,
-		int end, AjPTable t, AjPSeq seq)
+void print_hits(AjPStr name, AjPList *l, ajint hits, AjPFile outf, ajint begin,
+		ajint end, AjPTable t, AjPSeq seq)
 {
-    int i;
+    ajint i;
     EmbPMatMatch m;
     AjPStr acc=NULL;
     AjPStr s=NULL;

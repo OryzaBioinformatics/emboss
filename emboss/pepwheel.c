@@ -40,7 +40,7 @@ static void drawocta(float x, float y, float size, AjBool text, AjPFile outf);
 #define AJB_PURPLE 10
 
 
-int main( int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
     AjPSeq    seq=NULL;
     AjPStr    strand=NULL;
@@ -57,17 +57,17 @@ int main( int argc, char **argv, char **env)
     AjBool first;
     AjBool startloop;
     
-    int begin;
-    int end;
-    int len;
+    ajint begin;
+    ajint end;
+    ajint len;
 
-    int steps;
-    int turns;
-    int lc;
+    ajint steps;
+    ajint turns;
+    ajint lc;
     
-    int i;
-    int j;
-    int k;
+    ajint i;
+    ajint j;
+    ajint k;
     
     float xmin= -1.0;
     float xmax=  1.0;
@@ -158,7 +158,7 @@ int main( int argc, char **argv, char **env)
     
     first = ajTrue;
     angle = 90.0 + ang;
-    if(end-begin > (int)minresplot) wradius = 0.2;
+    if(end-begin > (ajint)minresplot) wradius = 0.2;
     else                            wradius = 0.40;
 
     for(i=0,lc=0,radius=wradius+wheelgap;i<len;i+=steps)
@@ -243,7 +243,7 @@ static void drawocta(float x, float y, float size, AjBool text, AjPFile outf)
 	0.1, 0.1, 0.05, -0.05, -0.1, -0.1, -0.05, 0.05, 0.1
     }
     ;
-    int i;
+    ajint i;
     
 
     for(i=0;i<8;++i)

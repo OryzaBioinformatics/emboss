@@ -34,20 +34,20 @@
 typedef struct primerguts{
   AjPStr patstr;
   AjPStr origpat;
-  int type;
-  int len;
-  int real_len;
+  ajint type;
+  ajint len;
+  ajint real_len;
   AjBool amino;
   AjBool carboxyl;
 
-  int mm;
+  ajint mm;
 
-  int* buf;
-  unsigned int* sotable;
-  unsigned int solimit;
+  ajint* buf;
+  ajuint* sotable;
+  ajuint solimit;
   EmbOPatBYPNode off[AJALPHA];
   AjPStr re;
-  int **skipm;
+  ajint **skipm;
   void* tidy;
 }*PGuts;
 
@@ -58,11 +58,11 @@ typedef struct primerhit{
   AjPStr acc;
   AjPStr forward; /* pattern that hits forward strand */
   AjPStr reverse; /* pattern that hits reverse strand */
-  int forward_pos;
-  int reverse_pos;
-  int amplen;
-  int forward_mismatch;
-  int reverse_mismatch;
+  ajint forward_pos;
+  ajint reverse_pos;
+  ajint amplen;
+  ajint forward_mismatch;
+  ajint reverse_mismatch;
 }*PHit;
 
 /* primer pairs will be read into a list of these structs */
@@ -82,7 +82,7 @@ static void free_primer(void** x, void* cl);
 static void clean_hitlist(AjPList hlist);
 
 /* utilities */
-static void read_primers(AjPList* primerList, AjPFile primerFile, int mmp);
+static void read_primers(AjPList* primerList, AjPFile primerFile, ajint mmp);
 static AjBool classify_and_compile(Primer* primdata);
 static void primer_search(AjPList primerList, AjPSeq seq, AjPFile outf);
 static void scan_seq(Primer primdata, AjPSeq seq, AjBool reverse, AjPFile outf);
@@ -90,7 +90,7 @@ static void store_hits(Primer primdata, AjPList fhits_list, AjPList rhits_list, 
 static void print_hits(AjPList primerList, AjPFile outf);
 
 
-int main (int argc, char * argv[])
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq seq = NULL;
@@ -98,7 +98,7 @@ int main (int argc, char * argv[])
     AjPFile outf;
     AjPList primerList;
 
-    int mmp=0;
+    ajint mmp=0;
 
     embInit ("primersearch", argc, argv);
     
@@ -158,7 +158,7 @@ static void initialise_pguts(PGuts* primer)
 /* Frees up all the internal members of a PGuts struct */
 static void free_pguts(PGuts* primer)
 {
-  int i=0;
+  ajint i=0;
    
   ajStrDel(&(*primer)->patstr);
   ajStrDel(&(*primer)->origpat);
@@ -229,12 +229,12 @@ static void clean_hitlist(AjPList hlist)
 
 /* utilities */
 /* read primers in from primerfile, classify and compile the patterns */
-static void read_primers(AjPList *primerList, AjPFile primerFile, int mmp)
+static void read_primers(AjPList *primerList, AjPFile primerFile, ajint mmp)
 {
   AjPStr rdline = NULL;
   AjPStrTok handle = NULL;
 
-  int nprimers = 0;
+  ajint nprimers = 0;
   Primer primdata = NULL;
 
 
@@ -270,8 +270,8 @@ static void read_primers(AjPList *primerList, AjPFile primerFile, int mmp)
 	      ajStrStr(primdata->forward->patstr));
 
     /* set the mismatch level */
-    primdata->forward->mm = (int) (ajStrLen(primdata->forward->patstr)*mmp)/100;
-    primdata->reverse->mm = (int) (ajStrLen(primdata->reverse->patstr)*mmp)/100;
+    primdata->forward->mm = (ajint) (ajStrLen(primdata->forward->patstr)*mmp)/100;
+    primdata->reverse->mm = (ajint) (ajStrLen(primdata->reverse->patstr)*mmp)/100;
 
     if(classify_and_compile(&primdata))
       {
@@ -376,8 +376,8 @@ static void scan_seq(Primer primdata, AjPSeq seq, AjBool reverse, AjPFile outf)
   AjPStr seqstr = NULL;
   AjPStr revstr = NULL;
   AjPStr seqname = NULL;
-  int fhits = 0;
-  int rhits = 0;
+  ajint fhits = 0;
+  ajint rhits = 0;
   AjPList fhits_list = NULL;
   AjPList rhits_list = NULL;
   
@@ -500,7 +500,7 @@ static void scan_seq(Primer primdata, AjPSeq seq, AjBool reverse, AjPFile outf)
 
 static void store_hits(Primer primdata, AjPList fhits, AjPList rhits, AjPSeq seq, AjBool reverse)
 {
-  int amplen = 0;
+  ajint amplen = 0;
   AjIList fi;
   AjIList ri;
 
@@ -517,9 +517,9 @@ static void store_hits(Primer primdata, AjPList fhits, AjPList rhits, AjPSeq seq
       ri = ajListIter(rhits);
       while(!ajListIterDone(ri))
 	{
-	  int seqlen = ajSeqLen(seq);
-	  int s = (fm->start);
-	  int e;
+	  ajint seqlen = ajSeqLen(seq);
+	  ajint s = (fm->start);
+	  ajint e;
 
 	  rm = ajListIterNext(ri);
 	  e = (rm->start-1); 
@@ -570,7 +570,7 @@ static void print_hits(AjPList primerList, AjPFile outf)
   /* iterate through list of hits */
   AjIList lIter;
 
-  int count = 1;
+  ajint count = 1;
   lIter = ajListIter(primerList);
   while(!ajListIterDone(lIter))
   {

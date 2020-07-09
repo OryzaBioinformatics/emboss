@@ -29,14 +29,14 @@
 
 
 
-void findgc(AjPStr *strand, int begin, int end, int window, int shift,
-	    float formamide, float mismatch, int prodLen, float dna,
+void findgc(AjPStr *strand, ajint begin, ajint end, ajint window, ajint shift,
+	    float formamide, float mismatch, ajint prodLen, float dna,
 	    float salt, float temperature, AjBool isDNA, AjBool isProduct, 
 	    AjBool dothermo, AjPFile outf, AjBool doplot, float *xa, float *ta,
-	    float *tpa, float *cga, int *npoints);
+	    float *tpa, float *cga, ajint *npoints);
 
 void plotit(AjPSeq *seq, float *xa, float *ta, float *cga, float *tpa,
-	    int npoints, int ibegin, int iend, AjPGraph mult,
+	    ajint npoints, ajint ibegin, ajint iend, AjPGraph mult,
 	    float mintemp);
 
 void unfmall(float *xa, float *ta, float *tpa, float *cga);
@@ -45,14 +45,14 @@ void unfmall(float *xa, float *ta, float *tpa, float *cga);
 
 
 
-int main( int argc, char ** argv, char ** env)
+int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPFile    outf=NULL;
-    int begin;
-    int end;
-    int window;
-    int shift;
+    ajint begin;
+    ajint end;
+    ajint window;
+    ajint shift;
     float DNAConc;
     float saltConc;
     float temperature=0.0;
@@ -69,14 +69,14 @@ int main( int argc, char ** argv, char ** env)
     
     AjPSeq seq;
     AjPStr strand=NULL;
-    int len;
+    ajint len;
     
     static float *xa;
     static float *ta;
     static float *tpa;
     static float *cga;
-    static int   npoints;
-    int    n;
+    static ajint   npoints;
+    ajint    n;
 
 
     (void) ajGraphInit("dan", argc, argv);
@@ -169,23 +169,23 @@ int main( int argc, char ** argv, char ** env)
 
 
 
-void findgc(AjPStr *strand, int begin, int end, int window, int shift,
-	    float formamide, float mismatch, int prodLen, float dna,
+void findgc(AjPStr *strand, ajint begin, ajint end, ajint window, ajint shift,
+	    float formamide, float mismatch, ajint prodLen, float dna,
 	    float salt, float temperature, AjBool isDNA, AjBool isproduct, 
 	    AjBool dothermo, AjPFile outf, AjBool doplot, float xa[], 
-	    float ta[], float tpa[], float cga[], int *np)
+	    float ta[], float tpa[], float cga[], ajint *np)
 {
     static AjBool initialised=0;
     AjPStr type=NULL;
     AjPStr substr=NULL;
     float  fwindow;
-    int    i;
-    int ibegin;
-    int iend;
+    ajint    i;
+    ajint ibegin;
+    ajint iend;
     float fprodlen;
     float TmP1;
     float TmP2;
-    int   e;
+    ajint   e;
 
     float DeltaG=0.0;
     float DeltaH;
@@ -282,14 +282,14 @@ void unfmall(float *xa, float *ta, float *tpa, float *cga)
 
 
 void plotit(AjPSeq *seq, float *xa, float *ta, float *cga, float *tpa,
-	    int npoints, int ibegin, int iend, AjPGraph graphs,
+	    ajint npoints, ajint ibegin, ajint iend, AjPGraph graphs,
 	    float mintemp)
 {
     AjPGraphData tmGraph=NULL;
     float max = -64000.;
     float min = 64000.;
     
-    int i;
+    ajint i;
     
     for(i=0;i<npoints;++i)
     {
@@ -311,7 +311,7 @@ void plotit(AjPSeq *seq, float *xa, float *ta, float *cga, float *tpa,
     ajGraphxySetYStart(graphs,0.0);
     ajGraphxySetYEnd(graphs,100.0);
     ajGraphxySetXRangeII(graphs,ibegin,iend);
-    ajGraphxySetYRangeII(graphs,(int)mintemp,100);
+    ajGraphxySetYRangeII(graphs,(ajint)mintemp,100);
 
     ajGraphDataxySetTypeC(tmGraph,"2D Plot");
     ajGraphDataxySetMaxMin(tmGraph,(float)ibegin,(float)iend,min,max);

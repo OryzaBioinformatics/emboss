@@ -571,6 +571,7 @@ dnl   #include <zlib.h>
 dnl   #endif /* PLD_png */
 dnl
 dnl @author Ian Longden <il@sanger.ac.uk>
+dnl Modified: Alan Bleasby. Corrected library order
 dnl
 
 AC_DEFUN(CHECK_PNGDRIVER,
@@ -638,7 +639,7 @@ then
 # If everything found okay then proceed to include png driver in config.
 #
 	if test $CHECK = "1" ; then
-	  LIBS="$LIBS -lz -lgd -lpng"
+	  LIBS="$LIBS -lgd -lpng -lz"
 	  AC_DEFINE(PLD_png)
 	else
 #

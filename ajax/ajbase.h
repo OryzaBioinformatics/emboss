@@ -21,11 +21,13 @@ extern AjBool aj_base_I;
 extern float aj_base_prob[][32];
 
 
-extern void ajBaseInit(void);
-extern int  ajAZToInt(int c);
-extern int  ajAZToBin(int c);
+extern  void ajBaseInit(void);
+AjBool  ajBaseAa1ToAa3(char aa1, AjPStr *aa3);
+
+extern ajint  ajAZToInt(ajint c);
+extern ajint  ajAZToBin(ajint c);
 extern char ajAZToBinC(char c);
-extern int  ajIntToAZ(int n);
+extern ajint  ajIntToAZ(ajint n);
 
 #endif
 

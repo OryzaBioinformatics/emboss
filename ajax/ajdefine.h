@@ -6,6 +6,8 @@ extern "C"
 #ifndef ajdefine_h
 #define ajdefine_h
 
+#include "ajarch.h"
+
 #define NPOS (size_t) (-1)
 /* const size_t NPOS = (size_t) (-1);*/ /* maximum size_t value */
 
@@ -29,7 +31,7 @@ enum capacity {default_size, reserve};
 ** @@
 ******************************************************************************/
 
-typedef int AjBool;
+typedef ajint AjBool;
 
 /* @data AjDate *******************************************************
 **
@@ -41,7 +43,7 @@ typedef int AjBool;
 ** @@
 ******************************************************************************/
 
-typedef int AjDate;
+typedef ajint AjDate;
 
 /* @data AjStatus *******************************************************
 **
@@ -53,25 +55,25 @@ typedef int AjDate;
 ** @@
 ******************************************************************************/
 
-typedef int AjStatus;
+typedef ajint AjStatus;
 
-typedef int AjEnum;
-typedef int AjMask;
+typedef ajint AjEnum;
+typedef ajint AjMask;
 
-typedef int AjInt4;		/* 4 bytes integer */
+typedef ajint AjInt4;		/* 4 bytes integer */
 
 #define AJAXLONGDOUBLE double
 
 #define AJBOOL(b) (b ? "TRUE" : "FALSE")
-static const int ajFltDig = 3;
+static const ajint ajFltDig = 3;
 
-static const int ajFalse = 0;
-static const int ajTrue = 1;
-static const int ajStatusOK = 0;
-static const int ajStatusInfo = 1;
-static const int ajStatusWarn = 2;
-static const int ajStatusError = 4;
-static const int ajStatusFatal = 8;
+static const ajint ajFalse = 0;
+static const ajint ajTrue = 1;
+static const ajint ajStatusOK = 0;
+static const ajint ajStatusInfo = 1;
+static const ajint ajStatusWarn = 2;
+static const ajint ajStatusError = 4;
+static const ajint ajStatusFatal = 8;
 
 #define AJFALSE 0
 #define AJTRUE 1

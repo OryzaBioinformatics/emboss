@@ -7,16 +7,16 @@
 AjPFile outfile;
 
 struct record{
-  int score;
+  ajint score;
   float ident;
   char *name1; 
-  int start1;
-  int end1;
+  ajint start1;
+  ajint end1;
   char *name2;
-  int start2;
-  int end2;
-  int offset; /* offset from the start of the "consensus" */
-  int added;
+  ajint start2;
+  ajint end2;
+  ajint offset; /* offset from the start of the "consensus" */
+  ajint added;
 };
 
 struct tableTop{
@@ -25,26 +25,26 @@ struct tableTop{
 };
 
 struct homol {
-  int start;
-  int end;
-  int offset;
-  int dup;
-  int score;
+  ajint start;
+  ajint end;
+  ajint offset;
+  ajint dup;
+  ajint score;
   char *name;
   char *seq;
 };
 
-static int compare(const void *x, const void *y) {
+static ajint compare(const void *x, const void *y) {
   EmbPWord x1 = ((EmbPWord2)x)->fword;
   EmbPWord y1 = ((EmbPWord2)y)->fword;
   
   return (y1->count-x1->count);
 }
 
-void tempTable(AjPTable table, int wordlen){
+void tempTable(AjPTable table, ajint wordlen){
   void **array = ajTableToarray(table, NULL);
   EmbPWord new;
-  int i,*pos;
+  ajint i,*pos;
 
   qsort(array, ajTableLength(table), 2*sizeof (*array),compare);
   for (i = 0; array[i]; i += 2) {
@@ -55,7 +55,7 @@ void tempTable(AjPTable table, int wordlen){
       ajFmtPrintF (outfile,
 		   "// %.*s\t%d", wordlen, new->fword,new->count);
       while(ajListIterMore(iter)){
-	pos = (int *) ajListIterNext(iter);
+	pos = (ajint *) ajListIterNext(iter);
 	ajFmtPrintF (outfile, "\t%d",*pos);
       }
       ajFmtPrintF (outfile, "\n");
@@ -70,7 +70,7 @@ AjPSeq efetchSeq(char *name)
   char *cp;
   char fetchstr[256];
   FILE *pipe;
-  int   len=0, d;
+  ajint   len=0, d;
   AjPSeq seq;
   
   sprintf(fetchstr, "efetch -q '%s'", name);
@@ -108,20 +108,20 @@ AjPSeq efetchSeq(char *name)
   return seq;
 }
 
-char * getsseq(AjPList sequencePartsList, int size, int verbose)
+char * getsseq(AjPList sequencePartsList, ajint size, ajint verbose)
 {
   AjIList iter = ajListIter(sequencePartsList);
   char fetchstr[256];
   char *cp;
   FILE *pipe;
-  int   len=0, d;
-  int total_len=0;
+  ajint   len=0, d;
+  ajint total_len=0;
   char * auxseqcon;
-  int j = 0,k,i;
-  int *a;
-  int *c;
-  int *g;
-  int *t;
+  ajint j = 0,k,i;
+  ajint *a;
+  ajint *c;
+  ajint *g;
+  ajint *t;
 
   AJCNEW0(a, size+1);
   AJCNEW0(c, size+1);
@@ -225,7 +225,7 @@ char * getsseq(AjPList sequencePartsList, int size, int verbose)
       if(subseq->seq[i] == auxseqcon[i])
 	j++;
     }
-    subseq->score = (int)((j*100)/(subseq->end-subseq->start));
+    subseq->score = (ajint)((j*100)/(subseq->end-subseq->start));
     AJFREE(subseq->seq);
   }
   ajListIterFree(iter);
@@ -264,41 +264,41 @@ void cleanup_Cluster(AjPList list){
   ajListFree(&list);
 }
 
-void consensus_output(AjPList unorderedlist, int addblanks,int number) {
+void consensus_output(AjPList unorderedlist, ajint addblanks,int number) {
 
   void **array = NULL;
   struct homol *homol;
   struct homol *homolptr[1800];
   struct homol *temp;
 
-  int homolmax = 0;
-  int i,j,found1,found2,notallsorted,num,min,k;
+  ajint homolmax = 0;
+  ajint i,j,found1,found2,notallsorted,num,min,k;
   struct record *match;
   struct record *match2;
-  static int count=0;
-  int start,max;
+  static ajint count=0;
+  ajint start,max;
   char * dnaoutput;
   char * cp;
   AjPList sublist;
   /*  AjIList iter;
-  int lastpos;
+  ajint lastpos;
   char *lastname;*/
-  int index;
+  ajint index;
   AjPTable hashTable;
 
   struct strange{
-    int min;
-    int max;
-    int total;
-    int maxmatch;
-    int indexofmaxmatch;
+    ajint min;
+    ajint max;
+    ajint total;
+    ajint maxmatch;
+    ajint indexofmaxmatch;
     char *name;
   }*s1;
 
-  int first = 1;
+  ajint first = 1;
   char *name =0;
-  int ia;
-  int wordlen = 10;
+  ajint ia;
+  ajint wordlen = 10;
 
   AJCNEW(homol, (ajListLength(unorderedlist)+1)*2);
 
@@ -502,7 +502,7 @@ void consensus_output(AjPList unorderedlist, int addblanks,int number) {
   /* then carry on as normal */
   /*except for initial homol[0] etc */
 
-  /* do long sort */
+  /* do ajlong sort */
 
   for (i = 0; i < (ia-1); i++){  
     match = (struct record *) array[i];
@@ -548,7 +548,7 @@ void consensus_output(AjPList unorderedlist, int addblanks,int number) {
   /* with respect to the others. Hence loop until all added */
 
   if (ia > 1) {
-    int diff1=0,diff2=0;
+    ajint diff1=0,diff2=0;
     notallsorted = 1;
     while(notallsorted){
       for( i = 0; i < ia; i++){
@@ -897,8 +897,8 @@ void match_Print(void **x,void *cl){
 void cluster_Print_Ace(struct tableTop *cluster){
   AjIList iter = ajListIter(cluster->matches);
   AjPTable hashTable;
-  int junk = 9;
-  int *count = &junk;
+  ajint junk = 9;
+  ajint *count = &junk;
 
   /* create hash table to make sure seq only printed out once */
   hashTable = ajStrTableNewC(0); 
@@ -928,8 +928,8 @@ void mergeTwoClusters(AjPList list, struct tableTop *cluster1,
   struct record *match2;
   AjIList iter = ajListIter(cluster2->matches);
   void **array = ajTableToarray(cluster2->hashTable, NULL);
-  int i;
-  int *count = 0;
+  ajint i;
+  ajint *count = 0;
 
 
     /* add the matches */
@@ -955,7 +955,7 @@ void mergeTwoClusters(AjPList list, struct tableTop *cluster1,
 
 }
 
-int isTheReverse(struct record *match, struct tableTop *cluster1){
+ajint isTheReverse(struct record *match, struct tableTop *cluster1){
   AjIList iter = ajListIter(cluster1->matches);
 
     while(ajListIterMore(iter)){         /* for each cluster */
@@ -976,7 +976,8 @@ int isTheReverse(struct record *match, struct tableTop *cluster1){
 
 
 
-int main(int argc, char * argv[]){
+int main(int argc, char **argv)
+{
   AjPFile matchfile;
 
   AjPStr line = NULL;
@@ -985,10 +986,10 @@ int main(int argc, char * argv[]){
   struct tableTop *cluster1=0;
   struct tableTop *cluster2=0;
   AjPList list =0;
-  int junk = 9;
-  int *count = &junk;
-  int num = 0;
-  int i =0;
+  ajint junk = 9;
+  ajint *count = &junk;
+  ajint num = 0;
+  ajint i =0;
   AjBool consensus;
 
   embInit("cluster", argc, argv);

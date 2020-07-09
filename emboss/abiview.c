@@ -27,32 +27,40 @@
 
 
 static AjPGraphData graphDisplay(AjPGraph graphs, AjPInt2d trace, 
-            int nstart, int nstop, AjPShort  basePositions, int base,
-            int colour, AjBool overlay, float tmax, int* ntrace);
+            ajint nstart, ajint nstop, AjPShort  basePositions, ajint base,
+            ajint colour, AjBool overlay, float tmax, ajint* ntrace);
 
-static AjPGraphData graphTextDisplay(AjPGraph graphs, int nstart,
-             int nstop, AjPShort  basePositions, 
-             AjBool overlay, AjPStr nseq, float tmax, int nt);
+static AjPGraphData graphTextDisplay(AjPGraph graphs, ajint nstart,
+             ajint nstop, AjPShort  basePositions, 
+             AjBool overlay, AjPStr nseq, float tmax, ajint nt);
 
-static void TextDisplay(AjPGraph graphs, int nstart, int nstop,
-                 AjPStr nseq);
-static int getResColour(char B);
+static void TextDisplay(AjPGraph graphs, ajint nstart, ajint nstop,
+                        AjPStr nseq, float tmax);
+static AjBool drawbase(char* res, AjPStr baseN);
+static ajint getResColour(char B);
 
 
 
-int main (int argc, char * argv[])
+int main(int argc, char **argv)
 {
     AjPStr  fname;
     AjPFile fp;
     AjPSeqout seqout;
     AjPSeq    seqo;
     AjPStr    nseq;
+    AjPStr    baseN;
     AjPInt2d  trace=NULL;
     AjPShort  basePositions=NULL;
     AjPGraph  graphs = NULL;
+
+    AjBool graph1;
+    AjBool graph2;
+    AjBool graph3;
+    AjBool graph4;
     AjBool overlay;
     AjBool separate;
     AjBool yticks;
+    AjBool dseq;
 
     AjPGraphData gd1 = NULL;
     AjPGraphData gd2 = NULL;
@@ -60,20 +68,22 @@ int main (int argc, char * argv[])
     AjPGraphData gd4 = NULL;
     AjPGraphData gd5 = NULL;
 
-    int ntrace;
-    int strace;
-    long int fwo_;
+    ajint ntrace;
+    ajint strace;
+    ajlong fwo_;
 
     float tmax;
-    int nstart;
-    int nstop;
-    int window;
-    int i;
-    int base;
-    long int baseO;
-    long int numBases;
-    long int numPoints;
-    long int dataOffset[4];
+    ajint nstart;
+    ajint nstop;
+    ajint window;
+    ajint i;
+    ajint base;
+    ajint nbases;
+    ajlong baseO;
+    ajlong numBases;
+    ajlong  basePosO;
+    ajlong numPoints;
+    ajlong dataOffset[4];
 
     char res1;
     char res2;
@@ -81,20 +91,23 @@ int main (int argc, char * argv[])
     char res4;
 
     /* BYTE[i] is a byte mask for byte i */
-    const long int BYTE[] = { 0x000000ff };
+    const ajlong BYTE[] = { 0x000000ff };
    
 
 
     (void) ajGraphInit ("abiview", argc, argv);
 
     fname    = ajAcdGetString("fname");
-    graphs   = ajAcdGetGraphxy( "graph");
+    graphs   = ajAcdGetGraphxy("graph");
     seqout   = ajAcdGetSeqout("outseq");
     separate = ajAcdGetBool("separate");
-    yticks = ajAcdGetBool("yticks");
+    yticks   = ajAcdGetBool("yticks");
+    dseq     = ajAcdGetBool("sequence");
     window   = ajAcdGetInt("window");
+    baseN    = ajAcdGetString("bases");
 
 
+    nbases = ajStrLen(baseN);
     overlay = !separate;
 
     fp = ajFileNewIn(fname);
@@ -104,6 +117,9 @@ int main (int argc, char * argv[])
     numBases = ajSeqABIGetNBase(fp);
     baseO = ajSeqABIGetBaseOffset(fp); /* find BASE tag & get offset */
     nseq = ajStrNew();                 /* read in sequence */
+
+    if(graphs->displaytype == 17)
+            window = numBases+1;
 
     trace = ajInt2dNew();
     basePositions = ajShortNew();
@@ -120,7 +136,16 @@ int main (int argc, char * argv[])
     res3 = (char)(fwo_>>8&BYTE[0]);
     res4 = (char)(fwo_&BYTE[0]);
 
+
+    graph1 = drawbase(&res1,baseN);    /* decide if to draw graph for each base */
+    graph2 = drawbase(&res2,baseN);
+    graph3 = drawbase(&res3,baseN);
+    graph4 = drawbase(&res4,baseN);
+    
+
     ajSeqABIReadSeq(fp,baseO,numBases,&nseq);
+    basePosO = ajSeqABIGetBasePosOffset(fp);      /* find PLOC tag & get offset */
+    ajFileSeek(fp,basePosO,SEEK_SET);
     ajSeqABIGetBasePosition(fp,numBases,&basePositions);
 
 
@@ -161,47 +186,62 @@ int main (int argc, char * argv[])
       if(nstop > numBases) 
           nstop = numBases;
 
-      ajGraphSetMulti(graphs,5);
+      ajGraphSetMulti(graphs,nbases+1);
       ajGraphxySetOverLap(graphs,overlay);
 
-      gd1 = graphDisplay(graphs,trace,nstart,nstop,basePositions,
-                 0,getResColour(res1),overlay,tmax,&ntrace);
+      if(graph1)
+        gd1 = graphDisplay(graphs,trace,nstart,nstop,basePositions,
+                        0,getResColour(res1),overlay,tmax,&ntrace);
 
       ntrace = strace;
-      gd2 = graphDisplay(graphs,trace,nstart,nstop,basePositions,
-                 1,getResColour(res2),overlay,tmax,&ntrace);
+      if(graph2)
+        gd2 = graphDisplay(graphs,trace,nstart,nstop,basePositions,
+                        1,getResColour(res2),overlay,tmax,&ntrace);
       ntrace = strace;
 
-      gd3 = graphDisplay(graphs,trace,nstart,nstop,basePositions,
-                 2,getResColour(res3),overlay,tmax,&ntrace);
+      if(graph3)
+        gd3 = graphDisplay(graphs,trace,nstart,nstop,basePositions,
+                        2,getResColour(res3),overlay,tmax,&ntrace);
       ntrace = strace;
 
-      gd4 = graphDisplay(graphs,trace,nstart,nstop,basePositions,
-                 3,getResColour(res4),overlay,tmax,&ntrace);
+      if(graph4)
+        gd4 = graphDisplay(graphs,trace,nstart,nstop,basePositions,
+                        3,getResColour(res4),overlay,tmax,&ntrace);
 
-      if(!overlay)
-        gd5 = graphTextDisplay(graphs,nstart,nstop,basePositions,
-                              overlay,nseq,tmax,strace);
-      else
-        TextDisplay(graphs,nstart,nstop,nseq);
+
+      /* Sequence text display */
+      if(dseq) 
+      {
+         if(!overlay)
+           gd5 = graphTextDisplay(graphs,nstart,nstop,basePositions,
+                                 overlay,nseq,tmax,strace);
+         else
+           TextDisplay(graphs,nstart,nstop,nseq,tmax);
+      }
 
       strace = ntrace;
 
       ajGraphxyDisplay(graphs,ajFalse); 
 
+      /* Clean up */
       if(nstop<numBases)
       {
-         ajGraphDataDel(&gd1);                     /* free graph data mem */
-         ajGraphDataDel(&gd2);
-         ajGraphDataDel(&gd3);
-         ajGraphDataDel(&gd4);
-         if(!overlay)          
-         {                     
-            ajGraphDataObjDel(&gd5);            /* free seq text mem */
-            ajGraphDataDel(&gd5);
+         if(graph1) ajGraphDataDel(&gd1);       /* free graph data mem */
+         if(graph2) ajGraphDataDel(&gd2);
+         if(graph3) ajGraphDataDel(&gd3);
+         if(graph4) ajGraphDataDel(&gd4);
+
+         if(dseq) 
+         {
+           if(!overlay)          
+           {                     
+              ajGraphDataObjDel(&gd5);          /* free seq text mem */
+              ajGraphDataDel(&gd5);
+           }
+           else
+              ajGraphObjDel(&graphs);	        /* free seq text mem */
          }
-         else
-            ajGraphObjDel(&graphs);	        /* free seq text mem */
+
          ajGraphNewPage(ajFalse);               /* display new page  */
       }
 
@@ -238,19 +278,19 @@ int main (int argc, char * argv[])
 **     
 *************************************************************************/
 static AjPGraphData graphDisplay(AjPGraph graphs, AjPInt2d trace, 
-             int nstart, int nstop, AjPShort  basePositions,
-             int base, int colour, AjBool overlay, float tmax,
-             int* nt)
+             ajint nstart, ajint nstop, AjPShort  basePositions,
+             ajint base, ajint colour, AjBool overlay, float tmax,
+             ajint* nt)
 {
-    int i;
-    short bP;
-    short lastbP;
-    int bstart;
+    ajint i;
+    ajshort bP;
+    ajshort lastbP;
+    ajint bstart;
 
     AjPGraphData gdata;
 
 
-/* create graph data object */
+    /* create graph data object */
     gdata = ajGraphxyDataNewI(ajShortGet(basePositions,nstop-1)-(*nt));
 
     if(nstart>0)
@@ -294,12 +334,12 @@ static AjPGraphData graphDisplay(AjPGraph graphs, AjPInt2d trace,
 ** returns: graph data object containing the sequence text
 **          
 *************************************************************************/
-static AjPGraphData graphTextDisplay(AjPGraph graphs, int nstart,
-             int nstop, AjPShort  basePositions, AjBool overlay,
-             AjPStr nseq, float tmax, int nt)
+static AjPGraphData graphTextDisplay(AjPGraph graphs, ajint nstart,
+             ajint nstop, AjPShort  basePositions, AjBool overlay,
+             AjPStr nseq, float tmax, ajint nt)
 {
-    int i;
-    int colres;
+    ajint i;
+    ajint colres;
 
     AjPGraphData gdata;
    
@@ -336,11 +376,11 @@ static AjPGraphData graphTextDisplay(AjPGraph graphs, int nstart,
 ** returns: 
 **          
 *************************************************************************/
-static void TextDisplay(AjPGraph graphs, int nstart, int nstop,
-                        AjPStr nseq)
+static void TextDisplay(AjPGraph graphs, ajint nstart, ajint nstop,
+                        AjPStr nseq, float tmax)
 {
-    int i;
-    int colres;
+    ajint i;
+    ajint colres;
 
     char res[2];
 
@@ -349,10 +389,46 @@ static void TextDisplay(AjPGraph graphs, int nstart, int nstop,
     {
        *res = ajStrChar(nseq,i);
        colres = getResColour(*res);
-       ajGraphObjAddText(graphs,(float)i+1.,1225.,colres,res);
+       ajGraphObjAddText(graphs,(float)i+1.,tmax+30.,colres,res);
     }
 
     return;
+}
+
+
+/* @funcstatic drawbase *************************************************
+**
+** Test to see if this base, i.e. res, is selected to be drawn 
+** (default is to draw graphs for all bases);
+**
+** returns: Boolean
+**
+*************************************************************************/
+static AjBool drawbase(char* res, AjPStr baseN)
+{
+
+  AjPRegexp rexp = NULL;
+  AjBool draw = ajFalse;
+  AjPStr b;
+  ajint i;
+
+
+  b = ajStrNew();
+  ajStrAssSubC(&b,res,0,0);
+
+  for(i=0;i<4;i++)
+  {
+    rexp = ajRegComp(b);
+    if(ajRegExec(rexp,baseN))
+    {
+      draw = ajTrue;
+    }
+    ajRegFree(&rexp);
+  }
+
+  ajStrDel(&b);
+
+  return draw;
 }
 
 
@@ -363,7 +439,7 @@ static void TextDisplay(AjPGraph graphs, int nstart, int nstop,
 ** returns: base colour
 **         
 *************************************************************************/
-static int getResColour(char B)
+static ajint getResColour(char B)
 {
   return ((B)=='C'?RED:(B)=='A'?GREEN:(B)=='G'?BLUE:(B)=='T'?BLACK:YELLOW);
 }

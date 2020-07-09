@@ -22,10 +22,10 @@
 **
 ** @param [r] x [const void *] First word
 ** @param [r] y [const void *] Second word
-** @return [int] difference 
+** @return [ajint] difference 
 ** @@
 ******************************************************************************/
-static int wordCmpStr(const void *x, const void *y) {
+static ajint wordCmpStr(const void *x, const void *y) {
   return strcmp((char *)x, (char *)y);
 }
 
@@ -42,9 +42,9 @@ static unsigned wordStrHash(const void *key, unsigned hashsize)
 {
   unsigned hashval;
   char *s = (char *) key;
-  int j = strlen(s);
+  ajint j = strlen(s);
 
-  int i;
+  ajint i;
   for(i=0, hashval = 0; i < j; i++, s++)
     hashval = *s + 31 *hashval;
   return hashval % hashsize;

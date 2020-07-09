@@ -27,18 +27,18 @@
 
 #define POFF 1000000	/* Printing flag */
 
-static void makeRuler(int len, int begin, char *ruler, int *npos);
-static void calcProteinPos(int *ppos, AjPStr pro, int len);
-static void showTrans(int *ppos, int *npos, AjPStr pro, AjPStr substr,
-		 int len, char *ruler, int begin,
+static void makeRuler(ajint len, ajint begin, char *ruler, ajint *npos);
+static void calcProteinPos(ajint *ppos, AjPStr pro, ajint len);
+static void showTrans(ajint *ppos, ajint *npos, AjPStr pro, AjPStr substr,
+		 ajint len, char *ruler, ajint begin,
 		 AjPFile outf, AjBool isrule, AjBool isp, AjBool isn,
-		 int width, char *name);
-static void showTransb(int *ppos, int *npos, AjPStr pro, AjPStr substr,
-		  int len, char *ruler, int begin,
+		 ajint width, char *name);
+static void showTransb(ajint *ppos, ajint *npos, AjPStr pro, AjPStr substr,
+		  ajint len, char *ruler, ajint begin,
 		  AjPFile outf, AjBool isrule, AjBool isp, AjBool isn,
-		  int start, int end);
+		  ajint start, ajint end);
 static void prettyTranslate(AjPFile outf,int beg,int end,AjPStr s,AjPCod codon,
-		       AjPRange range, int width, AjPStr pro);
+		       AjPRange range, ajint width, AjPStr pro);
 
 int main(int argc, char **argv)
 {
@@ -53,15 +53,15 @@ int main(int argc, char **argv)
     
     AjPStr       pro;
     
-    int beg;
-    int end;
-    int len;
+    ajint beg;
+    ajint end;
+    ajint len;
     
-    int width;
+    ajint width;
 
     char *ruler;
-    int  *ppos=NULL;
-    int  *npos=NULL;
+    ajint  *ppos=NULL;
+    ajint  *npos=NULL;
     
 
     embInit("prettyseq", argc, argv);
@@ -108,22 +108,22 @@ int main(int argc, char **argv)
 
 
 static void prettyTranslate(AjPFile outf,int beg,int end,AjPStr s,AjPCod codon,
-		       AjPRange range, int width, AjPStr pro)
+		       AjPRange range, ajint width, AjPStr pro)
 {
-    int limit;
-    int i;
-    int j;
+    ajint limit;
+    ajint i;
+    ajint j;
     
-    int nr;
-    int st;
-    int en;
+    ajint nr;
+    ajint st;
+    ajint en;
 
     char *p;
     char *q;
     char c;
     
     char tri[4];
-    int  idx;
+    ajint  idx;
     
     
     tri[3]='0';
@@ -155,7 +155,7 @@ static void prettyTranslate(AjPFile outf,int beg,int end,AjPStr s,AjPCod codon,
     {
 	ajRangeValues(range,i,&st,&en);
 	for(j=st;j<=en;++j)
-	    p[j] = (char)tolower((int)p[j]);
+	    p[j] = (char)tolower((ajint)p[j]);
     }
     
 
@@ -163,13 +163,13 @@ static void prettyTranslate(AjPFile outf,int beg,int end,AjPStr s,AjPCod codon,
     q=ajStrStr(pro);
     for(i=0;i<limit;++i)
     {
-	if(isupper((int)p[i]))
+	if(isupper((ajint)p[i]))
 	{
 	    q[i]=' ';
 	    continue;
 	}
 	tri[0]=p[i];
-	if(!p[i+1] || isupper((int)p[i+1]) || !p[i+2] || isupper((int)p[i+2]))
+	if(!p[i+1] || isupper((ajint)p[i+1]) || !p[i+2] || isupper((ajint)p[i+2]))
 	{
 	    q[i]=' ';
 	    if(q[i+1])
@@ -197,9 +197,9 @@ static void prettyTranslate(AjPFile outf,int beg,int end,AjPStr s,AjPCod codon,
 
 
 
-static void makeRuler(int len, int begin, char *ruler, int *npos)
+static void makeRuler(ajint len, ajint begin, char *ruler, ajint *npos)
 {
-    int i;
+    ajint i;
 
     for(i=0;i<len;++i)
     {
@@ -215,12 +215,12 @@ static void makeRuler(int len, int begin, char *ruler, int *npos)
 
 
 
-static void calcProteinPos(int *ppos, AjPStr pro, int len)
+static void calcProteinPos(ajint *ppos, AjPStr pro, ajint len)
 {
-    int j;
+    ajint j;
     
-    int pos;
-    int v;
+    ajint pos;
+    ajint v;
     
     char *p;
     
@@ -272,12 +272,12 @@ static void calcProteinPos(int *ppos, AjPStr pro, int len)
 
 
 
-static void showTrans(int *ppos, int *npos, AjPStr pro, AjPStr substr,
-		 int len, char *ruler, int begin,
+static void showTrans(ajint *ppos, ajint *npos, AjPStr pro, AjPStr substr,
+		 ajint len, char *ruler, ajint begin,
 		 AjPFile outf, AjBool isrule, AjBool isp, AjBool isn,
-		 int width, char *name)
+		 ajint width, char *name)
 {
-    int pos;
+    ajint pos;
 
     ajFmtPrintF(outf,"PRETTYSEQ of %s from %d to %d\n\n",name,begin,
 		begin+len-1);
@@ -304,16 +304,16 @@ static void showTrans(int *ppos, int *npos, AjPStr pro, AjPStr substr,
 
 
 
-static void showTransb(int *ppos, int *npos, AjPStr pro, AjPStr substr,
-		  int len, char *ruler, int begin,
+static void showTransb(ajint *ppos, ajint *npos, AjPStr pro, AjPStr substr,
+		  ajint len, char *ruler, ajint begin,
 		  AjPFile outf, AjBool isrule, AjBool isp, AjBool isn,
-		  int start, int end)
+		  ajint start, ajint end)
 {
     AjPStr s;
-    int b;
-    int e=0;
-    int v;
-    int pos;
+    ajint b;
+    ajint e=0;
+    ajint v;
+    ajint pos;
     
     s=ajStrNew();
     

@@ -34,14 +34,15 @@ comp reg exp.
 search regcomp with string.
 */
 
-int main (int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
   EmbPPatMatch results = NULL;
   AjPSeq seq = NULL;
   AjPStr str = NULL;
   AjPStr motiffilename = NULL;
   AjPFile motiffile = NULL;
   AjPStr line = NULL;
-  int j,pos;
+  ajint j,pos;
   char *sptr,*sptr2;
   char temp;
 

@@ -63,16 +63,16 @@
 **
 ** Default constructor for AJAX range objects.
 **
-** @param [r] n [int] number of ranges
+** @param [r] n [ajint] number of ranges
 **
 ** @return [AjPRange] Pointer to a range object
 ** @@
 ******************************************************************************/
 
-AjPRange ajRangeNewI (int n)
+AjPRange ajRangeNewI (ajint n)
 {
     AjPRange thys;
-    int i;
+    ajint i;
 
     AJNEW0(thys);
 
@@ -80,8 +80,8 @@ AjPRange ajRangeNewI (int n)
 
     if(n>0)
     {
-	thys->start = AJALLOC(n*sizeof(int));
-	thys->end   = AJALLOC(n*sizeof(int));
+	thys->start = AJALLOC(n*sizeof(ajint));
+	thys->end   = AJALLOC(n*sizeof(ajint));
 	thys->text  = AJALLOC(n*sizeof(AjPStr *));
 	for (i=0; i < n; i++) thys->text[i] = NULL;
     }
@@ -104,7 +104,7 @@ AjPRange ajRangeNewI (int n)
 void ajRangeDel (AjPRange *thys)
 {
 
-    int i;
+    ajint i;
     
     if((*thys)->n > 0)
     {
@@ -136,11 +136,11 @@ AjBool ajRangeGet(AjPRange *r, AjPStr str)
     static AjPStr c3=NULL;
     static AjPStr s=NULL;
     char *p;
-    int  n;
-    int e;
-    int f;
-    int t;
-    int i;
+    ajint  n;
+    ajint e;
+    ajint f;
+    ajint t;
+    ajint i;
     AjBool result = ajTrue;
 
     AjBool doneone = ajFalse;
@@ -241,7 +241,7 @@ AjBool ajRangeGet(AjPRange *r, AjPStr str)
 
 	    /* now get any strings after the pairs of ranges */
 	    p=ajStrStr(c3);
-	    if (!isdigit((int)*p))
+	    if (!isdigit((ajint)*p))
 	    {
 		doneone = ajTrue;
 		p=ajSysStrtok(p, digit);
@@ -314,9 +314,9 @@ AjBool ajRangeFile(AjPRange *r, AjPStr name) {
   char whiteSpace[] = " \t\n\r";  
   char notSpace[] = "\n\r";  
   AjPStrTok tokens;
-  int n = 0;	/* no ranges found so far */
-  int k;
-  int numone, numtwo;
+  ajint n = 0;	/* no ranges found so far */
+  ajint k;
+  ajint numone, numtwo;
  
   AjPStr one;
   AjPStr two;  
@@ -415,10 +415,10 @@ to populate ajRange) */
 **
 ** @param [r] thys [AjPRange] range object
 **
-** @return [int] number of ranges
+** @return [ajint] number of ranges
 ** @@
 ******************************************************************************/
-int ajRangeNumber(AjPRange thys)
+ajint ajRangeNumber(AjPRange thys)
 {
     return thys->n;
 }
@@ -428,14 +428,14 @@ int ajRangeNumber(AjPRange thys)
 ** Return (as parameters) start and end values in a range
 **
 ** @param [r] thys [AjPRange] range object
-** @param [r] element [int] range element (0 to n-1)
+** @param [r] element [ajint] range element (0 to n-1)
 ** @param [w] start [int *] start value
 ** @param [w] end [int *] end value
 **
 ** @return [AjBool] true if range exists
 ** @@
 ******************************************************************************/
-AjBool ajRangeValues(AjPRange thys, int element, int *start, int *end)
+AjBool ajRangeValues(AjPRange thys, ajint element, ajint *start, ajint *end)
 {
     if(element<0 || element>=thys->n)
 	return ajFalse;
@@ -454,14 +454,14 @@ AjBool ajRangeValues(AjPRange thys, int element, int *start, int *end)
 ** the text values of the two ranges are: 'potential exon' and 'repeat'
 **
 ** @param [r] thys [AjPRange] range object
-** @param [r] element [int] range element (0 to n-1)
+** @param [r] element [ajint] range element (0 to n-1)
 ** @param [w] text [AjPStr *] text value
 **
 ** @return [AjBool] true if range exists
 ** @@
 ** Modified: pmr 21-jan-00 return empty string if there is no text
 ******************************************************************************/
-AjBool ajRangeText(AjPRange thys, int element, AjPStr * text)
+AjBool ajRangeText(AjPRange thys, ajint element, AjPStr * text)
 {
     if(element<0 || element>=thys->n)
 	return ajFalse;
@@ -479,14 +479,14 @@ AjBool ajRangeText(AjPRange thys, int element, AjPStr * text)
 ** Set the values of a start and end in a (preexisting) range element
 **
 ** @param [r] thys [AjPRange] range object
-** @param [r] element [int] range element (0 to n-1)
-** @param [w] start [int] start value
-** @param [w] end [int] end value
+** @param [r] element [ajint] range element (0 to n-1)
+** @param [w] start [ajint] start value
+** @param [w] end [ajint] end value
 **
 ** @return [AjBool] true if range exists
 ** @@
 ******************************************************************************/
-AjBool ajRangeChange(AjPRange thys, int element, int start, int end)
+AjBool ajRangeChange(AjPRange thys, ajint element, ajint start, ajint end)
 {
     if(element<0 || element>=thys->n)
 	return ajFalse;
@@ -506,17 +506,17 @@ AjBool ajRangeChange(AjPRange thys, int element, int start, int end)
 ** the resulting range is changed to 1-2
 ** 
 ** @param [u] thys [AjPRange] range object
-** @param [r] begin [int] begin parameter obtained from ajSeqBegin(seq)
+** @param [r] begin [ajint] begin parameter obtained from ajSeqBegin(seq)
 **
 ** @return [AjBool] true if region values modified
 ** @@
 ******************************************************************************/
-AjBool ajRangeBegin (AjPRange thys, int begin) {
+AjBool ajRangeBegin (AjPRange thys, ajint begin) {
 
-    int nr = ajRangeNumber(thys);
-    int i;
-    int st;
-    int en;
+    ajint nr = ajRangeNumber(thys);
+    ajint i;
+    ajint st;
+    ajint en;
     AjBool result=ajFalse;
 
     for(i=0; i<nr; i++)
@@ -546,10 +546,10 @@ AjBool ajRangeBegin (AjPRange thys, int begin) {
 ******************************************************************************/
 AjBool ajRangeStrExtractList (AjPList outliststr, AjPRange thys, AjPStr instr) {
 
-    int nr = ajRangeNumber(thys);
-    int i;
-    int st;
-    int en;
+    ajint nr = ajRangeNumber(thys);
+    ajint i;
+    ajint st;
+    ajint en;
     AjBool result=ajFalse;
     AjPStr str;
 
@@ -580,10 +580,10 @@ AjBool ajRangeStrExtractList (AjPList outliststr, AjPRange thys, AjPStr instr) {
 ******************************************************************************/
 AjBool ajRangeStrExtract (AjPStr *outstr, AjPRange thys, AjPStr instr) {
 
-    int nr = ajRangeNumber(thys);
-    int i;
-    int st;
-    int en;
+    ajint nr = ajRangeNumber(thys);
+    ajint i;
+    ajint st;
+    ajint en;
     AjBool result=ajFalse;
 
     for(i=0; i<nr; i++)
@@ -615,14 +615,14 @@ AjBool ajRangeStrExtract (AjPStr *outstr, AjPRange thys, AjPStr instr) {
 ******************************************************************************/
 AjBool ajRangeStrStuff (AjPStr *outstr, AjPRange thys, AjPStr instr) {
 
-    int nr = ajRangeNumber(thys);
-    int i;
-    int j;
-    int lasten=0;
-    int lastst=0;
-    int len;
-    int st;
-    int en;
+    ajint nr = ajRangeNumber(thys);
+    ajint i;
+    ajint j;
+    ajint lasten=0;
+    ajint lastst=0;
+    ajint len;
+    ajint st;
+    ajint en;
     AjBool result=ajFalse;
 
     for(i=0; i<nr; i++)
@@ -658,10 +658,10 @@ AjBool ajRangeStrStuff (AjPStr *outstr, AjPRange thys, AjPStr instr) {
 ******************************************************************************/
 AjBool ajRangeStrMask (AjPStr *str, AjPRange thys, AjPStr maskchar) {
 
-    int nr = ajRangeNumber(thys);
-    int i, j;
-    int st;
-    int en;
+    ajint nr = ajRangeNumber(thys);
+    ajint i, j;
+    ajint st;
+    ajint en;
     AjBool result=ajFalse;;
 
     for(i=0; i<nr; ++i)
@@ -686,18 +686,18 @@ AjBool ajRangeStrMask (AjPStr *str, AjPRange thys, AjPStr maskchar) {
 /* @func ajRangeOverlapSingle ************************************************
 **
 ** Detect an overlap of a single range to a region of a sequence
-** @param [r] start [int] start of range
-** @param [r] end [int] end of range
-** @param [r] pos [int] postion in sequence of start of region of sequence
-** @param [r] length [int] length of region of sequence
+** @param [r] start [ajint] start of range
+** @param [r] end [ajint] end of range
+** @param [r] pos [ajint] postion in sequence of start of region of sequence
+** @param [r] length [ajint] length of region of sequence
 **
-** @return [int] 0=no overlap 1=internal 2=complete 3=at left 4=at right
+** @return [ajint] 0=no overlap 1=internal 2=complete 3=at left 4=at right
 ** @@
 ******************************************************************************/
-int ajRangeOverlapSingle (int start, int end, int pos, int length)
+ajint ajRangeOverlapSingle (ajint start, ajint end, ajint pos, ajint length)
 {
 
-    int posend = pos+length-1;	/* end position of region in sequence */
+    ajint posend = pos+length-1;	/* end position of region in sequence */
   
     /* convert range positions to sequence positions */
     start--;	
@@ -725,20 +725,20 @@ int ajRangeOverlapSingle (int start, int end, int pos, int length)
 **
 ** Detect overlaps of a set of ranges to a region of a sequence
 ** @param [r] thys [AjPRange] range object
-** @param [r] pos [int] postion in sequence of start of region of sequence
-** @param [r] length [int] length of region of sequence
+** @param [r] pos [ajint] postion in sequence of start of region of sequence
+** @param [r] length [ajint] length of region of sequence
 **
-** @return [int] Number of ranges in range object with overlaps to the region
+** @return [ajint] Number of ranges in range object with overlaps to the region
 ** @@
 ******************************************************************************/
-int ajRangeOverlaps (AjPRange thys, int pos, int length)
+ajint ajRangeOverlaps (AjPRange thys, ajint pos, ajint length)
 {
 
-    int nr = ajRangeNumber(thys);
-    int i;
-    int st;
-    int en;
-    int result = 0;
+    ajint nr = ajRangeNumber(thys);
+    ajint i;
+    ajint st;
+    ajint en;
+    ajint result = 0;
 
     for(i=0; i<nr; i++)
     {
@@ -760,11 +760,11 @@ int ajRangeOverlaps (AjPRange thys, int pos, int length)
 AjBool ajRangeOrdered (AjPRange thys)
 {
 
-    int nr = ajRangeNumber(thys);
-    int i;
-    int st;
-    int en;
-    int last=-1;
+    ajint nr = ajRangeNumber(thys);
+    ajint i;
+    ajint st;
+    ajint en;
+    ajint last=-1;
 
     for(i=0; i<nr; i++)
     {

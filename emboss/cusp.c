@@ -30,9 +30,9 @@ int main(int argc, char **argv)
     AjPFile    outf;
     AjPCod     codon;
     AjPStr     substr;
-    int beg;
-    int end;
-    int ccnt;
+    ajint beg;
+    ajint end;
+    ajint ccnt;
     
     
     embInit("cusp", argc, argv);

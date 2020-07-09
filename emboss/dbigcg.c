@@ -41,29 +41,29 @@ AjBool cleanup;
 typedef struct Sac {
   char* ac;
   char* entry;
-  int nid;			/* entry number */
+  ajint nid;			/* entry number */
 } Oac, *Pac;
 
 typedef struct Sentry {
-  int nac;
-  int rpos;
-  int spos;
-  int filenum;
+  ajint nac;
+  ajint rpos;
+  ajint spos;
+  ajint filenum;
   char* entry;
   char** ac;
 } Oentry, *Pentry;
 
 static AjPStr gcgtype = NULL;
-static int gcglen;
+static ajint gcglen;
 
-static int maxidlen = 12;
-static int maxaclen = 12;
+static ajint maxidlen = 12;
+static ajint maxaclen = 12;
 
 static AjPStr rline = NULL;
 static AjPStr sline = NULL;
 
-static int rpos;
-static int spos;
+static ajint rpos;
+static ajint spos;
 
 static AjPRegexp rexp = NULL;
 static AjPRegexp pirexp = NULL;
@@ -81,17 +81,17 @@ static AjPStr sortopt = NULL;
 
 static Pac    acnumNew (void);
 static Pentry entryNew (void);
-static Pentry nextentry (AjPFile libr, AjPFile libs, int ifile);
+static Pentry nextentry (AjPFile libr, AjPFile libs, ajint ifile);
 static AjBool gcgopenlib(AjPStr lname, AjPFile* libr, AjPFile* libs);
-static int gcggetent(AjPFile libr, AjPFile libs,
-		     int *d_pos, int *s_pos, AjPStr* libstr, AjPList alc);
-static int pirgetent(AjPFile libr, AjPFile libs,
-		     int *d_pos, int *s_pos, AjPStr* libstr, AjPList alc);
-static int gcgappent( AjPFile libr, AjPFile libs,
+static ajint gcggetent(AjPFile libr, AjPFile libs,
+		     ajint *d_pos, ajint *s_pos, AjPStr* libstr, AjPList alc);
+static ajint pirgetent(AjPFile libr, AjPFile libs,
+		     ajint *d_pos, ajint *s_pos, AjPStr* libstr, AjPList alc);
+static ajint gcgappent( AjPFile libr, AjPFile libs,
 		     AjPStr* libstr);
 
 static char* newcharS (AjPStr str);
-static char* newcharCI (char* str, int i);
+static char* newcharCI (char* str, ajint i);
 
 static AjPStr idformat = NULL;
 
@@ -112,23 +112,24 @@ static OParser parser[] = {
   {NULL, NULL}
 };
 
-static int cmpid (const void* a, const void* b);
-static int cmpacid (const void* a, const void* b);
-static int cmpacac (const void* a, const void* b);
+static ajint cmpid (const void* a, const void* b);
+static ajint cmpacid (const void* a, const void* b);
+static ajint cmpacac (const void* a, const void* b);
 static AjPList fileList (AjPStr dir, AjPStr wildfile);
 
-static int  writeInt2 (short i, AjPFile file);
-static int  writeInt4 (int i, AjPFile file);
-static int writeStr (AjPStr str, int len, AjPFile file);
-static int writeChar (char* str, int len, AjPFile file);
-static int writeByte (char ch, AjPFile file);
+static ajint  writeInt2 (short i, AjPFile file);
+static ajint  writeInt4 (ajint i, AjPFile file);
+static ajint writeStr (AjPStr str, ajint len, AjPFile file);
+static ajint writeChar (char* str, ajint len, AjPFile file);
+static ajint writeByte (char ch, AjPFile file);
 
 static void syscmd (AjPStr cmdstr);
-static void sortfile (const char* ext1, const char* ext2, int nfiles);
-static void rmfile (const char* ext, int nfiles);
-static void rmfileI (const char* ext, int ifile);
+static void sortfile (const char* ext1, const char* ext2, ajint nfiles);
+static void rmfile (const char* ext, ajint nfiles);
+static void rmfileI (const char* ext, ajint ifile);
 
-int main (int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
 
   AjBool staden;
   AjPStr directory;
@@ -146,34 +147,34 @@ int main (int argc, char * argv[]) {
   Pac acnum=NULL;
   char* lastac=NULL;
 
-  int i;
-  int j;
-  int k;
-  int nac;
-  int nid=0;
-  int iac=0;
+  ajint i;
+  ajint j;
+  ajint k;
+  ajint nac;
+  ajint nid=0;
+  ajint iac=0;
   void **ids = NULL;
   void **acs = NULL;
   AjPList inlist = NULL;
   void ** files = NULL;
-  int nfiles;
-  int ifile;
+  ajint nfiles;
+  ajint ifile;
 
-  int dsize;
-  int esize;
-  int asize;
-  int ahsize;
+  ajint dsize;
+  ajint esize;
+  ajint asize;
+  ajint ahsize;
   short recsize;
   short elen;
   short alen;
-  int maxfilelen=20;
+  ajint maxfilelen=20;
   char date[4] = {0,0,0,0};
   char padding[256];
-  int ient;
-  int filenum;
-  int rpos;
-  int spos;
-  int idnum;
+  ajint ient;
+  ajint filenum;
+  ajint rpos;
+  ajint spos;
+  ajint idnum;
 
   AjPStr rdline = NULL;
   AjPStr tmpstr = NULL;
@@ -453,7 +454,7 @@ int main (int argc, char * argv[]) {
   ajDebug("writing entrynam.idx %d\n", nid);
 
   elen = maxidlen+10;
-  esize = 300 + (nid*(int)elen);
+  esize = 300 + (nid*(ajint)elen);
   writeInt4 (esize, efile);
   writeInt4 (nid, efile);
   writeInt2 (elen, efile);
@@ -517,7 +518,7 @@ int main (int argc, char * argv[]) {
   ajDebug("writing acnum.hit %d\n", nac);
 
   alen = maxaclen+8;
-  asize = 300 + (nac*(int)alen); /* to be fixed later */
+  asize = 300 + (nac*(ajint)alen); /* to be fixed later */
   writeInt4 (asize, atfile);
   writeInt4 (nac, atfile);
   writeInt2 (alen, atfile);
@@ -604,7 +605,7 @@ int main (int argc, char * argv[]) {
 
   ajDebug ("wrote acnum.trg %d\n", iac);
   ajFileSeek (atfile, 0, 0);	/* fix up the record count */
-  writeInt4 (300+iac*(int)alen, atfile);
+  writeInt4 (300+iac*(ajint)alen, atfile);
   writeInt4 (iac, atfile);
 
   ajFileClose (&atfile);
@@ -622,11 +623,11 @@ int main (int argc, char * argv[]) {
 **
 ** @param [r] a [const void*] First id (Pentry*)
 ** @param [r] b [const void*] Second id (Pentry*)
-** @return [int] Comparison value, -1, 0 or +1.
+** @return [ajint] Comparison value, -1, 0 or +1.
 ** @@
 ******************************************************************************/
 
-static int cmpid (const void* a, const void* b) {
+static ajint cmpid (const void* a, const void* b) {
 
   Pentry aa = *(Pentry*) a;
   Pentry bb = *(Pentry*) b;
@@ -640,11 +641,11 @@ static int cmpid (const void* a, const void* b) {
 **
 ** @param [r] a [const void*] First id (Pac*)
 ** @param [r] b [const void*] Second id (Pentryca*)
-** @return [int] Comparison value, -1, 0 or +1.
+** @return [ajint] Comparison value, -1, 0 or +1.
 ** @@
 ******************************************************************************/
 
-static int cmpacid (const void* a, const void* b) {
+static ajint cmpacid (const void* a, const void* b) {
   Pac aa = *(Pac*) a;
   Pac bb = *(Pac*) b;
 
@@ -657,11 +658,11 @@ static int cmpacid (const void* a, const void* b) {
 **
 ** @param [r] a [const void*] First id (Pac*)
 ** @param [r] b [const void*] Second id (Pentryca*)
-** @return [int] Comparison value, -1, 0 or +1.
+** @return [ajint] Comparison value, -1, 0 or +1.
 ** @@
 ******************************************************************************/
 
-static int cmpacac (const void* a, const void* b) {
+static ajint cmpacac (const void* a, const void* b) {
   Pac aa = *(Pac*) a;
   Pac bb = *(Pac*) b;
 
@@ -715,21 +716,21 @@ static Pentry entryNew (void) {
 **
 ** @param [r] libr [AjPFile] Reference file
 ** @param [r] libs [AjPFile] Sequence file
-** @param [r] ifile [int] File number.
+** @param [r] ifile [ajint] File number.
 ** @return [Pentry] Entry data object.
 ** @@
 ******************************************************************************/
 
-static Pentry nextentry (AjPFile libr, AjPFile libs, int ifile) {
+static Pentry nextentry (AjPFile libr, AjPFile libs, ajint ifile) {
 
   static Pentry ret=NULL;
-  int ir;
-  int is;
+  ajint ir;
+  ajint is;
   static AjPStr id = NULL;
   static AjPStr tmpline2 = NULL;
   char* ac;
   char *p;
-  int i;
+  ajint i;
   static AjPList acl = NULL;
 
   if (!acl)
@@ -804,15 +805,15 @@ static char* newcharS (AjPStr str) {
 ** Constructor for a text string from another text string
 **
 ** @param [r] str [char*] Text object
-** @param [r] i [int] Length
+** @param [r] i [ajint] Length
 ** @return [char*] New text string.
 ******************************************************************************/
 
-static char* newcharCI (char* str, int i) {
+static char* newcharCI (char* str, ajint i) {
 
   static char* buffer = NULL;
-  static int ipos=0;
-  static int imax=0;
+  static ajint ipos=0;
+  static ajint imax=0;
 
   char* ret;
 
@@ -891,22 +892,22 @@ static AjBool gcgopenlib(AjPStr lname, AjPFile* libr, AjPFile* libs) {
 ** @param [w] s_pos [int*] Sequence  file offset returned
 ** @param [w] libstr [AjPStr*] ID
 ** @param [w] acl [AjPList] Accession number list
-** @return [int] Sequence length
+** @return [ajint] Sequence length
 ** @@
 ******************************************************************************/
 
-static int gcggetent(AjPFile libr, AjPFile libs,
-		     int *d_pos, int *s_pos, AjPStr* libstr, AjPList acl) {
+static ajint gcggetent(AjPFile libr, AjPFile libs,
+		     ajint *d_pos, ajint *s_pos, AjPStr* libstr, AjPList acl) {
 
   static AjPStr gcgdate = NULL;
-  int rblock;
-  /*  int ddone = 0;*/
+  ajint rblock;
+  /*  ajint ddone = 0;*/
   static AjPStr reflibstr = NULL;
-  /*  int iac;*/
-  int i;
+  /*  ajint iac;*/
+  ajint i;
   static AjPStr tmpstr = NULL;
-  static int called = 0;
-  static int iparser = -1;
+  static ajint called = 0;
+  static ajint iparser = -1;
 
   if (!called) {
     for (i=0; parser[i].Name; i++) {
@@ -1030,17 +1031,17 @@ static int gcggetent(AjPFile libr, AjPFile libs,
 ** @param [w] s_pos [int*] Sequence file offset  returned
 ** @param [w] libstr [AjPStr*] ID
 ** @param [w] acl [AjPList] Accession number list
-** @return [int] Sequence length
+** @return [ajint] Sequence length
 ** @@
 ******************************************************************************/
 
-static int pirgetent(AjPFile libr, AjPFile libs,
-		     int *d_pos, int *s_pos, AjPStr* libstr, AjPList acl) {
+static ajint pirgetent(AjPFile libr, AjPFile libs,
+		     ajint *d_pos, ajint *s_pos, AjPStr* libstr, AjPList acl) {
 
   static AjPStr reflibstr = NULL;
-  int i;
-  static int called = 0;
-  static int iparser = -1;
+  ajint i;
+  static ajint called = 0;
+  static ajint iparser = -1;
 
   if (!called) {
     for (i=0; parser[i].Name; i++) {
@@ -1140,11 +1141,11 @@ static int pirgetent(AjPFile libr, AjPFile libs,
 ** @param [r] libr [AjPFile] Reference file
 ** @param [r] libs [AjPFile] Sequence file
 ** @param [w] libstr [AjPStr*] ID
-** @return [int] Sequence length for this section
+** @return [ajint] Sequence length for this section
 ** @@
 ******************************************************************************/
 
-static int gcgappent (AjPFile libr, AjPFile libs, AjPStr* libstr) {
+static ajint gcgappent (AjPFile libr, AjPFile libs, AjPStr* libstr) {
 
   /* keep reading until we reach the end of entry
    and return the extra number of bases*/
@@ -1152,7 +1153,7 @@ static int gcgappent (AjPFile libr, AjPFile libs, AjPStr* libstr) {
   static AjPStr reflibstr = NULL;
   static AjPStr seqlibstr = NULL;
   static AjPStr testlibstr = NULL;
-  int ilen;
+  ajint ilen;
   static AjPStr tmpstr = NULL;
 
   AjBool isend;
@@ -1405,7 +1406,7 @@ static AjPList fileList (AjPStr dir, AjPStr wildfile) {
 
   DIR* dp;
   struct dirent* de;
-  int dirsize;
+  ajint dirsize;
   AjPStr name = NULL;
   static AjPStr dirfix = NULL;
 
@@ -1446,11 +1447,11 @@ static AjPList fileList (AjPStr dir, AjPStr wildfile) {
 **
 ** @param [r] i [short] Integer
 ** @param [r] file [AjPFile] Output file
-** @return [int] Return value from fwrite
+** @return [ajint] Return value from fwrite
 ** @@
 ******************************************************************************/
 
-static int  writeInt2 (short i, AjPFile file) {
+static ajint  writeInt2 (short i, AjPFile file) {
   short j = i;
   if (doReverse)ajUtilRev2(&j);
     
@@ -1461,14 +1462,14 @@ static int  writeInt2 (short i, AjPFile file) {
 **
 ** Writes a 4 byte integer to a binary file, with the correct byte orientation
 **
-** @param [r] i [int] Integer
+** @param [r] i [ajint] Integer
 ** @param [r] file [AjPFile] Output file
-** @return [int] Return value from fwrite
+** @return [ajint] Return value from fwrite
 ** @@
 ******************************************************************************/
 
-static int  writeInt4 (int i, AjPFile file) {
-  int j=i;
+static ajint  writeInt4 (ajint i, AjPFile file) {
+  ajint j=i;
   if (doReverse)ajUtilRev4(&j);
   return fwrite (&j, 4, 1, ajFileFp(file));
 }
@@ -1478,15 +1479,15 @@ static int  writeInt4 (int i, AjPFile file) {
 ** Writes a string to a binary file
 **
 ** @param [r] str [AjPStr] String
-** @param [r] len [int] Length (padded) to use in the file
+** @param [r] len [ajint] Length (padded) to use in the file
 ** @param [r] file [AjPFile] Output file
-** @return [int] Return value from fwrite
+** @return [ajint] Return value from fwrite
 ** @@
 ******************************************************************************/
 
-static int writeStr (AjPStr str, int len, AjPFile file) {
+static ajint writeStr (AjPStr str, ajint len, AjPFile file) {
   static char buf[256];
-  int i = ajStrLen(str);
+  ajint i = ajStrLen(str);
   strcpy(buf, ajStrStr(str));
   if (i < len)
     memset (&buf[i], '\0', len-i);
@@ -1499,15 +1500,15 @@ static int writeStr (AjPStr str, int len, AjPFile file) {
 ** Writes a text string to a binary file
 **
 ** @param [r] str [char*] Text string
-** @param [r] len [int] Length (padded) to use in the file
+** @param [r] len [ajint] Length (padded) to use in the file
 ** @param [r] file [AjPFile] Output file
-** @return [int] Return value from fwrite
+** @return [ajint] Return value from fwrite
 ** @@
 ******************************************************************************/
 
-static int writeChar (char* str, int len, AjPFile file) {
+static ajint writeChar (char* str, ajint len, AjPFile file) {
   static char buf[256];
-  int i = strlen(str);
+  ajint i = strlen(str);
   strcpy(buf, str);
   if (i < len)
     memset (&buf[i], '\0', len-i);
@@ -1521,11 +1522,11 @@ static int writeChar (char* str, int len, AjPFile file) {
 **
 ** @param [r] ch [char] Character
 ** @param [r] file [AjPFile] Output file
-** @return [int] Return value from fwrite
+** @return [ajint] Return value from fwrite
 ** @@
 ******************************************************************************/
 
-static int writeByte (char ch, AjPFile file) {
+static ajint writeByte (char ch, AjPFile file) {
   return fwrite (&ch, 1, 1, ajFileFp(file));
 }
 
@@ -1535,15 +1536,15 @@ static int writeByte (char ch, AjPFile file) {
 **
 ** @param [r] ext1 [const char*] Input file extension
 ** @param [r] ext2 [const char*] Output file extension
-** @param [r] nfiles [int] NUmber of files to sort (zero if unnumbered)
+** @param [r] nfiles [ajint] NUmber of files to sort (zero if unnumbered)
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void sortfile (const char* ext1, const char* ext2, int nfiles) {
+static void sortfile (const char* ext1, const char* ext2, ajint nfiles) {
 
   static AjPStr cmdstr = NULL;
-  int i;
+  ajint i;
   static AjPStr infname = NULL;
   static AjPStr outfname = NULL;
   static AjPStr srtext = NULL;
@@ -1589,11 +1590,11 @@ static void sortfile (const char* ext1, const char* ext2, int nfiles) {
 ** Remove a numbered file
 **
 ** @param [r] ext [const char*] Base file extension
-** @param [r] ifile [int] File number.
+** @param [r] ifile [ajint] File number.
 ** @return [void]
 ******************************************************************************/
 
-static void rmfileI (const char* ext, int ifile) {
+static void rmfileI (const char* ext, ajint ifile) {
 
   static AjPStr cmdstr = NULL;
 
@@ -1611,15 +1612,15 @@ static void rmfileI (const char* ext, int ifile) {
 ** Remove a file or a set of numbered files
 **
 ** @param [r] ext [const char*] Base file extension
-** @param [r] nfiles [int] Number of files, or zero for unnumbered.
+** @param [r] nfiles [ajint] Number of files, or zero for unnumbered.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void rmfile (const char* ext, int nfiles) {
+static void rmfile (const char* ext, ajint nfiles) {
 
   static AjPStr cmdstr = NULL;
-  int i;
+  ajint i;
 
   if (!cleanup) return;
 
@@ -1652,7 +1653,7 @@ static void syscmd (AjPStr cmdstr) {
   char** arglist = NULL;
   char* pgm;
   pid_t pid;
-  int status;
+  ajint status;
 
   ajDebug ("forking '%S'", cmdstr);
   (void) ajSysArglist (cmdstr, &pgm, &arglist);

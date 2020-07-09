@@ -4,8 +4,8 @@
 #define MAX_STRING 180
 
 typedef struct AjSGraphObj {
-  int type;
-  int colour;
+  ajint type;
+  ajint colour;
   AjPStr text;
   float x1,x2;
   float y1,y2;
@@ -25,8 +25,8 @@ typedef struct AjSGraphData {
   float *y;			/* y coords */
   AjBool ycalc;			/* as with x. So you do not delete data */
 				/*   if it was passed as a ptr. */
-  int numofpoints;
-  int numofobjects;
+  ajint numofpoints;
+  ajint numofobjects;
   float minX,maxX;
   float minY,maxY;
   float tminX,tmaxX;
@@ -36,8 +36,8 @@ typedef struct AjSGraphData {
   AjPStr xaxis;
   AjPStr yaxis;
   AjPStr gtype;			/* 2D, Tick etc */
-  int colour;         
-  int lineType;
+  ajint colour;         
+  ajint lineType;
   AjPGraphObj Obj;
 } AjOGraphData, *AjPGraphData;
 
@@ -49,10 +49,10 @@ typedef struct AjSGraphData {
 ******************************************************************************/
 
 typedef struct AjSGraph {
-  int numofgraphs;
-  int numofobjects;
-  int numofgraphsmax;
-  int flags;           /* over rides the EmbGraphData flags */
+  ajint numofgraphs;
+  ajint numofobjects;
+  ajint numofgraphsmax;
+  ajint flags;           /* over rides the EmbGraphData flags */
   float minX,maxX;     /* min max over all graphs */ 
   float minY,maxY;     
   float xstart;
@@ -61,7 +61,7 @@ typedef struct AjSGraph {
   float yend;
   AjBool ready;
   AjBool minmaxcalc;
-  int displaytype;
+  ajint displaytype;
   AjPFile file;
   AjPStr title;
   AjPStr subtitle;

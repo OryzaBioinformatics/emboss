@@ -28,7 +28,7 @@
 #include "ajax.h"
 #include <limits.h>
 
-static unsigned long seqCrcTable[256];
+static ajulong seqCrcTable[256];
 
 static void       seqCrcGen( void );
 
@@ -160,8 +160,8 @@ void ajSeqallToUpper (AjPSeqall seqall) {
 ******************************************************************************/
 
 void ajSeqallReverse (AjPSeqall thys) {
-  int ibegin = thys->Begin;
-  int iend = thys->End;
+  ajint ibegin = thys->Begin;
+  ajint iend = thys->End;
 
   ajDebug ("ajSeqallReverse len: %d Begin: %d End: %d\n",
 	   ajSeqallLen(thys), thys->Begin, thys->End);
@@ -184,13 +184,13 @@ void ajSeqallReverse (AjPSeqall thys) {
 ** Sets the start and end positions for a sequence stream.
 **
 ** @param [P] seq [AjPSeqall] Sequence stream object to be set.
-** @param [r] ibegin [int] Start position. Negative values are from the end.
-** @param [r] iend [int] End position. Negative values are from the end.
+** @param [r] ibegin [ajint] Start position. Negative values are from the end.
+** @param [r] iend [ajint] End position. Negative values are from the end.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajSeqallSetRange (AjPSeqall seq, int ibegin, int iend) {
+void ajSeqallSetRange (AjPSeqall seq, ajint ibegin, ajint iend) {
 
   ajDebug ("ajSeqallSetRange (len: %d %d, %d)\n",
 	   ajSeqLen(seq->Seq), ibegin, iend);
@@ -228,11 +228,11 @@ void ajSeqallSetRange (AjPSeqall seq, int ibegin, int iend) {
 ** latest sequence read.
 **
 ** @param [P] seqall [AjPSeqall] Sequence stream object
-** @return [int] sequence length.
+** @return [ajint] sequence length.
 ** @@
 ******************************************************************************/
 
-int ajSeqallLen (AjPSeqall seqall) {
+ajint ajSeqallLen (AjPSeqall seqall) {
   return ajSeqLen(seqall->Seq);
 }
 
@@ -241,11 +241,11 @@ int ajSeqallLen (AjPSeqall seqall) {
 ** Returns the sequence stream start position, or 1 if no start has been set.
 **
 ** @param [P] seq [AjPSeqall] Sequence stream object
-** @return [int] Start position.
+** @return [ajint] Start position.
 ** @@
 ******************************************************************************/
 
-int ajSeqallBegin (AjPSeqall seq) {
+ajint ajSeqallBegin (AjPSeqall seq) {
   if (!seq->Begin)
     return 1;
 
@@ -258,11 +258,11 @@ int ajSeqallBegin (AjPSeqall seq) {
 ** has been set.
 **
 ** @param [P] seq [AjPSeqall] Sequence stream object
-** @return [int] Start position.
+** @return [ajint] Start position.
 ** @@
 ******************************************************************************/
 
-int ajSeqallEnd (AjPSeqall seq) {
+ajint ajSeqallEnd (AjPSeqall seq) {
 
   if (!seq->End)
     return ajSeqLen(seq->Seq);
@@ -277,11 +277,11 @@ int ajSeqallEnd (AjPSeqall seq) {
 ** @param [r] thys [AjPSeqall] Sequence stream object.
 ** @param [r] begin [int*] Sequence range begin
 ** @param [r] end [int*] Sequence range end
-** @return [int] Sequence range length
+** @return [ajint] Sequence range length
 ** @@
 ******************************************************************************/
 
-int ajSeqallGetRange (AjPSeqall thys, int* begin, int* end) {
+ajint ajSeqallGetRange (AjPSeqall thys, ajint* begin, ajint* end) {
   ajDebug ("ajSeqallGetRange '%S'\n", thys->Seq->Name);
 
   return ajSeqGetRange(thys->Seq, begin, end);
@@ -294,11 +294,11 @@ int ajSeqallGetRange (AjPSeqall thys, int* begin, int* end) {
 ** @param [r] thys [AjPSeqset] Sequence set object.
 ** @param [r] begin [int*] Sequence range begin
 ** @param [r] end [int*] Sequence range end
-** @return [int] Sequence range length
+** @return [ajint] Sequence range length
 ** @@
 ******************************************************************************/
 
-int ajSeqsetGetRange (AjPSeqset thys, int* begin, int* end) {
+ajint ajSeqsetGetRange (AjPSeqset thys, ajint* begin, ajint* end) {
   ajDebug ("ajSeqsetGetRange '%S' begin %d end %d len: %d\n",
 	   thys->Name, thys->Begin, thys->End, thys->Len);
   *begin = ajSeqPosII(thys->Len, 1, thys->Begin);
@@ -317,11 +317,11 @@ int ajSeqsetGetRange (AjPSeqset thys, int* begin, int* end) {
 ** @param [r] thys [AjPSeq] Sequence object.
 ** @param [w] begin [int*] Sequence range begin
 ** @param [w] end [int*] Sequence range end
-** @return [int] Sequence range length
+** @return [ajint] Sequence range length
 ** @@
 ******************************************************************************/
 
-int ajSeqGetRange (AjPSeq thys, int* begin, int* end) {
+ajint ajSeqGetRange (AjPSeq thys, ajint* begin, ajint* end) {
   ajDebug ("ajSeqGetRange '%S'\n", thys->Name);
   *begin = ajSeqPos(thys, thys->Begin);
   if (thys->End)
@@ -491,7 +491,7 @@ AjPSeqset ajSeqsetNew (void) {
 ******************************************************************************/
 
 void ajSeqsetToLower (AjPSeqset seqset) {
-  int i;
+  ajint i;
 
   for (i=0; i < seqset->Size; i++) {
     (void) ajSeqToLower (seqset->Seq[i]);
@@ -510,7 +510,7 @@ void ajSeqsetToLower (AjPSeqset seqset) {
 ******************************************************************************/
 
 void ajSeqsetToUpper (AjPSeqset seqset) {
-  int i;
+  ajint i;
 
   for (i=0; i < seqset->Size; i++) {
     (void) ajSeqToUpper (seqset->Seq[i]);
@@ -529,9 +529,9 @@ void ajSeqsetToUpper (AjPSeqset seqset) {
 ******************************************************************************/
 
 void ajSeqsetReverse (AjPSeqset thys) {
-  int i;
-  int ibegin = thys->Begin;
-  int iend = thys->End;
+  ajint i;
+  ajint ibegin = thys->Begin;
+  ajint iend = thys->End;
 
   ajDebug ("ajSeqsetReverse len: %d Begin: %d End: %d\n",
 	   ajSeqsetLen(thys), thys->Begin, thys->End);
@@ -556,14 +556,14 @@ void ajSeqsetReverse (AjPSeqset thys) {
 ** Sets the start and end positions for a sequence set.
 **
 ** @param [P] seq [AjPSeqset] Sequence set object to be set.
-** @param [r] ibegin [int] Start position. Negative values are from the end.
-** @param [r] iend [int] End position. Negative values are from the end.
+** @param [r] ibegin [ajint] Start position. Negative values are from the end.
+** @param [r] iend [ajint] End position. Negative values are from the end.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajSeqsetSetRange (AjPSeqset seq, int ibegin, int iend) {
-  int i;
+void ajSeqsetSetRange (AjPSeqset seq, ajint ibegin, ajint iend) {
+  ajint i;
 
   ajDebug ("ajSeqsetSetRange (len: %d %d, %d)\n", seq->Len, ibegin, iend);
 
@@ -593,15 +593,15 @@ void ajSeqsetSetRange (AjPSeqset seq, int ibegin, int iend) {
 ** Fills a sequence set with gaps at the ends of any shorter sequences.
 **
 ** @param [P] seq [AjPSeqset] Sequence set object to be set.
-** @return [int] Number of gaps inserted
+** @return [ajint] Number of gaps inserted
 ** @@
 ******************************************************************************/
 
-int ajSeqsetFill (AjPSeqset seq) {
-  int i;
-  int ifix = 0;
-  int nfix = 0;
-  int ilen;
+ajint ajSeqsetFill (AjPSeqset seq) {
+  ajint i;
+  ajint ifix = 0;
+  ajint nfix = 0;
+  ajint ilen;
 
   ajDebug ("ajSeqsetFill (len: %d)\n", seq->Len);
 
@@ -688,11 +688,11 @@ AjBool ajSeqsetIsProt (AjPSeqset thys) {
 ** length in the set.
 **
 ** @param [P] seq [AjPSeqset] Sequence set object
-** @return [int] sequence set length.
+** @return [ajint] sequence set length.
 ** @@
 ******************************************************************************/
 
-int ajSeqsetLen (AjPSeqset seq) {
+ajint ajSeqsetLen (AjPSeqset seq) {
 
   return seq->Len;
 }
@@ -702,11 +702,11 @@ int ajSeqsetLen (AjPSeqset seq) {
 ** Returns the sequence set start position, or 1 if no start has been set.
 **
 ** @param [P] seq [AjPSeqset] Sequence set object
-** @return [int] Start position.
+** @return [ajint] Start position.
 ** @@
 ******************************************************************************/
 
-int ajSeqsetBegin (AjPSeqset seq) {
+ajint ajSeqsetBegin (AjPSeqset seq) {
 
   if (!seq->Begin)
     return 1;
@@ -720,11 +720,11 @@ int ajSeqsetBegin (AjPSeqset seq) {
 ** has been set.
 **
 ** @param [P] seq [AjPSeqset] Sequence set object
-** @return [int] Start position.
+** @return [ajint] Start position.
 ** @@
 ******************************************************************************/
 
-int ajSeqsetEnd (AjPSeqset seq) {
+ajint ajSeqsetEnd (AjPSeqset seq) {
 
   if (!seq->End)
     return (seq->Len);
@@ -737,12 +737,12 @@ int ajSeqsetEnd (AjPSeqset seq) {
 ** Returns the sequence data of a sequence in a sequence set
 **
 ** @param [P] seq [AjPSeqset] Sequence set object
-** @param [r] i [int] Sequence index
+** @param [r] i [ajint] Sequence index
 ** @return [char*] Sequence as a NULL terminated string.
 ** @@
 ******************************************************************************/
 
-char* ajSeqsetSeq (AjPSeqset seq, int i) {
+char* ajSeqsetSeq (AjPSeqset seq, ajint i) {
   if (i >= seq->Size) return NULL;
 
   return ajStrStr(seq->Seq[i]->Seq);
@@ -753,11 +753,11 @@ char* ajSeqsetSeq (AjPSeqset seq, int i) {
 ** Returns the number of sequences in a sequence set
 **
 ** @param [P] seq [AjPSeqset] Sequence set object
-** @return [int] sequence set size.
+** @return [ajint] sequence set size.
 ** @@
 ******************************************************************************/
 
-int ajSeqsetSize (AjPSeqset seq) {
+ajint ajSeqsetSize (AjPSeqset seq) {
 
   return seq->Size;
 }
@@ -767,12 +767,12 @@ int ajSeqsetSize (AjPSeqset seq) {
 ** Returns the name of a sequence in a sequence set
 **
 ** @param [P] seq [AjPSeqset] Sequence set object
-** @param [r] i [int] Sequence index
+** @param [r] i [ajint] Sequence index
 ** @return [AjPStr] sequence name as a string.
 ** @@
 ******************************************************************************/
 
-AjPStr ajSeqsetName (AjPSeqset seq, int i) {
+AjPStr ajSeqsetName (AjPSeqset seq, ajint i) {
   if (i >= seq->Size) return NULL;
 
   return seq->Seq[i]->Name;
@@ -783,12 +783,12 @@ AjPStr ajSeqsetName (AjPSeqset seq, int i) {
 ** Returns the weight of a sequence in a sequence set
 **
 ** @param [P] seq [AjPSeqset] Sequence set object
-** @param [r] i [int] Sequence index
+** @param [r] i [ajint] Sequence index
 ** @return [float] sequence weight as a float.
 ** @@
 ******************************************************************************/
 
-float ajSeqsetWeight (AjPSeqset seq, int i) {
+float ajSeqsetWeight (AjPSeqset seq, ajint i) {
   if (i >= seq->Size) return 0.0;
 
   return seq->Seq[i]->Weight;
@@ -804,7 +804,7 @@ float ajSeqsetWeight (AjPSeqset seq, int i) {
 ******************************************************************************/
 
 float ajSeqsetTotweight (AjPSeqset seq) {
-  int i;
+  ajint i;
   float ret = 0.0;
 
   ajDebug("ajSeqsetTotweight Size %d\n", seq->Size);
@@ -844,12 +844,12 @@ AjPStr ajSeqsetGetName (AjPSeqset thys) {
 ** be copied.
 **
 ** @param [u] thys [AjPSeqset] Sequence set object.
-** @param [r] i [int] Sequence index number in set
+** @param [r] i [ajint] Sequence index number in set
 ** @return [AjPSeq] Sequence object.
 ** @@
 ******************************************************************************/
 
-AjPSeq ajSeqsetGetSeq (AjPSeqset thys, int i) {
+AjPSeq ajSeqsetGetSeq (AjPSeqset thys, ajint i) {
   ajDebug ("ajSeqsetGetSeq '%S' %d/%d\n", thys->Name,i, thys->Size);
   if (i >= thys->Size) return NULL;
 
@@ -1446,13 +1446,13 @@ void ajSeqReplaceC (AjPSeq thys, char* seq) {
 ** Sets the start and end positions for a sequence (not for a sequence set).
 **
 ** @param [P] seq [AjPSeq] Sequence object to be set.
-** @param [r] ibegin [int] Start position. Negative values are from the end.
-** @param [r] iend [int] End position. Negative values are from the end.
+** @param [r] ibegin [ajint] Start position. Negative values are from the end.
+** @param [r] iend [ajint] End position. Negative values are from the end.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajSeqSetRange (AjPSeq seq, int ibegin, int iend) {
+void ajSeqSetRange (AjPSeq seq, ajint ibegin, ajint iend) {
 
   ajDebug ("ajSeqSetRange (len: %d %d, %d)\n", ajSeqLen(seq), ibegin, iend);
   if (ibegin) {
@@ -1494,7 +1494,12 @@ void ajSeqMakeUsa (AjPSeq thys, AjPSeqin seqin) {
   else {
     /*ajFmtPrintS (&thys->Usa, "%S::%S (%S)",
       thys->Formatstr, thys->Filename, thys->Entryname);*/
-    ajFmtPrintS (&thys->Usa, "%S::%S", thys->Formatstr, thys->Filename);
+    if (ajStrLen(thys->Entryname))
+      ajFmtPrintS (&thys->Usa, "%S::%S:%S", thys->Formatstr, thys->Filename,
+        thys->Entryname);
+    else 
+      ajFmtPrintS (&thys->Usa, "%S::%S", thys->Formatstr, thys->Filename);
+    
   }
 
   ajDebug ("      result: <%S>\n",
@@ -1544,8 +1549,8 @@ void ajSeqToLower (AjPSeq thys) {
 
 void ajSeqReverse (AjPSeq thys) {
 
-  int ibegin = thys->Begin;
-  int iend = thys->End;
+  ajint ibegin = thys->Begin;
+  ajint iend = thys->End;
 
   ajDebug ("ajSeqReverse len: %d Begin: %d End: %d\n",
 	   ajSeqLen(thys), thys->Begin, thys->End);
@@ -1623,8 +1628,8 @@ void ajSeqCompOnly (AjPSeq thys) {
 
 void ajSeqRevOnly (AjPSeq thys) {
 
-  int ibegin = thys->Begin;
-  int iend = thys->End;
+  ajint ibegin = thys->Begin;
+  ajint iend = thys->End;
 
   ajDebug ("ajSeqRevOnly len: %d Begin: %d End: %d\n",
 	   ajSeqLen(thys), thys->Begin, thys->End);
@@ -1769,19 +1774,19 @@ AjBool ajSeqIsProt (AjPSeq thys) {
 
 AjBool ajIsAccession (AjPStr accnum) {
 
-  int i = ajStrLen(accnum);
+  ajint i = ajStrLen(accnum);
   char *cp = ajStrStr(accnum);
 
   if (i < 6)
     return ajFalse;
 
-  if (!isalpha((int)*cp++))
+  if (!isalpha((ajint)*cp++))
     return ajFalse;
-  if (isalpha((int)*cp))
+  if (isalpha((ajint)*cp))
     cp++;
 
   while (*cp) {
-    if (!isdigit((int)*cp++))
+    if (!isdigit((ajint)*cp++))
       return ajFalse;
   }
 
@@ -1997,11 +2002,11 @@ void ajSeqQueryTrace (AjPSeqQuery thys) {
 ** Returns the sequence start position, or 1 if no start has been set.
 **
 ** @param [P] seq [AjPSeq] Sequence object
-** @return [int] Start position.
+** @return [ajint] Start position.
 ** @@
 ******************************************************************************/
 
-int ajSeqBegin (AjPSeq seq) {
+ajint ajSeqBegin (AjPSeq seq) {
 
   if (!seq->Begin)
     return 1;
@@ -2015,11 +2020,11 @@ int ajSeqBegin (AjPSeq seq) {
 ** has been set.
 **
 ** @param [P] seq [AjPSeq] Sequence object
-** @return [int] Start position.
+** @return [ajint] Start position.
 ** @@
 ******************************************************************************/
 
-int ajSeqEnd (AjPSeq seq) {
+ajint ajSeqEnd (AjPSeq seq) {
 
   if (!seq->End)
     return (ajSeqLen(seq));
@@ -2048,11 +2053,11 @@ char* ajSeqName (AjPSeq seq) {
 ** Returns the sequence offset from -sbegin originally.
 **
 ** @param [P] seq [AjPSeq] Sequence object
-** @return [int] Sequence offset.
+** @return [ajint] Sequence offset.
 ** @@
 ******************************************************************************/
 
-int ajSeqOffset (AjPSeq seq) {
+ajint ajSeqOffset (AjPSeq seq) {
   return seq->Offset;
 }
 /* @func ajSeqOffend *************************************************************
@@ -2060,11 +2065,11 @@ int ajSeqOffset (AjPSeq seq) {
 ** Returns the sequence offend value. Len choped off from -send originally.
 **
 ** @param [P] seq [AjPSeq] Sequence object
-** @return [int] Sequence offend.
+** @return [ajint] Sequence offend.
 ** @@
 ******************************************************************************/
 
-int ajSeqOffend (AjPSeq seq) {
+ajint ajSeqOffend (AjPSeq seq) {
   return seq->Offend;
 }
 
@@ -2073,11 +2078,11 @@ int ajSeqOffend (AjPSeq seq) {
 ** Returns the sequence length.
 **
 ** @param [P] seq [AjPSeq] Sequence object
-** @return [int] Sequence length.
+** @return [ajint] Sequence length.
 ** @@
 ******************************************************************************/
 
-int ajSeqLen (AjPSeq seq) {
+ajint ajSeqLen (AjPSeq seq) {
   return ajStrLen(seq->Seq);
 }
 
@@ -2134,7 +2139,7 @@ AjBool ajSeqNum (AjPSeq thys, AjPSeqCvt cvt, AjPStr* numseq) {
   ncp = ajStrStr(*numseq);
 
   while (*cp) {
-    *ncp = cvt->table[(int)*cp];
+    *ncp = cvt->table[(ajint)*cp];
     cp++;
     ncp++;
   }
@@ -2152,7 +2157,7 @@ AjBool ajSeqNum (AjPSeq thys, AjPSeqCvt cvt, AjPStr* numseq) {
 ******************************************************************************/
 
 void ajSeqCvtTrace (AjPSeqCvt cvt) {
-  int i;
+  ajint i;
   ajDebug ("Cvt table for '%S'\n\n", cvt->bases);
   ajDebug ("index num ch\n");
   ajDebug ("----- --- --\n");
@@ -2177,7 +2182,7 @@ void ajSeqCvtTrace (AjPSeqCvt cvt) {
 
 AjPSeqCvt ajSeqCvtNewZero (char* bases) {
   static AjPSeqCvt ret;
-  int i;
+  ajint i;
   char *cp = bases;
 
   AJNEW0(ret);
@@ -2190,8 +2195,8 @@ AjPSeqCvt ajSeqCvtNewZero (char* bases) {
   i = 0;
   while (*cp) {
     i++;
-    ret->table[toupper((int) *cp)] = ajSysItoC(i);
-    ret->table[tolower((int) *cp)] = ajSysItoC(i);
+    ret->table[toupper((ajint) *cp)] = ajSysItoC(i);
+    ret->table[tolower((ajint) *cp)] = ajSysItoC(i);
     cp++;
   }
 
@@ -2212,9 +2217,9 @@ AjPSeqCvt ajSeqCvtNewZero (char* bases) {
 
 AjPSeqCvt ajSeqCvtNew (char* bases) {
   static AjPSeqCvt ret;
-  int i;
-  int j;
-  int imax;
+  ajint i;
+  ajint j;
+  ajint imax;
   char *cp = bases;
 
   imax = strlen(bases);
@@ -2231,8 +2236,8 @@ AjPSeqCvt ajSeqCvtNew (char* bases) {
 
   i = 0;
   while (*cp) {
-    ret->table[toupper((int) *cp)] = ajSysItoC(i);
-    ret->table[tolower((int) *cp)] = ajSysItoC(i);
+    ret->table[toupper((ajint) *cp)] = ajSysItoC(i);
+    ret->table[tolower((ajint) *cp)] = ajSysItoC(i);
     cp++;
     i++;
   }
@@ -2275,8 +2280,8 @@ void ajSeqCvtDel (AjPSeqCvt* thys)
 
 AjPSeqCvt ajSeqCvtNewText (char* bases) {
   static AjPSeqCvt ret;
-  int i;
-  int j;
+  ajint i;
+  ajint j;
   char *cp = bases;
   char c;
   
@@ -2296,9 +2301,9 @@ AjPSeqCvt ajSeqCvtNewText (char* bases) {
 
   i = 0;
   while (*cp) {
-      c = ajSysItoC(toupper((int)*cp));
-      ret->table[toupper((int) *cp)] = c;
-      ret->table[tolower((int) *cp)] = c;
+      c = ajSysItoC(toupper((ajint)*cp));
+      ret->table[toupper((ajint) *cp)] = c;
+      ret->table[tolower((ajint) *cp)] = c;
       cp++;
       i++;
   }
@@ -2313,11 +2318,11 @@ AjPSeqCvt ajSeqCvtNewText (char* bases) {
 **
 ** @param [r] thys [AjPSeqCvt] Conversion table
 **
-** @return [int] Length
+** @return [ajint] Length
 ** @@
 ******************************************************************************/
 
-int ajSeqCvtLen (AjPSeqCvt thys) {
+ajint ajSeqCvtLen (AjPSeqCvt thys) {
 
   return thys->len;
 }
@@ -2330,13 +2335,13 @@ int ajSeqCvtLen (AjPSeqCvt thys) {
 ** @param [r] thys [AjPSeqCvt] Conversion table
 ** @param [r] ch [char] Sequence character
 **
-** @return [int] Conversion code
+** @return [ajint] Conversion code
 ** @@
 ******************************************************************************/
 
-int ajSeqCvtK (AjPSeqCvt thys, char ch) {
+ajint ajSeqCvtK (AjPSeqCvt thys, char ch) {
 
-  return thys->table[(int)ch];
+  return thys->table[(ajint)ch];
 }
 
 /* @func ajSeqStr *************************************************************
@@ -2605,11 +2610,11 @@ float ajSeqMW (AjPStr seq) {
 			  000.00, 117.15, 204.23, 128.16, /* U-X */
 			  181.19, 146.64}; /* source: Biochemistry LABFAX */
   float mw = 18.015;
-  int i;
+  ajint i;
   char* cp = ajStrStr(seq);
 
   while (*cp) {
-    i = toupper((int) *cp)-'A';
+    i = toupper((ajint) *cp)-'A';
     if (i > 25 || i < 0) {
       ajDebug("seqMW bad character '%c' %d\n", *cp, *cp);
       i = 'X' - 'A';
@@ -2628,15 +2633,15 @@ float ajSeqMW (AjPStr seq) {
 ** This seems to be a bit reversal of a standard CRC32 checksum.
 **
 ** @param [P] seq [AjPStr] Sequence as a string
-** @return [unsigned int] CRC32 checksum.
+** @return [ajuint] CRC32 checksum.
 ** @@
 ******************************************************************************/
 
-unsigned int ajSeqCrc (AjPStr seq) {
-  register unsigned long crc;
-  int     c;
+ajuint ajSeqCrc (AjPStr seq) {
+  register ajulong crc;
+  ajint     c;
   char* cp;
-  static int calls = 0;
+  static ajint calls = 0;
 
   if (!calls) {
     seqCrcGen ();
@@ -2647,7 +2652,7 @@ unsigned int ajSeqCrc (AjPStr seq) {
 
   crc = 0xFFFFFFFFL;
   while( *cp ) {
-    c = toupper((int) *cp);
+    c = toupper((ajint) *cp);
     crc = ((crc >> 8) & 0x00FFFFFFL) ^ seqCrcTable[ (crc^c) & 0xFF ];
     cp++;
   }
@@ -2664,8 +2669,8 @@ unsigned int ajSeqCrc (AjPStr seq) {
 ******************************************************************************/
 
 static void seqCrcGen (void) {
-  unsigned long crc, poly;
-  int     i, j;
+  ajulong crc, poly;
+  ajint     i, j;
 
   poly = 0xEDB88320L;
   for (i=0; i<256; i++) {
@@ -2692,7 +2697,7 @@ static void seqCrcGen (void) {
 ** @@
 ******************************************************************************/
 
-void ajSeqCount (AjPStr thys, int* b) {
+void ajSeqCount (AjPStr thys, ajint* b) {
 
   char* cp = ajStrStr(thys);
 
@@ -2700,11 +2705,11 @@ void ajSeqCount (AjPStr thys, int* b) {
 
   ajDebug ("ajSeqCount %d bases\n", ajStrLen(thys));
   while (*cp) {
-    if (toupper((int) *cp) == 'A') b[0]++;
-    if (toupper((int) *cp) == 'C') b[1]++;
-    if (toupper((int) *cp) == 'G') b[2]++;
-    if (toupper((int) *cp) == 'T') b[3]++;
-    if (toupper((int) *cp) == 'U') b[3]++;
+    if (toupper((ajint) *cp) == 'A') b[0]++;
+    if (toupper((ajint) *cp) == 'C') b[1]++;
+    if (toupper((ajint) *cp) == 'G') b[2]++;
+    if (toupper((ajint) *cp) == 'T') b[3]++;
+    if (toupper((ajint) *cp) == 'U') b[3]++;
     cp++;
   }
 
@@ -2729,18 +2734,18 @@ void ajSeqCount (AjPStr thys, int* b) {
 ** Calculates a GCG checksum for a sequence.
 **
 ** @param [r] thys [AjPSeq] Squence.
-** @return [int] GCG checksum.
+** @return [ajint] GCG checksum.
 ** @@
 ******************************************************************************/
 
-int ajSeqCheckGcg (AjPSeq thys) {
-  register long  i, check = 0, count = 0;
+ajint ajSeqCheckGcg (AjPSeq thys) {
+  register ajlong  i, check = 0, count = 0;
   char *cp = ajStrStr(thys->Seq);
-  int ilen = ajStrLen(thys->Seq);
+  ajint ilen = ajStrLen(thys->Seq);
 
   for (i = 0; i < ilen; i++) {
     count++;
-    check += count * toupper((int) cp[i]);
+    check += count * toupper((ajint) cp[i]);
     if (count == 57)
       count = 0;
   }
@@ -2758,12 +2763,12 @@ int ajSeqCheckGcg (AjPSeq thys) {
 ** For sequences the maximum is the last base.
 **
 ** @param [wP] thys [AjPSeq] Target sequence.
-** @param [r] ipos [int] Position.
-** @return [int] string position between 1 and length.
+** @param [r] ipos [ajint] Position.
+** @return [ajint] string position between 1 and length.
 ** @@
 ******************************************************************************/
 
-int ajSeqPos (AjPSeq thys, int ipos) {
+ajint ajSeqPos (AjPSeq thys, ajint ipos) {
 
   return ajSeqPosII (ajSeqLen(thys), 1, ipos);
 }
@@ -2778,13 +2783,13 @@ int ajSeqPos (AjPSeq thys, int ipos) {
 ** is being tested.
 **
 ** @param [wP] thys [AjPSeq] Target sequence.
-** @param [r] imin [int] Start position.
-** @param [r] ipos [int] Position.
-** @return [int] string position between 1 and length.
+** @param [r] imin [ajint] Start position.
+** @param [r] ipos [ajint] Position.
+** @return [ajint] string position between 1 and length.
 ** @@
 ******************************************************************************/
 
-int ajSeqPosI (AjPSeq thys, int imin, int ipos) {
+ajint ajSeqPosI (AjPSeq thys, ajint imin, ajint ipos) {
 
   return ajSeqPosII (ajSeqLen(thys), imin, ipos);
 }
@@ -2801,15 +2806,15 @@ int ajSeqPosI (AjPSeq thys, int imin, int ipos) {
 ** For strings, the result can go off the end to the terminating NULL.
 ** For sequences the maximum is the last base.
 **
-** @param [r] ilen [int] maximum length.
-** @param [r] imin [int] Start position.
-** @param [r] ipos [int] Position.
-** @return [int] string position between 1 and length.
+** @param [r] ilen [ajint] maximum length.
+** @param [r] imin [ajint] Start position.
+** @param [r] ipos [ajint] Position.
+** @return [ajint] string position between 1 and length.
 ** @@
 ******************************************************************************/
 
-int ajSeqPosII (int ilen, int imin, int ipos) {
-  int jpos;
+ajint ajSeqPosII (ajint ilen, ajint imin, ajint ipos) {
+  ajint jpos;
 
   if (ipos < 0)
     jpos = ilen + ipos + 1;

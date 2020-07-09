@@ -20,15 +20,18 @@
 
 #include <stdio.h>
 
+
+#include "emboss.h"
+
 #ifndef HAVE_ORB_ORBIT_H
-int main()
+int main(int argc, char **argv)
 {
     fprintf(stderr,"CORBA support has not been compiled\n");
     return 0;
 }
 #else
 
-#include "emboss.h"
+
 
 int main(int argc, char **argv)
 {
@@ -39,14 +42,14 @@ int main(int argc, char **argv)
     AjBool       dofeat=ajTrue;
     
     char *exerr=NULL;
-    int  exint=0;
-    int  nfeat=0;
-    int  nlocs=0;
-    int  i;
-    int  j;
-    int  k;
-    int  nval;
-    int  ntags;
+    ajint  exint=0;
+    ajint  nfeat=0;
+    ajint  nlocs=0;
+    ajint  i;
+    ajint  j;
+    ajint  k;
+    ajint  nval;
+    ajint  ntags;
     
     embInit("corbatest", argc, argv);
 

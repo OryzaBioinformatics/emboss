@@ -5,6 +5,7 @@ SUBDIRS = lib
 lib_LTLIBRARIES = libplplot.la
 
 INCLUDES = $(X_CFLAGS) -I$(srcdir)/ -I/usr/include/gd
+LIBS =
 
 PLPLOTSRC = pdfutils.c plargs.c plbox.c plcont.c plcore.c \
 plctrl.c plcvt.c pldtik.c plfill.c plhist.c plline.c plmap.c \
@@ -20,7 +21,6 @@ libplplot_la_LDFLAGS = -version-info 4:99:0
 
 noinst_HEADERS = drivers.h pdf.h plcore.h plevent.h plplotP.h plxwd.h \
 metadefs.h plConfig.h pldebug.h plplot.h plstrm.h plDevs.h
-
 
 
 

@@ -46,19 +46,19 @@ struct binding {
 ******************************************************************************/
 
 typedef struct AjSTable {
-  int size;
-  int (*cmp)(const void *x, const void *y);
+  ajint size;
+  ajint (*cmp)(const void *x, const void *y);
   unsigned (*hash)(const void *key, unsigned hashsize);
-  int length;
+  ajint length;
   unsigned timestamp; 
   struct binding **buckets;
 } AjOTable, *AjPTable;
 
-AjPTable  ajTableNew (int hint,
-		      int cmp(const void *x, const void *y),
+AjPTable  ajTableNew (ajint hint,
+		      ajint cmp(const void *x, const void *y),
 		      unsigned hash(const void *key, unsigned hashsize));
 void ajTableFree(AjPTable* table);
-int   ajTableLength(AjPTable table);
+ajint   ajTableLength(AjPTable table);
 void ajTableTrace   (AjPTable table);
 void *ajTablePut   (AjPTable table, const void *key,
 		    void *value);
@@ -68,19 +68,19 @@ void   ajTableMap    (AjPTable table,
 		      void apply(const void *key, void **value, void *cl),
 		      void *cl);
 void **ajTableToarray(AjPTable table, void *end);
-int        ajStrTableCmp (const void *x, const void *y);
-int        ajStrTableCmpC (const void *x, const void *y);
-int        ajStrTableCmpCase (const void *x, const void *y);
-int        ajStrTableCmpCaseC (const void *x, const void *y);
+ajint        ajStrTableCmp (const void *x, const void *y);
+ajint        ajStrTableCmpC (const void *x, const void *y);
+ajint        ajStrTableCmpCase (const void *x, const void *y);
+ajint        ajStrTableCmpCaseC (const void *x, const void *y);
 void       ajStrTableFree (AjPTable *table);
 unsigned   ajStrTableHash (const void *key, unsigned hashsize);
 unsigned   ajStrTableHashC (const void *key, unsigned hashsize);
 unsigned   ajStrTableHashCase (const void *key, unsigned hashsize);
 unsigned   ajStrTableHashCaseC (const void *key, unsigned hashsize);
-AjPTable   ajStrTableNew (int hint);
-AjPTable   ajStrTableNewC (int hint);
-AjPTable   ajStrTableNewCase (int hint);
-AjPTable   ajStrTableNewCaseC (int hint);
+AjPTable   ajStrTableNew (ajint hint);
+AjPTable   ajStrTableNewC (ajint hint);
+AjPTable   ajStrTableNewCase (ajint hint);
+AjPTable   ajStrTableNewCaseC (ajint hint);
 void       ajStrTablePrint (AjPTable table);
 void       ajStrTablePrintC (AjPTable table);
 #endif

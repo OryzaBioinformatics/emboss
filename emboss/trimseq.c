@@ -23,21 +23,22 @@
 #include "emboss.h"
 #include <ctype.h>	/* for tolower, toupper */
 
-int trim (AjPSeq seq, int sense, AjBool isnuc, int window, float percent, AjBool strict, AjBool star);
+ajint trim (AjPSeq seq, ajint sense, AjBool isnuc, ajint window, float percent, AjBool strict, AjBool star);
 void parole(AjBool *gang, char *good_guys);
 void arrest(AjBool *gang, char *bad_guys);
 
-int main (int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
 
   AjPSeqall seqall;
   AjPSeqout seqout;
   AjPSeq seq = NULL;
-  int window;
+  ajint window;
   AjBool left, right, strict, star;
   float percent;
   AjBool isnuc;
   AjPStr str=NULL; /* NULL definition is required for the ajStrAss() call */
-  int start, end;
+  ajint start, end;
 
 
   (void) embInit ("trimseq", argc, argv);
@@ -96,29 +97,29 @@ int main (int argc, char * argv[]) {
 Parameters:
 
 AjPSeq sequence
-int sense	1 = trim from left, 0 = trim from right
+ajint sense	1 = trim from left, 0 = trim from right
 AjBool isnuc
-int window
+ajint window
 float percent
 AjBool strict	trim off all IUPAC ambiguity codes, not just X, N
 AjBool star	trim off asterisks in proteins
 
 Returns:
-int position to trim to or -1 or ajSeqLen(seq) if no bad characters were found
+ajint position to trim to or -1 or ajSeqLen(seq) if no bad characters were found
 
 */
 
-int trim (AjPSeq seq, int sense, AjBool isnuc, int window, float percent, AjBool strict, AjBool star) {
+ajint trim (AjPSeq seq, ajint sense, AjBool isnuc, ajint window, float percent, AjBool strict, AjBool star) {
 	
-  int leroy_brown;	/* last bad character */
-  int suspect;		/* possible last bad character */
+  ajint leroy_brown;	/* last bad character */
+  ajint suspect;		/* possible last bad character */
   AjBool gang[256];	/* all the characters - true if a bad one to be removed */
-  int i;
-  int a;		/* start position of window */
-  int z;		/* position to end moving window to */
-  int inc;		/* increment value to move window (+-1) */
-  int count;		/* count of bad characters in window */
-  int look;		/* position in wind we are looking at */
+  ajint i;
+  ajint a;		/* start position of window */
+  ajint z;		/* position to end moving window to */
+  ajint inc;		/* increment value to move window (+-1) */
+  ajint count;		/* count of bad characters in window */
+  ajint look;		/* position in wind we are looking at */
   float pc;		/* percentage of bad characters in this window */
   char c;
 
@@ -161,7 +162,7 @@ int trim (AjPSeq seq, int sense, AjBool isnuc, int window, float percent, AjBool
 /* we always trim gaps from the end */
   for (; a != z; a += inc) {
     c = (ajSeqChar(seq))[a];
-    if (gang[(int)c] || c == '.' || c == '-' || c == '~' || c == ' ') {	/* trim if we have a bad character or a gap character at the end */
+    if (gang[(ajint)c] || c == '.' || c == '-' || c == '~' || c == ' ') {	/* trim if we have a bad character or a gap character at the end */
       leroy_brown = a;	/* want to trim down to here */
     } else {
       break;
@@ -173,7 +174,7 @@ int trim (AjPSeq seq, int sense, AjBool isnuc, int window, float percent, AjBool
 /* look in the window */
     for (count = 0, look = 0; look < window && look > -window; look += inc) {
       c = (ajSeqChar(seq))[a+look];
-      if (gang[(int)c]) {
+      if (gang[(ajint)c]) {
 /* count the bad characters */
         count++;
 /* remember the last bad character position in this window */
@@ -217,11 +218,11 @@ char *good_guys	- string of chars that are required
 
 void parole(AjBool *gang, char *good_guys) {
 	
-  int i;
+  ajint i;
 
   for (i=0; good_guys[i]; i++) {
-    gang[tolower((int) good_guys[i])] = ajFalse;
-    gang[toupper((int) good_guys[i])] = ajFalse;
+    gang[tolower((ajint) good_guys[i])] = ajFalse;
+    gang[toupper((ajint) good_guys[i])] = ajFalse;
   }
 }
 	
@@ -237,11 +238,11 @@ char *bad_guys	- string of chars that are not required
 
 void arrest(AjBool *gang, char *bad_guys) {
 	
-  int i;
+  ajint i;
 
   for (i=0; bad_guys[i]; i++) {
-    gang[tolower((int) bad_guys[i])] = ajTrue;
-    gang[toupper((int) bad_guys[i])] = ajTrue;
+    gang[tolower((ajint) bad_guys[i])] = ajTrue;
+    gang[toupper((ajint) bad_guys[i])] = ajTrue;
   }
 }
 	

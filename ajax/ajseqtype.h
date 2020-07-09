@@ -7,7 +7,7 @@ extern "C"
 #define ajseqtype_h
 
 void         ajSeqGap (AjPSeq thys, char gapc, char padc);
-void         ajSeqGapLen (AjPSeq thys, char gapc, char padc, int ilen);
+void         ajSeqGapLen (AjPSeq thys, char gapc, char padc, ajint ilen);
 void         ajSeqGapS (AjPStr* seq, char gapc);
 void         ajSeqSetNuc (AjPSeq thys);
 void         ajSeqSetProt (AjPSeq thys);

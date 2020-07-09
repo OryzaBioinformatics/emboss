@@ -6,7 +6,7 @@ dnl Process this file with autoconf to produce a configure script.
 #CC=cc
 
 AC_INIT(ajax/ajacd.c)
-AM_INIT_AUTOMAKE(EMBOSS, 1.9.1)
+AM_INIT_AUTOMAKE(EMBOSS, 1.10.0)
 
 dnl Use libtool to make a shared library.
 AM_PROG_LIBTOOL
@@ -59,7 +59,7 @@ CHECK_PNGDRIVER
 CFLAGS="-O"
 
 
-dnl Test is --enable-corba is given
+dnl Test if --enable-corba is given
 AC_ARG_ENABLE(corba,
 [ --enable-corba	   corba (need glib and orbit)])
 if test "${enable_corba}" = "yes" ; then
@@ -81,6 +81,87 @@ AC_ARG_ENABLE(debug,
 if test "${enable_debug}" = "yes" ; then
   CFLAGS="-g"
 fi          
+
+
+dnl Turn off irritating linker warnings in IRIX
+if test "`uname`" = "IRIX"; then
+CFLAGS="-Wl,-LD_MSG:off=84:off=16 $CFLAGS"
+fi
+
+
+
+
+dnl Test if --enable-large is given
+AC_ARG_ENABLE(large,
+[ --enable-large   large ])
+if test "${enable_large}" = "yes" ; then
+AC_MSG_CHECKING(for large file support)
+
+dnl Test for Linux large file support
+if test "`uname`" = "Linux"; then
+CPPFLAGS="-DAJ_LinuxLF -D__USE_FILEOFFSET64 -D__USE_LARGEFILE64 $CPPFLAGS"
+fi
+
+dnl Test for Solaris large file support
+if test "`uname`" = "SunOS"; then
+CPPFLAGS="-DAJ_SolarisLF -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE $CPPFLAGS"
+fi
+
+dnl Test for OSF1 large file support (its always this anyway)
+if test "`uname`" = "OSF1"; then
+CPPFLAGS="-DAJ_OSF1LF $CPPFLAGS"
+fi
+
+dnl Test for SGI large file support
+dnl CPPFLAGS="-DAJ_IRIXLF -D_OFF64_T -D_LFAPI -D_NO_ANSIMODE $CPPFLAGS"
+if test "`uname`" = "IRIX"; then
+CPPFLAGS="-DAJ_IRIXLF $CPPFLAGS"
+fi
+
+
+
+AC_MSG_RESULT(done)
+fi
+
+
+
+
+
+
+
+
+dnl Test if --enable-64 is given
+AC_ARG_ENABLE(64,
+[ --enable-64   64 ])
+if test "${enable_64}" = "yes" ; then
+AC_MSG_CHECKING(for 64bit compilation support)
+
+dnl Test for Linux 64 bit
+if test "`uname`" = "Linux"; then
+CPPFLAGS="-DAJ_Linux64 $CPPFLAGS"
+fi
+
+dnl Test for Solaris 64 bit
+if test "`uname`" = "SunOS"; then
+CPPFLAGS="-DAJ_Solaris64 $CPPFLAGS"
+fi
+
+dnl Test for OSF1 64 bit (its always this anyway)
+if test "`uname`" = "OSF1"; then
+CPPFLAGS="-DAJ_OSF164 $CPPFLAGS"
+fi
+
+dnl Test for SGI 64 bit
+if test "`uname`" = "IRIX"; then
+CPPFLAGS="-DAJ_IRIX64 -mabi=64 $CPPFLAGS"
+fi
+
+AC_MSG_RESULT(done)
+fi
+
+
+
+
 
 
 

@@ -24,38 +24,39 @@
 #include "emboss.h"
 
 
-int readexpfreq(AjPTable *exptable, AjPFile infile, int size);
-int makebigarray(unsigned long int no_elements, unsigned long int **bigarray);
+ajint readexpfreq(AjPTable *exptable, AjPFile infile, ajint size);
+ajint makebigarray(ajulong no_elements, ajulong **bigarray);
 
 
 
-int main (int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
 
   AjPSeqall seqall;
   AjPSeq seq;
-  int word;
+  ajint word;
   AjBool zerocount;
   AjBool ignorebz;
-  int frame;
+  ajint frame;
   AjPFile outfile;
   AjPFile infile;
   AjBool reverse;
   AjPStr ajb=NULL;
   
-  int pos;
+  ajint pos;
   char *s;
-  unsigned long int result;
-  unsigned long int *bigarray;
-  unsigned long int no_elements;
+  ajulong result;
+  ajulong *bigarray;
+  ajulong no_elements;
   AjBool first_time_round = ajTrue;
-  unsigned long int count;
+  ajulong count;
   AjPStr dispseq=NULL;
-  unsigned long int total=0;
-  unsigned long int other=0;
+  ajulong total=0;
+  ajulong other=0;
   AjBool otherflag;
   AjBool seqisnuc=ajFalse;
-  int increment;
-  int count_of_sequence_names = 0;
+  ajint increment;
+  ajint count_of_sequence_names = 0;
   AjPTable exptable = NULL;	/* table of expected frequencies */
   AjPStr strother = NULL;	/* holds the string of "Other" for looking in the hash table 'exptable' */
 
@@ -269,20 +270,20 @@ giving each word an equal frequency
 
 /******************************************************/
 
-int makebigarray(unsigned long int no_elements, unsigned long int **bigarray) {
+ajint makebigarray(ajulong no_elements, ajulong **bigarray) {
 
   ajDebug ("makebigarray for %ld elements\n", no_elements);
   AJCNEW(*bigarray, no_elements);
   return 0;
 }
 /******************************************************/
-int readexpfreq(AjPTable *exptable, AjPFile infile, int size) {
+ajint readexpfreq(AjPTable *exptable, AjPFile infile, ajint size) {
 
   AjPStr line = NULL;
   char whiteSpace[] = " \t\n\r";
   AjPStrTok tokens;
   AjPStr sizestr=NULL;
-  int thissize;
+  ajint thissize;
   AjPStr key;
   AjPStr value;
 

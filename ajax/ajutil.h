@@ -7,10 +7,10 @@ extern "C"
 #define ajutil_h
 
 void ajExit (void);
-int ajExitBad (void);
+ajint ajExitBad (void);
 void ajLogInfo (void);
 AjBool ajUtilBigendian (void);
-void ajUtilRev4 (int* i);
+void ajUtilRev4 (ajint* i);
 void ajUtilRev2 (short* i);
 AjBool ajUtilUid (AjPStr* dest);
 #endif

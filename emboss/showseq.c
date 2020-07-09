@@ -28,7 +28,7 @@
 
 static void FormatShow(EmbPShow ss, AjPStr format, AjPTrn trnTable,
 AjPRange translaterange, AjPRange uppercase, AjPRange highlight, AjBool
-threeletter, AjBool numberseq, AjPFeatTable feat, int orfminsize,
+threeletter, AjBool numberseq, AjPFeatTable feat, ajint orfminsize,
 AjPList restrictlist, AjBool flat);
 
 static void read_equiv(AjPFile *equfile, AjPTable *table);
@@ -37,9 +37,10 @@ static void read_file_of_enzyme_names(AjPStr *enzymes);
 
 
 
-int main (int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
 
-  int begin, end;
+  ajint begin, end;
   AjPSeqall seqall;
   AjPSeq seq;
   EmbPShow ss;
@@ -47,33 +48,33 @@ int main (int argc, char * argv[]) {
   AjPStr * formatlist;
   AjPStr * thinglist;
   AjPStr * tablelist;
-  int table=0;
+  ajint table=0;
   AjPRange translaterange;
   AjPRange uppercase;
   AjPRange highlight;
   AjBool threeletter;
   AjBool numberseq;
   AjBool nameseq;
-  int width;
-  int length;
-  int margin;
+  ajint width;
+  ajint length;
+  ajint margin;
   AjBool description;
-  int offset;
+  ajint offset;
   AjBool html;
   AjPStr descriptionline;
   AjPFeatTable feat;
-  int orfminsize;
+  ajint orfminsize;
   AjBool flat;
   AjPTrn trnTable;
 
   AjPStr format=ajStrNew();	/* holds ACD or constructed format for output */
-  int i;
+  ajint i;
 
 /* stuff lifted from Alan's 'restrict.c' */
     AjPStr    enzymes=NULL;
-    int mincuts;
-    int maxcuts;
-    int sitelen;
+    ajint mincuts;
+    ajint maxcuts;
+    ajint sitelen;
     AjBool single;
     AjBool blunt;
     AjBool sticky;
@@ -85,7 +86,7 @@ int main (int argc, char * argv[]) {
     AjPFile   enzfile=NULL;
     AjPFile   equfile=NULL;
     AjPTable  retable=NULL;
-    int       hits;
+    ajint       hits;
     AjPList   restrictlist=NULL;
 #define ENZDATA "REBASE/embossre.enz"
 #define EQUDATA "embossre.equ"
@@ -289,7 +290,7 @@ int main (int argc, char * argv[]) {
 ** @param [r] threeletter [AjBool] use 3-letter code
 ** @param [r] numberseq [AjBool] put numbers on sequences
 ** @param [r] feat [AjPFeatTable] sequence's feature table
-** @param [r] orfminsize [int] minimum size of ORFs to display (0 for no ORFs)
+** @param [r] orfminsize [ajint] minimum size of ORFs to display (0 for no ORFs)
 ** @param [r] restrictlist [AjPList] restriction enzyme cut site list (or NULL)
 ** @param [r] flat [AjBool] show restriction sites in flat format
 ** @return [void]
@@ -298,7 +299,7 @@ int main (int argc, char * argv[]) {
 
 static void FormatShow(EmbPShow ss, AjPStr format, AjPTrn trnTable,
 AjPRange translaterange, AjPRange uppercase, AjPRange highlight, AjBool
-threeletter, AjBool numberseq, AjPFeatTable feat, int orfminsize,
+threeletter, AjBool numberseq, AjPFeatTable feat, ajint orfminsize,
 AjPList restrictlist, AjBool flat) {
 
   AjPStrTok tok;

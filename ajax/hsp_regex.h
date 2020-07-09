@@ -2,6 +2,7 @@
 #define	hsp_regex_h	/* never again */
 
 #define NPSUBEXP  10
+#include "ajarch.h"
 #include <sys/types.h>
 
 /* @data AjPPosRegexp *******************************************************
@@ -49,7 +50,7 @@ typedef struct re_guts REGUTSSTRUCT;
 typedef off_t regoff_t;
 typedef struct regex_t {
     const char* orig;		/* AJAX extension: start of original */
-    int re_magic;
+    ajint re_magic;
     size_t re_nsub;		/* number of parenthesized subexpressions */
     const char *re_endp;	/* end pointer for REG_PEND */
     REGUTSSTRUCT *re_g;		/* none of your business :-) */
@@ -61,13 +62,13 @@ typedef struct {
 } regmatch_t, AjOPosRegmatch, *AjPPosRegmatch;
 
 typedef struct AjSPosRegexp{
-    int Subs;			/* size of match array */
+    ajint Subs;			/* size of match array */
     regex_t *Regex;
     AjPPosRegmatch Match;
 } AjOPosRegexp, *AjPPosRegexp;
 
 /* === hsp_regcomp.c === */
-extern int hsp_regcomp(regex_t *, const char *, int);
+extern ajint hsp_regcomp(regex_t *, const char *, int);
 #define	REG_BASIC	0000
 #define	REG_EXTENDED	0001
 #define	REG_ICASE	0002
@@ -102,7 +103,7 @@ extern size_t hsp_regerror(int, const regex_t *, char *, size_t);
 
 
 /* === regexec.c === */
-extern int hsp_regexec(const regex_t *, const char *, size_t,
+extern ajint hsp_regexec(const regex_t *, const char *, size_t,
 		       regmatch_t [], int);
 
 #define	REG_NOTBOL	00001

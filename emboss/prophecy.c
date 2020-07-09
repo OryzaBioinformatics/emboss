@@ -29,16 +29,16 @@
 #define HENIKOFF_LENGTH 27
 
 void simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
-		   int thresh);
+		   ajint thresh);
 void gribskov_profile(AjPSeqset seqset, float **sub,
-		      AjPFile outf, AjPStr name, int thresh,
+		      AjPFile outf, AjPStr name, ajint thresh,
 		      float gapopen, float gapextend, AjPStr *cons);
 void henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx, float **sub,
-		      int thresh, AjPSeqCvt cvt, AjPFile outf, AjPStr name,
+		      ajint thresh, AjPSeqCvt cvt, AjPFile outf, AjPStr name,
 		      float gapopen, float gapextend, AjPStr *cons);
 
 
-int main (int argc, char * argv[])
+int main(int argc, char **argv)
 {
 
     AjPSeqset seqset=NULL;
@@ -46,7 +46,7 @@ int main (int argc, char * argv[])
     AjPStr    name=NULL;
     AjPStr    cons=NULL;
     
-    int       thresh;
+    ajint       thresh;
     char *p;
     AjPStr *type;
 
@@ -93,20 +93,20 @@ int main (int argc, char * argv[])
 
 
 void simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
-		   int thresh)
+		   ajint thresh)
 {
     char *p;
-    int nseqs;
-    int mlen;
-    int len;
-    int i;
-    int j;
-    int x;
-    int px;
+    ajint nseqs;
+    ajint mlen;
+    ajint len;
+    ajint i;
+    ajint j;
+    ajint x;
+    ajint px;
     
-    int maxscore;
-    int score;
-    int *matrix[AZ+2];
+    ajint maxscore;
+    ajint score;
+    ajint *matrix[AZ+2];
     AjPStr cons=NULL;
     
     nseqs = ajSeqsetSize(seqset);
@@ -133,7 +133,7 @@ void simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
 	len = strlen(p);
 	for(j=0;j<len;++j)
 	{
-	    x = toupper((int)*p++);
+	    x = toupper((ajint)*p++);
 	    ++matrix[ajAZToInt(x)][j];
 	}
     }
@@ -190,7 +190,7 @@ void simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
     
 	    
 void gribskov_profile(AjPSeqset seqset, float **sub,
-		      AjPFile outf, AjPStr name, int thresh,
+		      AjPFile outf, AjPStr name, ajint thresh,
 		      float gapopen, float gapextend, AjPStr *cons)
 {
     AjPMatrixf imtx=0;
@@ -198,27 +198,27 @@ void gribskov_profile(AjPSeqset seqset, float **sub,
     AjPStr mname=NULL;
     
     float **mat;
-    int nseqs;
-    int mlen;
-    int i;
-    int j;
+    ajint nseqs;
+    ajint mlen;
+    ajint i;
+    ajint j;
     static char *valid="ACDEFGHIKLMNPQRSTVWY";
     char *p;
     char *q;
     float score;
     float sum;
-    int   gsum;
+    ajint   gsum;
     float   mmax;
     float   pmax;
     float   psum;
-    int  start;
-    int  end;
-    int  pos;
+    ajint  start;
+    ajint  end;
+    ajint  pos;
     float  x;
-    int  px;
+    ajint  px;
     
     float **weights;
-    int *gaps;
+    ajint *gaps;
 
     
     mname=ajStrNewC("Epprofile");
@@ -396,14 +396,14 @@ void gribskov_profile(AjPSeqset seqset, float **sub,
 
 
 void henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx, float **sub,
-		      int thresh, AjPSeqCvt cvt, AjPFile outf, AjPStr name,
+		      ajint thresh, AjPSeqCvt cvt, AjPFile outf, AjPStr name,
 		      float gapopen, float gapextend, AjPStr *cons)
 {
     float **mat;
-    int nseqs;
-    int mlen;
-    int i;
-    int j;
+    ajint nseqs;
+    ajint mlen;
+    ajint i;
+    ajint j;
     static char *valid="ACDEFGHIKLMNPQRSTVWY";
     char *p;
     char *q;
@@ -411,18 +411,18 @@ void henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx, float **sub,
     float sum;
     float psum;
     float pmax;
-    int   gsum;
-    int   mmax;
-    int  start;
-    int  end;
-    int  pos;
+    ajint   gsum;
+    ajint   mmax;
+    ajint  start;
+    ajint  end;
+    ajint  pos;
     
     float **weights;
-    int *gaps;
-    int *pcnt;
+    ajint *gaps;
+    ajint *pcnt;
 
     float x;
-    int px;
+    ajint px;
     
 
     nseqs = ajSeqsetSize(seqset);

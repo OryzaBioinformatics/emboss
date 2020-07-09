@@ -82,6 +82,9 @@ Command line arguments
    
 Input file format
 
+   'flat' files (native distribution format) of a protein or nucleic
+   sequence database.
+   
 Output file format
 
    dbiflat creates four index files. All are binary but with a simple
@@ -111,6 +114,8 @@ Output file format
        
 Data files
 
+   None.
+   
 Notes
 
    The indexing method depends on each entry having a unique entry name.
@@ -119,14 +124,24 @@ Notes
    
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It exits with a status of 0 if no problems.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name          Description

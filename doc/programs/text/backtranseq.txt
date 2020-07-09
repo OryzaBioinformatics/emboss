@@ -10,23 +10,37 @@ Function
    
 Description
 
-   Backtranseq takes a protein sequence and makes a best estimate of the
+   backtranseq takes a protein sequence and makes a best estimate of the
    likely nucleic acid sequence it could have come from. It does this by
    using a codon frequency table. For each amino acid, the corresponding
    most frequently occuring codon is used in the construction of the
    nucleic acid sequence.
    
+  Codon usage table name
+  
+   backtranseq reads in a data file containing the codon frequency
+   tables. The default codon frequency table is 'Ehum.cut' - the human
+   codon frequency table. It is important to use a codon frequency table
+   that is appropriate for the species that your protein comes from. See
+   the Data Files section below for more details on these files.
+   
 Usage
 
-   Here is a sample session with backtranseq.
-
+   Here is a sample session with backtranseq. Note that this is a human
+   protein and so the default (human) codon frequency file is used (i.e.
+   is not specified).
+   
 % backtranseq
+Back translate a protein sequence
 Input sequence: sw:opsd_human
 Output sequence [opsd_human.fasta]:
 
    Here is a session using a drosophila sequence and codon table:
-
-% backtranseq -seq sw:ach2_drome -out stdout -cfile Edrosophila
+   
+% backtranseq -cfile Edrosophila.cut
+Back translate a protein sequence
+Input sequence: sw:ach2_drome
+Output sequence [ach2_drome.fasta]:
 
 Command line arguments
 
@@ -60,6 +74,32 @@ Output file format
    translation of the specified protein, and using the specified
    translation table (which defaults to human).
    
+   The output from the backtranslation of the human protein sw:opsd_human
+   follows:
+     _________________________________________________________________
+   
+% more opsd_human.fasta
+>OPSD_HUMAN P08100 RHODOPSIN.
+ATGAACGGCACCGAGGGCCCCAACTTCTACGTGCCCTTCAGCAACGCCACCGGCGTGGTG
+AGAAGCCCCTTCGAGTACCCCCAGTACTACCTGGCCGAGCCCTGGCAGTTCAGCATGCTG
+GCCGCCTACATGTTCCTGCTGATCGTGCTGGGCTTCCCCATCAACTTCCTGACCCTGTAC
+GTGACCGTGCAGCACAAGAAGCTGAGAACCCCCCTGAACTACATCCTGCTGAACCTGGCC
+GTGGCCGACCTGTTCATGGTGCTGGGCGGCTTCACCAGCACCCTGTACACCAGCCTGCAC
+GGCTACTTCGTGTTCGGCCCCACCGGCTGCAACCTGGAGGGCTTCTTCGCCACCCTGGGC
+GGCGAGATCGCCCTGTGGAGCCTGGTGGTGCTGGCCATCGAGAGATACGTGGTGGTGTGC
+AAGCCCATGAGCAACTTCAGATTCGGCGAGAACCACGCCATCATGGGCGTGGCCTTCACC
+TGGGTGATGGCCCTGGCCTGCGCCGCCCCCCCCCTGGCCGGCTGGAGCAGATACATCCCC
+GAGGGCCTGCAGTGCAGCTGCGGCATCGACTACTACACCCTGAAGCCCGAGGTGAACAAC
+GAGAGCTTCGTGATCTACATGTTCGTGGTGCACTTCACCATCCCCATGATCATCATCTTC
+TTCTGCTACGGCCAGCTGGTGTTCACCGTGAAGGAGGCCGCCGCCCAGCAGCAGGAGAGC
+GCCACCACCCAGAAGGCCGAGAAGGAGGTGACCAGAATGGTGATCATCATGGTGATCGCC
+TTCCTGATCTGCTGGGTGCCCTACGCCAGCGTGGCCTTCTACATCTTCACCCACCAGGGC
+AGCAACTTCGGCCCCATCTTCATGACCATCCCCGCCTTCTTCGCCAAGAGCGCCGCCATC
+TACAACCCCGTGATCTACATCATGATGAACAAGCAGTTCAGAAACTGCATGCTGACCACC
+ATCTGCTGCGGCAAGAACCCCCTGGGCGACGACGAGGCCAGCGCCACCGTGAGCAAGACC
+GAGACCAGCCAGGTGGCCCCCGCC
+     _________________________________________________________________
+   
 Data files
 
    The codon usage table is read by default from "Ehum.cut" in the
@@ -79,10 +119,16 @@ Data files
 
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
    "Corrupt codon index file" - the codon usage file is incomplete or
@@ -98,6 +144,8 @@ Exit status
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name                          Description

@@ -36,7 +36,7 @@ AjPTable supply_table(AjPFile inf);
 
 
 
-int main( int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
     AjPStr    enzyme=NULL;
     
@@ -63,18 +63,18 @@ int main( int argc, char **argv, char **env)
     AjPStr iso;
     
     AjPStr    *ea;
-    int       ne=0;
+    ajint       ne=0;
 
-    int len;
-    int ncuts;
+    ajint len;
+    ajint ncuts;
     AjBool blunt;
-    int cut1;
-    int cut2;
-    int cut3;
-    int cut4;
+    ajint cut1;
+    ajint cut2;
+    ajint cut3;
+    ajint cut4;
 
-    int i;
-    int n;
+    ajint i;
+    ajint n;
     
     embInit("redata", argc, argv);
 

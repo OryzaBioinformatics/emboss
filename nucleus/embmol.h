@@ -11,14 +11,14 @@ extern "C"
 
 typedef struct EmbSMolFrag
 {
-    int begin;
-    int end;
+    ajint begin;
+    ajint end;
     double mwt;
 } EmbOMolFrag, *EmbPMolFrag;
 
 
 
-int embMolGetFrags(AjPStr thys, int rno, AjPList *l);
+ajint embMolGetFrags(AjPStr thys, ajint rno, AjPList *l);
 
 
 

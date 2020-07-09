@@ -23,7 +23,7 @@
 #include "emboss.h"
 #include <strings.h>
 
-void print_hits(AjPList l, AjPFile outf, int be, char *s);
+void print_hits(AjPList l, AjPFile outf, ajint be, char *s);
 
 
 
@@ -33,22 +33,22 @@ int main(int argc, char **argv)
     AjPSeq   a;
     AjPStr   substr;
     AjPStr   rname;
-    int      be;
-    int      en;
-    int      len;
+    ajint      be;
+    ajint      en;
+    ajint      len;
 
     AjBool unfavoured;
     AjBool overlap;
     AjBool allpartials;
     AjPStr *menu;
-    int    n;
+    ajint    n;
     
     AjPFile  outf;
     AjPList  l;
     AjPList  pa;
 
-    int     ncomp;
-    int     npart;
+    ajint     ncomp;
+    ajint     npart;
     
     
     embInit("digest", argc, argv);
@@ -123,11 +123,11 @@ int main(int argc, char **argv)
 
 
 
-void print_hits(AjPList l, AjPFile outf, int be, char *s)
+void print_hits(AjPList l, AjPFile outf, ajint be, char *s)
 {
     EmbPPropFrag fr;
     AjPStr  t;
-    int     len;
+    ajint     len;
     
     t=ajStrNew();
     len=strlen(s);

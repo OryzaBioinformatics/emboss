@@ -10,17 +10,41 @@ Function
    
 Description
 
-   Banana predicts bending of a normal (B) DNA double helix.
+   banana predicts bending of a normal (B) DNA double helix, using he
+   method of Goodsell & Dickerson, NAR 1994 11;22(24):5497-503.
+   
+   This program calculates the magnitude of local bending and macroscopic
+   curvature at each point along an arbitrary B-DNA sequence, using any
+   desired bending model that specifies values of twist, roll and tilt as
+   a function of sequence.
+   
+   The data, based on the nucleosome positioning data of Satchwell et al
+   1986 (J. Mol. Biol. 191, 659-675), correctly predicts experimental
+   A-tract curvature as measured by gel retardation and cyclization
+   kinetics and successfully predicts curvature in regions containing
+   phased GGGCCC sequences.
+   
+   This model - showing local bending at mixed sequence DNA, strong bends
+   at the sequence GGC, and straight, rigid A-tracts - is the only model,
+   out of six models investigated in Goodsell & Dickerson paper, that is
+   consistent with both solution data from gel retardation and
+   cyclization kinetics and structural data from x-ray crystallography.
    
    The consensus sequence for DNA bending is 5 As and 5 non-As
    alternating. "N" is an ambiguity code for any base, and "B" is the
-   ambiguity code for "not A" so "BANANA" is itself a bent sequence.
+   ambiguity code for "not A" so "BANANA" is itself a bent sequence -
+   hence the name of this program.
+   
+   The program outputs both a graphical display and a text file of the
+   results.
    
 Usage
 
    Here is a sample session with banana.
-
- banana embl:rnu68037
+   
+% banana embl:rnu68037
+Bending and curvature plot in B-DNA
+Graph type [x11]:
 
    click here for result (1st page only)
    
@@ -61,19 +85,85 @@ Input file format
    
 Output file format
 
-   .ps file if postscipt output requested.
+   The output is to both a graphical display and to a text file with the
+   default name 'banana.profile'.
+   
+   The graphical display shows the sequence together with the local local
+   bending (solid line) and macroscopic curvature (dotted line).
+   
+   The output data file from the above example is as follows:
+     _________________________________________________________________
+   
+t    0.0      0.0
+g   17.7      0.0
+a   21.1      0.0
+g   28.5      0.0
+c   26.2      0.0
+c   19.7      0.0
+c   18.7      0.0
+c   12.5      0.0
+t    9.7      0.0
+a   14.9      0.0
+c   16.5      0.0
+g   17.5      0.0
+g   26.2      0.0
+g   28.5      0.0
+c   20.7      0.0
+t   11.7      0.0
+t    6.4      0.0
+a    9.3      0.0
+a   14.9      0.0
+c   17.7      0.0
+c   15.7     19.2
+t   15.7     18.5
+g   17.7     17.9
+a   21.1     17.1
+g   28.5     15.9
+c   25.2     14.6
+c   12.5     13.3
+t    7.2     11.9
+a   13.2     10.8
+g   20.1     10.1
+t   19.5      9.6
+g   15.1      9.2
+g   14.9      9.1
+a   19.5      9.5
+t   19.7     10.2
+g   17.7     10.8
+a   17.7     11.0
+g   25.2     11.2
+g   26.2     11.3
+c   15.3     11.5
+a   11.4     11.7
+a   14.5     12.0
+c   13.9     12.2
+a   11.4     12.3
+[output truncated for brevity]
+     _________________________________________________________________
+   
+   The data file consists of three columns separated by blanks or tab
+   characters.
+   
+   The first column is the sequence.
+   The second column is the local bending.
+   The third is the curvature.
    
 Data files
 
-   angles files. By default Eangles_tri.dat is used.
+   It reads in angles files for the twist, roll and tilt angles. By
+   default Eangles_tri.dat is used, as in Goodsell & Dickerson, NAR 1994
+   11;22(24):5497-503 and Drew and Travers (1986) JMB 191, 659
    
 Notes
 
+   None.
+   
 References
 
-   Goodsell, D.S. & Dickerson, R.E. (1994) "Bending and Curvature
-   Calculations in B-DNA" Nucl. Acids. Res. 22, 5497-5503.
-   
+    1. Goodsell, D.S. & Dickerson, R.E. (1994) "Bending and Curvature
+       Calculations in B-DNA" Nucl. Acids. Res. 22, 5497-5503.
+    2. Drew and Travers (1986) JMB 191, 659
+       
 Warnings
 
    Only ACTG allowed, if sequence contains a non ACTG character then the
@@ -81,12 +171,16 @@ Warnings
    
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    0 if successfull.
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name                      Description

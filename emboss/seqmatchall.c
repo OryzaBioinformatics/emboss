@@ -3,7 +3,7 @@
 static AjPSeq seq2;
 static AjPSeq seq1;
 
-int statwordlen;
+ajint statwordlen;
 
 static void matchListPrint(void **x,void *cl) {
   EmbPWordMatch p = (EmbPWordMatch)*x;
@@ -21,14 +21,14 @@ static void listPrint(AjPFile outfile, AjPList list){
   ajListMap(list,matchListPrint, outfile);
 }
 
-int main (int argc, char * argv[])
+int main(int argc, char **argv)
 {
   AjPTable seq1MatchTable =0 ;
   AjPList matchlist ;
   AjPSeqset seqset;
   AjPFile outfile;
 
-  int i,j;
+  ajint i,j;
 
   
   embInit ("seqmatchall", argc, argv);

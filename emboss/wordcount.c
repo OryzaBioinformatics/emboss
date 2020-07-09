@@ -3,12 +3,13 @@
 
 
 
-int main (int argc, char * argv[]){
+int main(int argc, char **argv)
+{
 
   AjPSeq seq;
   AjPTable table =0 ;
   AjPFile outf;
-  int wordsize;
+  ajint wordsize;
 
   embInit("wordcount", argc, argv);
 

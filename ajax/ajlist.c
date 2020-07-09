@@ -107,7 +107,7 @@ static AjPList listNew(AjEnum type)
     list->Type = type;
 
     list->Last = listDummyNode (&list->First);
-  
+
     return list;
 }
 
@@ -128,7 +128,8 @@ void ajListPush (AjPList thys, void* x)
 
     listInsertNode (&thys->First, x);
 
-    thys->Count++;
+    if(!thys->Count++)
+	thys->Last->Prev = thys->First;
 
     return;
 }
@@ -161,7 +162,7 @@ void ajListstrPush (AjPList thys, AjPStr x)
 
 void ajListTrace (AjPList thys)
 {
-    int i = 0;
+    ajint i = 0;
     AjPListNode node;
 
     if (!thys) return;
@@ -207,7 +208,7 @@ void ajListTrace (AjPList thys)
 void ajListstrTrace (AjPList thys)
 {
 
-    int i = 0;
+    ajint i = 0;
     AjPListNode node;
 
     if (!thys)
@@ -258,7 +259,7 @@ AjPList ajListNewArgs (void* x, ...)
 {
     AjPList list;
     va_list ap;
-    int i=0;
+    ajint i=0;
     void* y;
 
     list = ajListNew();
@@ -292,7 +293,7 @@ AjPList ajListstrNewArgs (AjPStr x, ...)
 {
     AjPList list;
     va_list ap;
-    int i=0;
+    ajint i=0;
     AjPStr y;
 
     list = ajListstrNew();
@@ -388,7 +389,7 @@ void ajListAppend(AjPList thys, AjPListNode morenodes)
         
     listNodesTrace(morenodes);
 
-    more->Prev = thys->Last;
+    more->Next->Prev = thys->Last;
     thys->Last->Next = more->Next;
     thys->Last->Item = more->Item;
 
@@ -421,7 +422,6 @@ void ajListPushApp(AjPList thys, void* x)
        penultimate node, so we use the dummy node and make a new dummy node
        instead */
     AjPListNode tmp=NULL;
-    AjPListNode node;
 
     if(!thys->Count)
     {
@@ -430,9 +430,6 @@ void ajListPushApp(AjPList thys, void* x)
     }
     
     thys->Last->Item = x;
-    for(node=tmp=thys->First; node->Next; node = node->Next)
-	tmp = node;
-    thys->Last->Prev = tmp;
 
     tmp = thys->Last;
     thys->Last = listDummyNode(&thys->Last->Next);
@@ -567,11 +564,11 @@ AjBool ajListLast(AjPList thys, void** x)
 ** @@
 ****************************************************************/
 
-AjBool ajListNth(AjPList thys, int n, void** x)
+AjBool ajListNth(AjPList thys, ajint n, void** x)
 {
     AjPListNode rest;
-    int len;
-    int i;
+    ajint len;
+    ajint i;
   
     if (!thys || n<1)
 	return ajFalse;
@@ -742,11 +739,11 @@ void ajListstrReverse(AjPList thys)
 ** get the number of nodes in the linked list.
 **
 ** @param [r] thys [AjPList] List
-** @return [int] Number of nodes in list.
+** @return [ajint] Number of nodes in list.
 ** @@
 ***************************************************************/
 
-int ajListLength(AjPList thys)
+ajint ajListLength(AjPList thys)
 {
     if (!thys)
 	return 0;
@@ -759,11 +756,11 @@ int ajListLength(AjPList thys)
 ** get the number of nodes in the linked list.
 **
 ** @param [r] thys [AjPList] List
-** @return [int] Number of nodes in list.
+** @return [ajint] Number of nodes in list.
 ** @@
 ***************************************************************/
 
-int ajListstrLength(AjPList thys)
+ajint ajListstrLength(AjPList thys)
 {
     return ajListLength(thys);
 }
@@ -963,14 +960,14 @@ void ajListstrMap(AjPList thys, void apply(AjPStr* x, void* cl), void* cl)
 **
 ** @param [r] thys [AjPList] List
 ** @param [P] array [void***] Array of pointers to list items.
-** @return [int] Size of array of pointers.
+** @return [ajint] Size of array of pointers.
 ** @@
 ******************************************************************************/
 
-int ajListToArray(AjPList thys, void*** array)
+ajint ajListToArray(AjPList thys, void*** array)
 {
-    int i;
-    int n = thys->Count;
+    ajint i;
+    ajint n = thys->Count;
     AjPListNode rest = thys->First;
 
     if (!n)
@@ -997,15 +994,15 @@ int ajListToArray(AjPList thys, void*** array)
 ** @param [r] thys [AjPList] List
 ** @param [P] array [AjPStr**] Array of Stringss.
 **
-** @return [int] Size of array of pointers.
+** @return [ajint] Size of array of pointers.
 **
 ** @@
 ******************************************************************************/
 
-int ajListstrToArray(AjPList thys, AjPStr** array)
+ajint ajListstrToArray(AjPList thys, AjPStr** array)
 {
-    int i;
-    int n = thys->Count;
+    ajint i;
+    ajint n = thys->Count;
     AjPListNode rest = thys->First;
 
     if (!n)
@@ -1559,21 +1556,14 @@ void ajListstrIterTrace (AjIList thys)
 void ajListPushList (AjPList thys, AjPList* pmore)
 {
     AjPList more = *pmore;
-    AjPListNode  tmp=NULL;
-    AjPListNode  node;
-
 
     if (more->Count)
     {					/* more list has items */
 
 	if (thys->Count)
 	{				/* master list has items */
-	    for(node=more->First; node->Next; node = node->Next)
-		tmp = node;
-	    
 	    more->Last->Item = thys->First->Item;
 	    more->Last->Next = thys->First->Next;
-	    more->Last->Prev = tmp;
 	    thys->First->Next->Prev = more->Last;
 	}
 	else
@@ -1619,7 +1609,7 @@ void ajListstrPushList (AjPList thys, AjPList* pmore)
 static void listArrayTrace (void** array)
 {
     void** v = array;
-    int i=0;
+    ajint i=0;
     while (*v)
 	ajDebug ("array[%d] %x\n", i++, *v++);
 
@@ -1639,7 +1629,7 @@ static void listArrayTrace (void** array)
 void ajListSort (AjPList thys, int (*compar) (const void*, const void*))
 {
     void** array = NULL;
-    int i = 0;
+    ajint i = 0;
     AjPListNode node = thys->First;
 
     /*ajDebug ("ajListSort %d items\n", thys->Count);*/

@@ -12,10 +12,11 @@ wordmatch -sequencea /nfs/adnah/il/wordtest/eclac.seq -sequenceb /nfs/adnah/il/w
 #include "ajax.h"
 #include "emboss.h"
 
-int main(int argc, char * argv[]) {
+int main(int argc, char **argv)
+{
 
   AjPSeq seq1,seq2;
-  int wordlen;
+  ajint wordlen;
   AjPTable seq1MatchTable =0 ;
   AjPList matchlist = NULL;
   AjPFile outf;
