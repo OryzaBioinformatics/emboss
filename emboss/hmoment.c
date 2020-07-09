@@ -104,9 +104,12 @@ int main(int argc, char **argv)
 	ajStrToUpper(&str);
 	p = ajStrStr(str);
 
-	AJCNEW0(x,limit);
-	AJCNEW0(ya,limit);
-	AJCNEW0(yb,limit);
+	if(limit>0)
+	{
+	    AJCNEW0(x,limit);
+	    AJCNEW0(ya,limit);
+	    AJCNEW0(yb,limit);
+	}
 	
 
 	for(i=0;i<limit;++i)
@@ -162,14 +165,16 @@ int main(int argc, char **argv)
 	    if(twin)
 		hmoment_addgraph(graph,limit,x,yb,ymax,RED,bangle,window,
 				 baseline);
-
-	    ajGraphxyDisplay(graph,ajTrue);
+	    if(limit>0)
+		ajGraphxyDisplay(graph,ajTrue);
 	}
 	
-
-	AJFREE(x);
-	AJFREE(ya);
-	AJFREE(yb);
+	if(limit>0)
+	{
+	    AJFREE(x);
+	    AJFREE(ya);
+	    AJFREE(yb);
+	}
     }
     
     if(!plot)
@@ -196,7 +201,7 @@ int main(int argc, char **argv)
 ** @param [?] window [ajint] Undocumented
 ** @param [?] baseline [float] Undocumented
 ** @@
-******************************************************************************/
+****************************************************************************/
 
 
 static void hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
@@ -208,7 +213,9 @@ static void hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
     AjPGraphData data;
     AjPStr st=NULL;
 
-
+    if(limit<1)
+	return;
+    
     data = ajGraphxyDataNewI(limit);
 
     st = ajStrNew();
@@ -221,6 +228,9 @@ static void hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
     
     ajGraphxySetColour(data,colour);
     ajGraphDataxySetMaxMin(data,x[0],x[limit-1],0.,ymax);  
+    ajGraphDataxySetMaxima(data,x[0],x[limit-1],0.,ymax);  
+
+    ajGraphDataxySetTypeC(data,"2D Plot Float");
 
     ajFmtPrintS(&st,"uH (%d deg)",angle);
     ajGraphxyDataSetYtitle(data,st);

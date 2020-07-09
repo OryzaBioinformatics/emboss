@@ -27,7 +27,8 @@
 
 static void dotmatcher_pushpoint(AjPList *l, float x1, float y1, float x2,
 				 float y2, AjBool text);
-static void dotmatcher_datapoints(AjPList *l, AjPFile outf);
+static void dotmatcher_datapoints(AjPList *l, AjPFile outf, ajint b1,
+				  ajint b2);
 
 
 
@@ -371,15 +372,15 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf,"##Xmin %f Xmax %f Ymin %f Ymax %f\n",0.,
 		    (float)ajSeqLen(seq),0.,(float)ajSeqLen(seq2));
 	ajFmtPrintF(outf,"##ScaleXmin %f ScaleXmax %f "
-		    "ScaleYmin %f ScaleYmax %f\n",0.,(float)ajSeqLen(seq),0.,
-		    (float)ajSeqLen(seq2));
+		    "ScaleYmin %f ScaleYmax %f\n",(float)b1,(float)e1,
+		    (float)b2,(float)e2);
 	ajFmtPrintF(outf,"##Maintitle %S\n",subt);
 	ajFmtPrintF(outf,"##Xtitle %s\n##Ytitle %s\n",ajSeqName(seq),
 		    ajSeqName(seq2));
 	ajFmtPrintF(outf,"##DataObjects\n##Number %d\n",
 		    ajListLength(list));
 
-	dotmatcher_datapoints(&list,outf);
+	dotmatcher_datapoints(&list,outf,b1,b2);
 
 	ajFmtPrintF(outf,"##GraphObjects\n##Number 0\n");
 
@@ -421,15 +422,15 @@ static void dotmatcher_pushpoint(AjPList *l, float x1, float y1, float x2,
 
     if(!text)
     {
-	ajGraphLine(x1,y1,x2,y2);
+	ajGraphLine(x1+1,y1+1,x2+1,y2+1);
 	return;
     }
     
     AJNEW0(p);
-    p->x1=x1;
-    p->y1=y1;
-    p->x2=x2;
-    p->y2=y2;
+    p->x1=x1+1;
+    p->y1=y1+1;
+    p->x2=x2+1;
+    p->y2=y2+1;
     ajListPush(*l,(void *)p);
 
     return;
@@ -445,14 +446,14 @@ static void dotmatcher_pushpoint(AjPList *l, float x1, float y1, float x2,
 ******************************************************************************/
 
 
-static void dotmatcher_datapoints(AjPList *l,AjPFile outf)
+static void dotmatcher_datapoints(AjPList *l,AjPFile outf, ajint b1, ajint b2)
 {
     PPoint p;
 
     while(ajListPop(*l,(void **)&p))
     {
 	ajFmtPrintF(outf,"Line x1 %f y1 %f x2 %f y2 %f colour 0\n",
-		    p->x1,p->y1,p->x2,p->y2);
+		    p->x1+b1-1,p->y1+b2-1,p->x2+b1-1,p->y2+b2-1);
 	AJFREE(p);
     }
 

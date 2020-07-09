@@ -22,5 +22,5 @@ string: datafile  [
 
 outfile: outfile  [
   parameter: "Y"
-  default: "mwfilter.out"
-]
+  extension: "mwfilter"
+] 

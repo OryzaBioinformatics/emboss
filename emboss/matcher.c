@@ -28,9 +28,9 @@
 
 static ajint matcherSim(AjPAlign align,
 			char A[], char B[], ajint M, ajint N, ajint K,
-			ajint Q, ajint R, ajint nseq);
+			ajint Q, ajint R, ajint beg, ajint beg2, ajint nseq);
 static ajint matcherBigPass(char A[], char B[], ajint M, ajint N, ajint K,
-			      ajint nseq);
+			    ajint nseq);
 static ajint matcherLocate(char A[], char B[], ajint nseq);
 static ajint matcherSmallPass(char A[], char B[], ajint count, ajint nseq);
 static ajint matcherDiff(char A[], char B[], ajint M, ajint N, ajint tb,
@@ -221,14 +221,18 @@ int main(int argc, char **argv)
     ajint ggapval;
     ajint i;
     ajint K;
+    ajint beg;
+    ajint beg2;
 
     AjPAlign align = NULL;
 
     embInit("matcher", argc, argv);
     seq = ajAcdGetSeq ("sequencea");
     ajSeqTrim(seq);
+    beg = ajSeqOffset(seq);
     seq2 = ajAcdGetSeq ("sequenceb");
     ajSeqTrim(seq2);
+    beg2 = ajSeqOffset(seq2);
     matrix = ajAcdGetMatrix("datafile");
     K = ajAcdGetInt("alternatives");
     gdelval = ajAcdGetInt("gappenalty");
@@ -274,7 +278,7 @@ int main(int argc, char **argv)
 
     matcherSim(align, ajStrStr(aa0str),ajStrStr(aa1str),
 	       ajSeqLen(seq),ajSeqLen(seq2),
-	       K,(gdelval-ggapval),ggapval,2);
+	       K,(gdelval-ggapval),ggapval, beg, beg2, 2);
 
     if (outf)
       ajFileClose(&outf);
@@ -302,13 +306,15 @@ int main(int argc, char **argv)
 ** @param [r] K [ajint] Undocumented
 ** @param [r] Q [ajint] Undocumented
 ** @param [r] R [ajint] Undocumented
+** @param [r] beg0 [ajint] Offset of first sequence
+** @param [r] beg1 [ajint] Offset of second sequence
 ** @param [r] nseq [ajint] Number of sequences
 ** @return [ajint] Undocumented
 ******************************************************************************/
 
 static ajint matcherSim (AjPAlign align,
 			 char *A,char *B,ajint M,ajint N,ajint K,ajint Q,
-			 ajint R,ajint nseq)
+			 ajint R, ajint beg0, ajint beg1, ajint nseq)
 {
     ajint endi, endj, stari, starj; 	/* endpoint and startpoint */ 
     ajint  score;   			/* the max score in LIST */
@@ -436,10 +442,10 @@ static ajint matcherSim (AjPAlign align,
 
 	ajAlignDefine (align, seqset);
 
-	ajAlignSetGapI(align, Q, R);
+	ajAlignSetGapI(align, Q+R, R);
 	ajAlignSetScoreI(align, score);
 	ajAlignSetMatrixInt (align, matrix);
-	ajAlignSetRange (align, min0+1, max0, min1+1, max1);
+	ajAlignSetRange (align, min0+beg0+1, max0, min1+beg1+1, max1);
 	ajAlignSetStats(align, -1, nc, nident, -1, -1, NULL);
 	ajSeqsetDel (&seqset);
 
@@ -1568,7 +1574,7 @@ static ajint matcherDiscons(char *seqc0, char *seqc1, ajint nc)
 	    else
 		ll1 = ajTrue;
 
-	    qqoff = ajSeqBegin(seq) - 1 + (ajlong)(ioff0-del0)+seq->Offset;
+	    qqoff = ajSeqBegin(seq) - 1 + (ajlong)(ioff0-del0)+ajSeqOffset(seq);
 	    if (cl0 && qqoff%10 == 9)
 	    {
 		sprintf(&cline[0][i],"%8ld",(long)qqoff+1l);
@@ -1587,7 +1593,7 @@ static ajint matcherDiscons(char *seqc0, char *seqc1, ajint nc)
 		cline[0][i+8]=' ';
 	    }
       
-	    lloff = ajSeqBegin(seq2)-1 + (ajlong)(ioff1-del1)+seq2->Offset;
+	    lloff = ajSeqBegin(seq2)-1 + (ajlong)(ioff1-del1)+ajSeqOffset(seq2);
 	    if (cl1 && lloff%10 == 9)
 	    {
 		sprintf(&cline[1][i],"%8ld",(long)(lloff+1l));

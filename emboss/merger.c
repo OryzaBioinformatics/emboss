@@ -161,7 +161,7 @@ int main(int argc, char **argv)
 				 ajSeqName(a),ajSeqName(b),begina,beginb);
     embAlignReportGlobal(align, a, b, m, n,
 			 start1, start2, gapopen, gapextend,
-			 score, matrix);
+			 score, matrix, begina, beginb);
 
     /* write the merged sequence */    
     (void) ajSeqReplace(a, merged);

@@ -113,7 +113,7 @@ int main(int argc, char **argv)
     }
     else
 	ajFmtPrintF(outf,"##Graphic\n##Screen x1 %f y1 %f x2 %f y2 %f\n",
-		    0.0-xmargin,(total+xmargin)*1.35,0.0-ymargin,
+		    0.0-xmargin,0.0-ymargin,(total+xmargin)*1.35,
 		    total+ymargin);
     
     

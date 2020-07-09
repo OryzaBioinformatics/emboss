@@ -1,4 +1,4 @@
-/* @source hmoment application
+/* @source charge application
 **
 ** Calculate protein charge within a sliding window
 **
@@ -27,10 +27,10 @@
 
 #define AMINOFILE "Eamino.dat"
 
-static void  addgraph(AjPGraph graph, ajint limit, float *x, float *y,
-		      float ymax, float ymin,
-		      ajint window, char *sname);
-static AjPFloat read_amino(AjPFile* fp);
+static void  charge_addgraph(AjPGraph graph, ajint limit, float *x,
+			     float *y, float ymax, float ymin,
+			     ajint window, char *sname);
+static AjPFloat charge_read_amino(AjPFile* fp);
 
 int main(int argc, char **argv)
 {
@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 	ajFatal("Cannot open amino acid data file %S",aadata);
 
 
-    chg = read_amino(&cdata);
+    chg = charge_read_amino(&cdata);
 
     str = ajStrNew();
     
@@ -107,8 +107,12 @@ int main(int argc, char **argv)
 	ajStrToUpper(&str);
 	p = ajStrStr(str);
 
-	AJCNEW0(x,limit);
-	AJCNEW0(y,limit);
+	if(limit>0)
+	{
+	    AJCNEW0(x,limit);
+	    AJCNEW0(y,limit);
+	}
+	
 
 	for(i=0;i<limit;++i)
 	{
@@ -142,16 +146,19 @@ int main(int argc, char **argv)
 	else
 	{
 	    ajGraphSetMulti(graph,1);
-
 	    ajGraphxySetOverLap(graph,ajFalse);
-	    addgraph(graph,limit,x,y,ymax,ymin,window,sname);
-
-	    ajGraphxyDisplay(graph,ajTrue);
+	    ajGraphxyXtitleC(graph,"Position");
+	    ajGraphxyYtitleC(graph,"Charge");
+	    charge_addgraph(graph,limit,x,y,ymax,ymin,window,sname);
+	    if(limit>0)
+		ajGraphxyDisplay(graph,ajTrue);
 	}
 	
-
-	AJFREE(x);
-	AJFREE(y);
+	if(limit>0)
+	{
+	    AJFREE(x);
+	    AJFREE(y);
+	}
     }
     
     if(!plot)
@@ -166,9 +173,9 @@ int main(int argc, char **argv)
 
 
 
-static void  addgraph(AjPGraph graph, ajint limit, float *x, float *y,
-		      float ymax, float ymin,
-		      ajint window, char *sname)
+static void charge_addgraph(AjPGraph graph, ajint limit, float *x,
+			    float *y, float ymax, float ymin,
+			    ajint window, char *sname)
 {
     ajint i;
 
@@ -176,6 +183,9 @@ static void  addgraph(AjPGraph graph, ajint limit, float *x, float *y,
     AjPStr st=NULL;
     float baseline=0.;
 
+    if(limit<1)
+	return;
+    
     data = ajGraphxyDataNewI(limit);
 
     st = ajStrNew();
@@ -188,12 +198,13 @@ static void  addgraph(AjPGraph graph, ajint limit, float *x, float *y,
     
     ajGraphxySetColour(data,BLACK);
     ajGraphDataxySetMaxMin(data,x[0],x[limit-1],ymin,ymax);  
-
+    ajGraphDataxySetMaxima(data,x[0],x[limit-1],ymin,ymax);
 
     ajFmtPrintS(&st,"CHARGE of %s. Window:%d",sname,window);
     ajGraphxyDataSetTitle(data,st);
-
-
+    ajGraphxyTitleC(graph,ajStrStr(st));
+    
+    ajGraphDataxySetTypeC(data,"2D Plot Float");
     ajFmtPrintS(&st,"Charge");
     ajGraphxyDataSetYtitle(data,st);
 
@@ -210,7 +221,7 @@ static void  addgraph(AjPGraph graph, ajint limit, float *x, float *y,
 }
 
 
-static AjPFloat read_amino(AjPFile* fp)
+static AjPFloat charge_read_amino(AjPFile* fp)
 {
   /*    AjPFile  fp=NULL; */
     AjPStr   line;

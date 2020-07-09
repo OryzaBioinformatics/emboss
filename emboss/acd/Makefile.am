@@ -1,17 +1,17 @@
 
 pkgdata_DATA = codes.english \
-	abiview.acd ajbad.acd ajfeatest.acd ajtest.acd \
-	antigenic.acd backtranseq.acd banana.acd \
+	abiview.acd ajbad.acd ajfeatest.acd ajtest.acd alignwrap.acd \
+	antigenic.acd backtranseq.acd banana.acd biosed.acd \
 	btwisted.acd cai.acd chaos.acd charge.acd checktrans.acd chips.acd \
 	cirdna.acd codcmp.acd coderet.acd \
-	complex.acd compseq.acd cons.acd corbatest.acd \
+	complex.acd compseq.acd cons.acd contacts.acd corbatest.acd \
 	cpgplot.acd cpgreport.acd cusp.acd cutgextract.acd cutseq.acd \
 	dan.acd dbiblast.acd dbifasta.acd dbiflat.acd \
 	dbigcg.acd degapseq.acd \
 	demoalign.acd demofeatures.acd demolist.acd \
 	demoreport.acd demosequence.acd \
 	demostring.acd demotable.acd \
-	descseq.acd diffseq.acd \
+	descseq.acd dichet.acd diffseq.acd \
 	digest.acd distmat.acd domainer.acd \
 	dotmatcher.acd dotpath.acd dottup.acd \
 	dreg.acd einverted.acd embossdata.acd embossversion.acd emma.acd \
@@ -21,7 +21,7 @@ pkgdata_DATA = codes.english \
 	garnier.acd geecee.acd getorf.acd helixturnhelix.acd hmoment.acd \
 	histogramtest.acd iep.acd infoalign.acd infoseq.acd isochore.acd \
 	lindna.acd listor.acd marscan.acd maskfeat.acd maskseq.acd \
-	matcher.acd
+	matcher.acd swissparse.acd
 pkgdata2_DATA =	megamerger.acd merger.acd msbar.acd \
 	mwfilter.acd needle.acd \
 	newcpgreport.acd newcpgseek.acd newseq.acd noreturn.acd \
@@ -38,7 +38,7 @@ pkgdata2_DATA =	megamerger.acd merger.acd msbar.acd \
 	scopalign.acd scope.acd seealso.acd \
 	seqinfo.acd seqmatchall.acd seqret.acd seqretall.acd \
 	seqretallfeat.acd seqretset.acd seqretsingle.acd \
-	seqretsplit.acd seqrettype.acd showalign.acd\
+	seqretsplit.acd showalign.acd\
 	showdb.acd showfeat.acd showorf.acd showseq.acd shuffleseq.acd \
 	sigcleave.acd siggen.acd sigscan.acd silent.acd splitter.acd \
 	stretcher.acd stssearch.acd supermatcher.acd syco.acd \

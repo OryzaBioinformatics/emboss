@@ -266,7 +266,7 @@ maximum oligo size for which Primer3's melting-temperature is valid."
 
 float: otm  [
   optional: "@($(task)!=4)"
-  default: "60"
+  default: "60.0"
   information: "Primer optimum Tm"
   help: "Optimum melting temperature(Celsius) for a primer oligo. 
 Primer3 will try to pick primers with melting temperatures are close to
@@ -431,13 +431,17 @@ section: product  [
 
 integer: productosize  [
   optional: "@($(task)!=4)"
-  default: "0"
+##  default: "0"
+  default: "200"
+## GWW - 10 Jan 2002 - the web interface uses a default of 200 so go with that
   minimum: "0"
   information: "Product optimum size"
   help: "The optimum size for the PCR product.  0 indicates that there
-is no optimum product size.  This parameter influences primer pair
-selection only if PAIR-WT-PRODUCT-SIZE-GT or PAIR-WT-PRODUCT-SIZE-LT is
-non-0."
+is no optimum product size."
+## This parameter influences primer pair
+## selection only if PAIR-WT-PRODUCT-SIZE-GT or PAIR-WT-PRODUCT-SIZE-LT is
+## non-0.
+# GWW - 10 Jan 2002 - these are set non-zero by default in the wrapper.
 ]
 
 range: productsizerange  [
@@ -510,7 +514,9 @@ section: primerweights  [
 
 float: maxendstability  [
   optional: "N"
-  default: "100.0"
+#  default: "100.0"
+# the web interface uses 9.0, so go with this - GWW 10 Jan 2002
+  default: "9.0"
   maximum: "999.9999"
   information: "Maximum 3' end stability"
   help: "The maximum stability for the five 3' bases of a forward or

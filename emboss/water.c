@@ -108,7 +108,7 @@ int main(int argc, char **argv)
     sub = ajMatrixfArray(matrix);
     cvt = ajMatrixfCvt(matrix);
 
-    begina=ajSeqBegin(a);
+    begina=ajSeqBegin(a)+ajSeqOffset(a);
 
     while(ajSeqallNext(seqall,&b))
     {
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 	    maxarr=len;
 	}
 
-	beginb=ajSeqallBegin(seqall);
+	beginb=ajSeqBegin(b)+ajSeqOffset(b);
 
 	p = ajSeqChar(a);
 	q = ajSeqChar(b);
@@ -178,10 +178,12 @@ int main(int argc, char **argv)
 		(void) ajFmtPrintF (outf,"%S\n", ss);
 	    }
 	}
-
+	ajDebug("ReportLocal call start1:%d begina:%d start2:%d beginb:%d\n",
+		start1, begina, start2, beginb);
 	embAlignReportLocal (align, a, b, m, n,
-			     start1, start2, gapopen, gapextend,
-			     score, matrix);
+			     start1, start2,
+			     gapopen, gapextend,
+			     score, matrix, begina, beginb);
     }
 
     ajAlignClose(align);

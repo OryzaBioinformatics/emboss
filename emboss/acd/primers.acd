@@ -748,7 +748,7 @@ endsection:  primer
 
 # endsection:  oligos
 
-# endsection:  required
+endsection:  required
 
 section: output  [
   info: "Output options"

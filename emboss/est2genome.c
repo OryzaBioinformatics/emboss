@@ -70,9 +70,9 @@ static void  est2genome_make_output( AjPFile ofile, AjPSeq genome, AjPSeq est,
 
 int main(int argc, char **argv)
 {
-    AjPSeq genome;
-    AjPSeq splice_sites, reversed_splice_sites;
-    AjPSeq est, reversed_est=NULL;
+    AjPSeq genome=NULL;
+    AjPSeq splice_sites=NULL, reversed_splice_sites=NULL;
+    AjPSeq est=NULL, reversed_est=NULL;
     EmbPEstAlign fge=NULL, rge=NULL, bge=NULL;
     ajint width=50;
     ajint match=1;
@@ -92,9 +92,9 @@ int main(int argc, char **argv)
     ajint best=1;
     ajint search_mode;
     char *mode;
-    AjPStr modestr;
-    AjPFile outfile;
-    AjPSeqall estset;
+    AjPStr modestr=NULL;
+    AjPFile outfile=NULL;
+    AjPSeqall estset=NULL;
     
     /* the fasta input files */
     
@@ -400,7 +400,7 @@ int main(int argc, char **argv)
 	    embEstFreeAlign(&rge);
 	    embEstFreeAlign(&fge);
 	    
-	    ajSeqDel(&est);
+	    /*	    ajSeqDel(&est); */ /* Clone from seqall: Don't delete */
 	    ajSeqDel(&reversed_est);
 	}
 	

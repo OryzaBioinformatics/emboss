@@ -34,10 +34,6 @@ static void dotpath_plotMatches(AjPList list);
 
 
 
-
-
-
-
 /* @prog dotpath **************************************************************
 **
 ** Displays a non-overlapping wordmatch dotplot of two sequences
@@ -46,6 +42,8 @@ static void dotpath_plotMatches(AjPList list);
 
 int main(int argc, char **argv)
 {
+    EmbPWordMatch wmp=NULL;
+    ajint  wplen=0;
     AjPSeq seq1,seq2;
     ajint wordlen;
     AjPTable seq1MatchTable =0 ;
@@ -68,6 +66,11 @@ int main(int argc, char **argv)
     char ptr[10];
     ajint oldcolour=-1;
     ajint np=0;
+    ajint npp=0;
+    ajint begin1;
+    ajint begin2;
+    ajint end1;
+    ajint end2;
     
     ajGraphInit("dotpath", argc, argv);
 
@@ -80,6 +83,12 @@ int main(int argc, char **argv)
     boxit = ajAcdGetBool("boxit");
     outfile = ajAcdGetOutfile ("outfile");
 
+
+    begin1 = ajSeqBegin(seq1);
+    begin2 = ajSeqBegin(seq2);
+    end1   = ajSeqEnd(seq1);
+    end2   = ajSeqEnd(seq2);
+    
     ajSeqTrim(seq1);
     ajSeqTrim(seq2);
 
@@ -196,29 +205,48 @@ int main(int argc, char **argv)
     }
     else
     {
+	np = ajListLength(matchlist);
 	ajFmtPrintF(outfile,"##2D Plot\n##Title dotpath (%D)\n",ajTimeToday());
-	ajFmtPrintF(outfile,"##Graphs 1\n##Number 1\n##Points 0\n");
+	if(overlaps)
+	    ajFmtPrintF(outfile,"##Graphs 1\n##Number 1\n##Points %d\n",np);
+	else
+	    ajFmtPrintF(outfile,"##Graphs 1\n##Number 1\n##Points 0\n");
 	ajFmtPrintF(outfile,"##XminA %f XmaxA %f YminA %f YmaxA %f\n",0.,
 		    (float)ajSeqLen(seq1),0.,(float)ajSeqLen(seq2));
 	ajFmtPrintF(outfile,"##Xmin %f Xmax %f Ymin %f Ymax %f\n",0.,
 		    (float)ajSeqLen(seq1),0.,(float)ajSeqLen(seq2));
 	ajFmtPrintF(outfile,"##ScaleXmin %f ScaleXmax %f "
-		    "ScaleYmin %f ScaleYmax %f\n",0.,(float)ajSeqLen(seq1),0.,
-		    (float)ajSeqLen(seq2));
+		    "ScaleYmin %f ScaleYmax %f\n",(float)begin1,(float)end1,
+		    (float)begin2,(float)end2);
 	ajFmtPrintF(outfile,"##Maintitle\n");
 	ajFmtPrintF(outfile,"##Xtitle %s\n##Ytitle %s\n",ajSeqName(seq1),
 		    ajSeqName(seq2));
 
-	if(overlaps && (np=ajListLength(matchlist)))
+
+
+	if(matchlist)
+	{
+	    wplen = ajListLength(matchlist);
+	    for(i=0;i<wplen;++i)
+	    {
+		ajListPop(matchlist,(void **)&wmp);
+		wmp->seq1start += begin1;
+		wmp->seq2start += begin2;
+		ajListPushApp(matchlist,(void *)wmp);
+	    }
+	}
+
+
+	if(overlaps && np)
 	    ajListMap(matchlist,dotpath_objtofile1, outfile);	
 
 	/* get the minimal set of overlapping matches */    
 	(void) embWordMatchMin(matchlist, ajSeqLen(seq1), ajSeqLen(seq2));
 	embWordFreeTable(seq1MatchTable); /* free table of words */
-	np += ajListLength(matchlist);
+	npp = ajListLength(matchlist);
+	np += npp;
 
-
-	ajFmtPrintF(outfile,"##DataObjects\n##Number %d\n",np);
+	ajFmtPrintF(outfile,"##DataObjects\n##Number %d\n",npp);
 
 /* output the minal overlapping set of data with colour=BLACK */	
 	ajListMap(matchlist,dotpath_objtofile2, outfile);	
@@ -310,8 +338,8 @@ static void dotpath_drawPlotlines(void **x, void *cl)
     EmbPWordMatch p  = (EmbPWordMatch)*x;
     PLFLT x1,y1,x2,y2;
 
-    x1 = x2 = ((*p).seq1start);
-    y1 = y2 = (PLFLT)((*p).seq2start);
+    x1 = x2 = ((*p).seq1start)+1;
+    y1 = y2 = (PLFLT)((*p).seq2start)+1;
     x2 += (*p).length;
     y2 += (PLFLT)(*p).length;
  

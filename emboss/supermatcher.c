@@ -145,13 +145,19 @@ int main(int argc, char **argv)
     sub = ajMatrixfArray(matrix);
     cvt = ajMatrixfCvt(matrix);
 
-    begina=ajSeqallBegin(seq1);
-    beginb=ajSeqsetBegin(seq2);
-    
     embWordLength (wordlen);
+
+    for(k=0;k<ajSeqsetSize(seq2);k++)
+    {
+      b = ajSeqsetGetSeq (seq2, k);
+      ajSeqTrim(b);
+    }
 
     while(ajSeqallNext(seq1,&a))
     {
+        ajSeqTrim(a);
+	begina = 1 + ajSeqOffset(a);
+
 	m=ajStrNewL(1+ajSeqLen(a));
 
 	lena = ajSeqLen(a);
@@ -166,6 +172,8 @@ int main(int argc, char **argv)
 	{
 	    b = ajSeqsetGetSeq (seq2, k);
 	    lenb = ajSeqLen(b);
+	    beginb = 1 + ajSeqOffset(b);
+
 	    n=ajStrNewL(1+ajSeqLen(b));
 	  
 	    ajDebug ("Processing '%S'\n", ajSeqGetName (b));
@@ -243,8 +251,9 @@ int main(int argc, char **argv)
 				   score,1,sub,cvt,ajSeqName(a),ajSeqName(b),
 				   begina,beginb);
 		embAlignReportLocal(align, a, b,
-				    m,n,start1,start2,gapopen, gapextend,
-				    score,matrix);
+				    m,n,start1,start2,
+				    gapopen, gapextend,
+				    score,matrix, begina, beginb);
 	    }
 	    ajStrDel(&n);
 	}
@@ -283,7 +292,7 @@ static void supermatcher_matchListOrder(void **x,void *cl)
 
     offset = (*p).seq1start-(*p).seq2start;
 
-    /* iterate through ordered list to find if it exist already*/
+    /* iterate through ordered list to find if it exists already*/
     listIter = ajListIter(ordered);
 
     while (!ajListIterDone( listIter))
@@ -396,9 +405,11 @@ static ajint supermatcher_findstartpoints(AjPTable *seq1MatchTable,AjPSeq b,
     AjPList ordered=NULL;
     ajint amax=ajSeqLen(a)-1;
     ajint bmax =ajSeqLen(b)-1;
+    ajint bega = ajSeqOffset(a);
+    ajint begb = ajSeqOffset(b);
 
-
-    ajDebug ("supermatcher_findstartpoints len %d %d\n", amax, bmax);
+    ajDebug ("supermatcher_findstartpoints len %d %d off %d %d\n",
+	     amax, bmax, bega, begb);
     matchlist = embWordBuildMatchTable(seq1MatchTable, b, ajTrue);
   
     if(!matchlist)
@@ -418,6 +429,9 @@ static ajint supermatcher_findstartpoints(AjPTable *seq1MatchTable,AjPSeq b,
   
     ajListMap(ordered,supermatcher_findmax, &max);
   
+    ajDebug("findstart conmax off:%d count:%d total:%d\n",
+	    conmax->offset, conmax->count, conmax->total,
+	    ajListLength(conmax->list));
     offset = conmax->offset;
 
     ajListMap(ordered,supermatcher_removelists, NULL);
@@ -427,7 +441,7 @@ static ajint supermatcher_findstartpoints(AjPTable *seq1MatchTable,AjPSeq b,
   
     hwidth = (ajint) width/2;
   
-    offset+=hwidth;
+    /*offset+=hwidth;*/
 
     if(offset > 0)
     {

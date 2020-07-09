@@ -31,6 +31,9 @@ static void dottup_plotMatches(AjPList list);
 
 #include "ajgraph.h"
 
+
+
+
 /* @prog dottup ***************************************************************
 **
 ** Displays a wordmatch dotplot of two sequences
@@ -39,7 +42,8 @@ static void dottup_plotMatches(AjPList list);
 
 int main(int argc, char **argv)
 {
-  
+    EmbPWordMatch wmp=NULL;
+    ajint wplen;
     AjPSeq seq1,seq2;
     ajint wordlen;
     AjPTable seq1MatchTable=0;
@@ -66,7 +70,11 @@ int main(int argc, char **argv)
     ajint i;
     float k,max;
     char ptr[10];
-
+    ajint begin1;
+    ajint begin2;
+    ajint end1;
+    ajint end2;
+    
     ajGraphInit("dottup", argc, argv);
 
     wordlen = ajAcdGetInt ("wordsize");
@@ -77,6 +85,11 @@ int main(int argc, char **argv)
     boxit = ajAcdGetBool("boxit");
     outfile = ajAcdGetOutfile ("outfile");
 
+    begin1 = ajSeqBegin(seq1);
+    begin2 = ajSeqBegin(seq2);
+    end1   = ajSeqEnd(seq1);
+    end2   = ajSeqEnd(seq2);
+    
     ajSeqTrim(seq1);
     ajSeqTrim(seq2);
 
@@ -191,13 +204,27 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outfile,"##Xmin %f Xmax %f Ymin %f Ymax %f\n",0.,
 		    (float)ajSeqLen(seq1),0.,(float)ajSeqLen(seq2));
 	ajFmtPrintF(outfile,"##ScaleXmin %f ScaleXmax %f "
-		    "ScaleYmin %f ScaleYmax %f\n",0.,(float)ajSeqLen(seq1),0.,
-		    (float)ajSeqLen(seq2));
+		    "ScaleYmin %f ScaleYmax %f\n",(float)begin1,(float)end1,
+		    (float)begin2,(float)end2);
 	ajFmtPrintF(outfile,"##Maintitle\n");
 	ajFmtPrintF(outfile,"##Xtitle %s\n##Ytitle %s\n",ajSeqName(seq1),
 		    ajSeqName(seq2));
 	ajFmtPrintF(outfile,"##DataObjects\n##Number %d\n",
 		    ajListLength(matchlist));
+
+	if(matchlist)
+	{
+	    wplen = ajListLength(matchlist);
+	    for(i=0;i<wplen;++i)
+	    {
+		ajListPop(matchlist,(void **)&wmp);
+		wmp->seq1start += begin1;
+		wmp->seq2start += begin2;
+		ajListPushApp(matchlist,(void *)wmp);
+	    }
+	}
+	
+
 	if(matchlist)
 	    ajListMap(matchlist,dottup_objtofile, outfile);	
 	ajFmtPrintF(outfile,"##GraphObjects\n##Number 0\n");
@@ -253,8 +280,8 @@ static void dottup_drawPlotlines(void **x, void *cl)
     EmbPWordMatch p  = (EmbPWordMatch)*x;
     PLFLT x1,y1,x2,y2;
 
-    x1 = x2 = ((*p).seq1start);
-    y1 = y2 = (PLFLT)((*p).seq2start);
+    x1 = x2 = ((*p).seq1start)+1;
+    y1 = y2 = (PLFLT)((*p).seq2start)+1;
     x2 += (*p).length;
     y2 += (PLFLT)(*p).length;
  

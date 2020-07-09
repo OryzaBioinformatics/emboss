@@ -80,7 +80,7 @@
 ** (11) SQ - protein sequence. The number of residues is given before AA on the
 ** first line. The protein sequence is given on subsequent lines. 
 ** (12) XX - used for spacing.
-** (13) // - used to delimit data for each sequence.
+** (13) // - used to delimit data for search of swissprot. 
 **
 **
 **

@@ -138,6 +138,8 @@ int main(int argc, char **argv)
 
     AjPSeq res1  = NULL;
     AjPSeq res2 = NULL;
+    ajint beg;
+    ajint beg2;
 
     embInit("stretcher", argc, argv);
 
@@ -159,6 +161,11 @@ int main(int argc, char **argv)
       This is done so that ajAZToInt has only to be done once for
       each residue in the sequence
     */
+
+    ajSeqTrim(seq);
+    ajSeqTrim(seq2);
+    beg = 1 + ajSeqOffset(seq);
+    beg2 = 1 + ajSeqOffset(seq2);
 
     ajSeqToUpper(seq);
     ajSeqToUpper(seq2);
@@ -222,6 +229,7 @@ int main(int argc, char **argv)
 
     ajAlignSetGapI(align, gdelval, ggapval);
     ajAlignSetMatrixInt (align, matrix);
+    ajAlignSetRange (align, beg, beg+ajSeqLen(seq), beg2, beg2+ajSeqLen(seq2));
     ajAlignSetScoreI(align, gscore);
 
     ajAlignWrite (align);
@@ -312,7 +320,7 @@ static ajint stretcherEalign(char *A,char *B,ajint M,ajint N,ajint G,
 
     c = stretcherAlign(A,B,M,N,-g,-g);		/* OK, do it */
     ck = stretcherCheckScore((unsigned char *)A,(unsigned char *)B,M,N,S,NC);
-    if (c != ck) ajFmtPrintF (outf,"Check_score error.\n");
+    if (c != ck) ajWarn("stretcher CheckScore failed");
     return c;
 }
 
@@ -964,3 +972,8 @@ static ajint stretcherCheckScore(unsigned char *A,unsigned char *B,ajint M,
     *NC = nc1;
     return(score);
 }
+
+
+
+
+

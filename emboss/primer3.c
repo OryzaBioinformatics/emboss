@@ -115,11 +115,11 @@ int main(int argc, char **argv, char **env)
   float		product_max_tm;
 
 /* Objective Function Penalty Weights for Primers */
+  float		max_end_stability;
 /* these are not (yet) implemented */
 /*
   float		inside_penalty;
   float		outside_penalty;
-  float		max_end_stability;
 */
 
 /* Primer penalties */
@@ -234,11 +234,11 @@ int main(int argc, char **argv, char **env)
   product_max_tm      = ajAcdGetFloat("productmaxtm");
 
 /* Objective Function Penalty Weights for Primers */
+  max_end_stability   = ajAcdGetFloat("maxendstability");
 /* these are not (yet) implemented */
 /*
   inside_penalty      = ajAcdGetFloat("insidepenalty");
   outside_penalty     = ajAcdGetFloat("outsidepenalty");
-  max_end_stability   = ajAcdGetFloat("maxendstability");
 */
 
 /* Primer penalties */
@@ -377,6 +377,7 @@ int main(int argc, char **argv, char **env)
         primer3_send_float(stream, "PRIMER_PRODUCT_OPT_TM", product_opt_tm);
 	primer3_send_float(stream, "PRIMER_PRODUCT_MIN_TM", product_min_tm);
 	primer3_send_float(stream, "PRIMER_PRODUCT_MAX_TM", product_max_tm);
+	primer3_send_float(stream, "PRIMER_MAX_END_STABILITY", max_end_stability);
 	 
 /* send primer3 Internal Oligo "Global" parameters */	
 	primer3_send_int(stream, "PRIMER_INTERNAL_OLIGO_OPT_SIZE", internal_oligo_opt_size);
@@ -410,6 +411,10 @@ int main(int argc, char **argv, char **env)
 
             ajStrToUpper(&strand);
             ajStrAssSubC(&substr,ajStrStr(strand), begin-1, end-1);
+
+/* send flags to turn on using optimal product size */
+	   primer3_send_float(stream, "PRIMER_PAIR_WT_PRODUCT_SIZE_GT", 0.05);
+	   primer3_send_float(stream, "PRIMER_PAIR_WT_PRODUCT_SIZE_LT", 0.05);
 
 /* send primer3 Primer "Sequence" parameters */
             primer3_send_string(stream, "SEQUENCE", substr);
@@ -474,6 +479,9 @@ static AjPStr primer3_read(int fd)
 	
     while ( (ch = getc( stream )) != EOF )
         ajStrAppK(&ret, ch);
+
+    ajDebug( "primer3_core output\n%S\n", ret );
+
 
     fclose( stream );
     ajDebug( "reading done\n" );

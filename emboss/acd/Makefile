@@ -37,12 +37,12 @@ pkglibdir = $(libdir)/EMBOSS
 pkgincludedir = $(includedir)/EMBOSS
 top_builddir = ../..
 
-ACLOCAL = aclocal
-AUTOCONF = autoconf
-AUTOMAKE = automake
-AUTOHEADER = autoheader
+ACLOCAL = ${SHELL} /m2/emboss/emboss/missing --run aclocal
+AUTOCONF = ${SHELL} /m2/emboss/emboss/missing --run autoconf
+AUTOMAKE = ${SHELL} /m2/emboss/emboss/missing --run automake
+AUTOHEADER = ${SHELL} /m2/emboss/emboss/missing --run autoheader
 
-INSTALL = ../.././install-sh -c
+INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_SCRIPT = ${INSTALL}
@@ -55,9 +55,9 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = 
-host_triplet = sparc-sun-solaris2.7
-AJAX_FIXED_ROOT = \"/packages/emboss/compile/CURRENT/SOLARIS/emboss/emboss/emboss\"
-AMTAR = tar
+host_triplet = i686-pc-linux-gnu
+AJAX_FIXED_ROOT = \"/m2/emboss/emboss/emboss\"
+AMTAR = ${SHELL} /m2/emboss/emboss/missing --run tar
 AS = @AS@
 AWK = gawk
 CC = gcc
@@ -67,7 +67,8 @@ DLLTOOL = @DLLTOOL@
 ECHO = echo
 EXEEXT = 
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
-JAVA_OK = 
+ISAIXIA64 = 
+JAVA_OK = yes
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 OBJDUMP = @OBJDUMP@
@@ -75,32 +76,32 @@ OBJEXT = o
 PACKAGE = EMBOSS
 RANLIB = ranlib
 STRIP = strip
-VERSION = 2.1.0
-XLIB =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib -lX11 -lsocket -lsocket  -lnsl -lnsl
-X_CFLAGS =  -I/usr/openwin/include -I/usr/openwin/include
-X_EXTRA_LIBS = -lsocket -lsocket  -lnsl -lnsl
-X_LIBS =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib
+VERSION = 2.2.0
+XLIB =  -L/usr/X11R6/lib -L/usr/X11R6/lib -lX11 
+X_CFLAGS =  -I/usr/X11R6/include -I/usr/X11R6/include
+X_EXTRA_LIBS = 
+X_LIBS =  -L/usr/X11R6/lib -L/usr/X11R6/lib
 X_PRE_LIBS =  -lSM -lICE -lSM -lICE
 am__include = include
 am__quote = 
-havejavac = 
-install_sh = /packages/emboss/compile/CURRENT/SOLARIS/emboss/emboss/install-sh
+havejavac = yes
+install_sh = /m2/emboss/emboss/install-sh
 
 pkgdatadir = $(prefix)/share/$(PACKAGE)/acd
 
 pkgdata_DATA = codes.english \
-	abiview.acd ajbad.acd ajfeatest.acd ajtest.acd \
-	antigenic.acd backtranseq.acd banana.acd \
+	abiview.acd ajbad.acd ajfeatest.acd ajtest.acd alignwrap.acd \
+	antigenic.acd backtranseq.acd banana.acd biosed.acd \
 	btwisted.acd cai.acd chaos.acd charge.acd checktrans.acd chips.acd \
 	cirdna.acd codcmp.acd coderet.acd \
-	complex.acd compseq.acd cons.acd corbatest.acd \
+	complex.acd compseq.acd cons.acd contacts.acd corbatest.acd \
 	cpgplot.acd cpgreport.acd cusp.acd cutgextract.acd cutseq.acd \
 	dan.acd dbiblast.acd dbifasta.acd dbiflat.acd \
 	dbigcg.acd degapseq.acd \
 	demoalign.acd demofeatures.acd demolist.acd \
 	demoreport.acd demosequence.acd \
 	demostring.acd demotable.acd \
-	descseq.acd diffseq.acd \
+	descseq.acd dichet.acd diffseq.acd \
 	digest.acd distmat.acd domainer.acd \
 	dotmatcher.acd dotpath.acd dottup.acd \
 	dreg.acd einverted.acd embossdata.acd embossversion.acd emma.acd \
@@ -110,7 +111,7 @@ pkgdata_DATA = codes.english \
 	garnier.acd geecee.acd getorf.acd helixturnhelix.acd hmoment.acd \
 	histogramtest.acd iep.acd infoalign.acd infoseq.acd isochore.acd \
 	lindna.acd listor.acd marscan.acd maskfeat.acd maskseq.acd \
-	matcher.acd
+	matcher.acd swissparse.acd
 
 pkgdata2_DATA = megamerger.acd merger.acd msbar.acd \
 	mwfilter.acd needle.acd \
@@ -128,7 +129,7 @@ pkgdata2_DATA = megamerger.acd merger.acd msbar.acd \
 	scopalign.acd scope.acd seealso.acd \
 	seqinfo.acd seqmatchall.acd seqret.acd seqretall.acd \
 	seqretallfeat.acd seqretset.acd seqretsingle.acd \
-	seqretsplit.acd seqrettype.acd showalign.acd\
+	seqretsplit.acd showalign.acd\
 	showdb.acd showfeat.acd showorf.acd showseq.acd shuffleseq.acd \
 	sigcleave.acd siggen.acd sigscan.acd silent.acd splitter.acd \
 	stretcher.acd stssearch.acd supermatcher.acd syco.acd \

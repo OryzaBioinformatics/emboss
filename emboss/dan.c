@@ -103,10 +103,10 @@ int main(int argc, char **argv)
 
     seqall    = ajAcdGetSeqall("sequence");
     report    = ajAcdGetReport("outfile");
-    window    = ajAcdGetInt("windowSize");
-    shift     = ajAcdGetInt("shiftIncrement");
-    DNAConc   = ajAcdGetFloat("dnaConc");
-    saltConc  = ajAcdGetFloat("saltConc");
+    window    = ajAcdGetInt("windowsize");
+    shift     = ajAcdGetInt("shiftincrement");
+    DNAConc   = ajAcdGetFloat("dnaconc");
+    saltConc  = ajAcdGetFloat("saltconc");
     doThermo  = ajAcdGetBool("thermo");
     isProduct = ajAcdGetBool("product");
     isRNA     = ajAcdGetBool("rna");
