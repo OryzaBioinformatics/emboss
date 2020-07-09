@@ -71,7 +71,8 @@ int main(int argc, char **argv)
     ajint startj=0;
     ajint windowsize;
     float thresh;
-    AjPGraph graph = 0;
+    AjPGraph graph = NULL;
+    AjPGraph xygraph = NULL;
     /* AjPStr title=0,subtitle=0;*/
     AjOTime ajtime;
     const time_t tim = time(0);
@@ -129,10 +130,8 @@ int main(int argc, char **argv)
     seq = ajAcdGetSeq ("sequencea");
     seq2 = ajAcdGetSeq ("sequenceb");
     stretch = ajAcdGetBool("stretch");
-    if(!stretch)
-	graph = ajAcdGetGraph ("graph");
-    else
-	graph = ajAcdGetGraphxy("xygraph");
+    graph = ajAcdGetGraph ("graph");
+    xygraph = ajAcdGetGraphxy("xygraph");
     windowsize = ajAcdGetInt("windowsize");
     ithresh = ajAcdGetInt("threshold");  
     matrix  = ajAcdGetMatrix("matrixfile");
@@ -401,33 +400,33 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf,"##GraphObjects\n##Number 0\n");
 
     }
-    else
+    else			/* the xy graph for -stretch */
     {
 	tit = ajStrNew();
-	ajFmtPrintS(&tit,"%S",graph->title);
+	ajFmtPrintS(&tit,"%S",xygraph->title);
     
 
 	gdata = ajGraphxyDataNewI(1);
 	xa[0] = (float)b1;
 	ya[0] = (float)b2;
     
-	ajGraphxyTitleC(graph,ajStrStr(tit));
+	ajGraphxyTitleC(xygraph,ajStrStr(tit));
 
-	ajGraphxyXtitleC(graph,ajSeqName(seq));
-	ajGraphxyYtitleC(graph,ajSeqName(seq2));
+	ajGraphxyXtitleC(xygraph,ajSeqName(seq));
+	ajGraphxyYtitleC(xygraph,ajSeqName(seq2));
 
 	ajGraphDataxySetTypeC(gdata,"2D Plot Float");
 	ajGraphDataxySetMaxMin(gdata,(float)b1,(float)e1,(float)b2,
 			       (float)e2);
 	ajGraphDataxySetMaxima(gdata,(float)b1,(float)e1,(float)b2,
 			       (float)e2);
-	ajGraphxySetXStart(graph,(float)b1);
-	ajGraphxySetXEnd(graph,(float)e1);
-	ajGraphxySetYStart(graph,(float)b2);
-	ajGraphxySetYEnd(graph,(float)e2);
+	ajGraphxySetXStart(xygraph,(float)b1);
+	ajGraphxySetXEnd(xygraph,(float)e1);
+	ajGraphxySetYStart(xygraph,(float)b2);
+	ajGraphxySetYEnd(xygraph,(float)e2);
     
-	ajGraphxySetXRangeII(graph,b1,e1);
-	ajGraphxySetYRangeII(graph,b2,e2);
+	ajGraphxySetXRangeII(xygraph,b1,e1);
+	ajGraphxySetYRangeII(xygraph,b2,e2);
 
 
 	if(list)
@@ -439,16 +438,16 @@ int main(int argc, char **argv)
 		y1 = ppt->y1+b2-1;
 		x2 = ppt->x2+b1-1;
 		y2 = ppt->y2+b2-1;
-		ajGraphObjAddLine(graph,x1,y1,x2,y2,0);
+		ajGraphObjAddLine(xygraph,x1,y1,x2,y2,0);
 	    }
 	    ajListIterFree(iter);
 	}
 
 	ajGraphxyAddDataPtrPtr(gdata,xa,ya);
-	ajGraphxyReplaceGraph(graph,gdata);
+	ajGraphxyReplaceGraph(xygraph,gdata);
 
 
-	ajGraphxyDisplay(graph,ajFalse);
+	ajGraphxyDisplay(xygraph,ajFalse);
 	ajGraphClose();    
 
 	ajStrDel(&tit);
