@@ -1,2 +1,2 @@
-SUBDIRS = data embl pir swiss swnew wormpep
+SUBDIRS = data embl genbank gb pir swiss swnew wormpep
 

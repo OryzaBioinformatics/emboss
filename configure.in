@@ -6,7 +6,7 @@ dnl Process this file with autoconf to produce a configure script.
 #CC=cc
 
 AC_INIT(ajax/ajacd.c)
-AM_INIT_AUTOMAKE(EMBOSS, 2.3.1)
+AM_INIT_AUTOMAKE(EMBOSS, 2.4.0)
 
 
 dnl Use libtool to make a shared library.
@@ -92,7 +92,7 @@ fi
 
 dnl Turn off irritating linker warnings in IRIX
 if test "`uname`" = "IRIX"; then
-CFLAGS="-Wl,-LD_MSG:off=85:off=84:off=16 $CFLAGS"
+CFLAGS="-Wl,-LD_MSG:off=85:off=84:off=16:off=134 $CFLAGS"
 fi
 
 
@@ -172,17 +172,19 @@ fi
 
 dnl Test if purify exists and if --enable-purify given if so
 dnl set "-g" else set "-O"
+
 AC_MSG_CHECKING(for purify)
-if(purify -version) < /dev/null > /dev/null 2>&1; then
-   AC_MSG_RESULT(yes)
+#if(purify -version) < /dev/null > /dev/null 2>&1; then
    AC_ARG_ENABLE(purify,
    [  --enable-purify          purify ])
-   if test "${enable_purify}" = "yes" ; then
-     CFLAGS="-g"
-   fi          
+if test "${enable_purify}" = "yes" ; then
+     CFLAGS="$CFLAGS -g"
+     AC_MSG_RESULT(yes)
 else
    AC_MSG_RESULT(no)
-fi
+fi          
+#fi
+
 
 dnl Test if --enable-debug given
 AC_ARG_ENABLE(warnings,
@@ -204,6 +206,7 @@ dnl Tests for AIX
 dnl If shared needs -Wl,-G in plplot,ajax,nucleus, -lX11 in plplot,
 dnl and -Wl,brtl -Wl,-bdynamic in emboss
 dnl We therefore need a static test as well
+needajax=no
 AM_CONDITIONAL(ISAIXIA64, test "`uname`" = "AIX")
 AM_CONDITIONAL(ISSHARED, test "${enable_shared}" = "yes")
 AC_SUBST(ISAIXIA64)
@@ -224,14 +227,25 @@ case $host_os in
 	aix4.3.3*) needajax=yes ;;
 	*) needajax=no ;;
 esac
-
+fi
 AM_CONDITIONAL(NEEDAJAX,test "$needajax" = "yes")
 AC_SUBST(NEEDAJAX)
+
+
+dnl HP-UX needs -lsec for shadow passwords
+if test "`uname`" = "HP-UX"; then
+LDFLAGS="$LDFLAGS -lsec"
 fi
+
+
+dnl check and set compilation flags for Jemboss auth server code
+CHECK_THREADS
+
 
 AC_OUTPUT(plplot/Makefile plplot/lib/Makefile nucleus/Makefile ajax/Makefile
 emboss/Makefile emboss/acd/Makefile test/Makefile test/data/Makefile
-test/embl/Makefile test/pir/Makefile test/swiss/Makefile
+test/embl/Makefile test/genbank/Makefile test/gb/Makefile
+test/pir/Makefile test/swiss/Makefile
 test/swnew/Makefile test/wormpep/Makefile emboss/data/Makefile
 emboss/data/CODONS/Makefile emboss/data/REBASE/Makefile 
 emboss/data/PRINTS/Makefile emboss/data/PROSITE/Makefile

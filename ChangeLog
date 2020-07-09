@@ -1,24 +1,235 @@
+Version 2.4.0
+        New Jemboss authorising server code. This uses a new set-uid
+	program (jembossctl) to perform tasks as the user.
+
+	New alignment output format "match" for wordmatch, reports the
+	length, sequence names, and range in each sequence.
+
+	emboss.default.template has been changed to include the new SRSWWW
+	access method and the fields definitions for the test databases.
+
+	In dbiblast, renamed the -filename option -filenames to match the
+	other dbi indexing programs, and because wildcard filenames are
+	supported.
+	
+	Removed the -staden option for the dbi indexing programs. This had
+	no efect (it was originally included to rename files as
+	division.lookup for use by internal utilities at the Sanger
+	Centre).
+	
+	In qatest.pl test script, added test for missing expected file.
+	Only seen for obsolete secondary output files, no tests were passing
+	that should have failed.
+
+	Script (scripts/dbilist.pl) to report the contents of EMBLCD
+	database indices created by dbiflat, dbigcg, dbifasta or dbiblast.
+
+	Proxy HTTP access for remote servers. Define EMBOSS_PROXY as an
+	environment variable, or in emboss.defaults. Can also be set for
+	any database as proxy: "hostname:port" or overridden with
+	proxy: ":" to use a local server for a database. This is used by
+	both the URL and SRSWWW access methods.
+
+	New ajListUnique function to remove duplicate nodes in a list.
+
+	New embxyz.c / .h embXyzSeqsetNRRange functions added
+
+	Report format "table" is the default for several applications. In
+	this format, the sequence USA has been removed because it already
+	appears in the sequenec header part of the report. A new format
+	"-rformat nametable" will produce the previous report output for
+	users who are relying on parsing it.
+
+	Output files defined with the "nullok" attribute in ACD are not
+	created unless requested. The file name and extension are ignored.
+	It is possible to add a new associated qualifier to control this
+	behaviour, but its use may be confusing with more than one output
+	file.
+	
+	Precision attribute for report score (default is 3). Other
+	floating point report values are written as strings by the
+	original application so their precision is defined in the
+	code. The score is a float, as part of the internal (GFF) feature
+	structure.  A zero value produces an integer score (strictly, it
+	uses %.0f as the format). Set precision for etandem, fuzznuc,
+	fuzzpro, fuzztran, patmatdb, patmatmotifs (integer scores) and
+	restrict (no score)
+	
+	Report output for equicktandem and etandem, with -origfile to
+	write the original output format for sites (Sanger for example)
+	who still require it. By default, the origfile output file is
+	not created.
+
+	Report output for patmatdb and patmatmotifs. For patmatmotifs the
+	prosite documentation appears in the report footer, with the
+	addition of the motif name and the number of matches in the
+	sequence.
+
+	Report headers and footers automatically trim last newline.
+	
+	Reports in -rformat SeqTable right-align numbers.
+
+	Report output for marscan (-rformat GFF by default)
+
+	Report output for fuzztran (-rformat table with the translation
+	included as a report field). Using -rformat seqtable with fuzztran
+	now also shows the original DNA sequence.
+	
+	Report output for fuzznuc and fuzzpro (-rformat SeqTable by default)
+
+	New report qualifiers -raccshow to include accession in header
+	and -rdesshow to include description in header
+	
+	Two access methods "file" and "offset" were defined as valid in
+	database definitions, but are really reserved for simple file reading.
+	They are removed from the database access methods list.
+
+	Two access methods "cmd" and "nbrf" are obsolete (cmd was never
+	implemented, nbrf is replaced by gcg which includes a query
+	mechanism). Both are removed from the database access methods list,
+	and the source code is commented out.
+	
+	SRS, SRSFASTA and SRSWWW database access can read all entries This
+	is not recommended for SRSWWW access because it will read
+	everything into memory - all of EMBL for example - then strip out
+	HTML tags before reading. For SRS it is not recommended because
+	"methodall: direct" is faster. For SRSFASTA it is necessary
+	because using SRSFASTA implies EMBOSS does not read the original
+	data format. However, not iomplementing an "all" search left a gap
+	in the SRS access methods which would generate a bad SRS command
+	line or URL.
+	
+	NBRF sequence reading trims last character only if it is '*'
+	to catch cases where SRS reports the sequence as 'plain'
+
+	GCG database text has the spaces in ". ." strings removed.
+
+	Database entry text and sequence saved for binary formats (GCG, BLAST)
+	for use by entret and other applications
+
+	dbiblast indices with split databases (formatdb -v) fixed for reading
+	all entries (was only reading the first file)
+
+	dbiblast and dbigcg indices support exclude and file definitions
+	to create database subsets
+
+	Database include and file definitions can use the simple filename.
+	In some cases the full path was used. Database files are checked
+	both with and without the directory path for back-compatibility.
+
+	srswww access method created to query a remote web server.
+	Preferred to using URL access as SRS queries can be built
+
+	Sequence objects include the SeqVersion, Keyword list and Taxonomy
+	list.
+
+	The GI number is read as an alternative SeqVersion where it is
+	available (GenBank and some NCBI formats). The GI number is
+	reported in GenBank format if available, but the GenBank VERSION
+	line may have only the SeqVersion if, for example, the sequence
+	was reead from an EMBL entry. "sv" queries check both the
+	SeqVersion and GI number.
+
+	Accession numbers have a strict definition, which covers the old
+	and new EMBL/GenBank format, SwissProt, PIR, and REFSEQ
+	(NM_nnnnnn). Earlier versions would accept any "accession number"
+	in some sequence formats, especially NCBI format.
+
+	SeqVersion (EMBL SV line, GenBank VERSION line) is used in preference
+	to accession number where available. Can also be read in FASTA
+	and NCBI formats. Where only the SeqVersion is available, the
+	accession number is generated.
+	
+	USA queries implement searches by SV, DES, ORG and KEY. These work
+	with SRS access methods (SRS, SRSFASTA, SRSWWW) by building SRS
+	queries, and with direct access (simple file reading) by
+	testing the sequence object.
+
+	Key and Org queries are for full keywords (including spaces) and
+	for each level of the taxonomy.
+
+	Des queries, if the access method does not provide a mechanism,
+	(if the access method does not have its own index) are applied to
+	words within the description. Words start with a letter or number,
+	and end with a letter or number. SRS typically does the same, but
+	allows a single quote at the end. This catches words such as 3'
+	and 5' but is a problem with some quoted text.
+
+	Queries for ID ACC SV DES ORG and KEY are valid for all file
+	access methods, including URL, external, cmd, app, file and by
+	default any new method added. If the internal query data is not
+	flagged by the access method (to show the database has been
+	queried) the sequence object is automatically tested.
+
+	Missing description, keyword, organism, or seqversion fields cause
+	queries to fail if they are used on inappropriate data.
+
+	dbiflat, dbigcg dbifasta and dbiblast can index the new
+	fields. All fields are available in dbiflat and dbigcg. The sv and
+	des fields are available in dbifasta and dbiblast. If any specific
+	formats make it possible to parse the org (or key) field they can
+	be added as new formats.
+
+	The new EMBLCD index files are named as follows: des for the
+	descriptions (no obvious standard name), seqvn for the seqversion
+	(no obvious standard name), keyword for keywords (EMBLCD
+	distribution name) and taxon to organism (EMBCD distribution
+	name). The EMBLCD distribution also included a freetext index
+	which is similar to the SRS alltext search so we did not use the
+	name for the desctription index.
+
+	We are working through the EMBLCD format documentation to make
+	EMBOSS indices more compatible. For example, all tokens in the TRG
+	index files should have trailing spaces. We use a NULL to mark the
+	end of the string.
+
+	EMBLCD index files now expand to fit the longest token, including
+	the entryname index which was limited to 12 characters (only one
+	site reported a problem with this in dbifasta with long ID names).
+
+	A new qualifier -maxindex sets an upper limit (25 is recommended)
+	to limit the size of all index files. Currently this applies to
+	all indices. We can add separate maxima for each field if
+	needed. We expect very few sites to use the extra index fields
+	as SRS is a simpler alternative.
+	
+	New database definition token 'fields' with a list of indexed fields
+	can be set to 'sv des org key' for SRS databases. 
+
+	USAs check the query field against the database 'fields'
+	definition. ID and ACC are always allowed. dbname:name still
+	searches ID and ACC (no change from previous version)
+
+	USAs with a filename can include the new query fields. The syntax is
+	filename:field:query for example empro.dat:id:eclaci (the extended
+	syntax is because empro.dat-id:eclaci looks like a filename ending
+	in -id)
+
+	Application 'tranalign' added. 
+	This aligns nucleic coding regions based on a set of aligned proteins.
+
+	
 Version 2.3.1
 
-        est2genome fixed for large alignments (over 40Mbase for
-        est * genomic sequence length)
-        sequence reading for ABI files fixed (and selex files tested)
-        genbank feature input working
-        pepinfo PNG output larger to make the text readable (only affects
-        PNG output)
+	est2genome fixed for large alignments (over 40Mbase for
+	est * genomic sequence length)
+	sequence reading for ABI files fixed (and selex files tested)
+	genbank feature input working
+	pepinfo PNG output larger to make the text readable (only affects
+	PNG output)
 	empty sequence file input fails gracefully
 	empty sequence input fails gracefully (and only needs one
 	^D from stdin)
 	
 Version 2.3.0
 
-        Seqretall, seqretallfeat and seqretset moved to 'make check'.
-        Seqret has all the functionality of the above.
+	Seqretall, seqretallfeat and seqretset moved to 'make check'.
+	Seqret has all the functionality of the above.
 	Fix for NBRF accession number reading (ajseqread.c)
 	Whichdb program added.
 	Fix for dbifasta and wormpep
 	Fix for problem reading plain format sequences by primer3.
-        Primer3 renamed eprimer3 to avoid conflicts with the Whitehead's
+	Primer3 renamed eprimer3 to avoid conflicts with the Whitehead's
 	primer3 version 3.0.6.
 	transeq's '-frame' can have a list of values, as: '-frame=1,2,3'
 	Non-existent files in lists are again ignored
