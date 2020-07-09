@@ -66,12 +66,14 @@ CPP = @CPP@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
+EMBOSS_TOP = @EMBOSS_TOP@
 EXEEXT = @EXEEXT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 ISAIXIA64 = @ISAIXIA64@
 JAVA_OK = @JAVA_OK@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
+NEEDAJAX = @NEEDAJAX@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
@@ -95,7 +97,7 @@ SUBDIRS = plplot ajax nucleus emboss test doc jemboss
 # AJAX_FIXED_ROOT = \"`pwd`/emboss/acd\"
 
 # files with nonstandard names in this directory
-EXTRA_DIST = COMPAT LICENSE KNOWN_BUGS ONEWS PROBLEMS FAQ depcomp
+EXTRA_DIST = COMPAT LICENSE KNOWN_BUGS ONEWS PROBLEMS FAQ ChangeLog depcomp
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -411,13 +413,13 @@ uninstall-info: uninstall-info-recursive
 # then remove any CVS subdirectories
 
 dist-hook:
-	tar cBf - scripts | ( cd $(distdir); tar xBf - ; ) 
-	tar cBf - test | ( cd $(distdir); tar xBf - ; ) 
-	tar cBf - emboss/acd | ( cd $(distdir); tar xBf - ; cd emboss/acd; ) 
-	tar cBf - emboss/data | ( cd $(distdir); tar xBf - ; cd emboss/data; ) 
-	tar cBf - plplot/lib | ( cd $(distdir); tar xBf - ; ) 
-	tar cBf - doc | ( cd $(distdir); tar xBf - ; ) 
-	tar cBf - jemboss | ( cd $(distdir); tar xBf - ; find jemboss -name Makefile -exec rm -rf {} \; )
+	tar cBf - scripts | ( cd $(distdir); tar xBf - ; find scripts -name CVS -exec rm -rf {} \; ) 
+	tar cBf - test | ( cd $(distdir); tar xBf - ; rm -rf test/CVS test/*/CVS ) 
+	tar cBf - emboss/acd | ( cd $(distdir); tar xBf - ; cd emboss/acd; rm -rf CVS ) 
+	tar cBf - emboss/data | ( cd $(distdir); tar xBf - ; cd emboss/data; rm -rf CVS */CVS */*/CVS ) 
+	tar cBf - plplot/lib | ( cd $(distdir); tar xBf - ; find plplot -name CVS -exec rm -rf {} \; ) 
+	tar cBf - doc | ( cd $(distdir); tar xBf - ; find doc -name CVS -exec rm -rf {} \; ) 
+	tar cBf - jemboss | ( cd $(distdir); tar xBf - ; find jemboss -name CVS -exec rm -rf {} \;; find jemboss -name Makefile -exec rm -rf {} \; )
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
