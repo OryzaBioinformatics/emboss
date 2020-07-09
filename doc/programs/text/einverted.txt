@@ -27,9 +27,6 @@ Description
    optimal alignment, but is slower than, for example, a self-by-self
    BLAST. It can find multiple inverted repeats in a sequence.
    
-   Currently the maximal extent of the interval from start to end of the
-   repeat is set to 4000 bp.
-   
    Secondary structures like inverted repeats in genomic sequences may be
    implicated in initiation of DNA replication.
    

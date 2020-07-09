@@ -96,8 +96,8 @@ Command line arguments
    Any integer value 1
    -interticks do you want horizontal junctions between ticks (Y or N)
    Any string is accepted N
-   -gapsize interval between ticks in the ruler (enter an integer) Any
-   integer value 500
+   -gapsize interval between ticks in the ruler (enter an integer)
+   Integer 1 or more 500
    -ticklines do you want vertical lines at the ruler's ticks (Y or N)
    Any string is accepted N
    -tickheight height of ticks (enter a number to multiply the default

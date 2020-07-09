@@ -140,6 +140,7 @@ See also
    infoalign    Information on a multiple sequence alignment
    prettyplot   Displays aligned sequences, with colouring and boxing
    showalign    Displays a multiple sequence alignment
+   tranalign    Align nucleic coding regions given the aligned proteins
    
 Author(s)
 

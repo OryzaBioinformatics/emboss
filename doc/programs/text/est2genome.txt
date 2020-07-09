@@ -46,7 +46,7 @@ Command line arguments
    Mandatory qualifiers:
   [-est]               seqall     EST sequence(s)
   [-genome]            sequence   Genomic sequence
-   -outfile            outfile    Output file name
+  [-outfile]           outfile    Output file name
 
    Optional qualifiers:
    -match              integer    Score for matching two bases
@@ -56,8 +56,8 @@ Command line arguments
    -intronpenalty      integer    Cost for an intron, independent of length.
    -splicepenalty      integer    Cost for an intron, independent of length
                                   and starting/ending on donor-acceptor sites
-   -minscore           integer    You can exclude alignments with scores below
-                                  a threshold by setting this to be false.
+   -minscore           integer    Exclude alignments with scores below this
+                                  threshold score.
 
    Advanced qualifiers:
    -reverse            bool       Reverse the orientation of the EST sequence
@@ -106,7 +106,8 @@ Command line arguments
    (Parameter 1) EST sequence(s) Readable sequence(s) Required
    [-genome]
    (Parameter 2) Genomic sequence Readable sequence Required
-   -outfile Output file name Output file <sequence>.est2genome
+   [-outfile]
+   (Parameter 3) Output file name Output file <sequence>.est2genome
    Optional qualifiers Allowed values Default
    -match Score for matching two bases Any integer value 1
    -mismatch Cost for mismatching two bases Any integer value 1
@@ -116,8 +117,8 @@ Command line arguments
    value 40
    -splicepenalty Cost for an intron, independent of length and
    starting/ending on donor-acceptor sites Any integer value 20
-   -minscore You can exclude alignments with scores below a threshold by
-   setting this to be false. Any integer value 30
+   -minscore Exclude alignments with scores below this threshold score.
+   Any integer value 30
    Advanced qualifiers Allowed values Default
    -reverse Reverse the orientation of the EST sequence Yes/No No
    -[no]splice Use donor and acceptor splice sites. If you want to ignore

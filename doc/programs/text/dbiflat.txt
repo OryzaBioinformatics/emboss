@@ -44,9 +44,10 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -staden             bool       Use staden index file names
+   -fields             menu       Index fields
    -exclude            string     wildcard filename(s) to exclude
    -indexdirectory     string     Index directory
+   -maxindex           integer    Maximum index length
    -sortoptions        string     Sort options, typically '-T .' to use
                                   current directory for work files and '-k
                                   1,1' to force GNU sort to use the first
@@ -75,10 +76,17 @@ Command line arguments
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
-   -staden Use staden index file names Yes/No No
+   -fields Index fields
+   acnum   (Accession number)
+   seqvn   (Sequence Version and GI)
+   des     (Description)
+   keyword (Keywords)
+   taxon   (Taxonomy)
+   acnum
    -exclude wildcard filename(s) to exclude Any string is accepted An
    empty string is accepted
    -indexdirectory Index directory Any string is accepted .
+   -maxindex Maximum index length Integer 0 or more 0
    -sortoptions Sort options, typically '-T .' to use current directory
    for work files and '-k 1,1' to force GNU sort to use the first field
    Any string is accepted -T . -k 1,1

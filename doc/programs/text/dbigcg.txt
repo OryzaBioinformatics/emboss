@@ -42,15 +42,17 @@ Command line arguments
    Mandatory qualifiers:
    -idformat           menu       Entry format
    -directory          string     Database directory
-   -filename           string     Wildcard database filename
+   -filenames          string     Wildcard database filename
   [-dbname]            string     Database name
    -release            string     Release number
    -date               string     Index date
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -staden             bool       Use staden index file names
+   -fields             menu       Index fields
+   -exclude            string     wildcard filename(s) to exclude
    -indexdirectory     string     Index directory
+   -maxindex           integer    Maximum index length
    -sortoptions        string     Sort options, typically '-T .' to use
                                   current directory for work files and '-k
                                   1,1' to force GNU sort to use the first
@@ -72,7 +74,7 @@ Command line arguments
    PIR     (NBRF)
    EMBL
    -directory Database directory Any string is accepted .
-   -filename Wildcard database filename Any string is accepted *.seq
+   -filenames Wildcard database filename Any string is accepted *.seq
    [-dbname]
    (Parameter 1) Database name A string from 1 to 19 characters Required
    -release Release number A string up to 9 characters 0.0
@@ -80,8 +82,17 @@ Command line arguments
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
-   -staden Use staden index file names Yes/No No
+   -fields Index fields
+   acnum   (Accession number)
+   seqvn   (Sequence Version and GI)
+   des     (Description)
+   keyword (Keywords)
+   taxon   (Taxonomy)
+   acnum
+   -exclude wildcard filename(s) to exclude Any string is accepted An
+   empty string is accepted
    -indexdirectory Index directory Any string is accepted .
+   -maxindex Maximum index length Integer 0 or more 0
    -sortoptions Sort options, typically '-T .' to use current directory
    for work files and '-k 1,1' to force GNU sort to use the first field
    Any string is accepted -T . -k 1,1

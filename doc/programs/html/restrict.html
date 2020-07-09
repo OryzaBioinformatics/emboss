@@ -322,18 +322,52 @@ The input sequence can be one or more DNA sequences.
 </H2>
 
 
+<p>
+
+The output is a standard EMBOSS report file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+<p>
+
+See:
+<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html">
+http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+
+
+<p>
+
+By default <b>restrict</b> writes a 'table' report file.
+
+<p>
+
 The output from restrict is a simple text one. The base number,
 restriction enzyme name, recognition site and cut positions are
 shown. Note that cuts are always to the right of the residue
 shown and that 5' cuts are referred to by their associated 3'
 number sequence.
 
+<p>
+
 The program reports enzymes that cut at two or four sites. The
 program also reports isoschizomers and enzymes having the same
 recognition sequence but different cut sites.
 
-Here is part of a sample output:
 <p>
+
+Here is part of a sample output:
+
+<p>
+
 <pre>
 <hr>
 ########################################

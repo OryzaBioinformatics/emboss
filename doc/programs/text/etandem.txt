@@ -50,13 +50,14 @@ Command line arguments
   [-sequence]          sequence   Sequence USA
    -minrepeat          integer    Minimum repeat size
    -maxrepeat          integer    Maximum repeat size
-  [-outfile]           outfile    Output file name
+  [-outfile]           report     (no help text) report value
 
    Optional qualifiers: (none)
    Advanced qualifiers:
    -threshold          integer    Threshold score
    -mismatch           bool       Allow N as a mismatch
    -uniform            bool       Allow uniform consensus
+   -origfile           outfile    Output file name
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -71,13 +72,14 @@ Command line arguments
    -maxrepeat Maximum repeat size Integer, same as -minrepeat or higher
    Same as -minrepeat
    [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.etandem
+   (Parameter 2) (no help text) report value Report file
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
    -threshold Threshold score Any integer value 20
    -mismatch Allow N as a mismatch Yes/No No
    -uniform Allow uniform consensus Yes/No No
+   -origfile Output file name Output file <sequence>.etandem
    
 Input file format
 
@@ -85,28 +87,51 @@ Input file format
    
 Output file format
 
-   The output from etandem is an uncommented list of identified repeats.
-   In a future version this will change to be annotated sequence
-   features.
+   The output is a standard EMBOSS report file.
    
-   The columns of the report show:
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   feattable, motif, regions, seqtable, simple, srs, table, tagseq
    
-    1. Score
-    2. Start base position
-    3. End base position
-    4. Repeat size
-    5. Repeat count
-    6. Percent identity
-    7. Consensus sequence
-       
-   An example of the output is:
+   See:
+   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
+   further information on report formats.
+   
+   By default etandem writes a 'table' report file.
+   
+   The output from the above example is:
      _________________________________________________________________
    
-   120        793        936  6  24  93.8 acccta
-    90        283        420  6  23  84.8 taaccc
-    38        432        485  6   9  90.7 ccctaa
-    26        494        529  6   6  94.4 ccctaa
-    24        568        597  6   5 100.0 aaccct
+########################################
+# Program: etandem
+# Rundate: Thu Apr 11 13:31:10 2002
+# Report_file: stdout
+########################################
+
+#=======================================
+#
+# Sequence: HHTETRA     from: 1   to: 1272
+# HitCount: 5
+#
+# Threshold: 20
+# Minrepeat: 6
+# Maxrepeat: 6
+# Mismatch: No
+# Uniform: No
+#
+#=======================================
+
+  Start     End   Score   Size  Count Identity Consensus
+    793     936     120      6     24     93.8 acccta
+    283     420      90      6     23     84.8 taaccc
+    432     485      38      6      9     90.7 ccctaa
+    494     529      26      6      6     94.4 ccctaa
+    568     597      24      6      5    100.0 aaccct
+
+#---------------------------------------
+#---------------------------------------
      _________________________________________________________________
    
 Data files

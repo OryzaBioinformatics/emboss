@@ -40,7 +40,7 @@ Command line arguments
                                   four of any residue followed by Cys. The
                                   search is case-independent, so 'AAA' matches
                                   'aaa'.
-  [-outfile]           outfile    Output file name
+  [-outfile]           report     (no help text) report value
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
@@ -62,7 +62,7 @@ Command line arguments
    case-independent, so 'AAA' matches 'aaa'. A string of at least 2
    characters Required
    [-outfile]
-   (Parameter 3) Output file name Output file <sequence>.patmatdb
+   (Parameter 3) (no help text) report value Report file
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
@@ -110,34 +110,78 @@ Input file format
    
 Output file format
 
+   The output is a standard EMBOSS report file.
+   
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+   
+   See:
+   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
+   further information on report formats.
+   
+   By default patmatdb writes a 'dbmotif' report file.
+   
    The output from the above example follows:
      _________________________________________________________________
    
-Number of matches found in HD_FUGRU = 1
-Length of the sequence = 3148 basepairs
-Length of match = 4
-Start of match = position 1037 of sequence
-End of match = position 1040 of sequence
+########################################
+# Program: patmatdb
+# Rundate: Thu Apr 11 13:56:31 2002
+# Report_file: 5h1d_fugru.patmatdb
+########################################
 
-patmatDB of HD_FUGRU from 1037 to 1040 using pattern st[ty]s
+#=======================================
+#
+# Sequence: 2AAA_YEAST     from: 1   to: 635
+# HitCount: 2
+#
+# Motif: ST[TY]S
+#
+#=======================================
 
-STPASSTTSSAVDP
+Length = 4
+Start = position 19 of sequence
+End = position 22 of sequence
+
+
+SAATTSTTSTTSNS
      |  |
-  1037  1040
+    19  22
+
+Length = 4
+Start = position 22 of sequence
+End = position 25 of sequence
 
 
-
-Number of matches found in GCN4_YEAST = 1
-Length of the sequence = 281 basepairs
-Length of match = 4
-Start of match = position 157 of sequence
-End of match = position 160 of sequence
-
-patmatDB of GCN4_YEAST from 157 to 160 using pattern st[ty]s
-
-SNLEVSTTSFLPTP
+TTSTTSTTSNSKDS
      |  |
-   157  160
+    22  25
+
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: 41_XENLA     from: 1   to: 801
+# HitCount: 1
+#
+# Motif: ST[TY]S
+#
+#=======================================
+
+Length = 4
+Start = position 52 of sequence
+End = position 55 of sequence
+
+
+SQESPSTTSPSTRK
+     |  |
+    52  55
+
+etc.
      _________________________________________________________________
    
 Data files

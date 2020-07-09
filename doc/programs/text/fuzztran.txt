@@ -68,25 +68,43 @@ Command line arguments
 
    Mandatory qualifiers:
   [-sequence]          seqall     Sequence database USA
-   -pattern            string     Search pattern
+   -pattern            string     The standard IUPAC one-letter codes for the
+                                  amino acids are used.
+                                  The symbol `x' is used for a position where
+                                  any amino acid is accepted.
+                                  Ambiguities are indicated by listing the
+                                  acceptable amino acids for a given position,
+                                  between square parentheses `[ ]'. For
+                                  example: [ALT] stands for Ala or Leu or Thr.
+                                  Ambiguities are also indicated by listing
+                                  between a pair of curly brackets `{ }' the
+                                  amino acids that are not accepted at a gven
+                                  position. For example: {AM} stands for any
+                                  amino acid except Ala and Met.
+                                  Each element in a pattern is separated from
+                                  its neighbor by a `-'. (Optional in
+                                  fuzztran)
+                                  Repetition of an element of the pattern can
+                                  be indicated by following that element with
+                                  a numerical value or a numerical range
+                                  between parenthesis. Examples: x(3)
+                                  corresponds to x-x-x, x(2,4) corresponds to
+                                  x-x or x-x-x or x-x-x-x.
+                                  When a pattern is restricted to either the
+                                  N- or C-terminal of a sequence, that pattern
+                                  either starts with a `<' symbol or
+                                  respectively ends with a `>' symbol.
+                                  A period ends the pattern. (Optional in
+                                  fuzztran).
+                                  For example, [DE](2)HS{P}X(2)PX(2,4)C
    -mismatch           integer    Number of mismatches
-  [-outf]              outfile    Output file name
+  [-outfile]           report     (no help text) report value
 
    Optional qualifiers:
    -frame              menu       Frame(s) to translate
    -table              menu       Code to use
 
-   Advanced qualifiers:
-   -mmshow             bool       Show mismatches
-   -accshow            bool       Show accession numbers
-   -usashow            bool       Showing the USA (Uniform Sequence Address)
-                                  of the matching sequences will turn your
-                                  output file into a 'list' file that can then
-                                  be read in by many other EMBOSS programs by
-                                  specifying it with a '@' in front of the
-                                  filename.
-   -descshow           bool       Show descriptions
-
+   Advanced qualifiers: (none)
    General qualifiers:
   -help                bool       report command line options. More
                                   information on associated and general
@@ -96,11 +114,27 @@ Command line arguments
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
-   -pattern Search pattern Any string is accepted An empty string is
+   -pattern The standard IUPAC one-letter codes for the amino acids are
+   used. The symbol `x' is used for a position where any amino acid is
+   accepted. Ambiguities are indicated by listing the acceptable amino
+   acids for a given position, between square parentheses `[ ]'. For
+   example: [ALT] stands for Ala or Leu or Thr. Ambiguities are also
+   indicated by listing between a pair of curly brackets `{ }' the amino
+   acids that are not accepted at a gven position. For example: {AM}
+   stands for any amino acid except Ala and Met. Each element in a
+   pattern is separated from its neighbor by a `-'. (Optional in
+   fuzztran) Repetition of an element of the pattern can be indicated by
+   following that element with a numerical value or a numerical range
+   between parenthesis. Examples: x(3) corresponds to x-x-x, x(2,4)
+   corresponds to x-x or x-x-x or x-x-x-x. When a pattern is restricted
+   to either the N- or C-terminal of a sequence, that pattern either
+   starts with a `<' symbol or respectively ends with a `>' symbol. A
+   period ends the pattern. (Optional in fuzztran). For example,
+   [DE](2)HS{P}X(2)PX(2,4)C Any string is accepted An empty string is
    accepted
    -mismatch Number of mismatches Integer 0 or more 0
-   [-outf]
-   (Parameter 2) Output file name Output file <sequence>.fuzztran
+   [-outfile]
+   (Parameter 2) (no help text) report value Report file
    Optional qualifiers Allowed values Default
    -frame Frame(s) to translate
    1  (1)
@@ -135,13 +169,7 @@ Command line arguments
    23 (Thraustochytrium Mitochondrial)
    0
    Advanced qualifiers Allowed values Default
-   -mmshow Show mismatches Yes/No No
-   -accshow Show accession numbers Yes/No No
-   -usashow Showing the USA (Uniform Sequence Address) of the matching
-   sequences will turn your output file into a 'list' file that can then
-   be read in by many other EMBOSS programs by specifying it with a '@'
-   in front of the filename. Yes/No No
-   -descshow Show descriptions Yes/No No
+   (none)
    
 Input file format
 
@@ -183,81 +211,54 @@ Input file format
    
 Output file format
 
-   Here is the output from the example search:
+   The output is a standard EMBOSS report file.
    
-          RNOPS  1       97 RA
-          RNOPS  1      133 RA
-          RNOPS  1      421 RA
-          RNOPS  1      625 RA
-          RNOPS  1      835 RA
-          RNOPS  1      919 RA
-          RNOPS  2      227 RA
-          RNOPS  2      752 RA
-          RNOPS  3       72 RA
-
-   It is composed of four columns of data.
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   feattable, motif, regions, seqtable, simple, srs, table, tagseq
    
-     * The first column is the name of the sequence being searched.
-     * The second is the frame of translation that the pattern was found
-       in.
-     * The third is the start position of the match found.
-     * The fourth is the actual sequence that was matched by the search
-       pattern.
-       
-   If the option '-mmshow' is used, then an extra fourth column of data
-   is output indicating how many mismatches there are:
+   See:
+   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
+   further information on report formats.
    
-% fuzztran -mmshow -frame 6
-Protein pattern search after translation
-Input sequence(s): embl:rnops
-Search pattern: TWLWLT
-Number of mismatches [0]: 2
-Output file [rnops.fuzztran]: stdout
-
-          RNOPS  1      316     0 TWLWLT
-          RNOPS  1     1138     2 QRLWLT
-
-   If the option '-desc' is used then the description of the sequence is
-   displayed before each line showing the match details. For example:
+   By default fuzztran writes a 'table' report file.
    
-% fuzztran embl:rnops -desc
-Protein pattern search after translation
-Search pattern: TWLWLT
-Number of mismatches [0]:
-Output file [rnops.fuzztran]: stdout
-R.norvegicus mRNA for rhodopsin.
-
-R.norvegicus mRNA for rhodopsin.
-          RNOPS  1      316 TWLWLT
-
-   If the option '-acc' is also used then the accession number of the
-   sequence is displayed before each line showing the match details. For
-   example:
+   The output from the above example is:
    
-% fuzztran embl:rnops -desc -acc
-Protein pattern search after translation
-Search pattern: TWLWLT
-Number of mismatches [0]:
-Output file [rnops.fuzztran]: stdout
+########################################
+# Program: fuzztran
+# Rundate: Thu Apr 11 13:46:20 2002
+# Report_file: rnops.fuzztran
+########################################
 
-Z46957 R.norvegicus mRNA for rhodopsin.
-          RNOPS  1      316 TWLWLT
+#=======================================
+#
+# Sequence: RNOPS     from: 1   to: 1493
+# HitCount: 9
+#
+# Pattern: RA
+# Mismatch: 0
+# TransTable: 0
+# Frames: F
+#
+#=======================================
 
-   If the option '-usa' is used then the Uniform Sequence Address is
-   output at the start of each line of match details. For example:
-   
-% fuzztran embl:rnops -usa
-Protein pattern search after translation
-Search pattern: TWLWLT
-Number of mismatches [0]:
-Output file [rnops.fuzztran]: stdout
+  Start     End   Score Mismatch  Frame PStart   PEnd Translation
+     97     102       2        .      1     33     34 RA
+    133     138       2        .      1     45     46 RA
+    421     426       2        .      1    141    142 RA
+    625     630       2        .      1    209    210 RA
+    835     840       2        .      1    279    280 RA
+    919     924       2        .      1    307    308 RA
+    227     232       2        .      2     76     77 RA
+    752     757       2        .      2    251    252 RA
+     72      77       2        .      3     24     25 RA
 
-embl-id:RNOPS             RNOPS  1      316 TWLWLT
+#---------------------------------------
+#---------------------------------------
 
-   This is useful because it turns the output into a 'list' file of
-   sequence names that can then be read in by other EMBOSS programs when
-   a '@' is put at the start of the file.
-   
 Data files
 
    EMBOSS data files are distributed with the application and stored in

@@ -72,13 +72,21 @@ Input file format
    
 Output file format
 
-   The output from sigcleave is a simple text one. Maxsite is the amino
-   acid position immediately after the predicted cleavage site. Score is
-   the calculated weight value for the predicted cleavage site. Sequence
-   shows the amino acid positions used to calculate the score with "-"
-   used to indicate the predicted cleavage site.
+   The output is a standard EMBOSS report file.
    
-   Here is a sample output:
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+   
+   See:
+   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
+   further information on report formats.
+   
+   By default sigcleave writes a 'motif' report file.
+   
+   The output from the above example is:
   __________________________________________________________________________
 
 ########################################

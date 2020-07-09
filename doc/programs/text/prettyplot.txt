@@ -231,6 +231,7 @@ See also
    showseq Display a sequence with features, translation etc
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
+   tranalign Align nucleic coding regions given the aligned proteins
    
 Author(s)
 

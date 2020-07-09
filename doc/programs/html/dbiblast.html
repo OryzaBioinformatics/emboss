@@ -127,7 +127,7 @@ IT IS DONE FOR YOU.
    Mandatory qualifiers:
   [-dbname]            string     Database name
    -directory          string     Database directory
-   -filename           string     database base filename
+   -filenames          string     Wildcard database filename
    -release            string     Release number
    -date               string     Index date
    -seqtype            menu       Sequence type
@@ -135,12 +135,14 @@ IT IS DONE FOR YOU.
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -staden             bool       Use staden index file names
+   -fields             menu       Index fields
+   -exclude            string     wildcard filename(s) to exclude
    -indexdirectory     string     Index directory
    -sortoptions        string     Sort options, typically '-T .' to use
                                   current directory for work files and '-k
                                   1,1' to force GNU sort to use the first
                                   field
+   -maxindex           integer    Maximum index length
    -[no]systemsort     bool       Use system sort utility
    -[no]cleanup        bool       Clean up temporary files
    -sourcefile         bool       Use FASTA source file
@@ -177,8 +179,8 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-filename</td>
-<td>database base filename</td>
+<td>-filenames</td>
+<td>Wildcard database filename</td>
 <td>Any string is accepted</td>
 <td>Database name</td>
 </tr>
@@ -228,10 +230,17 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-staden</td>
-<td>Use staden index file names</td>
-<td>Yes/No</td>
-<td>No</td>
+<td>-fields</td>
+<td>Index fields</td>
+<td><table><tr><td>acnum</td> <td><i>(Accession number)</i></td></tr><tr><td>seqvn</td> <td><i>(Sequence Version and GI)</i></td></tr><tr><td>des</td> <td><i>(Description)</i></td></tr></table></td>
+<td>acnum</td>
+</tr>
+
+<tr>
+<td>-exclude</td>
+<td>wildcard filename(s) to exclude</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
 </tr>
 
 <tr>
@@ -246,6 +255,13 @@ IT IS DONE FOR YOU.
 <td>Sort options, typically '-T .' to use current directory for work files and '-k 1,1' to force GNU sort to use the first field</td>
 <td>Any string is accepted</td>
 <td>-T . -k 1,1</td>
+</tr>
+
+<tr>
+<td>-maxindex</td>
+<td>Maximum index length</td>
+<td>Integer 0 or more</td>
+<td>0</td>
 </tr>
 
 <tr>

@@ -63,7 +63,7 @@ Command line arguments
    -width              integer    window size
    -octanolplot        bool       Display the octanol plot
    -interfaceplot      bool       Display the interface plot
-   -[no]differenceplot bool       Do not display the difference plot
+   -[no]differenceplot bool       Display the difference plot
 
    Advanced qualifiers: (none)
    General qualifiers:
@@ -86,7 +86,7 @@ Command line arguments
    -width window size Integer from 1 to 200 19
    -octanolplot Display the octanol plot Yes/No No
    -interfaceplot Display the interface plot Yes/No No
-   -[no]differenceplot Do not display the difference plot Yes/No Yes
+   -[no]differenceplot Display the difference plot Yes/No Yes
    Advanced qualifiers Allowed values Default
    (none)
    

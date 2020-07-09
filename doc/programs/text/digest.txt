@@ -123,7 +123,19 @@ Input file format
    
 Output file format
 
-   Here is the output from the example:
+   The output is a standard EMBOSS report file.
+   
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+   
+   See:
+   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
+   further information on report formats.
+   
+   By default digest writes a 'seqtable' report file.
      _________________________________________________________________
    
 ########################################

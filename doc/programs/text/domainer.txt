@@ -373,8 +373,7 @@ See also
    search
    rebaseextract Extract data from REBASE
    scope Convert raw scop classification file to embl-like format
-   scopparse Reads raw scop classifications file and writes embl-like
-   format scop classification file
+   scopparse Reads raw-, and writes EMBL-like, scop classification files
    seqnr Converts redundant database results to a non-redundant set of
    hits
    tfextract Extract data from TRANSFAC

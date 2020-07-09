@@ -59,7 +59,7 @@ Command line arguments
    Mandatory qualifiers:
   [-dbname]            string     Database name
    -directory          string     Database directory
-   -filename           string     database base filename
+   -filenames          string     Wildcard database filename
    -release            string     Release number
    -date               string     Index date
    -seqtype            menu       Sequence type
@@ -67,12 +67,14 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -staden             bool       Use staden index file names
+   -fields             menu       Index fields
+   -exclude            string     wildcard filename(s) to exclude
    -indexdirectory     string     Index directory
    -sortoptions        string     Sort options, typically '-T .' to use
                                   current directory for work files and '-k
                                   1,1' to force GNU sort to use the first
                                   field
+   -maxindex           integer    Maximum index length
    -[no]systemsort     bool       Use system sort utility
    -[no]cleanup        bool       Clean up temporary files
    -sourcefile         bool       Use FASTA source file
@@ -87,7 +89,8 @@ Command line arguments
    [-dbname]
    (Parameter 1) Database name A string from 1 to 19 characters Required
    -directory Database directory Any string is accepted .
-   -filename database base filename Any string is accepted Database name
+   -filenames Wildcard database filename Any string is accepted Database
+   name
    -release Release number A string up to 9 characters 0.0
    -date Index date Date string dd/mm/yy 00/00/00
    -seqtype Sequence type
@@ -103,11 +106,18 @@ Command line arguments
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
-   -staden Use staden index file names Yes/No No
+   -fields Index fields
+   acnum (Accession number)
+   seqvn (Sequence Version and GI)
+   des   (Description)
+   acnum
+   -exclude wildcard filename(s) to exclude Any string is accepted An
+   empty string is accepted
    -indexdirectory Index directory Any string is accepted .
    -sortoptions Sort options, typically '-T .' to use current directory
    for work files and '-k 1,1' to force GNU sort to use the first field
    Any string is accepted -T . -k 1,1
+   -maxindex Maximum index length Integer 0 or more 0
    -[no]systemsort Use system sort utility Yes/No Yes
    -[no]cleanup Clean up temporary files Yes/No Yes
    -sourcefile Use FASTA source file Yes/No No

@@ -116,7 +116,7 @@ IT IS DONE FOR YOU.
    Mandatory qualifiers:
   [-est]               seqall     EST sequence(s)
   [-genome]            sequence   Genomic sequence
-   -outfile            outfile    Output file name
+  [-outfile]           outfile    Output file name
 
    Optional qualifiers:
    -match              integer    Score for matching two bases
@@ -126,8 +126,8 @@ IT IS DONE FOR YOU.
    -intronpenalty      integer    Cost for an intron, independent of length.
    -splicepenalty      integer    Cost for an intron, independent of length
                                   and starting/ending on donor-acceptor sites
-   -minscore           integer    You can exclude alignments with scores below
-                                  a threshold by setting this to be false.
+   -minscore           integer    Exclude alignments with scores below this
+                                  threshold score.
 
    Advanced qualifiers:
    -reverse            bool       Reverse the orientation of the EST sequence
@@ -197,7 +197,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-outfile</td>
+<td>[-outfile]<br>(Parameter 3)</td>
 <td>Output file name</td>
 <td>Output file</td>
 <td><i>&lt;sequence&gt;</i>.est2genome</td>
@@ -246,7 +246,7 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-minscore</td>
-<td>You can exclude alignments with scores below a threshold by setting this to be false.</td>
+<td>Exclude alignments with scores below this threshold score.</td>
 <td>Any integer value</td>
 <td>30</td>
 </tr>

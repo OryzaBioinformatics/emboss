@@ -66,14 +66,14 @@ Usage
 % marscan
 marscan
 Finds MAR/SAR sites in nucleic sequences
-Input sequence(s): EMBL:u01317
-Output file [hsfau1.marscan]:
+Input sequence(s): EMBL:HSHBB
+Output file [hshbb.marscan]:
 
 Command line arguments
 
    Mandatory qualifiers:
   [-sequence]          seqall     Sequence database USA
-  [-outf]              featout    File for output of MAR/SAR recognition
+  [-outfile]           report     File for output of MAR/SAR recognition
                                   signature (MRS) regions. This contains
                                   details of the MRS in normal GFF format. The
                                   MRS consists of two recognition sites, one
@@ -92,12 +92,12 @@ Command line arguments
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-outf]
+   [-outfile]
    (Parameter 2) File for output of MAR/SAR recognition signature (MRS)
    regions. This contains details of the MRS in normal GFF format. The
    MRS consists of two recognition sites, one of 8 bp and one of 16 bp on
    either sense strand of the genomic DNA, within 200 bp of each other.
-   Writeable feature table unknown.gff
+   Report file
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
@@ -109,35 +109,47 @@ Input file format
    
 Output file format
 
-   It writes a standard GFF (Gene Feature Format) file.
+   The output is a standard EMBOSS report file.
+   
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+   
+   See:
+   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
+   further information on report formats.
+   
+   By default marscan writes a GFF (Gene Feature Format) report file.
    
    The output from the above example is:
      _________________________________________________________________
    
-##gff-version 0.0
-##date 2001-02-21
-##sequence-region HSHBB 0 0
-HSHBB   marscan misc_signal     2242    2458    1.0     .       .       note "M
-AR/SAR recognition site (MRS). 8bp pattern=2451..2458. 16bp pattern = 2242..225
-7"
-HSHBB   marscan misc_signal     17654   17730   1.0     .       .       note "M
-AR/SAR recognition site (MRS). 8bp pattern=17723..17730. 16bp pattern = 17654..
-17669"
-HSHBB   marscan misc_signal     40956   41123   1.0     .       .       note "M
-AR/SAR recognition site (MRS). 8bp pattern=40956..40963. 16bp pattern = 41108..
-41123"
-HSHBB   marscan misc_signal     42232   42248   1.0     .       .       note "M
-AR/SAR recognition site (MRS). 8bp pattern=42232..42239. 16bp pattern = 42233..
-42248"
-HSHBB   marscan misc_signal     47834   47966   1.0     .       .       note "M
-AR/SAR recognition site (MRS). 8bp pattern=47959..47966. 16bp pattern = 47834..
-47849"
-HSHBB   marscan misc_signal     65112   65146   1.0     .       .       note "M
-AR/SAR recognition site (MRS). 8bp pattern=65139..65146. 16bp pattern = 65112..
-65127"
-HSHBB   marscan misc_signal     65947   65963   1.0     .       .       note "M
-AR/SAR recognition site (MRS). 8bp pattern=65947..65954. 16bp pattern = 65948..
-65963"
+##gff-version 2.0
+##date 2002-04-04
+##Type DNA HSHBB
+HSHBB   marscan misc_signal     2242    2458    0.000   +       .       Sequenc
+e "HSHBB.1" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 245
+1" ; note "*end8bp 2458" ; note "*start16bp 2242" ; note "*end16bp 2257"
+HSHBB   marscan misc_signal     17654   17730   0.000   +       .       Sequenc
+e "HSHBB.2" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 177
+23" ; note "*end8bp 17730" ; note "*start16bp 17654" ; note "*end16bp 17669"
+HSHBB   marscan misc_signal     40956   41123   0.000   +       .       Sequenc
+e "HSHBB.3" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 409
+56" ; note "*end8bp 40963" ; note "*start16bp 41108" ; note "*end16bp 41123"
+HSHBB   marscan misc_signal     42232   42248   0.000   +       .       Sequenc
+e "HSHBB.4" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 422
+32" ; note "*end8bp 42239" ; note "*start16bp 42233" ; note "*end16bp 42248"
+HSHBB   marscan misc_signal     47834   47966   0.000   +       .       Sequenc
+e "HSHBB.5" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 479
+59" ; note "*end8bp 47966" ; note "*start16bp 47834" ; note "*end16bp 47849"
+HSHBB   marscan misc_signal     65112   65146   0.000   +       .       Sequenc
+e "HSHBB.6" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 651
+39" ; note "*end8bp 65146" ; note "*start16bp 65112" ; note "*end16bp 65127"
+HSHBB   marscan misc_signal     65947   65963   0.000   +       .       Sequenc
+e "HSHBB.7" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 659
+47" ; note "*end8bp 65954" ; note "*start16bp 65948" ; note "*end16bp 65963"
      _________________________________________________________________
    
 Data files
@@ -197,6 +209,9 @@ Author(s)
 History
 
    Written (Jan 2001) - Gary Williams.
+   
+   Changed output file to standard EMBOSS report format (April 2002) -
+   Peter Rice
    
 Target users
 

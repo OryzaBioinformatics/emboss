@@ -103,22 +103,41 @@ IT IS DONE FOR YOU.
 <pre>
    Mandatory qualifiers:
   [-sequence]          seqall     Sequence database USA
-   -pattern            string     Search pattern
+   -pattern            string     The standard IUPAC one-letter codes for the
+                                  nucleotides are used.
+                                  The symbol `n' is used for a position where
+                                  any nucleotide is accepted.
+                                  Ambiguities are indicated by listing the
+                                  acceptable nucleotides for a given position,
+                                  between square parentheses `[ ]'. For
+                                  example: [ACG] stands for A or C or G.
+                                  Ambiguities are also indicated by listing
+                                  between a pair of curly brackets `{ }' the
+                                  nucleotides that are not accepted at a given
+                                  position. For example: {AG} stands for any
+                                  nucleotides except A and G.
+                                  Each element in a pattern is separated from
+                                  its neighbor by a `-'. (Optional in
+                                  fuzznuc).
+                                  Repetition of an element of the pattern can
+                                  be indicated by following that element with
+                                  a numerical value or a numerical range
+                                  between parenthesis. Examples: N(3)
+                                  corresponds to N-N-N, N(2,4) corresponds to
+                                  N-N or N-N-N or N-N-N-N.
+                                  When a pattern is restricted to either the
+                                  5' or 3' end of a sequence, that pattern
+                                  either starts with a `<' symbol or
+                                  respectively ends with a `>' symbol.
+                                  A period ends the pattern. (Optional in
+                                  fuzznuc).
+                                  For example, [CG](5)TG{A}N(1,5)C
    -mismatch           integer    Number of mismatches
-  [-outf]              outfile    Output file name
+  [-outfile]           report     (no help text) report value
 
    Optional qualifiers: (none)
    Advanced qualifiers:
    -complement         bool       Search complementary strand
-   -mmshow             bool       Show mismatches
-   -accshow            bool       Show accession numbers
-   -descshow           bool       Show descriptions
-   -usashow            bool       Showing the USA (Uniform Sequence Address)
-                                  of the matching sequences will turn your
-                                  output file into a 'list' file that can then
-                                  be read in by many other EMBOSS programs by
-                                  specifying it with a '@' in front of the
-                                  filename.
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -146,7 +165,15 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-pattern</td>
-<td>Search pattern</td>
+<td>The standard IUPAC one-letter codes for the nucleotides are used.
+The symbol `n' is used for a position where any nucleotide is accepted.
+Ambiguities are indicated by listing the acceptable nucleotides for a given position, between square parentheses `[ ]'. For example: [ACG] stands for A or C or G.
+Ambiguities are also indicated by listing between a pair of curly brackets `{ }' the nucleotides that are not accepted at a given position. For example: {AG} stands for any nucleotides except A and G.
+Each element in a pattern is separated from its neighbor by a `-'. (Optional in fuzznuc).
+Repetition of an element of the pattern can be indicated by following that element with a numerical value or a numerical range between parenthesis. Examples: N(3) corresponds to N-N-N, N(2,4) corresponds to N-N or N-N-N or N-N-N-N.
+When a pattern is restricted to either the 5' or 3' end of a sequence, that pattern either starts with a `<' symbol or respectively ends with a `>' symbol.
+A period ends the pattern. (Optional in fuzznuc).
+For example, [CG](5)TG{A}N(1,5)C</td>
 <td>Any string is accepted</td>
 <td><i>An empty string is accepted</i></td>
 </tr>
@@ -159,10 +186,10 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>[-outf]<br>(Parameter 2)</td>
-<td>Output file name</td>
-<td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.fuzznuc</td>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>(no help text) report value</td>
+<td>Report file</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -184,34 +211,6 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-complement</td>
 <td>Search complementary strand</td>
-<td>Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-mmshow</td>
-<td>Show mismatches</td>
-<td>Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-accshow</td>
-<td>Show accession numbers</td>
-<td>Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-descshow</td>
-<td>Show descriptions</td>
-<td>Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-usashow</td>
-<td>Showing the USA (Uniform Sequence Address) of the matching sequences will turn your output file into a 'list' file that can then be read in by many other EMBOSS programs by specifying it with a '@' in front of the filename.</td>
 <td>Yes/No</td>
 <td>No</td>
 </tr>
@@ -295,145 +294,64 @@ The search is case-independent, so 'AAA' matches 'aaa'.
 </H2>
 
 
-Here is the output from the example search:
-
 <p>
-<pre>
 
-        HHTETRA     1 AAGCTT
-        HHTETRA  1267 AAGCTT
-
-</pre>
-
-<p>
-It is composed of three columns of data.
-
-<ul>
-<li>The first column is the name of the sequence being searched.
-<li>The second is the start position of the match found.
-<li>The third is the actual sequence that was matched by the search pattern. 
-</ul>
-
-If the option '-mmshow' is used, then an extra column of data is output
-indicating how many mismatches there are in the match, for example:
-
+The output is a standard EMBOSS report file. 
 
 <p>
 
-<pre>
-% fuzznuc embl:hhtetra -mmshow
-Nucleic acid pattern search
-Search pattern: AAGCTT
-Number of mismatches [0]: 1
-Output file [hhtetra.fuzznuc]: stdout
-</pre>
+The results can be output in one of several styles by using the
+command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+<p>
+
+See:
+<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html">
+http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+
+
+<p>
+
+By default <b>fuzznuc</b> writes a 'seqtable' report file.
+
+<p>
+    
+The output from the above example is:
 
 <p>
 
 <pre>
+########################################
+# Program: fuzznuc
+# Rundate: Thu Apr 11 13:34:06 2002
+# Report_file: stdout
+########################################
 
-        HHTETRA       53     1 AAGCTG
-        HHTETRA      140     1 AAGCAT
-        HHTETRA      314     1 AACCTT
-        HHTETRA      350     1 AAGCCT
-        HHTETRA      374     1 AAGTTT
-        HHTETRA     1009     1 AAGTTT
-        HHTETRA     1259     1 AAGTTT
-        HHTETRA     1267     0 AAGCTT
+#=======================================
+#
+# Sequence: HHTETRA     from: 1   to: 1272
+# HitCount: 2
+#
+# Pattern: aagctt
+# Mismatch: 0
+# Complement: No
+#
+#=======================================
 
+  Start     End Mismatch Sequence
+      1       6        . aagctt
+   1267    1272        . aagctt
+
+#---------------------------------------
+#---------------------------------------
 </pre>
 
-<p>
-
-If the option '-desc' is used then the description of the sequence is
-displayed before each line showing the match details.  For example:
-
-<p>
-
-<pre>
-% fuzznuc embl:hhtetra -desc
-Nucleic acid pattern search
-Search pattern: AAGCTT
-Number of mismatches [0]: 
-Output file [hhtetra.fuzznuc]: stdout
-
-
-Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
-        HHTETRA        1 AAGCTT
-Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
-        HHTETRA     1267 AAGCTT
-</pre>
-
-<p>
-
-If the option '-acc' is also used then the accession number of the sequence is
-displayed before each line showing the match details.  For example:
-
-<p>
-
-<pre>
-% fuzznuc embl:hhtetra -desc -acc
-Nucleic acid pattern search
-Search pattern: AAGCTT
-Number of mismatches [0]: 
-Output file [hhtetra.fuzznuc]: stdout
-
-
-L46634 Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
-        HHTETRA        1 AAGCTT
-L46634 Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
-        HHTETRA     1267 AAGCTT
-</pre>
-
-<p>
-
-If the option '-usa' is used then the Uniform Sequence Address is output
-at the start of each line of match details.  For example:
-
-<p>
-
-<pre>
-% fuzznuc embl:hhtetra -usa
-Nucleic acid pattern search
-Search pattern: AAGCTT
-Number of mismatches [0]: 
-Output file [hhtetra.fuzznuc]: stdout
-
-
-embl-id:HHTETRA         HHTETRA        1 AAGCTT
-embl-id:HHTETRA         HHTETRA     1267 AAGCTT
-</pre>
-
-<p>
-
-This is useful because it turns the output into a 'list' file of
-sequence names that can then be read in by other EMBOSS programs when a
-'@' is put at the start of the file. 
-
-<p>
-
-If the option '-comp' is used, then the search will also be done on the
-reverse sense strand.  Any matches in that strand will be displayed with
-the start position using the forward-sense positions (it actually gives
-the position of the end of the match).  The matching sequence will be
-given in square brackets to distinguish this from a forward-sense match. 
-For example:
-
-<p>
-
-<pre>
-% fuzznuc embl:hhtetra -comp
-Nucleic acid pattern search
-Search pattern: AAGCTT
-Number of mismatches [0]: 
-Output file [hhtetra.fuzznuc]: stdout
-
-
-        HHTETRA        1 AAGCTT
-        HHTETRA     1267 AAGCTT
-        HHTETRA        1 [AAGCTT]
-        HHTETRA     1267 [AAGCTT]
-</pre>
 
 	
 <H2>

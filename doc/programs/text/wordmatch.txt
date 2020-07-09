@@ -34,12 +34,14 @@ Command line arguments
   [-asequence]         sequence   Sequence USA
   [-bsequence]         sequence   Sequence USA
    -wordsize           integer    Word size
-  [-outfile]           outfile    Output file name
+  [-outfile]           align      (no help text) align value
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -afeatout           featout    File for output of normal tab delimted gff's
-   -bfeatout           featout    File for output of normal tab delimted gff's
+   -afeatout           featout    File for output of normal tab delimited GFF
+                                  features
+   -bfeatout           featout    File for output of normal tab delimited GFF
+                                  features
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -54,14 +56,14 @@ Command line arguments
    (Parameter 2) Sequence USA Readable sequence Required
    -wordsize Word size Integer 2 or more 4
    [-outfile]
-   (Parameter 3) Output file name Output file <sequence>.wordmatch
+   (Parameter 3) (no help text) align value Alignment file
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
-   -afeatout File for output of normal tab delimted gff's Writeable
-   feature table unknown.gff
-   -bfeatout File for output of normal tab delimted gff's Writeable
-   feature table unknown.gff
+   -afeatout File for output of normal tab delimited GFF features
+   Writeable feature table unknown.gff
+   -bfeatout File for output of normal tab delimited GFF features
+   Writeable feature table unknown.gff
    
 Input file format
 
@@ -115,7 +117,7 @@ Diagnostic Error Messages
    
 Exit status
 
-   0 if successfull.
+   0 if successful.
    
 Known bugs
 

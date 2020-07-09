@@ -198,15 +198,37 @@ The input sequence can be one or more protein sequences.
 </H2>
 
 
-The output from sigcleave is a simple text one. Maxsite is the amino
-acid position immediately after the predicted cleavage site.
-Score is the calculated weight value for the predicted cleavage
-site.  Sequence shows the amino acid positions used to calculate the
-score with "-" used to indicate the predicted cleavage site.
+<p>
+
+The output is a standard EMBOSS report file. 
 
 <p>
 
-Here is a sample output:
+The results can be output in one of several styles by using the
+command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+<p>
+
+See:
+<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html">
+http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+
+
+<p>
+
+By default <b>sigcleave</b> writes a 'motif' report file.
+
+<p>
+
+The output from the above example is:
+
+<p>
 
 <pre>
 <hr>

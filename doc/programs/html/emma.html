@@ -822,16 +822,6 @@ IT IS DONE FOR YOU.
                                   residue. Increasing the gap extension
                                   penalty will make gaps shorter. Terminal
                                   gaps are not penalised.
-*  -unweighted         bool       The 'Transition weight' gives transitions (A
-                                  <--> G or C <--> T i.e. purine-purine or
-                                  pyrimidine-pyrimidine substitutions) a
-                                  weight between 0 and 1; a weight of zero
-                                  means that the transitions are scored as
-                                  mismatches, while a weight of 1 gives the
-                                  transitions the match score. For distantly
-                                  related DNA sequences, the weight should be
-                                  near to zero; for closely related sequences
-                                  it can be useful to assign a higher score.
    -[no]endgaps        bool       'End gap separation' treats end gaps just
                                   like internal gaps for the purposes of
                                   avoiding gaps that are too close (set by
@@ -1069,13 +1059,6 @@ We also supply an identity matrix which gives a score of 1.0 to two identical am
 <td>The penalty for extending a gap by 1 residue. Increasing the gap extension penalty will make gaps shorter. Terminal gaps are not penalised.</td>
 <td>Positive foating point number</td>
 <td>5.0</td>
-</tr>
-
-<tr>
-<td>-unweighted</td>
-<td>The 'Transition weight' gives transitions (A <--> G or C <--> T i.e. purine-purine or pyrimidine-pyrimidine substitutions) a weight between 0 and 1; a weight of zero means that the transitions are scored as mismatches, while a weight of 1 gives the transitions the match score. For distantly related DNA sequences, the weight should be near to zero; for closely related sequences it can be useful to assign a higher score.</td>
-<td>Yes/No</td>
-<td>No</td>
 </tr>
 
 <tr>
@@ -1494,6 +1477,7 @@ None.
 <tr><td><a href="plotcon.html">plotcon</a></td><td>Plots the quality of conservation of a sequence alignment</td></tr>
 <tr><td><a href="prettyplot.html">prettyplot</a></td><td>Displays aligned sequences, with colouring and boxing</td></tr>
 <tr><td><a href="showalign.html">showalign</a></td><td>Displays a multiple sequence alignment</td></tr>
+<tr><td><a href="tranalign.html">tranalign</a></td><td>Align nucleic coding regions given the aligned proteins</td></tr>
 </table>
 
 <!--

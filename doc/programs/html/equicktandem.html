@@ -113,10 +113,12 @@ IT IS DONE FOR YOU.
   [-sequence]          sequence   Sequence USA
    -maxrepeat          integer    Maximum repeat size
    -threshold          integer    Threshold score
-  [-outfile]           outfile    Output file name
+  [-outfile]           report     (no help text) report value
 
    Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Advanced qualifiers:
+   -origfile           outfile    Output file name
+
    General qualifiers:
   -help                bool       report command line options. More
                                   information on associated and general
@@ -157,9 +159,9 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>[-outfile]<br>(Parameter 2)</td>
-<td>Output file name</td>
-<td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.equicktandem</td>
+<td>(no help text) report value</td>
+<td>Report file</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -179,7 +181,10 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td>-origfile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.equicktandem</td>
 </tr>
 
 </table>
@@ -198,23 +203,60 @@ The input for equicktandem is a nucleotide sequence
 </H2>
 
 
-The output from equicktandem is an uncommented list of identified repeats.
-In a future version this will change to be annotated sequence features.
+<p>
+
+The output is a standard EMBOSS report file. 
 
 <p>
-The columns of the report show:
 
-<ol>
-<li>Score
-<li>Start base position
-<li>End base position
-<li>Repeat size
-<li>Repeat count
-</ol>
+The results can be output in one of several styles by using the
+command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+feattable, motif, regions, seqtable, simple, srs, table, tagseq
 
+<p>
+
+See:
+<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html">
+http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+
+
+<p>
+
+By default <b>equicktandem</b> writes a 'table' report file.
+
+<p>
+
+The output from the above example is:
+
+<p>
 
 <pre>
-   339        191        935  6 124
+########################################
+# Program: equicktandem
+# Rundate: Thu Apr 11 13:28:55 2002
+# Report_file: stdout
+########################################
+
+#=======================================
+#
+# Sequence: HHTETRA     from: 1   to: 1272
+# HitCount: 1
+#
+# Threshold: 20
+# Maxrepeat: 600
+#
+#=======================================
+
+  Start     End   Score   Size  Count
+    191     935     339      6    124
+
+#---------------------------------------
+#--------------------------------------- 
 </pre>
 
 <H2>

@@ -42,11 +42,7 @@ Command line arguments
   [-outfile]           outfile    Output file name
 
    Optional qualifiers: (none)
-   Advanced qualifiers:
-   -[no]obsexp         bool       Show observed/expected threshold line
-   -[no]cg             bool       Show CpG rich regions
-   -[no]pc             bool       Show percentage line
-
+   Advanced qualifiers: (none)
    General qualifiers:
   -help                bool       report command line options. More
                                   information on associated and general
@@ -66,9 +62,7 @@ Command line arguments
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
-   -[no]obsexp Show observed/expected threshold line Yes/No Yes
-   -[no]cg Show CpG rich regions Yes/No Yes
-   -[no]pc Show percentage line Yes/No Yes
+   (none)
    
 Input file format
 

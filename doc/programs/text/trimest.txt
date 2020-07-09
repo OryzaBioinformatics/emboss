@@ -10,8 +10,8 @@ Function
    
 Description
 
-   EST and mRNA sequences often have poy-A tails at the end of them. This
-   utility removes those poly-A tails.
+   EST and mRNA sequences often have poly-A tails at the end of them.
+   This utility removes those poly-A tails.
    
    EST sequences are often the reverse complement of the corresponding
    mRNA's forward sense and have poly-T tails at their 5' end. By
@@ -143,7 +143,7 @@ Output file format
    reverse-complemented by default. The description line has a comment
    appended about the changes made to the sequence.
    
-   For example, the sequence embl:hsfau is writetn out as:
+   For example, the sequence embl:hsfau is written out as:
      _________________________________________________________________
    
 >HSFAU X65923 H.sapiens fau mRNA [poly-A tail removed]
@@ -211,7 +211,9 @@ See also
    splitter     Split a sequence into (overlapping) smaller sequences
    swissparse   Retrieves sequences from swissprot using keyword search
    trimseq      Trim ambiguous bits off the ends of sequences
+   union        Reads sequence fragments and builds one sequence
    vectorstrip  Strips out DNA between a pair of vector sequences
+   yank         Reads a sequence range, appends the full USA to a list file
    
 Author(s)
 

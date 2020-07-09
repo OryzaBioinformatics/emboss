@@ -162,7 +162,7 @@ IT IS DONE FOR YOU.
 <pre>
    Mandatory qualifiers:
   [-sequence]          sequence   Sequence USA
-  [-outfile]           outfile    Output file name
+  [-outfile]           report     (no help text) report value
 
    Optional qualifiers:
    -full               bool       Provide full documentation for matching
@@ -201,9 +201,9 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>[-outfile]<br>(Parameter 2)</td>
-<td>Output file name</td>
-<td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.patmatmotifs</td>
+<td>(no help text) report value</td>
+<td>Report file</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -253,74 +253,120 @@ A protein sequence USA.
 
 
 <p>
-The output is a report of the start and end position of any matches of
-PROSITE entries to the input sequence. 
+
+The output is a standard EMBOSS report file. 
 
 <p>
-Optionally (using the qualifier '-full'), the full description of the
-prosite entry is also reported. 
+
+The results can be output in one of several styles by using the
+command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+feattable, motif, regions, seqtable, simple, srs, table, tagseq
 
 <p>
+
+See:
+<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html">
+http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+
+
+<p>
+
+By default <b>patmatmotifs</b> writes a 'dbmotif' report file.
+
+<p>
+
 The output from the above example follows:
 
 <p>
 
 <hr>
 <pre>
-Number of matches found in this Sequence = 1
+########################################
+# Program: patmatmotifs
+# Rundate: Thu Apr 11 13:53:51 2002
+# Report_file: 12s1_arath.patmatmotifs
+########################################
 
-Length of the sequence = 472 basepairs
-Start of match = position 282 of sequence
-End of match = position 304 of sequence
-Length of motif = 23
+#=======================================
+#
+# Sequence: 12S1_ARATH     from: 1   to: 472
+# HitCount: 1
+#
+# Full: Yes
+# Prune: Yes
+# Data_file: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data/PROSITE/pro
+site.lines
+#
+#=======================================
 
-patmatmotifs of 11S_SEED_STORAGE with 12S1_ARATH from 282 to 304
+Length = 23
+Start = position 282 of sequence
+End = position 304 of sequence
+ 
+
+Motif = 11S_SEED_STORAGE
+
 HGRHGNGLEETICSARCTDNLDDPSRADVYKPQ
      |                     |
    282                     304
 
-**********************************************
-* 11-S plant seed storage proteins signature *
-**********************************************
 
-Plant seed storage proteins, whose  principal function appears to be the major
-nitrogen  source for the developing plant,  can be classified, on the basis of
-their structure, into different families.  11-S are non-glycosylated  proteins
-which form hexameric structures [1,2].  Each of the subunits in the hexamer is
-itself composed of an acidic and a basic chain derived from a single precursor
-and linked  by a  disulfide bond.   This  structure is  shown in the following
-representation.
-
-                   +-------------------------+
-                   |                         |
-        xxxxxxxxxxxCxxxxxxxxxxxxxxxxxxxxxxNGxCxxxxxxxxxxxxxxxxxxxxxxx
-                                          *********
-        &lt;------Acidic-subunit-------------^gt;&lt;-----Basic-subunit------&gt;
-        &lt;-----------------About-480-to-500-residues-----------------&gt;
-
-'C': conserved cysteine involved in a disulfide bond.
-'*': position of the pattern.
-
-Proteins that belong to the 11-S family are: pea and broad bean legumins, rape
-cruciferin, rice glutelins,  cotton beta-globulins, soybean glycinins, pumpkin
-11-S globulin, oat globulin, sunflower helianthinin G3, etc.
-
-As a signature  pattern  for  this  family of proteins we used the region that
-includes the  conserved  cleavage  site between  the acidic and basic subunits
-(Asn-Gly) and a  proximal cysteine residue which is involved in the interchain
-disulfide bond.
-
--Consensus pattern: N-G-x-[DE](2)-x-[LIVMF]-C-[ST]-x(11,12)-[PAG]-D
-                    [C is involved in a disulfide bond]
--Sequences known to belong to this class detected by the pattern: ALL.
--Other sequence(s) detected in SWISS-PROT: NONE.
--Last update: June 1994 / Pattern and text revised.
-
-[ 1] Hayashi M., Mori H., Nishimura M., Akazawa T., Hara-Nishimura I.
-     Eur. J. Biochem. 172:627-632(1988).
-[ 2] Shotwell M.A., Afonso C., Davies E., Chesnut R.S., Larkins B.A.
-     Plant Physiol. 87:698-704(1988).
-***************
+#---------------------------------------
+#
+# Motif: 11S_SEED_STORAGE
+# Count: 1
+#
+# **********************************************
+# * 11-S plant seed storage proteins signature *
+# **********************************************
+#
+# Plant seed storage proteins, whose  principal function appears to be the major
+# nitrogen  source for the developing plant,  can be classified, on the basis of
+# their structure, into different families.  11-S are non-glycosylated  proteins
+# which form hexameric structures [1,2].  Each of the subunits in the hexamer is
+# itself composed of an acidic and a basic chain derived from a single precursor
+# and linked  by a  disulfide bond.   This  structure is  shown in the following
+# representation.
+#
+#                    +-------------------------+
+#                    |                         |
+#         xxxxxxxxxxxCxxxxxxxxxxxxxxxxxxxxxxNGxCxxxxxxxxxxxxxxxxxxxxxxx
+#                                           *********
+#         <------Acidic-subunit-------------><-----Basic-subunit------>
+#         <-----------------About-480-to-500-residues----------------->
+#
+# 'C': conserved cysteine involved in a disulfide bond.
+# '*': position of the pattern.
+#
+# Proteins that belong to the 11-S family are: pea and broad bean legumins, rape
+# cruciferin, rice glutelins,  cotton beta-globulins, soybean glycinins, pumpkin
+# 11-S globulin, oat globulin, sunflower helianthinin G3, etc.
+#
+# As a signature  pattern  for  this  family of proteins we used the region that
+# includes the  conserved  cleavage  site between  the acidic and basic subunits
+# (Asn-Gly) and a  proximal cysteine residue which is involved in the interchain
+# disulfide bond.
+#
+# -Consensus pattern: N-G-x-[DE](2)-x-[LIVMF]-C-[ST]-x(11,12)-[PAG]-D
+#                     [C is involved in a disulfide bond]
+# -Sequences known to belong to this class detected by the pattern: ALL.
+# -Other sequence(s) detected in SWISS-PROT: NONE.
+# -Last update: June 1994 / Pattern and text revised.
+#
+# [ 1] Hayashi M., Mori H., Nishimura M., Akazawa T., Hara-Nishimura I.
+#      Eur. J. Biochem. 172:627-632(1988).
+# [ 2] Shotwell M.A., Afonso C., Davies E., Chesnut R.S., Larkins B.A.
+#      Plant Physiol. 87:698-704(1988).
+#
+# ***************
+#
+#
+#---------------------------------------
 </pre>
 <hr>
 

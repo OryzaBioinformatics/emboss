@@ -102,12 +102,14 @@ IT IS DONE FOR YOU.
   [-asequence]         sequence   Sequence USA
   [-bsequence]         sequence   Sequence USA
    -wordsize           integer    Word size
-  [-outfile]           outfile    Output file name
+  [-outfile]           align      (no help text) align value
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -afeatout           featout    File for output of normal tab delimted gff's
-   -bfeatout           featout    File for output of normal tab delimted gff's
+   -afeatout           featout    File for output of normal tab delimited GFF
+                                  features
+   -bfeatout           featout    File for output of normal tab delimited GFF
+                                  features
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -149,9 +151,9 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>[-outfile]<br>(Parameter 3)</td>
-<td>Output file name</td>
-<td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.wordmatch</td>
+<td>(no help text) align value</td>
+<td>Alignment file</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -172,14 +174,14 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-afeatout</td>
-<td>File for output of normal tab delimted gff's</td>
+<td>File for output of normal tab delimited GFF features</td>
 <td>Writeable feature table</td>
 <td><i>unknown.gff</i></td>
 </tr>
 
 <tr>
 <td>-bfeatout</td>
-<td>File for output of normal tab delimted gff's</td>
+<td>File for output of normal tab delimited GFF features</td>
 <td>Writeable feature table</td>
 <td><i>unknown.gff</i></td>
 </tr>
@@ -268,7 +270,7 @@ None.
     Exit status
 </H2>
 
-    0 if successfull.
+    0 if successful.
 
 <H2>
     Known bugs

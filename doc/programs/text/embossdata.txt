@@ -111,6 +111,7 @@ Command line arguments
    PRINTS
    CVS
    CODONS
+   REBASE
    2, 3, 4
    
 Input file format

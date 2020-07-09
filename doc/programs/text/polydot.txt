@@ -115,7 +115,7 @@ Diagnostic Error Messages
    
 Exit status
 
-   0 if successfull.
+   0 if successful.
    
 Known bugs
 

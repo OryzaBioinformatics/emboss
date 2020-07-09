@@ -51,7 +51,7 @@ Command line arguments
                                   the properties of the sequence in that
                                   window. The window is incrementally moved
                                   along the sequence with the properties being
-                                  calcualted at each new position.
+                                  calculated at each new position.
    -shiftincrement     integer    This is the amount by which the window is
                                   moved at each increment in order to find the
                                   melting point and other properties along
@@ -106,7 +106,7 @@ Command line arguments
    properties of the sequence are determined by taking a short length of
    sequence known as a window and determining the properties of the
    sequence in that window. The window is incrementally moved along the
-   sequence with the properties being calcualted at each new position.
+   sequence with the properties being calculated at each new position.
    Integer from 1 to 100 20
    -shiftincrement This is the amount by which the window is moved at
    each increment in order to find the melting point and other properties
@@ -157,6 +157,20 @@ Output file format
    If a plot is not being produced, dan reports the sequence of each
    oligomer window, its melting temperature under the specified
    conditions and its GC content.
+   
+   The output is a standard EMBOSS report file.
+   
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+   
+   See:
+   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
+   further information on report formats.
+   
+   By default dan writes a 'seqtable' report file.
    
    This is the start and the end of the output file from the example.
 

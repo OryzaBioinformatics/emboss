@@ -121,13 +121,30 @@ Input file format
    
 Output file format
 
+   The output is a standard EMBOSS report file.
+   
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   feattable, motif, regions, seqtable, simple, srs, table, tagseq
+   
+   See:
+   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
+   further information on report formats.
+   
+   By default restrict writes a 'table' report file.
+   
    The output from restrict is a simple text one. The base number,
    restriction enzyme name, recognition site and cut positions are shown.
    Note that cuts are always to the right of the residue shown and that
-   5' cuts are referred to by their associated 3' number sequence. The
-   program reports enzymes that cut at two or four sites. The program
+   5' cuts are referred to by their associated 3' number sequence.
+   
+   The program reports enzymes that cut at two or four sites. The program
    also reports isoschizomers and enzymes having the same recognition
-   sequence but different cut sites. Here is part of a sample output:
+   sequence but different cut sites.
+   
+   Here is part of a sample output:
   __________________________________________________________________________
 
 ########################################

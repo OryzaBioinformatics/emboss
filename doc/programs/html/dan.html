@@ -122,7 +122,7 @@ IT IS DONE FOR YOU.
                                   the properties of the sequence in that
                                   window. The window is incrementally moved
                                   along the sequence with the properties being
-                                  calcualted at each new position.
+                                  calculated at each new position.
    -shiftincrement     integer    This is the amount by which the window is
                                   moved at each increment in order to find the
                                   melting point and other properties along
@@ -190,7 +190,7 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-windowsize</td>
-<td>The values of melting point and other thermodynamic properties of the sequence are determined by taking a short length of sequence known as a window and determining the properties of the sequence in that window. The window is incrementally moved along the sequence with the properties being calcualted at each new position.</td>
+<td>The values of melting point and other thermodynamic properties of the sequence are determined by taking a short length of sequence known as a window and determining the properties of the sequence in that window. The window is incrementally moved along the sequence with the properties being calculated at each new position.</td>
 <td>Integer from 1 to 100</td>
 <td>20</td>
 </tr>
@@ -326,6 +326,36 @@ oligomer window, its melting temperature under the specified conditions
 and its GC content. 
 
 <p>
+
+<p>
+
+The output is a standard EMBOSS report file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+<p>
+
+See:
+<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html">
+http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+
+
+<p>
+
+By default <b>dan</b> writes a 'seqtable' report file.
+
+
+<p>
+
 This is the start and the end of the output file from the example. 
 
 <pre>

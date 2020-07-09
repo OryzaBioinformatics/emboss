@@ -73,7 +73,7 @@ Command line arguments
    (Parameter 1) Sequence USA Readable sequence Required
    [-sequenceb]
    (Parameter 2) Sequence USA Readable sequence Required
-   -wordsize Word size Integer 2 or more 4
+   -wordsize Word size Integer 2 or more 10
    -data Output the match data to a file instead of plotting it Yes/No No
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,

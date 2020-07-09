@@ -34,22 +34,40 @@ Command line arguments
 
    Mandatory qualifiers:
   [-sequence]          seqall     Sequence database USA
-   -pattern            string     Search pattern
+   -pattern            string     The standard IUPAC one-letter codes for the
+                                  amino acids are used.
+                                  The symbol `x' is used for a position where
+                                  any amino acid is accepted.
+                                  Ambiguities are indicated by listing the
+                                  acceptable amino acids for a given position,
+                                  between square parentheses `[ ]'. For
+                                  example: [ALT] stands for Ala or Leu or Thr.
+                                  Ambiguities are also indicated by listing
+                                  between a pair of curly brackets `{ }' the
+                                  amino acids that are not accepted at a given
+                                  position. For example: {AM} stands for any
+                                  amino acid except Ala and Met.
+                                  Each element in a pattern is separated from
+                                  its neighbor by a `-'. (Optional in
+                                  fuzzpro).
+                                  Repetition of an element of the pattern can
+                                  be indicated by following that element with
+                                  a numerical value or a numerical range
+                                  between parenthesis. Examples: x(3)
+                                  corresponds to x-x-x, x(2,4) corresponds to
+                                  x-x or x-x-x or x-x-x-x.
+                                  When a pattern is restricted to either the
+                                  N- or C-terminal of a sequence, that pattern
+                                  either starts with a `<' symbol or
+                                  respectively ends with a `>' symbol.
+                                  A period ends the pattern. (Optional in
+                                  fuzzpro).
+                                  For example, [DE](2)HS{P}X(2)PX(2,4)C
    -mismatch           integer    Number of mismatches
-  [-outf]              outfile    Output file name
+  [-outfile]           report     (no help text) report value
 
    Optional qualifiers: (none)
-   Advanced qualifiers:
-   -mmshow             bool       Show mismatches
-   -accshow            bool       Show accession numbers
-   -usashow            bool       Showing the USA (Uniform Sequence Address)
-                                  of the matching sequences will turn your
-                                  output file into a 'list' file that can then
-                                  be read in by many other EMBOSS programs by
-                                  specifying it with a '@' in front of the
-                                  filename.
-   -descshow           bool       Show descriptions
-
+   Advanced qualifiers: (none)
    General qualifiers:
   -help                bool       report command line options. More
                                   information on associated and general
@@ -59,21 +77,31 @@ Command line arguments
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
-   -pattern Search pattern Any string is accepted An empty string is
+   -pattern The standard IUPAC one-letter codes for the amino acids are
+   used. The symbol `x' is used for a position where any amino acid is
+   accepted. Ambiguities are indicated by listing the acceptable amino
+   acids for a given position, between square parentheses `[ ]'. For
+   example: [ALT] stands for Ala or Leu or Thr. Ambiguities are also
+   indicated by listing between a pair of curly brackets `{ }' the amino
+   acids that are not accepted at a given position. For example: {AM}
+   stands for any amino acid except Ala and Met. Each element in a
+   pattern is separated from its neighbor by a `-'. (Optional in
+   fuzzpro). Repetition of an element of the pattern can be indicated by
+   following that element with a numerical value or a numerical range
+   between parenthesis. Examples: x(3) corresponds to x-x-x, x(2,4)
+   corresponds to x-x or x-x-x or x-x-x-x. When a pattern is restricted
+   to either the N- or C-terminal of a sequence, that pattern either
+   starts with a `<' symbol or respectively ends with a `>' symbol. A
+   period ends the pattern. (Optional in fuzzpro). For example,
+   [DE](2)HS{P}X(2)PX(2,4)C Any string is accepted An empty string is
    accepted
    -mismatch Number of mismatches Integer 0 or more 0
-   [-outf]
-   (Parameter 2) Output file name Output file <sequence>.fuzzpro
+   [-outfile]
+   (Parameter 2) (no help text) report value Report file
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
-   -mmshow Show mismatches Yes/No No
-   -accshow Show accession numbers Yes/No No
-   -usashow Showing the USA (Uniform Sequence Address) of the matching
-   sequences will turn your output file into a 'list' file that can then
-   be read in by many other EMBOSS programs by specifying it with a '@'
-   in front of the filename. Yes/No No
-   -descshow Show descriptions Yes/No No
+   (none)
    
 Input file format
 
@@ -115,99 +143,76 @@ Input file format
    
 Output file format
 
-   Here is the output from the example search:
+   The output is a standard EMBOSS report file.
    
-
-     ACT1_FUGRU    53 YVGDEAQSKRG
-     ACT2_FUGRU    53 YVGDEAQSKRG
-     ACT3_FUGRU    53 YVGDEAQSKRG
-     ACTC_FUGRU    55 YVGDEAQSKRG
-     ACTS_FUGRU    55 YVGDEAQSKRG
-     ACTT_FUGRU    55 YVGDEAQSKRG
-
-   It is composed of three columns of data.
+   The results can be output in one of several styles by using the
+   command-line qualifier -rformat xxx, where 'xxx' is replaced by the
+   name of the required format. The available format names are: embl,
+   genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+   feattable, motif, regions, seqtable, simple, srs, table, tagseq
    
-     * The first column is the name of the sequence being searched.
-     * The second is the start position of the match found.
-     * The third is the actual sequence that was matched by the search
-       pattern.
-       
-   If the option '-mmshow' is used, then an extra column of data is
-   output indicating how many mismatches there are:
+   See:
+   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
+   further information on report formats.
    
-% fuzzpro -mmshow
-Protein pattern search
-Input sequence(s): sw:100k_rat
-Search pattern: RARLX(3)R
-Number of mismatches [0]: 1
-Output file [100k_rat.fuzzpro]: stdout
-
-       100K_RAT   613     1 EARLNCFRN
-
-   If the option '-desc' is used then the description of the sequence is
-   displayed before each line showing the match details. For example:
+   By default fuzzzpro writes a 'seqtable' report file.
    
-% fuzzpro 'sw:*_HUMAN' -desc
-Protein pattern search
-Search pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
-Number of mismatches [0]:
-Output file [143b_human.fuzzpro]: stdout
-
-ACTIN, AORTIC SMOOTH MUSCLE (ALPHA-ACTIN 2).
-     ACTA_HUMAN    55 YVGDEAQSKRG
-ACTIN, CYTOPLASMIC 1 (BETA-ACTIN).
-     ACTB_HUMAN    53 YVGDEAQSKRG
-ACTIN, ALPHA CARDIAC.
-     ACTC_HUMAN    55 YVGDEAQSKRG
-ACTIN, CYTOPLASMIC 2 (GAMMA-ACTIN).
-     ACTG_HUMAN    53 YVGDEAQSKRG
-ACTIN, GAMMA-ENTERIC SMOOTH MUSCLE (ALPHA-ACTIN 3).
-     ACTH_HUMAN    54 YVGDEAQSKRG
-ACTIN, ALPHA SKELETAL MUSCLE (ALPHA-ACTIN 1).
-     ACTS_HUMAN    55 YVGDEAQSKRG
-
-   If the option '-acc' is also used then the accession number of the
-   sequence is displayed before each line showing the match details. For
-   example:
+   The output from the above example is:
    
-% fuzzpro 'sw:*_HUMAN' -desc -acc
-Protein pattern search
-Search pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
-Number of mismatches [0]:
-Output file [143b_human.fuzzpro]: stdout
+########################################
+# Program: fuzzpro
+# Rundate: Thu Apr 11 13:38:06 2002
+# Report_file: 100k_rat.fuzzpro
+########################################
 
-P03996 ACTIN, AORTIC SMOOTH MUSCLE (ALPHA-ACTIN 2).
-     ACTA_HUMAN    55 YVGDEAQSKRG
-P02570 ACTIN, CYTOPLASMIC 1 (BETA-ACTIN).
-     ACTB_HUMAN    53 YVGDEAQSKRG
-P04270 ACTIN, ALPHA CARDIAC.
-     ACTC_HUMAN    55 YVGDEAQSKRG
-P02571 ACTIN, CYTOPLASMIC 2 (GAMMA-ACTIN).
-     ACTG_HUMAN    53 YVGDEAQSKRG
-P12718 ACTIN, GAMMA-ENTERIC SMOOTH MUSCLE (ALPHA-ACTIN 3).
-     ACTH_HUMAN    54 YVGDEAQSKRG
-P02568 ACTIN, ALPHA SKELETAL MUSCLE (ALPHA-ACTIN 1).
-     ACTS_HUMAN    55 YVGDEAQSKRG
+#=======================================
+#
+# Sequence: ACT1_ABSGL     from: 1   to: 140
+# HitCount: 1
+#
+# Pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+# Mismatch: 0
+#
+#=======================================
 
-   If the option '-usa' is used then the Uniform Sequence Address is
-   output at the start of each line of match details. For example:
-   
-% fuzzpro 'sw:*_HUMAN' -usa
-Protein pattern search
-Search pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
-Number of mismatches [0]:
-Output file [143b_human.fuzzpro]: stdout
-sw-id:ACTA_HUMAN             ACTA_HUMAN    55 YVGDEAQSKRG
-sw-id:ACTB_HUMAN             ACTB_HUMAN    53 YVGDEAQSKRG
-sw-id:ACTC_HUMAN             ACTC_HUMAN    55 YVGDEAQSKRG
-sw-id:ACTG_HUMAN             ACTG_HUMAN    53 YVGDEAQSKRG
-sw-id:ACTH_HUMAN             ACTH_HUMAN    54 YVGDEAQSKRG
-sw-id:ACTS_HUMAN             ACTS_HUMAN    55 YVGDEAQSKRG
+  Start     End Mismatch Sequence
+     55      65        . YVGDEAQSKRG
 
-   This is useful because it turns the output into a 'list' file of
-   sequence names that can then be read in by other EMBOSS programs when
-   a '@' is put at the start of the file.
-   
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACT1_ACACA     from: 1   to: 375
+# HitCount: 1
+#
+# Pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+# Mismatch: 0
+#
+#=======================================
+
+  Start     End Mismatch Sequence
+     53      63        . YVGDEAQSKRG
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACT1_ARATH     from: 1   to: 377
+# HitCount: 1
+#
+# Pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+# Mismatch: 0
+#
+#=======================================
+
+  Start     End Mismatch Sequence
+     55      65        . YVGDEAQSKRG
+
+#---------------------------------------
+#---------------------------------------
+
+etc.
+
 Data files
 
    None.
