@@ -1623,6 +1623,8 @@ static AjBool seqReadGcg (AjPSeq thys, AjPSeqin seqin)
     char *p=NULL;
   
     ok = ajFileBuffGet (buff, &rdline);
+    if (!ok)
+      return ajFalse;
     bufflines++;
 
     ajDebug ("seqReadGcg first line ok: %B\n", ok);
@@ -1701,7 +1703,9 @@ static AjBool seqReadNcbi (AjPSeq thys, AjPSeqin seqin)
     ajint bufflines = 0;
     AjBool ok;
 
-    (void) ajFileBuffGet (buff, &rdline);
+    ok = ajFileBuffGet (buff, &rdline);
+    if (!ok)
+      return ajFalse;
 
     (void) ajStrAssC(&id,"");
     (void) ajStrAssC(&acc,"");
@@ -1774,16 +1778,20 @@ static AjBool seqReadSelex(AjPSeq thys, AjPSeqin seqin)
     ajint       i;
     char        c='\0';
     AjBool      first=ajTrue;
+    ajint       filestat;
     
     line = ajStrNew();
 
     
     if(!seqin->Selex)
     {
+        if (ajFileBuffEof(buff) && ajFileStdin(ajFileBuffFile(buff)))
+	  return ajFalse;
 	ajFileBuffClear(buff,-1);
 	ajFileBuffReset(buff);
 	buff->Fpos = 0;
-	ajFileSeek(buff->File, 0L, 0);
+	filestat = ajFileSeek(buff->File, 0L, 0);
+	ajDebug ("filestat %d\n", filestat);
 
 	/* First count the sequences, and get any header information */
 	while(!isseq && (ok=ajFileBuffGet(buff,&line)))
@@ -1916,6 +1924,8 @@ static AjBool seqReadStockholm(AjPSeq thys, AjPSeqin seqin)
     {
 	lpos = ajFileTell(buff->File);
 	ok=ajFileBuffGet(buff,&line);
+	if (!ok)
+	  return ajFalse;
 
 	if(!ok || !ajStrPrefixC(line,"# STOCKHOLM 1.0"))
 	{
@@ -2735,6 +2745,8 @@ static AjBool seqReadClustal (AjPSeq thys, AjPSeqin seqin)
     {					/* start of file */
 	ok = ajFileBuffGet (buff, &rdline);
 	bufflines++;
+	if (!ok)
+	  return ajFalse;
 
 	ajDebug("first line:\n'%S'\n", rdline);
 
@@ -2923,6 +2935,8 @@ static AjBool seqReadPhylip (AjPSeq thys, AjPSeqin seqin)
     if (!seqin->Data)
     {	/* start of file */
 	ok = ajFileBuffGet (buff, &rdline);
+	if (!ok)
+	  return ajFalse;
 	bufflines++;
 
 	ajDebug("first line:\n'%S'\n", rdline);
@@ -3117,6 +3131,8 @@ static AjBool seqReadHennig86 (AjPSeq thys, AjPSeqin seqin)
     if (!seqin->Data)
     {					/* start: load in file */
 	ok = ajFileBuffGet (buff, &rdline);
+	if (!ok)
+	  return ajFalse;
 	bufflines++;
 
 	ajDebug("first line:\n'%S'\n", rdline);
@@ -3668,6 +3684,8 @@ static AjBool seqReadMsf (AjPSeq thys, AjPSeqin seqin)
     if (!seqin->Data)
     {
 	ok = ajFileBuffGet (buff, &rdline);
+	if (!ok)
+	  return ajFalse;
 	bufflines++;
 
 	if (ajStrPrefixC(rdline, "!!"))
@@ -4130,8 +4148,11 @@ static AjBool seqReadGenbank (AjPSeq thys, AjPSeqin seqin)
     if (!ftfmt)
 	ajStrAssC (&ftfmt, "genbank");
 
-    (void) ajFileBuffGet (buff, &rdline);
+    if (!ajFileBuffGet (buff, &rdline))
+      return ajFalse;
     bufflines++;
+
+    ok = ajTrue;
 
     /* for GCG formatted databases */
 
@@ -4142,9 +4163,14 @@ static AjBool seqReadGenbank (AjPSeq thys, AjPSeqin seqin)
       ok = ajTrue;
       while (ok && ajStrPrefixC(rdline, " "))
       {
-	ajFileBuffGet (buff, &rdline);
+	ok = ajFileBuffGet (buff, &rdline);
  	bufflines++;
       }
+    }
+    if (!ok)
+    {
+      ajFileBuffReset (buff);
+      return ajFalse;
     }
 
     /* This loop necessary owing to headers on GB distro files */
@@ -4172,8 +4198,9 @@ static AjBool seqReadGenbank (AjPSeq thys, AjPSeqin seqin)
     seqSetName (&thys->Name, token);
 
     ok = ajFileBuffGetStore(buff, &rdline, seqin->Text, &thys->TextPtr);
-    while (ok && !ajStrPrefixC(rdline, "ORIGIN") && !ajStrPrefixC(rdline,
-								  "BASE COUNT"))
+    while (ok &&
+	   !ajStrPrefixC(rdline, "ORIGIN") &&
+	   !ajStrPrefixC(rdline, "BASE COUNT"))
     {
 	done = ajFalse;
 	bufflines++;
@@ -4430,16 +4457,24 @@ static AjBool seqReadAbi (AjPSeq thys, AjPSeqin seqin)
     AjPStr smpl=NULL;
     static AjPRegexp dotsexp = NULL;
     AjPFile fp = ajFileBuffFile (buff);
+    ajint filestat;
 
+    ajDebug("seqReadAbi file %F\n", fp);
     /* ajFileBuffTraceFull(buff, 10, 10); */
+
+    if (ajFileBuffEnd(buff))
+      return ajFalse;
+
     if(!ajSeqABITest(fp))
     {
+        ajDebug("seqReadAbi ajSeqABITest failed on %F\n", fp);
 	ajFileBuffResetPos(buff);
 	return ajFalse;
     }
 
-    ajFileSeek(fp,0L,0);
-
+    filestat = ajFileSeek(fp,0L,0);
+    ajDebug ("filestat %d\n", filestat);
+    
     numBases = ajSeqABIGetNBase(fp);
     /* Find BASE tag & get offset                    */
     baseO = ajSeqABIGetBaseOffset(fp);
@@ -4453,7 +4488,7 @@ static AjBool seqReadAbi (AjPSeq thys, AjPSeqin seqin)
     sample = ajStrNew();
     ajSeqABISampleName(fp, &sample);
 
-    /* replace dots in the sample name with undescore */
+    /* replace dots in the sample name with underscore */
     dotsexp = ajRegCompC ("^(.*)[.](.*)$");
     smpl = ajStrNew();
 
@@ -4471,7 +4506,7 @@ static AjBool seqReadAbi (AjPSeq thys, AjPSeqin seqin)
     
     ajSeqSetNuc (thys);
 
-    ajFileNext(buff->File);
+    ajFileBuffClear(buff, -1);
     buff->File->End=ajTrue;
 
     ajStrDel(&smpl);
@@ -5141,7 +5176,7 @@ static AjBool seqUsaProcess (AjPSeq thys, AjPSeqin seqin)
 		if (accstat)
 		  return ajTrue;
 
-		ajDebug ("Database '%S' : access method '%s' failed",
+		ajDebug ("Database '%S' : access method '%s' failed\n",
 			 qry->DbName, qry->Access->Name);
 		return ajFalse;
 	    }
