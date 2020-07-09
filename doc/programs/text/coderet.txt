@@ -1,0 +1,276 @@
+
+                              EMBOSS: coderet
+     _________________________________________________________________
+   
+                                Program coderet
+                                       
+Function
+
+   Extract CDS, mRNA and translations from feature tables
+   
+Description
+
+   The feature table of sequence database entries often have sections
+   like this:
+   
+   This specifies that the coding sequence for the gene is constructed by
+   joining several sections of code, many of which are in other entries
+   in this database.
+     _________________________________________________________________
+   
+FT   CDS             join(U21925.1:818..987,U21926.1:258..420,
+FT                   U21927.1:428..520,U21928.1:196..336,U21929.1:279..415,
+FT                   U21930.1:895..1014,516..708)
+     _________________________________________________________________
+   
+   or:
+   
+   This specifies that the messenger RNA sequence for the gene is
+   constructed by joining several sections of code, many of which are in
+   other entries in this database.
+     _________________________________________________________________
+   
+FT   mRNA            join(M88628.1:1006..1318,M88629.1:221..342,
+FT                   M88630.1:101..223,M88631.1:46..258,M88632.1:104..172,
+FT                   M88633.1:387..503,M88634.1:51..272,M88635.1:303..564,
+FT                   M88635.1:849..1020,M88636.1:282..375,M88637.1:39..253,
+FT                   M88638.1:91..241,M88639.1:168..377,M88640.1:627..3732,
+FT                   M88641.1:158..311,M88642.1:1051..1263,M88642.1:1550..1778,
+FT                   M88642.1:1986..2168,M88642.1:3904..4020,
+FT                   M88642.1:4627..4698,M88643.1:39..124,M88644.1:42..197,
+FT                   M88645.1:542..686,M88646.1:75..223,M88647.1:109..285,
+FT                   253..2211)
+     _________________________________________________________________
+   
+   or:
+   
+   This specifies that the translation of the coding region is as
+   follows.
+     _________________________________________________________________
+   
+FT                   /translation="MAQDSVDLSCDYQFWMQKLSVWDQASTLETQQDTCLHVAQFQEF
+L
+FT                   RKMYEALKEMDSNTVIERFPTIGQLLAKACWNPFILAYDESQKILIWCLCCLINKEPQ
+N
+FT                   SGQSKLNSWIQGVLSHILSALRFDKEVALFTQGLGYAPIDYYPGLLKNMVLSLASELR
+E
+FT                   NHLNGFNTQRRMAPERVASLSRVCVPLITLTDVDPLVEALLICHGREPQEILQPEFFE
+A
+FT                   VNEAILLKKISLPMSAVVCLWLRHLPSLEKAMLHLFEKLISSERNCLRRIECFIKDSS
+L
+FT                   PQAACHPAIFRVDEMFRCALLETDGALEIIATIQVFTQCFVEALEKASKQLRFALKTY
+F
+FT                   PYTSPSLAMVLLQDPQDIPRGHWLQTLKHISELLREAVEDQTHGSCGGPFESWFLFIH
+F
+FT                   GGWAEMVAEQLLMSAAEPPTALLWLLAFYYGPRDGRQQRAQTMVQVKAVLGHLLAMSR
+S
+FT                   SSLSAQDLQTVAGQGTDTDLRAPAQQLIRHLLLNFLLWAPGGHTIAWDVITLMAHTAE
+I
+FT                   THEIIGFLDQTLYRWNRLGIESPRSEKLARELLKELRTQV"
+     _________________________________________________________________
+   
+   It is often a tedious and error-prone job to extract the several
+   sections of these sequences from the database entries and to join them
+   together to construct the indicated finished sequence.
+   
+   coderet does this job for you.
+   
+   You specify the sequence containing the feature table and it extracts
+   the required CDS, mRNA and/or protein sequences specified by this
+   feature table. If any sequences are in other entries of that database,
+   they are automatically fetched and incorporated correctly into the
+   final sequence.
+   
+   The translations are not made from the coding sequence, they are
+   extracted directly from the translation sequence held in the feature
+   table.
+   
+Usage
+
+   Here is a sample session with coderet:
+   
+   The EMBL sequence X03487's feature table is as follows:
+     _________________________________________________________________
+   
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..512
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT   misc_feature    65..70
+FT                   /note="GGGCGG box"
+FT   misc_feature    103..108
+FT                   /note="GGGCGG box"
+FT   misc_feature    126..131
+FT                   /note="GGGCGG box"
+FT   promoter        150..154
+FT                   /note="put. TATA box"
+FT   mRNA            179..500
+FT                   /note="exon 1"
+FT   CDS             join(387..500,X03488.1:50..196,X03488.1:453..578,
+FT                   X03488.1:674..838)
+FT                   /db_xref="SWISS-PROT:P02794"
+FT                   /label=apoh_cds
+FT                   /product="apoferritin H subunit"
+FT                   /protein_id="CAA27205.1"
+FT                   /translation="MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDR
+D
+FT                   DVALKNFAKYFLHQSHEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMEC
+A
+FT                   LHLEKNVNQSLLELHKLATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAP
+E
+FT                   SGLAEYLFDKHTLGDSDNES"
+FT   intron          501..>512
+FT                   /note="intron I"
+     _________________________________________________________________
+   
+   This means that the mRNA sequence is from position 179 to 500 in this
+   sequence.
+   The coding sequence is formed by joining the region from 387 to 500 in
+   this sequence together with regions from two other entries in this
+   database: X03488 and X03488.
+   The translation of the coding sequence is also given.
+   
+   To extract all of the CDS, mRNA and the protein translations, type:
+   
+% coderet
+Extract CDS, mRNA and translations from feature tables
+Input sequence(s): embl:X03487
+Output sequence [hsferg1.fasta]:
+
+   The result is as follows:
+     _________________________________________________________________
+   
+>x03487_cds_1
+atgacgaccgcgtccacctcgcaggtgcgccagaactaccaccaggactcagaggccgcc
+atcaaccgccagatcaacctggagctctacgcctcctacgtttacctgtccatgtcttac
+tactttgaccgcgatgatgtggctttgaagaactttgccaaatactttcttcaccaatct
+catgaggagagggaacatgctgagaaactgatgaagctgcagaaccaacgaggtggccga
+atcttccttcaggatatcaagaaaccagactgtgatgactgggagagcgggctgaatgca
+atggagtgtgcattacatttggaaaaaaatgtgaatcagtcactactggaactgcacaaa
+ctggccactgacaaaaatgacccccatttgtgtgacttcattgagacacattacctgaat
+gagcaggtgaaagccatcaaagaattgggtgaccacgtgaccaacttgcgcaagatggga
+gcgcccgaatctggcttggcggaatatctctttgacaagcacaccctgggagacagtgat
+aatgaaagctaa
+>x03487_mrna_1
+cagacgttcttcgccgagagtcgtcggggtttcctgcttcaacagtgcttggacggaacc
+cggcgctcgttccccaccccggccggccgcccatagccagccctccgtcgacctcttcac
+cgcaccctcggactgccccaaggcccccgccgccgctccagcgccgcgcagccaccgccg
+ccgccgccgcctctccttagtcgccgccatgacgaccgcgtccacctcgcaggtgcgcca
+gaactaccaccaggactcagaggccgccatcaaccgccagatcaacctggagctctacgc
+ctcctacgtttacctgtccatg
+>x03487_pro_1
+MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDRDDVALKNFAKYFLHQS
+HEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMECALHLEKNVNQSLLELHK
+LATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPESGLAEYLFDKHTLGDSD
+NES
+     _________________________________________________________________
+   
+   Note that there is a mixture of nucleic and protein sequences in this
+   file
+   
+   To only extract the mRNA sequence, type:
+   
+% coderet -nocds -notranslation
+Extract CDS, mRNA and translations from feature tables
+Input sequence(s): embl:X03487
+Output sequence [hsferg1.fasta]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-seqall]            seqall     Sequence database USA
+  [-seqout]            seqout     Output sequence USA
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -[no]cds            bool       Extract CDS sequences
+   -[no]mrna           bool       Extract mrna sequences
+   -[no]translation    bool       Extract translated sequences
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-seqall]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-seqout]
+   (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -[no]cds Extract CDS sequences Yes/No Yes
+   -[no]mrna Extract mrna sequences Yes/No Yes
+   -[no]translation Extract translated sequences Yes/No Yes
+   
+Input file format
+
+   USA of one or more nucleic sequences having CDS, mRNA or translation
+   headings in their feature tables.
+   
+Output file format
+
+   The output is a sequence file containing any CDS, mRNA and protein
+   translation sequences as specified by the feature table of the
+   sequence(s).
+   
+   One or more of CDS, mRNA, translation can be excluded from the output
+   by using the appropriate qualifiers to the program (i.e. -nocds, etc.)
+   
+   The ID names of the output sequences are constructed from the name of
+   the input sequence, the type of feature being output (i.e. cds, mrna,
+   pro) and a unique ordinal number for this type to distinguish it from
+   others in this sequence. The name, type and number of separated by
+   underscore characters. Thus the second CDS feature in the sequence
+   'HSXYZ' would be named 'HSXYZ_cds_2'.
+   
+   The translations are not made from the coding sequence, they are
+   extracted directly from the translation sequence held in the feature
+   table.
+   
+Data files
+
+   None.
+   
+Notes
+
+   The translations are not made from the coding sequence, they are
+   extracted directly from the translation sequence held in the feature
+   table.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (Nov 2000) - Alan Bleasby.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
