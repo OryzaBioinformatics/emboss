@@ -14,6 +14,10 @@ DB qapfasta  [ type: P format: fasta method: emblcd
   dir: $emboss_qadata/data
   indexdir: $emboss_qadata/qa/dbifasta-swiss ]
 
+DB qawfasta  [ type: N format: fasta method: emblcd
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbifasta-worm ]
+
 DB qanblast [ type: N format: ncbi method: blast
   dir: $emboss_qadata/data
   indexdir: $emboss_qadata/qa/dbiblast-ex ]
