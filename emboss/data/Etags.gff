@@ -1,21 +1,30 @@
+note QTEXT
 allele QTEXT
-anticodon TEXT
+anticodon SPECIAL
+#      (pos:<base_range>,aa:<amino_acid>)
 bound_moiety QTEXT
 cell_line QTEXT
 cell_type QTEXT
 chromosome QTEXT
 chloroplast VOID
 chromoplast VOID
-citation SBI       ??=[3]                      
+citation SPECIAL
+#       [3]                      
 clone QTEXT
 clone_lib QTEXT
-codon TEXT (seq:"ttt", aa:Leu)
+codon SPECIAL
+#   (seq:"ttt", aa:Leu)
+# seq is 3 bases - use join() location for ribosomal slippage
+# use aa:OTHER for amino acids not on approved list
 codon_start  LIMITED "1,2,3"
-cons_splice TEXT (5'site:YES, 3'site:NO)
+cons_splice SPECIAL
+# (5'site:YES, 3'site:NO)
+# ABSENT also allowed if beyond end e.g.  (5'site:NO,3'site:ABSENT)
 country QTEXT
 cultivar QTEXT
 cyanelle VOID
-db_xref QTEXT
+db_xref QSPECIAL
+#      "<database>:<identifier>"
 dev_stage QTEXT
 direction  LIMITED "left,right,both" 
 EC_number QTEXT
@@ -36,9 +45,8 @@ map QTEXT
 macronuclear VOID
 mitochondrion VOID
 mod_base TEXT
-note QTEXT
 number TEXT
-organelle LIMITED "mitochondrion,nucleomorph,etc.."
+organelle QLIMITED mitochondrion,nucleomorph,plastid,mitochondrion:kinetoplast,plastid:chloroplast,plastid:apicoplast,plastid:chromoplast,plastid:cyanelle,platid:leucoplast,plastid:protoplastid
 organism QTEXT
 partial VOID
 PCR_conditions QTEXT
@@ -46,16 +54,18 @@ pop_variant QTEXT
 phenotype QTEXT
 plasmid QTEXT
 product QTEXT
-protein_id QTEXT
+protein_id QSPECIAL
+#   "AAA12345.1"
 proviral VOID
 pseudo VOID
 rearranged VOID
-replace QTEXT
+replace QSPECIAL
+#      "ACGT"
 rpt_family QTEXT
 rpt_type LIMITED "tandem,inverted,flanking,terminal,direct,dispersed,other"
-rpt_unit TEXT 
-rpt_unit TEXT    ???202..245
-sequenced_mol LIMITED "cDNA,cDNA to genomic RNA,cDNA to mRNA,cDNA to other RNA,cDNA to rRNA,DNA,mRNA,RNA,rRNA,scRNA,snRNA,tRNA"
+rpt_unit SPECIAL
+#   202..245
+sequenced_mol QLIMITED cDNA,cDNA to genomic RNA,cDNA to mRNA,cDNA to other RNA,cDNA to rRNA,DNA,mRNA,RNA,rRNA,scRNA,snRNA,tRNA
 serotype QTEXT
 sex QTEXT
 specific_host QTEXT
@@ -67,12 +77,40 @@ sub_species TEXT
 sub_strain TEXT
 tissue_lib QTEXT
 tissue_type QTEXT
-translation QTEXT 
-transl_except QTEXT  ???(pos:213..215,aa:Trp)
-transl_table NUMBER
+translation QSPECIAL 
+transl_except QSPECIAL
+#  (pos:213..215,aa:Trp)
+transl_table LIMITED 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,21,22,23
+# FTv3.0 has no definition for 17, 18, 19, 20
 transposon QTEXT
 usedin TEXT
 variety QTEXT
 virion VOID
 Target QTEXT note
 Sequence QTEXT note
+
+comment QTEXT
+
+# GFF allows multiple values up to a semicolon.
+# we could define ANY for these special cases
+# and LIMITED for those where we know the format
+
+# We could also make ANY the default, as perhaps 'comment'
+
+# GFF also allows # comments where we could hide non-conforming tags
+# but then we lose the tag order.
+
+# new type, not yet implemented
+# can be multiple values
+#Align I3
+# Align seqstart targetstart [length]
+# start of align block in 2 seqs, length usually ignored
+# continues until end of seq or next align block
+
+#Target Q3
+#Target QTEXT start end
+#For hits, the target sequence and base range
+
+# E_value REAL
+# E_value 0.003
+# float or exp format

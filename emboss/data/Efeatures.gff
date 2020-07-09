@@ -1,3 +1,20 @@
+misc_feature
+	/citation
+                      /db_xref                   
+                      /evidence
+                      /function
+                      /gene
+                      /label
+                      /map
+                      /note
+                      /partial
+                      /number
+                      /phenotype
+                      /product
+                      /pseudo
+                      /standard_name
+                      /usedin
+		      /Sequence
 attenuator
 	/citation
 	/db_xref
@@ -50,6 +67,7 @@ CDS
                       /product
                       /protein_id
                       /pseudo
+		      /sequence
                       /standard_name
                       /translation
                       /transl_except
@@ -113,6 +131,7 @@ exon
                       /partial
                       /product
                       /pseudo
+		      /sequence
                       /standard_name
                       /usedin
 GC_signal
@@ -167,6 +186,7 @@ intron
                       /note
                       /number
                       /partial
+		      /sequence
                       /standard_name
                       /usedin
 J_segment
@@ -233,23 +253,6 @@ misc_difference
                       /replace  
                       /standard_name
                       /usedin
-misc_feature
-/citation
-                      /db_xref                   
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /number
-                      /phenotype
-                      /product
-                      /pseudo
-                      /standard_name
-                      /usedin
-		      /Sequence
 misc_recomb
 	M/organism
 	/citation
@@ -859,9 +862,9 @@ Clone_right_end
 Clone_left_end
 	/note
 	/clone
-intron
-	/sequence
-exon
-	/sequence
-cds
-	/sequence
+#intron
+#	/sequence
+#exon
+#	/sequence
+#cds
+#	/sequence
