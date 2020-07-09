@@ -37,7 +37,7 @@ DB tembl [ type: N dir: $emboss_tempdata/embl
 # ===
 
 DB tpir [ type: P dir: $emboss_tempdata/pir
-   method: nbrf
+   method: gcg
    file: pir*.seq
    format: nbrf
    comment: "PIR using NBRF access for 4 files" ]
