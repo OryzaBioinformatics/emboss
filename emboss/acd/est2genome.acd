@@ -104,7 +104,7 @@ endsection: advanced
 
 section: output [ info: "output Section" type: page ]
 outfile: outfile  [
-  required: "y"
+  param: "y"
 ]
 
 bool: align  [

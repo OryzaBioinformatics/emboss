@@ -44,6 +44,12 @@ static ajint seq_end;
 static ajint win_mid;
 static ajint seq_begin;
 
+#ifdef PLD_png
+
+extern int PNGWidth;
+extern int PNGHeight;
+
+#endif
 
 /* @prog pepinfo **************************************************************
 **
@@ -110,6 +116,18 @@ int main(int argc, char **argv)
 	"OHM  Hydropathy parameters (Sweet & Eisenberg)",
 	"Consensus parameters (Eisenberg et al)"
     };
+
+#ifdef PLD_png
+
+    /*
+    PNGWidth = 1280;
+    PNGHeight = 960;
+    */
+
+    PNGWidth = 960;
+    PNGHeight = 960;
+
+#endif
 
     (void) ajGraphInit ("pepinfo", argc, argv);
 

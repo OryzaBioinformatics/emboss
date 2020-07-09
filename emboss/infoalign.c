@@ -109,6 +109,8 @@ int main(int argc, char **argv)
     refseq = ajAcdGetString ("refseq");
     matrix  = ajAcdGetMatrix ("matrix");
 
+    ajSeqsetFill (seqset);
+
     outfile = ajAcdGetOutfile ("outfile");
     
     html = ajAcdGetBool("html");
