@@ -1,0 +1,625 @@
+<!--START OF HEADER - DON'T ALTER -->
+
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: tranalign
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
+</a>
+</td>
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: tranalign
+</H2>
+</font>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<p><hr><p>
+
+<!--END OF HEADER-->
+
+<H1>
+Program tranalign
+</H1>
+<H2>
+    Function
+</H2>
+Align nucleic coding regions given the aligned proteins
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+        Algorithms
+  -->
+
+<b>tranalign</b> is a re-implementation in EMBOSS of the program
+<b>mrtrans</b> by Bill Pearson. 
+
+<p>
+
+
+
+<b>tranalign</b> is a simple program that allows you to produce aligned
+cDNA sequences from aligned protein sequences.  This can be very useful
+for phylogeny programs, e.g.  in PHYLIP - dnadist, dnapars, dnaml, etc. 
+In general, it is better to use protein sequences for multiple
+alignments, but to use DNA sequences for phylogeny.  This can be time
+consuming when there are gaps in the aligned protein sequences. 
+
+<p>
+
+<b>tranalign</b> takes a set of (unaligned) nucleic sequences and a set of
+<i>aligned</i> protein sequences.  It reads the first nucleic sequence
+and the first protein sequence, translates the nucleic sequence in each of the
+three forward frames, compares the protein sequence to the translated nucleic
+sequence to find the protein coding region, and then writes out the nucleic
+sequence that encoded the protein.  
+
+<p>
+
+The sequences must be in the same order in both sets of sequences.  A
+common problem you should be aware of is that some alignment program
+(including clustalw/<b>emma</b>) will re-order the aligned sequences to
+group similar sequences together. 
+
+<p>
+
+The protein library may include '-' characters to specify alignments. 
+Each '-' character in the protein library is ignored during the sequence
+comparison but replaced by '---' in the nucleic sequence output to form the aligned nucleic sequences. 
+
+<p>
+
+<b>tranalign</b> finds the coding regions for contiguous sequences only. 
+It will not splice together different exons to produce a coding
+sequence.  You should therefore use either mRNA sequences, or nucleic
+sequences which you have constructed to hold a contiguous coding region
+(maybe using <b>extractseq</b> or <b>yank</b> and <b>union</b>?). 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+
+Here is a sample session with tranalign:
+
+<pre>
+
+% tranalign tranalign.seq tranalign.pep tranalign2.seq
+
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-nsequence]         seqall     Nucleotide sequences to be aligned
+  [-psequence]         seqset     Protein sequence alignment
+  [-outseq]            seqoutset  Output sequence set USA
+
+   Optional qualifiers:
+   -table              menu       Code to use
+
+   Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-nsequence]<br>(Parameter 1)</td>
+<td>Nucleotide sequences to be aligned</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-psequence]<br>(Parameter 2)</td>
+<td>Protein sequence alignment</td>
+<td>Readable sequences</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 3)</td>
+<td>Output sequence set USA</td>
+<td>Writeable sequences</td>
+<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-table</td>
+<td>Code to use</td>
+<td><table><tr><td>0</td> <td><i>(Standard)</i></td></tr><tr><td>1</td> <td><i>(Standard (with alternative initiation codons))</i></td></tr><tr><td>2</td> <td><i>(Vertebrate Mitochondrial)</i></td></tr><tr><td>3</td> <td><i>(Yeast Mitochondrial)</i></td></tr><tr><td>4</td> <td><i>(Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma)</i></td></tr><tr><td>5</td> <td><i>(Invertebrate Mitochondrial)</i></td></tr><tr><td>6</td> <td><i>(Ciliate Macronuclear and Dasycladacean)</i></td></tr><tr><td>9</td> <td><i>(Echinoderm Mitochondrial)</i></td></tr><tr><td>10</td> <td><i>(Euplotid Nuclear)</i></td></tr><tr><td>11</td> <td><i>(Bacterial)</i></td></tr><tr><td>12</td> <td><i>(Alternative Yeast Nuclear)</i></td></tr><tr><td>13</td> <td><i>(Ascidian Mitochondrial)</i></td></tr><tr><td>14</td> <td><i>(Flatworm Mitochondrial)</i></td></tr><tr><td>15</td> <td><i>(Blepharisma Macronuclear)</i></td></tr><tr><td>16</td> <td><i>(Chlorophycean Mitochondrial)</i></td></tr><tr><td>21</td> <td><i>(Trematode Mitochondrial)</i></td></tr><tr><td>22</td> <td><i>(Scenedesmus obliquus)</i></td></tr><tr><td>23</td> <td><i>(Thraustochytrium Mitochondrial)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+The input is a set of unaligned nucleic sequences and the set of aligned
+protein sequences to be used as a guide in the alignment of the output
+nucleic sequences. 
+
+<p>
+
+The ID names of the nucleic acid and protein sequences are NOT checked
+to see if they correspond to each other.  They can have any names. 
+
+
+<p>
+
+There must be at least as many protein sequences as nucleic acid
+sequence - extra protein sequences are ignored. 
+
+<p>
+
+Each of the nucleic acid sequences must have a corresponding protein
+sequence which is derived from the coding region of that nucleic acid
+sequence. The two sets of sequences must be in the same order.
+
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+   -->
+
+The output is the regions of the nucleic acid sequences which code for
+the corresponding protein sequence, with gap characters ('-') introduced
+so that they have the same alignment as the corresponding protein
+sequences. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+
+
+The sequences must be in the same order in both sets of sequences.  A
+common problem you should be aware of is that some alignment program
+(including clustalw/<b>emma</b>) will re-order the aligned sequences to
+group similar sequences together. 
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+"No guide protein sequence available for nucleic sequence xxx" - the
+corresponding protein sequence for this nucleic sequence has not been
+input. You have input more nucleic acid sequences than protein sequences.
+
+<p>
+
+
+"Guide protein sequence xxx not found in nucleic sequence xxx" - the
+region of the nucleic sequence which codes for the protein was not
+found.  The coding region in the nucleic acid sequence must be a single
+contiguous sequence.  The protein sequence might not be the
+corresponding one for this nucleic acid sequence if they are out of
+order. 
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="emma.html">emma</a></td><td>Multiple alignment program - interface to ClustalW program</td></tr>
+<tr><td><a href="infoalign.html">infoalign</a></td><td>Information on a multiple sequence alignment</td></tr>
+<tr><td><a href="plotcon.html">plotcon</a></td><td>Plots the quality of conservation of a sequence alignment</td></tr>
+<tr><td><a href="prettyplot.html">prettyplot</a></td><td>Displays aligned sequences, with colouring and boxing</td></tr>
+<tr><td><a href="showalign.html">showalign</a></td><td>Displays a multiple sequence alignment</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+<!--
+        Who has worked on the program in the past.
+   -->
+
+The original program <b>mrtrans</b> was written by Bill Pearson
+<a href="mailto:wrp@virginia.edu">(wrp@virginia.edu)</a>
+
+<p>
+
+<b>tranalign</b> was written in EMBOSS code by Gary Williams using the
+description of <b>mrtrans</b> as a guide <a
+href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    History
+</H2>
+
+<!--
+        What changes have been made.
+   -->
+
+<b>mrtrans</b> written (Jan 1991, July 1987) - Bill Pearson
+
+<p>
+
+<b>tranalign</b> written (March 2002) - Gary Williams
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Comments
+</H2>
+
+<!--
+	Any comments, requests etc. that people have about the program
+   -->
+
+
+
+
+
+
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

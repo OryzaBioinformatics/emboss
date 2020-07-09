@@ -1,0 +1,195 @@
+
+                             EMBOSS: tranalign
+     _________________________________________________________________
+   
+                               Program tranalign
+                                       
+Function
+
+   Align nucleic coding regions given the aligned proteins
+   
+Description
+
+   tranalign is a re-implementation in EMBOSS of the program mrtrans by
+   Bill Pearson.
+   
+   tranalign is a simple program that allows you to produce aligned cDNA
+   sequences from aligned protein sequences. This can be very useful for
+   phylogeny programs, e.g. in PHYLIP - dnadist, dnapars, dnaml, etc. In
+   general, it is better to use protein sequences for multiple
+   alignments, but to use DNA sequences for phylogeny. This can be time
+   consuming when there are gaps in the aligned protein sequences.
+   
+   tranalign takes a set of (unaligned) nucleic sequences and a set of
+   aligned protein sequences. It reads the first nucleic sequence and the
+   first protein sequence, translates the nucleic sequence in each of the
+   three forward frames, compares the protein sequence to the translated
+   nucleic sequence to find the protein coding region, and then writes
+   out the nucleic sequence that encoded the protein.
+   
+   The sequences must be in the same order in both sets of sequences. A
+   common problem you should be aware of is that some alignment program
+   (including clustalw/emma) will re-order the aligned sequences to group
+   similar sequences together.
+   
+   The protein library may include '-' characters to specify alignments.
+   Each '-' character in the protein library is ignored during the
+   sequence comparison but replaced by '---' in the nucleic sequence
+   output to form the aligned nucleic sequences.
+   
+   tranalign finds the coding regions for contiguous sequences only. It
+   will not splice together different exons to produce a coding sequence.
+   You should therefore use either mRNA sequences, or nucleic sequences
+   which you have constructed to hold a contiguous coding region (maybe
+   using extractseq or yank and union?).
+   
+Usage
+
+   Here is a sample session with tranalign:
+
+% tranalign tranalign.seq tranalign.pep tranalign2.seq
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-nsequence]         seqall     Nucleotide sequences to be aligned
+  [-psequence]         seqset     Protein sequence alignment
+  [-outseq]            seqoutset  Output sequence set USA
+
+   Optional qualifiers:
+   -table              menu       Code to use
+
+   Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-nsequence]
+   (Parameter 1) Nucleotide sequences to be aligned Readable sequence(s)
+   Required
+   [-psequence]
+   (Parameter 2) Protein sequence alignment Readable sequences Required
+   [-outseq]
+   (Parameter 3) Output sequence set USA Writeable sequences
+   <sequence>.format
+   Optional qualifiers Allowed values Default
+   -table Code to use
+   0 (Standard)
+   1 (Standard (with alternative initiation codons))
+   2 (Vertebrate Mitochondrial)
+   3 (Yeast Mitochondrial)
+   4 (Mold, Protozoan, Coelenterate Mitochondrial and
+   Mycoplasma/Spiroplasma)
+   5 (Invertebrate Mitochondrial)
+   6 (Ciliate Macronuclear and Dasycladacean)
+   9 (Echinoderm Mitochondrial)
+   10 (Euplotid Nuclear)
+   11 (Bacterial)
+   12 (Alternative Yeast Nuclear)
+   13 (Ascidian Mitochondrial)
+   14 (Flatworm Mitochondrial)
+   15 (Blepharisma Macronuclear)
+   16 (Chlorophycean Mitochondrial)
+   21 (Trematode Mitochondrial)
+   22 (Scenedesmus obliquus)
+   23 (Thraustochytrium Mitochondrial)
+   0
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   The input is a set of unaligned nucleic sequences and the set of
+   aligned protein sequences to be used as a guide in the alignment of
+   the output nucleic sequences.
+   
+   The ID names of the nucleic acid and protein sequences are NOT checked
+   to see if they correspond to each other. They can have any names.
+   
+   There must be at least as many protein sequences as nucleic acid
+   sequence - extra protein sequences are ignored.
+   
+   Each of the nucleic acid sequences must have a corresponding protein
+   sequence which is derived from the coding region of that nucleic acid
+   sequence. The two sets of sequences must be in the same order.
+   
+Output file format
+
+   The output is the regions of the nucleic acid sequences which code for
+   the corresponding protein sequence, with gap characters ('-')
+   introduced so that they have the same alignment as the corresponding
+   protein sequences.
+   
+Data files
+
+   None.
+   
+Notes
+
+   The sequences must be in the same order in both sets of sequences. A
+   common problem you should be aware of is that some alignment program
+   (including clustalw/emma) will re-order the aligned sequences to group
+   similar sequences together.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   "No guide protein sequence available for nucleic sequence xxx" - the
+   corresponding protein sequence for this nucleic sequence has not been
+   input. You have input more nucleic acid sequences than protein
+   sequences.
+   
+   "Guide protein sequence xxx not found in nucleic sequence xxx" - the
+   region of the nucleic sequence which codes for the protein was not
+   found. The coding region in the nucleic acid sequence must be a single
+   contiguous sequence. The protein sequence might not be the
+   corresponding one for this nucleic acid sequence if they are out of
+   order.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name                        Description
+   emma         Multiple alignment program - interface to ClustalW program
+   infoalign    Information on a multiple sequence alignment
+   plotcon      Plots the quality of conservation of a sequence alignment
+   prettyplot   Displays aligned sequences, with colouring and boxing
+   showalign    Displays a multiple sequence alignment
+   
+Author(s)
+
+   The original program mrtrans was written by Bill Pearson
+   (wrp@virginia.edu)
+   
+   tranalign was written in EMBOSS code by Gary Williams using the
+   description of mrtrans as a guide (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   mrtrans written (Jan 1991, July 1987) - Bill Pearson
+   
+   tranalign written (March 2002) - Gary Williams
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
