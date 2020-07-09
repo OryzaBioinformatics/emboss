@@ -8,9 +8,17 @@
 #include "hsregexp.h"
 #include "hsregmagic.h"
 
-/*
- - regsub - perform substitutions after a regexp match
- */
+/* @func hsregsub *************************************************************
+**
+** perform substitutions after a regexp match
+**
+** @param [?] rp [const regexp*] Undocumented
+** @param [?] source [const char*] Undocumented
+** @param [?] dest [char*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 void hsregsub(const regexp *rp, const char *source, char *dest)
 {
     register regexp * const prog = (regexp *)rp;

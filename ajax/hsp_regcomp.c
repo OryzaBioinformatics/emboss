@@ -115,19 +115,17 @@ static ajint never = 0;		/* for use in asserts; shuts lint up */
 #define	never	0		/* some <assert.h>s have bugs too */
 #endif
 
-/*
- - regcomp - interface for parser and compilation
- = extern ajint regcomp(regex_t *, const char *, ajint);
- = #define	REG_BASIC	0000
- = #define	REG_EXTENDED	0001
- = #define	REG_ICASE	0002
- = #define	REG_NOSUB	0004
- = #define	REG_NEWLINE	0010
- = #define	REG_NOSPEC	0020
- = #define	REG_PEND	0040
- = #define	REG_DUMP	0200
- */
-				/* 0 success, otherwise REG_something */
+/* @func hsp_regcomp **********************************************************
+**
+** interface for parser and compilation
+**
+** @param [?] preg [regex_t*] Undocumented
+** @param [?] pattern [const char*] Undocumented
+** @param [?] cflags [ajint] Undocumented
+** @return [ajint] 0 success, otherwise REG_something
+** @@
+******************************************************************************/
+
 ajint hsp_regcomp(regex_t *preg, const char *pattern, ajint cflags)
 {
     struct parse pa;
@@ -230,11 +228,16 @@ ajint hsp_regcomp(regex_t *preg, const char *pattern, ajint cflags)
 
 
 
-/*
- - p_ere - ERE parser top level, concatenation and alternation
- == static void p_ere(register struct parse *p, ajint stop);
- */
-/* stop is the character this ERE should end at */
+/* @funcstatic p_ere *********************************************************
+**
+** ERE parser top level, concatenation and alternation
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] stop [ajint] the character this ERE should end at
+** @return [void]
+** @@
+******************************************************************************/
+
 static void p_ere(register struct parse *p, ajint stop)
 {
     register char c;
@@ -281,10 +284,15 @@ static void p_ere(register struct parse *p, ajint stop)
 
 
 
-/*
- - p_ere_exp - parse one subERE, an atom possibly followed by a repetition op
- == static void p_ere_exp(register struct parse *p);
- */
+/* @funcstatic  p_ere_exp *****************************************************
+**
+** parse one subERE, an atom possibly followed by a repetition op
+**
+** @param [?] p [register struct parse*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void p_ere_exp(register struct parse *p)
 {
     register char c;
@@ -439,10 +447,15 @@ static void p_ere_exp(register struct parse *p)
 
 
 
-/*
- - p_str - string (no metacharacters) "parser"
- == static void p_str(register struct parse *p);
- */
+/* @funcstatic  p_str *********************************************************
+**
+** string (no metacharacters) "parser"
+**
+** @param [?] p [register struct parse*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void p_str(register struct parse *p)
 {
     (void)REQUIRE(MORE(), REG_EMPTY);
@@ -454,19 +467,23 @@ static void p_str(register struct parse *p)
 
 
 
-/*
- - p_bre - BRE parser top level, anchoring and concatenation
- == static void p_bre(register struct parse *p, register ajint end1, \
- ==	register ajint end2);
- * Giving end1 as OUT essentially eliminates the end1/end2 check.
- *
- * This implementation is a bit of a kludge, in that a trailing $ is first
- * taken as an ordinary character and then revised to be an anchor.  The
- * only undesirable side effect is that '$' gets included as a character
- * category in such cases.  This is fairly harmless; not worth fixing.
- * The amount of lookahead needed to avoid this kludge is excessive.
- */
-/* end1 and end2 are the first and second terminating characters */
+/* @funcstatic  p_bre *********************************************************
+**
+** BRE parser top level, anchoring and concatenation
+**
+** This implementation is a bit of a kludge, in that a trailing $ is first
+** taken as an ordinary character and then revised to be an anchor.  The
+** only undesirable side effect is that '$' gets included as a character
+** category in such cases.  This is fairly harmless; not worth fixing.
+** The amount of lookahead needed to avoid this kludge is excessive.
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] end1 [register ajint] first terminating character
+** @param [?] end2 [register ajint] second terminating character
+** @return [void]
+** @@
+******************************************************************************/
+
 static void p_bre( register struct parse *p, register ajint end1,
 		  register ajint end2)
 {
@@ -500,12 +517,16 @@ static void p_bre( register struct parse *p, register ajint end1,
 
 
 
-/*
- - p_simp_re - parse a simple RE, an atom possibly followed by a repetition
- == static ajint p_simp_re(register struct parse *p, ajint starordinary);
- */
-			/* was the simple RE an unbackslashed $? */
-/* starordinary - is a leading * an ordinary character? */
+/* @funcstatic  p_simp_re *****************************************************
+**
+** parse a simple RE, an atom possibly followed by a repetition
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] starordinary [ajint] is a leading * an ordinary character?
+** @return [ajint] was the simple RE an unbackslashed $? 
+** @@
+******************************************************************************/
+
 static ajint p_simp_re(register struct parse *p, ajint starordinary)
 {
     register ajint c;
@@ -635,11 +656,15 @@ static ajint p_simp_re(register struct parse *p, ajint starordinary)
 
 
 
-/*
- - p_count - parse a repetition count
- == static ajint p_count(register struct parse *p);
- */
-			/* the value */
+/* @funcstatic  p_count *******************************************************
+**
+** parse a repetition count
+**
+** @param [?] p [register struct parse*] Undocumented
+** @return [ajint] the value
+** @@
+******************************************************************************/
+
 static ajint p_count(register struct parse *p)
 {
     register ajint count = 0;
@@ -659,13 +684,18 @@ static ajint p_count(register struct parse *p)
 
 
 
-/*
- - p_bracket - parse a bracketed character list
- == static void p_bracket(register struct parse *p);
- *
- * Note a significant property of this code:  if the allocset() did SETERROR,
- * no set operations are done.
- */
+/* @funcstatic  p_bracket *****************************************************
+**
+** parse a bracketed character list
+**
+** Note a significant property of this code:  if the allocset() did SETERROR,
+** no set operations are done.
+**
+** @param [?] p [register struct parse*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void p_bracket(register struct parse *p)
 {
     register cset *cs = allocset(p);
@@ -745,10 +775,16 @@ static void p_bracket(register struct parse *p)
 
 
 
-/*
- - p_b_term - parse one term of a bracketed character list
- == static void p_b_term(register struct parse *p, register cset *cs);
- */
+/* @funcstatic  p_b_term ******************************************************
+**
+** parse one term of a bracketed character list
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] cs [register cset*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void p_b_term(register struct parse *p, register cset *cs)
 {
     register char c;
@@ -815,10 +851,16 @@ static void p_b_term(register struct parse *p, register cset *cs)
 
 
 
-/*
- - p_b_cclass - parse a character-class name and deal with it
- == static void p_b_cclass(register struct parse *p, register cset *cs);
- */
+/* @funcstatic  p_b_cclass ****************************************************
+**
+** parse a character-class name and deal with it
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] cs [register cset*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void p_b_cclass(register struct parse *p, register cset *cs)
 {
     register char *sp = p->next;
@@ -851,12 +893,18 @@ static void p_b_cclass(register struct parse *p, register cset *cs)
 
 
 
-/*
- - p_b_eclass - parse an equivalence-class name and deal with it
- == static void p_b_eclass(register struct parse *p, register cset *cs);
- *
- * This implementation is incomplete. xxx
- */
+/* @funcstatic  p_b_eclass ****************************************************
+**
+** parse an equivalence-class name and deal with it
+**
+** This implementation is incomplete. xxx
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] cs [register cset*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void p_b_eclass(register struct parse *p, register cset *cs)
 {
     register char c;
@@ -869,11 +917,15 @@ static void p_b_eclass(register struct parse *p, register cset *cs)
 
 
 
-/*
- - p_b_symbol - parse a character or [..]ed multicharacter collating symbol
- == static char p_b_symbol(register struct parse *p);
- */
-			/* value of symbol */
+/* @funcstatic  p_b_symbol ****************************************************
+**
+** parse a character or [..]ed multicharacter collating symbol
+**
+** @param [?] p [register struct parse*] Undocumented
+** @return [char] value of symbol
+** @@
+******************************************************************************/
+
 static char p_b_symbol(register struct parse *p)
 {
     register char value;
@@ -892,12 +944,16 @@ static char p_b_symbol(register struct parse *p)
 
 
 
-/*
- - p_b_coll_elem - parse a collating-element name and look it up
- == static char p_b_coll_elem(register struct parse *p, ajint endc);
- */
-			/* value of collating element */
-			/* name ended by endc,']' */
+/* @funcstatic  p_b_coll_elem *************************************************
+**
+** parse a collating-element name and look it up
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] endc [ajint] name ended by endc,']'
+** @return [char] value of collating element 
+** @@
+******************************************************************************/
+
 static char p_b_coll_elem(register struct parse *p, ajint endc)
 {
     register char *sp = p->next;
@@ -925,11 +981,15 @@ static char p_b_coll_elem(register struct parse *p, ajint endc)
 
 
 
-/*
- - othercase - return the case counterpart of an alphabetic
- == static char othercase(ajint ch);
- */
-			/* if no counterpart, return ch */
+/* @funcstatic  othercase *****************************************************
+**
+** return the case counterpart of an alphabetic
+**
+** @param [?] ch [ajint] Undocumented
+** @return [char] if no counterpart, return ch
+** @@
+******************************************************************************/
+
 static char othercase(ajint ch)
 {
     assert(isalpha(ch));
@@ -945,12 +1005,18 @@ static char othercase(ajint ch)
 
 
 
-/*
- - bothcases - emit a dualcase version of a two-case character
- == static void bothcases(register struct parse *p, ajint ch);
- *
- * Boy, is this implementation ever a kludge...
- */
+/* @funcstatic  bothcases *****************************************************
+**
+** emit a dualcase version of a two-case character
+**
+** Boy, is this implementation ever a kludge...
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] ch [ajint] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void bothcases(register struct parse *p, ajint ch)
 {
     register char *oldnext = p->next;
@@ -973,10 +1039,16 @@ static void bothcases(register struct parse *p, ajint ch)
 
 
 
-/*
- - ordinary - emit an ordinary character
- == static void ordinary(register struct parse *p, register ajint ch);
- */
+/* @funcstatic  ordinary ******************************************************
+**
+** emit an ordinary character
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] ch [register ajint] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void ordinary(register struct parse *p, register ajint ch)
 {
     register cat_t *cap = p->g->categories;
@@ -995,12 +1067,17 @@ static void ordinary(register struct parse *p, register ajint ch)
 
 
 
-/*
- - nonnewline - emit REG_NEWLINE version of OANY
- == static void nonnewline(register struct parse *p);
- *
- * Boy, is this implementation ever a kludge...
- */
+/* @funcstatic  nonnewline ****************************************************
+**
+** emit REG_NEWLINE version of OANY
+**
+** Boy, is this implementation ever a kludge...
+**
+** @param [?] p [register struct parse*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void nonnewline(register struct parse *p)
 {
     register char *oldnext = p->next;
@@ -1023,13 +1100,17 @@ static void nonnewline(register struct parse *p)
 
 
 
-/*
- - repeat - generate code for a bounded repetition, recursively if needed
- == static void repeat(register struct parse *p, sopno start, ajint from, ajint to);
-
-sopno start;			 operand from here to end of strip 
-ajint from;			 repeated from this number 
-ajint to;				 to this number of times (maybe INFINITY) */
+/* @funcstatic  repeat ********************************************************
+**
+** generate code for a bounded repetition, recursively if needed
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] start [sopno] operand from here to end of strip 
+** @param [?] from [ajint] repeated from this number 
+** @param [?] to [ajint] to this number of times (maybe INFINITY)
+** @return [void]
+** @@
+******************************************************************************/
 
 static void repeat( register struct parse *p, sopno start, ajint from, ajint to)
 {
@@ -1099,11 +1180,16 @@ static void repeat( register struct parse *p, sopno start, ajint from, ajint to)
 
 
 
-/*
- - seterr - set an error condition
- == static ajint seterr(register struct parse *p, ajint e);
- */
-			/* useless but makes type checking happy */
+/* @funcstatic  seterr ********************************************************
+**
+** set an error condition
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] e [ajint] Undocumented
+** @return [ajint] useless but makes type checking happy
+** @@
+******************************************************************************/
+
 static ajint seterr(register struct parse *p, ajint e)
 {
     if (p->error == 0)		/* keep earliest error condition */
@@ -1117,11 +1203,16 @@ static ajint seterr(register struct parse *p, ajint e)
 
 
 
-/*
- - allocset - allocate a set of characters for []
- == static cset *allocset(register struct parse *p);
- */
-static cset * allocset(register struct parse *p)
+/* @funcstatic  allocset ******************************************************
+**
+** allocate a set of characters for []
+**
+** @param [?] p [register struct parse*] Undocumented
+** @return [cset*] Undocumented
+** @@
+******************************************************************************/
+
+static cset* allocset(register struct parse *p)
 {
     register ajint no = p->g->ncsets++;
     register size_t nc;
@@ -1177,10 +1268,16 @@ static cset * allocset(register struct parse *p)
 
 
 
-/*
- - freeset - free a now-unused set
- == static void freeset(register struct parse *p, register cset *cs);
- */
+/* @funcstatic  freeset *******************************************************
+**
+** free a now-unused set
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] cs [register cset*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void freeset(register struct parse *p, register cset *cs)
 {
     register ajint i;
@@ -1197,17 +1294,22 @@ static void freeset(register struct parse *p, register cset *cs)
 
 
 
-/*
- - freezeset - final processing on a set of characters
- == static ajint freezeset(register struct parse *p, register cset *cs);
- *
- * The main task here is merging identical sets.  This is usually a waste
- * of time (although the hash code minimizes the overhead), but can win
- * big if REG_ICASE is being used.  REG_ICASE, by the way, is why the hash
- * is done using addition rather than xor -- all ASCII [aA] sets xor to
- * the same value!
- */
-			/* set number */
+/* @funcstatic  freezeset *****************************************************
+**
+** final processing on a set of characters
+**
+** The main task here is merging identical sets.  This is usually a waste
+** of time (although the hash code minimizes the overhead), but can win
+** big if REG_ICASE is being used.  REG_ICASE, by the way, is why the hash
+** is done using addition rather than xor -- all ASCII [aA] sets xor to
+** the same value!
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] cs [register cset*] Undocumented
+** @return [ajint] set number
+** @@
+******************************************************************************/
+
 static ajint freezeset( register struct parse *p, register cset *cs)
 {
     register UCH h = cs->hash;
@@ -1241,11 +1343,16 @@ static ajint freezeset( register struct parse *p, register cset *cs)
 
 
 
-/*
- - firstch - return first character in a set (which must have at least one)
- == static ajint firstch(register struct parse *p, register cset *cs);
- */
-			/* character; there is no "none" value */
+/* @funcstatic  firstch *******************************************************
+**
+** return first character in a set (which must have at least one)
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] cs [register cset*] Undocumented
+** @return [ajint] character; there is no "none" value 
+** @@
+******************************************************************************/
+
 static ajint firstch(register struct parse *p, register cset *cs)
 {
     register ajint i;
@@ -1262,10 +1369,16 @@ static ajint firstch(register struct parse *p, register cset *cs)
 
 
 
-/*
- - nch - number of characters in a set
- == static ajint nch(register struct parse *p, register cset *cs);
- */
+/* @funcstatic  nch ***********************************************************
+**
+** number of characters in a set
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] cs [register cset*] Undocumented
+** @return [ajint] Undocumented
+** @@
+******************************************************************************/
+
 static ajint nch(register struct parse *p, register cset *cs)
 {
     register ajint i;
@@ -1282,11 +1395,17 @@ static ajint nch(register struct parse *p, register cset *cs)
 
 
 
-/*
- - mcadd - add a collating element to a cset
- == static void mcadd(register struct parse *p, register cset *cs, \
- ==	register char *cp);
- */
+/* @funcstatic  mcadd *********************************************************
+**
+** add a collating element to a cset
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] cs [register cset*] Undocumented
+** @param [?] cp [register char*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void mcadd(register struct parse *p,register cset *cs,
 		  register char *cp)
 {
@@ -1311,10 +1430,16 @@ static void mcadd(register struct parse *p,register cset *cs,
 
 
 
-/*
- - mcsub - subtract a collating element from a cset
- == static void mcsub(register cset *cs, register char *cp);
- */
+/* @funcstatic  mcsub *********************************************************
+**
+** subtract a collating element from a cset
+**
+** @param [?] cs [register cset*] Undocumented
+** @param [?] cp [register char*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void mcsub(register cset *cs, register char *cp)
 {
     register char *fp = mcfind(cs, cp);
@@ -1340,10 +1465,16 @@ static void mcsub(register cset *cs, register char *cp)
 
 
 
-/*
- - mcin - is a collating element in a cset?
- == static ajint mcin(register cset *cs, register char *cp);
- */
+/* @funcstatic  mcin **********************************************************
+**
+** is a collating element in a cset?
+**
+** @param [?] cs [register cset*] Undocumented
+** @param [?] cp [register char*] Undocumented
+** @return [ajint] Undocumented
+** @@
+******************************************************************************/
+
 static ajint mcin(register cset *cs, register char *cp)
 {
     return(mcfind(cs, cp) != NULL);
@@ -1353,10 +1484,16 @@ static ajint mcin(register cset *cs, register char *cp)
 
 
 
-/*
- - mcfind - find a collating element in a cset
- == static char *mcfind(register cset *cs, register char *cp);
- */
+/* @funcstatic  mcfind ********************************************************
+**
+** find a collating element in a cset
+**
+** @param [?] cs [register cset*] Undocumented
+** @param [?] cp [register char*] Undocumented
+** @return [char*] Undocumented
+** @@
+******************************************************************************/
+
 static char * mcfind(register cset *cs,register char *cp)
 {
     register char *p;
@@ -1373,13 +1510,19 @@ static char * mcfind(register cset *cs,register char *cp)
 
 
 
-/*
- - mcinvert - invert the list of collating elements in a cset
- == static void mcinvert(register struct parse *p, register cset *cs);
- *
- * This would have to know the set of possibilities.  Implementation
- * is deferred.
- */
+/* @funcstatic  mcinvert ******************************************************
+**
+** invert the list of collating elements in a cset
+**
+** This would have to know the set of possibilities.  Implementation
+** is deferred.
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] cs [register cset*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void mcinvert(register struct parse *p, register cset *cs)
 {
     assert(cs->multis == NULL);		/* xxx */
@@ -1389,13 +1532,20 @@ static void mcinvert(register struct parse *p, register cset *cs)
 
 
 
-/*
- - mccase - add case counterparts of the list of collating elements in a cset
- == static void mccase(register struct parse *p, register cset *cs);
- *
- * This would have to know the set of possibilities.  Implementation
- * is deferred.
- */
+/* @funcstatic  mccase ********************************************************
+**
+** add case counterparts of the list of collating elements in a cset
+**
+** This would have to know the set of possibilities.  Implementation
+** is deferred.
+**
+* This would have to know the set of possibilities.  Implementation
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] cs [register cset*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void mccase(register struct parse *p,register cset *cs)
 {
     assert(cs->multis == NULL);		/* xxx */
@@ -1405,11 +1555,16 @@ static void mccase(register struct parse *p,register cset *cs)
 
 
 
-/*
- - isinsets - is this character in any sets?
- == static ajint isinsets(register REGUTSSTRUCT *g, ajint c);
- */
-			/* predicate */
+/* @funcstatic  isinsets ******************************************************
+**
+** is this character in any sets?
+**
+** @param [?] g [register REGUTSSTRUCT*] Undocumented
+** @param [?] c [ajint] Undocumented
+** @return [ajint] predicate
+** @@
+******************************************************************************/
+
 static ajint isinsets(register REGUTSSTRUCT *g, ajint c)
 {
     register UCH *col;
@@ -1427,11 +1582,17 @@ static ajint isinsets(register REGUTSSTRUCT *g, ajint c)
 
 
 
-/*
- - samesets - are these two characters in exactly the same sets?
- == static ajint samesets(register REGUTSSTRUCT *g, ajint c1, ajint c2);
- */
-			/* predicate */
+/* @funcstatic  samesets ******************************************************
+**
+** are these two characters in exactly the same sets?
+**
+** @param [?] g [register REGUTSSTRUCT*] Undocumented
+** @param [?] c1 [ajint] Undocumented
+** @param [?] c2 [ajint] Undocumented
+** @return [ajint] predicate
+** @@
+******************************************************************************/
+
 static ajint samesets(register REGUTSSTRUCT *g, ajint c1, ajint c2)
 {
     register UCH *col;
@@ -1450,10 +1611,16 @@ static ajint samesets(register REGUTSSTRUCT *g, ajint c1, ajint c2)
 
 
 
-/*
- - categorize - sort out character categories
- == static void categorize(struct parse *p, register REGUTSSTRUCT *g);
- */
+/* @funcstatic  categorize ****************************************************
+**
+** sort out character categories
+**
+** @param [?] p [struct parse*] Undocumented
+** @param [?] g [register REGUTSSTRUCT*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void categorize(struct parse *p,register REGUTSSTRUCT *g)
 {
     register cat_t *cats = g->categories;
@@ -1480,13 +1647,16 @@ static void categorize(struct parse *p,register REGUTSSTRUCT *g)
 
 
 
-/*
- - dupl - emit a duplicate of a bunch of sops
- == static sopno dupl(register struct parse *p, sopno start, sopno finish);
- */
-/* start of duplicate 
- start;		from here 
- finish;	to this less one */
+/* @funcstatic  dupl **********************************************************
+**
+** emit a duplicate of a bunch of sops
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] start [sopno] from here 
+** @param [?] finish [sopno] to this less one
+** @return [sopno] start of duplicate
+** @@
+******************************************************************************/
 
 static sopno dupl(register struct parse *p,sopno start,sopno finish)
 {
@@ -1507,15 +1677,21 @@ static sopno dupl(register struct parse *p,sopno start,sopno finish)
 
 
 
+/* @funcstatic  doemit ********************************************************
+**
+** emit a strip operator
+**
+** It might seem better to implement this as a macro with a function as
+** hard-case backup, but it's just too big and messy unless there are
+** some changes to the data structures.  Maybe later.
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] op [sop] Undocumented
+** @param [?] opnd [size_t] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
 
-/*
- - doemit - emit a strip operator
- == static void doemit(register struct parse *p, sop op, size_t opnd);
- *
- * It might seem better to implement this as a macro with a function as
- * hard-case backup, but it's just too big and messy unless there are
- * some changes to the data structures.  Maybe later.
- */
 static void doemit(register struct parse *p,sop op,size_t opnd)
 {
     /* avoid making error situations worse */
@@ -1538,10 +1714,18 @@ static void doemit(register struct parse *p,sop op,size_t opnd)
 
 
 
-/*
- - doinsert - insert a sop into the strip
- == static void doinsert(register struct parse *p, sop op, size_t opnd, sopno pos);
- */
+/* @funcstatic  doinsert ******************************************************
+**
+** insert a sop into the strip
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] op [sop] Undocumented
+** @param [?] opnd [size_t] Undocumented
+** @param [?] pos [sopno] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void doinsert(register struct parse *p,sop op,size_t opnd,sopno pos)
 {
     register sopno sn;
@@ -1579,10 +1763,17 @@ static void doinsert(register struct parse *p,sop op,size_t opnd,sopno pos)
 
 
 
-/*
- - dofwd - complete a forward reference
- == static void dofwd(register struct parse *p, sopno pos, sop value);
- */
+/* @funcstatic  dofwd *********************************************************
+**
+** complete a forward reference
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] pos [register sopno] Undocumented
+** @param [?] value [sop] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void dofwd(register struct parse *p,register sopno pos,sop value)
 {
     /* avoid making error situations worse */
@@ -1597,10 +1788,16 @@ static void dofwd(register struct parse *p,register sopno pos,sop value)
 
 
 
-/*
- - enlarge - enlarge the strip
- == static void enlarge(register struct parse *p, sopno size);
- */
+/* @funcstatic  enlarge *******************************************************
+**
+** enlarge the strip
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] size [register sopno] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void enlarge(register struct parse *p, register sopno size)
 {
     register sop *sp;
@@ -1621,10 +1818,16 @@ static void enlarge(register struct parse *p, register sopno size)
 
 
 
-/*
- - stripsnug - compact the strip
- == static void stripsnug(register struct parse *p, register REGUTSSTRUCT *g);
- */
+/* @funcstatic stripsnug *****************************************************
+**
+** compact the strip
+**
+** @param [?] p [register struct parse*] Undocumented
+** @param [?] g [register REGUTSSTRUCT*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void stripsnug(register struct parse *p,register REGUTSSTRUCT *g)
 {
     g->nstates = p->slen;
@@ -1640,16 +1843,22 @@ static void stripsnug(register struct parse *p,register REGUTSSTRUCT *g)
 
 
 
-/*
- - findmust - fill in must and mlen with longest mandatory literal string
- == static void findmust(register struct parse *p, register REGUTSSTRUCT *g);
- *
- * This algorithm could do fancy things like analyzing the operands of |
- * for common subsequences.  Someday.  This code is simple and finds most
- * of the interesting cases.
- *
- * Note that must and mlen got initialized during setup.
- */
+/* @funcstatic findmust ******************************************************
+**
+** fill in must and mlen with longest mandatory literal string
+**
+** This algorithm could do fancy things like analyzing the operands of |
+** for common subsequences.  Someday.  This code is simple and finds most
+** of the interesting cases.
+**
+** Note that must and mlen got initialized during setup.
+**
+** @param [?] p [struct parse*] Undocumented
+** @param [?] g [register REGUTSSTRUCT*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void findmust(struct parse *p,register REGUTSSTRUCT *g)
 {
     register sop *scan;
@@ -1735,11 +1944,16 @@ static void findmust(struct parse *p,register REGUTSSTRUCT *g)
 
 
 
-/*
- - pluscount - count + nesting
- == static sopno pluscount(register struct parse *p, register REGUTSSTRUCT *g);
- */
-			/* nesting depth */
+/* @funcstatic  pluscount *****************************************************
+**
+** count + nesting
+**
+** @param [?] p [struct parse*] Undocumented
+** @param [?] g [register REGUTSSTRUCT*] Undocumented
+** @return [sopno] nesting depth
+** @@
+******************************************************************************/
+
 static sopno pluscount(struct parse *p,register REGUTSSTRUCT *g)
 {
     register sop *scan;
@@ -1776,7 +1990,14 @@ static sopno pluscount(struct parse *p,register REGUTSSTRUCT *g)
 
 
 
-/* Unused functions to keep compiler happy */
+/* @func regcompUnused ********************************************************
+**
+** Unused functions to keep compiler happy
+**
+** @return [void]
+** @@
+******************************************************************************/
+
 void regcompUnused(void)
 {
     cset ucset;

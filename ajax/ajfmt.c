@@ -787,6 +787,7 @@ static const Except_T Fmt_Overflow = { "Formatting Overflow" };
 ** floating point conversions all use cvt_f which sends everything to
 ** the standard C library. Also, cvt_d is used by alternative codes.
 **
+** @return [void]
 ******************************************************************************/
 
 static Fmt_T cvt[256] =
@@ -818,6 +819,7 @@ static Fmt_T cvt[256] =
 ** floating point conversions all use cvt_f which sends everything to
 ** the standard C library. Also, cvt_d is used by alternative codes.
 **
+** @return [void]
 ******************************************************************************/
 
 static Fmt_S scvt[256] =
@@ -895,7 +897,7 @@ static ajint fmtAjInsert(int c, void* cl)
 **
 ** Appends a character to a buffer, resizing it if necessary
 **
-** @param [R] c [int] Character to be written
+** @param [R] c [ajint] Character to be written
 ** @param [R] cl [void*] Output file
 ** @return [ajint] 0 on success
 ******************************************************************************/
@@ -1562,6 +1564,9 @@ void ajFmtVfmt (int put(int c, void* cl), void* cl, const char* fmt,
 		fmt++;
 	    }
 	    c = *fmt++;		/* finally, next character is the code */
+
+	    /* Calling funclist Fmt_T() */
+
 	    (void) assert(cvt[(int)c]);	/* we need a defined routine */
 	    (*cvt[(int)c])(c, VA_P(ap), put, cl, (ajuint *)flags, width,
 			   precision);
@@ -1906,6 +1911,8 @@ static ajint ajFmtVscan(char *thys,const char *fmt,va_list ap)
 
 	/* *q is the conversion function to call */
 	ok = ajTrue;
+
+	/* Calling funclist Fmt_S() */
 	(void) assert(scvt[(int)*q]);
 	(*scvt[(int)*q])(q,&p,VA_P(ap),width,convert,&ok);
 

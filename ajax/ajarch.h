@@ -33,6 +33,8 @@ typedef unsigned int ajuint;
 typedef short ajshort;
 typedef unsigned short ajushort;
 typedef unsigned long long ajulong;
+#define ftell(a) ftello64(a)
+#define fseek(a,b,c) fseeko64(a,b,c)
 #endif
 
 

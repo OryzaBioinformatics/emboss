@@ -533,6 +533,17 @@ static void GraphSymbols(float *x1, float *y1, ajint numofdots,
 ******************************************************************************/
 
 static void GraphClose(void){
+  AjPList files=NULL;
+  AjPStr tmpStr=NULL;
+
+  ajGraphInfo(&files);
+  while (ajListstrLength(files)) {
+    ajListstrPop (files, &tmpStr);
+    ajDebug("GraphInfo file '%S'\n", tmpStr);
+    ajStrDel(&tmpStr);
+  }
+  ajListstrDel(&files);
+
   ajDebug ("=g= plend ()\n");
   plend();
 }  
@@ -714,6 +725,8 @@ void ajGraphOpenWin (AjPGraph thys, float xmin, float xmax,
   ajtime.format = 0;
 
   ajGraphSetDevice(thys);
+
+  /* Calling funclist graphType() */
   graphType[thys->displaytype].GOpen(thys, graphType[thys->displaytype].ext);
 
 
@@ -797,6 +810,7 @@ void ajGraphOpen (AjPGraph thys, PLFLT xmin, PLFLT xmax,
   ajtime.format = 0;
 
   ajGraphSetDevice(thys);
+  /* Calling funclist graphType() */
   graphType[thys->displaytype].GOpen(thys, graphType[thys->displaytype].ext);
 
   if( ajStrLen(thys->title) <=1){
@@ -853,6 +867,7 @@ AjBool ajGraphSet (AjPGraph thys, AjPStr type) {
 
   for (i=0;graphType[i].Name;i++) {
     if (ajStrPrefixCaseCO(graphType[i].Name, type)) {
+      /* Calling funclist graphType() */
       if (!graphType[i].GOpen) {
 	ajDebug("ajGraphSet type '%S' displaytype %d '%s' no GOpen function\n",
 	      type, i, graphType[i].Name);
@@ -887,6 +902,7 @@ AjBool ajGraphxySet (AjPGraph thys, AjPStr type) {
 
   for (i=0;graphType[i].Name;i++) {
     if (ajStrPrefixCaseCO(graphType[i].Name, type)) {
+      /* Calling funclist graphType() */
       if (!graphType[i].XYDisplay) {
 	ajDebug("ajGraphxySet type '%S' displaytype %d '%s' no XYDisplay function\n",
 		type, i, graphType[i].Name);
@@ -2791,7 +2807,7 @@ AjPGraphData ajGraphxyDataNewI (ajint numofpoints) {
 **
 ** add another graph structure to the multiple graph structure.
 **
-** @param [w] mult [AjPGraph] multple graph structure.
+** @param [w] mult [AjPGraph] multiple graph structure.
 ** @param [r] graphdata [AjPGraphData] graph to be added.
 ** @return [ajint] 1 if graph added successfully else 0;
 ** @@
@@ -2818,7 +2834,7 @@ ajint ajGraphxyAddGraph(AjPGraph mult, AjPGraphData graphdata){
 **
 ** replace graph structure into the multiple graph structure.
 **
-** @param [w] mult [AjPGraph] multple graph structure.
+** @param [w] mult [AjPGraph] multiple graph structure.
 ** @param [r] graphdata [AjPGraphData] graph to be added.
 ** @return [ajint] 1 if graph added successfully else 0;
 ** @@
@@ -3297,7 +3313,7 @@ void ajGraphxySetYGrid(AjPGraph graphs, AjBool set){
 **
 ** Set the max and min of the data points for all graphs. 
 **
-** @param [rw] graphs [AjPGraph] multple graph structure.
+** @param [rw] graphs [AjPGraph] multiple graph structure.
 ** @param [r] xmin [float]  x min.
 ** @param [r] xmax [float]  x max.
 ** @param [r] ymin [float]  y min.
@@ -3327,7 +3343,7 @@ void ajGraphxySetMaxMin(AjPGraph graphs,float xmin,float xmax,
 **
 ** Set the max and min of the data points you wish to display. 
 **
-** @param [rw] graphdata [AjPGraphData] multple graph structure.
+** @param [rw] graphdata [AjPGraphData] multiple graph structure.
 ** @param [r] xmin [float]  x min.
 ** @param [r] xmax [float]  x max.
 ** @param [r] ymin [float]  y min.
@@ -3377,7 +3393,7 @@ void ajGraphDataxyMaxMin(float *array, ajint npoints, float *min, float *max)
 **
 ** Set the scale max and min of the data points you wish to display. 
 **
-** @param [rw] graphdata [AjPGraphData] multple graph structure.
+** @param [rw] graphdata [AjPGraphData] multiple graph structure.
 ** @param [r] xmin [float]  true x min.
 ** @param [r] xmax [float]  true x max.
 ** @param [r] ymin [float]  true y min.
@@ -3400,7 +3416,7 @@ void ajGraphDataxySetMaxima(AjPGraphData graphdata, float xmin, float xmax,
 **
 ** Set the type of the graph for data output. 
 **
-** @param [rw] graphdata [AjPGraphData] multple graph structure.
+** @param [rw] graphdata [AjPGraphData] multiple graph structure.
 ** @param [r] type [char*]  Type e.g. "2D Plot", "Histogram".
 ** @return [void]
 ** @@
@@ -3582,6 +3598,7 @@ static void GraphxyGeneral (AjPGraph graphs, AjBool closeit) {
 *************************************************************************/
 void ajGraphxyDisplay (AjPGraph graphs, AjBool closeit) {
 
+  /* Calling funclist graphType() */
   (graphType[graphs->displaytype].XYDisplay)
     (graphs, closeit, graphType[graphs->displaytype].ext);
   return;
@@ -4933,8 +4950,49 @@ void ajGraphRectangleOnCurve(PLFLT xcentre, PLFLT ycentre, PLFLT Radius, PLFLT B
   return;
 }
 
+/* @func ajGraphInfo **************************************************
+**
+** Information on files created for graph output
+**
+** @param [w] files [AjPList] List of graph files
+** @return [ajint] Number of files (will match length of list)
+** @@
+******************************************************************************/
 
+ajint ajGraphInfo(AjPList* files)
+{
+  ajint i;
+  ajint j;
+  char tmp[1024];
+  AjPStr tmpStr=NULL;
 
+  i = plfileinfo(tmp);
+
+  ajDebug("ajGraphInfo i:%d tmp:'%s'\n", i, tmp);
+
+  *files = ajListstrNew();
+
+  ajDebug("ajGraphInfo new list\n");
+
+  if (!i)
+    return 0;
+
+  if (i < 0) {		/* single filename  in tmp*/
+    ajStrAssC(&tmpStr, tmp);
+    ajListstrPushApp(*files, tmpStr);
+    tmpStr=NULL;
+    return 1;
+  }
+
+  for (j=1; j<=i; j++) {	/* family: tmp has format, i is no. of files */
+    ajDebug("ajGraphInfo printing file %d\n", j);
+    ajFmtPrintS(&tmpStr, tmp, j);
+    ajDebug("ajGraphInfo storing file '%S'\n", tmpStr);
+    ajListstrPushApp(*files, tmpStr);
+    tmpStr=NULL;
+  }
+  return i;
+}
 
 /* @func ajGraphUnused **************************************************
 **

@@ -151,21 +151,26 @@ static void reginsert(register struct comp *cp,char op,char *opnd);
 static char *regnode(register struct comp *cp, char op);
 static void regc(register struct comp *cp, char b);
 
-/*
- - hsregcomp - compile a regular expression into internal code
- *
- * We can't allocate space until we know how big the compiled form will be,
- * but we can't compile it (and thus know how big it is) until we've got a
- * place to put the code.  So we cheat:  we compile it twice, once with code
- * generation turned off and size counting turned on, and once "for real".
- * This also means that we don't allocate space until we are sure that the
- * thing really will compile successfully, and we never have to move the
- * code and thus invalidate pointers into it.  (Note that it has to be in
- * one piece because free() must be able to free it all.)
- *
- * Beware that the optimization-preparation code in here knows about some
- * of the structure of the compiled regexp.
- */
+/* @func hsregcomp ************************************************************
+**
+** compile a regular expression into internal code
+**
+** We can't allocate space until we know how big the compiled form will be,
+** but we can't compile it (and thus know how big it is) until we've got a
+** place to put the code.  So we cheat:  we compile it twice, once with code
+** generation turned off and size counting turned on, and once "for real".
+** This also means that we don't allocate space until we are sure that the
+** thing really will compile successfully, and we never have to move the
+** code and thus invalidate pointers into it.  (Note that it has to be in
+** one piece because free() must be able to free it all.)
+**
+** Beware that the optimization-preparation code in here knows about some
+** of the structure of the compiled regexp.
+**
+** @param [?] exp [const char*] Undocumented
+** @return [regexp*] Undocumented
+** @@
+******************************************************************************/
 
 regexp * hsregcomp(const char *exp)
 {
@@ -253,15 +258,22 @@ regexp * hsregcomp(const char *exp)
 
 
 
-/*
- - reg - regular expression, i.e. main body or parenthesized thing
- *
- * Caller must absorb opening parenthesis.
- *
- * Combining parenthesis handling with the base level of regular expression
- * is a trifle forced, but the need to tie the tails of the branches to what
- * follows makes it hard to avoid.
- */
+/* @funcstatic  reg ***********************************************************
+**
+** regular expression, i.e. main body or parenthesized thing
+**
+** Caller must absorb opening parenthesis.
+**
+** Combining parenthesis handling with the base level of regular expression
+** is a trifle forced, but the need to tie the tails of the branches to what
+** follows makes it hard to avoid.
+**
+** @param [?] cp [register struct comp*] Undocumented
+** @param [?] paren [ajint] Undocumented
+** @param [?] flagp [ajint*] Undocumented
+** @return [char*] Undocumented
+** @@
+******************************************************************************/
 
 static char * reg(register struct comp *cp, ajint paren, ajint *flagp)
 {
@@ -334,11 +346,16 @@ static char * reg(register struct comp *cp, ajint paren, ajint *flagp)
 
 
 
-/*
- - regbranch - one alternative of an | operator
- *
- * Implements the concatenation operator.
- */
+/* @funcstatic  regbranch *****************************************************
+**
+** one alternative of an | operator. Implements the concatenation operator.
+**
+** @param [?] cp [register struct comp*] Undocumented
+** @param [?] flagp [ajint*] Undocumented
+** @return [char*] Undocumented
+** @@
+******************************************************************************/
+
 static char * regbranch( register struct comp *cp, ajint *flagp)
 {
     register char *ret;
@@ -373,15 +390,21 @@ static char * regbranch( register struct comp *cp, ajint *flagp)
 
 
 
-/*
- - regpiece - something followed by possible [*+?]
- *
- * Note that the branching code sequences used for ? and the general cases
- * of * and + are somewhat optimized:  they use the same NOTHING node as
- * both the endmarker for their branch list and the body of the last branch.
- * It might seem that this node could be dispensed with entirely, but the
- * endmarker role is not redundant.
- */
+/* @funcstatic  regpiece ******************************************************
+**
+** something followed by possible [*+?]
+**
+** Note that the branching code sequences used for ? and the general cases
+** of * and + are somewhat optimized:  they use the same NOTHING node as
+** both the endmarker for their branch list and the body of the last branch.
+** It might seem that this node could be dispensed with entirely, but the
+** endmarker role is not redundant.
+**
+** @param [?] cp [register struct comp*] Undocumented
+** @param [?] flagp [ajint*] Undocumented
+** @return [char*] Undocumented
+** @@
+******************************************************************************/
 
 static char * regpiece(register struct comp *cp, ajint *flagp)
 {
@@ -450,14 +473,21 @@ static char * regpiece(register struct comp *cp, ajint *flagp)
 
 
 
-/*
- - regatom - the lowest level
- *
- * Optimization:  gobbles an entire sequence of ordinary characters so that
- * it can turn them into a single node, which is smaller to store and
- * faster to run.  Backslashed characters are exceptions, each becoming a
- * separate node; the code is simpler that way and it's not worth fixing.
- */
+
+/* @funcstatic  regatom *******************************************************
+**
+** the lowest level
+**
+** Optimization:  gobbles an entire sequence of ordinary characters so that
+** it can turn them into a single node, which is smaller to store and
+** faster to run.  Backslashed characters are exceptions, each becoming a
+** separate node; the code is simpler that way and it's not worth fixing.
+**
+** @param [?] cp [register struct comp*] Undocumented
+** @param [?] flagp [ajint*] Undocumented
+** @return [char*] Undocumented
+** @@
+******************************************************************************/
 
 static char * regatom(register struct comp *cp, ajint *flagp)
 {
@@ -576,10 +606,16 @@ static char * regatom(register struct comp *cp, ajint *flagp)
 
 
 
-/*
- - regnode - emit a node
- */
-			/* Location. */
+/* @funcstatic  regnode *******************************************************
+**
+** emit a node
+**
+** @param [?] cp [register struct comp*] Undocumented
+** @param [?] op [char] Undocumented
+** @return [char*] Location.
+** @@
+******************************************************************************/
+
 static char * regnode(register struct comp *cp, char op)
 {
     register char *const ret = cp->regcode;
@@ -604,9 +640,16 @@ static char * regnode(register struct comp *cp, char op)
 
 
 
-/*
- - regc - emit (if appropriate) a byte of code
- */
+/* @funcstatic  regc **********************************************************
+**
+** emit (if appropriate) a byte of code
+**
+** @param [?] cp [register struct comp*] Undocumented
+** @param [?] b [char] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void regc(register struct comp *cp, char b)
 {
     if (EMITTING(cp))
@@ -619,11 +662,19 @@ static void regc(register struct comp *cp, char b)
 
 
 
-/*
- - reginsert - insert an operator in front of already-emitted operand
- *
- * Means relocating the operand.
- */
+/* @funcstatic  reginsert *****************************************************
+**
+** insert an operator in front of already-emitted operand
+**
+** Means relocating the operand.
+**
+** @param [?] cp [register struct comp*] Undocumented
+** @param [?] op [char] Undocumented
+** @param [?] opnd [char*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void reginsert(register struct comp *cp,char op,char *opnd)
 {
     register char *place;
@@ -647,9 +698,17 @@ static void reginsert(register struct comp *cp,char op,char *opnd)
 
 
 
-/*
- - regtail - set the next-pointer at the end of a node chain
- */
+/* @funcstatic  regtail *******************************************************
+**
+** set the next-pointer at the end of a node chain
+**
+** @param [?] cp [register struct comp*] Undocumented
+** @param [?] p [char*] Undocumented
+** @param [?] val [char*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void regtail(register struct comp *cp,char *p,char *val)
 {
     register char *scan;
@@ -672,9 +731,17 @@ static void regtail(register struct comp *cp,char *p,char *val)
 
 
 
-/*
- - regoptail - regtail on operand of first argument; nop if operandless
- */
+/* @funcstatic  regoptail *****************************************************
+**
+** regtail on operand of first argument; nop if operandless
+**
+** @param [?] cp [register struct comp*] Undocumented
+** @param [?] p [char*] Undocumented
+** @param [?] val [char*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 static void regoptail(register struct comp *cp,char *p,char *val)
 {
     /* "Operandless" and "op != BRANCH" are synonymous in practice. */
@@ -718,9 +785,16 @@ void regdump();
 static char *regprop();
 #endif
 
-/*
- - hsregexec - match a regexp against a string
- */
+/* @func hsregexec ************************************************************
+**
+** match a regexp against a string
+**
+** @param [?] prog [register regexp*] Undocumented
+** @param [?] str [const char*] Undocumented
+** @return [ajint] Undocumented
+** @@
+******************************************************************************/
+
 ajint hsregexec(register regexp *prog,const char *str)
 {
     register char *string = (char *)str; /* avert const poisoning */
@@ -779,10 +853,17 @@ ajint hsregexec(register regexp *prog,const char *str)
 
 
 
-/*
- - regtry - try match at specific point
- */
-			/* 0 failure, 1 success */
+/* @funcstatic  regtry ********************************************************
+**
+** try match at specific point
+**
+** @param [?] ep [register struct exec*] Undocumented
+** @param [?] prog [regexp*] Undocumented
+** @param [?] string [char*] Undocumented
+** @return [ajint] 0 failure, 1 success
+** @@
+******************************************************************************/
+
 static ajint regtry(register struct exec *ep,regexp *prog,char *string)
 {
     register ajint i;
@@ -812,17 +893,23 @@ static ajint regtry(register struct exec *ep,regexp *prog,char *string)
 
 
 
-/*
- - regmatch - main matching routine
- *
- * Conceptually the strategy is simple:  check to see whether the current
- * node matches, call self recursively to see whether the rest matches,
- * and then act accordingly.  In practice we make some effort to avoid
- * recursion, in particular by going through "ordinary" nodes (that don't
- * need to know whether the rest of the match failed) by a loop instead of
- * by recursion.
- */
-		/* 0 failure, 1 success */
+/* @funcstatic  regmatch ******************************************************
+**
+** main matching routine
+**
+** Conceptually the strategy is simple:  check to see whether the current
+** node matches, call self recursively to see whether the rest matches,
+** and then act accordingly.  In practice we make some effort to avoid
+** recursion, in particular by going through "ordinary" nodes (that don't
+** need to know whether the rest of the match failed) by a loop instead of
+** by recursion.
+**
+** @param [?] ep [register struct exec*] Undocumented
+** @param [?] prog [char*] Undocumented
+** @return [ajint] 0 failure, 1 success
+** @@
+******************************************************************************/
+
 static ajint regmatch(register struct exec *ep, char *prog)
 {
     register char *scan;		/* Current node. */
@@ -989,9 +1076,15 @@ static ajint regmatch(register struct exec *ep, char *prog)
 
 
 
-/*
- - regrepeat - report how many times something simple would match
- */
+/* @funcstatic  regrepeat *****************************************************
+**
+** report how many times something simple would match
+**
+** @param [?] ep [register struct exec*] Undocumented
+** @param [?] node [char*] Undocumented
+** @return [size_t] Undocumented
+** @@
+******************************************************************************/
 
 static size_t regrepeat(register struct exec *ep,char *node)
 {
@@ -1030,10 +1123,16 @@ static size_t regrepeat(register struct exec *ep,char *node)
 
 
 
-/*
- - regnext - dig the "next" pointer out of a node
- */
-static char *regnext(register char *p)
+/* @funcstatic  regnext *******************************************************
+**
+** dig the "next" pointer out of a node
+**
+** @param [?] p [register char*] Undocumented
+** @return [char*] Undocumented
+** @@
+******************************************************************************/
+
+static char* regnext(register char *p)
 {
     register const ajint offset = NEXT(p);
 
@@ -1051,9 +1150,15 @@ static char *regnext(register char *p)
 
 static char *regprop();
 
-/*
- - regdump - dump a regexp onto stdout in vaguely comprehensible form
- */
+/* @func regdump **************************************************************
+**
+** dump a regexp onto stdout in vaguely comprehensible form
+**
+** @param [?] r [regexp*] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
 void regdump(regexp *r)
 {
     register char *s;
@@ -1099,10 +1204,16 @@ void regdump(regexp *r)
 
 
 
-/*
- - regprop - printable representation of opcode
- */
-static char *regprop(char *op)
+/* @funcstatic  regprop *******************************************************
+**
+** printable representation of opcode
+**
+** @param [?] op [char*] Undocumented
+** @return [char*] Undocumented
+** @@
+******************************************************************************/
+
+static char* regprop(char *op)
 {
     register char *p;
     static char buf[50];

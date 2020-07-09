@@ -749,6 +749,8 @@ AjBool ajSeqABISampleName(AjPFile fp, AjPStr *sample)
 /* @func seqAbiUnused ****************************************************
 **
 ** Unused functions for clean compile
+**
+** @return [void]
 ** @@
 ******************************************************************************/
 

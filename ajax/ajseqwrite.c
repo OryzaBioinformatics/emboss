@@ -195,6 +195,7 @@ void ajSeqAllWrite (AjPSeqout outseq, AjPSeq seq) {
   if (outseq->Single)
     (void) seqFileReopen(outseq);
 
+  /* Calling funclist seqOutFormat() */
   seqOutFormat[outseq->Format].Write (outseq);
   outseq->Count++;
 
@@ -269,6 +270,7 @@ void ajSeqsetWrite (AjPSeqout outseq, AjPSeqset seq) {
     if (outseq->Single)
       (void) seqFileReopen(outseq);
 
+    /* Calling funclist seqOutFormat() */
     seqOutFormat[outseq->Format].Write (outseq);
     outseq->Count++;
 
@@ -311,6 +313,7 @@ static void seqWriteListAppend (AjPSeqout outseq, AjPSeq seq) {
   if (outseq->Single) {
     ajDebug("single sequence mode: write immediately\n");
     seqDefName (&outseq->Name, !outseq->Single);
+    /* Calling funclist seqOutFormat() */
     seqOutFormat[outseq->Format].Write (outseq);
   }
 
@@ -334,8 +337,10 @@ void ajSeqWriteClose (AjPSeqout outseq) {
 
   ajDebug ("ajSeqWriteClose '%F'\n", outseq->File);
 
-  if (seqOutFormat[outseq->Format].Save)
+  if (seqOutFormat[outseq->Format].Save) {
+    /* Calling funclist seqOutFormat() */
     seqOutFormat[outseq->Format].Write (outseq);
+  }
 
   if (outseq->Knownfile)
     outseq->File = NULL;
@@ -384,6 +389,7 @@ void ajSeqWrite (AjPSeqout outseq, AjPSeq seq) {
   if (outseq->Single)
     (void) seqFileReopen(outseq);
 
+  /* Calling funclist seqOutFormat() */
   seqOutFormat[outseq->Format].Write (outseq);
   outseq->Count++;
 
@@ -1155,6 +1161,12 @@ static void seqWriteClustal (AjPSeqout outseq) {
       ilen = ajSeqLen(seq);
   }  
 
+  for (i=0; i < isize; i++) {
+    seq = seqarr[i];
+    if (ilen > ajSeqLen(seq))
+      ajSeqFill(seq, ilen);
+  }  
+
   (void) ajFmtPrintF (outseq->File,
 		      "CLUSTAL W(1.4) multiple sequence alignment\n");
   
@@ -1515,8 +1527,6 @@ static void seqWriteMsf (AjPSeqout outseq) {
 	     ajSeqGetName(seq), ajSeqLen(seq), check);
     checktot += check;
     checktot = checktot % 10000;
-    if (ilen < ajSeqLen(seq))
-      ilen = ajSeqLen(seq);
   }  
 
   ajDebug ("checksum %d\n", checktot);
@@ -2592,7 +2602,7 @@ void ajSeqPrintOutFormat (AjPFile outf, AjBool full) {
 
   ajFmtPrintF (outf, "\n");
   ajFmtPrintF (outf, "# sequence output formats\n");
-  ajFmtPrintF (outf, "# Name         Try (if true, try)\n");
+  ajFmtPrintF (outf, "# Name         Single (if true, 1 sequence per file)\n");
   ajFmtPrintF (outf, "\n");
   ajFmtPrintF (outf, "OutFormat {\n");
   for (i=0; seqOutFormat[i].Name; i++) {
@@ -3272,21 +3282,26 @@ void ajSeqoutTrace (AjPSeqout seq) {
     
 }
 
-/* @func ajSeqWriteCdb ********************************************************
+
+
+
+
+/* @func ajSeqWriteXyz ********************************************************
 **
-** Writes a Cdb sequence in SWISSPROT format.
+** Writes a sequence in SWISSPROT format.
 **
 ** @param [w] outf [AjPFile] output stream
 ** @param [r] seq [AjPStr] sequence
+** @param [r] prefix [char *] identifier code - should be 2 char's long
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajSeqWriteCdb (AjPFile outf, AjPStr seq)
+void ajSeqWriteXyz(AjPFile outf, AjPStr seq, char *prefix)
 {
     AjPSeqout outseq=NULL;
-    
     static SeqPSeqFormat sf=NULL;
+    
     ajint mw;
     ajuint crc;
 
@@ -3298,8 +3313,8 @@ void ajSeqWriteCdb (AjPFile outf, AjPStr seq)
     crc = ajSeqCrc (outseq->Seq);
     mw = (ajint) (0.5+ajSeqMW (outseq->Seq));
     (void) ajFmtPrintF (outseq->File,
-			"SQ   SEQUENCE %5d AA; %6d MW;  %08X CRC32;\n",
-			ajStrLen(outseq->Seq), mw, crc);
+			"%-5sSEQUENCE %5d AA; %6d MW;  %08X CRC32;\n",
+			prefix, ajStrLen(outseq->Seq), mw, crc);
 
     seqSeqFormat(ajStrLen(outseq->Seq), &sf);
     (void) strcpy (sf->endstr, "");

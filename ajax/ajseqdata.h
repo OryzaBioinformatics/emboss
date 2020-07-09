@@ -105,7 +105,7 @@ typedef struct AjSSelex
 } AjOSelex,*AjPSelex;
 
 
-/* @data AjPSelexData *******************************************************
+/* @data AjPSelexdata *******************************************************
 **
 ** Ajax Selex data object (individual sequences)
 **
@@ -131,6 +131,73 @@ typedef struct AjSSelexdata
     AjPSelexSQ sq;
 } AjOSelexdata,*AjPSelexdata;
 
+
+/* @data AjPStockholm ***********************************************
+**
+** Ajax Stockholm object.
+**
+** @new ajStockholmNew Default constructor
+** @delete ajStockholmDel Default destructor
+** @@
+******************************************************************************/
+
+typedef struct AjSStockholm
+{
+    AjPStr id;
+    AjPStr ac;
+    AjPStr de;
+    AjPStr au;
+    AjPStr al;
+    AjPStr tp;
+    AjPStr se;
+    ajint  ga[2];
+    float  tc[2];
+    float  nc[2];
+    AjPStr bm;
+    AjPStr ref;
+    AjPStr dc;
+    AjPStr dr;
+    AjPStr cc;
+    AjPStr sacons;
+    AjPStr sscons;
+    AjPStr gs;
+    AjPStr *name;
+    AjPStr *str;
+    ajint  n;
+    ajint  Count;
+} AjOStockholm,*AjPStockholm;
+
+
+/* @data AjPStockholmdata *****************************************************
+**
+** Ajax Stockholm data object (individual sequences)
+**
+** @new ajStockholmdataNew Default constructor
+** @delete ajStockholmdataDel Default destructor
+** @@
+******************************************************************************/
+
+typedef struct AjSStockholmdata
+{
+    AjPStr id;
+    AjPStr ac;
+    AjPStr de;
+    AjPStr au;
+    AjPStr al;
+    AjPStr tp;
+    AjPStr se;
+    AjPStr bm;
+    AjPStr sscons;
+    AjPStr sacons;
+    AjPStr ref;
+    AjPStr dc;
+    AjPStr dr;
+    AjPStr cc;
+    AjPStr gs;
+    float  ga[2];
+    float  tc[2];
+    float  nc[2];
+} AjOStockholmdata,*AjPStockholmdata;
 
 
 /* @data AjPSeqin *******************************************************
@@ -198,6 +265,7 @@ typedef struct AjSSeqin {
   ajlong Fpos;			/* File position (fseek) for building USA */
   AjPSeqQuery Query;		/* Query data - see AjPSeqQuery */
   AjPSelex Selex;
+  AjPStockholm Stockholm;
   void *Data;			/* Format data for reuse,
 				   e.g. multiple sequence input */
 } AjOSeqin, *AjPSeqin;
@@ -294,6 +362,7 @@ typedef struct AjSSeq {
   AjPList Acclist;		/* Secondary accessions */
   AjPStr Seq;			/* The sequence */
   AjPSelexdata Selexdata;
+  AjPStockholmdata Stock;
 } AjOSeq, *AjPSeq;
 
 /* @data AjPSeqset *******************************************************

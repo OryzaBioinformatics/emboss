@@ -70,6 +70,7 @@ extern "C"
 ** @ass ajStrFromLong Creates a string representation of a ajlong int
 ** @ass ajStrFromFloat Creates a string representation of a float
 ** @ass ajStrFromDouble Creates a string representation of a double
+** @ass ajStrFromDoubleE Creates a string representation (exp) of a double
 **
 ** @mod ajStrApp   Appends a string object
 ** @mod ajStrAppC  Appends a char* text
@@ -311,6 +312,7 @@ void       ajStrFixI (const AjPStr thys, ajint ilen);
 void       ajStrFixTestI (const AjPStr thys, ajint ilen);
 AjBool     ajStrFromBool (AjPStr *pthis, AjBool boule);
 AjBool     ajStrFromDouble (AjPStr *pthis, double val, ajint precision);
+AjBool     ajStrFromDoubleE (AjPStr* pthis, double val, ajint precision);
 AjBool     ajStrFromFloat (AjPStr *pthis, float val, ajint precision);
 AjBool     ajStrFromInt (AjPStr *pthis, ajint val);
 AjBool     ajStrFromLong (AjPStr *pthis, ajlong val);

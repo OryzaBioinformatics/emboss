@@ -168,6 +168,12 @@ void ajHistDisplay (AjPHist hist){
   bin_range = (hist->xmax - hist->xmin)/(float)hist->bins;
 
   if(hist->displaytype != HIST_SEPARATE){
+    if (max <= 0.01) {
+      if (max < 0.0)
+	max = 0.0;
+      else
+	max = 1.0;
+    }
     ajGraphOpenPlot (hist->graph, 1);
     ajGraphPlenv(hist->xmin-percent5, hist->xmax+percent5, min,
 		 max*((float)1.025), aj_hist_mark);
@@ -216,6 +222,12 @@ void ajHistDisplay (AjPHist hist){
     bar_width = bin_range;
     for(i=0;i<hist->numofsets;i++){
       
+      if (totals[i] <= 0.01) {	/* apparently the ymin value */
+	if (totals[i] < 0.0)
+	  totals[i] = 0.0;
+	else
+	  totals[i] = 1.0;
+      }
       ajGraphPlenv(hist->xmin-percent5, hist->xmax+percent5,
 		   totals2[i]*((float)1.025), totals[i]*((float)1.025),
 		   aj_hist_mark);

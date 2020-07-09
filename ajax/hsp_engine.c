@@ -52,7 +52,7 @@ struct match {
 #include "hsp_engine.h"
 
 #ifdef REDEBUG
-#define	SP(t, s, c)	print(m, t, s, c, stdout)
+#define	SP(t, s, c)	hsp_engine_print(m, t, s, c, stdout)
 #define	AT(t, p1, p2, s1, s2)	at(m, t, p1, p2, s1, s2)
 #define	NOTE(str)	{ if (m->eflags&REG_TRACE) (void) printf("=%s\n",
 								 (str)); }
@@ -241,13 +241,19 @@ static ajint matcher(register REGUTSSTRUCT *g, char *string, size_t nmatch,
     return(0);
 }
 
-/*
-   - dissect - figure out what matched what, no back references
-   == static char *dissect(register struct match *m, char *start, \
-			   ==	char *stop, sopno startst, sopno stopst);
-			   */
-/* == stop (success) always */
-static char *dissect(register struct match *m, char *start, char *stop,
+/* @funcstatic dissect ********************************************
+**
+** figure out what matched what, no back references
+**
+** @param [r] m [register struct match*] Undocumented
+** @param [r] start [char*] Undocumented
+** @param [r] stop [char*] Undocumented
+** @param [r] startst [sopno] Undocumented
+** @param [r] stopst [sopno] Undocumented
+** @return [char*] Undocumented
+******************************************************************************/
+
+static char* dissect(register struct match *m, char *start, char *stop,
 		     sopno startst, sopno stopst)
 {
     register ajint i;
@@ -436,13 +442,20 @@ static char *dissect(register struct match *m, char *start, char *stop,
     return(sp);
 }
 
-/*
-   - backref - figure out what matched what, figuring in back references
-   == static char *backref(register struct match *m, char *start, \
-			   ==	char *stop, sopno startst, sopno stopst, sopno lev);
-			   */
-/* == stop (success) or NULL (failure) */
-static char *backref(register struct match *m, char *start, char *stop,
+/* @funcstatic backref ********************************************
+**
+** figure out what matched what, figuring in back references
+**
+** @param [r] m [register struct match*] Undocumented
+** @param [r] start [char*] Undocumented
+** @param [r] stop [char*] Undocumented
+** @param [r] startst [sopno] Undocumented
+** @param [r] stopst [sopno] Undocumented
+** @param [r] lev [sopno] Undocumented
+** @return [char*] Undocumented
+******************************************************************************/
+
+static char* backref(register struct match *m, char *start, char *stop,
 		     sopno startst, sopno stopst, sopno lev)
 {
     register ajint i;
@@ -640,13 +653,19 @@ static char *backref(register struct match *m, char *start, char *stop,
     return((char *)NULL);		/* dummy */
 }
 
-/*
-   - fast - step through the string at top speed
-   == static char *fast(register struct match *m, char *start, \
-			==	char *stop, sopno startst, sopno stopst);
-			*/
-/* where tentative match ended, or NULL */
-static char *fast(register struct match *m, char *start, char *stop,
+/* @funcstatic fast ********************************************
+**
+** step through the string at top speed
+**
+** @param [r] m [register struct match*] Undocumented
+** @param [r] start [char*] Undocumented
+** @param [r] stop [char*] Undocumented
+** @param [r] startst [sopno] Undocumented
+** @param [r] stopst [sopno] Undocumented
+** @return [char*]  where tentative match ended, or NULL
+******************************************************************************/
+
+static char* fast(register struct match *m, char *start, char *stop,
 		  sopno startst, sopno stopst)
 {
     register states st = m->st;
@@ -734,13 +753,19 @@ static char *fast(register struct match *m, char *start, char *stop,
     return(NULL);
 }
 
-/*
-   - slow - step through the string more deliberately
-   == static char *slow(register struct match *m, char *start, \
-			==	char *stop, sopno startst, sopno stopst);
-			*/
-/* where it ended */
-static char *slow(register struct match *m, char *start, char *stop,
+/* @funcstatic slow ********************************************
+**
+** step through the string more deliberately
+**
+** @param [r] m [register struct match*] Undocumented
+** @param [r] start [char*] Undocumented
+** @param [r] stop [char*] Undocumented
+** @param [r] startst [sopno] Undocumented
+** @param [r] stopst [sopno] Undocumented
+** @return [char*]  where it ended
+******************************************************************************/
+
+static char* slow(register struct match *m, char *start, char *stop,
 		  sopno startst, sopno stopst)
 {
     register states st = m->st;
@@ -824,20 +849,18 @@ static char *slow(register struct match *m, char *start, char *stop,
 }
 
 
-/*
-   - step - map set of states reachable before char to set reachable after
-   == static states step(register REGUTSSTRUCT *g, sopno start, sopno stop, \
-			 ==	register states bef, ajint ch, register states aft);
-			 == #define	BOL	(OUT+1)
-			 == #define	EOL	(BOL+1)
-			 == #define	BOLEOL	(BOL+2)
-			 == #define	NOTHING	(BOL+3)
-			 == #define	BOW	(BOL+4)
-			 == #define	EOW	(BOL+5)
-			 == #define	CODEMAX	(BOL+5)		// highest code used
-			 == #define	NONCHAR(c)	((c) > CHAR_MAX)
-			 == #define	NNONCHAR	(CODEMAX-CHAR_MAX)
-			 */
+/* @funcstatic step ***********************************************************
+**
+** map set of states reachable before char to set reachable after
+**
+** @param [r] g [register REGUTSSTRUCT*] Undocumented
+** @param [r] start [sopno] Undocumented
+** @param [r] stop [sopno] Undocumented
+** @param [r] bef [register states] Undocumented
+** @param [r] ch [ajint] Undocumented
+** @param [r] aft [register states] Undocumented
+** @return [states] Undocumented
+******************************************************************************/
 
 static states step(register REGUTSSTRUCT *g, sopno start, sopno stop,
 		   register states bef, ajint ch, register states aft)
@@ -953,15 +976,22 @@ static states step(register REGUTSSTRUCT *g, sopno start, sopno stop,
 }
 
 #ifdef REDEBUG
-/*
-   - print - print a set of states
-   == #ifdef REDEBUG
-   == static void print(struct match *m, char *caption, states st, \
-			==	ajint ch, FILE *d);
-			== #endif
-			*/
 
-static void print(struct match m, char *caption, states st, ajint ch, FILE *d)
+
+/* @funcstatic hsp_engine_print ***********************************************
+**
+** print a set of states
+**
+** @param [r] m [struct match] Undocumented
+** @param [r] caption [char*] Undocumented
+** @param [r] st [states] Undocumented
+** @param [r] ch [ajint] Undocumented
+** @param [r] d [FILE*] Undocumented
+** @return [void]
+******************************************************************************/
+
+static void hsp_engine_print(struct match m, char *caption, states st,
+			    ajint ch, FILE *d)
 {
     register REGUTSSTRUCT *g = m->g;
     register ajint i;
@@ -976,19 +1006,24 @@ static void print(struct match m, char *caption, states st, ajint ch, FILE *d)
     for (i = 0; i < g->nstates; i++)
 	if (ISSET(st, i))
 	{
-	    (void) fprintf(d, "%s%d", (first) ? "\t" : ", ", i);
+	  (void) fprintf(d, "%s%d", (first) ? "\t" : ", ", i);
 	    first = 0;
 	}
     (void) fprintf(d, "\n");
 }
 
-/* 
-   - at - print current situation
-   == #ifdef REDEBUG
-   == static void at(struct match *m, char *title, char *start, char *stop, \
-		     ==						sopno startst, sopno stopst);
-		     == #endif
-		     */
+/* @funcstatic at **********************************************************
+**
+** print current situation
+**
+** @param [r] m [struct match*] Undocumented
+** @param [r] title[char*] Undocumented
+** @param [r] start [char*] Undocumented
+** @param [r] stop [char*] Undocumented
+** @param [r] startst [sopno] Undocumented
+** @param [r] stopst [sopno] Undocumented
+** @return [void]
+******************************************************************************/
 
 static void at(struct match *m, char *title, char *start, char *stop,
 	       sopno startst, sopno stopst)
@@ -1003,19 +1038,21 @@ static void at(struct match *m, char *title, char *start, char *stop,
 
 #ifndef PCHARDONE
 #define	PCHARDONE	/* never again */
-/*
-   - pchar - make a character printable
-   == #ifdef REDEBUG
-   == static char *pchar(ajint ch);
-   == #endif
-   *
-   * Is this identical to regchar() over in debug.c?  Well, yes.  But a
-   * duplicate here avoids having a debugging-capable regexec.o tied to
-   * a matching debug.o, and this is convenient.  It all disappears in
-   * the non-debug compilation anyway, so it doesn't matter much.
- */
-			/* -> representation */
-static char *pchar(ajint ch)
+
+/* @funcstatic pchar **********************************************************
+**
+** make a character printable
+**
+** Is this identical to regchar() over in debug.c?  Well, yes.  But a
+** duplicate here avoids having a debugging-capable regexec.o tied to
+** a matching debug.o, and this is convenient.  It all disappears in
+** the non-debug compilation anyway, so it doesn't matter much.
+**
+** @param [r] ch [ajint] Undocumented
+** @return [char*] Undocumented
+******************************************************************************/
+
+static char* pchar(ajint ch)
 {
     static char pbuf[10];
 

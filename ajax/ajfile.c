@@ -1754,6 +1754,9 @@ AjPFileBuff ajFileBuffNewFile (AjPFile file) {
 **
 ** Creates a new buffered input file object from an open file.
 **
+** The AjPFile pointer is a clone, so we should simply overwrite
+** whatever was there before, but we do need to clear the buffer
+**
 ** @param [w] pthys [AjPFileBuff*] Buffered file object.
 ** @param [r] file [AjPFile] File object to be buffered.
 ** @return [AjBool] ajTrue on success
@@ -1774,10 +1777,16 @@ AjBool ajFileBuffSetFile (AjPFileBuff* pthys, AjPFile file) {
   }
   thys = *pthys;
 
-  if (thys->File && (thys->File->Handle ==  file->Handle)) /* same file */
-    return ajTrue;
 
-  ajFileClose (&thys->File);
+  /* same file ??? */
+  if (thys->File && (thys->File->Handle ==  file->Handle)) { 
+    ajFileBuffClear (thys, -1);
+    return ajTrue;
+  }
+  
+  /* No: this is a copy of the true pointer. */
+  /* ajFileClose (&thys->File); */
+  
   thys->File = file;
 
   thys->Last = thys->Curr = thys->Lines = thys->Free = NULL;

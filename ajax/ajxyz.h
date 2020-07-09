@@ -15,6 +15,31 @@ extern "C"
 
 
 
+/* @data AjPPdbtosp *******************************************************
+**
+** Ajax Pdbtosp object.
+**
+** Holds swissprot codes and accession numbers for a PDB code.
+**
+** AjPPdbtosp is implemented as a pointer to a C data structure.
+**
+** @alias AjSPdbtosp
+** @alias AjOPdbtosp
+**
+** @@
+******************************************************************************/
+typedef struct AjSPdbtosp
+{   	
+    AjPStr     Pdb;    /* PDB code*/
+    ajint      n;      /* No. entries for this pdb code */
+    AjPStr    *Acc;    /* Accession numbers */
+    AjPStr    *Spr;    /* Swissprot codes */
+} AjOPdbtosp, *AjPPdbtosp;
+
+
+
+
+
 /* @data AjPScorealg *******************************************************
 **
 ** Ajax Scorealg object.
@@ -233,6 +258,9 @@ typedef struct AjSHit
   ajint     Rank;       /* Rank order of hit */	
   float     Score;      /* Score of hit */
   float     Eval;       /* E-value of hit */
+  AjBool    Target;     /* True if the Scophit is targetted for removal from 
+			     a list of Scophit objects */
+  AjBool    Priority;   /* True if the Scop hit is high priority. */
 } AjOHit, *AjPHit;
 
 
@@ -323,10 +351,17 @@ typedef struct AjSAtom
   float      Z;          /*Z coordinate*/
   float      O;          /*Occupancy */
   float      B;          /*B value thermal factor*/
+
+  /* Secondary structure-specific variables */
+  ajint      eNum;       /* Serial number of the element */
+  AjPStr     eId;        /* Element identifier */
+  char       eType;      /* Element type COIL ('C'), HELIX ('H'), SHEET ('E') or TURN ('T'). Has a default value of COIL. */
+  ajint      eClass;     /* Class of helix, an int from 1-10,  from 
+			    http://www.rcsb.org/pdb/docs/format/pdbguide2.2/guide2.2_frame.html (see below)*/
 } AjOAtom, *AjPAtom;
 
 
-/* @data AjPChain *******************************************************
+/* @data AjPChain ***********************************************************
 **
 ** Ajax chain object.
 **
@@ -347,6 +382,12 @@ typedef struct AjSChain
   ajint        Nres;       /*No. of amino acid residues*/
   ajint        Nlig;       /*No. of groups which are non-covalently associated 
 			   with the chain, excluding water ("heterogens")*/
+
+  ajint    numHelices;   /* No. of helices in the chain */
+  ajint   numStrands;   /* No. of strands in the chain */
+  ajint    numSheets;    /* No. of sheets in the chain */
+  ajint    numTurns;     /* No. of turns in the chain */
+
   AjPStr     Seq;	 /* sequence as string */
   AjPList    Atoms;      /*List of Atom objects for (potentially multiple models)
 			  of the polypeptide chain and any groups (ligands) that 
@@ -389,11 +430,29 @@ typedef struct AjSPdb
 			   never be uniquely associated with a chain */
 }AjOPdb, *AjPPdb;
 
+
+
+
 /* @data AjPScop *******************************************************
 **
 ** Ajax scop object.
 **
 ** Holds scop database data
+**
+** The variables have the following meaning:
+**
+**  AjPStr Entry;          Domain identifer code 
+**  AjPStr Pdb;            Corresponding pdb identifier code
+**  AjPStr Class;          SCOP class name as an AjPStr 
+**  AjPStr Fold;           SCOP fold  name as an AjPStr  
+**  AjPStr Superfamily;    SCOP superfamily name as an AjPStr 
+**  AjPStr Family;         SCOP family name as an AjPStr 
+**  AjPStr Domain;         SCOP domain name as an AjPStr 
+**  AjPStr Source;         SCOP source (species) as an AjPStr 
+**  ajint    N;            No. chains from which this domain is comprised 
+**  char   *Chain;         Chain identifiers 
+**  AjPStr *Start;         PDB residue number of first residue in domain 
+**  AjPStr *End;           PDB residue number of last residue in domain 
 **
 ** AjPScop is implemented as a pointer to a C data structure.
 **
@@ -402,22 +461,123 @@ typedef struct AjSPdb
 **
 ** @@
 ******************************************************************************/
-
 typedef struct AjSScop
+{
+    AjPStr Entry;         /* Domain identifer code */
+    AjPStr Pdb;           /* Corresponding pdb identifier code*/
+    AjPStr Class;         /* SCOP class name as an AjPStr */
+    AjPStr Fold;          /* SCOP fold  name as an AjPStr */ 
+    AjPStr Superfamily;   /* SCOP superfamily name as an AjPStr */
+    AjPStr Family;        /* SCOP family name as an AjPStr */
+    AjPStr Domain;        /* SCOP domain name as an AjPStr */
+    AjPStr Source;        /* SCOP source (species) as an AjPStr */
+    ajint    N;           /* No. chains from which this domain is comprised */
+    char   *Chain;        /* Chain identifiers */
+    AjPStr *Start;        /* PDB residue number of first residue in domain */
+    AjPStr *End;          /* PDB residue number of last residue in domain */
+
+    ajint  Sunid;         /* SCOP sunid for domain data */
+    AjPStr Acc;           /* Accession number of sequence entry  */
+    AjPStr Spr;           /* Swissprot code of sequence entry */
+    AjPStr SeqPdb;	  /* Sequence (from pdb) as string */
+    AjPStr SeqSpr;	  /* Sequence (from swissprot) as string */
+    ajint  Startd;      /* Start of sequence relative to full length 
+			    swissprot sequence */
+    ajint  Endd;        /* End of sequence relative to full length 
+			    swissprot sequence */
+} AjOScop,*AjPScop;
+
+
+
+
+
+
+/* @data AjPScopcla *******************************************************
+**
+** Ajax scopcla object.
+**
+** Holds scop database data from raw file (dir.cla.scop.txt from SCOP authors)
+**
+** The variables have the following meaning:
+**
+**  AjPStr Entry;          Domain identifer code 
+**  AjPStr Pdb;            Corresponding pdb identifier code
+**  AjPStr Sccs;           Scop compact classification string
+**  ajint  Class;          SCOP sunid for class 
+**  ajint  Fold;           SCOP sunid for fold 
+**  ajint  Superfamily;    SCOP sunid for superfamily 
+**  ajint  Family;         SCOP sunid for family 
+**  ajint  Domain;         SCOP sunid for domain   
+**  ajint  Source;         SCOP sunid for species 
+**  ajint  Domdat;         SCOP sunid for domain data
+**  ajint  N;              No. chains from which this domain is comprised 
+**  char   *Chain;         Chain identifiers 
+**  AjPStr *Start;         PDB residue number of first residue in domain 
+**  AjPStr *End;           PDB residue number of last residue in domain 
+**
+** AjPScopcla is implemented as a pointer to a C data structure.
+**
+** @alias AjSScopcla
+** @alias AjOScopcla
+**
+** @@
+******************************************************************************/
+
+typedef struct AjSScopcla
 {
     AjPStr Entry;
     AjPStr Pdb;
-    AjPStr Class;
-    AjPStr Fold;
-    AjPStr Superfamily;
-    AjPStr Family;
-    AjPStr Domain;
-    AjPStr Source;
+    AjPStr Sccs;
+
+    ajint  Class;
+    ajint  Fold;
+    ajint  Superfamily;
+    ajint  Family;  
+    ajint  Domain;
+    ajint  Source;
+    ajint  Domdat;
+        
     ajint    N;
     char   *Chain;
     AjPStr *Start;
     AjPStr *End;
-} AjOScop,*AjPScop;
+} AjOScopcla,*AjPScopcla;
+
+
+
+/* @data AjPScopdes *******************************************************
+**
+** Ajax scopdes object.
+**
+** Holds scop database data from raw file (dir.des.scop.txt from SCOP authors)
+**
+** The variables have the following meaning:
+**
+**  ajint  Sunid;   SCOP sunid for node 
+**  AjPStr Type;    Type of node, either 'px' (domain data), 'cl' (class),
+**  'cf' (fold), 'sf' (superfamily), 'fa' (family), 'dm' (domain) or 
+**  'sp' (species).
+**  AjPStr Sccs;    Scop compact classification string
+**  AjPStr Entry;   Domain identifer code (or '-' if Type!='px')
+**  AjPStr Desc;    Description in english of the node
+**
+** AjPScopdes is implemented as a pointer to a C data structure.
+**
+** @alias AjSScopdes
+** @alias AjOScopdes
+**
+** @@
+******************************************************************************/
+
+typedef struct AjSScopdes
+{
+    ajint  Sunid;
+    AjPStr Type;
+    AjPStr Sccs;
+    AjPStr Entry;
+    AjPStr Desc;
+} AjOScopdes,*AjPScopdes;
+
 
 
 
@@ -533,6 +693,51 @@ typedef struct AjSSignature
 
 
 
+/* @data AjPDichetent ***********************************************************
+**
+** Ajax Dichetent object.
+**
+** Holds a single entry from a dictionary of heterogen groups.
+**
+** AjPDichetent is implemented as a pointer to a C data structure.
+**
+** @alias AjSDichetent
+** @alias AjODichetent
+**
+** @@
+******************************************************************************/
+typedef struct AjSDichetent
+{
+    AjPStr   abv;   /* 3-letter abbreviation of heterogen */
+    AjPStr   syn;   /* Synonym */
+    AjPStr   ful;   /* Full name */
+    ajint    cnt;   /* No. of occurences (files) of this heterogen in a directory */
+} AjODichetent, *AjPDichetent;
+
+
+
+
+/* @data AjPDichet ***********************************************************
+**
+** Ajax Dichet object.
+** Holds a dictionary of heterogen groups.
+**
+** AjPDichet is implemented as a pointer to a C data structure.
+**
+** @alias AjSDichet
+** @alias AjODichet
+**
+** @@
+******************************************************************************/
+typedef struct AjSDichet
+{
+    ajint         n;        /* Number of entries */
+    AjPDichetent *entries;  /* Array of entries */
+} AjODichet, *AjPDichet;
+
+
+
+
 
 
 
@@ -555,116 +760,175 @@ typedef struct AjSSignature
 
 
 
+AjPPdbtosp ajXyzPdbtospNew(ajint n);
+void ajXyzPdbtospDel(AjPPdbtosp *thys);
+AjBool ajXyzPdbtospRead(AjPFile inf, AjPStr entry, AjPPdbtosp *thys);
+AjBool ajXyzPdbtospReadC(AjPFile inf, char *entry, AjPPdbtosp *thys);
+AjBool ajXyzPdbtospReadAll(AjPFile inf, AjPList *list);
+ajint ajXyzPdbtospBinSearch(AjPStr id, AjPPdbtosp *arr, ajint siz);
+ajint ajXyzSortPdbtospPdb(const void *ptr1, const void *ptr2);
 
 
-AjPAtom  ajXyzAtomNew(void);
-void     ajXyzAtomDel(AjPAtom *thys);
-AjPChain ajXyzChainNew(void);
-void     ajXyzChainDel(AjPChain *thys);
-AjPPdb   ajXyzPdbNew(ajint chains);
-void     ajXyzPdbDel(AjPPdb *thys);
-void     ajXyzScopDel(AjPScop *pthis);
-AjPScop  ajXyzScopNew(ajint n);
+AjPAtom       ajXyzAtomNew(void);
+void          ajXyzAtomDel(AjPAtom *thys);
+AjBool        ajXyzInContact(AjPAtom atm1, AjPAtom atm2, float thresh,
+			    AjPVdwall vdw);
+float         ajXyzAtomDistance(AjPAtom atm1, AjPAtom atm2, AjPVdwall vdw);
+
+AjPChain      ajXyzChainNew(void);
+void          ajXyzChainDel(AjPChain *thys);
 
 
-AjPScophit  ajXyzScophitNew(void);
-void     ajXyzScophitDel(AjPScophit *pthis);
-void     ajXyzScophitDelWrap(const void  **ptr);
-AjBool ajXyzHitlistToScophits(AjPList in, AjPList *out);
-AjBool        ajXyzHitsOverlap(AjPHit h1, AjPHit h2, ajint n);
+AjPPdb        ajXyzPdbNew(ajint chains);
+void          ajXyzPdbDel(AjPPdb *thys);
+AjBool        ajXyzPdbWriteAll(AjPFile errf, AjPFile outf, AjPPdb pdb);
+AjBool        ajXyzPdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
+				AjPScop scop); 
+AjBool        ajXyzPdbChain(char id, AjPPdb pdb, ajint *chn);
+AjBool        ajXyzPdbAtomIndexI(AjPPdb pdb, ajint chn, AjPInt *idx);
+AjBool        ajXyzPdbAtomIndexC(AjPPdb pdb, char chn, AjPInt *idx);
+
+
+AjPScop       ajXyzScopNew(ajint n);
+void          ajXyzScopDel(AjPScop *pthis);
+AjBool        ajXyzScopRead(AjPFile inf, AjPStr entry, AjPScop *thys);
+AjBool        ajXyzScopReadC(AjPFile inf, char *entry, AjPScop *thys);
+void          ajXyzScopWrite(AjPFile outf, AjPScop thys);
+AjPStr        ajXyzScopToPdb(AjPStr scop, AjPStr *pdb);
+AjBool        ajXyzPdbToSp(AjPStr pdb, AjPStr *spr, AjPList list);
+AjBool        ajXyzScopToSp(AjPStr scop, AjPStr *spr, AjPList list);
+AjBool        ajXyzPdbToAcc(AjPStr pdb, AjPStr *acc, AjPList list);
+AjBool        ajXyzScopToAcc(AjPStr scop, AjPStr *acc, AjPList list);
+
+
+AjPScopcla    ajXyzScopclaNew(ajint chains);
+void          ajXyzScopclaDel(AjPScopcla *thys);
+AjBool        ajXyzScopclaRead(AjPFile inf, AjPStr entry, AjPScopcla *thys);
+AjBool        ajXyzScopclaReadC(AjPFile inf, char *entry, AjPScopcla *thys);
+
+AjPScopdes    ajXyzScopdesNew(void);
+void          ajXyzScopdesDel(AjPScopdes *ptr);
+AjBool        ajXyzScopdesRead(AjPFile inf, AjPStr entry, AjPScopdes *thys);
+AjBool        ajXyzScopdesReadC(AjPFile inf, char *entry, AjPScopdes *thys);
+
+
+
+
+AjPScophit    ajXyzScophitNew(void);
+void          ajXyzScophitDel(AjPScophit *pthis);
+void          ajXyzScophitDelWrap(const void  **ptr);
+AjBool        ajXyzScophitsToHitlist(AjPList in, AjPHitlist *out,   AjIList *iter);
 AjBool        ajXyzScophitsOverlap(AjPScophit h1, AjPScophit h2, ajint n);
 AjBool        ajXyzScophitsOverlapAcc(AjPScophit h1, AjPScophit h2, ajint n);
-AjBool ajXyzScophitCopy(AjPScophit *to, AjPScophit from);
-AjPList ajXyzScophitListCopy(AjPList ptr);
-AjBool   ajXyzScophitCheckTarget(AjPScophit ptr);
+AjBool        ajXyzScophitCopy(AjPScophit *to, AjPScophit from);
+AjPList       ajXyzScophitListCopy(AjPList ptr);
+AjBool        ajXyzScophitToHit(AjPHit *to, AjPScophit from);
+AjBool        ajXyzScophitCheckTarget(AjPScophit ptr);
 AjBool        ajXyzScophitTarget(AjPScophit *h);
 AjBool        ajXyzScophitTargetLowPriority(AjPScophit *h);
+AjBool        ajXyzScophitMergeInsertThis(AjPList list, AjPScophit hit1, 
+				   AjPScophit hit2,  AjIList iter);
+AjBool        ajXyzScophitMergeInsertOther(AjPList list, AjPScophit hit1, AjPScophit hit2);
+AjPScophit    ajXyzScophitMerge(AjPScophit hit1, AjPScophit hit2);
+ajint         ajXyzScophitCompId(const void *hit1, const void *hit2);
+ajint         ajXyzScophitCompStart(const void *hit1, const void *hit2);
+ajint         ajXyzScophitCompFold(const void *hit1, const void *hit2);
+ajint         ajXyzScophitCompSfam(const void *hit1, const void *hit2);
+ajint         ajXyzScophitCompFam(const void *hit1, const void *hit2);
 
-AjBool   ajXyzScophitMergeInsertThis(AjPList list, AjPScophit hit1, 
-				     AjPScophit hit2,  AjIList iter);
-AjBool   ajXyzScophitMergeInsertOther(AjPList list, AjPScophit hit1, AjPScophit hit2);
-AjPScophit  ajXyzScophitMerge(AjPScophit hit1, AjPScophit hit2);
+
+AjPHit        ajXyzHitNew(void);
+void          ajXyzHitDel(AjPHit *pthis);
+AjBool        ajXyzHitsOverlap(AjPHit h1, AjPHit h2, ajint n);
+ajint         ajXyzCompScore(const void *hit1, const void *hit2);
+ajint         ajXyzCompScoreInv(const void *hit1, const void *hit2);
+ajint         ajXyzCompId(const void *hit1, const void *hit2);
+
+AjPHitlist    ajXyzHitlistNew(int n);
+void          ajXyzHitlistDel(AjPHitlist *pthis);
+AjBool        ajXyzHitlistRead(AjPFile inf, char *delim, AjPHitlist *thys);
+AjBool        ajXyzHitlistReadNode(AjPFile scopf, AjPList *list, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr class);
+AjBool        ajXyzHitlistReadFam(AjPFile scopf, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr class, AjPList* list);
+AjBool        ajXyzHitlistReadSfam(AjPFile scopf, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr class,AjPList* list);
+AjBool        ajXyzHitlistReadFold(AjPFile scopf, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr class,AjPList* list);
+AjBool        ajXyzHitlistWrite(AjPFile outf, AjPHitlist thys);
+AjBool        ajXyzHitlistToScophits(AjPList in, AjPList *out);
+AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets, 
+				   ajint thresh);
+AjBool        ajXyzHitlistPriorityHigh(AjPHitlist *list);
+AjBool        ajXyzHitlistPriorityLow(AjPHitlist *list);
+AjBool        ajXyzHitlistToThreeScophits(AjPList in, AjPList *fam, AjPList *sfam, AjPList *fold);
+
+AjBool        ajXyzHitlistsWriteFasta(AjPList *list, AjPFile *outf);
 
 
-
-
-
-void     ajXyzHitDel(AjPHit *pthis);
-AjPHit   ajXyzHitNew(void);
-void     ajXyzHitlistDel(AjPHitlist *pthis);
-AjPHitlist  ajXyzHitlistNew(int n);
-AjBool   ajXyzHitlistRead(AjPFile inf, char *delim, AjPHitlist *thys);
-AjBool   ajXyzHitlistWrite(AjPFile outf, AjPHitlist thys);
-
-AjBool   ajXyzScopRead(AjPFile inf, AjPStr entry, AjPScop *thys);
-AjBool   ajXyzScopReadC(AjPFile inf, char *entry, AjPScop *thys);
-void     ajXyzScopWrite(AjPFile outf, AjPScop thys);
-
-AjBool   ajXyzCpdbRead(AjPFile inf, AjPPdb *thys);
-AjBool   ajXyzCpdbWriteAll(AjPFile out, AjPPdb thys);
-AjBool   ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
+AjBool        ajXyzCpdbRead(AjPFile inf, AjPPdb *thys);
+AjBool        ajXyzCpdbReadOld(AjPFile inf, AjPPdb *thys);
+AjBool        ajXyzCpdbWriteAll(AjPFile out, AjPPdb thys);
+AjBool        ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 			      AjPScop scop);
 
-AjBool   ajXyzPdbWriteAll(AjPFile errf, AjPFile outf, AjPPdb pdb);
-AjBool   ajXyzPdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
-			     AjPScop scop); 
 
-AjBool   ajXyzPrintPdbSeqresChain(AjPFile errf, AjPFile outf, AjPPdb pdb,
+AjBool        ajXyzPrintPdbSeqresChain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 				  ajint chn);
-AjBool   ajXyzPrintPdbSeqresDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
+AjBool        ajXyzPrintPdbSeqresDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 				   AjPScop scop);
-AjBool   ajXyzPrintPdbAtomChain(AjPFile outf, AjPPdb pdb, ajint mod, ajint chn);
-AjBool   ajXyzPrintPdbAtomDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
+AjBool        ajXyzPrintPdbAtomChain(AjPFile outf, AjPPdb pdb, ajint mod, ajint chn);
+AjBool        ajXyzPrintPdbAtomDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 				 AjPScop scop, ajint mod);
-AjBool   ajXyzPrintPdbHeterogen(AjPFile outf, AjPPdb pdb, ajint mod);
-AjBool   ajXyzPrintPdbText(AjPFile outf, AjPStr str, char *prefix);
-AjBool   ajXyzPrintPdbHeader(AjPFile outf, AjPPdb pdb);
-AjBool   ajXyzPrintPdbHeaderScop(AjPFile outf, AjPScop scop);
-AjBool   ajXyzPrintPdbTitle(AjPFile outf, AjPPdb pdb);
-AjBool   ajXyzPrintPdbCompnd(AjPFile outf, AjPPdb pdb);
-AjBool   ajXyzPrintPdbSource(AjPFile outf, AjPPdb pdb);
-AjBool   ajXyzPrintPdbEmptyRemark(AjPFile outf, AjPPdb pdb);
-AjBool   ajXyzPrintPdbResolution(AjPFile outf, AjPPdb pdb);
-
-AjBool   ajXyzPdbChain(char id, AjPPdb pdb, ajint *chn);
-void     ajXyzScopToPdb(AjPStr scop, AjPStr *pdb);
-
-AjBool   ajXyzPdbAtomIndexI(AjPPdb pdb, ajint chn, AjPInt *idx);
-AjBool   ajXyzPdbAtomIndexC(AjPPdb pdb, char chn, AjPInt *idx);
+AjBool        ajXyzPrintPdbHeterogen(AjPFile outf, AjPPdb pdb, ajint mod);
+AjBool        ajXyzPrintPdbText(AjPFile outf, AjPStr str, char *prefix);
+AjBool        ajXyzPrintPdbHeader(AjPFile outf, AjPPdb pdb);
+AjBool        ajXyzPrintPdbHeaderScop(AjPFile outf, AjPScop scop);
+AjBool        ajXyzPrintPdbTitle(AjPFile outf, AjPPdb pdb);
+AjBool        ajXyzPrintPdbCompnd(AjPFile outf, AjPPdb pdb);
+AjBool        ajXyzPrintPdbSource(AjPFile outf, AjPPdb pdb);
+AjBool        ajXyzPrintPdbEmptyRemark(AjPFile outf, AjPPdb pdb);
+AjBool        ajXyzPrintPdbResolution(AjPFile outf, AjPPdb pdb);
 
 
-AjBool   ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys);
-AjBool   ajXyzScopalgWrite(AjPFile outf, AjPScopalg *thys);
-void ajXyzScopalgDel(AjPScopalg *pthis);
-AjPScopalg  ajXyzScopalgNew(int n);
-ajint ajXyzScopalgGetseqs(AjPScopalg thys, AjPStr **arr);
+AjBool        ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys);
+AjBool        ajXyzScopalgWrite(AjPFile outf, AjPScopalg *thys);
+AjBool        ajXyzScopalgWriteClustal(AjPScopalg align, AjPFile* outf);
+AjPScopalg    ajXyzScopalgNew(int n);
+void          ajXyzScopalgDel(AjPScopalg *pthis);
+ajint         ajXyzScopalgGetseqs(AjPScopalg thys, AjPStr **arr);
 
 
-void ajXyzCmapDel(AjPCmap *pthis);
-AjPCmap  ajXyzCmapNew(int dim);
+AjPCmap       ajXyzCmapNew(int dim);
+void          ajXyzCmapDel(AjPCmap *pthis);
+AjBool        ajXyzCmapRead(AjPFile inf, ajint mode, ajint chn, ajint mod, AjPCmap *thys);
+AjBool        ajXyzCmapReadC(AjPFile inf, char chn, ajint mod, AjPCmap *thys);
+AjBool        ajXyzCmapReadI(AjPFile inf, ajint chn, ajint mod, AjPCmap *thys);
 
-AjBool   ajXyzCmapRead(AjPFile inf, ajint mode, ajint chn, ajint mod, AjPCmap *thys);
-AjBool   ajXyzCmapReadC(AjPFile inf, char chn, ajint mod, AjPCmap *thys);
-AjBool   ajXyzCmapReadI(AjPFile inf, ajint chn, ajint mod, AjPCmap *thys);
+
+float         ajXyzVdwRad(AjPAtom atm, AjPVdwall vdw);
+ 
+AjPVdwall     ajXyzVdwallNew(ajint n);
+void          ajXyzVdwallDel(AjPVdwall *pthis);
+AjBool        ajXyzVdwallRead(AjPFile inf, AjPVdwall *thys);
 
 
-AjPVdwall  ajXyzVdwallNew(ajint n);
-AjPVdwres  ajXyzVdwresNew(ajint n);
-void ajXyzVdwresDel(AjPVdwres *pthis);
-void ajXyzVdwallDel(AjPVdwall *pthis);
-AjBool   ajXyzVdwallRead(AjPFile inf, AjPVdwall *thys);
+AjPVdwres     ajXyzVdwresNew(ajint n);
+void          ajXyzVdwresDel(AjPVdwres *pthis);
 
-AjPScorealg  ajXyzScorealgNew(ajint len);
-void ajXyzScorealgDel(AjPScorealg *pthis);
-float ajXyzVdwRad(AjPAtom atm, AjPVdwall vdw);
+
+AjPScorealg   ajXyzScorealgNew(ajint len);
+void          ajXyzScorealgDel(AjPScorealg *pthis);
 
 
 AjPSigdat     ajXyzSigdatNew(int nres, int ngap);
 AjPSigpos     ajXyzSigposNew(ajint ngap);
+
+
 void          ajXyzSigdatDel(AjPSigdat *pthis);
 void          ajXyzSigposDel(AjPSigpos *thys);
+
+
 AjPHitidx     ajXyzHitidxNew(void);
 void          ajXyzHitidxDel(AjPHitidx *pthis);
+ajint         ajXyzBinSearch(AjPStr id, AjPHitidx *arr, ajint siz);
+
 
 AjPSignature  ajXyzSignatureNew(int n);
 void          ajXyzSignatureDel(AjPSignature *pthis);
@@ -682,26 +946,17 @@ AjBool        ajXyzSignatureAlignWrite(AjPFile outf, AjPSignature sig,
 				       AjPHitlist hits);
 
 
-ajint         ajXyzCompScore(const void *hit1, const void *hit2);
-ajint         ajXyzCompId(const void *hit1, const void *hit2);
-ajint         ajXyzBinSearch(AjPStr id, AjPHitidx *arr, ajint siz);
+AjPDichetent  ajXyzDichetentNew(void);
+void          ajXyzDichetentDel(AjPDichetent *ptr);
 
-AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets, 
-				   ajint thresh);
+AjPDichet      ajXyzDichetNew(ajint n);
+void          ajXyzDichetDel(AjPDichet *ptr);
+AjBool        ajXyzDichetRawRead(AjPFile fptr, AjPDichet *ptr);
+AjBool        ajXyzDichetRead(AjPFile fptr, AjPDichet *ptr);
+AjBool        ajXyzDichetWrite(AjPFile fptr, AjPDichet ptr, AjBool dogrep);
 
 
-AjBool       ajXyzHitlistPriorityHigh(AjPHitlist *list);
-AjBool       ajXyzHitlistPriorityLow(AjPHitlist *list);
-ajint ajXyzScophitCompId(const void *hit1, const void *hit2);
-ajint ajXyzScophitCompStart(const void *hit1, const void *hit2);
-ajint ajXyzScophitCompFold(const void *hit1, const void *hit2);
-ajint ajXyzScophitCompSfam(const void *hit1, const void *hit2);
-ajint ajXyzScophitCompFam(const void *hit1, const void *hit2);
-AjBool ajXyzInContact(AjPAtom atm1, AjPAtom atm2, float thresh,
-			  AjPVdwall vdw);
-float ajXyzVdwRad(AjPAtom atm, AjPVdwall vdw);
 
-AjBool ajXyzHitlistToThreeScophits(AjPList in, AjPList *fam, AjPList *sfam, AjPList *fold);
 
 
 

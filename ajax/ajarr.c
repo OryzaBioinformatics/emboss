@@ -408,7 +408,7 @@ void ajIntDec(AjPInt *thys, ajint elem)
 }
 
 
-/* @funcstatic ajCharResize ***************************************************
+/* @funcstatic ajChararrResize ************************************************
 **
 ** Resize a character array.
 **

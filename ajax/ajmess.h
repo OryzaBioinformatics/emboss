@@ -18,6 +18,12 @@ extern AjBool acdDebugSet;
 extern AjBool acdDebug;
 extern AjPStr acdProgram;
 
+/* @data AjPError ***********************************************
+**
+** Ajax error message levels object
+**
+** @@
+******************************************************************************/
 typedef struct AjSError
 {
     AjBool warning;

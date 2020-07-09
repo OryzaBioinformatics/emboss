@@ -11,6 +11,18 @@ char *fields[];			 list is not NULL-terminated
 ajint nfields;			 number of entries available in fields[] 
 char *sep;			 "" white, "c" single char, "ab" [ab]+ */
 
+/* @func split **************************************************************
+**
+** Undocumented.
+**
+** @param [?] string [char*] Undocumented
+** @param [?] fields [char* []] Undocumented
+** @param [?] nfields [ajint] Undocumented
+** @param [?] sep [char*] Undocumented
+** @return [ajint] Undocumented
+** @@
+******************************************************************************/
+
 ajint split(char *string, char *fields[], ajint nfields, char *sep)
 {
     register char *p = string;
@@ -157,15 +169,21 @@ ajint split(char *string, char *fields[], ajint nfields, char *sep)
 
 
 
-/*
- * test program
- * pgm		runs regression
- * pgm sep	splits stdin lines by sep
- * pgm str sep	splits str by sep
- * pgm str sep n	splits str by sep n times
- */
+/* @prog hsp_split ************************************************************
+**
+** test program
+**
+** pgm		runs regression<br>
+** pgm sep	splits stdin lines by sep<br>
+** pgm str sep	splits str by sep<br>
+** pgm str sep n	splits str by sep n times
+**
+** @param [?] argc [ajint] Undocumented
+** @param [?] argv [char**] Undocumented
+** @@
+******************************************************************************/
 
-ajint main(ajint argc, char **argv)
+int main(ajint argc, char **argv)
 {
     char buf[512];
     register ajint n;
@@ -201,6 +219,16 @@ ajint main(ajint argc, char **argv)
 
 
 
+/* @func dosplit **************************************************************
+**
+** Undocumented.
+**
+** @param [?] string [char*] Undocumented
+** @param [?] seps [char*] Undocumented
+** @return [ajint] Undocumented
+** @@
+******************************************************************************/
+
 ajint dosplit(char *string, char *seps)
 {
 #	define	NF	5
@@ -208,16 +236,24 @@ ajint dosplit(char *string, char *seps)
     register ajint nf;
 
     nf = split(string, fields, NF, seps);
-    (void) print(nf, NF, fields);
+    (void) hsp_split_print(nf, NF, fields);
 }
 
 
 
 
 
+/* @func hsp_split_print ******************************************************
+**
+** Undocumented
+** 
+** @param [r] nf [ajint] Undocumented
+** @param [r] nfp [ajint] Undocumented
+** @param [r] fields [char* []] Undocumented
+** @return [ajint] Undocumented
+******************************************************************************/
 
-
-ajint print(ajint nf, ajint nfp, char *fields[])
+ajint hsp_split_print(ajint nf, ajint nfp, char *fields[])
 {
     register ajint fn;
     register ajint bound;
@@ -305,6 +341,14 @@ struct {
 
 
 
+/* @func regress **************************************************************
+**
+** Undocumented.
+**
+** @return [ajint] Undocumented
+** @@
+******************************************************************************/
+
 ajint regress()
 {
     char buf[512];
@@ -350,7 +394,7 @@ ajint regress()
 	    }
 	}
 	if (printit)
-	    print(nf, RNF, fields);
+	    hsp_split_print(nf, RNF, fields);
     }
 }
 #endif

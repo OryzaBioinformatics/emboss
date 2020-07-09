@@ -1795,11 +1795,12 @@ AjBool ajListstrPopEnd(AjPList thys, AjPStr *x)
 }
 
 
-/* @func ajListDummyFunctions ************************************************
+/* @func ajListDummyFunction ************************************************
 **
 ** Dummy function to catch all unused functions defined in ajlist
 **
 ** @param [R] array [void**] Array needed by ajListArrayTrace
+** @return [void]
 ******************************************************************************/
 
 void ajListDummyFunction(void** array)
@@ -1812,7 +1813,7 @@ void ajListDummyFunction(void** array)
 **
 ** Garbage collect a list
 **
-** @param [r] thys [AjPList] List.
+** @param [r] list [AjPList] List.
 ** @param [r] destruct [void* function] Wrapper function for item destructor
 ** @param [r] compar [AjBool* function] Function to test whether to delete
 ** @return [void]

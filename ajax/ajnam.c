@@ -994,8 +994,10 @@ static void namProcessFile (FILE* file) {
 	}
 	else if(*ptr == '\'' || *ptr == '\"'){
 	  word[j++] = *ptr;
-	  if (quote)
-	    quote = '\0';
+	  if (quote) {
+	    if (quote == *ptr)
+	      quote = '\0';
+	  }
 	  else
 	    quote = *ptr;
 	}

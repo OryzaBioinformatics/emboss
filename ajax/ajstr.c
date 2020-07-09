@@ -1130,6 +1130,41 @@ AjBool ajStrFromDouble (AjPStr* pthis, double val, ajint precision) {
   return ret ;
 }
 
+/* @func ajStrFromDoubleE *****************************************************
+**
+** Converts a double precision value into a string. The string size is set
+** to be just large enough to hold the value. Uses exponential form.
+**
+** @param [wP] pthis [AjPStr*] Target string
+** @param [r] val [double] Double precision value
+** @param [r] precision [ajint] Precision (number of decimal places) to use.
+** @return [AjBool] ajTrue if string was reallocated
+** @@
+******************************************************************************/
+
+AjBool ajStrFromDoubleE (AjPStr* pthis, double val, ajint precision) {
+
+  AjBool ret = ajFalse;
+  ajint i;
+  char fmt[12];
+  AjPStr thys;
+
+  ajint ival = abs((ajint) val);
+
+  if (ival)
+    i = precision + (ajint) log10((double)ival) + 8;
+  else
+    i = precision + 8;
+
+  ret = ajStrModL(pthis, i);
+  thys = *pthis;
+
+  (void) sprintf (fmt, "%%.%de", precision);
+  thys->Len = sprintf (thys->Ptr, fmt, val);
+
+  return ret ;
+}
+
 /* ==================================================================== */
 /* =========================== Modifiers ============================== */
 /* ==================================================================== */
@@ -1722,7 +1757,7 @@ AjBool ajStrSubstituteCC(AjPStr *pthis, const char* replace,
 ** Replace all occurrences of character replace with putin in string pthis.
 **
 ** @param [uP] pthis [AjPStr*]  Target string.
-** @param [r]  replace [ char] Character to replace.
+** @param [r]  replace [char] Character to replace.
 ** @param [r]  putin [char] Character to insert.
 ** @return [AjBool] ajTrue if string was reallocated
 ** @@

@@ -6,10 +6,14 @@
 #include "hsp_utils.h"
 #include "hsp_regex2.h"
 
-/*
-   - regfree - free everything
-   = extern void regfree(regex_t *);
-   */
+/* @func hsp_regfree **********************************************************
+**
+** free everything
+**
+** @param [r] preg [regex_t*] Undocumented
+** @return [void]
+******************************************************************************/
+
 void hsp_regfree(regex_t *preg)
 {
     register REGUTSSTRUCT *g;

@@ -38,6 +38,12 @@ AjPSelexdata ajSelexdataNew(void);
 void         ajSelexdataDel(AjPSelexdata *thys);
 void         ajSelexSQDel(AjPSelexSQ *thys);
 AjPSelexSQ   ajSelexSQNew(void);
+AjPStockholm ajStockholmNew(ajint i);
+void         ajStockholmDel(AjPStockholm *thys);
+void         ajStockholmdataDel(AjPStockholmdata *thys);
+
+AjPStockholmdata ajStockholmdataNew(void);
+
 ajint        ajSeqallBegin (AjPSeqall seq);
 void         ajSeqallDel(AjPSeqall *thys);
 ajint        ajSeqallEnd (AjPSeqall seq);
@@ -92,6 +98,7 @@ ajint        ajSeqCvtSize (AjPSeqCvt cvt);
 void         ajSeqCvtTrace (AjPSeqCvt cvt);
 void         ajSeqDel (AjPSeq* pthis);
 ajint        ajSeqEnd (AjPSeq seq);
+ajint        ajSeqFill (AjPSeq seq, ajint len);
 ajint        ajSeqGapCount (AjPSeq thys);
 ajint        ajSeqGapCountS (AjPStr str);
 void         ajSeqGapStandard (AjPSeq thys, char gapch);

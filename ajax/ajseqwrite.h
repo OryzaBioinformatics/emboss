@@ -77,7 +77,7 @@ void         ajSeqoutUsa (AjPSeqout* pthis, AjPStr Usa);
 void         ajSeqsetWrite (AjPSeqout seqout, AjPSeqset seq);
 void         ajSeqWrite (AjPSeqout seqout, AjPSeq seq);
 void         ajSeqWriteClose (AjPSeqout outseq);
-void         ajSeqWriteCdb (AjPFile outf, AjPStr seq);
+void         ajSeqWriteXyz(AjPFile outf, AjPStr seq, char *prefix);
 
 #endif
 

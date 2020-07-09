@@ -117,6 +117,8 @@ AjBool ajSeqTypeTest (AjPSeq thys, AjPStr Type) {
       ajDebug("Sequence is not nucleic\n");
       return ajFalse;
     }
+
+    /* Calling funclist seqType() */
     ret = seqType[i].Test (thys);
     if (ret) {
       ajDebug ("Sequence %s must be %s,\n found bad character '%c'",
@@ -217,6 +219,7 @@ AjBool ajSeqTypeCheck (AjPSeq thys, AjPSeqin seqin) {
       ajErr("Sequence is not nucleic\n");
       return ajFalse;
     }
+    /* Calling funclist seqType() */
     ret = seqType[i].Test (thys);
     if (ret) {
       ajErr ("Sequence %s must be %s,\n found bad character '%c'",
@@ -838,7 +841,7 @@ static void seqGapSL (AjPStr* seq, char gapc, char padc, ajint ilen) {
   }
 
   if (ilen)
-    (void) ajStrModL (seq, ilen);
+    (void) ajStrModL (seq, ilen+1);
   else
     (void) ajStrMod(seq);
 

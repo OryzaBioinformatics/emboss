@@ -57,7 +57,7 @@ static ajint tableCmpAtom(const void *x, const void *y) {
 **
 ** @param [R] key [const void*] Key
 ** @param [R] hashsize [ajuint] Hash size (maximum hash value)
-** @return [ajint] 0 for success, 1 for different keys
+** @return [ajuint] 0 for success, 1 for different keys
 ** @@
 ******************************************************************************/
 

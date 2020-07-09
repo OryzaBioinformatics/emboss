@@ -17,15 +17,20 @@ static char *regchar(ajint ch);
 
 /* == end debug.ih == */
 
-/*
-   - regprint - print a regexp for debugging
-   == void hsp_regprint(regex_t *r, FILE *d);
-   */
-/* N.B: Was....
-   void hsp_regprint(regex_t r, FILE *d){
-   but r has to be a pointer. REALLY BAD to use "r" as a variable in a routine 
-   of this length - it's a pity to find it in the code with a search!
-*/
+/* @func hsp_regprint *******************************************************
+**
+** print a regexp for debugging
+**
+** N.B: Was....  void hsp_regprint(regex_t r, FILE *d){ but r has to
+**    be a pointer. REALLY BAD to use "r" as a variable in a routine
+**    of this length - it's a pity to find it in the code with a
+**    search!
+**
+** @param [r] r [regex_t*] Undocumented
+** @param [r] d [FILE*] Undocumented
+** @return [void]
+******************************************************************************/
+
 void hsp_regprint(regex_t *r, FILE *d)
 {
 	register REGUTSSTRUCT *g = r->re_g;
@@ -88,7 +93,7 @@ void hsp_regprint(regex_t *r, FILE *d)
 		    else
 		    {
 			if (last >= 0)
-			{
+			  {
 			    if (last != c-1)
 				(void) fprintf(d, "-%s",
 					       regchar(c-1));
@@ -99,10 +104,15 @@ void hsp_regprint(regex_t *r, FILE *d)
 	    }
     }
 
-/*
-   - s_print - print the strip for debugging
-   == static void s_print(register REGUTSSTRUCT *g, FILE *d);
-   */
+/* @funcstatic s_print *******************************************************
+**
+** print the strip for debugging
+**
+** @param [r] g [register REGUTSSTRUCT*] Undocumented
+** @param [r] d [FILE*] Undocumented
+** @return [void]
+******************************************************************************/
+
 static void s_print(register REGUTSSTRUCT *g, FILE *d)
 {
     register sop *s;
@@ -242,10 +252,14 @@ static void s_print(register REGUTSSTRUCT *g, FILE *d)
     }
 }
 
-/*
-   - regchar - make a character printable
-   == static char *regchar(ajint ch);
-   */
+/* @funcstatic regchar *******************************************************
+**
+** make a character printable
+**
+** @param [r] ch [ajint] Undocumented
+** @return [char*] Undocumented
+******************************************************************************/
+
 static char * regchar(ajint ch)
 {
     static char buf[10];

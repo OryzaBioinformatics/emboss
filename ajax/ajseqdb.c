@@ -324,13 +324,25 @@ static AjBool seqAccessEmblcd (AjPSeqin seqin)
 	{
 	    ajDebug ("entry id: '%S' acc: '%S'\n", qry->Id, qry->Acc);
 	    if (!seqCdQryEntry (qry))
-		ajDebug ("EMBLCD Entry failed");
+	    {
+	      ajDebug ("EMBLCD Entry failed\n");
+	      if (ajStrLen(qry->Id))
+		  ajErr ("Database Entry '%S' not found", qry->Id);
+	      else
+		  ajErr ("Database Entry '%S' not found", qry->Acc);
+	    }
 	}
 	if (qry->Type == QRY_QUERY)
 	{
 	    ajDebug ("query id: '%S' acc: '%S'\n", qry->Id, qry->Acc);
 	    if (!seqCdQryQuery (qry))
-		ajDebug ("EMBLCD Query failed");
+	    {
+	      ajDebug ("EMBLCD Query failed\n");
+	      if (ajStrLen(qry->Id))
+		  ajErr ("Database Query '%S' not found", qry->Id);
+	      else
+		  ajErr ("Database Query '%S' not found", qry->Acc);
+	    }
 	}
     }
 
@@ -922,7 +934,7 @@ static ajint seqCdTrgSearch (SeqPCdTrg trgLine, AjPStr entry, SeqPCdFile fp)
 	itry = (ilo + ihi)/2;
 	if (itry == ipos)
 	{
-	    ajDebug("'%S' not found found in .trg\n", entrystr);
+	    ajDebug("'%S' not found in .trg\n", entrystr);
 	    ajStrDel (&entrystr);
 	    return -1;
 	}
@@ -1696,13 +1708,13 @@ static AjBool seqAccessGcg (AjPSeqin seqin)
 	{
 	    ajDebug ("entry id: '%S' acc: '%S'\n", qry->Id, qry->Acc);
 	    if (!seqCdQryEntry (qry))
-		ajErr ("GCG Entry failed");
+		ajDebug ("GCG Entry failed");
 	}
 	if (qry->Type == QRY_QUERY)
 	{
 	    ajDebug ("query id: '%S' acc: '%S'\n", qry->Id, qry->Acc);
 	    if (!seqCdQryQuery (qry))
-		ajErr ("GCG Query failed");
+		ajDebug ("GCG Query failed");
 	}
 	AJFREE(qryd->trgLine);
     }
@@ -1772,7 +1784,18 @@ static AjBool seqGcgReadRef (const AjPSeqin seqin)
     AjPSeqQuery qry = seqin->Query;
     SeqPCdQry qryd = qry->QryData;
     ajlong rpos;
+    static AjPStr id = NULL;
+    static AjPStr idc = NULL;
+    static AjPRegexp idexp = NULL;
     AjBool ispir = ajFalse;
+    AjBool continued=ajFalse;
+    AjBool testcontinue=ajFalse;
+    char *p=NULL;
+
+    if (!idexp)
+    {
+	idexp =ajRegCompC("^>...([^ \n]+)");
+    }
 
     if (!ajFileGets (qryd->libr, &line)) /* end of file */
 	return ajFalse;
@@ -1786,6 +1809,25 @@ static AjBool seqGcgReadRef (const AjPSeqin seqin)
     if (ispir)
 	ajFileBuffLoadS (seqin->Filebuff, line);
 
+    if (ajRegExec(idexp, line))
+    {
+	continued = ajFalse;
+	ajRegSubI (idexp, 1, &id);
+	if(ajStrSuffixC(id,"_0") || ajStrSuffixC(id,"_00"))
+	{
+	    continued = ajTrue;
+	    p = ajStrStr(id);
+	    p = strrchr(p,(ajint)'_');
+	    *(++p)='\0';
+	    (void) ajStrFix(id);
+	}
+    }
+    else
+    {
+      ajDebug("seqGcgReadRef bad ID line\n'%S'\n", line);
+      ajFatal ("seqGcgReadRef bad ID line\n'%S'\n", line);
+    }
+
     if (!ajFileGets (qryd->libr, &line)) /* blank desc line */
 	return ajFalse;
 
@@ -1797,14 +1839,34 @@ static AjBool seqGcgReadRef (const AjPSeqin seqin)
     {					/* end of file */
 	if (ajStrChar(line, 0) == '>')
 	{				/* start of next entry */
-	    ajFileSeek (qryd->libr, rpos, 0);
-	    return ajTrue;
+
+	  /* skip over split entries so it can be used for "all" */
+
+	    if (continued)
+	    {
+	      testcontinue=ajTrue;
+	      ajRegExec(idexp, line);
+	      ajRegSubI (idexp, 1, &idc);
+
+	      if(!ajStrPrefix(idc,id))
+	      {
+		ajFileSeek (qryd->libr, rpos, 0);
+		return ajTrue;
+	      }
+	    }
+	    else
+	    {
+	      ajFileSeek (qryd->libr, rpos, 0);
+	      return ajTrue;
+	    }
 	}
 	rpos = ajFileTell (qryd->libr);
-	ajFileBuffLoadS (seqin->Filebuff, line);
+	if (!testcontinue)
+	  ajFileBuffLoadS (seqin->Filebuff, line);
     }
 
-    /* at end, skip over split entries so it can be used for "all" */
+
+    /* at end of file */
 
     ajFileClose (&qryd->libr);
 
@@ -1842,7 +1904,6 @@ static AjBool seqGcgReadSeq (const AjPSeqin seqin)
     ajlong spos;
     AjBool ispir = ajFalse;
     char *p=NULL;
-    char *q=NULL;
     AjBool continued=ajFalse;
   
     if (!idexp)
@@ -1867,10 +1928,10 @@ static AjBool seqGcgReadSeq (const AjPSeqin seqin)
 	if(ajStrSuffixC(id,"_0") || ajStrSuffixC(id,"_00"))
 	{
 	    continued = ajTrue;
-	    p = q = ajStrStr(id);
+	    p = ajStrStr(id);
 	    p = strrchr(p,(ajint)'_');
 	    *(++p)='\0';
-	    (void) ajStrAssC(&id,q);
+	    (void) ajStrFix(id);
 	    if(!contseq)
 		contseq = ajStrNew();
 	    if(!dstr)
@@ -1888,6 +1949,7 @@ static AjBool seqGcgReadSeq (const AjPSeqin seqin)
     else
     {
 	ajDebug("seqGcgReadSeq bad ID line\n'%S'\n", line);
+	ajFatal("seqGcgReadSeq bad ID line\n'%S'\n", line);
 	return ajFalse;
     }
     if (!ajFileGets (qryd->libs, &line)) /* desc line */
@@ -1914,7 +1976,7 @@ static AjBool seqGcgReadSeq (const AjPSeqin seqin)
     }
     else
     {
-	ajStrModL (&seqin->Inseq, gcglen+1);
+	ajStrModL (&seqin->Inseq, gcglen+3);
 	rblock = gcglen;
 	if (ajStrChar(gcgtype, 0) == '2')
 	    rblock = (rblock+3)/4;
@@ -1939,6 +2001,7 @@ static AjBool seqGcgReadSeq (const AjPSeqin seqin)
 
 	if(continued)
 	{
+	    spos = ajFileTell (qryd->libs);
 	    while(ajFileGets(qryd->libs,&line))
 	    {
 		ajRegExec(idexp, line);
@@ -1946,13 +2009,18 @@ static AjBool seqGcgReadSeq (const AjPSeqin seqin)
 		ajRegSubI (idexp, 1, &idc);
 
 		if(!ajStrPrefix(idc,id))
-		    break;
+		{
+		  ajFileSeek (qryd->libs, spos, 0);
+		  break;
+		}
 
 		ajStrToInt (tmpstr, &gcglen);
 		if (!ajFileGets (qryd->libs, &dstr)) /* desc line */
-		    return ajFalse;
+		{
+		  return ajFalse;
+		}
 
-		ajStrModL (&contseq, gcglen+1);	    
+		ajStrModL (&contseq, gcglen+3);	    
 
 		rblock = gcglen;
 		if (ajStrChar(gcgtype, 0) == '2')
@@ -1987,11 +2055,11 @@ static AjBool seqGcgReadSeq (const AjPSeqin seqin)
 		seqin->Inseq->Len = pos-1;
 	    
 		ajStrApp(&seqin->Inseq,contseq);
+		spos = ajFileTell (qryd->libs);
 	    }
 	}
     
-
-	ajFileGets (qryd->libs, &line);
+/*	ajFileGets (qryd->libs, &line); */
     }
   
 
@@ -2019,6 +2087,11 @@ static void seqGcgBinDecode (AjPStr thys, ajint sqlen)
 
     seqp = start + rdlen;
     cp = start + 4*rdlen;
+
+    ajDebug("seqp:%x start:%x cp:%x sqlen:%d len:%d size:%d (seqp-start):%d\n",
+	    seqp, start, cp, sqlen,
+	    ajStrLen(thys), ajStrSize(thys),
+	    (seqp - start));
 
     while (seqp > start)
     {
@@ -2540,11 +2613,13 @@ static AjBool seqCdQryFile (AjPSeqQuery qry)
     ajRegSubI (divexp, 3, &qryd->seqfile);
     ajDebug ("File(s) '%S' '%S'\n", qryd->datfile, qryd->seqfile);
 
+    ajFileClose(&qryd->libr);
     qryd->libr = ajFileNewDF (qry->Directory, qryd->datfile);
     if (!qryd->libr)
 	ajFatal("Cannot open database file '%S'", qryd->datfile);
     if (ajStrLen(qryd->seqfile))
     {
+        ajFileClose(&qryd->libs);
 	qryd->libs = ajFileNewDF (qry->Directory, qryd->seqfile);
 	if (!qryd->libs)
 	    ajFatal("Cannot open sequence file '%S'", qryd->seqfile);
@@ -2675,7 +2750,7 @@ static AjBool seqAccessUrl (AjPSeqin seqin)
     {
 	ajDebug ("get '%S' qryid '%S'\n", get, qry->Id);
 	(void) ajFmtPrintS(&urlget, ajStrStr(get), ajStrStr(qry->Id));
-	(void) ajStrAss(&get, urlget);
+	(void) ajStrAssS (&get, urlget);
 	ipos = ajStrFindC(get, "%s");
     }
 
@@ -3329,7 +3404,7 @@ static AjBool seqBlastReadTable (const AjPSeqin seqin, AjPStr* hline,
 	    a_len = 0;
 
 	ajStrFixI (*sline, seq_len);
-	ajStrAss(&seqin->Inseq, *sline);
+	ajStrAssS (&seqin->Inseq, *sline);
 	return ajTrue;
 
 
@@ -3347,7 +3422,7 @@ static AjBool seqBlastReadTable (const AjPSeqin seqin, AjPStr* hline,
 		    break;
 		ajStrApp (sline, rdline);
 	    }
-	    ajStrAss(&seqin->Inseq, *sline);
+	    ajStrAssS (&seqin->Inseq, *sline);
 	    return ajTrue;
 	}
 	else
@@ -3455,7 +3530,7 @@ static AjBool seqBlastReadTable (const AjPSeqin seqin, AjPStr* hline,
 	    }
 
 	    ajStrFixI (*sline, seq_len);
-	    ajStrAss(&seqin->Inseq, *sline);
+	    ajStrAssS (&seqin->Inseq, *sline);
 	    return ajTrue;
 	}
 
@@ -3561,7 +3636,7 @@ static AjBool seqCdTrgQuery (AjPSeqQuery qry)
 	return ajFalse;
     
 
-    (void) ajStrAss(&acstr,acname);
+    (void) ajStrAssS (&acstr,acname);
     (void) ajStrToUpper(&acstr);
     (void) ajStrAssC(&actmp,ajStrStr(acstr));
 
