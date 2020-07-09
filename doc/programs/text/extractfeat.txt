@@ -1,0 +1,356 @@
+
+                            EMBOSS: extractfeat
+     _________________________________________________________________
+   
+                              Program extractfeat
+                                       
+Function
+
+   Extract features from a sequence
+   
+Description
+
+   extractfeat is a simple utility for extracting parts of a sequence
+   that have been annotated as being a specific type of feature. These
+   sub-sequences are writen to the output sequence file.
+   
+   If the feature is annotated as being in the reverse sense of a nucleic
+   acid sequence, then that feature's sub-sequence is
+   reverse-complemented before being written out.
+   
+   It is often useful to have some information on the context of the
+   feature. extractfeat allows you to specify a number of bases or
+   residues before and/or after the feature to write out.
+   
+   If you are interested in extracting the sequence of the region around
+   the start or end of the feature, then this can also be specified.
+   
+   Please remember that the output feature sequence is only as good as
+   the annotation. If you rely upon other people's, or other program's
+   annotation of features, then some of these will be incorrect.
+   
+Usage
+
+   Here is a sample session with extractfeat to write out the exons of a
+   sequence:
+
+% extractfeat embl:hsfau1 -type exon stdout
+
+   To write out the exons with 10 extra bases at the start and end so
+   that you can inspect the splice sites:
+
+% extractfeat embl:hsfau1 -type exon -before 10 -after 10 stdout
+
+   To write out the 10 bases around the start of all 'exon' features in
+   the embl database:
+
+% extractfeat embl:\*  -type exon -before 5 -after -5 stdout
+
+   To write out the 7 residues around all phosphorylated residues in
+   swissprot:
+
+% extractfeat sw:\*  -type mod_res -value phosphorylation -before 3 -after -4 s
+tdout
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outseq]            seqout     Output sequence USA
+
+   Optional qualifiers:
+   -before             integer    If this value is greater than 0 then that
+                                  number of bases or residues before the
+                                  feature are included in the extracted
+                                  sequence. This allows you to get the context
+                                  of the feature. If this value is negative
+                                  then the start of the extracted sequence
+                                  will be this number of bases/residues before
+                                  the end of the feature. So a value of '10'
+                                  will start the extraction 10 bases/residues
+                                  before the start of the sequence, and a
+                                  value of '-10' will start the extraction 10
+                                  bases/residues before the end of the
+                                  feature. The output sequence will be padded
+                                  with 'N' or 'X' characters if the sequence
+                                  starts after the required start of the
+                                  extraction.
+   -after              integer    If this value is greater than 0 then that
+                                  number of bases or residues after the
+                                  feature are included in the extracted
+                                  sequence. This allows you to get the context
+                                  of the feature. If this value is negative
+                                  then the end of the extracted sequence will
+                                  be this number of bases/residues after the
+                                  start of the feature. So a value of '10'
+                                  will end the extraction 10 bases/residues
+                                  after the end of the sequence, and a value
+                                  of '-10' will end the extraction 10
+                                  bases/residues after the start of the
+                                  feature. The output sequence will be padded
+                                  with 'N' or 'X' characters if the sequence
+                                  ends before the required end of the
+                                  extraction.
+   -source             string     By default any feature source in the feature
+                                  table is shown. You can se t this to match
+                                  any feature source you wish to show.
+                                  The source name is usuall y either the name
+                                  of the program that detected the feature or
+                                  it is the feature table (eg: EMBL) that the
+                                  feature came from.
+                                  The source may be wildcarded by u sing '*'.
+                                  If you wish to show more than one source,
+                                  separate their names with the character '|',
+                                  eg:
+                                  gene* | embl
+   -type               string     By default every feature in the feature
+                                  table is extracted. You can set this to be
+                                  any feature type you wish to extract.
+                                  See http://www3.ebi.ac.uk/Services/WebFeat/
+                                  for a list of the EMBL feature types and see
+                                  Appendix A of the Swissprot user manual in
+                                  http://www.expasy.ch/txt/userman.txt for a
+                                  list of the Swissprot feature types.
+                                  The type may be wildcarded by using '*'.
+                                  If you wish to extract more than one type,
+                                  separate their names with the character '|',
+                                  eg:
+                                  *UTR | intron
+   -sense              integer    By default any feature type in the feature
+                                  table is extracted. You can set this to
+                                  match any feature sense you wish. 0 - any
+                                  sense, 1 - forward sense, -1 - reverse sense
+   -minscore           float      If this is greater than or equal to the
+                                  maximum score, then any score is permitted
+   -maxscore           float      If this is less than or equal to the maximum
+                                  score, then any score is permitted
+   -tag                string     Tags are the types of extra values that a
+                                  feature may have. For example in the EMBL
+                                  feature table, a 'CDS' type of feature may
+                                  have the tags '/codon', '/codon_start',
+                                  '/db_xref', '/EC_number', '/evidence',
+                                  '/exception', '/function', '/gene',
+                                  '/label', '/map', '/note', '/number',
+                                  '/partial', '/product', '/protein_id',
+                                  '/pseudo', '/standard_name', '/translation',
+                                  '/transl_except', '/transl_table', or
+                                  '/usedin'. Some of these tags also have
+                                  values, for example '/gene' can have the
+                                  value of the gene name.
+                                  By default any feature tag in the feature
+                                  table is extracted. You can set this to
+                                  match any feature tag you wish to show.
+                                  The tag may be wildcarded by using '*'.
+                                  If you wish to extract more than one tag,
+                                  separate their names with the character '|',
+                                  eg:
+                                  gene | label
+   -value              string     Tag values are the values associated with a
+                                  feature tag. Tags are the types of extra
+                                  values that a feature may have. For example
+                                  in the EMBL feature table, a 'CDS' type of
+                                  feature may have the tags '/codon',
+                                  '/codon_start', '/db_xref', '/EC_number',
+                                  '/evidence', '/exception', '/function',
+                                  '/gene', '/label', '/map', '/note',
+                                  '/number', '/partial', '/product',
+                                  '/protein_id', '/pseudo', '/standard_name',
+                                  '/translation', '/transl_except',
+                                  '/transl_table', or '/usedin'. Only some of
+                                  these tags can have values, for example
+                                  '/gene' can have the value of the gene name.
+                                  By default any feature tag value in the
+                                  feature table is shown. You can set this to
+                                  match any feature tag valueyou wish to show.
+                                  The tag value may be wildcarded by using
+                                  '*'.
+                                  If you wish to show more than one tag value,
+                                  separate their names with the character
+                                  '|', eg:
+                                  pax* | 10
+
+   Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outseq]
+   (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
+   Optional qualifiers Allowed values Default
+   -before If this value is greater than 0 then that number of bases or
+   residues before the feature are included in the extracted sequence.
+   This allows you to get the context of the feature. If this value is
+   negative then the start of the extracted sequence will be this number
+   of bases/residues before the end of the feature. So a value of '10'
+   will start the extraction 10 bases/residues before the start of the
+   sequence, and a value of '-10' will start the extraction 10
+   bases/residues before the end of the feature. The output sequence will
+   be padded with 'N' or 'X' characters if the sequence starts after the
+   required start of the extraction. Any integer value 0
+   -after If this value is greater than 0 then that number of bases or
+   residues after the feature are included in the extracted sequence.
+   This allows you to get the context of the feature. If this value is
+   negative then the end of the extracted sequence will be this number of
+   bases/residues after the start of the feature. So a value of '10' will
+   end the extraction 10 bases/residues after the end of the sequence,
+   and a value of '-10' will end the extraction 10 bases/residues after
+   the start of the feature. The output sequence will be padded with 'N'
+   or 'X' characters if the sequence ends before the required end of the
+   extraction. Any integer value 0
+   -source By default any feature source in the feature table is shown.
+   You can se t this to match any feature source you wish to show. The
+   source name is usuall y either the name of the program that detected
+   the feature or it is the feature table (eg: EMBL) that the feature
+   came from. The source may be wildcarded by u sing '*'. If you wish to
+   show more than one source, separate their names with the character
+   '|', eg: gene* | embl Any string is accepted *
+   -type By default every feature in the feature table is extracted. You
+   can set this to be any feature type you wish to extract. See
+   http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature
+   types and see Appendix A of the Swissprot user manual in
+   http://www.expasy.ch/txt/userman.txt for a list of the Swissprot
+   feature types. The type may be wildcarded by using '*'. If you wish to
+   extract more than one type, separate their names with the character
+   '|', eg: *UTR | intron Any string is accepted *
+   -sense By default any feature type in the feature table is extracted.
+   You can set this to match any feature sense you wish. 0 - any sense, 1
+   - forward sense, -1 - reverse sense Any integer value 0 - any sense, 1
+   - forward sense, -1 - reverse sense
+   -minscore If this is greater than or equal to the maximum score, then
+   any score is permitted Any integer value 0.0
+   -maxscore If this is less than or equal to the maximum score, then any
+   score is permitted Any integer value 0.0
+   -tag Tags are the types of extra values that a feature may have. For
+   example in the EMBL feature table, a 'CDS' type of feature may have
+   the tags '/codon', '/codon_start', '/db_xref', '/EC_number',
+   '/evidence', '/exception', '/function', '/gene', '/label', '/map',
+   '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo',
+   '/standard_name', '/translation', '/transl_except', '/transl_table',
+   or '/usedin'. Some of these tags also have values, for example '/gene'
+   can have the value of the gene name. By default any feature tag in the
+   feature table is extracted. You can set this to match any feature tag
+   you wish to show. The tag may be wildcarded by using '*'. If you wish
+   to extract more than one tag, separate their names with the character
+   '|', eg: gene | label Any string is accepted *
+   -value Tag values are the values associated with a feature tag. Tags
+   are the types of extra values that a feature may have. For example in
+   the EMBL feature table, a 'CDS' type of feature may have the tags
+   '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence',
+   '/exception', '/function', '/gene', '/label', '/map', '/note',
+   '/number', '/partial', '/product', '/protein_id', '/pseudo',
+   '/standard_name', '/translation', '/transl_except', '/transl_table',
+   or '/usedin'. Only some of these tags can have values, for example
+   '/gene' can have the value of the gene name. By default any feature
+   tag value in the feature table is shown. You can set this to match any
+   feature tag valueyou wish to show. The tag value may be wildcarded by
+   using '*'. If you wish to show more than one tag value, separate their
+   names with the character '|', eg: pax* | 10 Any string is accepted *
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   Normal sequence with features.
+   
+   Feature tables in Swissprot, EMBL, GFF, etc. format can be added using
+   '-ufo featurefile' on the command line.
+   
+Output file format
+
+   The sequences of the specified features are written out.
+   
+   The ID name of the sequence is formed from the original sequence anme
+   with the start and end positions of the feature appended to it. So if
+   the feature came from a sequence with an ID name of 'XYZ' from
+   positions 10 to 22, then the resulting ID name of the feature sequence
+   will be 'XYZ_10_22'
+   
+   The name of the type of feature is added to the start of the
+   description of the sequence in brackets, e.g.: '[exon]'.
+   
+   The sequence is written out as a normal sequence.
+   
+   If the feature is in the reverse sense of a nucleic acid sequence,
+   then it is reverse-complemented before being written.
+   
+Data files
+
+   None.
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   If the end position of the sequence to be written is less than the
+   start position, then the warning message "Extraction region end less
+   than start for feature type [start-end] in ID name" is written and no
+   sequence is output.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name                          Description
+   coderet      Extract CDS, mRNA and translations from feature tables
+   cutseq       Removes a specified section from a sequence
+   degapseq     Removes gap characters from sequences
+   descseq      Alter the name or description of a sequence
+   entret       Reads and writes (returns) flatfile entries
+   extractseq   Extract regions from a sequence
+   infoseq      Displays some simple information about sequences
+   listor       Writes a list file of the logical OR of two sets of sequences
+   maskfeat     Mask off features of a sequence
+   maskseq      Mask off regions of a sequence
+   newseq       Type in a short new sequence
+   noreturn     Removes carriage return from ASCII files
+   notseq       Excludes a set of sequences and writes out the remaining ones
+   nthseq       Writes one sequence from a multiple set of sequences
+   pasteseq     Insert one sequence into another
+   revseq       Reverse and complement a sequence
+   seqret       Reads and writes (returns) sequences
+   seqretall    Reads and writes (returns) a set of sequences one at a time
+   seqretset    Reads and writes (returns) a set of sequences all at once
+   seqretsplit  Reads and writes (returns) sequences in individual files
+   showfeat     Show features of a sequence
+   splitter     Split a sequence into (overlapping) smaller sequences
+   swissparse   Retrieves sequences from swissprot using keyword search
+   trimest      Trim poly-A tails off EST sequences
+   trimseq      Trim ambiguous bits off the ends of sequences
+   vectorstrip  Strips out DNA between a pair of vector sequences
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (Dec 12 2001) - Gary Williams
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

@@ -1,0 +1,89 @@
+appl: extractfeat [
+  documentation: "Extract features from a sequence"
+  groups: "Edit, Feature tables"
+]
+
+seqall: sequence  [
+  parameter: "Y"
+  type: "any"
+  features: "Y"
+]
+
+seqout: outseq  [
+  parameter: "Y"
+]
+
+integer: before  [
+  optional: "Y"
+  default: "0"
+  information: "Amount of sequence before feature to extract"
+  help: "If this value is greater than 0 then that number of bases or residues before the feature are included in the extracted sequence.  This allows you to get the context of the feature.  If this value is negative then the start of the extracted sequence will be this number of bases/residues before the end of the feature.  So a value of '10' will start the extraction 10 bases/residues before the start of the sequence, and a value of '-10' will start the extraction 10 bases/residues before the end of the feature.  The output sequence will be padded with 'N' or 'X' characters if the sequence starts after the required start of the extraction."
+]
+
+integer: after  [
+  optional: "Y"
+  default: "0"
+  information: "Amount of sequence after feature to extract"
+  help: "If this value is greater than 0 then that number of bases or residues after the feature are included in the extracted sequence.  This allows you to get the context of the feature.  If this value is negative then the end of the extracted sequence will be this number of bases/residues after the start of the feature.  So a value of '10' will end the extraction 10 bases/residues after the end of the sequence, and a value of '-10' will end the extraction 10 bases/residues after the start of the feature.  The output sequence will be padded with 'N' or 'X' characters if the sequence ends before the required end of the extraction."
+]
+
+###################
+# Feature Criteria
+###################
+
+
+string: source  [
+  optional: "Y"
+  default: "*"
+  information: "Source of feature to display"
+  help: "By default any feature source in the feature table is shown. You can se
+t this to match any feature source you wish to show. \ The source name is usuall
+y either the name of the program that detected the feature or it is the feature 
+table (eg: EMBL) that the feature came from. \ The source may be wildcarded by u
+sing '*'. \ If you wish to show more than one source, separate their names with 
+the character '|', eg: \ gene* | embl"
+]
+
+string: type  [
+  optional: "Y"
+  default: "*"
+  information: "Type of feature to extract"
+  help: "By default every feature in the feature table is extracted. You can set this to be any feature type you wish to extract.  \ See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types.  \ The type may be wildcarded by using '*'.  \ If you wish to extract more than one type, separate their names with the character '|', eg: \ *UTR | intron"
+]
+
+int: sense  [
+  optional: "Y"
+  default: "0"
+  information: "Sense of feature to extract"
+  expect: "0 - any sense, 1 - forward sense, -1 - reverse sense"
+  help: "By default any feature type in the feature table is extracted.  You can set this to match any feature sense you wish. 0 - any sense, 1 - forward sense, -1 - reverse sense"
+]
+
+float: minscore [
+  optional: "Y"
+  default: "0.0"
+  information: "Minimum score of feature to extract"
+  help: "If this is greater than or equal to the maximum score, then any score is permitted"
+]
+
+float: maxscore [
+  optional: "Y"
+  default: "0.0"
+  information: "Maximum score of feature to extract"
+  help: "If this is less than or equal to the maximum score, then any score is permitted"
+]
+
+string: tag  [
+  optional: "Y"
+  default: "*"
+  information: "Tag of feature to extract"
+  help: "Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Some of these tags also have values, for example '/gene' can have the value of the gene name. \ By default any feature tag in the feature table is extracted. You can set this to match any feature tag you wish to show. \ The tag may be wildcarded by using '*'. \ If you wish to extract more than one tag, separate their names with the character '|', eg: \ gene | label"
+]
+
+string: value  [
+  optional: "Y"
+  default: "*"
+  information: "Value of feature tags to extract"
+  help: "Tag values are the values associated with a feature tag. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Only some of these tags can have values, for example '/gene' can have the value of the gene name. By default any feature tag value in the feature table is shown. You can set this to match any feature tag valueyou wish to show. \ The tag value may be wildcarded by using '*'. \ If you wish to show more than one tag value, separate their names with the character '|', eg: \ pax* | 10"
+]
+
