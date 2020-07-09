@@ -25,15 +25,16 @@
 
 
 static AjBool getpos (AjPList l, ajint *thisprev, ajint otherprev,
-	AjBool *stored_match, ajint *stored_dist, ajint *stored_this_pos,
-	ajint *stored_other_pos, AjPFeatTable *tab, AjBool this_is_8);
+	AjBool *stored_match, ajint *stored_dist, ajint *stored_8_pos,
+	ajint *stored_16_pos, ajint *stored_lastpos, 
+	AjPFeatTable *tab, AjBool this_is_8,
+	ajint *end_of_last_output_match);
 
 static void stepdown (AjPList l16, AjPList l8, AjPFeatTable *tab);
 
 static void output_stored_match(AjBool stored_match, ajint stored_dist,
-	ajint stored_this_pos, ajint stored_other_pos, AjPFeatTable *tab,
-	AjBool this_is_8);
-	
+	ajint s8, ajint s16, AjPFeatTable *tab);	
+
 static ajint    patRestrictStartCompare(const void *a, const void *b);
 
 
@@ -228,6 +229,10 @@ int main(int argc, char **argv)
 /* find pairs of hits withing the required distance and output the results */
           stepdown (l16, l8, &tab);
 
+/* write features and tidy up */
+          (void) ajFeaturesWrite(outf, tab);        
+          ajFeatDeleteDict(dict);
+          ajFeatTabDel(&tab);
 	}
 	
 	
@@ -257,95 +262,10 @@ int main(int argc, char **argv)
 
     ajStrDel(&seqname);
     ajSeqDel(&seq);
-    ajFeaturesWrite(outf, tab);
 
     ajExit();
     return 0;
 }
-
-/* @funcstatic getpos ********************************************
-**
-** gets the next position from a list and checks to see if we have a match
-** within MAXDIST of the last match in the other list
-**
-** @param [r] l [AjPList] the list of matching positions 
-** @param [rw] thisprev [int *] pointer to last stored position of this pattern
-** @param [r] otherprev [ajint] last stored position of the other pattern
-** @param [rw] stored_match [AjBool *] flag set to ajtrue if have stored match
-** @param [rw] stored_dist [int *] distance between the patterns in the stored match
-** @param [rw] stored_this_pos [int *] position of this pattern match in stored match
-** @param [rw] stored_other_pos [int *] position of 8 pattern match in stored match
-** @param [rw] tab [AjPFeatTable*] feature table
-** @param [r] this_is_8 [AjBool] ajTrue is 'thisprev' refers to the length 8 pattern
-** @return [AjBool] False if the list is empty
-** @@
-******************************************************************************/
-
-static AjBool getpos (AjPList l, ajint *thisprev, ajint otherprev,
-	AjBool *stored_match, ajint *stored_dist, ajint *stored_this_pos,
-	ajint *stored_other_pos, AjPFeatTable *tab, AjBool this_is_8)
-{
-
-  EmbPMatMatch m;
-  ajint dist;	/* distance between the two patterns */
-
-  while (*thisprev <= otherprev) {
-  	
-/* if the list is empty, return ajFalse */
-    if (!ajListPop(l, (void **)&m)) {
-      return ajFalse;
-    }
-
-/* get position of next list element and store it */
-    *thisprev = m->start;
-    embMatMatchDel(&m);
-
-/* get the absolute distance between the two patterns */
-    dist = otherprev - *thisprev;
-    if (dist < 0) {
-      dist = -dist;
-    }
-   
-/* otherprev is -1 if it hasn't got a position stored in it yet */
-    if (otherprev == -1) {
-      dist = MAXDIST + 1;
-    }
-
-/* if dist to other stored pos is within range */
-    if (dist < MAXDIST) {
-
-/* if we have a stored match output it */
-      if (*stored_match) {
-        if (dist < *stored_dist) {
-
-/* store new match */
-	  *stored_match = ajTrue;
-	  *stored_dist = dist;
-	  *stored_this_pos = *thisprev;
-	  *stored_other_pos = otherprev;
-        } else {
-          output_stored_match(*stored_match, *stored_dist, *stored_this_pos, *stored_other_pos, tab, this_is_8);
-          *stored_match = ajFalse;
-        }
-      } else {
-/* store new match */
-	  *stored_match = ajTrue;
-	  *stored_dist = dist;
-	  *stored_this_pos = *thisprev;
-	  *stored_other_pos = otherprev;
-      }
-    } else {
-      if (*stored_match) {
-      	output_stored_match(*stored_match, *stored_dist, *stored_this_pos, *stored_other_pos, tab, this_is_8);
-      	*stored_match = ajFalse;
-      }
-    }
-  }
-  
-  return ajTrue;
-  
-}
-
 
 /* @funcstatic stepdown ********************************************
 **
@@ -369,13 +289,18 @@ static void stepdown (AjPList l16, AjPList l8, AjPFeatTable *tab)
   ajint stored_dist;	/* distance between the patterns in the stored match */
   ajint stored_16_pos;	/* position of 16 pattern match in stored match */
   ajint stored_8_pos;	/* position of 8 pattern match in stored match */
+  ajint stored_lastpos;	/* position of end of second pattern in stored match */
   
   AjBool notend16=ajTrue;	/* flag for empty list of length 16 pattern matches*/
   AjBool notend8=ajTrue;	/* flag for empty list of length 8 pattern matches*/
+
+  ajint end_of_last_output_match = -(MAXDIST+1);	/* used to prevent clusters of MRS within MAXDIST of each other */
   
   while (notend16 || notend8) {
 
-    notend16 = getpos(l16, &prev16, prev8, &stored_match, &stored_dist, &stored_16_pos, &stored_8_pos, tab, ajFalse);
+    notend16 = getpos(l16, &prev16, prev8, &stored_match, &stored_dist,
+	&stored_8_pos, &stored_16_pos, &stored_lastpos, tab, ajFalse,
+	&end_of_last_output_match);
 
 /* if the list of 8 pattern matches is empty and the 16's have gone past
 the last 8 pattern match, stop searching */
@@ -383,7 +308,9 @@ the last 8 pattern match, stop searching */
       notend16 = ajFalse;
     }
 
-    notend8 = getpos(l8, &prev8, prev16, &stored_match, &stored_dist, &stored_8_pos, &stored_16_pos, tab, ajTrue);
+    notend8 = getpos(l8, &prev8, prev16, &stored_match, &stored_dist,
+	&stored_8_pos, &stored_16_pos, &stored_lastpos, tab, ajTrue,
+	&end_of_last_output_match);
 
 /* if the list of 16 pattern matches is empty and the 8's have gone past
 the last 16 pattern match, stop searching */
@@ -393,9 +320,161 @@ the last 16 pattern match, stop searching */
   }
 
 /* Both lists are empty. Output any remaining stored match */
-  output_stored_match(stored_match, stored_dist, stored_8_pos, stored_16_pos, tab, ajTrue);
-
+/* only output if this match is further than MAXDIST from the last hit
+output to prevent lots of outputs for a cluster of MRS's */
+  if (stored_8_pos - end_of_last_output_match > MAXDIST || stored_16_pos - end_of_last_output_match > MAXDIST) {
+    output_stored_match(stored_match, stored_dist, stored_8_pos, stored_16_pos, tab);
+  } 
+/* else { printf("REJECT (at end) stored_8_pos=%d, stored_16_pos=%d end_of_last_output_match=%d", stored_8_pos, stored_16_pos, end_of_last_output_match); } */
 }
+
+/* @funcstatic getpos ********************************************
+**
+** gets the next position from a list and checks to see if we have a match
+** within MAXDIST of the last match in the other list
+**
+** @param [r] l [AjPList] the list of matching positions 
+** @param [rw] thisprev [int *] pointer to last stored position of this pattern
+** @param [r] otherprev [ajint] last stored position of the other pattern
+** @param [rw] stored_match [AjBool *] flag set to ajtrue if have stored match
+** @param [rw] stored_dist [int *] distance between the patterns in the stored match
+** @param [rw] stored_8_pos [int *] position of this pattern match in stored match
+** @param [rw] stored_16_pos [int *] position of 8 pattern match in stored match
+** @param [rw] stored_lastpos [int *] position of end of second pattern in stored match
+** @param [rw] tab [AjPFeatTable*] feature table
+** @param [r] this_is_8 [AjBool] ajTrue is 'thisprev' refers to the length 8 pattern
+** @param [rw] end_of_last_output_match [ajint *] end of the last output match
+** @return [AjBool] False if the list is empty
+** @@
+******************************************************************************/
+
+static AjBool getpos (AjPList l, ajint *thisprev, ajint otherprev,
+	AjBool *stored_match, ajint *stored_dist, ajint *stored_8_pos,
+	ajint *stored_16_pos, ajint *stored_lastpos, 
+	AjPFeatTable *tab, AjBool this_is_8,
+	ajint *end_of_last_output_match)
+{
+
+  EmbPMatMatch m;
+  ajint dist;	/* distance between the two patterns */
+  ajint firstpos;	/* first position of the first of the two patterns */
+  ajint lastpos; 	/* last position of the second of the two patterns */
+  ajint s8, s16, e8, e16;	/* start and end positions */
+
+  while (*thisprev <= otherprev) {
+  	
+/* if the list is empty, return ajFalse */
+    if (!ajListPop(l, (void **)&m)) {
+      return ajFalse;
+    }
+
+/* get position of next list element and store it */
+    *thisprev = m->start;
+    embMatMatchDel(&m);
+
+/* get the start and end positions of the 8bp and 16bp patterns and get
+the end position of the MRS = second pattern + length of second pattern -1 */
+    if (this_is_8) {
+      s8 = *thisprev;
+      s16 = otherprev;
+    } else {
+      s8 = otherprev;
+      s16 = *thisprev;
+    }
+    e8 = s8+7;
+    e16 = s16+15;
+
+/* get last position of the two patterns */
+    if (e8>e16) {
+      lastpos = e8;
+    } else {
+      lastpos = e16;
+    }
+
+/* get distance from end of first pattern to start of second */
+    if (e8 < s16) {
+      dist = s16-e8;
+    } else if (e16 < s8) {
+      dist = s8-e16; 
+    } else {	/* overlap */
+      dist = 0;
+    }
+  
+/* the first position of the two patterns */
+    if (s8>s16) {
+      firstpos = s16;
+    } else {
+      firstpos = s8;
+    }
+
+/* otherprev is -1 if it hasn't got a position stored in it yet */
+    if (otherprev == -1) {
+      dist = MAXDIST + 1;
+      firstpos = MAXDIST + 1;
+    }
+
+/* if they are overlapping, we may still have a negative length */     
+    if (dist < 0) {
+      ajFatal("Have a negative distance!\n");
+    }
+   
+/* if dist to other stored pos is within range */
+    if (dist <= MAXDIST) {
+
+/* if we have a stored match output it */
+      if (*stored_match) {
+        if (dist < *stored_dist) {
+
+/* store new match */
+/* only output if this match is further than MAXDIST from the last hit
+output to prevent lots of outputs for a cluster of MRS's */
+/* printf("*end_of_last_output_match=%d firstpos=%d dist=%d\n", *end_of_last_output_match, firstpos, firstpos - *end_of_last_output_match); */
+          if (firstpos - *end_of_last_output_match > MAXDIST) {
+/* printf("STORE for OUTPUT dist=%d\n", firstpos - *end_of_last_output_match); */
+	    *stored_match = ajTrue;
+	    *stored_dist = dist;
+	    *stored_8_pos = s8;
+	    *stored_16_pos = s16;
+            *stored_lastpos = lastpos;
+/* printf("storing:\nstored_8_pos=%d, stored_16_pos=%d, stored_lastpos=%d\n", *stored_8_pos, *stored_16_pos, *stored_lastpos); */
+/* printf("In getpos() s8=%d, e8=%d, s16=%d, e16=%d dist=%d\n", s8, e8, s16, e16, firstpos - *end_of_last_output_match); */
+	  }
+/* else { printf("REJECT (in a cluster) s8=%d, e8=%d, s16=%d, e16=%d dist=%d\n", s8, e8, s16, e16, firstpos - *end_of_last_output_match); } */
+        } else {
+          output_stored_match(*stored_match, *stored_dist, *stored_8_pos, *stored_16_pos, tab);
+          *stored_match = ajFalse;
+          *end_of_last_output_match = *stored_lastpos;
+        }
+      } else {
+/* store new match */
+/* only output if this match is further than MAXDIST from the last hit
+output to prevent lots of outputs for a cluster of MRS's */
+/* printf("*end_of_last_output_match=%d firstpos=%d dist=%d\n", *end_of_last_output_match, firstpos, firstpos - *end_of_last_output_match);*/
+        if (firstpos - *end_of_last_output_match > MAXDIST) {
+/* printf("STORE for OUTPUT dist = %d\n", firstpos - *end_of_last_output_match); */
+	  *stored_match = ajTrue;
+	  *stored_dist = dist;
+	  *stored_8_pos = s8;
+	  *stored_16_pos = s16;
+          *stored_lastpos = lastpos;
+/* printf("storing:\nstored_8_pos=%d, stored_16_pos=%d, stored_lastpos=%d\n", *stored_8_pos, *stored_16_pos, *stored_lastpos);*/
+/* printf("in getpos() s8=%d, e8=%d, s16=%d, e16=%d dist=%d\n", s8, e8, s16, e16, firstpos - *end_of_last_output_match);*/
+	}
+/* else { printf("REJECT (in a cluster) s8=%d, e8=%d, s16=%d, e16=%d dist=%d\n", s8, e8, s16, e16, firstpos - *end_of_last_output_match); } */
+      }
+    } else {
+      if (*stored_match) {
+        output_stored_match(*stored_match, *stored_dist, *stored_8_pos, *stored_16_pos, tab);
+      	*stored_match = ajFalse;
+        *end_of_last_output_match = *stored_lastpos;
+      }
+    }
+  }
+  
+  return ajTrue;
+  
+}
+
 
 /* @funcstatic output_stored_match ********************************************
 **
@@ -403,17 +482,15 @@ the last 16 pattern match, stop searching */
 **
 ** @param [r] stored_match [AjBool] flag set to ajtrue if have stored match
 ** @param [r] stored_dist [ajint] distance between the patterns in the stored match
-** @param [r] stored_this_pos [ajint]  position of this pattern match in stored match
-** @param [r] stored_other_pos [ajint] position of 8 pattern match in stored match
+** @param [r] s8 [ajint]  position of 8bp pattern match in stored match
+** @param [r] s16 [ajint] position of 16bp pattern match in stored match
 ** @param [rw] tab [AjPFeatTable*] feature table
-** @param [r] this_is_8 [AjBool] ajTrue is 'stored_this_pos' is for the length 8 pattern
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void output_stored_match(AjBool stored_match, ajint stored_dist,
-ajint stored_this_pos, ajint stored_other_pos, AjPFeatTable *tab, 
-AjBool this_is_8)
+ajint s8, ajint s16, AjPFeatTable *tab)
 {
 
 /* strand is set to unknown because the MAR/SAR recognition signature (MRS) is
@@ -424,8 +501,8 @@ not dependent on the strand(s) it is on */
   AjPStr score=NULL,source=NULL,type=NULL, desc=NULL, note=NULL;
   AjPFeature feature;
   AjPStr notestr=NULL;
-
-  ajint a, b, s8, s16, tmp, end;
+  ajint start, end;
+  ajint e8, e16;	/* end positions of the 8bp and 16 bp pattern matches */
 
   if (!stored_match) return;
   	
@@ -434,33 +511,25 @@ not dependent on the strand(s) it is on */
   ajStrAssC(&score,"1.0");
   ajStrAssC(&note, "note");
 
-
-/* order the start positions of the two patterns */
-  a = stored_this_pos;
-  b = stored_other_pos;
-  if (a > b) {
-    tmp = a;
-    a = b;
-    b = tmp;
-    this_is_8 = ! this_is_8;
-  }
-
 /* get the start and end positions of the 8bp and 16bp patterns and get
 the end position of the MRS = second pattern + length of second pattern -1 */
-  if (this_is_8) {
-    s8 = a;
-    s16 = b;
-    end = s16+15;
+  e8 = s8+7;
+  e16 = s16+15;
+  if (s8 < s16) {
+    start = s8;
   } else {
-    s8 = b;
-    s16 = a;
-    end = s8+7;
+    start = s16;
+  }
+  if (e8>e16) {
+    end = e8;
+  } else {
+    end = e16;
   }
 
   feature = ajFeatureNew(*tab, source, type,
-    a, end, score, strand, frame, desc, 0, 0) ;
+    start, end, score, strand, frame, desc, 0, 0) ;
 
-  ajFmtPrintS(&notestr, "MAR/SAR recognition site (MRS). 8bp pattern=%d..%d. 16bp pattern = %d..%d", a, a+7, b, b+15);
+  ajFmtPrintS(&notestr, "MAR/SAR recognition site (MRS). 8bp pattern=%d..%d. 16bp pattern = %d..%d", s8, e8, s16, e16);
   ajFeatSetTagValue(feature, note, notestr, ajFalse);
 
 /* tidy up - don't delete 'notestr' */

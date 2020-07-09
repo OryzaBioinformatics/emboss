@@ -400,6 +400,7 @@ void dogarnier(AjPFile outf, ajint from, ajint to, char *seq, char *name,
 */
   }	
     
+  for(k=0;k<4;++k) iarr[k]=0;
 
   lastk = 0;
   for (i=0; i<n0; i++) {
@@ -425,7 +426,6 @@ void dogarnier(AjPFile outf, ajint from, ajint to, char *seq, char *name,
     parr[0] -= dch;
     parr[1] -= dcs;
 
-    for(k=0;k<4;++k) iarr[k]=0;
     k = 0;
 
     for (j=1; j<4; j++) if (parr[j]>parr[k]) k=j;

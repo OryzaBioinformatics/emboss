@@ -514,7 +514,8 @@ static void WriteORF(AjPSeq seq, ajint len, ajint seqlen, AjBool sense,
     }
     else
     {
-	(void) ajStrFromInt(&value, e);	/* the base before the stop codon
+	s = seqlen-s+1;
+	(void) ajStrFromInt(&value, s);	/* the base before the stop codon
 					   (numbering bases from 1) */    
     }
     (void) ajStrApp(&name, value);
@@ -523,7 +524,10 @@ static void WriteORF(AjPSeq seq, ajint len, ajint seqlen, AjBool sense,
 	(void) ajStrFromInt(&value, e);	/* the base before the stop codon
 					   (numbering bases from 1) */
     else
-	(void) ajStrFromInt(&value, s);    
+    {
+	e = seqlen-e+1;
+	(void) ajStrFromInt(&value, e);
+    }
 
     (void) ajStrApp(&name, value);
     (void) ajStrAppC(&name, "] ");
