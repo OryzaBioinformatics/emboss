@@ -72,7 +72,7 @@ AjPStr strPNULL = &strONULL;
 static AjPStr strNewNew (size_t size);
 static void strClone (AjPStr* pthis);
 static void strCloneL (AjPStr* pthis, size_t size);
-
+static AjBool strMatchWordCC (const char* str, const char* text);
 
 static ajlong strAlloc = 0;
 static ajlong strFree = 0;
@@ -1951,7 +1951,7 @@ AjBool ajStrTrimC (AjPStr* pthis, const char* chars) {
 
   cp = &thys->Ptr[thys->Len-1];
   i = 0;
-  while (strchr(chars, *cp)) {
+  while (strchr(chars, *cp) && thys->Len) {
     thys->Len--;
     cp--;
     i++;
@@ -1987,7 +1987,7 @@ AjBool ajStrTrimEndC (AjPStr* pthis, const char* chars) {
 
   cp = &thys->Ptr[thys->Len-1];
   i = 0;
-  while (strchr(chars, *cp)) {
+  while (strchr(chars, *cp) && thys->Len) {
     thys->Len--;
     cp--;
     i++;
@@ -3456,6 +3456,194 @@ AjBool ajStrIsWild (const AjPStr thys) {
   return ajRegExec(wildexp, thys);
 }
 
+/* @func ajStrMatchWord ***************************************************
+**
+** Simple case insensitive test for matching a wildcard value to a 'word'
+** in text.
+**
+** 'Word' is defined as starting and ending with an alphanumeric character
+** (A-Z a-z 0-9) with no white space.
+**
+** The query text can use '*' or '?' as a wildcard.
+**
+** @param [r] str [AjPStr] String
+** @param [r] text [AjPStr] Text
+** @return [AjBool]  ajTrue if found
+** @@
+******************************************************************************/
+
+AjBool ajStrMatchWord (AjPStr str, AjPStr text) {
+  return ajStrMatchWordCC (str->Ptr, text->Ptr);
+}
+
+/* @func ajStrMatchWordC ***************************************************
+**
+** Simple case insensitive test for matching a wildcard value to a 'word'
+** in text.
+**
+** 'Word' is defined as starting and ending with an alphanumeric character
+** (A-Z a-z 0-9) with no white space.
+**
+** The query text can use '*' or '?' as a wildcard.
+**
+** @param [r] str [AjPStr] String
+** @param [r] text [const char*] Text
+** @return [AjBool] ajTrue if found
+** @@
+******************************************************************************/
+
+AjBool ajStrMatchWordC (AjPStr str, const char* text) {
+  return ajStrMatchWordCC(str->Ptr, text);
+}
+
+/* @func ajStrMatchWordCC ***************************************************
+**
+** Simple case insensitive test for matching a wildcard value to a 'word'
+** in text.
+**
+** 'Word' is defined as starting and ending with an alphanumeric character
+** (A-Z a-z 0-9) with no white space.
+**
+** The query text can use '*' or '?' as a wildcard.
+**
+** @param [r] str [const char*] String
+** @param [r] text [const char*] Text
+** @return [AjBool] ajTrue if found
+** @@
+******************************************************************************/
+
+AjBool ajStrMatchWordCC (const char* str, const char* text) {
+
+  const char* cp = text;
+  const char* cq = str;
+
+  AjBool word=ajFalse;
+
+  ajDebug("ajStrMatchWordCC('%s', '%s')\n", str, text);
+
+  if (!*cp && !*cq) return ajTrue;
+  if (!*cp) return ajFalse;
+
+  ajDebug("something to test, continue...\n");
+
+  /* unlike ajStrCmpWildCC, we step through the string (str) not the
+     query (text) */
+
+  while (*cq) {
+
+    if (!word) {
+      if (isalnum((int) *cq)) {	/* start of word */
+	word = ajTrue;
+	if (strMatchWordCC(cq, text))
+	  return ajTrue;;
+      }
+    }
+    else {
+      if (!isalnum((int) *cq)) {	/* end of word */
+	word = ajFalse;
+      }
+    }
+
+    cq++;
+  }
+
+  return ajFalse;
+}
+
+/* @funcstatic strMatchWordCC *************************************************
+**
+** Compare two strings for a wildcard match to the first word
+**
+** @param [r] str [const char*] String
+** @param [r] text [const char*] Text
+** @return [AjBool] ajTrue if found
+** @@
+******************************************************************************/
+
+static AjBool strMatchWordCC (const char* str, const char* text) {
+
+  const char* cp = text;
+  const char* cq = str;
+  char lastch = '\0';
+
+  ajDebug ("strMatchWordCC '%s' '%s'\n", str, text);
+
+  if (!*cp && !*cq) return ajTrue; /* both empty */
+  if (!*cp) return ajFalse;	/* no query text */
+
+  while (*cp && !isspace((int) *cp)) {
+
+    if (!*cq && *cp != '*')
+      return ajFalse;
+
+    switch (*cp) {
+    case '?':			/* skip next character and continue */
+      lastch = *cq;
+      cp++;
+      cq++;
+      break;
+    case '*':
+      cp++;			/* recursive call to test the rest */
+      if (!*cp) {
+	 ajDebug ("...matches at end +%d '%s' +%d '%s'\n",
+	   (cq - str), cq, (cp - text), cp);
+	return ajTrue;	/* just match the rest */
+      }
+      if (!*cq) {
+	ajDebug ("...test match to null string just in case\n");
+	return strMatchWordCC (cq, cp);
+      }
+      while (*cq) {		/* wildcard in mid name, look for the rest */
+        if (strMatchWordCC (cq, cp)) /* recursive + repeats */
+	  return ajTrue;
+	ajDebug ("...'*' at +%d '%s' +%d '%s' continuing\n",
+	   (cq - str), cq, (cp - text), cp);
+	cq++;
+      }
+      return ajFalse;		/* if we're still here, it failed */
+
+      /* always returns once '*' is found */
+
+    default:			/* for all other characters, keep checking */
+      if (tolower((ajint) *cp) != tolower((ajint) *cq)) {
+	  return ajFalse;
+      }
+      cp++;
+      if (*cq) {
+	lastch = *cq;
+	cq++;
+      }
+    }
+  }
+
+  ajDebug ("...done comparing at +%d '%s' +%d '%s' lastch '%c'\n",
+    (cq - str), cq, (cp - text), cp, lastch);
+
+  if (!isalnum((int) lastch)) {
+    ajDebug("not a word boundary at '%c'\n", lastch);
+    return ajFalse;
+  }
+
+  if (*cp) {
+    ajDebug ("...incomplete cp, FAILED\n");
+    return ajFalse ;
+  }
+
+  if (*cq) {
+    if (isalnum((int) *cq)) {
+      ajDebug ("word continues, failed\n");
+      return ajFalse;
+    }
+    ajDebug ("word end ... success\n");
+    return ajTrue;
+  }
+
+  ajDebug ("...all finished and matched\n");
+
+  return ajTrue;
+}
+
+
 /* @func ajStrCheck ***********************************************************
 **
 ** Checks a string object for consistency. Intended for debugging and testing
@@ -4246,6 +4434,43 @@ ajint ajStrTokenCount(AjPStr* line, const char *delim)
 
     while(ajStrToken(&tmp, &t, delim)) ++count;
     
+    return count;
+}
+
+
+/* @func ajStrTokenCountR *****************************************************
+**
+** Returns the number of tokens in a string (reentrant)
+**
+** @param [r] line [AjPStr*] String to examine.
+** @param [r] delim [const char *] String of delimiter characters.
+** @return [ajint] The number of tokens
+** @@
+******************************************************************************/
+
+ajint ajStrTokenCountR(AjPStr* line, const char *delim)
+{
+    AjPStr buf=NULL;
+    ajint count;
+    char  *p;
+    char  *save=NULL;
+    
+    if(!*line)
+	return 0;
+
+    buf = ajStrNew();
+    
+    p = ajSysStrtokR(ajStrStr(*line),delim,&save,&buf);
+    if(!p)
+    {
+	ajStrDel(&buf);
+	return 0;
+    }
+
+    count=1;
+    while(ajSysStrtokR(NULL,delim,&save,&buf)) ++count;
+    
+    ajStrDel(&buf);
     return count;
 }
 

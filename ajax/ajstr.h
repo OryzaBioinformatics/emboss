@@ -365,6 +365,9 @@ AjBool     ajStrMatchWild   (const AjPStr thys, const AjPStr wild);
 AjBool     ajStrMatchWildC  (const AjPStr thys, const char* text);
 AjBool     ajStrMatchWildCC (const char* str, const char* text);
 AjBool     ajStrMatchWildCO (const char* str, const AjPStr wild);
+AjBool     ajStrMatchWord (AjPStr str, AjPStr text);
+AjBool     ajStrMatchWordC (AjPStr str, const char* text);
+AjBool     ajStrMatchWordCC (const char* str, const char* text);
 AjBool     ajStrMod  (AjPStr* pthis);
 AjBool     ajStrModL (AjPStr* pthis, size_t size);
 ajint      ajStrNCmpC (const AjPStr thys, const char *text, ajint n);
@@ -436,6 +439,7 @@ AjBool     ajStrTokenAss (AjPStrTok *ptok, const AjPStr thys,
 			  const char *delim);
 void       ajStrTokenClear (AjPStrTok *token);
 ajint      ajStrTokenCount(AjPStr *line, const char *delim);
+ajint      ajStrTokenCountR(AjPStr* line, const char *delim);
 AjPStrTok  ajStrTokenInit (const AjPStr thys, const char *delim);
 void       ajStrTokenReset (AjPStrTok* ptok);
 AjBool     ajStrTokenRest (AjPStr* pthis, AjPStrTok* ptoken);
