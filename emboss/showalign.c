@@ -1,0 +1,931 @@
+/* @source showalign application
+**
+** Display a multiple sequence alignment with consensus
+**
+** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** 8 May 2001 - GWW - written
+** @@
+**
+** This program is free software; you can redistribute it and/or
+** modify it under the terms of the GNU General Public License
+** as published by the Free Software Foundation; either version 2
+** of the License, or (at your option) any later version.
+**
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+**
+** You should have received a copy of the GNU General Public License
+** along with this program; if not, write to the Free Software
+** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+******************************************************************************/
+
+
+/**************************************************************************
+
+Outputs a set of sequence as compared to a reference sequence as follows:
+	
+With reference: AII
+and sequence:   ALW
+ie. 		identical, similar, not-similar
+
+Show			
+----
+
+All		ALw
+Identical	A..
+Non-id		.lW
+Similar		Al.
+Dissimilar	..W
+
+
+
+***************************************************************************/
+
+
+#include "emboss.h"
+#include <ctype.h>
+#include <math.h>	/* for log10() */
+
+/* declare structures */
+
+typedef struct AjSOrder {
+  AjPSeq seq;
+  ajint similarity;	/* total of similarity scores to consensus for sort order */
+  ajint idcount;	/* count of identical residues for stats */
+  ajint simcount;	/* count of similar residues for stats */
+} AjOOrder, *AjPOrder;
+
+
+/* declare functions */
+
+static int Getrefseq (AjPStr refseq, AjPSeqset seqset);
+static void NiceMargin(AjPSeqset seqset, ajint *margin, AjBool docon,
+	ajint nrefseq);
+static void Convert (AjPSeqset seqset, AjPStr *show, AjBool similarcase,
+	ajint nrefseq, ajint **sub, AjPSeqCvt cvt, AjPSeq consensus);
+static void MakeAll (AjPSeq ref, AjPSeq seq, ajint **sub, AjPSeqCvt cvt,
+	AjBool similarcase);
+static void MakeIdentity (AjPSeq ref, AjPSeq seq);
+static void MakeNonidentity (AjPSeq ref, AjPSeq seq, ajint **sub,
+	AjPSeqCvt cvt, AjBool similarcase);
+static void MakeSimilar (AjPSeq ref, AjPSeq seq, ajint **sub,
+	AjPSeqCvt cvt, AjBool similarcase);
+static void MakeDissimilar (AjPSeq ref, AjPSeq seq, ajint **sub,
+	AjPSeqCvt cvt);
+static void Order(AjPStr *order, AjPSeqset seqset, AjPSeq consensus,
+	ajint nrefseq, ajint **sub, AjPSeqCvt cvt, AjOOrder *aorder);
+static int Output (AjPFile outf, AjPSeqset seqset, ajint nrefseq, 
+	ajint width, ajint margin, AjPSeq consensus, AjBool docon,
+	AjBool bottom, AjOOrder * aorder, AjBool html,
+	AjPRange highlight, AjPRange uppercase, AjBool number, 
+	AjBool ruler);
+static int OutputNums (AjPFile outf, ajint pos, ajint width, ajint margin);
+static int OutputTicks (AjPFile outf, ajint pos, ajint width, ajint margin);
+static int OutputSeq (AjPFile outf, AjPSeq seq,
+	ajint pos, ajint end, ajint width, ajint margin, AjBool html,
+	AjPRange highlight, AjPRange uppercase);
+static ajint CompareTwoSeqNames(const void * a, const void * b);
+static ajint CompareTwoSeqSimilarities(const void * a, const void * b);
+
+
+
+int main(int argc, char **argv)
+{
+
+  AjPFile outf;
+  AjPSeqset seqset = NULL;
+  AjPStr refseq;	/* input name/number of reference sequence */
+  ajint  nrefseq;	/* numeric reference sequence */
+  AjPStr *show;		/* what to show */
+  ajint width;		/* width of displayed sequence line */
+  ajint margin;		/* width of displayed margin on left side */
+  AjPMatrix matrix;	/* scoring matrix structure */
+  ajint **sub;		/* integer scoring matrix */
+  AjPSeqCvt  cvt=0;	/* conversion table for scoring matrix */
+  AjBool similarcase;	/* True if want to change case based on Similarity */
+  float identity;
+  ajint ident;
+  float fplural; 
+  float setcase;
+  AjPStr cons = ajStrNew();
+  AjPSeq consensus = ajSeqNew();
+  AjBool html;		/* format for HTML display */
+  AjPRange highlight;	/* ranges to colour in HTML */
+  AjPRange uppercase;	/* ranges to uppercase */
+  AjBool docon;		/* show the consensus line */
+  AjBool bottom;	/* show the refseq line at the bottom of the alignment as well as the top */
+  AjPStr *order;	/* input required order */
+  AjOOrder *aorder;	/* the output order array */
+  AjBool number;	/* display number line */
+  AjBool ruler;		/* display ruler line */
+
+  embInit ("showalign", argc, argv);
+
+  seqset = ajAcdGetSeqset ("sequence");
+  outf = ajAcdGetOutfile ("outfile");
+  refseq = ajAcdGetString ("refseq");
+  show = ajAcdGetList ("show");
+  order = ajAcdGetList ("order");
+  width = ajAcdGetInt ("width");
+  margin = ajAcdGetInt ("margin");
+  matrix  = ajAcdGetMatrix ("matrix");
+  similarcase = ajAcdGetBool ("similarcase");
+  docon = ajAcdGetBool ("consensus");
+  bottom = ajAcdGetBool ("bottom");
+  number = ajAcdGetBool ("number");
+  ruler = ajAcdGetBool ("ruler");
+
+/* html and range formatting parameters */
+  html = ajAcdGetBool ("html");
+  uppercase = ajAcdGetRange ("uppercase");
+  highlight = ajAcdGetRange ("highlight");
+
+/* consensus parameters */
+  fplural   = ajAcdGetFloat("plurality");
+  setcase   = ajAcdGetFloat("setcase");
+  identity  = ajAcdGetFloat("identity");
+
+/* get conversion table and scoring matrix */
+  cvt = ajMatrixCvt(matrix);
+  sub = ajMatrixArray(matrix);  
+
+/* get the number of the reference sequence */
+  nrefseq = Getrefseq(refseq, seqset);
+
+/* change the % plurality to the fraction of absolute total weight */
+  fplural = ajSeqsetTotweight(seqset) * fplural / 100;
+
+/* change the % identity to the number of identical sequences at a
+position required for consensus */
+  ident = ajSeqsetSize(seqset) * identity / 100;
+
+/* get the consensus sequence */
+  embConsCalc (seqset, matrix, ajSeqsetSize(seqset), ajSeqsetLen(seqset),
+	fplural, setcase, ident, &cons);
+  ajSeqAssSeq(consensus, cons);				/* set the sequence string */
+  ajSeqAssName(consensus, ajStrNewC("Consensus"));	/* name the sequence */
+
+/* if margin is given as -1 ensure it is reset to a nice value */
+  NiceMargin(seqset, &margin, docon, nrefseq);
+
+/* order the output */
+  AJCNEW(aorder, ajSeqsetSize(seqset));
+  Order(order, seqset, consensus, nrefseq, sub, cvt, aorder);
+
+/* convert all sequences except the refseq to the required symbols */
+  Convert(seqset, show, similarcase, nrefseq, sub, cvt, consensus);
+
+/* output the sequences */
+  Output(outf, seqset, nrefseq, width, margin, consensus, docon, bottom,
+	aorder, html, highlight, uppercase, number, ruler);
+
+/* tidy up */
+  ajFileClose (&outf);
+  ajSeqDel(&consensus);
+  AJFREE(aorder);
+
+  ajExit ();
+  return 0;
+}
+
+/* @funcstatic Getrefseq ********************************************
+**
+** Determines which sequence should be the reference sequence.
+** The first sequence in the set is returned as 0.
+** -1 is returned as the consensus sequence.
+**
+** @param [r] refseq [AjPStr] input name/number of reference sequence 
+** @param [r] seqset [AjPSeqset] the sequences 
+** @return [int] the number of the reference sequence
+** @@
+******************************************************************************/
+
+static int Getrefseq (AjPStr refseq, AjPSeqset seqset)
+{
+
+  ajint i;
+  AjPSeq seq;
+
+  for (i=0; i<ajSeqsetSize(seqset); i++) {
+    seq = ajSeqsetGetSeq(seqset, i);
+    if (!ajStrCmpO(ajSeqGetName(seq), refseq)) {
+      return i;
+    }
+  }
+
+/* not a name of a sequence, so it must be a number */
+  if (ajStrToInt(refseq, &i)) {
+    if (i < 0 || i > ajSeqsetSize(seqset)) {
+      ajFatal("Reference sequence number < 0 or > number of input sequences: %d", i);
+    }
+    return i-1;
+  } else {
+    ajFatal("Reference sequence is not a sequence ID or a number: %S", refseq);
+  }
+
+  return 0;
+}
+ 
+/* @funcstatic NiceMargin ********************************************
+**
+** If margin is input as -1, change it to the margin which allows
+** the longest name to be displayed plus one extra space after it
+**
+** @param [r] seqset [AjPSeqset] the sequences 
+** @param [rw] margin [*ajint] margin
+** @param [r] docon [AjBool] displaying the consensus line
+** @param [r] nrefseq [ajint] the sequence being displayed
+** @return [void] 
+** @@
+******************************************************************************/
+
+static void NiceMargin(AjPSeqset seqset, ajint *margin, AjBool docon,
+	ajint nrefseq)
+{
+  ajint longest = 0;
+  ajint len;
+  ajint i;
+  AjPSeq seq;
+
+/* if margin has been explicitly set, use that value */
+  if (*margin != -1) return;
+
+/* are we displaying the consensus at the end or using it as the ref seq? */
+  if (docon || nrefseq == -1) {
+    longest = 9;	/* the length of "Consensus" */
+  }
+
+/* get length of longest sequence name */
+  for (i=0; i<ajSeqsetSize(seqset); i++) {
+    seq = ajSeqsetGetSeq(seqset, i);
+    len = ajStrLen(ajSeqGetName(seq));
+    if (len > longest) longest = len;
+  }
+
+  *margin = longest+1; /* use longest name plus one extra space */
+} 
+/* @funcstatic Convert ********************************************
+** 
+** Convert all sequences except the refseq to the required symbols
+**
+** @param [r] seqset [AjPSeqset] the sequences
+** @param [r] show [AjPStr *] type of thing to show 
+** @param [r] similarcase [*AjPStr] change case according to similarity
+** @param [r] nrefseq [ajint] number of the refseq
+** @param [r] sub [ajint **] scoring matrix
+** @param [r] cvt [AjPSeqCvt] conversion table for scoring matrix
+** @param [r] consensus [AjPSeq] consensus sequence
+** @return [void]
+** @@
+******************************************************************************/
+
+static void Convert (AjPSeqset seqset, AjPStr *show, AjBool similarcase,
+	ajint nrefseq, ajint **sub, AjPSeqCvt cvt, AjPSeq consensus)
+{
+	
+  ajint i;
+  AjPSeq seq;
+  AjPSeq ref;
+  char showchar = ajStrStr(show[0])[0];	/* first char of 'show' */
+
+	
+/* get the reference sequence */
+  if (nrefseq == -1) {
+    ref = consensus;
+  } else {
+    ref = ajSeqsetGetSeq(seqset, nrefseq);
+  }
+
+/* convert the other sequences */  
+  for (i=0; i<ajSeqsetSize(seqset); i++) {
+    if (i != nrefseq) {	/* don't convert the reference sequence */
+      seq = ajSeqsetGetSeq(seqset, i);
+      switch (showchar) {
+      case 'A':		/* All - no change, except for case */
+      	MakeAll(ref, seq, sub, cvt, similarcase);
+        break;
+      case 'I':		/* Identities */
+        MakeIdentity(ref, seq);
+        break;
+      case 'N':		/* Non-identities */
+        MakeNonidentity (ref, seq, sub, cvt, similarcase);
+        break;
+      case 'S':		/* Similarities */
+        MakeSimilar (ref, seq, sub, cvt, similarcase);
+        break;
+      case 'D':		/* Dissimilarities */
+        MakeDissimilar (ref, seq, sub, cvt);
+        break;
+      default:
+        ajFatal("Unknown option for '-show': %S", show[0]);
+        break;
+      }
+    }
+  }
+}
+
+/* @funcstatic MakeAll ********************************************
+**
+** Leave the sequence unchanged unless we are changing the case depending
+** on the similarity to the reference sequence
+**
+** @param [r] ref [AjPSeq] the reference sequence
+** @param [r] seq [AjPSeq] the sequence to be changed
+** @param [r] sub [ajint **] scoring matrix
+** @param [r] cvt [AjPSeqCvt] conversion table for scoring matrix
+** @param [r] similarcase [AjBool] change case depending on similarity
+** @return [void]
+** @@
+******************************************************************************/
+
+static void MakeAll (AjPSeq ref, AjPSeq seq, ajint **sub, AjPSeqCvt cvt,
+	AjBool similarcase)
+{
+	
+  ajint i;
+  ajint lenseq = ajSeqLen(seq);
+  ajint lenref = ajSeqLen(ref);
+
+  char *s = ajSeqChar(seq);	/* the original char * of the sequence */
+  char *r = ajSeqChar(ref);
+
+/* if we are not changing the case, do nothing */
+  if (!similarcase) return;
+
+  for (i=0; i<lenref; i++) {
+    if (s[i] != '-') {
+      if (sub[ajSeqCvtK(cvt, r[i])][ajSeqCvtK(cvt, s[i])] <= 0) {
+        s[i] = tolower(s[i]);	/* dissimilar to lowercase */
+      } else {
+      	s[i] = toupper(s[i]);	/* similar to uppercase */
+      }
+    }
+  }
+
+/* is seq longer than ref? */
+  if (lenseq > lenref) {
+    for (; i<lenseq; i++) {
+      if (s[i] != '-') {
+        s[i] = s[i] = tolower(s[i]);	/* dissimilar to lowercase */;
+      }
+    }	
+  }
+
+}
+
+/* @funcstatic MakeIdentity ********************************************
+**
+** Convert 'seq' to '.'s except where identical to 'ref'
+**
+** @param [r] ref [AjPSeq] the reference sequence
+** @param [r] seq [AjPSeq] the sequence to be changed
+** @return [void]
+** @@
+******************************************************************************/
+static void MakeIdentity (AjPSeq ref, AjPSeq seq)
+{
+	
+  ajint i;
+  ajint lenseq = ajSeqLen(seq);
+  ajint lenref = ajSeqLen(ref);
+
+  char *s = ajSeqChar(seq);	/* the original char * of the sequence */
+  char *r = ajSeqChar(ref);
+
+  for (i=0; i<lenref && s[i] != '\0'; i++) {
+    if (toupper(s[i]) != toupper(r[i]) && s[i] != '-') {
+      s[i] = '.';
+    }
+  }
+
+/* is seq longer than ref? */
+  if (lenseq > lenref) {
+    for (; i<lenseq; i++) {
+      if (s[i] != '-') {
+        s[i] = '.';
+      }
+    }	
+  }
+}
+
+/* @funcstatic MakeNonidentity ********************************************
+**
+** Convert 'seq' to '.'s where identical to 'ref'
+** Change case to lowercase where similar as given by scoring matrix.
+** Change remaining dissimilar residues to uppercase.
+**
+** @param [r] ref [AjPSeq] the reference sequence
+** @param [r] seq [AjPSeq] the sequence to be changed
+** @param [r] sub [ajint **] scoring matrix
+** @param [r] cvt [AjPSeqCvt] conversion table for scoring matrix
+** @param [r] similarcase [AjBool] change case depending on similarity
+** @return [void]
+** @@
+******************************************************************************/
+
+static void MakeNonidentity (AjPSeq ref, AjPSeq seq, ajint **sub,
+	AjPSeqCvt cvt, AjBool similarcase)
+{
+	
+  ajint i;
+  ajint lenseq = ajSeqLen(seq);
+  ajint lenref = ajSeqLen(ref);
+
+  char *s = ajSeqChar(seq);	/* the original char * of the sequence */
+  char *r = ajSeqChar(ref);
+
+  for (i=0; i<lenref; i++) {
+    if (s[i] != '-') {
+      if (toupper(s[i]) == toupper(r[i])) { /* identical */
+        s[i] = '.';
+      } else {
+/* change case based on similarity? */
+        if (similarcase) {
+      	  if (sub[ajSeqCvtK(cvt, r[i])][ajSeqCvtK(cvt, s[i])] <= 0) {
+      	    s[i] = toupper(s[i]);
+      	  } else {
+      	    s[i] = tolower(s[i]);
+      	  }
+        }
+      }
+    }
+  }
+
+/* Is seq longer than ref? Make it all upppercase */
+  if (lenseq > lenref && similarcase) {
+    for (; i<lenseq; i++) {
+      if (s[i] != '-') {
+        s[i] = toupper(s[i]);
+      }
+    }	
+  }
+
+
+}
+
+/* @funcstatic MakeSimilar ********************************************
+**
+** Convert 'seq' to '.'s except where similar to 'ref', as defined by
+** similarity scoring matrix.
+** Change identities to upper-case, all others to lower-case.
+**
+** @param [r] ref [AjPSeq] the reference sequence
+** @param [r] seq [AjPSeq] the sequence to be changed
+** @param [r] sub [ajint **] scoring matrix
+** @param [r] cvt [AjPSeqCvt] conversion table for scoring matrix
+** @param [r] similarcase [AjBool] change case depending on similarity
+** @return [void]
+** @@
+******************************************************************************/
+
+static void MakeSimilar (AjPSeq ref, AjPSeq seq, ajint **sub,
+	AjPSeqCvt cvt, AjBool similarcase)
+{
+	
+  ajint i;
+  ajint lenseq = ajSeqLen(seq);
+  ajint lenref = ajSeqLen(ref);
+
+  char *s = ajSeqChar(seq);	/* the original char * of the sequence */
+  char *r = ajSeqChar(ref);
+
+  for (i=0; i<lenref; i++) {
+    if (s[i] != '-') {
+      if (sub[ajSeqCvtK(cvt, r[i])][ajSeqCvtK(cvt, s[i])] <= 0) {
+        s[i] = '.';
+      } else {
+/* change case based on similarity? */
+         if (similarcase) {
+           if (toupper(s[i]) == toupper(r[i])) {	/* identical */
+             s[i] = toupper(s[i]);
+           } else {
+             s[i] = tolower(s[i]);
+           }
+      	 }
+      }
+    }
+  }
+
+/* is seq longer than ref? */
+  if (lenseq > lenref) {
+    for (; i<lenseq; i++) {
+      if (s[i] != '-') {
+        s[i] = '.';
+      }
+    }	
+  }
+
+}
+
+
+/* @funcstatic MakeDissimilar ********************************************
+**
+** Convert 'seq' to '.'s where identical or similar to 'ref', as defined by
+** similarity scoring matrix.
+**
+** @param [r] ref [AjPSeq] the reference sequence
+** @param [r] seq [AjPSeq] the sequence to be changed
+** @param [r] sub [ajint **] scoring matrix
+** @param [r] cvt [AjPSeqCvt] conversion table for scoring matrix
+** @return [void]
+** @@
+******************************************************************************/
+
+static void MakeDissimilar (AjPSeq ref, AjPSeq seq, ajint **sub,
+	AjPSeqCvt cvt)
+{
+	
+  ajint i;
+  ajint lenref = ajSeqLen(ref);
+
+  char *s = ajSeqChar(seq);	/* the original char * of the sequence */
+  char *r = ajSeqChar(ref);
+
+  for (i=0; i<lenref; i++) {
+    if (s[i] != '-') {
+      if (sub[ajSeqCvtK(cvt, r[i])][ajSeqCvtK(cvt, s[i])] > 0) {
+        s[i] = '.';
+      }
+    }
+  }
+
+}
+
+/* @funcstatic Order ********************************************
+**
+** Orders the sequences
+**
+** @param [r] order [AjPStr *] how to order the sequences
+** @param [r] seqset [AjPSeqset] input sequences
+** @param [r] consensus [AjPSeq] consensus sequence
+** @param [r] nrefseq [ajint] number of reference sequence
+** @param [r] sub [ajint **] substitution matrix
+** @param [r] cvt [AjPSeqCvt] substitution conversion table
+** @param [rw] aorder [AjOOrder *] output order to display the sequences
+** @return [void]
+** @@
+******************************************************************************/
+
+static void Order(AjPStr *order, AjPSeqset seqset, AjPSeq consensus,
+	ajint nrefseq, ajint **sub, AjPSeqCvt cvt, AjOOrder *aorder)
+{ 
+
+  char orderchar = ajStrStr(order[0])[0];	/* first char of 'order' */
+  AjPSeq ref;
+  ajint i, j, k;
+  char *s;
+  char *r;
+  ajint rlen, len;
+	
+/* get the reference sequence */
+  if (nrefseq == -1) {
+    ref = consensus;
+  } else {
+    ref = ajSeqsetGetSeq(seqset, nrefseq);
+  }
+  rlen = ajSeqLen(ref);
+
+/* initialise all order positions as unused */
+  for (i=0; i<ajSeqsetSize(seqset); i++) {
+    aorder[i].seq = NULL;
+  }
+
+/* do the ordering */
+  switch (orderchar) {
+  case 'I':		/* Input order */
+    for (i=0, j=0; i<ajSeqsetSize(seqset); i++) {
+      if (i != nrefseq) {
+        aorder[j++].seq = ajSeqsetGetSeq(seqset, i);
+      }
+    }
+        
+    break;
+  case 'A':		/* Alphabetical name order */
+    for (i=0, j=0; i<ajSeqsetSize(seqset); i++) {
+      if (i != nrefseq) {
+        aorder[j++].seq = ajSeqsetGetSeq(seqset, i);
+      }
+    }
+/* sort alphabetically by name */
+    qsort(aorder, j, sizeof(AjOOrder), CompareTwoSeqNames);
+    break;
+
+  case 'S':		/* Similarity to the reference sequence */
+    if (nrefseq == -1) {
+      r = ajSeqChar(consensus);
+    } else {
+      r = ajSeqChar(ajSeqsetGetSeq(seqset, nrefseq));
+    }
+
+    for (i=0, j=0; i<ajSeqsetSize(seqset); i++) {
+      if (i != nrefseq) {
+        aorder[j].seq = ajSeqsetGetSeq(seqset, i);
+        aorder[j].similarity = 0;
+        len = ajSeqLen(aorder[j].seq);
+        s = ajSeqChar(aorder[j].seq);
+        for (k=0; k<len && k<rlen; k++) {
+          aorder[j].similarity += sub[ajSeqCvtK(cvt, r[k])][ajSeqCvtK(cvt, s[k])];
+        }
+        j++;
+      }
+    }
+/* sort by similarity */
+    qsort(aorder, j, sizeof(AjOOrder), CompareTwoSeqSimilarities);
+    break;
+
+  default:
+    ajFatal("Unknown option for '-order': %S", order[0]);
+    break;
+  }
+
+/* debug
+ajUser("sorted names:");
+for (i=0; i<ajSeqsetSize(seqset); i++) {
+  if (aorder[i].seq != NULL) {ajUser("%s", ajSeqName(aorder[i].seq));}
+}
+*/
+
+}
+
+/* @funcstatic Output ********************************************
+**
+** Writes the sequences to the output file
+**
+** @param [r] outf [AjPFile] output file handle
+** @param [r] seqset [AjPSeqset] the sequences
+** @param [r] nrefseq [ajint] number of the refseq
+** @param [r] width [ajint] width of displayed sequence line
+** @param [r] margin [ajint] width of margin on left side
+** @param [r] consensus [AjPSeq] consensus sequence
+** @param [r] docon [AjBool] display consensus sequence at the bottom
+** @param [r] bottom [AjBool] display refseq at the botton of the alignment as well
+** @param [rw] aorder [AjOOrder *] order to display the sequences
+** @param [r] html [AjBool] format for html display
+** @param [r] highlight [AjPRange] ranges to highlight
+** @param [r] uppercase [AjPRange] ranges to uppercase
+** @param [r] number [AjBool] display number line
+** @param [r] ruler [AjBool] display ruler line
+** @return [void]
+** @@
+******************************************************************************/
+
+static int Output (AjPFile outf, AjPSeqset seqset, ajint nrefseq, 
+	ajint width, ajint margin, AjPSeq consensus, AjBool docon,
+	AjBool bottom, AjOOrder * aorder, AjBool html,
+	AjPRange highlight, AjPRange uppercase, AjBool number, 
+	AjBool ruler)
+{ 
+
+  ajint pos;		/* start position in sequences of next line */
+  ajint i;
+  ajint nseqs = ajSeqsetSize(seqset);	/* number of sequences */
+  AjPSeq ref;		/* the reference sequence */
+
+/* get the start and end positions */
+  ajint begin=ajSeqsetBegin(seqset)-1;
+  ajint end=ajSeqsetEnd(seqset)-1;
+
+/* if consensus line is the refseq, then aorder holds all the seqset sequences
+  else it is one less than the seqset size */
+  if (nrefseq != -1) {
+    nseqs--;
+    ref = ajSeqsetGetSeq(seqset, nrefseq);
+  } else {
+    ref = consensus;
+  }
+
+/* format for html display */
+  if (html) {
+    ajFmtPrintF(outf, "<pre>\n");
+  }
+    
+/* get next set of lines to output */
+  for (pos=begin; pos<=end; pos+=width) {
+  	
+/* numbers line */ 
+    if (number) {
+      OutputNums(outf, pos, width, margin);
+    }
+
+/* ruler/ticks line */
+    if (ruler) {
+      OutputTicks(outf, pos, width, margin);
+    }
+
+/* refseq always at the top */
+    OutputSeq(outf, ref, pos, end, width, margin, html, highlight, uppercase);
+  
+/* sequences */
+    for (i=0; i<nseqs; i++) {
+      OutputSeq(outf, aorder[i].seq, pos, end, width, margin, html, highlight, uppercase);
+    }
+    
+/* refseq at the bottom also */
+    if (bottom) {
+      OutputSeq(outf, ref, pos, end, width, margin, html, highlight, uppercase);
+    }
+   
+/* consensus line (if not already displayed) */
+    if (docon && nrefseq != -1) {
+      OutputSeq(outf, consensus, pos, end, width, margin, html, highlight, uppercase);
+    }
+
+/* blank line */
+    ajFmtPrintF(outf, "\n");
+  }
+  
+/* format for html display */
+  if (html) {
+    ajFmtPrintF(outf, "</pre>\n");
+  }
+
+  return 0;
+}
+
+/* @funcstatic OutputNums ********************************************
+** 
+** Writes the numbers line
+**
+** @param [r]  outf [AjPFile] output file handle
+** @param [r] pos [ajint] position in sequence to start line
+** @param [r] width [ajint] width of line
+** @param [r] margin [ajint] length of left hand margin
+** @return [void]
+** @@
+******************************************************************************/
+
+static int OutputNums (AjPFile outf, ajint pos, ajint width, ajint margin)
+{ 
+
+  AjPStr line=ajStrNewL(81);		/* line of ticks to print */
+  ajint i;
+  ajint firstpos;
+  AjPStr marginfmt=ajStrNewL(10);
+
+/* margin and first number which may be partly in the margin */
+/* ajFmtPrintF() doesn't seem to deal with formats like "%*d"
+correctly, so ...  */
+  if (pos>0 && (ajint)log10((double)pos)+1 > margin + 10-(pos%10)) {
+/* number is too long to fit in the margin, so just write spaces */
+    ajStrAppKI(&line, ' ', margin+(10-(pos)%10));
+    firstpos = pos + 10-(pos%10);
+  } else {
+    ajFmtPrintS(&marginfmt, "%%%dd", margin+(10-(pos)%10));
+    firstpos = pos + 10-(pos%10);
+    ajFmtPrintF(outf, ajStrStr(marginfmt), firstpos);
+  }
+
+/* make the numbers line */
+  for (i=firstpos+10; i<=pos+width; i+=10) {
+      (void) ajFmtPrintAppS(&line, "%10d", i);
+  }         
+
+/* print the numbers */
+  ajFmtPrintF(outf, "%S\n", line);
+
+/* tidy up */
+  ajStrDel(&line);
+  ajStrDel(&marginfmt);
+
+  return 0;
+}
+
+/* @funcstatic OutputTicks ********************************************
+** 
+** Writes the ticks line
+**
+** @param [r]  outf [AjPFile] output file handle
+** @param [r] pos [ajint] position in sequence to start line
+** @param [r] width [ajint] width of line
+** @param [r] margin [ajint] length of left hand margin
+** @return [void]
+** @@
+******************************************************************************/
+
+static int OutputTicks (AjPFile outf, ajint pos, ajint width, ajint margin)
+{ 
+
+  AjPStr line=ajStrNewL(81);		/* line of ticks to print */
+  ajint i;
+
+/* margin */
+  ajStrAppKI(&line, ' ', margin);
+
+/* make the ticks line */
+  for (i=pos+1; i<pos+width+1; i++) {
+    if (!(i % 10)) {
+      (void) ajStrAppC(&line, "|");
+    } else if (!(i % 5)) {
+      (void) ajStrAppC(&line, ":");
+    } else {
+      (void) ajStrAppC(&line, "-");
+    }
+  }         
+
+/* print the ticks */
+  ajFmtPrintF(outf, "%S\n", line);
+
+/* tidy up */
+  ajStrDel(&line);
+
+  return 0;
+}
+
+/* @funcstatic OutputSeq ********************************************
+** 
+** Writes the specified sequence line to the output file
+**
+** @param [r] outf [AjPFile] output file handle
+** @param [r] seq [AjPSeq] the sequence to display
+** @param [r] pos [ajint] position in sequence to start line
+** @param [r] end [ajint] position to end sequence at
+** @param [r] width [ajint] width of line
+** @param [r] margin [ajint] length of left hand margin
+** @param [r] html [AjBool] display formatted for html
+** @param [r] highlight [AjPRange] ranges to highlight
+** @param [r] uppercase [AjPRange] ranges to uppercase
+** @return [void]
+** @@
+******************************************************************************/
+
+static int OutputSeq (AjPFile outf, AjPSeq seq,
+	ajint pos, ajint end, ajint width, ajint margin, AjBool html,
+	AjPRange highlight, AjPRange uppercase)
+{ 
+  AjPStr line=ajStrNew();		/* next line of sequence to print */
+  AjPStr marginfmt=ajStrNewL(10);
+
+/* get end to display up to */
+  if (end > pos+width-1) {
+    end = pos+width-1;
+  }
+
+/* the bit of the sequence to be output */
+  ajStrAssSub(&line, ajSeqStr(seq), pos, end);
+
+/* name of sequence */
+/* ajFmtPrintF() doesn't seem to deal with formats like "%.*S"
+correctly, so ...  */
+  ajFmtPrintS(&marginfmt, "%%-%d.%dS", margin, margin);
+ if (margin > 0) {
+   ajFmtPrintF(outf, ajStrStr(marginfmt), ajSeqGetName(seq));
+ }
+
+/* change required ranges to uppercase */
+  embShowUpperRange(&line, uppercase, pos);
+
+/* +++ colour the sequences */
+  if (html) {
+    
+  }
+  
+/* highlight required ranges */  
+  if (html) {
+    embShowColourRange(&line, highlight, pos);
+  }
+
+/* print the sequence */
+  ajFmtPrintF(outf, "%S\n", line);
+
+/* tidy up */
+  ajStrDel(&line);
+  ajStrDel(&marginfmt);
+
+  return 0;
+}
+
+/** @funcstatic CompareTwoSeqNames **********************************************
+**
+** Compare two Sequences' Names
+**
+** @param [r] a [const void *] First sequence
+** @param [r] b [const void *] Second sequence
+**
+** @return [ajint] Compare value (-1, 0, +1)
+** @@
+******************************************************************************/
+static ajint CompareTwoSeqNames(const void * a, const void * b)
+{
+  return strcmp(ajSeqName((*(AjOOrder *)a).seq), ajSeqName((*(AjOOrder *)b).seq));
+}
+               
+              
+/** @funcstatic  CompareTwoSeqSimilarities **********************************************
+**
+** Compare two Sequences by their similarity to the reference sequence
+**
+** @param [r] a [const void *] First sequence similarity
+** @param [r] b [const void *] Second sequence similarity
+**
+** @return [ajint] Compare value (-1, 0, +1)
+** @@
+******************************************************************************/
+static ajint CompareTwoSeqSimilarities(const void * a, const void * b)
+{
+  return (*(AjOOrder *)b).similarity - (*(AjOOrder *)a).similarity;
+}
+               
+              
+

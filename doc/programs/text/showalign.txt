@@ -1,0 +1,638 @@
+
+                             EMBOSS: showalign
+     _________________________________________________________________
+   
+                               Program showalign
+                                       
+Function
+
+   Display a multiple sequence alignment
+   
+Description
+
+   showalign displays an aligned set of protein or a nucleic acid
+   sequences in a style suitable for publication.
+   
+   The output is sent to the screen by default for the user to view, but
+   it can write the results to a file.
+   
+   The output highlights various differences or similarities between each
+   of the sequences and a reference sequence by setting selected types of
+   matches to a reference sequence to be '.' characters.
+   
+   The reference sequence can be either the calculated consensus sequence
+   (the default) or it can be one of the set of aligned sequences,
+   specified by either the ordinal number of that sequence in the input
+   file, or by its name.
+   
+   The output sequences can be displayed in either the input order (the
+   default) or they can be sorted in order of their similarity to the
+   reference sequence or sorted alphabetically by their names.
+   
+   By using the '-show' option, the displayed sequences can either be
+   shown as:
+     * complete (-show=All),
+     * only identical matches between the sequence and the reference
+       sequence, all other positions being replaced by '.' characters
+       (-show=Identities)
+     * non-identical matches, with identical matches being replaced by
+       '.' characters, similar matches are shown in lower case
+       (-show=Non-identities)
+     * similar matches, with non-similar matches being replaced by '.'
+       characters, similar matches are shown in lower case
+       (-show=Similarities)
+     * dissimilar matches, with identical or similar matches being
+       replaced by '.' characters (-show=Dissimilarities)
+       
+   A small table of the way these alignments are displayed illustrates
+   this.
+   If we have a reference protein sequence of "III" and a sequence
+   aligned to this of "ILW", then we have an identical matching residue,
+   then a similar one, then a dissimilar one.
+   The different methods of display would give the following:
+     _________________________________________________________________
+   
+Reference       III
+
+All             ILw
+Identical       I..
+Non-id          .lW
+Similar         Il.
+Dissimilar      ..W
+     _________________________________________________________________
+   
+   Changing the similar matches to lowercase can optionally be disable by
+   using the option -nosimilarcase.
+   
+   The displayed sequence can be numbered by placing a ruler with ticks
+   above the sequence.
+   
+   The width of a line can be set. The width of a margin to the left of
+   the sequences that shows the sequence names can be set.
+   
+   Specified regions of the sequence can be displayed in uppercase to
+   highlight them.
+   
+   The output can be formatted for HTML.
+   
+   If the output is being formatted for HTML, then specified regions of
+   the sequence can be displayed in any valid HTML colours.
+   
+Usage
+
+   Here is a sample session with showalign:
+
+% showalign
+Display a multiple sequence alignment
+Input sequence set: globin.seq
+Output file [stdout]:
+                  10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpkv
+HBB_MACFU ....P...n...T.....................................P....G....
+HBD_HUMAN ....P...t..NA........A............................P....G....
+HBB_RABIT ...sS.......A.......e.............................An...N....
+HBB_BOVIN -M..A...a...AF....K..........-...................tA....N....
+HBB_LAMGL .n.sGd..n..HG..S..K..........-........r..........tA....N....
+HBE_HUMAN ..F.A...a...S..S.m..e.A...................d...n...PS.ilG....
+HBE_RABIT ..F.P...CIisKQ..q..i..T...................dn..n...SS.i.G....
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpkv
+
+                  70        80        90       100       110       120
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus kahgkkvlxsfxdglXhldnlkgtfaklselhcdxxhvdpenfkllgnvlvivlaxhfgk
+HBB_MACFU ........Ga.S...N..........q.......--...............C...H....
+HBD_HUMAN ........Ga.S...A.........sq.......--.......r.......C...Rn...
+HBB_RABIT ........Aa.Se..S..................KL.......r..........sH....
+HBB_BOVIN ........D..Sn.mK...d......A.......KL...............v...Rn...
+HBB_LAMGL ....S...N..G...S........y.........KL.......r.......v...R....
+HBE_HUMAN ........T..G.AiKnm....PA..........--.............m..i..T....
+HBE_RABIT ........T..G.AiKnm.....A..........--..............l....T....
+Consensus kahgkkvlxsfxdglXhldnlkgtfaklselhcdxxhvdpenfkllgnvlvivlaxhfgk
+
+                 130       140       150       160       170       180
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus eftpqvqaayqkvvagvanalahkyhxxxx
+HBB_MACFU ..........................
+HBD_HUMAN .....m....................
+HBB_RABIT ..........................
+HBB_BOVIN ....Vl..Df.............r..
+HBB_LAMGL ....Dl.................r..ACDH
+HBE_HUMAN ....e....w..l.sA
+HBE_RABIT ....e....w..l.s...I.......
+Consensus eftpqvqaayqkvvagvanalahkyhxxxx
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqset     The sequence alignment to be displayed.
+  [-outfile]           outfile    If you enter the name of a file here then
+                                  this program will write the sequence details
+                                  into that file.
+
+   Optional qualifiers:
+   -refseq             string     If you give the number in the alignment or
+                                  the name of a sequence, it will be taken to
+                                  be the reference sequence. The reference
+                                  sequence is always show in full and is the
+                                  one against which all the other sequences
+                                  are compared. If this is set to 0 then the
+                                  consensus sequence will be used as the
+                                  reference sequence. By default the consensus
+                                  sequence is used as the reference sequence.
+   -[no]bottom         bool       If this is true then the refernce sequence
+                                  is displayed at the bottom of the alignment
+                                  as well as at the top.
+   -show               list       What to show
+   -order              list       Output order of the sequences
+   -[no]similarcase    bool       If this is set True, then when -show is set
+                                  to 'Similarities' or 'Non-identities' and a
+                                  residue is similar but not identical to the
+                                  reference sequence residue, it will be
+                                  changed to lower-case. If -show is set to
+                                  'All' then non-identical, non-similar
+                                  residues will be changed to lower-case. If
+                                  this is False then no change to the case of
+                                  the residues is made on the basis of their
+                                  similarity to the reference sequence.
+   -matrix             matrix     Similarity scoring Matrix file
+   -[no]consensus      bool       If this is true then the consensus line is
+                                  displayed at the bottom.
+
+   Advanced qualifiers:
+   -uppercase          range      Regions to put in uppercase.
+                                  If this is left blank, then the sequence
+                                  case is left alone.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are separated by any non-digit,
+                                  non-alpha character.
+                                  Examples of region specifications are:
+                                  24-45, 56-78
+                                  1:45, 67=99;765..888
+                                  1,5,8,10,23,45,57,99
+   -[no]number         bool       If this option is true then a line giving
+                                  the positions in the alignment is displayed
+                                  every 10 characters above the alignment.
+   -[no]ruler          bool       If this option is true then a ruler line
+                                  marking every 5th and 10th character in the
+                                  alignment is displayed.
+   -width              integer    Width of sequence to display
+   -margin             integer    This sets the length of the left-hand margin
+                                  for sequence names. If the margin is set at
+                                  0 then no margin and no names are
+                                  displayed. If the margin is set to a value
+                                  that is less than the length of a sequence
+                                  name then the sequence name is displayed
+                                  truncated to the length of the margin. If
+                                  the margin is set to -1 then the minimum
+                                  margin width that will allow all the
+                                  sequence names to be displayed in full plus
+                                  a space at the end of the name will
+                                  automatically be selected.
+   -[no]names          bool       Set this to be false if you do not wish to
+                                  display the ID name of the sequences
+   -html               bool       Use HTML formatting
+   -highlight          range      Regions to colour if formatting for HTML.
+                                  If this is left blank, then the sequence is
+                                  left alone.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are followed by any valid HTML font
+                                  colour.
+                                  Examples of region specifications are:
+                                  24-45 blue 56-78 orange
+                                  1-100 green 120-156 red
+                                  A file of ranges to colour (one range per
+                                  line) can be specified as '@filename'.
+   -plurality          float      Set a cut-off for the % of positive scoring
+                                  matches below which there is no consensus.
+                                  The default plurality is taken as 50% of the
+                                  total weight of all the sequences in the
+                                  alignment.
+   -setcase            float      Sets the threshold for the scores of the
+                                  positive matches above which the consensus
+                                  is is upper-case and below which the
+                                  consensus is in lower-case.
+   -identity           float      Provides the facility of setting the
+                                  required number of identities at a position
+                                  for it to give a consensus. Therefore, if
+                                  this is set to 100% only columns of
+                                  identities contribute to the consensus.
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) The sequence alignment to be displayed. Readable
+   sequences Required
+   [-outfile]
+   (Parameter 2) If you enter the name of a file here then this program
+   will write the sequence details into that file. Output file stdout
+   Optional qualifiers Allowed values Default
+   -refseq If you give the number in the alignment or the name of a
+   sequence, it will be taken to be the reference sequence. The reference
+   sequence is always show in full and is the one against which all the
+   other sequences are compared. If this is set to 0 then the consensus
+   sequence will be used as the reference sequence. By default the
+   consensus sequence is used as the reference sequence. Any string is
+   accepted 0
+   -[no]bottom If this is true then the refernce sequence is displayed at
+   the bottom of the alignment as well as at the top. Yes/No Yes
+   -show What to show
+   A (All of the sequences)
+   I (Identities between the sequences)
+   N (Non-identities between the sequences)
+   S (Similarities between the sequences)
+   D (Dissimilarities between the sequences)
+   N
+   -order Output order of the sequences
+   I (Input order - no change)
+   A (Alphabetical order of the names)
+   S (Similarity to the reference sequence)
+   I
+   -[no]similarcase If this is set True, then when -show is set to
+   'Similarities' or 'Non-identities' and a residue is similar but not
+   identical to the reference sequence residue, it will be changed to
+   lower-case. If -show is set to 'All' then non-identical, non-similar
+   residues will be changed to lower-case. If this is False then no
+   change to the case of the residues is made on the basis of their
+   similarity to the reference sequence. Yes/No Yes
+   -matrix Similarity scoring Matrix file Comparison matrix file in
+   EMBOSS data path EBLOSUM62 for protein
+   EDNAFULL for DNA
+   -[no]consensus If this is true then the consensus line is displayed at
+   the bottom. Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   -uppercase Regions to put in uppercase. If this is left blank, then
+   the sequence case is left alone. A set of regions is specified by a
+   set of pairs of positions. The positions are integers. They are
+   separated by any non-digit, non-alpha character. Examples of region
+   specifications are: 24-45, 56-78 1:45, 67=99;765..888
+   1,5,8,10,23,45,57,99 Sequence range If this is left blank, then the
+   sequence case is left alone.
+   -[no]number If this option is true then a line giving the positions in
+   the alignment is displayed every 10 characters above the alignment.
+   Yes/No Yes
+   -[no]ruler If this option is true then a ruler line marking every 5th
+   and 10th character in the alignment is displayed. Yes/No Yes
+   -width Width of sequence to display Integer 1 or more 60
+   -margin This sets the length of the left-hand margin for sequence
+   names. If the margin is set at 0 then no margin and no names are
+   displayed. If the margin is set to a value that is less than the
+   length of a sequence name then the sequence name is displayed
+   truncated to the length of the margin. If the margin is set to -1 then
+   the minimum margin width that will allow all the sequence names to be
+   displayed in full plus a space at the end of the name will
+   automatically be selected. Integer -1 or more -1
+   -[no]names Set this to be false if you do not wish to display the ID
+   name of the sequences Yes/No Yes
+   -html Use HTML formatting Yes/No No
+   -highlight Regions to colour if formatting for HTML. If this is left
+   blank, then the sequence is left alone. A set of regions is specified
+   by a set of pairs of positions. The positions are integers. They are
+   followed by any valid HTML font colour. Examples of region
+   specifications are: 24-45 blue 56-78 orange 1-100 green 120-156 red A
+   file of ranges to colour (one range per line) can be specified as
+   '@filename'. Sequence range full sequence
+   -plurality Set a cut-off for the % of positive scoring matches below
+   which there is no consensus. The default plurality is taken as 50% of
+   the total weight of all the sequences in the alignment. Number from
+   0.000 to 100.000 50.0
+   -setcase Sets the threshold for the scores of the positive matches
+   above which the consensus is is upper-case and below which the
+   consensus is in lower-case. Any integer value 0
+   -identity Provides the facility of setting the required number of
+   identities at a position for it to give a consensus. Therefore, if
+   this is set to 100% only columns of identities contribute to the
+   consensus. Number from 0.000 to 100.000 0.0
+   
+Input file format
+
+   showalign reads in a set of aligned protein or nucleic sequences.
+   
+   You can specifiy a file of ranges to display in uppercase by giving
+   the '-uppercase' qualifier the value '@' followed by the name of the
+   file containing the ranges. (eg: '-upper @myfile').
+   
+   The format of the range file is:
+   
+     * Comment lines start with '#' in the first column.
+     * Comment lines and blank lines are ignored.
+     * The line may start with white-space.
+     * There are two positive (integer) numbers per line separated by one
+       or more space or
+     * TAB characters.
+     * The second number must be greater or equal to the first number.
+     * There can be optional text after the two numbers to annotate the
+       line.
+     * White-space before or after the text is removed.
+       
+   An example range file is:
+   
+
+# this is my set of ranges
+12   23
+ 4   5       this is like 12-23, but smaller
+67   10348   interesting region
+
+   You can specifiy a file of ranges to highlight in a different colour
+   when outputting in HTML format (using the '-html' qualifier) by giving
+   the '-highlight' qualifier the value '@' followed by the name of the
+   file containing the ranges. (eg: '-highlight @myfile').
+   
+   The format of this file is very similar to the format of the above
+   uppercase range file, except that the text after the start and end
+   positions is used as the HTML colour name. This colour name is used
+   'as is' when specifying the colour in HTML in a '' construct, (where
+   'xxx' is the name of the colour).
+   
+   The standard names of HTML font colours are given in:
+   http://www.iconbazaar.com/color_tables/named_colors.html
+   
+   An example highlight range file is:
+   
+
+# this is my set of ranges
+12   23         red
+ 4   5          darkturquoise
+67   10348      #FFE4E1
+
+Output file format
+
+   showalign writes out a text file, optionally formatted for HTML.
+   
+   Some examples of different optional output styles follows:
+     _________________________________________________________________
+   
+% showalign g.seq stdout -show=n
+Display a multiple sequence alignment
+                  10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+HBB_MACFU ....P...n...T.....................................P....G...
+HBD_HUMAN ....P...t..NA........A............................P....G...
+HBB_RABIT ...sS.......A.......e.............................An...N...
+HBB_BOVIN -M..A...a...AF....K..........-...................tA....N...
+HBB_LAMGL .n.sGd..n..HG..S..K..........-........r..........tA....N...
+HBE_HUMAN ..F.A...a...S..S.m..e.A...................d...n...PS.ilG...
+HBE_RABIT ..F.P...CIisKQ..q..i..T...................dn..n...SS.i.G...
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+     _________________________________________________________________
+     _________________________________________________________________
+   
+% showalign g.seq stdout -show=a
+Display a multiple sequence alignment
+                  10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+HBB_MACFU VHLTpEEKNAVTtLWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSSpDAVMgNPK
+HBD_HUMAN VHLTpEEKTAVnaLWGKVNVDaVGGEALGRLLVVYPWTQRFFESFGDLSSpDAVMgNPK
+HBB_RABIT VHLSsEEKSAVTaLWGKVNVEEVGGEALGRLLVVYPWTQRFFESFGDLSSaNAVMnNPK
+HBB_BOVIN -mLTaEEKAAVTafWGKVkVDEVGGEALG-LLVVYPWTQRFFESFGDLSTaDAVMnNPK
+HBB_LAMGL VNLSgDEKNAVhgLWsKVkVDEVGGEALG-LLVVYPWTRRFFESFGDLSTaDAVMnNPK
+HBE_HUMAN VHfTaEEKAAVTsLWsKMNVEEaGGEALGRLLVVYPWTQRFFDSFGNLSSpsAILgNPK
+HBE_RABIT VHfTpEEKciISkqWGQVNIDEtGGEALGRLLVVYPWTQRFFDNFGNLSSssAIMgNPK
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+     _________________________________________________________________
+     _________________________________________________________________
+   
+% showalign g.seq stdout -show=i
+Display a multiple sequence alignment
+                  10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+HBB_MACFU VHLT.EEK.AVT.LWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSS.DAVM.NPK
+HBD_HUMAN VHLT.EEK.AV..LWGKVNVD.VGGEALGRLLVVYPWTQRFFESFGDLSS.DAVM.NPK
+HBB_RABIT VHL..EEKSAVT.LWGKVNV.EVGGEALGRLLVVYPWTQRFFESFGDLSS..AVM.NPK
+HBB_BOVIN -.LT.EEK.AVT..WGKV.VDEVGGEALG-LLVVYPWTQRFFESFGDLS..DAVM.NPK
+HBB_LAMGL V.L...EK.AV..LW.KV.VDEVGGEALG-LLVVYPWT.RFFESFGDLS..DAVM.NPK
+HBE_HUMAN VH.T.EEK.AVT.LW.K.NV.E.GGEALGRLLVVYPWTQRFF.SFG.LSS..A...NPK
+HBE_RABIT VH.T.EEK......WG.VN.DE.GGEALGRLLVVYPWTQRFF..FG.LSS..A.M.NPK
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+     _________________________________________________________________
+     _________________________________________________________________
+   
+% showalign g.seq stdout -show=s
+Display a multiple sequence alignment
+                  10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+HBB_MACFU VHLT.EEKnAVT.LWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSS.DAVM.NPK
+HBD_HUMAN VHLT.EEKtAV..LWGKVNVD.VGGEALGRLLVVYPWTQRFFESFGDLSS.DAVM.NPK
+HBB_RABIT VHLs.EEKSAVT.LWGKVNVeEVGGEALGRLLVVYPWTQRFFESFGDLSS.nAVM.NPK
+HBB_BOVIN -.LT.EEKaAVT..WGKV.VDEVGGEALG-LLVVYPWTQRFFESFGDLSt.DAVM.NPK
+HBB_LAMGL VnLs.dEKnAV..LW.KV.VDEVGGEALG-LLVVYPWTrRFFESFGDLSt.DAVM.NPK
+HBE_HUMAN VH.T.EEKaAVT.LW.KmNVeE.GGEALGRLLVVYPWTQRFFdSFGnLSS..Ail.NPK
+HBE_RABIT VH.T.EEK..is..WGqVNiDE.GGEALGRLLVVYPWTQRFFdnFGnLSS..AiM.NPK
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+     _________________________________________________________________
+     _________________________________________________________________
+   
+% showalign g.seq stdout -show=d
+Display a multiple sequence alignment
+                  10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+HBB_MACFU ....P.......T.....................................P....G...
+HBD_HUMAN ....P......NA........A............................P....G...
+HBB_RABIT ....S.......A.....................................A....N...
+HBB_BOVIN -M..A.......AF....K..........-....................A....N...
+HBB_LAMGL ....G......HG..S..K..........-....................A....N...
+HBE_HUMAN ..F.A.......S..S......A...........................PS...G...
+HBE_RABIT ..F.P...CI..KQ........T...........................SS...G...
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+     _________________________________________________________________
+     _________________________________________________________________
+   
+% showalign g.seq stdout -ref=1
+Display a multiple sequence alignment
+                  10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+HBB_MACFU VHLTPEEKNAVTTLWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSSPDAVMGNPK
+HBD_HUMAN ........T..NA........A.....................................
+HBB_RABIT ...sS...s...A.......e.............................An...N...
+HBB_BOVIN -M..A...A...AF....K..........-...................tA....N...
+HBB_LAMGL .n.sGd.....HG..S..K..........-........r..........tA....N...
+HBE_HUMAN ..F.A...A...s..S.m..e.A...................d...n....S.il....
+HBE_RABIT ..F.....CIisKQ..q..i..T...................dn..n...SS.i.....
+HBB_MACFU VHLTPEEKNAVTTLWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSSPDAVMGNPK
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+     _________________________________________________________________
+     _________________________________________________________________
+   
+Display a range of sequences in uppercase, everything else in lowercase
+% showalign g.seq stdout -nocon -ref=1 -sl -upper 9-15 -nosimilarcaseDisplay a
+multiple sequence alignment
+                  10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+HBB_MACFU vhltpeekNAVTTLWgkvnvdevggealgrllvvypwtqrffesfgdlsspdavmgnpk
+HBD_HUMAN ........T..NA........a.....................................
+HBB_RABIT ...ss...S...A.......e.............................an...n...
+HBB_BOVIN -m..a...A...AF....k..........-...................ta....n...
+HBB_LAMGL .n.sgd.....HG..s..k..........-........r..........ta....n...
+HBE_HUMAN ..f.a...A...S..s.m..e.a...................d...n....s.il....
+HBE_RABIT ..f.....CIISKQ..q..i..t...................dn..n...ss.i.....
+HBB_MACFU vhltpeekNAVTTLWgkvnvdevggealgrllvvypwtqrffesfgdlsspdavmgnpk
+     _________________________________________________________________
+     _________________________________________________________________
+   
+Alphabetical order
+% showalign g.seq stdout -order=a
+Display a multiple sequence alignment
+                  10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+HBB_BOVIN -M..A...a...AF....K..........-...................tA....N...
+HBB_LAMGL .n.sGd..n..HG..S..K..........-........r..........tA....N...
+HBB_MACFU ....P...n...T.....................................P....G...
+HBB_RABIT ...sS.......A.......e.............................An...N...
+HBD_HUMAN ....P...t..NA........A............................P....G...
+HBE_HUMAN ..F.A...a...S..S.m..e.A...................d...n...PS.ilG...
+HBE_RABIT ..F.P...CIisKQ..q..i..T...................dn..n...SS.i.G...
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+     _________________________________________________________________
+     _________________________________________________________________
+   
+In order of similarity to the reference sequence
+% showalign g.seq stdout -order=s
+Display a multiple sequence alignment
+                  10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+HBB_MACFU ....P...n...T.....................................P....G...
+HBB_RABIT ...sS.......A.......e.............................An...N...
+HBD_HUMAN ....P...t..NA........A............................P....G...
+HBB_BOVIN -M..A...a...AF....K..........-...................tA....N...
+HBE_HUMAN ..F.A...a...S..S.m..e.A...................d...n...PS.ilG...
+HBB_LAMGL .n.sGd..n..HG..S..K..........-........r..........tA....N...
+HBE_RABIT ..F.P...CIisKQ..q..i..T...................dn..n...SS.i.G...
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+     _________________________________________________________________
+     _________________________________________________________________
+   
+Format for HTML and highlight some inetersting regions in different colours
+% showalign g.seq stdout -html -high '4-13 green 43-43 red 51-56 blue'
+Display a multiple sequence alignment
+                  10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+HBB_MACFU ....P...n...T.....................................P....G...
+HBD_HUMAN ....P...t..NA........A............................P....G...
+HBB_RABIT ...sS.......A.......e.............................An...N...
+HBB_BOVIN -M..A...a...AF....K..........-...................tA....N...
+HBB_LAMGL .n.sGd..n..HG..S..K..........-........r..........tA....N...
+HBE_HUMAN ..F.A...a...S..S.m..e.A...................d...n...PS.ilG...
+HBE_RABIT ..F.P...CIisKQ..q..i..T...................dn..n...SS.i.G...
+Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+     _________________________________________________________________
+     _________________________________________________________________
+   
+No consensus line at the bottom
+No ruler line
+No numbers line
+Don't repeat the reference sequence at the bottom of the sequences
+Use sequence 1 as the reference sequence
+Display residues from position 10 to 30 only
+% showalign g.seq stdout -nocon -norule -nonum -nobot -ref=1 -sb=10 -send=30
+Display a multiple sequence alignment
+
+HBB_MACFU AVTTLWGKVNVDEVGGEALGR
+HBD_HUMAN ..NA........A........
+HBB_RABIT ...A.......e.........
+HBB_BOVIN ...AF....K..........-
+HBB_LAMGL ..HG..S..K..........-
+HBE_HUMAN ...s..S.m..e.A.......
+HBE_RABIT IisKQ..q..i..T.......
+     _________________________________________________________________
+   
+Data files
+
+   showalign reads in scoring matrices to determine the consesnus
+   sequence and to determine which matches are similar or not.
+   
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+   
+   To see the available EMBOSS data files, run:
+   
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+   
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+       
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   abiview Reads ABI file and display the trace
+   cirdna Draws circular maps of DNA constructs
+   emma Multiple alignment program - interface to ClustalW program
+   lindna Draws linear maps of DNA constructs
+   pepnet Displays proteins as a helical net
+   pepwheel Shows protein sequences as helices
+   plotcon Plots the quality of conservation of a sequence alignment
+   prettyplot Displays aligned sequences, with colouring and boxing
+   prettyseq Output sequence with translated ranges
+   remap Display a sequence with restriction cut sites, translation etc
+   seealso Finds programs sharing group names
+   showdb Displays information on the currently available databases
+   showfeat Show features of a sequence
+   showseq Display a sequence with features, translation etc
+   textsearch Search sequence documentation text. SRS and Entrez are
+   faster!
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (23 May 2001) - Gary Williams
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

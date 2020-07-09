@@ -1,0 +1,229 @@
+appl: showalign [
+	doc: "Display a multiple sequence alignment"
+	groups: "Alignment:Multiple, Display"
+]
+
+  seqset: sequence [ 
+	param: Y
+        type: gapany
+	help: "The sequence alignment to be displayed."
+  ]
+
+  outfile: outfile [
+        param: Y
+        def: "stdout"
+        info: "Output sequence details to a file"
+        help: "If you enter the name of a file here then this program
+               will write the sequence details into that file."
+  ]
+
+  string: refseq [
+	opt: Y
+	def: "0"
+	info: "The number or the name of the reference sequence"
+	help: "If you give the number in the alignment or the name of a
+sequence, it will be taken to be the reference sequence.  The reference
+sequence is always show in full and is the one against which all the
+other sequences are compared.  If this is set to 0 then the consensus
+sequence will be used as the reference sequence.  By default the
+consensus sequence is used as the reference sequence."
+  ]
+
+  bool: bottom [
+	optional: Y
+	def: Y
+	info: "Display the reference sequence at the bottom"
+	help: "If this is true then the refernce sequence is displayed at
+the bottom of the alignment as well as at the top."
+  ]
+
+  list: show [
+        opt: Y
+        default: "N"
+        min: 1
+        max: 1
+        header: "What to show"
+        values: 
+		"A:All of the sequences,
+		I:Identities between the sequences,
+		N:Non-identities between the sequences,
+		S:Similarities between the sequences,
+		D:Dissimilarities between the sequences"
+        delim: ","
+        codedelim: ":"
+        info: "What to show"
+  ]
+
+  list: order [
+        opt: Y
+        default: "I"
+        min: 1
+        max: 1
+        header: "Output order of the sequences"
+        values: 
+		"I:Input order - no change,
+		A:Alphabetical order of the names,
+		S:Similarity to the reference sequence"
+        delim: ","
+        codedelim: ":"
+        info: "Output order of the sequences"
+  ]
+
+  bool: similarcase [
+	opt: Y
+	default: Y
+	info: "Show similar residues in lower-case"
+	help: "If this is set True, then when -show is set to
+'Similarities' or 'Non-identities' and a residue is similar but not
+identical to the reference sequence residue, it will be changed to
+lower-case.  If -show is set to 'All' then non-identical, non-similar
+residues will be changed to lower-case.  If this is False then no change
+to the case of the residues is made on the basis of their similarity to
+the reference sequence."
+  ]
+
+  matrix: matrix [
+        optional: Y
+        info: "Similarity scoring Matrix file"
+        protein: $(sequence.protein)
+  ]
+
+  range: uppercase [ 
+	def: ""
+        info: "Regions to put in uppercase (eg: 4-57,78-94)" 
+        help: "Regions to  put in uppercase. \
+	       If this is left blank, then the sequence case is left alone. \
+	       A set of regions is specified by a set of pairs of positions. \
+	       The positions are integers. \
+	       They are separated by any non-digit, non-alpha character. \
+	       Examples of region specifications are: \
+	       24-45, 56-78 \
+	       1:45, 67=99;765..888 \
+	       1,5,8,10,23,45,57,99"
+        expect: "If this is left blank, then the sequence case is left alone."
+  ]
+
+  bool: number [
+	def: Y
+	info: "Number the sequences"
+	help: "If this option is true then a line giving the positions
+in the alignment is displayed every 10 characters above the alignment."
+  ]
+
+  bool: ruler [
+	def: Y
+	info: "Display ruler"
+	help: "If this option is true then a ruler line marking every
+5th and 10th character in the alignment is displayed."
+  ]
+
+  int: width [
+	def: 60
+	min: 1
+	info: "Width of sequence to display"
+  ]
+
+  int: margin [
+	def: -1
+	min: -1
+	info: "Length of margin for sequence names"
+	help: "This sets the length of the left-hand margin for sequence
+names.  If the margin is set at 0 then no margin and no names are
+displayed.  If the margin is set to a value that is less than the length
+of a sequence name then the sequence name is displayed truncated to the
+length of the margin.  If the margin is set to -1 then the minimum margin
+width that will allow all the sequence names to be displayed in full
+plus a space at the end of the name will automatically be selected."
+  ]
+
+  bool: names [
+	def: Y
+	info: "Show sequence IDs"
+	help: "Set this to be false if you do not wish to display the
+               ID name of the sequences"
+  ]
+
+
+  bool: html [
+	def: N
+	info: "Use HTML formatting"
+  ]
+
+  range: highlight [ 
+	def: ""
+        info: "Regions to colour in HTML (eg: 4-57 red 78-94 green)" 
+        help: "Regions to colour if formatting for HTML. \
+	       If this is left blank, then the sequence is left alone. \
+	       A set of regions is specified by a set of pairs of positions. \
+	       The positions are integers. \
+	       They are followed by any valid HTML font colour. \
+	       Examples of region specifications are: \
+	       24-45 blue 56-78 orange \
+	       1-100 green 120-156 red \
+	       A file of ranges to colour (one range per line) can be specified
+	       as '@filename'."
+  ]
+
+#  string: colour [
+#	def: "@($(sequence.protein) ? protein : nucleic)"
+#	info: "Name of colour map in HTML"
+#	help: "The colours are taken from the EMBOSS file 'Ecolour.map'. \ 
+#There are several colour styles in this data file: \ 
+#nucleic, protein - the standard EMBOSS colour maps \ 
+#rasmol - Rasmol colours \ 
+#gcg - GCG SeqLab colours \ 
+#acidic - Acidic/Basic (Red=acidic, Blue=basic) \ 
+#polar - Polar (Red=Polar) \ 
+#hydrophobic - Hydrophobic (Red=Hydrophobic) \ 
+#aromatic - Aromatic/Aliphatic (Red=Aromatic, Blue=Aliphatic) \ 
+#buried - Surface/Buried (Red=Surface, Blue=Buried) \ 
+#charge - Positive/Negative charge (Red=Positive, Blue=Negative) \ 
+#size - Tiny/Small/Large (Red=Tiny, Green=Small, Blue=Large) \ 
+#Only the 'nucleic' style is applicable to nucleic sequences, the rest
+#are for proteins. Set this option to be blank, or 'none' to use no colours."
+#  ]
+
+
+
+#
+# Consensus sequence parameters
+#
+
+  float:  plurality [
+        def: 50.0
+        min : 0.0
+	max: 100.0
+        info: "Plurality check % for consensus"
+        help: "Set a cut-off for the % of positive scoring matches below
+which there is no consensus.  The default plurality is taken as 50% of the
+total weight of all the sequences in the alignment."
+  ]
+
+  float: setcase [
+        def: 0
+        info: "Threshold above which the consensus is given in uppercase"
+        help: "Sets the threshold for the scores of the positive matches
+above which the consensus is is upper-case and below which the consensus
+is in lower-case."
+  ]
+
+  float: identity [
+        def : 0.0
+        min : 0.0
+	max: 100.0
+        info: "Required % of identities at a position fro consensus"
+        help: "Provides the facility of setting the required number of
+identities at a position for it to give a consensus. 
+Therefore, if this is set to 100%
+only columns of identities contribute to the consensus."
+  ]
+
+
+  bool: consensus [
+	optional: Y
+	def: Y
+	info: "Display the consensus line"
+	help: "If this is true then the consensus line is displayed at
+the bottom."
+  ]
+
