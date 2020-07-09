@@ -12,7 +12,7 @@ seqall: sequence  [
 endsection: input
 
 section: required [ info: "required Section" type: page ]
-section: vectorfilesection [ info: "vectorfilesection Section" type: page ]
+section: vectorfilesection [ info: "vectorfilesection Section" type: frame ]
 bool: vectorfile  [
   parameter: "Y"
   default: "Y"

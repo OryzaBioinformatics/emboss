@@ -32,6 +32,13 @@ static float wobble_get_mean(char *bases, char *s);
 
 
 
+#ifdef PLD_png
+
+extern int PNGWidth;
+extern int PNGHeight;
+
+#endif
+
 /* @prog wobble ***************************************************************
 **
 ** Wobble base plot
@@ -77,6 +84,18 @@ int main(int argc, char **argv)
     
 	
     
+#ifdef PLD_png
+
+    /*
+    PNGWidth = 1280;
+    PNGHeight = 960;
+    */
+
+    PNGWidth = 960;
+    PNGHeight = 960;
+
+#endif
+
     (void) ajGraphInit("wobble", argc, argv);
 
     seq       = ajAcdGetSeq("sequence");

@@ -59,7 +59,7 @@ integer: minscore  [
   optional: "Y"
   default: "30"
   information: "Minimum accepted score"
-  help: "You can exclude alignments with scores below a threshold by setting this to be false."
+  help: "Exclude alignments with scores below this threshold score."
 ]
 
 bool: reverse  [

@@ -59,6 +59,8 @@ int main(int argc, char **argv)
     AjPStr    stmp=NULL;
     AjPStr    sstr=NULL;
     AjPStr    tmpStr=NULL;
+    AjPStr    headStr=NULL;
+    AjPStr    tailStr=NULL;
 
     AjBool    prokaryote=ajFalse;
 
@@ -181,11 +183,12 @@ int main(int argc, char **argv)
 	    }
 	}
 
-	(void) ajFmtPrintAppS(&tmpStr,
+	(void) ajStrAssC (&headStr, "");
+	(void) ajFmtPrintAppS(&headStr,
 			      "Reporting scores over %.2f",
 			      minweight);
 
-	ajReportSetHeader(report, tmpStr);
+	ajReportSetHeader(report, headStr);
 
 	if (outf)
 	  ajFmtPrintF(outf,"\n\nSIGCLEAVE of %s from %d to %d\n\n",
@@ -196,8 +199,8 @@ int main(int argc, char **argv)
 	{
 	  if (outf)
 	    ajFmtPrintF(outf,"\nNo scores over %.2f\n",minweight);
-	  ajFmtPrintS(&tmpStr,"\nNo scores over %.2f\n",minweight);
-	  ajReportSetTail(report, tmpStr);
+	  ajFmtPrintS(&tailStr,"\nNo scores over %.2f\n",minweight);
+	  ajReportSetTail(report, tailStr);
 	}
 	else
 	{

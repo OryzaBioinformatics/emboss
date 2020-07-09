@@ -19,7 +19,7 @@ endsection: input
 section: required [ info: "required Section" type: page ]
 integer: wordsize  [
   required: "Y"
-  default: "4"
+  default: "10"
   minimum: "2"
   information: "Word size"
 ]

@@ -404,6 +404,38 @@ int main(int argc, char **argv)
 		
 		
 	    }
+	    else if (search_mode == FORWARD_ONLY) {
+	      ajFmtPrintF(outfile,
+			  "Note requested forward est and forward genome\n");
+	      est2genome_make_output(outfile, genome, est, fge,
+				     match, mismatch,
+				     gap_penalty, intron_penalty,
+				     splice_penalty, minscore,
+				     align, width, reverse);
+	      if ( best == 0 )
+		est2genome_make_output(outfile, genome, est, bge,
+				       match, mismatch,
+				       gap_penalty, intron_penalty,
+				       splice_penalty, minscore,
+				       align, width, reverse);
+	    }
+	    else if (search_mode == REVERSE_ONLY) {
+	      ajFmtPrintF(outfile,
+			  "Note requested reversed est and forward genome\n");
+	      est2genome_make_output(outfile, genome, reversed_est,
+				     rge, match, mismatch,
+				     gap_penalty, intron_penalty,
+				     splice_penalty, minscore,
+				     align, width, isreverse);
+	      if ( best == 0 )
+		est2genome_make_output(outfile, genome,
+				       reversed_est, bge, match,
+				       mismatch, gap_penalty,
+				       intron_penalty,
+				       splice_penalty, minscore,
+				       align, width, isreverse);
+	    }
+
 	    embEstFreeAlign(&bge);
 	    embEstFreeAlign(&rge);
 	    embEstFreeAlign(&fge);

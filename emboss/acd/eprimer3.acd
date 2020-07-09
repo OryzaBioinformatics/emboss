@@ -14,7 +14,7 @@ seqall: sequence  [
 endsection:  input
 
 section: advanced  [ info: "advanced Section" type: page ]
-section: program  [ info: "Program Options" type: page ]
+section: program  [ info: "Program Options" type: frame ]
 
 bool: explainflag  [
   optional: "N"
@@ -60,7 +60,7 @@ integer: firstbaseindex  [
 
 endsection:  program
 
-section: sequenceopt  [ info: "Sequence options" type: page ]
+section: sequenceopt  [ info: "Sequence options" type: frame ]
 
 range: includedregion  [
   optional: "Y"
@@ -99,7 +99,7 @@ string: reverseinput  [
 
 endsection:  sequenceopt
 
-section: primer  [ info: "Primer Details" type: page ]
+section: primer  [ info: "Primer Details" type: frame ]
 
 bool: pickanyway  [
   optional: "N"
@@ -266,7 +266,7 @@ integer: maxpolyx  [
 
 endsection:  primer
 
-section: product  [ info: "Product details" type: page ]
+section: product  [ info: "Product details" type: frame ]
 
 integer: productosize  [
   optional: "@($(task)!=4)"
@@ -307,7 +307,7 @@ float: productmaxtm  [
 
 endsection:  product
 
-section: primerweights  [ info: "Primer Penalty Weights" type: page ]
+section: primerweights  [ info: "Primer Penalty Weights" type: frame ]
 
 float: maxendstability  [
   optional: "N"
@@ -319,7 +319,7 @@ float: maxendstability  [
 
 endsection:  primerweights
 
-section: oligosinput  [ info: "Internal Oligo Input" type: page ]
+section: oligosinput  [ info: "Internal Oligo Input" type: frame ]
 
 range: oligoexcludedregion  [
   optional: "@(@($(task)==1) | @($(task)==4))"
@@ -337,7 +337,7 @@ string: oligoinput  [
 
 endsection:  oligosinput
 
-section: oligos  [ info: "Internal Oligo Details" type: page ]
+section: oligos  [ info: "Internal Oligo Details" type: frame ]
 
 integer: oligoosize  [
   optional: "@(@($(task)==1) | @($(task)==4))"

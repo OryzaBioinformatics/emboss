@@ -116,25 +116,26 @@ int main(int argc, char **argv)
 
     /* outf      = ajAcdGetOutfile("originalfile"); */
 
-    if(isProduct)
-    {
-	formamide = ajAcdGetFloat("formamide");
-	mismatch  = ajAcdGetFloat("mismatch");
-	prodLen   = ajAcdGetInt("prodLen");
-    }
-    else
+    formamide = ajAcdGetFloat("formamide");
+    mismatch  = ajAcdGetFloat("mismatch");
+    prodLen   = ajAcdGetInt("prodLen");
+
+    if(!isProduct)
     {
 	formamide = mismatch = 0.0;
 	prodLen   = window;
     }
 
-    if (doThermo)
-        temperature = ajAcdGetFloat("temperature");
+    temperature = ajAcdGetFloat("temperature");
+    if (!doThermo)
+      temperature = 0.0;
 
-    if(doplot)
+    mintemp = ajAcdGetFloat("mintemp");
+    mult = ajAcdGetGraphxy ("graph");
+    if(!doplot)
     {
-	mintemp = ajAcdGetFloat("mintemp");
-	mult = ajAcdGetGraphxy ("graph");
+      mintemp = 0.0;
+      mult = NULL;
     }
     
 

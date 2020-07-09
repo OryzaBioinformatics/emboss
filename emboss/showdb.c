@@ -47,6 +47,7 @@ int main(int argc, char **argv)
     AjBool doall;
     AjBool docomment;
     AjBool dorelease;
+    AjBool only;
 
     AjPFile outfile = NULL;
     AjPStr dbname = NULL;	/* the next database name to look at */
@@ -76,6 +77,9 @@ int main(int argc, char **argv)
     doall = ajAcdGetBool("all");
     docomment = ajAcdGetBool("comment");
     dorelease = ajAcdGetBool("release");
+    only = ajAcdGetBool("only"); /* not needed, but users can set all */
+				 /* that depend on it to make it */
+				 /* "unused" otherwise */
 
     /* start the HTML table */
     if (html)

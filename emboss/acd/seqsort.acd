@@ -25,7 +25,7 @@ integer: overlap  [
 endsection: required
 
 section: advanced [ info: "advanced Section" type: page ]
-section: modesection [ info: "modesection Section" type: page ]
+section: modesection [ info: "modesection Section" type: frame ]
 string: psipath  [
   required: "@($(mode)==1)"
   prompt: "Location of psiblasts hits files"

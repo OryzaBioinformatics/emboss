@@ -78,7 +78,7 @@ range: annotation  [
   expected: "If this is left blank, then no annotation is added."
 ]
 
-section: restrictsection [ info: "restriction Section" type: page ]
+section: restrictsection [ info: "restriction Section" type: frame ]
 bool: flatreformat  [
   optional: "N"
   default: "N"
@@ -228,7 +228,7 @@ bool: html  [
   information: "Use HTML formatting"
 ]
 
-section : featuresection [ info : "feature Section" type : page ]
+section: featuresection [ info: "feature Section" type: frame ]
 
 string: matchsource  [
   optional: "Y"

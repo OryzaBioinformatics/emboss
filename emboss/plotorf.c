@@ -29,6 +29,13 @@ static void plotorf_norfs(char *seq, char *rev, ajint n, float **x, float **y,
 			  ajint nstarts, AjPStr *stops, ajint nstops);
 static AjBool plotorf_isin(char *p, AjPStr *str, ajint n);
 
+#ifdef PLD_png
+
+extern int PNGWidth;
+extern int PNGHeight;
+
+#endif
+
 
 
 /* @prog plotorf **************************************************************
@@ -70,6 +77,18 @@ int main(int argc, char **argv)
     
 	
     
+#ifdef PLD_png
+
+    /*
+    PNGWidth = 1280;
+    PNGHeight = 960;
+    */
+
+    PNGWidth = 960;
+    PNGHeight = 960;
+
+#endif
+
     (void) ajGraphInit("plotorf", argc, argv);
 
     seq       = ajAcdGetSeq("sequence");

@@ -178,7 +178,6 @@ int main(int argc, char **argv, char **env)
     ma_matrix = ajAcdGetString( "mamatrix");
     gapc = ajAcdGetFloat( "gapc");
     gapv = ajAcdGetFloat( "gapv");
-    /*    unweighted = ajAcdGetBool( "unweighted"); il ? NOT USED*/
     endgaps = ajAcdGetBool( "endgaps");
     norgap = ajAcdGetBool( "norgap");
     nohgap = ajAcdGetBool( "nohgap");

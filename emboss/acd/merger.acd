@@ -51,6 +51,8 @@ align: outfile  [
   default: "stdout"
   information: "Output alignment and explanation"
   aformat: "simple"
+  minseqs: "2"
+  maxseqs: "2"
 ]
 
 endsection: output

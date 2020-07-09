@@ -25,6 +25,13 @@
 #include <float.h>
 #include <math.h>
 
+#ifdef PLD_png
+
+extern int PNGWidth;
+extern int PNGHeight;
+
+#endif
+
 
 /* @prog syco ***************************************************************
 **
@@ -83,6 +90,18 @@ int main(int argc, char **argv)
     ajint end;
     ajint window;
     
+#ifdef PLD_png
+
+    /*
+    PNGWidth = 1280;
+    PNGHeight = 960;
+    */
+
+    PNGWidth = 960;
+    PNGHeight = 960;
+
+#endif
+
     (void) ajGraphInit("syco", argc, argv);
 
     a         = ajAcdGetSeq("sequence");

@@ -37,7 +37,7 @@ endsection: required
 section: advanced [ info: "advanced Section" type: page ]
 variable:  dogap "@($(type) != f)"
 
-section: typesection [ info: "typesection Section" type: page ]
+section: typesection [ info: "typesection Section" type: frame ]
 integer: threshold  [
   required: "@($(type)==F)"
   default: "75"
@@ -56,7 +56,7 @@ matrixf: datafile  [
 
 endsection: typesection
 
-section: dogapsection [ info: "dogapsection Section" type: page ]
+section: dogapsection [ info: "dogapsection Section" type: frame ]
 float: open  [
   required: "$(dogap)"
   information: "Gap opening penalty"

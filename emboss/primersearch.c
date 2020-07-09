@@ -351,7 +351,7 @@ static void psearch_read_primers(AjPList *primerList, AjPFile primerFile,
 	ajStrAssC(&primdata->forward->origpat,
 		  ajStrStr(primdata->forward->patstr));
 	ajStrAssC(&primdata->reverse->origpat, 
-		  ajStrStr(primdata->forward->patstr));
+		  ajStrStr(primdata->reverse->patstr));
 
 	/* set the mismatch level */
 	primdata->forward->mm = (ajint) (ajStrLen(primdata->forward->patstr)*
@@ -506,8 +506,8 @@ static void psearch_scan_seq(Primer primdata, AjPSeq seq, AjBool reverse,
     /* initialise variables for search */
     ajStrAssC(&seqname,ajSeqName(seq));
     ajSeqToUpper(seq);
-    ajStrAss(&seqstr, ajSeqStr(seq));
-    ajStrAss(&revstr, ajSeqStr(seq));
+    ajStrAssS(&seqstr, ajSeqStr(seq));
+    ajStrAssS(&revstr, ajSeqStr(seq));
     ajSeqReverseStr(&revstr);
     fhits_list = ajListNew();
     rhits_list = ajListNew();
@@ -535,7 +535,8 @@ static void psearch_scan_seq(Primer primdata, AjPSeq seq, AjBool reverse,
 			 &fhits, 
 			 primdata->forward->real_len,
 			 &(primdata->forward->tidy));
-	if(fhits) 
+
+	if(fhits)
 	    embPatFuzzSearch(primdata->reverse->type, 
 			     ajSeqBegin(seq), 
 			     primdata->reverse->patstr,
@@ -556,7 +557,6 @@ static void psearch_scan_seq(Primer primdata, AjPSeq seq, AjBool reverse,
 			     &rhits, 
 			     primdata->reverse->real_len,
 			     &(primdata->reverse->tidy));
-     
     }
     else
     {
@@ -662,6 +662,7 @@ static void psearch_store_hits(Primer primdata, AjPList fhits, AjPList rhits,
 	    rm = ajListIterNext(ri);
 	    e = (rm->start-1); 
 	    amplen = seqlen-(s-1)-e;
+
 	    if (amplen > 0)	   /* no point making a hit if -ve length! */
 	    {
 		primerhit = NULL;
@@ -672,8 +673,8 @@ static void psearch_store_hits(Primer primdata, AjPList fhits, AjPList rhits,
 		primerhit->forward=NULL;
 		primerhit->reverse=NULL;
 		ajStrAssC(&primerhit->seqname,ajSeqName(seq));
-		ajStrAss(&primerhit->desc, ajSeqGetDesc(seq));
-		ajStrAss(&primerhit->acc, ajSeqGetAcc(seq));
+		ajStrAssS(&primerhit->desc, ajSeqGetDesc(seq));
+		ajStrAssS(&primerhit->acc, ajSeqGetAcc(seq));
 		primerhit->forward_pos = fm->start;
 		primerhit->reverse_pos = rm->start;
 		primerhit->forward_mismatch = fm->mm;
@@ -681,13 +682,13 @@ static void psearch_store_hits(Primer primdata, AjPList fhits, AjPList rhits,
 		primerhit->amplen = amplen;
 		if(!reverse)
 		{
-		    ajStrAss(&primerhit->forward, primdata->forward->patstr);
-		    ajStrAss(&primerhit->reverse, primdata->reverse->patstr);
+		    ajStrAssS(&primerhit->forward, primdata->forward->patstr);
+		    ajStrAssS(&primerhit->reverse, primdata->reverse->patstr);
 		}
 		else
 		{
-		    ajStrAss(&primerhit->forward, primdata->reverse->patstr);
-		    ajStrAss(&primerhit->reverse, primdata->forward->patstr);
+		    ajStrAssS(&primerhit->forward, primdata->reverse->patstr);
+		    ajStrAssS(&primerhit->reverse, primdata->forward->patstr);
 		}
 		ajListPushApp(primdata->hitlist, primerhit);
 

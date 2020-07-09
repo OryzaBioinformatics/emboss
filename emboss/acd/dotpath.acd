@@ -43,7 +43,7 @@ bool: boxit  [
   information: "Draw a box around dotplot"
 ]
 
-section: datasection [ info: "datasection Section" type: page ]
+section: datasection [ info: "datasection Section" type: frame ]
 bool: data  [
   required: "N"
   default: "N"

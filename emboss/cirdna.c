@@ -238,8 +238,9 @@ int main(int argc, char **argv)
 
     /* height of a tick, a block, and a range */
     TickHeight = 10*ajAcdGetFloat("tickheight");
-    if( ajStrMatchCaseC(PosBlocks, "Out") ) BlockHeight = 10*ajAcdGetFloat("blockheight");
-    else BlockHeight = TextHeight+10;
+    BlockHeight = 10*ajAcdGetFloat("blockheight");
+    if( !ajStrMatchCaseC(PosBlocks, "Out") )
+      BlockHeight = TextHeight+10;
     RangeHeight = 10*ajAcdGetFloat("rangeheight");
 
     /* set the relative positions of elements of a group */

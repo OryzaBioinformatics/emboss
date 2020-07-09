@@ -71,6 +71,8 @@ int main(int argc, char **argv)
     snam   = ajStrNew();
     
     ajNamListListDatabases(dblist);
+
+    AjErrorLevel.error = ajFalse;
     
     while(ajListPop(dblist,(void **)&lnam))
     {

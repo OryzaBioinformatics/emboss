@@ -52,7 +52,7 @@ bool: interfaceplot  [
 bool: differenceplot  [
   optional: "Y"
   default: "Y"
-  information: "Do not display the difference plot"
+  information: "Display the difference plot"
 ]
 
 endsection: output

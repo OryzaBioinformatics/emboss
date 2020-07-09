@@ -150,8 +150,8 @@ int main(int argc, char **argv)
 	    ajGraphDataxySetTypeC(fgraph,"2D Plot");
 	    
 	    ajGraphxyAddDataPtrPtr(fgraph,x,y);
-	    ajGraphxyAddGraph(graph,fgraph);
-	    ajGraphxyDisplay(graph,ajTrue);
+	    ajGraphxyReplaceGraph(graph,fgraph);
+	    ajGraphxyDisplay(graph,ajFalse);
 	}
 	
 
@@ -159,7 +159,9 @@ int main(int argc, char **argv)
 	AJFREE(y);
     }
 
-    if(!plot)
+    if(plot)
+        ajGraphClose();
+    else
 	ajFileClose(&outf);
     ajStrDel(&str);
     ajStrDel(&bases);

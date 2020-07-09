@@ -27,7 +27,7 @@
 static float hmoment_calchm(char *p, int pos, int window, ajint angle);
 static void  hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
 			      float ymax, ajint colour, ajint angle,
-			      ajint window, float baseline);
+			      ajint window, float baseline, char *sname);
 
 
 
@@ -158,15 +158,15 @@ int main(int argc, char **argv)
 		ajGraphSetMulti(graph,1);
 
 	    ajGraphxySetOverLap(graph,ajFalse);
-	    ajFmtPrintS(&st,"HMOMENT of %s. Window:%d",sname,window);
 
 	    hmoment_addgraph(graph,limit,x,ya,ymax,BLACK,aangle,window,
-			     baseline);
+			     baseline, sname);
 	    if(twin)
 		hmoment_addgraph(graph,limit,x,yb,ymax,RED,bangle,window,
-				 baseline);
+				 baseline, sname);
+
 	    if(limit>0)
-		ajGraphxyDisplay(graph,ajTrue);
+		ajGraphxyDisplay(graph,ajFalse);
 	}
 	
 	if(limit>0)
@@ -177,7 +177,9 @@ int main(int argc, char **argv)
 	}
     }
     
-    if(!plot)
+    if(plot)
+        ajGraphClose();
+    else
 	ajFileClose(&outf);
     ajStrDel(&str);
     ajStrDel(&st);
@@ -200,13 +202,14 @@ int main(int argc, char **argv)
 ** @param [?] angle [ajint] Undocumented
 ** @param [?] window [ajint] Undocumented
 ** @param [?] baseline [float] Undocumented
+** @param [?] sname [char*] Sequence name
 ** @@
 ****************************************************************************/
 
 
 static void hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
 			     float ymax, ajint colour, ajint angle,
-			     ajint window, float baseline)
+			     ajint window, float baseline, char *sname)
 {
     ajint i;
 
@@ -216,6 +219,7 @@ static void hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
     if(limit<1)
 	return;
     
+
     data = ajGraphxyDataNewI(limit);
 
     st = ajStrNew();
@@ -231,6 +235,9 @@ static void hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
     ajGraphDataxySetMaxima(data,x[0],x[limit-1],0.,ymax);  
 
     ajGraphDataxySetTypeC(data,"2D Plot Float");
+
+    ajFmtPrintS(&st,"HMOMENT of %s. Window:%d",sname,window);
+    ajGraphxyDataSetTitle(data,st);
 
     ajFmtPrintS(&st,"uH (%d deg)",angle);
     ajGraphxyDataSetYtitle(data,st);

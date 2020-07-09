@@ -87,11 +87,7 @@ int main(int argc, char **argv)
     boxit = ajAcdGetBool("boxit");
     outfile = ajAcdGetOutfile ("outfile");
     stretch = ajAcdGetBool("stretch");
-    if(stretch)
-	xygraph = ajAcdGetGraphxy ("xygraph");
-    else
-	graph = ajAcdGetGraph ("graph");
-
+    xygraph = ajAcdGetGraphxy ("xygraph");
 
     begin1 = ajSeqBegin(seq1);
     begin2 = ajSeqBegin(seq2);
@@ -116,6 +112,7 @@ int main(int argc, char **argv)
 	return 0;
     }
 
+    /* We get  here only if stretch is false */
 
     max= ajSeqLen(seq1);
     if(ajSeqLen(seq2) > max)

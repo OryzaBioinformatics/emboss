@@ -59,20 +59,5 @@ outfile: outfile  [
   parameter: "Y"
 ]
 
-bool: obsexp  [
-  default: "Y"
-  information: "Show observed/expected threshold line"
-]
-
-bool: cg  [
-  default: "Y"
-  information: "Show CpG rich regions"
-]
-
-bool: pc  [
-  default: "Y"
-  information: "Show percentage line"
-]
-
 endsection: output
 

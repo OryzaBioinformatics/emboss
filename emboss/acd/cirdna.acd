@@ -58,6 +58,7 @@ string: interticks  [
 
 integer: gapsize  [
   optional: "Y"
+  minimum: "1"
   default: "500"
   information: "interval between ticks in the ruler (enter an integer)"
 ]

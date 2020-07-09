@@ -35,7 +35,7 @@ integer: turns  [
   help: "The number of residues plotted per turn is the 'steps' value divided by this value."
 ]
 
-section: amphipathicsection [ info: "amphipathic Section" type: page]
+section: amphipathicsection [ info: "amphipathic Section" type: frame ]
 bool: amphipathic  [
   information: "Prompt for amphipathic residue marking"
   help: "If this is true then the residues ACFGILMVWY are marked as squares and all other residues are unmarked. This overrides any other markup that you may have specified using the qualifiers '-squares', '-diamonds' and '-octags'."
@@ -64,7 +64,7 @@ string: octags  [
 
 endsection: amphipathicsection
 
-section: datasection [ info: "datasection Section" type: page ]
+section: datasection [ info: "datasection Section" type: frame ]
 bool: data  [
   required: "N"
   default: "N"

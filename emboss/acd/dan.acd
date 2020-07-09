@@ -18,7 +18,7 @@ integer: windowsize  [
   maximum: "100"
   default: "20"
   information: "Enter window size"
-  help: "The values of melting point and other thermodynamic properties of the sequence are determined by taking a short length of sequence known as a window and determining the properties of the sequence in that window. The window is incrementally moved along the sequence with the properties being calcualted at each new position."
+  help: "The values of melting point and other thermodynamic properties of the sequence are determined by taking a short length of sequence known as a window and determining the properties of the sequence in that window. The window is incrementally moved along the sequence with the properties being calculated at each new position."
 ]
 
 integer: shiftincrement  [
@@ -55,7 +55,7 @@ bool: rna  [
   help: "This specifies that the sequence is an RNA sequnce and not a DNA sequence."
 ]
 
-section: productsection [ info: "productsection Section" type: page ]
+section: productsection [ info: "productsection Section" type: frame ]
 bool: product  [
   optional: "N"
   information: "Prompt for product values"
@@ -91,7 +91,7 @@ integer: prodlen  [
 
 endsection: productsection
 
-section: thermosection [ info: "thermosection Section" type: page ]
+section: thermosection [ info: "thermosection Section" type: frame ]
 bool: thermo  [
   optional: "N"
   information: "Thermodynamic calculations"

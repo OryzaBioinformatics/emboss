@@ -51,10 +51,10 @@ showalign showdb showfeat showorf showseq \
 shuffleseq sigcleave siggen sigscan silent splitter scopalign stretcher \
 stssearch supermatcher swissparse syco \
 textsearch tfextract tfm tfscan \
-tmap transeq trimest trimseq \
-vectorstrip \
+tmap tranalign transeq trimest trimseq \
+union vectorstrip \
 water whichdb wobble wordcount wordmatch \
-wossname
+wossname yank
 
 INCLUDES = -I$(top_srcdir)/nucleus -I$(top_srcdir)/ajax -I$(top_srcdir)/plplot
 
@@ -214,9 +214,11 @@ tfextract_SOURCES = tfextract.c
 tfm_SOURCES = tfm.c
 tfscan_SOURCES = tfscan.c
 tmap_SOURCES = tmap.c
+tranalign_SOURCES = tranalign.c
 transeq_SOURCES = transeq.c
 trimest_SOURCES = trimest.c
 trimseq_SOURCES = trimseq.c
+union_SOURCES = union.c
 vectorstrip_SOURCES = vectorstrip.c
 water_SOURCES = water.c
 whichdb_SOURCES = whichdb.c
@@ -224,6 +226,7 @@ wobble_SOURCES = wobble.c
 wordcount_SOURCES = wordcount.c
 wordmatch_SOURCES = wordmatch.c
 wossname_SOURCES = wossname.c
+yank_SOURCES = yank.c
 
 alignwrap_SOURCES = alignwrap.c
 ajtest_SOURCES = ajtest.c

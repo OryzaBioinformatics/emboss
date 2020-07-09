@@ -54,7 +54,7 @@ outfile: outfile  [
   prompt: "Output program details to a file"
   help: "If you enter the name of a file here then this program will write the program names and brief descriptions into that file."
 ]
-section: htmlsection [ info: "htmlsection Section" type: page ]
+section: htmlsection [ info: "htmlsection Section" type: frame ]
 bool: html  [
   optional: "Y"
   default: "N"

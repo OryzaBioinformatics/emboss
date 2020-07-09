@@ -161,7 +161,7 @@ int main(int argc, char **argv)
 	    ajGraphxyYtitleC(graph,"Charge");
 	    charge_addgraph(graph,limit,x,y,ymax,ymin,window,sname);
 	    if(limit>0)
-		ajGraphxyDisplay(graph,ajTrue);
+		ajGraphxyDisplay(graph,ajFalse);
 	}
 	
 	if(limit>0)
@@ -171,8 +171,11 @@ int main(int argc, char **argv)
 	}
     }
     
-    if(!plot)
+    if(plot)
+        ajGraphClose();
+    else
 	ajFileClose(&outf);
+
     ajStrDel(&str);
 
     ajFileClose(&cdata);

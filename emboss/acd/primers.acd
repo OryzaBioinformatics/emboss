@@ -3,10 +3,7 @@ appl: primers [
   groups: "Nucleic:Primers"
 ]
 
-section: input  [
-  info: "input Section"
-  type: "page"
-]
+section: input  [ info: "input Section" type: page ]
 
 seqall: sequence  [
   parameter: "Y"
@@ -16,10 +13,7 @@ seqall: sequence  [
 
 endsection:  input
 
-section: required  [
-  info: "required Section"
-  type: "page"
-]
+section: required  [ info: "required Section" type: page ]
 
 range: target  [
   optional: "Y"
@@ -30,10 +24,7 @@ range: target  [
 
 endsection:  required
 
-section: advanced  [
-  info: "advanced Section"
-  type: "page"
-]
+section: advanced  [ info: "advanced section"  type: page ]
 
 integer: minsize  [
   optional: "Y"
@@ -61,10 +52,7 @@ float: maxdifftm  [
 
 endsection:  advanced
 
-section: output  [
-  info: "output section"
-  type: "page"
-]
+section: output  [ info: "output Section" type: page ]
 
 bool: explainflag  [
   optional: "Y"

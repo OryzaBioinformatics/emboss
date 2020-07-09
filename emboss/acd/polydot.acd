@@ -24,7 +24,7 @@ integer: wordsize  [
 endsection: required
 
 section: output [ info: "output Section" type: page ]
-section: datasection [ info: "data Section" type: page ]
+section: datasection [ info: "data Section" type: frame ]
 bool: data  [
   required: "N"
   default: "N"

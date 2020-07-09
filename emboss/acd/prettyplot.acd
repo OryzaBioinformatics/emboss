@@ -135,7 +135,7 @@ float: plurality  [
   expected: "Half the total sequence weighting"
 ]
 
-section: consensussection [ info: "consensus Section" type: page ]
+section: consensussection [ info: "consensus Section" type: frame ]
 bool: consensus  [
   optional: "Y"
   information: "Display the consensus"

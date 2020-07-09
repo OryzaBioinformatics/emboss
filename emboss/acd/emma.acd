@@ -15,7 +15,7 @@ seqall: inseqs  [
 endsection: input
 
 section: advanced [ info: "advanced Section" type: page ]
-section: dendsection [ info: "dendsection Section" type: page ]
+section: dendsection [ info: "dendsection Section" type: frame ]
 bool: onlydend  [
   optional: "Y"
   default: "No"
@@ -45,7 +45,7 @@ bool: insist  [
   information: "Insist that the sequence type is changed to protein"
 ]
 
-section: slowsection [ info: "slowsection Section" type: page ]
+section: slowsection [ info: "slowsection Section" type: frame ]
 list: slowfast  [
   optional: "Y"
   default: "s"
@@ -82,7 +82,7 @@ float: pwgapv  [
 
 endsection: slowsection
 
-section: protsection [ info: "protsection Section" type: page ]
+section: protsection [ info: "protsection Section" type: frame ]
 bool: prot  [
   optional: "N"
   default: "@($(insist) ? @(!$(inseqs.protein)):$(inseqs.protein))"
@@ -128,7 +128,7 @@ string: pairwisedata  [
 
 endsection: protsection
 
-section: fastsection [ info: "fastsection Section" type: page ]
+section: fastsection [ info: "fastsection Section" type: frame ]
 
 integer: ktup  [
   optional: "@(!$(slow))"
@@ -179,7 +179,7 @@ bool: nopercent  [
 
 endsection: fastsection
 
-section: matrixsection [ info: "matrixsection Section" type: page ]
+section: matrixsection [ info: "matrixsection Section" type: frame ]
 list: matrix  [
   optional: "$(prot)"
   default: "b"
@@ -220,7 +220,7 @@ string: mamatrix  [
 
 endsection: matrixsection
 
-section: gapsection [ info: "gapsection Section" type: page ]
+section: gapsection [ info: "gapsection Section" type: frame ]
 float: gapc  [
   optional: "Y"
   default: "10.0"
@@ -239,13 +239,6 @@ float: gapv  [
   prompt: "Enter variable gap penalty"
   valid: "Positive foating point number"
   help: "The penalty for extending a gap by 1 residue. Increasing the gap extension penalty will make gaps shorter. Terminal gaps are not penalised."
-]
-
-bool: unweighted  [
-  optional: "@(!$(prot))"
-  default: "No"
-  information: "Transitions are unweighted"
-  help: "The 'Transition weight' gives transitions (A <--> G or C <--> T i.e. purine-purine or pyrimidine-pyrimidine substitutions) a weight between 0 and 1; a weight of zero means that the transitions are scored as mismatches, while a weight of 1 gives the transitions the match score. For distantly related DNA sequences, the weight should be near to zero; for closely related sequences it can be useful to assign a higher score."
 ]
 
 bool: endgaps  [

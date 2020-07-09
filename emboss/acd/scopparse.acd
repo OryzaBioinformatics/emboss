@@ -1,5 +1,5 @@
 appl: scopparse [
-  documentation: "Reads raw scop classifications file and writes embl-like format scop classification file."
+  documentation: "Reads raw-, and writes EMBL-like, scop classification files"
   groups: "Utils:Database creation"
 ]
 

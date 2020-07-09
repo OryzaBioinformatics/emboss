@@ -128,7 +128,6 @@ int main(int argc, char **argv)
     ajFmtPrintS(&tmpstr, "Feature file for first sequence");
     ajReportFileAdd (report, ajFeattabOutFile(seq1out), tmpstr);
 
-    tmpstr=NULL;
     ajFmtPrintS(&tmpstr, "Feature file for second sequence");
     ajReportFileAdd (report, ajFeattabOutFile(seq2out), tmpstr);
 

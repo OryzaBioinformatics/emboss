@@ -107,10 +107,10 @@ int main(int argc, char **argv)
     ajint i,numseq,j=0,numres,count,k;
     ajint kmax;
     float defheight,currentheight;
-    AjPStr shade=0,pair=0;
-    AjPGraph graph = 0;
-    AjPMatrix cmpmatrix=0;
-    AjPSeqCvt cvt=0;
+    AjPStr shade=NULL,pair=NULL;
+    AjPGraph graph = NULL;
+    AjPMatrix cmpmatrix=NULL;
+    AjPSeqCvt cvt=NULL;
     AjBool consensus;
     AjBool colourbyconsensus;
     AjBool colourbyresidues;
@@ -124,9 +124,9 @@ int main(int argc, char **argv)
     ajint identity;
     AjBool listoptions;
     ajint alternative;
-    AjPStr sidentity=0,ssimilarity=0,sother=0;
-    AjPStr sboxcolval=0;
-    AjPStr options=0;
+    AjPStr sidentity=NULL,ssimilarity=NULL,sother=NULL;
+    AjPStr sboxcolval=NULL;
+    AjPStr options=NULL;
     ajint showscore = 0;
     ajint iboxcolval=0;
     ajint cidentity = RED;
@@ -204,9 +204,10 @@ int main(int argc, char **argv)
 	}
     }
     boxcol  = ajAcdGetBool("boxcol");
+    sboxcolval  = ajAcdGetString("boxcolval");
+
     if(boxcol)
     {
-	sboxcolval  = ajAcdGetString("boxcolval");
 	iboxcolval = ajGraphCheckColour(sboxcolval);
 	if(iboxcolval == -1)
 	    iboxcolval = GREY;
@@ -303,21 +304,22 @@ int main(int argc, char **argv)
     if(colourbyconsensus && colourbyresidues)
 	colourbyconsensus = AJFALSE;
 
+    sidentity = ajAcdGetString("cidentity");
+    ssimilarity = ajAcdGetString("csimilarity");
+    sother = ajAcdGetString("cother");
+
     if(colourbyconsensus)
     {
     
-	sidentity = ajAcdGetString("cidentity");
 	cidentity = ajGraphCheckColour(sidentity);
 	if(cidentity == -1)
 	    cidentity = RED;
     
-	ssimilarity = ajAcdGetString("csimilarity");
 	csimilarity = ajGraphCheckColour(ssimilarity);
 	if(csimilarity == -1)
 	    csimilarity = GREEN;
     
     
-	sother = ajAcdGetString("cother");
 	cother = ajGraphCheckColour(sother);
 	if(cother == -1)
 	    cother = BLACK;

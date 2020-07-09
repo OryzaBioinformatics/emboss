@@ -59,7 +59,8 @@ int main(int argc, char **argv)
     AjPStr    sstr=NULL;
     AjPStr    stmp=NULL;
     AjPStr    substr=NULL;
-    AjPStr    tmpStr = NULL;
+    AjPStr    tmpHeadStr = NULL;
+    AjPStr    tmpFeatStr = NULL;
     AjPFeattable TabRpt = NULL;
     AjPFeature gf = NULL;
 
@@ -201,7 +202,7 @@ int main(int argc, char **argv)
 		lenap=0;
 	    }
 
-	ajReportSetHeader(report, tmpStr);
+	ajReportSetHeader(report, tmpHeadStr);
 
 	if (outf) {
 	  ajFmtPrintF(outf,"ANTIGENIC of %s  from: %d  to: %d\n\n",
@@ -279,8 +280,8 @@ int main(int argc, char **argv)
 		    break;
 		  }
 		}
-		ajFmtPrintS(&tmpStr, "*pos %d", maxscorepos);
-		ajFeatTagAdd (gf, NULL, tmpStr);
+		ajFmtPrintS(&tmpFeatStr, "*pos %d", maxscorepos);
+		ajFeatTagAdd (gf, NULL, tmpFeatStr);
 	    }
 
 	    /* obsolete - use -rf with a feature format to get this output */
