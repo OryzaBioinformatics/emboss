@@ -1,0 +1,943 @@
+>>>>ECLAC
+ 
+ID   ECLAC      standard; DNA; PRO; 7477 BP.
+XX
+AC   J01636; J01637; K01483; K01793;
+XX
+NI   g146575
+XX
+DT   30-NOV-1990 (Rel. 26, Created)
+DT   18-JUL-1995 (Rel. 44, Last updated, Version 5)
+XX
+DE   E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+XX
+KW   acetyltransferase; beta-D-galactosidase; galactosidase; lac operon;
+KW   lac repressor protein; lacA gene; lacI gene; lactose permease;
+KW   lacY gene; lacz gene; mutagenesis; palindrome; promoter region;
+KW   thiogalactoside acetyltransferase.
+XX
+OS   Escherichia coli
+OC   Eubacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+OC   Escherichia.
+XX
+RN   [1]
+RP   1243-1266
+RX   MEDLINE; 74055539.
+RA   Gilbert W., Maxam A.;
+RT   "The nucleotide sequence of the lac operator";
+RL   Proc. Natl. Acad. Sci. U.S.A. 70:3581-3584(1973).
+XX
+RN   [2]
+RP   1246-1308
+RX   MEDLINE; 74055540.
+RA   Maizels N.M.;
+RT   "The nucleotide sequence of the lactose messenger ribonucleic acid
+RT   transcribed from the UV5 promoter mutant of Escherichia coli";
+RL   Proc. Natl. Acad. Sci. U.S.A. 70:3585-3589(1973).
+XX
+RN   [3]
+RX   MEDLINE; 74174501.
+RA   Gilbert W., Maizels N., Maxam A.;
+RT   "Sequences of controlling regions of the lactose operon";
+RL   Cold Spring Harb. Symp. Quant. Biol. 38:845-855(1974).
+XX
+RN   [4]
+RA   Gilbert W., Gralla J., Majors A.J., Maxam A.;
+RT   "Lactose operator sequences and the action of lac repressor";
+RL   (in) and Blauer,G. (eds.);
+RL   Protein-Ligand Interactions:193-207;
+RL   Walter de Gruyter, New York (1975)
+XX
+RN   [5]
+RP   1146-1282
+RX   MEDLINE; 75048325.
+RA   Dickson R.C., Abelson J.N., Barnes W.M., Reznikoff W.S.;
+RT   "Genetic regulation: The lac control region";
+RL   Science 187:27-35(1975).
+XX
+RN   [6]
+RP   1227-1271
+RA   Gilbert W., Maxam A., Mirzabekov A.;
+RT   "Contacts between the lac repressor and DNA revealed by methylation";
+RL   (in) and Maaloe,O. (eds.);
+RL   Control of ribosome synthesis:138-143;
+RL   Academic Press, New York (1976)
+XX
+RN   [7]
+RX   MEDLINE; 76150089.
+RA   Marians K.J., Wu R.;
+RT   "Structure of the lactose operator";
+RL   Nature 260:360-363(1976).
+XX
+RN   [8]
+RP   1242-1268
+RX   MEDLINE; 77056376.
+RA   Heyneker H.L., Shine J., Goodman H.M., Boyer H.W., Rosenberg J.,
+RA   Dickerson R.E., Narang S.A., Itakura K., Lin S., Riggs A.D.;
+RT   "Synthetic lac operator is functional in vivo";
+RL   Nature 263:748-752(1976).
+XX
+RN   [9]
+RX   MEDLINE; 77168230.
+RA   Dickson R.C., Abelson J.N., Johnson P., Reznikoff W.S., Barnes W.M.;
+RT   "Nucleotide sequence changes produced by mutations in the lac promoter
+RT   of Escherichia coli";
+RL   J. Mol. Biol. 111:65-75(1977).
+XX
+RN   [10]
+RP   51-264
+RX   MEDLINE; 78052881.
+RA   Steege D.A.;
+RT   "5'-terminal nucleotide sequence of Escherichia coli lactose repressor
+RT   mRNA: Features of translational initiation and reinitiation sites";
+RL   Proc. Natl. Acad. Sci. U.S.A. 74:4163-4167(1977).
+XX
+RN   [11]
+RP   1-81
+RX   MEDLINE; 78246990.
+RA   Calos M.P.;
+RT   "DNA sequence for a low-level promoter of the lac repressor and an 'up'
+RT   promoter mutation";
+RL   Nature 274:762-765(1978).
+XX
+RN   [12]
+RP   49-1161
+RX   MEDLINE; 78246991.
+RA   Farabaugh P.J.;
+RT   "Sequence of the lacI gene";
+RL   Nature 274:765-769(1978).
+XX
+RN   [13]
+RX   MEDLINE; 78246992.
+RA   Miller J.H., Coulondre C., Farabaugh P.J.;
+RT   "Correlation of nonsense sites in the lacI gene with specific codons in
+RT   the nucleotide sequence";
+RL   Nature 274:770-775(1978).
+XX
+RN   [14]
+RX   MEDLINE; 80209248.
+RA   Calos M.P., Miller J.H.;
+RT   "DNA sequence alteration resulting from a mutation impairing promoter
+RT   function in the lac repressor gene";
+RL   Mol. Gen. Genet. 178:225-227(1980).
+XX
+RN   [15]
+RP   4306-5804
+RA   Buechel D.E., Gronenborn B., Mueller-Hill B.;
+RT   "Sequence of the lactose permease gene";
+RL   Nature 283:541-545(1980).
+XX
+RN   [16]
+RX   MEDLINE; 82049502.
+RA   Miller J.H., Calos M.P., Galas D.J.;
+RT   "Genetic and sequencing studies of the specificity of transposition into
+RT   the lac region of E. coli";
+RL   Cold Spring Harb. Symp. Quant. Biol. 45:243-257(1981).
+XX
+RN   [17]
+RX   MEDLINE; 82004657.
+RA   Chenchick A., Beabealashvilli R.S., Mirzabekov A.;
+RT   "Topography of interaction of Escherichia coli RNA polymerase subunits
+RT   with lac UV5 promoter";
+RL   FEBS Lett. 128:46-50(1981).
+XX
+RN   [18]
+RX   MEDLINE; 81213459.
+RA   Betz J.L., Sadler J.R.;
+RT   "Variants of a cloned synthetic lactose operator: I. A palindromic dimer
+RT   lactose operator derived from one strand of the cloned 40-base pair
+RT   operator";
+RL   Gene 13:1-12(1981).
+XX
+RN   [19]
+RX   MEDLINE; 81213463.
+RA   Sadler J.R., Tecklenburg M.;
+RT   "Cloning and characterization of the natural lactose operator";
+RL   Gene 13:13-23(1981).
+XX
+RN   [20]
+RX   MEDLINE; 82051311.
+RA   Betz J.L., Sadler J.R.;
+RT   "Variants of a cloned synthetic lactose operator: II.
+RT   Chloramphenicol-resistant revertants retaining a lactose opeator in the
+RT   CAT gene of plasmid pBR325";
+RL   Gene 15:187-200(1981).
+XX
+RN   [21]
+RX   MEDLINE; 82147746.
+RA   Calos M.P., Miller J.H.;
+RT   "The DNA sequence change resulting from the I-Q1 mutation, which greatly
+RT   increases promoter strength";
+RL   Mol. Gen. Genet. 183:559-560(1981).
+XX
+RN   [22]
+RX   MEDLINE; 82150928.
+RA   Mieschendahl M., Buechel D.E., Bocklage H., Mueller-Hill B.;
+RT   "Mutations in the lacY gene of Escherichia coli define functional
+RT   organization of lactose permease";
+RL   Proc. Natl. Acad. Sci. U.S.A. 78:7652-7656(1981).
+XX
+RN   [23]
+RX   MEDLINE; 83158761.
+RA   Russell D.R., Bennett G.N.;
+RT   "Construction and analysis of in vivo activity of E. coli promoter
+RT   hybrids and promoter mutants that alter the -35 to -10 spacing";
+RL   Gene 20:231-243(1982).
+XX
+RN   [24]
+RX   MEDLINE; 83007251.
+RA   Horowitz H., Platt T.;
+RT   "A termination site for lacI transcription is between the CAP site and
+RT   the lac promoter";
+RL   J. Biol. Chem. 257:11740-11746(1982).
+XX
+RN   [25]
+RX   MEDLINE; 83030833.
+RA   Klein R.D., Wells R.D.;
+RT   "Effects of neighboring DNA homopolymers on the biochemical and physical
+RT   properties of the Escherichia coli lactose promoter: I. Cloning and
+RT   characterization studies";
+RL   J. Biol. Chem. 257:12954-12961(1982).
+XX
+RN   [26]
+RP   1183-1291
+RX   MEDLINE; 82174608.
+RA   Weiher H., Schaller H.;
+RT   "Segment-specific mutagenesis: Extensive mutagenesis of a lac
+RT   promoter/operator element";
+RL   Proc. Natl. Acad. Sci. U.S.A. 79:1408-1412(1982).
+XX
+RN   [27]
+RX   MEDLINE; 83233528.
+RA   Van dyke M.W., Dervan P.B.;
+RT   "Footprinting with MPE-Fe(II). Complementary-strand analyses of
+RT   distamycin- and actinomycin-binding sites on heterogeneous DNA";
+RL   Cold Spring Harb. Symp. Quant. Biol. 47:347-353(1983).
+XX
+RN   [28]
+RP   1287-4364
+RX   MEDLINE; 84028567.
+RA   Kalnins A., Otto K., Ruether U., Mueller-Hill B.;
+RT   "Sequence of the lacZ gene of Escherichia coli";
+RL   EMBO J. 2:593-597(1983).
+XX
+RN   [29]
+RX   MEDLINE; 83291093.
+RA   Cone K.C., Sellitti M.A., Steege D.A.;
+RT   "Lac repressor mRNA transcription terminates in vivo in the lac control
+RT   region";
+RL   J. Biol. Chem. 258:11296-11304(1983).
+XX
+RN   [30]
+RX   MEDLINE; 84070714.
+RA   Sadler J.R., Sasmor H., Betz J.L.;
+RT   "A perfectly symmetric lac operator binds the lac repressor very
+RT   tightly";
+RL   Proc. Natl. Acad. Sci. U.S.A. 80:6785-6789(1983).
+XX
+RN   [31]
+RX   MEDLINE; 84119517.
+RA   Glickman B.W., Ripley L.S.;
+RT   "Structural intermediates of deletion mutagenesis: A role for
+RT   palindromic DNA";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81:512-516(1984).
+XX
+RN   [32]
+RX   MEDLINE; 85280412.
+RA   Spassky A., Kirkegaard K., Buc H.;
+RT   "Changes in the DNA structure of the lac UV5 promoter during formation
+RT   of an open complex with Escherichia coli RNA polymerase";
+RL   Biochemistry 24:2723-2731(1985).
+XX
+RN   [33]
+RX   MEDLINE; 86079527.
+RA   Straney D.C., Crothers D.M.;
+RT   "Intermediates in transcription initiation from the E. coli lac UV5
+RT   promoter";
+RL   Cell 43:449-459(1985).
+XX
+RN   [34]
+RX   MEDLINE; 86031346.
+RA   Looman A.C., de Gruyter M., Vogelaar A., van Knippenberg P.H.;
+RT   "Effects of heterologous ribosomal binding sites on the transcription
+RT   and translation of the lacZ gene of Escherichia coli";
+RL   Gene 37:145-154(1985).
+XX
+RN   [35]
+RX   MEDLINE; 86059235.
+RA   Mandecki W., Goldman R.A., Powell B.S., Caruthers M.H.;
+RT   "Lac up-promoter mutants with increased homology to the consensus
+RT   promoter sequence";
+RL   J. Bacteriol. 164:1353-1355(1985).
+XX
+RN   [36]
+RX   MEDLINE; 85210885.
+RA   Malamy M.H., Rahaim P.T., Hoffman C.S., Baghdoyan D., O'Connor M.B.,
+RA   Miller J.F.;
+RT   "A frameshift mutation at the junction of an IS1 insertion within lacZ
+RT   restores beta-galactosidase activity via formation of an active lacZ-IS1
+RT   fusion protein";
+RL   J. Mol. Biol. 181:551-555(1985).
+XX
+RN   [37]
+RP   5646-7477
+RX   MEDLINE; 86016712.
+RA   Hediger M.A., Johnson D.F., Nierlich D.P., Zabin I.;
+RT   "DNA sequence of the lactose operon: The lacA gene and the
+RT   transcriptional termination region";
+RL   Proc. Natl. Acad. Sci. U.S.A. 82:6414-6418(1985).
+XX
+DR   SWISS-PROT; P00722; BGAL_ECOLI.
+DR   SWISS-PROT; P02920; LACY_ECOLI.
+DR   SWISS-PROT; P03023; LACI_ECOLI.
+DR   SWISS-PROT; P07464; THGA_ECOLI.
+XX
+CC   [3] sites; UV5 mRNA transcripts and operator mutants. [(in) Sund,H.
+CC   and Blauer,G. (eds.);Protein-Ligand Interactions: 193-207;Walter
+CC   de] sites; operator mutational analysis. [7] sites; S1 and mung
+CC   bean nuclease action on operator DNA. [9] sites; class I, II and
+CC   III promoter mutant analysis. [13] sites; lacI mutant analysis.
+CC   [16] sites; Tn5, Tn9 and Tn10 insertion sites in lac region. [14]
+CC   sites; lacI promoter mutation UJ177. [18] sites; palindromic dimer
+CC   operator;. [19] sites; natural operator sequence. [20] sites;
+CC   operator mutational analysis. [21] sites; lacI-Q deletion. [17]
+CC   sites; RNA polymerase UV5 promoter interaction. [22] sites; lacY
+CC   mutational analysis. [24] sites; lacI-promoted transcription
+CC   termination. [25] sites; wt and UV5 promoter sequence studies. [23]
+CC   sites; UV5 promoter mutational analysis. [30] sites; perfectly
+CC   symmetric operator sequence. [29] sites; lacI mRNA termination
+CC   site. [27] sites; distamycin and actinomycin binding to promoter.
+CC   [31] sites; lacI deletion studies. [35] sites; promoter mutational
+CC   studies. [33] sites; DNAase I studies with promoter sequence. [34]
+CC   sites; ribosomal binding and translation initiation for lacZ. [36]
+CC   sites; insertion sequence IS1 integration in lacZ;. [32] sites;
+CC   DNAase I studies with promoter. [1] first reports a 27 bp
+CC   operator(sites 1240-1266) with two-fold symmetries; the operator
+CC   has also been defined to be bases 1246-1266 or bases 1239-1273 [8].
+CC   [(in) Kjeldgaard,N.C. and Maaloe, O.(eds);Control of ribosome
+CC   synthesis: 138-143;A] explores the ability of lac repressor protein
+CC   to affect methylation of operator DNA. [8] argues that DNA on both
+CC   sides of the 21 bp operator (bases 1246-1266) affects repressor
+CC   binding but that the sequences of this DNA are probably not
+CC   critical. [5] gives a larger sequence known as the
+CC   promoter-operator region for the wild-type, whereas [2] and [26]
+CC   give portions of this region for the mutant strain UV5. Within the
+CC   promoter region, bases 1162-1199 are identified as the catabolite
+CC   gene activator protein binding site (cap) and bases 1200-1245 are
+CC   the RNA polymerase interaction site. [10] reports a sequence for
+CC   the 5'end of the lacI (repressor) gene and discusses restart in
+CC   mutant strains. [11] presents a sequence for the lacI promoter
+CC   region and identifies an I-Q mutation which enhances lacI
+CC   transcription approximately ten-fold. [12] gives a complete
+CC   sequence for lacI which agrees with the known lac repressor
+CC   sequence. [26] examines the promoter-operator region in the UV5
+CC   strain (lac109) and studies 23 mutant derivatives of this sequence.
+CC   This sequence agrees with known protein sequences for the lacZ,
+CC   lacY and lacA enzymes. [15] notes that the fMet codon is not
+CC   present for lacA and suggests that the 'ttg' codon (5727-5729),
+CC   which immediately precedes the mature N-terminal asparagine codon,
+CC   is the start codon. The cds for lacZ, lacY and lacA are included on
+CC   a single mRNA transcript. Complete source information: Escherichia
+CC   coli DNA [1],[(in) Kjeldgaard,N.C. and Maaloe,O.(eds); Control of
+CC   ribosome synthesis: 138-143;A],[8],[12],[26]; mRNA [2], [5],[10];
+CC   clone lambda-h80dlac DNA [11],[15]; clone puk217 [28]; pgm8 [37].
+CC   NCBI gi: 146575
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .7477
+FT                   /organism="Escherichia coli"
+FT   mutation        16
+FT                   /note="c in wild-type; t in 'up' promoter mutant I-Q [11]"
+FT   mRNA            51. .1230
+FT                   /note="lacI (repressor) mRNA; preferred in vivo 3' end
+FT                   [12],[29]"
+FT   CDS             79. .1161
+FT                   /codon_start=1
+FT                   /db_xref="PID:g146576"
+FT                   /db_xref="SWISS-PROT:P03023"
+FT                   /note="lac repressor protein (gtg start codon); NCBI gi:
+FT                   146576"
+FT                   /gene="lacI"
+FT                   /translation="MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAEL
+FT                   NYIPNRVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGV
+FT                   EACKAAVHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSIIFSH
+FT                   EDGTRLGVEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWSA
+FT                   MSGFQQTMQMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSSC
+FT                   YIPPSTTIKQDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASPR
+FT                   ALADSLMQLARQVSRLESGQ"
+FT   misc_signal     1162. .1199
+FT                   /note="cap protein binding site"
+FT   variation       1183. .1186
+FT                   /note="ttag in wild-type; aatt in strain UV5 [26]"
+FT   mutation        1209. .1211
+FT                   /note="gct in wild-type; gt in mutant l305 [5]"
+FT   mutation        1212
+FT                   /note="t in wild-type; a in mutant l241 [5]"
+FT   mutation        1230
+FT                   /note="c in wild-type; a in mutant p-r-1a [5]"
+FT   variation       1237. .1238
+FT                   /note="gt in wild-type; aa in strain UV5 [26]"
+FT   mutation        1242. .1245
+FT                   /note="gtgg in wild-type; ttca in synthetic operator [8]"
+FT   misc_signal     1246. .1266
+FT                   /note="lac repressor protein binding site"
+FT   mRNA            1246. .>4358
+FT                   /note="lacZ mRNA [2],[5]"
+FT   mutation        1267. .1268
+FT                   /note="tc in wild-type; tg in synthetic operator [8]"
+FT   variation       1282. .1291
+FT                   /note="ctatgaccat in wild-type; gatccggcca in strain UV5
+FT                   [26]"
+FT   CDS             1284. .4358
+FT                   /codon_start=1
+FT                   /db_xref="PID:g146577"
+FT                   /db_xref="SWISS-PROT:P00722"
+FT                   /note="beta-d-galactosidase;  NCBI gi: 146577"
+FT                   /gene="lacZ"
+FT                   /translation="MTMITDSLAVVLQRRDWENPGVTQLNRLAAHPPFASWRNSEEART
+FT                   DRPSQQLRSLNGEWRFAWFPAPEAVPESWLECDLPEADTVVVPSNWQMHGYDAPIYTNV
+FT                   TYPITVNPPFVPTENPTGCYSLTFNVDESWLQEGQTRIIFDGVNSAFHLWCNGRWVGYG
+FT                   QDSRLPSEFDLSAFLRAGENRLAVMVLRWSDGSYLEDQDMWRMSGIFRDVSLLHKPTTQ
+FT                   ISDFHVATRFNDDFSRAVLEAEVQMCGELRDYLRVTVSLWQGETQVASGTAPFGGEIID
+FT                   ERGGYADRVTLRLNVENPKLWSAEIPNLYRAVVELHTADGTLIEAEACDVGFREVRIEN
+FT                   GLLLLNGKPLLIRGVNRHEHHPLHGQVMDEQTMVQDILLMKQNNFNAVRCSHYPNHPLW
+FT                   YTLCDRYGLYVVDEANIETHGMVPMNRLTDDPRWLPAMSERVTRMVQRDRNHPSVIIWS
+FT                   LGNESGHGANHDALYRWIKSVDPSRPVQYEGGGADTTATDIICPMYARVDEDQPFPAVP
+FT                   KWSIKKWLSLPGETRPLILCEYAHAMGNSLGGFAKYWQAFRQYPRLQGGFVWDWVDQSL
+FT                   IKYDENGNPWSAYGGDFGDTPNDRQFCMNGLVFADRTPHPALTEAKHQQQFFQFRLSGQ
+FT                   TIEVTSEYLFRHSDNELLHWMVALDGKPLASGEVPLDVAPQGKQLIELPELPQPESAGQ
+FT                   LWLTVRVVQPNATAWSEAGHISAWQQWRLAENLSVTLPAASHAIPHLTTSEMDFCIELG
+FT                   NKRWQFNRQSGFLSQMWIGDKKQLLTPLRDQFTRAPLDNDIGVSEATRIDPNAWVERWK
+FT                   AAGHYQAEAALLQCTADTLADAVLITTAHAWQHQGKTLFISRKTYRIDGSGQMAITVDV
+FT                   EVASDTPHPARIGLNCQLAQVAERVNWLGLGPQENYPDRLTAACFDRWDLPLSDMYTPY
+FT                   VFPSENGLRCGTRELNYGPHQWRGDFQFNISRYSQQQLMETSHRHLLHAEEGTWLNIDG
+FT                   FHMGIGGDDSWSPSVSAEFQLSAGRYHYQLVWCQK"
+FT   CDS             4410. .5663
+FT                   /codon_start=1
+FT                   /db_xref="PID:g146578"
+FT                   /db_xref="SWISS-PROT:P02920"
+FT                   /note="lactose permease;  NCBI gi: 146578"
+FT                   /gene="lacY"
+FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSDT
+FT                   GIIFAAISLFSLLFQPLFGLLSDKLGLRKYLLWIITGMLVMFAPFFIFIFGPLLQYNIL
+FT                   VGSIVGGIYLGFCFNAGAPAVEAFIEKVSRRSNFEFGRARMFGCVGWALCASIVGIMFT
+FT                   INNQFVFWLGSGCALILAVLLFFAKTDAPSSATVANAVGANHSAFSLKLALELFRQPKL
+FT                   WFLSLYVIGVSCTYDVFDQQFANFFTSFFATGEQGTRVFGYVTTMGELLNASIMFFAPL
+FT                   IINRIGGKNALLLAGTIMSVRIIGSSFATSALEVVILKTLHMFEVPFLLVGCFKYITSQ
+FT                   FEVRFSATIYLVCFCFFKQLAMIFMSVLAGNMYESIGFQGAYLVLGLVALGFTLISVFT
+FT                   LSGPGPLSLLRRQVNEVA"
+FT   CDS             5727. .6338
+FT                   /codon_start=1
+FT                   /db_xref="PID:g551814"
+FT                   /db_xref="SWISS-PROT:P07464"
+FT                   /note="thiogalactoside acetyltransferase (ttg start codon);
+FT                   NCBI gi: 551814"
+FT                   /gene="lacA"
+FT                   /translation="MNMPMTERIRAGKLFTDMCEGLPEKRLRGKTLMYEFNHSHPSEVE
+FT                   KRESLIKEMFATVGENAWVEPPVYFSYGSNIHIGRNFYANFNLTIVDDYTVTIGDNVLI
+FT                   APNVTLSVTGHPVHHELRKNGEMYSFPITIGNNVWIGSHVVINPGVTIGDNSVIGAGSI
+FT                   VTKDIPPNVVAAGVPCRVIREINDRDKHYYFKDYKVESSV"
+XX
+SQ   Sequence 7477 BP; 1739 A; 1991 C; 2004 G; 1743 T; 0 other;
+>>>>ECLACA
+ 
+ID   ECLACA     standard; DNA; PRO; 1832 BP.
+XX
+AC   X51872;
+XX
+NI   g41891
+XX
+DT   17-APR-1990 (Rel. 23, Created)
+DT   19-JUL-1995 (Rel. 44, Last updated, Version 3)
+XX
+DE   Escherichia coli lacA gene for thiogalactoside transacetylase
+XX
+KW   lac operon; lacA gene; lacY gene; thiogalactoside transacetylase.
+XX
+OS   Escherichia coli
+OC   Eubacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+OC   Escherichia.
+XX
+RN   [1]
+RC   (1-1832)
+RP   1-1832
+RX   MEDLINE; 86016712.
+RA   Hediger M.A., Johnson D.F., Nierlich D.P., Zabin I.;
+RT   "DNA sequence of the lactose operon: The lacA gene and the
+RT   transcriptional termination region";
+RL   Proc. Natl. Acad. Sci. U.S.A. 82:6414-6418(1985).
+XX
+DR   SWISS-PROT; P07464; THGA_ECOLI.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .1832
+FT                   /organism="Escherichia coli"
+FT   CDS             <1. .18
+FT                   /codon_start=1
+FT                   /db_xref="PID:e17183"
+FT                   /product="lacY gene product"
+FT                   /translation="VNEVA"
+FT   CDS             82. .690
+FT                   /db_xref="PID:g581122"
+FT                   /db_xref="SWISS-PROT:P07464"
+FT                   /product="thiogalactoside transacetylase"
+FT                   /gene="lacA"
+FT                   /translation="MNMPMTERIRAGKLFTDMCEGLPEKRLRGKTLMYEFNHSHPSEVE
+FT                   KRESLIKEMFATVGENAWVEPPVYFSYGSNIHIGRNFYANFNLTIVDDYTVTIGDNVLI
+FT                   APNVTLSVTGHPVHHELRKNGEMYSFPITIGNNVWIGSHVVINPGVTIGDNSVIGAGSI
+FT                   VTKDIPPNVVAAGVPCRVIREINDRDKHYYFKDYKVESSV"
+XX
+SQ   Sequence 1832 BP; 519 A; 510 C; 450 G; 353 T; 0 other;
+>>>>ECLACI
+ 
+ID   ECLACI     standard; DNA; PRO; 1113 BP.
+XX
+AC   V00294;
+XX
+NI   g41893
+XX
+DT   09-JUN-1982 (Rel. 01, Created)
+DT   30-NOV-1990 (Rel. 26, Last updated, Version 1)
+XX
+DE   E. coli laci gene (codes for the lac repressor).
+XX
+KW   DNA binding protein; repressor.
+XX
+OS   Escherichia coli
+OC   Eubacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+OC   Escherichia.
+XX
+RN   [1]
+RP   1-1113
+RX   MEDLINE; 78246991.
+RA   Farabaugh P.J.;
+RT   "Sequence of the lacI gene";
+RL   Nature 274:765-769(1978).
+XX
+DR   SWISS-PROT; P03023; LACI_ECOLI.
+XX
+CC   KST ECO.LACI
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .1113
+FT                   /organism="Escherichia coli"
+FT   CDS             31. .1110
+FT                   /db_xref="PID:g581123"
+FT                   /db_xref="SWISS-PROT:P03023"
+FT                   /note="reading frame"
+FT                   /translation="MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAEL
+FT                   NYIPNRVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGV
+FT                   EACKAAVHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSIIFSH
+FT                   EDGTRLGVEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWSA
+FT                   MSGFQQTMQMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSSC
+FT                   YIPPSTTIKQDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASPR
+FT                   ALADSLMQLARQVSRLESGQ"
+XX
+SQ   Sequence 1113 BP; 249 A; 304 C; 322 G; 238 T; 0 other;
+>>>>ECLACY
+ 
+ID   ECLACY     standard; DNA; PRO; 1500 BP.
+XX
+AC   V00295;
+XX
+NI   g41897
+XX
+DT   09-JUN-1982 (Rel. 01, Created)
+DT   07-JUL-1995 (Rel. 44, Last updated, Version 4)
+XX
+DE   E. coli lacY gene (codes for lactose permease).
+XX
+KW   membrane protein.
+XX
+OS   Escherichia coli
+OC   Eubacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+OC   Escherichia.
+XX
+RN   [1]
+RP   1-1500
+RA   Buechel D.E., Gronenborn B., Mueller-Hill B.;
+RT   "Sequence of the lactose permease gene";
+RL   Nature 283:541-545(1980).
+XX
+DR   SWISS-PROT; P00722; BGAL_ECOLI.
+DR   SWISS-PROT; P02920; LACY_ECOLI.
+DR   SWISS-PROT; P07464; THGA_ECOLI.
+XX
+CC   lacZ is a beta-galactosidase and lacA is transacetylase.
+CC   KST ECO.LACY
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .1500
+FT                   /organism="Escherichia coli"
+FT   CDS             <1. .54
+FT                   /codon_start=1
+FT                   /db_xref="PID:g41898"
+FT                   /db_xref="SWISS-PROT:P00722"
+FT                   /note="reading frame (lacZ)"
+FT                   /translation="FQLSAGRYHYQLVWCQK"
+FT   CDS             106. .1359
+FT                   /db_xref="PID:g41899"
+FT                   /db_xref="SWISS-PROT:P02920"
+FT                   /note="reading frame (lacY)"
+FT                   /translation="MYYLKNTNFWMFGLFFFFYFFIMGAYFPFFPIWLHDINHISKSDT
+FT                   GIIFAAISLFSLLFQPLFGLLSDKLGLRKYLLWIITGMLVMFAPFFIFIFGPLLQYNIL
+FT                   VGSIVGGIYLGFCFNAGAPAVEAFIEKVSRRSNFEFGRARMFGCVGWALCASIVGIMFT
+FT                   INNQFVFWLGSGCALILAVLLFFAKTDAPSSATVANAVGANHSAFSLKLALELFRQPKL
+FT                   WFLSLYVIGVSCTYDVFDQQFANFFTSFFATGEQGTRVFGYVTTMGELLNASIMFFAPL
+FT                   IINRIGGKNALLLAGTIMSVRIIGSSFATSALEVVILKTLHMFEVPFLLVGCFKYITSQ
+FT                   FEVRFSATIYLVCFCFFKQLAMIFMSVLAGNMYESIGFQGAYLVLGLVALGFTLISVFT
+FT                   LSGPGPLSLLRRQVNEVA"
+FT   CDS             1423. .>1500
+FT                   /db_xref="PID:g581124"
+FT                   /db_xref="SWISS-PROT:P07464"
+FT                   /note="reading frame (lacA)"
+FT                   /translation="MNMPMTERIRAGKLFTDMCEGLPEKR"
+XX
+SQ   Sequence 1500 BP; 315 A; 342 C; 357 G; 486 T; 0 other;
+>>>>ECLACZ
+ 
+ID   ECLACZ     standard; DNA; PRO; 3078 BP.
+XX
+AC   V00296;
+XX
+NI   g41901
+XX
+DT   13-JUL-1983 (Rel. 03, Created)
+DT   06-MAR-1996 (Rel. 47, Last updated, Version 4)
+XX
+DE   E. coli gene lacZ coding for beta-galactosidase (EC 3.2.1.23).
+XX
+KW   galactosidase.
+XX
+OS   Escherichia coli
+OC   Eubacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+OC   Escherichia.
+XX
+RN   [1]
+RP   1-3078
+RX   MEDLINE; 84028567.
+RA   Kalnins A., Otto K., Ruether U., Mueller-Hill B.;
+RT   "Sequence of the lacZ gene of Escherichia coli";
+RL   EMBO J. 2:593-597(1983).
+XX
+RN   [2]
+RX   MEDLINE; 87275876.
+RA   Zell R., Fritz H.J.;
+RT   "DNA mismatch-repair in Escherichia coli counteracting the hydrolytic
+RT   deamination of 5-methyl-cytosine residues";
+RL   EMBO J. 6:1809-1815(1987).
+XX
+DR   SWISS-PROT; P00722; BGAL_ECOLI.
+XX
+CC   Data kindly reviewed (18-MAY-1983) by U. Ruether
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .3078
+FT                   /organism="Escherichia coli"
+FT   CDS             <1. .3072
+FT                   /db_xref="PID:e2350"
+FT                   /db_xref="SWISS-PROT:P00722"
+FT                   /note="galactosidase"
+FT                   /translation="TMITDSLAVVLQRRDWENPGVTQLNRLAAHPPFASWRNSEEARTD
+FT                   RPSQQLRSLNGEWRFAWFPAPEAVPESWLECDLPEADTVVVPSNWQMHGYDAPIYTNVT
+FT                   YPITVNPPFVPTENPTGCYSLTFNVDESWLQEGQTRIIFDGVNSAFHLWCNGRWVGYGQ
+FT                   DSRLPSEFDLSAFLRAGENRLAVMVLRWSDGSYLEDQDMWRMSGIFRDVSLLHKPTTQI
+FT                   SDFHVATRFNDDFSRAVLEAEVQMCGELRDYLRVTVSLWQGETQVASGTAPFGGEIIDE
+FT                   RGGYADRVTLRLNVENPKLWSAEIPNLYRAVVELHTADGTLIEAEACDVGFREVRIENG
+FT                   LLLLNGKPLLIRGVNRHEHHPLHGQVMDEQTMVQDILLMKQNNFNAVRCSHYPNHPLWY
+FT                   TLCDRYGLYVVDEANIETHGMVPMNRLTDDPRWLPAMSERVTRMVQRDRNHPSVIIWSL
+FT                   GNESGHGANHDALYRWIKSVDPSRPVQYEGGGADTTATDIICPMYARVDEDQPFPAVPK
+FT                   WSIKKWLSLPGETRPLILCEYAHAMGNSLGGFAKYWQAFRQYPRLQGGFVWDWVDQSLI
+FT                   KYDENGNPWSAYGGDFGDTPNDRQFCMNGLVFADRTPHPALTEAKHQQQFFQFRLSGQT
+FT                   IEVTSEYLFRHSDNELLHWMVALDGKPLASGEVPLDVAPQGKQLIELPELPQPESAGQL
+FT                   WLTVRVVQPNATAWSEAGHISAWQQWRLAENLSVTLPAASHAIPHLTTSEMDFCIELGN
+FT                   KRWQFNRQSGFLSQMWIGDKKQLLTPLRDQFTRAPLDNDIGVSEATRIDPNAWVERWKA
+FT                   AGHYQAEAALLQCTADTLADAVLITTAHAWQHQGKTLFISRKTYRIDGSGQMAITVDVE
+FT                   VASDTPHPARIGLNCQLAQVAERVNWLGLGPQENYPDRLTAACFDRWDLPLSDMYTPYV
+FT                   FPSENGLRCGTRELNYGPHQWRGDFQFNISRYSQQQLMETSHRHLLHAEEGTWLNIDGF
+FT                   HMGIGGDDSWSPSVSAEFQLSAGRYHYQLVWCQK"
+FT   mat_peptide     1. .3069
+XX
+SQ   Sequence 3078 BP; 682 A; 841 C; 886 G; 669 T; 0 other;
+>>>>PAAMIB
+ 
+ID   PAAMIB     standard; DNA; PRO; 1212 BP.
+XX
+AC   X77160;
+XX
+NI   g473108
+XX
+DT   13-APR-1994 (Rel. 39, Created)
+DT   10-AUG-1995 (Rel. 44, Last updated, Version 6)
+XX
+DE   P.aeruginosa (PAC1) amiB gene.
+XX
+KW   amiB gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Eubacteria; Proteobacteria; gamma subdivision; Pseudomonas group;
+OC   Pseudomonas.
+XX
+RN   [1]
+RA   Wilson S.A., Wachira S.M., Drew R.E., Jones D., Pearl L.H.;
+RT   "Identification of a putative ABC transporter in the Pseudomonas
+RT   aeruginosa amidase operon";
+RL   Unpublished.
+XX
+RN   [2]
+RP   1-1212
+RA   Wilson S.A.;
+RT   ;
+RL   Submitted (17-JAN-1994) to the EMBL/GenBank/DDBJ databases.
+RL   S.A. Wilson, University College London, Dept of Biochemistry, Gower
+RL   Street, London WC1E 6BT, UK
+XX
+RN   [3]
+RP   1-1212
+RX   MEDLINE; 95370186.
+RA   Wilson S.A., Williams R.J., Pearl L.H., Drew R.E.;
+RT   "Identification of Two New Genes in the Pseudomonas aeruginosa Amidase
+RT   Operon, Encoding an ATPase (AmiB) and a Putative Integral Membrane
+RT   Protein (AmiS)";
+RL   J. Biol. Chem. 270:18818-18824(1995).
+XX
+DR   SPTREMBL; Q51416; Q51416.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .1212
+FT                   /organism="Pseudomonas aeruginosa"
+FT                   /strain="PAC1"
+FT                   /clone="plasmid pAS20"
+FT   CDS             97. .1212
+FT                   /db_xref="PID:g473109"
+FT                   /db_xref="SPTREMBL:Q51416"
+FT                   /gene="amiB"
+FT                   /translation="MPFLSDMLDQSRRQQDEEQALARENLAEASLLQAHLSHRSALHSR
+FT                   FRFDPAAVMDCLRAEVLGQEPALQAVEDMLKVVRADIADPRRPLFSALFLGPTGVGKTE
+FT                   IVRALARALHGDAEGFCRVDMNTLSQEHYAAALTGAPPGYVGAKEGTTLLEQDKLDGSP
+FT                   GRPGIVLFDELEKASPEVVHALLNVLDNGLLRVASGERTYHFRNTLVFMTSNLCAHEIQ
+FT                   RYDERRQRLPWRLLPVGGERRRRDIDGMVRARLLKTFSPEFVNRLDSVVTFNWIERDVV
+FT                   ARLVELEVQRLNRRLEKHRCRLEATPEVLAKIARAGFDRQFGARALRRSVRHHLEVPLA
+FT                   EHLLDHHQPGDGNCTIYLASLEHERVRFVRR"
+XX
+SQ   Sequence 1212 BP; 193 A; 426 C; 403 G; 190 T; 0 other;
+>>>>PAAMIE
+ 
+ID   PAAMIE     standard; DNA; PRO; 1065 BP.
+XX
+AC   M27612;
+XX
+NI   g150979
+XX
+DT   02-FEB-1990 (Rel. 22, Created)
+DT   04-JUL-1990 (Rel. 24, Last updated, Version 1)
+XX
+DE   P.aeruginosa amiE gene encoding aliphatic amidase, complete cds.
+XX
+KW   aliphatic amidase.
+XX
+OS   Pseudomonas aeruginosa
+OC   Eubacteria; Proteobacteria; gamma subdivision; Pseudomonas group;
+OC   Pseudomonas.
+XX
+RN   [1]
+RP   1-1065
+RX   MEDLINE; 87219102.
+RA   Brammar W.J., Charles I.G., Matfield M., Cheng-Pin L., Drew R.E.,
+RA   Clarke P.H.;
+RT   "The nucleotide sequence of the amiE gene of Pseudomonas aeruginosa";
+RL   FEBS Lett. 215:291-294(1987).
+XX
+DR   SWISS-PROT; P11436; ALAM_PSEAE.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .1065
+FT                   /organism="Pseudomonas aeruginosa"
+FT   CDS             25. .1065
+FT                   /db_xref="PID:g150980"
+FT                   /db_xref="SWISS-PROT:P11436"
+FT                   /note="aliphatic amidase (EC 3.5.1.4)"
+FT                   /translation="MRHGDISSSNDTVGVAVVNYKMPRLHTAAEVLDNARKIADMIVGM
+FT                   KQGLPGMDLVVFPEYSLQGIMYDPAEMMETAVAIPGEETEIFSRACRKANVWGVFSLTG
+FT                   ERHEEHPRKAPYNTLVLIDNNGEIVQKYRKIIPWCPIEGWYPGGQTYVSEGPKGMKISL
+FT                   IICDDPNYPEIWRDCAMKGAELIVRCQGYMYPAKDQQVMMAKAMAWANNCYVAVANAAG
+FT                   FDGVYSYFGHSAIIGFDGRTLGECGEEEMGIQYAQLSLSQIRDARANDQSQNHLFKILH
+FT                   RGYSGLQASGDGDRGLAECPFEFYRTWVTDAEKARDNVERLTRSTTGVAQCPVGRLPYE
+FT                   GLEKEA"
+XX
+SQ   Sequence 1065 BP; 220 A; 337 C; 343 G; 165 T; 0 other;
+>>>>PAAMIR
+ 
+ID   PAAMIR     standard; DNA; PRO; 2167 BP.
+XX
+AC   X13776; M43175;
+XX
+NI   g45269
+XX
+DT   19-APR-1989 (Rel. 19, Created)
+DT   17-FEB-1997 (Rel. 50, Last updated, Version 22)
+XX
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+DE   regulation
+XX
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Eubacteria; Proteobacteria; gamma subdivision; Pseudomonas group;
+OC   Pseudomonas.
+XX
+RN   [1]
+RP   1167-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg,
+RL   FRG.
+XX
+RN   [2]
+RP   1167-2167
+RX   MEDLINE; 89211409.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene of
+RT   Pseudomonas aeruginosa";
+RL   FEBS Lett. 246:39-43(1989).
+XX
+RN   [3]
+RP   1-1292
+RX   MEDLINE; 91317707.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of
+RT   the Pseudomonas aeruginosa aliphatic amidase, and purification of the
+RT   amiC product.";
+RL   J. Bacteriol. 173:4914-4921(1991).
+XX
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg,
+RL   FRG.
+XX
+DR   SWISS-PROT; P10932; AMIR_PSEAE.
+DR   SWISS-PROT; P27017; AMIC_PSEAE.
+XX
+CC   Data kindly reviewed (04-SEP-1991) by Rice P. M.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .2167
+FT                   /organism="Pseudomonas aeruginosa"
+FT                   /strain="PAC"
+FT                   /isolate="PAC 1"
+FT                   /map="38 min"
+FT   CDS             1289. .1879
+FT                   /db_xref="PID:g45270"
+FT                   /db_xref="SWISS-PROT:P10932"
+FT                   /note="aliphatic amidase regulator, positive regulator of
+FT                   amiE"
+FT                   /gene="amiR"
+FT                   /translation="MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPP
+FT                   PEAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHG
+FT                   VITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWD
+FT                   EREAHQHLSREAMKRREPILKIAQELLGNEPSA"
+FT   CDS             135. .1292
+FT                   /db_xref="PID:g45271"
+FT                   /db_xref="SWISS-PROT:P27017"
+FT                   /note="negative regulator of amiR"
+FT                   /gene="amiC"
+FT                   /translation="MGSHQERPLIGLLFSETGVTADIERSHAYGALLAVEQLNREGGVG
+FT                   GRPIETLSQDPGGDPDRYRLCAEDFIRNRGVRFLVGCYMSHTRKAVMPVVERADALLCY
+FT                   PTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLIRHYGERVVFIGSDYIYPRESNHVMRHL
+FT                   YRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQARADVVFSTVVGTGTAELYRAIARRYG
+FT                   DGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPYFSSIDTPASRAFVQACHGFFPENAT
+FT                   ITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLYDIDIDAPQGPVRVERQNNHSRLSS
+FT                   RIAEIDARGVFQVRWQSPEPIRPDPYVVVHNLDDWSASMGGGPLP"
+FT   promoter        8. .24
+FT                   /note="proposed rpoN-dependent promoter"
+FT   promoter        65. .81
+FT                   /note="proposed rpoN-dependent promoter"
+FT   RBS             121. .126
+FT                   /note="proposed Shine-Dalgarno sequence"
+FT   mutation        912. .1167
+FT                   /note="ClaI fragment deleted in pSW36, constitutive
+FT                   phenotype"
+FT                   /replace=""
+FT                   /gene="amiC"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648. .653
+FT                   /note="end of 658bp XhoI fragment, deletion in pSW3 causes
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /citation=[3]
+FT                   /replace="g"
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+>>>>PAAMIS
+ 
+ID   PAAMIS     standard; DNA; PRO; 1130 BP.
+XX
+AC   X77161;
+XX
+NI   g473110
+XX
+DT   13-APR-1994 (Rel. 39, Created)
+DT   10-AUG-1995 (Rel. 44, Last updated, Version 6)
+XX
+DE   P.aeruginosa (PAC1) amiS gene.
+XX
+KW   amiS gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Eubacteria; Proteobacteria; gamma subdivision; Pseudomonas group;
+OC   Pseudomonas.
+XX
+RN   [1]
+RA   Wilson S.A., Wachira S.M., Drew R.E., Jones D., Pearl L.H.;
+RT   "Identification of a putative ABC transporter in the Pseudomonas
+RT   aeruginosa amidase operon";
+RL   Unpublished.
+XX
+RN   [2]
+RP   1-1130
+RA   Wilson S.A.;
+RT   ;
+RL   Submitted (17-JAN-1994) to the EMBL/GenBank/DDBJ databases.
+RL   S.A. Wilson, University College London, Dept of Biochemistry, Gower
+RL   Street, London WC1E 6BT, UK
+XX
+RN   [3]
+RP   1-1130
+RX   MEDLINE; 95370186.
+RA   Wilson S.A., Williams R.J., Pearl L.H., Drew R.E.;
+RT   "Identification of Two New Genes in the Pseudomonas aeruginosa Amidase
+RT   Operon, Encoding an ATPase (AmiB) and a Putative Integral Membrane
+RT   Protein (AmiS)";
+RL   J. Biol. Chem. 270:18818-18824(1995).
+XX
+DR   SWISS-PROT; Q51417; AMIS_PSEAE.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1. .1130
+FT                   /organism="Pseudomonas aeruginosa"
+FT                   /strain="PAC1"
+FT                   /clone="plasmid pAS20"
+FT   CDS             61. .576
+FT                   /db_xref="PID:g473111"
+FT                   /db_xref="SWISS-PROT:Q51417"
+FT                   /gene="amiS"
+FT                   /translation="MLGLVLLYVGAVLFLNAVWLLGKISGREVAVINFLVGVLSACVAF
+FT                   YLIFSAAAGQGSLKAGALTLLFAFTYLWVAANQFLEVDGKGLGWFCLFVSLTACTVAIE
+FT                   SFAGASGPFGLWNAVNWTVWALLWFCFFLLLGLSRGIQKPVAYLTLASAIFTAWLPGLL
+FT                   LLGQVLKA"
+XX
+SQ   Sequence 1130 BP; 167 A; 335 C; 377 G; 251 T; 0 other;

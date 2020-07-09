@@ -1,0 +1,246 @@
+ID   GMGL01     standard; DNA; PLN; 3400 BP.
+XX
+AC   V00451; L00005; L00006;
+XX
+SV   V00451.1
+XX
+DT   13-JUL-1983 (Rel. 03, Created)
+DT   01-OCT-1996 (Rel. 49, Last updated, Version 5)
+XX
+DE   Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+XX
+KW   leghemoglobin; pseudogene.
+XX
+OS   Glycine max (soybean)
+OC   Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+OC   Spermatophyta; Magnoliophyta; eudicotyledons; core eudicots; Rosidae;
+OC   eurosids I; Fabales; Fabaceae; Papilionoideae; Glycine.
+XX
+RN   [1]
+RP   1-3400
+RA   Wiborg O., Hyldig-Nielsen J.J., Jensen E.O., Paludan K., Marcker K.A.;
+RT   "the structure of an unusual leghemoglobin gene from soybean";
+RL   EMBO J. 2:449-452(1983).
+XX
+DR   AGDR; V00451; V00451.
+DR   MENDEL; 8125; Glyma;1000;8125.
+DR   SPTREMBL; Q42801; Q42801.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..3400
+FT                   /db_xref="taxon:3847"
+FT                   /organism="Glycine max"
+FT   CDS             join(363..460,555..663,2182..2286,3065..3208)
+FT                   /db_xref="SPTREMBL:Q42801"
+FT                   /product="leghemoglobin"
+FT                   /protein_id="CAA23729.1"
+FT                   /translation="MGAFTEKQEALVNSSFEAFKANLPHHSVVFFNSILEKAPAAKNMF
+FT                   SFLGDAVDPKNPKLAGHAEKLFGLVRDSAVQLQTKGLVVADATLGPIHTQKGVTDLQFA
+FT                   VVKEALLKTIKEAVGDKWSEELSNPWEVAYDEIAAAIKKAMAIGSLV"
+FT   exon            <363..460
+FT                   /number=1
+FT   intron          461..554
+FT                   /number=1
+FT   exon            555..663
+FT                   /number=2
+FT   intron          664..2181
+FT                   /number=2
+FT   exon            2182..2286
+FT                   /number=3
+FT   intron          2287..3064
+FT                   /number=3
+FT   exon            3065..>3208
+FT                   /number=4
+XX
+SQ   Sequence 3400 BP; 931 A; 310 C; 334 G; 975 T; 850 other;
+     ttttactcaa atcaatgata tatattttgg taactttttt tcttttactt ataattttgt        60
+     ttacgttaaa agtcaaaaaa gaatacatta aaaaattaaa aattcaccga acaacttaaa       120
+     ttatttattt actttgacta agtgaaaaat tacttgatta agtttttgaa aaggtcgttg       180
+     tgtcttcata atgccgattg atacgctcca cattcaataa gccaagagag acatattcaa       240
+     taacaatcgc aacaaatttt ttttcagtct ccaaaccatc tatataaaca agtattggat       300
+     gtgaacttat aactggattg aaaatagaaa ttaaataaca gaaaattaca aaagatcgaa       360
+     atatgggtgc ttttacagag aagcaagagg ctttggtgaa tagctcgttt gaagcattca       420
+     aggcaaacct tcctcaccac agcgttgtat tcttcaattc gtaatttttc tctctcaccc       480
+     tatgtttccc ttgagttgaa aagaggtagt gtacataata gtgtctttgg tttgattaaa       540
+     aaacaaaata ataggatatt ggagaaagca ccagcagcaa agaacatgtt ctcattttta       600
+     ggtgatgcag tagatccgaa aaatcctaag ctcgcgggcc atgctgaaaa gctttttgga       660
+     ttggtaagtg ttagtcaact aaaattatag ttattttatg tgattttagg gatgtatact       720
+     ggattagatt ttaaaagatt attttagtgt ttgtatattt taaaaattat ataagaatat       780
+     tatgatttat taaatttttt tataagaatt ttatgatagt ttaaatttta atgtatttat       840
+     atcataaaat ttnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn       900
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn       960
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1020
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1080
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1140
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1200
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1260
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1320
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1380
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1440
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1500
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1560
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1620
+     nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn      1680
+     nnnnnnnnnn nnnnnnnnnn nntagaaagg gtttgataga catttaatac taaaaagtca      1740
+     tataaaatcc atcaaattta tcttaaaaag tagtctatcg aaatttgtat attttttaaa      1800
+     tgtttcaaaa ctttttttta aagttataaa aaacttaatt gaataccacc aaattttgtt      1860
+     gaattcatta aaaaaaattt aaaaatatta attgaatatt ataagactta tttatagcat      1920
+     ttaaaaattc tcattaaata ccagaaaaaa aaatttataa ttttttttta aaatgttaat      1980
+     ccagtatact ccgctcttaa aattaaacat gcacttatat aatactctta aaatatcaat      2040
+     gaacatttgt taaattgtat tttatatctt taacatatct cgtactaggg attaataatg      2100
+     tataaaatta tattagtatt tcttgattag ttttctttaa tgatcatctt atcatatatt      2160
+     atgatatttt tcaaattgta ggtgcgtgac tcagctgttc aacttcaaac aaagggatta      2220
+     gtggtggctg atgccacact tggtcctatc cacacccaaa aaggagttac cgatcttcaa      2280
+     tttgcggtat gataaataaa ttgttataat aaatgcatac ttaaatctaa catggtgtat      2340
+     tctgtaatga tcatcacttc ttttgtttag taatgaattt actaaacata taacatttaa      2400
+     tgtcctcaat attatattat tgtaattttc aatgattttt ttaattaata attctttgag      2460
+     caatgtttaa agaaattgat ttaacactgc aataactagc ttcctctttc tcaattttta      2520
+     tataaattat cacatatact atggaaataa aataagctaa actatgtgat tatttatttt      2580
+     tggattaggt tattaatagc attttataat ctattggcta ttgcaacgtt gattgattac      2640
+     tcaaaaaaaa aaaactttga ttgattatta attatcattt ctttttgcat tgattctcgc      2700
+     ctgtcgacat ttttctttga agttaagatt caattcaaat attttcattt atttattcat      2760
+     atttattaaa gtcaacttaa ttttgtttat aaatactatt attttttttc tatttattgt      2820
+     attagtatga agtaggtctc gtaaaaaaca gacaaattat ttcatagtca accagtattt      2880
+     tatttaattt taaattattt aattaaaaaa cacaaaacct tattacttgt atcaacagtt      2940
+     gctgatttat aaacattact actacaactt cttgggatat taatagcatt actgcgaaac      3000
+     tttaatatga aaatttaatt ataaggaaaa atgtaagagc taaaacatca ttattgattc      3060
+     gtaggtggtt aaagaagcac tgcttaaaac aataaaggaa gcagttgggg acaaatggag      3120
+     cgaagaattg agcaatcctt gggaagtagc ctacgatgaa attgcagccg caattaagaa      3180
+     ggcaatggct ataggatcat tagtataaag tctagtagta ataaataaat tttgtttcac      3240
+     taaaatttgt tattaacttc ttgatataaa tgtcggttac attaggtaaa atacagtact      3300
+     tgtctttgaa taaacaatat taaattattt gcctcagggt ttatgtttat gaatcacaat      3360
+     cgatacttta tacatgtttt aaaattattt taataagctt                            3400
+//
+ID   GMLLBPS1   standard; DNA; PLN; 852 BP.
+XX
+AC   L00005; V00451;
+XX
+SV   L00005.1
+XX
+DT   01-OCT-1996 (Rel. 49, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 2)
+XX
+DE   soybean leghemoglobin pseudogene, segment 1.
+XX
+KW   leghemoglobin; pseudogene.
+XX
+OS   Glycine max (soybean)
+OC   Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+OC   Spermatophyta; Magnoliophyta; eudicotyledons; core eudicots; Rosidae;
+OC   eurosids I; Fabales; Fabaceae; Papilionoideae; Glycine.
+XX
+RN   [1]
+RP   1-852
+RA   Wiborg O., Hyldig-Nielsen J.J., Jensen E.O., Paludan K., Marcker K.A.;
+RT   "the structure of an unusual leghemoglobin gene from soybean";
+RL   EMBO J. 2:449-452(1983).
+XX
+CC   The derived amino acid sequence corresponds to no known peptide,
+CC   and no mRNA has been detected; this gene may therefore be a
+CC   pseudogene [1]. The leghemoglobin pseudogene exons 1 and 2 extend
+CC   over bases 363-460 and 555-663.
+CC   EMBL features not translated to GenBank features:
+CC   key        from     to       description
+CC   CDS         363    462       reading frame (part 1)
+CC   (363 is 1st base in codon)
+CC   (462 is 1st base in codon)
+CC   CDS         545    663       reading frame (part 2)
+CC   (545 is 3rd base in codon)
+CC   (663 is 3rd base in codon)
+CC   CDS        2182   2586       reading frame (part 3)
+CC   (2182 is 1st base in codon)
+CC   (2586 is 3rd base in codon)
+CC   CDS        3065   3205       reading frame (part 4)
+CC   (3065 is 1st base in codon)
+CC   (3205 is 3rd base in codon).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..852
+FT                   /db_xref="taxon:3847"
+FT                   /organism="Glycine max"
+XX
+SQ   Sequence 852 BP; 305 A; 107 C; 130 G; 310 T; 0 other;
+     ttttactcaa atcaatgata tatattttgg taactttttt tcttttactt ataattttgt        60
+     ttacgttaaa agtcaaaaaa gaatacatta aaaaattaaa aattcaccga acaacttaaa       120
+     ttatttattt actttgacta agtgaaaaat tacttgatta agtttttgaa aaggtcgttg       180
+     tgtcttcata atgccgattg atacgctcca cattcaataa gccaagagag acatattcaa       240
+     taacaatcgc aacaaatttt ttttcagtct ccaaaccatc tatataaaca agtattggat       300
+     gtgaacttat aactggattg aaaatagaaa ttaaataaca gaaaattaca aaagatcgaa       360
+     atatgggtgc ttttacagag aagcaagagg ctttggtgaa tagctcgttt gaagcattca       420
+     aggcaaacct tcctcaccac agcgttgtat tcttcaattc gtaatttttc tctctcaccc       480
+     tatgtttccc ttgagttgaa aagaggtagt gtacataata gtgtctttgg tttgattaaa       540
+     aaacaaaata ataggatatt ggagaaagca ccagcagcaa agaacatgtt ctcattttta       600
+     ggtgatgcag tagatccgaa aaatcctaag ctcgcgggcc atgctgaaaa gctttttgga       660
+     ttggtaagtg ttagtcaact aaaattatag ttattttatg tgattttagg gatgtatact       720
+     ggattagatt ttaaaagatt attttagtgt ttgtatattt taaaaattat ataagaatat       780
+     tatgatttat taaatttttt tataagaatt ttatgatagt ttaaatttta atgtatttat       840
+     atcataaaat tt                                                           852
+//
+ID   GMLLBPS2   standard; DNA; PLN; 1698 BP.
+XX
+AC   L00006; V00451;
+XX
+SV   L00006.1
+XX
+DT   01-OCT-1996 (Rel. 49, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 2)
+XX
+DE   soybean leghemoglobin pseudogene, segment 2.
+XX
+KW   leghemoglobin; pseudogene.
+XX
+OS   Glycine max (soybean)
+OC   Eukaryota; Viridiplantae; Streptophyta; Embryophyta; Tracheophyta;
+OC   Spermatophyta; Magnoliophyta; eudicotyledons; core eudicots; Rosidae;
+OC   eurosids I; Fabales; Fabaceae; Papilionoideae; Glycine.
+XX
+RN   [1]
+RP   1-1698
+RA   Wiborg O., Hyldig-Nielsen J.J., Jensen E.O., Paludan K., Marcker K.A.;
+RT   "the structure of an unusual leghemoglobin gene from soybean";
+RL   EMBO J. 2:449-452(1983).
+XX
+CC   The derived amino acid sequence corresponds to no known peptide,
+CC   and no mRNA has been detected; this gene may therefore be a
+CC   pseudogene [1]. The leghemoglobin pseudogene exons 3 and 4 extend
+CC   over bases 480-584 and 1363-1506.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1698
+FT                   /db_xref="taxon:3847"
+FT                   /organism="Glycine max"
+XX
+SQ   Sequence 1698 BP; 626 A; 203 C; 204 G; 665 T; 0 other;
+     tagaaagggt ttgatagaca tttaatacta aaaagtcata taaaatccat caaatttatc        60
+     ttaaaaagta gtctatcgaa atttgtatat tttttaaatg tttcaaaact tttttttaaa       120
+     gttataaaaa acttaattga ataccaccaa attttgttga attcattaaa aaaaatttaa       180
+     aaatattaat tgaatattat aagacttatt tatagcattt aaaaattctc attaaatacc       240
+     agaaaaaaaa atttataatt tttttttaaa atgttaatcc agtatactcc gctcttaaaa       300
+     ttaaacatgc acttatataa tactcttaaa atatcaatga acatttgtta aattgtattt       360
+     tatatcttta acatatctcg tactagggat taataatgta taaaattata ttagtatttc       420
+     ttgattagtt ttctttaatg atcatcttat catatattat gatatttttc aaattgtagg       480
+     tgcgtgactc agctgttcaa cttcaaacaa agggattagt ggtggctgat gccacacttg       540
+     gtcctatcca cacccaaaaa ggagttaccg atcttcaatt tgcggtatga taaataaatt       600
+     gttataataa atgcatactt aaatctaaca tggtgtattc tgtaatgatc atcacttctt       660
+     ttgtttagta atgaatttac taaacatata acatttaatg tcctcaatat tatattattg       720
+     taattttcaa tgattttttt aattaataat tctttgagca atgtttaaag aaattgattt       780
+     aacactgcaa taactagctt cctctttctc aatttttata taaattatca catatactat       840
+     ggaaataaaa taagctaaac tatgtgatta tttatttttg gattaggtta ttaatagcat       900
+     tttataatct attggctatt gcaacgttga ttgattactc aaaaaaaaaa aactttgatt       960
+     gattattaat tatcatttct ttttgcattg attctcgcct gtcgacattt ttctttgaag      1020
+     ttaagattca attcaaatat tttcatttat ttattcatat ttattaaagt caacttaatt      1080
+     ttgtttataa atactattat tttttttcta tttattgtat tagtatgaag taggtctcgt      1140
+     aaaaaacaga caaattattt catagtcaac cagtatttta tttaatttta aattatttaa      1200
+     ttaaaaaaca caaaacctta ttacttgtat caacagttgc tgatttataa acattactac      1260
+     tacaacttct tgggatatta atagcattac tgcgaaactt taatatgaaa atttaattat      1320
+     aaggaaaaat gtaagagcta aaacatcatt attgattcgt aggtggttaa agaagcactg      1380
+     cttaaaacaa taaaggaagc agttggggac aaatggagcg aagaattgag caatccttgg      1440
+     gaagtagcct acgatgaaat tgcagccgca attaagaagg caatggctat aggatcatta      1500
+     gtataaagtc tagtagtaat aaataaattt tgtttcacta aaatttgtta ttaacttctt      1560
+     gatataaatg tcggttacat taggtaaaat acagtacttg tctttgaata aacaatatta      1620
+     aattatttgc ctcagggttt atgtttatga atcacaatcg atactttata catgttttaa      1680
+     aattatttta ataagctt                                                    1698
+//

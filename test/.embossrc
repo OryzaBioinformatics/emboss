@@ -1,0 +1,40 @@
+# some simple testing stuff
+
+SET emboss_qadata /srsuser/rice/hgmp/emboss/test
+
+DB qangcg  [ type: N format: embl method: gcg
+  dir: $emboss_qadata/embl
+  indexdir: $emboss_qadata/qa/dbigcg-ex ]
+
+DB qanfasta  [ type: N format: fasta method: emblcd
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbifasta-ex ]
+
+DB qapfasta  [ type: P format: fasta method: emblcd
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbifasta-swiss ]
+
+DB qanblast [ type: N format: ncbi method: blast
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbiblast-ex ]
+
+DB qapblast  [ type: P format: ncbi method: blast
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbiblast-ex ]
+
+DB qanflat  [ type: N format: embl method: emblcd
+  dir: $emboss_qadata/embl
+  indexdir: $emboss_qadata/qa/dbiflat-ex ]
+
+DB qapflat  [ type: P format: swiss method: emblcd
+  dir: $emboss_qadata/swnew
+  indexdir: $emboss_qadata/qa/dbiflat-swiss ]
+
+DB qanmito [ type: N format: ncbi method: blast
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbiblast-ex/mitont ]
+
+DB qapmito [ type: P format: ncbi method: blast
+  dir: $emboss_qadata/data
+  indexdir: $emboss_qadata/qa/dbiblast-ex/mitoaa ]
+
