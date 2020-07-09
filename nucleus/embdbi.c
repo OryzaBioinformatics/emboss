@@ -94,7 +94,113 @@ EmbPentry embDbiEntryNew (void) {
   return ret;
 }
 
-/* @func embDbiFileList *******************************************************
+/* @funcstatic embDbiFileList ********************************************
+**
+** Makes a list of all files in a directory matching a wildcard file name.
+**
+** @param [r] dir [AjPStr] Directory
+** @param [r] wildfile [AjPStr] Wildcard file name
+** @return [AjPList] New list of all files with full paths
+** @@ 
+******************************************************************************/
+
+AjPList embDbiFileList (AjPStr dir, AjPStr wildfile, AjBool trim) {
+
+  AjPList retlist=NULL;
+    
+  DIR* dp;
+  struct dirent* de;
+  int dirsize;
+  AjPStr name = NULL;
+  static AjPStr dirfix = NULL;
+  AjPStr tmp;
+  AjPStr s;
+  AjPStr s2;
+  AjPStr t;
+  
+  char *p;
+  char *q;
+  AjPList l;
+  int ll;
+  int i;
+  AjBool d;
+  
+  ajDebug("embDbiFileList dir '%S' wildfile '%S'\n",
+	  dir, wildfile);
+  
+  tmp = ajStrNewC(ajStrStr(wildfile));
+
+  if (ajStrLen(dir))
+    (void) ajStrAss (&dirfix, dir);
+  else
+    (void) ajStrAssC (&dirfix, "./");
+
+  if (ajStrChar(dirfix, -1) != '/')
+    (void) ajStrAppC (&dirfix, "/");
+
+  (void) ajStrAppC(&wildfile,"*");
+
+  dp = opendir (ajStrStr(dirfix));
+  if (!dp)
+    ajFatal("opendir failed on '%S'", dirfix);
+
+  s = ajStrNew();
+  l = ajListNew();
+  dirsize = 0;
+  retlist = ajListstrNew ();
+  while ((de = readdir(dp))) {
+    if (!de->d_ino) continue;	/* skip deleted files with inode zero */
+    if (!ajStrMatchWildCO(de->d_name, wildfile)) continue;
+    (void) ajStrAssC(&s,de->d_name);
+    p=q=ajStrStr(s);
+    if (trim) {
+      p=strrchr(p,(int)'.');
+      if(p)
+	*p='\0';
+    }
+    s2 = ajStrNewC(q);
+    
+    ll=ajListLength(l);
+    
+    d=ajFalse;
+    for(i=0;i<ll;++i)
+    {
+	ajListPop(l,(void *)&t);
+	if(ajStrMatch(t,s2))
+	   d=ajTrue;
+	ajListPushApp(l,(void *)t);
+    }
+    if(!d)
+	ajListPush(l,(void *)s2);
+    else
+    {
+	ajStrDel(&s2);
+	continue;
+    }
+
+    dirsize++;
+    ajDebug ("accept '%S'\n", s2);
+    name = NULL;
+    (void) ajFmtPrintS (&name, "%S%S", dirfix, s2);
+    ajListstrPushApp (retlist, name);
+  }
+
+  if(!ajListLength(retlist))
+      ajFatal("No match for file specification %S",tmp);
+
+  while(ajListPop(l,(void *)&t))
+      ajStrDel(&t);
+  ajStrDel(&s);
+  ajStrDel(&tmp);
+
+  (void) closedir (dp);
+  ajDebug ("%d files for '%S' '%S'\n", dirsize, dir, wildfile);
+
+  return retlist;
+
+}
+
+/* @func embDbiFileListExc ****************************************************
 **
 ** Makes a list of all files in a directory matching a wildcard file name.
 **
@@ -105,7 +211,7 @@ EmbPentry embDbiEntryNew (void) {
 ** @@ 
 ******************************************************************************/
 
-AjPList embDbiFileList (AjPStr dir, AjPStr wildfile, AjPStr exclude) {
+AjPList embDbiFileListExc (AjPStr dir, AjPStr wildfile, AjPStr exclude) {
 
   AjPList retlist = NULL;
 
@@ -116,6 +222,9 @@ AjPList embDbiFileList (AjPStr dir, AjPStr wildfile, AjPStr exclude) {
   static AjPStr dirfix = NULL;
   static AjPStr fname = NULL;
 
+  ajDebug("embDbiFileListExc dir '%S' wildfile '%S' exclude '%S'\n",
+	  dir, wildfile, exclude);
+  
   if (ajStrLen(dir))
     (void) ajStrAss (&dirfix, dir);
   else
@@ -123,6 +232,8 @@ AjPList embDbiFileList (AjPStr dir, AjPStr wildfile, AjPStr exclude) {
 
   if (ajStrChar(dirfix, -1) != '/')
     (void) ajStrAppC (&dirfix, "/");
+
+  ajDebug ("dirfix '%S'\n", dirfix);
 
   dp = opendir (ajStrStr(dirfix));
   if (!dp)
