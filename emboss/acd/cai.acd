@@ -1,0 +1,10 @@
+appl: cai [
+        doc: "CAI codon adaptation index"
+        groups: "DNA: sequence composition, gene finding"
+]
+
+ seqall: seqall [ param: Y type: DNA ]
+
+ codon: cfile [ req: Y info: "Codon usage file" def: Eyeastcai.cut ]
+
+ outfile: outfile [ param: Y ]
