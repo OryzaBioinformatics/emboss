@@ -9,7 +9,7 @@
 
 appl: cutseq [
 	doc: "Removes a specified section from a sequence."
-	group: "sequence editing"
+	groups: "Edit"
 ]
 
   sequence: sequence [

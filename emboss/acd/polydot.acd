@@ -10,7 +10,7 @@
 
 appl: polydot [
 	doc: "Displays all-against-all dotplots of a set of sequences"
-	groups: "sequence comparison, DNA: sequence features, protein: sequence features"
+	groups: "Alignment:Dot plots"
 ]
 
   seqset: sequences [ 

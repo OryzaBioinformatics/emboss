@@ -3,7 +3,7 @@
 
 appl: fuzznuc [
 	doc: "Nucleic acid pattern search"
-	group: "pattern matching"
+	groups: "Nucleic:Motifs"
 ]
 
 seqall: sequence [

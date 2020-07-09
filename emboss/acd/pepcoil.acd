@@ -5,7 +5,7 @@
 # ajb 27th March 1999
 appl: pepcoil [
 	doc: "Predicts coiled coil regions"
-	groups: "protein: sequence features, secondary structure"
+	groups: "Protein:2D Structure, Protein:Motifs"
 ]
 
   seqall: sequence [ param: Y type: PureProtein ]

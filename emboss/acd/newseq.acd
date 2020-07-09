@@ -9,7 +9,7 @@
 
 appl: newseq [
 	doc: "Type in a short new sequence."
-	group: "sequence editing"
+	groups: "Edit"
 ]
 
 

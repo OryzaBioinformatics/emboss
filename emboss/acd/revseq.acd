@@ -9,7 +9,7 @@
 
 appl: revseq [
 	doc: "Reverse and complement a sequence"
-	group: "sequence editing"
+	groups: "Edit"
 ]
 
   seqall: sequence [

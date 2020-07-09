@@ -13,7 +13,7 @@
 
 appl: geecee [
 	doc: "Calculates the fractional GC content of nucleic acid sequences"
-	groups: "CpG islands, DNA: sequence composition"
+	groups: "Nucleic:CpG Islands"
 ]
 
   seqall: sequence [ param: Y type: dna ]

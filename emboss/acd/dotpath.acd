@@ -3,7 +3,7 @@
 
 appl: dotpath [
 	doc: "Displays a non-overlapping wordmatch dotplot of two sequences"
-	groups: "comparison, DNA: sequence features, protein: sequence features"
+	groups: "Alignment:Dot plots"
 ]
 
   sequence: sequencea [ param: y type: any ]

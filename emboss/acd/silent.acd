@@ -2,7 +2,7 @@
 #
 appl: silent [
           doc: "Silent mutation restriction enzyme scan"
-          groups: "DNA: sequence features, restriction enzymes, site directed mutagenesis"
+          groups: "Nucleic:Restriction"
 ]
 
   sequence: seq [ param: Y ]

@@ -1,6 +1,6 @@
 appl: tfextract [
   documentation: "Extract data from TRANSFAC"
-  groups: "utilities"
+  groups: "Utils:Database creation"
 ]
 
 infile: inf  [

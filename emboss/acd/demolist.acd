@@ -1,4 +1,4 @@
-appl: demolist [ doc: "demonstration of the list functions"  group: "demo" ]
+appl: demolist [ doc: "demonstration of the list functions"  groups: "Test" ]
 
 infile: gff [
         parameter: Y

@@ -1,6 +1,6 @@
 appl: backtranseq [
         doc: "Back translate a protein sequence"
-        groups: "translation"
+        groups: "Nucleic:Translation, Protein:Composition"
 ]
 
  sequence: sequence [ param: Y type: PureProtein ]

@@ -1,6 +1,6 @@
 appl:  prettyseq [
         doc: "Output sequence with translated ranges"
-        groups: "coding regions, translation"
+        groups: "Display, Nucleic:Translation"
 ]
 
  sequence: sequence [ param: Y type: DNA ]

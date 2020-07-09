@@ -1,7 +1,7 @@
 appl: domainer
 [
 	doc: "Build domain coordinate files"
-	groups: "PROTEIN: structure"
+	groups: "Utils:Database creation"
 ]
 
 infile: scop 	

@@ -10,7 +10,7 @@
 
 appl: seqretallfeat [
 	doc: "Reads and writes (returns) one or more sequences"
-	groups: "reformatting, sequence display, database: entry extraction"
+	groups: "Test"
 ]
 
   seqall: sequence [ param: Y feat: Y ]

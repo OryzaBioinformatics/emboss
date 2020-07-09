@@ -1,6 +1,6 @@
 appl: histogramtest [
 	doc: "test of graphics"
-	groups: "debugging"
+	groups: "Test"
 ]
 
   int: sets   [ req: y def: 1 min: 1 max: 10

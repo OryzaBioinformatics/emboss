@@ -1,6 +1,6 @@
 appl: merger [
         doc: "Merge two overlapping nucleic acid sequences"
-        groups: "alignment, sequence editing"
+        groups: "Alignment:Consensus"
 ]
 
   sequence: seqa [

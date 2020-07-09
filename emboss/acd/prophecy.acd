@@ -10,7 +10,7 @@
 
 appl: prophecy [
 	doc: "Creates matrices/profiles from multiple alignments"
-	groups: "profiles"
+	groups: "Nucleic:Profiles, Protein:Profiles"
 ]
 
   seqset: sequence [ param: Y type: gapany ]

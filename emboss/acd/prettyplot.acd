@@ -1,6 +1,6 @@
 appl: prettyplot [
 	doc: "Displays aligned sequences, with colouring and boxing"
-	groups: "display: alignment: multiple"
+	groups: "Alignment:Multiple, Display"
 ]
 
 	seqset: msf [ 

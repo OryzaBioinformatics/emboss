@@ -10,7 +10,7 @@
 
 application: ajbad [
 	doc: "Test file for ACD parsing"
-	groups: "debugging"
+	groups: "Test"
 ]
 
 string: typea [ req: y prompt: "Sequence type" valid: "valid value test" ]

@@ -3,7 +3,7 @@
 
 appl: megamerger [
         doc: "Merge two large overlapping nucleic acid sequences"
-        groups: "alignment, sequence editing"
+        groups: "Alignment:Consensus"
 ]
 
   sequence: seqa [

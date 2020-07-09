@@ -10,7 +10,7 @@
 
 appl: maskfeat [
 	doc: "Mask off features of a sequence."
-	group: "sequence editing"
+	groups: "Edit, Feature tables"
 ]
 
   seqall: sequence [

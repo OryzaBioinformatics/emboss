@@ -2,7 +2,7 @@
 
 appl: msbar [
 	doc: "Mutate sequence beyond all recognition"
-	group: "mutation"
+	groups: "Nucleic:Mutation, Protein:Mutation"
 ]
 
   seqall: sequence [ 

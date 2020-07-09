@@ -4,7 +4,7 @@
 
 appl: dreg [
 	doc: "regular expression search of a nucleotide sequence"
-	groups: "pattern matching"
+	groups: "Nucleic:Motifs"
 ]
 
   seqall: sequence [ param: Y type: dna ]

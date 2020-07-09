@@ -1,6 +1,6 @@
 appl: stretcher [
         doc: "Finds the best global alignment between two sequences"
-        groups: "alignment: global"
+        groups: "Alignment:Global"
 ]
 
   sequence: sequencea [ param: Y type: any]

@@ -1,6 +1,6 @@
 appl: tfscan [
   documentation: "Scans DNA sequences for transcription factors"
-  groups: "DNA: sequence features, transcription, pattern matching, motifs"
+  groups: "Nucleic:Transcription"
 ]
 
 seqall: sequence  [

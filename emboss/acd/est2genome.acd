@@ -1,6 +1,6 @@
 appl: est2genome [
 	doc: "Align EST and genomic DNA sequences"
-	groups: "alignment"
+	groups: "Alignment:Global"
 ]
 
   seqall: est [ 

@@ -10,7 +10,7 @@
 
 appl: plplottest [
 	doc: "test of PLPLOT graphics library"
-	groups: "debugging"
+	groups: "Test"
 ]
 
   graph: graph [ req: Y ]

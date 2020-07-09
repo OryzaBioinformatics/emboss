@@ -9,7 +9,7 @@
 
 appl: descseq [
 	doc: "Alter the name or description of a sequence."
-	group: "sequence editing"
+	groups: "Edit"
 ]
 
   sequence: sequence [ 

@@ -1,7 +1,7 @@
 appl: swissparse
 [
 	doc: "Retrieves sequences from swissprot using keyword search"
-	groups: "PROTEIN: structure"
+	groups: "Edit, Feature Tables"
 ]
 
 infile: keyfile [

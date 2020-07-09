@@ -10,7 +10,7 @@
 
 appl: isochore [
 	doc: "Plots isochores in large DNA sequences"
-	groups: "DNA: sequence features, DNA: sequence composition"
+	groups: "Nucleic:Composition"
 ]
 
   sequence: sequence [ param: Y type: dna ]

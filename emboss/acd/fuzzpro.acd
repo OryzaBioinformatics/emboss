@@ -3,7 +3,7 @@
 
 appl: fuzzpro [
 	doc: "Protein pattern search"
-	group: "pattern matching"
+	groups: "Protein:Motifs"
 ]
 
 seqall: sequence [

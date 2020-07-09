@@ -10,7 +10,7 @@
 
 appl: seqretset [
 	doc: "Reads and writes (returns) a set of sequences all at once"
-	groups: "reformatting, sequence display"
+	groups: "Edit"
 ]
 
   seqset: sequence [ param: Y ]

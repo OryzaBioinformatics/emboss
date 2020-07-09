@@ -10,7 +10,7 @@
 
 appl: getorf [
 	doc: "Finds and extracts open reading frames (ORFs)"
-	group: "translation, gene finding"
+	groups: "Nucleic:Gene finding"
 ]
 
   seqall: sequence [

@@ -1,7 +1,7 @@
 
 appl: matcher [
         doc: "Finds the best local alignments between two sequences"
-        groups: "alignment: local"
+        groups: "Alignment:Local"
 ]
 
   sequence: sequencea [ param: Y type: any ]

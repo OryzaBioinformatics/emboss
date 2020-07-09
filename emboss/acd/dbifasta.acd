@@ -1,4 +1,4 @@
-appl: dbifasta [ group: "database: indexing"
+appl: dbifasta [ groups: "Utils:Database indexing"
                  doc: "Index a fasta database" ]
 
 bool: staden [ prompt: "Use staden index file names" ]

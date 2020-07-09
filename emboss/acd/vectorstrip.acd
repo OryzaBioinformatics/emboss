@@ -3,7 +3,7 @@
 
 appl: vectorstrip [
 	doc: "Strips out DNA between a pair of vector sequences"
-	group: "sequence editing"
+	groups: "Edit"
 ]
 
 seqall: sequence [

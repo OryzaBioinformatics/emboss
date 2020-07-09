@@ -5,7 +5,7 @@
 
 appl: abiview [
 	doc: "Reads ABI file and display the trace"
-	groups: "ABI trace files, sequence display"
+	groups: "Display"
 ]
 
   string: fname [

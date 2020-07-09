@@ -11,7 +11,7 @@
 
 appl: oddcomp [
         doc: "Finds protein sequence regions with a biased composition"     
-	group: "protein: sequence composition, protein: sequence features"
+	groups: "Protein:Motifs"
   ]
 
   seqall: sequence [

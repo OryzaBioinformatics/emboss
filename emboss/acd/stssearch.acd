@@ -10,7 +10,7 @@
 
 appl: stssearch [
 	doc: "Searches a DNA database for matches with a set of STS primers"
-	groups: "primers, sequence comparison"
+	groups: "Nucleic:Primers"
 ]
 
   seqall: sequences [ param: Y type: dna ]

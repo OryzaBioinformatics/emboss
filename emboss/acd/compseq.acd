@@ -10,7 +10,7 @@
 
 appl: compseq [
 	doc: "Counts the composition of dimer/trimer/etc words in a sequence"
-	group: "DNA: sequence composition, protein: sequence composition"
+	groups: "Nucleic:Composition, Protein:Composition"
   ]
 
   seqall: sequence [

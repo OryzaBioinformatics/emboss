@@ -7,7 +7,7 @@
 
 appl: complex [
 	doc: "Find the linguistic complexity in nucleotide sequences"
-	groups: "DNA: sequence properties"
+	groups: "Nucleic:Composition"
 ]
 
 

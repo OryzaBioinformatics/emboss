@@ -9,7 +9,7 @@
 
 appl: trimseq [
 	doc: "Trim ambiguous bits off the ends of sequences"
-	group: "sequence editing"
+	groups: "Edit"
 ]
 
   seqall: sequence [

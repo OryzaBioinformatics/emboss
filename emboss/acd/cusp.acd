@@ -1,6 +1,6 @@
 appl: cusp [
         doc: "Create a codon usage table"
-        groups: "translation,gene finding,DNA: sequence composition"
+        groups: "Nucleic:Codon usage"
 ]
 
  seqall: sequence [ param: Y type: DNA ]

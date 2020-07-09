@@ -1,6 +1,6 @@
 appl: coderet [
         doc: "Extract CDS, mRNA and translations from feature tables"
-        groups: "sequence features"
+        groups: "Feature tables, Nucleic:Translation"
 ]
 
 seqall: seqall [

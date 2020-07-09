@@ -4,7 +4,7 @@
 # ajb 14th April 1999
 appl: restrict [
 	doc: "Finds restriction enzyme cleavage sites"
-	groups: "DNA: sequence features, restriction enzymes"
+	groups: "Nucleic:Restriction"
 ]
 
   seqall: sequence [ param: Y type: DNA ]

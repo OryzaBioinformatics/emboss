@@ -11,8 +11,7 @@
 appl: seqretfeat [
 	doc: "Reads and writes (returns) a sequence and outputs the
 	feature table for it"
-	groups: "reformatting, sequence display, database: entry
-	extraction, features"
+	groups: "Test"
 ]
 
 ##  sequence: sequence [ param: Y feat: Y ]

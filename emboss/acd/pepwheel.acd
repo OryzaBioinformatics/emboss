@@ -5,7 +5,7 @@
 # ajb 16th March 1999
 appl: pepwheel [
 	doc: "Shows protein sequences as helices"
-	groups: "Protein: sequence properties, secondary structure"
+	groups: "Display, Protein:2D Structure"
 ]
 
   sequence: sequence [

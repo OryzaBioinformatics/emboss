@@ -4,7 +4,7 @@
 
 appl: tfm [
 	doc: "Displays a program's help documentation manual"
-	group: "utilities:help"
+	groups: "Information"
 ]
 
   string: program [

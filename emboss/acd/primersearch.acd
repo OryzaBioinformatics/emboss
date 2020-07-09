@@ -1,6 +1,6 @@
 appl: primersearch [
   documentation: "Searches DNA sequences for matches with primer pairs"
-  groups: "primers, comparison"
+  groups: "Nucleic:Primers"
 ]
 
 seqall: sequences  [

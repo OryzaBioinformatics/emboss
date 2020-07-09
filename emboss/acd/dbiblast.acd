@@ -1,4 +1,4 @@
-appl: dbiblast [ group: "database: indexing" doc: "Index a BLAST database" ]
+appl: dbiblast [ groups: "Utils:Database indexing" doc: "Index a BLAST database" ]
 
 bool: staden [ prompt: "Use staden index file names" ]
 

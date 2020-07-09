@@ -3,7 +3,7 @@
 
 appl: marscan [
 	doc: "Finds MAR/SAR sites in nucleic sequences"
-	group: "DNA: sequence features, gene finding"
+	groups: "Nucleic:Gene finding, Nucleic:Motifs"
 ]
 
 seqall: sequence [

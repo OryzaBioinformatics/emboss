@@ -1,6 +1,6 @@
 appl: banana [
         doc: "Bending and curvature plot in B-DNA"
-        groups: "DNA: sequence properties"
+        groups: "Nucleic:Composition"
 ]
 
   sequence: sequence [ param: y type: puredna ]

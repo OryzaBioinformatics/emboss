@@ -1,6 +1,6 @@
 appl: scope [
         doc: "Convert raw scop classification file to embl-like format"
-        groups: "PROTEIN: structure"
+        groups: "Utils:Database creation"
 ]
 
 

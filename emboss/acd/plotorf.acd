@@ -9,7 +9,7 @@
 
 appl: plotorf [
 	doc: "Plot potential open reading frames"
-	group: "coding regions, translation"
+	groups: "Nucleic:Gene finding, Nucleic:Translation"
 ]
 
   sequence: sequence [

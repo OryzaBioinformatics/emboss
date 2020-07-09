@@ -10,7 +10,7 @@
 
 appl: shuffleseq [
        doc: "Shuffles a set of sequences maintaining composition"
-       groups: "mutation"
+       groups: "Nucleic:Mutation, Protein:Mutation"
 ]
 
   seqall: sequence [ param: Y type: any]

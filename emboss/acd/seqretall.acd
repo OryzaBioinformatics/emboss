@@ -10,7 +10,7 @@
 
 appl: seqretall [
 	doc: "Reads and writes (returns) a set of sequences one at a time"
-	groups: "reformatting, sequence display, database: entry extraction"
+	groups: "Edit"
 ]
 
   seqall: sequence [ param: Y ]

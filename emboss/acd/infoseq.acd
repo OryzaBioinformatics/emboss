@@ -5,7 +5,7 @@
 
 appl: infoseq [
 	doc: "Displays some simple information about sequences"
-	group: "sequence information"
+	groups: "Edit, Information"
 ]
 
 seqall: sequence [

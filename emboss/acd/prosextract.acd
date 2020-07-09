@@ -5,7 +5,7 @@
 
 appl: prosextract [
 	doc: "Builds the PROSITE motif database for patmatmotifs to search"
-	groups: "motifs, utilities"
+	groups: "Utils:Database creation"
 ]
 	 
 string: infdat [ param: Y prompt: "Enter name of prosite directory" ]

@@ -5,7 +5,7 @@
 
 appl: cons [
 	doc: "Creates a consensus from multiple alignments"
-	groups: "profiles"
+	groups: "Alignment:Consensus"
 ]
 
   seqset: msf [ 

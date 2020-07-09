@@ -9,7 +9,7 @@
 
 appl: treetypedisplay [
 	doc: "test of graphics"
-	groups: "debugging"
+	groups: "Test"
 ]
 
   graph: graph [ req: Y ]

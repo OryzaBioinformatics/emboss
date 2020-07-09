@@ -1,6 +1,6 @@
 appl: lindna [
 	doc: "Draws linear maps of DNA constructs"
-	group: "sequence display"
+	groups: "Display"
 	]
 
 graph: graphout [

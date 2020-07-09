@@ -9,7 +9,7 @@
 
 appl: wobble [
 	doc: "Wobble base plot"
-	group: "DNA: sequence composition, transcription"
+	groups: "Nucleic:Gene finding"
 ]
 
   sequence: sequence [

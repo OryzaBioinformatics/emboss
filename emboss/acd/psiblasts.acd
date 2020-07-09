@@ -1,7 +1,7 @@
 appl: psiblasts
 [
 	doc: "Runs PSI-BLAST given scopalign alignments"
-	groups: "PROTEIN: structure"
+	groups: "Protein:3D Structure"
 ]
 
 string: align

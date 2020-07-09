@@ -1,6 +1,6 @@
 appl: iep [
         doc: "Calculates the isoelectric point of a protein"
-        groups: "protein: sequence properties"
+        groups: "Protein:Composition"
 ]
 
  seqall: sequencea [ param: Y type: pureprotein ]

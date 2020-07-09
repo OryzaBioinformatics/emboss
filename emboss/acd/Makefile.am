@@ -1,5 +1,5 @@
 
-pkgdata_DATA = codes.english emboss.default \
+pkgdata_DATA = codes.english \
 	abiview.acd ajbad.acd ajfeatest.acd ajtest.acd \
 	ajtest2.acd antigenic.acd backtranseq.acd banana.acd \
 	btwisted.acd cai.acd chaos.acd charge.acd checktrans.acd chips.acd \
@@ -10,14 +10,14 @@ pkgdata_DATA = codes.english emboss.default \
 	dbigcg.acd demofeatures.acd demolist.acd demosequence.acd \
 	demostring.acd demotable.acd descseq.acd diffseq.acd \
 	digest.acd domainer.acd dotmatcher.acd dotpath.acd dottup.acd \
-	dreg.acd einverted.acd embossdata.acd emma.acd \
+	dreg.acd einverted.acd embossdata.acd embossversion.acd emma.acd \
 	emowse.acd entrails.acd entret.acd equicktandem.acd \
 	est2genome.acd etandem.acd extractseq.acd findkm.acd \
 	freak.acd fuzznuc.acd fuzzpro.acd fuzztran.acd \
 	garnier.acd geecee.acd getorf.acd helixturnhelix.acd hmoment.acd \
 	histogramtest.acd iep.acd infoseq.acd isochore.acd \
-	lindna.acd marscan.acd maskfeat.acd maskseq.acd matcher.acd \
-	megamerger.acd merger.acd msbar.acd needle.acd \
+	lindna.acd marscan.acd maskfeat.acd maskseq.acd matcher.acd
+pkgdata2_DATA =	megamerger.acd merger.acd msbar.acd needle.acd \
 	newcpgreport.acd newcpgseek.acd newseq.acd noreturn.acd \
 	notseq.acd nrscope.acd nthseq.acd octanol.acd oddcomp.acd \
 	palindrome.acd pasteseq.acd patmatdb.acd patmatmotifs.acd \
@@ -27,12 +27,12 @@ pkgdata_DATA = codes.english emboss.default \
 	preg.acd prettyplot.acd prettyseq.acd prima.acd \
 	primersearch.acd printsextract.acd profit.acd prophecy.acd \
 	prophet.acd prosextract.acd proteinmotifsearch.acd pscan.acd \
-	rebaseextract.acd recode.acd redata.acd remap.acd \
+	rebaseextract.acd recoder.acd redata.acd remap.acd \
 	restover.acd restrict.acd revseq.acd scope.acd seealso.acd \
 	seqinfo.acd seqmatchall.acd seqret.acd seqretall.acd \
 	seqretallfeat.acd seqretfeat.acd seqretset.acd \
-	seqretsplit.acd seqrettype.acd seqtofeat.acd showdb.acd \
-	showfeat.acd showorf.acd showseq.acd shuffleseq.acd \
+	seqretsplit.acd seqrettype.acd seqtofeat.acd showalign.acd\
+	showdb.acd showfeat.acd showorf.acd showseq.acd shuffleseq.acd \
 	sigcleave.acd silent.acd simplesw.acd splitter.acd \
 	stamps.acd stretcher.acd stssearch.acd supermatcher.acd syco.acd \
 	testplot.acd textsearch.acd tfextract.acd tfm.acd \
@@ -41,3 +41,4 @@ pkgdata_DATA = codes.english emboss.default \
 	wordcount.acd wordmatch.acd wossname.acd
 
 pkgdatadir=$(prefix)/share/$(PACKAGE)/acd
+pkgdata2dir=$(prefix)/share/$(PACKAGE)/acd

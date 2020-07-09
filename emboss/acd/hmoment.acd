@@ -1,6 +1,6 @@
 appl: hmoment [
         doc: "Hydrophobic moment calculation"
-        groups: "PROTEIN: sequence properties"
+        groups: "Protein:2D Structure"
 ]
 
  seqall: seqall [ param: Y type: pureprotein ]

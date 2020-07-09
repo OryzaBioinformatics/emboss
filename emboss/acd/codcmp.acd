@@ -1,6 +1,6 @@
 appl: codcmp [
         doc: "Codon usage table comparison"
-        groups: "DNA: sequence composition"
+        groups: "Nucleic:Codon usage"
 ]
 
  codon: first [ param: Y info: "First codon usage file" ]

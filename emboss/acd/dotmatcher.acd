@@ -1,6 +1,6 @@
 appl: dotmatcher [
         doc: "Displays a thresholded dotplot of two sequences"
-        groups: "sequence comparison, DNA: sequence features, protein: sequence features"
+        groups: "Alignment:Dot plots"
 ]
 
   sequence: sequencea [ param: y type: any]

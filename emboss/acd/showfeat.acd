@@ -5,7 +5,7 @@
 
 appl: showfeat [
 	doc: "Show features of a sequence."
-	group: "sequence display"
+	groups: "Display, Feature tables"
 ]
 
   seqall: sequence [

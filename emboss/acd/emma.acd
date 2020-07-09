@@ -1,6 +1,6 @@
 appl: emma [
   documentation: "Multiple alignment program - interface to ClustalW program"
-  groups: "alignment: multiple"
+  groups: "Alignment:Multiple"
 ]
 
 seqall: inseqs  [

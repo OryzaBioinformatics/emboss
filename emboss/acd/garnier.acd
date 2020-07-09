@@ -1,6 +1,6 @@
 appl: garnier [
         doc: "Predicts protein secondary structure"
-        groups: "protein: sequence features, secondary structure"
+        groups: "Protein:2D Structure"
 ]
 
   seqall: sequencea [ param: Y type: PureProtein ]

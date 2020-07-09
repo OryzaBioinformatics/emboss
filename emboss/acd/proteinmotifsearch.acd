@@ -1,6 +1,6 @@
 appl: proteinmotifsearch [
 	doc: "test of pattern matching"
-	groups: "debugging"
+	groups: "Test"
 ]
 
   sequence: sequence [ param: Y type: protein]

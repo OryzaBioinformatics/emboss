@@ -1,6 +1,6 @@
 appl: syco [
         doc: "Synonymous codon usage Gribskov statistic plot"
-        groups: "sequence composition, gene finding"
+        groups: "Nucleic:Codon usage"
 ]
 
  sequence: sequence [ param: Y type: DNA ]

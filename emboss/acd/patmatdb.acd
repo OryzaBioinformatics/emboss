@@ -5,7 +5,7 @@
 
 appl: patmatdb [
 	doc: "Search a protein sequence with a motif"
-	groups: "motifs, pattern matching"
+	groups: "Protein:Motifs"
 ]
 
 seqall: sequence [

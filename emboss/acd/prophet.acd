@@ -10,7 +10,7 @@
 
 appl: prophet [
 	doc: "Gapped alignment for profiles"
-	group: "profiles"
+	groups: "Nucleic:Profiles, Protein:Profiles"
   ]
 
 
@@ -33,7 +33,7 @@ appl: prophet [
 
   float: gapextend [
         req: Y
-        def: 0.1
+        def: 1.0
         prompt: "Gap extension coefficient"
   ]
 

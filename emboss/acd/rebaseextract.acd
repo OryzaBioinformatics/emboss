@@ -4,7 +4,7 @@
 
 appl: rebaseextract [
 	doc: "Extract data from REBASE"
-	groups: "utilities, restriction enzymes"
+	groups: "Utils:Database creation"
 ]
 	 
 	infile: inf [param: Y  req: Y

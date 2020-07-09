@@ -1,6 +1,6 @@
 appl: pepinfo [
   documentation: "Plots simple amino acid properties in parallel"
-  groups: "protein: sequence properties"
+  groups: "Protein:Composition"
 ]
 
 sequence: inseq  [

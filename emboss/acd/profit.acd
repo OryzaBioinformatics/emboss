@@ -10,7 +10,7 @@
 
 appl: profit [
 	doc: "Scan a sequence or database with a matrix or profile"
-	group: "profiles"
+	groups: "Nucleic:Profiles, Protein:Profiles"
   ]
 
 

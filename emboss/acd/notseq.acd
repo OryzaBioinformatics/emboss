@@ -9,7 +9,7 @@
 
 appl: notseq [
 	doc: "Excludes a set of sequences and writes out the remaining ones"
-	groups: "reformatting, sequence display, database: entry extraction"
+	groups: "Edit"
 ]
 
   seqall: sequence [ param: Y]

@@ -1,4 +1,4 @@
-appl: dbigcg [ group: "database: indexing" doc: "Index a GCG formatted database" ]
+appl: dbigcg [ groups: "Utils:Database indexing" doc: "Index a GCG formatted database" ]
 
 bool: staden [ prompt: "Use staden index file names" ]
 

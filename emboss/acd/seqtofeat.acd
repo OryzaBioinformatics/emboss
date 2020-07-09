@@ -10,7 +10,7 @@
 
 appl: seqtofeat [
 	doc: "Reads a sequence, finds a pattern, and reports hits as features"
-	groups: "debugging"
+	groups: "Test"
 ]
 
   sequence: sequence [ param: Y feat: Y ]

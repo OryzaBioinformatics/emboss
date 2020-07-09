@@ -1,6 +1,6 @@
 appl: octanol [
         doc: "Displays protein hydropathy"
-        groups: "protein: sequence properties, hydropathy"
+        groups: "Protein:Composition"
 ]
 
   sequence: sequencea [ param: Y type: pureprotein ]

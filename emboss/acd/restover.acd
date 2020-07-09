@@ -1,6 +1,6 @@
 appl: restover [
 	doc: "Finds restriction enzymes that produce a specific overhang"
-	groups: "DNA: sequence features, restriction enzymes"
+	groups: "Nucleic:Restriction"
 ]
 
   seqall: sequence [ param: Y type: DNA ]

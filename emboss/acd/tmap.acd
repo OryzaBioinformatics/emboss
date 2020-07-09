@@ -1,6 +1,6 @@
 appl: tmap [
         doc: "Displays membrane spanning regions"
-        groups: "protein: sequence features"
+        groups: "Protein:2D Structure"
 ]
 
         seqset: msf [ 

@@ -1,6 +1,6 @@
 appl: emowse [
         doc: "Protein identification by mass spectrometry"
-        groups: "PROTEIN: sequence composition"
+        groups: "Protein:Composition"
 ]
 
  seqall: sequences [ param: Y type: protein ]

@@ -1,4 +1,4 @@
-appl: dbiflat [ group: "database: indexing" doc: "Index a flat file database" ]
+appl: dbiflat [ groups: "Utils:Database indexing" doc: "Index a flat file database" ]
 
 bool: staden [ prompt: "Use staden index file names" ]
 

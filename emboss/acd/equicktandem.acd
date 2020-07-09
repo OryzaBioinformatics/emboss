@@ -1,6 +1,6 @@
 appl: equicktandem [
 	doc: "Finds tandem repeats"
-	groups: "DNA: sequence features, repeats"
+	groups: "Nucleic:Repeats"
 ]
 
 

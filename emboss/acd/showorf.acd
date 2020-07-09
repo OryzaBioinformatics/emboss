@@ -1,6 +1,6 @@
 appl:  showorf [
         doc: "Pretty output of DNA translations"
-        groups: "coding regions, translation"
+        groups: "Nucleic:Gene finding, Nucleic:Translation"
 ]
 
  sequence: sequence [ param: Y type: DNA ]

@@ -1,6 +1,6 @@
 appl: charge [
         doc: "Protein charge plot"
-        groups: "PROTEIN: sequence properties"
+        groups: "Protein:Composition"
 ]
 
  seqall: seqall [ param: Y type: protein ]

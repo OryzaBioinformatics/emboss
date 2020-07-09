@@ -8,7 +8,7 @@
 
 appl:	findkm [
 	doc: "Find Km and Vmax for an enzyme reaction by a Hanes/Woolf plot" 
-	groups: "enzyme kinetics"
+	groups: "Enzyme Kinetics"
 ]
 
 infile:	infile [ 

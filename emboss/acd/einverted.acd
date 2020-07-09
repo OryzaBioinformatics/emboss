@@ -1,6 +1,6 @@
 appl: einverted [
 	doc: "Finds DNA inverted repeats"
-	groups: "DNA: sequence features, repeats"
+	groups: "Nucleic:Repeats, Nucleic:2D structure"
 ]
 
   sequence: sequence [ param: Y type: dna ]

@@ -2,7 +2,7 @@
 
 appl: extractseq [
 	doc: "Extract regions from a sequence"
-	group: "sequence editing"
+	groups: "Edit"
 ]
 
   seqall: sequence [ 

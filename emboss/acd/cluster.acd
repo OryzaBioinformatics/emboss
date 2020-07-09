@@ -10,7 +10,7 @@
 
 appl: cluster [
 	doc: "DNA sequence clustering"
-	groups: "cluster analysis, alignment: multiple"
+	groups: "Alignment:Consensus"
 ]
 
   infile: infile [

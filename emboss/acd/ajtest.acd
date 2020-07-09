@@ -10,7 +10,7 @@
 
 appl: ajtest [
         doc: "Test file for ACD parsing"
-        groups: "debugging"
+        groups: "Test"
 ]
 
   seqall: sequence [ param: Y]

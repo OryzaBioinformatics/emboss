@@ -1,6 +1,6 @@
 appl: cai [
         doc: "CAI codon adaptation index"
-        groups: "DNA: sequence composition, gene finding"
+        groups: "Nucleic:Codon usage"
 ]
 
  seqall: seqall [ param: Y type: DNA ]

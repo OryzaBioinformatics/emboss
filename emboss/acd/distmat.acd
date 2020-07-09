@@ -5,7 +5,7 @@
 
 appl: distmat [
 	doc: "Creates a distance matrix from multiple alignments"
-	groups: "phylogeny"
+	groups: "Phylogeny"
 ]
 
   seqset: msf [ 

@@ -7,7 +7,7 @@
 
 appl: palindrome [
 	doc: "Looks for inverted repeats in a nucleotide sequence"
-	groups: "DNA: sequence features, repeats"
+	groups: "Nucleic:Repeats"
 ]
 
   sequence: insequence [ param: Y type: nucleotide ]

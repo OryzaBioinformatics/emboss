@@ -1,6 +1,6 @@
 appl: plotcon [
 	doc: "Plots the quality of conservation of a sequence alignment"
-	groups: "display: alignment: multiple"
+	groups: "Alignment:Multiple"
 ]
 
   seqset: msf [ 

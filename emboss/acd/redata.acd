@@ -1,6 +1,6 @@
 appl: redata [
   documentation: "Search REBASE for enzyme name, references, suppliers etc."
-  groups: "DNA: sequence features, restriction enzymes"
+  groups: "Nucleic:Restriction"
 ]
 
 string: enzyme  [

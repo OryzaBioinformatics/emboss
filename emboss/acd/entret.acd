@@ -3,7 +3,7 @@
 
 appl: entret [
 	doc: "Reads and writes (returns) flatfile entries"
-	groups: "sequence display, database: entry extraction"
+	groups: "Edit"
 ]
 
   seqall: sequence [ param: Y entry: Y ]

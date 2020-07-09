@@ -5,7 +5,7 @@
 # ajb 11th March 1999
 appl: helixturnhelix [
 	doc: "Report nucleic acid binding motifs"
-	groups: "protein: sequence features, secondary structure, motifs"
+	groups: "Protein:2D Structure, Protein:Motifs"
 ]
 
   seqall: sequence [ param: Y type: PureProtein  ]

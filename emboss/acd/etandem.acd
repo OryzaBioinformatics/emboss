@@ -1,6 +1,6 @@
 appl: etandem [
 	doc: "Looks for tandem repeats in a nucleotide sequence"
-	groups: "DNA: sequence features, repeats"
+	groups: "Nucleic:Repeats"
 ]
 
   sequence: sequence [ param: Y type: dna ]

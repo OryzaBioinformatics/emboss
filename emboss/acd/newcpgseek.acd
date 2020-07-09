@@ -7,7 +7,7 @@
 
 appl: newcpgseek [
 	doc: "Reports CpG rich regions"
-	groups: "CpG islands, DNA: sequence features, DNA: sequence composition"
+	groups: "Nucleic:CpG Islands"
 ]
 
   seqall: sequence [ param: Y type: DNA ]

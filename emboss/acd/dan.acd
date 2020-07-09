@@ -7,7 +7,7 @@
 
 appl: dan [
 	doc: "Calculates DNA RNA/DNA melting temperature"
-	groups: "DNA: sequence properties"
+	groups: "Nucleic:Composition"
 ]
 
   seqall: sequence [

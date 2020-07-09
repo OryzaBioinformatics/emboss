@@ -10,7 +10,7 @@
 
 appl: transeq [
 	doc: "Translate nucleic acid sequences"
-	group: "translation"
+	groups: "Nucleic:Translation"
 ]
 
   seqall: sequence [

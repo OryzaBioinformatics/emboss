@@ -4,7 +4,7 @@
 # ajb 9th March 1999
 appl: pscan [
 	doc: "Scans proteins using PRINTS"
-	groups: "protein: sequence features, pattern matching, motifs"
+	groups: "Protein:Motifs"
 ]
 
   seqall: sequence [ param: Y type: Protein ]

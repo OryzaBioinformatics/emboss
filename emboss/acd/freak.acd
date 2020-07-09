@@ -1,6 +1,6 @@
 appl: freak [
         doc: "Residue/base frequency table or plot"
-        groups: "DNA: sequence composition"
+        groups: "Nucleic:Composition"
 ]
 
  seqall: seqall [ param: Y type: any ]

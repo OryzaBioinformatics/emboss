@@ -1,7 +1,7 @@
 appl: nrscope 
 [
         doc: "Converts redundant EMBL-format SCOP file to non-redundant one"
-	groups: "PROTEIN: structure"
+	groups: "Utils:Database creation"
 ]
 
 
@@ -40,13 +40,14 @@ float: thresh
 [
 	param: Y
 	prompt: "The % sequence identity redundancy threshold"
-	def: 95
+	def: 95.0
 ]
 
 matrixf: datafile 
 [
 	param: Y
-	prompt: "Residue substitution file"
+	prompt: "Residue substitution matrix"
+	default: "EBLOSUM62"
 ]	
 
 float: gapopen 

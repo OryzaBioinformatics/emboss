@@ -9,7 +9,7 @@
 
 appl: pasteseq [
 	doc: "Insert one sequence into another"
-	group: "sequence editing"
+	groups: "Edit"
 ]
 
   sequence: sequence [ 

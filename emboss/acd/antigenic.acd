@@ -5,7 +5,7 @@
 # ajb 9th March 1999
 appl: antigenic [ 
 	doc: "Finds antigenic sites in proteins" 
-	groups: "protein: sequence features"
+	groups: "Protein:Motifs"
 ]
 
   seqall: sequence [ param: Y type: PureProtein ]

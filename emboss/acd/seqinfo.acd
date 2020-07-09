@@ -12,7 +12,7 @@
 
 appl: seqinfo [
 	doc: "Returns sequence information"
-	groups: "sequence information"
+	groups: "Test"
 ]
 
   seqall: sequence [ param: Y ]

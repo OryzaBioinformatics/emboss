@@ -1,6 +1,6 @@
 appl: remap [
 	doc: "Display a sequence with restriction cut sites, translation etc.."
-	group: "sequence display, restriction enzymes, translation"
+	groups: "Display, Nucleic:Restriction, Nucleic:Translation"
 ]
 
   seqall: sequence [ 

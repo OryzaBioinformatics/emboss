@@ -5,7 +5,7 @@
 
 appl: corbatest [
 	doc: "Test of EMBL corba retrieval"
-	groups: "DNA: sequence retrieval"
+	groups: "Test"
 ]
 
 string: entry [

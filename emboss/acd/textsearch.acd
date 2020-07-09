@@ -4,7 +4,7 @@
 
 appl: textsearch [
   doc: "Search sequence documentation text. SRS and Entrez are faster!"
-  group: "sequence information, text search"
+  groups: "Display, Information"
 ]
 
 seqall: sequence [

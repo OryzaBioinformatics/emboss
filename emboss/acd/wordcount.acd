@@ -10,7 +10,7 @@
 
 appl: wordcount [
 	doc: "Counts words of a specified size in a DNA sequence"
-	groups: "DNA: sequence composition"
+	groups: "Nucleic:Composition"
 ]
 
   sequence: sequence [ param: Y type: dna]

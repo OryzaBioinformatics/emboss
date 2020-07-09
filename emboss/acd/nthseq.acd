@@ -3,7 +3,7 @@
 
 appl: nthseq [
 	doc: "Writes one sequence from a multiple set of sequences"
-	groups: "sequence editing"
+	groups: "Edit"
 ]
 
   seqall: sequence [

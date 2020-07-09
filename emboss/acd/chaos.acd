@@ -8,7 +8,7 @@
 
 appl: chaos [
 	doc: "Create a chaos game representation plot for a sequence"
-	groups: "DNA: sequence features, DNA: sequence composition"
+	groups: "Nucleic:Composition"
 ]
 
 

@@ -1,6 +1,6 @@
 appl: pepstats [
         doc: "Protein statistics"
-        groups: "protein: sequence properties"
+        groups: "Protein:Composition"
 ]
 
   sequence: sequencea [ param: Y type: PureProtein ]

@@ -10,7 +10,7 @@
 
 appl: seqmatchall [
 	doc: "Does an all-against-all comparison of a set of sequences"
-	groups: "sequence comparison"
+	groups: "Alignment:Local"
 ]
 
 seqset: sequence [

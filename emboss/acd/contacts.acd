@@ -1,7 +1,7 @@
 appl: contacts
 [
 	doc: "Reads a coordinate file and writes a contact file"
-	groups: "PROTEIN: structure"
+	groups: "Protein:3D Structure"
 ]
 
 string: cpdb

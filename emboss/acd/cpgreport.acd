@@ -5,7 +5,7 @@
 # ajb 14th March 1999
 appl: cpgreport [
 	doc: "Reports all CpG rich regions"
-	groups: "CpG islands, DNA: sequence features"
+	groups: "Nucleic:CpG Islands"
 ]
 
   seqall: sequence [ 

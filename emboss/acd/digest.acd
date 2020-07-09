@@ -1,6 +1,6 @@
 appl: digest [
         doc: "Protein proteolytic enzyme or reagent cleavage digest"
-        groups: "protein: sequence properties"
+        groups: "Protein:Motifs"
 ]
 
   sequence: sequencea [ 

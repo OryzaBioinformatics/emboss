@@ -3,7 +3,7 @@
 
 appl: fuzztran [
 	doc: "Protein pattern search after translation"
-	group: "pattern matching"
+	groups: "Nucleic:Motifs, Protein:Motifs"
 ]
 
 seqall: sequence [

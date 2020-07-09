@@ -1,6 +1,6 @@
 appl: patmattest [
 	doc: "test of pattern matching"
-	groups: "debugging"
+	groups: "Test"
 ]
 
   sequence: sequence [ param: Y type: any ]

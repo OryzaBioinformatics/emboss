@@ -1,6 +1,6 @@
 appl: testplot [
         doc: "test"
-        groups: "debugging"
+        groups: "Test"
 ]
 
 

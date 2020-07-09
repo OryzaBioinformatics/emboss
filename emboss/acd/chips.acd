@@ -1,6 +1,6 @@
 appl: chips [
         doc: "Codon usage statistics"
-        groups: "DNA: sequence composition, gene finding"
+        groups: "Nucleic:Codon usage"
 ]
 
  seqall: seqall [ param: Y type: DNA ]

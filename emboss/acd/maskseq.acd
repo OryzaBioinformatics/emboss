@@ -10,7 +10,7 @@
 
 appl: maskseq [
 	doc: "Mask off regions of a sequence."
-	group: "sequence editing"
+	groups: "Edit"
 ]
 
   sequence: sequence [

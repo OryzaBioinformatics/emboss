@@ -1,6 +1,6 @@
 appl: showseq [
 	doc: "Display a sequence with features, translation etc.."
-	group: "sequence display, restriction enzymes, translation, DNA: sequence features, protein: sequence features"
+	groups: "Display, Nucleic:Translation, Nucleic:Restriction"
 ]
 
   seqall: sequence [ 

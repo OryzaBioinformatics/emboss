@@ -9,7 +9,7 @@
 
 appl:	embossdata [ 
 	doc: "Finds or fetches the data files read in by the EMBOSS programs"
-	groups: "utilities"
+	groups: "Utils:Misc"
 ]
 
 outfile: outf [

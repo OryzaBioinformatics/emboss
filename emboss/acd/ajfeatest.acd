@@ -10,7 +10,7 @@
 
 appl: ajfeatest [
 	doc: "Reads and writes (returns) a sequence and its features"
-	groups: "reformatting, sequence display, database: entry extraction"
+	groups: "Test"
 ]
 
   sequence: sequence [ param: Y type: any features: Y]

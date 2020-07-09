@@ -10,7 +10,7 @@
 
 appl: seqrettype [
 	doc: "Reads and writes (returns) a sequence of a specified type"
-	groups: "reformatting, sequence display, database: entry extraction"
+	groups: "Edit"
 ]
 
   select: type [ req: y delim: "," prompt: "Sequence type"

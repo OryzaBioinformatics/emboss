@@ -1,6 +1,6 @@
 appl: pepwindowall [
         doc: "Displays protein hydropathy of a set of sequences"
-        groups: "protein: sequence properties, hydropathy"
+        groups: "Protein:Composition"
 ]
 
   seqset: msf [ 

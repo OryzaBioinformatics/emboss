@@ -10,7 +10,7 @@
 
 appl: degapseq [
 	doc: "Removes gap characters from sequences"
-	groups: "reformatting"
+	groups: "Edit"
 ]
 
 seqall: sequence [ 

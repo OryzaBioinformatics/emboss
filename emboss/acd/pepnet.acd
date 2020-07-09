@@ -4,7 +4,7 @@
 # ajb 17th March 1999
 appl: pepnet [
 	doc: "Displays proteins as a helical net"
-	groups: "Protein: sequence properties, secondary structure"
+	groups: "Display, Protein:2D Structure"
 ]
 
   sequence: sequence [

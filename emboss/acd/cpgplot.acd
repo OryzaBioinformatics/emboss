@@ -5,12 +5,12 @@
 # ajb 14th March 1999
 appl: cpgplot [
 	doc: "Plot CpG rich areas"
-	groups: "CpG islands, DNA: sequence features"
+	groups: "Nucleic:CpG Islands"
 ]
 
   seqall: sequence [ 
 	param: Y 
-	type: DNA 
+	type: PUREDNA 
   ]
 
   int: window [ 

@@ -1,6 +1,6 @@
 appl: cirdna [
 	doc: "Draws circular maps of DNA constructs"
-	group: "sequence display"
+	groups: "Display"
 	]
 
 graph: graphout [

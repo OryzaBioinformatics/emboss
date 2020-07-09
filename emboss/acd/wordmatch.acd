@@ -10,7 +10,7 @@
 
 appl: wordmatch [
 	doc: "Finds all exact matches of a given size between 2 sequences"
-	groups: "sequence comparison"
+	groups: "Alignment:Local"
 ]
 
   sequence: asequence [ param: Y type: any ]

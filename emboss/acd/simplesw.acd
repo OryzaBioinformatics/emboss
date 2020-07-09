@@ -1,6 +1,6 @@
 appl: simplesw [
         doc: "Simple Smith-Waterman alignment."
-        groups: "alignment: local"
+        groups: "Alignment:Local"
 ]
 
   sequence: sequencea [ param: Y type: any ]

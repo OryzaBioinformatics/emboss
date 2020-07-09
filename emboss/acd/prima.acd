@@ -4,7 +4,7 @@
 # AJAX COMMAND DEFINITION (ACD) FILE
 
 appl: 	prima [ doc: "Selects primers for PCR and DNA amplification."
-	        groups: "primers" ]
+	        groups: "Nucleic:Primers" ]
 
 sequence: sequence [param: "Y" req: "Y" ]
 

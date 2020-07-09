@@ -1,6 +1,6 @@
 appl: checktrans [
         doc: "Reports STOP codons and ORF statistics of a protein sequence"
-        groups: "protein: sequence properties"
+        groups: "Protein:Composition"
 ]
 
   seqall: sequence [ 

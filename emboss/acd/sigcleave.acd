@@ -5,7 +5,7 @@
 # ajb 14th March 1999
 appl: sigcleave [
 	doc: "Reports protein signal cleavage sites"
-	groups: "protein: sequence features, secondary structure"
+	groups: "Protein:Motifs"
 ]
 
   seqall: sequence [ param: Y type: PureProtein ]

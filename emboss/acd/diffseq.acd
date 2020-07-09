@@ -3,7 +3,7 @@
 
 appl: diffseq [
 	doc: "Find differences (SNPs) between nearly identical sequences"
-	groups: "comparison, DNA: sequence features, protein: sequence features"
+	groups: "Alignment:Differences"
 ]
 
   sequence: asequence [

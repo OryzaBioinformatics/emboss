@@ -1,6 +1,6 @@
 appl: needle [
         doc: "Needleman-Wunsch global alignment."
-        groups: "alignment: global"
+        groups: "Alignment:Global"
 ]
 
   sequence: sequencea [ param: Y type: any]
