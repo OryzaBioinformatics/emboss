@@ -13,7 +13,7 @@ simplesw testplot treetypedisplay
 bin_PROGRAMS = acdc antigenic \
 backtranseq banana btwisted \
 chaos checktrans chips cirdna codcmp complex \
-compseq cpgplot cpgreport cusp cutseq \
+compseq cons cpgplot cpgreport cusp cutseq \
 dan dbiblast dbifasta dbiflat dbigcg \
 descseq diffseq digest dotmatcher dotpath dottup dreg \
 einverted embossdata emma emowse \
@@ -61,6 +61,7 @@ cirdna_SOURCES = cirdna.c
 codcmp_SOURCES = codcmp.c
 complex_SOURCES = complex.c
 compseq_SOURCES = compseq.c
+cons_SOURCES = cons.c
 cpgplot_SOURCES = cpgplot.c
 cpgreport_SOURCES = cpgreport.c
 cusp_SOURCES = cusp.c

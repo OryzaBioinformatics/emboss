@@ -163,7 +163,7 @@ int main(int argc, char **argv)
 	    ajGraphxyXtitleC(graph,"pH");
 	    ajGraphxyYtitleC(graph,"Charge");
 
-	    ajGraphDataxySetTypeC(phGraph,"2D Plot");
+	    ajGraphDataxySetTypeC(phGraph,"2D Plot Float");
 	    ajGraphDataxySetMaxMin(phGraph,1.0,14.0,minchg,maxchg);
 	    ajGraphDataxySetMaxima(phGraph,1.0,14.0,minchg,maxchg);
 	    ajGraphxySetXStart(graph,1.0);

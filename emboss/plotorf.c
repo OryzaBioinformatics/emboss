@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 	ajGraphxySetOverLap(graph,ajFalse);
 	ajGraphxySetYTick(graph, ajFalse);
 	ajGraphDataxySetMaxima(data,(float)beg,(float)end,0.0,1.0);
-	ajGraphDataxySetTypeC(data,"Multi 2D Plot");
+	ajGraphDataxySetTypeC(data,"Multi 2D Plot Small");
 	ajGraphxyDataSetYtitleC(data,"Orf");
 	ajGraphxyDataSetXtitleC(data,"Sequence");
 	ajGraphxyDataSetTitleC(data,ftit[i]);

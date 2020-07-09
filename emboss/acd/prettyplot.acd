@@ -3,11 +3,6 @@ appl: prettyplot [
 	groups: "display: alignment: multiple"
 ]
 
-	bool: data [
-	opt: N
-	def: N
-	]
-
 	seqset: msf [ 
 	param: Y
 	type: gapany
@@ -192,6 +187,11 @@ appl: prettyplot [
 	optional: Y
 	info: "Print residue scores"
 	def: -1
+	]
+
+	bool: data [
+	opt: N
+	def: N
 	]
 
 	graph: graph [

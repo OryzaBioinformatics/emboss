@@ -236,7 +236,7 @@ int main (int argc, char *argv[])
     ajGraphDataxyMaxMin(S,N,&amin,&amax);
     ajGraphDataxyMaxMin(V,N,&bmin,&bmax);
     ajGraphDataxySetMaxima(xygraph,amin,amax,bmin,bmax);
-    ajGraphDataxySetTypeC(xygraph,"2D Plot");
+    ajGraphDataxySetTypeC(xygraph,"2D Plot Float");
     
     xygraph2 = ajGraphxyDataNewI(N);    
     ajGraphxyAddDataPtrPtr(xygraph2, xdata, ydata);  
