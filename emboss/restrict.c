@@ -99,6 +99,10 @@ int main(int argc, char **argv)
     nameit     = ajAcdGetBool("name");
     dfile      = ajAcdGetString("datafile");
     
+    if (!blunt  && !sticky)
+	ajFatal("Blunt/Sticky end cutters shouldn't both be disabled.");
+
+
     if(single) max=min=1;
     
     table = ajStrTableNew(EQUGUESS);

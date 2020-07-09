@@ -32,7 +32,11 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
+#ifndef _AIX
 #include <sys/fcntl.h>
+#else
+#include <fcntl.h>
+#endif
 #include <string.h>
 
 #ifndef MAP_FILE      /* Solaris does not have MAP_FILE */

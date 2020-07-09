@@ -4961,7 +4961,7 @@ static AjBool seqReadABIInt4(AjPFile fp,ajlong *i4)
 
     unsigned char buf[sizeof(ajlong)];
 
-    if (ajFileRead((void *)buf,sizeof(buf),1,fp) != 1) return ajFalse;
+    if (ajFileRead((void *)buf,4,1,fp) != 1) return ajFalse;
     *i4 = (ajlong)
         (((ajulong)buf[3]) +
          ((ajulong)buf[2]<<8) +
@@ -4988,7 +4988,7 @@ static AjBool seqABIReadFloat4(AjPFile fp,float* f4)
 
     unsigned char buf[sizeof(ajlong)];
 
-    if (ajFileRead((void *)buf,sizeof(buf),1,fp) != 1)
+    if (ajFileRead((void *)buf,4,1,fp) != 1)
          return ajFalse;
     *f4 = (ajlong)
         (((ajulong)buf[3]) +
@@ -5014,7 +5014,7 @@ static AjBool seqABIReadInt2(AjPFile fp, ajshort *i2)
 {
      unsigned char buf[sizeof(ajshort)];
 
-    if (ajFileRead((void *)buf,sizeof(buf),1,fp) != 1)
+    if (ajFileRead((void *)buf,2,1,fp) != 1)
          return ajFalse;
     *i2 = (ajshort)
         (((ajushort)buf[1]) +

@@ -42,7 +42,17 @@ Description
    individual sequences of 8 (AATAAYAA) and 16 bp (AWWRTAANNWWGNNNC)
    within a 200 bp distance from each other. One mismatch is allowed in
    the 16 bp pattern. The patterns can occur on either strand of the DNA
-   with respect to each other.
+   with respect to each other. The 8 bp and the 16 bp sites can overlap.
+   
+   Where there are many possible MRS sites caused by many 8 bp and/or 16
+   bp pattern sites located within 200 bp of each other, then only the 8
+   bp site and the 16 bp site that occur closest to each other are
+   reported.
+   
+   Once a MRS has been reported, no more sites will be looked for within
+   200 bp of that site. This reduces (but maybe will not totally
+   eliminate) over-reporting of the clusters of MRS's that tend to occur
+   within a MAR/SAR.
    
    Not all SARs contain a MRS. Analysis of >300 kb of genomic sequence
    from a variety of eukaryotic organisms shows that the MRS faithfully
@@ -56,7 +66,7 @@ Usage
 % marscan
 marscan
 Finds MAR/SAR sites in nucleic sequences
-Input sequence(s): EMBL:BVJDUN
+Input sequence(s): EMBL:u01317
 Output file [hsfau1.marscan]:
 
 Command line arguments
@@ -100,11 +110,29 @@ Output file format
      _________________________________________________________________
    
 ##gff-version 0.0
-##date 2001-02-12
-##sequence-region BVJDUN 0 0
-BVJDUN  marscan misc_signal     4604    4633    1.0     .       .       note "M
-AR/SAR recognition site (MRS). 8bp pattern=4604..4611. 16bp pattern = 4618..463
-3"
+##date 2001-02-21
+##sequence-region HSHBB 0 0
+HSHBB   marscan misc_signal     2242    2458    1.0     .       .       note "M
+AR/SAR recognition site (MRS). 8bp pattern=2451..2458. 16bp pattern = 2242..225
+7"
+HSHBB   marscan misc_signal     17654   17730   1.0     .       .       note "M
+AR/SAR recognition site (MRS). 8bp pattern=17723..17730. 16bp pattern = 17654..
+17669"
+HSHBB   marscan misc_signal     40956   41123   1.0     .       .       note "M
+AR/SAR recognition site (MRS). 8bp pattern=40956..40963. 16bp pattern = 41108..
+41123"
+HSHBB   marscan misc_signal     42232   42248   1.0     .       .       note "M
+AR/SAR recognition site (MRS). 8bp pattern=42232..42239. 16bp pattern = 42233..
+42248"
+HSHBB   marscan misc_signal     47834   47966   1.0     .       .       note "M
+AR/SAR recognition site (MRS). 8bp pattern=47959..47966. 16bp pattern = 47834..
+47849"
+HSHBB   marscan misc_signal     65112   65146   1.0     .       .       note "M
+AR/SAR recognition site (MRS). 8bp pattern=65139..65146. 16bp pattern = 65112..
+65127"
+HSHBB   marscan misc_signal     65947   65963   1.0     .       .       note "M
+AR/SAR recognition site (MRS). 8bp pattern=65947..65954. 16bp pattern = 65948..
+65963"
      _________________________________________________________________
    
 Data files

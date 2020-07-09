@@ -120,8 +120,12 @@ static void cvt_p(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 static void cvt_u(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 		  ajuint* flags, ajint width, ajint precision);
 
-
-
+#if defined(HAVE64)
+static ajlong sc_long(const char *str);
+static ajulong sc_ulong(const char *str);
+static ajulong sc_hex(const char *str);
+static ajulong sc_octal(const char *str);
+#endif
 
 /* @funcstatic c_isin ********************************************************
 **
@@ -224,20 +228,38 @@ static void cvt_d(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
     char *p = buf + sizeof buf;
 
     if (flags['l'])
+    {
 	val = (long) va_arg(VA_V(ap), long);
+#if defined(HAVE64)
+	hval = val;
+#endif
+    }
     else if(flags['L'])
     {
 #if defined(HAVE64)
 	hval = (ajlong) va_arg(VA_V(ap),ajlong);
 	val = hval;
 #else
-	ajFatal("Cannot use %%Ld on 32 bit machines");
+	val = (long) va_arg(VA_V(ap), long);
+	ajDebug("Warning: Use of %%Ld on a 32 bit model");
 #endif
     }
     else if (flags['h'])
-	val = (long) va_arg(VA_V(ap), int); /* ANSI C converts short to ajint */
-    else
+    {
+	/* ANSI C converts short to ajint */
 	val = (long) va_arg(VA_V(ap), int);
+#if defined(HAVE64)
+	hval = val;
+#endif
+    }
+    else
+    {
+	val = (long) va_arg(VA_V(ap), int);
+#if defined(HAVE64)
+	hval = val;
+#endif
+    }
+    
 
 #if defined(HAVE64)
     if (hval == INT_MIN)
@@ -293,8 +315,10 @@ static void cvt_d(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 static void cvt_u(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 		  ajuint* flags, ajint width, ajint precision)
 {
-    unsigned long m;
-
+    unsigned long m=0;
+#if defined(HAVE64)
+    ajulong  hm=0;
+#endif
     char buf[43];
     char *p = buf + sizeof buf;
 
@@ -303,13 +327,27 @@ static void cvt_u(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
     else if(flags['h'])
 	/* ANSI C converts short to ajint */
 	m  = va_arg(VA_V(ap), unsigned int);
+    else if(flags['L'])
+    {
+#if defined(HAVE64)
+	hm = va_arg(VA_V(ap), ajulong);
+#else
+	m  = va_arg(VA_V(ap), unsigned long);
+	ajDebug("Warning: Use of %%L on 32 bit model");
+#endif
+    }
     else
 	m  = va_arg(VA_V(ap), unsigned int);
 
+#if !defined(HAVE64)
     do
 	*--p = ajSysItoC(m%10 + '0');
     while((m /= 10) > 0);
-
+#else
+    do
+	*--p = ajSysItoC((int)(hm%(ajulong)10 + '0'));
+    while((hm /= (ajulong)10) > 0);
+#endif
     ajFmtPutd(p, (buf + sizeof buf) - p, put, cl, flags,
 	      width, precision);
 
@@ -334,21 +372,39 @@ static void cvt_u(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 static void cvt_o(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 		  ajuint* flags, ajint width, ajint precision)
 {
-    unsigned long m;
+    unsigned long m=0;
     char buf[43];
     char *p = buf + sizeof buf;
+#if defined(HAVE64)
+    ajulong hm=0;
+#endif
 
     if(flags['l'])
 	m = va_arg(VA_V(ap), unsigned long);
     if(flags['h'])
 	/* ANSI C converts short to ajint */
 	m = va_arg(VA_V(ap), unsigned int);
+    else if(flags['L'])
+    {
+#if defined(HAVE64)
+	hm = (ajulong) va_arg(VA_V(ap), ajulong);
+#else
+	m = va_arg(VA_V(ap), unsigned long);
+	ajDebug("Warning: Use of %%Lo on a 32 bit model");
+#endif
+    }
     else
 	m = va_arg(VA_V(ap), unsigned int);
 
+#if !defined(HAVE64)
     do
 	*--p = ajSysItoC((m&0x7) + '0');
     while((m>>= 3) != 0);
+#else
+    do
+	*--p = ajSysItoC((int)((hm&0x7) + '0'));
+    while((hm>>= 3) != 0);
+#endif
 
     if(flags['#'])
 	*--p = '0';
@@ -377,7 +433,10 @@ static void cvt_o(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 static void cvt_x(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 		  ajuint* flags, ajint width, ajint precision)
 {
-    unsigned long m;
+    unsigned long m=0;
+#if defined(HAVE64)
+    ajulong hm=0;
+#endif
     char buf[43];
     char *p = buf + sizeof buf;
 
@@ -386,6 +445,15 @@ static void cvt_x(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
     else if(flags['h'])
 	/* ANSI C converts short to int */
 	m = va_arg(VA_V(ap), unsigned int);
+    else if(flags['L'])
+    {
+#if defined(HAVE64)
+	hm = va_arg(VA_V(ap), ajulong);
+#else
+	m = va_arg(VA_V(ap), unsigned long);
+	ajDebug("Warning: Use of %%Lx on a 32 bit model");
+#endif
+    }
     else
 	m = va_arg(VA_V(ap), unsigned int);
 
@@ -397,9 +465,15 @@ static void cvt_x(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
     }
     else
     {
+#if !defined(HAVE64)
 	do
 	    *--p = "0123456789abcdef"[m&0xf];
 	while((m>>= 4) != 0);
+#else
+	do
+	    *--p = "0123456789abcdef"[hm&0xf];
+	while((hm>>= 4) != 0);
+#endif
     }
 
     while(precision > buf+sizeof(buf)-p)
@@ -443,6 +517,7 @@ static void cvt_p(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
     do
 	*--p = "0123456789abcdef"[m&0xf];
     while((m>>= 4) != 0);
+
     ajFmtPutd(p, (buf + sizeof buf) - p, put, cl, flags,
 	      width, precision);
 
@@ -1745,8 +1820,16 @@ static ajint ajFmtVscan(char *thys,const char *fmt,va_list ap)
 	
 	/* If *q isn't '%' then it must match *p */
 	if(*q != '%')
+	{
 	    if(*q!=*p)
 		break;
+	    else
+	    {
+		++p;
+		++q;
+		continue;
+	    }
+	}
 	
 	/* Check for %% */
 	if(*(++q)=='%')
@@ -1919,9 +2002,12 @@ static void scvt_d(char *fmt, char **pos, VALIST ap, ajint width,
 	    else
 	    {
 #if defined(HAVE64)    
-		sscanf(ajStrStr(t),"%Ld",&hn);
+		hn = sc_long(ajStrStr(t));
 #else
-		ajFatal("Cannot use %%Ld on 32 bit machines");
+		val = hval;
+		sscanf(ajStrStr(t),"%ld",&n);
+		hn = n;
+		ajDebug("Warning: Use of %%Ld on a 32 bit model");
 #endif
 	    }
 	    if(flag=='h')
@@ -1996,14 +2082,16 @@ static void scvt_x(char *fmt, char **pos, VALIST ap, ajint width,
 		if(sscanf(ajStrStr(t),"%lx",&n)!=1)
 		    return;
 	    }
-
 	    else
 	    {
 #if defined(HAVE64)
-		if(sscanf(ajStrStr(t),"%Lx",&n)!=1)
-		    return;
+		hn = sc_hex(ajStrStr(t));
 #else
-		ajFatal("Cannot use %%Lx on 32 bit machines");
+		val = hval;
+		if(sscanf(ajStrStr(t),"%lx",&n)!=1)
+		    return;
+		hn = n;
+		ajDebug("Warning: Use of %%Lx on a 32 bit model");
 #endif
 	    }
 
@@ -2204,10 +2292,13 @@ static void scvt_o(char *fmt, char **pos, VALIST ap, ajint width,
 	    else
 	    {
 #if defined(HAVE64)
-		if(sscanf(ajStrStr(t),"%Lo",&hn)!=1)
-		    return;
+		hn = sc_octal(ajStrStr(t));
 #else
-		ajFatal("Cannot use %%Lo on 32 bit machines");
+		val = hval;
+		if(sscanf(ajStrStr(t),"%lo",&n)!=1)
+		    return;
+		hn = n;
+		ajDebug("Warning: Use of %%Lo on a 32 bit model");
 #endif
 	    }
 
@@ -2287,10 +2378,13 @@ static void scvt_u(char *fmt, char **pos, VALIST ap, ajint width,
 	    else
 	    {
 #if defined(HAVE64)
-		if(sscanf(ajStrStr(t),"%Lu",&hn)!=1)
-		    return;
+		hn = sc_ulong(ajStrStr(t));
 #else
-		ajFatal("Cannot use %%Lu on 32 bit machines");
+		val = hval;
+		if(sscanf(ajStrStr(t),"%lu",&n)!=1)
+		    return;
+		hn = n;
+		ajDebug("Warning: Use of %%Lu on a 32 bit model");
 #endif
 	    }
 
@@ -2630,3 +2724,117 @@ static void scvt_z(char *fmt, char **pos, VALIST ap, ajint width,
 
     return;
 }
+
+
+#if defined(HAVE64)
+/* @funcstatic sc_long ***************************************************
+**
+** Load a 64 bit long from a char*
+**
+** @param [r] str [const char*] long number
+** @return [ajlong] result
+** @@
+******************************************************************************/
+static ajlong sc_long(const char *str)
+{
+    ajlong v=0;
+    ajint d;
+    char *p;
+    char c;
+    
+    p = (char *)str;
+    
+    while((c=*(p++)))
+    {
+	d = c - '0';
+	v = (ajlong)10*v + (ajlong)d;
+    }
+    
+    return v;
+}
+
+
+/* @funcstatic sc_ulong ***************************************************
+**
+** Load a 64 bit unsigned long from a char*
+**
+** @param [r] str [const char*] long number
+** @return [ajulong] result
+** @@
+******************************************************************************/
+static ajulong sc_ulong(const char *str)
+{
+    ajulong v=0;
+    ajint d;
+    char *p;
+    char c;
+    
+    p = (char *)str;
+    
+    while((c=*(p++)))
+    {
+	d = c - '0';
+	v = (ajulong)10*v + (ajulong)d;
+    }
+    
+    return v;
+}
+
+/* @funcstatic sc_hex ***************************************************
+**
+** Load a 64 bit unsigned long from a char* hexadecimal
+**
+** @param [r] str [const char*] long hex number
+** @return [ajulong] result
+** @@
+******************************************************************************/
+
+static ajulong sc_hex(const char *str)
+{
+    ajulong v=0;
+    ajint d;
+    char *p;
+    char c;
+    
+    p = (char *)str+2;
+    
+    while((c=toupper((int)*(p++))))
+    {
+	if(c>='0' && c<='9')
+	    d = c - '0';
+	else
+	    d = c - 'A' + 10;
+	v = (ajulong)16*v + (ajulong)d;
+    }
+    
+    return v;
+}
+
+
+/* @funcstatic sc_octal ***************************************************
+**
+** Load a 64 bit unsigned long from a char* octal
+**
+** @param [r] str [const char*] long hex number
+** @return [ajulong] result
+** @@
+******************************************************************************/
+
+static ajulong sc_octal(const char *str)
+{
+    ajulong v=0;
+    ajint d;
+    char *p;
+    char c;
+    
+    p = (char *)str+1;
+    
+    while((c=toupper((int)*(p++))))
+    {
+	d = c - '0';
+	v = (ajulong)8*v + (ajulong)d;
+    }
+    
+    return v;
+}
+#endif

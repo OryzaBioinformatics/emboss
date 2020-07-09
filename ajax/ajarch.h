@@ -39,11 +39,11 @@ typedef unsigned long long ajulong;
 #ifdef AJ_SolarisLF
 #define HAVE64
 typedef int ajint;
-typedef off_t ajlong;
+typedef long long ajlong;
 typedef unsigned int ajuint;
 typedef short ajshort;
 typedef unsigned short ajushort;
-typedef unsigned long ajulong;
+typedef unsigned long long ajulong;
 #define ftell(a) ftello(a)
 #define fseek(a,b,c) fseeko(a,b,c)
 #endif

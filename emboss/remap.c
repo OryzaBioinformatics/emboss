@@ -128,7 +128,9 @@ int main(int argc, char **argv)
   limit = ajAcdGetBool ("limit");
   enzymes = ajAcdGetString ("enzymes");
   equiv = ajAcdGetBool("preferred");
-    
+
+  if (!blunt  && !sticky)
+    ajFatal("Blunt/Sticky end cutters shouldn't both be disabled.");    
 
 /* get the number of the genetic code used */
   (void) ajStrToInt(tablelist[0], &table);

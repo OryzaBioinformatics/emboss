@@ -2,7 +2,7 @@
 SUBDIRS = acd data
 
 check_PROGRAMS = ajtest ajtest2 ajtest3 ajtestajnam \
-cluster corbatest \
+cluster complex corbatest \
 demofeatures demolist demosequence demostring demotable \
 entrails histogramtest intconv messtest \
 patmattest plplottest proteinmotifsearch \
@@ -12,14 +12,14 @@ simplesw stamps testplot treetypedisplay
 
 bin_PROGRAMS = abiview acdc antigenic \
 backtranseq banana btwisted \
-chaos checktrans chips cirdna codcmp coderet complex \
+chaos checktrans chips cirdna codcmp coderet \
 compseq cons cpgplot cpgreport cusp cutseq \
 dan dbiblast dbifasta dbiflat dbigcg \
 descseq diffseq digest domainer dotmatcher dotpath dottup dreg \
 einverted embossdata emma emowse entret \
 equicktandem est2genome etandem extractseq \
 findkm freak fuzznuc fuzzpro fuzztran \
-garnier geecee getorf helixturnhelix \
+garnier geecee getorf helixturnhelix hmoment \
 iep infoseq isochore lindna \
 marscan maskfeat maskseq matcher megamerger merger msbar \
 needle newcpgreport newcpgseek newseq \
@@ -96,6 +96,7 @@ garnier_SOURCES = garnier.c
 geecee_SOURCES = geecee.c
 getorf_SOURCES = getorf.c
 helixturnhelix_SOURCES = helixturnhelix.c
+hmoment_SOURCES = hmoment.c
 iep_SOURCES = iep.c
 infoseq_SOURCES = infoseq.c
 intconv_SOURCES = intconv.c

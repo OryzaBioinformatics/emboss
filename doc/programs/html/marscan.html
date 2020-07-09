@@ -60,31 +60,64 @@ IT IS DONE FOR YOU.
   -->
 
 
-Matrix/scaffold attachment regions (MARs/SARs) are genomic elements thought to delineate the structural and functional organisation of the eukaryotic genome.
-Originally, MARs and SARs were identified through their ability to bind to the nuclear matrix or scaffold.
-Binding cannot be assigned to a unique sequence element, but is dispersed over a region of several hundred base pairs.
-These elements are found flanking a gene or a small cluster of genes and are located often in the vicinity of cis-regulatory sequences.
-This has led to the suggestion that they contribute to higher order regulation of transcription by defining boundaries of independently controlled chromatin domains.
-There is indirect evidence to support this notion.
-In transgenic experiments MARs/SARs dampen position effects by shielding the transgene from the effects of the chromatin structure at the site of integration.
-Furthermore, they may act as boundary elements for enhancers, restricting their long range effect to only the promoters that are located in the same chromatin domain.
+Matrix/scaffold attachment regions (MARs/SARs) are genomic elements
+thought to delineate the structural and functional organisation of the
+eukaryotic genome.  Originally, MARs and SARs were identified through
+their ability to bind to the nuclear matrix or scaffold.  Binding cannot
+be assigned to a unique sequence element, but is dispersed over a region
+of several hundred base pairs.  These elements are found flanking a gene
+or a small cluster of genes and are located often in the vicinity of
+cis-regulatory sequences.  This has led to the suggestion that they
+contribute to higher order regulation of transcription by defining
+boundaries of independently controlled chromatin domains.  There is
+indirect evidence to support this notion.  In transgenic experiments
+MARs/SARs dampen position effects by shielding the transgene from the
+effects of the chromatin structure at the site of integration. 
+Furthermore, they may act as boundary elements for enhancers,
+restricting their long range effect to only the promoters that are
+located in the same chromatin domain. 
 
 <p>
 
-<b>marscan</b> finds a bipartite sequence element that is unique for a large group of eukaryotic MARs/SARs.
-This MAR/SAR recognition signature (<b>MRS</b>) comprises two individual sequence elements that are <200 bp apart and may be aligned on positioned nucleosomes in MARs.
-The MRS can be used to correctly predict the position of MARs/SARs in plants and animals, based on genomic DNA sequence information alone.
-Experimental evidence from the analysis of >300 kb of sequence data from several eukaryotic organisms show that wherever a MRS is observed in the DNA sequence, the corresponding genomic fragment is a biochemically identifiable SAR.
+<b>marscan</b> finds a bipartite sequence element that is unique for a
+large group of eukaryotic MARs/SARs.  This MAR/SAR recognition signature
+(<b>MRS</b>) comprises two individual sequence elements that are <200 bp
+apart and may be aligned on positioned nucleosomes in MARs.  The MRS can
+be used to correctly predict the position of MARs/SARs in plants and
+animals, based on genomic DNA sequence information alone.  Experimental
+evidence from the analysis of >300 kb of sequence data from several
+eukaryotic organisms show that wherever a MRS is observed in the DNA
+sequence, the corresponding genomic fragment is a biochemically
+identifiable SAR. 
 
 <p>
 
-The MRS is a bipartite sequence element that consists of two individual sequences of 8 (AATAAYAA) and 16 bp (AWWRTAANNWWGNNNC) within a 200 bp distance from each other.
-One mismatch is allowed in the 16 bp pattern. The patterns can occur on either strand of the DNA with respect to each other.
+The MRS is a bipartite sequence element that consists of two individual
+sequences of 8 (AATAAYAA) and 16 bp (AWWRTAANNWWGNNNC) within a 200 bp
+distance from each other.  One mismatch is allowed in the 16 bp pattern. 
+The patterns can occur on either strand of the DNA with respect to each
+other. The 8 bp and the 16 bp sites can overlap.
 
 <p>
 
-Not all SARs contain a MRS.
-Analysis of >300 kb of genomic sequence from a variety of eukaryotic organisms shows that the MRS faithfully predicts 80% of MARs and SARs, suggesting that at least one other type of MAR/SAR may exist which does not contain a MRS.
+Where there are many possible MRS sites caused by many 8 bp and/or 16 bp
+pattern sites located within 200 bp of each other, then only the 8 bp
+site and the 16 bp site that occur closest to each other are reported. 
+
+<p>
+
+Once a MRS has been reported, no more sites will be looked for within
+200 bp of that site.  This reduces (but maybe will not totally
+eliminate) over-reporting of the clusters of MRS's that tend to occur
+within a MAR/SAR. 
+
+
+<p>
+
+Not all SARs contain a MRS.  Analysis of >300 kb of genomic sequence
+from a variety of eukaryotic organisms shows that the MRS faithfully
+predicts 80% of MARs and SARs, suggesting that at least one other type
+of MAR/SAR may exist which does not contain a MRS. 
 
 <p>
 
@@ -109,7 +142,7 @@ Here is a sample session with marscan:
 % marscan
 marscan
 Finds MAR/SAR sites in nucleic sequences
-Input sequence(s): EMBL:BVJDUN
+Input sequence(s): EMBL:u01317
 Output file [hsfau1.marscan]:
 
 </pre>
@@ -252,9 +285,15 @@ The output from the above example is:
 <hr>
 <pre>
 ##gff-version 0.0
-##date 2001-02-12
-##sequence-region BVJDUN 0 0
-BVJDUN  marscan misc_signal     4604    4633    1.0     .       .       note "MAR/SAR recognition site (MRS). 8bp pattern=4604..4611. 16bp pattern = 4618..4633"
+##date 2001-02-21
+##sequence-region HSHBB 0 0
+HSHBB   marscan misc_signal     2242    2458    1.0     .       .       note "MAR/SAR recognition site (MRS). 8bp pattern=2451..2458. 16bp pattern = 2242..2257"
+HSHBB   marscan misc_signal     17654   17730   1.0     .       .       note "MAR/SAR recognition site (MRS). 8bp pattern=17723..17730. 16bp pattern = 17654..17669"
+HSHBB   marscan misc_signal     40956   41123   1.0     .       .       note "MAR/SAR recognition site (MRS). 8bp pattern=40956..40963. 16bp pattern = 41108..41123"
+HSHBB   marscan misc_signal     42232   42248   1.0     .       .       note "MAR/SAR recognition site (MRS). 8bp pattern=42232..42239. 16bp pattern = 42233..42248"
+HSHBB   marscan misc_signal     47834   47966   1.0     .       .       note "MAR/SAR recognition site (MRS). 8bp pattern=47959..47966. 16bp pattern = 47834..47849"
+HSHBB   marscan misc_signal     65112   65146   1.0     .       .       note "MAR/SAR recognition site (MRS). 8bp pattern=65139..65146. 16bp pattern = 65112..65127"
+HSHBB   marscan misc_signal     65947   65963   1.0     .       .       note "MAR/SAR recognition site (MRS). 8bp pattern=65947..65954. 16bp pattern = 65948..65963"
 </pre>
 <hr>
 

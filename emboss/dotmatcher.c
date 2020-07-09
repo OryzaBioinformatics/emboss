@@ -114,7 +114,6 @@ int main(int argc, char **argv)
     ajStrAssSubC(&se2,ajSeqChar(seq2),b2-1,e2-1);
     ajSeqReplace(seq,se1);
     ajSeqReplace(seq2,se2);
-    printf("%d %d",ajSeqLen(seq),ajSeqLen(seq2));
     
 
     s1 = ajStrStr(ajSeqStr(seq));

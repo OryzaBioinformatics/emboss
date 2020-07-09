@@ -3509,7 +3509,7 @@ ajint add_database ( DATABASE *db ) {
 void make_embl_index( DATABASE *db ) {
 
   ajint n;
-  ajulong offset;
+  unsigned long offset;
   HASH_LIST *item;
   char name[256];
 
@@ -3548,7 +3548,7 @@ void make_embl_index( DATABASE *db ) {
 void make_fasta_index( DATABASE *db ) {
 
   ajint n;
-  ajulong offset;
+  unsigned long offset;
   HASH_LIST *item;
   char name[256];
 
@@ -3587,7 +3587,7 @@ void make_fasta_index( DATABASE *db ) {
 void make_nbrf_index( DATABASE *db ) {
 
   ajint n;
-  ajulong offset1, offset2;
+  unsigned long offset1, offset2;
   HASH_LIST *item;
   char name[256];
 
@@ -4053,7 +4053,7 @@ ajint compile_embl_index( char *name ) {
   FILE *datafile, *indexfile;
   char sname[256];
   ajint c;
-  ajulong n, offset, state=-1;
+  unsigned long n, offset, state=-1;
 
   datafile = openfile_in_seqpath( name, "dat", "r", buf);
   indexfile = openfile_in_seqpath( name, "index", "w", buf);
@@ -4109,7 +4109,7 @@ void compile_fasta_index( char *name ) {
   FILE *datafile, *indexfile;
   char sname[256];
   ajint c;
-  ajulong n, offset, state=-1;
+  unsigned long n, offset, state=-1;
 
   datafile = openfile_in_seqpath( name, "fasta", "r", buf);
   indexfile = openfile_in_seqpath( name, "index", "w", buf);
@@ -4161,8 +4161,8 @@ void compile_nbrf_index( char *name ) {
   char buf[256];
   FILE *datafile, *textfile, *indexfile;
   char name1[256], name2[256];
-  ajulong c, d;
-  ajulong n;
+  unsigned long c, d;
+  unsigned long n;
 
   datafile = openfile_in_seqpath( name, "seq", "r",buf);
   textfile = openfile_in_seqpath( name, "ref", "r",buf);

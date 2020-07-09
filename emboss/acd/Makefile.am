@@ -14,7 +14,7 @@ pkgdata_DATA = codes.english emboss.default \
 	emowse.acd entrails.acd entret.acd equicktandem.acd \
 	est2genome.acd etandem.acd extractseq.acd findkm.acd \
 	freak.acd fuzznuc.acd fuzzpro.acd fuzztran.acd \
-	garnier.acd geecee.acd getorf.acd helixturnhelix.acd \
+	garnier.acd geecee.acd getorf.acd helixturnhelix.acd hmoment.acd \
 	histogramtest.acd iep.acd infoseq.acd isochore.acd \
 	lindna.acd marscan.acd maskfeat.acd maskseq.acd matcher.acd \
 	megamerger.acd merger.acd msbar.acd needle.acd \

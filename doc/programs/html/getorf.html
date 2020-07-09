@@ -254,13 +254,13 @@ longer than the minimum size, which defaults to 30 bases or 10 amino acids.
 <p>
 The results from the example run are:
 
+<p>
 <pre>
-
-&gt;ECLACI_1 [735 - 1112] E. coli laci gene (codes for the lac repressor).
+;gt&ECLACI_1 [735 - 1112] E. coli laci gene (codes for the lac repressor).
 GHRSHCDAGCQRSDGAGRNARHYRVRAARWCGYLGSGIRRYRRQLMLYPAVNHHQTGFSP
 AGANQRGPLAATLSGPGGEGQSAVARLTGEKKNHPGAQYANRLSPRVGRFINAAGTTGFP
 TGKRAV
-&gt;ECLACI_2 [1 - 1110] E. coli laci gene (codes for the lac repressor).
+;gt&ECLACI_2 [1 - 1110] E. coli laci gene (codes for the lac repressor).
 PEESQFRVVNVKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPN
 RVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGVEACKAA
 VHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSIIFSHEDGTRLG
@@ -268,47 +268,66 @@ VEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWSAMSGFQQTM
 QMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSSCYIPPSTTIK
 QDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASPRALADSLMQLA
 RQVSRLESGQ*
-&gt;ECLACI_3 [1065 - 649] E. coli laci gene (codes for the lac repressor).
+;gt&ECLACI_3 [465 - 49] E. coli laci gene (codes for the lac repressor).
 RRNISAGSFHSNGILVIQRIVNDQPTDALREKIVHRRFTGFDAASFYHRHHHAGTQLIGA
 RFNRRDNLRRRVQGQTGGGNANQQRLFARQLLCHAVGNVIQLRHRRFHFFPRFRRNVAGL
 VHHAGNGLIRDTGILCDIV
-
 </pre>
-
+<p>
 
 All output ORF sequences are written to the specified outut file.
 
+<p> 
+
+The name of the ORF sequences is constructed from the name of the
+input sequence with an underscore character ('_') and a unique ordinal number
+of the ORF found appended.  The description of the output ORF sequence
+is constructed from the description of the input sequence with the start
+and end positions of the ORF prepended.  
+
 <p>
-The name of the ORF sequences is constructed from the name of the input
-sequence with an underscore character ('_') and the number of the ORF
-found appended.  The description of the output ORF sequence is
-constructed from the description of the input sequence with the start
-and end positions of the ORF prepended. 
+
+The unique number appended to the name is simply used to create new
+unique sequence names, it does not imply any further information
+indicating any order, positioning or sense-strand of the ORFs. 
+
+<p>
+
+If the ORF has been found in the reverse sense, then the start position
+will be smaller than the end position.  The numbering uses the
+forward-sense positions, but read in the reverse sense.  For example,
+<b>;gt&ECLACI_3 [465 - 49]<b> in the output above is a reverse-sense ORF
+running from position 465 to 49. 
 
 <H2>
     Data files
 </H2>
 
+None.
 
 <H2>
     Notes
 </H2>
 
+None.
 
 <H2>
     References
 </H2>
 
+None.
 
 <H2>
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
@@ -321,6 +340,7 @@ It always exits with status 0.
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -368,6 +388,7 @@ href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
     History
 </H2>
 
+2000 - written - Gary Williams
 
 <H2>
     Target users

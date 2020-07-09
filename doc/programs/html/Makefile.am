@@ -10,7 +10,7 @@ pkgdata_DATA =  abiview0.gif banana0.gif chaos0.gif cpgplot0.gif \
                antigenic.html assorted_group.html backtranseq.html \
                banana.html btwisted.html chaos.html checktrans.html \
                chips.html cirdna.html clique.html codcmp.html coderet.html \
-               coding_regions_group.html comparison_group.html complex.html \
+               coding_regions_group.html comparison_group.html \
                compseq.html cons.html consense.html contml.html \
                contrast.html cpg_islands_group.html cpgplot.html \
                cpgreport.html cusp.html cutseq.html dan.html \
