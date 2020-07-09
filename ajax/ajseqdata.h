@@ -40,17 +40,25 @@ typedef struct AjSSeqQuery {
   AjPStr DbType;		/* Database type */ 
   AjPStr Id;			/* ID Wildcard */
   AjPStr Acc;			/* Accession Wildcard */
-  AjPStr Des;			/* Description Wildcard (not yet used) */
+  AjPStr Des;			/* Description Wildcard */
+  AjPStr Key;			/* Keyword Wildcard */
+  AjPStr Org;			/* Taxonomy Wildcard */
+  AjPStr Sv;			/* SeqVersion Wildcard */
   AjPStr Method;		/* Name of access method */
   AjPStr Formatstr;		/* Name of input sequence format */
   AjPStr IndexDir;		/* Index directory */
   AjPStr Directory;		/* Data directory */
   AjPStr Filename;		/* Individual filename */
   AjPStr Exclude;		/* File wildcards to exclude (spaced) */
+  AjPStr DbFields;		/* Query fields (plus id and acc) */
+  AjPStr DbProxy;		/* Proxy host */
+  AjPStr Field;			/* Query level */
+  AjPStr QryString;		/* Query level */
   AjPStr Application;		/* External application command */
   enum AjEQryType Type;		/* Enum query type */
   ajlong Fpos;			/* File position from fseek */
-  SeqSAccess* Access;		/* Access function : see ajseqread.h */
+  AjBool QryDone;		/* Has the query been done yet */
+  SeqSAccess* Access;	        /* Access function : see ajseqread.h */
   void* QryData;		/* Private data for access function */
 } AjOSeqQuery, *AjPSeqQuery;
 
@@ -336,6 +344,9 @@ typedef struct AjSSeqin {
 typedef struct AjSSeq {
   AjPStr Name;			/* Name (ID) */
   AjPStr Acc;			/* Accession number (primary only) */
+  AjPStr Sv;			/* SeqVersion number */
+  AjPStr Gi;			/* GI NCBI version number */
+  AjPStr Tax;			/* Main taxonomy (species) */
   AjPStr Type;			/* Type N or P */
   AjEnum EType;			/* unused, obsolete */
   AjPStr Db;			/* Database name */
@@ -360,6 +371,8 @@ typedef struct AjSSeq {
   AjPStr TextPtr;		/* Full text */
   float Weight;			/* Weight from multiple alignment */
   AjPList Acclist;		/* Secondary accessions */
+  AjPList Keylist;		/* Keyword list */
+  AjPList Taxlist;		/* Taxonomy list (just species for now) */
   AjPStr Seq;			/* The sequence */
   AjPSelexdata Selexdata;
   AjPStockholmdata Stock;
