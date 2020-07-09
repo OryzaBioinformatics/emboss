@@ -10989,6 +10989,7 @@ static void acdArgsParse (ajint argc, char *argv[]) {
       if (j == 2) i++;
     }
     else {
+      iparam = acdNextParam(0); /* first free parameter */
       (void) acdIsParam(cp, &param, &iparam, &acd);
       if (acd) {
 	if (acdIsParamValue(param)) {
@@ -11089,7 +11090,7 @@ static AjBool acdIsParam (char* arg, AjPStr* param, ajint* iparam,
 
   if (*iparam >= acdNParam) {
     ajFatal ("Argument '%s'\nToo many parameters %d/%d\n",
-	     arg, (*iparam + 1), acdNParam);
+	     arg, (*iparam), acdNParam);
   }
 
 
