@@ -1382,7 +1382,7 @@ static void reportWriteSrsFlags (AjPReport thys,
       ajFmtPrintF (outf, "Sequence: %S\n", subseq);
     }
     ajFmtPrintF (outf, "Score: %.*f\n",thys->Precision,  score);
-    if (feature->Strand)
+    if (feature->Strand == '+' || feature->Strand == '-')
       ajFmtPrintF (outf, "Strand: %c\n", feature->Strand);
     if (feature->Frame)
       ajFmtPrintF (outf, "Frame: %d\n", feature->Frame);
