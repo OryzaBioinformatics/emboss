@@ -349,4 +349,4 @@ to this mailing list by filling in the web form at the following URL:
 
 -- Johann Visagie <johann@egenetics.com>
 
-$Id: EMBOSS-FreeBSD-HOWTO.txt,v 1.1.1.1 2001/06/09 20:20:52 ableasby Exp $
+$Id: EMBOSS-FreeBSD-HOWTO.txt,v 1.1.1.1 2001/07/15 11:49:26 ableasby Exp $

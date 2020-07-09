@@ -5,7 +5,7 @@ $locout = "local";
 $infile = "";
 $lib = "unknown";
 
-%test = ("func" => 1, "funcstatic" => 1, "prog" => 1);
+%test = ("func" => 1, "funcstatic" => 1, "funclist" => 1, "prog" => 1);
 
 if ($ARGV[0]) {$infile = $ARGV[0];}
 if ($ARGV[1]) {$lib = $ARGV[1];}
@@ -253,6 +253,44 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 
     }
 
+    if ($token eq "funclist")  {
+      $ismacro = 0;
+      $isprog = 0;
+      $OFILE = HTMLB;
+      if ($sect NE $laststatfsect) {
+        print $OFILE "<hr><h2><a name=\"$sect\">\n";
+        print $OFILE "$sect</a></h2>\n";
+        print $OFILE "$srest\n";
+	$laststatfsect = $sect
+      }
+      $type = $token;
+      ($name, $frest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
+      print "Function list $name\n";
+      print $OFILE "<hr><h3><a name=\"$name\">\n";
+      print $OFILE "Macro</a> ".srsref($name)."</h3>\n";
+      $srest = $mrest;
+      $mrest =~ s/>/\&gt;/gos;
+      $mrest =~ s/</\&lt;/gos;
+      $mrest =~ s/\n\n/\n<p>\n/gos;
+      print $OFILE "$mrest\n";
+
+      print SRS "ID $name\n";
+      print SRS "TY list\n";
+      print SRS "MO $pubout\n";
+      print SRS "LB $lib\n";
+      print SRS "XX\n";
+
+      $srest =~ s/\n\n+$/\n/gos;
+      $srest =~ s/\n\n\n+/\n\n/gos;
+      $srest =~ s/\n([^\n])/\nDE $1/gos;
+      $srest =~ s/\n\n/\nDE\n/gos;
+      $srest =~ s/>/\&gt;/gos;
+      $srest =~ s/</\&lt;/gos;
+      print SRS "DE $srest";
+      print SRS "XX\n";
+
+    }
+
     if ($token eq "param")  {
       if (!$intable) {
 	print $OFILE "<p><table border=3>\n";
@@ -355,12 +393,22 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 ## $rest is what follows the comment
 ##############################################################
 
-    if ($test{$type}) {
+    if ($test{$type} == 1) {
 
 # body is the code up to a '}' at the start of a line
 
 	($body) = ($rest =~ /(.*?\n\}[^\n]*\n)/os);
 	print SRS $body;
+
+    }
+
+    if ($test{$type} == 2) {
+
+# body is the code up to a line that doesn't end with '\'
+
+      ($body) = ($rest =~ /\s*(\n#define\s+[^(\n]+\s*[(][^)\n]*[)].*?[^\\])$/os);
+	print SRS "==FUNCLIST\n$body\n==ENDLIST\n";
+	print SRS "==REST\n$rest\n==ENDREST\n";
 
     }
   }

@@ -1,6 +1,4 @@
-12/06/2001      Version 1.13.3 Further dbifasta & dbiflat fixes
-09/06/2001      Version 1.13.2 Fix remap, pepwindow, dbigcg, dbiblast
-                               errors introduced in 1.13.0. Add CUTGEXTRACT
+15/07/2001      Version 2.0.0  New feature table handling etc
 25/05/2001      Version 1.13.1 Fix emboss.default.template problem
 24/05/2001      Version 1.13.0 SHOWALIGN and EMBOSSVERSION added. Prophet fixed
 17/04/2001      Version 1.12.0 DISTMAT and CAI added

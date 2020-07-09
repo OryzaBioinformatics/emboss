@@ -1,21 +1,113 @@
+#
+# Things to do
+#
+# (1) database extract programs to write to a local directory
+# (2) test local directory as well as local files (see above)
+# (3) make list of missing data files
+# (4) update web page examples to match the tests
+# (5) tests for @list and other odd USA types
+#
+###########################################################################
+
+ID acdc-0001
+AP acdc
+CL qatest tembl:paamir tembl:paamir x.x -auto
+FI x.x
+FZ = 0
+//
+
+ID acdc-0002
+AP acdc
+CL qatest tembl:paamir tembl:paamir x.x -aint 5 -auto
+FI x.x
+FZ = 0
+//
+
+ID acdc-0003
+AP acdc
+CL qatest tembl:paamir tembl:paamir x.x -ai 5 -auto
+FI x.x
+FZ = 0
+//
+
+ID acdc-0004
+AP acdc
+CL qatest tembl:paamir tembl:paamir x.x -a 5 -auto
+ER 1
+FI stderr
+FP /ambiguous qualifier a /
+FI x.x
+FZ = 0
+//
+
+ID acdc-0005
+AP acdc
+CL qatest tembl:paamir -sbegin 5 -send 1000 tembl:paamir x.x -auto
+FI x.x
+FZ = 0
+//
+
+
+ID acdc-0006
+AP acdc
+CL qatest tembl:paamir tembl:paamir -sbegin 5 -send 1000 x.x -auto
+FI x.x
+FZ = 0
+//
+
+ID acdc-0007
+AP acdc
+CL qatest -sbegin 5 -send 1000 tembl:paamir tembl:paamir x.x -auto
+FI x.x
+FZ = 0
+//
+
+ID acdc-0008
+AP acdc
+CL qatest tembl:paamir tembl:paamir x.x -sbegin 5 -send 1000  -auto
+FI x.x
+FZ = 0
+//
+
+ID acdc-0009
+AP acdc
+CL qatest tembl:paamir tembl:paamir x.x
+CL  -sbegin_asequence 5 -send_asequence 1000 -auto
+FI x.x
+FZ = 0
+//
+
+ID acdc-0010
+AP acdc
+CL qatest tembl:paamir tembl:paamir x.x -sbegin_as 5 -send_as 1000  -auto
+FI x.x
+FZ = 0
+//
+
+ID acdc-0011
+AP acdc
+CL qatest tembl:paamir tembl:paamir x.x -sbegin_a 5 -send_a 1000 
+ER 1
+FI stderr
+FP / ambiguous master qualifier for sbegin_a /
+FP /\nunknown qualifier -sbegin_a\n/
+FI x.x
+FZ = 0
+//
+
 ID antigenic-command
 AP antigenic
 CL tsw:amir_pseae -auto
-## temporary feature output file
 FI amir_pseae.out2
+FZ = 564
+FP /^AMIR_PSEAE\tantigenic\tmisc_feature\t4\t60\t1\.222.*; note "max score at 53"\n/
 FI amir_pseae.antigenic
 FP /ANTIGENIC/
 FP /246/
 FP /1[.]246/
 FP / NS.[^P]GSL/
-FZ >100
-FC >5
-CC
-CC Only kidding - both stdout and stderr should be empty
-FI stdout
-FZ <5
-FI stderr
-FC =0
+FZ > 100
+FC > 5
 //
 
 ID antigenic-ex
@@ -24,16 +116,16 @@ IN tsw:act1_fugru
 IN
 IN
 FI act1_fugru.out2
+FZ = 1877
+FP /^ACT1_FUGRU\tantigenic\tmisc_feature\t214\t222\t1\.207\t\+\t\.\tSequence "ACT1_FUGRU\.1" ; note "max score at 217"\n/
 FI act1_fugru.antigenic
 FP /ANTIGENIC/
 FP /1[.]207/
 FP /AA[^AV]VV/
-FZ >100
-FC >5
-CC
-CC stderr should have 1 line of doc, 1 of prompts
+FZ > 100
+FC > 5
 FI stderr
-FC =2
+FC = 2
 //
 
 ID backtranseq-ex
@@ -41,20 +133,23 @@ AP backtranseq
 IN tsw:ach2_drome
 IN
 FI ach2_drome.fasta
-FP /^>ACH2_DROME.*GAGAAGAAGAAC$/
-FZ =1838
+FP /^>ACH2_DROME/
+FP /GAGAAGAAGAAC\n/
+FZ = 1838
 FI stderr
 FC = 2
 //
 
 ID banana-ex
 AP banana
-CL -graph ps
+CL -graph data
 IN tembl:rnu68037
 FI banana.profile
-FZ =21906
-FI banana.ps
-FZ =308957
+FZ = 21906
+FP /\At +0.0 +0.0\ng +17.7 +0.0\na +21.1 +0.0\ng +28.5 +0.0\n/
+FP /^c +17.7 +0.0\nc +15.7 +19.2\nt +15.7 +18.5\ng +17.7 +17.9\n/
+FI banana.dat1
+FZ = 308957
 FI stderr
 FC = 2
 //
@@ -62,6 +157,12 @@ ID btwisted-ex
 AP btwisted
 CL -auto tembl:ab000095 -sbegin 100 -send 120
 FI ab000095.btwisted
+FP /^# Twisting calculated from 100 to 120 of AB000095\n/
+FP /^Total twist \(degrees\): 681\.1\n/
+FP /^Total turns : 1\.89\n/
+FP /^Average bases per turn: 11\.10\n/
+FP /^Total stacking energy : -179\.34\n/
+FP /^Average stacking energy per dinucleotide: -8\.97\n/
 //
 
 ID cai-ex
@@ -84,6 +185,8 @@ FI eclac.chaos
 FZ = 0
 FI chaos.ps
 FZ > 100
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
 //
 
 ID charge-ex
@@ -106,9 +209,16 @@ IN
 FI stderr
 FC = 2
 FI paamir_1.checktrans
-FP /Total STOPS:\s+7$/
+FZ = 132
+FP /Total STOPS:\s+7\n/
+FP /^\s+7\s+635\s+357\s+278-634\s+PAAMIR_1_7\n/
 FI paamir_1.fasta
+FZ = 375
+FP /\A>PAAMIR_1_7\n/
+FP /^PPARRRWRRWRVTWQRGRWWSRLTSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGR\n/
 FI paamir_1.out3
+FZ = 133
+FP /^PAAMIR_1.*278\t634\t0\.000/
 //
 
 ID chips-ex
@@ -124,12 +234,16 @@ FP /Nc = 32[.]951/
 
 ID cirdna-ex
 AP cirdna
-CL -graph data
+CL -graph ps
 IN ../../data/data.cirp
 IN
 IN
 FI stderr
 FC = 2
+FI cirdna.ps
+FZ = 20181
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
 //
 
 ID codcmp-ex
@@ -140,12 +254,12 @@ IN
 FI stderr
 FC = 2
 FI outfile.codcmp
-FP /^Mean Squared Difference = 0[.]037$/
-FP /^Sum Squared Difference = 2[.]337$/
-FP /^Root Mean Squared Difference = 0[.]191$/
-FP /^Sum Difference         = 9[.]840$/
-FP /^Mean Difference         = 0[.]154$/
-FP /^Codons not appearing   = 0$/
+FP /^Mean Squared Difference = 0[.]037\n/
+FP /^Sum Squared Difference = 2[.]337\n/
+FP /^Root Mean Squared Difference = 0[.]191\n/
+FP /^Sum Difference         = 9[.]840\n/
+FP /^Mean Difference         = 0[.]154\n/
+FP /^Codons not appearing   = 0\n/
 //
 
 ID coderet-ex
@@ -156,7 +270,7 @@ FI stderr
 FC = 2
 FI hsferg1.fasta
 FP />x03487_cds_1\natgacgaccgcgt/
-FP /\naatgaaagctaa\n>x03487_mrna_1\ncagacgttcttcgc/
+FP /aatgaaagctaa\n>x03487_mrna_1\ncagacgttcttcgc/
 FP /ctcctacgtttacctgtccatg\n>x03487_pro_1\nMTTASTSQVRQNY/
 //
 
@@ -179,6 +293,9 @@ CL tembl:hsfau 2 result3.comp
 FI stderr
 FC = 1
 FI result3.comp
+FZ = 912
+FP /^Total count\s+517\n/
+FP /^AA\s+45\s+0\.0870406\s+0\.0625000\s+1\.3926499\n/
 //
 
 ID compseq-ex2
@@ -187,6 +304,9 @@ CL tembl:hsfau 6 result6.comp -nozero
 FI stderr
 FC = 1
 FI result6.comp
+FZ = 18689
+FP /^Total count\s+513\n/
+FP /^AAAAAA\s+6\s+0\.0116959\s+0\.0002441\s+47\.9064327\n/
 //
 
 ID compseq-ex3
@@ -195,6 +315,9 @@ CL tembl:hsfau 3 result3.comp -frame 2 -in ../../data/prev.comp
 FI stderr
 FC = 1
 FI result3.comp
+FZ = 2697
+FP /^Total count\s+172\n/
+FP /^AAA\s+7\s+0\.0406977\s+0\.0329457\s+1\.2352955\n/
 //
 
 ID cons-ex
@@ -204,6 +327,10 @@ IN aligned.cons
 FI stderr
 FC = 2
 FI aligned.cons
+FZ = 134
+FP /\A>EMBOSS_001\n/
+FP /^acgtacgtacgtacgtacgtnnnnacgtacgtacgtacgtnnnnnnnnnnnnnnnnnnnn\n/
+FP /^nnnnnnnnnnnnnnnnnnnnacgtacgtacgtacgtacgtacgtacgtnnnnacgtacgt\n/
 //
 
 ID cpgplot-ex
@@ -216,14 +343,25 @@ IN
 IN
 IN
 FI stderr
-FC = 7
+FC = 4
 FI rnu68037.cpgplot
 FP /RNU68037 from 1 to 1218/
 FP /Observed\/Expected ratio > 0\.60/
 FP /Length 406 \(104\.\.509\)/
 FP /Length 329 \(596\.\.924\)/
 FI rnu68037.out2
-FZ = 0
+FZ = 196
+FP /^RNU68037.*\t104\t509\t/
+FP /^RNU68037.*\t596\t924\t/
+FI cpgplot1.dat
+FZ = 24885
+FP /^444\.000000\s+1\.066856\n/
+FI cpgplot2.dat
+FZ = 25999
+FP /^444\.000000\s+75\.000000\n/
+FI cpgplot3.dat
+FZ = 24883
+FP /^444\.000000\s+1\.000000\n/
 //
 
 ID cpgreport-ex
@@ -238,7 +376,8 @@ FP /CPGREPORT of RNU68037 from 1 to 1218/
 FP /RNU68037                 12     13    17          1 100\.0    -/
 FP /RNU68037               1183   1193    26          2  72\.7   2\.00/
 FI rnu68037.out2
-FZ = 0
+FZ = 497
+FP /^RNU68037\tcpgreport\tmisc_feature\t96\t1032\t630\.000\t/
 //
 
 ID cusp-ex
@@ -262,6 +401,7 @@ FI stderr
 FC = 1
 FI gatta2.seq
 FZ = 2291
+FP /^ggtaccgctcgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgatcta\n/
 //
 
 ID cutseq-ex2
@@ -271,6 +411,7 @@ FI stderr
 FC = 1
 FI jsh.seq
 FZ = 2273
+FP /^tgctcgatcaccaccagccgggcgacgggaactgcacgatctacctggcgagcctggagc\n/
 //
 
 ID cutseq-ex3
@@ -282,6 +423,7 @@ FI stderr
 FC = 2
 FI starta.seq
 FZ = 90
+FP /\A>PAAMIR X13776 .* regulation\Z/
 //
 
 ID dan-ex
@@ -312,9 +454,16 @@ IN
 IN
 FI stderr
 FC = 2
+FI dan1.dat
+FZ = 46560
+FP /^11\.000000\s+64\.921204\n/
+FP /^2158\.000000\s+62\.373310\n/
+FI paamir.dan
+FZ = 0
 //
 
 ID dbiblast-ex
+DL keep
 AP dbiblast
 IN swnew
 IN ../../data
@@ -324,20 +473,88 @@ IN
 IN
 IN
 FI stderr
-FC = 2
+FC = 8
 FI acnum.hit
 FZ = 320
+FP /\A.{300}\003/
 FI acnum.trg
 FZ = 400
+FP /\A.{308}P53450\000/
 FI division.lkp
 FZ = 322
+FP /\A.{300}\001\000swnew.pin\000/
 FI entrynam.idx
 FZ = 410
+FP /\A.{300}CO9_FUGRU\000/
+//
+
+ID dbiblast-idfirst
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qapblast-id:CO9_FUGRU test.out -auto
+FI test.out
+FP 1 />CO9_FUGRU /
+//
+
+ID dbiblast-idsecond
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qapblast-id:E2BB_FUGRU test.out -auto
+FI test.out
+FP 1 />E2BB_FUGRU /
+//
+
+ID dbiblast-last
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qapblast-id:TM21_FUGRU test.out -auto
+FI test.out
+FP 1 />TM21_FUGRU /
+//
+
+ID dbiblast-nextlast
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qapblast-id:ODO2_FUGRU test.out -auto
+FI test.out
+FP 1 />ODO2_FUGRU /
+//
+
+ID dbiblast-acfirst
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qapblast-acc:P53450 test.out -auto
+FI test.out
+FP 1 />FOS_FUGRU P53450 /
+//
+
+ID dbiblast-acsecond
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qapblast-acc:P79755 test.out -auto
+FI test.out
+FP 1 />CO9_FUGRU P79755 /
+//
+
+ID dbiblast-aclast
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qapblast-acc:Q90515 test.out -auto
+FI test.out
+FP 1 />TM21_FUGRU Q90515 /
 //
 
 ID dbifasta-ex
+DL keep
 AP dbifasta
-IN simple
+IN idacc
 IN EMROD
 IN ../../data
 IN emrod
@@ -347,17 +564,58 @@ FI stderr
 FC = 8
 FI acnum.hit
 FZ = 312
+FP /\A.{300}\001/
 FI acnum.trg
 FZ = 384
+FP /\A.{308}L48662\000/
 FI division.lkp
 FZ = 322
+FP /\A.{300}\001\000emrod\000/
 FI entrynam.idx
 FZ = 390
+FP /\A.{300}MMAM\000/
+//
+
+ID dbifasta-idfirst
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qanfasta-id:MMAM test.out -auto
+FI test.out
+FP 1 />MMAM /
+//
+
+ID dbifasta-idsecond
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qanfasta-id:RNOPS test.out -auto
+FI test.out
+FP 1 />RNOPS /
+//
+
+ID dbifasta-last
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qanfasta-id:RNU68037 test.out -auto
+FI test.out
+FP 1 />RNU68037 /
+//
+
+ID dbifasta-nextlast
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qanfasta-id:RNOPS test.out -auto
+FI test.out
+FP 1 />RNOPS /
 //
 
 ID dbifasta-swiss
+DL keep
 AP dbifasta
-IN simple
+IN idacc
 IN SWNEW
 IN ../../data
 IN swnew
@@ -367,15 +625,56 @@ FI stderr
 FC = 8
 FI acnum.hit
 FZ = 320
+FP /\A.{300}\003/
 FI acnum.trg
 FZ = 440
+FP /\A.{308}P53450\000/
 FI division.lkp
 FZ = 322
+FP /\A.{300}\001\000swnew\000/
 FI entrynam.idx
 FZ = 450
+FP /\A.{300}CO9_FUGRU\000/
+//
+
+ID dbifasta-swissidfirst
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qapfasta-id:CO9_FUGRU test.out -auto
+FI test.out
+FP 1 />CO9_FUGRU /
+//
+
+ID dbifasta-swissidsecond
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qapfasta-id:E2BB_FUGRU test.out -auto
+FI test.out
+FP 1 />E2BB_FUGRU /
+//
+
+ID dbifasta-swisslast
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qapfasta-id:TM21_FUGRU test.out -auto
+FI test.out
+FP 1 />TM21_FUGRU /
+//
+
+ID dbifasta-swissnextlast
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qapfasta-id:ODO2_FUGRU test.out -auto
+FI test.out
+FP 1 />ODO2_FUGRU /
 //
 
 ID dbiflat-ex
+DL keep
 AP dbiflat
 IN EMBL
 IN EMBL
@@ -383,17 +682,114 @@ IN ../../embl
 IN rod.dat
 IN
 IN
+FI stderr
+FC = 5
 FI acnum.hit
 FZ = 312
+FP /\A.{300}\001/
 FI acnum.trg
 FZ = 360
+FP /\A.{308}L48662\000/
 FI division.lkp
 FZ = 322
+FP /\A.{300}\001\000rod\.dat\000/
 FI entrynam.idx
 FZ = 366
+FP /\A.{300}MMAM\000/
+//
+
+ID dbiflat-id
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qanflat-id:rnops test.out -auto
+FI test.out
+FP /\A>RNOPS /
+//
+
+ID dbiflat-idfirst
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qanflat-id:MMAM test.out -auto
+FI test.out
+FP 1 />MMAM /
+//
+
+ID dbiflat-idsecond
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qanflat-id:RNOPS test.out -auto
+FI test.out
+FP 1 />RNOPS /
+//
+
+ID dbiflat-last
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qanflat-id:RNU68037 test.out -auto
+FI test.out
+FP 1 />RNU68037 /
+//
+
+ID dbiflat-nextlast
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qanflat-id:RNOPS test.out -auto
+FI test.out
+FP 1 />RNOPS /
+//
+
+ID dbiflat-tembl-idfirst
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL tembl-id:AB000095 test.out -auto
+FI test.out
+FP 1 />AB000095 /
+//
+
+ID dbiflat-tembl-idsecond
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL tembl-id:AB000360 test.out -auto
+FI test.out
+FP 1 />AB000360 /
+//
+
+ID dbiflat-tembl-last
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL tembl-id:XLRHODOP test.out -auto
+FI test.out
+FP 1 />XLRHODOP /
+//
+
+ID dbiflat-tembl-nextlast
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL tembl-id:XL23808 test.out -auto
+FI test.out
+FP 1 />XL23808 /
+//
+
+ID dbiflat-tembl-multiacc
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL tembl-acc:V00451 test.out -auto
+FI test.out
+FP 3 />GM/
 //
 
 ID dbiflat-swiss
+DL keep
 AP dbiflat
 IN
 IN SWNEW
@@ -402,15 +798,126 @@ IN
 IN
 IN
 FI stderr
-FC = 2
+FC = 5
 FI acnum.hit
 FZ = 320
+FP /\A.{300}\003/
 FI acnum.trg
+FP /\A.{308}P53450\000/
 FZ = 400
 FI division.lkp
 FZ = 378
+FP /\A.{300}\001\000new_seq\.dat\000/
 FI entrynam.idx
 FZ = 410
+FP /\A.{300}CO9_FUGRU\000/
+//
+
+ID dbiflat-swiss-idfirst
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qapflat-id:CO9_FUGRU test.out -auto
+FI test.out
+FP 1 />CO9_FUGRU /
+//
+
+ID dbiflat-swiss-idsecond
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qapflat-id:E2BB_FUGRU test.out -auto
+FI test.out
+FP 1 />E2BB_FUGRU /
+//
+
+ID dbiflat-swiss-last
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qapflat-id:TM21_FUGRU test.out -auto
+FI test.out
+FP 1 />TM21_FUGRU /
+//
+
+ID dbiflat-swiss-nextlast
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qapflat-id:ODO2_FUGRU test.out -auto
+FI test.out
+FP 1 />ODO2_FUGRU /
+//
+
+ID dbigcg-ex
+DL keep
+TI 120
+AP dbigcg
+IN EMBL
+IN EMBL
+IN ../../embl
+IN
+IN
+IN
+FI stderr
+FC = 6
+FI acnum.hit
+FZ = 468
+FP /\A.{300}\001/
+FI acnum.trg
+FZ = 1140
+FP /\A.{308}AB000095\000/
+FI division.lkp
+FZ = 524
+FP /\A.{300}\001\000eem_ba1\.ref eem_ba1\.seq\000/
+FI entrynam.idx
+FZ = 1048
+FP /\A.{300}AB000095\000/
+//
+
+ID dbigcg-id
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qangcg-id:hsfau test.out -auto
+FI test.out
+FP 1 /\A>HSFAU /
+//
+
+ID dbigcg-idfirst
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qangcg-id:AB000095 test.out -auto
+FI test.out
+FP 1 />AB000095 /
+//
+
+ID dbigcg-idsecond
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qangcg-id:AB009062 test.out -auto
+FI test.out
+FP 1 />AB009062 /
+//
+
+ID dbigcg-last
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qangcg-id:XLRHODOP test.out -auto
+FI test.out
+FP 1 />XLRHODOP /
+//
+
+ID dbigcg-nextlast
+AP seqret
+PP EMBOSSRC=../..
+PP export EMBOSSRC
+CL qangcg-id:XL23808 test.out -auto
+FI test.out
+FP 1 />XL23808 /
 //
 
 ID degapseq-ex
@@ -420,4 +927,4105 @@ FI stderr
 FC = 1
 FI nogaps.seq
 FZ = 138
+FP /^ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT\n/
 //
+
+ID descseq-ex
+AP descseq
+CL -seq ../../data/dna.text -out clone23.seq -name "myclone23"
+FI stderr
+FC = 1
+FI clone23.seq
+FZ = 113
+FP /^>myclone23\n/
+//
+
+ID descseq-ex2
+AP descseq
+CL -seq ../../data/dna.text -out xy24.seq -desc "This is my clone number 244"
+FI stderr
+FC = 1
+FI xy24.seq
+FZ = 142
+FP /EMBOSS_001 This is my clone number 244\n/
+//
+
+ID descseq-ex3
+AP descseq
+CL -seq ../../data/dna.text -out est4.seq -desc " (submitted)" -append
+FI stderr
+FC = 1
+FI est4.seq
+FZ = 127
+FP /EMBOSS_001  \(submitted\)\n/
+//
+
+ID diffseq-ex
+AP diffseq
+## Takes about 3 minutes on original test
+## some systems may need longer.
+## Or we could go for a shorter example ...
+TI 300
+CL tembl:ap000504 tembl:af129756
+IN
+IN
+FI stderr
+FC = 2
+FI ap000504.diffseq
+FZ = 13953
+FP /^AP000504 overlap starts at 1\n/
+FP /^AF129756 overlap starts at 6036\n/
+FP /^AP000504 2655-2658 Length: 4\nSequence: tgtg\n/
+FI AF129756.diffgff
+FZ = 11823
+FP /^AF129756\tdiffseq\tconflict\t10945\t10962\t1\.000\t.*; note "Insertion of 18 bases in AF129756" ; replace ""\n/
+FI AP000504.diffgff
+FZ = 11774
+FP /^AP000504\tdiffseq\tconflict\t847\t847\t1\.000\t.*; note "SNP in AF129756" ; replace "t"\n/
+//
+
+ID digest-ex
+AP digest
+IN tsw:opsd_human
+IN
+IN
+FI stderr
+FC = 11
+FI opsd_human.digest
+FP /^246\s+248\s+346[.]383\s+\(K\) AEK \(E\)\s*\n/
+FP /yields 14 fragments/
+FC = 18
+//
+
+
+ID distmat-ex
+AP distmat
+CC Test data pax.align not yet available for example run
+CL ../../data/pax.align
+IN 2
+IN
+FI stderr
+FC = 2
+FI outfile.distmat
+FP / Kimura /
+FP /^\s+0[.]00\s+20[.]37\s+PX8A_HUMAN 9\n/
+FC = 99999
+//
+
+ID domainer-ex
+CC Test data not yet available for example run
+AP domainer
+IN ../../scop/testscop.dat
+IN ../../cpdb/
+IN
+IN
+IN
+IN
+IN log.1
+IN log.2
+FI log.1
+FC = 9999
+FI log.2
+FC = 9999
+//
+
+ID dotmatcher-ex
+AP dotmatcher
+CL tsw:hba_human tsw:hbb_human -graph ps
+FI stderr
+FC = 2
+##
+## why is this output file created?
+##
+FI hba_human.dotmatcher
+FZ = 0
+FI dotmatcher.ps
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
+//
+
+ID dotpath-ex
+AP dotpath
+##
+## timeout 60 seconds on original test system
+##
+TI 400
+CL tembl:AF129756 tembl:AP000504 -word 20 -data -out af.path
+FI af.path
+FP /^##Number 118\n/
+FC = 133
+FI stderr
+FC = 1
+//
+
+ID dottup-ex
+AP dottup
+CL tembl:eclac tembl:eclaci -wordsize=6 -gtitle="eclaci vs eclac" -graph ps
+FI dottup.ps
+FZ = 66996
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
+FI stderr
+FC = 2
+##
+##we do not really want the eclac.dottup file by default
+##
+FI eclac.dottup
+FZ = 0
+//
+
+ID dreg-ex
+AP dreg
+IN tembl:paamir
+IN
+IN ggtacc
+FI paamir.dreg
+FP /PAAMIR +1 +GGTACC/
+FI stderr
+FC = 2
+//
+
+ID einverted-ex
+AP einverted
+##
+## timeout more than 60 seconds
+## or we may need a quicker example
+##
+TI 500
+CL tembl:hsts1
+IN
+IN
+IN
+IN
+IN
+FI stderr
+FC = 2
+FI hsts1.inv
+FP /Score 236: 108/130 \( 83%\) matches, 0 gaps/
+//
+
+ID embossdata-ex
+AP embossdata
+CL -showall
+FI stderr
+FC = 1
+FI stdout
+FP /^DIRECTORY: .*data\/?\n/
+FP /^DIRECTORY: .*data\/CODONS\/?\n/
+FP /^\s*EBLOSUM62\s*\n/
+FP /^\s*Eyeast.cut\s*\n/
+//
+
+ID embossdata-exfile
+AP embossdata
+CL -filename EPAM60
+FI stderr
+FC = 1
+FI stdout
+FP /^File \.\/EPAM60/
+FP /^File \.embossdata\/EPAM60/
+//
+
+ID embossdata-exfetch
+AP embossdata
+CL -fetch -filename Epepcoil.dat
+FI stderr
+FC = 1
+FI stdout
+FP /^File '.*data\/Epepcoil.dat' has been copied successfully\.\n/
+FI Epepcoil.dat
+FZ = 1445
+FP /\A# Input data for PEPCOIL *\n/
+//
+
+ID embossversion-ex
+AP embossversion
+FI stderr
+FC = 1
+FI stdout
+FC = 1
+FP /^[12]\.\d+(\.\d+)?\n/
+//
+
+ID emowse-ex
+AP emowse
+IN tsw:*
+IN ../../data/test.mowse
+IN
+IN
+FI stderr
+FC = 2
+FI 100k_rat.emowse
+FZ = 8246
+FP /^1   100K_RAT/
+FP /1  : 100K_RAT\s+1\.277e\+06 100368\.6   0\.750/
+//
+
+ID emma-ex
+AP emma
+IN ../../data/globins.fasta
+IN
+IN
+FI stderr
+FC = 3
+##
+## stdout is written by clustalw, invoked by emma
+##
+## exact output file contents depend on the clustalw version
+##
+FI stdout
+FC > 50
+FP /^Sequences \(1:2\) Aligned. Score:  83\n/
+FP /^Alignment Score 2432\n/
+FP /^GCG-Alignment file created +\S+\Z/
+FI hbb_human.aln
+FZ = 1248
+FP /^--------VHLTPEEKSAVTALWGKVN-VDEVGGEALGR-LLVVYPWTQRFFESFGDLST\n/
+FI hbb_human.dnd
+FZ = 186
+FP /^HBB_HUMAN:0.08080,\nHBB_HORSE:0\.08359\)\n/
+//
+
+ID entret-ex
+AP entret
+CL tembl:hsfau
+IN
+FI stderr
+FC = 2
+FI hsfau.entret
+FZ = 2806
+FP /^FT   CDS             57\.\.458\n/
+FP /^\/\/\Z/
+//
+
+ID equicktandem-ex
+AP equicktandem
+IN tembl:hhtetra
+IN
+IN
+IN
+FI stderr
+FC = 2
+FI hhtetra.qtan
+FZ = 36
+FP /^   339        191        935  6 124\n/
+//
+
+ID est2genome-ex
+TI 200
+AP est2genome
+IN tembl:hs989235
+IN tembl:hsnfg9
+IN
+FI stderr
+FC = 2
+FI hs989235.est2genome
+FZ = 3051
+FP /Note .* forward est and forward genome, .* imply REVERSED GENE/
+FP /^Exon       163  91\.8 25685 25874 HSNFG9           1   193 HS989235/
+//
+
+ID etandem-ex
+AP etandem
+IN tembl:hhtetra
+IN
+IN 6
+IN
+FI stderr
+FC = 2
+FI hhtetra.tan
+FZ = 245
+FC = 5
+FP /^   120        793        936  6  24  93.8 acccta\n/
+FP /^    90        283        420  6  23  84.8 taaccc\n/
+FP /^    38        432        485  6   9  90.7 ccctaa\n/
+FP /^    26        494        529  6   6  94.4 ccctaa\n/
+FP /^    24        568        597  6   5 100.0 aaccct\n/
+//
+
+ID extractseq-ex
+AP extractseq
+CL tembl:hsfau result.seq -regions '10-20'
+FI stderr
+FC = 1
+FI result.seq
+FZ = 45
+FP /^ctcgactccat\n/
+//
+
+ID extractseq-ex2
+AP extractseq
+CL tembl:hsfau result2.seq -regions '10-20 30-45 533-537'
+FI stderr
+FC = 1
+FI result2.seq
+FZ = 61
+FP /^ctcgactccatagctgggaccgccgtt\n/
+//
+
+ID extractseq-ex3
+AP extractseq
+CL tembl:hsfau1 -reg "782..856,951..1095,1557..1612,1787..1912" stdout
+FI stderr
+FC = 1
+FI stdout
+FC = 8
+FP /^atgcagctctttg[^\n]+ccaggaaacg/
+FP /^cccacctttggcaagaagaagggccccaatgccaactcttaa\n/
+//
+
+ID extractseq-ex4
+AP extractseq
+CL tembl:hsfau1 -reg "782..856,951..1095,1557..1612,1787..1912" stdout -separate
+FI stderr
+FC = 1
+FI stdout
+FC = 13
+FP /^>HSFAU1_782_856/
+FP /atgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacg\ngtcgcccagatcaag/
+FP /gtaaagtccatggttccctggcccgtgctggaaaagtgagaggtcagactcctaag/
+FP /^tcttaa\n/
+//
+
+ID findkm-ex
+AP findkm
+CL -graph ps
+IN ../../data/enztest.dat
+IN
+FI stderr
+FC = 2
+FI enztest.findkm
+FP /^Vmax = 99.70, Km = 4.894612\n/
+FI findkm.ps
+FZ > 30000
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
+//
+
+ID freak-ex
+AP freak
+CL tembl:hsfau
+IN
+IN
+FI stderr
+FC = 2
+FI hsfau.freak
+FP /^24         0.733333\n/
+FP /^36         0.600000\n/
+FP /^489        0.266667\Z/
+FZ = 9827
+//
+
+ID fuzznuc-ex
+AP fuzznuc
+IN tembl:hhtetra
+IN AAGCTT
+IN
+IN
+FI stderr
+FC = 2
+FI hhtetra.fuzznuc
+FZ = 64
+FP /^        HHTETRA        1 AAGCTT\n/
+FP /^        HHTETRA     1267 AAGCTT\n/
+//
+
+ID fuzzpro-ex
+AP fuzzpro
+IN tsw:*
+IN [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+IN
+IN
+FI stderr
+FC = 2
+FI 100k_rat.fuzzpro
+FP /^     ACT2_FUGRU    53 YVGDEAQSKRG\n/
+FP 3 /^     ACT._FUGRU    53 YVGDEAQSKRG\n/
+FP 3 /^     ACT._FUGRU    55 YVGDEAQSKRG\n/
+//
+
+ID fuzztran-ex
+AP fuzztran
+CL -opt
+IN tembl:rnops
+IN f
+IN
+IN RA
+IN
+IN
+FI stderr
+FC = 31
+FI rnops.fuzztran
+FZ = 279
+FP /^          RNOPS  1      919 RA\n/
+FP /^          RNOPS  2      752 RA\n/
+FP /^          RNOPS  3       72 RA\n/
+FP 6 /^          RNOPS  1 +\d+ RA\n/
+FP 2 /^          RNOPS  2 +\d+ RA\n/
+FP 1 /^          RNOPS  3 +\d+ RA\n/
+//
+
+ID garnier-ex
+AP garnier
+IN tsw:amic_pseae
+IN
+FI stderr
+FC = 2
+FI amic_pseae.garnier
+FZ = 2943
+FP /^ Residue totals: H:111   E: 98   T: 81   C: 94\n/
+//
+
+ID geecee-ex
+AP geecee
+CL tembl:hhtetra
+IN
+FI stderr
+FC = 2
+FI hhtetra.geecee
+FZ = 42
+FP /^HHTETRA       0\.53\n/
+//
+
+ID getorf-ex
+AP getorf
+CL -minsize 300
+IN tembl:eclaci
+IN
+FI stderr
+FC = 2
+FI eclaci.orf
+FZ = 861
+FP /^>ECLACI_1 \[735 - 1112\]/
+FP /^TGKRAV\n/
+FP /^>ECLACI_2 \[1 - 1110\]/
+FP /^RQVSRLESGQ\*\n/
+FP /^>ECLACI_3 \[465 - 49\]/
+//
+
+ID helixturnhelix-ex
+AP helixturnhelix
+IN tsw:laci_ecoli
+IN
+FI stderr
+FC = 2
+FI laci_ecoli.hth
+FZ = 240
+FP /^Score 2160 \(\+6\.54 SD\) in LACI_ECOLI at residue 4\n/
+//
+
+ID hmoment-ex
+AP hmoment
+CL tsw:hbb_human
+IN
+FI stderr
+FC = 2
+FI hbb_human.hmoment
+FZ = 1483
+FP /^Window: 10 Angle: 100 Max uH: 0\.714\n/
+FP /^137\s+0\.299\Z/
+//
+
+ID iep-ex
+AP iep
+CL tsw:laci_ecoli
+IN
+FI stderr
+FC = 2
+FI laci_ecoli.iep
+FZ = 761 
+FP /^Isoelectric Point = 6\.8820\n/
+FP /^  7\.00    43\.59    -0\.41\n/
+//
+
+# change examples to .msf from .seq
+#
+ID infoalign-ex
+AP infoalign
+CL ../../data/globins.msf
+FI stderr
+FC = 1
+FI stdout
+FZ = 691
+FP /^msf::.*HBA_HORSE\s+HBA_HORSE\s+144\s+147\s+2\s+3\s+48\s+4\s+92\s+66\.666664\s+\n/
+//
+
+ID infoalign-ex2
+AP infoalign
+CL ../../data/globins.msf -nousa
+FI stderr
+FC = 1
+FI stdout
+FZ = 407
+FP /^HBA_HORSE\s+144\s+147\s+2\s+3\s+48\s+4\s+92\s+66\.666664\s+\n/
+//
+
+ID infoalign-ex3
+AP infoalign
+CL ../../data/globins.msf -only -name -seqlength
+FI stderr
+FC = 1
+FI stdout
+FZ = 126
+FP /^HBA_HORSE\s+144\n/
+//
+
+ID infoalign-ex4
+AP infoalign
+CL ../../data/globins.msf -only -name -gapcount -diffcount
+FI stderr
+FC = 1
+FI stdout
+FZ = 136
+FP /^HBA_HORSE\s+3\s+92\n/
+//
+
+ID infoalign-ex5
+AP infoalign
+CL ../../data/globins.msf -only -name -gaps
+FI stderr
+FC = 1
+FI stdout
+FZ = 112
+FP /^HBA_HORSE\s+2\n/
+//
+
+ID infoalign-ex6
+AP infoalign
+CL ../../data/globins.msf -html
+FI stderr
+FC = 1
+FI stdout
+FZ = 1590
+FP /^<tr><tr>msf::\.\./\.\./data/globins\.msf:HBA_HORSE<\/tr>\n/
+FP /^<tr>HBA_HORSE<\/tr>\n/
+//
+
+ID infoalign-ex7
+AP infoalign
+CL ../../data/globins.msf -refseq 1
+FI stderr
+FC = 1
+FI stdout
+FZ = 691
+FP /^msf::\S+\s+HBA_HORSE\s+144\s+147\s+2\s+3\s+54\s+18\s+72\s+62.500000\s+\n/
+//
+
+ID infoseq-ex
+AP infoseq
+CL tembl:paamir
+FI stderr
+FC = 1
+FI stdout
+FZ = 202
+FP /^tembl-id:PAAMIR\s+PAAMIR\s+X13776\s+N\s+2167\s+66\.54\s+Pseudomonas/
+//
+
+ID infoseq-ex2
+AP infoseq
+CL tembl:paamir -nousa
+FI stderr
+FC = 1
+FI stdout
+FZ = 168
+FP /^PAAMIR\s+X13776\s+N\s+2167\s+66\.54\s+Pseudomonas/
+//
+
+ID infoseq-ex3
+AP infoseq
+CL tembl:paamir -only -name -length
+FI stderr
+FC = 1
+FI stdout
+FZ = 19
+FP /^PAAMIR\s+2167\n/
+//
+
+ID infoseq-ex4
+AP infoseq
+CL tembl:paamir -only -desc
+FI stderr
+FC = 1
+FI stdout
+FZ = 75
+FP /^Pseudomonas aeruginosa .* regulation\n/
+//
+
+ID infoseq-ex5
+AP infoseq
+CL tembl:paamir -only -type
+FI stderr
+FC = 1
+FI stdout
+FZ = 2
+FP /^N\n/
+//
+
+ID infoseq-ex6
+AP infoseq
+CL tembl:paamir -html
+FI stderr
+FC = 1
+FI stdout
+FZ = 354
+FP /^<tr><td>tembl-id:PAAMIR</td><td>PAAMIR</td><td>X13776</td><td>N</td><td>2167</td><td>66.54 </td><td>Pseudomonas .* regulation</td></tr>\n/
+//
+
+ID isochore-ex
+CC Reads Genbank entry SCCHRIII from remote server
+AP isochore
+CL tgb:scchriii
+IN
+FI stderr
+FC = 2
+FI scchriii.iso
+FZ = 0
+//
+
+# remove the extra 2 prompts from the example
+ID lindna-ex
+AP lindna
+CL -graph ps
+IN ../../data/data.linp
+FI stderr
+FC = 2
+FI lindna.ps
+FZ = 14048
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
+//
+
+ID marscan-ex
+AP marscan
+IN tembl:u01317
+IN
+FI stderr
+FC = 2
+FI hshbb.marscan 
+FZ = 1181
+FP /\t2242\t2458\t.* 8bp.*=2451\.\.2458.* 16bp.*= 2242\.\.2257"\n/
+//
+
+ID maskfeat-ex
+AP maskfeat
+CL tembl:ab000360
+IN
+FI stderr
+FC = 3
+FI ab000360.fasta
+FZ = 2683
+FP /^>AB000360 /
+FP /^NNNNNNNNNNNNNNNNaaagtcacttctttctacccttttcaatgtgctaatgctctttt\n/
+//
+
+ID maskseq-ex
+AP maskseq
+CL ../../data/prot.fasta prot2.seq -reg=10-12
+FI stderr
+FC = 1
+FI prot2.seq
+FZ = 146
+FP /^ACDEFGHIKXXXPQRSTVWYACDEFGHIKLMNPQRSTVWYACDEFGHIKLMNPQRSTVWY\n/
+//
+
+ID maskseq-ex2
+AP maskseq
+CL ../../data/prot.fasta prot2.seq -reg=20-30 -mask=x
+FI stderr
+FC = 1
+FI prot2.seq
+FZ = 146
+FP /^ACDEFGHIKLMNPQRSTVWxxxxxxxxxxxMNPQRSTVWYACDEFGHIKLMNPQRSTVWY\n/
+//
+
+ID maskseq-ex3
+AP maskseq
+CL ../../data/prot.fasta prot2.seq -reg=20-23,34-45,88-90
+FI stderr
+FC = 1
+FI prot2.seq
+FZ = 146
+FP /^ACDEFGHIKLMNPQRSTVWXXXXEFGHIKLMNPXXXXXXXXXXXXGHIKLMNPQRSTVWY\n/
+FP /^ACDEFGHIKLMNPQRSTVWYACDEFGHXXXMNPQRSTVWY\n/
+//
+
+ID matcher-ex
+AP matcher
+CL tsw:hba_human tsw:hbb_human
+IN
+FI stderr
+FC = 2
+FI hba_human.matcher
+FZ = 916
+FP /^  43\.4% identity in 145 HBA_HUMAN overlap; score:  264\n/
+//
+
+ID megamerger-ex
+TI 300
+AP megamerger
+CL tembl:ap000504 tembl:af129756
+IN
+IN report
+IN
+FI stderr
+FC = 2
+FI report
+FZ = 30354
+FP /^AP000504 overlap starts at 1\n/
+FP /^AF129756 overlap starts at 6036\n/
+##
+## silly example - output is identical to af129756
+##
+FI ap000504.merged
+FZ = 187842
+FP /^gaattctctccctcccatctgtggctgagattaaagatctgcacctgaagcactgaagaa\n/
+FP /^tcctgctcctagaagctaaactctccagacttagtcttctgaattc\n/
+//
+
+ID merger-ex
+AP merger
+IN tembl:eclacy
+IN tembl:eclaca
+IN
+IN
+FI stderr
+FC = 2
+FI stdout 
+FZ = 16012
+FP /^Score: 795\.00\n/
+FP /^ECLACY +1351 +gtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccga 1395 +\n/
+FP /^ECLACA +10 +gtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccga 54 +\n/
+##
+## starts with eclacy, ends with eclaca, small overlap
+##
+FI eclacy.fasta
+FZ = 3289
+FP /^ttccagctgagcgccggtcgctaccattaccagttggtctggtgtcaaaaataataataa\n/
+FP /^agcttccggccagcgccagcccgcccatggtaaccaccggcagagcggtcgac\n/
+//
+
+ID msbar-ex
+AP msbar
+IN tembl:eclac
+IN
+IN 5
+IN 4
+IN
+IN
+FI stderr
+FC = 26
+##
+## hard to test - different changes each time
+FI eclac.fasta 
+FZ = 7676
+FP /^>ECLAC J01636/
+//
+
+ID needle-ex
+AP needle
+CL tsw:hba_human tsw:hbb_human
+IN
+IN
+IN
+FI stderr
+FC = 2
+FI hba_human.needle 
+FZ = 1025
+FP /^Score: 290\.50\n/
+FP / 1 +VHLTPEEKSAVTALWGKV\.\.NVDEVGGEALGRLLVVYPWTQRFFE 43 /
+FP / 45 +HF\.DLS\.\.\.\.\.HGSAQVKGHGKKVADALTNAVAHVDDMPNALSAL 83 /
+//
+
+ID newcpgreport-ex
+AP newcpgreport
+IN tembl:rnu68037
+IN
+IN
+IN
+IN
+IN
+IN
+FI stderr
+FC = 2
+FI rnu68037.newcpgreport
+FZ = 542
+FP /^FT   CpG island       104\.\.509\n/
+FP /^FT                    \/size=406\n/
+FP /^FT                    \/Sum C\+G=269\n/
+FP /^FT                    \/Percent CG=66\.26\n/
+FP /^FT                    \/ObsExp=0.81\n/
+FP /^FT   CpG island       596\.\.924\n/
+FP /^FT   numislands       2\n/
+//
+
+ID newcpgseek-ex
+AP newcpgseek
+IN tembl:rnu68037
+IN
+IN
+FI stderr
+FC = 2
+FI rnu68037.newcpgseek
+FZ = 279
+FP /^with score \> 17 \n/
+FP /^\*    96   1032   630         87  66\.1   0\.65\n/
+FP /^  1072   1100    26          3  62\.1   0\.00\n/
+FP /^  1183   1193    26          2  72\.7   2\.00\n/
+//
+
+# example to use SWISS format (for protein)
+ID newseq-ex
+AP newseq
+IN swiss::mycc.pep
+IN cytoc
+IN fragment of cytochrome c
+IN p
+IN KKKEERADLIAY
+FI stderr
+FC = 5
+FI mycc.pep
+FZ = 154
+FP /^ID   cytoc          STANDARD;      PRT;    12 AA\.\n/
+FP /^DE   fragment of cytochrome c\n/
+FP /^SQ   SEQUENCE    12 AA;   1464 MW;  2BF1DB53 CRC32;\n/
+//
+
+ID noreturn-ex
+AP noreturn
+CL ../../data/abc.dat
+IN
+FI stderr
+FC = 2
+FI abc.noreturn
+FZ = 71
+FP /carriage return format\nACDEFGHIKLMNPQRSTVWY\n/
+//
+
+# change example to use globins.fasta
+ID notseq-ex
+AP notseq
+IN ../../data/globins.fasta
+IN mydata.seq
+IN myg_phyca,lgb2_luplu
+FI stderr
+FC = 2
+FI mydata.seq
+FZ = 926
+FP /^>HBA_HUMAN/
+FP /^>HBA_HORSE/
+FP /^>HBB_HUMAN/
+FP /^>HBB_HORSE/
+FP /^>GLB5_PETMA/
+FP 0 /^>MYG_PHYCA/
+FP 0 /^>LGB2_LUPLU/
+//
+
+ID notseq-ex2
+AP notseq
+IN ../../data/globins.fasta
+IN mydata.seq
+IN hb*
+FI stderr
+FC = 2
+FI mydata.seq
+FZ = 581
+FP 0 /^>HBA_HUMAN/
+FP 0 /^>HBA_HORSE/
+FP 0 /^>HBB_HUMAN/
+FP 0 /^>HBB_HORSE/
+FP /^>GLB5_PETMA/
+FP /^>MYG_PHYCA/
+FP /^>LGB2_LUPLU/
+//
+
+ID nrscope-ex
+CC input data file not available
+AP nrscope
+IN ../../data/Escop.dat
+IN EscopNR.test
+IN
+IN
+IN 95
+IN
+IN 20
+IN 1
+IN EscopNR.log
+FI stderr
+FC = 2
+FI EscopNR.log
+FZ = 0
+FI EscopNR.test
+FZ = 0
+//
+
+ID nthseq-ex
+AP nthseq
+IN tembl:eclac*
+IN 2
+IN
+FI stderr
+FC = 2
+FI eclac.fasta
+FZ = 1940
+FP /^>ECLACA X51872 Escherichia coli lacA gene/
+//
+
+ID octanol-ex
+AP octanol
+IN tsw:opsd_human
+IN ps
+FI stderr
+FC = 2
+FI octanol.ps
+FZ = 17968
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
+//
+
+ID oddcomp-ex
+CC test.comp input file missing
+AP oddcomp
+IN tsw:*
+IN out.odd
+IN ../../data/test.comp
+IN
+FI stderr
+FC = 2
+FI out.odd
+FZ = 0
+//
+
+ID palindrome-ex
+AP palindrome
+IN tembl:hsts1
+IN 15
+IN
+IN
+IN
+IN
+IN
+FI stderr
+FC = 2
+FI hsts1.pal
+FZ = 1380
+FP /^Palindromes:\n126   caaaaaaaaaaaaaaaa   142\n/
+FP /^217   gtttttttttttttttt   201\n/
+FP /^127   aaaaaaaaaaaaaaaagaccgccagggct   155\n/
+FP /^204   ttttttttttttttttctggcggtcccga   176\n/
+//
+
+# change the examples to use these files
+ID pasteseq-ex
+AP pasteseq
+CL tsw:amir_pseae tsw:flav_nossm -pos=67
+IN
+FI stderr
+FC = 2
+FI amir_pseae.fasta
+FZ = 276
+FP /^FQNGHHDSKKIGLFYGTZTGKTESVAEIIDEFGDEVVTLDIDEIAALLAAGTPRTTLVAL\n/
+//
+
+ID pasteseq-ex2
+AP pasteseq
+CL tsw:amir_pseae tsw:flav_nossm -out=amirplus.seq -pos=67
+FI stderr
+FC = 1
+FI amirplus.seq
+FZ = 276
+FP /^FQNGHHDSKKIGLFYGTZTGKTESVAEIIDEFGDEVVTLDIDEIAALLAAGTPRTTLVAL\n/
+//
+
+ID pasteseq-ex3
+AP pasteseq
+CL tsw:amir_pseae tsw:flav_nossm -out=amirplus.seq -pos=0
+FI stderr
+FC = 1
+FI amirplus.seq
+FZ = 276
+FP /^DALVLQLIRIGCSVRQCWPPPEAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVAL\n/
+//
+
+ID patmatdb-ex
+AP patmatdb
+IN tsw:*
+IN st[ty]s
+IN
+FI stderr
+FC = 2
+FI 100k_rat.patmatdb 
+FZ = 855
+FP /^Number of matches found in HD_FUGRU = 1\n/
+FP /^Length of the sequence = 3148 basepairs\n/
+FP /^Length of match = 4\n/
+FP /^Start of match = position 1037 of sequence\n/
+FP /^End of match = position 1040 of sequence\n/
+FP /^patmatDB of HD_FUGRU from 1037 to 1040 using pattern st\[ty\]s\n/
+FP /^STPASSTTSSAVDP\n/
+//
+
+# change the example (was an arabidopsis entry)
+ID patmatmotifs-ex
+CC Needs prosextract - uses reformatted prosite data
+AP patmatmotifs
+CL -full
+IN tsw:opsd_human
+IN
+FI stderr
+FC = 2
+FI opsd_human.patmatmotifs
+FP /^Number of matches found in this Sequence = 1\n/
+FP /^Length of the sequence = 348 basepairs\n/
+FP /^Start of match = position 123 of sequence\n/
+FP /^End of match = position 139 of sequence\n/
+FP /^Length of motif = 17\n/
+FP /^patmatmotifs of G_PROTEIN_RECEP_F1_1 with OPSD_HUMAN from 123 to 139\n/
+FP /^TLGGEIALWSLVVLAIERYVVVCKPMS\n/
+//
+
+ID pepcoil-ex
+AP pepcoil
+IN tsw:gcn4_yeast
+IN
+IN
+FI stderr
+FC = 2
+FI gcn4_yeast.pepcoil 
+FZ = 258
+FP /^Other structures from 1 to 232 \(232 residues\)\n/
+FP /^   Max score: 1\.283 \(probability 0\.21\)\n/
+FP /^Prediction starts at 233\n/
+FP /^Probable coiled-coil from 233 to 281 \(49 residues\)\n/
+FP /^   Max score: 1\.910 \(probability 1\.00\)\n/
+//
+
+ID pepinfo-ex
+AP pepinfo
+IN tsw:opsd_human
+IN ps
+IN
+FI stderr
+FC = 2
+FI pepinfo.out 
+FZ = 202670
+FP 3 /^\s+4\s+T\s+1\n/
+FP 6 /^\s+4\s+T\s+0\n/
+FP 3 /^\s+4\s+T\s+0\.000\n/
+FI pepinfo.ps
+FZ = 670365
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 2\n/
+//
+
+ID pepnet-ex
+AP pepnet
+CL -sask
+IN tsw:gcn4_yeast
+IN 253
+IN 274
+IN ps
+FI stderr
+FC = 2
+FI pepnet.ps
+FZ = 12009
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 2\n/
+//
+
+ID pepstats-ex
+AP pepstats
+IN tsw:laci_ecoli
+IN
+FI stderr
+FC = 2
+FI laci_ecoli.pepstats
+FZ = 1259
+FP /^Molecular weight = 38563\.98/
+FP /^Average Residue Weight  = 107\.122\s+Charge\s+= 1\.5\s+\n/
+FP /^Isoelectric Point = 6\.8820\n/
+FP /^A = Ala\s+44\s+12\.222\s+1\.421\s+\n/
+FP /^Tiny\s+\(A\+C\+G\+S\+T\)\s+121\s+33\.611\n/
+//
+
+ID pepwheel-ex
+AP pepwheel
+CL tsw:hbb_human -send 30
+IN ps
+FI stderr
+FC = 2
+FI hbb_human.pepwheel
+FZ = 0
+FI pepwheel.ps
+FZ = 12395
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
+//
+
+ID pepwindow-ex
+AP pepwindow
+CL tsw:hba_human
+IN ps
+FI stderr
+FC = 2
+FI pepwindow.ps
+FZ = 14647
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
+//
+
+# change example to globins.msf (plural)
+ID pepwindowall-ex
+AP pepwindowall
+CL ../../data/globins.msf -gxtitle="Base Number" -gytitle="hydropathy"
+IN ps
+FI stderr
+FC = 12
+FI pepwindowall.ps
+FZ = 13691
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
+//
+
+# change example to use globins.msf
+ID plotcon-ex
+AP plotcon
+CL -sformat msf ../../data/globins.msf -graph ps
+IN
+FI stderr
+FC = 2
+FI plotcon.ps
+FZ = 20866
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
+FI outfile.plotcon
+FZ = 0
+//
+
+ID plotorf-ex
+AP plotorf
+IN tembl:paamir
+IN ps
+FI stderr
+FC = 2
+FI plotorf.ps
+FZ = 40719
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
+//
+
+ID plotorf-ex2
+AP plotorf
+CL -start ATT,ATC,ATA,ATG,GTG -stop TAA,TAG,AGA,AGG
+IN ../../data/mito.seq
+IN ps
+FI stderr
+FC = 2
+FI plotorf.ps
+FZ = 140763
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
+//
+
+ID polydot-ex
+AP polydot
+CL ../../data/globins.fasta -gtitle="Polydot of globins.fasta"
+CL -graph ps
+IN
+FI stderr
+FC = 2
+FI polydot.ps
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
+FI outfile.polydot
+FZ = 0
+//
+
+ID preg-ex
+AP preg
+IN tsw:*_rat
+IN
+IN IA[QWF]A
+FI stderr
+FC = 2
+FI 100k_rat.preg
+FZ = 94
+FP /^       100K_RAT   390 IAQA\n/
+//
+
+ID prettyplot-ex
+AP prettyplot
+CL -resbreak=10 -boxcol -consensus -plurality=3
+IN ../../data/globins.msf
+IN ps
+FI stderr
+FC = 2
+FI prettyplot.ps
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 3\n/
+//
+
+ID prettyplot-ex2
+AP prettyplot
+CL ../../data/globins.msf -plurality=3 -docolour
+IN ps
+FI stderr
+FC = 2
+FI prettyplot.ps
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 2\n/
+//
+
+ID prettyseq-ex
+AP prettyseq
+IN tembl:paamir
+IN 135-1292
+IN
+FI stderr
+FC = 2
+FI paamir.prettyseq 
+FZ = 8166 
+FP / 121 AGGAGAGGAAACGGatgggatcgcaccaggagcggccgctgatcggcctgctgttctccg 180\n/
+FP / 1               M  G  S  H  Q  E  R  P  L  I  G  L  L  F  S  E 16\n/
+//
+
+ID prima-ex
+AP prima
+IN tembl:eclaci
+IN
+IN
+IN
+IN
+IN
+IN
+FI stderr
+FC = 2
+FI eclaci.prima 
+FZ = 1597
+FP /^3 pairs found\n/
+FP /^ +10 AGTCAATTCAGGGTGGTGAA +29\s+154 ATGTAATTCAGCTCCGCCAT +173\n/
+FP /Tm  56\.24 C  \(GC 50\.00%\)\s+Tm  57\.14 C  \(GC 50\.00%\)\n/
+FP /Tma:    40\.56 C\s+Tma:    40\.83 C\n/
+FP /Product GC: 53\.23%\n/
+FP /Product Tm: 55\.12 C\n/
+FP /Length:     124\n/
+FP /^ +266 TTGTCGCGGCGATTAAATCTC +286\s+510 GTACCGTCTTCATGGGAGAAA +530\n/
+FP /^ +477 TGTCTCTGACCAGACACCC +495\s+728 GGAACGATGCCCTCATTCA +746\n/
+//
+
+ID primersearch-ex
+AP primersearch
+CL tembl:z52466
+IN ../../data/primers
+IN
+IN
+FI stderr
+FC = 2
+FI hsa203yc1.primersearch
+FZ = 405
+FP /^Primer name D1S2660\nAmplimer 1\n/
+FP /^\tSequence: HSA203YC1 Z52466 \n/
+FP /^\tH.sapiens \(D1S2660\) DNA segment containing \(CA\) repeat; clone AFMa203yc1; single read\.\n/
+FP /^\tCACACATGCACATGCAC hits forward strand at 27 with 0 mismatches\n/
+FP /^\tAGTGACACCAGCAGGG hits reverse strand at \[103\] with 0 mismatches\n/
+FP /^\tAmplimer length: 261 bp\n/
+//
+
+ID primersearch-ex2
+AP primersearch
+CL tembl:z52466
+IN ../../data/primers
+IN
+IN 20
+FI stderr
+FC = 2
+FI hsa203yc1.primersearch
+FZ = 686
+FP /^Amplimer 1\n\tSequence: HSA203YC1 Z52466 \n/
+FP /^Amplimer 2\n\tSequence: HSA203YC1 Z52466 \n/
+FP /^\tCACACATGCACATGCAC hits forward strand at 49 with 2 mismatches\n/
+//
+
+## commit a data/seqs.list file for input
+
+ID primersearch-ex3
+CC Need the seqs.list input list
+AP primersearch
+CL @../../data/seqs.list
+IN ../../data/primers
+IN
+IN
+FI stderr
+FC = 2
+FI hs214yg7.primersearch
+FZ = 0
+//
+
+ID printsextract-ex
+TI 400
+CC Needs a local copy of prints
+AP printsextract
+IN /srsdata/flatfiles/prints/prints30_0.dat
+FI stderr
+FC = 2
+//
+
+# change example to start with data/globins.msf
+# note - prompts reversed relative to example
+# Note - failed to find any results
+ID profit-ex
+AP profit
+IN ../../data/globins.prophecy
+IN tsw:*
+IN
+FI stderr
+FC = 2
+FI globins.profit
+FZ = 93
+FP /^#\Z/
+//
+
+#fix example to match this.
+ID prophecy-ex
+AP prophecy
+IN ../../data/globins.msf
+IN
+IN globins
+IN
+IN
+FI stderr
+FC = 6
+FI outfile.prophecy 
+FZ = 13782
+FC = 173
+FP /^Maximum score\s+496\n/
+FP /^Consensus\s+PIVDT.*AAYQG\n/
+//
+
+#fix example to match this.
+ID prophecy-ex2
+AP prophecy
+IN ../../data/globins.msf
+IN g
+IN globins
+IN
+IN
+IN
+IN
+FI stderr
+FC = 6
+FI outfile.prophecy 
+FZ = 24742
+FP /^Max_score\s+645\.45\n/
+FP /^Consensus\s+PIVDT.*ELGYQG\n/
+FP /^0\.15 0\.00 0\.03 0\.03 0\.03 -0\.18 .* 0\.87 0\.87\n/
+//
+
+# example - use h* to save time
+ID prophet-ex
+TI 600
+AP prophet
+IN tsw:h*
+IN ../../data/globins.gribskov
+IN
+IN
+IN
+FI stderr
+FC = 2
+FI hba_human.prophet
+FP /^Score: 170.08\n/
+FP /^Consensus +15 +ELSAVDKAWVKAN\.SVAEVGGHALERGLFASEPMTLEFFDTFKYL 58 +\n/
+FP /^HBA_HUMAN +1 +VLSPADKTNVKAAWG\.GKVGAHAGEYGAEALERMFLSFPTTKTYF 44 +\n/
+//
+
+# example needs modifying - what is prosite.lines
+ID prosextract-ex
+AP prosextract
+IN /srsdata/flatfiles/prosite
+FI stderr
+FC = 2
+//
+
+ID pscan-ex
+AP pscan
+IN tsw:opsd_human
+IN
+IN
+IN
+FI stderr
+FC = 2
+FI opsd_human.pscan 
+FZ = 1501
+FP /^Fingerprint GPCRRHODOPSN Elements 7\n    Accession number PR00237\n/
+FP /^  Element 1 Threshold 54% Score 64%\n/
+FP /^             Start position 39 Length 25\n/
+//
+
+ID rebaseextract-ex
+AP rebaseextract
+IN /srsdata/flatfiles/rebase/withrefm
+FI stderr
+FC = 2
+//
+
+ID recoder-ex
+AP recoder
+IN tembl:hsfau
+IN EcoRII
+IN
+FI stderr
+FC = 2
+FI hsfau.recoder
+FZ = 2563
+FP 3 /^EcoRII      CCWGG          77        P\.P    78       C->[ACGT]  \n/
+//
+
+# make bamhi explicit in reply to prompt
+ID redata-ex
+CC Needs rebaseextract to reformat REBASE data
+AP redata
+IN BamHI
+IN
+FI stderr
+FC = 2
+FI outfile.redata
+FP /\ABamHI\n/
+FP /^Recognition site is GGATCC leaving sticky ends\n/
+FP /^  Cut positions 5':1 3':5\n/
+//
+
+ID remap-ex
+CC Needs rebaseextract to reformat REBASE data
+AP remap
+CL -notran -sbeg 1 -send 60
+IN tembl:eclac
+IN
+IN taqi,bsu6i,acii,bsski
+IN
+FI stderr
+FC = 2
+FI eclac.remap 
+FZ = 888
+FP /^# Enzymes that cut.*\n(\s+\S+\s+1\s+\n){4}\n/
+FP /^# Enzymes that do not cut.*\n\n/
+FP /^\s+AciI\s+1\s+\n/
+FP /^\s+BssKI\s+1\s+\n/
+FP /^\s+Bsu6I\s+1\s+\n/
+FP /^\s+TaqI\s+1\s+\n/
+//
+
+ID remap-ex2
+CC Needs rebaseextract to reformat REBASE data
+AP remap
+CL -notran -sbeg 1 -send 60
+IN tembl:eclac
+IN
+IN
+IN
+FI stderr
+FC = 2
+FI eclac.remap
+FZ = 7325
+FP /^\s+AspLEI\s+2\s+BstHHI,CfoI,HhaI\n/
+//
+
+ID restover-ex
+CC Needs rebaseextract to reformat REBASE data
+AP restover
+IN tembl:hsfau
+IN cg
+IN
+FI stderr
+FC = 2
+FI hsfau.restover
+FZ = 1123
+FP /^# Number of hits with any overlap: 214\n/
+FP /^\s+11\s+TaqI\s+TCGA\s+11\s+13\s+\n/
+//
+
+ID restrict-ex
+CC Needs rebaseextract to reformat REBASE data
+AP restrict
+IN tembl:hsfau
+IN
+IN
+IN
+FI stderr
+FC = 2
+FI hsfau.restrict
+FZ = 10033
+FP /^\s+11\s+TaqI\s+TCGA\s+11\s+13\s+\n/
+FP /^\s+125\s+Hin4I\s+GAYNNNNNVTC\s+116\s+111\s+148\s+143\n/
+//
+
+ID revseq-ex
+AP revseq
+CL tembl:hsfau hsfau.rev
+FI stderr
+FC = 1
+FI hsfau.rev
+FZ = 560
+FP /^gtcccagctaccgcgaagatggagtcgagaaagaggaa\n/
+//
+
+ID revseq-ex2
+AP revseq
+CL tembl:hsfau hsfau.rev -norev
+FI stderr
+FC = 1
+FI hsfau.rev
+FZ = 560
+FP /^agattattttttcggtgaatcaagtcagtttttttttt\n/
+//
+
+ID revseq-ex3
+AP revseq
+CL tembl:hsfau hsfau.rev -nocomp
+FI stderr
+FC = 1
+FI hsfau.rev
+FZ = 560
+FP /^cagggtcgatggcgcttctacctcagctctttctcctt\n/
+//
+
+ID scopalign-ex
+CC missing input file(s)
+CC needs stamp
+AP scopalign
+IN ../../data/scop.orig
+IN
+FI stderr
+FC = 2
+FI stdout
+FZ = 0
+//
+
+ID scope-ex
+CC missing input file(s)
+AP scope
+IN ../../data/scop.orig
+IN
+FI stderr
+FC = 2
+FI Escop.dat
+FZ = 0
+//
+
+ID seealso-ex
+AP seealso
+IN matcher
+FI stderr
+FC = 2
+FI stdout
+FZ = 290
+FP /^seqmatchall/
+FP /^supermatcher/
+FP /^water/
+FP /^wordmatch/
+//
+
+ID seqmatchall-ex
+AP seqmatchall
+IN tembl:eclac*
+IN 15
+IN
+FI stderr
+FC = 2
+FI outfile.seqmatchall
+FZ = 210
+FP /^1832  5646 7477 ECLAC 1 1832 ECLACA\n/
+FP /^1113  49 1161 ECLAC 1 1113 ECLACI\n/
+FP /^1500  4305 5804 ECLAC 1 1500 ECLACY\n/
+FP /^3078  1287 4364 ECLAC 1 3078 ECLACZ\n/
+FP /^159  1 159 ECLACA 1342 1500 ECLACY\n/
+FP /^60  1 60 ECLACY 3019 3078 ECLACZ\n/
+//
+
+
+###########################################################################
+
+# first entry in first file
+ID seqret-dbidfilefirst
+AP seqret
+CL -auto tembl:HS989235 test.out
+FI test.out
+FP 1 /\A>HS989235 /
+//
+
+# last entry in last file
+ID seqret-dbidfilelast
+AP seqret
+CL -auto tembl-id:XL23808 test.out
+FI test.out
+FP 1 /\A>XL23808 /
+//
+
+# last entry in last file
+ID seqret-dbacfilelast
+AP seqret
+CL -auto tembl-acc:U23808 test.out
+FI test.out
+FP 1 /\A>XL23808 U23808 /
+//
+
+ID seqret-dbacfirst
+AP seqret
+CL -auto tembl-acc:AB000095 test.out
+FI test.out
+FP 1 /\A>AB000095 AB000095 /
+//
+
+ID seqret-dbacnextlast
+AP seqret
+CL -auto tembl-acc:Z52466 test.out
+FI test.out
+FP 1 /\A>HSA203YC1 Z52466 /
+//
+
+ID seqret-dbaclast
+AP seqret
+CL -auto tembl-acc:Z69719 test.out
+FI test.out
+FP 1 /\A>HSNFG9 Z69719 /
+//
+
+ID seqret-inauto-acedb
+AP seqret
+CL -auto ../../data/dna.acedb test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inusa-acedb
+AP seqret
+CL -auto acedb::../../data/dna.acedb test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-in-acedb
+AP seqret
+CL -auto ../../data/dna.acedb -sf acedb test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inauto-codata
+AP seqret
+CL -auto ../../data/dna.codata test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inusa-codata
+AP seqret
+CL -auto codata::../../data/dna.codata test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-in-codata
+AP seqret
+CL -auto ../../data/dna.codata -sf codata test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inauto-embl
+AP seqret
+CL -auto ../../data/dna.embl test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inusa-embl
+AP seqret
+CL -auto embl::../../data/dna.embl test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-in-embl
+AP seqret
+CL -auto ../../data/dna.embl -sf embl test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inauto-fasta
+AP seqret
+CL -auto ../../data/dna.fasta test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inusa-fasta
+AP seqret
+CL -auto fasta::../../data/dna.fasta test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-in-fasta
+AP seqret
+CL -auto ../../data/dna.fasta -sf fasta test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inauto-gcg
+AP seqret
+CL -auto ../../data/dna.gcg test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inusa-gcg
+AP seqret
+CL -auto gcg::../../data/dna.gcg test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-in-gcg
+AP seqret
+CL -auto ../../data/dna.gcg -sf gcg test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inauto-gcg8
+AP seqret
+CL -auto ../../data/dna.gcg8 test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inusa-gcg8
+AP seqret
+CL -auto gcg8::../../data/dna.gcg8 test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-in-gcg8
+AP seqret
+CL -auto ../../data/dna.gcg8 -sf gcg8 test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inauto-genbank
+AP seqret
+CL -auto ../../data/dna.genbank test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inusa-genbank
+AP seqret
+CL -auto genbank::../../data/dna.genbank test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-in-genbank
+AP seqret
+CL -auto ../../data/dna.genbank -sf genbank test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inauto-ig
+##
+## We expect failure - IG is not allowed for automatic detection
+## because it can read almost anything as 'valid'
+##
+ER 1
+AP seqret
+CL -auto ../../data/dna.ig test.out -osf embl
+FI stderr
+FP /Unable to read sequence .*/dna\.ig/
+//
+
+ID seqret-inusa-ig
+AP seqret
+CL -auto ig::../../data/dna.ig test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-in-ig
+AP seqret
+CL -auto ../../data/dna.ig -sf ig test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inauto-ncbi
+AP seqret
+CL -auto ../../data/dna.ncbi test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inusa-ncbi
+AP seqret
+CL -auto ncbi::../../data/dna.ncbi test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-in-ncbi
+AP seqret
+CL -auto ../../data/dna.ncbi -sf ncbi test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inauto-raw
+AP seqret
+CL -auto ../../data/dna.text test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inusa-raw
+AP seqret
+CL -auto raw::../../data/dna.text test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-in-raw
+AP seqret
+CL -auto ../../data/dna.text -sf raw test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inauto-staden
+AP seqret
+CL -auto ../../data/dna.staden test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inusa-staden
+AP seqret
+CL -auto staden::../../data/dna.staden test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-in-staden
+AP seqret
+CL -auto ../../data/dna.staden -sf staden test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inauto-strider
+AP seqret
+CL -auto ../../data/dna.strider test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inusa-strider
+AP seqret
+CL -auto strider::../../data/dna.strider test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-in-strider
+AP seqret
+CL -auto ../../data/dna.strider -sf strider test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inauto-text
+AP seqret
+CL -auto ../../data/dna.text test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inusa-text
+AP seqret
+CL -auto text::../../data/dna.text test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-in-text
+AP seqret
+CL -auto ../../data/dna.text -sf text test.out -osf embl
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-inmultiauto-acedb
+AP seqret
+CL -auto ../../data/dna.m-acedb test.out -osf embl
+FI test.out
+FP 1 /^ID   ACEDBM1 .* 120 BP\.\n/
+FP 1 /^ID   ACEDBM2 .* 120 BP\.\n/
+FP 1 /^ID   ACEDBM3 .* 120 BP\.\n/
+FP 2 /^SQ   Sequence 120 BP; 30 A; 30 C; 30 G; 30 T; 0 other;/
+FP 1 /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;/
+//
+
+ID seqret-inmultiusa-acedb
+AP seqret
+CL -auto acedb::../../data/dna.m-acedb test.out -osf embl
+FI test.out
+FP 1 /^ID   ACEDBM1 .* 120 BP\.\n/
+FP 1 /^ID   ACEDBM2 .* 120 BP\.\n/
+FP 1 /^ID   ACEDBM3 .* 120 BP\.\n/
+FP 2 /^SQ   Sequence 120 BP; 30 A; 30 C; 30 G; 30 T; 0 other;/
+FP 1 /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;/
+//
+
+ID seqret-inmulti-acedb
+AP seqret
+CL -auto ../../data/dna.m-acedb -sf acedb test.out -osf embl
+FI test.out
+FP 1 /^ID   ACEDBM1 .* 120 BP\.\n/
+FP 1 /^ID   ACEDBM2 .* 120 BP\.\n/
+FP 1 /^ID   ACEDBM3 .* 120 BP\.\n/
+FP 2 /^SQ   Sequence 120 BP; 30 A; 30 C; 30 G; 30 T; 0 other;/
+FP 1 /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;/
+//
+
+ID seqret-inmultiauto-codata
+AP seqret
+CL -auto ../../data/dna.m-codata test.out -osf embl
+FI test.out
+FP 1 /^ID   CODATAM1 .* 120 BP\.\n/
+FP 1 /^ID   CODATAM2 .* 120 BP\.\n/
+FP 1 /^ID   CODATAM3 .* 120 BP\.\n/
+FP 2 /^SQ   Sequence 120 BP; 30 A; 30 C; 30 G; 30 T; 0 other;/
+FP 1 /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;/
+//
+
+ID seqret-inmultiusa-codata
+AP seqret
+CL -auto codata::../../data/dna.m-codata test.out -osf embl
+FI test.out
+FP 1 /^ID   CODATAM1 .* 120 BP\.\n/
+FP 1 /^ID   CODATAM2 .* 120 BP\.\n/
+FP 1 /^ID   CODATAM3 .* 120 BP\.\n/
+FP 2 /^SQ   Sequence 120 BP; 30 A; 30 C; 30 G; 30 T; 0 other;/
+FP 1 /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;/
+//
+
+ID seqret-inmulti-codata
+AP seqret
+CL -auto ../../data/dna.m-codata -sf codata test.out -osf embl
+FI test.out
+FP 1 /^ID   CODATAM1 .* 120 BP\.\n/
+FP 1 /^ID   CODATAM2 .* 120 BP\.\n/
+FP 1 /^ID   CODATAM3 .* 120 BP\.\n/
+FP 2 /^SQ   Sequence 120 BP; 30 A; 30 C; 30 G; 30 T; 0 other;/
+FP 1 /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;/
+//
+
+ID seqret-inmultiauto-embl
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf embl
+FI test.out
+FP 1 /^ID   FASTAM1 .* 120 BP\.\n/
+FP 1 /^ID   FASTAM2 .* 120 BP\.\n/
+FP 1 /^ID   FASTAM3 .* 120 BP\.\n/
+FP 2 /^SQ   Sequence 120 BP; 30 A; 30 C; 30 G; 30 T; 0 other;/
+FP 1 /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;/
+//
+
+ID seqret-inmultiusa-embl
+AP seqret
+CL -auto embl::../../data/dna.m-embl test.out -osf embl
+FI test.out
+FP 1 /^ID   FASTAM1 .* 120 BP\.\n/
+FP 1 /^ID   FASTAM2 .* 120 BP\.\n/
+FP 1 /^ID   FASTAM3 .* 120 BP\.\n/
+FP 2 /^SQ   Sequence 120 BP; 30 A; 30 C; 30 G; 30 T; 0 other;/
+FP 1 /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;/
+//
+
+ID seqret-inmulti-embl
+AP seqret
+CL -auto ../../data/dna.m-embl -sf embl test.out -osf embl
+FI test.out
+FP 1 /^ID   FASTAM1 .* 120 BP\.\n/
+FP 1 /^ID   FASTAM2 .* 120 BP\.\n/
+FP 1 /^ID   FASTAM3 .* 120 BP\.\n/
+FP 2 /^SQ   Sequence 120 BP; 30 A; 30 C; 30 G; 30 T; 0 other;/
+FP 1 /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;/
+//
+
+ID seqret-inmultiauto-fasta
+AP seqret
+CL -auto ../../data/dna.m-fasta test.out -osf embl
+FI test.out
+FP 1 /^ID   FASTAM1 .* 120 BP\.\n/
+FP 1 /^ID   FASTAM2 .* 120 BP\.\n/
+FP 1 /^ID   FASTAM3 .* 120 BP\.\n/
+FP 2 /^SQ   Sequence 120 BP; 30 A; 30 C; 30 G; 30 T; 0 other;/
+FP 1 /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;/
+//
+
+ID seqret-inmultiusa-fasta
+AP seqret
+CL -auto fasta::../../data/dna.m-fasta test.out -osf embl
+FI test.out
+FP 1 /^ID   FASTAM1 .* 120 BP\.\n/
+FP 1 /^ID   FASTAM2 .* 120 BP\.\n/
+FP 1 /^ID   FASTAM3 .* 120 BP\.\n/
+FP 2 /^SQ   Sequence 120 BP; 30 A; 30 C; 30 G; 30 T; 0 other;/
+FP 1 /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;/
+//
+
+ID seqret-inmulti-fasta
+AP seqret
+CL -auto ../../data/dna.m-fasta -sf fasta test.out -osf embl
+FI test.out
+FP 1 /^ID   FASTAM1 .* 120 BP\.\n/
+FP 1 /^ID   FASTAM2 .* 120 BP\.\n/
+FP 1 /^ID   FASTAM3 .* 120 BP\.\n/
+FP 2 /^SQ   Sequence 120 BP; 30 A; 30 C; 30 G; 30 T; 0 other;/
+FP 1 /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;/
+//
+
+ID seqret-inmultiauto-msf
+AP seqret
+CL -auto ../../data/dna.msf test.out -osf embl
+FI test.out
+FP 1 /^ID   MSFM1 .* 120 BP\.\n/
+FP 1 /^ID   MSFM2 .* 120 BP\.\n/
+FP 1 /^ID   MSFM3 .* 120 BP\.\n/
+FP 2 /^SQ   Sequence 120 BP; 30 A; 30 C; 30 G; 30 T; 0 other;/
+FP 1 /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;/
+//
+
+ID seqret-inmultiusa-msf
+AP seqret
+CL -auto msf::../../data/dna.msf test.out -osf embl
+FI test.out
+FP 1 /^ID   MSFM1 .* 120 BP\.\n/
+FP 1 /^ID   MSFM2 .* 120 BP\.\n/
+FP 1 /^ID   MSFM3 .* 120 BP\.\n/
+FP 2 /^SQ   Sequence 120 BP; 30 A; 30 C; 30 G; 30 T; 0 other;/
+FP 1 /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;/
+//
+
+ID seqret-inmulti-msf
+AP seqret
+CL -auto ../../data/dna.msf -sf msf test.out -osf embl
+FI test.out
+FP 1 /^ID   MSFM1 .* 120 BP\.\n/
+FP 1 /^ID   MSFM2 .* 120 BP\.\n/
+FP 1 /^ID   MSFM3 .* 120 BP\.\n/
+FP 2 /^SQ   Sequence 120 BP; 30 A; 30 C; 30 G; 30 T; 0 other;/
+FP 1 /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;/
+//
+
+ID seqret-inmultiauto-msf8
+AP seqret
+CL -auto ../../data/dna.msf8 test.out -osf embl
+FI test.out
+FP 1 /^ID   fastam1 .* 121 BP\.\n/
+FP 1 /^ID   fastam2 .* 121 BP\.\n/
+FP 1 /^ID   fastam3 .* 121 BP\.\n/
+FP 2 /^SQ   Sequence 121 BP; 30 A; 30 C; 30 G; 30 T; 1 other;/
+FP 1 /^SQ   Sequence 121 BP; 29 A; 29 C; 29 G; 29 T; 5 other;/
+//
+
+ID seqret-inmultiusa-msf8
+AP seqret
+CL -auto msf::../../data/dna.msf8 test.out -osf embl
+FI test.out
+FP 1 /^ID   fastam1 [^\n]* 121 BP\.\n/
+FP 1 /^ID   fastam2 [^\n]* 121 BP\.\n/
+FP 1 /^ID   fastam3 [^\n]* 121 BP\.\n/
+FP 2 /^SQ   Sequence 121 BP; 30 A; 30 C; 30 G; 30 T; 1 other;/
+FP 1 /^SQ   Sequence 121 BP; 29 A; 29 C; 29 G; 29 T; 5 other;/
+//
+
+ID seqret-inmulti-msf8
+AP seqret
+CL -auto ../../data/dna.msf8 -sf msf test.out -osf embl
+FI test.out
+FP 1 /^ID   fastam1 .* 121 BP\.\n/
+FP 1 /^ID   fastam2 .* 121 BP\.\n/
+FP 1 /^ID   fastam3 .* 121 BP\.\n/
+FP 2 /^SQ   Sequence 121 BP; 30 A; 30 C; 30 G; 30 T; 1 other;/
+FP 1 /^SQ   Sequence 121 BP; 29 A; 29 C; 29 G; 29 T; 5 other;/
+//
+
+ID seqret-inmultiauto-ncbi
+AP seqret
+CL -auto ../../data/dna.m-ncbi test.out -osf embl
+FI test.out
+FP 1 /^ID   N30001 .* 144 BP\.\n/
+FP 1 /^ID   N30002 .* 144 BP\.\n/
+FP 1 /^ID   N30003 .* 144 BP\.\n/
+FP 3 /Sequence 144 BP; 36 A; 36 C; 36 G; 36 T; 0 other;/
+//
+
+ID seqret-inmultiusa-ncbi
+AP seqret
+CL -auto ncbi::../../data/dna.m-ncbi test.out -osf embl
+FI test.out
+FP 1 /^ID   N30001 .* 144 BP\.\n/
+FP 1 /^ID   N30002 .* 144 BP\.\n/
+FP 1 /^ID   N30003 .* 144 BP\.\n/
+FP 3 /Sequence 144 BP; 36 A; 36 C; 36 G; 36 T; 0 other;/
+//
+
+ID seqret-inmulti-ncbi
+AP seqret
+CL -auto ../../data/dna.m-ncbi -sf ncbi test.out -osf embl
+FI test.out
+FP 1 /^ID   N30001 .* 144 BP\.\n/
+FP 1 /^ID   N30002 .* 144 BP\.\n/
+FP 1 /^ID   N30003 .* 144 BP\.\n/
+FP 3 /Sequence 144 BP; 36 A; 36 C; 36 G; 36 T; 0 other;/
+//
+
+ID seqret-inmultiauto-phylip
+AP seqret
+CL -auto ../../data/dna.phylip test.out -osf embl
+FI test.out
+FP 1 /^ID   MSFM1 .* 120 BP\.\n/
+FP 1 /^ID   MSFM2 .* 120 BP\.\n/
+FP 1 /^ID   MSFM3 .* 120 BP\.\n/
+FP 2 /^SQ   Sequence 120 BP; 30 A; 30 C; 30 G; 30 T; 0 other;/
+FP 1 /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;/
+//
+
+ID seqret-inmultiusa-phylip
+AP seqret
+CL -auto phylip::../../data/dna.phylip test.out -osf embl
+FI test.out
+FP 1 /^ID   MSFM1 .* 120 BP\.\n/
+FP 1 /^ID   MSFM2 .* 120 BP\.\n/
+FP 1 /^ID   MSFM3 .* 120 BP\.\n/
+FP 2 /^SQ   Sequence 120 BP; 30 A; 30 C; 30 G; 30 T; 0 other;/
+FP 1 /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;/
+//
+
+ID seqret-inmulti-phylip
+AP seqret
+CL -auto ../../data/dna.phylip -sf phylip test.out -osf embl
+FI test.out
+FP 1 /^ID   MSFM1 .* 120 BP\.\n/
+FP 1 /^ID   MSFM2 .* 120 BP\.\n/
+FP 1 /^ID   MSFM3 .* 120 BP\.\n/
+FP 2 /^SQ   Sequence 120 BP; 30 A; 30 C; 30 G; 30 T; 0 other;/
+FP 1 /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;/
+//
+
+ID seqret-inmultiauto-strider
+AP seqret
+CL -auto ../../data/dna.m-strider test.out -osf embl
+FI test.out
+FP 1 /^ID   STRIDERM1 .* 144 BP\.\n/
+FP 1 /^ID   STRIDERM2 .* 144 BP\.\n/
+FP 1 /^ID   STRIDERM3 .* 144 BP\.\n/
+FP 3 /Sequence 144 BP; 36 A; 36 C; 36 G; 36 T; 0 other;/
+//
+
+ID seqret-inmultiusa-strider
+AP seqret
+CL -auto strider::../../data/dna.m-strider test.out -osf embl
+FI test.out
+FP 1 /^ID   STRIDERM1 .* 144 BP\.\n/
+FP 1 /^ID   STRIDERM2 .* 144 BP\.\n/
+FP 1 /^ID   STRIDERM3 .* 144 BP\.\n/
+FP 3 /Sequence 144 BP; 36 A; 36 C; 36 G; 36 T; 0 other;/
+//
+
+ID seqret-inmulti-strider
+AP seqret
+CL -auto ../../data/dna.m-strider -sf strider test.out -osf embl
+FI test.out
+FP 1 /^ID   STRIDERM1 .* 144 BP\.\n/
+FP 1 /^ID   STRIDERM2 .* 144 BP\.\n/
+FP 1 /^ID   STRIDERM3 .* 144 BP\.\n/
+FP 3 /Sequence 144 BP; 36 A; 36 C; 36 G; 36 T; 0 other;/
+//
+
+ID seqret-inauto-nonewline
+AP seqret
+CL -auto ../../data/dna.nonewline test.out -osf embl
+FI test.out
+FP /^ID   .* 48 BP\.\n/
+FP /^SQ   Sequence 48 BP; 10 A; 10 C; 10 G; 10 T; 8 other;/
+//
+
+ID seqret-in-badformat
+##
+## bad format name - but still reads (auto) it if it can
+##
+AP seqret
+CL -auto ../../data/dna.fasta -sf badformat test.out -osf embl
+FI stderr
+FP /Unknown input format 'badformat'/
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-in-badusaformat
+##
+## bad format name - but still reads (auto) it if it can
+##
+AP seqret
+CL -auto badformat::../../data/dna.fasta test.out -osf embl
+FI stderr
+FP /Unknown input format 'badformat'/
+FI test.out
+FP /^ID   .* 100 BP\.\n/
+FP /SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
+//
+
+ID seqret-outusa-acedb
+AP seqret
+CL -auto ../../data/dna.embl acedb::test.out
+FI test.out
+FZ = 116
+FP /^DNA : "EMBL"\n/
+//
+
+ID seqret-out-acedb
+AP seqret
+CL -auto ../../data/dna.embl test.out -osf acedb
+FI test.out
+FZ = 116
+FP /^DNA : "EMBL"\n/
+//
+
+ID seqret-outusa-asn1
+AP seqret
+CL -auto ../../data/dna.embl asn1::test.out
+FI test.out
+FZ = 291
+FP /repr raw, mol dna, length 100, topology linear,/
+FP /id \{ local id 1 \},/
+//
+
+ID seqret-out-asn1
+AP seqret
+CL -auto ../../data/dna.embl test.out -osf asn1
+FI test.out
+FZ = 291
+FP /repr raw, mol dna, length 100, topology linear,/
+FP /id \{ local id 1 \},/
+//
+
+ID seqret-outusa-codata
+AP seqret
+CL -auto ../../data/dna.embl codata::test.out
+FI test.out
+FZ = 419
+FP /^     61 a c g t a c g t a c g t a c g t a c g t a c g t a c g t a c\n/
+FP /^ENTRY           EMBL/
+FP /^TITLE           EMBL FORMAT DNA SEQUENCE, 100 bases/
+FP /^ACCESSION       E10002/
+FP /^\/\/\/\n/
+//
+
+ID seqret-out-codata
+AP seqret
+CL -auto ../../data/dna.embl test.out -osf codata
+FI test.out
+FZ = 419
+FP /^     61 a c g t a c g t a c g t a c g t a c g t a c g t a c g t a c\n/
+FP /^ENTRY           EMBL/
+FP /^TITLE           EMBL FORMAT DNA SEQUENCE, 100 bases/
+FP /^ACCESSION       E10002/
+FP /^\/\/\/\n/
+//
+
+ID seqret-outusa-debug
+AP seqret
+CL -auto ../../data/dna.embl debug::test.out
+FI test.out
+FZ = 548
+FP /^  Name: 'EMBL'\n/
+FP /^  Accession: 'E10002'\n/
+FP /^  Description: 'EMBL FORMAT DNA SEQUENCE'\n/
+FP /^  Type: 'N'\n/
+FP /^  Usa: 'debug::test.out'\n/
+FP /^  Input format: 'embl'\n/
+FP /^  Ufo: ''\n/
+FP /^  Entryname: 'EMBL'\n/
+FP /^  File name: 'test\.out'\n/
+FP /^  Extension: 'fasta'\n/
+FP /^  Single: 'No'\n/
+FP /^  Features: 'No'\n/
+FP /^  Count: 'No'\n/
+FP /^  51  gtacgtacgt acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt  100\n/
+//
+
+ID seqret-out-debug
+AP seqret
+CL -auto ../../data/dna.embl test.out -osf debug
+FI test.out
+FZ = 541
+FP /^  Name: 'EMBL'\n/
+FP /^  Accession: 'E10002'\n/
+FP /^  Description: 'EMBL FORMAT DNA SEQUENCE'\n/
+FP /^  Type: 'N'\n/
+FP /^  Usa: 'test.out'\n/
+FP /^  Input format: 'embl'\n/
+FP /^  Ufo: ''\n/
+FP /^  Entryname: 'EMBL'\n/
+FP /^  File name: 'test\.out'\n/
+FP /^  Extension: 'debug'\n/
+FP /^  Single: 'No'\n/
+FP /^  Features: 'No'\n/
+FP /^  Count: 'No'\n/
+FP /^  51  gtacgtacgt acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt  100\n/
+//
+
+ID seqret-outusa-embl
+AP seqret
+CL -auto ../../data/dna.embl embl::test.out
+FI test.out
+FZ = 307
+FP /^ID   EMBL       standard; DNA; UNC; 100 BP\.\n/
+FP /^AC   E10002;\n/
+FP /^DE   EMBL FORMAT DNA SEQUENCE\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;\n/
+FP /^     acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt        60\n/
+//
+
+ID seqret-out-embl
+AP seqret
+CL -auto ../../data/dna.embl test.out -osf embl
+FI test.out
+FZ = 307
+FP /^ID   EMBL       standard; DNA; UNC; 100 BP\.\n/
+FP /^AC   E10002;\n/
+FP /^DE   EMBL FORMAT DNA SEQUENCE\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;\n/
+FP /^     acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt        60\n/
+//
+
+ID seqret-outusa-experiment
+AP seqret
+CL -auto ../../data/dna.embl experiment::test.out
+FI test.out
+FZ = 113
+FP /<EMBL---->/
+FP /^acgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgt\n/
+//
+
+ID seqret-out-experiment
+AP seqret
+CL -auto ../../data/dna.embl test.out -osf experiment
+FI test.out
+FZ = 113
+FP /<EMBL---->/
+FP /^acgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgt\n/
+//
+
+ID seqret-outusa-fasta
+AP seqret
+CL -auto ../../data/dna.embl fasta::test.out
+FI test.out
+FZ = 140
+FP /^>EMBL E10002 EMBL FORMAT DNA SEQUENCE\n/
+FP /^acgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgt\n/
+//
+
+ID seqret-out-fasta
+AP seqret
+CL -auto ../../data/dna.embl test.out -osf fasta
+FI test.out
+FZ = 140
+FP /^>EMBL E10002 EMBL FORMAT DNA SEQUENCE\n/
+FP /^acgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgt\n/
+//
+
+ID seqret-outusa-fitch
+AP seqret
+CL -auto ../../data/dna.embl fitch::test.out
+FI test.out
+FZ = 152
+FP /^EMBL, 100 bases\n/
+FP /^ acg tac gta cgt acg tac gta cgt acg tac gta cgt acg tac gta cgt acg tac gta cgt\n/
+//
+
+ID seqret-out-fitch
+AP seqret
+CL -auto ../../data/dna.embl test.out -osf fitch
+FI test.out
+FZ = 152
+FP /^EMBL, 100 bases\n/
+FP /^ acg tac gta cgt acg tac gta cgt acg tac gta cgt acg tac gta cgt acg tac gta cgt\n/
+//
+
+ID seqret-outusa-gcg
+AP seqret
+CL -auto ../../data/dna.embl gcg::test.out
+FI test.out
+FZ = 211
+FP /^\!\!NA_SEQUENCE 1\.0\n/
+FP /^EMBL  Length: 100  Type: N  Check: 6856 \.\.\n/
+FP /^   1 acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt acgtacgtac\n/
+//
+
+ID seqret-out-gcg
+AP seqret
+CL -auto ../../data/dna.embl test.out -osf gcg
+FI test.out
+FZ = 211
+FP /^\!\!NA_SEQUENCE 1\.0\n/
+FP /^EMBL  Length: 100  Type: N  Check: 6856 \.\.\n/
+FP /^   1 acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt acgtacgtac\n/
+//
+
+ID seqret-outusa-genbank
+AP seqret
+CL -auto ../../data/dna.embl genbank::test.out
+FI test.out
+FZ = 262
+FP /^LOCUS       EMBL\n/
+FP /^ACCESSION   E10002\n/
+FP /^DEFINITION  EMBL FORMAT DNA SEQUENCE\n/
+FP /^BASE COUNT       25 a     25 c     25 g     25 t\n/
+FP /^ORIGIN\n/
+FP /^       1  acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt\n/
+//
+
+ID seqret-out-genbank
+AP seqret
+CL -auto ../../data/dna.embl test.out -osf genbank
+FI test.out
+FZ = 262
+FP /^LOCUS       EMBL\n/
+FP /^ACCESSION   E10002\n/
+FP /^DEFINITION  EMBL FORMAT DNA SEQUENCE\n/
+FP /^BASE COUNT       25 a     25 c     25 g     25 t\n/
+FP /^ORIGIN\n/
+FP /^       1  acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt\n/
+//
+
+ID seqret-outusa-gff
+AP seqret
+CL -auto ../../data/dna.embl gff::test.out
+FI test.out
+FZ = 191
+FP /^##gff-version 2\n/
+FP /^##source-version EMBOSS 2\.0\.0\n/
+FP /^##date [0-9\-]+\n/
+FP /^##DNA EMBL\n/
+FP /^##acgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgt\n/
+FP /^##end-DNA\n/
+//
+
+ID seqret-out-gff
+AP seqret
+CL -auto ../../data/dna.embl test.out -osf gff
+FI test.out
+FZ = 191
+FP /^##gff-version 2\n/
+FP /^##source-version EMBOSS 2\.0\.0\n/
+FP /^##date [0-9\-]+\n/
+FP /^##DNA EMBL\n/
+FP /^##acgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgt\n/
+FP /^##end-DNA\n/
+//
+
+ID seqret-outusa-ig
+AP seqret
+CL -auto ../../data/dna.embl ig::test.out
+FI test.out
+FZ = 145
+FP /;EMBL FORMAT DNA SEQUENCE, 100 bases\n/
+FP /EMBL\n/
+FP /gtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgt1\n/
+//
+
+ID seqret-out-ig
+AP seqret
+CL -auto ../../data/dna.embl test.out -osf ig
+FI test.out
+FZ = 145
+FP /;EMBL FORMAT DNA SEQUENCE, 100 bases\n/
+FP /EMBL\n/
+FP /gtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgt1\n/
+//
+
+ID seqret-outusa-ncbi
+AP seqret
+CL -auto ../../data/dna.embl ncbi::test.out
+FI test.out
+FZ = 150
+FP /^>gnl\|unk\|EMBL \(E10002\) EMBL FORMAT DNA SEQUENCE\n/
+FP /^acgtacgtacgtacgtacgtacgtacgtacgtacgtacgt\n/
+//
+
+ID seqret-out-ncbi
+AP seqret
+CL -auto ../../data/dna.embl test.out -osf ncbi
+FI test.out
+FZ = 150
+FP /^>gnl\|unk\|EMBL \(E10002\) EMBL FORMAT DNA SEQUENCE\n/
+FP /^acgtacgtacgtacgtacgtacgtacgtacgtacgtacgt\n/
+//
+
+ID seqret-outusa-strider
+AP seqret
+CL -auto ../../data/dna.embl strider::test.out
+FI test.out
+FZ = 166
+FP /^; ### from DNA Strider ;-\)\n/
+FP /^; DNA sequence  EMBL, 100 bases\n/
+FP /^;\n/
+FP /^acgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtac\n/
+//
+
+ID seqret-out-strider
+AP seqret
+CL -auto ../../data/dna.embl test.out -osf strider
+FI test.out
+FZ = 166
+FP /^; ### from DNA Strider ;-\)\n/
+FP /^; DNA sequence  EMBL, 100 bases\n/
+FP /^;\n/
+FP /^acgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtac\n/
+//
+
+ID seqret-outusa-swiss
+AP seqret
+CL -auto ../../data/dna.embl swiss::test.out
+FI test.out
+FZ = 307
+FP /^ID   EMBL       standard; DNA; UNC; 100 BP\.\n/
+FP /^AC   E10002;\n/
+FP /^DE   EMBL FORMAT DNA SEQUENCE\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;\n/
+FP /^     acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt        60\n/
+//
+
+ID seqret-out-swiss
+AP seqret
+CL -auto ../../data/dna.embl test.out -osf swiss
+FI test.out
+FZ = 307
+FP /^ID   EMBL       standard; DNA; UNC; 100 BP\.\n/
+FP /^AC   E10002;\n/
+FP /^DE   EMBL FORMAT DNA SEQUENCE\n/
+FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;\n/
+FP /^     acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt acgtacgtac gtacgtacgt        60\n/
+//
+
+ID seqret-outusa-text
+AP seqret
+CL -auto ../../data/dna.embl text::test.out
+FI test.out
+FZ = 102
+FP /^gtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgt\n/
+//
+
+ID seqret-out-text
+AP seqret
+CL -auto ../../data/dna.embl test.out -osf text
+FI test.out
+FZ = 102
+FP /^gtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgt\n/
+//
+
+ID seqret-outmultiusa-acedb
+AP seqret
+CL -auto ../../data/dna.m-embl acedb::test.out
+FI test.out
+FZ = 420
+FP 3 /^DNA : "FASTAM[1-3]"/
+//
+
+ID seqret-outmulti-acedb
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf acedb
+FI test.out
+FZ = 420
+FP 3 /^DNA : "FASTAM[1-3]"/
+//
+
+ID seqret-outmultiusa-asn1
+AP seqret
+CL -auto ../../data/dna.m-embl asn1::test.out
+FI test.out
+FZ = 957
+FP 3 /^    id \{ local id 1 \},/
+FP 3 /^    descr { title "FASTA FORMAT DNA SEQUENCE F3000[1-3]" },\n/
+FP /^    descr { title "FASTA FORMAT DNA SEQUENCE F30003" },\n/
+//
+
+ID seqret-outmulti-asn1
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf asn1
+FI test.out
+FZ = 957
+FP 3 /^    id \{ local id 1 \},/
+FP 3 /^    descr { title "FASTA FORMAT DNA SEQUENCE F3000[1-3]" },\n/
+FP /^    descr { title "FASTA FORMAT DNA SEQUENCE F30003" },\n/
+//
+
+ID seqret-outmultiusa-clustal
+AP seqret
+CL -auto ../../data/dna.m-embl clustal::test.out
+FI test.out
+FZ = 801
+FP /^CLUSTAL W\(1\.4\) multiple sequence alignment\n/
+FP /^FASTAM2         ACGTACGTAC GTACGTACGT ----ACGTAC GTACGTACGT ACGTACGTAC\n/
+//
+
+ID seqret-outmulti-clustal
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf clustal
+FI test.out
+FZ = 801
+FP /^CLUSTAL W\(1\.4\) multiple sequence alignment\n/
+FP /^FASTAM2         ACGTACGTAC GTACGTACGT ----ACGTAC GTACGTACGT ACGTACGTAC\n/
+//
+
+ID seqret-outmultiusa-clustalprot
+AP seqret
+CL -auto ../../data/prot.m-swiss clustal::test.out
+FI test.out
+FZ = 549
+FP /^CLUSTAL W\(1\.4\) multiple sequence alignment\n/
+FP /^SWISSM2         AACCDDEEFF GGHHIIKKLL MMNNPPQQRR SSTTVVWWYY AACCDDEEFF\n/
+FP 4 /^\n/
+FP 2 /^                                                                      \n/
+//
+
+ID seqret-outmulti-clustalprot
+AP seqret
+CL -auto ../../data/prot.m-swiss test.out -osf clustal
+FI test.out
+FZ = 549
+FP /^CLUSTAL W\(1\.4\) multiple sequence alignment\n/
+FP /^SWISSM2         AACCDDEEFF GGHHIIKKLL MMNNPPQQRR SSTTVVWWYY AACCDDEEFF\n/
+FP 4 /^\n/
+FP 2 /^                                                                      \n/
+//
+
+ID seqret-outmultiusa-codata
+AP seqret
+CL -auto ../../data/dna.m-embl codata::test.out
+FI test.out
+FZ = 1410
+FP 3 /^ENTRY           FASTAM[1-3] \n/
+FP 3 /^\/\/\/\n/
+//
+
+ID seqret-outmulti-codata
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf codata
+FI test.out
+FZ = 1410
+FP 3 /^ENTRY           FASTAM[1-3] \n/
+FP 3 /^\/\/\/\n/
+//
+
+ID seqret-outmultiusa-debug
+AP seqret
+CL -auto ../../data/dna.m-embl debug::test.out
+FI test.out
+FZ = 1886
+FP 3 /^  Name: 'FASTAM[1-3]'\n/
+FP 3 /^  Accession: 'F3000[1-3]'\n/
+FP /^  Entryname: 'FASTAM3'\n/
+FP 3 /^  Usa: 'debug::test.out'\n/
+FP 3 /^  Input format: 'embl'\n/
+FP 3 /^  Ufo: ''\n/
+FP 3 /^  Entryname: 'FASTAM[1-3]'\n/
+FP 3 /^  File name: 'test\.out'\n/
+FP 3 /^  Extension: 'fasta'\n/
+//
+
+ID seqret-outmulti-debug
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf debug
+FI test.out
+FZ = 1865
+FP 3 /^  Name: 'FASTAM[1-3]'\n/
+FP 3 /^  Accession: 'F3000[1-3]'\n/
+FP /^  Entryname: 'FASTAM3'\n/
+FP 3 /^  Usa: 'test.out'\n/
+FP 3 /^  Input format: 'embl'\n/
+FP 3 /^  Ufo: ''\n/
+FP 3 /^  Entryname: 'FASTAM[1-3]'\n/
+FP 3 /^  File name: 'test\.out'\n/
+FP 3 /^  Extension: 'debug'\n/
+//
+
+ID seqret-outmultiusa-embl
+AP seqret
+CL -auto ../../data/dna.m-embl embl::test.out
+FI test.out
+FZ = 945
+FP 3 /^ID   FASTAM[1-3]    standard; DNA; UNC; 120 BP.\n/
+FP 3 /^AC   F3000[1-3];\n/
+FP /^AC   F30003;\n/
+FP /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;\n/
+//
+
+ID seqret-outmulti-embl
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf embl
+FI test.out
+FZ = 945
+FP 3 /^ID   FASTAM[1-3]    standard; DNA; UNC; 120 BP.\n/
+FP 3 /^AC   F3000[1-3];\n/
+FP /^AC   F30003;\n/
+FP /^SQ   Sequence 120 BP; 29 A; 29 C; 29 G; 29 T; 4 other;\n/
+//
+
+ID seqret-outmultiusa-fasta
+AP seqret
+CL -auto ../../data/dna.m-embl fasta::test.out
+FI test.out
+FZ = 513
+FP 3 /^>FASTAM[1-3] F3000[1-3] FASTA FORMAT DNA SEQUENCE F3000[1-3]\n/
+FP /^>FASTAM3 F30003 FASTA FORMAT DNA SEQUENCE F30003\n/
+//
+
+ID seqret-outmulti-fasta
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf fasta
+FI test.out
+FZ = 513
+FP 3 /^>FASTAM[1-3] F3000[1-3] FASTA FORMAT DNA SEQUENCE F3000[1-3]\n/
+FP /^>FASTAM3 F30003 FASTA FORMAT DNA SEQUENCE F30003\n/
+//
+
+ID seqret-outmultiusa-fitch
+AP seqret
+CL -auto ../../data/dna.m-embl fitch::test.out
+FI test.out
+FZ = 543
+FP 3 /^FASTAM[1-3], 120 bases\n/
+FP /^FASTAM1, 120 bases\n/
+FP /^ ACG TAC GTA CGT ACG TAC GT- --- ACG TAC GTA CGT ACG TAC GTA CGT ACG TAC GTA CGT\n/
+//
+
+ID seqret-outmulti-fitch
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf fitch
+FI test.out
+FZ = 543
+FP 3 /^FASTAM[1-3], 120 bases\n/
+FP /^FASTAM1, 120 bases\n/
+FP /^ ACG TAC GTA CGT ACG TAC GT- --- ACG TAC GTA CGT ACG TAC GTA CGT ACG TAC GTA CGT\n/
+//
+
+ID seqret-outmultiusa-gcg
+AP seqret
+CL -auto ../../data/dna.m-embl gcg::test.out
+FI test.out
+FZ = 750
+FP 3 /^!!NA_SEQUENCE 1\.0\n/
+FP /^FASTAM1  Length: 120  Type: N  Check: 8587 \.\.\n/
+FP /^FASTAM2  Length: 120  Type: N  Check: 6178 \.\.\n/
+FP /^FASTAM3  Length: 120  Type: N  Check: 8431 \.\.\n/
+FP 3 /^FASTA FORMAT DNA SEQUENCE F3000[1-3]\n/
+//
+
+ID seqret-outmulti-gcg
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf gcg
+FI test.out
+FZ = 750
+FP 3 /^!!NA_SEQUENCE 1\.0\n/
+FP /^FASTAM1  Length: 120  Type: N  Check: 8587 \.\.\n/
+FP /^FASTAM2  Length: 120  Type: N  Check: 6178 \.\.\n/
+FP /^FASTAM3  Length: 120  Type: N  Check: 8431 \.\.\n/
+FP 3 /^FASTA FORMAT DNA SEQUENCE F3000[1-3]\n/
+//
+
+ID seqret-outmultiusa-genbank
+AP seqret
+CL -auto ../../data/dna.m-embl genbank::test.out
+FI test.out
+FZ = 899
+FP 3 /^LOCUS       FASTAM[1-3]\n/
+FP /^LOCUS       FASTAM3\n/
+FP 3 /^ACCESSION   F3000[1-3]\n/
+FP /^ACCESSION   F30003\n/
+FP /^BASE COUNT       29 a     29 c     29 g     29 t      4 others\n/
+FP 3 /^\/\/\n/
+//
+
+ID seqret-outmulti-genbank
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf genbank
+FI test.out
+FZ = 899
+FP 3 /^LOCUS       FASTAM[1-3]\n/
+FP /^LOCUS       FASTAM3\n/
+FP 3 /^ACCESSION   F3000[1-3]\n/
+FP /^ACCESSION   F30003\n/
+FP /^BASE COUNT       29 a     29 c     29 g     29 t      4 others\n/
+FP 3 /^\/\/\n/
+//
+
+ID seqret-outmultiusa-gff
+AP seqret
+CL -auto ../../data/dna.m-embl gff::test.out
+FI test.out
+FZ = 642
+FP 3 /^##DNA FASTAM[1-3]\n/
+FP /^##DNA FASTAM2\n/
+FP 3 /^##end-DNA\n/
+//
+
+ID seqret-outmulti-gff
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf gff
+FI test.out
+FZ = 642
+FP 3 /^##DNA FASTAM[1-3]\n/
+FP /^##DNA FASTAM2\n/
+FP 3 /^##end-DNA\n/
+//
+
+ID seqret-outmultiusa-gffprot
+AP seqret
+CL -auto ../../data/prot.m-swiss gff::test.out
+FI test.out
+FZ = 543
+FP 3 /^##gff-version 2\n/
+FP 3 /^##Protein SWISSM[1-3]\n/
+FP /^##Protein SWISSM2\n/
+FP 3 /^##end-Protein\n/
+FP /^##MMNNPPQQRRSSTTVVWWYY\n/
+//
+
+ID seqret-outmulti-gffprot
+AP seqret
+CL -auto ../../data/prot.m-swiss test.out -osf gff
+FI test.out
+FZ = 543
+FP 3 /^##gff-version 2\n/
+FP 3 /^##Protein SWISSM[1-3]\n/
+FP /^##Protein SWISSM2\n/
+FP 3 /^##end-Protein\n/
+FP /^##MMNNPPQQRRSSTTVVWWYY\n/
+//
+
+ID seqret-outmultiusa-hennig86
+AP seqret
+CL -auto ../../data/dna.m-embl hennig86::test.out
+FI test.out
+FZ = 432
+FP /^xread\n/
+FP /^' Written by EMBOSS [0-9][0-9]\/[01][0-9]\/[0-9][0-9] '\n/
+FP /^120 3\n/
+FP 3 /^FASTAM[1-3]\n/
+FP /^FASTAM2\n/
+FP /^03210321032103210321\?\?\?\?032103210321032103210321032103210321032103210321032103210321032103210321032103210321123003210321\n/
+FP /^;\n/
+//
+
+ID seqret-outmulti-hennig86
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf hennig86
+FI test.out
+FZ = 432
+FP /^xread\n/
+FP /^' Written by EMBOSS [0-9][0-9]\/[01][0-9]\/[0-9][0-9] '\n/
+FP /^120 3\n/
+FP 3 /^FASTAM[1-3]\n/
+FP /^FASTAM2\n/
+FP /^03210321032103210321\?\?\?\?032103210321032103210321032103210321032103210321032103210321032103210321032103210321123003210321\n/
+FP /^;\n/
+//
+
+ID seqret-outmultiusa-jackknifer
+AP seqret
+CL -auto ../../data/dna.m-embl jackknifer::test.out
+FI test.out
+FZ = 590
+FP /^' Written by EMBOSS [0-9\/]+ \n/
+FP 3 /^\(FASTAM3\)            [ACGT\-]+\n/
+//
+
+ID seqret-outmulti-jackknifer
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf jackknifer
+FI test.out
+FZ = 590
+FP /^' Written by EMBOSS [0-9\/]+ \n/
+FP 3 /^\(FASTAM3\)            [ACGT\-]+\n/
+//
+
+ID seqret-outmultiusa-mega
+AP seqret
+CL -auto ../../data/dna.m-embl mega::test.out
+FI test.out
+FZ = 610
+FP /^#mega\n/
+FP /^TITLE: Written by EMBOSS [0-9\/]+\n/
+FP 9 /^#FASTAM[1-3]              [ACGT\-]+\n/
+FP 3 /^\n/
+//
+
+ID seqret-outmulti-mega
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf mega
+FI test.out
+FZ = 610
+FP /^#mega\n/
+FP /^TITLE: Written by EMBOSS [0-9\/]+\n/
+FP 9 /^#FASTAM[1-3]              [ACGT\-]+\n/
+FP 3 /^\n/
+//
+
+ID seqret-outmultiusa-meganon
+AP seqret
+CL -auto ../../data/dna.m-embl meganon::test.out
+FI test.out
+FZ = 470
+FP /^#mega\n/
+FP /^TITLE: Written by EMBOSS [0-9\/]+\n/
+FP /^#FASTAM2             \n/
+FP 3 /^#FASTAM[1-3]             \n/
+//
+
+ID seqret-outmulti-meganon
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf meganon
+FI test.out
+FZ = 470
+FP /^#mega\n/
+FP /^TITLE: Written by EMBOSS [0-9\/]+\n/
+FP /^#FASTAM2             \n/
+FP 3 /^#FASTAM[1-3]             \n/
+//
+
+ID seqret-outmultiusa-msf
+AP seqret
+CL -auto ../../data/dna.m-embl msf::test.out
+FI test.out
+FZ = 871
+FP /^!!NA_MULTIPLE_ALIGNMENT 1\.0\n/
+FP /^  test\.out MSF: 120 Type: N [0-9\/]+ CompCheck: 3196 \.\.\n/
+FP /^  Name: FASTAM1 Len: 120  Check: 8587 Weight: 1\.00\n/
+FP /^  Name: FASTAM2 Len: 120  Check: 6178 Weight: 1\.00\n/
+FP /^  Name: FASTAM3 Len: 120  Check: 8431 Weight: 1\.00\n/
+FP /^\/\/\n/
+FP /^           1                                               50\n/
+FP 3 /^FASTAM3    [ACGT\-]+\n/
+//
+
+ID seqret-outmulti-msf
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf msf
+FI test.out
+FZ = 871
+FP /^!!NA_MULTIPLE_ALIGNMENT 1\.0\n/
+FP /^  test\.out MSF: 120 Type: N [0-9\/]+ CompCheck: 3196 \.\.\n/
+FP /^  Name: FASTAM1 Len: 120  Check: 8587 Weight: 1\.00\n/
+FP /^  Name: FASTAM2 Len: 120  Check: 6178 Weight: 1\.00\n/
+FP /^  Name: FASTAM3 Len: 120  Check: 8431 Weight: 1\.00\n/
+FP /^\/\/\n/
+FP /^           1                                               50\n/
+FP 3 /^FASTAM3    [ACGT\-]+\n/
+//
+
+ID seqret-outmultiusa-msfprot
+AP seqret
+CL -auto ../../data/prot.m-swiss msf::test.out
+FI test.out
+FZ = 743
+FP /^!!AA_MULTIPLE_ALIGNMENT 1\.0\n/
+FP /^  test\.out MSF:  100 Type: P [0-9\/]+ CompCheck: 4147 \.\.\n/
+FP /^  Name: SWISSM1 Len: 100  Check: 1414 Weight: 1\.00\n/
+FP /^  Name: SWISSM2 Len: 100  Check: 1993 Weight: 1\.00\n/
+FP /^  Name: SWISSM3 Len: 100  Check:  740 Weight: 1\.00\n/
+FP /^\/\/\n/
+FP /^           1                                               50\n/
+FP 2 /^SWISSM2    [A-Z~]+\n/
+//
+
+ID seqret-outmulti-msfprot
+AP seqret
+CL -auto ../../data/prot.m-swiss test.out -osf msf
+FI test.out
+FZ = 743
+FP /^!!AA_MULTIPLE_ALIGNMENT 1\.0\n/
+FP /^  test\.out MSF:  100 Type: P [0-9\/]+ CompCheck: 4147 \.\.\n/
+FP /^  Name: SWISSM1 Len: 100  Check: 1414 Weight: 1\.00\n/
+FP /^  Name: SWISSM2 Len: 100  Check: 1993 Weight: 1\.00\n/
+FP /^  Name: SWISSM3 Len: 100  Check:  740 Weight: 1\.00\n/
+FP /^\/\/\n/
+FP /^           1                                               50\n/
+FP 2 /^SWISSM2    [A-Z~]+\n/
+//
+
+ID seqret-outmultiusa-nexus
+AP seqret
+CL -auto ../../data/dna.m-embl nexus::test.out
+FI test.out
+FZ = 756
+FP /^#NEXUS\n/
+FP /^[TITLE: Written by EMBOSS [0-9\/]+]\n/
+FP /^begin data;\n/
+FP /^dimensions ntax=3 nchar=120;\n/
+FP /^format interleave datatype=DNA missing=N gap=-;\n/
+FP /^matrix\n/
+FP /^;\n/
+FP /^endblock;\n/
+FP /^begin assumptions;\n/
+FP /^options deftype=unord;\n/
+FP 3 /^FASTAM2              [ACGT\-]+\n/
+//
+
+ID seqret-outmulti-nexus
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf nexus
+FI test.out
+FZ = 756
+FP /^#NEXUS\n/
+FP /^[TITLE: Written by EMBOSS [0-9\/]+]\n/
+FP /^begin data;\n/
+FP /^dimensions ntax=3 nchar=120;\n/
+FP /^format interleave datatype=DNA missing=N gap=-;\n/
+FP /^matrix\n/
+FP /^;\n/
+FP /^endblock;\n/
+FP /^begin assumptions;\n/
+FP /^options deftype=unord;\n/
+FP 3 /^FASTAM2              [ACGT\-]+\n/
+//
+
+ID seqret-outmultiusa-nexusnon
+AP seqret
+CL -auto ../../data/dna.m-embl nexusnon::test.out
+FI test.out
+FZ = 572
+FP /^#NEXUS\n/
+FP /^[TITLE: Written by EMBOSS [0-9\/]+]\n/
+FP /^begin data;\n/
+FP /^dimensions ntax=3 nchar=120;\n/
+FP /^format datatype=DNA missing=N gap=-;\n/
+FP /^matrix\n/
+FP 3 /^FASTAM[1-3]\n/
+FP 3 /^[ACGT\-]+\n/
+FP /^;\n/
+FP /^endblock;\n/
+FP /^begin assumptions;\n/
+FP /^options deftype=unord;\n/
+//
+
+ID seqret-outmulti-nexusnon
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf nexusnon
+FI test.out
+FZ = 572
+FP /^#NEXUS\n/
+FP /^[TITLE: Written by EMBOSS [0-9\/]+]\n/
+FP /^begin data;\n/
+FP /^dimensions ntax=3 nchar=120;\n/
+FP /^format datatype=DNA missing=N gap=-;\n/
+FP /^matrix\n/
+FP 3 /^FASTAM[1-3]\n/
+FP 3 /^[ACGT\-]+\n/
+FP /^;\n/
+FP /^endblock;\n/
+FP /^begin assumptions;\n/
+FP /^options deftype=unord;\n/
+//
+
+ID seqret-outmultiusa-phylip
+AP seqret
+CL -auto ../../data/dna.m-embl phylip::test.out
+FI test.out
+FZ = 495
+FP /^ 3 120\n/
+FP /^FASTAM1   ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC\n/
+FP 6 /^          [ACGT \-]+\n/
+//
+
+ID seqret-outmulti-phylip
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf phylip
+FI test.out
+FZ = 495
+FP /^ 3 120\n/
+FP /^FASTAM1   ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC\n/
+FP 6 /^          [ACGT \-]+\n/
+//
+
+ID seqret-outmultiusa-phylip3
+AP seqret
+CL -auto ../../data/dna.m-embl phylip3::test.out
+FI test.out
+FZ = 495
+FP /^1 120 YF\n/
+FP /^FASTAM1   ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC\n/
+FP 6 /^          [ACGT \-]+\n/
+FP / GTACGTACGT\nFASTAM2/
+//
+
+ID seqret-outmulti-phylip3
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf phylip3
+FI test.out
+FZ = 495
+FP /^1 120 YF\n/
+FP /^FASTAM1   ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC\n/
+FP 6 /^          [ACGT \-]+\n/
+FP / GTACGTACGT\nFASTAM2/
+//
+
+ID seqret-outmultiusa-swiss
+AP seqret
+CL -auto ../../data/prot.m-swiss swiss::test.out
+FI test.out
+FZ = 769
+FP 3 /^ID   SWISSM[1-3]        STANDARD;      PRT; +[0-9]+ AA\.\n/
+FP /^ID   SWISSM2        STANDARD;      PRT;    80 AA\.\n/
+FP /^SQ   SEQUENCE    60 AA;   7151 MW;  3AD3EB8C CRC32;\n/
+FP 3 /^\/\/\n/
+//
+
+ID seqret-outmulti-swiss
+AP seqret
+CL -auto ../../data/prot.m-swiss test.out -osf swiss
+FI test.out
+FZ = 769
+FP 3 /^ID   SWISSM[1-3]        STANDARD;      PRT; +[0-9]+ AA\.\n/
+FP /^ID   SWISSM2        STANDARD;      PRT;    80 AA\.\n/
+FP /^SQ   SEQUENCE    60 AA;   7151 MW;  3AD3EB8C CRC32;\n/
+FP 3 /^\/\/\n/
+//
+
+ID seqret-outmultiusa-ncbi
+AP seqret
+CL -auto ../../data/dna.m-embl ncbi::test.out
+FI test.out
+FZ = 543
+FP 3 /^>gnl\|unk\|FASTAM[1-3] \(F3000[1-3]\) FASTA FORMAT DNA SEQUENCE F3000[1-3]\n/
+FP /^>gnl\|unk\|FASTAM2 \(F30002\) FASTA FORMAT DNA SEQUENCE F30002\n/
+//
+
+ID seqret-outmulti-ncbi
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf ncbi
+FI test.out
+FZ = 543
+FP 3 /^>gnl\|unk\|FASTAM[1-3] \(F3000[1-3]\) FASTA FORMAT DNA SEQUENCE F3000[1-3]\n/
+FP /^>gnl\|unk\|FASTAM2 \(F30002\) FASTA FORMAT DNA SEQUENCE F30002\n/
+//
+
+ID seqret-outmultiusa-nbrf
+AP seqret
+CL -auto ../../data/dna.m-embl nbrf::test.out
+FI test.out
+FZ = 579
+FP 3 /^>D1;FASTAM[1-3]\n/
+FP 3 /^FASTA FORMAT DNA SEQUENCE F3000[1-3], 120 bases\n/
+FP /^FASTA FORMAT DNA SEQUENCE F30001, 120 bases\n/
+FP /^ ACGTACGTTG CAACGTACGT\*\n/
+//
+
+ID seqret-outmulti-nbrf
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf nbrf
+FI test.out
+FZ = 579
+FP 3 /^>D1;FASTAM[1-3]\n/
+FP 3 /^FASTA FORMAT DNA SEQUENCE F3000[1-3], 120 bases\n/
+FP /^FASTA FORMAT DNA SEQUENCE F30001, 120 bases\n/
+FP /^ ACGTACGTTG CAACGTACGT\*\n/
+//
+
+ID seqret-outmultiusa-ig
+AP seqret
+CL -auto ../../data/dna.m-embl ig::test.out
+FI test.out
+FZ = 531
+FP /^;FASTA FORMAT DNA SEQUENCE F30002, 120 bases\n/
+FP 3 /^;FASTA FORMAT DNA SEQUENCE F3000[1-3], 120 bases\n/
+FP /^FASTAM2\n/
+FP 3 /^FASTAM[1-3]\n/
+FP /^ACGTACGTACGTACGTACGT1\n/
+//
+
+ID seqret-outmulti-ig
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf ig
+FI test.out
+FZ = 531
+FP /^;FASTA FORMAT DNA SEQUENCE F30002, 120 bases\n/
+FP 3 /^;FASTA FORMAT DNA SEQUENCE F3000[1-3], 120 bases\n/
+FP /^FASTAM2\n/
+FP 3 /^FASTAM[1-3]\n/
+FP /^ACGTACGTACGTACGTACGT1\n/
+//
+
+ID seqret-outmultiusa-strider
+AP seqret
+CL -auto ../../data/dna.m-embl strider::test.out
+FI test.out
+FZ = 570
+FP /^; ### from DNA Strider ;-\)\n/
+FP 3 /^; DNA sequence  FASTAM[1-3], 120 bases\n/
+FP /^; DNA sequence  FASTAM2, 120 bases\n/
+FP /^;\n/
+FP /^ACGTACGTACGTACGTACGT\n/
+//
+
+ID seqret-outmulti-strider
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf strider
+FI test.out
+FZ = 570
+FP /^; ### from DNA Strider ;-\)\n/
+FP 3 /^; DNA sequence  FASTAM[1-3], 120 bases\n/
+FP /^; DNA sequence  FASTAM2, 120 bases\n/
+FP /^;\n/
+FP /^ACGTACGTACGTACGTACGT\n/
+//
+
+ID seqret-outmultiusa-treecon
+AP seqret
+CL -auto ../../data/dna.m-embl treecon::test.out
+FI test.out
+FZ = 391
+FP /^120\n/
+FP 3 /^FASTAM[1-3]\n/
+FP /^FASTAM2\n/
+FP /^ACGTACGTACGTACGTACGT----ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTTGCAACGTACGT\n/
+//
+
+ID seqret-outmulti-treecon
+AP seqret
+CL -auto ../../data/dna.m-embl test.out -osf treecon
+FI test.out
+FZ = 391
+FP /^120\n/
+FP 3 /^FASTAM[1-3]\n/
+FP /^FASTAM2\n/
+FP /^ACGTACGTACGTACGTACGT----ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTTGCAACGTACGT\n/
+//
+
+ID seqretset-ex
+AP seqretset
+CL -auto tembl:eclac* test.out -osf fasta
+FI test.out
+FZ = 15608
+FP 5 /^>ECLAC/
+//
+
+ID seqretset-ex1
+AP seqretset
+CL -auto tembl:eclacz test.out -osf fasta
+FI test.out
+FP 1 /^>ECLAC/
+//
+
+ID seqretall-ex
+AP seqretall
+CL -auto tembl:eclac* test.out -osf fasta
+FI test.out
+FZ = 15608
+FP 5 /^>ECLAC/
+//
+
+ID seqretall-ex1
+AP seqretall
+CL -auto tembl:eclacz test.out -osf fasta
+FI test.out
+FP 1 /^>ECLAC/
+//
+
+#############################################################################
+
+# should make output filename optional as it is rarely used
+
+ID seqretsplit-ex
+AP seqretsplit
+CL tembl:hsfa*
+IN
+FI stderr
+FC = 2
+FI hsfau.fasta
+FZ = 560
+FP /^>HSFAU /
+FI hsfau1.fasta
+FZ = 2086
+FP /^>HSFAU1 /
+FI hsferg1.fasta
+FZ = 569
+FP /^>HSFERG1 /
+FI hsferg2.fasta
+FZ = 1202
+FP /^>HSFERG2 /
+FI hsfos.fasta
+FZ = 6376
+FP /^>HSFOS /
+//
+
+# change example to use globins.msf
+ID showalign-ex
+AP showalign
+IN ../../data/globins.msf
+IN
+FI stderr
+FC = 2
+FI stdout
+FZ = 2235
+FP /^HBB_HUMAN  --------VHLTPE\.K\.AVTALWG\.VN-VD\.V\.GEA\.GR-LLVvY\.WTQR\.\.ES\.GD\.ST\n/
+FP /^Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx\n/
+//
+
+ID showdb-ex
+AP showdb
+FI stderr
+FC = 1
+FI stdout
+FP /^tsw\s+P\s+OK\s+OK\s+OK/
+FP /^tembl\s+N\s+OK\s+OK\s+OK/
+//
+
+ID showdb-ex2
+AP showdb
+CL -outfile showdb.out
+FI stderr
+FC = 1
+FI showdb.out
+FP /^tsw\s+P\s+OK\s+OK\s+OK/
+FP /^tembl\s+N\s+OK\s+OK\s+OK/
+//
+
+ID showdb-ex3
+AP showdb
+CL -database tsw
+FI stderr
+FC = 1
+FI stdout
+FP /^tsw\s+P\s+OK\s+OK\s+OK/
+FP 0 /^tembl/
+//
+
+ID showdb-ex4
+AP showdb
+CL -html
+FI stderr
+FC = 1
+FI stdout
+FP /^<tr><td>tsw</td><td>P</td><td>OK/
+FP /^<tr><td>tembl</td><td>N</td><td>OK/
+//
+
+ID showdb-ex5
+AP showdb
+CL -nonucleic
+FI stderr
+FC = 1
+FI stdout
+FP /^tsw\s+P\s+OK\s+OK\s+OK/
+FP 0 /^[^#]\S*\s+N/
+//
+
+ID showdb-ex6
+AP showdb
+CL -noheading
+FI stderr
+FC = 1
+FI stdout
+FP /\A\S+\s+[PN]\s+/
+FP 0 /\A#/
+//
+
+ID showdb-ex7
+AP showdb
+CL -noheading -notype -noid -noquery -noall -nocomment -auto
+FI stdout
+FP /^tsw\s+\n/
+FP /^tembl\s+\n/
+//
+
+ID showdb-ex8
+AP showdb
+CL -only -type
+FI stderr
+FC = 1
+FI stdout
+FP /^tsw\s+P\s+\n/
+FP /^tembl\s+N\s+\n/
+//
+
+ID showfeat-ex
+AP showfeat
+IN tembl:paamir
+IN
+FI stderr
+FC = 2
+FI stdout 
+FZ = 844
+FP /\|=+\| 2167\n/
+FP 3 /    misc_feature\n/
+FP /-> source\n/
+//
+
+ID showorf-ex
+AP showorf
+IN tembl:paamir
+IN
+IN
+FI stderr
+FC = 10
+FI paamir.showorf
+FZ = 22690
+FP /^F1 +1 G  T  A  G  R  A  S  A  R  S  P  P  A  G  R  R  E  17\n/
+FP /^R2 +106    Y  R  Q  G  L  M  Q  E  I  V  V  L  R  A  V  P  91\n/
+//
+
+# output needs further work
+# ran to base 120 (should be 100)
+# note="" extra quotes
+
+ID showseq-ex
+AP showseq
+CL tembl:paamir -sbeg 1 -send 100
+IN
+IN
+FI stderr
+FC = 12
+FI stdout 
+FZ = 799
+FP 2 /^\s+\|=+\|\n\s+promoter note="/
+//
+
+ID shuffleseq-ex
+AP shuffleseq
+CL -shuffle 2
+IN tembl:mmam
+IN
+FI stderr
+FC = 2
+##
+## hard to test - randomised but same length
+##
+FI mmam.fasta 
+FZ = 942
+FP /^>MMAM/
+//
+
+# fix output file in example
+ID sigcleave-ex
+AP sigcleave
+IN tsw:ach2_drome
+IN
+IN
+FI stderr
+FC = 2
+FI ach2_drome.sig
+FZ = 1690
+FP /^Maximum score 13\.7 at residue 42\n/
+FP /^ Sequence:  LLVLLLLCETVQA-NPD/
+FP 9 /^ Sequence:  /
+//
+
+ID silent-ex
+CC Needs REBASEXTRACT to reformat REBASE
+AP silent
+IN tembl:hsfau
+IN ecori,hindiii
+IN
+FI stderr
+FC = 2
+FI hsfau.silent 
+FZ = 565
+FP /^HindIII     AAGCTT         267       A\.A    268      A->T  \n/
+//
+
+ID splitter-ex
+AP splitter
+CL tembl:AP000504 ap000504.split
+FI stderr
+FC = 1
+FI ap000504.split
+FZ = 102677
+FP /\A>AP000504_1-10000/
+FP /^>AP000504_10001-20000/
+FP /^>AP000504_90001-100000/
+FP 10 /^>/
+//
+
+ID splitter-ex2
+AP splitter
+CL tembl:AP000504 ap000504.split -size=50000 -over=3000
+FI stderr
+FC = 1
+FI ap000504.split
+FZ = 104917
+FP /\A>AP000504_1-53000/
+FP /^>AP000504_50001-100000/
+FP 2 /^>/
+//
+
+ID stamps-ex
+AP stamps
+IN ../../data/scop.orig
+IN
+FI stderr
+FC = 2
+//
+
+# update example
+ID stretcher-ex
+AP stretcher
+CL tsw:hba_human tsw:hbb_human
+IN
+FI stderr
+FC = 2
+FI hba_human.stretcher
+FZ = 1073
+FP /^scoring matrix: EBLOSUM62, gap penalties: 12/2\n/
+FP /^43\.2% identity;\s+Global alignment score: 272\n/
+FP /^HBA_HU V-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH-----GSA\n/
+FP /^HBB_HU VHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNP\n/
+//
+
+ID stssearch-ex
+AP stssearch
+IN tembl:eclac*
+IN ../../data/lac.primers
+IN
+FI stderr
+FC = 2
+FI eclac.stssearch
+FZ = 710
+FP /^ECLAC: PrimA PrimerA matched at 532\n/
+FP /^ECLAC: \(rev\) PrimA PrimerB matched at 689\n/
+//
+
+ID supermatcher-ex
+TI 400
+AP supermatcher
+CL tembl:ec* tembl:eclac -word 50 
+IN
+IN 3.0
+IN
+FI stderr
+FC = 2
+FI stdout 
+FZ = 0
+FI supermatcher.error
+FZ = 0
+FI eclac.supermatcher
+FZ = 77788
+FP /^ECLAC           9/
+FP /^Score: 37305\.00/
+FP 5 /^Score: /
+FP /^ECLACY          1486/
+//
+
+ID syco-ex
+AP syco
+CL -plot -cfile pae
+IN tembl:paamir
+IN ps
+FI stderr
+FC = 2
+FI paamir.syco
+FZ = 0
+FI syco.ps
+FZ = 59910
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
+//
+
+# change the example
+ID textsearch-ex
+AP textsearch
+CL tsw:* 'lactose'
+FI stderr
+FC = 1
+FI stdout
+FZ = 169
+FP /^tsw-id:LACI_ECOLI LACI_ECOLI    P03023\s+LACTOSE OPERON REPRESSOR/
+FP /^tsw-id:LACY_ECOLI LACY_ECOLI    P02920\s+LACTOSE PERMEASE/
+//
+
+ID textsearch-ex2
+AP textsearch
+CL tsw:*_ecoli 'lactose | permease'
+FI stderr
+FC = 1
+FI stdout
+FZ = 180
+FP /^tsw-id:LACI_ECOLI LACI_ECOLI    P03023\s+LACTOSE OPERON REPRESSOR/
+FP /^tsw-id:LACY_ECOLI LACY_ECOLI    P02920\s+LACTOSE PERMEASE/
+//
+
+# update example
+ID textsearch-ex3
+AP textsearch
+CL tembl:* 'lacz' -html -outfile embl.lacz
+FI stderr
+FC = 1
+FI embl.lacz
+FZ = 220
+FP /^tembl-id:ECLAC    ECLAC         J01636\s+E.coli lactose operon/
+FP /^tembl-id:ECLACZ   ECLACZ        V00296\s+E. coli gene lacZ coding for/
+
+ID tfextract-ex
+AP tfextract
+IN /srsdata/flatfiles/transfac/site.dat
+FI stderr
+FC = 2
+FI stdout
+FZ = 0
+//
+
+ID tfm-ex
+AP tfm
+CL wossname
+FI stderr
+FC = 1
+FI stdout
+FZ = 13299
+FP /EMBOSS: wossname/
+FP /Program wossname/
+//
+
+ID tfscan-ex
+CC Needs tfextract to reformat TRANSFAC data
+AP tfscan
+IN tembl:hsfos
+IN v
+IN
+IN
+FI stderr
+FC = 8
+FI hsfos.tfscan
+FZ = 88877
+FC = 1906
+FP /^MOUSE\$FCGR3A_02      R04413   3287  3292  ttcctc\n/
+//
+
+ID tmap-ex
+AP tmap
+CL tsw:opsd_human -out tmap.res -graph ps
+FI stderr
+FC = 2
+FI tmap.res
+FZ = 1068
+FP /^  TM  1:   43 -   69  \(27\.0\)\n/
+FP /^  TM  1:   43 -   69 \(27\)\n/
+FI tmap.ps
+FZ = 39543
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
+//
+
+# update the examples
+ID transeq-ex
+AP transeq
+CL tembl:paamir amir.pep
+FI stderr
+FC = 1
+FI amir.pep
+FZ = 821
+FP /^>PAAMIR_1/
+FP /^GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR\*SACCSP\n/
+//
+
+ID transeq-ex2
+AP transeq
+CL tembl:paamir amir.pep -frame=2
+FI stderr
+FC = 1
+FI amir.pep
+FZ = 820
+FP /^>PAAMIR_2/
+FP /^VPLAEHLLDHHQPGDGNCTIYLASLEHERVRFVRR\*ATVTGEETDGIAPGAAADRPAVLR\n/
+//
+
+ID transeq-ex3
+AP transeq
+CL tembl:paamir amir.pep -frame=-1
+FI stderr
+FC = 1
+FI amir.pep
+FZ = 820
+FP /^>PAAMIR_4/
+FP /^SNQTALRNSTAPTYSRTSPSMMTIPLLLLFWSARIAQADGSFPSNS\*AIFRIGSRRFIAS\n/
+//
+
+ID transeq-ex4
+AP transeq
+CL tembl:paamir amir.pep -frame=F
+FI stderr
+FC = 1
+FI amir.pep
+FZ = 2460
+FP /^>PAAMIR_1/
+FP /^>PAAMIR_2/
+FP /^>PAAMIR_3/
+FP /^CWARSAVGRWR\*STSWSAC\*APASRST\*SFPQQPGRAR\*RPER\*PCYSLLPICGWPPTSS\n/
+//
+
+ID transeq-ex5
+AP transeq
+CL tembl:paamir amir.pep -frame=R
+FI stderr
+FC = 1
+FI amir.pep
+FZ = 2461
+FP /^>PAAMIR_4/
+FP /^>PAAMIR_5/
+FP /^SNQTALRNSTAPTYSRTSPSMMTIPLLLLFWSARIAQADGSFPSNS\*AIFRIGSRRFIAS\n/
+FP /^LEELVGGHPQIGKSE\*QGQRSGLQRALPGCCGKDQVERDAGAQHADQEVDHRHLPTADLA\n/
+FP /^>PAAMIR_6/
+//
+
+ID transeq-ex6
+AP transeq
+CL tembl:paamir amir.pep -frame=6
+FI stderr
+FC = 1
+FI amir.pep
+FZ = 4921
+FP /^>PAAMIR_1/
+FP /^>PAAMIR_2/
+FP /^>PAAMIR_3/
+FP /^>PAAMIR_4/
+FP /^>PAAMIR_5/
+FP /^>PAAMIR_6/
+FP /^LEELVGGHPQIGKSE\*QGQRSGLQRALPGCCGKDQVERDAGAQHADQEVDHRHLPTADLA\n/
+//
+
+ID transeq-ex7
+AP transeq
+CL tembl:paamir amir.pep -reg=2-45,67-201,328-509
+FI stderr
+FC = 1
+FI amir.pep
+FZ = 209
+FP /^>PAAMIR_1/
+FP /^VRRGLHSQPGGTVPRGLLHVAHAQGGDAGGRARRRAALLPDPLRGLRVFAEHRLRRSGAE\n/
+FP /^X\Z/
+//
+
+ID transeq-ex8
+AP transeq
+CL ../../data/mito.seq mito.pep -table 2
+FI stderr
+FC = 1
+FI mito.pep
+FZ = 5626
+FP /^>NC_001321.1_1/
+FP /^VNY\*SAHDHNMTEVSYIWYFFIFFGGLARTPLWP\*\*VSSQSDKL\*LGLDVFVIWLAQPTC\n/
+//
+
+# madness - never trims anything
+ID trimseq-ex
+AP trimseq
+CL tembl:hsfau hsfau.seq -window 1 -percent 100
+FI stderr
+FC = 1
+FI hsfau.seq
+FZ = 560
+FP /^>HSFAU /
+//
+
+ID trimseq-ex2
+AP trimseq
+CL tembl:hsfau hsfau.seq -window 5 -percent 40
+FI stderr
+FC = 1
+FI hsfau.seq
+FZ = 560
+FP /^>HSFAU /
+//
+
+ID trimseq-ex3
+AP trimseq
+CL tembl:hsfau hsfau.seq -window 20 -percent 80
+FI stderr
+FC = 1
+FI hsfau.seq
+FZ = 560
+FP /^>HSFAU /
+//
+
+ID trimseq-ex4
+AP trimseq
+CL tembl:hsfau hsfau.seq -window 20 -percent 10
+FI stderr
+FC = 1
+FI hsfau.seq
+FZ = 560
+FP /^>HSFAU /
+//
+
+ID trimseq-ex5
+AP trimseq
+CL tembl:hsfau hsfau.seq -window 20 -percent 50 -strict
+FI stderr
+FC = 1
+FI hsfau.seq
+FZ = 560
+FP /^>HSFAU /
+//
+
+ID trimseq-ex6
+AP trimseq
+CL tembl:hsfau hsfau.seq -window 1 -percent 100 -star
+FI stderr
+FC = 1
+FI hsfau.seq
+FZ = 560
+FP /^>HSFAU /
+//
+
+ID trimseq-ex7
+AP trimseq
+CL tembl:hsfau hsfau.seq -window 20 -percent 50 -noright
+FI stderr
+FC = 1
+FI hsfau.seq
+FZ = 560
+FP /^>HSFAU /
+//
+
+# need the data file
+ID vectorstrip-ex
+CC input data file is missing
+AP vectorstrip
+CL ../../data/vecseqs.list
+IN
+IN ../../data/vectors
+IN
+IN
+IN vector.strip
+IN vector.fasta
+FI stderr
+FC = 2
+FI vector.strip
+FZ = 0
+FI vector.fasta
+FZ = 0
+//
+
+ID water-ex
+AP water
+CL tsw:hba_human tsw:hbb_human
+IN
+IN
+IN
+FI stderr
+FC = 2
+FI hba_human.water 
+FZ = 1021
+FP /^Score: 293.50\n/
+FP /^HBB_HUMAN +3 +LTPEEKSAVTALWGKV\.\.NVDEVGGEALGRLLVVYPWTQRFFESF 45 +\n/
+FP /^HBA_HUMAN +47 +\.DLS\.\.\.\.\.HGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSD 85 +\n/
+FP /^%id = 45.99\s+%similarity = 64.23\n/
+FP /^Overall %id = 43.15\s+Overall %similarity = 60.27\n/
+//
+
+ID wobble-ex
+AP wobble
+IN tembl:paamir
+IN ps
+IN
+FI stderr
+FC = 2
+FI paamir.wobble
+FZ = 46
+FP /^Expected GC content in third position = 66.54\n/
+FI wobble.ps
+FZ = 109862
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
+//
+
+ID wordcount-ex
+AP wordcount
+CL tembl:rnu68037 -wordsize=3
+IN
+FI stderr
+FC = 2
+FI rnu68037.wordcount
+FZ = 432
+FP /\Actg\s+54\n/
+FP /^aaa\s+1\Z/
+//
+
+ID wordmatch-ex
+AP wordmatch
+CL tsw:hba_human tsw:hbb_human
+IN
+IN
+FI stderr
+FC = 2
+FI hba_human.wordmatch
+FZ = 150
+FP /^        58          63          5\n/
+FP /^        14          15          4\n/
+FP /^       116         121          4\n/
+FI hba_human.out2
+FZ = 336
+FP /^HBA_HUMAN\twordmatch\tmisc_feature\t58\t62\t1\.000\t/
+FI hba_human.out3
+FZ = 336
+FP /^HBB_HUMAN\twordmatch\tmisc_feature\t63\t67\t1\.000\t/
+//
+
+ID wordmatch-same
+AP wordmatch
+CL tembl:eclaci tembl:eclaci -word 50 -auto
+FI eclaci.wordmatch
+FZ = 82
+FP /^         1           1       1113\n/
+FI eclaci.out2
+FZ = 137
+FP /^ECLACI\twordmatch\tmisc_feature\t1\t1113\t1\.000\t/
+FI eclaci.out3
+FZ = 137
+FP /^ECLACI\twordmatch\tmisc_feature\t1\t1113\t1\.000\t/
+//
+
+ID wossname-ex
+AP wossname
+CL restrict
+FI stderr
+FC = 1
+FI stdout
+FP /^recoder /
+FP /^remap /
+FP /^restover /
+FP /^silent /
+FP 0 /seqret /
+//
+
+ID wossname-ex2
+AP wossname
+CL -search ''
+FI stderr
+FC = 1
+FI stdout
+FP /^recoder /
+FP /^remap /
+FP /^restover /
+FP /^silent /
+FP /^seqret /
+FP /^INFORMATION/
+//
+
+ID wossname-ex3
+AP wossname
+CL -search '' -alphabetic
+FI stderr
+FC = 1
+FI stdout
+FP /\AALPHABETIC.*\nabiview /
+//
+
+ID wossname-ex4
+AP wossname
+CL -search '' -groups
+FI stderr
+FC = 1
+FI stdout
+FP /^[A-Z]/
+FP 0 /^[^A-Z]/
+//
+
+ID wossname-ex5
+AP wossname
+CL -groups -html -prelink '#'
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^<li><a href="#ALIGNMENT">ALIGNMENT<\/a><\/li>\n/
+//
+
+# change the URL :-)
+ID wossname-ex6
+AP wossname
+CL '' -html -prelink
+CL 'http://www.sanger.ac.uk/Software/EMBOSS/Apps/'
+CL -postlink '.shtml'
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /<a href="http:\/\/www\.sanger\.ac\.uk\/Software\/EMBOSS\/Apps\/abiview\.shtml"/
+//
+
+
+
+#######################################
+# EMNU
+#######################################
+
+#######################################
+# MEME
+#######################################
+
+#######################################
+# MSE
+#######################################
+
+#######################################
+# PHYLIP
+#######################################
+
+#######################################
+# TOPO
+#######################################

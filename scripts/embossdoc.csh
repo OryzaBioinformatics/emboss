@@ -12,9 +12,14 @@ set wdir = $argv[2]
 \rm -rf x/
 mkdir x
 cd x
+
 echo >! ../efunc.out
+echo >! ../efunc.check
 echo >! ../edata.out
+echo >! ../edata.check
+
 foreach x ($edir/ajax/*.c)
+  embossdoccheck.pl $x >> ../efunc.check
   embossdoc.pl $x >> ../efunc.out
 end
 cat *.srs >! ../efunc.dat
@@ -24,6 +29,7 @@ cat *.srs >! ../efunc.dat
 \rm *.srs
 
 foreach x ($edir/nucleus/*.c)
+  embossdoccheck.pl $x >> ../efunc.check
   embossdoc.pl $x >> ../efunc.out
 end
 cat *.srs >> ../efunc.dat
@@ -33,6 +39,7 @@ cat *.srs >> ../efunc.dat
 \rm *.srs
 
 foreach x ($edir/emboss/*.c)
+  embossdoccheck.pl $x >> ../efunc.check
   embossdoc.pl $x >> ../efunc.out
 end
 cat *.srs >> ../efunc.dat
@@ -42,9 +49,11 @@ cat *.srs >> ../efunc.dat
 \rm *.srs
 
 foreach x ($edir/ajax/*.h)
+  embossdatacheck.pl $x >> ../edata.check
   embossdatadoc.pl $x >> ../edata.out
 end
 foreach x ($edir/nucleus/*.h)
+  embossdatacheck.pl $x >> ../edata.check
   embossdatadoc.pl $x >> ../edata.out
 end
 cat *.srsdata >! ../edata.dat
@@ -60,7 +69,9 @@ cd ..
 source ~/srs6/etc/prep_srs
 
 srsbuild efunc -nn
-srsbuild efunc -rel '1.12.0'
+srsbuild efunc -rel '1.13.0'
 
 srsbuild edata -nn
-srsbuild edata -rel '1.12.0'
+srsbuild edata -rel '1.13.0'
+
+srsbuild -l efunc

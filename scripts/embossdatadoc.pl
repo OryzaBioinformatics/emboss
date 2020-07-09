@@ -37,7 +37,7 @@ print HTMLB  "<html><head><title>$title</title></head><body bgcolor=\"#ffffff\">
 print HTML  "<h1>$pubout</h1>\n";
 print HTMLB  "<h1>$pubout</h1>\n";
 
-foreach $x ("new", "delete", "del", "ass", "mod", "use", "set", "cast", "use", "other") {
+foreach $x ("new", "delete", "del", "ass", "mod", "use", "set", "cast", "use", "other", "alias") {
     $tables{$x} = 1;
 }
 
@@ -269,6 +269,29 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
       print $OFILE "<tr><td>".srsdref($fname)."</td><td>$prest</td></tr>\n";
     }
 
+    if ($token eq "alias")  {
+      if (!$intable) {
+	print $OFILE "<h3>Alias name(s)</h3>\n";
+	print $OFILE "<p><table border=3>\n";
+	print $OFILE "<tr><th>Name</th><th>Description</th></tr>\n";
+	$intable = 1;
+      }
+      ($fname,$prest) = ($data =~ m/\S+\s*(\S*)\s*(.*)/gos);
+
+      $drest = $prest;
+      $drest =~ s/\n\n+$/\n/gos;
+      $drest =~ s/\n\n\n+/\n\n/gos;
+      $drest =~ s/\n([^\n])/\nRD $1/gos;
+      $drest =~ s/\n\n/\nRD\n/gos;
+      $drest =~ s/^$/\n/gos;
+      print SRS "TN $fname\n";
+      print SRS "TD $drest";
+      print SRS "TX\n";
+
+      ###if (!$prest) {print "bad alias spec '$fname', no description\n"}
+      print $OFILE "<tr><td>".srsdref($fname)."</td><td>$prest</td></tr>\n";
+    }
+
     if ($token eq "@")  {
 	break;
     }
@@ -279,8 +302,9 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
     print "=============================\n";
     print SRS "//\n";
 
-#    ($body) = ($rest =~ /(.*?\n\}[^\n]*\n)/gos);
-#    print SRS $body;
+    ($body) = ($rest =~ /(.*?\n\}[^\n]*\n)/gos);
+    $body =~ s/^\s+//m;
+    print SRS $body;
   }
 
 }
