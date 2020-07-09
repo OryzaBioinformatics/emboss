@@ -217,7 +217,7 @@ int main(int argc, char **argv)
 				   maxcuts, blunt, sticky, commercial,
 				   &restrictlist);
 	if (hits)
-	    /* this bit is lifted from printHits() */
+	    /* this bit is lifted from printHits */
 	    (void) embPatRestrictRestrict(&restrictlist, hits, !limit,
 					  ajFalse);
 

@@ -49,6 +49,7 @@ int main(int argc, char **argv, char **env)
     AjBool emboss;
     AjBool embassy;
     AjBool explode;
+    AjBool colon;
 
     (void) embInit ("seealso", argc, argv);
 
@@ -61,6 +62,7 @@ int main(int argc, char **argv, char **env)
     emboss  = ajAcdGetBool("emboss");
     embassy = ajAcdGetBool("embassy");
     explode = ajAcdGetBool("explode");
+    colon   = ajAcdGetBool("colon");
 
     /* is a search string specified */
     if (!ajStrLen(search))
@@ -68,7 +70,8 @@ int main(int argc, char **argv, char **env)
 
 
     /* get the groups and program information */
-    (void) embGrpGetProgGroups (glist, alpha, env, emboss, embassy, explode);
+    (void) embGrpGetProgGroups (glist, alpha, env, emboss, embassy,
+		explode, colon);
 
     newlist = ajListNew();
     (void) embGrpKeySearchSeeAlso(newlist, &appgroups, alpha, glist, search); 

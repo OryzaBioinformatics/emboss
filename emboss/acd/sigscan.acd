@@ -1,7 +1,7 @@
 appl: sigscan
 [
 	doc: "Scans a sparse protein signature against swissprot"
-	groups: "PROTEIN: structure"
+	groups: "PROTEIN:3D STRUCTURE"
 ]
 
 infile: sigin

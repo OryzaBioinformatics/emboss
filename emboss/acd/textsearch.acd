@@ -49,7 +49,7 @@ bool: casesensitive [
 # It is only used in the ACD file, it is not read by the program itself
 bool: only [ 
   default: N 
-  info: "Display the inverse of the specified columns"
+  info: "Display the specified columns"
   help: "This is a way of shortening the command line if you only want a
 few things to be displayed.  Instead of specifying: \ 
 '-nohead -noname -nousa -noacc -nodesc' \ 

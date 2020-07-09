@@ -115,3 +115,14 @@ non-expanded names are simply like: 'NAME1 NAME2'."
   ]
 
 
+  bool: colon [
+	def: N
+	prompt: "Put a colon in the group name between two levels"
+	help: "The groups that EMBOSS applications belong to up to two
+levels, for example the primary group 'ALIGNMENT' has several
+sub-groups, or second-level groups, e.g.: CONSENSUS, DIFFERENCES, DOT
+PLOTS, GLOBAL, LOCAL, MULTIPLE.  To aid programs that parse the output
+of wossname that require the names of these subgroups, a colon ':' will
+be placed between the first and second level of the group name if this
+option is true."
+  ]

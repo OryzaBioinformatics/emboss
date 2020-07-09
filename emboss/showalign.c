@@ -825,7 +825,7 @@ static ajint showalign_OutputNums (AjPFile outf, ajint pos, ajint width,
     AjPStr marginfmt=ajStrNewL(10);
 
     /* margin and first number which may be partly in the margin */
-    /* ajFmtPrintF() doesn't seem to deal with formats like "%*d"
+    /* ajFmtPrintF doesn't seem to deal with formats like "%*d"
        correctly, so ...  */
     if (pos>0 && (ajint)log10((double)pos)+1 > margin + 10-(pos%10))
     {
@@ -934,7 +934,7 @@ static ajint showalign_OutputSeq (AjPFile outf, AjPSeq seq, ajint pos,
     ajStrAssSub(&line, ajSeqStr(seq), pos, end);
 
     /* name of sequence */
-    /* ajFmtPrintF() doesn't seem to deal with formats like "%.*S"
+    /* ajFmtPrintF doesn't seem to deal with formats like "%.*S"
        correctly, so ...  */
     ajFmtPrintS(&marginfmt, "%%-%d.%dS", margin, margin);
     if (margin > 0)

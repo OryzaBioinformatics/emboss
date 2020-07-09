@@ -48,6 +48,7 @@ int main(int argc, char **argv, char **env)
     AjBool emboss;
     AjBool embassy;
     AjBool explode;
+    AjBool colon;
 
     (void) embInit ("wossname", argc, argv);
 
@@ -61,9 +62,11 @@ int main(int argc, char **argv, char **env)
     emboss = ajAcdGetBool("emboss");
     embassy = ajAcdGetBool("embassy");
     explode = ajAcdGetBool("explode");
+    colon   = ajAcdGetBool("colon");
   
     /* get the groups and program information */
-    (void) embGrpGetProgGroups (glist, alpha, env, emboss, embassy, explode);
+    (void) embGrpGetProgGroups (glist, alpha, env, emboss, embassy,
+		explode, colon);
 
 
     /* is a search string specified */

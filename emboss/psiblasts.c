@@ -133,136 +133,47 @@
 ** 
 **  Must implement better way of producing value of TRAIN for TY record - 
 **  which uses file of correspondence between SCOP domains and SWISPROT 
-**  sequences ?
+**  sequences ?   At the moment, if a hit is an exact substring of at 
+**  least one of the sequences from the SCOP alignment, then it is taken
+**  to be a member of the training set.
 **
+** 
 **  Important Note
 **
 **  WHEN RUNNING PSIBLASTS AT THE HGMP IT IS ESSENTIAL THAT THE COMMAND 
 **  'use blast_v2' (which runs the script /packages/menu/USE/blast_v2) IS GIVEN 
 **  BEFORE IT IS RUN. 
+**  psiblasts is hard-coded to give to scan swissprot, (-d swissprot  option 
+**  to blastpgp. This is probably specific to use on the HGMP server. Option
+**  to run psiblasts on any blast-indexed database will be implemented in the 
+**  future (acd entry and code is below).
+**  string: database 	
+**  [ 
+**  	  param: Y
+**  	  prompt: "BLAST database to search"
+** 	  def: "./swissprot"
+**  ]
+**
+**  database   = ajAcdGetString("database");
+**  
+
 ******************************************************************************/ 
         
 
 #include "emboss.h"
 
-/*****************************************************************************
- **									    **
- ** This routine takes the name of an alignment file in clustal format and  **
- ** parses out the sequences and returns a AjPList containing just these    **
- ** sequences.            						    **
- **									    **
- *****************************************************************************/
 
-/* @func SeqGet ***************************************************************
-**
-** This routine takes the name of an alignment file in clustal format and
-** parses out the sequences and returns a AjPList containing just these
-** sequences.
-**
-** @param [?] alignf [AjPStr] Undocumented
-** @return [AjPList] Undocumented
-** @@
-******************************************************************************/
 
-AjPList SeqGet(AjPStr alignf)
-{
 
-    AjPFile file        = NULL;	   /* The scopalign generated alignment file */
+AjPHitlist psiblasts_ajXyzHitlistPsiblast(AjPScopalg scopalg, AjPFile psif);
+AjPFile psiblasts_ajXyzScopalgPsiblast(AjPScopalg scopalg, AjPFile alignf, 
+				       AjPStr *psiname, ajint niter, 
+				       float evalue, AjPStr database);
 
-    AjBool  done_1st_blk= ajFalse; /* Flag for whether we've read first block of sequences */
 
-    AjPList list_seqs   = NULL;    /* List of sequences */
 
-    AjPStr  *arr_seqs   = NULL;    /* Array of sequences */
-    AjPStr  seq         = NULL;
-    AjPStr  seq1        = NULL;
-    AjPStr  line        = NULL;
 
-    ajint   cnt         = 0;       /* Counter for sequence */
-    ajint   x           = 0;       /* Loop counter */
-    ajint   y           = 0;
 
-    line = ajStrNew();
-    
-    /* Create a new list */
-    list_seqs = ajListstrNew();
-    file      = ajFileNewIn(alignf);
-    
-    /* Start of code for reading input file */
-    /*Ignore everything up to first line beginning with 'Number'*/
-    while(ajFileReadLine(file,&line))
-    {
-	if(ajStrPrefixC(line,"Number"))
-	    break;
-    }
-
-    /* Read the rest of the file */
-    while(ajFileReadLine(file,&line))
-    {
-	/* Ignore 'Number' and 'Post_similar' lines */
-	if((ajStrPrefixC(line,"Number"))||
-	   (ajStrPrefixC(line,"Post_similar")))
-	    continue;
-
-	/* If we are on a blank line */
-	/* ajFileReadLine will trim the tailing \n */
-	if(ajStrChar(line,1)=='\0')
-	{ 
-	    done_1st_blk=ajTrue;
-	    cnt = 0;
-	    y++;
-
-	    if(y == 1)
-	    {
-		x = ajListstrToArray(list_seqs, &arr_seqs); 
-	    }
-	    continue;
-	}
-
-	if(done_1st_blk == ajTrue)
-	{
-	    ajFmtScanS(line, "%*s%S", &seq1);
-	    ajStrApp(&arr_seqs[cnt], seq1);
-	    cnt++;
-	    continue;
-	}
-
-	/* It is a sequence line from the first block */
-	if(done_1st_blk==ajFalse)
-	{
-	    /* The first block of sequences */
-	    /* Read in sequence */
-	    seq = ajStrNew();		
-	    ajFmtScanS(line, "%*s%S", &seq);
-	    	    
-	    /* Push string onto list */
-	    ajListstrPushApp(list_seqs,seq);
-	    continue;
-	}
-	
-    }
-    ajListstrDel(&list_seqs); 
-    list_seqs = ajListstrNew();
-   
-    for(x=0;x<cnt;x++)
-    {
-	seq = ajStrNew();
-	ajStrSubstituteCC(&arr_seqs[x],"-","");
-	ajStrAss(&seq,arr_seqs[x]);
-	ajListstrPushApp(list_seqs,seq);
-    } 
-        
-    /* Free up the list */
-    ajFileClose(&file);
-    
-    ajStrDel(&seq);
-    ajStrDel(&seq1);
-    ajStrDel(&line);
-    
-    return list_seqs;
-    ajExit();
-
-}
 
 /* @prog psiblasts *******************************************************
 **
@@ -272,74 +183,55 @@ AjPList SeqGet(AjPStr alignf)
 
 int main(int argc, char **argv)
 {
-    AjPStr  align       = NULL;		/* Location of alignment files for input */
-    AjPStr  alignextn   = NULL;		/* File extension of alignment files */
-    AjPStr  database    = NULL;		/* Name of BLAST database to search */
-    AjPStr  submatrix   = NULL;		/* Name of residue substitution matrix */
-    AjPStr  temp        = NULL;		/* Temp string */
-    AjPStr  line        = NULL;		/* Temp string */ 
-    AjPStr  sub         = NULL;		/* Temp string */
-    AjPStr  seq         = NULL;		/* Holds a complete sequence */
-    AjPStr *seqs        = NULL;		
-    AjPStr  msg         = NULL;		/* Error message */
-    AjPStr  cmdline     = NULL;		/* Command line arguments to run the psi-blast program */
-    AjPStr  start       = NULL;		/* Begining of sequence */
-    AjPStr  end         = NULL;		/* End of sequence */
-    AjPStr  sequence    = NULL;         /* Holds the hit region */ 
-        
-    ajint     niter     = 0;		/* Number of PSIBLAST iterations */
-    ajint     nscore    = 0;		/* Number of sequece blocks per entry */
-    ajint     nlines    = 0;
-    ajint     hitcounter= 0;		/* counts the number of hits */
-    ajint     setcounter= 0;		/* counts the total number of hits per alignment file */
-    ajint     nseqs     = 0;		/* the number of sequnces in the multiple sequence alignment */
-    ajint     x         = 0;
-          
-    float   evalue      = 0.0;		/* Threshold E-value for inclusion in family */
+    AjPStr     align     = NULL;   /* Location of alignment files for input */
+    AjPStr     alignextn = NULL;   /* File extension of alignment files */
+    AjPStr     alignname = NULL;   /* Name of alignment file */
+    AjPStr     database  = NULL;   /* Name of BLAST database to search */ 
+    AjPStr     submatrix = NULL;   /* Name of residue substitution matrix */
+    AjPStr     msg       = NULL;   /* Error message */
+    AjPStr     temp      = NULL;   /* Temp string */
+    AjPStr     psiname   = NULL;   /* Name of psiblast output file */
+
+    AjPFile    families  = NULL;   /* Name of families file for output */
+    AjPFile    logf      = NULL;   /* Log file pointer */
+    AjPFile    psif      = NULL;   /* Pointer to psiblast output file*/
+    AjPFile    alignf    = NULL;   /* Alignment file pointer */
+
+    ajint      niter     = 0;	   /* Number of PSIBLAST iterations */          
+    float      evalue    = 0.0;	   /* Threshold E-value for inclusion in family */
+
+    AjPList    list      = NULL;   /* Used to hold list of names of files in 
+				      align directory */
+    AjPScopalg scopalg   = NULL;   /*Scop alignment from input file */
+    AjPHitlist hitlist   = NULL;   /* Hitlist object for holding results of 
+				      PSIBLAST hits*/
+
+
     
-    ajlong  offset      = 0;
-    ajint   fseekr      = 0;
+
     
-    AjPList list        = NULL;		/* Used to hold list of names of files in align directory */
-    AjPList scopinfo    = NULL;         /* Holds the scop information in alignment file */
-    AjPList seqlist     = NULL;		/* Holds the sequences in the training set */
-    
-    AjPFile families    = NULL;		/* Name of families file for output */
-    AjPFile alignf      = NULL;		/* Alignment file pointer */
-    AjPFile logf        = NULL;		/* Log file pointer */
-    AjPFile seqf        = NULL;		/* A file containing an ungaped fasta sequence from the alignment file */
-    AjPFile justalign   = NULL;         /* A file containing just the alignment, wthout the Escop.dat infomation */
-    
-    AjPRegexp rexp      = NULL;
-    AjPRegexp blanks    = NULL;
-        
-    
-    /* Initialise strings */
-    align     = ajStrNew();
-    alignextn = ajStrNew();
-    database  = ajStrNew();
-    submatrix = ajStrNew();
-    temp      = ajStrNew();
-    line      = ajStrNew();
-    seq       = ajStrNew();
-    sub       = ajStrNew();
+    /* Initialise strings etc */
+    alignname = ajStrNew();
     msg       = ajStrNew();
-    cmdline   = ajStrNew();
-    start     = ajStrNew();
-    end       = ajStrNew();
-    sequence  = ajStrNew();
+    temp      = ajStrNew();
+    psiname   = ajStrNew();
+
+    psif     = ajFileNew();
+    alignf   = ajFileNew();
     
+    list     = ajListNew();
+
+
     /* Read data from acd */
     embInit("psiblasts",argc,argv); 
-    
     align      = ajAcdGetString("align");
     alignextn  = ajAcdGetString("alignextn");
-    database   = ajAcdGetString("database");
     submatrix  = ajAcdGetString("submatrix");
     niter      = ajAcdGetInt("niter");
     evalue     = ajAcdGetFloat("evalue");
     families   = ajAcdGetOutfile("families");
     logf       = ajAcdGetOutfile("logf");
+    
     
     /* Check directories */
     if(!ajFileDir(&align))
@@ -347,7 +239,6 @@ int main(int argc, char **argv)
     
     
     /* Create list of files in align directory */
-    list = ajListNew();
     ajStrAssC(&temp, "*");	
     if((ajStrChar(alignextn, 0)=='.'))
 	ajStrApp(&temp, alignextn);    
@@ -359,262 +250,416 @@ int main(int argc, char **argv)
     ajFileScan(align, temp, &list, ajFalse, ajFalse, NULL, NULL, ajFalse, NULL); 
 
 
-    /*Start of main application loop*/   
-       
-    ajFmtPrintF(families,"DE   Members of scop families\nXX\nEX   THRESH %.3f; MATRIX %S;\nXX\n",evalue,submatrix);
-    while(ajListPop(list,(void **)&temp))
-    {
-	rexp      = ajRegCompC("(^[0-9][_0-9a-zA-Z/-]+)([ ]*)([A-Z-]+)");
-	blanks    = ajRegCompC("(^[0-9a-zA-Z])");
+        
+    /* Write header info. of output file */	       
+    ajFmtPrintF(families,"DE   Members of scop families\nXX\n"
+		"EX   THRESH %.3f; MATRIX %S;\nXX\n",
+		evalue,submatrix);
 
-	scopinfo  = ajListstrNew();
-	seqlist   = ajListstrNew();
-	
-	/* Read alignment file*/
-	if((alignf = ajFileNewIn(temp)) == NULL)
+
+
+
+    
+    /*Start of main application loop*/   
+    while(ajListPop(list,(void **)&alignname))
+    { 
+	/* Open alignment file*/
+	if((alignf = ajFileNewIn(alignname)) == NULL)
 	{
 	    ajFmtPrintS(&msg, "Could not open for reading %S %S", 
-			temp);
+			alignname);
 	    ajWarn(ajStrStr(msg));
 	    ajFmtPrintF(logf, "WARN  Could not open for reading %S\n", 
-			temp);
-	    ajFileClose(&alignf);
-	    ajStrDel(&temp);	
+			alignname);
 	    continue;	    
 	}
-	ajStrAss(&sub,temp);
-	
-	/******************************************************************** 
-	 ** Set up and Run Psi-Blast by creating a single sequence file and *
-	 ** a file containing just the multiple sequence alignment.         *
-	 ********************************************************************/
-	
-	temp = ajStrNewC("alignfile");
-	justalign = ajFileNewApp(temp);
-	ajFmtPrintF(justalign,"\n");
-
-	while(ajFileReadLine(alignf,&line))
-	{ 	    
-	    
-	    if(ajRegExec(rexp,line))
-		ajFmtPrintF(justalign,"%S\n",line);
-	    	    
-	    else if(ajStrFindCaseC(line,"Number")>=0)
-		continue;
-	    	    
-	    else if(ajStrFindCaseC(line,"Post_similar")>=0)
-		ajFmtPrintF(justalign,"\n");	
-	    	    
- 	    else
-	    {
-		temp = ajStrNew();
-		ajStrAss(&temp,line);
-		ajListstrPushApp(scopinfo,temp);
-	    }
-	
-	}
-	
-	ajFileClose(&justalign);
-	ajFileClose(&alignf);
-
-	seqlist = SeqGet(sub);
-	nseqs = ajListstrToArray(seqlist,&seqs);
-	
-	line = ajStrNewC("seq.fasta");
-        seqf = ajFileNewApp(line);
-       	ajFmtPrintF(seqf,">SEQ\n%S\n",seqs[0]);
-	ajFileClose(&seqf);
-
-
-	ajFmtPrintS(&cmdline,"blastpgp -i %S -B alignfile -j %d -e %f -d %s > file\n",
-		    line, niter,evalue,ajStrStr(database));
-
-	system(ajStrStr(cmdline)); /* Run PSI-BLAST */
-
 	
 
-	/* write out the scop family infomation */
-	while(ajListstrPop(scopinfo,&line))
-	{
-	    if(ajRegExec(blanks,line))
-		ajFmtPrintF(families,"%S\n",line);
-	}
+	/* Read alignment file */
+	ajXyzScopalgRead(alignf, &scopalg);
+	
+
+	/* psiblasts is hard-coded to give to scan swissprot, (-d swissprot  option 
+	   to blastpgp. This is probably specific to use on the HGMP server. Option
+	   to run psiblasts on any blast-indexed database will be implemented in the 
+	   future */
+	ajStrAssC(&database, "swissprot");
+	
+
+	/* Generate input files for psiblast and callpsiblast */
+	if(!(psif = psiblasts_ajXyzScopalgPsiblast(scopalg, alignf, &psiname, niter, 
+					 evalue, database)))
+	    ajFatal("Error creating psiblast file");
+	
 		
-	ajRegFree(&rexp);
-	ajRegFree(&blanks);
+	/*  Parse the Psi-Blast output file and write a Hitlist object */
+	hitlist = psiblasts_ajXyzHitlistPsiblast(scopalg, psif);
+
 	
-	/* clean up the directory on the fly */
-	temp = ajStrNewC("alignfile");
-	ajSysUnlink(&temp);
-	temp = ajStrNewC("seq.fasta");
-	ajSysUnlink(&temp);
+	/* Close alignment file and delete psiblast output file*/
+   	ajFileClose(&alignf);
+	ajFmtPrintS(&temp, "rm %S", psiname);
+	system(ajStrStr(temp));
 	
 	
-	/*********************************************************
-	 ** Parse the Psi-Blast output file and put the sequences*
-	 ** in an EMBL like format.                              *
-	 *********************************************************/
+	/* Write the Hitlist object to file */	       
+	ajXyzHitlistWrite(families, hitlist);
 	
-	/* parse the psi-blast output */
-	temp = ajStrNewC("file");
-	seqf = ajFileNewIn(temp);
-	
-	rexp   = ajRegCompC("(^Sbjct:)([ ]+)([0-9]+)([ ]+)([A-Z-]+)([ ]+)([0-9]+)");
-	blanks = ajRegCompC("(^>SW:)([A-Z0-9_]+)");
-       
-	/* do a first parse through the psi-blast output file to work out the number of hits */
-	while(ajFileReadLine(seqf,&line))
-	{
-	    if(ajStrFindCaseC(line,"score = ")>=0)
-		setcounter++;
-	}
-	fseekr = ajFileSeek(seqf,offset,SEEK_SET);
-	ajFmtPrintF(families,"NS   %d\nXX\n",setcounter);
 
-       	while(ajFileReadLine(seqf,&line))
-	{
-	    if(ajRegExec(blanks,line))
-	    {   
-		ajRegSubI(blanks,2,&seq);
-				
-		while(ajFileReadLine(seqf,&line))
-		{
-
-		     /* tests for multiple sequences for a given hit entry delimited by "score" */
-		    if(ajStrFindCaseC(line,"score")>=0)
-		    {
-			nscore++;
-			hitcounter++;
-			
-			if(nscore==1) 
-			{
-			    ajFmtPrintF(families,"NN   [%d]\nXX\n",hitcounter);
-			    ajFmtPrintF(families,"AC   %S\nXX\n",seq);
-			    nlines = 0;
-			}	
-			
-			else
-			{
-			    ajFmtPrintF(families,"%S END;\nXX\n",end);
-			    ajSeqWriteCdb(families,sequence);
-			    ajFmtPrintF(families,"XX\n");
-			    for(x = 0;x<nseqs;x++)
-			    {
-				if(ajStrFindCase(seqs[x],sequence)>=0)
-				{
-				    ajFmtPrintF(families,"TY   TRAIN\nXX\n");
-				    break;
-				}
-				else
-				{
-				    ajFmtPrintF(families,"TY   PSIBLAST\nXX\n");
-				    break;
-				}
-			    }
-
-			    ajStrAssC(&sequence,"");
-			    ajFmtPrintF(families,"NN   [%d]\nXX\nAC   %S\nXX\n",hitcounter,seq);
-			    nscore = 1;
-			    nlines = 0;
-			}
-		    }
-		    
-		    else if(ajRegExec(rexp,line))
-		    {	
-			ajRegSubI(rexp,3,&start);
-			ajRegSubI(rexp,5,&sub);
-			ajStrSubstituteCC(&sub,"-","");
-			ajStrApp(&sequence,sub);
-			ajRegSubI(rexp,7,&end);
-			offset = ajFileTell(seqf);
-			nlines++;
-									
-			if(nscore==1&&nlines==1)
-			    ajFmtPrintF(families,"RA   %S START;  ",start);
-		    }
-
-		    /* test for an end of hit entry delimited by a ">" */
-		    else if(ajStrFindCaseC(line,">")>=0 || ajStrFindCaseC(line,"database")>=0
-			    || ajStrFindCaseC(line,"searching")>=0)
-		    {
-			fseekr = ajFileSeek(seqf,offset,SEEK_SET);
-			if(nscore==1)
-			{
-			    ajFmtPrintF(families,"%S END;\nXX\n",end);		    
-			    ajSeqWriteCdb(families,sequence);
-			    ajFmtPrintF(families,"XX\n");
-			     for(x = 0;x<nseqs;x++)
-			    {
-				if(ajStrFindCase(seqs[x],sequence)>=0)
-				{
-				    ajFmtPrintF(families,"TY   TRAIN\nXX\n");
-				    break;
-				}
-				else
-				{
-				    ajFmtPrintF(families,"TY   PSIBLAST\nXX\n");
-				    break;
-				}
-			    }
-					
-			    ajStrAssC(&sequence,"");
-			    nscore = 0;
-			}
-			break;
-		    }
-		}
-	    }
-	}
-
-
-	/* set all counters to zero */
-	hitcounter = 0;
-	setcounter = 0;
-	offset 	   = 0;
-	nlines     = 0;
-	nscore     = 0;
-	
-	/* clean up */
-	ajFileClose(&seqf);
-
-	ajListDel(&seqlist);
-	ajListDel(&scopinfo);
-
-	for(x=0;x<nseqs;x++)
-	    ajStrDel(&seqs[x]);
-	
-	ajRegFree(&rexp);
-	ajRegFree(&blanks);
-     
-	temp = ajStrNewC("file");
-	ajSysUnlink(&temp);
-       
-	ajStrAssC(&seq,"");	
-	ajFmtPrintF(families,"//\n");
-    
+	/* Free memory */
+	ajXyzHitlistDel(&hitlist);
+	ajXyzScopalgDel(&scopalg);
     }
-            
-    /*Tidy up */
+    
+
+
+        
+
+    /*Tidy up and return */
     ajStrDel(&align);
     ajStrDel(&alignextn);
+    ajStrDel(&alignname);
+    ajStrDel(&psiname);
     ajStrDel(&database);
     ajStrDel(&submatrix);
-    ajStrDel(&temp);
-    ajStrDel(&line);
-    ajStrDel(&sub);
     ajStrDel(&msg);
-    ajStrDel(&cmdline);
-    ajStrDel(&start);
-    ajStrDel(&end);
-    ajStrDel(&sequence);
-        
-    ajListDel(&list);
-    
+    ajStrDel(&temp);
+
     ajFileClose(&families);
     ajFileClose(&logf);
+    ajFileClose(&psif);	
+    ajFileClose(&alignf);		
+    
+    ajListDel(&list);
 
     ajExit();
     return 0;
 }
 
+
+
+
+
+/* @funcstatic psiblasts_ajXyzScopalgPsiblast *******************************
+**
+** Reads a Scopalg object and the corresponding alignment file. Calls psiblast
+** to do a search for the SCOP family over a specified database. The psiblast 
+** output file is created and a pointer to it provided.
+**
+** @param [r] scopalg    [AjPScopalg]  Alignment    
+** @param [r] alignf     [AjPFile]     Alignment file
+** @param [r] psiname    [AjPStr *]    Name of psiblast output file created
+** @param [r] niter      [ajint]       No. psiblast iterations
+** @param [r] evalue     [float]       Threshold E-value for psiblast
+** @param [r] database   [AjPStr]      Database name
+**
+** @return [AjPFile] Pointer to  psiblast output file for reading or NULL for error.
+** @@
+** 
+** Note
+** When the library code function ScopalgWrite is written, we will no longer
+** need to pass in a pointer to the alignment file itself. Write ScopalgWrite
+** and modify this function accordingly - not urgent.
+******************************************************************************/
+AjPFile psiblasts_ajXyzScopalgPsiblast(AjPScopalg scopalg, AjPFile alignf, 
+				       AjPStr *psiname, ajint niter, float evalue, 
+				       AjPStr database)
+{
+    AjPStr    line      = NULL;	 /* Temp string for reading alignment file */
+    AjPStr    name      = NULL;	 /* Base name of STAMP temp files */
+    AjPStr    temp      = NULL;	 /* Temp. string */
+    AjPStr    seqin     = NULL;	 /* Name of temp. file for PSIBLAST input file 
+				    (single sequence in FASTA format from alignment */
+    AjPStr    seqsin    = NULL;	 /* Name of temp. file for PSIBLAST input file 
+				    (sequences alignment w/o scop records, 
+				    'Post_similar' or 'Number' lines*/
+    AjPStr   *seqs      = NULL;  /* Sequences from alignment */    
+
+    AjPFile   seqsinf   = NULL;  /* File pointer for  PSIBLAST input file 
+				    (multiple sequences)*/
+    AjPFile   seqinf    = NULL;  /* File pointer for  PSIBLAST input file 
+				    (single sequence)*/
+    AjPFile   psif      = NULL;  /* Pointer to psiblast output file*/
+    
+    ajint     nseqs     = 0;     /* No. of sequences in alignment */
+    ajint     x         = 0;     /* Loop counter */
+    
+
+    
+
+    
+    /* Rewind alignment file */
+    ajFileSeek(alignf,0,SEEK_SET);
+
+
+
+    /* Allocate strings */
+    line      = ajStrNew();
+    name      = ajStrNew();
+    temp      = ajStrNew();
+    seqin     = ajStrNew();
+    seqsin    = ajStrNew();
+    
+
+
+    /* Read scopalg structure and extract sequences only */
+    if(!(nseqs=ajXyzScopalgGetseqs(scopalg, &seqs)))
+	ajFatal("ajXyzScopalgGetseqs returned 0 sequences in "
+		"psiblasts_ajXyzScopalgPsiblast. Email jison@hgmp.mrc.ac.uk\n");
+
+
+    /* Initialise random number generator for naming of temp. files
+       and create  psiblast input files */
+    ajRandomSeed();
+    ajStrAssC(&name, ajFileTempName(NULL));
+    ajStrAss(&seqsin, name);
+    ajStrAppC(&seqsin, ".seqsin");
+    ajStrAss(&seqin, name);
+    ajStrAppC(&seqin, ".seqin");
+    ajStrAss(psiname, name);
+    ajStrAppC(psiname, ".psiout");
+
+
+    seqsinf = ajFileNewOut(seqsin);
+    seqinf = ajFileNewOut(seqin);
+    
+
+    /* Read alignment file and write psiblast input file
+     of multiple sequences */
+    while(ajFileReadLine(alignf,&line))
+    {
+	/* Ignore 'Number', 'Post_similar' and Scop classification lines */
+	if((ajStrPrefixC(line,"Number")))
+	    continue;
+	else if (ajStrPrefixC(line,"Post_similar"))
+	    continue;
+	else if(ajStrPrefixC(line,"CL"))
+	{
+	    /*Print blank line at top of output file*/
+	    ajFmtPrintF(seqsinf,"\n");	
+	    continue;
+	}
+	else if(ajStrPrefixC(line,"FO"))
+	    continue;
+	else if(ajStrPrefixC(line,"SF"))
+	    continue;
+	else if(ajStrPrefixC(line,"FA"))
+	    continue;
+	else if(ajStrPrefixC(line,"XX"))
+	    continue;
+	else if(ajStrChar(line,1)=='\0')
+	{ 
+	    /* If we are on a blank line
+	       Print blank line at top of output file*/
+	    ajFmtPrintF(seqsinf,"\n");	
+	    continue;
+	}
+	else
+	    ajFmtPrintF(seqsinf,"%S\n",line);
+    }
+    
+    
+
+    /* Write psiblast input file of single sequence */    
+    ajFmtPrintF(seqinf,">\n%S\n",seqs[0]);
+    
+
+    /* Close psiblast input files before psiblast opens them */
+    ajFileClose(&seqinf);
+    ajFileClose(&seqsinf);
+
+    
+    /* Run PSI-BLAST */
+    ajFmtPrintS(&temp,"blastpgp -i %S -B %S -j %d -e %f -d %S > %S\n",
+		seqin, seqsin, niter,evalue, database, *psiname);
+    ajFmtPrint("%S\n", temp);
+    system(ajStrStr(temp));
+    
+    
+
+    /* Remove temp. files */
+    ajFmtPrintS(&temp, "rm %S", seqin);
+    system(ajStrStr(temp));
+    ajFmtPrintS(&temp, "rm %S", seqsin);
+    system(ajStrStr(temp));
+
+
+    /* Tidy up */
+    ajStrDel(&line);
+    ajStrDel(&name);
+    ajStrDel(&temp);
+    ajStrDel(&seqin);	
+    ajStrDel(&seqsin);
+    for(x=0;x<nseqs;x++)
+	ajStrDel(&seqs[x]);	
+    AJFREE(seqs);
+        
+
+    /* Open psiblast output file and return pointer */
+    psif = ajFileNewIn(*psiname);
+    return psif;
+}
+
+
+
+
+
+/* @funcstatic psiblasts_ajXyzHitlistPsiblast ********************************
+**
+** Reads a psiblast output file and writes a Hitlist object containing the 
+** hits.
+**
+** @param [r] scopalg   [AjPScopalg]  Alignment    
+** @param [r] psif      [AjPFile]     psiblast output file 
+**
+** @return [AjPHitlist] Pointer to Hitlist object (or NULL on failure)
+** @@
+** 
+******************************************************************************/
+AjPHitlist psiblasts_ajXyzHitlistPsiblast(AjPScopalg scopalg, AjPFile psif)
+{
+    /* The hits are organised into blocks, each block contains hits to 
+       a protein with a unique accession number.  
+       Each hit in a block mnay be spread over multiple lines. nlines 
+       is the number of the line (sequence fragment) we are currently on */
+
+
+    AjPStr  line       = NULL;	/* Temp string */ 
+    AjPStr  acc        = NULL;	/* Acc. number of hit*/ 
+    AjPStr  fragseq    = NULL;	/* Sequence fragment */ 
+    AjPStr  fullseq    = NULL;	/* Sequence of entire hit */ 
+    AjPStr  *seqs      = NULL;  /* Sequences from alignment */
+
+    ajint   start      = 0;     /* Start of hit */
+    ajint   fragstart  = 0;     /* Start of sequence fragment */
+    ajint   fragend    = 0;     /* End of sequence fragment */
+    ajint   hitn       = 0;     /* The number of the hit we are on */
+    ajint   nhits      = 0;	/* No. of hits in alignment file */
+    ajint   fseekr     = 0;
+    ajint   x          = 0;     /* Loop counter */
+    ajint   nseqs      = 0;     /* No. of sequences in alignment */
+    ajlong  offset     = 0;
+    
+    AjPHitlist hitlist = NULL;  /* Hitlist object for holding results 
+				   of PSIBLAST hits*/
+
+
+
+
+
+     /* Allocate strings etc */
+    line      = ajStrNew();
+    acc       = ajStrNew();
+    fragseq   = ajStrNew();
+    fullseq   = ajStrNew();
+    
+
+    /* Read scopalg structure and write array of sequences only */    
+    if(!(nseqs=ajXyzScopalgGetseqs(scopalg, &seqs)))
+	ajFatal("No sequences in alignment passed to psiblasts_ajXyzHitlistPsiblast. "
+		"Email jison@hgmp.mrc.ac.uk\n");
+    
+
+    /* Calculate the number of hits */
+    while(ajFileReadLine(psif,&line))
+	if(ajStrFindCaseC(line,"score = ")>=0)
+	    nhits++;
+    fseekr = ajFileSeek(psif,offset,SEEK_SET);
+
+
+    /* Allocate memory for Hitlist object */
+    if(!(hitlist = ajXyzHitlistNew(nhits)))
+	return(hitlist);
+
+    
+    /* Copy SCOP classification records*/
+    /* Assign scop classification records from hitlist structure */
+    ajStrAss(&hitlist->Class, scopalg->Class);
+    ajStrAss(&hitlist->Fold, scopalg->Fold);
+    ajStrAss(&hitlist->Superfamily, scopalg->Superfamily);
+    ajStrAss(&hitlist->Family, scopalg->Family);
+
+    
+    /* Loop for whole of input file*/
+    while(ajFileReadLine(psif,&line))
+    {
+	/* We've found a line beginning with > i.e. the start 
+	   of a block of hits to a single protein*/
+	if(ajStrPrefixC(line,">SW:"))
+	{
+	    /* Parse the accession number */
+	    ajFmtScanS(line, "%*s %S", &acc);
+	}
+	/* We've found a line beginning with ' Score = ' i.e. the
+	   start of data for a hit */
+	else if(ajStrPrefixC(line," Score = "))
+	{
+	    /* Write hit structure, we've parsed  */
+	    if(hitn!=0)
+	    {
+		hitlist->hits[hitn-1]->Start = start;
+		hitlist->hits[hitn-1]->End = fragend;
+		ajStrAss(&hitlist->hits[hitn-1]->Id, acc);
+		ajStrAss(&hitlist->hits[hitn-1]->Seq, fullseq);
+		ajStrDegap(&hitlist->hits[hitn-1]->Seq);
+		ajStrAssC(&hitlist->hits[hitn-1]->Typeobj, "PSIBLAST");
+		for(x=0;x<scopalg->N; x++)
+		    if((ajStrFindCase(seqs[x], hitlist->hits[hitn-1]->Seq))>=0)
+		    {
+			ajStrAssC(&hitlist->hits[hitn-1]->Typeobj, "TRAIN");
+			break;
+		    }
+	    }
+	    
+
+	    /* Reset the sequence of the full hit */
+	    ajStrAssC(&fullseq, "");
+
+	    /* Incremenet hit counter */
+	    hitn++;
+	}
+	/* Line containing sequence segment of the hit */
+	else if(ajStrPrefixC(line,"Sbjct: "))
+	{
+	    /* Parse the start, end and sequence of the fragment */
+	    ajFmtScanS(line, "%*s %d %S %d", &fragstart, &fragseq, &fragend);
+
+	    /* If this is the first fragment, get the start point */
+	    if(!ajStrCmpC(fullseq, ""))
+		start=fragstart;
+   
+	    /* Add fragment to end of sequence of full hit */
+	    ajStrApp(&fullseq, fragseq);
+	}
+    }
+
+
+    /* Write hit structure for last hit */
+    if(hitn!=0)
+    {
+	hitlist->hits[hitn-1]->Start = start;
+	hitlist->hits[hitn-1]->End = fragend;
+	ajStrAss(&hitlist->hits[hitn-1]->Id, acc);
+	ajStrAss(&hitlist->hits[hitn-1]->Seq, fullseq);
+	ajStrDegap(&hitlist->hits[hitn-1]->Seq);
+	ajStrAssC(&hitlist->hits[hitn-1]->Typeobj, "PSIBLAST");
+	for(x=0;x<scopalg->N; x++)
+	    if((ajStrFindCase(seqs[x], hitlist->hits[hitn-1]->Seq))>=0)
+	    {
+		ajStrAssC(&hitlist->hits[hitn-1]->Typeobj, "TRAIN");
+		break;
+	    }
+    }
+
+    /*Tidy up and return */
+    ajStrDel(&line);
+    ajStrDel(&acc);
+    ajStrDel(&fragseq);
+    ajStrDel(&fullseq);
+    for(x=0;x<nseqs;x++)
+	ajStrDel(&seqs[x]);	
+    AJFREE(seqs);
+
+    return hitlist;
+}
 

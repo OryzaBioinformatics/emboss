@@ -467,7 +467,7 @@ static void infoalign_OutputStr (AjPFile outfile, AjPStr str, AjBool html,
 {
     AjPStr marginfmt=ajStrNewL(10);
   
-    /* ajFmtPrintF() doesn't seem to deal with formats like "%-*S"
+    /* ajFmtPrintF doesn't seem to deal with formats like "%-*S"
        correctly, so ...  */
     ajFmtPrintS(&marginfmt, "%%-%dS", minlength);
      

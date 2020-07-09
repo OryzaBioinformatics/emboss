@@ -107,7 +107,15 @@ more programs reported as sharing a similar function than you will if
 you specify that you wish to use non-exploded names"
   ]
 
-
-
-
+  bool: colon [
+        def: N
+        prompt: "Put a colon in the group name between two levels"
+        help: "The groups that EMBOSS applications belong to have up to
+two levels, for example the primary group 'ALIGNMENT' has several
+sub-groups, or second-level groups, e.g.: CONSENSUS, DIFFERENCES, DOT
+PLOTS, GLOBAL, LOCAL, MULTIPLE.  To aid programs that parse the output
+of seealso that require the names of these subgroups, a colon ':' will
+be placed between the first and second level of the group name if this
+option is true."
+  ]
 

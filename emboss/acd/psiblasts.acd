@@ -18,13 +18,6 @@ string: alignextn
 	def: ".align"
 ]
 
-string: database 	
-[ 
-	param: Y
-	prompt: "BLAST database to search"
-	def: "./swissprot"
-]
-
 int: niter
 [
 	param: Y
@@ -43,7 +36,7 @@ string: submatrix
 [
 	param: Y
 	prompt: "Residue substitution matrix"
-	default: "./BLOSUM62"
+	default: "./EBLOSUM62"
 ]	
 
 outfile: families

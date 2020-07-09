@@ -834,6 +834,8 @@ static ajint dbigcg_gcggetent(AjPFile libr, AjPFile libs, ajint *d_pos,
 	sexp = ajRegCompC("^....([^ \t]+)[ \t]+([^ \t]+)[ \t]+([^ \t]+)"
 			  "[ \t]+([^ \t]+)[ \t]+([0-9]+)");
 
+    ajDebug("dbigcg_gcggetent .seq (%S) %d '%S'\n", idformat, spos, sline);
+
     /* check for seqid line */
     while (ajStrChar(sline,0)!='>')
     {
@@ -843,6 +845,7 @@ static ajint dbigcg_gcggetent(AjPFile libr, AjPFile libs, ajint *d_pos,
 	    *s_pos = spos;		/* end of file */
 	    return 0;
 	}
+	ajDebug("... read until next seq %d '%S'\n", spos, sline);
     }
     *s_pos = spos;
 
@@ -853,13 +856,17 @@ static ajint dbigcg_gcggetent(AjPFile libr, AjPFile libs, ajint *d_pos,
 
     ajRegSubI(sexp, 1, libstr);
 
-  
 
 
     ajRegSubI(sexp, 2, &gcgdate);
     ajRegSubI(sexp, 3, &gcgtype);
     ajRegSubI(sexp, 5, &tmpstr);
     ajStrToInt (tmpstr, &gcglen);
+
+    ajDebug("new entry '%S' date:'%S' type:'%S' len:'%S'=%d\n",
+	    *libstr, gcgdate, gcgtype, tmpstr, gcglen);
+
+    ajDebug("dbigcg_gcggetent .ref (%S) %d '%S'\n", idformat, rpos, rline);
 
     /* check for refid line */
     while (ajStrChar(rline,0)!='>')
@@ -871,6 +878,7 @@ static ajint dbigcg_gcggetent(AjPFile libr, AjPFile libs, ajint *d_pos,
 	    ajErr("ref ended before seq");
 	    break;
 	}
+	ajDebug("... read until next ref %d '%S'\n", rpos, rline);
     }
     *d_pos = rpos;
 
@@ -924,12 +932,18 @@ static ajint dbigcg_gcggetent(AjPFile libr, AjPFile libs, ajint *d_pos,
     /*
      *  for big entries, need to append until we have all the parts.
      *  They are named with _0 on the first part, _1 on the second and so on.
+     *  or _00 on the first part, _01 on the second and so on.
      *  We can look for the "id_" prefix.
      */
 
-    i = ajStrLen(*libstr);
-    if (!ajStrSuffixC(*libstr, "_0") && !ajStrSuffixC(*libstr,"_00"))
-	return gcglen;
+    /*
+     * i = ajStrLen(*libstr);
+     */
+
+    if (!ajStrSuffixC(*libstr, "_0") &&
+	!ajStrSuffixC(*libstr,"_00") &&
+	!ajStrSuffixC(*libstr,"_000"))
+      return gcglen;
   
     gcglen += dbigcg_gcgappent (libr, libs, libstr);
 
@@ -1094,6 +1108,7 @@ static ajint dbigcg_gcgappent (AjPFile libr, AjPFile libs, AjPStr* libstr)
 
     ajStrAssS(&tmpstr,*libstr);
   
+    ajDebug("dbi_gcgappent '%S'\n", tmpstr);
 
     p = ajStrStr(tmpstr);
     q = strrchr(p,'_');
@@ -1107,24 +1122,32 @@ static ajint dbigcg_gcgappent (AjPFile libr, AjPFile libs, AjPStr* libstr)
   
     while(!isend)
     {
+        spos = ajFileTell(libs);
 	ajFileGets(libs,&sline);
 	while (strncmp(ajStrStr(sline),">>>>",4))
 	{
-	    if (!ajFileGets(libs, &sline))
+	    spos = ajFileTell(libs);
+	    if (!ajFileGets(libs, &sline)) {
+		ajDebug ("end of file on seq\n");
 		return 1;
+	    }
 	}
       
 	ajRegExec (sexp, sline);
 	ajRegSubI(sexp, 1, &seqlibstr);
 
+	rpos = ajFileTell(libr);
 	ajFileGets(libr, &rline);
       
-	while (ajStrChar(rline,0)!='>')
+	while (ajStrChar(rline,0)!='>') {
+	    rpos = ajFileTell(libr);
 	    if (!ajFileGets(libr, &rline))
 	    {
+		ajDebug ("ref ended before seq\n");
 		ajErr ("ref ended before seq\n");
 		break;
 	    }
+	}
 
 	ajRegExec (rexp, rline);
 	ajRegSubI (rexp, 1, &reflibstr);
@@ -1132,9 +1155,12 @@ static ajint dbigcg_gcgappent (AjPFile libr, AjPFile libs, AjPStr* libstr)
 	if (ajStrNCmpO(reflibstr, testlibstr, ilen) ||
 	    ajStrNCmpO(seqlibstr, testlibstr, ilen))
 	    isend = ajTrue;
+
+	ajDebug("gcgappent %B test: '%S' seq: '%S' ref: '%S'\n",
+		isend, testlibstr, seqlibstr, reflibstr);
     }
   
-
+    ajDebug("gcgappent done at seq: '%S' ref: '%S'\n", seqlibstr, reflibstr);
 
     ajStrAssC(libstr,p);
   

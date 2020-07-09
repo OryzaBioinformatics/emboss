@@ -1,7 +1,7 @@
 appl: siggen
 [
         doc: "Generates a sparse protein signature"
-        groups: "PROTEIN: structure"
+        groups: "PROTEIN:3D STRUCTURE"
 ]
 
 string: algpath

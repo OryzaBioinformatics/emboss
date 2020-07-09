@@ -28,13 +28,13 @@ pkgdata2_DATA =	megamerger.acd merger.acd msbar.acd needle.acd \
 	plotcon.acd plotorf.acd polydot.acd \
 	preg.acd prettyplot.acd prettyseq.acd prima.acd \
 	primersearch.acd printsextract.acd profit.acd prophecy.acd \
-	prophet.acd prosextract.acd pscan.acd \
+	prophet.acd prosextract.acd pscan.acd psiblasts.acd\
 	rebaseextract.acd recoder.acd redata.acd remap.acd \
-	restover.acd restrict.acd revseq.acd scope.acd \
-        scopalign.acd  seealso.acd \
+	restover.acd restrict.acd revseq.acd \
+	scopalign.acd scope.acd seealso.acd \
 	seqinfo.acd seqmatchall.acd seqret.acd seqretall.acd \
 	seqretallfeat.acd seqretset.acd \
-	seqretsplit.acd seqrettype.acd showalign.acd \
+	seqretsplit.acd seqrettype.acd showalign.acd\
 	showdb.acd showfeat.acd showorf.acd showseq.acd shuffleseq.acd \
 	sigcleave.acd siggen.acd sigscan.acd silent.acd splitter.acd \
 	stretcher.acd stssearch.acd supermatcher.acd syco.acd \

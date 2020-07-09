@@ -92,6 +92,7 @@ int main(int argc, char **argv)
 	  AJCRESIZE(obsexp, len);
 	  AJCRESIZE(thresh, len);
 	  AJCRESIZE(xypc, len);
+	  maxarr = len;
 	}
 	for(i=0;i<len;++i)
 	    obsexp[i]=xypc[i]=0.0;
