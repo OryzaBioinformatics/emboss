@@ -371,7 +371,9 @@ Input file format
    'xxx' is the name of the colour).
    
    The standard names of HTML font colours are given in:
-   http://www.iconbazaar.com/color_tables/named_colors.html
+   http://http://www.w3.org/TR/REC-html40/types.html and
+   http://www.ausmall.com.au/freegraf/ncolour2.htm and
+   http://mindprod.com/htmlcolours.html (amongst other places).
    
    An example highlight range file is:
    

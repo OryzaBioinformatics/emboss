@@ -20,7 +20,7 @@ Description
    methyltransferases and restriction enzymes, as predicted from analysis
    of genomic sequences, are also listed.
    
-   The home page of REBASE is: http://rebase.neb.com/rebase/rebase.html
+   The home page of REBASE is: http://rebase.neb.com/
    
    This program derives recognition site and cleavage information from
    the "withrefm" file of an REBASE distribution. It creates three files
@@ -140,7 +140,7 @@ Data files
    
 Notes
 
-   The home page of REBASE is: http://rebase.neb.com/rebase/rebase.html
+   The home page of REBASE is: http://rebase.neb.com/
    
    Running this program may be the job of your system manager.
    

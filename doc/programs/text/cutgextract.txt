@@ -35,7 +35,7 @@ Command line arguments
                                   qualifiers can be found with -help -verbose
    
 
-   EMBOSS An error in ajacd.c at line 10820: unknown attribute 'name' for
+   EMBOSS An error in ajacd.c at line 10825: unknown attribute 'name' for
    'directory'
    
 Input file format

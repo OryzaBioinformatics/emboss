@@ -53,7 +53,7 @@ Description
    methyltransferases and restriction enzymes, as predicted from analysis
    of genomic sequences, are also listed.
    
-   The home page of REBASE is: http://rebase.neb.com/rebase/rebase.html
+   The home page of REBASE is: http://rebase.neb.com/
    
    This program can use REBASE data to find the recognition sites and/or
    cut sites of restriction enzymes in a nucleic acid sequence.
@@ -725,7 +725,9 @@ Input file format
    'xxx' is the name of the colour).
    
    The standard names of HTML font colours are given in:
-   http://www.iconbazaar.com/color_tables/named_colors.html
+   http://http://www.w3.org/TR/REC-html40/types.html and
+   http://www.ausmall.com.au/freegraf/ncolour2.htm and
+   http://mindprod.com/htmlcolours.html (amongst other places).
    
    An example highlight range file is:
    
