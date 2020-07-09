@@ -3,19 +3,15 @@ appl: octanol [
   groups: "Protein:Composition"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequencea  [
   parameter: "Y"
   type: "pureprotein"
 ]
 
-xygraph: graph  [
-  parameter: "Y"
-  multiple: "3"
-  gxtitle: "$(sequencea.name)"
-  gytitle: "Total Free Energy (Kcal/mol)"
-  gtitle: "White-Wimley Plot"
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 datafile: datafile  [
   optional: "Y"
   information: "White-Wimley data file (Ewhite-wimley.dat)"
@@ -28,6 +24,17 @@ integer: width  [
   default: "19"
   minimum: "1"
   maximum: "200"
+]
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+xygraph: graph  [
+  parameter: "Y"
+  multiple: "3"
+  gxtitle: "$(sequencea.name)"
+  gytitle: "Total Free Energy (Kcal/mol)"
+  gtitle: "White-Wimley Plot"
 ]
 
 bool: octanolplot  [
@@ -47,3 +54,5 @@ bool: differenceplot  [
   default: "Y"
   information: "Do not display the difference plot"
 ]
+
+endsection: output

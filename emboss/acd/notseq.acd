@@ -3,18 +3,25 @@ appl: notseq [
   groups: "Edit"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
 ]
 
-seqoutall: outseq  [
-  parameter: "Y"
-]
+endsection: input
 
+section: required [ info: "required Section" type: page ]
 string: exclude  [
   parameter: "Y"
   information: "Sequence names to exclude"
   help: "Enter a list of sequence names or accession numbers to exclude from the sequences read in. The excluded sequences will be written to the file specified in the 'junkout' parameter. The remainder will be written out to the file specified in the 'outseq' parameter. \ The list of sequence names can be separated by either spaces or commas. \ The sequence names can be wildcarded. \ The sequence names are case independent. \ An example of a list of sequences to be excluded is: \ myseq, hs*, one two three"
+]
+
+endsection: required
+
+section: output [ info: "output Section" type: page ]
+seqoutall: outseq  [
+  parameter: "Y"
 ]
 
 seqoutall: junkout  [
@@ -23,3 +30,5 @@ seqoutall: junkout  [
   information: "file of excluded sequences"
   help: "This file collects the sequences which you have excluded from the main output file of sequences."
 ]
+
+endsection: output

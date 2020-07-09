@@ -3,21 +3,28 @@ appl: maskseq [
   groups: "Edit"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequence  [
   parameter: "Y"
   type: "any"
 ]
 
-seqout: outseq  [
-  parameter: "Y"
-]
+endsection: input
 
+section: required [ info: "required Section" type: page ]
 range: regions  [
   required: "Y"
   default: ""
   information: "Regions to mask (eg: 4-57,78-94)"
   help: "Regions to mask. \ A set of regions is specified by a set of pairs of positions. \ The positions are integers. \ They are separated by any non-digit, non-alpha character. \ Examples of region specifications are: \ 24-45, 56-78 \ 1:45, 67=99;765..888 \ 1,5,8,10,23,45,57,99"
   expected: "None"
+]
+
+endsection: required
+
+section: output [ info: "output Section" type: page ]
+seqout: outseq  [
+  parameter: "Y"
 ]
 
 string: maskchar  [
@@ -27,3 +34,6 @@ string: maskchar  [
   help: "Character to use when masking. \ Default is 'X' for protein sequences, 'N' for nucleic sequences."
   expected: "'X' for protein, 'N' for nucleic"
 ]
+
+endsection: output
+

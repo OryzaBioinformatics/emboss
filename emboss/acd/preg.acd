@@ -3,17 +3,26 @@ appl: preg [
   groups: "Protein:Motifs"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "protein"
 ]
 
-outfile: outfile  [
-  parameter: "Y"
-]
+endsection: input
 
+section: required [ info: "required Section" type: page ]
 regexp: pattern  [
   parameter: "Y"
   upper: "Y"
   information: "Regular expression pattern"
 ]
+
+endsection: required
+
+section: output [ info: "output Section" type: page ]
+outfile: outfile  [
+  parameter: "Y"
+]
+
+endsection: output

@@ -3,6 +3,7 @@ appl: polydot [
   groups: "Alignment:Dot plots"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqset: sequences  [
   parameter: "Y"
   type: "any"
@@ -10,6 +11,9 @@ seqset: sequences  [
   help: "File containing a sequence alignment"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 integer: wordsize  [
   required: "Y"
   default: "6"
@@ -17,6 +21,10 @@ integer: wordsize  [
   information: "Word size"
 ]
 
+endsection: required
+
+section: output [ info: "output Section" type: page ]
+section: datasection [ info: "data Section" type: page ]
 bool: data  [
   required: "N"
   default: "N"
@@ -28,6 +36,13 @@ graph: graph  [
   required: "@(!$(data))"
   gtitle: "Polydot:"
 ]
+
+outfile: outfile  [
+  required: "$(data)"
+  nullok: "Y"
+]
+
+endsection:datasection
 
 integer: gap  [
   default: "10"
@@ -60,7 +75,6 @@ string: ext  [
   information: "Extension for feature file"
 ]
 
-outfile: outfile  [
-  required: "$(data)"
-  nullok: "Y"
-]
+endsection: output
+
+

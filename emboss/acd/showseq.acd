@@ -3,18 +3,15 @@ appl: showseq [
   groups: "Display, Nucleic:Translation, Nucleic:Restriction"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   features: "Y"
 ]
 
-outfile: outfile  [
-  parameter: "Y"
-  default: "stdout"
-  information: "Output sequence details to a file"
-  help: "If you enter the name of a file here then this program will write the sequence details into that file."
-]
+endsection: input
 
+section: required [ info: "required Section" type: page ]
 list: format  [
   required: "Y"
   default: "2"
@@ -27,9 +24,12 @@ list: format  [
   information: "Display format"
 ]
 
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
 list: things  [
   required: "@($(format) == 0)"
-  default: "B N T S A F"
+  default: "B,N,T,S,A,F"
   minimum: "1"
   maximum: "100"
   header: "Specify your own things to display"
@@ -37,11 +37,7 @@ list: things  [
   delimiter: ","
   codedelimiter: ":"
   information: "Enter a list of things to display"
-  help: "Specify a list of one or more code characters in the order in
-which you wish things to be displayed one above the other down the page. 
-For example if you wish to see things displayed in the order: sequence,
-complement sequence, ticks line, frame 1 translation, blank line; then
-you should enter 'S,C,T,1,B'."
+  help: "Specify a list of one or more code characters in the order in which you wish things to be displayed one above the other down the page. For example if you wish to see things displayed in the order: sequence, complement sequence, ticks line, frame 1 translation, blank line; then you should enter 'S,C,T,1,B'."
 ]
 
 range: translate  [
@@ -78,17 +74,11 @@ range: annotation  [
   optional: "Y"
   default: ""
   information: "Regions to mark (eg: 4-57 promoter region 78-94 first exon)"
-  help: "Regions to annotate by marking.  \ If this is left blank, then
-no annotation is added.  \ A set of regions is specified by a set of
-pairs of positions followed by optional text.  \ The positions are
-integers.  \ They are followed by any text (but not digits when on the
-command-line).  \ Examples of region specifications are: \ 24-45 new
-domain 56-78 match to Mouse \ 1-100 First part 120-156 oligo \ A file of
-ranges to annotate (one range per line) can be specified as
-'@filename'."
+  help: "Regions to annotate by marking. \ If this is left blank, then no annotation is added. \ A set of regions is specified by a set of pairs of positions followed by optional text. \ The positions are integers. \ They are followed by any text (but not digits when on the command-line). \ Examples of region specifications are: \ 24-45 new domain 56-78 match to Mouse \ 1-100 First part 120-156 oligo \ A file of ranges to annotate (one range per line) can be specified as '@filename'."
   expected: "If this is left blank, then no annotation is added."
 ]
 
+section: restrictsection [ info: "restriction Section" type: page ]
 bool: flatreformat  [
   optional: "N"
   default: "N"
@@ -174,6 +164,8 @@ string: enzymes  [
   help: "The name 'all' reads in all enzyme names from the REBASE database. You can specify enzymes by giving their names with commas between then, such as: 'HincII,hinfI,ppiI,hindiii'. \ The case of the names is not important. You can specify a file of enzyme names to read in by giving the name of the file holding the enzyme names with a '@' character in front of it, for example, '@enz.list'. \ Blank lines and lines starting with a hash character or '!' are ignored and all other lines are concatenated together with a comma character ',' and then treated as the list of enzymes to search for. \ An example of a file of enzyme names is: \ ! my enzymes \ HincII, ppiII \ ! other enzymes \ hindiii \ HinfI \ PpiI"
 ]
 
+endsection : restrictsection
+
 list: table  [
   optional: "Y"
   default: "0"
@@ -236,10 +228,7 @@ bool: html  [
   information: "Use HTML formatting"
 ]
 
-###################
-# Feature Criteria
-###################
-
+section : featuresection [ info : "feature Section" type : page ]
 
 string: matchsource  [
   optional: "Y"
@@ -255,30 +244,26 @@ string: matchtype  [
   help: "By default any feature type in the feature table is shown. You can set this to match any feature type you wish to show. \ See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types. \ The type may be wildcarded by using '*'. \ If you wish to show more than one type, separate their names with the character '|', eg: \ *UTR | intron"
 ]
 
-int: matchsense  [
+integer: matchsense  [
   optional: "Y"
   default: "0"
   information: "Sense of feature to display"
-  expect: "0 - any sense, 1 - forward sense, -1 - reverse sense"
-  help: "By default any feature type in the feature table is shown.  You
-can set this to match any feature sense you wish to show.
-0 - any sense, 1 - forward sense, -1 - reverse sense"
+  expected: "0 - any sense, 1 - forward sense, -1 - reverse sense"
+  help: "By default any feature type in the feature table is shown. You can set this to match any feature sense you wish to show. 0 - any sense, 1 - forward sense, -1 - reverse sense"
 ]
 
-float: minscore [
+float: minscore  [
   optional: "Y"
   default: "0.0"
   information: "Minimum score of feature to display"
-  help: "If this is greater than or equal to the maximum score, then any
-score is permitted"
+  help: "If this is greater than or equal to the maximum score, then any score is permitted"
 ]
 
-float: maxscore [
+float: maxscore  [
   optional: "Y"
   default: "0.0"
   information: "Maximum score of feature to display"
-  help: "If this is less than or equal to the maximum score, then any
-score is permitted"
+  help: "If this is less than or equal to the maximum score, then any score is permitted"
 ]
 
 string: matchtag  [
@@ -294,3 +279,17 @@ string: matchvalue  [
   information: "Value of feature tags to display"
   help: "Tag values are the values associated with a feature tag. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Only some of these tags can have values, for example '/gene' can have the value of the gene name. By default any feature tag value in the feature table is shown. You can set this to match any feature tag valueyou wish to show. \ The tag value may be wildcarded by using '*'. \ If you wish to show more than one tag value, separate their names with the character '|', eg: \ pax* | 10"
 ]
+
+endsection : featuresection
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+outfile: outfile  [
+  parameter: "Y"
+  default: "stdout"
+  information: "Output sequence details to a file"
+  help: "If you enter the name of a file here then this program will write the sequence details into that file."
+]
+
+endsection: output

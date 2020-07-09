@@ -3,6 +3,7 @@ appl: prettyplot [
   groups: "Alignment:Multiple, Display"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqset: msf  [
   parameter: "Y"
   type: "gapany"
@@ -10,6 +11,9 @@ seqset: msf  [
   help: "File containing a sequence alignment"
 ]
 
+endsection: input
+
+section: advanced [ info: "advanced Section" type: page ]
 integer: residuesperline  [
   optional: "Y"
   default: "50"
@@ -100,12 +104,6 @@ string: boxcolval  [
   default: "GREY"
 ]
 
-bool: consensus  [
-  optional: "Y"
-  information: "Display the consensus"
-  default: "N"
-]
-
 bool: name  [
   optional: "Y"
   information: "Display the sequence names"
@@ -137,6 +135,13 @@ float: plurality  [
   expected: "Half the total sequence weighting"
 ]
 
+section: consensussection [ info: "consensus Section" type: page ]
+bool: consensus  [
+  optional: "Y"
+  information: "Display the consensus"
+  default: "N"
+]
+
 bool: collision  [
   optional: "Y"
   information: "Allow collisions in calculating consensus"
@@ -152,17 +157,13 @@ integer: alternative  [
   maximum: "3"
 ]
 
-bool: portrait  [
-  optional: "Y"
-  information: "Set page to Portrait"
-  default: "N"
-]
-
 matrix: matrixfile  [
   optional: "Y"
   information: "Matrix file"
   protein: "$(msf.protein)"
 ]
+
+endsection: consensussection
 
 integer: showscore  [
   optional: "Y"
@@ -170,6 +171,15 @@ integer: showscore  [
   default: "-1"
 ]
 
+bool: portrait  [
+  optional: "Y"
+  information: "Set page to Portrait"
+  default: "N"
+]
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 bool: data  [
   optional: "N"
   default: "N"
@@ -178,3 +188,5 @@ bool: data  [
 graph: graph  [
   required: "@(!$(data))"
 ]
+endsection: output
+

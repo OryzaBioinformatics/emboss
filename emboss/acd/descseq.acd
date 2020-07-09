@@ -3,15 +3,15 @@ appl: descseq [
   groups: "Edit"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequence  [
   parameter: "Y"
   type: "gapany"
 ]
 
-seqout: outseq  [
-  parameter: "Y"
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 string: name  [
   optional: "Y"
   default: ""
@@ -28,3 +28,11 @@ bool: append  [
   information: "Append to the existing description"
   help: "This allows you to append the name or description you have given on to the end of the existing name or description of the sequence."
 ]
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+seqout: outseq  [
+  parameter: "Y"
+]
+
+endsection: output

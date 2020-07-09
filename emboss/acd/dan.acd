@@ -3,11 +3,15 @@ appl: dan [
   groups: "Nucleic:Composition"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "DNA"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 integer: windowsize  [
   required: "Y"
   minimum: "1"
@@ -42,31 +46,16 @@ float: saltconc  [
   information: "Enter salt concentration (mM)"
 ]
 
-bool: plot  [
-  information: "Produce a plot"
-  help: "If this is not specified then the file of output data is produced, else a plot of the melting point along the sequence is produced."
-]
+endsection: required
 
-float: mintemp  [
-  required: "$(plot)"
-  minimum: "0."
-  maximum: "150."
-  default: "55."
-  information: "Enter minimum temperature"
-  help: "Enter a minimum value for the temperature scale (y-axis) of the plot."
-]
-
-xygraph: graph  [
-  required: "$(plot)"
-  multiple: "1"
-]
-
+section: advanced [ info: "advanced Section" type: page ]
 bool: rna  [
   optional: "N"
   information: "Use RNA data values"
   help: "This specifies that the sequence is an RNA sequnce and not a DNA sequence."
 ]
 
+section: productsection [ info: "productsection Section" type: page ]
 bool: product  [
   optional: "N"
   information: "Prompt for product values"
@@ -100,6 +89,9 @@ integer: prodlen  [
   help: "This specifies the product length to be used in calculations (it is ignored unless -product is used)."
 ]
 
+endsection: productsection
+
+section: thermosection [ info: "thermosection Section" type: page ]
 bool: thermo  [
   optional: "N"
   information: "Thermodynamic calculations"
@@ -115,6 +107,30 @@ float: temperature  [
   help: "If -thermo has been specified then this specifies the temperature at which to calculate the DeltaG, DeltaH and DeltaS values."
 ]
 
+endsection: thermosection
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+bool: plot  [
+  information: "Produce a plot"
+  help: "If this is not specified then the file of output data is produced, else a plot of the melting point along the sequence is produced."
+]
+
+float: mintemp  [
+  required: "$(plot)"
+  minimum: "0."
+  maximum: "150."
+  default: "55."
+  information: "Enter minimum temperature"
+  help: "Enter a minimum value for the temperature scale (y-axis) of the plot."
+]
+
+xygraph: graph  [
+  required: "$(plot)"
+  multiple: "1"
+]
+
 report: outfile  [
   required: "@(!$(plot))"
   information: "Output data file"
@@ -122,8 +138,5 @@ report: outfile  [
   rformat: "seqtable"
   taglist: "float:tm=Tm float:gc=GC float:dg=DeltaG float:dh=DeltaH float:ds=DeltaS float:tmprod=TmProd"
 ]
-#outfile: outfile  [
-#  required: "@(!$(plot))"
-#  information: "Output data file"
-#  help: "If a plot is not being produced then data on the melting point etc. in each window along the sequence is output to the file."
-#]
+
+endsection: output

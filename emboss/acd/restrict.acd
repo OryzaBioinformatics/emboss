@@ -3,11 +3,33 @@ appl: restrict [
   groups: "Nucleic:Restriction"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "DNA"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
+integer: sitelen  [
+  required: "Y"
+  minimum: "2"
+  maximum: "20"
+  default: "4"
+  information: "Minimum recognition site length"
+]
+
+string: enzymes  [
+  required: "Y"
+  default: "all"
+  information: "Comma separated enzyme list"
+  help: "The name 'all' reads in all enzyme names from the REBASE database. You can specify enzymes by giving their names with commas between then, such as: 'HincII,hinfI,ppiI,hindiii'. \ The case of the names is not important. You can specify a file of enzyme names to read in by giving the name of the file holding the enzyme names with a '@' character in front of it, for example, '@enz.list'. \ Blank lines and lines starting with a hash character or '!' are ignored and all other lines are concatenated together with a comma character ',' and then treated as the list of enzymes to search for. \ An example of a file of enzyme names is: \ ! my enzymes \ HincII, ppiII \ ! other enzymes \ hindiii \ HinfI \ PpiI"
+]
+
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
 integer: min  [
   optional: "N"
   minimum: "1"
@@ -22,14 +44,6 @@ integer: max  [
   maximum: "2000000000"
   default: "2000000000"
   information: "Maximum cuts per RE"
-]
-
-integer: sitelen  [
-  required: "Y"
-  minimum: "2"
-  maximum: "20"
-  default: "4"
-  information: "Minimum recognition site length"
 ]
 
 bool: single  [
@@ -68,6 +82,15 @@ bool: commercial  [
   information: "Only enzymes with suppliers"
 ]
 
+string: datafile  [
+  required: "N"
+  default: ""
+  information: "Alternative RE data file"
+]
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 bool: limit  [
   optional: "N"
   default: "Y"
@@ -98,22 +121,12 @@ bool: name  [
   information: "Show sequence name"
 ]
 
-string: enzymes  [
-  required: "Y"
-  default: "all"
-  information: "Comma separated enzyme list"
-  help: "The name 'all' reads in all enzyme names from the REBASE database. You can specify enzymes by giving their names with commas between then, such as: 'HincII,hinfI,ppiI,hindiii'. \ The case of the names is not important. You can specify a file of enzyme names to read in by giving the name of the file holding the enzyme names with a '@' character in front of it, for example, '@enz.list'. \ Blank lines and lines starting with a hash character or '!' are ignored and all other lines are concatenated together with a comma character ',' and then treated as the list of enzymes to search for. \ An example of a file of enzyme names is: \ ! my enzymes \ HincII, ppiII \ ! other enzymes \ hindiii \ HinfI \ PpiI"
-]
-
-string: datafile  [
-  required: "N"
-  default: ""
-  information: "Alternative RE data file"
-]
-
 report: outfile  [
   parameter: "Y"
   rformat: "table"
   multiple: "Y"
   taglist: "str:enzyme=Enzyme_name str:site=Restriction_site int:5prime int:3prime int:5primerev int:3primerev"
 ]
+
+endsection: output
+

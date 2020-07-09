@@ -3,6 +3,7 @@ appl: codcmp [
   groups: "Nucleic:Codon usage"
 ]
 
+section: input [ info: "input Section" type: page ]
 codon: first  [
   parameter: "Y"
   information: "First codon usage file"
@@ -13,6 +14,11 @@ codon: second  [
   information: "Second codon usage file"
 ]
 
+endsection: input
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   parameter: "Y"
 ]
+endsection: output
+

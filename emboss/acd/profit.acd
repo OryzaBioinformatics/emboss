@@ -3,6 +3,8 @@ appl: profit [
   groups: "Nucleic:Profiles, Protein:Profiles"
 ]
 
+section: input [ info: "input Section" type: page ]
+
 infile: infile  [
   parameter: "Y"
   prompt: "Profile or matrix file"
@@ -13,6 +15,12 @@ seqall: sequence  [
   type: "any"
 ]
 
+endsection: input
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   parameter: "Y"
 ]
+
+endsection: output
+

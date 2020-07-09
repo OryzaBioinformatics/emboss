@@ -3,12 +3,16 @@ appl: cons [
   groups: "Alignment:Consensus"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqset: msf  [
   parameter: "Y"
   type: "gapany"
   help: "File containing a sequence alignment."
 ]
 
+endsection: input
+
+section: advanced [ info: "advanced Section" type: page ]
 matrix: datafile  [
   optional: "Y"
   information: "Scoring matrix"
@@ -23,13 +27,6 @@ float: plurality  [
   expected: "Half the total sequence weighting"
 ]
 
-float: setcase  [
-  optional: "Y"
-  information: "Define a threshold above which the consensus is given in uppercase"
-  help: "Sets the threshold for the positive matches above which the consensus is is upper-case and below which the consensus is in lower-case."
-  default: "0"
-]
-
 integer: identity  [
   optional: "Y"
   information: "Required number of identities at a position"
@@ -38,6 +35,9 @@ integer: identity  [
   minimum: "0"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 seqout: outseq  [
   parameter: "Y"
 ]
@@ -47,3 +47,13 @@ string: name  [
   default: ""
   information: "Name of the consensus sequence"
 ]
+
+float: setcase  [
+  optional: "Y"
+  information: "Define a threshold above which the consensus is given in uppercase"
+  help: "Sets the threshold for the positive matches above which the consensus is is upper-case and below which the consensus is in lower-case."
+  default: "0"
+]
+
+endsection: output
+

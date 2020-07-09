@@ -3,11 +3,15 @@ appl: pepstats [
   groups: "Protein:Composition"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequencea  [
   parameter: "Y"
   type: "PureProtein"
 ]
 
+endsection: input
+
+section: advanced [ info: "advanced Section" type: page ]
 bool: termini  [
   required: "N"
   default: "Y"
@@ -21,6 +25,11 @@ string: aadata  [
   default: "Eamino.dat"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   required: "Y"
 ]
+endsection: output
+

@@ -3,11 +3,30 @@ appl: fuzztran [
   groups: "Nucleic:Motifs, Protein:Motifs"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "dna"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
+string: pattern  [
+  required: "Y"
+  prompt: "Search pattern"
+]
+
+integer: mismatch  [
+  required: "Y"
+  default: "0"
+  minimum: "0"
+  prompt: "Number of mismatches"
+]
+
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
 list: frame  [
   optional: "Y"
   default: "1"
@@ -32,16 +51,11 @@ list: table  [
   prompt: "Code to use"
 ]
 
-string: pattern  [
-  required: "Y"
-  prompt: "Search pattern"
-]
+endsection: advanced
 
-integer: mismatch  [
-  required: "Y"
-  default: "0"
-  minimum: "0"
-  prompt: "Number of mismatches"
+section: output [ info: "output Section" type: page ]
+outfile: outf  [
+  parameter: "Y"
 ]
 
 bool: mmshow  [
@@ -69,6 +83,5 @@ bool: descshow  [
   information: "Show descriptions"
 ]
 
-outfile: outf  [
-  parameter: "Y"
-]
+endsection: output
+

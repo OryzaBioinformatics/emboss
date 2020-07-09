@@ -3,11 +3,15 @@ appl: pepinfo [
   groups: "Protein:Composition"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: inseq  [
   parameter: "Y"
   type: "protein"
 ]
 
+endsection: input
+
+section: output [ info: "output Section" type: page ]
 xygraph: graph  [
   required: "Y"
   multiple: "3"
@@ -28,6 +32,9 @@ bool: hydropathyplot  [
   information: "plot graphs of hydropathy"
 ]
 
+endsection: output
+
+section: advanced [ info: "advanced Section" type: page ]
 integer: hwindow  [
   optional: "Y"
   default: "9"
@@ -49,3 +56,9 @@ string: aahydropathy  [
   information: "User defined hydropathy data"
   prompt: "Enter user defined file of hydropathy data or leave blank"
 ]
+endsection: advanced
+
+
+
+
+

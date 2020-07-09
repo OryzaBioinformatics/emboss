@@ -3,16 +3,15 @@ appl: pepwheel [
   groups: "Display, Protein:2D Structure"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequence  [
   parameter: "Y"
   type: "Protein"
 ]
 
-bool: amphipathic  [
-  information: "Prompt for amphipathic residue marking"
-  help: "If this is true then the residues ACFGILMVWY are marked as squares and all other residues are unmarked. This overrides any other markup that you may have specified using the qualifiers '-squares', '-diamonds' and '-octags'."
-]
+endsection: input
 
+section: output [ info: "output Section" type: page ]
 bool: wheel  [
   default: "Y"
   information: "Plot the wheel"
@@ -36,6 +35,12 @@ integer: turns  [
   help: "The number of residues plotted per turn is the 'steps' value divided by this value."
 ]
 
+section: amphipathicsection [ info: "amphipathic Section" type: page]
+bool: amphipathic  [
+  information: "Prompt for amphipathic residue marking"
+  help: "If this is true then the residues ACFGILMVWY are marked as squares and all other residues are unmarked. This overrides any other markup that you may have specified using the qualifiers '-squares', '-diamonds' and '-octags'."
+]
+
 string: squares  [
   optional: "@(!$(amphipathic))"
   default: "ILVM"
@@ -57,6 +62,9 @@ string: octags  [
   help: "By default the positively charged residues HKR are marked with octagons."
 ]
 
+endsection: amphipathicsection
+
+section: datasection [ info: "datasection Section" type: page ]
 bool: data  [
   required: "N"
   default: "N"
@@ -64,12 +72,17 @@ bool: data  [
   help: "Output the match data to a file instead of plotting it"
 ]
 
+outfile: outfile  [
+  required: "$(data)"
+  nullok: "Y"
+]
+
 graph: graph  [
   required: "@(!$(data))"
   gxtitle: "$(sequence.name)"
 ]
 
-outfile: outfile  [
-  required: "$(data)"
-  nullok: "Y"
-]
+endsection: datasection
+
+endsection: output
+

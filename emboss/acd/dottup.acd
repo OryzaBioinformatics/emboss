@@ -3,6 +3,7 @@ appl: dottup [
   groups: "Alignment:Dot plots"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequencea  [
   parameter: "y"
   type: "any"
@@ -13,6 +14,9 @@ sequence: sequenceb  [
   type: "@($(sequencea.protein) ? protein : nucleotide)"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 integer: wordsize  [
   required: "Y"
   default: "4"
@@ -20,26 +24,43 @@ integer: wordsize  [
   information: "Word size"
 ]
 
-bool: data  [
+endsection: required
+
+section: output [ info: "output Section" type: page ]
+bool: stretch  [
   required: "N"
+  default: "N"
+  information: "Stretch axes"
+  help: "Use non-proportional axes"
+]
+
+bool: data  [
+  required: "@(!$(stretch))"
   default: "N"
   information: "Display as data"
   help: "Output the match data to a file instead of plotting it"
 ]
 
 graph: graph  [
-  required: "@(!$(data))"
+  required: "@(@(!$(data)) & @(!$(stretch)))"
   gxtitle: "$(sequenceb.name)"
   gytitle: "$(sequencea.name)"
 ]
 
+xygraph: xygraph  [
+  required: "$(stretch)"
+]
+
 bool: boxit  [
   default: "Y"
-  optional: "Y"
+  optional: "@(!$(stretch))"
   information: "Draw a box around dotplot"
 ]
 
 outfile: outfile  [
-  required: "$(data)"
+  required: "@($(data) & @(!$(stretch)))"
   nullok: "Y"
 ]
+
+endsection: output
+

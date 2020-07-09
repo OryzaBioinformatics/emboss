@@ -3,6 +3,7 @@ appl: plotcon [
   groups: "Alignment:Multiple"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqset: msf  [
   parameter: "Y"
   type: "gapany"
@@ -10,6 +11,9 @@ seqset: msf  [
   help: "File containing a sequence alignment"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 integer: winsize  [
   required: "Y"
   information: "Window size"
@@ -17,12 +21,18 @@ integer: winsize  [
   default: "4"
 ]
 
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
 matrix: scorefile  [
   optional: "Y"
   information: "Comparison matrix file"
   protein: "$(msf.protein)"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 bool: data  [
   required: "N"
   default: "N"
@@ -41,3 +51,6 @@ outfile: outfile  [
   nullok: "Y"
   information: "Display as data"
 ]
+
+endsection: output
+

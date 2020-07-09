@@ -65,18 +65,20 @@ CPP = gcc -E
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
+EMBOSS_TOP = /m2/emboss/emboss
 EXEEXT = 
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 ISAIXIA64 = 
-JAVA_OK = yes
+JAVA_OK = 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
+NEEDAJAX = 
 OBJDUMP = @OBJDUMP@
 OBJEXT = o
 PACKAGE = EMBOSS
 RANLIB = ranlib
 STRIP = strip
-VERSION = 2.2.0
+VERSION = 2.3.0
 XLIB =  -L/usr/X11R6/lib -L/usr/X11R6/lib -lX11 
 X_CFLAGS =  -I/usr/X11R6/include -I/usr/X11R6/include
 X_EXTRA_LIBS = 
@@ -84,7 +86,7 @@ X_LIBS =  -L/usr/X11R6/lib -L/usr/X11R6/lib
 X_PRE_LIBS =  -lSM -lICE -lSM -lICE
 am__include = include
 am__quote = 
-havejavac = yes
+havejavac = 
 install_sh = /m2/emboss/emboss/install-sh
 
 pkgdatadir = $(prefix)/share/$(PACKAGE)/acd
@@ -105,12 +107,13 @@ pkgdata_DATA = codes.english \
 	digest.acd distmat.acd domainer.acd \
 	dotmatcher.acd dotpath.acd dottup.acd \
 	dreg.acd einverted.acd embossdata.acd embossversion.acd emma.acd \
-	emowse.acd entrails.acd entret.acd equicktandem.acd \
+	emowse.acd entrails.acd entret.acd eprimer3.acd equicktandem.acd \
 	est2genome.acd etandem.acd extractseq.acd extractfeat.acd findkm.acd \
 	freak.acd fuzznuc.acd fuzzpro.acd fuzztran.acd \
 	garnier.acd geecee.acd getorf.acd helixturnhelix.acd hmoment.acd \
 	histogramtest.acd iep.acd infoalign.acd infoseq.acd isochore.acd \
-	lindna.acd listor.acd marscan.acd maskfeat.acd maskseq.acd \
+	interface.acd jembossctl.acd lindna.acd listor.acd \
+        marscan.acd maskfeat.acd maskseq.acd \
 	matcher.acd swissparse.acd
 
 pkgdata2_DATA = megamerger.acd merger.acd msbar.acd \
@@ -118,25 +121,25 @@ pkgdata2_DATA = megamerger.acd merger.acd msbar.acd \
 	newcpgreport.acd newcpgseek.acd newseq.acd noreturn.acd \
 	notseq.acd nrscope.acd nthseq.acd octanol.acd oddcomp.acd \
 	palindrome.acd pasteseq.acd patmatdb.acd patmatmotifs.acd \
-	patmattest.acd pepcoil.acd pepinfo.acd pepnet.acd \
+	patmattest.acd pdbtosp.acd pepcoil.acd pepinfo.acd pepnet.acd \
 	pepstats.acd pepwheel.acd pepwindow.acd pepwindowall.acd \
 	plotcon.acd plotorf.acd polydot.acd \
-	preg.acd prettyplot.acd prettyseq.acd prima.acd primer3.acd \
+	preg.acd prettyplot.acd prettyseq.acd prima.acd \
 	primers.acd primersearch.acd printsextract.acd profit.acd \
 	prophecy.acd prophet.acd prosextract.acd pscan.acd psiblasts.acd \
 	rebaseextract.acd recoder.acd redata.acd remap.acd \
 	restover.acd restrict.acd revseq.acd \
-	scopalign.acd scope.acd seealso.acd \
-	seqinfo.acd seqmatchall.acd seqret.acd seqretall.acd \
+	scopalign.acd scope.acd scopparse.acd seealso.acd \
+	seqinfo.acd seqmatchall.acd seqnr.acd seqret.acd seqretall.acd \
 	seqretallfeat.acd seqretset.acd seqretsingle.acd \
-	seqretsplit.acd showalign.acd\
+	seqretsplit.acd seqsort.acd showalign.acd\
 	showdb.acd showfeat.acd showorf.acd showseq.acd shuffleseq.acd \
 	sigcleave.acd siggen.acd sigscan.acd silent.acd splitter.acd \
 	stretcher.acd stssearch.acd supermatcher.acd syco.acd \
 	testplot.acd textsearch.acd tfextract.acd tfm.acd \
 	tfscan.acd tmap.acd transeq.acd treetypedisplay.acd \
-	trimest.acd trimseq.acd vectorstrip.acd water.acd wobble.acd \
-	wordcount.acd wordmatch.acd wossname.acd
+	trimest.acd trimseq.acd vectorstrip.acd water.acd whichdb.acd \
+	wobble.acd wordcount.acd wordmatch.acd wossname.acd
 
 pkgdata2dir = $(prefix)/share/$(PACKAGE)/acd
 subdir = emboss/acd

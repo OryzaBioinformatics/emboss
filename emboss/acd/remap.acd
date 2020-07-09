@@ -3,17 +3,15 @@ appl: remap [
   groups: "Display, Nucleic:Restriction, Nucleic:Translation"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "DNA"
 ]
 
-outfile: outfile  [
-  parameter: "Y"
-  information: "Output sequence details to a file"
-  help: "If you enter the name of a file here then this program will write the sequence details into that file."
-]
+endsection: input
 
+section: required [ info: "required Section" type: page ]
 string: enzymes  [
   required: "Y"
   default: "all"
@@ -29,18 +27,9 @@ integer: sitelen  [
   information: "Minimum recognition site length"
 ]
 
-bool: cutlist  [
-  optional: "Y"
-  default: "Y"
-  prompt: "List the enzymes that cut"
-]
+endsection: required
 
-bool: flatreformat  [
-  optional: "Y"
-  default: "N"
-  prompt: "Display RE sites in flat format"
-]
-
+section: advanced [ info: "advanced Section" type: page ]
 integer: mincuts  [
   optional: "Y"
   minimum: "1"
@@ -93,6 +82,38 @@ bool: commercial  [
   information: "Only enzymes with suppliers"
 ]
 
+list: table  [
+  optional: "Y"
+  default: "0"
+  minimum: "1"
+  maximum: "1"
+  header: "Genetic codes"
+  values: "0:Standard; 1:Standard (with alternative initiation codons); 2:Vertebrate Mitochondrial; 3:Yeast Mitochondrial; 4:Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma; 5:Invertebrate Mitochondrial; 6:Ciliate Macronuclear and Dasycladacean; 9:Echinoderm Mitochondrial; 10:Euplotid Nuclear; 11:Bacterial; 12:Alternative Yeast Nuclear; 13:Ascidian Mitochondrial; 14:Flatworm Mitochondrial; 15:Blepharisma Macronuclear; 16:Chlorophycean Mitochondrial; 21:Trematode Mitochondrial; 22:Scenedesmus obliquus; 23:Thraustochytrium Mitochondrial"
+  delimiter: ";"
+  codedelimiter: ":"
+  prompt: "Code to use"
+]
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+outfile: outfile  [
+  parameter: "Y"
+  information: "Output sequence details to a file"
+  help: "If you enter the name of a file here then this program will write the sequence details into that file."
+]
+bool: cutlist  [
+  optional: "Y"
+  default: "Y"
+  prompt: "List the enzymes that cut"
+]
+
+bool: flatreformat  [
+  optional: "Y"
+  default: "N"
+  prompt: "Display RE sites in flat format"
+]
+
 bool: limit  [
   optional: "Y"
   default: "Y"
@@ -133,18 +154,6 @@ range: highlight  [
   default: ""
   information: "Regions to colour in HTML (eg: 4-57 red 78-94 green)"
   help: "Regions to colour if formatting for HTML. \ If this is left blank, then the sequence is left alone. \ A set of regions is specified by a set of pairs of positions. \ The positions are integers. \ They are followed by any valid HTML font colour. \ Examples of region specifications are: \ 24-45 blue 56-78 orange \ 1-100 green 120-156 red \ A file of ranges to colour (one range per line) can be specifed as '@filename'."
-]
-
-list: table  [
-  optional: "Y"
-  default: "0"
-  minimum: "1"
-  maximum: "1"
-  header: "Genetic codes"
-  values: "0:Standard; 1:Standard (with alternative initiation codons); 2:Vertebrate Mitochondrial; 3:Yeast Mitochondrial; 4:Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma; 5:Invertebrate Mitochondrial; 6:Ciliate Macronuclear and Dasycladacean; 9:Echinoderm Mitochondrial; 10:Euplotid Nuclear; 11:Bacterial; 12:Alternative Yeast Nuclear; 13:Ascidian Mitochondrial; 14:Flatworm Mitochondrial; 15:Blepharisma Macronuclear; 16:Chlorophycean Mitochondrial; 21:Trematode Mitochondrial; 22:Scenedesmus obliquus; 23:Thraustochytrium Mitochondrial"
-  delimiter: ";"
-  codedelimiter: ":"
-  prompt: "Code to use"
 ]
 
 bool: threeletter  [
@@ -196,3 +205,5 @@ bool: html  [
   default: "N"
   information: "Use HTML formatting"
 ]
+
+endsection: output

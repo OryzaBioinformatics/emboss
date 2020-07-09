@@ -3,19 +3,16 @@ appl: showfeat [
   groups: "Display, Feature tables"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "any"
   features: "Y"
 ]
 
-outfile: outfile  [
-  parameter: "Y"
-  default: "stdout"
-  information: "Output feature details to a file"
-  help: "If you enter the name of a file here then this program will write the feature details into that file."
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 string: matchsource  [
   optional: "Y"
   default: "*"
@@ -145,3 +142,14 @@ bool: values  [
   information: "Display tag values of features"
   help: "Set this to be false if you do not wish to display the tag values of the features. If this is set to be false, only the tag names will be displayed. If the tags are not displayed, then the values will not be displayed. The value of the 'translation' tag is never displayed as it is often extremely long."
 ]
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+outfile: outfile  [
+  parameter: "Y"
+  default: "stdout"
+  information: "Output feature details to a file"
+  help: "If you enter the name of a file here then this program will write the feature details into that file."
+]
+
+endsection: output

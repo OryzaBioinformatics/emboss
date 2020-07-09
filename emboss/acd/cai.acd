@@ -3,17 +3,26 @@ appl: cai [
   groups: "Nucleic:Codon usage"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: seqall  [
   parameter: "Y"
   type: "DNA"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 codon: cfile  [
   required: "Y"
   information: "Codon usage file"
   default: "Eyeastcai.cut"
 ]
 
+endsection: required
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   parameter: "Y"
 ]
+endsection: output
+

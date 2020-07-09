@@ -3,26 +3,20 @@ appl: msbar [
   groups: "Nucleic:Mutation, Protein:Mutation"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "any"
 ]
 
-seqoutall: outseq  [
-  parameter: "Y"
-]
+endsection: input
 
+section: required [ info: "required Section" type: page ]
 integer: count  [
   required: "Y"
   default: "1"
   minimum: "0"
   information: "Number of times to perform the mutation operations"
-]
-
-bool: inframe  [
-  optional: "@($(sequence.protein)?N:Y)"
-  default: "N"
-  information: "Do 'codon' and 'block' operations in frame"
 ]
 
 list: point  [
@@ -35,6 +29,27 @@ list: point  [
   delimiter: ";"
   codedelimiter: ":"
   information: "Types of point mutations to perform"
+]
+
+list: block  [
+  required: "Y"
+  default: "0"
+  minimum: "1"
+  maximum: "4"
+  header: "Block mutation operations"
+  values: "0:None; 1:Any of the following; 2:Insertions; 3:Deletions; 4:Changes; 5:Duplications; 6:Moves"
+  delimiter: ";"
+  codedelimiter: ":"
+  information: "Types of block mutations to perform"
+]
+
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
+bool: inframe  [
+  optional: "@($(sequence.protein)?N:Y)"
+  default: "N"
+  information: "Do 'codon' and 'block' operations in frame"
 ]
 
 list: codon  [
@@ -50,18 +65,6 @@ list: codon  [
   help: "Types of codon mutations to perform. These are only done if the sequence is nucleic."
 ]
 
-list: block  [
-  required: "Y"
-  default: "0"
-  minimum: "1"
-  maximum: "4"
-  header: "Block mutation operations"
-  values: "0:None; 1:Any of the following; 2:Insertions; 3:Deletions; 4:Changes; 5:Duplications; 6:Moves"
-  delimiter: ";"
-  codedelimiter: ":"
-  information: "Types of block mutations to perform"
-]
-
 integer: minimum  [
   default: "1"
   minimum: "0"
@@ -73,3 +76,12 @@ integer: maximum  [
   minimum: "$(minimum)"
   information: "Maximum size for a block mutation"
 ]
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+seqoutall: outseq  [
+  parameter: "Y"
+]
+
+endsection: output

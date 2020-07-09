@@ -1,8 +1,12 @@
 appl: megamerger [
   documentation: "Merge two large overlapping nucleic acid sequences"
   groups: "Alignment:Consensus"
+  gui: yes
+  batch: yes
+  cpu: medium
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: seqa  [
   parameter: "Y"
   type: "DNA"
@@ -13,6 +17,19 @@ sequence: seqb  [
   type: "DNA"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
+integer: wordsize  [
+  required: "Y"
+  default: "20"
+  minimum: "2"
+  information: "Word size"
+]
+
+endsection: required
+
+section: output [ info: "output Section" type: page ]
 seqout: outseq  [
   parameter: "Y"
   extension: "merged"
@@ -24,9 +41,5 @@ outfile: report  [
   information: "Output report"
 ]
 
-integer: wordsize  [
-  required: "Y"
-  default: "20"
-  minimum: "2"
-  information: "Word size"
-]
+endsection: output
+

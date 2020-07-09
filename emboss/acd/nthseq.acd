@@ -3,10 +3,14 @@ appl: nthseq [
   groups: "Edit"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 integer: number  [
   required: "Y"
   minimum: "1"
@@ -14,6 +18,12 @@ integer: number  [
   prompt: "The number of the sequence to output"
 ]
 
+endsection: required
+
+section: output [ info: "output Section" type: page ]
 seqout: outseq  [
   parameter: "Y"
 ]
+
+endsection: output
+

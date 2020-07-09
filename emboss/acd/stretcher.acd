@@ -3,6 +3,7 @@ appl: stretcher [
   groups: "Alignment:Global"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequencea  [
   parameter: "Y"
   type: "any"
@@ -13,14 +14,9 @@ sequence: sequenceb  [
   type: "@($(sequencea.protein) ? protein : nucleotide)"
 ]
 
-align: outfile  [
-  parameter: "Y"
-  aformat: "markx0"
-  minseq: 2
-  maxseq: 2
-  aglobal: "Y"
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 matrix: datafile  [
   optional: "Y"
   help: "Matrix file"
@@ -45,19 +41,15 @@ integer: gaplength  [
   expected: "2 for protein, 4 for nucleic"
 ]
 
-#integer: markx  [
-#  optional: "Y"
-#  help: "alternative displays"
-#  default: "0"
-#  maximum: "10"
-#  valid: "Positive integer up to 10"
-#]
+endsection: advanced
 
-#integer: length  [
-#  optional: "Y"
-#  help: "number per line"
-#  default: "60"
-#  minimum: "1"
-#  maximum: "200"
-#  valid: "Positive integer"
-#]
+section: output [ info: "output Section" type: page ]
+align: outfile  [
+  parameter: "Y"
+  aformat: "markx0"
+  minseqs: "2"
+  maxseqs: "2"
+  aglobal: "Y"
+]
+
+endsection: output

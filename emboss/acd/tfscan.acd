@@ -3,11 +3,15 @@ appl: tfscan [
   groups: "Nucleic:Transcription"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "DNA"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 list: menu  [
   required: "Y"
   default: "V"
@@ -28,6 +32,12 @@ integer: mismatch  [
   information: "Number of mismatches"
 ]
 
+endsection: required
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   parameter: "Y"
 ]
+
+endsection: output
+

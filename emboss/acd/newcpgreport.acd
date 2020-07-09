@@ -3,11 +3,15 @@ appl: newcpgreport [
   groups: "Nucleic:CpG Islands"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "DNA"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 integer: window  [
   required: "Y"
   minimum: "1"
@@ -48,6 +52,9 @@ float: minpc  [
   information: "Minimum percentage"
 ]
 
+endsection: required
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   parameter: "Y"
 ]
@@ -66,3 +73,6 @@ bool: pc  [
   default: "Y"
   information: "Show percentage line"
 ]
+
+endsection: output
+

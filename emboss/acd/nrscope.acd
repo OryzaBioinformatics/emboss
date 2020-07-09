@@ -3,16 +3,11 @@ appl: nrscope [
   groups: "Utils:Database creation"
 ]
 
+section: input [ info: "input Section" type: page ]
 infile: scopin  [
   parameter: "Y"
   prompt: "Name of scop file for input (embl-like format)"
   default: "Escop.dat"
-]
-
-outfile: scopout  [
-  parameter: "Y"
-  prompt: "Name of non-redundant scop file for output (embl-like format)"
-  default: "EscopNR.dat"
 ]
 
 string: dpdb  [
@@ -27,6 +22,9 @@ string: extn  [
   default: ".pxyz"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 float: thresh  [
   parameter: "Y"
   prompt: "The % sequence identity redundancy threshold"
@@ -61,8 +59,19 @@ float: gapextend  [
   help: "The gap extension, penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty. An exception is where one or both sequences are single reads with possible sequencing errors in which case you would expect many single base gaps. You can get this result by setting the gap open penalty to zero (or very low) and using the gap extension penalty to control gap scoring."
 ]
 
+endsection: required
+
+section: output [ info: "output Section" type: page ]
+outfile: scopout  [
+  parameter: "Y"
+  prompt: "Name of non-redundant scop file for output (embl-like format)"
+  default: "EscopNR.dat"
+]
+
 outfile: errf  [
   parameter: "Y"
   prompt: "Name of log file for the build"
   default: "nrscope.log"
 ]
+endsection: output
+

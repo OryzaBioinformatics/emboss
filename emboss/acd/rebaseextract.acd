@@ -1,10 +1,16 @@
 appl: rebaseextract [
   documentation: "Extract data from REBASE"
   groups: "Utils:Database creation"
+  gui: yes
+  batch: yes
+  cpu: medium
 ]
 
+section: input [ info: "input Section" type: page ]
 infile: inf  [
   parameter: "Y"
-  required: "Y"
   prompt: "Full pathname of WITHREFM"
 ]
+
+endsection: input
+

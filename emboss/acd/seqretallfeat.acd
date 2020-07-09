@@ -3,32 +3,19 @@ appl: seqretallfeat [
   groups: "Test"
 ]
 
-variable:  fred "2 + 2"
-
-section: secinseq  [
-  info: "input sequence"
-  type: "frame"
-  border: "2"
-  side: "top"
-]
-
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   features: "Y"
 ]
 
-section: secoutseq  [
-  info: "output sequence"
-  type: "page"
-  comment: "testing sections"
-  folder: "fred"
-]
+endsection: input
 
+section: output [ info: "output Section" type: page ]
 seqoutall: outseq  [
   parameter: "Y"
   features: "Y"
 ]
 
-endsection:  secoutseq
+endsection: output
 
-endsection:  secinseq

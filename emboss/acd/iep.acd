@@ -3,23 +3,15 @@ appl: iep [
   groups: "Protein:Composition"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequencea  [
   parameter: "Y"
   type: "pureprotein"
 ]
 
-bool: plot  [
-  required: "N"
-  default: "N"
-  information: "Plot charge vs pH"
-]
+endsection: input
 
-bool: report  [
-  required: "N"
-  default: "Y"
-  information: "Write results to a file"
-]
-
+section: advanced [ info: "advanced Section" type: page ]
 float: step  [
   required: "N"
   information: "pH step value"
@@ -40,6 +32,21 @@ bool: termini  [
   information: "Include charge at N and C terminus"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+bool: plot  [
+  required: "N"
+  default: "N"
+  information: "Plot charge vs pH"
+]
+
+bool: report  [
+  required: "N"
+  default: "Y"
+  information: "Write results to a file"
+]
+
 xygraph: graph  [
   required: "$(plot)"
 ]
@@ -47,3 +54,5 @@ xygraph: graph  [
 outfile: outfile  [
   required: "$(report)"
 ]
+
+endsection: output

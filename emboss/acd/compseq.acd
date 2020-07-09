@@ -3,10 +3,14 @@ appl: compseq [
   groups: "Nucleic:Composition, Protein:Composition"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 integer: word  [
   parameter: "Y"
   minimum: "1"
@@ -16,24 +20,14 @@ integer: word  [
   help: "This is the size of word (n-mer) to count. \ Thus if you want to count codon frequencies, you should enter 3 here."
 ]
 
-outfile: outfile  [
-  parameter: "Y"
-  extension: "composition"
-  help: "This is the results file."
-]
+endsection: required
 
+section: advanced [ info: "advanced Section" type: page ]
 infile: infile  [
   optional: "Y"
   nullok: "Y"
   information: "'compseq' file to use for expected word frequencies"
   help: "This is a file previously produced by 'compseq' that can be used to set the expected frequencies of words in this analysis. \ The word size in the current run must be the same as the one in this results file. Obviously, you should use a file produced from protein sequences if you are counting protein sequence word frequencies, and you must use one made from nucleotide frequencies if you and analysing a nucleotide sequence."
-]
-
-bool: zerocount  [
-  optional: "Y"
-  default: "Y"
-  information: "Display the words that have a frequency of zero"
-  help: "You can make the output results file much smaller if you do not display the words with a zero count."
 ]
 
 integer: frame  [
@@ -58,3 +52,20 @@ bool: reverse  [
   information: "Count words in the forward and reverse sense"
   help: "Set this to be true if you also wish to also count words in the reverse complement of a nucleic sequence."
 ]
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+outfile: outfile  [
+  parameter: "Y"
+  extension: "composition"
+  help: "This is the results file."
+]
+
+bool: zerocount  [
+  optional: "Y"
+  default: "Y"
+  information: "Display the words that have a frequency of zero"
+  help: "You can make the output results file much smaller if you do not display the words with a zero count."
+]
+
+endsection: output

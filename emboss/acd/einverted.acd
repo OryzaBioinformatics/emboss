@@ -1,18 +1,20 @@
 appl: einverted [
   documentation: "Finds DNA inverted repeats"
   groups: "Nucleic:Repeats, Nucleic:2D structure"
+  gui: yes
+  batch: yes
+  cpu: medium
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequence  [
   parameter: "Y"
   type: "dna"
 ]
 
-outfile: outfile  [
-  parameter: "Y"
-  extension: "inv"
-]
+endsection: input
 
+section: required [ info: "required Section" type: page ]
 integer: gap  [
   default: "12"
   required: "Y"
@@ -37,9 +39,22 @@ integer: mismatch  [
   information: "Mismatch score"
 ]
 
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
 integer: maxrepeat  [
   optional: "Y"
   default: "4000"
   information: "Maximum extent of repeats"
   help: "Maximum separation between the start of repeat and the end of the inverted repeat (the default is 4000 bases)."
 ]
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+outfile: outfile  [
+  parameter: "Y"
+  extension: "inv"
+]
+
+endsection: output

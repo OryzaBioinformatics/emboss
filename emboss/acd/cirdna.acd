@@ -3,22 +3,16 @@ appl: cirdna [
   groups: "Display"
 ]
 
-graph: graphout  [
-  required: "Y"
-]
-
+section: input [ info: "input Section" type: page ]
 infile: inputfile  [
   required: "Y"
   default: "inputfile"
   information: "input file containing mapping data"
 ]
 
-float: originangle  [
-  optional: "Y"
-  default: "90"
-  information: "position of the molecule's origin on the circle (enter a number in the range 0 - 360)"
-]
+endsection: input
 
+section: required [ info: "required Section" type: page ]
 string: posticks  [
   required: "Y"
   default: "Out"
@@ -29,6 +23,19 @@ string: posblocks  [
   required: "Y"
   default: "In"
   information: "text inside or outside the blocks (enter In or Out)"
+]
+
+endsection: required
+
+section: output [ info: "output Section" type: page ]
+graph: graphout  [
+  required: "Y"
+]
+
+float: originangle  [
+  optional: "Y"
+  default: "90"
+  information: "position of the molecule's origin on the circle (enter a number in the range 0 - 360)"
 ]
 
 string: intersymbol  [
@@ -90,3 +97,6 @@ float: postext  [
   default: "1"
   information: "space between text and ticks, blocks, and ranges (enter a number to multiply the default space)"
 ]
+
+endsection: output
+

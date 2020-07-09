@@ -3,12 +3,16 @@ appl: distmat [
   groups: "Phylogeny"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqset: msf  [
   parameter: "Y"
   type: "gapany"
   help: "File containing a sequence alignment."
 ]
 
+endsection: input
+
+section: advanced [ info: "advanced Section" type: page ]
 list: nucmethod  [
   required: "@(!$(msf.protein))"
   default: "0"
@@ -33,11 +37,6 @@ list: protmethod  [
   codedelimiter: ":"
   prompt: "Method to use"
   help: "Multiple substitution correction methods for proteins."
-]
-
-outfile: outf  [
-  parameter: "Y"
-  information: "Enter a name for the distance matrix"
 ]
 
 bool: ambiguous  [
@@ -74,3 +73,13 @@ float: parametera  [
   information: "a-parameter"
   help: "User defined a parameter to be use in the Jin-Nei Gamma distance calculation. The suggested value to be used is 1.0 [Jin et al.] and this is the default."
 ]
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+outfile: outf  [
+  parameter: "Y"
+  information: "Enter a name for the distance matrix"
+]
+
+endsection: output
+

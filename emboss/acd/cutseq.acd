@@ -3,15 +3,15 @@ appl: cutseq [
   groups: "Edit"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequence  [
   parameter: "Y"
   type: "gapany"
 ]
 
-seqout: outseq  [
-  parameter: "Y"
-]
+endsection: input
 
+section: required [ info: "required Section" type: page ]
 integer: from  [
   required: "Y"
   default: "$(sequence.begin)"
@@ -31,3 +31,11 @@ integer: to  [
   help: "This is the end position (inclusive) of the section of the sequence that you wish to remove."
   expected: "End of sequence (0)"
 ]
+endsection: required
+
+section: output [ info: "output Section" type: page ]
+seqout: outseq  [
+  parameter: "Y"
+]
+
+endsection: output

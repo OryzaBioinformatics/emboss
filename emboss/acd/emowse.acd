@@ -3,6 +3,7 @@ appl: emowse [
   groups: "Protein:Composition"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequences  [
   parameter: "Y"
   type: "protein"
@@ -13,6 +14,18 @@ infile: infile  [
   information: "Name of molecular weight data file"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
+integer: weight  [
+  required: "Y"
+  default: "0"
+  information: "Whole sequence molwt"
+]
+
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
 list: enzyme  [
   optional: "N"
   default: "1"
@@ -30,12 +43,6 @@ string: aadata  [
   information: "Amino acid data file"
   help: "Molecular weight data for amino acids"
   default: "Eamino.dat"
-]
-
-integer: weight  [
-  required: "Y"
-  default: "0"
-  information: "Whole sequence molwt"
 ]
 
 integer: pcrange  [
@@ -67,6 +74,11 @@ float: partials  [
   information: "Partials factor"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   required: "Y"
 ]
+endsection: output
+

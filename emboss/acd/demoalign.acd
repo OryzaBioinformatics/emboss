@@ -3,28 +3,37 @@ appl: demoalign [
   groups: "Test"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqset: sequence  [
   parameter: "Y"
   features: "Y"
 ]
 
-align: outfile [
+endsection: input
+
+section: output [ info: "output Section" type: page ]
+align: outfile  [
   parameter: "Y"
   aformat: "SRS"
 ]
 
-matrixf: floatmatrix [
+endsection: output
+
+section: advanced [ info: "advanced Section" type: page ]
+matrixf: floatmatrix  [
   optional: "Y"
   help: "Matrix file"
   protein: "$(sequence.protein)"
 ]
 
-matrix: intmatrix [
+matrix: intmatrix  [
   optional: "Y"
   help: "Matrix file"
   protein: "$(sequence.protein)"
 ]
 
-bool: dofloat [
+bool: dofloat  [
   prompt: "Use floating point matrix"
 ]
+endsection: advanced
+

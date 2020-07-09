@@ -3,17 +3,15 @@ appl: oddcomp [
   groups: "Protein:Motifs"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "Protein"
 ]
 
-outfile: outfile  [
-  parameter: "Y"
-  extension: "oddcomp"
-  help: "This is the results file."
-]
+endsection: input
 
+section: required [ info: "required Section" type: page ]
 infile: compdata  [
   parameter: "Y"
   required: "Y"
@@ -29,8 +27,22 @@ integer: window  [
   help: "This is the size of window in which to count. \ Thus if you want to count frequencies in a 40 aa stretch you should enter 40 here."
 ]
 
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
 bool: ignorebz  [
   default: "Y"
   information: "Ignore the amino acids B and Z and just count them as 'Other'"
   help: "The amino acid code B represents Asparagine or Aspartic acid and the code Z represents Glutamine or Glutamic acid. \ These are not commonly used codes and you may wish not to count words containing them, just noting them in the count of 'Other' words."
 ]
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+outfile: outfile  [
+  parameter: "Y"
+  extension: "oddcomp"
+  help: "This is the results file."
+]
+
+endsection: output

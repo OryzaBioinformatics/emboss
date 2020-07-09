@@ -3,11 +3,16 @@ appl: vectorstrip [
   groups: "Edit"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "dna"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
+section: vectorfilesection [ info: "vectorfilesection Section" type: page ]
 bool: vectorfile  [
   parameter: "Y"
   default: "Y"
@@ -22,15 +27,7 @@ infile: vectors  [
   prompt: "Name of vectorfile"
 ]
 
-string: linkera  [
-  required: "@(!$(vectorfile))"
-  prompt: "5' sequence"
-]
-
-string: linkerb  [
-  required: "@(!$(vectorfile))"
-  prompt: "3' sequence"
-]
+endsection: vectorfilesection
 
 integer: mismatch  [
   required: "Y"
@@ -44,6 +41,22 @@ bool: besthits  [
   prompt: "Show only the best hits (minimise mismatches)?"
 ]
 
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
+string: linkera  [
+  required: "@(!$(vectorfile))"
+  prompt: "5' sequence"
+]
+
+string: linkerb  [
+  required: "@(!$(vectorfile))"
+  prompt: "3' sequence"
+]
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 outfile: outf  [
   parameter: "Y"
 ]
@@ -51,3 +64,6 @@ outfile: outf  [
 seqoutall: outseq  [
   parameter: "Y"
 ]
+
+endsection: output
+

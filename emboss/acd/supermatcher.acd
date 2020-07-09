@@ -1,8 +1,12 @@
 appl: supermatcher [
   documentation: "Finds a match of a large sequence against one or more sequences"
   groups: "Alignment:Local"
+  gui: yes
+  batch: yes
+  cpu: medium
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: seqa  [
   parameter: "Y"
   type: "any"
@@ -13,12 +17,9 @@ seqset: seqb  [
   type: "@($(seqa.protein) ? protein : nucleotide)"
 ]
 
-matrixf: datafile  [
-  optional: "Y"
-  information: "Matrix file"
-  protein: "$(seqa.protein)"
-]
+endsection: input
 
+section: required [ info: "required Section" type: page ]
 float: gapopen  [
   required: "Y"
   information: "Gap opening penalty"
@@ -37,36 +38,14 @@ float: gapextend  [
   expected: "0.5 for any sequence type"
 ]
 
-align: outfile  [
-  required: "Y"
-  aformat: "simple"
-  minseq: 2
-  maxseq: 2
-]
+endsection: required
 
-outfile: errorfile  [
+section: advanced [ info: "advanced Section" type: page ]
+matrixf: datafile  [
   optional: "Y"
-  default: "supermatcher.error"
-  information: "Error file to be written to"
+  information: "Matrix file"
+  protein: "$(seqa.protein)"
 ]
-
-#bool: showinternals  [
-#  optional: "Y"
-#  default: "N"
-#  information: "Show internals"
-#]
-
-#bool: scoreonly  [
-#  optional: "Y"
-#  default: "N"
-#  information: "Calculate score only"
-#]
-
-#bool: showalign  [
-#  optional: "Y"
-#  default: "Y"
-#  information: "Show alignment"
-#]
 
 integer: width  [
   optional: "Y"
@@ -80,3 +59,21 @@ integer: wordlen  [
   minimum: "3"
   information: "word length for initial matching"
 ]
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+align: outfile  [
+  required: "Y"
+  aformat: "simple"
+  minseqs: "2"
+  maxseqs: "2"
+]
+
+outfile: errorfile  [
+  optional: "Y"
+  default: "supermatcher.error"
+  information: "Error file to be written to"
+]
+
+endsection: output
+

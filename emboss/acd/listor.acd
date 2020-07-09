@@ -3,6 +3,7 @@ appl: listor [
   groups: "Edit"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqset: firstset  [
   parameter: "Y"
 ]
@@ -11,13 +12,9 @@ seqset: secondset  [
   parameter: "Y"
 ]
 
-outfile: outlist  [
-  parameter: "Y"
-  extension: "list"
-  information: "Output list file"
-  help: "The list of sequence names will be written to this list file"
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 list: operator  [
   optional: "Y"
   default: "OR"
@@ -30,3 +27,15 @@ list: operator  [
   information: "Enter the logical operator to combine the sequences"
   help: "The following logical operators combine the sequences in the following ways: \ OR - gives all that occur in one set or the other \ AND - gives only those which occur in both sets \ XOR - gives those which only occur in one set or the other, but not in both \ NOT - gives those which occur in the first set except for those that also occur in the second"
 ]
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+outfile: outlist  [
+  parameter: "Y"
+  extension: "list"
+  information: "Output list file"
+  help: "The list of sequence names will be written to this list file"
+]
+
+endsection: output

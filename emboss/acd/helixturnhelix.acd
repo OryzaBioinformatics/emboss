@@ -3,11 +3,15 @@ appl: helixturnhelix [
   groups: "Protein:2D Structure, Protein:Motifs"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "PureProtein"
 ]
 
+endsection: input
+
+section: advanced [ info: "advanced Section" type: page ]
 float: mean  [
   optional: "Y"
   minimum: "1."
@@ -37,9 +41,14 @@ bool: eightyseven  [
   information: "Use the old (1987) weight data"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 report: outfile  [
   parameter: "Y"
   rformat: "motif"
   rextension: "hth"
   taglist: "int:pos=Maximum_score_at float:sd=Standard_deviations"
 ]
+endsection: output
+

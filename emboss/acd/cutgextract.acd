@@ -3,14 +3,21 @@ appl: cutgextract [
   groups: "Utils:Database creation"
 ]
 
+section: input [ info: "input Section" type: page ]
 dirlist: directory  [
   parameter: "Y"
   required: "Y"
   prompt: "CUTG directory"
 ]
 
+endsection: input
+
+section: advanced [ info: "advanced Section" type: page ]
 string: wildspec  [
   required: "N"
   default: "*.codon"
   information: "Type of codon file"
 ]
+
+endsection: advanced
+

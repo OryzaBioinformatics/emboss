@@ -3,19 +3,16 @@ appl: infoalign [
   groups: "Alignment:Multiple, Information"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqset: sequence  [
   parameter: "Y"
   type: "gapany"
   help: "The sequence alignment to be displayed."
 ]
 
-outfile: outfile  [
-  optional: "Y"
-  default: "stdout"
-  information: "Output sequence details to a file"
-  help: "If you enter the name of a file here then this program will write the sequence details into that file."
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 string: refseq  [
   optional: "Y"
   default: "0"
@@ -43,6 +40,16 @@ float: identity  [
   maximum: "100.0"
   information: "Required % of identities at a position fro consensus"
   help: "Provides the facility of setting the required number of identities at a position for it to give a consensus. Therefore, if this is set to 100% only columns of identities contribute to the consensus."
+]
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+outfile: outfile  [
+  optional: "Y"
+  default: "stdout"
+  information: "Output sequence details to a file"
+  help: "If you enter the name of a file here then this program will write the sequence details into that file."
 ]
 
 bool: html  [
@@ -116,3 +123,6 @@ bool: description  [
   default: "@(!$(only))"
   information: "Display 'description' column"
 ]
+
+endsection: output
+

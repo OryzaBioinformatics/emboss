@@ -1,13 +1,20 @@
 appl: prophet [
   documentation: "Gapped alignment for profiles"
   groups: "Nucleic:Profiles, Protein:Profiles"
+  gui: yes
+  batch: yes
+  cpu: medium
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "any"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 infile: infile  [
   parameter: "Y"
   prompt: "Profile or matrix file"
@@ -25,6 +32,12 @@ float: gapextend  [
   prompt: "Gap extension coefficient"
 ]
 
+endsection: required
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   parameter: "Y"
 ]
+
+endsection: output
+

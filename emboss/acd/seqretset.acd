@@ -3,10 +3,17 @@ appl: seqretset [
   groups: "Edit"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqset: sequence  [
   parameter: "Y"
 ]
 
+endsection: input
+
+section: output [ info: "output Section" type: page ]
 seqoutset: outseq  [
   parameter: "Y"
 ]
+
+endsection: output
+

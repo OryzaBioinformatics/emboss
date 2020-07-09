@@ -3,17 +3,15 @@ appl: hmoment [
   groups: "Protein:2D Structure"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: seqall  [
   parameter: "Y"
   type: "pureprotein"
 ]
 
-bool: plot  [
-  optional: "N"
-  default: "N"
-  information: "Produce graphic"
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 integer: window  [
   optional: "Y"
   default: "10"
@@ -38,6 +36,15 @@ float: baseline  [
   information: "Graph marker line"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+bool: plot  [
+  optional: "N"
+  default: "N"
+  information: "Produce graphic"
+]
+
 bool: double  [
   optional: "N"
   default: "N"
@@ -51,3 +58,5 @@ xygraph: graph  [
 outfile: outfile  [
   required: "@(!$(plot))"
 ]
+
+endsection: output

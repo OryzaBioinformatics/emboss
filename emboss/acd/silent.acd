@@ -3,16 +3,23 @@ appl: silent [
   groups: "Nucleic:Restriction"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: seq  [
   parameter: "Y"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 string: enzymes  [
   required: "Y"
   default: "all"
   information: "Comma separated enzyme list"
 ]
 
+endsection: required
+
+section: output [ info: "output Section" type: page ]
 bool: sshow  [
   required: "N"
   default: "N"
@@ -34,3 +41,6 @@ bool: allmut  [
 outfile: outf  [
   parameter: "Y"
 ]
+
+endsection: output
+

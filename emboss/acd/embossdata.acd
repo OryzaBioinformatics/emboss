@@ -3,13 +3,7 @@ appl: embossdata [
   groups: "Utils:Misc"
 ]
 
-outfile: outf  [
-  optional: "Y"
-  default: "stdout"
-  information: "Results file name"
-  help: "This specifies the name of the file that the results of a search for a file in the various data directories is written to. By default these results are written to the screen (stdout)."
-]
-
+section: advanced [ info: "advanced Section" type: page ]
 bool: showall  [
   optional: "Y"
   information: "Show all potential EMBOSS data files"
@@ -40,3 +34,14 @@ select: reject  [
   help: "This specifies the names of the sub-directories of the EMBOSS data directory that should be ignored when displaying data directories."
   button: "Y"
 ]
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+outfile: outf  [
+  optional: "Y"
+  default: "stdout"
+  information: "Results file name"
+  help: "This specifies the name of the file that the results of a search for a file in the various data directories is written to. By default these results are written to the screen (stdout)."
+]
+
+endsection: output

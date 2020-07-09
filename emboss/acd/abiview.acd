@@ -3,12 +3,16 @@ appl: abiview [
   groups: "Display"
 ]
 
+section: input [ info: "input Section" type: page ]
 string: fname  [
   parameter: "Y"
   default: ""
   information: "Name of the ABI trace file"
 ]
 
+endsection: input
+
+section: output [ info: "output Section" type: page ]
 seqout: outseq  [
   parameter: "Y"
   information: "Sequence file"
@@ -49,3 +53,6 @@ string: bases  [
   default: "GATC"
   information: "Base graphs to be displayed"
 ]
+
+endsection: output
+

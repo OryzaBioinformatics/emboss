@@ -3,31 +3,40 @@ appl: biosed [
   groups: "Edit"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
 ]
 
+endsection: input
 
-bool: delete  [
-  optional: "N"
-  info: "Delete the target sequence sections"
-  default: "N"
-]
-
-
+section: required [ info: "required Section" type: page ]
 string: target  [
   required: "Y"
-  info: "Sequence section to match"
+  information: "Sequence section to match"
   default: "N"
 ]
 
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
+bool: delete  [
+  optional: "N"
+  information: "Delete the target sequence sections"
+  default: "N"
+]
 
 string: replace  [
-  required: @(!$(delete))
-  info: "Replacement sequence section"
+  required: "@(!$(delete))"
+  information: "Replacement sequence section"
   default: "A"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 seqout: outseq  [
   parameter: "Y"
 ]
+endsection: output
+

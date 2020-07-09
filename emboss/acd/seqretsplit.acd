@@ -3,15 +3,24 @@ appl: seqretsplit [
   groups: "Edit"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
 ]
 
+endsection: input
+
+section: advanced [ info: "advanced Section" type: page ]
+bool: firstonly  [
+  information: "Read one sequence and stop"
+]
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 seqoutall: outseq  [
   parameter: "Y"
   ossingle: "Y"
 ]
 
-bool: firstonly  [
-  information: "Read one sequence and stop"
-]
+endsection: output

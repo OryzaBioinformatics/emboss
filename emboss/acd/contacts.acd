@@ -1,8 +1,12 @@
 appl: contacts [
   documentation: "Reads coordinate files and writes contact files"
   groups: "Protein:3D Structure"
+  gui: yes
+  batch: yes
+  cpu: high
 ]
 
+section: input [ info: "input Section" type: page ]
 string: cpdb  [
   parameter: "Y"
   information: "Location of coordinate files for input (embl-like format)"
@@ -15,18 +19,9 @@ string: cpdbextn  [
   default: ".pxyz"
 ]
 
-string: con  [
-  parameter: "Y"
-  information: "Location of contact files for output"
-  default: "./"
-]
+endsection: input
 
-string: conextn  [
-  parameter: "Y"
-  information: "Extension of contact files"
-  default: ".con"
-]
-
+section: required [ info: "required Section" type: page ]
 float: thresh  [
   parameter: "Y"
   information: "Threshold contact distance"
@@ -46,8 +41,25 @@ string: vdwf  [
   default: "Evdw.dat"
 ]
 
+endsection: required
+
+section: output [ info: "output Section" type: page ]
+string: con  [
+  parameter: "Y"
+  information: "Location of contact files for output"
+  default: "./"
+]
+
+string: conextn  [
+  parameter: "Y"
+  information: "Extension of contact files"
+  default: ".con"
+]
 outfile: conerrf  [
   parameter: "Y"
   prompt: "Name of log file for the build"
   default: "contacts.log"
 ]
+
+endsection: output
+

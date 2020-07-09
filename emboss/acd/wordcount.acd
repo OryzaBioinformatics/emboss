@@ -3,11 +3,15 @@ appl: wordcount [
   groups: "Nucleic:Composition"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequence  [
   parameter: "Y"
   type: "dna"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 integer: wordsize  [
   required: "Y"
   default: "4"
@@ -15,6 +19,12 @@ integer: wordsize  [
   information: "Word size"
 ]
 
+endsection: required
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   required: "Y"
 ]
+
+endsection: output
+

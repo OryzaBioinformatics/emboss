@@ -3,16 +3,15 @@ appl: isochore [
   groups: "Nucleic:Composition"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequence  [
   parameter: "Y"
   type: "dna"
 ]
 
-outfile: out  [
-  parameter: "Y"
-  extension: "iso"
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 integer: window  [
   optional: "Y"
   default: "1000"
@@ -29,6 +28,16 @@ integer: shift  [
   information: "Shift increment"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+outfile: out  [
+  parameter: "Y"
+  extension: "iso"
+]
+
 xygraph: graph  [
   required: "Y"
 ]
+
+endsection: output

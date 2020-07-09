@@ -3,17 +3,37 @@ appl: prima [
   groups: "Nucleic:Primers"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequence  [
   parameter: "Y"
   required: "Y"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 bool: targetrange  [
   parameter: "Y"
   default: "N"
   information: "Specify a Target Range?"
 ]
 
+float: minprimertm  [
+  required: "Y"
+  default: "53"
+  information: "Minimum Primer Tm (deg Celsius)"
+]
+
+float: maxprimertm  [
+  required: "Y"
+  default: "58"
+  information: "Maximum Primer Tm (deg Celsius)"
+]
+
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
+section: targetrangesection [ info: "targetrangesection Section" type: page ]
 integer: targetstart  [
   required: "$(targetrange)"
   default: "$(sequence.begin)"
@@ -28,12 +48,15 @@ integer: targetend  [
   expected: "End of sequence"
 ]
 
+endsection: targetrangesection
+
 integer: overlap  [
   required: "N"
   default: "50"
   information: "Minimum overlap of sequences"
 ]
 
+section: primersection [ info: "primer Section" type: page ]
 integer: minprimerlen  [
   required: "N"
   default: "18"
@@ -62,18 +85,9 @@ float: maxpmgccont  [
   information: "Maximum primer GC fraction"
 ]
 
-float: minprimertm  [
-  required: "Y"
-  default: "53"
-  information: "Minimum Primer Tm (deg Celsius)"
-]
+endsection: primersection
 
-float: maxprimertm  [
-  required: "Y"
-  default: "58"
-  information: "Maximum Primer Tm (deg Celsius)"
-]
-
+section: productsection [ info: "product Section" type: page ]
 integer: minprodlen  [
   required: "@(!$(targetrange))"
   default: "100"
@@ -102,6 +116,8 @@ float: maxprodgccont  [
   information: "Maximum product GC fraction"
 ]
 
+endsection: productsection
+
 float: saltconc  [
   required: "N"
   minimum: "1"
@@ -124,6 +140,16 @@ bool: list  [
   information: "Force list-style output"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 outfile: outf  [
   parameter: "Y"
 ]
+endsection: output
+
+
+
+
+
+

@@ -3,16 +3,23 @@ appl: restover [
   groups: "Nucleic:Restriction"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "DNA"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 string: seqcomp  [
   parameter: "Y"
   information: "Overlap sequence"
 ]
 
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
 integer: min  [
   optional: "N"
   minimum: "1"
@@ -39,12 +46,6 @@ bool: threeprime  [
   optional: "N"
   default: "N"
   information: "3' overhang? (else 5') e.g. BamHI has CTAG as a 5' overhang, and ApaI has CCGG as 3' overhang."
-]
-
-bool: html  [
-  optional: "N"
-  default: "N"
-  information: "Create HTML output"
 ]
 
 bool: blunt  [
@@ -77,6 +78,21 @@ bool: commercial  [
   information: "Only enzymes with suppliers"
 ]
 
+string: datafile  [
+  required: "N"
+  default: ""
+  information: "Alternative RE data file"
+]
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+bool: html  [
+  optional: "N"
+  default: "N"
+  information: "Create HTML output"
+]
+
 bool: limit  [
   optional: "N"
   default: "Y"
@@ -107,12 +123,9 @@ bool: name  [
   information: "Show sequence name"
 ]
 
-string: datafile  [
-  required: "N"
-  default: ""
-  information: "Alternative RE data file"
-]
-
 outfile: outfile  [
   parameter: "Y"
 ]
+
+endsection: output
+

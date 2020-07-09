@@ -3,10 +3,17 @@ appl: noreturn [
   groups: "Edit"
 ]
 
+section: input [ info: "input Section" type: page ]
 infile: infile  [
   parameter: "Y"
 ]
 
+endsection: input
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   parameter: "Y"
 ]
+
+endsection: output
+

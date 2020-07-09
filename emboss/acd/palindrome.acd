@@ -3,11 +3,15 @@ appl: palindrome [
   groups: "Nucleic:Repeats"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: insequence  [
   parameter: "Y"
   type: "nucleotide"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 integer: minpallen  [
   required: "Y"
   default: "10"
@@ -40,6 +44,9 @@ integer: nummismatches  [
   valid: "Positive integer"
 ]
 
+endsection: required
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   parameter: "Y"
   extension: "pal"
@@ -50,3 +57,6 @@ bool: overlap  [
   information: "Report overlapping matches"
   default: "Y"
 ]
+
+endsection: output
+

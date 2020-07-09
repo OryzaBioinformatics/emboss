@@ -3,10 +3,14 @@ appl: newseq [
   groups: "Edit"
 ]
 
+section: output [ info: "output Section" type: page ]
 seqout: outseq  [
   parameter: "Y"
 ]
 
+endsection: output
+
+section: required [ info: "required Section" type: page ]
 string: name  [
   parameter: "Y"
   information: "Name of the sequence"
@@ -31,8 +35,14 @@ list: type  [
   information: "Type of sequence"
 ]
 
+endsection: required
+
+section: input [ info: "input Section" type: page ]
 string: sequence  [
   parameter: "Y"
   information: "Enter the sequence"
   help: "The sequence itself. \ Because of the limitation of the operating system, you will only be able to type in a short sequence of (typically) 250 characters, or so. \ The keyboard will beep at you when you have reached this limit and you will not be able to press the RETURN/ENTER key until you have deleted a few characters."
 ]
+
+endsection: input
+

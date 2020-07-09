@@ -3,11 +3,15 @@ appl: pepnet [
   groups: "Display, Protein:2D Structure"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequence  [
   parameter: "Y"
   type: "Protein"
 ]
 
+endsection: input
+
+section: output [ info: "output Section" type: page ]
 bool: amphipathic  [
   information: "Prompt for amphipathic residue marking"
   help: "If this is true then the residues ACFGILMVWY are marked as squares and all other residues are unmarked. This overrides any other markup that you may have specified using the qualifiers '-squares', '-diamonds' and '-octags'."
@@ -44,3 +48,6 @@ bool: data  [
 graph: graph  [
   required: "@(!$(data))"
 ]
+
+endsection: output
+

@@ -3,19 +3,16 @@ appl: showalign [
   groups: "Alignment:Multiple, Display"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqset: sequence  [
   parameter: "Y"
   type: "gapany"
   help: "The sequence alignment to be displayed."
 ]
 
-outfile: outfile  [
-  parameter: "Y"
-  default: "stdout"
-  information: "Output sequence details to a file"
-  help: "If you enter the name of a file here then this program will write the sequence details into that file."
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 string: refseq  [
   optional: "Y"
   default: "0"
@@ -144,3 +141,14 @@ bool: consensus  [
   information: "Display the consensus line"
   help: "If this is true then the consensus line is displayed at the bottom."
 ]
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+outfile: outfile  [
+  parameter: "Y"
+  default: "stdout"
+  information: "Output sequence details to a file"
+  help: "If you enter the name of a file here then this program will write the sequence details into that file."
+]
+
+endsection: output

@@ -3,22 +3,34 @@ appl: charge [
   groups: "Protein:Composition"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: seqall  [
   parameter: "Y"
   type: "protein"
 ]
 
-bool: plot  [
-  optional: "N"
-  default: "N"
-  information: "Produce graphic"
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 integer: window  [
   optional: "Y"
   minimum: "1"
   default: "5"
   information: "Window"
+]
+
+string: aadata  [
+  required: "N"
+  default: "Eamino.dat"
+  information: "Amino acid property data file name"
+]
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+bool: plot  [
+  optional: "N"
+  default: "N"
+  information: "Produce graphic"
 ]
 
 xygraph: graph  [
@@ -29,8 +41,4 @@ outfile: outfile  [
   required: "@(!$(plot))"
 ]
 
-string: aadata  [
-  required: "N"
-  default: "Eamino.dat"
-  information: "Amino acid property data file name"
-]
+endsection: output

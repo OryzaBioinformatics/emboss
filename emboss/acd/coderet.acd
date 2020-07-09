@@ -3,12 +3,16 @@ appl: coderet [
   groups: "Feature tables, Nucleic:Translation"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: seqall  [
   parameter: "Y"
   type: "DNA"
   entry: "Y"
 ]
 
+endsection: input
+
+section: advanced [ info: "advanced Section" type: page ]
 bool: cds  [
   optional: "N"
   default: "Y"
@@ -27,6 +31,11 @@ bool: translation  [
   information: "Extract translated sequences"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 seqout: seqout  [
   parameter: "Y"
 ]
+endsection: output
+

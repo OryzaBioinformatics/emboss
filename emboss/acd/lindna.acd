@@ -3,14 +3,18 @@ appl: lindna [
   groups: "Display"
 ]
 
-graph: graphout  [
-  required: "Y"
-]
-
+section: input [ info: "input Section" type: page ]
 infile: inputfile  [
   required: "Y"
   default: "inputfile"
   information: "input file containing mapping data"
+]
+
+endsection: input
+
+section: output [ info: "output Section" type: page ]
+graph: graphout  [
+  required: "Y"
 ]
 
 string: intersymbol  [
@@ -72,3 +76,7 @@ float: postext  [
   default: "1"
   information: "space between text and ticks, blocks, and ranges (enter a number to multiply the default space)"
 ]
+
+endsection: output
+
+

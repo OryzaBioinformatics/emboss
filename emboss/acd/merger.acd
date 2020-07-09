@@ -3,6 +3,7 @@ appl: merger [
   groups: "Alignment:Consensus"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: seqa  [
   parameter: "Y"
   type: "DNA"
@@ -13,10 +14,9 @@ sequence: seqb  [
   type: "DNA"
 ]
 
-seqout: outseq  [
-  parameter: "Y"
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 matrixf: datafile  [
   optional: "Y"
   information: "Matrix file"
@@ -39,9 +39,19 @@ float: gapextend  [
   default: "5"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+seqout: outseq  [
+  parameter: "Y"
+]
+
 align: outfile  [
   required: "Y"
   default: "stdout"
   information: "Output alignment and explanation"
   aformat: "simple"
 ]
+
+endsection: output
+

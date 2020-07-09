@@ -3,6 +3,7 @@ appl: wossname [
   groups: "Information"
 ]
 
+section: input [ info: "input Section" type: page ]
 string: search  [
   parameter: "Y"
   default: ""
@@ -10,48 +11,9 @@ string: search  [
   help: "Enter a word or words here and a case-independent search for it will be made in the one-line documentation of all of the EMBOSS programs. If no keyword is specified, all programs will be listed."
 ]
 
-outfile: outfile  [
-  optional: "Y"
-  default: "stdout"
-  prompt: "Output program details to a file"
-  help: "If you enter the name of a file here then this program will write the program names and brief descriptions into that file."
-]
+endsection: input
 
-bool: html  [
-  optional: "Y"
-  default: "N"
-  prompt: "Format the output for HTML"
-  help: "If you are sending the output to a file, this will format it for displaying as a table in a WWW document."
-]
-
-string: prelink  [
-  optional: "$(html)"
-  default: ""
-  prompt: "String to form the first half of an HTML link"
-  help: "If you are outputting to a file in HTML format, you can make the program names into hyper-links by setting this to be the first half of the URL. \ For example, if you wish the program name to be a hyperlink to the URL: \ http://www.uk.embnet.org/Software/EMBOSS/Apps/programname.html \ then if you enter \ http://www.uk.embnet.org/Software/EMBOSS/Apps/ here, then the first half of the URL before the programname will be set."
-]
-
-string: postlink  [
-  optional: "$(html)"
-  default: ""
-  prompt: "String to form the second half of an HTML link"
-  help: "If you are outputting to a file in HTML format, you can make the program names into hyper-links by setting this to be the second half of the URL. \ For example, if you wish the program name to be a hyperlink to the URL: \ http://www.uk.embnet.org/Software/EMBOSS/Apps/programname.html \ then if you enter '.html' here, the second half of the URL after the programname will be set."
-]
-
-bool: groups  [
-  optional: "Y"
-  default: "N"
-  prompt: "Output only the group names"
-  help: "If you use this option, then only the group names will output to the file"
-]
-
-bool: alphabetic  [
-  optional: "Y"
-  default: "N"
-  prompt: "Output an alphabetic list of programs"
-  help: "If you use this option, then you will get a single list of the program names and descriptions instead of the programs being listed in their functional groups."
-]
-
+section: advanced [ info: "advanced Section" type: page ]
 bool: emboss  [
   default: "Y"
   information: "Search the EMBOSS programs"
@@ -80,10 +42,54 @@ bool: colon  [
 bool: gui  [
   default: "N"
   prompt: "Only report those applications that can run in a GUI"
-  help: "This option is intended to help those who are designing
-Graphical User Interfaces to the EMBOSS applications.  Some EMBOSS
-programs are inappropriate for running in a GUI, these include other
-menu programs and interactive editors.  This option allows you to only
-report those programs that can be run from a GUI"
+  help: "This option is intended to help those who are designing Graphical User Interfaces to the EMBOSS applications. Some EMBOSS programs are inappropriate for running in a GUI, these include other menu programs and interactive editors. This option allows you to only report those programs that can be run from a GUI"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+outfile: outfile  [
+  optional: "Y"
+  default: "stdout"
+  prompt: "Output program details to a file"
+  help: "If you enter the name of a file here then this program will write the program names and brief descriptions into that file."
+]
+section: htmlsection [ info: "htmlsection Section" type: page ]
+bool: html  [
+  optional: "Y"
+  default: "N"
+  prompt: "Format the output for HTML"
+  help: "If you are sending the output to a file, this will format it for displaying as a table in a WWW document."
+]
+
+string: prelink  [
+  optional: "$(html)"
+  default: ""
+  prompt: "String to form the first half of an HTML link"
+  help: "If you are outputting to a file in HTML format, you can make the program names into hyper-links by setting this to be the first half of the URL. \ For example, if you wish the program name to be a hyperlink to the URL: \ http://www.uk.embnet.org/Software/EMBOSS/Apps/programname.html \ then if you enter \ http://www.uk.embnet.org/Software/EMBOSS/Apps/ here, then the first half of the URL before the programname will be set."
+]
+
+string: postlink  [
+  optional: "$(html)"
+  default: ""
+  prompt: "String to form the second half of an HTML link"
+  help: "If you are outputting to a file in HTML format, you can make the program names into hyper-links by setting this to be the second half of the URL. \ For example, if you wish the program name to be a hyperlink to the URL: \ http://www.uk.embnet.org/Software/EMBOSS/Apps/programname.html \ then if you enter '.html' here, the second half of the URL after the programname will be set."
+]
+
+endsection: htmlsection
+
+bool: groups  [
+  optional: "Y"
+  default: "N"
+  prompt: "Output only the group names"
+  help: "If you use this option, then only the group names will output to the file"
+]
+
+bool: alphabetic  [
+  optional: "Y"
+  default: "N"
+  prompt: "Output an alphabetic list of programs"
+  help: "If you use this option, then you will get a single list of the program names and descriptions instead of the programs being listed in their functional groups."
+]
+
+endsection: output

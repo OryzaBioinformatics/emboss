@@ -3,6 +3,7 @@ appl: redata [
   groups: "Nucleic:Restriction"
 ]
 
+section: input [ info: "input Section" type: page ]
 string: enzyme  [
   parameter: "Y"
   information: "Restriction enzyme name"
@@ -10,6 +11,9 @@ string: enzyme  [
   help: "Enter the name of the restrcition enzyme that you wish to get details of. The names often have a 'I' in them - this is a capital 'i', not a '1' or an 'l'. The names are case-indeppendent ('AaeI' is the same as 'aaei')"
 ]
 
+endsection: input
+
+section: output [ info: "output Section" type: page ]
 bool: isoschizomers  [
   required: "N"
   default: "Y"
@@ -32,3 +36,5 @@ bool: suppliers  [
 outfile: outfile  [
   parameter: "Y"
 ]
+endsection: output
+

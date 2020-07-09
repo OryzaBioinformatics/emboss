@@ -1,55 +1,44 @@
 appl: dbifasta [
   groups: "Utils:Database indexing"
   documentation: "Index a fasta database"
+  gui: yes
+  batch: yes
+  cpu: medium
 ]
 
-bool: staden  [
-  prompt: "Use staden index file names"
-]
-
+section: input [ info: "input Section" type: page ]
 list: idformat  [
   required: "y"
   prompt: "ID line format"
-  values: "simple: >ID; idacc: >ID ACC; gcgid: >db:ID; gcgidacc: >db:ID ACC; dbid: >db ID; ncbi: | formats;"
+  values: "simple+ >ID; idacc+ >ID ACC; gcgid+ >db:ID; gcgidacc+ >db:ID ACC; dbid+ >db ID; ncbi+ | formats;"
   maximum: "1"
   minimum: "1"
   default: "idacc"
+  delimiter: ";"
+  codedelimiter: "+"
 ]
+
+string: directory  [
+  required: "Y"
+  default: "."
+  prompt: "Database directory"
+]
+
+string: filenames  [
+  required: "Y"
+  default: "*.dat"
+  prompt: "Wildcard database filename"
+]
+
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 
 string: dbname  [
   parameter: "Y"
   maxlength: "19"
   minlength: "1"
   prompt: "Database name"
-]
-
-variable:  dbknown "@(is: $(dbname))"
-
-string: directory  [
-  required: "$(dbknown)"
-  default: "."
-  prompt: "Database directory"
-]
-
-string: filenames  [
-  required: "$(dbknown)"
-  default: "*.dat"
-  prompt: "Wildcard database filename"
-]
-
-string: exclude  [
-  prompt: "wildcard filename(s) to exclude"
-]
-
-string: indexdirectory  [
-  default: "."
-  prompt: "Index directory"
-]
-
-string: sortoptions  [
-  default: "-T . -k 1,1"
-  prompt: "Sort option(s)"
-  help: "Sort options, typically '-T .' to use current directory for work files and '-k 1,1' to force GNU sort to use the first field"
 ]
 
 string: release  [
@@ -67,6 +56,28 @@ string: date  [
   pattern: "^([0-9]+.[0-9]+.[0-9]+)?$"
 ]
 
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
+bool: staden  [
+  prompt: "Use staden index file names"
+]
+
+string: exclude  [
+  prompt: "wildcard filename(s) to exclude"
+]
+
+string: indexdirectory  [
+  default: "."
+  prompt: "Index directory"
+]
+
+string: sortoptions  [
+  default: "-T . -k 1,1"
+  prompt: "Sort option(s)"
+  help: "Sort options, typically '-T .' to use current directory for work files and '-k 1,1' to force GNU sort to use the first field"
+]
+
 bool: systemsort  [
   default: "Y"
   information: "Use system sort utility"
@@ -76,3 +87,6 @@ bool: cleanup  [
   default: "Y"
   information: "Clean up temporary files"
 ]
+endsection: advanced
+
+

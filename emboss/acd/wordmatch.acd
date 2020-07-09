@@ -3,6 +3,7 @@ appl: wordmatch [
   groups: "Alignment:Local"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: asequence  [
   parameter: "Y"
   type: "any"
@@ -13,15 +14,21 @@ sequence: bsequence  [
   type: "@($(asequence.protein) ? protein : nucleotide)"
 ]
 
-outfile: outfile  [
-  parameter: "Y"
-]
+endsection: input
 
+section: required [ info: "required Section" type: page ]
 integer: wordsize  [
   required: "Y"
   default: "4"
   minimum: "2"
   information: "Word size"
+]
+
+endsection: required
+
+section: output [ info: "output Section" type: page ]
+outfile: outfile  [
+  parameter: "Y"
 ]
 
 featout: afeatout  [
@@ -35,3 +42,6 @@ featout: bfeatout  [
   information: "feature file for output bseq"
   help: "File for output of normal tab delimted gff's"
 ]
+
+endsection: output
+

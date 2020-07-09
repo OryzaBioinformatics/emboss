@@ -3,6 +3,7 @@ appl: stssearch [
   groups: "Nucleic:Primers"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequences  [
   parameter: "Y"
   type: "dna"
@@ -13,6 +14,11 @@ infile: primers  [
   prompt: "Primer file"
 ]
 
+endsection: input
+
+section: output [ info: "output Section" type: page ]
 outfile: out  [
   parameter: "Y"
 ]
+endsection: output
+

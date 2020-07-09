@@ -3,15 +3,24 @@ appl: backtranseq [
   groups: "Nucleic:Translation, Protein:Composition"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequence  [
   parameter: "Y"
   type: "PureProtein"
 ]
 
+endsection: input
+
+section: advanced [ info: "advanced Section" type: page ]
 codon: cfile  [
   optional: "Y"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 seqout: outfile  [
   parameter: "Y"
 ]
+endsection: output
+

@@ -3,14 +3,20 @@ appl: scope [
   groups: "Utils:Database creation"
 ]
 
+section: input [ info: "input Section" type: page ]
 infile: infile  [
   prompt: "Name of scop file for input (raw format)"
   default: "scop.orig"
   parameter: "Y"
 ]
 
+endsection: input
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   prompt: "Name of scop file for output (embl-like format)"
   default: "Escop.dat"
   parameter: "Y"
 ]
+endsection: output
+

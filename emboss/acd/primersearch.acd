@@ -3,6 +3,7 @@ appl: primersearch [
   groups: "Nucleic:Primers"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequences  [
   parameter: "Y"
   type: "dna"
@@ -13,12 +14,21 @@ infile: primers  [
   prompt: "Primer file"
 ]
 
-outfile: out  [
-  parameter: "Y"
-]
+endsection: input
 
+section: required [ info: "required Section" type: page ]
 integer: mismatchpercent  [
   parameter: "Y"
   default: "0"
   prompt: "Allowed percent mismatch"
 ]
+
+endsection: required
+
+section: output [ info: "output Section" type: page ]
+outfile: out  [
+  parameter: "Y"
+]
+
+endsection: output
+

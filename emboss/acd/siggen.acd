@@ -3,6 +3,7 @@ appl: siggen [
   groups: "PROTEIN:3D STRUCTURE"
 ]
 
+section: input [ info: "input Section" type: page ]
 string: algpath  [
   parameter: "Y"
   prompt: "Location of alignment files for input"
@@ -15,19 +16,9 @@ string: algextn  [
   default: ".align"
 ]
 
-string: sigpath  [
-  parameter: "Y"
-  prompt: "Location of signature files for output"
-  default: "./"
-]
+endsection: input
 
-
-string: sigextn  [
-  parameter: "Y"
-  prompt: "Extension of signature files for output"
-  default: ".sig"
-]
-
+section: required [ info: "required Section" type: page ]
 integer: sparsity  [
   parameter: "Y"
   prompt: "% sparsity of signature"
@@ -40,6 +31,9 @@ bool: randomise  [
   default: "N"
 ]
 
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
 list: seqoption  [
   required: "@(!$(randomise))"
   default: "3"
@@ -98,7 +92,6 @@ string: cpdbpath  [
   required: "@(!$(randomise))"
   information: "Location of coordinate files for input (embl-like format)"
   default: "/data/cpdbscop/"
-
 ]
 
 string: cpdbextn  [
@@ -112,3 +105,21 @@ bool: filterpsim  [
   prompt: "Ignore alignment postitions with post_similar value of 0"
   default: "N"
 ]
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+string: sigpath  [
+  parameter: "Y"
+  prompt: "Location of signature files for output"
+  default: "./"
+]
+
+string: sigextn  [
+  parameter: "Y"
+  prompt: "Extension of signature files for output"
+  default: ".sig"
+]
+
+endsection: output
+

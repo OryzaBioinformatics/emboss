@@ -3,8 +3,11 @@ appl: embossversion [
   groups: "Utils:Misc"
 ]
 
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   optional: "Y"
   default: "stdout"
   prompt: "Output file"
 ]
+endsection: output
+

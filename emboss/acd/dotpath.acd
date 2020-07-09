@@ -1,8 +1,12 @@
 appl: dotpath [
   documentation: "Displays a non-overlapping wordmatch dotplot of two sequences"
   groups: "Alignment:Dot plots"
+  gui: yes
+  batch: yes
+  cpu: high
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequencea  [
   parameter: "y"
   type: "any"
@@ -13,6 +17,9 @@ sequence: sequenceb  [
   type: "@($(sequencea.protein) ? protein : nucleotide)"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 integer: wordsize  [
   required: "Y"
   default: "4"
@@ -20,6 +27,9 @@ integer: wordsize  [
   information: "Word size"
 ]
 
+endsection: required
+
+section: output [ info: "output Section" type: page ]
 bool: overlaps  [
   optional: "Y"
   default: "N"
@@ -27,6 +37,13 @@ bool: overlaps  [
   help: "Displays the overlapping matches (in red) as well as the minimal set of non-overlapping matches"
 ]
 
+bool: boxit  [
+  default: "Y"
+  optional: "Y"
+  information: "Draw a box around dotplot"
+]
+
+section: datasection [ info: "datasection Section" type: page ]
 bool: data  [
   required: "N"
   default: "N"
@@ -40,13 +57,11 @@ graph: graph  [
   gytitle: "$(sequencea.name)"
 ]
 
-bool: boxit  [
-  default: "Y"
-  optional: "Y"
-  information: "Draw a box around dotplot"
-]
-
 outfile: outfile  [
   required: "$(data)"
   nullok: "Y"
 ]
+endsection: datasection
+
+endsection: output
+

@@ -3,22 +3,29 @@ appl: prettyseq [
   groups: "Display, Nucleic:Translation"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequence  [
   parameter: "Y"
   type: "DNA"
 ]
 
-codon: cfile  [
-  optional: "N"
-  information: "Codon usage file"
-  default: "Ehum.cut"
-]
+endsection: input
 
+section: required [ info: "required Section" type: page ]
 range: range  [
   required: "Y"
   information: "Range(s) to translate"
   default: "$(sequence.begin)-$(sequence.end)"
   expected: "Whole sequence"
+]
+
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
+codon: cfile  [
+  optional: "N"
+  information: "Codon usage file"
+  default: "Ehum.cut"
 ]
 
 integer: width  [
@@ -46,6 +53,12 @@ bool: nlabel  [
   information: "Number DNA sequence"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   parameter: "Y"
 ]
+
+endsection: output
+

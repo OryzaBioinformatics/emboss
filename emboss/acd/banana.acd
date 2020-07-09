@@ -3,17 +3,24 @@ appl: banana [
   groups: "Nucleic:Composition"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequence  [
   parameter: "y"
   type: "puredna"
 ]
 
+endsection: input
+
+section: advanced [ info: "advanced Section" type: page ]
 datafile: anglesfile  [
   optional: "Y"
   information: "angles file"
   default: "Eangles_tri.dat"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 bool: data  [
   optional: "N"
   information: "Output as data"
@@ -35,3 +42,5 @@ outfile: outfile  [
   optional: "Y"
   default: "banana.profile"
 ]
+endsection: output
+

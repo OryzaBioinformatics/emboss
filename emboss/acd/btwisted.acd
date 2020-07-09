@@ -3,11 +3,15 @@ appl: btwisted [
   groups: "Nucleic:Composition"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequence  [
   parameter: "Y"
   type: "PureDNA"
 ]
 
+endsection: input
+
+section: advanced [ info: "advanced Section" type: page ]
 string: angledata  [
   required: "N"
   default: "Eangles.dat"
@@ -20,6 +24,11 @@ string: energydata  [
   information: "File containing base pair stacking energies"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   parameter: "Y"
 ]
+endsection: output
+

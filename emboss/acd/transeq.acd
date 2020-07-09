@@ -3,21 +3,20 @@ appl: transeq [
   groups: "Nucleic:Translation"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "nucleotide"
 ]
 
-seqoutall: outseq  [
-  parameter: "Y"
-  extension: "pep"
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 list: frame  [
   optional: "Y"
   default: "1"
   minimum: "1"
-  maximum: "1"
+  maximum: "6"
   header: "Translation frames"
   values: "1:1, 2:2, 3:3, F:Forward three frames, -1:-1, -2:-2, -3:-3, R:Reverse three frames, 6:All six frames"
   delimiter: ","
@@ -51,3 +50,13 @@ bool: trim  [
   prompt: "Trim trailing X's and *'s"
   help: "This removes all X and * characters from the right end of the translation. The trimming process starts at the end and continues until the next character is not a X or a *"
 ]
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+seqoutall: outseq  [
+  parameter: "Y"
+  extension: "pep"
+]
+
+endsection: output

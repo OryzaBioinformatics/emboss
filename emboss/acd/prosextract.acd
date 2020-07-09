@@ -1,9 +1,15 @@
 appl: prosextract [
   documentation: "Builds the PROSITE motif database for patmatmotifs to search"
   groups: "Utils:Database creation"
+  gui: yes
+  batch: yes
+  cpu: medium
 ]
 
+section: input [ info: "input Section" type: page ]
 string: infdat  [
   parameter: "Y"
   prompt: "Enter name of prosite directory"
 ]
+endsection: input
+

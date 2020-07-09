@@ -1,13 +1,18 @@
+
 appl: prophecy [
   documentation: "Creates matrices/profiles from multiple alignments"
   groups: "Nucleic:Profiles, Protein:Profiles"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqset: sequence  [
   parameter: "Y"
   type: "gapany"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 list: type  [
   required: "Y"
   default: "F"
@@ -21,14 +26,18 @@ list: type  [
   button: "Y"
 ]
 
-variable:  dogap "@($(type) != f)"
-
 string: name  [
   required: "Y"
   default: "mymatrix"
   information: "Enter a name for the profile"
 ]
 
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
+variable:  dogap "@($(type) != f)"
+
+section: typesection [ info: "typesection Section" type: page ]
 integer: threshold  [
   required: "@($(type)==F)"
   default: "75"
@@ -45,6 +54,9 @@ matrixf: datafile  [
   expected: "'Epprofile' for Gribskov type, or EBLOSUM62"
 ]
 
+endsection: typesection
+
+section: dogapsection [ info: "dogapsection Section" type: page ]
 float: open  [
   required: "$(dogap)"
   information: "Gap opening penalty"
@@ -57,6 +69,14 @@ float: extension  [
   default: "0.3"
 ]
 
+endsection: dogapsection
+
+endsection: advanced
+
+
+section: output [ info: "output Section" type: page ]
 outfile: outf  [
   parameter: "Y"
 ]
+endsection: output
+

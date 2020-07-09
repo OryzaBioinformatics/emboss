@@ -3,16 +3,15 @@ appl: revseq [
   groups: "Edit"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "dna"
 ]
 
-seqoutall: outseq  [
-  parameter: "Y"
-  extension: "rev"
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 bool: reverse  [
   default: "Y"
   prompt: "Reverse sequence"
@@ -24,3 +23,13 @@ bool: complement  [
   prompt: "Complement sequence"
   help: "Set this to be false if you do not wish to complement the output sequence"
 ]
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+seqoutall: outseq  [
+  parameter: "Y"
+  extension: "rev"
+]
+
+endsection: output

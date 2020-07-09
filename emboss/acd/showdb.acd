@@ -3,19 +3,16 @@ appl: showdb [
   groups: "Display, Information"
 ]
 
+section: input [ info: "input Section" type: page ]
 string: database  [
   default: ""
   optional: "Y"
   prompt: "Name of a single database to give information on"
 ]
 
-outfile: outfile  [
-  optional: "Y"
-  default: "stdout"
-  prompt: "Output database details to a file"
-  help: "If you enter the name of a file here then this program will write the database details into that file."
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 bool: html  [
   optional: "Y"
   default: "N"
@@ -75,3 +72,15 @@ bool: release  [
   default: "N"
   prompt: "Display 'release' column"
 ]
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+outfile: outfile  [
+  optional: "Y"
+  default: "stdout"
+  prompt: "Output database details to a file"
+  help: "If you enter the name of a file here then this program will write the database details into that file."
+]
+
+endsection: output
+

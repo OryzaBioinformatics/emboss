@@ -3,11 +3,15 @@ appl: patmatdb [
   groups: "Protein:Motifs"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "Protein"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 string: motif  [
   parameter: "Y"
   minlength: "2"
@@ -15,6 +19,12 @@ string: motif  [
   help: "Patterns for patmatdb are based on the format of pattern used in the PROSITE database. For example: '[DE](2)HS{P}X(2)PX(2,4)C' means two Asps or Glus in any order followed by His, Ser, any residue other then Pro, then two of any residue followed by Pro followed by two to four of any residue followed by Cys. The search is case-independent, so 'AAA' matches 'aaa'."
 ]
 
+endsection: required
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   parameter: "Y"
 ]
+
+endsection: output
+

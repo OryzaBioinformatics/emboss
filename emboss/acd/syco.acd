@@ -3,11 +3,15 @@ appl: syco [
   groups: "Nucleic:Codon usage"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequence  [
   parameter: "Y"
   type: "DNA"
 ]
 
+endsection: input
+
+section: advanced [ info: "advanced Section" type: page ]
 codon: cfile  [
   optional: "N"
   information: "Codon usage file"
@@ -33,6 +37,9 @@ float: minimum  [
   information: "Minimum value for a common codon"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 bool: plot  [
   optional: "N"
   information: "Produce plot"
@@ -46,3 +53,6 @@ xygraph: graph  [
 outfile: outfile  [
   required: "@(!$(plot))"
 ]
+
+endsection: output
+

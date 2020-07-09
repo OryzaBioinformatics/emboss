@@ -3,6 +3,7 @@ appl: swissparse [
   groups: "Edit, Feature Tables"
 ]
 
+section: input [ info: "input Section" type: page ]
 infile: keyfile  [
   prompt: "Name of keywords file for input"
   default: "scop.terms"
@@ -15,8 +16,13 @@ infile: spfile  [
   parameter: "Y"
 ]
 
+endsection: input
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   prompt: "Name of search results file for output"
   default: "scop.seqs"
   parameter: "Y"
 ]
+endsection: output
+

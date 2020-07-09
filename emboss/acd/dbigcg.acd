@@ -1,12 +1,12 @@
 appl: dbigcg [
   groups: "Utils:Database indexing"
   documentation: "Index a GCG formatted database"
+  gui: yes
+  batch: yes
+  cpu: medium
 ]
 
-bool: staden  [
-  prompt: "Use staden index file names"
-]
-
+section: input [ info: "input Section" type: page ]
 list: idformat  [
   required: "y"
   prompt: "Entry format"
@@ -16,36 +16,27 @@ list: idformat  [
   default: "EMBL"
 ]
 
-string: dbname  [
-  parameter: "Y"
-  maxlength: "19"
-  minlength: "1"
-  prompt: "Database name"
-]
-
-variable:  dbknown "@(is: $(dbname))"
-
 string: directory  [
-  required: "$(dbknown)"
+  required: "Y"
   default: "."
   prompt: "Database directory"
 ]
 
 string: filename  [
-  required: "$(dbknown)"
+  required: "Y"
   default: "*.seq"
   prompt: "Wildcard database filename"
 ]
 
-string: indexdirectory  [
-  default: "."
-  prompt: "Index directory"
-]
+endsection: input
 
-string: sortoptions  [
-  default: "-T . -k 1,1"
-  prompt: "Sort option(s)"
-  help: "Sort options, typically '-T .' to use current directory for work files and '-k 1,1' to force GNU sort to use the first field"
+section: required [ info: "required Section" type: page ]
+
+string: dbname  [
+  parameter: "Y"
+  maxlength: "19"
+  minlength: "1"
+  prompt: "Database name"
 ]
 
 string: release  [
@@ -64,6 +55,24 @@ string: date  [
   pattern: "^([0-9]+.[0-9]+.[0-9]+)?$"
 ]
 
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
+bool: staden  [
+  prompt: "Use staden index file names"
+]
+
+string: indexdirectory  [
+  default: "."
+  prompt: "Index directory"
+]
+
+string: sortoptions  [
+  default: "-T . -k 1,1"
+  prompt: "Sort option(s)"
+  help: "Sort options, typically '-T .' to use current directory for work files and '-k 1,1' to force GNU sort to use the first field"
+]
+
 bool: systemsort  [
   default: "Y"
   information: "Use system sort utility"
@@ -73,3 +82,8 @@ bool: cleanup  [
   default: "Y"
   information: "Clean up temporary files"
 ]
+
+endsection: advanced
+
+
+

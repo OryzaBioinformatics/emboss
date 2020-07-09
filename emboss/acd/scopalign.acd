@@ -1,16 +1,26 @@
 appl: scopalign [
   documentation: "Generate alignments for SCOP families"
   groups: "Protein:3D Structure"
+  gui: yes
+  batch: yes
+  cpu: medium
 ]
 
+section: input [ info: "input Section" type: page ]
 infile: scopf  [
   parameter: "Y"
   prompt: "Name of scop file for input (embl-like format)"
   default: "Escop.dat"
 ]
 
+endsection: input
+
+section: output [ info: "output Section" type: page ]
 string: path  [
   parameter: "Y"
   prompt: "Location of alignment files for output"
   default: "./"
 ]
+
+endsection: output
+

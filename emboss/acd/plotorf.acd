@@ -3,16 +3,15 @@ appl: plotorf [
   groups: "Nucleic:Gene finding, Nucleic:Translation"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequence  [
   parameter: "Y"
   type: "dna"
 ]
 
-xygraph: graph  [
-  required: "Y"
-  multiple: "6"
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 string: start  [
   optional: "N"
   default: "ATG"
@@ -24,3 +23,13 @@ string: stop  [
   default: "TAA,TAG,TGA"
   information: "Stop codons"
 ]
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+xygraph: graph  [
+  required: "Y"
+  multiple: "6"
+]
+
+endsection: output

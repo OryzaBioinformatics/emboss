@@ -3,33 +3,37 @@ appl: textsearch [
   groups: "Display, Information"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 string: pattern  [
   parameter: "Y"
   prompt: "Enter a pattern to search for"
   help: "The search pattern is a regular expression. Use a | to indicate OR. \ For example: \ human|mouse \ will find text with either 'human' OR 'mouse' in the text"
 ]
 
-outfile: outfile  [
-  optional: "Y"
-  default: "stdout"
-  prompt: "Output sequence details to a file"
-  help: "If you enter the name of a file here then this program will write the sequence details into that file."
-]
+endsection: required
 
-bool: html  [
-  optional: "Y"
-  default: "N"
-  prompt: "Format output as an HTML table"
-]
+section: advanced [ info: "advanced Section" type: page ]
 
 bool: casesensitive  [
   optional: "Y"
   default: "N"
   prompt: "Do a case-sensitive search"
+]
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+bool: html  [
+  optional: "Y"
+  default: "N"
+  prompt: "Format output as an HTML table"
 ]
 
 bool: only  [
@@ -62,3 +66,13 @@ bool: description  [
   default: "@(!$(only))"
   prompt: "Display 'description' column"
 ]
+
+outfile: outfile  [
+  optional: "Y"
+  default: "stdout"
+  prompt: "Output sequence details to a file"
+  help: "If you enter the name of a file here then this program will write the sequence details into that file."
+]
+
+endsection: output
+

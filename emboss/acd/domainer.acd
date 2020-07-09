@@ -3,6 +3,7 @@ appl: domainer [
   groups: "Utils:Database creation"
 ]
 
+section: input [ info: "input Section" type: page ]
 infile: scop  [
   parameter: "Y"
   prompt: "Name of scop file for input (embl-like format)"
@@ -15,6 +16,9 @@ string: cpdb  [
   default: "./"
 ]
 
+endsection: input
+
+section: output [ info: "output Section" type: page ]
 string: cpdbscop  [
   parameter: "Y"
   information: "Location of coordinate files for output (embl-like format)"
@@ -50,3 +54,5 @@ outfile: pdberrf  [
   prompt: "Name of log file for the pdb format build"
   default: "domainer.log2"
 ]
+endsection: output
+

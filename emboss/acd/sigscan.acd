@@ -1,8 +1,12 @@
 appl: sigscan [
   documentation: "Scans a sparse protein signature against swissprot"
   groups: "PROTEIN:3D STRUCTURE"
+  gui: yes
+  batch: yes
+  cpu: medium
 ]
 
+section: input [ info: "input Section" type: page ]
 infile: sigin  [
   parameter: "Y"
   prompt: "Name of signature file for input"
@@ -21,6 +25,9 @@ infile: targetf  [
   default: "test.fam"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 integer: thresh  [
   parameter: "Y"
   information: "Minimum length (residues) of overlap required for two hits with the same code to be counted as the same hit."
@@ -67,6 +74,9 @@ list: nterm  [
   prompt: "Select number"
 ]
 
+endsection: required
+
+section: output [ info: "output Section" type: page ]
 integer: nhits  [
   parameter: "Y"
   information: "Number of hits to output"
@@ -84,3 +94,6 @@ outfile: alignf  [
   prompt: "Name of signature alignments file for output"
   default: "test.align"
 ]
+
+endsection: output
+

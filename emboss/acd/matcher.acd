@@ -3,6 +3,7 @@ appl: matcher [
   groups: "Alignment:Local"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequencea  [
   parameter: "Y"
   type: "any"
@@ -13,13 +14,9 @@ sequence: sequenceb  [
   type: "@($(sequencea.protein) ? protein : nucleotide)"
 ]
 
-align: outfile  [
-  parameter: "Y"
-  aformat: "markx0"
-  minseq: 2
-  maxseq: 2
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 matrix: datafile  [
   optional: "Y"
   information: "Matrix file"
@@ -53,19 +50,14 @@ integer: gaplength  [
   expected: "4 for any sequence"
   help: "The gap length, or gap extension, penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty. An exception is where one or both sequences are single reads with possible sequencing errors in which case you would expect many single base gaps. You can get this result by setting the gap penalty to zero (or very low) and using the gap extension penalty to control gap scoring."
 ]
+endsection: advanced
 
-#integer: markx  [
-#  optional: "Y"
-#  information: "Alternative displays"
-#  default: "0"
-#  maximum: "10"
-#  help: "This sets the alternate display of matches and mismatches in alignments. \ -markx=0 uses ':','.',' ', for identities, conservative replacements, and non-conservative replacements, respectively. \ -markx=1 uses ' ','x', and 'X'. \ -markx=2 does not show the second sequence, but uses the second alignment line to display matches with a '.' for identity, or with the mismatched residue for mismatches. \ -markx=3 outputs a title line with the percentage identity and score and then outputs the gapped sequences in multiple FASTA format. \ -markx=4 outputs only the title line with the percentage identity and score. \ -markx=5,6,7,8 and 9 are the same as -markx=1 \ -markx=10 outputs a parseable output."
-#]
+section: output [ info: "output Section" type: page ]
+align: outfile  [
+  parameter: "Y"
+  aformat: "markx0"
+  minseqs: "2"
+  maxseqs: "2"
+]
 
-#integer: length  [
-#  optional: "Y"
-#  information: "Number of residues per line"
-#  default: "60"
-#  minimum: "1"
-#  maximum: "200"
-#]
+endsection: output

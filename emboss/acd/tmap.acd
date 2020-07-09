@@ -3,6 +3,7 @@ appl: tmap [
   groups: "Protein:2D Structure"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqset: msf  [
   parameter: "Y"
   type: "gapprotein"
@@ -10,6 +11,9 @@ seqset: msf  [
   help: "File containing a sequence alignment"
 ]
 
+endsection: input
+
+section: output [ info: "output Section" type: page ]
 xygraph: graph  [
   required: "y"
   multiple: "2"
@@ -21,3 +25,6 @@ outfile: outfile  [
   optional: "Y"
   default: "tmap.res"
 ]
+
+endsection: output
+

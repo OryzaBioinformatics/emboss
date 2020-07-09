@@ -3,11 +3,15 @@ appl: fuzzpro [
   groups: "Protein:Motifs"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "protein"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 string: pattern  [
   required: "Y"
   prompt: "Search pattern"
@@ -20,6 +24,9 @@ integer: mismatch  [
   prompt: "Number of mismatches"
 ]
 
+endsection: required
+
+section: output [ info: "output Section" type: page ]
 bool: mmshow  [
   optional: "N"
   default: "0"
@@ -48,3 +55,5 @@ bool: descshow  [
 outfile: outf  [
   parameter: "Y"
 ]
+endsection: output
+

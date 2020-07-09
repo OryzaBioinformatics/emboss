@@ -3,16 +3,15 @@ appl: getorf [
   groups: "Nucleic:Gene finding"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "DNA"
 ]
 
-seqoutall: outseq  [
-  parameter: "Y"
-  extension: "orf"
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 list: table  [
   optional: "Y"
   default: "0"
@@ -66,3 +65,13 @@ integer: flanking  [
   information: "Number of flanking nucleotides to report"
   help: "If you have chosen one of the options of the type of sequence to find that gives the flanking sequence around a STOP or START codon, this allows you to set the number of nucleotides either side of that codon to output. If the region of flanking nucleotides crosses the start or end of the sequence, no output is given for this codon."
 ]
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+seqoutall: outseq  [
+  parameter: "Y"
+  extension: "orf"
+]
+
+endsection: output
+

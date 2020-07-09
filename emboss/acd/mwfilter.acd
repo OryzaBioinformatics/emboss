@@ -3,10 +3,15 @@ appl: mwfilter [
   groups: "Protein:Composition"
 ]
 
+section: input [ info: "input Section" type: page ]
 infile: infile  [
   parameter: "Y"
   information: "Molecular weight file input"
 ]
+
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 
 float: tolerance  [
   required: "Y"
@@ -14,13 +19,21 @@ float: tolerance  [
   default: "50.0"
 ]
 
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
 string: datafile  [
   optional: "N"
   default: "Emwfilter.dat"
   information: "Data file of noisy molecular weights"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   parameter: "Y"
   extension: "mwfilter"
-] 
+]
+endsection: output
+

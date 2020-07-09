@@ -1,8 +1,12 @@
 appl: est2genome [
   documentation: "Align EST and genomic DNA sequences"
   groups: "Alignment:Global"
+  gui: yes
+  batch: yes
+  cpu: medium
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: est  [
   parameter: "Y"
   type: "dna"
@@ -15,6 +19,9 @@ sequence: genome  [
   prompt: "Genomic sequence"
 ]
 
+endsection: input
+
+section: advanced [ info: "advanced Section" type: page ]
 integer: match  [
   optional: "Y"
   default: "1"
@@ -66,16 +73,6 @@ bool: splice  [
   help: "Use donor and acceptor splice sites. If you want to ignore donor-acceptor sites then set this to be false."
 ]
 
-bool: align  [
-  information: "Show the alignment"
-  help: "Show the alignment. The alignment includes the first and last 5 bases of each intron, together with the intron width. The direction of splicing is indicated by angle brackets (forward or reverse) or ???? (unknown)."
-]
-
-integer: width  [
-  default: "50"
-  information: "Alignment width"
-]
-
 string: mode  [
   default: "both"
   information: "Comparison mode"
@@ -103,6 +100,22 @@ integer: seed  [
   information: "Random number seed"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   required: "y"
 ]
+
+bool: align  [
+  information: "Show the alignment"
+  help: "Show the alignment. The alignment includes the first and last 5 bases of each intron, together with the intron width. The direction of splicing is indicated by angle brackets (forward or reverse) or ???? (unknown)."
+]
+
+integer: width  [
+  default: "50"
+  information: "Alignment width"
+]
+
+endsection: output
+

@@ -3,19 +3,15 @@ appl: garnier [
   groups: "Protein:2D Structure"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequencea  [
   parameter: "Y"
   type: "PureProtein"
 ]
-  report: outfile [ param: Y
-            rformat: tagseq
-	    taglist: "str:helix str:sheet str:turns str:coil"
-  ]
 
-# Obsolete - replaced by report file
-# Source code will use this to write the original output format if enabled
-#  outfile: outfile [ param: Y ]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 integer: idc  [
   required: "N"
   default: "0"
@@ -23,3 +19,13 @@ integer: idc  [
   maximum: "6"
   information: "idc param"
 ]
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+report: outfile  [
+  parameter: "Y"
+  rformat: "tagseq"
+  taglist: "str:helix str:sheet str:turns str:coil"
+]
+
+endsection: output

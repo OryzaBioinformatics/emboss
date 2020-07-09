@@ -3,16 +3,15 @@ appl: etandem [
   groups: "Nucleic:Repeats"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequence  [
   parameter: "Y"
   type: "dna"
 ]
 
-outfile: outfile  [
-  parameter: "Y"
-  extension: "tan"
-]
+endsection: input
 
+section: required [ info: "required Section" type: page ]
 integer: minrepeat  [
   required: "Y"
   default: "10"
@@ -30,6 +29,9 @@ integer: maxrepeat  [
   expected: "Same as -minrepeat"
 ]
 
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
 integer: threshold  [
   default: "20"
   information: "Threshold score"
@@ -42,3 +44,12 @@ bool: mismatch  [
 bool: uniform  [
   information: "Allow uniform consensus"
 ]
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+outfile: outfile  [
+  parameter: "Y"
+  extension: "tan"
+]
+
+endsection: output

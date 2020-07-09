@@ -1,34 +1,39 @@
 appl: alignwrap [
-        doc: "Aligns a set of sequences to a seed alignment"
-        groups: "alignment: global"
+  documentation: "Aligns a set of sequences to a seed alignment"
+  groups: "alignment: global"
 ]
 
-string: inpath [
-	req: Y
-	def: "./"
-	help: "Directory containing the seed alignments (input)"
+section: input [ info: "input Section" type: page ]
+string: inpath  [
+  required: "Y"
+  default: "./"
+  help: "Directory containing the seed alignments (input)"
 ]
 
-string: extn [
-	req: Y
-	def: ".align"
-	help: "File extention of seed alignment files (input)"
+string: extn  [
+  required: "Y"
+  default: ".align"
+  help: "File extention of seed alignment files (input)"
 ]
 
-string: scopfamilies [
-	req: Y
-	help: "scop families file containing the set of sequences in EMBL-like format"
+string: scopfamilies  [
+  required: "Y"
+  help: "scop families file containing the set of sequences in EMBL-like format"
 ]
 
-string: outpath [
-	req: Y
-	def: "./tmp/"
-	help: "Directory for extended alignments (output)"
+endsection: input
+
+section: output [ info: "output Section" type: page ]
+string: outpath  [
+  required: "Y"
+  default: "./tmp/"
+  help: "Directory for extended alignments (output)"
 ]
 
-
-string: outextn [
-	req: Y
-	def: ".extalign"
-	help: "File extention of extended alignment files (output)"
+string: outextn  [
+  required: "Y"
+  default: ".extalign"
+  help: "File extention of extended alignment files (output)"
 ]
+endsection: output
+

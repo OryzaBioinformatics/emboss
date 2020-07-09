@@ -3,6 +3,7 @@ appl: psiblasts [
   groups: "Protein:3D Structure"
 ]
 
+section: input [ info: "input Section" type: page ]
 string: align  [
   parameter: "Y"
   prompt: "Location of alignment files for input"
@@ -15,6 +16,9 @@ string: alignextn  [
   default: ".align"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 integer: niter  [
   parameter: "Y"
   prompt: "Number of PSIBLAST iterations"
@@ -39,6 +43,9 @@ string: submatrix  [
   default: "./EBLOSUM62"
 ]
 
+endsection: required
+
+section: output [ info: "output Section" type: page ]
 outfile: families  [
   parameter: "Y"
   prompt: "Name of families file for output"
@@ -50,3 +57,5 @@ outfile: logf  [
   prompt: "Name of log file for the build"
   default: "psiblasts.log"
 ]
+endsection: output
+

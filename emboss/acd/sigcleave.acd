@@ -3,19 +3,27 @@ appl: sigcleave [
   groups: "Protein:Motifs"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "PureProtein"
 ]
 
-report: outfile  [
-  parameter: "Y"
-  rextension: "sig"
-  rformat: "motif"
-  multiple: "Y"
-  taglist: "str:mature_peptide"
+endsection: input
+
+section: required [ info: "required Section" type: page ]
+float: minweight  [
+  required: "Y"
+  minimum: "0."
+  maximum: "100."
+  default: "3.5"
+  information: "Minimum weight"
+  help: "Minimum scoring weight value for the predicted cleavage site"
 ]
 
+endsection: required
+
+section: advanced [ info: "advanced Section" type: page ]
 bool: prokaryote  [
   optional: "Y"
   help: "Specifies the sequence is prokaryotic and changes the default scoring data file name"
@@ -41,11 +49,15 @@ integer: nval  [
   expected: "Pval+15 (2)"
 ]
 
-float: minweight  [
-  required: "Y"
-  minimum: "0."
-  maximum: "100."
-  default: "3.5"
-  information: "Minimum weight"
-  help: "Minimum scoring weight value for the predicted cleavage site"
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+report: outfile  [
+  parameter: "Y"
+  rextension: "sig"
+  rformat: "motif"
+  multiple: "Y"
+  taglist: "str:mature_peptide"
 ]
+
+endsection: output

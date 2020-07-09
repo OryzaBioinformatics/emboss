@@ -3,6 +3,7 @@ appl: pasteseq [
   groups: "Edit"
 ]
 
+section: input [ info: "input Section" type: page ]
 sequence: sequence  [
   parameter: "Y"
   type: "any"
@@ -14,11 +15,9 @@ sequence: insseq  [
   type: "@($(sequence.protein) ? protein : nucleotide)"
 ]
 
-seqout: outseq  [
-  parameter: "Y"
-  required: "Y"
-]
+endsection: input
 
+section: required [ info: "required Section" type: page ]
 integer: pos  [
   required: "Y"
   default: "$(sequence.end)"
@@ -27,3 +26,13 @@ integer: pos  [
   information: "Position to insert after"
   help: "The position in the main input sequence to insert after. \ To insert before the start use the position 0."
 ]
+
+endsection: required
+
+section: output [ info: "output Section" type: page ]
+seqout: outseq  [
+  parameter: "Y"
+  required: "Y"
+]
+
+endsection: output

@@ -3,14 +3,30 @@ appl: seqret [
   groups: "Edit"
 ]
 
+section: input [ info: "input Section" type: page ]
+bool: feature  [
+  information: "Use feature information"
+]
+
 seqall: sequence  [
   parameter: "Y"
+  features: "$(feature)"
 ]
 
-seqoutall: outseq  [
-  parameter: "Y"
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 bool: firstonly  [
   information: "Read one sequence and stop"
 ]
+
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+seqoutall: outseq  [
+  parameter: "Y"
+  features: "$(feature)"
+]
+
+endsection: output
+

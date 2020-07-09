@@ -3,11 +3,15 @@ appl: checktrans [
   groups: "Protein:Composition"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "stopprotein"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 integer: orfml  [
   required: "Y"
   minimum: "1"
@@ -15,6 +19,9 @@ integer: orfml  [
   information: "Minimum ORF Length to report"
 ]
 
+endsection: required
+
+section: output [ info: "output Section" type: page ]
 outfile: report  [
   parameter: "Y"
 ]
@@ -29,3 +36,5 @@ featout: featout  [
   information: "feature file for output"
   help: "File for output features"
 ]
+endsection: output
+

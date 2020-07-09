@@ -3,6 +3,7 @@ appl: tfm [
   groups: "Information"
 ]
 
+section: input [ info: "input Section" type: page ]
 string: program  [
   parameter: "Y"
   default: ""
@@ -11,6 +12,9 @@ string: program  [
   help: "Enter the name of an EMBOSS program"
 ]
 
+endsection: input
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   optional: "Y"
   default: "stdout"
@@ -31,3 +35,5 @@ bool: more  [
   prompt: "Display a screenful at a time"
   help: "This uses the standard UNIX utility 'more' to display the text page-by-page, waiting for you to read one screen-full before going on to the next page. When you have finished reading a page, press the SPACE bar to proceed to the next page."
 ]
+
+endsection: output

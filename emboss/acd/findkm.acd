@@ -3,22 +3,30 @@ appl: findkm [
   groups: "Enzyme Kinetics"
 ]
 
+section: input [ info: "input Section" type: page ]
 infile: infile  [
   parameter: "Y"
   prompt: "Enter name of file containing data"
 ]
 
-outfile: outfile  [
-  parameter: "Y"
-]
+endsection: input
 
+section: advanced [ info: "advanced Section" type: page ]
 bool: plot  [
   required: "N"
   default: "Y"
   information: "S/V vs S"
 ]
 
+endsection: advanced
+
+section: output [ info: "output Section" type: page ]
+outfile: outfile  [
+  parameter: "Y"
+]
+
 xygraph: graphlb  [
   required: "Y"
   multiple: "2"
 ]
+endsection: output

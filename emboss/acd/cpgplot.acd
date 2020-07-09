@@ -3,11 +3,15 @@ appl: cpgplot [
   groups: "Nucleic:CpG Islands"
 ]
 
+section: input [ info: "input Section" type: page ]
 seqall: sequence  [
   parameter: "Y"
   type: "DNA"
 ]
 
+endsection: input
+
+section: required [ info: "required Section" type: page ]
 integer: window  [
   required: "Y"
   minimum: "1"
@@ -53,6 +57,9 @@ float: minpc  [
   help: "This sets the minimum average percentage of G plus C a set of 10 windows that are required before a CpG island is reported."
 ]
 
+endsection: required
+
+section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   parameter: "Y"
   help: "This sets the name of the file holding the report of the input sequence name, CpG island parameters and the output details of any CpG islands that are found."
@@ -86,3 +93,6 @@ featout: featout  [
   information: "feature file for output"
   help: "File for output features"
 ]
+
+endsection: output
+
