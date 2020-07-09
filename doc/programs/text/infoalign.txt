@@ -1,0 +1,322 @@
+
+                             EMBOSS: infoalign
+     _________________________________________________________________
+   
+                               Program infoalign
+                                       
+Function
+
+   Information on a multiple sequence alignment
+   
+Description
+
+   infoalign is small utility to list some simple properties of sequences
+   in an alignment.
+   
+   It will write a table containing one line per sequence. The
+   information is written out in columns separated by space ot TAB
+   characters. The columns of data are: the sequences' USA, name, two
+   measures of length, counts of gaps, and numbers of identical, similar
+   and different residues or bases in this sequence when compared to a
+   reference sequence, togather with a simple statistic of the % change
+   between the reference sequence and this sequence.
+   
+   The reference sequence can be either the calculated consensus sequence
+   (the default) or it can be one of the set of aligned sequences,
+   specified by either the ordinal number of that sequence in the input
+   file, or by its name.
+   
+   Any combination of these types of information can be easily selected
+   or unselected.
+   
+   By default, the output file starts each line with the USA of the
+   sequence being described, so the output file is a list file that can
+   be manually edited and read in by any other EMBOSS program that can
+   read in one or more sequence to be analysed.
+   
+Usage
+
+   Here is a sample session with infoalign:
+   % infoalign globin.seq
+   
+   Don't display the USA of a sequence
+   % infoalign globin.seq -nousa
+   
+   Display only the name and sequence length of a sequence
+   % infoalign globin.seq -only -name -seqlength
+   
+   Display only the name, number of gap characters and differences to the
+   consensus sequence
+   % infoalign globin.seq -only -name -gapcount -diffcount
+   
+   Display the name and number of gaps within a sequence
+   % infoalign globin.seq -only -name -gaps
+   
+   Display information formatted with HTML
+   % infoalign globin.seq -html
+   
+   Use the first sequence as the reference sequence to compare to
+   % infoalign globin.seq -refseq 1
+   
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqset     The sequence alignment to be displayed.
+
+   Optional qualifiers:
+   -outfile            outfile    If you enter the name of a file here then
+                                  this program will write the sequence details
+                                  into that file.
+   -refseq             string     If you give the number in the alignment or
+                                  the name of a sequence, it will be taken to
+                                  be the reference sequence. The reference
+                                  sequence is the one against which all the
+                                  other sequences are compared. If this is set
+                                  to 0 then the consensus sequence will be
+                                  used as the reference sequence. By default
+                                  the consensus sequence is used as the
+                                  reference sequence.
+   -matrix             matrix     Similarity scoring Matrix file
+   -html               bool       Format output as an HTML table
+
+   Advanced qualifiers:
+   -plurality          float      Set a cut-off for the % of positive scoring
+                                  matches below which there is no consensus.
+                                  The default plurality is taken as 50% of the
+                                  total weight of all the sequences in the
+                                  alignment.
+   -identity           float      Provides the facility of setting the
+                                  required number of identities at a position
+                                  for it to give a consensus. Therefore, if
+                                  this is set to 100% only columns of
+                                  identities contribute to the consensus.
+   -only               bool       This is a way of shortening the command line
+                                  if you only want a few things to be
+                                  displayed. Instead of specifying:
+                                  '-nohead -nousa -noname -noalign -nogaps
+                                  -nogapcount -nosimcount -noidcount
+                                  -nodiffcount'
+                                  to get only the sequence length output, you
+                                  can specify
+                                  '-only -seqlength'
+   -heading            bool       Display column headings
+   -usa                bool       Display the USA of the sequence
+   -name               bool       Display 'name' column
+   -seqlength          bool       Display 'seqlength' column
+   -alignlength        bool       Display 'alignlength' column
+   -gaps               bool       Display number of gaps
+   -gapcount           bool       Display number of gap positions
+   -idcount            bool       Display number of identical positions
+   -simcount           bool       Display number of similar positions
+   -diffcount          bool       Display number of different positions
+   -change             bool       Display % number of changed positions
+   -description        bool       Display 'description' column
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) The sequence alignment to be displayed. Readable
+   sequences Required
+   Optional qualifiers Allowed values Default
+   -outfile If you enter the name of a file here then this program will
+   write the sequence details into that file. Output file stdout
+   -refseq If you give the number in the alignment or the name of a
+   sequence, it will be taken to be the reference sequence. The reference
+   sequence is the one against which all the other sequences are
+   compared. If this is set to 0 then the consensus sequence will be used
+   as the reference sequence. By default the consensus sequence is used
+   as the reference sequence. Any string is accepted 0
+   -matrix Similarity scoring Matrix file Comparison matrix file in
+   EMBOSS data path EBLOSUM62 for protein
+   EDNAFULL for DNA
+   -html Format output as an HTML table Yes/No No
+   Advanced qualifiers Allowed values Default
+   -plurality Set a cut-off for the % of positive scoring matches below
+   which there is no consensus. The default plurality is taken as 50% of
+   the total weight of all the sequences in the alignment. Number from
+   0.000 to 100.000 50.0
+   -identity Provides the facility of setting the required number of
+   identities at a position for it to give a consensus. Therefore, if
+   this is set to 100% only columns of identities contribute to the
+   consensus. Number from 0.000 to 100.000 0.0
+   -only This is a way of shortening the command line if you only want a
+   few things to be displayed. Instead of specifying: '-nohead -nousa
+   -noname -noalign -nogaps -nogapcount -nosimcount -noidcount
+   -nodiffcount' to get only the sequence length output, you can specify
+   '-only -seqlength' Yes/No No
+   -heading Display column headings Yes/No @(!$(only))
+   -usa Display the USA of the sequence Yes/No @(!$(only))
+   -name Display 'name' column Yes/No @(!$(only))
+   -seqlength Display 'seqlength' column Yes/No @(!$(only))
+   -alignlength Display 'alignlength' column Yes/No @(!$(only))
+   -gaps Display number of gaps Yes/No @(!$(only))
+   -gapcount Display number of gap positions Yes/No @(!$(only))
+   -idcount Display number of identical positions Yes/No @(!$(only))
+   -simcount Display number of similar positions Yes/No @(!$(only))
+   -diffcount Display number of different positions Yes/No @(!$(only))
+   -change Display % number of changed positions Yes/No @(!$(only))
+   -description Display 'description' column Yes/No @(!$(only))
+   
+Input file format
+
+   A normal multiple sequence alignment file, as produced by an alignment
+   program is read in.
+   
+Output file format
+
+   The output is displayed on the screen (stdout) by default. A typical
+   output file is:
+     _________________________________________________________________
+   
+# USA             Name        SeqLen    AlignLen        Gaps    GapLen  Ident
+Similar  Differ  % Change        Description
+fasta::globin.seq:HBB_MACFU     HBB_MACFU     147       148     1       1
+134      3       10      8.843537
+fasta::globin.seq:HBD_HUMAN     HBD_HUMAN     147       148     1       1
+128      7       12      12.925170
+fasta::globin.seq:HBB_RABIT     HBB_RABIT     147       148     1       1
+131      7       9       10.884354
+fasta::globin.seq:HBB_BOVIN     HBB_BOVIN     146       147     1       1
+121      10      15      17.123287
+fasta::globin.seq:HBB_LAMGL     HBB_LAMGL     151       152     1       1
+122      11      18      19.205297
+fasta::globin.seq:HBE_HUMAN     HBE_HUMAN     143       150     2       7
+104      14      25      27.272728
+fasta::globin.seq:HBE_RABIT     HBE_RABIT     147       148     1       1
+113      16      18      23.129251
+     _________________________________________________________________
+   
+   The first non-blank line is the heading. This is followed by one line
+   per sequence containing the following columns of data separated by one
+   of more space or TAB characters:
+   
+     * The USA (Uniform Sequence Address) that EMBOSS can use to read in
+       the sequence.
+     * Name - name of the sequence.
+     * SeqLen - length of the sequence when all gap characters are
+       removed.
+     * AlignLen - length of the sequence including internal gap
+       characters i.e. gaps at the start or the end are not included.
+     * Gaps - number of gaps e.g. 'AAA---AAA' is 1 gap (and 3 gap
+       characters long (see GapLen)).
+     * GapLen - total number of internal gap characters, see the 3 gap
+       characters above.
+     * Ident - number of characters that are identical to the specified
+       reference sequence (uppercase 'A' is identical to lowercase 'a').
+     * Similar - number of characters which are non-identical - which
+       score > 0 in the comparison matrix when compared to the reference
+       sequence, but which are not identical.
+     * Different - number of characters which score <= 0 in the
+       comparison matrix when compared to the reference sequence.
+     * %Change - a simple measure of the percentage change as compared to
+       the reference sequence: (GapLen - Ident) * 100 / GapLen.
+     * Description - the description annotation of teh sequence (if any).
+       
+   If qualifiers to inhibit various columns of information are used, then
+   the remaining columns of information are output in the same order as
+   shown above, so if '-noseqlength' is used, the order of output is:
+   usa, name, alignlength, gaps, gapcount, idcount, simcount, diffcount,
+   change, description.
+   
+   When the -html qualifier is specified, then the output will be wrapped
+   in HTML tags, ready for inclusion in a Web page. Note that tags such
+   as
+   and are not output by this program as the table of databases is
+   expected to form only part of the contents of a web page - the rest of
+   the web page must be supplier by the user.
+   
+   The lines of output information are guaranteed not to have trailing
+   white-space at the end.
+   
+Data files
+
+   infoalign reads in scoring matrices to determine the consensus
+   sequence and to determine which matches are similar or not.
+   
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+   
+   To see the available EMBOSS data files, run:
+   
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+   
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+       
+Notes
+
+   By default, the output file starts each line with the USA of the
+   sequence being described, so the output file is a list file that can
+   be manually edited and read in by other EMBOSS programs using the
+   list-file specification of '@filename'.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   emma Multiple alignment program - interface to ClustalW program
+   infoseq Displays some simple information about sequences
+   plotcon Plots the quality of conservation of a sequence alignment
+   prettyplot Displays aligned sequences, with colouring and boxing
+   seealso Finds programs sharing group names
+   showalign Display a multiple sequence alignment
+   showdb Displays information on the currently available databases
+   textsearch Search sequence documentation text. SRS and Entrez are
+   faster!
+   tfm Displays a program's help documentation manual
+   wossname Finds programs by keywords in their one-line documentation
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (June 2001) - Gary Williams
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
