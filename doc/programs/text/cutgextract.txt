@@ -1,0 +1,103 @@
+
+                            EMBOSS: cutgextract
+     _________________________________________________________________
+   
+                              Program cutgextract
+                                       
+Function
+
+   Extract data from CUTG
+   
+Description
+
+   **************** EDIT HERE ****************
+   
+Usage
+
+   Here is a sample session with cutgextract:
+
+% cutgextract
+
+   **************** EDIT HERE ****************
+   
+Command line arguments
+
+   Mandatory qualifiers:
+  [-directory]         dirlist    CUTG directory
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -wildspec           string     Type of codon file
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   EMBOSS An error in ajacd.c at line 10715: unknown attribute 'name' for
+   'directory'
+   
+Input file format
+
+   **************** EDIT HERE ****************
+   
+Output file format
+
+   **************** EDIT HERE ****************
+   
+Data files
+
+   **************** EDIT HERE ****************
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   domainer Build domain coordinate files
+   nrscope Converts redundant EMBL-format SCOP file to non-redundant one
+   printsextract Extract data from PRINTS
+   prosextract Builds the PROSITE motif database for patmatmotifs to
+   search
+   rebaseextract Extract data from REBASE
+   scope Convert raw scop classification file to embl-like format
+   tfextract Extract data from TRANSFAC
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   **************** EDIT HERE ****************
+   
+History
+
+   Written (date) - author. **************** EDIT HERE ****************
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
