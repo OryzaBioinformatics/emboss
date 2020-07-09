@@ -1,0 +1,14 @@
+appl: demoreport [
+  documentation: "Reads a sequence and feature table, writes a report"
+  groups: "Test"
+]
+
+sequence: sequence  [
+  parameter: "Y"
+  features: "Y"
+]
+
+report: report  [
+  parameter: "Y"
+  taglist: "int:demo=demo_tag float:test int:pos=Maximum_position"
+]
