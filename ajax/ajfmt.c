@@ -53,11 +53,12 @@
 #include "ajstr.h"
 #include "ajfile.h"
 
-struct FmtSBuf {
-	char *buf;
-	char *bp;
-	ajint size;
-};
+typedef struct FmtSBuf {
+  char *buf;			/* buffer to write */
+  char *bp;			/* next position in buffer */
+  ajint size;			/* size of buffer from malloc */
+  AjBool fixed;			/* if ajTrue, cannot reallocate */
+} FmtOBuf, *FmtPBuf;
 
 #define pad(n,c) do { ajint nn = (n); \
                    while (nn-- > 0) \
@@ -872,7 +873,7 @@ static ajint fmtOutC(int c, void* cl)
     return putc(c, f);
 }
 
-/* @funcstatic fmtAjInsert ****************************************************
+/* @funcstatic fmtInsert ****************************************************
 **
 ** Inserts a character in a buffer, raises a Fmt_Overflow exception if
 ** the buffer is too small.
@@ -882,18 +883,25 @@ static ajint fmtOutC(int c, void* cl)
 ** @return [ajint] 0 on success
 ******************************************************************************/
 
-static ajint fmtAjInsert(int c, void* cl)
+static ajint fmtInsert(int c, void* cl)
 {
-    struct FmtSBuf *p = cl;
+    FmtPBuf p = cl;
 
     if (p->bp >= p->buf + p->size)
-	AJRAISE(Fmt_Overflow);
+    {
+        if (p->fixed)
+	  AJRAISE(Fmt_Overflow);
+
+	AJRESIZE(p->buf, 2*p->size);
+	p->bp = p->buf + p->size;
+	p->size *= 2;
+    }
     *p->bp++ = ajSysItoC(c);
 
     return c;
 }
 
-/* @funcstatic fmtAjAppend ****************************************************
+/* @funcstatic fmtAppend ****************************************************
 **
 ** Appends a character to a buffer, resizing it if necessary
 **
@@ -902,12 +910,15 @@ static ajint fmtAjInsert(int c, void* cl)
 ** @return [ajint] 0 on success
 ******************************************************************************/
 
-static ajint fmtAjAppend(ajint c, void* cl)
+static ajint fmtAppend(ajint c, void* cl)
 {
-    struct FmtSBuf *p = cl;
+    FmtPBuf p = cl;
 
     if(p->bp >= p->buf + p->size)
     {
+        if (p->fixed)
+	  AJRAISE(Fmt_Overflow);
+
 	AJRESIZE(p->buf, 2*p->size);
 	p->bp = p->buf + p->size;
 	p->size *= 2;
@@ -1227,8 +1238,7 @@ AjPStr ajFmtStr(const char* fmt, ...)
 #if defined(__PPC__) && defined(_CALL_SYSV)
     va_list save_ap;
 #endif
-    volatile AjBool okay=ajFalse;
-    ajint len =20;
+    ajint len = 32;
     AjPStr fnew;
 
     fnew = ajStrNewL (len);
@@ -1237,20 +1247,12 @@ AjPStr ajFmtStr(const char* fmt, ...)
 #if defined(__PPC__) && defined(_CALL_SYSV)
     __va_copy(save_ap, ap);
 #endif
-    while(!okay)
-    {
-	AJTRY
-	    len = ajFmtVfmtCL(fnew->Ptr, fnew->Res, fmt, ap);
-	fnew->Len = len;
-	okay = ajTrue;
-	ELSE
-	    len = fnew->Res *2;		/* double the memory and try again */
-	(void) ajStrModL(&fnew, len);
+
+    fnew->Len = ajFmtVfmtStrCL(&fnew->Ptr, 0, &fnew->Res, fmt, ap);
+
 #if defined(__PPC__) && defined(_CALL_SYSV)
 	__va_copy(ap, save_ap);
 #endif
-	END_TRY;
-    }  
 
     va_end(ap);
     return fnew;
@@ -1280,45 +1282,22 @@ AjPStr ajFmtPrintS (AjPStr* pthis, const char* fmt, ...)
 {
     volatile AjPStr thys;
     va_list ap;
+
 #if defined(__PPC__) && defined(_CALL_SYSV)
     va_list save_ap;
 #endif
-    volatile AjBool okay = ajFalse;
-    ajint len ;
 
     va_start(ap, fmt);
 
     (void) ajStrModL(pthis, 32);
     thys = *pthis;
-    len = thys->Res;
+
 #if defined(__PPC__) && defined(_CALL_SYSV)
     __va_copy(save_ap, ap);
 #endif
-    while(!okay)
-    {
-	AJTRY
-	    len = ajFmtVfmtCL(thys->Ptr, thys->Res, fmt, ap);
-	thys->Len = len;
-	okay = ajTrue;
-	ELSE
-	    if(thys->Use == 1)
-	    {
-		len = thys->Res *2;	/* double the memory and try again */
-		/* create new one with twice the memory */
-		(void) ajStrModL(pthis, len);
-		thys = *pthis;
-#if defined(__PPC__) && defined(_CALL_SYSV)
-		__va_copy(ap, save_ap);
-#endif
-	    }
-	    else
-	    {
-		thys= 0;
-		okay = ajTrue;
-		ajMessOutCode("BUFCPY");
-	    }
-	END_TRY;
-    }  
+
+    thys->Len = ajFmtVfmtStrCL(&thys->Ptr, 0, &thys->Res, fmt, ap);
+
     va_end(ap);
 
     return thys;
@@ -1340,8 +1319,6 @@ AjPStr ajFmtPrintS (AjPStr* pthis, const char* fmt, ...)
 ** @error on unsuccessful writing return 0
 **
 ** @@
-** NOTE: unsafe may be best to pass a pointer to the pointer new 
-** as it passes back 0 if not able to be done
 *****************************************************************************/ 
 
 AjPStr ajFmtPrintAppS(AjPStr* pthis, const char* fmt, ...)
@@ -1351,49 +1328,66 @@ AjPStr ajFmtPrintAppS(AjPStr* pthis, const char* fmt, ...)
 #if defined(__PPC__) && defined(_CALL_SYSV)
     va_list save_ap;
 #endif
-    volatile AjBool okay = ajFalse;
-    ajint len ;
+    ajint len;
 
     va_start(ap, fmt);
 
     (void) ajStrModL(pthis, 32);
     thys = *pthis;
-    len = thys->Res;
+
 #if defined(__PPC__) && defined(_CALL_SYSV)
     __va_copy(save_ap, ap);
 #endif
-    while(!okay)
-    {
-	AJTRY
-	    len = ajFmtVfmtCL(&thys->Ptr[thys->Len], thys->Res-thys->Len,
+
+    len = ajFmtVfmtStrCL(&thys->Ptr, thys->Len, &thys->Res,
 			      fmt, ap);
-	thys->Len += len;
-	okay = ajTrue;
-	ELSE
-	    if(thys->Use == 1)
-	    {
-		len = thys->Res *2;	/* double the memory and try again */
-		/* create new one with twice the memory */
-		(void) ajStrModL(pthis, len);
-		thys = *pthis;
-#if defined(__PPC__) && defined(_CALL_SYSV)
-		__va_copy(ap, save_ap);
-#endif
-	    }
-	    else
-	    {
-		thys= 0;
-		okay = ajTrue;
-		ajMessOutCode("BUFCPY");
-	    }
-	END_TRY;
-    }  
+
+    thys->Len += len;
+
     va_end(ap);
 
     return thys;
 }
 
-/* @func ajFmtVfmtCL **********************************************************
+/* @func ajFmtVfmtStrCL ******************************************************
+**
+** Same as ajFmtPrintCL but takes arguments from the list ap.
+**
+** @param [w] pbuf [char**] char string to be written too.
+** @param [r] pos [ajint] position in buffer to start writing
+** @param [U] size [ajint*] allocated size of the buffer
+** @param [r] fmt [const char*] Format string.
+** @param [r] ap [va_list] Variable length argument list.
+**
+** @return [] [ajint] number of characters written to buf.
+**
+** @@
+**************************************************************************/
+
+ajint ajFmtVfmtStrCL(char **pbuf, ajint pos, ajint* size,
+const char* fmt, va_list ap)
+{
+    FmtOBuf cl;
+
+    (void) assert(*pbuf);
+    (void) assert(*size > 0);
+    (void) assert(fmt);
+
+    cl.buf = *pbuf;
+    cl.bp = cl.buf + pos;
+    cl.size = *size;
+    cl.fixed = ajFalse;
+
+    ajFmtVfmt(fmtAppend, &cl, fmt, ap);
+    (void) fmtAppend(0, &cl);
+
+    *size = cl.size;
+    *pbuf = cl.buf;
+
+    return cl.bp - cl.buf - 1 - pos;
+}
+
+/* @func ajFmtVfmtCL *******************************************************
 **
 ** Same as ajFmtPrintCL but takes arguments from the list ap.
 **
@@ -1409,15 +1403,18 @@ AjPStr ajFmtPrintAppS(AjPStr* pthis, const char* fmt, ...)
 
 ajint ajFmtVfmtCL(char* buf, ajint size, const char* fmt, va_list ap)
 {
-    struct FmtSBuf cl;
+    FmtOBuf cl;
 
     (void) assert(buf);
     (void) assert(size > 0);
     (void) assert(fmt);
+
     cl.buf = cl.bp = buf;
     cl.size = size;
-    ajFmtVfmt(fmtAjInsert, &cl, fmt, ap);
-    (void) fmtAjInsert(0, &cl);
+    cl.fixed = ajTrue;
+
+    ajFmtVfmt(fmtInsert, &cl, fmt, ap);
+    (void) fmtInsert(0, &cl);
 
     return cl.bp - cl.buf - 1;
 }
@@ -1462,14 +1459,16 @@ char* ajFmtString(const char* fmt, ...)
 
 char* ajFmtVString(const char* fmt, va_list ap)
 {
-    struct FmtSBuf cl;
+    FmtOBuf cl;
 
     (void) assert(fmt);
 
     cl.size = 256;
     cl.buf = cl.bp = AJALLOC(cl.size);
-    ajFmtVfmt(fmtAjAppend, &cl, fmt, ap);
-    (void) fmtAjAppend(0, &cl);
+    cl.fixed = ajFalse;
+
+    ajFmtVfmt(fmtAppend, &cl, fmt, ap);
+    (void) fmtAppend(0, &cl);
 
     return AJRESIZE(cl.buf, cl.bp - cl.buf);
 }
@@ -1729,46 +1728,58 @@ void ajFmtPrintSplit(AjPFile outf, AjPStr str, char *prefix, ajint len,
     AjPStrTok handle=NULL;
     AjPStr token = NULL;
     AjPStr tmp   = NULL;
+    AjPStr tmp2  = NULL;
+
     ajint    n = 0;
     ajint    l = 0;
     ajint    c = 0;
-    
+
     token = ajStrNew();
     tmp   = ajStrNewC("");
-    
+    tmp2  = ajStrNew();
 
     handle = ajStrTokenInit(str,delim);
-    
+
     while(ajStrToken(&token,&handle,NULL))
     {
 	if(!c)
 	    ajFmtPrintF(outf,"%s",prefix);
-	
+
 	if((l=n+ajStrLen(token)) < len)
 	{
 	    if(c++)
 		ajStrAppC(&tmp," ");
 	    ajStrApp(&tmp,token);
-	    n = ++l;
+	    if(c!=1)
+		n = ++l;
+	    else
+		n = l;
 	}
 	else
 	{
 	    ajFmtPrintF(outf,"%S\n",tmp);
 	    ajStrAssS(&tmp,token);
 	    ajStrAppC(&tmp," ");
-	    n = ajStrLen(token);
+	    n = ajStrLen(token) + 1;
 	    c = 0;
 	}
     }
 
     if(c)
 	ajFmtPrintF(outf,"%S\n",tmp);
+    else
+    {
+	n = ajStrLen(tmp);
+	ajStrAssSub(&tmp2,tmp,0,n-2);
+	ajFmtPrintF(outf,"%s%S\n",prefix,tmp2);
+    }
 
 
     ajStrTokenClear(&handle);
     ajStrDel(&token);
     ajStrDel(&tmp);
-    
+    ajStrDel(&tmp2);
+
     return;
 }
 
