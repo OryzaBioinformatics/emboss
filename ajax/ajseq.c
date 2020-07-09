@@ -873,6 +873,7 @@ AjPSeq ajSeqNewL (size_t size) {
   pthis->Formatstr = ajStrNew();
   pthis->Filename = ajStrNew();
   pthis->Entryname = ajStrNew();
+  pthis->TextPtr = ajStrNew();
   if (size)
     pthis->Seq = ajStrNewL(size);
   else
@@ -976,6 +977,7 @@ void ajSeqDel (AjPSeq* pthis) {
   ajStrDel (&thys->Formatstr);
   ajStrDel (&thys->Filename);
   ajStrDel (&thys->Entryname);
+  ajStrDel (&thys->TextPtr);
   ajStrDel (&thys->Seq);
 
   if(thys->Fttable)
@@ -1021,6 +1023,7 @@ void ajSeqClear (AjPSeq thys) {
   (void) ajStrClear (&thys->Formatstr);
   (void) ajStrClear (&thys->Filename);
   (void) ajStrClear (&thys->Entryname);
+  (void) ajStrClear (&thys->TextPtr);
   (void) ajStrClear (&thys->Seq);
   
   return;
@@ -2429,6 +2432,24 @@ AjPFeatTable ajSeqGetFeat (AjPSeq thys) {
 AjPStr ajSeqGetName (AjPSeq thys) {
 
   return thys->Name;
+}
+
+/* @func ajSeqGetEntry ********************************************************
+**
+** Returns the sequence full text entry.
+** Because this is a pointer to the real internal string
+** the caller must take care not to change the character string in any way.
+** If the string is to be changed (case for example) then it must first
+** be copied.
+**
+** @param [u] thys [AjPSeq] Sequence object.
+** @return [AjPStr] Entry as a string.
+** @@
+******************************************************************************/
+
+AjPStr ajSeqGetEntry (AjPSeq thys)
+{
+  return thys->TextPtr;
 }
 
 

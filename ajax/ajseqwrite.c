@@ -88,8 +88,8 @@ static void       seqWriteTreecon (AjPSeqout outseq);
 static SeqOOutFormat seqOutFormat[] = { /* AJFALSE = write one file */
   {"unknown",    AJFALSE, AJFALSE, seqWriteFasta}, /* internal default writes FASTA */
                                  /* set 'fasta' in ajSeqOutFormatDefault */
-  {"gcg",        AJTRUE,  AJFALSE, seqWriteGcg},
-  {"gcg8",       AJTRUE,  AJFALSE, seqWriteGcg},
+  {"gcg",        AJFALSE,  AJFALSE, seqWriteGcg},
+  {"gcg8",       AJFALSE,  AJFALSE, seqWriteGcg},
   {"embl",       AJFALSE, AJFALSE, seqWriteEmbl},
   {"em",         AJFALSE, AJFALSE, seqWriteEmbl},
   {"swiss",      AJFALSE, AJFALSE, seqWriteSwiss},
@@ -105,11 +105,11 @@ static SeqOOutFormat seqOutFormat[] = { /* AJFALSE = write one file */
   {"codata",     AJFALSE, AJFALSE, seqWriteCodata},
   {"strider",    AJFALSE, AJFALSE, seqWriteStrider},
   {"acedb",      AJFALSE, AJFALSE, seqWriteAcedb},
-  {"experiment", AJTRUE,  AJFALSE, seqWriteStaden},
-  {"staden",     AJTRUE,  AJFALSE, seqWriteStaden},
-  {"text",       AJTRUE,  AJFALSE, seqWriteText},
-  {"plain",      AJTRUE,  AJFALSE, seqWriteText},
-  {"raw",        AJTRUE,  AJFALSE, seqWriteText},
+  {"experiment", AJFALSE, AJFALSE, seqWriteStaden},
+  {"staden",     AJFALSE, AJFALSE, seqWriteStaden},
+  {"text",       AJFALSE, AJFALSE, seqWriteText},
+  {"plain",      AJFALSE, AJFALSE, seqWriteText},
+  {"raw",        AJFALSE, AJFALSE, seqWriteText},
   {"fitch",      AJFALSE, AJFALSE, seqWriteFitch},
   {"msf",        AJFALSE, AJTRUE,  seqWriteMsf},
   {"clustal",    AJFALSE, AJTRUE,  seqWriteClustal},

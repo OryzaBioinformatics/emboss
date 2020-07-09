@@ -2067,6 +2067,39 @@ AjBool ajFileBuffGet (const AjPFileBuff thys, AjPStr* pdest) {
   return ajFileBuffGetL (thys, pdest, &fpos);
 }
 
+/* @func ajFileBuffGetStore **************************************************
+**
+** Reads a line from a buffered file. Also appends the line to
+** a given string if the append flag is true. A double NULL character
+** is added afterwards. If the buffer has data, reads from the
+** buffer. If the buffer is exhausted, reads from the file. If the file is
+** exhausted, sets end of file and returns. If end of file was already set,
+** looks for another file to open.
+**
+** @param [r] thys [const AjPFileBuff] Buffered input file.
+** @param [w] pdest [AjPStr*] Buffer to hold results.
+** @param [r] store [AjBool] append if true
+** @param [w] astr [AjPStr*] string to append to
+** @return [AjBool] ajTrue if data was read.
+** @@
+******************************************************************************/
+
+AjBool ajFileBuffGetStore (const AjPFileBuff thys, AjPStr* pdest,
+			   AjBool store, AjPStr *astr)
+{
+  long fpos = 0;
+  AjBool ret;
+  
+  ret =  ajFileBuffGetL (thys, pdest, &fpos);
+  
+  if(!store)
+      return ret;
+
+  ajFmtPrintAppS(astr,"%S",*pdest);
+
+  return ret;
+}
+
 /* @func ajFileBuffGetL *******************************************************
 **
 ** Reads a line from a buffered file. If the buffer has data, reads from the

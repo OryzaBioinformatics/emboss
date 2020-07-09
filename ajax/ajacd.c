@@ -83,11 +83,11 @@ static AjPFile acdPrettyFile = NULL;
 
 /* Levels as defined in the ACD structure */
 
-enum AcdELevel { ACD_APPL,	/* application definition */
-		 ACD_PARAM,	/* parameter */
-		 ACD_QUAL,	/* qualifier */
-		 ACD_VAR,	/* variable */
-		 ACD_IF		/* if test */
+enum AcdELevel { ACD_APPL,		/* application definition */
+		 ACD_PARAM,		/* parameter */
+		 ACD_QUAL,		/* qualifier */
+		 ACD_VAR,		/* variable */
+		 ACD_IF			/* if test */
 };
 
 /* Levels as text, only for use in logging report */
@@ -108,21 +108,25 @@ static char* acdValNames[] = {"application", "string", "word",
 
 /* attribute structure */
 
-typedef struct AcdSAttr {	
+typedef struct AcdSAttr
+{	
   char *Name;
   enum AcdEValtype Type;
 } AcdOAttr, *AcdPAttr;
 
+
 /* qualifier structure */
 
-typedef struct AcdSQual {
+typedef struct AcdSQual
+{
   char *Name;
   char *Default;
   char *Type;
   char *Help;
 } AcdOQual, *AcdPQual;
 
-typedef struct AcdSTableItem {
+typedef struct AcdSTableItem
+{
   AjPStr Qual;
   AjPStr Help;
   AjPStr Valid;
@@ -149,7 +153,8 @@ typedef struct AcdSTableItem {
 ** @@
 ******************************************************************************/
 
-typedef struct AcdSAcd {
+typedef struct AcdSAcd
+{
   struct AcdSAcd* Next;
   AjPStr Name;            
   AjPStr Token;
@@ -173,7 +178,8 @@ typedef struct AcdSAcd {
 
 /* general type structure */
 
-typedef struct AcdSType {
+typedef struct AcdSType
+{
   char* Name;			/* type name */
   AcdPAttr Attr;		/* type-specific attributes */
   void (*Set)(AcdPAcd thys);	/* function to set value and prompt user */
@@ -207,7 +213,8 @@ static AjPStr acdVar;
 
 /* keywords (other than qualifier types) */
 
-typedef enum {
+typedef enum
+{
   BAD_STAGE, APPL_STAGE, QUAL_STAGE, VAR_STAGE
 } AcdEStage ;
 
@@ -696,6 +703,7 @@ AcdOAttr acdAttrSeqoutall[] = { {"name", VT_STR},
 
 AcdOAttr acdAttrSeq[] = { {"type", VT_STR},
 			  {"features", VT_BOOL},
+			  {"entry", VT_BOOL},
 			  {"comment", VT_STR},
 			  {"corba", VT_STR},
 			  {"style",VT_STR},
@@ -710,6 +718,7 @@ AcdOAttr acdAttrSeqset[] = { {"type", VT_STR},
 
 AcdOAttr acdAttrSeqall[] = { {"type", VT_STR},
 			     {"features", VT_BOOL},
+			     {"entry", VT_BOOL},
 			     {"comment", VT_STR},
 			     {"corba", VT_STR},
 			     {"style",VT_STR},
@@ -731,14 +740,16 @@ AcdOAttr acdAttrVar[] = {
 			     {"style",VT_STR},
                           {NULL, VT_NULL} };
 
-typedef struct AcdSKey {
+typedef struct AcdSKey
+{
   char *Name;
   AcdEStage Stage;
   AcdPAttr Attr;		/* type-specific attributes */
   void (*Set)(AcdPAcd thys);	/* function to set value and prompt user */
 } AcdOKey, *AcdPKey;
 
-AcdOKey acdKeywords[] = {
+AcdOKey acdKeywords[] =
+{
   {"application", APPL_STAGE,   acdAttrAppl, acdSetAppl},
   {"variable",    VAR_STAGE,    acdAttrVar,  acdSetVar},
   {NULL, BAD_STAGE} };
@@ -747,7 +758,8 @@ AcdOKey acdKeywords[] = {
 ** or numbered if tied to a parameter */
 
 /* "qualifier"  "default" "type" */
-AcdOQual acdQualAppl[] = {
+AcdOQual acdQualAppl[] =
+{
   {"debug",      "N",      "bool", "write debug output to program.dbg"},
   {"auto",       "N",      "bool", "turn off prompts"},
   {"stdout",     "N",      "bool", "write standard output"},
@@ -761,7 +773,8 @@ AcdOQual acdQualAppl[] = {
   {"acdtable",   "N",      "bool", "write HTML table of options"},
   {NULL, NULL, NULL, NULL} };
 
-AcdOQual acdQualFeat[] = {
+AcdOQual acdQualFeat[] =
+{
   {"fformat",    "",       "string",  "features format"},
   {"fopenfile",  "",       "string",  "features file name"},
   {"fask",       "",       "bool",    "prompt for begin/end/reverse"},
@@ -770,7 +783,8 @@ AcdOQual acdQualFeat[] = {
   {"freverse",   "",       "bool",    "reverse (if DNA)"},
   {NULL, NULL, NULL, NULL} };
 
-AcdOQual acdQualFeatout[] = {
+AcdOQual acdQualFeatout[] =
+{
   {"offormat",    "",       "string", "output seq format"},
   {"ofopenfile",  "",       "string", "features file name"},
   {"ofextension", "",       "string", "file name extension"},
@@ -778,7 +792,8 @@ AcdOQual acdQualFeatout[] = {
   {"ofsingle",    "",       "bool",   "separate file for each entry"},
   {NULL, NULL, NULL, NULL} };
 
-AcdOQual acdQualSeq[] = {
+AcdOQual acdQualSeq[] =
+{
   {"sbegin",     "", "integer", "first base used"},
   {"send",       "", "integer", "last base used, def=seq length"},
   {"sreverse",   "", "bool",    "reverse (if DNA)"},
@@ -797,7 +812,8 @@ AcdOQual acdQualSeq[] = {
   {"fopenfile",  "", "string",  "features file name"},
   {NULL, NULL, NULL, NULL} };
 
-AcdOQual acdQualSeqset[] = {
+AcdOQual acdQualSeqset[] =
+{
   {"sbegin",     "", "integer", "first base used"},
   {"send",       "", "integer", "last base used, def=seq length"},
   {"sreverse",   "", "bool",    "reverse (if DNA)"},
@@ -816,7 +832,8 @@ AcdOQual acdQualSeqset[] = {
   {"fopenfile",  "", "string",  "features file name"},
   {NULL, NULL, NULL, NULL} };
 
-AcdOQual acdQualSeqall[] = {
+AcdOQual acdQualSeqall[] =
+{
   {"sbegin",     "", "integer", "first base used"},
   {"send",       "", "integer", "last base used, def=seq length"},
   {"sreverse",   "", "bool",    "reverse (if DNA)"},
@@ -835,7 +852,8 @@ AcdOQual acdQualSeqall[] = {
   {"fopenfile",  "", "string",  "features file name"},
   {NULL, NULL, NULL, NULL} };
 
-AcdOQual acdQualSeqout[] = {
+AcdOQual acdQualSeqout[] =
+{
   {"osformat",   "",       "string",  "output seq format"},
   {"osextension", "",      "string",  "file name extension"},
   {"osname",     "",       "string",  "base file name"},
@@ -846,7 +864,8 @@ AcdOQual acdQualSeqout[] = {
   {"ofname",     "",       "string",  "features file name"},
   {NULL, NULL, NULL, NULL} };
 
-AcdOQual acdQualSeqoutset[] = {
+AcdOQual acdQualSeqoutset[] =
+{
   {"osformat",   "",       "string",  "output seq format"},
   {"osextension", "",      "string",  "file name extension"},
   {"osname",     "",       "string",  "base file name"},
@@ -857,7 +876,8 @@ AcdOQual acdQualSeqoutset[] = {
   {"ofname",     "",       "string",  "features file name"},
   {NULL, NULL, NULL, NULL} };
 
-AcdOQual acdQualSeqoutall[] = {
+AcdOQual acdQualSeqoutall[] =
+{
   {"osformat",   "",       "string",  "output seq format"},
   {"osextension", "",      "string",  "file name extension"},
   {"osname",     "",       "string",  "base file name"},
@@ -868,7 +888,8 @@ AcdOQual acdQualSeqoutall[] = {
   {"ofname",     "",       "string",  "features file name"},
   {NULL, NULL, NULL, NULL} };
 
-AcdOQual acdQualGraph[] = {
+AcdOQual acdQualGraph[] =
+{
   {"gprompt",   "", "bool",    "graph prompting"},
   {"gtitle",    "", "string",  "graph title"},
   {"gsubtitle", "", "string",  "graph subtitle"},
@@ -879,7 +900,8 @@ AcdOQual acdQualGraph[] = {
   {"goutfile",  "", "string",  "output file for non interactive displays"},
   {NULL, NULL, NULL, NULL} };
 
-AcdOQual acdQualGraphxy[] = {
+AcdOQual acdQualGraphxy[] =
+{
   {"gprompt",   "", "bool",    "graph prompting"},
   {"gtitle",    "", "string",  "graph title"},
   {"gsubtitle", "", "string",  "graph subtitle"},
@@ -899,7 +921,8 @@ AcdOQual acdQualGraphxy[] = {
 /*"Type"         Attributes        Function
   Qualifiers         "Help Text" */
 
-AcdOType acdType[] = {
+AcdOType acdType[] =
+{
   {"array",        acdAttrArray,    acdSetArray,
    NULL,             "List of numbers" },
   {"bool",        acdAttrBool,      acdSetBool,
@@ -955,13 +978,15 @@ AcdOType acdType[] = {
   {NULL, NULL, NULL, NULL, NULL}
 };
 
-typedef struct AcdSValid {
+typedef struct AcdSValid
+{
   char* Name;
   void (*Valid) (AcdPAcd thys, AjPStr* str);
   void (*Expect) (AcdPAcd thys, AjPStr* str);
 } AcdOValid, *AcdPValid;
 
-AcdOValid acdValid[] = {
+AcdOValid acdValid[] =
+{
   {"sequence",  acdHelpValidSeq,     acdHelpExpectSeq},
   {"seqset",    acdHelpValidSeq,     acdHelpExpectSeq},
   {"seqall",    acdHelpValidSeq,     acdHelpExpectSeq},
@@ -1004,140 +1029,149 @@ AcdOValid acdValid[] = {
 ** @@
 ******************************************************************************/
 
-AjStatus ajAcdInitP (char *pgm, int argc, char *argv[], char *package) {
+AjStatus ajAcdInitP (char *pgm, int argc, char *argv[], char *package)
+{
 
-  static AjPFile acdFile = NULL;
-  static AjPStr acdLine = NULL;
-  static AjPStr acdFName = NULL;
-  static AjPStr acdRoot = NULL;
-  static AjPStr acdRootInst = NULL;
-  static AjPStr acdPack = NULL;
-  static AjPStr acdText = NULL;
-  static AjPStr tmpstr = NULL;
-  int i;
+    static AjPFile acdFile = NULL;
+    static AjPStr acdLine = NULL;
+    static AjPStr acdFName = NULL;
+    static AjPStr acdRoot = NULL;
+    static AjPStr acdRootInst = NULL;
+    static AjPStr acdPack = NULL;
+    static AjPStr acdText = NULL;
+    static AjPStr tmpstr = NULL;
+    int i;
    
-  acdProgram = ajStrNewC (pgm);
+    acdProgram = ajStrNewC (pgm);
   
-  ajDebug ("testing acdprompts");
-  if (ajNamGetValueC ("acdprompts", &tmpstr)) {
-    ajDebug ("acdprompts '%S'", tmpstr);
-    if (ajStrToInt(tmpstr, &i))
-      acdPromptTry = i;
-    if (acdPromptTry < 1) acdPromptTry = 1;
-    ajDebug ("acdPromptTry %d", acdPromptTry);
-  }
-  (void) ajStrDelReuse(&tmpstr);
+    ajDebug ("testing acdprompts");
+    if (ajNamGetValueC ("acdprompts", &tmpstr))
+    {
+	ajDebug ("acdprompts '%S'", tmpstr);
+	if (ajStrToInt(tmpstr, &i))
+	    acdPromptTry = i;
+	if (acdPromptTry < 1) acdPromptTry = 1;
+	ajDebug ("acdPromptTry %d", acdPromptTry);
+    }
+    (void) ajStrDelReuse(&tmpstr);
   
-  /* pre-parse the command line for special options */
+    /* pre-parse the command line for special options */
   
-  (void) ajStrStat ("before acdArgsScan");
-  acdArgsScan (argc, argv);
-  (void) ajStrStat ("after acdArgsScan");
+    (void) ajStrStat ("before acdArgsScan");
+    acdArgsScan (argc, argv);
+    (void) ajStrStat ("after acdArgsScan");
   
-  /* open the command definition file */
+    /* open the command definition file */
    
-  (void) ajNamRootPack (&acdPack);
-  (void) ajNamRootInstall (&acdRootInst);
-  (void) ajFileDirFix (&acdRootInst);
+    (void) ajNamRootPack (&acdPack);
+    (void) ajNamRootInstall (&acdRootInst);
+    (void) ajFileDirFix (&acdRootInst);
 
-  if (ajNamGetValueC ("acdroot", &acdRoot)) { /* _acdroot variable defined */
-    (void) ajFileDirFix (&acdRoot);
-    ajFmtPrintS (&acdFName, "%S%s.acd", acdRoot, pgm);
-    acdFile = ajFileNewIn (acdFName);
-  }
-  else if (*package) {		/* separate package */
-    ajFmtPrintS (&acdFName, "%Sshare/%S/acd/%s.acd",
-		 acdRootInst, acdPack, pgm);
-    acdFile = ajFileNewIn (acdFName);
-    if (!acdFile) {
-      ajDebug ("acdfile '%S' not opened\n", acdFName);
-      ajStrAssC (&acdPack, package); /* package name passed to acdInitP */
-      ajStrToLower (&acdPack);	/* temporary - old sources used capitals */
-				/* but try to pass correctly and remove this */
+    if (ajNamGetValueC ("acdroot", &acdRoot))
+    {					/* _acdroot variable defined */
+	(void) ajFileDirFix (&acdRoot);
+	ajFmtPrintS (&acdFName, "%S%s.acd", acdRoot, pgm);
+	acdFile = ajFileNewIn (acdFName);
+    }
+    else if (*package)
+    {					/* separate package */
+	ajFmtPrintS (&acdFName, "%Sshare/%S/acd/%s.acd",
+		     acdRootInst, acdPack, pgm);
+	acdFile = ajFileNewIn (acdFName);
+	if (!acdFile)
+	{
+	    ajDebug ("acdfile '%S' not opened\n", acdFName);
+	    ajStrAssC (&acdPack, package); /* package name passed to acdInitP */
+	    ajStrToLower (&acdPack);	/* temporary - old sources used capitals */
+	    /* but try to pass correctly and remove this */
 
-      (void) ajNamRoot (&acdRoot);
-      (void) ajFileDirUp (&acdRoot);
-      ajFmtPrintS (&acdFName, "%Sembassy/%S/emboss_acd/%s.acd",
-		   acdRoot, acdPack, pgm);
-      acdFile = ajFileNewIn (acdFName);
+	    (void) ajNamRoot (&acdRoot);
+	    (void) ajFileDirUp (&acdRoot);
+	    ajFmtPrintS (&acdFName, "%Sembassy/%S/emboss_acd/%s.acd",
+			 acdRoot, acdPack, pgm);
+	    acdFile = ajFileNewIn (acdFName);
+	}
     }
-  }
-  else {			/* main package */
-    ajFmtPrintS (&acdFName, "%Sshare/%S/acd/%s.acd",
-		 acdRootInst, acdPack, pgm);
-    acdFile = ajFileNewIn (acdFName);
-    if (!acdFile) {
-      ajDebug ("acdfile '%S' not opened\n", acdFName);
-      (void) ajNamRoot (&acdRoot);
-      (void) ajFileDirFix (&acdRoot);
-      ajFmtPrintS (&acdFName, "%Sacd/%s.acd", acdRoot, pgm);
-      acdFile = ajFileNewIn (acdFName);
+    else
+    {					/* main package */
+	ajFmtPrintS (&acdFName, "%Sshare/%S/acd/%s.acd",
+		     acdRootInst, acdPack, pgm);
+	acdFile = ajFileNewIn (acdFName);
+	if (!acdFile)
+	{
+	    ajDebug ("acdfile '%S' not opened\n", acdFName);
+	    (void) ajNamRoot (&acdRoot);
+	    (void) ajFileDirFix (&acdRoot);
+	    ajFmtPrintS (&acdFName, "%Sacd/%s.acd", acdRoot, pgm);
+	    acdFile = ajFileNewIn (acdFName);
+	}
     }
-  }
   
   
-  if (!acdFile) {
-    ajFatal ("acdfile '%S' not opened\n", acdFName);
-  }
-  (void) ajStrDelReuse (&acdFName);
-  
-  /* read the whole file into a string [change to use a list later] */
-  
-  acdText = ajStrNew();
-  
-  while (ajFileReadLine (acdFile, &acdLine)) {
-    acdNoComment(&acdLine);
-    if (ajStrLen(acdLine)) {
-      (void) ajStrApp (&acdText, acdLine);
-      (void) ajStrAppC (&acdText, " ");
-    }
-  }
-  ajFileClose (&acdFile);
-  (void) ajStrDelReuse (&acdLine);
-  (void) ajStrDelReuse (&acdFName);
-  
-  /* Parse the input to set the initial definitions */
-  
-  (void) ajStrStat ("before acdParse");
-  acdParse (acdText);
-  (void) ajStrStat ("after acdParse");
-  (void) ajStrDelReuse (&acdText);
-  
-  /* Fill in incomplete information like parameter numbers */
-  
-  acdProcess ();
-  (void) ajStrStat ("after acdProcess");
-  
-  AJCNEW0(acdParamSet, acdNParam+1);
+    if (!acdFile)
+	ajFatal ("acdfile '%S' not opened\n", acdFName);
 
-  /* report on what we have so far */
+    (void) ajStrDelReuse (&acdFName);
   
-  acdListReport("Definitions in ACD file");
-  (void) ajStrStat ("after acdListReport");
+    /* read the whole file into a string [change to use a list later] */
   
-  /* parse the command line and update the values */
+    acdText = ajStrNew();
   
-  acdArgsParse (argc, argv);
-  (void) ajStrStat ("after acdArgsParse");
+    while (ajFileReadLine (acdFile, &acdLine))
+    {
+	acdNoComment(&acdLine);
+	if (ajStrLen(acdLine))
+	{
+	    (void) ajStrApp (&acdText, acdLine);
+	    (void) ajStrAppC (&acdText, " ");
+	}
+    }
+    ajFileClose (&acdFile);
+    (void) ajStrDelReuse (&acdLine);
+    (void) ajStrDelReuse (&acdFName);
   
-  /* report on what we have so far */
+    /* Parse the input to set the initial definitions */
   
-  acdListReport("Results of parsing command line arguments");
-  (void) ajStrStat ("after acdListReport2");
+    (void) ajStrStat ("before acdParse");
+    acdParse (acdText);
+    (void) ajStrStat ("after acdParse");
+    (void) ajStrDelReuse (&acdText);
   
-  /* set the true values and prompt for missing required values */
+    /* Fill in incomplete information like parameter numbers */
   
-  acdSetAll();
-  (void) ajStrStat ("after acdSetAll");
+    acdProcess ();
+    (void) ajStrStat ("after acdProcess");
   
-  /* report on what we have now */
+    AJCNEW0(acdParamSet, acdNParam+1);
+
+    /* report on what we have so far */
   
-  acdListReport("Final results after setting values and prompting the user");
-  (void) ajStrStat ("after acdListReport3");
+    acdListReport("Definitions in ACD file");
+    (void) ajStrStat ("after acdListReport");
   
-  /* all done */
+    /* parse the command line and update the values */
   
-  return ajStatusOK;
+    acdArgsParse (argc, argv);
+    (void) ajStrStat ("after acdArgsParse");
+  
+    /* report on what we have so far */
+  
+    acdListReport("Results of parsing command line arguments");
+    (void) ajStrStat ("after acdListReport2");
+  
+    /* set the true values and prompt for missing required values */
+  
+    acdSetAll();
+    (void) ajStrStat ("after acdSetAll");
+  
+    /* report on what we have now */
+  
+    acdListReport("Final results after setting values and prompting the user");
+    (void) ajStrStat ("after acdListReport3");
+  
+    /* all done */
+  
+    return ajStatusOK;
 }
 
 /* @func ajAcdInit ************************************************************
@@ -1172,50 +1206,56 @@ AjStatus ajAcdInit (char *pgm, int argc, char *argv[]) {
 ** @@
 ******************************************************************************/
 
-static AcdEStage acdStage (AjPStr token) {
+static AcdEStage acdStage (AjPStr token)
+{
 
-  int i;
-  int ifound=0;
-  AcdEStage j=BAD_STAGE;
+    int i;
+    int ifound=0;
+    AcdEStage j=BAD_STAGE;
 
-  static AjPStr ambigList = NULL;
+    static AjPStr ambigList = NULL;
 
-  (void) ajStrAssC(&ambigList, "");
+    (void) ajStrAssC(&ambigList, "");
 
-  if (!ajStrLen(token))
+    if (!ajStrLen(token))
+	return BAD_STAGE;
+
+    i = 0;
+    while (acdKeywords[i].Name)
+    {
+	if (ajStrMatchC (token, acdKeywords[i].Name))
+	    return acdKeywords[i].Stage;
+	if (ajStrPrefixCO (acdKeywords[i].Name, token))
+	{
+	    ifound++;
+	    j = acdKeywords[i].Stage;
+	    acdAmbigAppC (&ambigList, acdKeywords[i].Name);
+	}
+	i++;
+    }
+
+    i =  0;
+    while (acdType[i].Name)
+    {
+	if (ajStrMatchC (token, acdType[i].Name))
+	    return QUAL_STAGE;
+	if (ajStrPrefixCO (acdType[i].Name, token))
+	{
+	    ifound++;
+	    j = QUAL_STAGE;
+	    acdAmbigAppC (&ambigList, acdType[i].Name);
+	}
+	i++;
+    }
+    if (ifound == 1)
+	return j;
+    if (ifound > 1)
+    {
+	ajWarn ("ambiguous acd stage %S (%S)", token, ambigList);
+	(void) ajStrDelReuse(&ambigList);
+    }
+
     return BAD_STAGE;
-
-  i = 0;
-  while (acdKeywords[i].Name) {
-    if (ajStrMatchC (token, acdKeywords[i].Name))
-      return acdKeywords[i].Stage;
-    if (ajStrPrefixCO (acdKeywords[i].Name, token)) {
-      ifound++;
-      j = acdKeywords[i].Stage;
-      acdAmbigAppC (&ambigList, acdKeywords[i].Name);
-    }
-    i++;
-  }
-
-  i =  0;
-  while (acdType[i].Name) {
-    if (ajStrMatchC (token, acdType[i].Name))
-      return QUAL_STAGE;
-    if (ajStrPrefixCO (acdType[i].Name, token)) {
-      ifound++;
-      j = QUAL_STAGE;
-      acdAmbigAppC (&ambigList, acdType[i].Name);
-    }
-    i++;
-  }
-  if (ifound == 1)
-    return j;
-  if (ifound > 1) {
-    ajWarn ("ambiguous acd stage %S (%S)", token, ambigList);
-    (void) ajStrDelReuse(&ambigList);
-  }
-
-  return BAD_STAGE;
 }
 
 /* @funcstatic acdParse *******************************************************
@@ -1230,177 +1270,188 @@ static AcdEStage acdStage (AjPStr token) {
 ** @@
 ******************************************************************************/
 
-static void acdParse (AjPStr text) {
+static void acdParse (AjPStr text)
+{
+    static AjPStr acdtmp=NULL;
+    static AjPStr acdvalue=NULL;
+    static AjPStr acdmodvalue=NULL;
+    static AjPStr acdtoken = NULL;
+    AjPStrTok tokenhandle;
+    char white[] = " \t\n\r";
+    char whiteplus[] = " \t\n\r:=";
+    AjBool done=ajFalse;
 
-  static AjPStr acdtmp=NULL;
-  static AjPStr acdvalue=NULL;
-  static AjPStr acdmodvalue=NULL;
-  static AjPStr acdtoken = NULL;
-  AjPStrTok tokenhandle;
-  char white[] = " \t\n\r";
-  char whiteplus[] = " \t\n\r:=";
-  AjBool done=ajFalse;
-
-  tokenhandle = ajStrTokenInit (text, whiteplus);
+    tokenhandle = ajStrTokenInit (text, whiteplus);
   
-  (void) ajStrToken (&acdtmp, &tokenhandle, NULL);
-  (void) ajStrToLower (&acdtmp);
-
-  acdCurrentStage = acdStage (acdtmp);
-  if (acdCurrentStage != APPL_STAGE) {
-    ajFatal ("The application definition must be at the start of the file");
-  }
-
-  while (ajStrLen(acdtmp)) {
-    acdCurrentStage = acdStage (acdtmp);
-
-    switch (acdCurrentStage) {
-
-      /* catch-all for failed parsing */
-
-    case BAD_STAGE:
-      ajFatal ("Unrecognized token '%S'\n", acdtmp);
-      break;
-
-      /* appl: application_name */
-
-    case APPL_STAGE:		
-      (void) ajStrAssS(&acdApplType, acdtmp); /* we have the type */
-      (void) ajStrToken (&acdAppl, &tokenhandle, white); /* then the appl
-                                                            name */
-      (void) ajStrToLower (&acdAppl);
-      (void) ajStrToken (&acdtmp, &tokenhandle, whiteplus); /* may be
-							       [token:= */
-      (void) ajStrToLower (&acdtmp);
-      acdApplCurr = acdNewAppl (acdAppl);
-      if (acdIsLeftB(&acdtmp)) {
-	(void) ajStrAssS (&acdApplToken, acdAppl);
-      }
-      else {			/* some day, look for a new token here */
-	(void) ajStrAssS (&acdApplToken, acdAppl);
-	ajWarn ("'[ doc: doc_def]' not found in .acd file for %S: %S\n",
-		acdApplType, acdAppl);
-	continue;		/* back to top of loop */
-      }
-      (void) ajStrToLower (&acdApplToken);
-      acdPretty ("%S: %S [\n", acdApplType,
-	      acdAppl);
-
-      /* continue parsing until we reach a true closing ']' character */
-
-      if (!ajStrLen(acdtmp))	/* that was a lonely '[' we trimmed */
-	(void) ajStrToken (&acdtmp, &tokenhandle, whiteplus);
-
-      (void) ajStrToLower (&acdtmp);
-      done = acdIsRightB(&acdtmp);
-
-      while (!done) {
-	(void) ajStrAssS (&acdtoken, acdtmp);
-	(void) ajStrAssS (&acdvalue, acdParseValueRB (&tokenhandle, white));
-	done = acdIsRightB(&acdvalue);
-	(void) ajStrAssS (&acdmodvalue, acdvalue);
-	(void) acdTextFormat(&acdmodvalue);
-	(void) acdSetKey (acdApplCurr, &acdtoken, acdmodvalue);
-	acdPretty ("  %S: \"%S\"\n", acdtoken, acdvalue);
-	if (!done) {
-	  (void) ajStrToken(&acdtmp, &tokenhandle, whiteplus);
-	  (void) ajStrToLower (&acdtmp);
-	  done = acdIsRightB(&acdtmp);
-	}
-      }
-      acdPretty ("]\n");
-
-      (void) ajStrAssC (&acdVar, "today"); /* we have the type */
-      (void) ajFmtPrintS (&acdvalue, "%D", ajTimeToday());
-      acdVarCurr = acdNewVar (acdVar);
-      (void) acdSetVarDef (acdVarCurr, acdvalue);
-      break;
-
-      /* type: qualname [ attr: value ]
-      **
-      ** The token name is optional (defaults to the qualifier name)
-      ** The [] are required so the token can be detected.  Attributes
-      ** are defined for each "type", as are associated
-      ** qualifiers. There is no distinction between them here.  The
-      ** difference is that the qualifier values are defaults which
-      ** can be overridden on the ocmmand line
-      */
-
-    case QUAL_STAGE:		
-      (void) ajStrAssS(&acdQualType, acdtmp); /* we have the type */
-      (void) ajStrToken (&acdQual, &tokenhandle, white); /* then the 
-							    qualifier */
-      (void) ajStrToLower (&acdQual);
-      (void) ajStrToken (&acdtmp, &tokenhandle, whiteplus); /* may be 
-							       [token:= */
-      (void) ajStrToLower (&acdtmp);
-      if (acdIsLeftB(&acdtmp))
-	(void) ajStrAssS (&acdQualToken, acdQual);
-      else {
-	(void) ajStrAssS (&acdQualToken, acdtmp);
-	(void) ajStrToken (&acdtmp, &tokenhandle, whiteplus);
-	if (!acdIsLeftB(&acdtmp))
-	  ajFatal ("'[' not found for %S: %S\n", acdQualType, acdQual);
-      }
-      (void) ajStrToLower (&acdQualToken);
-      acdQualCurr = acdNewQual (acdQual, acdQualToken, &acdQualType, 0);
-      acdPretty ("\n%S: %S %S [\n", acdQualType,
-	      acdQual, acdStrDiff(acdQual, acdQualToken));
-
-      /* continue parsing until we reach a true closing ']' character */
-
-      if (!ajStrLen(acdtmp))	/* that was a lonely '[' we trimmed */
-	(void) ajStrToken (&acdtmp, &tokenhandle, whiteplus);
-
-      (void) ajStrToLower (&acdtmp);
-      done = acdIsRightB(&acdtmp);
-
-      while (!done) {
-	(void) ajStrAssS (&acdtoken, acdtmp);
-	(void) ajStrAssS (&acdvalue, acdParseValueRB (&tokenhandle, white));
-	done = acdIsRightB(&acdvalue);
-	(void) ajStrAssS (&acdmodvalue, acdvalue);
-	(void) acdTextFormat(&acdmodvalue);
-	(void) acdSet (acdQualCurr, &acdtoken, acdmodvalue);
-	acdPretty ("  %S: \"%S\"\n", acdtoken, acdvalue);
-	if (!done) {
-	  (void) ajStrToken(&acdtmp, &tokenhandle, whiteplus);
-	  (void) ajStrToLower (&acdtmp);
-	  done = acdIsRightB(&acdtmp);
-	}
-      }
-      acdPretty ("]\n");
-
-      break;
-
-    case VAR_STAGE:		
-      (void) ajStrToken (&acdVar, &tokenhandle, white); /* then the variable
-							   name */
-      (void) ajStrToLower (&acdVar);
-      acdVarCurr = acdNewVar (acdVar);
-      ajStrAssS(&acdvalue, acdParseValue(&tokenhandle, white));
-      acdPretty ("variable:  %S \"%S\"\n", acdVar, acdvalue);
-      (void) acdSetVarDef (acdVarCurr, acdvalue);
-      break;
-
-    default:
-      ajFatal ("*** Help - unknown stage ***\n");
-      break;
-    }
-
-    (void) ajStrToken(&acdtmp, &tokenhandle, whiteplus);
+    (void) ajStrToken (&acdtmp, &tokenhandle, NULL);
     (void) ajStrToLower (&acdtmp);
-  }
-  acdLog ("-- All Done --\n");
 
-  if (acderr) ajErr ("\n*** %d ERRORS FOUND ***\n", acderr);
+    acdCurrentStage = acdStage (acdtmp);
+    if (acdCurrentStage != APPL_STAGE)
+	ajFatal("The application definition must be at the start of the file");
 
-  (void) ajStrDelReuse (&acdtmp);
-  (void) ajStrDelReuse (&acdvalue);
-  (void) ajStrDelReuse (&acdtoken);
-  (void) ajStrTokenClear (&tokenhandle);
 
-  return;
+    while (ajStrLen(acdtmp))
+    {
+	acdCurrentStage = acdStage (acdtmp);
+
+	switch (acdCurrentStage)
+	{
+
+	    /* catch-all for failed parsing */
+
+	case BAD_STAGE:
+	    ajFatal ("Unrecognized token '%S'\n", acdtmp);
+	    break;
+
+	    /* appl: application_name */
+
+	case APPL_STAGE:		
+	    (void) ajStrAssS(&acdApplType, acdtmp); /* we have the type */
+	    (void) ajStrToken (&acdAppl, &tokenhandle, white);
+	    /* then the appl name */
+	    (void) ajStrToLower (&acdAppl);
+	    /* may be [token:= */
+	    (void) ajStrToken (&acdtmp, &tokenhandle, whiteplus);
+		
+	    (void) ajStrToLower (&acdtmp);
+	    acdApplCurr = acdNewAppl (acdAppl);
+	    if (acdIsLeftB(&acdtmp))
+		(void) ajStrAssS (&acdApplToken, acdAppl);
+	    else
+	    {	/* some day, look for a new token here */
+		(void) ajStrAssS (&acdApplToken, acdAppl);
+		ajWarn("'[ doc: doc_def]' not found in .acd file for %S: %S\n",
+			acdApplType, acdAppl);
+		continue;		/* back to top of loop */
+	    }
+	    (void) ajStrToLower (&acdApplToken);
+	    acdPretty ("%S: %S [\n", acdApplType,
+		       acdAppl);
+
+	    /* continue parsing until we reach a true closing ']' character */
+
+	    if (!ajStrLen(acdtmp))	/* that was a lonely '[' we trimmed */
+		(void) ajStrToken (&acdtmp, &tokenhandle, whiteplus);
+
+	    (void) ajStrToLower (&acdtmp);
+	    done = acdIsRightB(&acdtmp);
+
+	    while (!done)
+	    {
+		(void) ajStrAssS (&acdtoken, acdtmp);
+		(void) ajStrAssS (&acdvalue, acdParseValueRB (&tokenhandle,
+							      white));
+		done = acdIsRightB(&acdvalue);
+		(void) ajStrAssS (&acdmodvalue, acdvalue);
+		(void) acdTextFormat(&acdmodvalue);
+		(void) acdSetKey (acdApplCurr, &acdtoken, acdmodvalue);
+		acdPretty ("  %S: \"%S\"\n", acdtoken, acdvalue);
+		if (!done)
+		{
+		    (void) ajStrToken(&acdtmp, &tokenhandle, whiteplus);
+		    (void) ajStrToLower (&acdtmp);
+		    done = acdIsRightB(&acdtmp);
+		}
+	    }
+	    acdPretty ("]\n");
+
+	    (void) ajStrAssC (&acdVar, "today"); /* we have the type */
+	    (void) ajFmtPrintS (&acdvalue, "%D", ajTimeToday());
+	    acdVarCurr = acdNewVar (acdVar);
+	    (void) acdSetVarDef (acdVarCurr, acdvalue);
+	    break;
+
+	    /* type: qualname [ attr: value ]
+	     **
+	     ** The token name is optional (defaults to the qualifier name)
+	     ** The [] are required so the token can be detected.  Attributes
+	     ** are defined for each "type", as are associated
+	     ** qualifiers. There is no distinction between them here.  The
+	     ** difference is that the qualifier values are defaults which
+	     ** can be overridden on the ocmmand line
+	     */
+
+	case QUAL_STAGE:		
+	    (void) ajStrAssS(&acdQualType, acdtmp); /* we have the type */
+	    (void) ajStrToken (&acdQual, &tokenhandle, white); /* then the 
+								  qualifier */
+	    (void) ajStrToLower (&acdQual);
+	    (void) ajStrToken (&acdtmp, &tokenhandle, whiteplus);
+	    /* may be [token:= */
+	    (void) ajStrToLower (&acdtmp);
+	    if (acdIsLeftB(&acdtmp))
+		(void) ajStrAssS (&acdQualToken, acdQual);
+	    else
+	    {
+		(void) ajStrAssS (&acdQualToken, acdtmp);
+		(void) ajStrToken (&acdtmp, &tokenhandle, whiteplus);
+		if (!acdIsLeftB(&acdtmp))
+		    ajFatal ("'[' not found for %S: %S\n", acdQualType,
+			     acdQual);
+	    }
+	    (void) ajStrToLower (&acdQualToken);
+	    acdQualCurr = acdNewQual (acdQual, acdQualToken, &acdQualType, 0);
+	    acdPretty ("\n%S: %S %S [\n", acdQualType,
+		       acdQual, acdStrDiff(acdQual, acdQualToken));
+
+	    /* continue parsing until we reach a true closing ']' character */
+
+	    if (!ajStrLen(acdtmp))	/* that was a lonely '[' we trimmed */
+		(void) ajStrToken (&acdtmp, &tokenhandle, whiteplus);
+
+	    (void) ajStrToLower (&acdtmp);
+	    done = acdIsRightB(&acdtmp);
+
+	    while (!done)
+	    {
+		(void) ajStrAssS (&acdtoken, acdtmp);
+		(void) ajStrAssS (&acdvalue, acdParseValueRB (&tokenhandle,
+							      white));
+		done = acdIsRightB(&acdvalue);
+		(void) ajStrAssS (&acdmodvalue, acdvalue);
+		(void) acdTextFormat(&acdmodvalue);
+		(void) acdSet (acdQualCurr, &acdtoken, acdmodvalue);
+		acdPretty ("  %S: \"%S\"\n", acdtoken, acdvalue);
+		if (!done)
+		{
+		    (void) ajStrToken(&acdtmp, &tokenhandle, whiteplus);
+		    (void) ajStrToLower (&acdtmp);
+		    done = acdIsRightB(&acdtmp);
+		}
+	    }
+	    acdPretty ("]\n");
+
+	    break;
+
+	case VAR_STAGE:		
+	    /* then the variable name */
+	    (void) ajStrToken (&acdVar, &tokenhandle, white);
+	    (void) ajStrToLower (&acdVar);
+	    acdVarCurr = acdNewVar (acdVar);
+	    ajStrAssS(&acdvalue, acdParseValue(&tokenhandle, white));
+	    acdPretty ("variable:  %S \"%S\"\n", acdVar, acdvalue);
+	    (void) acdSetVarDef (acdVarCurr, acdvalue);
+	    break;
+
+	default:
+	    ajFatal ("*** Help - unknown stage ***\n");
+	    break;
+	}
+
+	(void) ajStrToken(&acdtmp, &tokenhandle, whiteplus);
+	(void) ajStrToLower (&acdtmp);
+    }
+    acdLog ("-- All Done --\n");
+
+    if (acderr) ajErr ("\n*** %d ERRORS FOUND ***\n", acderr);
+
+    (void) ajStrDelReuse (&acdtmp);
+    (void) ajStrDelReuse (&acdvalue);
+    (void) ajStrDelReuse (&acdtoken);
+    (void) ajStrTokenClear (&tokenhandle);
+
+    return;
 }
 
 
@@ -1414,23 +1465,24 @@ static void acdParse (AjPStr text) {
 ** @@
 ******************************************************************************/
 
-static void acdNoComment (AjPStr* text) {
-  int i;
-  char *cp;
+static void acdNoComment (AjPStr* text)
+{
+    int i;
+    char *cp;
 
-  i = ajStrLen (*text);
+    i = ajStrLen (*text);
 
-  if (!i)                       /* empty string */
+    if (!i)				/* empty string */
+	return;
+
+    cp = strchr(ajStrStr(*text), '#');
+    if (cp)
+    {					/* comment found */
+	*cp = '\0';
+	(void) ajStrFix (*text);
+    }
+
     return;
-
-  cp = strchr(ajStrStr(*text), '#');
-  if (cp) {                      /* comment found */
-    *cp = '\0';
-    (void) ajStrFix (*text);
-  }
-
-  return;
-
 }
 
 /* @funcstatic acdParseValue **************************************************
@@ -1449,55 +1501,60 @@ static void acdNoComment (AjPStr* text) {
 ******************************************************************************/
 
 
-static AjPStr acdParseValue (AjPStrTok* tokenhandle, char* delim) {
-  static AjPStr strp=NULL;
-  static AjPStr tmpstrp=NULL;
-  char  endq[]=" ";
-  int iquote;
-  char *cq;
-  AjBool done = ajFalse;
+static AjPStr acdParseValue (AjPStrTok* tokenhandle, char* delim)
+{
+    static AjPStr strp=NULL;
+    static AjPStr tmpstrp=NULL;
+    char  endq[]=" ";
+    int iquote;
+    char *cq;
+    AjBool done = ajFalse;
 
-  char *quotes = "\"'{(<";
-  char *endquotes = "\"'})>";
+    char *quotes = "\"'{(<";
+    char *endquotes = "\"'})>";
 
-  if (!ajStrToken (&strp, tokenhandle, delim))
-      return NULL;
-
-  cq = strchr(quotes, ajStrChar(strp, 0));
-  if (!cq) {			/* no quotes, simple return */
-    return strp;
-  }
-
-  /* quote found: parse up to closing quote then strip white space */
-
-  (void) ajStrDelReuse (&tmpstrp);
-
-  iquote = cq - quotes;
-  endq[0] = endquotes[iquote];
-  (void) ajStrTrim (&strp, 1);
-
-  while (!done) {
-    if (ajStrSuffixC(strp, endq)) { /* check for trailing quotes */
-      (void) ajStrTrim(&strp, -1);
-      done = ajTrue;
-    }
-
-    if (ajStrLen(strp)) {
-      if (ajStrLen(tmpstrp)) {
-	(void) ajStrAppC(&tmpstrp, " ");
-	(void) ajStrApp (&tmpstrp, strp);
-      }
-      else
-	(void) ajStrAssS(&tmpstrp, strp);
-    }
-    if (!done) {
-      if (!ajStrToken (&strp, tokenhandle, delim))
+    if(!ajStrToken (&strp, tokenhandle, delim))
 	return NULL;
-    }
-  }
 
-  return tmpstrp;
+    cq = strchr(quotes, ajStrChar(strp, 0));
+    if (!cq)				/* no quotes, simple return */
+	return strp;
+
+
+    /* quote found: parse up to closing quote then strip white space */
+
+    (void) ajStrDelReuse (&tmpstrp);
+
+    iquote = cq - quotes;
+    endq[0] = endquotes[iquote];
+    (void) ajStrTrim (&strp, 1);
+
+    while(!done)
+    {
+	if (ajStrSuffixC(strp, endq))
+	{				/* check for trailing quotes */
+	    (void) ajStrTrim(&strp, -1);
+	    done = ajTrue;
+	}
+
+	if (ajStrLen(strp))
+	{
+	    if (ajStrLen(tmpstrp))
+	    {
+		(void) ajStrAppC(&tmpstrp, " ");
+		(void) ajStrApp (&tmpstrp, strp);
+	    }
+	    else
+		(void) ajStrAssS(&tmpstrp, strp);
+	}
+	if (!done)
+	    if (!ajStrToken (&strp, tokenhandle, delim))
+		return NULL;
+    }
+
+    return tmpstrp;
 }
+
 /* @funcstatic acdParseValueRB ************************************************
 **
 ** Uses ajStrTok to complete a (possibly) quoted value.
@@ -1513,64 +1570,69 @@ static AjPStr acdParseValue (AjPStrTok* tokenhandle, char* delim) {
 ** @@
 ******************************************************************************/
 
-static AjPStr acdParseValueRB (AjPStrTok* tokenhandle, char* delim) {
-  static AjPStr strp=NULL;
-  static AjPStr tmpstrp=NULL;
-  char  endq[]=" ";
-  char  endqbr[]=" ]";
-  int iquote;
-  char *cq;
-  AjBool done = ajFalse;
-  AjBool rightb = ajFalse;
+static AjPStr acdParseValueRB (AjPStrTok* tokenhandle, char* delim)
+{
+    static AjPStr strp=NULL;
+    static AjPStr tmpstrp=NULL;
+    char  endq[]=" ";
+    char  endqbr[]=" ]";
+    int iquote;
+    char *cq;
+    AjBool done = ajFalse;
+    AjBool rightb = ajFalse;
 
-  char *quotes = "\"'{(<";
-  char *endquotes = "\"'})>";
+    char *quotes = "\"'{(<";
+    char *endquotes = "\"'})>";
 
-  if (!ajStrToken (&strp, tokenhandle, delim))
-      return NULL;
-
-  cq = strchr(quotes, ajStrChar(strp, 0));
-  if (!cq) {			/* no quotes, simple return */
-    return strp;
-  }
-
-  /* quote found: parse up to closing quote then strip white space */
-
-  (void) ajStrDelReuse (&tmpstrp);
-
-  iquote = cq - quotes;
-  endq[0] = endqbr[0] = endquotes[iquote];
-  (void) ajStrTrim (&strp, 1);
-
-  while (!done) {
-    if (ajStrSuffixC(strp, endq)) {
-      (void) ajStrTrim(&strp, -1);
-      done = ajTrue;
-    }
-
-    if (ajStrSuffixC(strp, endqbr)) {
-      (void) ajStrTrim(&strp, -2);
-      rightb = ajTrue;
-      done = ajTrue;
-    }
-    if (ajStrLen(strp)) {
-      if (ajStrLen(tmpstrp)) {
-	(void) ajStrAppC(&tmpstrp, " ");
-	(void) ajStrApp (&tmpstrp, strp);
-      }
-      else
-	(void) ajStrAssS(&tmpstrp, strp);
-    }
-    if (!done) {
-      if (!ajStrToken (&strp, tokenhandle, delim))
+    if (!ajStrToken (&strp, tokenhandle, delim))
 	return NULL;
+
+    cq = strchr(quotes, ajStrChar(strp, 0));
+    if (!cq)				/* no quotes, simple return */
+	return strp;
+
+
+    /* quote found: parse up to closing quote then strip white space */
+
+    (void) ajStrDelReuse (&tmpstrp);
+
+    iquote = cq - quotes;
+    endq[0] = endqbr[0] = endquotes[iquote];
+    (void) ajStrTrim (&strp, 1);
+
+    while (!done)
+    {
+	if (ajStrSuffixC(strp, endq))
+	{
+	    (void) ajStrTrim(&strp, -1);
+	    done = ajTrue;
+	}
+
+	if (ajStrSuffixC(strp, endqbr))
+	{
+	    (void) ajStrTrim(&strp, -2);
+	    rightb = ajTrue;
+	    done = ajTrue;
+	}
+	if (ajStrLen(strp))
+	{
+	    if (ajStrLen(tmpstrp))
+	    {
+		(void) ajStrAppC(&tmpstrp, " ");
+		(void) ajStrApp (&tmpstrp, strp);
+	    }
+	    else
+		(void) ajStrAssS(&tmpstrp, strp);
+	}
+	if (!done)
+	    if (!ajStrToken (&strp, tokenhandle, delim))
+		return NULL;
     }
-  }
 
-  if (rightb)
-    (void) ajStrAppC(&tmpstrp, "]");
+    if (rightb)
+	(void) ajStrAppC(&tmpstrp, "]");
 
-  return tmpstrp;
+    return tmpstrp;
 }
 
 /* @funcstatic acdIsLeftB *****************************************************
@@ -1582,15 +1644,15 @@ static AjPStr acdParseValueRB (AjPStrTok* tokenhandle, char* delim) {
 ** @@
 ******************************************************************************/
 
-static AjBool acdIsLeftB (AjPStr* pstr) {
+static AjBool acdIsLeftB (AjPStr* pstr)
+{
 
-  if (ajStrChar(*pstr, 0) != '[') {
-    return ajFalse;
-  }
+    if (ajStrChar(*pstr, 0) != '[')
+	return ajFalse;
 
-  (void) ajStrTrim (pstr, 1);
+    (void) ajStrTrim (pstr, 1);
 
-  return ajTrue;
+    return ajTrue;
 }
 
 /* @funcstatic acdIsRightB ****************************************************
@@ -1602,17 +1664,17 @@ static AjBool acdIsLeftB (AjPStr* pstr) {
 ** @@
 ******************************************************************************/
 
-static AjBool acdIsRightB (AjPStr* pstr) {
+static AjBool acdIsRightB (AjPStr* pstr)
+{
 
-  char ch = ajStrChar(*pstr, -1);
+    char ch = ajStrChar(*pstr, -1);
 
-  if (ch != ']') {
-    return ajFalse;
-  }
+    if (ch != ']')
+	return ajFalse;
 
-  (void) ajStrTrim (pstr, -1);
+    (void) ajStrTrim (pstr, -1);
 
-  return ajTrue;
+    return ajTrue;
 }
 
 /* @funcstatic acdNewAppl *****************************************************
@@ -1624,49 +1686,52 @@ static AjBool acdIsRightB (AjPStr* pstr) {
 ** @@
 ******************************************************************************/
 
-static AcdPAcd acdNewAppl (AjPStr name) {
+static AcdPAcd acdNewAppl (AjPStr name)
+{
+    AcdPAcd acd;
+    AcdPAcd qacd;
+    AcdPAcd saveqacd = NULL;
+    AcdPQual quals;
+    static AjPStr qname = NULL;
+    static AjPStr qtype = NULL;
+    static int firstcall = 1;
+    static int ikey;
+    int i;
 
-  AcdPAcd acd;
-  AcdPAcd qacd;
-  AcdPAcd saveqacd = NULL;
-  AcdPQual quals;
-  static AjPStr qname = NULL;
-  static AjPStr qtype = NULL;
-  static int firstcall = 1;
-  static int ikey;
-  int i;
-
-  if (firstcall) {
-    ikey = acdFindKeyC("application");
-    firstcall = 0;
-  }
-
-  i = 0;
-  quals = acdQualAppl;
-  if (quals) {
-    while (quals[i].Name) {
-      (void) ajStrAssC (&qname, quals[i].Name);
-      (void) ajStrAssC (&qtype, quals[i].Type);
-      /*   qacd = acdNewQual (qname, qname, &qtype, o);*/
-      qacd = acdNewQualQual (qname, &qtype);
-      if (*quals[i].Default) {
-	(void) acdSetDefC (qacd, quals[i].Default);
-      }
-      if (!i)
-	saveqacd = qacd;	/* save the location of the first one */
-      i++;
+    if (firstcall)
+    {
+	ikey = acdFindKeyC("application");
+	firstcall = 0;
     }
-  }
 
-  acd = acdNewAcdKey (name, name, ikey);
-  acd->Level = ACD_APPL;
-  if (saveqacd)
-    acd->AssocQuals = saveqacd;
+    i = 0;
+    quals = acdQualAppl;
+    if (quals)
+    {
+	while (quals[i].Name)
+	{
+	    (void) ajStrAssC (&qname, quals[i].Name);
+	    (void) ajStrAssC (&qtype, quals[i].Type);
+	    /*   qacd = acdNewQual (qname, qname, &qtype, o);*/
+	    qacd = acdNewQualQual (qname, &qtype);
+	    if (*quals[i].Default)
+		(void) acdSetDefC (qacd, quals[i].Default);
 
-  (void) ajStrDelReuse (&qname);
-  (void) ajStrDelReuse (&qtype);
+	    if (!i)
+		saveqacd = qacd;  /* save the location of the first one */
+	    i++;
+	}
+    }
 
-  return acd;
+    acd = acdNewAcdKey (name, name, ikey);
+    acd->Level = ACD_APPL;
+    if (saveqacd)
+	acd->AssocQuals = saveqacd;
+
+    (void) ajStrDelReuse (&qname);
+    (void) ajStrDelReuse (&qtype);
+
+    return acd;
 }
 
 /* @funcstatic acdNewVar *****************************************************
@@ -1678,21 +1743,22 @@ static AcdPAcd acdNewAppl (AjPStr name) {
 ** @@
 ******************************************************************************/
 
-static AcdPAcd acdNewVar (AjPStr name) {
+static AcdPAcd acdNewVar (AjPStr name)
+{
+    AcdPAcd acd;
+    static int firstcall = 1;
+    static int ikey;
 
-  AcdPAcd acd;
-  static int firstcall = 1;
-  static int ikey;
+    if (firstcall)
+    {
+	ikey = acdFindKeyC ("variable");
+	firstcall = 0;
+    }
 
-  if (firstcall) {
-    ikey = acdFindKeyC ("variable");
-    firstcall = 0;
-  }
+    acd = acdNewAcdKey(name, name, ikey);
+    acd->Level = ACD_VAR;
 
-  acd = acdNewAcdKey(name, name, ikey);
-  acd->Level = ACD_VAR;
-
-  return acd;
+    return acd;
 }
 
 /* @funcstatic acdNewQual *****************************************************
@@ -1708,59 +1774,61 @@ static AcdPAcd acdNewVar (AjPStr name) {
 ******************************************************************************/
 
 static AcdPAcd acdNewQual (AjPStr name, AjPStr token, AjPStr* type,
-			   int pnum) {
+			   int pnum)
+{
+    AcdPAcd acd;
+    AcdPAcd qacd;
+    AcdPAcd saveqacd = NULL;
+    AcdPQual quals;
+    static AjPStr qname = NULL;
+    static AjPStr qtype = NULL;
+    int itype;
+    int i;
 
-  AcdPAcd acd;
-  AcdPAcd qacd;
-  AcdPAcd saveqacd = NULL;
-  AcdPQual quals;
-  static AjPStr qname = NULL;
-  static AjPStr qtype = NULL;
-  int itype;
-  int i;
-
-  if (!ajStrIsAlpha(name))
-    ajWarn("ACD qualifier '%S' has invalid character(s)", name);
-  if (!ajStrIsAlpha(token)) {
-    if (!ajStrMatch(name, token))
-      ajWarn("ACD token '%S' has invalid character(s)", token);
-  }
-
-  itype = acdFindType (*type);
-  (void) ajStrAssC (type, acdType[itype].Name);
-
-  /* do any associated qualifiers first so they are already complete
-     when we come to the parameter later in processing */
-
-  i = 0;
-  quals = acdType[itype].Quals;	/* any associated qualifiers for itype?  */
-  if (quals) {
-    while (quals[i].Name) {
-      (void) ajStrAssC (&qname, quals[i].Name);
-      (void) ajStrAssC (&qtype, quals[i].Type);
-      qacd = acdNewQualQual (qname, &qtype);
-      if (*quals[i].Default) {
-	(void) acdSetDefC (qacd, quals[i].Default);
-      }
-      if (!i)
-	saveqacd = qacd;	/* save the location of the first one */
-      i++;
+    if (!ajStrIsAlpha(name))
+	ajWarn("ACD qualifier '%S' has invalid character(s)", name);
+    if (!ajStrIsAlpha(token))
+    {
+	if (!ajStrMatch(name, token))
+	    ajWarn("ACD token '%S' has invalid character(s)", token);
     }
-  }
 
-  /* now set up the new parameter, and link in the list of qualifiers
-     (if any) from earlier */
+    itype = acdFindType (*type);
+    (void) ajStrAssC (type, acdType[itype].Name);
 
-  acdTestUnknown (name, token, pnum);
-  acd = acdNewAcd(name, token, itype);
-  acd->Level = ACD_QUAL;
-  if (saveqacd)
-    acd->AssocQuals = saveqacd;
+    /* do any associated qualifiers first so they are already complete
+       when we come to the parameter later in processing */
 
-  (void) ajStrDelReuse (&qname);
-  (void) ajStrDelReuse (&qtype);
+    i = 0;
+    quals = acdType[itype].Quals;	/* any associated qualifiers for itype?  */
+    if (quals)
+    {
+	while (quals[i].Name)
+	{
+	    (void) ajStrAssC (&qname, quals[i].Name);
+	    (void) ajStrAssC (&qtype, quals[i].Type);
+	    qacd = acdNewQualQual (qname, &qtype);
+	    if (*quals[i].Default)
+		(void) acdSetDefC (qacd, quals[i].Default);
+	    if (!i)
+		saveqacd = qacd;	/* save the location of the first one */
+	    i++;
+	}
+    }
 
-  return acd;
+    /* now set up the new parameter, and link in the list of qualifiers
+       (if any) from earlier */
+
+    acdTestUnknown (name, token, pnum);
+    acd = acdNewAcd(name, token, itype);
+    acd->Level = ACD_QUAL;
+    if (saveqacd)
+	acd->AssocQuals = saveqacd;
+
+    (void) ajStrDelReuse (&qname);
+    (void) ajStrDelReuse (&qtype);
+
+    return acd;
 }
 
 /* @funcstatic acdNewQualQual *************************************************
@@ -1773,20 +1841,20 @@ static AcdPAcd acdNewQual (AjPStr name, AjPStr token, AjPStr* type,
 ** @@
 ******************************************************************************/
 
-static AcdPAcd acdNewQualQual (AjPStr name, AjPStr* type) {
+static AcdPAcd acdNewQualQual (AjPStr name, AjPStr* type)
+{
+    AcdPAcd acd;
+    int itype;
 
-  AcdPAcd acd;
-  int itype;
+    itype = acdFindType (*type);
+    (void) ajStrAssC (type, acdType[itype].Name);
 
-  itype = acdFindType (*type);
-  (void) ajStrAssC (type, acdType[itype].Name);
+    acdTestAssoc (name);
+    acd = acdNewAcd(name, name, itype);
+    acd->Level = ACD_QUAL;
+    acd->Assoc = ajTrue;
 
-  acdTestAssoc (name);
-  acd = acdNewAcd(name, name, itype);
-  acd->Level = ACD_QUAL;
-  acd->Assoc = ajTrue;
-
-  return acd;
+    return acd;
 }
 
 /* @funcstatic acdNewAcd ******************************************************
@@ -1802,49 +1870,52 @@ static AcdPAcd acdNewQualQual (AjPStr name, AjPStr* type) {
 ** @@
 ******************************************************************************/
 
-static AcdPAcd acdNewAcd (AjPStr name, AjPStr token, int itype) {
+static AcdPAcd acdNewAcd (AjPStr name, AjPStr token, int itype)
+{
+    int i;
 
-  int i;
+    if (acdListLast)
+	acdListLast = AJNEW0(acdListLast->Next);
+    else {
+	acdListLast = AJNEW0(acdList);
+    }
+    (void) ajStrAssS(&acdListLast->Name, name);
+    (void) ajStrAssS(&acdListLast->Token, token);
+    acdListLast->Type = itype;
 
-  if (acdListLast)
-    acdListLast = AJNEW0(acdListLast->Next);
-  else {
-    acdListLast = AJNEW0(acdList);
-  }
-  (void) ajStrAssS(&acdListLast->Name, name);
-  (void) ajStrAssS(&acdListLast->Token, token);
-  acdListLast->Type = itype;
+    /* we do NAttr and AttrStr explicitly for clarity, */
+    /* though they are 0 and NULL from the AJNEW0 */
 
-  /* we do NAttr and AttrStr explicitly for clarity, */
-  /* though they are 0 and NULL from the AJNEW0 */
+    switch (acdCurrentStage)
+    {
+    case QUAL_STAGE:
+	acdListLast->NAttr = acdAttrCount(itype);
+	break;
+    default:
+	acdListLast->NAttr = 0;
+	break;
+    }
 
-  switch (acdCurrentStage) {
-  case QUAL_STAGE:
-    acdListLast->NAttr = acdAttrCount(itype);
-    break;
-  default:
-    acdListLast->NAttr = 0;
-    break;
-  }
+    if (acdListLast->NAttr)
+    {
+	acdListLast->AttrStr = AJCALLOC (acdListLast->NAttr, sizeof (AjPStr));
+	for (i = 0; i < acdListLast->NAttr; i++)
+	    acdListLast->AttrStr[i] = ajStrNew();
+    }
+    else
+	acdListLast->AttrStr = NULL;
 
-  if (acdListLast->NAttr) {
-    acdListLast->AttrStr = AJCALLOC (acdListLast->NAttr, sizeof (AjPStr));
-    for (i = 0; i < acdListLast->NAttr; i++)
-      acdListLast->AttrStr[i] = ajStrNew();
-  }
-  else
-    acdListLast->AttrStr = NULL;
+    acdListLast->DefStr = AJCALLOC (nDefAttr, sizeof (AjPStr));
+    for (i = 0; i < nDefAttr; i++)
+	acdListLast->DefStr[i] = ajStrNew();
 
-  acdListLast->DefStr = AJCALLOC (nDefAttr, sizeof (AjPStr));
-  for (i = 0; i < nDefAttr; i++)
-    acdListLast->DefStr[i] = ajStrNew();
+    acdListLast->Defined = ajFalse;
+    acdListLast->Assoc = ajFalse;
+    acdListLast->ValStr = ajStrNew();
 
-  acdListLast->Defined = ajFalse;
-  acdListLast->Assoc = ajFalse;
-  acdListLast->ValStr = ajStrNew();
-
-  return acdListLast;
+    return acdListLast;
 }
+
 /* @funcstatic acdNewAcdKey ***************************************************
 **
 ** General constructor for a new ACD general object. Initialises all values
@@ -1858,54 +1929,56 @@ static AcdPAcd acdNewAcd (AjPStr name, AjPStr token, int itype) {
 ** @@
 ******************************************************************************/
 
-static AcdPAcd acdNewAcdKey (AjPStr name, AjPStr token, int ikey) {
+static AcdPAcd acdNewAcdKey (AjPStr name, AjPStr token, int ikey)
+{
+    int i;
 
-  int i;
+    if (acdListLast)
+	acdListLast = AJNEW0(acdListLast->Next);
+    else {
+	acdListLast = AJNEW0(acdList);
+    }
+    acdListLast->Next = NULL;
+    (void) ajStrAssS (&acdListLast->Name, name);
+    (void) ajStrAssS (&acdListLast->Token, token);
+    acdListLast->PNum = 0;
+    acdListLast->Level = ACD_APPL;
+    acdListLast->Type = ikey;
+    switch (acdCurrentStage)
+    {
+    case APPL_STAGE:
+	acdListLast->NAttr = acdAttrKeyCount(ikey);
+	break;
+    case VAR_STAGE:
+	acdListLast->NAttr = acdAttrKeyCount(ikey);
+	break;
+    default:
+	acdListLast->NAttr = 0;
+	break;
+    }
 
-  if (acdListLast)
-    acdListLast = AJNEW0(acdListLast->Next);
-  else {
-    acdListLast = AJNEW0(acdList);
-  }
-  acdListLast->Next = NULL;
-  (void) ajStrAssS (&acdListLast->Name, name);
-  (void) ajStrAssS (&acdListLast->Token, token);
-  acdListLast->PNum = 0;
-  acdListLast->Level = ACD_APPL;
-  acdListLast->Type = ikey;
-  switch (acdCurrentStage) {
-  case APPL_STAGE:
-    acdListLast->NAttr = acdAttrKeyCount(ikey);
-    break;
-  case VAR_STAGE:
-    acdListLast->NAttr = acdAttrKeyCount(ikey);
-    break;
-  default:
-    acdListLast->NAttr = 0;
-    break;
-  }
+    if (acdListLast->NAttr)
+    {
+	acdListLast->AttrStr = AJCALLOC (acdListLast->NAttr, sizeof (AjPStr));
+	for (i = 0; i < acdListLast->NAttr; i++)
+	    acdListLast->AttrStr[i] = ajStrNew();
+    }
+    else
+	acdListLast->AttrStr = NULL;
 
-  if (acdListLast->NAttr) {
-    acdListLast->AttrStr = AJCALLOC (acdListLast->NAttr, sizeof (AjPStr));
-    for (i = 0; i < acdListLast->NAttr; i++)
-      acdListLast->AttrStr[i] = ajStrNew();
-  }
-  else
-    acdListLast->AttrStr = NULL;
+    acdListLast->DefStr = NULL;
 
-  acdListLast->DefStr = NULL;
+    acdListLast->SAttr = 0;
+    acdListLast->SetAttr = NULL;
+    acdListLast->SetStr = NULL;
 
-  acdListLast->SAttr = 0;
-  acdListLast->SetAttr = NULL;
-  acdListLast->SetStr = NULL;
+    acdListLast->Defined = ajFalse;
+    acdListLast->Assoc = ajFalse;
+    acdListLast->AssocQuals = NULL;
+    acdListLast->ValStr = ajStrNew();
+    acdListLast->Value = NULL;
 
-  acdListLast->Defined = ajFalse;
-  acdListLast->Assoc = ajFalse;
-  acdListLast->AssocQuals = NULL;
-  acdListLast->ValStr = ajStrNew();
-  acdListLast->Value = NULL;
-
-  return acdListLast;
+    return acdListLast;
 }
 
 /* @funcstatic acdTestUnknown *************************************************
@@ -1922,21 +1995,22 @@ static AcdPAcd acdNewAcdKey (AjPStr name, AjPStr token, int ikey) {
 ** @@
 ******************************************************************************/
 
-static void acdTestUnknown (AjPStr name, AjPStr token, int pnum) {
+static void acdTestUnknown (AjPStr name, AjPStr token, int pnum)
+{
+    AcdPAcd pa;
 
-  AcdPAcd pa;
+    pa = acdFindAcd (name, token, pnum);
+    if (pa)
+    {
+	if (pnum)
+	    ajFatal ("Name/Token %S%d/%S%d not unique\n",
+		     name, pnum, token, pnum);
+	else
+	    ajFatal ("Name/Token %S/%S not unique\n",
+		     name, token);
+    }
 
-  pa = acdFindAcd (name, token, pnum);
-  if (pa) {
-    if (pnum)
-      ajFatal ("Name/Token %S%d/%S%d not unique\n",
-	       name, pnum, token, pnum);
-    else
-      ajFatal ("Name/Token %S/%S not unique\n",
-	       name, token);
-  }
-
-  return;
+    return;
 }
 
 /* @funcstatic acdTestAssoc ***************************************************
@@ -1951,20 +2025,22 @@ static void acdTestUnknown (AjPStr name, AjPStr token, int pnum) {
 ** @@
 ******************************************************************************/
 
-static void acdTestAssoc (AjPStr name) {
+static void acdTestAssoc (AjPStr name)
+{
+    AcdPAcd pa;
 
-  AcdPAcd pa;
-
-  for (pa=acdList; pa; pa=pa->Next) {
-    if (!pa->Assoc &&
-	ajStrMatch(pa->Name, name) &&
-	ajStrMatch(pa->Token, name)) {
-      ajFatal ("Associated qualifier %S clashes with %S/%S in ACD file\n",
-	       name, pa->Name, pa->Token);
-      break;
+    for (pa=acdList; pa; pa=pa->Next)
+    {
+	if (!pa->Assoc && ajStrMatch(pa->Name, name) &&
+	    ajStrMatch(pa->Token, name))
+	{
+	    ajFatal("Associated qualifier %S clashes with %S/%S in ACD file\n",
+		    name, pa->Name, pa->Token);
+	    break;
+	}
     }
-  }
-  return;
+
+    return;
 }
 
 /* @funcstatic acdFindAcd *****************************************************
@@ -1978,21 +2054,22 @@ static void acdTestAssoc (AjPStr name) {
 ** @@
 ******************************************************************************/
 
-static AcdPAcd acdFindAcd (AjPStr name, AjPStr token, int pnum) {
+static AcdPAcd acdFindAcd (AjPStr name, AjPStr token, int pnum)
+{
+    AcdPAcd pa;
 
-  AcdPAcd pa;
-
-  acdLog ("acdFindAcd ('%S', '%S', %d)\n", name, token, pnum);
-  for (pa=acdList; pa; pa=pa->Next) {
-    if (ajStrMatch(pa->Name, name) && ajStrMatch(pa->Token, token)) {
-      if (!pa->PNum || !pnum || (pa->PNum == pnum)) {
-	acdLog ("..found '%S' %d\n", pa->Name, pa->PNum);
-	return pa;
-      }
+    acdLog ("acdFindAcd ('%S', '%S', %d)\n", name, token, pnum);
+    for (pa=acdList; pa; pa=pa->Next)
+    {
+	if (ajStrMatch(pa->Name, name) && ajStrMatch(pa->Token, token))
+	    if (!pa->PNum || !pnum || (pa->PNum == pnum))
+	    {
+		acdLog ("..found '%S' %d\n", pa->Name, pa->PNum);
+		return pa;
+	    }
     }
-  }
 
-  return NULL;
+    return NULL;
 }
 
 /* @funcstatic acdFindAssoc ***************************************************
@@ -2007,36 +2084,39 @@ static AcdPAcd acdFindAcd (AjPStr name, AjPStr token, int pnum) {
 ** @@
 ******************************************************************************/
 
-static AcdPAcd acdFindAssoc (AcdPAcd thys, AjPStr name) {
+static AcdPAcd acdFindAssoc (AcdPAcd thys, AjPStr name)
+{
+    AcdPAcd pa;
+    int ifound=0;
+    AcdPAcd ret=NULL;
+    static AjPStr ambigList = NULL;
 
-  AcdPAcd pa;
-  int ifound=0;
-  AcdPAcd ret=NULL;
-  static AjPStr ambigList = NULL;
+    (void) ajStrAssC(&ambigList, "");
 
-  (void) ajStrAssC(&ambigList, "");
-
-  for (pa=thys->AssocQuals; pa->Assoc; pa=pa->Next) {
-    if (ajStrPrefix(pa->Name, name)) {
-      if (ajStrMatch(pa->Name, name))
-	return pa;
-      ifound++;
-      ret = pa;
-      acdAmbigApp (&ambigList, pa->Name);
+    for (pa=thys->AssocQuals; pa->Assoc; pa=pa->Next)
+    {
+	if (ajStrPrefix(pa->Name, name))
+	{
+	    if (ajStrMatch(pa->Name, name))
+		return pa;
+	    ifound++;
+	    ret = pa;
+	    acdAmbigApp (&ambigList, pa->Name);
+	}
     }
-  }
 
-  if (ifound == 1)
-    return ret;
-  if (ifound > 1) {
-    ajWarn ("ambiguous name/token %S (%S)", name, ambigList);
-    (void) ajStrDelReuse(&ambigList);
-  }
+    if (ifound == 1)
+	return ret;
+    if (ifound > 1)
+    {
+	ajWarn ("ambiguous name/token %S (%S)", name, ambigList);
+	(void) ajStrDelReuse(&ambigList);
+    }
 
-  ajFatal ("ACD Parsing: Attribute or qualifier %S unknown\n",
-	   name);
+    ajFatal ("ACD Parsing: Attribute or qualifier %S unknown\n",
+	     name);
   
-  return NULL;
+    return NULL;
 }
 
 /* @funcstatic acdTestQualC ***************************************************
@@ -2050,86 +2130,99 @@ static AcdPAcd acdFindAssoc (AcdPAcd thys, AjPStr name) {
 ** @@
 ******************************************************************************/
 
-static AjBool acdTestQualC (char *name) {
+static AjBool acdTestQualC (char *name)
+{
+    static AjPStr  qstr = NULL;
+    static AjPStr  qmaster = NULL;
+    AcdPAcd pa;
+    AcdPAcd qa;
+    AcdPAcd savepa=NULL;
+    int qnum = 0;
+    int i;
+    int ifound=0;
+    static AjPStr ambigList = NULL;
 
-  static AjPStr  qstr = NULL;
-  static AjPStr  qmaster = NULL;
-  AcdPAcd pa;
-  AcdPAcd qa;
-  AcdPAcd savepa=NULL;
-  int qnum = 0;
-  int i;
-  int ifound=0;
-  static AjPStr ambigList = NULL;
+    (void) ajStrAssC(&ambigList, "");
 
-  (void) ajStrAssC(&ambigList, "");
+    ajDebug ("acdTestQualC '%s'\n", name);
 
-  ajDebug ("acdTestQualC '%s'\n", name);
+    if (*name != '-')
+	return ajFalse;
 
-  if (*name != '-')
+    (void) ajStrAssC (&qstr, name+1);
+
+    i = ajStrFindC(qstr, "=");		/* qualifier with value */
+    if (i > 0)
+	(void) ajStrSub(&qstr, 0, i-1);	/* strip any value and keep testing */
+
+    acdQualParse (&qstr, &qmaster, &qnum);
+
+    if (ajStrLen(qmaster))
+    {
+	for (pa=acdList; pa; pa=pa->Next)
+	{
+	    if (ajStrMatch (pa->Name, qmaster))
+	    {
+		ajDebug ("  *master matched* '%S'\n", pa->Name);
+		qa = acdFindAssoc(pa, qstr);
+		if (qa)
+		    return ajTrue;
+		else
+		    return ajFalse;
+	    }
+	}
+	if (ajStrPrefix (pa->Name, qstr))
+	{
+	    ifound++;
+	    savepa = pa;
+	    acdAmbigApp (&ambigList, pa->Name);
+	}
+	ajDebug ("   ifound: %d\n", ifound);
+
+	if (ifound == 1)
+	{
+	    qa = acdFindAssoc(savepa, qstr);
+	    if (qa)
+		return ajTrue;
+	    else
+		return ajFalse;
+	}
+
+	if (ifound > 1)
+	{
+	    ajWarn ("ambiguous master qualifier %s (%S)", name, ambigList);
+	    (void) ajStrDelReuse(&ambigList);
+	}
+    }
+    else
+    {
+	for (pa=acdList; pa; pa=pa->Next)
+	{
+	    if (ajStrMatch (pa->Name, qstr))
+	    {
+		ajDebug ("   *matched* '%S'\n", pa->Name);
+		return ajTrue;
+	    }
+	    if (ajStrPrefix (pa->Name, qstr))
+	    {
+		ifound++;
+		acdAmbigApp (&ambigList, pa->Name);
+	    }
+	}
+
+	ajDebug ("   ifound: %d\n", ifound);
+
+	if (ifound == 1)
+	    return ajTrue;
+
+	if (ifound > 1)
+	{
+	    ajWarn ("ambiguous qualifier %s (%S)", name, ambigList);
+	    (void) ajStrDelReuse(&ambigList);
+	}
+    }
+
     return ajFalse;
-
-  (void) ajStrAssC (&qstr, name+1);
-
-  i = ajStrFindC(qstr, "=");	/* qualifier with value */
-  if (i > 0)
-    (void) ajStrSub(&qstr, 0, i-1);	/* strip any value and keep testing */
-
-  acdQualParse (&qstr, &qmaster, &qnum);
-
-  if (ajStrLen(qmaster)) {
-    for (pa=acdList; pa; pa=pa->Next) {
-      if (ajStrMatch (pa->Name, qmaster)) {
-	ajDebug ("  *master matched* '%S'\n", pa->Name);
-	qa = acdFindAssoc(pa, qstr);
-	if (qa) return ajTrue;
-	else return ajFalse;
-      }
-    }
-    if (ajStrPrefix (pa->Name, qstr)) {
-      ifound++;
-      savepa = pa;
-      acdAmbigApp (&ambigList, pa->Name);
-    }
-   ajDebug ("   ifound: %d\n", ifound);
-
-   if (ifound == 1) {
-     qa = acdFindAssoc(savepa, qstr);
-     if (qa) return ajTrue;
-     else return ajFalse;
-   }
-
-    if (ifound > 1) {
-      ajWarn ("ambiguous master qualifier %s (%S)", name, ambigList);
-      (void) ajStrDelReuse(&ambigList);
-    }
-  }
-
-  else {
-
-    for (pa=acdList; pa; pa=pa->Next) {
-      if (ajStrMatch (pa->Name, qstr)) {
-	ajDebug ("   *matched* '%S'\n", pa->Name);
-	return ajTrue;
-      }
-      if (ajStrPrefix (pa->Name, qstr)) {
-	ifound++;
-	acdAmbigApp (&ambigList, pa->Name);
-      }
-    }
-
-    ajDebug ("   ifound: %d\n", ifound);
-
-    if (ifound == 1)
-      return ajTrue;
-
-    if (ifound > 1) {
-      ajWarn ("ambiguous qualifier %s (%S)", name, ambigList);
-      (void) ajStrDelReuse(&ambigList);
-    }
-  }
-
-  return ajFalse;
 }
 
 /* @funcstatic acdFindType ****************************************************
@@ -2144,33 +2237,36 @@ static AjBool acdTestQualC (char *name) {
 ** @@
 ******************************************************************************/
 
-static int acdFindType (AjPStr type) {
+static int acdFindType (AjPStr type)
+{
+    int i;
+    int ifound=0;
+    int j=0;
+    static AjPStr ambigList = NULL;
 
-  int i;
-  int ifound=0;
-  int j=0;
-  static AjPStr ambigList = NULL;
+    (void) ajStrAssC(&ambigList, "");
 
-  (void) ajStrAssC(&ambigList, "");
-
-  for (i=0; acdType[i].Name; i++) {
-    if (ajStrMatchC (type, acdType[i].Name))
-      return i;
-    if (ajStrPrefixCO (acdType[i].Name, type)) {
-      ifound++;
-      j = i;
-      acdAmbigAppC (&ambigList, acdType[i].Name);
+    for (i=0; acdType[i].Name; i++)
+    {
+	if (ajStrMatchC (type, acdType[i].Name))
+	    return i;
+	if (ajStrPrefixCO (acdType[i].Name, type))
+	{
+	    ifound++;
+	    j = i;
+	    acdAmbigAppC (&ambigList, acdType[i].Name);
+	}
     }
-  }
 
-  if (ifound > 1) {
-    ajWarn ("ambiguous type %S (%S)", type, ambigList);
-    (void) ajStrDelReuse(&ambigList);
-  }
-  if (ifound != 1)
-    ajFatal ("unknown type: '%S'\n", type);
+    if (ifound > 1)
+    {
+	ajWarn ("ambiguous type %S (%S)", type, ambigList);
+	(void) ajStrDelReuse(&ambigList);
+    }
+    if (ifound != 1)
+	ajFatal ("unknown type: '%S'\n", type);
 
-  return j;
+    return j;
 }
 
 /* @funcstatic acdFindTypeC ***************************************************
@@ -2185,34 +2281,37 @@ static int acdFindType (AjPStr type) {
 ** @@
 ******************************************************************************/
 
-static int acdFindTypeC (char* type) {
+static int acdFindTypeC (char* type)
+{
+    int i;
+    int ifound=0;
+    int j=0;
+    int ilen = strlen(type);
+    static AjPStr ambigList = NULL;
 
-  int i;
-  int ifound=0;
-  int j=0;
-  int ilen = strlen(type);
-  static AjPStr ambigList = NULL;
+    (void) ajStrAssC(&ambigList, "");
 
-  (void) ajStrAssC(&ambigList, "");
-
-  for (i=0; acdType[i].Name; i++) {
-    if (!strcmp (type, acdType[i].Name))
-      return i;
-    if (strncmp (acdType[i].Name, type, ilen)) {
-      ifound++;
-      j = i;
-      acdAmbigAppC (&ambigList, acdType[i].Name);
+    for (i=0; acdType[i].Name; i++)
+    {
+	if (!strcmp (type, acdType[i].Name))
+	    return i;
+	if (strncmp (acdType[i].Name, type, ilen))
+	{
+	    ifound++;
+	    j = i;
+	    acdAmbigAppC (&ambigList, acdType[i].Name);
+	}
     }
-  }
 
-  if (ifound > 1) {
-    ajWarn ("ambiguous type %s (%S)", type, ambigList);
-    (void) ajStrDelReuse(&ambigList);
-  }
-  if (ifound != 1)
-    ajFatal ("unknown type: '%s'\n", type);
+    if (ifound > 1)
+    {
+	ajWarn ("ambiguous type %s (%S)", type, ambigList);
+	(void) ajStrDelReuse(&ambigList);
+    }
+    if (ifound != 1)
+	ajFatal ("unknown type: '%s'\n", type);
 
-  return j;
+    return j;
 }
 
 /* #funcstatic acdFindKey *****************************************************
@@ -2268,34 +2367,37 @@ static int acdFindTypeC (char* type) {
 ** @@
 ******************************************************************************/
 
-static int acdFindKeyC (char* key) {
+static int acdFindKeyC (char* key)
+{
+    int i;
+    int ifound=0;
+    int j=0;
+    int ilen = strlen(key);
+    static AjPStr ambigList = NULL;
 
-  int i;
-  int ifound=0;
-  int j=0;
-  int ilen = strlen(key);
-  static AjPStr ambigList = NULL;
+    (void) ajStrAssC(&ambigList, "");
 
-  (void) ajStrAssC(&ambigList, "");
-
-  for (i=0; acdKeywords[i].Name; i++) {
-    if (!strcmp (key, acdKeywords[i].Name))
-      return i;
-    if (strncmp (acdKeywords[i].Name, key, ilen)) {
-      ifound++;
-      j = i;
-      acdAmbigAppC (&ambigList, acdKeywords[i].Name);
+    for (i=0; acdKeywords[i].Name; i++)
+    {
+	if (!strcmp (key, acdKeywords[i].Name))
+	    return i;
+	if (strncmp (acdKeywords[i].Name, key, ilen))
+	{
+	    ifound++;
+	    j = i;
+	    acdAmbigAppC (&ambigList, acdKeywords[i].Name);
+	}
     }
-  }
 
-  if (ifound > 1) {
-    ajWarn ("ambiguous keyword %s (%S)",key, ambigList);
-    (void) ajStrDelReuse(&ambigList);
-  }
-  if (ifound != 1)
-    ajFatal ("unknown keyword: '%s'\n", key);
+    if (ifound > 1)
+    {
+	ajWarn ("ambiguous keyword %s (%S)",key, ambigList);
+	(void) ajStrDelReuse(&ambigList);
+    }
+    if (ifound != 1)
+	ajFatal ("unknown keyword: '%s'\n", key);
 
-  return j;
+    return j;
 }
 
 /*===========================================================================*/
@@ -2315,23 +2417,25 @@ static int acdFindKeyC (char* key) {
 ** @@
 ******************************************************************************/
 
-static AjBool acdReplyInit (AcdPAcd thys, char *defval, AjPStr* reply) {
+static AjBool acdReplyInit (AcdPAcd thys, char *defval, AjPStr* reply)
+{
+    AjPStr def;
 
-  AjPStr def;
-
-  if (thys->DefStr) {
-    def = thys->DefStr[DEF_DEFAULT];
-    if (ajStrLen(def)) {
-      (void) ajStrAssS(reply, def);
-      (void) acdVarResolve(reply);
-      return ajTrue;
+    if (thys->DefStr)
+    {
+	def = thys->DefStr[DEF_DEFAULT];
+	if (ajStrLen(def))
+	{
+	    (void) ajStrAssS(reply, def);
+	    (void) acdVarResolve(reply);
+	    return ajTrue;
+	}
     }
-  }
 
-  (void) ajStrAssC (reply, defval);
-  (void) ajStrAssC (&thys->DefStr[DEF_DEFAULT], defval);
+    (void) ajStrAssC (reply, defval);
+    (void) ajStrAssC (&thys->DefStr[DEF_DEFAULT], defval);
 
-  return ajFalse;
+    return ajFalse;
 }
 
 /* @funcstatic acdUserGet *****************************************************
@@ -2357,70 +2461,71 @@ static AjBool acdReplyInit (AcdPAcd thys, char *defval, AjPStr* reply) {
 ** @@
 ******************************************************************************/
 
-static AjBool acdUserGet (AcdPAcd thys, AjPStr* reply) {
+static AjBool acdUserGet (AcdPAcd thys, AjPStr* reply)
+{
+    static AjPStr msg = NULL;
+    AjBool ret = ajFalse;
 
-  static AjPStr msg = NULL;
-  AjBool ret = ajFalse;
+    AjPStr prompt;
+    AjPStr info;
+    AjPStr code;
+    AjPStr help;
 
-  AjPStr prompt;
-  AjPStr info;
-  AjPStr code;
-  AjPStr help;
+    static AjPStr defreply=NULL;
 
-  static AjPStr defreply=NULL;
+    ajDebug ("acdUserGet '%S' reply '%S'\n", thys->Name, *reply);
 
-  ajDebug ("acdUserGet '%S' reply '%S'\n", thys->Name, *reply);
+    if (thys->DefStr && !acdAuto)
+    {
+	prompt = thys->DefStr[DEF_PROMPT];
+	info = thys->DefStr[DEF_INFO];
+	code = thys->DefStr[DEF_CODE];
+	help = thys->DefStr[DEF_HELP];
 
-  if (thys->DefStr && !acdAuto) {
+	(void) ajStrAssS(&defreply, *reply);
 
-    prompt = thys->DefStr[DEF_PROMPT];
-    info = thys->DefStr[DEF_INFO];
-    code = thys->DefStr[DEF_CODE];
-    help = thys->DefStr[DEF_HELP];
+	if (ajStrLen(code))
+	    (void) acdCodeGet (code, &msg);
 
-    (void) ajStrAssS(&defreply, *reply);
+	else if (ajStrLen(prompt))
+	    (void) ajStrAssS (&msg, prompt);
 
-    if (ajStrLen(code))
-      (void) acdCodeGet (code, &msg);
+	else if (ajStrLen(info))
+	    (void) ajStrAssS (&msg, info);
 
-    else if (ajStrLen(prompt))
-      (void) ajStrAssS (&msg, prompt);
+	else if (ajStrLen(help))
+	    (void) ajStrAssS (&msg, help);
 
-    else if (ajStrLen(info))
-      (void) ajStrAssS (&msg, info);
+	else
+	{
+	    if (!acdCodeDef (thys, &msg))
+	    {
+		(void) ajStrAssCL(&msg, "", 512);
+		(void) ajFmtPrintS (&msg, "-%S : enter %s value",
+				    thys->Name, acdType[thys->Type].Name);
+	    }
+	}
 
-    else if (ajStrLen(help))
-      (void) ajStrAssS (&msg, help);
+	(void) acdVarResolve(&msg);
 
-    else {
-      if (!acdCodeDef (thys, &msg)) {
-	(void) ajStrAssCL(&msg, "", 512);
-	(void) ajFmtPrintS (&msg, "-%S : enter %s value",
-			    thys->Name, acdType[thys->Type].Name);
-      }
+	(void) ajDebug ("acdUserGet '%S' defreply '%S' msg '%S'\n",
+			thys->Name, defreply, msg);
+
+	if (ajStrLen(defreply))
+	    ret = ajUserGet (reply, "%S [%S]: ", msg, defreply);
+	else
+	    ret = ajUserGet (reply, "%S: ", msg);
+	if (!ret)
+	    (void) ajStrAssS (reply, defreply);
     }
-
-    (void) acdVarResolve(&msg);
-
-    (void) ajDebug ("acdUserGet '%S' defreply '%S' msg '%S'\n",
-	     thys->Name, defreply, msg);
-
-    if (ajStrLen(defreply))
-      ret = ajUserGet (reply, "%S [%S]: ", msg, defreply);
-    else
-      ret = ajUserGet (reply, "%S: ", msg);
-    if (!ret) {
-      (void) ajStrAssS (reply, defreply);
-    }
-  }
   
-  if (ajStrLen(*reply))
-    ret = ajTrue;
+    if (ajStrLen(*reply))
+	ret = ajTrue;
 
-  (void) ajStrDelReuse (&msg);
-  (void) ajStrDelReuse (&defreply);
+    (void) ajStrDelReuse (&msg);
+    (void) ajStrDelReuse (&defreply);
 
-  return ret;
+    return ret;
 }
 
 /* @funcstatic acdUserGetPrompt ***********************************************
@@ -2441,30 +2546,29 @@ static AjBool acdUserGet (AcdPAcd thys, AjPStr* reply) {
 ** @@
 ******************************************************************************/
 
-static AjBool acdUserGetPrompt (char* prompt, AjPStr* reply) {
+static AjBool acdUserGetPrompt (char* prompt, AjPStr* reply)
+{
+    AjBool ret = ajFalse;
 
-  AjBool ret = ajFalse;
+    static AjPStr defreply=NULL;
 
-  static AjPStr defreply=NULL;
-
-  if (!acdAuto) {
-
-    (void) ajStrAssS(&defreply, *reply);
-    if (ajStrLen(defreply))
-      ret = ajUserGet (reply, "    %s [%S]: ", prompt, defreply);
-    else
-      ret = ajUserGet (reply, "    %s: ", prompt);
-    if (!ret) {
-      (void) ajStrAssS (reply, defreply);
+    if (!acdAuto)
+    {
+	(void) ajStrAssS(&defreply, *reply);
+	if (ajStrLen(defreply))
+	    ret = ajUserGet (reply, "    %s [%S]: ", prompt, defreply);
+	else
+	    ret = ajUserGet (reply, "    %s: ", prompt);
+	if (!ret)
+	    (void) ajStrAssS (reply, defreply);
     }
-  }
 
-  if (ajStrLen(*reply))
-    ret = ajTrue;
+    if (ajStrLen(*reply))
+	ret = ajTrue;
 
-  (void) ajStrDelReuse (&defreply);
+    (void) ajStrDelReuse (&defreply);
 
-  return ret;
+    return ret;
 }
 
 /* @funcstatic acdBadRetry ***************************************************
@@ -2476,9 +2580,10 @@ static AjBool acdUserGetPrompt (char* prompt, AjPStr* reply) {
 ** @@
 ******************************************************************************/
 
-static void acdBadRetry (AcdPAcd thys) {
+static void acdBadRetry (AcdPAcd thys)
+{
     ajDie ("%S terminated: Bad value for '-%S' and no more retries\n",
-	     acdProgram, thys->Name);
+	   acdProgram, thys->Name);
 }
 
 /* @funcstatic acdBadVal ******************************************************
@@ -2495,28 +2600,28 @@ static void acdBadRetry (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-static void acdBadVal (AcdPAcd thys, AjBool required, char *fmt, ...) {
+static void acdBadVal (AcdPAcd thys, AjBool required, char *fmt, ...)
+{
+    va_list args;
+    static AjPStr msg = NULL;
+    static AjPStr name = NULL;
 
-  va_list args;
-  static AjPStr msg = NULL;
-  static AjPStr name = NULL;
-
-  ajStrAssC(&name,ajStrStr(thys->Name));
+    ajStrAssC(&name,ajStrStr(thys->Name));
   
-  (void) ajFmtPrintS(&msg, "option -%S: %s", name, fmt);
-  va_start (args, fmt) ;
-  ajVErr (ajStrStr(msg), args);
-  va_end (args) ;
+    (void) ajFmtPrintS(&msg, "option -%S: %s", name, fmt);
+    va_start (args, fmt) ;
+    ajVErr (ajStrStr(msg), args);
+    va_end (args) ;
 
-  if (!required)
-    ajDie ("%S terminated: Bad value for option and no prompt\n",
-	     acdProgram);
+    if (!required)
+	ajDie ("%S terminated: Bad value for option and no prompt\n",
+	       acdProgram);
 
-  if (acdAuto)
-    ajDie ("%S terminated: Bad value with -auto defined.\n",
-	     acdProgram);
+    if (acdAuto)
+	ajDie ("%S terminated: Bad value with -auto defined.\n",
+	       acdProgram);
 
-  return;
+    return;
 }
 
 /* @funcstatic acdSetXxxx *****************************************************
@@ -2541,37 +2646,38 @@ static void acdBadVal (AcdPAcd thys, AjBool required, char *fmt, ...) {
 ** @@
 ******************************************************************************/
 
-static void acdSetXxxx (AcdPAcd thys) {
+static void acdSetXxxx (AcdPAcd thys)
+{
+    AjPStr val;
 
-  AjPStr val;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    AjPStr reply = NULL;
+    int itry;
 
-  AjBool required = ajFalse;
-  AjBool ok = ajFalse;
-  AjPStr reply = NULL;
-  int itry;
+    /* create storage for val if needed, e.g. with AJNEW0(val) */
 
-  /* create storage for val if needed, e.g. with AJNEW0(val) */
+    val = NULL;				/* set a default value */
 
-  val = NULL;			/* set a default value */
+    required = acdIsRequired(thys);
+    (void) acdReplyInit (thys, "", &reply);
 
-  required = acdIsRequired(thys);
-  (void) acdReplyInit (thys, "", &reply);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
 
-  for (itry=acdPromptTry; itry && !ok; itry--) {
+	if (required)			/* need to prompt? */
+	    (void) acdUserGet (thys, &reply);
 
-    if (required)  /* need to prompt? */
-      (void) acdUserGet (thys, &reply);
+	ok = ajTrue;			/* test the value somehow */
+    }
+    if (!ok)
+	acdBadRetry (thys);
 
-    ok = ajTrue; /* test the value somehow */
-  }
-  if (!ok)
-    acdBadRetry (thys);
+    (void) ajStrAssS(&val, reply);	/* use the validated reply */
+    thys->Value = val;			/* set the value */
+    (void) ajStrAssS (&thys->ValStr, val); /* set the string value */
 
-  (void) ajStrAssS(&val, reply);	/* use the validated reply */
-  thys->Value = val;			/* set the value */
-  (void) ajStrAssS (&thys->ValStr, val); /* set the string value */
-
-  return;
+    return;
 }
 
 /* @funcstatic acdSetAppl *****************************************************
@@ -2592,18 +2698,20 @@ static void acdSetXxxx (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-static void acdSetAppl (AcdPAcd thys) {
+static void acdSetAppl (AcdPAcd thys)
+{
 
-  static AjPStr appldoc = NULL;
+    static AjPStr appldoc = NULL;
 
-  (void) acdAttrResolve (thys, "documentation", &appldoc);
+    (void) acdAttrResolve (thys, "documentation", &appldoc);
 
-  if (!acdAuto && ajStrLen(appldoc)) {
-    (void) ajStrWrapLeft (&appldoc, 75, 0);
-    ajUser("%S", appldoc);
-  }
+    if (!acdAuto && ajStrLen(appldoc))
+    {
+	(void) ajStrWrapLeft (&appldoc, 75, 0);
+	ajUser("%S", appldoc);
+    }
 
-  return;
+    return;
 }
 
 /* @funcstatic acdSetVar *****************************************************
@@ -2622,14 +2730,15 @@ static void acdSetAppl (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-static void acdSetVar (AcdPAcd thys) {
+static void acdSetVar (AcdPAcd thys)
+{
 
-  if (thys->DefStr)
-    (void) ajStrAssS (&thys->ValStr, thys->DefStr[DEF_DEFAULT]);
+    if (thys->DefStr)
+	(void) ajStrAssS (&thys->ValStr, thys->DefStr[DEF_DEFAULT]);
 
-  (void) acdVarResolve (&thys->ValStr);
+    (void) acdVarResolve (&thys->ValStr);
 
-  return;
+    return;
 }
 
 /* @func ajAcdGetArray ********************************************************
@@ -2644,9 +2753,9 @@ static void acdSetVar (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-AjPFloat ajAcdGetArray (char *token) {
-
-  return acdGetValue (token, "array");
+AjPFloat ajAcdGetArray (char *token)
+{
+    return acdGetValue (token, "array");
 }
 
 /* @funcstatic acdSetArray ****************************************************
@@ -2669,115 +2778,123 @@ AjPFloat ajAcdGetArray (char *token) {
 ** @@
 ******************************************************************************/
 
-static void acdSetArray (AcdPAcd thys) {
+static void acdSetArray (AcdPAcd thys)
+{
+    AjPFloat val;
 
-  AjPFloat val;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    int itry;
+    AjBool warnrange;
 
-  AjBool required = ajFalse;
-  AjBool ok = ajFalse;
-  static AjPStr defreply = NULL;
-  static AjPStr reply = NULL;
-  int itry;
-  AjBool warnrange;
+    float fmin;
+    float fmax;
+    int precision;
+    int size;
+    float sum;
+    float tolerance;
+    float fdef;
+    float ftol;
+    float ftot;
+    static AjPStr deflist = NULL;
+    int i;
+    float* array;
 
-  float fmin;
-  float fmax;
-  int precision;
-  int size;
-  float sum;
-  float tolerance;
-  float fdef;
-  float ftol;
-  float ftot;
-  static AjPStr deflist = NULL;
-  int i;
-  float* array;
+    (void) acdAttrToFloat (thys, "minimum", -FLT_MAX, &fmin);
+    acdLog ("minimum: %e\n", fmin);
 
-  (void) acdAttrToFloat (thys, "minimum", -FLT_MAX, &fmin);
-  acdLog ("minimum: %e\n", fmin);
+    (void) acdAttrToFloat (thys, "maximum", FLT_MAX, &fmax);
+    acdLog ("maximum: %e\n", fmax);
 
-  (void) acdAttrToFloat (thys, "maximum", FLT_MAX, &fmax);
-  acdLog ("maximum: %e\n", fmax);
+    (void) acdAttrToFloat (thys, "sum", 1.0, &sum);
+    acdLog ("sum: %e\n", sum);
 
-  (void) acdAttrToFloat (thys, "sum", 1.0, &sum);
-  acdLog ("sum: %e\n", sum);
+    (void) acdAttrToFloat (thys, "tolerance", 0.01, &tolerance);
+    acdLog ("tolerance: %e\n", tolerance);
 
-  (void) acdAttrToFloat (thys, "tolerance", 0.01, &tolerance);
-  acdLog ("tolerance: %e\n", tolerance);
+    (void) acdAttrToInt (thys, "precision", 3, &precision);
+    acdLog ("precision: %d\n", precision);
 
-  (void) acdAttrToInt (thys, "precision", 3, &precision);
-  acdLog ("precision: %d\n", precision);
+    (void) acdAttrToBool (thys, "warnrange", ajTrue, &warnrange);
+    acdLog ("warnrange: %B\n", warnrange);
 
-  (void) acdAttrToBool (thys, "warnrange", ajTrue, &warnrange);
-  acdLog ("warnrange: %B\n", warnrange);
+    (void) acdAttrToInt (thys, "size", 1, &size);
+    acdLog ("size: %d\n", size);
+    if (size < 1)
+	ajFatal ("Array size %d less than 1", size);
 
-  (void) acdAttrToInt (thys, "size", 1, &size);
-  acdLog ("size: %d\n", size);
-  if (size < 1)
-    ajFatal ("Array size %d less than 1", size);
+    fdef = sum / ((float) size);
 
-  fdef = sum / ((float) size);
+    for (i=0; i < size; i++)
+    {
+	if (i)
+	    ajStrAppK (&deflist, ' ');
+	ajFmtPrintAppS (&deflist, "%.*f", precision, fdef);
+    }
 
-  for (i=0; i < size; i++) {
-    if (i)
-      ajStrAppK (&deflist, ' ');
-    ajFmtPrintAppS (&deflist, "%.*f", precision, fdef);
-  }
+    val = ajFloatNew();			/* create storage for the result */
 
-  val = ajFloatNew();	/* create storage for the result */
+    required = acdIsRequired(thys);
+    (void) acdReplyInit (thys, ajStrStr(deflist), &defreply);
 
-  required = acdIsRequired(thys);
-  (void) acdReplyInit (thys, ajStrStr(deflist), &defreply);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	(void) ajStrAssS (&reply, defreply);
 
-  for (itry=acdPromptTry; itry && !ok; itry--) {
+	if (required)
+	    (void) acdUserGet (thys, &reply);
 
-    (void) ajStrAssS (&reply, defreply);
+	ok = ajFloatParse(reply, &val);
+	if (!ok)
+	    acdBadVal (thys, required,
+		       "Invalid array value '%S', please try again",
+		       reply);
 
-    if (required)
-      (void) acdUserGet (thys, &reply);
+	array = ajFloatFloat(val);
+	ftot = 0.0;
+	for (i=0; i< size; i++)
+	{
+	    if (array[i] < fmin)
+	    {				/* reset within limits */
+		if (warnrange)
+		    ajWarn("floating point value [%d] out of range %.*f "
+			   "less than %.*f\n",
+			   i+1, precision, array[i], precision, fmin);
+		array[i] = fmin;
+	    }
 
-    ok = ajFloatParse(reply, &val);
+	    if (array[i] > fmax)
+	    {
+		if (warnrange)
+		    ajWarn("floating point value [%d] out of range %.*f "
+			   "more than %.*f\n",
+			   i+1, precision, array[i], precision, fmax);
+		array[i] = fmax;
+	    }
+	    ftot += array[i];
+	}
+
+	ftol = (float) fabs (ftot -sum);
+	if (ftol > tolerance)
+	{
+	    ajWarn ("Bad total %.*f, required total is %.*f with "
+		    "tolerance %.*f",
+		    precision, ftot, precision, sum,precision, tolerance);
+	    acdBadVal (thys, required,
+		       "Invalid array value '%S', please try again",
+		       reply);
+	    ok = ajFalse;
+	}
+    }
     if (!ok)
-      acdBadVal (thys, required,
-		 "Invalid array value '%S', please try again",
-		 reply);
+	acdBadRetry (thys);
 
-    array = ajFloatFloat(val);
-    ftot = 0.0;
-    for (i=0; i< size; i++) {
-      if (array[i] < fmin) { 	/* reset within limits */
-	if (warnrange)
-	  ajWarn("floating point value [%d] out of range %.*f less than %.*f\n",
-		 i+1, precision, array[i], precision, fmin);
-	array[i] = fmin;
-      }
+    thys->Value = val;
+    (void) ajFloatStr(&thys->ValStr, val, precision);
 
-      if (array[i] > fmax) {
-	if (warnrange)
-	  ajWarn("floating point value [%d] out of range %.*f more than %.*f\n",
-		 i+1, precision, array[i], precision, fmax);
-	array[i] = fmax;
-      }
-      ftot += array[i];
-    }
-
-    ftol = (float) fabs (ftot -sum);
-    if (ftol > tolerance) {
-      ajWarn ("Bad total %.*f, required total is %.*f with tolerance %.*f",
-	      precision, ftot, precision, sum,precision, tolerance);
-      acdBadVal (thys, required,
-		 "Invalid array value '%S', please try again",
-		 reply);
-      ok = ajFalse;
-    }
-  }
-  if (!ok)
-    acdBadRetry (thys);
-
-  thys->Value = val;
-  (void) ajFloatStr(&thys->ValStr, val, precision);
-
-  return;
+    return;
 }
 
 /* @func ajAcdGetBool *********************************************************
@@ -2792,11 +2909,12 @@ static void acdSetArray (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-AjBool ajAcdGetBool (char *token) {
-  AjBool* val;
+AjBool ajAcdGetBool (char *token)
+{
+    AjBool* val;
 
-  val = acdGetValue (token, "bool");
-  return *val;
+    val = acdGetValue (token, "bool");
+    return *val;
 }
 
 /* @funcstatic acdSetBool *****************************************************
@@ -2816,50 +2934,50 @@ AjBool ajAcdGetBool (char *token) {
 ** @@
 ******************************************************************************/
 
-static void acdSetBool (AcdPAcd thys) {
+static void acdSetBool (AcdPAcd thys)
+{
+    AjBool* val;
 
-  AjBool* val;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    int itry;
 
-  AjBool required = ajFalse;
-  AjBool ok = ajFalse;
-  static AjPStr defreply = NULL;
-  static AjPStr reply = NULL;
-  int itry;
+    AJNEW0(val);			/* create storage for the result */
 
-  AJNEW0(val);			/* create storage for the result */
+    *val = ajFalse;			/* set the default value */
 
-  *val = ajFalse;		/* set the default value */
+    required = acdIsRequired(thys);
+    (void) acdReplyInit (thys, "N", &defreply);
 
-  required = acdIsRequired(thys);
-  (void) acdReplyInit (thys, "N", &defreply);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	(void) ajStrAssS (&reply, defreply);
 
-  for (itry=acdPromptTry; itry && !ok; itry--) {
-
-    (void) ajStrAssS (&reply, defreply);
-
-    if (required)
-      (void) acdUserGet (thys, &reply);
+	if (required)
+	    (void) acdUserGet (thys, &reply);
     
-    ok = ajStrToBool(reply, val);
+	ok = ajStrToBool(reply, val);
+	if (!ok)
+	    acdBadVal (thys, required, "Invalid Y/N value '%S'", reply);
+    }
     if (!ok)
-      acdBadVal (thys, required, "Invalid Y/N value '%S'", reply);
-  }
-  if (!ok)
-    acdBadRetry (thys);
+	acdBadRetry (thys);
 
-  thys->Value = val;
-  (void) ajStrAssC(&thys->ValStr, ajStrBool(*val));
+    thys->Value = val;
+    (void) ajStrAssC(&thys->ValStr, ajStrBool(*val));
 
-  (void) acdSetQualAppl (thys, *val);	/* check special application
+    (void) acdSetQualAppl (thys, *val);	/* check special application
 					   booleans */
 
-  if (ajStrMatchC(thys->Name, "help"))
-    acdHelp();
+    if (ajStrMatchC(thys->Name, "help"))
+	acdHelp();
 
-  if (ajStrMatchC(thys->Name, "acdpretty") && *val)
-    ajExit();
+    if (ajStrMatchC(thys->Name, "acdpretty") && *val)
+	ajExit();
 
-  return;
+    return;
 }
 
 
@@ -2875,9 +2993,9 @@ static void acdSetBool (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-AjPCod ajAcdGetCodon (char *token) {
-
-  return acdGetValue (token, "codon");
+AjPCod ajAcdGetCodon (char *token)
+{
+    return acdGetValue (token, "codon");
 }
 
 
@@ -2902,57 +3020,61 @@ AjPCod ajAcdGetCodon (char *token) {
 ** @@
 ******************************************************************************/
 
-static void acdSetCodon (AcdPAcd thys) {
+static void acdSetCodon (AcdPAcd thys)
+{
+    AjPCod val;
 
-  AjPCod val;
+    AjPStr name=NULL;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    int itry;
 
-  AjPStr name=NULL;
-  AjBool required = ajFalse;
-  AjBool ok = ajFalse;
-  static AjPStr defreply = NULL;
-  static AjPStr reply = NULL;
-  int itry;
-
-  val = ajCodNew();		/* set the default value */
-  (void) acdAttrResolve (thys, "name", &name);
-  if(!ajStrLen(name))
-      (void) ajStrAssC(&name,DEFCODON);
+    val = ajCodNew();			/* set the default value */
+    (void) acdAttrResolve (thys, "name", &name);
+    if(!ajStrLen(name))
+	(void) ajStrAssC(&name,DEFCODON);
   
-  required = acdIsRequired(thys);
+    required = acdIsRequired(thys);
 
-  (void) acdReplyInit (thys, ajStrStr(name), &defreply);
-  acdPromptCodon (thys);
+    (void) acdReplyInit (thys, ajStrStr(name), &defreply);
+    acdPromptCodon (thys);
 
-  for (itry=acdPromptTry; itry && !ok; itry--) {
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
 
-    ok = ajTrue;		/* accept the default if nothing changes */
+	ok = ajTrue;	/* accept the default if nothing changes */
 
-    (void) ajStrAss (&reply, defreply);
+	(void) ajStrAss (&reply, defreply);
 
-    if (required)
-      (void) acdUserGet (thys, &reply);
+	if (required)
+	    (void) acdUserGet (thys, &reply);
 
-    if (ajStrLen(reply)) {
-      if (!ajCodRead(reply,&val)) {
-	acdBadVal (thys, required,
-		   "Unable to read codon usage '%S'", reply);
-	ok = ajFalse;
-      }
+	if (ajStrLen(reply))
+	{
+	    if (!ajCodRead(reply,&val))
+	    {
+		acdBadVal (thys, required,
+			   "Unable to read codon usage '%S'", reply);
+		ok = ajFalse;
+	    }
+	}
+	else
+	{
+	    acdBadVal (thys, required, "Codon file is required");
+	    ok = ajFalse;
+	}
     }
-    else {
-      acdBadVal (thys, required, "Codon file is required");
-      ok = ajFalse;
-    }
-  }
 
-  if (!ok)
-    acdBadRetry (thys);
+    if (!ok)
+	acdBadRetry (thys);
 
-  thys->Value = val;
-  (void) ajStrAssS (&thys->ValStr, reply);
+    thys->Value = val;
+    (void) ajStrAssS (&thys->ValStr, reply);
 
-  ajStrDel(&name);
-  return;
+    ajStrDel(&name);
+    return;
 }
 
 /* @func ajAcdGetDatafile *****************************************************
@@ -2968,9 +3090,9 @@ static void acdSetCodon (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-AjPFile ajAcdGetDatafile (char *token) {
-
-  return acdGetValue (token, "datafile");
+AjPFile ajAcdGetDatafile (char *token)
+{
+    return acdGetValue (token, "datafile");
 }
 
 
@@ -2991,65 +3113,70 @@ AjPFile ajAcdGetDatafile (char *token) {
 ** @@
 ******************************************************************************/
 
-static void acdSetDatafile (AcdPAcd thys) {
+static void acdSetDatafile (AcdPAcd thys)
+{
+    AjPFile val;
 
-  AjPFile val;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    int itry;
+    AjBool nullok;
+    static AjPStr name = NULL;
+    static AjPStr ext = NULL;
 
-  AjBool required = ajFalse;
-  AjBool ok = ajFalse;
-  static AjPStr defreply = NULL;
-  static AjPStr reply = NULL;
-  int itry;
-  AjBool nullok;
-  static AjPStr name = NULL;
-  static AjPStr ext = NULL;
+    static AjPStr datafname = NULL;
 
-  static AjPStr datafname = NULL;
+    val = NULL;				/* set the default value */
 
-  val = NULL;		/* set the default value */
+    (void) acdAttrResolve (thys, "name", &name);
+    (void) acdAttrResolve (thys, "extension", &ext);
 
-  (void) acdAttrResolve (thys, "name", &name);
-  (void) acdAttrResolve (thys, "extension", &ext);
+    (void) acdAttrToBool (thys, "nullok", ajFalse, &nullok);
+    acdLog ("nullok: %B\n", nullok);
 
-   (void) acdAttrToBool (thys, "nullok", ajFalse, &nullok);
-  acdLog ("nullok: %B\n", nullok);
+    required = acdIsRequired(thys);
+    (void) acdDataFilename (&datafname, name, ext);
+    (void) acdReplyInit (thys, ajStrStr(datafname), &defreply);
+    acdPromptInfile (thys);
 
-  required = acdIsRequired(thys);
-  (void) acdDataFilename (&datafname, name, ext);
-  (void) acdReplyInit (thys, ajStrStr(datafname), &defreply);
-  acdPromptInfile (thys);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
 
-  for (itry=acdPromptTry; itry && !ok; itry--) {
+	ok = ajTrue;			/* accept the default if nothing changes */
 
-    ok = ajTrue;		/* accept the default if nothing changes */
+	(void) ajStrAssS (&reply, defreply);
 
-    (void) ajStrAssS (&reply, defreply);
+	if (required)
+	    (void) acdUserGet (thys, &reply);
 
-    if (required)
-      (void) acdUserGet (thys, &reply);
-
-    if (ajStrLen(reply)) {
-      ajFileDataNew(reply, &val);
-      if (!val) {
-	acdBadVal (thys, required,
-		   "Unable to open data file '%S' for input", reply);
-	ok = ajFalse;
-      }
+	if (ajStrLen(reply))
+	{
+	    ajFileDataNew(reply, &val);
+	    if (!val)
+	    {
+		acdBadVal (thys, required,
+			   "Unable to open data file '%S' for input", reply);
+		ok = ajFalse;
+	    }
+	}
+	else
+	{
+	    if (!nullok)
+	    {
+		acdBadVal (thys, required, "Input file is required");
+		ok = ajFalse;
+	    }
+	}
     }
-    else {
-      if (!nullok) {
-	acdBadVal (thys, required, "Input file is required");
-	ok = ajFalse;
-      }
-    }
-  }
-  if (!ok)
-    acdBadRetry (thys);
+    if (!ok)
+	acdBadRetry (thys);
 
-  thys->Value = val;
-  (void) ajStrAssS (&thys->ValStr, reply);
+    thys->Value = val;
+    (void) ajStrAssS (&thys->ValStr, reply);
 
-  return;
+    return;
 }
 
 /* @func ajAcdGetDirectory ****************************************************
@@ -3065,9 +3192,9 @@ static void acdSetDatafile (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-AjPStr ajAcdGetDirectory (char *token) {
-
-  return acdGetValue (token, "directory");
+AjPStr ajAcdGetDirectory (char *token)
+{
+    return acdGetValue (token, "directory");
 }
 
 /* @funcstatic acdSetDirectory ************************************************
@@ -3086,63 +3213,63 @@ AjPStr ajAcdGetDirectory (char *token) {
 ** @@
 ******************************************************************************/
 
-static void acdSetDirectory (AcdPAcd thys) {
+static void acdSetDirectory (AcdPAcd thys)
+{
+    AjPStr val;
 
-  AjPStr val;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    int itry;
+    AjBool nullok=ajFalse;
+    AjBool dopath;
 
-  AjBool required = ajFalse;
-  AjBool ok = ajFalse;
-  static AjPStr defreply = NULL;
-  static AjPStr reply = NULL;
-  int itry;
-  AjBool nullok=ajFalse;
-  AjBool dopath;
+    val = NULL;				/* set the default value */
 
-  val = NULL;		/* set the default value */
+    (void) acdAttrToBool (thys, "fullpath", ajFalse, &dopath);
+    acdLog ("nullok: %B\n", nullok);
+    (void) acdAttrToBool (thys, "nullok", ajFalse, &nullok);
+    acdLog ("nullok: %B\n", nullok);
 
-  (void) acdAttrToBool (thys, "fullpath", ajFalse, &dopath);
-  acdLog ("nullok: %B\n", nullok);
-  (void) acdAttrToBool (thys, "nullok", ajFalse, &nullok);
-  acdLog ("nullok: %B\n", nullok);
+    required = acdIsRequired(thys);
+    (void) acdReplyInit (thys, ".", &defreply);
 
-  required = acdIsRequired(thys);
-  (void) acdReplyInit (thys, ".", &defreply);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	ok = ajTrue;			/* accept the default if nothing changes */
 
-  for (itry=acdPromptTry; itry && !ok; itry--) {
+	(void) ajStrAssS (&reply, defreply);
 
-    ok = ajTrue;		/* accept the default if nothing changes */
+	if (required)
+	    (void) acdUserGet (thys, &reply);
 
-    (void) ajStrAssS (&reply, defreply);
-
-    if (required)
-      (void) acdUserGet (thys, &reply);
-
-    if (ajStrLen(reply)) {
-      if (dopath)
-	ok = ajFileDirPath(&reply);
-      else
-	ok = ajFileDir(&reply);
-      if (!ok) {
-	acdBadVal (thys, required,
-		   "Unable to open file '%S' for input", reply);
-      }
+	if (ajStrLen(reply))
+	{
+	    if (dopath)
+		ok = ajFileDirPath(&reply);
+	    else
+		ok = ajFileDir(&reply);
+	    if (!ok)
+		acdBadVal (thys, required,
+			   "Unable to open file '%S' for input", reply);
+	}
+	else
+	{
+	    if (!nullok)
+		acdBadVal (thys, required, "Input file is required");
+	    ok = ajFalse;
+	}
     }
-    else {
-      if (!nullok) {
-	acdBadVal (thys, required, "Input file is required");
-	ok = ajFalse;
-      }
-    }
-  }
-  if (!ok)
-    acdBadRetry (thys);
+    if (!ok)
+	acdBadRetry (thys);
 
-  ajStrAssS (&val, reply);
+    ajStrAssS (&val, reply);
 
-  thys->Value = val;
-  (void) ajStrAssS (&thys->ValStr, reply);
+    thys->Value = val;
+    (void) ajStrAssS (&thys->ValStr, reply);
 
-  return;
+    return;
 }
 
 /* @func ajAcdGetFeat *********************************************************
@@ -3158,9 +3285,9 @@ static void acdSetDirectory (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-AjPFeatTable ajAcdGetFeat (char *token) {
-
-  return acdGetValue (token, "features");
+AjPFeatTable ajAcdGetFeat (char *token)
+{
+    return acdGetValue (token, "features");
 }
 
 /* @funcstatic acdSetFeat *****************************************************
@@ -3189,139 +3316,142 @@ AjPFeatTable ajAcdGetFeat (char *token) {
 ** @@
 ******************************************************************************/
 
-static void acdSetFeat (AcdPAcd thys) {
+static void acdSetFeat (AcdPAcd thys)
+{
+    AjPFeatTable val = NULL;
+    AjPFeatTabIn tabin = NULL;
 
-  AjPFeatTable val = NULL;
-  AjPFeatTabIn tabin = NULL;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    int itry;
 
-  AjBool required = ajFalse;
-  AjBool ok = ajFalse;
-  static AjPStr defreply = NULL;
-  static AjPStr reply = NULL;
-  int itry;
+    static AjPStr infname = NULL;
 
-  static AjPStr infname = NULL;
+    static AcdOAttr setattr[] =
+    {
+	{"begin", VT_INT},
+	{"end", VT_INT},
+	{"length", VT_INT},
+	{"protein", VT_BOOL},
+	{"nucleic", VT_BOOL},
+	{"name", VT_STR},
+	{"size", VT_STR},
+	{NULL, VT_NULL} };
 
-  static AcdOAttr setattr[] = {
-    {"begin", VT_INT},
-    {"end", VT_INT},
-    {"length", VT_INT},
-    {"protein", VT_BOOL},
-    {"nucleic", VT_BOOL},
-    {"name", VT_STR},
-    {"size", VT_STR},
-    {NULL, VT_NULL} };
+    int fbegin=0;
+    int fend=0;
+    AjBool freverse=ajFalse;
+    AjBool fprompt=ajFalse;
+    int iattr;
 
-  int fbegin=0;
-  int fend=0;
-  AjBool freverse=ajFalse;
-  AjBool fprompt=ajFalse;
-  int iattr;
+    tabin = ajFeatTabInNew();		/* set the default value */
 
-  tabin = ajFeatTabInNew();		/* set the default value */
+    required = acdIsRequired(thys);
+    (void) acdQualToBool (thys, "fask", ajFalse, &fprompt, &defreply);
 
-  required = acdIsRequired(thys);
-  (void) acdQualToBool (thys, "fask", ajFalse, &fprompt, &defreply);
+    (void) acdInFilename (&infname);
+    (void) acdReplyInit (thys, ajStrStr(infname), &defreply);
+    acdPromptFeat (thys);
 
-  (void) acdInFilename (&infname);
-  (void) acdReplyInit (thys, ajStrStr(infname), &defreply);
-  acdPromptFeat (thys);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	ok = ajTrue;			/* accept the default if nothing changes */
 
-  for (itry=acdPromptTry; itry && !ok; itry--) {
+	(void) ajStrAssS (&reply, defreply);
 
-    ok = ajTrue;		/* accept the default if nothing changes */
+	if (required)
+	    (void) acdUserGet (thys, &reply);
 
-    (void) ajStrAssS (&reply, defreply);
+	(void) acdGetValueAssoc (thys, "fformat", &tabin->Formatstr);
+	(void) acdGetValueAssoc (thys, "fopenfile", &tabin->Filename);
 
-    if (required)
-     (void) acdUserGet (thys, &reply);
-
-    (void) acdGetValueAssoc (thys, "fformat", &tabin->Formatstr);
-    (void) acdGetValueAssoc (thys, "fopenfile", &tabin->Filename);
-
-    ok = ajFeatRead(&val, tabin, reply);
-    if (!ok) {
-      acdBadVal (thys, required,
-		 "Unable to read feature table '%S'", reply);
+	ok = ajFeatRead(&val, tabin, reply);
+	if (!ok)
+	    acdBadVal (thys, required,
+		       "Unable to read feature table '%S'", reply);
     }
-  }
-  if (!ok)
-    acdBadRetry (thys);
-
-  (void) acdInFileSave(ajFeatGetName(val)); /* save the sequence name */
-
-  /* now process the begin, end and reverse options */
-
-  ok = acdQualToInt (thys, "fbegin", 1, &fbegin, &defreply);
-  for (itry=acdPromptTry; itry && !ok; itry--) {
-    (void) ajStrAssS (&reply, defreply);
-    if (fprompt)
-      (void) acdUserGetPrompt (" Begin at position", &reply);
-    ok = ajStrToInt(reply, &fbegin);
     if (!ok)
-      acdBadVal (thys, ajTrue,
-		 "Invalid integer value '%S'", reply);
-  }
-  if (!ok)
-    acdBadRetry (thys);
+	acdBadRetry (thys);
 
-  ok = acdQualToInt (thys, "fend", ajFeatLen(val), &fend, &defreply);
-  for (itry=acdPromptTry; itry && !ok; itry--) {
-    (void) ajStrAssS (&reply, defreply);
-    if (fprompt)
-      (void) acdUserGetPrompt ("   End at position", &reply);
-    ok = ajStrToInt(reply, &fend);
+    (void) acdInFileSave(ajFeatGetName(val)); /* save the sequence name */
+
+    /* now process the begin, end and reverse options */
+
+    ok = acdQualToInt (thys, "fbegin", 1, &fbegin, &defreply);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	(void) ajStrAssS (&reply, defreply);
+	if (fprompt)
+	    (void) acdUserGetPrompt (" Begin at position", &reply);
+	ok = ajStrToInt(reply, &fbegin);
+	if (!ok)
+	    acdBadVal (thys, ajTrue,
+		       "Invalid integer value '%S'", reply);
+    }
     if (!ok)
-      acdBadVal (thys, ajTrue,
-		 "Invalid integer value '%S'", reply);
-  }
-  if (!ok)
-    acdBadRetry (thys);
+	acdBadRetry (thys);
 
-  ok = acdQualToBool (thys, "freverse", ajFalse, &freverse, &defreply);
-  for (itry=acdPromptTry; itry && !ok; itry--) {
-    (void) ajStrAssS (&reply, defreply);
-    if (fprompt)
-      (void) acdUserGetPrompt ("    Reverse strand", &reply);
-    ok = ajStrToBool(reply, &freverse);
+    ok = acdQualToInt (thys, "fend", ajFeatLen(val), &fend, &defreply);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	(void) ajStrAssS (&reply, defreply);
+	if (fprompt)
+	    (void) acdUserGetPrompt ("   End at position", &reply);
+	ok = ajStrToInt(reply, &fend);
+	if (!ok)
+	    acdBadVal (thys, ajTrue,
+		       "Invalid integer value '%S'", reply);
+    }
     if (!ok)
-      acdBadVal (thys, ajTrue,
-		 "Invalid Y/N value '%S'", reply);
-  }
-  if (!ok)
-    acdBadRetry (thys);
+	acdBadRetry (thys);
 
-  acdLog ("sbegin: %d, send: %d, freverse: %B\n",
-		 fbegin, fend, freverse);
+    ok = acdQualToBool (thys, "freverse", ajFalse, &freverse, &defreply);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	(void) ajStrAssS (&reply, defreply);
+	if (fprompt)
+	    (void) acdUserGetPrompt ("    Reverse strand", &reply);
+	ok = ajStrToBool(reply, &freverse);
+	if (!ok)
+	    acdBadVal (thys, ajTrue,
+		       "Invalid Y/N value '%S'", reply);
+    }
+    if (!ok)
+	acdBadRetry (thys);
+
+    acdLog ("sbegin: %d, send: %d, freverse: %B\n",
+	    fbegin, fend, freverse);
   
-  /*
-  if (freverse)
-    ajFeatReverse (val);
+    /*
+       if (freverse)
+       ajFeatReverse (val);
+       
+       ajFeatTabSetRange(val, fbegin, fend);
+       ajfeatTabInSetRange(tabin, fbegin, fend);
+       */
 
-  ajFeatTabSetRange(val, fbegin, fend);
-  ajfeatTabInSetRange(tabin, fbegin, fend);
-  */
+    ajFeatTabInDel (&tabin);
 
-  ajFeatTabInDel (&tabin);
+    /* features tables have special set attributes */
 
-  /* features tables have special set attributes */
+    thys->SAttr = acdAttrListCount (setattr);
+    thys->SetAttr = &setattr[0];
+    thys->SetStr = AJCALLOC0 (thys->SAttr, sizeof (AjPStr));
 
-  thys->SAttr = acdAttrListCount (setattr);
-  thys->SetAttr = &setattr[0];
-  thys->SetStr = AJCALLOC0 (thys->SAttr, sizeof (AjPStr));
+    iattr = 0;
+    (void) ajStrFromInt (&thys->SetStr[iattr++], fbegin);
+    (void) ajStrFromInt (&thys->SetStr[iattr++], fend);
+    (void) ajStrFromInt (&thys->SetStr[iattr++], ajFeatLen(val));
+    (void) ajStrFromBool (&thys->SetStr[iattr++], ajFeatIsProt(val));
+    (void) ajStrAssS (&thys->SetStr[iattr++], val->Name);
+    (void) ajStrFromInt (&thys->SetStr[iattr++], ajFeatSize(val));
 
-  iattr = 0;
-  (void) ajStrFromInt (&thys->SetStr[iattr++], fbegin);
-  (void) ajStrFromInt (&thys->SetStr[iattr++], fend);
-  (void) ajStrFromInt (&thys->SetStr[iattr++], ajFeatLen(val));
-  (void) ajStrFromBool (&thys->SetStr[iattr++], ajFeatIsProt(val));
-  (void) ajStrAssS (&thys->SetStr[iattr++], val->Name);
-  (void) ajStrFromInt (&thys->SetStr[iattr++], ajFeatSize(val));
+    thys->Value = val;
+    (void) ajStrAssS (&thys->ValStr, reply);
 
-  thys->Value = val;
-  (void) ajStrAssS (&thys->ValStr, reply);
-
-  return;
+    return;
 }
 
 /* @func ajAcdGetFeatout ******************************************************
@@ -3337,9 +3467,9 @@ static void acdSetFeat (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-AjPFeatTabOut ajAcdGetFeatout (char *token) {
-
-  return acdGetValue (token, "featout");
+AjPFeatTabOut ajAcdGetFeatout (char *token)
+{
+    return acdGetValue (token, "featout");
 }
 
 /* @funcstatic acdSetFeatout **************************************************
@@ -3368,78 +3498,78 @@ AjPFeatTabOut ajAcdGetFeatout (char *token) {
 ** @@
 ******************************************************************************/
 
-static void acdSetFeatout (AcdPAcd thys) {
+static void acdSetFeatout (AcdPAcd thys)
+{
+    AjPFeatTabOut val = NULL;
 
-  AjPFeatTabOut val = NULL;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    int itry;
 
-  AjBool required = ajFalse;
-  AjBool ok = ajFalse;
-  static AjPStr defreply = NULL;
-  static AjPStr reply = NULL;
-  int itry;
+    static AjPStr name = NULL;
+    static AjPStr ext = NULL;
+    static AjPStr outfname = NULL;
 
-  static AjPStr name = NULL;
-  static AjPStr ext = NULL;
-  static AjPStr outfname = NULL;
+    static AcdOAttr setattr[] =
+    {
+	{"begin", VT_INT},
+	{"end", VT_INT},
+	{"length", VT_INT},
+	{"protein", VT_BOOL},
+	{"nucleic", VT_BOOL},
+	{"name", VT_STR},
+	{NULL, VT_NULL} };
 
-  static AcdOAttr setattr[] = {
-    {"begin", VT_INT},
-    {"end", VT_INT},
-    {"length", VT_INT},
-    {"protein", VT_BOOL},
-    {"nucleic", VT_BOOL},
-    {"name", VT_STR},
-    {NULL, VT_NULL} };
+    required = acdIsRequired(thys);
+    val = ajFeatTabOutNew();
 
-  required = acdIsRequired(thys);
-  val = ajFeatTabOutNew();
+    acdAttrResolve (thys, "name", &name);
+    if (!acdGetValueAssoc (thys, "offormat", &val->Formatstr))
+	(void) acdAttrResolve (thys, "extension", &ext);
 
-  acdAttrResolve (thys, "name", &name);
-  if (!acdGetValueAssoc (thys, "offormat", &val->Formatstr))
-    (void) acdAttrResolve (thys, "extension", &ext);
+    (void) acdOutFilename (&outfname, name, val->Formatstr);
+    (void) acdReplyInit (thys, ajStrStr(outfname), &defreply);
+    acdPromptFeatout (thys);
 
-  (void) acdOutFilename (&outfname, name, val->Formatstr);
-  (void) acdReplyInit (thys, ajStrStr(outfname), &defreply);
-  acdPromptFeatout (thys);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	ok = ajTrue;			/* accept the default if nothing changes */
 
-  for (itry=acdPromptTry; itry && !ok; itry--) {
+	(void) ajStrAssS (&reply, defreply);
 
-    ok = ajTrue;		/* accept the default if nothing changes */
+	if (required)
+	    (void) acdUserGet (thys, &reply);
 
-    (void) ajStrAssS (&reply, defreply);
-
-    if (required)
-     (void) acdUserGet (thys, &reply);
-
-    (void) acdGetValueAssoc (thys, "ofopenfile", &val->Filename);
-    ok = ajFeatTabOutOpen (val, reply);
-    if (!ok) {
-      acdBadVal (thys, required,
-		 "Unable to read sequence '%S'", reply);
+	(void) acdGetValueAssoc (thys, "ofopenfile", &val->Filename);
+	ok = ajFeatTabOutOpen (val, reply);
+	if (!ok)
+	    acdBadVal (thys, required,
+		       "Unable to read sequence '%S'", reply);
     }
-  }
-  if (!ok)
-    acdBadRetry (thys);
+    if (!ok)
+	acdBadRetry (thys);
 
-  /* features tables have special set attributes */
+    /* features tables have special set attributes */
 
-  thys->SAttr = acdAttrListCount (setattr);
-  thys->SetAttr = &setattr[0];
-  thys->SetStr = AJCALLOC0 (thys->SAttr, sizeof (AjPStr));
+    thys->SAttr = acdAttrListCount (setattr);
+    thys->SetAttr = &setattr[0];
+    thys->SetStr = AJCALLOC0 (thys->SAttr, sizeof (AjPStr));
 
-  /*
-  (void) ajStrFromInt (&thys->SetStr[ACD_SEQ_BEGIN], ajSeqBegin(val));
-  (void) ajStrFromInt (&thys->SetStr[ACD_SEQ_END], ajSeqEnd(val));
-  (void) ajStrFromInt (&thys->SetStr[ACD_SEQ_LENGTH], ajSeqLen(val));
-  (void) ajStrFromBool (&thys->SetStr[ACD_SEQ_PROTEIN], ajSeqIsProt(val));
-  (void) ajStrFromBool (&thys->SetStr[ACD_SEQ_NUCLEIC], ajSeqIsNuc(val));
-  (void) ajStrAssS (&thys->SetStr[ACD_SEQ_NAME], val->Name);
-  */
+    /*
+       (void) ajStrFromInt (&thys->SetStr[ACD_SEQ_BEGIN], ajSeqBegin(val));
+       (void) ajStrFromInt (&thys->SetStr[ACD_SEQ_END], ajSeqEnd(val));
+       (void) ajStrFromInt (&thys->SetStr[ACD_SEQ_LENGTH], ajSeqLen(val));
+       (void) ajStrFromBool (&thys->SetStr[ACD_SEQ_PROTEIN], ajSeqIsProt(val));
+       (void) ajStrFromBool (&thys->SetStr[ACD_SEQ_NUCLEIC], ajSeqIsNuc(val));
+       (void) ajStrAssS (&thys->SetStr[ACD_SEQ_NAME], val->Name);
+       */
 
-  thys->Value = val;
-  (void) ajStrAssS (&thys->ValStr, reply);
+    thys->Value = val;
+    (void) ajStrAssS (&thys->ValStr, reply);
 
-  return;
+    return;
 }
 
 /* @func ajAcdGetFloat ********************************************************
@@ -3454,12 +3584,12 @@ static void acdSetFeatout (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-float ajAcdGetFloat (char *token) {
+float ajAcdGetFloat (char *token)
+{
+    float* val;
 
-  float* val;
-
-  val = acdGetValue (token, "float");
-  return *val;
+    val = acdGetValue (token, "float");
+    return *val;
 }
 
 /* @funcstatic acdSetFloat ****************************************************
@@ -3482,74 +3612,76 @@ float ajAcdGetFloat (char *token) {
 ** @@
 ******************************************************************************/
 
-static void acdSetFloat (AcdPAcd thys) {
+static void acdSetFloat (AcdPAcd thys)
+{
+    float* val;
 
-  float* val;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    int itry;
+    AjBool warnrange;
 
-  AjBool required = ajFalse;
-  AjBool ok = ajFalse;
-  static AjPStr defreply = NULL;
-  static AjPStr reply = NULL;
-  int itry;
-  AjBool warnrange;
+    float fmin;
+    float fmax;
+    int precision;
 
-  float fmin;
-  float fmax;
-  int precision;
+    (void) acdAttrToFloat (thys, "minimum", -FLT_MAX, &fmin);
+    acdLog ("minimum: %e\n", fmin);
 
-  (void) acdAttrToFloat (thys, "minimum", -FLT_MAX, &fmin);
-  acdLog ("minimum: %e\n", fmin);
+    (void) acdAttrToFloat (thys, "maximum", FLT_MAX, &fmax);
+    acdLog ("maximum: %e\n", fmax);
 
-  (void) acdAttrToFloat (thys, "maximum", FLT_MAX, &fmax);
-  acdLog ("maximum: %e\n", fmax);
+    (void) acdAttrToInt (thys, "precision", 3, &precision);
+    acdLog ("precision: %d\n", precision);
 
-  (void) acdAttrToInt (thys, "precision", 3, &precision);
-  acdLog ("precision: %d\n", precision);
+    (void) acdAttrToBool (thys, "warnrange", ajTrue, &warnrange);
+    acdLog ("warnrange: %B\n", warnrange);
 
-  (void) acdAttrToBool (thys, "warnrange", ajTrue, &warnrange);
-  acdLog ("warnrange: %B\n", warnrange);
+    AJNEW0(val);			/* create storage for the result */
 
-  AJNEW0(val);			/* create storage for the result */
+    *val = 0.0;				/* set the default value */
 
-  *val = 0.0;		/* set the default value */
+    required = acdIsRequired(thys);
+    (void) acdReplyInit (thys, "0.0", &defreply);
 
-  required = acdIsRequired(thys);
-  (void) acdReplyInit (thys, "0.0", &defreply);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	(void) ajStrAssS (&reply, defreply);
 
-  for (itry=acdPromptTry; itry && !ok; itry--) {
+	if (required)
+	    (void) acdUserGet (thys, &reply);
 
-    (void) ajStrAssS (&reply, defreply);
-
-    if (required)
-      (void) acdUserGet (thys, &reply);
-
-    ok = ajStrToFloat(reply, val);
+	ok = ajStrToFloat(reply, val);
+	if (!ok)
+	    acdBadVal (thys, required,
+		       "Invalid decimal value '%S', please try again",
+		       reply);
+    }
     if (!ok)
-      acdBadVal (thys, required,
-		 "Invalid decimal value '%S', please try again",
-		 reply);
-  }
-  if (!ok)
-    acdBadRetry (thys);
+	acdBadRetry (thys);
 
-  if (*val < fmin) { 	/* reset within limits */
-    if (warnrange)
-      ajWarn("floating point value out of range %.*f less than %.*f\n",
-	     precision, *val, precision, fmin);
-    *val = fmin;
-  }
+    if (*val < fmin)
+    {					/* reset within limits */
+	if (warnrange)
+	    ajWarn("floating point value out of range %.*f less than %.*f\n",
+		   precision, *val, precision, fmin);
+	*val = fmin;
+    }
 
-  if (*val > fmax) {
-    if (warnrange)
-      ajWarn("floating point value out of range %.*f more than %.*f\n",
-	     precision, *val, precision, fmax);
-    *val = fmax;
-  }
+    if (*val > fmax)
+    {
+	if (warnrange)
+	    ajWarn("floating point value out of range %.*f more than %.*f\n",
+		   precision, *val, precision, fmax);
+	*val = fmax;
+    }
 
-  thys->Value = val;
-  (void) ajStrFromFloat(&thys->ValStr, *val, precision);
+    thys->Value = val;
+    (void) ajStrFromFloat(&thys->ValStr, *val, precision);
 
-  return;
+    return;
 }
 
 /* @func ajAcdGetGraph ******************************************************
@@ -3562,9 +3694,9 @@ static void acdSetFloat (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-AjPGraph ajAcdGetGraph (char *token) {
-
-  return acdGetValue (token, "graph");
+AjPGraph ajAcdGetGraph (char *token)
+{
+    return acdGetValue (token, "graph");
 }
 
 /* @funcstatic acdSetGraph **************************************************
@@ -3581,84 +3713,83 @@ AjPGraph ajAcdGetGraph (char *token) {
 ** @@
 ******************************************************************************/
 
-static void acdSetGraph (AcdPAcd thys) {
+static void acdSetGraph (AcdPAcd thys)
+{
+    AjPGraph val;
 
-  AjPGraph val;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    int itry;
+    static AjPStr title = NULL;
+    AjPStr name = ajStrNewC("GRAPHICS");
+    static AjPStr gdev = NULL;
 
-  AjBool required = ajFalse;
-  AjBool ok = ajFalse;
-  static AjPStr defreply = NULL;
-  static AjPStr reply = NULL;
-  int itry;
-  static AjPStr title = NULL;
-  AjPStr name = ajStrNewC("GRAPHICS");
-  static AjPStr gdev = NULL;
+    /*   int multi;
+	 
+	 (void) acdAttrToInt (thys, "multi", 1, &multi);
+	 if (multi < 1) multi = 1;
+	 acdLog ("multi: %d\n", multi);
+	 */
 
-  /*   int multi;
+    required = acdIsRequired(thys);
 
-  (void) acdAttrToInt (thys, "multi", 1, &multi);
-  if (multi < 1) multi = 1;
-  acdLog ("multi: %d\n", multi);
-  */
+    if(ajNamGetValueC(ajStrStr(name),&gdev))
+	(void) acdReplyInit (thys, ajStrStr(gdev), &defreply);
+    else
+	(void) acdReplyInit (thys, "x11", &defreply);
 
-  required = acdIsRequired(thys);
+    acdPromptGraph (thys);
 
-  if(ajNamGetValueC(ajStrStr(name),&gdev)){
-    (void) acdReplyInit (thys, ajStrStr(gdev), &defreply);
-  }
-  else {
-    (void) acdReplyInit (thys, "x11", &defreply);
-  }
-
-  acdPromptGraph (thys);
-
-  val = call("ajGraphNew");
+    val = call("ajGraphNew");
   
-  for (itry=acdPromptTry; itry && !ok; itry--) {
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	(void) ajStrAssS (&reply, defreply);
 
-    (void) ajStrAssS (&reply, defreply);
+	if (required)
+	    (void) acdUserGet (thys, &reply);
 
-    if (required)
-      (void) acdUserGet (thys, &reply);
-
-    (void) call("ajGraphSet",val, reply,&ok);
-    if (!ok){
-      acdBadVal (thys, required,
-		 "Invalid graph value '%S'", reply);
-      (void) call("ajGraphDumpDevices");
+	(void) call("ajGraphSet",val, reply,&ok);
+	if (!ok)
+	{
+	    acdBadVal (thys, required,
+		       "Invalid graph value '%S'", reply);
+	    (void) call("ajGraphDumpDevices");
+	}
     }
-  }
-  if (!ok)
-    acdBadRetry (thys);
+    if (!ok)
+	acdBadRetry (thys);
 
-  thys->Value = val;
-  (void) ajStrAssC (&thys->ValStr, "graph definition");
+    thys->Value = val;
+    (void) ajStrAssC (&thys->ValStr, "graph definition");
 
-  if (!acdGetValueAssoc (thys, "gtitle", &title))
-    (void) acdAttrResolve (thys, "gtitle", &title);
-  (void) call("ajGraphxyTitle",val,title);
+    if (!acdGetValueAssoc (thys, "gtitle", &title))
+	(void) acdAttrResolve (thys, "gtitle", &title);
+    (void) call("ajGraphxyTitle",val,title);
 
-  if (!acdGetValueAssoc (thys, "gsubtitle", &title))
-    (void) acdAttrResolve (thys, "gsubtitle", &title);
-  (void) call("ajGraphxySubtitle",val,title);
+    if (!acdGetValueAssoc (thys, "gsubtitle", &title))
+	(void) acdAttrResolve (thys, "gsubtitle", &title);
+    (void) call("ajGraphxySubtitle",val,title);
 
-  if (!acdGetValueAssoc (thys, "gxtitle", &title))
-    (void) acdAttrResolve (thys, "gxtitle", &title);
-  (void) call("ajGraphxyXtitle",val,title);
+    if (!acdGetValueAssoc (thys, "gxtitle", &title))
+	(void) acdAttrResolve (thys, "gxtitle", &title);
+    (void) call("ajGraphxyXtitle",val,title);
 
-  if (!acdGetValueAssoc (thys, "gytitle", &title))
-    (void) acdAttrResolve (thys, "gytitle", &title);
-  (void) call("ajGraphxyYtitle",val,title);
+    if (!acdGetValueAssoc (thys, "gytitle", &title))
+	(void) acdAttrResolve (thys, "gytitle", &title);
+    (void) call("ajGraphxyYtitle",val,title);
 
-  if (!acdGetValueAssoc (thys, "goutfile", &title))
-    (void) acdAttrResolve (thys, "goutfile", &title);
-  (void) call("ajGraphxySetOutputFile",val,title);
+    if (!acdGetValueAssoc (thys, "goutfile", &title))
+	(void) acdAttrResolve (thys, "goutfile", &title);
+    (void) call("ajGraphxySetOutputFile",val,title);
 
- (void) call("ajGraphTrace",val);
+    (void) call("ajGraphTrace",val);
 
-  ajStrDel(&name);
+    ajStrDel(&name);
   
-  return;
+    return;
 }
 
 /* @func ajAcdGetGraphxy ******************************************************
@@ -3671,9 +3802,9 @@ static void acdSetGraph (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-AjPGraph ajAcdGetGraphxy (char *token) {
-
-  return acdGetValue (token, "xygraph");
+AjPGraph ajAcdGetGraphxy (char *token)
+{
+    return acdGetValue (token, "xygraph");
 }
 
 /* @funcstatic acdSetGraphxy **************************************************
@@ -3690,88 +3821,86 @@ AjPGraph ajAcdGetGraphxy (char *token) {
 ** @@
 ******************************************************************************/
 
-static void acdSetGraphxy (AcdPAcd thys) {
+static void acdSetGraphxy (AcdPAcd thys)
+{
+    AjPGraph val;
+    AjPStr name = ajStrNewC("GRAPHICS");
+    static AjPStr gdev = NULL;
 
-  AjPGraph val;
-  AjPStr name = ajStrNewC("GRAPHICS");
-  static AjPStr gdev = NULL;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    int itry;
+    int multi;
+    static AjPStr title = NULL;
 
-  AjBool required = ajFalse;
-  AjBool ok = ajFalse;
-  static AjPStr defreply = NULL;
-  static AjPStr reply = NULL;
-  int itry;
-  int multi;
-  static AjPStr title = NULL;
+    (void) acdAttrToInt (thys, "multi", 1, &multi);
+    if (multi < 1) multi = 1;
+    acdLog ("multi: %d\n", multi);
 
-  (void) acdAttrToInt (thys, "multi", 1, &multi);
-  if (multi < 1) multi = 1;
-  acdLog ("multi: %d\n", multi);
+    required = acdIsRequired(thys);
+    /*
+       (void) acdReplyInit (thys, "xwindows", &defreply);
+       if(ajNamGetValueC(ajStrStr(name),&value)){
+       (void) ajStrAssS(&defreply,value);
+       ajStrDel(&value);
+       }
+       */
 
-  required = acdIsRequired(thys);
-  /*
-  (void) acdReplyInit (thys, "xwindows", &defreply);
-  if(ajNamGetValueC(ajStrStr(name),&value)){
-    (void) ajStrAssS(&defreply,value);
-    ajStrDel(&value);
-  }
-  */
+    if(ajNamGetValueC(ajStrStr(name),&gdev))
+	(void) acdReplyInit (thys, ajStrStr(gdev), &defreply);
+    else
+	(void) acdReplyInit (thys, "x11", &defreply);
 
-  if(ajNamGetValueC(ajStrStr(name),&gdev)){
-    (void) acdReplyInit (thys, ajStrStr(gdev), &defreply);
-  }
-  else {
-    (void) acdReplyInit (thys, "x11", &defreply);
-  }
+    acdPromptGraph (thys);
 
-  acdPromptGraph (thys);
+    val = call("ajGraphxyNewI",multi);
 
-  val = call("ajGraphxyNewI",multi);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	(void) ajStrAssS (&reply, defreply);
 
-  for (itry=acdPromptTry; itry && !ok; itry--) {
+	if (required)
+	    (void) acdUserGet (thys, &reply);
 
-    (void) ajStrAssS (&reply, defreply);
-
-    if (required)
-      (void) acdUserGet (thys, &reply);
-
-    (void) call("ajGraphxySet",val, reply, &ok);
-    if (!ok){
-      acdBadVal (thys, required,
-		 "Invalid XY graph value '%S'", reply);
-      (void) call("ajGraphDumpDevices");
+	(void) call("ajGraphxySet",val, reply, &ok);
+	if (!ok){
+	    acdBadVal (thys, required,
+		       "Invalid XY graph value '%S'", reply);
+	    (void) call("ajGraphDumpDevices");
+	}
     }
-  }
-  if (!ok)
-    acdBadRetry (thys);
+    if (!ok)
+	acdBadRetry (thys);
 
-  thys->Value = val;
-  (void) ajStrAssC (&thys->ValStr, "XY graph definition");
+    thys->Value = val;
+    (void) ajStrAssC (&thys->ValStr, "XY graph definition");
 
-  if (!acdGetValueAssoc (thys, "gtitle", &title))
-    (void) acdAttrResolve (thys, "gtitle", &title);
-  (void) call("ajGraphxyTitle",val,title);
+    if (!acdGetValueAssoc (thys, "gtitle", &title))
+	(void) acdAttrResolve (thys, "gtitle", &title);
+    (void) call("ajGraphxyTitle",val,title);
 
-  if (!acdGetValueAssoc (thys, "gsubtitle", &title))
-    (void) acdAttrResolve (thys, "gsubtitle", &title);
-  (void) call("ajGraphxySubtitle",val,title);
+    if (!acdGetValueAssoc (thys, "gsubtitle", &title))
+	(void) acdAttrResolve (thys, "gsubtitle", &title);
+    (void) call("ajGraphxySubtitle",val,title);
 
-  if (!acdGetValueAssoc (thys, "gxtitle", &title))
-    (void) acdAttrResolve (thys, "gxtitle", &title);
-  (void) call("ajGraphxyXtitle",val,title);
+    if (!acdGetValueAssoc (thys, "gxtitle", &title))
+	(void) acdAttrResolve (thys, "gxtitle", &title);
+    (void) call("ajGraphxyXtitle",val,title);
 
-  if (!acdGetValueAssoc (thys, "gytitle", &title))
-    (void) acdAttrResolve (thys, "gytitle", &title);
-  (void) call("ajGraphxyYtitle",val,title);
+    if (!acdGetValueAssoc (thys, "gytitle", &title))
+	(void) acdAttrResolve (thys, "gytitle", &title);
+    (void) call("ajGraphxyYtitle",val,title);
 
-  if (!acdGetValueAssoc (thys, "goutfile", &title))
-    (void) acdAttrResolve (thys, "goutfile", &title);
-  (void) call("ajGraphxySetOutputFile",val,title);
+    if (!acdGetValueAssoc (thys, "goutfile", &title))
+	(void) acdAttrResolve (thys, "goutfile", &title);
+    (void) call("ajGraphxySetOutputFile",val,title);
 
-  (void) call("ajGraphTrace",val);
+    (void) call("ajGraphTrace",val);
 
-  ajStrDel(&name);
-  return;
+    ajStrDel(&name);
+    return;
 }
 
 /* @func ajAcdGetInt **********************************************************
@@ -3786,12 +3915,12 @@ static void acdSetGraphxy (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-int ajAcdGetInt (char *token) {
+int ajAcdGetInt (char *token)
+{
+    int* val;
 
-  int* val;
-
-  val = acdGetValue (token, "integer");
-  return *val;
+    val = acdGetValue (token, "integer");
+    return *val;
 }
 
 /* @funcstatic acdSetInt ******************************************************
@@ -3813,73 +3942,75 @@ int ajAcdGetInt (char *token) {
 ** @@
 ******************************************************************************/
 
-static void acdSetInt (AcdPAcd thys) {
+static void acdSetInt (AcdPAcd thys)
+{
+    int* val;
 
-  int* val;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    int itry;
+    AjBool warnrange;
 
-  AjBool required = ajFalse;
-  AjBool ok = ajFalse;
-  static AjPStr defreply = NULL;
-  static AjPStr reply = NULL;
-  int itry;
-  AjBool warnrange;
+    int imin;
+    int imax;
 
-  int imin;
-  int imax;
+    (void) acdAttrToInt (thys, "minimum", INT_MIN, &imin);
+    acdLog ("minimum: %d\n", imin);
 
-  (void) acdAttrToInt (thys, "minimum", INT_MIN, &imin);
-  acdLog ("minimum: %d\n", imin);
+    (void) acdAttrToInt (thys, "maximum", INT_MAX, &imax);
+    acdLog ("maximum: %d\n", imax);
 
-  (void) acdAttrToInt (thys, "maximum", INT_MAX, &imax);
-  acdLog ("maximum: %d\n", imax);
+    (void) acdAttrToBool (thys, "warnrange", ajTrue, &warnrange);
+    acdLog ("warnrange: %B\n", warnrange);
 
-  (void) acdAttrToBool (thys, "warnrange", ajTrue, &warnrange);
-  acdLog ("warnrange: %B\n", warnrange);
+    AJNEW0(val);			/* create storage for the result */
 
-  AJNEW0(val);			/* create storage for the result */
+    *val = 0;				/* set the default value */
 
-  *val = 0;		/* set the default value */
+    required = acdIsRequired(thys);
+    (void) acdReplyInit (thys, "0", &defreply);
 
-  required = acdIsRequired(thys);
-  (void) acdReplyInit (thys, "0", &defreply);
+    acdLog ("acdSetInt %S default '%S' Required: %B\n",
+	    thys->Name, defreply, required);
 
-  acdLog ("acdSetInt %S default '%S' Required: %B\n",
-	  thys->Name, defreply, required);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	(void) ajStrAssS (&reply, defreply);
 
-  for (itry=acdPromptTry; itry && !ok; itry--) {
+	if (required)
+	    (void) acdUserGet (thys, &reply);
 
-    (void) ajStrAssS (&reply, defreply);
-
-    if (required)
-      (void) acdUserGet (thys, &reply);
-
-    acdLog (" reply: '%S' \n", reply);
-    if (ajStrMatchC(reply, "default"))
-      (void) ajStrAssC(&reply, "0");
-    ok = ajStrToInt(reply, val);
-    acdLog (" modified reply: '%S' val: %d ok: %B\n", reply, *val, ok);
+	acdLog (" reply: '%S' \n", reply);
+	if (ajStrMatchC(reply, "default"))
+	    (void) ajStrAssC(&reply, "0");
+	ok = ajStrToInt(reply, val);
+	acdLog (" modified reply: '%S' val: %d ok: %B\n", reply, *val, ok);
+	if (!ok)
+	    acdBadVal (thys, required,
+		       "Invalid integer value '%S'", reply);
+    }
     if (!ok)
-      acdBadVal (thys, required,
-		 "Invalid integer value '%S'", reply);
-  }
-  if (!ok)
-    acdBadRetry (thys);
+	acdBadRetry (thys);
 
-  if (*val < imin) {		/* reset within limits */
-    if (warnrange)
-      ajWarn("integer value out of range %d less than %d\n", *val, imin);
-    *val = imin;
-  }
-  if (*val > imax) {
-    if (warnrange)
-      ajWarn("integer value out of range %d more than %d\n", *val, imax);
-    *val = imax;
-  }
+    if (*val < imin)
+    {					/* reset within limits */
+	if (warnrange)
+	    ajWarn("integer value out of range %d less than %d\n", *val, imin);
+	*val = imin;
+    }
+    if (*val > imax)
+    {
+	if (warnrange)
+	    ajWarn("integer value out of range %d more than %d\n", *val, imax);
+	*val = imax;
+    }
 
-  thys->Value = val;
-  (void) ajStrFromInt (&thys->ValStr, *val);
+    thys->Value = val;
+    (void) ajStrFromInt (&thys->ValStr, *val);
 
-  return;
+    return;
 }
 
 /* @func ajAcdGetInfile *******************************************************
@@ -3895,9 +4026,9 @@ static void acdSetInt (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-AjPFile ajAcdGetInfile (char *token) {
-
-  return acdGetValue (token, "infile");
+AjPFile ajAcdGetInfile (char *token)
+{
+    return acdGetValue (token, "infile");
 }
 
 /* @funcstatic acdSetInfile ***************************************************
@@ -3922,62 +4053,66 @@ AjPFile ajAcdGetInfile (char *token) {
 ** @@
 ******************************************************************************/
 
-static void acdSetInfile (AcdPAcd thys) {
+static void acdSetInfile (AcdPAcd thys)
+{
+    AjPFile val;
 
-  AjPFile val;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    int itry;
+    AjBool nullok;
 
-  AjBool required = ajFalse;
-  AjBool ok = ajFalse;
-  static AjPStr defreply = NULL;
-  static AjPStr reply = NULL;
-  int itry;
-  AjBool nullok;
+    static AjPStr infname = NULL;
 
-  static AjPStr infname = NULL;
+    val = NULL;				/* set the default value */
 
-  val = NULL;		/* set the default value */
+    (void) acdAttrToBool (thys, "nullok", ajFalse, &nullok);
+    acdLog ("nullok: %B\n", nullok);
 
-  (void) acdAttrToBool (thys, "nullok", ajFalse, &nullok);
-  acdLog ("nullok: %B\n", nullok);
+    required = acdIsRequired(thys);
+    (void) acdInFilename (&infname);
+    (void) acdReplyInit (thys, ajStrStr(infname), &defreply);
+    acdPromptInfile (thys);
 
-  required = acdIsRequired(thys);
-  (void) acdInFilename (&infname);
-  (void) acdReplyInit (thys, ajStrStr(infname), &defreply);
-  acdPromptInfile (thys);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	ok = ajTrue;			/* accept the default if nothing changes */
 
-  for (itry=acdPromptTry; itry && !ok; itry--) {
+	(void) ajStrAssS (&reply, defreply);
 
-    ok = ajTrue;		/* accept the default if nothing changes */
+	if (required)
+	    (void) acdUserGet (thys, &reply);
 
-    (void) ajStrAssS (&reply, defreply);
-
-    if (required)
-      (void) acdUserGet (thys, &reply);
-
-    if (ajStrLen(reply)) {
-      val = ajFileNewIn(reply);
-      if (!val) {
-	acdBadVal (thys, required,
-		   "Unable to open file '%S' for input", reply);
-	ok = ajFalse;
-      }
+	if (ajStrLen(reply))
+	{
+	    val = ajFileNewIn(reply);
+	    if (!val)
+	    {
+		acdBadVal (thys, required,
+			   "Unable to open file '%S' for input", reply);
+		ok = ajFalse;
+	    }
+	}
+	else
+	{
+	    if (!nullok)
+	    {
+		acdBadVal (thys, required, "Input file is required");
+		ok = ajFalse;
+	    }
+	}
     }
-    else {
-      if (!nullok) {
-	acdBadVal (thys, required, "Input file is required");
-	ok = ajFalse;
-      }
-    }
-  }
-  if (!ok)
-    acdBadRetry (thys);
+    if (!ok)
+	acdBadRetry (thys);
 
-  (void) acdInFileSave(reply);
+    (void) acdInFileSave(reply);
 
-  thys->Value = val;
-  (void) ajStrAssS (&thys->ValStr, reply);
+    thys->Value = val;
+    (void) ajStrAssS (&thys->ValStr, reply);
 
-  return;
+    return;
 }
 
 /* @func ajAcdGetList *******************************************************
@@ -3993,9 +4128,9 @@ static void acdSetInfile (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-AjPStr* ajAcdGetList (char *token) {
-
-  return acdGetValue (token, "list");
+AjPStr* ajAcdGetList (char *token)
+{
+    return acdGetValue (token, "list");
 }
 
 /* @func ajAcdGetListI *******************************************************
@@ -4012,19 +4147,18 @@ AjPStr* ajAcdGetList (char *token) {
 ** @@
 ******************************************************************************/
 
-AjPStr ajAcdGetListI (char *token, int num) {
+AjPStr ajAcdGetListI (char *token, int num)
+{
+    AjPStr* val;
+    int i;
 
-  AjPStr* val;
-  int i;
+    val = acdGetValue (token, "list");
+    for (i=1; i<num; i++)
+	if (!val[i])
+	    ajWarn ("value %d not found for %s, last value was %d\n",
+		    num, token, i-1);
 
-  val = acdGetValue (token, "list");
-  for (i=1; i<num; i++) {
-    if (!val[i]) {
-      ajWarn ("value %d not found for %s, last value was %d\n",
-	      num, token, i-1);
-    }
-   }
-  return val[num-1];
+    return val[num-1];
 }
 
 /* @funcstatic acdSetList *****************************************************
@@ -4045,56 +4179,59 @@ AjPStr ajAcdGetListI (char *token, int num) {
 ** @@
 ******************************************************************************/
 
-static void acdSetList (AcdPAcd thys) {
+static void acdSetList (AcdPAcd thys)
+{
+    AjPStr* val;
 
-  AjPStr* val;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    int itry;
+    int i;
 
-  AjBool required = ajFalse;
-  AjBool ok = ajFalse;
-  static AjPStr defreply = NULL;
-  static AjPStr reply = NULL;
-  int itry;
-  int i;
+    int min, max;
 
-  int min, max;
+    val = NULL;				/* set the default value */
 
-  val = NULL;		/* set the default value */
+    required = acdIsRequired(thys);
+    (void) acdReplyInit (thys, "", &defreply);
 
-  required = acdIsRequired(thys);
-  (void) acdReplyInit (thys, "", &defreply);
+    (void) acdAttrToInt (thys, "minimum", 1, &min);
+    (void) acdAttrToInt (thys, "maximum", 1, &max);
 
-  (void) acdAttrToInt (thys, "minimum", 1, &min);
-  (void) acdAttrToInt (thys, "maximum", 1, &max);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	ok = ajTrue;			/* accept the default if nothing changes */
 
-  for (itry=acdPromptTry; itry && !ok; itry--) {
+	(void) ajStrAssS (&reply, defreply);
 
-    ok = ajTrue;		/* accept the default if nothing changes */
+	if (required)
+	{
+	    acdListPrompt(thys);
+	    (void) acdUserGet (thys, &reply);
+	}
 
-    (void) ajStrAssS (&reply, defreply);
+	val = acdListValue(thys, min, max, reply);
+	if (!val)
+	{
+	    acdBadVal (thys, required, "Bad list option '%S'", reply);
+	    ok = ajFalse;
+	}
+    }
+    if (!ok)
+	acdBadRetry (thys);
 
-    if (required) {
-      acdListPrompt(thys);
-      (void) acdUserGet (thys, &reply);
+    thys->Value = val;
+    for (i=0; val[i]; i++)
+    {
+	ajDebug("Storing val[%d] '%S'\n", i,val[i]);
+	if (i)
+	    (void) ajStrAppC (&thys->ValStr, ";");
+	(void) ajStrApp (&thys->ValStr, val[i]);
     }
 
-    val = acdListValue(thys, min, max, reply);
-    if (!val) {
-      acdBadVal (thys, required, "Bad list option '%S'", reply);
-      ok = ajFalse;
-    }
-  }
-  if (!ok)
-    acdBadRetry (thys);
-
-  thys->Value = val;
-  for (i=0; val[i]; i++) {
-    ajDebug("Storing val[%d] '%S'\n", i,val[i]);
-    if (i)
-      (void) ajStrAppC (&thys->ValStr, ";");
-    (void) ajStrApp (&thys->ValStr, val[i]);
-  }
-
-  return;
+    return;
 }
 
 /* @func ajAcdGetMatrix *******************************************************
@@ -4109,9 +4246,9 @@ static void acdSetList (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-AjPMatrix ajAcdGetMatrix (char *token) {
-
-  return acdGetValue (token, "matrix");
+AjPMatrix ajAcdGetMatrix (char *token)
+{
+    return acdGetValue (token, "matrix");
 }
 
 /* @func ajAcdGetMatrixf ******************************************************
@@ -4126,9 +4263,9 @@ AjPMatrix ajAcdGetMatrix (char *token) {
 ** @@
 ******************************************************************************/
 
-AjPMatrixf ajAcdGetMatrixf (char *token) {
-
-  return acdGetValue (token, "matrixf");
+AjPMatrixf ajAcdGetMatrixf (char *token)
+{
+    return acdGetValue (token, "matrixf");
 }
 
 /* @funcstatic acdSetMatrix ***************************************************
@@ -4146,64 +4283,69 @@ AjPMatrixf ajAcdGetMatrixf (char *token) {
 ** @@
 ******************************************************************************/
 
-static void acdSetMatrix (AcdPAcd thys) {
+static void acdSetMatrix (AcdPAcd thys)
+{
+    AjPMatrix val;
 
-  AjPMatrix val;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    int itry;
+    AjBool isprot;
 
-  AjBool required = ajFalse;
-  AjBool ok = ajFalse;
-  static AjPStr defreply = NULL;
-  static AjPStr reply = NULL;
-  int itry;
-  AjBool isprot;
+    static AjPStr infname = NULL;
 
-  static AjPStr infname = NULL;
+    val = NULL;				/* set the default value */
 
-  val = NULL;		/* set the default value */
-
-  required = acdIsRequired(thys);
-  (void) acdAttrToBool (thys, "protein", ajTrue, &isprot);
-  if (isprot) {
-    (void) acdAttrResolve (thys, "pname", &infname);
-    if (!ajStrLen(infname))
-      (void) ajStrAssC(&infname, DEFBLOSUM);
-  }
-  else {
-    (void) acdAttrResolve (thys, "nname", &infname);
-    if (!ajStrLen(infname))
-      (void) ajStrAssC(&infname, DEFDNA);
-  }
-  (void) acdReplyInit (thys, ajStrStr(infname), &defreply);
-
-  for (itry=acdPromptTry; itry && !ok; itry--) {
-
-    ok = ajTrue;		/* accept the default if nothing changes */
-
-    (void) ajStrAss (&reply, defreply);
-
-    if (required)
-      (void) acdUserGet (thys, &reply);
-
-    if (ajStrLen(reply)) {
-      if (!ajMatrixRead(&val, reply)) {
-	acdBadVal (thys, required,
-		   "Unable to read matrix '%S'", reply);
-	ok = ajFalse;
-      }
+    required = acdIsRequired(thys);
+    (void) acdAttrToBool (thys, "protein", ajTrue, &isprot);
+    if (isprot)
+    {
+	(void) acdAttrResolve (thys, "pname", &infname);
+	if (!ajStrLen(infname))
+	    (void) ajStrAssC(&infname, DEFBLOSUM);
     }
-    else {
-      acdBadVal (thys, required, "Matrix is required");
-      ok = ajFalse;
+    else
+    {
+	(void) acdAttrResolve (thys, "nname", &infname);
+	if (!ajStrLen(infname))
+	    (void) ajStrAssC(&infname, DEFDNA);
     }
-  }
+    (void) acdReplyInit (thys, ajStrStr(infname), &defreply);
 
-  if (!ok)
-    acdBadRetry (thys);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	ok = ajTrue;			/* accept the default if nothing changes */
 
-  thys->Value = val;
-  (void) ajStrAss (&thys->ValStr, reply);
+	(void) ajStrAss (&reply, defreply);
 
-  return;
+	if (required)
+	    (void) acdUserGet (thys, &reply);
+
+	if (ajStrLen(reply))
+	{
+	    if (!ajMatrixRead(&val, reply))
+	    {
+		acdBadVal (thys, required,
+			   "Unable to read matrix '%S'", reply);
+		ok = ajFalse;
+	    }
+	}
+	else
+	{
+	    acdBadVal (thys, required, "Matrix is required");
+	    ok = ajFalse;
+	}
+    }
+
+    if (!ok)
+	acdBadRetry (thys);
+
+    thys->Value = val;
+    (void) ajStrAss (&thys->ValStr, reply);
+
+    return;
 }
 
 /* @funcstatic acdSetMatrixf **************************************************
@@ -4221,64 +4363,70 @@ static void acdSetMatrix (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-static void acdSetMatrixf (AcdPAcd thys) {
+static void acdSetMatrixf (AcdPAcd thys)
+{
+    AjPMatrixf val;
 
-  AjPMatrixf val;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    int itry;
+    AjBool isprot;
 
-  AjBool required = ajFalse;
-  AjBool ok = ajFalse;
-  static AjPStr defreply = NULL;
-  static AjPStr reply = NULL;
-  int itry;
-  AjBool isprot;
+    static AjPStr infname = NULL;
 
-  static AjPStr infname = NULL;
+    val = NULL;				/* set the default value */
 
-  val = NULL;		/* set the default value */
-
-  required = acdIsRequired(thys);
-  (void) acdAttrToBool (thys, "protein", ajTrue, &isprot);
-  if (isprot) {
-    (void) acdAttrResolve (thys, "pname", &infname);
-    if (!ajStrLen(infname))
-      (void) ajStrAssC(&infname, DEFBLOSUM);
-  }
-  else {
-    (void) acdAttrResolve (thys, "nname", &infname);
-    if (!ajStrLen(infname))
-      (void) ajStrAssC(&infname, DEFDNA);
-  }
-  (void) acdReplyInit (thys, ajStrStr(infname), &defreply);
-
-  for (itry=acdPromptTry; itry && !ok; itry--) {
-
-    ok = ajTrue;		/* accept the default if nothing changes */
-
-    (void) ajStrAss (&reply, defreply);
-
-    if (required)
-      (void) acdUserGet (thys, &reply);
-
-    if (ajStrLen(reply)) {
-      if (!ajMatrixfRead(&val, reply)) {
-	acdBadVal (thys, required,
-		   "Unable to read matrix '%S'", reply);
-	ok = ajFalse;
-      }
+    required = acdIsRequired(thys);
+    (void) acdAttrToBool (thys, "protein", ajTrue, &isprot);
+    if (isprot)
+    {
+	(void) acdAttrResolve (thys, "pname", &infname);
+	if (!ajStrLen(infname))
+	    (void) ajStrAssC(&infname, DEFBLOSUM);
     }
-    else {
-      acdBadVal (thys, required, "Matrix is required");
-      ok = ajFalse;
+    else
+    {
+	(void) acdAttrResolve (thys, "nname", &infname);
+	if (!ajStrLen(infname))
+	    (void) ajStrAssC(&infname, DEFDNA);
     }
-  }
+    (void) acdReplyInit (thys, ajStrStr(infname), &defreply);
 
-  if (!ok)
-    acdBadRetry (thys);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
 
-  thys->Value = val;
-  (void) ajStrAssS (&thys->ValStr, reply);
+	ok = ajTrue;	/* accept the default if nothing changes */
 
-  return;
+	(void) ajStrAss (&reply, defreply);
+
+	if (required)
+	    (void) acdUserGet (thys, &reply);
+
+	if (ajStrLen(reply))
+	{
+	    if (!ajMatrixfRead(&val, reply))
+	    {
+		acdBadVal (thys, required,
+			   "Unable to read matrix '%S'", reply);
+		ok = ajFalse;
+	    }
+	}
+	else
+	{
+	    acdBadVal (thys, required, "Matrix is required");
+	    ok = ajFalse;
+	}
+    }
+
+    if (!ok)
+	acdBadRetry (thys);
+
+    thys->Value = val;
+    (void) ajStrAssS (&thys->ValStr, reply);
+
+    return;
 }
 
 /* @func ajAcdGetOutfile ******************************************************
@@ -4294,9 +4442,9 @@ static void acdSetMatrixf (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-AjPFile ajAcdGetOutfile (char *token) {
-
-  return acdGetValue (token, "outfile");
+AjPFile ajAcdGetOutfile (char *token)
+{
+    return acdGetValue (token, "outfile");
 }
 
 /* @funcstatic acdSetOutfile **************************************************
@@ -4321,65 +4469,69 @@ AjPFile ajAcdGetOutfile (char *token) {
 ** @@
 ******************************************************************************/
 
-static void acdSetOutfile (AcdPAcd thys) {
+static void acdSetOutfile (AcdPAcd thys)
+{
+    AjPFile val;
 
-  AjPFile val;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    int itry;
+    AjBool nullok;
 
-  AjBool required = ajFalse;
-  AjBool ok = ajFalse;
-  static AjPStr defreply = NULL;
-  static AjPStr reply = NULL;
-  int itry;
-  AjBool nullok;
+    static AjPStr name = NULL;
+    static AjPStr ext = NULL;
+    static AjPStr outfname = NULL;
 
-  static AjPStr name = NULL;
-  static AjPStr ext = NULL;
-  static AjPStr outfname = NULL;
+    val = NULL;				/* set the default value */
 
-  val = NULL;		/* set the default value */
+    (void) acdAttrResolve (thys, "name", &name);
+    (void) acdAttrResolve (thys, "extension", &ext);
 
-  (void) acdAttrResolve (thys, "name", &name);
-  (void) acdAttrResolve (thys, "extension", &ext);
+    (void) acdAttrToBool (thys, "nullok", ajFalse, &nullok);
+    acdLog ("nullok: %B\n", nullok);
 
-  (void) acdAttrToBool (thys, "nullok", ajFalse, &nullok);
-  acdLog ("nullok: %B\n", nullok);
+    required = acdIsRequired(thys);
+    (void) acdOutFilename (&outfname, name, ext);
+    (void) acdReplyInit (thys, ajStrStr(outfname), &defreply);
+    acdPromptOutfile (thys);
 
-  required = acdIsRequired(thys);
-  (void) acdOutFilename (&outfname, name, ext);
-  (void) acdReplyInit (thys, ajStrStr(outfname), &defreply);
-  acdPromptOutfile (thys);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	ok = ajTrue;			/* accept the default if nothing changes */
 
-  for (itry=acdPromptTry; itry && !ok; itry--) {
+	(void) ajStrAssS (&reply, defreply);
 
-    ok = ajTrue;		/* accept the default if nothing changes */
+	if (required)
+	    (void) acdUserGet (thys, &reply);
 
-    (void) ajStrAssS (&reply, defreply);
-
-    if (required)
-      (void) acdUserGet (thys, &reply);
-
-    if (ajStrLen(reply)) {
-      val = ajFileNewOut(reply);
-      if (!val) {
-	acdBadVal (thys, required,
-		   "Unable to open file '%S' for output", reply);
-	ok = ajFalse;
-      }
+	if (ajStrLen(reply))
+	{
+	    val = ajFileNewOut(reply);
+	    if (!val)
+	    {
+		acdBadVal (thys, required,
+			   "Unable to open file '%S' for output", reply);
+		ok = ajFalse;
+	    }
+	}
+	else
+	{
+	    if (!nullok)
+	    {
+		acdBadVal (thys, required, "Output file is required");
+		ok = ajFalse;
+	    }
+	}
     }
-    else {
-      if (!nullok) {
-	acdBadVal (thys, required, "Output file is required");
-	ok = ajFalse;
-      }
-    }
-  }
-  if (!ok)
-    acdBadRetry (thys);
+    if (!ok)
+	acdBadRetry (thys);
 
-  thys->Value = val;
-  (void) ajStrAssS (&thys->ValStr, reply);
+    thys->Value = val;
+    (void) ajStrAssS (&thys->ValStr, reply);
 
-  return;
+    return;
 }
 
 /* @func ajAcdGetRange *******************************************************
@@ -4394,9 +4546,9 @@ static void acdSetOutfile (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-AjPRange ajAcdGetRange (char *token) {
-
-  return acdGetValue (token, "range");
+AjPRange ajAcdGetRange (char *token)
+{
+    return acdGetValue (token, "range");
 }
 
 
@@ -4422,43 +4574,44 @@ AjPRange ajAcdGetRange (char *token) {
 ** @@
 ******************************************************************************/
 
-static void acdSetRange (AcdPAcd thys) {
+static void acdSetRange (AcdPAcd thys)
+{
+    AjPRange val;
 
-  AjPRange val;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    int itry;
 
-  AjBool required = ajFalse;
-  AjBool ok = ajFalse;
-  static AjPStr defreply = NULL;
-  static AjPStr reply = NULL;
-  int itry;
+    required = acdIsRequired(thys);
+    (void) acdReplyInit (thys, "", &defreply);
 
-  required = acdIsRequired(thys);
-  (void) acdReplyInit (thys, "", &defreply);
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	ok = ajTrue;	/* accept the default if nothing changes */
 
-  for (itry=acdPromptTry; itry && !ok; itry--) {
+	(void) ajStrAss (&reply, defreply);
 
-    ok = ajTrue;		/* accept the default if nothing changes */
+	if (required)
+	    (void) acdUserGet (thys, &reply);
 
-    (void) ajStrAss (&reply, defreply);
-
-    if (required)
-      (void) acdUserGet (thys, &reply);
-
-    if (!ajRangeGet(&val,reply)) {
-      acdBadVal (thys, required,
-	   "Bad range specification '%S'", reply);
-      ok = ajFalse;
+	if (!ajRangeGet(&val,reply))
+	{
+	    acdBadVal (thys, required,
+		       "Bad range specification '%S'", reply);
+	    ok = ajFalse;
+	}
     }
-  }
 
-  if (!ok)
-    acdBadRetry (thys);
+    if (!ok)
+	acdBadRetry (thys);
 
-  thys->Value = val;
-  (void) ajStrAssS (&thys->ValStr, reply);
+    thys->Value = val;
+    (void) ajStrAssS (&thys->ValStr, reply);
 
   
-  return;
+    return;
 }
 
 
@@ -4476,9 +4629,9 @@ static void acdSetRange (AcdPAcd thys) {
 ** @@
 ******************************************************************************/
 
-AjPRegexp ajAcdGetRegexp (char *token) {
-
-  return acdGetValue (token, "regexp");
+AjPRegexp ajAcdGetRegexp (char *token)
+{
+    return acdGetValue (token, "regexp");
 }
 
 /* @funcstatic acdSetRegexp ***************************************************
@@ -4784,7 +4937,7 @@ static void acdSetSeq (AcdPAcd thys) {
   AjBool sprot=ajFalse;
   AjBool slower=ajFalse;
   AjBool supper=ajFalse;
-
+  
   val = ajSeqNew();		/* set the default value */
   seqin = ajSeqinNew();		/* set the default value */
   seqin->multi = ajFalse;
@@ -4824,6 +4977,7 @@ static void acdSetSeq (AcdPAcd thys) {
 
     (void) acdAttrToStr(thys, "type", "", &seqin->Inputtype);
     (void) acdAttrToBool(thys, "features", ajFalse, &seqin->Features);
+    (void) acdAttrToBool(thys, "entry", ajFalse, &seqin->Text);
 
     i = ajStrLen(seqin->Ufo) + ajStrLen(seqin->Ftquery->Formatstr)
       + ajStrLen(seqin->Ftquery->Filename);
@@ -5195,8 +5349,11 @@ AjPSeqall ajAcdGetSeqall (char *token) {
 ** Associated qualifiers "-sformat", "-sdbname", "-sopenfile", "-sid"
 ** are applied to the USA before reading the sequence.
 **
-** Associated qualifiers "-supper", "-slower" and "-sask" are applied
+** Associated qualifier "-sask" is applied
 ** after reading.
+**
+** Associated qualifiers "-supper", "-slower" are applied
+** globally
 **
 ** Associated qualifiers "-sbegin", "-send" and "-sreverse"
 ** are applied as appropriate, with prompting for values,
@@ -5241,8 +5398,7 @@ static void acdSetSeqall (AcdPAcd thys) {
   AjBool sprot=ajFalse;
   AjBool slower=ajFalse;
   AjBool supper=ajFalse;
-
-
+  
   val = ajSeqallNew();		/* set the default value */
   seqin = val->Seqin;
   seqin->multi = ajTrue;
@@ -5250,6 +5406,13 @@ static void acdSetSeqall (AcdPAcd thys) {
 
   (void) acdQualToBool (thys, "snucleotide", ajFalse, &snuc, &defreply);
   (void) acdQualToBool (thys, "sprotein", ajFalse, &sprot, &defreply);
+  (void) acdQualToBool (thys, "supper", ajFalse, &supper, &defreply);
+  (void) acdQualToBool (thys, "slower", ajFalse, &slower, &defreply);
+
+  if(slower)
+      seqin->Lower = ajTrue;
+  if(supper)
+      seqin->Upper = ajTrue;
 
   if (snuc)
     ajSeqinSetNuc (seqin);
@@ -5283,6 +5446,8 @@ static void acdSetSeqall (AcdPAcd thys) {
     */
     (void) acdAttrToStr(thys, "type", "", &seqin->Inputtype);
     (void) acdAttrToBool(thys, "features", ajFalse, &seqin->Features);
+    (void) acdAttrToBool(thys, "entry", ajFalse, &seqin->Text);
+
     if (ajStrLen(seqin->Ufo))
       seqin->Features = ajTrue;
 
@@ -5299,8 +5464,6 @@ static void acdSetSeqall (AcdPAcd thys) {
 
   (void) acdInFileSave(ajSeqallGetName(val)); /* save the sequence name */
 
-  (void) acdQualToBool (thys, "supper", ajFalse, &supper, &defreply);
-  (void) acdQualToBool (thys, "slower", ajFalse, &slower, &defreply);
   (void) acdQualToBool (thys, "sask", ajFalse, &sprompt, &defreply);
 
   /* now process the begin, end and reverse options */
@@ -5354,10 +5517,7 @@ static void acdSetSeqall (AcdPAcd thys) {
 		 sbegin, send, ajStrBool(sreverse));
   
   ajSeqallSetRange(val, sbegin, send);
-  if (slower)
-    (void) ajStrToLower (&seq->Seq);
-  if (supper)
-    (void) ajStrToUpper (&seq->Seq);
+
   if (sreverse)
     ajSeqallReverse (val);
   

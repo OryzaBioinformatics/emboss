@@ -84,6 +84,7 @@ void         ajSeqDel (AjPSeq* pthis);
 int          ajSeqEnd (AjPSeq seq);
 AjPStr       ajSeqGetAcc (AjPSeq thys);
 AjPStr       ajSeqGetDesc (AjPSeq thys);
+AjPStr       ajSeqGetEntry (AjPSeq thys);
 AjPFeatTable ajSeqGetFeat (AjPSeq thys);
 AjPStr       ajSeqGetName (AjPSeq thys);
 int          ajSeqGetRange (AjPSeq thys, int* begin, int* end);

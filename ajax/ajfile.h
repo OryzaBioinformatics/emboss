@@ -78,6 +78,7 @@ typedef struct AjSFileBuffList {
 **                          removing HTML tokens
 ** @mod ajFileBuffLoad Reads all input lines from a file into the buffer.
 ** @mod ajFileBuffGet Reads a line from a buffered file.
+** @mod ajFileBuffGetStore Reads a line from a buffered file with append.
 ** @use ajFileBuffEmpty Tests whether a file buffer is empty.
 ** @use ajFileBuffTrace Writes debug messages to indicate the contents
 **                      of a buffered file.
@@ -113,6 +114,8 @@ FILE*       ajFileBuffFp (const AjPFileBuff thys);
 void        ajFileBuffFreeClear (const AjPFileBuff thys);
 AjBool      ajFileBuffGet  (const AjPFileBuff thys, AjPStr *pdest);
 AjBool      ajFileBuffGetL (const AjPFileBuff thys, AjPStr *pdest, long* fpos);
+AjBool      ajFileBuffGetStore (const AjPFileBuff thys, AjPStr* pdest,
+				AjBool store, AjPStr *astr);
 void        ajFileBuffLoad (const AjPFileBuff thys);
 void        ajFileBuffLoadC (const AjPFileBuff thys, const char* str);
 void        ajFileBuffLoadS (const AjPFileBuff thys, const AjPStr str);

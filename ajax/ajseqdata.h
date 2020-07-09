@@ -109,6 +109,9 @@ typedef struct AjSSeqin {
   AjBool IsNuc;
   AjBool IsProt;
   AjBool multi;
+  AjBool Lower;
+  AjBool Upper;
+  AjBool Text;
   int Count;
   int Filecount;
   long Fpos;
@@ -202,6 +205,7 @@ typedef struct AjSSeq {
   AjEnum Format;
   AjPStr Filename;
   AjPStr Entryname;
+  AjPStr TextPtr;
   float Weight;
   AjPList Acclist;
   AjPStr Seq;
