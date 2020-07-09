@@ -4840,7 +4840,7 @@ static AjBool featVocabRead (char* name, ajint typsize, ajint tagsize,
   */
 
   ajFmtPrintS (&TypeFName, "Efeatures.%s", name);
-  ajDebug("Trying to open %S...",TypeFName);
+  ajDebug("Trying to open %S...\n",TypeFName);
   ajFileDataNew(TypeFName,&TypeFile);
   if(!TypeFile){
     ajErr("Unable to read data file '%S'\n", TagsFName);
@@ -5201,6 +5201,52 @@ AjPStr ajFeatTagSet (AjPFeature thys, AjPStr tag, AjPStr value) {
   }
 
   return NULL;
+}
+
+/* @func ajFeatTagAddCC *******************************************************
+**
+** Sets a feature tag value, creating a new feature tag even if one
+** already exists.
+**
+** @param [r] thys [AjPFeature] Feature
+** @param [r] tag [const char*] Feature tag
+** @param [r] value [const char*] Feature tag value
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajFeatTagAddCC (AjPFeature thys, const char* tag, const char* value) {
+
+  static AjPStr tagstr = NULL;
+  static AjPStr valstr = NULL;
+
+  ajStrAssC (&tagstr, tag);
+  ajStrAssC (&valstr, tag);
+  ajFeatTagAdd (thys, tagstr, valstr);
+
+  return;
+}
+
+/* @func ajFeatTagAddC ********************************************************
+**
+** Sets a feature tag value, creating a new feature tag even if one
+** already exists.
+**
+** @param [r] thys [AjPFeature] Feature
+** @param [r] tag [const char*] Feature tag
+** @param [r] value [AjPStr] Feature tag value
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajFeatTagAddC (AjPFeature thys, const char* tag, AjPStr value) {
+
+  static AjPStr tagstr = NULL;
+
+  ajStrAssC (&tagstr, tag);
+  ajFeatTagAdd (thys, tagstr, value);
+
+  return;
 }
 
 /* @func ajFeatTagAdd *********************************************************
@@ -6327,12 +6373,12 @@ static AjBool featTagSpecialAllProteinid (AjPStr* pval) {
 static AjBool featTagSpecialAllReplace (AjPStr* pval) {
 
   static AjPRegexp exp = NULL;
-
   static AjPStr seqstr = NULL;
   AjBool ret = ajFalse;
 
   if (!exp)
-    exp = ajRegCompC("^([acgt]*)$");
+    exp = ajRegCompC("^([acgtn]*)$"); /* n is used in old_sequence */
+				/* and in misc_difference features */
 
   /* if (!exp)
      exp = ajRegCompC("^\"([acgt]*)\"$");*/
