@@ -1,0 +1,192 @@
+
+                              EMBOSS: marscan
+     _________________________________________________________________
+   
+                                Program marscan
+                                       
+Function
+
+   Finds MAR/SAR sites in nucleic sequences
+   
+Description
+
+   Matrix/scaffold attachment regions (MARs/SARs) are genomic elements
+   thought to delineate the structural and functional organisation of the
+   eukaryotic genome. Originally, MARs and SARs were identified through
+   their ability to bind to the nuclear matrix or scaffold. Binding
+   cannot be assigned to a unique sequence element, but is dispersed over
+   a region of several hundred base pairs. These elements are found
+   flanking a gene or a small cluster of genes and are located often in
+   the vicinity of cis-regulatory sequences. This has led to the
+   suggestion that they contribute to higher order regulation of
+   transcription by defining boundaries of independently controlled
+   chromatin domains. There is indirect evidence to support this notion.
+   In transgenic experiments MARs/SARs dampen position effects by
+   shielding the transgene from the effects of the chromatin structure at
+   the site of integration. Furthermore, they may act as boundary
+   elements for enhancers, restricting their long range effect to only
+   the promoters that are located in the same chromatin domain.
+   
+   marscan finds a bipartite sequence element that is unique for a large
+   group of eukaryotic MARs/SARs. This MAR/SAR recognition signature
+   (MRS) comprises two individual sequence elements that are <200 bp
+   apart and may be aligned on positioned nucleosomes in MARs. The MRS
+   can be used to correctly predict the position of MARs/SARs in plants
+   and animals, based on genomic DNA sequence information alone.
+   Experimental evidence from the analysis of >300 kb of sequence data
+   from several eukaryotic organisms show that wherever a MRS is observed
+   in the DNA sequence, the corresponding genomic fragment is a
+   biochemically identifiable SAR.
+   
+   The MRS is a bipartite sequence element that consists of two
+   individual sequences of 8 (AATAAYAA) and 16 bp (AWWRTAANNWWGNNNC)
+   within a 200 bp distance from each other. One mismatch is allowed in
+   the 16 bp pattern. The patterns can occur on either strand of the DNA
+   with respect to each other.
+   
+   Not all SARs contain a MRS. Analysis of >300 kb of genomic sequence
+   from a variety of eukaryotic organisms shows that the MRS faithfully
+   predicts 80% of MARs and SARs, suggesting that at least one other type
+   of MAR/SAR may exist which does not contain a MRS.
+   
+Usage
+
+   Here is a sample session with marscan:
+
+% marscan
+marscan
+Finds MAR/SAR sites in nucleic sequences
+Input sequence(s): EMBL:BVJDUN
+Output file [hsfau1.marscan]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outf]              featout    File for output of MAR/SAR recognition
+                                  signature (MRS) regions. This contains
+                                  details of the MRS in normal GFF format. The
+                                  MRS consists of two recognition sites, one
+                                  of 8 bp and one of 16 bp on either sense
+                                  strand of the genomic DNA, within 200 bp of
+                                  each other.
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+   
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outf]
+   (Parameter 2) File for output of MAR/SAR recognition signature (MRS)
+   regions. This contains details of the MRS in normal GFF format. The
+   MRS consists of two recognition sites, one of 8 bp and one of 16 bp on
+   either sense strand of the genomic DNA, within 200 bp of each other.
+   Writeable feature table unknown.gff
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   Normal genomic DNA USA.
+   
+Output file format
+
+   It writes a standard GFF (Gene Feature Format) file.
+   
+   The output from the above example is:
+     _________________________________________________________________
+   
+##gff-version 0.0
+##date 2001-02-12
+##sequence-region BVJDUN 0 0
+BVJDUN  marscan misc_signal     4604    4633    1.0     .       .       note "M
+AR/SAR recognition site (MRS). 8bp pattern=4604..4611. 16bp pattern = 4618..463
+3"
+     _________________________________________________________________
+   
+Data files
+
+   None.
+   
+Notes
+
+   None.
+   
+References
+
+   The method for finding the MAR/SAR sites is described in:
+   
+   van Drunen CM., Sewalt RGAB., Oosterling RW., Weisbeek PJ., Smeekens
+   SCM. and van Driel R. "A bipartite sequence element associated with
+   matrix/scaffold attachment regions" Nucleic Acids Research. 1999. Vol
+   27, No. 14, pp. 2924-2930
+   
+   The original paper on MASs/SARs is:
+   
+   Mirkovitch J., Mirault M-E. and Laemmli UK. Cell. 1984. Vol. 39 pp.
+   223-232.
+   
+Warnings
+
+   It does not check that the DNA input seequnce is genomic or not.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name                          Description
+   chaos        Create a chaos game representation plot for a sequence
+   chips        Codon usage statistics
+   cpgplot      Plot CpG rich areas
+   cpgreport    Reports all CpG rich regions
+   cusp         Create a codon usage table
+   diffseq      Find differences (SNPs) between nearly identical sequences
+   dotmatcher   Displays a thresholded dotplot of two sequences
+   dotpath      Displays a non-overlapping wordmatch dotplot of two sequences
+   dottup       Displays a wordmatch dotplot of two sequences
+   einverted    Finds DNA inverted repeats
+   equicktandem Finds tandem repeats
+   etandem      Looks for tandem repeats in a nucleotide sequence
+   getorf       Finds and extracts open reading frames (ORFs)
+   isochore     Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek   Reports CpG rich regions
+   palindrome   Looks for inverted repeats in a nucleotide sequence
+   polydot      Displays all-against-all dotplots of a set of sequences
+   recode       Remove restriction sites but maintain the same translation
+   redata       Search REBASE for enzyme name, references, suppliers etc
+   restover     Finds restriction enzymes that produce a specific overhang
+   restrict     Finds restriction enzyme cleavage sites
+   showseq      Display a sequence with features, translation etc
+   silent       Silent mutation restriction enzyme scan
+   syco         Synonymous codon usage Gribskov statistic plot
+   tfscan       Scans DNA sequences for transcription factors
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (Jan 2001) - Gary Williams.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
