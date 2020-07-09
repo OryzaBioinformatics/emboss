@@ -1653,6 +1653,24 @@ FP /^               [|]+>>>>> 515 >>>>>[|]+\n/
 FP /^   pax6   1082 ttgaggccctggagaaag...............agtttgagagaacccat   1116\n/
 //
 
+ID est2genome-align-linear
+TI 200
+AP est2genome
+CL -align -space 2
+IN ../../data/pax6_cdna.fasta
+IN ../../data/z83307.seq
+IN
+FI stderr
+FC = 2
+FI pax6.est2genome
+FZ = 8087
+FP /Note .* forward est and forward genome, .* imply forward gene/
+FP /^Exon       129  99.2  1380  1510 HSA1280        428   558 pax6/
+FP /^HSA1280   9567 ttgaggccctggagaaaggtgat.....ttcagagtttgagagaacccat  10116\n/
+FP /^               [|]+>>>>> 515 >>>>>[|]+\n/
+FP /^   pax6   1082 ttgaggccctggagaaag...............agtttgagagaacccat   1116\n/
+//
+
 ID est2genome-align-best
 TI 200
 AP est2genome
@@ -1809,8 +1827,8 @@ FP 1 /^          RNOPS  3 +\d+ RA\n/
 //
 
 ID feat-embl
-AP seqretallfeat
-CL ../../data/feat.fasta -ufo ../../data/feat.emft embl::test.out -auto
+AP seqret
+CL -feat ../../data/feat.fasta -ufo ../../data/feat.emft embl::test.out -auto
 FI test.out
 FZ = 78140
 ## Internal quotes
@@ -1826,8 +1844,8 @@ FP /\/note="aliphatic amidase regulator, positive regulator of\n/
 //
 
 ID feat-embl-togff
-AP seqretallfeat
-CL ../../data/feat.fasta -ufo ../../data/feat.emft gff::test.out -auto
+AP seqret
+CL -feat ../../data/feat.fasta -ufo ../../data/feat.emft gff::test.out -auto
 FI test.out
 FZ = 60755
 ## Internal quotes
@@ -1835,8 +1853,8 @@ FP /\tCDS\t1289\t1879\t0\.000\t\+\t\.\tSequence "AB036666.58" ; .* of \\"amiE\\"
 //
 
 ID feat-embl-togb
-AP seqretallfeat
-CL ../../data/feat.fasta -ufo ../../data/feat.emft gb::test.out -auto
+AP seqret
+CL -feat ../../data/feat.fasta -ufo ../../data/feat.emft gb::test.out -auto
 FI test.out
 FZ = 75351
 ## Internal quotes
@@ -1851,9 +1869,26 @@ FP /^     CDS             1289..1879\n/
 FP /\/note="aliphatic amidase regulator, positive regulator of\n/
 //
 
+ID feat-genbank-toembl
+AP seqret
+CL -feat ../../data/feat.fasta -ufo ../../data/feat.gbft em::test.out -auto
+FI test.out
+FZ = 78140
+## Internal quotes
+FP /^FT                   ""amiE"" gene"\n/
+## Bad features type (CODS) to misc_feature
+FP /^FT   misc_feature    135..1292\n/
+## Case fix for tag /Translation
+FP /^FT                   \/translation="MSANSL/
+## Case fix for type Cds
+FP /^FT   CDS             1289..1879\n/
+## Cleanup of extra white space 'positive  regulator'
+FP /\/note="aliphatic amidase regulator, positive regulator of\n/
+//
+
 ID feat-pir
-AP seqretallfeat
-CL ../../data/featprot.fasta -ufo ../../data/feat.pir sw::test.out -auto
+AP seqret
+CL -feat ../../data/featprot.fasta -ufo ../../data/feat.pir sw::test.out -auto
 FI test.out
 FZ = 4834
 ## active site two locations with copied annotation (note and comment)
@@ -1862,8 +1897,8 @@ FP /^FT   ACT_SITE     90     90       Cys, His \(status experimental\)\.\n/
 //
 
 ID feat-pir-togff
-AP seqretallfeat
-CL ../../data/featprot.fasta -ufo ../../data/feat.pir gff::test.out -auto
+AP seqret
+CL -feat ../../data/featprot.fasta -ufo ../../data/feat.pir gff::test.out -auto
 FI test.out
 FZ = 5023
 ## active site two locations with copied annotation (note and comment)
@@ -1872,8 +1907,8 @@ FP /^OPSD_HUMAN\tPIR\tact_site\t90\t90\t0\.000\t\+\t\.\tSequence "OPSD_HUMAN.11"
 //
 
 ID feat-pir-topir
-AP seqretallfeat
-CL ../../data/featprot.fasta -ufo ../../data/feat.pir pir::test.out -auto
+AP seqret
+CL -feat ../../data/featprot.fasta -ufo ../../data/feat.pir pir::test.out -auto
 FI test.out
 FZ = 1921
 ## active site two locations with copied annotation (note and comment)
@@ -1881,8 +1916,8 @@ FP /^F;38,90\/Active site: Cys, His, act_site #status experimental\n/
 //
 
 ID feat-swiss
-AP seqretallfeat
-CL tsw:laci_ecoli sw::test.out -auto
+AP seqret
+CL -feat tsw:laci_ecoli sw::test.out -auto
 FI test.out
 FZ = 1031
 FP /^FT   DNA_BIND      6     25       H-T-H MOTIF\.\n/
@@ -1890,8 +1925,8 @@ FP /^FT   HELIX        32     44\n/
 //
 
 ID feat-swiss-topir
-AP seqretallfeat
-CL tsw:laci_ecoli pir::test.out -auto
+AP seqret
+CL -feat tsw:laci_ecoli pir::test.out -auto
 FI test.out
 FZ = 823
 FP /^F;6-25\/Binding site: H-T-H MOTIF, dna_bind\n/
@@ -1899,8 +1934,8 @@ FP /^F;32-44\/Region: helix\n/
 //
 
 ID feat-swiss-togff
-AP seqretallfeat
-CL tsw:laci_ecoli gff::test.out -auto
+AP seqret
+CL -feat tsw:laci_ecoli gff::test.out -auto
 FI test.out
 FZ = 1428
 FP /^LACI_ECOLI\tSWISSPROT\tdna_bind\t6\t25\t0\.000\t\+\t\.\tSequence "LACI_ECOLI\.1" ; note "H-T-H MOTIF"\n/
@@ -3487,6 +3522,63 @@ FP /^ID   .* 100 BP\.\n/
 FP /^SQ   Sequence 100 BP; 25 A; 25 C; 25 G; 25 T; 0 other;/
 //
 
+ID seqret-inauto-abi
+AP seqret
+CL -auto ../../data/abiview.abi test.out -osf embl
+FI test.out
+FZ = 1241
+FP /^ID   .* 838 BP\.\n/
+FP /^SQ   Sequence 838 BP; 274 A; 140 C; 182 G; 211 T; 31 other;/
+//
+
+ID seqret-inusa-abi
+AP seqret
+CL -auto abi::../../data/abiview.abi test.out -osf embl
+FI test.out
+FZ = 1241
+FP /^ID   .* 838 BP\.\n/
+FP /^SQ   Sequence 838 BP; 274 A; 140 C; 182 G; 211 T; 31 other;/
+//
+
+ID seqret-in-abi
+AP seqret
+CL -auto ../../data/abiview.abi -sf abi test.out -osf embl
+FI test.out
+FZ = 1241
+FP /^ID   .* 838 BP\.\n/
+FP /^SQ   Sequence 838 BP; 274 A; 140 C; 182 G; 211 T; 31 other;/
+//
+
+ID seqret-inauto-selex
+AP seqret
+CL -auto ../../data/test.selex test.out -osf embl
+FI test.out
+FZ = 532
+FP 3 /^ID/
+FP /^ID   lig28.* 31 BP\.\n/
+FP /^SQ   Sequence 31 BP; 7 A; 7 C; 8 G; 7 T; 2 other;/
+//
+
+ID seqret-inusa-selex
+AP seqret
+CL -auto selex::../../data/test.selex test.out -osf embl
+FI test.out
+FZ = 532
+FP 3 /^ID/
+FP /^ID   lig28.* 31 BP\.\n/
+FP /^SQ   Sequence 31 BP; 7 A; 7 C; 8 G; 7 T; 2 other;/
+//
+
+ID seqret-in-selex
+AP seqret
+CL -auto ../../data/test.selex -sf selex test.out -osf embl
+FI test.out
+FZ = 532
+FP 3 /^ID/
+FP /^ID   lig28.* 31 BP\.\n/
+FP /^SQ   Sequence 31 BP; 7 A; 7 C; 8 G; 7 T; 2 other;/
+//
+
 ID seqret-inmultiauto-acedb
 AP seqret
 CL -auto ../../data/dna.m-acedb test.out -osf embl
@@ -3784,6 +3876,17 @@ CL -auto ../../data/dna.nonewline test.out -osf embl
 FI test.out
 FP /^ID   .* 48 BP\.\n/
 FP /^SQ   Sequence 48 BP; 10 A; 10 C; 10 G; 10 T; 8 other;/
+//
+
+ID seqret-inauto-empty
+AP seqret
+CL -auto stdin test.out -osf embl
+ER 1
+FI stderr
+FZ = 39
+FP /Error: Unable to read sequence 'stdin'/
+FI test.out
+FZ =0
 //
 
 ID seqret-in-badformat
@@ -4841,22 +4944,24 @@ FP /^ACGTACGTACGTACGTACGT----ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACG
 //
 
 ID seqretset-ex
-AP seqretset
-CL -auto tembl:eclac* test.out -osf fasta
+AP infoalign
+CL -auto tembl:eclac* -out test.out
 FI test.out
-FZ = 15608
-FP 5 /^>ECLAC/
+FZ = 712
+FP /tembl-id:ECLAC\s+ECLAC\s+7477\s+7477\s+0\s+0\s+65\s+0\s+7412\s+99[.]130[0-9]+\s+E.*/
+FP /tembl-id:ECLACZ\s+ECLACZ\s+3078\s+3078\s+0\s+0\s+72\s+0\s+3006\s+97[.]660[0-9]+\s+E.*/
 //
 
 ID seqretset-ex1
-AP seqretset
-CL -auto tembl:eclacz test.out -osf fasta
+AP infoalign
+CL -auto tembl:eclacz -out test.out
 FI test.out
-FP 1 /^>ECLAC/
+FZ = 229
+FP /tembl-id:ECLACZ\s+ECLACZ\s+3078\s+3078\s+0\s+0\s+0\s+0\s+3078\s+100[.]0+\s+E.*/
 //
 
 ID seqretall-ex
-AP seqretall
+AP seqret
 CL -auto tembl:eclac* test.out -osf fasta
 FI test.out
 FZ = 15608
@@ -4864,7 +4969,7 @@ FP 5 /^>ECLAC/
 //
 
 ID seqretall-ex1
-AP seqretall
+AP seqret
 CL -auto tembl:eclacz test.out -osf fasta
 FI test.out
 FP 1 /^>ECLAC/
