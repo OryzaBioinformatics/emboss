@@ -1,0 +1,482 @@
+
+                                EMBOSS: topo
+     _________________________________________________________________
+   
+                                 Program topo
+                                       
+Function
+
+   TOPO creates an image of a transmembrane protein.
+   
+Description
+
+   TOPO creates an image of a transmembrane region but the user must give
+   the transmembrane regions for the sequence as it does not calculate
+   these.
+   
+Usage
+
+   Here is a sample session with topo.
+
+% topo sw:aqp1_human -signa -prol=UM -cys=cg -gly=sr -acid=dr
+-basic=db -ohaa=da -araa=dg
+
+Draws an image of a transmembrane protein
+Display on device [xwin]:
+Transmembrane Sections: 18 35 49 67 94 115 136 156 165 184 211 232
+First membrane from the outside [Y]: n
+Signatue Sections: 74 82 sy 189 189 hm 239 239 sa 157 157 sa 262 262 sa
+
+
+   click here for result
+   
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-sequence]          sequence   Sequence USA
+   -graph              graph      Graph type
+   -sections           range      Examples of region specifications are:
+                                  24-45, 56-78
+                                  1:45, 67=99;765..888
+                                  1,5,8,10,23,45,57,99
+   -[no]membrane       bool       First membrane from the outside
+*  -sigrange           range      Examples of ranges specifications are:
+                                  10-10 CF, 56-78 SY\ 1:45 SR, 67=99
+                                  HY;765..888 SF
+                                  1,5,HG,8,10,HY,23,45,SR,57,99,UG
+
+   Optional qualifiers:
+   -cyssymbol          list       Code representing shape and colour for cys
+                                  i.e. SR square red, HY hexagon yellow
+                                  CF circle NOfill, UG up arrow green
+   -glysymbol          list       Symbol to display N-glycosylation sites
+                                  outside of membrane see cyssymbol for
+                                  examples
+   -acidicaa           list       Symbol to display acidic amino acids
+   -basicaa            list       Symbol to display basic amino acids
+   -amineaa            list       Symbol to display amine amino acids
+   -ohaa               list       Symbol to display OH- amino acids
+   -araa               list       Symbol to display aromatic amino acids
+   -proline            list       Symbol to display prolines
+   -signature          bool       Are there any signature areas to be marked
+   -draft              bool       Is this a draft plot
+
+   Advanced qualifiers: (none)
+   
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence USA Readable sequence Required
+   -graph Graph type EMBOSS has a list of known devices, including
+   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
+   EMBOSS_GRAPHICS value, or x11
+   -sections Examples of region specifications are: 24-45, 56-78 1:45,
+   67=99;765..888 1,5,8,10,23,45,57,99 Sequence range full sequence
+   -[no]membrane First membrane from the outside Yes/No Yes
+   -sigrange Examples of ranges specifications are: 10-10 CF, 56-78 SY\
+   1:45 SR, 67=99 HY;765..888 SF 1,5,HG,8,10,HY,23,45,SR,57,99,UG
+   Sequence range full sequence
+   Optional qualifiers Allowed values Default
+   -cyssymbol Code representing shape and colour for cys i.e. SR square
+   red, HY hexagon yellow CF circle NOfill, UG up arrow green
+   N  (None)
+   CF (circle)
+   SF (square)
+   HF (hexagon)
+   UF (up arrpw)
+   DF (down arrow)
+   C  (black circle)
+   CG (green circle)
+   CR (red circle)
+   CB (blue circle)
+   CA (aqua circle)
+   CM (magenta circle)
+   CY (yellow circle)
+   S  (black square)
+   SG (green square)
+   SR (red square)
+   SB (blue square)
+   SA (aqua square)
+   SM (magenta square)
+   SY (yellow square)
+   H  (black hexagon)
+   HG (green hexagon)
+   HR (red hexagon)
+   HB (blue hexagon)
+   HA (aqua hexagon)
+   HM (magenta hexagon)
+   HY (yellow hexagon)
+   U  (black up arrow)
+   UG (green up arrow)
+   UR (red up arrow)
+   UB (blue up arrow)
+   UA (aqua up arrow)
+   UM (magenta up arrow)
+   UY (yellow up arrow)
+   D  (black down arrow)
+   DG (green down arrow)
+   DR (red down arrow)
+   DB (blue down arrow)
+   DA (aqua down arrow)
+   DM (magenta down arrow)
+   DY (yellow down arrow)
+   CF
+   -glysymbol Symbol to display N-glycosylation sites outside of membrane
+   see cyssymbol for examples
+   N  (None)
+   CF (circle)
+   SF (square)
+   HF (hexagon)
+   UF (up arrpw)
+   DF (down arrow)
+   C  (black circle)
+   CG (green circle)
+   CR (red circle)
+   CB (blue circle)
+   CA (aqua circle)
+   CM (magenta circle)
+   CY (yellow circle)
+   S  (black square)
+   SG (green square)
+   SR (red square)
+   SB (blue square)
+   SA (aqua square)
+   SM (magenta square)
+   SY (yellow square)
+   H  (black hexagon)
+   HG (green hexagon)
+   HR (red hexagon)
+   HB (blue hexagon)
+   HA (aqua hexagon)
+   HM (magenta hexagon)
+   HY (yellow hexagon)
+   U  (black up arrow)
+   UG (green up arrow)
+   UR (red up arrow)
+   UB (blue up arrow)
+   UA (aqua up arrow)
+   UM (magenta up arrow)
+   UY (yellow up arrow)
+   D  (black down arrow)
+   DG (green down arrow)
+   DR (red down arrow)
+   DB (blue down arrow)
+   DA (aqua down arrow)
+   DM (magenta down arrow)
+   DY (yellow down arrow)
+   CF
+   -acidicaa Symbol to display acidic amino acids
+   N  (None)
+   CF (circle)
+   SF (square)
+   HF (hexagon)
+   UF (up arrpw)
+   DF (down arrow)
+   C  (black circle)
+   CG (green circle)
+   CR (red circle)
+   CB (blue circle)
+   CA (aqua circle)
+   CM (magenta circle)
+   CY (yellow circle)
+   S  (black square)
+   SG (green square)
+   SR (red square)
+   SB (blue square)
+   SA (aqua square)
+   SM (magenta square)
+   SY (yellow square)
+   H  (black hexagon)
+   HG (green hexagon)
+   HR (red hexagon)
+   HB (blue hexagon)
+   HA (aqua hexagon)
+   HM (magenta hexagon)
+   HY (yellow hexagon)
+   U  (black up arrow)
+   UG (green up arrow)
+   UR (red up arrow)
+   UB (blue up arrow)
+   UA (aqua up arrow)
+   UM (magenta up arrow)
+   UY (yellow up arrow)
+   D  (black down arrow)
+   DG (green down arrow)
+   DR (red down arrow)
+   DB (blue down arrow)
+   DA (aqua down arrow)
+   DM (magenta down arrow)
+   DY (yellow down arrow)
+   CF
+   -basicaa Symbol to display basic amino acids
+   N  (None)
+   CF (circle)
+   SF (square)
+   HF (hexagon)
+   UF (up arrpw)
+   DF (down arrow)
+   C  (black circle)
+   CG (green circle)
+   CR (red circle)
+   CB (blue circle)
+   CA (aqua circle)
+   CM (magenta circle)
+   CY (yellow circle)
+   S  (black square)
+   SG (green square)
+   SR (red square)
+   SB (blue square)
+   SA (aqua square)
+   SM (magenta square)
+   SY (yellow square)
+   H  (black hexagon)
+   HG (green hexagon)
+   HR (red hexagon)
+   HB (blue hexagon)
+   HA (aqua hexagon)
+   HM (magenta hexagon)
+   HY (yellow hexagon)
+   U  (black up arrow)
+   UG (green up arrow)
+   UR (red up arrow)
+   UB (blue up arrow)
+   UA (aqua up arrow)
+   UM (magenta up arrow)
+   UY (yellow up arrow)
+   D  (black down arrow)
+   DG (green down arrow)
+   DR (red down arrow)
+   DB (blue down arrow)
+   DA (aqua down arrow)
+   DM (magenta down arrow)
+   DY (yellow down arrow)
+   CF
+   -amineaa Symbol to display amine amino acids
+   N  (None)
+   CF (circle)
+   SF (square)
+   HF (hexagon)
+   UF (up arrpw)
+   DF (down arrow)
+   C  (black circle)
+   CG (green circle)
+   CR (red circle)
+   CB (blue circle)
+   CA (aqua circle)
+   CM (magenta circle)
+   CY (yellow circle)
+   S  (black square)
+   SG (green square)
+   SR (red square)
+   SB (blue square)
+   SA (aqua square)
+   SM (magenta square)
+   SY (yellow square)
+   H  (black hexagon)
+   HG (green hexagon)
+   HR (red hexagon)
+   HB (blue hexagon)
+   HA (aqua hexagon)
+   HM (magenta hexagon)
+   HY (yellow hexagon)
+   U  (black up arrow)
+   UG (green up arrow)
+   UR (red up arrow)
+   UB (blue up arrow)
+   UA (aqua up arrow)
+   UM (magenta up arrow)
+   UY (yellow up arrow)
+   D  (black down arrow)
+   DG (green down arrow)
+   DR (red down arrow)
+   DB (blue down arrow)
+   DA (aqua down arrow)
+   DM (magenta down arrow)
+   DY (yellow down arrow)
+   CF
+   -ohaa Symbol to display OH- amino acids
+   N  (None)
+   CF (circle)
+   SF (square)
+   HF (hexagon)
+   UF (up arrpw)
+   DF (down arrow)
+   C  (black circle)
+   CG (green circle)
+   CR (red circle)
+   CB (blue circle)
+   CA (aqua circle)
+   CM (magenta circle)
+   CY (yellow circle)
+   S  (black square)
+   SG (green square)
+   SR (red square)
+   SB (blue square)
+   SA (aqua square)
+   SM (magenta square)
+   SY (yellow square)
+   H  (black hexagon)
+   HG (green hexagon)
+   HR (red hexagon)
+   HB (blue hexagon)
+   HA (aqua hexagon)
+   HM (magenta hexagon)
+   HY (yellow hexagon)
+   U  (black up arrow)
+   UG (green up arrow)
+   UR (red up arrow)
+   UB (blue up arrow)
+   UA (aqua up arrow)
+   UM (magenta up arrow)
+   UY (yellow up arrow)
+   D  (black down arrow)
+   DG (green down arrow)
+   DR (red down arrow)
+   DB (blue down arrow)
+   DA (aqua down arrow)
+   DM (magenta down arrow)
+   DY (yellow down arrow)
+   CF
+   -araa Symbol to display aromatic amino acids
+   N  (None)
+   CF (circle)
+   SF (square)
+   HF (hexagon)
+   UF (up arrpw)
+   DF (down arrow)
+   C  (black circle)
+   CG (green circle)
+   CR (red circle)
+   CB (blue circle)
+   CA (aqua circle)
+   CM (magenta circle)
+   CY (yellow circle)
+   S  (black square)
+   SG (green square)
+   SR (red square)
+   SB (blue square)
+   SA (aqua square)
+   SM (magenta square)
+   SY (yellow square)
+   H  (black hexagon)
+   HG (green hexagon)
+   HR (red hexagon)
+   HB (blue hexagon)
+   HA (aqua hexagon)
+   HM (magenta hexagon)
+   HY (yellow hexagon)
+   U  (black up arrow)
+   UG (green up arrow)
+   UR (red up arrow)
+   UB (blue up arrow)
+   UA (aqua up arrow)
+   UM (magenta up arrow)
+   UY (yellow up arrow)
+   D  (black down arrow)
+   DG (green down arrow)
+   DR (red down arrow)
+   DB (blue down arrow)
+   DA (aqua down arrow)
+   DM (magenta down arrow)
+   DY (yellow down arrow)
+   CF
+   -proline Symbol to display prolines
+   N  (None)
+   CF (circle)
+   SF (square)
+   HF (hexagon)
+   UF (up arrpw)
+   DF (down arrow)
+   C  (black circle)
+   CG (green circle)
+   CR (red circle)
+   CB (blue circle)
+   CA (aqua circle)
+   CM (magenta circle)
+   CY (yellow circle)
+   S  (black square)
+   SG (green square)
+   SR (red square)
+   SB (blue square)
+   SA (aqua square)
+   SM (magenta square)
+   SY (yellow square)
+   H  (black hexagon)
+   HG (green hexagon)
+   HR (red hexagon)
+   HB (blue hexagon)
+   HA (aqua hexagon)
+   HM (magenta hexagon)
+   HY (yellow hexagon)
+   U  (black up arrow)
+   UG (green up arrow)
+   UR (red up arrow)
+   UB (blue up arrow)
+   UA (aqua up arrow)
+   UM (magenta up arrow)
+   UY (yellow up arrow)
+   D  (black down arrow)
+   DG (green down arrow)
+   DR (red down arrow)
+   DB (blue down arrow)
+   DA (aqua down arrow)
+   DM (magenta down arrow)
+   DY (yellow down arrow)
+   CF
+   -signature Are there any signature areas to be marked Yes/No No
+   -draft Is this a draft plot Yes/No No
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   Any sequence.
+   
+Output file format
+
+Data files
+
+Notes
+
+   As you can see the lists above the are alot of options to choose for
+   the displays of acidic, basic amino acids etc. This can be explained
+   simply as :-
+   
+   One letter codes are black filled shaped EXCEPT for "N" which means
+   NONE (no shape).
+   
+   For two letter codes the first letter is the shape and the second the
+   colour except for "F" which means NO FILL.
+   
+   For the signatures you need to input sets of start position, end
+   position and code. For the example given these are 74 82 sy 189 189 hm
+   239 239 sa 157 157 sa 262 262 sa
+So residues 74 to 82 will have Yellow Squares (sy).
+   residue 189 (i.e. 189 to 189) will have a Magenta Hexagon. (hm)
+
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   The original Fortran program was written by Susan Jean Johns, VADMS
+   Center, Biochemistry/Biophysics Department at WSU.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments
