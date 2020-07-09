@@ -1,0 +1,20 @@
+appl: union [
+  documentation: "Reads sequence fragments and builds one sequence"
+  groups: "Edit"
+]
+
+section: input [ info: "input Section" type: page ]
+
+seqall: sequence  [
+  parameter: "Y"
+]
+
+endsection: input
+
+section: output [ info: "output Section" type: page ]
+seqout: outseq  [
+  parameter: "Y"
+]
+
+endsection: output
+

@@ -1,0 +1,151 @@
+
+                               EMBOSS: union
+     _________________________________________________________________
+   
+                                 Program union
+                                       
+Function
+
+   Reads sequence fragments and builds one sequence
+   
+Description
+
+   union reads in several sequences, concatenates them and writes them
+   out as a single sequence.
+   
+   It is most useful when the input sequences are specified in a List
+   file. The List file (file of sequence names) can be any set of
+   sequences in files or database entries specified in the normal EMBOSS
+   USA (which can include the spcification of sub-regions of the
+   sequence, eg. 'em:hsfau[20,55]'). Specifying several such subregions
+   in a sequence or sequences allows you to enter disjoint sequences to
+   be joined.
+   
+Usage
+
+   Here is a sample session with union, the file 'cds.list' contains a
+   list of the regions making up the coding sequence of the sequence
+   'embl:hsfau':
+
+% union
+Reads sequence fragments and builds one sequence
+Input sequence(s): @cds.list
+Output sequence [hsfau1.fasta]: fau.cds
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outseq]            seqout     Output sequence USA
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outseq]
+   (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   The input can be any set of sequences in a file of multiple sequence
+   entries or a List file. The sequences are concatenated in the order in
+   which they appear in the file.
+   
+   The input used in the above example is:
+   
+em-id:HSFAU1[782:856]
+em-id:HSFAU1[951:1095]
+em-id:HSFAU1[1557:1612]
+em-id:HSFAU1[1787:1912]
+
+   You may find the program yank useful for creating List files.
+   
+Output file format
+
+   The result if a normal sequence file containnig a single sequence
+   resulting from the concatenation of the input sequences.
+   
+Data files
+
+   None.
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name                          Description
+   biosed       Replace or delete sequence sections
+   cutseq       Removes a specified section from a sequence
+   degapseq     Removes gap characters from sequences
+   descseq      Alter the name or description of a sequence
+   entret       Reads and writes (returns) flatfile entries
+   extractfeat  Extract features from a sequence
+   extractseq   Extract regions from a sequence
+   listor       Writes a list file of the logical OR of two sets of sequences
+   maskfeat     Mask off features of a sequence
+   maskseq      Mask off regions of a sequence
+   newseq       Type in a short new sequence
+   noreturn     Removes carriage return from ASCII files
+   notseq       Excludes a set of sequences and writes out the remaining ones
+   nthseq       Writes one sequence from a multiple set of sequences
+   pasteseq     Insert one sequence into another
+   revseq       Reverse and complement a sequence
+   seqret       Reads and writes (returns) sequences
+   seqretsplit  Reads and writes (returns) sequences in individual files
+   splitter     Split a sequence into (overlapping) smaller sequences
+   swissparse   Retrieves sequences from swissprot using keyword search
+   trimest      Trim poly-A tails off EST sequences
+   trimseq      Trim ambiguous bits off the ends of sequences
+   vectorstrip  Strips out DNA between a pair of vector sequences
+   yank         Reads a sequence range, appends the full USA to a list file
+   
+   You may find the program yank useful for creating List files.
+   
+Author(s)
+
+   This application was written by Peter Rice
+   (peter.rice@uk.lionbioscience.com)
+   
+History
+
+   Written (March 2002) - Peter Rice.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
