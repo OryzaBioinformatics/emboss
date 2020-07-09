@@ -144,10 +144,10 @@ int XErrorProc(Display *dpy, XErrorEvent *errEventPtr)
 /*      (void) fprintf(stderr,"Can't change colormap on True Color Display. Plplot bug!\n");
     return 0;*/
   }
-    (void) fprintf(stderr, "X protocol error: ");
+/*    (void) fprintf(stderr, "X protocol error: ");
     (void) fprintf(stderr, "error=%d request=%d minor=%d\n",
         errEventPtr->error_code, errEventPtr->request_code,
-        errEventPtr->minor_code);
+        errEventPtr->minor_code);*/
     return 1;
 }
 
@@ -2115,8 +2115,11 @@ GetVisual(PLStream *pls)
 	    xwd->visual = visualList->visual;	/* Choose first match. */
 	    xwd->depth = vTemplate.depth;
 	}
+    /*ajb*/ XFree(visualList);
 #endif
     }
+
+    
 #endif
 
     if ( ! visuals_matched) {

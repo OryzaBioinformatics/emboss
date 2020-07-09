@@ -33,6 +33,7 @@ static void	calc_didev	(void);
 static void	calc_diori	(void);
 static void	calc_dimap	(void);
 static void	plgdevlst	(char **, char **, int *, int);
+void plPX_trace (PLStream *pls, FILE* outf);
 
 /* Static variables */
 

@@ -52,7 +52,7 @@ static void tty_atexit	(void);
 static void tty_setup	(void) {}
 static int  tty_cbreak	(void) {return 0;}
 static int  tty_reset	(void) {return 0;}
-static void tty_atexit	(void) {}
+/*static void tty_atexit	(void) {}*/
 #endif
 
 /* Pixel settings */
