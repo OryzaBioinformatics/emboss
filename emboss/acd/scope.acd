@@ -1,0 +1,15 @@
+appl: scope [
+        doc: "Convert SCOP to EMBL format"
+        groups: "PROTEIN:protein structure"
+]
+
+
+infile: infile [
+	prompt: "Scop input file"
+	param: Y
+]
+
+outfile: outfile [
+	prompt: "EMBL format output file"
+	param: Y
+]
