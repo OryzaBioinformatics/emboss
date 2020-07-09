@@ -193,30 +193,26 @@ Q) Can I get the latest code via CVS ?
 
 A) Yes. Here is the information you will need:-
 
-   Make sure you have cvs on your system (available at http://www.cyclic.com). 
-   Then log into the cvs server at HGMP as:
+   Make sure you have cvs on your system Then log into the cvs server at
+   'open-bio.org' as: user 'cvs' with password 'cvs'. 
 
-   user 'cvsuser', 
-   password 'CVSUSER' 
+   cvs -d :pserver:cvs@cvs.open-bio.org:/home/repository/emboss login
+   The password is 'cvs'
+
+   To checkout the EMBOSS source code tree, put yourself in a local directory
+   just above where you want to see the EMBOSS directory created. For example
+   if you wanted EMBOSS to be seen as /home/joe/src/emboss... then cd into
+   /home/joe/src then checkout the repository by typing: 
+
+   cvs -d :pserver:cvs@cvs.open-bio.org:/home/repository/emboss checkout emboss
+
+   Or if you want to update a previously checked-out source code tree:
+   cvs -d :pserver:cvs@cvs.open-bio.org:/home/repository/emboss update
+
+   You can logout from the CVS server with:
+   cvs -d :pserver:cvs@cvs.open-bio.org:/home/repository/emboss logout
 
    (this is a read only server). 
-
-   For example:
-   cvs -d :pserver:cvsuser@cvs.hgmp.mrc.ac.uk:/packages/emboss/COPY login
-   password: CVSUSER
-
-   Now to check out the EMBOSS source code tree, place yourself in a
-   local directory above where you want to see the EMBOSS directory.
-
-   For example if you wanted EMBOSS to be seen as
-
-   /home/joe/src/emboss...
-
-   cd into /home/joe/src.
-
-   Now checkout the repository as
-
-   cvs -d :pserver:cvsuser@cvs.hgmp.mrc.ac.uk:/cvsroot/packages/emboss/COPY checkout emboss
 
 
 
