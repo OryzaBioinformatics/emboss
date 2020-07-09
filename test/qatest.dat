@@ -1061,7 +1061,7 @@ ID dottup-ex
 AP dottup
 CL tembl:eclac tembl:eclaci -wordsize=6 -gtitle="eclaci vs eclac" -graph ps
 FI dottup.ps
-FZ = 66996
+FZ > 66990
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 1\n/
 FI stderr
@@ -1225,6 +1225,20 @@ FI hs989235.est2genome
 FZ = 3051
 FP /Note .* forward est and forward genome, .* imply REVERSED GENE/
 FP /^Exon       163  91\.8 25685 25874 HSNFG9           1   193 HS989235/
+//
+
+ID est2genome-pax
+TI 200
+AP est2genome
+IN ../../data/pax6_cdna.fasta
+IN ../../data/z83307.seq
+IN
+FI stderr
+FC = 2
+FI pax6.est2genome
+FZ = 2104
+FP /Note .* forward est and forward genome, .* imply forward gene/
+FP /^Exon       129  99.2  1380  1510 HSA1280        428   558 pax6/
 //
 
 ID etandem-ex
@@ -4859,6 +4873,27 @@ FP 5 /^# Score: /
 FP /^ECLACY +1451 [acgt]+ +1492\n/
 //
 
+ID supermatcher-range
+TI 400
+AP supermatcher
+CL tembl:ec* tembl:eclac -word 50 -sbegin2 101 -send2 -101
+IN
+IN 3.0
+IN
+FI stderr
+FC = 2
+FI stdout 
+FZ = 0
+FI supermatcher.error
+FZ = 0
+FI eclac.supermatcher
+FZ > 69555
+FP /^ECLAC +1 /
+FP /^# Score: 37305\.0/
+FP 5 /^# Score: /
+FP /^ECLACY +1451 [acgt]+ +1492\n/
+//
+
 ID syco-ex
 AP syco
 CL -plot -cfile Epae.cut
@@ -5170,14 +5205,11 @@ FC = 2
 FI hba_human.water 
 FZ > 1175
 FP /^# Score: 293.5\n/
-FP /^HBA_HUMAN +1 +LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLS- +48\n/
-FP /^HBB_HUMAN +1 +LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLST +48\n/
-FP /^HBA_HUMAN +49 +----HGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP +94\n/
+FP /^HBA_HUMAN +2 +LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLS- +49\n/
+FP /^HBB_HUMAN +3 +LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLST +50\n/
+FP /^HBA_HUMAN +50 +----HGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP +95\n/
 FP /^# Identity: +63/145 \(43\.4%\)\n/
 FP /^# Similarity: +88/145 \(60.7%\)\n/
-## Old scores ... check calculation method
-## FP /^%id = 45.99\s+%similarity = 64.23\n/
-## FP /^Overall %id = 43.15\s+Overall %similarity = 60.27\n/
 //
 
 ID wobble-ex
@@ -5309,6 +5341,488 @@ FI stderr
 FC = 2
 FI stdout
 FP /<a href="http:\/\/www\.sanger\.ac\.uk\/Software\/EMBOSS\/Apps\/abiview\.shtml"/
+//
+
+###########################################################
+# Checking alignment reports
+# with sbegin, send, various formats, and
+# different internal alignment functions
+###########################################################
+
+ID align-matcher-full
+AP matcher
+CL -gappen 5 -gaplen 1 -stdout
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +10\/14 \(71\.4%\)/
+FP /^# Score: +38\n/
+FP 1 /^                 10  \n/
+FP 1 /^             20      \n/
+FP 1 /^ AFULL AAACCCGGG--TTT\n/
+FP 1 /^ BFULL AAAC--GGGCCTTT\n/
+FC = 32
+//
+
+
+ID align-matcher-part
+AP matcher
+CL -gappen 5 -gaplen 1 -stdout
+IN ../../data/aligna.dna
+IN ../../data/alignapart.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +56\/56 \(100\.0%\)/
+FP /^# Score: +280\n/
+FP 1 /^ AFULL CCGGTT\n/
+FP 1 /^ APART CCGGTT\n/
+FP 1 /^           10        20        30        40        50    \n/
+FP 1 /^               10        20        30        40        50\n/
+FC = 38
+//
+
+ID align-matcher-begin
+AP matcher
+CL -gappen 5 -gaplen 1 -stdout -sbegin1 5
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +10\/14 \(71\.4%\)/
+FP /^# Score: +38\n/
+FP 1 /^             20      \n/
+FP 1 /^ AFULL AAACCCGGG--TTT\n/
+FP 1 /^ BFULL AAAC--GGGCCTTT\n/
+FP 1 /^                 10  \n/
+FC = 32
+//
+
+ID align-matcher-end
+AP matcher
+CL -gappen 5 -gaplen 1 -stdout -send1 15
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +7\/10 \(70\.0%\)/
+FP /^# Score: +25\n/
+FP 1 /^           10    \n/
+FP 1 /^ AFULL AACCGG--TT\n/
+FP 1 /^ BFULL AACGGGCCTT\n/
+FP 1 /^              10 \n/
+FC = 32
+//
+
+ID align-matcher-begin2
+AP matcher
+CL -gappen 5 -gaplen 1 -stdout -sbegin2 5
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +6\/8 \(75\.0%\)/
+FP /^# Score: +24\n/
+FP 1 /^       20      \n/
+FP 1 /^ AFULL GGG--TTT\n/
+FP 1 /^ BFULL GGGCCTTT\n/
+FP 1 /^           10  \n/
+FC = 32
+//
+
+ID align-matcher-end2
+AP matcher
+CL -gappen 5 -gaplen 1 -stdout -send2 -3
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +9\/16 \(56\.2%\)/
+FP /^# Score: +30\n/
+FP 1 /^               50      \n/
+FP 1 /^ AFULL AAACCCGGGTTTAACC\n/
+FP 1 /^ BFULL AAAC--GGG-----CC\n/
+FP 1 /^                       \n/
+FC = 32
+//
+
+ID align-matcher-begendall
+AP matcher
+CL -gappen 5 -gaplen 1 -stdout -sbegin1 5 -send1 15 -sbegin2 2 -send2 -6
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +5\/6 \(83\.3%\)/
+FP /^# Score: +21\n/
+FP 1 /^           10\n/
+FP 1 /^ AFULL AACCGG\n/
+FP 1 /^ BFULL AACGGG\n/
+FP 1 /^             \n/
+FC = 32
+//
+
+ID align-water-full
+AP water
+CL -gapopen 5 -gapext 1 -stdout
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +10\/14 \(71\.4%\)/
+FP /^# Score: +38\.0\n/
+FP 1 /^AFULL             13 aaacccggg--ttt     24\n/
+FP 1 /^BFULL              1 aaa--cgggccttt     12\n/
+FC = 30
+//
+
+
+ID align-water-part
+AP water
+CL -gapopen 5 -gapext 1 -stdout
+IN ../../data/aligna.dna
+IN ../../data/alignapart.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +56\/56 \(100\.0%\)/
+FP /^# Score: +280\.0\n/
+FP 1 /^AFULL             55 ccggtt     60\n/
+FP 1 /^APART             51 ccggtt     56\n/
+FC = 34
+//
+
+ID align-water-begin
+AP water
+CL -gapopen 5 -gapext 1 -stdout -sbegin1 5
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +10\/14 \(71\.4%\)/
+FP /^# Score: +38\.0\n/
+FP 1 /^AFULL             13 aaacccggg--ttt     24\n/
+FP 1 /^BFULL              1 aaa--cgggccttt     12\n/
+FC = 30
+//
+
+ID align-water-end
+AP water
+CL -gapopen 5 -gapext 1 -stdout -send1 15
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +7\/11 \(63\.6%\)/
+FP /^# Score: +24\.0\n/
+FP 1 /^AFULL              5 aaccgg---tt     12\n/
+FP 1 /^BFULL              1 aaacgggcctt     11\n/
+FC = 30
+//
+
+ID align-water-begin2
+AP water
+CL -gapopen 5 -gapext 1 -stdout -sbegin2 5
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +6\/8 \(75\.0%\)/
+FP /^# Score: +24\.0\n/
+FP 1 /^AFULL             19 ggg--ttt     24\n/
+FP 1 /^BFULL              5 gggccttt     12\n/
+FC = 30
+//
+
+ID align-water-end2
+AP water
+CL -gapopen 5 -gapext 1 -stdout -send2 -3
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +9\/16 \(56\.2%\)/
+FP /^# Score: +30\.0\n/
+FP 1 /^AFULL             41 aaacccgggtttaacc     56\n/
+FP 1 /^BFULL              1 aaa--cggg-----cc      9\n/
+FC = 30
+//
+
+ID align-water-begendall
+AP water
+CL -gapopen 5 -gapext 1 -stdout -sbegin1 5 -send1 15 -sbegin2 2 -send2 -6
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +5\/6 \(83\.3%\)/
+FP /^# Score: +21\.0\n/
+FP 1 /^AFULL              5 aaccgg     10\n/
+FP 1 /^BFULL              2 aacggg      7\n/
+FC = 30
+//
+
+ID align-stretcher-full
+AP stretcher
+CL -gappen 16 -gaplen 1 -stdout
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +10\/64 \(15\.6%\)/
+FP /^# Score: +-55\n/
+FP 1 /^               10        20        30        40        50\n/
+FP 1 /^ AFULL ACGTAACCGGTTAAACCCGGGTTTAAAACCCCGGGGTTTTAAACCCGGGT\n/
+FP 1 /^ BFULL A------------AAC----------------GGGCCTTT----------\n/
+FP 1 /^                                           10            \n/
+FC = 38
+//
+
+ID align-stretcher-part
+AP stretcher
+CL -gappen 16 -gaplen 4 -stdout
+IN ../../data/aligna.dna
+IN ../../data/alignapart.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +56\/64 \(87\.5%\)/
+FP /^# Score: +224\n/
+FP 1 /^               60    \n/
+FP 1 /^ AFULL TTAACCGGTTACGT\n/
+FP 1 /^ APART TTAACCGGTT----\n/
+FP 1 /^         50          \n/
+FC = 38
+//
+
+ID align-stretcher-begin
+AP stretcher
+CL -gappen 16 -gaplen 4 -stdout -sbegin1 5
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +9\/60 \(15\.0%\)/
+FP /^# Score: +-183\n/
+FP 1 /^           10        20        30        40        50    \n/
+FP 1 /^ AFULL AACCGGTTAAACCCGGGTTTAAAACCCCGGGGTTTTAAACCCGGGTTTAA\n/
+FP 1 /^ BFULL AAACG-------------------------GGCCTT--------------\n/
+FP 1 /^                                        10               \n/
+//
+
+ID align-stretcher-end
+AP stretcher
+CL -gappen 16 -gaplen 4 -stdout -send1 15
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +6\/15 \(40\.0%\)/
+FP /^# Score: +-18\n/
+FP 1 /^               10     \n/
+FP 1 /^ AFULL ACGTAACCGGTTAAA\n/
+FP 1 /^ BFULL A---AACGGGCCTTT\n/
+FP 1 /^                  10  \n/
+FC = 32
+//
+
+ID align-stretcher-begin2
+AP stretcher
+CL -gappen 16 -gaplen 4 -stdout -sbegin2 5
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +6\/64 \( 9\.4%\)/
+FP /^# Score: +-226\n/
+FP 1 /^               10        20        30        40        50\n/
+FP 1 /^ AFULL ACGTAACCGGTTAAACCCGGGTTTAAAACCCCGGGGTTTTAAACCCGGGT\n/
+FP 1 /^ BFULL --------------------------------GGGCCTTT----------\n/
+FP 1 /^                                           10            \n/
+//
+
+ID align-stretcher-end2
+AP stretcher
+CL -gappen 16 -gaplen 4 -stdout -send2 -3
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +8\/64 \(12\.5%\)/
+FP /^# Score: +-208\n/
+FP 1 /^               60    \n/
+FP 1 /^ AFULL TTAACCGGTTACGT\n/
+FP 1 /^ BFULL -----------CCT\n/
+FP 1 /^                   10\n/
+FC = 38
+//
+
+ID align-stretcher-begendall
+AP stretcher
+CL -gappen 16 -gaplen 4 -stdout -sbegin1 5 -send1 15 -sbegin2 2 -send2 -6
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +5\/11 \(45\.5%\)/
+FP /^# Score: +-11\n/
+FP 1 /^           10     \n/
+FP 1 /^ AFULL AACCGGTTAAA\n/
+FP 1 /^ BFULL AACGGG-----\n/
+FP 1 /^                  \n/
+FC = 32
+//
+
+ID align-needle-full
+AP needle
+CL -gapopen 16 -gapext 4 -stdout
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +8\/64 \(12\.5%\)/
+FP /^# Score: +24\.0\n/
+FP 1 /^AFULL +1 acgtaaccggttaaacccgggtttaaaaccccggggttttaaacccgggt     50\n/
+FP 1 /^BFULL +1             aaacgggccttt                               12\n/
+FC = 34
+//
+
+ID align-needle-part
+AP needle
+CL -gapopen 16 -gapext 4 -stdout
+IN ../../data/aligna.dna
+IN ../../data/alignapart.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +56\/64 \(87\.5%\)/
+FP /^# Score: +280\.0\n/
+FP 1 /^AFULL             51 ttaaccggttacgt     64\n/
+FP 1 /^APART             47 ttaaccggtt         56\n/
+FC = 34
+//
+
+ID align-needle-begin
+AP needle
+CL -gapopen 16 -gapext 4 -stdout -sbegin1 5
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +8\/60 \(13\.3%\)/
+FP /^# Score: +24\.0\n/
+FP 1 /^AFULL +5 aaccggttaaacccgggtttaaaaccccggggttttaaacccgggtttaa     54\n/
+FP 1 /^BFULL +1         aaacgggccttt                                   12\n/
+FC = 34
+//
+
+ID align-needle-end
+AP needle
+CL -gapopen 16 -gapext 4 -stdout -send1 15
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +3\/24 \(12\.5%\)/
+FP /^# Score: +15\.0\n/
+FP 1 /^AFULL +1 acgtaaccggttaaa              15\n/
+FP 1 /^BFULL +1             aaacgggccttt     12\n/
+FC = 30
+//
+
+ID align-needle-begin2
+AP needle
+CL -gapopen 16 -gapext 4 -stdout -sbegin2 5
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +6\/64 \( 9\.4%\)/
+FP /^# Score: +22\.0\n/
+FP 1 /^AFULL +1 acgtaaccggttaaacccgggtttaaaaccccggggttttaaacccgggt     50\n/
+FP 1 /^BFULL +5                                 gggccttt               12\n/
+FC = 34
+//
+
+ID align-needle-end2
+AP needle
+CL -gapopen 16 -gapext 4 -stdout -send2 -3
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +6\/64 \( 9\.4%\)/
+FP /^# Score: +14\.0\n/
+FP 1 /^AFULL +1 acgtaaccggttaaacccgggtttaaaaccccggggttttaaacccgggt     50\n/
+FP 1 /^BFULL +1             aaacgggcct                                 10\n/
+FC = 34
+//
+
+ID align-needle-begendall
+AP needle
+CL -gapopen 16 -gapext 4 -stdout -sbegin1 5 -send1 15 -sbegin2 2 -send2 -6
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FI stdout
+FP /^# Identity: +5\/11 \(45\.5%\)/
+FP /^# Score: +21\.0\n/
+FP 1 /^AFULL +5 aaccggttaaa     15\n/
+FP 1 /^BFULL +2 aacggg           7\n/
+FC = 30
 //
 
 
