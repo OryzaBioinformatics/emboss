@@ -596,11 +596,18 @@ combinations of name */
 ** we might want to retain the ':' in the output if it is being parsed by
 ** other programs that create 2-level menus for an interface etc.
 */
-      if (!colon)
+      if (!colon) {
           ajStrConvertCC(&copystr, ":", " ");
+          ajStrClean(&copystr);
+      } else {
+/* tidy up spurious spaces around the colon */
+          ajStrClean(&copystr);
+          ajStrSubstituteCC(&copystr, " :", ":");
+          ajStrSubstituteCC(&copystr, ": ", ":");
+      }  
+
 /*      ajDebug("After removing : from group name, it is: %S\n", 
         	copystr); */
-      ajStrClean(&copystr);
       ajListstrPushApp(groups, copystr);
     }
   }
