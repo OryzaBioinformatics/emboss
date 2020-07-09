@@ -2117,7 +2117,7 @@ void plPX_trace (PLStream *pls, FILE* outf) {
 	   "Physical device limits in physical coordinates");
   fprintf (outf, "phyxma  %6d > %s\n", pls->phyxma,
 	   "...");
-  fprintf (outf, "phyxlen 6%d > %s\n", pls->phyxlen,
+  fprintf (outf, "phyxlen %6d > %s\n", pls->phyxlen,
 	   "...");
   fprintf (outf, "phyymi  %6d > %s\n", pls->phyymi,
 	   "...");
