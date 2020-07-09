@@ -126,8 +126,8 @@ int main(int argc, char **argv)
 	      ajFmtPrintF(outf, "End of match = position %d of sequence\n\n",
 			  end);
 
-	    gf = ajFeatNew (tab, NULL, fthit, start, end,
-			    (float) length, ' ', 0);
+	    gf = ajFeatNewProt (tab, NULL, fthit, start, end,
+			    (float) length);
 
 	    if (outf)
 	      ajFmtPrintF(outf,
