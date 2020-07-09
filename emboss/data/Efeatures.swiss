@@ -78,7 +78,7 @@ CONFLICT
 # by  an  intra-chain disulfide bond. If the 'FROM' and 'TO'  endpoints  are
 # identical,  the  disulfide bond is an interchain one and  the  description
 # field  indicates  the nature of the cross-link.
-# DISULFID
+DISULFID
 	/note
 	/comment
 
