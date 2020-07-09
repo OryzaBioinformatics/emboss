@@ -1,0 +1,780 @@
+<!--START OF HEADER - DON'T ALTER -->
+
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: hmoment
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
+</a>
+</td>
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: hmoment
+</H2>
+</font>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<p><hr><p>
+
+<!--END OF HEADER-->
+
+<H1>
+Program hmoment
+</H1>
+<H2>
+    Function
+</H2>
+Hydrophobic moment calculation
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+        Algorithms
+  -->
+
+<b>hmoment</b> plots or writes out the hydrophobic moment.  Hydrophic
+moment is the hydrophobicity of a peptide measured for a specified angle
+of rotation per residue. 
+
+<p>
+
+Periodicities in the polar/apolar character of the amino acid sequence
+of a protein can be examined by assigning to each residue a numerical
+hydrophobicity and searching for periodicity in the resulting
+one-dimensional function.  The strength of each periodic component is
+the quantity that has been termed the hydrophobic moment. 
+
+<p>
+
+When proteins of known three-dimensional structure are examined, it is
+found that sequences that form alpha helices tend to have, on average, a
+strong periodicity in the hydrophobicity of af 3.6 residues, the period
+of the alpha helix. The angle of rotation per residue in alpha helices is 
+100 degrees.
+
+Similarly, many sequences that form strands of beta sheets tend to have
+a periodicity in their hydrophobicity of about 2.3 residues, the period
+typical of beta structure.  The angle of rotation per residue in beta
+sheets is 160 degrees. 
+
+This means that many protein sequences tend to form the periodic
+structure that maximizes their amphiphilicity. 
+
+<p>
+
+The hydrophobic moment is measured within a moving window using the method
+of Eisenberg et al.  The default angle of 100 degrees is used for the
+alpha-helix results and the default of 160 degrees is used for the
+beta-sheet results.  These angles can be changed if required using the
+appropriate options. 
+
+<p>
+
+<b>hmoment</b> can plot two graphs when the option '-double' is given,
+one for the alpha helix moment and one for the beta sheet moment. 
+Otherwise it just plots the alpha helix moment.
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+
+Here is a sample session with hmoment:
+
+<p>
+
+<pre>
+% hmoment sw:hbb_human
+Hydrophobic moment calculation
+Output file [hbb_human.hmoment]: 
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers (* if not always prompted):
+  [-seqall]            seqall     Sequence database USA
+*  -graph              xygraph    Graph type
+*  -outfile            outfile    Output file name
+
+   Optional qualifiers:
+   -window             integer    Window
+   -bangle             integer    Beta sheet angle (degrees)
+
+   Advanced qualifiers:
+   -plot               bool       Produce graphic
+   -aangle             integer    Alpha helix angle (degrees)
+   -baseline           float      Graph marker line
+   -double             bool       Plot two graphs
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-seqall]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.hmoment</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-window</td>
+<td>Window</td>
+<td>Any integer value</td>
+<td>10</td>
+</tr>
+
+<tr>
+<td>-bangle</td>
+<td>Beta sheet angle (degrees)</td>
+<td>Any integer value</td>
+<td>160</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-plot</td>
+<td>Produce graphic</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-aangle</td>
+<td>Alpha helix angle (degrees)</td>
+<td>Any integer value</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>-baseline</td>
+<td>Graph marker line</td>
+<td>Any integer value</td>
+<td>0.35</td>
+</tr>
+
+<tr>
+<td>-double</td>
+<td>Plot two graphs</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>hmoment</b> reads in a protein sequence.
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+   -->
+
+With the '-plot' option <b>hmoment</b> displays a graphical plot of the
+hydrophobic moment of the specified alpha helix angle. With the '-plot -double'
+options it also displays the beta-sheet hydrophobic moment.
+
+<p>
+
+Otherwise it writes out a files containing the two columns separated by
+space or TAB characters.  The first column is the position of the start
+of the window that the hydrophobic moment was calculated in.  The second is
+the hydrophobic moment ('uH').  (If the option '-double' is given then the
+beta-sheet angle hydrophobicity is given as a third column.)
+
+<p>
+
+The ouput of the above is example follows:
+
+<p>
+<hr>
+<pre>
+HMOMENT of HBB_HUMAN from 1 to 146
+
+Window: 10 Angle: 100 Max uH: 0.714
+Position        uH
+1               0.091
+2               0.216
+3               0.208
+4               0.123
+5               0.211
+6               0.194
+7               0.185
+8               0.169
+9               0.312
+10              0.292
+11              0.185
+12              0.092
+13              0.050
+14              0.164
+15              0.245
+16              0.187
+17              0.130
+18              0.262
+19              0.396
+20              0.317
+21              0.342
+22              0.492
+23              0.508
+24              0.517
+25              0.418
+26              0.416
+27              0.350
+28              0.292
+29              0.196
+30              0.102
+31              0.288
+32              0.314
+33              0.442
+34              0.560
+35              0.464
+36              0.577
+37              0.584
+38              0.676
+39              0.714
+40              0.670
+41              0.462
+42              0.369
+43              0.221
+44              0.176
+45              0.073
+46              0.058
+47              0.041
+48              0.148
+49              0.125
+50              0.219
+51              0.221
+52              0.110
+53              0.060
+54              0.045
+55              0.107
+56              0.264
+57              0.259
+58              0.401
+59              0.452
+60              0.354
+61              0.265
+62              0.365
+63              0.430
+64              0.522
+65              0.508
+66              0.519
+67              0.349
+68              0.324
+69              0.330
+70              0.365
+71              0.447
+72              0.364
+73              0.251
+74              0.166
+75              0.118
+76              0.252
+77              0.276
+78              0.299
+79              0.330
+80              0.241
+81              0.315
+82              0.291
+83              0.163
+84              0.182
+85              0.254
+86              0.069
+87              0.179
+88              0.201
+89              0.065
+90              0.041
+91              0.110
+92              0.181
+93              0.261
+94              0.312
+95              0.200
+96              0.263
+97              0.369
+98              0.310
+99              0.362
+100             0.495
+101             0.585
+102             0.450
+103             0.488
+104             0.547
+105             0.315
+106             0.311
+107             0.252
+108             0.187
+109             0.215
+110             0.295
+111             0.425
+112             0.303
+113             0.421
+114             0.528
+115             0.487
+116             0.436
+117             0.501
+118             0.532
+119             0.409
+120             0.447
+121             0.308
+122             0.383
+123             0.252
+124             0.361
+125             0.374
+126             0.314
+127             0.219
+128             0.310
+129             0.361
+130             0.439
+131             0.433
+132             0.507
+133             0.336
+134             0.344
+135             0.207
+136             0.234
+137             0.299
+</pre>
+<hr>
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+Eisenberg D, Weiss RM, Terwilliger TC 
+"The hydrophobic moment detects periodicity in protein hydrophobicity."
+Proc Natl Acad Sci U S A 1984 Jan;81(1):140-4
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="charge.html">charge</a></td><td>Protein charge plot</td></tr>
+<tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein sequence</td></tr>
+<tr><td><a href="digest.html">digest</a></td><td>Protein proteolytic enzyme or reagent cleavage digest</td></tr>
+<tr><td><a href="iep.html">iep</a></td><td>Calculates the isoelectric point of a protein</td></tr>
+<tr><td><a href="octanol.html">octanol</a></td><td>Displays protein hydropathy</td></tr>
+<tr><td><a href="pepinfo.html">pepinfo</a></td><td>Plots simple amino acid properties in parallel</td></tr>
+<tr><td><a href="pepnet.html">pepnet</a></td><td>Displays proteins as a helical net</td></tr>
+<tr><td><a href="pepstats.html">pepstats</a></td><td>Protein statistics</td></tr>
+<tr><td><a href="pepwheel.html">pepwheel</a></td><td>Shows protein sequences as helices</td></tr>
+<tr><td><a href="pepwindow.html">pepwindow</a></td><td>Displays protein hydropathy</td></tr>
+<tr><td><a href="pepwindowall.html">pepwindowall</a></td><td>Displays protein hydropathy of a set of sequences</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+<!--
+        Who has worked on the program in the past.
+   -->
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    History
+</H2>
+
+<!--
+        What changes have been made.
+   -->
+
+Written (March 2001) - Alan Bleasby.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Comments
+</H2>
+
+<!--
+	Any comments, requests etc. that people have about the program
+   -->
+
+
+
+
+
+
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+
