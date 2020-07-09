@@ -364,50 +364,68 @@ static void NoCutList (AjPFile outfile, AjPList restrictlist, AjBool
 
   AjPFile enzfile=NULL;
   AjPStr  *ea;
-  ajint ne;		/* number of enzymes */
+  ajint ne;             /* number of enzymes */
   AjBool isall=ajTrue;
-  ajint i,j;
-  AjIList miter;	/* iterator for matches list */
-  EmbPMatMatch m=NULL;	/* restriction enzyme match structure */
+  ajint i;
+  AjIList miter;        /* iterator for matches list */
+  EmbPMatMatch m=NULL;  /* restriction enzyme match structure */
   EmbPPatRestrict enz;
   char *p;
-  ajint netmp;
-  AjPList iso=ajListstrNew();	/* list of isoschizomers that cut */
-  AjIList iter;		/* iterator for isoschizomers list */
   AjPStrTok tok;
   char tokens[] = " ,";
   AjPStr code = NULL;
-  AjPStr code2 = NULL;
+  AjIList riter;                        /* iterator for restrictlist */
+
+/* list of enzymes that cut */
+  AjPList cutlist=ajListstrNew();
+  AjIList citer;                        /* iterator for cutlist */
+  AjPStr cutname = NULL;
+
+/* list of enzymes that don't cut */
+  AjPList nocutlist = ajListstrNew();
+  AjIList niter;                        /* iterator for nocutlist */
+  AjPStr nocutname = NULL;
 
 
-/* check on number of enzymes specified */
+/*** Read in a list of all input enzyme names */
+ajDebug("Read in a list of all input enzyme names\n");
+
   ne = 0;
   if (!enzymes) {
       isall = ajTrue;
   } else {
+/* get input list of enzymes into ea[] */
     ne = ajArrCommaList(enzymes,&ea);
-    for (i=0;i<ne;++i) {
-      ajStrCleanWhite(&ea[i]);
-    }
     if (ajStrMatchCaseC(ea[0],"all")) {
       isall = ajTrue;
     } else {
-      isall = ajFalse;
+      isall = ajFalse; 
+  
+/* push explicitly input enzymes on nocutlist */
+      for (i=0;i<ne;++i) {
+        ajStrCleanWhite(&ea[i]);
+        code = ajStrNew();
+        ajStrAss(&code, ea[i]);
+        ajListstrPushApp(nocutlist, code);
+      }    
     }
   }
 
-  netmp = ne;
-  
+/* tidy up ea[] */
+  for (i=0; i<ne; ++i)
+    if (ea[i])
+      ajStrDel(&ea[i]);
+  if (ne)
+    AJFREE (ea);
 
+/* if user entered 'all' then read in list of all enzymes, with restrictions */
   if (isall) {
 /* list all files in REBASE that don't cut */
     ajFileDataNewC(ENZDATA, &enzfile);
 
-/* read all enzyme names into ea[] and set ne */
-/* read once to count the valid entries in the enzyme file */
-    ne = 0;
+/* push all enzyme names onto nocutlist */
     enz = embPatRestrictNew();
-    (void) ajFileSeek(enzfile,0L,0);
+/*    (void) ajFileSeek(enzfile,0L,0); */
     while(embPatRestrictReadEntry(&enz,&enzfile)) {
       if(!enz->ncuts) continue;
       if(enz->len < sitelen) continue;
@@ -415,109 +433,120 @@ static void NoCutList (AjPFile outfile, AjPList restrictlist, AjBool
       if(!sticky && !enz->blunt) continue;
       p = ajStrStr(enz->pat);
       if(*p < 'A' || *p > 'Z') continue;
-      ne++;
-    }
-
-
-  for (i=0; i<netmp; ++i) 
-  	if (ea[i]) 
-  		ajStrDel(&ea[i]);
-  if (netmp)
-      AJFREE (ea);
-
-
-/* make ea[] and populate it with enzyme names */
-    AJCNEW(ea, ne);
-    (void) ajFileSeek(enzfile,0L,0);
-    i = 0;
-    while(embPatRestrictReadEntry(&enz,&enzfile)) {
-      if(!enz->ncuts) continue;
-      if(enz->len < sitelen) continue;
-      if(!blunt && enz->blunt) continue;
-      if(!sticky && !enz->blunt) continue;
-      p = ajStrStr(enz->pat);
-      if(*p < 'A' || *p > 'Z') continue;
-      ajStrAss(&ea[i], enz->cod);
-      i++;
+      code = ajStrNew();
+      ajStrAss(&code, enz->cod);
+      ajListstrPushApp(nocutlist, code);
     }
     embPatRestrictDel(&enz);
     ajFileClose(&enzfile);
-
   }
-
-/* find enzymes that don't cut and blank them out */
+        
+/*** Make a list of all enzymes that cut */
+ajDebug("Make a list of all enzymes that cut\n");
+        
   miter = ajListIter(restrictlist);
   while ((m = ajListIterNext(miter)) != NULL) {
-    for (i=0; i<ne; ++i) {
-      if (ajStrMatchCase(ea[i], m->cod)) {
-/* blank out this element of ea[] */
-        ajStrClear(&ea[i]);
-        break;
-      }
-    }
+    cutname = ajStrNew();
+    ajStrAss(&cutname, m->cod);
+    ajListstrPushApp(cutlist, cutname);
   }
-  (void) ajListIterFree(miter);
+  ajListIterFree(miter);
+      
+  
+/*** Add to cutlist all isoschizomers of enzymes that cut */
+ajDebug("Add to cutlist all isoschizomers of enzymes that cut\n");
 
 /* make list of isoschizomers that cut */
-  iter = ajListIter(restrictlist);
-  while ((m = ajListIterNext(iter)) != NULL) {
+  code = ajStrNew();    /* to stop problems with nocutlist still using this instance of 'code' in its last element */
+  riter = ajListIter(restrictlist);   
+  while ((m = ajListIterNext(riter)) != NULL) {
 /* start token to parse isoschizomers names */
     tok = ajStrTokenInit(m->iso,  tokens);
     while (ajStrToken (&code, &tok, tokens)) {
-      code2 = ajStrNew();
-      ajStrAss(&code2, code);
-      ajListstrPush(iso, code2);
+      cutname = ajStrNew();
+      ajStrAss(&cutname, code);
+      ajListstrPushApp(cutlist, cutname);
     }
     ajStrTokenClear(&tok);
   }
-  (void) ajListIterFree(iter);
-   
-/* now check if it matches an isoschizomer - blank out if it does */
-  iter = ajListIter(iso);
-  while ((code2 = (AjPStr)ajListIterNext(iter)) != NULL) {
-    for (i=0; i<ne; ++i) {
-      if (ajStrMatchCase(ea[i], code2)) {
-        ajStrClear(&ea[i]);
-	break;
-      }
+  (void) ajListIterFree(riter);
+      
+      
+/*** Remove from the nocutlist all enzymes and isoschizomers that cut */
+ajDebug("Remove from the nocutlist all enzymes and isoschizomers that cut\n");
+  
+/* This steps down both lists at the same time, comparing names and
+iterating to the next name in whichever list whose name compares alphabetically
+before the other.  Where a match is found, the nocutlist item is
+deleted.  */
+
+  ajListSort(nocutlist, ajStrCmp);
+  ajListSort(cutlist, ajStrCmp);   
+  
+  citer = ajListIter(cutlist);
+  niter = ajListIter(nocutlist);
+    
+  nocutname = (AjPStr)ajListIterNext(niter);
+  cutname = (AjPStr)ajListIterNext(citer);
+
+ajDebug("initial cutname, nocutname: '%S' '%S'\n", cutname, nocutname);
+  
+  while (nocutname != NULL && cutname != NULL) {
+ajDebug("compare cutname, nocutname: %S %S\n", cutname, nocutname);
+    i = ajStrCmpCase(cutname, nocutname); 
+    if (i == 0) {       /* match - so remove from nocutlist */
+ajDebug("ajListstrRemove %S\n", nocutname);
+      ajListstrRemove(niter);  
+      nocutname = (AjPStr)ajListIterNext(niter);
+      cutname = (AjPStr)ajListIterNext(citer);
+    } else if (i == -1) {       /* cutlist name sorts before nocutlist name */
+      cutname = (AjPStr)ajListIterNext(citer);
+    } else if (i == 1) {        /* nocutlist name sorts before cutlist name */
+      nocutname = (AjPStr)ajListIterNext(niter);
+    } 
+  }
+  ajListIterFree(citer);
+  ajListIterFree(niter);
+  ajListstrFree(&cutlist);
+
+
+
+/*** Print out the list */
+ajDebug("Print out the list\n");  
+
+/* print the title */
+  if (html) (void) ajFmtPrintF(outfile, "<H2>");
+  (void) ajFmtPrintF(outfile, "\n\n# Enzymes that do not cut\n\n");
+  if (html) (void) ajFmtPrintF(outfile, "</H2>");
+
+  if (html) {(void) ajFmtPrintF(outfile, "<PRE>");}
+
+/*  ajListSort(nocutlist, ajStrCmp);*/
+  niter = ajListIter(nocutlist);
+  i = 0;
+  while ((nocutname = (AjPStr)ajListIterNext(niter)) != NULL) {
+    (void) ajFmtPrintF (outfile, "%-10S", nocutname);
+/* new line after every 7 names printed */
+    if (i++ == 7) {
+      (void) ajFmtPrintF (outfile, "\n");
+      i = 0;
     }
   }
-  (void) ajListIterFree(iter);
-  ajListstrFree(&iso);
-
-/* now only have non-cutting enzyme names in ea[] - print them */
-  if (html) (void) ajFmtPrintF(outfile, "<H2>");  
-  (void) ajFmtPrintF(outfile, "\n\n# Enzymes that do not cut\n\n");
-  if (html) (void) ajFmtPrintF(outfile, "</H2>");  
-
-  if (html) {(void) ajFmtPrintF(outfile, "<PRE>");} 
-
-  qsort(ea, ne, sizeof (*ea), ajStrCmp);
-  j = 0;
-  for (i = 0; i<ne; i++) {
-/* if the element isn't blank, print it */
-    if (ajStrLen(ea[i])) {	
-      (void) ajFmtPrintF (outfile, "%-10S", ea[i]);
-/* new line after every 7 names printed */      
-      if (j++ == 7) {
-      	(void) ajFmtPrintF (outfile, "\n");
-      	j = 0;
-      }
-    }
-  }  
+  ajListIterFree(niter);
+      
+      
+/* end the output */
   (void) ajFmtPrintF (outfile, "\n");
-  if (html) {(void) ajFmtPrintF(outfile, "</PRE>");} 
-
-/* tidy up */
-  for (i=0; i<ne; ++i) 
-  	if (ea[i]) 
-  		ajStrDel(&ea[i]);
-  if (ne)
-      AJFREE (ea);
-
+  if (html) {(void) ajFmtPrintF(outfile, "</PRE>");}
+    
+/*** Tidy up */
+ajDebug("Tidy up\n");
+  ajListstrFree(&nocutlist);
+  
   return;
-}
 
+
+}
 
 /* @funcstatic read_equiv *****************************************************
 **
