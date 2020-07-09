@@ -8,9 +8,7 @@
 #include "ajexcept.h"
 #include "ajmem.h"
 
-
 extern void ajDebug(char *fmt, ...);
-
 
 static const Except_T Mem_Failed = { "Allocation failed, insufficient memory available" };
 static const Except_T Mem_Badcount = { "Allocation bad byte count" };
@@ -39,16 +37,29 @@ void* ajMemAlloc (ajlong nbytes, const char* file, ajint line) {
   void *ptr;
 
   if (nbytes <= 0) {
-    ajExceptRaise(&Mem_Badcount, file, line);
+#ifdef HAVE_JAVA
+      fprintf(stderr,"Attempt to allocate <=0 bytes");
+      exit(-1);
+#else
+      ajExceptRaise(&Mem_Badcount, file, line);
+#endif
   }
     
   ptr = malloc(nbytes);
+#ifdef HAVE_JAVA
+  if(ptr == NULL)
+  {
+      fprintf(stderr,"Memory allocation failed in ajMemAlloc");
+      exit(-1);
+  }
+#else
   if (ptr == NULL) {
     if (file == NULL)
       AJRAISE(Mem_Failed);
     else
       ajExceptRaise(&Mem_Failed, file, line);
   }
+#endif
 
   memAlloc += nbytes;
   memCount++;
@@ -79,12 +90,20 @@ void* ajMemCalloc (ajlong count, ajlong nbytes,
   assert(nbytes > 0);
 
   ptr = calloc(count, nbytes);
+#ifdef HAVE_JAVA
+  if(ptr == NULL)
+  {
+      fprintf(stderr,"Memory allocation failed in ajMemCalloc");
+      exit(-1);
+  }
+#else
   if (ptr == NULL) {
     if (file == NULL)
       AJRAISE(Mem_Failed);
     else
       ajExceptRaise(&Mem_Failed, file, line);
   }
+#endif
 
   memAlloc += (count*nbytes);
   memCount++;
@@ -173,12 +192,20 @@ void* ajMemResize (void* ptr, ajlong nbytes,
 
   ptr = realloc(ptr, nbytes);
 
+#ifdef HAVE_JAVA
+  if(ptr == NULL)
+  {
+      fprintf(stderr,"Memory allocation failed in ajMemResize");
+      exit(-1);
+  }
+#else
   if (ptr == NULL) {
     if (file == NULL)
       AJRAISE(Mem_Failed);
     else
       ajExceptRaise(&Mem_Failed, file, line);
   }
+#endif
 
   memResize += nbytes;
   memResizeCount++;
