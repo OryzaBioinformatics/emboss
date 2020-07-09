@@ -5,7 +5,11 @@ $locout = "local";
 $infile = "";
 $lib = "unknown";
 
-%test = ("func" => 1, "funcstatic" => 1, "funclist" => 1, "prog" => 1);
+### test is whether to test the return etc.
+### body is whether to print the body code
+
+%test = ("func" => 1, "funcstatic" => 1, "funclist" => 0, "prog" => 0);
+%body = ("func" => 1, "funcstatic" => 1, "funclist" => 1, "prog" => 1);
 
 if ($ARGV[0]) {$infile = $ARGV[0];}
 if ($ARGV[1]) {$lib = $ARGV[1];}
@@ -57,6 +61,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
   $rtype = "";
   $ismacro = 0;
   $isprog = 0;
+  $islist = 0;
   @largs = ();
   while ($cc =~ m/@((\S+)([^@]+))/gos) {
     $data = $1;
@@ -129,7 +134,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
       $fargs =~ s/\s+/ /gos;    # all whitespace is one space
       $fargs =~ s/ ,/,/gos;   # no space before comma
       $fargs =~ s/, /,/gos;   # no space after comma
-      $fargs =~ s/(\w+) *(\[[^\]]*\])/$2 $1/gos;   # [] before name
+      $fargs =~ s/(\w+) *((\[[^\]]*\])+)/$2 $1/gos;   # [] before name
       $fargs =~ s/(\*+)(\S)/$1 $2/g;  # put space after run of *
       $fargs =~ s/ \*/\*/gos;         # no space before run of *
       $fargs =~ s/ [\(]\* (\w+)[\)]/* $1/gos;  # remove function arguments
@@ -189,17 +194,20 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
       print SRS "DE $srest";
       print SRS "XX\n";
 
+      $xfargs = $fargs;
       $fargs =~ s/\s+/ /gos;    # all whitespace is one space
       $fargs =~ s/ ,/,/gos;   # no space before comma
       $fargs =~ s/, /,/gos;   # no space after comma
-      $fargs =~ s/(\w+) *(\[[^\]]*\])/$2 $1/gos;   # [] before name
+      $fargs =~ s/(\w+) *((\[[^\]]*\])+)/$2 $1/gos;   # [] before name
       $fargs =~ s/(\*+)(\S)/$1 $2/g;  # put space after run of *
       $fargs =~ s/ \*/\*/gos;         # no space before run of *
       $fargs =~ s/ [\(]\* (\w+)[\)]/* $1/gos;  # remove function arguments
       $fargs =~ s/(\w+)\s?[\(][^\)]+[\)],/function $1,/gos;  # remove function arguments
       $fargs =~ s/(\w+)\s?[\(][^\)]+[\)]$/function $1/gos;  # remove function arguments
       $fargs =~ s/\s*\(\*(\w+)[^\)]*\)/\* $1/gs;
-#      print "**static <$ftype> fname <$fname> fargs <$fargs>\n"; 
+#      if ($fname =~ /tmap/) {
+#	print "**static <$ftype> fname <$fname> fargs <$fargs> xfargs <$xfargs>\n"; 
+#      }
       @largs = split(/,/, $fargs);
 #      foreach $x (@largs) {
 #	print "<$x> ";
@@ -256,6 +264,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
     if ($token eq "funclist")  {
       $ismacro = 0;
       $isprog = 0;
+      $islist = 1;
       $OFILE = HTMLB;
       if ($sect NE $laststatfsect) {
         print $OFILE "<hr><h2><a name=\"$sect\">\n";
@@ -301,6 +310,8 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 #      print "code: <$code> var: <$var> cast: <$cast>\n";
 #      print "-----------------------------\n";
       $cast =~ s/ \*/\*/gos;         # no space before run of *
+      $cast =~ s/\{/\[/gos;	# brackets fixed
+      $cast =~ s/\}/\]/gos;	# brackets fixed
       $curarg = @largs[$acnt];
       ($tcast,$tname) = ($curarg =~ /(\S.*\S)\s+(\S+)/);
       if (!$tname) {
@@ -382,7 +393,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	  $w=$#largs+1;
 	  print "bad \@param list $acnt found $w wanted\n";
       }
-      if (!$rtype) {print "bad missing \@return\n"}
+      if (!$rtype && $ftype ne "void") {print "bad missing \@return\n"}
       print "=============================\n";
     }
     print SRS "//\n";
@@ -393,7 +404,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 ## $rest is what follows the comment
 ##############################################################
 
-    if ($test{$type} == 1) {
+    if ($body{$type} == 1) {
 
 # body is the code up to a '}' at the start of a line
 
