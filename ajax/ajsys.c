@@ -56,10 +56,8 @@ void ajSysBasename(AjPStr *s)
     }
     
     if(p!=t)
-    {
-	(void) ajStrClear(s);
-	(void) ajStrSetC(s, p+1);
-    }
+	(void) ajStrAssC(s, p+1);
+
     return;
 }
 
@@ -166,7 +164,7 @@ AjBool ajSysWhich(AjPStr *s)
 /* @func ajSysWhichEnv *******************************************************
 **
 ** Gets the Basename of a file then searches $PATH sequentially until it
-** finds a user-EXECUTABLE file of the same name.
+** finds a user-EXECUTABLE file of the same name. Reentrant.
 **
 ** @param [rw] s [AjPStr*] Filename in AjStr, replaced by full pathname
 ** @param [rw] env [char**] Environment
@@ -181,11 +179,15 @@ AjBool ajSysWhichEnv(AjPStr *s, char **env)
     AjPStr tname=NULL;
     AjPStr fname=NULL;
     AjPStr path=NULL;
+    char   *save=NULL;
+    AjPStr buf;
+    AjPStr tmp=NULL;
+    
 
-
+    buf = ajStrNew();
     tname = ajStrNew();
-    (void) ajStrSet(&tname, *s);
-
+    tmp = ajStrNew();
+    ajStrAssS(&tname,*s);
 
     fname = ajStrNew();
     path  = ajStrNew();
@@ -199,42 +201,50 @@ AjBool ajSysWhichEnv(AjPStr *s, char **env)
 	if(!strncmp("PATH=",env[count],5)) break;
 	++count;
     }
+
     if(!(*env[count]))
     {
 	ajStrDel(&fname);
 	ajStrDel(&tname);
 	ajStrDel(&path);
+	ajStrDel(&buf);
+	ajStrDel(&tmp);
 	return ajFalse;
     }
     
-    (void) ajStrSetC(&path, env[count]);
+    ajStrAssC(&path, env[count]);
     p=ajStrStr(path);
     p+=5;
-    p=ajSysStrtok(p,":");
+    ajStrAssC(&tmp,p);
+
+    p=ajSysStrtokR(ajStrStr(tmp),":",&save,&buf);
+
     if(p==NULL)
     {
 	ajStrDel(&fname);
 	ajStrDel(&tname);
 	ajStrDel(&path);
+	ajStrDel(&buf);
+	ajStrDel(&tmp);
 	return ajFalse;
     }
 
     while(1)
     {
-	(void) ajStrClear(&fname);
 	(void) ajFmtPrintS(&fname,"%s/%S",p,tname);
 
 	if(ajFileStat(&fname, AJ_FILE_X))
 	{
-	    (void) ajStrClear(s);
-	    (void) ajStrSet(s,fname);
+	    ajStrAssS(s,fname);
 	    break;
 	}
-	if((p=ajSysStrtok(NULL,":"))==NULL)
+	if((p=ajSysStrtokR(NULL,":",&save,&buf))==NULL)
         {
 	    ajStrDel(&fname);
 	    ajStrDel(&tname);
 	    ajStrDel(&path);
+	    ajStrDel(&buf);
+	    ajStrDel(&tmp);
 	    return ajFalse;
         }
     }
@@ -242,6 +252,9 @@ AjBool ajSysWhichEnv(AjPStr *s, char **env)
     ajStrDel(&fname);
     ajStrDel(&tname);
     ajStrDel(&path);
+    ajStrDel(&buf);
+    ajStrDel(&tmp);
+
     return ajTrue;
 }
 
@@ -628,4 +641,98 @@ char* ajSysStrtok(const char *s, const char *t)
     p += len;
     
     return ajStrStr(rets);
+}
+
+
+/* @func ajSysStrtokR ******************************************************
+**
+** Reentrant strtok that doesn't corrupt the source string
+**
+** @param [r] s [const char *] source string
+** @param [r] t [const char *] delimiter string
+** @param [r] ptrptr [char **] ptr save
+** @param [r] buf [AjPStr *] result buffer
+**
+** @return [char*] pointer or NULL
+** @@
+******************************************************************************/
+
+char* ajSysStrtokR(const char *s, const char *t, char **ptrptr, AjPStr *buf)
+{
+    char *p;
+    ajint len;
+
+    if(!*buf)
+	*buf = ajStrNew();
+
+    if(s!=NULL)
+	p = (char *)s;
+    else
+	p = *ptrptr;
+
+    
+    if(!*p)
+	return NULL;
+
+    len = strspn(p,t);
+    p += len;
+    len = strcspn(p,t);
+    ajStrAssSubC(buf,p,0,len-1);
+    p += len;
+    len = strspn(p,t);
+    p += len;
+
+    *ptrptr = p;
+    
+    return ajStrStr(*buf);
+}
+
+/* @func ajSysFgets ******************************************************
+**
+** An fgets replacement that will cope with Mac OSX <CR> files
+**
+** @param [w] buf [char *] buffer
+** @param [r] size [int] maximum length to read
+** @param [r] fp [FILE *] stream
+**
+** @return [char*] buf or NULL
+** @@
+******************************************************************************/
+
+char *ajSysFgets(char *buf, int size, FILE *fp)
+{
+#ifdef __ppc__
+    int c;
+    char *p;
+    int cnt;
+
+    p = buf;
+    if(!size || size<0)
+        return NULL;
+
+    cnt = 0;
+    while((c=getc(fp))!=EOF && c!=0x0d && c!='\n' && cnt!=size)
+    {
+        *(p++) = c;
+        ++cnt;
+    }
+
+    *p ='\0';
+
+    if(c==EOF)
+        return NULL;
+
+
+    if(cnt == size)
+        return buf;
+
+    if(c=='\r' || c=='\n')
+        *(p++) = '\n';
+
+    *p = '\0';
+
+    return buf;
+#else
+    return fgets(buf,size,fp);
+#endif
 }
