@@ -93,9 +93,9 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
+   Mandatory qualifiers (* if not always prompted):
   [-msf]               seqset     File containing a sequence alignment
-   -graph              graph      Graph type
+*  -graph              graph      Graph type
 
    Optional qualifiers:
    -residuesperline    integer    The number of residues to be displayed on
@@ -144,10 +144,12 @@ IT IS DONE FOR YOU.
                                   for matching or identical scores then a
                                   collision has occured.
    -portrait           bool       Set page to Portrait
-   -datafile           matrix     Matrix file
+   -matrixfile         matrix     Matrix file
    -showscore          integer    Print residue scores
 
-   Advanced qualifiers: (none)
+   Advanced qualifiers:
+   -data               bool       (no help text) bool value
+
 
 </pre>
 </td></tr></table>
@@ -353,7 +355,7 @@ The only four letters allowed are BPLW, in any order.</td>
 </tr>
 
 <tr>
-<td>-datafile</td>
+<td>-matrixfile</td>
 <td>Matrix file</td>
 <td>Comparison matrix file in EMBOSS data path</td>
 <td>EBLOSUM62 for protein<br>EDNAMAT for DNA</td>
@@ -373,7 +375,10 @@ The only four letters allowed are BPLW, in any order.</td>
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td>-data</td>
+<td>(no help text) bool value</td>
+<td>Yes/No</td>
+<td>No</td>
 </tr>
 
 </table>
@@ -471,6 +476,7 @@ The directories are searched in the following order:
 <a name=See also><h2>See also</h2></a>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="plotcon.html">plotcon</a></td><td>Plots the quality of conservation of a sequence alignment</td></tr>
 </table>
 
 <!--

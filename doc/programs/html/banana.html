@@ -93,17 +93,19 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
+   Mandatory qualifiers (* if not always prompted):
   [-sequence]          sequence   Sequence USA
-   -graph              graph      Graph type
+*  -graph              graph      Graph type
 
    Optional qualifiers:
-   -datafile           datafile   angles file
+   -anglesfile         datafile   angles file
    -residuesperline    integer    Number of residues to be displayed on each
                                   line
    -outfile            outfile    Output file name
 
-   Advanced qualifiers: (none)
+   Advanced qualifiers:
+   -data               bool       Output as data
+
 
 </pre>
 </td></tr></table>
@@ -137,7 +139,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-datafile</td>
+<td>-anglesfile</td>
 <td>angles file</td>
 <td>Data file</td>
 <td>Eangles_tri.dat</td>
@@ -164,7 +166,10 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td>-data</td>
+<td>Output as data</td>
+<td>Yes/No</td>
+<td>No</td>
 </tr>
 
 </table>
