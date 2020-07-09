@@ -1,0 +1,152 @@
+
+                              EMBOSS: degapseq
+     _________________________________________________________________
+   
+                               Program degapseq
+                                       
+Function
+
+   Removes gap characters from sequences
+   
+Description
+
+   degapseq reads in one or more sequences and writes them out again
+   minus any gap characters. In effect it removes gaps from aligned
+   sequences.
+   
+   In fact, if does more than just this as it removes ANY non-alphabetic
+   character from the input sequence, so as well as removing the
+   gap-characters, it will remove such things as the '*' in protein
+   sequenecs that indicates the position of a 'translated' STOP codon.
+   
+   There are many different formats for storing sequences in files. Some
+   sequence formats allow you to store aligned sequences, including the
+   information on where gaps have been introduced to make the sequence
+   align properly. This is indicated by using a special character to
+   indicate that there is a gap at that position. Different sequence
+   formats use different characters to indicate gaps. Some formats may
+   use more than one type of character to indicate different types of
+   gaps (e.g. gaps at the ends of the sequences, internal gaps, gaps
+   introduced by a program or by a person editing the alignment, etc.)
+   Some typicate characters used to indicate where gaps are may be: '.',
+   '-' and '~'.
+   
+   When EMBOSS programs read in a sequence that has gap-characters in,
+   all gap characters are internally changed to '-' characters. i.e.
+   EMBOSS only has one type of gap character. Thus any distinguishing
+   characters for different gap types are reduced to a '-'. There is only
+   one type of gap in EMBOSS.
+   
+   degapseq removes any non-alphabetic character in the sequence, in
+   effect this means that gaps and '*' characters are removed. The
+   sequence is then written out.
+   
+Usage
+
+   Here is a sample session with degapseq:
+
+% degapseq alignment.seq nogaps.seq
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outseq]            seqoutall  Output sequence(s) USA
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+   
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outseq]
+   (Parameter 2) Output sequence(s) USA Writeable sequence(s)
+   <sequence>.format
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   Any valid input sequence USA is allowed.
+   
+   The input sequence can be nucleic or protein.
+   
+   The input sequence can be gapped or ungapped.
+   
+   An example of a sequence with gaps might be:
+   
+>dgshsh
+ATGCGCAGGTACGTATG....CTGACGGTACGTGATCGA-GCTGA-CGAGCGTATGC-----
+>hsf1
+--------TGACTGATGCTGA~~~~CTG-ACGTGACTGATGCTGATCGTGACTGATCGTGAC
+>myclone1
+ATGCGCAGGTACGTATGCTGACGGTACGTGATCGA-GCTGA-CGAGCGTATGC-----
+
+Output file format
+
+   The output is a sequence with no gaps.
+   
+   An example is the ouput of the above input sequence:
+   
+>dgshsh
+ATGCGCAGGTACGTATGCTGACGGTACGTGATCGAGCTGACGAGCGTATGC
+>hsf1
+TGACTGATGCTGACTGACGTGACTGATGCTGATCGTGACTGATCGTGAC
+>myclone1
+ATGCGCAGGTACGTATGCTGACGGTACGTGATCGAGCTGACGAGCGTATGC
+
+Data files
+
+   None.
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   It will remove '*' characters from protein sequences as well as
+   removing the gap characters.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name                          Description
+   notseq       Excludes a set of sequences and writes out the remaining ones
+   seqret       Reads and writes (returns) sequences
+   seqretall    Reads and writes (returns) a set of sequences one at a time
+   seqretset    Reads and writes (returns) a set of sequences all at once
+   seqretsplit  Reads and writes (returns) sequences in individual files
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (6 March 2001) - Gary Williams
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
