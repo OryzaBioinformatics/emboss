@@ -128,6 +128,8 @@ sub runtest ($) {
 	  "findkm" => "findkm $ENV{EPURE}/../test/data/test.findkm -auto",
 	  "extractseq" => "extractseq tembl:hsfau -region '20-50' -auto",
 	  "etandem" => "etandem tembl:hsfau -auto",
+	  "est2genome3" => "est2genome tgenbank-acc:X65923 tembl-acc:X65921 -auto",
+	  "est2genome2" => "est2genome tgenbank:hsfau tembl:hsfau1 -auto",
 	  "est2genome" => "est2genome tembl:hsfau tembl:hsfau1 -auto",
 	  "equicktandem" => "equicktandem tembl:hsfau -auto",
 	  "entret" => "entret tembl:hsfau -auto",
