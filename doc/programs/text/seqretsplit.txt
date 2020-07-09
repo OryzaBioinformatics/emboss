@@ -1,0 +1,164 @@
+
+                            EMBOSS: seqretsplit
+     _________________________________________________________________
+   
+                              Program seqretsplit
+                                       
+Function
+
+   Reads and writes (returns) sequences in individual files
+   
+Description
+
+   seqretsplit is exactly the same as the program seqret except that when
+   it writes out more than one sequence, it writes each sequence to an
+   individual file.
+   
+   Its main use is therefore to split a file containing multiple
+   sequences into many files, each containing one sequence.
+   
+   The names of the files it creates are derived from the ID name of the
+   sequence, followed by an extension denoting the format of the
+   sequence. You have no control over the names of the files it writes
+   out.
+   
+   For example, if the files embl:hsfa11* are read in and the output is
+   specified as wibble.seq, then the following files are expected to be
+   created:
+   
+hsfa110.fasta
+hsfa111.fasta
+hsfa112.fasta
+hsfa113.fasta
+hsfa114.fasta
+
+   (No file wibble.seq is created.)
+   
+   Why would you want to split a multiple sequence file into many
+   individual files?
+   
+   EMBOSS programs can read in many sequences from one file where this is
+   sensible. Sometimes EMBOSS programs can only read in one sequence at a
+   time because that is the sensible way to do things, but your sequence
+   is one sequence of many in a file. You can specify that sequence using
+   the USA filename:sequenceID, but you may still feel more comfortable
+   splitting your sequences up into many files first.
+   
+   Many non-EMBOSS programs will also have restrictions on whether they
+   can read in multiple sequence files or not.
+   
+Usage
+
+   Here is a sample session with seqretsplit:
+
+% seqretsplit
+Reads and writes (returns) sequences in individual files
+Input sequence(s): embl:hsfa11*
+Output sequence [hsfa110.fasta]:
+
+   The specification of the output file is not used in this case.
+   
+   At some point this ought to change and you will not be prompted for
+   the output file at all.
+   
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outseq]            seqoutall  Output sequence(s) USA
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -firstonly          bool       Read one sequence and stop
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outseq]
+   (Parameter 2) Output sequence(s) USA Writeable sequence(s)
+   <sequence>.format
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -firstonly Read one sequence and stop Yes/No No
+   
+Input file format
+
+   Normal sequence USA.
+   
+Output file format
+
+   One file for each input sequence is written out.
+   
+   The names of the files it creates are derived from the ID name of the
+   sequence, followed by an extension denoting the format of the
+   sequence. You have no control over the names of the files it writes
+   out.
+   
+   For example, if the files embl:hsfa11* are read in and the output is
+   specified as wibble.seq, then the following files are expected to be
+   created:
+   
+hsfa110.fasta
+hsfa111.fasta
+hsfa112.fasta
+hsfa113.fasta
+hsfa114.fasta
+
+   (No file wibble.seq is created.)
+   
+Data files
+
+   None.
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   It shouldn't really prompt for the output filename.
+   
+See also
+
+   Program name                          Description
+   cirdna       Draws circular maps of DNA constructs
+   lindna       Draws linear maps of DNA constructs
+   remap        Display a sequence with restriction cut sites, translation etc
+   seqret       Reads and writes (returns) sequences
+   seqretall    Reads and writes (returns) a set of sequences one at a time
+   seqretset    Reads and writes (returns) a set of sequences all at once
+   showfeat     Show features of a sequence
+   showseq      Display a sequence with features, translation etc
+   
+Author(s)
+
+   This application was written by Peter Rice (price@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (Jan 2000) - Peter Rice
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
