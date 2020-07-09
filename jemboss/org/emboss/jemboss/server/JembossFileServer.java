@@ -22,7 +22,6 @@ package org.emboss.jemboss.server;
 
 import org.emboss.jemboss.programs.*;
 import org.emboss.jemboss.parser.*;
-import org.apache.soap.rpc.Parameter;
 
 import java.io.*;
 import java.util.*;
@@ -32,8 +31,9 @@ public class JembossFileServer
 
 
 //SITE SPECIFIC CHANGE USER DIRECTORIES HERE
-  public Vector embreo_roots()
+  public Vector embreo_roots(String user)
   {
+
     Vector vans = new Vector();
     vans.add("status");
     vans.add("0");
@@ -44,11 +44,11 @@ public class JembossFileServer
     vans.add("HOME");
 
     vans.add("HOME");
-    vans.add("/m3/users/tim");
+    vans.add("/tmp/SOAP/emboss/"+System.getProperty("user.name")+"/"+user);
  
-    vans.add("SCRATCH");
-    vans.add("/m3/users/tim/soap");
-  
+// 
+// ADD OTHER DIRECTORY ROOTS HERE
+//   
     return vans;
   }
 
@@ -62,11 +62,11 @@ public class JembossFileServer
 * @return directory path
 *
 */
-  private String getRoot(String s)
+  private String getRoot(String s, String user)
   {
     String rt = null;
 
-    Vector userRoots = embreo_roots();
+    Vector userRoots = embreo_roots(user);
 
     for(int i=0; i<userRoots.size();i+=2)
     {
@@ -79,12 +79,12 @@ public class JembossFileServer
   }
 
 
-  public Vector directory_shortls(String options, String dirname)
+  public Vector directory_shortls(String options, String dirname, String user)
   {
     Vector vans = new Vector();
     int split = options.indexOf("=")+1;
 
-    File dir = new File(getRoot(options.substring(split)) + "/" + dirname);
+    File dir = new File(getRoot(options.substring(split),user) + "/" + dirname);
 
 // filter out dot files
     File files[] = dir.listFiles(new FilenameFilter()
@@ -117,25 +117,43 @@ public class JembossFileServer
     return vans;
   }
 
-  public Vector get_file(String options, String filename)
+  public Vector get_file(String options, String filename, String user)
   {
     Vector vans = new Vector();
-//  File dir = new File("/m3/users/tim/"+filename);
     
-    int split = options.indexOf("=")+1;    
-    File dir = new File(getRoot(options.substring(split)) + "/" + filename);
+    int split = options.indexOf("=")+1;  
+    String fullFileName = getRoot(options.substring(split),user) + "/" + filename;
+    File dir = new File(fullFileName);
 
     String line = new String("");
     String fc = new String("");
-    try
+
+    if(fullFileName.toLowerCase().endsWith(".png") ||
+       fullFileName.toLowerCase().endsWith(".gif") ||
+       fullFileName.toLowerCase().endsWith(".jpeg") )
     {
-      BufferedReader in = new BufferedReader(new FileReader(dir));
-      while((line = in.readLine()) != null)
-        fc = fc.concat(line + "\n");
+      byte[] data = JembossServer.readByteFile(fullFileName);
+      vans.add("contents");
+      vans.add(data);
     }
-    catch (IOException ioe){}
-    vans.add("contents");
-    vans.add(fc);
+    else
+    {
+
+      try
+      {
+        BufferedReader in = new BufferedReader(new FileReader(dir));
+        while((line = in.readLine()) != null)
+          fc = fc.concat(line + "\n");
+        vans.add("contents");
+        vans.add(fc);
+      }
+      catch (IOException ioe)
+      {
+        vans.add("contents");
+        vans.add("Sorry cannot read this file");
+      }
+    }
+
     vans.add("status");
     vans.add("0");
     vans.add("msg");
@@ -152,12 +170,13 @@ public class JembossFileServer
 * @param filedata file contents
 *
 */
-  public Vector put_file(String options, String filename, byte[] filedata)
+  public Vector put_file(String options, String filename, byte[] filedata,
+                         String user)
   {
     Vector vans = new Vector();
 
     int split = options.indexOf("=")+1;
-    File f = new File(getRoot(options.substring(split)) + "/" + filename);
+    File f = new File(getRoot(options.substring(split),user) + "/" + filename);
 
     try
     {
@@ -166,8 +185,6 @@ public class JembossFileServer
       out.close();
       vans.add("status");
       vans.add("0");
-//    System.out.println("WRITTEN TO " + getRoot(options.substring(split)) +
-//                       "/" + filename);
     }
     catch(IOException ioe)
     {

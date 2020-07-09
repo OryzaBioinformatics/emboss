@@ -149,8 +149,10 @@ public class PrivateRequest
        else       //No authorization reqd, so use user name here
        {          //to create own sand box on server
 
-          String userName = System.getProperty("user.name");
-          args.addElement(new Parameter("USERNAME", String.class,
+         if(args == null)
+           args = new Vector();
+         String userName = System.getProperty("user.name");
+         args.addElement(new Parameter("USERNAME", String.class,
                                       userName, null));
        }
      }

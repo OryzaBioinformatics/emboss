@@ -23,7 +23,6 @@ package org.emboss.jemboss.server;
 import org.emboss.jemboss.*;
 import org.emboss.jemboss.programs.*;
 import org.emboss.jemboss.parser.*;
-import org.apache.soap.rpc.Parameter;
 
 import java.io.*;
 import java.util.*;
@@ -155,11 +154,6 @@ public class JembossServer
     {
       System.out.println("Cannot open EMBOSS acd file " + acdToParse);
     }
-
-//  acd.addElement(new Parameter("status",String.class,"status",null));
-//  acd.addElement(new Parameter("status",String.class,"0",null));
-//  acd.addElement(new Parameter("acd",String.class,"acd",null));
-//  acd.addElement(new Parameter("acd",String.class,acdText,null));
 
     acd.add("status");
     acd.add("0");
@@ -388,7 +382,7 @@ public class JembossServer
   {
 
     Vector result = new Vector();
-    System.out.println("Running runProg now.... " + tmproot);
+//  System.out.println("Running runProg now.... " + tmproot);
     
 
     //disallow pathnames and multiple command constructions
@@ -748,7 +742,6 @@ public class JembossServer
 
   }
 
-
 /**
 *
 * Reads in png files from EMBOSS output
@@ -767,96 +760,94 @@ public class JembossServer
 
     for(int i=0;i<pngFiles.length;i++)
     {
-      String line = new String("");
       String key = new String(pngFiles[i]);
-      DataInputStream dis;
-      FileInputStream fis;
+      DataInputStream dis = null;
+      FileInputStream fis = null;
       int nby = 0;
-      byte data[] = new byte[1];
-      try
+      byte data[] = readByteFile(project + fs + pngFiles[i]);
+      if(data != null)
       {
-        fis = new FileInputStream(project + fs + pngFiles[i]);
-        dis = new DataInputStream(fis);
-        while(true)
-        {
-          dis.readByte();
-          nby++;
-        }
-      }
-      catch (EOFException eof){}
-      catch (IOException ioe){}
-
-      if(nby >0)
-      {
-        try
-        {
-          data = new byte[nby];
-          fis = new FileInputStream(project + fs + pngFiles[i]);
-          dis = new DataInputStream(fis);
-          nby=0;
-          while(true)
-          {
-            data[nby]=dis.readByte();
-            nby++;
-          }
-        }
-        catch (EOFException eof){}
-        catch (IOException ioe){}
-
         result.add(key);
         result.add(data);
       }
     }
     return result;
   }
- 
-//public Vector embreo_roots()
-//{
-//  Vector vans = new Vector();
-//  vans.add("status");
-//  vans.add("0");
-//  vans.add("msg");
-//  vans.add("");
-//  vans.add("default-root");
-//  vans.add("HOME");
-//  vans.add("HOME");
-//  vans.add("/m3/users/tim");    
 
-//  return vans;
-//}
+/**
+*
+* Read a file into a byte array.
+* @param String file name
+* @return byte[] contents of file
+*
+*/
+  protected static byte[] readByteFile(String filename)
+  {
 
+    DataInputStream dis = null;
+    FileInputStream fis = null;
+    int nby = 0;
+    byte data[] = null;
 
-//public Vector directory_shortls(String options, String dirname)
-//{
-//  Vector vans = new Vector();
-//  File dir = new File("/m3/users/tim/");
+    try
+    {
+      fis = new FileInputStream(filename);
+      dis = new DataInputStream(fis);
+      while(true)
+      {
+        dis.readByte();
+        nby++;
+      }
+    }
+    catch (EOFException eof){}
+    catch (IOException ioe){}
+    finally
+    {
+      if(dis!=null)
+        try
+        {
+          dis.close();
+        }
+        catch (IOException ioe2){}
+      if(fis!=null)
+        try
+        {
+          fis.close();
+        }
+        catch (IOException ioe2){}
+    }
 
+    if(nby >0)
+    {
+      try
+      {
+        data = new byte[nby];
+        fis = new FileInputStream(filename);
+        dis = new DataInputStream(fis);
+        nby=0;
+        dis.readFully(data);
+      }
+      catch (EOFException eof){}
+      catch (IOException ioe){}
+      finally
+      {
+        if(dis!=null)
+          try
+          {
+            dis.close();
+          }
+          catch (IOException ioe2){}
+        if(fis!=null)
+          try
+          {
+            fis.close();
+          }
+          catch (IOException ioe2){}
+      }
+    }
 
-//  File files[] = dir.listFiles();
-//  
-//  System.out.println("HERE IN directory_shortls");
-//  String listFiles = "";
-//  String listDir = "";
-
-//  for(int i=0;i<files.length;i++)
-//  {
-//    if(files[i].isDirectory())
-//      listDir = listDir.concat(files[i].getName() + "\n");
-//    else
-//      listFiles = listFiles.concat(files[i].getName() + "\n");
-//  }
-
-//  vans.add("status");
-//  vans.add("0");
-//  vans.add("msg");
-//  vans.add("");
-//  vans.add("list");
-//  vans.add(listFiles);
-//  vans.add("dirlist");
-//  vans.add(listDir);
-
-//  return vans;
-//}
+    return data;
+  }
 
 
 /**

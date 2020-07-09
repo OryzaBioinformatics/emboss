@@ -81,12 +81,9 @@ public class FileList
      directories = eRun.getHash().get("dirlist").toString();
 
      vdir = new Vector();
-     StringTokenizer tokenizer = new StringTokenizer(directories,"\n");
-     while (tokenizer.hasMoreTokens())
-     {
-       String image = tokenizer.nextToken();
-       vdir.add(image);
-     }
+     StringTokenizer tok = new StringTokenizer(directories,"\n");
+     while (tok.hasMoreTokens())
+       vdir.add(tok.nextToken());
 
      if (mysettings.getDebug()) 
        System.out.println("FileList: done");
@@ -102,14 +99,18 @@ public class FileList
   public Vector fileVector() 
   {
     Vector v = new Vector();
-    StringTokenizer tokenizer = new StringTokenizer(flist,"\n");
-    while (tokenizer.hasMoreTokens()) 
-    {
-      String image = tokenizer.nextToken();
-      v.add(image);
-    }
+    StringTokenizer tok = new StringTokenizer(flist,"\n");
+    while (tok.hasMoreTokens()) 
+      v.add(tok.nextToken());
+
+    Object list[] = v.toArray();
+    java.util.Arrays.sort(list);
+    for(int i=0; i<list.length; i++)
+      v.set(i,(String)list[i]);
+    
     return v;
   }
+
 
 /**
 * Gets whether this name is a directory

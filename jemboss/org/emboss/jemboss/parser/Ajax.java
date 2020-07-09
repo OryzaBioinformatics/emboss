@@ -51,70 +51,62 @@ public class Ajax
 
 /** user home dir */
   public String home;
-/** user id */
-  public static int uid;
-/** group id */
-  public static int gid;
 
-/** authentication method */
-  public native boolean userInfo(String userName, 
-                                 String passWord);
-  public native int setuid(int uid);
-  public native int setgid(int gid);
-
-  public native int seteuid(int uid);
-  public native int setegid(int gid);
-
-  public native int getuid();
-  public native int getgid();
-
-  public native int geteuid();
-  public native int getegid();
-
-/** new methods */
-  public native boolean userAuth(String username,
+/** authentication methods */
+  public synchronized native boolean userAuth(String username,
           byte[] password, String environment);
-  public native boolean forkEmboss(String username,
+  public synchronized native boolean forkEmboss(String username,
                byte[] password, String environment,
                String commandline, String directory);
-  public native boolean makeDir(String username,
+  public synchronized native boolean forkBatch(String username,
+               byte[] password, String environment,
+               String commandline, String directory);
+  public synchronized native boolean makeDir(String username,
                byte[] password, String environment,
                String directory);
-  public native boolean delFile(String username,
+  public synchronized native boolean delFile(String username,
                byte[] password, String environment,
                String filename);
-  public native boolean delDir(String username,
+  public synchronized native boolean delDir(String username,
                byte[] password, String environment,
                String directory);
-  public native boolean listFiles(String username,
+  public synchronized native boolean listFiles(String username,
                byte[] password, String environment,
                String directory);
-  public native boolean listDirs(String username,
+  public synchronized native boolean listDirs(String username,
                byte[] password, String environment,
                String directory);
-  public native byte[] getFile(String username,
+  public synchronized native byte[] getFile(String username,
                byte[] password, String environment,
                String filename);
-  public native boolean putFile(String username,
+  public synchronized native boolean putFile(String username,
                byte[] password, String environment,
                String filename, byte[] bytearray);
 
 /** stdout & stderr from fork */
-  public String outStd;
-  public String errStd;
-  public static int size;
-  public static int prnt;
-  public static int fileok;
-//public byte[] fbuf;
+  private String outStd;
+  private String errStd;
+  private int size;
+  private int prnt;
+  private int fileok;
 
-  public native boolean fork(String cmdLine, String envp,
-                          String dir, int uid, int gid);
-
-
+//public native boolean fork(String cmdLine, String envp,
+//                        String dir, int uid, int gid);
 
   static
   {
-    System.loadLibrary("ajax");
+    try
+    {
+      System.loadLibrary("ajax");
+    }
+    catch(UnsatisfiedLinkError e) 
+    {
+      if(e.getMessage().indexOf("already loaded in another classloader") 
+                               != -1)
+        System.err.println(e);
+      else
+        throw e;
+    }
   }
 
 /**
@@ -147,6 +139,30 @@ public class Ajax
     this.protein = protein;
   }
 
+  public synchronized String getOutStd()
+  {
+    return outStd;
+  }
+ 
+  public synchronized String getErrStd()
+  {
+    return errStd;
+  }
+
+  public synchronized int getSize()
+  {
+    return size;
+  }
+
+  public synchronized int getPrnt()
+  {
+    return prnt;
+  }
+
+  public synchronized int getFileok()
+  {
+    return fileok;
+  }
 
 }
 

@@ -48,6 +48,8 @@ public class RunEmbossApplication
     }
     catch(IOException ioe)
     {
+      System.out.println("RunEmbossApplication Error executing: "+
+                          embossCommand);
       status = "1";
     }
   }
@@ -61,12 +63,14 @@ public class RunEmbossApplication
   {
     stdout = "";
 
+    BufferedInputStream stdoutStream = null;
+    BufferedReader stdoutRead = null;
     try
     {
       String line;
-      BufferedInputStream stdoutStream =
+      stdoutStream =
          new BufferedInputStream(p.getInputStream());
-      BufferedReader stdoutRead =
+      stdoutRead =
          new BufferedReader(new InputStreamReader(stdoutStream));
 
       if((line = stdoutRead.readLine()) != null)
@@ -77,19 +81,52 @@ public class RunEmbossApplication
     
         if(project != null)
         {
-          try{
+          PrintWriter out = null;
+          try
+          {
             File so = new File(project.getCanonicalPath() + "/stdout");
             so.createNewFile();
-            PrintWriter out = new PrintWriter(new FileWriter(so));
+            out = new PrintWriter(new FileWriter(so));
             out.println(stdout);
-            out.close();
-          }catch(IOException ioe){}
+          }
+          catch(IOException ioe)
+          {
+            System.err.println("RunEmbossApplication: Error writing" + 
+                              project.getCanonicalPath() + "/stdout");
+          }
+          finally
+          {
+            if(out!=null)
+              out.close();
+          }
         }
       }
     }
     catch (IOException io)
     {
-      System.out.println("Error in collecting standard out");
+      System.err.println("RunEmbossApplication: Error in "+ 
+                                "collecting standard out");
+    }
+    finally
+    {
+      try
+      {
+        if(stdoutStream!=null)
+          stdoutStream.close();
+      }
+      catch(IOException ioe)
+      {
+        System.err.println("RunEmbossApplication: Error closing stream");
+      } 
+      try
+      {
+        if(stdoutRead!=null)
+          stdoutRead.close();
+      }
+      catch(IOException ioe)
+      {
+        System.err.println("RunEmbossApplication: Error closing reader");
+      }
     }
  
     boolean std = false;

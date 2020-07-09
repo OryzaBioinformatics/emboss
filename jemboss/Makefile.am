@@ -11,7 +11,7 @@ all-local:
 	@if test "${JAVA_OK}" != "yes" ; then \
 	  echo "Not compiling Jemboss"; \
 	else \
-	  (if test "${SHELL}" != "/bin/sh" ; then \
+	  (if test "${SHELL}" = "/bin/bash" ; then \
 	  declare -x CLASSPATH=":lib/soap.jar:lib/xerces.jar:lib/mail.jar:lib/activation.jar:lib/jakarta-regexp-1.2.jar:lib/jalview.jar:lib/jcert.jar:lib/jnet.jar:lib/jsse.jar:.:"; \
 	  export CLASSPATH; \
 	  javac org/emboss/jemboss/Jemboss.java; \

@@ -423,7 +423,7 @@ public class BuildJembossForm implements ActionListener
               Jemboss.resultsManager.updateStatus();
               if(!Jemboss.resultsManager.isAutoUpdate())
               {
-                System.out.println("Start new batch update thread");
+//              System.out.println("Start new batch update thread");
                 Jemboss.resultsManager.setAutoUpdate(true);
                 String freq = (String)AdvancedOptions.jobMgr.getSelectedItem();
                 int ind = freq.indexOf(" ");
@@ -853,7 +853,7 @@ public class BuildJembossForm implements ActionListener
       }
       else                                      // presume remote
       {
-        System.out.println("Can't find list file "+lfn);
+//      System.out.println("Can't find list file "+lfn);
         options = options.concat(" -" + val + " list::" +  lfn);
       }
       
@@ -883,13 +883,13 @@ public class BuildJembossForm implements ActionListener
         }
         else
         {
-          System.out.println("Ignoring invalid local file "+fn);
+//        System.out.println("Ignoring invalid local file "+fn);
           options = options.concat(" -" + val + " " +  fn);
         }
       }
       else     //presume remote
       {
-        System.out.println("Can't find plain file "+fn);
+//      System.out.println("Can't find plain file "+fn);
         options = options.concat(" -" + val + " " +  fn);
       }
     }
