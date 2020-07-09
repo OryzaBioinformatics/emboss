@@ -60,8 +60,8 @@ Command line arguments
    (Parameter 1) Sequence USA Readable sequence Required
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
-   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
-   EMBOSS_GRAPHICS value, or x11
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
+   png EMBOSS_GRAPHICS value, or x11
    -outf Output file name Output file <sequence>.wobble
    Optional qualifiers Allowed values Default
    -window Window size in codons Integer 1 or more 30

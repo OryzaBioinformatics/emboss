@@ -65,11 +65,11 @@ sequences in an alignment.
 <p>
 
 It will write a table containing one line per sequence.  The information
-is written out in columns separated by space ot TAB characters.  The
+is written out in columns separated by space or TAB characters.  The
 columns of data are: the sequences' USA, name, two measures of length,
 counts of gaps, and numbers of identical, similar and different residues
 or bases in this sequence when compared to a reference sequence,
-togather with a simple statistic of the % change between the reference
+together with a simple statistic of the % change between the reference
 sequence and this sequence. 
 
 <p>
@@ -103,44 +103,58 @@ one or more sequence to be analysed.
 
 Here is a sample session with infoalign:
 <br>
+<pre>
 % infoalign globin.seq
+</pre>
 
 <p>
 
 Don't display the USA of a sequence 
 <br>
+<pre>
 % infoalign globin.seq -nousa
+</pre>
 
 <p>
 
 Display only the name and sequence length of a sequence 
 <br>
+<pre>
 % infoalign globin.seq -only -name -seqlength
+</pre>
 
 <p>
 
 Display only the name, number of gap characters and differences to the consensus sequence
 <br>
+<pre>
 % infoalign globin.seq -only -name -gapcount -diffcount
+</pre>
 
 <p>
 
 Display the name and  number of gaps within a sequence
 <br>
+<pre>
 % infoalign globin.seq -only -name -gaps
+</pre>
 
 <p>
 
 Display information formatted with HTML 
 <br>
+<pre>
 % infoalign globin.seq -html
+</pre>
 
 
 <p>
 
 Use the first sequence as the reference sequence to compare to
 <br>
+<pre>
 % infoalign globin.seq -refseq 1
+</pre>
 
 
 
@@ -446,7 +460,7 @@ of more space or TAB characters:
 <LI> SeqLen - length of the sequence when all gap characters are removed.
 <LI> AlignLen - length of the sequence including internal gap characters i.e. gaps at the start or the end are not included.
 <LI> Gaps - number of gaps e.g. 'AAA---AAA' is 1 gap (and 3 gap characters long (see GapLen)).
-<LI> GapLen - total number of internal gap characters, see the 3 gap characters above.
+<LI> GapLen - total number of internal gap characters, see the 3 gap characters above. This is the sum total of all of the internal gap characters in this sequence.
 <LI> Ident - number of characters that are identical to the specified reference sequence (uppercase 'A' is identical to lowercase 'a').
 <LI> Similar - number of characters which are non-identical - which score > 0 in the comparison matrix when compared to the reference sequence, but which are not identical.
 <LI> Different - number of characters which score <= 0 in the comparison matrix when compared to the reference sequence.
@@ -657,7 +671,7 @@ None.
 <tr><td><a href="plotcon.html">plotcon</a></td><td>Plots the quality of conservation of a sequence alignment</td></tr>
 <tr><td><a href="prettyplot.html">prettyplot</a></td><td>Displays aligned sequences, with colouring and boxing</td></tr>
 <tr><td><a href="seealso.html">seealso</a></td><td>Finds programs sharing group names</td></tr>
-<tr><td><a href="showalign.html">showalign</a></td><td>Display a multiple sequence alignment</td></tr>
+<tr><td><a href="showalign.html">showalign</a></td><td>Displays a multiple sequence alignment</td></tr>
 <tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
 <tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation text. SRS and Entrez are faster!</td></tr>
 <tr><td><a href="tfm.html">tfm</a></td><td>Displays a program's help documentation manual</td></tr>

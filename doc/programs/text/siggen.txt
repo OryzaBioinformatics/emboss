@@ -62,25 +62,23 @@ Name of signature file for output [sig.sig]:
 
 Command line arguments
 
-   Mandatory qualifiers:
+   Mandatory qualifiers (* if not always prompted):
   [-algpath]           string     Location of alignment files for input
   [-algextn]           string     Extension of alignment files for input
-  [-conpath]           string     Location of contact files for input
-  [-conextn]           string     Extension of contact files
+  [-sigpath]           string     Location of signature files for output
+  [-sigextn]           string     Extension of signature files for output
   [-sparsity]          integer    % sparsity of signature
-  [-randomize]         bool       Generate a randomized signature
-  [-datafile]          matrixf    Substitution matrix to be used
-  [-[no]scoreseq]      bool       Score alignment on basis of residue
-                                  conservation
-  [-[no]scorencon]     bool       Score alignment on basis of number of
-                                  contacts
-  [-[no]scoreccon]     bool       Score alignment on basis of conservation of
-                                  contacts
-  [-scoreboth]         bool       Score alignment on a combined measure of
-                                  number and conservation of contacts
-  [-[no]postsim]       bool       Ignore alignment postitions with
+  [-randomise]         bool       Generate a randomised signature
+*  -seqoption          list       Select number
+*  -datafile           matrixf    Substitution matrix to be used
+*  -conoption          list       Select number
+*  -filtercon          bool       Ignore alignment positions making less than
+                                  a threshold number of contacts
+*  -conthresh          integer    Threshold contact number
+*  -conpath            string     Location of contact files for input
+*  -conextn            string     Extension of contact files
+*  -filterpsim         bool       Ignore alignment postitions with
                                   post_similar value of 0
-  [-sigfile]           outfile    Name of signature file for output
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
@@ -97,35 +95,37 @@ Command line arguments
    [-algextn]
    (Parameter 2) Extension of alignment files for input Any string is
    accepted .align
-   [-conpath]
-   (Parameter 3) Location of contact files for input Any string is
+   [-sigpath]
+   (Parameter 3) Location of signature files for output Any string is
    accepted ./
-   [-conextn]
-   (Parameter 4) Extension of contact files Any string is accepted .con
+   [-sigextn]
+   (Parameter 4) Extension of signature files for output Any string is
+   accepted .sig
    [-sparsity]
    (Parameter 5) % sparsity of signature Any integer value 10
-   [-randomize]
-   (Parameter 6) Generate a randomized signature Yes/No No
-   [-datafile]
-   (Parameter 7) Substitution matrix to be used Comparison matrix file in
+   [-randomise]
+   (Parameter 6) Generate a randomised signature Yes/No No
+   -seqoption Select number
+   1 (Substitution matrix)
+   2 (Residue class)
+   3 (None)
+   3
+   -datafile Substitution matrix to be used Comparison matrix file in
    EMBOSS data path ./EBLOSUM62
-   [-[no]scoreseq]
-   (Parameter 8) Score alignment on basis of residue conservation Yes/No
-   Yes
-   [-[no]scorencon]
-   (Parameter 9) Score alignment on basis of number of contacts Yes/No
-   Yes
-   [-[no]scoreccon]
-   (Parameter 10) Score alignment on basis of conservation of contacts
-   Yes/No Yes
-   [-scoreboth]
-   (Parameter 11) Score alignment on a combined measure of number and
-   conservation of contacts Yes/No No
-   [-[no]postsim]
-   (Parameter 12) Ignore alignment postitions with post_similar value of
-   0 Yes/No Yes
-   [-sigfile]
-   (Parameter 13) Name of signature file for output Output file sig.sig
+   -conoption Select number
+   1 (Number)
+   2 (Conservation)
+   3 (Number and conservation)
+   4 (None)
+   4
+   -filtercon Ignore alignment positions making less than a threshold
+   number of contacts Yes/No No
+   -conthresh Threshold contact number Any integer value 10
+   -conpath Location of contact files for input Any string is accepted
+   /data/contacts/
+   -conextn Extension of contact files Any string is accepted .con
+   -filterpsim Ignore alignment postitions with post_similar value of 0
+   Yes/No No
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
@@ -284,10 +284,9 @@ Known bugs
    
 See also
 
-   Program name                    Description
+   Program name                   Description
    contacts     Reads coordinate files and writes contact files
    scopalign    Generate alignments for SCOP families
-   sigscan      Scans a sparse protein signature against swissprot
    
 Author(s)
 

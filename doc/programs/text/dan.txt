@@ -70,7 +70,7 @@ Command line arguments
 *  -prodlen            integer    This specifies the product length to be used
                                   in calculations (it is ignored unless
                                   -product is used).
-*  -outfile            outfile    If a plot is not being produced then data on
+*  -outfile            report     If a plot is not being produced then data on
                                   the melting point etc. in each window along
                                   the sequence is output to the file.
 
@@ -119,8 +119,8 @@ Command line arguments
    the plot. Number from 0.000 to 150.000 55.
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
-   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
-   EMBOSS_GRAPHICS value, or x11
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
+   png EMBOSS_GRAPHICS value, or x11
    -formamide This specifies the percent formamide to be used in
    calculations (it is ignored unless -product is used). Number from
    0.000 to 100.000 0.
@@ -132,7 +132,7 @@ Command line arguments
    (20)
    -outfile If a plot is not being produced then data on the melting
    point etc. in each window along the sequence is output to the file.
-   Output file <sequence>.dan
+   Report file
    Optional qualifiers Allowed values Default
    -temperature If -thermo has been specified then this specifies the
    temperature at which to calculate the DeltaG, DeltaH and DeltaS

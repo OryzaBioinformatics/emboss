@@ -112,7 +112,38 @@ Data files
    
 Notes
 
-   None.
+   Sometimes you can find repeats using the program palindrome that you
+   can't find with einverted using the default parameters.
+   
+   This is not due to a problem with either program. It is simply because
+   some of the shortest repeats that you find with palindrome's default
+   parameter values are below einverted's default cutoff score - you
+   should decrease the 'Minimum score threshold' to see them.
+   
+   For example, when palindrome is run with 'em:hsfau1', it finds the
+   repeat:
+   
+64    aaaactaaggc    74
+      |||||||||||
+98    ttttgattccg    88
+
+   einverted will not report this as its score is 33 (11 bases scoring 3
+   each, no mismatches or gaps) with is below the default score cutoff of
+   50.
+   
+   If einverted is run as:
+   
+   % einverted em:hsfau1 -threshold 33
+   
+   then it will find it:
+   
+Score 33: 11/11 (100%) matches, 0 gaps
+      64 aaaactaaggc 74
+         |||||||||||
+      98 ttttgattccg 88
+
+   (Anything can be considered to be a repeat if you set the score
+   threshold low enough!)
    
 References
 

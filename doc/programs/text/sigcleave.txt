@@ -28,7 +28,7 @@ Command line arguments
 
    Mandatory qualifiers:
   [-sequence]          seqall     Sequence database USA
-  [-outfile]           outfile    Output file name
+  [-outfile]           report     (no help text) report value
    -minweight          float      Minimum scoring weight value for the
                                   predicted cleavage site
 
@@ -54,7 +54,7 @@ Command line arguments
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.sigcleave
+   (Parameter 2) (no help text) report value Report file
    -minweight Minimum scoring weight value for the predicted cleavage
    site Number from 0.000 to 100.000 3.5
    Optional qualifiers Allowed values Default

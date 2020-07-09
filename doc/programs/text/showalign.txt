@@ -6,7 +6,7 @@
                                        
 Function
 
-   Display a multiple sequence alignment
+   Displays a multiple sequence alignment
    
 Description
 

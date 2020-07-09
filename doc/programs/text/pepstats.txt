@@ -45,6 +45,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers:
    -[no]termini        bool       Include charge at N and C terminus
+   -aadata             string     Molecular weight data for amino acids
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -60,6 +61,8 @@ Command line arguments
    (none)
    Advanced qualifiers Allowed values Default
    -[no]termini Include charge at N and C terminus Yes/No Yes
+   -aadata Molecular weight data for amino acids Any string is accepted
+   Eamino.dat
    
 Input file format
 

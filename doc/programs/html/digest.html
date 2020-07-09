@@ -142,7 +142,7 @@ IT IS DONE FOR YOU.
    Mandatory qualifiers:
   [-sequencea]         sequence   Sequence USA
    -menu               list       Select number
-  [-outfile]           outfile    Output file name
+  [-outfile]           report     (no help text) report value
 
    Optional qualifiers: (none)
    Advanced qualifiers:
@@ -155,6 +155,7 @@ IT IS DONE FOR YOU.
                                   3..5 etc but not (e.g.) 2..5. Overlaps are
                                   therefore fragments with exactly one
                                   potential cut site within it.
+   -aadata             string     Molecular weight data for amino acids
    -allpartials        bool       As for overlap but fragments containing more
                                   than one potential cut site are included.
 
@@ -191,9 +192,9 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>[-outfile]<br>(Parameter 2)</td>
-<td>Output file name</td>
-<td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.digest</td>
+<td>(no help text) report value</td>
+<td>Report file</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -224,6 +225,13 @@ IT IS DONE FOR YOU.
 <td>Used for partial digestion. Shows all cuts from favoured cut sites plus 1..3, 2..4, 3..5 etc but not (e.g.) 2..5. Overlaps are therefore fragments with exactly one potential cut site within it.</td>
 <td>Yes/No</td>
 <td>No</td>
+</tr>
+
+<tr>
+<td>-aadata</td>
+<td>Molecular weight data for amino acids</td>
+<td>Any string is accepted</td>
+<td>Eamino.dat</td>
 </tr>
 
 <tr>

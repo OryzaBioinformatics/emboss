@@ -15,14 +15,14 @@ Description
    candidate repeat lengths to identify genuine tandem repeats.
    
    equicktandem is a simple program that looks for segments in which each
-   base tends to match the base back, i.e. with an autocorrelation peak
-   at . This can allow drift in the repeating sequence, i.e. it does not
-   look for a consensus sequence for the whole repeat block (that is what
-   etandem does). But it is much quicker than etandem. It does not
-   account for gaps.
+   base tends to match the base 'repeatsize' back, i.e. with an
+   autocorrelation peak at 'repeatsize'. This can allow drift in the
+   repeating sequence, i.e. it does not look for a consensus sequence for
+   the whole repeat block (that is what etandem does). But it is much
+   quicker than etandem. It does not account for gaps.
    
-   The score is +1 for a match to the corresponding base back and -1 for
-   a mismatch.
+   The score is +1 for a match to the corresponding base 'repeatsize'
+   back and -1 for a mismatch.
    
 Usage
 

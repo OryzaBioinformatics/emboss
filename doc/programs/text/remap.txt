@@ -320,10 +320,10 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
 
 # Enzymes that cut  Frequency   Isoschizomers
-    AccB7I          1   PflMI,Van91I
+    AccB7I          1   PflBI,PflMI,Van91I
      AccII          1   Bsh1236I,BstFNI,BstUI,MvnI,ThaI
       AciI          1
-    AspLEI          2   CfoI,HhaI
+    AspLEI          2   BstHHI,CfoI,HhaI
     AsuC2I          1   BcnI,NciI
   Bme1390I          1   MspR9I,ScrFI
      Bsc4I          1   BseLI,BsiYI,BslI
@@ -337,39 +337,49 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
 
 
+# Enzymes < MINCUTS Frequency   Isoschizomers
+
+
+
+# Enzymes > MAXCUTS Frequency   Isoschizomers
+
+
+
 # Enzymes that do not cut
 
-AatI      AatII     AauI      Acc113I   Acc16I    Acc36I    Acc65I    AccB1I
+AarI      AatI      AatII     AauI      Acc113I   Acc16I    Acc36I    Acc65I
 
-AccBSI    AccI      AccIII    AclI      AclNI     AclWI     AcsI      AcyI
+AccB1I    AccBSI    AccI      AccIII    AclI      AclWI     AcsI      AcyI
 
-AdeI      AfaI      AfeI      AflII     AflIII    AgeI      AhdI      AloI
+AdeI      AfaI      AfeI      AflI      AflII     AflIII    AgeI      AhdI
 
-AluI      Alw21I    Alw26I    Alw44I    AlwI      AlwNI     Ama87I    AocI
+AhlI      AloI      AluI      Alw21I    Alw26I    Alw44I    AlwI      AlwNI
 
-Aor51HI   ApaI      ApaLI     ApoI      AscI      AseI      AsiAI     AsnI
+Ama87I    AocI      Aor51HI   ApaI      ApaLI     ApoI      AscI      AseI
 
-Asp700I   Asp718I   AspEI     AspHI     AspI      AspS9I    AsuHPI    AsuNHI
+AsiAI     AsnI      Asp700I   Asp718I   AspEI     AspHI     AspI      AspS9I
 
-AvaI      AvaII     AviII     AvrII     AxyI      BaeI      BalI      BamHI
+AsuHPI    AsuII     AsuNHI    AvaI      AvaII     AviII     AvrII     AxyI
 
-BanI      BanII     BanIII    BbeI      BbrPI     BbsI      BbuI      Bbv12I
+BaeI      BalI      BamHI     BanI      BanII     BanIII    BbeI      BbrPI
 
-BbvCI     BbvI      BcgI      BciVI     BclI      BcoI      BcuI      BfaI
+BbsI      BbuI      Bbv12I    BbvCI     BbvI      BceAI     BcgI      BciVI
 
-BfmI      BfrI      BfuI      BglI      BglII     BlnI      BlpI      Bme18I
+BclI      BcoI      BcuI      BfaI      BfiI      BfmI      BfrBI     BfrI
 
-BmrI      BmyI      BoxI      BpiI      BplI      BpmI      Bpu10I    Bpu1102I
+BfuI      BglI      BglII     BlnI      BlpI      Bme18I    BmrI      BmyI
 
-Bpu14I    BpuAI     Bsa29I    BsaAI     BsaBI     BsaHI     BsaI      BsaJI
+BoxI      BpiI      BplI      BpmI      Bpu10I    Bpu1102I  Bpu14I    BpuAI
 
-BsaMI     BsaOI     BsaWI     BsaXI     BscBI     BscCI     BscFI     BscI
+Bsa29I    BsaAI     BsaBI     BsaHI     BsaI      BsaJI     BsaMI     BsaOI
 
-Bse118I   Bse1I     Bse21I    Bse3DI    Bse8I     BseAI     BseCI     BseDI
+BsaWI     BsaXI     BscBI     BscCI     BscFI     BscI      Bse118I   Bse1I
 
-BseGI     BseMI     BseMII    BseNI     BsePI     BseRI     BseSI     BseX3I
+Bse21I    Bse3DI    Bse8I     BseAI     BseBI     BseCI     BseDI     BseGI
 
-BseXI     BsgI      Bsh1285I  Bsh1365I  BshI      BshNI     BshTI     BsiBI
+BseMI     BseMII    BseNI     BsePI     BseRI     BseSI     BseX3I    BseXI
+
+BsgI      Bsh1285I  Bsh1365I  BshFI     BshI      BshNI     BshTI     BsiBI
 
 BsiCI     BsiEI     BsiHKAI   BsiLI     BsiMI     BsiQI     BsiWI     BsiXI
 
@@ -377,25 +387,27 @@ BsiZI     BsmAI     BsmBI     BsmFI     BsmI      Bso31I    BsoBI     BsoMAI
 
 Bsp106I   Bsp119I   Bsp120I   Bsp1286I  Bsp13I    Bsp1407I  Bsp143I   Bsp1720I
 
-Bsp19I    Bsp68I    BspA2I    BspCI     BspDI     BspEI     BspHI     BspLI
+Bsp19I    Bsp68I    BspA2I    BspCI     BspCNI    BspDI     BspEI     BspHI
 
-BspLU11I  BspMI     BspPI     BspTI     BspXI     BsrBI     BsrBRI    BsrDI
+BspLI     BspLU11I  BspMI     BspPI     BspT104I  BspT107I  BspTI     BspXI
 
-BsrFI     BsrGI     BsrI      BsrSI     BssAI     BssECI    BssHII    BssNAI
+BsrBI     BsrBRI    BsrDI     BsrFI     BsrGI     BsrI      BsrSI     BssAI
 
-BssSI     BssT1I    Bst1107I  Bst2BI    Bst2UI    Bst4CI    Bst71I    Bst98I
+BssECI    BssHI     BssHII    BssNAI    BssSI     BssT1I    Bst1107I  Bst2BI
 
-BstACI    BstAPI    BstBAI    BstBI     BstDEI    BstDSI    BstEII    BstF5I
+Bst2UI    Bst4CI    Bst71I    Bst98I    BstACI    BstAPI    BstBAI    BstBI
 
-BstHPI    BstMCI    BstNI     BstNSI    BstOI     BstPAI    BstPI     BstSFI
+BstDEI    BstDSI    BstEII    BstENI    BstENII   BstF5I    BstHPI    BstMCI
 
-BstSNI    BstX2I    BstXI     BstYI     BstZ17I   BstZI     Bsu15I    Bsu36I
+BstNI     BstNSI    BstOI     BstPAI    BstPI     BstSFI    BstSNI    BstV2I
 
-BsuRI     BtgI      BtrI      BtsI      Cac8I     CaiI      CciNI     CelII
+BstX2I    BstXI     BstYI     BstZ17I   BstZI     Bsu15I    Bsu36I    BsuRI
 
-Cfr10I    Cfr13I    Cfr42I    Cfr9I     CfrI      ClaI      CpoI      Csp45I
+BtgI      BtrI      BtsI      Cac8I     CaiI      CciNI     CelII     Cfr10I
 
-Csp6I     CspI      CviJI     CviRI     CviTI     CvnI      DdeI      DpnI
+Cfr13I    Cfr42I    Cfr9I     CfrI      ClaI      CpoI      Csp45I    Csp6I
+
+CspAI     CspI      CviJI     CviRI     CviTI     CvnI      DdeI      DpnI
 
 DpnII     DraI      DraII     DraIII    DrdI      DsaI      DseDI     EaeI
 
@@ -403,63 +415,72 @@ EagI      Eam1105I  EciI      Ecl136II  EclHKI    EclXI     Eco105I   Eco130I
 
 Eco147I   Eco24I    Eco31I    Eco32I    Eco47I    Eco47III  Eco52I    Eco57I
 
-Eco64I    Eco72I    Eco81I    Eco88I    Eco91I    EcoICRI   EcoNI     EcoO109I
+Eco57MI   Eco64I    Eco72I    Eco81I    Eco88I    Eco91I    EcoICRI   EcoNI
 
-EcoO65I   EcoRI     EcoRII    EcoRV     EcoT14I   EcoT22I   EcoT38I   EgeI
+EcoO109I  EcoO65I   EcoRI     EcoRII    EcoRV     EcoT14I   EcoT22I   EcoT38I
 
-EheI      ErhI      Esp3I     FauI      FauNDI    FbaI      FblI      Fnu4HI
+EgeI      EheI      ErhI      Esp3I     FauI      FauNDI    FbaI      FblI
 
-FokI      FriOI     FseI      Fsp4HI    FspI      GsuI      HaeIII    HgaI
+Fnu4HI    FokI      FriOI     FseI      Fsp4HI    FspAI     FspI      FunI
 
-HgiEI     Hin1I     HincII    HindII    HindIII   HinfI     HpaI      HphI
+FunII     GsuI      HaeIII    HgaI      HgiEI     Hin1I     Hin4I     HincII
 
-Hpy188I   Hpy188III Hpy8I     Hpy99I    HpyCH4III HpyCH4IV  HpyCH4V   Hsp92I
+HindII    HindIII   HinfI     HpaI      HphI      Hpy188I   Hpy188III Hpy8I
 
-ItaI      KasI      Kpn2I     KpnI      Ksp22I    KspAI     KspI      Kzo9I
+Hpy99I    HpyCH4III HpyCH4IV  HpyCH4V   HpyF44III Hsp92I    ItaI      KasI
 
-LspI      MaeI      MaeII     MaeIII    MamI      MbiI      MboI      MboII
+Kpn2I     KpnI      Ksp22I    KspAI     KspI      Kzo9I     LspI      LweI
 
-MfeI      MflI      MlsI      MluI      MluNI     Mly113I   MlyI      MnlI
+MabI      MaeI      MaeII     MaeIII    MamI      MbiI      MboI      MboII
 
-Mph1103I  MroI      MroNI     MroXI     MscI      MseI      MslI      Msp17I
+MfeI      MflI      MhlI      MlsI      MluI      MluNI     Mly113I   MlyI
 
-MspA1I    MspCI     MssI      MunI      Mva1269I  MvaI      MwoI      NaeI
+MnlI      Mph1103I  MroI      MroNI     MroXI     MscI      MseI      MslI
 
-NarI      NcoI      NdeI      NdeII     NgoAIV    NgoMIV    NheI      NlaIV
+Msp17I    MspA1I    MspCI     MssI      MunI      Mva1269I  MvaI      MwoI
 
-NmuCI     NotI      NruGI     NruI      NsbI      NsiI      NspBII    NspI
+NaeI      NarI      NcoI      NdeI      NdeII     NgoAIV    NgoMIV    NheI
 
-NspV      PacI      PaeI      PaeR7I    PagI      PalI      PauI      PciI
+NlaIV     NmuCI     NotI      NruGI     NruI      NsbI      NsiI      NspI
 
-PdiI      PdmI      Pfl23II   PflFI     PinAI     Ple19I    PleI      PmaCI
+NspIII    NspV      OliI      PacI      PaeI      PaeR7I    PagI      PalI
 
-Pme55I    PmeI      PmlI      PpiI      PpsI      Ppu10I    PpuMI     PshAI
+PauI      PciI      PctI      PdiI      PdmI      Pfl23II   PflFI     PinAI
 
-PshBI     PsiI      Psp124BI  Psp1406I  Psp5II    PspAI     PspEI     PspGI
+Ple19I    PleI      PmaCI     Pme55I    PmeI      PmlI      PpiI      PpsI
 
-PspLI     PspN4I    PspOMI    PspPPI    PstI      PsuI      PsyI      PvuI
+Ppu10I    PpuMI     PpuXI     PshAI     PshBI     PsiI      Psp124BI  Psp1406I
 
-PvuII     RcaI      RsaI      Rsr2I     RsrII     SacI      SacII     SalI
+Psp5II    PspAI     PspEI     PspGI     PspLI     PspN4I    PspOMI    PspPI
 
-SanDI     SapI      Sau3AI    Sau96I    SbfI      ScaI      SchI      SdaI
+PspPPI    PsrI      PstI      PsuI      PsyI      PvuI      PvuII     RcaI
 
-SduI      SexAI     SfaNI     SfcI      SfiI      SfoI      Sfr274I   Sfr303I
+RsaI      Rsr2I     RsrII     SacI      SacII     SalI      SanDI     SapI
 
-SfuI      SgfI      SgrAI     SinI      SmaI      SmiI      SmiMI     SmlI
+SatI      Sau3AI    Sau96I    SbfI      ScaI      SchI      SdaI      SduI
 
-SnaBI     SpeI      SphI      SrfI      Sse8387I  Sse9I     SseBI     SspBI
+SexAI     SfaNI     SfcI      SfiI      SfoI      Sfr274I   Sfr303I   SfuI
 
-SspI      SstI      SstII     StuI      StyI      SunI      SwaI      TaaI
+SgfI      SgrAI     SgrBI     SinI      SlaI      SmaI      SmiI      SmiMI
 
-TaiI      TasI      TatI      TfiI      TliI      Tru1I     Tru9I     TscI
+SmlI      SmuI      SnaBI     SpaHI     SpeI      SphI      SrfI      Sse8387I
 
-TseI      Tsp45I    Tsp509I   TspEI     TspRI     Tth111I   Vha464I   VneI
+Sse9I     SseBI     SspBI     SspI      SstI      SstII     StuI      StyI
 
-VpaK11BI  VspI      XagI      XapI      XbaI      XceI      XcmI      XhoI
+SunI      SwaI      TaaI      TaiI      TasI      TatI      TauI      TelI
 
-XhoII     XmaCI     XmaI      XmaIII    XmaJI     XmiI      XmnI      XspI
+TfiI      TliI      Tru1I     Tru9I     TscI      TseI      Tsp45I    Tsp509I
 
-Zsp2I
+TspEI     TspRI     Tth111I   Vha464I   VneI      VpaK11BI  VspI      XagI
+
+XapI      XbaI      XceI      XcmI      XhoI      XhoII     XmaCI     XmaI
+
+XmaIII    XmaJI     XmiI      XmnI      XspI      ZhoI      Zsp2I
+
+
+# Number of enzymes not matching SITELEN, BLUNT, STICKY, COMMERCIAL criteria
+
+633
      _________________________________________________________________
    
    The name of the sequence is displayed, followed by the description of
@@ -477,13 +498,22 @@ Zsp2I
    isoschizomers of that enzyme (sharing the same recognition site
    pattern and cut sites) is given.
    
+   This is followed by lists of the enzymes that do cut, but which cut
+   less often than the '-mincut' qualifier or more often than the
+   '-maxcut' qualifier.
+   
    Any of the isoschizomers that are excluded from cutting, (either
    through restrictions such as the permitted number of cuts, blunt
    cutters only, single cutters only etc. or because their name has not
    been given in the input list of enzymes), will not be listed.
    
-   Finally, a list of the enzymes whose names were input but which do not
-   cut is given.
+   Then a list is displayed of the enzymes whose names were input and
+   which match the other criteria ('-sitelen', '-blunt', '-sticky' or
+   '-commercial') but which do not cut.
+   
+   Finally the number of enzymes that were rejected from consideration
+   because they do not match the '-sitelen', '-blunt', '-sticky' or
+   '-commercial' criteria is displayed.
    
    The '-flatreformat' qualifier changes the display to emphasise the
    recognition site of the restriction enzyme, which is indicated by a
@@ -504,7 +534,6 @@ Zsp2I
 -sbeg 1 -send 60 -flat -notran
 Display a sequence with restriction cut sites, translation etc..
 
-Display a sequence with restriction cut sites, translation etc..
 ECLAC
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
@@ -535,8 +564,22 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
 
 
+# Enzymes < MINCUTS Frequency   Isoschizomers
+
+
+
+# Enzymes > MAXCUTS Frequency   Isoschizomers
+
+
+
 # Enzymes that do not cut
 
+
+
+
+# Number of enzymes not matching SITELEN, BLUNT, STICKY, COMMERCIAL criteria
+
+0
 
 Data files
 
@@ -588,7 +631,7 @@ See also
    restover Finds restriction enzymes that produce a specific overhang
    restrict Finds restriction enzyme cleavage sites
    seealso Finds programs sharing group names
-   showalign Display a multiple sequence alignment
+   showalign Displays a multiple sequence alignment
    showdb Displays information on the currently available databases
    showfeat Show features of a sequence
    showorf Pretty output of DNA translations

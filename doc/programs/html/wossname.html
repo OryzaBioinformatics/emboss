@@ -201,6 +201,14 @@ IT IS DONE FOR YOU.
                                   these subgroups, a colon ':' will be placed
                                   between the first and second level of the
                                   group name if this option is true.
+   -gui                bool       This option is intended to help those who
+                                  are designing Graphical User Interfaces to
+                                  the EMBOSS applications. Some EMBOSS
+                                  programs are inappropriate for running in a
+                                  GUI, these include other menu programs and
+                                  interactive editors. This option allows you
+                                  to only report those programs that can be
+                                  run from a GUI
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -311,6 +319,13 @@ then if you enter '.html' here, the second half of the URL after the programname
 <tr>
 <td>-colon</td>
 <td>The groups that EMBOSS applications belong to up to two levels, for example the primary group 'ALIGNMENT' has several sub-groups, or second-level groups, e.g.: CONSENSUS, DIFFERENCES, DOT PLOTS, GLOBAL, LOCAL, MULTIPLE. To aid programs that parse the output of wossname that require the names of these subgroups, a colon ':' will be placed between the first and second level of the group name if this option is true.</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-gui</td>
+<td>This option is intended to help those who are designing Graphical User Interfaces to the EMBOSS applications. Some EMBOSS programs are inappropriate for running in a GUI, these include other menu programs and interactive editors. This option allows you to only report those programs that can be run from a GUI</td>
 <td>Yes/No</td>
 <td>No</td>
 </tr>

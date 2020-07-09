@@ -52,7 +52,7 @@ Command line arguments
 
    Optional qualifiers:
    -windowsize         integer    window size over which to test threshhold
-   -threshold          float      threshold
+   -threshold          integer    threshold
    -matrixfile         matrix     Matrix file
 
    Advanced qualifiers:
@@ -72,13 +72,13 @@ Command line arguments
    (Parameter 2) Sequence USA Readable sequence Required
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
-   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
-   EMBOSS_GRAPHICS value, or x11
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
+   png EMBOSS_GRAPHICS value, or x11
    -outfile Display as data Output file <sequence>.dotmatcher
    Optional qualifiers Allowed values Default
    -windowsize window size over which to test threshhold Integer 3 or
    more 10
-   -threshold threshold Number 0.000 or more 17.0
+   -threshold threshold Integer 0 or more 17
    -matrixfile Matrix file Comparison matrix file in EMBOSS data path
    EBLOSUM62 for protein
    EDNAFULL for DNA

@@ -321,6 +321,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers:
    -enzyme             list       Enzyme or reagent
+   -aadata             string     Molecular weight data for amino acids
    -pcrange            integer    Allowed whole sequence weight variability
    -frequencies        string     Frequencies file
    -tolerance          float      (no help text) float value
@@ -352,6 +353,8 @@ Command line arguments
    7 (Chymotrypsin)
    8 (CNBr)
    1
+   -aadata Molecular weight data for amino acids Any string is accepted
+   Eamino.dat
    -pcrange Allowed whole sequence weight variability Integer from 0 to
    75 25
    -frequencies Frequencies file Any string is accepted Efreqs.dat

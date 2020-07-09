@@ -20,8 +20,8 @@ Description
    are taken from the specified similarity matrix. The average of the
    position similarities within the window is plotted.
    
-   The program may be useful is determining where the quality of
-   alignments are good or bad.
+   The program is useful for determining where the quality of alignments
+   is good or bad.
    
 Usage
 
@@ -61,8 +61,8 @@ Command line arguments
    4
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
-   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
-   EMBOSS_GRAPHICS value, or x11
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
+   png EMBOSS_GRAPHICS value, or x11
    -outfile Display as data Output file <sequence>.plotcon
    Optional qualifiers Allowed values Default
    -scorefile Comparison matrix file Comparison matrix file in EMBOSS
@@ -139,7 +139,7 @@ See also
    emma         Multiple alignment program - interface to ClustalW program
    infoalign    Information on a multiple sequence alignment
    prettyplot   Displays aligned sequences, with colouring and boxing
-   showalign    Display a multiple sequence alignment
+   showalign    Displays a multiple sequence alignment
    
 Author(s)
 

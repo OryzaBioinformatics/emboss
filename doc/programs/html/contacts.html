@@ -142,6 +142,11 @@ Name of log file for the build [contacts.log]:
   [-con]               string     Location of contact files for output
   [-conextn]           string     Extension of contact files
   [-thresh]            float      Threshold contact distance
+  [-ignore]            float      If any two atoms from two different residues
+                                  are at least this distance apart then no
+                                  futher inter-atomic contacts will be checked
+                                  for for that residue pair . This speeds the
+                                  calculation up considerably.
   [-vdwf]              string     Name of data file with van der Waals radii
   [-conerrf]           outfile    Name of log file for the build
 
@@ -199,14 +204,21 @@ Name of log file for the build [contacts.log]:
 </tr>
 
 <tr>
-<td>[-vdwf]<br>(Parameter 6)</td>
+<td>[-ignore]<br>(Parameter 6)</td>
+<td>If any two atoms from two different residues are at least this distance apart then no futher inter-atomic contacts will be checked for for that residue pair . This speeds the calculation up considerably.</td>
+<td>Any integer value</td>
+<td>20.0</td>
+</tr>
+
+<tr>
+<td>[-vdwf]<br>(Parameter 7)</td>
 <td>Name of data file with van der Waals radii</td>
 <td>Any string is accepted</td>
 <td>Evdw.dat</td>
 </tr>
 
 <tr>
-<td>[-conerrf]<br>(Parameter 7)</td>
+<td>[-conerrf]<br>(Parameter 8)</td>
 <td>Name of log file for the build</td>
 <td>Output file</td>
 <td>contacts.log</td>
@@ -644,6 +656,7 @@ None.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="scopalign.html">scopalign</a></td><td>Generate alignments for SCOP families</td></tr>
+<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature</td></tr>
 </table>
 
 <!-- 

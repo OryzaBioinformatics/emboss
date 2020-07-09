@@ -208,6 +208,7 @@ See also
    entret Reads and writes (returns) flatfile entries
    extractseq Extract regions from a sequence
    infoalign Information on a multiple sequence alignment
+   listor Writes a list file of the logical OR of two sets of sequences
    maskfeat Mask off features of a sequence
    maskseq Mask off regions of a sequence
    newseq Type in a short new sequence
@@ -227,6 +228,7 @@ See also
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
    tfm Displays a program's help documentation manual
+   trimest Trim poly-A tails off EST sequences
    trimseq Trim ambiguous bits off the ends of sequences
    vectorstrip Strips out DNA between a pair of vector sequences
    wossname Finds programs by keywords in their one-line documentation

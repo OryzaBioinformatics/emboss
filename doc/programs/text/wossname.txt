@@ -137,6 +137,14 @@ Command line arguments
                                   these subgroups, a colon ':' will be placed
                                   between the first and second level of the
                                   group name if this option is true.
+   -gui                bool       This option is intended to help those who
+                                  are designing Graphical User Interfaces to
+                                  the EMBOSS applications. Some EMBOSS
+                                  programs are inappropriate for running in a
+                                  GUI, these include other menu programs and
+                                  interactive editors. This option allows you
+                                  to only report those programs that can be
+                                  run from a GUI
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -208,6 +216,11 @@ Command line arguments
    that require the names of these subgroups, a colon ':' will be placed
    between the first and second level of the group name if this option is
    true. Yes/No No
+   -gui This option is intended to help those who are designing Graphical
+   User Interfaces to the EMBOSS applications. Some EMBOSS programs are
+   inappropriate for running in a GUI, these include other menu programs
+   and interactive editors. This option allows you to only report those
+   programs that can be run from a GUI Yes/No No
    
 Input file format
 

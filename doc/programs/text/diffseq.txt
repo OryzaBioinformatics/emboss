@@ -45,7 +45,7 @@ Command line arguments
   [-asequence]         sequence   Sequence USA
   [-bsequence]         sequence   Sequence USA
    -wordsize           integer    Word size
-   -outfile            outfile    Output report file
+   -outfile            report     Output report file
 
    Optional qualifiers:
    -afeatout           featout    File for output of first sequence's normal
@@ -73,7 +73,7 @@ Command line arguments
    [-bsequence]
    (Parameter 2) Sequence USA Readable sequence Required
    -wordsize Word size Integer 2 or more 10
-   -outfile Output report file Output file <sequence>.diffseq
+   -outfile Output report file Report file
    Optional qualifiers Allowed values Default
    -afeatout File for output of first sequence's normal tab delimited
    gff's Writeable feature table $(asequence.name).diffgff

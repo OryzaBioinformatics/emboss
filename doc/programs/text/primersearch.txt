@@ -293,6 +293,7 @@ See also
 
    Program name Description
    prima Selects primers for PCR and DNA amplification
+   primer3 Picks primers for PCR reactions
    stssearch Searches a DNA database for matches with a set of STS
    primers
    

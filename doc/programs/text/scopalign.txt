@@ -171,6 +171,7 @@ See also
 
    Program name                   Description
    contacts     Reads coordinate files and writes contact files
+   siggen       Generates a sparse protein signature
    
 Author(s)
 

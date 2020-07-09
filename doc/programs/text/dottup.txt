@@ -74,8 +74,8 @@ Command line arguments
    -wordsize Word size Integer 2 or more 4
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
-   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
-   EMBOSS_GRAPHICS value, or x11
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
+   png EMBOSS_GRAPHICS value, or x11
    -outfile Output file name Output file <sequence>.dottup
    Optional qualifiers Allowed values Default
    -[no]boxit Draw a box around dotplot Yes/No Yes

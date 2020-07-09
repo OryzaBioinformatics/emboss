@@ -149,25 +149,23 @@ Name of signature file for output [sig.sig]:
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
+   Mandatory qualifiers (* if not always prompted):
   [-algpath]           string     Location of alignment files for input
   [-algextn]           string     Extension of alignment files for input
-  [-conpath]           string     Location of contact files for input
-  [-conextn]           string     Extension of contact files
+  [-sigpath]           string     Location of signature files for output
+  [-sigextn]           string     Extension of signature files for output
   [-sparsity]          integer    % sparsity of signature
-  [-randomize]         bool       Generate a randomized signature
-  [-datafile]          matrixf    Substitution matrix to be used
-  [-[no]scoreseq]      bool       Score alignment on basis of residue
-                                  conservation
-  [-[no]scorencon]     bool       Score alignment on basis of number of
-                                  contacts
-  [-[no]scoreccon]     bool       Score alignment on basis of conservation of
-                                  contacts
-  [-scoreboth]         bool       Score alignment on a combined measure of
-                                  number and conservation of contacts
-  [-[no]postsim]       bool       Ignore alignment postitions with
+  [-randomise]         bool       Generate a randomised signature
+*  -seqoption          list       Select number
+*  -datafile           matrixf    Substitution matrix to be used
+*  -conoption          list       Select number
+*  -filtercon          bool       Ignore alignment positions making less than
+                                  a threshold number of contacts
+*  -conthresh          integer    Threshold contact number
+*  -conpath            string     Location of contact files for input
+*  -conextn            string     Extension of contact files
+*  -filterpsim         bool       Ignore alignment postitions with
                                   post_similar value of 0
-  [-sigfile]           outfile    Name of signature file for output
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
@@ -202,17 +200,17 @@ Name of signature file for output [sig.sig]:
 </tr>
 
 <tr>
-<td>[-conpath]<br>(Parameter 3)</td>
-<td>Location of contact files for input</td>
+<td>[-sigpath]<br>(Parameter 3)</td>
+<td>Location of signature files for output</td>
 <td>Any string is accepted</td>
 <td>./</td>
 </tr>
 
 <tr>
-<td>[-conextn]<br>(Parameter 4)</td>
-<td>Extension of contact files</td>
+<td>[-sigextn]<br>(Parameter 4)</td>
+<td>Extension of signature files for output</td>
 <td>Any string is accepted</td>
-<td>.con</td>
+<td>.sig</td>
 </tr>
 
 <tr>
@@ -223,59 +221,66 @@ Name of signature file for output [sig.sig]:
 </tr>
 
 <tr>
-<td>[-randomize]<br>(Parameter 6)</td>
-<td>Generate a randomized signature</td>
+<td>[-randomise]<br>(Parameter 6)</td>
+<td>Generate a randomised signature</td>
 <td>Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
-<td>[-datafile]<br>(Parameter 7)</td>
+<td>-seqoption</td>
+<td>Select number</td>
+<td><table><tr><td>1</td> <td><i>(Substitution matrix)</i></td></tr><tr><td>2</td> <td><i>(Residue class)</i></td></tr><tr><td>3</td> <td><i>(None)</i></td></tr></table></td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>-datafile</td>
 <td>Substitution matrix to be used</td>
 <td>Comparison matrix file in EMBOSS data path</td>
 <td>./EBLOSUM62</td>
 </tr>
 
 <tr>
-<td>[-[no]scoreseq]<br>(Parameter 8)</td>
-<td>Score alignment on basis of residue conservation</td>
-<td>Yes/No</td>
-<td>Yes</td>
+<td>-conoption</td>
+<td>Select number</td>
+<td><table><tr><td>1</td> <td><i>(Number)</i></td></tr><tr><td>2</td> <td><i>(Conservation)</i></td></tr><tr><td>3</td> <td><i>(Number and conservation)</i></td></tr><tr><td>4</td> <td><i>(None)</i></td></tr></table></td>
+<td>4</td>
 </tr>
 
 <tr>
-<td>[-[no]scorencon]<br>(Parameter 9)</td>
-<td>Score alignment on basis of number of contacts</td>
-<td>Yes/No</td>
-<td>Yes</td>
-</tr>
-
-<tr>
-<td>[-[no]scoreccon]<br>(Parameter 10)</td>
-<td>Score alignment on basis of conservation of contacts</td>
-<td>Yes/No</td>
-<td>Yes</td>
-</tr>
-
-<tr>
-<td>[-scoreboth]<br>(Parameter 11)</td>
-<td>Score alignment on a combined measure of number and conservation of contacts</td>
+<td>-filtercon</td>
+<td>Ignore alignment positions making less than a threshold number of contacts</td>
 <td>Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
-<td>[-[no]postsim]<br>(Parameter 12)</td>
-<td>Ignore alignment postitions with post_similar value of 0</td>
-<td>Yes/No</td>
-<td>Yes</td>
+<td>-conthresh</td>
+<td>Threshold contact number</td>
+<td>Any integer value</td>
+<td>10</td>
 </tr>
 
 <tr>
-<td>[-sigfile]<br>(Parameter 13)</td>
-<td>Name of signature file for output</td>
-<td>Output file</td>
-<td>sig.sig</td>
+<td>-conpath</td>
+<td>Location of contact files for input</td>
+<td>Any string is accepted</td>
+<td>/data/contacts/</td>
+</tr>
+
+<tr>
+<td>-conextn</td>
+<td>Extension of contact files</td>
+<td>Any string is accepted</td>
+<td>.con</td>
+</tr>
+
+<tr>
+<td>-filterpsim</td>
+<td>Ignore alignment postitions with post_similar value of 0</td>
+<td>Yes/No</td>
+<td>No</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -655,7 +660,6 @@ None.
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="contacts.html">contacts</a></td><td>Reads coordinate files and writes contact files</td></tr>
 <tr><td><a href="scopalign.html">scopalign</a></td><td>Generate alignments for SCOP families</td></tr>
-<tr><td><a href="sigscan.html">sigscan</a></td><td>Scans a sparse protein signature against swissprot</td></tr>
 </table>
 
 <!-- 

@@ -201,6 +201,7 @@ See also
    descseq      Alter the name or description of a sequence
    extractseq   Extract regions from a sequence
    infoseq      Displays some simple information about sequences
+   listor       Writes a list file of the logical OR of two sets of sequences
    maskfeat     Mask off features of a sequence
    maskseq      Mask off regions of a sequence
    newseq       Type in a short new sequence
@@ -215,6 +216,7 @@ See also
    seqretsplit  Reads and writes (returns) sequences in individual files
    splitter     Split a sequence into (overlapping) smaller sequences
    swissparse   Retrieves sequences from swissprot using keyword search
+   trimest      Trim poly-A tails off EST sequences
    trimseq      Trim ambiguous bits off the ends of sequences
    vectorstrip  Strips out DNA between a pair of vector sequences
    

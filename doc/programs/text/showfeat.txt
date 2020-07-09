@@ -10,8 +10,8 @@ Function
    
 Description
 
-   Showfeat reads a sequence and a feature table, and writes a text
-   representation of the features to standard output.
+   Showfeat reads a protein or nucleic sequence and its feature table,
+   and writes a text representation of the features to standard output.
    
 Usage
 
@@ -115,7 +115,8 @@ Command line arguments
                                   separate their names with the character
                                   '|', eg:
                                   pax* | 10
-   -sort               list       Sort features by Type, Start or Source
+   -sort               list       Sort features by Type, Start or Source, or
+                                  Nosort (don't sort - use input order)
 
    Advanced qualifiers:
    -html               bool       Use HTML formatting
@@ -239,10 +240,12 @@ Command line arguments
    feature tag valueyou wish to show. The tag value may be wildcarded by
    using '*'. If you wish to show more than one tag value, separate their
    names with the character '|', eg: pax* | 10 Any string is accepted *
-   -sort Sort features by Type, Start or Source
+   -sort Sort features by Type, Start or Source, or Nosort (don't sort -
+   use input order)
    source (Sort by Source)
    start  (Sort by Start position)
    type   (Sort by Type)
+   nosort (No sorting done)
    start
    Advanced qualifiers Allowed values Default
    -html Use HTML formatting Yes/No No
@@ -387,18 +390,32 @@ Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description
@@ -413,7 +430,7 @@ See also
    prettyseq Output sequence with translated ranges
    remap Display a sequence with restriction cut sites, translation etc
    seealso Finds programs sharing group names
-   showalign Display a multiple sequence alignment
+   showalign Displays a multiple sequence alignment
    showdb Displays information on the currently available databases
    showseq Display a sequence with features, translation etc
    swissparse Retrieves sequences from swissprot using keyword search
@@ -427,6 +444,11 @@ Author(s)
    
 History
 
+   Written 1999 - Gary Williams
+   
+   Dec 2001 - added -sort nosort option to get the features in the input
+   order
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

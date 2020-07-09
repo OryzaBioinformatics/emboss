@@ -75,7 +75,8 @@ Known bugs
    
 See also
 
-   Program name Description
+   Program name        Description
+   ajtest       Test file for ACD parsing
    
 Author(s)
 

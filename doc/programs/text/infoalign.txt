@@ -14,11 +14,11 @@ Description
    in an alignment.
    
    It will write a table containing one line per sequence. The
-   information is written out in columns separated by space ot TAB
+   information is written out in columns separated by space or TAB
    characters. The columns of data are: the sequences' USA, name, two
    measures of length, counts of gaps, and numbers of identical, similar
    and different residues or bases in this sequence when compared to a
-   reference sequence, togather with a simple statistic of the % change
+   reference sequence, together with a simple statistic of the % change
    between the reference sequence and this sequence.
    
    The reference sequence can be either the calculated consensus sequence
@@ -37,27 +37,27 @@ Description
 Usage
 
    Here is a sample session with infoalign:
-   % infoalign globin.seq
-   
+% infoalign globin.seq
+
    Don't display the USA of a sequence
-   % infoalign globin.seq -nousa
-   
+% infoalign globin.seq -nousa
+
    Display only the name and sequence length of a sequence
-   % infoalign globin.seq -only -name -seqlength
-   
+% infoalign globin.seq -only -name -seqlength
+
    Display only the name, number of gap characters and differences to the
    consensus sequence
-   % infoalign globin.seq -only -name -gapcount -diffcount
-   
+% infoalign globin.seq -only -name -gapcount -diffcount
+
    Display the name and number of gaps within a sequence
-   % infoalign globin.seq -only -name -gaps
-   
+% infoalign globin.seq -only -name -gaps
+
    Display information formatted with HTML
-   % infoalign globin.seq -html
-   
+% infoalign globin.seq -html
+
    Use the first sequence as the reference sequence to compare to
-   % infoalign globin.seq -refseq 1
-   
+% infoalign globin.seq -refseq 1
+
 Command line arguments
 
    Mandatory qualifiers:
@@ -205,7 +205,8 @@ fasta::globin.seq:HBE_RABIT     HBE_RABIT     147       148     1       1
      * Gaps - number of gaps e.g. 'AAA---AAA' is 1 gap (and 3 gap
        characters long (see GapLen)).
      * GapLen - total number of internal gap characters, see the 3 gap
-       characters above.
+       characters above. This is the sum total of all of the internal gap
+       characters in this sequence.
      * Ident - number of characters that are identical to the specified
        reference sequence (uppercase 'A' is identical to lowercase 'a').
      * Similar - number of characters which are non-identical - which
@@ -298,7 +299,7 @@ See also
    plotcon Plots the quality of conservation of a sequence alignment
    prettyplot Displays aligned sequences, with colouring and boxing
    seealso Finds programs sharing group names
-   showalign Display a multiple sequence alignment
+   showalign Displays a multiple sequence alignment
    showdb Displays information on the currently available databases
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!

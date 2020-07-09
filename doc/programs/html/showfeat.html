@@ -58,8 +58,8 @@ Show features of a sequence
 
 
 
-Showfeat reads a sequence and a feature table, and writes a text
-representation of the features to standard output.
+Showfeat reads a protein or nucleic sequence and its feature table, 
+and writes a text representation of the features to standard output.
 
 <H2>
     Usage
@@ -183,7 +183,8 @@ IT IS DONE FOR YOU.
                                   separate their names with the character
                                   '|', eg:
                                   pax* | 10
-   -sort               list       Sort features by Type, Start or Source
+   -sort               list       Sort features by Type, Start or Source, or
+                                  Nosort (don't sort - use input order)
 
    Advanced qualifiers:
    -html               bool       Use HTML formatting
@@ -336,8 +337,8 @@ pax* | 10</td>
 
 <tr>
 <td>-sort</td>
-<td>Sort features by Type, Start or Source</td>
-<td><table><tr><td>source</td> <td><i>(Sort by Source)</i></td></tr><tr><td>start</td> <td><i>(Sort by Start position)</i></td></tr><tr><td>type</td> <td><i>(Sort by Type)</i></td></tr></table></td>
+<td>Sort features by Type, Start or Source, or Nosort (don't sort - use input order)</td>
+<td><table><tr><td>source</td> <td><i>(Sort by Source)</i></td></tr><tr><td>start</td> <td><i>(Sort by Start position)</i></td></tr><tr><td>type</td> <td><i>(Sort by Type)</i></td></tr><tr><td>nosort</td> <td><i>(No sorting done)</i></td></tr></table></td>
 <td>start</td>
 </tr>
 
@@ -560,35 +561,47 @@ Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
     Data files
 </H2>
 
+None.
 
 <H2>
     Notes
 </H2>
+
+None.
 
 
 <H2>
     References
 </H2>
 
+None.
+
 
 <H2>
     Warnings
 </H2>
+
+None.
 
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
+
 
 <H2>
     Exit status
 </H2>
 
+It always exits with a status of 0.
 
 <H2>
     Known bugs
 </H2>
+
+None.
 
 
 <!--
@@ -610,7 +623,7 @@ Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 <tr><td><a href="prettyseq.html">prettyseq</a></td><td>Output sequence with translated ranges</td></tr>
 <tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
 <tr><td><a href="seealso.html">seealso</a></td><td>Finds programs sharing group names</td></tr>
-<tr><td><a href="showalign.html">showalign</a></td><td>Display a multiple sequence alignment</td></tr>
+<tr><td><a href="showalign.html">showalign</a></td><td>Displays a multiple sequence alignment</td></tr>
 <tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
 <tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
@@ -636,6 +649,10 @@ href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
     History
 </H2>
 
+Written 1999 - Gary Williams
+<p>
+
+Dec 2001 - added -sort nosort option to get the features in the input order
 
 <H2>
     Target users

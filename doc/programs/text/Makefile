@@ -1,7 +1,7 @@
-# Generated automatically from Makefile.in by configure.
-# Makefile.in generated automatically by automake 1.4 from Makefile.am
+# Makefile.in generated automatically by automake 1.5 from Makefile.am.
 
-# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001
+# Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -12,10 +12,12 @@
 # PARTICULAR PURPOSE.
 
 
+
 SHELL = /bin/sh
 
 srcdir = .
 top_srcdir = ../../..
+
 prefix = /usr/local
 exec_prefix = ${prefix}
 
@@ -31,11 +33,8 @@ infodir = ${prefix}/info
 mandir = ${prefix}/man
 includedir = ${prefix}/include
 oldincludedir = /usr/include
-
-DESTDIR =
 pkglibdir = $(libdir)/EMBOSS
 pkgincludedir = $(includedir)/EMBOSS
-
 top_builddir = ../../..
 
 ACLOCAL = aclocal
@@ -44,188 +43,265 @@ AUTOMAKE = automake
 AUTOHEADER = autoheader
 
 INSTALL = ../../.././install-sh -c
-INSTALL_PROGRAM = ${INSTALL} $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_PROGRAM = ${INSTALL}
 INSTALL_DATA = ${INSTALL} -m 644
-INSTALL_SCRIPT = ${INSTALL_PROGRAM}
+INSTALL_SCRIPT = ${INSTALL}
+INSTALL_HEADER = $(INSTALL_DATA)
 transform = s,x,x,
-
 NORMAL_INSTALL = :
 PRE_INSTALL = :
 POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-host_alias = sparc-sun-solaris2.7
+host_alias = 
 host_triplet = sparc-sun-solaris2.7
 AJAX_FIXED_ROOT = \"/packages/emboss/compile/CURRENT/SOLARIS/emboss/emboss/emboss\"
+AMTAR = tar
 AS = @AS@
 AWK = gawk
 CC = gcc
 CPP = gcc -E
+DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
-LD = /usr/ccs/bin/ld
+ECHO = echo
+EXEEXT = 
+INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
+JAVA_OK = 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
-MAKEINFO = makeinfo
-NM = /usr/ccs/bin/nm -p
 OBJDUMP = @OBJDUMP@
+OBJEXT = o
 PACKAGE = EMBOSS
 RANLIB = ranlib
-VERSION = 2.0.1
+STRIP = strip
+VERSION = 2.1.0
 XLIB =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib -lX11 -lsocket -lsocket  -lnsl -lnsl
-
-pkgdata_DATA = SITE-DIRECTED.txt abiview.txt antigenic.txt backtranseq.txt                banana.txt btwisted.txt cai.txt chaos.txt charge.txt                checktrans.txt chips.txt cirdna.txt clique.txt codcmp.txt                coderet.txt complex.txt compseq.txt cons.txt consense.txt                contacts.txt contml.txt contrast.txt cpgplot.txt                cpgreport.txt cusp.txt cutseq.txt dan.txt dbiblast.txt                dbifasta.txt dbiflat.txt dbigcg.txt degapseq.txt descseq.txt                diffseq.txt digest.txt distmat.txt dnacomp.txt dnadist.txt                dnainvar.txt dnaml.txt dnamlk.txt dnapars.txt dnapenny.txt                dollop.txt dolpenny.txt domainer.txt dotmatcher.txt                dotpath.txt dottup.txt dreg.txt eclique.txt econsense.txt                econtml.txt econtrast.txt ednacomp.txt ednadist.txt                ednainvar.txt ednaml.txt ednamlk.txt ednapars.txt                ednapenny.txt edollop.txt edolpenny.txt efactor.txt                efitch.txt egendist.txt einverted.txt ekitsch.txt                embossdata.txt embossversion.txt emix.txt emma.txt                emowse.txt eneighbor.txt entret.txt epenny.txt eprotdist.txt                eprotpars.txt equicktandem.txt erestml.txt eseqboot.txt                est2genome.txt etandem.txt extractseq.txt factor.txt                findkm.txt fitch.txt freak.txt fuzznuc.txt fuzzpro.txt                fuzztran.txt garnier.txt geecee.txt gendist.txt getorf.txt                helixturnhelix.txt hmoment.txt iep.txt infoalign.txt
-
-pkgdata2_DATA = infoseq.txt isochore.txt kitsch.txt lindna.txt marscan.txt                maskfeat.txt maskseq.txt matcher.txt megamerger.txt                merger.txt mix.txt msbar.txt mse.txt needle.txt neighbor.txt                newcpgreport.txt newcpgseek.txt newseq.txt noreturn.txt                notseq.txt nrscope.txt nthseq.txt octanol.txt oddcomp.txt                palindrome.txt pasteseq.txt patmatdb.txt patmatmotifs.txt                penny.txt pepcoil.txt pepinfo.txt pepnet.txt pepstats.txt                pepwheel.txt pepwindow.txt pepwindowall.txt plotcon.txt                plotorf.txt polydot.txt preg.txt prettyplot.txt                prettyseq.txt prima.txt primersearch.txt printsextract.txt                profit.txt prophecy.txt prophet.txt prosextract.txt                protdist.txt pscan.txt rebaseextract.txt recode.txt                recoder.txt redata.txt remap.txt restml.txt restover.txt                restrict.txt revseq.txt scopalign.txt scope.txt seealso.txt                seqboot.txt seqmatchall.txt seqret.txt seqretall.txt                seqretallfeat.txt seqretfeat.txt seqretset.txt                seqretsplit.txt showalign.txt showdb.txt showfeat.txt                showorf.txt showseq.txt shuffleseq.txt sigcleave.txt                siggen.txt sigscan.txt silent.txt splitter.txt stamps.txt                stretcher.txt stssearch.txt supermatcher.txt swissparse.txt                syco.txt textsearch.txt tfextract.txt tfm.txt tfscan.txt                tmap.txt topo.txt transeq.txt trimseq.txt vectorstrip.txt                water.txt wobble.txt wordcount.txt wordmatch.txt                wossname.txt
-
+X_CFLAGS =  -I/usr/openwin/include -I/usr/openwin/include
+X_EXTRA_LIBS = -lsocket -lsocket  -lnsl -lnsl
+X_LIBS =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib
+X_PRE_LIBS =  -lSM -lICE -lSM -lICE
+am__include = include
+am__quote = 
+havejavac = 
+install_sh = /packages/emboss/compile/CURRENT/SOLARIS/emboss/emboss/install-sh
 
 pkgdatadir = $(prefix)/share/$(PACKAGE)/doc/programs/text
+
+pkgdata_DATA = SITE-DIRECTED.txt abiview.txt ajtest.txt antigenic.txt \
+               backtranseq.txt banana.txt btwisted.txt cai.txt chaos.txt \
+               charge.txt checktrans.txt chips.txt cirdna.txt clique.txt \
+               codcmp.txt coderet.txt complex.txt compseq.txt cons.txt \
+               consense.txt contacts.txt contml.txt contrast.txt \
+               cpgplot.txt cpgreport.txt cusp.txt cutgextract.txt \
+               cutseq.txt dan.txt dbiblast.txt dbifasta.txt dbiflat.txt \
+               dbigcg.txt degapseq.txt descseq.txt diffseq.txt digest.txt \
+               distmat.txt dnacomp.txt dnadist.txt dnainvar.txt dnaml.txt \
+               dnamlk.txt dnapars.txt dnapenny.txt dollop.txt dolpenny.txt \
+               domainer.txt dotmatcher.txt dotpath.txt dottup.txt dreg.txt \
+               eclique.txt econsense.txt econtml.txt econtrast.txt \
+               ednacomp.txt ednadist.txt ednainvar.txt ednaml.txt \
+               ednamlk.txt ednapars.txt ednapenny.txt edollop.txt \
+               edolpenny.txt efactor.txt efitch.txt egendist.txt \
+               einverted.txt ekitsch.txt embossdata.txt embossversion.txt \
+               emix.txt emma.txt emowse.txt eneighbor.txt entret.txt \
+               epenny.txt eprotdist.txt eprotpars.txt equicktandem.txt \
+               erestml.txt eseqboot.txt est2genome.txt etandem.txt \
+               extractfeat.txt extractseq.txt factor.txt findkm.txt \
+               fitch.txt freak.txt fuzznuc.txt fuzzpro.txt fuzztran.txt \
+               garnier.txt geecee.txt gendist.txt getorf.txt \
+               helixturnhelix.txt hmoment.txt iep.txt infoalign.txt
+
+pkgdata2_DATA = infoseq.txt isochore.txt kitsch.txt lindna.txt listor.txt \
+               marscan.txt maskfeat.txt maskseq.txt matcher.txt \
+               megamerger.txt merger.txt mix.txt msbar.txt mse.txt \
+               needle.txt neighbor.txt newcpgreport.txt newcpgseek.txt \
+               newseq.txt noreturn.txt notseq.txt nrscope.txt nthseq.txt \
+               octanol.txt oddcomp.txt palindrome.txt pasteseq.txt \
+               patmatdb.txt patmatmotifs.txt penny.txt pepcoil.txt \
+               pepinfo.txt pepnet.txt pepstats.txt pepwheel.txt \
+               pepwindow.txt pepwindowall.txt plotcon.txt plotorf.txt \
+               polydot.txt preg.txt prettyplot.txt prettyseq.txt prima.txt \
+               primer3.txt primersearch.txt printsextract.txt profit.txt \
+               prophecy.txt prophet.txt prosextract.txt protdist.txt \
+               pscan.txt rebaseextract.txt recode.txt recoder.txt \
+               redata.txt remap.txt restml.txt restover.txt restrict.txt \
+               revseq.txt scopalign.txt scope.txt seealso.txt seqboot.txt \
+               seqmatchall.txt seqret.txt seqretall.txt seqretallfeat.txt \
+               seqretfeat.txt seqretset.txt seqretsplit.txt showalign.txt \
+               showdb.txt showfeat.txt showorf.txt showseq.txt \
+               shuffleseq.txt sigcleave.txt siggen.txt sigscan.txt \
+               silent.txt splitter.txt stamps.txt stretcher.txt \
+               stssearch.txt supermatcher.txt swissparse.txt syco.txt \
+               textsearch.txt tfextract.txt tfm.txt tfscan.txt tmap.txt \
+               topo.txt transeq.txt trimest.txt trimseq.txt vectorstrip.txt \
+               water.txt wobble.txt wordcount.txt wordmatch.txt \
+               wossname.txt
+
 pkgdata2dir = $(prefix)/share/$(PACKAGE)/doc/programs/text
+subdir = doc/programs/text
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_CLEAN_FILES = 
-DATA =  $(pkgdata_DATA) $(pkgdata2_DATA)
+CONFIG_CLEAN_FILES =
+DIST_SOURCES =
+DATA = $(pkgdata_DATA) $(pkgdata2_DATA)
 
-DIST_COMMON =  Makefile.am Makefile.in
+DIST_COMMON = Makefile.am Makefile.in
+all: all-am
 
-
-DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
-
-TAR = tar
-GZIP_ENV = --best
-all: all-redirect
 .SUFFIXES:
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu doc/programs/text/Makefile
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
-	cd $(top_builddir) \
-	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+mostlyclean-libtool:
+	-rm -f *.lo
 
+clean-libtool:
+	-rm -rf .libs _libs
 
+distclean-libtool:
+	-rm -f libtool
+$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
+	cd $(top_srcdir) && \
+	  $(AUTOMAKE) --gnu  doc/programs/text/Makefile
+Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) && \
+	  CONFIG_HEADERS= CONFIG_LINKS= \
+	  CONFIG_FILES=$(subdir)/$@ $(SHELL) ./config.status
+uninstall-info-am:
 install-pkgdataDATA: $(pkgdata_DATA)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)
 	@list='$(pkgdata_DATA)'; for p in $$list; do \
-	  if test -f $(srcdir)/$$p; then \
-	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(pkgdatadir)/$$p"; \
-	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(pkgdatadir)/$$p; \
-	  else if test -f $$p; then \
-	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(pkgdatadir)/$$p"; \
-	    $(INSTALL_DATA) $$p $(DESTDIR)$(pkgdatadir)/$$p; \
-	  fi; fi; \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgdatadir)/$$f"; \
+	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgdatadir)/$$f; \
 	done
 
 uninstall-pkgdataDATA:
 	@$(NORMAL_UNINSTALL)
-	list='$(pkgdata_DATA)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(pkgdatadir)/$$p; \
+	@list='$(pkgdata_DATA)'; for p in $$list; do \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " rm -f $(DESTDIR)$(pkgdatadir)/$$f"; \
+	  rm -f $(DESTDIR)$(pkgdatadir)/$$f; \
 	done
-
 install-pkgdata2DATA: $(pkgdata2_DATA)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(pkgdata2dir)
 	@list='$(pkgdata2_DATA)'; for p in $$list; do \
-	  if test -f $(srcdir)/$$p; then \
-	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(pkgdata2dir)/$$p"; \
-	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(pkgdata2dir)/$$p; \
-	  else if test -f $$p; then \
-	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(pkgdata2dir)/$$p"; \
-	    $(INSTALL_DATA) $$p $(DESTDIR)$(pkgdata2dir)/$$p; \
-	  fi; fi; \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgdata2dir)/$$f"; \
+	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgdata2dir)/$$f; \
 	done
 
 uninstall-pkgdata2DATA:
 	@$(NORMAL_UNINSTALL)
-	list='$(pkgdata2_DATA)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(pkgdata2dir)/$$p; \
+	@list='$(pkgdata2_DATA)'; for p in $$list; do \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " rm -f $(DESTDIR)$(pkgdata2dir)/$$f"; \
+	  rm -f $(DESTDIR)$(pkgdata2dir)/$$f; \
 	done
 tags: TAGS
 TAGS:
 
 
-distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
-subdir = doc/programs/text
+top_distdir = ../../..
+distdir = $(top_distdir)/$(PACKAGE)-$(VERSION)
 
 distdir: $(DISTFILES)
-	here=`cd $(top_builddir) && pwd`; \
-	top_distdir=`cd $(top_distdir) && pwd`; \
-	distdir=`cd $(distdir) && pwd`; \
-	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu doc/programs/text/Makefile
 	@for file in $(DISTFILES); do \
-	  d=$(srcdir); \
+	  if test -f $$file; then d=.; else d=$(srcdir); fi; \
+	  dir=`echo "$$file" | sed -e 's,/[^/]*$$,,'`; \
+	  if test "$$dir" != "$$file" && test "$$dir" != "."; then \
+	    $(mkinstalldirs) "$(distdir)/$$dir"; \
+	  fi; \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$/$$file $(distdir)/$$file; \
+	    cp -pR $$d/$$file $(distdir) \
+	    || exit 1; \
 	  else \
 	    test -f $(distdir)/$$file \
-	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
-	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	    || cp -p $$d/$$file $(distdir)/$$file \
+	    || exit 1; \
 	  fi; \
 	done
-info-am:
-info: info-am
-dvi-am:
-dvi: dvi-am
 check-am: all-am
 check: check-am
-installcheck-am:
-installcheck: installcheck-am
-install-exec-am:
-install-exec: install-exec-am
+all-am: Makefile $(DATA)
 
-install-data-am: install-pkgdataDATA install-pkgdata2DATA
+installdirs:
+	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir) $(DESTDIR)$(pkgdata2dir)
+
+install: install-am
+install-exec: install-exec-am
 install-data: install-data-am
+uninstall: uninstall-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
-install: install-am
-uninstall-am: uninstall-pkgdataDATA uninstall-pkgdata2DATA
-uninstall: uninstall-am
-all-am: Makefile $(DATA)
-all-redirect: all-am
+
+installcheck: installcheck-am
 install-strip:
-	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
-installdirs:
-	$(mkinstalldirs)  $(DESTDIR)$(pkgdatadir) $(DESTDIR)$(pkgdata2dir)
-
-
+	$(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
+	  `test -z '$(STRIP)' || \
+	    echo "INSTALL_PROGRAM_ENV=STRIPPROG='$(STRIP)'"` install
 mostlyclean-generic:
 
 clean-generic:
 
 distclean-generic:
-	-rm -f Makefile $(CONFIG_CLEAN_FILES)
-	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+	-rm -f Makefile $(CONFIG_CLEAN_FILES) stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
-mostlyclean-am:  mostlyclean-generic
-
-mostlyclean: mostlyclean-am
-
-clean-am:  clean-generic mostlyclean-am
-
+	@echo "This command is intended for maintainers to use"
+	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-distclean-am:  distclean-generic clean-am
-	-rm -f libtool
+clean-am: clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-am
 
-maintainer-clean-am:  maintainer-clean-generic distclean-am
-	@echo "This command is intended for maintainers to use;"
-	@echo "it deletes files that may require special tools to rebuild."
+distclean-am: clean-am distclean-generic distclean-libtool
+
+dvi: dvi-am
+
+dvi-am:
+
+info: info-am
+
+info-am:
+
+install-data-am: install-pkgdata2DATA install-pkgdataDATA
+
+install-exec-am:
+
+install-info: install-info-am
+
+install-man:
+
+installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 
-.PHONY: uninstall-pkgdataDATA install-pkgdataDATA uninstall-pkgdata2DATA \
-install-pkgdata2DATA tags distdir info-am info dvi-am dvi check \
-check-am installcheck-am installcheck install-exec-am install-exec \
-install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+maintainer-clean-am: distclean-am maintainer-clean-generic
 
+mostlyclean: mostlyclean-am
+
+mostlyclean-am: mostlyclean-generic mostlyclean-libtool
+
+uninstall-am: uninstall-info-am uninstall-pkgdata2DATA \
+	uninstall-pkgdataDATA
+
+.PHONY: all all-am check check-am clean clean-generic clean-libtool \
+	distclean distclean-generic distclean-libtool distdir dvi \
+	dvi-am info info-am install install-am install-data \
+	install-data-am install-exec install-exec-am install-info \
+	install-info-am install-man install-pkgdata2DATA \
+	install-pkgdataDATA install-strip installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic mostlyclean-libtool uninstall \
+	uninstall-am uninstall-info-am uninstall-pkgdata2DATA \
+	uninstall-pkgdataDATA
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

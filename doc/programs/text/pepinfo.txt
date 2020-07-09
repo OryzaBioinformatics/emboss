@@ -64,8 +64,8 @@ Command line arguments
    (Parameter 1) Sequence USA Readable sequence Required
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
-   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
-   EMBOSS_GRAPHICS value, or x11
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
+   png EMBOSS_GRAPHICS value, or x11
    [-outfile]
    (Parameter 2) Output file name Output file pepinfo.out
    Optional qualifiers Allowed values Default
@@ -175,6 +175,9 @@ References
     2. Sweet RM, Eisenberg D Correlation of sequence hydrophobicities
        measures similarity in three-dimensional protein structure. J Mol
        Biol 1983 Dec 25;171(4):479-488
+    3. Eisenberg D, Weiss RM, Terwilliger TC. The helical hydrophobic
+       moment: a measure of the amphiphilicity of a helix. Nature 1982
+       Sep 23;299(5881):371-4
        
 Warnings
 

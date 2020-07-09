@@ -57,8 +57,8 @@ Command line arguments
    (Parameter 2) Sequence file Writeable sequence <sequence>.format
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
-   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
-   EMBOSS_GRAPHICS value, or x11
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
+   png EMBOSS_GRAPHICS value, or x11
    Optional qualifiers Allowed values Default
    -yticks Display y-axis ticks Yes/No No
    -[no]sequence Display the sequence on the graph Yes/No Yes
@@ -124,7 +124,7 @@ See also
    prettyseq Output sequence with translated ranges
    remap Display a sequence with restriction cut sites, translation etc
    seealso Finds programs sharing group names
-   showalign Display a multiple sequence alignment
+   showalign Displays a multiple sequence alignment
    showdb Displays information on the currently available databases
    showfeat Show features of a sequence
    showseq Display a sequence with features, translation etc

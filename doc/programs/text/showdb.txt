@@ -209,7 +209,7 @@ See also
    prettyseq Output sequence with translated ranges
    remap Display a sequence with restriction cut sites, translation etc
    seealso Finds programs sharing group names
-   showalign Display a multiple sequence alignment
+   showalign Displays a multiple sequence alignment
    showfeat Show features of a sequence
    showseq Display a sequence with features, translation etc
    textsearch Search sequence documentation text. SRS and Entrez are

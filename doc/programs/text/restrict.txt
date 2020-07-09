@@ -54,7 +54,7 @@ Command line arguments
                                   hindiii
                                   HinfI
                                   PpiI
-  [-outfile]           outfile    Output file name
+  [-outfile]           report     (no help text) report value
 
    Optional qualifiers: (none)
    Advanced qualifiers:
@@ -95,7 +95,7 @@ Command line arguments
    enzyme names is: ! my enzymes HincII, ppiII ! other enzymes hindiii
    HinfI PpiI Any string is accepted all
    [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.restrict
+   (Parameter 2) (no help text) report value Report file
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default

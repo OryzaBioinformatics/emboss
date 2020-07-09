@@ -56,6 +56,11 @@ Command line arguments
   [-con]               string     Location of contact files for output
   [-conextn]           string     Extension of contact files
   [-thresh]            float      Threshold contact distance
+  [-ignore]            float      If any two atoms from two different residues
+                                  are at least this distance apart then no
+                                  futher inter-atomic contacts will be checked
+                                  for for that residue pair . This speeds the
+                                  calculation up considerably.
   [-vdwf]              string     Name of data file with van der Waals radii
   [-conerrf]           outfile    Name of log file for the build
 
@@ -81,11 +86,16 @@ Command line arguments
    (Parameter 4) Extension of contact files Any string is accepted .con
    [-thresh]
    (Parameter 5) Threshold contact distance Any integer value 1.0
+   [-ignore]
+   (Parameter 6) If any two atoms from two different residues are at
+   least this distance apart then no futher inter-atomic contacts will be
+   checked for for that residue pair . This speeds the calculation up
+   considerably. Any integer value 20.0
    [-vdwf]
-   (Parameter 6) Name of data file with van der Waals radii Any string is
+   (Parameter 7) Name of data file with van der Waals radii Any string is
    accepted Evdw.dat
    [-conerrf]
-   (Parameter 7) Name of log file for the build Output file contacts.log
+   (Parameter 8) Name of log file for the build Output file contacts.log
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
@@ -303,6 +313,7 @@ See also
 
    Program name              Description
    scopalign    Generate alignments for SCOP families
+   siggen       Generates a sparse protein signature
    
 Author(s)
 

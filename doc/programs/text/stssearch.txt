@@ -139,6 +139,7 @@ See also
 
    Program name                     Description
    prima        Selects primers for PCR and DNA amplification
+   primer3      Picks primers for PCR reactions
    primersearch Searches DNA sequences for matches with primer pairs
    
    If you want something that only reports matches of both primer pairs

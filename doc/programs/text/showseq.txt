@@ -148,7 +148,8 @@ Specify your own things to display
          F : Features
          R : Restriction enzyme cut sites in forward sense
         -R : Restriction enzyme cut sites in reverse sense
-Enter a list of things to display [B N T S F]: b,s,t,c
+         A : Annotation
+Enter a list of things to display [B N T S A F]: b,s,t,c
 ECLAC
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
@@ -171,14 +172,14 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
    
    The 'thing' codes used in the list of standard formats are:
    
-Sequence only:                  S
-Default sequence:               B N T S F
-Pretty sequence:                B N T S
-One frame translation:          B N T S B 1 F
-Three frame translations:       B N T S B 1 2 3 F
-Six frame translations:         B N T S B 1 2 3 T -3 -2 -1 F
-Restriction enzyme map:         B R S N T C -R B 1 2 3 T -3 -2 -1
-Baroque:                        B 1 2 3 N T R S T C -R T -3 -2 -1 F
+Sequence only:                  S A
+Default sequence:               B N T S A F
+Pretty sequence:                B N T S A
+One frame translation:          B N T S B 1 A F
+Three frame translations:       B N T S B 1 2 3 A F
+Six frame translations:         B N T S B 1 2 3 T -3 -2 -1 A F
+Restriction enzyme map:         B R S N T C -R B 1 2 3 T -3 -2 -1 A
+Baroque:                        B 1 2 3 N T R S T C -R T -3 -2 -1 A F
 
    The following are some examples of different formats:
    
@@ -283,6 +284,28 @@ heavy chain mRNA.
 
                  R  L  L
 
+   Add your own annotation to the display
+   
+% showseq embl:mmam stdout -format 2 -send 120 -annotation '13-26 binding site
+15-15 SNP'
+Display a sequence with features, translation etc..
+MMAM
+Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody
+heavy chain mRNA.
+
+                   10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          gagnnccagctgcagcagtctggacctgagctggtaaagcctggggcttcagtgaagatg
+                      |------------|
+                      binding site
+                        |
+                        SNP
+
+                   70        80        90        100       110       120
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          tcctgcaaggcttctggatacacattcactagctatgttatgcactgggtgaatcagaag
+
+
 Command line arguments
 
    Mandatory qualifiers (* if not always prompted):
@@ -338,6 +361,20 @@ Command line arguments
                                   1-100 green 120-156 red
                                   A file of ranges to colour (one range per
                                   line) can be specified as '@filename'.
+   -annotation         range      Regions to annotate by marking.
+                                  If this is left blank, then no annotation is
+                                  added.
+                                  A set of regions is specified by a set of
+                                  pairs of positions followed by optional
+                                  text.
+                                  The positions are integers.
+                                  They are followed by any text (but not
+                                  digits when on the command-line).
+                                  Examples of region specifications are:
+                                  24-45 new domain 56-78 match to Mouse
+                                  1-100 First part 120-156 oligo
+                                  A file of ranges to annotate (one range per
+                                  line) can be specified as '@filename'.
    -enzymes            string     The name 'all' reads in all enzyme names
                                   from the REBASE database. You can specify
                                   enzymes by giving their names with commas
@@ -361,6 +398,83 @@ Command line arguments
                                   HinfI
                                   PpiI
    -table              list       Code to use
+   -matchsource        string     By default any feature source in the feature
+                                  table is shown. You can set this to match
+                                  any feature source you wish to show.
+                                  The source name is usually either the name
+                                  of the program that detected the feature or
+                                  it is the feature table (eg: EMBL) that the
+                                  feature came from.
+                                  The source may be wildcarded by using '*'.
+                                  If you wish to show more than one source,
+                                  separate their names with the character '|',
+                                  eg:
+                                  gene* | embl
+   -matchtype          string     By default any feature type in the feature
+                                  table is shown. You can set this to match
+                                  any feature type you wish to show.
+                                  See http://www3.ebi.ac.uk/Services/WebFeat/
+                                  for a list of the EMBL feature types and see
+                                  Appendix A of the Swissprot user manual in
+                                  http://www.expasy.ch/txt/userman.txt for a
+                                  list of the Swissprot feature types.
+                                  The type may be wildcarded by using '*'.
+                                  If you wish to show more than one type,
+                                  separate their names with the character '|',
+                                  eg:
+                                  *UTR | intron
+   -matchsense         integer    By default any feature type in the feature
+                                  table is shown. You can set this to match
+                                  any feature sense you wish to show. 0 - any
+                                  sense, 1 - forward sense, -1 - reverse sense
+   -minscore           float      If this is greater than or equal to the
+                                  maximum score, then any score is permitted
+   -maxscore           float      If this is less than or equal to the maximum
+                                  score, then any score is permitted
+   -matchtag           string     Tags are the types of extra values that a
+                                  feature may have. For example in the EMBL
+                                  feature table, a 'CDS' type of feature may
+                                  have the tags '/codon', '/codon_start',
+                                  '/db_xref', '/EC_number', '/evidence',
+                                  '/exception', '/function', '/gene',
+                                  '/label', '/map', '/note', '/number',
+                                  '/partial', '/product', '/protein_id',
+                                  '/pseudo', '/standard_name', '/translation',
+                                  '/transl_except', '/transl_table', or
+                                  '/usedin'. Some of these tags also have
+                                  values, for example '/gene' can have the
+                                  value of the gene name.
+                                  By default any feature tag in the feature
+                                  table is shown. You can set this to match
+                                  any feature tag you wish to show.
+                                  The tag may be wildcarded by using '*'.
+                                  If you wish to show more than one tag,
+                                  separate their names with the character '|',
+                                  eg:
+                                  gene | label
+   -matchvalue         string     Tag values are the values associated with a
+                                  feature tag. Tags are the types of extra
+                                  values that a feature may have. For example
+                                  in the EMBL feature table, a 'CDS' type of
+                                  feature may have the tags '/codon',
+                                  '/codon_start', '/db_xref', '/EC_number',
+                                  '/evidence', '/exception', '/function',
+                                  '/gene', '/label', '/map', '/note',
+                                  '/number', '/partial', '/product',
+                                  '/protein_id', '/pseudo', '/standard_name',
+                                  '/translation', '/transl_except',
+                                  '/transl_table', or '/usedin'. Only some of
+                                  these tags can have values, for example
+                                  '/gene' can have the value of the gene name.
+                                  By default any feature tag value in the
+                                  feature table is shown. You can set this to
+                                  match any feature tag valueyou wish to show.
+                                  The tag value may be wildcarded by using
+                                  '*'.
+                                  If you wish to show more than one tag value,
+                                  separate their names with the character
+                                  '|', eg:
+                                  pax* | 10
 
    Advanced qualifiers:
    -orfminsize         integer    Minimum size of Open Reading Frames (ORFs)
@@ -432,7 +546,8 @@ Command line arguments
    F  (Features)
    R  (Restriction enzyme cut sites in forward sense)
    -R (Restriction enzyme cut sites in reverse sense)
-   B N T S F
+   A  (Annotation)
+   B N T S A F
    Optional qualifiers Allowed values Default
    -translate Regions to translate (if translating). If this is left
    blank the complete sequence is translated. A set of regions is
@@ -455,6 +570,14 @@ Command line arguments
    specifications are: 24-45 blue 56-78 orange 1-100 green 120-156 red A
    file of ranges to colour (one range per line) can be specified as
    '@filename'. Sequence range full sequence
+   -annotation Regions to annotate by marking. If this is left blank,
+   then no annotation is added. A set of regions is specified by a set of
+   pairs of positions followed by optional text. The positions are
+   integers. They are followed by any text (but not digits when on the
+   command-line). Examples of region specifications are: 24-45 new domain
+   56-78 match to Mouse 1-100 First part 120-156 oligo A file of ranges
+   to annotate (one range per line) can be specified as '@filename'.
+   Sequence range If this is left blank, then no annotation is added.
    -enzymes The name 'all' reads in all enzyme names from the REBASE
    database. You can specify enzymes by giving their names with commas
    between then, such as: 'HincII,hinfI,ppiI,hindiii'. The case of the
@@ -487,6 +610,54 @@ Command line arguments
    22 (Scenedesmus obliquus)
    23 (Thraustochytrium Mitochondrial)
    0
+   -matchsource By default any feature source in the feature table is
+   shown. You can set this to match any feature source you wish to show.
+   The source name is usually either the name of the program that
+   detected the feature or it is the feature table (eg: EMBL) that the
+   feature came from. The source may be wildcarded by using '*'. If you
+   wish to show more than one source, separate their names with the
+   character '|', eg: gene* | embl Any string is accepted *
+   -matchtype By default any feature type in the feature table is shown.
+   You can set this to match any feature type you wish to show. See
+   http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature
+   types and see Appendix A of the Swissprot user manual in
+   http://www.expasy.ch/txt/userman.txt for a list of the Swissprot
+   feature types. The type may be wildcarded by using '*'. If you wish to
+   show more than one type, separate their names with the character '|',
+   eg: *UTR | intron Any string is accepted *
+   -matchsense By default any feature type in the feature table is shown.
+   You can set this to match any feature sense you wish to show. 0 - any
+   sense, 1 - forward sense, -1 - reverse sense Any integer value 0 - any
+   sense, 1 - forward sense, -1 - reverse sense
+   -minscore If this is greater than or equal to the maximum score, then
+   any score is permitted Any integer value 0.0
+   -maxscore If this is less than or equal to the maximum score, then any
+   score is permitted Any integer value 0.0
+   -matchtag Tags are the types of extra values that a feature may have.
+   For example in the EMBL feature table, a 'CDS' type of feature may
+   have the tags '/codon', '/codon_start', '/db_xref', '/EC_number',
+   '/evidence', '/exception', '/function', '/gene', '/label', '/map',
+   '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo',
+   '/standard_name', '/translation', '/transl_except', '/transl_table',
+   or '/usedin'. Some of these tags also have values, for example '/gene'
+   can have the value of the gene name. By default any feature tag in the
+   feature table is shown. You can set this to match any feature tag you
+   wish to show. The tag may be wildcarded by using '*'. If you wish to
+   show more than one tag, separate their names with the character '|',
+   eg: gene | label Any string is accepted *
+   -matchvalue Tag values are the values associated with a feature tag.
+   Tags are the types of extra values that a feature may have. For
+   example in the EMBL feature table, a 'CDS' type of feature may have
+   the tags '/codon', '/codon_start', '/db_xref', '/EC_number',
+   '/evidence', '/exception', '/function', '/gene', '/label', '/map',
+   '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo',
+   '/standard_name', '/translation', '/transl_except', '/transl_table',
+   or '/usedin'. Only some of these tags can have values, for example
+   '/gene' can have the value of the gene name. By default any feature
+   tag value in the feature table is shown. You can set this to match any
+   feature tag valueyou wish to show. The tag value may be wildcarded by
+   using '*'. If you wish to show more than one tag value, separate their
+   names with the character '|', eg: pax* | 10 Any string is accepted *
    Advanced qualifiers Allowed values Default
    -orfminsize Minimum size of Open Reading Frames (ORFs) to display in
    the translations. Integer 0 or more 0
@@ -563,6 +734,21 @@ Input file format
 12   23         red
  4   5          darkturquoise
 67   10348      #FFE4E1
+
+   You can specifiy a file of ranges to annotate by giving the
+   '-annotate' qualifier the value '@' followed by the name of the file
+   containing the ranges. (eg: '-annotate @myfile').
+   
+   The format of this file is very similar to the format of the above
+   highlight range file, except that the text after the start and end
+   positions is used as the displayed text of the annotated region.
+   
+   An example annotation range file is:
+   
+# this is my set of ranges
+12   23         exon 1
+ 4   5          CAP site
+67   10348      exon 2
 
    You can specify a file of enzyme names to read in by giving the
    '-enzymes' qualifier the name of the file holding the enzyme names
@@ -791,7 +977,7 @@ See also
    restover Finds restriction enzymes that produce a specific overhang
    restrict Finds restriction enzyme cleavage sites
    seealso Finds programs sharing group names
-   showalign Display a multiple sequence alignment
+   showalign Displays a multiple sequence alignment
    showdb Displays information on the currently available databases
    showfeat Show features of a sequence
    showorf Pretty output of DNA translations
@@ -809,6 +995,7 @@ History
 
    Written 1999 - GWW
    23 Aug 2000 - features display added - GWW
+   20 Nov 2001 - feature matches and annotation display added - GWW
    
 Target users
 

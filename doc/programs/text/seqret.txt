@@ -552,6 +552,8 @@ Output file format
    
 Data files
 
+   None.
+   
 Notes
 
    This description of what you can do when reading or writing files is
@@ -572,14 +574,24 @@ Notes
    
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                          Description
@@ -589,6 +601,7 @@ See also
    entret       Reads and writes (returns) flatfile entries
    extractseq   Extract regions from a sequence
    infoseq      Displays some simple information about sequences
+   listor       Writes a list file of the logical OR of two sets of sequences
    maskfeat     Mask off features of a sequence
    maskseq      Mask off regions of a sequence
    newseq       Type in a short new sequence
@@ -602,6 +615,7 @@ See also
    seqretsplit  Reads and writes (returns) sequences in individual files
    splitter     Split a sequence into (overlapping) smaller sequences
    swissparse   Retrieves sequences from swissprot using keyword search
+   trimest      Trim poly-A tails off EST sequences
    trimseq      Trim ambiguous bits off the ends of sequences
    vectorstrip  Strips out DNA between a pair of vector sequences
    
@@ -616,9 +630,34 @@ Author(s)
    
 History
 
+   1999 - Written by Peter Rice
+   
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
    
 Comments
+
+  Fasta output format
+  
+    Question
+    
+   When i tried to convert the EMBL format file into fasta format using
+   the program "seqret", I found that the Access.no appears twice...
+   
+>AF102796 AF102796 Homo sapiens alphaE-catenin (CTNNA1) gene, exon 11.
+
+    Answer
+    
+   "It is not a bug ... it is a feature"
+   
+   There are many "FASTA formats". EMBOSS uses the format that ACEDB and
+   the Sanger Centre genome projects use. The first field after the ID is
+   the accession number, so that accession numbers can be kept when
+   sequences are converted to FASTA format, without using the NCBI format
+   (with '|' characters in the IDs).
+   
+   Your EMBL format file has IDs that look like accession numbers, so
+   EMBOSS fills in the accession number for each sequence, and reports it
+   in the FASTA format.
