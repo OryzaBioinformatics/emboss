@@ -43,10 +43,31 @@
 
 
 #include <errno.h>
-#include <sys/socket.h>
-#include <sys/un.h>
 #include <fcntl.h>
 #include <ctype.h>
+#include <sys/ioctl.h>
+
+#ifdef __hpux
+#include <signal.h>
+#include <stropts.h>
+#endif
+
+#ifdef HAVE_POLL		/* Only for OSs without FD macros */
+#include <poll.h>
+#endif
+
+
+#define UIDLIMIT 100		/* Minimum acceptable uid and gid     */
+#define GIDLIMIT 1		/* Alter these to suit security prefs */
+
+#define AJ_OUTBUF 10000		/* pipe buffer size      */
+#define R_BUFFER  2048		/* Reentrant buffer size */
+
+#define TIMEOUT 30		/* Arbitrary timeout (secs) */
+
+#if defined (__SVR4) && defined (__sun)
+#include <sys/filio.h>
+#endif
 
 #include <pwd.h>
 #ifndef _XOPEN_SOURCE
@@ -57,12 +78,15 @@
 #include <crypt.h>
 #endif
 
-#define R_BUFFER 2048		/* Reentrant buffer size */
+
 
 #ifdef N_SHADOW
 #include <shadow.h>
 #endif
 #ifdef R_SHADOW
+#include <shadow.h>
+#endif
+#ifdef HPUX_SHADOW
 #include <shadow.h>
 #endif
 
@@ -75,16 +99,8 @@
 #endif
 
 #ifdef HPUX_SHADOW
-#include <hpsecurity.h>
 #include <prot.h>
 #endif
-
-
-#define AJ_OUTBUF 10000
-#define AJNOTFOUND -999
-
-#define UIDLIMIT 0
-#define GIDLIMIT 0
 
 
 /*
@@ -111,40 +127,42 @@ static int PAM_conv(int num_msg, struct pam_message **msg,
  *  system
  */
 static char **make_array(AjPStr str);
-static void java_tidy_command(AjPStr *uniq, AjPStr *cl, AjPStr *clemboss,
-			      AjPStr *dir, AjPStr *envi, AjPStr *prog);
+static void java_tidy_command(AjPStr *str1, AjPStr *str2, AjPStr *str3,
+			      AjPStr *str4, AjPStr *str5, AjPStr *str6);
 static void java_tidy_command2(AjPStr *uniq, AjPStr *cl, AjPStr *clemboss,
 			       AjPStr *dir, AjPStr *envi, AjPStr *prog,
 			       char *buf);
 static void java_tidy_command3(AjPStr *uniq, AjPStr *cl, AjPStr *clemboss,
 			       AjPStr *dir, AjPStr *envi, AjPStr *prog,
-			       char *buf, char *cuniq, int sockdes,
+			       char *buf, int *commpipe,
 			       int *outpipe, int *errpipe);
 
 
-static AjPStr java_uniqueName(AjPStr username, ajint command);
 
-static ajint java_send_auth(int conndes, char *cuser, char *cpass,
+static ajint java_send_auth(int tchan, int rchan, char *cuser, char *cpass,
 			    AjPStr *errstd);
-static ajint java_emboss_fork(int conndes,char *cuser,char *cpass,
+static ajint java_emboss_fork(int tchan,char *cuser,char *cpass,
 			      AjPStr clemboss, AjPStr enviro, AjPStr dir,
 			      char *buf, AjPStr *errstd);
-static ajint java_make_dir(int conndes, char *cuser, char *cpass, AjPStr dir,
+static ajint java_batch_fork(int tchan,char *cuser,char *cpass,
+			     AjPStr clemboss, AjPStr enviro, AjPStr dir,
+			     char *buf, AjPStr *errstd);
+static ajint java_make_dir(int tchan, char *cuser, char *cpass, AjPStr dir,
 			   char *buf, AjPStr *errstd);
-static ajint java_delete_file(int conndes, char *cuser, char *cpass,
+static ajint java_delete_file(int tchan, char *cuser, char *cpass,
 			      AjPStr ufile, char *buf, AjPStr *errstd);
-static ajint java_delete_dir(int conndes, char *cuser, char *cpass, AjPStr dir,
+static ajint java_delete_dir(int tchan, char *cuser, char *cpass, AjPStr dir,
 			     char *buf, AjPStr *errstd);
-static ajint java_list_files(int conndes, char *cuser, char *cpass, AjPStr dir,
+static ajint java_list_files(int tchan, char *cuser, char *cpass, AjPStr dir,
 			     char *buf, AjPStr *errstd);
-static ajint java_list_dirs(int conndes, char *cuser, char *cpass, AjPStr dir,
+static ajint java_list_dirs(int tchan, char *cuser, char *cpass, AjPStr dir,
 			    char *buf, AjPStr *errstd);
-static ajint java_get_file(int conndes, char *cuser, char *cpass, AjPStr file,
-			   char *buf, unsigned char **fbuf,int *size,
-			   AjPStr *errstd);
-static ajint java_put_file(int conndes,char *cuser,char *cpass,AjPStr file,
-			   char *buf,unsigned char *fbuf,int size,
-			   AjPStr *errstd);
+static ajint java_get_file(int tchan, int rchan, char *cuser, char *cpass,
+			   AjPStr file, char *buf, unsigned char **fbuf,
+			   int *size, AjPStr *errstd);
+static ajint java_put_file(int tchan, int rchan, char *cuser, char *cpass,
+			   AjPStr file, char *buf, unsigned char *fbuf,
+			   int size, AjPStr *errstd);
 
 static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
 			       int *outpipe, int *errpipe, char *buf);
@@ -161,6 +179,17 @@ static int java_jembossctl(ajint command, AjPStr username, AjPStr password,
 
 static AjBool ajJavaGetSeqFromUsa (AjPStr thys, AjPSeq *seq);
 static AjBool ajJavaGetSeqsetFromUsa (AjPStr thys, AjPSeqset *seq);
+
+
+static int java_pipe_write(int tchan, char *buf, int n, int seconds,
+			   AjPStr *errstd);
+static int java_pipe_read(int rchan, char *buf, int n, int seconds,
+			  AjPStr *errstd);
+static int java_snd(int tchan,char *buf,int len,AjPStr *errstd);
+static int java_rcv(int rchan, char *buf, AjPStr *errstd);
+
+
+static int java_block(int chan, unsigned long flag);
 
 
 
@@ -384,18 +413,34 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_userInfo
     if(juser)
 	ajStrAssC(&username,juser);
     else
+    {
+	ajStrDel(&username);
+	ajStrDel(&password);
+	ajStrDel(&home);
 	return (unsigned char)ajFalse;
+    }
+    
     (*env)->ReleaseStringUTFChars(env,door,juser);
 
     jpass = (char *) (*env)->GetStringUTFChars(env,key,0);
     if(jpass)
 	ajStrAssC(&password,jpass);
     else
+    {
+	ajStrDel(&username);
+	ajStrDel(&password);
+	ajStrDel(&home);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,key,jpass);
 
     if(!ajStrLen(username) || !ajStrLen(password))
+    {
+	ajStrDel(&username);
+	ajStrDel(&password);
+	ajStrDel(&home);
 	return (unsigned char)ajFalse;
+    }
 
 #ifndef NO_AUTH
     ok = java_pass(username,password,&uid,&gid,&home);
@@ -502,6 +547,9 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
     char *p = NULL;
     char *sbuf = NULL;
     char *buf  = NULL;
+#ifdef _POSIX_C_SOURCE
+    int ret=0;
+#endif
 
     if(!(buf=(char*)malloc(R_BUFFER)) || !(sbuf=(char*)malloc(R_BUFFER)))
 	return ajFalse;
@@ -514,9 +562,18 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 	AJFREE(sbuf);
         return ajFalse;
     }
-    
-    
 
+
+#ifdef _POSIX_C_SOURCE
+    ret = getpwnam_r(ajStrStr(username),&presult,buf,R_BUFFER,&pwd);
+    
+    if(ret!=0)
+    {
+	AJFREE(buf);
+	AJFREE(sbuf);
+        return ajFalse;
+    }
+#else    
     pwd = getpwnam_r(ajStrStr(username),&presult,buf,R_BUFFER);
     
     if(!pwd)
@@ -525,7 +582,7 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 	AJFREE(sbuf);
         return ajFalse;
     }
-    
+#endif    
     
     *uid = pwd->pw_uid;
     *gid = pwd->pw_gid;
@@ -586,30 +643,61 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
 			ajint *gid, AjPStr *home)
 {
-    struct pr_passwd *shadow = NULL;
-    struct passwd pwd;
-    
+    struct spwd *shadow = NULL;
+    struct spwd sresult;
+    struct passwd *pwd  = NULL;
+    struct passwd presult;
     char *p = NULL;
-
-    shadow = getprpwnam(ajStrStr(username));
-    if(!shadow)	
-	return ajFalse;
-
-    *uid = shadow->ufld.fd_uid;
-
+    char *epwd = NULL;
+    char *buf  = NULL;
+    int ret=0;
+    int trusted;
     
-    pwd = getpwnam(ajStrStr(username));
-    if(!pwd)
+    trusted = iscomsec();
+    if(!(epwd=(char *)malloc(R_BUFFER)))
 	return ajFalse;
     
+
+    if(trusted)
+    {
+	shadow = getspnam(ajStrStr(username));
+	if(!shadow)
+	{
+	    AJFREE(epwd);
+	    return ajFalse;
+	}
+	strcpy(epwd,shadow->sp_pwdp);
+    }
+    
+
+    if(!(buf=(char *)malloc(R_BUFFER)))
+	return ajFalse;
+    ret = getpwnam_r(ajStrStr(username),&presult,buf,R_BUFFER,&pwd);
+    if(ret!=0)
+    {
+	AJFREE(buf);
+	AJFREE(epwd);
+	return ajFalse;
+    }
+    if(!trusted)
+	strcpy(epwd,pwd->pw_passwd);
+    
+    *uid = pwd->pw_uid;
     *gid = pwd->pw_gid;
-
     ajStrAssC(home,pwd->pw_dir);
 
-    p = crypt(ajStrStr(password),shadow->ufld.fd_encrypt);
+    p = crypt(ajStrStr(password),epwd);
 
-    if(!strcmp(p,shadow->ufld.fd_encrypt))
+    if(!strcmp(p,epwd))
+    {
+	AJFREE(buf);
+	AJFREE(epwd);
 	return ajTrue;
+    }
+    
+    AJFREE(buf);
+    AJFREE(epwd);
+
 
     return ajFalse;
 }
@@ -832,7 +920,11 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_setuid
 JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_seteuid
 (JNIEnv *env, jclass j, jint uid)
 {
+#ifndef __hpux
     return((jint)seteuid((uid_t)uid));
+#else
+    return -1;
+#endif
 }
 
 
@@ -870,7 +962,11 @@ JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_setgid
 JNIEXPORT jint JNICALL Java_org_emboss_jemboss_parser_Ajax_setegid
 (JNIEnv *env, jclass j, jint gid)
 {
+#ifndef __hpux
     return((jint)setegid((gid_t)gid));
+#else
+    return -1;
+#endif
 }
 
 
@@ -979,7 +1075,6 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
     AjPStr cl=NULL;
     AjPStr envi=NULL;
     AjPStr dir=NULL;
-    AjPStrTok handle=NULL;
     
 
     char **argp=NULL;
@@ -990,19 +1085,25 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
 
     int  outpipe[2];
     int  errpipe[2];
-    
+
+#ifdef HAVE_POLL
+    struct pollfd ufds[2];
+    unsigned int nfds;
+#else
     fd_set rec;
     struct timeval t;
+#endif
+
     int nread=0;
     char *buf;
     AjPStr outstd=NULL;
     AjPStr errstd=NULL;
     int retval=0;
+    char *save;
 
-/*
     if(!uid || !gid)
 	return (unsigned char)ajFalse;
-*/
+
     if(uid<UIDLIMIT)
 	return (unsigned char)ajFalse;
     if(gid<GIDLIMIT)
@@ -1025,9 +1126,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
     (*env)->ReleaseStringUTFChars(env,commandline,sptr);
 
 
-    handle = ajStrTokenInit(cl," \t\n");
-    ajStrToken(&prog,&handle,NULL);
-    ajStrTokenClear(&handle);
+    ajSysStrtokR(ajStrStr(cl)," \t\n",&save,&prog);
     
 
     sptr = (char *) (*env)->GetStringUTFChars(env,environment,0);
@@ -1043,14 +1142,47 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
     envp = make_array(envi);
 
     if(!ajSysWhichEnv(&prog,envp))
+    {
+	java_tidy_command(&prog,&cl,&envi,&dir,&outstd,&errstd);
+	i = 0;
+	while(argp[i])
+	    AJFREE(argp[i]);
+	AJFREE(argp);
+	
+	i = 0;
+	while(envp[i])
+	    AJFREE(envp[i]);
+	AJFREE(envp);
+	
 	return (unsigned char)ajFalse;
+    }
+    
 
-    pipe(outpipe);
-    pipe(errpipe);
+    while(pipe(outpipe)==-1);
+    while(pipe(errpipe)==-1);
 
+#if defined (__SVR4) && defined (__sun)
+    pid = fork1();
+#else
     pid = fork();
+#endif
+
     if(pid == -1)
+    {
+	java_tidy_command(&prog,&cl,&envi,&dir,&outstd,&errstd);
+	i = 0;
+	while(argp[i])
+	    AJFREE(argp[i]);
+	AJFREE(argp);
+	
+	i = 0;
+	while(envp[i])
+	    AJFREE(envp[i]);
+	AJFREE(envp);
+	
 	return (unsigned char)ajFalse;
+    }
+
     
     if(!pid)			/* Child */
     {
@@ -1078,14 +1210,80 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
 	}
     }
 
+    *buf = '\0';
 
-
-    while((retval=waitpid(pid,&status,WNOHANG))!=pid && !retval)
+#ifdef HAVE_POLL
+    while((retval=waitpid(pid,&status,WNOHANG))!=pid)
     {
+	if(retval==-1)
+	    if(errno!=EINTR)
+		break;
+
+	ufds[0].fd = outpipe[0];
+	ufds[1].fd = errpipe[0];
+	ufds[0].events = POLLIN | POLLPRI;
+	ufds[1].events = POLLIN | POLLPRI;
+	nfds = 2;
+	if(!(retval=poll(ufds,nfds,1)) || retval==-1)
+	    continue;
+
+	if((ufds[0].revents & POLLIN) || (ufds[0].revents & POLLPRI))
+	{
+	    while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    buf[nread]='\0';
+	    ajStrAppC(&outstd,buf);
+	}
+
+
+	if((ufds[1].revents & POLLIN) || (ufds[1].revents & POLLPRI))
+	{
+	    while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    buf[nread]='\0';
+	    ajStrAppC(&errstd,buf);
+	}
+    }
+
+
+    ufds[0].fd = outpipe[0];
+    ufds[1].fd = errpipe[0];
+    ufds[0].events = POLLIN | POLLPRI;
+    ufds[1].events = POLLIN | POLLPRI;
+    nfds = 2;
+
+    retval=poll(ufds,nfds,1);
+
+    if(retval>0)
+	if((ufds[0].revents & POLLIN) || (ufds[0].revents & POLLPRI))
+	{
+	    while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    buf[nread]='\0';
+	    ajStrAppC(&outstd,buf);
+	}
+    
+    retval=poll(ufds,nfds,1);
+
+    if(retval>0)
+	if((ufds[1].revents & POLLIN) || (ufds[1].revents & POLLPRI))
+	{
+	    while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    buf[nread]='\0';
+	    ajStrAppC(&errstd,buf);
+	}
+#else
+    while((retval=waitpid(pid,&status,WNOHANG))!=pid)
+    {
+	if(retval==-1)
+	    if(errno!=EINTR)
+		break;
+
 	FD_ZERO(&rec);
 	FD_SET(outpipe[0],&rec);
 	t.tv_sec = 0;
-	t.tv_usec = 0;
+	t.tv_usec = 1000;
 	select(outpipe[0]+1,&rec,NULL,NULL,&t);
 	if(FD_ISSET(outpipe[0],&rec))
 	{
@@ -1097,7 +1295,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
 	FD_ZERO(&rec);
 	FD_SET(errpipe[0],&rec);
 	t.tv_sec = 0;
-	t.tv_usec = 0;
+	t.tv_usec = 1000;
 	select(errpipe[0]+1,&rec,NULL,NULL,&t);
 	if(FD_ISSET(errpipe[0],&rec))
 	{
@@ -1134,7 +1332,7 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
 	buf[nread]='\0';
 	ajStrAppC(&errstd,buf);
     }
-
+#endif
 
     field = (*env)->GetFieldID(env,jvc,"outStd","Ljava/lang/String;");    
     ostr = (*env)->NewStringUTF(env,ajStrStr(outstd));
@@ -1187,69 +1385,31 @@ static char **make_array(AjPStr str)
 {
     int n;
     char **ptr=NULL;
-    AjPStrTok handle;
-    AjPStr token;
+    AjPStr buf;
+    char   *save=NULL;
     
-    token = ajStrNew();
+    buf = ajStrNew();
     
-    n = ajStrTokenCount(&str," \t\n");
+    n = ajStrTokenCountR(&str," \t\n");
 
     AJCNEW0(ptr,n+1);
 
     ptr[n] = NULL;
 
     n = 0;
-    
-    handle = ajStrTokenInit(str," \t\n");
-    while(ajStrToken(&token,&handle,NULL))
-	ptr[n++] = ajCharNew(token);
 
-    ajStrTokenClear(&handle);
-    ajStrDel(&token);
+    if(!ajSysStrtokR(ajStrStr(str)," \t\n",&save,&buf))
+	return ptr;
+    ptr[n++] = ajCharNew(buf);
+    
+    while(ajSysStrtokR(NULL," \t\n",&save,&buf))
+	ptr[n++] = ajCharNew(buf);
+
+    ajStrDel(&buf);
     
     return ptr;
 }
 
-
-
-
-/* @funcstatic java_uniqueName ********************************************
-**
-** Construct a unique name for the jembossctl socket
-**
-** @param [r] username [AjPStr] username
-** @param [r] command [ajint] command type
-**
-** @return [AjPStr] unique name
-******************************************************************************/
-
-static AjPStr java_uniqueName(AjPStr username, ajint command)
-{
-    AjPStr pipename=NULL;
-    struct timeval tv;
-    struct stat buf;
-    int count = 0;
-    
-    if(gettimeofday(&tv,NULL))
-	return NULL;
-    
-    pipename = ajStrNew();
-
-    do
-    {
-	if(count++ == 10)
-	{
-	    ajStrDel(&pipename);
-	    return NULL;
-	}
-	ajFmtPrintS(&pipename,"/tmp/jb-%S-%d-%Ld-%Ld-%d",username,
-		    ajRandomNumber(),tv.tv_sec,tv.tv_usec,command);
-    }
-    while(stat(ajStrStr(pipename),&buf)!=-1);
-    
-
-    return pipename;
-}
 
 
 /* @funcstatic java_send_auth ********************************************
@@ -1264,7 +1424,7 @@ static AjPStr java_uniqueName(AjPStr username, ajint command)
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_send_auth(int conndes, char *cuser, char *cpass,
+static ajint java_send_auth(int tchan, int rchan, char *cuser, char *cpass,
 			    AjPStr *errstd)
 {
     AjPStr cmnd=NULL;
@@ -1272,22 +1432,25 @@ static ajint java_send_auth(int conndes, char *cuser, char *cpass,
     int    n;
     
     cmnd = ajStrNew();
+    ajFmtPrintS(&cmnd,"%d %s %s",COMM_AUTH,cuser,cpass); 
 
-    ajFmtPrintS(&cmnd,"%d %s %s",COMM_AUTH,cuser,cpass);
-
-    if(send(conndes,ajStrStr(cmnd),ajStrLen(cmnd)+1,0) < 0)
+    if(java_snd(tchan,ajStrStr(cmnd),ajStrLen(cmnd)+1,errstd)<0)
     {
 	ajStrAppC(errstd,"Error sending (java_send_auth)\n");
 	ajStrDel(&cmnd);
 	return -1;
     }
 
-    if((n=recv(conndes,&c,1,0)) < 0)
+
+    n = java_rcv(rchan,(char *)&c,errstd);
+    if(n==-1)
     {
 	ajStrAppC(errstd,"Error receiving (java_send_auth)\n");
 	ajStrDel(&cmnd);
 	return -1;
     }
+
+
 
     ajStrDel(&cmnd);
 
@@ -1318,7 +1481,7 @@ static ajint java_send_auth(int conndes, char *cuser, char *cpass,
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_emboss_fork(int conndes,char *cuser,char *cpass,
+static ajint java_emboss_fork(int tchan, char *cuser,char *cpass,
 			      AjPStr clemboss, AjPStr envi, AjPStr dir,
 			      char *buf, AjPStr *errstd)
 {
@@ -1335,7 +1498,7 @@ static ajint java_emboss_fork(int conndes,char *cuser,char *cpass,
     sprintf(p,"%s",ajStrStr(dir));
     n = (p-buf) + ajStrLen(dir) +1;
 
-    if(send(conndes,buf,n,0) < 0)
+    if(java_snd(tchan,buf,n,errstd) < 0)
     {
 	ajStrAppC(errstd,"Sending error (java_emboss_fork)\n");
 	return -1;
@@ -1344,6 +1507,47 @@ static ajint java_emboss_fork(int conndes,char *cuser,char *cpass,
     return 0;
 }
 
+/* @funcstatic java_batch_fork ********************************************
+**
+** Send a detached emboss fork request to jembossctl
+**
+** @param [rw] conndes [int] socket
+** @param [r] cuser [char*] username
+** @param [r] cpass [char*] password
+** @param [r] clemboss [AjPStr] emboss command line
+** @param [r] envi [AjPStr] emboss environment
+** @param [r] dir [AjPStr] directory to invoke emboss from
+** @param [w] buf [char*] socket buffer
+** @param [w] errstd [AjPStr*] stderr from jembossctl
+**
+** @return [ajint] 0=success -1=failure
+******************************************************************************/
+
+static ajint java_batch_fork(int tchan, char *cuser,char *cpass,
+			     AjPStr clemboss, AjPStr envi, AjPStr dir,
+			     char *buf, AjPStr *errstd)
+{
+    char *p=NULL;
+    int n;
+    
+    
+    n = sprintf(buf,"%d %s %s",BATCH_FORK,cuser,cpass);
+    p=buf+n+1;
+    sprintf(p,"%s",ajStrStr(clemboss));
+    p += (ajStrLen(clemboss)+1);
+    sprintf(p,"%s",ajStrStr(envi));
+    p += (ajStrLen(envi)+1);
+    sprintf(p,"%s",ajStrStr(dir));
+    n = (p-buf) + ajStrLen(dir) +1;
+
+    if(java_snd(tchan,buf,n,errstd) < 0)
+    {
+	ajStrAppC(errstd,"Sending error (java_batch_fork)\n");
+	return -1;
+    }
+
+    return 0;
+}
 
 /* @funcstatic java_make_dir ********************************************
 **
@@ -1359,7 +1563,7 @@ static ajint java_emboss_fork(int conndes,char *cuser,char *cpass,
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_make_dir(int conndes,char *cuser,char *cpass,AjPStr dir,
+static ajint java_make_dir(int tchan,char *cuser,char *cpass,AjPStr dir,
 			   char *buf, AjPStr *errstd)
 {
     char *p=NULL;
@@ -1371,7 +1575,7 @@ static ajint java_make_dir(int conndes,char *cuser,char *cpass,AjPStr dir,
     sprintf(p,"%s",ajStrStr(dir));
     n = (p-buf) + ajStrLen(dir) +1;
 
-    if(send(conndes,buf,n,0) < 0)
+    if(java_snd(tchan,buf,n,errstd) < 0)
     {
 	ajStrAppC(errstd,"Sending error (java_make_dir)\n");
 	return -1;
@@ -1396,8 +1600,8 @@ static ajint java_make_dir(int conndes,char *cuser,char *cpass,AjPStr dir,
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_delete_file(int conndes,char *cuser,char *cpass,AjPStr ufile,
-			 char *buf, AjPStr *errstd)
+static ajint java_delete_file(int tchan,char *cuser,char *cpass,AjPStr ufile,
+			      char *buf, AjPStr *errstd)
 {
     char *p=NULL;
     int n;
@@ -1408,7 +1612,7 @@ static ajint java_delete_file(int conndes,char *cuser,char *cpass,AjPStr ufile,
     sprintf(p,"%s",ajStrStr(ufile));
     n = (p-buf) + ajStrLen(ufile) +1;
 
-    if(send(conndes,buf,n,0) < 0)
+    if(java_snd(tchan,buf,n,errstd) < 0)
     {
 	ajStrAppC(errstd,"Sending error (java_delete_file)\n");
 	return -1;
@@ -1432,7 +1636,7 @@ static ajint java_delete_file(int conndes,char *cuser,char *cpass,AjPStr ufile,
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_delete_dir(int conndes,char *cuser,char *cpass,AjPStr dir,
+static ajint java_delete_dir(int tchan,char *cuser,char *cpass,AjPStr dir,
 			     char *buf, AjPStr *errstd)
 {
     char *p=NULL;
@@ -1444,7 +1648,7 @@ static ajint java_delete_dir(int conndes,char *cuser,char *cpass,AjPStr dir,
     sprintf(p,"%s",ajStrStr(dir));
     n = (p-buf) + ajStrLen(dir) +1;
 
-    if(send(conndes,buf,n,0) < 0)
+    if(java_snd(tchan,buf,n,errstd) < 0)
     {
 	ajStrAppC(errstd,"Sending error (java_delete_dir)\n");
 	return -1;
@@ -1468,7 +1672,7 @@ static ajint java_delete_dir(int conndes,char *cuser,char *cpass,AjPStr dir,
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_list_files(int conndes,char *cuser,char *cpass,AjPStr dir,
+static ajint java_list_files(int tchan,char *cuser,char *cpass,AjPStr dir,
 			     char *buf, AjPStr *errstd)
 {
     char *p=NULL;
@@ -1480,7 +1684,7 @@ static ajint java_list_files(int conndes,char *cuser,char *cpass,AjPStr dir,
     sprintf(p,"%s",ajStrStr(dir));
     n = (p-buf) + ajStrLen(dir) +1;
 
-    if(send(conndes,buf,n,0) < 0)
+    if(java_snd(tchan,buf,n,errstd) < 0)
     {
 	ajStrAppC(errstd,"Sending error (java_list_files)\n");
 	return -1;
@@ -1505,7 +1709,7 @@ static ajint java_list_files(int conndes,char *cuser,char *cpass,AjPStr dir,
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_list_dirs(int conndes,char *cuser,char *cpass,AjPStr dir,
+static ajint java_list_dirs(int tchan,char *cuser,char *cpass,AjPStr dir,
 			    char *buf, AjPStr *errstd)
 {
     char *p=NULL;
@@ -1517,7 +1721,7 @@ static ajint java_list_dirs(int conndes,char *cuser,char *cpass,AjPStr dir,
     sprintf(p,"%s",ajStrStr(dir));
     n = (p-buf) + ajStrLen(dir) +1;
 
-    if(send(conndes,buf,n,0) < 0)
+    if(java_snd(tchan,buf,n,errstd) < 0)
     {
 	ajStrAppC(errstd,"Sending error (java_list_dirs)\n");
 	return -1;
@@ -1544,34 +1748,46 @@ static ajint java_list_dirs(int conndes,char *cuser,char *cpass,AjPStr dir,
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_get_file(int conndes,char *cuser,char *cpass,AjPStr file,
-			   char *buf,unsigned char **fbuf,int *size,
-			   AjPStr *errstd)
+static ajint java_get_file(int tchan,int rchan,char *cuser,char *cpass,
+			   AjPStr file, char *buf,unsigned char **fbuf,
+			   int *size, AjPStr *errstd)
 {
     char *p=NULL;
     int n;
     int rlen=0;
-    
     
     n = sprintf(buf,"%d %s %s",GET_FILE,cuser,cpass);
     p=buf+n+1;
     sprintf(p,"%s",ajStrStr(file));
     n = (p-buf) + ajStrLen(file) +1;
 
-    if(send(conndes,buf,n,0) < 0)
+
+    if(java_snd(tchan,buf,n,errstd) < 0)
     {
 	ajStrAppC(errstd,"Sending error (java_get_file)\n");
 	return -1;
     }
 
 
-    if((rlen = recv(conndes,buf,JBUFFLEN,0)) < 0)
+    rlen = java_rcv(rchan,buf,errstd);
+
+    if(rlen==-1)
     {
+	*size = 0;
 	ajStrAppC(errstd,"Reading error (java_get_file)\n");
 	return -1;
     }
 
+
     if(sscanf(buf,"%d",&n)!=1)
+    {
+	ajStrAppC(errstd,"Bad size (java_get_file)\n");
+	return -1;
+    }
+
+
+
+    if(n==-1)
     {
 	ajStrAppC(errstd,"Bad size (java_get_file)\n");
 	return -1;
@@ -1606,8 +1822,8 @@ static ajint java_get_file(int conndes,char *cuser,char *cpass,AjPStr file,
 ** @return [ajint] 0=success -1=failure
 ******************************************************************************/
 
-static ajint java_put_file(int conndes,char *cuser,char *cpass,AjPStr file,
-			   char *buf,unsigned char *fbuf,int size,
+static ajint java_put_file(int tchan,int rchan,char *cuser,char *cpass,
+			   AjPStr file, char *buf,unsigned char *fbuf,int size,
 			   AjPStr *errstd)
 {
     char *p=NULL;
@@ -1622,15 +1838,15 @@ static ajint java_put_file(int conndes,char *cuser,char *cpass,AjPStr file,
     n = (p-buf) + ajStrLen(file) +1;
 
     /* send command */
-    if(send(conndes,buf,n,0) < 0)
+    if(java_snd(tchan,buf,n,errstd) < 0)
     {
 	ajStrAppC(errstd,"Sending error (java_put_file)\n");
 	return -1;
     }
 
 
-
-    if((rlen = recv(conndes,buf,2,0))==-1)
+    rlen = java_rcv(rchan,buf,errstd);
+    if(rlen==-1)
     {
 	ajStrAppC(errstd,"Socket Recv error 2\n");
 	return -1;
@@ -1641,14 +1857,15 @@ static ajint java_put_file(int conndes,char *cuser,char *cpass,AjPStr file,
 
     /* Send file size */
     n = sprintf(buf,"%d",size);
-    if(send(conndes,buf,n+1,0) < 0)
+    if(java_snd(tchan,buf,n+1,errstd) < 0)
     {
 	ajStrAppC(errstd,"Sending error (java_put_file)\n");
 	return -1;
     }
     
 
-    if((rlen = recv(conndes,buf,2,0))==-1)
+    rlen = java_rcv(rchan,buf,errstd);
+    if(rlen==-1)
     {
 	ajStrAppC(errstd,"Socket Recv error 2\n");
 	return -1;
@@ -1659,7 +1876,7 @@ static ajint java_put_file(int conndes,char *cuser,char *cpass,AjPStr file,
     while(pos+JBUFFLEN < size)
     {
  	memcpy((void *)buf,(const void *)&fbuf[pos],JBUFFLEN);
-	if(send(conndes,buf,JBUFFLEN,0) < 0)
+	if(java_snd(tchan,buf,JBUFFLEN,errstd) < 0)
 	{
 	    ajStrAppC(errstd,"Sending error (java_put_file)\n");
 	    return -1;
@@ -1670,7 +1887,7 @@ static ajint java_put_file(int conndes,char *cuser,char *cpass,AjPStr file,
 	if(size-pos)
 	{
 	    memcpy((void *)buf,(const void *)&fbuf[pos],size-pos);
-	    if(send(conndes,buf,size-pos,0) < 0)
+	    if(java_snd(tchan,buf,size-pos,errstd) < 0)
 	    {
 		ajStrAppC(errstd,"Sending error (java_put_file)\n");
 		return -1;
@@ -1698,23 +1915,113 @@ static ajint java_put_file(int conndes,char *cuser,char *cpass,AjPStr file,
 static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
 			       int *outpipe, int *errpipe, char *buf)
 {
+#ifdef HAVE_POLL
+    struct pollfd ufds[2];
+    unsigned int  nfds;
+#else
     fd_set rec;
     struct timeval t;
+#endif
+
     int nread=0;
     int  status;
     int retval=0;
+    unsigned long block=0;
+    
 
-
-    while((retval=waitpid(pid,&status,WNOHANG))!=pid && !retval)
+    block = 1;
+    if(java_block(outpipe[0],block)==-1)
     {
+	ajFmtPrintAppS(errstd,"Cannot unblock 1a. %d\n",errno);
+	return;
+    }
+
+    if(java_block(errpipe[0],block)==-1)
+    {
+	ajFmtPrintAppS(errstd,"Cannot unblock 2a. %d\n",errno);
+	return;
+    }
+
+    *buf = '\0';
+
+
+#ifdef HAVE_POLL
+    while((retval=waitpid(pid,&status,WNOHANG))!=pid)
+    {
+	if(retval==-1)
+	    if(errno!=EINTR)
+		break;
+
+	ufds[0].fd = outpipe[0];
+	ufds[1].fd = errpipe[0];
+	ufds[0].events = POLLIN | POLLPRI;
+	ufds[1].events = POLLIN | POLLPRI;
+	nfds = 2;
+	if(!(retval=poll(ufds,nfds,1)) || retval==-1)
+	    continue;
+
+	if((ufds[0].revents & POLLIN) || (ufds[0].revents & POLLPRI))
+	{
+	    while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    buf[nread]='\0';
+	    ajStrAppC(outstd,buf);
+	}
+
+
+	if((ufds[1].revents & POLLIN) || (ufds[1].revents & POLLPRI))
+	{
+	    while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    buf[nread]='\0';
+	    ajStrAppC(errstd,buf);
+	}
+    }
+
+
+    ufds[0].fd = outpipe[0];
+    ufds[1].fd = errpipe[0];
+    ufds[0].events = POLLIN | POLLPRI;
+    ufds[1].events = POLLIN | POLLPRI;
+    nfds = 2;
+
+    retval=poll(ufds,nfds,1);
+
+    if(retval>0)
+	if((ufds[0].revents & POLLIN) || (ufds[0].revents & POLLPRI))
+	{
+	    while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    buf[nread]='\0';
+	    ajStrAppC(outstd,buf);
+	}
+    
+    retval=poll(ufds,nfds,1);
+
+    if(retval>0)
+	if((ufds[1].revents & POLLIN) || (ufds[1].revents & POLLPRI))
+	{
+	    while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    buf[nread]='\0';
+	    ajStrAppC(errstd,buf);
+	}
+#else
+    while((retval=waitpid(pid,&status,WNOHANG))!=pid)
+    {
+	if(retval==-1)
+	    if(errno!=EINTR)
+		break;
+
 	FD_ZERO(&rec);
 	FD_SET(outpipe[0],&rec);
 	t.tv_sec = 0;
-	t.tv_usec = 0;
+	t.tv_usec = 1000;
 	select(outpipe[0]+1,&rec,NULL,NULL,&t);
 	if(FD_ISSET(outpipe[0],&rec))
 	{
-	    nread = read(outpipe[0],(void *)buf,JBUFFLEN);
+	    while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
 	    buf[nread]='\0';
 	    ajStrAppC(outstd,buf);
 	}
@@ -1722,11 +2029,12 @@ static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
 	FD_ZERO(&rec);
 	FD_SET(errpipe[0],&rec);
 	t.tv_sec = 0;
-	t.tv_usec = 0;
+	t.tv_usec = 1000;
 	select(errpipe[0]+1,&rec,NULL,NULL,&t);
 	if(FD_ISSET(errpipe[0],&rec))
 	{
-	    nread = read(errpipe[0],(void *)buf,JBUFFLEN);
+	    while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
 	    buf[nread]='\0';
 	    ajStrAppC(errstd,buf);
 	}
@@ -1742,7 +2050,8 @@ static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
     select(outpipe[0]+1,&rec,NULL,NULL,&t);
     if(FD_ISSET(outpipe[0],&rec))
     {
-	nread = read(outpipe[0],(void *)buf,JBUFFLEN);
+	while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
+	      && errno==EINTR);
 	buf[nread]='\0';
 	ajStrAppC(outstd,buf);
     }
@@ -1755,9 +2064,24 @@ static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
     select(errpipe[0]+1,&rec,NULL,NULL,&t);
     if(FD_ISSET(errpipe[0],&rec))
     {
-	nread = read(errpipe[0],(void *)buf,JBUFFLEN);
+	while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
+	      && errno==EINTR);
 	buf[nread]='\0';
 	ajStrAppC(errstd,buf);
+    }
+#endif
+
+    block = 0;
+    if(java_block(outpipe[0],block)==-1)
+    {
+	ajFmtPrintAppS(errstd,"Cannot unblock 3a. %d\n",errno);
+	return;
+    }
+
+    if(java_block(errpipe[0],block)==-1)
+    {
+	ajFmtPrintAppS(errstd,"Cannot unblock 4a. %d\n",errno);
+	return;
     }
 
 
@@ -1785,39 +2109,150 @@ static void java_wait_for_file(int pid,AjPStr *outstd, AjPStr *errstd,
 			       int *outpipe, int *errpipe, char *buf,
 			       unsigned char *fbuf,int size)
 {
+#ifdef HAVE_POLL
+    struct pollfd ufds[2];
+    unsigned int  nfds;
+#else
     fd_set rec;
     struct timeval t;
+#endif
+
     int nread=0;
     int  status;
     int retval=0;
-    unsigned char *ptr;
+    unsigned char *ptr=NULL;
+    unsigned long block=0;
+    
 
-    ptr = fbuf;
-
-    while((retval=waitpid(pid,&status,WNOHANG))!=pid && !retval)
+    block = 1;
+    if(java_block(outpipe[0],block)==-1)
     {
+	ajFmtPrintAppS(errstd,"Cannot unblock 5a. %d\n",errno);
+	return;
+    }
+
+    if(java_block(errpipe[0],block)==-1)
+    {
+	ajFmtPrintAppS(errstd,"Cannot unblock 6a. %d\n",errno);
+	return;
+    }
+
+    *buf = '\0';
+    
+    if(size)
+	ptr = fbuf;
+
+
+#ifdef HAVE_POLL
+    while((retval=waitpid(pid,&status,WNOHANG))!=pid)
+    {
+	if(retval==-1)
+	    if(errno!=EINTR)
+		break;
+
+	ufds[0].fd = outpipe[0];
+	ufds[1].fd = errpipe[0];
+	ufds[0].events = POLLIN | POLLPRI;
+	ufds[1].events = POLLIN | POLLPRI;
+	nfds = 2;
+	if(!(retval=poll(ufds,nfds,1)) || retval==-1)
+	    continue;
+
+	if(size && ((ufds[0].revents & POLLIN) || (ufds[0].revents & POLLPRI)))
+	{
+	    while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    if(nread >0)
+	    {
+		memcpy((void *)ptr,(const void *)buf,nread);
+		ptr += nread;
+	    }
+	}
+
+
+	if((ufds[1].revents & POLLIN) || (ufds[1].revents & POLLPRI))
+	{
+	    while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    if(nread > -1)
+	    {
+		buf[nread]='\0';
+		ajStrAppC(errstd,buf);
+	    }
+	}
+    }
+
+
+    ufds[0].fd = outpipe[0];
+    ufds[1].fd = errpipe[0];
+    ufds[0].events = POLLIN | POLLPRI;
+    ufds[1].events = POLLIN | POLLPRI;
+    nfds = 2;
+
+    retval=poll(ufds,nfds,1);
+
+    if(retval>0)
+	if(size && ((ufds[0].revents & POLLIN) || (ufds[0].revents & POLLPRI)))
+	{
+	    while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    if(nread > 0)
+	    {
+		memcpy((void *)ptr,(const void *)buf,nread);
+		ptr += nread;
+	    }
+	}
+    
+    retval=poll(ufds,nfds,1);
+
+    if(retval>0)
+	if((ufds[1].revents & POLLIN) || (ufds[1].revents & POLLPRI))
+	{
+	    while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    if(nread > -1)
+	    {
+		buf[nread]='\0';
+		ajStrAppC(errstd,buf);
+	    }
+	}
+#else
+    while((retval=waitpid(pid,&status,WNOHANG))!=pid)
+    {
+	if(retval==-1)
+	    if(errno!=EINTR)
+		break;
+
 	FD_ZERO(&rec);
 	FD_SET(outpipe[0],&rec);
 	t.tv_sec = 0;
-	t.tv_usec = 0;
+	t.tv_usec = 1000;
 	select(outpipe[0]+1,&rec,NULL,NULL,&t);
-	if(FD_ISSET(outpipe[0],&rec))
+	if(size && FD_ISSET(outpipe[0],&rec))
 	{
-	    nread = read(outpipe[0],(void *)buf,JBUFFLEN);
-	    memcpy((void *)ptr,(const void *)buf,nread);
-	    ptr += nread;
+	    while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    if(nread>0)
+	    {
+		memcpy((void *)ptr,(const void *)buf,nread);
+		ptr += nread;
+	    }
 	}
 
 	FD_ZERO(&rec);
 	FD_SET(errpipe[0],&rec);
 	t.tv_sec = 0;
-	t.tv_usec = 0;
+	t.tv_usec = 1000;
 	select(errpipe[0]+1,&rec,NULL,NULL,&t);
 	if(FD_ISSET(errpipe[0],&rec))
 	{
-	    nread = read(errpipe[0],(void *)buf,JBUFFLEN);
-	    buf[nread]='\0';
-	    ajStrAppC(errstd,buf);
+	    while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    if(nread > -1)
+	    {
+		buf[nread]='\0';
+		ajStrAppC(errstd,buf);
+	    }
 	}
 
 
@@ -1829,11 +2264,15 @@ static void java_wait_for_file(int pid,AjPStr *outstd, AjPStr *errstd,
     t.tv_sec = 0;
     t.tv_usec = 0;
     select(outpipe[0]+1,&rec,NULL,NULL,&t);
-    if(FD_ISSET(outpipe[0],&rec))
+    if(size && FD_ISSET(outpipe[0],&rec))
     {
-	nread = read(outpipe[0],(void *)buf,JBUFFLEN);
-	memcpy((void *)ptr,(const void *)buf,nread);
-	ptr += nread;
+	while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
+	      && errno==EINTR);
+	if(nread>0)
+	{
+	    memcpy((void *)ptr,(const void *)buf,nread);
+	    ptr += nread;
+	}
     }
 
 
@@ -1844,15 +2283,32 @@ static void java_wait_for_file(int pid,AjPStr *outstd, AjPStr *errstd,
     select(errpipe[0]+1,&rec,NULL,NULL,&t);
     if(FD_ISSET(errpipe[0],&rec))
     {
-	nread = read(errpipe[0],(void *)buf,JBUFFLEN);
-	buf[nread]='\0';
-	ajStrAppC(errstd,buf);
+	while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
+	      && errno==EINTR);
+	if(nread>-1)
+	{
+	    buf[nread]='\0';
+	    ajStrAppC(errstd,buf);
+	}
+    }
+#endif
+
+    if(size)
+	if(ptr-fbuf != size)
+	    ajStrAppC(errstd,"\nIncomplete file read\n");
+
+    block = 0;
+    if(java_block(outpipe[0],block)==-1)
+    {
+	ajFmtPrintAppS(errstd,"Cannot unblock 7a. %d\n",errno);
+	return;
     }
 
-
-    if(ptr-fbuf != size)
-	ajStrAppC(errstd,"\nIncomplete file read\n");
-
+    if(java_block(errpipe[0],block)==-1)
+    {
+	ajFmtPrintAppS(errstd,"Cannot unblock 8a. %d\n",errno);
+	return;
+    }
 
     return;
 }
@@ -1884,37 +2340,23 @@ static int java_jembossctl(ajint command, AjPStr username, AjPStr password,
 			   unsigned char **fbuf, int *fsize)
 {
     AjPStr dir=NULL;
-    AjPStr uniq=NULL;
+    AjPStr unused=NULL;
 
     AjPStr prog=NULL;    /* Fork strings */
     AjPStr cl=NULL;
     AjPStr clemboss=NULL;
     AjPStr envi=NULL;
 
-    struct timeval tv;
-    long   then;
-    long   now;
     int    i=0;
     
     
     char *cuser=NULL;
     char *cpass=NULL;
-    char *cuniq=NULL;
+
     char *buff=NULL;
     int size=0;
-    
 
-    /* Socket stuff */
-    int sockdes;		/* Initial socket descriptor   */
-    int conndes;		/* Connected socket descriptor */
-    
-    struct sockaddr_un here;
-    struct sockaddr_un there;
-    int nlen;
-    int tlen=0;
     int rlen=0;
-
-
 
     char **argp=NULL;
     char **envp=NULL;
@@ -1922,18 +2364,18 @@ static int java_jembossctl(ajint command, AjPStr username, AjPStr password,
 
     int  outpipe[2];
     int  errpipe[2];
+    int  commpipe[2];
+    int  tchan;
+    int  rchan;
     
     int retval=0;
+    char c;
+    int  n;
 
-
-    uniq = java_uniqueName(username,command);
-    if(!uniq)
-	return -1;
-    
-    cuniq = ajStrStr(uniq);
     cuser = ajStrStr(username);
     cpass = ajStrStr(password);
 
+    unused   = ajStrNew();
     clemboss = ajStrNew();
     dir      = ajStrNew();
     cl       = ajStrNew();
@@ -1941,55 +2383,14 @@ static int java_jembossctl(ajint command, AjPStr username, AjPStr password,
     prog     = ajStrNew();
 
 
-    ajRandomSeed();
-    
     if(!(buff=(char*)malloc(JBUFFLEN)))
     {
 	ajStrAppC(errstd,"Malloc error\n");
-	java_tidy_command(&uniq,&cl,&clemboss,&dir,&envi,&prog);
+	java_tidy_command(&unused,&cl,&clemboss,&dir,&envi,&prog);
 	return -1;
     }
     
 
-    
-    /* Get socket descriptor */
-    sockdes = socket(AF_UNIX,SOCK_STREAM,0);
-    if(sockdes==-1)
-    {
-	ajStrAppC(errstd,"No socket descriptor\n");
-	java_tidy_command2(&uniq,&cl,&clemboss,&dir,&envi,&prog,buff);
-	return -1;
-    }
-    
-
-    /* Process might not return so set non-blocking */
-    fcntl(sockdes,F_SETFL,O_NONBLOCK);
-
-
-    /* Bind to socket */
-    here.sun_family = AF_UNIX;
-    strcpy(here.sun_path,ajStrStr(uniq));
-    unlink(here.sun_path);
-    nlen = ajStrLen(uniq) + sizeof(here.sun_family);
-    if(bind(sockdes,(struct sockaddr*)&here,nlen)==-1)
-    {
-	ajStrAppC(errstd,"Bind error\n");
-	close(sockdes);
-	unlink(cuniq);
-	java_tidy_command2(&uniq,&cl,&clemboss,&dir,&envi,&prog,buff);
-	return -1;
-    }
-    
-
-    /* Set socket listening */
-    if(listen(sockdes,10)==-1)
-    {
-	ajStrAppC(errstd,"Listen error\n");
-	close(sockdes);
-	unlink(cuniq);
-	java_tidy_command2(&uniq,&cl,&clemboss,&dir,&envi,&prog,buff);
-	return -1;
-    }
     
     /* Set environment for execve */
     ajStrAssS(&envi,environment);
@@ -2000,38 +2401,65 @@ static int java_jembossctl(ajint command, AjPStr username, AjPStr password,
     if(!ajSysWhichEnv(&prog,envp))
     {
 	ajStrAppC(errstd,"Cannot locate jembossctl\n");
-	close(sockdes);
-	unlink(cuniq);
-	java_tidy_command2(&uniq,&cl,&clemboss,&dir,&envi,&prog,buff);
+	java_tidy_command2(&unused,&cl,&clemboss,&dir,&envi,&prog,buff);
+	i = 0;
+	while(envp[i])
+	    AJFREE(envp[i]);
+	AJFREE(envp);
 	return -1;
     }
 
     /* Setup commandline */
-    ajFmtPrintS(&cl,"jembossctl %s",cuniq);
+    ajFmtPrintS(&cl,"jembossctl");
     argp = make_array(cl);
-    
-    pipe(outpipe);
-    pipe(errpipe);
 
+    while(pipe(outpipe)==-1);
+    while(pipe(errpipe)==-1);
+    while(pipe(commpipe)==-1);
+    tchan = commpipe[1];
+    rchan = outpipe[0];
+
+    
+    
+
+#if defined (__SVR4) && defined (__sun)
+    pid = fork1();
+#else
     pid = fork();
+#endif
     if(pid == -1)
     {
 	ajStrAppC(errstd,"Fork error\n");
-	java_tidy_command3(&uniq,&cl,&clemboss,&dir,&envi,&prog,buff,cuniq,
-			   sockdes,outpipe,errpipe);
+	java_tidy_command3(&unused,&cl,&clemboss,&dir,&envi,&prog,buff,
+			   commpipe,outpipe,errpipe);
+	i = 0;
+	while(argp[i])
+	    AJFREE(argp[i]);
+	AJFREE(argp);
+	
+	i = 0;
+	while(envp[i])
+	    AJFREE(envp[i]);
+	AJFREE(envp);
 	return -1;
     }
 
-    if(!pid)			/* Child (doit suid prog) */
+
+
+    if(!pid)			/* Child (jembossctl) prog */
     {
+	dup2(commpipe[0],0);
 	dup2(outpipe[1],1);
 	dup2(errpipe[1],2);
+	
 	if(execve(ajStrStr(prog),argp,envp) == -1)
 	{
 	    fprintf(stderr,"execve failure\n");
 	    exit(-1);
 	}
     }
+    
+
 
     /* Don't need the env or commline for the parent */
     i = 0;
@@ -2046,145 +2474,117 @@ static int java_jembossctl(ajint command, AjPStr username, AjPStr password,
     /* End of fork code */
 
 
-
-    /* Wait for a connection with timeout of 30 seconds */
-    /* Success if jembossctl says OK across the socket  */
-    if(gettimeofday(&tv,NULL))
-    {
-	ajStrAppC(errstd,"Gettimeofday error\n");
-	java_tidy_command3(&uniq,&cl,&clemboss,&dir,&envi,&prog,buff,cuniq,
-			   sockdes,outpipe,errpipe);
-	return -1;
-    }
-    then = tv.tv_sec;
-    
-    tlen = sizeof(there);
-    while((conndes=accept(sockdes,(struct sockaddr*)&there,&tlen))==-1)
-    {
-	if(errno!=EAGAIN)
-	    break;
-
-	if(gettimeofday(&tv,NULL))
-	{
-	    ajStrAppC(errstd,"Gettimeofday error\n");
-	    java_tidy_command3(&uniq,&cl,&clemboss,&dir,&envi,&prog,buff,cuniq,
-			       sockdes,outpipe,errpipe);
-	    return -1;
-	}
-	now = tv.tv_sec;
-	if(now-then >= 30)
-	{
-	    ajStrAppC(errstd,"Timeout error\n");
-	    java_tidy_command3(&uniq,&cl,&clemboss,&dir,&envi,&prog,buff,cuniq,
-			       sockdes,outpipe,errpipe);
-	    return -1;
-	}
-
-    }
-    
-    if(!conndes)
-    {
-	ajStrAppC(errstd,"Server connect error\n");
-	java_tidy_command3(&uniq,&cl,&clemboss,&dir,&envi,&prog,buff,cuniq,
-			   sockdes,outpipe,errpipe);
-	return -1;
-    }
-
-
     *buff = '\0';
-    if((rlen = recv(conndes,buff,2,0))==-1)
+    rlen = java_rcv(rchan,buff,errstd);
+    if(rlen==-1)
     {
-	ajStrAppC(errstd,"Socket Recv error 1\n");
-	java_tidy_command3(&uniq,&cl,&clemboss,&dir,&envi,&prog,buff,cuniq,
-			   sockdes,outpipe,errpipe);
-	close(conndes);
+	ajStrAppC(errstd,"Pipe Recv error 1\n");
+	java_tidy_command3(&unused,&cl,&clemboss,&dir,&envi,&prog,buff,
+			   commpipe,outpipe,errpipe);
 	return -1;
     }
-
 
     if(rlen<2 || strncmp(buff,"OK",2))
     {
 	ajStrAppC(errstd,"Incorrect ACK error\n");
-	java_tidy_command3(&uniq,&cl,&clemboss,&dir,&envi,&prog,buff,cuniq,
-			   sockdes,outpipe,errpipe);
-	close(conndes);
+	java_tidy_command3(&unused,&cl,&clemboss,&dir,&envi,&prog,buff,
+			   commpipe,outpipe,errpipe);
 	return -1;
     }
 
-
-
-
-    
-
-    /* At this point socket comms are active and commands can be sent */
+    /* At this point pipe comms are active and commands can be sent */
 
     switch(command)
     {
     case COMM_AUTH:
-	retval = java_send_auth(conndes,cuser,cpass,errstd);
+	retval = java_send_auth(tchan,rchan,cuser,cpass,errstd);
 	java_wait_for_term(pid,outstd,errstd,outpipe,errpipe,buff);
 	break;
 
     case EMBOSS_FORK:
 	ajStrAssS(&clemboss,str1);
 	ajStrAssS(&dir,str2);
-	retval = java_emboss_fork(conndes,cuser,cpass,clemboss,envi,dir,buff,
+	retval = java_emboss_fork(tchan,cuser,cpass,clemboss,envi,dir,buff,
 				  errstd);
 	java_wait_for_term(pid,outstd,errstd,outpipe,errpipe,buff);
 	break;
 
     case MAKE_DIRECTORY:
 	ajStrAssS(&dir,str1);
-	retval = java_make_dir(conndes,cuser,cpass,dir,buff,errstd);
+	retval = java_make_dir(tchan,cuser,cpass,dir,buff,errstd);
 	java_wait_for_term(pid,outstd,errstd,outpipe,errpipe,buff);
 	break;
 
     case DELETE_FILE:
 	ajStrAssS(&dir,str1);
-	retval = java_delete_file(conndes,cuser,cpass,dir,buff,errstd);
+	retval = java_delete_file(tchan,cuser,cpass,dir,buff,errstd);
 	java_wait_for_term(pid,outstd,errstd,outpipe,errpipe,buff);
 	break;
 
     case DELETE_DIR:
 	ajStrAssS(&dir,str1);
-	retval = java_delete_dir(conndes,cuser,cpass,dir,buff,errstd);
+	retval = java_delete_dir(tchan,cuser,cpass,dir,buff,errstd);
 	java_wait_for_term(pid,outstd,errstd,outpipe,errpipe,buff);
 	break;
 
     case LIST_FILES:
 	ajStrAssS(&dir,str1);
-	retval = java_list_files(conndes,cuser,cpass,dir,buff,errstd);
+	retval = java_list_files(tchan,cuser,cpass,dir,buff,errstd);
 	java_wait_for_term(pid,outstd,errstd,outpipe,errpipe,buff);
 	break;
 
     case LIST_DIRS:
 	ajStrAssS(&dir,str1);
-	retval = java_list_dirs(conndes,cuser,cpass,dir,buff,errstd);
+	retval = java_list_dirs(tchan,cuser,cpass,dir,buff,errstd);
 	java_wait_for_term(pid,outstd,errstd,outpipe,errpipe,buff);
 	break;
 
     case GET_FILE:
 	ajStrAssS(&dir,str1);
-	retval = java_get_file(conndes,cuser,cpass,dir,buff,fbuf,&size,errstd);
+	retval = java_get_file(tchan,rchan,cuser,cpass,dir,buff,fbuf,&size,
+			       errstd);
+	if(retval==-1)
+	{
+	    size = 0;
+	    *fsize = 0;
+	}
+	else
+	    *fsize = size;
+
 	java_wait_for_file(pid,outstd,errstd,outpipe,errpipe,buff,*fbuf,size);
-	*fsize = size;
 	break;
 
     case PUT_FILE:
 	ajStrAssS(&dir,str1);
 	size = *fsize;
-	retval = java_put_file(conndes,cuser,cpass,dir,buff,*fbuf,size,errstd);
+	retval = java_put_file(tchan,rchan,cuser,cpass,dir,buff,*fbuf,size,
+			       errstd);
 	java_wait_for_term(pid,outstd,errstd,outpipe,errpipe,buff);
 	break;
-	
+
+    case BATCH_FORK:
+	ajStrAssS(&clemboss,str1);
+	ajStrAssS(&dir,str2);
+	retval = java_batch_fork(tchan,cuser,cpass,clemboss,envi,dir,buff,
+				  errstd);
+
+	n = java_rcv(rchan,(char *)&c,errstd);
+
+	if(n==-1 || !c)
+	    ajStrAppC(errstd,"Error receiving (java_batch)\n");
+#ifdef __hpux
+	signal(SIGCLD,SIG_IGN);
+#endif
+	break;
+
     default:
 	break;
     }
     
 
-    java_tidy_command3(&uniq,&cl,&clemboss,&dir,&envi,&prog,buff,cuniq,
-		       sockdes,outpipe,errpipe);
-    close(conndes);
+    java_tidy_command3(&unused,&cl,&clemboss,&dir,&envi,&prog,buff,
+		       commpipe,outpipe,errpipe);
+
 
     return retval;
 }
@@ -2194,26 +2594,26 @@ static int java_jembossctl(ajint command, AjPStr username, AjPStr password,
 **
 ** Delete allocated memory
 **
-** @param [w] uniq [AjPStr*] unique name
-** @param [w] cl [AjPStr] command line
-** @param [w] clemboss [AjPStr*] emboss command line
-** @param [w] dir [AjPStr*] directory
-** @param [w] envi [AjPStr*] environment
-** @param [w] prog [AjPStr*] program name
+** @param [w] str1 [AjPStr*] any string
+** @param [w] str2 [AjPStr*] any string
+** @param [w] str3 [AjPStr*] any string
+** @param [w] str4 [AjPStr*] any string
+** @param [w] str5 [AjPStr*] any string
+** @param [w] str6 [AjPStr*] any string
 **
 ** @return [void]
 ******************************************************************************/
 
-static void java_tidy_command(AjPStr *uniq, AjPStr *cl, AjPStr *clemboss,
-			      AjPStr *dir, AjPStr *envi, AjPStr *prog)
+static void java_tidy_command(AjPStr *str1, AjPStr *str2, AjPStr *str3,
+			      AjPStr *str4, AjPStr *str5, AjPStr *str6)
 {
 
-    ajStrDel(uniq);
-    ajStrDel(cl);
-    ajStrDel(clemboss);
-    ajStrDel(dir);
-    ajStrDel(envi);
-    ajStrDel(prog);
+    ajStrDel(str1);
+    ajStrDel(str2);
+    ajStrDel(str3);
+    ajStrDel(str4);
+    ajStrDel(str5);
+    ajStrDel(str6);
 
     return;
 }
@@ -2266,12 +2666,12 @@ static void java_tidy_command2(AjPStr *uniq, AjPStr *cl, AjPStr *clemboss,
 
 static void java_tidy_command3(AjPStr *uniq, AjPStr *cl, AjPStr *clemboss,
 			       AjPStr *dir, AjPStr *envi, AjPStr *prog,
-			       char *buf, char *cuniq, int sockdes,
+			       char *buf, int *commpipe,
 			       int *outpipe, int *errpipe)
 {
     
-    close(sockdes);
-    unlink(cuniq);
+    close(commpipe[0]);
+    close(commpipe[1]);
     close(outpipe[0]);
     close(outpipe[1]);
     close(errpipe[0]);
@@ -2331,12 +2731,18 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_userAuth
     password = ajStrNew();
     home     = ajStrNew();
     envi     = ajStrNew();
+    outstd   = ajStrNew();
+    errstd   = ajStrNew();
     
     juser = (char *) (*env)->GetStringUTFChars(env,door,0);
     if(juser)
 	ajStrAssC(&username,juser);
     else
+    {
+	java_tidy_command(&username,&password,&home,&envi,&outstd,&errstd);
 	return (unsigned char)ajFalse;
+    }
+    
     (*env)->ReleaseStringUTFChars(env,door,juser);
 
 
@@ -2352,11 +2758,17 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_userAuth
     if(jenv)
 	ajStrAssC(&envi,jenv);
     else
+    {
+	java_tidy_command(&username,&password,&home,&envi,&outstd,&errstd);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,environment,jenv);
 
     if(!ajStrLen(username) || !ajStrLen(password) || !ajStrLen(envi))
+    {
+	java_tidy_command(&username,&password,&home,&envi,&outstd,&errstd);
 	return (unsigned char)ajFalse;
+    }
 
     ok = ajFalse;
     if(!java_jembossctl(COMM_AUTH,username,password,envi,NULL,NULL,&outstd,
@@ -2381,14 +2793,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_userAuth
     (*env)->SetObjectField(env,obj,field,estr);
 
 
-    
-    ajStrDel(&username);
-    ajStrDel(&password);
-    ajStrDel(&home);
-    ajStrDel(&envi);
-    ajStrDel(&outstd);
-    ajStrDel(&errstd);
-    
+    java_tidy_command(&username,&password,&home,&envi,&outstd,&errstd);    
+
 
     if(!ok)
 	return (unsigned char)ajFalse;
@@ -2396,6 +2802,164 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_userAuth
     return (unsigned char)ajTrue;
 }
 
+
+
+/* @func Ajax.forkBatch **************************************************
+**
+** Run an EMBOSS program detached
+** Loads outStd,errStd within java.
+**
+** @param [rw] env [JNIEnv*] java environment
+** @param [r] obj [jobject] java object
+** @param [r] door [jstring] username
+** @param [r] key [jstring] password
+** @param [r] environment [jstring] environment
+** @param [r] cline [jstring] command line
+** @param [r] direct [jstring] directory to create
+**
+** @return [jboolean] true if success
+** @@
+******************************************************************************/
+
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkBatch
+(JNIEnv *env, jobject obj, jstring door, jbyteArray key,
+ jstring environment, jstring cline, jstring direct)
+{
+    AjPStr username=NULL;
+    AjPStr password=NULL;
+    AjPStr envi=NULL;
+    AjPStr outstd=NULL;
+    AjPStr errstd=NULL;
+
+    jclass jvc = (*env)->GetObjectClass(env,obj);
+    jfieldID field;
+    jstring  ostr;
+    jstring  estr;
+    char   *juser=NULL;
+    char   *jpass=NULL;
+    char   *jenv =NULL;
+    char   *jcl =NULL;
+    char   *jdir =NULL;
+
+    AjPStr commandline=NULL;
+    AjPStr directory=NULL;
+    
+    AjBool ok=ajFalse;
+    jsize  plen = (*env)->GetArrayLength(env,key);
+    jbyte  *ca = (*env)->GetByteArrayElements(env,key,0);
+    int i;
+    
+    username = ajStrNew();
+    password = ajStrNew();
+    envi     = ajStrNew();
+    outstd   = ajStrNew();
+    errstd   = ajStrNew();
+
+    commandline = ajStrNew();    
+    directory   = ajStrNew();
+    
+    juser = (char *) (*env)->GetStringUTFChars(env,door,0);
+    if(juser)
+	ajStrAssC(&username,juser);
+    else
+    {
+	java_tidy_command(&username,&password,&envi,&commandline,
+			  &outstd,&errstd);
+	ajStrDel(&directory);
+	return (unsigned char)ajFalse;
+    }
+    (*env)->ReleaseStringUTFChars(env,door,juser);
+
+
+    if(!(jpass=(char *)malloc(plen+1)))
+    {
+	java_tidy_command(&username,&password,&envi,&commandline,
+			  &outstd,&errstd);
+	ajStrDel(&directory);
+	return (unsigned char)ajFalse;
+    }
+    bzero((void *)jpass,plen+1);
+    for(i=0;i<plen;++i)
+	jpass[i] = (char)ca[i];
+    ajStrAssC(&password,jpass);
+    (*env)->ReleaseByteArrayElements(env,key,ca,0);
+
+
+    jenv = (char *) (*env)->GetStringUTFChars(env,environment,0);
+    if(jenv)
+	ajStrAssC(&envi,jenv);
+    else
+    {
+	java_tidy_command(&username,&password,&envi,&commandline,
+			  &outstd,&errstd);
+	ajStrDel(&directory);
+	AJFREE(jpass);
+	return (unsigned char)ajFalse;
+    }
+    (*env)->ReleaseStringUTFChars(env,environment,jenv);
+
+
+    jcl = (char *) (*env)->GetStringUTFChars(env,cline,0);
+    if(jcl)
+	ajStrAssC(&commandline,jcl);
+    else
+    {
+	java_tidy_command(&username,&password,&envi,&commandline,
+			  &outstd,&errstd);
+	ajStrDel(&directory);
+	AJFREE(jpass);
+	return (unsigned char)ajFalse;
+    }
+    (*env)->ReleaseStringUTFChars(env,cline,jcl);
+
+    jdir = (char *) (*env)->GetStringUTFChars(env,direct,0);
+    if(jdir)
+	ajStrAssC(&directory,jdir);
+    else
+    {
+	java_tidy_command(&username,&password,&envi,&commandline,
+			  &outstd,&errstd);
+	ajStrDel(&directory);
+	AJFREE(jpass);
+	return (unsigned char)ajFalse;
+    }
+    (*env)->ReleaseStringUTFChars(env,direct,jdir);
+
+
+    if(!ajStrLen(username) || !ajStrLen(password) || !ajStrLen(envi))
+    {
+	java_tidy_command(&username,&password,&envi,&commandline,
+			  &outstd,&errstd);
+	ajStrDel(&directory);
+	AJFREE(jpass);
+	return (unsigned char)ajFalse;
+    }
+
+    ok = ajFalse;
+    if(!java_jembossctl(BATCH_FORK,username,password,envi,commandline,
+			directory,&outstd,&errstd,NULL,NULL))
+	ok = ajTrue;
+    
+
+    field = (*env)->GetFieldID(env,jvc,"outStd","Ljava/lang/String;");
+    ostr = (*env)->NewStringUTF(env,ajStrStr(outstd));
+    (*env)->SetObjectField(env,obj,field,ostr);
+
+    field = (*env)->GetFieldID(env,jvc,"errStd","Ljava/lang/String;");
+    estr = (*env)->NewStringUTF(env,ajStrStr(errstd));
+    (*env)->SetObjectField(env,obj,field,estr);
+
+
+    java_tidy_command(&username,&password,&envi,&commandline,
+		      &outstd,&errstd);
+    ajStrDel(&directory);
+    AJFREE(jpass);    
+
+    if(!ok)
+	return (unsigned char)ajFalse;
+    
+    return (unsigned char)ajTrue;
+}
 
 
 /* @func Ajax.forkEmboss **************************************************
@@ -2448,6 +3012,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkEmboss
     username = ajStrNew();
     password = ajStrNew();
     envi     = ajStrNew();
+    outstd   = ajStrNew();
+    errstd   = ajStrNew();
 
     commandline = ajStrNew();    
     directory   = ajStrNew();
@@ -2456,12 +3022,22 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkEmboss
     if(juser)
 	ajStrAssC(&username,juser);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&commandline,
+			  &outstd,&errstd);
+	ajStrDel(&directory);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,door,juser);
 
 
     if(!(jpass=(char *)malloc(plen+1)))
+    {
+	java_tidy_command(&username,&password,&envi,&commandline,
+			  &outstd,&errstd);
+	ajStrDel(&directory);
 	return (unsigned char)ajFalse;
+    }
     bzero((void *)jpass,plen+1);
     for(i=0;i<plen;++i)
 	jpass[i] = (char)ca[i];
@@ -2473,7 +3049,13 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkEmboss
     if(jenv)
 	ajStrAssC(&envi,jenv);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&commandline,
+			  &outstd,&errstd);
+	ajStrDel(&directory);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,environment,jenv);
 
 
@@ -2481,19 +3063,37 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkEmboss
     if(jcl)
 	ajStrAssC(&commandline,jcl);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&commandline,
+			  &outstd,&errstd);
+	ajStrDel(&directory);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,cline,jcl);
 
     jdir = (char *) (*env)->GetStringUTFChars(env,direct,0);
     if(jdir)
 	ajStrAssC(&directory,jdir);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&commandline,
+			  &outstd,&errstd);
+	ajStrDel(&directory);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,direct,jdir);
 
 
     if(!ajStrLen(username) || !ajStrLen(password) || !ajStrLen(envi))
+    {
+	java_tidy_command(&username,&password,&envi,&commandline,
+			  &outstd,&errstd);
+	ajStrDel(&directory);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
 
     ok = ajFalse;
     if(!java_jembossctl(EMBOSS_FORK,username,password,envi,commandline,
@@ -2510,16 +3110,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkEmboss
     (*env)->SetObjectField(env,obj,field,estr);
 
 
-    
-    ajStrDel(&username);
-    ajStrDel(&password);
-    ajStrDel(&envi);
-    ajStrDel(&outstd);
-    ajStrDel(&errstd);
-
-    ajStrDel(&commandline);
+    java_tidy_command(&username,&password,&envi,&commandline,
+		      &outstd,&errstd);
     ajStrDel(&directory);
-    
+    AJFREE(jpass);
 
     if(!ok)
 	return (unsigned char)ajFalse;
@@ -2575,6 +3169,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_makeDir
     username = ajStrNew();
     password = ajStrNew();
     envi     = ajStrNew();
+    outstd   = ajStrNew();
+    errstd   = ajStrNew();
 
     directory  = ajStrNew();
     
@@ -2582,12 +3178,20 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_makeDir
     if(juser)
 	ajStrAssC(&username,juser);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,door,juser);
 
 
     if(!(jpass=(char *)malloc(plen+1)))
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
 	return (unsigned char)ajFalse;
+    }
     bzero((void *)jpass,plen+1);
     for(i=0;i<plen;++i)
 	jpass[i] = (char)ca[i];
@@ -2598,21 +3202,33 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_makeDir
     if(jenv)
 	ajStrAssC(&envi,jenv);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,environment,jenv);
 
     if(!ajStrLen(username) || !ajStrLen(password) || !ajStrLen(envi))
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
 
     jdir = (char *) (*env)->GetStringUTFChars(env,direct,0);
     if(jdir)
 	ajStrAssC(&directory,jdir);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,direct,jdir);
-
-
-
 
     ok = ajFalse;
     if(!java_jembossctl(MAKE_DIRECTORY,username,password,envi,directory,NULL,
@@ -2629,14 +3245,9 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_makeDir
     (*env)->SetObjectField(env,obj,field,estr);
 
 
-    
-    ajStrDel(&username);
-    ajStrDel(&password);
-    ajStrDel(&envi);
-    ajStrDel(&outstd);
-    ajStrDel(&errstd);
-    
-    ajStrDel(&directory);
+    java_tidy_command(&username,&password,&envi,&directory,
+		      &outstd,&errstd);
+    AJFREE(jpass);
 
     if(!ok)
 	return (unsigned char)ajFalse;
@@ -2693,6 +3304,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delFile
     username = ajStrNew();
     password = ajStrNew();
     envi     = ajStrNew();
+    outstd   = ajStrNew();
+    errstd   = ajStrNew();
 
     file     = ajStrNew();
     
@@ -2700,12 +3313,20 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delFile
     if(juser)
 	ajStrAssC(&username,juser);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&file,
+			  &outstd,&errstd);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,door,juser);
 
 
     if(!(jpass=(char *)malloc(plen+1)))
+    {
+	java_tidy_command(&username,&password,&envi,&file,
+			  &outstd,&errstd);
 	return (unsigned char)ajFalse;
+    }
     bzero((void *)jpass,plen+1);
     for(i=0;i<plen;++i)
 	jpass[i] = (char)ca[i];
@@ -2717,17 +3338,32 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delFile
     if(jenv)
 	ajStrAssC(&envi,jenv);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&file,
+			  &outstd,&errstd);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,environment,jenv);
 
     if(!ajStrLen(username) || !ajStrLen(password) || !ajStrLen(envi))
+    {
+	java_tidy_command(&username,&password,&envi,&file,
+			  &outstd,&errstd);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
 
     jfil = (char *) (*env)->GetStringUTFChars(env,filename,0);
     if(jfil)
 	ajStrAssC(&file,jfil);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&file,
+			  &outstd,&errstd);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,filename,jfil);
 
 
@@ -2748,14 +3384,9 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delFile
     (*env)->SetObjectField(env,obj,field,estr);
 
 
-    
-    ajStrDel(&username);
-    ajStrDel(&password);
-    ajStrDel(&envi);
-    ajStrDel(&outstd);
-    ajStrDel(&errstd);
-    
-    ajStrDel(&file);
+    java_tidy_command(&username,&password,&envi,&file,
+		      &outstd,&errstd);
+    AJFREE(jpass);
 
     if(!ok)
 	return (unsigned char)ajFalse;
@@ -2811,6 +3442,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delDir
     username = ajStrNew();
     password = ajStrNew();
     envi     = ajStrNew();
+    outstd   = ajStrNew();
+    errstd   = ajStrNew();
 
     directory  = ajStrNew();
     
@@ -2818,12 +3451,20 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delDir
     if(juser)
 	ajStrAssC(&username,juser);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,door,juser);
 
 
     if(!(jpass=(char *)malloc(plen+1)))
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
 	return (unsigned char)ajFalse;
+    }
     bzero((void *)jpass,plen+1);
     for(i=0;i<plen;++i)
 	jpass[i] = (char)ca[i];
@@ -2835,20 +3476,33 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delDir
     if(jenv)
 	ajStrAssC(&envi,jenv);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,environment,jenv);
 
     if(!ajStrLen(username) || !ajStrLen(password) || !ajStrLen(envi))
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
 
     jdir = (char *) (*env)->GetStringUTFChars(env,direct,0);
     if(jdir)
 	ajStrAssC(&directory,jdir);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,direct,jdir);
-
-
 
 
     ok = ajFalse;
@@ -2866,14 +3520,9 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delDir
     (*env)->SetObjectField(env,obj,field,estr);
 
 
-    
-    ajStrDel(&username);
-    ajStrDel(&password);
-    ajStrDel(&envi);
-    ajStrDel(&outstd);
-    ajStrDel(&errstd);
-    
-    ajStrDel(&directory);
+    java_tidy_command(&username,&password,&envi,&directory,
+		      &outstd,&errstd);
+    AJFREE(jpass);
 
     if(!ok)
 	return (unsigned char)ajFalse;
@@ -2930,6 +3579,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listFiles
     username = ajStrNew();
     password = ajStrNew();
     envi     = ajStrNew();
+    outstd   = ajStrNew();
+    errstd   = ajStrNew();
 
     directory  = ajStrNew();
     
@@ -2937,12 +3588,20 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listFiles
     if(juser)
 	ajStrAssC(&username,juser);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,door,juser);
 
 
     if(!(jpass=(char *)malloc(plen+1)))
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
 	return (unsigned char)ajFalse;
+    }
     bzero((void *)jpass,plen+1);
     for(i=0;i<plen;++i)
 	jpass[i] = (char)ca[i];
@@ -2955,20 +3614,33 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listFiles
     if(jenv)
 	ajStrAssC(&envi,jenv);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,environment,jenv);
 
     if(!ajStrLen(username) || !ajStrLen(password) || !ajStrLen(envi))
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
 
     jdir = (char *) (*env)->GetStringUTFChars(env,direct,0);
     if(jdir)
 	ajStrAssC(&directory,jdir);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,direct,jdir);
-
-
 
 
     ok = ajFalse;
@@ -2986,14 +3658,9 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listFiles
     (*env)->SetObjectField(env,obj,field,estr);
 
 
-    
-    ajStrDel(&username);
-    ajStrDel(&password);
-    ajStrDel(&envi);
-    ajStrDel(&outstd);
-    ajStrDel(&errstd);
-    
-    ajStrDel(&directory);
+    java_tidy_command(&username,&password,&envi,&directory,
+		      &outstd,&errstd);
+    AJFREE(jpass);
 
     if(!ok)
 	return (unsigned char)ajFalse;
@@ -3050,6 +3717,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listDirs
     username = ajStrNew();
     password = ajStrNew();
     envi     = ajStrNew();
+    outstd   = ajStrNew();
+    errstd   = ajStrNew();
 
     directory  = ajStrNew();
     
@@ -3057,11 +3726,19 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listDirs
     if(juser)
 	ajStrAssC(&username,juser);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,door,juser);
 
     if(!(jpass=(char *)malloc(plen+1)))
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
 	return (unsigned char)ajFalse;
+    }
     bzero((void *)jpass,plen+1);
     for(i=0;i<plen;++i)
 	jpass[i] = (char)ca[i];
@@ -3073,20 +3750,33 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listDirs
     if(jenv)
 	ajStrAssC(&envi,jenv);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,environment,jenv);
 
     if(!ajStrLen(username) || !ajStrLen(password) || !ajStrLen(envi))
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
 
     jdir = (char *) (*env)->GetStringUTFChars(env,direct,0);
     if(jdir)
 	ajStrAssC(&directory,jdir);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&directory,
+			  &outstd,&errstd);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,direct,jdir);
-
-
 
 
     ok = ajFalse;
@@ -3104,14 +3794,9 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listDirs
     (*env)->SetObjectField(env,obj,field,estr);
 
 
-    
-    ajStrDel(&username);
-    ajStrDel(&password);
-    ajStrDel(&envi);
-    ajStrDel(&outstd);
-    ajStrDel(&errstd);
-    
-    ajStrDel(&directory);
+    java_tidy_command(&username,&password,&envi,&directory,
+		      &outstd,&errstd);
+    AJFREE(jpass);
 
     if(!ok)
 	return (unsigned char)ajFalse;
@@ -3177,6 +3862,8 @@ JNIEXPORT jbyteArray JNICALL Java_org_emboss_jemboss_parser_Ajax_getFile
     username = ajStrNew();
     password = ajStrNew();
     envi     = ajStrNew();
+    outstd   = ajStrNew();
+    errstd   = ajStrNew();
 
     file     = ajStrNew();
     
@@ -3186,7 +3873,11 @@ JNIEXPORT jbyteArray JNICALL Java_org_emboss_jemboss_parser_Ajax_getFile
     (*env)->ReleaseStringUTFChars(env,door,juser);
 
     if(!(jpass=(char *)malloc(plen+1)))
+    {
+	java_tidy_command(&username,&password,&envi,&file,
+			  &outstd,&errstd);
 	return NULL;
+    }
     bzero((void *)jpass,plen+1);
     for(i=0;i<plen;++i)
 	jpass[i] = (char)ca[i];
@@ -3250,32 +3941,27 @@ JNIEXPORT jbyteArray JNICALL Java_org_emboss_jemboss_parser_Ajax_getFile
     (*env)->SetObjectField(env,obj,field,estr);
 
 
-    field = (*env)->GetStaticFieldID(env,jvc,"prnt","I");
-    (*env)->SetStaticIntField(env,jvc,field,prnt);
+    field = (*env)->GetFieldID(env,jvc,"prnt","I");
+    (*env)->SetIntField(env,obj,field,prnt);
 
 
-    field = (*env)->GetStaticFieldID(env,jvc,"size","I");
-    (*env)->SetStaticIntField(env,jvc,field,size);
+    field = (*env)->GetFieldID(env,jvc,"size","I");
+    (*env)->SetIntField(env,obj,field,size);
 
 
 
-    field = (*env)->GetStaticFieldID(env,jvc,"fileok","I");
-    (*env)->SetStaticIntField(env,jvc,field,fileok);
+    field = (*env)->GetFieldID(env,jvc,"fileok","I");
+    (*env)->SetIntField(env,obj,field,fileok);
 
     jb = (*env)->NewByteArray(env,size);
     (*env)->SetByteArrayRegion(env,jb,0,size,(jbyte *)fbuf);
 
 
-    
-    ajStrDel(&username);
-    ajStrDel(&password);
-    ajStrDel(&envi);
-    ajStrDel(&outstd);
-    ajStrDel(&errstd);
-    
-    ajStrDel(&file);
-    AJFREE(fbuf);
 
+    java_tidy_command(&username,&password,&envi,&file,
+		      &outstd,&errstd);
+    AJFREE(jpass);
+    AJFREE(fbuf);
 
     return jb;
 }
@@ -3332,8 +4018,9 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_putFile
 
 
     size = len;
-    if(!(fbuf=(unsigned char *)malloc(size)))
-	return (unsigned char)ajFalse;
+    if(size)
+	if(!(fbuf=(unsigned char *)malloc(size)))
+	    return (unsigned char)ajFalse;
     for(i=0;i<size;++i)
 	fbuf[i] = (unsigned char)ba[i];
     (*env)->ReleaseByteArrayElements(env,arr,ba,0);
@@ -3341,6 +4028,8 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_putFile
     username = ajStrNew();
     password = ajStrNew();
     envi     = ajStrNew();
+    outstd   = ajStrNew();
+    errstd   = ajStrNew();
 
     file     = ajStrNew();
     
@@ -3348,11 +4037,23 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_putFile
     if(juser)
 	ajStrAssC(&username,juser);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&file,
+			  &outstd,&errstd);
+	if(size)
+	    AJFREE(fbuf);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,door,juser);
 
     if(!(jpass=(char *)malloc(plen+1)))
+    {
+	java_tidy_command(&username,&password,&envi,&file,
+			  &outstd,&errstd);
+	if(size)
+	    AJFREE(fbuf);
 	return (unsigned char)ajFalse;
+    }
     bzero((void *)jpass,plen+1);
     for(i=0;i<plen;++i)
 	jpass[i] = (char)ca[i];
@@ -3364,17 +4065,38 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_putFile
     if(jenv)
 	ajStrAssC(&envi,jenv);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&file,
+			  &outstd,&errstd);
+	if(size)
+	    AJFREE(fbuf);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,environment,jenv);
 
     if(!ajStrLen(username) || !ajStrLen(password) || !ajStrLen(envi))
+    {
+	java_tidy_command(&username,&password,&envi,&file,
+			  &outstd,&errstd);
+	if(size)
+	    AJFREE(fbuf);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
 
     jfil = (char *) (*env)->GetStringUTFChars(env,filename,0);
     if(jfil)
 	ajStrAssC(&file,jfil);
     else
+    {
+	java_tidy_command(&username,&password,&envi,&file,
+			  &outstd,&errstd);
+	if(size)
+	    AJFREE(fbuf);
+	AJFREE(jpass);
 	return (unsigned char)ajFalse;
+    }
     (*env)->ReleaseStringUTFChars(env,filename,jfil);
 
 
@@ -3395,14 +4117,11 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_putFile
 
     if(size)
 	AJFREE(fbuf);
-    
-    ajStrDel(&username);
-    ajStrDel(&password);
-    ajStrDel(&envi);
-    ajStrDel(&outstd);
-    ajStrDel(&errstd);
-    
-    ajStrDel(&file);
+
+    java_tidy_command(&username,&password,&envi,&file,
+		      &outstd,&errstd);
+    AJFREE(jpass);
+
 
     if(!ok)
 	return (unsigned char)ajFalse;
@@ -3410,5 +4129,362 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_putFile
     return (unsigned char)ajTrue;
 }
 
+
+
+/* @funcstatic java_pipe_write ************************************************
+**
+** Write a byte stream down a file desriptor (unblocked)
+**
+** @param [w] tchan [int] file descriptor
+** @param [r] buf [char *] buffer to write
+** @param [r] n [int] number of bytes to write
+** @param [r] seconds [int] time-out
+** @param [w] errstd [AjPStr*] stderr
+**
+** @return [int] 0=success  -1=failure
+** @@
+******************************************************************************/
+
+static int java_pipe_write(int tchan, char *buf, int n, int seconds,
+			   AjPStr *errstd)
+{
+#ifdef HAVE_POLL
+    struct pollfd ufds;
+    unsigned int  nfds;
+#else
+    fd_set fdr;
+    fd_set fdw;
+    struct timeval tfd;
 #endif
 
+    int  written;
+    int  sent=0;
+    int  ret=0;
+    char *p;
+    unsigned long block=0;
+    long then = 0;
+    long now  = 0;
+    struct timeval tv;
+    
+    gettimeofday(&tv,NULL);
+    then = tv.tv_sec;
+    
+
+    block = 1;
+    if(java_block(tchan,block)==-1)
+    {
+	ajFmtPrintAppS(errstd,"Cannot unblock 9a. %d\n",errno);
+	return -1;
+    }
+    
+
+    p = buf;
+    written = 0;
+
+#ifdef HAVE_POLL
+    while(written!=n)
+    {
+	gettimeofday(&tv,NULL);
+	now = tv.tv_sec;
+	if(now-then >= seconds)
+	{
+	    ajStrAppC(errstd,"java_pipe_write timeout\n");
+	    return -1;
+	}
+
+	/* Check pipe is writeable */
+
+	ufds.fd = tchan;
+	ufds.events = POLLOUT;
+	nfds = 1;
+	ret=poll(&ufds,nfds,1);
+
+	if(ret && ret!=-1 && (ufds.revents & POLLOUT))
+	{
+	    while((sent=write(tchan,p,n-(p-buf)))==-1 && errno==EINTR);
+	    if(sent == -1)
+	    {
+		ajStrAppC(errstd,"java_pipe_write send error\n");
+		return -1;
+	    }
+	    written += sent;
+	    p += sent;
+	    gettimeofday(&tv,NULL);
+	    then = tv.tv_sec;
+	}
+    }
+#else
+    while(written!=n)
+    {
+	gettimeofday(&tv,NULL);
+	now = tv.tv_sec;
+	if(now-then >= seconds)
+	{
+	    ajStrAppC(errstd,"java_pipe_write timeout\n");
+	    return -1;
+	}
+
+	/* Check pipe is writeable */
+	tfd.tv_sec  = 0;
+	tfd.tv_usec = 1000;
+	FD_ZERO(&fdw);
+	FD_SET(tchan,&fdw);
+	fdr = fdw;
+	
+	ret = select(tchan+1,&fdr,&fdw,NULL,&tfd);
+
+	if(ret && ret!=-1 && FD_ISSET(tchan,&fdw))
+	{
+	    while((sent=write(tchan,p,n-(p-buf)))==-1 && errno==EINTR);
+	    if(sent == -1)
+	    {
+		ajStrAppC(errstd,"java_pipe_write send error\n");
+		return -1;
+	    }
+	    written += sent;
+	    p += sent;
+	    gettimeofday(&tv,NULL);
+	    then = tv.tv_sec;
+	}
+    }
+#endif
+
+    block = 0;
+    if(java_block(tchan,block)==-1)
+    {
+	ajFmtPrintAppS(errstd,"Cannot block 10a. %d\n",errno);
+	return -1;
+    }
+
+    return 0;
+}
+
+
+
+/* @funcstatic java_pipe_read ************************************************
+**
+** Read a byte stream from a file desriptor (unblocked)
+**
+** @param [w] rchan [int] file descriptor
+** @param [r] buf [char *] buffer for read
+** @param [r] n [int] number of bytes to read
+** @param [r] seconds [int] time-out
+** @param [w] errstd [AjPStr*] stderr
+**
+** @return [int] 0=success  -1=failure
+** @@
+******************************************************************************/
+
+static int java_pipe_read(int rchan, char *buf, int n, int seconds,
+			  AjPStr *errstd)
+{
+#ifdef HAVE_POLL
+    struct pollfd ufds;
+    unsigned int  nfds;
+#else
+    fd_set fdr;
+    fd_set fdw;
+    struct timeval tfd;
+#endif
+
+    int  sum;
+    int  got=0;
+    int  ret=0;
+    char *p;
+    unsigned long block=0;
+    long then = 0;
+    long now  = 0;
+    struct timeval tv;
+    
+    gettimeofday(&tv,NULL);
+    then = tv.tv_sec;
+
+
+    block = 1;
+    if(java_block(rchan,block)==-1)
+    {
+	ajFmtPrintAppS(errstd,"Cannot unblock 11a. %d\n",errno);
+	return -1;
+    }
+
+    p = buf;
+    sum = 0;
+
+#ifdef HAVE_POLL
+    while(sum!=n)
+    {
+	gettimeofday(&tv,NULL);
+	now = tv.tv_sec;
+	if(now-then >= seconds)
+	{
+	    ajStrAppC(errstd,"java_pipe_read timeout\n");
+	    return -1;
+	}
+
+	/* Check pipe is readable */
+	ufds.fd = rchan;
+	ufds.events = POLLIN | POLLPRI;
+	nfds = 1;
+
+	ret=poll(&ufds,nfds,1);
+
+	if(ret && ret!=-1)
+	{
+	    if((ufds.revents & POLLIN) || (ufds.revents & POLLPRI))
+	    {
+		while((got=read(rchan,p,n-(p-buf)))==-1 && errno==EINTR);
+		if(got == -1)
+		{
+		    ajStrAppC(errstd,"java_pipe_read read error\n");
+		    return -1;
+		}
+		sum += got;
+		p += got;
+		gettimeofday(&tv,NULL);
+		then = tv.tv_sec;
+	    }
+	}
+	
+    }
+#else
+    while(sum!=n)
+    {
+	gettimeofday(&tv,NULL);
+	now = tv.tv_sec;
+	if(now-then >= seconds)
+	{
+	    ajStrAppC(errstd,"java_pipe_read timeout\n");
+	    return -1;
+	}
+
+	/* Check pipe is readable */
+	tfd.tv_sec  = 0;
+	tfd.tv_usec = 1000;
+	FD_ZERO(&fdr);
+	FD_SET(rchan,&fdr);
+	fdw = fdr;
+	
+	ret = select(rchan+1,&fdr,&fdw,NULL,&tfd);
+
+	if(ret && ret!=-1 && FD_ISSET(rchan,&fdr))
+	{
+	    while((got=read(rchan,p,n-(p-buf)))==-1 && errno==EINTR);
+	    if(got == -1)
+	    {
+		ajStrAppC(errstd,"java_pipe_read read error\n");
+		return -1;
+	    }
+	    sum += got;
+	    p += got;
+	    gettimeofday(&tv,NULL);
+	    then = tv.tv_sec;
+	}
+    }
+#endif
+
+    block = 0;
+    if(java_block(rchan,block)==-1)
+    {
+	ajFmtPrintAppS(errstd,"Cannot unblock 12a. %d\n",errno);
+	return -1;
+    }
+
+    return 0;
+}
+
+
+
+/* @funcstatic java_snd ************************************************
+**
+** Mimic socket write using pipes
+**
+** @param [w] tchan [int] file descriptor
+** @param [r] buf [char *] buffer to write
+** @param [r] len [int] number of bytes to write
+** @param [w] errstd [AjPStr*] stderr
+**
+** @return [int] 0=success  -1=failure
+** @@
+******************************************************************************/
+
+static int java_snd(int tchan,char *buf,int len,AjPStr *errstd)
+{
+
+    if(java_pipe_write(tchan,(char *)&len,sizeof(int),TIMEOUT,errstd)==-1)
+    {
+	ajStrAppC(errstd,"java_snd error\n");
+	return -1;
+    }
+    if(java_pipe_write(tchan,buf,len,TIMEOUT,errstd)==-1)
+    {
+	ajStrAppC(errstd,"java_snd error\n");
+	return -1;
+    }
+
+    return 0;
+}
+
+/* @funcstatic java_rcv ************************************************
+**
+** Mimic socket read using pipes
+**
+** @param [r] rchan [int] file descriptor
+** @param [r] buf [char *] buffer to write
+** @param [w] errstd [AjPStr*] stderr
+**
+** @return [int] 0=success  -1=failure
+** @@
+******************************************************************************/
+
+static int java_rcv(int rchan, char *buf, AjPStr *errstd)
+{
+    int len;
+    
+    if(java_pipe_read(rchan,(char *)&len,sizeof(int),TIMEOUT,errstd)==-1)
+    {
+	ajStrAppC(errstd,"java_rcv error\n");
+	return -1;
+    }
+    if(java_pipe_read(rchan,buf,len,TIMEOUT,errstd)==-1)
+    {
+	ajStrAppC(errstd,"java_rcv error\n");
+	return -1;
+    }
+
+    return len;
+}
+
+
+
+/* @funcstatic java_block ************************************************
+**
+** File descriptor block/unblock
+**
+** @param [r] chan [int] file descriptor
+** @param [r] flag [unsigned long] block=1 unblock=0
+**
+** @return [int] 0=success  -1=failure
+** @@
+******************************************************************************/
+
+static int java_block(int chan, unsigned long flag)
+{
+    
+    if(ioctl(chan,FIONBIO,&flag)==-1)
+    {
+#ifdef __sgi
+	if(errno==ENOSYS)
+	    return 0;
+#endif
+#ifdef __hpux
+	if(errno==ENOTTY)
+	    return 0;
+#endif
+	return -1;
+    }
+
+    return 0;
+}
+
+
+#endif

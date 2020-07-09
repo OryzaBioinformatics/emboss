@@ -25,6 +25,7 @@ extern "C" {
 #define LIST_DIRS      7
 #define GET_FILE       8
 #define PUT_FILE       9
+#define BATCH_FORK     10
 
 JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqType 
     (JNIEnv *, jobject, jstring);
@@ -63,6 +64,10 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
 JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_userAuth
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment);
+
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkBatch
+(JNIEnv *env, jobject obj, jstring door, jbyteArray key,
+ jstring environment, jstring cline, jstring direct);
 
 JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_forkEmboss
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
