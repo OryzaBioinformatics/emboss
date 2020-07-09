@@ -1,0 +1,41 @@
+# recode application 
+#
+appl: recode [
+          doc: "Find and remove restriction sites but maintain the same translation"
+          groups: "DNA: sequence features, restriction enzymes, site directed mutagenesis"
+]
+
+
+sequence: seq [
+	param: Y 
+        info: "Nucleic acid sequence"
+]
+
+
+string: enzymes [ 
+	req: Y 
+	def: all 
+	info: "Comma separated enzyme list" 
+]
+ 
+  
+bool: sshow [ 
+	req: N 
+	def: N 
+	info: "Display untranslated sequence" 
+]
+
+
+bool: tshow [ 
+	req: N 
+	def: N 
+	info: "Display translated sequence" 
+]
+
+
+outfile: outf [ 
+	param: Y 
+        info: "Results file name"
+]
+
+
