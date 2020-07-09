@@ -34,14 +34,14 @@ appl: diffseq [
         opt: Y
 	def: "$(asequence.name).diffgff"
         info: "Feature file for output asequence"
-        help: "File for output of first sequence's normal tab delimted gff's"
+        help: "File for output of first sequence's normal tab delimited gff's"
   ]
 
   featout: bfeatout [
         opt: Y
 	def: "$(bsequence.name).diffgff"
         info: "Feature file for output bsequence"
-        help: "File for output of second sequence's normal tab delimted gff's"
+        help: "File for output of second sequence's normal tab delimited gff's"
   ]
 
   bool: columns [

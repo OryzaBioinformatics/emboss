@@ -41,18 +41,18 @@ void henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx, float **sub,
 int main (int argc, char * argv[])
 {
 
-    AjPSeqset seqset;
-    AjPFile   outf;
-    AjPStr    name;
-    AjPStr    cons;
+    AjPSeqset seqset=NULL;
+    AjPFile   outf=NULL;
+    AjPStr    name=NULL;
+    AjPStr    cons=NULL;
     
     int       thresh;
     char *p;
     AjPStr *type;
 
     float **sub=NULL;
-    AjPMatrixf imtx=0;
-    AjPSeqCvt cvt=0;
+    AjPMatrixf imtx=NULL;
+    AjPSeqCvt cvt=NULL;
     float gapopen;
     float gapextend;
     
@@ -73,8 +73,8 @@ int main (int argc, char * argv[])
     gapextend = ajRoundF(gapextend, 8);
 
     p = ajStrStr(*type);
-    cons = ajStrNewC("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-    ajStrAssC(&cons,"");
+    cons = ajStrNewC("");
+
     
     if(*p=='F') simple_matrix(seqset,outf,name,thresh);
     if(*p=='G') gribskov_profile(seqset,sub,outf,name,thresh,
@@ -232,6 +232,7 @@ void gribskov_profile(AjPSeqset seqset, float **sub,
     cvt = ajMatrixfCvt(imtx);
 
 
+
     /* Set gaps to be maximum length of gap that can occur
      * including that position
      */
@@ -242,12 +243,17 @@ void gribskov_profile(AjPSeqset seqset, float **sub,
 	for(j=0;j<nseqs;++j)
 	{
 	    p=ajSeqsetSeq(seqset,j);
-	    if(ajAZToInt(p[i])!=27) continue; /* if not a gap */
+	    if(i>=strlen(p))
+		continue;
+	    if(ajAZToInt(p[i])!=27)	  /* if not a gap */
+		continue;
 	    pos = i;
-	    while(pos>-1 && ajAZToInt(p[pos])==27) --pos;
+	    while(pos>-1 && ajAZToInt(p[pos])==27)
+		--pos;
 	    start = ++pos;
 	    pos=i;
-	    while(pos<mlen && ajAZToInt(p[pos])==27) ++pos;
+	    while(pos<mlen && ajAZToInt(p[pos])==27)
+		++pos;
 	    end = pos-1;
 	    gsum = AJMAX(gsum, (end-start)+1);
 	}
@@ -284,6 +290,8 @@ void gribskov_profile(AjPSeqset seqset, float **sub,
 	for(j=0;j<nseqs;++j)
 	{
 	    p=ajSeqsetSeq(seqset,j);
+	    if(i>=strlen(p))
+		continue;
 	    weights[i][ajAZToInt(p[i])] += ajSeqsetWeight(seqset,j);
 	}
 
@@ -377,6 +385,10 @@ void gribskov_profile(AjPSeqset seqset, float **sub,
     AJFREE (weights);
 
     AJFREE (gaps);
+
+    ajMatrixfDel(&imtx);
+    
+
     return;
 }
 
@@ -430,12 +442,17 @@ void henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx, float **sub,
 	for(j=0;j<nseqs;++j)
 	{
 	    p=ajSeqsetSeq(seqset,j);
-	    if(ajAZToInt(p[i])!=27) continue; /* if not a gap */
+	    if(i>=strlen(p))
+		continue;
+	    if(ajAZToInt(p[i])!=27)
+		continue; /* if not a gap */
 	    pos = i;
-	    while(pos>-1 && ajAZToInt(p[pos])==27) --pos;
+	    while(pos>-1 && ajAZToInt(p[pos])==27)
+		--pos;
 	    start = ++pos;
 	    pos=i;
-	    while(pos<mlen && ajAZToInt(p[pos])==27) ++pos;
+	    while(pos<mlen && ajAZToInt(p[pos])==27)
+		++pos;
 	    end = pos-1;
 	    gsum = AJMAX(gsum, (end-start)+1);
 	}
@@ -471,6 +488,8 @@ void henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx, float **sub,
 	for(j=0;j<nseqs;++j)
 	{
 	    p=ajSeqsetSeq(seqset,j);
+	    if(i>=strlen(p))
+		continue;
 	    weights[i][ajAZToInt(p[i])] += ajSeqsetWeight(seqset,j);
 	}
 

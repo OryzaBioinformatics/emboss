@@ -48,7 +48,7 @@ typedef struct {
     PLINT xmin, xmax, xlen;
     PLINT ymin, ymax, ylen;
 
-    FPOS_T lp_offset, toc_offset;
+    long lp_offset, toc_offset;
 } PLmDev;
 
 /* Function prototypes */
@@ -272,7 +272,7 @@ plD_bop_plm(PLStream *pls)
 {
     PLmDev *dev = (PLmDev *) pls->dev;
     U_CHAR c = (U_CHAR) BOP;
-    FPOS_T cp_offset=0, fwbyte_offset=0, bwbyte_offset=0;
+    long cp_offset=0, fwbyte_offset=0, bwbyte_offset=0;
     FILE *file = pls->OutFile;
 
     dbug_enter("plD_bop_plm");
@@ -285,7 +285,7 @@ plD_bop_plm(PLStream *pls)
 /* If writing to a file, find out where we are */
 
     if (pls->output_type == 0) {
-	if (pl_fgetpos(file, &cp_offset))
+	if ((cp_offset=ftell(file))==-1)
 	    plexit("plD_bop_plm: fgetpos call failed");
 
     /* Seek back to previous page header and write forward byte offset. */
@@ -298,11 +298,11 @@ plD_bop_plm(PLStream *pls)
 		    "Location: %d, seeking to: %d\n",
 		    cp_offset, dev->lp_offset);
 	    fwbyte_offset = dev->lp_offset + 7;
-	    if (pl_fsetpos(file, &fwbyte_offset))
+	    if (!fseek(file,fwbyte_offset,0))
 		plexit("plD_bop_plm: fsetpos call failed");
 
 #ifdef DEBUG
-	    if (pl_fgetpos(file, &fwbyte_offset))
+	    if ((fwbyte_offset=ftell(file))==-1)
 		plexit("plD_bop_plm: fgetpos call failed");
 
 	    pldebug("plD_bop_plm",
@@ -313,14 +313,14 @@ plD_bop_plm(PLStream *pls)
 	    fflush(file);
 
 #ifdef DEBUG
-	    if (pl_fsetpos(file, &fwbyte_offset))
+	    if (!fseek(file,fwbyte_offset,0))
 		plexit("plD_bop_plm: fsetpos call failed");
 
 	    plm_rd(pdf_rd_4bytes(pls->pdfs, &foo));
 	    pldebug("plD_bop_plm", "Value read as: %d\n", foo);
 #endif
 
-	    if (pl_fsetpos(file, &cp_offset))
+	    if (!fseek(file,cp_offset,0))
 		plexit("plD_bop_plm: fsetpos call failed");
 	}
     }
@@ -339,13 +339,13 @@ plD_bop_plm(PLStream *pls)
 
     if (pls->output_type == 0) {
 	if (dev->toc_offset > 0) {
-	    if (pl_fsetpos(file, &dev->toc_offset))
+	    if (!fseek(file,dev->toc_offset,0))
 		plexit("plD_bop_plm: fsetpos call failed");
 
 	    plm_wr( pdf_wr_header(pls->pdfs, "pages") );
 	    plm_wr( pdf_wr_2bytes(pls->pdfs, (U_SHORT) pls->page) );
 
-	    if (pl_fsetpos(file, &cp_offset))
+	    if (!fseek(file,cp_offset,0))
 		plexit("plD_bop_plm: fsetpos call failed");
 	}
     }
@@ -535,7 +535,7 @@ WriteHeader(PLStream *pls)
 /* Write table of contents info.  Right now only number of pages. */
 /* The order here is critical */
 
-    if (pl_fgetpos(file, &dev->toc_offset))
+    if ((dev->toc_offset=ftell(file))==-1)
 	plexit("WriteHeader: fgetpos call failed");
 
     plm_wr( pdf_wr_header(pls->pdfs, "pages") );

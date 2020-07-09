@@ -14,14 +14,35 @@ appl: water [
         protein: $(sequencea.protein)
   ]
 
- float: gapopen [ req: Y info: "Gap opening penalty" min: 1.0 max: 100.0
-                  def: "@($(sequencea.protein)? 10.0 : 10.0)"
-                  expect: "10.0 for any sequence"
+ float: gapopen [
+	req: Y
+	info: "Gap opening penalty"
+	min: 1.0
+	max: 100.0
+	def: "@($(sequencea.protein)? 10.0 : 10.0)"
+	expect: "10.0 for any sequence"
+	help: "The gap open penalty is the score taken away when a gap
+is created.  The best value depends on the choice of comparison matrix. 
+The default value assumes you are using the EBLOSUM62 matrix for protein
+sequences, and the EDNAMAT matrix for nucleotide sequences."
   ]
 
- float: gapextend [ req: Y info: "Gap extension penalty" min: 0.1 max: 10.0
-                  def: "@($(sequencea.protein)? 0.5 : 0.5)"
-                  expect: "0.5 for any sequence"
+ float: gapextend [
+	req: Y
+	info: "Gap extension penalty"
+	min: 0.1
+	max: 10.0
+	def: "@($(sequencea.protein)? 0.5 : 0.5)"
+	expect: "0.5 for any sequence"
+	help: "The gap extension, penalty is added to the standard gap
+penalty for each base or residue in the gap.  This is how long gaps are
+penalized.  Usually you will expect a few long gaps rather than many
+short gaps, so the gap extension penalty should be lower than the gap
+penalty.  An exception is where one or both sequences are single reads
+with possible sequencing errors in which case you would expect many
+single base gaps.  You can get this result by setting the gap open
+penalty to zero (or very low) and using the gap extension penalty to
+control gap scoring."
    ]
 
  outfile: outfile [param: Y ]
@@ -30,4 +51,6 @@ appl: water [
 	optional: Y
 	def: "N"
 	info: "Show internals"
+	help: "Show debugging information on the internal state of the
+search."
   ]

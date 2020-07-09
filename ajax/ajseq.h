@@ -72,6 +72,7 @@ void         ajSeqCompOnly (AjPSeq thys);
 void         ajSeqCompOnlyStr (AjPStr* thys);
 void         ajSeqCount (AjPStr thys, int *b);
 unsigned int ajSeqCrc( AjPStr seq );
+void         ajSeqCvtDel (AjPSeqCvt* thys);
 int          ajSeqCvtK (AjPSeqCvt thys, char ch);
 int          ajSeqCvtLen (AjPSeqCvt thys);
 AjPSeqCvt    ajSeqCvtNew (char* bases);

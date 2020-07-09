@@ -34,6 +34,7 @@ int       ajMatrixSize (AjPMatrix thys);
 float**    ajMatrixfArray (AjPMatrixf thys);
 char       ajMatrixfChar (AjPMatrixf thys, int i);
 AjPSeqCvt  ajMatrixfCvt (AjPMatrixf thys);
+AjPMatrixf ajMatrixfDel (AjPMatrixf *thys);
 AjPStr     ajMatrixfName (AjPMatrixf thys);
 AjPMatrixf ajMatrixfNew (char* codes, AjPStr filename);
 AjBool     ajMatrixfSeqNum (AjPMatrixf thys, AjPSeq seq, AjPStr* numseq);

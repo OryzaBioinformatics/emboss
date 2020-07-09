@@ -56,8 +56,46 @@ Smith-Waterman local alignment
     Description
 </H2>
 
-Uses the smith-waterman algorithm (modified for speed enhancments) to
-    calculate the local alignment.  
+<b>water</b> uses the Smith-Waterman algorithm (modified for speed
+enhancments) to calculate the local alignment.
+<P>
+
+The Smith-Waterman algorithm is a member of the class of algorithms
+that can calculate the best score and local alignment in the order of mn
+steps, (where 'n' and 'm' are the lengths of the two sequences).  These
+dynamic programming algorithms were first developed for protein sequence
+comparison by Smith and Waterman, though similar methods were
+independently devised during the late 1960's and early 1970's for use in
+the fields of speech processing and computer science. 
+<P>
+
+A local alignment searches for regions of local similarity between two
+sequences and need not include the entire length of the sequences. 
+Local alignment methods are very useful for scanning databases or other
+circumsatnces when you wish to find matches between small regions of
+sequences, for example between protein domains. 
+<P>
+
+Dynamic programming methods ensure
+the optimal local alignment by exploring all possible alignments and
+choosing the best.  It does this by reading in a scoring matrix that
+contains values for every possible residue or nucleotide match.  <b>water</b>
+finds an alignment with the maximum possible score where the score of an
+alignment is equal to the sum of the matches taken from the scoring
+matrix. 
+<P>
+
+An important problem is the treatment of gaps, i.e., spaces inserted to
+optimise the alignment score.  A penalty is subtracted from the score
+for each gap opened (the 'gap open' penalty) and a penalty is subtracted
+from the score for the total number of gap spaces multiplied by a cost
+(the 'gap extension' penalty). 
+<P>
+
+Typically, the cost of extending a gap is set to be 5-10 times lower
+than the cost for opening a gap. 
+<P>
+
 <H2>
     Usage
 </H2>
@@ -71,28 +109,6 @@ Here is a sample session with water.
 Gap opening penalty [10.0]: 
 Gap extension penalty [0.5]: 
 Output file [hba_human.water]: 
-
-% more hba_human.water
-
-Local: HBA_HUMAN vs HBB_HUMAN
-Score: 293.50
-
-HBA_HUMAN       2     LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF 46   
-                      |:| :|: | | ||||  :  | | ||| |: : :| |: :|  |
-HBB_HUMAN       3     LTPEEKSAVTALWGKV..NVDEVGGEALGRLLVVYPWTQRFFESF 45   
-
-HBA_HUMAN       47    .DLS.....HGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSD 85   
-                       |||      |: :|| |||||  | :: :||:|::    : ||:
-HBB_HUMAN       46    GDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSE 90   
-
-HBA_HUMAN       86    LHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLA 130  
-                      ||  || ||| ||:|| : |:  || |   |||| | |:  | :|
-HBB_HUMAN       91    LHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVA 135  
-
-HBA_HUMAN       131   SVSTVLTSKY                                    140  
-                       |:  |  ||
-HBB_HUMAN       136   GVANALAHKY                                    145  
-
 </pre>
 
 
@@ -113,13 +129,32 @@ IT IS DONE FOR YOU.
    Mandatory qualifiers:
   [-sequencea]         sequence   Sequence USA
   [-seqall]            seqall     Sequence database USA
-   -gapopen            float      Gap opening penalty
-   -gapextend          float      Gap extension penalty
+   -gapopen            float      The gap open penalty is the score taken away
+                                  when a gap is created. The best value
+                                  depends on the choice of comparison matrix.
+                                  The default value assumes you are using the
+                                  EBLOSUM62 matrix for protein sequences, and
+                                  the EDNAMAT matrix for nucleotide sequences.
+   -gapextend          float      The gap extension, penalty is added to the
+                                  standard gap penalty for each base or
+                                  residue in the gap. This is how long gaps
+                                  are penalized. Usually you will expect a few
+                                  long gaps rather than many short gaps, so
+                                  the gap extension penalty should be lower
+                                  than the gap penalty. An exception is where
+                                  one or both sequences are single reads with
+                                  possible sequencing errors in which case you
+                                  would expect many single base gaps. You can
+                                  get this result by setting the gap open
+                                  penalty to zero (or very low) and using the
+                                  gap extension penalty to control gap
+                                  scoring.
   [-outfile]           outfile    Output file name
 
    Optional qualifiers:
    -datafile           matrixf    Matrix file
-   -showinternals      bool       Show internals
+   -showinternals      bool       Show debugging information on the internal
+                                  state of the search.
 
    Advanced qualifiers: (none)
 
@@ -150,14 +185,14 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-gapopen</td>
-<td>Gap opening penalty</td>
+<td>The gap open penalty is the score taken away when a gap is created. The best value depends on the choice of comparison matrix. The default value assumes you are using the EBLOSUM62 matrix for protein sequences, and the EDNAMAT matrix for nucleotide sequences.</td>
 <td>Number from 1.000 to 100.000</td>
 <td>10.0 for any sequence</td>
 </tr>
 
 <tr>
 <td>-gapextend</td>
-<td>Gap extension penalty</td>
+<td>The gap extension, penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty. An exception is where one or both sequences are single reads with possible sequencing errors in which case you would expect many single base gaps. You can get this result by setting the gap open penalty to zero (or very low) and using the gap extension penalty to control gap scoring.</td>
 <td>Number from 0.100 to 10.000</td>
 <td>0.5 for any sequence</td>
 </tr>
@@ -184,7 +219,7 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-showinternals</td>
-<td>Show internals</td>
+<td>Show debugging information on the internal state of the search.</td>
 <td>Yes/No</td>
 <td>No</td>
 </tr>
@@ -213,6 +248,32 @@ Any two sequence USAs of the same type (DNA or protein).
 <H2>
     Output file format
 </H2>
+
+Here is the output file from the example run: 
+<P>
+
+<HR>
+<PRE>
+Local: HBA_HUMAN vs HBB_HUMAN
+Score: 293.50
+
+HBA_HUMAN       2        LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF 46      
+                         |:| :|: | | ||||  :  | | ||| |: : :| |: :|  |
+HBB_HUMAN       3        LTPEEKSAVTALWGKV..NVDEVGGEALGRLLVVYPWTQRFFESF 45      
+
+HBA_HUMAN       47       .DLS.....HGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSD 85      
+                          |||      |: :|| |||||  | :: :||:|::    : ||:
+HBB_HUMAN       46       GDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSE 90      
+
+HBA_HUMAN       86       LHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLA 130     
+                         ||  || ||| ||:|| : |:  || |   |||| | |:  | :|
+HBB_HUMAN       91       LHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVA 135     
+
+HBA_HUMAN       131      SVSTVLTSKY                                    140     
+                          |:  |  ||
+HBB_HUMAN       136      GVANALAHKY          
+</PRE>
+<HR>
 
 
 <H2>
@@ -250,21 +311,65 @@ The directories are searched in the following order:
     Notes
 </H2>
 
+<b>water</b> is a true implementation of the Smith-Waterman algorithm
+and so produces a full path matrix.  It therefore cannot be used with
+genome sized sequences unless you have a <b>lot</b> of memory and a lot
+of time. 
 
 <H2>
     References
 </H2>
+
+<OL>
+<LI>Smith TF, Waterman MS (1981) J. Mol. Biol 147(1);195-7
+</OL>
+
+
 
 
 <H2>
     Warnings
 </H2>
 
+Local alignment methods only report the best matching areas between two
+sequences - there may be a large number of alternative local alignments
+that do not score as highly.  If two proteins share more than one common
+region, for example one has a single copy of a particular domain while
+the other has two copies, it may be possible to "miss" the second and
+subsequent alignments.  You will be able to see this situation if you
+have done a dotplot and your local alignment does not show all the
+features you expected to see. 
+<P>
+
+<b>water</b> is for aligning the best matching subsequences of two
+sequences.  It does not necessarily align whole sequences against each
+other; you should use <b>needle</b> if you wish to align closely related
+sequences along their whole lengths. 
+<P>
+
+The memory and time required to do the search is proportional to (on the
+order of) mn, where 'n' and 'm' are the lengths of the two sequences. 
+This means that aligning two 1000-residue sequences takes roughly 100
+times longer and uses 100 times more memory than aligning two
+100-residue sequences. 
+<P>
+
+If you run out of memory, try using <b>supermatcher</b> or
+<b>matcher</b>.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+<PRE>
+Uncaught exception
+ Assertion failed
+ raised at ajmem.c:xxx
+</PRE>
+<P>
+
+Probably means you have run out of memory.  Try using
+<b>supermatcher</b> or <b>matcher</b> if this happens. 
 
 <H2>
     Exit status
@@ -275,6 +380,8 @@ The directories are searched in the following order:
 <H2>
     Known bugs
 </H2>
+
+None.
 
 
 <!--
@@ -293,6 +400,16 @@ The directories are searched in the following order:
         data files?) that seealso doesn't find.
    -->
 
+<p>
+<b>matcher</b> is a local alignment program that is less rigorous than <p>water</p> and therefore runs more quickly. It may be useful for database searching.
+
+<p>
+<b>supermatcher</b> is designed for local alignments of very large sequences and is even less rigorous in its implementation.
+
+
+<p>
+<a href="supermatcher.html">supermatcher</a> Finds a match of a large sequence against one or more sequences
+<a href="matcher.html">matcher</a> Finds the best local alignments between two sequences
 
 <H2>
     Author(s)

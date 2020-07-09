@@ -2199,6 +2199,28 @@ AjPSeqCvt ajSeqCvtNew (char* bases) {
   return ret;
 }
 
+/* @func ajSeqCvtDel ******************************************************
+**
+** Delete a conversion table
+**
+** @param [w] bases [AjPSeqCvt*] Conversion table
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajSeqCvtDel (AjPSeqCvt* thys)
+{
+
+  if(!*thys || !thys)
+      return;
+  
+  AJFREE((*thys)->table);
+  ajStrDel(&(*thys)->bases);
+  AJFREE(*thys);
+
+  return;
+}
+
 /* @func ajSeqCvtNewText ******************************************************
 **
 ** Generates a new conversion table in which the characters are retained

@@ -6,7 +6,7 @@
                                        
 Function
 
-   Plots the quality of conservation of a multiple sequence alignment
+   Plots the quality of conservation of a sequence alignment
    
 Description
 
@@ -45,7 +45,7 @@ Command line arguments
    Advanced qualifiers:
    -data               bool       Output the match data to a file instead of
                                   plotting it
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-msf]
@@ -130,8 +130,8 @@ Known bugs
    
 See also
 
-   Program name Description
-   prettyplot Displays aligned sequences, with colouring and boxing
+   Program name                      Description
+   prettyplot   Displays aligned sequences, with colouring and boxing
    
 Author(s)
 

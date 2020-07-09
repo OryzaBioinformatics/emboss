@@ -37,7 +37,7 @@
 #include <limits.h>         /* for INT_MAX */
 
 
-void calc_consensus(AjPSeqset seqset,AjPFile outf,AjPMatrix cmpmatrix,
+void calc_consensus(AjPSeqset seqset,AjPMatrix cmpmatrix,
                     int nseqs, int mlen, float fplural, float setcase, 
                     int identity, AjPStr *cons);
 
@@ -52,7 +52,9 @@ int main (int argc, char * argv[])
     float setcase;
     char  *p;
     AjPSeqset seqset;
-    AjPFile   outf;
+    AjPSeqout seqout;
+    AjPSeq    seqo;
+    AjPStr    name = NULL;
     AjPStr    cons;
     AjPMatrix cmpmatrix=0;
  
@@ -64,7 +66,8 @@ int main (int argc, char * argv[])
     fplural   = ajAcdGetFloat("plurality");
     setcase   = ajAcdGetFloat("setcase");
     identity  = ajAcdGetInt("identity");
-    outf      = ajAcdGetOutfile ("outf");
+    seqout    = ajAcdGetSeqout("outseq");
+    name      = ajAcdGetString ("name");
 
     nseqs = ajSeqsetSize(seqset);
     if(nseqs<2)
@@ -80,21 +83,27 @@ int main (int argc, char * argv[])
     }
 
     cons = ajStrNew();
-    calc_consensus(seqset,outf,cmpmatrix,nseqs,mlen,
-                    fplural,setcase,identity,&cons);
+    calc_consensus(seqset,cmpmatrix,nseqs,mlen,
+                   fplural,setcase,identity,&cons);
 
-    /* print consensus */
-    ajFmtPrintF(outf,"Consensus \n%s\n",ajStrStr(cons));   
+    /* write out consensus sequence */
+    seqo = ajSeqNew();
+    ajSeqAssSeq(seqo,cons);
+    if(name == NULL)
+     ajSeqAssName(seqo,ajSeqsetGetName(seqset));
+    else
+     ajSeqAssName(seqo,name);
 
-    ajFileClose(&outf);
+    ajSeqWrite(seqout,seqo);
+    
     ajStrDel(&cons);
-
+    ajSeqDel(&seqo);
     ajExit ();
     return 0;
 
 }
 
-void calc_consensus(AjPSeqset seqset,AjPFile outf,AjPMatrix cmpmatrix,
+void calc_consensus(AjPSeqset seqset,AjPMatrix cmpmatrix,
                     int nseqs,int mlen,float fplural,float setcase,
                     int identity, AjPStr *cons)
 {
@@ -119,7 +128,7 @@ void calc_consensus(AjPSeqset seqset,AjPFile outf,AjPMatrix cmpmatrix,
     AjPFloat score=NULL;
     char **seqcharptr;
     char res;
-
+    char nocon;
 
 
     matrix  = ajMatrixArray(cmpmatrix);
@@ -132,12 +141,19 @@ void calc_consensus(AjPSeqset seqset,AjPFile outf,AjPMatrix cmpmatrix,
 
     score = ajFloatNew();
 
+    nocon = '-';
+    if(ajSeqsetIsNuc(seqset))        /* set non-consensus character */
+       nocon = 'N'; 
+    else if ( ajSeqsetIsProt(seqset))
+       nocon = 'X';
+    
+   
     for(i=0;i<nseqs;i++)                  /* get sequence as string */
       seqcharptr[i] =  ajSeqsetSeq(seqset, i);  
 
     for(k=0; k< mlen; k++)
     {
-      res = '-';
+      res = nocon;
 
       for(i=0;i<matsize;i++)          /* reset id's and +ve matches */
       {
@@ -219,12 +235,13 @@ void calc_consensus(AjPSeqset seqset,AjPFile outf,AjPMatrix cmpmatrix,
       }
 
       /* plurality check */
-      if(matching[ajSeqCvtK(cvt,seqcharptr[highindex][k])] >= fplural)
+      if(matching[ajSeqCvtK(cvt,seqcharptr[highindex][k])] >= fplural
+         && seqcharptr[highindex][k] != '-')
          res = seqcharptr[highindex][k];
 
       if(matching[highindex]<= setcase)
         res = tolower(res);
-  
+
       if(identity)                      /* if just looking for id's */
       {
         j=0;
@@ -234,7 +251,7 @@ void calc_consensus(AjPSeqset seqset,AjPFile outf,AjPMatrix cmpmatrix,
           j++;
         }
         if(j<identity) 
-          res = '-';
+          res = nocon;
       }
 
       ajStrAppK(cons,res);

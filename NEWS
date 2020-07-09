@@ -1,3 +1,4 @@
+11/10/2000      Version 1.6.1 RedHat Linux 7.0 fpos_t fix
 06/10/2000      Version 1.6.0 Addition of CONS application
 03/10/2000      Version 1.5.6 URL access handles new SRS6.07* format.
                               Library and applications leak-free.

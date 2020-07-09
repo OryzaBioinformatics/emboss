@@ -101,6 +101,36 @@ AjPMatrixf ajMatrixfNew (char* codes, AjPStr filename) {
   return ret;
 }
 
+/* @func ajMatrixfDel *******************************************************
+**
+** Delete a float matrix
+**
+** @param [w] codes [AjPMatrixf*] Matrix to delete
+** @return [void]
+** @@
+******************************************************************************/
+
+AjPMatrixf ajMatrixfDel (AjPMatrixf *thys)
+{
+  int isize;
+  int i;
+
+  if(!*thys || !thys)
+      return;
+
+  ajStrDel(&(*thys)->Codes);
+  ajStrDel(&(*thys)->Name);
+  isize = (*thys)->Size;
+  for(i=0;i<isize;++i)
+      AJFREE( (*thys)->Matrixf[i]);
+  AJFREE((*thys)->Matrixf);
+
+  ajSeqCvtDel(&(*thys)->Cvt);
+  AJFREE(*thys);
+  
+  return;
+}
+
 /* @func ajMatrixArray *******************************************************
 **
 ** Returns the comparison matrix as an array of integer arrays.

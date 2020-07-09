@@ -993,6 +993,7 @@ AjStatus ajAcdInitP (char *pgm, int argc, char *argv[], char *package) {
     }
   }
   
+  
   if (!acdFile) {
     ajFatal ("acdfile '%S' not opened\n", acdFName);
   }

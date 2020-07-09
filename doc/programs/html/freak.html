@@ -1,7 +1,3 @@
-<!--
-Edit this file to replace 'freak' with the name of the program.
--->
-
 <HTML>
 
 <HEAD>
@@ -84,7 +80,14 @@ Residue/base frequency table or plot
         etc. for as long as is required (several pages is not unreasonable)
   -->
 
+<b>freak</b> takes one or more sequences as input and a set of bases or
+residues to search for. It then calculates the frequency of these
+bases/residues in a window as it moves along the sequence.  The
+frequency is output to a data file or (optionally) plotted.
+<P>
 
+The default set of bases is 'cg' which will calculate the frequency of
+'G' + 'C' bases within the default moving window of 30 bases. 
 
 <H2>
     Usage
@@ -100,7 +103,10 @@ Here is a sample session with freak:
 
 <pre>
 
-% freak
+% freak embl:hsfau 
+Residue/base frequency table or plot
+Residue letters [gc]: 
+Output file [hsfau.freak]: 
 
 </pre>
 
@@ -218,6 +224,8 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
+Normal sequence USAs.
+
 <H2>
     Output file format
 </H2>
@@ -230,7 +238,57 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null output, errors etc. 
    -->
 
+The output from the above example is:
+<p>
+<hr>
+<pre>
+FREAK of HSFAU from 1 to 518 Window 30 Step 1
 
+1          0.500000
+2          0.533333
+3          0.566667
+4          0.533333
+5          0.533333
+6          0.566667
+7          0.566667
+8          0.566667
+9          0.600000
+10         0.633333
+11         0.633333
+12         0.666667
+13         0.666667
+14         0.666667
+15         0.666667
+16         0.633333
+17         0.666667
+18         0.633333
+19         0.633333
+20         0.633333
+21         0.666667
+22         0.666667
+23         0.700000
+24         0.733333
+25         0.700000
+26         0.666667
+27         0.633333
+28         0.600000
+29         0.566667
+30         0.600000
+31         0.633333
+32         0.600000
+33         0.600000
+34         0.633333
+35         0.600000
+36         0.600000
+
+</pre>
+<P>
+[listing truncated for brevity]
+<P>
+
+The ouput consists of a title line and then two columns containing the
+position of the start of the window and then the frequency in that
+window of the bases or residues being searched for. 
 
 <H2>
     Data files
@@ -260,7 +318,7 @@ IT IS DONE FOR YOU.
 
    -->
 
-
+None.
 
 <H2>
     Notes
@@ -272,6 +330,8 @@ IT IS DONE FOR YOU.
         Useful things you can do with this program.
    -->
 
+None.
+
 
 <H2>
     References
@@ -280,6 +340,8 @@ IT IS DONE FOR YOU.
 <!-- 
         Bibliography for methods used.
    -->
+
+None.
 
 
 <H2>
@@ -291,6 +353,8 @@ IT IS DONE FOR YOU.
         eg:
         It doesn't check to see if the sequence is a protein sequence or not.
    -->
+
+None.
 
 <H2>
     Diagnostic Error Messages
@@ -307,6 +371,8 @@ IT IS DONE FOR YOU.
 
    -->
 
+None.
+
 
 <H2>
     Exit status
@@ -318,6 +384,8 @@ IT IS DONE FOR YOU.
         "It always exits with status 0"
    -->
 
+It always exits with status 0.
+
 <H2>
     Known bugs
 </H2>
@@ -326,6 +394,8 @@ IT IS DONE FOR YOU.
 <!-- 
         Bugs noted but not yet fixed.
    -->
+
+None.
 
 
 
@@ -369,6 +439,8 @@ This application was written by Alan Bleasby <a
 href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
    -->
 
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
 
 
 <H2>
@@ -379,6 +451,7 @@ href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
         What changes have been made.
    -->
 
+Wriiten (Aug 2000) Alan Bleasby
 
 <H2>
     Target users
