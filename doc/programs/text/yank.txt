@@ -1,0 +1,215 @@
+
+                                EMBOSS: yank
+     _________________________________________________________________
+   
+                                 Program yank
+                                       
+Function
+
+   Reads a sequence range, appends the full USA to a list file
+   
+Description
+
+   yank is a simple utility to add a specified sequence name to a list
+   file.
+   
+   In fact, it writes out not just the name of the sequence, but also the
+   start and end position of a region within that sequence and, if the
+   sequence is nucleic, if can specify whether the sequence is the
+   reverse complement.
+   
+   Many EMBOSS programs can read in a set of sequences. (Some examples
+   are emma and union) There are many ways of specifying these sequences,
+   including wildcarded sequence file names, wildcarded database entry
+   names and list files. List files (files of file names) are the most
+   flexible. yank is a utility to add sequences to a list file.
+   
+   Instead of containing the sequences themselves, a List file contains
+   "references" to sequences - so, for example, you might include
+   database entries, the names of files containing sequences, or even the
+   names of other list files. For example, here's a valid list file,
+   called seq.list:
+   
+unix % more seq.list
+
+opsd_abyko.fasta
+sw:opsd_xenla
+sw:opsd_c*
+@another_list
+
+   This looks a bit odd, but it's really very straightforward; the file
+   contains:
+   
+     * opsd_abyko.fasta - this is the name of a sequence file. The file
+       is read in from the current directory.
+     * sw:opsd_xenla - this is a reference to a specific sequence in the
+       SwissProt database
+     * sw:opsd_c* - this represents all the sequences in SwissProt whose
+       identifiers start with ``opsd_c''
+     * another_list - this is the name of a second list file
+       
+   Notice the @ in front of the last entry. This is the way you tell
+   EMBOSS that this file is a list file, not a regular sequence file.
+   
+   Without the program yank you would need to use a text editor such as
+   pico to create the appropriate list files. yank makes this process
+   easy.
+   
+Usage
+
+   Here is a sample session with yank, adding the regions making up the
+   coding sequence of embl:hsfau1 to the list 'cds.list':
+
+% yank
+Reads a range from a sequence, appends the full USA to a list file
+Input sequence: em:hsfau1
+     Begin at position [start]: 782
+       End at position [end]: 856
+        Reverse strand [N]:
+Output file [hsfau1.yank]: cds.list
+
+% yank
+Reads a range from a sequence, appends the full USA to a list file
+Input sequence: em:hsfau1
+     Begin at position [start]: 951
+       End at position [end]: 1095
+        Reverse strand [N]:
+Output file [hsfau1.yank]: cds.list
+
+% yank
+Reads a range from a sequence, appends the full USA to a list file
+Input sequence: em:hsfau1
+     Begin at position [start]: 1557
+       End at position [end]: 1612
+        Reverse strand [N]:
+Output file [hsfau1.yank]: cds.list
+
+% yank
+Reads a range from a sequence, appends the full USA to a list file
+Input sequence: em:hsfau1
+     Begin at position [start]: 1787
+       End at position [end]: 1912
+        Reverse strand [N]:
+Output file [hsfau1.yank]: cds.list
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -newfile            bool       Overwrite existing output file
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence USA Readable sequence Required
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.yank
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -newfile Overwrite existing output file Yes/No No
+   
+Input file format
+
+   Any valid sequence can be read in.
+   
+   You will be prompted for the start and end positions you wish to use.
+   
+   If the sequence is nucleic, you will be prompted whether you wish to
+   use the reverse complement of the sequence.
+   
+Output file format
+
+   The result file 'cds.list' of the example above is:
+   
+em-id:HSFAU1[782:856]
+em-id:HSFAU1[951:1095]
+em-id:HSFAU1[1557:1612]
+em-id:HSFAU1[1787:1912]
+
+   This can now be read in by a program such as union by specifying the
+   list file as '@cds.list' when union prompts for input.
+   
+Data files
+
+   None.
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name                          Description
+   biosed       Replace or delete sequence sections
+   cutseq       Removes a specified section from a sequence
+   degapseq     Removes gap characters from sequences
+   descseq      Alter the name or description of a sequence
+   entret       Reads and writes (returns) flatfile entries
+   extractfeat  Extract features from a sequence
+   extractseq   Extract regions from a sequence
+   listor       Writes a list file of the logical OR of two sets of sequences
+   maskfeat     Mask off features of a sequence
+   maskseq      Mask off regions of a sequence
+   newseq       Type in a short new sequence
+   noreturn     Removes carriage return from ASCII files
+   notseq       Excludes a set of sequences and writes out the remaining ones
+   nthseq       Writes one sequence from a multiple set of sequences
+   pasteseq     Insert one sequence into another
+   revseq       Reverse and complement a sequence
+   seqret       Reads and writes (returns) sequences
+   seqretsplit  Reads and writes (returns) sequences in individual files
+   splitter     Split a sequence into (overlapping) smaller sequences
+   swissparse   Retrieves sequences from swissprot using keyword search
+   trimest      Trim poly-A tails off EST sequences
+   trimseq      Trim ambiguous bits off the ends of sequences
+   union        Reads sequence fragments and builds one sequence
+   vectorstrip  Strips out DNA between a pair of vector sequences
+   
+   The program extract does not make list files, but creates a sequence
+   from sub-regions of a single other sequence.
+   
+Author(s)
+
+   This application was written by Peter Rice
+   (peter.rice@uk.lionbioscience.com)
+   
+History
+
+   Written (March 2002) - Peter Rice.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
