@@ -616,9 +616,9 @@ echo
 echo "#!/bin/csh " > tomstop
 echo "setenv JAVA_HOME $JAVA_HOME" >> tomstop
 echo "setenv LD_LIBRARY_PATH $EMBOSS_INSTALL/lib" >> tomstop
-if [ "$AUTH_TYPE" = "3" ]; then
-  echo "setenv LD_PRELOAD /lib/libpam.so" >> tomstop
-fi
+#if [ "$AUTH_TYPE" = "3" ]; then
+#  echo "setenv LD_PRELOAD /lib/libpam.so" >> tomstop
+#fi
 echo 'set path=($path '"$JAVA_HOME/bin)"  >> tomstop
 echo "rehash"  >> tomstop
 echo "$TOMCAT_ROOT/bin/shutdown.sh"  >> tomstop
