@@ -1,3 +1,8 @@
+Version 2.4.1
+	Fixed error reading multiple databases
+	Fixed MacOSX reading of incomplete sequence files
+	Fixed indexing of REFSEQ
+
 Version 2.4.0
         New Jemboss authorising server code. This uses a new set-uid
 	program (jembossctl) to perform tasks as the user.

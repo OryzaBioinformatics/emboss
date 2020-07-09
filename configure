@@ -1633,7 +1633,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=EMBOSS
- VERSION=2.4.0
+ VERSION=2.4.1
 
 
 cat >>confdefs.h <<_ACEOF
