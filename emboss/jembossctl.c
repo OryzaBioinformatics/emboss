@@ -77,7 +77,10 @@ static void jctl_zero(char *buf);
 #ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE
 #endif
+
+#ifndef __ppc__
 #include <crypt.h>
+#endif
 
 #ifdef N_SHADOW
 #include <shadow.h>
@@ -144,10 +147,11 @@ int main(int argc, char **argv)
     unsigned char *fbuf=NULL;
     int size;
     
-    embInit("jembossctl",argc,argv);
 
-
-    sockname = ajAcdGetString("sock");
+    if(argc!=2)
+	return -1;
+    
+    sockname = ajStrNewC(argv[1]);
     pname = ajStrStr(sockname);
 
     if(!jcntl_check_socket_owner(pname))
@@ -325,8 +329,6 @@ int main(int argc, char **argv)
     ajStrDel(&message);
     jctl_tidy_strings(&tstr,&home,&retlist,buf);
     
-
-    ajExit();
     return 0;
 }
 
@@ -678,7 +680,20 @@ static AjBool jctl_up(char *buf, int *uid, int *gid, AjPStr *home)
     cstr     = ajStrNew();
 
     ajStrAssC(&cstr,buf);
-    ajFmtScanS(cstr,"%d%S%S",&command,&username,&password);
+    if(ajFmtScanS(cstr,"%d%S%S",&command,&username,&password)!=3)
+    {
+	if(ajStrLen(username))
+	   bzero((void*)ajStrStr(username),ajStrLen(username));
+	if(ajStrLen(password))
+	   bzero((void*)ajStrStr(password),ajStrLen(password));
+	jctl_zero(buf);
+	
+	ajStrDel(&username);
+	ajStrDel(&password);
+	ajStrDel(&cstr);
+	return ajFalse;
+    }
+    
 
     
 #ifndef NO_AUTH
