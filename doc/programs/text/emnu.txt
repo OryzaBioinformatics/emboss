@@ -1,9 +1,0 @@
-
-                                   Not Found
-                                       
-   The requested URL /Software/EMBOSS/Apps//emnu.html was not found on
-   this server.
-     _________________________________________________________________
-   
-   
-    Apache/1.3.12 Server at www.uk.embnet.org Port 80
