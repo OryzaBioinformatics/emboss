@@ -1941,7 +1941,8 @@ AjBool ajStrRev (AjPStr* pthis) {
 }
 
 
-/* @func ajStrQuote *************************************************************
+/* @func ajStrQuote ***********************************************************
+**
 ** Makes sure a string is quoted (with double quotes)
 **
 ** @param [rw] s [AjPStr *] string
@@ -1961,6 +1962,31 @@ void ajStrQuote(AjPStr *s) {
   if ((*s)->Len == 1 || ajStrChar(*s, -1) != '"') {
     ajStrAppK(s, '"');
   }
+}
+
+/* @func ajStrQuoteStrip ******************************************************
+**
+** Makes sure a string is unquoted (remove any double quotes).
+** Internal escaped or double quotes are converted to single quotes
+**
+** @param [rw] s [AjPStr *] string
+**
+** @return [void]
+** @@
+******************************************************************************/
+void ajStrQuoteStrip(AjPStr *s) {
+
+  if (ajStrChar(*s, -1) == '"') {
+    ajStrTrim (s, -1);
+  }
+  if (ajStrChar(*s, 0) == '"') {
+    ajStrTrim (s, 1);
+  }
+
+  ajStrSubstituteCC (s, "\"\"", "\""); /* doubled quotes to single */
+  ajStrSubstituteCC (s, "\\\"", "\""); /* escaped quotes to single */
+
+  return;
 }
 
 /* @func ajStrRandom ************************************************************
