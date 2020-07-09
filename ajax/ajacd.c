@@ -57,6 +57,9 @@
 #define	ACD_SEQ_WEIGHT 6
 #define	ACD_SEQ_COUNT 7
 
+#define USED_GET 1
+#define USED_ACD 2
+
 /*static AjBool acdDebug = 0;*/
 /*static AjBool acdDebugSet = 0;*/
 /*static AjPStr acdProgram = NULL;*/
@@ -174,6 +177,7 @@ typedef struct AcdSAcd
   AjPStr* SetStr;
   AjPStr* DefStr;		/* default attrib values */
   AjBool Defined;		/* set when defined by user */
+  ajint Used;
   AjBool Assoc;
   struct AcdSAcd* AssocQuals;
   AjPStr OrigStr;
@@ -691,6 +695,7 @@ AcdOAttr acdAttrOutfile[] = { {"name", VT_STR},
 			      {"extension", VT_STR},
 			      {"type", VT_STR},
 			      {"nullok", VT_BOOL},
+			      {"append", VT_BOOL},
 			      {NULL, VT_NULL} };
 
 AcdOAttr acdAttrCpdb[] = { {"name", VT_STR},
@@ -716,6 +721,7 @@ AcdOAttr acdAttrReport[] = { {"name", VT_STR},
 			     {"taglist", VT_STR}, /* extra tags to report */
 			     {"mintags", VT_INT}, /* min number extra tags */
 			     {"multiple", VT_BOOL},
+			     {"precision", VT_INT},/*score precision */
 			     {NULL, VT_NULL} };
 
 AcdOAttr acdAttrSec[] = { {"info", VT_STR},
@@ -829,6 +835,8 @@ AcdOQual acdQualAlign[] =
   {"aextension", "",       "string", "file name extension"},
   {"aname",      "",       "string", "base file name"},
   {"awidth",     "",       "int",    "alignment width"},
+  {"aaccshow",   "",       "bool",   "show accession number in the header"},
+  {"adesshow",   "",       "bool",   "show description in the header"},
   {"ausashow",   "",       "bool",   "show the full USA in the alignment"},
   {"aglobal",    "",       "bool",   "show the full sequence in alignment"},
   {NULL, NULL, NULL, NULL} };
@@ -858,6 +866,8 @@ AcdOQual acdQualReport[] =
   {"ropenfile",  "",       "string", "report file name"},
   {"rextension", "",       "string", "file name extension"},
   {"rname",      "",       "string", "base file name"},
+  {"raccshow",   "",       "bool",   "show accession number in the report"},
+  {"rdesshow",   "",       "bool",   "show description in the report"},
   {"rusashow",   "",       "bool",   "show the full USA in the report"},
   {NULL, NULL, NULL, NULL} };
 
@@ -3174,6 +3184,8 @@ static void acdSetAlign (AcdPAcd thys)
     (void) acdQualToInt (thys, "awidth", 50, &val->Width, &defreply);
     (void) acdAttrToBool (thys, "multiple", ajFalse, &val->Multi);
     (void) acdQualToBool (thys, "aglobal", ajFalse, &val->Global, &defreply);
+    (void) acdQualToBool (thys, "aaccshow", ajFalse, &val->Showacc, &defreply);
+    (void) acdQualToBool (thys, "adesshow", ajFalse, &val->Showdes, &defreply);
     (void) acdQualToBool (thys, "ausashow", ajFalse, &val->Showusa, &defreply);
 
     (void) acdOutFilename (&outfname, name, ext);
@@ -4102,7 +4114,8 @@ static void acdSetFeatout (AcdPAcd thys)
     required = acdIsRequired(thys);
     val = ajFeattabOutNew();
 
-    acdAttrResolve (thys, "name", &name);
+    if (!acdGetValueAssoc (thys, "ofname", &name))
+      acdAttrResolve (thys, "name", &name);
     if (!acdGetValueAssoc (thys, "offormat", &val->Formatstr))
 	(void) acdAttrResolve (thys, "extension", &ext);
 
@@ -5056,6 +5069,7 @@ static void acdSetOutfile (AcdPAcd thys)
     static AjPStr reply = NULL;
     ajint itry;
     AjBool nullok;
+    AjBool append;
 
     static AjPStr name = NULL;
     static AjPStr ext = NULL;
@@ -5068,10 +5082,19 @@ static void acdSetOutfile (AcdPAcd thys)
 
     (void) acdAttrToBool (thys, "nullok", ajFalse, &nullok);
     acdLog ("nullok: %B\n", nullok);
+    (void) acdAttrToBool (thys, "append", ajFalse, &append);
+    acdLog ("append: %B\n", append);
 
     required = acdIsRequired(thys);
-    (void) acdOutFilename (&outfname, name, ext);
-    (void) acdReplyInit (thys, ajStrStr(outfname), &defreply);
+    if (nullok)
+    {
+      (void) acdReplyInit (thys, "", &defreply);
+    }
+    else
+    {
+      (void) acdOutFilename (&outfname, name, ext);
+      (void) acdReplyInit (thys, ajStrStr(outfname), &defreply);
+    }
     acdPromptOutfile (thys);
 
     for (itry=acdPromptTry; itry && !ok; itry--)
@@ -5085,7 +5108,14 @@ static void acdSetOutfile (AcdPAcd thys)
 
 	if (ajStrLen(reply))
 	{
-	    val = ajFileNewOut(reply);
+	    if (append)
+	    {
+	        val = ajFileNewApp(reply);
+	    }
+	    else
+	    {
+	        val = ajFileNewOut(reply);
+	    }
 	    if (!val)
 	    {
 		acdBadVal (thys, required,
@@ -5581,10 +5611,13 @@ static void acdSetReport (AcdPAcd thys)
     (void) acdAttrResolve (thys, "rextension", &ext);
     (void) acdAttrToStr (thys, "taglist", "", &taglist);
     (void) acdAttrToInt (thys, "mintags", 0, &val->Mintags);
+    (void) acdAttrToInt (thys, "precision", 3, &val->Precision);
     (void) acdAttrToStr (thys, "type", "", &val->Type);
     (void) acdAttrToBool (thys, "multiple", ajFalse, &val->Multi);
     (void) acdGetValueAssoc (thys, "rformat", &val->Formatstr);
-   (void) acdQualToBool (thys, "rusashow", ajFalse, &val->Showusa, &defreply);
+    (void) acdQualToBool (thys, "rusashow", ajFalse, &val->Showusa, &defreply);
+    (void) acdQualToBool (thys, "raccshow", ajFalse, &val->Showacc, &defreply);
+    (void) acdQualToBool (thys, "rdesshow", ajFalse, &val->Showdes, &defreply);
 
     if (!ajReportSetTags (val, taglist, mintags)) {
       ajErr("Bad tag list for report");
@@ -7234,6 +7267,9 @@ static void* acdGetValueNum (char *token, char* type, ajint pnum) {
       if (pa->PNum == pnum) {
 	acdLog ("found %S [%d] '%S'\n",
 		pa->Name, pa->PNum, pa->ValStr);
+	if (pa->Used & USED_GET)
+	  ajWarn("ACD token '%S' used more than once", pa->Name);
+	pa->Used |= USED_GET;
 	return pa->Value;
       }
       else if (!pnum) {		/* matches any if unique, so count them */
@@ -7253,6 +7289,7 @@ static void* acdGetValueNum (char *token, char* type, ajint pnum) {
       ajFatal ("Token %s is not of type %s\n", token, type);
     acdLog ("found %S [%d] '%S'\n",
 		   ret->Name, ret->PNum, ret->ValStr);
+    ret->Used |= USED_GET;
     return ret->Value;
   }
 
@@ -11791,6 +11828,7 @@ static AjBool acdGetAttr (AjPStr* result, AjPStr name, AjPStr attrib) {
     (void) ajStrDelReuse (&tempstr);
     ajDebug ("no attribute name, use valstr for %S '%S'\n",
        pa->Name, *result);
+    pa->Used |= USED_ACD;
     return ajTrue;
   }
 
@@ -12934,13 +12972,14 @@ static AjPStr* acdListValue (AcdPAcd thys, ajint min, ajint max, AjPStr reply) {
 
   /* ajDebug ("reply: '%S' delim '%S'", reply, repdelim); */
 
-  ajStrAssC(&validstr, "");
   rephandle = ajStrTokenInit (reply, ajStrStr(repdelim));
+  ajStrAssC(&validstr, "");
   while (ajStrToken (&repstr, &rephandle, NULL)) {
     itoken++;
     ajDebug("testing '%S'\n", repstr);
     handle = ajStrTokenInit (value, ajStrStr(delim));
     ifound = jfound = 0;
+    ajStrAssC(&validstr, "");
     while (ajStrDelim (&line, &handle, NULL)) {
       codehandle = ajStrTokenInit (line, ajStrStr(codedelim));
       (void) ajStrToken (&code, &codehandle, NULL);
@@ -12951,11 +12990,9 @@ static AjPStr* acdListValue (AcdPAcd thys, ajint min, ajint max, AjPStr reply) {
       /* ajDebug ("desc:  '%S'\n", desc); */
       /* ajDebug ("test '%S' code: '%S' desc: %S'\n", repstr, code, desc); */
 
-      if (itoken == 1) {
-	if (ajStrLen(validstr))
+      if (ajStrLen(validstr))
 	  ajStrAppK(&validstr, ',');
-	ajStrApp(&validstr, code);
-      }
+      ajStrApp(&validstr, code);
 
       if (ajStrMatch(code, repstr) ||
 	  (!exactcase && ajStrMatch(code, repstr))) {
@@ -13646,9 +13683,50 @@ static AjBool acdVocabCheck (AjPStr str, char** vocab) {
   return ajFalse;
 }
 
+/* @func ajAcdExit ***********************************************************
+**
+** Reports any unused ACD values
+**
+** Cleans up feature table internal memory
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajAcdExit (AjBool silent) {
+
+  AcdPAcd pa;
+  static AjBool staySilent=AJFALSE;
+
+  if (silent) staySilent = ajTrue;
+
+  if (staySilent) return;
+
+  /* turn off the warnings for now ... comment out this line to enable them */
+  /* the problem is that some programs have conditionals arouns the */
+  /* ajAcdGet calls so they can sometimes fail to use values, even where */
+  /* the test cases say they are fine. */
+  /* also some ACD files (showdb for example) use values, */
+  /* but in some cases (showdb with all booleans on the command line) */
+  /* the value is not needed */
+
+  if (!staySilent) return;
+
+  for (pa=acdList; pa; pa=pa->Next) {
+    if (pa->Assoc) continue;
+    if (pa->Level != ACD_PARAM && pa->Level != ACD_QUAL) continue;
+    if (!pa->Used) {
+      ajWarn ("ACD qualifier never used: %S = '%S' (assoc %B)",
+	      pa->Name, pa->ValStr, pa->Assoc);
+    }
+
+  }
+
+  return;
+}
 
 /*
- *  In case people want -errorlevel=wraning,noerror,fatal
+ *  In case people want -errorlevel=warning,noerror,fatal
  *
 //static void acdParseErrorLevel(AjPStr str)
 //{
