@@ -6,7 +6,7 @@ dnl Process this file with autoconf to produce a configure script.
 #CC=cc
 
 AC_INIT(ajax/ajacd.c)
-AM_INIT_AUTOMAKE(EMBOSS, 2.3.0)
+AM_INIT_AUTOMAKE(EMBOSS, 2.3.1)
 
 
 dnl Use libtool to make a shared library.

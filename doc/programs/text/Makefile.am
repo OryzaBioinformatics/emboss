@@ -20,13 +20,13 @@ pkgdata_DATA =  SITE-DIRECTED.txt abiview.txt ajtest.txt antigenic.txt \
                est2genome.txt etandem.txt extractfeat.txt extractseq.txt \
                factor.txt findkm.txt fitch.txt freak.txt fuzznuc.txt \
                fuzzpro.txt fuzztran.txt garnier.txt geecee.txt gendist.txt \
-               getorf.txt helixturnhelix.txt hmoment.txt iep.txt
-pkgdata2_DATA = infoalign.txt infoseq.txt isochore.txt kitsch.txt lindna.txt \
-               listor.txt marscan.txt maskfeat.txt maskseq.txt matcher.txt \
-               megamerger.txt merger.txt mix.txt msbar.txt mse.txt \
-               mwfilter.txt needle.txt neighbor.txt newcpgreport.txt \
-               newcpgseek.txt newseq.txt noreturn.txt notseq.txt \
-               nrscope.txt nthseq.txt octanol.txt oddcomp.txt \
+               getorf.txt helixturnhelix.txt hmoment.txt iep.txt \
+               infoalign.txt infoseq.txt isochore.txt jembossctl.txt
+pkgdata2_DATA = kitsch.txt lindna.txt listor.txt marscan.txt maskfeat.txt \
+               maskseq.txt matcher.txt megamerger.txt merger.txt mix.txt \
+               msbar.txt mse.txt mwfilter.txt needle.txt neighbor.txt \
+               newcpgreport.txt newcpgseek.txt newseq.txt noreturn.txt \
+               notseq.txt nrscope.txt nthseq.txt octanol.txt oddcomp.txt \
                palindrome.txt pasteseq.txt patmatdb.txt patmatmotifs.txt \
                penny.txt pepcoil.txt pepinfo.txt pepnet.txt pepstats.txt \
                pepwheel.txt pepwindow.txt pepwindowall.txt plotcon.txt \

@@ -1,3 +1,15 @@
+Version 2.3.1
+
+        est2genome fixed for large alignments (over 40Mbase for
+        est * genomic sequence length)
+        sequence reading for ABI files fixed (and selex files tested)
+        genbank feature input working
+        pepinfo PNG output larger to make the text readable (only affects
+        PNG output)
+	empty sequence file input fails gracefully
+	empty sequence input fails gracefully (and only needs one
+	^D from stdin)
+	
 Version 2.3.0
 
         Seqretall, seqretallfeat and seqretset moved to 'make check'.
@@ -12,4 +24,3 @@ Version 2.3.0
 	Non-existent files in lists are again ignored
 	Various wildcard database search fixes
 	ESIM4 added as an embassy package
-	
