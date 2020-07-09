@@ -373,7 +373,7 @@ static AjBool seqAccessEmblcd (AjPSeqin seqin)
 
     }
     
-    ajStrAssS (&seqin->Db, qry->DbName);
+    (void) ajStrAssS (&seqin->Db, qry->DbName);
 
     return retval;
 }
@@ -454,7 +454,7 @@ static AjBool seqCdAll (AjPSeqin seqin)
     seqin->Filebuff = ajFileBuffNewInList(list);
     fullName = NULL;
 
-    ajStrAssS (&seqin->Db, qry->DbName);
+    (void) ajStrAssS (&seqin->Db, qry->DbName);
 
     seqCdFileClose (&dfp);
     ajStrDelReuse (&divfile);
@@ -519,7 +519,7 @@ static SeqPCdFile seqCdFileOpen (AjPStr dir, char* name, AjPStr* fullname)
     thys->NRecords = thys->Header->NRecords;
     thys->RecSize = thys->Header->RecSize;
 
-    ajStrAssS (fullname, ajFileGetName(thys->File));
+    (void) ajStrAssS (fullname, ajFileGetName(thys->File));
 
     ajDebug ("seqCdFileOpen '%F' NRecords: %d RecSize: %d\n",
 	     thys->File, thys->NRecords, thys->RecSize);
@@ -750,9 +750,9 @@ static AjBool seqCdIdxQuery (AjPSeqQuery qry)
 
     SeqPCdEntry entry;
 
-    (void) ajStrAss (&idstr,idname);
+    (void) ajStrAssS (&idstr,idname);
     (void) ajStrToUpper (&idstr);
-    (void) ajStrAss (&idpref, idstr);
+    (void) ajStrAssS (&idpref, idstr);
 
     (void) ajStrWildPrefix (&idpref);
 
@@ -912,7 +912,7 @@ static ajint seqCdTrgSearch (SeqPCdTrg trgLine, AjPStr entry, SeqPCdFile fp)
     ajint itry;
     char *name;
 
-    (void) ajStrAss (&entrystr, entry);
+    (void) ajStrAssS (&entrystr, entry);
     (void) ajStrToUpper (&entrystr);
 
     ilo = 0;
@@ -1203,7 +1203,7 @@ static AjBool seqAccessSrs (AjPSeqin seqin)
     AjPSeqQuery qry = seqin->Query;
 
     if (!ajNamDbGetDbalias(qry->DbName, &searchdb))
-	(void) ajStrAss (&searchdb, qry->DbName);
+	(void) ajStrAssS (&searchdb, qry->DbName);
 
     if (!ajStrLen (qry->Application))
 	(void) ajStrAssC (&qry->Application, "getz");
@@ -1232,6 +1232,7 @@ static AjBool seqAccessSrs (AjPSeqin seqin)
 	ajDebug ("unable to open file '%S'\n", seqin->Filename);
 	return ajFalse;
     }
+    (void) ajStrAssS (&seqin->Db, qry->DbName);
 
     ajStrDel (&searchdb);
 
@@ -1256,7 +1257,7 @@ static AjBool seqAccessSrsfasta (AjPSeqin seqin)
     AjPSeqQuery qry = seqin->Query;
 
     if (!ajNamDbGetDbalias (qry->DbName, &searchdb))
-	(void) ajStrAss (&searchdb, qry->DbName);
+	(void) ajStrAssS (&searchdb, qry->DbName);
 
     if (!ajStrLen (qry->Application))
 	(void) ajStrAssC (&qry->Application, "getz");
@@ -1284,6 +1285,8 @@ static AjBool seqAccessSrsfasta (AjPSeqin seqin)
 	ajDebug ("unable to open file '%S'\n", seqin->Filename);
 	return ajFalse;
     }
+
+    (void) ajStrAssS (&seqin->Db, qry->DbName);
 
     ajStrDel (&searchdb);
 
@@ -1388,7 +1391,7 @@ static AjBool seqCdQryOpen (AjPSeqQuery qry)
 	(void) seqCdFileReadShort (&j, qryd->dfp);
 	(void) seqCdFileReadName (name, qryd->nameSize, qryd->dfp);
 
-	ajStrAssC(&fullName, name);
+	(void) ajStrAssC(&fullName, name);
 	ajFileNameDirSet (&fullName, qry->Directory);
 
 	if (!ajFileTestSkip (fullName, qry->Exclude, qry->Filename, ajTrue))
@@ -1733,6 +1736,9 @@ static AjBool seqAccessGcg (AjPSeqin seqin)
 	seqCdQryClose (qry);
     }
 
+    if (retval)
+      (void) ajStrAssS (&seqin->Db, qry->DbName);
+
     return retval;
 }
 
@@ -1942,7 +1948,7 @@ static AjBool seqGcgReadSeq (const AjPSeqin seqin)
     }
     else if (ajRegExec(idexp2, line))
     {
-	ajStrAssC(&gcgtype, "ASCII");
+	(void) ajStrAssC(&gcgtype, "ASCII");
 	ajRegSubI (idexp, 1, &tmpstr);
 	ispir = ajTrue;
     }
@@ -2253,7 +2259,7 @@ static AjBool seqAccessBlast (AjPSeqin seqin)
 	seqCdQryClose (qry);
     }
 
-    ajStrAssS (&seqin->Db, qry->DbName);
+    (void) ajStrAssS (&seqin->Db, qry->DbName);
 
     return retval;
 }
@@ -2352,7 +2358,7 @@ static AjBool seqBlastOpen (AjPSeqQuery qry)
 	isdna = ajTrue;
     }
 
-    ajStrAssS (&qryd->srcfile, qryd->datfile);
+    (void) ajStrAssS (&qryd->srcfile, qryd->datfile);
     ajFileNameExtC (&qryd->srcfile, NULL);
     ajFmtPrintS (&qryd->seqfile, "%S.%s", qryd->srcfile, seqext[qryd->type]);
     ajFmtPrintS (&qryd->datfile, "%S.%s", qryd->srcfile, hdrext[qryd->type]);
@@ -2381,7 +2387,7 @@ static AjBool seqBlastOpen (AjPSeqQuery qry)
     else
 	rdtmp = TitleLen + ((TitleLen%4 !=0 ) ? 4-(TitleLen%4) : 0);
 
-    ajStrAssCL(&Title, "", rdtmp+1);
+    (void) ajStrAssCL(&Title, "", rdtmp+1);
     ajDebug ("IsBlast2: %B title_len: %d rdtmp: %d title_str: '%S'\n",
 	     isblast2, TitleLen, rdtmp, Title);
     ajStrTrace(Title);
@@ -2402,7 +2408,7 @@ static AjBool seqBlastOpen (AjPSeqQuery qry)
     {
 	DateLen = ajFileReadUint (qryd->libt, bigend);
 	rdtmp2 = DateLen;
-	ajStrAssCL(&Date, "", rdtmp2+1);
+	(void) ajStrAssCL(&Date, "", rdtmp2+1);
 	ajFileRead (ajStrStr(Date),(size_t)1,(size_t)rdtmp2,qryd->libt);
 	ajStrFixI (Date, DateLen);
 	ajDebug ("datelen: %d rdtmp: %d date_str: '%S'\n",
@@ -2570,7 +2576,7 @@ static AjBool seqBlastAll (const AjPSeqin seqin)
 	return ajFalse;
 
     qryd->idnum++;
-    ajStrAssS (&seqin->Db, qry->DbName);
+    (void) ajStrAssS (&seqin->Db, qry->DbName);
 
 
     return ajTrue;
@@ -2676,8 +2682,9 @@ static AjBool seqAccessNbrf (AjPSeqin seqin)
 	return ajFalse;
     }
 
-    (void) ajStrAss (&seqin->Filename, qry->Filename);
-    (void) ajStrAss (&seqin->Entryname, qry->Id);
+    (void) ajStrAssS (&seqin->Filename, qry->Filename);
+    (void) ajStrAssS (&seqin->Entryname, qry->Id);
+    (void) ajStrAssS (&seqin->Db, qry->DbName);
 
     ajStrDel (&fullname);
 
@@ -2825,6 +2832,8 @@ static AjBool seqAccessUrl (AjPSeqin seqin)
     if(!ajFileBuffStripSrs(seqin->Filebuff))
 	ajFileBuffStripHtml(seqin->Filebuff);
 
+    (void) ajStrAssS (&seqin->Db, qry->DbName);
+
     ajStrDelReuse (&url);
     ajStrDelReuse (&host);
     ajStrDelReuse (&port);
@@ -2922,6 +2931,8 @@ static AjBool seqAccessApp (AjPSeqin seqin)
 	return ajFalse;
     }
 
+    (void) ajStrAssS (&seqin->Db, qry->DbName);
+
     ajStrDel (&pipename);
 
     return ajTrue;
@@ -3005,7 +3016,7 @@ AjBool ajSeqAccessFile (AjPSeqin seqin)
     /* ajStrTraceT (seqin->Filename, "seqin->Filename:"); */
     /* ajStrTraceT (qry->Filename, "qry->Filename (after):"); */
 
-    (void) ajStrAss (&seqin->Filename, qry->Filename);
+    (void) ajStrAssS (&seqin->Filename, qry->Filename);
 
     return ajTrue;
 }
@@ -3041,7 +3052,7 @@ AjBool ajSeqAccessOffset (AjPSeqin seqin)
     ajFileSeek (ajFileBuffFile(seqin->Filebuff), qry->Fpos, 0);
     /* ajStrTraceT (seqin->Filename, "seqin->Filename:"); */
     /* ajStrTraceT (qry->Filename, "qry->Filename (after):"); */
-    (void) ajStrAss (&seqin->Filename, qry->Filename);
+    (void) ajStrAssS (&seqin->Filename, qry->Filename);
 
     return ajTrue;
 }
@@ -3085,7 +3096,8 @@ static AjBool seqAccessDirect (AjPSeqin seqin)
 	return ajFalse;
     }
 
-    (void) ajStrAss (&seqin->Filename, qry->Filename);
+    (void) ajStrAssS (&seqin->Db, qry->DbName);
+    (void) ajStrAssS (&seqin->Filename, qry->Filename);
 
     return ajTrue;
 }
@@ -3175,7 +3187,7 @@ static AjBool seqBlastReadTable (const AjPSeqin seqin, AjPStr* hline,
     else
 	hsize = qryd->Size - start;
 
-    ajStrAssCL (hline, "", hsize+1);
+    (void) ajStrAssCL (hline, "", hsize+1);
 
     ajDebug ("type: %d hsize: %d start: %d end: %d dbSize: %d\n",
 	     qryd->type, hsize, start, end, qryd->Size);
@@ -3237,7 +3249,7 @@ static AjBool seqBlastReadTable (const AjPSeqin seqin, AjPStr* hline,
 	seq_len = end - start - 1;
 	ajDebug ("seq_len: %d spos: %d %x\n", seq_len, spos, spos);
 
-	ajStrAssCL (sline, "", seq_len+1);
+	(void) ajStrAssCL (sline, "", seq_len+1);
 
 	ajFileRead(&tmpbyte, 1, 1, qryd->libs); /* skip the null byte */
 	if (tmpbyte)
@@ -3267,7 +3279,7 @@ static AjBool seqBlastReadTable (const AjPSeqin seqin, AjPStr* hline,
 	ajStrFixI (*sline, seqcnt);
 	ajDebug ("Read sequence %d %d\n'%S'\n", seqcnt, ajStrLen(*sline),
 		 *sline);
-	ajStrAssS (&seqin->Inseq, *sline);
+	(void) ajStrAssS (&seqin->Inseq, *sline);
 	return ajTrue;
 
   
@@ -3281,7 +3293,7 @@ static AjBool seqBlastReadTable (const AjPSeqin seqin, AjPStr* hline,
 	ajDebug ("c_len %d spos %d seq_len %d\n",
 		 c_len, spos, seq_len);
 
-	ajStrAssCL (sline, "", seq_len+1);
+	(void) ajStrAssCL (sline, "", seq_len+1);
 
 	seq = ajStrStr(*sline);
 
@@ -3404,7 +3416,7 @@ static AjBool seqBlastReadTable (const AjPSeqin seqin, AjPStr* hline,
 	    a_len = 0;
 
 	ajStrFixI (*sline, seq_len);
-	ajStrAssS (&seqin->Inseq, *sline);
+	(void) ajStrAssS (&seqin->Inseq, *sline);
 	return ajTrue;
 
 
@@ -3412,7 +3424,7 @@ static AjBool seqBlastReadTable (const AjPSeqin seqin, AjPStr* hline,
 	if (qryd->libf)
 	{	/* we have the FASTA source file */
 	    seq_len = fend - fstart;
-	    ajStrAssCL (sline, "", seq_len+1);
+	    (void) ajStrAssCL (sline, "", seq_len+1);
 	    ajDebug ("reading FASTA file\n");
 	    ajFileSeek(qryd->libf,fstart,0);
 	    while (ajFileGetsTrim(qryd->libf, &rdline))
@@ -3422,7 +3434,7 @@ static AjBool seqBlastReadTable (const AjPSeqin seqin, AjPStr* hline,
 		    break;
 		ajStrApp (sline, rdline);
 	    }
-	    ajStrAssS (&seqin->Inseq, *sline);
+	    (void) ajStrAssS (&seqin->Inseq, *sline);
 	    return ajTrue;
 	}
 	else
@@ -3448,7 +3460,7 @@ static AjBool seqBlastReadTable (const AjPSeqin seqin, AjPStr* hline,
 	    ajDebug ("c_len %d c_pad %d spos %d seq_len %d\n",
 		     c_len, c_pad, spos, seq_len);
 
-	    ajStrAssCL (sline, "", seq_len+1);
+	    (void) ajStrAssCL (sline, "", seq_len+1);
 
 	    ajFileRead(&tmpbyte, (size_t)1, (size_t)1,
 		       qryd->libs);	/* skip the null byte */
@@ -3530,7 +3542,7 @@ static AjBool seqBlastReadTable (const AjPSeqin seqin, AjPStr* hline,
 	    }
 
 	    ajStrFixI (*sline, seq_len);
-	    ajStrAssS (&seqin->Inseq, *sline);
+	    (void) ajStrAssS (&seqin->Inseq, *sline);
 	    return ajTrue;
 	}
 
@@ -3565,19 +3577,19 @@ static void seqBlastStripNcbi (AjPStr* line)
 	if (!giexp)
 	giexp = ajRegCompC("^gi[|][^|]+[|]");*/
 
-    ajStrAssS (&tmpline, *line);
+    (void) ajStrAssS (&tmpline, *line);
 
     /*  ajDebug ("parseNCBI '%S'\n", tmpline);
 	if (ajRegExec(gnlexp, tmpline))
 	{
 	ajRegPost(gnlexp, &tmpstr);
-	ajStrAssS (&tmpline, tmpstr);
+	(void) ajStrAssS (&tmpline, tmpstr);
 	}
 	
 	if (ajRegExec(giexp, tmpline))
 	{
 	ajRegPost(giexp, &tmpstr);
-	ajStrAssS (&tmpline, tmpstr);
+	(void) ajStrAssS (&tmpline, tmpstr);
 	}
 	*/
     ajFmtPrintS (line, ">%S", tmpline);
