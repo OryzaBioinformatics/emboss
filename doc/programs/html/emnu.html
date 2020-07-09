@@ -1,0 +1,980 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: emnu
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: emnu
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program emnu
+</H1>
+
+<H2>
+    Function
+</H2>
+
+
+Simple menu of EMBOSS applications
+
+
+<H2>
+    Description
+</H2>
+
+
+
+<b>emnu</b> displays a simple character-based menu that allows you to display
+the names of emboss programs and select them.
+<P>
+
+It also displays the names of files in your current directory and allows
+you to display their contents, copy them, delete them and do other
+things with them. 
+<P>
+
+<b>emnu</b> allows to to move around the menus of programs or files
+using the arrow keys.  Pressing RETURN when you have selected an item
+will run a program or display a file. 
+<p>
+
+You can also navigate around the menu by typing the first few letters of
+the option that you desire.  You will move to the item in the menu that first
+matches those letters. 
+<P>
+
+You can also type in UNIX commands as if you were typing them in a UNIX
+session.  (Of course, as you type, <b>emnu</b> will not know if you wish
+to run a UNIX command or go to a menu item starting with the letters you
+are typing, so you will see the menu selection changing as you type.  If
+this irritates you and you are confident enough with UNIX commands to be
+typing them directly, maybe you do not need to use <b>emnu</b>?)
+<p>
+
+If you run a command or program that creates one or more files, then when
+you return to the menu, the command line will be set up to contain the
+command <b>more</b> followed by the names of the files.  Pressing RETURN
+to run this command will display the contents of these files.  If you do
+not wish to see these files, just press <b>^C</b> to clear the command
+line. 
+<p>
+
+You can also navigate around the menu and do many other things by typing
+control keys and Function keys.  Control keys can be typed by pressing
+the <b>Control</b> key and another key.  Control keys are written here
+and in the online help text as a <b>^</b> and then the key's letter, for
+example <i>^C</i> means Control-C. 
+<p>
+
+The control key commands that are most useful will be displayed in the
+bottom two lines of the screen.  If in doubt, press the '?' key for
+further help. 
+<p>
+
+If you are using <b>emnu</b> through a telnet session or in a 'xterm'
+window, you may be able to click on menu options and on the bottom two
+lines of help in the screen to select items.  (Double click on the menu
+to run that item.)
+<p>
+
+The menus that are displayed are very simple.  They consist of the title
+of the menu at the top of the screen, followed by several lines of
+things to select.  The first two items are always 'EXIT' which takes you back
+to the previous menu, and 'HELP' which shows help for this menu. 
+<p>
+
+The first menu you see (the GROUPS MENU) will consist of two columns of
+the groups of EMBOSS programs.  You can move up and down, left and right
+using the arrow keys.  The bottom two lines show useful control keys you
+can type to do things.  You may be able to click on the help text
+or on the menu items to select them.
+<p>
+
+The line above the two help lines is the command line.  This is where
+the currently selected menu item or any command you type is displayed. 
+See the <b>Usage</b> section of this document below to see useful
+control codes for navigating and editing this command line.  You may
+type in any UNIX command or any EMBOSS program name in this command
+line.  It is common to add extra parameters or options to change the
+default behaviour of an EMBOSS program.  You may edit the command line
+to do this.  For example the program <b>seqret</b> can take many
+options.  You may wish to type the command 'seqret -osf gcg' to
+make <b>seqret</b> write out sequences in GCG format. 
+<p>
+
+Selecting any item in the GROUPS menu apart from 'EXIT' and 'HELP' will
+select a sub-menu.  The 'ALL FILES' and 'NEW FILES' items will start a
+menu displaying files, all others will display a menu of EMBOSS
+programs. 
+<P>
+
+<!------------------------------------------------------------------------->
+
+<H3>
+	Groups menu
+</H3>
+
+This is the menu that is initially displayed.
+<P>
+
+
+<hr>
+<table align=middle bgcolor="#E0E0E0" border=1 cellspacing=0 cellpadding=1>
+<tr>
+<td>
+<pre>
+                                   GROUPS MENU
+>EXIT                                MOTIFS
+ HELP                                MUTATION
+ ALL FILES                           PATTERN MATCHING
+ NEW FILES                           PRIMERS
+ ALPHABETIC LISTING OF ALL PROGRAMS  PROFILES
+ SEARCH FOR PROGRAMS                 PROTEIN SEQUENCE COMPOSITION
+                                     PROTEIN SEQUENCE FEATURES
+ ALIGNMENT                           PROTEIN SEQUENCE PROPERTIES
+ ALIGNMENT GLOBAL                    REFORMATTING
+ ALIGNMENT LOCAL                     REPEATS
+ ALIGNMENT MULTIPLE                  RESTRICTION ENZYMES
+ CODING REGIONS                      SECONDARY STRUCTURE
+ COMPARISON                          SEQUENCE COMPARISON
+ CPG ISLANDS                         SEQUENCE COMPOSITION
+ DATABASE ENTRY EXTRACTION           SEQUENCE DISPLAY
+ DATABASE INDEXING                   SEQUENCE EDITING
+ DATABASE INFORMATION                SEQUENCE INFORMATION
+ DISPLAY ALIGNMENT MULTIPLE          SITE DIRECTED MUTAGENESIS
+ DNA SEQUENCE COMPOSITION            TEXT SEARCH
+ DNA SEQUENCE FEATURES               TRANSCRIPTION
+ DNA SEQUENCE PROPERTIES             TRANSLATION
+> EXIT
+ ? Help ^N New Files ^A StartLine ^B Back    ^C Clear  ^U Menu Up ^P Page Up
+^X Exit ^T All Files ^E End Line  ^F Forward ^K ClrEnd ^D Menu Dn ^Z Page Dn
+</pre>
+</td>
+</tr>
+</table>
+<hr>
+
+
+
+<hr>
+<table align=middle bgcolor="#E0E0E0" border=1 cellspacing=0 cellpadding=1>
+<tr>
+<td>
+<pre>
+                                  MAIN MENU HELP
+This menu system aims to make it easy to run EMBOSS programs and manage files.
+
+You now have a menu of EMBOSS program groups. You can select any program group
+and select the programs. Move to an option and press RETURN to select it.
+You can move to menu options by typing the first few letters of the option name
+or by using the cursor (arrow) keys.
+You can also type any normal UNIX command and run it.
+
+Before the program group options, are the following special options:
+EXIT - exit the program
+HELP - this page of help
+ALL FILES - display files in this directory, view them, change directory, etc.
+NEW FILES - display the files that have been created since 'em' started running
+ALPHABETIC - listing of all EMBOSS programs
+SEARCH - search for EMBOSS programs by name or description
+
+The following control keys edit the command line:
+^F forward, ^B back, ^A start, ^E end, ^C delete line, ^K delete to end of line
+
+The following keys get other things:
+F1,F2,F3,F5 -view, view sequence, copy and delete the last file looked at
+^X exit, ^N/^T file menus, ^R recall stored file, TAB complete name of option
+
+Press any key to continue... 
+</pre>
+</td>
+</tr>
+</table>
+<hr>
+
+<!------------------------------------------------------------------------->
+
+<H3>
+	Programs menus
+</H3>
+
+A typical EMBOSS PROGRAMS MENU is displayed below.
+<P>
+
+It starts with the normal 'EXIT' and 'HELP' items.  All the other items
+are EMBOSS programs.  There is only one column of items.  Each item is
+followed by a short description of the program.  Use of the UP and DOWN
+arrow keys will move you up and down in the menu.  Use of the LEFT and
+RIGHT arrow keys will also move you up and down in the menu. 
+<p>
+
+To get back to the GROUPS MENU, select the 'EXIT' option or type ^X. 
+<p>
+
+You may add any text you wish after the name of a selected EMBOSS
+program.  For example, type ^E to go to the end of the command line and
+type <b> -opt</b> after the program name to make the program ask you for
+more than the minimal set of qualifiers when you run that program. 
+<p>
+
+To see detailed help on a program, move to the appropriate item and
+press the <b>?</b> key. 
+<p>
+
+If you run a program that creates one or more files, then when
+you return to the menu, the command line will be set up to contain the
+command <b>more</b> followed by the names of the files.  Pressing RETURN
+to run this command will display the contents of these files.  If you do
+not wish to see these files, just press <b>^C</b> to clear the command
+line. 
+<p>
+
+To run the program, just press RETURN.
+<p>
+
+NOTE: Once you start running any program, you are no longer talking to
+the menu system, you are only talking to that program.  Therefore all of
+the control codes for doing things like putting file names in the
+command line will have no effect. 
+<P>
+
+
+<hr>
+<table align=middle bgcolor="#E0E0E0" border=1 cellspacing=0 cellpadding=1>
+<tr>
+<td>
+<pre>
+                                  PROGRAMS MENU
+>EXIT                                                                           
+ HELP
+
+ chaos        Create a chaos game representation plot fro a sequence
+ cpgplot      Plot CpG rich areas
+ cpgreport    Reports all CpG rich regions
+ diffseq      Find differences (SNPs) between nearly identical sequences
+ dotmatcher   Displays a thresholded dotplot of two sequences
+ dotpath      Displays a non-overlapping wordmatch dotplot of two sequences
+ dottup       Displays a wordmatch dotplot of two sequences
+ einverted    Finds DNA inverted repeats
+ equicktandem Finds tandem repeats
+ etandem      Looks for tandem repeats in a nucleotide sequence
+ isochore     Plots isochores in large DNA sequences
+ newcpgreport Report CpG rich areas
+ newcpgseek   Reports CpG rich regions
+ palindrome   Looks for inverted repeats in a nucleotide sequence
+ polydot      Displays all-against-all dotplots of a set of sequences
+ redata       Search REBASE for enzyme name, references, suppliers etc
+ restrict     Finds restriction enzyme cleavage sites
+ showseq      Display a sequence with features, translation etc
+> EXIT
+ ? Help ^N New Files ^G Get File  ^J Complete  ^C Clear  ^U Menu Up ^P Page Up
+^X Exit ^T All Files ^R RecalFile ^E End Line  ^K ClrEnd ^D Menu Dn ^Z Page Dn
+</pre>
+</td>
+</tr>
+</table>
+<hr>
+
+
+
+
+
+
+<hr>
+<table align=middle bgcolor="#E0E0E0" border=1 cellspacing=0 cellpadding=1>
+<tr>
+<td>
+<pre>
+                                PROGRAMS MENU HELP
+This menu aims to make it easy to run the EMBOSS programs.
+
+You now have a menu of EMBOSS programs. You can select any program.
+Move to an option and press RETURN to select it.
+You can move to menu options by typing the first few letters of the option name
+or by using the cursor (arrow) keys.
+You can also type any normal UNIX command and run it.
+
+Before the program group options, are the following special options:
+EXIT - exit the program
+HELP - this page of help
+
+The following control keys edit the command line:
+^F forward, ^B back, ^A start, ^E end, ^C delete line, ^K delete to end of line
+
+The following keys get other things:
+F1,F2,F3,F5 -view, view sequence, copy and delete the last file looked at
+^X exit, ^N/^T file menus, ^R recall stored file, ? see detailed help on program
+
+
+
+
+
+Press any key to continue... 
+</pre>
+</td>
+</tr>
+</table>
+<hr>
+
+
+
+<!------------------------------------------------------------------------->
+
+<H3>
+	All files menu
+</H3>
+
+Get to this menu by selecting the 'ALL FILES' option from the main
+GROUPS menu, or type <b>^T</b> in any menu. 
+<P>
+This will show a list of the files in your current directory (folder).
+<p>
+
+The name of the current directory will be displayed as the title of the menu.
+<p>
+
+You can see the contents of a file by pressing RETURN when the file is
+the currently selected item in the menu.  If the current item is a
+directory (marked by the word <b>Dir</b> by the name) then you will go
+into that directory and the FILES menu will change to display the files
+in that directory.  All further programs will be run in that new
+directory until you exit the menu program or you change directory again. 
+Exiting from the FILES menu will not change back to the previous menu. 
+<p>
+
+There are many useful control keys for manipulating files:
+<P>
+
+The following change the way the files are sorted before displaying in the menu.
+Having pressed one of these function keys, all subsequent file menus
+will sort the files using the appropriate method.
+<p>
+
+<pre>
+ F8  AlphaSort
+     Sort the files by name (Start a files menu if not already in one) 
+
+ F9  TimeSort   
+     Sort the files by time (Start a files menu if not already in one) 
+</pre>
+<P>
+
+The following will use the current files menu item to display, copy of
+delete.  If you are not currently in a FILES menu or if the current item
+is not a file, then the last valid file that you pressed RETURN on will
+be remembered and used. 
+<p>
+
+The <b>^G</b> key is useful for adding this default file name to a
+command you are typing into the command line. 
+<p>
+
+Note: you can use the commands in any menu and they will work on the
+default file. 
+
+<p>
+<pre>
+ F1  ViewFile   
+     Show the contents of the current menu item file, or last file viewed 
+
+ F2  View Seq   
+     Display the current file as a sequence 
+
+ F4  CopyFile   
+     Copy the current file to a new file 
+
+ F5  DelFile   
+     Delete the current file 
+
+ ^G  GetFile   
+     Add the name of the current file to the command line 
+</pre>
+<p>
+
+Separate from the memory of the default file used by the above commands
+is a specific method of remembering the name of an item in the FILES
+menus and recalling it into the command line at a later date by using
+the following pair of key codes. 
+<p>
+
+<pre>
+ ^S  StoreFile   
+     Remember the name of the current menu item file 
+
+ ^R  RecalFile   
+     Add the stored file name to the command line 
+</pre>
+<p>
+
+And finally, it is often useful to be able to make a new directory
+(folder) and go directly into that new directory. 
+<p>
+<pre>
+ F3  New Dir    
+     Create a new directory and go into it 
+</pre>
+<p>
+
+
+<hr>
+<table align=middle bgcolor="#E0E0E0" border=1 cellspacing=0 cellpadding=1>
+<tr>
+<td>
+<pre>
+                FILES: /people/gwilliam/tmp
+ EXIT
+ HELP
+ TO HOME
+ PARENT DIRECTORY
+
+ five.needle                   20 Nov 2000 16:51   29 Kb
+ five.rev                      16 Nov 2000 14:48  178  b
+ five.seq                      09 Nov 2000 17:08  178  b
+ five.seq.fasta                20 Nov 2000 15:42  210  b
+ five.seq.fasta.align          20 Nov 2000 15:42    1 Kb
+ five.seq.fasta.cat            20 Nov 2000 15:42   14 Kb
+ five.seq.fasta.masked         20 Nov 2000 15:42  210  b
+ five.seq.fasta.masked.log     20 Nov 2000 15:42   35  b
+ five.seq.fasta.out            20 Nov 2000 15:42  295  b
+ five.seq.fasta.stderr         20 Nov 2000 15:42   13 Kb
+ five.seq.fasta.tbl            20 Nov 2000 15:42    1 Kb
+ five.water                    20 Nov 2000 09:34    1 Kb
+ four.seq                      09 Nov 2000 17:08  159  b
+>one.seq                       09 Nov 2000 17:08  276  b
+ three.AC026020                20 Nov 2000 16:07  868 Kb
+ three.AC026051                20 Nov 2000 16:06  768 Kb
+> one.seq
+ ? Help F1 ViewFile F3 New Dir  ^G GetFile ^S StoreFile F9 TimeSort ^N NewFile
+^X Exit F2 View Seq F4 CopyFile F5 DelFile ^R RecalFile F8 AlphaSort
+</pre>
+</td>
+</tr>
+</table>
+<hr>
+
+
+<hr>
+<table align=middle bgcolor="#E0E0E0" border=1 cellspacing=0 cellpadding=1>
+<tr>
+<td>
+<pre>
+                                ALL FILES MENU HELP
+This menu aims to make it easy to view and manage the files output by programs.
+You now have a menu of file names in the current directory.
+You can select any file by moving to its menu option
+You can move to menu options by typing the first few letters of the file name
+or by using the cursor (arrow) keys.
+Press RETURN to view the file (or if it is a directory, to go into it).
+You can also type any normal UNIX command and run it.
+
+Before the file name options, are the following special options:
+EXIT - exit back to the previous menu screen
+HELP - this page of help
+TO HOME - go back to your 'Home' directory
+PARENT DIRECTORY - go to the directory above this one
+
+The current file becomes the default file for use by:
+F1 view file, F2 display as sequence, F3 copy file, F5 delete file
+
+The following keys do other things:
+F4 makes a new directory, F8 sort files by name, F9 sort files by time
+^X exit, ^N new files menu, ^S store current file name, ^R recall stored file
+
+
+
+Press any key to continue... 
+</pre>
+</td>
+</tr>
+</table>
+<hr>
+
+
+
+
+
+<!------------------------------------------------------------------------->
+
+<H3>
+	New files menu
+</H3>
+
+
+The NEW FILES menu is exactly the same at the ALL FILES menu except that
+it only holds those files that have been created or modified since you
+started the menu program. 
+<P>
+
+It therefore consists of a convenient way of quickly finding those files
+which you have worked on during this menu session. 
+
+
+<hr>
+<table align=middle bgcolor="#E0E0E0" border=1 cellspacing=0 cellpadding=1>
+<tr>
+<td>
+<pre>
+              NEW FILES: /people/gwilliam/tmp
+>EXIT                                          
+ HELP
+ TO HOME
+ PARENT DIRECTORY
+
+ five.needle          20 Nov 2000 16:51   29 Kb
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+> EXIT
+ ? Help F1 ViewFile F3 New Dir  ^G GetFile ^S StoreFile F9 TimeSort ^T AllFile
+^X Exit F2 View Seq F4 CopyFile F5 DelFile ^R RecalFile F8 AlphaSort
+</pre>
+</td>
+</tr>
+</table>
+<hr>
+
+
+
+
+
+<hr>
+<table align=middle bgcolor="#E0E0E0" border=1 cellspacing=0 cellpadding=1>
+<tr>
+<td>
+<pre>
+                                NEW FILES MENU HELP
+This menu aims to make it easy to view and manage the files output by programs.
+It shows the files that have been created since 'em' started.
+
+You now have a menu of file names in the current directory.
+You can select any file by moving to its menu option
+You can move to menu options by typing the first few letters of the file name
+or by using the cursor (arrow) keys.
+Press RETURN to view the file (or if it is a directory, to go into it).
+You can also type any normal UNIX command and run it.
+
+Before the file name options, are the following special options:
+EXIT - exit back to the previous menu screen
+HELP - this page of help
+TO HOME - go back to your 'Home' directory
+PARENT DIRECTORY - go to the directory above this one
+
+The current file becomes the default file for use by:
+F1 view file, F2 display as sequence, F3 copy file, F5 delete file
+
+The following keys do other things:
+F4 makes a new directory, F8 sort files by name, F9 sort files by time
+^X exit, ^T all files menu, ^S store current file name, ^R recall stored file
+
+Press any key to continue... 
+</pre>
+</td>
+</tr>
+</table>
+<hr>
+
+
+
+
+
+The name of this program, <b>emnu</b>, comes from the observation that the
+<i>EMBOSS Menu is Not UNIX</i>. 
+
+
+<!------------------------------------------------------------------------->
+<!------------------------------------------------------------------------->
+
+<H2>
+    Usage
+</H2>
+
+
+<H3>
+General
+</H3>
+
+
+<table align=middle bgcolor="#D0E0F0" border=1 cellspacing=0 cellpadding=1>
+<tr>
+<th>Key</th>
+<th>Name</th>
+<th>Description</th>
+</tr>
+<tr>
+<td> ?</td><td>Help</td><td>Help on the current menu, or current program</td>
+</tr>
+<tr>
+<td>^X</td><td>Exit </td><td>Exit back to the prvious menu</td>
+</tr>
+</table>
+
+
+
+<H3>
+Menu navigation
+</H3>
+
+<table align=middle bgcolor="#D0E0F0" border=1 cellspacing=0 cellpadding=1>
+<tr>
+<th>Key</th>
+<th>Name</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>^U</td><td>Menu Up </td><td>Move up one menu item (same as UP ARROW)</td>
+</tr>
+<tr>
+<td>^D</td><td>Menu Dn </td><td>Move down one menu item (same as DOWN ARROW)</td>
+</tr>
+<tr>
+<td>^P</td><td>Page Up</td><td>Move down the menu by one screen</td>
+</tr>
+<tr>
+<td>^Z</td><td>Page Dn</td><td>Move up the menu by one screen</td>
+</tr>
+</table>
+
+
+
+<H3>
+Command-line editing
+</H3>
+
+<table align=middle bgcolor="#D0E0F0" border=1 cellspacing=0 cellpadding=1>
+<tr>
+<th>Key</th>
+<th>Name</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>^A</td><td>StartLine </td><td>Move to the start of the command line</td>
+</tr>
+<tr>
+<td>^E</td><td>End Line  </td><td>Move to the end of the command line</td>
+</tr>
+<tr>
+<td>^B</td><td>Back    </td><td>Move back one character in the command line</td>
+</tr>
+<tr>
+<td>^F</td><td>Forward </td><td>Move forward one character in the command line</td>
+</tr>
+<tr>
+<td>^C</td><td>Clear  </td><td>Clear all of the command line</td>
+</tr>
+<tr>
+<td>^K</td><td>ClrEnd </td><td>Clear from the cursor position to the end of the command line</td>
+</tr>
+<tr>
+<td>^J</td><td>Complete  </td><td>Complete the command line to match the current menu item</td>
+</tr>
+</table>
+
+
+
+<H3>
+Files
+</H3>
+
+<table align=middle bgcolor="#D0E0F0" border=1 cellspacing=0 cellpadding=1>
+<tr>
+<th>Key</th>
+<th>Name</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>^N</td><td>New Files </td><td>Display a menu showing only files created since the menu program started</td>
+</tr>
+<tr>
+<td>^T</td><td>All Files </td><td>Display a menu of all files in the current directory</td>
+</tr>
+<tr>
+<td>F8</td><td>AlphaSort</td><td>Sort the files by name (Start a files menu if not already in one)</td>
+</tr>
+<tr>
+<td>F9</td><td>TimeSort </td><td>Sort the files by time (Start a files menu if not already in one)</td>
+</tr>
+<tr>
+<td>F1</td><td>ViewFile </td><td>Show the contents of the current menu item file, or last file viewed</td>
+</tr>
+<tr>
+<td>F2</td><td>View Seq </td><td>Display the current file as a sequence</td>
+</tr>
+<tr>
+<td>F3</td><td>New Dir  </td><td>Create a new directory and go into it</td>
+</tr>
+<tr>
+<td>F4</td><td>CopyFile </td><td>Copy the current file to a new file</td>
+</tr>
+<tr>
+<td>F5</td><td>DelFile </td><td>Delete the current file</td>
+</tr>
+<tr>
+<td>^G</td><td>GetFile </td><td>Add the name of the current file to the command line</td>
+</tr>
+<tr>
+<td>^S</td><td>StoreFile </td><td>Remember the name of the current menu item file</td>
+</tr>
+<tr>
+<td>^R</td><td>RecalFile </td><td>Add the stored file name to the command line</td>
+</tr>
+</table>
+
+
+
+
+
+<!------------------------------------------------------------------------->
+<!------------------------------------------------------------------------->
+
+<H2>
+    Command line arguments
+</H2>
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers: (none)
+   Optional qualifiers:
+   -[no]morefiles      bool       After every command that you run in the
+                                  menu, either by selecting the name of an
+                                  EMBOSS program, or by typing the command in
+                                  the command line, a check is made to see if
+                                  any new files have been created by that
+                                  command. If so, the command 'more filenames'
+                                  will be put into the comamnd line ready for
+                                  you to quickly view those new files. If you
+                                  do not wish this to happen, set this to be
+                                  false.
+   -explode            bool       The groups that EMBOSS applications belong
+                                  to have two forms, exploded and not
+                                  exploded. The exploded group names are more
+                                  numerous and often vaguely phrased than the
+                                  non-exploded ones. The exploded names are
+                                  formed from definitions of the group names
+                                  that start like NAME1:NAME2 and which are
+                                  then expanded into many combinations of the
+                                  names as: 'NAME1', 'NAME2', 'NAME1 NAME2',
+                                  NAME2 NAME1'. The non-expanded names are
+                                  simply like: 'NAME1 NAME2'.
+
+   Advanced qualifiers: (none)
+
+
+</pre>
+</td></tr></table>
+<P>
+
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]morefiles</td>
+<td>After every command that you run in the menu, either by selecting the name of an EMBOSS program, or by typing the command in the command line, a check is made to see if any new files have been created by that command. If so, the command 'more filenames' will be put into the comamnd line ready for you to quickly view those new files. If you do not wish this to happen, set this to be false.</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-explode</td>
+<td>The groups that EMBOSS applications belong to have two forms, exploded and not exploded. The exploded group names are more numerous and often vaguely phrased than the non-exploded ones. The exploded names are formed from definitions of the group names that start like NAME1:NAME2 and which are then expanded into many combinations of the names as: 'NAME1', 'NAME2', 'NAME1 NAME2', NAME2 NAME1'. The non-expanded names are simply like: 'NAME1 NAME2'.</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H2>
+    Input file format
+</H2>
+
+
+None.
+
+<H2>
+    Output file format
+</H2>
+
+None.
+
+<H2>
+    Data files
+</H2>
+
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+The name of this program, <b>emnu</b>, comes from the observation that 
+<i>'emnu'</i> is a mangled <i>'menu'</i>.
+
+
+<H2>
+    References
+</H2>
+
+None.
+
+<H2>
+    Warnings
+</H2>
+
+None.
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+None.
+
+<H2>
+    Exit status
+</H2>
+
+
+It always exits with status 0. 
+
+<H2>
+    Known bugs
+</H2>
+
+It crashes if you resize the xterm window to make it smaller than when
+the menu system started. 
+<p>
+
+It sometimes crashes when the xterm window is resized to be less than 80
+characters wide and the menu lines are longer than this.
+<p>
+
+When using the '-explode' option, one of the program
+groups is expanded to be 'HELP'.  Selecting this option simply gives the
+help for the Groups Menu.  I don't intend to alter this situation, it is
+a feature.
+<p>
+
+delete_file() doesn't delete directories - this is because
+we don't allow directories to be default files.  Should we? It would
+complicate things like copy_file.
+<p>
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+
+This application was written by Gary Williams <a
+href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+
+<H2>
+    History
+</H2>
+
+Many concepts (but no code) for this application cames from the editor
+<b>pico</b> and the file browser 'Midnight Commander' (<b>mc</b>). 
+<p>
+
+Code was taken liberally from the example programs in the <b>ncurses</b>
+package.
+<p>
+
+The name of this program, <b>emnu</b>, was a suggestion from Peter Rice
+after the author had run through many temporary names ('esme' -
+Extremely Simple Menu for EMBOSS, 'em' - EMBOSS Menu, 'm' - Menu). 
+<p>
+
+April - Dec 2000 - written - Gary Williams
+
+<H2>
+    Target users
+</H2>
+
+
+This program is intended to be used by naive users. 
+
+<H2>
+    Comments
+</H2>
+
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+
