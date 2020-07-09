@@ -1354,6 +1354,7 @@ static void listInsertNodeOld(AjPListNode* pnode, void* x)
     AJNEW0(p);
     p->Item = x;
     p->Next = (*pnode);
+    p->Prev = (*pnode)->Prev;
     p->Next->Prev = p;
     *pnode = p;
 

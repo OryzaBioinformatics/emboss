@@ -430,7 +430,7 @@ void ajListPushApp(AjPList thys, void* x)
     }
     
     thys->Last->Item = x;
-    for(node=thys->First; node->Next; node = node->Next)
+    for(node=tmp=thys->First; node->Next; node = node->Next)
 	tmp = node;
     thys->Last->Prev = tmp;
 
@@ -1482,6 +1482,7 @@ static void listInsertNode (AjPListNode* pnode, void* x)
     AJNEW0(p);
     p->Item = x;
     p->Next = (*pnode);
+    p->Prev = (*pnode)->Prev;
     p->Next->Prev = p;
     *pnode = p;
 
