@@ -869,6 +869,7 @@ static void patRestrictPushHit(EmbPPatRestrict *enz, AjPList *l, int pos,
     hit->pat = ajStrNewC(ajStrStr((*enz)->pat));
     hit->acc = ajStrNew();
     hit->tit = ajStrNew();
+    hit->iso = ajStrNew();
     hit->len = (*enz)->len;
 
     if(forward)
@@ -2964,6 +2965,10 @@ int embPatVariablePattern (AjPStr *pattern, AjPStr opattern, AjPStr text,
 ** Notably double reporting of symmetric palindromes and reporting
 ** of isoschizomers. Also provides an optional alphabetic sort.
 **
+** If we don't allow isoschizomers, then names of all isoschizomers
+** found will be added to the string 'iso' in the returned list of
+** EmbPMatMatch structures.  If 'isos' is AjTrue then they will be left alone.
+**
 ** @param [rw] l [AjPList *] list of hits from ajPatRestrictScan
 ** @param [r] hits [int] number of hits from ajPatRestrictScan
 ** @param [r] isos [AjBool] Allow isoschizomers
@@ -2973,9 +2978,11 @@ int embPatVariablePattern (AjPStr *pattern, AjPStr opattern, AjPStr text,
 ** @@
 ******************************************************************************/
 
-int embPatRestrictRestrict (AjPList *l, int hits, AjBool isos, AjBool alpha)
+int embPatRestrictRestrict (AjPList *l, int hits, AjBool isos,
+	AjBool alpha)
 {
     EmbPMatMatch m=NULL;
+    EmbPMatMatch archetype=NULL; /* archetype of a set of isoschizomers */
     AjPStr  ps=NULL;
     AjPList tlist=NULL;
     AjPList newlist=NULL;
@@ -2998,6 +3005,7 @@ int embPatRestrictRestrict (AjPList *l, int hits, AjBool isos, AjBool alpha)
     /* Remove Mirrors for each enzyme separately */
     ajListSort(*l,patRestrictNameCompare);
     tc=nc=0;
+
     if(hits)
     {
 	ajListPop(*l,(void **)&m);
@@ -3075,6 +3083,8 @@ int embPatRestrictRestrict (AjPList *l, int hits, AjBool isos, AjBool alpha)
 	{
 	    if(pos==m->start)
 	    {
+/* push groups of RE's that share the same start position onto tlist to
+be checked later to see if they are isoschizomers */
 		ajListPush(tlist,(void *)m);
 		++tc;
 	    }
@@ -3094,6 +3104,7 @@ int embPatRestrictRestrict (AjPList *l, int hits, AjBool isos, AjBool alpha)
 		 * Now loop rejecting, for each left in the list,
 		 * anything similar
 		 */
+/* check for isoschizomers in the group sharing the previous 'pos' here */
 		while(tc)
 		{
 		    ajListPop(tlist,(void **)&m);
@@ -3102,7 +3113,9 @@ int embPatRestrictRestrict (AjPList *l, int hits, AjBool isos, AjBool alpha)
 		    cut3=m->cut3;
 		    cut4=m->cut4;
 		    ajStrAssC(&ps,ajStrStr(m->pat));
+/* first one of the group is not an isoschizomer, by definition, so return it */
 		    ajListPush(*l,(void *)m);
+		    archetype = m;
 		    ++nc;
 		    --tc;
 		
@@ -3118,8 +3131,17 @@ int embPatRestrictRestrict (AjPList *l, int hits, AjBool isos, AjBool alpha)
 			    ++v;
 			}
 		    
-			else
+			else 
+			{
+/* same cut sites and pattern at the RE just pushed onto 'l', so is an
+isoschizomer - add its name to the archetype's list of isoschizomers and
+delete */
+			    if (ajStrLen(archetype->iso) > 0) {
+			        ajStrAppC(&archetype->iso, ",");
+			    }
+			    ajStrApp(&archetype->iso, m->cod);
 			    embMatMatchDel(&m);
+			}
 		    }
 		    tc=v;
 		}
@@ -3137,7 +3159,9 @@ int embPatRestrictRestrict (AjPList *l, int hits, AjBool isos, AjBool alpha)
 	    cut3=m->cut3;
 	    cut4=m->cut4;
 	    ajStrAssC(&ps,ajStrStr(m->pat));
+/* first one of the group is not an isoschizomer, by definition, so return it */
 	    ajListPush(*l,(void *)m);
+	    archetype = m;
 	    ++nc;
 	    --tc;
 		
@@ -3152,9 +3176,17 @@ int embPatRestrictRestrict (AjPList *l, int hits, AjBool isos, AjBool alpha)
 		    ajListPushApp(tlist,(void *)m);
 		    ++v;
 		}
-	    
 		else
+		{
+/* same cut sites and pattern as the RE just pushed onto 'l', so is an
+isoschizomer - add its name to the archetype's list of isoschizomers and
+delete */
+		    if (ajStrLen(archetype->iso) > 0) {
+		        ajStrAppC(&archetype->iso, ",");
+		    }
+		    ajStrApp(&archetype->iso, m->cod);
 		    embMatMatchDel(&m);
+		}
 	    }
 	    tc=v;
 	}

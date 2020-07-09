@@ -48,16 +48,22 @@ int main(int argc, char **argv)
     embInit("tfextract",argc,argv);
     
     inf = ajAcdGetInfile("inf");
+
     pfname = ajStrNewC("tffungi");
     ajFileDataNewWrite(pfname,&fout);
+
     ajStrAssC(&pfname,"tfinsect");
     ajFileDataNewWrite(pfname,&iout);
+
     ajStrAssC(&pfname,"tfvertebrate");
     ajFileDataNewWrite(pfname,&vout);
+
     ajStrAssC(&pfname,"tfplant");
     ajFileDataNewWrite(pfname,&pout);
+
     ajStrAssC(&pfname,"tfother");
     ajFileDataNewWrite(pfname,&oout);
+
     ajStrDel(&pfname);
 
     line    = ajStrNew();
@@ -103,7 +109,10 @@ int main(int argc, char **argv)
 	}
 	if(ajStrPrefixC(line,"OC") && !done)
 	{
+/* GWW 11 Dec 2000 - this keyword no longer occurs in the site.dat entries
 	    if(strstr(p,"thallobionta"))
+*/
+	    if(strstr(p,"Fungi"))
 	    {
 		done=ajTrue;
 		fp=fout;

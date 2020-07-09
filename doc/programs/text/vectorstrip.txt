@@ -366,12 +366,20 @@ Sequences output to file:
 
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
     1.
@@ -395,6 +403,8 @@ Exit status
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name                      Description
@@ -419,6 +429,8 @@ Author(s)
    
 History
 
+   16 August 2000 - Val Curwen - Written.
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

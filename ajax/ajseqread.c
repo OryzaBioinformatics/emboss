@@ -660,9 +660,10 @@ AjBool ajSeqRead (AjPSeq thys, AjPSeqin seqin)
 	ajSeqinUsa (&seqin, usa);
 	ajStrDel(&usa);
 
-	if (!seqUsaProcess (thys, seqin))
+/*	if (!seqUsaProcess (thys, seqin))
 	    return ajFalse;
-
+*/
+	seqUsaProcess (thys, seqin);
 	ret = seqRead (thys, seqin);
     }
 
@@ -4514,7 +4515,9 @@ AjBool ajSeqGetFromUsa (AjPStr thys, AjBool protein, AjPSeq *seq)
 AjBool ajSeqABITest(AjPFile fp)
 {   
 
-    char pabi[4];
+    char pabi[5];
+
+    pabi[4] = '\0'; 
 
     if(ajFileRead((void *)pabi,4,1,fp))
     {

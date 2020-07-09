@@ -27,8 +27,6 @@ int main(int argc, char**argv)
 {
     AjPRegexp rexp   = NULL;
     AjPRegexp exp2   = NULL;
-    AjPRegexp t1exp  = NULL;
-    AjPRegexp t2exp  = NULL;
     AjPStr line      = NULL;
     AjPStr str       = NULL;
     AjPStr entry     = NULL;
@@ -38,12 +36,14 @@ int main(int argc, char**argv)
     AjPStr text      = NULL;
     AjPStr token     = NULL;
     
-    AjPStrTok handle = NULL;
-
+    AjPStrTok handle  = NULL;
+    AjPStrTok bhandle = NULL;
+    
     AjPFile inf  = NULL;
     AjPFile outf = NULL;
 
     char *p=NULL;
+    char *q=NULL;
     char c=' ';
     
     int n;
@@ -57,10 +57,6 @@ int main(int argc, char**argv)
     rexp  = ajRegCompC("^([^ \t\r\n]+)[ \t\n\r]+([^ \t\r\n]+)[ \t\r\n]+"
 		       "([^ \t\r\n]+)[ \t\n\r]+([^ \t\n\r]+)[ \t\n\r]+");
     exp2  = ajRegCompC("^([0-9]+)([A-Za-z]+)[-]([0-9]+)");
-    t1exp = ajRegCompC("^([^:]+)[:]([^:]+)[:]([^:]+)[:]([^:]+)[:]([^:]+)[:]"
-		       "([^:]+)[:]([^:]+)[:]");
-    t2exp = ajRegCompC("^([^:]+)[:]([^:]+)[:]([^:]+)[:]([^:]+)[:]([^:]+)[:]"
-		       "([^:]+)[:]");
     
     
     embInit("scope", argc, argv);
@@ -112,60 +108,61 @@ int main(int argc, char**argv)
 	    p = ajStrStr(token);
 	    if(sscanf(p,"%d-%d",&from,&to)==2)
 	    {
-		ajStrAssC(&scop->Chain[i],"Unnamed");
-		scop->Start[i] = from;
-		scop->End[i]   = to;
+		scop->Chain[i]='.';
+		ajFmtPrintS(&scop->Start[i],"%d",from);
+		ajFmtPrintS(&scop->End[i],"%d",to);
 	    }
 	    else if(sscanf(p,"%c:%d-%d",&c,&from,&to)==3)
 	    {
-		scop->Start[i] = from;
-		scop->End[i]   = to;
-		ajStrAssSub(&scop->Chain[i],chains,0,0);
+		ajFmtPrintS(&scop->Start[i],"%d",from);
+		ajFmtPrintS(&scop->End[i],"%d",to);
+		scop->Chain[i]=c;
 	    }
 	    else if(ajStrChar(token,1)==':')
 	    {
-		scop->Start[i] = 0;
-		scop->End[i]   = 0;
-		ajStrAssSub(&scop->Chain[i],chains,0,0);
+		ajStrAssC(&scop->Start[i],".");
+		ajStrAssC(&scop->End[i],".");
+		scop->Chain[i]=*ajStrStr(token);
 	    }
 	    else if(ajRegExec(exp2,token))
 	    {
 		ajRegSubI(exp2,1,&str);
-		ajStrToInt(str,&scop->Start[i]);
-		ajRegSubI(exp2,2,&scop->Chain[i]);
+		ajStrAss(&scop->Start[i],str);
+		ajRegSubI(exp2,2,&str);
+		scop->Chain[i] = *ajStrStr(str);
 		ajRegSubI(exp2,3,&str);
-		ajStrToInt(str,&scop->End[i]);
+		ajStrAss(&scop->End[i],str);
 	    }
 	    else
 		ajFatal("Unparseable chain line [%S]\n",chains);
 	}
 	ajStrTokenClear(&handle);
 
-	if(ajRegExec(t1exp,text))
+	ajStrAssC(&scop->Source,"Unknown");	
+	bhandle = ajStrTokenInit(text,"|\n");
+	while(ajStrToken(&token,&bhandle,NULL))
 	{
-	    ajRegSubI(t1exp,1,&scop->Db);
-	    ajRegSubI(t1exp,2,&scop->Class);
-	    ajRegSubI(t1exp,3,&scop->Fold);
-	    ajRegSubI(t1exp,4,&scop->Superfamily);
-	    ajRegSubI(t1exp,5,&scop->Family);
-	    ajRegSubI(t1exp,6,&scop->Domain);
-	    ajRegSubI(t1exp,7,&scop->Source);
+	    ajStrRemoveHtml(&token);
+	    ajStrClean(&token);
+	    p = ajStrStr(token);
+	    if(ajStrPrefixC(token,"Class:"))
+		ajStrAssC(&scop->Class,p+7);
+	    if(ajStrPrefixC(token,"Fold:"))
+		ajStrAssC(&scop->Fold,p+6);
+	    if(ajStrPrefixC(token,"Superfamily:"))
+		ajStrAssC(&scop->Superfamily,p+13);
+	    if(ajStrPrefixC(token,"Family:"))
+		ajStrAssC(&scop->Family,p+8);
+	    if(ajStrPrefixC(token,"Protein:"))
+		ajStrAssC(&scop->Domain,p+9);
+	    if(ajStrPrefixC(token,"Species:"))
+	    {
+		ajStrAssC(&scop->Source,p+9);
+	    }
 	}
-	else if(ajRegExec(t2exp,text))
-	{
-	    ajRegSubI(t2exp,1,&scop->Db);
-	    ajRegSubI(t2exp,2,&scop->Class);
-	    ajRegSubI(t2exp,3,&scop->Fold);
-	    ajRegSubI(t2exp,4,&scop->Superfamily);
-	    ajRegSubI(t2exp,5,&scop->Family);
-	    ajRegSubI(t2exp,6,&scop->Domain);
-	    ajStrAssC(&scop->Source,"Unknown");
-	}
-	else
-	    ajFatal("Unparseable Text [%S]",text);
-
+	ajStrTokenClear(&bhandle);
+	
 	ajScopWrite(outf,scop);
-
 	ajScopDel(&scop);
     }
     

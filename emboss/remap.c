@@ -25,10 +25,18 @@
 
 /* declare functions */
 static void read_equiv(AjPFile *equfile, AjPTable *table);
-static void CutList (AjPFile outfile, AjPList restrictlist, AjBool html);
+static void CutList (AjPFile outfile, AjPList restrictlist, AjBool isos,
+	AjBool html);
 static void NoCutList (AjPFile outfile, AjPList restrictlist, AjBool
 	html, AjPStr enzymes, AjBool blunt, AjBool sticky, int sitelen);
 static void read_file_of_enzyme_names(AjPStr *enzymes);
+
+/* structure for counts and isoschizomers of a restriction enzyme hit */
+typedef struct SValue {
+    int    count;
+    AjPStr iso;
+} OValue, *PValue;
+
 
 int main (int argc, char * argv[]) {
 
@@ -221,7 +229,7 @@ int main (int argc, char * argv[]) {
 
 /* display a list of the Enzymes that cut and don't cut */
     if (cutlist) {
-      CutList(outfile, restrictlist, html);
+      CutList(outfile, restrictlist, limit, html);
       NoCutList(outfile, restrictlist, html, enzymes, blunt, sticky, sitelen);
     }
 
@@ -260,24 +268,32 @@ int main (int argc, char * argv[]) {
 **
 ** @param [r] outfile [AjPFile] file to print to.
 ** @param [r] restrictlist [AjPList] List to print.
+** @param [r] isos [AjBool] True if allow isoschizomers
 ** @param [r] html [AjBool] dump out html if true.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void CutList (AjPFile outfile, AjPList restrictlist, AjBool html) {
+static void CutList (AjPFile outfile, AjPList restrictlist, AjBool isos,
+	AjBool html) {
 	
 
   AjPTable table = ajStrTableNewCase (200);
-  int * value;
+  PValue value;
   AjPStr key;
   AjIList miter;	/* iterator for matches list */
   EmbPMatMatch m=NULL;	/* restriction enzyme match structure */
   void **array;		/* array for table */  
   int i;
 
+/* print title */
   if (html) (void) ajFmtPrintF(outfile, "<H2>");  
-  (void) ajFmtPrintF(outfile, "\n\nEnzymes that cut\n\n");
+  (void) ajFmtPrintF(outfile, "\n\n# Enzymes that cut  Frequency");
+  if (isos) {
+    (void) ajFmtPrintF(outfile, "\tIsoschizomers\n");
+  } else {
+    (void) ajFmtPrintF(outfile, "\n");
+  }
   if (html) (void) ajFmtPrintF(outfile, "</H2>");  
 
 
@@ -286,18 +302,24 @@ static void CutList (AjPFile outfile, AjPList restrictlist, AjBool html) {
     
     key = m->cod;
 
+/* debug */
+/* (void) ajFmtPrintF(outfile, "%S =|= %S\n", key, m->iso); */
+
+
 /* increment the count of key */
-    value = (int *) ajTableGet(table, (const void *)key);
+    value = (PValue) ajTableGet(table, (const void *)key);
     if (value == NULL) {
       AJNEW0(value);
-      *value = 1;          	
+      value->count = 1;          	
+      value->iso = ajStrNew();
+      ajStrAss(&(value->iso), m->iso);
     } else {
-      (*value)++;
+      value->count++;
     }
     ajTablePut(table, (const void *)key, (void *)value);
 /* debug
-    (int *) value = ajTableGet(table, (const void *)key);
-    ajDebug("key=%S value=%d", key, *value);
+    (PValue) value = ajTableGet(table, (const void *)key);
+    ajDebug("key=%S value=%d", key, value->count);
 */
   }
   (void) ajListIterFree(miter);
@@ -307,8 +329,9 @@ static void CutList (AjPFile outfile, AjPList restrictlist, AjBool html) {
   array = ajTableToarray(table, NULL);
   qsort(array, ajTableLength(table), 2*sizeof (*array), ajStrCmp);
   for (i = 0; array[i]; i += 2) {
-    value = (int *) array[i+1];
-    (void) ajFmtPrintF (outfile, "%10S  %d\n", (AjPStr) array[i], *value);
+    value = (PValue) array[i+1];
+    (void) ajFmtPrintF (outfile, "%10S\t    %d\t%S\n", (AjPStr) array[i], value->count, value->iso);
+    ajStrDel(&(value->iso));
     AJFREE(array[i+1]);		/* free the int* value */
   }  
   AJFREE(array);
@@ -350,7 +373,13 @@ static void NoCutList (AjPFile outfile, AjPList restrictlist, AjBool
   EmbPPatRestrict enz;
   char *p;
   int netmp;
-  
+  AjPList iso=ajListstrNew();	/* list of isoschizomers that cut */
+  AjIList iter;		/* iterator for isoschizomers list */
+  AjPStrTok tok;
+  char tokens[] = " ,";
+  AjPStr code = NULL;
+  AjPStr code2 = NULL;
+
 /* check on number of enzymes specified */
   ne = 0;
   if (!enzymes) {
@@ -418,9 +447,7 @@ static void NoCutList (AjPFile outfile, AjPList restrictlist, AjBool
 
   }
   
- 
-
-/* list files in 'enzymes' that don't cut */
+/* find enzymes that don't cut and blank them out */
   miter = ajListIter(restrictlist);
   while ((m = ajListIterNext(miter)) != NULL) {
     for (i=0; i<ne; ++i) {
@@ -430,14 +457,40 @@ static void NoCutList (AjPFile outfile, AjPList restrictlist, AjBool
         break;
       }
     }
-
   }
   (void) ajListIterFree(miter);
 
+/* make list of isoschizomers that cut */
+  iter = ajListIter(restrictlist);
+  while ((m = ajListIterNext(iter)) != NULL) {
+/* start token to parse isoschizomers names */
+    tok = ajStrTokenInit(m->iso,  tokens);
+    while (ajStrToken (&code, &tok, tokens)) {
+      code2 = ajStrNew();
+      ajStrAss(&code2, code);
+      ajListstrPush(iso, code2);
+    }
+  }
+  ajStrTokenClear(&tok);
+  (void) ajListIterFree(iter);
+   
+
+/* now check if it matches an isoschizomer - blank out if it does */
+  iter = ajListIter(iso);
+  while ((code2 = (AjPStr)ajListIterNext(iter)) != NULL) {
+    for (i=0; i<ne; ++i) {
+      if (ajStrMatchCase(ea[i], code2)) {
+        ajStrClear(&ea[i]);
+	break;
+      }
+    }
+  }
+  (void) ajListIterFree(iter);
+  ajListstrFree(&iso);
 
 /* now only have non-cutting enzyme names in ea[] - print them */
   if (html) (void) ajFmtPrintF(outfile, "<H2>");  
-  (void) ajFmtPrintF(outfile, "\n\nEnzymes that do not cut\n\n");
+  (void) ajFmtPrintF(outfile, "\n\n# Enzymes that do not cut\n\n");
   if (html) (void) ajFmtPrintF(outfile, "</H2>");  
 
   if (html) {(void) ajFmtPrintF(outfile, "<PRE>");} 

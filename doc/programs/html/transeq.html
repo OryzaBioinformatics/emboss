@@ -189,7 +189,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-table</td>
 <td>Code to use</td>
-<td><table><tr><td>0</td> <td><i>(Standard)</i></td></tr><tr><td>1</td> <td><i>(Standard (with alternative initiation codons))</i></td></tr><tr><td>2</td> <td><i>(Vertebrate Mitochondrial)</i></td></tr><tr><td>3</td> <td><i>(Yeast Mitochondrial)</i></td></tr><tr><td>4</td> <td><i>(Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma)</i></td></tr><tr><td>5</td> <td><i>(Invertebrate Mitochondrial)</i></td></tr><tr><td>6</td> <td><i>(Ciliate Macronuclear and Dasycladacean)</i></td></tr><tr><td>9</td> <td><i>(Echinoderm Mitochondrial)</i></td></tr><tr><td>10</td> <td><i>(Euplotid Nuclear)</i></td></tr><tr><td>11</td> <td><i>(Bacterial)</i></td></tr><tr><td>12</td> <td><i>(Alternative Yeast Nuclear)</i></td></tr><tr><td>13</td> <td><i>(Ascidian Mitochondrial)</i></td></tr><tr><td>14</td> <td><i>(Flatworm Mitochondrial)</i></td></tr><tr><td>15</td> <td><i>(Blepharisma Macronuclear)</i></td></tr></table></td>
+<td><table><tr><td>0</td> <td><i>(Standard)</i></td></tr><tr><td>1</td> <td><i>(Standard (with alternative initiation codons))</i></td></tr><tr><td>2</td> <td><i>(Vertebrate Mitochondrial)</i></td></tr><tr><td>3</td> <td><i>(Yeast Mitochondrial)</i></td></tr><tr><td>4</td> <td><i>(Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma)</i></td></tr><tr><td>5</td> <td><i>(Invertebrate Mitochondrial)</i></td></tr><tr><td>6</td> <td><i>(Ciliate Macronuclear and Dasycladacean)</i></td></tr><tr><td>9</td> <td><i>(Echinoderm Mitochondrial)</i></td></tr><tr><td>10</td> <td><i>(Euplotid Nuclear)</i></td></tr><tr><td>11</td> <td><i>(Bacterial)</i></td></tr><tr><td>12</td> <td><i>(Alternative Yeast Nuclear)</i></td></tr><tr><td>13</td> <td><i>(Ascidian Mitochondrial)</i></td></tr><tr><td>14</td> <td><i>(Flatworm Mitochondrial)</i></td></tr><tr><td>15</td> <td><i>(Blepharisma Macronuclear)</i></td></tr><tr><td>16</td> <td><i>(Chlorophycean Mitochondrial)</i></td></tr><tr><td>21</td> <td><i>(Trematode Mitochondrial)</i></td></tr><tr><td>22</td> <td><i>(Scenedesmus obliquus)</i></td></tr><tr><td>23</td> <td><i>(Thraustochytrium Mitochondrial)</i></td></tr></table></td>
 <td>0</td>
 </tr>
 
@@ -234,14 +234,65 @@ Examples of region specifications are:
 </H2>
 
 
-	The input sequence can be one or more nucleic acid sequences.
+The input sequence can be one or more nucleic acid sequences.
 
 <H2>
     Output file format
 </H2>
 
 
-	One or more peptide sequences are written out.
+One or more peptide sequences are written out.
+<P>
+
+The names of the resulting protein sequences are formed from the name of
+the input nucleic acid sequence with '_' and the translation frame
+appended to it.  Thus a nucleic acid sequence with the name 'XYZ'
+franslated in all 6 frame would produce protein sequences with the
+names: 'XYZ_1', 'XYZ_2', 'XYZ_3', 'XYZ_4', 'XYZ_5', 'XYZ_6'. 
+<p>
+
+For example, the result of the command
+<br>
+transeq em:hsfau -frame=6
+<br>
+would be:
+<p>
+
+<hr>
+<pre>
+>HSFAU_1 H.sapiens fau mRNA
+FLFLDSIFAVAGTAVQSPICSSLSAPRSYTPSR*PARKRSPRSRLM*PHWRALPRKIKSC
+SWQARPWRMRPLWASAGWRP*LPWK*QAACLEVKFMVPWPVLEK*EVRLLRWPNRRRRRR
+RQVGLSGGCSTTGALSTLCPPLARRRAPMPTLKSFVILAFSNKKAT*FSQKKX
+>HSFAU_2 H.sapiens fau mRNA
+SSFSTPSSR*LGPPFSRQYAALCPRPGATHLRGDRPGNGRPDQGSCSLTGGHCPGRSSRA
+PGRRAPGG*GHSGPVRGGGPDYPGSSRPHAWR*SSWFPGPCWKSERSDS*GGQTGEEEEE
+DRSG*AADAVQPALCQRCAHLWQEEGPQCQLLSLL*FWLSLIKKPLSSVKKKX
+>HSFAU_3 H.sapiens fau mRNA
+PLSRLHLRGSWDRRSVANMQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVL
+LAGAPLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKK
+TGRAKRRMQYNRRFVNVVPTFGKKKGPNANS*VFCNSGFL**KSHLVQSKKK
+>HSFAU_4 H.sapiens fau mRNA
+FFF*LN*VAFLLEKARITKDLRVGIGALLLAKGGHNVDKAPVVLHPPLSPTCLLLLLLLF
+GHLRSLTSHFSSTGQGTMNFTSKHAACYFQGSQGLHPALAQSGLILQGRACQEHDLIFRG
+NALQ*GYMSLDLGDRFLAGHLEGV*LLGADKELHIGD*TAVPATAKMESRKRX
+>HSFAU_5 H.sapiens fau mRNA
+FFFD*TKWLFY*RKPELQKT*ELALGPFFLPKVGTTLTKRRLYCIRRLARPVFFFFFSCL
+ATLGV*PLTFPARAREP*TLPPSMRPATSRVVRASTPHWPRVASSSRGAPARSTT*SSGA
+MPSSEAT*ALIWATVSWPVTSKVCSSWARTKSCILATERRSQLPRRWSRERGX
+>HSFAU_6 H.sapiens fau mRNA
+FFLTELSGFFIRESQNYKRLKSWHWGPSSCQRWAQR*QSAGCTASAA*PDLSSSSSSPVW
+PP*ESDLSLFQHGPGNHELYLQACGLLLPG*SGPPPRTGPEWPHPPGARLPGARLDLPGQ
+CPPVRLHEP*SGRPFPGRSPRRCVAPGRGQRAAYWRLNGGPSYREDGVEKEE
+</pre>
+<hr>
+<p>
+
+If regions are specified, they are taken to be translated in frame 1 and
+so the output name would be 'XYZ_1'. 
+<p>
+
+
 
 <H2>
     Data files
@@ -352,10 +403,13 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
     Notes
 </H2>
 
+None.
 
 <H2>
     References
 </H2>
+
+None.
 
 
 <H2>

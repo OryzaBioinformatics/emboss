@@ -4,6 +4,10 @@
 **
 ** @author Copyright (C) 1998 Ian Longden
 ** @version 1.0
+** @author Copyright (C) 2001 Alan Bleasby
+** @version 2.0 Changed lists to be double-linked, completely rewrote
+**              iterator handling and added back-iteration functions.
+**              Operation of ajListInsert made more intuitive.
 ** @@
 **
 ** This library is free software; you can redistribute it and/or
@@ -32,9 +36,10 @@
 **           (NOT including the header)
 ** 4) Type - the list type
 **
-** The body of the linked list contains two variables:-
+** The body of the linked list contains three variables:-
 ** 1) next - a pointer to the next linked list object or NULL
-** 2) item - a void pointer to the data.
+** 2) prev - a pointer to the previous linked list object or NULL
+** 3) item - a void pointer to the data.
 *******************************************************************/
  
 #include <stddef.h>
@@ -47,6 +52,9 @@
 #include "ajmem.h"
 #include "ajlist.h"
 #include "ajmess.h"
+
+#define ajLASTFWD  0	/* For iteration shows direction of last walk */
+#define ajLASTBACK 1
 
 static AjPList listNew(AjEnum type);
 static void listInsertNode (AjPListNode* pnode, void* x);
@@ -64,8 +72,9 @@ static void listArrayTrace (void** array);
 ** @@
 ****************************************************************/
 
-AjPList ajListNew(void) {
-  return listNew(ajEListAny);
+AjPList ajListNew(void)
+{
+    return listNew(ajEListAny);
 }
 
 /* @func ajListstrNew *********************************************
@@ -76,8 +85,9 @@ AjPList ajListNew(void) {
 ** @@
 ****************************************************************/
 
-AjPList ajListstrNew(void) {
-  return listNew(ajEListStr);
+AjPList ajListstrNew(void)
+{
+    return listNew(ajEListStr);
 }
 
 /* @funcstatic listNew *********************************************
@@ -89,16 +99,16 @@ AjPList ajListstrNew(void) {
 ** @@
 ****************************************************************/
 
-static AjPList listNew(AjEnum type) {
+static AjPList listNew(AjEnum type)
+{
+    AjPList list;
 
-  AjPList list;
+    AJNEW0 (list);
+    list->Type = type;
 
-  AJNEW0 (list);
-  list->Type = type;
-
-  list->Last = listDummyNode (&list->First);
-
-  return list;
+    list->Last = listDummyNode (&list->First);
+  
+    return list;
 }
 
 /* @func ajListPush ********************************************
@@ -112,15 +122,15 @@ static AjPList listNew(AjEnum type) {
 ** @@
 *****************************************************************/  
 
-void ajListPush (AjPList thys, void* x) {
+void ajListPush (AjPList thys, void* x)
+{
+    assert (thys);
 
-  assert (thys);
+    listInsertNode (&thys->First, x);
 
-  listInsertNode (&thys->First, x);
+    thys->Count++;
 
-  thys->Count++;
-
-  return;
+    return;
 }
 
 /* @func ajListstrPush ********************************************
@@ -133,10 +143,11 @@ void ajListPush (AjPList thys, void* x) {
 ** @@
 *****************************************************************/  
 
-void ajListstrPush (AjPList thys, AjPStr x) {
-  ajListPush (thys, (void*) x);
+void ajListstrPush (AjPList thys, AjPStr x)
+{
+    ajListPush (thys, (void*) x);
 
-  return;
+    return;
 }
 
 /* @func ajListTrace ********************************************
@@ -148,38 +159,40 @@ void ajListstrPush (AjPList thys, AjPStr x) {
 ** @@
 *****************************************************************/  
 
-void ajListTrace (AjPList thys) {
+void ajListTrace (AjPList thys)
+{
+    int i = 0;
+    AjPListNode node;
 
-  int i = 0;
-  AjPListNode node;
+    if (!thys) return;
 
-  if (!thys) return;
+    ajDebug ("\nList Trace %x type %d count %d\n",
+	     thys, thys->Type, thys->Count);
+    ajDebug("first-> %x last-> %x\n", thys->First, thys->Last);
 
-  ajDebug ("\nList Trace %x type %d count %d\n",
-	   thys, thys->Type, thys->Count);
-  ajDebug("first-> %x last-> %x\n", thys->First, thys->Last);
+    for (node=thys->First; node->Next; node=node->Next) {
+	i++;
+	ajDebug ("Item[%d] item %x (data %x) rest -> %x prev -> %x\n",
+		 i, node, node->Item, node->Next, node->Prev);
+    }
 
-  for (node=thys->First; node->Next; node=node->Next) {
-    i++;
-    ajDebug ("Item[%d] item %x (data %x) rest -> %x\n",
-	     i, node, node->Item, node->Next);
-  }
+    if (i != thys->Count)
+    {
+	ajDebug("*** list error expect %d items, found %d\n",
+		thys->Count, i);
+	ajErr("*** list error expect %d items, found %d",
+	      thys->Count, i);
+    }
 
-  if (i != thys->Count) {
-    ajDebug("*** list error expect %d items, found %d\n",
-	    thys->Count, i);
-    ajErr("*** list error expect %d items, found %d",
-	    thys->Count, i);
-  }
+    if (thys->Last != node)
+    {
+	ajDebug("*** list error expect end at %x, found at %x\n",
+		thys->Last, node);
+	ajErr("*** list error expect end at %x, found at %x",
+	      thys->Last, node);
+    }
 
-  if (thys->Last != node) {
-    ajDebug("*** list error expect end at %x, found at %x\n",
-	    thys->Last, node);
-    ajErr("*** list error expect end at %x, found at %x",
-	    thys->Last, node);
-  }
-
-  return;
+    return;
 }
 
 /* @func ajListstrTrace ********************************************
@@ -191,39 +204,44 @@ void ajListTrace (AjPList thys) {
 ** @@
 *****************************************************************/  
 
-void ajListstrTrace (AjPList thys) {
+void ajListstrTrace (AjPList thys)
+{
 
-  int i = 0;
-  AjPListNode node;
+    int i = 0;
+    AjPListNode node;
 
-  if (!thys) return;
+    if (!thys)
+	return;
 
-  ajDebug ("\nList Trace %x type %d count %d\n",
-	   thys, thys->Type, thys->Count);
-  ajDebug("rest-> %x last-> %x\n",
-	  thys->First, thys->Last);
+    ajDebug ("\nList Trace %x type %d count %d\n",
+	     thys, thys->Type, thys->Count);
+    ajDebug("rest-> %x last-> %x\n",
+	    thys->First, thys->Last);
 
-  for (node=thys->First; node->Next; node=node->Next) {
-    i++;
-    ajDebug ("Item[%d] item %x '%S' rest -> %x\n",
-	       i, node, (AjPStr) node->Item, node->Next);
-  }
+    for (node=thys->First; node->Next; node=node->Next)
+    {
+	i++;
+	ajDebug ("Item[%d] item %x '%S' rest -> %x prev -> %x\n",
+		 i, node, (AjPStr) node->Item, node->Next, node->Prev);
+    }
 
-  if (i != thys->Count) {
-    ajDebug("*** list error expect %d items, found %d\n",
-	    thys->Count, i);
-    ajErr("*** list error expect %d items, found %d",
-	    thys->Count, i);
-  }
+    if (i != thys->Count)
+    {
+	ajDebug("*** list error expect %d items, found %d\n",
+		thys->Count, i);
+	ajErr("*** list error expect %d items, found %d",
+	      thys->Count, i);
+    }
 
-  if (thys->Last != node) {
-    ajDebug("*** list error expect end at %x, found at %x\n",
-	    thys->Last, node);
-    ajErr("*** list error expect end at %x, found at %x",
-	    thys->Last, node);
-  }
+    if (thys->Last != node)
+    {
+	ajDebug("*** list error expect end at %x, found at %x\n",
+		thys->Last, node);
+	ajErr("*** list error expect end at %x, found at %x",
+	      thys->Last, node);
+    }
 
-  return;
+    return;
 }
 
 /* @func ajListNewArgs ********************************************
@@ -236,27 +254,27 @@ void ajListstrTrace (AjPList thys) {
 ** @@
 ****************************************************************/
 
-AjPList ajListNewArgs (void* x, ...) {
+AjPList ajListNewArgs (void* x, ...)
+{
+    AjPList list;
+    va_list ap;
+    int i=0;
+    void* y;
 
-  AjPList list;
-  va_list ap;
-  int i=0;
-  void* y;
+    list = ajListNew();
 
-  list = ajListNew();
+    if (!x)
+	return list;
 
-  if (!x)
+    va_start(ap, x);
+    y = x;
+
+    for ( i=0; y; y = va_arg(ap, void*),i++)
+	ajListPushApp(list, y);
+
+    va_end(ap);
+
     return list;
-
-  va_start(ap, x);
-  y = x;
-
-  for ( i=0; y; y = va_arg(ap, void*),i++) {
-    ajListPushApp(list, y);
-  }
-  va_end(ap);
-
-  return list;
 }
 
 /* @func ajListstrNewArgs ********************************************
@@ -270,27 +288,27 @@ AjPList ajListNewArgs (void* x, ...) {
 ** @@
 ****************************************************************/
 
-AjPList ajListstrNewArgs (AjPStr x, ...) {
+AjPList ajListstrNewArgs (AjPStr x, ...)
+{
+    AjPList list;
+    va_list ap;
+    int i=0;
+    AjPStr y;
 
-  AjPList list;
-  va_list ap;
-  int i=0;
-  AjPStr y;
+    list = ajListstrNew();
 
-  list = ajListstrNew();
+    if (!x)
+	return list;
 
-  if (!x)
+    va_start(ap, x);
+    y = x;
+
+    for ( i=0; y; y = va_arg(ap, AjPStr),i++)
+	ajListstrPushApp(list, y);
+
+    va_end(ap);
+
     return list;
-
-  va_start(ap, x);
-  y = x;
-
-  for ( i=0; y; y = va_arg(ap, AjPStr),i++) {
-    ajListstrPushApp(list, y);
-  }
-  va_end(ap);
-
-  return list;
 }
 
 /* @func ajListNodesNew *******************************************
@@ -303,25 +321,31 @@ AjPList ajListstrNewArgs (AjPStr x, ...) {
 ** @@
 ********************************************************************/
 
-AjPListNode ajListNodesNew (void* x, ...) {
-  va_list ap;
-  AjPListNode topnode, node;
-  va_start(ap, x);
+AjPListNode ajListNodesNew (void* x, ...)
+{
+    va_list ap;
+    AjPListNode topnode, node;
+    va_start(ap, x);
 
-  topnode = listDummyNode (&node);
+    topnode = listDummyNode (&node);
+    
+    ajDebug("ajListNodesNew topnode: %x -> %x\n", topnode, topnode->Next);
+    for ( ; x; x = va_arg(ap, void *))
+    {
+	node->Item = x;
+	(void) listDummyNode(&node->Next);
+	node->Next->Prev = node;
+	ajDebug ("topnode: %x node: %x, item: %x -> %x\n",
+		 topnode, node, x, node->Next);
+	/* node = node->Next; ??AJB comment: shouldn't this be here?? */
+    }
+    va_end(ap);
 
-  ajDebug("ajListNodesNew topnode: %x -> %x\n", topnode, topnode->Next);
-  for ( ; x; x = va_arg(ap, void *)) {
-    node->Item = x;
-    (void) listDummyNode(&node->Next);
-    ajDebug ("topnode: %x node: %x, item: %x -> %x\n",
-	     topnode, node, x, node->Next);
-  }
-  va_end(ap);
+    topnode->Prev = NULL;
+  
+    listNodesTrace(node);
 
-  listNodesTrace(node);
-
-  return node;
+    return node;
 }
 
 /* @funcstatic listNodesTrace *************************************************
@@ -333,16 +357,18 @@ AjPListNode ajListNodesNew (void* x, ...) {
 ** @@
 ******************************************************************************/
 
-static void listNodesTrace (AjPListNode node) {
-  AjPListNode p = node;
+static void listNodesTrace (AjPListNode node)
+{
+    AjPListNode p = node;
 
-  ajDebug("listNodesTrace %x\n", p);
+    ajDebug("listNodesTrace %x\n", p);
 
-  while (p->Next) {
-    ajDebug ("node %x item %x -> %x\n", p, p->Item, p->Next);
-    p = p->Next;
-  }
-  return;
+    while (p->Next)
+    {
+	ajDebug ("node %x item %x -> %x\n", p, p->Item, p->Next);
+	p = p->Next;
+    }
+    return;
 }
 
 /* @func ajListAppend ************************************************
@@ -356,24 +382,26 @@ static void listNodesTrace (AjPListNode node) {
 ** @@
 *********************************************************************/  
 
-void ajListAppend(AjPList thys, AjPListNode morenodes) {
-
-  AjPListNode more = morenodes;
+void ajListAppend(AjPList thys, AjPListNode morenodes)
+{
+    AjPListNode more = morenodes;
         
-  listNodesTrace(morenodes);
+    listNodesTrace(morenodes);
 
-  thys->Last->Next = more->Next;
-  thys->Last->Item = more->Item;
+    more->Prev = thys->Last;
+    thys->Last->Next = more->Next;
+    thys->Last->Item = more->Item;
 
-  while(more->Next) {	/* need to get to the end of the list */
-    more = more->Next;
-    thys->Count++;
-  }
+    while(more->Next)
+    {				/* need to get to the end of the list */
+	more = more->Next;
+	thys->Count++;
+    }
 
-  thys->Last = more;		/* now we can set the end of the list */
-  AJFREE (morenodes);		/* first extra node (only) was duplicated */
+    thys->Last = more;		/* now we can set the end of the list */
+    AJFREE (morenodes);		/* first extra node (only) was duplicated */
 
-  return;
+    return;
 }
 
 /* @func ajListPushApp ************************************************
@@ -387,18 +415,32 @@ void ajListAppend(AjPList thys, AjPListNode morenodes) {
 ** @@
 *********************************************************************/  
 
-void ajListPushApp(AjPList thys, void* x) {
+void ajListPushApp(AjPList thys, void* x)
+{
+    /* cannot use listInsertNode because that needs a pointer to the
+       penultimate node, so we use the dummy node and make a new dummy node
+       instead */
+    AjPListNode tmp=NULL;
+    AjPListNode node;
 
-  /* cannot use listInsertNode because that needs a pointer to the
-     penultimate node, so we use the dummy node and make a new dummy node
-     instead */
+    if(!thys->Count)
+    {
+	ajListPush(thys,x);
+	return;
+    }
+    
+    thys->Last->Item = x;
+    for(node=thys->First; node->Next; node = node->Next)
+	tmp = node;
+    thys->Last->Prev = tmp;
 
-  thys->Last->Item = x;
-  thys->Last = listDummyNode(&thys->Last->Next);
+    tmp = thys->Last;
+    thys->Last = listDummyNode(&thys->Last->Next);
+    thys->Last->Prev = tmp;
+    
+    thys->Count++;
 
-  thys->Count++;
-
-  return;
+    return;
 }
 
 /* @func ajListstrPushApp ************************************************
@@ -412,8 +454,9 @@ void ajListPushApp(AjPList thys, void* x) {
 ** @@
 *********************************************************************/  
 
-void ajListstrPushApp(AjPList thys, AjPStr x) {
-  ajListPushApp (thys, (void*) x);
+void ajListstrPushApp(AjPList thys, AjPStr x)
+{
+    ajListPushApp (thys, (void*) x);
 }
 
 /* @func ajListstrCopy ************************************************
@@ -428,8 +471,9 @@ void ajListstrPushApp(AjPList thys, AjPStr x) {
 ** @@
 *******************************************************************/
 
-AjPList ajListstrCopy(AjPList thys) {
-  return ajListCopy (thys);
+AjPList ajListstrCopy(AjPList thys)
+{
+    return ajListCopy (thys);
 }
 
 /* @func ajListCopy ************************************************
@@ -444,23 +488,23 @@ AjPList ajListstrCopy(AjPList thys) {
 ** @@
 *******************************************************************/
 
-AjPList ajListCopy(AjPList thys) {
+AjPList ajListCopy(AjPList thys)
+{
+    AjPList newlist;
 
-  AjPList newlist;
+    AjPListNode node;
 
-  AjPListNode node;
+    if(!thys)
+	return NULL;
 
-  if(!thys)
-    return NULL;
+    newlist = ajListNew();
+    newlist->Type = thys->Type;
 
-  newlist = ajListNew();
-  newlist->Type = thys->Type;
+    for ( node=thys->First; node->Next; node=node->Next)
+	ajListPushApp (newlist, node->Item);
 
-  for ( node=thys->First; node->Next; node=node->Next) {
-    ajListPushApp (newlist, node->Item);
-  }
 
-  return newlist;
+    return newlist;
 }
 
 /* @func ajListFirst **********************************************
@@ -473,15 +517,16 @@ AjPList ajListCopy(AjPList thys) {
 ** @@
 ****************************************************************/
 
-AjBool ajListFirst(AjPList thys, void** x) {
+AjBool ajListFirst(AjPList thys, void** x)
+{
 
-  if (!thys)
-    return ajFalse;
+    if (!thys)
+	return ajFalse;
 
-  if (x)
-    *x = listNodeItem(thys->First);
+    if (x)
+	*x = listNodeItem(thys->First);
 
-  return ajTrue;
+    return ajTrue;
 }
 
 /* @func ajListLast **********************************************
@@ -494,21 +539,21 @@ AjBool ajListFirst(AjPList thys, void** x) {
 ** @@
 ****************************************************************/
 
-AjBool ajListLast(AjPList thys, void** x) {
+AjBool ajListLast(AjPList thys, void** x)
+{
+    AjPListNode rest;
 
-  AjPListNode rest;
+    if (!thys)
+	return ajFalse;
 
-  if (!thys)
-    return ajFalse;
+    for (rest = thys->First; rest->Next; rest = rest->Next)
+	if(!rest->Next->Next)
+	    break;
 
-  for (rest = thys->First; rest->Next; rest = rest->Next)
-      if(!rest->Next->Next)
-	  break;
+    if (x)
+	*x = listNodeItem(rest);
 
-  if (x)
-    *x = listNodeItem(rest);
-
-  return ajTrue;
+    return ajTrue;
 }
 
 /* @func ajListNth **********************************************
@@ -524,23 +569,23 @@ AjBool ajListLast(AjPList thys, void** x) {
 
 AjBool ajListNth(AjPList thys, int n, void** x)
 {
-  AjPListNode rest;
-  int len;
-  int i;
+    AjPListNode rest;
+    int len;
+    int i;
   
-  if (!thys || n<1)
-    return ajFalse;
+    if (!thys || n<1)
+	return ajFalse;
 
-  len = ajListLength(thys);
-  if(n>len)
-      return ajFalse;
+    len = ajListLength(thys);
+    if(n>len)
+	return ajFalse;
   
-  for (i=0,rest = thys->First; i<n ; rest = rest->Next);
+    for (i=0,rest = thys->First; i<n ; rest = rest->Next);
 
-  if (x)
-    *x = listNodeItem(rest);
+    if (x)
+	*x = listNodeItem(rest);
 
-  return ajTrue;
+    return ajTrue;
 }
 
 /* @func ajListPop **********************************************
@@ -553,19 +598,22 @@ AjBool ajListNth(AjPList thys, int n, void** x)
 ** @@
 ****************************************************************/
 
-AjBool ajListPop(AjPList thys, void** x) {
+AjBool ajListPop(AjPList thys, void** x)
+{
 
-  if (!thys)
-    return ajFalse;
+    if (!thys)
+	return ajFalse;
 
-  if (x)
-    *x = listNodeItem(thys->First);
+    if (x)
+	*x = listNodeItem(thys->First);
 
-  if (!listNodeDel(&thys->First))
-    return ajFalse;
+    if (!listNodeDel(&thys->First))
+	return ajFalse;
 
-  thys->Count--;
-  return ajTrue;
+    thys->First->Prev = NULL;
+
+    thys->Count--;
+    return ajTrue;
 }
 
 /* @funcstatic listNodeDel **********************************************
@@ -577,17 +625,21 @@ AjBool ajListPop(AjPList thys, void** x) {
 ** @@
 ****************************************************************/
 
-static AjBool listNodeDel (AjPListNode* pnode) {
-  AjPListNode node = *pnode;
+static AjBool listNodeDel (AjPListNode* pnode)
+{
+    AjPListNode node = *pnode;
+    AjPListNode tmp;
+  
+    if (!node || !node->Next)
+	return ajFalse;
 
-  if (!node || !node->Next)
-    return ajFalse;
+    tmp = node->Prev;
+    node = node->Next;
+    node->Prev = tmp;
+    AJFREE (*pnode);
+    *pnode = node;
 
-  node = node->Next;
-  AJFREE (*pnode);
-  *pnode = node;
-
-  return ajTrue;
+    return ajTrue;
 }
 
 /* @funcstatic listNodeItem **********************************************
@@ -599,12 +651,13 @@ static AjBool listNodeDel (AjPListNode* pnode) {
 ** @@
 ****************************************************************/
 
-static void* listNodeItem (AjPListNode node) {
+static void* listNodeItem (AjPListNode node)
+{
 
-  if (!node || !node->Next)
-    return NULL;
+    if (!node || !node->Next)
+	return NULL;
 
-  return node->Item;
+    return node->Item;
 }
 
 
@@ -618,19 +671,22 @@ static void* listNodeItem (AjPListNode node) {
 ** @@
 ****************************************************************/
 
-AjBool ajListstrPop (AjPList thys, AjPStr* x) {
+AjBool ajListstrPop (AjPList thys, AjPStr* x)
+{
 
-  if (!thys)
-    return ajFalse;
+    if (!thys)
+	return ajFalse;
 
-  if (x)
-    *x = (AjPStr) listNodeItem(thys->First);
+    if (x)
+	*x = (AjPStr) listNodeItem(thys->First);
 
-  if (!listNodeDel(&thys->First))
-    return ajFalse;
+    if (!listNodeDel(&thys->First))
+	return ajFalse;
 
-  thys->Count--;
-  return ajTrue;
+    thys->First->Prev = NULL;
+
+    thys->Count--;
+    return ajTrue;
 }
 
 /* @func ajListReverse ****************************************
@@ -642,22 +698,29 @@ AjBool ajListstrPop (AjPList thys, AjPStr* x) {
 ** @@
 ***************************************************************/
 
-void ajListReverse(AjPList thys) {
-  AjPListNode head = thys->Last, savenext;
+void ajListReverse(AjPList thys)
+{
+    AjPListNode head = thys->Last;
+    AjPListNode savenext;
+    AjPListNode node;
 
-  AjPListNode node;
+    if (thys->Count <= 1)
+	return;
 
-  if (thys->Count <= 1)
+    thys->Last->Prev = thys->First;
+
+    for ( node = thys->First; node->Next; node = savenext)
+    {
+	savenext = node->Next;
+	node->Prev = node->Next;
+	node->Next = head;
+	head = node;
+    }
+    thys->First = head;
+
+    thys->First->Prev = NULL;
+  
     return;
-
-  for ( node = thys->First; node->Next; node = savenext) {
-    savenext = node->Next;
-    node->Next = head;
-    head = node;
-  }
-  thys->First = head;
-
-  return;
 }
 
 /* @func ajListstrReverse ****************************************
@@ -669,8 +732,9 @@ void ajListReverse(AjPList thys) {
 ** @@
 ***************************************************************/
 
-void ajListstrReverse(AjPList thys) {
-  ajListReverse (thys);
+void ajListstrReverse(AjPList thys)
+{
+    ajListReverse (thys);
 }
 
 /* @func ajListLength ****************************************
@@ -682,11 +746,12 @@ void ajListstrReverse(AjPList thys) {
 ** @@
 ***************************************************************/
 
-int ajListLength(AjPList thys) {
-  if (!thys)
-    return 0;
+int ajListLength(AjPList thys)
+{
+    if (!thys)
+	return 0;
 
-  return thys->Count;
+    return thys->Count;
 }
 
 /* @func ajListstrLength ****************************************
@@ -698,9 +763,9 @@ int ajListLength(AjPList thys) {
 ** @@
 ***************************************************************/
 
-int ajListstrLength(AjPList thys) {
-
-  return ajListLength(thys);
+int ajListstrLength(AjPList thys)
+{
+    return ajListLength(thys);
 }
 
 
@@ -716,40 +781,41 @@ int ajListstrLength(AjPList thys) {
 ** @@
 **************************************************************/
 
-void ajListFree(AjPList* pthis) {
+void ajListFree(AjPList* pthis)
+{
+    AjPListNode next;
+    AjPListNode *rest;
+    AjPList thys;
 
-  AjPListNode next;
-  AjPListNode *rest;
-  AjPList thys;
+    if (!pthis)
+	return;
 
-  if (!pthis)
-    return;
+    if (!*pthis)
+	return;
 
-  if (!*pthis) {
-    return;
-  }
+    thys = *pthis;
+    rest = &thys->First;
 
-  thys = *pthis;
-  rest = &thys->First;
+    if (!thys->Count)
+    {
+	AJFREE(thys->Last);
+	AJFREE(*pthis);    
+	return;
+    }
 
-  if (!thys->Count){
-    AJFREE(thys->Last);
-    AJFREE(*pthis);    
-    return;
-  }
+    /* don't free the data in the list (we don't know how) */
+    /* just free the nodes */
 
-  /* don't free the data in the list (we don't know how) */
-  /* just free the nodes */
+    for ( ; (*rest)->Next; *rest = next)
+    {
+	next = (*rest)->Next;
+	AJFREE(*rest);
+    }
 
-  for ( ; (*rest)->Next; *rest = next) {
-    next = (*rest)->Next;
     AJFREE(*rest);
-  }
+    AJFREE(*pthis);
 
-  AJFREE(*rest);
-  AJFREE(*pthis);
-
-  return;
+    return;
 }
 
 /* @func ajListstrFree *****************************************
@@ -763,35 +829,36 @@ void ajListFree(AjPList* pthis) {
 ** @@
 **************************************************************/
 
-void ajListstrFree(AjPList* pthis) {
-  AjPListNode next;
-  AjPListNode *rest;
-  AjPList thys;
+void ajListstrFree(AjPList* pthis)
+{
+    AjPListNode next;
+    AjPListNode *rest;
+    AjPList thys;
 
-  if (!pthis)
-    return;
+    if (!pthis)
+	return;
 
-  if (!*pthis)
-    return;
+    if (!*pthis)
+	return;
 
-  thys = *pthis;
-  rest = &thys->First;
+    thys = *pthis;
+    rest = &thys->First;
 
-  if (thys->Count) {
-
-  /* free the data in the list (if we know how) */
-
-    for ( ; (*rest)->Next; *rest = next) {
-      next = (*rest)->Next;
-      ajStrDel ((AjPStr*) &(*rest)->Item);
-      AJFREE(*rest);
+    if (thys->Count)
+    {
+	/* free the data in the list (if we know how) */
+	for ( ; (*rest)->Next; *rest = next)
+	{
+	    next = (*rest)->Next;
+	    ajStrDel ((AjPStr*) &(*rest)->Item);
+	    AJFREE(*rest);
+	}
     }
-  }
 
-  AJFREE(*rest);
-  AJFREE(*pthis);
+    AJFREE(*rest);
+    AJFREE(*pthis);
 
-  return;
+    return;
 }
 
 /* @func ajListDel *****************************************
@@ -806,25 +873,23 @@ void ajListstrFree(AjPList* pthis) {
 ** @@
 **************************************************************/
 
-void ajListDel(AjPList* pthis) {
+void ajListDel(AjPList* pthis)
+{
+    AjPList list;
 
-  AjPList list;
+    if (!pthis)
+	return;
+    if (!*pthis)
+	return;
 
-  if (!pthis)
+    list = *pthis;
+    if (!list->Count)
+	if (list->Last == list->First)
+	    AJFREE (list->First);
+
+    AJFREE(*pthis);
+
     return;
-  if (!*pthis)
-    return;
-
-  list = *pthis;
-  if (!list->Count) {
-    if (list->Last == list->First) {
-      AJFREE (list->First);
-    }
-  }
-
-  AJFREE(*pthis);
-
-  return;
 }
 
 /* @func ajListstrDel *****************************************
@@ -839,10 +904,11 @@ void ajListDel(AjPList* pthis) {
 ** @@
 **************************************************************/
 
-void ajListstrDel(AjPList* pthis) {
-  ajListDel (pthis);
+void ajListstrDel(AjPList* pthis)
+{
+    ajListDel (pthis);
 
-  return;
+    return;
 }
 
 /* @func ajListMap ************************************************************
@@ -856,17 +922,15 @@ void ajListstrDel(AjPList* pthis) {
 ** @@
 ******************************************************************************/
 
-void ajListMap (AjPList thys,
-	       void apply(void** x, void* cl), void* cl) {
+void ajListMap (AjPList thys, void apply(void** x, void* cl), void* cl)
+{
+    AjPListNode rest;
+    assert(apply);
 
-  AjPListNode rest;
-  assert(apply);
+    for (rest = thys->First; rest->Next; rest = rest->Next)
+	apply((void**) &rest->Item, cl);
 
-  for (rest = thys->First; rest->Next; rest = rest->Next) {
-    apply((void**) &rest->Item, cl);
-  }
-
-  return;
+    return;
 }
 
 /* @func ajListstrMap *********************************************************
@@ -881,17 +945,16 @@ void ajListMap (AjPList thys,
 ** @@
 ******************************************************************************/
 
-void ajListstrMap(AjPList thys,
-	       void apply(AjPStr* x, void* cl), void* cl) {
+void ajListstrMap(AjPList thys, void apply(AjPStr* x, void* cl), void* cl)
+{
+    AjPListNode rest;
+    assert(apply);
 
-  AjPListNode rest;
-  assert(apply);
+    for (rest=thys->First; rest->Next; rest = rest->Next)
+	apply((AjPStr*) &rest->Item, cl);
 
-  for (rest=thys->First; rest->Next; rest = rest->Next) {
-    apply((AjPStr*) &rest->Item, cl);
-  }
 
-  return;
+    return;
 }
 
 /* @func ajListToArray ********************************************************
@@ -904,24 +967,27 @@ void ajListstrMap(AjPList thys,
 ** @@
 ******************************************************************************/
 
-int ajListToArray(AjPList thys, void*** array) {
+int ajListToArray(AjPList thys, void*** array)
+{
+    int i;
+    int n = thys->Count;
+    AjPListNode rest = thys->First;
 
-  int i, n = thys->Count;
-  AjPListNode rest = thys->First;
+    if (!n)
+    {
+	*array = NULL;
+	return 0;
+    }
 
-  if (!n) {
-    *array = NULL;
-    return 0;
-  }
+    *array = AJALLOC((n+1)*sizeof(array));
+    for (i = 0; i < n; i++)
+    {
+	(*array)[i] = rest->Item;
+	rest = rest->Next;
+    }
+    (*array)[n] = 0;
 
-  *array = AJALLOC((n+1)*sizeof(array));
-  for (i = 0; i < n; i++) {
-    (*array)[i] = rest->Item;
-    rest = rest->Next;
-  }
-  (*array)[n] = 0;
-
-  return n;
+    return n;
 }
 
 /* @func ajListstrToArray *****************************************************
@@ -936,25 +1002,27 @@ int ajListToArray(AjPList thys, void*** array) {
 ** @@
 ******************************************************************************/
 
-int ajListstrToArray(AjPList thys, AjPStr** array) {
+int ajListstrToArray(AjPList thys, AjPStr** array)
+{
+    int i;
+    int n = thys->Count;
+    AjPListNode rest = thys->First;
 
-  int i;
-  int n = thys->Count;
-  AjPListNode rest = thys->First;
+    if (!n)
+    {
+	*array = NULL;
+	return 0;
+    }
 
-  if (!n) {
-    *array = NULL;
-    return 0;
-  }
+    *array = AJALLOC((n)*sizeof (array));
 
-  *array = AJALLOC((n)*sizeof (array));
+    for (i = 0; i < n; i++)
+    {
+	(*array)[i] = (AjPStr) rest->Item;
+	rest = rest->Next;
+    }
 
-  for (i = 0; i < n; i++) {
-    (*array)[i] = (AjPStr) rest->Item;
-    rest = rest->Next;
-  }
-
-  return n;
+    return n;
 }
 
 /* @func ajListFind *********************************************
@@ -969,17 +1037,16 @@ int ajListstrToArray(AjPList thys, AjPStr** array) {
 ** @@
 ******************************************************************/
 
-AjBool ajListFind(AjPList thys,
-	       AjBool apply(void** x, void* cl), void* cl) {
+AjBool ajListFind(AjPList thys, AjBool apply(void** x, void* cl), void* cl)
+{
+    AjPListNode list;
 
-  AjPListNode list;
+    assert(apply);
 
-  assert(apply);
-
-  for ( list = thys->First; list->Next; list = list->Next)
-    if(apply(&list->Item, cl))
-      return ajTrue;
-  return ajFalse;
+    for ( list = thys->First; list->Next; list = list->Next)
+	if(apply(&list->Item, cl))
+	    return ajTrue;
+    return ajFalse;
 }
 
 /* @func ajListstrFind *********************************************
@@ -994,41 +1061,75 @@ AjBool ajListFind(AjPList thys,
 ** @@
 ******************************************************************/
 
-AjBool ajListstrFind (AjPList thys,
-	       AjBool apply(AjPStr* x, void* cl), void* cl) {
+AjBool ajListstrFind (AjPList thys, AjBool apply(AjPStr* x, void* cl),
+		      void* cl)
+{
+    AjPListNode list;
 
-  AjPListNode list;
+    assert(apply);
 
-  assert(apply);
-
-  for ( list = thys->First; list->Next; list = list->Next)
-    if(apply((AjPStr*) &list->Item, cl))
-      return ajTrue;
-  return ajFalse;
+    for ( list = thys->First; list->Next; list = list->Next)
+	if(apply((AjPStr*) &list->Item, cl))
+	    return ajTrue;
+    return ajFalse;
 }
 
 /* @func ajListIter *******************************************************
 **
-** Creates an iterator to operate from start toend of the list.
+** Creates an iterator to operate from start to end of list.
 **
 ** @param [r] thys [AjPList] List
 ** @return [AjIList] New list iterator
 ** @@
 ******************************************************************************/
 
-AjIList ajListIter (AjPList thys) {
+AjIList ajListIter (AjPList thys)
+{
+    AjIList iter;
 
-  AjIList iter;
+    if (!thys)
+	return NULL;
 
-  if (!thys)
-    return NULL;
+    AJNEW0(iter);
+    iter->Head = thys;
+    iter->Dir = ajLASTFWD;
+    iter->Here = thys->First;
+    iter->Orig = thys->First;
+    
+    return iter;
+}
 
-  AJNEW0(iter);
-  iter->Head = thys;
-  iter->PCurr = NULL;
-  iter->PPrev = &thys->First;
+/* @func ajListIterBack ****************************************************
+**
+** Creates an iterator to operate from end to start of the list.
+**
+** @param [r] thys [AjPList] List
+** @return [AjIList] New list iterator
+** @@
+******************************************************************************/
 
-  return iter;
+AjIList ajListIterBack (AjPList thys)
+{
+    AjIList iter;
+    AjPListNode node = NULL;
+    AjPListNode tmp  = NULL;
+    
+    if (!thys)
+	return NULL;
+
+    if(!thys->Count)
+	return NULL;
+
+    for(node=thys->First; node->Next; node = node->Next)
+	tmp = node;
+    thys->Last->Prev = tmp;
+
+    AJNEW0(iter);
+    iter->Head = thys;
+    iter->Dir = ajLASTBACK;
+    iter->Here = tmp->Next;
+
+    return iter;
 }
 
 /* @func ajListIterDone *******************************************************
@@ -1040,12 +1141,29 @@ AjIList ajListIter (AjPList thys) {
 ** @@
 ******************************************************************************/
 
-AjBool ajListIterDone (AjIList iter) {
+AjBool ajListIterDone (AjIList iter)
+{
+    if (ajListIterMore(iter))
+	return ajFalse;
 
-  if (ajListIterMore(iter))
-    return ajFalse;
+    return ajTrue;
+}
 
-  return ajTrue;
+/* @func ajListIterBackDone **************************************************
+**
+** Tests whether a backwards iterator has completed yet.
+**
+** @param [r] iter [AjIList] List iterator.
+** @return [AjBool] ajTrue if the iterator is exhausted.
+** @@
+******************************************************************************/
+
+AjBool ajListIterBackDone (AjIList iter)
+{
+    if (ajListIterBackMore(iter))
+	return ajFalse;
+
+    return ajTrue;
 }
 
 /* @func ajListIterFree *******************************************************
@@ -1057,11 +1175,11 @@ AjBool ajListIterDone (AjIList iter) {
 ** @@
 ******************************************************************************/
 
-void ajListIterFree (AjIList iter) {
+void ajListIterFree (AjIList iter)
+{
+    AJFREE(iter);
 
-  AJFREE(iter);
-
-  return;
+    return;
 }
 
 /* @func ajListIterMore *******************************************************
@@ -1073,28 +1191,51 @@ void ajListIterFree (AjIList iter) {
 ** @@
 ******************************************************************************/
 
-AjBool ajListIterMore (AjIList iter){
+AjBool ajListIterMore (AjIList iter)
+{
+    AjPListNode p;
 
-  AjPListNode* p;
+    if (!iter)
+	return ajFalse;
 
-  if (!iter)
-    return ajFalse;
+    p = iter->Here;
 
-  p = iter->PCurr;
-
-  if (!p) {
-    p = iter->PPrev;
-    if (!(*p)->Next) {	/* in case we get called again */
-      return ajFalse;
+    if(iter->Dir == ajLASTFWD)
+    {
+	if(!p->Next)
+	    return ajFalse;
     }
-  }
-  else {
-    if (!(*p)->Next || !(*p)->Next->Next) {
-      return ajFalse;
-    }
-  }
+    else
+	if(!p->Next->Next || !p->Next->Next->Next)
+	    return ajFalse;
+	
+    return ajTrue;
+}
 
-  return ajTrue;
+
+/* @func ajListIterBackMore **************************************************
+**
+** Tests whether ajListIterBackNext can return another item.
+**
+** @param [r] iter [AjIList] List iterator.
+** @return [AjBool] ajTrue if the iterator can continue.
+** @@
+******************************************************************************/
+
+AjBool ajListIterBackMore (AjIList iter)
+{
+    AjPListNode p;
+
+    if (!iter)
+	return ajFalse;
+
+    p = iter->Here;
+
+    if(!p->Prev)
+	return ajFalse;
+
+
+    return ajTrue;
 }
 
 /* @func ajListIterNext *******************************************************
@@ -1106,30 +1247,63 @@ AjBool ajListIterMore (AjIList iter){
 ** @@
 ******************************************************************************/
 
-void* ajListIterNext (AjIList iter) {
+void* ajListIterNext (AjIList iter)
+{
+    AjPListNode p;
+    void *ret;
 
-  void* ret;
+    if(!ajListIterMore(iter))
+	return NULL;
 
-  if (!iter->PCurr) {		/* no current item, use previous */
-    iter->PCurr = iter->PPrev;
-    if (!(*iter->PCurr)->Next) {	/* on last dummy node: all done */
-      return NULL;
+    p = iter->Here;
+
+    if(iter->Dir == ajLASTFWD)
+    {
+	ret = p->Item;
+	iter->Here = p->Next;
     }
-  }
-  else {			/* continue from current item */
-    if (!(*iter->PCurr)->Next) {	/* on last dummy node: all done */
-      return NULL;
+    else
+    {
+	iter->Dir = ajLASTFWD;
+	ret = p->Next->Item;
+	iter->Here = p->Next->Next;
     }
-    iter->PCurr = iter->PPrev = &(*iter->PCurr)->Next;
-  }
 
-  if (!(*iter->PCurr)->Next) {	/* on last dummy node: all done */
-    return NULL;
-  }
+    return ret;
+}
 
-  ret = (*iter->PCurr)->Item;
+/* @func ajListIterBackNext **************************************************
+**
+** Returns next item using back iterator.
+**
+** @param [r] iter [AjIList] List iterator.
+** @return [void*] Data item returned.
+** @@
+******************************************************************************/
 
-  return ret;
+void* ajListIterBackNext (AjIList iter)
+{
+    AjPListNode p;
+    void* ret;
+
+    if(!ajListIterBackMore(iter))
+	return NULL;
+
+    p = iter->Here;
+
+    if(iter->Dir == ajLASTFWD)
+    {
+	ret = p->Prev->Prev->Item;
+	iter->Here = p->Prev->Prev;
+	iter->Dir = ajLASTBACK;
+    }
+    else
+    {
+	ret = p->Prev->Item;
+	iter->Here = p->Prev;
+    }
+
+    return ret;
 }
 
 /* @func ajListRemove *******************************************************
@@ -1138,27 +1312,37 @@ void* ajListIterNext (AjIList iter) {
 ** to show which item. Otherwise remove the first item.
 **
 ** We want to remove the item just fetched by the iterator.
-** PCurr is a pointer to this node, either from the list head or from
-** the previous node.
 **
 ** @param [r] iter [AjIList] List iterator.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajListRemove (AjIList iter) {
+void ajListRemove (AjIList iter)
+{
+    AjPListNode p;
+    
+    /* ajDebug ("ajListRemove\n");*/
 
-  /* ajDebug ("ajListRemove\n");*/
+    p = iter->Here;
 
-  if (!iter->PCurr || !(*iter->PCurr)->Next)
-    ajFatal("Tried to remove list item from empty iterator\n");
+    if(iter->Dir == ajLASTFWD)
+    {
+	if(!p->Prev)
+	    ajFatal("Attempt to delete from unused iterator\n");
 
-  (void) listNodeDel(iter->PPrev);
-  iter->PCurr = NULL;
+	if(!p->Prev->Prev)
+	    (void) listNodeDel(&(iter->Head->First));
+	else
+	    (void) listNodeDel(&p->Prev->Prev->Next);
+    }
+    else
+	(void) listNodeDel(&p->Prev->Prev->Next);
+    
 
-  iter->Head->Count--;
+    iter->Head->Count--;
 
-  return;
+    return;
 }
 
 /* @func ajListstrRemove ******************************************************
@@ -1167,19 +1351,18 @@ void ajListRemove (AjIList iter) {
 ** to show which item. Otherwise remove the first item.
 **
 ** We want to remove the item just fetched by the iterator.
-** PCurr is a pointer to this node, either from the list head or from
-** the previous node.
 **
 ** @param [r] iter [AjIList] List iterator.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajListstrRemove (AjIList iter) {
+void ajListstrRemove (AjIList iter)
+{
 
-  ajListRemove (iter);
+    ajListRemove (iter);
 
-  return;
+    return;
 }
 
 /* @func ajListInsert *******************************************************
@@ -1193,25 +1376,44 @@ void ajListstrRemove (AjIList iter) {
 ** @@
 ******************************************************************************/
 
-void ajListInsert (AjIList iter, void* x) {
-  AjPList list = iter->Head;
+void ajListInsert (AjIList iter, void* x)
+{
+    AjPList list = iter->Head;
+    AjPListNode p;
+    
+    /* ajDebug ("ajListInsert\n");*/
 
-  /* ajDebug ("ajListInsert\n");*/
-  /*ajListTrace (list);*/
-  /*ajListIterTrace (iter);*/
 
-  listInsertNode (iter->PPrev, x);
-  iter->PPrev = &(*iter->PPrev)->Next;
-  if (iter->PCurr)
-    iter->PCurr = iter->PPrev;
+    p = iter->Here;
 
-  list->Count++;
 
-  /*ajListTrace (list);*/
-  /*ajListIterTrace (iter);*/
+    if(iter->Dir == ajLASTFWD)
+    {
+	if(!p->Prev)
+	    listInsertNode(&list->First,x);
+	else
+	    listInsertNode(&p->Prev->Next,x);
+	iter->Here = p->Prev;
+    }
+    else
+    {
+	if(!p->Next)
+	    ajFatal("Cannot add a new node for unused back iterator\n");
+	
+	if(!p->Prev)
+	    listInsertNode(&list->First,x);
+	else
+	    listInsertNode(&p->Prev->Next,x);
+    }
 
-  return;
+    list->Count++;
+
+    /*ajListTrace (list);*/
+    /*ajListIterTrace (iter);*/
+
+    return;
 }
+
 
 /* @func ajListstrInsert ****************************************************
 **
@@ -1224,24 +1426,43 @@ void ajListInsert (AjIList iter, void* x) {
 ** @@
 ******************************************************************************/
 
-void ajListstrInsert (AjIList iter, AjPStr x) {
-  AjPList list = iter->Head;
+void ajListstrInsert (AjIList iter, AjPStr x)
+{
+    AjPList list = iter->Head;
+    AjPListNode p;
+    
+    /*ajDebug ("ajListstrInsert\n");*/
+    ajListstrTrace (list);
+    ajListstrIterTrace (iter);
 
-  /*ajDebug ("ajListstrInsert\n");*/
-  ajListstrTrace (list);
-  ajListstrIterTrace (iter);
+    p = iter->Here;
 
-  listInsertNode (iter->PPrev, x);
-  iter->PPrev = &(*iter->PPrev)->Next;
-  if (iter->PCurr)
-    iter->PCurr = iter->PPrev;
 
-  list->Count++;
+    if(iter->Dir == ajLASTFWD)
+    {
+	if(!p->Prev)
+	    listInsertNode(&list->First,x);
+	else
+	    listInsertNode(&p->Prev->Next,x);
+	iter->Here = p->Prev;
+    }
+    else
+    {
+	if(!p->Next)
+	    ajFatal("Cannot add a new node for unused back iterator\n");
+	
+	if(!p->Prev)
+	    listInsertNode(&list->First,x);
+	else
+	    listInsertNode(&p->Prev->Next,x);
+    }
 
-  ajListstrTrace (list);
-  ajListstrIterTrace (iter);
+    list->Count++;
 
-  return;
+    ajListstrTrace (list);
+    ajListstrIterTrace (iter);
+
+    return;
 }
 
 /* @funcstatic listInsertNode ************************************************
@@ -1254,15 +1475,17 @@ void ajListstrInsert (AjIList iter, AjPStr x) {
 ** @@
 ******************************************************************************/
 
-static void listInsertNode (AjPListNode* pnode, void* x) {
-  AjPListNode p;
+static void listInsertNode (AjPListNode* pnode, void* x)
+{
+    AjPListNode p;
   
-  AJNEW0(p);
-  p->Item = x;
-  p->Next = (*pnode);
-  *pnode = p;
+    AJNEW0(p);
+    p->Item = x;
+    p->Next = (*pnode);
+    p->Next->Prev = p;
+    *pnode = p;
 
-  return;
+    return;
 }
 
 /* @funcstatic listDummyNode **********************************************
@@ -1274,11 +1497,12 @@ static void listInsertNode (AjPListNode* pnode, void* x) {
 ** @@
 ******************************************************************************/
 
-static AjPListNode listDummyNode (AjPListNode* pnode) {
+static AjPListNode listDummyNode (AjPListNode* pnode)
+{
   
-  AJNEW0(*pnode);
+    AJNEW0(*pnode);
 
-  return *pnode;
+    return *pnode;
 }
 
 /* @func ajListIterTrace ********************************************
@@ -1290,32 +1514,15 @@ static AjPListNode listDummyNode (AjPListNode* pnode) {
 ** @@
 *****************************************************************/  
 
-void ajListIterTrace (AjIList thys) {
+void ajListIterTrace (AjIList thys)
+{
+    if (!thys)
+	return;
 
-  AjPListNode node;
+    ajDebug("\nIterator Head %x Here %x Dir %d\n",thys->Head,
+	    thys->Here,thys->Dir);
 
-  if (!thys) return;
-
-  if (thys->PCurr) {
-    ajDebug ("\nIterator PCurr %x -> %x PPrev %x -> %x Head %x Count %d\n",
-	     thys->PCurr, *thys->PCurr, thys->PPrev, *thys->PPrev,
-	     thys->Head, thys->Head->Count);
-
-    node = *thys->PCurr;
-    if (node)
-      ajDebug (" node %x (item %x) rest -> %x\n",
-	       node, node->Item, node->Next);
-    else
-      ajDebug (" node %x (item NULL) rest -> NULL\n",
-	       node);
-  }
-  else {
-    ajDebug ("\nIterator PCurr %x -> <NULL> PPrev %x -> %x Head %x Count %d\n",
-	     thys->PCurr,  thys->PPrev, *thys->PPrev,
-	     thys->Head, thys->Head->Count);
-    ajDebug (" node NULL (item NULL) rest -> NULL\n");
-  }
-  return;
+    return;
 }
 
 /* @func ajListstrIterTrace ********************************************
@@ -1327,32 +1534,15 @@ void ajListIterTrace (AjIList thys) {
 ** @@
 *****************************************************************/  
 
-void ajListstrIterTrace (AjIList thys) {
+void ajListstrIterTrace (AjIList thys)
+{
+    if (!thys)
+	return;
 
-  AjPListNode node;
+    ajDebug("\nIterator Head %x Here %x Dir %d Item %S\n",thys->Head,
+	    thys->Here,thys->Dir,(AjPStr)thys->Here->Item);
 
-  if (!thys) return;
-
-  if (thys->PCurr) {
-    ajDebug ("\nIterator PCurr %x -> %x PPrev %x -> %x Head %x Count %d\n",
-	     thys->PCurr, *thys->PCurr, thys->PPrev, *thys->PPrev,
-	     thys->Head, thys->Head->Count);
-
-    node = *thys->PCurr;
-    if (node)
-      ajDebug (" node %x (item '%S') rest -> %x\n",
-	       node, node->Item, node->Next);
-    else
-      ajDebug (" node %x (item NULL) rest -> NULL\n",
-	       node);
-  }
-  else {
-    ajDebug ("\nIterator PCurr %x -> <NULL> PPrev %x -> %x Head %x Count %d\n",
-	     thys->PCurr, thys->PPrev, *thys->PPrev,
-	     thys->Head, thys->Head->Count);
-    ajDebug (" node NULL (item NULL) rest -> NULL\n");
-  }
-  return;
+    return;
 }
 
 /* @func ajListPushList *******************************************************
@@ -1365,27 +1555,38 @@ void ajListstrIterTrace (AjIList thys) {
 ** @@
 ******************************************************************************/
 
-void ajListPushList (AjPList thys, AjPList* pmore) {
+void ajListPushList (AjPList thys, AjPList* pmore)
+{
+    AjPList more = *pmore;
+    AjPListNode  tmp=NULL;
+    AjPListNode  node;
 
-  AjPList more = *pmore;
 
-  if (more->Count) {		/* more list has items */
+    if (more->Count)
+    {					/* more list has items */
 
-    if (thys->Count) {		/* master list has items */
-      more->Last->Item = thys->First->Item;
-      more->Last->Next = thys->First->Next;
+	if (thys->Count)
+	{				/* master list has items */
+	    for(node=more->First; node->Next; node = node->Next)
+		tmp = node;
+	    
+	    more->Last->Item = thys->First->Item;
+	    more->Last->Next = thys->First->Next;
+	    more->Last->Prev = tmp;
+	    thys->First->Next->Prev = more->Last;
+	}
+	else
+	    thys->Last = more->Last;
+
+	AJFREE (thys->First);
+	thys->First = more->First;
+	thys->Count += more->Count;
+	thys->First->Prev = NULL;
     }
-    else
-      thys->Last = more->Last;
 
-    AJFREE (thys->First);
-    thys->First = more->First;
-    thys->Count += more->Count;
-  }
+    ajListDel (pmore);			/* free the list but not the nodes */
 
-  ajListDel (pmore);		/* free the list but not the nodes */
-
-  return;
+    return;
 }
 
 /* @func ajListstrPushList ****************************************************
@@ -1398,10 +1599,11 @@ void ajListPushList (AjPList thys, AjPList* pmore) {
 ** @@
 ******************************************************************************/
 
-void ajListstrPushList (AjPList thys, AjPList* pmore) {
-  ajListPushList (thys, pmore);
+void ajListstrPushList (AjPList thys, AjPList* pmore)
+{
+    ajListPushList (thys, pmore);
 
-  return;
+    return;
 }
 
 /* @funcstatic listArrayTrace *************************************************
@@ -1413,12 +1615,14 @@ void ajListstrPushList (AjPList thys, AjPList* pmore) {
 ** @@
 ******************************************************************************/
 
-static void listArrayTrace (void** array) {
-  void** v = array;
-  int i=0;
-  while (*v) {
-    ajDebug ("array[%d] %x\n", i++, *v++);
-  }
+static void listArrayTrace (void** array)
+{
+    void** v = array;
+    int i=0;
+    while (*v)
+	ajDebug ("array[%d] %x\n", i++, *v++);
+
+    return;
 }
 
 /* @func ajListSort *******************************************************
@@ -1431,33 +1635,36 @@ static void listArrayTrace (void** array) {
 ** @@
 ******************************************************************************/
 
-void ajListSort (AjPList thys, int (*compar) (const void*, const void*)) {
-  void** array = NULL;
-  int i = 0;
-  AjPListNode node = thys->First;
+void ajListSort (AjPList thys, int (*compar) (const void*, const void*))
+{
+    void** array = NULL;
+    int i = 0;
+    AjPListNode node = thys->First;
 
-  /*ajDebug ("ajListSort %d items\n", thys->Count);*/
-  /*ajListTrace(thys);*/
+    /*ajDebug ("ajListSort %d items\n", thys->Count);*/
+    /*ajListTrace(thys);*/
 
-  if (thys->Count <= 1) return;
+    if (thys->Count <= 1)
+	return;
 
-  (void) ajListToArray(thys, &array);
-  /* listArrayTrace(array);*/
+    (void) ajListToArray(thys, &array);
+    /* listArrayTrace(array);*/
 
-  qsort (array, thys->Count, sizeof(void*), compar);
+    qsort (array, thys->Count, sizeof(void*), compar);
 
-  while (node->Next) {
-    node->Item = array[i++];
-    node = node->Next;
-  }
+    while (node->Next)
+    {
+	node->Item = array[i++];
+	node = node->Next;
+    }
 
-  AJFREE (array);
+    AJFREE (array);
 
-  return;
+    return;
 }
 
 /* Dummy function to catch all unused functions defined above */
-void ajListDummyFunction(void** array) {
-
-  listArrayTrace(array);
+void ajListDummyFunction(void** array)
+{
+    listArrayTrace(array);
 }

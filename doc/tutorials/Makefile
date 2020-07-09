@@ -71,10 +71,12 @@ NM = /usr/ccs/bin/nm -p
 OBJDUMP = @OBJDUMP@
 PACKAGE = EMBOSS
 RANLIB = ranlib
-VERSION = 1.8.0
+VERSION = 1.9.0
 XLIB =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib -lX11 -lsocket -lsocket  -lnsl -lnsl
 
-pkgdata_DATA = *.bib *.tex *.ps.gz
+pkgdata_DATA = biblio.bib dottup.ps.gz emboss_tutorial.tex                pepinfo1.ps.gz pepinfo2.ps.gz plotorf.ps.gz tmap.ps.gz
+
+
 pkgdatadir = $(prefix)/share/$(PACKAGE)/doc/tutorials
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 

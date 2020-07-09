@@ -167,6 +167,8 @@ See also
    printsextract Extract data from PRINTS
    prosextract Builds the PROSITE motif database for patmatmotifs to
    search
+   recode Find and remove restriction sites but maintain the same
+   translation
    redata Search REBASE for enzyme name, references, suppliers etc
    remap Display a sequence with restriction cut sites, translation etc
    restrict Finds restriction enzyme cleavage sites

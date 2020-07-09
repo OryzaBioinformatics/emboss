@@ -3470,6 +3470,13 @@ static void GraphxyGeneral (AjPGraph graphs, AjBool closeit) {
     GraphInit(graphs);
     ajGraphColourFore();
     /*    GraphSubPage(0);         Done in ajGraphplenv*/
+
+    g = (graphs->graphs)[0];    
+    graphs->xstart = g->minX;
+    graphs->xend   = g->maxX;
+    graphs->ystart = g->minY;
+    graphs->yend   = g->maxY;
+
     ajGraphPlenv(graphs->xstart, graphs->xend,
 		 graphs->ystart, graphs->yend, graphs->flags);
     
@@ -3694,6 +3701,96 @@ void ajGraphObjAddLine(AjPGraph graphs, float x1, float y1,
   Obj->y2 = y2;
   Obj->colour = colour;
   Obj->next = 0;
+}
+
+
+/* @func ajGraphDataObjDel ***************************************************
+**
+** Delete all objects from a graph data object.
+**
+** @param [w] thys [AjPGraphData*] Graph data object
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajGraphDataObjDel(AjPGraphData *thys)
+{
+    AjPGraphObj here=NULL;
+    AjPGraphObj p=NULL;
+
+    here = p = (*thys)->Obj;
+    while(p)
+    {
+	p = here->next;
+	ajStrDel(&here->text);
+	AJFREE(here);
+	here = p;
+    }
+
+    (*thys)->numofobjects = 0;
+    (*thys)->Obj = NULL;
+
+    return;
+}
+
+/* @func ajGraphObjDel ***************************************************
+**
+** Delete all objects from a graph object.
+**
+** @param [w] thys [AjPGraph*] Graph object
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajGraphObjDel(AjPGraph *thys)
+{
+    AjPGraphObj here=NULL;
+    AjPGraphObj p=NULL;
+
+    here = p = (*thys)->Obj;
+    while(p)
+    {
+	p = here->next;
+	ajStrDel(&here->text);
+	AJFREE(here);
+	here = p;
+    }
+
+    (*thys)->numofobjects = 0;
+    (*thys)->Obj = NULL;
+
+    return;
+}
+
+/* @func ajGraphDataDel ***************************************************
+**
+** Delete a graph data object.
+**
+** @param [w] thys [AjPGraphData*] Graph data object
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajGraphDataDel(AjPGraphData *thys)
+{
+    AjPGraphData this = *thys;
+    
+    AJFREE(this->x);
+    AJFREE(this->y);
+    ajStrDel(&this->title);
+    ajStrDel(&this->subtitle);
+    ajStrDel(&this->xaxis);
+    ajStrDel(&this->yaxis);
+    ajStrDel(&this->gtype);
+
+    ajGraphDataObjDel(thys);
+
+    AJFREE(this);
+
+    return;
 }
 
 /* @funcstatic GraphObjPrint *****************************************

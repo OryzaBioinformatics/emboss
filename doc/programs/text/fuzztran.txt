@@ -70,7 +70,7 @@ Command line arguments
 
    Optional qualifiers:
    -frame              list       Frame(s) to translate
-   -table              list       Genetic code to use
+   -table              list       Code to use
 
    Advanced qualifiers:
    -mmshow             bool       Show mismatches
@@ -98,22 +98,26 @@ Command line arguments
    R  (Reverse three frames)
    6  (All six frames)
    1
-   -table Genetic code to use
+   -table Code to use
    0 (Standard)
    1 (Standard (with alternative initiation codons))
    2 (Vertebrate Mitochondrial)
    3 (Yeast Mitochondrial)
-   4 (Mold/Protozoan/Coelenterate Mitochondrial and
+   4 (Mold, Protozoan, Coelenterate Mitochondrial and
    Mycoplasma/Spiroplasma)
    5 (Invertebrate Mitochondrial)
-   6 (Ciliate Macronuclear and dasycladacean)
-   9 (Echinoderm Mitochondrail)
+   6 (Ciliate Macronuclear and Dasycladacean)
+   9 (Echinoderm Mitochondrial)
    10 (Euplotid Nuclear)
    11 (Bacterial)
    12 (Alternative Yeast Nuclear)
    13 (Ascidian Mitochondrial)
    14 (Flatworm Mitochondrial)
    15 (Blepharisma Macronuclear)
+   16 (Chlorophycean Mitochondrial)
+   21 (Trematode Mitochondrial)
+   22 (Scenedesmus obliquus)
+   23 (Thraustochytrium Mitochondrial)
    0
    Advanced qualifiers Allowed values Default
    -mmshow Show mismatches Yes/No No

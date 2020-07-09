@@ -1,4 +1,3 @@
-/*  Last edited: Feb 29 10:26 2000 (pmr) */
 #ifdef __cplusplus
 extern "C"
 {

@@ -27,6 +27,12 @@ Description
    error message to be written (e.g. '-osformat') or will be quietly
    ignored (e.g. '-sbegin', '-send').
    
+   If you have defined a database to use GCG indexed databases, then
+   entret will currently only return the annotation and not the sequence.
+   entret will currently only reproduce the original entry, including the
+   sequence, for databases which hold the whole entry in one file (e.g.
+   the original flatfiles or SRS indexed databases).
+   
 Usage
 
    Here is a sample session with entret:
@@ -185,8 +191,10 @@ Known bugs
 See also
 
    Program name                          Description
+   abiview      Reads ABI file and display the trace
    cirdna       Draws circular maps of DNA constructs
    lindna       Draws linear maps of DNA constructs
+   notseq       Excludes a set of sequences and writes out the remaining ones
    remap        Display a sequence with restriction cut sites, translation etc
    seqret       Reads and writes (returns) sequences
    seqretall    Reads and writes (returns) a set of sequences one at a time

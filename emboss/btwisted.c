@@ -77,7 +77,7 @@ int main (int argc, char **argv)
  
     dinuc = ajSeqChar(seq);
 
-    for(i=begin-1; i<end-2; ++i)
+    for(i=begin-1; i<end-1; ++i)
     {
 	ajStrAssSubC(&nucs,dinuc,i,i+1);
 	if(!(valstr = ajTableGet(angletable,(const void *)nucs)))

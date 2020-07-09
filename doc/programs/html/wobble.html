@@ -59,6 +59,20 @@ Wobble base plot
 
 Wobble plots the third position variability as an indicator of a 
 potential coding region.
+<p>
+
+For each of the six possible translation frames, this plots a graph
+showing the percentage of 'G' and 'C' bases in the third position of
+codons in the frame within a window that is moved over the sequence. 
+<p>
+
+Bases other than 'G' and 'C' can be chosen with the <b>-bases</b> option.
+<p>
+
+The Mean of the third base percentage value is drawn as a horizontal
+line across the plots. 
+<p>
+
 
 <H2>
     Usage
@@ -173,45 +187,71 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
+Normal nucleic acid sequence USA.
 
 <H2>
     Output file format
 </H2>
 
+It plots a set of six graphs, one for each frame.
 
 <H2>
     Data files
 </H2>
 
+None.
 
 <H2>
     Notes
 </H2>
+
+None.
 
 
 <H2>
     References
 </H2>
 
+None.
+
 
 <H2>
     Warnings
 </H2>
+
+None.
 
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+"Sequence too short for window" - The sequence must be longer than 3
+times the window length. 
+<p>
+
+"Specifying ACG&T is meaningless" - When you use the option
+<b>-bases</b> to specify the bases to look for, it is pointless to
+specuy looking for all the possible bases as these should add to 100%
+all the time. 
+<p>
+
+"No bases specified" - Similarly you have to specify soem bases to look
+for otherwise you must plot a 0% line. 
+<p>
+
 
 <H2>
     Exit status
 </H2>
 
+It always exist with a status of 0, unless a fatal error is given.
 
 <H2>
     Known bugs
 </H2>
+
+None.
 
 
 <!--
@@ -254,6 +294,7 @@ href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
     History
 </H2>
 
+Completed Spring 2000.
 
 <H2>
     Target users

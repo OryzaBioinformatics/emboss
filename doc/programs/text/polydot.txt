@@ -117,6 +117,8 @@ See also
    palindrome Looks for inverted repeats in a nucleotide sequence
    pepcoil Predicts coiled coil regions
    pscan Scans proteins using PRINTS
+   recode Find and remove restriction sites but maintain the same
+   translation
    redata Search REBASE for enzyme name, references, suppliers etc
    restrict Finds restriction enzyme cleavage sites
    seqmatchall Does an all-against-all comparison of a set of sequences

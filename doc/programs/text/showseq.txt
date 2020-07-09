@@ -360,6 +360,7 @@ Command line arguments
                                   hindiii
                                   HinfI
                                   PpiI
+   -table              list       Code to use
 
    Advanced qualifiers:
    -orfminsize         integer    Minimum size of Open Reading Frames (ORFs)
@@ -376,7 +377,6 @@ Command line arguments
    -[no]commercial     bool       Only use restriction enzymes with suppliers
    -[no]limit          bool       Limits RE hits to one isoschizomer
    -preferred          bool       Report preferred isoschizomers
-   -table              list       Translation table genetic code to use
    -threeletter        bool       Display protein sequences in three-letter
                                   code
    -number             bool       Number the sequences
@@ -461,22 +461,7 @@ Command line arguments
    treated as the list of enzymes to search for. An example of a file of
    enzyme names is: ! my enzymes HincII, ppiII ! other enzymes hindiii
    HinfI PpiI Any string is accepted all
-   Advanced qualifiers Allowed values Default
-   -orfminsize Minimum size of Open Reading Frames (ORFs) to display in
-   the translations. Integer 0 or more 0
-   -flatreformat Display RE sites in flat format Yes/No No
-   -mincuts Minimum cuts per RE Integer from 1 to 1000 1
-   -maxcuts Maximum cuts per RE Integer up to 2000000000 2000000000
-   -sitelen Minimum recognition site length Integer from 2 to 20 4
-   -single Force single RE site only cuts Yes/No No
-   -[no]blunt Allow blunt end RE cutters Yes/No Yes
-   -[no]sticky Allow sticky end RE cutters Yes/No Yes
-   -[no]ambiguity Allow ambiguous RE matches Yes/No Yes
-   -plasmid Allow circular DNA Yes/No No
-   -[no]commercial Only use restriction enzymes with suppliers Yes/No Yes
-   -[no]limit Limits RE hits to one isoschizomer Yes/No Yes
-   -preferred Report preferred isoschizomers Yes/No No
-   -table Translation table genetic code to use
+   -table Code to use
    0 (Standard)
    1 (Standard (with alternative initiation codons))
    2 (Vertebrate Mitochondrial)
@@ -492,7 +477,26 @@ Command line arguments
    13 (Ascidian Mitochondrial)
    14 (Flatworm Mitochondrial)
    15 (Blepharisma Macronuclear)
+   16 (Chlorophycean Mitochondrial)
+   21 (Trematode Mitochondrial)
+   22 (Scenedesmus obliquus)
+   23 (Thraustochytrium Mitochondrial)
    0
+   Advanced qualifiers Allowed values Default
+   -orfminsize Minimum size of Open Reading Frames (ORFs) to display in
+   the translations. Integer 0 or more 0
+   -flatreformat Display RE sites in flat format Yes/No No
+   -mincuts Minimum cuts per RE Integer from 1 to 1000 1
+   -maxcuts Maximum cuts per RE Integer up to 2000000000 2000000000
+   -sitelen Minimum recognition site length Integer from 2 to 20 4
+   -single Force single RE site only cuts Yes/No No
+   -[no]blunt Allow blunt end RE cutters Yes/No Yes
+   -[no]sticky Allow sticky end RE cutters Yes/No Yes
+   -[no]ambiguity Allow ambiguous RE matches Yes/No Yes
+   -plasmid Allow circular DNA Yes/No No
+   -[no]commercial Only use restriction enzymes with suppliers Yes/No Yes
+   -[no]limit Limits RE hits to one isoschizomer Yes/No Yes
+   -preferred Report preferred isoschizomers Yes/No No
    -threeletter Display protein sequences in three-letter code Yes/No No
    -number Number the sequences Yes/No No
    -width Width of sequence to display Integer 1 or more 60
@@ -771,50 +775,55 @@ Known bugs
    
 See also
 
-   Program name                           Description
-  antigenic      Finds antigenic sites in proteins
-  backtranseq    Back translate a protein sequence
-  chaos          Create a chaos game representation plot for a sequence
-  cirdna         Draws circular maps of DNA constructs
-  cpgplot        Plot CpG rich areas
-  cpgreport      Reports all CpG rich regions
-  cusp           Create a codon usage table
-  diffseq        Find differences (SNPs) between nearly identical sequences
-  dotmatcher     Displays a thresholded dotplot of two sequences
-  dotpath        Displays a non-overlapping wordmatch dotplot of two sequences
-  dottup         Displays a wordmatch dotplot of two sequences
-  einverted      Finds DNA inverted repeats
-  equicktandem   Finds tandem repeats
-  etandem        Looks for tandem repeats in a nucleotide sequence
-  garnier        Predicts protein secondary structure
-  getorf         Finds and extracts open reading frames (ORFs)
-  helixturnhelix Report nucleic acid binding motifs
-  isochore       Plots isochores in large DNA sequences
-  lindna         Draws linear maps of DNA constructs
-  newcpgreport   Report CpG rich areas
-  newcpgseek     Reports CpG rich regions
-  oddcomp        Finds protein sequence regions with a biased composition
-  palindrome     Looks for inverted repeats in a nucleotide sequence
-  pepcoil        Predicts coiled coil regions
-  plotorf        Plot potential open reading frames
-  polydot        Displays all-against-all dotplots of a set of sequences
-  prettyseq      Output sequence with translated ranges
-  pscan          Scans proteins using PRINTS
-  rebaseextract  Extract data from REBASE
-  redata         Search REBASE for enzyme name, references, suppliers etc
-  remap          Display a sequence with restriction cut sites, translation etc
-  restrict       Finds restriction enzyme cleavage sites
-  seqret         Reads and writes (returns) sequences
-  seqretall      Reads and writes (returns) a set of sequences one at a time
-  seqretset      Reads and writes (returns) a set of sequences all at once
-  seqretsplit    Reads and writes (returns) sequences
-  showfeat       Show features of a sequence
-  showorf        Pretty output of DNA translations
-  sigcleave      Reports protein signal cleavage sites
-  silent         Silent mutation restriction enzyme scan
-  tfscan         Scans DNA sequences for transcription factors
-  tmap           Displays membrane spanning regions
-  transeq        Translate nucleic acid sequences
+   Program name Description
+   abiview Reads ABI file and display the trace
+   antigenic Finds antigenic sites in proteins
+   backtranseq Back translate a protein sequence
+   chaos Create a chaos game representation plot for a sequence
+   cirdna Draws circular maps of DNA constructs
+   cpgplot Plot CpG rich areas
+   cpgreport Reports all CpG rich regions
+   cusp Create a codon usage table
+   diffseq Find differences (SNPs) between nearly identical sequences
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   einverted Finds DNA inverted repeats
+   entret Reads and writes (returns) flatfile entries
+   equicktandem Finds tandem repeats
+   etandem Looks for tandem repeats in a nucleotide sequence
+   garnier Predicts protein secondary structure
+   getorf Finds and extracts open reading frames (ORFs)
+   helixturnhelix Report nucleic acid binding motifs
+   isochore Plots isochores in large DNA sequences
+   lindna Draws linear maps of DNA constructs
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   notseq Excludes a set of sequences and writes out the remaining ones
+   oddcomp Finds protein sequence regions with a biased composition
+   palindrome Looks for inverted repeats in a nucleotide sequence
+   pepcoil Predicts coiled coil regions
+   plotorf Plot potential open reading frames
+   polydot Displays all-against-all dotplots of a set of sequences
+   prettyseq Output sequence with translated ranges
+   pscan Scans proteins using PRINTS
+   rebaseextract Extract data from REBASE
+   recode Find and remove restriction sites but maintain the same
+   translation
+   redata Search REBASE for enzyme name, references, suppliers etc
+   remap Display a sequence with restriction cut sites, translation etc
+   restrict Finds restriction enzyme cleavage sites
+   seqret Reads and writes (returns) sequences
+   seqretall Reads and writes (returns) a set of sequences one at a time
+   seqretset Reads and writes (returns) a set of sequences all at once
+   seqretsplit Reads and writes (returns) sequences in individual files
+   showfeat Show features of a sequence
+   showorf Pretty output of DNA translations
+   sigcleave Reports protein signal cleavage sites
+   silent Silent mutation restriction enzyme scan
+   tfscan Scans DNA sequences for transcription factors
+   tmap Displays membrane spanning regions
+   transeq Translate nucleic acid sequences
    
 Author(s)
 

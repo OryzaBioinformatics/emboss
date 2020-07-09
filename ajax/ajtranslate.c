@@ -87,31 +87,33 @@
 ** 
 ** Example of typical ACD file list for getting the genetic code table number:
 ** 
-**   list: table [
-**         opt: Y
-**         default: "0"
-**         min: 1
-**         max: 1
-**         header: "Genetic codes"
-**         values: 
-**                 "0:Standard;
-**                 1:Standard (with alternative initiation codons); 
-**                 2:Vertebrate Mitochondrial;
-**                 3:Yeast Mitochondrial;
-**                 4:Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma;
-**                 5:Invertebrate Mitochondrial;
-**                 6:Ciliate Macronuclear and Dasycladacean;
-**                 9:Echinoderm Mitochondrial;
-**                 10:Euplotid Nuclear;
-**                 11:Bacterial;
-**                 12:Alternative Yeast Nuclear;
-**                 13:Ascidian Mitochondrial;
-**                 14:Flatworm Mitochondrial; 
-**                 15:Blepharisma Macronuclear"
-**         delim: ";"
-**         codedelim: ":"
-**         prompt: "Code to use"
-**   ]
+** list: table [
+**        opt: Y
+**        default: "0"
+**        min: 1
+**        max: 1
+**        header: "Genetic codes"
+**        values:
+**                "0:Standard;
+**                1:Standard (with alternative initiation codons);
+**                2:Vertebrate Mitochondrial;
+**                3:Yeast Mitochondrial;
+**                4:Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma;
+**                5:Invertebrate Mitochondrial;
+**                6:Ciliate Macronuclear and Dasycladacean;
+**                9:Echinoderm Mitochondrial;
+**                10:Euplotid Nuclear;
+**                11:Bacterial;
+**                12:Alternative Yeast Nuclear;
+**                13:Ascidian Mitochondrial;
+**                14:Flatworm Mitochondrial;
+**                15:Blepharisma Macronuclear;
+**                16:Chlorophycean Mitochondrial;
+**                21:Trematode Mitochondrial"
+**        delim: ";"
+**        codedelim: ":"
+**        prompt: "Code to use"
+**  ]
 ** 
 ** 
 ** 

@@ -578,9 +578,11 @@ Known bugs
 See also
 
    Program name                          Description
+   abiview      Reads ABI file and display the trace
    cirdna       Draws circular maps of DNA constructs
    entret       Reads and writes (returns) flatfile entries
    lindna       Draws linear maps of DNA constructs
+   notseq       Excludes a set of sequences and writes out the remaining ones
    remap        Display a sequence with restriction cut sites, translation etc
    seqretall    Reads and writes (returns) a set of sequences one at a time
    seqretset    Reads and writes (returns) a set of sequences all at once

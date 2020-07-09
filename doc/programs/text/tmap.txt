@@ -12,14 +12,35 @@ Description
 
    This program predicts transmembrane segments in proteins, utilising
    the algorithm described in: "Persson, B. & Argos, P. (1994) Prediction
-   of transmembrane segments in proteins utilsing multiple sequence
+   of transmembrane segments in proteins utilising multiple sequence
    alignments J. Mol. Biol. 237, 182-192."
+   
+   tmap reads in one or more aligned protein sequences.
+   
+   Two sets of propensity values are then used for the calculations: one
+   for the middle, hydrophobic portion and one for the terminal regions
+   of the transmembrane sequence spans. Average propensity values are
+   calculated for each position along the alignment, with the
+   contribution from each sequence weighted according to its
+   dissimilarity relative to the other alignged sequences.
+   
+   Eight-residue segments are considered as potential cores of
+   transmembrane segments and elongated if thier middle propensity values
+   are above a threshold. End propensity values are also considered as
+   stop signals. Only helices with a length of 15 to 29 residues are
+   allowed and correctionbs for strictly conserved charged residues are
+   made.
+   
+   The method is more successful than predictions based upon single
+   sequences alone.
+   
+   The results are plotted on a graph and written to a text file.
    
 Usage
 
    Here is a sample session with tmap.
 
-  % tmap sw:opsd_human
+  % tmap sw:opsd_human -out tmap.res
 
    click here for result
    
@@ -53,12 +74,63 @@ Input file format
    
 Output file format
 
-   .ps file if postscipt output requested.
+   A plot of the propensities to form the middle and the end of
+   transmembrane regions is output.
+   
+   Bars are displayed in the plot above the regions predicted as being
+   most likely to form transmembrane regions.
+   
+   The text file (specified by the -output option) gives a summary of
+   these regions. The text file produced by the above example is:
+     _________________________________________________________________
+   
+Program TMAP, version 46, to predict transmembrane segments from .msf file.
+The program reads a multiple alignment file of the GCG multiple sequence format
+and predicts membrane-spanning regions according to the algorithm in
+Persson & Argos (1994), J. Mol. Biol. 237, 182-192.
+
+RESULTS from program TMAP, edition 46'
+
+Numbers give: a) number of transmembrane segment
+              b) start of TM segment (alignment position / residue number)
+              c) end of TM segment (alignment position / residue number)
+              d) length of TM segment within parentheses
+
+PREDICTED TRANSMEMBRANE SEGMENTS FOR ALIGNMENT
+
+  TM  1:   43 -   69  (27.0)
+  TM  2:   73 -   97  (25.0)
+  TM  3:  112 -  140  (29.0)
+  TM  4:  148 -  176  (29.0)
+  TM  5:  201 -  229  (29.0)
+  TM  6:  255 -  275  (21.0)
+  TM  7:  282 -  302  (21.0)
+
+
+PREDICTED TRANSMEMBRANE SEGMENTS FOR PROTEIN OPSD_HUMAN
+
+  TM  1:   43 -   69 (27)
+  TM  2:   73 -   97 (25)
+  TM  3:  112 -  140 (29)
+  TM  4:  148 -  176 (29)
+  TM  5:  201 -  229 (29)
+  TM  6:  255 -  275 (21)
+  TM  7:  282 -  302 (21)
+     _________________________________________________________________
+   
+   The transmembrane regions for the complete alignment are given first,
+   followed by the predictions for each individual sequence in the
+   alignment. (In the example above there is only 1 sequence in the
+   alignment.)
    
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
    "Persson, B. & Argos, P. (1994) Prediction of transmembrane segments
@@ -67,14 +139,20 @@ References
    
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    0 if successfull.
    
 Known bugs
 
+   None.
+   
 See also
 
     Program name                           Description

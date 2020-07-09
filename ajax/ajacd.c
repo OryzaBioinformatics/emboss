@@ -42,6 +42,7 @@
 
 
 #define DEFCODON  "Ehum.cut"
+#define DEFDLIST  "."
 #define DEFBLOSUM "EBLOSUM62"
 #define DEFDNA    "EDNAMAT"
 #define DEFCPDB   "1azu"
@@ -334,6 +335,7 @@ static AjBool acdSetQualDefInt (AcdPAcd thys, char* name, int value);
 static AjBool acdSetKey (AcdPAcd thys, AjPStr* attrib, AjPStr value);
 static AjBool acdSetVarDef (AcdPAcd thys, AjPStr value);
 static void acdPromptCodon (AcdPAcd thys);
+static void acdPromptDirlist (AcdPAcd thys);
 static void acdPromptFeat (AcdPAcd thys);
 static void acdPromptFeatout (AcdPAcd thys);
 static void acdPromptGraph (AcdPAcd thys);
@@ -383,6 +385,7 @@ static AjBool acdExpExists (AjPStr* result, AjPStr str);
 /*static void*  ajAcdGetXxxx (char *token);*/
 
 static void acdHelpValidCodon (AcdPAcd thys, AjPStr* str);
+static void acdHelpValidDirlist (AcdPAcd thys, AjPStr* str);
 static void acdHelpValidData  (AcdPAcd thys, AjPStr* str);
 static void acdHelpValidFeatout (AcdPAcd thys, AjPStr* str);
 static void acdHelpValidFloat (AcdPAcd thys, AjPStr* str);
@@ -401,6 +404,7 @@ static void acdHelpValidSeq (AcdPAcd thys, AjPStr* str);
 static void acdHelpValidSeqout (AcdPAcd thys, AjPStr* str);
 static void acdHelpValidString (AcdPAcd thys, AjPStr* str);
 static void acdHelpExpectCodon (AcdPAcd thys, AjPStr* str);
+static void acdHelpExpectDirlist (AcdPAcd thys, AjPStr* str);
 static void acdHelpExpectData (AcdPAcd thys, AjPStr* str);
 static void acdHelpExpectFeatout (AcdPAcd thys, AjPStr* str);
 static void acdHelpExpectFloat (AcdPAcd thys, AjPStr* str);
@@ -426,6 +430,7 @@ static void acdSetVar (AcdPAcd thys);
 static void acdSetArray (AcdPAcd thys);
 static void acdSetBool (AcdPAcd thys);
 static void acdSetCodon (AcdPAcd thys);
+static void acdSetDirlist (AcdPAcd thys);
 static void acdSetDatafile (AcdPAcd thys);
 static void acdSetDirectory (AcdPAcd thys);
 static void acdSetFeat (AcdPAcd thys);
@@ -546,6 +551,13 @@ AcdOAttr acdAttrDirectory[] = { {"fullpath", VT_BOOL},
 				{"corba", VT_STR},
 				{"style",VT_STR},
 				{NULL, VT_NULL} };
+
+AcdOAttr acdAttrDirlist[] = { {"fullpath", VT_BOOL},
+			      {"nullok", VT_BOOL},
+			      {"comment", VT_STR},
+			      {"corba", VT_STR},
+			      {"style",VT_STR},
+			      {NULL, VT_NULL} };
 
 AcdOAttr acdAttrFeat[] = { {"name", VT_STR},
 			   {"extension", VT_STR},
@@ -956,6 +968,8 @@ AcdOType acdType[] =
    NULL,             "Data file" },
   {"directory",   acdAttrDirectory, acdSetDirectory,
    NULL,             "Directory" },
+  {"dirlist",	  acdAttrDirlist,     acdSetDirlist,
+   NULL,             "Directory with files" },
   {"features",    acdAttrFeat,      acdSetFeat,
    acdQualFeat,      "Readable feature table" },
   {"featout",     acdAttrFeatout,   acdSetFeatout,
@@ -1024,6 +1038,7 @@ AcdOValid acdValid[] =
   {"infile",    acdHelpValidIn,      acdHelpExpectIn},
   {"datafile",  acdHelpValidData,    acdHelpExpectData},
   {"codon",     acdHelpValidCodon,   acdHelpExpectCodon},
+  {"dirlist",   acdHelpValidDirlist, acdHelpExpectDirlist},
   {"list",      acdHelpValidList,    NULL},
   {"cpdb",      acdHelpValidCpdb,    acdHelpExpectCpdb},
   {"scop",      acdHelpValidScop,    acdHelpExpectScop},
@@ -3108,6 +3123,105 @@ static void acdSetCodon (AcdPAcd thys)
     return;
 }
 
+
+/* @func ajAcdGetDirlist *****************************************************
+**
+** Returns a list of files in a given directory.
+** Called by the application after all ACD values have been set,
+** and simply returns what the ACD item already has.
+**
+** @param [r] token [char*] Text token name
+** @return [AjPList] List of files.
+** @cre failure to find an item with the right name and type aborts.
+** @@
+******************************************************************************/
+
+AjPList ajAcdGetDirlist (char *token)
+{
+    return acdGetValue (token, "dirlist");
+}
+
+
+/* @funcstatic acdSetDirlist ************************************************
+**
+** Using the definition in the ACD file, and any values for the
+** item or its associated qualifiers provided on the command line,
+** prompts the user if necessary (and possible) and
+** sets the actual value for an ACD directory item.
+**
+** Understands all attributes and associated qualifiers for this item type.
+**
+** The default value is "." the current directory.
+**
+** @param [u] thys [AcdPAcd] ACD item.
+** @return [void]
+** @@
+******************************************************************************/
+
+static void acdSetDirlist (AcdPAcd thys)
+{
+    AjPList val;
+    AjPStr  t;
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    int itry;
+    AjBool nullok=ajFalse;
+    AjBool dopath;
+
+    val = NULL;
+
+    (void) acdAttrToBool (thys, "fullpath", ajFalse, &dopath);
+    acdLog ("nullok: %B\n", nullok);
+    (void) acdAttrToBool (thys, "nullok", ajFalse, &nullok);
+    acdLog ("nullok: %B\n", nullok);
+
+    required = acdIsRequired(thys);
+    (void) acdReplyInit (thys, ".", &defreply);
+    acdPromptDirlist(thys);
+    
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	ok = ajTrue;		/* accept the default if nothing changes */
+
+	(void) ajStrAssS (&reply, defreply);
+
+	if (required)
+	    (void) acdUserGet (thys, &reply);
+
+	if (ajStrLen(reply))
+	{
+	    if (dopath)
+		ok = ajFileDirPath(&reply);
+	    else
+		ok = ajFileDir(&reply);
+	    if (!ok)
+		acdBadVal (thys, required,
+			   "Unable to open file '%S' for input", reply);
+	}
+	else
+	{
+	    if (!nullok)
+		acdBadVal (thys, required, "Input file is required");
+	    ok = ajFalse;
+	}
+    }
+    if (!ok)
+	acdBadRetry (thys);
+
+    val = ajListstrNew();			/* set the default value */
+    t   = ajStrNewC("*");
+    ajFileScan(reply,t,&val,ajFalse,ajFalse,NULL,NULL,ajFalse,NULL);
+    ajStrDel(&t);
+    
+    thys->Value = val;
+    (void) ajStrAssS (&thys->ValStr, reply);
+
+    return;
+}
+
+
 /* @func ajAcdGetDatafile *****************************************************
 **
 ** Returns an item of type Datafile as defined in a named ACD item.
@@ -3268,7 +3382,7 @@ static void acdSetDirectory (AcdPAcd thys)
 
     for (itry=acdPromptTry; itry && !ok; itry--)
     {
-	ok = ajTrue;			/* accept the default if nothing changes */
+	ok = ajTrue;		/* accept the default if nothing changes */
 
 	(void) ajStrAssS (&reply, defreply);
 
@@ -4572,7 +4686,7 @@ static void acdSetOutfile (AcdPAcd thys)
 ** and simply returns what the ACD item already has.
 **
 ** @param [r] token [char*] Text token name
-** @return [AjPPdb] Codon object.
+** @return [AjPPdb] Cpdb object.
 ** @cre failure to find an item with the right name and type aborts.
 ** @@
 ******************************************************************************/
@@ -4607,7 +4721,7 @@ AjPPdb ajAcdGetCpdb (char *token)
 static void acdSetCpdb (AcdPAcd thys)
 {
     AjPPdb val;
-
+    AjPFile inf=NULL;
     AjPStr name=NULL;
     AjBool required = ajFalse;
     AjBool ok = ajFalse;
@@ -4637,12 +4751,18 @@ static void acdSetCpdb (AcdPAcd thys)
 
 	if (ajStrLen(reply))
 	{
-	    if (!ajCpdbRead(reply,&val))
+	    if((inf=ajFileNewIn(reply)))
 	    {
-		acdBadVal (thys, required,
-			   "Unable to read clean PDB file '%S'", reply);
-		ok = ajFalse;
+		if (ajCpdbRead(inf,&val))
+		    ajFileClose(&inf);
+		else
+		{
+		    acdBadVal (thys, required,
+			       "Unable to read clean PDB file '%S'", reply);
+		    ok = ajFalse;
+		}
 	    }
+	    
 	}
 	else
 	{
@@ -6950,6 +7070,20 @@ static void acdHelpValidCodon (AcdPAcd thys, AjPStr* str) {
   return;
 }
 
+/* @funcstatic acdHelpValidDirlist *******************************************
+**
+** Generates valid description for a dirlist type.
+**
+** @param [r] thys [AcdPAcd] ACD object
+** @param [r] str [AjPStr*] Help text (if any) generated
+** @return [void]
+** @@
+******************************************************************************/
+
+static void acdHelpValidDirlist (AcdPAcd thys, AjPStr* str) {
+  return;
+}
+
 /* @funcstatic acdHelpValidMatrix *********************************************
 **
 ** Generates valid description for a comparison matrix type.
@@ -7424,6 +7558,27 @@ static void acdHelpExpectCodon (AcdPAcd thys, AjPStr* str) {
   if (ajStrLen(*str)) return;
 
   ajStrAssC (str, DEFCODON);
+
+  return;
+}
+
+
+/* @funcstatic acdHelpExpectDirlist ******************************************
+**
+** Generates expected value description for a dirlist type.
+**
+** @param [r] thys [AcdPAcd] ACD object
+** @param [r] str [AjPStr*] Help text (if any) generated
+** @return [void]
+** @@
+******************************************************************************/
+
+static void acdHelpExpectDirlist (AcdPAcd thys, AjPStr* str) {
+
+  (void) acdAttrResolve (thys, "name", str);
+  if (ajStrLen(*str)) return;
+
+  ajStrAssC (str, DEFDLIST);
 
   return;
 }
@@ -11186,6 +11341,30 @@ static void acdPromptCodon (AcdPAcd thys) {
     return;
 
   (void) ajFmtPrintS (prompt, "Codon usage file");
+  return;
+}
+
+
+/* @funcstatic acdPromptDirlist *********************************************
+**
+** Sets the default prompt for this ACD object to be a dirlist
+**
+** @param [r] thys [AcdPAcd] Current ACD object.
+** @return [void]
+** @@
+******************************************************************************/
+
+static void acdPromptDirlist (AcdPAcd thys) {
+  AjPStr* prompt;
+
+  if (!thys->DefStr)
+    return;
+
+  prompt = &thys->DefStr[DEF_PROMPT];
+  if (ajStrLen(*prompt))
+    return;
+
+  (void) ajFmtPrintS (prompt, "Directory with files");
   return;
 }
 

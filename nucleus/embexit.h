@@ -1,4 +1,7 @@
-/*  Last edited: Feb  7 16:01 2000 (pmr) */
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #ifndef embexit_h
 #define embexit_h
@@ -6,4 +9,8 @@
 void embExit (void);
 
 #endif
+
+#ifdef __cplusplus
+}
 #endif
+

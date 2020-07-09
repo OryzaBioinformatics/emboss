@@ -185,6 +185,7 @@ AjBool      ajFileStderr (const AjPFile file);
 AjBool      ajFileStdin (const AjPFile file);
 AjBool      ajFileStdout (const AjPFile file);
 long        ajFileTell (const AjPFile thys);
+char*       ajFileTempName(const char *dir);
 AjBool      ajFileTestSkip (AjPStr fullname, AjPStr exc, AjPStr inc,
 			    AjBool keep);
 void        ajFileTrace (const AjPFile thys);

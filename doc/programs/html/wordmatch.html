@@ -59,6 +59,15 @@ Finds all exact matches of a given size between 2 sequences
 Finds all exact matches of a given minimum size between 2
     sequences displaying the start points in each sequence and the
     match length.
+<p>
+
+This program takes two sequences and finds regions where they are
+identical.  These regions are reported in the output file (and
+optionally) in GFF (Gene Feature Format) files. 
+<p>
+
+It will not find identical regions smaller than the specified <b>wordsize</b>.
+
 <H2>
     Usage
 </H2>
@@ -71,13 +80,6 @@ Here is a sample session with wordmatch.
 % wordmatch sw:hba_human sw:hbb_human
 Output file [hba_human.wordmatch]: 
 Word size [4]: 
-
-% more hba_human.wordmatch
-FINALLY length = 3
- HBA_HUMAN  HBB_HUMAN Length
-        58          63          5
-        14          15          4
-       116         121          4
 
 </pre>
 
@@ -193,29 +195,68 @@ Any two sequence USAs of the same type (DNA or protein).
 </H2>
 
 
+The file produced in the above example is:
+<p>
+<hr>
+<pre>
+FINALLY length = 3
+ HBA_HUMAN  HBB_HUMAN Length
+        58          63          5
+        14          15          4
+       116         121          4
+</pre>
+<hr>
+<p>
+
+The first line ('FINALLY...') gives the number of regions found.
+<p>
+
+The next line gives the headers for the subsequent columns of data.
+This consists for the names of the two sequence and the word 'Length'.
+<p>
+
+Subsequent lines consist of three columns fo numbers separated by spaces
+or TAB characters.  Each line contains the information on one identical
+region.  The first column is the start position in the first sequence of
+the identical region.  The second number is the start position in the
+second sequence.  the third number is the length of the identical
+region. 
+
+<p>
+If no regions are found, the output file is blank.
+
 <H2>
     Data files
 </H2>
 
+None.
 
 <H2>
     Notes
 </H2>
+
+None.
 
 
 <H2>
     References
 </H2>
 
+None.
+
 
 <H2>
     Warnings
 </H2>
 
+None.
+
 
 <H2>
     Diagnostic Error Messages
 </H2>
+
+None.
 
 
 <H2>
@@ -227,6 +268,8 @@ Any two sequence USAs of the same type (DNA or protein).
 <H2>
     Known bugs
 </H2>
+
+None.
 
 
 <!--

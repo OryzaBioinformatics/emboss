@@ -469,7 +469,7 @@ AjPStr embPropProt1to3 (AjPSeq seq, int pad) {
 
 AjBool embPropPurine (char base) {
 
-  return (index(propPurines, base) != NULL);
+  return (strchr(propPurines, (int)base) != NULL);
 
 }
 
@@ -486,7 +486,7 @@ AjBool embPropPurine (char base) {
 
 AjBool embPropPyrimidine (char base) {
 
-  return (index(propPyrimidines, base) != NULL);
+  return (strchr(propPyrimidines, (int)base) != NULL);
 
 }
 

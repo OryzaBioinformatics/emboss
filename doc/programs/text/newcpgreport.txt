@@ -112,34 +112,36 @@ Known bugs
 
 See also
 
-   Program name                          Description
-   chaos        Create a chaos game representation plot for a sequence
-   chips        Codon usage statistics
-   codcmp       Codon usage table comparison
-   compseq      Counts the composition of dimer/trimer/etc words in a sequence
-   cpgplot      Plot CpG rich areas
-   cpgreport    Reports all CpG rich regions
-   cusp         Create a codon usage table
-   diffseq      Find differences (SNPs) between nearly identical sequences
-   dotmatcher   Displays a thresholded dotplot of two sequences
-   dotpath      Displays a non-overlapping wordmatch dotplot of two sequences
-   dottup       Displays a wordmatch dotplot of two sequences
-   einverted    Finds DNA inverted repeats
+   Program name Description
+   chaos Create a chaos game representation plot for a sequence
+   chips Codon usage statistics
+   codcmp Codon usage table comparison
+   compseq Counts the composition of dimer/trimer/etc words in a sequence
+   cpgplot Plot CpG rich areas
+   cpgreport Reports all CpG rich regions
+   cusp Create a codon usage table
+   diffseq Find differences (SNPs) between nearly identical sequences
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   einverted Finds DNA inverted repeats
    equicktandem Finds tandem repeats
-   etandem      Looks for tandem repeats in a nucleotide sequence
-   freak        Residue/base frequency table or plot
-   geecee       Calculates the fractional GC content of nucleic acid sequences
-   isochore     Plots isochores in large DNA sequences
-   newcpgseek   Reports CpG rich regions
-   palindrome   Looks for inverted repeats in a nucleotide sequence
-   polydot      Displays all-against-all dotplots of a set of sequences
-   redata       Search REBASE for enzyme name, references, suppliers etc
-   restrict     Finds restriction enzyme cleavage sites
-   showseq      Display a sequence with features, translation etc
-   silent       Silent mutation restriction enzyme scan
-   tfscan       Scans DNA sequences for transcription factors
-   wobble       Wobble base plot
-   wordcount    Counts words of a specified size in a DNA sequence
+   etandem Looks for tandem repeats in a nucleotide sequence
+   freak Residue/base frequency table or plot
+   geecee Calculates the fractional GC content of nucleic acid sequences
+   isochore Plots isochores in large DNA sequences
+   newcpgseek Reports CpG rich regions
+   palindrome Looks for inverted repeats in a nucleotide sequence
+   polydot Displays all-against-all dotplots of a set of sequences
+   recode Find and remove restriction sites but maintain the same
+   translation
+   redata Search REBASE for enzyme name, references, suppliers etc
+   restrict Finds restriction enzyme cleavage sites
+   showseq Display a sequence with features, translation etc
+   silent Silent mutation restriction enzyme scan
+   tfscan Scans DNA sequences for transcription factors
+   wobble Wobble base plot
+   wordcount Counts words of a specified size in a DNA sequence
    
 Author(s)
 

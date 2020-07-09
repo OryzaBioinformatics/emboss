@@ -469,6 +469,7 @@ IT IS DONE FOR YOU.
                                   hindiii
                                   HinfI
                                   PpiI
+   -table              list       Code to use
 
    Advanced qualifiers:
    -orfminsize         integer    Minimum size of Open Reading Frames (ORFs)
@@ -485,7 +486,6 @@ IT IS DONE FOR YOU.
    -[no]commercial     bool       Only use restriction enzymes with suppliers
    -[no]limit          bool       Limits RE hits to one isoschizomer
    -preferred          bool       Report preferred isoschizomers
-   -table              list       Translation table genetic code to use
    -threeletter        bool       Display protein sequences in three-letter
                                   code
    -number             bool       Number the sequences
@@ -606,6 +606,13 @@ PpiI</td>
 <td>all</td>
 </tr>
 
+<tr>
+<td>-table</td>
+<td>Code to use</td>
+<td><table><tr><td>0</td> <td><i>(Standard)</i></td></tr><tr><td>1</td> <td><i>(Standard (with alternative initiation codons))</i></td></tr><tr><td>2</td> <td><i>(Vertebrate Mitochondrial)</i></td></tr><tr><td>3</td> <td><i>(Yeast Mitochondrial)</i></td></tr><tr><td>4</td> <td><i>(Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma)</i></td></tr><tr><td>5</td> <td><i>(Invertebrate Mitochondrial)</i></td></tr><tr><td>6</td> <td><i>(Ciliate Macronuclear and Dasycladacean)</i></td></tr><tr><td>9</td> <td><i>(Echinoderm Mitochondrial)</i></td></tr><tr><td>10</td> <td><i>(Euplotid Nuclear)</i></td></tr><tr><td>11</td> <td><i>(Bacterial)</i></td></tr><tr><td>12</td> <td><i>(Alternative Yeast Nuclear)</i></td></tr><tr><td>13</td> <td><i>(Ascidian Mitochondrial)</i></td></tr><tr><td>14</td> <td><i>(Flatworm Mitochondrial)</i></td></tr><tr><td>15</td> <td><i>(Blepharisma Macronuclear)</i></td></tr><tr><td>16</td> <td><i>(Chlorophycean Mitochondrial)</i></td></tr><tr><td>21</td> <td><i>(Trematode Mitochondrial)</i></td></tr><tr><td>22</td> <td><i>(Scenedesmus obliquus)</i></td></tr><tr><td>23</td> <td><i>(Thraustochytrium Mitochondrial)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
 <tr bgcolor="#FFFFD0">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
@@ -701,13 +708,6 @@ PpiI</td>
 <td>Report preferred isoschizomers</td>
 <td>Yes/No</td>
 <td>No</td>
-</tr>
-
-<tr>
-<td>-table</td>
-<td>Translation table genetic code to use</td>
-<td><table><tr><td>0</td> <td><i>(Standard)</i></td></tr><tr><td>1</td> <td><i>(Standard (with alternative initiation codons))</i></td></tr><tr><td>2</td> <td><i>(Vertebrate Mitochondrial)</i></td></tr><tr><td>3</td> <td><i>(Yeast Mitochondrial)</i></td></tr><tr><td>4</td> <td><i>(Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma)</i></td></tr><tr><td>5</td> <td><i>(Invertebrate Mitochondrial)</i></td></tr><tr><td>6</td> <td><i>(Ciliate Macronuclear and Dasycladacean)</i></td></tr><tr><td>9</td> <td><i>(Echinoderm Mitochondrial)</i></td></tr><tr><td>10</td> <td><i>(Euplotid Nuclear)</i></td></tr><tr><td>11</td> <td><i>(Bacterial)</i></td></tr><tr><td>12</td> <td><i>(Alternative Yeast Nuclear)</i></td></tr><tr><td>13</td> <td><i>(Ascidian Mitochondrial)</i></td></tr><tr><td>14</td> <td><i>(Flatworm Mitochondrial)</i></td></tr><tr><td>15</td> <td><i>(Blepharisma Macronuclear)</i></td></tr></table></td>
-<td>0</td>
 </tr>
 
 <tr>
@@ -1123,6 +1123,7 @@ It is not a bug. Please don't report it.
 <a name=See also><h2>See also</h2></a>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="abiview.html">abiview</a></td><td>Reads ABI file and display the trace</td></tr>
 <tr><td><a href="antigenic.html">antigenic</a></td><td>Finds antigenic sites in proteins</td></tr>
 <tr><td><a href="backtranseq.html">backtranseq</a></td><td>Back translate a protein sequence</td></tr>
 <tr><td><a href="chaos.html">chaos</a></td><td>Create a chaos game representation plot for a sequence</td></tr>
@@ -1135,6 +1136,7 @@ It is not a bug. Please don't report it.
 <tr><td><a href="dotpath.html">dotpath</a></td><td>Displays a non-overlapping wordmatch dotplot of two sequences</td></tr>
 <tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
 <tr><td><a href="einverted.html">einverted</a></td><td>Finds DNA inverted repeats</td></tr>
+<tr><td><a href="entret.html">entret</a></td><td>Reads and writes (returns) flatfile entries</td></tr>
 <tr><td><a href="equicktandem.html">equicktandem</a></td><td>Finds tandem repeats</td></tr>
 <tr><td><a href="etandem.html">etandem</a></td><td>Looks for tandem repeats in a nucleotide sequence</td></tr>
 <tr><td><a href="garnier.html">garnier</a></td><td>Predicts protein secondary structure</td></tr>
@@ -1144,6 +1146,7 @@ It is not a bug. Please don't report it.
 <tr><td><a href="lindna.html">lindna</a></td><td>Draws linear maps of DNA constructs</td></tr>
 <tr><td><a href="newcpgreport.html">newcpgreport</a></td><td>Report CpG rich areas</td></tr>
 <tr><td><a href="newcpgseek.html">newcpgseek</a></td><td>Reports CpG rich regions</td></tr>
+<tr><td><a href="notseq.html">notseq</a></td><td>Excludes a set of sequences and writes out the remaining ones</td></tr>
 <tr><td><a href="oddcomp.html">oddcomp</a></td><td>Finds protein sequence regions with a biased composition</td></tr>
 <tr><td><a href="palindrome.html">palindrome</a></td><td>Looks for inverted repeats in a nucleotide sequence</td></tr>
 <tr><td><a href="pepcoil.html">pepcoil</a></td><td>Predicts coiled coil regions</td></tr>
@@ -1152,13 +1155,14 @@ It is not a bug. Please don't report it.
 <tr><td><a href="prettyseq.html">prettyseq</a></td><td>Output sequence with translated ranges</td></tr>
 <tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
 <tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
+<tr><td><a href="recode.html">recode</a></td><td>Find and remove restriction sites but maintain the same translation</td></tr>
 <tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
 <tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
 <tr><td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td></tr>
 <tr><td><a href="seqret.html">seqret</a></td><td>Reads and writes (returns) sequences</td></tr>
 <tr><td><a href="seqretall.html">seqretall</a></td><td>Reads and writes (returns) a set of sequences one at a time</td></tr>
 <tr><td><a href="seqretset.html">seqretset</a></td><td>Reads and writes (returns) a set of sequences all at once</td></tr>
-<tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences</td></tr>
+<tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
 <tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
 <tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
 <tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>

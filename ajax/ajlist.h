@@ -20,6 +20,7 @@ enum AjEListType {ajEListAny, ajEListStr};
 typedef struct AjSListNode AjOListNode, *AjPListNode;
 struct AjSListNode {
 	AjPListNode Next;	/* next item */
+	AjPListNode Prev;       /* previous item */
 	void *Item;		/* data */
 };
 
@@ -95,9 +96,13 @@ typedef struct AjSList {
 
 typedef struct AjSIList {
   AjPList Head ;
-  AjPListNode* PCurr;
-  AjPListNode* PPrev;
+  AjPListNode Here;
+  AjPListNode Orig;
+  AjBool Dir;
 } *AjIList;
+
+
+
 
 AjPList ajListNew (void);          /* return header */
 AjPList ajListstrNew (void);          /* return header */
@@ -154,6 +159,12 @@ AjBool ajListIterDone (AjIList iter);
 void ajListIterTrace (AjIList iter);
 void ajListstrIterTrace (AjIList iter);
 
+AjIList ajListIterBack (AjPList thys);
+AjBool  ajListIterBackDone (AjIList iter);
+AjBool  ajListIterBackMore (AjIList iter);
+void*   ajListIterBackNext (AjIList iter);
+
+
 void ajListAppend (AjPList list, AjPListNode tail);
 
 AjBool ajListFind(AjPList listhead,
@@ -164,6 +175,7 @@ AjBool ajListstrFind(AjPList listhead,
 void ajListPushList (AjPList list, AjPList* pmore);
 void ajListstrPushList (AjPList list, AjPList* pmore);
 void ajListInsert (AjIList iter, void* x);
+void ajListInsertOld (AjIList iter, void* x);
 void ajListRemove (AjIList iter);
 void ajListstrInsert (AjIList iter, AjPStr x);
 void ajListstrRemove (AjIList iter);

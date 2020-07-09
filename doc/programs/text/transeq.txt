@@ -121,6 +121,10 @@ Command line arguments
    13 (Ascidian Mitochondrial)
    14 (Flatworm Mitochondrial)
    15 (Blepharisma Macronuclear)
+   16 (Chlorophycean Mitochondrial)
+   21 (Trematode Mitochondrial)
+   22 (Scenedesmus obliquus)
+   23 (Thraustochytrium Mitochondrial)
    0
    -regions Regions to translate. If this is left blank, then the
    complete sequence is translated. A set of regions is specified by a
@@ -141,6 +145,46 @@ Input file format
 Output file format
 
    One or more peptide sequences are written out.
+   
+   The names of the resulting protein sequences are formed from the name
+   of the input nucleic acid sequence with '_' and the translation frame
+   appended to it. Thus a nucleic acid sequence with the name 'XYZ'
+   franslated in all 6 frame would produce protein sequences with the
+   names: 'XYZ_1', 'XYZ_2', 'XYZ_3', 'XYZ_4', 'XYZ_5', 'XYZ_6'.
+   
+   For example, the result of the command
+   transeq em:hsfau -frame=6
+   would be:
+     _________________________________________________________________
+   
+>HSFAU_1 H.sapiens fau mRNA
+FLFLDSIFAVAGTAVQSPICSSLSAPRSYTPSR*PARKRSPRSRLM*PHWRALPRKIKSC
+SWQARPWRMRPLWASAGWRP*LPWK*QAACLEVKFMVPWPVLEK*EVRLLRWPNRRRRRR
+RQVGLSGGCSTTGALSTLCPPLARRRAPMPTLKSFVILAFSNKKAT*FSQKKX
+>HSFAU_2 H.sapiens fau mRNA
+SSFSTPSSR*LGPPFSRQYAALCPRPGATHLRGDRPGNGRPDQGSCSLTGGHCPGRSSRA
+PGRRAPGG*GHSGPVRGGGPDYPGSSRPHAWR*SSWFPGPCWKSERSDS*GGQTGEEEEE
+DRSG*AADAVQPALCQRCAHLWQEEGPQCQLLSLL*FWLSLIKKPLSSVKKKX
+>HSFAU_3 H.sapiens fau mRNA
+PLSRLHLRGSWDRRSVANMQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVL
+LAGAPLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKK
+TGRAKRRMQYNRRFVNVVPTFGKKKGPNANS*VFCNSGFL**KSHLVQSKKK
+>HSFAU_4 H.sapiens fau mRNA
+FFF*LN*VAFLLEKARITKDLRVGIGALLLAKGGHNVDKAPVVLHPPLSPTCLLLLLLLF
+GHLRSLTSHFSSTGQGTMNFTSKHAACYFQGSQGLHPALAQSGLILQGRACQEHDLIFRG
+NALQ*GYMSLDLGDRFLAGHLEGV*LLGADKELHIGD*TAVPATAKMESRKRX
+>HSFAU_5 H.sapiens fau mRNA
+FFFD*TKWLFY*RKPELQKT*ELALGPFFLPKVGTTLTKRRLYCIRRLARPVFFFFFSCL
+ATLGV*PLTFPARAREP*TLPPSMRPATSRVVRASTPHWPRVASSSRGAPARSTT*SSGA
+MPSSEAT*ALIWATVSWPVTSKVCSSWARTKSCILATERRSQLPRRWSRERGX
+>HSFAU_6 H.sapiens fau mRNA
+FFLTELSGFFIRESQNYKRLKSWHWGPSSCQRWAQR*QSAGCTASAA*PDLSSSSSSPVW
+PP*ESDLSLFQHGPGNHELYLQACGLLLPG*SGPPPRTGPEWPHPPGARLPGARLDLPGQ
+CPPVRLHEP*SGRPFPGRSPRRCVAPGRGQRAAYWRLNGGPSYREDGVEKEE
+     _________________________________________________________________
+   
+   If regions are specified, they are taken to be translated in frame 1
+   and so the output name would be 'XYZ_1'.
    
 Data files
 
@@ -243,8 +287,12 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
    When translation using non-standard genetic code table, always check

@@ -16,73 +16,10 @@ times it occurs.
 Usage
 
    Here is a sample session with wordcount.
+   
 % wordcount embl:rnu68037 -wordsize=3
-
 Counts words of a specified size in a DNA sequence
-ctg     54
-gcc     53
-tgg     53
-ggc     51
-cgc     47
-gct     47
-gtg     40
-tgc     39
-cct     38
-gcg     36
-cca     29
-ggg     26
-ctt     25
-tcc     25
-cag     25
-ggt     24
-ccc     24
-tgt     23
-ctc     23
-ccg     22
-cac     22
-gca     22
-cgt     22
-agc     21
-cgg     19
-acg     19
-ttg     19
-tcg     18
-agg     17
-ttc     17
-cat     17
-gag     16
-act     16
-gtc     16
-aac     15
-gga     14
-tct     14
-atc     14
-cta     13
-tca     13
-atg     12
-gtt     11
-gta     11
-acc     11
-aca     10
-tga     10
-caa     10
-tac     10
-tag     9
-gac     9
-agt     9
-ttt     8
-cga     7
-taa     6
-gat     6
-aga     5
-tat     5
-gaa     4
-tta     3
-aat     3
-ata     3
-att     3
-aag     2
-aaa     1
+Output file [rnu68037.wordcount]:
 
 Command line arguments
 
@@ -110,22 +47,110 @@ Input file format
    
 Output file format
 
+   The output sequence produced in the above example is:
+     _________________________________________________________________
+   
+ctg     54
+tgg     53
+gcc     53
+ggc     51
+cgc     47
+gct     47
+gtg     40
+tgc     39
+cct     38
+gcg     36
+cca     29
+ggg     26
+cag     25
+ctt     25
+tcc     25
+ggt     24
+ccc     24
+ctc     23
+tgt     23
+gca     22
+cgt     22
+ccg     22
+cac     22
+agc     21
+acg     19
+ttg     19
+cgg     19
+tcg     18
+ttc     17
+cat     17
+agg     17
+act     16
+gtc     16
+gag     16
+aac     15
+gga     14
+atc     14
+tct     14
+tca     13
+cta     13
+atg     12
+gtt     11
+acc     11
+gta     11
+aca     10
+tac     10
+tga     10
+caa     10
+gac     9
+agt     9
+tag     9
+ttt     8
+cga     7
+gat     6
+taa     6
+tat     5
+aga     5
+gaa     4
+aat     3
+ata     3
+tta     3
+att     3
+aag     2
+aaa     1
+     _________________________________________________________________
+   
+   The file simply consists of two columns, separated by spaces or TAB
+   characters.
+   
+   The first column consists of all the possible words of size wordsize.
+   The second column consists of the count of those words in the input
+   sequence.
+   
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    0 if successfull.
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name                          Description

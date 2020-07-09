@@ -15,6 +15,7 @@ AjPFloat  ajAcdGetArray (char *token);
 AjBool    ajAcdGetBool (char *token);
 AjPCod    ajAcdGetCodon (char *token);
 AjPFile   ajAcdGetDatafile (char *token);
+AjPList   ajAcdGetDirlist (char *token);
 AjPFeatTable  ajAcdGetFeat (char *token);
 AjPFeatTabOut ajAcdGetFeatout (char *token);
 float     ajAcdGetFloat (char *token);

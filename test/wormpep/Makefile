@@ -71,10 +71,10 @@ NM = /usr/ccs/bin/nm -p
 OBJDUMP = @OBJDUMP@
 PACKAGE = EMBOSS
 RANLIB = ranlib
-VERSION = 1.8.0
+VERSION = 1.9.0
 XLIB =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib -lX11 -lsocket -lsocket  -lnsl -lnsl
 
-pkgdata_DATA = worm* acnum.hit acnum.trg division.lkp entrynam.idx
+pkgdata_DATA = wormpep acnum.hit acnum.trg division.lkp entrynam.idx
 pkgdatadir = $(prefix)/share/$(PACKAGE)/test/wormpep
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 

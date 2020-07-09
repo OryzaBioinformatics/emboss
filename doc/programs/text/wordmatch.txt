@@ -13,6 +13,13 @@ Description
    Finds all exact matches of a given minimum size between 2 sequences
    displaying the start points in each sequence and the match length.
    
+   This program takes two sequences and finds regions where they are
+   identical. These regions are reported in the output file (and
+   optionally) in GFF (Gene Feature Format) files.
+   
+   It will not find identical regions smaller than the specified
+   wordsize.
+   
 Usage
 
    Here is a sample session with wordmatch.
@@ -20,13 +27,6 @@ Usage
 % wordmatch sw:hba_human sw:hbb_human
 Output file [hba_human.wordmatch]:
 Word size [4]:
-
-% more hba_human.wordmatch
-FINALLY length = 3
- HBA_HUMAN  HBB_HUMAN Length
-        58          63          5
-        14          15          4
-       116         121          4
 
 Command line arguments
 
@@ -64,22 +64,58 @@ Input file format
    
 Output file format
 
+   The file produced in the above example is:
+     _________________________________________________________________
+   
+FINALLY length = 3
+ HBA_HUMAN  HBB_HUMAN Length
+        58          63          5
+        14          15          4
+       116         121          4
+     _________________________________________________________________
+   
+   The first line ('FINALLY...') gives the number of regions found.
+   
+   The next line gives the headers for the subsequent columns of data.
+   This consists for the names of the two sequence and the word 'Length'.
+   
+   Subsequent lines consist of three columns fo numbers separated by
+   spaces or TAB characters. Each line contains the information on one
+   identical region. The first column is the start position in the first
+   sequence of the identical region. The second number is the start
+   position in the second sequence. the third number is the length of the
+   identical region.
+   
+   If no regions are found, the output file is blank.
+   
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    0 if successfull.
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description

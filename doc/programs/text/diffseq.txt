@@ -377,35 +377,37 @@ Known bugs
    
 See also
 
-    Program name                           Description
-   antigenic      Finds antigenic sites in proteins
-   chaos          Create a chaos game representation plot for a sequence
-   cpgplot        Plot CpG rich areas
-   cpgreport      Reports all CpG rich regions
-   dotmatcher     Displays a thresholded dotplot of two sequences
-   dotpath        Displays a non-overlapping wordmatch dotplot of two sequences
-   dottup         Displays a wordmatch dotplot of two sequences
-   einverted      Finds DNA inverted repeats
-   equicktandem   Finds tandem repeats
-   etandem        Looks for tandem repeats in a nucleotide sequence
-   garnier        Predicts protein secondary structure
+   Program name Description
+   antigenic Finds antigenic sites in proteins
+   chaos Create a chaos game representation plot for a sequence
+   cpgplot Plot CpG rich areas
+   cpgreport Reports all CpG rich regions
+   dotmatcher Displays a thresholded dotplot of two sequences
+   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
+   dottup Displays a wordmatch dotplot of two sequences
+   einverted Finds DNA inverted repeats
+   equicktandem Finds tandem repeats
+   etandem Looks for tandem repeats in a nucleotide sequence
+   garnier Predicts protein secondary structure
    helixturnhelix Report nucleic acid binding motifs
-   isochore       Plots isochores in large DNA sequences
-   newcpgreport   Report CpG rich areas
-   newcpgseek     Reports CpG rich regions
-   oddcomp        Finds protein sequence regions with a biased composition
-   palindrome     Looks for inverted repeats in a nucleotide sequence
-   pepcoil        Predicts coiled coil regions
-   polydot        Displays all-against-all dotplots of a set of sequences
-   primersearch   Searches DNA sequences for matches with primer pairs
-   pscan          Scans proteins using PRINTS
-   redata         Search REBASE for enzyme name, references, suppliers etc
-   restrict       Finds restriction enzyme cleavage sites
-   showseq        Display a sequence with features, translation etc
-   sigcleave      Reports protein signal cleavage sites
-   silent         Silent mutation restriction enzyme scan
-   tfscan         Scans DNA sequences for transcription factors
-   tmap           Displays membrane spanning regions
+   isochore Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek Reports CpG rich regions
+   oddcomp Finds protein sequence regions with a biased composition
+   palindrome Looks for inverted repeats in a nucleotide sequence
+   pepcoil Predicts coiled coil regions
+   polydot Displays all-against-all dotplots of a set of sequences
+   primersearch Searches DNA sequences for matches with primer pairs
+   pscan Scans proteins using PRINTS
+   recode Find and remove restriction sites but maintain the same
+   translation
+   redata Search REBASE for enzyme name, references, suppliers etc
+   restrict Finds restriction enzyme cleavage sites
+   showseq Display a sequence with features, translation etc
+   sigcleave Reports protein signal cleavage sites
+   silent Silent mutation restriction enzyme scan
+   tfscan Scans DNA sequences for transcription factors
+   tmap Displays membrane spanning regions
    
    A graphical dotplot of the matches used in this program can be
    displayed using the program dotpath.

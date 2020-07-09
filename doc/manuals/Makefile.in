@@ -74,7 +74,7 @@ RANLIB = @RANLIB@
 VERSION = @VERSION@
 XLIB = @XLIB@
 
-pkgdata_DATA = admin.* program.ps.gz
+pkgdata_DATA = admin.sty admin.tex program.ps.gz
 pkgdatadir = $(prefix)/share/$(PACKAGE)/doc/manuals
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 

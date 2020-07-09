@@ -56,6 +56,40 @@ Scans DNA sequences for transcription factors
     Description
 </H2>
 
+The
+<A HREF="http://transfac.gbf.de/TRANSFAC/">TRANSFAC Database</A>
+is a database of eukaryotic cis-acting regulatory DNA elements and
+trans-acting factors.  It covers the whole range from yeast to human. 
+<p>
+
+The SITE data from TRANSFAC contains information on individual
+(putatively) regulatory protein binding sites.  It has been divided into
+the following taxonomic groups. 
+<p>
+<ul>
+<li>Fungi
+<li>Insects
+<li>Plants
+<li>Vertebrates
+<li>Other
+</ul>
+<p>
+
+
+
+The program <b>tfscan</b> takes a sequence and the name of one of these
+taxonomic groups and does a fast match of the TRANSFAC sequences against
+the input sequence (optionally allowing mismatches). 
+<p>
+
+The results is a list of the positions which match the binding sites in
+the TRANSFAC SITE database. 
+<p>
+
+Because the binding sites are so small, there will be many spurious
+(false positive) matches. 
+<p>
+
 
 <H2>
     Usage
@@ -77,10 +111,6 @@ Transcription Factor Class
 Select class [V]: v
 Number of mismatches [0]: 
 Output file [hsfos.tfscan]: 
-
-Scanning HSFOS...
-
-
 </pre>
 
 
@@ -174,6 +204,7 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
+Normal nucleic acid sequence USA.
 
 <H2>
     Output file format
@@ -182,88 +213,195 @@ IT IS DONE FOR YOU.
 
 Here is part of the output from the example run. Some of the sites in
 TRANSFAC are extremely short.
-
+<p>
+<hr>
 <pre>
-
 TFSCAN of HSFOS from 1 to 6210
 
-XENLA$VITB1_14       R04490   5200  5206  gcaaaca
-XENLA$VITB1_14       R04490   4481  4487  gcaaaca
-
-.................
-
-HS$CFOS_19           R04047   412   438   caggatgtccatattaggacatctgcg
-HS$CFOS_18           R04046   412   438   caggatgtccatattaggacatctgcg
-
-.................
-
-HS$CFOS_17           R03425   749   770   gagcaactgagaagccaagact
-
-.................
-
-HS$CFOS_16           R01889   420   429   ccatattagg
-
-.................
-
-HS$CFOS_15           R01640   412   419   caggatgt
-MOUSE$CFOS_04        R00475   415   434   gatgtccatattaggacatc
-MOUSE$CFOS_03        R00474   415   434   gatgtccatattaggacatc
-MOUSE$CFOS_02        R00473   415   434   gatgtccatattaggacatc
-MOUSE$CFOS_01        R00472   414   436   ggatgtccatattaggacatctg
-HS$CFOS_14           R00471   669   676   gtgacgtt
-HS$CFOS_13           R00470   649   656   gcgccacc
-HS$CFOS_13           R00470   635   642   gcgccacc
-HS$CFOS_12           R00469   1496  1502  tgcgtca
-HS$CFOS_12           R00469   435   441   tgcgtca
-HS$CFOS_11           R00468   1496  1502  tgcgtca
-HS$CFOS_11           R00468   435   441   tgcgtca
-HS$CFOS_10           R00467   415   434   gatgtccatattaggacatc
-HS$CFOS_09           R00466   412   434   caggatgtccatattaggacatc
-HS$CFOS_08           R00465   415   421   gatgtcc
-HS$CFOS_07           R00464   415   434   gatgtccatattaggacatc
-HS$CFOS_06           R00463   420   429   ccatattagg
-HS$CFOS_05           R00462   415   434   gatgtccatattaggacatc
-HS$CFOS_04           R00461   415   434   gatgtccatattaggacatc
-HS$CFOS_03           R00460   401   440   ccccccttacacaggatgtccatattaggacatctgcg
-tc
-HS$CFOS_02           R00459   387   395   tcccgtcaa
-HS$CFOS_01           R00458   383   397   cagttcccgtcaatc
-
+HS$CFOS_20           R08485   384   396   agttcccgtcaat
+DOG$ATP1A_01         R08484   3057  3063  gacatgg
+HS$CEBPA_01          R08471   4535  4540  cacgtg
+HS$GPB_05            R08210   3716  3721  gtatct
+HS$GPB_02            R08207   5837  5842  ggtggg
+HS$GPB_02            R08207   2399  2404  ggtggg
+HS$GPB_02            R08207   2077  2082  ggtggg
+MOUSE$TIMP1_02       R08168   2362  2368  caggaag
+MOUSE$BMG_11         R08167   960   965   ggatag
+RAT$RPK_02           R08166   6136  6140  tgtgc
+RAT$RPK_02           R08166   5953  5957  tgtgc
+RAT$RPK_02           R08166   4433  4437  tgtgc
+RAT$RPK_02           R08166   4143  4147  tgtgc
+RAT$RPK_02           R08166   3450  3454  tgtgc
+RAT$RPK_02           R08166   3246  3250  tgtgc
+RAT$RPK_02           R08166   3154  3158  tgtgc
+RAT$RPK_02           R08166   1128  1132  tgtgc
+HS$TIMP1_02          R08152   2361  2368  ccaggaag
+HS$TIMP1_01          R08151   2642  2648  tgagtaa
+HS$IL3_08            R05028   4376  4381  tgtggg
+HS$IL3_08            R05028   3471  3476  tgtggg
+HS$IL3_08            R05028   2584  2589  tgtggg
+HS$IL3_08            R05028   2066  2071  tgtggg
+HS$CATHD_01          R04883   1430  1435  ggcggg
+HS$CATHD_01          R04883   1092  1097  ggcggg
+HS$CATHD_01          R04883   569   574   ggcggg
+RAT$IGFBP2_02        R04793   5123  5128  gggcgg
+RAT$IGFBP2_02        R04793   1429  1434  gggcgg
+RAT$IGFBP2_02        R04793   1091  1096  gggcgg
+RAT$IGFBP2_02        R04793   607   612   gggcgg
+RAT$IGFBP2_01        R04792   5123  5128  gggcgg
+RAT$IGFBP2_01        R04792   1429  1434  gggcgg
+RAT$IGFBP2_01        R04792   1091  1096  gggcgg
+RAT$IGFBP2_01        R04792   607   612   gggcgg
+HS$A14COL_01         R04791   5123  5128  gggcgg
+HS$A14COL_01         R04791   1429  1434  gggcgg
+HS$A14COL_01         R04791   1091  1096  gggcgg
+HS$A14COL_01         R04791   607   612   gggcgg
+HS$A24COL_03         R04790   5123  5128  gggcgg
+etc......
 </pre>
+<hr>
+<p>
+
+The output consists of a title line then 5 columns separated by whitespace.
+<p>
+
+The first column is the identifier of the entry.
+<p>
+
+The second column is the Accession Number of the entry.
+<p>
+
+The third and fourth columns are the start and end positions of the match in your input sequence.
+<p>
+
+The fifth column is the sequence of the region where a match has been found.
+<p>
+
+
+For further details on an entry from the TRANSFAC database, see:
+<br>
+<A HREF="http://transfac.gbf.de/cgi-bin/qt/search.pl">http://transfac.gbf.de/cgi-bin/qt/search.pl</A>
 
 <H2>
     Data files
 </H2>
+
+<b>tfscan</b> reads the TRANSFAC SITE data held in the EMBOSS data files:
+<p>
+<ul>
+<li>tffungi 
+<li>tfinsect 
+<li>tfplant 
+<li>tfvertebrate 
+<li>tfother
+</ul>
+<p>
+
+Your EMBOSS administrator will have to run the EMBOSS program <b>tfextract</b>
+in order to set these files up from the TRANSFAC distribution files.
+<p>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+        If you wish to include the standard description of what data
+        files are and how to use embossdata to inspect and retrieve
+        them, use:
+   -->
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
 
 
 <H2>
     Notes
 </H2>
 
+None.
 
 <H2>
     References
 </H2>
+
+<ul>
+<li>Nucleic Acids Res. 16: 1879-1902, 1988
+<li>BioTechForum - Advances in Molecular Genetics (J. Collins,A.J. Driesel, eds.) 4:95-108, 1991
+<li>Nucleic Acids Res. 20:3-26, 1992 
+</ul>
 
 
 <H2>
     Warnings
 </H2>
 
+Your EMBOSS administrator will have to run the EMBOSS program <b>tfextract</b>
+in order to set up the data files from the TRANSFAC distribution files.
+<p>
+
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+"EMBOSS An error in tfscan.c at line 82:
+<br>
+Either EMBOSS_DATA undefined or TFEXTRACT needs running"
+<p>
+
+This means that you should contact your EMBOSS administrator and ask
+them to run the <b>tfextract</b> program to set up the TRANSFAC data for
+EMBOSS. 
+<p>
 
 <H2>
     Exit status
 </H2>
 
+It always exits with a status of 0.
 
 <H2>
     Known bugs
 </H2>
+
+None.
 
 
 <!--
@@ -300,6 +438,7 @@ HS$CFOS_01           R00458   383   397   cagttcccgtcaatc
 <tr><td><a href="printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
 <tr><td><a href="prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
 <tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
+<tr><td><a href="recode.html">recode</a></td><td>Find and remove restriction sites but maintain the same translation</td></tr>
 <tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
 <tr><td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td></tr>
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
@@ -311,6 +450,11 @@ HS$CFOS_01           R00458   383   397   cagttcccgtcaatc
         Add any comments about other associated programs (to prepare
         data files?) that seealso doesn't find.
    -->
+<p>
+
+Your EMBOSS administrator will have to run the EMBOSS program <b>tfextract</b>
+in order to set up the data files from the TRANSFAC distribution files.
+<p>
 
 
 <H2>
@@ -325,6 +469,7 @@ href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
     History
 </H2>
 
+Written Summer 2000 - Alan Bleasby
 
 <H2>
     Target users

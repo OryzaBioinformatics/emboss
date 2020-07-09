@@ -84,24 +84,24 @@ Strips out DNA between a pair of vector sequences
         etc. for as long as is required (several pages is not unreasonable)
   -->
 
-vectorstrip is intended to be useful for stripping vector sequence
+<b>vectorstrip</b> is intended to be useful for stripping vector sequence
 from the ends of sequences of interest. For example, if a fragment has
 been cloned into a vector and then sequenced, the sequence may contain
 vector data eg from the cloning polylinker at the 5' and 3' ends of
-the sequence.  vectorstrip will remove these contaminating regions and
+the sequence.  <b>vectorstrip</b> will remove these contaminating regions and
 output trimmed sequence ready for input into another application.
 
 <p>
 
-vectorstrip is suitable for use with low quality sequence data as it
+<b>vectorstrip</b> is suitable for use with low quality sequence data as it
 can allow for mismatches between the sequence and the vector patterns
 provided. You can specify the maximum level of mismatch
 expected.
 <p>
 Vector data can either be provided in a file or interactively. If
-presented in a file, vectorstrip will search all input sequences with
+presented in a file, <b>vectorstrip</b> will search all input sequences with
 all vectors listed in that file. The intention is that the user can
-maintain a single file for use with vectorstrip, containing all the
+maintain a single file for use with <b>vectorstrip</b>, containing all the
 linker sequences commonly used in the laboratory.
 
 <p>
@@ -123,7 +123,7 @@ match the sequence with zero mismatches, the search will stop and the
 program will output only these "best" matches. If there are no perfect
 matches, the program will try searching again allowing 1 mismatch,
 then 2, and so on until either the patterns match the sequence or the
-maximum specified mismatch level is exceeded. You can tell vectorstrip
+maximum specified mismatch level is exceeded. You can tell <b>vectorstrip</b>
 to show all possible matches up to your specified maximum level, as
 illustrated in the examples below.
 
@@ -135,7 +135,7 @@ illustrated in the examples below.
 	Example usage, as run from the command-line.
         Many examples illustrating different behaviours is good.
  -->
-Here are several examples of running vectorstrip. The vectorfile and 
+Here are several examples of running <b>vectorstrip</b>. The vectorfile and 
 the sequence files used in these example are given <a href="#input">below</a>.
 In each case, the same fragment has been cloned into the XhoI site of 
 the polylinker of each vector. The cloned fragment is represented in 
@@ -143,7 +143,7 @@ lower case and the vector sequence in upper case so the sequence
 trimming can be readily seen.
 
 <ol>
-<li> Running vectorstrip on a list of sequences with default parameters
+<li> Running <b>vectorstrip</b> on a list of sequences with default parameters
 <pre>
 unix % vectorstrip @seqs.list
 Strips out DNA between a pair of vector sequences
@@ -233,7 +233,7 @@ tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
 c
 </pre>
 
-<li> Running vectorstrip allowing maximum 30% mismatch, and asking only for best hits
+<li> Running <b>vectorstrip</b> allowing maximum 30% mismatch, and asking only for best hits
 <pre>
 unix % vectorstrip litmus.seq
 Strips out DNA between a pair of vector sequences
@@ -267,7 +267,7 @@ Sequences output to file:
                 GCCTTAAGTGAGTCGTATTACGGA
 </pre>
 
-<li> Running vectorstrip allowing maximum 30% mismatch, and asking for all hits
+<li> Running <b>vectorstrip</b> allowing maximum 30% mismatch, and asking for all hits
 <pre>
 unix % vectorstrip litmus.seq
 Strips out DNA between a pair of vector sequences
@@ -312,7 +312,7 @@ Sequences output to file:
         sequence trimmed from 3' end:
                 TCAAGGCCTTAAGTGAGTCGTATTACGGA
 </pre>
-<li> Running vectorstrip against a sequence containing Ns
+<li> Running <b>vectorstrip</b> against a sequence containing Ns
 <pre>
 unix % vectorstrip pTYB1_N.seq
 Strips out DNA between a pair of vector sequences
@@ -567,7 +567,7 @@ cloned sequence in lower case.
 
 Two types of output file are produced:
 <ol>
-<li>The sequence file(s) - contain the trimmed subsequence(s) produced by vectorstrip either all in one file, or in separate files if the command line flag -ossingle is used.
+<li>The sequence file(s) - contain the trimmed subsequence(s) produced by <b>vectorstrip</b> either all in one file, or in separate files if the command line flag -ossingle is used.
 <li>Results summary file eg<br>
 <pre>
 Sequence: pTYB1.seq      Vector: pTYB1
@@ -663,7 +663,7 @@ The directories are searched in the following order:
 
    -->
 
-
+None.
 
 <H2>
     Notes
@@ -675,6 +675,7 @@ The directories are searched in the following order:
         Useful things you can do with this program.
    -->
 
+None.
 
 <H2>
     References
@@ -683,6 +684,8 @@ The directories are searched in the following order:
 <!-- 
         Bibliography for methods used.
    -->
+
+None.
 
 
 <H2>
@@ -694,6 +697,8 @@ The directories are searched in the following order:
         eg:
         It doesn't check to see if the sequence is a protein sequence or not.
    -->
+None.
+
 
 <H2>
     Diagnostic Error Messages
@@ -733,6 +738,8 @@ It always exits with status 0.
 <!-- 
         Bugs noted but not yet fixed.
    -->
+
+None.
 
 
 
@@ -785,6 +792,8 @@ href="mailto:vcurwen@hgmp.mrc.ac.uk">(vcurwen@hgmp.mrc.ac.uk)</a>
 <H2>
     History
 </H2>
+
+16 August 2000 - Val Curwen - Written.
 
 <!--
         What changes have been made.

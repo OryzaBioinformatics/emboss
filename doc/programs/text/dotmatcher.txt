@@ -125,6 +125,8 @@ See also
    pepcoil Predicts coiled coil regions
    polydot Displays all-against-all dotplots of a set of sequences
    pscan Scans proteins using PRINTS
+   recode Find and remove restriction sites but maintain the same
+   translation
    redata Search REBASE for enzyme name, references, suppliers etc
    restrict Finds restriction enzyme cleavage sites
    seqmatchall Does an all-against-all comparison of a set of sequences

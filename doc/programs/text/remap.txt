@@ -39,12 +39,20 @@ Usage
 
    Here is a sample session with remap. We only look at a small section
    of the sequence to save space.
-
 % remap -notran -sbeg 1 -send 60
 Display a sequence with restriction cut sites, translation etc..
 Input sequence(s): embl:eclac
 Output file [eclac.remap]:
 Comma separated enzyme list [all]: taqi,bsu6i,acii,bsski
+Minimum recognition site length [4]:
+
+   Here is an example where all enzymes in the REBASE database are used:
+   
+% remap -notran -sbeg 1 -send 60
+Display a sequence with restriction cut sites, translation etc..
+Input sequence(s): embl:eclac
+Output file [eclac.remap]:
+Comma separated enzyme list [all]:
 Minimum recognition site length [4]:
 
 Command line arguments
@@ -91,6 +99,7 @@ Command line arguments
    -[no]commercial     bool       Only enzymes with suppliers
    -[no]limit          bool       Limits reports to one isoschizomer
    -preferred          bool       Report preferred isoschizomers
+   -table              list       Code to use
 
    Advanced qualifiers:
    -[no]translation    bool       Display translation
@@ -123,7 +132,6 @@ Command line arguments
                                   1-100 green 120-156 red
                                   A file of ranges to colour (one range per
                                   line) can be specifed as '@filename'.
-   -table              list       Translation table genetic code to use
    -threeletter        bool       Display protein sequences in three-letter
                                   code
    -number             bool       Number the sequences
@@ -170,6 +178,27 @@ Command line arguments
    -[no]commercial Only enzymes with suppliers Yes/No Yes
    -[no]limit Limits reports to one isoschizomer Yes/No Yes
    -preferred Report preferred isoschizomers Yes/No No
+   -table Code to use
+   0 (Standard)
+   1 (Standard (with alternative initiation codons))
+   2 (Vertebrate Mitochondrial)
+   3 (Yeast Mitochondrial)
+   4 (Mold, Protozoan, Coelenterate Mitochondrial and
+   Mycoplasma/Spiroplasma)
+   5 (Invertebrate Mitochondrial)
+   6 (Ciliate Macronuclear and Dasycladacean)
+   9 (Echinoderm Mitochondrial)
+   10 (Euplotid Nuclear)
+   11 (Bacterial)
+   12 (Alternative Yeast Nuclear)
+   13 (Ascidian Mitochondrial)
+   14 (Flatworm Mitochondrial)
+   15 (Blepharisma Macronuclear)
+   16 (Chlorophycean Mitochondrial)
+   21 (Trematode Mitochondrial)
+   22 (Scenedesmus obliquus)
+   23 (Thraustochytrium Mitochondrial)
+   0
    Advanced qualifiers Allowed values Default
    -[no]translation Display translation Yes/No Yes
    -[no]reverse Display cut sites and translation of reverse sense Yes/No
@@ -190,23 +219,6 @@ Command line arguments
    specifications are: 24-45 blue 56-78 orange 1-100 green 120-156 red A
    file of ranges to colour (one range per line) can be specifed as
    '@filename'. Sequence range full sequence
-   -table Translation table genetic code to use
-   0 (Standard)
-   1 (Standard (with alternative initiation codons))
-   2 (Vertebrate Mitochondrial)
-   3 (Yeast Mitochondrial)
-   4 (Mold, Protozoan, Coelenterate Mitochondrial and
-   Mycoplasma/Spiroplasma)
-   5 (Invertebrate Mitochondrial)
-   6 (Ciliate Macronuclear and Dasycladacean)
-   9 (Echinoderm Mitochondrial)
-   10 (Euplotid Nuclear)
-   11 (Bacterial)
-   12 (Alternative Yeast Nuclear)
-   13 (Ascidian Mitochondrial)
-   14 (Flatworm Mitochondrial)
-   15 (Blepharisma Macronuclear)
-   0
    -threeletter Display protein sequences in three-letter code Yes/No No
    -number Number the sequences Yes/No No
    -width Width of sequence to display Integer 1 or more 60
@@ -259,49 +271,192 @@ Input file format
    http://www.iconbazaar.com/color_tables/named_colors.html
    
    An example highlight range file is:
-
+     _________________________________________________________________
+   
 # this is my set of ranges
 12   23         red
  4   5          darkturquoise
 67   10348      #FFE4E1
-
+     _________________________________________________________________
+   
 Output file format
 
-   The output file from the example above follows:
-
+   The output file from the example above, where all enzymes were used,
+   follows:
+     _________________________________________________________________
+   
 ECLAC
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
-                                                      Hin6I
-                                                      | Bsu6I
-                 TaqI   Hin6I         AciI            | BssKI
-                 \      \             \               \ \
+                                                  Hsp92II
+                                                  |   Hin6I
+                                                  |   | Bsu6I
+                                                  |   | BssKI
+                 TaqI                             |   | AspLEI
+                 |  Bsc4I                         |   | |Bsp143II
+                 |  AccB7I                        |   | ||BsiSI
+                 |  |   Hin6I         AciI        |   | ||AsuC2I
+                 |  |   | AspLEI      AccII       |   | ||Bme1390I
+                 \  \   \ \           \           \   \ \\\
           GACACCATCGAATGGCGCAAAACCTTTCGCGGTATGGCATGATAGCGCCCGGAAGAGAGT
                    10        20        30        40        50        60
           ----:----|----:----|----:----|----:----|----:----|----:----|
           CTGTGGTAGCTTACCGCGTTTTGGAAAGCGCCATACCGTACTATCGCGGGCCTTCTCTCA
-                   /      /             /               /  / /
-                   TaqI   Hin6I         AciI            |  | BssKI
-                                                        |  Bsu6I
-                                                        Hin6I
-
-          D  T  I  E  W  R  K  T  F  R  G  M  A  *  *  R  P  E  E  S
-           T  P  S  N  G  A  K  P  F  A  V  W  H  D  S  A  R  K  R  V
-            H  H  R  M  A  Q  N  L  S  R  Y  G  M  I  A  P  G  R  E  S
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-            V  G  D  F  P  A  F  G  K  A  T  H  C  S  L  A  R  F  L  T
-           S  V  M  S  H  R  L  V  K  R  P  I  A  H  Y  R  G  S  S  L
-          X  C  W  R  I  A  C  F  R  E  R  Y  P  M  I  A  G  P  L  S
+                 / /    / /           / /     /      // /  ///
+                 | TaqI | Hin6I       | AciI  |      || |  ||BssKI
+                 AccB7I AspLEI        AccII   |      || |  |BsiSI
+                 Bsc4I                        |      || |  Bme1390I
+                                              |      || |  AsuC2I
+                                              |      || |  Bsu6I
+                                              |      || Hin6I
+                                              |      |AspLEI
+                                              |      Bsp143II
+                                              Hsp92II
 
 
-Enzymes that cut
+# Enzymes that cut  Frequency   Isoschizomers
+    AccB7I          1   PflMI,Van91I
+     AccII          1   Bsh1236I,BstFNI,BstUI,MvnI,ThaI
+      AciI          1
+    AspLEI          2   CfoI,HhaI
+    AsuC2I          1   BcnI,NciI
+  Bme1390I          1   MspR9I,ScrFI
+     Bsc4I          1   BseLI,BsiYI,BslI
+     BsiSI          1   HapII,HpaII,MspI
+  Bsp143II          1   BstH2I,HaeII
+     BssKI          1
+     Bsu6I          1   Eam1104I,EarI,Ksp632I
+     Hin6I          2   HinP1I,HspAI
+   Hsp92II          1   NlaIII
+      TaqI          1   TthHB8I
 
-      AciI  1
-     BssKI  1
-     Bsu6I  1
-     Hin6I  2
-      TaqI  1
 
+
+# Enzymes that do not cut
+
+AatI      AatII     AauI      Acc113I   Acc16I    Acc36I    Acc65I    AccB1I
+
+AccBSI    AccI      AccIII    AclI      AclNI     AclWI     AcsI      AcyI
+
+AdeI      AfaI      AfeI      AflII     AflIII    AgeI      AhdI      AloI
+
+AluI      Alw21I    Alw26I    Alw44I    AlwI      AlwNI     Ama87I    AocI
+
+Aor51HI   ApaI      ApaLI     ApoI      AscI      AseI      AsiAI     AsnI
+
+Asp700I   Asp718I   AspEI     AspHI     AspI      AspS9I    AsuHPI    AsuNHI
+
+AvaI      AvaII     AviII     AvrII     AxyI      BaeI      BalI      BamHI
+
+BanI      BanII     BanIII    BbeI      BbrPI     BbsI      BbuI      Bbv12I
+
+BbvCI     BbvI      BcgI      BciVI     BclI      BcoI      BcuI      BfaI
+
+BfmI      BfrI      BfuI      BglI      BglII     BlnI      BlpI      Bme18I
+
+BmrI      BmyI      BoxI      BpiI      BplI      BpmI      Bpu10I    Bpu1102I
+
+Bpu14I    BpuAI     Bsa29I    BsaAI     BsaBI     BsaHI     BsaI      BsaJI
+
+BsaMI     BsaOI     BsaWI     BsaXI     BscBI     BscCI     BscFI     BscI
+
+Bse118I   Bse1I     Bse21I    Bse3DI    Bse8I     BseAI     BseCI     BseDI
+
+BseGI     BseMI     BseMII    BseNI     BsePI     BseRI     BseSI     BseX3I
+
+BseXI     BsgI      Bsh1285I  Bsh1365I  BshI      BshNI     BshTI     BsiBI
+
+BsiCI     BsiEI     BsiHKAI   BsiLI     BsiMI     BsiQI     BsiWI     BsiXI
+
+BsiZI     BsmAI     BsmBI     BsmFI     BsmI      Bso31I    BsoBI     BsoMAI
+
+Bsp106I   Bsp119I   Bsp120I   Bsp1286I  Bsp13I    Bsp1407I  Bsp143I   Bsp1720I
+
+Bsp19I    Bsp68I    BspA2I    BspCI     BspDI     BspEI     BspHI     BspLI
+
+BspLU11I  BspMI     BspPI     BspTI     BspXI     BsrBI     BsrBRI    BsrDI
+
+BsrFI     BsrGI     BsrI      BsrSI     BssAI     BssECI    BssHII    BssNAI
+
+BssSI     BssT1I    Bst1107I  Bst2BI    Bst2UI    Bst4CI    Bst71I    Bst98I
+
+BstACI    BstAPI    BstBAI    BstBI     BstDEI    BstDSI    BstEII    BstF5I
+
+BstHPI    BstMCI    BstNI     BstNSI    BstOI     BstPAI    BstPI     BstSFI
+
+BstSNI    BstX2I    BstXI     BstYI     BstZ17I   BstZI     Bsu15I    Bsu36I
+
+BsuRI     BtgI      BtrI      BtsI      Cac8I     CaiI      CciNI     CelII
+
+Cfr10I    Cfr13I    Cfr42I    Cfr9I     CfrI      ClaI      CpoI      Csp45I
+
+Csp6I     CspI      CviJI     CviRI     CviTI     CvnI      DdeI      DpnI
+
+DpnII     DraI      DraII     DraIII    DrdI      DsaI      DseDI     EaeI
+
+EagI      Eam1105I  EciI      Ecl136II  EclHKI    EclXI     Eco105I   Eco130I
+
+Eco147I   Eco24I    Eco31I    Eco32I    Eco47I    Eco47III  Eco52I    Eco57I
+
+Eco64I    Eco72I    Eco81I    Eco88I    Eco91I    EcoICRI   EcoNI     EcoO109I
+
+EcoO65I   EcoRI     EcoRII    EcoRV     EcoT14I   EcoT22I   EcoT38I   EgeI
+
+EheI      ErhI      Esp3I     FauI      FauNDI    FbaI      FblI      Fnu4HI
+
+FokI      FriOI     FseI      Fsp4HI    FspI      GsuI      HaeIII    HgaI
+
+HgiEI     Hin1I     HincII    HindII    HindIII   HinfI     HpaI      HphI
+
+Hpy188I   Hpy188III Hpy8I     Hpy99I    HpyCH4III HpyCH4IV  HpyCH4V   Hsp92I
+
+ItaI      KasI      Kpn2I     KpnI      Ksp22I    KspAI     KspI      Kzo9I
+
+LspI      MaeI      MaeII     MaeIII    MamI      MbiI      MboI      MboII
+
+MfeI      MflI      MlsI      MluI      MluNI     Mly113I   MlyI      MnlI
+
+Mph1103I  MroI      MroNI     MroXI     MscI      MseI      MslI      Msp17I
+
+MspA1I    MspCI     MssI      MunI      Mva1269I  MvaI      MwoI      NaeI
+
+NarI      NcoI      NdeI      NdeII     NgoAIV    NgoMIV    NheI      NlaIV
+
+NmuCI     NotI      NruGI     NruI      NsbI      NsiI      NspBII    NspI
+
+NspV      PacI      PaeI      PaeR7I    PagI      PalI      PauI      PciI
+
+PdiI      PdmI      Pfl23II   PflFI     PinAI     Ple19I    PleI      PmaCI
+
+Pme55I    PmeI      PmlI      PpiI      PpsI      Ppu10I    PpuMI     PshAI
+
+PshBI     PsiI      Psp124BI  Psp1406I  Psp5II    PspAI     PspEI     PspGI
+
+PspLI     PspN4I    PspOMI    PspPPI    PstI      PsuI      PsyI      PvuI
+
+PvuII     RcaI      RsaI      Rsr2I     RsrII     SacI      SacII     SalI
+
+SanDI     SapI      Sau3AI    Sau96I    SbfI      ScaI      SchI      SdaI
+
+SduI      SexAI     SfaNI     SfcI      SfiI      SfoI      Sfr274I   Sfr303I
+
+SfuI      SgfI      SgrAI     SinI      SmaI      SmiI      SmiMI     SmlI
+
+SnaBI     SpeI      SphI      SrfI      Sse8387I  Sse9I     SseBI     SspBI
+
+SspI      SstI      SstII     StuI      StyI      SunI      SwaI      TaaI
+
+TaiI      TasI      TatI      TfiI      TliI      Tru1I     Tru9I     TscI
+
+TseI      Tsp45I    Tsp509I   TspEI     TspRI     Tth111I   Vha464I   VneI
+
+VpaK11BI  VspI      XagI      XapI      XbaI      XceI      XcmI      XhoI
+
+XhoII     XmaCI     XmaI      XmaIII    XmaJI     XmiI      XmnI      XspI
+
+Zsp2I
+     _________________________________________________________________
+   
    The name of the sequence is displayed, followed by the description of
    the sequence.
    
@@ -313,7 +468,17 @@ Enzymes that cut
    
    At the end the section header 'Enzymes that cut' is displayed followed
    by a list of the enzymes that cut the specified sequence and the
-   number of times that they cut.
+   number of times that they cut. For each enzyme that cuts, a list of
+   isoschizomers of that enzyme (sharing the same recognition site
+   pattern and cut sites) is given.
+   
+   Any of the isoschizomers that are excluded from cutting, (either
+   through restrictions such as the permitted number of cuts, blunt
+   cutters only, single cutters only etc. or because their name has not
+   been given in the input list of enzymes), will not be listed.
+   
+   Finally, a list of the enzymes whose names were input but which do not
+   cut is given.
    
    The '-flatreformat' qualifier changes the display to emphasise the
    recognition site of the restriction enzyme, which is indicated by a
@@ -334,6 +499,7 @@ Enzymes that cut
 -sbeg 1 -send 60 -flat -notran
 Display a sequence with restriction cut sites, translation etc..
 
+Display a sequence with restriction cut sites, translation etc..
 ECLAC
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
@@ -355,13 +521,17 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
                                                                   Bsu6I
 
 
-Enzymes that cut
+# Enzymes that cut  Frequency   Isoschizomers
+      AciI          1
+     BssKI          1
+     Bsu6I          1
+     Hin6I          2
+      TaqI          1
 
-      AciI  1
-     BssKI  1
-     Bsu6I  1
-     Hin6I  2
-      TaqI  1
+
+
+# Enzymes that do not cut
+
 
 Data files
 
@@ -373,38 +543,55 @@ Data files
    
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with status 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
-   Program name                          Description
-   backtranseq   Back translate a protein sequence
-   cirdna        Draws circular maps of DNA constructs
-   cusp          Create a codon usage table
-   getorf        Finds and extracts open reading frames (ORFs)
-   lindna        Draws linear maps of DNA constructs
-   plotorf       Plot potential open reading frames
-   prettyseq     Output sequence with translated ranges
+   Program name Description
+   abiview Reads ABI file and display the trace
+   backtranseq Back translate a protein sequence
+   cirdna Draws circular maps of DNA constructs
+   cusp Create a codon usage table
+   entret Reads and writes (returns) flatfile entries
+   getorf Finds and extracts open reading frames (ORFs)
+   lindna Draws linear maps of DNA constructs
+   notseq Excludes a set of sequences and writes out the remaining ones
+   plotorf Plot potential open reading frames
+   prettyseq Output sequence with translated ranges
    rebaseextract Extract data from REBASE
-   redata        Search REBASE for enzyme name, references, suppliers etc
-   restrict      Finds restriction enzyme cleavage sites
-   seqret        Reads and writes (returns) sequences
-   seqretall     Reads and writes (returns) a set of sequences one at a time
-   seqretset     Reads and writes (returns) a set of sequences all at once
-   seqretsplit   Reads and writes (returns) sequences
-   showfeat      Show features of a sequence
-   showorf       Pretty output of DNA translations
-   showseq       Display a sequence with features, translation etc
-   silent        Silent mutation restriction enzyme scan
-   transeq       Translate nucleic acid sequences
+   recode Find and remove restriction sites but maintain the same
+   translation
+   redata Search REBASE for enzyme name, references, suppliers etc
+   restrict Finds restriction enzyme cleavage sites
+   seqret Reads and writes (returns) sequences
+   seqretall Reads and writes (returns) a set of sequences one at a time
+   seqretset Reads and writes (returns) a set of sequences all at once
+   seqretsplit Reads and writes (returns) sequences in individual files
+   showfeat Show features of a sequence
+   showorf Pretty output of DNA translations
+   showseq Display a sequence with features, translation etc
+   silent Silent mutation restriction enzyme scan
+   transeq Translate nucleic acid sequences
    
 Author(s)
 
@@ -413,6 +600,10 @@ Author(s)
    
 History
 
+   Written Spring 2000
+   
+   Changed 7 Dec 2000 - GWW - to declare isoschizomers that cut
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

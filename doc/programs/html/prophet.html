@@ -86,10 +86,10 @@ IT IS DONE FOR YOU.
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
   [-infile]            infile     Profile or matrix file
    -gapopen            float      Gap opening coefficient
    -gapextend          float      Gap extension coefficient
-  [-sequence]          seqall     Sequence database USA
   [-outfile]           outfile    Output file name
 
    Optional qualifiers: (none)
@@ -107,7 +107,14 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>[-infile]<br>(Parameter 1)</td>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 2)</td>
 <td>Profile or matrix file</td>
 <td>Input file</td>
 <td><b>Required</b></td>
@@ -125,13 +132,6 @@ IT IS DONE FOR YOU.
 <td>Gap extension coefficient</td>
 <td>Any integer value</td>
 <td>0.1</td>
-</tr>
-
-<tr>
-<td>[-sequence]<br>(Parameter 2)</td>
-<td>Sequence database USA</td>
-<td>Readable sequence(s)</td>
-<td><b>Required</b></td>
 </tr>
 
 <tr>

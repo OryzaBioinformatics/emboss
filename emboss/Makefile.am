@@ -10,7 +10,7 @@ scope seqinfo \
 seqretallfeat seqretfeat seqtofeat \
 simplesw testplot treetypedisplay 
 
-bin_PROGRAMS = acdc antigenic \
+bin_PROGRAMS = abiview acdc antigenic \
 backtranseq banana btwisted \
 chaos checktrans chips cirdna codcmp coderet complex \
 compseq cons cpgplot cpgreport cusp cutseq \
@@ -23,7 +23,7 @@ garnier geecee getorf helixturnhelix \
 iep infoseq isochore lindna \
 maskfeat maskseq matcher megamerger merger msbar \
 needle newcpgreport newcpgseek newseq \
-noreturn nthseq \
+noreturn notseq nthseq \
 octanol oddcomp \
 palindrome pasteseq patmatdb patmatmotifs \
 pepcoil pepinfo pepnet pepstats \
@@ -32,7 +32,7 @@ plotcon plotorf polydot preg \
 prettyplot prettyseq prima primersearch printsextract \
 profit prophecy prophet \
 prosextract pscan \
-rebaseextract redata remap restrict revseq \
+rebaseextract recode redata remap restover restrict revseq \
 seealso seqmatchall seqret seqretall seqretset seqretsplit \
 showdb showfeat showorf showseq \
 shuffleseq sigcleave silent splitter stretcher \
@@ -49,6 +49,7 @@ wossname
 
 INCLUDES = -I$(top_srcdir)/nucleus -I$(top_srcdir)/ajax -I$(top_srcdir)/plplot
 
+abiview_SOURCES = abiview.c
 acdc_SOURCES = acdc.c
 antigenic_SOURCES = antigenic.c
 backtranseq_SOURCES = backtranseq.c
@@ -113,6 +114,7 @@ newcpgreport_SOURCES = newcpgreport.c
 newcpgseek_SOURCES = newcpgseek.c
 newseq_SOURCES = newseq.c
 noreturn_SOURCES = noreturn.c
+notseq_SOURCES = notseq.c
 nthseq_SOURCES = nthseq.c
 octanol_SOURCES = octanol.c
 oddcomp_SOURCES = oddcomp.c
@@ -143,8 +145,10 @@ prosextract_SOURCES = prosextract.c
 proteinmotifsearch_SOURCES = proteinmotifsearch.c
 pscan_SOURCES = pscan.c
 rebaseextract_SOURCES = rebaseextract.c
+recode_SOURCES = recode.c
 redata_SOURCES = redata.c
 remap_SOURCES = remap.c
+restover_SOURCES = restover.c
 restrict_SOURCES = restrict.c
 revseq_SOURCES = revseq.c
 seealso_SOURCES = seealso.c

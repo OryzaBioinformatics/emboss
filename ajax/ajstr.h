@@ -205,10 +205,9 @@ typedef struct AjSStr {
 ** @@
 ******************************************************************************/
 typedef struct AjSStrIter {
-  size_t Begin;
-  size_t End;
-  size_t Curr;
-  AjPStr Obj;
+  char *Start;
+  char *End;
+  char *Ptr;
 } *AjIStr;
 
 
@@ -322,14 +321,19 @@ AjBool     ajStrIsSpace (const AjPStr thys);
 AjBool     ajStrIsWild (const AjPStr thys);
 AjBool     ajStrIsWord (const AjPStr thys);
 AjIStr     ajStrIter (const AjPStr thys);
-#define    ajStrIterBegin(iter) iter->Begin
-#define    ajStrIterDone(iter) (iter->Curr >= iter->End)
-#define    ajStrIterEnd(iter) iter->End
+AjIStr     ajStrIterBack (const AjPStr thys);
+#define    ajStrIterBackDone(iter) (iter->Ptr < iter->Start)
+#define    ajStrIterBackMore(iter) (iter->Ptr > iter->Start)
+AjIStr     ajStrIterBackNext (AjIStr iter);
+#define    ajStrIterBegin(iter) (iter->Ptr = iter->Start)
+#define    ajStrIterDone(iter) (iter->Ptr > iter->End)
+#define    ajStrIterEnd(iter) (iter->Ptr = iter->End)
 void       ajStrIterFree (AjIStr *iter);
-#define    ajStrIterGetK(iter) (*AJSTRSTR(iter->Obj))
-#define    ajStrIterGetC(iter) (AJSTRSTR(iter->Obj))
+#define    ajStrIterGetK(iter) (*iter->Ptr)
+#define    ajStrIterGetC(iter) (iter->Ptr)
+#define    ajStrIterMore(iter) (iter->Ptr < iter->End)
 AjIStr     ajStrIterNext (AjIStr iter);
-
+#define    ajStrIterPutK(iter,c) (*iter->Ptr = c) 
 AjBool     ajStrJoin  (AjPStr* pthis, int pos1, const AjPStr addbit, int pos2);
 AjBool     ajStrJoinC (AjPStr* pthis, int pos1, const char* addbit, int pos2);
 
@@ -378,6 +382,7 @@ AjBool     ajStrReplaceC (AjPStr* pthis, int pos1,
 			  const char* overwrite, int len);
 int        ajStrRef(const AjPStr thys);
 #define    AJSTRREF(str) str->Use
+void       ajStrRemoveHtml(AjPStr *thys);
 AjBool     ajStrRev (AjPStr* pthis);
 int        ajStrRFindC (const AjPStr thys, const char *text);
 int        ajStrRoom (const AjPStr thys);

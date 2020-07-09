@@ -100,6 +100,10 @@ Command line arguments
    13 (Ascidian Mitochondrial)
    14 (Flatworm Mitochondrial)
    15 (Blepharisma Macronuclear)
+   16 (Chlorophycean Mitochondrial)
+   21 (Trematode Mitochondrial)
+   22 (Scenedesmus obliquus)
+   23 (Thraustochytrium Mitochondrial)
    0
    -minsize Minimum nucleotide size of ORF to report Any integer value 30
    -find This is a small menu of possible output options. The first four

@@ -19,22 +19,22 @@ Usage
 Command line arguments
 
    Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
   [-infile]            infile     Profile or matrix file
    -gapopen            float      Gap opening coefficient
    -gapextend          float      Gap extension coefficient
-  [-sequence]          seqall     Sequence database USA
   [-outfile]           outfile    Output file name
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    
    Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
    [-infile]
-   (Parameter 1) Profile or matrix file Input file Required
+   (Parameter 2) Profile or matrix file Input file Required
    -gapopen Gap opening coefficient Any integer value 1.0
    -gapextend Gap extension coefficient Any integer value 0.1
-   [-sequence]
-   (Parameter 2) Sequence database USA Readable sequence(s) Required
    [-outfile]
    (Parameter 3) Output file name Output file <sequence>.prophet
    Optional qualifiers Allowed values Default

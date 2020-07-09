@@ -4014,16 +4014,35 @@ int ajCharPos (const char* thys, int ipos) {
 ** @@
 ******************************************************************************/
 
-AjIStr ajStrIter (const AjPStr thys) {
-
+AjIStr ajStrIter (const AjPStr thys)
+{
   AjIStr iter;
+  
+  AJNEW0(iter);
+  iter->Start = iter->Ptr = ajStrStr(thys);
+  iter->End = iter->Start + ajStrLen(thys) - 1;
+  
+  return iter;
 
-  iter = AJNEW0(iter);
-  iter->Begin = 0;
-  iter->End = thys->Len;
-  iter->Curr = 0;
-  iter->Obj = thys;
+}
 
+/* @func ajStrIterBack *******************************************************
+**
+** Creates an iterator over the characters in a string set to end of string.
+**
+** @param [wP] thys [const AjPStr] Original string
+** @return [AjIStr] String Iterator
+** @@
+******************************************************************************/
+
+AjIStr ajStrIterBack (const AjPStr thys)
+{
+  AjIStr iter;
+  
+  AJNEW0(iter);
+  iter->Start = ajStrStr(thys);
+  iter->End = iter->Ptr = iter->Start + ajStrLen(thys) - 1;
+  
   return iter;
 
 }
@@ -4046,15 +4065,35 @@ AjIStr ajStrIter (const AjPStr thys) {
 ** @@
 ******************************************************************************/
 
-AjIStr ajStrIterNext (AjIStr iter) {
+AjIStr ajStrIterNext (AjIStr iter)
+{
+    
+    iter->Ptr++;
+    if(iter->Ptr > iter->End)
+	return NULL;
 
-  if (iter->Curr < iter->End) {
-    iter->Curr++;
-    iter->Obj->Ptr++;
-    iter->Obj->Len--;
-    iter->Obj->Res--;
-  }
-  return iter;
+    return iter;
+}
+
+/* @func ajStrIterBackNext ****************************************************
+**
+** Step to previous character in string iterator.
+**
+** @param [P] iter [AjIStr] String iterator.
+** @return [AjIStr] Updated iterator duplicated as return value.
+** @@
+******************************************************************************/
+
+AjIStr ajStrIterBackNext (AjIStr iter)
+{
+
+    
+    iter->Ptr--;
+
+    if(iter->Ptr < iter->Start)
+	return NULL;
+
+    return iter;
 }
 
 /* @macro ajStrIterEnd ******************************************************
@@ -4093,11 +4132,12 @@ AjIStr ajStrIterNext (AjIStr iter) {
 ** @@
 ******************************************************************************/
 
-void ajStrIterFree (AjIStr* iter) {
+void ajStrIterFree (AjIStr* iter)
+{
 
-  AJFREE(*iter);
+    AJFREE(*iter);
 
-  return;
+    return;
 }
 
 /* ==================================================================== */
@@ -5046,6 +5086,44 @@ void ajStrDegap(AjPStr* thys)
 	    --(*thys)->Len;
     }
     (*thys)->Ptr[(*thys)->Len] = '\0';
+
+    return;
+}
+
+/* @func ajStrRemoveHtml *****************************************************
+**
+** Removes all strings between and including angle brackets
+**
+** @param [w] thys [AjPStr*] String
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajStrRemoveHtml(AjPStr *thys)
+{
+    char *p;
+    char *q;
+
+    p = q = (*thys)->Ptr;
+    while(*p)
+    {
+	if(*p!='<')
+	{
+	    *q++=*p++;
+	    continue;
+	}
+	while(*p)
+	{
+	    if(*p=='>')
+	    {
+		++p;
+		break;
+	    }
+	    --(*thys)->Len;
+	    ++p;
+	}
+    }
+    *q='\0';
 
     return;
 }

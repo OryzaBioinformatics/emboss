@@ -80,6 +80,13 @@ error message to be written (e.g.  '-osformat') or will be quietly
 ignored (e.g.  '-sbegin', '-send'). 
 
 
+<p>
+
+If you have defined a database to use GCG indexed databases, then
+<b>entret</b> will currently only return the annotation and not the
+sequence.  <b>entret</b> will currently only reproduce the original
+entry, including the sequence, for databases which hold the whole entry
+in one file (e.g.  the original flatfiles or SRS indexed databases). 
 
 
 
@@ -490,8 +497,10 @@ None.
 <a name=See also><h2>See also</h2></a>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="abiview.html">abiview</a></td><td>Reads ABI file and display the trace</td></tr>
 <tr><td><a href="cirdna.html">cirdna</a></td><td>Draws circular maps of DNA constructs</td></tr>
 <tr><td><a href="lindna.html">lindna</a></td><td>Draws linear maps of DNA constructs</td></tr>
+<tr><td><a href="notseq.html">notseq</a></td><td>Excludes a set of sequences and writes out the remaining ones</td></tr>
 <tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
 <tr><td><a href="seqret.html">seqret</a></td><td>Reads and writes (returns) sequences</td></tr>
 <tr><td><a href="seqretall.html">seqretall</a></td><td>Reads and writes (returns) a set of sequences one at a time</td></tr>

@@ -82,6 +82,7 @@ void          ajGraphClose (void);
 void          ajGraphCloseWin (void);
 void          ajGraphColourBack (void);
 void          ajGraphColourFore (void);
+void          ajGraphDataDel(AjPGraphData *thys);
 void          ajGraphDataObjAddLine (AjPGraphData graphs, float x1, float y1,
 				     float x2, float y2, int colour);
 void          ajGraphDataObjAddRect (AjPGraphData graphs,
@@ -129,6 +130,8 @@ void          ajGraphObjAddRect (AjPGraph graphs, float x1, float y1,
 				 float x2, float y2, int colour, int fill);
 void          ajGraphObjAddText (AjPGraph graphs, float x1, float y1,
 				 int colour, char *text);
+void          ajGraphObjDel(AjPGraph *thys);
+void          ajGraphDataObjDel(AjPGraphData *thys);
 void          ajGraphOpen (AjPGraph thys, PLFLT xmin, PLFLT xmax,
 			   PLFLT ymin, PLFLT ymax, int flags);
 void          ajGraphOpenPlot (AjPGraph thys, int numofsets);

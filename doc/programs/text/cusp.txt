@@ -67,6 +67,16 @@ GCT     A               0.000   0.000   0
 
 .........
 
+   The 'Fract' column gives the faction of all amino acids coded for by
+   this codon triplet.
+   
+   The /1000 column represents the number of codons, given the input
+   sequence(s), there are per 1000 bases. This will be an extrapolation
+   if the sequence is shorter than 1000 bases.
+   
+   If multiple sequences are input then the statistics are given for all
+   of the sequences together, not individually.
+   
 Data files
 
    cusp reads a codon usage file, but only as a template and does not use
@@ -74,16 +84,28 @@ Data files
    
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   Always exits with status 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                          Description
@@ -114,6 +136,8 @@ Author(s)
    
 History
 
+   Spring 2000 - written
+   
 Target users
 
    This program is intended to be used by everyone and everything, from
