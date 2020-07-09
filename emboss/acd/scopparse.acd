@@ -1,0 +1,22 @@
+appl: scopparse [
+  documentation: "Reads raw scop classifications file and writes embl-like format scop classification file."
+  groups: "Utils:Database creation"
+]
+
+infile: infilea  [
+  prompt: "Name of scop classification file for input (raw format dir.cla.scop.txt_X.XX file)"
+  default: "dir.cla.scop.txt_1.57"
+  parameter: "Y"
+]
+
+infile: infileb  [
+  prompt: "Name of description file for input (raw format dir.des.scop.txt_X.XX file)"
+  default: "dir.des.scop.txt_1.57"
+  parameter: "Y"
+]
+
+outfile: outfile  [
+  prompt: "Name of scop file for output (embl-like format)"
+  default: "Escop.dat"
+  parameter: "Y"
+]
