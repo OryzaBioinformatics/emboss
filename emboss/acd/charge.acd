@@ -1,0 +1,14 @@
+appl: charge [
+        doc: "Protein charge plot"
+        groups: "PROTEIN: sequence properties"
+]
+
+ seqall: seqall [ param: Y type: protein ]
+
+ bool: plot [ opt: N def: N info: "Produce graphic" ]
+
+ int: window [ opt: Y min: 1 def: 5 info: "Window" ]
+
+ xygraph: graph [ req: $(plot) ]
+
+ outfile: outfile [ req: @(!$(plot)) ]
