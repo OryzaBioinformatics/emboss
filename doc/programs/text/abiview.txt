@@ -1,0 +1,135 @@
+
+                              EMBOSS: abiview
+     _________________________________________________________________
+   
+                                Program abiview
+                                       
+Function
+
+   Reads ABI file and display the trace
+   
+Description
+
+   abiview reads in an ABI sequence trace file and graphically displays
+   the results.
+   
+   The data for each nucleotide is plotted and the assigned nucleotide
+   (G, A, T, C or N) in the ABI file is overlayed on the graphs.
+   
+   It also writes out the sequence to an output sequence file.
+   
+Usage
+
+   Here is a sample session with abiview:
+
+% abiview
+Name of the ABI trace file: ba16d2.s1
+Output sequence [outfile.fasta]:
+Graph type [x11]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-fname]             string     Name of the ABI trace file
+  [-outseq]            seqout     Sequence file
+   -graph              xygraph    Graph type
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -separate           bool       Separate the trace graphs for the 4 bases
+   -yticks             bool       Display y-axis ticks
+   -window             integer    Sequence display window size
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-fname]
+   (Parameter 1) Name of the ABI trace file Any string is accepted An
+   empty string is accepted
+   [-outseq]
+   (Parameter 2) Sequence file Writeable sequence <sequence>.format
+   -graph Graph type EMBOSS has a list of known devices, including
+   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
+   EMBOSS_GRAPHICS value, or x11
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -separate Separate the trace graphs for the 4 bases Yes/No No
+   -yticks Display y-axis ticks Yes/No No
+   -window Sequence display window size Any integer value 40
+   
+Input file format
+
+   This reads in a standard ABI trace file.
+   
+Output file format
+
+   It outputs a file holding a normal nucleotide sequence.
+   
+   It outputs a graphical image of the traces.
+   The graphical output from the above example is here.
+   
+   The horizontal scale of the output image labelled 'Residue Position'
+   is only a very approximate indication of the spacing of residues in
+   the image. The real residue spacing is variable, as it relies on the
+   speed with which the oligo-nucleotides are eluted in the ABI
+   sequencer. Do not be surprised to see the nucleotide signals spaced at
+   a much greater distance than the horizontal scale might suggest.
+   
+Data files
+
+   None.
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name                          Description
+   cirdna       Draws circular maps of DNA constructs
+   entret       Reads and writes (returns) flatfile entries
+   lindna       Draws linear maps of DNA constructs
+   notseq       Excludes a set of sequences and writes out the remaining ones
+   remap        Display a sequence with restriction cut sites, translation etc
+   seqret       Reads and writes (returns) sequences
+   seqretall    Reads and writes (returns) a set of sequences one at a time
+   seqretset    Reads and writes (returns) a set of sequences all at once
+   seqretsplit  Reads and writes (returns) sequences in individual files
+   showfeat     Show features of a sequence
+   showseq      Display a sequence with features, translation etc
+   
+Author(s)
+
+   This application was written by Tim Carver (tcarver@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (January 2001) - Tim Carver
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
