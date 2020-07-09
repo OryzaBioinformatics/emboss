@@ -76,6 +76,8 @@ ajulong embNmerNuc2int(char *seq, ajint wordsize, ajint offset,
 /* @func embNmerInt2nuc ************************************************
 **
 ** Decodes a unsigned ajlong ajint number into a word of a nucleic sequence.
+** The returned nucleic sequence is pre-pended to anything already in
+** the string 'seq'.
 **
 ** @param [w] seq [AjPStr *] the returned sequence
 ** @param [r] wordsize [ajint] the size of word to produce
@@ -173,6 +175,8 @@ ajulong embNmerProt2int(char *seq, ajint wordsize, ajint offset,
 /* @func embNmerInt2prot ************************************************
 **
 ** Decodes a unsigned ajlong ajint number into a word of a protein sequence.
+** The returned protein sequence is pre-pended to anything already in
+** the string 'seq'.
 **
 ** @param [w] seq [AjPStr *] the returned sequence
 ** @param [r] wordsize [ajint] the size of word to produce

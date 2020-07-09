@@ -41,7 +41,7 @@ typedef struct EmbSShowInfo {
 /********* Descriptor object types *****************/
 
 enum ShowEValtype {SH_SEQ, SH_BLANK, SH_TICK, SH_TICKNUM, SH_COMP,
-SH_TRAN, SH_RE, SH_FT};
+SH_TRAN, SH_RE, SH_FT, SH_NOTE};
 
 
 
@@ -110,6 +110,11 @@ typedef struct EmbSShowFT {
   AjPFeattable feat;
 } EmbOShowFT, *EmbPShowFT;
 
+/* annotation information, type = SH_NOTE */
+typedef struct EmbSShowNote {
+  AjPRange regions;	/* regions to note, NULL = no regions */
+} EmbOShowNote, *EmbPShowNote;
+
 
 /********* assorted structures ***********/
 /* RE cut site position list node */
@@ -135,6 +140,7 @@ void embShowAddTran (EmbPShow thys, AjPTrn trnTable, ajint frame,
 		     ajint orfminsize);
 void embShowAddRE (EmbPShow thys, ajint sense, AjPList restrictlist, AjBool flat);
 void embShowAddFT (EmbPShow thys, AjPFeattable feat);
+void embShowAddNote (EmbPShow thys, AjPRange regions);
 void embShowPrint (AjPFile out, EmbPShow thys);
 void embShowUpperRange(AjPStr *line, AjPRange upperrange, ajint pos);
 void embShowColourRange(AjPStr *line, AjPRange colour, ajint pos);

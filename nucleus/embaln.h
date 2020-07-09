@@ -35,23 +35,42 @@ void embAlignProfilePathCalc(char *a, ajint mlen, ajint slen, float gapopen,
 			    float gapextend, float *path, float **fmatrix,
 			    ajint *compass, AjBool show);
 
+void embAlignReportGlobal (AjPAlign align, AjPSeq seqa, AjPSeq seqb, 
+			  AjPStr m, AjPStr n,
+			  ajint start1, ajint start2,
+			  float gapopen, float gapextend,
+			  float score, AjPMatrixf matrix);
+void embAlignReportLocal (AjPAlign align, AjPSeq seqa, AjPSeq seqb, 
+			  AjPStr m, AjPStr n,
+			  ajint start1, ajint start2,
+			  float gapopen, float gapextend,
+			  float score, AjPMatrixf matrix);
+void embAlignReportProfile(AjPAlign align, AjPSeqset seqset,
+			   char *a, char *b, AjPStr m, AjPStr n,
+			   ajint start1, ajint start2,
+			   float score, AjBool mark,
+			   float **fmatrix, char *namea,
+			   char *nameb, ajint begina, ajint beginb);
+
 float embAlignScoreNWMatrix(float *path, AjPSeq a, AjPSeq b, float **fmatrix,
-			   AjPSeqCvt cvt, ajint lena, ajint lenb, float gapopen, ajint *compass,
-			   float gapextend, ajint *start1, ajint *start2);
+			    AjPSeqCvt cvt, ajint lena, ajint lenb,
+			    float gapopen, ajint *compass,
+			    float gapextend, ajint *start1, ajint *start2);
 
 float embAlignScoreProfileMatrix(float *path, ajint *compass, float gapopen,
-				float gapextend, AjPStr b,
-				ajint clen, ajint slen, float **fmatrix,
-				ajint *start1, ajint *start2);
+				 float gapextend, AjPStr b,
+				 ajint clen, ajint slen, float **fmatrix,
+				 ajint *start1, ajint *start2);
 float embAlignScoreSWMatrix(float *path, ajint *compass, float gapopen,
-			  float gapextend,  AjPSeq a, AjPSeq b,
-			  ajint lena, ajint lenb, float **sub,
-			   AjPSeqCvt cvt, ajint *start1, ajint *start2);
+			    float gapextend,  AjPSeq a, AjPSeq b,
+			    ajint lena, ajint lenb, float **sub,
+			    AjPSeqCvt cvt, ajint *start1, ajint *start2);
 
 void embAlignWalkNWMatrix(float *path, AjPSeq a, AjPSeq b, AjPStr *m,
-			 AjPStr *n, ajint lena, ajint lenb, ajint *start1,
-			 ajint *start2, float gapopen,
-			 float gapextend, AjPSeqCvt cvt, ajint *compass, float **sub);
+			  AjPStr *n, ajint lena, ajint lenb, ajint *start1,
+			  ajint *start2, float gapopen,
+			  float gapextend, AjPSeqCvt cvt,
+			  ajint *compass, float **sub);
 void embAlignWalkProfileMatrix(float *path, ajint *compass, float gapopen,
 			      float gapextend, AjPStr cons, AjPStr b,
 			      AjPStr *m, AjPStr *n, ajint clen, ajint slen,

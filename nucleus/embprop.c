@@ -5,6 +5,8 @@
 ** @version 1.0
 ** @modified 24 Nov 1999 - GWW - Added embPropProtGaps and embPropProt1to3
 ** @modified 1 Sept 2000 - GWW - Added embPropTransition embPropTranversion
+** @modified 4 July 2001 - DMAM - Modified embPropAminoRead embPropCalcMolwt
+** @modified 4 July 2001 - DMAM - Added embPropCalcMolwtMod
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -58,9 +60,9 @@ static ajint propFragCompare(const void *a, const void *b);
 ** @@
 ******************************************************************************/
 
-void embPropAminoRead(void)
+void embPropAminoRead(AjPFile mfptr)
 {
-    AjPFile mfptr=NULL;
+  /*    AjPFile mfptr=NULL; */
     AjPStr  line=NULL;
     AjPStr  delim=NULL;
     
@@ -72,8 +74,6 @@ void embPropAminoRead(void)
     if(propInit)
 	return;
 
-    ajFileDataNewC(AMINODATFILE, &mfptr);
-    if(!mfptr) ajFatal("%s  not found\n",AMINODATFILE);
 
     line=ajStrNew();
     delim=ajStrNewC(" :\t\n");
@@ -91,7 +91,6 @@ void embPropAminoRead(void)
 
     ajStrDel(&line);
     ajStrDel(&delim);
-    ajFileClose(&mfptr);
 
     propInit=ajTrue;
     return;
@@ -102,6 +101,7 @@ void embPropAminoRead(void)
 /* @func embPropCalcMolwt  ************************************************
 **
 ** Calculate the molecular weight of a protein sequence
+** This is a shell around embPropCalcMolwtMod using water as the modifier.
 **
 ** @param [r] s [char *] sequence
 ** @param [r] start [ajint] start position
@@ -112,13 +112,36 @@ void embPropAminoRead(void)
 ******************************************************************************/
 double embPropCalcMolwt(char *s, ajint start, ajint end)
 {
+
+  return embPropCalcMolwtMod(s,start,end,EMBPROPMSTN_H, EMBPROPMSTC_OH );
+}
+
+
+/* @func embPropCalcMolwtMod  ************************************************
+**
+** Calculate the molecular weight of a protein sequence
+** with chemically modified termini
+**
+** @param [r] s [char *] sequence
+** @param [r] start [ajint] start position
+** @param [r] end [ajint] end position
+** @param [r] nmass [double] mass of the N-terminal group
+** @param [r] cmass [double] mass of the C-terminal group
+**
+** @return [double] molecular weight
+** @@
+******************************************************************************/
+double embPropCalcMolwtMod(char *s, ajint start, ajint end, double nmass, double cmass)
+{
+
     char *p;
     double sum;
     ajint i;
     ajint len;
     
     if(!propInit)
-	embPropAminoRead();
+      ajFatal("Amino Acid data not initialised. Call embPropAminoRead");
+    /*embPropAminoRead();*/
 
     len = end-start+1;
     
@@ -128,7 +151,7 @@ double embPropCalcMolwt(char *s, ajint start, ajint end)
     for(i=0;i<len;++i)
 	sum += EmbPropTable[ajAZToInt(toupper((ajint)p[i]))][EMBPROPMOLWT];
 
-    return sum+18.0153;
+    return sum + nmass + cmass;
 }
 
 

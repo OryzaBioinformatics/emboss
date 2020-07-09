@@ -1,6 +1,7 @@
-# Makefile.in generated automatically by automake 1.4 from Makefile.am
+# Makefile.in generated automatically by automake 1.5 from Makefile.am.
 
-# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001
+# Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -10,6 +11,7 @@
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 
+@SET_MAKE@
 
 SHELL = @SHELL@
 
@@ -31,13 +33,9 @@ infodir = @infodir@
 mandir = @mandir@
 includedir = @includedir@
 oldincludedir = /usr/include
-
-DESTDIR =
-
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
-
 top_builddir = ..
 
 ACLOCAL = @ACLOCAL@
@@ -46,11 +44,11 @@ AUTOMAKE = @AUTOMAKE@
 AUTOHEADER = @AUTOHEADER@
 
 INSTALL = @INSTALL@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
+INSTALL_HEADER = $(INSTALL_DATA)
 transform = @program_transform_name@
-
 NORMAL_INSTALL = :
 PRE_INSTALL = :
 POST_INSTALL = :
@@ -60,134 +58,107 @@ POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
 AJAX_FIXED_ROOT = @AJAX_FIXED_ROOT@
+AMTAR = @AMTAR@
 AS = @AS@
 AWK = @AWK@
 CC = @CC@
 CPP = @CPP@
+DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
-LD = @LD@
+ECHO = @ECHO@
+EXEEXT = @EXEEXT@
+INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+JAVA_OK = @JAVA_OK@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
-MAKEINFO = @MAKEINFO@
-NM = @NM@
 OBJDUMP = @OBJDUMP@
+OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
+STRIP = @STRIP@
 VERSION = @VERSION@
 XLIB = @XLIB@
+X_CFLAGS = @X_CFLAGS@
+X_EXTRA_LIBS = @X_EXTRA_LIBS@
+X_LIBS = @X_LIBS@
+X_PRE_LIBS = @X_PRE_LIBS@
+am__include = @am__include@
+am__quote = @am__quote@
+havejavac = @havejavac@
+install_sh = @install_sh@
 
 lib_LTLIBRARIES = libnucleus.la
+
+@ISAIXIA64_FALSE@@ISSHARED_TRUE@AM_CFLAGS = 
+@ISAIXIA64_TRUE@@ISSHARED_TRUE@AM_CFLAGS = -Wl,-G -lm -L../ajax/.libs -lajax
 
 INCLUDES = -I$(top_srcdir)/plplot $(X_CFLAGS) -I$(srcdir)/ -I$(top_srcdir)/ajax
 
 LIBS = 
 
-NUCLSRC = embaln.c embcom.c embcons.c embdata.c embdbi.c 	   embest.c embexit.c embgroup.c embiep.c 	   embinit.c embmat.c embmisc.c embmol.c 	   embnmer.c embpat.c embprop.c embread.c 	   embshow.c embword.c embxyz.c
+NUCLSRC = embaln.c embcom.c embcons.c embdata.c embdbi.c \
+	   embest.c embexit.c embgroup.c embiep.c \
+	   embinit.c embmat.c embmisc.c embmol.c \
+	   embnmer.c embpat.c embprop.c embread.c \
+	   embshow.c embword.c embxyz.c
 
 
 libnucleus_la_SOURCES = $(NUCLSRC)
 
 libnucleus_la_LDFLAGS = -version-info 1:0:1
 
-noinst_HEADERS = emboss.h 		 embaln.h embcom.h embcons.h embdata.h embdbi.h 		 embest.h embexit.h embgroup.h embiep.h 		 embinit.h embmat.h embmisc.h 		 embmol.h embnmer.h embpat.h embprop.h                  embread.h embshow.h embword.h embxyz.h
+noinst_HEADERS = emboss.h \
+		 embaln.h embcom.h embcons.h embdata.h embdbi.h \
+		 embest.h embexit.h embgroup.h embiep.h \
+		 embinit.h embmat.h embmisc.h \
+		 embmol.h embnmer.h embpat.h embprop.h \
+                 embread.h embshow.h embword.h embxyz.h
 
+subdir = nucleus
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_CLEAN_FILES = 
-LTLIBRARIES =  $(lib_LTLIBRARIES)
+CONFIG_CLEAN_FILES =
+LTLIBRARIES = $(lib_LTLIBRARIES)
 
+libnucleus_la_LIBADD =
+am_libnucleus_la_OBJECTS = embaln.lo embcom.lo embcons.lo embdata.lo \
+	embdbi.lo embest.lo embexit.lo embgroup.lo embiep.lo embinit.lo \
+	embmat.lo embmisc.lo embmol.lo embnmer.lo embpat.lo embprop.lo \
+	embread.lo embshow.lo embword.lo embxyz.lo
+libnucleus_la_OBJECTS = $(am_libnucleus_la_OBJECTS)
 
-DEFS = @DEFS@ -I. -I$(srcdir) 
+DEFS = @DEFS@
+DEFAULT_INCLUDES =  -I. -I$(srcdir)
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
-X_CFLAGS = @X_CFLAGS@
-X_LIBS = @X_LIBS@
-X_EXTRA_LIBS = @X_EXTRA_LIBS@
-X_PRE_LIBS = @X_PRE_LIBS@
-libnucleus_la_LIBADD = 
-libnucleus_la_OBJECTS =  embaln.lo embcom.lo embcons.lo embdata.lo \
-embdbi.lo embest.lo embexit.lo embgroup.lo embiep.lo embinit.lo \
-embmat.lo embmisc.lo embmol.lo embnmer.lo embpat.lo embprop.lo \
-embread.lo embshow.lo embword.lo embxyz.lo
-CFLAGS = @CFLAGS@
-COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+depcomp = $(SHELL) $(top_srcdir)/depcomp
+@AMDEP_TRUE@DEP_FILES = $(DEPDIR)/embaln.Plo $(DEPDIR)/embcom.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/embcons.Plo $(DEPDIR)/embdata.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/embdbi.Plo $(DEPDIR)/embest.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/embexit.Plo $(DEPDIR)/embgroup.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/embiep.Plo $(DEPDIR)/embinit.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/embmat.Plo $(DEPDIR)/embmisc.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/embmol.Plo $(DEPDIR)/embnmer.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/embpat.Plo $(DEPDIR)/embprop.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/embread.Plo $(DEPDIR)/embshow.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/embword.Plo $(DEPDIR)/embxyz.Plo
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
+	$(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
-LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
-HEADERS =  $(noinst_HEADERS)
+LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+CFLAGS = @CFLAGS@
+DIST_SOURCES = $(libnucleus_la_SOURCES)
+HEADERS = $(noinst_HEADERS)
 
-DIST_COMMON =  COPYING Makefile.am Makefile.in
-
-
-DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
-
-TAR = tar
-GZIP_ENV = --best
+DIST_COMMON = $(noinst_HEADERS) COPYING Makefile.am Makefile.in
 SOURCES = $(libnucleus_la_SOURCES)
-OBJECTS = $(libnucleus_la_OBJECTS)
 
-all: all-redirect
+all: all-am
+
 .SUFFIXES:
-.SUFFIXES: .S .c .lo .o .s
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps nucleus/Makefile
-
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
-	cd $(top_builddir) \
-	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
-
-
-mostlyclean-libLTLIBRARIES:
-
-clean-libLTLIBRARIES:
-	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
-
-distclean-libLTLIBRARIES:
-
-maintainer-clean-libLTLIBRARIES:
-
-install-libLTLIBRARIES: $(lib_LTLIBRARIES)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(libdir)
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
-	  if test -f $$p; then \
-	    echo "$(LIBTOOL)  --mode=install $(INSTALL) $$p $(DESTDIR)$(libdir)/$$p"; \
-	    $(LIBTOOL)  --mode=install $(INSTALL) $$p $(DESTDIR)$(libdir)/$$p; \
-	  else :; fi; \
-	done
-
-uninstall-libLTLIBRARIES:
-	@$(NORMAL_UNINSTALL)
-	list='$(lib_LTLIBRARIES)'; for p in $$list; do \
-	  $(LIBTOOL)  --mode=uninstall rm -f $(DESTDIR)$(libdir)/$$p; \
-	done
-
-.c.o:
-	$(COMPILE) -c $<
-
-.s.o:
-	$(COMPILE) -c $<
-
-.S.o:
-	$(COMPILE) -c $<
-
-mostlyclean-compile:
-	-rm -f *.o core *.core
-
-clean-compile:
-
-distclean-compile:
-	-rm -f *.tab.c
-
-maintainer-clean-compile:
-
-.c.lo:
-	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
-
-.s.lo:
-	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
-
-.S.lo:
-	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+.SUFFIXES: .c .lo .o .obj
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -196,515 +167,219 @@ clean-libtool:
 	-rm -rf .libs _libs
 
 distclean-libtool:
+	-rm -f libtool
+$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
+	cd $(top_srcdir) && \
+	  $(AUTOMAKE) --gnu  nucleus/Makefile
+Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) && \
+	  CONFIG_HEADERS= CONFIG_LINKS= \
+	  CONFIG_FILES=$(subdir)/$@ $(SHELL) ./config.status
+install-libLTLIBRARIES: $(lib_LTLIBRARIES)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(libdir)
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    echo " $(LIBTOOL) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$p $(DESTDIR)$(libdir)/$$p"; \
+	    $(LIBTOOL) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$p $(DESTDIR)$(libdir)/$$p; \
+	  else :; fi; \
+	done
 
-maintainer-clean-libtool:
+uninstall-libLTLIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  echo " $(LIBTOOL) --mode=uninstall rm -f $(DESTDIR)$(libdir)/$$p"; \
+	  $(LIBTOOL) --mode=uninstall rm -f $(DESTDIR)$(libdir)/$$p; \
+	done
 
-libnucleus.la: $(libnucleus_la_OBJECTS) $(libnucleus_la_DEPENDENCIES)
+clean-libLTLIBRARIES:
+	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+libnucleus.la: $(libnucleus_la_OBJECTS) $(libnucleus_la_DEPENDENCIES) 
 	$(LINK) -rpath $(libdir) $(libnucleus_la_LDFLAGS) $(libnucleus_la_OBJECTS) $(libnucleus_la_LIBADD) $(LIBS)
+
+mostlyclean-compile:
+	-rm -f *.$(OBJEXT) core *.core
+
+distclean-compile:
+	-rm -f *.tab.c
+
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embaln.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embcom.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embcons.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embdata.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embdbi.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embest.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embexit.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embgroup.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embiep.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embinit.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embmat.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embmisc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embmol.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embnmer.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embpat.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embprop.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embread.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embshow.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embword.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/embxyz.Plo@am__quote@
+
+distclean-depend:
+	-rm -rf $(DEPDIR)
+
+.c.o:
+@AMDEP_TRUE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(COMPILE) -c `test -f $< || echo '$(srcdir)/'`$<
+
+.c.obj:
+@AMDEP_TRUE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(COMPILE) -c `cygpath -w $<`
+
+.c.lo:
+@AMDEP_TRUE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LTCOMPILE) -c -o $@ `test -f $< || echo '$(srcdir)/'`$<
+CCDEPMODE = @CCDEPMODE@
+uninstall-info-am:
 
 tags: TAGS
 
-ID: $(HEADERS) $(SOURCES) $(LISP)
-	list='$(SOURCES) $(HEADERS)'; \
-	unique=`for i in $$list; do echo $$i; done | \
-	  awk '    { files[$$0] = 1; } \
+ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
+	list='$(SOURCES) $(HEADERS) $(TAGS_FILES)'; \
+	unique=`for i in $$list; do \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '    { files[$$0] = 1; } \
 	       END { for (i in files) print i; }'`; \
-	here=`pwd` && cd $(srcdir) \
-	  && mkid -f$$here/ID $$unique $(LISP)
+	mkid -fID $$unique $(LISP)
 
-TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
-	list='$(SOURCES) $(HEADERS)'; \
-	unique=`for i in $$list; do echo $$i; done | \
-	  awk '    { files[$$0] = 1; } \
+	list='$(SOURCES) $(HEADERS) $(TAGS_FILES)'; \
+	unique=`for i in $$list; do \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '    { files[$$0] = 1; } \
 	       END { for (i in files) print i; }'`; \
 	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
-	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
+	  || etags $(ETAGS_ARGS) $$tags  $$unique $(LISP)
 
-mostlyclean-tags:
-
-clean-tags:
+GTAGS:
+	here=`CDPATH=: && cd $(top_builddir) && pwd` \
+	  && cd $(top_srcdir) \
+	  && gtags -i $(GTAGS_ARGS) $$here
 
 distclean-tags:
-	-rm -f TAGS ID
+	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH
 
-maintainer-clean-tags:
+DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
-distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
-
-subdir = nucleus
+top_distdir = ..
+distdir = $(top_distdir)/$(PACKAGE)-$(VERSION)
 
 distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
-	  d=$(srcdir); \
+	  if test -f $$file; then d=.; else d=$(srcdir); fi; \
+	  dir=`echo "$$file" | sed -e 's,/[^/]*$$,,'`; \
+	  if test "$$dir" != "$$file" && test "$$dir" != "."; then \
+	    $(mkinstalldirs) "$(distdir)/$$dir"; \
+	  fi; \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$/$$file $(distdir)/$$file; \
+	    cp -pR $$d/$$file $(distdir) \
+	    || exit 1; \
 	  else \
 	    test -f $(distdir)/$$file \
-	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
-	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	    || cp -p $$d/$$file $(distdir)/$$file \
+	    || exit 1; \
 	  fi; \
 	done
-embaln.lo embaln.o : embaln.c emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
-	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
-	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
-	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
-	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
-	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajfeatdata.h \
-	../ajax/ajseqdata.h ../ajax/ajseq.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajseqabi.h ../ajax/ajreport.h \
-	../ajax/ajmatrices.h ../ajax/ajrange.h ../ajax/ajcod.h \
-	../ajax/ajmath.h ../ajax/ajutil.h ../ajax/ajnam.h \
-	../ajax/ajmess.h ../ajax/ajposreg.h ../ajax/hsp_regex.h \
-	../ajax/ajtranslate.h ../ajax/ajsys.h ../ajax/ajbase.h \
-	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
-	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
-	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h embaln.h \
-	embcom.h embcons.h embdbi.h embread.h embiep.h embprop.h \
-	embinit.h embword.h embpat.h embmat.h embdata.h embnmer.h \
-	embgroup.h embshow.h embmisc.h embmol.h embxyz.h
-embcom.lo embcom.o : embcom.c emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
-	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
-	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
-	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
-	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
-	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajfeatdata.h \
-	../ajax/ajseqdata.h ../ajax/ajseq.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajseqabi.h ../ajax/ajreport.h \
-	../ajax/ajmatrices.h ../ajax/ajrange.h ../ajax/ajcod.h \
-	../ajax/ajmath.h ../ajax/ajutil.h ../ajax/ajnam.h \
-	../ajax/ajmess.h ../ajax/ajposreg.h ../ajax/hsp_regex.h \
-	../ajax/ajtranslate.h ../ajax/ajsys.h ../ajax/ajbase.h \
-	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
-	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
-	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h embaln.h \
-	embcom.h embcons.h embdbi.h embread.h embiep.h embprop.h \
-	embinit.h embword.h embpat.h embmat.h embdata.h embnmer.h \
-	embgroup.h embshow.h embmisc.h embmol.h embxyz.h
-embcons.lo embcons.o : embcons.c emboss.h ../ajax/ajax.h \
-	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
-	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
-	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
-	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
-	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
-	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
-	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
-	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
-	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
-	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
-	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
-	../ajax/ajbase.h ../ajax/ajdan.h ../ajax/ajsort.h \
-	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
-	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
-	../plplot/plplot.h embaln.h embcom.h embcons.h embdbi.h \
-	embread.h embiep.h embprop.h embinit.h embword.h embpat.h \
-	embmat.h embdata.h embnmer.h embgroup.h embshow.h embmisc.h \
-	embmol.h embxyz.h
-embdata.lo embdata.o : embdata.c emboss.h ../ajax/ajax.h \
-	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
-	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
-	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
-	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
-	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
-	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
-	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
-	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
-	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
-	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
-	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
-	../ajax/ajbase.h ../ajax/ajdan.h ../ajax/ajsort.h \
-	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
-	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
-	../plplot/plplot.h embaln.h embcom.h embcons.h embdbi.h \
-	embread.h embiep.h embprop.h embinit.h embword.h embpat.h \
-	embmat.h embdata.h embnmer.h embgroup.h embshow.h embmisc.h \
-	embmol.h embxyz.h
-embdbi.lo embdbi.o : embdbi.c emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
-	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
-	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
-	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
-	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
-	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajfeatdata.h \
-	../ajax/ajseqdata.h ../ajax/ajseq.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajseqabi.h ../ajax/ajreport.h \
-	../ajax/ajmatrices.h ../ajax/ajrange.h ../ajax/ajcod.h \
-	../ajax/ajmath.h ../ajax/ajutil.h ../ajax/ajnam.h \
-	../ajax/ajmess.h ../ajax/ajposreg.h ../ajax/hsp_regex.h \
-	../ajax/ajtranslate.h ../ajax/ajsys.h ../ajax/ajbase.h \
-	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
-	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
-	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h embaln.h \
-	embcom.h embcons.h embdbi.h embread.h embiep.h embprop.h \
-	embinit.h embword.h embpat.h embmat.h embdata.h embnmer.h \
-	embgroup.h embshow.h embmisc.h embmol.h embxyz.h
-embest.lo embest.o : embest.c emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
-	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
-	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
-	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
-	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
-	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajfeatdata.h \
-	../ajax/ajseqdata.h ../ajax/ajseq.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajseqabi.h ../ajax/ajreport.h \
-	../ajax/ajmatrices.h ../ajax/ajrange.h ../ajax/ajcod.h \
-	../ajax/ajmath.h ../ajax/ajutil.h ../ajax/ajnam.h \
-	../ajax/ajmess.h ../ajax/ajposreg.h ../ajax/hsp_regex.h \
-	../ajax/ajtranslate.h ../ajax/ajsys.h ../ajax/ajbase.h \
-	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
-	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
-	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h embaln.h \
-	embcom.h embcons.h embdbi.h embread.h embiep.h embprop.h \
-	embinit.h embword.h embpat.h embmat.h embdata.h embnmer.h \
-	embgroup.h embshow.h embmisc.h embmol.h embxyz.h embest.h
-embexit.lo embexit.o : embexit.c emboss.h ../ajax/ajax.h \
-	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
-	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
-	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
-	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
-	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
-	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
-	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
-	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
-	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
-	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
-	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
-	../ajax/ajbase.h ../ajax/ajdan.h ../ajax/ajsort.h \
-	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
-	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
-	../plplot/plplot.h embaln.h embcom.h embcons.h embdbi.h \
-	embread.h embiep.h embprop.h embinit.h embword.h embpat.h \
-	embmat.h embdata.h embnmer.h embgroup.h embshow.h embmisc.h \
-	embmol.h embxyz.h
-embgroup.lo embgroup.o : embgroup.c emboss.h ../ajax/ajax.h \
-	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
-	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
-	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
-	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
-	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
-	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
-	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
-	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
-	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
-	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
-	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
-	../ajax/ajbase.h ../ajax/ajdan.h ../ajax/ajsort.h \
-	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
-	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
-	../plplot/plplot.h embaln.h embcom.h embcons.h embdbi.h \
-	embread.h embiep.h embprop.h embinit.h embword.h embpat.h \
-	embmat.h embdata.h embnmer.h embgroup.h embshow.h embmisc.h \
-	embmol.h embxyz.h
-embiep.lo embiep.o : embiep.c emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
-	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
-	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
-	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
-	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
-	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajfeatdata.h \
-	../ajax/ajseqdata.h ../ajax/ajseq.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajseqabi.h ../ajax/ajreport.h \
-	../ajax/ajmatrices.h ../ajax/ajrange.h ../ajax/ajcod.h \
-	../ajax/ajmath.h ../ajax/ajutil.h ../ajax/ajnam.h \
-	../ajax/ajmess.h ../ajax/ajposreg.h ../ajax/hsp_regex.h \
-	../ajax/ajtranslate.h ../ajax/ajsys.h ../ajax/ajbase.h \
-	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
-	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
-	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h embaln.h \
-	embcom.h embcons.h embdbi.h embread.h embiep.h embprop.h \
-	embinit.h embword.h embpat.h embmat.h embdata.h embnmer.h \
-	embgroup.h embshow.h embmisc.h embmol.h embxyz.h
-embinit.lo embinit.o : embinit.c emboss.h ../ajax/ajax.h \
-	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
-	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
-	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
-	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
-	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
-	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
-	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
-	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
-	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
-	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
-	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
-	../ajax/ajbase.h ../ajax/ajdan.h ../ajax/ajsort.h \
-	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
-	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
-	../plplot/plplot.h embaln.h embcom.h embcons.h embdbi.h \
-	embread.h embiep.h embprop.h embinit.h embword.h embpat.h \
-	embmat.h embdata.h embnmer.h embgroup.h embshow.h embmisc.h \
-	embmol.h embxyz.h
-embmat.lo embmat.o : embmat.c ../ajax/ajax.h ../ajax/ajarch.h \
-	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
-	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
-	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
-	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
-	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajfeatdata.h \
-	../ajax/ajseqdata.h ../ajax/ajseq.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajseqabi.h ../ajax/ajreport.h \
-	../ajax/ajmatrices.h ../ajax/ajrange.h ../ajax/ajcod.h \
-	../ajax/ajmath.h ../ajax/ajutil.h ../ajax/ajnam.h \
-	../ajax/ajmess.h ../ajax/ajposreg.h ../ajax/hsp_regex.h \
-	../ajax/ajtranslate.h ../ajax/ajsys.h ../ajax/ajbase.h \
-	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
-	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
-	../ajax/ajcorba.h embmat.h
-embmisc.lo embmisc.o : embmisc.c emboss.h ../ajax/ajax.h \
-	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
-	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
-	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
-	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
-	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
-	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
-	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
-	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
-	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
-	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
-	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
-	../ajax/ajbase.h ../ajax/ajdan.h ../ajax/ajsort.h \
-	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
-	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
-	../plplot/plplot.h embaln.h embcom.h embcons.h embdbi.h \
-	embread.h embiep.h embprop.h embinit.h embword.h embpat.h \
-	embmat.h embdata.h embnmer.h embgroup.h embshow.h embmisc.h \
-	embmol.h embxyz.h
-embmol.lo embmol.o : embmol.c ../ajax/ajax.h ../ajax/ajarch.h \
-	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
-	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
-	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
-	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
-	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajfeatdata.h \
-	../ajax/ajseqdata.h ../ajax/ajseq.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajseqabi.h ../ajax/ajreport.h \
-	../ajax/ajmatrices.h ../ajax/ajrange.h ../ajax/ajcod.h \
-	../ajax/ajmath.h ../ajax/ajutil.h ../ajax/ajnam.h \
-	../ajax/ajmess.h ../ajax/ajposreg.h ../ajax/hsp_regex.h \
-	../ajax/ajtranslate.h ../ajax/ajsys.h ../ajax/ajbase.h \
-	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
-	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
-	../ajax/ajcorba.h embmol.h embprop.h
-embnmer.lo embnmer.o : embnmer.c emboss.h ../ajax/ajax.h \
-	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
-	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
-	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
-	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
-	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
-	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
-	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
-	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
-	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
-	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
-	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
-	../ajax/ajbase.h ../ajax/ajdan.h ../ajax/ajsort.h \
-	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
-	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
-	../plplot/plplot.h embaln.h embcom.h embcons.h embdbi.h \
-	embread.h embiep.h embprop.h embinit.h embword.h embpat.h \
-	embmat.h embdata.h embnmer.h embgroup.h embshow.h embmisc.h \
-	embmol.h embxyz.h
-embpat.lo embpat.o : embpat.c ../ajax/ajax.h ../ajax/ajarch.h \
-	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
-	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
-	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
-	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
-	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajfeatdata.h \
-	../ajax/ajseqdata.h ../ajax/ajseq.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajseqabi.h ../ajax/ajreport.h \
-	../ajax/ajmatrices.h ../ajax/ajrange.h ../ajax/ajcod.h \
-	../ajax/ajmath.h ../ajax/ajutil.h ../ajax/ajnam.h \
-	../ajax/ajmess.h ../ajax/ajposreg.h ../ajax/hsp_regex.h \
-	../ajax/ajtranslate.h ../ajax/ajsys.h ../ajax/ajbase.h \
-	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
-	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
-	../ajax/ajcorba.h embpat.h embmat.h
-embprop.lo embprop.o : embprop.c emboss.h ../ajax/ajax.h \
-	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
-	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
-	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
-	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
-	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
-	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
-	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
-	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
-	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
-	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
-	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
-	../ajax/ajbase.h ../ajax/ajdan.h ../ajax/ajsort.h \
-	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
-	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
-	../plplot/plplot.h embaln.h embcom.h embcons.h embdbi.h \
-	embread.h embiep.h embprop.h embinit.h embword.h embpat.h \
-	embmat.h embdata.h embnmer.h embgroup.h embshow.h embmisc.h \
-	embmol.h embxyz.h
-embread.lo embread.o : embread.c emboss.h ../ajax/ajax.h \
-	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
-	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
-	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
-	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
-	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
-	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
-	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
-	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
-	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
-	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
-	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
-	../ajax/ajbase.h ../ajax/ajdan.h ../ajax/ajsort.h \
-	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
-	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
-	../plplot/plplot.h embaln.h embcom.h embcons.h embdbi.h \
-	embread.h embiep.h embprop.h embinit.h embword.h embpat.h \
-	embmat.h embdata.h embnmer.h embgroup.h embshow.h embmisc.h \
-	embmol.h embxyz.h
-embshow.lo embshow.o : embshow.c emboss.h ../ajax/ajax.h \
-	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
-	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
-	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
-	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
-	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
-	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
-	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
-	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
-	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
-	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
-	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
-	../ajax/ajbase.h ../ajax/ajdan.h ../ajax/ajsort.h \
-	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
-	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
-	../plplot/plplot.h embaln.h embcom.h embcons.h embdbi.h \
-	embread.h embiep.h embprop.h embinit.h embword.h embpat.h \
-	embmat.h embdata.h embnmer.h embgroup.h embshow.h embmisc.h \
-	embmol.h embxyz.h
-embword.lo embword.o : embword.c emboss.h ../ajax/ajax.h \
-	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
-	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
-	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
-	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
-	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
-	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
-	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
-	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
-	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
-	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
-	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
-	../ajax/ajbase.h ../ajax/ajdan.h ../ajax/ajsort.h \
-	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
-	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
-	../plplot/plplot.h embaln.h embcom.h embcons.h embdbi.h \
-	embread.h embiep.h embprop.h embinit.h embword.h embpat.h \
-	embmat.h embdata.h embnmer.h embgroup.h embshow.h embmisc.h \
-	embmol.h embxyz.h
-embxyz.lo embxyz.o : embxyz.c emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
-	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
-	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
-	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
-	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
-	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajfeatdata.h \
-	../ajax/ajseqdata.h ../ajax/ajseq.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajseqabi.h ../ajax/ajreport.h \
-	../ajax/ajmatrices.h ../ajax/ajrange.h ../ajax/ajcod.h \
-	../ajax/ajmath.h ../ajax/ajutil.h ../ajax/ajnam.h \
-	../ajax/ajmess.h ../ajax/ajposreg.h ../ajax/hsp_regex.h \
-	../ajax/ajtranslate.h ../ajax/ajsys.h ../ajax/ajbase.h \
-	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
-	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
-	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h embaln.h \
-	embcom.h embcons.h embdbi.h embread.h embiep.h embprop.h \
-	embinit.h embword.h embpat.h embmat.h embdata.h embnmer.h \
-	embgroup.h embshow.h embmisc.h embmol.h embxyz.h
-
-info-am:
-info: info-am
-dvi-am:
-dvi: dvi-am
 check-am: all-am
 check: check-am
-installcheck-am:
-installcheck: installcheck-am
-install-exec-am: install-libLTLIBRARIES
-install-exec: install-exec-am
+all-am: Makefile $(LTLIBRARIES) $(HEADERS)
 
-install-data-am:
+installdirs:
+	$(mkinstalldirs) $(DESTDIR)$(libdir)
+
+install: install-am
+install-exec: install-exec-am
 install-data: install-data-am
+uninstall: uninstall-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
-install: install-am
-uninstall-am: uninstall-libLTLIBRARIES
-uninstall: uninstall-am
-all-am: Makefile $(LTLIBRARIES) $(HEADERS)
-all-redirect: all-am
+
+installcheck: installcheck-am
 install-strip:
-	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
-installdirs:
-	$(mkinstalldirs)  $(DESTDIR)$(libdir)
-
-
+	$(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
+	  `test -z '$(STRIP)' || \
+	    echo "INSTALL_PROGRAM_ENV=STRIPPROG='$(STRIP)'"` install
 mostlyclean-generic:
 
 clean-generic:
 
 distclean-generic:
-	-rm -f Makefile $(CONFIG_CLEAN_FILES)
-	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+	-rm -f Makefile $(CONFIG_CLEAN_FILES) stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
-mostlyclean-am:  mostlyclean-libLTLIBRARIES mostlyclean-compile \
-		mostlyclean-libtool mostlyclean-tags \
-		mostlyclean-generic
-
-mostlyclean: mostlyclean-am
-
-clean-am:  clean-libLTLIBRARIES clean-compile clean-libtool clean-tags \
-		clean-generic mostlyclean-am
-
+	@echo "This command is intended for maintainers to use"
+	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-distclean-am:  distclean-libLTLIBRARIES distclean-compile \
-		distclean-libtool distclean-tags distclean-generic \
-		clean-am
-	-rm -f libtool
+clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
+	mostlyclean-am
 
 distclean: distclean-am
 
-maintainer-clean-am:  maintainer-clean-libLTLIBRARIES \
-		maintainer-clean-compile maintainer-clean-libtool \
-		maintainer-clean-tags maintainer-clean-generic \
-		distclean-am
-	@echo "This command is intended for maintainers to use;"
-	@echo "it deletes files that may require special tools to rebuild."
+distclean-am: clean-am distclean-compile distclean-depend \
+	distclean-generic distclean-libtool distclean-tags
+
+dvi: dvi-am
+
+dvi-am:
+
+info: info-am
+
+info-am:
+
+install-data-am:
+
+install-exec-am: install-libLTLIBRARIES
+
+install-info: install-info-am
+
+install-man:
+
+installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 
-.PHONY: mostlyclean-libLTLIBRARIES distclean-libLTLIBRARIES \
-clean-libLTLIBRARIES maintainer-clean-libLTLIBRARIES \
-uninstall-libLTLIBRARIES install-libLTLIBRARIES mostlyclean-compile \
-distclean-compile clean-compile maintainer-clean-compile \
-mostlyclean-libtool distclean-libtool clean-libtool \
-maintainer-clean-libtool tags mostlyclean-tags distclean-tags \
-clean-tags maintainer-clean-tags distdir info-am info dvi-am dvi check \
-check-am installcheck-am installcheck install-exec-am install-exec \
-install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+maintainer-clean-am: distclean-am maintainer-clean-generic
 
+mostlyclean: mostlyclean-am
+
+mostlyclean-am: mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool
+
+uninstall-am: uninstall-info-am uninstall-libLTLIBRARIES
+
+.PHONY: GTAGS all all-am check check-am clean clean-generic \
+	clean-libLTLIBRARIES clean-libtool distclean distclean-compile \
+	distclean-depend distclean-generic distclean-libtool \
+	distclean-tags distdir dvi dvi-am info info-am install \
+	install-am install-data install-data-am install-exec \
+	install-exec-am install-info install-info-am \
+	install-libLTLIBRARIES install-man install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool tags uninstall \
+	uninstall-am uninstall-info-am uninstall-libLTLIBRARIES
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -60,7 +60,8 @@ typedef struct gnode {
 
 ajint    embGrpCompareTwoGnodes(const void * a, const void * b);
 void   embGrpGetProgGroups (AjPList glist, AjPList alpha, char **env,
-          AjBool emboss, AjBool embassy, AjBool explode, AjBool colon);
+          AjBool emboss, AjBool embassy, AjBool explode, AjBool colon,
+          AjBool gui);
 void   embGrpGroupsListDel (AjPList *groupslist);
 void   embGrpKeySearchProgs (AjPList newlist, AjPList glist, AjPStr key);
 void   embGrpKeySearchSeeAlso(AjPList newlist, AjPList *appgroups,

@@ -8,22 +8,22 @@ static ajint wordLength = 0;
 /* list of wordlengths with current one at top of list */
 static AjPList wordLengthList = NULL;	
 
-static void orderPosMatchTable(AjPList unorderedList);
-static ajint wordMatchCmpPos (const void* v1, const void* v2);
+static ajint    wordCmpStr(const void *x, const void *y);
+static ajint    wordCompare(const void *x, const void *y);
+static void     wordCurIterTrace (AjIList curiter);
+static void     wordCurListTrace (AjPList curlist);
+static ajint    wordDeadZone(EmbPWordMatch match, ajint deadx1, ajint deady1,
+			  int deadx2, ajint deady2, ajint minlength);
+static void     wordListInsertNodeOld (AjPListNode* pnode, void* x);
+static void     wordListInsertOld (AjIList iter, void* x);
+static ajint    wordMatchCmp (const void* v1, const void* v2);
+static ajint    wordMatchCmpPos (const void* v1, const void* v2);
+static void     wordNewListTrace (ajint i, AjPList newlist);
+static void     wordOrderPosMatchTable(AjPList unorderedList);
 
-static ajint wordCmpStr(const void *x, const void *y);
 static unsigned wordStrHash(const void *key, unsigned hashsize);
-static void wordNewListTrace (ajint i, AjPList newlist);
-static void wordCurListTrace (AjPList curlist);
-static void wordCurIterTrace (AjIList curiter);
-static ajint wordMatchCmp (const void* v1,
-			 const void* v2);
-static ajint deadZone(EmbPWordMatch match, ajint deadx1, ajint deady1, int
-	deadx2, ajint deady2, ajint minlength);
 
-static void listInsertOld (AjIList iter, void* x);
-static void listInsertNodeOld (AjPListNode* pnode, void* x);
-
+static void     wordVFree(const void *key, void **count, void *cl);
 
 /* @funcstatic wordCmpStr *********************************************
 **
@@ -59,7 +59,7 @@ static unsigned wordStrHash(const void *key, unsigned hashsize)
     return hashval % hashsize;
 }
 
-/* @funcstatic compare *********************************************
+/* @funcstatic wordCompare *********************************************
 **
 ** Compare two words.
 **
@@ -68,7 +68,7 @@ static unsigned wordStrHash(const void *key, unsigned hashsize)
 ** @return [ajint] count difference for words.
 ** @@
 ******************************************************************************/
-static ajint compare(const void *x, const void *y)
+static ajint wordCompare(const void *x, const void *y)
 {
     EmbPWord x1 = ((EmbPWord2)x)->fword;
     EmbPWord y1 = ((EmbPWord2)y)->fword;
@@ -157,7 +157,7 @@ void embWordPrintTable(AjPTable table)
     EmbPWord ajnew;
     ajint i;
 
-    qsort(array, ajTableLength(table), 2*sizeof (*array),compare);
+    qsort(array, ajTableLength(table), 2*sizeof (*array),wordCompare);
     for (i = 0; array[i]; i += 2)
     {
 	ajnew = (EmbPWord) array[i+1];
@@ -184,7 +184,7 @@ void embWordPrintTableF(AjPTable table, AjPFile outf)
     EmbPWord ajnew;
     ajint i;
 
-    qsort(array, ajTableLength(table), 2*sizeof (*array),compare);
+    qsort(array, ajTableLength(table), 2*sizeof (*array),wordCompare);
     for (i = 0; array[i]; i += 2)
     {
 	ajnew = (EmbPWord) array[i+1];
@@ -196,7 +196,7 @@ void embWordPrintTableF(AjPTable table, AjPFile outf)
     return;
 }
 
-/* @funcstatic positionListDelete *********************************************
+/* @funcstatic wordPositionListDelete ******************************************
 **
 ** deletes entries in a list of positions.
 **
@@ -206,7 +206,7 @@ void embWordPrintTableF(AjPTable table, AjPFile outf)
 ** @@
 ******************************************************************************/
 
-static void positionListDelete(void **x,void *cl)
+static void wordPositionListDelete(void **x,void *cl)
 {
     ajint *p = (ajint *)*x;
 
@@ -214,7 +214,7 @@ static void positionListDelete(void **x,void *cl)
     return;
 }
 
-/* @funcstatic vfree *********************************************
+/* @funcstatic wordVFree *********************************************
 **
 ** free the elements in a list of positons
 **
@@ -225,10 +225,10 @@ static void positionListDelete(void **x,void *cl)
 ** @@
 ******************************************************************************/
 
-static void vfree(const void *key, void **count, void *cl)
+static void wordVFree(const void *key, void **count, void *cl)
 {
     /* free the elements in the list of the positons */
-    ajListMap(((EmbPWord)*count)->list,positionListDelete, NULL);
+    ajListMap(((EmbPWord)*count)->list,wordPositionListDelete, NULL);
 
     /* free the list structure for the positions. */
     ajListFree(&((EmbPWord)*count)->list);
@@ -253,14 +253,14 @@ static void vfree(const void *key, void **count, void *cl)
 
 void embWordFreeTable(AjPTable table)
 {
-    ajTableMap(table, vfree, NULL);
+    ajTableMap(table, wordVFree, NULL);
     ajTableFree(&table);
     table = 0;
 
     return;
 }
 
-/* @funcstatic matchListDelete ***********************************************
+/* @funcstatic wordMatchListDelete *********************************************
 **
 ** deletes entries in a list of matches.
 **
@@ -270,7 +270,7 @@ void embWordFreeTable(AjPTable table)
 ** @@
 ******************************************************************************/
 
-static void matchListDelete(void **x,void *cl)
+static void wordMatchListDelete(void **x,void *cl)
 {
     EmbPWordMatch p = (EmbPWordMatch)*x;
 
@@ -292,13 +292,13 @@ void embWordMatchListDelete(AjPList* plist)
 {
     if (!*plist) return;
 
-    ajListMap(*plist,matchListDelete, NULL);
+    ajListMap(*plist,wordMatchListDelete, NULL);
     ajListFree(plist);
 
     return;
 }
 
-/* @funcstatic  matchListPrint ***********************************************
+/* @funcstatic wordMatchListPrint **********************************************
 **
 ** print the word table.
 **
@@ -308,7 +308,7 @@ void embWordMatchListDelete(AjPList* plist)
 ** @@
 ******************************************************************************/
 
-static void matchListPrint(void **x,void *cl)
+static void wordMatchListPrint(void **x,void *cl)
 {
     EmbPWordMatch p = (EmbPWordMatch)*x;
     AjPFile file = (AjPFile) cl;
@@ -333,7 +333,7 @@ static void matchListPrint(void **x,void *cl)
 
 void embWordMatchListPrint(AjPFile file, AjPList list)
 {
-    ajListMap(list,matchListPrint, file);
+    ajListMap(list,wordMatchListPrint, file);
     return;
 }
 
@@ -485,7 +485,7 @@ ajint embWordGetTable(AjPTable *table, AjPSeq seq)
     return ajTrue;
 }
 
-/* @funcstatic findWordAtPos ********************************************
+/* @funcstatic wordFindWordAtPos ********************************************
 **
 ** Looks for a word at a given position
 **
@@ -496,7 +496,7 @@ ajint embWordGetTable(AjPTable *table, AjPSeq seq)
 ** @@
 ******************************************************************************/
 
-static ajint findWordAtPos (char *word, AjPTable seq1MatchTable, ajint nextpos)
+static ajint wordFindWordAtPos (char *word, AjPTable seq1MatchTable, ajint nextpos)
 {
     EmbPWord wordmatch;
     ajint *k = &nextpos;
@@ -520,7 +520,7 @@ static ajint findWordAtPos (char *word, AjPTable seq1MatchTable, ajint nextpos)
     return 0;
 }
   
-/* @funcstatic getWholeMatch ********************************************
+/* @funcstatic wordGetWholeMatch ********************************************
 **
 ** Looks for a word length match.
 **
@@ -530,7 +530,7 @@ static ajint findWordAtPos (char *word, AjPTable seq1MatchTable, ajint nextpos)
 ** @@
 ******************************************************************************/
 
-static ajint getWholeMatch (EmbPWordMatch match, AjPTable seq1MatchTable)
+static ajint wordGetWholeMatch (EmbPWordMatch match, AjPTable seq1MatchTable)
 {
     AjPSeq seq2 = match->sequence;
     char *startptr;
@@ -550,7 +550,7 @@ static ajint getWholeMatch (EmbPWordMatch match, AjPTable seq1MatchTable)
     while (i <= ilast)
     {
 	/* find if it matches */
-	if (!findWordAtPos(startptr, seq1MatchTable, nextpos)) break;
+	if (!wordFindWordAtPos(startptr, seq1MatchTable, nextpos)) break;
 
 	match->length++;
 	nextpos++;
@@ -561,7 +561,7 @@ static ajint getWholeMatch (EmbPWordMatch match, AjPTable seq1MatchTable)
     return (nextpos+wordLength) - (match->seq1start +1);
 }
 
-/* @funcstatic orderMatchTable ************************************************
+/* @funcstatic wordOrderMatchTable ************************************************
 **
 ** Sort the hits by length then seq1 start then by seq2 start
 **
@@ -570,7 +570,7 @@ static ajint getWholeMatch (EmbPWordMatch match, AjPTable seq1MatchTable)
 ** @@
 ******************************************************************************/
 
-static void orderMatchTable(AjPList unorderedList)
+static void wordOrderMatchTable(AjPList unorderedList)
 {
     ajListSort (unorderedList, wordMatchCmp);
     return;
@@ -643,7 +643,7 @@ static ajint wordMatchCmp (const void* v1, const void* v2)
 }
 
 
-/* @funcstatic orderPosMatchTable ************************************************
+/* @funcstatic wordOrderPosMatchTable ******************************************
 **
 ** Sort the hits by seq1 start then by seq2 start
 **
@@ -652,7 +652,7 @@ static ajint wordMatchCmp (const void* v1, const void* v2)
 ** @@
 ******************************************************************************/
 
-static void orderPosMatchTable(AjPList unorderedList)
+static void wordOrderPosMatchTable(AjPList unorderedList)
 {
     ajListSort (unorderedList, wordMatchCmpPos);
     return;
@@ -884,7 +884,7 @@ AjPList embWordBuildMatchTable (AjPTable *seq1MatchTable,  AjPSeq seq2,
 		    if (curiter)
 		    {			/* add to curlist */
 		      /*ajDebug("ajListInsert using curiter\n");*/
-			listInsertOld(curiter, match2);
+			wordListInsertOld(curiter, match2);
 			/*wordCurListTrace(curlist);*/
 			/*wordCurIterTrace(curiter);*/
 		    }
@@ -932,7 +932,7 @@ AjPList embWordBuildMatchTable (AjPTable *seq1MatchTable,  AjPSeq seq2,
 
     /*wordCurListTrace(hitlist);*/
     if (orderit)
-	orderMatchTable(hitlist);
+	wordOrderMatchTable(hitlist);
 
     /*wordCurListTrace(hitlist);*/
 
@@ -1047,7 +1047,8 @@ static void wordCurIterTrace (AjIList curiter)
 }
 
 
-/* @funcstatic deadZone ******************************************************
+/* @funcstatic wordDeadZone ****************************************************
+**
 ** Determines if a match is within the region which is not overlapped by the 
 ** match starting at position (deadx1, deady1) or ending at position
 ** (deadx2, deady2). If it is in this region
@@ -1089,8 +1090,8 @@ static void wordCurIterTrace (AjIList curiter)
 ** @@
 ******************************************************************************/
 
-static ajint deadZone(EmbPWordMatch match, ajint deadx1, ajint deady1,
-		    ajint deadx2, ajint deady2, ajint minlength)
+static ajint wordDeadZone(EmbPWordMatch match, ajint deadx1, ajint deady1,
+			  ajint deadx2, ajint deady2, ajint minlength)
 {
     ajint startx = match->seq1start;
     ajint starty = match->seq2start;
@@ -1211,7 +1212,7 @@ void embWordMatchMin(AjPList matchlist, ajint seq1length, ajint seq2length)
     ajint result;
              
     /* order the matches by size - largest first */
-    orderMatchTable(matchlist);
+    wordOrderMatchTable(matchlist);
 
     /*
      *  remove all other matches in the overlapping dead-zone, truncating
@@ -1243,15 +1244,15 @@ void embWordMatchMin(AjPList matchlist, ajint seq1length, ajint seq2length)
 	    match = ajListIterNext(iter);
 
 	    /* want to remove this match if it is in the dead zone */      
-	    result = deadZone(match, deadx1, deady1, deadx2, deady2,
-			      wordLength);
+	    result = wordDeadZone(match, deadx1, deady1, deadx2, deady2,
+				  wordLength);
 	    if (result == 1)
 	    {	/*
 		 *  it is in the dead zone - remove it
 		 *  Need to free up the match structure and remove the
 		 *  current node of the list
 		 */
-		matchListDelete((void **)&match, NULL);
+		wordMatchListDelete((void **)&match, NULL);
 		ajListRemove(iter);
 	    }
 	    else if (result == 2)
@@ -1266,12 +1267,12 @@ void embWordMatchMin(AjPList matchlist, ajint seq1length, ajint seq2length)
          *  again by size
          */
 	if (truncated)
-	    orderMatchTable(matchlist);
+	    wordOrderMatchTable(matchlist);
     }
 
 
     /* sort by x start position */
-    orderPosMatchTable(minlist);
+    wordOrderPosMatchTable(minlist);
 
     /* debug */
     /*
@@ -1296,7 +1297,7 @@ void embWordMatchMin(AjPList matchlist, ajint seq1length, ajint seq2length)
 }
 
 
-/* @funcstatic listInsertOld **************************************************
+/* @funcstatic wordListInsertOld ***********************************************
 **
 ** Obsolete ajListInsert version emulation
 ** Insert an item in a list, using an iterator (if not null)
@@ -1308,7 +1309,7 @@ void embWordMatchMin(AjPList matchlist, ajint seq1length, ajint seq2length)
 ** @@
 ******************************************************************************/
 
-static void listInsertOld (AjIList iter, void* x)
+static void wordListInsertOld (AjIList iter, void* x)
 {
     AjPList list = iter->Head;
     AjPListNode p;
@@ -1325,16 +1326,16 @@ static void listInsertOld (AjIList iter, void* x)
     if(p == iter->Orig)
     {
 	if(!p->Prev->Prev)
-	    listInsertNodeOld(&list->First->Next,x);	    
+	    wordListInsertNodeOld(&list->First->Next,x);	    
 	else
-	    listInsertNodeOld(&p->Prev->Next,x);
+	    wordListInsertNodeOld(&p->Prev->Next,x);
     }
     else
     {
 	if(!p->Prev->Prev)
-	    listInsertNodeOld(&list->First,x);
+	    wordListInsertNodeOld(&list->First,x);
 	else
-	    listInsertNodeOld(&p->Prev->Prev->Next,x);
+	    wordListInsertNodeOld(&p->Prev->Prev->Next,x);
     }
     
 
@@ -1343,7 +1344,7 @@ static void listInsertOld (AjIList iter, void* x)
     return;
 }
 
-/* @funcstatic listInsertNodeOld *********************************************
+/* @funcstatic wordListInsertNodeOld *******************************************
 **
 ** Inserts a new node in a list at the current node position.
 **
@@ -1353,7 +1354,7 @@ static void listInsertOld (AjIList iter, void* x)
 ** @@
 ******************************************************************************/
 
-static void listInsertNodeOld(AjPListNode* pnode, void* x)
+static void wordListInsertNodeOld(AjPListNode* pnode, void* x)
 {
     AjPListNode p;
   
@@ -1378,14 +1379,11 @@ void embWordUnused(void)
 {
     EmbOWordMatch match;
     AjPTable ajptable=NULL;
-    ajint *x;
-    ajint *y=NULL;
     
-    (void) getWholeMatch (&match,ajptable);
-    positionListDelete((void *)&x,(void *)y);
-    wordCurListTrace(NULL);
-    wordCurIterTrace(NULL);
-    wordNewListTrace (0, NULL);
+    (void) wordGetWholeMatch (&match,ajptable);
+    wordCurListTrace(NULL);	/* comment out in embWordBuildMatchTable */
+    wordCurIterTrace(NULL);	/* comment out in embWordBuildMatchTable */
+    wordNewListTrace (0, NULL);	/* comment out in embWordBuildMatchTable */
 
     return;
 }

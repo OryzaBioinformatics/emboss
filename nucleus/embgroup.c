@@ -25,11 +25,13 @@
 
 
 static void getACDfiles (AjPList glist, AjPList alpha, char **env,
-			 AjPStr acddir, AjBool explode, AjBool colon);
+			 AjPStr acddir, AjBool explode, AjBool colon,
+			 AjBool gui);
 static void getACDdirs (AjPList glist, AjPList alpha, char **env,
-			 AjPStr acddir, AjBool explode, AjBool colon);
+			 AjPStr acddir, AjBool explode, AjBool colon,
+			 AjBool gui);
 static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
-			AjBool explode, AjBool colon);
+			AjBool explode, AjBool colon, AjBool *gui);
 static void groupNoComment (AjPStr* text);	
 static AjPStr grpParseValueRB (AjPStrTok* tokenhandle, char* delim);
 static void splitlist (AjPList groups, AjPStr value, AjBool explode,
@@ -52,12 +54,14 @@ static void addGroupsToList(AjPList alpha, AjPList glist,
 ** @param [r] embassy [AjBool] Read in EMBASSY ACD data
 ** @param [r] explode [AjBool] Expand group names around ':'
 ** @param [r] colon [AjBool] Retain ':' in group names
+** @param [r] gui [AjBool] Only report programs that are OK in GUIs
 ** @return [void] 
 ** @@
 ******************************************************************************/
 
 void embGrpGetProgGroups (AjPList glist, AjPList alpha, char **env,
-	  AjBool emboss, AjBool embassy, AjBool explode, AjBool colon)
+	  AjBool emboss, AjBool embassy, AjBool explode, AjBool colon,
+	  AjBool gui)
 {
 
     AjPStr acdroot = NULL;
@@ -111,7 +115,7 @@ void embGrpGetProgGroups (AjPList glist, AjPList alpha, char **env,
 	}
 
 	/* normal EMBOSS ACD */
-	getACDfiles(glist, alpha, env, acdroot, explode, colon);
+	getACDfiles(glist, alpha, env, acdroot, explode, colon, gui);
     }
   
     if (embassy && !doneinstall)
@@ -122,7 +126,7 @@ void embGrpGetProgGroups (AjPList glist, AjPList alpha, char **env,
 		     acdrootinst, acdpack);
 	if (ajFileDir(&acdroot))
 	    /* embassadir ACD files */
-	    getACDfiles(glist, alpha, env, acdroot, explode, colon);
+	    getACDfiles(glist, alpha, env, acdroot, explode, colon, gui);
 	else
 	{   /* look for all source directories */
 	    /*      ajDebug ("acd directory '%S' not opened\n", acdroot); */
@@ -130,7 +134,7 @@ void embGrpGetProgGroups (AjPList glist, AjPList alpha, char **env,
 	    (void) ajFileDirUp (&acdrootdir);
 	    ajFmtPrintS (&acdroot, "%Sembassy/", acdrootdir);
 	    /* embassadir ACD files */
-	    getACDdirs(glist, alpha, env, acdroot, explode, colon);
+	    getACDdirs(glist, alpha, env, acdroot, explode, colon, gui);
 	}
   	
     }
@@ -160,12 +164,14 @@ void embGrpGetProgGroups (AjPList glist, AjPList alpha, char **env,
 ** @param [r] acddir [AjPStr] path of directory holding ACD files to read in
 ** @param [r] explode [AjBool] Expand group names around ':'
 ** @param [r] colon [AjBool] Retain ':' in group names
+** @param [r] gui [AjBool] Report only those applications OK in GUIs
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void getACDdirs (AjPList glist, AjPList alpha, char **env,
-			 AjPStr acddir, AjBool explode, AjBool colon) {
+			 AjPStr acddir, AjBool explode, AjBool colon,
+			 AjBool gui) {
 
   DIR *dirp;
   DIR *dirpa;
@@ -187,7 +193,7 @@ static void getACDdirs (AjPList glist, AjPList alpha, char **env,
     (void) ajFmtPrintS(&dirname, "%S%s/emboss_acd/", acddir, dp->d_name);
     if ((dirpa = opendir(ajStrStr(dirname)))) {
 /*      ajDebug ("testing directory '%S'\n", dirname); */
-      getACDfiles (glist, alpha, env, dirname, explode, colon);
+      getACDfiles (glist, alpha, env, dirname, explode, colon, gui);
       closedir (dirpa);
     }
     else {
@@ -213,12 +219,14 @@ static void getACDdirs (AjPList glist, AjPList alpha, char **env,
 ** @param [r] acddir [AjPStr] path of directory holding ACD files to read in
 ** @param [r] explode [AjBool] Expand group names around ':'
 ** @param [r] colon [AjBool] Retain ':' in group names
+** @param [r] gui [AjBool] Report only those applications OK in GUIs
 ** @return [void] 
 ** @@
 ******************************************************************************/
 
 static void getACDfiles (AjPList glist, AjPList alpha, char **env,
-			 AjPStr acddir, AjBool explode, AjBool colon) {
+			 AjPStr acddir, AjBool explode, AjBool colon,
+			 AjBool gui) {
 
   DIR *dirp;
   struct dirent *dp;
@@ -228,6 +236,7 @@ static void getACDfiles (AjPList glist, AjPList alpha, char **env,
   AjPStr applpath = NULL;	/* path of application */
   AjPStr doc = NULL;
   AjPList groups = NULL;
+  AjBool guiresult;
 
 /* go through all the files in this directory */
   if ((dirp = opendir(ajStrStr(acddir))) == NULL) {   /* open our directory */
@@ -248,12 +257,17 @@ static void getACDfiles (AjPList glist, AjPList alpha, char **env,
 /* open the file and parse it */
           if ((file = ajFileNewIn(progpath)) != NULL) {
             groups = ajListstrNew();
-            parse(file, &appl, &doc, groups, explode, colon);
+            parse(file, &appl, &doc, groups, explode, colon, &guiresult);
 
 /* see if the appl is the name of a real program */
 	    (void) ajStrAss(&applpath, appl);
             if (ajSysWhichEnv(&applpath, env)) {
-              addGroupsToList(alpha, glist, groups, appl, doc);
+/* see if the appl is OK in GUIs or we don't want just GUI apps */
+              if (guiresult || !gui) {
+                addGroupsToList(alpha, glist, groups, appl, doc);
+              } else {
+              	ajDebug("%S is not a OK in GUIs\n", appl);
+              }
             } else {
 /*              ajDebug("%S is not a program\n", applpath); */
             }
@@ -287,12 +301,13 @@ static void getACDfiles (AjPList glist, AjPList alpha, char **env,
 ** @param [w] groups [AjPList] Program groups string
 ** @param [r] explode [AjBool] Expand group names around ':'
 ** @param [r] colon [AjBool] Retain ':' in group names
+** @param [w] gui [AjBool*] returns ajTrue if application is OK in GUIs
 **
 ** @return [void] 
 ** @@
 **************************************************************************/
 static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
-	AjBool explode, AjBool colon) {
+	AjBool explode, AjBool colon, AjBool *gui) {
 
   AjPStr line = NULL;
   AjPStr text = NULL;
@@ -308,9 +323,13 @@ static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
   ajint donegroup = ajFalse;
   AjPStr nullgroup = NULL;
   AjPStr newstr = NULL;
+  AjPStr tmpvalue = NULL;  
 
 /* initialise a name for programs with no assigned group */	
   (void) ajStrAppC(&nullgroup, "ASSORTED");
+
+/* if 'gui' not defined in ACD, default is 'gui: Y' */
+  *gui = ajTrue;
 
 /* read file into one line, stripping out comment lines and blanks */
   while (ajFileReadLine (file, &line)) {
@@ -338,7 +357,7 @@ static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
 
   token=ajStrNew();
       
-/* is the next token 'doc' or 'groups' */
+/* is the next token 'doc' or 'groups' or 'gui' */
     while (ajStrToken (&tmpstr, &tokenhandle, whiteplus)) {
       while (ajStrCmpC(tmpstr, "]")) {
         (void) ajStrAss (&token, tmpstr);
@@ -358,6 +377,15 @@ static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
           (void) ajStrChomp(doc);
           (void) ajStrTrimC(doc, ".,");
 
+        } else if (ajStrPrefixC(token, "gui")) {
+          (void) ajStrAss (&tmpvalue, value);
+          (void) ajStrChomp(&tmpvalue);
+	  ajDebug ("gui value '%S'\n", tmpvalue);
+/* test for '[Nn]*' */
+          if (tolower((ajStrStr(tmpvalue))[0]) == 'n') {
+            *gui = ajFalse;
+          }
+          ajStrDel(&tmpvalue);
         } else if (ajStrPrefixC(token, "group")) {
           donegroup = ajTrue;
           splitlist (groups, value, explode, colon);

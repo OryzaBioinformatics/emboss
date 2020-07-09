@@ -31,7 +31,7 @@ Example: complement of the sequence
 
 Create a new type in the descriptor object types 'enum ShowEValtype'. 
 eg: SH_COMP
-Use this to refer to this type in later routines. (eg: by embShowAddComp())
+Use this to refer to this type in later routines. (eg: by embShowAddComp)
 
 Create a structure to hold information about what options for this type
 you can have. 
@@ -39,7 +39,7 @@ eg: typedef struct EmbSShowComp { ... }
 
 Create a function called by the user to set up the new type as the next
 thing to be displayed in the list of things.
-eg: embShowAddComp()
+eg: embShowAddComp
 
 Create the routine to actually output a line's length of whatever is
 being displayed from position 'pos' of the sequence - the output is
@@ -49,7 +49,7 @@ These strings need not be complete lines - you can push many strings of
 partial lines if you prefer.
 End the lines to be output by pushing a string ending with a '\n'.
 As many lines as you wish may be pushed onto the lines list.
-eg: showFillComp()
+eg: showFillComp
 
 Add a case statement to showFillLines to call the showFill* routine.
 eg:
@@ -135,6 +135,8 @@ static void    showFillTran(EmbPShow thys, AjPList lines, EmbPShowTran info,
 			    ajint pos);
 static void    showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info,
 			  ajint pos);
+static void    showFillNote(EmbPShow thys, AjPList lines, EmbPShowNote info,
+			  ajint pos);
 
 static void showDelSeq (EmbPShowSeq info);
 static void showDelBlank (EmbPShowBlank info);
@@ -144,6 +146,7 @@ static void showDelComp (EmbPShowComp info);
 static void showDelTran (EmbPShowTran info);
 static void showDelRE (EmbPShowRE info);
 static void showDelFT (EmbPShowFT info);
+static void showDelNote (EmbPShowNote info);
 static void showAddTags(AjPStr *tagsout, AjPFeature feat, AjBool values);
 	
 
@@ -266,11 +269,11 @@ void embShowDel (EmbPShow* pthis)
      ****** MOST EMPHATICALLY DO NOT:
      ****** <free the sequence>
      ****** 
-     ****** It took me a ajlong time to work out why showseq was crashing after
+     ****** It took me a long time to work out why showseq was crashing after
      ****** the first sequence.
      ****** 
      ****** It was because I was dutifully freeing up all the data held in
-     ****** this structure and 'seq' is later freed by ajSeqallNext()
+     ****** this structure and 'seq' is later freed by ajSeqallNext
      ******/
     /*****  DO NOT: ajSeqDel(&pthis->seq); *****/
 
@@ -319,6 +322,10 @@ void embShowDel (EmbPShow* pthis)
 	    (void) showDelFT(info);
 	    break;
 
+	case SH_NOTE:
+	    (void) showDelNote(info);
+	    break;
+
 	default:
 	    (void) ajFatal("Unknown descriptor type found in embShowDel: %d",
 			   type);
@@ -330,7 +337,7 @@ void embShowDel (EmbPShow* pthis)
 
     (void) ajListIterFree(iter);
 
-    /* we have already freed the descriptors, so use ajListDel() here */ 
+    /* we have already freed the descriptors, so use ajListDel here */ 
     while(ajListPop(thys->list,(void **)&ptr));
     (void) ajListDel(&thys->list);
 
@@ -463,7 +470,23 @@ static void showDelRE (EmbPShowRE info) {
 
 static void showDelFT (EmbPShowFT info) {
 
-  /*(void) ajFeattabDel(&(info->feat));*/ /* cloned pointer in showeseq etc.*/
+  (void) ajFeattableDel(&(info->feat)); /* cloned pointer in showseq etc.*/
+  AJFREE(info);
+
+}
+
+
+/* @funcstatic showDelNote ***********************************************************
+**
+** Deletes a show annotation region descriptor object.
+**
+** @param [P] info [EmbPShowNote] Show annotation region descriptor object
+** @return [void]
+** @@
+******************************************************************************/
+
+static void showDelNote (EmbPShowNote info) {
+
   AJFREE(info);
 
 }
@@ -695,6 +718,30 @@ void embShowAddFT (EmbPShow thys, AjPFeattable feat) {
   return;
 }
 
+/* @func embShowAddNote *******************************************************
+**
+** Adds the annotations to be displayed to the list of things to show
+**
+** @param [r] thys [EmbPShow] Show sequence object
+** @param [r] regions [AjPRange] Sequence range(s)
+** @return [void]
+** @@
+******************************************************************************/
+
+void embShowAddNote (EmbPShow thys, AjPRange regions) {
+
+  EmbPShowNote info;
+(void) ajDebug("embShowAddNote\n");
+  
+  AJNEW0(info);
+
+  info->regions = regions;	/* regions to note */
+
+  (void) ajListPushApp(thys->list, showInfoNew(info, SH_NOTE));
+
+  return;
+}
+
 /* ==================================================================== */
 /* =========================== Modifiers ============================== */
 /* ==================================================================== */
@@ -764,8 +811,9 @@ void embShowPrint(AjPFile out, EmbPShow thys)
 	     *  we assume that newline characters only occur at the end of
 	     *  lines
 	     */
-	    if (ajStrStr(line)[ajStrLen(line)-1] == '\n')
-		count++;
+	    if(ajStrLen(line))
+		if (ajStrStr(line)[ajStrLen(line)-1] == '\n')
+		    count++;
 	(void) ajListIterFree(liter);
 
 	/* thys->length is zero if we have an indefinite page length */
@@ -885,6 +933,10 @@ static void showFillLines(AjPList lines, EmbPShow thys, ajint pos)
 
 	case SH_FT:
 	    (void) showFillFT(thys, lines, info, pos);
+	    break;
+
+	case SH_NOTE:
+	    (void) showFillNote(thys, lines, info, pos);
 	    break;
 
 	default:
@@ -1624,7 +1676,7 @@ static void showFillREupright(EmbPShow thys, AjPList lines, EmbPShowRE info,
 {
     AjPStr line=NULL;
     AjPStr newline=NULL;
-    AjPStr baseline=ajStrNew();		/* line holding first set of ticks */
+    AjPStr baseline;			/* line holding first set of ticks */
     AjPList linelist = ajListstrNew();	/* list of lines to fill */
     ajint cut;				/* the sites to display */
     AjIList liter;			/* iterator for linelist */
@@ -1637,6 +1689,8 @@ static void showFillREupright(EmbPShow thys, AjPList lines, EmbPShowRE info,
     AjPStr tick=NULL;			/* tick "|" string */
     ajint ln;
     AjPStr sajb=NULL;
+
+    baseline = ajStrNew();
   
     /* if we have not yet produced a sorted list of cut sites, do it now */
     if (info->sitelist == NULL)
@@ -1702,7 +1756,7 @@ static void showFillREupright(EmbPShow thys, AjPList lines, EmbPShowRE info,
 
 	    /*
 	     *  we will be potentially updating the nodes of linelist, so
-	     *  don't just iterate, use ajListstrPop() and ajListstrPushApp()
+	     *  don't just iterate, use ajListstrPop and ajListstrPushApp
 	     *  to pop off the bottom and then push the altered node back on
 	     *  the top of the list
 	     */
@@ -1782,7 +1836,7 @@ static void showFillREupright(EmbPShow thys, AjPList lines, EmbPShowRE info,
 
     /* tidy up */
     while(ajListstrPop(linelist,&sajb));
-    /* do not use ajListstrFree() here! */
+    /* do not use ajListstrFree here! */
     (void) ajListstrDel(&linelist);
     ajStrDel(&tick);
 }
@@ -2133,7 +2187,7 @@ static void showFillREflat(EmbPShow thys, AjPList lines, EmbPShowRE info,
 
 	    /*
 	     *  we will be potentially updating the nodes of linelist, so
-	     *  don't just iterate, use ajListstrPop() and ajListstrPushApp()
+	     *  don't just iterate, use ajListstrPop and ajListstrPushApp
 	     *  to pop off the bottom and then push the altered node back on
 	     *  the top of the list
 	     */
@@ -2148,7 +2202,7 @@ static void showFillREflat(EmbPShow thys, AjPList lines, EmbPShowRE info,
 		if (!freespace)
 		{
 		    /* if name space is clear, write name and site */
-		    /* ajDebug("Calling showLineIsClear() for region %d to "
+		    /* ajDebug("Calling showLineIsClear for region %d to "
 		       "%d", start-pos, end-pos); */
 		    if (showLineIsClear(&line, start-pos, end-pos))
 		    {
@@ -2221,7 +2275,7 @@ static void showFillREflat(EmbPShow thys, AjPList lines, EmbPShowRE info,
 	ajStrConvertCC (&line, claimchar, " ");
 
 	/*
-	 *  remove trailing spaces - these can be very ajlong in namestr when
+	 *  remove trailing spaces - these can be very long in namestr when
 	 *  the cut and recognition sites are widely separated and so many
 	 *  claimchars have been appended
 	 */
@@ -2245,7 +2299,7 @@ static void showFillREflat(EmbPShow thys, AjPList lines, EmbPShowRE info,
 
     /* tidy up */
     while(ajListstrPop(linelist,&sajb));
-    /* do not use ajListstrFree() here! */
+    /* do not use ajListstrFree here! */
     (void) ajListstrDel(&linelist);
 
     return;
@@ -2305,19 +2359,19 @@ static void showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info, ajint pos)
      *
      *  AjEFeatClass      Class ;
      *  AjPFeattable      Owner ;
-     *  AjPFeatVocFeat     Source ;
-     *  AjPFeatVocFeat     Type ;
-     *  ajint               Start ;
-     *  ajint               End; 
-     *  ajint               Start2;
-     *  ajint               End2;
+     *  AjPFeatVocFeat    Source ;
+     *  AjPFeatVocFeat    Type ;
+     *  ajint             Start ;
+     *  ajint             End; 
+     *  ajint             Start2;
+     *  ajint             End2;
      *  AjPStr            Score ;
      *  AjPList           Tags ;  a.k.a. the [group] field tag-values of GFF2 
      *  AjPStr            Comment ;
      *  AjEFeatStrand     Strand ;
      *  AjEFeatFrame      Frame ;
      *  AjPStr            desc ;
-     *  ajint               Flags;
+     *  ajint             Flags;
      *
      */
 
@@ -2330,7 +2384,10 @@ static void showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info, ajint pos)
 	{
 	    gf = ajListIterNext (iter) ;
     
-	    /* don't output the 'source' feature - it is very irritating! */
+            /* ignore remote IDs */
+            if (!ajFeatIsLocal(gf)) continue;
+
+            /* don't output the 'source' feature - it is very irritating! */
 	    if (!ajStrCmpC(gf->Type, "source")) continue;
 
 	    /*
@@ -2363,7 +2420,7 @@ static void showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info, ajint pos)
 	    namestart = start;
 	    nameend =  start + ajStrLen(namestr)-1;
 
-	    /* shift ajlong namestr back if longer than the line when printed */
+	    /* shift long namestr back if longer than the line when printed */
 	    if (nameend > pos+thys->width-1+thys->margin)
 	    {
 		/*ajDebug("name is longer than margin");*/
@@ -2436,8 +2493,8 @@ static void showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info, ajint pos)
 	    /*
 	     *  iterate through list of existing lines to find no overlap
 	     *  with existing lines we will be potentially updating the
-	     *  nodes of linelist, so don't just iterate, use ajListstrPop()
-	     *  and ajListstrPushApp() to pop off the bottom and then push
+	     *  nodes of linelist, so don't just iterate, use ajListstrPop
+	     *  and ajListstrPushApp to pop off the bottom and then push
 	     *  the altered node back on the top of the list
 	     */
 	    for (ln = ajListstrLength(linelist); ln>0; ln--)
@@ -2453,7 +2510,7 @@ static void showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info, ajint pos)
 		if (!freespace)
 		{
 		    /* if name space is clear, write namestr and sitestr */
-		    /* ajDebug("Calling showLineIsClear() for region %d to"
+		    /* ajDebug("Calling showLineIsClear for region %d to"
 		       " %d", start-pos, end-pos); */
 		    if (showLineIsClear(&line2, start-pos, end-pos) &&
 			showLineIsClear(&line2, namestart-pos, nameend-pos))
@@ -2513,7 +2570,7 @@ static void showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info, ajint pos)
 	 */
 	ajStrConvertCC (&line, claimchar, " ");
 
-	/* remove trailing spaces - these can be very ajlong */
+	/* remove trailing spaces - these can be very long */
 	for (i=ajStrLen(line)-1; i>=0; i--)
 	    if (*(ajStrStr(line)+i) != ' ')
 		break;
@@ -2532,12 +2589,256 @@ static void showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info, ajint pos)
     (void) ajListIterFree(liter);
 
     /* tidy up */
-    /* do not use ajListstrFree() here! */
+    /* do not use ajListstrFree here! */
     while(ajListstrPop(linelist,&sajb));
     (void) ajListstrDel(&linelist);
 
     return;
 }
+
+
+/* @funcstatic showFillNote ***************************************************
+**
+** Add this line's worth of user annotation to the lines list
+**
+** @param [P] thys [EmbPShow] Show sequence object
+** @param [u] lines [AjPList] list of lines to add to
+** @param [r] info [EmbPShowNote] data on how to display the annotation
+** @param [r] pos [ajint] current printing position in the sequence
+** @return [void]
+** @@
+******************************************************************************/
+static void showFillNote(EmbPShow thys, AjPList lines, EmbPShowNote info,
+			  ajint pos)
+{
+
+    AjPStr line=NULL;
+    AjPStr line2=NULL;
+    AjPList linelist=NULL;	/* list of lines to fill */
+    ajint start, end;		/* start and end position of linestr */
+    ajint namestart, nameend;	/* start and end position of namestr */
+    AjIList liter;		/* iterator for linelist */
+    AjPStr namestr=NULL;	/* name of feature to insert into line */
+    AjPStr linestr=NULL;	/* line graphics to insert */
+    ajint i;
+    char *claimchar = "*";	/* char used to stake a claim to */
+                                /* that position in the string */
+    AjBool freespace;		/* flag for found a free space to */
+    /* print in */ 
+    ajint ln;
+    AjPStr sajb=NULL;
+    
+    ajint count;		/* count of annotation region */
+    ajint rstart, rend;		/* region start and end */
+
+    (void) ajDebug("showFillFT\n");
+    linelist = ajListstrNew();
+    
+    /* count through the annotation regions */
+    if (info->regions && ajRangeNumber(info->regions))
+    {
+	for (count = 0; count < ajRangeNumber(info->regions); count++)
+	{
+            ajRangeValues(info->regions, count, &rstart, &rend);
+
+	    /*
+	     * check that the region is within the line to display
+	     */
+	    if (pos+1 > rend || pos+thys->width < rstart)
+		continue;
+
+	    /*
+	       ajDebug("pos = %d annotation = %d-%d", pos, rstart, rend);
+	    */
+
+	    /* get annotation string */
+            ajRangeText (info->regions, count, &namestr);
+      
+	    /*
+	     *  note the start and end positions of the name and line
+	     *  graphics
+	     */
+	    start = (rstart-1<pos) ? pos : rstart-1;
+	    end = (rend-1>pos+thys->width-1) ? pos+thys->width-1 :
+		rend-1;
+	    /* print the name starting with the line */
+	    namestart = start;
+	    nameend =  start + ajStrLen(namestr)-1;
+
+	    /* shift long namestr back if longer than the line when printed */
+	    if (nameend > pos+thys->width-1+thys->margin)
+	    {
+		/*ajDebug("name is longer than margin");*/
+		if (ajStrLen(namestr) > end-pos+1)
+		{
+		    /* ajDebug("name is longer than the line - shifting to "
+		       "start of line"); */
+		    namestart = pos;
+		    nameend = pos + ajStrLen(namestr) -1;
+		    /*
+		     *  it is shifted back to the start of the display line
+		     *  is it still longer than the line? truncate it
+		     */
+		    if (nameend > thys->width-1+thys->margin)
+		    {
+			/* ajDebug("...still longer than the line, truncate "
+			   "it to %d chars", thys->width-1+thys->margin); */
+			ajStrTruncate(&namestr, thys->width-1+thys->margin);
+			nameend = pos+thys->width-1+thys->margin;
+		    }
+		}
+		else
+		{
+		    /*ajDebug("Not longer than the line now");*/
+		    namestart = end - ajStrLen(namestr)+1;
+		    nameend = namestart + ajStrLen(namestr)-1;
+		}
+	    }
+
+	    /*
+	     *  add on any claim characters required to stake a claim to
+	     *  positions used by the line graphics
+	     */
+	    if (end > nameend)
+	    {
+		(void) ajStrAppKI(&namestr, *claimchar, end-nameend);
+		nameend = end;
+	    }
+
+	    /*
+	     *  add on a couple more claim characters to space out the
+	     *  features
+	     */
+	    ajStrAppKI(&namestr, *claimchar, 2);
+	    nameend += 2;
+
+	    /* prepare line string */
+	    /* initial string of '-'s */
+	    linestr = ajStrNew();
+	    (void) ajStrAppKI(&linestr, '-', end-start+1 );
+
+	    /* put in end position characters */
+	    if (rstart-1>=pos)
+		*(ajStrStr(linestr)) = '|';
+	    if (rend-1<=pos+thys->width-1)
+		*(ajStrStr(linestr)+end-start) = '|';
+
+
+	    /*
+	       ajDebug("pos=%d, start=%d, end=%d, namestart=%d, nameend=%d,"
+	       " end-pos=%d", pos, start, end, namestart, nameend, end-pos);
+	       ajDebug("namestr=  %S", namestr);
+	       ajDebug("linestr=  %S", linestr);
+	       */
+
+
+	    /* work up list of lines */
+	    freespace = ajFalse;
+
+	    /*
+	     *  iterate through list of existing lines to find no overlap
+	     *  with existing lines we will be potentially updating the
+	     *  nodes of linelist, so don't just iterate, use ajListstrPop
+	     *  and ajListstrPushApp to pop off the bottom and then push
+	     *  the altered node back on the top of the list
+	     */
+	    for (ln = ajListstrLength(linelist); ln>0; ln--)
+	    {
+		/* get the linestr line */
+		(void) ajListstrPop(linelist, &line);
+		/* get the namestr line */
+		(void) ajListstrPop(linelist, &line2);
+		/*
+		 *  if we have not yet written the name in this set of
+		 *  iterations, see if we can do so now
+		 */
+		if (!freespace)
+		{
+		    /* if name space is clear, write namestr and sitestr */
+		    /* ajDebug("Calling showLineIsClear for region %d to"
+		       " %d", start-pos, end-pos); */
+		    if (showLineIsClear(&line2, start-pos, end-pos) &&
+			showLineIsClear(&line2, namestart-pos, nameend-pos))
+		    {
+			/* ajDebug("over printing clear region start=%d-pos"
+			   "=%d", start-pos, end-pos); */
+			showOverPrint(&line, start-pos, linestr);
+			/* ajDebug("over printing clear region namestart=%d"
+			   "-nameend=%d", namestart-pos, nameend-pos); */
+			showOverPrint(&line2, namestart-pos, namestr);
+			/* flag to show we have written name */
+			freespace = ajTrue;
+		    }
+		}
+
+		(void) ajListstrPushApp(linelist, line);
+		(void) ajListstrPushApp(linelist, line2);
+		/* end 'iteration' through lines */
+	    }
+
+	    /*
+	     *  if we didn't find a clear region to print in, append two new
+	     *  strings and print in them
+	     */
+	    if (!freespace)
+	    {
+		/* ajDebug("Create a new list line. No=%d+2",
+		   ajListstrLength(linelist));*/
+		line=ajStrNew();
+		/* fill with spaces */
+		(void) ajStrAppKI(&line, ' ', thys->width);
+		line2=ajStrNew();
+		/* fill with spaces */
+		(void) ajStrAppKI(&line2, ' ', thys->width);
+		/*ajDebug("start=%d, pos=%d", start-pos, end-pos);*/
+		showOverPrint(&line, start-pos, linestr);
+		/*ajDebug("start=%d, pos=%d", start-start, end-pos);*/
+		showOverPrint(&line2, namestart-pos, namestr);
+		(void) ajListstrPushApp(linelist, line);
+		(void) ajListstrPushApp(linelist, line2);
+	    }
+
+	    /* tidy up */
+	    ajStrDel(&namestr);
+	    ajStrDel(&linestr);
+	}
+    }
+
+    /* iterate through the lines and print them */
+    liter = ajListIter(linelist);
+    while ((line = ajListIterNext(liter)) != NULL)
+    {
+	/*  convert claim characters in the line to spaces as these were
+	 *  used to stake a claim to the space
+	 */
+	ajStrConvertCC (&line, claimchar, " ");
+
+	/* remove trailing spaces - these can be very long */
+	for (i=ajStrLen(line)-1; i>=0; i--)
+	    if (*(ajStrStr(line)+i) != ' ')
+		break;
+
+	ajStrTruncate(&line, i+1);
+
+	/* output to the lines list */
+	/* variable width margin at left */
+	(void) showMargin(thys, lines);
+	/* with optional number in it */
+	/* put the translation line on the output list */
+	(void) ajListstrPushApp(lines, line);
+	/* end output line */
+	(void) ajListstrPushApp(lines, ajFmtStr("\n"));
+    }
+    (void) ajListIterFree(liter);
+
+    /* tidy up */
+    /* do not use ajListstrFree here! */
+    while(ajListstrPop(linelist,&sajb));
+    (void) ajListstrDel(&linelist);
+
+    return;
+}
+
 
 
 /* @funcstatic showOverPrint ************************************************
@@ -2586,7 +2887,7 @@ if (*(ajStrStr(*target)+i+start) == '\0' || *(ajStrStr(insert)+i) == '\0')
   }
 /*  
 ajDebug("result is: >%S<", *target);
-ajDebug("exiting showOverPrint()");  
+ajDebug("exiting showOverPrint");  
 */
 }
 

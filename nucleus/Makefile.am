@@ -2,6 +2,14 @@
 
 lib_LTLIBRARIES = libnucleus.la
 
+if ISSHARED
+if ISAIXIA64
+AM_CFLAGS = -Wl,-G -lm -L../ajax/.libs -lajax
+else
+AM_CFLAGS =
+endif
+endif
+
 INCLUDES = -I$(top_srcdir)/plplot $(X_CFLAGS) -I$(srcdir)/ -I$(top_srcdir)/ajax
 
 LIBS =
