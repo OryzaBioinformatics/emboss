@@ -1,0 +1,169 @@
+
+                               EMBOSS: notseq
+     _________________________________________________________________
+   
+                                Program notseq
+                                       
+Function
+
+   Excludes a set of sequences and writes out the remaining ones
+   
+Description
+
+   When you have a set of sequences (a file of multiple sequences?) and
+   you wish to remove one or more of them from the set, then use notseq.
+   
+   This program was written for the case where a file containing several
+   sequences is being used as a small database, but some of the sequences
+   are no longer required and must be deleted from the file.
+   
+   notseq splits the input sequences into those that you wish to keep and
+   those you wish to exclude.
+   
+   notseq takes a set of sequences as input together with a list of
+   sequence names or accession numbers. It also takes the name of a new
+   file to write the files that you want to keep into, and optionally the
+   name of a file that will contain the files that you want excluded from
+   the set.
+   
+   notseq then reads in the input sequences. It outputs the ones that
+   match one of the sequence names or acession numbers to the file of
+   excluded sequences, and those that don't match are output to the file
+   of sequences to be kept.
+   
+Usage
+
+   Here is a sample session with notseq. In this case the excluded
+   sequences ('clone186' and 'clone876') are simply thrown away and not
+   saved to any file.
+   
+% notseq
+Input sequence(s): mydata.seq
+Output sequence [clone001.fasta]: mydata2.seq
+Sequence names to exclude: clone186, clone876
+
+   Here is an example where the sequences to be excluded are saved to
+   another file:
+   
+% notseq -junkout excluded.seq
+Input sequence(s): mydata.seq
+Output sequence [clone001.fasta]: mydata2.seq
+Sequence names to exclude: clone99*
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outseq]            seqoutall  Output sequence(s) USA
+  [-exclude]           string     Enter a list of sequence names or accession
+                                  numbers to exclude from the sequences read
+                                  in. The excluded sequences will be written
+                                  to the file specified in the 'junkout'
+                                  parameter. The remainder will be written out
+                                  to the file specified in the 'outseq'
+                                  parameter.
+                                  The list of sequence names can be separated
+                                  by either spaces or commas.
+                                  The sequence names can be wildcarded.
+                                  The sequence names are case independent.
+                                  An example of a list of sequences to be
+                                  excluded is:
+                                  myseq, hs*, one two three
+
+   Optional qualifiers:
+   -junkout            seqoutall  This file collects the sequences which you
+                                  have excluded from the main output file of
+                                  sequences.
+
+   Advanced qualifiers: (none)
+   
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-outseq]
+   (Parameter 2) Output sequence(s) USA Writeable sequence(s)
+   <sequence>.format
+   [-exclude]
+   (Parameter 3) Enter a list of sequence names or accession numbers to
+   exclude from the sequences read in. The excluded sequences will be
+   written to the file specified in the 'junkout' parameter. The
+   remainder will be written out to the file specified in the 'outseq'
+   parameter. The list of sequence names can be separated by either
+   spaces or commas. The sequence names can be wildcarded. The sequence
+   names are case independent. An example of a list of sequences to be
+   excluded is: myseq, hs*, one two three Any string is accepted An empty
+   string is accepted
+   Optional qualifiers Allowed values Default
+   -junkout This file collects the sequences which you have excluded from
+   the main output file of sequences. Writeable sequence(s) /dev/null
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   Normal sequence USA.
+   
+Output file format
+
+   Normal sequence USA.
+   
+Data files
+
+   None.
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   If no matches are found to any of the specified sequence names, the
+   message "This is a warning: No matches found." is displayed.
+   
+Exit status
+
+   It exits with a status of 0 unless no matches are found to any of the
+   input sequences name, in which case it exits with a status of -1.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name                          Description
+   abiview      Reads ABI file and display the trace
+   cirdna       Draws circular maps of DNA constructs
+   entret       Reads and writes (returns) flatfile entries
+   lindna       Draws linear maps of DNA constructs
+   remap        Display a sequence with restriction cut sites, translation etc
+   seqret       Reads and writes (returns) sequences
+   seqretall    Reads and writes (returns) a set of sequences one at a time
+   seqretset    Reads and writes (returns) a set of sequences all at once
+   seqretsplit  Reads and writes (returns) sequences in individual files
+   showfeat     Show features of a sequence
+   showseq      Display a sequence with features, translation etc
+   
+Author(s)
+
+   This application was written by Gary Williams
+   (gwilliam@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (9 Jan 2001) - Gary Williams
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
