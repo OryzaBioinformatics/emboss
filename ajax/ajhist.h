@@ -42,6 +42,12 @@ extern "C"
 
 extern ajint aj_hist_mark;    
 
+/* @data AjPHistData *******************************************************
+**
+** AJAX data structure for histogram graph data
+**
+******************************************************************************/
+
 typedef struct AjSHistData {
   float *data; /* y coors */
   AjBool deletedata;
@@ -53,6 +59,12 @@ typedef struct AjSHistData {
   AjPStr yaxis;
   /*  AjPStr yaxisright;*/
 } AjOHistData, *AjPHistData;
+
+/* @data AjPHist *******************************************************
+**
+** AJAX data structure for histogram graph objects
+**
+******************************************************************************/
 
 typedef struct AjSHist {
   ajint numofsets;        /* number of current sets */

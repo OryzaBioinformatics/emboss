@@ -251,9 +251,10 @@ embaln.lo embaln.o : embaln.c emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
 	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
 	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
-	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajseq.h \
-	../ajax/ajseqdata.h ../ajax/ajseqtype.h ../ajax/ajarr.h \
-	../ajax/ajseqread.h ../ajax/ajseqwrite.h ../ajax/ajseqdb.h \
+	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajfeatdata.h \
+	../ajax/ajseqdata.h ../ajax/ajseq.h ../ajax/ajseqtype.h \
+	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
+	../ajax/ajseqdb.h ../ajax/ajseqabi.h ../ajax/ajreport.h \
 	../ajax/ajmatrices.h ../ajax/ajrange.h ../ajax/ajcod.h \
 	../ajax/ajmath.h ../ajax/ajutil.h ../ajax/ajnam.h \
 	../ajax/ajmess.h ../ajax/ajposreg.h ../ajax/hsp_regex.h \
@@ -269,9 +270,10 @@ embcom.lo embcom.o : embcom.c emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
 	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
 	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
-	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajseq.h \
-	../ajax/ajseqdata.h ../ajax/ajseqtype.h ../ajax/ajarr.h \
-	../ajax/ajseqread.h ../ajax/ajseqwrite.h ../ajax/ajseqdb.h \
+	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajfeatdata.h \
+	../ajax/ajseqdata.h ../ajax/ajseq.h ../ajax/ajseqtype.h \
+	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
+	../ajax/ajseqdb.h ../ajax/ajseqabi.h ../ajax/ajreport.h \
 	../ajax/ajmatrices.h ../ajax/ajrange.h ../ajax/ajcod.h \
 	../ajax/ajmath.h ../ajax/ajutil.h ../ajax/ajnam.h \
 	../ajax/ajmess.h ../ajax/ajposreg.h ../ajax/hsp_regex.h \
@@ -288,9 +290,10 @@ embcons.lo embcons.o : embcons.c emboss.h ../ajax/ajax.h \
 	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
 	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
 	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajseq.h ../ajax/ajseqdata.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
+	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
+	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
+	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
+	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
 	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
 	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
 	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
@@ -307,9 +310,10 @@ embdata.lo embdata.o : embdata.c emboss.h ../ajax/ajax.h \
 	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
 	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
 	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajseq.h ../ajax/ajseqdata.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
+	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
+	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
+	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
+	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
 	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
 	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
 	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
@@ -325,9 +329,10 @@ embdbi.lo embdbi.o : embdbi.c emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
 	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
 	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
-	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajseq.h \
-	../ajax/ajseqdata.h ../ajax/ajseqtype.h ../ajax/ajarr.h \
-	../ajax/ajseqread.h ../ajax/ajseqwrite.h ../ajax/ajseqdb.h \
+	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajfeatdata.h \
+	../ajax/ajseqdata.h ../ajax/ajseq.h ../ajax/ajseqtype.h \
+	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
+	../ajax/ajseqdb.h ../ajax/ajseqabi.h ../ajax/ajreport.h \
 	../ajax/ajmatrices.h ../ajax/ajrange.h ../ajax/ajcod.h \
 	../ajax/ajmath.h ../ajax/ajutil.h ../ajax/ajnam.h \
 	../ajax/ajmess.h ../ajax/ajposreg.h ../ajax/hsp_regex.h \
@@ -343,9 +348,10 @@ embest.lo embest.o : embest.c emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
 	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
 	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
-	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajseq.h \
-	../ajax/ajseqdata.h ../ajax/ajseqtype.h ../ajax/ajarr.h \
-	../ajax/ajseqread.h ../ajax/ajseqwrite.h ../ajax/ajseqdb.h \
+	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajfeatdata.h \
+	../ajax/ajseqdata.h ../ajax/ajseq.h ../ajax/ajseqtype.h \
+	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
+	../ajax/ajseqdb.h ../ajax/ajseqabi.h ../ajax/ajreport.h \
 	../ajax/ajmatrices.h ../ajax/ajrange.h ../ajax/ajcod.h \
 	../ajax/ajmath.h ../ajax/ajutil.h ../ajax/ajnam.h \
 	../ajax/ajmess.h ../ajax/ajposreg.h ../ajax/hsp_regex.h \
@@ -362,9 +368,10 @@ embexit.lo embexit.o : embexit.c emboss.h ../ajax/ajax.h \
 	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
 	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
 	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajseq.h ../ajax/ajseqdata.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
+	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
+	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
+	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
+	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
 	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
 	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
 	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
@@ -381,9 +388,10 @@ embgroup.lo embgroup.o : embgroup.c emboss.h ../ajax/ajax.h \
 	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
 	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
 	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajseq.h ../ajax/ajseqdata.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
+	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
+	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
+	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
+	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
 	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
 	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
 	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
@@ -399,9 +407,10 @@ embiep.lo embiep.o : embiep.c emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
 	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
 	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
-	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajseq.h \
-	../ajax/ajseqdata.h ../ajax/ajseqtype.h ../ajax/ajarr.h \
-	../ajax/ajseqread.h ../ajax/ajseqwrite.h ../ajax/ajseqdb.h \
+	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajfeatdata.h \
+	../ajax/ajseqdata.h ../ajax/ajseq.h ../ajax/ajseqtype.h \
+	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
+	../ajax/ajseqdb.h ../ajax/ajseqabi.h ../ajax/ajreport.h \
 	../ajax/ajmatrices.h ../ajax/ajrange.h ../ajax/ajcod.h \
 	../ajax/ajmath.h ../ajax/ajutil.h ../ajax/ajnam.h \
 	../ajax/ajmess.h ../ajax/ajposreg.h ../ajax/hsp_regex.h \
@@ -418,9 +427,10 @@ embinit.lo embinit.o : embinit.c emboss.h ../ajax/ajax.h \
 	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
 	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
 	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajseq.h ../ajax/ajseqdata.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
+	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
+	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
+	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
+	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
 	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
 	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
 	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
@@ -436,9 +446,10 @@ embmat.lo embmat.o : embmat.c ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
 	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
 	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
-	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajseq.h \
-	../ajax/ajseqdata.h ../ajax/ajseqtype.h ../ajax/ajarr.h \
-	../ajax/ajseqread.h ../ajax/ajseqwrite.h ../ajax/ajseqdb.h \
+	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajfeatdata.h \
+	../ajax/ajseqdata.h ../ajax/ajseq.h ../ajax/ajseqtype.h \
+	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
+	../ajax/ajseqdb.h ../ajax/ajseqabi.h ../ajax/ajreport.h \
 	../ajax/ajmatrices.h ../ajax/ajrange.h ../ajax/ajcod.h \
 	../ajax/ajmath.h ../ajax/ajutil.h ../ajax/ajnam.h \
 	../ajax/ajmess.h ../ajax/ajposreg.h ../ajax/hsp_regex.h \
@@ -452,9 +463,10 @@ embmisc.lo embmisc.o : embmisc.c emboss.h ../ajax/ajax.h \
 	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
 	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
 	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajseq.h ../ajax/ajseqdata.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
+	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
+	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
+	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
+	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
 	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
 	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
 	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
@@ -470,9 +482,10 @@ embmol.lo embmol.o : embmol.c ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
 	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
 	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
-	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajseq.h \
-	../ajax/ajseqdata.h ../ajax/ajseqtype.h ../ajax/ajarr.h \
-	../ajax/ajseqread.h ../ajax/ajseqwrite.h ../ajax/ajseqdb.h \
+	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajfeatdata.h \
+	../ajax/ajseqdata.h ../ajax/ajseq.h ../ajax/ajseqtype.h \
+	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
+	../ajax/ajseqdb.h ../ajax/ajseqabi.h ../ajax/ajreport.h \
 	../ajax/ajmatrices.h ../ajax/ajrange.h ../ajax/ajcod.h \
 	../ajax/ajmath.h ../ajax/ajutil.h ../ajax/ajnam.h \
 	../ajax/ajmess.h ../ajax/ajposreg.h ../ajax/hsp_regex.h \
@@ -486,9 +499,10 @@ embnmer.lo embnmer.o : embnmer.c emboss.h ../ajax/ajax.h \
 	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
 	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
 	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajseq.h ../ajax/ajseqdata.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
+	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
+	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
+	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
+	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
 	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
 	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
 	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
@@ -504,9 +518,10 @@ embpat.lo embpat.o : embpat.c ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
 	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
 	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
-	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajseq.h \
-	../ajax/ajseqdata.h ../ajax/ajseqtype.h ../ajax/ajarr.h \
-	../ajax/ajseqread.h ../ajax/ajseqwrite.h ../ajax/ajseqdb.h \
+	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajfeatdata.h \
+	../ajax/ajseqdata.h ../ajax/ajseq.h ../ajax/ajseqtype.h \
+	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
+	../ajax/ajseqdb.h ../ajax/ajseqabi.h ../ajax/ajreport.h \
 	../ajax/ajmatrices.h ../ajax/ajrange.h ../ajax/ajcod.h \
 	../ajax/ajmath.h ../ajax/ajutil.h ../ajax/ajnam.h \
 	../ajax/ajmess.h ../ajax/ajposreg.h ../ajax/hsp_regex.h \
@@ -520,9 +535,10 @@ embprop.lo embprop.o : embprop.c emboss.h ../ajax/ajax.h \
 	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
 	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
 	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajseq.h ../ajax/ajseqdata.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
+	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
+	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
+	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
+	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
 	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
 	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
 	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
@@ -539,9 +555,10 @@ embread.lo embread.o : embread.c emboss.h ../ajax/ajax.h \
 	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
 	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
 	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajseq.h ../ajax/ajseqdata.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
+	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
+	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
+	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
+	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
 	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
 	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
 	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
@@ -558,9 +575,10 @@ embshow.lo embshow.o : embshow.c emboss.h ../ajax/ajax.h \
 	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
 	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
 	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajseq.h ../ajax/ajseqdata.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
+	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
+	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
+	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
+	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
 	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
 	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
 	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
@@ -577,9 +595,10 @@ embword.lo embword.o : embword.c emboss.h ../ajax/ajax.h \
 	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
 	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
 	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
-	../ajax/ajseq.h ../ajax/ajseqdata.h ../ajax/ajseqtype.h \
-	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
-	../ajax/ajseqdb.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
+	../ajax/ajfeatdata.h ../ajax/ajseqdata.h ../ajax/ajseq.h \
+	../ajax/ajseqtype.h ../ajax/ajarr.h ../ajax/ajseqread.h \
+	../ajax/ajseqwrite.h ../ajax/ajseqdb.h ../ajax/ajseqabi.h \
+	../ajax/ajreport.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
 	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
 	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
 	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
@@ -595,9 +614,10 @@ embxyz.lo embxyz.o : embxyz.c emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
 	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
 	../ajax/ajmem.h ../ajax/ajreg.h ../ajax/hsregexp.h \
-	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajseq.h \
-	../ajax/ajseqdata.h ../ajax/ajseqtype.h ../ajax/ajarr.h \
-	../ajax/ajseqread.h ../ajax/ajseqwrite.h ../ajax/ajseqdb.h \
+	../ajax/hsregmagic.h ../ajax/ajfmt.h ../ajax/ajfeatdata.h \
+	../ajax/ajseqdata.h ../ajax/ajseq.h ../ajax/ajseqtype.h \
+	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
+	../ajax/ajseqdb.h ../ajax/ajseqabi.h ../ajax/ajreport.h \
 	../ajax/ajmatrices.h ../ajax/ajrange.h ../ajax/ajcod.h \
 	../ajax/ajmath.h ../ajax/ajutil.h ../ajax/ajnam.h \
 	../ajax/ajmess.h ../ajax/ajposreg.h ../ajax/hsp_regex.h \

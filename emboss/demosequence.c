@@ -20,14 +20,20 @@
 
 #include "emboss.h"
 
+/* @prog demosequence *******************************************************
+**
+** Testing
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
 
-  embInit ("demosequence", argc, argv);
+    embInit ("demosequence", argc, argv);
 
   
-  /* in progress ... */
+    /* in progress ... */
 
-  ajExit();
-  return 0;
+    ajExit();
+    return 0;
 }

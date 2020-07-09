@@ -286,9 +286,16 @@ ajint pam2[MAXSQ][MAXSQ];
 ajint pamh1[MAXSQ];		/* used for kfact replacement */
 
 
-void dogarnier(AjPFile outf, ajint s, ajint len, char *seq, char *name,
-	       ajint begin, ajint Idc);
-void makemap (char *input, ajint *map, ajint n);
+static void garnier_do(AjPFile outf, ajint s, ajint len, char *seq, char *name,
+		       ajint begin, ajint Idc);
+static void garnier_makemap (char *input, ajint *map, ajint n);
+
+
+/* @prog garnier **************************************************************
+**
+** Predicts protein secondary structure
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -325,7 +332,7 @@ int main(int argc, char **argv)
 
 	len=ajStrLen(substr);
 
-	dogarnier(outf,0,len,ajStrStr(substr),ajSeqName(seq),begin,Idc);
+	garnier_do(outf,0,len,ajStrStr(substr),ajSeqName(seq),begin,Idc);
 
 	ajStrDel(&strand);
     }
@@ -338,9 +345,23 @@ int main(int argc, char **argv)
     return 0;
 }
 
+/* @funcstatic garnier_do ****************************************************
+**
+** Undocumented.
+**
+** @param [?] outf [AjPFile] Undocumented
+** @param [?] from [ajint] Undocumented
+** @param [?] to [ajint] Undocumented
+** @param [?] seq [char*] Undocumented
+** @param [?] name [char*] Undocumented
+** @param [?] begin [ajint] Undocumented
+** @param [?] Idc [ajint] Undocumented
+** @@
+******************************************************************************/
 
-void dogarnier(AjPFile outf, ajint from, ajint to, char *seq, char *name,
-	       ajint begin, ajint Idc)
+
+static void garnier_do(AjPFile outf, ajint from, ajint to, char *seq,
+		       char *name, ajint begin, ajint Idc)
 {
     char *refstr="\n Please cite:\n Garnier, Osguthorpe and Robson (1978) J. Mol. Biol. 120:97-120\n";
     
@@ -385,7 +406,7 @@ void dogarnier(AjPFile outf, ajint from, ajint to, char *seq, char *name,
     }
     else dcs=dch=0;
     
-    makemap(amino,amap,nna);  
+    garnier_makemap(amino,amap,nna);  
 
     
 /* copy from garnier.c original */
@@ -471,23 +492,35 @@ void dogarnier(AjPFile outf, ajint from, ajint to, char *seq, char *name,
     ajFmtPrintF(outf,"-----------------------------------------------"
 		"---------------------\n\n");
     
-
+    return;
 }
 
 
-void makemap (char *input, ajint *map, ajint n)
+
+
+/* @funcstatic garnier_makemap ***********************************************
+**
+** Undocumented.
+**
+** @param [?] input [char*] Undocumented
+** @param [?] map [ajint*] Undocumented
+** @param [?] n [ajint] Undocumented
+** @@
+******************************************************************************/
+
+
+static void garnier_makemap (char *input, ajint *map, ajint n)
 {
     ajint i;
     
     for (i=0;i<n;i++) 
     {
 	map[aascii[(ajint)input[i]]]=i;
-/*	ajDebug("i: %d map...[i] %x input[i] %x '%c'\n",
-		i, map[aascii[input[i]]], input[i], input[i]);
-*/	
+	/*
+	 *      ajDebug("i: %d map...[i] %x input[i] %x '%c'\n",
+	 *	i, map[aascii[input[i]]], input[i], input[i]);
+	 */	
     }
+
+    return;
 }
-
-
-
-

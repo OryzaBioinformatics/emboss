@@ -25,9 +25,9 @@
 
 
 
-static void pushpoint(AjPList *l, float x1, float y1, float x2, float y2,
-		      AjBool text);
-static void datapoints(AjPList *l, AjPFile outf);
+static void dotmatcher_pushpoint(AjPList *l, float x1, float y1, float x2,
+				 float y2, AjBool text);
+static void dotmatcher_datapoints(AjPList *l, AjPFile outf);
 
 
 
@@ -42,20 +42,36 @@ typedef struct SPoint
 
 
 
+
+/* @prog dotmatcher ***********************************************************
+**
+** Displays a thresholded dotplot of two sequences
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     AjPList list=NULL;
-    AjPSeq seq,seq2;
-    AjPStr aa0str=0,aa1str=0;
-    char *s1,*s2;
+    AjPSeq seq;
+    AjPSeq seq2;
+    AjPStr aa0str=0;
+    AjPStr aa1str=0;
+    char *s1;
+    char *s2;
     char *strret=NULL;
-    ajint i,j,k,l,abovethresh,total;
-    ajint starti=0,startj=0;
+    ajint i;
+    ajint j;
+    ajint k;
+    ajint l;
+    ajint abovethresh;
+    ajint total;
+    ajint starti=0;
+    ajint startj=0;
     ajint windowsize;
     float thresh;
     AjPGraph graph = 0;
     /* AjPStr title=0,subtitle=0;*/
-    AJTIME ajtime;
+    AjOTime ajtime;
     const time_t tim = time(0);
     AjBool boxit=AJTRUE;
     /* Different ticks as they need to be different for x and y due to
@@ -65,10 +81,13 @@ int main(int argc, char **argv)
     ajint acceptableticks[]={1,10,50,100,200,500,1000,2000,5000,10000,15000,
 			       500000,1000000,5000000};
     ajint numbofticks = 10;
-    float xmargin,ymargin;
-    float ticklen,tickgap;
+    float xmargin;
+    float ymargin;
+    float ticklen;
+    float tickgap;
     float onefifth;
-    float k2,max;
+    float k2;
+    float max;
     char ptr[10];
     AjPMatrix matrix = NULL;
     ajint** sub;
@@ -191,7 +210,8 @@ int main(int argc, char **argv)
 	}
 	while(i < ajSeqLen(seq) && k < ajSeqLen(seq2))
 	{
-	    total = total - sub[(ajint)s1[i-windowsize]][(ajint)s2[k-windowsize]];
+	    total = total - sub[(ajint)s1[i-windowsize]]
+		[(ajint)s2[k-windowsize]];
 	    total = total + sub[(ajint)s1[i]][(ajint)s2[k]];
 	    if(abovethresh)
 	    {
@@ -199,8 +219,8 @@ int main(int argc, char **argv)
 		{
 		    abovethresh = 0;
 		    /* draw the line */
-		    pushpoint(&list,(float)starti,(float)startj,
-				(float)i-1,(float)k-1,text);
+		    dotmatcher_pushpoint(&list,(float)starti,(float)startj,
+					 (float)i-1,(float)k-1,text);
 		}	    
 	    }
 	    else if (total >= thresh)
@@ -214,7 +234,8 @@ int main(int argc, char **argv)
 	if(abovethresh)
 	{
 	    /* draw the line */
-	    pushpoint(&list,(float)starti,(float)startj,(float)i-1,(float)k-1,
+	    dotmatcher_pushpoint(&list,(float)starti,(float)startj,
+				 (float)i-1,(float)k-1,
 		      text);
 	}
     }
@@ -237,7 +258,8 @@ int main(int argc, char **argv)
 	}
 	while(k < ajSeqLen(seq) && j < ajSeqLen(seq2))
 	{
-	    total = total - sub[(ajint)s1[k-windowsize]][(ajint)s2[j-windowsize]];
+	    total = total - sub[(ajint)s1[k-windowsize]]
+		[(ajint)s2[j-windowsize]];
 	    total = total + sub[(ajint)s1[k]][(ajint)s2[j]];
 	    if(abovethresh)
 	    {
@@ -245,8 +267,8 @@ int main(int argc, char **argv)
 		{
 		    abovethresh = 0;
 		    /* draw the line */
-		    pushpoint(&list,(float)starti,(float)startj,
-				(float)k-1,(float)j-1,text);
+		    dotmatcher_pushpoint(&list,(float)starti,(float)startj,
+					 (float)k-1,(float)j-1,text);
 		}	    
 	    }
 	    else if (total >= thresh)
@@ -261,7 +283,8 @@ int main(int argc, char **argv)
 	{
 	    /* draw the line */
 	    /*      printf("line (%d,%d) (%d,%d)\n",starti,startj,i-1,k-1);*/
-	    pushpoint(&list,(float)starti,(float)startj,(float)k-1,(float)j-1,
+	    dotmatcher_pushpoint(&list,(float)starti,(float)startj,
+				 (float)k-1,(float)j-1,
 		      text);
 	}
     }
@@ -353,7 +376,7 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf,"##DataObjects\n##Number %d\n",
 		    ajListLength(list));
 
-	datapoints(&list,outf);
+	dotmatcher_datapoints(&list,outf);
 
 	ajFmtPrintF(outf,"##GraphObjects\n##Number 0\n");
 
@@ -374,9 +397,22 @@ int main(int argc, char **argv)
     return 0;
 }
 
+/* @funcstatic dotmatcher_pushpoint ******************************************
+**
+** Undocumented.
+**
+** @param [?] l [AjPList*] Undocumented
+** @param [?] x1 [float] Undocumented
+** @param [?] y1 [float] Undocumented
+** @param [?] x2 [float] Undocumented
+** @param [?] y2 [float] Undocumented
+** @param [?] text [AjBool] Undocumented
+** @@
+******************************************************************************/
 
-static void pushpoint(AjPList *l, float x1, float y1, float x2, float y2,
-		      AjBool text)
+
+static void dotmatcher_pushpoint(AjPList *l, float x1, float y1, float x2,
+				 float y2, AjBool text)
 {
     PPoint p;
 
@@ -392,11 +428,21 @@ static void pushpoint(AjPList *l, float x1, float y1, float x2, float y2,
     p->x2=x2;
     p->y2=y2;
     ajListPush(*l,(void *)p);
+
     return;
 }
 
+/* @funcstatic dotmatcher_datapoints *****************************************
+**
+** Undocumented.
+**
+** @param [?] l [AjPList*] Undocumented
+** @param [?] outf [AjPFile] Undocumented
+** @@
+******************************************************************************/
 
-static void datapoints(AjPList *l,AjPFile outf)
+
+static void dotmatcher_datapoints(AjPList *l,AjPFile outf)
 {
     PPoint p;
 

@@ -23,6 +23,13 @@
 #include "emboss.h"
 
 
+
+/* @prog backtranseq **********************************************************
+**
+** Back translate a protein sequence
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     AjPSeq     a;

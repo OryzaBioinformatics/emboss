@@ -1522,11 +1522,11 @@ void embAlignPrintLocal(AjPFile outf, char *a, char *b, AjPStr m, AjPStr n,
     ajStrDel(&fm);
 }
 
-
-
-
-
-
+/* @func embAlignUnused *******************************************************
+**
+** Calls unused functions to avoid warning messages
+**
+******************************************************************************/
 
 void embAlignUnused(void)
 {
@@ -1545,6 +1545,7 @@ void embAlignUnused(void)
     alignPathCalcOld(a,b,lena,lenb,gapopen,gapextend,path,sub,cvt,
 		       compass,show);
 }
+
 /* @func embAlignPathCalcFast *************************************************
 **
 ** Create path matrix for Smith-Waterman and Needleman-Wunsch
@@ -1561,7 +1562,7 @@ void embAlignUnused(void)
 ** @param [r] cvt [AjPSeqCvt] Conversion array for AjPMatrixf
 ** @param [w] compass [ajint *] Path direction pointer array
 ** @param [r] show [AjBool] Display path matrix
-** @param [r] width [ajint] width of path matrix
+** @param [r] pathwidth [ajint] width of path matrix
 ** 
 ** Optimised to keep a maximum value to avoid looping down or left
 ** to find the maximum. (il 29/07/99)
@@ -1572,7 +1573,7 @@ void embAlignUnused(void)
 ******************************************************************************/
 void embAlignPathCalcFast(char *a, char *b, ajint lena, ajint lenb, float gapopen,
 		     float gapextend, float *path, float **sub, AjPSeqCvt cvt,
-		     ajint *compass, AjBool show, ajint width)
+		     ajint *compass, AjBool show, ajint pathwidth)
 {
     ajint xpos;
     ajint i;
@@ -1582,20 +1583,28 @@ void embAlignPathCalcFast(char *a, char *b, ajint lena, ajint lenb, float gapope
     float fnew;
     float *maxa,*maxb;
     ajint jlena;
+    ajint jlenb;
+    ajint width = pathwidth;
 
     float max;
     static AjPStr outstr = NULL;
 
+    if (lena < width)
+      width = lena;
+    if (lenb < width)
+      width = lenb;
+
     jlena = lena - 10;
     if (jlena < 0) jlena = lena-1;
-    /*    jlenb = lenb - 10;
-	  if (jlena < 0) jlenb = lenb-1;*/
+
+        jlenb = lenb - 10;
+	  if (jlena < 0) jlenb = lenb-1;
 
     ajDebug ("embAlignPathCalcFast\n");
 
-    /*ajDebug ("lena: %d lenb: %d width: %d\n", lena, lenb, width);
-      ajDebug ("a: '%10.10s .. %10.10s' %d\n", a, &a[jlena], lena);
-      ajDebug ("b: '%10.10s .. %10.10s' %d\n", b, &b[jlenb], lenb);*/
+    ajDebug ("lena: %d lenb: %d width: %d\n", lena, lenb, width);
+    ajDebug ("a: '%10.10s .. %10.10s' %d\n", a, &a[jlena], lena);
+    ajDebug ("b: '%10.10s .. %10.10s' %d\n", b, &b[jlenb], lenb);
 
     /* Create stores for the maximum values in a row or column */
 

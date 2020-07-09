@@ -131,7 +131,7 @@ static void namPrintDatabase(AjPStr* dbattr);
 static void namListStandards(ajint which);
 static ajint namMethod2Scope (AjPStr method);
 static void namDebugStandards(ajint which);
-static void namDebugDatabases(void);
+void   namDebugDatabases(void);
 static void namDebugEnvironmentals(void);
 static void namListParse(void **x,void *cl);
 static void namProcessFile(FILE *file);

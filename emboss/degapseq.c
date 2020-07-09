@@ -22,35 +22,41 @@
 
 #include "emboss.h"
 
+/* @prog degapseq *******************************************************
+**
+** Testing
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
 
-  AjPSeqall seqall;
-  AjPSeqout seqout;
-  AjPSeq seq = NULL;
-  AjPStr str=NULL;
+    AjPSeqall seqall;
+    AjPSeqout seqout;
+    AjPSeq seq = NULL;
+    AjPStr str=NULL;
 
-  embInit ("degapseq", argc, argv);
+    embInit ("degapseq", argc, argv);
 
-  seqout = ajAcdGetSeqoutall ("outseq");
-  seqall = ajAcdGetSeqall ("sequence");
+    seqout = ajAcdGetSeqoutall ("outseq");
+    seqall = ajAcdGetSeqall ("sequence");
 
-  while (ajSeqallNext(seqall, &seq)) {
+    while (ajSeqallNext(seqall, &seq))
+    {
+	/* get a COPY of the sequence string */
+	str = ajStrNew();
+	ajStrAss (&str, ajSeqStr(seq));
 
-/* get a COPY of the sequence string */
-    str = ajStrNew();
-    ajStrAss (&str, ajSeqStr(seq));
+	ajStrDegap(&str);
+	ajSeqReplace(seq, str);
+	ajStrDel(&str);
 
-    ajStrDegap(&str);
-    ajSeqReplace(seq, str);
-    ajStrDel(&str);
+	ajSeqAllWrite (seqout, seq);
+    }
 
-    ajSeqAllWrite (seqout, seq);
-  }
+    ajSeqWriteClose (seqout);
 
-  ajSeqWriteClose (seqout);
-
-  ajExit ();
-  return 0;
+    ajExit ();
+    return 0;
 }
 

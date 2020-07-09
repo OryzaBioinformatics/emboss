@@ -23,6 +23,13 @@
 
 #define DATANAME "PROSITE/prosite.lines" 
 
+
+/* @prog prosextract **********************************************************
+**
+** Builds the PROSITE motif database for patmatmotifs to search
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     AjPFile infdat 	=NULL;

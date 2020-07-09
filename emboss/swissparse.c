@@ -207,15 +207,18 @@ typedef struct AjSTerms
 
 
 
+static AjPTerms swissparse_TermsNew(void);
 
-AjBool   TermsRead(AjPFile inf, AjPTerms *thys);
-void     TermsDel(AjPTerms *pthis);
-AjPTerms TermsNew(void);
-AjBool   keysearch(AjPFile inf, AjPTerms terms, AjPHitlist *hits);
+static AjBool   swissparse_TermsRead(AjPFile inf, AjPTerms *thys);
+static void     swissparse_TermsDel(AjPTerms *pthis);
+static AjBool   swissparse_keysearch(AjPFile inf, AjPTerms terms,
+				     AjPHitlist *hits);
 
-
-
-
+/* @prog swissparse *******************************************************
+**
+** Retrieves sequences from swissprot using keyword search
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -242,7 +245,7 @@ int main(int argc, char **argv)
     
     /* Start of main application loop 
        Read next list of terms from input file */
-    while((TermsRead(key_inf, &keyptr)))
+    while((swissparse_TermsRead(key_inf, &keyptr)))
     {
 	/* Rewind swissprot file pointer to the top */
 	ajFileSeek(sp_inf, 0, 0);
@@ -253,7 +256,7 @@ int main(int argc, char **argv)
 
 
 	/* Do search of swissprot */
-	keysearch(sp_inf, keyptr, &hitptr);
+	swissparse_keysearch(sp_inf, keyptr, &hitptr);
 
 
 	/* Copy scop records from terms to hitlist structure */
@@ -269,9 +272,9 @@ int main(int argc, char **argv)
 
 	/* Free memory for hitlist & keyptr*/
 	ajXyzHitlistDel(&hitptr);
-	TermsDel(&keyptr);
+	swissparse_TermsDel(&keyptr);
     }
-    
+    swissparse_TermsDel(&keyptr);    
     
     /* Tidy up*/
     ajFileClose(&key_inf);
@@ -279,7 +282,6 @@ int main(int argc, char **argv)
     ajFileClose(&outf);
 
 
-    /* Return */
     return 0;
 }
 
@@ -287,14 +289,15 @@ int main(int argc, char **argv)
 
 
 
-/* @func TermsNew ***********************************************************
+/* @funcstatic swissparse_TermsNew ********************************************
  **
- ** Terms object constructor. This is normally called by the TermsRead function.
+ ** Terms object constructor. This is normally called by the TermsRead
+ **  function.
  **
  ** @return [AjPTerms] Pointer to a Terms object
  ** @@
  ******************************************************************************/
-AjPTerms TermsNew(void)
+static AjPTerms swissparse_TermsNew(void)
 {
     AjPTerms  ret =NULL;		/* Pointer to terms structure */    
     
@@ -315,7 +318,7 @@ AjPTerms TermsNew(void)
 
 
 
-/* @func TermsDel ***********************************************************
+/* @funcstatic swissparse_TermsDel *******************************************
  **
  ** Destructor for terms object.
  **
@@ -324,22 +327,22 @@ AjPTerms TermsNew(void)
  ** @return [void]
  ** @@
  ******************************************************************************/
-void     TermsDel(AjPTerms *pthis)
+static void swissparse_TermsDel(AjPTerms *pthis)
 {
     int x=0;				/* Counter */
+    AjPTerms thys = *pthis;
+    
+    ajStrDel(&thys->Class);
+    ajStrDel(&thys->Fold);
+    ajStrDel(&thys->Superfamily);
+    ajStrDel(&thys->Family);
 
     
-    ajStrDel(&(*pthis)->Class);
-    ajStrDel(&(*pthis)->Fold);
-    ajStrDel(&(*pthis)->Superfamily);
-    ajStrDel(&(*pthis)->Family);
+    for(x=0;x<thys->N; x++)
+	ajStrDel(&thys->Keywords[x]);
+    AJFREE(thys->Keywords);
 
-    
-    for(x=0;x<(*pthis)->N; x++)
-	ajStrDel(&(*pthis)->Keywords[x]);
-
-
-    AJFREE(*pthis);
+    AJFREE(thys);
     
     return;
 }
@@ -348,7 +351,7 @@ void     TermsDel(AjPTerms *pthis)
 
 
 
-/* @func TermsRead *********************************************************
+/* @funcstatic swissparse_TermsRead ******************************************
  **
  ** Read the next Terms object from a file in embl-like format. The search 
  ** terms are modified with a leading and trailing space.
@@ -359,7 +362,7 @@ void     TermsDel(AjPTerms *pthis)
  ** @return [AjBool] True on succcess
  ** @@
  ******************************************************************************/
-AjBool TermsRead(AjPFile inf, AjPTerms *thys)
+static AjBool swissparse_TermsRead(AjPFile inf, AjPTerms *thys)
 {    
     AjPStr   line           =NULL;	/* Line of text */
     AjPStr   temp           =NULL;
@@ -368,7 +371,7 @@ AjBool TermsRead(AjPFile inf, AjPTerms *thys)
     
 
     /* Create Terms structure */
-    (*thys)=TermsNew();
+    (*thys)=swissparse_TermsNew();
 
 
     /* Create list & allocate strings */
@@ -447,7 +450,7 @@ AjBool TermsRead(AjPFile inf, AjPTerms *thys)
     if(!ok)
     {
 	/* Clean up */
-	ajListstrDel(&list_terms);
+	ajListstrFree(&list_terms);
 	ajStrDel(&line);
 	
     
@@ -459,7 +462,7 @@ AjBool TermsRead(AjPFile inf, AjPTerms *thys)
     /*Convert the AjPList of terms to array of AjPSeq's*/
     if(!((*thys)->N=ajListstrToArray((AjPList)list_terms,&(*thys)->Keywords)))
     {
-	ajWarn("Zero sized list of terms passed into TermsRead");
+	ajWarn("Zero sized list of terms passed into swissparse_TermsRead");
     }
 
 
@@ -467,8 +470,6 @@ AjBool TermsRead(AjPFile inf, AjPTerms *thys)
     ajListstrDel(&list_terms);
     ajStrDel(&line);
     
-    
-    /* Return */
     return ajTrue;
 } 
 
@@ -476,7 +477,7 @@ AjBool TermsRead(AjPFile inf, AjPTerms *thys)
 
 
 
-/* @func keysearch  **********************************************************
+/* @funcstatic swissparse_keysearch  *****************************************
  **
  ** Search swissprot with terms structure and writes a hitlist structure
  **
@@ -487,7 +488,8 @@ AjBool TermsRead(AjPFile inf, AjPTerms *thys)
  ** @return [AjBool] True on success
  ** @@
  ******************************************************************************/
-AjBool   keysearch(AjPFile inf, AjPTerms terms, AjPHitlist *hits)
+static AjBool swissparse_keysearch(AjPFile inf, AjPTerms terms,
+				   AjPHitlist *hits)
 {
     AjPStr   line           =NULL;	/* Line of text */
     AjPStr   id             =NULL;	/* Line of text */
@@ -589,7 +591,8 @@ AjBool   keysearch(AjPFile inf, AjPTerms terms, AjPHitlist *hits)
 	
 
 	/* Parse the sequence */
-	else if((ajStrPrefixC(line,"SQ") && ((foundkw == ajTrue) || (foundft == ajTrue))))
+	else if((ajStrPrefixC(line,"SQ") && ((foundkw == ajTrue) ||
+					     (foundft == ajTrue))))
 	{
 	    /* Allocate memory for temp. sequence */
 	    temp       = ajStrNew();
@@ -614,7 +617,10 @@ AjBool   keysearch(AjPFile inf, AjPTerms terms, AjPHitlist *hits)
 		    (*hits)->N++;
 
 		    
-		    /* Reallocate memory for array of hits in hitlist structure */
+		    /*
+		     * Reallocate memory for array of hits in hitlist
+		     * structure
+		     */
 		    AJCRESIZE((*hits)->hits, (*hits)->N);
 		    (*hits)->hits[(*hits)->N-1]=ajXyzHitNew();
 
@@ -635,7 +641,7 @@ AjBool   keysearch(AjPFile inf, AjPTerms terms, AjPHitlist *hits)
 
 
 	    /* In swissparse the Type field will always be set to OTHER */
-	    ajStrAssC(&(*hits)->hits[(*hits)->N - 1]->Type, "OTHER");
+	    ajStrAssC(&(*hits)->hits[(*hits)->N - 1]->Typeobj, "OTHER");
 
 		}
 	    }
@@ -653,7 +659,8 @@ AjBool   keysearch(AjPFile inf, AjPTerms terms, AjPHitlist *hits)
 		/* Extract whole sequence */
 		ajStrAss(&(*hits)->hits[(*hits)->N - 1]->Seq, temp); 
 		(*hits)->hits[(*hits)->N - 1]->Start = 1; 
-		(*hits)->hits[(*hits)->N - 1]->End = ajStrLen((*hits)->hits[(*hits)->N - 1]->Seq); 
+		(*hits)->hits[(*hits)->N - 1]->End =
+		    ajStrLen((*hits)->hits[(*hits)->N - 1]->Seq); 
 
 
 	    /* Put id into structure */
@@ -661,7 +668,7 @@ AjBool   keysearch(AjPFile inf, AjPTerms terms, AjPHitlist *hits)
 
 
 	    /* In swissparse the Type field will always be set to OTHER */
-	    ajStrAssC(&(*hits)->hits[(*hits)->N - 1]->Type, "OTHER");
+	    ajStrAssC(&(*hits)->hits[(*hits)->N - 1]->Typeobj, "OTHER");
 	    }
 
 
@@ -679,10 +686,5 @@ AjBool   keysearch(AjPFile inf, AjPTerms terms, AjPHitlist *hits)
     ajIntDel(&start);
     ajIntDel(&end);
 
-    /* Return */
     return ajTrue;
 }
-
-
-
-

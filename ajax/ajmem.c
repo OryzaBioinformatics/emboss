@@ -12,7 +12,7 @@
 extern void ajDebug(char *fmt, ...);
 
 
-static const Except_T Mem_Failed = { "Allocation Failed" };
+static const Except_T Mem_Failed = { "Allocation failed, insufficient memory available" };
 static const Except_T Mem_Badcount = { "Allocation bad byte count" };
 
 static ajlong memAlloc = 0;

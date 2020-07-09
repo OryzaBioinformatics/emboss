@@ -31,7 +31,11 @@ int main(int argc, char **argv)
 }
 #else
 
-
+/* @prog corbatest *******************************************************
+**
+** Testing
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -106,6 +110,7 @@ int main(int argc, char **argv)
 
     ajCorbafeatDel(&feat);
     
+    ajExit();
     return 0;
 }
 

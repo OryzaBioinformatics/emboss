@@ -1,70 +1,67 @@
 #include "emboss.h"
 
-int main(int argc, char **argv)
+/* @prog demofeatures *******************************************************
+**
+** Testing
+**
+******************************************************************************/
+
+int main (int argc, char **argv)
 {
-  AjPFeatLexicon dict=NULL;
-  AjPFeatTable feattable;
-  AjPStr name=NULL,score=NULL,desc=NULL,source=NULL,type=NULL;
-  AjEFeatStrand strand=AjStrandWatson;
-  AjEFeatFrame frame=AjFrameUnknown;
-  AjBool sortbytype,dictionary,sortbystart,tracedict;
-  AjPFile file;
-  AjPFeature feature;
-  AjPFeatTabOut output = NULL;
-  ajint i;
+    AjPFeattable feattable;
+    AjPStr name=NULL;
+    AjPStr source=NULL;
+    AjPStr type=NULL;
+    char strand='+';
+    ajint frame=0;
+    AjBool sortbytype;
+    AjBool dictionary;
+    AjBool sortbystart;
+    AjBool tracedict;
+    AjPFeature feature;
+    AjPFeattabOut output = NULL;
+    ajint i;
+    float score = 0.0;
 
-  embInit ("demofeatures", argc, argv);
+    embInit ("demofeatures", argc, argv);
 
-  /*  file =        ajAcdGetOutfile("outfile");*/
-  output     =  ajAcdGetFeatout("featout");
-  dictionary =  ajAcdGetBool("dictionary");
-  sortbytype =  ajAcdGetBool("typesort");
-  sortbystart = ajAcdGetBool("startsort");
-  tracedict =   ajAcdGetBool("tracedict");
+    output     =  ajAcdGetFeatout("featout");
+    dictionary =  ajAcdGetBool("dictionary");
+    sortbytype =  ajAcdGetBool("typesort");
+    sortbystart = ajAcdGetBool("startsort");
+    tracedict =   ajAcdGetBool("tracedict");
 
-  /* first read the dictionary if one is to be used */
+    /* first read the dictionary if one is to be used */
 
-  if(dictionary) 
-    dict = ajFeatGffDictionaryCreate(); 
+    ajStrAssC(&name,"seq1");
 
-  ajStrAssC(&name,"seq1");
+    feattable = ajFeattableNew(name);
 
-  feattable = ajFeatTabNew(name,dict);
-  if(!dictionary)
-    dict = feattable->Dictionary;
-
-  ajStrAssC(&source,"demofeature");
-  ajStrAssC(&score,"1.0");
-
-
+    ajStrAssC(&source,"demofeature");
+    score = 1.0;
   
-  for(i=1;i<11;i++){
-    if(i & 1)
-      ajStrAssC(&type,"CDS");
-    else
-      ajStrAssC(&type,"misc_feature");
+    for(i=1;i<11;i++)
+    {
+	if(i & 1)
+	    ajStrAssC(&type,"CDS");
+	else
+	    ajStrAssC(&type,"misc_feature");
 
-    feature = ajFeatureNew(feattable, source, type,
-			  i, i+10, score, strand, frame,
-			  desc , 0, 0) ;    
-
-  }
+	feature = ajFeatNew(feattable, source, type,
+			    i, i+10, score, strand, frame) ;
+    }
   
   
-  if(sortbytype)
-    ajFeatSortByType(feattable);
-  if(sortbystart)
-    ajFeatSortByStart(feattable);
+    if(sortbytype)
+	ajFeatSortByType(feattable);
+    if(sortbystart)
+	ajFeatSortByStart(feattable);
 
-
-  if(tracedict) /* -debug need to be on aswell for this to be visible!! */
-    ajFeatDickTracy(dict);
-
-  ajFeaturesWrite (output, feattable);
+    ajFeatWrite (output, feattable);
   
-  ajStrDel(&name);
-  ajStrDel(&score);
-  ajStrDel(&type);
+    ajStrDel(&name);
+    ajStrDel(&type);
 
-  return 0;
+    ajExit();
+    return 0;
 }

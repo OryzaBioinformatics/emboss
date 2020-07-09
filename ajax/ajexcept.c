@@ -46,16 +46,16 @@ void ajExceptRaise(const T* e, const char* file,
 	Except_Frame *p = Except_stack;
 	assert(e);
 	if (p == NULL) {
-		ajMessOut("Uncaught exception");
+		ajMessOut("Uncaught exception: ");
 		if (e->reason)
-			ajMessOut(" %s", e->reason);
+			ajMessOut(" %s,", e->reason);
 		else
-			ajMessOut(" at 0x%p", e);
+			ajMessOut(" at 0x%p,", e);
 		if (file && line > 0)
 			ajMessOut(" raised at %s:%d\n", file, line);
-		ajMessCrash("aborting...\n");
+		/*ajMessCrash("aborting...\n");*/
 		/*		fflush(stderr);*/
-		abort();
+		exit(EXIT_FAILURE);
 	}
 	p->exception = e;
 	p->file = file;

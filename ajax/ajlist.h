@@ -17,12 +17,11 @@ enum AjEListType {ajEListAny, ajEListStr};
 ** @@
 ******************************************************************************/
 
-typedef struct AjSListNode AjOListNode, *AjPListNode;
-struct AjSListNode {
-	AjPListNode Next;	/* next item */
-	AjPListNode Prev;       /* previous item */
+typedef struct AjSListNode {
+	struct AjSListNode* Next;	/* next item */
+	struct AjSListNode* Prev;       /* previous item */
 	void *Item;		/* data */
-};
+} AjOListNode, *AjPListNode;
 
 /* @data AjPList ********************************************************
 **
@@ -93,6 +92,12 @@ typedef struct AjSList {
   ajint Count;
   AjEnum Type;
 } AjOList, *AjPList;
+
+/* @data AjIList *******************************************************
+**
+** AJAX list iterator data structure
+**
+******************************************************************************/
 
 typedef struct AjSIList {
   AjPList Head ;

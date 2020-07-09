@@ -6,6 +6,13 @@ extern "C"
 #ifndef ajmatrices_h
 #define ajmatrices_h
 
+/* @data AjPMatrix *******************************************************
+**
+** AJAX data structure for sequence comparison matrices with integer values
+**
+** @alias AjSMatrix
+******************************************************************************/
+
 typedef struct AjSMatrix {
   ajint Size;
   AjPStr Name;
@@ -13,6 +20,14 @@ typedef struct AjSMatrix {
   ajint** Matrix;
   AjPSeqCvt Cvt;
 } AjOMatrix, *AjPMatrix;
+
+/* @data AjPMatrixf *******************************************************
+**
+** AJAX data structure for sequence comparison matrices with floating
+** point values
+**
+** @alias AjSMatrixf
+******************************************************************************/
 
 typedef struct AjSMatrixf {
   ajint Size;

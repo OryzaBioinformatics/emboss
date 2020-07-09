@@ -27,19 +27,30 @@
 
 #define POFF 1000000	/* Printing flag */
 
-static void makeRuler(ajint len, ajint begin, char *ruler, ajint *npos);
-static void calcProteinPos(ajint *ppos, AjPStr pro, ajint len);
-static void showTrans(ajint *ppos, ajint *npos, AjPStr pro, AjPStr substr,
-		 ajint len, char *ruler, ajint begin,
-		 AjPFile outf, AjBool isrule, AjBool isp, AjBool isn,
-		 ajint width, char *name);
-static void showTransb(ajint *ppos, ajint *npos, AjPStr pro, AjPStr substr,
-		  ajint len, char *ruler, ajint begin,
-		  AjPFile outf, AjBool isrule, AjBool isp, AjBool isn,
-		  ajint start, ajint end);
-static void prettyTranslate(AjPFile outf, ajint beg, ajint end, AjPStr s,
-			    AjPCod codon, AjPRange range, ajint width,
-			    AjPStr pro);
+static void prettyseq_makeRuler(ajint len, ajint begin, char *ruler,
+				ajint *npos);
+static void prettyseq_calcProteinPos(ajint *ppos, AjPStr pro,
+				     ajint len);
+static void prettyseq_showTrans(ajint *ppos, ajint *npos, AjPStr pro,
+				AjPStr substr, ajint len, char *ruler,
+				ajint begin, AjPFile outf, AjBool isrule,
+				AjBool isp, AjBool isn, ajint width,
+				char *name);
+static void prettyseq_showTransb(ajint *ppos, ajint *npos, AjPStr pro,
+				 AjPStr substr, ajint len, char *ruler,
+				 ajint begin, AjPFile outf, AjBool isrule,
+				 AjBool isp, AjBool isn, ajint start,
+				 ajint end);
+static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end, AjPStr s,
+				AjPCod codon, AjPRange range, ajint width,
+				AjPStr pro);
+
+
+/* @prog prettyseq ************************************************************
+**
+** Output sequence with translated ranges
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -88,11 +99,11 @@ int main(int argc, char **argv)
     AJCNEW (npos, len);
     AJCNEW (ppos, len);
 
-    prettyTranslate(outf,beg,end,substr,codon,range,width,pro);
-    makeRuler(len,beg,ruler,npos);
-    calcProteinPos(ppos,pro,len);
-    showTrans(ppos,npos,pro,substr,len,ruler,beg,
-		outf,isrule,isp,isn,width,ajSeqName(a));
+    prettyseq_Translate(outf,beg,end,substr,codon,range,width,pro);
+    prettyseq_makeRuler(len,beg,ruler,npos);
+    prettyseq_calcProteinPos(ppos,pro,len);
+    prettyseq_showTrans(ppos,npos,pro,substr,len,ruler,beg,
+			outf,isrule,isp,isn,width,ajSeqName(a));
 
     AJFREE (npos);
     AJFREE (ppos);
@@ -107,10 +118,25 @@ int main(int argc, char **argv)
 }
 
 
+/* @funcstatic  prettyseq_Translate *******************************************
+**
+** Undocumented.
+**
+** @param [w] outf [AjPFile] outfile
+** @param [r] beg [ajint] start position
+** @param [r] end [ajint] end position
+** @param [r] s [AjPStr] nucleic acid sequence
+** @param [r] codon [AjPCod] translation CU table
+** @param [r] range [AjPRange] region to translate
+** @param [r] width [ajint] screen width
+** @param [w] pro [AjPStr] protein
+** @@
+******************************************************************************/
 
-static void prettyTranslate(AjPFile outf, ajint beg, ajint end, AjPStr s,
-			    AjPCod codon, AjPRange range, ajint width,
-			    AjPStr pro)
+
+static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end, AjPStr s,
+				AjPCod codon, AjPRange range, ajint width,
+				AjPStr pro)
 {
     ajint limit;
     ajint i;
@@ -198,8 +224,20 @@ static void prettyTranslate(AjPFile outf, ajint beg, ajint end, AjPStr s,
 
 
 
+/* @funcstatic  prettyseq_makeRuler *******************************************
+**
+** Create a ruler
+**
+** @param [r] len [ajint] length for ruler
+** @param [r] begin [ajint] numbering start
+** @param [w] ruler [char*] ruler
+** @param [w] npos [ajint*] numbering
+** @@
+******************************************************************************/
 
-static void makeRuler(ajint len, ajint begin, char *ruler, ajint *npos)
+
+static void prettyseq_makeRuler(ajint len, ajint begin, char *ruler,
+				ajint *npos)
 {
     ajint i;
 
@@ -216,8 +254,18 @@ static void makeRuler(ajint len, ajint begin, char *ruler, ajint *npos)
 
 
 
+/* @funcstatic prettyseq_calcProteinPos ***************************************
+**
+** Protein translation positions
+**
+** @param [w] ppos [ajint*] positions
+** @param [r] pro [AjPStr] protein
+** @param [r] len [ajint] length
+** @@
+******************************************************************************/
 
-static void calcProteinPos(ajint *ppos, AjPStr pro, ajint len)
+
+static void prettyseq_calcProteinPos(ajint *ppos, AjPStr pro, ajint len)
 {
     ajint j;
     
@@ -274,10 +322,31 @@ static void calcProteinPos(ajint *ppos, AjPStr pro, ajint len)
 
 
 
-static void showTrans(ajint *ppos, ajint *npos, AjPStr pro, AjPStr substr,
-		 ajint len, char *ruler, ajint begin,
-		 AjPFile outf, AjBool isrule, AjBool isp, AjBool isn,
-		 ajint width, char *name)
+/* @funcstatic prettyseq_showTrans *******************************************
+**
+** Show translations
+**
+** @param [r] ppos [ajint*] protein positions
+** @param [r] npos [ajint*] nucleic positions
+** @param [r] pro [AjPStr] protein
+** @param [r] substr [AjPStr] dna
+** @param [r] len [ajint] length
+** @param [r] ruler [char*] ruler
+** @param [r] begin [ajint] start in dna
+** @param [w] outf [AjPFile] outfile
+** @param [r] isrule [AjBool] show ruler
+** @param [r] isp [AjBool] show protein
+** @param [r] isn [AjBool] show dna
+** @param [r] width [ajint] display width
+** @param [r] name [char*] name of dna
+** @@
+******************************************************************************/
+
+static void prettyseq_showTrans(ajint *ppos, ajint *npos, AjPStr pro,
+				AjPStr substr, ajint len, char *ruler,
+				ajint begin, AjPFile outf, AjBool isrule,
+				AjBool isp, AjBool isn, ajint width,
+				char *name)
 {
     ajint pos;
 
@@ -290,13 +359,13 @@ static void showTrans(ajint *ppos, ajint *npos, AjPStr pro, AjPStr substr,
     {
 	if(pos+width<len)
 	{
-	    showTransb(ppos,npos,pro,substr,len,ruler,begin,
-			 outf,isrule,isp,isn,pos,pos+width-1);
+	    prettyseq_showTransb(ppos,npos,pro,substr,len,ruler,begin,
+				 outf,isrule,isp,isn,pos,pos+width-1);
 	    pos += width;
 	    continue;
 	}
-	showTransb(ppos,npos,pro,substr,len,ruler,begin,
-		     outf,isrule,isp,isn,pos,len-1);
+	prettyseq_showTransb(ppos,npos,pro,substr,len,ruler,begin,
+			     outf,isrule,isp,isn,pos,len-1);
 	break;
     }
 
@@ -305,11 +374,32 @@ static void showTrans(ajint *ppos, ajint *npos, AjPStr pro, AjPStr substr,
 
 
 
+/* @funcstatic prettyseq_showTransb ******************************************
+**
+** Low level display
+**
+** @param [r] ppos [ajint*] protein positions
+** @param [r] npos [ajint*] nucleic positions
+** @param [r] pro [AjPStr] protein
+** @param [r] substr [AjPStr] dna
+** @param [r] len [ajint] length
+** @param [r] ruler [char*] ruler
+** @param [r] begin [ajint] start in dna
+** @param [w] outf [AjPFile] outfile
+** @param [r] isrule [AjBool] show ruler
+** @param [r] isp [AjBool] show protein
+** @param [r] isn [AjBool] show dna
+** @param [r] start [ajint] start pos
+** @param [r] end [ajint] end pos
+** @@
+******************************************************************************/
 
-static void showTransb(ajint *ppos, ajint *npos, AjPStr pro, AjPStr substr,
-		  ajint len, char *ruler, ajint begin,
-		  AjPFile outf, AjBool isrule, AjBool isp, AjBool isn,
-		  ajint start, ajint end)
+
+static void prettyseq_showTransb(ajint *ppos, ajint *npos, AjPStr pro,
+				 AjPStr substr, ajint len, char *ruler,
+				 ajint begin, AjPFile outf, AjBool isrule,
+				 AjBool isp, AjBool isn, ajint start,
+				 ajint end)
 {
     AjPStr s;
     ajint b;

@@ -1,3 +1,24 @@
+/* @source einverted application
+**
+** Inverted repeats by dynamic programming
+**
+** @author: Copyright (C) J Thierry-Mieg and R Durbin, 1993
+** @@
+**
+** This program is free software; you can redistribute it and/or
+** modify it under the terms of the GNU General Public License
+** as published by the Free Software Foundation; either version 2
+** of the License, or (at your option) any later version.
+** 
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+** 
+** You should have received a copy of the GNU General Public License
+** along with this program; if not, write to the Free Software
+** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+******************************************************************************/
 /*  File: inverted.c
  *  Author: Richard Durbin (rd@mrc-lmba.cam.ac.uk)
  *  Copyright (C) J Thierry-Mieg and R Durbin, 1993
@@ -28,260 +49,335 @@ look at the code and find the value and say what it is in the
 documentation.  Ideally this should be a command line configurable
 parameter, but this may mean some non-trivial recoding because currently
 I think arrays are statically not dynamically defined. 
+
+Tim Carver 26/04/01:
+maxsave has been made a command line parameter 
 */
-#define MAXSAVE 4000
+
 #define TEST
 
-ajint match;
-ajint mismatch;
-ajint threshold;
-ajint gap;
-AjPFile outfile;
+static ajint match;
+static ajint mismatch;
+static ajint threshold;
+static ajint gap;
+static ajint maxsave;
+static AjPFile outfile;
 static AjPSeqCvt cvt;
-ajint rogue = 1000000;
+static ajint rogue = 1000000;
 
 static char base[] = "acgt-" ;
 
-char *sq ;
-ajint *revmatch[5] ;
-ajint length ;
-ajint matrix[MAXSAVE][MAXSAVE] ;
+static char *sq ;
+static ajint *revmatch[5] ;
+static ajint length ;
+static AjPInt2d matrix=NULL;
 
-void report (ajint max, ajint imax) ;
+static void einverted_report (ajint max, ajint imax) ;
+
+
+/* @prog einverted ************************************************************
+**
+** Finds DNA inverted repeats
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
-  ajint i, j, irel, imax, jmax=0, *ip, *t1Base ;
-  ajint lastReported = -1 ;
-  char *cp ;
-  register ajint a, c, d, *t0, *t1, max ;
-  ajint localMax[MAXSAVE], back[MAXSAVE] ;
+    ajint i;
+    ajint j;
+    ajint irel;
+    ajint imax;
+    ajint jmax=0;
+    ajint *ip;
+    ajint *t1Base;
+    ajint lastReported = -1 ;
+    char *cp ;
+    register ajint a, c, d, *t0, *t1, max ;
+    AjPInt localMax=NULL; 
+    AjPInt back=NULL;
 
-  AjPSeq sequence = NULL ;
-  AjPStr nseq = NULL;
+    AjPSeq sequence = NULL ;
+    AjPStr nseq = NULL;
 
-  embInit ("einverted", argc, argv);
-  outfile = ajAcdGetOutfile ("outfile");
-  sequence = ajAcdGetSeq ("sequence");
-  threshold = ajAcdGetInt ("threshold");
-  match = ajAcdGetInt ("match");
-  mismatch = ajAcdGetInt ("mismatch");
-  gap = ajAcdGetInt ("gap");
 
-  length = ajSeqLen(sequence);
-  cvt = ajSeqCvtNew ("ACGT");
-  ajSeqNum (sequence, cvt, &nseq);
-  sq = ajStrStr(nseq);
+    embInit ("einverted", argc, argv);
+    outfile = ajAcdGetOutfile ("outfile");
+    sequence = ajAcdGetSeq ("sequence");
+    threshold = ajAcdGetInt ("threshold");
+    match = ajAcdGetInt ("match");
+    mismatch = ajAcdGetInt ("mismatch");
+    gap = ajAcdGetInt ("gap");
+    maxsave = ajAcdGetInt("maxrepeat");
 
-  ajDebug("sequence length: %d\n", length);
+    length = ajSeqLen(sequence);
+    cvt = ajSeqCvtNew ("ACGT");
+    ajSeqNum (sequence, cvt, &nseq);
+    sq = ajStrStr(nseq);
 
-  /* build revmatch etc. to be a,t,g,c matched to reverse sequence
-     ending in MAXSAVE ROGUE values
-  */
-  for (i = 5 ; i-- ;)
-    { AJCNEW(revmatch[i], (length+MAXSAVE));
-      ip = revmatch[i];
-      for (j = length ; j-- ; )
-	*ip++ = mismatch ;
-      for (j = MAXSAVE ; j-- ;)
-	*ip++ = rogue ;
+    ajDebug("sequence length: %d\n", length);
+
+    /* 
+       build revmatch etc. to be a,t,g,c matched to reverse sequence
+       ending in MAXSAVE ROGUE values
+       */
+    for (i = 5 ; i-- ;)
+    { 
+	AJCNEW(revmatch[i], (length+maxsave));
+	ip = revmatch[i];
+	for(j = length ; j-- ; )
+	    *ip++ = mismatch ;
+	for(j = maxsave ; j-- ;)
+	    *ip++ = rogue ;
     }
 
-  cp = ajStrStr(nseq);
-  for (j = length ; j-- ;)	/* reverse order important here */
-    switch (*cp++)
-      {
-      case 0: revmatch[3][j] = match ; break ; /* A */
-      case 1: revmatch[2][j] = match ; break ; /* C */
-      case 2: revmatch[1][j] = match ; break ; /* G */
-      case 3: revmatch[0][j] = match ; break ; /* T */
-      }
+    cp = ajStrStr(nseq);
+    for (j = length ; j-- ;)		/* reverse order important here */
+	switch (*cp++)
+	{
+	case 0: revmatch[3][j] = match ; break ; /* A */
+	case 1: revmatch[2][j] = match ; break ; /* C */
+	case 2: revmatch[1][j] = match ; break ; /* G */
+	case 3: revmatch[0][j] = match ; break ; /* T */
+	}
 
-  for (i = 0; i < MAXSAVE ; i++) back[i] = localMax[i] = 0;
+    back     = ajIntNew();
+    localMax = ajIntNew();
+    matrix   = ajInt2dNew();
 
-  for (i = 0 ; i < length+MAXSAVE ; ++i) /* +MAXSAVE to report at end */
+    for(i=0; i<maxsave; i++)
     {
-      irel = i % MAXSAVE ;
+	ajIntPut(&back,i,0);
+	ajIntPut(&localMax,i,0);
+	for(j=0; j<maxsave; j++)
+	    ajInt2dPut(&matrix,i,j,0);
+    }
 
-      ajDebug ("i: %d irel: %d back[irel] %d\n", i, irel, back[irel]);
 
-      if (back[irel])		/* something to report */
-	{ imax = 0 ;
-	  for (j = back[irel] ; j > i-MAXSAVE ; --j)
-	    if (localMax[j%MAXSAVE] > imax)
-	      { jmax = j ;
-		imax = localMax[j%MAXSAVE] ;
-	      }
-	  report (imax, jmax) ;
-	  lastReported = jmax ;
-	  for (j = jmax ; j >= i-MAXSAVE ; --j)
-	    { localMax[j%MAXSAVE] = 0 ;
-	      back[j%MAXSAVE] = 0 ;
+    for (i = 0 ; i < length+maxsave ; ++i) /* +MAXSAVE to report at end */
+    {
+	irel = i % maxsave ;
+
+	ajDebug ("i: %d irel: %d back[irel] %d\n", i, irel,
+		 ajIntGet(back,irel));
+        if (ajIntGet(back,irel))	/* something to report */
+	{
+	    imax = 0 ;
+	    for (j = ajIntGet(back,irel) ; j > i-maxsave ; --j)
+		if (ajIntGet(localMax,j%maxsave) > imax)
+		{
+		    jmax = j ;
+		    imax = ajIntGet(localMax,j%maxsave);
+		}
+	    einverted_report (imax, jmax) ;
+	    lastReported = jmax ;
+	    for (j = jmax ; j >= i-maxsave; --j)
+	    {
+		ajIntPut(&localMax,j%maxsave,0);
+		ajIntPut(&back,j%maxsave,0);
 	    }
 	}
 
-      if (i >= length)		/* report only */
-	continue ;
+	if (i >= length)		/* report only */
+	    continue ;
 
-      if (i == 0)
-	t0 = matrix[MAXSAVE-1] - 1 ; /* NB offset by 1 */
-      else
-	t0 = matrix[(i-1) % MAXSAVE] - 1 ; /* NB offset by 1 */
-      t1 = matrix[irel] ;
-      memcpy (t1, &revmatch[(ajint)sq[i]][length-i], (MAXSAVE-1)*sizeof(ajint)) ;
-      t1[MAXSAVE-2] = t1[MAXSAVE-1] = rogue ;
+	if (i == 0)
+	    t0 = (matrix->Ptr[maxsave-1]->Ptr) - 1 ; /* NB offset by 1 */
+	else
+	    t0 = (matrix->Ptr[(i-1)%maxsave]->Ptr) - 1 ; /* NB offset by 1 */
 
-/* Gene Myers' version of dynamic progamming: 
-   a is current *t0, d is diagonal sum, c is working *t1 value 
-*/
+	t1 = (matrix->Ptr[irel]->Ptr);
+	memcpy (t1, &revmatch[(ajint)sq[i]][length-i],
+		(maxsave-1)*sizeof(ajint)) ;
+	t1[maxsave-2] = t1[maxsave-1] = rogue ;
+
+	/* Gene Myers' version of dynamic progamming: 
+	   a is current *t0, d is diagonal sum, c is working *t1 value 
+	   */
 
 #ifdef TEST
-      ajDebug ("\n%2d %c: ", i, base[(ajint)sq[i]]) ;
-      for (j = length-i ; --j ;)
-	ajDebug ("      ") ;
-      ajDebug (" ") ;
-      if (*t1 > 0)
-	ajDebug ("*") ;
-      else
+	ajDebug ("\n%2d %c: ", i, base[(ajint)sq[i]]) ;
+	for (j = length-i ; --j ;)
+	    ajDebug ("      ") ;
 	ajDebug (" ") ;
-      ajDebug ("%2d  ", *t1) ;
+	if (*t1 > 0)
+	    ajDebug ("*") ;
+	else
+	    ajDebug (" ") ;
+	ajDebug ("%2d  ", *t1) ;
 #endif
 
-      max = threshold-1 ;
-      jmax = 0 ;
-      t1Base = t1 ;
+	max = threshold-1 ;
+	jmax = 0 ;
+	t1Base = t1 ;
 
 #ifdef MYERS
-      c = *t1 ;
-      a = -rogue ;
-      while (1)			/* inner loop */
-	{ d = *++t1 ;
-	  if (a > 0) d += a ;
-	  a = *++t0 ;
-	  if (a > c) c = a ;
-	  c -= gap ;
-	  if (d > c) c = d ;
+	c = *t1 ;
+	a = -rogue ;
+	while (1)			/* inner loop */
+	{
+	    d = *++t1 ;
+	    if (a > 0) d += a ;
+	    a = *++t0 ;
+	    if (a > c) c = a ;
+	    c -= gap ;
+	    if (d > c) c = d ;
 #ifdef TEST
-	  if (c == d)
-	  {
-	    if (d == *t1)
-	      ajDebug (".") ;
+	    if (c == d)
+	    {
+		if (d == *t1)
+		    ajDebug (".") ;
+		else
+		    ajDebug ("\\") ;
+	    }
+	    else if (c + gap == a)
+		ajDebug ("|") ;
 	    else
-		ajDebug ("\\") ;
-	  }
-	  else if (c + gap == a)
-	    ajDebug ("|") ;
-	  else
-	    ajDebug ("-") ;
-	  if (*t1 > 0)
-	    ajDebug ("*") ;
-	  else
-	    ajDebug (" ") ;
-	  ajDebug ("%2d  ", c) ;
+		ajDebug ("-") ;
+	    if (*t1 > 0)
+		ajDebug ("*") ;
+	    else
+		ajDebug (" ") ;
+	    ajDebug ("%2d  ", c) ;
 #endif
-	  *t1 = c ;
-	  if (c > max)
-	    { if (c >= rogue)
-		goto done ;
-	      max = c ; jmax = t1 - t1Base ;
+	    *t1 = c ;
+	    if (c > max)
+	    {
+		if (c >= rogue)
+		    goto done ;
+		max = c ; jmax = t1 - t1Base ;
 	    }
 	}
 #endif
 
     done:
-      if (jmax)			/* max was broken */
-	{ localMax[irel] = max ;
-	  j = (i-jmax-1) % MAXSAVE ;
-	  if (i-jmax-1 > lastReported && 
-	      (!back[j] || localMax[back[j] % MAXSAVE] < max))
-	    back[j] = i ;
+	if (jmax)			/* max was broken */
+	{
+	    ajIntPut(&localMax,irel,max);
+	    j = (i-jmax-1) % maxsave;
+	    if (i-jmax-1 > lastReported && 
+		(!ajIntGet(back,j) || 
+		 ajIntGet(localMax,ajIntGet(back,j)%maxsave) < max))
+		ajIntPut(&back,j,i);
 	}
-      else
-	localMax[irel] = 0 ;
-/*
-      if (!((i+1) % 1000))
-	ajDebug ("%d", i+1) ;
-*/
+	else
+	    ajIntPut(&localMax,irel,0);
+	/*
+	   if (!((i+1) % 1000))
+	   ajDebug ("%d", i+1) ;
+	   */
     }
 
-  ajExit();
-  return 0;
+    ajIntDel(&localMax);
+    ajIntDel(&back);
+    ajInt2dDel(&matrix);
+
+    ajExit();
+    return 0;
 }
 
-void report (ajint max, ajint imax)
+
+/* @funcstatic einverted_report **********************************************
+**
+** Undocumented.
+**
+** @param [?] max [ajint] Undocumented
+** @param [?] imax [ajint] Undocumented
+** @@
+******************************************************************************/
+
+
+static void einverted_report (ajint max, ajint imax)
 {
-  ajint *t1, *ip, *jp, i, j ;
-  static ajint align1[2*MAXSAVE], align2[2*MAXSAVE] ;
-  ajint nmatch = 0, nmis = 0, ngap = 0 ;
-  ajint saveMax = max ;
+    ajint *t1;
+    ajint *ip;
+    ajint *jp;
+    ajint i;
+    ajint j;
+    ajint *align1;
+    ajint *align2;
+    ajint nmatch = 0;
+    ajint nmis = 0;
+    ajint ngap = 0 ;
+    ajint saveMax = max ;
 
-  ajDebug ("report (%d %d)\n", max, imax);
 
-				/* reconstruct maximum path */
-  t1 = matrix[imax % MAXSAVE] ;
-  for (j = 0 ; j < MAXSAVE ; ++j)
-    if (t1[j] == max)
-      break ;
-  i = imax ;
-  ip = align1 ; jp = align2 ;
-  while (max > 0 && j >= 0)	/* original missed blunt joins */
-    { *ip++ = i ;
-      *jp++ = i-j ;		/* seqpt + 1 */
+
+    AJCNEW(align1,2*maxsave);
+    AJCNEW(align2,2*maxsave);
+
+    ajDebug ("report (%d %d)\n", max, imax);
+
+    /* reconstruct maximum path */
+    t1 = (matrix->Ptr[imax % maxsave]->Ptr);
+    for (j = 0 ; j < maxsave ; ++j)
+	if (t1[j] == max)
+	    break ;
+    i = imax ;
+    ip = align1 ; jp = align2 ;
+    while (max > 0 && j >= 0)		/* original missed blunt joins */
+    {
+	*ip++ = i ;
+	*jp++ = i-j ;			/* seqpt + 1 */
 #ifdef TEST
-      ajDebug ("i j, max (local): %d %d, %4d (%2d)\n", 
-	      i, j, max, revmatch[(ajint)sq[i]][length-i+j]) ;
+	ajDebug ("i j, max (local): %d %d, %4d (%2d)\n", 
+		 i, j, max, revmatch[(ajint)sq[i]][length-i+j]) ;
 #endif
-      if (t1[j-1] == max + gap)
-	{ max += gap ; ++ngap ;
-	  --j ; continue ;
+	if (t1[j-1] == max + gap)
+	{
+	    max += gap ; ++ngap ;
+	    --j ; continue ;
 	}
-      t1 = matrix[(i-1) % MAXSAVE] ;
-      if (t1[j-1] == max + gap)
-	{ max += gap ; ++ngap ;
-	  --i ; --j ; continue ;
+	t1 = (matrix->Ptr[(i-1) % maxsave]->Ptr);
+	if (t1[j-1] == max + gap)
+	{
+	    max += gap ; ++ngap ;
+	    --i ; --j ; continue ;
 	}
-      max -= revmatch[(ajint)sq[i]][length-i+j] ;
-      if (revmatch[(ajint)sq[i]][length-i+j] == match)
-	++nmatch ;
-      else
-	++nmis ;
-      --i ; j-=2 ;
+	max -= revmatch[(ajint)sq[i]][length-i+j] ;
+	if (revmatch[(ajint)sq[i]][length-i+j] == match)
+	    ++nmatch ;
+	else
+	    ++nmis ;
+	--i ; j-=2 ;
     }
-  *ip = *jp = 0 ;
+    *ip = *jp = 0 ;
 #ifdef TEST
-  ajDebug ("\n") ;
+    ajDebug ("\n") ;
 #endif
-				/* report reconstruction */
+    /* report reconstruction */
 
-  ajFmtPrintF (outfile, "\nScore %d: %d/%d (%3d%%) matches, %d gaps\n", 
-	  saveMax, nmatch, (nmatch+nmis), 
-	  (100*nmatch)/(nmatch+nmis), ngap) ;
+    ajFmtPrintF (outfile, "\nScore %d: %d/%d (%3d%%) matches, %d gaps\n", 
+		 saveMax, nmatch, (nmatch+nmis), 
+		 (100*nmatch)/(nmatch+nmis), ngap) ;
 
-  ajFmtPrintF (outfile, "%8d ", *align2) ;	/* NB *jp is 1+coord */
-  for (jp = align2 ; *jp ; ++jp)
-    if (*jp == *(jp+1))
-      ajFmtPrintF (outfile, "-") ;
-    else
-      ajFmtPrintF (outfile, "%c", base[(ajint)sq[*jp-1]]) ;
-  ajFmtPrintF (outfile, " %-8d\n", *(jp-1)) ;
+    ajFmtPrintF (outfile, "%8d ", *align2) ; /* NB *jp is 1+coord */
+    for (jp = align2 ; *jp ; ++jp)
+	if (*jp == *(jp+1))
+	    ajFmtPrintF (outfile, "-") ;
+	else
+	    ajFmtPrintF (outfile, "%c", base[(ajint)sq[*jp-1]]) ;
+    ajFmtPrintF (outfile, " %-8d\n", *(jp-1)) ;
 
-  ajFmtPrintF (outfile, "         ") ;
-  for (ip = align1, jp = align2 ; *ip ; ++ip, ++jp)
-    if (*ip == *(ip+1) || *jp == *(jp+1))
-      ajFmtPrintF (outfile, " ") ;
-    else if (sq[*ip] + sq[*jp-1] == 3) /* pmr: was 1 or 5 */
-      ajFmtPrintF (outfile, "|") ;
-    else
-      ajFmtPrintF (outfile, " ") ;
-  ajFmtPrintF (outfile, "\n") ;
+    ajFmtPrintF (outfile, "         ") ;
+    for (ip = align1, jp = align2 ; *ip ; ++ip, ++jp)
+	if (*ip == *(ip+1) || *jp == *(jp+1))
+	    ajFmtPrintF (outfile, " ") ;
+	else if (sq[*ip] + sq[*jp-1] == 3) /* pmr: was 1 or 5 */
+	    ajFmtPrintF (outfile, "|") ;
+	else
+	    ajFmtPrintF (outfile, " ") ;
+    ajFmtPrintF (outfile, "\n") ;
 
-  ajFmtPrintF (outfile, "%8d ", *align1 + 1) ;
-  for (ip = align1 ; *ip ; ++ip)
-    if (*ip == *(ip+1))
-      ajFmtPrintF (outfile, "-") ;
-    else
-      ajFmtPrintF (outfile, "%c", base[(ajint)sq[*ip]]) ;
-  ajFmtPrintF (outfile, " %-8d\n", *(ip-1)+1) ;
+    ajFmtPrintF (outfile, "%8d ", *align1 + 1) ;
+    for (ip = align1 ; *ip ; ++ip)
+	if (*ip == *(ip+1))
+	    ajFmtPrintF (outfile, "-") ;
+	else
+	    ajFmtPrintF (outfile, "%c", base[(ajint)sq[*ip]]) ;
+    ajFmtPrintF (outfile, " %-8d\n", *(ip-1)+1) ;
+
+    AJFREE(align1);
+    AJFREE(align2);
+
+    return;
 }
-
-/************* end of file ************/

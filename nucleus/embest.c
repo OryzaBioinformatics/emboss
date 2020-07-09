@@ -855,8 +855,8 @@ EmbPEstAlign embEstAlignNonRecursive ( AjPSeq est, AjPSeq genome,
 
 		      AJFREE (score1);
 		      AJFREE (score2);
-		      AJFREE (eseq);
-		      AJFREE (gseq);
+		      /* AJFREE (eseq); */ /* copy of pointer from edup */
+		      /* AJFREE (gseq); */ /* copy of pointer from gdup */
 		      AJFREE (best_intron_score);
 		      AJFREE (best_intron_coord);
 		      AJFREE (temp_path);
@@ -1019,8 +1019,8 @@ EmbPEstAlign embEstAlignNonRecursive ( AjPSeq est, AjPSeq genome,
 
   AJFREE (score1);
   AJFREE (score2);
-  AJFREE (eseq);
-  AJFREE (gseq);
+  /*  AJFREE (eseq); */ /* copy of pointer in edup */
+  /*  AJFREE (gseq); */ /* copy of pointer in gdup */
   AJFREE (best_intron_score);
   AJFREE (best_intron_coord);
   ajSeqDel(&gdup);
@@ -1574,8 +1574,8 @@ static ajint estAlignMidpt ( AjPSeq est, AjPSeq genome, ajint match,
   AJFREE (score2);
   AJFREE (midpt1);
   AJFREE (midpt2);
-  AJFREE (eseq);
-  AJFREE (gseq);
+  AJFREE (edup);		/* also frees eseq */
+  AJFREE (gdup);		/* also frees edup */
   AJFREE (best_intron_score);
   AJFREE (best_intron_coord);
 

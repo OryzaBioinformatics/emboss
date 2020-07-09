@@ -22,75 +22,84 @@
 
 #include "emboss.h"
 
+
+/* @prog splitter *************************************************************
+**
+** Split a sequence into (overlapping) smaller sequences
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
 
-  AjPSeqall seqall;
-  AjPSeqout seqout;
-  AjPSeq seq;
-  AjPSeq subseq = NULL;
-  AjPStr str = NULL;
-  AjPStr name = NULL;
-  AjPStr value = NULL;
-  ajint size, overlap;
-  ajint from, to, start, end;
-  ajint seqlen;
+    AjPSeqall seqall;
+    AjPSeqout seqout;
+    AjPSeq seq;
+    AjPSeq subseq = NULL;
+    AjPStr str = NULL;
+    AjPStr name = NULL;
+    AjPStr value = NULL;
+    ajint size;
+    ajint overlap;
+    ajint from;
+    ajint to;
+    ajint start;
+    ajint end;
+    ajint seqlen;
   
-  (void) embInit ("splitter", argc, argv);
+    (void) embInit ("splitter", argc, argv);
 
-  seqout = ajAcdGetSeqoutall ("outseq");
-  seqall = ajAcdGetSeqall ("sequence");
-  size = ajAcdGetInt ("size");
-  overlap = ajAcdGetInt ("overlap");
+    seqout = ajAcdGetSeqoutall ("outseq");
+    seqall = ajAcdGetSeqall ("sequence");
+    size = ajAcdGetInt ("size");
+    overlap = ajAcdGetInt ("overlap");
 
-  while (ajSeqallNext(seqall, &seq)) {
+    while (ajSeqallNext(seqall, &seq))
+    {
+	seqlen = ajSeqLen (seq)-1;
+	if (seqlen > size)
+	{
+	    subseq = ajSeqNew ();
+	    for (from = 0; from <= seqlen; from += size)
+	    {
+		to = from + size-1;
+		start = from;
+		if (start < 0) {start = 0;}
 
-    seqlen = ajSeqLen (seq)-1;
-    if (seqlen > size) {
+		end = to + overlap;
+		if (end > seqlen)
+		    end = seqlen;
 
-      subseq = ajSeqNew ();
-      for (from = 0; from <= seqlen; from += size) {
+		(void) ajStrAssSub(&str, ajSeqStr(seq), start, end);
+		(void) ajSeqReplace(subseq, str);
 
-        to = from + size-1;
-	start = from - overlap;
-        if (start < 0) {start = 0;}
+		/* create a nice name for the subsequence */
+		(void) ajStrAss(&name, ajSeqGetName(seq));
+		(void) ajStrAppC(&name, "_");
+		(void) ajStrFromInt(&value, start+1);
+		(void) ajStrApp(&name, value);
+		(void) ajStrAppC(&name, "-");
+		(void) ajStrFromInt(&value, end+1);	
+		(void) ajStrApp(&name, value);
+		(void) ajSeqAssName(subseq, name);
 
-	end = to + overlap;
-        if (end > seqlen) {end = seqlen;}
+		/* set the description of the subsequence */
+		(void) ajSeqAssDesc(subseq, ajSeqGetDesc(seq));
 
-        (void) ajStrAssSub(&str, ajSeqStr(seq), start, end);
-        (void) ajSeqReplace(subseq, str);
+		/* set the type of the subsequence */
+		(void) ajSeqType(subseq);
 
-/* create a nice name for the subsequence */
-	(void) ajStrAss(&name, ajSeqGetName(seq));
-	(void) ajStrAppC(&name, "_");
-	(void) ajStrFromInt(&value, start+1);
-	(void) ajStrApp(&name, value);
-	(void) ajStrAppC(&name, "-");
-	(void) ajStrFromInt(&value, end+1);	
-	(void) ajStrApp(&name, value);
-	(void) ajSeqAssName(subseq, name);
+		(void) ajSeqAllWrite (seqout, subseq);
+	    }
 
-/* set the description of the subsequence */
-	(void) ajSeqAssDesc(subseq, ajSeqGetDesc(seq));
-
-/* set the type of the subsequence */
-	(void) ajSeqType(subseq);
-
-        (void) ajSeqAllWrite (seqout, subseq);
-      }
-
-      (void) ajSeqDel (&subseq);
-    	
-    } else {
-
-      (void) ajSeqAllWrite (seqout, seq);
-    	
+	    (void) ajSeqDel (&subseq);
+	}
+	else
+	    (void) ajSeqAllWrite (seqout, seq);
     }
-  }
   
-  (void) ajSeqWriteClose (seqout);
+    (void) ajSeqWriteClose (seqout);
 
-  (void) ajExit ();
-  return 0;
+    ajExit ();
+    return 0;
 }

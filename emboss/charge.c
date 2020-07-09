@@ -25,10 +25,17 @@
 
 #define AMINOFILE "Eamino.dat"
 
-static void  addgraph(AjPGraph graph, ajint limit, float *x, float *y,
-		      float ymax, float ymin,
-		      ajint window, char *sname);
-static AjPFloat read_amino(void);
+static void  charge_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
+			     float ymax, float ymin, ajint window,
+			     char *sname);
+static AjPFloat charge_read_amino(void);
+
+
+/* @prog charge ***************************************************************
+**
+** Protein charge plot
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -79,7 +86,7 @@ int main(int argc, char **argv)
 	graph = ajAcdGetGraphxy("graph");
 
 
-    chg = read_amino();
+    chg = charge_read_amino();
 
     str = ajStrNew();
     
@@ -136,7 +143,7 @@ int main(int argc, char **argv)
 	    ajGraphSetMulti(graph,1);
 
 	    ajGraphxySetOverLap(graph,ajFalse);
-	    addgraph(graph,limit,x,y,ymax,ymin,window,sname);
+	    charge_addgraph(graph,limit,x,y,ymax,ymin,window,sname);
 
 	    ajGraphxyDisplay(graph,ajTrue);
 	}
@@ -154,11 +161,25 @@ int main(int argc, char **argv)
     return 0;
 }
 
+/* @funcstatic charge_addgraph ***********************************************
+**
+** Undocumented.
+**
+** @param [?] graph [AjPGraph] Undocumented
+** @param [?] limit [ajint] Undocumented
+** @param [?] x [float*] Undocumented
+** @param [?] y [float*] Undocumented
+** @param [?] ymax [float] Undocumented
+** @param [?] ymin [float] Undocumented
+** @param [?] window [ajint] Undocumented
+** @param [?] sname [char*] Undocumented
+** @@
+******************************************************************************/
 
 
-static void  addgraph(AjPGraph graph, ajint limit, float *x, float *y,
-		      float ymax, float ymin,
-		      ajint window, char *sname)
+
+static void charge_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
+			    float ymax, float ymin, ajint window, char *sname)
 {
     ajint i;
 
@@ -199,8 +220,16 @@ static void  addgraph(AjPGraph graph, ajint limit, float *x, float *y,
     return;
 }
 
+/* @funcstatic charge_read_amino *********************************************
+**
+** Undocumented.
+**
+** @return [AjPFloat] Undocumented
+** @@
+******************************************************************************/
 
-static AjPFloat read_amino(void)
+
+static AjPFloat charge_read_amino(void)
 {
     AjPFile  fp=NULL;
     AjPStr   line;

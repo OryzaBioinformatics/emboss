@@ -1,25 +1,30 @@
 #include "emboss.h"
 
+/* @prog ajtest ***************************************************************
+**
+** testing, and subject to frequent change
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
 
-  AjPSeq seq;
-  AjPSeqall seqall;
-  AjPSeqout seqout;
+    AjPSeqset seqset;
+    AjPSeqall seqall;
+    AjPSeq seq;
+    ajint i = 0;
 
-  embInit ("ajtest", argc, argv);
+    embInit ("ajtest", argc, argv);
 
-  seqall = ajAcdGetSeqall ("sequence");
-  seqout = ajAcdGetSeqout ("outseq");
+    seqall = ajAcdGetSeqall ("sequence");
+    seqset = ajAcdGetSeqset ("seqset");
 
-  while (ajSeqallNext (seqall, &seq)) {
-    ajSeqTrace (seq);
-    ajUser ("<%S>", ajSeqGetUsa(seq));
-    ajSeqAllWrite (seqout, seq);
-  }
+    ajUser ("Set of %d", ajSeqsetSize(seqset));
+    while (ajSeqallNext (seqall, &seq))
+    {
+	ajUser ("%3d <%S>", i++, ajSeqGetUsa(seq));
+    }
 
-  ajSeqWriteClose (seqout);
-
-  ajExit ();
-  return 0;
+    ajExit ();
+    return 0;
 }

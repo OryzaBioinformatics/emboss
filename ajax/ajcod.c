@@ -147,6 +147,8 @@ void ajCodDel (AjPCod *thys)
     AJFREE((*thys)->back);
     ajStrDel(&(*thys)->name);
 
+    AJFREE(*thys);
+    
     return;
 }
 

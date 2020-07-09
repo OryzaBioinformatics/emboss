@@ -12,17 +12,31 @@ extern "C"
 
 
 #define T Except_T
-typedef struct T {
+
+/*  @data Except_T ********************************************************
+**
+** Exception data structure
+**
+******************************************************************************/
+
+typedef struct Except_T {
 	char *reason;
-} T;
-typedef struct Except_Frame Except_Frame;
-struct Except_Frame {
+} Except_T;
+
+/*  @data Except_Frame ********************************************************
+**
+** Exception frame data structure
+**
+******************************************************************************/
+
+typedef struct Except_Frame {
 	jmp_buf env;
-	Except_Frame *prev;
+	struct Except_Frame *prev;
 	const char *file;
 	ajint line;
 	const T *exception;
-};
+} Except_Frame;
+
 enum { Except_entered=0, Except_raised,
        Except_handled,   Except_finalized };
 extern Except_Frame *Except_stack;

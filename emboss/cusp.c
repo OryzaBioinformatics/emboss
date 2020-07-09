@@ -23,6 +23,13 @@
 #include "emboss.h"
 
 
+
+/* @prog cusp ***************************************************************
+**
+** Create a codon usage table
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     AjPSeqall  seqall;

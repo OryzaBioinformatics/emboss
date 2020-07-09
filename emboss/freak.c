@@ -23,6 +23,13 @@
 #include "emboss.h"
 
 
+
+/* @prog freak ***************************************************************
+**
+** Residue/base frequency table or plot
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     AjPSeqall  seqall;
@@ -92,8 +99,14 @@ int main(int argc, char **argv)
 	    ++c;
 	    t += step;
 	}
-	x = (float *) AJALLOC(c * sizeof(float));
-	y = (float *) AJALLOC(c * sizeof(float));
+
+	
+	if(c)
+	{
+	    x = (float *) AJALLOC(c * sizeof(float));
+	    y = (float *) AJALLOC(c * sizeof(float));
+	}
+	
 	
 	for(i=0;i<c;++i)
 	{

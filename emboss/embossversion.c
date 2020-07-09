@@ -22,17 +22,24 @@
 
 #include "emboss.h"
 
+
+/* @prog embossversion ********************************************************
+**
+** Writes the current EMBOSS version number
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
 
-  AjPFile outfile = NULL;
+    AjPFile outfile = NULL;
                         
-  embInit ("embossversion", argc, argv);
-  outfile = ajAcdGetOutfile ("outfile");
+    embInit ("embossversion", argc, argv);
+    outfile = ajAcdGetOutfile ("outfile");
 
-  ajFmtPrintF(outfile,"%s\n", VERSION);
-  (void) ajFileClose(&outfile);    
+    ajFmtPrintF(outfile,"%s\n", VERSION);
+    (void) ajFileClose(&outfile);    
   
-  ajExit ();
-  return 0;
+    ajExit ();
+    return 0;
 }

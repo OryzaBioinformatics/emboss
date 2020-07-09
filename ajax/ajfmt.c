@@ -53,7 +53,7 @@
 #include "ajstr.h"
 #include "ajfile.h"
 
-struct buf {
+struct FmtSBuf {
 	char *buf;
 	char *bp;
 	ajint size;
@@ -726,7 +726,7 @@ static void cvt_uB(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 static void cvt_uD(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 		  ajuint* flags, ajint width, ajint precision)
 {
-    AJTIME *time =  va_arg(VA_V(ap), AJTIME *);
+    AjPTime time =  va_arg(VA_V(ap), AjPTime);
     struct tm *mytime = time->time;
 
     char buf[280];
@@ -779,7 +779,7 @@ static void cvt_uF(ajint code, VALIST ap, int put(int c, void* cl), void* cl,
 
 static const Except_T Fmt_Overflow = { "Formatting Overflow" };
 
-/* ****************************************************************************
+/* @funclist Fmt_T ************************************************************
 **
 ** Conversion functions called for each conversion code.
 **
@@ -810,7 +810,7 @@ static Fmt_T cvt[256] =
 };
 
 
-/* ****************************************************************************
+/* @funclist Fmt_S ************************************************************
 **
 ** Conversion functions called for each scan conversion code.
 **
@@ -854,16 +854,35 @@ static Fmt_S scvt[256] =
 
 static char *Fmt_flags = "-+ 0#"; 
 
-static ajint outc(int c, void* cl)
+/* @funcstatic fmtOutC *******************************************************
+**
+** General output function to print a single character to a file
+**
+** @param [R] c [int] Character to be written
+** @param [R] cl [void*] Output file
+** @return [ajint] 0 on success
+******************************************************************************/
+
+static ajint fmtOutC(int c, void* cl)
 {
     FILE *f = cl;
 
     return putc(c, f);
 }
 
-static ajint s_ajinsert(int c, void* cl)
+/* @funcstatic fmtAjInsert ****************************************************
+**
+** Inserts a character in a buffer, raises a Fmt_Overflow exception if
+** the buffer is too small.
+**
+** @param [R] c [int] Character to be written
+** @param [R] cl [void*] Output file
+** @return [ajint] 0 on success
+******************************************************************************/
+
+static ajint fmtAjInsert(int c, void* cl)
 {
-    struct buf *p = cl;
+    struct FmtSBuf *p = cl;
 
     if (p->bp >= p->buf + p->size)
 	AJRAISE(Fmt_Overflow);
@@ -872,9 +891,18 @@ static ajint s_ajinsert(int c, void* cl)
     return c;
 }
 
-static ajint s_ajappend(ajint c, void* cl)
+/* @funcstatic fmtAjAppend ****************************************************
+**
+** Appends a character to a buffer, resizing it if necessary
+**
+** @param [R] c [int] Character to be written
+** @param [R] cl [void*] Output file
+** @return [ajint] 0 on success
+******************************************************************************/
+
+static ajint fmtAjAppend(ajint c, void* cl)
 {
-    struct buf *p = cl;
+    struct FmtSBuf *p = cl;
 
     if(p->bp >= p->buf + p->size)
     {
@@ -983,7 +1011,7 @@ void ajFmtPrint (const char* fmt, ...)
     va_list ap;
 
     va_start(ap, fmt);
-    ajFmtVfmt(outc, stdout, fmt, ap);
+    ajFmtVfmt(fmtOutC, stdout, fmt, ap);
     va_end(ap);
 
     return;
@@ -1001,7 +1029,7 @@ void ajFmtPrint (const char* fmt, ...)
 
 void ajFmtVPrint (const char* fmt, va_list ap)
 {
-    ajFmtVfmt(outc, stdout, fmt, ap);
+    ajFmtVfmt(fmtOutC, stdout, fmt, ap);
 
     return;
 }
@@ -1021,7 +1049,7 @@ void ajFmtError (const char* fmt, ...)
     va_list ap;
 
     va_start(ap, fmt);
-    ajFmtVfmt(outc, stderr, fmt, ap);
+    ajFmtVfmt(fmtOutC, stderr, fmt, ap);
     va_end(ap);
 
     return;
@@ -1039,7 +1067,7 @@ void ajFmtError (const char* fmt, ...)
 
 void ajFmtVError (const char* fmt, va_list ap)
 {
-    ajFmtVfmt(outc, stderr, fmt, ap);
+    ajFmtVfmt(fmtOutC, stderr, fmt, ap);
 
     return;
 }
@@ -1060,7 +1088,7 @@ void ajFmtPrintF (AjPFile file, const char* fmt, ...)
     va_list ap;
 
     va_start(ap, fmt);
-    ajFmtVfmt(outc, file->fp, fmt, ap);
+    ajFmtVfmt(fmtOutC, file->fp, fmt, ap);
     va_end(ap);
 
     return;
@@ -1079,7 +1107,7 @@ void ajFmtPrintF (AjPFile file, const char* fmt, ...)
 
 void ajFmtVPrintF(AjPFile file, const char* fmt, va_list ap)
 {
-    ajFmtVfmt(outc, file->fp, fmt, ap);
+    ajFmtVfmt(fmtOutC, file->fp, fmt, ap);
 
     return;
 }
@@ -1097,7 +1125,7 @@ void ajFmtVPrintF(AjPFile file, const char* fmt, va_list ap)
 
 void ajFmtVPrintFp(FILE* stream, const char* fmt, va_list ap)
 {
-    ajFmtVfmt(outc, stream, fmt, ap);
+    ajFmtVfmt(fmtOutC, stream, fmt, ap);
 
     return;
 }
@@ -1118,7 +1146,7 @@ void ajFmtPrintFp(FILE* stream, const char* fmt, ...)
     va_list ap;
 
     va_start(ap, fmt);
-    ajFmtVfmt(outc, stream, fmt, ap);
+    ajFmtVfmt(fmtOutC, stream, fmt, ap);
     va_end(ap);
 
     return;
@@ -1379,15 +1407,15 @@ AjPStr ajFmtPrintAppS(AjPStr* pthis, const char* fmt, ...)
 
 ajint ajFmtVfmtCL(char* buf, ajint size, const char* fmt, va_list ap)
 {
-    struct buf cl;
+    struct FmtSBuf cl;
 
     (void) assert(buf);
     (void) assert(size > 0);
     (void) assert(fmt);
     cl.buf = cl.bp = buf;
     cl.size = size;
-    ajFmtVfmt(s_ajinsert, &cl, fmt, ap);
-    (void) s_ajinsert(0, &cl);
+    ajFmtVfmt(fmtAjInsert, &cl, fmt, ap);
+    (void) fmtAjInsert(0, &cl);
 
     return cl.bp - cl.buf - 1;
 }
@@ -1432,14 +1460,14 @@ char* ajFmtString(const char* fmt, ...)
 
 char* ajFmtVString(const char* fmt, va_list ap)
 {
-    struct buf cl;
+    struct FmtSBuf cl;
 
     (void) assert(fmt);
 
     cl.size = 256;
     cl.buf = cl.bp = AJALLOC(cl.size);
-    ajFmtVfmt(s_ajappend, &cl, fmt, ap);
-    (void) s_ajappend(0, &cl);
+    ajFmtVfmt(fmtAjAppend, &cl, fmt, ap);
+    (void) fmtAjAppend(0, &cl);
 
     return AJRESIZE(cl.buf, cl.bp - cl.buf);
 }

@@ -851,7 +851,7 @@ void ajListstrFree(AjPList* pthis)
 	    AJFREE(*rest);
 	}
     }
-
+    
     AJFREE(*rest);
     AJFREE(*pthis);
 
@@ -873,6 +873,8 @@ void ajListstrFree(AjPList* pthis)
 void ajListDel(AjPList* pthis)
 {
     AjPList list;
+    AjPListNode *rest=NULL;
+    AjPListNode next=NULL;
 
     if (!pthis)
 	return;
@@ -880,10 +882,17 @@ void ajListDel(AjPList* pthis)
 	return;
 
     list = *pthis;
-    if (!list->Count)
-	if (list->Last == list->First)
-	    AJFREE (list->First);
 
+    rest = &list->First;
+
+    if (list->Count)
+	for ( ; (*rest)->Next; *rest = next)
+	{
+	    next = (*rest)->Next;
+	    AJFREE(*rest);
+	}
+
+    AJFREE (*rest);
     AJFREE(*pthis);
 
     return;
@@ -1356,11 +1365,41 @@ void ajListRemove (AjIList iter)
 
 void ajListstrRemove (AjIList iter)
 {
+    AjPListNode p;
+    
+    /* ajDebug ("ajListRemove\n");*/
 
-    ajListRemove (iter);
+    p = iter->Here;
+
+    if(iter->Dir == ajLASTFWD)
+    {
+	if(!p->Prev)
+	    ajFatal("Attempt to delete from unused iterator\n");
+
+	if(!p->Prev->Prev)
+	{
+	    ajStrDel((AjPStr *)&(iter->Head->First->Item));
+	    (void) listNodeDel(&(iter->Head->First));
+	}
+	else
+	{
+	    ajStrDel((AjPStr *)&p->Prev->Prev->Next->Item);	    
+	    (void) listNodeDel(&p->Prev->Prev->Next);
+	}
+    }
+    else
+    {
+	ajStrDel((AjPStr *)&p->Prev->Prev->Next->Item);
+	(void) listNodeDel(&p->Prev->Prev->Next);
+    }
+    
+    
+
+    iter->Head->Count--;
 
     return;
 }
+
 
 /* @func ajListInsert *******************************************************
 **
@@ -1575,8 +1614,8 @@ void ajListPushList (AjPList thys, AjPList* pmore)
 	thys->First->Prev = NULL;
     }
 
-    ajListDel (pmore);			/* free the list but not the nodes */
-
+    AJFREE(more);	/* free the list but not the nodes */
+    
     return;
 }
 
@@ -1745,7 +1784,13 @@ AjBool ajListstrPopEnd(AjPList thys, AjPStr *x)
 }
 
 
-/* Dummy function to catch all unused functions defined above */
+/* @func ajListDummyFunctions ************************************************
+**
+** Dummy function to catch all unused functions defined in ajlist
+**
+** @param [R] array [void**] Array needed by ajListArrayTrace
+******************************************************************************/
+
 void ajListDummyFunction(void** array)
 {
     listArrayTrace(array);

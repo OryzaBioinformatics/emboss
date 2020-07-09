@@ -89,6 +89,13 @@
 
 
 
+
+/* @prog nrscope **************************************************************
+**
+** Converts redundant EMBL-format SCOP file to non-redundant one
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     ajint        x         = 0;

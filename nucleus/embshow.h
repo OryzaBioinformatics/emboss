@@ -107,7 +107,7 @@ typedef struct EmbSShowRE {
 
 /* Feature information, type = SH_FT */
 typedef struct EmbSShowFT {
-  AjPFeatTable feat;
+  AjPFeattable feat;
 } EmbOShowFT, *EmbPShowFT;
 
 
@@ -134,7 +134,7 @@ void embShowAddTran (EmbPShow thys, AjPTrn trnTable, ajint frame,
 		     AjBool threeletter, AjBool number, AjPRange regions,
 		     ajint orfminsize);
 void embShowAddRE (EmbPShow thys, ajint sense, AjPList restrictlist, AjBool flat);
-void embShowAddFT (EmbPShow thys, AjPFeatTable feat);
+void embShowAddFT (EmbPShow thys, AjPFeattable feat);
 void embShowPrint (AjPFile out, EmbPShow thys);
 void embShowUpperRange(AjPStr *line, AjPRange upperrange, ajint pos);
 void embShowColourRange(AjPStr *line, AjPRange colour, ajint pos);

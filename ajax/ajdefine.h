@@ -33,18 +33,6 @@ enum capacity {default_size, reserve};
 
 typedef ajint AjBool;
 
-/* @data AjDate *******************************************************
-**
-** Date/time data type
-**
-** Used to store date/time values. Equivalent to "ajint".
-**
-** On output, conversion code "%D" writes the date.
-** @@
-******************************************************************************/
-
-typedef ajint AjDate;
-
 /* @data AjStatus *******************************************************
 **
 ** Status code returned with bit fields.

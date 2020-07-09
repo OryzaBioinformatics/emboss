@@ -27,6 +27,13 @@
 #define GSTEP 0.1
 
 
+
+/* @prog iep ***************************************************************
+**
+** Calculates the isoelectric point of a protein
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     AjPSeqall all;

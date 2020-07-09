@@ -29,12 +29,19 @@
 #define SUPPGUESS 50	/* Estimate of number of suppliers. */
 
 
-AjPTable supply_table(AjPFile inf);
+static AjPTable redata_supply_table(AjPFile inf);
 
 
 
 
 
+
+
+/* @prog redata ***************************************************************
+**
+** Search REBASE for enzyme name, references, suppliers etc
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -105,7 +112,7 @@ int main(int argc, char **argv)
 
 
     /* Read in and close supplier file for later use */
-    t=supply_table(supfile);
+    t=redata_supply_table(supfile);
     ajFileClose(&supfile);
 
     /* Read the enzyme line */
@@ -253,8 +260,17 @@ int main(int argc, char **argv)
 }
 
 
+/* @funcstatic redata_supply_table *******************************************
+**
+** Read list of RE suppliers into table
+**
+** @param [r] inf [AjPFile] infile
+** @return [AjPTable] Undocumented
+** @@
+******************************************************************************/
 
-AjPTable supply_table(AjPFile inf)
+
+static AjPTable redata_supply_table(AjPFile inf)
 {
     AjPTable t;
 

@@ -6,10 +6,18 @@ extern "C"
 #ifndef ajtime_h
 #define ajtime_h
 #include <time.h>
-typedef struct ajtime {
+
+/* @data AjPTime *******************************************************
+**
+** AJAX time and data data structure. The same structure is used for both.
+**
+** @alias AjPDate
+******************************************************************************/
+
+typedef struct AjSTime {
   struct tm *time;
   char *format;
-} AJTIME, *AjPTime, *AjPDate;
+} AjOTime, *AjPTime, *AjPDate;
 
 
 AjPTime ajTimeToday (void);

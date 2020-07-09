@@ -40,8 +40,8 @@ typedef struct AjSSeqout {
   ajint Offset;
   AjPStr Usa;
   AjPStr Ufo;
-  AjPFeatTable Fttable;
-  AjPFeatTabOut Ftquery;
+  AjPFeattable Fttable;
+  AjPFeattabOut Ftquery;
   AjPStr FtFormat;
   AjPStr FtFilename;
   AjPStr Informatstr;

@@ -39,7 +39,7 @@ static void* memmove (void *dst, const void* src, size_t len) {
 
 #define RESERVED_SIZE 32
 
-
+static AjBool ajChararrResize(AjPChar *thys, ajint elem);
 static AjBool ajIntResize(AjPInt *thys, ajint elem);
 static AjBool ajInt2dResize(AjPInt2d *thys, ajint elem);
 static AjBool ajInt3dResize(AjPInt3d *thys, ajint elem);
@@ -55,6 +55,174 @@ static AjBool ajShort3dResize(AjPShort3d *thys, ajint elem);
 static AjBool ajLongResize(AjPLong *thys, ajint elem);
 static AjBool ajLong2dResize(AjPLong2d *thys, ajint elem);
 static AjBool ajLong3dResize(AjPLong3d *thys, ajint elem);
+
+
+
+/* @func ajChararrNew *************************************************************
+**
+** Default constructor for empty AJAX character arrays.
+**
+** @return [AjPChar] Pointer to an empty character array structure
+** @@
+******************************************************************************/
+
+AjPChar ajChararrNew(void)
+{
+    AjPChar thys;
+
+    AJNEW0(thys);
+    thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(char));
+    thys->Len = 0;
+    thys->Res = RESERVED_SIZE;
+    
+    return thys;
+}
+
+
+
+/* @func ajChararrNewL ************************************************************
+**
+** Constructor given an initial reserved size.
+**
+** @param [r] size [ajint] Reserved size
+** @return [AjPChar] Pointer to an empty character array struct of specified size.
+** @@
+******************************************************************************/
+
+AjPChar ajChararrNewL(ajint size)
+{
+    AjPChar thys;
+
+    size = ajRound(size,RESERVED_SIZE);
+
+    AJNEW0(thys);
+    thys->Ptr = AJALLOC0(size*sizeof(char));
+    thys->Len = 0;
+    thys->Res = (ajint)size;
+    
+    return thys;
+}
+
+
+
+
+/* @func ajChararrDel *************************************************************
+**
+** Default destructor for AJAX character arrays.
+**
+** If the given array is a NULL pointer, simply returns.
+**
+** @param  [w] thys [AjPChar*] Pointer to the char array to be deleted.
+**         The pointer is always deleted.
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajChararrDel(AjPChar *thys)
+{
+
+    if(!thys || !*thys)
+	return;
+    
+    AJFREE((*thys)->Ptr);
+    AJFREE(*thys);
+
+    *thys = NULL;
+    
+    return;
+}
+
+
+
+
+
+
+/* @func ajChararrGet *************************************************************
+**
+** Retrieve an element from an AJAX character array.
+**
+** If the given array is a NULL pointer, simply returns.
+**
+** @param  [r] thys [AjPChar] Pointer to the char array.
+** @param  [r] elem [ajint] array element.
+**
+** @return [char] contents of array element
+** @@
+******************************************************************************/
+
+char ajChararrGet(AjPChar thys, ajint elem)
+{
+    if(elem<0 || !thys || elem>=thys->Len)
+	ajErr("Attempt to access bad char array index %d\n",elem);
+    
+    return thys->Ptr[elem];
+}
+
+
+
+
+
+
+/* @func ajChararrPut *************************************************************
+**
+** Load a character array element.
+**
+** If the given array is a NULL pointer an error is generated.
+** If the array is of insufficient size then the array is extended.
+** Negative indices generate an error.
+**
+** @param  [w] thys [AjPChar*] Pointer to the char array.
+** @param  [r] elem [ajint] array element.
+** @param  [r] v [char] value to load.
+**
+** @return [AjBool] true if the array was extended.
+** @@
+******************************************************************************/
+
+AjBool ajChararrPut(AjPChar *thys, ajint elem, char v)
+{
+    if(!thys || !*thys || elem<0)
+	ajErr("Attempt to write to illegal array value %d\n",elem);
+
+    if(elem < (*thys)->Res)
+    {
+	if(elem>=(*thys)->Len)
+	    (*thys)->Len = elem+1;
+	(*thys)->Ptr[elem] = v;
+	return ajFalse;
+    }
+
+    (void) ajChararrResize(thys, elem);
+
+    (*thys)->Ptr[elem] = v;
+    
+    return ajTrue;
+}
+
+
+
+
+/* @func ajChararrChararr *************************************************************
+**
+** Returns the current char* pointer. This will remain valid until
+** the array is resized or deleted.
+**
+** @param [r] thys [AjPChar] Source array
+** @return [char*] Current array pointer, or a null string if undefined.
+** @@
+******************************************************************************/
+char* ajChararrChararr(AjPChar thys)
+{
+    if(!thys || !thys->Len)
+	return NULL;
+
+    return thys->Ptr;
+}
+
+
+
+
+
 
 
 
@@ -239,6 +407,55 @@ void ajIntDec(AjPInt *thys, ajint elem)
     return;
 }
 
+
+/* @funcstatic ajCharResize ***************************************************
+**
+** Resize a character array.
+**
+** If the given array is a NULL pointer an error is generated.
+** Negative indices generate an error.
+**
+** @param  [w] thys [AjPChar*] Pointer to the char array.
+** @param  [r] size [ajint] new size.
+**
+** @return [AjBool] true if the array was extended.
+** @@
+******************************************************************************/
+
+static AjBool ajChararrResize(AjPChar *thys, ajint size)
+{
+    AjPChar p=NULL;
+    ajint    s;
+    ajint    clen;
+    ajint    limit;
+    
+
+    if(!thys || !*thys || size<0)
+	ajErr("Illegal attempt to resize character array");
+
+    clen = ajRound((*thys)->Len-1,RESERVED_SIZE);
+    s = ajRound(size+1,RESERVED_SIZE);
+    if(s == clen)
+	return ajFalse;
+    
+    p = *thys;
+
+    *thys = ajChararrNewL(s);
+    
+    if((ajint)size < p->Len-1)
+	limit = size+1;
+    else
+	limit = p->Len;
+    
+    (void) memmove((*thys)->Ptr,p->Ptr,limit*sizeof(char));
+
+    (*thys)->Len = size+1;
+    
+
+    ajChararrDel(&p);
+
+    return ajTrue;
+}
 
 
 /* @funcstatic ajIntResize ***************************************************

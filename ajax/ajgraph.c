@@ -59,6 +59,7 @@ static void     GraphObjDel (AjPGraph graphs);
 static void     GraphObjDraw (AjPGraph graphs);
 static void     GraphObjPrint (AjPGraph graphs);
 static void     GraphOpenFile (AjPGraph graphs, char *ext);
+static void     GraphOpenNull (AjPGraph graphs, char *ext);
 static void     GraphOpenXwin (AjPGraph graphs, char *ext);
 static void     GraphPen (ajint pen, ajint red, ajint green, ajint blue);
 static void     GraphRegister (void);
@@ -102,6 +103,13 @@ typedef struct GraphSType {
   void (*GOpen) (AjPGraph thys, char *ext);
 } GraphOType, *GraphPType;
 
+/* @funclist graphType ********************************************************
+**
+** Graph functions to open and display a graph with the PLPLOT
+** device drivers
+**
+******************************************************************************/
+
 static GraphOType graphType[] = {
   {"postscript", "ps",      ".ps",   GraphxyDisplayToFile, GraphOpenFile},
   {"ps",         "ps",      ".ps",   GraphxyDisplayToFile, GraphOpenFile},
@@ -122,7 +130,7 @@ static GraphOType graphType[] = {
   {"none",       "null",    "null",  GraphxyDisplayXwin,   GraphOpenXwin},
   {"null",       "null",    "null",  GraphxyDisplayXwin,   GraphOpenXwin},
   {"text",       "null",    "null",  GraphxyDisplayXwin,   GraphOpenXwin},
-  {"data",       "null",    ".dat",  GraphxyDisplayToData, NULL},
+  {"data",       "null",    ".dat",  GraphxyDisplayToData, GraphOpenFile},
 #ifndef X_DISPLAY_MISSING /* X not available */
   {"xterm",      "xterm",   "null",  GraphxyDisplayXwin, GraphOpenXwin},
 #endif
@@ -518,7 +526,7 @@ static void GraphSymbols(float *x1, float *y1, ajint numofdots,
 
 /* @funcstatic GraphClose *****************************************************
 **
-** Close the graph with the plplot command.
+** Close the graph with the plplot plend command.
 **
 ** @return [void]
 ** @@
@@ -699,7 +707,7 @@ void ajGraphOpenPlot(AjPGraph thys, ajint numofsets) {
 void ajGraphOpenWin (AjPGraph thys, float xmin, float xmax,
 		  float ymin, float ymax)
 {
-  AJTIME ajtime;
+  AjOTime ajtime;
   const time_t tim = time(0);      
 
   ajtime.time = localtime(&tim);
@@ -724,7 +732,7 @@ void ajGraphOpenWin (AjPGraph thys, float xmin, float xmax,
 /* @func ajGraphNewPage ***********************************************
 **
 ** Clear Screen if (X) or new page if plotter/postscript. Also pass a boolean
-** to state wether you want the current oen colour character sizes etc to
+** to state whether you want the current pen colour character sizes etc to
 ** be reset or stay the same for the next page.
 **
 ** @param [r] resetdefaults [AjBool] reset page setting?
@@ -782,7 +790,7 @@ void ajGraphCloseWin(void){
 
 void ajGraphOpen (AjPGraph thys, PLFLT xmin, PLFLT xmax,
 		  PLFLT ymin, PLFLT ymax, ajint flags) {
-  AJTIME ajtime;
+  AjOTime ajtime;
   const time_t tim = time(0);      
 
   ajtime.time = localtime(&tim);
@@ -880,7 +888,7 @@ AjBool ajGraphxySet (AjPGraph thys, AjPStr type) {
   for (i=0;graphType[i].Name;i++) {
     if (ajStrPrefixCaseCO(graphType[i].Name, type)) {
       if (!graphType[i].XYDisplay) {
-	ajDebug("ajGraphxySet type '%S' displaytype %d '%s' no GOpen function\n",
+	ajDebug("ajGraphxySet type '%S' displaytype %d '%s' no XYDisplay function\n",
 		type, i, graphType[i].Name);
 	return ajFalse;
       }
@@ -2005,6 +2013,19 @@ static void GraphOpenFile (AjPGraph graphs, char *ext) {
 
   GraphSetName(graphs, graphs->outputfile,ext);
   
+  return;
+}
+
+/* @funcstatic GraphOpenNull *******************************************
+**
+** A dummy routine for writing graphs to a data file. Does nothing.
+**
+** @param [r] graphs [AjPGraph] Multiple graph pointer.
+** @param [r] ext [char*] file extension
+** @return [void]
+** @@
+******************************************************************************/
+static void GraphOpenNull (AjPGraph graphs, char *ext) {
   return;
 }
 
@@ -3459,7 +3480,7 @@ static void GraphxyGeneral (AjPGraph graphs, AjBool closeit) {
 
   AjPGraphData g;
   ajint i,old,old2;
-  AJTIME ajtime;
+  AjOTime ajtime;
   const time_t tim = time(0);      
 
   ajtime.time = localtime(&tim);
@@ -3652,8 +3673,7 @@ void ajGraphObjAddText(AjPGraph graphs, float x1, float y1,
 
 
   Obj->type = TEXT;
-  Obj->text = 0;
-  (void) ajStrSetC(&Obj->text,text);
+  Obj->text = ajStrNewC(text);
   Obj->x1 = x1;
   Obj->x2 = 0.0;
   Obj->y1 = y1;
@@ -4834,8 +4854,6 @@ PLFLT *xy1, *xy2;
 char *text;
 
 text = (char *)AJALLOC( 1000*sizeof(char) );
-xy1 = (float *)AJALLOC( 2*sizeof(float) );
-xy2 = (float *)AJALLOC( 2*sizeof(float) );
 
 numchar = strlen(Text);
 for(i=0; i<numchar; i++) {
@@ -4844,10 +4862,11 @@ for(i=0; i<numchar; i++) {
   strcpy(text, Text);
   text[i+1] = '\0';
   ajGraphDrawTextOnLine(xy1[0], xy1[1], xy2[0], xy2[1], &text[i], just);
+  AJFREE(xy1); 
+  AJFREE(xy2); 
+
 }
 AJFREE(text);
-AJFREE(xy1); 
-AJFREE(xy2); 
 }
 
 /* @func ajGraphDrawTextOnCurve *************************************
@@ -4902,15 +4921,18 @@ void ajGraphRectangleOnCurve(PLFLT xcentre, PLFLT ycentre, PLFLT Radius, PLFLT B
   ajGraphPartCircle(xcentre, ycentre, r1Blocks, StartAngle, EndAngle);
   ajGraphPartCircle(xcentre, ycentre, r2Blocks, StartAngle, EndAngle);
   
-  xy1 = (float *)AJALLOC( 2*sizeof(float) );
-  xy2 = (float *)AJALLOC( 2*sizeof(float) );
-  
   xy1 = ajComputeCoord(xcentre, ycentre, r1Blocks, StartAngle);
   xy2 = ajComputeCoord(xcentre, ycentre, r2Blocks, StartAngle);
   ajGraphDrawLine( xy1[0], xy1[1], xy2[0], xy2[1] );
+  AJFREE(xy1);
+  AJFREE(xy2);
   xy1 = ajComputeCoord(xcentre, ycentre, r1Blocks, EndAngle);
   xy2 = ajComputeCoord(xcentre, ycentre, r2Blocks, EndAngle);
   ajGraphDrawLine( xy1[0], xy1[1], xy2[0], xy2[1] );
+  AJFREE(xy1);
+  AJFREE(xy2);
+
+  return;
 }
 
 
@@ -4935,6 +4957,7 @@ void ajGraphUnused(void)
     GraphCheckPoints (0, &f, &f);
     GraphCheckFlags (0);
     GraphArrayGapsI (0, &i, &i);
+    GraphOpenNull(NULL,NULL);
 }
 
 #endif

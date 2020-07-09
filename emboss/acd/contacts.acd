@@ -1,6 +1,6 @@
 appl: contacts
 [
-	doc: "Reads a coordinate file and writes a contact file"
+	doc: "Reads coordinate files and writes contact files"
 	groups: "Protein:3D Structure"
 ]
 
@@ -39,7 +39,7 @@ float: thresh
 	def: 1.0
 ]
 
-infile: vdwf
+string: vdwf
 [ 
 	param: Y
 	prompt: "Name of data file with van der Waals radii"

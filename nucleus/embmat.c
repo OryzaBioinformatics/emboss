@@ -76,6 +76,7 @@ void embMatMatchDel(EmbPMatMatch *s)
     ajStrDel(&(*s)->acc);
     ajStrDel(&(*s)->tit);
     ajStrDel(&(*s)->pat);
+    ajStrDel(&(*s)->iso);
     AJFREE(*s);
     *s = NULL;
 

@@ -22,10 +22,17 @@
 
 #include "emboss.h"
 
-void put_seq(AjPSeq seq, AjPStr strseq, ajint n, char *name, ajint type,
-	     AjPSeqout seqout);
+static void coderet_put_seq(AjPSeq seq, AjPStr strseq, ajint n, char *name,
+			    ajint type, AjPSeqout seqout);
 
 
+
+
+/* @prog coderet **************************************************************
+**
+** Extract CDS, mRNA and translations from feature tables
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -86,7 +93,7 @@ int main(int argc, char **argv)
 		    ajWarn("Cannot extract %s\n",ajSeqName(seq));
 		    continue;
 		}
-		put_seq(seq,cds,i,"cds",0,seqout);
+		coderet_put_seq(seq,cds,i,"cds",0,seqout);
 		ajStrDel(&cdslines[i]);
 	    }
 	    if(ncds)
@@ -105,7 +112,7 @@ int main(int argc, char **argv)
 		    ajWarn("Cannot extract %s",ajSeqName(seq));
 		    continue;
 		}
-		put_seq(seq,mrna,i,"mrna",0,seqout);
+		coderet_put_seq(seq,mrna,i,"mrna",0,seqout);
 		ajStrDel(&mrnalines[i]);
 	    }
 
@@ -120,7 +127,7 @@ int main(int argc, char **argv)
     
 	    for(i=0;i<ntran;++i)
 	    {
-		put_seq(seq,tranlines[i],i,"pro",1,seqout);
+		coderet_put_seq(seq,tranlines[i],i,"pro",1,seqout);
 		ajStrDel(&tranlines[i]);
 	    }
 
@@ -143,8 +150,22 @@ int main(int argc, char **argv)
 
 
 
-void put_seq(AjPSeq seq, AjPStr strseq, ajint n, char *name, ajint type,
-	     AjPSeqout seqout)
+
+/* @funcstatic coderet_put_seq ***********************************************
+**
+** Undocumented.
+**
+** @param [?] seq [AjPSeq] Undocumented
+** @param [?] strseq [AjPStr] Undocumented
+** @param [?] n [ajint] Undocumented
+** @param [?] name [char*] Undocumented
+** @param [?] type [ajint] Undocumented
+** @param [?] seqout [AjPSeqout] Undocumented
+** @@
+******************************************************************************/
+
+static void coderet_put_seq(AjPSeq seq, AjPStr strseq, ajint n, char *name,
+			    ajint type, AjPSeqout seqout)
 {
     AjPSeq nseq=NULL;
     AjPStr fn=NULL;

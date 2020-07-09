@@ -38,6 +38,13 @@ void henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx, float **sub,
 		      float gapopen, float gapextend, AjPStr *cons);
 
 
+
+/* @prog prophecy *************************************************************
+**
+** Creates matrices/profiles from multiple alignments
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
 
@@ -90,6 +97,17 @@ int main(int argc, char **argv)
 }
 
 
+
+/* @func simple_matrix ********************************************************
+**
+** Undocumented.
+**
+** @param [?] seqset [AjPSeqset] Undocumented
+** @param [?] outf [AjPFile] Undocumented
+** @param [?] name [AjPStr] Undocumented
+** @param [?] thresh [ajint] Undocumented
+** @@
+******************************************************************************/
 
 
 void simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
@@ -188,7 +206,22 @@ void simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
 }
 
     
-	    
+/* @func gribskov_profile *****************************************************
+**
+** Undocumented.
+**
+** @param [?] seqset [AjPSeqset] Undocumented
+** @param [?] sub [float**] Undocumented
+** @param [?] outf [AjPFile] Undocumented
+** @param [?] name [AjPStr] Undocumented
+** @param [?] thresh [ajint] Undocumented
+** @param [?] gapopen [float] Undocumented
+** @param [?] gapextend [float] Undocumented
+** @param [?] cons [AjPStr*] Undocumented
+** @@
+******************************************************************************/
+
+    
 void gribskov_profile(AjPSeqset seqset, float **sub,
 		      AjPFile outf, AjPStr name, ajint thresh,
 		      float gapopen, float gapextend, AjPStr *cons)
@@ -393,6 +426,23 @@ void gribskov_profile(AjPSeqset seqset, float **sub,
 }
 
 
+
+/* @func henikoff_profile *****************************************************
+**
+** Undocumented.
+**
+** @param [?] seqset [AjPSeqset] Undocumented
+** @param [?] imtx [AjPMatrixf] Undocumented
+** @param [?] sub [float**] Undocumented
+** @param [?] thresh [ajint] Undocumented
+** @param [?] cvt [AjPSeqCvt] Undocumented
+** @param [?] outf [AjPFile] Undocumented
+** @param [?] name [AjPStr] Undocumented
+** @param [?] gapopen [float] Undocumented
+** @param [?] gapextend [float] Undocumented
+** @param [?] cons [AjPStr*] Undocumented
+** @@
+******************************************************************************/
 
 
 void henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx, float **sub,

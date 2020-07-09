@@ -1,4 +1,4 @@
-/** @source findkm.c
+/* @source findkm.c
 ** @author: Copyright (C) Sinead O'Leary (soleary@hgmp.mrc.ac.uk), David Martin (david.martin@biotek.uio.no)
 ** @@
 ** Application to calculate the Michaelis Menton Constants (Km) of different 
@@ -24,13 +24,20 @@
 #include <stdlib.h>
 #include <limits.h>
 
-float summation(float *arr, ajint number);
-float multisum (float *arr1, float *arr2, ajint number);
-float findmax(float *arr1, ajint number);
-float findmin(float *arr1, ajint number);
+static float findkm_summation(float *arr, ajint number);
+static float findkm_multisum (float *arr1, float *arr2, ajint number);
+static float findkm_findmax(float *arr1, ajint number);
+static float findkm_findmin(float *arr1, ajint number);
 
 
 /*Func declarations */
+
+
+/* @prog findkm ***************************************************************
+**
+** Find Km and Vmax for an enzyme reaction by a Hanes/Woolf plot
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -107,34 +114,34 @@ int main(int argc, char **argv)
     N=0;
     while (ajFileReadLine(infile, &line))
     {
-	    if (ajStrLen(line) > 0)
+	if (ajStrLen(line) > 0)
         {
             (void)sscanf(ajStrStr(line),"%f %f",&S[N],&V[N]);
             if (S[N] > 0.0 && V[N] > 0.0)
             {
                 xdata[N] = S[N];
                 ydata[N] = S[N]/V[N];
-	            N++;
+		N++;
             }
         }
     }
 
     
     /* find the max and min values for the graph parameters*/
-    xmin = 0.5*findmin(xdata, N);
-    xmax = 1.5*findmax(xdata, N);
-    ymin = 0.5*findmin(ydata, N);
-    ymax = 1.5*findmax(ydata, N);
+    xmin = 0.5*findkm_findmin(xdata, N);
+    xmax = 1.5*findkm_findmax(xdata, N);
+    ymin = 0.5*findkm_findmin(ydata, N);
+    ymax = 1.5*findkm_findmax(ydata, N);
     
-    xmin2 = 0.5*findmin(S, N);
-    xmax2 = 1.5*findmax(S, N);
-    ymin2 = 0.5*findmin(V, N);
-    ymax2 = 1.5*findmax(V, N);
+    xmin2 = 0.5*findkm_findmin(S, N);
+    xmax2 = 1.5*findkm_findmax(S, N);
+    ymin2 = 0.5*findkm_findmin(V, N);
+    ymax2 = 1.5*findkm_findmax(V, N);
     
 
     
     /* Incase the casted ints turn out to be same number on the axis, 
-    make the max number larger than the min so graph can be seen. */
+       make the max number larger than the min so graph can be seen. */
     
     if ((ajint)xmax == (ajint)xmin)
         ++xmax;    
@@ -150,58 +157,59 @@ int main(int argc, char **argv)
     
      
     /* Gaussian Elimination for Best-fit curve plotting and 
-    calculating Km and Vmax */
+       calculating Km and Vmax */
     
-    A = summation(xdata, N);
-    B = summation(ydata, N);
+    A = findkm_summation(xdata, N);
+    B = findkm_summation(ydata, N);
 
-    C = multisum(xdata, ydata, N);
-    D = multisum(xdata, xdata, N);    
+    C = findkm_multisum(xdata, ydata, N);
+    D = findkm_multisum(xdata, xdata, N);    
 
     /*    c2 = (C -((A*B)/N) / (D - (D/N)));                          
 	  c1 = ((B-A) * c2 /N);
-     
+	  
 	  Vmax = c1;
-       
+	  
 	  Km = (1/c1)/c2;*/
     
     
   
     /*To find the best fit line, Least Squares Fit:    y =ax +b;  
-    Two Simultaneous equations, REARRANGE FOR b
-    
-        summation(ydata, N) - summation(xdata,N)*a - N*b =0;
-        b = (summation(ydata,N) - summation(xdata,N)*a) /  N; 
-        b = (B - A*a)/ N;
-                  
-	C - D*a - A*((B - A*a)/ N) =0;
-        C - D*a - A*B/N + A*A*a/N =0;
-        C - A*B/N = D*a - A*A*a/N;*/
+      Two Simultaneous equations, REARRANGE FOR b
+      
+      findkm_summation(ydata, N) - findkm_summation(xdata,N)*a - N*b =0;
+      b = (findkm_summation(ydata,N) - findkm_summation(xdata,N)*a) /  N; 
+      b = (B - A*a)/ N;
+      
+      C - D*a - A*((B - A*a)/ N) =0;
+      C - D*a - A*B/N + A*A*a/N =0;
+      C - A*B/N = D*a - A*A*a/N;*/
         
-      /* REARRANGE FOR a */
+    /* REARRANGE FOR a */
 
-       a = (N*C - A*B)/ (N*D - A*A);
-       b = (B - A*a)/ N;
+    a = (N*C - A*B)/ (N*D - A*A);
+    b = (B - A*a)/ N;
        
     /* Equation of Line - Lineweaver burk eqn*/
     /* 1/V = (Km/Vmax)*(1/S) + 1/Vmax;*/
 
           
-            Vmax = 1/a;
-            Km = b/a;
+    Vmax = 1/a;
+    Km = b/a;
            
-            cutx = -1/Km;
-            cuty = Km/Vmax;
+    cutx = -1/Km;
+    cuty = Km/Vmax;
     
     /* set limits for last point on graph */
     
-        upperXlimit = findmax(xdata,N)+3;
-        upperYlimit = (upperXlimit)*a + b;
+    upperXlimit = findkm_findmax(xdata,N)+3;
+    upperYlimit = (upperXlimit)*a + b;
 
     (void)ajFmtPrintF(outfile, "---Hanes Woolf Plot Calculations---\n");
     (void)ajFmtPrintF(outfile, "Slope of best fit line is a = %.2f\n", a);
     (void)ajFmtPrintF(
-	  outfile,"Coefficient in Eqn of line y = ma +b is b = %.2f\n", b);
+		      outfile,"Coefficient in Eqn of line y = ma +b is b "
+		      "= %.2f\n", b);
 
     (void)ajFmtPrintF(outfile, "Where line cuts x axis = (%.2f, 0)\n", cutx);
     (void)ajFmtPrintF(outfile, "Where line cuts y axis = (0, %.2f)\n", cuty);
@@ -212,60 +220,60 @@ int main(int argc, char **argv)
     
     /* draw graphs */
             
-     if(doplot)
+    if(doplot)
     {
-    xygraph = ajGraphxyDataNewI(N);
-    ajGraphxyAddDataPtrPtr(xygraph, S, V);  
-    ajGraphxyAddGraph(graphLB, xygraph); 
-    ajGraphxyDataSetTitleC(xygraph, "Michaelis Menten Plot");
-    ajGraphxyDataSetXtitleC(xygraph, "[S]");
-    ajGraphxyDataSetYtitleC(xygraph, "V");
+	xygraph = ajGraphxyDataNewI(N);
+	ajGraphxyAddDataPtrPtr(xygraph, S, V);  
+	ajGraphxyAddGraph(graphLB, xygraph); 
+	ajGraphxyDataSetTitleC(xygraph, "Michaelis Menten Plot");
+	ajGraphxyDataSetXtitleC(xygraph, "[S]");
+	ajGraphxyDataSetYtitleC(xygraph, "V");
     
-    ajGraphxySetXStart(graphLB, 0.0);
-    ajGraphxySetXEnd(graphLB, xmax2);
+	ajGraphxySetXStart(graphLB, 0.0);
+	ajGraphxySetXEnd(graphLB, xmax2);
 	ajGraphxySetYStart(graphLB, 0.0);        
 	ajGraphxySetYEnd(graphLB, ymax2);
 	ajGraphxySetXRangeII(graphLB, (ajint)0.0, (ajint)xmax2);
 	ajGraphxySetYRangeII(graphLB, (ajint)0.0, (ajint)ymax2);
-    ajGraphDataObjAddLine
+	ajGraphDataObjAddLine
 	    (xygraph, 0.0, 0.0, S[0], V[0], (ajint)BLACK);
-    ajGraphxySetCirclePoints(graphLB, ajTrue);
-    ajGraphDataxySetMaxMin(xygraph,0.0,xmax2,0.0,ymax2);
+	ajGraphxySetCirclePoints(graphLB, ajTrue);
+	ajGraphDataxySetMaxMin(xygraph,0.0,xmax2,0.0,ymax2);
 
 
-    ajGraphDataxyMaxMin(S,N,&amin,&amax);
-    ajGraphDataxyMaxMin(V,N,&bmin,&bmax);
-    ajGraphDataxySetMaxima(xygraph,amin,amax,bmin,bmax);
-    ajGraphDataxySetTypeC(xygraph,"2D Plot Float");
+	ajGraphDataxyMaxMin(S,N,&amin,&amax);
+	ajGraphDataxyMaxMin(V,N,&bmin,&bmax);
+	ajGraphDataxySetMaxima(xygraph,amin,amax,bmin,bmax);
+	ajGraphDataxySetTypeC(xygraph,"2D Plot Float");
     
-    xygraph2 = ajGraphxyDataNewI(N);    
-    ajGraphxyAddDataPtrPtr(xygraph2, xdata, ydata);  
-    ajGraphxyAddGraph(graphLB, xygraph2); 
+	xygraph2 = ajGraphxyDataNewI(N);    
+	ajGraphxyAddDataPtrPtr(xygraph2, xdata, ydata);  
+	ajGraphxyAddGraph(graphLB, xygraph2); 
 
-    ajGraphxyDataSetTitleC(xygraph2, "Hanes Woolf Plot");
-    ajGraphxyDataSetXtitleC(xygraph2, "[S]");
-    ajGraphxyDataSetYtitleC(xygraph2, "[S]/V");
+	ajGraphxyDataSetTitleC(xygraph2, "Hanes Woolf Plot");
+	ajGraphxyDataSetXtitleC(xygraph2, "[S]");
+	ajGraphxyDataSetYtitleC(xygraph2, "[S]/V");
 
-    ajGraphxySetXStart(graphLB, cutx);
-    ajGraphxySetXEnd(graphLB, upperXlimit);
-    ajGraphxySetYStart(graphLB, 0.0);        
-    ajGraphxySetYEnd(graphLB, upperYlimit);
-    ajGraphxySetXRangeII(graphLB, (ajint)cutx, (ajint)upperXlimit);
-    ajGraphxySetYRangeII(graphLB, (ajint)0.0, (ajint)upperYlimit); 
-    /*    ajGraphDataObjAddLine
-	  (xygraph2, cutx, 0.0, upperXlimit, upperYlimit, (ajint)RED);*/
-    ajGraphxySetCirclePoints(graphLB, ajTrue);
-    ajGraphDataxySetMaxMin(xygraph2, cutx,upperXlimit,0.0,upperYlimit);
-    ajGraphDataxyMaxMin(xdata,N,&amin,&amax);
-    ajGraphDataxyMaxMin(ydata,N,&bmin,&bmax);
-    ajGraphDataxySetMaxima(xygraph2,amin,amax,bmin,bmax);
-    ajGraphDataxySetTypeC(xygraph2,"2D Plot");
+	ajGraphxySetXStart(graphLB, cutx);
+	ajGraphxySetXEnd(graphLB, upperXlimit);
+	ajGraphxySetYStart(graphLB, 0.0);        
+	ajGraphxySetYEnd(graphLB, upperYlimit);
+	ajGraphxySetXRangeII(graphLB, (ajint)cutx, (ajint)upperXlimit);
+	ajGraphxySetYRangeII(graphLB, (ajint)0.0, (ajint)upperYlimit); 
+	/*    ajGraphDataObjAddLine
+	      (xygraph2, cutx, 0.0, upperXlimit, upperYlimit, (ajint)RED);*/
+	ajGraphxySetCirclePoints(graphLB, ajTrue);
+	ajGraphDataxySetMaxMin(xygraph2, cutx,upperXlimit,0.0,upperYlimit);
+	ajGraphDataxyMaxMin(xdata,N,&amin,&amax);
+	ajGraphDataxyMaxMin(ydata,N,&bmin,&bmax);
+	ajGraphDataxySetMaxima(xygraph2,amin,amax,bmin,bmax);
+	ajGraphDataxySetTypeC(xygraph2,"2D Plot");
 
     
 
-    ajGraphxyTitleC(graphLB,"FindKm");
-    ajGraphxySetOverLap(graphLB,ajFalse);    
-    ajGraphxyDisplay(graphLB, ajTrue);
+	ajGraphxyTitleC(graphLB,"FindKm");
+	ajGraphxySetOverLap(graphLB,ajFalse);    
+	ajGraphxyDisplay(graphLB, ajTrue);
     }      
   
     
@@ -285,50 +293,98 @@ int main(int argc, char **argv)
         
  
 
-       
-float summation(float *arr, ajint number)
+ /* @funcstatic findkm_summation *********************************************
+**
+** Undocumented.
+**
+** @param [?] arr [float*] Undocumented
+** @param [?] number [ajint] Undocumented
+** @return [float] Undocumented
+** @@
+******************************************************************************/
+
+      
+static float findkm_summation(float *arr, ajint number)
 {
-ajint i;
-float sum=0;
-    for (i = 0; i < number; i++) {
+    ajint i;
+    float sum=0;
+
+    for (i = 0; i < number; i++)
         sum += arr[i];
-    }
+
     return sum;
 } 
 
        
-float multisum(float *arr1, float *arr2, ajint number)
+/* @funcstatic findkm_multisum ***********************************************
+**
+** Undocumented.
+**
+** @param [?] arr1 [float*] Undocumented
+** @param [?] arr2 [float*] Undocumented
+** @param [?] number [ajint] Undocumented
+** @return [float] Undocumented
+** @@
+******************************************************************************/
+
+static float findkm_multisum(float *arr1, float *arr2, ajint number)
 {
-ajint i;
-float sum=0;
-    for (i = 0; i < number; i++) {
+    ajint i;
+    float sum=0;
+
+    for (i = 0; i < number; i++)
         sum += arr1[i]*arr2[i];
-    }
+
     return sum;
-   
 }
 
-float findmax(float *arr, ajint number)
+
+
+
+/* @funcstatic findkm_findmax ************************************************
+**
+** Undocumented.
+**
+** @param [?] arr [float*] Undocumented
+** @param [?] number [ajint] Undocumented
+** @return [float] Undocumented
+** @@
+******************************************************************************/
+
+static float findkm_findmax(float *arr, ajint number)
 {
-ajint i;
-float max=arr[0];
-    for (i=1; i<number; ++i){
-        if (arr[i] > max) {
+    ajint i;
+    float max=arr[0];
+
+    for (i=1; i<number; ++i)
+        if (arr[i] > max)
             max = arr[i];
-        }
-    }
+
     return max;
 }
 
-float findmin(float *arr, ajint number)
+
+
+
+/* @funcstatic findkm_findmin *************************************************
+**
+** Undocumented.
+**
+** @param [?] arr [float*] Undocumented
+** @param [?] number [ajint] Undocumented
+** @return [float] Undocumented
+** @@
+******************************************************************************/
+
+static float findkm_findmin(float *arr, ajint number)
 {
     ajint i;
     float min=arr[0];
-    for (i=1; i<number; ++i){
-        if (arr[i] < min) {
+
+    for (i=1; i<number; ++i)
+        if (arr[i] < min)
             min = arr[i];
-        }
-    }
+
     return min;
 }
 

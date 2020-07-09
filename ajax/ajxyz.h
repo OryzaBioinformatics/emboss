@@ -30,10 +30,10 @@ extern "C"
 ******************************************************************************/
 typedef struct AjSScorealg
 {   
-    AjPInt    seq_score;    /* Array of scores based on residue convervation */
+/*JC AjPInt ==> AjPFloat */    AjPFloat  seq_score;    /* Array of scores based on residue convervation */
     AjPInt    post_similar; /* Array of scores based on stamp pij value      */
-    AjPInt    ncon_score;   /* Array of scores based on number of contacts   */
-    AjPInt    ccon_score;   /* Array of scores based on convervation of contacts */
+/*JC AjPInt ==> AjPFloat */    AjPFloat    ncon_score;   /* Array of scores based on number of contacts   */
+/*JC AjPInt ==> AjPFloat */     AjPFloat    ccon_score;   /* Array of scores based on convervation of contacts */
     AjPInt    nccon_score; /* Array of total score based on convervation and number of contacts */
 
     AjPInt    combi_score;  /* Array of total score based on users scoring criteria  */
@@ -174,18 +174,23 @@ typedef struct AjSScopalg
 
 typedef struct AjSScophit
 {
-    AjPStr   Class;
-    AjPStr   Fold;
-    AjPStr   Superfamily;
-    AjPStr   Family;
-    AjPStr    Seq;	/* Sequence as string */
-    ajint     Start;      /* Start of sequence relative to full length 
+    AjPStr    Class;
+    AjPStr    Fold;
+    AjPStr    Superfamily;
+    AjPStr    Family;
+    AjPStr    Seq;	  /* Sequence as string */
+    ajint     Start;      /* Start of sequence or signature alignment relative to full length 
 			    swissprot sequence */
-    ajint     End;        /* End of sequence relative to full length 
+    ajint     End;        /* End of sequence or signature alignment relative to full length 
 			    swissprot sequence */
     AjPStr    Id;         /* Identifier */  
-    AjPStr    Type;       /* Bibliographic information */ 
+    AjPStr    Typeobj;    /* Bibliographic information ... objective*/ 
+    AjPStr    Typesbj;    /* Bibliographic information ... subjective */ 
     ajint     Group;      /* Group no. of sequence */
+    ajint     Rank;       /* Rank order of hit */	
+    float     Score;      /* Score of hit */
+    float     Eval;       /* E-value of hit */
+    AjPStr    Alg;        /* Alignment, e.g. of a signature to the sequence */
 } AjOScophit, *AjPScophit;
 
 
@@ -197,7 +202,7 @@ typedef struct AjSScophit
 **
 ** Holds data associated with a protein / domain sequence that is generated 
 ** / manipulated by the EMBOSS applications psiblasts, swissparse, seqsort, 
-** seqmerge and groups.
+** seqmerge, groups and sigscan.
 **
 ** AjPHit is implemented as a pointer to a C data structure.
 **
@@ -210,13 +215,18 @@ typedef struct AjSScophit
 typedef struct AjSHit
 {
   AjPStr    Seq;	/* Sequence as string */
-  ajint     Start;      /* Start of sequence relative to full length 
+  ajint     Start;      /* Start of sequence or signature alignment relative to full length 
 			    swissprot sequence */
-  ajint     End;        /* End of sequence relative to full length 
+  ajint     End;        /* End of sequence or signature alignment relative to full length 
 			    swissprot sequence */
   AjPStr    Id;         /* Identifier */  
-  AjPStr    Type;       /* Bibliographic information */ 
+  AjPStr    Typeobj;    /* Primary classification of hit - objective*/
+  AjPStr    Typesbj;    /* Secondary classification of hit */
+  AjPStr    Alg;        /* Alignment, e.g. of a signature to the sequence */
   ajint     Group;      /* Group no. of sequence */
+  ajint     Rank;       /* Rank order of hit */	
+  float     Score;      /* Score of hit */
+  float     Eval;       /* E-value of hit */
 } AjOHit, *AjPHit;
 
 
@@ -244,6 +254,32 @@ typedef struct AjSHitlist
     ajint   N;            /* No. of hits */
     AjPHit *hits;        /* Array of hits */
 } AjOHitlist, *AjPHitlist;
+
+
+
+
+
+/* @data AjPHitidx *******************************************************
+**
+** Ajax Hitidx object.
+**
+** Holds data for an indexing Hit and Hitlist objects
+**
+** AjPHitidx is implemented as a pointer to a C data structure.
+**
+** @alias AjSHitidx
+** @alias AjOHitidx
+**
+** @@
+******************************************************************************/
+typedef struct AjSHitidx
+{  
+    AjPStr      Id;        /* Identifier */  
+    AjPHit      hptr;      /* Pointer to AjPHit structure*/
+    AjPHitlist  lptr;      /* Pointer to AjPHitlist structure*/
+}AjOHitidx, *AjPHitidx;
+
+
 
 
 
@@ -370,6 +406,141 @@ typedef struct AjSScop
 
 
 
+/* @data AjPSigcell *******************************************************
+**
+** Ajax Sigcell object.
+**
+** Holds data for a cell of a path matrix for signature:sequence alignment.
+**
+** AjPSigcell is implemented as a pointer to a C data structure.
+**
+** @alias AjSSigcell
+** @alias AjOSigcell
+**
+** @@
+******************************************************************************/
+typedef struct AjSSigcell
+{
+    float  val;            /* Value for this cell */
+    ajint  prev;           /* Index in path matrix of prev. highest value */
+    AjBool try;            /* == ajTrue if this cell has been visited */
+} AjOSigcell, *AjPSigcell;
+
+
+
+
+
+/* @data AjPSigdat *******************************************************
+**
+** Ajax Sigdat object.
+**
+** Holds empirical data for an (uncompiled) signature position. 
+** Important: Functions which manipulate this structure rely on the data in 
+** the gap arrays (gsiz and grfq) being filled in order of increasing gap size.
+**
+** AjPSigdat is implemented as a pointer to a C data structure.
+**
+** @alias AjSSigdat
+** @alias AjOSigdat
+**
+** @@
+******************************************************************************/
+typedef struct AJSSigdat
+{
+    ajint       nres;         /* No. diff. types of residue*/
+    AjPChar     rids;         /* Residue id's */
+    AjPInt      rfrq;         /* Residue frequencies */
+
+    ajint       ngap;         /* No. diff. sizes of empirical gap*/
+    AjPInt      gsiz;         /* Gap sizes */
+    AjPInt      gfrq;         /* Frequencies of gaps of each size*/
+    ajint       wsiz;         /* Window size for this gap */
+} AJOSigdat, *AjPSigdat;
+
+
+
+
+
+
+/* @data AjPSigpos *******************************************************
+**
+** Ajax Sigpos object.
+**
+** Holds data for compiled signature position
+**
+** AjPSigpos is implemented as a pointer to a C data structure.
+**
+** @alias AjSSigpos
+** @alias AjOSigpos
+**
+** @@
+******************************************************************************/
+typedef struct AJSSigpos
+{
+    ajint    ngaps;        /* No. of gaps */
+    ajint   *gsiz;         /* Gap sizes */
+    float   *gpen;         /* Gap penalties */
+    float   *subs;         /* Residue match values */
+} AJOSigpos, *AjPSigpos;
+
+
+
+
+/* @data AjPSignature *******************************************************
+**
+** Ajax Signature object.
+**
+** Holds data for 
+**
+** AjPSignature is implemented as a pointer to a C data structure.
+**
+** @alias AjSSignature
+** @alias AjOSignature
+**
+** @@
+******************************************************************************/
+typedef struct AjSSignature
+{
+    AjPStr     Class;
+    AjPStr     Fold;
+    AjPStr     Superfamily;
+    AjPStr     Family;
+    ajint      npos;       /*No. of signature positions*/
+    AjPSigpos *pos;        /*Array of derived data for puropses of 
+			     alignment*/
+    AjPSigdat *dat;        /*Array of empirical data*/
+} AjOSignature, *AjPSignature;
+
+
+
+
+
+
+
+
+
+
+/* @data AjPXXX *******************************************************
+**
+** Ajax XXX object.
+**
+** Holds data for 
+**
+** AjPXXX is implemented as a pointer to a C data structure.
+**
+** @alias AjSXXX
+** @alias AjOXXX
+**
+** @@
+******************************************************************************/
+
+
+
+
+
+
+
+
 AjPAtom  ajXyzAtomNew(void);
 void     ajXyzAtomDel(AjPAtom *thys);
 AjPChain ajXyzChainNew(void);
@@ -383,6 +554,12 @@ AjPScop  ajXyzScopNew(ajint n);
 AjPScophit  ajXyzScophitNew(void);
 void     ajXyzScophitDel(AjPScophit *pthis);
 AjBool ajXyzHitlistToScophits(AjPList in, AjPList *out);
+AjBool        ajXyzHitsOverlap(AjPHit h1, AjPHit h2, ajint n);
+AjBool        ajXyzScophitsOverlap(AjPScophit h1, AjPScophit h2, ajint n);
+AjBool ajXyzScophitCopy(AjPScophit *to, AjPScophit from);
+
+
+
 
 void     ajXyzHitDel(AjPHit *pthis);
 AjPHit   ajXyzHitNew(void);
@@ -425,12 +602,19 @@ void     ajXyzScopToPdb(AjPStr scop, AjPStr *pdb);
 
 
 AjBool   ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys);
+AjBool   ajXyzScopalgWrite(AjPFile outf, AjPScopalg *thys);
 void ajXyzScopalgDel(AjPScopalg *pthis);
 AjPScopalg  ajXyzScopalgNew(int n);
+ajint ajXyzScopalgGetseqs(AjPScopalg thys, AjPStr **arr);
+
 
 void ajXyzCmapDel(AjPCmap *pthis);
 AjPCmap  ajXyzCmapNew(int dim);
-AjBool   ajXyzCmapRead(AjPFile inf, ajint chn, ajint mod, AjPCmap *thys);
+
+AjBool   ajXyzCmapRead(AjPFile inf, ajint mode, ajint chn, ajint mod, AjPCmap *thys);
+AjBool   ajXyzCmapReadC(AjPFile inf, char chn, ajint mod, AjPCmap *thys);
+AjBool   ajXyzCmapReadI(AjPFile inf, ajint chn, ajint mod, AjPCmap *thys);
+
 
 AjPVdwall  ajXyzVdwallNew(ajint n);
 AjPVdwres  ajXyzVdwresNew(ajint n);
@@ -441,6 +625,40 @@ AjBool   ajXyzVdwallRead(AjPFile inf, AjPVdwall *thys);
 AjPScorealg  ajXyzScorealgNew(ajint len);
 void ajXyzScorealgDel(AjPScorealg *pthis);
 float ajXyzVdwRad(AjPAtom atm, AjPVdwall vdw);
+
+
+AjPSigdat     ajXyzSigdatNew(int nres, int ngap);
+AjPSigpos     ajXyzSigposNew(ajint ngap);
+void          ajXyzSigdatDel(AjPSigdat *pthis);
+void          ajXyzSigposDel(AjPSigpos *thys);
+AjPHitidx     ajXyzHitidxNew(void);
+void          ajXyzHitidxDel(AjPHitidx *pthis);
+
+AjPSignature  ajXyzSignatureNew(int n);
+void          ajXyzSignatureDel(AjPSignature *pthis);
+AjBool        ajXyzSignatureRead(AjPFile inf, AjPSignature *thys);
+AjBool        ajXyzSignatureWrite(AjPFile outf, AjPSignature thys);
+AjBool        ajXyzSignatureCompile(AjPSignature *S, float gapo, float gape, 	
+				    AjPMatrixf matrix);
+AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit, 
+				     ajint nterm);
+AjBool        ajXyzSignatureAlignSeqall(AjPSignature sig, AjPSeqall db, ajint n, 
+					AjPHitlist *hits, ajint nterm);
+AjBool        ajXyzSignatureHitsWrite(AjPFile outf, AjPSignature sig, 
+				      AjPHitlist hits);
+AjBool        ajXyzSignatureAlignWrite(AjPFile outf, AjPSignature sig, 
+				       AjPHitlist hits);
+
+
+ajint         ajXyzCompScore(const void *hit1, const void *hit2);
+ajint         ajXyzCompId(const void *hit1, const void *hit2);
+ajint         ajXyzBinSearch(AjPStr id, AjPHitidx *arr, ajint siz);
+
+AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets, 
+				   ajint thresh);
+
+
+
 
 
 

@@ -34,6 +34,13 @@
 
 #include "emboss.h"
 
+
+/* @prog cons ***************************************************************
+**
+** Creates a consensus from multiple alignments
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     ajint   nseqs;
@@ -63,37 +70,38 @@ int main(int argc, char **argv)
 
     nseqs = ajSeqsetSize(seqset);
     if(nseqs<2)
-      ajFatal("Insufficient sequences (%d) to create a matrix",nseqs);
+	ajFatal("Insufficient sequences (%d) to create a matrix",nseqs);
 
     mlen = ajSeqsetLen(seqset);
-    for(i=0;i<nseqs;++i)         /* check sequences are same length */
+    for(i=0;i<nseqs;++i)	/* check sequences are same length */
     {
-      p = ajSeqsetSeq(seqset,i);
-      if(strlen(p)!=mlen) {
-        ajWarn("Sequence lengths are not equal!");
-	break;
-      }
+	p = ajSeqsetSeq(seqset,i);
+	if(strlen(p)!=mlen)
+	{
+	    ajWarn("Sequence lengths are not equal!");
+	    break;
+	}
     }
 
     ajSeqsetToUpper(seqset);
 
     cons = ajStrNew();
     embConsCalc (seqset, cmpmatrix, nseqs, mlen,
-                   fplural, setcase, identity, &cons);
+		 fplural, setcase, identity, &cons);
 
     /* write out consensus sequence */
     seqo = ajSeqNew();
     ajSeqAssSeq(seqo,cons);
     if(name == NULL)
-     ajSeqAssName(seqo,ajSeqsetGetName(seqset));
+	ajSeqAssName(seqo,ajSeqsetGetName(seqset));
     else
-     ajSeqAssName(seqo,name);
+	ajSeqAssName(seqo,name);
 
     ajSeqWrite(seqout,seqo);
     
     ajStrDel(&cons);
     ajSeqDel(&seqo);
+
     ajExit ();
     return 0;
-
 }

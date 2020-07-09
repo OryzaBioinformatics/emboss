@@ -23,40 +23,19 @@
 #include "emboss.h"
 
 
-static void objtofile(void **x,void *cl);
+static void dottup_objtofile(void **x,void *cl);
+static void dottup_drawPlotlines(void **x, void *cl);
+static void dottup_plotMatches(AjPList list);
 
 
-#ifndef NO_PLOT
+
 #include "ajgraph.h"
 
-static void drawPlotlines(void **x, void *cl)
-{
-    EmbPWordMatch p  = (EmbPWordMatch)*x;
-    PLFLT x1,y1,x2,y2;
-
-    x1 = x2 = ((*p).seq1start);
-    y1 = y2 = (PLFLT)((*p).seq2start);
-    x2 += (*p).length;
-    y2 += (PLFLT)(*p).length;
- 
-    ajGraphLine(x1, y1, x2, y2);
-}
-
-
-
-
-
-
-static void plotMatches(AjPList list)
-{
-    ajListMap(list,drawPlotlines, NULL);
-}
-
-#endif
-
-
-
-
+/* @prog dottup ***************************************************************
+**
+** Displays a wordmatch dotplot of two sequences
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -122,7 +101,7 @@ int main(int argc, char **argv)
 	ajGraphSetCharSize(0.5);
 
 	if(matchlist)
-	    plotMatches(matchlist);
+	    dottup_plotMatches(matchlist);
 	if(boxit)
 	{
 	    ajGraphRect( 0.0,0.0,(float)ajSeqLen(seq1),(float)ajSeqLen(seq2));
@@ -220,35 +199,86 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outfile,"##DataObjects\n##Number %d\n",
 		    ajListLength(matchlist));
 	if(matchlist)
-	    ajListMap(matchlist,objtofile, outfile);	
+	    ajListMap(matchlist,dottup_objtofile, outfile);	
 	ajFmtPrintF(outfile,"##GraphObjects\n##Number 0\n");
 
     }
   
     if(matchlist) 
-	embWordMatchListDelete(matchlist); /* free the match structures */
+	embWordMatchListDelete(&matchlist); /* free the match structures */
  
     ajExit();
     return 0;
 }
 
 
+/* @funcstatic dottup_objtofile **********************************************
+**
+** Undocumented.
+**
+** @@
+******************************************************************************/
 
-static void objtofile(void **x,void *cl)
+
+static void dottup_objtofile(void **x,void *cl)
 {
-  EmbPWordMatch p = (EmbPWordMatch)*x;
-  AjPFile file = (AjPFile) cl;
-  ajint x1;
-  ajint x2;
-  ajint y1;
-  ajint y2;
+    EmbPWordMatch p = (EmbPWordMatch)*x;
+    AjPFile file = (AjPFile) cl;
+    ajint x1;
+    ajint x2;
+    ajint y1;
+    ajint y2;
 
-  x1 = (*p).seq1start;
-  y1 = (*p).seq2start;
-  x2 = x1 + (*p).length;
-  y2 = y1 + (*p).length;
+    x1 = (*p).seq1start;
+    y1 = (*p).seq2start;
+    x2 = x1 + (*p).length;
+    y2 = y1 + (*p).length;
   
-  (void) ajFmtPrintF(file, "Line x1 %f y1 %f x2 %f y2 %f colour 0\n",
-		     (float)x1,(float)y1,(float)x2,(float)y2);
-  return;
+    (void) ajFmtPrintF(file, "Line x1 %f y1 %f x2 %f y2 %f colour 0\n",
+		       (float)x1,(float)y1,(float)x2,(float)y2);
+    return;
 }
+
+#ifndef NO_PLOT
+
+/* @funcstatic dottup_drawPlotlines ******************************************
+**
+** Undocumented.
+**
+** @@
+******************************************************************************/
+
+static void dottup_drawPlotlines(void **x, void *cl)
+{
+    EmbPWordMatch p  = (EmbPWordMatch)*x;
+    PLFLT x1,y1,x2,y2;
+
+    x1 = x2 = ((*p).seq1start);
+    y1 = y2 = (PLFLT)((*p).seq2start);
+    x2 += (*p).length;
+    y2 += (PLFLT)(*p).length;
+ 
+    ajGraphLine(x1, y1, x2, y2);
+
+    return;
+}
+
+
+
+
+/* @funcstatic dottup_plotMatches *********************************************
+**
+** Undocumented.
+**
+** @param [?] list [AjPList] Undocumented
+** @@
+******************************************************************************/
+
+static void dottup_plotMatches(AjPList list)
+{
+    ajListMap(list,dottup_drawPlotlines, NULL);
+
+    return;
+}
+
+#endif

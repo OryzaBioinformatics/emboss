@@ -23,6 +23,13 @@
 #include "emboss.h"
 
 
+
+/* @prog cai ***************************************************************
+**
+** CAI codon adaptation index
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     AjPSeqall  seqall;

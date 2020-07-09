@@ -15,7 +15,7 @@ appl: ajtest [
 
   seqall: sequence [ param: Y]
 
-  seqout: outseq [ param: Y ]
+  seqset: seqset [ param: Y ]
 
 #  bool: reqbool [ def: Y req: Y  info: "Required bool" ]
 #  bool: bool [ def: N info: "Required bool"  ]

@@ -3,6 +3,13 @@
 
 #define MAX_STRING 180
 
+/* @data AjPGraphObj *******************************************************
+**
+** AJAX data structure for graph objects, conatined as a substructure
+** in AjPGraphData
+**
+******************************************************************************/
+
 typedef struct AjSGraphObj {
   ajint type;
   ajint colour;

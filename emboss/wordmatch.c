@@ -7,10 +7,18 @@
 **
 */
 /*
-wordmatch -sequencea /nfs/adnah/il/wordtest/eclac.seq -sequenceb /nfs/adnah/il/wordtest/eclaci.seq -wordsize 6q
+wordmatch -sequencea /nfs/adnah/il/wordtest/eclac.seq
+          -sequenceb /nfs/adnah/il/wordtest/eclaci.seq -wordsize 6q
 */
 #include "ajax.h"
 #include "emboss.h"
+
+
+/* @prog wordmatch ************************************************************
+**
+** Finds all exact matches of a given size between 2 sequences
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -20,8 +28,8 @@ int main(int argc, char **argv)
   AjPTable seq1MatchTable =0 ;
   AjPList matchlist = NULL;
   AjPFile outf;
-  AjPFeatTable Tab1=NULL,Tab2=NULL;
-  AjPFeatTabOut seq1out = NULL, seq2out = NULL;
+  AjPFeattable Tab1=NULL,Tab2=NULL;
+  AjPFeattabOut seq1out = NULL, seq2out = NULL;
 
   embInit("wordmatch", argc, argv);
 
@@ -37,7 +45,8 @@ int main(int argc, char **argv)
   seq2out     =  ajAcdGetFeatout("bfeatout");
 
   embWordLength (wordlen);
-  if(embWordGetTable(&seq1MatchTable, seq1)){ /* get table of words */
+  if(embWordGetTable(&seq1MatchTable, seq1))
+  { /* get table of words */
     matchlist = embWordBuildMatchTable(&seq1MatchTable, seq2, ajTrue);
   }
 
@@ -47,14 +56,16 @@ int main(int argc, char **argv)
   embWordFreeTable(seq1MatchTable);               /* free table of words */
 
   ajFmtPrintF(outf, "%10s %10s Length\n", ajSeqName(seq1), ajSeqName(seq2));
-  if(matchlist) {
+  if(matchlist)
+  {
     embWordMatchListPrint(outf, matchlist);
-    embWordMatchListConvToFeat(matchlist,&Tab1,&Tab2,seq1->Name, seq2->Name);
+    embWordMatchListConvToFeat(matchlist,&Tab1,&Tab2,seq1, seq2);
     
-    embWordMatchListDelete(matchlist); /* free the match structures */
+    embWordMatchListDelete(&matchlist); /* free the match structures */
   }
-  ajFeaturesWrite(seq1out, Tab1);
-  ajFeaturesWrite(seq2out, Tab2);
+  ajFeatWrite(seq1out, Tab1);
+  ajFeatWrite(seq2out, Tab2);
+
   ajExit();
   return 0;
 }

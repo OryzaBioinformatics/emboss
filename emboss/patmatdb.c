@@ -22,9 +22,16 @@
 #include "emboss.h"
 
 
-void spaces(AjPFile *outf, ajint length);
+static void patmatdb_spaces(AjPFile *outf, ajint length);
 
 
+
+
+/* @prog patmatdb *************************************************************
+**
+** Search a protein sequence with a motif
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -126,15 +133,15 @@ int main(int argc, char **argv)
 		
 		
 	    ajFmtPrintF(outf, "     |");
-	    spaces(&outf, length);
+	    patmatdb_spaces(&outf, length);
 	    ajFmtPrintF(outf, "|\n");
 
 
 	    ajFmtPrintF(outf, "%6d", start);
-	    spaces(&outf, length);
+	    patmatdb_spaces(&outf, length);
 	    ajFmtPrintF(outf, "%-d\n\n\n", end);
 	}
-
+	embPatMatchDel(&match);
     }	
 
 
@@ -147,11 +154,16 @@ int main(int argc, char **argv)
     return 0;
 }
 
+/* @funcstatic patmatdb_spaces ************************************************
+**
+** add spaces under sequence between the count bars
+**
+** @param [w] outf [AjPFile*] outfile
+** @param [r] length [ajint] length+2
+** @@
+******************************************************************************/
 
-
-/* spaces - add spaces under sequence between the count bars. */
-
-void spaces(AjPFile *outf, ajint length)
+static void patmatdb_spaces(AjPFile *outf, ajint length)
 {
     ajint i;
 

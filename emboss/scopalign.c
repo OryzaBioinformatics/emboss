@@ -112,12 +112,18 @@
 
 
 #include "emboss.h"
-void ProcessStampFile(AjPStr in, AjPStr out, AjPScop scop);
+
+
+static void scopalign_ProcessStampFile(AjPStr in, AjPStr out, AjPScop scop);
 
 
 
 
-
+/* @prog scopalign *******************************************************
+**
+** Generate alignments for SCOP families
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -296,7 +302,7 @@ int main(int argc, char **argv)
 
 		/* Process STAMP alignment file and generate alignment file 
 		   for output */
-		ProcessStampFile(out, align, prevscop);
+		scopalign_ProcessStampFile(out, align, prevscop);
 		
 
 		/* Remove all temporary files */
@@ -412,7 +418,7 @@ int main(int argc, char **argv)
     
 
     /* Process STAMP alignment file and generate alignment file for output */
-    ProcessStampFile(out, align, scop);
+    scopalign_ProcessStampFile(out, align, scop);
 
 
     /* Remove all temporary files */
@@ -470,7 +476,7 @@ int main(int argc, char **argv)
 
 
 
-/* @func ProcessStampFile ****************************************************
+/* @funcstatic scopalign_ProcessStampFile ***********************************
 **
 ** This function is very specific to scopalign, hence it is not library code.
 ** This function reads the output of ver2hor, i.e. a stamp alignment (Figure 
@@ -560,7 +566,8 @@ int main(int argc, char **argv)
 ** @return [void]
 ** @@
 *****************************************************************************/
-void ProcessStampFile(AjPStr in, AjPStr out, AjPScop scop)
+
+static void scopalign_ProcessStampFile(AjPStr in, AjPStr out, AjPScop scop)
 {
     AjPFile  outf =NULL;  /* Output file pointer */
     AjPFile   inf =NULL;  /* Input file pointer */
@@ -583,9 +590,9 @@ void ProcessStampFile(AjPStr in, AjPStr out, AjPScop scop)
 
     /* Open input and output files */
     if(!(outf=ajFileNewOut(out)))
-	ajFatal("Could not open output file in ProcessStampFile");
+	ajFatal("Could not open output file in scopalign_ProcessStampFile");
     if(!(inf=ajFileNewIn(in)))
-	ajFatal("Could not open input file in ProcessStampFile");
+	ajFatal("Could not open input file in scopalign_ProcessStampFile");
     
 
     /*Write SCOP classification records to file*/
@@ -593,8 +600,8 @@ void ProcessStampFile(AjPStr in, AjPStr out, AjPScop scop)
     ajFmtPrintSplit(outf,scop->Fold,"\nXX\nFO   ",75," \t\n\r");
     ajFmtPrintSplit(outf,scop->Superfamily,"XX\nSF   ",75," \t\n\r");
     ajFmtPrintSplit(outf,scop->Family,"XX\nFA   ",75," \t\n\r");
-    ajFmtPrintF(outf,"XX\n");
-    
+    ajFmtPrintF(outf,"XX");
+
     
     /* Start of code for reading input file */
     /*Ignore everything up to first line beginning with 'Number'*/
@@ -623,7 +630,7 @@ void ProcessStampFile(AjPStr in, AjPStr out, AjPScop scop)
 	{
 	    /* Print the number line out as it is */
 	    if(ajStrPrefixC(line,"Number"))
-		ajFmtPrintF(outf,"%S\n",line);
+		ajFmtPrintF(outf,"\n%S\n",line);
 	    else
 	    {
 		/* Read only the 7 characters of the domain identifier code in */
@@ -633,7 +640,9 @@ void ProcessStampFile(AjPStr in, AjPStr out, AjPScop scop)
 
 		/* Read the sequence */
 		ajStrAssSub(&temp3, line, 13, 69);
-
+		ajStrConvertCC(&temp3, " ", "-");
+		ajStrToUpper(&temp3);
+		
 
 		/* Write domain id code and sequence out */
 		ajFmtPrintF(outf,"%-13S%S\n",temp2, temp3);
@@ -653,7 +662,7 @@ void ProcessStampFile(AjPStr in, AjPStr out, AjPScop scop)
 		ajStrAssSub(&temp3, line, 13, 69);
 
 		/* Write post similar line out */
-		ajFmtPrintF(outf,"%-13s%S\n\n","Post_similar", temp3);
+		ajFmtPrintF(outf,"%-13s%S\n","Post_similar", temp3);
 	    }
 	    /* Ignore Very and Less similar lines */
 	    else continue;

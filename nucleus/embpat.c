@@ -39,6 +39,15 @@ static AjBool patOUBrute(char *seq, char *pat, ajint spos, ajint ppos, ajint mm,
 			ajint omm, ajint level, AjPList *l, AjBool carboxyl,
 			ajint begin, ajint *count, AjPStr *name, ajint st);
 
+/* @funcstatic patStringFree **************************************************
+**
+** Free a pattern structure, through an ajListMap call
+**
+** @param [D] x [void**] pattern
+** @param [R] cl [void*] Function
+** @@
+******************************************************************************/
+
 static void patStringFree(void **x, void *cl) {
   ajint **ptr = (ajint **)x;
 
@@ -60,7 +69,7 @@ AjPStr embPatSeqCreateRegExp(AjPStr thys, AjBool protein) {
   return embPatSeqCreateRegExpC(ajStrStr(thys), protein);
 }
 
-/* @func embPatSeqCreateRegExpC ************************************************
+/* @func embPatSeqCreateRegExpC ***********************************************
 **
 ** Create a regular expression for a string and substitute the chars for
 ** Nucleotides or proteins as needed.

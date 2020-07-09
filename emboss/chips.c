@@ -23,6 +23,13 @@
 #include "emboss.h"
 
 
+
+/* @prog chips ***************************************************************
+**
+** Codon usage statistics
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     AjPSeqall  seqall;

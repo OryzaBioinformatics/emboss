@@ -21,6 +21,13 @@
 
 #include "emboss.h"
 
+
+/* @prog needle ***************************************************************
+**
+** Needleman-Wunsch global alignment
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     AjPSeqall seqall;

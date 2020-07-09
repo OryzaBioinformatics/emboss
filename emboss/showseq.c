@@ -26,51 +26,64 @@
 
 /* declare functions */
 
-static void FormatShow(EmbPShow ss, AjPStr format, AjPTrn trnTable,
-AjPRange translaterange, AjPRange uppercase, AjPRange highlight, AjBool
-threeletter, AjBool numberseq, AjPFeatTable feat, ajint orfminsize,
-AjPList restrictlist, AjBool flat);
+static void showseq_FormatShow(EmbPShow ss, AjPStr format, AjPTrn trnTable,
+			       AjPRange translaterange, AjPRange uppercase,
+			       AjPRange highlight, AjBool threeletter,
+			       AjBool numberseq, AjPFeattable feat,
+			       ajint orfminsize, AjPList restrictlist,
+			       AjBool flat);
 
-static void read_equiv(AjPFile *equfile, AjPTable *table);
-static void read_file_of_enzyme_names(AjPStr *enzymes);
+static void showseq_read_equiv(AjPFile *equfile, AjPTable *table);
+static void showseq_read_file_of_enzyme_names(AjPStr *enzymes);
+
+
+#define ENZDATA "REBASE/embossre.enz"
+#define EQUDATA "embossre.equ"
+#define EQUGUESS 3500     /* Estimate of number of equivalent names */
 
 
 
+/* @prog showseq **************************************************************
+**
+** Display a sequence with features, translation etc
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
 
-  ajint begin, end;
-  AjPSeqall seqall;
-  AjPSeq seq;
-  EmbPShow ss;
-  AjPFile outfile;
-  AjPStr * formatlist;
-  AjPStr * thinglist;
-  AjPStr * tablelist;
-  ajint table=0;
-  AjPRange translaterange;
-  AjPRange uppercase;
-  AjPRange highlight;
-  AjBool threeletter;
-  AjBool numberseq;
-  AjBool nameseq;
-  ajint width;
-  ajint length;
-  ajint margin;
-  AjBool description;
-  ajint offset;
-  AjBool html;
-  AjPStr descriptionline;
-  AjPFeatTable feat;
-  ajint orfminsize;
-  AjBool flat;
-  AjPTrn trnTable;
+    ajint begin, end;
+    AjPSeqall seqall;
+    AjPSeq seq;
+    EmbPShow ss;
+    AjPFile outfile;
+    AjPStr * formatlist;
+    AjPStr * thinglist;
+    AjPStr * tablelist;
+    ajint table=0;
+    AjPRange translaterange;
+    AjPRange uppercase;
+    AjPRange highlight;
+    AjBool threeletter;
+    AjBool numberseq;
+    AjBool nameseq;
+    ajint width;
+    ajint length;
+    ajint margin;
+    AjBool description;
+    ajint offset;
+    AjBool html;
+    AjPStr descriptionline;
+    AjPFeattable feat;
+    ajint orfminsize;
+    AjBool flat;
+    AjPTrn trnTable;
 
-  AjPStr format=ajStrNew();	/* holds ACD or constructed format for output */
-  ajint i;
+    /* holds ACD or constructed format for output */
+    AjPStr format=ajStrNew();
+    ajint i;
 
-/* stuff lifted from Alan's 'restrict.c' */
+    /* stuff lifted from Alan's 'restrict.c' */
     AjPStr    enzymes=NULL;
     ajint mincuts;
     ajint maxcuts;
@@ -88,196 +101,205 @@ int main(int argc, char **argv)
     AjPTable  retable=NULL;
     ajint       hits;
     AjPList   restrictlist=NULL;
-#define ENZDATA "REBASE/embossre.enz"
-#define EQUDATA "embossre.equ"
-#define EQUGUESS 3500     /* Estimate of number of equivalent names */
-                                                                                                     
 
 
-  (void) embInit ("showseq", argc, argv);
+    (void) embInit ("showseq", argc, argv);
 
-  seqall = ajAcdGetSeqall ("sequence");
-  outfile = ajAcdGetOutfile ("outfile");
-  formatlist = ajAcdGetList ("format");
-  thinglist = ajAcdGetList ("things");
-  tablelist = ajAcdGetList ("table");
-  translaterange = ajAcdGetRange ("translate");
-  uppercase = ajAcdGetRange ("uppercase");
-  highlight = ajAcdGetRange ("highlight");
-  threeletter = ajAcdGetBool ("threeletter");
-  numberseq = ajAcdGetBool ("number");
-  width = ajAcdGetInt ("width");
-  length = ajAcdGetInt ("length");
-  margin = ajAcdGetInt ("margin");
-  nameseq = ajAcdGetBool ("name");
-  description = ajAcdGetBool ("description");
-  offset = ajAcdGetInt ("offset");
-  html = ajAcdGetBool ("html");
-  orfminsize = ajAcdGetInt ("orfminsize");
-  flat = ajAcdGetBool ("flatreformat");
+    seqall = ajAcdGetSeqall ("sequence");
+    outfile = ajAcdGetOutfile ("outfile");
+    formatlist = ajAcdGetList ("format");
+    thinglist = ajAcdGetList ("things");
+    tablelist = ajAcdGetList ("table");
+    translaterange = ajAcdGetRange ("translate");
+    uppercase = ajAcdGetRange ("uppercase");
+    highlight = ajAcdGetRange ("highlight");
+    threeletter = ajAcdGetBool ("threeletter");
+    numberseq = ajAcdGetBool ("number");
+    width = ajAcdGetInt ("width");
+    length = ajAcdGetInt ("length");
+    margin = ajAcdGetInt ("margin");
+    nameseq = ajAcdGetBool ("name");
+    description = ajAcdGetBool ("description");
+    offset = ajAcdGetInt ("offset");
+    html = ajAcdGetBool ("html");
+    orfminsize = ajAcdGetInt ("orfminsize");
+    flat = ajAcdGetBool ("flatreformat");
 
-/*  restriction enzyme stuff */
-  mincuts = ajAcdGetInt ("mincuts");
-  maxcuts = ajAcdGetInt ("maxcuts");
-  sitelen  = ajAcdGetInt ("sitelen");
-  single = ajAcdGetBool ("single");
-  blunt = ajAcdGetBool ("blunt");
-  sticky = ajAcdGetBool ("sticky");
-  ambiguity = ajAcdGetBool ("ambiguity");
-  plasmid = ajAcdGetBool ("plasmid");
-  commercial = ajAcdGetBool ("commercial");
-  limit = ajAcdGetBool ("limit");
-  enzymes = ajAcdGetString ("enzymes");
-  equiv = ajAcdGetBool("preferred");       
+    /*  restriction enzyme stuff */
+    mincuts = ajAcdGetInt ("mincuts");
+    maxcuts = ajAcdGetInt ("maxcuts");
+    sitelen  = ajAcdGetInt ("sitelen");
+    single = ajAcdGetBool ("single");
+    blunt = ajAcdGetBool ("blunt");
+    sticky = ajAcdGetBool ("sticky");
+    ambiguity = ajAcdGetBool ("ambiguity");
+    plasmid = ajAcdGetBool ("plasmid");
+    commercial = ajAcdGetBool ("commercial");
+    limit = ajAcdGetBool ("limit");
+    enzymes = ajAcdGetString ("enzymes");
+    equiv = ajAcdGetBool("preferred");       
   
-/* read the local file of enzymes names */
-  read_file_of_enzyme_names(&enzymes);
+    /* read the local file of enzymes names */
+    showseq_read_file_of_enzyme_names(&enzymes);
   
-/* check that the translate range is ordered */
-  if (!ajRangeOrdered(translaterange)) {
-    (void) ajDie("Translation ranges are not in ascending, non-overlapping order.");
-  } 
+    /* check that the translate range is ordered */
+    if (!ajRangeOrdered(translaterange))
+	(void) ajDie("Translation ranges are not in ascending, "
+		     "non-overlapping order.");
 
-/* get the format to use */
-  if (!ajStrCmpC(formatlist[0], "0")) {
-    for (i=0; thinglist[i]; i++) {
-      (void) ajStrApp(&format, thinglist[i]);
-      (void) ajStrAppC(&format, " ");
-    }
-  } else if (!ajStrCmpC(formatlist[0], "1")) {
-    (void) ajStrAssC(&format, "S ");
-    
-  } else if (!ajStrCmpC(formatlist[0], "2")) {
-    (void) ajStrAssC(&format, "B N T S F ");
 
-  } else if (!ajStrCmpC(formatlist[0], "3")) {
-    (void) ajStrAssC(&format, "B N T S ");
+    /* get the format to use */
+    if (!ajStrCmpC(formatlist[0], "0"))
+	for (i=0; thinglist[i]; i++)
+	{
+	    (void) ajStrApp(&format, thinglist[i]);
+	    (void) ajStrAppC(&format, " ");
+	}
+    else if (!ajStrCmpC(formatlist[0], "1"))
+	(void) ajStrAssC(&format, "S ");
+    else if (!ajStrCmpC(formatlist[0], "2"))
+	(void) ajStrAssC(&format, "B N T S F ");
+    else if (!ajStrCmpC(formatlist[0], "3"))
+	(void) ajStrAssC(&format, "B N T S ");
+    else if (!ajStrCmpC(formatlist[0], "4"))
+	(void) ajStrAssC(&format, "B N T S B 1 F ");
+    else if (!ajStrCmpC(formatlist[0], "5"))
+	(void) ajStrAssC(&format, "B N T S B 1 2 3 F ");
+    else if (!ajStrCmpC(formatlist[0], "6"))
+	(void) ajStrAssC(&format, "B N T S B 1 2 3 T -3 -2 -1 F ");
+    else if (!ajStrCmpC(formatlist[0], "7"))
+	(void) ajStrAssC(&format, "B R S N T C -R B 1 2 3 T -3 -2 -1 ");
+    else if (!ajStrCmpC(formatlist[0], "8"))
+	(void) ajStrAssC(&format, "B 1 2 3 N T R S T C -R T -3 -2 -1 F ");
+    else
+	(void) ajFatal("Invalid format type: %S", formatlist[0]);
 
-  } else if (!ajStrCmpC(formatlist[0], "4")) {
-    (void) ajStrAssC(&format, "B N T S B 1 F ");
 
-  } else if (!ajStrCmpC(formatlist[0], "5")) {
-    (void) ajStrAssC(&format, "B N T S B 1 2 3 F ");
+    /* make the format upper case */
+    (void) ajStrToUpper(&format);
 
-  } else if (!ajStrCmpC(formatlist[0], "6")) {
-    (void) ajStrAssC(&format, "B N T S B 1 2 3 T -3 -2 -1 F ");
+    /* create the translation table */
+    trnTable = ajTrnNewI(table);
 
-  } else if (!ajStrCmpC(formatlist[0], "7")) {
-    (void) ajStrAssC(&format, "B R S N T C -R B 1 2 3 T -3 -2 -1 ");
-    
-  } else if (!ajStrCmpC(formatlist[0], "8")) {
-    (void) ajStrAssC(&format, "B 1 2 3 N T R S T C -R T -3 -2 -1 F ");
-    
-  } else {
-    (void) ajFatal("Invalid format type: %S", formatlist[0]);
-  }
+    while (ajSeqallNext(seqall, &seq))
+    {
+	/* get begin and end positions */
+	begin = ajSeqBegin(seq)-1;
+	end = ajSeqEnd(seq)-1;
 
-/* make the format upper case */
-  (void) ajStrToUpper(&format);
+	/* do the name and description */
+	if (nameseq)
+	{
+	    if (html)
+		(void) ajFmtPrintF(outfile, "<H2>%S</H2>\n",
+				   ajSeqGetName(seq));
+	    else
+		(void) ajFmtPrintF(outfile, "%S\n", ajSeqGetName(seq));
+	}
 
-/* create the translation table */
-  trnTable = ajTrnNewI(table);
+	if (description)
+	{
+	    /*
+	     *  wrap the description line at the width of the sequence
+	     *  plus margin
+	     */
+	    if (html)
+		(void) ajFmtPrintF(outfile, "<H3>%S</H3>\n",
+				   ajSeqGetDesc(seq));
+	    else
+	    {
+		descriptionline = ajStrNew();
+		(void) ajStrAss(&descriptionline, ajSeqGetDesc(seq));
+		(void) ajStrWrap(&descriptionline, width+margin);
+		(void) ajFmtPrintF(outfile, "%S\n", descriptionline);
+		(void) ajStrDel(&descriptionline);
+	    }
+	}
 
-  while (ajSeqallNext(seqall, &seq)) {
+	/* get the feature table of the sequence */
+	feat = ajSeqGetFeat(seq);
 
-/* get begin and end positions */
-  begin = ajSeqBegin(seq)-1;
-  end = ajSeqEnd(seq)-1;
+	/* get the restriction cut sites */
+	/*
+	 *  most of this is lifted from the program 'restrict.c' by Alan
+	 *  Bleasby
+	 */    
+	if (ajStrFindC(format, "R") != -1)
+	{
+	    if (single)
+		maxcuts=mincuts=1;
+	    retable = ajStrTableNew(EQUGUESS);
+	    ajFileDataNewC(ENZDATA, &enzfile);
+	    if(!enzfile)
+		ajFatal("Cannot locate enzyme file. Run REBASEEXTRACT");
+	    if (equiv)
+	    {
+		ajFileDataNewC(EQUDATA,&equfile);
+		if (!equfile)
+		    equiv=ajFalse;
+		else
+		    showseq_read_equiv(&equfile, &retable);   
+	    }    
 
-/* do the name and description */
-    if (nameseq) {
-      if (html) {
-        (void) ajFmtPrintF(outfile, "<H2>%S</H2>\n", ajSeqGetName(seq));
-      } else {
-        (void) ajFmtPrintF(outfile, "%S\n", ajSeqGetName(seq));
-      }
-    }
-    if (description) {
-/* wrap the description line at the width of the sequence plus margin */
-      if (html) {
-        (void) ajFmtPrintF(outfile, "<H3>%S</H3>\n", ajSeqGetDesc(seq));
-      } else {
-        descriptionline = ajStrNew();
-        (void) ajStrAss(&descriptionline, ajSeqGetDesc(seq));
-        (void) ajStrWrap(&descriptionline, width+margin);
-        (void) ajFmtPrintF(outfile, "%S\n", descriptionline);
-        (void) ajStrDel(&descriptionline);
-      }
-    }
+	    ajFileSeek(enzfile, 0L, 0);
+	    hits =embPatRestrictMatch(seq, 1, ajSeqLen(seq), enzfile, enzymes,
+				      sitelen, plasmid, ambiguity, mincuts,
+				      maxcuts, blunt, sticky, commercial,
+				      &restrictlist);
+	    if (hits)
+		/* this bit is lifted from printHits() */
+		(void) embPatRestrictRestrict(&restrictlist, hits, !limit,
+					      ajFalse);
 
-/* get the feature table of the sequence */
-    feat = ajSeqGetFeat(seq);
-
-/* get the restriction cut sites */
-/* most of this is lifted from the program 'restrict.c' by Alan Bleasby */    
-    if (ajStrFindC(format, "R") != -1) {
-      if (single) maxcuts=mincuts=1;
-      retable = ajStrTableNew(EQUGUESS);
-      ajFileDataNewC(ENZDATA, &enzfile);
-      if(!enzfile)
-          ajFatal("Cannot locate enzyme file. Run REBASEEXTRACT");
-      if (equiv) {
-        ajFileDataNewC(EQUDATA,&equfile);
-        if (!equfile) equiv=ajFalse;
-        else read_equiv(&equfile, &retable);   
-      }    
-
-      ajFileSeek(enzfile, 0L, 0);
-      hits =embPatRestrictMatch(seq, 1, ajSeqLen(seq), enzfile, enzymes,
-				sitelen, plasmid, ambiguity, mincuts, maxcuts,
-				blunt, sticky, commercial, &restrictlist);
-      if (hits) {
-/* this bit is lifted from printHits() */
-        (void) embPatRestrictRestrict(&restrictlist, hits, !limit, ajFalse);
-      }
-/* tidy up */
-      ajFileClose(&enzfile);      
-    }
+	    /* tidy up */
+	    ajFileClose(&enzfile);      
+	}
     	
 
 
-/* make the Show Object */
-    ss = embShowNew(seq, begin, end, width, length, margin, html, offset);
+	/* make the Show Object */
+	ss = embShowNew(seq, begin, end, width, length, margin, html, offset);
 
-/* get the number of the genetic code used */
-    (void) ajStrToInt(tablelist[0], &table);
+	/* get the number of the genetic code used */
+	(void) ajStrToInt(tablelist[0], &table);
 
-    if (html) (void) ajFmtPrintF(outfile, "<PRE>");
+	if (html)
+	    (void) ajFmtPrintF(outfile, "<PRE>");
 
-    (void) FormatShow(ss, format, trnTable, translaterange,
-	uppercase, highlight, threeletter, numberseq, feat,
-	orfminsize, restrictlist, flat);
+	(void) showseq_FormatShow(ss, format, trnTable, translaterange,
+				  uppercase, highlight, threeletter,
+				  numberseq, feat, orfminsize, restrictlist,
+				  flat);
 
-    (void) embShowPrint(outfile, ss);
+	(void) embShowPrint(outfile, ss);
 
-/* tidy up */
-    (void) embShowDel(&ss);
-/* AJB fixed: trying to delete memory already deleted */
-/*   (void) ajFeatTabDel(&feat); */
-    (void) ajListDel(&restrictlist);
+	/* tidy up */
+	(void) embShowDel(&ss);
+	/* AJB fixed: trying to delete memory already deleted */
+	/*   (void) ajFeattabDel(&feat); */
+	(void) ajListDel(&restrictlist);
 
-/* add a gratuitous newline at the end of the sequence */
-    (void) ajFmtPrintF(outfile, "\n");
+	/* add a gratuitous newline at the end of the sequence */
+	(void) ajFmtPrintF(outfile, "\n");
 
-    if (html) {
-    	(void) ajFmtPrintF(outfile, "<PRE>");
+	if (html)
+	    (void) ajFmtPrintF(outfile, "<PRE>");
     }
-  }
 
 
-/* tidy up */
-  (void) ajStrDel(&format);
-  ajFileClose(&outfile);
-  ajTrnDel (&trnTable);
+    /* tidy up */
+    (void) ajStrDel(&format);
+    ajFileClose(&outfile);
+    ajTrnDel (&trnTable);
 
-  (void) ajExit ();
-  return 0;
+    (void) ajExit ();
+    return 0;
 }
 
 
 
 
-/* @funcstatic FormatShow ****************************************************
+/* @funcstatic showseq_FormatShow ********************************************
 **
 ** Set up the EmbPShow object, according to the required format
 **
@@ -289,89 +311,80 @@ int main(int argc, char **argv)
 ** @param [r] highlight [AjPRange] ranges to colour in HTML
 ** @param [r] threeletter [AjBool] use 3-letter code
 ** @param [r] numberseq [AjBool] put numbers on sequences
-** @param [r] feat [AjPFeatTable] sequence's feature table
-** @param [r] orfminsize [ajint] minimum size of ORFs to display (0 for no ORFs)
+** @param [r] feat [AjPFeattable] sequence's feature table
+** @param [r] orfminsize [ajint] minimum size of ORFs to display
+**                              (0 for no ORFs)
 ** @param [r] restrictlist [AjPList] restriction enzyme cut site list (or NULL)
 ** @param [r] flat [AjBool] show restriction sites in flat format
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void FormatShow(EmbPShow ss, AjPStr format, AjPTrn trnTable,
-AjPRange translaterange, AjPRange uppercase, AjPRange highlight, AjBool
-threeletter, AjBool numberseq, AjPFeatTable feat, ajint orfminsize,
-AjPList restrictlist, AjBool flat) {
+static void showseq_FormatShow(EmbPShow ss, AjPStr format, AjPTrn trnTable,
+			       AjPRange translaterange, AjPRange uppercase, 
+			       AjPRange highlight,  AjBool threeletter,
+			       AjBool numberseq, AjPFeattable feat,
+			       ajint orfminsize, AjPList restrictlist,
+			       AjBool flat)
+{
+    AjPStrTok tok;
+    char white[] = " \t\n\r";
+    char whiteplus[] = " \t,.!@#$%^&*()_+|~`\\={}[]:;\"'<>,.?/";
+    AjPStr code = NULL;
 
-  AjPStrTok tok;
-  char white[] = " \t\n\r";
-  char whiteplus[] = " \t,.!@#$%^&*()_+|~`\\={}[]:;\"'<>,.?/";
-  AjPStr code = NULL;
+    /* start token to parse format */
+    tok = ajStrTokenInit(format,  white);
+    while (ajStrToken (&code, &tok, whiteplus))
+    {
+	(void) ajStrToUpper(&code);
 
-/* start token to parse format */
-  tok = ajStrTokenInit(format,  white);
-  while (ajStrToken (&code, &tok, whiteplus)) {
-    (void) ajStrToUpper(&code);
-
-    if (!ajStrCmpC(code, "S")) {
-      (void) embShowAddSeq(ss, numberseq, threeletter, uppercase, highlight);
-      
-    } else if (!ajStrCmpC(code, "B")) {
-      (void) embShowAddBlank(ss);
-      
-    } else if (!ajStrCmpC(code, "1")) {
-      (void) embShowAddTran (ss, trnTable, 1, threeletter, numberseq,
-			     translaterange, orfminsize);
-      
-    } else if (!ajStrCmpC(code, "2")) {
-      (void) embShowAddTran (ss, trnTable, 2, threeletter, numberseq,
-			     NULL, orfminsize);
-      
-    } else if (!ajStrCmpC(code, "3")) {
-      (void) embShowAddTran (ss, trnTable, 3, threeletter, numberseq,
-			     NULL, orfminsize);
-      
-    } else if (!ajStrCmpC(code, "-1")) {
-      (void) embShowAddTran (ss, trnTable, -1, threeletter, numberseq,
-			     NULL, orfminsize);
-      
-    } else if (!ajStrCmpC(code, "-2")) {
-      (void) embShowAddTran (ss, trnTable, -2, threeletter, numberseq,
-			    NULL, orfminsize);
-      
-    } else if (!ajStrCmpC(code, "-3")) {
-      (void) embShowAddTran (ss, trnTable, -3, threeletter, numberseq,
-			     NULL, orfminsize);
-      
-    } else if (!ajStrCmpC(code, "T")) {
-      (void) embShowAddTicks(ss);
-      
-    } else if (!ajStrCmpC(code, "N")) {
-      (void) embShowAddTicknum(ss);
-
-    } else if (!ajStrCmpC(code, "C")) {
-      (void) embShowAddComp(ss, numberseq);
-
-    } else if (!ajStrCmpC(code, "F")) {
-      (void) embShowAddFT(ss, feat);
-
-    } else if (!ajStrCmpC(code, "R")) {
-      (void) embShowAddRE (ss, 1, restrictlist, flat);
-
-    } else if (!ajStrCmpC(code, "-R")) {
-      (void) embShowAddRE (ss, -1, restrictlist, flat);
-
-    } else {
-      (void) ajDie("Formatting code not recognised: '%S'", code);
+	if (!ajStrCmpC(code, "S"))
+	    (void) embShowAddSeq(ss, numberseq, threeletter, uppercase,
+				 highlight);
+	else if (!ajStrCmpC(code, "B"))
+	    (void) embShowAddBlank(ss);
+	else if (!ajStrCmpC(code, "1"))
+	    (void) embShowAddTran (ss, trnTable, 1, threeletter, numberseq,
+				   translaterange, orfminsize);
+	else if (!ajStrCmpC(code, "2"))
+	    (void) embShowAddTran (ss, trnTable, 2, threeletter, numberseq,
+				   NULL, orfminsize);
+	else if (!ajStrCmpC(code, "3"))
+	    (void) embShowAddTran (ss, trnTable, 3, threeletter, numberseq,
+				   NULL, orfminsize);
+	else if (!ajStrCmpC(code, "-1"))
+	    (void) embShowAddTran (ss, trnTable, -1, threeletter, numberseq,
+				   NULL, orfminsize);
+	else if (!ajStrCmpC(code, "-2"))
+	    (void) embShowAddTran (ss, trnTable, -2, threeletter, numberseq,
+				   NULL, orfminsize);
+	else if (!ajStrCmpC(code, "-3"))
+	    (void) embShowAddTran (ss, trnTable, -3, threeletter, numberseq,
+				   NULL, orfminsize);
+	else if (!ajStrCmpC(code, "T"))
+	    (void) embShowAddTicks(ss);
+	else if (!ajStrCmpC(code, "N"))
+	    (void) embShowAddTicknum(ss);
+	else if (!ajStrCmpC(code, "C"))
+	    (void) embShowAddComp(ss, numberseq);
+	else if (!ajStrCmpC(code, "F"))
+	    (void) embShowAddFT(ss, feat);
+	else if (!ajStrCmpC(code, "R"))
+	    (void) embShowAddRE (ss, 1, restrictlist, flat);
+	else if (!ajStrCmpC(code, "-R"))
+	    (void) embShowAddRE (ss, -1, restrictlist, flat);
+	else
+	    (void) ajDie("Formatting code not recognised: '%S'", code);
     }
-  }
 
-/* tidy up */
-  (void) ajStrDel(&code);
-  (void) ajStrTokenClear(&tok);
+    /* tidy up */
+    (void) ajStrDel(&code);
+    (void) ajStrTokenClear(&tok);
 
+    return;
 }
 
-/* @funcstatic read_equiv *********************************************************
+/* @funcstatic showseq_read_equiv *********************************************
 **
 ** Lifted from Alan's restrict.c but reads the equ file. 
 **
@@ -381,7 +394,7 @@ AjPList restrictlist, AjBool flat) {
 ** @@
 ******************************************************************************/
 
-static void read_equiv(AjPFile *equfile, AjPTable *table)
+static void showseq_read_equiv(AjPFile *equfile, AjPTable *table)
 {
     AjPStr line;
     AjPStr key;
@@ -404,10 +417,11 @@ static void read_equiv(AjPFile *equfile, AjPTable *table)
     }
          
     ajFileClose(equfile);
+    return;
 }
 
 
-/* @funcstatic read_file_of_enzyme_names *************************************
+/* @funcstatic showseq_read_file_of_enzyme_names ******************************
 **
 ** If the list of enzymes starts with a '@' if opens that file, reads in
 ** the list of enzyme names and replaces the input string with the enzyme names
@@ -417,31 +431,33 @@ static void read_equiv(AjPFile *equfile, AjPTable *table)
 ** @@
 ******************************************************************************/
       
-static void read_file_of_enzyme_names(AjPStr *enzymes) {
-      
-  AjPFile file=NULL;
-  AjPStr line;
-  char   *p=NULL;   
+static void showseq_read_file_of_enzyme_names(AjPStr *enzymes)
+{
+    AjPFile file=NULL;
+    AjPStr line;
+    char   *p=NULL;   
 
-  if (ajStrFindC(*enzymes, "@") == 0) {
-    ajStrTrimC(enzymes, "@");   /* remove the @ */
-    file = ajFileNewIn(*enzymes);
-    if (file == NULL) {
-      ajDie("Cannot open the file of enzyme names: '%S'", enzymes);
+    if (ajStrFindC(*enzymes, "@") == 0)
+    {
+	ajStrTrimC(enzymes, "@");	/* remove the @ */
+	file = ajFileNewIn(*enzymes);
+	if (file == NULL)
+	    ajDie("Cannot open the file of enzyme names: '%S'", enzymes);
+
+	/* blank off the enzyme file name and replace with the enzyme names */
+	ajStrClear(enzymes);
+	line = ajStrNew();
+	while(ajFileReadLine(file, &line))
+	{
+	    p = ajStrStr(line);
+	    if (!*p || *p == '#' || *p == '!') continue;
+	    ajStrApp(enzymes, line);
+	    ajStrAppC(enzymes, ",");
+	}
+	ajStrDel(&line);
+
+	ajFileClose(&file);
     }
-/* blank off the enzyme file name and replace with the enzyme names */
-    ajStrClear(enzymes);
-    line = ajStrNew();
-    while(ajFileReadLine(file, &line)) {
-      p = ajStrStr(line);
-      if (!*p || *p == '#' || *p == '!') continue;
-      ajStrApp(enzymes, line);
-      ajStrAppC(enzymes, ",");
-    }
-    ajStrDel(&line);
 
-    ajFileClose(&file);
-  }
-
+    return;
 }
-

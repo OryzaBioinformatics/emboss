@@ -9,6 +9,35 @@ extern "C"
 
 #include <sys/types.h>
 
+/* @data AjPChar *******************************************************
+**
+** Ajax character object.
+**
+** Holds a character array with additional data.
+** The length is known and held internally.
+**
+** AjPChar is implemented as a pointer to a C data structure.
+**
+** @alias AjSChar
+** @alias AjOChar
+**
+** @new    ajCharNew Default constructor
+** @new    ajCharNewL Constructor with reserved size
+** @delete ajCharDel Default destructor
+** @ass    ajCharGet Retrieve a character from an array
+** @mod    ajCharPut Load a character array element
+** @cast   ajCharChar Retrieve internal pointer
+** @@
+******************************************************************************/
+
+typedef struct AjSChar {
+  ajint Res;
+  ajint Len;
+  char *Ptr;
+} AjOChar, *AjPChar;
+
+
+
 /* @data AjPInt *******************************************************
 **
 ** Ajax integer object.
@@ -497,6 +526,14 @@ AjPFloat3d  ajFloat3dNew(void);
 AjPFloat3d  ajFloat3dNewL(ajint size);
 AjBool      ajFloat3dPut(AjPFloat3d *thys, ajint elem1, ajint elem2, ajint elem3,
 			 float v);
+
+AjPChar      ajChararrNew(void);
+AjPChar      ajChararrNewL(ajint size);
+void        ajChararrDel(AjPChar *thys);
+char         ajChararrGet(AjPChar thys, ajint elem);
+AjBool      ajChararrPut(AjPChar *thys, ajint elem, char v);
+char*        ajChararrChararr(AjPChar thys);
+
 
 void        ajIntDel(AjPInt *thys);
 void        ajIntDec(AjPInt *thys, ajint elem);

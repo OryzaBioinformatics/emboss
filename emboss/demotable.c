@@ -20,78 +20,138 @@
 
 #include "emboss.h"
 
-static AjPStr getsubfromstring(AjPStr line, ajint which){
-  static AjPRegexp gffexp=NULL;
-  AjPStr temp =NULL;
- 
-  if(!gffexp)
-    gffexp = ajRegCompC("([^\t]+)\t([^\t]+)\t([^\t]+)");
 
-  if(ajRegExec(gffexp,line))
-    ajRegSubI(gffexp,which,&temp);
-   
-  return temp;
-}
+static AjPStr demotable_getsubfromstring(AjPStr line, ajint which);
+static void demotable_typePrint (const void* key, void** value, void* cl);
+static void demotable_freetype (const void* key, void** value, void* cl);
 
-static void typePrint (const void* key, void** value, void* cl){
-  AjPStr keystr = (AjPStr) key;
-  ajint    *valptr = (ajint *) *value;
 
-  ajUser("type '%S' found %d times", keystr, *valptr);
-}
 
-static void freetype (const void* key, void** value, void* cl){
-  AjPStr keystr = (AjPStr) key;
-  ajint    *valptr = (ajint *) *value;
+/* @prog demotable *******************************************************
+**
+** Testing
+**
+******************************************************************************/
 
-  ajStrDel(&keystr);
-  AJFREE(valptr);
-}
- 
 int main(int argc, char **argv)
 {
-  AjPStr temp;
-  AjPFile gfffile;
-  AjPStr  line=NULL;
-  AjPTable type;
-  ajint *intptr;
+    AjPStr temp;
+    AjPFile gfffile;
+    AjPStr  line=NULL;
+    AjPTable type;
+    ajint *intptr;
  
-  embInit ("demotable", argc, argv);
+    embInit ("demotable", argc, argv);
 
   
-  /*open file */
-  gfffile = ajAcdGetInfile("gff");
+    /*open file */
+    gfffile = ajAcdGetInfile("gff");
 
-  /* create new table using ajStrTableCmpCase as the comparison function
-     and ajStrTableHashCase as the hash function. Initial size of 50 is used */
-  type   = ajTableNew(50, ajStrTableCmpCase, ajStrTableHashCase);
+    /*
+     *  create new table using ajStrTableCmpCase as the comparison function
+     *  and ajStrTableHashCase as the hash function. Initial size of 50
+     *  is used
+     */
+    type   = ajTableNew(50, ajStrTableCmpCase, ajStrTableHashCase);
 
-  while( ajFileReadLine(gfffile, &line) ) {
+    while( ajFileReadLine(gfffile, &line) )
+    {
+	temp = demotable_getsubfromstring(line,3); /* get the string to test */
 
-    temp = getsubfromstring(line,3); /* get the string to test */
+	if(temp)
+	{
+	    /* does the key "temp" already exist in the table */
+	    intptr = ajTableGet(type, temp);
 
-    if(temp){
-
-      /* does the key "temp" already exist in the table */
-      intptr = ajTableGet(type, temp);
-
-
-      if(!intptr){                      /* if not i.e. no key returned */
-	AJNEW(intptr);
-	*intptr = 1;
-	ajTablePut(type, temp, intptr); /* add it*/
-      }
-      else {
-	ajStrDel(&temp);
-	(*intptr)++;                    /* else increment the counter */
-      }
+	    if(!intptr)
+	    {				/* if not i.e. no key returned */
+		AJNEW(intptr);
+		*intptr = 1;
+		ajTablePut(type, temp, intptr); /* add it*/
+	    }
+	    else
+	    {
+		ajStrDel(&temp);
+		(*intptr)++;		/* else increment the counter */
+	    }
+	}
     }
-  }
-  ajUser("%d types found",ajTableLength(type));
-  ajTableMap (type, typePrint, NULL);  /* use the map function to print out the results */
-  ajTableMap (type, freetype, NULL);  /* use the map function to free all memory */
-  ajTableFree (&type);
+    ajUser("%d types found",ajTableLength(type));
 
-  ajExit();
-  return 0;
+    /* use the map function to print out the results */
+    ajTableMap (type, demotable_typePrint, NULL);
+
+    /* use the map function to free all memory */
+    ajTableMap (type, demotable_freetype, NULL);
+    ajTableFree (&type);
+
+    ajExit();
+    return 0;
+}
+
+
+
+/* @funcstatic demotable_getsubfromstring ************************************
+**
+** Undocumented.
+**
+** @param [?] line [AjPStr] Undocumented
+** @param [?] which [ajint] Undocumented
+** @return [AjPStr] Undocumented
+** @@
+******************************************************************************/
+
+static AjPStr demotable_getsubfromstring(AjPStr line, ajint which)
+{
+    static AjPRegexp gffexp=NULL;
+    AjPStr temp =NULL;
+ 
+    if(!gffexp)
+	gffexp = ajRegCompC("([^\t]+)\t([^\t]+)\t([^\t]+)");
+
+    if(ajRegExec(gffexp,line))
+	ajRegSubI(gffexp,which,&temp);
+   
+    return temp;
+}
+
+
+
+
+/* @funcstatic demotable_typePrint *******************************************
+**
+** Undocumented.
+**
+** @@
+******************************************************************************/
+
+static void demotable_typePrint (const void* key, void** value, void* cl)
+{
+    AjPStr keystr = (AjPStr) key;
+    ajint    *valptr = (ajint *) *value;
+
+    ajUser("type '%S' found %d times", keystr, *valptr);
+
+    return;
+}
+
+
+
+
+/* @funcstatic demotable_freetype ********************************************
+**
+** Undocumented.
+**
+** @@
+******************************************************************************/
+
+static void demotable_freetype (const void* key, void** value, void* cl)
+{
+    AjPStr keystr = (AjPStr) key;
+    ajint    *valptr = (ajint *) *value;
+
+    ajStrDel(&keystr);
+    AJFREE(valptr);
+
+    return;
 }

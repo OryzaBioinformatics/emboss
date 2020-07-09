@@ -25,6 +25,13 @@
 #include <float.h>
 #include <math.h>
 
+
+/* @prog syco ***************************************************************
+**
+** Synonymous codon usage Gribskov statistic plot
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     AjPSeq       a;

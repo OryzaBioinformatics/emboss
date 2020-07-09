@@ -22,7 +22,16 @@
 
 
 #include "emboss.h"
-static void FeatSeqMask (AjPSeq seq, AjPStr type, AjPStr maskchar);
+
+
+static void maskfeat_FeatSeqMask (AjPSeq seq, AjPStr type, AjPStr maskchar);
+
+
+/* @prog maskfeat *************************************************************
+**
+** Mask off features of a sequence
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -32,7 +41,7 @@ int main(int argc, char **argv)
   AjPSeqout seqout;
   AjPStr type;
   AjPStr maskchar;
-  /*  ajint beg, end;*/
+
 
   (void) embInit ("maskfeat", argc, argv);
 
@@ -41,26 +50,24 @@ int main(int argc, char **argv)
   type = ajAcdGetString ("type");
   maskchar = ajAcdGetString ("maskchar");
 
-/* get begin and end positions */
-  /*  beg = ajSeqallBegin(seqall)-1;  
-  end = ajSeqallEnd(seqall)-1;
-    NOT USED ????
-  */  
-  while (ajSeqallNext(seqall, &seq)) {
-
+  while (ajSeqallNext(seqall, &seq))
+  {
 /* mask the regions */
-    (void) FeatSeqMask (seq, type, maskchar);
+    (void) maskfeat_FeatSeqMask (seq, type, maskchar);
   
     (void) ajSeqAllWrite (seqout, seq);
   }
 
   (void) ajSeqWriteClose (seqout);
 
-  (void) ajExit ();
+  ajExit ();
   return 0;
 }
 
-/* @funcstatic FeatSeqMask ********************************************
+
+
+
+/* @funcstatic maskfeat_FeatSeqMask *****************************************
 **
 ** Masks features of a sequence
 **
@@ -72,48 +79,49 @@ int main(int argc, char **argv)
 ******************************************************************************/
 
 
-static void FeatSeqMask (AjPSeq seq, AjPStr type, AjPStr maskchar) {
-    	
-  AjIList    iter = NULL ;
-  AjPFeature gf   = NULL ;
-  AjPStr str = NULL;
-  AjPFeatTable feat;
-  char whiteSpace[] = " \t\n\r,;";	/* skip whitespace and , ; */
-  AjPStrTok tokens;
-  AjPStr key=NULL;
+static void maskfeat_FeatSeqMask (AjPSeq seq, AjPStr type, AjPStr maskchar)
+{
+    AjIList    iter = NULL ;
+    AjPFeature gf   = NULL ;
+    AjPStr str = NULL;
+    AjPFeattable feat;
+    char whiteSpace[] = " \t\n\r,;";	/* skip whitespace and , ; */
+    AjPStrTok tokens;
+    AjPStr key=NULL;
       
-/* get the feature table of the sequence */
+    /* get the feature table of the sequence */
     feat = ajSeqGetFeat(seq);
     
-/* Check arguments */
-  ajFeatObjVerify(feat, AjCFeatTable ) ;
-
-  (void) ajStrAss (&str, ajSeqStr(seq));
+    (void) ajStrAss (&str, ajSeqStr(seq));
                   
-/* For all features... */
+    /* For all features... */
                     
-  if (feat->Features) {
-    iter = ajListIter(feat->Features) ;
-    while(ajListIterMore(iter)) {
-      gf = ajListIterNext (iter) ;
-      tokens = ajStrTokenInit(type, whiteSpace);
-      while (ajStrToken( &key, &tokens, NULL)) {
-        if (ajStrMatchWild(gf->Type->name, key)) {
-          (void) ajStrMask (&str, gf->Start-1, gf->End-1, *ajStrStr(maskchar));
-        }
-      }
-      (void) ajStrTokenClear( &tokens);
-      (void) ajStrDel(&key);
-    }
-    ajListIterFree(iter) ;
-  }
-     
-  (void) ajSeqReplace(seq, str);
+    if (feat->Features)
+    {
+	iter = ajListIter(feat->Features) ;
+	while(ajListIterMore(iter))
+	{
+	    gf = ajListIterNext (iter) ;
+	    tokens = ajStrTokenInit(type, whiteSpace);
+	    while (ajStrToken( &key, &tokens, NULL))
+		if (ajStrMatchWild(gf->Type, key))
+		    (void) ajStrMask (&str, gf->Start-1, gf->End-1,
+				      *ajStrStr(maskchar));
 
-/* tidy up */
-  (void) ajFeatTabDel(&feat);
-  (void) ajStrDel(&str);
-  (void) ajStrDel(&key);
+	    (void) ajStrTokenClear( &tokens);
+	    (void) ajStrDel(&key);
+	}
+	ajListIterFree(iter) ;
+    }
+     
+    (void) ajSeqReplace(seq, str);
+
+    /* tidy up */
+    (void) ajFeattabDel(&feat);
+    (void) ajStrDel(&str);
+    (void) ajStrDel(&key);
+
+    return;
 }
 
   

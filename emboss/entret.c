@@ -22,6 +22,13 @@
 
 #include "emboss.h"
 
+
+/* @prog entret ***************************************************************
+**
+** Reads and writes (returns) flatfile entries
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     AjPSeqall seqall=NULL;

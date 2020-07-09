@@ -36,22 +36,22 @@ typedef struct SeqSAccess SeqSAccess;
 ******************************************************************************/
 
 typedef struct AjSSeqQuery {
-  AjPStr DbName;
-  AjPStr DbType;
-  AjPStr Id;
-  AjPStr Acc;
-  AjPStr Des;
-  AjPStr Method;
-  AjPStr Formatstr;
-  AjPStr IndexDir;
-  AjPStr Directory;
-  AjPStr Filename;
-  AjPStr Exclude;
-  AjPStr Application;
-  enum AjEQryType Type;
-  ajlong Fpos;
-  SeqSAccess* Access;
-  void* QryData;
+  AjPStr DbName;		/* Database name */
+  AjPStr DbType;		/* Database type */ 
+  AjPStr Id;			/* ID Wildcard */
+  AjPStr Acc;			/* Accession Wildcard */
+  AjPStr Des;			/* Description Wildcard (not yet used) */
+  AjPStr Method;		/* Name of access method */
+  AjPStr Formatstr;		/* Name of input sequence format */
+  AjPStr IndexDir;		/* Index directory */
+  AjPStr Directory;		/* Data directory */
+  AjPStr Filename;		/* Individual filename */
+  AjPStr Exclude;		/* File wildcards to exclude (spaced) */
+  AjPStr Application;		/* External application command */
+  enum AjEQryType Type;		/* Enum query type */
+  ajlong Fpos;			/* File position from fseek */
+  SeqSAccess* Access;		/* Access function : see ajseqread.h */
+  void* QryData;		/* Private data for access function */
 } AjOSeqQuery, *AjPSeqQuery;
 
 /* @data AjPSeqin *******************************************************
@@ -79,44 +79,47 @@ typedef struct AjSSeqQuery {
 ******************************************************************************/
 
 typedef struct AjSSeqin {
-  AjPStr Name;
-  AjPStr Acc;
-  AjPStr Inputtype;
-  AjPStr Type;
-  AjPStr Db;
-  AjPStr Setdb;
-  AjPStr Full;
-  AjPStr Date;
-  AjPStr Desc;
-  AjPStr Doc;
+  AjPStr Name;			/* Sequence name (replace) */
+  AjPStr Acc;			/* Sequence accession number (replace) */
+  AjPStr Inputtype;		/* Sequence type from ACD */
+  AjPStr Type;			/* Sequence type N or P */
+  AjPStr Db;			/* Database name (replace) */
+  AjPStr Setdb;			/* Database name (replace) */
+  AjPStr Full;			/* Full name */
+  AjPStr Date;			/* Date */
+  AjPStr Desc;			/* One-line description */
+  AjPStr Doc;			/* Full text */
   AjPStr Inseq;			/* temporary input sequence holder */
-  ajint Begin;
-  ajint End;
-  AjBool Rev;
-  AjPList List;
-  AjPStr Usa;
-  AjPStr Ufo;
-  AjPFeatTable Fttable;
-  AjPFeatTabIn Ftquery;
-  AjPStr Formatstr;
-  AjEnum Format;
-  AjPStr Filename;
-  AjPStr Entryname;
-  AjPFileBuff Filebuff;
-  AjBool Search;
-  AjBool Single;
-  AjBool Features;
-  AjBool IsNuc;
-  AjBool IsProt;
-  AjBool multi;
-  AjBool Lower;
-  AjBool Upper;
-  AjBool Text;
-  ajint Count;
-  ajint Filecount;
-  ajlong Fpos;
-  AjPSeqQuery Query;
-  void *Data;
+  ajint Begin;			/* Start position */
+  ajint End;			/* End position */
+  AjBool Rev;			/* Reverse/complement if true */
+  AjPList List;			/* List of USAs to be read */
+  AjPStr Usa;			/* USA for the sequence */
+  AjPStr Ufo;			/* UFO for features (if any) */
+  AjPFeattable Fttable;		/* Input feature table (why in AjPSeqin?) */
+  AjPFeattabIn Ftquery;		/* Feature table input spec */
+  AjPStr Formatstr;		/* Sequence input format name */
+  AjEnum Format;		/* Sequence input format enum */
+  AjPStr Filename;		/* Original filename */
+  AjPStr Entryname;		/* Entry name */
+  AjPFileBuff Filebuff;		/* Input sequence buffered file */
+  AjBool Search;		/* Search for more entries (always true?) */
+  AjBool Single;		/* Read single entries */
+  AjBool Features;		/* true: read features if any */
+  AjBool IsNuc;			/* true: known to be nucleic */
+  AjBool IsProt;		/* true: known to be protein */
+  AjBool multi;			/* ???? see also Single */
+  AjBool Lower;			/* true: convert to lower case -slower */
+  AjBool Upper;			/* true: convert to upper case -supper */
+  AjBool Text;			/* true: save full text of entry */
+  ajint Count;			/* count of entries so far. Used
+			           when ACD reads first sequence and
+				   we need to reuse it in a Next loop */
+  ajint Filecount;		/* Unused */
+  ajlong Fpos;			/* File position (fseek) for building USA */
+  AjPSeqQuery Query;		/* Query data - see AjPSeqQuery */
+  void *Data;			/* Format data for reuse,
+				   e.g. multiple sequence input */
 } AjOSeqin, *AjPSeqin;
 
 
@@ -182,33 +185,33 @@ typedef struct AjSSeqin {
 ** @@
 ******************************************************************************/
 typedef struct AjSSeq {
-  AjPStr Name;
-  AjPStr Acc;
-  AjPStr Type;
-  AjEnum EType;
-  AjPStr Db;
-  AjPStr Setdb;
-  AjPStr Full;
-  AjPStr Date;
-  AjPStr Desc;
-  AjPStr Doc;
-  AjBool Rev;
-  ajint Begin;
-  ajint End;
-  ajint Offset;
-  ajint Offend;
-  ajlong Fpos;
-  AjPStr Usa;
-  AjPStr Ufo;
-  AjPFeatTable Fttable;
-  AjPStr Formatstr;
-  AjEnum Format;
-  AjPStr Filename;
-  AjPStr Entryname;
-  AjPStr TextPtr;
-  float Weight;
-  AjPList Acclist;
-  AjPStr Seq;
+  AjPStr Name;			/* Name (ID) */
+  AjPStr Acc;			/* Accession number (primary only) */
+  AjPStr Type;			/* Type N or P */
+  AjEnum EType;			/* unused, obsolete */
+  AjPStr Db;			/* Database name */
+  AjPStr Setdb;			/* Database name from command line */
+  AjPStr Full;			/* Full name */
+  AjPStr Date;			/* Date */
+  AjPStr Desc;			/* One-line description */
+  AjPStr Doc;			/* Obsolete - see TextPtr */
+  AjBool Rev;			/* true: reverse-complemented */
+  ajint Begin;			/* start position (processed on reading) */
+  ajint End;			/* end position (processed on reading)( */
+  ajint Offset;			/* offset from start */
+  ajint Offend;			/* offset from end */
+  ajlong Fpos;			/* File position (fseek) for USA */
+  AjPStr Usa;			/* USA fo re-reading */
+  AjPStr Ufo;			/* UFO for re-reading */
+  AjPFeattable Fttable;		/* Feature table */
+  AjPStr Formatstr;		/* Input format name */
+  AjEnum Format;		/* Input format enum */
+  AjPStr Filename;		/* Original filename */
+  AjPStr Entryname;		/* Entryname (ID) */
+  AjPStr TextPtr;		/* Full text */
+  float Weight;			/* Weight from multiple alignment */
+  AjPList Acclist;		/* Secondary accessions */
+  AjPStr Seq;			/* The sequence */
 } AjOSeq, *AjPSeq;
 
 /* @data AjPSeqset *******************************************************
@@ -244,23 +247,23 @@ typedef struct AjSSeq {
 ******************************************************************************/
 
 typedef struct AjSSeqset {
-  ajint Size;
-  ajint Len;
-  ajint Begin;
-  ajint End;
-  AjBool Rev;
-  float Totweight;
-  AjPStr Type;
-  AjEnum EType;
-  AjPStr Formatstr;
-  AjEnum Format;
-  AjPStr Filename;
-  AjPStr Full;
-  AjPStr Name;
-  AjPStr Usa;
-  AjPStr Ufo;
-  AjPSeq* Seq;
-  float* Seqweight;
+  ajint Size;			/* Number of sequences */
+  ajint Len;			/* Maximum sequence length */
+  ajint Begin;			/* start position */
+  ajint End;			/* end position */
+  AjBool Rev;			/* true: reverse-complemented */
+  float Totweight;		/* total weight (usually 1.0 * Size) */
+  AjPStr Type;			/* Type N or P */
+  AjEnum EType;			/* enum type obsolete */
+  AjPStr Formatstr;		/* Input format name */
+  AjEnum Format;		/* Input format enum */
+  AjPStr Filename;		/* Original filename */
+  AjPStr Full;			/* Full name */
+  AjPStr Name;			/* Name */
+  AjPStr Usa;			/* USA for re-reading */
+  AjPStr Ufo;			/* UFO for re-reading */
+  AjPSeq* Seq;			/* Sequence array (see Size) */
+  float* Seqweight;		/* Sequence weights (see also AjPSeq) */
 } AjOSeqset, *AjPSeqset;
 
 
@@ -283,12 +286,12 @@ typedef struct AjSSeqset {
 ******************************************************************************/
 
 typedef struct AjSSeqall {
-  AjPSeq Seq;
-  AjPSeqin Seqin;
-  ajint Count;
-  ajint Begin;
-  ajint End;
-  AjBool Rev;
+  AjPSeq Seq;			/* Current sequence */
+  AjPSeqin Seqin;		/* Sequence input for reading next */
+  ajint Count;			/* Count of sequences so far */
+  ajint Begin;			/* start position */
+  ajint End;			/* end position */
+  AjBool Rev;			/* true: reverse-complement */
 } AjOSeqall, *AjPSeqall;
 
 #endif

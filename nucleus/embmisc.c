@@ -6,7 +6,7 @@
 
 #include "emboss.h"
 
-/** @func embMiscMatchPattern ***********************************************
+/* @func embMiscMatchPattern ***********************************************
 **
 ** Does a simple OR'd test of matches to (possibly wildcarded) words.
 ** The words are tested one at a time until a match is found.

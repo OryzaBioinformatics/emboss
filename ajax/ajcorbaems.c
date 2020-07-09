@@ -5,6 +5,16 @@
 #include <string.h>
 #include "ajcorbaembl.h"
 
+
+/* @func GNOME_Unknown_ref ***************************************************
+**
+** Undocumented.
+**
+** @param [?] _obj [GNOME_Unknown] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @@
+******************************************************************************/
+
 void
 GNOME_Unknown_ref(GNOME_Unknown _obj, CORBA_Environment * ev)
 {
@@ -93,6 +103,16 @@ GNOME_Unknown_ref(GNOME_Unknown _obj, CORBA_Environment * ev)
       }
    }
 }
+
+/* @func GNOME_Unknown_unref *************************************************
+**
+** Undocumented.
+**
+** @param [?] _obj [GNOME_Unknown] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @@
+******************************************************************************/
+
 void
 GNOME_Unknown_unref(GNOME_Unknown _obj, CORBA_Environment * ev)
 {
@@ -181,6 +201,18 @@ GNOME_Unknown_unref(GNOME_Unknown _obj, CORBA_Environment * ev)
       }
    }
 }
+
+/* @func GNOME_Unknown_query_interface ***************************************
+**
+** Undocumented.
+**
+** @param [?] _obj [GNOME_Unknown] Undocumented
+** @param [?] repoid [const CORBA_char*] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_Object] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_Object
 GNOME_Unknown_query_interface(GNOME_Unknown _obj, const CORBA_char * repoid,
 			      CORBA_Environment * ev)
@@ -301,6 +333,16 @@ GNOME_Unknown_query_interface(GNOME_Unknown _obj, const CORBA_char * repoid,
       }
    }
 }
+
+/* @func _ORBIT_org_biocorba_seqcore_RequestTooLarge_demarshal ***************
+**
+** Undocumented.
+**
+** @param [?] _ORBIT_recv_buffer [GIOPRecvBuffer*] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @@
+******************************************************************************/
+
 void
 _ORBIT_org_biocorba_seqcore_RequestTooLarge_demarshal(GIOPRecvBuffer *
 						      _ORBIT_recv_buffer,
@@ -346,6 +388,16 @@ _ORBIT_org_biocorba_seqcore_RequestTooLarge_demarshal(GIOPRecvBuffer *
 		       _ORBIT_exdata);
 }
 
+
+/* @func _ORBIT_org_biocorba_seqcore_OutOfRange_demarshal ********************
+**
+** Undocumented.
+**
+** @param [?] _ORBIT_recv_buffer [GIOPRecvBuffer*] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @@
+******************************************************************************/
+
 void
 _ORBIT_org_biocorba_seqcore_OutOfRange_demarshal(GIOPRecvBuffer *
 						 _ORBIT_recv_buffer,
@@ -385,6 +437,16 @@ _ORBIT_org_biocorba_seqcore_OutOfRange_demarshal(GIOPRecvBuffer *
 		       _ORBIT_exdata);
 }
 
+
+/* @func _ORBIT_org_biocorba_seqcore_EndOfStream_demarshal *******************
+**
+** Undocumented.
+**
+** @param [?] _ORBIT_recv_buffer [GIOPRecvBuffer*] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @@
+******************************************************************************/
+
 void
 _ORBIT_org_biocorba_seqcore_EndOfStream_demarshal(GIOPRecvBuffer *
 						  _ORBIT_recv_buffer,
@@ -394,6 +456,16 @@ _ORBIT_org_biocorba_seqcore_EndOfStream_demarshal(GIOPRecvBuffer *
 		       TC_org_biocorba_seqcore_EndOfStream_struct.repo_id,
 		       NULL);
 }
+
+
+/* @func _ORBIT_org_biocorba_seqcore_NeedsUpdate_demarshal *******************
+**
+** Undocumented.
+**
+** @param [?] _ORBIT_recv_buffer [GIOPRecvBuffer*] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @@
+******************************************************************************/
 
 void
 _ORBIT_org_biocorba_seqcore_NeedsUpdate_demarshal(GIOPRecvBuffer *
@@ -434,6 +506,16 @@ _ORBIT_org_biocorba_seqcore_NeedsUpdate_demarshal(GIOPRecvBuffer *
 		       _ORBIT_exdata);
 }
 
+
+/* @func _ORBIT_org_biocorba_seqcore_DoesNotExist_demarshal ******************
+**
+** Undocumented.
+**
+** @param [?] _ORBIT_recv_buffer [GIOPRecvBuffer*] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @@
+******************************************************************************/
+
 void
 _ORBIT_org_biocorba_seqcore_DoesNotExist_demarshal(GIOPRecvBuffer *
 						   _ORBIT_recv_buffer,
@@ -473,6 +555,16 @@ _ORBIT_org_biocorba_seqcore_DoesNotExist_demarshal(GIOPRecvBuffer *
 		       _ORBIT_exdata);
 }
 
+
+/* @func _ORBIT_org_biocorba_seqcore_UnableToProcess_demarshal ***************
+**
+** Undocumented.
+**
+** @param [?] _ORBIT_recv_buffer [GIOPRecvBuffer*] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @@
+******************************************************************************/
+
 void
 _ORBIT_org_biocorba_seqcore_UnableToProcess_demarshal(GIOPRecvBuffer *
 						      _ORBIT_recv_buffer,
@@ -511,6 +603,17 @@ _ORBIT_org_biocorba_seqcore_UnableToProcess_demarshal(GIOPRecvBuffer *
 		       TC_org_biocorba_seqcore_UnableToProcess_struct.repo_id,
 		       _ORBIT_exdata);
 }
+
+
+/* @func org_biocorba_seqcore_AnonymousSeq_type ******************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_AnonymousSeq] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_short] Undocumented
+** @@
+******************************************************************************/
 
 CORBA_short
 org_biocorba_seqcore_AnonymousSeq_type(org_biocorba_seqcore_AnonymousSeq _obj,
@@ -610,6 +713,17 @@ org_biocorba_seqcore_AnonymousSeq_type(org_biocorba_seqcore_AnonymousSeq _obj,
       }
    }
 }
+
+/* @func org_biocorba_seqcore_AnonymousSeq_is_circular ***********************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_AnonymousSeq] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_boolean] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_boolean
 org_biocorba_seqcore_AnonymousSeq_is_circular
    (org_biocorba_seqcore_AnonymousSeq _obj, CORBA_Environment * ev)
@@ -704,6 +818,17 @@ org_biocorba_seqcore_AnonymousSeq_is_circular
       }
    }
 }
+
+/* @func org_biocorba_seqcore_AnonymousSeq_length ****************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_AnonymousSeq] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_long] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_long
 org_biocorba_seqcore_AnonymousSeq_length(org_biocorba_seqcore_AnonymousSeq
 					 _obj, CORBA_Environment * ev)
@@ -802,6 +927,17 @@ org_biocorba_seqcore_AnonymousSeq_length(org_biocorba_seqcore_AnonymousSeq
       }
    }
 }
+
+/* @func org_biocorba_seqcore_AnonymousSeq_seq *******************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_AnonymousSeq] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_char*] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_char *
 org_biocorba_seqcore_AnonymousSeq_seq(org_biocorba_seqcore_AnonymousSeq _obj,
 				      CORBA_Environment * ev)
@@ -920,6 +1056,19 @@ org_biocorba_seqcore_AnonymousSeq_seq(org_biocorba_seqcore_AnonymousSeq _obj,
       }
    }
 }
+
+/* @func org_biocorba_seqcore_AnonymousSeq_subseq ****************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_AnonymousSeq] Undocumented
+** @param [?] start [const CORBA_long] Undocumented
+** @param [?] end [const CORBA_long] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_char*] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_char *
 org_biocorba_seqcore_AnonymousSeq_subseq(org_biocorba_seqcore_AnonymousSeq
 					 _obj, const CORBA_long start,
@@ -1049,6 +1198,17 @@ org_biocorba_seqcore_AnonymousSeq_subseq(org_biocorba_seqcore_AnonymousSeq
       }
    }
 }
+
+/* @func org_biocorba_seqcore_PrimarySeq_display_id **************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_PrimarySeq] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_char*] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_char *
 org_biocorba_seqcore_PrimarySeq_display_id(org_biocorba_seqcore_PrimarySeq
 					   _obj, CORBA_Environment * ev)
@@ -1162,6 +1322,17 @@ org_biocorba_seqcore_PrimarySeq_display_id(org_biocorba_seqcore_PrimarySeq
       }
    }
 }
+
+/* @func org_biocorba_seqcore_PrimarySeq_primary_id **************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_PrimarySeq] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_char*] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_char *
 org_biocorba_seqcore_PrimarySeq_primary_id(org_biocorba_seqcore_PrimarySeq
 					   _obj, CORBA_Environment * ev)
@@ -1275,6 +1446,17 @@ org_biocorba_seqcore_PrimarySeq_primary_id(org_biocorba_seqcore_PrimarySeq
       }
    }
 }
+
+/* @func org_biocorba_seqcore_PrimarySeq_accession_number ********************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_PrimarySeq] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_char*] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_char *
 org_biocorba_seqcore_PrimarySeq_accession_number
    (org_biocorba_seqcore_PrimarySeq _obj, CORBA_Environment * ev)
@@ -1387,6 +1569,17 @@ org_biocorba_seqcore_PrimarySeq_accession_number
       }
    }
 }
+
+/* @func org_biocorba_seqcore_PrimarySeq_version *****************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_PrimarySeq] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_long] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_long
 org_biocorba_seqcore_PrimarySeq_version(org_biocorba_seqcore_PrimarySeq _obj,
 					CORBA_Environment * ev)
@@ -1485,6 +1678,18 @@ org_biocorba_seqcore_PrimarySeq_version(org_biocorba_seqcore_PrimarySeq _obj,
       }
    }
 }
+
+/* @func org_biocorba_seqcore_Seq_all_SeqFeatures ****************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_Seq] Undocumented
+** @param [?] sub_seqfeatures [const CORBA_boolean] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_SeqFeatureVector] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_SeqFeatureVector
 org_biocorba_seqcore_Seq_all_SeqFeatures(org_biocorba_seqcore_Seq _obj,
 					 const CORBA_boolean sub_seqfeatures,
@@ -1594,6 +1799,19 @@ org_biocorba_seqcore_Seq_all_SeqFeatures(org_biocorba_seqcore_Seq _obj,
       }
    }
 }
+
+/* @func org_biocorba_seqcore_Seq_get_SeqFeatures_by_type ********************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_Seq] Undocumented
+** @param [?] sub_seqfeatures [const CORBA_boolean] Undocumented
+** @param [?] type [const CORBA_char*] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_SeqFeatureVector] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_SeqFeatureVector
 org_biocorba_seqcore_Seq_get_SeqFeatures_by_type(org_biocorba_seqcore_Seq
 						 _obj,
@@ -1722,6 +1940,20 @@ org_biocorba_seqcore_Seq_get_SeqFeatures_by_type(org_biocorba_seqcore_Seq
       }
    }
 }
+
+/* @func org_biocorba_seqcore_Seq_get_SeqFeatures_in_region ******************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_Seq] Undocumented
+** @param [?] start [const CORBA_long] Undocumented
+** @param [?] end [const CORBA_long] Undocumented
+** @param [?] sub_seqfeatures [const CORBA_boolean] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_SeqFeatureVector] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_SeqFeatureVector
 org_biocorba_seqcore_Seq_get_SeqFeatures_in_region(org_biocorba_seqcore_Seq
 						   _obj,
@@ -1845,6 +2077,21 @@ org_biocorba_seqcore_Seq_get_SeqFeatures_in_region(org_biocorba_seqcore_Seq
       }
    }
 }
+
+/* @func org_biocorba_seqcore_Seq_get_SeqFeatures_in_region_by_type **********
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_Seq] Undocumented
+** @param [?] start [const CORBA_long] Undocumented
+** @param [?] end [const CORBA_long] Undocumented
+** @param [?] sub_seqfeatures [const CORBA_boolean] Undocumented
+** @param [?] type [const CORBA_char*] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_SeqFeatureVector] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_SeqFeatureVector
 org_biocorba_seqcore_Seq_get_SeqFeatures_in_region_by_type
    (org_biocorba_seqcore_Seq _obj, const CORBA_long start,
@@ -1983,6 +2230,17 @@ org_biocorba_seqcore_Seq_get_SeqFeatures_in_region_by_type
       }
    }
 }
+
+/* @func org_biocorba_seqcore_Seq_get_PrimarySeq *****************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_Seq] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_PrimarySeq] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_PrimarySeq
 org_biocorba_seqcore_Seq_get_PrimarySeq(org_biocorba_seqcore_Seq _obj,
 					CORBA_Environment * ev)
@@ -2087,6 +2345,17 @@ org_biocorba_seqcore_Seq_get_PrimarySeq(org_biocorba_seqcore_Seq _obj,
       }
    }
 }
+
+/* @func org_biocorba_seqcore_SeqFeature_type ********************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_SeqFeature] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_char*] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_char *
 org_biocorba_seqcore_SeqFeature_type(org_biocorba_seqcore_SeqFeature _obj,
 				     CORBA_Environment * ev)
@@ -2199,6 +2468,17 @@ org_biocorba_seqcore_SeqFeature_type(org_biocorba_seqcore_SeqFeature _obj,
       }
    }
 }
+
+/* @func org_biocorba_seqcore_SeqFeature_source ******************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_SeqFeature] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_char*] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_char *
 org_biocorba_seqcore_SeqFeature_source(org_biocorba_seqcore_SeqFeature _obj,
 				       CORBA_Environment * ev)
@@ -2312,6 +2592,17 @@ org_biocorba_seqcore_SeqFeature_source(org_biocorba_seqcore_SeqFeature _obj,
       }
    }
 }
+
+/* @func org_biocorba_seqcore_SeqFeature_seq_primary_id **********************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_SeqFeature] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_char*] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_char *
 org_biocorba_seqcore_SeqFeature_seq_primary_id(org_biocorba_seqcore_SeqFeature
 					       _obj, CORBA_Environment * ev)
@@ -2424,6 +2715,17 @@ org_biocorba_seqcore_SeqFeature_seq_primary_id(org_biocorba_seqcore_SeqFeature
       }
    }
 }
+
+/* @func org_biocorba_seqcore_SeqFeature_start *******************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_SeqFeature] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_long] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_long
 org_biocorba_seqcore_SeqFeature_start(org_biocorba_seqcore_SeqFeature _obj,
 				      CORBA_Environment * ev)
@@ -2521,6 +2823,17 @@ org_biocorba_seqcore_SeqFeature_start(org_biocorba_seqcore_SeqFeature _obj,
       }
    }
 }
+
+/* @func org_biocorba_seqcore_SeqFeature_end *********************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_SeqFeature] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_long] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_long
 org_biocorba_seqcore_SeqFeature_end(org_biocorba_seqcore_SeqFeature _obj,
 				    CORBA_Environment * ev)
@@ -2618,6 +2931,17 @@ org_biocorba_seqcore_SeqFeature_end(org_biocorba_seqcore_SeqFeature _obj,
       }
    }
 }
+
+/* @func org_biocorba_seqcore_SeqFeature_strand ******************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_SeqFeature] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_short] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_short
 org_biocorba_seqcore_SeqFeature_strand(org_biocorba_seqcore_SeqFeature _obj,
 				       CORBA_Environment * ev)
@@ -2716,6 +3040,17 @@ org_biocorba_seqcore_SeqFeature_strand(org_biocorba_seqcore_SeqFeature _obj,
       }
    }
 }
+
+/* @func org_biocorba_seqcore_SeqFeature_qualifiers **************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_SeqFeature] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_NameValueSetList*] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_NameValueSetList *
 org_biocorba_seqcore_SeqFeature_qualifiers(org_biocorba_seqcore_SeqFeature
 					   _obj, CORBA_Environment * ev)
@@ -2944,6 +3279,17 @@ GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
       }
    }
 }
+
+/* @func org_biocorba_seqcore_SeqFeature_sub_SeqFeatures *********************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_SeqFeature] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_SeqFeatureVector] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_SeqFeatureVector
 org_biocorba_seqcore_SeqFeature_sub_SeqFeatures
    (org_biocorba_seqcore_SeqFeature _obj, CORBA_Environment * ev)
@@ -3048,6 +3394,17 @@ org_biocorba_seqcore_SeqFeature_sub_SeqFeatures
       }
    }
 }
+
+/* @func org_biocorba_seqcore_SeqFeature_locations ***************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_SeqFeature] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_SeqFeatureLocationList*] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_SeqFeatureLocationList *
 org_biocorba_seqcore_SeqFeature_locations(org_biocorba_seqcore_SeqFeature
 					  _obj, CORBA_Environment * ev)
@@ -3236,6 +3593,17 @@ GUINT16_SWAP_LE_BE(*((guint16 *) _ORBIT_curptr));
       }
    }
 }
+
+/* @func org_biocorba_seqcore_SeqFeature_PrimarySeq_is_available *************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_SeqFeature] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_boolean] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_boolean
 org_biocorba_seqcore_SeqFeature_PrimarySeq_is_available
    (org_biocorba_seqcore_SeqFeature _obj, CORBA_Environment * ev)
@@ -3330,6 +3698,17 @@ org_biocorba_seqcore_SeqFeature_PrimarySeq_is_available
       }
    }
 }
+
+/* @func org_biocorba_seqcore_SeqFeature_get_PrimarySeq **********************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_SeqFeature] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_PrimarySeq] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_PrimarySeq
 org_biocorba_seqcore_SeqFeature_get_PrimarySeq(org_biocorba_seqcore_SeqFeature
 					       _obj, CORBA_Environment * ev)
@@ -3440,6 +3819,17 @@ org_biocorba_seqcore_SeqFeature_get_PrimarySeq(org_biocorba_seqcore_SeqFeature
       }
    }
 }
+
+/* @func org_biocorba_seqcore_PrimarySeqIterator_next ************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_PrimarySeqIterator] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_PrimarySeq] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_PrimarySeq
 org_biocorba_seqcore_PrimarySeqIterator_next
    (org_biocorba_seqcore_PrimarySeqIterator _obj, CORBA_Environment * ev)
@@ -3550,6 +3940,17 @@ org_biocorba_seqcore_PrimarySeqIterator_next
       }
    }
 }
+
+/* @func org_biocorba_seqcore_PrimarySeqIterator_has_more ********************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_PrimarySeqIterator] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_boolean] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_boolean
 org_biocorba_seqcore_PrimarySeqIterator_has_more
    (org_biocorba_seqcore_PrimarySeqIterator _obj, CORBA_Environment * ev)
@@ -3644,6 +4045,17 @@ org_biocorba_seqcore_PrimarySeqIterator_has_more
       }
    }
 }
+
+/* @func org_biocorba_seqcore_SeqFeatureIterator_next ************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_SeqFeatureIterator] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_SeqFeature] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_SeqFeature
 org_biocorba_seqcore_SeqFeatureIterator_next
    (org_biocorba_seqcore_SeqFeatureIterator _obj, CORBA_Environment * ev)
@@ -3754,6 +4166,17 @@ org_biocorba_seqcore_SeqFeatureIterator_next
       }
    }
 }
+
+/* @func org_biocorba_seqcore_SeqFeatureIterator_has_more ********************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_SeqFeatureIterator] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_boolean] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_boolean
 org_biocorba_seqcore_SeqFeatureIterator_has_more
    (org_biocorba_seqcore_SeqFeatureIterator _obj, CORBA_Environment * ev)
@@ -3848,6 +4271,17 @@ org_biocorba_seqcore_SeqFeatureIterator_has_more
       }
    }
 }
+
+/* @func org_biocorba_seqcore_PrimarySeqVector_size **************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_PrimarySeqVector] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_long] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_long
 org_biocorba_seqcore_PrimarySeqVector_size
    (org_biocorba_seqcore_PrimarySeqVector _obj, CORBA_Environment * ev)
@@ -3946,6 +4380,18 @@ org_biocorba_seqcore_PrimarySeqVector_size
       }
    }
 }
+
+/* @func org_biocorba_seqcore_PrimarySeqVector_elementAt *********************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_PrimarySeqVector] Undocumented
+** @param [?] index [const CORBA_long] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_PrimarySeq] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_PrimarySeq
 org_biocorba_seqcore_PrimarySeqVector_elementAt
    (org_biocorba_seqcore_PrimarySeqVector _obj, const CORBA_long index,
@@ -4060,6 +4506,17 @@ org_biocorba_seqcore_PrimarySeqVector_elementAt
       }
    }
 }
+
+/* @func org_biocorba_seqcore_PrimarySeqVector_iterator **********************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_PrimarySeqVector] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_PrimarySeqIterator] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_PrimarySeqIterator
 org_biocorba_seqcore_PrimarySeqVector_iterator
    (org_biocorba_seqcore_PrimarySeqVector _obj, CORBA_Environment * ev)
@@ -4164,6 +4621,17 @@ org_biocorba_seqcore_PrimarySeqVector_iterator
       }
    }
 }
+
+/* @func org_biocorba_seqcore_SeqFeatureVector_size **************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_SeqFeatureVector] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_long] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_long
 org_biocorba_seqcore_SeqFeatureVector_size
    (org_biocorba_seqcore_SeqFeatureVector _obj, CORBA_Environment * ev)
@@ -4262,6 +4730,18 @@ org_biocorba_seqcore_SeqFeatureVector_size
       }
    }
 }
+
+/* @func org_biocorba_seqcore_SeqFeatureVector_elementAt *********************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_SeqFeatureVector] Undocumented
+** @param [?] index [const CORBA_long] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_SeqFeature] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_SeqFeature
 org_biocorba_seqcore_SeqFeatureVector_elementAt
    (org_biocorba_seqcore_SeqFeatureVector _obj, const CORBA_long index,
@@ -4376,6 +4856,17 @@ org_biocorba_seqcore_SeqFeatureVector_elementAt
       }
    }
 }
+
+/* @func org_biocorba_seqcore_SeqFeatureVector_iterator **********************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_SeqFeatureVector] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_SeqFeatureIterator] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_SeqFeatureIterator
 org_biocorba_seqcore_SeqFeatureVector_iterator
    (org_biocorba_seqcore_SeqFeatureVector _obj, CORBA_Environment * ev)
@@ -4480,6 +4971,17 @@ org_biocorba_seqcore_SeqFeatureVector_iterator
       }
    }
 }
+
+/* @func org_biocorba_seqcore_PrimarySeqDB_name ******************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_PrimarySeqDB] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_char*] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_char *
 org_biocorba_seqcore_PrimarySeqDB_name(org_biocorba_seqcore_PrimarySeqDB _obj,
 				       CORBA_Environment * ev)
@@ -4593,6 +5095,17 @@ org_biocorba_seqcore_PrimarySeqDB_name(org_biocorba_seqcore_PrimarySeqDB _obj,
       }
    }
 }
+
+/* @func org_biocorba_seqcore_PrimarySeqDB_version ***************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_PrimarySeqDB] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_long] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_long
 org_biocorba_seqcore_PrimarySeqDB_version(org_biocorba_seqcore_PrimarySeqDB
 					  _obj, CORBA_Environment * ev)
@@ -4691,6 +5204,17 @@ org_biocorba_seqcore_PrimarySeqDB_version(org_biocorba_seqcore_PrimarySeqDB
       }
    }
 }
+
+/* @func org_biocorba_seqcore_PrimarySeqDB_max_sequence_length ***************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_PrimarySeqDB] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [CORBA_long] Undocumented
+** @@
+******************************************************************************/
+
 CORBA_long
 org_biocorba_seqcore_PrimarySeqDB_max_sequence_length
    (org_biocorba_seqcore_PrimarySeqDB _obj, CORBA_Environment * ev)
@@ -4788,6 +5312,19 @@ org_biocorba_seqcore_PrimarySeqDB_max_sequence_length
       }
    }
 }
+
+/* @func org_biocorba_seqcore_PrimarySeqDB_get_PrimarySeq ********************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_PrimarySeqDB] Undocumented
+** @param [?] accession_number [const CORBA_char*] Undocumented
+** @param [?] version [const CORBA_long] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_PrimarySeq] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_PrimarySeq
 org_biocorba_seqcore_PrimarySeqDB_get_PrimarySeq
    (org_biocorba_seqcore_PrimarySeqDB _obj,
@@ -4921,6 +5458,17 @@ org_biocorba_seqcore_PrimarySeqDB_get_PrimarySeq
       }
    }
 }
+
+/* @func org_biocorba_seqcore_PrimarySeqDB_get_PrimarySeqVector **************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_PrimarySeqDB] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_PrimarySeqVector] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_PrimarySeqVector
 org_biocorba_seqcore_PrimarySeqDB_get_PrimarySeqVector
    (org_biocorba_seqcore_PrimarySeqDB _obj, CORBA_Environment * ev)
@@ -5025,6 +5573,19 @@ org_biocorba_seqcore_PrimarySeqDB_get_PrimarySeqVector
       }
    }
 }
+
+/* @func org_biocorba_seqcore_SeqDB_get_Seq **********************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_SeqDB] Undocumented
+** @param [?] accession_number [const CORBA_char*] Undocumented
+** @param [?] version [const CORBA_long] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_Seq] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_Seq
 org_biocorba_seqcore_SeqDB_get_Seq(org_biocorba_seqcore_SeqDB _obj,
 				   const CORBA_char * accession_number,
@@ -5158,6 +5719,17 @@ org_biocorba_seqcore_SeqDB_get_Seq(org_biocorba_seqcore_SeqDB _obj,
       }
    }
 }
+
+/* @func org_biocorba_seqcore_SeqDB_accession_numbers ************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_SeqDB] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_StringList*] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_StringList *
 org_biocorba_seqcore_SeqDB_accession_numbers(org_biocorba_seqcore_SeqDB _obj,
 					     CORBA_Environment * ev)
@@ -5304,6 +5876,19 @@ org_biocorba_seqcore_SeqDB_accession_numbers(org_biocorba_seqcore_SeqDB _obj,
       }
    }
 }
+
+/* @func org_biocorba_seqcore_UpdateableSeqDB_write_Seq **********************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_UpdateableSeqDB] Undocumented
+** @param [?] updatedSeqs [const org_biocorba_seqcore_SeqList*] Undocumented
+** @param [?] addedSeqs [const org_biocorba_seqcore_SeqList*] Undocumented
+** @param [?] deadSeqs [const org_biocorba_seqcore_SeqList*] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @@
+******************************************************************************/
+
 void
 org_biocorba_seqcore_UpdateableSeqDB_write_Seq
    (org_biocorba_seqcore_UpdateableSeqDB _obj,
@@ -5467,6 +6052,19 @@ org_biocorba_seqcore_UpdateableSeqDB_write_Seq
       }
    }
 }
+
+/* @func org_biocorba_seqcore_UpdateableSeqDB_write_PrimarySeq ***************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_UpdateableSeqDB] Undocumented
+** @param [?] updatedSeqs [const org_biocorba_seqcore_PrimarySeqList*] Undocumented
+** @param [?] addedSeqs [const org_biocorba_seqcore_PrimarySeqList*] Undocumented
+** @param [?] deadSeqs [const org_biocorba_seqcore_PrimarySeqList*] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @@
+******************************************************************************/
+
 void
 org_biocorba_seqcore_UpdateableSeqDB_write_PrimarySeq
    (org_biocorba_seqcore_UpdateableSeqDB _obj,
@@ -5628,6 +6226,19 @@ org_biocorba_seqcore_UpdateableSeqDB_write_PrimarySeq
       }
    }
 }
+
+/* @func org_biocorba_seqcore_BioEnv_get_PrimarySeqIterator_from_file ********
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_BioEnv] Undocumented
+** @param [?] format [const CORBA_char*] Undocumented
+** @param [?] filename [const CORBA_char*] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_PrimarySeqIterator] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_PrimarySeqIterator
 org_biocorba_seqcore_BioEnv_get_PrimarySeqIterator_from_file
    (org_biocorba_seqcore_BioEnv _obj, const CORBA_char * format,
@@ -5775,6 +6386,19 @@ org_biocorba_seqcore_BioEnv_get_PrimarySeqIterator_from_file
       }
    }
 }
+
+/* @func org_biocorba_seqcore_BioEnv_get_PrimarySeq_from_file ****************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_BioEnv] Undocumented
+** @param [?] format [const CORBA_char*] Undocumented
+** @param [?] filename [const CORBA_char*] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_PrimarySeq] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_PrimarySeq
 org_biocorba_seqcore_BioEnv_get_PrimarySeq_from_file
    (org_biocorba_seqcore_BioEnv _obj, const CORBA_char * format,
@@ -5921,6 +6545,19 @@ org_biocorba_seqcore_BioEnv_get_PrimarySeq_from_file
       }
    }
 }
+
+/* @func org_biocorba_seqcore_BioEnv_get_Seq_from_file ***********************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_BioEnv] Undocumented
+** @param [?] format [const CORBA_char*] Undocumented
+** @param [?] filename [const CORBA_char*] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_Seq] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_Seq
 org_biocorba_seqcore_BioEnv_get_Seq_from_file(org_biocorba_seqcore_BioEnv
 					      _obj, const CORBA_char * format,
@@ -6068,6 +6705,17 @@ org_biocorba_seqcore_BioEnv_get_Seq_from_file(org_biocorba_seqcore_BioEnv
       }
    }
 }
+
+/* @func org_biocorba_seqcore_BioEnv_get_SeqDB_names *************************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_BioEnv] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_StringList*] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_StringList *
 org_biocorba_seqcore_BioEnv_get_SeqDB_names(org_biocorba_seqcore_BioEnv _obj,
 					    CORBA_Environment * ev)
@@ -6214,6 +6862,18 @@ org_biocorba_seqcore_BioEnv_get_SeqDB_names(org_biocorba_seqcore_BioEnv _obj,
       }
    }
 }
+
+/* @func org_biocorba_seqcore_BioEnv_get_SeqDB_versions **********************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_BioEnv] Undocumented
+** @param [?] name [const CORBA_char*] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_LongList*] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_LongList *
 org_biocorba_seqcore_BioEnv_get_SeqDB_versions(org_biocorba_seqcore_BioEnv
 					       _obj, const CORBA_char * name,
@@ -6360,6 +7020,19 @@ org_biocorba_seqcore_BioEnv_get_SeqDB_versions(org_biocorba_seqcore_BioEnv
       }
    }
 }
+
+/* @func org_biocorba_seqcore_BioEnv_get_SeqDB_by_name ***********************
+**
+** Undocumented.
+**
+** @param [?] _obj [org_biocorba_seqcore_BioEnv] Undocumented
+** @param [?] name [const CORBA_char*] Undocumented
+** @param [?] version [const CORBA_long] Undocumented
+** @param [?] ev [CORBA_Environment*] Undocumented
+** @return [org_biocorba_seqcore_SeqDB] Undocumented
+** @@
+******************************************************************************/
+
 org_biocorba_seqcore_SeqDB
 org_biocorba_seqcore_BioEnv_get_SeqDB_by_name(org_biocorba_seqcore_BioEnv
 					      _obj, const CORBA_char * name,

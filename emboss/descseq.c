@@ -22,58 +22,67 @@
 
 #include "emboss.h"
 
+
+/* @prog descseq **************************************************************
+**
+** Alter the name or description of a sequence
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
 
-  AjPSeqout seqout;
-  AjPSeq seq;
-  AjPStr name = NULL;
-  AjPStr desc = NULL;
-  AjPStr temp = NULL;
-  AjBool append;
+    AjPSeqout seqout;
+    AjPSeq seq;
+    AjPStr name = NULL;
+    AjPStr desc = NULL;
+    AjPStr temp = NULL;
+    AjBool append;
   
-  (void) embInit ("descseq", argc, argv);
+    (void) embInit ("descseq", argc, argv);
 
-  seqout = ajAcdGetSeqout ("outseq");
-  seq = ajAcdGetSeq ("sequence");
-  append = ajAcdGetBool ("append");
-  name = ajAcdGetString ("name");
-  desc = ajAcdGetString ("description");
+    seqout = ajAcdGetSeqout ("outseq");
+    seq = ajAcdGetSeq ("sequence");
+    append = ajAcdGetBool ("append");
+    name = ajAcdGetString ("name");
+    desc = ajAcdGetString ("description");
 
 
-/* if appending, then do this */
-  if (append) {
-
-/* do we have a name? */  	
-    if (ajStrLen(name)) {
-      (void) ajStrAss(&temp, ajSeqGetName(seq));
-      (void) ajStrApp(&temp, name);
-      (void) ajSeqAssName(seq, temp);
-    }
+    /* if appending, then do this */
+    if (append)
+    {
+	/* do we have a name? */  	
+	if (ajStrLen(name))
+	{
+	    (void) ajStrAss(&temp, ajSeqGetName(seq));
+	    (void) ajStrApp(&temp, name);
+	    (void) ajSeqAssName(seq, temp);
+	}
   
-/* do we have a description? */
-    if (ajStrLen(desc)) {
-      (void) ajStrAss(&temp, ajSeqGetDesc(seq));
-      (void) ajStrApp(&temp, desc);
-      (void) ajSeqAssDesc(seq, temp);
-    }
+	/* do we have a description? */
+	if (ajStrLen(desc))
+	{
+	    (void) ajStrAss(&temp, ajSeqGetDesc(seq));
+	    (void) ajStrApp(&temp, desc);
+	    (void) ajSeqAssDesc(seq, temp);
+	}
 
-/* otherwise, just overwrite the existing values */
-  } else {
-/* do we have a name? */  	
-    if (ajStrLen(name)) {
-      (void) ajSeqAssName(seq, name);
+	/* otherwise, just overwrite the existing values */
     }
+    else
+    {
+	/* do we have a name? */  	
+	if (ajStrLen(name))
+	    (void) ajSeqAssName(seq, name);
   
-/* do we have a description? */
-    if (ajStrLen(desc)) {
-      (void) ajSeqAssDesc(seq, desc);
+	/* do we have a description? */
+	if (ajStrLen(desc))
+	    (void) ajSeqAssDesc(seq, desc);
     }
-  }
 
-  (void) ajSeqWrite (seqout, seq);  
-  (void) ajSeqWriteClose (seqout);
+    (void) ajSeqWrite (seqout, seq);  
+    (void) ajSeqWriteClose (seqout);
 
-  ajExit ();
-  return 0;
+    ajExit ();
+    return 0;
 }

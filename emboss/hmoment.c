@@ -24,11 +24,18 @@
 #include <math.h>
 
 
-static float calchm(char *p, int pos, int window, ajint angle);
-static void  addgraph(AjPGraph graph, ajint limit, float *x, float *y,
-		      float ymax, ajint colour, ajint angle,
-		      ajint window, float baseline);
+static float hmoment_calchm(char *p, int pos, int window, ajint angle);
+static void  hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
+			      float ymax, ajint colour, ajint angle,
+			      ajint window, float baseline);
 
+
+
+/* @prog hmoment **************************************************************
+**
+** Hydrophobic moment calculation
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -105,8 +112,8 @@ int main(int argc, char **argv)
 	for(i=0;i<limit;++i)
 	{
 	    x[i] = (float)i+1+beg;
-	    ya[i] = calchm(p,i,window,aangle);
-	    yb[i] = calchm(p,i,window,bangle);
+	    ya[i] = hmoment_calchm(p,i,window,aangle);
+	    yb[i] = hmoment_calchm(p,i,window,bangle);
 	}
 
 	for(i=0,ymax=-100.;i<limit;++i)
@@ -150,9 +157,11 @@ int main(int argc, char **argv)
 	    ajGraphxySetOverLap(graph,ajFalse);
 	    ajFmtPrintS(&st,"HMOMENT of %s. Window:%d",sname,window);
 
-	    addgraph(graph,limit,x,ya,ymax,BLACK,aangle,window,baseline);
+	    hmoment_addgraph(graph,limit,x,ya,ymax,BLACK,aangle,window,
+			     baseline);
 	    if(twin)
-		addgraph(graph,limit,x,yb,ymax,RED,bangle,window,baseline);
+		hmoment_addgraph(graph,limit,x,yb,ymax,RED,bangle,window,
+				 baseline);
 
 	    ajGraphxyDisplay(graph,ajTrue);
 	}
@@ -173,10 +182,26 @@ int main(int argc, char **argv)
 }
 
 
+/* @funcstatic hmoment_addgraph **********************************************
+**
+** Undocumented.
+**
+** @param [?] graph [AjPGraph] Undocumented
+** @param [?] limit [ajint] Undocumented
+** @param [?] x [float*] Undocumented
+** @param [?] y [float*] Undocumented
+** @param [?] ymax [float] Undocumented
+** @param [?] colour [ajint] Undocumented
+** @param [?] angle [ajint] Undocumented
+** @param [?] window [ajint] Undocumented
+** @param [?] baseline [float] Undocumented
+** @@
+******************************************************************************/
 
-static void addgraph(AjPGraph graph, ajint limit, float *x, float *y,
-		     float ymax, ajint colour, ajint angle, ajint window,
-		     float baseline)
+
+static void hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
+			     float ymax, ajint colour, ajint angle,
+			     ajint window, float baseline)
 {
     ajint i;
 
@@ -213,8 +238,20 @@ static void addgraph(AjPGraph graph, ajint limit, float *x, float *y,
 }
 
 
+/* @funcstatic hmoment_calchm ************************************************
+**
+** Undocumented.
+**
+** @param [?] p [char*] Undocumented
+** @param [?] pos [int] Undocumented
+** @param [?] window [int] Undocumented
+** @param [?] angle [ajint] Undocumented
+** @return [float] Undocumented
+** @@
+******************************************************************************/
 
-static float calchm(char *p, int pos, int window, ajint angle)
+
+static float hmoment_calchm(char *p, int pos, int window, ajint angle)
 {
     ajint  i;
     double h;

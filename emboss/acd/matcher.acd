@@ -31,7 +31,7 @@ interesting and significant alignments."
 
   int: gappenalty [
 	optional: Y 
-	info: "gap penalty"
+	info: "Gap penalty"
         def : "@($(sequencea.protein)? 14 : 16)"
         min : "0"
 	valid: "Positive integer"
@@ -45,7 +45,7 @@ sequences."
 
   int: gaplength [
 	optional: Y 
-	info: "gap length penalty"
+	info: "Gap length penalty"
         def : "@($(sequencea.protein)? 4 : 4)"
         min : "0"
 	valid: "Positive integer"
@@ -63,7 +63,7 @@ control gap scoring."
 
   int: markx [
 	optional: Y 
-	info: "alternative displays"
+	info: "Alternative displays"
         def : "0"
         max : "10"
 	help: "This sets the alternate display of matches and mismatches
@@ -82,7 +82,7 @@ the mismatched residue for mismatches.
 
   int: length [
 	optional: Y 
-	info: "number of residues per line"
+	info: "Number of residues per line"
         def : "60"
         min : "1"
 	max : "200"

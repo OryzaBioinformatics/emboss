@@ -91,6 +91,7 @@ int main(int argc, char **argv)
 
   EmbPentry entry;
   EmbPac acnum=NULL;
+  EmbPac acnumtmp=NULL;
   char* lastac=NULL;
   ajint idtype=0;
   
@@ -196,7 +197,7 @@ int main(int argc, char **argv)
   AJCNEW0(divfiles, nfiles);
 
   if (systemsort)
-    acnum = embDbiAcnumNew();
+    acnum = acnumtmp = embDbiAcnumNew();
 
   for (ifile=0; ifile<nfiles; ifile++) {
     curfilename = (AjPStr) files[ifile];
@@ -481,7 +482,7 @@ int main(int argc, char **argv)
 
   iac=0;
   j = 0;
-  k = 0;
+  k = 1;
   if (systemsort) {
     i=0;
     ajFmtPrintS (&alistfname, "%S.acsrt2", dbname);
@@ -546,6 +547,21 @@ int main(int argc, char **argv)
 
   ajDebug ("finished...\n%7d files\n%7d entries\n%7d acnum.trg\n%7d acnum.hit\n",
 	  nfiles, nid, iac, nac);
+
+  ajRegFree(&datexp);
+  ajRegFree(&idsrtexp);
+  ajRegFree(&acsrtexp);
+  ajRegFree(&acsrt2exp);
+  
+
+  /* Peter. Probably needs more work */
+  ajListDel(&inlist);
+
+  if(acnumtmp)
+      AJFREE(acnumtmp);
+  
+
+
   ajExit ();
   return 0;
 }

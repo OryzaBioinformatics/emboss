@@ -36,10 +36,32 @@
 #include "ajstr.h"
 #include "ajmess.h"
 
-static ajint cmpatom(const void *x, const void *y) {
+/* @funcstatic tableCmpAtom ***************************************************
+**
+** Default comparison function for key comparison
+**
+** @param [R] x [const void*] First key
+** @param [R] y [const void*] Second key
+** @return [ajint] 0 for success, 1 for different keys
+** @@
+******************************************************************************/
+
+
+static ajint tableCmpAtom(const void *x, const void *y) {
 	return x != y;
 }
-static ajuint hashatom(const void *key, ajuint hashsize) {
+
+/* @funcstatic tableHashAtom **************************************************
+**
+** Default hash function for key indexing
+**
+** @param [R] key [const void*] Key
+** @param [R] hashsize [ajuint] Hash size (maximum hash value)
+** @return [ajint] 0 for success, 1 for different keys
+** @@
+******************************************************************************/
+
+static ajuint tableHashAtom(const void *key, ajuint hashsize) {
 	return ((unsigned long)key>>2) % hashsize;
 }
 
@@ -76,8 +98,8 @@ AjPTable ajTableNew(ajint hint,
 	table = AJALLOC(sizeof (*table) +
 		primes[i-1]*sizeof (table->buckets[0]));
 	table->size = primes[i-1];
-	table->cmp  = cmp  ?  cmp : cmpatom;
-	table->hash = hash ? hash : hashatom;
+	table->cmp  = cmp  ?  cmp : tableCmpAtom;
+	table->hash = hash ? hash : tableHashAtom;
 	table->buckets = (struct binding **)(table + 1);
 	for (i = 0; i < table->size; i++)
 		table->buckets[i] = NULL;

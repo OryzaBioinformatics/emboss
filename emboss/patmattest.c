@@ -19,65 +19,81 @@
 
 #include "emboss.h"
 
-char *testset[] = { "GAN","GAATTC","CCSGG","GANTC","GABNNNNNVTC","GA","GANN","TC"};
-  
+static char *testset[] =
+{
+    "GAN","GAATTC","CCSGG","GANTC","GABNNNNNVTC","GA", "GANN","TC"
+};
+
+/* @prog patmettest *******************************************************
+**
+** Testing
+**
+******************************************************************************/
+ 
 int main(int argc, char **argv)
 {
-  AjPStr cut = NULL;
-  AjPStr new = NULL;
-  AjPStr test = NULL;
-  AjPStr regexp = NULL;
-  EmbPPatMatch results = NULL;
-  AjPSeq seq;
-  ajint i,j;
+    AjPStr cut = NULL;
+    AjPStr new = NULL;
+    AjPStr test = NULL;
+    AjPStr regexp = NULL;
+    EmbPPatMatch results = NULL;
+    AjPSeq seq;
+    ajint i;
+    ajint j;
 
-  embInit ("patmattest", argc, argv);
+    embInit ("patmattest", argc, argv);
 
-  ajStrAssC (&test,"GAATTCCCGGAGATTCCGACTC");
+    ajStrAssC (&test,"GAATTCCCGGAGATTCCGACTC");
 
 
-  for(i=0;i<8;i++){
-    ajStrAssC (&cut,testset[i]);
+    for(i=0;i<8;i++)
+    {
+	ajStrAssC (&cut,testset[i]);
 
-    /* Create the regular expression form the plain text */
-    regexp = embPatSeqCreateRegExp(cut,0);    
+	/* Create the regular expression form the plain text */
+	regexp = embPatSeqCreateRegExp(cut,0);    
 
-    /* find the matches */
-    results = embPatMatchFind(regexp,test);
+	/* find the matches */
+	results = embPatMatchFind(regexp,test);
 
     
-    ajUser("01234567890123456789012345");
-    ajUser("%S",test);
-    ajUser("%S %S",cut,regexp);
+	ajUser("01234567890123456789012345");
+	ajUser("%S",test);
+	ajUser("%S %S",cut,regexp);
+	ajUser("%d matches found",results->number);
+	for(j=0;j<results->number;j++)
+	    ajUser("start = %d len = %d",results->start[j],results->len[j]);
+	ajUser(" ");
+	embPatMatchDel(&results);
+	ajStrDel(&regexp);
+	ajStrDel(&cut);
+    }
+    ajStrDel(&test);
+
+    seq = ajAcdGetSeq ("sequence1");
+
+    cut = ajAcdGetString("expression");
+
+    results = embPatSeqMatchFind(seq, cut);
+    ajUser("%S",cut);
     ajUser("%d matches found",results->number);
-    for(j=0;j<results->number;j++)
-      ajUser("start = %d len = %d",results->start[j],results->len[j]);
+    for(j=0;j < embPatMatchGetNumber(results) ;j++)
+    {
+	ajUser("start = %d len = %d",embPatMatchGetStart(results,j),
+	       embPatMatchGetLen(results,j));
+	/*get a copy off the string */
+	new = ajStrNewL(results->len[j]);
+	ajStrAssSub(&new,ajSeqStr(seq),embPatMatchGetStart(results,j),
+		    embPatMatchGetEnd(results,j));
+	ajUser("%S",new);
+	ajStrDel(&new);
+    }
+
     ajUser(" ");
     embPatMatchDel(&results);
-    ajStrDel(&regexp);
     ajStrDel(&cut);
-  }
-  ajStrDel(&test);
+    ajSeqDel(&seq);
 
-  seq = ajAcdGetSeq ("sequence1");
-
-  cut = ajAcdGetString("expression");
-
-  results = embPatSeqMatchFind(seq, cut);
-  ajUser("%S",cut);
-  ajUser("%d matches found",results->number);
-  for(j=0;j < embPatMatchGetNumber(results) ;j++){
-    ajUser("start = %d len = %d",embPatMatchGetStart(results,j),embPatMatchGetLen(results,j));
-    /*get a copy off the string */
-    new = ajStrNewL(results->len[j]);
-    ajStrAssSub(&new,ajSeqStr(seq),embPatMatchGetStart(results,j),embPatMatchGetEnd(results,j));
-    ajUser("%S",new);
-    ajStrDel(&new);
-  }
-  ajUser(" ");
-  embPatMatchDel(&results);
-  ajStrDel(&cut);
-  ajSeqDel(&seq);
-  ajExit();
-  return 0;
+    ajExit();
+    return 0;
 }

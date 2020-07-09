@@ -518,9 +518,6 @@ static void fileClose (const AjPFile thys) {
     ajDebug ("closing file '%F'\n", thys);
     if(fclose (thys->fp))
       ajFatal("File close in fileClose");
-    ajStrDel (&thys->Name);
-    ajStrDel (&thys->Buff);
-    ajListstrFree (&thys->List);
     thys->Handle = 0;
 
     fileCloseCnt++;
@@ -529,6 +526,10 @@ static void fileClose (const AjPFile thys) {
   else {
     ajDebug ("file already closed\n");
   }
+
+  ajStrDel (&thys->Name);
+  ajStrDel (&thys->Buff);
+  ajListstrFree (&thys->List);
 
   return;
 }
@@ -823,6 +824,7 @@ AjBool ajFileNext (const AjPFile thys) {
     return ajFalse;
   }
 
+  ajDebug ("ajFileNext for non-list file %F name '%S'\n", thys, thys->Name);
   ajListTrace(thys->List);
   if (!ajListPop (thys->List, (void*) &name)) { /* end of list */
     /*    ajStrDel (&thys->Name);
@@ -833,9 +835,12 @@ AjBool ajFileNext (const AjPFile thys) {
   }
 
   ajDebug("ajFileNext filename '%S'\n", name);
-  if (!ajFileReopen (thys, name))
+  if (!ajFileReopen (thys, name)) {
+    ajStrDel(&name);		/* popped from the list */
     return ajFalse;
+  }
 
+  ajStrDel(&name);		/* popped from the list */
   thys->End = ajFalse;
 
   ajDebug("ajFileNext success\n");
@@ -978,7 +983,7 @@ AjBool ajFileGetsL (const AjPFile thys, AjPStr* pdest, ajlong* fpos) {
 
   while (buff) {
     if (thys->End) {
-      *fpos = 0;
+      /* *fpos = 0; */   /* we don't really want to reset this */
       ajDebug("File already read to end %F\n", thys);
       return ajFalse;
     }
@@ -1659,6 +1664,9 @@ AjPFileBuff ajFileBuffNew (void) {
   thys->Last = thys->Curr = thys->Lines = thys->Free = NULL;
   thys->Pos = thys->Size = 0;
 
+  ajDebug("ajFileBuffNew %x Buff %x Name %x \n",
+	  thys, thys->File->Buff->Ptr, thys->File->Name->Ptr);
+
   return thys;
 }
 
@@ -2046,12 +2054,13 @@ void ajFileBuffDel (AjPFileBuff* pthis) {
   if (!pthis)
     return;
 
-  if (!*pthis)
-    return;
-
   thys = *pthis;
 
-  ajDebug("ajFileBuffDel '%F'\n", thys->File);
+  if (!thys)
+    return;
+
+  ajDebug("ajFileBuffDel %x '%F' Buff %x Name %x\n",
+	  thys, thys->File, thys->File->Buff->Ptr, thys->File->Name->Ptr);
 
   ajFileBuffClear (thys, -1);
   ajFileBuffFreeClear (thys);
@@ -2505,6 +2514,29 @@ void ajFileBuffReset (const AjPFileBuff thys) {
   return;
 }
 
+/* @func ajFileBuffResetPos ******************************************************
+**
+** Resets the pointer and current record of a file buffer so the next read
+** starts at the first buffered line.
+**
+** Also resets the file position to the last known read, to undo the
+** damage done by (for example) ajseqabi functions.
+**
+** @param [u] thys [const AjPFileBuff] File buffer
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajFileBuffResetPos (const AjPFileBuff thys) {
+  ajFileBuffTraceFull(thys, 10, 10);
+  thys->Pos = 0;
+  thys->Curr = thys->Lines;
+  ajFileSeek(thys->File, thys->Fpos, SEEK_SET);
+  ajFileBuffTraceFull(thys,10,10);
+
+  return;
+}
+
 /* @func ajFileBuffFreeClear **************************************************
 **
 ** Deletes freed lines from a file buffer. The free list is used to avoid
@@ -2732,9 +2764,10 @@ void ajFileBuffTraceFull (const AjPFileBuff thys, size_t nlines,
   AjPFileBuffList line;
   AjBool last = ajFalse;
 
-  ajDebug ("Trace buffer file '%S'\n"
-	   "             Pos: %d Size: %d\n",
-	  thys->File->Name, thys->Pos, thys->Size);
+  ajDebug ("Trace buffer file '%S' End: %B\n"
+	   "             Pos: %d Size: %d Nobuff: %B Fpos: %ld\n",
+	   thys->File->Name, thys->File->End,
+	   thys->Pos, thys->Size, thys->Nobuff, thys->Fpos);
 
   line = thys->Lines;
   for (i=1; line && (i <= nlines); i++) {

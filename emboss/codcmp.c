@@ -23,6 +23,13 @@
 #include "emboss.h"
 #include <math.h>
 
+
+/* @prog codcmp ***************************************************************
+**
+** Codon usage table comparison
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     AjPFile    outf;
@@ -33,10 +40,8 @@ int main(int argc, char **argv)
     double     sum2;
     
     double     t;
-    
-    ajint        unused;
-
-    ajint i;
+    ajint      unused;
+    ajint      i;
     
 
     
@@ -64,12 +69,17 @@ int main(int argc, char **argv)
     ajFmtPrintF(outf,"# CODCMP codon usage table comparison\n");
     ajFmtPrintF(outf,"# %s vs %s\n\n",ajStrStr(first->name),
                 ajStrStr(second->name));
-    if (unused<64) { 
+
+    if (unused<64)
+    { 
         ajFmtPrintF(outf,"Sum Squared Difference = %.3f\n",sum2);
-        ajFmtPrintF(outf,"Mean Squared Difference = %.3f\n",sum2/((double) (64-unused)));
-        ajFmtPrintF(outf,"Root Mean Squared Difference = %.3f\n",sqrt(sum2/((double) (64-unused))));
+        ajFmtPrintF(outf,"Mean Squared Difference = %.3f\n",
+		    sum2/((double) (64-unused)));
+        ajFmtPrintF(outf,"Root Mean Squared Difference = %.3f\n",
+		    sqrt(sum2/((double) (64-unused))));
         ajFmtPrintF(outf,"Sum Difference         = %.3f\n",sum);
-        ajFmtPrintF(outf,"Mean Difference         = %.3f\n",sum/((double) (64-unused)));
+        ajFmtPrintF(outf,"Mean Difference         = %.3f\n",
+		    sum/((double) (64-unused)));
     }
     ajFmtPrintF(outf,"Codons not appearing   = %d\n",unused);
 
@@ -81,4 +91,3 @@ int main(int argc, char **argv)
     ajExit();
     return 0;
 }
-

@@ -6,6 +6,7 @@ extern "C"
 #ifndef embmisc_h
 #define embmisc_h
 
+AjBool embMiscMatchPattern (AjPStr str, AjPStr pattern);
 
 #endif
 

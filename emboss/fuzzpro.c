@@ -24,11 +24,19 @@
 #include "stdlib.h"
 
 
-void print_hits(AjPList *l, ajint hits, AjPFile outf, AjPStr seq, AjBool mms,
-		ajint begin, AjPStr desc, AjBool dodesc, AjPStr acc,
-		AjBool doacc, AjPStr usa, AjBool dousa);
+static void fuzzpro_print_hits(AjPList *l, ajint hits, AjPFile outf,
+			       AjPStr seq, AjBool mms, ajint begin,
+			       AjPStr desc, AjBool dodesc, AjPStr acc,
+			       AjBool doacc, AjPStr usa, AjBool dousa);
 
 
+
+
+/* @prog fuzzpro **************************************************************
+**
+** Protein pattern search
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -118,8 +126,8 @@ int main(int argc, char **argv)
 	    desc = ajSeqGetDesc(seq);
 	    acc  = ajSeqGetAcc(seq);
             usa  = ajSeqGetUsa(seq);
-	    print_hits(&l,hits,outf,text,mms,begin,desc,dodesc,acc,doacc,
-	    	usa,dousa);
+	    fuzzpro_print_hits(&l,hits,outf,text,mms,begin,desc,dodesc,acc,
+			       doacc,usa,dousa);
 	}
 	
 
@@ -143,10 +151,30 @@ int main(int argc, char **argv)
 
 
 
+/* @funcstatic fuzzpro_print_hits ***************************************
+**
+** Undocumented.
+**
+** @param [?] l [AjPList*] Undocumented
+** @param [?] hits [ajint] Undocumented
+** @param [?] outf [AjPFile] Undocumented
+** @param [?] seq [AjPStr] Undocumented
+** @param [?] mms [AjBool] Undocumented
+** @param [?] begin [ajint] Undocumented
+** @param [?] desc [AjPStr] Undocumented
+** @param [?] dodesc [AjBool] Undocumented
+** @param [?] acc [AjPStr] Undocumented
+** @param [?] doacc [AjBool] Undocumented
+** @param [?] usa [AjPStr] Undocumented
+** @param [?] dousa [AjBool] Undocumented
+** @@
+******************************************************************************/
 
-void print_hits(AjPList *l, ajint hits, AjPFile outf, AjPStr seq, AjBool mms,
-		ajint begin, AjPStr desc, AjBool dodesc, AjPStr acc,
-		AjBool doacc, AjPStr usa, AjBool dousa)
+
+static void fuzzpro_print_hits(AjPList *l, ajint hits, AjPFile outf,
+			       AjPStr seq, AjBool mms, ajint begin,
+			       AjPStr desc, AjBool dodesc, AjPStr acc,
+			       AjBool doacc, AjPStr usa, AjBool dousa)
 {
     ajint i;
     EmbPMatMatch m;

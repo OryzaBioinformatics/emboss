@@ -24,332 +24,404 @@
 #include "emboss.h"
 
 
-ajint readexpfreq(AjPTable *exptable, AjPFile infile, ajint size);
-ajint makebigarray(ajulong no_elements, ajulong **bigarray);
+static ajint compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
+				 ajint size);
+static ajint compseq_makebigarray(ajulong no_elements, ajulong **bigarray);
 
 
+
+
+/* @prog compseq **************************************************************
+**
+** Counts the composition of dimer/trimer/etc words in a sequence
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
 
-  AjPSeqall seqall;
-  AjPSeq seq;
-  ajint word;
-  AjBool zerocount;
-  AjBool ignorebz;
-  ajint frame;
-  AjPFile outfile;
-  AjPFile infile;
-  AjBool reverse;
-  AjPStr ajb=NULL;
+    AjPSeqall seqall;
+    AjPSeq seq;
+    ajint word;
+    AjBool zerocount;
+    AjBool ignorebz;
+    ajint frame;
+    AjPFile outfile;
+    AjPFile infile;
+    AjBool reverse;
+    AjPStr ajb=NULL;
   
-  ajint pos;
-  char *s;
-  ajulong result;
-  ajulong *bigarray;
-  ajulong no_elements;
-  AjBool first_time_round = ajTrue;
-  ajulong count;
-  AjPStr dispseq=NULL;
-  ajulong total=0;
-  ajulong other=0;
-  AjBool otherflag;
-  AjBool seqisnuc=ajFalse;
-  ajint increment;
-  ajint count_of_sequence_names = 0;
-  AjPTable exptable = NULL;	/* table of expected frequencies */
-  AjPStr strother = NULL;	/* holds the string of "Other" for looking in the hash table 'exptable' */
+    ajint pos;
+    char *s;
+    ajulong result;
+    ajulong *bigarray;
+    ajulong no_elements;
+    AjBool first_time_round = ajTrue;
+    ajulong count;
+    AjPStr dispseq=NULL;
+    ajulong total=0;
+    ajulong other=0;
+    AjBool otherflag;
+    AjBool seqisnuc=ajFalse;
+    ajint increment;
+    ajint count_of_sequence_names = 0;
+    AjPTable exptable = NULL;		/* table of expected frequencies */
 
-  AjBool have_exp_freq = ajFalse;	/* we don't have a file of expected frequencies yet */
-  double default_exp_freq, obs_freq=0.0, exp_freq, obs_exp;
+    /* holds the string of "Other" for looking in the hash table 'exptable' */
+    AjPStr strother = NULL;
 
-  (void) embInit ("compseq", argc, argv);
 
-  seqall = ajAcdGetSeqall ("sequence");
-  word = ajAcdGetInt ("word");
-  outfile = ajAcdGetOutfile ("outfile");
-  infile = ajAcdGetInfile ("infile");
-  zerocount = ajAcdGetBool("zerocount");
-  ignorebz = ajAcdGetBool("ignorebz");
-  frame = ajAcdGetInt("frame");
-  reverse = ajAcdGetBool("reverse");
+    /* we don't have a file of expected frequencies yet */
+    AjBool have_exp_freq = ajFalse;
+    double default_exp_freq;
+    double obs_freq=0.0;
+    double exp_freq;
+    double obs_exp;
 
-/* Output some documentation to the results file */
-  (void) ajFmtPrintF(outfile, "#\n"
-	      "# Output from 'compseq'\n"
-	      "#\n");
-  if (!zerocount) {
-    (void) ajFmtPrintF(outfile,
-		"# Words with a frequency of zero are not reported.\n");
-  }
-  if (!ignorebz) {
-    (void) ajFmtPrintF(outfile,
-		"# The amino acid codes 'B' and 'Z' will be counted,\n" 
-		"# rather than treated as 'Other'.\n");
-  }
-  if (frame) {
-    (void) ajFmtPrintF(outfile,
-		"# Only words in frame %d will be counted.\n",
-		frame);
-  }
-  if (infile == NULL) {
-    (void) ajFmtPrintF(outfile,
-		"# The Expected frequencies are calculated on the (false) assumption that every\n"
-		"# word has equal frequency.\n");
-  } else {
-    (void) ajFmtPrintF(outfile,
-		"# The Expected frequencies are taken from the file: %s\n",
-		ajFileName(infile));
-    
-    (void) readexpfreq(&exptable, infile, word);
-    have_exp_freq = ajTrue;
-  }
-  (void) ajFmtPrintF(outfile, "#\n");
-  (void) ajFmtPrintF(outfile, "# The input sequences are:\n");
+    (void) embInit ("compseq", argc, argv);
+
+    seqall = ajAcdGetSeqall ("sequence");
+    word = ajAcdGetInt ("word");
+    outfile = ajAcdGetOutfile ("outfile");
+    infile = ajAcdGetInfile ("infile");
+    zerocount = ajAcdGetBool("zerocount");
+    ignorebz = ajAcdGetBool("ignorebz");
+    frame = ajAcdGetInt("frame");
+    reverse = ajAcdGetBool("reverse");
+
+    /* Output some documentation to the results file */
+    (void) ajFmtPrintF(outfile, "#\n# Output from 'compseq'\n#\n");
+
+    if (!zerocount)
+	(void) ajFmtPrintF(outfile,"# Words with a frequency of zero are "
+			   "not reported.\n");
+
+
+    if (!ignorebz)
+	(void) ajFmtPrintF(outfile,"# The amino acid codes 'B' and 'Z' will "
+			   "be counted,\n# rather than treated as 'Other'.\n");
+
+
+    if (frame)
+	(void) ajFmtPrintF(outfile,"# Only words in frame %d will be "
+			   "counted.\n", frame);
+
+    if (infile == NULL)
+	(void) ajFmtPrintF(outfile,"# The Expected frequencies are "
+			   "calculated on the (false) assumption that every\n"
+			   "# word has equal frequency.\n");
+    else
+    {
+	(void) ajFmtPrintF(outfile,"# The Expected frequencies are taken "
+			   "from the file: %s\n",ajFileName(infile));
+	compseq_readexpfreq(&exptable, infile, word);
+	have_exp_freq = ajTrue;
+    }
+    (void) ajFmtPrintF(outfile, "#\n");
+    (void) ajFmtPrintF(outfile, "# The input sequences are:\n");
 
   
-/* see if we are using a sliding window or only looking at a word-sized
-single frame */
-  if (frame) {
-    increment = word;
-  } else {
-    increment = 1;
-  }
+    /*
+     *  see if we are using a sliding window or only looking at a word-sized
+     *  single frame
+     */
+    if (frame)
+	increment = word;
+    else
+	increment = 1;
 
-  while (ajSeqallNext(seqall, &seq)) {
+    while (ajSeqallNext(seqall, &seq))
+    {
+	/* note the name of the sequence */
+	if (count_of_sequence_names++ < 10)
+	    (void) ajFmtPrintF(outfile, "#\t%s\n", ajSeqName(seq));
+	else if (count_of_sequence_names++ == 11)
+	    (void) ajFmtPrintF(outfile, "# ... et al.\n");
 
-/* note the name of the sequence */
-  if (count_of_sequence_names++ < 10) {
-    (void) ajFmtPrintF(outfile, "#\t%s\n", ajSeqName(seq));
-  } else if (count_of_sequence_names++ == 11) {
-    (void) ajFmtPrintF(outfile, "# ... et al.\n");
-  } 
 
+	/*
+	 *  we first of all need to make a store for the results in a
+	 *  nice big array
+	 */
+	if (first_time_round)
+	{
+	    seqisnuc = ajSeqIsNuc(seq);
+	    if (!embNmerGetNoElements(&no_elements, word, seqisnuc, ignorebz))
+		(void) ajDie("The word size is too large for the data "
+			     "structure available.");
 
-/* we first of all need to make a store for the results in a nice big array */
-    if (first_time_round) {
-      seqisnuc = ajSeqIsNuc(seq);
-      if (!embNmerGetNoElements(&no_elements, word, seqisnuc, ignorebz)) {
-        (void) ajDie("The word size is too large for the data structure available.");
-      }
-      (void) makebigarray(no_elements, &bigarray);
-      first_time_round = ajFalse;
-    }
+	    (void) compseq_makebigarray(no_elements, &bigarray);
+	    first_time_round = ajFalse;
+	}
     
-    (void) ajSeqToUpper(seq);
-    s = ajSeqChar(seq);
+	(void) ajSeqToUpper(seq);
+	s = ajSeqChar(seq);
 
-/*
-Start at the first position, or at the frame, if it has been specified
-and then look at each word in a sliding window if no frame is specified,
-or at each increment of the word-size if frame is specified.
-Stop when less than a word-length from the end of the sequence.
-*/
-    for (pos=frame; pos <= ajSeqLen(seq)-word; pos += increment) {
-      if (seqisnuc) {
-        result = embNmerNuc2int(s, word, pos, &otherflag);
-      } else {
-        result = embNmerProt2int(s, word, pos, &otherflag, ignorebz);
-      }
-/* count this word */
-      if (!otherflag) {
-        bigarray[result]++;
-      } else {
-        other++;
-      }
-      total++;
-    }	
+	/*
+	 *  Start at the first position, or at the frame, if it has been
+	 *  specified and then look at each word in a sliding window if
+	 *  no frame is specified, or at each increment of the word-size
+	 *  if frame is specified. Stop when less than a word-length from
+	 *  the end of the sequence.
+	 */
+	for (pos=frame; pos <= ajSeqLen(seq)-word; pos += increment)
+	{
+	    if (seqisnuc)
+		result = embNmerNuc2int(s, word, pos, &otherflag);
+	    else
+		result = embNmerProt2int(s, word, pos, &otherflag, ignorebz);
 
-    if (seqisnuc && reverse) {
-/* Do it again on the reverse strand */
-      (void) ajSeqReverse(seq);
-      s = ajSeqChar(seq);
 
-      for (pos=frame; pos <= ajSeqLen(seq)-word; pos += increment) {
-        if (seqisnuc) {
-          result = embNmerNuc2int(s, word, pos, &otherflag);
-        } else {
-          result = embNmerProt2int(s, word, pos, &otherflag, ignorebz);
-        }
-/* count this word */
-        if (!otherflag) {
-          bigarray[result]++;
-        } else {
-          other++;
-        }
-        total++;
-      }	
-      
+	    /* count this word */
+	    if (!otherflag)
+		bigarray[result]++;
+	    else
+		other++;
+
+	    total++;
+	}	
+
+	if (seqisnuc && reverse)
+	{
+	    /* Do it again on the reverse strand */
+	    (void) ajSeqReverse(seq);
+	    s = ajSeqChar(seq);
+
+	    for (pos=frame; pos <= ajSeqLen(seq)-word; pos += increment)
+	    {
+		if (seqisnuc)
+		    result = embNmerNuc2int(s, word, pos, &otherflag);
+		else
+		    result = embNmerProt2int(s, word, pos, &otherflag,
+					     ignorebz);
+
+		/* count this word */
+		if (!otherflag)
+		    bigarray[result]++;
+		else
+		    other++;
+
+		total++;
+	    }	
+	}
     }
 
-  }
+    /* Give the word size used */
+    (void) ajFmtPrintF(outfile,"\n\nWord size\t%d\n", word);
 
-/* Give the word size used */
-  (void) ajFmtPrintF(outfile,
-	      "\n\nWord size\t%d\n", word);
+    /* Now output the Total count */
+    (void) ajFmtPrintF(outfile,"Total count\t%lu\n\n", total);
 
-/* Now output the Total count */
-  (void) ajFmtPrintF(outfile,
-	      "Total count\t%lu\n\n", total);
+    /* we have now counted the frequency of the words in the sequences */
+    (void) ajFmtPrintF(outfile, 
+		       "#\n# Word\tObs Count\tObs Frequency\tExp Frequency\t"
+		       "Obs/Exp Frequency\n#\n");
 
-/* we have now counted the frequency of the words in the sequences */
-  (void) ajFmtPrintF(outfile, 
-	      "#\n"
-	      "# Word\tObs Count\tObs Frequency\tExp Frequency\tObs/Exp Frequency\n"
-	      "#\n");
+    /*
+     *  if we have no file of expected frequencies, then we make our own
+     *  by simply giving each word an equal frequency
+     */
+    default_exp_freq = 1/(double)no_elements;
 
-/* if we have no file of expected frequencies, then we make our own by simply
-giving each word an equal frequency
-*/
-  default_exp_freq = 1/(double)no_elements;
+    for (count=0; count<no_elements; count++)
+    {
+	if (!zerocount && bigarray[count] == 0)
+	    continue;
 
-  for (count=0; count<no_elements; count++) {
-    if (!zerocount && bigarray[count] == 0) {
-      continue;
-    }
-    (void) ajStrClear(&dispseq);
-    if (seqisnuc) {
-      (void) embNmerInt2nuc(&dispseq, word, count);
-    } else {
-      (void) embNmerInt2prot(&dispseq, word, count, ignorebz);
-    }
+	(void) ajStrClear(&dispseq);
+
+	if (seqisnuc)
+	    (void) embNmerInt2nuc(&dispseq, word, count);
+	else
+	    (void) embNmerInt2prot(&dispseq, word, count, ignorebz);
     
-    if (have_exp_freq) {
-	if((ajb=ajTableGet(exptable,dispseq)))
-	    (void) ajStrToDouble(ajb, &exp_freq);
+	if (have_exp_freq)
+	{
+	    if((ajb=ajTableGet(exptable,dispseq)))
+		(void) ajStrToDouble(ajb, &exp_freq);
+	    else
+		exp_freq = default_exp_freq;
+	}
 	else
 	    exp_freq = default_exp_freq;
-    } else {
-      exp_freq = default_exp_freq;
+
+	if (exp_freq == 0.0)
+	    /* display a big number rather than a divide by zero error */
+	    obs_exp = 10000000000.0;
+	else
+	{
+	    obs_freq = (double)bigarray[count]/(double)total;
+	    obs_exp = obs_freq/exp_freq;
+	}
+
+	(void) ajFmtPrintF(outfile, "%S\t%lu\t\t%.7f\t%.7f\t%.7f\n", dispseq,
+			   bigarray[count], obs_freq, exp_freq, obs_exp);
     }
-    if (exp_freq == 0.0) {
-/* display a big number rather than a divide by zero error */
-      obs_exp = 10000000000.0;
-    } else {
-      obs_freq = (double)bigarray[count]/(double)total;
-      obs_exp = obs_freq/exp_freq;
+
+    /* now output the Other count */
+    if (have_exp_freq)
+    {
+	(void) ajStrAssC(&strother, "Other");
+	(void) ajStrToDouble(ajTableGet (exptable, strother), &exp_freq);
     }
+    else
+	obs_freq = (double)other/(double)total;
 
-    (void) ajFmtPrintF(outfile, "%S\t%lu\t\t%.7f\t%.7f\t%.7f\n", dispseq, bigarray[count], obs_freq, exp_freq, obs_exp);
-  }
 
-/* now output the Other count */
-  if (have_exp_freq) {
-    (void) ajStrAssC(&strother, "Other");
-    (void) ajStrToDouble(ajTableGet (exptable, strother), &exp_freq);
-  } else {
-    obs_freq = (double)other/(double)total;
-  }
+    if (!have_exp_freq || exp_freq==0.0)
+    {
+	exp_freq = 0.0;
+	/* display a big number rather than a divide by zero error */
+	obs_exp = 10000000000.0;
+    }
+    else
+	obs_exp = obs_freq/exp_freq;    
 
-  if (!have_exp_freq || exp_freq==0.0) {
-    exp_freq = 0.0;
-/* display a big number rather than a divide by zero error */
-    obs_exp = 10000000000.0;
-  } else {
-    obs_exp = obs_freq/exp_freq;    
-  }
 
-  (void) ajFmtPrintF(outfile, "\nOther\t%lu\t\t%.7f\t%.7f\t%.7f\n", other, obs_freq, exp_freq, obs_exp);
+    (void) ajFmtPrintF(outfile, "\nOther\t%lu\t\t%.7f\t%.7f\t%.7f\n", other,
+		       obs_freq, exp_freq, obs_exp);
 
-  (void) ajFileClose(&outfile);
+    (void) ajFileClose(&outfile);
 
 
 
-/* tidy up */
-  AJFREE (bigarray);
+    /* tidy up */
+    AJFREE (bigarray);
 
-  if (have_exp_freq) {
-    (void) ajTableFree(&exptable);
-  }
-  
- 
-
-  (void) ajExit ();
-  return 0;
-}
-
-/******************************************************/
-
-ajint makebigarray(ajulong no_elements, ajulong **bigarray) {
-
-  ajDebug ("makebigarray for %ld elements\n", no_elements);
-  AJCNEW(*bigarray, no_elements);
-  return 0;
-}
-/******************************************************/
-ajint readexpfreq(AjPTable *exptable, AjPFile infile, ajint size) {
-
-  AjPStr line = NULL;
-  char whiteSpace[] = " \t\n\r";
-  AjPStrTok tokens;
-  AjPStr sizestr=NULL;
-  ajint thissize;
-  AjPStr key;
-  AjPStr value;
-
-/* initialise the hash table - use case-insensitive comparison */
-  *exptable = ajStrTableNewCase(350);
+    if (have_exp_freq)
+	(void) ajTableFree(&exptable);
   
 
-/* read the file */
-  while (ajFileReadLine(infile, &line)) {
+    (void) ajExit ();
+    return 0;
+}
 
-/* skip comment and blank lines */
-    if (!ajStrFindC(line, "#")) continue;
-    if (!ajStrLen(line)) continue;
 
-/* look for the word size */
-    if (!ajStrFindC(line, "Word size")) {
-      (void) ajStrAssSub(&sizestr, line, 10, ajStrLen(line));
-      (void) ajStrChomp(&sizestr);
-      (void) ajStrToInt(sizestr, &thissize);
-      if (size == thissize) break;
-      (void) ajDie ("The word size you are counting (%d) is different to the word\n"
-	     "size in the file of expected frequencies (%d).",
-	     size, thissize);
+
+
+/* @funcstatic compseq_makebigarray ******************************************
+**
+** Undocumented.
+**
+** @param [?] no_elements [ajulong] Undocumented
+** @param [?] bigarray [ajulong**] Undocumented
+** @return [ajint] Undocumented
+** @@
+******************************************************************************/
+
+static ajint compseq_makebigarray(ajulong no_elements, ajulong **bigarray)
+{
+
+    ajDebug ("makebigarray for %ld elements\n", no_elements);
+    AJCNEW(*bigarray, no_elements);
+
+    return 0;
+}
+
+
+
+
+/* @funcstatic compseq_readexpfreq *******************************************
+**
+** Undocumented.
+**
+** @param [?] exptable [AjPTable*] Undocumented
+** @param [?] infile [AjPFile] Undocumented
+** @param [?] size [ajint] Undocumented
+** @return [ajint] Undocumented
+** @@
+******************************************************************************/
+
+static ajint compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
+				 ajint size)
+{
+
+    AjPStr line = NULL;
+    char whiteSpace[] = " \t\n\r";
+    AjPStrTok tokens;
+    AjPStr sizestr=NULL;
+    ajint thissize;
+    AjPStr key;
+    AjPStr value;
+
+    /* initialise the hash table - use case-insensitive comparison */
+    *exptable = ajStrTableNewCase(350);
+  
+
+    /* read the file */
+    while (ajFileReadLine(infile, &line))
+    {
+	/* skip comment and blank lines */
+	if (!ajStrFindC(line, "#")) continue;
+	if (!ajStrLen(line)) continue;
+
+	/* look for the word size */
+	if (!ajStrFindC(line, "Word size"))
+	{
+	    (void) ajStrAssSub(&sizestr, line, 10, ajStrLen(line));
+	    (void) ajStrChomp(&sizestr);
+	    (void) ajStrToInt(sizestr, &thissize);
+	    if (size == thissize) break;
+	    (void) ajDie ("The word size you are counting (%d) is different "
+			  "to the word\nsize in the file of expected "
+			  "frequencies (%d).", size, thissize);
       
-    } else {
-      (void) ajDie ("The 'Word size' line was not found, instead found:\n%S\n", line);
+	}
+	else
+	    (void) ajDie ("The 'Word size' line was not found, instead "
+			  "found:\n%S\n", line);
     }
-  }
   
-/* read the file */
-  while (ajFileReadLine(infile, &line)) {
+    /* read the file */
+    while (ajFileReadLine(infile, &line))
+    {
 
-/* skip comment and blank lines */
-    if (!ajStrFindC(line, "#")) continue;
-    if (!ajStrLen(line)) continue;
+	/* skip comment and blank lines */
+	if (!ajStrFindC(line, "#")) continue;
+	if (!ajStrLen(line)) continue;
  
-/* look for the total number of counts - anything after this is our data */
-    if (!ajStrFindC(line, "Total")) break;
-    
-  }
+	/*
+	 *  look for the total number of counts - anything after this
+	 *  is our data
+	 */
+	if (!ajStrFindC(line, "Total"))
+	    break;
+    }
 
-/* read in the observed frequencies as a string */
-  while (ajFileReadLine(infile, &line)) {
+    /* read in the observed frequencies as a string */
+    while (ajFileReadLine(infile, &line))
+    {
+	/* skip comment and blank lines */
+	if (!ajStrFindC(line, "#"))
+	    continue;
 
-/* skip comment and blank lines */
-    if (!ajStrFindC(line, "#")) continue;
-    if (!ajStrLen(line)) continue;
+	if (!ajStrLen(line))
+	    continue;
 
-    tokens = ajStrTokenInit(line, whiteSpace); 
+	tokens = ajStrTokenInit(line, whiteSpace); 
 
-/* get the word as the key */
-    key = ajStrNew();
-    (void) ajStrToken( &key, &tokens, NULL);
+	/* get the word as the key */
+	key = ajStrNew();
+	(void) ajStrToken( &key, &tokens, NULL);
 
-/* get the observed frequency as the value - we'll use this as the expected frequency */
-    value = ajStrNew();
-    (void) ajStrToken( &value, &tokens, NULL);	/* skip the observed count column */
-    (void) ajStrToken( &value, &tokens, NULL);
+	/*
+	 *  get the observed frequency as the value - we'll use this as
+	 *  the expected frequency
+	 */
+	value = ajStrNew();
 
-    (void) ajTablePut( *exptable, key, value);
+	/* skip the observed count column */
+	(void) ajStrToken( &value, &tokens, NULL);
+	(void) ajStrToken( &value, &tokens, NULL);
 
-  }    
+	(void) ajTablePut( *exptable, key, value);
 
-/* tidy up */
-  (void) ajStrDel(&line);
-  (void) ajStrTokenClear( &tokens);
-  return 0;
+    }    
+
+    /* tidy up */
+    (void) ajStrDel(&line);
+    (void) ajStrTokenClear( &tokens);
+
+    return 0;
 }
 

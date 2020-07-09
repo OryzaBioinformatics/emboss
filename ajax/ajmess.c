@@ -343,10 +343,37 @@ void ajMessBeep (void) {
   return;
 }
 
+/* @func ajMessOutLine *******************************************************
+**
+** Formats a message. Calls the defined output function (if any).
+** Otherwise prints the message to standard output with an extra newline.
+**
+** @param [r] format [char*] Format string
+** @param [v] [...] Variable length argument list
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajMessOutLine (char *format,...) {
+  va_list args ;
+  char *mesg_buf;
+
+  /* Format the message string. */
+
+  AJAXFORMATSTRING(args, format, mesg_buf, NULL);
+
+  if (outRoutine)
+    (*outRoutine)(mesg_buf) ;
+  else
+    (void) fprintf (stderr, "%s\n", mesg_buf) ;
+
+  return;
+}
+
 /* @func ajMessOut *******************************************************
 **
 ** Formats a message. Calls the defined output function (if any).
-** Otherwise prints the message to standard output.
+** Otherwise prints the message to standard output with no newline.
 **
 ** @param [r] format [char*] Format string
 ** @param [v] [...] Variable length argument list
@@ -365,7 +392,7 @@ void ajMessOut (char *format,...) {
   if (outRoutine)
     (*outRoutine)(mesg_buf) ;
   else
-    (void) fprintf (stderr, "%s\n", mesg_buf) ;
+    (void) fprintf (stderr, "%s", mesg_buf) ;
 
   return;
 }
@@ -1374,7 +1401,7 @@ void ajMessCodesDelete (void) {
   errorTable = 0;
   return;
 }
-/* @func ajDebug*******************************************************
+/* @func ajDebug *******************************************************
 **
 ** Writes a debug message to the debug file if debugging is on.
 ** Typically, debugging is turned on by adding '-debug' to the command line

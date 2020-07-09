@@ -13,6 +13,21 @@ appl: seqretallfeat [
 	groups: "Test"
 ]
 
+# testing sections
+# type can be 'frame' or 'page'
+
+  variable: fred "2 + 2"
+  section: secinseq [ info: "input sequence" type: "frame"
+   border:2
+   side:top
+  ]
   seqall: sequence [ param: Y feat: Y ]
 
+  section: secoutseq [ info: "output sequence" type: "page"
+   comment: "testing sections"
+   folder:fred 
+  ]
   seqoutall: outseq [ param: Y feat: Y ]
+
+  endsection: secoutseq
+  endsection: secinseq

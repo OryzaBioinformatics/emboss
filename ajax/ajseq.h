@@ -87,7 +87,7 @@ ajint          ajSeqEnd (AjPSeq seq);
 AjPStr       ajSeqGetAcc (AjPSeq thys);
 AjPStr       ajSeqGetDesc (AjPSeq thys);
 AjPStr       ajSeqGetEntry (AjPSeq thys);
-AjPFeatTable ajSeqGetFeat (AjPSeq thys);
+AjPFeattable ajSeqGetFeat (AjPSeq thys);
 AjPStr       ajSeqGetName (AjPSeq thys);
 ajint          ajSeqGetRange (AjPSeq thys, ajint* begin, ajint* end);
 AjPStr       ajSeqGetUsa (AjPSeq thys);

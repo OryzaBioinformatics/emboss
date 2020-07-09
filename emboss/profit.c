@@ -26,32 +26,41 @@
 #define AZ 27
 
 
-static void read_profile(AjPFile inf, AjPStr *name, AjPStr *mname, ajint *mlen,
-			  float *gapopen, float *gapextend, ajint *thresh,
-			  float *maxs, AjPStr *cons);
+static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
+				ajint *mlen, float *gapopen, float *gapextend,
+				ajint *thresh, float *maxs, AjPStr *cons);
 
-static void read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
-			ajint *maxs, ajint *thresh,AjPStr *cons);
+static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
+			       ajint *maxs, ajint *thresh,AjPStr *cons);
 
-void scan_profile(AjPStr substr, AjPStr pname, AjPStr name, AjPStr mname,
-		   ajint mlen, float **fmatrix, ajint thresh, float maxs,
-		   float gapopen, float gapextend, AjPFile outf,
-		   AjPStr *cons);
+static void profit_scan_profile(AjPStr substr, AjPStr pname, AjPStr name,
+				AjPStr mname, ajint mlen, float **fmatrix,
+				ajint thresh, float maxs, float gapopen,
+				float gapextend, AjPFile outf, AjPStr *cons);
 
-void scan_simple(AjPStr substr, AjPStr pname, AjPStr name, ajint mlen, ajint maxs,
-		 ajint thresh, ajint **matrix,AjPFile outf,AjPStr *cons);
+static void profit_scan_simple(AjPStr substr, AjPStr pname, AjPStr name,
+			       ajint mlen, ajint maxs, ajint thresh,
+			       ajint **matrix,AjPFile outf,AjPStr *cons);
 
-void printHits(AjPStr substr,AjPStr pname, ajint pos, AjPStr name, ajint score,
-	       ajint thresh,float maxs, AjPFile outf,AjPStr *cons);
+static void profit_printHits(AjPStr substr,AjPStr pname, ajint pos,
+			     AjPStr name, ajint score, ajint thresh,
+			     float maxs, AjPFile outf,AjPStr *cons);
 
-ajint getType(AjPFile inf);
-
-
-
-
+static ajint profit_getType(AjPFile inf);
 
 
 
+
+
+
+
+
+
+/* @prog profit ***************************************************************
+**
+** Scan a sequence or database with a matrix or profile
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -97,19 +106,18 @@ int main(int argc, char **argv)
     inf       = ajAcdGetInfile("infile");
     outf      = ajAcdGetOutfile("outfile");
     
-    seq=ajSeqNew();
     substr=ajStrNew();
     name=ajStrNew();
     mname=ajStrNew();
     line=ajStrNew();
 
-    if(!(type=getType(inf)))
+    if(!(type=profit_getType(inf)))
 	ajFatal("Unrecognised profile/matrix file format");
     
     switch(type)
     {
     case 1:
-	read_simple(inf, &name, &mlen, &maxs, &thresh, &cons);
+	profit_read_simple(inf, &name, &mlen, &maxs, &thresh, &cons);
 	AJCNEW(matrix, mlen);
 	fptr=(void **)matrix;
     
@@ -132,8 +140,8 @@ int main(int argc, char **argv)
 		    maxs);
 	break;
     case 2:
-	read_profile(inf,&name,&mname,&mlen,&gapopen,&gapextend,&thresh,
-		      &maxfs, &cons);
+	profit_read_profile(inf,&name,&mname,&mlen,&gapopen,&gapextend,&thresh,
+			    &maxfs, &cons);
 	AJCNEW(fmatrix, mlen);
 	fptr=(void **)fmatrix;
 	for(i=0;i<mlen;++i)
@@ -155,8 +163,8 @@ int main(int argc, char **argv)
 		    thresh,maxfs);
 	break;
     case 3:
-	read_profile(inf,&name,&mname,&mlen,&gapopen,&gapextend,&thresh,
-		      &maxfs, &cons);
+	profit_read_profile(inf,&name,&mname,&mlen,&gapopen,&gapextend,&thresh,
+			    &maxfs, &cons);
 	AJCNEW(fmatrix, mlen);
 	fptr=(void **)fmatrix;
 	for(i=0;i<mlen;++i)
@@ -196,15 +204,16 @@ int main(int argc, char **argv)
 	switch(type)
 	{
 	case 1:
-	    scan_simple(substr,pname,name,mlen,maxs,thresh,matrix,outf,&cons);
+	    profit_scan_simple(substr,pname,name,mlen,maxs,thresh,matrix,
+			       outf,&cons);
 	    break;
 	case 2:
-	    scan_profile(substr,pname,name,mname,mlen,fmatrix,thresh,maxfs,
-			  gapopen,gapextend,outf,&cons);
+	    profit_scan_profile(substr,pname,name,mname,mlen,fmatrix,
+				thresh,maxfs,gapopen,gapextend,outf,&cons);
 	    break;
 	case 3:
-	    scan_profile(substr,pname,name,mname,mlen,fmatrix,thresh,maxfs,
-			  gapopen,gapextend,outf,&cons);
+	    profit_scan_profile(substr,pname,name,mname,mlen,fmatrix,thresh,
+				maxfs,gapopen,gapextend,outf,&cons);
 	    break;
 	default:
 	    break;
@@ -230,8 +239,17 @@ int main(int argc, char **argv)
 
 
 
+/* @funcstatic profit_getType ************************************************
+**
+** Get type of matrix
+**
+** @param [r] inf [AjPFile] profile
+** @return [ajint] 1=simple 2=Gribskov 3=Henikoff
+** @@
+******************************************************************************/
 
-ajint getType(AjPFile inf)
+
+static ajint profit_getType(AjPFile inf)
 {
     AjPStr line=NULL;
     char *p=NULL;
@@ -258,9 +276,22 @@ ajint getType(AjPFile inf)
 
 
 
+/* @funcstatic  profit_read_simple ********************************************
+**
+** Undocumented.
+**
+** @param [r] inf [AjPFile] mtx file
+** @param [w] name [AjPStr*] mtx name
+** @param [w] mlen [ajint*] mtx length
+** @param [w] maxs [ajint*] mtx max score
+** @param [w] thresh [ajint*] mtx threshold
+** @param [w] cons [AjPStr*] mtx consensus
+** @@
+******************************************************************************/
 
-static void read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
-		 ajint *maxs, ajint *thresh, AjPStr *cons)
+
+static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
+			       ajint *maxs, ajint *thresh, AjPStr *cons)
 {
     char *p;
     
@@ -314,10 +345,26 @@ static void read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
 
 
 
+/* @funcstatic  profit_read_profile ******************************************
+**
+** Read profile
+**
+** @param [r] inf [AjPFile] Undocumented
+** @param [w] name [AjPStr*] profile name
+** @param [w] mname [AjPStr*] mtx name
+** @param [w] mlen [ajint*] profile length
+** @param [w] gapopen [float*] gap open penalty
+** @param [w] gapextend [float*] gap extend penalty
+** @param [w] thresh [ajint*] threshold
+** @param [w] maxs [float*] maximum score
+** @param [w] cons [AjPStr*] consensus sequence
+** @@
+******************************************************************************/
 
-static void read_profile(AjPFile inf, AjPStr *name, AjPStr *mname, ajint *mlen,
-			  float *gapopen, float *gapextend, ajint *thresh,
-			  float *maxs, AjPStr *cons)
+
+static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
+				ajint *mlen, float *gapopen, float *gapextend,
+				ajint *thresh, float *maxs, AjPStr *cons)
 {
     char *p;
     
@@ -392,14 +439,33 @@ static void read_profile(AjPFile inf, AjPStr *name, AjPStr *mname, ajint *mlen,
 
 
     ajStrDel(&line);
+
+    return;
 }
 
 
 
 
+/* @funcstatic profit_scan_simple ********************************************
+**
+** Scan sequence with a frequency matrix
+**
+** @param [r] substr [AjPStr] sequence
+** @param [r] pname [AjPStr] profile name
+** @param [r] name [AjPStr] seq namne
+** @param [r] mlen [ajint] mtx length
+** @param [r] maxs [ajint] max score
+** @param [r] thresh [ajint] threshold
+** @param [r] matrix [ajint**] freq mtx
+** @param [w] outf [AjPFile] outfile
+** @param [r] cons [AjPStr*] consensus sequence
+** @@
+******************************************************************************/
 
-void scan_simple(AjPStr substr, AjPStr pname, AjPStr name, ajint mlen, ajint maxs,
-		 ajint thresh, ajint **matrix,AjPFile outf, AjPStr *cons)
+
+static void profit_scan_simple(AjPStr substr, AjPStr pname, AjPStr name,
+			       ajint mlen, ajint maxs, ajint thresh,
+			       ajint **matrix,AjPFile outf, AjPStr *cons)
 {
     ajint len;
     ajint i;
@@ -422,27 +488,64 @@ void scan_simple(AjPStr substr, AjPStr pname, AjPStr name, ajint mlen, ajint max
 	    sum += matrix[j][ajAZToInt(*(p+i+j))];
 	score = sum * 100 / maxs;
 	if(score >= thresh)
-	    printHits(substr,pname,i,name,score,thresh,(float)maxs,outf,
-		      cons);
+	    profit_printHits(substr,pname,i,name,score,thresh,(float)maxs,outf,
+			     cons);
     }
 }
 
 
 
+/* @funcstatic profit_printHits **********************************************
+**
+** Print results for profit
+**
+** @param [r] substr [AjPStr] sequence
+** @param [r] pname [AjPStr] profile name
+** @param [r] pos [ajint] position
+** @param [r] name [AjPStr] name
+** @param [r] score [ajint] score
+** @param [r] thresh [ajint] threshold
+** @param [r] maxs [float] max score
+** @param [w] outf [AjPFile] outfile
+** @param [r] cons [AjPStr*] consensus seq
+** @@
+******************************************************************************/
 
-void printHits(AjPStr substr,AjPStr pname, ajint pos, AjPStr name, ajint score,
-	       ajint thresh, float maxs, AjPFile outf, AjPStr *cons)
+
+static void profit_printHits(AjPStr substr,AjPStr pname, ajint pos,
+			     AjPStr name, ajint score, ajint thresh,
+			     float maxs, AjPFile outf, AjPStr *cons)
 {
 
     ajFmtPrintF(outf,"%s %d Percentage: %d\n",ajStrStr(pname),pos+1,score);
+    return;
 }
 
 
+/* @funcstatic profit_scan_profile *******************************************
+**
+** Scan sequence with a profile
+**
+** @param [r] substr [AjPStr] sequence
+** @param [r] pname [AjPStr] profile name
+** @param [r] name [AjPStr] sequence name
+** @param [r] mname [AjPStr] mtx name
+** @param [r] mlen [ajint] profile length
+** @param [r] fmatrix [float**] score matrix
+** @param [r] thresh [ajint] threshold
+** @param [r] maxs [float] max score
+** @param [r] gapopen [float] open penalty
+** @param [r] gapextend [float] extend penalty
+** @param [w] outf [AjPFile] outfile
+** @param [r] cons [AjPStr*] consensus seq
+** @@
+******************************************************************************/
 
-void scan_profile(AjPStr substr, AjPStr pname, AjPStr name, AjPStr mname,
-		   ajint mlen, float **fmatrix, ajint thresh, float maxs,
-		   float gapopen, float gapextend, AjPFile outf,
-		   AjPStr *cons)
+
+static void profit_scan_profile(AjPStr substr, AjPStr pname, AjPStr name,
+				AjPStr mname, ajint mlen, float **fmatrix,
+				ajint thresh, float maxs, float gapopen,
+				float gapextend, AjPFile outf, AjPStr *cons)
 {
     ajint len;
     ajint i;
@@ -465,8 +568,8 @@ void scan_profile(AjPStr substr, AjPStr pname, AjPStr name, AjPStr mname,
 	    sum += fmatrix[j][ajAZToInt(*(p+i+j))];
 	score = sum * 100. / maxs;
 	if((ajint)score >= thresh)
-	    printHits(substr,pname,i,name,(ajint)score,thresh,maxs,outf,
-		      cons);
+	    profit_printHits(substr,pname,i,name,(ajint)score,thresh,maxs,outf,
+			     cons);
     }
     return;
 }

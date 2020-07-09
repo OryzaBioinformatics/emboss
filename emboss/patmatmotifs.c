@@ -21,8 +21,15 @@
 
 #include "emboss.h"
    
-void spaces(AjPFile *outf, ajint length); 
+static void patmat_spaces(AjPFile *outf, ajint length); 
   
+
+/* @prog patmatmotifs *********************************************************
+**
+** Search a PROSITE motif database with a protein sequence
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
 
@@ -170,11 +177,11 @@ int main(int argc, char **argv)
 		ajFmtPrintF(outf, "%s\n", ajStrStr(temp));
 		
 		ajFmtPrintF(outf, "     |");
-		spaces(&outf, length);
+		patmat_spaces(&outf, length);
 		ajFmtPrintF(outf, "|\n");
 	    
 		ajFmtPrintF(outf, "%6d", start+1);
-		spaces(&outf, length);
+		patmat_spaces(&outf, length);
 		ajFmtPrintF(outf, "%-d\n\n", end+1);
 	    }
 	
@@ -220,14 +227,21 @@ int main(int argc, char **argv)
     return 0;
 }
 
+/* @funcstatic patmat_spaces *************************************************
+**
+** Pad output with spaces
+**
+** @param [w] outf [AjPFile*] outfile
+** @param [r] length [ajint] nspaces + 2
+** @@
+******************************************************************************/
 
-
-/* Functions */
-
-void spaces(AjPFile *outf, ajint length)
+static void patmat_spaces(AjPFile *outf, ajint length)
 {
     ajint i;
 
     for (i=0; i < length-2; ++i)
 	ajFmtPrintF(*outf, " ");
+
+    return;
 }

@@ -26,10 +26,12 @@
 
 
 
-static void plotresidue(char c, float r, float a, char *squares, char *circles,
-			char *diamonds, AjBool text, AjPFile outf,
-			float xmin,float xmax,float ymin,float ymax);
-static void drawocta(float x, float y, float size, AjBool text, AjPFile outf);
+static void pepwheel_plotresidue(char c, float r, float a, char *squares,
+				 char *circles, char *diamonds, AjBool text,
+				 AjPFile outf, float xmin,float xmax,
+				 float ymin,float ymax);
+static void pepwheel_drawocta(float x, float y, float size, AjBool text,
+			      AjPFile outf);
 
 
 
@@ -39,6 +41,13 @@ static void drawocta(float x, float y, float size, AjBool text, AjPFile outf);
 #define AJB_RED    1
 #define AJB_PURPLE 10
 
+
+
+/* @prog pepwheel *************************************************************
+**
+** Shows protein sequences as helices
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -201,10 +210,10 @@ int main(int argc, char **argv)
 		    }
 		}
 	    }
-	    plotresidue(*(ajStrStr(substr)+lc),radius+resgap,angle,
-			ajStrStr(squares),ajStrStr(octags),
-			ajStrStr(diamonds),text,outf,
-			xmin,xmax,ymin,ymax);
+	    pepwheel_plotresidue(*(ajStrStr(substr)+lc),radius+resgap,angle,
+				 ajStrStr(squares),ajStrStr(octags),
+				 ajStrStr(diamonds),text,outf,
+				 xmin,xmax,ymin,ymax);
 	    ++lc;
 	    if(lc==len)
 		break;
@@ -230,8 +239,21 @@ int main(int argc, char **argv)
     return 0;
 }
 
+/* @funcstatic pepwheel_drawocta *********************************************
+**
+** Draw an octagon
+**
+** @param [r] x [float] xpos
+** @param [r] y [float] xpos
+** @param [r] size [float] size
+** @param [r] text [AjBool] text or graphic
+** @param [w] outf [AjPFile] outfile
+** @@
+******************************************************************************/
 
-static void drawocta(float x, float y, float size, AjBool text, AjPFile outf)
+
+static void pepwheel_drawocta(float x, float y, float size, AjBool text,
+			      AjPFile outf)
 {
     static float polyx[]=
     {
@@ -263,10 +285,30 @@ static void drawocta(float x, float y, float size, AjBool text, AjPFile outf)
 
 
     
+/* @funcstatic pepwheel_plotresidue *******************************************
+**
+** Plot a residue
+**
+** @param [r] c [char] char to plot
+** @param [r] r [float] radius
+** @param [r] a [float] angle
+** @param [r] squares [char*] residues for squares
+** @param [r] octags [char*] residues for octagons
+** @param [r] diamonds [char*] residues for diamonds
+** @param [r] text [AjBool] text or graphic output
+** @param [w] outf [AjPFile] outfile
+** @param [r] xmin [float] co-ord
+** @param [r] xmax [float] co-ord
+** @param [r] ymin [float] co-ord
+** @param [r] ymax [float] co-ord
+** @@
+******************************************************************************/
 
-static void plotresidue(char c, float r, float a, char *squares, char *octags,
-		 char *diamonds, AjBool text, AjPFile outf,
-			float xmin, float xmax, float ymin, float ymax)
+
+static void pepwheel_plotresidue(char c, float r, float a, char *squares,
+				 char *octags, char *diamonds, AjBool text,
+				 AjPFile outf, float xmin, float xmax,
+				 float ymin, float ymax)
 {
     float  x;
     float  y;
@@ -300,7 +342,7 @@ static void plotresidue(char c, float r, float a, char *squares, char *octags,
     {
 	if(!text)
 	    ajGraphSetFore(AJB_BLACK);
-	drawocta(x,y+0.003,0.28,text,outf);
+	pepwheel_drawocta(x,y+0.003,0.28,text,outf);
     }
     if(strstr(diamonds,cs))
     {

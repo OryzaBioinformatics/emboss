@@ -19,9 +19,15 @@
 ******************************************************************************/
 #include "emboss.h"
 
+
+/* @prog complex **************************************************************
+**
+** Find the linguistic complexity in nucleotide sequences
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
-  
     char *charseq;
     char *name;
  
@@ -66,16 +72,19 @@ int main(int argc, char **argv)
 
     ajDebug("Output file: %F \n",outfile);
 
-    if(omnia){ 
+    if(omnia)
+    { 
 	embComWriteFile(outfile,jmin,jmax,lwin,step,sim);
 	ajUser("do embComWriteFile\n");
-	while (ajSeqallNext(seqall, &seq)) {
+	while (ajSeqallNext(seqall, &seq))
+	{
 	    ajSeqAllWrite (seqout,seq);
 	    len = ajSeqLen(seq);
 	    name = ajSeqName(seq);
 	    ajUser("%s %d",name,len);
 	    charseq = ajSeqChar(seq);
-	    if(len >= lwin){
+	    if(len >= lwin)
+	    {
 		Num_seq++;
 		embComComplexity(charseq,name,len,jmin,jmax,lwin,
 				 step,sim,freq,omnia,
@@ -84,9 +93,11 @@ int main(int argc, char **argv)
 	    }
 	}
     }  
-    else{
+    else
+    {
 	Num_seq = 0;
-	while((ajSeqallNext(seqall, &seq) && Num_seq < 1)){
+	while((ajSeqallNext(seqall, &seq) && Num_seq < 1))
+	{
 	    len = ajSeqLen(seq);
 	    name = ajSeqName(seq);
 	    charseq = ajSeqChar(seq);

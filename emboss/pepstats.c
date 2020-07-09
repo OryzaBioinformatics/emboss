@@ -28,6 +28,13 @@
 
 #define DAYHOFF_FILE "Edayhoff.freq"
 
+
+/* @prog pepstats *************************************************************
+**
+** Protein statistics
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     char *prop[]=

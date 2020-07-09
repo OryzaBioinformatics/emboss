@@ -21,7 +21,7 @@ void ajSortFloatDecI(float *a, ajint *p, ajint n)
 
     for(s=n/2; s>0; s /= 2)
 	for(i=s; i<n; ++i)
-	    for(j=i-s;j>=0 && a[p[j]]>a[p[j+s]]; j-=s)
+	    for(j=i-s;j>=0 && a[p[j]]<a[p[j+s]]; j-=s)
 	    {
 		t = p[j];
 		p[j] = p[j+s];
@@ -50,7 +50,7 @@ void ajSortIntDecI(ajint *a, ajint *p, ajint n)
 
     for(s=n/2; s>0; s /= 2)
 	for(i=s; i<n; ++i)
-	    for(j=i-s;j>=0 && a[p[j]]>a[p[j+s]]; j-=s)
+	    for(j=i-s;j>=0 && a[p[j]]<a[p[j+s]]; j-=s)
 	    {
 		t = p[j];
 		p[j] = p[j+s];
@@ -79,7 +79,7 @@ void ajSortFloatIncI(float *a, ajint *p, ajint n)
 
     for(s=n/2; s>0; s /= 2)
 	for(i=s; i<n; ++i)
-	    for(j=i-s;j>=0 && a[p[j]]<=a[p[j+s]]; j-=s)
+	    for(j=i-s;j>=0 && a[p[j]]>=a[p[j+s]]; j-=s)
 	    {
 		t = p[j];
 		p[j] = p[j+s];
@@ -108,7 +108,7 @@ void ajSortIntIncI(ajint *a, ajint *p, ajint n)
 
     for(s=n/2; s>0; s /= 2)
 	for(i=s; i<n; ++i)
-	    for(j=i-s;j>=0 && a[p[j]]<=a[p[j+s]]; j-=s)
+	    for(j=i-s;j>=0 && a[p[j]]>=a[p[j+s]]; j-=s)
 	    {
 		t = p[j];
 		p[j] = p[j+s];
@@ -135,7 +135,7 @@ void ajSortFloatDec(float *a, ajint n)
 
     for(s=n/2; s>0; s /= 2)
 	for(i=s; i<n; ++i)
-	    for(j=i-s;j>=0 && a[j]>a[j+s]; j-=s)
+	    for(j=i-s;j>=0 && a[j]<a[j+s]; j-=s)
 	    {
 		t = a[j];
 		a[j] = a[j+s];
@@ -163,7 +163,7 @@ void ajSortIntDec(ajint *a, ajint n)
 
     for(s=n/2; s>0; s /= 2)
 	for(i=s; i<n; ++i)
-	    for(j=i-s;j>=0 && a[j]>a[j+s]; j-=s)
+	    for(j=i-s;j>=0 && a[j]<a[j+s]; j-=s)
 	    {
 		t = a[j];
 		a[j] = a[j+s];
@@ -190,7 +190,7 @@ void ajSortFloatInc(float *a, ajint n)
 
     for(s=n/2; s>0; s /= 2)
 	for(i=s; i<n; ++i)
-	    for(j=i-s;j>=0 && a[j]<a[j+s]; j-=s)
+	    for(j=i-s;j>=0 && a[j]>a[j+s]; j-=s)
 	    {
 		t = a[j];
 		a[j] = a[j+s];
@@ -218,7 +218,7 @@ void ajSortIntInc(ajint *a, ajint n)
 
     for(s=n/2; s>0; s /= 2)
 	for(i=s; i<n; ++i)
-	    for(j=i-s;j>=0 && a[j]<a[j+s]; j-=s)
+	    for(j=i-s;j>=0 && a[j]>a[j+s]; j-=s)
 	    {
 		t = a[j];
 		a[j] = a[j+s];

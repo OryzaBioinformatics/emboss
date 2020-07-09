@@ -24,6 +24,13 @@
 #include "emboss.h"
 
 
+
+/* @prog tfextract ************************************************************
+**
+** Extract data from TRANSFAC
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     AjPFile inf  = NULL;

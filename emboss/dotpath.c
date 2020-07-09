@@ -25,42 +25,24 @@
 
 
 #include "emboss.h"
-
-
-static void objtofile1(void **x,void *cl);
-static void objtofile2(void **x,void *cl);
-
-
-
-
-#ifndef NO_PLOT
 #include "ajgraph.h"
 
-static void drawPlotlines(void **x, void *cl)
-{
-    EmbPWordMatch p  = (EmbPWordMatch)*x;
-    PLFLT x1,y1,x2,y2;
-
-    x1 = x2 = ((*p).seq1start);
-    y1 = y2 = (PLFLT)((*p).seq2start);
-    x2 += (*p).length;
-    y2 += (PLFLT)(*p).length;
- 
-    ajGraphLine(x1, y1, x2, y2);
-}
-
-
-
-static void plotMatches(AjPList list)
-{
-    ajListMap(list,drawPlotlines, NULL);
-}
-
-#endif
+static void dotpath_objtofile1(void **x,void *cl);
+static void dotpath_objtofile2(void **x,void *cl);
+static void dotpath_drawPlotlines(void **x, void *cl);
+static void dotpath_plotMatches(AjPList list);
 
 
 
 
+
+
+
+/* @prog dotpath **************************************************************
+**
+** Displays a non-overlapping wordmatch dotplot of two sequences
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -127,7 +109,7 @@ int main(int argc, char **argv)
 	if(overlaps && ajListLength(matchlist))
 	{
 	    oldcolour = ajGraphSetFore(RED);
-	    plotMatches(matchlist); 
+	    dotpath_plotMatches(matchlist); 
 	    ajGraphSetFore(oldcolour);	/* restore colour we were using */
 	}
 
@@ -138,7 +120,7 @@ int main(int argc, char **argv)
 	
 	/* display them */
 	if (ajListLength(matchlist))
-	    plotMatches(matchlist);
+	    dotpath_plotMatches(matchlist);
 
 	if(boxit)
 	{
@@ -228,7 +210,7 @@ int main(int argc, char **argv)
 		    ajSeqName(seq2));
 
 	if(overlaps && (np=ajListLength(matchlist)))
-	    ajListMap(matchlist,objtofile1, outfile);	
+	    ajListMap(matchlist,dotpath_objtofile1, outfile);	
 
 	/* get the minimal set of overlapping matches */    
 	(void) embWordMatchMin(matchlist, ajSeqLen(seq1), ajSeqLen(seq2));
@@ -239,13 +221,13 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outfile,"##DataObjects\n##Number %d\n",np);
 
 /* output the minal overlapping set of data with colour=BLACK */	
-	ajListMap(matchlist,objtofile2, outfile);	
+	ajListMap(matchlist,dotpath_objtofile2, outfile);	
 
 	ajFmtPrintF(outfile,"##GraphObjects\n##Number 0\n");
     }
   
     if(matchlist) 
-	embWordMatchListDelete(matchlist); /* free the match structures */
+	embWordMatchListDelete(&matchlist); /* free the match structures */
 
  
     ajExit();
@@ -254,43 +236,102 @@ int main(int argc, char **argv)
 
 
 
+/* @funcstatic dotpath_objtofile1 **********************************************
+**
+** Undocumented.
+**
+** @@
+******************************************************************************/
 
 
-static void objtofile1(void **x,void *cl)
+
+static void dotpath_objtofile1(void **x,void *cl)
 {
-  EmbPWordMatch p = (EmbPWordMatch)*x;
-  AjPFile file = (AjPFile) cl;
-  ajint x1;
-  ajint x2;
-  ajint y1;
-  ajint y2;
+    EmbPWordMatch p = (EmbPWordMatch)*x;
+    AjPFile file = (AjPFile) cl;
+    ajint x1;
+    ajint x2;
+    ajint y1;
+    ajint y2;
 
-  x1 = (*p).seq1start;
-  y1 = (*p).seq2start;
-  x2 = x1 + (*p).length;
-  y2 = y1 + (*p).length;
+    x1 = (*p).seq1start;
+    y1 = (*p).seq2start;
+    x2 = x1 + (*p).length;
+    y2 = y1 + (*p).length;
   
-  (void) ajFmtPrintF(file, "Line x1 %f y1 %f x2 %f y2 %f colour %d\n",
-		     (float)x1,(float)y1,(float)x2,(float)y2,RED);
-  return;
+    (void) ajFmtPrintF(file, "Line x1 %f y1 %f x2 %f y2 %f colour %d\n",
+		       (float)x1,(float)y1,(float)x2,(float)y2,RED);
+    return;
 }
 
 
-static void objtofile2(void **x,void *cl)
-{
-  EmbPWordMatch p = (EmbPWordMatch)*x;
-  AjPFile file = (AjPFile) cl;
-  ajint x1;
-  ajint x2;
-  ajint y1;
-  ajint y2;
 
-  x1 = (*p).seq1start;
-  y1 = (*p).seq2start;
-  x2 = x1 + (*p).length;
-  y2 = y1 + (*p).length;
+
+/* @funcstatic dotpath_objtofile2 ********************************************
+**
+** Undocumented.
+**
+** @@
+******************************************************************************/
+
+
+static void dotpath_objtofile2(void **x,void *cl)
+{
+    EmbPWordMatch p = (EmbPWordMatch)*x;
+    AjPFile file = (AjPFile) cl;
+    ajint x1;
+    ajint x2;
+    ajint y1;
+    ajint y2;
+
+    x1 = (*p).seq1start;
+    y1 = (*p).seq2start;
+    x2 = x1 + (*p).length;
+    y2 = y1 + (*p).length;
   
-  (void) ajFmtPrintF(file, "Line x1 %f y1 %f x2 %f y2 %f colour %d\n",
-		     (float)x1,(float)y1,(float)x2,(float)y2,BLACK);
-  return;
+    (void) ajFmtPrintF(file, "Line x1 %f y1 %f x2 %f y2 %f colour %d\n",
+		       (float)x1,(float)y1,(float)x2,(float)y2,BLACK);
+    return;
 }
+
+
+
+#ifndef NO_PLOT
+
+/* @funcstatic dotpath_drawPlotlines *****************************************
+**
+** Undocumented.
+**
+** @@
+******************************************************************************/
+
+static void dotpath_drawPlotlines(void **x, void *cl)
+{
+    EmbPWordMatch p  = (EmbPWordMatch)*x;
+    PLFLT x1,y1,x2,y2;
+
+    x1 = x2 = ((*p).seq1start);
+    y1 = y2 = (PLFLT)((*p).seq2start);
+    x2 += (*p).length;
+    y2 += (PLFLT)(*p).length;
+ 
+    ajGraphLine(x1, y1, x2, y2);
+}
+
+
+/* @funcstatic dotpath_plotMatches ********************************************
+**
+** Undocumented.
+**
+** @param [?] list [AjPList] Undocumented
+** @@
+******************************************************************************/
+
+
+static void dotpath_plotMatches(AjPList list)
+{
+    ajListMap(list,dotpath_drawPlotlines, NULL);
+    return;
+}
+
+#endif

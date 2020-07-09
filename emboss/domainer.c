@@ -43,7 +43,7 @@
 ** 
 ** The pdb format is explained at URL (1)
 ** (1) http://www.rcsb.org/pdb/docs/format/pdbguide2.2/guide2.2_frame.html
-** domainer writes the following records in pdb format:
+** domainer writes the following records in pdb format (Figure 1):
 ** (1)  HEADER - bibliographic information.  The text 'CLEANED-UP PDB FILE FOR 
 ** SCOP DOMAIN XXXXXXX' is always given (where XXXXXXX is a 7-character domain 
 ** identifier code).
@@ -59,9 +59,51 @@
 ** (7)  ATOM - atomic coordinates.
 ** (8)  TER - indicates the end of a chain.
 ** 
+** 
+**  
+** Figure 1  Excerpt from clean coordinate file (pdb format)
+** HEADER     CLEANED-UP PDB FILE FOR SCOP DOMAIN D1HBBA_                          
+**  TITLE      THIS FILE IS MISSING MOST RECORDS FROM THE ORIGINAL PDB FILE         
+**  COMPND     HEMOGLOBIN A (DEOXY, LOW SALT, 100MM CL)                             
+**  SOURCE     HUMAN (HOMO SAPIENS)                                                 
+**  REMARK                                                                          
+**  REMARK     RESOLUTION. 1.90  ANGSTROMS.                                         
+**  REMARK                                                                          
+**  SEQRES   1 A  141  VAL LEU SER PRO ALA ASP LYS THR ASN VAL LYS ALA ALA          
+**  SEQRES   2 A  141  TRP GLY LYS VAL GLY ALA HIS ALA GLY GLU TYR GLY ALA          
+**  SEQRES   3 A  141  GLU ALA LEU GLU ARG MET PHE LEU SER PHE PRO THR THR          
+**  SEQRES   4 A  141  LYS THR TYR PHE PRO HIS PHE ASP LEU SER HIS GLY SER          
+**  SEQRES   5 A  141  ALA GLN VAL LYS GLY HIS GLY LYS LYS VAL ALA ASP ALA          
+**  SEQRES   6 A  141  LEU THR ASN ALA VAL ALA HIS VAL ASP ASP MET PRO ASN          
+**  SEQRES   7 A  141  ALA LEU SER ALA LEU SER ASP LEU HIS ALA HIS LYS LEU          
+**  SEQRES   8 A  141  ARG VAL ASP PRO VAL ASN PHE LYS LEU LEU SER HIS CYS          
+**  SEQRES   9 A  141  LEU LEU VAL THR LEU ALA ALA HIS LEU PRO ALA GLU PHE          
+**  SEQRES  10 A  141  THR PRO ALA VAL HIS ALA SER LEU ASP LYS PHE LEU ALA          
+**  SEQRES  11 A  141  SER VAL SER THR VAL LEU THR SER LYS TYR ARG                  
+**  ATOM      1  N   VAL A   1       7.155  17.725   4.424  1.00 37.82           N  
+**  ATOM      2  CA  VAL A   1       7.854  18.800   3.718  1.00 35.10           C  
+**  ATOM      3  C   VAL A   1       9.366  18.565   3.754  1.00 31.92           C  
+**  ATOM      4  O   VAL A   1       9.861  17.961   4.721  1.00 35.01           O  
+**  ATOM      5  CB  VAL A   1       7.529  20.168   4.360  1.00 47.63           C  
+**  ATOM      6  CG1 VAL A   1       7.806  21.300   3.369  1.00 62.84           C  
+**  ATOM      7  CG2 VAL A   1       6.136  20.244   4.936  1.00 54.85           C  
+**  ATOM      8  N   LEU A   2      10.032  19.062   2.731  1.00 27.38           N  
+**  ATOM      9  CA  LEU A   2      11.496  18.967   2.657  1.00 23.24           C  
+**  ATOM     10  C   LEU A   2      12.077  20.110   3.496  1.00 22.99           C  
+**  ATOM     11  O   LEU A   2      11.672  21.259   3.289  1.00 25.22           O  
+**  ATOM     12  CB  LEU A   2      11.924  19.005   1.204  1.00 18.04           C  
+**  ATOM     13  CG  LEU A   2      11.563  17.855   0.286  1.00 17.80           C  
+**  ATOM     14  CD1 LEU A   2      12.166  18.109  -1.097  1.00 20.08           C  
+**  ATOM     15  CD2 LEU A   2      12.116  16.542   0.839  1.00 13.84           C  
+**  ATOM     16  N   SER A   3      12.979  19.784   4.391  1.00 22.22           N  
+**  ATOM     17  CA  SER A   3      13.652  20.792   5.257  1.00 20.53           C  
+**  ATOM     18  C   SER A   3      14.871  21.318   4.505  1.00 18.31           C  
+**  ATOM     19  O   SER A   3      15.273  20.709   3.496  1.00 17.73           O  
+**  ATOM     20  CB  SER A   3      14.084  20.042   6.534  1.00 17.61           C  
 **
-** The embl-like format used for clean coordinate files uses the following 
-** records:
+**
+** The embl-like format used for clean domain coordinate files (Figure 2) uses the 
+** following records:
 ** (1)  ID - Either the 4-character PDB identifier code (for clean protein 
 ** coordinate files) or the 7-character domain identifier code taken from scop
 ** (for domain coordinate files; see documentation for the EMBOSS application 
@@ -105,9 +147,40 @@
 ** factor.
 ** (9)  XX - Used for spacing.
 ** (10) // - Given on the last line of the file only.
+**  
 ** 
-** 
-** domainer generates a log file an excerpt of which is shown (Figure 1). If 
+** Figure 2 Excerpt from clean domain coordinate file (embl-like format)
+**  ** ID   D1HBBA_
+**  XX
+**  DE   Co-ordinates for SCOP domain D1HBBA_
+**  XX
+**  OS   See Escop.dat for domain classification
+**  XX
+**  EX   METHOD xray; RESO 1.90; NMOD 1; NCHA 1;
+**  XX
+**  CN   [1]
+**  XX
+**  IN   ID A; NR 141; NH 0; NW 0;
+**  XX
+**  SQ   SEQUENCE   141 AA;  15127 MW;  5EC7DB1E CRC32;
+**       VLSPADKTNV KAAWGKVGAH AGEYGAEALE RMFLSFPTTK TYFPHFDLSH GSAQVKGHGK
+**       KVADALTNAV AHVDDMPNAL SALSDLHAHK LRVDPVNFKL LSHCLLVTLA AHLPAEFTPA
+**       VHASLDKFLA SVSTVLTSKY R
+**  XX
+**  CO   1    1    P    1     1     V    VAL    N      7.155   17.725    4.424     1.00    37.82
+**  CO   1    1    P    1     1     V    VAL    CA     7.854   18.800    3.718     1.00    35.10
+**  CO   1    1    P    1     1     V    VAL    C      9.366   18.565    3.754     1.00    31.92
+**  CO   1    1    P    1     1     V    VAL    O      9.861   17.961    4.721     1.00    35.01
+**  CO   1    1    P    1     1     V    VAL    CB     7.529   20.168    4.360     1.00    47.63
+**  CO   1    1    P    1     1     V    VAL    CG1    7.806   21.300    3.369     1.00    62.84
+**  CO   1    1    P    1     1     V    VAL    CG2    6.136   20.244    4.936     1.00    54.85
+**  CO   1    1    P    2     2     L    LEU    N     10.032   19.062    2.731     1.00    27.38
+**  CO   1    1    P    2     2     L    LEU    CA    11.496   18.967    2.657     1.00    23.24
+**  CO   1    1    P    2     2     L    LEU    C     12.077   20.110    3.496     1.00    22.99
+**  CO   1    1    P    2     2     L    LEU    O     11.672   21.259    3.289     1.00    25.22
+**
+**  
+** domainer generates a log file an excerpt of which is shown (Figure 3). If 
 ** there is a problem in processing a domain, three lines containing the 
 ** record '//', the domain identifier code and an error message respectively
 ** are written. The text 'WARN  filename not found' is given in cases where a 
@@ -117,7 +190,7 @@
 ** messages may also be given (in case of difficulty email Jon Ison, 
 ** jison@hgmp.mrc.ac.uk).
 **
-** Figure 1 Excerpt of log file
+** Figure 3 Excerpt of log file
 ** //
 ** DS002__
 ** WARN  Could not open for reading cpdb file s002.pxyz
@@ -138,6 +211,13 @@
 
 
 
+
+
+/* @prog domainer *************************************************************
+**
+** Build domain coordinate files
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {

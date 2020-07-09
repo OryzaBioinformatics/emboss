@@ -22,6 +22,13 @@
 ******************************************************************************/
 #include "emboss.h"
 
+
+/* @prog infoseq **************************************************************
+**
+** Displays some simple information about sequences
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     
@@ -72,7 +79,8 @@ int main(int argc, char **argv)
     /* start the HTML table */
     if (html)
 	(void) ajFmtPrintF(outfile,
-			   "<table border cellpadding=4 bgcolor=\"#FFFFF0\">\n");
+			   "<table border cellpadding=4 bgcolor=\"#FFFFF0"
+			   "\">\n");
     
     while (ajSeqallNext(seqall, &seq))
     {
@@ -192,11 +200,12 @@ int main(int argc, char **argv)
 	    else
 	    {
 		/* 
-		   Make the formatting nice:
-		   
-		   If this is the last item, don't put spaces or TABs after it.
-		   Try to fit the name in 18 spaces, else just add a TAB after it
-		   */
+		 *  Make the formatting nice:
+		 *  
+		 *  If this is the last item, don't put spaces or TABs after
+		 *  it. Try to fit the name in 18 spaces, else just add a
+		 *  TAB after it
+		 */
 		if (ajStrLen(usa) < 18)
 		{
 		    if (doname || doacc || dotype || dolength ||
@@ -221,11 +230,12 @@ int main(int argc, char **argv)
 	    else
 	    {
 		/* 
-		   Make the formatting nice:
-		   
-		   If this is the last item, don't put spaces or TABs after it.
-		   Try to fit the name in 14 space, else just add a TAB after it
-		   */
+		 *  Make the formatting nice:
+		 *  
+		 *  If this is the last item, don't put spaces or TABs after
+		 *  it. Try to fit the name in 14 space, else just add a
+		 *  TAB after it
+		 */
 		if (ajStrLen(name) < 14)
 		{
 		    if (doacc || dotype || dolength || (!type && dopgc) ||
@@ -329,5 +339,5 @@ int main(int argc, char **argv)
     ajStrDel(&altacc);
 
     (void) ajExit();
-    exit(0);
+    return 0;
 }

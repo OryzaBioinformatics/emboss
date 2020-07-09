@@ -34,13 +34,22 @@
 #define EQUGUESS 3500	  /* Estimate of number of equivalent names */
 
 
-void printHits(AjPFile *outf, AjPList *l, AjPStr *name, ajint hits, ajint begin,
-	       ajint end, AjBool ambiguity, ajint mincut, ajint maxcut, AjBool
-	       plasmid, AjBool blunt, AjBool sticky, ajint sitelen,
-	       AjBool limit, AjBool equiv, AjPTable table, AjBool alpha,
-	       AjBool frags, AjBool nameit);
-void read_equiv(AjPFile *equfile, AjPTable *table);
-static void read_file_of_enzyme_names(AjPStr *enzymes);
+static void restrict_printHits(AjPFile *outf, AjPList *l, AjPStr *name,
+			       ajint hits, ajint begin, ajint end,
+			       AjBool ambiguity, ajint mincut, ajint maxcut,
+			       AjBool plasmid, AjBool blunt, AjBool sticky,
+			       ajint sitelen, AjBool limit, AjBool equiv,
+			       AjPTable table, AjBool alpha, AjBool frags,
+			       AjBool nameit);
+static void restrict_read_equiv(AjPFile *equfile, AjPTable *table);
+static void restrict_read_file_of_enzyme_names(AjPStr *enzymes);
+
+
+/* @prog restrict *************************************************************
+**
+** Finds restriction enzyme cleavage sites
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -108,8 +117,8 @@ int main(int argc, char **argv)
     table = ajStrTableNew(EQUGUESS);
 
     
-/* read the local file of enzymes names */
-    read_file_of_enzyme_names(&enzymes);
+    /* read the local file of enzymes names */
+    restrict_read_file_of_enzyme_names(&enzymes);
   
      if(!*ajStrStr(dfile))
     {
@@ -132,7 +141,7 @@ int main(int argc, char **argv)
 	if(!equfile)
 	    equiv=ajFalse;
 	else
-	    read_equiv(&equfile,&table);
+	    restrict_read_equiv(&equfile,&table);
     }
     
 
@@ -150,9 +159,9 @@ int main(int argc, char **argv)
 	if(hits)
 	{
 	    name = ajStrNewC(ajSeqName(seq));
-	    printHits(&outf,&l,&name,hits,begin,end,ambiguity,min,max,
-		      plasmid,blunt,sticky,sitelen,limit,equiv,table,alpha,
-		      frags,nameit);
+	    restrict_printHits(&outf,&l,&name,hits,begin,end,ambiguity,min,max,
+			       plasmid,blunt,sticky,sitelen,limit,equiv,table,
+			       alpha,frags,nameit);
 	    ajStrDel(&name);
 	}
 
@@ -172,12 +181,40 @@ int main(int argc, char **argv)
 
 
 
+/* @funcstatic restrict_printHits ********************************************
+**
+** Print restriction sites
+**
+** @param [w] outf [AjPFile*] outfile
+** @param [w] l [AjPList*] hits
+** @param [r] name [AjPStr*] sequence name
+** @param [r] hits [ajint] number of hits
+** @param [r] begin [ajint] start position
+** @param [r] end [ajint] end position
+** @param [r] ambiguity [AjBool] allow ambiguities
+** @param [r] mincut [ajint] minimum cuts
+** @param [r] maxcut [ajint] maximum cuts
+** @param [r] plasmid [AjBool] circular
+** @param [r] blunt [AjBool] allow blunt cutters
+** @param [r] sticky [AjBool] allow sticky cutters
+** @param [r] sitelen [ajint] length of cut site
+** @param [r] limit [AjBool] limit count
+** @param [r] equiv [AjBool] show equivalents
+** @param [r] table [AjPTable] supplier table
+** @param [r] alpha [AjBool] alphabetic sort
+** @param [r] frags [AjBool] show fragment lengths
+** @param [r] nameit [AjBool] show name
+** @@
+******************************************************************************/
 
-void printHits(AjPFile *outf, AjPList *l, AjPStr *name, ajint hits, ajint begin,
-	       ajint end, AjBool ambiguity, ajint mincut, ajint maxcut, AjBool
-	       plasmid, AjBool blunt, AjBool sticky, ajint sitelen,
-	       AjBool limit, AjBool equiv, AjPTable table, AjBool alpha,
-	       AjBool frags,AjBool nameit)
+
+static void restrict_printHits(AjPFile *outf, AjPList *l, AjPStr *name,
+			       ajint hits, ajint begin, ajint end,
+			       AjBool ambiguity, ajint mincut, ajint maxcut,
+			       AjBool plasmid, AjBool blunt, AjBool sticky,
+			       ajint sitelen, AjBool limit, AjBool equiv,
+			       AjPTable table, AjBool alpha, AjBool frags,
+			       AjBool nameit)
 {
     EmbPMatMatch m=NULL;
     AjPStr  ps=NULL;
@@ -228,7 +265,7 @@ void printHits(AjPFile *outf, AjPList *l, AjPStr *name, ajint hits, ajint begin,
     
 
     ajFmtPrintF(*outf,"# Number of hits: %d\n",hits);
-    ajFmtPrintF(*outf,"# Base Number\tEnzyme\t\tSite\t\t5'\t3'\t[5'\t3']\n");    
+    ajFmtPrintF(*outf,"# Base Number\tEnzyme\t\tSite\t\t5'\t3'\t[5'\t3']\n");
     for(i=0;i<hits;++i)
     {
 	ajListPop(*l,(void **)&m);
@@ -271,7 +308,7 @@ void printHits(AjPFile *outf, AjPList *l, AjPStr *name, ajint hits, ajint begin,
 
     if(frags)
     {
-	ajSortIntDec(fa,fn);
+	ajSortIntInc(fa,fn);
 	ajFmtPrintF(*outf,"\n\nFragment lengths:\n");
 	if(!fn || (fn==1 && plasmid))
 	    ajFmtPrintF(*outf,"    %d\n",end-begin+1);
@@ -296,7 +333,7 @@ void printHits(AjPFile *outf, AjPList *l, AjPStr *name, ajint hits, ajint begin,
 	    }
 	    else
 		fx[fc++]=(fa[0]-begin+1)+(end-fa[fn-1]);
-	    ajSortIntInc(fx,fc);
+	    ajSortIntDec(fx,fc);
 	    for(i=0;i<fc;++i)
 		ajFmtPrintF(*outf,"    %d\n",fx[i]);
 	}
@@ -313,8 +350,17 @@ void printHits(AjPFile *outf, AjPList *l, AjPStr *name, ajint hits, ajint begin,
 }
 
 
+/* @funcstatic restrict_read_equiv *******************************************
+**
+** Read table of equivalents
+**
+** @param [r] equfile [AjPFile*] equivalent name file
+** @param [w] table [AjPTable*]  equivalent names
+** @@
+******************************************************************************/
 
-void read_equiv(AjPFile *equfile, AjPTable *table)
+
+static void restrict_read_equiv(AjPFile *equfile, AjPTable *table)
 {
     AjPStr line;
     AjPStr key;
@@ -337,9 +383,11 @@ void read_equiv(AjPFile *equfile, AjPTable *table)
     }
 
     ajFileClose(equfile);
+
+    return;
 }
 
-/* @funcstatic read_file_of_enzyme_names *************************************
+/* @funcstatic restrict_read_file_of_enzyme_names ****************************
 **
 ** If the list of enzymes starts with a '@' if opens that file, reads in
 ** the list of enzyme names and replaces the input string with the enzyme names
@@ -349,7 +397,7 @@ void read_equiv(AjPFile *equfile, AjPTable *table)
 ** @@
 ******************************************************************************/
       
-static void read_file_of_enzyme_names(AjPStr *enzymes)
+static void restrict_read_file_of_enzyme_names(AjPStr *enzymes)
 {
     AjPFile file=NULL;
     AjPStr line;

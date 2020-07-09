@@ -10,6 +10,13 @@ extern "C"
 
 #define padding_char '-'
 
+/* @data hash_list *******************************************************
+**
+** NUCLEUS internal data structure for est2genome EMBOSS application
+** to maintain internal hash lists.
+**
+******************************************************************************/
+
 typedef struct hash_list
 {
   char *name;
@@ -23,6 +30,12 @@ typedef enum { INTRON=0, DIAGONAL=1, DELETE_EST=2, DELETE_GENOME=3,
 	       FORWARD_SPLICED_INTRON=-1, REVERSE_SPLICED_INTRON=-2
 } directions;
 typedef enum { NOT_A_SITE=1, DONOR=2, ACCEPTOR=4 } donor_acceptor;
+
+/* @data EmbPEstAlign *******************************************************
+**
+** NUCLEUS data structure for EST alignments (originally for est2genome)
+**
+******************************************************************************/
 
 typedef struct EmbSEstAlign
 {

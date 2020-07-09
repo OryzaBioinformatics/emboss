@@ -10,7 +10,7 @@ appl: cpgplot [
 
   seqall: sequence [ 
 	param: Y 
-	type: PUREDNA 
+	type: DNA 
   ]
 
   int: window [ 

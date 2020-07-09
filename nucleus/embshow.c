@@ -144,7 +144,7 @@ static void showDelComp (EmbPShowComp info);
 static void showDelTran (EmbPShowTran info);
 static void showDelRE (EmbPShowRE info);
 static void showDelFT (EmbPShowFT info);
-static void showAddTags(AjPStr *tagsout, AjPList taglist, AjBool values);
+static void showAddTags(AjPStr *tagsout, AjPFeature feat, AjBool values);
 	
 
 
@@ -320,7 +320,7 @@ void embShowDel (EmbPShow* pthis)
 	    break;
 
 	default:
-	    (void) ajFatal("Unknown descriptor type found in embShowDel(): %d",
+	    (void) ajFatal("Unknown descriptor type found in embShowDel: %d",
 			   type);
 	}
 
@@ -463,7 +463,7 @@ static void showDelRE (EmbPShowRE info) {
 
 static void showDelFT (EmbPShowFT info) {
 
-  (void) ajFeatTabDel(&(info->feat));
+  /*(void) ajFeattabDel(&(info->feat));*/ /* cloned pointer in showeseq etc.*/
   AJFREE(info);
 
 }
@@ -676,12 +676,12 @@ void embShowAddRE (EmbPShow thys, ajint sense, AjPList restrictlist,
 ** Adds the Features to be displayed to the list of things to show
 **
 ** @param [P] thys [EmbPShow] Show sequence object
-** @param [r] feat [AjPFeatTable] features
+** @param [r] feat [AjPFeattable] features
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void embShowAddFT (EmbPShow thys, AjPFeatTable feat) {
+void embShowAddFT (EmbPShow thys, AjPFeattable feat) {
 
   EmbPShowFT info;
   (void) ajDebug("embShowAddFT\n");
@@ -889,7 +889,7 @@ static void showFillLines(AjPList lines, EmbPShow thys, ajint pos)
 
 	default:
 	    (void) ajFatal("Unknown descriptor type found in "
-			   "showFillLines(): %d",type);
+			   "showFillLines: %d",type);
 	}
     }
     (void) ajListIterFree(diter);
@@ -1404,13 +1404,12 @@ static void showFillTran(EmbPShow thys, AjPList lines, EmbPShowTran info,
     AjPStr seqstr=NULL;	/* local copy of seq string for translating ranges */
     AjPSeq seq=NULL;	/* local copy of sequence for translating ranges */
     AjPStr temp=NULL;
-    AjPStr sajb=NULL;
+    AjPStr sajb=NULL;	/* peptide expanded to 3-letter code or by 2 spaces */
     ajint frame;
     ajint framepad=0;	/* number of spaces to pad to the correct frame pos */
     ajint linepos;
     ajint startpos;	/* number at start of line */
     ajint endpos;		/* number at end of line */
-    ajint shift=0;	/* length of sequence mod 3 */
     ajint i, j;
     ajint last;
 
@@ -1468,44 +1467,30 @@ static void showFillTran(EmbPShow thys, AjPList lines, EmbPShowTran info,
 	    /* ... or just translate in the required frame */
 
 	    /*
-	     *  change frames -1 to -3 to frames 6 to 4 for translation
-	     *  of complement
+	     *  change frames -1 to -3 to frames 4 to 6 for translation
+	     *  of complement (NB that really should say just 'complement', not
+	     *  'reverse-complement' as we will be putting the resulting 
+	     *  reversed peptide under the forward nucleic sequence.)
 	     */
 	    frame = info->frame;
-	    if (frame < 0)
-		frame = 7 + frame; 
+	    if (frame < 0) {
+		frame = 3-frame;
+            }
 
-
-	    /* if we are doing the reverse complement then the frame is */
-	    /* dependent on the length of the sequence%3 */
-	    if (info->frame < 0)
-	    { 
-		/* get the length mod 3 - used for adjusting the frame of */
-		/* reverse sense translations */
-		shift = ajSeqLen(thys->seq)%3;
-		frame += shift;
-		if (frame > 6) frame -= 3;
-	    }
-      
-     
 	    /* do the translation */    
 	    tran = ajTrnSeqOrig (info->trnTable, thys->seq, frame);
 
 	    /*
-	     *  shift the translation to the correct frame if it is not
-	     *  in frame 1 or 4
+	     *  shift the translation to the correct frame
 	     */
-	    if (frame == 1 || frame == 6)
-		framepad = 0+shift;
-	    else if (frame == 2 || frame == 5)
-		framepad = 1+shift;
+	    if (frame == 1 || frame == 5)
+		framepad = 0;
+	    else if (frame == 2 || frame == 6)
+		framepad = 1;
 	    else if (frame == 3 || frame == 4)
-		framepad = 2+shift;
+		framepad = 2;
 
-	    if (framepad > 2)
-		framepad -= 3;
-
-	    /* convert inter-ORF regions to '.'s */
+	    /* convert inter-ORF regions to '-'s */
 	    last = -1;
 	    for (i=0; i<ajSeqLen(tran); i++)
 		if (ajStrStr(ajSeqStr(tran))[i] == '*')
@@ -2313,13 +2298,13 @@ static void showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info, ajint pos)
     if (!info->feat)
 	return;
       
-    /*  ajDebug("No. of features=%d", ajFeatTabCount(info->feat)); */
+    /*  ajDebug("No. of features=%d", ajFeattabCount(info->feat)); */
 
     /* reminder of the AjSFeature structure for handy reference
      *
      *
      *  AjEFeatClass      Class ;
-     *  AjPFeatTable      Owner ;
+     *  AjPFeattable      Owner ;
      *  AjPFeatVocFeat     Source ;
      *  AjPFeatVocFeat     Type ;
      *  ajint               Start ;
@@ -2346,7 +2331,7 @@ static void showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info, ajint pos)
 	    gf = ajListIterNext (iter) ;
     
 	    /* don't output the 'source' feature - it is very irritating! */
-	    if (!ajStrCmpC(gf->Type->name, "source")) continue;
+	    if (!ajStrCmpC(gf->Type, "source")) continue;
 
 	    /*
 	     * check that the feature is within the line to display (NB.
@@ -2357,15 +2342,15 @@ static void showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info, ajint pos)
 		continue;
 
 	    /*    
-	       ajDebug("type = %S %d-%d", gf->Type->name, gf->Start, gf->End);
+	       ajDebug("type = %S %d-%d", gf->Type, gf->Start, gf->End);
 	     */
 
 	    /* prepare name string */
 	    namestr = ajStrNew();
-	    ajStrAss(&namestr,  gf->Type->name);
+	    ajStrAss(&namestr,  gf->Type);
 
 	    /* add tags to namestr*/
-	    showAddTags(&namestr, gf->Tags, ajTrue);
+	    showAddTags (&namestr, gf, ajTrue);
       
 	    /*
 	     *  note the start and end positions of the name and line
@@ -2620,59 +2605,69 @@ static AjBool showLineIsClear(AjPStr *line, ajint start, ajint end) {
   ajint i;
   ajint len = ajStrLen(*line)-1;
 /*
-ajDebug("In showLineIsClear(): Looking for clear line at positions:");
+ajDebug("In showLineIsClear: Looking for clear line at positions:");
 ajDebug("target len=%d", len+1);
 ajDebug("start=%d, end=%d", start, end);
 ajDebug("target=>%S<", *line);
 */
   if (len < end) {
-/*ajDebug("In showLineIsClear(): ajStrAppKI of %d chars", end-len);*/
+/*ajDebug("In showLineIsClear: ajStrAppKI of %d chars", end-len);*/
     (void) ajStrAppKI(line, ' ', end-len);
   }
   
   for (i=start; i<=end; i++) {
-/*ajDebug("In showLineIsClear(): Line at pos %d is >%c<",
+/*ajDebug("In showLineIsClear: Line at pos %d is >%c<",
 	i, *(ajStrStr(*line)+i));*/
     if (*(ajStrStr(*line)+i) != ' ') return ajFalse;
   }
 
-/*ajDebug("In showLineIsClear(): Line is clear **** :-)");*/
+/*ajDebug("In showLineIsClear: Line is clear **** :-)");*/
   return ajTrue;
 
 }
 
-/** @funcstatic showAddTags ***********************************************
+/* @funcstatic showAddTags ***********************************************
 **
 ** writes feature tags to the tagsout string
 **
-** @param [r] tagsout [AjPStr *] tags out string
-** @param [r] taglist [AjPList] list of tags
+** @param [r] tagsout [AjPStr*] tags out string
+** @param [r] feat [AjPFeature] Feature to be processed
 ** @param [r] values [AjBool] display values of tags
 **
 ** @return [void] 
 ** @@
 ******************************************************************************/
 
-static void showAddTags(AjPStr *tagsout, AjPList taglist, AjBool values) {
+static void showAddTags (AjPStr *tagsout, AjPFeature feat, AjBool values)
+{
 
-  AjIList titer;                /* iterator for taglist */
-  LPFeatTagValue tagstr;        /* tag structure */
+    AjPStr tagnam = NULL;
+    AjPStr tagval = NULL;
+    AjIList titer;
 
-/* iterate through the tags and test for match to patterns */
-/* debug - there is something wrong with the list */
+    /* iterate through the tags and test for match to patterns */
+    /* debug - there is something wrong with the list */
 
-  titer = ajListIter(taglist);
-  while (ajListIterMore(titer)) {
-    tagstr = (LPFeatTagValue)ajListIterNext(titer);
-/* don't display the translation tag - it is far too ajlong :-) */
-    if (ajStrCmpC(tagstr->Tag->VocTag->name, "translation")) {
-      if (values == ajTrue) {
-        (void) ajFmtPrintAppS(tagsout, " %S=\"%S\"", tagstr->Tag->VocTag->name, tagstr->Value);
-      } else {
-        (void) ajFmtPrintAppS(tagsout, " %S", tagstr->Tag->VocTag->name);
-      }
-    }
-  }
-  (void) ajListIterFree(titer);
+    tagval = ajStrNew();
+    tagnam = ajStrNew();
+    
+    titer = ajFeatTagIter (feat);
+
+    while (ajFeatTagval(titer, &tagnam, &tagval))
+	/* don't display the translation tag - it is far too long :-) */
+	if (ajStrCmpC(tagnam, "translation"))
+	{
+	    if (ajStrLen(tagval))
+		(void) ajFmtPrintAppS(tagsout, " %S=\"%S\"", tagnam, tagval);
+	    else
+		(void) ajFmtPrintAppS(tagsout, " %S", tagnam);
+	}
+
+    (void) ajListIterFree(titer);
+
+    ajStrDel(&tagval);
+    ajStrDel(&tagnam);
+    
+    return;
 }
 

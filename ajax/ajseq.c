@@ -79,11 +79,12 @@ AjPSeqall ajSeqallNew (void) {
 **
 ******************************************************************************/
 
-/* @func ajSeqallNew **********************************************************
+/* @func ajSeqallDel **********************************************************
 **
-** Creates a new sequence stream object to hold one sequence at a time.
+** Destructor for sequence stream objects
 **
-** @return [AjPSeqall] New sequence stream object.
+** @param [d] thys [AjPSeqall*] Sequence stream object reference
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -275,8 +276,8 @@ ajint ajSeqallEnd (AjPSeqall seq) {
 ** Returns the sequence range for a sequence stream
 **
 ** @param [r] thys [AjPSeqall] Sequence stream object.
-** @param [r] begin [int*] Sequence range begin
-** @param [r] end [int*] Sequence range end
+** @param [r] begin [ajint*] Sequence range begin
+** @param [r] end [ajint*] Sequence range end
 ** @return [ajint] Sequence range length
 ** @@
 ******************************************************************************/
@@ -292,8 +293,8 @@ ajint ajSeqallGetRange (AjPSeqall thys, ajint* begin, ajint* end) {
 ** Returns the sequence range for a sequence set
 **
 ** @param [r] thys [AjPSeqset] Sequence set object.
-** @param [r] begin [int*] Sequence range begin
-** @param [r] end [int*] Sequence range end
+** @param [r] begin [ajint*] Sequence range begin
+** @param [r] end [ajint*] Sequence range end
 ** @return [ajint] Sequence range length
 ** @@
 ******************************************************************************/
@@ -315,8 +316,8 @@ ajint ajSeqsetGetRange (AjPSeqset thys, ajint* begin, ajint* end) {
 ** Returns the sequence range for a sequence.
 **
 ** @param [r] thys [AjPSeq] Sequence object.
-** @param [w] begin [int*] Sequence range begin
-** @param [w] end [int*] Sequence range end
+** @param [w] begin [ajint*] Sequence range begin
+** @param [w] end [ajint*] Sequence range end
 ** @return [ajint] Sequence range length
 ** @@
 ******************************************************************************/
@@ -997,7 +998,6 @@ void ajSeqDel (AjPSeq* pthis) {
 
   AjPSeq thys = pthis ? *pthis : 0;
   AjPStr ptr=NULL;
-  AjPFeatLexicon dict=NULL;
   
   if (!pthis) return;
   if (!*pthis) return;
@@ -1020,9 +1020,7 @@ void ajSeqDel (AjPSeq* pthis) {
 
   if(thys->Fttable)
   {
-      dict = ajFeatTableDict(thys->Fttable);
-      ajFeatDeleteDict(dict);
-      ajFeatTabDel(&thys->Fttable);
+      ajFeattabDel(&thys->Fttable);
   }
 
   while(ajListstrPop(thys->Acclist,&ptr))
@@ -1063,7 +1061,8 @@ void ajSeqClear (AjPSeq thys) {
   (void) ajStrClear (&thys->Entryname);
   (void) ajStrClear (&thys->TextPtr);
   (void) ajStrClear (&thys->Seq);
-  
+
+  ajFeattabDel(&thys->Fttable);
   return;
 }
 
@@ -1764,8 +1763,7 @@ AjBool ajSeqIsProt (AjPSeq thys) {
 ** The current definition is one or two alpha characters, followed
 ** by a string of digits and a minimum length of 6.
 **
-** This may need evision in future is Swiss-Prot adopts its planned
-** new accession number format.
+** Revised for new Swiss-Prot accession number format AnXXXn
 **
 ** @param [P] accnum [AjPStr] String to be tested
 ** @return [AjBool] ajTrue if the string is a possible accession number.
@@ -1774,26 +1772,62 @@ AjBool ajSeqIsProt (AjPSeq thys) {
 
 AjBool ajIsAccession (AjPStr accnum) {
 
-  ajint i = ajStrLen(accnum);
-  char *cp = ajStrStr(accnum);
+  ajint i;
+  char *cp;
 
+  if (!accnum)
+    return ajFalse;
+
+  i = ajStrLen(accnum);
   if (i < 6)
     return ajFalse;
 
+  cp = ajStrStr(accnum);
+
+  /* must have an alphabetic start */
+
   if (!isalpha((ajint)*cp++))
     return ajFalse;
-  if (isalpha((ajint)*cp))
+
+  /* two choices for the next character */
+
+  if (isalpha((ajint)*cp)) {	/* EMBL/GenBank AAnnnnnn */
     cp++;
 
-  while(*cp)
-  {
-    if(isdigit((int)*cp) || *cp=='.')
-       ++cp;
-    else
-       return ajFalse;
+    while(*cp)			/* optional trailing .version */
+      {
+	if(isdigit((ajint)*cp) || *cp=='.')
+	  ++cp;
+	else
+	  return ajFalse;
+      }
+    return ajTrue;
+  }
+  else if (isdigit((ajint)*cp)) { /* EMBL/GenBank old Annnnn */
+    cp++;			/* or SWISS AnXXXn */
+
+    for (i=0; i<3; i++) {
+      if (isalpha((ajint)*cp) || isdigit((ajint)*cp))
+	cp++;
+      else
+	return ajFalse;
+    }
+
+    if (!isdigit((ajint)*cp)) {
+      return ajFalse;
+    }
+
+    while(*cp)			/* optional trailing .version */
+      {
+	if(isdigit((ajint)*cp) || *cp=='.')
+	  ++cp;
+	else
+	  return ajFalse;
+      }
+    return ajTrue;
   }
 
-  return ajTrue;
+  return ajFalse;
 }
 
 
@@ -2252,7 +2286,7 @@ AjPSeqCvt ajSeqCvtNew (char* bases) {
 **
 ** Delete a conversion table
 **
-** @param [w] bases [AjPSeqCvt*] Conversion table
+** @param [w] thys [AjPSeqCvt*] Conversion table reference
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -2453,11 +2487,11 @@ AjPStr ajSeqGetDesc (AjPSeq thys) {
 ** be copied.
 **
 ** @param [u] thys [AjPSeq] Sequence object.
-** @return [AjPFeatTable] feature table (if any)
+** @return [AjPFeattable] feature table (if any)
 ** @@
 ******************************************************************************/
 
-AjPFeatTable ajSeqGetFeat (AjPSeq thys) {
+AjPFeattable ajSeqGetFeat (AjPSeq thys) {
 
   return thys->Fttable;
 }
@@ -2552,7 +2586,7 @@ AjPSeqout ajSeqoutNew (void) {
   pthis->Extension = ajStrNew();
   pthis->Savelist = NULL;
 
-  pthis->Ftquery = ajFeatTabOutNew();
+  pthis->Ftquery = ajFeattabOutNew();
   pthis->Fttable = NULL;
   return pthis;
 }
@@ -2590,6 +2624,8 @@ void ajSeqoutDel (AjPSeqout* pthis) {
   ajStrDel (&thys->Extension);
 
   ajListDel(&thys->Savelist);
+
+  AJFREE(thys->Ftquery);
 
   AJFREE(*pthis);
   return;
@@ -2695,7 +2731,7 @@ static void seqCrcGen (void) {
 ** Counts the numbers of A, C, G and T in a nucleotide sequence.
 **
 ** @param [P] thys [AjPStr] Sequence as a string
-** @param [w] b [int*] integer array, minimum size 5, to hold the results.
+** @param [w] b [ajint*] integer array, minimum size 5, to hold the results.
 ** @return [void]
 ** @@
 ******************************************************************************/

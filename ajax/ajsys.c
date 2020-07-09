@@ -125,7 +125,8 @@ AjBool ajSysWhich(AjPStr *s)
 
     (void) ajStrAssS(&tname, *s);
 
-    fname = ajStrNew();
+    if(!fname)
+	fname = ajStrNew();
 
     ajSysBasename(&tname);
     

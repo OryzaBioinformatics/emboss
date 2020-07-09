@@ -22,51 +22,58 @@
 
 #include "emboss.h"
 
+
+/* @prog pasteseq *************************************************************
+**
+** Insert one sequence into another
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
-  AjPSeq seq=NULL;
-  AjPSeq insertseq=NULL;
-  AjPSeqout seqout=NULL;
-  ajint pos=0;	/* position to insert after - can be 0 to sequence.length */
-  AjPStr str=NULL;
+    AjPSeq seq=NULL;
+    AjPSeq insertseq=NULL;
+    AjPSeqout seqout=NULL;
+    /* position to insert after - can be 0 to sequence.length */
+    ajint pos=0;
+    AjPStr str=NULL;
 
-  AjPSeq newseq=NULL; /* the new sequence */
+    AjPSeq newseq=NULL;			/* the new sequence */
   
 
-  (void) embInit ("pasteseq", argc, argv);
+    embInit ("pasteseq", argc, argv);
 
-  seq = ajAcdGetSeq ("sequence");
-  insertseq = ajAcdGetSeq ("insseq");
-  pos = ajAcdGetInt ("pos");
-  seqout = ajAcdGetSeqout ("outseq");
+    seq = ajAcdGetSeq ("sequence");
+    insertseq = ajAcdGetSeq ("insseq");
+    pos = ajAcdGetInt ("pos");
+    seqout = ajAcdGetSeqout ("outseq");
 
 
-/* create the new sequence - set the size to the size of the two input
-sequences plus 1 for the terminating NULL */
-  newseq = ajSeqNewL(ajSeqLen(seq) + ajSeqLen(insertseq) + 1);
+    /*
+     *  create the new sequence - set the size to the size of the two input
+     *  sequences plus 1 for the terminating NULL
+     */
+    newseq = ajSeqNewL(ajSeqLen(seq) + ajSeqLen(insertseq) + 1);
 
-/* create a name for the sequence */
-  (void) ajSeqAssName(newseq, ajSeqGetName(seq));
+    /* create a name for the sequence */
+    ajSeqAssName(newseq, ajSeqGetName(seq));
   
-/* set the description of the sequence */
-  (void) ajSeqAssDesc(newseq, ajSeqGetDesc(seq));
+    /* set the description of the sequence */
+    ajSeqAssDesc(newseq, ajSeqGetDesc(seq));
   
-/* do the insertion here */
-  str = ajSeqStr(newseq);
-  (void) ajStrAssC(&str, ajSeqChar(seq));
-  (void) ajStrInsert(&str, pos, ajSeqStr(insertseq));
+    /* do the insertion here */
+    str = ajSeqStr(newseq);
+    ajStrAssC(&str, ajSeqChar(seq));
+    ajStrInsert(&str, pos, ajSeqStr(insertseq));
 
-/* set the type of the output sequence (is this required?) */
-  (void) ajSeqType (newseq);
+    /* set the type of the output sequence (is this required?) */
+    ajSeqType (newseq);
 
-/* output the sequence */
-  (void) ajSeqWrite (seqout, newseq);
-  (void) ajSeqWriteClose (seqout);
+    /* output the sequence */
+    ajSeqWrite (seqout, newseq);
+    ajSeqWriteClose (seqout);
 
 
-  (void) ajExit ();
-  return 0;
+    ajExit ();
+    return 0;
 }
-
-
-

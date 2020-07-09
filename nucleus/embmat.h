@@ -10,6 +10,11 @@ extern "C"
 
 typedef ajint *PMAT_INT[26];
 
+/* @data EmbPMatPrints *******************************************************
+**
+** NUCLEUS data structure for PRINTS protein fingerprints
+**
+******************************************************************************/
 
 typedef struct EmbSMatPrints
 {
@@ -23,6 +28,11 @@ typedef struct EmbSMatPrints
     PMAT_INT *matrix;			/* Matrices                        */
 } EmbOMatPrints, *EmbPMatPrints;
 
+/* @data EmbPMatMatch *******************************************************
+**
+** NUCLEUS data structure for sequence matrix matches
+**
+******************************************************************************/
 
 typedef struct EmbSMatMatch
 {

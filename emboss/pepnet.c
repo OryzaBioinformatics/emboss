@@ -27,13 +27,21 @@
 
 
 
-static void plotresidue(char c, float x, float y, char *squares, char *circles,
-			char *diamonds, AjBool text, AjPFile outf);
-static void drawocta(float x, float y, float size, AjBool text,
-		     AjPFile outf);
+static void pepnet_plotresidue(char c, float x, float y, char *squares,
+			       char *circles, char *diamonds, AjBool text,
+			       AjPFile outf);
+static void pepnet_drawocta(float x, float y, float size, AjBool text,
+			    AjPFile outf);
 
 
 
+
+
+/* @prog pepnet ***************************************************************
+**
+** Displays proteins as a helical net
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -192,9 +200,9 @@ int main(int argc, char **argv)
 		x -= xinc;
 		y += yinc;
 		if(lc <= pstop)
-		    plotresidue(*(ajStrStr(substr)+r),x,y,
-				ajStrStr(squares),ajStrStr(octags),
-				ajStrStr(diamonds),text,outf);
+		    pepnet_plotresidue(*(ajStrStr(substr)+r),x,y,
+				       ajStrStr(squares),ajStrStr(octags),
+				       ajStrStr(diamonds),text,outf);
 		++r;
 		++lc;
 	    }
@@ -204,9 +212,9 @@ int main(int argc, char **argv)
 		x -= xinc;
 		y += yinc;
 		if(lc <= pstop)
-		    plotresidue(*(ajStrStr(substr)+r),x,y,
-				ajStrStr(squares),ajStrStr(octags),
-				ajStrStr(diamonds),text,outf);
+		    pepnet_plotresidue(*(ajStrStr(substr)+r),x,y,
+				       ajStrStr(squares),ajStrStr(octags),
+				       ajStrStr(diamonds),text,outf);
 		++r;
 		++lc;
 	    }
@@ -251,8 +259,20 @@ int main(int argc, char **argv)
 
 
 
-static void drawocta(float x, float y, float size, AjBool text,
-		     AjPFile outf)
+/* @funcstatic pepnet_drawocta *********************************************
+**
+** Draw an octagon
+**
+** @param [r] x [float] xpos
+** @param [r] y [float] xpos
+** @param [r] size [float] size
+** @param [r] text [AjBool] text or graphic
+** @param [w] outf [AjPFile] outfile
+** @@
+******************************************************************************/
+
+static void pepnet_drawocta(float x, float y, float size, AjBool text,
+			    AjPFile outf)
 {
     static float polyx[]=
     {
@@ -280,8 +300,26 @@ static void drawocta(float x, float y, float size, AjBool text,
 }
 
 
-static void plotresidue(char c, float x, float y, char *squares, char *octags,
-		 char *diamonds, AjBool text, AjPFile outf)
+
+
+/* @funcstatic pepnet_plotresidue *******************************************
+**
+** Plot a residue
+**
+** @param [r] c [char] char to plot
+** @param [r] r [float] radius
+** @param [r] a [float] angle
+** @param [r] squares [char*] residues for squares
+** @param [r] octags [char*] residues for octagons
+** @param [r] diamonds [char*] residues for diamonds
+** @param [r] text [AjBool] text or graphic output
+** @param [w] outf [AjPFile] outfile
+** @@
+******************************************************************************/
+
+static void pepnet_plotresidue(char c, float x, float y, char *squares,
+			       char *octags, char *diamonds, AjBool text,
+			       AjPFile outf)
 {
     static char cs[2];
 
@@ -307,7 +345,7 @@ static void plotresidue(char c, float x, float y, char *squares, char *octags,
     {
 	if(!text)
 	    ajGraphSetFore(BLUEVIOLET);
-	drawocta(x,y+0.225,20.0,text,outf);
+	pepnet_drawocta(x,y+0.225,20.0,text,outf);
     }
     if(strstr(diamonds,cs))
     {

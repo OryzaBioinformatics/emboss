@@ -776,7 +776,7 @@ not already there */
   embGrpSortGroupsList(apnode->progs);
 
 }
-/** @func embGrpMakeNewGnode *************************************************
+/* @func embGrpMakeNewGnode *************************************************
 ** 
 ** Creates a new pointer to a Gnode struct for holding a group's
 ** name and pointer to a list of programs (also held in Gnodes).
@@ -785,6 +785,7 @@ not already there */
 ** @return [GPnode] pointer to a new GPnode struct
 ** @@
 ******************************************************************************/
+
 GPnode embGrpMakeNewGnode(AjPStr name)
 {
   GPnode gpnode;
@@ -809,7 +810,7 @@ GPnode embGrpMakeNewGnode(AjPStr name)
 
 
 
-/** @func embGrpMakeNewPnode *************************************************
+/* @func embGrpMakeNewPnode *************************************************
 ** 
 ** Creates a new pointer to a Gnode struct for holding a program's
 ** name and documentation.
@@ -819,6 +820,7 @@ GPnode embGrpMakeNewGnode(AjPStr name)
 ** @return [GPnode] pointer to a new gnode struct
 ** @@
 ******************************************************************************/
+
 GPnode embGrpMakeNewPnode(AjPStr name, AjPStr doc) {
   GPnode gpnode;
   AjPStr newstr = NULL;
@@ -835,7 +837,7 @@ GPnode embGrpMakeNewPnode(AjPStr name, AjPStr doc) {
 }
 
 
-/** @func embGrpSortGroupsList ************************************************
+/* @func embGrpSortGroupsList ************************************************
 **
 ** Sort a list of GPnodes by their name.
 **
@@ -843,6 +845,7 @@ GPnode embGrpMakeNewPnode(AjPStr name, AjPStr doc) {
 ** @return [void] 
 ** @@
 ******************************************************************************/
+
 void embGrpSortGroupsList(AjPList groupslist) {
   GPnode gl;
   AjIList giter;	/* 'groupslist' iterator */
@@ -859,7 +862,7 @@ void embGrpSortGroupsList(AjPList groupslist) {
 
   
 }
-/** @func embGrpCompareTwoGnodes **********************************************
+/* @func embGrpCompareTwoGnodes **********************************************
 ** 
 ** Compare two Gnodes as case-insensitive strings.
 **
@@ -874,7 +877,7 @@ ajint embGrpCompareTwoGnodes(const void * a, const void * b) {
   return ajStrCmpCase((*(GPnode *)a)->name, (*(GPnode *)b)->name);
 }
 
-/** @func embGrpOutputGroupsList **********************************************
+/* @func embGrpOutputGroupsList **********************************************
 ** 
 ** Displays a list of groups to an output file handle.
 ** 
@@ -906,15 +909,15 @@ void embGrpOutputGroupsList(AjPFile outfile, AjPList groupslist,
 	if (html)
 	{
 	    if (showprogs)
-		ajFmtPrintF(outfile,"<a name=%S><h2>%S</h2></a>\n", gl->name,
-			    gl->name);
+		ajFmtPrintF(outfile,"<h2><a name=\"%S\">%S</a></h2>\n",
+			gl->name, gl->name);
 	    else
 	    {
 		if (ajStrLen(link1) || ajStrLen(link2))
-		    ajFmtPrintF(outfile,"<li><a href=\"%S%S%S\">%S</a>\n",
+		    ajFmtPrintF(outfile,"<li><a href=\"%S%S%S\">%S</a></li>\n",
 				link1,gl->name,link2,gl->name);
 		else
-		    ajFmtPrintF(outfile,"<li>%S\n", gl->name);
+		    ajFmtPrintF(outfile,"<li>%S</li>\n", gl->name);
 	    }
 	}
 	else
@@ -940,7 +943,7 @@ void embGrpOutputGroupsList(AjPFile outfile, AjPList groupslist,
 }
 
 
-/** @func embGrpOutputProgsList ***********************************************
+/* @func embGrpOutputProgsList ***********************************************
 ** 
 ** Displays a list of programs and their descriptions to an output file handle.
 ** 
@@ -951,7 +954,8 @@ void embGrpOutputGroupsList(AjPFile outfile, AjPList groupslist,
 ** @param [r] link2 [AjPStr] string (eg. '.html') to put after program name
 ** @return [void] 
 ** @@
-**/
+******************************************************************************/
+
 void embGrpOutputProgsList(AjPFile outfile, AjPList progslist, AjBool html,
 			  AjPStr link1, AjPStr link2) {
   GPnode pl;
@@ -981,14 +985,15 @@ void embGrpOutputProgsList(AjPFile outfile, AjPList progslist, AjBool html,
 }
 
 
-/** @func embGrpGroupsListDel *************************************************
+/* @func embGrpGroupsListDel *************************************************
 ** 
 ** Destructor for a groups list
 ** 
 ** @param [r] groupslist [AjPList*] List of groups to be destroyed
 ** @return [void] 
 ** @@
-**/
+******************************************************************************/
+
 void embGrpGroupsListDel(AjPList *groupslist) {
   GPnode gl;
   AjIList giter;	/* 'groupslist' iterator */
@@ -1008,7 +1013,7 @@ void embGrpGroupsListDel(AjPList *groupslist) {
   
 }
 
-/** @func embGrpKeySearchProgs ************************************************
+/* @func embGrpKeySearchProgs ************************************************
 **
 ** Searches a list of groups and programs for (partial) matches to a keyword
 ** 
@@ -1017,7 +1022,7 @@ void embGrpGroupsListDel(AjPList *groupslist) {
 ** @param [r] key [AjPStr] String to search for
 ** @return [void] 
 ** @@
-**/
+******************************************************************************/
 
 void embGrpKeySearchProgs(AjPList newlist, AjPList glist, AjPStr key) {
   AjIList giter;	/* 'glist' iterator */
@@ -1069,7 +1074,7 @@ and name/doc */
 
 }
 
-/** @func embGrpKeySearchSeeAlso ************************************************
+/* @func embGrpKeySearchSeeAlso ************************************************
 **
 ** Takes an application name and returns a list of the groups that the
 ** application belongs to and a list of the applications that are in
@@ -1085,7 +1090,7 @@ and name/doc */
 ** @param [r] key [AjPStr] program name to search for
 ** @return [void] 
 ** @@
-**/
+******************************************************************************/
 
 void embGrpKeySearchSeeAlso(AjPList newlist, AjPList *appgroups,
 			    AjPList alpha, AjPList glist, AjPStr key)
@@ -1183,7 +1188,7 @@ void embGrpKeySearchSeeAlso(AjPList newlist, AjPList *appgroups,
 }
 
 
-/** @func embGrpMakeUnique ************************************************
+/* @func embGrpMakeUnique ************************************************
 **
 ** Takes a sorted GPnode list and ensures that there are no duplicate
 ** group or application names in that list.
@@ -1191,7 +1196,7 @@ void embGrpKeySearchSeeAlso(AjPList newlist, AjPList *appgroups,
 ** @param [U] list [AjPList] List of application GPnode returned
 ** @return [void] 
 ** @@
-**/
+******************************************************************************/
 
 void embGrpMakeUnique(AjPList list)
 {

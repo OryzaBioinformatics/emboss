@@ -163,11 +163,11 @@ static size_t     seqCdFileReadName (char* name, size_t namesize,
 				     SeqPCdFile thys);
 static size_t     seqCdFileReadShort (short* i, SeqPCdFile thys);
 static void       seqCdFileClose (SeqPCdFile *thys);
-static ajint        seqCdFileSeek (SeqPCdFile fil, ajint ipos);
+static ajint      seqCdFileSeek (SeqPCdFile fil, ajint ipos);
 static void       seqCdIdxLine (SeqPCdIdx idxLine,  ajint ipos, SeqPCdFile fp);
 static char*      seqCdIdxName (ajint ipos, SeqPCdFile fp);
 static AjBool     seqCdIdxQuery (AjPSeqQuery qry);
-static ajint        seqCdIdxSearch (SeqPCdIdx idxLine, AjPStr entry,
+static ajint      seqCdIdxSearch (SeqPCdIdx idxLine, AjPStr entry,
 				  SeqPCdFile fp);
 static AjBool     seqCdQryClose (AjPSeqQuery qry);
 static AjBool     seqCdQryEntry (AjPSeqQuery qry);
@@ -183,13 +183,19 @@ static char*      seqCdTrgName (ajint ipos, SeqPCdFile fp);
 static AjBool     seqCdTrgOpen (AjPStr dir, char* name,
 			    SeqPCdFile *trgfil, SeqPCdFile *hitfil);
 static AjBool     seqCdTrgQuery (AjPSeqQuery qry);
-static ajint        seqCdTrgSearch (SeqPCdTrg trgLine, AjPStr name, SeqPCdFile fp);
+static ajint      seqCdTrgSearch (SeqPCdTrg trgLine, AjPStr name, SeqPCdFile fp);
 
 static AjBool     seqGcgAll (const AjPSeqin seqin);
 static void       seqGcgBinDecode (AjPStr thys, ajint rdlen);
 static void       seqGcgLoadBuff (const AjPSeqin seqin);
 static AjBool     seqGcgReadRef (const AjPSeqin seqin);
 static AjBool     seqGcgReadSeq (const AjPSeqin seqin);
+
+/* @funclist seqAccess ********************************************************
+**
+** Functions to access each database or sequence access method
+**
+******************************************************************************/
 
 static SeqOAccess seqAccess[] =
 {
@@ -206,7 +212,8 @@ static SeqOAccess seqAccess[] =
   {"nbrf",seqAccessNbrf},
   {"gcg",seqAccessGcg},
   {"blast",seqAccessBlast},
-  {NULL, NULL} };
+  {NULL, NULL}
+};
 
 static char aa_btoa[27] = {"-ARNDCQEGHILKMFPSTWYVBZX*"};
 static char aa_btoa2[27]= {"-ABCDEFGHIKLMNPQRSTVWXYZ*"};
@@ -276,7 +283,7 @@ static AjBool seqAccessEmblcd (AjPSeqin seqin)
     AjPSeqQuery qry = seqin->Query;
     SeqPCdQry qryd = qry->QryData;
 
-    static ajint qrycalled = 0;
+    static ajint qrycalled = 0;	/*  check bigendian once */
 
 
     ajDebug ("seqAccessEmblcd type %d\n", qry->Type);
@@ -334,12 +341,22 @@ static AjBool seqAccessEmblcd (AjPSeqin seqin)
     {
 	seqCdQryClose (qry);
 	/* AJB addition */
-	if(qry->Type == QRY_ENTRY && !seqin->multi)
+        /*
+	 * This was for the old code where seqsets had different
+         * memory handling ... and the reason for the multi
+         * flag in the first place. So far this seems
+         * unnecessary for the revised code but is left here
+         * for a while as a reminder and 'just in case'
+	 */
+	if((qry->Type == QRY_ENTRY) && !seqin->multi)
 	{
 /*	    if(seqin->Ftquery->Handle)
-		ajFileBuffClear(seqin->Ftquery->Handle,0);*/
+	    ajFileBuffClear(seqin->Ftquery->Handle,0);
+	    if(seqin->Ftquery->Handle)
+		ajFileBuffClear(seqin->Ftquery->Handle,0); */
 	    AJFREE(qryd);
 	}
+
     }
     
     ajStrAssS (&seqin->Db, qry->DbName);
@@ -373,7 +390,7 @@ static AjBool seqCdAll (AjPSeqin seqin)
     char *name;
     AjPStr fullName = NULL;
 
-    static ajint called = 0;
+    static ajint called = 0;	/*  we test once for bigendian */
 
     if (!called)
     {
@@ -410,10 +427,15 @@ static AjBool seqCdAll (AjPSeqin seqin)
 
 	/* test exclusion list and add file if OK */
 
-	if (ajFileTestSkip (fullName, qry->Exclude, qry->Filename, ajTrue))
+	if (ajFileTestSkip (fullName, qry->Exclude, qry->Filename, ajTrue)) {
+	    ajDebug("qrybufflist add '%S'\n", fullName);
 	    ajListstrPushApp (list, fullName);
-	else
+	    fullName = NULL;
+	}
+	else {
+	    ajDebug("qrybufflist *delete* '%S'\n", fullName);
 	    ajStrDel(&fullName);
+	}
     }
     seqin->Filebuff = ajFileBuffNewInList(list);
     fullName = NULL;
@@ -647,7 +669,7 @@ static ajint seqCdIdxSearch (SeqPCdIdx idxLine, AjPStr entry, SeqPCdFile fil)
     ajint icmp=0;
     char *name;
 
-    (void) ajStrAss (&entrystr, entry);
+    (void) ajStrAssS (&entrystr, entry);
     (void) ajStrToUpper (&entrystr);
 
     ajDebug("seqCdIdxSearch (entry '%S')\n", entry);
@@ -734,7 +756,8 @@ static AjBool seqCdIdxQuery (AjPSeqQuery qry)
 	    name = seqCdIdxName (ipos, fil);
 	    name[ilen] = '\0';
 	    icmp = ajStrCmpC(idpref, name); /* test prefix */
-	    ajDebug ("idx test %d '%s' %2d (+/- %d)\n", ipos, name, icmp, ihi-ilo);
+	    ajDebug ("idx test %d '%s' %2d (+/- %d)\n",
+		     ipos, name, icmp, ihi-ilo);
 	    if (!icmp)
 	    {				/* hit prefix - test for first */
 		ajDebug ("idx hit %d\n", ipos);
@@ -771,7 +794,8 @@ static AjBool seqCdIdxQuery (AjPSeqQuery qry)
 	    name = seqCdIdxName (ipos, fil);
 	    name[ilen] = '\0';
 	    icmp = ajStrCmpC(idpref, name);
-	    ajDebug ("idx test %d '%s' %2d (+/- %d)\n", ipos, name, icmp, ihi-ilo);
+	    ajDebug ("idx test %d '%s' %2d (+/- %d)\n",
+		     ipos, name, icmp, ihi-ilo);
 	    if (!icmp)
 	    {				/* hit prefix */
 		ajDebug ("idx hit %d\n", ipos);
@@ -782,7 +806,8 @@ static AjBool seqCdIdxQuery (AjPSeqQuery qry)
 	    else
 		ilo = ipos+1;
 	}
-	ajDebug ("second pass: ipos %d jlo %d khi %d\n", ipos, jlo, khi);
+	ajDebug ("second pass: ipos %d jlo %d khi %d\n",
+		 ipos, jlo, khi);
 
 	name = seqCdIdxName (jlo, fil);
 	ajDebug ("first  %d '%s'\n", jlo, name);
@@ -1241,7 +1266,7 @@ static AjBool seqCdQryReuse (AjPSeqQuery qry)
 	return ajFalse;
   
 
-    ajDebug ("qryd->list  %x\n",qryd->List);
+/*    ajDebug ("qryd->list  %x\n",qryd->List);*/
     if (!qryd->List)
     {
 	ajDebug ("query data all finished\n");

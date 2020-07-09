@@ -56,8 +56,9 @@ void ajMessBeep (void) ; /* make a beep */
 AjBool ajMessErrorSetFile(char *errfile);   /* set file to read codes/messages from */
 void ajMessCodesDelete(void);               /* Delete the code/message pairs */
 
-void ajMessOut (char *format, ...) ;  /* simple message */
+void ajMessOut (char *format, ...) ;  /* simple message, no newline */
 void ajMessOutCode(char *name);       /* as above but uses codes to get message */
+void ajMessOutLine (char *format, ...) ;  /* simple message with newline */
 void ajMessDump (char *format, ...) ; /* write to log file */
 void ajMessError (char *format, ...) ; /* error message and write to log file */
 void ajMessVError (char *format, va_list args) ; /* error message and write to log file */
@@ -75,7 +76,7 @@ void ajMessSetErr (char *filename, ajint line_num);
 #define ajVWarn ajMessVWarning
 #define ajErr ajMessError
 #define ajVErr ajMessVError
-#define ajUser ajMessOut
+#define ajUser ajMessOutLine
 #define ajVUser ajMessVOut
 #define ajDie ajMessDie
 #define ajVDie ajMessDie

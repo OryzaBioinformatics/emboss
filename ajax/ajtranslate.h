@@ -36,8 +36,10 @@ extern "C"
 ** @use ajTrnCFrame Translating a sequence from a char * in a frame
 ** @use ajTrnStrFrame Translating a sequence from a AjPStr in a frame
 ** @use ajTrnSeqFrame Translating a sequence from a AjPSeq in a frame
-** @use ajTrnSeqOrig Translating a sequence (DEPRECATED)
-** @use ajTrnStrOrig Translating a sequence (DEPRECATED)
+** @use ajTrnSeqFramePep Translating a sequence from a AjPSeq in a frameand returns a new peptide
+** @use ajTrnCDangle Translates the last 1 or two bases of a sequence in a char *
+** @use ajTrnStrDangle Translates the last 1 or two bases of a sequence in a AjStr
+** @use ajTrnSeqOrig Translating a sequence
 ** @use ajTrnGetTitle Returns description of the translation table
 ** @use ajTrnGetFileName Returns file name the translation table was read from
 ** @use ajTrnStartStop Checks whether the input codon is a Start codon, a Stop codon or something else
@@ -99,13 +101,15 @@ void ajTrnRevSeq (AjPTrn trnObj, AjPSeq seq, AjPStr *pep);
 void ajTrnCFrame (AjPTrn trnObj, char *seq, ajint len, ajint frame, AjPStr *pep);
 void ajTrnStrFrame (AjPTrn trnObj, AjPStr seq, ajint frame, AjPStr *pep);
 void ajTrnSeqFrame (AjPTrn trnObj, AjPSeq seq, ajint frame, AjPStr *pep);
-AjPSeq ajTrnSeqOrig (AjPTrn trnObj, AjPSeq trnSeq, ajint frame);
-AjPStr ajTrnStrOrig (AjPTrn trnObj, AjPStr trnSeq, ajint frame);
+AjPSeq ajTrnSeqFramePep (AjPTrn trnObj, AjPSeq seq, ajint frame);
+ajint ajTrnCDangle (AjPTrn trnObj, char *seq, ajint len, ajint frame, AjPStr *pep);
+ajint ajTrnStrDangle (AjPTrn trnObj, AjPStr seq, ajint frame, AjPStr *pep);
 AjPStr ajTrnGetTitle (AjPTrn thys);
 AjPStr ajTrnGetFileName (AjPTrn thys);
 ajint ajTrnStartStop (AjPTrn trnObj, AjPStr codon, char *aa);
 ajint ajTrnStartStopC (AjPTrn trnObj, char *codon, char *aa);
-       	 
+AjPSeq ajTrnSeqOrig (AjPTrn trnObj, AjPSeq seq, ajint frame);
+
 #endif
 
 #ifdef __cplusplus

@@ -90,12 +90,14 @@ enum AcdELevel { ACD_APPL,		/* application definition */
 		 ACD_PARAM,		/* parameter */
 		 ACD_QUAL,		/* qualifier */
 		 ACD_VAR,		/* variable */
-		 ACD_IF			/* if test */
+		 ACD_IF,                /* if test */
+		 ACD_SEC,	        /* start new section */
+		 ACD_ENDSEC		/* end section */
 };
 
 /* Levels as text, only for use in logging report */
 
-static char* acdLevel[] = { "APPL", "PARAM", "QUAL", "VAR", "IF" };
+static char* acdLevel[] = { "APPL", "PARAM", "QUAL", "VAR", "IF", "SEC", "ENDSEC" };
 
 /* Attribute value types */
 
@@ -197,6 +199,8 @@ static AjBool* acdParamSet;
 static AcdPAcd acdApplCurr = NULL;
 static AcdPAcd acdQualCurr = NULL;
 static AcdPAcd acdVarCurr = NULL;
+static AcdPAcd acdSecCurr = NULL;
+static AcdPAcd acdEndsecCurr = NULL;
 static AcdPAcd acdMasterQual = NULL;
 
 /*
@@ -212,13 +216,15 @@ static ajint acdNParam=0;
 static AjPStr acdAppl,  acdApplType, acdApplToken;
 static AjPStr acdQual,  acdQualType, acdQualToken;
 static AjPStr acdVar;
+static AjPStr acdSec;
+static AjPStr acdEndsec;
 
 
 /* keywords (other than qualifier types) */
 
 typedef enum
 {
-  BAD_STAGE, APPL_STAGE, QUAL_STAGE, VAR_STAGE
+  BAD_STAGE, APPL_STAGE, QUAL_STAGE, VAR_STAGE, SEC_STAGE, ENDSEC_STAGE
 } AcdEStage ;
 
 static AcdEStage acdCurrentStage;
@@ -227,7 +233,7 @@ static AcdEStage acdStage (AjPStr token);
 static void acdParse (AjPStr text);
 static void acdArgsScan (ajint argc, char *argv[]);
 static void acdHelp (void);
-static void acdHelpAssoc (AcdPAcd thys, AjPStr *str);
+static void acdHelpAssoc (AcdPAcd thys, AjPStr *str, char *name);
 static void acdHelpAppend (AcdPAcd thys, AjPStr* str, char flag);
 static void acdHelpShow (AjPStr str, char* title);
 static void acdHelpAssocTable (AcdPAcd thys, AjPList tablist, char flag);
@@ -240,6 +246,7 @@ static AjBool acdIsParam (char* arg, AjPStr* param, ajint* iparam,
                           AcdPAcd* acd);
 static ajint acdIsQual (char* arg, char* arg2, ajint *iparam, AjPStr *pqual,
                       AjPStr *pvalue, ajint* number, AcdPAcd* acd);
+static AjBool acdValIsBool (char* arg);
 static void acdQualParse (AjPStr* pqual, AjPStr* pqmaster, ajint* number);
 static void acdTokenToLower (char *token, ajint* number);
 static void acdNoComment (AjPStr* text);
@@ -252,6 +259,8 @@ static AcdPAcd acdNewAppl (AjPStr name);
 static AcdPAcd acdNewVar (AjPStr name);
 static AcdPAcd acdNewAcd (AjPStr name, AjPStr token, ajint itype);
 static AcdPAcd acdNewAcdKey (AjPStr name, AjPStr token, ajint ikey);
+static AcdPAcd acdNewSec (AjPStr name);
+static AcdPAcd acdNewEndsec (AjPStr name);
 static void acdTestUnknown (AjPStr name, AjPStr token, ajint pnum);
 static void acdTestAssoc (AjPStr name);
 static AjBool acdTestQualC (char *name);
@@ -290,7 +299,7 @@ static AjBool acdAttrToBool (AcdPAcd thys,
 static AjBool acdAttrToFloat (AcdPAcd thys,
 			      char *attr, float defval, float *result);
 static AjBool acdAttrToInt (AcdPAcd thys,
-			    char *attr, ajint defval, ajint *result);
+ 			    char *attr, ajint defval, ajint *result);
 static AjBool acdAttrToStr (AcdPAcd thys,
 			    char *attr, char* defval, AjPStr *result);
 static AjBool acdQualToBool (AcdPAcd thys, char *qual, 
@@ -340,6 +349,7 @@ static void acdPromptDirlist (AcdPAcd thys);
 static void acdPromptFeat (AcdPAcd thys);
 static void acdPromptFeatout (AcdPAcd thys);
 static void acdPromptGraph (AcdPAcd thys);
+static void acdPromptReport (AcdPAcd thys);
 static void acdPromptScop (AcdPAcd thys);
 static void acdPromptSeq (AcdPAcd thys);
 static void acdPromptSeqout (AcdPAcd thys);
@@ -360,6 +370,7 @@ static void acdLog (char *fmt, ...);
 static void acdPretty (char *fmt, ...);
 static AjBool acdIsQtype (AcdPAcd thys);
 static AjBool acdTextFormat (AjPStr* text);
+AjBool acdVocabCheck (AjPStr str, char** vocab);
 
 /* expression processing */
 
@@ -378,6 +389,36 @@ static AjBool acdExpCond (AjPStr* result, AjPStr str);
 static AjBool acdExpCase (AjPStr* result, AjPStr str);
 static AjBool acdExpFilename (AjPStr* result, AjPStr str);
 static AjBool acdExpExists (AjPStr* result, AjPStr str);
+
+typedef struct AcdSExpList {
+  char* Name;
+  AjBool (*Func) (AjPStr *result, AjPStr str);
+} AcdOExpList;
+
+/* @funclist explist **********************************************************
+**
+** Functions for processing expressions in ACD dependencies
+**
+******************************************************************************/
+
+static AcdOExpList explist[] = {
+    {"plus", acdExpPlus},
+    {"minus", acdExpMinus},
+    {"star", acdExpStar},
+    {"div", acdExpDiv},
+    {"not", acdExpNot},
+    {"equal", acdExpEqual},
+    {"notequal", acdExpNotEqual},
+    {"greater", acdExpGreater},
+    {"lesser", acdExpLesser},
+    {"or", acdExpOr},
+    {"and", acdExpAnd},
+    {"cond", acdExpCond},
+    {"case", acdExpCase},
+    {"filename", acdExpFilename},
+    {"exists", acdExpExists},
+    {NULL, NULL}
+};
 
 /* Dummy model routine for new data types - but these must not be static
    and wil be defined in ajacd.h instead */
@@ -426,6 +467,8 @@ static void acdHelpExpectString (AcdPAcd thys, AjPStr* str);
 
 static void acdSetXxxx (AcdPAcd thys);
 static void acdSetAppl (AcdPAcd thys);
+static void acdSetEndsec (AcdPAcd thys);
+static void acdSetSec (AcdPAcd thys);
 static void acdSetVar (AcdPAcd thys);
 static void acdSetArray (AcdPAcd thys);
 static void acdSetBool (AcdPAcd thys);
@@ -448,6 +491,7 @@ static void acdSetCpdb (AcdPAcd thys);
 static void acdSetScop (AcdPAcd thys);
 static void acdSetRange (AcdPAcd thys);
 static void acdSetRegexp (AcdPAcd thys);
+static void acdSetReport (AcdPAcd thys);
 /*static void acdSetRegions (AcdPAcd thys);*/
 static void acdSetSelect (AcdPAcd thys);
 static void acdSetSeq (AcdPAcd thys);
@@ -552,6 +596,9 @@ AcdOAttr acdAttrDirlist[] = { {"fullpath", VT_BOOL},
 			      {"nullok", VT_BOOL},
 			      {NULL, VT_NULL} };
 
+AcdOAttr acdAttrEndsec[] = {
+			   {NULL, VT_NULL} };
+
 AcdOAttr acdAttrFeat[] = { {"name", VT_STR},
 			   {"extension", VT_STR},
 			   {NULL, VT_NULL} };
@@ -645,6 +692,18 @@ AcdOAttr acdAttrRegexp[] = { {"minlength", VT_INT},
 			     {"lower", VT_BOOL},
 			     {NULL, VT_NULL} };
 
+AcdOAttr acdAttrReport[] = { {"name", VT_STR},
+			      {"extension", VT_STR},
+			      {NULL, VT_NULL} };
+
+AcdOAttr acdAttrSec[] = { {"info", VT_STR},
+			   {"type", VT_STR}, /* list in acdSetSec */
+			   {"comment", VT_STR},
+			   {"border", VT_INT},
+			   {"side", VT_STR},    /* list in acdSetSec */
+			   {"folder", VT_STR},
+			   {NULL, VT_NULL} };
+
 AcdOAttr acdAttrSelect[] = { {"minimum", VT_INT},
 			     {"maximum", VT_INT},
 			     {"button", VT_BOOL},
@@ -703,27 +762,31 @@ typedef struct AcdSKey
 
 AcdOKey acdKeywords[] =
 {
-  {"application", APPL_STAGE,   acdAttrAppl, acdSetAppl},
-  {"variable",    VAR_STAGE,    acdAttrVar,  acdSetVar},
+  {"application", APPL_STAGE,   acdAttrAppl,   acdSetAppl},
+  {"variable",    VAR_STAGE,    acdAttrVar,    acdSetVar},
+  {"section",     SEC_STAGE,    acdAttrSec,    acdSetSec},
+  {"endsection",  ENDSEC_STAGE, acdAttrEndsec, acdSetEndsec},
   {NULL, BAD_STAGE} };
 
 /* Type-specific associated qualifiers which can be used positionally
 ** or numbered if tied to a parameter */
 
 /* "qualifier"  "default" "type" */
-AcdOQual acdQualAppl[] =
+
+AcdOQual acdQualAppl[] =	/* careful: index numbers used in*/
+				/* acdSetQualAppl */
 {
-  {"debug",      "N",      "bool", "write debug output to program.dbg"},
   {"auto",       "N",      "bool", "turn off prompts"},
   {"stdout",     "N",      "bool", "write standard output"},
   {"filter",     "N",      "bool", "read standard input, write standard output"},
                                   /* after auto and stdout so it can replace */
   {"options",    "N",      "bool", "prompt for required and optional values"},
-  {"verbose",    "N",      "bool", "report some/full command line options"},
-  {"help",       "N",      "bool", "report command line options"},
+  {"debug",      "N",      "bool", "write debug output to program.dbg"},
   {"acdlog",     "N",      "bool", "write ACD processing log to program.acdlog"},
   {"acdpretty",  "N",      "bool", "rewrite ACD file as program.acdpretty"},
   {"acdtable",   "N",      "bool", "write HTML table of options"},
+  {"help",       "N",      "bool", "report command line options. More information on associated and general qualifiers can be found with -help -verbose"},
+  {"verbose",    "N",      "bool", "report some/full command line options"},
   {NULL, NULL, NULL, NULL} };
 
 AcdOQual acdQualFeat[] =
@@ -743,6 +806,14 @@ AcdOQual acdQualFeatout[] =
   {"ofextension", "",       "string", "file name extension"},
   {"ofname",      "",       "string", "base file name"},
   {"ofsingle",    "",       "bool",   "separate file for each entry"},
+  {NULL, NULL, NULL, NULL} };
+
+AcdOQual acdQualReport[] =
+{
+  {"rformat",    "",       "string", "report format"},
+  {"ropenfile",  "",       "string", "report file name"},
+  {"rextension", "",       "string", "file name extension"},
+  {"rname",      "",       "string", "base file name"},
   {NULL, NULL, NULL, NULL} };
 
 AcdOQual acdQualSeq[] =
@@ -874,6 +945,14 @@ AcdOQual acdQualGraphxy[] =
 /*"Type"         Attributes        Function
   Qualifiers         "Help Text" */
 
+/* @funclist acdType **********************************************************
+**
+** Processing for ACD types
+**
+** Includes the acdSet functions for each ACD type
+**
+******************************************************************************/
+
 AcdOType acdType[] =
 {
   {"array",        acdAttrArray,    acdSetArray,
@@ -918,6 +997,8 @@ AcdOType acdType[] =
    NULL,             "Sequence range" },
   {"regexp",	  acdAttrRegexp,     acdSetRegexp,
    NULL,             "Regular expression pattern" },
+  {"report",      acdAttrReport,     acdSetReport,
+   acdQualReport,    "Report file" },
   {"select",      acdAttrSelect,    acdSetSelect,
    NULL,             "Selection from list of values" },
   {"sequence",    acdAttrSeq,       acdSetSeq,
@@ -943,6 +1024,13 @@ typedef struct AcdSValid
   void (*Valid) (AcdPAcd thys, AjPStr* str);
   void (*Expect) (AcdPAcd thys, AjPStr* str);
 } AcdOValid, *AcdPValid;
+
+/* @funclist acdValid *********************************************************
+**
+** ACD type help processing, includes functions to describe valid
+** values and expected values in -help output and -acdtable output
+**
+******************************************************************************/
 
 AcdOValid acdValid[] =
 {
@@ -1395,13 +1483,63 @@ static void acdParse (AjPStr text)
 	    break;
 
 	case VAR_STAGE:		
-	    /* then the variable name */
+	    /* then the variable name  and the value */
 	    (void) ajStrToken (&acdVar, &tokenhandle, white);
 	    (void) ajStrToLower (&acdVar);
 	    acdVarCurr = acdNewVar (acdVar);
 	    ajStrAssS(&acdvalue, acdParseValue(&tokenhandle, white));
-	    acdPretty ("variable:  %S \"%S\"\n", acdVar, acdvalue);
+	    acdPretty ("\nvariable:  %S \"%S\"\n", acdVar, acdvalue);
 	    (void) acdSetVarDef (acdVarCurr, acdvalue);
+	    break;
+
+	case SEC_STAGE:		
+	    /* new section - append to list */
+	    (void) ajStrToken (&acdSec, &tokenhandle, white);
+	    (void) ajStrToLower (&acdSec);
+
+	    (void) ajStrToken (&acdtmp, &tokenhandle, whiteplus);
+	    if (!acdIsLeftB(&acdtmp))
+		ajFatal ("'[' not found for section: %S\n", acdSec);
+
+	    acdSecCurr = acdNewSec (acdSec);
+	    acdPretty ("\nsection: %S  [\n", acdSec);
+
+	    /* continue parsing until we reach a true closing ']' character */
+
+	    if (!ajStrLen(acdtmp))	/* that was a lonely '[' we trimmed */
+	      (void) ajStrToken (&acdtmp, &tokenhandle, whiteplus);
+
+	    (void) ajStrToLower (&acdtmp);
+	    done = acdIsRightB(&acdtmp); /* can be just [tok:val] */
+
+	    while (!done)
+	    {
+		(void) ajStrAssS (&acdtoken, acdtmp);
+		(void) ajStrAssS (&acdvalue, acdParseValueRB (&tokenhandle,
+							      white));
+		done = acdIsRightB(&acdvalue);
+		(void) ajStrAssS (&acdmodvalue, acdvalue);
+		(void) acdTextFormat(&acdmodvalue);
+		(void) acdSetKey (acdSecCurr, &acdtoken, acdmodvalue);
+		acdPretty ("  %S: \"%S\"\n", acdtoken, acdvalue);
+		if (!done)
+		{
+		    (void) ajStrToken(&acdtmp, &tokenhandle, whiteplus);
+		    (void) ajStrToLower (&acdtmp);
+		    done = acdIsRightB(&acdtmp);
+		}
+	    }
+	    acdPretty ("]\n");
+
+	    break;
+
+	case ENDSEC_STAGE:		
+	    /* end section, remove from list. Only have the name here */
+	    (void) ajStrToken (&acdEndsec, &tokenhandle, white);
+	    (void) ajStrToLower (&acdEndsec);
+	    acdEndsecCurr = acdNewEndsec (acdEndsec);
+	    /* ajStrAssS(&acdvalue, acdParseValue(&tokenhandle, white));*/
+	    acdPretty ("\nendsection:  %S\n", acdEndsec);
 	    break;
 
 	default:
@@ -1731,6 +1869,60 @@ static AcdPAcd acdNewVar (AjPStr name)
     return acd;
 }
 
+/* @funcstatic acdNewSec *****************************************************
+**
+** Constructor front end for a section ACD object.
+**
+** @param [r] name [AjPStr] Token name to be used by applications
+** @return [AcdPAcd] ACD variable object for name.
+** @@
+******************************************************************************/
+
+static AcdPAcd acdNewSec (AjPStr name)
+{
+    AcdPAcd acd;
+    static ajint firstcall = 1;
+    static ajint ikey;
+
+    if (firstcall)
+    {
+	ikey = acdFindKeyC ("section");
+	firstcall = 0;
+    }
+
+    acd = acdNewAcdKey(name, name, ikey);
+    acd->Level = ACD_SEC;
+
+    return acd;
+}
+
+/* @funcstatic acdNewEndsec *****************************************************
+**
+** Constructor front end for an end of section ACD object.
+**
+** @param [r] name [AjPStr] Token name to be used by applications
+** @return [AcdPAcd] ACD variable object for name.
+** @@
+******************************************************************************/
+
+static AcdPAcd acdNewEndsec (AjPStr name)
+{
+    AcdPAcd acd;
+    static ajint firstcall = 1;
+    static ajint ikey;
+
+    if (firstcall)
+    {
+	ikey = acdFindKeyC ("endsection");
+	firstcall = 0;
+    }
+
+    acd = acdNewAcdKey(name, name, ikey);
+    acd->Level = ACD_ENDSEC;
+
+    return acd;
+}
+
 /* @funcstatic acdNewQual *****************************************************
 **
 ** Constructor front end for a qualifier ACD object.
@@ -1920,6 +2112,9 @@ static AcdPAcd acdNewAcdKey (AjPStr name, AjPStr token, ajint ikey)
 	acdListLast->NAttr = acdAttrKeyCount(ikey);
 	break;
     case VAR_STAGE:
+	acdListLast->NAttr = acdAttrKeyCount(ikey);
+	break;
+    case SEC_STAGE:
 	acdListLast->NAttr = acdAttrKeyCount(ikey);
 	break;
     default:
@@ -2684,6 +2879,105 @@ static void acdSetAppl (AcdPAcd thys)
     return;
 }
 
+/* @funcstatic acdSetEndsec *****************************************************
+**
+** Ends the current ACD section
+**
+** Called when an "endsection" type ACD item is checked. Should not be called
+** for any other item.
+**
+** At present there is nothing to prompt for here, though there could
+** be, for example, a blank line at the end of a section where something was prompted for.
+**
+** @param [r] thys [AcdPAcd] ACD for the endsection item.
+** @return [void]
+** @@
+******************************************************************************/
+
+static void acdSetEndsec (AcdPAcd thys)
+{
+
+    if (thys->DefStr)
+	(void) ajStrAssS (&thys->ValStr, thys->DefStr[DEF_DEFAULT]);
+
+    (void) acdVarResolve (&thys->ValStr);
+
+    return;
+}
+
+/* @funcstatic acdSetSec *****************************************************
+**
+** Starts a new ACD section.
+**
+** Called when a "section" type ACD item is checked. Should not be called
+** for any other item.
+**
+** At present there is nothing to prompt for here, though there could
+** be, for example, a prompt issued before the first prompt for the section.
+** This would be stored (the 'info' attribute) and used in the standard
+** prompting functions.
+**
+** @param [r] thys [AcdPAcd] ACD for the section item.
+** @return [void]
+** @@
+******************************************************************************/
+
+static void acdSetSec (AcdPAcd thys)
+{
+    ajint border = 1;
+    AjPStr comment = NULL;
+    AjPStr folder  = NULL;
+    AjPStr info    = NULL;
+    AjPStr side    = NULL;
+    AjPStr type    = NULL;
+    AjPStr tmpstr  = NULL;
+
+    char* sideVal[] = {"top", "bottom", "left", "right", NULL};
+    char* typeVal[] = {"frame", "page", NULL};
+
+    if (acdAttrToStr(thys, "type", "", &type)) {
+      if (!acdVocabCheck(type, typeVal))
+	(void) ajFatal("section %S, bad attribute value type: %S",
+		       thys->Name, type);
+    }
+
+    if (acdAttrToInt (thys, "border", 1, &border)) {
+	if (!ajStrMatchCaseC(type, "frame"))
+	  (void) ajWarn("section %S, border only used by type: frame",
+			thys->Name);
+	if (border < 1) {
+	    (void) acdAttrToStr(thys, "border", "", &tmpstr);
+	    (void) ajFatal ("section %S, bad attribute value type: %S",
+			    tmpstr);
+	}
+    }
+
+    (void) acdAttrToStr(thys, "comment", "", &comment);
+    if (acdAttrToStr(thys, "folder", "", &folder)) {
+	if (!ajStrMatchCaseC(type, "page"))
+	    ajWarn("section %S, folder only used by type: page",
+		   thys->Name);
+    }
+
+    (void) acdAttrToStr(thys, "info", "", &info);
+    if (acdAttrToStr(thys, "side", "", &side)) {
+	if (!acdVocabCheck(side, sideVal))
+	    ajFatal("section %S, bad attribute value side: %S",
+		    thys->Name, side);
+	if (!ajStrMatchCaseC(type, "frame"))
+	    ajWarn("section %S, side only used by type: frame",
+		   thys->Name);
+    }
+
+    ajStrDel(&comment);
+    ajStrDel(&folder);
+    ajStrDel(&info);
+    ajStrDel(&side);
+    ajStrDel(&type);
+    ajStrDel(&tmpstr);
+    return;
+}
+
 /* @funcstatic acdSetVar *****************************************************
 **
 ** Defines an ACD variable.
@@ -2921,6 +3215,8 @@ static void acdSetBool (AcdPAcd thys)
     required = acdIsRequired(thys);
     (void) acdReplyInit (thys, "N", &defreply);
 
+    ajDebug("acdSetBool -%S def: %S\n", thys->Name, defreply);
+
     for (itry=acdPromptTry; itry && !ok; itry--)
     {
 	(void) ajStrAssS (&reply, defreply);
@@ -2940,6 +3236,8 @@ static void acdSetBool (AcdPAcd thys)
 
     (void) acdSetQualAppl (thys, *val);	/* check special application
 					   booleans */
+
+    ajDebug("acdSetBool -%S val: %B\n", thys->Name, *val);
 
     if (ajStrMatchC(thys->Name, "help"))
 	acdHelp();
@@ -3144,6 +3442,7 @@ static void acdSetDirlist (AcdPAcd thys)
     n = ajListLength(val);
     for(i=0;i<n;++i)
     {
+/*	ajFmtPrintS(&t,"%S/",reply);*/
 	ajFmtPrintS(&t,"");
 	ajListPop(val,(void **)&v);
 	ajStrApp(&t,v);
@@ -3362,13 +3661,13 @@ static void acdSetDirectory (AcdPAcd thys)
 ** and simply returns what the ACD item already has.
 **
 ** @param [r] token [char*] Text token name
-** @return [AjPFeatTable] Feature Table object. The table was already loaded by
+** @return [AjPFeattable] Feature Table object. The table was already loaded by
 **         acdSetFeat so this just returns the pointer.
 ** @cre failure to find an item with the right name and type aborts.
 ** @@
 ******************************************************************************/
 
-AjPFeatTable ajAcdGetFeat (char *token)
+AjPFeattable ajAcdGetFeat (char *token)
 {
     return acdGetValue (token, "features");
 }
@@ -3401,8 +3700,8 @@ AjPFeatTable ajAcdGetFeat (char *token)
 
 static void acdSetFeat (AcdPAcd thys)
 {
-    AjPFeatTable val = NULL;
-    AjPFeatTabIn tabin = NULL;
+    AjPFeattable val = NULL;
+    AjPFeattabIn tabin = NULL;
 
     AjBool required = ajFalse;
     AjBool ok = ajFalse;
@@ -3429,7 +3728,7 @@ static void acdSetFeat (AcdPAcd thys)
     AjBool fprompt=ajFalse;
     ajint iattr;
 
-    tabin = ajFeatTabInNew();		/* set the default value */
+    tabin = ajFeattabInNew();		/* set the default value */
 
     required = acdIsRequired(thys);
     (void) acdQualToBool (thys, "fask", ajFalse, &fprompt, &defreply);
@@ -3450,7 +3749,7 @@ static void acdSetFeat (AcdPAcd thys)
 	(void) acdGetValueAssoc (thys, "fformat", &tabin->Formatstr);
 	(void) acdGetValueAssoc (thys, "fopenfile", &tabin->Filename);
 
-	ok = ajFeatRead(&val, tabin, reply);
+	ok = ajFeatUfoRead(&val, tabin, reply);
 	if (!ok)
 	    acdBadVal (thys, required,
 		       "Unable to read feature table '%S'", reply);
@@ -3511,11 +3810,11 @@ static void acdSetFeat (AcdPAcd thys)
        if (freverse)
        ajFeatReverse (val);
        
-       ajFeatTabSetRange(val, fbegin, fend);
-       ajFeatTabInSetRange(tabin, fbegin, fend);
+       ajFeattabSetRange(val, fbegin, fend);
+       ajFeattabInSetRange(tabin, fbegin, fend);
        */
 
-    ajFeatTabInDel (&tabin);
+    ajFeattabInDel (&tabin);
 
     /* features tables have special set attributes */
 
@@ -3544,13 +3843,13 @@ static void acdSetFeat (AcdPAcd thys)
 ** and simply returns what the ACD item already has.
 **
 ** @param [r] token [char*] Text token name
-** @return [AjPFeatTabOut] Feature Table output object. Already opened
+** @return [AjPFeattabOut] Feature Table output object. Already opened
 **                      by acdSetFeatout so this just returns the object
 ** @cre failure to find an item with the right name and type aborts.
 ** @@
 ******************************************************************************/
 
-AjPFeatTabOut ajAcdGetFeatout (char *token)
+AjPFeattabOut ajAcdGetFeatout (char *token)
 {
     return acdGetValue (token, "featout");
 }
@@ -3583,7 +3882,7 @@ AjPFeatTabOut ajAcdGetFeatout (char *token)
 
 static void acdSetFeatout (AcdPAcd thys)
 {
-    AjPFeatTabOut val = NULL;
+    AjPFeattabOut val = NULL;
 
     AjBool required = ajFalse;
     AjBool ok = ajFalse;
@@ -3606,7 +3905,7 @@ static void acdSetFeatout (AcdPAcd thys)
 	{NULL, VT_NULL} };
 
     required = acdIsRequired(thys);
-    val = ajFeatTabOutNew();
+    val = ajFeattabOutNew();
 
     acdAttrResolve (thys, "name", &name);
     if (!acdGetValueAssoc (thys, "offormat", &val->Formatstr))
@@ -3626,7 +3925,7 @@ static void acdSetFeatout (AcdPAcd thys)
 	    (void) acdUserGet (thys, &reply);
 
 	(void) acdGetValueAssoc (thys, "ofopenfile", &val->Filename);
-	ok = ajFeatTabOutOpen (val, reply);
+	ok = ajFeattabOutOpen (val, reply);
 	if (!ok)
 	    acdBadVal (thys, required,
 		       "Unable to read sequence '%S'", reply);
@@ -3988,7 +4287,7 @@ static void acdSetGraphxy (AcdPAcd thys)
 
 /* @func ajAcdGetInt **********************************************************
 **
-** Returns an item of type Int as defined in a named ACD item. Called by the
+** Returns an item of type ajint as defined in a named ACD item. Called by the
 ** application after all ACD values have been set, and simply returns
 ** what the ACD item already has.
 **
@@ -5025,6 +5324,124 @@ static void acdSetRegexp (AcdPAcd thys) {
   return;
 }
 
+/* @func ajAcdGetReport ******************************************************
+**
+** Returns an item of type Report as defined in a named ACD item.
+** Called by the application after all ACD values have been set,
+** and simply returns what the ACD item already has.
+**
+** @param [r] token [char*] Text token name
+** @return [AjPReport] Report output object. Already opened
+**                      by acdSetFeatout so this just returns the object
+** @cre failure to find an item with the right name and type aborts.
+** @@
+******************************************************************************/
+
+AjPReport ajAcdGetReport (char *token)
+{
+    return acdGetValue (token, "report");
+}
+
+/* @funcstatic acdSetReport **************************************************
+**
+** Using the definition in the ACD file, and any values for the
+** item or its associated qualifiers provided on the command line,
+** prompts the user if necessary (and possible) and
+** sets the actual value for an ACD report item.
+**
+** Understands all attributes and associated qualifiers for this item type.
+**
+** The default value (if no other available) is a null string, which
+** is invalid.
+**
+** Associated qualifiers "-rformat", "-ropenfile"
+** are applied to the UFO before reading the sequence.
+**
+** Associated qualifiers "-rbegin", "-rend" and "-rreverse"
+** are applied as appropriate, with prompting for values,
+** after the sequence has been read. They are applied to the feature table,
+** and the resulting table is what is set in the ACD item.
+**
+** @param [u] thys [AcdPAcd] ACD item.
+** @return [void]
+** @see ajSeqRead
+** @@
+******************************************************************************/
+
+static void acdSetReport (AcdPAcd thys)
+{
+    AjPReport val = NULL;
+
+    AjBool required = ajFalse;
+    AjBool ok = ajFalse;
+    static AjPStr defreply = NULL;
+    static AjPStr reply = NULL;
+    ajint itry;
+
+    static AjPStr name = NULL;
+    static AjPStr ext = NULL;
+    static AjPStr outfname = NULL;
+
+    static AcdOAttr setattr[] =
+    {
+	{"begin", VT_INT},
+	{"end", VT_INT},
+	{"length", VT_INT},
+	{"protein", VT_BOOL},
+	{"nucleic", VT_BOOL},
+	{"name", VT_STR},
+	{NULL, VT_NULL} };
+
+    required = acdIsRequired(thys);
+    val = ajReportNew();
+
+    acdAttrResolve (thys, "name", &name);
+    if (!acdGetValueAssoc (thys, "rformat", &val->Formatstr))
+	(void) acdAttrResolve (thys, "rextension", &ext);
+
+    (void) acdOutFilename (&outfname, name, val->Formatstr);
+    (void) acdReplyInit (thys, ajStrStr(outfname), &defreply);
+    acdPromptReport (thys);
+
+    for (itry=acdPromptTry; itry && !ok; itry--)
+    {
+	ok = ajTrue;		/* accept the default if nothing changes */
+
+	(void) ajStrAssS (&reply, defreply);
+
+	if (required)
+	    (void) acdUserGet (thys, &reply);
+
+	(void) acdGetValueAssoc (thys, "ropenfile", &val->Filename);
+	ok = ajReportOpen (val, reply);
+	if (!ok)
+	    acdBadVal (thys, required,
+		       "Unable to read sequence '%S'", reply);
+    }
+    if (!ok)
+	acdBadRetry (thys);
+
+    /* reports have special set attributes */
+
+    thys->SAttr = acdAttrListCount (setattr);
+    thys->SetAttr = &setattr[0];
+    thys->SetStr = AJCALLOC0 (thys->SAttr, sizeof (AjPStr));
+
+    /*
+       (void) ajStrFromInt (&thys->SetStr[ACD_SEQ_BEGIN], ajSeqBegin(val));
+       (void) ajStrFromInt (&thys->SetStr[ACD_SEQ_END], ajSeqEnd(val));
+       (void) ajStrFromInt (&thys->SetStr[ACD_SEQ_LENGTH], ajSeqLen(val));
+       (void) ajStrFromBool (&thys->SetStr[ACD_SEQ_PROTEIN], ajSeqIsProt(val));
+       (void) ajStrFromBool (&thys->SetStr[ACD_SEQ_NUCLEIC], ajSeqIsNuc(val));
+       (void) ajStrAssS (&thys->SetStr[ACD_SEQ_NAME], val->Name);
+       */
+
+    thys->Value = val;
+    (void) ajStrAssS (&thys->ValStr, reply);
+
+    return;
+}
+
 /* @func ajAcdGetSelect *******************************************************
 **
 ** Returns an item of type Select as defined in a named ACD item,
@@ -5226,7 +5643,8 @@ static void acdSetSeq (AcdPAcd thys) {
   
   val = ajSeqNew();		/* set the default value */
   seqin = ajSeqinNew();		/* set the default value */
-  seqin->multi = ajFalse;
+
+  /* seqin->multi = ajFalse; */ /* pmr: moved to ajSeqinNew */
   
   (void) acdQualToBool (thys, "snucleotide", ajFalse, &snuc, &defreply);
   (void) acdQualToBool (thys, "sprotein", ajFalse, &sprot, &defreply);
@@ -5252,12 +5670,14 @@ static void acdSetSeq (AcdPAcd thys) {
      (void) acdUserGet (thys, &reply);
 
     ajSeqinUsa (&seqin, reply);
+
     (void) acdGetValueAssoc (thys, "sformat", &seqin->Formatstr);
     (void) acdGetValueAssoc (thys, "sdbname", &seqin->Db);
     (void) acdGetValueAssoc (thys, "sopenfile", &seqin->Filename);
     (void) acdGetValueAssoc (thys, "sid", &seqin->Entryname);
 
     (void) acdGetValueAssoc (thys, "ufo", &seqin->Ufo);
+
     (void) acdGetValueAssoc (thys, "fformat", &seqin->Ftquery->Formatstr);
     (void) acdGetValueAssoc (thys, "fopenfile", &seqin->Ftquery->Filename);
 
@@ -5462,8 +5882,9 @@ static void acdSetSeqset (AcdPAcd thys) {
 
   val = ajSeqsetNew();		/* set the default value */
   seqin = ajSeqinNew();		/* set the default value */
-  seqin->multi = ajTrue;
-  
+
+  seqin->multi = ajTrue;  /* pmr: moved to ajSeqinNew */ /* ajb added back */
+
   (void) acdQualToBool (thys, "snucleotide", ajFalse, &snuc, &defreply);
   (void) acdQualToBool (thys, "sprotein", ajFalse, &sprot, &defreply);
 
@@ -5493,10 +5914,10 @@ static void acdSetSeqset (AcdPAcd thys) {
     (void) acdGetValueAssoc (thys, "sopenfile", &seqin->Filename);
     (void) acdGetValueAssoc (thys, "sid", &seqin->Entryname);
     (void) acdGetValueAssoc (thys, "ufo", &seqin->Ufo);
-    /*
+
     (void) acdGetValueAssoc (thys, "fformat", &seqin->Ftquery->Formatstr);
     (void) acdGetValueAssoc (thys, "fopenfile", &seqin->Ftquery->Filename);
-    */
+
     (void) acdAttrToStr(thys, "type", "", &seqin->Inputtype);
     (void) acdAttrToBool(thys, "features", ajFalse, &seqin->Features);
     if (ajStrLen(seqin->Ufo))
@@ -5726,10 +6147,10 @@ static void acdSetSeqall (AcdPAcd thys) {
     (void) acdGetValueAssoc (thys, "sopenfile", &seqin->Filename);
     (void) acdGetValueAssoc (thys, "sid", &seqin->Entryname);
     (void) acdGetValueAssoc (thys, "ufo", &seqin->Ufo);
-    /*
+
     (void) acdGetValueAssoc (thys, "fformat", &seqin->Ftquery->Formatstr);
     (void) acdGetValueAssoc (thys, "fopenfile", &seqin->Ftquery->Filename);
-    */
+
     (void) acdAttrToStr(thys, "type", "", &seqin->Inputtype);
     (void) acdAttrToBool(thys, "features", ajFalse, &seqin->Features);
     (void) acdAttrToBool(thys, "entry", ajFalse, &seqin->Text);
@@ -6569,7 +6990,7 @@ static void* acdGetValueNum (char *token, char* type, ajint pnum) {
   return NULL;
 }
 
-/* @funcstatic acdHelp **************************************************
+/* @funcstatic acdHelp ********************************************************
 **
 ** Reports on program options if acdDoHelp is set, either by
 ** -help on the command line or by the prefix_HELP variable..
@@ -6600,16 +7021,16 @@ static void acdHelp (void) {
   AjPList genlist = NULL;
   AjPList asslist = NULL;
 
+  ajDebug("acdHelp %B\n", acdDoHelp);
+
   if (!acdDoHelp) return;
 
   if (acdTable) {
     reqlist = ajListNew();
     optlist = ajListNew();
     advlist = ajListNew();
-    if (acdVerbose) {
-      genlist = ajListNew();
-      asslist = ajListNew();
-    }
+    genlist = ajListNew();
+    if (acdVerbose) asslist = ajListNew();
     ajUser ("<table border cellspacing=0 cellpadding=3 bgcolor=\"#f5f5ff\">");
   }
 
@@ -6682,14 +7103,22 @@ static void acdHelp (void) {
       ajFatal ("unknown qualifier type %d in acdHelp", helpType);
     }
 
-    if (acdVerbose && pa->AssocQuals) {
+    if (pa->AssocQuals) {
       if (helpType == HELP_APP) {
-	acdHelpAssoc (pa, &helpGen);
-	acdHelpAssocTable  (pa, genlist, hlpFlag);
+	if (acdVerbose) {
+	  acdHelpAssoc (pa, &helpGen, NULL);
+	  acdHelpAssocTable  (pa, genlist, hlpFlag);
+	}
+	else {
+	  acdHelpAssoc (pa, &helpGen, "help");
+	  acdHelpAssocTable  (pa, genlist, hlpFlag);
+	}
       }
       else {
-	acdHelpAssoc (pa, &helpAss);
-	acdHelpAssocTable  (pa, asslist, hlpFlag);
+	if (acdVerbose) {
+	  acdHelpAssoc (pa, &helpAss, NULL);
+	  acdHelpAssocTable  (pa, asslist, hlpFlag);
+	}
       }
     }
   }
@@ -6708,8 +7137,7 @@ static void acdHelp (void) {
   acdHelpTableShow (advlist, "Advanced qualifiers");
   if (acdVerbose) acdHelpShow
 		    (helpAss, "Associated qualifiers");
-  if (acdVerbose) acdHelpShow
-		    (helpGen, "General qualifiers");
+  acdHelpShow (helpGen, "General qualifiers");
   if (acdVerbose && acdTable)
     acdHelpTableShow (asslist, "Associated qualifiers");
   if (acdVerbose && acdTable)
@@ -6726,13 +7154,17 @@ static void acdHelp (void) {
 **
 ** Processes all associated qualifiers for a qualifier or for the application.
 **
+** If a qualifier name is given (e.g. "help") then only that qualifier
+** is processed.
+**
 ** @param [r] thys [AcdPAcd]  ACD object
 ** @param [r] str [AjPStr*] Help text being built
+** @param [r] name [char*] Single name to process
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void acdHelpAssoc (AcdPAcd thys, AjPStr *str) {
+static void acdHelpAssoc (AcdPAcd thys, AjPStr *str, char* name) {
 
   static AjPStr line = NULL;
   static AjPStr qname = NULL;
@@ -6757,6 +7189,7 @@ static void acdHelpAssoc (AcdPAcd thys, AjPStr *str) {
   if (quals) {
     for (i=0; quals[i].Name; i++) {
       acdLog ("++ quals[%d].Name %s\n", i, quals[i].Name);
+      if (name && strcmp(name, quals[i].Name)) continue;
       if (thys->PNum)
 	(void) ajFmtPrintS (&qname, "-%s%d", quals[i].Name, thys->PNum);
       else
@@ -7390,7 +7823,7 @@ static void acdHelpExpectOut (AcdPAcd thys, AjPStr* str) {
   return;
 }
 
-/* @funcstatic acdHelpExpectInt ************************************************
+/* @funcstatic acdHelpExpectInt ***********************************************
 **
 ** Generates expected value description for an integer type.
 **
@@ -8118,6 +8551,8 @@ static AjBool acdSet (AcdPAcd thys, AjPStr* attrib, AjPStr value) {
   AcdPAcd aqual;
 /*  static AjPStr defattrib=NULL; */
 
+  ajDebug("acdSet attr '%S' val '%S' type '%s'\n", thys->Name, *attrib, value);
+
   i = acdFindAttr (attr, *attrib);
 
   if (thys->DefStr && i < 0) {	/* try again with default attributes */
@@ -8602,7 +9037,7 @@ static AjBool acdQualToFloat (AcdPAcd thys, char *qual,
 ** @param [r] thys [AcdPAcd] ACD item of master parameter or qualifier.
 ** @param [r] qual [char*] Qualifier name
 ** @param [r] defval [ajint] default value
-** @param [w] result [int*] Resulting value.
+** @param [w] result [ajint*] Resulting value.
 ** @param [wP] valstr [AjPStr*] Qualifier value as a string
 ** @return [AjBool] ajTrue on success
 ** @@
@@ -8647,7 +9082,7 @@ static AjBool acdQualToInt (AcdPAcd thys, char *qual,
 ** @param [r] thys [AcdPAcd] ACD item of master parameter or qualifier.
 ** @param [r] qual [char*] Qualifier name
 ** @param [r] defval [ajint] default value
-** @param [w] result [int*] Resulting value.
+** @param [w] result [ajint*] Resulting value.
 ** @param [wP] valstr [AjPStr*] Qualifier value as a string
 ** @return [AjBool] ajTrue on success
 ** @@
@@ -8700,7 +9135,7 @@ static AjBool acdQualToSeqbegin (AcdPAcd thys, char *qual,
 ** @param [r] thys [AcdPAcd] ACD item of master parameter or qualifier.
 ** @param [r] qual [char*] Qualifier name
 ** @param [r] defval [ajint] default value
-** @param [w] result [int*] Resulting value.
+** @param [w] result [ajint*] Resulting value.
 ** @param [wP] valstr [AjPStr*] Qualifier value as a string
 ** @return [AjBool] ajTrue on success
 ** @@
@@ -8833,7 +9268,7 @@ static AjBool acdAttrToFloat (AcdPAcd thys,
 ** @param [r] thys [AcdPAcd] ACD item
 ** @param [r] attr [char*] Attribute name
 ** @param [r] defval [ajint] Default value
-** @param [w] result [int*] Resulting value.
+** @param [w] result [ajint*] Resulting value.
 ** @return [AjBool] ajTrue if a value was defined, ajFalse if the
 **         default value was used.
 ** @@
@@ -8918,7 +9353,7 @@ static AjBool acdAttrResolve (AcdPAcd thys, char *attr, AjPStr *result) {
 ** #param [r] thys [AcdPAcd] ACD item
 ** #param [r] attr [char*] Attribute name
 ** #param [r] defval [ajint] Default value
-** #param [w] result [int*] Resulting value.
+** #param [w] result [ajint*] Resulting value.
 ** #return [AjBool] ajTrue if a value was defined, ajFalse if the
 **         default value was used.
 ** @@
@@ -9086,34 +9521,6 @@ static AjBool acdHelpVarResolve (AjPStr* str, AjPStr var) {
 
 static AjBool acdFunResolve (AjPStr* result, AjPStr str) {
   ajint i;
-
-  typedef struct expSlist {
-    char* Name;
-    AjBool (*Func) (AjPStr *result, AjPStr str);
-  } expOlist;
-
-  /*
-   * AJB: initialisations below have variable functions in an
-   * initialisation list which is supposed to be constant!
-   * This may not be portable.
-   */
-  expOlist explist[] = {
-    {"plus", acdExpPlus},
-    {"minus", acdExpMinus},
-    {"star", acdExpStar},
-    {"div", acdExpDiv},
-    {"not", acdExpNot},
-    {"equal", acdExpEqual},
-    {"notequal", acdExpNotEqual},
-    {"greater", acdExpGreater},
-    {"lesser", acdExpLesser},
-    {"or", acdExpOr},
-    {"and", acdExpAnd},
-    {"cond", acdExpCond},
-    {"case", acdExpCase},
-    {"filename", acdExpFilename},
-    {"exists", acdExpExists},
-    {NULL, NULL} };
 
   ajDebug ("acdFunResolve '%S'\n", str);
 
@@ -10182,8 +10589,12 @@ static void acdArgsScan (ajint argc, char *argv[]) {
     if (!strcmp(argv[i], "-acdlog"))   acdDoLog = ajTrue;
     if (!strcmp(argv[i], "-acdpretty"))  acdDoPretty = ajTrue;
     if (!strcmp(argv[i], "-acdtable")) acdTable = ajTrue;
+
+    if (!strcmp(argv[i], "-help")) {
+	ajDebug("acdArgsScan -help argv[%d]\n", i);
+    }
   }
-  ajDebug ("acdArgsScan acdDebug %B\n", acdDebug);
+  ajDebug ("acdArgsScan acdDebug %B acdDoHelp %B\n", acdDebug, acdDoHelp);
 
   return;
 }
@@ -10373,7 +10784,7 @@ static ajint acdNextParam (ajint pnum) {
 **
 ** @param [r] arg [char*] Argument
 ** @param [wP] param [AjPStr*] Parameter text copied on success
-** @param [w] iparam [int*] Parameter number incremented on success
+** @param [w] iparam [ajint*] Parameter number incremented on success
 ** @param [wP] acd [AcdPAcd*] ACD item for the current parameter
 ** @return [AjBool] ajTrue if "arg" could be a parameter
 **         ajFalse if it appears to be a qualifier (starts with "-" and
@@ -10391,7 +10802,7 @@ static AjBool acdIsParam (char* arg, AjPStr* param, ajint* iparam,
 
   if (*iparam >= acdNParam) {
     ajFatal ("Argument '%s'\nToo many parameters %d/%d\n",
-	     arg, *iparam, acdNParam);
+	     arg, (*iparam + 1), acdNParam);
   }
 
 
@@ -10430,10 +10841,10 @@ static AjBool acdIsParam (char* arg, AjPStr* param, ajint* iparam,
 **
 ** @param [r] arg [char*] Argument
 ** @param [r] arg2 [char*] Next argument
-** @param [w] iparam [int*] Parameter number
+** @param [w] iparam [ajint*] Parameter number
 ** @param [wP] pqual [AjPStr*] Qualifier name copied on success
 ** @param [wP] pvalue [AjPStr*] Qualifier value copied on success
-** @param [w] number [int*] Qualifier number
+** @param [w] number [ajint*] Qualifier number
 ** @param [wP] acd [AcdPAcd*] Qualifier data
 ** @return [ajint] Number of arguments consumed
 ** @@
@@ -10469,6 +10880,10 @@ static ajint acdIsQual (char* arg, char* arg2, ajint *iparam, AjPStr *pqual,
 
   ret = 1;
   (void) ajStrAssC (pqual, cp);	/* qualifier with '-' or '/' removed */
+
+  /*
+  ** qualifiers starting 'no' are boolean 'no'
+  */
 
   if (qstart && ajStrPrefixC(*pqual, "no")) { /* boolean prefix */
     acdQualParse (pqual, &qmaster, number);
@@ -10529,8 +10944,23 @@ static ajint acdIsQual (char* arg, char* arg2, ajint *iparam, AjPStr *pqual,
 
   if (!gotvalue) {
     acdLog ("testing for a value\n");
-    if (!strcmp(acdType[acdListCurr->Type].Name, "bool"))
-      (void) ajStrAssC(pvalue, "Y");
+
+    /*
+    ** Bool qualifiers can have no value
+    ** or can be followed by a valid Bool value
+    */
+
+    if (!strcmp(acdType[acdListCurr->Type].Name, "bool")) {
+      if (acdValIsBool(arg2)) {	/* bool value, accept */
+	ajDebug("acdValIsBool -%s '%s'\n", arg, arg2); 
+	gotvalue = ajTrue;
+	ret = 2;
+	(void) ajStrAssC(pvalue, arg2);
+      }
+      else {			/* we must mean true */
+	(void) ajStrAssC(pvalue, "Y");
+      }
+    }
     else {
       if (!arg2) {
 	(void) ajStrToBool ((*acd)->DefStr[DEF_MISSING], &ismissing);
@@ -10560,11 +10990,63 @@ static ajint acdIsQual (char* arg, char* arg2, ajint *iparam, AjPStr *pqual,
 	(void) ajStrAssC (pvalue, arg2);
       }
       else
-        (void) ajStrAssC (pvalue, "");
+	(void) ajStrAssC (pvalue, "");
     }
   }
 
   return ret;
+}
+
+/* @funcstatic acdValIsBool ***************************************************
+**
+** Tests whether a value on the command line is a valid Boolean value
+**
+** @param [r] arg [char*] COmmand live argument value
+** @return [AjBool] ajTrue if the value is boolean,
+**                  but not whether it is true or false.
+******************************************************************************/
+
+static AjBool acdValIsBool (char* arg) {
+
+  if (!arg) return ajFalse;
+  switch (*arg) {
+  case 'n':
+  case 'N':
+    if (!arg[1]) return ajTrue;
+    return ajStrMatchCaseCC (arg, "no");
+    break;
+
+  case 'y':
+  case 'Y':
+    if (!arg[1]) return ajTrue;
+    return ajStrMatchCaseCC (arg, "yes");
+    break;
+
+  case 't':
+  case 'T':
+    if (!arg[1]) return ajTrue;
+    return ajStrMatchCaseCC (arg, "true");
+    break;
+
+  case 'f':
+  case 'F':
+    if (!arg[1]) return ajTrue;
+    return ajStrMatchCaseCC (arg, "false");
+    break;
+
+  case '0':
+    if (!arg[1]) return ajTrue;
+    return ajStrMatchCaseCC (arg, "0");
+    break;
+
+  case '1':
+    if (!arg[1]) return ajTrue;
+    return ajStrMatchCaseCC (arg, "1");
+    break;
+
+  default:
+    return ajFalse;
+  }
 }
 
 /* @funcstatic acdFindItem ****************************************************
@@ -10625,7 +11107,7 @@ static AcdPAcd acdFindItem (AjPStr item, ajint number) {
 ** @param [r] qual [AjPStr] Qualifier name
 ** @param [rN] master [AjPStr] Master qualifier name
 ** @param [r] PNum [ajint] Qualifier number (zero if a general qualifier)
-** @param [u] iparam [int*]  Current parameter number
+** @param [u] iparam [ajint*]  Current parameter number
 ** @return [AcdPAcd] ACD item for qualifier
 ** @@
 ******************************************************************************/
@@ -11069,7 +11551,7 @@ static AjBool acdGetAttr (AjPStr* result, AjPStr name, AjPStr attrib) {
 ** @param [uP] pqual [AjPStr*] Qualifier name set to lower case
 **        with number suffix removed
 ** @param [uP] pqmaster [AjPStr*] Master name for associated qualifier
-** @param [w] number [int*] Qualifier number suffix if any
+** @param [w] number [ajint*] Qualifier number suffix if any
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -11107,7 +11589,7 @@ static void acdQualParse (AjPStr* pqual, AjPStr* pqmaster, ajint* number) {
 **
 ** @param [u] token [char*] Qualifier name set to lower case
 **        with number suffix removed
-** @param [w] number [int*] Qualifier number suffix if any.
+** @param [w] number [ajint*] Qualifier number suffix if any.
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -11505,6 +11987,48 @@ static void acdPromptFeatout (AcdPAcd thys) {
   return;
 }
 
+/* @funcstatic acdPromptReport ************************************************
+**
+** Sets the default prompt for this ACD object to be a report output
+** prompt with "first", "second" etc. added.
+**
+** @param [r] thys [AcdPAcd] Current ACD object.
+** @return [void]
+** @@
+******************************************************************************/
+
+static void acdPromptReport (AcdPAcd thys) {
+  AjPStr* prompt;
+  static ajint count=0;
+
+  if (!thys->DefStr)
+    return;
+
+  prompt = &thys->DefStr[DEF_PROMPT];
+  if (ajStrLen(*prompt))
+    return;
+
+  count++;
+  switch (count) {
+  case 1: (void) ajFmtPrintS (prompt, "Output report"); break;
+  case 2: (void) ajFmtPrintS (prompt, "Second output report"); break;
+  case 3: (void) ajFmtPrintS (prompt, "Third output report"); break;
+  case 11:
+  case 12:
+  case 13:
+    (void) ajFmtPrintS (prompt, "%dth output report", count); break;
+  default:
+    switch (count % 10) {
+    case 1: (void) ajFmtPrintS (prompt, "%dst output report", count); break;
+    case 2: (void) ajFmtPrintS (prompt, "%dnd output report", count); break;
+    case 3: (void) ajFmtPrintS (prompt, "%drd output report", count); break;
+    default: (void) ajFmtPrintS (prompt, "%dth output report", count); break;
+    }
+    break;
+  }
+  return;
+}
+
 /* @funcstatic acdPromptSeqout ************************************************
 **
 ** Sets the default prompt for this ACD object to be a sequence output
@@ -11868,6 +12392,8 @@ static AjBool acdSetQualAppl (AcdPAcd thys, AjBool val) {
   static AjPStr setstr = NULL;
   static AjPStr valstr = NULL;
 
+  ajDebug("acdSetQualAppl '%S'\n", thys->Name);
+
   for(i=0; acdQualAppl[i].Name; i++) {
     if (ajStrMatchC(thys->Name, acdQualAppl[i].Name)) {
       if (thys->Defined) {	/* User put it on the command line */
@@ -11884,25 +12410,25 @@ static AjBool acdSetQualAppl (AcdPAcd thys, AjBool val) {
 	  setval = val;
       }
       switch (i) {		/* see acdQualAppl for the correct order */
-      case 0:
-	acdDebug = setval;
-	/* ajDebug ("acdSetQualAppl acdDebug %B\n", acdDebug); */
-	acdDebugSet = ajTrue;
-	break;
-      case 1: acdAuto     = setval; break;
-      case 2: acdStdout   = setval; break;
-      case 3: acdFilter   = setval;
+      case 0: acdAuto     = setval; break;
+      case 1: acdStdout   = setval; break;
+      case 2: acdFilter   = setval;
 	if (acdFilter) {
 	  acdAuto   = ajTrue;
 	  acdStdout = ajTrue;
 	}
 	break;
-      case 4: acdOptions  = setval; break;
-      case 5: acdVerbose  = setval; break;
-      case 6: acdDoHelp   = setval; break;
-      case 7: acdDoLog    = setval; break;
-      case 8: acdDoPretty = setval; break;
-      case 9: acdTable    = setval; break;
+      case 3: acdOptions  = setval; break;
+      case 4:
+	acdDebug = setval;
+	/* ajDebug ("acdSetQualAppl acdDebug %B\n", acdDebug); */
+	acdDebugSet = ajTrue;
+	break;
+      case 5: acdDoLog    = setval; break;
+      case 6: acdDoPretty = setval; break;
+      case 7: acdTable    = setval; break;
+      case 8: acdDoHelp   = setval; break;
+      case 9: acdVerbose  = setval; break;
       }
       return ajTrue;
     }
@@ -12675,4 +13201,26 @@ void ajAcdPrintType (AjPFile outf, AjBool full) {
   ajFmtPrintF (outf, "}\n");
   
   return;
+}
+
+/* @funcstatic acdVocabCheck **************************************************
+**
+** Checks for a string in a controlled vocabulary of character strings,
+** ended with a NULL.
+**
+** @param [R] str [AjPStr] Test string
+** @param [R] vocab [char**] Controlled vocabulary
+** @return [AjBool] ajTrue if the string matched on of the words
+******************************************************************************/
+
+AjBool acdVocabCheck (AjPStr str, char** vocab) {
+
+  ajint i=0;
+  while (vocab[i]) {
+    if (ajStrMatchCaseC(str, vocab[i]))
+        return ajTrue;
+    i++;
+  }
+
+  return ajFalse;
 }

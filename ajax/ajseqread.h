@@ -27,8 +27,8 @@ extern "C"
 ******************************************************************************/
 
 typedef struct SeqSAccess {
-  char *Name;
-  AjBool (*Access) (AjPSeqin seqin);
+  char *Name;			/* Access method name used in emboss.default */
+  AjBool (*Access) (AjPSeqin seqin); /* Access function */
 } SeqOAccess, *SeqPAccess;
 
 AjPSeqall    ajSeqallFile (AjPStr usa);
@@ -37,6 +37,7 @@ AjBool       ajSeqGetFromUsa (AjPStr thys, AjBool protein, AjPSeq *seq);
 void         ajSeqinClear (AjPSeqin thys);
 void         ajSeqinDel (AjPSeqin* pthis);
 AjPSeqin     ajSeqinNew (void);
+AjBool       ajSeqParseFasta(AjPStr str, AjPStr* id, AjPStr* acc, AjPStr* desc);
 AjBool       ajSeqParseNcbi(AjPStr str, AjPStr* id, AjPStr* acc, AjPStr* desc);
 void         ajSeqinSetNuc (AjPSeqin seqin);
 void         ajSeqinSetProt (AjPSeqin seqin);
@@ -45,28 +46,6 @@ void         ajSeqinUsa (AjPSeqin* pthis, AjPStr Usa);
 void         ajSeqPrintInFormat (AjPFile outf, AjBool full);
 AjBool       ajSeqRead (AjPSeq thys, AjPSeqin seqin);
 AjBool       ajSeqsetRead (AjPSeqset thys, AjPSeqin seqin);
-AjBool 	     ajSeqABITest(AjPFile fp);
-AjBool 	     ajSeqABIReadSeq(AjPFile fp, ajlong baseO,ajlong numBases,
-                             AjPStr* nseq);
-AjBool 	     ajSeqABIMachineName(AjPFile fp,AjPStr* machine);
-ajint 	     ajSeqABIGetNData(AjPFile fp);
-ajint	     ajSeqABIGetNBase(AjPFile fp);
-void 	     ajSeqABIGetData(AjPFile fp,ajlong *Offset,ajlong numPoints, 
-                             AjPInt2d trace);
-void 	     ajSeqABIGetBasePosition(AjPFile fp,ajlong numBases, 
-                             AjPShort* basePositions);
-void 	     ajSeqABIGetSignal(AjPFile fp,ajlong fwo_,
-                    	       ajshort sigC,ajshort sigA,
-                   	       ajshort sigG,ajshort sigT);
-float 	     ajSeqABIGetBaseSpace(AjPFile fp);
-ajint	     ajSeqABIGetBaseOffset(AjPFile fp);
-ajint 	     ajSeqABIGetBasePosOffset(AjPFile fp);
-ajint	     ajSeqABIGetFWO(AjPFile fp);
-ajint 	     ajSeqABIGetPrimerOffset(AjPFile fp);
-ajint	     ajSeqABIGetPrimerPosition(AjPFile fp);
-AjBool 	     ajSeqABIGetTraceOffset(AjPFile fp,ajlong *Offset);
-
-
 
 #endif
 

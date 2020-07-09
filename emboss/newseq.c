@@ -22,40 +22,47 @@
 
 #include "emboss.h"
 
+
+/* @prog newseq ***************************************************************
+**
+** Type in a short new sequence
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
 
-  AjPSeqout seqout;
-  AjPSeq seq = NULL;
-  AjPStr name = NULL;
-  AjPStr desc = NULL;
-  AjPStr sequence = NULL;
-  AjPStr *type;
+    AjPSeqout seqout;
+    AjPSeq seq = NULL;
+    AjPStr name = NULL;
+    AjPStr desc = NULL;
+    AjPStr sequence = NULL;
+    AjPStr *type;
   
-  (void) embInit ("newseq", argc, argv);
+    (void) embInit ("newseq", argc, argv);
 
-  seqout = ajAcdGetSeqout ("outseq");
-  name = ajAcdGetString ("name");
-  desc = ajAcdGetString ("description");
-  sequence = ajAcdGetString ("sequence");
-  type = ajAcdGetList ("type");
+    seqout   = ajAcdGetSeqout ("outseq");
+    name     = ajAcdGetString ("name");
+    desc     = ajAcdGetString ("description");
+    sequence = ajAcdGetString ("sequence");
+    type     = ajAcdGetList   ("type");
 
-/* initialise the sequence */
-  seq = ajSeqNewL(ajStrLen(sequence));
+    /* initialise the sequence */
+    seq = ajSeqNewL(ajStrLen(sequence));
 
-/* assign some things to the sequence */
-  (void) ajSeqAssName(seq, name);
-  (void) ajSeqAssDesc(seq, desc);
-  if (!ajStrCmpC(type[0], "N")) {
-    (void) ajSeqSetNuc(seq);
-  } else {
-    (void) ajSeqSetProt(seq);
-  }
-  (void) ajSeqReplace(seq, sequence);
+    /* assign some things to the sequence */
+    (void) ajSeqAssName(seq, name);
+    (void) ajSeqAssDesc(seq, desc);
+    if (!ajStrCmpC(type[0], "N"))
+	(void) ajSeqSetNuc(seq);
+    else
+	(void) ajSeqSetProt(seq);
 
-  (void) ajSeqWrite (seqout, seq);  
-  (void) ajSeqWriteClose (seqout);
+    (void) ajSeqReplace(seq, sequence);
 
-  ajExit ();
-  return 0;
+    (void) ajSeqWrite (seqout, seq);  
+    (void) ajSeqWriteClose (seqout);
+
+    ajExit ();
+    return 0;
 }

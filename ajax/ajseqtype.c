@@ -14,6 +14,12 @@ enum ProtNuc {ISANY=0, ISNUC=1, ISPROT=2};
 ** gap conversion is a separate attribute, along with case convserion
 */
 
+/* @funclist seqType **********************************************************
+**
+** Functions to test each sequence type
+**
+******************************************************************************/
+
 static SeqOType seqType[] = {
   {"any",            AJFALSE, ISANY, ajSeqTypeAny,
                      "any valid sequence"}, /* reset type */
@@ -46,7 +52,8 @@ static SeqOType seqType[] = {
   {"gapany",         AJTRUE,  ISANY, ajSeqTypeGapany,   
                      "any valid sequence with gaps"}, /* reset type */
   {NULL,             AJFALSE, ISANY, NULL,            
-                     NULL} };
+                     NULL}
+};
 
 static void       seqGapSL (AjPStr* seq, char gapc, char padc, ajint ilen);
 static AjBool     seqTypeStopTrim (AjPSeq thys);

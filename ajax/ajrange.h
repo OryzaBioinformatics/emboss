@@ -6,6 +6,14 @@ extern "C"
 #ifndef ajrange_h
 #define ajrange_h
 
+/* @data AjPRange *******************************************************
+**
+** Data structure for AJAX sequence range specifications
+**
+** @alias AjORange
+** @alias AjSRange
+******************************************************************************/
+
 typedef struct AjSRange
 {
     ajint n;			/* Number of ranges */

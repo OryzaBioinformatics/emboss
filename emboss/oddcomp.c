@@ -28,302 +28,347 @@
 #include "emboss.h"
 
 
-ajint readexpfreq(AjPTable *exptable, AjPFile compdata, ajint *size);
-ajint makebigarray(ajlong no_elements, ajlong **bigarray);
+static ajint oddcomp_readexpfreq(AjPTable *exptable, AjPFile compdata,
+				 ajint *size);
+static ajint oddcomp_makebigarray(ajlong no_elements, ajlong **bigarray);
 
 
+
+
+/* @prog oddcomp **************************************************************
+**
+** Finds protein sequence regions with a biased composition
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
 
-  AjPSeqall seqall;
-  AjPSeq seq;
-  ajint word =2;
-  /*  AjBool inwindow;*/
-  AjPFile outfile;
-  AjPFile compdata;
-  ajint window;
-  ajint pos;
-  char *s;
-  ajlong result;
-  ajlong *bigarray;
-  ajlong *windowbuffer; /* ring buffer for sliding window */
-  ajulong no_elements;
-  AjBool first_time_round = ajTrue;
-  AjBool ignorebz = ajTrue;
-  ajulong count;
-  AjPStr dispseq=NULL;
-  AjPStr ajb=NULL;
-  ajulong total=0;
-  ajulong other=0;
-  AjBool otherflag;
-  AjBool seqisnuc=ajFalse;
-  ajint increment = 1;
-  ajint ringsize;
-  ajlong steps = 0;
-  /*  ajint count_of_sequence_names = 0;*/
-  AjPTable exptable = NULL;	/* table of expected frequencies */
+    AjPSeqall seqall;
+    AjPSeq seq;
+    ajint word =2;
+    /*  AjBool inwindow;*/
+    AjPFile outfile;
+    AjPFile compdata;
+    ajint window;
+    ajint pos;
+    char *s;
+    ajlong result;
+    ajlong *bigarray;
+    ajlong *windowbuffer;		/* ring buffer for sliding window */
+    ajulong no_elements;
+    AjBool first_time_round = ajTrue;
+    AjBool ignorebz = ajTrue;
+    ajulong count;
+    AjPStr dispseq=NULL;
+    AjPStr ajb=NULL;
+    ajulong total=0;
+    ajulong other=0;
+    AjBool otherflag;
+    AjBool seqisnuc=ajFalse;
+    ajint increment = 1;
+    ajint ringsize;
+    ajlong steps = 0;
+    /*  ajint count_of_sequence_names = 0;*/
+    AjPTable exptable = NULL;		/* table of expected frequencies */
 
 
-  ajlong exp_freq;
-  (void) embInit ("oddcomp", argc, argv);
+    ajlong exp_freq;
+    (void) embInit ("oddcomp", argc, argv);
 
-  seqall = ajAcdGetSeqall ("sequence");
-  window = ajAcdGetInt ("window");
-  outfile = ajAcdGetOutfile ("outfile");
-  compdata = ajAcdGetInfile ("compdata");
-  ringsize = window - word + 1; /* number of overlapping words in a window */
+    seqall = ajAcdGetSeqall ("sequence");
+    window = ajAcdGetInt ("window");
+    outfile = ajAcdGetOutfile ("outfile");
+    compdata = ajAcdGetInfile ("compdata");
+    /* number of overlapping words in a window */
+    ringsize = window - word + 1;
 
-/* Output some documentation to the results file */
-  (void) ajFmtPrintF(outfile, "#\n"
-		     "# Output from 'oddcomp'\n"
-		     "#\n");
-  (void) ajFmtPrintF(outfile,
-		     "# The Expected frequencies are taken from the file: %s\n",
-		     ajFileName(compdata));
+    /* Output some documentation to the results file */
+    (void) ajFmtPrintF(outfile, "#\n"
+		       "# Output from 'oddcomp'\n"
+		       "#\n");
+    (void) ajFmtPrintF(outfile,
+		       "# The Expected frequencies are taken from the "
+		       "file: %s\n", ajFileName(compdata));
 
-  /* read the required frequencies into a table */
-  (void) readexpfreq(&exptable, compdata, &word);
-
-
-  /* more notes */
-  (void) ajFmtPrintF(outfile, "#\n#\tWord size: %d\n",word);
+    /* read the required frequencies into a table */
+    (void) oddcomp_readexpfreq(&exptable, compdata, &word);
 
 
-
-  while (ajSeqallNext(seqall, &seq)) {
-
-    seqisnuc = ajSeqIsNuc(seq);
-
-    /* not interested in nucleotide sequences so ignore any that get in */
-    if (seqisnuc) {
-      continue;
-    }
-    /* ignore sequences shorter than the window of interest */
-    if (ajSeqLen(seq)<window) {
-      continue;
-    }
+    /* more notes */
+    (void) ajFmtPrintF(outfile, "#\n#\tWord size: %d\n",word);
 
 
-    /* we first of all need to make a store for the results in a nice big array */
-    /* also create the ring buffer */
-    if (first_time_round) {
 
-      if (!embNmerGetNoElements(&no_elements, word, seqisnuc, ignorebz)) {
-        (void) ajDie("The word size is too large for the data structure available.");
-      }
+    while (ajSeqallNext(seqall, &seq))
+    {
+	seqisnuc = ajSeqIsNuc(seq);
+
+	/* not interested in nucleotide sequences so ignore any that get in */
+	if (seqisnuc)
+	    continue;
+
+	/* ignore sequences shorter than the window of interest */
+	if (ajSeqLen(seq)<window)
+	    continue;
 
 
-      (void) makebigarray(no_elements, &bigarray);
+	/*
+	 *  we first of all need to make a store for the results in a
+	 *  nice big array
+	 */
+	if (first_time_round) {
 
-      (void) makebigarray(ringsize, &windowbuffer); /* create a ring buffer */
+	    if (!embNmerGetNoElements(&no_elements, word, seqisnuc, ignorebz))
+		(void) ajDie("The word size is too large for the data "
+			     "structure available.");
 
-      first_time_round = ajFalse;
-    }
+
+	    (void) oddcomp_makebigarray(no_elements, &bigarray);
+
+	    (void) oddcomp_makebigarray(ringsize, &windowbuffer); /* create a ring buffer */
+
+	    first_time_round = ajFalse;
+	}
     
-    (void) ajSeqToUpper(seq);
-    s = ajSeqChar(seq);
+	(void) ajSeqToUpper(seq);
+	s = ajSeqChar(seq);
 
-    /* initialise the results buffer for this sequence. 
-       each word will require a certain number of counts to get to the 
-       necessary frequency. Set the number of counts to negative this so
-       it is only necessary to check for counts >0. Also set the steps 
-       variable to go the number of steps needed before a new check needs 
-       to be made (count minimum number of words required before the state
-       can change.) 
-    */
+	/*  initialise the results buffer for this sequence. 
+	 *  each word will require a certain number of counts to get to the 
+	 *  necessary frequency. Set the number of counts to negative this so
+	 *  it is only necessary to check for counts >0. Also set the steps 
+	 *  variable to go the number of steps needed before a new check needs 
+	 *  to be made (count minimum number of words required before the state
+	 *  can change.) 
+	 */
+	for (count=0; count< no_elements;count++)
+	{
+	    (void) ajStrClear(&dispseq); 
+	    /*
+	     *  need to clear the string as embNmerInt2Prot will prepend
+	     *  to it
+	     */
+	    (void) embNmerInt2prot(&dispseq, word, count, ignorebz);
+	    ajb=ajTableGet (exptable, dispseq);
+	    if (ajb)
+		(void) ajStrToLong( ajb, &exp_freq);
+	    else
+		exp_freq=0;
 
-
- for (count=0; count< no_elements;count++){
-   (void) ajStrClear(&dispseq); 
-   /* need to clear the string as embNmerInt2Prot will prepend to it */
-
-   (void) embNmerInt2prot(&dispseq, word, count, ignorebz);
-   ajb=ajTableGet (exptable, dispseq);
-   if (ajb) {
-     (void) ajStrToLong( ajb, &exp_freq);
-     
-   }else {
-     exp_freq=0;
-   }
-   if ( exp_freq>0) {
-
-
-     /* set bigarray count to negative the count needed to exceed the frequency */
-          bigarray[count] = - exp_freq;
-   } else {
-     bigarray[count]=0;
-   }
-
-
- }
-
-
-    /*  Start at the first position, and fill the ring buffer by sliding one step at a time. */
-
-    for (pos=1;pos<= ringsize; pos += increment) {
-
-      result = embNmerProt2int(s, word, pos, &otherflag,ignorebz);
-      if (otherflag) {
-	windowbuffer[pos%ringsize]=-1;
-      } else {
-	windowbuffer[pos%ringsize]=result;
-	bigarray[result]++;
-      }
-    }
-    /* ringbuffer now full. calculate the number of steps to get a change in 
-	 state by working out the sum of negative values */
-
-    for (count=0; count<no_elements;count++){
-      if (bigarray[count]<0) {
-	steps -= bigarray[count];
-      }
-    }
-
-    for (pos=ringsize+1; pos <= ajSeqLen(seq)-word; pos += increment) {
-
-      /* have we got to check to see whether or not we have the necessary
-	 composition */
-
-      if (steps==0) {
-	for (count=0; count<no_elements;count++){
-	  if (bigarray[count]<0) {
-	    steps -= bigarray[count];
-	  }
+	    if ( exp_freq>0)
+		/*
+		 *  set bigarray count to negative the count needed to
+		 *  exceed the frequency
+		 */
+		bigarray[count] = - exp_freq;
+	    else
+		bigarray[count]=0;
 	}
-	/*now check to see if the composition is a hit. */
-	if (steps==0) {
-	  ajFmtPrintF(outfile, "\t%s\n", ajSeqName(seq));
-	  total++;
-	  break;
+
+
+	/*
+	 *  Start at the first position, and fill the ring buffer by
+	 *  sliding one step at a time.
+	 */
+	for (pos=1;pos<= ringsize; pos += increment)
+	{
+	    result = embNmerProt2int(s, word, pos, &otherflag,ignorebz);
+	    if (otherflag)
+		windowbuffer[pos%ringsize]=-1;
+	    else
+	    {
+		windowbuffer[pos%ringsize]=result;
+		bigarray[result]++;
+	    }
 	}
-      } else {
-	steps--;
-      }
 
-      result = embNmerProt2int(s, word, pos, &otherflag,ignorebz);
+	/*
+	 *  ringbuffer now full. calculate the number of steps to get a
+	 *  change in  state by working out the sum of negative values
+	 */
 
-      /* uncount the word just leaving the window if it wasn't 'other'*/
-      if (windowbuffer[pos%ringsize] >=0){
-	bigarray[windowbuffer[pos%ringsize]]--;
-      } else {
-	other--;
-      }
-      /* count this word */
+	for (count=0; count<no_elements;count++)
+	    if (bigarray[count]<0)
+		steps -= bigarray[count];
+
+	for (pos=ringsize+1; pos <= ajSeqLen(seq)-word; pos += increment)
+	{
+	    /*
+	     *  have we got to check to see whether or not we have the
+	     *  necessary composition
+	     */
+	    if (steps==0)
+	    {
+		for (count=0; count<no_elements;count++)
+		    if (bigarray[count]<0)
+			steps -= bigarray[count];
+
+		/*now check to see if the composition is a hit. */
+		if (steps==0)
+		{
+		    ajFmtPrintF(outfile, "\t%s\n", ajSeqName(seq));
+		    total++;
+		    break;
+		}
+	    }
+	    else
+		steps--;
+
+	    result = embNmerProt2int(s, word, pos, &otherflag,ignorebz);
+
+	    /* uncount the word just leaving the window if it wasn't 'other'*/
+	    if (windowbuffer[pos%ringsize] >=0)
+		bigarray[windowbuffer[pos%ringsize]]--;
+	    else
+		other--;
+
+	    /* count this word */
 
 
-      if (!otherflag) {
-	windowbuffer[pos%ringsize] = result;
-	bigarray[result]++;
-      } else {
-	windowbuffer[pos%ringsize] = -1;
-	other++;
-      }
-    }	
+	    if (!otherflag)
+	    {
+		windowbuffer[pos%ringsize] = result;
+		bigarray[result]++;
+	    }
+	    else
+	    {
+		windowbuffer[pos%ringsize] = -1;
+		other++;
+	    }
+	}	
+    }
 
 
-  }
+    (void) ajFmtPrintF(outfile, "\n#\tEND\t#\n");
 
+    (void) ajFileClose(&outfile);
 
-  (void) ajFmtPrintF(outfile, "\n#\tEND\t#\n");
+    /* tidy up */
 
-  (void) ajFileClose(&outfile);
+    AJFREE (bigarray);
 
-  /* tidy up */
+    (void) ajStrTableFree(&exptable);
 
-  AJFREE (bigarray);
-
-  (void) ajStrTableFree(&exptable);
-
-  (void) ajExit ();
-  return 0;
+    ajExit ();
+    return 0;
 }
 
-/******************************************************/
+/* @funcstatic oddcomp_makebigarray ******************************************
+**
+** Undocumented.
+**
+** @param [?] no_elements [ajlong] Undocumented
+** @param [?] bigarray [ajlong**] Undocumented
+** @return [ajint] Undocumented
+** @@
+******************************************************************************/
 
+static ajint oddcomp_makebigarray(ajlong no_elements, ajlong **bigarray)
+{
 
-ajint makebigarray(ajlong no_elements, ajlong **bigarray) {
+    AJCNEW(*bigarray, no_elements);
 
-  AJCNEW(*bigarray, no_elements);
-  return 0;
+    return 0;
 }
-/******************************************************/
-ajint readexpfreq(AjPTable *exptable, AjPFile compdata, ajint *size) {
 
-  AjPStr line = NULL;
-  char whiteSpace[] = " \t\n\r";
-  AjPStrTok tokens;
-  AjPStr sizestr=NULL;
-  ajint thissize;
-  AjPStr key;
-  AjPStr value;
+/* @funcstatic oddcomp_readexpfreq *******************************************
+**
+** Undocumented.
+**
+** @param [?] exptable [AjPTable*] Undocumented
+** @param [?] compdata [AjPFile] Undocumented
+** @param [?] size [ajint*] Undocumented
+** @return [ajint] Undocumented
+** @@
+******************************************************************************/
 
-  /* initialise the hash table - use case-insensitive comparison */
+static ajint oddcomp_readexpfreq(AjPTable *exptable, AjPFile compdata,
+				 ajint *size)
+{
+    AjPStr line = NULL;
+    char whiteSpace[] = " \t\n\r";
+    AjPStrTok tokens;
+    AjPStr sizestr=NULL;
+    ajint thissize;
+    AjPStr key;
+    AjPStr value;
 
-  *exptable = ajStrTableNewCase(350);
+    /* initialise the hash table - use case-insensitive comparison */
+
+    *exptable = ajStrTableNewCase(350);
   
 
 
-  /* read the file */
-  while (ajFileReadLine(compdata, &line)) {
+    /* read the file */
+    while (ajFileReadLine(compdata, &line))
+    {
+	/* skip comment and blank lines */
+	if (!ajStrFindC(line, "#"))
+	    continue;
+	if (!ajStrLen(line))
+	    continue;
 
+	/* look for the word size */
+	if (!ajStrFindC(line, "Word size"))
+	{
+	    (void) ajStrAssSub(&sizestr, line, 10, ajStrLen(line));
+	    (void) ajStrChomp(&sizestr);
+	    (void) ajStrToInt(sizestr, &thissize);
 
-    /* skip comment and blank lines */
-    if (!ajStrFindC(line, "#")) continue;
-    if (!ajStrLen(line)) continue;
-
-    /* look for the word size */
-    if (!ajStrFindC(line, "Word size")) {
-
-      (void) ajStrAssSub(&sizestr, line, 10, ajStrLen(line));
-      (void) ajStrChomp(&sizestr);
-      (void) ajStrToInt(sizestr, &thissize);
-
-      *size = thissize;
-      break;
-    } else {
-      (void) ajDie ("The 'Word size' line was not found, instead found:\n%S\n",
-		    line);
+	    *size = thissize;
+	    break;
+	}
+	else
+	    (void) ajDie ("The 'Word size' line was not found, "
+			  "instead found:\n%S\n",line);
     }
-  }
   
-  /* read the file */
-  while (ajFileReadLine(compdata, &line)) {
-
-
-    /* skip comment and blank lines */
-    if (!ajStrFindC(line, "#")) continue;
-    if (!ajStrLen(line)) continue;
+    /* read the file */
+    while (ajFileReadLine(compdata, &line))
+    {
+	/* skip comment and blank lines */
+	if (!ajStrFindC(line, "#"))
+	    continue;
+	if (!ajStrLen(line))
+	    continue;
  
-    /* look for the total number of counts - anything after this is our data */
-    if (!ajStrFindC(line, "Total")) break;
+	/*
+	 *  look for the total number of counts - anything after this is
+	 *  our data
+	 */
+	if (!ajStrFindC(line, "Total"))
+	    break;
+    }
 
-  }
+    /* read in the observed frequencies as a string */
+    while (ajFileReadLine(compdata, &line))
+    {
+	/* skip comment and blank lines */
+	if (!ajStrFindC(line, "#"))
+	    continue;
+	if (!ajStrLen(line))
+	    continue;
 
-  /* read in the observed frequencies as a string */
-  while (ajFileReadLine(compdata, &line)) {
+	tokens = ajStrTokenInit(line, whiteSpace); 
 
-    /* skip comment and blank lines */
-    if (!ajStrFindC(line, "#")) continue;
-    if (!ajStrLen(line)) continue;
+	/* get the word as the key */
+	key = ajStrNew();
+	(void) ajStrToken( &key, &tokens, NULL);
 
-    tokens = ajStrTokenInit(line, whiteSpace); 
+	/*
+	 *  get the observed count as the value - we'll use this as the
+	 *  expected frequency
+	 */
+	value = ajStrNew();
+	(void) ajStrToken( &value, &tokens, NULL);
+	(void) ajTablePut( *exptable, key, value);
+	(void) ajStrTokenClear( &tokens);
+    }    
 
-    /* get the word as the key */
-    key = ajStrNew();
-    (void) ajStrToken( &key, &tokens, NULL);
-
-    /* get the observed count as the value - we'll use this as the expected frequency */
-    value = ajStrNew();
-    (void) ajStrToken( &value, &tokens, NULL);
-    (void) ajTablePut( *exptable, key, value);
-    (void) ajStrTokenClear( &tokens);
-  }    
-
-  /* tidy up */
-  ajStrDel(&line);
-  ajStrDel(&sizestr);
+    /* tidy up */
+    ajStrDel(&line);
+    ajStrDel(&sizestr);
   
-  return 0;
+    return 0;
 }
-

@@ -14,3 +14,13 @@ appl: einverted [
   int: match [ def: 3 req: Y info: "Match score" ]
 
   int: mismatch [ def: -4 req: Y info: "Mismatch score" ]
+
+  int: maxrepeat [ 
+        optional: Y
+        def: 4000
+        info: "Maximum extent of repeats"
+        help: "Maximum separation between the start of repeat
+               and the end of the inverted repeat (the default 
+               is 4000 bases)."
+  ]
+

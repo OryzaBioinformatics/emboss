@@ -26,24 +26,40 @@
 #include <stdlib.h>
 
 
-void findbases(AjPStr *substr, ajint begin, ajint len, ajint window, ajint shift,
-               float *obsexp, float *xypc, AjPStr *bases, float *obsexpmax,
-	       ajint *plstart, ajint *plend);
-void countbases(char *seq, char *bases, ajint window, ajint *cx, ajint *cy,
-		ajint *cxpy);
-void identify(AjPFile outf, float *obsexp, float *xypc, AjBool *thresh,
-	      ajint begin, ajint len, ajint shift, char *bases, char *name,
-	      ajint minlen, float minobsexp, float minpc,AjPFeatTabOut featout);
-void reportislands(AjPFile outf, AjBool *thresh, char *bases, char *name,
-		   float minobsexp, float minpc, ajint minlen, ajint begin,
-		   ajint len);
-void plotit(char *seq, ajint begin, ajint len, ajint shift, float *obsexp,
-	    float *xypc, AjBool *thresh, char *bases, float obsexpmax,
-	    ajint plstart, ajint plend, AjBool doobsexp,
-	    AjBool docg, AjBool dopc, AjPGraph mult);
+static void cpgplot_findbases(AjPStr *substr, ajint begin, ajint len,
+			      ajint window, ajint shift, float *obsexp,
+			      float *xypc, AjPStr *bases, float *obsexpmax,
+			      ajint *plstart, ajint *plend);
 
-void dumpfeatout(AjPFeatTabOut featout, AjBool *thresh, char *seqname,int begin,int len);
+static void cpgplot_countbases(char *seq, char *bases, ajint window,
+			       float *cx, float *cy, float *cxpy);
 
+static void cpgplot_identify(AjPFile outf, float *obsexp, float *xypc,
+			     AjBool *thresh, ajint begin, ajint len,
+			     ajint shift, char *bases, char *name,
+			     ajint minlen, float minobsexp, float minpc,
+			     AjPFeattabOut featout);
+
+static void cpgplot_reportislands(AjPFile outf, AjBool *thresh, char *bases,
+				  char *name, float minobsexp, float minpc,
+				  ajint minlen, ajint begin, ajint len);
+
+static void cpgplot_plotit(char *seq, ajint begin, ajint len, ajint shift,
+			   float *obsexp, float *xypc, AjBool *thresh,
+			   char *bases, float obsexpmax, ajint plstart,
+			   ajint plend, AjBool doobsexp,
+			   AjBool docg, AjBool dopc, AjPGraph mult);
+
+static void cpgplot_dumpfeatout(AjPFeattabOut featout, AjBool *thresh,
+				char *seqname, ajint begin, ajint len);
+
+
+
+/* @prog cpgplot **************************************************************
+**
+** Plot CpG rich areas
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -78,7 +94,7 @@ int main(int argc, char **argv)
     
     ajint i;
     ajint maxarr;
-    AjPFeatTabOut featout=NULL;
+    AjPFeattabOut featout=NULL;
 
     
     (void) ajGraphInit("cpgplot",argc,argv);
@@ -114,7 +130,8 @@ int main(int argc, char **argv)
 	(void) ajStrAssSubC(&substr,ajStrStr(strand),--begin,--end);
 	len=ajStrLen(substr);
 
-	if (len > maxarr) {
+	if (len > maxarr)
+	{
 	  AJCRESIZE(obsexp, len);
 	  AJCRESIZE(thresh, len);
 	  AJCRESIZE(xypc, len);
@@ -127,18 +144,18 @@ int main(int argc, char **argv)
 	
 	
 
-	findbases(&substr, begin, len, window, shift, obsexp, xypc,
-		  &bases, &obsexpmax, &plstart, &plend);
+	cpgplot_findbases(&substr, begin, len, window, shift, obsexp, xypc,
+			  &bases, &obsexpmax, &plstart, &plend);
 
 	
-	identify(outf, obsexp, xypc, thresh, 0, len, shift,
-		 ajStrStr(bases), ajSeqName(seq), minlen, minobsexp, minpc,
-		 featout);
+	cpgplot_identify(outf, obsexp, xypc, thresh, 0, len, shift,
+			 ajStrStr(bases), ajSeqName(seq), minlen, minobsexp,
+			 minpc, featout);
 	
 
-	plotit(ajSeqName(seq), begin, len, shift, obsexp, xypc, thresh,
-	       ajStrStr(bases), obsexpmax, plstart, plend,
-	       doobsexp, docg, dopc, mult);
+	cpgplot_plotit(ajSeqName(seq), begin, len, shift, obsexp, xypc, thresh,
+		       ajStrStr(bases), obsexpmax, plstart, plend,
+		       doobsexp, docg, dopc, mult);
 
 	ajStrDel(&strand);
    }
@@ -154,13 +171,30 @@ int main(int argc, char **argv)
 
 
 
-void findbases(AjPStr *substr, ajint begin, ajint len, ajint window,
-	       ajint shift, float *obsexp, float *xypc, AjPStr *bases,
-	       float *obsexpmax, ajint *plstart, ajint *plend)
+/* @funcstatic cpgplot_findbases *********************************************
+**
+** Undocumented.
+**
+** @param [?] substr [AjPStr*] Undocumented
+** @param [?] begin [ajint] Undocumented
+** @param [?] len [ajint] Undocumented
+** @param [?] window [ajint] Undocumented
+** @param [?] shift [ajint] Undocumented
+** @param [?] obsexp [float*] Undocumented
+** @param [?] xypc [float*] Undocumented
+** @param [?] bases [AjPStr*] Undocumented
+** @param [?] obsexpmax [float*] Undocumented
+** @param [?] plstart [ajint*] Undocumented
+** @param [?] plend [ajint*] Undocumented
+** @@
+******************************************************************************/
+
+static void cpgplot_findbases(AjPStr *substr, ajint begin, ajint len,
+			      ajint window, ajint shift, float *obsexp,
+			      float *xypc, AjPStr *bases, float *obsexpmax,
+			      ajint *plstart, ajint *plend)
 {
-    ajint cxpy;
-    ajint cx;
-    ajint cy;
+    float cxpy;
     float cxf;
     float cyf;
     float windowf;
@@ -185,12 +219,10 @@ void findbases(AjPStr *substr, ajint begin, ajint len, ajint window,
     {
 	j = i+offset;
 	p = ajStrStr(*substr) + i;
-	countbases(p, q, window, &cx, &cy, &cxpy);
+	cpgplot_countbases(p, q, window, &cxf, &cyf, &cxpy);
 	
-	obs = (float) cxpy;
-	exp = ((float)(cx*cy))/windowf;
-	cxf=(float)cx;
-	cyf=(float)cy;
+	obs = cxpy;
+	exp = (cxf*cyf)/windowf;
 	if(!exp) obsexp[j]=0.0;
 	else
 	{
@@ -206,10 +238,23 @@ void findbases(AjPStr *substr, ajint begin, ajint len, ajint window,
 
 
 
+/* @funcstatic cpgplot_countbases ********************************************
+**
+** Undocumented.
+**
+** @param [?] seq [char*] Undocumented
+** @param [?] bases [char*] Undocumented
+** @param [?] window [ajint] Undocumented
+** @param [?] cx [float*] Undocumented
+** @param [?] cy [float*] Undocumented
+** @param [?] cxpy [float*] Undocumented
+** @@
+******************************************************************************/
 
 
-void countbases(char *seq, char *bases, ajint window, ajint *cx, ajint *cy,
-		ajint *cxpy)
+
+static void cpgplot_countbases(char *seq, char *bases, ajint window,
+			       float *cx, float *cy, float *cxpy)
 {
     ajint i;
     
@@ -218,7 +263,7 @@ void countbases(char *seq, char *bases, ajint window, ajint *cx, ajint *cy,
     ajint codea;
     ajint codeb;
 
-    *cxpy = *cx = *cy = 0;
+    *cxpy = *cx = *cy = 0.;
 
     codex = ajAZToBin(bases[0]);
     codey = ajAZToBin(bases[1]);
@@ -229,30 +274,59 @@ void countbases(char *seq, char *bases, ajint window, ajint *cx, ajint *cy,
     {
 	codea=codeb;
 	codeb=ajAZToBin(seq[i+1]);
-	if(codea && !(codea & (15-codex)))
-	{
-	    ++*cx;
-	    if(codeb && !(codeb & (15-codey))) ++*cxpy;
-	}
-	if(codea && !(codea & (15-codey))) ++*cy;
+
+        if(!(15-codea))   /* look for abiguity code 'N' */
+        {
+          *cx = *cx + 0.25;
+          if(!(15-codeb)) 
+             *cxpy = *cxpy + 0.0625; 
+        } 
+        else 
+        {
+          if(codea && !(codea & (15-codex)))
+          {
+            ++*cx;
+            if(codeb && !(codeb & (15-codey))) ++*cxpy;
+          }
+          if(codea && !(codea & (15-codey))) ++*cy;
+        }
     }
 
     return;
 }
 
-/*
+
+
+
+/* @funcstatic cpgplot_identify **********************************************
+**
 **    This subroutine identifies the CpG line, identifying the possible
 **    dinucleotide 'islands' in the sequence. These are defined as
 **    base positions where, over an average of 10 windows, the calculated
 **    % composition is over 50% and the calculated Obs/Exp ratio is over 0.6
 **    and the conditions hold for a minimum of 200 bases.
 **
-*/
+** @param [?] outf [AjPFile] Undocumented
+** @param [?] obsexp [float*] Undocumented
+** @param [?] xypc [float*] Undocumented
+** @param [?] thresh [AjBool*] Undocumented
+** @param [?] begin [ajint] Undocumented
+** @param [?] len [ajint] Undocumented
+** @param [?] shift [ajint] Undocumented
+** @param [?] bases [char*] Undocumented
+** @param [?] name [char*] Undocumented
+** @param [?] minlen [ajint] Undocumented
+** @param [?] minobsexp [float] Undocumented
+** @param [?] minpc [float] Undocumented
+** @param [?] featout [AjPFeattabOut] Undocumented
+** @@
+******************************************************************************/
 
-void identify(AjPFile outf, float *obsexp, float *xypc, AjBool *thresh,
-	      ajint begin, ajint len, ajint shift, char *bases, char *name,
-	      ajint minlen, float minobsexp, float minpc,
-	      AjPFeatTabOut featout)
+static void cpgplot_identify(AjPFile outf, float *obsexp, float *xypc,
+			     AjBool *thresh, ajint begin, ajint len,
+			     ajint shift, char *bases, char *name,
+			     ajint minlen, float minobsexp, float minpc,
+			     AjPFeattabOut featout)
 {
   static ajint avwindow=10;
   float avpc;
@@ -268,7 +342,7 @@ void identify(AjPFile outf, float *obsexp, float *xypc, AjBool *thresh,
   for(i=0; i<len; ++i) thresh[i]=ajFalse;
 
   sumlen=0;
-/*  posmin = begin;*/
+  /*  posmin = begin;*/
   for(pos=0,first=0;pos<(len-avwindow*shift);pos+=shift)
   {
     sumpc=sumobsexp=0.0;
@@ -293,7 +367,8 @@ void identify(AjPFile outf, float *obsexp, float *xypc, AjBool *thresh,
     }
     else
     {
-      if(sumlen >= minlen) {/* island ajlong enough? */
+      if(sumlen >= minlen)
+      {	/* island long enough? */
 	for(i=first; i<=pos-shift;++i)
 	  thresh[i]=ajTrue;
       }
@@ -301,24 +376,42 @@ void identify(AjPFile outf, float *obsexp, float *xypc, AjBool *thresh,
     }
   }
 
-  if(sumlen>=minlen) {
+  if(sumlen>=minlen)
+  {
     for(i=first;i<len;++i)
       thresh[i]=ajTrue;
   }
 
-  reportislands(outf, thresh, bases, name, minobsexp, minpc,
+  cpgplot_reportislands(outf, thresh, bases, name, minobsexp, minpc,
 		minlen, begin, len);
 
-  dumpfeatout(featout,thresh, name, begin, len );
+  cpgplot_dumpfeatout(featout,thresh, name, begin, len );
+
   return;
 }
 
 
 
 
-void reportislands(AjPFile outf, AjBool *thresh, char *bases, char *name,
-		   float minobsexp, float minpc, ajint minlen, ajint begin,
-		   ajint len)
+/* @funcstatic cpgplot_reportislands *****************************************
+**
+** Undocumented.
+**
+** @param [?] outf [AjPFile] Undocumented
+** @param [?] thresh [AjBool*] Undocumented
+** @param [?] bases [char*] Undocumented
+** @param [?] name [char*] Undocumented
+** @param [?] minobsexp [float] Undocumented
+** @param [?] minpc [float] Undocumented
+** @param [?] minlen [ajint] Undocumented
+** @param [?] begin [ajint] Undocumented
+** @param [?] len [ajint] Undocumented
+** @@
+******************************************************************************/
+
+static void cpgplot_reportislands(AjPFile outf, AjBool *thresh, char *bases,
+				  char *name, float minobsexp, float minpc,
+				  ajint minlen, ajint begin, ajint len)
 {
     AjBool island;
     ajint startpos=0;
@@ -370,12 +463,33 @@ void reportislands(AjPFile outf, AjBool *thresh, char *bases, char *name,
 
 
 
+/* @funcstatic cpgplot_plotit ************************************************
+**
+** Undocumented.
+**
+** @param [?] seq [char*] Undocumented
+** @param [?] begin [ajint] Undocumented
+** @param [?] len [ajint] Undocumented
+** @param [?] shift [ajint] Undocumented
+** @param [?] obsexp [float*] Undocumented
+** @param [?] xypc [float*] Undocumented
+** @param [?] thresh [AjBool*] Undocumented
+** @param [?] bases [char*] Undocumented
+** @param [?] obsexpmax [float] Undocumented
+** @param [?] plstart [ajint] Undocumented
+** @param [?] plend [ajint] Undocumented
+** @param [?] doobsexp [AjBool] Undocumented
+** @param [?] docg [AjBool] Undocumented
+** @param [?] dopc [AjBool] Undocumented
+** @param [?] graphs [AjPGraph] Undocumented
+** @@
+******************************************************************************/
 
-
-void plotit(char *seq, ajint begin, ajint len, ajint shift, float *obsexp,
-	    float *xypc, AjBool *thresh, char *bases, float obsexpmax,
-	    ajint plstart, ajint plend, AjBool doobsexp,
-	    AjBool docg, AjBool dopc, AjPGraph graphs)
+static void cpgplot_plotit(char *seq, ajint begin, ajint len, ajint shift,
+			   float *obsexp, float *xypc, AjBool *thresh,
+			   char *bases, float obsexpmax, ajint plstart,
+			   ajint plend, AjBool doobsexp, AjBool docg,
+			   AjBool dopc, AjPGraph graphs)
 
 {
     AjPGraphData tmGraph  = NULL;
@@ -499,26 +613,44 @@ void plotit(char *seq, ajint begin, ajint len, ajint shift, float *obsexp,
 
     if(docg)
 	AJFREE (tmp);
+
+    return;
 }
 
-void dumpfeatout(AjPFeatTabOut featout, AjBool *thresh, char *seqname,
-		 ajint begin,int len)
+
+
+
+/* @funcstatic cpgplot_dumpfeatout *******************************************
+**
+** Undocumented.
+**
+** @param [?] featout [AjPFeattabOut] Undocumented
+** @param [?] thresh [AjBool*] Undocumented
+** @param [?] seqname [char*] Undocumented
+** @param [?] begin [ajint] Undocumented
+** @param [?] len [ajint] Undocumented
+** @@
+******************************************************************************/
+
+static void cpgplot_dumpfeatout(AjPFeattabOut featout, AjBool *thresh,
+				char *seqname, ajint begin, ajint len)
 {
     AjBool island;
     ajint startpos=0;
     ajint endpos;
     ajint i;
-    AjPFeatTable feattable;
-    AjPFeatLexicon dict=NULL;
-    AjPStr name=NULL,score=NULL,desc=NULL,source=NULL,type=NULL;
-    AjEFeatStrand strand=AjStrandWatson;
-    AjEFeatFrame frame=AjFrameUnknown;
+    AjPFeattable feattable;
+    AjPStr name=NULL;
+    AjPStr source=NULL;
+    AjPStr type=NULL;
+    char strand='+';
+    ajint frame=0;
     AjPFeature feature;
-    
+    float score = 0.0;
+
     ajStrAssC(&name,seqname);
     
-    feattable = ajFeatTabNew(name,dict);
-    dict = feattable->Dictionary;
+    feattable = ajFeattableNewDna(name);
     
     ajStrAssC(&source,"cpgplot");
     ajStrAssC(&type,"misc_feature");
@@ -533,10 +665,9 @@ void dumpfeatout(AjPFeatTabOut featout, AjBool *thresh, char *seqname,
 	    if(!island)
 	    {
 		endpos = i;
-		feature = ajFeatureNew(feattable, source, type,
-				       startpos+begin+1,endpos+begin, score,
-				       strand, frame,
-				       desc , 0, 0) ;    
+		feature = ajFeatNew(feattable, source, type,
+				    startpos+begin+1,endpos+begin,
+				    score, strand, frame) ;
 		if(!feature)
 		  ajDebug("Error feature not added to feature table");
 	    }
@@ -551,14 +682,13 @@ void dumpfeatout(AjPFeatTabOut featout, AjBool *thresh, char *seqname,
     if(island)
     {
 	endpos=len-1;
-	feature = ajFeatureNew(feattable, source, type,
-			       startpos+begin+1,endpos+begin, score, strand,
-			       frame, desc , 0, 0) ;    
+	feature = ajFeatNew(feattable, source, type,
+			    startpos+begin+1,endpos+begin,
+			    score, strand, frame) ;
     }
     ajFeatSortByStart(feattable);
-    ajFeaturesWrite (featout, feattable);
-    ajFeatTabDel(&feattable);
-    ajFeatDeleteDict(dict);
+    ajFeatWrite (featout, feattable);
+    ajFeattabDel(&feattable);
 
     ajStrDel(&source);
     ajStrDel(&type);

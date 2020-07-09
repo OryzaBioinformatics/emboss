@@ -23,9 +23,16 @@
 #include "emboss.h"
 #include <strings.h>
 
-void print_hits(AjPList l, AjPFile outf, ajint be, char *s);
+static void digest_print_hits(AjPList l, AjPFile outf, ajint be, char *s);
 
 
+
+
+/* @prog digest ***************************************************************
+**
+** Protein proteolytic enzyme or reagent cleavage digest
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -88,7 +95,7 @@ int main(int argc, char **argv)
     {
 	ajFmtPrintF(outf,"Complete digestion with %s yields %d fragments:\n",
 		    ajStrStr(rname),ncomp);
-	print_hits(l,outf,be,ajStrStr(substr));
+	digest_print_hits(l,outf,be,ajStrStr(substr));
     }
   
     if(overlap && !allpartials && npart)
@@ -96,7 +103,7 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf,"\n\nPartial digest with %s yields %d extras.\n",
 		    ajStrStr(rname),npart);
 	ajFmtPrintF(outf,"Only overlapping partials shown:\n");
-	print_hits(pa,outf,be,ajStrStr(substr));
+	digest_print_hits(pa,outf,be,ajStrStr(substr));
     }
 
     if(allpartials && npart)
@@ -104,7 +111,7 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf,"\n\nPartial digest with %s yields %d extras.\n",
 		    ajStrStr(rname),npart);
 	ajFmtPrintF(outf,"All partials shown:\n");
-	print_hits(pa,outf,be,ajStrStr(substr));
+	digest_print_hits(pa,outf,be,ajStrStr(substr));
     }
     
 
@@ -121,9 +128,20 @@ int main(int argc, char **argv)
 }
 
 
+/* @funcstatic digest_print_hits **********************************************
+**
+** Undocumented.
+**
+** @param [?] l [AjPList] Undocumented
+** @param [?] outf [AjPFile] Undocumented
+** @param [?] be [ajint] Undocumented
+** @param [?] s [char*] Undocumented
+** @@
+******************************************************************************/
 
 
-void print_hits(AjPList l, AjPFile outf, ajint be, char *s)
+
+void digest_print_hits(AjPList l, AjPFile outf, ajint be, char *s)
 {
     EmbPPropFrag fr;
     AjPStr  t;

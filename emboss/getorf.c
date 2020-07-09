@@ -22,15 +22,18 @@
 
 #include "emboss.h"
 
-static void WriteORF(AjPSeq seq, ajint len, ajint seqlen, AjBool sense, ajint find,
-		     ajint *orf_no, ajint start, ajint pos, AjPStr str,
-		     AjPSeqout seqout, ajint around);
+static void getorf_WriteORF(AjPSeq seq, ajint len, ajint seqlen,
+			    AjBool sense, ajint find, ajint *orf_no,
+			    ajint start, ajint pos, AjPStr str,
+			    AjPSeqout seqout, ajint around);
 
-static void AppORF(ajint find, AjPStr *str, char *chrseq, ajint pos, char aa);
+static void getorf_AppORF(ajint find, AjPStr *str, char *chrseq, ajint pos,
+			  char aa);
 
-static void FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable, ajint minsize,
-		     AjPSeqout seqout, AjBool sense, AjBool circular,
-		     ajint find, ajint *orf_no, AjBool methionine, ajint around);
+static void getorf_FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable,
+			    ajint minsize, AjPSeqout seqout, AjBool sense,
+			    AjBool circular, ajint find, ajint *orf_no,
+			    AjBool methionine, ajint around);
 
 
 /* types of control codon */
@@ -45,6 +48,13 @@ static void FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable, ajint minsize,
 #define AROUND_START 4
 #define AROUND_INIT_STOP 5
 #define AROUND_END_STOP 6
+
+
+/* @prog getorf ***************************************************************
+**
+** Finds and extracts open reading frames (ORFs)
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -63,13 +73,13 @@ int main(int argc, char **argv)
   
     AjPSeq seq=NULL;
     AjPTrn trnTable;
-    AjPStr sseq=NULL;			/* sequence string */
+    AjPStr sseq=NULL;	/* sequence string */
 
-    ajint orf_no;				/* ORF number to append to name of
-					   sequence to create unique name */
+    ajint orf_no;	/* ORF number to append to name of
+			   sequence to create unique name */
 
-    AjBool sense;			/* ajTrue = forward sense,
-					   ajFalse = reverse sense */
+    AjBool sense;	/* ajTrue = forward sense,
+			   ajFalse = reverse sense */
     ajint len;
 
     (void) embInit ("getorf", argc, argv);
@@ -120,16 +130,17 @@ int main(int argc, char **argv)
 	}
 
 	/* find the ORFs */
-	(void) FindORFs(seq, len, trnTable, minsize, seqout, sense, circular,
-			find, &orf_no, methionine, around);
+	(void) getorf_FindORFs(seq, len, trnTable, minsize, seqout, sense,
+			       circular, find, &orf_no, methionine, around);
 
 	/* now reverse complement the sequence and do it again */
 	if (reverse)
 	{
 	    sense = ajFalse;
 	    (void) ajSeqReverse(seq);
-	    (void) FindORFs(seq, len, trnTable, minsize, seqout, sense,
-			    circular, find, &orf_no, methionine, around);
+	    (void) getorf_FindORFs(seq, len, trnTable, minsize, seqout, sense,
+				   circular, find, &orf_no, methionine,
+				   around);
 	}
     }
   
@@ -147,12 +158,29 @@ int main(int argc, char **argv)
 
 
 
-/******************************************************************************/
-/* finds all orfs in the current sense and writes them out */
 
-static void FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable, ajint minsize,
-		     AjPSeqout seqout, AjBool sense, AjBool circular,
-		     ajint find, ajint *orf_no, AjBool methionine, ajint around)
+/* @funcstatic getorf_FindORFs ***********************************************
+**
+** finds all orfs in the current sense and writes them out
+**
+** @param [?] seq [AjPSeq] Undocumented
+** @param [?] len [ajint] Undocumented
+** @param [?] trnTable [AjPTrn] Undocumented
+** @param [?] minsize [ajint] Undocumented
+** @param [?] seqout [AjPSeqout] Undocumented
+** @param [?] sense [AjBool] Undocumented
+** @param [?] circular [AjBool] Undocumented
+** @param [?] find [ajint] Undocumented
+** @param [?] orf_no [ajint*] Undocumented
+** @param [?] methionine [AjBool] Undocumented
+** @param [?] around [ajint] Undocumented
+** @@
+******************************************************************************/
+
+static void getorf_FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable,
+			    ajint minsize, AjPSeqout seqout, AjBool sense,
+			    AjBool circular, ajint find, ajint *orf_no,
+			    AjBool methionine, ajint around)
 {
 
     AjBool ORF[3];			/* true if found an ORF */
@@ -241,7 +269,8 @@ static void FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable, ajint minsize,
 		   last codon to the sequence - otherwise, ignore the STOP
 		   codon */
 		if (pos >= seqlen-5 && pos < seqlen-2)
-		    (void) AppORF(find, &newstr[frame], chrseq, pos, aa);
+		    (void) getorf_AppORF(find, &newstr[frame], chrseq, pos,
+					 aa);
 
 		/* see if we already have a sequence to write out */
 		if (ORF[frame])
@@ -250,13 +279,15 @@ static void FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable, ajint minsize,
 		    {
 			/* create a new sequence */
 			if (codon == STOP)
-			    (void) WriteORF(seq, len, seqlen, sense, find,
-					    orf_no, start[frame], pos-1,
-					    newstr[frame], seqout, around);
+			    (void) getorf_WriteORF(seq, len, seqlen, sense,
+						   find, orf_no, start[frame],
+						   pos-1, newstr[frame],
+						   seqout, around);
 			else
-			    (void) WriteORF(seq, len, seqlen, sense, find,
-					    orf_no, start[frame], pos+2,
-					    newstr[frame], seqout, around);
+			    (void) getorf_WriteORF(seq, len, seqlen, sense,
+						   find, orf_no, start[frame],
+						   pos+2, newstr[frame],
+						   seqout, around);
 		    }
 		    /* reset the newstr to zero length so that we can start
 		       storing the next ORF for this frame in it */
@@ -287,7 +318,7 @@ static void FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable, ajint minsize,
 	    else if (ORF[frame])
 	    {
 		/* append sequence to newstr if we are in an ORF */
-		(void) AppORF(find, &newstr[frame], chrseq, pos, aa);
+		(void) getorf_AppORF(find, &newstr[frame], chrseq, pos, aa);
 	    }
 
 	}
@@ -300,8 +331,10 @@ static void FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable, ajint minsize,
 					   START */
 		if (pos < len)
 		{
-		    /* reset the newstr to zero length so that we can start
-		       storing the ORF for this frame in it */
+		    /*
+		     *  reset the newstr to zero length so that we can start
+		     *  storing the ORF for this frame in it
+		     */
 		    (void) ajStrClear(&newstr[frame]);
 		    ORF[frame] = ajTrue; /* we are now in an ORF (as ajlong as
 					    we are not circular and past the
@@ -309,12 +342,14 @@ static void FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable, ajint minsize,
 		    start[frame] = pos;	/* start of the ORF for this frame */
 		    if (methionine)
 		    {
-			(void) AppORF(find, &newstr[frame], chrseq, pos, 'M');
+			(void) getorf_AppORF(find, &newstr[frame], chrseq,
+					     pos, 'M');
 			/* start sequence with Met */
 		    }
 		    else
 		    {
-			(void) AppORF(find, &newstr[frame], chrseq, pos, aa);
+			(void) getorf_AppORF(find, &newstr[frame], chrseq,
+					     pos, aa);
 			/* append sequence to newstr */
 		    }
 		}
@@ -331,20 +366,23 @@ static void FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable, ajint minsize,
 		       last codon to the sequence - otherwise, ignore the
 		       STOP codon */
 		    if (pos >= seqlen-5 && pos < seqlen-2)
-			(void) AppORF(find, &newstr[frame], chrseq, pos, aa);
+			(void) getorf_AppORF(find, &newstr[frame], chrseq,
+					     pos, aa);
 
 		    if (ajStrLen(newstr[frame]) >= minsize)
 		    {
 			/* create a new sequence */
 			if (codon == STOP)
-			    (void) WriteORF(seq, len, seqlen, sense, find,
-					    orf_no, start[frame], pos-1,
-					    newstr[frame], seqout, around);
+			    (void) getorf_WriteORF(seq, len, seqlen, sense,
+						   find, orf_no, start[frame],
+						   pos-1, newstr[frame],
+						   seqout, around);
 			else
 			{
-			    (void) WriteORF(seq, len, seqlen, sense, find,
-					    orf_no, start[frame], pos+2,
-					    newstr[frame], seqout, around);
+			    (void) getorf_WriteORF(seq, len, seqlen, sense,
+						   find, orf_no, start[frame],
+						   pos+2, newstr[frame],
+						   seqout, around);
 			}
 		    }
 		}
@@ -366,7 +404,8 @@ static void FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable, ajint minsize,
 	    {
 		/* append sequence to newstr if we are in an ORF */
 		if (ORF[frame])
-		    (void) AppORF(find, &newstr[frame], chrseq, pos, aa);
+		    (void) getorf_AppORF(find, &newstr[frame], chrseq, pos,
+					 aa);
         	
 	    }      	
 	}
@@ -384,8 +423,9 @@ static void FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable, ajint minsize,
 	    /* translate frame 1 into pep */
 	    pep = ajTrnSeqOrig(trnTable, seq, 1);
 	    if (ajSeqLen(pep) >= minsize)
-		(void) WriteORF(seq, len, seqlen, sense, find, orf_no, 0,
-				seqlen-1, ajSeqStr(pep), seqout, around);
+		(void) getorf_WriteORF(seq, len, seqlen, sense, find, orf_no,
+				       0, seqlen-1, ajSeqStr(pep), seqout,
+				       around);
 	    (void) ajSeqDel (&pep);
 	}
 	if (!GOTSTOP[1])
@@ -394,8 +434,9 @@ static void FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable, ajint minsize,
 	    pep = ajTrnSeqOrig(trnTable, seq, 2);
 	    if (ajSeqLen(pep) >= minsize)
 	    {
-		(void) WriteORF(seq, len, seqlen, sense, find, orf_no, 1,
-				seqlen-1, ajSeqStr(pep), seqout, around);
+		(void) getorf_WriteORF(seq, len, seqlen, sense, find, orf_no,
+				       1, seqlen-1, ajSeqStr(pep), seqout,
+				       around);
 	    }
 	    (void) ajSeqDel (&pep);
 	}
@@ -405,8 +446,9 @@ static void FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable, ajint minsize,
 	    pep = ajTrnSeqOrig(trnTable, seq, 3);
 	    if (ajSeqLen(pep) >= minsize)
 	    {
-		(void) WriteORF(seq, len, seqlen, sense, find, orf_no, 2,
-				seqlen-1, ajSeqStr(pep), seqout, around);
+		(void) getorf_WriteORF(seq, len, seqlen, sense, find, orf_no,
+				       2, seqlen-1, ajSeqStr(pep), seqout,
+				       around);
 	    }
 	    (void) ajSeqDel (&pep);
 	}
@@ -418,10 +460,27 @@ static void FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable, ajint minsize,
     return;
 }
 
-/******************************************************************************/
-static void WriteORF(AjPSeq seq, ajint len, ajint seqlen, AjBool sense,
-		     ajint find, ajint *orf_no, ajint start, ajint pos, AjPStr str,
-		     AjPSeqout seqout, ajint around)
+/* @funcstatic  getorf_WriteORF **********************************************
+**
+** Undocumented.
+**
+** @param [?] seq [AjPSeq] Undocumented
+** @param [?] len [ajint] Undocumented
+** @param [?] seqlen [ajint] Undocumented
+** @param [?] sense [AjBool] Undocumented
+** @param [?] find [ajint] Undocumented
+** @param [?] orf_no [ajint*] Undocumented
+** @param [?] start [ajint] Undocumented
+** @param [?] pos [ajint] Undocumented
+** @param [?] str [AjPStr] Undocumented
+** @param [?] seqout [AjPSeqout] Undocumented
+** @param [?] around [ajint] Undocumented
+** @@
+******************************************************************************/
+
+static void getorf_WriteORF(AjPSeq seq, ajint len, ajint seqlen, AjBool sense,
+			    ajint find, ajint *orf_no, ajint start, ajint pos,
+			    AjPStr str, AjPSeqout seqout, ajint around)
 {
     /* pos is the sequence position of the last nucleotide in the ORF */
 
@@ -560,14 +619,25 @@ static void WriteORF(AjPSeq seq, ajint len, ajint seqlen, AjBool sense,
     ajStrDel(&value);
     ajStrDel(&name);
 
-
+    return;
 }
 
 
 
-/***************************************************************************/
-/* append aa to ORF sequence string */
-static void AppORF(ajint find, AjPStr *str, char *chrseq, ajint pos, char aa)
+/* @funcstatic getorf_AppORF *************************************************
+**
+** append aa to ORF sequence string
+**
+** @param [?] find [ajint] Undocumented
+** @param [?] str [AjPStr*] Undocumented
+** @param [?] chrseq [char*] Undocumented
+** @param [?] pos [ajint] Undocumented
+** @param [?] aa [char] Undocumented
+** @@
+******************************************************************************/
+
+static void getorf_AppORF(ajint find, AjPStr *str, char *chrseq, ajint pos,
+			  char aa)
 {
 
     if (find == N_STOP2STOP || find == N_START2STOP ||

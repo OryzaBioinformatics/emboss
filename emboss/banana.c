@@ -36,6 +36,13 @@
 
 
 
+
+/* @prog banana ***************************************************************
+**
+** Bending and curvature plot in B-DNA
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     AjPSeq seq;
@@ -236,10 +243,10 @@ int main(int argc, char **argv)
 
     for(i=(ajint)rbend+1;i<=ajStrLen(sstr)-(ajint)rbend-1;i++)
     {
-	bend[i] = sqrt(((x[i+(ajint)rbend]-x[i-(ajint)rbend])*(x[i+(ajint)rbend]-
-							   x[i-(ajint)rbend])) +
-		       ((y[i+(ajint)rbend]-y[i-(ajint)rbend])*(y[i+(ajint)rbend]-
-							   y[i-(ajint)rbend])));
+	bend[i] = sqrt(((x[i+(ajint)rbend]-x[i-(ajint)rbend])*
+			(x[i+(ajint)rbend]-x[i-(ajint)rbend])) +
+		       ((y[i+(ajint)rbend]-y[i-(ajint)rbend])*
+			(y[i+(ajint)rbend]-y[i-(ajint)rbend])));
 	bend[i]*=bendscale;
     }
 

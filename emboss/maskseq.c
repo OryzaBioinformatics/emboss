@@ -22,38 +22,44 @@
 
 
 #include "emboss.h"
-void MaskRegions(AjPStr regions, AjPSeq *seq, AjPStr maskchar);
+
+
+/* @prog maskseq **************************************************************
+**
+** Mask off regions of a sequence
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
+    AjPSeq seq;
+    AjPSeqout seqout;
+    AjPRange regions;
+    AjPStr maskchar;
+    AjPStr str=NULL;
+    ajint beg;
+    ajint end;
 
-  AjPSeq seq;
-  AjPSeqout seqout;
-  AjPRange regions;
-  AjPStr maskchar;
-  AjPStr str=NULL;
-  ajint beg, end;
+    (void) embInit ("maskseq", argc, argv);
 
-  (void) embInit ("maskseq", argc, argv);
+    seq = ajAcdGetSeq ("sequence");
+    seqout = ajAcdGetSeqout ("outseq");
+    regions = ajAcdGetRange("regions");
+    maskchar = ajAcdGetString ("maskchar");
 
-  seq = ajAcdGetSeq ("sequence");
-  seqout = ajAcdGetSeqout ("outseq");
-  regions = ajAcdGetRange("regions");
-  maskchar = ajAcdGetString ("maskchar");
-
-  beg = ajSeqBegin(seq)-1;
-  end = ajSeqEnd(seq)-1;
+    beg = ajSeqBegin(seq)-1;
+    end = ajSeqEnd(seq)-1;
 
 
-/* mask the regions */
-  (void) ajStrAssSub (&str, ajSeqStr(seq), beg, end);
-  (void) ajRangeBegin (regions, beg+1);
-  (void) ajRangeStrMask (&str, regions, maskchar);
-  (void) ajSeqReplace(seq, str);
+    /* mask the regions */
+    (void) ajStrAssSub (&str, ajSeqStr(seq), beg, end);
+    (void) ajRangeBegin (regions, beg+1);
+    (void) ajRangeStrMask (&str, regions, maskchar);
+    (void) ajSeqReplace(seq, str);
   
-  (void) ajSeqWrite (seqout, seq);
-  (void) ajSeqWriteClose (seqout);
+    (void) ajSeqWrite (seqout, seq);
+    (void) ajSeqWriteClose (seqout);
 
-  (void) ajExit ();
-  return 0;
+    ajExit ();
+    return 0;
 }

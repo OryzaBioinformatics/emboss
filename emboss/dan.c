@@ -29,21 +29,30 @@
 
 
 
-void findgc(AjPStr *strand, ajint begin, ajint end, ajint window, ajint shift,
-	    float formamide, float mismatch, ajint prodLen, float dna,
-	    float salt, float temperature, AjBool isDNA, AjBool isProduct, 
-	    AjBool dothermo, AjPFile outf, AjBool doplot, float *xa, float *ta,
-	    float *tpa, float *cga, ajint *npoints);
+static void dan_findgc(AjPStr *strand, ajint begin, ajint end, ajint window,
+		       ajint shift, float formamide, float mismatch,
+		       ajint prodLen, float dna, float salt,
+		       float temperature, AjBool isDNA, AjBool isProduct, 
+		       AjBool dothermo, AjPFile outf, AjBool doplot,
+		       float *xa, float *ta, float *tpa, float *cga,
+		       ajint *npoints);
 
-void plotit(AjPSeq *seq, float *xa, float *ta, float *cga, float *tpa,
-	    ajint npoints, ajint ibegin, ajint iend, AjPGraph mult,
-	    float mintemp);
+static void dan_plotit(AjPSeq *seq, float *xa, float *ta, float *cga,
+		       float *tpa, ajint npoints, ajint ibegin, ajint iend,
+		       AjPGraph mult, float mintemp);
 
-void unfmall(float *xa, float *ta, float *tpa, float *cga);
-
-
+static void dan_unfmall(float *xa, float *ta, float *tpa, float *cga);
 
 
+
+
+
+
+/* @prog dan ***************************************************************
+**
+** Calculates DNA RNA/DNA melting temperature
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -141,16 +150,16 @@ int main(int argc, char **argv)
 	AJCNEW (tpa, n);
 	AJCNEW (cga, n);
 
-	findgc(&strand,begin,end,window,shift,formamide,mismatch,
-	       prodLen,DNAConc,saltConc, temperature, isDNA, isProduct, 
-	       doThermo, outf, doplot, xa, ta, tpa, cga, &npoints);
+	dan_findgc(&strand,begin,end,window,shift,formamide,mismatch,
+		   prodLen,DNAConc,saltConc, temperature, isDNA, isProduct, 
+		   doThermo, outf, doplot, xa, ta, tpa, cga, &npoints);
 
 	/*	offset  = window/2;*/
 
 	if(doplot)
-	    plotit(&seq,xa,ta,cga,tpa,npoints,begin,end, mult,
-		   mintemp);
-	unfmall(xa, ta, tpa, cga);
+	    dan_plotit(&seq,xa,ta,cga,tpa,npoints,begin,end, mult,
+		       mintemp);
+	dan_unfmall(xa, ta, tpa, cga);
 	ajStrDel(&strand);
     }
     
@@ -165,15 +174,43 @@ int main(int argc, char **argv)
 
 
 
+/* @funcstatic dan_findgc ****************************************************
+**
+** Undocumented
+**
+**
+** @param [R] strand [AjPStr*] Undocumented
+** @param [R] begin [ajint] Undocumented
+** @param [R] end [ajint] Undocumented
+** @param [R] window [ajint] Undocumented
+** @param [R] shift [ajint] Undocumented
+** @param [R] formamide [float] Undocumented
+** @param [R] mismatch [float] Undocumented
+** @param [R] prodLen [ajint] Undocumented
+** @param [R] dna [float] Undocumented
+** @param [R] salt [float] Undocumented
+** @param [R] temperature [float] Undocumented
+** @param [R] isDNA [AjBool] Undocumented
+** @param [R] isproduct [AjBool] Undocumented
+** @param [R] dothermo [AjBool] Undocumented
+** @param [R] outf [AjPFile] Undocumented
+** @param [R] doplot [AjBool] Undocumented
+** @param [R] xa [float*] Undocumented
+** @param [R] ta [float*] Undocumented
+** @param [R] tpa [float*] Undocumented
+** @param [R] cga [float*] Undocumented
+** @param [R] np [ajint*] Undocumented
+** @@
+******************************************************************************/
 
 
 
-
-void findgc(AjPStr *strand, ajint begin, ajint end, ajint window, ajint shift,
-	    float formamide, float mismatch, ajint prodLen, float dna,
-	    float salt, float temperature, AjBool isDNA, AjBool isproduct, 
-	    AjBool dothermo, AjPFile outf, AjBool doplot, float xa[], 
-	    float ta[], float tpa[], float cga[], ajint *np)
+static void dan_findgc(AjPStr *strand, ajint begin, ajint end, ajint window,
+		       ajint shift, float formamide, float mismatch,
+		       ajint prodLen, float dna, float salt,float temperature,
+		       AjBool isDNA, AjBool isproduct,  AjBool dothermo,
+		       AjPFile outf, AjBool doplot, float xa[], 
+		       float ta[], float tpa[], float cga[], ajint *np)
 {
     static AjBool initialised=0;
     AjPStr type=NULL;
@@ -263,27 +300,58 @@ void findgc(AjPStr *strand, ajint begin, ajint end, ajint window, ajint shift,
     }
 
     ajStrDel(&substr);
+
     return;
 }
 
 
 
+/* @funcstatic dan_unfmall ***************************************************
+**
+** Undocumented.
+**
+** @param [?] xa [float*] Undocumented
+** @param [?] ta [float*] Undocumented
+** @param [?] tpa [float*] Undocumented
+** @param [?] cga [float*] Undocumented
+** @@
+******************************************************************************/
 
 
-void unfmall(float *xa, float *ta, float *tpa, float *cga)
+
+static void dan_unfmall(float *xa, float *ta, float *tpa, float *cga)
 {
     AJFREE( xa);
     AJFREE( ta);
     AJFREE( tpa);
     AJFREE( cga);
+
+    return;
 }
 
     
+/* @funcstatic dan_plotit ****************************************************
+**
+** Undocumented.
+**
+** @param [?] seq [AjPSeq*] Undocumented
+** @param [?] xa [float*] Undocumented
+** @param [?] ta [float*] Undocumented
+** @param [?] cga [float*] Undocumented
+** @param [?] tpa [float*] Undocumented
+** @param [?] npoints [ajint] Undocumented
+** @param [?] ibegin [ajint] Undocumented
+** @param [?] iend [ajint] Undocumented
+** @param [?] graphs [AjPGraph] Undocumented
+** @param [?] mintemp [float] Undocumented
+** @@
+******************************************************************************/
 
 
-void plotit(AjPSeq *seq, float *xa, float *ta, float *cga, float *tpa,
-	    ajint npoints, ajint ibegin, ajint iend, AjPGraph graphs,
-	    float mintemp)
+
+static void dan_plotit(AjPSeq *seq, float *xa, float *ta, float *cga,
+		       float *tpa, ajint npoints, ajint ibegin, ajint iend,
+		       AjPGraph graphs, float mintemp)
 {
     AjPGraphData tmGraph=NULL;
     float max = -64000.;
@@ -322,4 +390,6 @@ void plotit(AjPSeq *seq, float *xa, float *ta, float *cga, float *tpa,
     ajGraphxyAddGraph(graphs,tmGraph);
 
     ajGraphxyDisplay(graphs,AJTRUE);
+
+    return;
 }

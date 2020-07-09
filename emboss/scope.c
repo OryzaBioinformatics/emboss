@@ -1,6 +1,6 @@
 /* @source scope application
 **
-** Convert scop classification file to embl-like format
+** Convert raw scop classification file to embl-like format
 **
 ** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @author: Copyright (C) Jon Ison (jison@hgmp.mrc.ac.uk)
@@ -37,7 +37,12 @@
 ** Note that other scop classification files, without this annotation, are 
 ** available at URL (2).
 ** 
-** scope writes the scop classification to an embl-like format file. The 
+** scope writes the scop classification to an embl-like format file (Figure 1). 
+** No changes are made to the data other than changing the format in which it 
+** is held. This EMBL-like format SCOP file is used by several other EMBOSS 
+** programs. The reason why the SCOP database format is changed to an EMBL-like 
+** format before being used used by other EMBOSS programs is that it is an
+** easier format to work with than the native SCOP database format. The 
 ** records used to describe an entry are given below.  Records (4) to (8) 
 ** are used to describe the position of the domain in the scop hierarchy.
 **
@@ -77,8 +82,80 @@
 ** file (a '.' is given in cases where a position was not specified).  Note 
 ** that the start and end positions refer to residue numbering given in the 
 ** original pdb file and therefore must be treated as strings.
-
-
+** (12) XX - used for spacing.
+** (13) // - used to delimit records for a domain.
+**
+** Figure 1  Excerpt from embl-like format scop classification file
+**
+**  
+**  ID   D3SDHA_
+**  XX
+**  EN   3SDH
+**  XX
+**  OS   Ark clam (Scapharca inaequivalvis)
+**  XX
+**  CL   All alpha proteins
+**  XX
+**  FO   Globin-like
+**  XX
+**  SF   Globin-like
+**  XX
+**  FA   Globins
+**  XX
+**  DO   Hemoglobin I
+**  XX
+**  NC   1
+**  XX
+**  CN   [1]
+**  XX
+**  CH   a CHAIN; . START; . END;
+**  //
+**  ID   D3SDHB_
+**  XX
+**  EN   3SDH
+**  XX
+**  OS   Ark clam (Scapharca inaequivalvis)
+**  XX
+**  CL   All alpha proteins
+**  XX
+**  FO   Globin-like
+**  XX
+**  SF   Globin-like
+**  XX
+**  FA   Globins
+**  XX
+**  DO   Hemoglobin I
+**  XX
+**  NC   1
+**  XX
+**  CN   [1]
+**  XX
+**  CH   b CHAIN; . START; . END;
+**  //
+**  ID   D3HBIA_
+**  XX
+**  EN   3HBI
+**  XX
+**  OS   Ark clam (Scapharca inaequivalvis)
+**  XX
+**  CL   All alpha proteins
+**  XX
+**  FO   Globin-like
+**  XX
+**  SF   Globin-like
+**  XX
+**  FA   Globins
+**  XX
+**  DO   Hemoglobin I
+**  XX
+**  NC   1
+**  XX
+**  CN   [1]
+**  XX
+**  CH   a CHAIN; . START; . END;
+**  //
+**  ID   D3HBIB_
+**  
 ******************************************************************************/
 
 
@@ -92,6 +169,13 @@
 
 
 
+
+
+/* @prog scope ***************************************************************
+**
+** Convert raw scop classification file to embl-like format
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -123,9 +207,6 @@ int main(int argc, char **argv)
     AjPScop scop      = NULL;
     
     
-
-
-
     /* Compile regular expressions */
     rexp  = ajRegCompC("^([^ \t\r\n]+)[ \t\n\r]+([^ \t\r\n]+)[ \t\r\n]+"
 		       "([^ \t\r\n]+)[ \t\n\r]+([^ \t\n\r]+)[ \t\n\r]+");
@@ -149,10 +230,6 @@ int main(int argc, char **argv)
     text    = ajStrNew();
     token   = ajStrNew();
     
-
-
-
-
     
     /* Start of main application loop */
     while(ajFileReadLine(inf,&line))
@@ -275,8 +352,6 @@ int main(int argc, char **argv)
     ajFileClose(&inf);
     ajFileClose(&outf);
 
-
-    /* Bye Bye */
     ajExit();
     return 0;
 }

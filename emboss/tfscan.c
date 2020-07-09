@@ -26,10 +26,18 @@
 #include "string.h"
 
 
-void print_hits(AjPStr name, AjPList *l, ajint hits, AjPFile outf, ajint begin,
-		ajint end, AjPTable t, AjPSeq seq);
+static void tfscan_print_hits(AjPStr name, AjPList *l, ajint hits,
+			      AjPFile outf, ajint begin, ajint end,
+			      AjPTable t, AjPSeq seq);
 
 
+
+
+/* @prog tfscan ***************************************************************
+**
+** Scans DNA sequences for transcription factors
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -129,7 +137,7 @@ int main(int argc, char **argv)
 	}
 
 	if(sum)
-	    print_hits(name,&l,sum,outf,begin,end,atable,seq);
+	    tfscan_print_hits(name,&l,sum,outf,begin,end,atable,seq);
 	ajFileSeek(inf,0L,0);
 	ajListDel(&l);
 	ajStrTableFree(&atable);
@@ -152,9 +160,24 @@ int main(int argc, char **argv)
     return 0;
 }
 
+/* @funcstatic tfscan_print_hits *********************************************
+**
+** Print matches to transcription factor sites
+**
+** @param [r] name [AjPStr] name of test sequence
+** @param [w] l [AjPList*] list of hits
+** @param [r] hits [ajint] number of hits
+** @param [w] outf [AjPFile] output file
+** @param [r] begin [ajint] sequence start
+** @param [r] end [ajint] sequence end
+** @param [?] t [AjPTable] table of accession numbers
+** @param [r] seq [AjPSeq] test sequence
+** @@
+******************************************************************************/
 
-void print_hits(AjPStr name, AjPList *l, ajint hits, AjPFile outf, ajint begin,
-		ajint end, AjPTable t, AjPSeq seq)
+
+void tfscan_print_hits(AjPStr name, AjPList *l, ajint hits, AjPFile outf,
+		       ajint begin, ajint end, AjPTable t, AjPSeq seq)
 {
     ajint i;
     EmbPMatMatch m;

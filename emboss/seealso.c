@@ -21,6 +21,13 @@
 ******************************************************************************/
 #include "emboss.h"
 
+
+/* @prog seealso **************************************************************
+**
+** Finds programs sharing group names
+**
+******************************************************************************/
+
 int main(int argc, char **argv, char **env)
 {
 
@@ -89,4 +96,3 @@ int main(int argc, char **argv, char **env)
     (void) ajExit();
     return 0;
 }
-

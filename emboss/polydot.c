@@ -8,55 +8,28 @@
 
 #include "ajgraph.h"
 
-float xstart=0,ystart=0;
-ajint *lines;
-ajint *pts;
-ajint which;
-AjPFile outf=NULL;
-
-static void drawPlotlines(void **x, void *cl)
-{
-    EmbPWordMatch p  = (EmbPWordMatch)*x;
-    PLFLT x1,y1,x2,y2;
-
-    lines[which]++;
-    pts[which]+= (*p).length;
-    x1 = x2 = ((*p).seq1start)+xstart;
-    y1 = y2 = (PLFLT)((*p).seq2start)+ystart;
-    x2 += (*p).length;
-    y2 += (PLFLT)(*p).length;
- 
-    ajGraphLine(x1, y1, x2, y2);
-}
-
-static void dataPlotlines(void **x, void *cl)
-{
-    EmbPWordMatch p  = (EmbPWordMatch)*x;
-    PLFLT x1,y1,x2,y2;
-
-    lines[which]++;
-    pts[which]+= (*p).length;
-    x1 = x2 = ((*p).seq1start)+xstart;
-    y1 = y2 = (PLFLT)((*p).seq2start)+ystart;
-    x2 += (*p).length;
-    y2 += (PLFLT)(*p).length;
- 
-    ajFmtPrintF(outf,"Line x1 %f y1 %f x2 %f y2 %f colour 0\n",x1, y1, x2, y2);
-}
-
-
-static void plotMatches(AjPList list, AjBool text)
-{
-    if(!text)
-	ajListMap(list,drawPlotlines, NULL);
-    else
-	ajListMap(list,dataPlotlines, NULL);
-    return;
-}
+static float xstart=0;
+static float ystart=0;
+static ajint *lines;
+static ajint *pts;
+static ajint which;
+static AjPFile outf=NULL;
 
 
 
 
+static void polydot_drawPlotlines(void **x, void *cl);
+static void polydot_dataPlotlines(void **x, void *cl);
+static void polydot_plotMatches(AjPList list, AjBool text);
+
+
+
+
+/* @prog polydot **************************************************************
+**
+** Displays all-against-all dotplots of a set of sequences
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -79,9 +52,9 @@ int main(int argc, char **argv)
     char ptr[10];
     float ticklen;
     float onefifth;
-    AjPFeatTable *tabptr=NULL;
+    AjPFeattable *tabptr=NULL;
     AjPStr ufo=NULL,format=NULL,ext=NULL;
-    AjPFeatTabOut seq1out = NULL;
+    AjPFeattabOut seq1out = NULL;
     AjBool text;
     AjPStr sajb=NULL;
     
@@ -166,14 +139,14 @@ int main(int argc, char **argv)
 		matchlist = embWordBuildMatchTable(&seq1MatchTable, seq2,
 						   ajTrue);
 		if(matchlist)
-		    plotMatches(matchlist,text);
+		    polydot_plotMatches(matchlist,text);
 		if(i<j && dumpfeat)
 		    embWordMatchListConvToFeat(matchlist,&tabptr[i],
-					       &tabptr[j],seq1->Name,
-					       seq2->Name);
+					       &tabptr[j],seq1,
+					       seq2);
      
 		if(matchlist)  /* free the match structures */
-		    embWordMatchListDelete(matchlist);
+		    embWordMatchListDelete(&matchlist);
 
 		if(j==0)
 		{
@@ -281,7 +254,7 @@ int main(int argc, char **argv)
 
     if(dumpfeat)
     {
-	seq1out = ajFeatTabOutNew();
+	seq1out = ajFeattabOutNew();
 	for(i=0;i<ajSeqsetSize(seqset);i++)
 	{
 	    seq1 = ajSeqsetGetSeq (seqset, i);
@@ -290,8 +263,8 @@ int main(int argc, char **argv)
 	    ajStrAppC(&ufo,ajSeqName(seq1));
 	    ajStrAppC(&ufo,".");
 	    ajStrApp(&ufo,ext);
-	    ajFeatTabOutOpen(seq1out, ufo);
-	    ajFeaturesWrite(seq1out, tabptr[i]);
+	    ajFeattabOutOpen(seq1out, ufo);
+	    ajFeatWrite(seq1out, tabptr[i]);
 	}
     }
 
@@ -304,6 +277,79 @@ int main(int argc, char **argv)
     ajStrDel(&sajb);
     AJFREE(lines);
     AJFREE(pts);
+
     ajExit();
     return 0;
+}
+
+
+
+
+/* @funcstatic polydot_drawPlotlines *****************************************
+**
+** Undocumented.
+**
+** @@
+******************************************************************************/
+
+static void polydot_drawPlotlines(void **x, void *cl)
+{
+    EmbPWordMatch p  = (EmbPWordMatch)*x;
+    PLFLT x1,y1,x2,y2;
+
+    lines[which]++;
+    pts[which]+= (*p).length;
+    x1 = x2 = ((*p).seq1start)+xstart;
+    y1 = y2 = (PLFLT)((*p).seq2start)+ystart;
+    x2 += (*p).length;
+    y2 += (PLFLT)(*p).length;
+ 
+    ajGraphLine(x1, y1, x2, y2);
+}
+
+
+
+
+/* @funcstatic  polydot_dataPlotlines ****************************************
+**
+** Undocumented.
+**
+** @@
+******************************************************************************/
+
+static void polydot_dataPlotlines(void **x, void *cl)
+{
+    EmbPWordMatch p  = (EmbPWordMatch)*x;
+    PLFLT x1,y1,x2,y2;
+
+    lines[which]++;
+    pts[which]+= (*p).length;
+    x1 = x2 = ((*p).seq1start)+xstart;
+    y1 = y2 = (PLFLT)((*p).seq2start)+ystart;
+    x2 += (*p).length;
+    y2 += (PLFLT)(*p).length;
+ 
+    ajFmtPrintF(outf,"Line x1 %f y1 %f x2 %f y2 %f colour 0\n",x1, y1, x2, y2);
+}
+
+
+
+
+/* @funcstatic polydot_plotMatches *******************************************
+**
+** Undocumented.
+**
+** @param [?] list [AjPList] Undocumented
+** @param [?] text [AjBool] Undocumented
+** @@
+******************************************************************************/
+
+static void polydot_plotMatches(AjPList list, AjBool text)
+{
+    if(!text)
+	ajListMap(list,polydot_drawPlotlines, NULL);
+    else
+	ajListMap(list,polydot_dataPlotlines, NULL);
+
+    return;
 }

@@ -34,7 +34,6 @@ sequence with the properties being calcualted at each new position."
 	max: $(windowSize) 
 	def: 1
         info:"Enter Shift Increment"
-        expect: "Window size (20)" 
 	help: "This is the amount by which the window is moved at each
 increment in order to find the melting point and other properties along
 the sequence."

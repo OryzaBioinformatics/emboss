@@ -21,6 +21,13 @@
 
 #include "emboss.h"
 
+
+/* @prog water ***************************************************************
+**
+** Smith-Waterman local alignment
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     AjPSeqall seqall;

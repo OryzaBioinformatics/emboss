@@ -26,19 +26,29 @@
 #define AZ 28
 
 
-ajint  getType(AjPFile inf, AjPStr *tname);
+static ajint prophet_getType(AjPFile inf, AjPStr *tname);
 
-static void read_profile(AjPFile inf, AjPStr *name, AjPStr *mname, ajint *mlen,
-			  float *gapopen, float *gapextend, ajint *thresh,
-			  float *maxs, AjPStr *cons);
-void scan_profile(AjPStr substr, AjPStr pname, AjPStr name, AjPStr mname,
-		  ajint mlen, float **fmatrix, ajint thresh, float maxs,
-		  float gapopen, float gapextend, AjPFile outf,
-		  AjPStr *cons, float opencoeff, float extendcoeff,
-		  float *path, ajint *compass, AjPStr *m, AjPStr *n,
-		  ajint slen, ajint begin);
+static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
+				 ajint *mlen, float *gapopen,
+				 float *gapextend, ajint *thresh,
+				 float *maxs, AjPStr *cons);
+static void prophet_scan_profile(AjPStr substr, AjPStr pname, AjPStr name,
+				 AjPStr mname, ajint mlen, float **fmatrix,
+				 ajint thresh, float maxs, float gapopen,
+				 float gapextend, AjPFile outf,
+				 AjPStr *cons, float opencoeff,
+				 float extendcoeff, float *path,
+				 ajint *compass, AjPStr *m, AjPStr *n,
+				 ajint slen, ajint begin);
 
 
+
+
+/* @prog prophet **************************************************************
+**
+** Gapped alignment for profiles
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -96,7 +106,6 @@ int main(int argc, char **argv)
     opencoeff = ajRoundF(opencoeff, 8);
     extendcoeff = ajRoundF(extendcoeff, 8);
 
-    seq=ajSeqNew();
     substr=ajStrNew();
     name=ajStrNew();
     mname=ajStrNew();
@@ -105,12 +114,12 @@ int main(int argc, char **argv)
     m=ajStrNewC("");
     n=ajStrNewC("");
     
-    type=getType(inf,&tname);
+    type=prophet_getType(inf,&tname);
     if(!type)
       ajFatal("Unrecognised profile/matrix file format");
     
-    read_profile(inf,&name,&mname,&mlen,&gapopen,&gapextend,&thresh,
-		  &maxfs, &cons);
+    prophet_read_profile(inf,&name,&mname,&mlen,&gapopen,&gapextend,&thresh,
+			 &maxfs, &cons);
     AJCNEW(fmatrix, mlen);
 
     for(i=0;i<mlen;++i)
@@ -152,9 +161,9 @@ int main(int argc, char **argv)
 	ajStrAssC(&m,"");
 	ajStrAssC(&n,"");
 
-	scan_profile(substr,pname,name,mname,mlen,fmatrix,thresh,maxs,
-		     gapopen,gapextend,outf,&cons,opencoeff,extendcoeff,
-		     path,compass,&m,&n,len,begin);
+	prophet_scan_profile(substr,pname,name,mname,mlen,fmatrix,thresh,maxs,
+			     gapopen,gapextend,outf,&cons,opencoeff,
+			     extendcoeff,path,compass,&m,&n,len,begin);
 	
 	ajStrDel(&strand);    
     }
@@ -176,8 +185,18 @@ int main(int argc, char **argv)
 
 
 
+/* @funcstatic prophet_getType ***********************************************
+**
+** Undocumented.
+**
+** @param [r] inf [AjPFile] infile
+** @param [w] tname [AjPStr*] type name
+** @return [ajint] 1=Gribskov 2=Henikoff
+** @@
+******************************************************************************/
 
-ajint getType(AjPFile inf, AjPStr *tname)
+
+static ajint prophet_getType(AjPFile inf, AjPStr *tname)
 {
     AjPStr line=NULL;
     char *p=NULL;
@@ -205,10 +224,27 @@ ajint getType(AjPFile inf, AjPStr *tname)
 
 
 
+/* @funcstatic  prophet_read_profile ******************************************
+**
+** Read Gribskov or Henikoff profile
+**
+** @param [r] inf [AjPFile] infile
+** @param [w] name [AjPStr*] profile name
+** @param [w] mname [AjPStr*] matrix name
+** @param [w] mlen [ajint*] profile length
+** @param [w] gapopen [float*] open penalty
+** @param [w] gapextend [float*] extend penalty
+** @param [w] thresh [ajint*] score threshold
+** @param [w] maxs [float*] maximum score
+** @param [w] cons [AjPStr*] consensus sequence
+** @@
+******************************************************************************/
 
-static void read_profile(AjPFile inf, AjPStr *name, AjPStr *mname, ajint *mlen,
-			  float *gapopen, float *gapextend, ajint *thresh,
-			  float *maxs, AjPStr *cons)
+
+static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
+				 ajint *mlen, float *gapopen,
+				 float *gapextend, ajint *thresh,
+				 float *maxs, AjPStr *cons)
 {
     char *p;
     
@@ -288,13 +324,41 @@ static void read_profile(AjPFile inf, AjPStr *name, AjPStr *mname, ajint *mlen,
 
 
 
+/* @funcstatic prophet_scan_profile *******************************************
+**
+** Scan sequence with profile
+**
+** @param [r] substr [AjPStr] sequence
+** @param [r] pname [AjPStr] profilename
+** @param [r] name [AjPStr] seq name
+** @param [r] mname [AjPStr] matrix name
+** @param [r] mlen [ajint] profile length
+** @param [r] fmatrix [float**] score matrix
+** @param [r] thresh [ajint] score threshold
+** @param [r] maxs [float] maximum score
+** @param [r] gapopen [float] open penalty
+** @param [r] gapextend [float] extend penalty
+** @param [w] outf [AjPFile] outfile
+** @param [r] cons [AjPStr*] consensus sequence
+** @param [r] opencoeff [float] opening co-efficient
+** @param [r] extendcoeff [float] extension co-efficient
+** @param [r] path [float*] path matrix
+** @param [r] compass [ajint*] path direction
+** @param [r] m [AjPStr*] sequence result
+** @param [r] n [AjPStr*] consensus result
+** @param [r] slen [ajint] sequence length
+** @param [r] begin [ajint] start position
+** @@
+******************************************************************************/
 
-void scan_profile(AjPStr substr, AjPStr pname, AjPStr name, AjPStr mname,
-		  ajint mlen, float **fmatrix, ajint thresh, float maxs,
-		  float gapopen, float gapextend, AjPFile outf,
-		  AjPStr *cons, float opencoeff, float extendcoeff,
-		  float *path, ajint *compass, AjPStr *m, AjPStr *n,
-		  ajint slen, ajint begin)
+
+static void prophet_scan_profile(AjPStr substr, AjPStr pname, AjPStr name,
+				 AjPStr mname, ajint mlen, float **fmatrix,
+				 ajint thresh, float maxs, float gapopen,
+				 float gapextend, AjPFile outf, AjPStr *cons,
+				 float opencoeff, float extendcoeff,
+				 float *path, ajint *compass, AjPStr *m,
+				 AjPStr *n, ajint slen, ajint begin)
 {
     float score;
     ajint start1;

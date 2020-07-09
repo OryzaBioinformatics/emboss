@@ -31,26 +31,15 @@
 ** @param [r] cmpmatrix [AjPMatrix] comparison scoring matrix
 ** @param [r] nseqs [ajint] number of sequences in alignment
 ** @param [r] mlen [ajint] length of alignment
-** @param [r] fplural [float] no. of +ve scoring matches below which there is no consensus
-** @param [r] setcase [float] case set if score above/below +ve matching threshold
-** @param [r] identity [ajint] number of identical symbols required for consesnsus
+** @param [r] fplural [float] no. of +ve scoring matches below which
+**                            there is no consensus
+** @param [r] setcase [float] case set if score above/below +ve matching
+**                            threshold
+** @param [r] identity [ajint] number of identical symbols required
+**                             for consesnsus
 ** @param [w] cons [AjPStr *] the created consensus sequence
 ** @return [void]
 ******************************************************************************/
-
-/* 
-** -plurality  	- defines no. of +ve scoring matches below 
-**                which there is no consensus.
-**
-** -identity   	- defines the number of identical symbols
-**                requires in an alignment column for it to
-**                included in the consensus.
-**
-** -setcase   	- upper/lower case given if score above/below
-**                user defined +ve matching threshold.
-**
-*****************************************************************************/
-
 
 void embConsCalc(AjPSeqset seqset,AjPMatrix cmpmatrix,
                     ajint nseqs, ajint mlen,float fplural,float setcase,

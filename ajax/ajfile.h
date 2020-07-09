@@ -130,6 +130,7 @@ AjPFileBuff ajFileBuffNewInList (const AjPList list);
 AjPFileBuff ajFileBuffNewS (const AjPStr data);
 void        ajFileBuffNobuff (const AjPFileBuff thys);
 void        ajFileBuffReset (const AjPFileBuff thys);
+void        ajFileBuffResetPos (const AjPFileBuff thys);
 AjBool      ajFileBuffSetFile (AjPFileBuff* pthys, AjPFile file);
 ajint         ajFileBuffSize (void);
 void        ajFileBuffStripHtml (const AjPFileBuff thys);

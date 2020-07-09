@@ -26,11 +26,18 @@
 #include "emboss.h"
 
 
-static void check_dir(AjPStr d, AjPFile outf);
-static void check_file(AjPStr d, AjPStr file, AjPFile outf);
-static AjPStr data_dir(void);
+static void embossdata_check_dir(AjPStr d, AjPFile outf);
+static void embossdata_check_file(AjPStr d, AjPStr file, AjPFile outf);
+static AjPStr embossdata_data_dir(void);
 
 
+
+
+/* @prog embossdata ***********************************************************
+**
+** Finds or fetches the data files read in by the EMBOSS programs
+**
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -88,7 +95,7 @@ int main(int argc, char **argv)
 
 
     /* get the full pathname of the  emboss/data installation directory */
-    ddir = data_dir();
+    ddir = embossdata_data_dir();
 
     flocs = ajListNew();
 
@@ -136,16 +143,16 @@ int main(int argc, char **argv)
 
 	(void) ajStrAssC(&directory, ".");
 	if(isname)
-	    check_file(directory,filename,outf);
+	    embossdata_check_file(directory,filename,outf);
 	else
-	    check_dir(directory,outf);
+	    embossdata_check_dir(directory,outf);
 
 	/* .embossdata */
 	(void) ajStrAssC(&directory, ".embossdata");
 	if(isname)
-	    check_file(directory,filename,outf);
+	    embossdata_check_file(directory,filename,outf);
 	else
-	    check_dir(directory,outf);
+	    embossdata_check_dir(directory,outf);
 
 	/* HOME */    
 	if((p=getenv("HOME")))
@@ -153,17 +160,17 @@ int main(int argc, char **argv)
 	    (void) ajStrAssC(&hdir, p);
 	    (void) ajStrAss(&directory, hdir);
 	    if(isname)
-		check_file(directory,filename,outf);
+		embossdata_check_file(directory,filename,outf);
 	    else
-		check_dir(directory,outf);
+		embossdata_check_dir(directory,outf);
 
 	    /* ~/.embossdata */
 	    (void) ajStrAss(&directory, hdir);
 	    (void) ajStrAppC(&directory, "/.embossdata");
 	    if(isname)
-		check_file(directory,filename,outf);
+		embossdata_check_file(directory,filename,outf);
 	    else
-		check_dir(directory,outf);
+		embossdata_check_dir(directory,outf);
 	}
 	
 
@@ -174,7 +181,7 @@ int main(int argc, char **argv)
 	    ajFileScan(path,filename,&flocs,ajFalse,ajFalse,NULL,rlist,
 		       recurs,outf);
 	    if(!ajListPop(flocs,(void **)&t))
-		check_file(ddir,filename,outf);
+		embossdata_check_file(ddir,filename,outf);
 	    else
 	    {
 		ajFmtPrintF(outf,"File %-60.60S Exists\n",t);
@@ -182,7 +189,7 @@ int main(int argc, char **argv)
 	    }
 	}
 	else
-	    check_dir(ddir,outf);
+	    embossdata_check_dir(ddir,outf);
     }
     
 
@@ -213,9 +220,18 @@ int main(int argc, char **argv)
 
 
 
+/* @funcstatic embossdata_check_dir *******************************************
+**
+** Undocumented.
+**
+** @param [?] d [AjPStr] Undocumented
+** @param [?] outf [AjPFile] Undocumented
+** @@
+******************************************************************************/
 
 
-static void check_dir(AjPStr d, AjPFile outf)
+
+static void embossdata_check_dir(AjPStr d, AjPFile outf)
 {
     if(ajSysIsDirectory(ajStrStr(d)))
 	ajFmtPrintF(outf,"%-60.60S Exists\n",d);
@@ -228,8 +244,18 @@ static void check_dir(AjPStr d, AjPFile outf)
 
 
 
+/* @funcstatic embossdata_check_file *****************************************
+**
+** Undocumented.
+**
+** @param [?] d [AjPStr] Undocumented
+** @param [?] file [AjPStr] Undocumented
+** @param [?] outf [AjPFile] Undocumented
+** @@
+******************************************************************************/
 
-static void check_file(AjPStr d, AjPStr file, AjPFile outf)
+
+static void embossdata_check_file(AjPStr d, AjPStr file, AjPFile outf)
 {
     AjPStr s;
 
@@ -248,8 +274,16 @@ static void check_file(AjPStr d, AjPStr file, AjPFile outf)
 }
 
 
+/* @funcstatic embossdata_data_dir *******************************************
+**
+** Undocumented.
+**
+** @return [AjPStr] Undocumented
+** @@
+******************************************************************************/
 
-static AjPStr data_dir(void)
+
+static AjPStr embossdata_data_dir(void)
 {
     static AjPStr where=NULL;
     AjPStr tmp=NULL;

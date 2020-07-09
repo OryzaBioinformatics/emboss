@@ -102,7 +102,7 @@ typedef ajlong sopno;
 #define AJ_OEOW        (20)      /* end word      -                      */
 
 
-/*
+/* @data cset *******************************************************
  * Structure for [] character-set representation.  Character sets are
  * done as bit vectors, grouped 8 to a byte vector for compactness.
  * The individual set therefore has both a pointer to the byte vector
@@ -114,6 +114,7 @@ typedef ajlong sopno;
  * a string of multi-character elements, and decide the size of the
  * vectors at run time.
  */
+
 typedef struct {
 	size_t smultis;
 	/* rearranged to avoid compiler inserting internal padding */
@@ -136,10 +137,11 @@ typedef struct {
 typedef unsigned char cat_t;
 
 
-/*
+/* @data re_guts *******************************************************
  * main compiled-expression structure
  */
-struct re_guts {
+
+typedef struct re_guts {
 	ajint magic;
 #		define	MAGIC2	((('R'^0200)<<8)|'E')
 	sop *strip;		/* malloced area for strip */
@@ -166,7 +168,7 @@ struct re_guts {
 	sopno nplus;		/* how deep does it nest +s? */
 	/* catspace must be last */
 	cat_t catspace[1];	/* actually [NC] */
-};
+} re_guts;
 
 /* misc utilities */
 #define	OUT	(CHAR_MAX+1)	/* a non-character value */

@@ -8,6 +8,12 @@ extern "C"
 #ifndef ajcorba_h
 #define ajcorba_h
 
+/* @data AjPCorbatype *******************************************************
+**
+** AJAX CORBA type data structure
+**
+******************************************************************************/
+
 typedef struct AjSCorbatype
 {
     AjPStr       Name;
@@ -30,6 +36,12 @@ typedef struct AjSCorbatype
     ajint          *LStrand;
     AjPStr       Seq;
 } AjOCorbatype,*AjPCorbatype;
+
+/* @data AjPCorbafeat *******************************************************
+**
+** AJAX CORBA feature data structure
+**
+******************************************************************************/
 
 typedef struct AjSCorbafeat
 {

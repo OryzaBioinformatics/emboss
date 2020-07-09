@@ -346,41 +346,6 @@ char* ajCharNewLS (size_t size, const AjPStr thys) {
   return cp;
 }
 
-/* #funcstatic ajCharNewBuffC ********************************************
-**
-** OBSOLETE: used in the EMBOSS DBI programs, replaced by ajNewCharC
-**
-** Constructor for a text string from an AjPStr, using a large buffer
-** to reduce the number of mallocs.
-**
-** #param [r] str [char*] Text object
-** #param [r] i [ajint] Length
-** #return [char*] New text string.
-******************************************************************************/
-
-/*
-static char* newcharCI (char* str, ajint i) {
-
-  static char* buffer = NULL;
-  static ajint ipos=0;
-  static ajint imax=0;
-
-  char* ret;
-
-  if ((ipos+i) > imax) {
-    AJCNEW(buffer, 1000000);
-    ajDebug ("newchar need more memory ipos: %d i: %d  imax: %d buffer: %x\n",
-	     ipos, i, imax, buffer);
-    imax = 1000000;
-    ipos = 0;
-  }
-  ret = &buffer[ipos];
-  strncpy (ret, str, i);
-  ipos += i;
-  return ret;
-}
-*/
-
 /* @funcstatic strNewNew ****************************************************
 **
 ** Internal constructor for modifiable AJAX strings. Used by all the string
@@ -752,8 +717,16 @@ AjBool ajStrAssS (AjPStr* pthis, const AjPStr str) {
   AjPStr thys = *pthis;
 
   if (!str) {			/* no source string */
-    *pthis = ajStrNew();
-    return ajTrue;
+      if(!pthis)
+      {
+	  *pthis = ajStrNew();
+          return ajTrue;
+      }
+      else
+      {
+	  ajStrAssC(pthis,"");
+	  return ajFalse;
+      }
   }
 
   ret = ajStrModL (pthis, str->Len+1); /* minimum reserved size, may be more */
@@ -1778,7 +1751,7 @@ AjBool ajStrChop (AjPStr* pthis) {
 ** Removes the characters from the start or end of a string
 **
 ** @param [uP] pthis [AjPStr*] string
-** @param [r] num [ajint] Number of characters to delete for the start (if
+** @param [r] num [ajint] Number of characters to delete from the start (if
 **            positive) or the end (if negative)
 ** @return [AjBool] ajTrue if string was reallocated
 ** @@
@@ -1968,6 +1941,28 @@ AjBool ajStrRev (AjPStr* pthis) {
 }
 
 
+/* @func ajStrQuote *************************************************************
+** Makes sure a string is quoted (with double quotes)
+**
+** @param [rw] s [AjPStr *] string
+**
+** @return [void]
+** @@
+******************************************************************************/
+void ajStrQuote(AjPStr *s) {
+
+  if (ajStrChar(*s, 0) != '"') {
+    ajStrInsertC (s, 0, "\"");
+  }
+
+  /* careful: could be an empty string that is now '"' */
+  /* this is the only way to have a length of 1 */
+
+  if ((*s)->Len == 1 || ajStrChar(*s, -1) != '"') {
+    ajStrAppK(s, '"');
+  }
+}
+
 /* @func ajStrRandom ************************************************************
 **
 ** Returns randomised string in place
@@ -2003,7 +1998,7 @@ void ajStrRandom(AjPStr *s)
 	na[i]=i;
 	rn[i]=ajRandomNumber();
     }
-    ajSortIntDecI(rn,na,len);
+    ajSortIntIncI(rn,na,len);
     
     for(i=0;i<len;++i)
 	q[i]=p[na[i]];
@@ -2319,22 +2314,46 @@ AjBool ajStrClean(AjPStr *s) {
   p=ajStrStr(t);
   len=strlen(p);
 
+  /* if string was already empty, no need to do anything */
+
+  if(!len)
+    return ajFalse;
+
+  /* tabs converted to spaces */
+
   for(i=0;i<len;++i) if(p[i]=='\t') p[i]=' ';
 
+  /* remove leading spaces */
+
   i=0;
-  while(1) {
-    if(!p[i]) break;
+  while(p[i]) {
     if(p[i]!=' ') break;
     ++i;
   }
-  (void) strcpy(p,&p[i]);
 
-  len=strlen(p);
+  if (i) {
+    (void) strcpy(p,&p[i]);
+    len=strlen(p);
+    if(!len) {			/* if that emptied it, so be it */
+      ret = ajStrAssC(s,"");
+      return ret;
+    }
+  }
+
+  /* remove newline at the end (if any) */
+
   if(p[len-1]=='\n') {
     p[len-1]='\0';
     --len;
   }
+
+  if(!len) {			/* if that emptied it, so be it */
+    ret = ajStrAssC(s,"");
+    return ret;
+  }
     
+  /* clean up any space at the end */
+
   for(i=len-1;i>-1;--i)
     if(p[i]!=' ') break;
   p[i+1]='\0';
@@ -2734,7 +2753,7 @@ int ajStrCmp (const void* str1, const void* str2) {
 **
 ** @param [r] thys [const AjPStr] First string
 ** @param [r] anoth [const AjPStr] Second string
-** @return [int] -1 if first string should sort before second, +1 if the
+** @return [int] -ve if first string should sort before second, +ve if the
 **         second string should sort first. 0 if they are identical
 **         in length and content.
 ** @@

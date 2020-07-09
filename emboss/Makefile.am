@@ -3,19 +3,20 @@ SUBDIRS = acd data
 
 EXTRA_DIST = emboss.default.template
 
-check_PROGRAMS = ajtest ajtest2 ajtest3 ajtestajnam \
-contacts cluster complex corbatest \
+check_PROGRAMS = ajtest \
+complex corbatest \
 demofeatures demolist demosequence demostring demotable \
-entrails histogramtest intconv messtest \
-patmattest plplottest proteinmotifsearch \
+entrails histogramtest intconv \
+patmattest \
+psiblasts \
 seqinfo \
-seqretallfeat seqretfeat seqtofeat \
-simplesw swissparse testplot treetypedisplay 
+sigscan \
+testplot treetypedisplay 
 
 bin_PROGRAMS = abiview acdc antigenic \
 backtranseq banana btwisted \
 cai chaos charge checktrans chips cirdna codcmp coderet \
-compseq cons cpgplot cpgreport cusp cutgextract cutseq \
+contacts compseq cons cpgplot cpgreport cusp cutgextract cutseq \
 dan dbiblast dbifasta dbiflat dbigcg \
 degapseq descseq diffseq digest distmat domainer \
 dotmatcher dotpath dottup dreg \
@@ -23,7 +24,7 @@ einverted embossdata embossversion emma emowse entret \
 equicktandem est2genome etandem extractseq \
 findkm freak fuzznuc fuzzpro fuzztran \
 garnier geecee getorf helixturnhelix hmoment \
-iep infoseq isochore lindna \
+iep infoalign infoseq isochore lindna \
 marscan maskfeat maskseq matcher megamerger merger msbar \
 needle newcpgreport newcpgseek newseq \
 noreturn notseq nrscope nthseq \
@@ -36,10 +37,10 @@ prettyplot prettyseq prima primersearch printsextract \
 profit prophecy prophet \
 prosextract pscan \
 rebaseextract recoder redata remap restover restrict revseq scope \
-seealso seqmatchall seqret seqretall seqretset seqretsplit \
+seealso seqmatchall seqret seqretall seqretallfeat seqretset seqretsplit \
 showalign showdb showfeat showorf showseq \
-shuffleseq sigcleave silent splitter scopalign stretcher \
-stssearch supermatcher syco \
+shuffleseq sigcleave siggen silent splitter scopalign stretcher \
+stssearch supermatcher swissparse syco \
 textsearch tfextract tfm tfscan \
 tmap transeq trimseq \
 vectorstrip \
@@ -65,6 +66,7 @@ coderet_SOURCES = coderet.c
 complex_SOURCES = complex.c
 compseq_SOURCES = compseq.c
 cons_SOURCES = cons.c
+contacts_SOURCES = contacts.c
 corbatest_SOURCES = corbatest.c
 cpgplot_SOURCES = cpgplot.c
 cpgreport_SOURCES = cpgreport.c
@@ -107,6 +109,7 @@ getorf_SOURCES = getorf.c
 helixturnhelix_SOURCES = helixturnhelix.c
 hmoment_SOURCES = hmoment.c
 iep_SOURCES = iep.c
+infoalign_SOURCES = infoalign.c
 infoseq_SOURCES = infoseq.c
 intconv_SOURCES = intconv.c
 isochore_SOURCES = isochore.c
@@ -152,7 +155,6 @@ profit_SOURCES = profit.c
 prophecy_SOURCES = prophecy.c
 prophet_SOURCES = prophet.c
 prosextract_SOURCES = prosextract.c
-proteinmotifsearch_SOURCES = proteinmotifsearch.c
 pscan_SOURCES = pscan.c
 rebaseextract_SOURCES = rebaseextract.c
 recoder_SOURCES = recoder.c
@@ -176,6 +178,7 @@ showfeat_SOURCES = showfeat.c
 showorf_SOURCES = showorf.c
 showseq_SOURCES = showseq.c
 shuffleseq_SOURCES = shuffleseq.c
+siggen_SOURCES = siggen.c
 sigcleave_SOURCES = sigcleave.c
 silent_SOURCES = silent.c
 splitter_SOURCES = splitter.c
@@ -183,6 +186,7 @@ scopalign_SOURCES = scopalign.c
 stretcher_SOURCES = stretcher.c
 stssearch_SOURCES = stssearch.c
 supermatcher_SOURCES = supermatcher.c
+swissparse_SOURCES = swissparse.c
 syco_SOURCES = syco.c
 textsearch_SOURCES = textsearch.c
 tfextract_SOURCES = tfextract.c
@@ -199,25 +203,16 @@ wordmatch_SOURCES = wordmatch.c
 wossname_SOURCES = wossname.c
 
 ajtest_SOURCES = ajtest.c
-ajtest2_SOURCES = ajtest2.c
-ajtest3_SOURCES = ajtest3.c
-ajtestajnam_SOURCES = ajtestajnam.c
-contacts_SOURCES = contacts.c
-cluster_SOURCES = cluster.c
 demofeatures_SOURCES = demofeatures.c
 demolist_SOURCES = demolist.c
 demosequence_SOURCES = demosequence.c
 demostring_SOURCES = demostring.c
 demotable_SOURCES = demotable.c
 histogramtest_SOURCES = histogramtest.c
-messtest_SOURCES = messtest.c
 patmattest_SOURCES = patmattest.c
-plplottest_SOURCES = plplottest.c
-simplesw_SOURCES = simplesw.c
-swissparse_SOURCES = swissparse.c
+psiblasts_SOURCES = psiblasts.c
 seqretallfeat_SOURCES = seqretallfeat.c
-seqretfeat_SOURCES = seqretfeat.c
-seqtofeat_SOURCES = seqtofeat.c
+sigscan_SOURCES = sigscan.c
 testplot_SOURCES = testplot.c
 treetypedisplay_SOURCES = treetypedisplay.c
 

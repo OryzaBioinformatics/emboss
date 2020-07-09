@@ -23,12 +23,19 @@
 #include "emboss.h"
 
 
+
+/* @prog noreturn *************************************************************
+**
+** Removes carriage return from ASCII files
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
     AjPFile inf  = NULL;
     AjPFile outf = NULL;
     AjPStr  line = NULL;
-    ajint     len;
+    ajint   len;
     char    *p;
     
     embInit("noreturn", argc, argv);
@@ -42,8 +49,9 @@ int main(int argc, char **argv)
     {
 	p   = MAJSTRSTR(line);
 	len = ajStrLen(line);
-	if(p[len-1] == 0x0d)
-	    p[len-1] = 0x00;
+	if(len)
+	    if(p[len-1] == 0x0d)
+		p[len-1] = 0x00;
 
 	ajFmtPrintF(outf,"%s\n",p);
     }

@@ -100,6 +100,7 @@ EmbPentry embDbiEntryNew (void) {
 **
 ** @param [r] dir [AjPStr] Directory
 ** @param [r] wildfile [AjPStr] Wildcard file name
+** @param [r] trim [AjBool] Expand to search, trim results
 ** @return [AjPList] New list of all files with full paths
 ** @@ 
 ******************************************************************************/
@@ -111,6 +112,7 @@ AjPList embDbiFileList (AjPStr dir, AjPStr wildfile, AjBool trim) {
   DIR* dp;
   struct dirent* de;
   int dirsize;
+  static AjPStr wwildfile=NULL;
   AjPStr name = NULL;
   static AjPStr dirfix = NULL;
   AjPStr tmp;
@@ -127,8 +129,10 @@ AjPList embDbiFileList (AjPStr dir, AjPStr wildfile, AjBool trim) {
   
   ajDebug("embDbiFileList dir '%S' wildfile '%S'\n",
 	  dir, wildfile);
+
+  ajStrAssS(&wwildfile,wildfile);
   
-  tmp = ajStrNewC(ajStrStr(wildfile));
+  tmp = ajStrNewC(ajStrStr(wwildfile));
 
   if (ajStrLen(dir))
     (void) ajStrAss (&dirfix, dir);
@@ -138,7 +142,9 @@ AjPList embDbiFileList (AjPStr dir, AjPStr wildfile, AjBool trim) {
   if (ajStrChar(dirfix, -1) != '/')
     (void) ajStrAppC (&dirfix, "/");
 
-  (void) ajStrAppC(&wildfile,"*");
+  if (trim) {
+    (void) ajStrAppC(&wwildfile,"*");
+  }
 
   dp = opendir (ajStrStr(dirfix));
   if (!dp)
@@ -150,7 +156,7 @@ AjPList embDbiFileList (AjPStr dir, AjPStr wildfile, AjBool trim) {
   retlist = ajListstrNew ();
   while ((de = readdir(dp))) {
     if (!de->d_ino) continue;	/* skip deleted files with inode zero */
-    if (!ajStrMatchWildCO(de->d_name, wildfile)) continue;
+    if (!ajStrMatchWildCO(de->d_name, wwildfile)) continue;
     (void) ajStrAssC(&s,de->d_name);
     p=q=ajStrStr(s);
     if (trim) {
@@ -190,11 +196,14 @@ AjPList embDbiFileList (AjPStr dir, AjPStr wildfile, AjBool trim) {
 
   while(ajListPop(l,(void *)&t))
       ajStrDel(&t);
+
+  ajListDel(&l);
+  
   ajStrDel(&s);
   ajStrDel(&tmp);
 
   (void) closedir (dp);
-  ajDebug ("%d files for '%S' '%S'\n", dirsize, dir, wildfile);
+  ajDebug ("%d files for '%S' '%S'\n", dirsize, dir, wwildfile);
 
   return retlist;
 

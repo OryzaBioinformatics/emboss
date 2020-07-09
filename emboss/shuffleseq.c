@@ -23,6 +23,13 @@
 
 
 
+
+/* @prog shuffleseq ***********************************************************
+**
+** Shuffles a set of sequences maintaining composition
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
 

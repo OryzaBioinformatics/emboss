@@ -1,6 +1,6 @@
-/* @source showseq application
+/* @source nthseq application
 **
-** Display a sequence with translations, features and other bits
+** Get nth sequence in a file of sequences
 **
 ** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** 14 Sept 1999 - GWW - written
@@ -24,33 +24,40 @@
 
 #include "emboss.h"
 
+
+/* @prog nthseq ***************************************************************
+**
+** Writes one sequence from a multiple set of sequences
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
 
-  AjPSeqall seqall;
-  AjPSeqout seqout;
-  AjPSeq seq = NULL;
-  ajint n;
-  ajint count;
+    AjPSeqall seqall;
+    AjPSeqout seqout;
+    AjPSeq seq = NULL;
+    ajint n;
+    ajint count;
   
-  embInit ("nthseq", argc, argv);
+    embInit ("nthseq", argc, argv);
 
-  seqall = ajAcdGetSeqall ("sequence");
-  n = ajAcdGetInt ("number");
-  seqout = ajAcdGetSeqout ("outseq");
+    seqall = ajAcdGetSeqall ("sequence");
+    n = ajAcdGetInt ("number");
+    seqout = ajAcdGetSeqout ("outseq");
 
-  count = 0;
-  while (ajSeqallNext(seqall, &seq)) {
-    if (++count == n) {
-      ajSeqWrite (seqout, seq);
-      ajSeqWriteClose (seqout);
-      ajExit ();
-      return 0;
-    }
-  }
+    count = 0;
+    while (ajSeqallNext(seqall, &seq))
+	if (++count == n)
+	{
+	    ajSeqWrite (seqout, seq);
+	    ajSeqWriteClose (seqout);
+	    ajExit ();
+	    return 0;
+	}
 
-  ajSeqWriteClose (seqout);
-  (void) ajDie("No such sequence - only %d sequences were input.", count);
-  return 1;
+    ajSeqWriteClose (seqout);
+    (void) ajDie("No such sequence - only %d sequences were input.", count);
 
+    return 1;
 }
