@@ -37,16 +37,17 @@
 
 #include "emboss.h"
 
-static AjPFile outfile;
-static AjPSeqCvt cvt;
+static AjPFile outfile=NULL;
+static AjPSeqCvt cvt=NULL;
 
-static void equicktandem_report (AjPFile outf, ajint begin);
+static void equicktandem_print (AjPFile outf, ajint begin);
+static void equicktandem_report (AjPFeattable tab, ajint begin);
 
-static char *back;
-static char *front;
+static char *back=NULL;
+static char *front=NULL;
 static char *maxback=NULL;
 static char *maxfront=NULL;
-char* sq;
+char* sq=NULL;
 ajint gap;
 ajint max;
 ajint score;
@@ -63,19 +64,31 @@ int main(int argc, char **argv)
     ajint thresh;
     ajint maxrepeat;
     AjPSeq sequence = NULL ;
+    AjPSeq saveseq = NULL ;
     AjPStr tseq = NULL;
     AjPStr str = NULL;
     AjPStr substr = NULL;
+    AjPFeattable tab=NULL;
+    AjPReport report=NULL;
+    AjPStr tmpstr = NULL;
   
     ajint  begin;
     ajint  end;
     ajint  len;
     
     embInit ("equicktandem", argc, argv);
-    outfile = ajAcdGetOutfile ("outfile");
+    report = ajAcdGetReport ("outfile");
+    outfile = ajAcdGetOutfile ("origfile");
     sequence = ajAcdGetSeq ("sequence");
     thresh = ajAcdGetInt ("threshold");
     maxrepeat = ajAcdGetInt ("maxrepeat");
+
+    saveseq = ajSeqNewS(sequence);
+    tab = ajFeattableNewSeq (saveseq);
+
+    ajFmtPrintAppS (&tmpstr, "Threshold: %d\n", thresh);
+    ajFmtPrintAppS (&tmpstr, "Maxrepeat: %d\n", maxrepeat);
+    ajReportSetHeader (report, tmpstr);
 
     begin = ajSeqBegin(sequence) - 1;
     end   = ajSeqEnd(sequence) - 1;
@@ -104,7 +117,8 @@ int main(int argc, char **argv)
 	    {
 		if (max >= thresh)
 		{
-		    equicktandem_report (outfile, begin);
+		    equicktandem_print (outfile, begin);
+		    equicktandem_report (tab, begin);
 		    back = maxfront ; front = back + gap ;
 		    score = max = 0 ;
 		}
@@ -120,7 +134,8 @@ int main(int argc, char **argv)
 	    {
 		if (max >= thresh)
 		{
-		    equicktandem_report (outfile, begin);
+		    equicktandem_print (outfile, begin);
+		    equicktandem_report (tab, begin);
 		    back = maxfront ; front = back + gap ;
 		    score = max = 0 ;
 		}
@@ -140,8 +155,15 @@ int main(int argc, char **argv)
 	}
 
 	if (max >= thresh)
-	    equicktandem_report (outfile, begin);
+	{
+	    equicktandem_print (outfile, begin);
+	    equicktandem_report (tab, begin);
+	}
     }
+
+    ajReportWrite (report, tab, saveseq);
+
+    ajFeattableDel(&tab);
 
     ajStrDel(&str);
     ajStrDel(&substr);
@@ -153,18 +175,22 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic equicktandem_report *******************************************
+/* @funcstatic equicktandem_print *******************************************
 **
-** Undocumented.
+** Prints the original output format, but simply returns if the
+** output file is NULL.
 **
 ** @param [?] outf [AjPFile] Undocumented
 ** @param [?] begin [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
-static void equicktandem_report (AjPFile outf, ajint begin)
+static void equicktandem_print (AjPFile outf, ajint begin)
 {
     char* cp;
+
+    if (!outf)
+      return;
 
     ajFmtPrintF (outf, "%6d %10d %10d %2d %3d\n",
 		 max, 1+maxback-sq+begin, 1+maxfront-sq+begin,
@@ -174,3 +200,46 @@ static void equicktandem_report (AjPFile outf, ajint begin)
 
     return;
 }
+/* @funcstatic equicktandem_savefeat ******************************************
+**
+** Saves a result as a feature.
+**
+** @param [?] tab [AjPFeattable] Undocumented
+** @param [?] begin [ajint] Undocumented
+** @@
+******************************************************************************/
+
+static void equicktandem_report (AjPFeattable tab, ajint begin)
+{
+    char* cp;
+
+    AjPFeature gf;
+    static AjPStr rpthit=NULL;
+    static AjPStr s=NULL;
+
+    if (!rpthit)
+      ajStrAssC (&rpthit, "repeat_region");
+
+    /*
+    ajFmtPrintF (outf, "%6d %10d %10d %2d %3d\n",
+		 max, 1+maxback-sq+begin, 1+maxfront-sq+begin,
+		 gap, (maxfront-maxback+1)/gap) ;
+    */
+
+
+    gf = ajFeatNew (tab, NULL, rpthit,
+		    1+maxback-sq+begin, 1+maxfront-sq+begin,
+		    (float) max, '+', 0);
+
+    ajFeatTagAddCC (gf, "rpt_type", "TANDEM");
+    ajFmtPrintS(&s, "*rpt_size %d", gap);
+    ajFeatTagAdd (gf, NULL, s);
+    ajFmtPrintS(&s, "*rpt_count %d", (maxfront-maxback+1) / gap);
+    ajFeatTagAdd (gf, NULL, s);
+
+    for (cp = maxback ; cp <= maxfront ; ++cp)
+	*cp = 'Z' ;
+
+    return;
+}
+

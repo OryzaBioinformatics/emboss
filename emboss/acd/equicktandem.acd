@@ -26,9 +26,18 @@ integer: threshold  [
 endsection: required
 
 section: output [ info: "output Section" type: page ]
-outfile: outfile  [
+
+report: outfile  [
   parameter: "Y"
-  extension: "qtan"
+  rformat: "table"
+  taglist: "int:rpt_size=Size int:rpt_count=Count"
+  rextension: "qtan"
+  precision: 0
+]
+
+outfile: origfile  [
+  extension: "oldqtan"
+  nullok: "Y"
 ]
 
 endsection: output

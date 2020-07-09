@@ -24,11 +24,9 @@
 #include "stdlib.h"
 
 
-static void fuzztran_print_hits(AjPList *l, ajint hits, AjPFile outf,
-				AjPStr seq, AjBool mms, ajint begin,
-				ajint fnum, ajint end, AjPStr desc,
-				AjBool dodesc, AjPStr acc, AjBool doacc,
-				AjPStr usa, AjBool dousa);
+static void fuzztran_save_hits (AjPList *l, ajint hits, ajint fnum,
+				AjPStr pro,
+				AjPFeattable* ptab, AjPSeq seq);
 
 
 
@@ -42,7 +40,8 @@ int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq seq;
-    AjPFile outf;
+    AjPReport report=NULL;
+    AjPFeattable tab=NULL;
     AjPStr pattern=NULL;
     AjPStr opattern=NULL;
     AjPStr seqname=NULL;
@@ -64,14 +63,7 @@ int main(int argc, char **argv)
     
     AjBool amino;
     AjBool carboxyl;
-    AjBool mms;
-    AjPStr desc=NULL;
-    AjPStr acc=NULL;
-    AjBool doacc;
-    AjBool dodesc;
-    AjPStr usa=NULL;
-    AjBool dousa;
-    
+   
     ajint    type=0;
     ajint    *buf=NULL;
     ajint    hits=0;
@@ -90,21 +82,24 @@ int main(int argc, char **argv)
     ajint **skipm=NULL;
     
 
+    AjPStr         tmpstr = NULL;
     void   *tidy=NULL;
 
     embInit ("fuzztran", argc, argv);
     
     seqall   = ajAcdGetSeqall("sequence");
-    outf     = ajAcdGetOutfile("outf");
     pattern  = ajAcdGetString("pattern");
+    report = ajAcdGetReport ("outfile");
     mismatch = ajAcdGetInt("mismatch");
-    mms      = ajAcdGetBool("mmshow");
     lgcode   = ajAcdGetList("table");
     lframe   = ajAcdGetList("frame");
-    doacc    = ajAcdGetBool("accshow");
-    dodesc   = ajAcdGetBool("descshow");
-    dousa    = ajAcdGetBool("usashow");
         
+    ajFmtPrintAppS (&tmpstr, "Pattern: %S\n", pattern);
+    ajFmtPrintAppS (&tmpstr, "Mismatch: %d\n", mismatch);
+    ajFmtPrintAppS (&tmpstr, "TransTable: %S\n", ajAcdValue("table"));
+    ajFmtPrintAppS (&tmpstr, "Frames: %S\n", ajAcdValue("frame"));
+    ajReportSetHeader (report, tmpstr);
+
     seqname = ajStrNew();
     opattern=ajStrNew();
 
@@ -143,11 +138,7 @@ int main(int argc, char **argv)
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
 	    {
-		desc = ajSeqGetDesc(seq);
-		acc  = ajSeqGetAcc(seq);
-		usa  = ajSeqGetUsa(seq);
-		fuzztran_print_hits(&l,hits,outf,pro,mms,begin,1,end,desc,
-				    dodesc,acc,doacc,usa,dousa);
+	      fuzztran_save_hits (&l,hits,1, pro, &tab, seq);
 	    }
 
 	    ajStrAssC(&pro,"");
@@ -158,11 +149,7 @@ int main(int argc, char **argv)
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
 	    {
-		desc = ajSeqGetDesc(seq);
-		acc  = ajSeqGetAcc(seq);
-		usa  = ajSeqGetUsa(seq);
-		fuzztran_print_hits(&l,hits,outf,pro,mms,begin,2,end,desc,
-				    dodesc,acc,doacc,usa,dousa);
+		fuzztran_save_hits (&l,hits,2, pro, &tab, seq);
 	    }
 	    ajStrAssC(&pro,"");
 
@@ -172,11 +159,7 @@ int main(int argc, char **argv)
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
 	    {
-		desc = ajSeqGetDesc(seq);
-		acc  = ajSeqGetAcc(seq);
-		usa  = ajSeqGetUsa(seq);
-		fuzztran_print_hits(&l,hits,outf,pro,mms,begin,3,end,desc,
-				    dodesc,acc,doacc,usa,dousa);
+		fuzztran_save_hits(&l,hits,3, pro, &tab, seq);
 	    }
 	    ajStrAssC(&pro,"");
 	}
@@ -188,11 +171,7 @@ int main(int argc, char **argv)
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
 	    {
-		desc = ajSeqGetDesc(seq);
-		acc  = ajSeqGetAcc(seq);
-		usa  = ajSeqGetUsa(seq);
-		fuzztran_print_hits(&l,hits,outf,pro,mms,begin,-1,end,desc,
-				    dodesc,acc,doacc,usa,dousa);
+		fuzztran_save_hits(&l,hits, -1, pro, &tab, seq);
 	    }
 	    ajStrAssC(&pro,"");
 
@@ -202,11 +181,7 @@ int main(int argc, char **argv)
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
 	    {
-		desc = ajSeqGetDesc(seq);
-		acc  = ajSeqGetAcc(seq);
-		usa  = ajSeqGetUsa(seq);
-		fuzztran_print_hits(&l,hits,outf,pro,mms,begin,-2,end,desc,
-				    dodesc,acc,doacc,usa,dousa);
+		fuzztran_save_hits(&l,hits,-2, pro, &tab, seq);
 	    }
 	    ajStrAssC(&pro,"");
 
@@ -216,11 +191,7 @@ int main(int argc, char **argv)
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
 	    {
-		desc = ajSeqGetDesc(seq);
-		acc  = ajSeqGetAcc(seq);
-		usa  = ajSeqGetUsa(seq);
-		fuzztran_print_hits(&l,hits,outf,pro,mms,begin,-3,end,desc,
-				    dodesc,acc,doacc,usa,dousa);
+		fuzztran_save_hits(&l,hits,-3, pro, &tab, seq);
 	    }
 	    ajStrAssC(&pro,"");
 	}
@@ -232,11 +203,7 @@ int main(int argc, char **argv)
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
 	    {
-		desc = ajSeqGetDesc(seq);
-		acc  = ajSeqGetAcc(seq);
-		usa  = ajSeqGetUsa(seq);
-		fuzztran_print_hits(&l,hits,outf,pro,mms,begin,1,end,desc,
-				    dodesc,acc,doacc,usa,dousa);
+		fuzztran_save_hits(&l,hits, 1, pro, &tab, seq);
 	    }
 	    ajStrAssC(&pro,"");
 	    
@@ -246,11 +213,7 @@ int main(int argc, char **argv)
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
 	    {
-		desc = ajSeqGetDesc(seq);
-		acc  = ajSeqGetAcc(seq);
-		usa  = ajSeqGetUsa(seq);
-		fuzztran_print_hits(&l,hits,outf,pro,mms,begin,2,end,desc,
-				    dodesc,acc,doacc,usa,dousa);
+		fuzztran_save_hits(&l,hits, 2, pro, &tab, seq);
 	    }
 	    ajStrAssC(&pro,"");
 
@@ -260,11 +223,7 @@ int main(int argc, char **argv)
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
 	    {
-		desc = ajSeqGetDesc(seq);
-		acc  = ajSeqGetAcc(seq);
-		usa  = ajSeqGetUsa(seq);
-		fuzztran_print_hits(&l,hits,outf,pro,mms,begin,3,end,desc,
-				    dodesc,acc,doacc,usa,dousa);
+		fuzztran_save_hits(&l,hits,3, pro, &tab, seq);
 	    }
 	    ajStrAssC(&pro,"");
 
@@ -274,11 +233,7 @@ int main(int argc, char **argv)
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
 	    {
-		desc = ajSeqGetDesc(seq);
-		acc  = ajSeqGetAcc(seq);
-		usa  = ajSeqGetUsa(seq);
-		fuzztran_print_hits(&l,hits,outf,pro,mms,begin,-1,end,desc,
-				    dodesc,acc,doacc,usa,dousa);
+		fuzztran_save_hits(&l,hits,-1, pro, &tab, seq);
 	    }
 	    ajStrAssC(&pro,"");
 
@@ -288,11 +243,7 @@ int main(int argc, char **argv)
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
 	    {
-		desc = ajSeqGetDesc(seq);
-		acc  = ajSeqGetAcc(seq);
-		usa  = ajSeqGetUsa(seq);
-		fuzztran_print_hits(&l,hits,outf,pro,mms,begin,-2,end,desc,
-				    dodesc,acc,doacc,usa,dousa);
+		fuzztran_save_hits(&l,hits, -2, pro, &tab, seq);
 	    }
 	    ajStrAssC(&pro,"");
 
@@ -302,11 +253,7 @@ int main(int argc, char **argv)
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
 	    {
-		desc = ajSeqGetDesc(seq);
-		acc  = ajSeqGetAcc(seq);
-		usa  = ajSeqGetUsa(seq);
-		fuzztran_print_hits(&l,hits,outf,pro,mms,begin,-3,end,desc,
-				    dodesc,acc,doacc,usa,dousa);
+		fuzztran_save_hits(&l,hits, -3, pro, &tab, seq);
 	    }
 	    ajStrAssC(&pro,"");
 	}
@@ -319,16 +266,16 @@ int main(int argc, char **argv)
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
 	    {
-		desc = ajSeqGetDesc(seq);
-		acc  = ajSeqGetAcc(seq);
-		usa  = ajSeqGetUsa(seq);
-		fuzztran_print_hits(&l,hits,outf,pro,mms,begin,frameno,end,
-				    desc,dodesc,acc,doacc,usa,dousa);
+		fuzztran_save_hits(&l,hits,frameno, pro, &tab, seq);
 	    }
 	    ajStrAssC(&pro,"");
 	}
 	
-
+	if (ajFeatSize(tab))
+	{
+	  (void) ajReportWrite(report, tab, seq);
+	  ajFeattableDel(&tab);
+	}
 	ajListDel(&l);
     }
     
@@ -344,54 +291,66 @@ int main(int argc, char **argv)
     ajStrDel(&pattern);
     ajStrDel(&seqname);
     ajSeqDel(&seq);
-    ajFileClose(&outf);
+
+    ajReportClose (report);
+    ajReportDel (&report);
     ajExit();
     return 0;
 }
 
 
 
-/* @funcstatic fuzztran_print_hits ********************************************
+/* @funcstatic fuzztran_save_hits ********************************************
 **
-** Undocumented.
+** Save the hits in a feature table for later reporting.
 **
-** @param [?] l [AjPList*] Undocumented
-** @param [?] hits [ajint] Undocumented
-** @param [?] outf [AjPFile] Undocumented
-** @param [?] seq [AjPStr] Undocumented
-** @param [?] mms [AjBool] Undocumented
-** @param [?] begin [ajint] Undocumented
-** @param [?] fnum [ajint] Undocumented
-** @param [?] end [ajint] Undocumented
-** @param [?] desc [AjPStr] Undocumented
-** @param [?] dodesc [AjBool] Undocumented
-** @param [?] acc [AjPStr] Undocumented
-** @param [?] doacc [AjBool] Undocumented
-** @param [?] usa [AjPStr] Undocumented
-** @param [?] dousa [AjBool] Undocumented
+** @param [?] l [AjPList*] List of hits stored as EmbPMatch objects
+** @param [?] hits [ajint] Number of hits
+** @param [?] fnum [ajint] Frame number 1, 2, 3, -1, -2 or -3.
+** @param [?] ptab [AjPFeattable*] Feature table (created if first use)
+** @param [?] seq [AjPSeq] Sequence
 ** @@
 ******************************************************************************/
 
 
-static void fuzztran_print_hits(AjPList *l, ajint hits, AjPFile outf,
-				AjPStr seq, AjBool mms, ajint begin,
-				ajint fnum, ajint end, AjPStr desc,
-				AjBool dodesc, AjPStr acc, AjBool doacc,
-				AjPStr usa, AjBool dousa)
+static void fuzztran_save_hits(AjPList *l, ajint hits, ajint fnum,
+			       AjPStr pro,
+			       AjPFeattable* ptab, AjPSeq seq)
 {
     ajint i;
     EmbPMatMatch m;
-    AjPStr s;
     ajint ff;
     AjBool forward;
     ajint slen;
     ajint npos;
-    
+    ajint nlast;
+    AjPFeattable tab;
+    char strand = '+';
+    ajint begin;
+    ajint end;
+    AjPFeature gf=NULL;
+    static AjPStr fthit;
+    static AjPStr s=NULL;
+    static AjPStr t=NULL;
+
+    if (!fthit)
+      ajStrAssC(&fthit, "hit");
+
+    if (!*ptab)
+      *ptab = ajFeattableNewSeq(seq);
+
+    tab = *ptab;
+
+    begin = ajSeqBegin(seq);
+    end = ajSeqEnd(seq);
 
     forward=ajTrue;
     if(fnum<0)
+    {
 	forward=ajFalse;
-    
+	strand = '-';
+    }
+
     slen = end-begin+1;
     
     s=ajStrNew();
@@ -410,33 +369,40 @@ static void fuzztran_print_hits(AjPList *l, ajint hits, AjPFile outf,
     for(i=0;i<hits;++i)
     {
 	ajListPop(*l,(void **)&m);
-
-	ajStrAssSubC(&s,ajStrStr(seq),m->start-1,m->start+m->len-2);
-
-	if(doacc)
-	    ajFmtPrintF(outf,"%S ",acc);
-	if(dodesc)
-	    ajFmtPrintF(outf,"%S",desc);
-	if(doacc || dodesc)
-	    ajFmtPrintF(outf,"\n");
-
-	if(dousa)
-	    ajFmtPrintF(outf,"%S\t",usa);
-
 	if(forward)
+	{
 	    npos = (m->start*3) + ff + (begin-1);
+	    nlast = npos + m->len*3 - 1;
+	}
 	else
-	    npos = (slen/3)*3  - (m->start*3) - (fnum-1) + (begin);
-	
+	{
+	    nlast = (slen/3)*3  - (m->start*3) - (fnum-1) + (begin);
+	    npos = nlast - m->len*3 + 1;
+	}
 
-	if(!mms)
-	    ajFmtPrintF(outf,"%15s %2d %8d %s\n",ajStrStr(m->seqname),fnum,
-			npos,
-			ajStrStr(s));
-	else
-	    ajFmtPrintF(outf,"%15s %2d %8d %5d %s\n",ajStrStr(m->seqname),
-			fnum,npos,
-			m->mm,ajStrStr(s));
+        gf = ajFeatNew(tab, NULL, fthit,
+		       npos,
+		       nlast,
+		       (float) (m->len - m->mm), strand, fnum);
+
+	if (m->mm)
+	{
+	  ajFmtPrintS(&s, "*mismatch %d", m->mm);
+	  ajFeatTagAdd (gf, NULL, s);
+	}
+
+	ajFmtPrintS(&s, "*frame %d", fnum);
+	ajFeatTagAdd (gf, NULL, s);
+
+	ajFmtPrintS(&s, "*start %d", m->start);
+	ajFeatTagAdd (gf, NULL, s);
+
+	ajFmtPrintS(&s, "*end %d", m->start + m->len - 1);
+	ajFeatTagAdd (gf, NULL, s);
+
+	ajStrAssSub(&t,pro,m->start-1,m->start+m->len-2);
+	ajFmtPrintS(&s, "*translation %S", t);
+	ajFeatTagAdd (gf, NULL, s);
 
 	embMatMatchDel(&m);
     }

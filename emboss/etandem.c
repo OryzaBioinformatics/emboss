@@ -44,8 +44,6 @@ typedef struct cons
   struct cons *next ;
 } *Cons ;
 
-static AjPFile outfile;
-
 static struct cons rootStruct ;
 static Cons root = &rootStruct ;
 static ajint *ring ;
@@ -59,9 +57,9 @@ static AjPSeqCvt cvt;
 
 static Cons etandem_consCreate (void);
 static void etandem_consDestroy (Cons cons);
-static void etandem_basicReport (Cons a);
+static void etandem_basicReport (AjPFeattable tab, AjPFile outfile, Cons a);
 static void etandem_report (Cons a);
-static void etandem_finalReport (void);
+static void etandem_finalReport (AjPFeattable tab, AjPFile outfile);
 
 #define ATAB(x,y) (a->tab[x+5*y])
 
@@ -123,29 +121,54 @@ static Cons reportRoot = &reportRootStruct ;
 **
 ** Undocumented.
 **
+** @param [r] tab [AjPFeattable] Feature table
+** @param [r] outfile [AjPFile] Output file (null unless original output
+**                              is needed)
 ** @param [?] a [Cons] Undocumented
 ** @@
 ******************************************************************************/
 
-static void etandem_basicReport (Cons a)
+static void etandem_basicReport (AjPFeattable tab, AjPFile outfile, Cons a)
 {
     ajint j;
     ajint copies;
     ajint n = a->repeat ;
     float perc ;
+    AjPStr constr=NULL;
+    AjPStr rpthit=NULL;
+    AjPStr s=NULL;
+    AjPFeature gf;
 
     ajDebug("basicReport\n");
 
+    if (!rpthit)
+      ajStrAssC (&rpthit, "repeat_region");
+
     copies = (a->ibest - a->start + 1) / n ;
     perc = 100.0 * (a->bestScore + n * (copies + 1)) / (2.0 * n * copies) ;
-    ajFmtPrintF (outfile, "%6d %10d %10d %2d %3d %5.1f ",
-		 a->bestScore, a->start+1, a->ibest+1, 
-		 n, copies, perc) ;
+    if (outfile)
+      ajFmtPrintF (outfile, "%6d %10d %10d %2d %3d %5.1f ",
+		   a->bestScore, a->start+1, a->ibest+1, 
+		   n, copies, perc) ;
+
+    gf = ajFeatNew (tab, NULL, rpthit,
+		    a->start+1, a->ibest+1,
+		    (float) a->bestScore, '+', 0);
+    ajFeatTagAddCC (gf, "rpt_type", "TANDEM");
+    ajFmtPrintS(&s, "*rpt_size %d", n);
+    ajFeatTagAdd (gf, NULL, s);
+    ajFmtPrintS(&s, "*rpt_count %d", copies);
+    ajFeatTagAdd (gf, NULL, s);
+    ajFmtPrintS(&s, "*identity %.1f", perc);
+    ajFeatTagAdd (gf, NULL, s);
+
+    /* make the consensus */
+
     for (j = (a->phase+1) % n ; j < n ; ++j)
     {
 	ajDebug("      bestMax[%d] letter[%d] '%c'\n",
 		j, a->bestMax[j], letter[a->bestMax[j]]);
-	ajFmtPrintF (outfile, "%c", letter[a->bestMax[j]]) ;
+	ajStrAppK(&constr, letter[a->bestMax[j]]) ;
     }
 
     if ((a->phase+1) % n)
@@ -153,10 +176,14 @@ static void etandem_basicReport (Cons a)
 	{
 	    ajDebug("more: bestMax[%d] letter[%d] '%c'\n",
 		    j, a->bestMax[j], letter[a->bestMax[j]]);
-	    ajFmtPrintF (outfile, "%c", letter[a->bestMax[j]]) ;
+	    ajStrAppK(&constr, letter[a->bestMax[j]]) ;
 	}
 
-    ajFmtPrintF (outfile, "\n") ;
+    ajFmtPrintS(&s, "*consensus %S", constr);
+    ajFeatTagAdd (gf, NULL, s);
+
+    if (outfile)
+      ajFmtPrintF (outfile, "%S\n", constr) ;
 
     return;
 }
@@ -206,10 +233,13 @@ static void etandem_report (Cons a)
 **
 ** Undocumented.
 **
+** @param [r] tab [AjPFeattable] Feature table
+** @param [r] outfile [AjPFile] Output file (null unless original output
+**                              is needed)
 ** @@
 ******************************************************************************/
 
-static void etandem_finalReport (void)
+static void etandem_finalReport (AjPFeattable tab, AjPFile outfile)
 {
     ajint start;
     ajint end ; 
@@ -227,7 +257,7 @@ static void etandem_finalReport (void)
 		top = a ;
 	}
 	/* report that */
-	etandem_basicReport (top) ;
+	etandem_basicReport (tab, outfile, top) ;
 	/* destroy all overlapping entries, including self  */
 	start = top->start ; end = top->ibest ;
 	olda = reportRoot ;
@@ -275,6 +305,10 @@ int main(int argc, char **argv)
     Cons olda;
     Cons oldb;
     AjPStr nseq = NULL;
+    AjPFeattable tab=NULL;
+    AjPReport report=NULL;
+    AjPFile outfile=NULL;
+    AjPStr tmpstr = NULL;
 
     embInit ("etandem", argc, argv);
 
@@ -283,9 +317,19 @@ int main(int argc, char **argv)
     mismatch = ajAcdGetBool ("mismatch");
     thresh = ajAcdGetInt("threshold");
     uniform = ajAcdGetBool("uniform");
-    outfile = ajAcdGetOutfile ("outfile");
+    report = ajAcdGetReport ("outfile");
+    outfile = ajAcdGetOutfile ("origfile");
     sequence = ajAcdGetSeq ("sequence");
     nbase = ajSeqLen(sequence);
+
+    tab = ajFeattableNewSeq (sequence);
+
+    ajFmtPrintAppS (&tmpstr, "Threshold: %d\n", thresh);
+    ajFmtPrintAppS (&tmpstr, "Minrepeat: %d\n", nmin);
+    ajFmtPrintAppS (&tmpstr, "Maxrepeat: %d\n", nmax);
+    ajFmtPrintAppS (&tmpstr, "Mismatch: %B\n", mismatch);
+    ajFmtPrintAppS (&tmpstr, "Uniform: %B\n", uniform);
+    ajReportSetHeader (report, tmpstr);
 
     cvt = ajSeqCvtNewZero ("ACGTN");
     ajSeqNum (sequence, cvt, &nseq);
@@ -386,7 +430,7 @@ int main(int argc, char **argv)
 			    if (DEBUG)
 			    {
 				ajDebug ("B") ;
-				etandem_basicReport (b) ;
+				etandem_basicReport (tab, outfile, b) ;
 			    }
 			    etandem_consDestroy (b) ;
 			    b = oldb ;
@@ -397,7 +441,7 @@ int main(int argc, char **argv)
 			    if (DEBUG)
 			    {
 				ajDebug ("A") ;
-				etandem_basicReport (a) ;
+				etandem_basicReport (tab, outfile, a) ;
 			    }
 			    etandem_consDestroy (a) ;
 			    a = olda ;
@@ -413,7 +457,7 @@ int main(int argc, char **argv)
 	    if (DEBUG)
 	    {
 		for (a = root->next ; a ; a = a->next)
-		    etandem_basicReport (a) ;
+		    etandem_basicReport (tab, outfile, a) ;
 	    }
 	}
 
@@ -424,7 +468,9 @@ int main(int argc, char **argv)
 	}
     }
 
-    etandem_finalReport () ;
+    etandem_finalReport (tab, outfile) ;
+    ajReportWrite(report, tab, sequence);
+
     ajStrDel (&nseq);
 
     ajExit();

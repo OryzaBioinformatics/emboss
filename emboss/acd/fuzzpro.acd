@@ -12,9 +12,30 @@ seqall: sequence  [
 endsection: input
 
 section: required [ info: "required Section" type: page ]
+
 string: pattern  [
   required: "Y"
   prompt: "Search pattern"
+  help: "The standard IUPAC one-letter codes for the amino acids are used. \ 
+The symbol `x' is used for a position where any amino acid is accepted. \ 
+Ambiguities are indicated by listing the acceptable amino acids for a
+given position, between square parentheses `[ ]'.  For example: [ALT]
+stands for Ala or Leu or Thr. \ 
+Ambiguities are also indicated by listing between a pair of curly
+brackets `{ }' the amino acids that are not accepted at a given
+position.  For example: {AM} stands for any amino acid except Ala and
+Met. \ 
+Each element in a pattern is separated from its neighbor by a `-'.
+(Optional in fuzzpro). \ 
+Repetition of an element of the pattern can be indicated by following
+that element with a numerical value or a numerical range between
+parenthesis.  Examples: x(3) corresponds to x-x-x, x(2,4) corresponds to
+x-x or x-x-x or x-x-x-x. \ 
+When a pattern is restricted to either the N- or C-terminal of a
+sequence, that pattern either starts with a `<' symbol or respectively
+ends with a `>' symbol. \ 
+A period ends the pattern.  (Optional in fuzzpro). \ 
+For example, [DE](2)HS{P}X(2)PX(2,4)C"
 ]
 
 integer: mismatch  [
@@ -27,33 +48,13 @@ integer: mismatch  [
 endsection: required
 
 section: output [ info: "output Section" type: page ]
-bool: mmshow  [
-  optional: "N"
-  default: "0"
-  information: "Show mismatches"
-]
 
-bool: accshow  [
-  optional: "N"
-  default: "0"
-  information: "Show accession numbers"
-]
-
-bool: usashow  [
-  optional: "N"
-  default: "0"
-  information: "Show USA"
-  help: "Showing the USA (Uniform Sequence Address) of the matching sequences will turn your output file into a 'list' file that can then be read in by many other EMBOSS programs by specifying it with a '@' in front of the filename."
-]
-
-bool: descshow  [
-  optional: "N"
-  default: "0"
-  information: "Show descriptions"
-]
-
-outfile: outf  [
+report: outfile  [
   parameter: "Y"
+  taglist: "int:mismatch=Mismatch"
+  rformat: "seqtable"
+  precision: 0
 ]
+
 endsection: output
 

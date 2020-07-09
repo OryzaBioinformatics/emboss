@@ -36,6 +36,8 @@ static void patmatdb_spaces(AjPFile *outf, ajint length);
 int main(int argc, char **argv)
 {
     AjPFile outf 		=NULL;	
+    AjPFeattable tab            =NULL;
+    AjPReport report            =NULL;
 
     AjPSeqall seqall 		=NULL;
     AjPSeq seq			=NULL;
@@ -57,20 +59,26 @@ int main(int argc, char **argv)
     ajint zend;    
     ajint seqlength;
     ajint j;
-	
+    AjPStr         tmpstr = NULL;
+    AjPFeature gf;
+    AjPStr fthit = NULL;
+
     embInit ("patmatdb", argc, argv);
 	
     seqall	= ajAcdGetSeqall ("sequence");
     motif 	= ajAcdGetString ("motif");
-    outf        = ajAcdGetOutfile("outfile");
+    /* outf        = ajAcdGetOutfile("outfile"); */
+    report = ajAcdGetReport ("outfile");
 
     temp=ajStrNew();
     ajStrToUpper(&motif);
+    ajStrAssC (&fthit, "hit");
 
     /*converting the Prosite motif to a reg exps */		
     regexp =embPatPrositeToRegExp(&motif);
    
-
+    ajFmtPrintAppS (&tmpstr, "Motif: %S\n", motif);
+    ajReportSetHeader (report, tmpstr);
 
     while (ajSeqallNext(seqall, &seq))
     {
@@ -82,65 +90,85 @@ int main(int argc, char **argv)
 
 	/*returns the number of posix matches in the structure. */
 	number 	= embPatPosMatchGetNumber(match);
-	if(number)
+	if(number && outf)
 	    ajFmtPrintF(outf,"\nNumber of matches found in %s = %d\n",
 			ajSeqName(seq), number);
+
+	if (number)
+	  tab = ajFeattableNewSeq(seq);
 
 	for (i=0; i<number; i++)
 	{
 	    seqlength = ajStrLen(str);
-	    ajFmtPrintF(outf, "Length of the sequence = %d basepairs\n",
-			seqlength);
+	    if (outf)
+	      ajFmtPrintF(outf, "Length of the sequence = %d basepairs\n",
+			  seqlength);
 
 	    /*returns length from pattern match for index'th item. */
 	    length = embPatPosMatchGetLen(match, i);
-	    ajFmtPrintF(outf, "Length of match = %d\n", length);
+	    if (outf)
+	      ajFmtPrintF(outf, "Length of match = %d\n", length);
 
 	    /*
 	     * returns the start position from the pattern match for the
              * index'th item.
 	     */
-	    start = embPatPosMatchGetStart(match, i);
-	    ajFmtPrintF(outf, "Start of match = position %d of sequence\n",
-			start);			
+	    start = 1+embPatPosMatchGetStart(match, i);
+	    if (outf)
+	      ajFmtPrintF(outf, "Start of match = position %d of sequence\n",
+			  start);			
 	
 	    /* returns the end point for the pattern match for the
 	     * index'th item.
 	     */
-	    end	= embPatPosMatchGetEnd(match, i);
-	    ajFmtPrintF(outf, "End of match = position %d of sequence\n\n", end);
-				
-	    
-	    ajFmtPrintF(outf,
-			"patmatDB of %s from %d to %d using pattern %s\n\n",
-			ajSeqName(seq), start, end, ajStrStr(motif));
+	    end	= 1+embPatPosMatchGetEnd(match, i);
+	    if (outf)
+	      ajFmtPrintF(outf, "End of match = position %d of sequence\n\n",
+			  end);
+
+	    gf = ajFeatNew (tab, NULL, fthit, start, end,
+			    (float) length, ' ', 0);
+
+	    if (outf)
+	      ajFmtPrintF(outf,
+			  "patmatDB of %s from %d to %d using pattern %s\n\n",
+			  ajSeqName(seq), start, end, ajStrStr(motif));
 		
 
 	    if(start-5<0)
 	    {
-		for(j=0;j<5-start;++j) ajFmtPrintF(outf," ");
+	        if (outf)
+	        {
+		    for(j=0;j<5-start;++j) ajFmtPrintF(outf," ");
+	        }
 		zstart=0;
 	    }
-	    else zstart=start-5;
+	    else zstart=start-6;
 	    
-	    if (end+5> seqlength)
+	    if (end+4> seqlength)
 		zend = end;
-	    else zend = end+5; 
+	    else zend = end+4; 
 
 
 				
 	    ajStrAssSub(&temp, str, zstart, zend);
-	    ajFmtPrintF(outf, "%s\n", ajStrStr(temp));
+	    if (outf)
+	    {
+	      ajFmtPrintF(outf, "%s\n", ajStrStr(temp));
 		
-		
-	    ajFmtPrintF(outf, "     |");
-	    patmatdb_spaces(&outf, length);
-	    ajFmtPrintF(outf, "|\n");
+	      ajFmtPrintF(outf, "     |");
+	      patmatdb_spaces(&outf, length);
+	      ajFmtPrintF(outf, "|\n");
 
-
-	    ajFmtPrintF(outf, "%6d", start);
-	    patmatdb_spaces(&outf, length);
-	    ajFmtPrintF(outf, "%-d\n\n\n", end);
+	      ajFmtPrintF(outf, "%6d", start);
+	      patmatdb_spaces(&outf, length);
+	      ajFmtPrintF(outf, "%-d\n\n\n", end);
+	    }
+	}
+	if (number)
+        {
+	    ajReportWrite (report, tab, seq);
+	    ajFeattableDel(&tab);
 	}
 	embPatMatchDel(&match);
     }	
@@ -151,6 +179,10 @@ int main(int argc, char **argv)
     ajStrDel(&motif);
     ajStrDel(&str);
     ajStrDel(&regexpdata);
+
+    ajReportClose(report);
+    ajReportDel (&report);
+
     ajExit();
     return 0;
 }
@@ -167,6 +199,8 @@ int main(int argc, char **argv)
 static void patmatdb_spaces(AjPFile *outf, ajint length)
 {
     ajint i;
+    if (!outf) return;
+
 
     for (i=0; i < length-2; ++i)
 	ajFmtPrintF(*outf, " ");

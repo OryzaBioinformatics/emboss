@@ -47,9 +47,18 @@ bool: uniform  [
 endsection: advanced
 
 section: output [ info: "output Section" type: page ]
-outfile: outfile  [
+
+report: outfile  [
   parameter: "Y"
-  extension: "tan"
+  rformat: "table"
+  taglist: "int:rpt_size=Size int:rpt_count=Count float:identity=Identity str:consensus=Consensus"
+  rextension: "tan"
+  precision: 0
+]
+
+outfile: origfile  [
+  extension: "oldtan"
+  nullok: "Y"
 ]
 
 endsection: output

@@ -22,8 +22,10 @@ string: motif  [
 endsection: required
 
 section: output [ info: "output Section" type: page ]
-outfile: outfile  [
+report: outfile  [
   parameter: "Y"
+  rformat: "dbmotif"
+  precision: 0
 ]
 
 endsection: output

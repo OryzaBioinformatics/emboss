@@ -24,11 +24,10 @@
 #include "stdlib.h"
 
 
-static void fuzznuc_print_hits(AjPList *l, ajint hits, AjPFile outf,
-			       AjPStr seq, AjBool mms, AjBool sc, ajint thits,
-			       ajint adj, ajint begin, AjPStr desc,
-			       AjBool dodesc, AjPStr acc, AjBool doacc,
-			       AjPStr usa, AjBool dousa);
+static void fuzznuc_report_hits(AjPList *l, ajint hits,
+				AjBool sc, ajint thits,
+				AjPReport report,
+				AjPFeattable tab, AjPSeq seq);
 
 
 /* @prog fuzznuc **************************************************************
@@ -41,17 +40,20 @@ int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq seq;
-    AjPFile outf;
+    AjPFeattable tab=NULL;
+    AjPReport report=NULL;
     AjPStr pattern=NULL;
     AjPStr opattern=NULL;
     AjPStr seqname=NULL;
     AjPStr text=NULL;
-    AjPStr desc=NULL;
-    AjBool dodesc;
-    AjPStr acc=NULL;
-    AjBool doacc;
-    AjPStr usa=NULL;
-    AjBool dousa;
+
+    /*
+//    AjBool dodesc;
+//    AjPStr acc=NULL;
+//    AjBool doacc;
+//    AjPStr usa=NULL;
+//    AjBool dousa;
+    */
     
     AjPList l;
     
@@ -61,7 +63,6 @@ int main(int argc, char **argv)
     
     AjBool amino;
     AjBool carboxyl;
-    AjBool mms;
     AjBool sc;
     ajint    type=0;
 
@@ -78,24 +79,24 @@ int main(int argc, char **argv)
     AjPStr	   regexp=NULL;
     ajint          **skipm=NULL;
     ajint          *buf=NULL;    
-
+    AjPStr         tmpstr = NULL;
     void   *tidy=NULL;
 
     embInit ("fuzznuc", argc, argv);
     
     seqall   = ajAcdGetSeqall("sequence");
-    outf     = ajAcdGetOutfile("outf");
+    report = ajAcdGetReport ("outfile");
     pattern  = ajAcdGetString("pattern");
     mismatch = ajAcdGetInt("mismatch");
-    mms      = ajAcdGetBool("mmshow");
     sc       = ajAcdGetBool("complement");
-    dodesc   = ajAcdGetBool("descshow");
-    doacc    = ajAcdGetBool("accshow");
-    dousa    = ajAcdGetBool("usashow");
     
+    ajFmtPrintAppS (&tmpstr, "Pattern: %S\n", pattern);
+    ajFmtPrintAppS (&tmpstr, "Mismatch: %d\n", mismatch);
+    ajFmtPrintAppS (&tmpstr, "Complement: %B\n", sc);
+    ajReportSetHeader (report, tmpstr);
+
     seqname = ajStrNew();
     opattern=ajStrNew();
-
 
     /* Copy original pattern for dear Henry */
     ajStrAssC(&opattern,ajStrStr(pattern));
@@ -112,8 +113,8 @@ int main(int argc, char **argv)
     {
 	l = ajListNew();
 	ajStrAssC(&seqname,ajSeqName(seq));
-	begin = ajSeqallBegin(seqall);
-	end   = ajSeqallEnd(seqall);
+	begin = ajSeqBegin(seq);
+	end   = ajSeqEnd(seq);
 	ajStrAssSubC(&text,ajSeqChar(seq),begin-1,end-1);
 	ajStrToUpper(&text);
 	adj = begin+end+1;
@@ -134,11 +135,10 @@ int main(int argc, char **argv)
 
 	if(hits || (thits&&sc))
 	{
-	    desc = ajSeqGetDesc(seq);
-	    acc  = ajSeqGetAcc(seq);
-	    usa  = ajSeqGetUsa(seq);
-	    fuzznuc_print_hits(&l,hits,outf,text,mms,sc,thits,adj,begin,desc,
-			       dodesc,acc,doacc,usa,dousa);
+	    tab = ajFeattableNewDna(seqname);
+	    fuzznuc_report_hits(&l,hits,sc,thits,
+				report, tab, seq);
+	    ajFeattableDel(&tab);
 	}
 	
 	
@@ -156,45 +156,49 @@ int main(int argc, char **argv)
     ajStrDel(&pattern);
     ajStrDel(&seqname);
     ajSeqDel(&seq);
-    ajFileClose(&outf);
+
+    (void) ajReportClose(report);
+    ajReportDel(&report);    
+
     ajExit();
     return 0;
 }
 
-
-
-/* @funcstatic fuzznuc_print_hits *********************************************
+/* @funcstatic fuzznuc_report_hits ********************************************
 **
 ** Undocumented.
 **
 ** @param [?] l [AjPList*] Undocumented
 ** @param [?] hits [ajint] Undocumented
-** @param [?] outf [AjPFile] Undocumented
-** @param [?] seq [AjPStr] Undocumented
-** @param [?] mms [AjBool] Undocumented
 ** @param [?] sc [AjBool] Undocumented
 ** @param [?] thits [ajint] Undocumented
-** @param [?] adj [ajint] Undocumented
-** @param [?] begin [ajint] Undocumented
-** @param [?] desc [AjPStr] Undocumented
-** @param [?] dodesc [AjBool] Undocumented
-** @param [?] acc [AjPStr] Undocumented
-** @param [?] doacc [AjBool] Undocumented
-** @param [?] usa [AjPStr] Undocumented
-** @param [?] dousa [AjBool] Undocumented
+** @param [?] report [AjPReport] Report object
+** @param [?] tab [AjPFeattable] Feature table
+** @param [?] seq [AjPSeq] Sequence
 ** @@
 ******************************************************************************/
 
 
-static void fuzznuc_print_hits(AjPList *l, ajint hits, AjPFile outf,
-			       AjPStr seq, AjBool mms, AjBool sc, ajint thits,
-			       ajint adj, ajint begin, AjPStr desc,
-			       AjBool dodesc, AjPStr acc, AjBool doacc,
-			       AjPStr usa, AjBool dousa)
+static void fuzznuc_report_hits(AjPList *l, ajint hits,
+				AjBool sc, ajint thits,
+				AjPReport report,
+			        AjPFeattable tab, AjPSeq seq)
 {
     ajint i;
     EmbPMatMatch m;
     AjPStr s;
+    AjPFeature gf = NULL;
+    static AjPStr fthit;
+    ajint begin;
+    ajint end;
+    ajint adj;
+
+    begin = ajSeqBegin(seq) - 1;
+    end = ajSeqEnd(seq) - 1;
+    adj =  ajSeqBegin(seq) + ajSeqEnd(seq) + 1;
+
+    if (!fthit)
+      ajStrAssC(&fthit, "hit");
 
     s=ajStrNew();
 
@@ -203,23 +207,21 @@ static void fuzznuc_print_hits(AjPList *l, ajint hits, AjPFile outf,
     for(i=0;i<hits;++i)
     {
 	ajListPop(*l,(void **)&m);
-	ajStrAssSubC(&s,ajStrStr(seq),m->start-begin,m->start+m->len-1-begin);
-	if(doacc)
-	    ajFmtPrintF(outf,"%S ",acc);
-	if(dodesc)
-	    ajFmtPrintF(outf,"%S",desc);
-	if(doacc || dodesc)
-	    ajFmtPrintF(outf,"\n");
-	
-	if(dousa)
-	    ajFmtPrintF(outf,"%S\t",usa);
-	    
-	if(!mms)
-	    ajFmtPrintF(outf,"%15s %8d %s\n",ajStrStr(m->seqname),m->start,
-			ajStrStr(s));
-	else
-	    ajFmtPrintF(outf,"%15s %8d %5d %s\n",ajStrStr(m->seqname),m->start,
-			m->mm,ajStrStr(s));
+        gf = ajFeatNew(tab, NULL, fthit,
+		       m->start,
+		       m->start + m->len - 1,
+		       (float) (m->len - m->mm), '+', 0);
+
+	/*
+	ajFmtPrintS(&s, "*strand +");
+	ajFeatTagAdd (gf, NULL, s);
+	*/
+
+	if (m->mm)
+	{
+	  ajFmtPrintS(&s, "*mismatch %d", m->mm);
+	  ajFeatTagAdd (gf, NULL, s);
+	}
 
 	embMatMatchDel(&m);
     }
@@ -227,33 +229,31 @@ static void fuzznuc_print_hits(AjPList *l, ajint hits, AjPFile outf,
     if(sc)
     {
 	ajListReverse(*l);
-	ajSeqReverseStr(&seq);
 	for(i=0;i<thits;++i)
 	{
 	    ajListPop(*l,(void **)&m);
-	    ajStrAssSubC(&s,ajStrStr(seq),m->start-begin,m->start+m->len-1-
-			 begin);
-	    if(doacc)
-		ajFmtPrintF(outf,"%S ",acc);
-	    if(dodesc)
-		ajFmtPrintF(outf,"%S",desc);
-	    if(doacc || dodesc)
-		ajFmtPrintF(outf,"\n");
+	    gf = ajFeatNew (tab, NULL, fthit,
+			    adj - m->start - m->len,
+			    adj - m->start - 1,
+			    (float) (m->len - m->mm), '-', 0);
 
-	    if(dousa)
-	        ajFmtPrintF(outf,"%S\t",usa);
+	    /*
+	    ajFmtPrintS(&s, "*strand -");
+	    ajFeatTagAdd (gf, NULL, s);
+	    */
 
-	    if(!mms)
-		ajFmtPrintF(outf,"%15s %8d [%s]\n",ajStrStr(m->seqname),
-			    adj-m->start-m->len,ajStrStr(s));
-	    else
-		ajFmtPrintF(outf,"%15s %8d %5d [%s]\n",ajStrStr(m->seqname),
-			    adj-m->start-m->len,m->mm,ajStrStr(s));
+	    if (m->mm)
+	    {
+	      ajFmtPrintS(&s, "*mismatch %d", m->mm);
+	      ajFeatTagAdd (gf, NULL, s);
+	    }
 
 	    embMatMatchDel(&m);
 	}
     }
     
+    (void) ajReportWrite(report, tab, seq);        
+
     ajStrDel(&s);
     
     return;

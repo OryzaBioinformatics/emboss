@@ -28,8 +28,12 @@ bool: prune  [
 endsection: advanced
 
 section: output [ info: "output Section" type: page ]
-outfile: outfile  [
+
+report: outfile  [
   parameter: "Y"
+  rformat: "dbmotif"
+  taglist: "str:motif=Motif"
+  precision: 0
 ]
 
 endsection: output

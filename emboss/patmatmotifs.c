@@ -36,6 +36,8 @@ int main(int argc, char **argv)
     AjPFile inf	      = NULL;
     AjPFile inf2      = NULL;
     AjPFile outf      = NULL;
+    AjPFeattable tab            =NULL;
+    AjPReport report            =NULL;
 
     AjPSeq sequence   = NULL;
 
@@ -50,6 +52,7 @@ int main(int argc, char **argv)
     AjPStr name       = NULL;
     EmbPPatMatch match = NULL;
     AjPStr savereg=NULL;
+    AjPStr fthit = NULL;
     
     AjBool full;
     AjBool prune;
@@ -64,11 +67,13 @@ int main(int argc, char **argv)
     char *p;
     ajint seqlength;
     ajint j;
-
+    AjPStr tmpstr=NULL;
+    AjPStr tailstr=NULL;
+    AjPFeature gf;
 
     embInit ("patmatmotifs", argc, argv);
 
-
+    ajStrAssC (&fthit, "hit");
 
     savereg = ajStrNew();
     str = ajStrNew();
@@ -80,10 +85,14 @@ int main(int argc, char **argv)
     name = ajStrNew();
     
     sequence = ajAcdGetSeq("sequence");
-    outf     = ajAcdGetOutfile("outfile");
+    /* outf     = ajAcdGetOutfile("outfile"); */
+    report = ajAcdGetReport ("outfile");
     full     = ajAcdGetBool("full");
     prune    = ajAcdGetBool("prune");
     
+    tab = ajFeattableNewSeq(sequence);
+    ajStrAssC (&tailstr, "");
+
     seqlength = ajStrLen(str);
     str       = ajSeqStrCopy(sequence);
     
@@ -94,6 +103,10 @@ int main(int argc, char **argv)
     if(!inf)
 	ajFatal("Either EMBOSS_DATA undefined or PROSEXTRACT needs running");
     
+    ajFmtPrintAppS (&tmpstr, "Full: %B\n", full);
+    ajFmtPrintAppS (&tmpstr, "Prune: %B\n", prune);
+    ajFmtPrintAppS (&tmpstr, "Data_file: %F\n", inf);
+    ajReportSetHeader (report, tmpstr);
 
     while (ajFileReadLine(inf, &regexp))
     {
@@ -128,42 +141,51 @@ int main(int argc, char **argv)
 	    match = embPatPosMatchFind(temp, str);
 	    number = embPatPosMatchGetNumber(match); 
 	    
-	    if(number)
+	    if(number && outf)
 		ajFmtPrintF(outf, 
 		      "\nNumber of matches found in this Sequence = %d\n\n",
 		      number);
 	
-	
 	    for (i=0; i<number; i++)
 	    {
 		seqlength = ajStrLen(str);
-		ajFmtPrintF(outf,
-			   "Length of the sequence = %d basepairs\n",
-			    seqlength);
+		if (outf)
+		  ajFmtPrintF(outf,
+			      "Length of the sequence = %d basepairs\n",
+			      seqlength);
 			
-		start = embPatPosMatchGetStart(match, i); 
-		ajFmtPrintF(outf,
-			    "Start of match = position %d of sequence\n",
-			    start+1);
+		start = 1+embPatPosMatchGetStart(match, i); 
+		if (outf)
+		  ajFmtPrintF(outf,
+			      "Start of match = position %d of sequence\n",
+			      start+1);
 	
-		end = embPatPosMatchGetEnd(match, i);  		
-		ajFmtPrintF(outf, 
-			    "End of match = position %d of sequence\n", end+1);
+		end = 1+embPatPosMatchGetEnd(match, i);  		
+		if (outf)
+		  ajFmtPrintF(outf, 
+			      "End of match = position %d of sequence\n",
+			      end+1);
 		
 		length = embPatPosMatchGetLen(match, i);
-		ajFmtPrintF(outf, "Length of motif = %d\n\n", length);
+		if (outf)
+		  ajFmtPrintF(outf, "Length of motif = %d\n\n", length);
 	
+		gf = ajFeatNew (tab, NULL, fthit, start, end,
+				(float) length, ' ', 0);
 
+		if (outf)
+		  ajFmtPrintF(outf, 
+			      "patmatmotifs of %s with %s from %d to %d\n", 
+			      ajStrStr(name), ajSeqName(sequence),
+			      start+1, end+1);
 
-
-		ajFmtPrintF(outf, 
-		     "patmatmotifs of %s with %s from %d to %d\n", 
-		      ajStrStr(name), ajSeqName(sequence), start+1, end+1);
-
+		ajFmtPrintS (&tmpstr, "*motif %S", name);
+		ajFeatTagAdd (gf, NULL, tmpstr);
 
 		if(start-5<0)
 		{
-		    for(j=0;j<5-start; ++j) ajFmtPrintF(outf," ");
+		    if (outf)
+		      for(j=0;j<5-start; ++j) ajFmtPrintF(outf," ");
 		    zstart = 0;
 		}
 		else zstart = start-5;
@@ -174,15 +196,18 @@ int main(int argc, char **argv)
 	
 			
 		ajStrAssSub(&temp, str, zstart, zend);
-		ajFmtPrintF(outf, "%s\n", ajStrStr(temp));
+		if (outf)
+		  {
+		    ajFmtPrintF(outf, "%s\n", ajStrStr(temp));
 		
-		ajFmtPrintF(outf, "     |");
-		patmat_spaces(&outf, length);
-		ajFmtPrintF(outf, "|\n");
+		    ajFmtPrintF(outf, "     |");
+		    patmat_spaces(&outf, length);
+		    ajFmtPrintF(outf, "|\n");
 	    
-		ajFmtPrintF(outf, "%6d", start+1);
-		patmat_spaces(&outf, length);
-		ajFmtPrintF(outf, "%-d\n\n", end+1);
+		    ajFmtPrintF(outf, "%6d", start+1);
+		    patmat_spaces(&outf, length);
+		    ajFmtPrintF(outf, "%-d\n\n", end+1);
+		  }
 	    }
 	
 
@@ -198,15 +223,25 @@ int main(int argc, char **argv)
 		 * Insert Prosite documentation from files made by
 		 * prosextract.c
 		 */
-		while (ajFileReadLine(inf2, &text))
-		    ajFmtPrintF(outf, "%s\n", ajStrStr(text));
-		ajFmtPrintF(outf, "***************\n");
+		ajFmtPrintAppS(&tailstr, "Motif: %S\n", name);
+		ajFmtPrintAppS(&tailstr, "Count: %d\n\n", number);
+		while (ajFileReadLine(inf2, &text)) {
+		  ajFmtPrintAppS(&tailstr, "%S\n", text);
+		  if (outf)
+		    ajFmtPrintF(outf, "%S\n", text);
+		}
+		if (outf)
+		  ajFmtPrintF(outf, "***************\n");
+		ajFmtPrintAppS(&tailstr, "\n***************\n\n");
 		ajFileClose(&inf2);
 
 	    }
 	embPatMatchDel(&match);
 	}
     }
+
+    ajReportSetTail(report,tailstr);
+    ajReportWrite(report, tab, sequence);
     
     ajStrDel(&temp);
     ajStrDel(&regexp);
@@ -219,7 +254,7 @@ int main(int argc, char **argv)
     ajStrDel(&accession);
     ajSeqDel(&sequence);
 
-    
+    ajFeattableDel(&tab);
     ajFileClose(&inf);
     ajFileClose(&outf);
 
