@@ -70,7 +70,7 @@ static EmbPentry dbiflatNextFlatEntry (AjPFile libr, ajint ifile);
 
 /* @prog dbiflat **************************************************************
 **
-** Indexing a flat file database
+** Index a flat file database
 **
 ******************************************************************************/
 
@@ -180,7 +180,7 @@ int main(int argc, char **argv)
   idlist = ajListNew ();
   aclist = ajListNew ();
 
-  inlist = embDbiFileList (directory, filename, exclude);
+  inlist = embDbiFileListExc (directory, filename, exclude);
   ajListSort (inlist, ajStrCmp);
   nfiles = ajListToArray(inlist, &files);
 

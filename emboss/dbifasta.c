@@ -67,6 +67,13 @@ static EmbPentry dbifastaNextFlatEntry (AjPFile libr, ajint ifile,
 static AjPRegexp getExpr(AjPStr idformat, ajint *type);
 
 
+
+/* @prog dbifasta *************************************************************
+**
+** Index a fasta database
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
 
@@ -179,7 +186,7 @@ int main(int argc, char **argv)
   idlist = ajListNew ();
   aclist = ajListNew ();
 
-  inlist = embDbiFileList (directory, filename, exclude);
+  inlist = embDbiFileListExc (directory, filename, exclude);
   ajListSort (inlist, ajStrCmp);
   nfiles = ajListToArray(inlist, &files);
 
