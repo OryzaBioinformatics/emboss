@@ -116,6 +116,7 @@ void ajListstrPushApp(AjPList list, AjPStr x);
 
 AjBool ajListFirst(AjPList thys, void** x);
 AjBool ajListLast(AjPList thys, void** x);
+AjBool ajListNth(AjPList thys, int n, void** x);
 
 AjPList ajListCopy   (AjPList list);      /* new list returned */
 AjPList ajListstrCopy   (AjPList list);

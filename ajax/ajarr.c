@@ -187,6 +187,56 @@ AjBool ajIntPut(AjPInt *thys, int elem, int v)
     return ajTrue;
 }
 
+/* @func ajIntInc *************************************************************
+**
+** Increment an integer array element.
+**
+** If the given array is a NULL pointer an error is generated.
+** Negative indices generate an error.
+**
+** @param  [w] thys [AjPInt*] Pointer to the int array.
+** @param  [r] elem [int] array element.
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajIntInc(AjPInt *thys, int elem)
+{
+    if(!thys || !*thys || elem<0 || elem>(*thys)->Len)
+	ajErr("Attempt to write to illegal array value %d\n",elem);
+
+
+    ++(*thys)->Ptr[elem];
+    
+    return;
+}
+
+/* @func ajIntDec *************************************************************
+**
+** Deccrement an integer array element.
+**
+** If the given array is a NULL pointer an error is generated.
+** Negative indices generate an error.
+**
+** @param  [w] thys [AjPInt*] Pointer to the int array.
+** @param  [r] elem [int] array element.
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajIntDec(AjPInt *thys, int elem)
+{
+    if(!thys || !*thys || elem<0 || elem>(*thys)->Len)
+	ajErr("Attempt to write to illegal array value %d\n",elem);
+
+
+    --(*thys)->Ptr[elem];
+    
+    return;
+}
+
 
 
 /* @funcstatic ajIntResize ***************************************************

@@ -117,6 +117,9 @@ static AjPFeatLexicon EMBL_Dictionary ();
 static AjPFeatLexicon GFF_Dictionary ();
 static AjPFeatLexicon dummyDict ();
 
+static AjBool featGetUsaSection(AjPStr* tmp, AjPStr token, int* begin,
+				int* end, AjPStr usa);
+
 
 static AjPFeatLexicon ajFeatVocNew(void) ;
 static AjPFeatVocFeat ajFeatVocAddFeat(AjPFeatLexicon thys, AjPStr tag, int flag) ;
@@ -6136,4 +6139,460 @@ void ajFeatTabInClear (AjPFeatTabIn thys)
     ajFatal("ajFeatTabInClear did not delete Handle");
 
   return;
+}
+
+
+/* @func ajFeatLocToSeq ****************************************************
+**
+** Returns a sequence entry from a feature location
+**
+** @param [r] seq [AjPStr] sequence
+** @param [r] line [AjPStr] location
+** @param [w] res [AjPStr*] sequence construct
+** @param [r] usa [AjPStr] usa of query
+** @return [AjBool] true on success
+** @@
+******************************************************************************/
+
+AjBool ajFeatLocToSeq(AjPStr seq, AjPStr line, AjPStr *res, AjPStr usa)
+{
+    static AjPStr str=NULL;
+    char *p;
+    char *q;
+    
+    int len;
+    int i;
+    int off;
+    static AjPStr token=NULL;
+    static AjPStr tmp=NULL;
+    static AjPStr ent=NULL;
+    
+    AjPRegexp exp_ndotn = NULL;
+    AjPRegexp exp_brnbr = NULL;
+    AjPRegexp exp_compbrndashnbr = NULL;
+    AjPRegexp exp_joinbr = NULL;
+    AjPStrTok handle = NULL;
+    
+    AjBool isglobcomp=ajFalse;
+    AjBool isjoin=ajFalse;
+    AjBool docomp=ajFalse;
+    AjBool dbentry=ajFalse;
+    
+    int begin=0;
+    int end=0;
+    
+    if(!str)
+    {
+	token = ajStrNew();
+	str   = ajStrNew();
+	tmp   = ajStrNew();
+	ent   = ajStrNew();
+    }
+
+    ajStrAssS(&str,line);
+
+
+    /* Remove chevrons */
+    p=ajStrStr(str);
+    len = ajStrLen(str);
+    for(i=0;i<len;++i)
+    {
+	if(*p=='<' || *p=='>')
+	    *p=' ';
+	++p;
+    }
+
+    ajStrCleanWhite(&str);
+
+    /* Replace sites by a single location */
+    p=ajStrStr(str);
+    len = ajStrLen(str);
+    while(*p)
+    {
+	if(*p=='^')
+	{
+	    *(p++)=' ';
+	    while(*p>='0' && *p<='9')
+		*(p++) = ' ';
+	}
+	else
+	    ++p;
+    }
+    ajStrCleanWhite(&str);
+
+
+    /* Replace any x.y with x */
+    exp_ndotn = ajRegCompC("([0-9]+)[.]([0-9]+)");
+    p = ajStrStr(str);
+    while(ajRegExec(exp_ndotn,str))
+    {
+	off = ajRegOffset(exp_ndotn);
+	while(p[off]!='.')
+	    ++off;
+	p[off++]=' ';
+	while(p[off]>='0' && p[off]<='9')
+	    p[off++]=' ';
+    }
+    ajRegFree(&exp_ndotn);
+    ajStrCleanWhite(&str);
+
+    /* Replace any (n) with n */
+    exp_brnbr = ajRegCompC("[(]([0-9]+)[)]");
+    p = ajStrStr(str);
+    while(ajRegExec(exp_brnbr,str))
+    {
+	off = ajRegOffset(exp_brnbr);
+	p[off++]=' ';
+	while(p[off]!=')')
+	    ++off;
+	p[off++]=' ';
+    }
+    ajRegFree(&exp_brnbr);
+    ajStrCleanWhite(&str);
+
+    /* See if its a global complement and remove complement enclosure */
+    if(ajStrPrefixC(str,"complement("))
+    {
+	p=ajStrStr(str);
+	len=ajStrLen(str);
+	ajStrAssSub(&str,str,11,len-2);
+	isglobcomp=ajTrue;
+    }
+    
+    /* Replace .. with - */
+    p = ajStrStr(str);
+    while(*p)
+    {
+	if(*p=='.' && *(p+1)=='.')
+	{
+	    *p='-';
+	    *(p+1)=' ';
+	}
+	++p;
+    }
+
+    ajStrCleanWhite(&str);    
+
+
+    /* Replace complement(n-n) with ^n-n */
+    exp_compbrndashnbr = ajRegCompC("complement[(]([A-Za-z0-9:.]+)[-]([0-9]+)[)]");
+/*    exp_compbrndashnbr = ajRegCompC("complement[(]([0-9]+)[-]([0-9]+)[)]");*/
+    p = ajStrStr(str);
+    while(ajRegExec(exp_compbrndashnbr,str))
+    {
+	off = ajRegOffset(exp_compbrndashnbr);
+	for(i=0;i<10;++i)
+	    p[off++]=' ';
+	p[off]='^';
+	while(p[off]!=')')
+	    ++off;
+	p[off++]=' ';
+    }
+    ajStrCleanWhite(&str);
+    ajRegFree(&exp_compbrndashnbr);
+    
+
+    /* Check for only one "join" */
+    p = ajStrStr(str);
+    exp_joinbr = ajRegCompC("join[(]");    
+    i=0;
+    while(ajRegExec(exp_joinbr,str))
+    {
+	off = ajRegOffset(exp_joinbr);
+	++i;
+	if(off)
+	{
+	    ajWarn("Too many joins");
+	    return ajFalse;
+	}
+	p=ajStrStr(str);
+	len=ajStrLen(str);
+	ajStrAssSub(&str,str,5,len-2);
+	isjoin=ajTrue;
+    }
+    ajRegFree(&exp_joinbr);
+    
+
+    /* Construct the sequence */
+    ajStrAssC(res,"");
+    handle = ajStrTokenInit(str,",");
+    while(ajStrToken(&token,&handle,NULL))
+    {
+	p = ajStrStr(token);
+	if(*p=='^')
+	{
+	    ++p;
+	    docomp=ajTrue;
+	}
+	else
+	    docomp=ajFalse;
+
+	q=p;
+	dbentry = ajFalse;
+	while(*q)
+	    if(*(q++)==':')
+	    {
+		dbentry = ajTrue;
+		break;
+	    }
+
+	if(dbentry)
+	{
+	    if(*ajStrStr(token)=='^')
+		ajStrAssC(&token,ajStrStr(token)+1);
+	    if(!featGetUsaSection(&ent,token,&begin,&end,usa))
+	    {
+		ajWarn("Couldn't find embedded entry %S\n",token);
+		return ajFalse;
+	    }
+	    ajStrAssSubC(&tmp,ajStrStr(ent),--begin,--end);
+	}
+	else
+	{
+	    if(sscanf(p,"%d-%d",&begin,&end)!=2)
+	    {
+		if(*p>='0' && *p<='9')
+		{
+		    if(sscanf(p,"%d",&begin)==1)
+			end=begin;
+		    else
+		    {
+			ajWarn("LocToSeq: Unpaired range");
+			return ajFalse;
+		    }
+		}
+	    }
+	    ajStrAssSubC(&tmp,ajStrStr(seq),--begin,--end);
+       }
+	
+
+	if(docomp)
+	    ajSeqReverseStr(&tmp);
+	ajStrAppC(res,ajStrStr(tmp));
+    }
+    
+    if(isglobcomp)
+	ajSeqReverseStr(res);
+
+    return ajTrue;
+}
+
+/* @func ajFeatGetLocs ****************************************************
+**
+** Returns location information from catenated sequence entry
+**
+** @param [r] str [AjPStr] catenated (seq->TextPtr) entry
+** @param [w] cds [AjPStr**] array of locations
+** @param [r] type [char*] type (e.g. CDS/mrna)
+
+** @return [int] number of location lines
+** @@
+******************************************************************************/
+
+int ajFeatGetLocs(AjPStr str, AjPStr **cds, char *type)
+{
+    AjPStr *entry=NULL;
+    int nlines=0;
+    int i=0;
+    int ncds=0;
+    int nc=0;
+    char *p=NULL;
+    AjPStr test=NULL;
+
+    test = ajStrNew();
+    ajFmtPrintS(&test,"     %s",type);
+    
+    nlines = ajStrListToArray(str, &entry);
+
+    for(i=0;i<nlines;++i)
+    {
+	if(ajStrPrefixC(entry[i],"FT "))
+	{
+	    p = ajStrStr(entry[i]);
+	    *p = *(p+1) = ' ';
+	}
+	
+	if(ajStrPrefix(entry[i],test))
+	    ++ncds;
+    }
+    
+
+    if(ncds)
+    {
+	AJCNEW0(*cds,ncds);
+	for(i=0;i<ncds;++i)
+	    (*cds)[i] = ajStrNew();
+    }
+
+
+    for(nc=i=0;nc<ncds;++nc)
+    {
+	if(ajStrPrefixC(entry[i],"FT "))
+	{
+	    p = ajStrStr(entry[i]);
+	    *p = *(p+1) = ' ';
+	}
+	
+	while(!ajStrPrefix(entry[i],test))
+	    ++i;
+	
+	ajStrAssC(&(*cds)[nc],ajStrStr(entry[i++])+21);
+	while( *(p=ajStrStr(entry[i]))==' ')
+	{
+	    if(*(p+21)=='/' || *(p+5)!=' ')
+		break;
+	    ajStrAppC(&(*cds)[nc],p+21);
+	    ++i;
+	}
+	ajStrCleanWhite(&(*cds)[nc]);
+    }
+	
+
+    for(i=0;i<nlines;++i)
+	ajStrDel(&entry[i]);
+    AJFREE(entry);
+
+    ajStrDel(&test);
+
+    return ncds;
+}
+
+/* @func ajFeatGetTrans ****************************************************
+**
+** Returns ytanslation information from catenated sequence entry
+**
+** @param [r] str [AjPStr] catenated (seq->TextPtr) entry
+** @param [w] cds [AjPStr**] array of translations
+**
+** @return [int] number of location lines
+** @@
+******************************************************************************/
+
+int ajFeatGetTrans(AjPStr str, AjPStr **cds)
+{
+    AjPStr *entry=NULL;
+    int nlines=0;
+    int i=0;
+    int ncds=0;
+    int nc=0;
+    char *p=NULL;
+    static AjPRegexp exp_tr=NULL;
+    
+    
+    nlines = ajStrListToArray(str, &entry);
+
+    exp_tr = ajRegCompC("/translation=");
+
+    for(i=0;i<nlines;++i)
+    {
+	if(ajStrPrefixC(entry[i],"FT "))
+	{
+	    p = ajStrStr(entry[i]);
+	    *p = *(p+1) = ' ';
+	}
+	
+	if(ajRegExec(exp_tr,entry[i]))
+	    ++ncds;
+    }
+    
+
+    if(ncds)
+    {
+	AJCNEW0(*cds,ncds);
+	for(i=0;i<ncds;++i)
+	    (*cds)[i] = ajStrNew();
+    }
+
+
+    for(nc=i=0;nc<ncds;++nc)
+    {
+	if(ajStrPrefixC(entry[i],"FT "))
+	{
+	    p = ajStrStr(entry[i]);
+	    *p = *(p+1) = ' ';
+	}
+	
+	while(!ajRegExec(exp_tr,entry[i]))
+	    ++i;
+	
+	ajStrAssC(&(*cds)[nc],ajStrStr(entry[i++])+35);
+	while( *(p=ajStrStr(entry[i]))==' ')
+	{
+	    if(*(p+21)=='/' || *(p+5)!=' ')
+		break;
+	    ajStrAppC(&(*cds)[nc],p+21);
+	    ++i;
+	}
+	p = ajStrStr((*cds)[nc]);
+	p[ajStrLen((*cds)[nc])-2] = ' ';
+	ajStrCleanWhite(&(*cds)[nc]);
+    }
+	
+
+    for(i=0;i<nlines;++i)
+	ajStrDel(&entry[i]);
+    AJFREE(entry);
+
+    return ncds;
+}
+
+
+static AjBool featGetUsaSection(AjPStr* thys, AjPStr token, int* begin,
+				int* end, AjPStr usa)
+{
+    AjPStrTok handle=NULL;
+    AjPStrTok hand2=NULL;
+    
+    AjPStr db=NULL;
+    AjPStr entry=NULL;
+    AjPStr entry2=NULL;
+    AjPStr numbers=NULL;
+    AjBool ok=ajTrue;
+    char   *p=NULL;
+    AjPSeq seq=NULL;
+    
+    db      = ajStrNew();
+    entry   = ajStrNew();
+    entry2  = ajStrNew();
+    numbers = ajStrNew();
+    seq     = ajSeqNew();
+
+    handle = ajStrTokenInit(usa,":");
+    ajStrToken(&db,&handle,NULL);
+    ajStrTokenClear(&handle);
+    ajStrAppC(&db,":");
+    
+    handle = ajStrTokenInit(token,":");
+    ajStrToken(&entry,&handle,NULL);
+
+    hand2 = ajStrTokenInit(entry,".");
+    ajStrToken(&entry2,&hand2,NULL);
+    ajStrTokenClear(&hand2);
+
+    ajStrToken(&numbers,&handle,NULL);
+    ajStrTokenClear(&handle);
+
+    p = ajStrStr(numbers);
+    if(sscanf(p,"%d-%d",begin,end)!=2)
+    {
+	if(sscanf(p,"%d",begin)==1)
+	    *end=*begin;
+	else
+	    ok = ajFalse;
+    }
+
+    ajStrApp(&db,entry2);
+
+    if(!ajSeqGetFromUsa(db,0,&seq))
+	ok = ajFalse;
+
+    ajStrAssC(thys,ajSeqChar(seq));
+
+    ajStrDel(&db);
+    ajStrDel(&entry);
+    ajStrDel(&entry2);
+    ajStrDel(&numbers);
+    ajSeqDel(&seq);
+
+    return ok;
 }

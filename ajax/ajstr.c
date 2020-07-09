@@ -2278,11 +2278,20 @@ AjBool ajStrCleanWhite(AjPStr *s) {
   (void) ajStrAssS (&t,*s);		/* make a buffer in t */
     
   p=ajStrStr(t);
-  len=strlen(p);
+  len=ajStrLen(t);
 
-  for(i=0;i<len;++i) if(p[i]=='\t' || p[i]=='\n') p[i]=' ';
   for(i=0;i<len;++i)
-      if(p[i]!=' ') p[j++]=p[i];
+      if(p[i]=='\t' || p[i]=='\n')
+	  p[i]=' ';
+  for(i=0;i<len;++i)
+  {
+      if(p[i]!=' ')
+      {
+	  p[j++]=p[i];
+      }
+      else
+	  --t->Len;
+  }
   p[j]='\0';
 
   ret = ajStrAssC(s,p);
@@ -5005,4 +5014,38 @@ int ajStrListToArray(AjPStr thys, AjPStr **array)
     }
     
     return c;
+}
+
+
+/* @func ajStrDegap **********************************************************
+**
+** Removes all but alphabetic characters from a string
+**
+** @param [w] thys [AjPStr*] String
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajStrDegap(AjPStr* thys)
+{
+    char *p;
+    char *q;
+    int  i;
+    int  len;
+    char c;
+    
+    p = q = (*thys)->Ptr;
+    len = (*thys)->Len;
+    
+    for(i=0;i<len;++i)
+    {
+	c = *(p++);
+	if((c>='A' && c<='Z') || (c>='a' && c<='z'))
+	    *(q++) = c;
+	else
+	    --(*thys)->Len;
+    }
+    (*thys)->Ptr[(*thys)->Len] = '\0';
+
+    return;
 }

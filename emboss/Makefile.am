@@ -2,17 +2,17 @@
 SUBDIRS = acd data
 
 check_PROGRAMS = ajtest ajtest2 ajtest3 ajtestajnam \
-cluster \
+cluster corbatest \
 demofeatures demolist demosequence demostring demotable \
 entrails histogramtest messtest \
 patmattest plplottest proteinmotifsearch \
-seqinfo \
+scope seqinfo \
 seqretallfeat seqretfeat seqtofeat \
 simplesw testplot treetypedisplay 
 
 bin_PROGRAMS = acdc antigenic \
 backtranseq banana btwisted \
-chaos checktrans chips cirdna codcmp complex \
+chaos checktrans chips cirdna codcmp coderet complex \
 compseq cons cpgplot cpgreport cusp cutseq \
 dan dbiblast dbifasta dbiflat dbigcg \
 descseq diffseq digest dotmatcher dotpath dottup dreg \
@@ -59,9 +59,11 @@ checktrans_SOURCES = checktrans.c
 chips_SOURCES = chips.c
 cirdna_SOURCES = cirdna.c
 codcmp_SOURCES = codcmp.c
+coderet_SOURCES = coderet.c
 complex_SOURCES = complex.c
 compseq_SOURCES = compseq.c
 cons_SOURCES = cons.c
+corbatest_SOURCES = corbatest.c
 cpgplot_SOURCES = cpgplot.c
 cpgreport_SOURCES = cpgreport.c
 cusp_SOURCES = cusp.c
@@ -152,6 +154,7 @@ seqinfo_SOURCES = seqinfo.c
 seqretall_SOURCES = seqretall.c
 seqretset_SOURCES = seqretset.c
 seqretsplit_SOURCES = seqretsplit.c
+scope_SOURCES = scope.c
 showdb_SOURCES = showdb.c
 showfeat_SOURCES = showfeat.c
 showorf_SOURCES = showorf.c

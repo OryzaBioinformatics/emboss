@@ -464,7 +464,7 @@ static AjPFile seqBlastFileOpen (AjPStr dir, AjPStr name)
 static SeqPCdFile seqCdFileOpen (AjPStr dir, char* name, AjPStr* fullname)
 {
     SeqPCdFile thys=NULL;
-    AjPFile fred;
+
 
     AJNEW0(thys);
 
@@ -3468,7 +3468,7 @@ static AjBool seqCdTrgQuery (AjPSeqQuery qry)
     int t2;
     int b2;
     int t3;
-    int pos;
+    int pos=0;
     int len;
     int start;
     int end;

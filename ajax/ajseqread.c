@@ -1,4 +1,4 @@
-/*
+/* 
 ** This is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public License
 ** as published by the Free Software Foundation; either version 2
@@ -43,6 +43,22 @@ typedef struct SeqSMsfItem
   float Weight;
   AjPStr Seq;
 } SeqOMsfItem, *SeqPMsfItem;
+
+
+static AjBool     seqReadAbi (AjPSeq thys, AjPSeqin seqin);
+static AjBool     seqABISampleName(AjPFile fp, AjPStr *sample);
+static AjBool     seqReadABIInt4(AjPFile fp,long int*i4);
+static AjBool     seqABIReadFloat4(AjPFile fp,float* f4);
+static AjBool     seqABIReadInt2(AjPFile fp,short int*i2);
+static AjBool     seqABIGetFlag(AjPFile fp, long int flagLabel,
+				long int flagInstance,long int word,
+				long int* val);
+static AjBool     seqABIGetFlagF(AjPFile fp, long int flagLabel,
+				 long int flagInstance,long int word,
+				 float* val);
+static AjBool     seqABIGetFlagW(AjPFile fp, long int flagLabel,
+				 long int word,short int* val);
+static short      seqABIBaseIdx(char B);
 
 static void       seqAccSave (AjPSeq thys, AjPStr acc);
 static int        seqAppend (AjPStr* seq, AjPStr line);
@@ -139,6 +155,7 @@ static SeqOInFormat seqInFormatDef[] = { /* AJFALSE = ignore (duplicates) */
   {"text",       AJFALSE, seqReadText},
   {"plain",      AJFALSE, seqReadText},
   {"raw",        AJTRUE,  seqReadRaw},
+  {"abi",        AJTRUE,  seqReadAbi},
   {NULL, 0, NULL} };
 
 static SeqPInFormat seqInFormat = seqInFormatDef;
@@ -408,10 +425,8 @@ AjBool ajSeqAllRead (AjPSeq thys, AjPSeqin seqin)
     AjBool ret = ajFalse;
   
     if (!seqin->Filebuff)
-    {
 	if (!seqUsaProcess (thys, seqin))
 	    return ajFalse;
-    }
   
     ret = seqRead (thys, seqin);
     if (ret)
@@ -425,6 +440,41 @@ AjBool ajSeqAllRead (AjPSeq thys, AjPSeqin seqin)
     return ret;
 }
 
+/* @func ajSeqAllFile *********************************************************
+**
+** Parse a USA Uniform Sequence Address
+**
+** Return the results in the AjPSeqall object but leave the file open for
+** future calls.
+**
+** @param [r] thys [AjPStr] sequence usa.
+** @return [AjPseqall] seqall object
+** @@
+******************************************************************************/
+
+AjPSeqall ajSeqallFile(AjPStr usa)
+{
+    AjPSeqall seqall=NULL;
+    AjPSeqin  seqin=NULL;
+    AjPSeq    seq=NULL;
+    
+    seqall = ajSeqallNew();
+    
+    seqin = seqall->Seqin;
+    seqin->multi = ajTrue;
+    seq = seqall->Seq;
+
+    ajSeqinUsa(&seqin,usa);
+
+    if(!ajSeqAllRead(seq,seqin))
+    {
+	ajSeqallDel(&seqall);
+	return NULL;
+    }
+
+    return seqall;
+}
+    
 /* @func ajSeqallNext *********************************************************
 **
 ** Reads the next sequence into a sequence stream. For the first call this
@@ -840,7 +890,6 @@ static int seqReadFmt (AjPSeq thys, AjPSeqin seqin, SeqPInFormat inform,
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
-
 static AjBool seqRead (AjPSeq thys, AjPSeqin seqin)
 {
     int i;
@@ -2645,9 +2694,6 @@ static AjBool seqReadSwiss (AjPSeq thys, AjPSeqin seqin)
     AjPFileBuff ftfile = NULL;
     static AjPStr ftfmt = NULL;
     AjBool dofeat = ajFalse;
-    AjPStr *fred=NULL;
-    int n;
-    int i;
     
     /*
        ajFileBuffTraceFull (buff, 50);
@@ -4415,3 +4461,833 @@ AjBool ajSeqParseNcbi(AjPStr str, AjPStr* id, AjPStr* acc, AjPStr* desc)
     return ajTrue;
 }
 
+
+/* @funcstatic ajSeqGetFromUsa ***********************************************
+**
+** Returns a sequence given a USA
+**
+** @param [r] thys [AjPStr] USA
+** @param [r] protein [AjBool] True if protein
+** @param [w] thys [AjPSeq*] sequence
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+AjBool ajSeqGetFromUsa (AjPStr thys, AjBool protein, AjPSeq *seq)
+{
+    AjPSeqin seqin;
+    AjBool ok;
+  
+  
+    seqin = ajSeqinNew();
+    seqin->multi = ajFalse;
+    seqin->Text  = ajFalse;
+  
+    if(!protein)
+	ajSeqinSetNuc (seqin);
+    else
+	ajSeqinSetProt (seqin);
+
+    ajSeqinUsa (&seqin, thys);
+    ok = ajSeqRead(*seq, seqin);
+    ajSeqinDel (&seqin);
+
+
+    if(!ok)
+	return ajFalse;
+
+    return ajTrue;
+}
+
+
+/* @func ajSeqABITest ********************************************************
+**
+** Test file type is ABI format - look for 'ABIF' flag (which may be in one
+** of 2 places).
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
+
+AjBool ajSeqABITest(AjPFile fp)
+{   
+
+    char pabi[4];
+
+    if(ajFileRead((void *)pabi,4,1,fp))
+    {
+      if(ajStrPrefixCC(pabi,"ABIF"))
+        return ajTrue;
+    } 
+
+    if(ajFileSeek(fp,26,SEEK_SET))
+    {
+      if(ajFileRead((void*)pabi,4,1,fp))
+      {
+        if(ajStrPrefixCC(pabi,"ABIF"))
+           return ajTrue;
+      }
+    }
+
+    return ajFalse;
+}
+
+
+/* @func ajSeqABIReadSeq *****************************************************
+**
+** Read in a sequence from an ABI trace file.
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @param [r] baseO [long int ] BASE offset in an ABI file
+** @param [r] numBases [long int ] number of bases
+** @param [w] nseq [AjPStr* ] read sequence
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
+
+AjBool ajSeqABIReadSeq(AjPFile fp,long int baseO,long int numBases,
+	AjPStr* nseq)
+{
+    int i;
+    char pseq;
+
+    ajFileSeek(fp,baseO,SEEK_SET);
+    for (i=0;i<(int)numBases;i++)
+    {
+          ajFileRead(&pseq,1,1,fp);
+        
+          /* if(pseq == 'N') pseq='-'; */
+          ajStrAppK(nseq,pseq);
+    }
+    return ajTrue;
+}
+
+
+/* @func ajSeqABIMachineName *************************************************
+**
+** Get the name of the machine used to obtain an ABI trace file.
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @param [w] machine [AjPStr* ] machine name
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
+
+AjBool ajSeqABIMachineName(AjPFile fp,AjPStr *machine)
+{
+    long int mchn;
+    const long MCHNtag = ((long) ((((('M'<<8)+'C')<<8)+'H')<<8)+'N');
+    unsigned char l;
+
+
+    if(seqABIGetFlag(fp,MCHNtag,1,5,&mchn))
+    {
+       if (ajFileSeek(fp,mchn,SEEK_SET) >= 0)
+       {
+        ajFileRead(&l,sizeof(char),1,fp);
+        *machine = ajStrNewL(l+1);
+        ajFileRead((void*)ajStrStr(*machine),l,1,fp);
+        *(ajStrStr(*machine)+l)='\0';
+       } else
+       {
+         return ajFalse;
+       }
+    } else
+    {
+      return ajFalse;
+    }
+
+    return ajTrue;
+}
+
+
+/* @func ajSeqABIGetNData ****************************************************
+**
+** Find 'DATA' tag and get the number of data points.
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
+
+int ajSeqABIGetNData(AjPFile fp)
+{
+
+    long int numPoints;
+    const long DATAtag = ((long) ((((('D'<<8)+'A')<<8)+'T')<<8)+'A');
+    const short TRACE_INDEX = 9;
+
+    if (!seqABIGetFlag(fp,DATAtag,TRACE_INDEX,3,&numPoints))
+          ajFatal("Error - locating DATA tag");
+
+    return numPoints;
+}
+
+
+/* @func ajSeqABIGetNBase *****************************************************
+**
+** Find the 'BASE' tag in an ABI trace file and get the number of bases.
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
+
+int ajSeqABIGetNBase(AjPFile fp)
+{
+
+    long int numBases;
+    const long BASEtag = ((long) ((((('P'<<8)+'B')<<8)+'A')<<8)+'S');
+
+    if (!seqABIGetFlag(fp,BASEtag,1,3,&numBases))
+         ajFatal("Error - locating BASE tag");
+
+    return numBases;
+}
+
+
+/* @func ajSeqABIGetData *****************************************************
+**
+** Read in the processed trace data from an ABI file.
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @param [r] Offset [long int ] data offset in ABI file
+** @param [r] numPoints [long int ] number of data points
+** @param [w] trace [AjPInt2d ] (4xnumPoints) array of trace data
+** @return [void] 
+** @@
+******************************************************************************/
+
+void ajSeqABIGetData(AjPFile fp,long int *Offset,long int numPoints,
+                     AjPInt2d trace)
+{
+    int i;
+    int j;
+    short int traceValue;
+
+    /* Read in data  */
+    for (i=0;i<4;i++)
+    {
+        if (ajFileSeek(fp,Offset[i],SEEK_SET)) ajFatal("Error - reading trace");
+        for (j=0;j<(int)numPoints;j++)
+            if (seqABIReadInt2(fp,&traceValue))
+                ajInt2dPut(&trace,i,j,(int)traceValue);
+            else
+                ajFatal("Error - reading trace");
+    }
+
+    return;
+}
+
+
+/* @func ajSeqABIGetBasePosition *********************************************
+**
+** Read in the base positions from an ABI file.
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @param [r] numBases [long int] number of bases
+** @param [w] basePositions [AjPShort* ] base positions
+** @return [void] 
+** @@
+******************************************************************************/
+
+void ajSeqABIGetBasePosition(AjPFile fp,long int numBases,
+                             AjPShort* basePositions)
+{
+    int i;
+    short int bP;
+     
+    /* Read in base positions   */
+    for (i=0;i<(int)numBases;i++)
+    {
+        if (!seqABIReadInt2(fp,&bP)) 
+         ajFatal("Error - in finding Base Position");
+        ajShortPut(basePositions,i,bP);
+    }
+
+    return;
+}
+
+
+/* @func ajSeqABIGetSignal ***************************************************
+**
+** Read in the signal strength information from an ABI file.
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @param [r] fwo_ [long int] field order 
+** @param [w] sigC [short int] average signal strength for C
+** @param [w] sigA [short int] average signal strength for A
+** @param [w] sigG [short int] average signal strength for G
+** @param [w] sigT [short int] average signal strength for T
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajSeqABIGetSignal(AjPFile fp,long int fwo_,
+                  short int sigC,short int sigA,
+                  short int sigG,short int sigT)
+{
+    long int signalO;
+    short int* base[4];
+
+    const long SIGNALtag    = ((long) ((((('S'<<8)+'/')<<8)+'N')<<8)+'%');
+
+    /* Get signal strength info */
+    if (seqABIGetFlag(fp,SIGNALtag,1,5,&signalO))
+    {
+        base[0] = &sigC;
+        base[1] = &sigA;
+        base[2] = &sigG;
+        base[3] = &sigT;
+        if (ajFileSeek(fp, signalO, SEEK_SET) >= 0 &&
+            seqABIReadInt2(fp, base[seqABIBaseIdx((char)(fwo_>>24&255))]) &&
+            seqABIReadInt2(fp, base[seqABIBaseIdx((char)(fwo_>>16&255))]) &&
+            seqABIReadInt2(fp, base[seqABIBaseIdx((char)(fwo_>>8&255))]) &&
+            seqABIReadInt2(fp, base[seqABIBaseIdx((char)(fwo_&255))]))
+            {
+/*            ajUser("avg_signal_strength = C:%d A:%d G:%d T:%d",sigC,sigA,
+	sigG,sigT);
+*/
+            }
+    }
+
+    return;
+}
+
+
+/* @func ajSeqABIGetBaseSpace ************************************************
+**
+** Read in the base spacing from an ABI file.
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @return [float] base spacing
+** @@
+******************************************************************************/
+
+float ajSeqABIGetBaseSpace(AjPFile fp)
+{
+
+    float spacing;
+    const long SPACINGtag = ((long) ((((('S'<<8)+'P')<<8)+'A')<<8)+'C');
+
+    seqABIGetFlagF(fp,SPACINGtag,1,5,&spacing);
+
+    return spacing;
+}
+
+
+/* @func ajSeqABIGetBaseOffset ***********************************************
+**
+** Routine to get the 'BASE' tag offset in an ABI file.
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @return [int] 'BASE' tag offset in an ABI file
+** @@
+******************************************************************************/
+
+int ajSeqABIGetBaseOffset(AjPFile fp)
+{
+    long int baseO;
+    const long BASEtag = ((long) ((((('P'<<8)+'B')<<8)+'A')<<8)+'S');
+
+    /* Find BASE tag & get offset                                */
+    if (!seqABIGetFlag(fp,BASEtag,1,5,&baseO))
+           ajFatal("Error - in finding Base Offset");
+
+    return baseO;
+}
+
+
+/* @func ajSeqABIGetBasePosOffset ********************************************
+**
+** Routine to get the 'PLOC', base position, tag offset in an ABI file
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @return [int] base position offset in an ABI file
+** @@
+******************************************************************************/
+
+int ajSeqABIGetBasePosOffset(AjPFile fp)
+{
+    long int basePosO;
+    const long BASEPOStag = ((long) ((((('P'<<8)+'L')<<8)+'O')<<8)+'C');
+
+    /* Find BASEPOS tag & get base position offset               */
+    if (!seqABIGetFlag(fp,BASEPOStag,1,5,&basePosO))
+          ajFatal("Error - in finding Base Pos Offset");
+
+    return basePosO;
+}
+
+
+/* @func ajSeqABIGetFWO ******************************************************
+**
+** Routine to get the "FWO" tag, field order ("GATC"), tag. 
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @return [int] field order
+** @@
+******************************************************************************/
+
+int ajSeqABIGetFWO(AjPFile fp)
+{
+
+    long int fwo_;
+    const long FWO_tag = ((long) ((((('F'<<8)+'W')<<8)+'O')<<8)+'_');
+
+    /* Find FWO tag */
+    if (!seqABIGetFlag(fp,FWO_tag,1,5,&fwo_))
+            ajFatal("Error - in finding field order");
+
+    return fwo_;
+}
+
+
+/* @func ajSeqABIGetPrimerOffset *********************************************
+**
+** Routine to get the primer offset in an ABI file.
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @return [short int] primer offset
+** @@
+******************************************************************************/
+
+int ajSeqABIGetPrimerOffset(AjPFile fp)
+{
+
+    short int primerPos;
+    const long PPOStag = ((long) ((((('P'<<8)+'P')<<8)+'O')<<8)+'S');
+
+
+    /* Find PPOS tag (Primer Position) & get offset              */
+    if (!seqABIGetFlagW(fp,PPOStag,6,&primerPos))
+         ajFatal("Error - in finding primer offset");
+
+    return primerPos;
+}
+
+
+/* @func ajSeqABIGetPrimerPosition *******************************************
+**
+** Routine to get the primer position in an ABI file.
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @return [int] primer position
+** @@
+******************************************************************************/
+
+int ajSeqABIGetPrimerPosition(AjPFile fp)
+{
+    long int primerPosition;
+    const long PPOStag = ((long) ((((('P'<<8)+'P')<<8)+'O')<<8)+'S');
+
+
+    if (!seqABIGetFlag(fp,PPOStag,1,5,&primerPosition))
+          ajFatal("Error - in getting primer position");
+        {
+        /* ppos stored in MBShort of pointer */
+        primerPosition = primerPosition>>16;
+        }
+
+
+    return primerPosition;
+}
+
+
+
+/* @func ajSeqABIGetTraceOffset **********************************************
+**
+** Get the processed trace data ('DATA' tag) offset in an ABI file.
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @param [w] Offset [long int * ] trace data offset, used in ajSeqABIGetData
+** @return [AjBool]  ajTrue on success
+** @@
+******************************************************************************/
+
+AjBool ajSeqABIGetTraceOffset(AjPFile fp,long int *Offset)
+{
+    long int dataxO[4];
+    long int fwo_;
+
+    /* BYTE[i] is a byte mask for byte i */
+    const long int BYTE[] = { 0x000000ff };
+    const short TRACE_INDEX = 9;
+    const long DATAtag      = ((long) ((((('D'<<8)+'A')<<8)+'T')<<8)+'A');
+
+    /* Find FWO tag - Field order "GATC"                         */
+    fwo_ = ajSeqABIGetFWO(fp);
+
+    /* Get data trace offsets                                    */
+    if (!seqABIGetFlag(fp,DATAtag,TRACE_INDEX,
+         5,&dataxO[seqABIBaseIdx((char)(fwo_>>24&BYTE[0]))]))
+              return ajFalse;
+    if (!seqABIGetFlag(fp,DATAtag,TRACE_INDEX+1,
+         5,&dataxO[seqABIBaseIdx((char)(fwo_>>16&BYTE[0]))]))
+              return ajFalse;
+    if (!seqABIGetFlag(fp,DATAtag,TRACE_INDEX+2,
+         5,&dataxO[seqABIBaseIdx((char)(fwo_>>8&BYTE[0]))]))
+              return ajFalse;
+    if (!seqABIGetFlag(fp,DATAtag,TRACE_INDEX+3,
+         5,&dataxO[seqABIBaseIdx((char)(fwo_&BYTE[0]))]))
+              return ajFalse;
+
+    Offset[0]=dataxO[seqABIBaseIdx((char)(fwo_>>24&BYTE[0]))];
+    Offset[1]=dataxO[seqABIBaseIdx((char)(fwo_>>16&BYTE[0]))];
+    Offset[2]=dataxO[seqABIBaseIdx((char)(fwo_>>8&BYTE[0]))];
+    Offset[3]=dataxO[seqABIBaseIdx((char)(fwo_&BYTE[0]))];
+
+    return ajTrue;
+}
+
+
+/* @funcstatic seqReadABIInt4  ***********************************************
+**
+** Routine to read 4 bytes from a file and return the integer. 
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @param [w] i4 [long int * ] long integer read in from ABI file
+** @return [AjBool] true if read successfully
+** @@
+******************************************************************************/
+
+static AjBool seqReadABIInt4(AjPFile fp,long int*i4)
+{
+
+    unsigned char buf[sizeof(long int)];
+
+    if (ajFileRead((void *)buf,sizeof(buf),1,fp) != 1) return ajFalse;
+    *i4 = (long int)
+        (((unsigned long)buf[3]) +
+         ((unsigned long)buf[2]<<8) +
+         ((unsigned long)buf[1]<<16) +
+         ((unsigned long)buf[0]<<24));
+
+    ajDebug("seqReadABIInt4 %c %c %c %c",buf[0],buf[1],buf[2],buf[3]);  
+    return (AJTRUE);
+}
+
+
+/* @funcstatic seqABIReadFloat4 *********************************************
+**
+** Routine to read 4 bytes from a file and return the float.
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @param [w] f4 [float * ] long integer read in from ABI file
+** @return [AjBool] true if read successfully
+** @@
+******************************************************************************/
+
+static AjBool seqABIReadFloat4(AjPFile fp,float* f4)
+{
+
+    unsigned char buf[sizeof(long int)];
+
+    if (ajFileRead((void *)buf,sizeof(buf),1,fp) != 1)
+         return ajFalse;
+    *f4 = (long int)
+        (((unsigned long)buf[3]) +
+         ((unsigned long)buf[2]<<8) +
+         ((unsigned long)buf[1]<<16) +
+         ((unsigned long)buf[0]<<24));
+
+    return ajTrue;
+}
+
+
+/* @funcstatic seqABIReadInt2 ************************************************
+**
+** Routine to read 2 bytes from a file and return the short integer.
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @param [w] i2 [short int * ] short integer read in from ABI file
+** @return [AjBool] true if read successfully
+** @@
+******************************************************************************/
+
+static AjBool seqABIReadInt2(AjPFile fp,short int*i2)
+{
+     unsigned char buf[sizeof(short int)];
+
+    if (ajFileRead((void *)buf,sizeof(buf),1,fp) != 1)
+         return ajFalse;
+    *i2 = (short int)
+        (((unsigned short)buf[1]) +
+         ((unsigned short)buf[0]<<8));
+
+    return ajTrue;
+}
+
+
+/* @funcstatic seqABIGetFlag ************************************************
+**
+** Routine to read through an ABI trace file until it reaches a flag
+** (flagLabel). If there are multiple flags in the file it will search
+** to find the correct instance of that flag (flagInstance).
+** It  will then return the *integer* value (val) of the word+1 from
+** that flag record.
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @param [r] flagLabel [long int ] flag in the ABI file
+** @param [r] flagInstance [long int ] flag instance in the ABI file
+** @param [r] word [long int ] number of fields to ignore in this record
+** @param [w] val [long int* ] integer value of the word+1
+** @return [AjBool] true if read successfully
+** @@
+******************************************************************************/
+
+
+static AjBool seqABIGetFlag(AjPFile fp, long int flagLabel,
+         long int flagInstance,long int word,long int* val)
+{
+    int     flagNum=-1;
+    int     i;
+    long int  Label, Instance;
+    long int indexO;
+    const int INDEX_ENTRY_LENGTH= 28;
+
+
+    if(ajFileSeek(fp,26,SEEK_SET) ||
+      (!seqReadABIInt4(fp, &indexO))) ajFatal("Error - in finding flag");
+
+    do
+    {
+        flagNum++;
+        if (ajFileSeek(fp,indexO+(flagNum*INDEX_ENTRY_LENGTH),SEEK_SET) != 0)
+            return ajFalse;
+
+        if (!seqReadABIInt4(fp, &Label))
+            return ajFalse;
+        
+        if (!seqReadABIInt4(fp, &Instance))
+            return ajFalse;
+    } while (!(Label == (long int)flagLabel && 
+               Instance == (long int)flagInstance));
+
+    for (i=2; i<=word; i++) {
+        if (!seqReadABIInt4(fp, val))
+	    return ajFalse;
+    }
+
+    return ajTrue;
+
+}
+
+
+/* @funcstatic seqABIGetFlagF ************************************************
+**
+** Routine to read through an ABI trace file until it reaches a flag
+** (flagLabel). If there are multiple flags in the file it will search
+** to find the correct instance of that flag (flagInstance).
+** It  will then return the *float* value (val) of the word+1 from
+** that flag record.
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @param [r] flagLabel [long int ] flag in the ABI file
+** @param [r] flagInstance [long int ] flag instance in the ABI file
+** @param [r] word [long int ] number of fields to ignore in this record
+** @param [w] val [float* ] integer value of the word+1
+** @return [AjBool] true if read successfully
+** @@
+******************************************************************************/
+
+static AjBool seqABIGetFlagF(AjPFile fp, long int flagLabel,
+         long int flagInstance,long int word,float* val)
+{
+    int     flagNum=-1;
+    int     i;
+    long int  Label, Instance;
+    long int indexO;
+    const int INDEX_ENTRY_LENGTH= 28;
+
+
+    if(ajFileSeek(fp,26,SEEK_SET) ||
+      (!seqReadABIInt4(fp, &indexO))) ajFatal("Error - in finding flag");
+
+    do
+    {
+        flagNum++;
+        if (ajFileSeek(fp,indexO+(flagNum*INDEX_ENTRY_LENGTH),SEEK_SET) != 0)
+            return ajFalse;
+
+        if (!seqReadABIInt4(fp, &Label))
+            return ajFalse;
+
+        if (!seqReadABIInt4(fp, &Instance))
+            return ajFalse;
+    } while (!(Label == (long int)flagLabel &&
+               Instance == (long int)flagInstance));
+
+    for (i=2; i<=word; i++) {
+        if (!seqABIReadFloat4(fp, val))
+	    return ajFalse;
+    }
+
+    return ajTrue;
+}
+
+
+/* @funcstatic seqABIGetFlagF ************************************************
+**
+** Routine to read through an ABI trace file until it reaches a flag
+** (flagLabel). If there are multiple flags in the file it will search
+** to find the correct instance of that flag (flagInstance).
+** It  will then return the *short int* value (val) of the word+1 from
+** that flag record.
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @param [r] flagLabel [long int ] flag in the ABI file
+** @param [r] flagInstance [long int ] flag instance in the ABI file
+** @param [r] word [long int ] number of fields to ignore in this record
+** @param [w] val [short int* ] integer value of the word+1
+** @return [AjBool] true if read successfully
+** @@
+******************************************************************************/
+
+static AjBool seqABIGetFlagW(AjPFile fp, long int flagLabel,
+         long int word,short int* val)
+{
+    int     flagNum=-1;
+    int     i;
+    long int  Label;
+    long int  jval;
+    long int indexO;
+    const int   INDEX_ENTRY_LENGTH= 28;
+
+
+    if(ajFileSeek(fp,26,SEEK_SET) ||
+      (!seqReadABIInt4(fp, &indexO))) ajFatal("Error - in finding flag");
+
+    do
+    {
+        flagNum++;
+        if (ajFileSeek(fp, indexO+(flagNum*INDEX_ENTRY_LENGTH), SEEK_SET) != 0)
+            return ajFalse;
+        if (!seqReadABIInt4(fp, &Label))
+            return ajFalse;
+        }
+        while (Label != (long int)flagLabel);
+
+
+    for (i=2; i<word; i++)
+        if (!seqReadABIInt4(fp, &jval)) return ajFalse;
+
+    if (!seqABIReadInt2(fp, val)) return ajFalse;
+
+    return ajTrue;
+}
+
+
+/* @funcstatic seqABIBaseIdx *************************************************
+**
+** Returns: 0 if C, 1 if A, 2 if G, 3 if anything else
+**
+** @param [r] B [char ] base (C, A, G or T)
+** @return [short int] 0 if C, 1 if A, 2 if G, 3 if anything else
+** @@
+******************************************************************************/
+
+static short seqABIBaseIdx(char B)
+{
+   return ((B)=='C'?0:(B)=='A'?1:(B)=='G'?2:3);
+}
+
+
+/* @funcstatic seqABISampleName **********************************************
+**
+** Get the sample name from an ABI trace file.
+**
+** @param [r] fp [AjPStr ] ABI datafile name
+** @param [w] sample [AjPStr* ] sample name
+** @return [AjBool] true if read successfully
+** @@
+******************************************************************************/
+
+static AjBool seqABISampleName(AjPFile fp, AjPStr *sample)
+{
+    long int mchn;
+    const long SMPLtag = ((long) ((((('S'<<8)+'M')<<8)+'P')<<8)+'L');
+    unsigned char l;
+
+
+    if((seqABIGetFlag(fp,SMPLtag,1,5,&mchn)) &&
+       (ajFileSeek(fp,mchn,SEEK_SET) >= 0)){
+       ajFileRead(&l,sizeof(char),1,fp);
+       *sample = ajStrNewL(l+1);
+       ajFileRead((void*)ajStrStr(*sample),l,1,fp);
+       *(ajStrStr(*sample)+l)='\0';
+    }
+
+    return ajTrue;
+}
+
+
+/* @funcstatic seqReadAbi ****************************************************
+**
+** Given data in a sequence structure, tries to read everything needed
+** using ABI format.
+**
+** @param [wP] thys [AjPSeq] Sequence object
+** @param [P] seqin [AjPSeqin] Sequence input object
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
+
+static AjBool seqReadAbi (AjPSeq thys, AjPSeqin seqin)
+{
+    AjPFileBuff buff = seqin->Filebuff;
+    AjPFile fp=NULL;
+    AjBool  ok=ajFalse;
+    long int baseO=0L;
+    long int numBases=0L;
+    AjPStr sample=NULL;
+    AjPStr smpl=NULL;
+    static AjPRegexp dotsexp = NULL;
+
+
+    fp = buff->File;
+    if(!ajSeqABITest(fp))
+    {
+	ajFileBuffReset(buff);
+	return ajFalse;
+    }
+
+    ajFileSeek(fp,0L,0);
+
+    numBases = ajSeqABIGetNBase(fp);
+    /* Find BASE tag & get offset                    */
+    baseO = ajSeqABIGetBaseOffset(fp);
+    /* Read in sequence         */
+    ok = ajSeqABIReadSeq(fp,baseO,numBases,&thys->Seq);
+
+    sample = ajStrNew();
+    seqABISampleName(fp, &sample);
+
+    /* replace dots in the sample name with undescore */
+    dotsexp = ajRegCompC ("^(.*)[.](.*)$");
+    smpl = ajStrNew();
+
+    while(ajRegExec(dotsexp,sample))
+    {
+      ajStrClear(&sample);
+      ajRegSubI(dotsexp,1,&smpl);
+      ajStrAppC(&smpl,"_");
+      ajStrApp(&sample,smpl);
+      ajRegSubI(dotsexp,2,&smpl);
+      ajStrApp(&sample,smpl);
+    }
+
+    ajStrAssC(&thys->Name,ajStrStr(sample));
+    
+    ajSeqSetNuc (thys);
+
+    ajFileNext(buff->File);
+    buff->File->End=ajTrue;
+
+    ajStrDel(&smpl);
+    ajStrDel(&sample);
+    
+    return ajTrue;
+}

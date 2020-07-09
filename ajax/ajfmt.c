@@ -1315,3 +1315,65 @@ void ajFmtPutd(const char* str, int len,
       pad(width - n, ' ');
   }
 }
+
+/* @func ajFmtPrintSplit *****************************************************
+**
+** Block and print a string. String is split at given delimiters
+**
+** @param [w] outf [AjPFile] output stream
+** @param [r] str [AjPStr] text to write
+** @param [r] prefix [char *] prefix string
+** @param [r] len [int] maximum span
+** @param [r] delim [char *] delimiter string
+** @return [void]
+** @@
+*****************************************************************************/
+
+void ajFmtPrintSplit(AjPFile outf, AjPStr str, char *prefix, int len,
+		     char *delim)
+{
+    AjPStrTok handle=NULL;
+    AjPStr token = NULL;
+    AjPStr tmp   = NULL;
+    int    n = 0;
+    int    l = 0;
+    int    c = 0;
+    
+    token = ajStrNew();
+    tmp   = ajStrNewC("");
+    
+
+    handle = ajStrTokenInit(str,delim);
+    
+    while(ajStrToken(&token,&handle,NULL))
+    {
+	if(!c)
+	    ajFmtPrintF(outf,"%s",prefix);
+	
+	if((l=n+ajStrLen(token)) < len)
+	{
+	    if(c++)
+		ajStrAppC(&tmp," ");
+	    ajStrApp(&tmp,token);
+	    n = ++l;
+	}
+	else
+	{
+	    ajFmtPrintF(outf,"%S\n",tmp);
+	    ajStrAssS(&tmp,token);
+	    ajStrAppC(&tmp," ");
+	    n = ajStrLen(token);
+	    c = 0;
+	}
+    }
+
+    if(c)
+	ajFmtPrintF(outf,"%S\n",tmp);
+
+
+    ajStrTokenClear(&handle);
+    ajStrDel(&token);
+    ajStrDel(&tmp);
+    
+    return;
+}

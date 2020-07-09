@@ -1,4 +1,3 @@
-/*  Last edited: Feb  7 16:58 2000 (pmr) */
 #ifdef __cplusplus
 extern "C"
 {
@@ -28,6 +27,7 @@ extern "C"
 #include "ajseq.h"
 #include "ajseqdata.h"
 #include "ajseqtype.h"
+#include "ajarr.h"
 #include "ajseqread.h"
 #include "ajseqwrite.h"
 #include "ajseqdb.h"
@@ -52,11 +52,12 @@ extern "C"
 #include "ajbase.h"
 #include "ajdan.h"
 #include "ajsort.h"
-#include "ajarr.h"
 #include "ajgraphstruct.h"
   /*#include "ajhist.h"*/
+#include "ajxyz.h"
 #include "ajacd.h"
 #include "ajcall.h"
+#include "ajcorba.h"
 
 #endif
 

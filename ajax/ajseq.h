@@ -33,10 +33,12 @@ typedef struct AjSSeqCvt {
 
 AjBool       ajIsAccession (AjPStr accnum);
 int          ajSeqallBegin (AjPSeqall seq);
+void         ajSeqallDel(AjPSeqall *thys);
 int          ajSeqallEnd (AjPSeqall seq);
 AjPStr       ajSeqallGetName (AjPSeqall thys);
 AjPStr       ajSeqallGetNameSeq (AjPSeqall thys);
 int          ajSeqallGetRange (AjPSeqall thys, int* begin, int* end);
+AjPStr       ajSeqallGetUsa (AjPSeqall thys);
 int          ajSeqallLen (AjPSeqall seqall);
 AjPSeqall    ajSeqallNew (void);
 AjBool       ajSeqallNext (AjPSeqall seqall, AjPSeq* retseq);

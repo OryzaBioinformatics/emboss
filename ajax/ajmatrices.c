@@ -110,7 +110,7 @@ AjPMatrixf ajMatrixfNew (char* codes, AjPStr filename) {
 ** @@
 ******************************************************************************/
 
-AjPMatrixf ajMatrixfDel (AjPMatrixf *thys)
+void ajMatrixfDel (AjPMatrixf *thys)
 {
   int isize;
   int i;

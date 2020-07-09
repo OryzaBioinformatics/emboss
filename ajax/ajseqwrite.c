@@ -1626,7 +1626,7 @@ static void seqWritePhylip3 (AjPSeqout outseq)
     int itest;
     static AjPStr sseq = NULL;
     int ipos;
-    int iend;
+    int iend=0;
     AjPStr tstr=NULL;
 
     ajDebug ("seqWritePhylip3 list size %d\n", ajListLength(outseq->Savelist));
@@ -2037,6 +2037,29 @@ AjBool ajSeqOutSetFormat (AjPSeqout thys, AjPStr format) {
   ajDebug ("... output format set to '%S'\n", fmt);
 
   return ajTrue;
+}
+
+/* @func ajSeqOutSetFormatC ************************************************
+**
+** Sets the output format. Currently hard coded but will be replaced
+** in future by a variable.
+**
+** @param [wP] thys [AjPSeqout] Sequence output object.
+** @param [r] format [char *] Output format.
+** @return [AjBool] ajTrue on success.
+** @@
+******************************************************************************/
+
+AjBool ajSeqOutSetFormatC (AjPSeqout thys, char* format) {
+
+  AjPStr fmt = NULL;
+  AjBool ret;
+  
+  fmt = ajStrNewC(format);
+  ret = ajSeqOutSetFormat(thys,fmt);
+  ajStrDel(&fmt);
+
+  return ret;
 }
 
 /* @func ajSeqOutFormatDefault ************************************************
@@ -2729,4 +2752,46 @@ void ajSeqoutTrace (AjPSeqout seq) {
   else
     ajDebug( "  Features OFF\n");
     
+}
+
+/* @funcstatic ajSeqWriteCdb ************************************************
+**
+** Writes a Cdb sequence in SWISSPROT format.
+**
+** @param [w] outf [AjPFile] output stream
+** @param [r] seq [AjPStr] sequence
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajSeqWriteCdb (AjPFile outf, AjPStr seq)
+{
+    AjPSeqout outseq=NULL;
+    
+    static SeqPSeqFormat sf=NULL;
+    int mw;
+    unsigned int crc;
+
+    outseq = ajSeqoutNew();
+
+    outseq->File = outf;
+    ajStrAssS(&outseq->Seq,seq);
+    
+    crc = ajSeqCrc (outseq->Seq);
+    mw = (int) (0.5+ajSeqMW (outseq->Seq));
+    (void) ajFmtPrintF (outseq->File,
+			"SQ   SEQUENCE %5d AA; %6d MW;  %08X CRC32;\n",
+			ajStrLen(outseq->Seq), mw, crc);
+
+    seqSeqFormat(ajStrLen(outseq->Seq), &sf);
+    (void) strcpy (sf->endstr, "");
+    sf->tab = 4;
+    sf->spacer = 11;
+    sf->width = 60;
+
+    seqWriteSeq (outseq, sf);
+
+    ajSeqoutDel(&outseq);
+
+    return;
 }

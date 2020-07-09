@@ -165,7 +165,7 @@ char* embPropIntToThree(int c)
     {
 	"Ala","Asx","Cys","Asp","Glu","Phe","Gly","His","Ile","---","Lys",
 	"Leu","Met","Asn","---","Pro","Gln","Arg","Ser","Thr","---",
-	"Val","Trp","Xxx","Tyr","Glx" 
+	"Val","Trp","Xaa","Tyr","Glx" 
     };
     
     

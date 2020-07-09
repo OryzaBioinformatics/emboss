@@ -253,7 +253,6 @@ static AjPStr data_dir(void)
 {
     static AjPStr where=NULL;
     AjPStr tmp=NULL;
-    char *p=NULL;
     
     where = ajStrNew();
     tmp = ajStrNew();

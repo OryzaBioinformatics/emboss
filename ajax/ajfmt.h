@@ -44,6 +44,8 @@ extern int ajFmtPrintCL (char *buf, int size,
 	const char *fmt, ...);
 extern int ajFmtVPrintCL (char *buf, int size,
 	const char *fmt, va_list ap);
+extern void ajFmtPrintSplit(AjPFile outf, AjPStr str, char *prefix, int len,
+			    char *delim);
 extern int ajFmtVFmtS(char *buf, int size,
 	const char *fmt, va_list ap);
 extern char *ajFmtString (const char *fmt, ...);

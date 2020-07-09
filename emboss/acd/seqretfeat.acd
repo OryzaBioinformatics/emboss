@@ -15,22 +15,22 @@ appl: seqretfeat [
 	extraction, features"
 ]
 
-  sequence: sequence [ param: Y feat: Y ]
+##  sequence: sequence [ param: Y feat: Y ]
 
-  seqout: outseq [ param: Y feat: Y ]
+##  seqout: outseq [ param: Y feat: Y ]
 
   string: featignore    [
 	  req:N 
 	  def:"" 
 	  prompt:"Features to ignore"
-	  help: "Coma delimited list of Features NOT to be outputted"
+	  help: "Comma delimited list of Features NOT to be output"
 	  ]
 
   string: featonlyallow [
 	  req:N 
 	  def:""
 	  prompt:"Features to output"
-	  help: "Coma delimited list of Features to be outputted \
+	  help: "Comma delimited list of Features to be output, \
 	  will have no effect if featignore is set"
 	  ]
 
@@ -38,14 +38,14 @@ appl: seqretfeat [
 	  req:N 
 	  def:""
 	  prompt:"Tags to ignore"
-	  help: "Coma delimited list of Tags NOT to be outputted"
+	  help: "Comma delimited list of Tags NOT to be output"
 	  ]
 
   string: tagonlyallow  [
 	  req:N 
 	  def:""
 	  prompt:"Tags to output"
-	  help: "Coma delimited list of Tagss to be outputted \ 
+	  help: "Comma delimited list of Tags to be output, \ 
 	  will have no effect if tagignore is set"
 	  ]
 

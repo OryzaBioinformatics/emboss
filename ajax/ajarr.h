@@ -499,7 +499,9 @@ AjBool      ajFloat3dPut(AjPFloat3d *thys, int elem1, int elem2, int elem3,
 			 float v);
 
 void        ajIntDel(AjPInt *thys);
+void        ajIntDec(AjPInt *thys, int elem);
 int         ajIntGet(AjPInt thys, int elem);
+void        ajIntInc(AjPInt *thys, int elem);
 int*        ajIntInt(AjPInt thys);
 int         ajIntLen(AjPInt thys);
 AjPInt      ajIntNew(void);

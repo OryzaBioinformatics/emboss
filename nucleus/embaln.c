@@ -2706,9 +2706,9 @@ void embAlignPrintProfile(AjPFile outf, char *a, char *b, AjPStr m, AjPStr n,
 ** @param [r] lenm [int] length of first sequence
 ** @param [r] lenn [int] length of second sequence
 ** @param [w] id [float *] % identity
-** @param [w] id [float *] % similarity
+** @param [w] sim [float *] % similarity
 ** @param [w] idx [float *] % identity wrt longest sequence
-** @param [w] id [float *] % similarity wrt longest sequence
+** @param [w] simx [float *] % similarity wrt longest sequence
 ** 
 ** @return [void]
 ******************************************************************************/
@@ -2742,7 +2742,7 @@ void embAlignCalcSimilarity(AjPStr m, AjPStr n, float **sub, AjPSeqCvt cvt,
 	    continue;
 	}
 
-	match=sub[ajSeqCvtK(cvt,p[i])][ajSeqCvtK(cvt,q[i])];
+	match=sub[ajSeqCvtK(cvt,toupper(p[i]))][ajSeqCvtK(cvt,toupper(q[i]))];
 	if(p[i]==q[i])
 	{
 	    ++(*id);
