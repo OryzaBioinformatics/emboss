@@ -17,6 +17,11 @@ extern "C"
 #define AJBPS    1			/* Bits per state		*/
 
 
+/* @data EmbPPatMatch *******************************************************
+**
+** NUCLEUS data structure for pattern matches
+**
+******************************************************************************/
 
 typedef struct EmbSPatMatch {
   ajint number;
@@ -25,6 +30,11 @@ typedef struct EmbSPatMatch {
 } EmbOPatMatch, *EmbPPatMatch;
 
 
+/* @data EmbPPatRestrict ******************************************************
+**
+** NUCLEUS data structure for pattern matches
+**
+******************************************************************************/
 
 typedef struct EmbSPatRestrict
 {
@@ -48,9 +58,12 @@ typedef struct EmbSPatRestrict
 
 
 
-/*
- *   Node structure for Baeza-Yates & Perleberg algorithm
- */
+/* @data EmbPPatBYPNode ******************************************************
+**
+** NUCLEUS data structure for nodes in Baeza-Yates & Perleberg algorithm
+**
+******************************************************************************/
+
 typedef struct EmbSPatBYPNode
 {
     ajint offset;

@@ -7,9 +7,11 @@ extern "C"
 #define embshow_h
 
 
-
-
-/********* the EmbPShow object ***********/
+/* @data EmbPShow *******************************************************
+**
+** NUCLEUS data structure for EmbPShow object
+**
+******************************************************************************/
 
 typedef struct EmbSShow {
   AjPList list;		/* list of EmbPShowInfo structures */
@@ -27,8 +29,11 @@ typedef struct EmbSShow {
 } EmbOShow, *EmbPShow;
 
 
-
-/****** struct for node of list of descriptors object pointers ******/
+/* @data EmbPShowInfo *******************************************************
+**
+** NUCLEUS data structure for node of list of descriptors object pointers
+**
+******************************************************************************/
 
 typedef struct EmbSShowInfo {
   ajint type;  
@@ -43,11 +48,12 @@ typedef struct EmbSShowInfo {
 enum ShowEValtype {SH_SEQ, SH_BLANK, SH_TICK, SH_TICKNUM, SH_COMP,
 SH_TRAN, SH_RE, SH_FT, SH_NOTE};
 
+/* @data EmbPShowSeq *******************************************************
+**
+** NUCLEUS data structure for sequence information, type = SH_SEQ
+**
+******************************************************************************/
 
-
-/********* the display option structures ***********/
-
-/* sequence information, type = SH_SEQ */
 typedef struct EmbSShowSeq {
   AjBool number;	/* ajTrue = number the sequence */
   AjBool threeletter;	/* ajTrue = display proteins in three letter code */
@@ -56,6 +62,13 @@ typedef struct EmbSShowSeq {
 } EmbOShowSeq, *EmbPShowSeq;
 
 /* blank line information, type = SH_BLANK */
+
+/* @data EmbPShowBlank *******************************************************
+**
+** NUCLEUS data structure for  blank line information, type = SH_BLANK
+**
+******************************************************************************/
+
 typedef struct EmbSShowBlank {
 /* AJNEW0() falls over if 0 bytes are allocated, so put in this dummy to
 pad the structure out
@@ -63,7 +76,12 @@ pad the structure out
   AjBool dummy;
 } EmbOShowBlank, *EmbPShowBlank;
 
-/* tick line information, type = SH_TICK */
+/* @data EmbPShowTicks *******************************************************
+**
+** NUCLEUS data structure for tick line information, type = SH_TICK
+**
+******************************************************************************/
+
 typedef struct EmbSShowTicks {
 /* AJNEW0() falls over if 0 bytes are allocated, so put in this dummy to
 pad the structure out
@@ -71,7 +89,12 @@ pad the structure out
   AjBool dummy;
 } EmbOShowTicks, *EmbPShowTicks;
 
-/* tick number line information, type = SH_TICKNUM */
+/* @data EmbPShowTicknum ******************************************************
+**
+** NUCLEUS data structure for tick number line information, type = SH_TICKNUM
+**
+******************************************************************************/
+
 typedef struct EmbSShowTicknum {
 /* AJNEW0() falls over if 0 bytes are allocated, so put in this dummy to
 pad the structure out
@@ -79,7 +102,12 @@ pad the structure out
   AjBool dummy;
 } EmbOShowTicknum, *EmbPShowTicknum;
 
-/* translation information, type = SH_TRAN */
+/* @data EmbPShowTran ******************************************************
+**
+** NUCLEUS data structure for translation information, type = SH_TRAN
+**
+******************************************************************************/
+
 typedef struct EmbSShowTran {
   AjPSeq transeq;	/* our stored translation */
   AjPTrn trnTable;	/* translation table */
@@ -91,12 +119,22 @@ typedef struct EmbSShowTran {
   ajint orfminsize;	/* minimum size of ORF to display */
 } EmbOShowTran, *EmbPShowTran;
 
-/* sequence complement information, type = SH_COMP */
+/* @data EmbPShowComp ******************************************************
+**
+** NUCLEUS data structure for sequence complement information, type = SH_COMP
+**
+******************************************************************************/
+
 typedef struct EmbSShowComp {
   AjBool number;	/* ajTrue = number the complement */
 } EmbOShowComp, *EmbPShowComp;
 
-/* RE cut site information, type = SH_RE */
+/* @data EmbPShowRE ******************************************************
+**
+** NUCLEUS data structure for RE cut site information, type = SH_RE
+**
+******************************************************************************/
+
 typedef struct EmbSShowRE {
   ajint sense;			/* 1 or -1 = sense to display */
   AjBool flat;			/* ajTrue = display in flat format with recognition sites */
@@ -105,19 +143,35 @@ typedef struct EmbSShowRE {
   AjPList sitelist;		/* list of EmbSShowREsite */
 } EmbOShowRE, *EmbPShowRE;
 
-/* Feature information, type = SH_FT */
+/* @data EmbPShowFT ******************************************************
+**
+** NUCLEUS data structure for  Feature information, type = SH_FT
+**
+******************************************************************************/
+
 typedef struct EmbSShowFT {
   AjPFeattable feat;
 } EmbOShowFT, *EmbPShowFT;
 
-/* annotation information, type = SH_NOTE */
+/* @data EmbPShowNote ******************************************************
+**
+** NUCLEUS data structure for annotation information, type = SH_NOTE
+**
+******************************************************************************/
+
 typedef struct EmbSShowNote {
   AjPRange regions;	/* regions to note, NULL = no regions */
 } EmbOShowNote, *EmbPShowNote;
 
 
 /********* assorted structures ***********/
-/* RE cut site position list node */
+
+/* @data EmbPShowREsite ******************************************************
+**
+** NUCLEUS data structure for RE cut site position list node
+**
+******************************************************************************/
+
 typedef struct EmbSShowREsite {
   ajint pos;		/* cut site position */
   AjPStr name;		/* name of RE */

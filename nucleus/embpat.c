@@ -45,6 +45,7 @@ static AjBool patOUBrute(char *seq, char *pat, ajint spos, ajint ppos, ajint mm,
 **
 ** @param [D] x [void**] pattern
 ** @param [R] cl [void*] Function
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -1484,7 +1485,7 @@ ajint embPatBYPSearch(AjPStr *str, AjPStr *name, ajint begin, ajint slen,
 	}
 	if(buf[i&AJMOD256]<=mm)
 	{
-	    if(amino && i-plen+1!=0) return 0;
+	    if(amino && i-plen+1!=0) return count; /* pmr: was return 0 */
 	    if(!carboxyl || (carboxyl && i+1==slen))
 	    {
 		++count;
@@ -1805,16 +1806,26 @@ AjBool embPatClassify(AjPStr *pat, AjBool *amino, AjBool *carboxyl,
 {
     char *p;
     AjBool repeat;
-    
+
+
+    ajDebug("embPatClassify pat '%S' protein %b\n", *pat, protein);
+
     repeat=*amino=*carboxyl=*fclass=*ajcompl=*dontcare=*range=ajFalse;
 
     (void) ajStrClean(pat);
     patAminoCarboxyl(pat,amino,carboxyl);
     
+    ajDebug("cleaned pat '%S' amino %b carboxyl %b\n",
+	    *pat, *amino, *carboxyl);
+
     (void) ajStrToUpper(pat);
 
     if(!protein)
+    {
 	patIUBTranslate(pat);
+	ajDebug("IUB translated pat '%S'\n", *pat);
+    }
+
     p=ajStrStr(*pat);    
     
     while(*p)
@@ -1924,8 +1935,14 @@ AjBool embPatClassify(AjPStr *pat, AjBool *amino, AjBool *carboxyl,
 	return ajFalse;
     }
 
+    ajDebug("patterns expanded pat '%S'\n", *pat);
+
     if(repeat && !*range)
+    {
+	ajDebug("testing repeat expansion\n");
 	if(!patExpandRepeat(pat)) return ajFalse;
+	ajDebug("repeats expanded pat '%S'\n", *pat);
+    }
 
     return ajTrue;
 }
@@ -2013,7 +2030,7 @@ ajint embPatSOSearch(AjPStr *str, AjPStr *name, ajuint first, ajint begin,
 	    if(state < limit)
 	    {
 		pos=(p-q)-plen+1;
-		if(amino && pos) return 0;
+		if(amino && pos) return matches; /* pmr: was return 0 */
 		if(!carboxyl || (carboxyl && pos==slen-plen))
 		{
 		    ++matches;
@@ -2139,11 +2156,17 @@ ajint embPatBYGSearch(AjPStr *str, AjPStr *name, ajint begin, ajint plen,
     
     ajint matches;
     ajint slen;
-    
+
+    ajDebug("embPatBYGSearch begin:%d plen:%d limit:%u amino:%b carboxyl:%b\n",
+	    begin, plen, limit, amino, carboxyl);
+
     p=q=ajStrStr(*str);
     slen = ajStrLen(*str);
     matches = 0;
     initial = ~0;
+
+    ajDebug("..pat initial %u\n", initial);
+    ajDebug("..pat strlen:%d str:'%S'\n", q, *str);
 
     do
     {
@@ -2151,14 +2174,17 @@ ajint embPatBYGSearch(AjPStr *str, AjPStr *name, ajint begin, ajint plen,
 	do
 	{
 	    state = (state<<AJBPS) | table[(ajint)*p];
+	    ajDebug("..pat state %u p:%d\n", state, p);
 	    if(state < limit)
 	    {
 		pos=(p-q)-plen+1;
-		if(amino && pos) return 0;
+		if(amino && pos) return matches; /* pmr: was return 0 */
 		if(!carboxyl || (carboxyl && pos==slen-plen))
 		{
 		    ++matches;
 		    embPatPushHit(l,name,pos,plen,begin,0);
+		    ajDebug("..pat hit matches:%d list:%d name:'%S' pos:%d\n",
+			    matches, ajListLength(l), *name, pos);
 		}
 	    }
 	    ++p;
@@ -2265,7 +2291,7 @@ ajint embPatTUSearch(AjPStr *pat, AjPStr *text, ajint slen, ajint **skipm, ajint
 	}
 	if(mm<=k)
 	{
-	    if(amino && h+1) return 0;
+	    if(amino && h+1) return matches; /* pmr: was return 0 */
 	    if(!carboxyl || (carboxyl && h+1==slen-m))
 	    {
 		++matches;
@@ -2471,7 +2497,7 @@ ajint embPatTUBSearch(AjPStr *pat,AjPStr *text, ajint slen, ajint **skipm, ajint
 
 	if(mm<=k)
 	{
-	    if(amino && h+1) return 0;
+	    if(amino && h+1) return matches; /* pmr: was return 0 */
 	    if(!carboxyl || (carboxyl && h+1==slen-m))
 	    {
 		++matches;
@@ -3651,7 +3677,8 @@ void embPatFuzzSearch(ajint type, ajint begin, AjPStr pattern,
     ajint i;
     ajint start;
     ajint end;
-    
+
+    ajDebug("embPatFuzzSearch type %d\n", type);
 
     switch (type)
     {

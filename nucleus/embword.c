@@ -1373,6 +1373,7 @@ static void wordListInsertNodeOld(AjPListNode* pnode, void* x)
 **
 ** Unused functions. Here to keep compiler warnings away
 **
+** @return [void]
 ******************************************************************************/
 
 void embWordUnused(void)

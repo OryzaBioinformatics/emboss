@@ -1576,6 +1576,7 @@ void embAlignPrintLocal(AjPFile outf, char *a, char *b, AjPStr m, AjPStr n,
 **
 ** Calls unused functions to avoid warning messages
 **
+** @return [void]
 ******************************************************************************/
 
 void embAlignUnused(void)
@@ -3066,9 +3067,9 @@ void embAlignReportGlobal(AjPAlign align, AjPSeq seqa, AjPSeq seqb,
 ** @param [r] n [AjPStr] Walk alignment for second sequence
 ** @param [r] start1 [ajint] start of alignment in first sequence
 ** @param [r] start2 [ajint] start of alignment in second sequence
-** @param [r] score [float] alignment score from AlignScoreX
 ** @param [r] gapopen [float] Gap open penalty to report
 ** @param [r] gapextend [float] Gap extend penalty to report
+** @param [r] score [float] alignment score from AlignScoreX
 ** @param [r] matrix [AjPMatrixf] Floating point matrix
 ** @param [r] offset1 [ajint] first sequence offset
 ** @param [r] offset2 [ajint] second sequence offset
@@ -3123,7 +3124,7 @@ void embAlignReportLocal(AjPAlign align, AjPSeq seqa, AjPSeq seqb,
 
 }
 
-/* @func embAlignPrintProfile *******************************************
+/* @func embAlignReportProfile *******************************************
 **
 ** Print a profile alignment
 ** Nucleotides or proteins as needed.

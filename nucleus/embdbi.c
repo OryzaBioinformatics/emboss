@@ -94,7 +94,7 @@ EmbPentry embDbiEntryNew (void) {
   return ret;
 }
 
-/* @funcstatic embDbiFileList ********************************************
+/* @func embDbiFileList ********************************************
 **
 ** Makes a list of all files in a directory matching a wildcard file name.
 **
@@ -268,7 +268,7 @@ AjPList embDbiFileListExc (AjPStr dir, AjPStr wildfile, AjPStr exclude) {
   return retlist;
 }
 
-/* @func embDBiFlatOpenlib ****************************************************
+/* @func embDbiFlatOpenlib ****************************************************
 **
 ** Open a flat file library
 **

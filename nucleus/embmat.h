@@ -60,8 +60,7 @@ typedef struct EmbSMatMatch
     ajint    cut3;
     ajint    cut4;
     AjPStr iso;				/* Holds names of isoschizomers    */
-} EmbOMatMatch, *EmbPMatMatch
-;
+} EmbOMatMatch, *EmbPMatMatch;
 
 
 

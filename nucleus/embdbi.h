@@ -19,7 +19,7 @@ typedef struct EmbSac {
   ajint nid;			/* entry number */
 } EmbOac, *EmbPac;
 
-/* @data EmbPEntry *******************************************************
+/* @data EmbPentry *******************************************************
 **
 ** NUCLEUS internal structure for database indexing applications
 ** to store an entry id with a list of accession numbers and file

@@ -6,6 +6,12 @@ extern "C"
 #ifndef embWord_h
 #define embWord_h
 
+/* @data EmbPWordMatch *******************************************************
+**
+** NUCLEUS data structure for word matches
+**
+******************************************************************************/
+
 typedef struct EmbSWordMatch {
   ajint seq1start;            /* match start point in original sequence */
   ajint seq2start;            /* match start point in comparison sequence */
@@ -14,11 +20,23 @@ typedef struct EmbSWordMatch {
 			    /* so we know which one the match belongs to */
 } EmbOWordMatch, *EmbPWordMatch;
 
+/* @data EmbPWord *******************************************************
+**
+** NUCLEUS data structure for words
+**
+******************************************************************************/
+
 typedef struct EmbSWord {
   ajint count;
   char *fword;
   AjPList list;
 } EmbOWord, *EmbPWord;
+
+/* @data EmbPWord2 *******************************************************
+**
+** NUCLEUS data structure for words (part 2)
+**
+******************************************************************************/
 
 typedef struct EmbSWord2 {
   char *name;
