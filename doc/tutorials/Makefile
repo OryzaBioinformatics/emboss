@@ -71,7 +71,7 @@ NM = /usr/ccs/bin/nm -p
 OBJDUMP = @OBJDUMP@
 PACKAGE = EMBOSS
 RANLIB = ranlib
-VERSION = 2.0.0
+VERSION = 2.0.1
 XLIB =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib -lX11 -lsocket -lsocket  -lnsl -lnsl
 
 pkgdata_DATA = biblio.bib dottup.ps.gz emboss-gcg.ppt 	emboss-interfaces.ppt emboss-talk.ppt emboss_tutorial.ps.gz 	emboss_tutorial.tex pepinfo1.ps.gz pepinfo2.ps.gz plotorf.ps.gz 	tmap.ps.gz

@@ -71,7 +71,7 @@ NM = /usr/ccs/bin/nm -p
 OBJDUMP = @OBJDUMP@
 PACKAGE = EMBOSS
 RANLIB = ranlib
-VERSION = 2.0.0
+VERSION = 2.0.1
 XLIB =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib -lX11 -lsocket -lsocket  -lnsl -lnsl
 
 pkgdata_DATA = acnum.hit acnum.trg division.lkp entrynam.idx                est.dat fun.dat hum1.dat inv.dat pln.dat pro.dat rod.dat                sts.dat vrl.dat vrt.dat
