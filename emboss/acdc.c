@@ -37,6 +37,7 @@ int main(int argc, char **argv)
     else
 	ajGraphInit (argv[1], argc-1, &argv[1]);
 
+    ajAcdExit (ajTrue);		/* turn off the 'never used' ACD warnings */
     ajExit ();
     return 0;
 }
