@@ -1,0 +1,10 @@
+Classic MacOS simply won't work; an adequately recent version of Java
+simply isn't available.
+
+MacOS X (10.1, anyway) should work fine, as it comes with Java 1.3 and
+Java Web Start by default. There's a snag, however - an old and
+incompatible XML parser is also included by Apple, and that breaks our
+SOAP classes, so while the client starts up, it bombs out as soon as it
+tries to make a SOAP call.
+
+So we haven't yet succeeded in getting Embreo to work on a Mac.
