@@ -27,20 +27,28 @@ integer: wordsize  [
 endsection: required
 
 section: output [ info: "output Section" type: page ]
-outfile: outfile  [
+
+align: outfile  [
   parameter: "Y"
+  aformat: "match"
+  minseqs: "2"
+  maxseqs: "2"
 ]
 
 featout: afeatout  [
   parameter: "N"
+  ofname: "$(asequence.name)"
+  offormat: "gff"
   information: "feature file for output aseq"
-  help: "File for output of normal tab delimted gff's"
+  help: "File for output of normal tab delimited GFF features"
 ]
 
 featout: bfeatout  [
   parameter: "N"
+  ofname: "$(bsequence.name)"
+  offormat: "gff"
   information: "feature file for output bseq"
-  help: "File for output of normal tab delimted gff's"
+  help: "File for output of normal tab delimited GFF features"
 ]
 
 endsection: output
