@@ -91,6 +91,13 @@ static OParser parser[] = {
 };
 
 
+
+/* @prog dbigcg ***************************************************************
+**
+** Index a GCG formatted database
+**
+******************************************************************************/
+
 int main(int argc, char **argv)
 {
 
@@ -200,7 +207,7 @@ int main(int argc, char **argv)
   idlist = ajListNew ();
   aclist = ajListNew ();
 
-  inlist = embDbiFileList (directory, filename, NULL);
+  inlist = embDbiFileList (directory, filename, ajFalse);
   ajListSort (inlist, ajStrCmp);
   nfiles = ajListToArray(inlist, &files);
 
@@ -277,7 +284,7 @@ int main(int argc, char **argv)
     ajFmtPrintS (&blistfname, "%S.acid2", dbname);
     blistfile = ajFileNewOut (blistfname);
     if (!blistfile)
-      ajFatal("Failed to open %S for reading", blistfname);
+      ajFatal("Failed to open %S for writing", blistfname);
 
     ient=0;
     nac = 0;
