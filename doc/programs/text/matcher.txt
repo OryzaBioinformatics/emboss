@@ -52,7 +52,7 @@ Command line arguments
    Mandatory qualifiers:
   [-sequencea]         sequence   Sequence USA
   [-sequenceb]         sequence   Sequence USA
-  [-outfile]           outfile    Output file name
+  [-outfile]           align      (no help text) align value
 
    Optional qualifiers:
    -datafile           matrix     Matrix file
@@ -84,26 +84,6 @@ Command line arguments
                                   the gap penalty to zero (or very low) and
                                   using the gap extension penalty to control
                                   gap scoring.
-   -markx              integer    This sets the alternate display of matches
-                                  and mismatches in alignments.
-                                  -markx=0 uses ':','.',' ', for identities,
-                                  conservative replacements, and
-                                  non-conservative replacements, respectively.
-                                  -markx=1 uses ' ','x', and 'X'.
-                                  -markx=2 does not show the second sequence,
-                                  but uses the second alignment line to
-                                  display matches with a '.' for identity, or
-                                  with the mismatched residue for mismatches.
-                                  -markx=3 outputs a title line with the
-                                  percentage identity and score and then
-                                  outputs the gapped sequences in multiple
-                                  FASTA format.
-                                  -markx=4 outputs only the title line with
-                                  the percentage identity and score.
-                                  -markx=5,6,7,8 and 9 are the same as
-                                  -markx=1
-                                  -markx=10 outputs a parseable output.
-   -length             integer    Number of residues per line
 
    Advanced qualifiers: (none)
    General qualifiers:
@@ -118,7 +98,7 @@ Command line arguments
    [-sequenceb]
    (Parameter 2) Sequence USA Readable sequence Required
    [-outfile]
-   (Parameter 3) Output file name Output file <sequence>.matcher
+   (Parameter 3) (no help text) align value Alignment file
    Optional qualifiers Allowed values Default
    -datafile Matrix file Comparison matrix file in EMBOSS data path
    EBLOSUM62 for protein
@@ -143,18 +123,6 @@ Command line arguments
    by setting the gap penalty to zero (or very low) and using the gap
    extension penalty to control gap scoring. Positive integer 4 for any
    sequence
-   -markx This sets the alternate display of matches and mismatches in
-   alignments. -markx=0 uses ':','.',' ', for identities, conservative
-   replacements, and non-conservative replacements, respectively.
-   -markx=1 uses ' ','x', and 'X'. -markx=2 does not show the second
-   sequence, but uses the second alignment line to display matches with a
-   '.' for identity, or with the mismatched residue for mismatches.
-   -markx=3 outputs a title line with the percentage identity and score
-   and then outputs the gapped sequences in multiple FASTA format.
-   -markx=4 outputs only the title line with the percentage identity and
-   score. -markx=5,6,7,8 and 9 are the same as -markx=1 -markx=10 outputs
-   a parseable output. Integer up to 10 0
-   -length Number of residues per line Integer from 1 to 200 60
    Advanced qualifiers Allowed values Default
    (none)
    

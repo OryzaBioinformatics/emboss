@@ -380,6 +380,7 @@ Known bugs
 See also
 
    Program name                      Description
+   alignwrap    Aligns a set of sequences to a seed alignment
    needle       Needleman-Wunsch global alignment
    stretcher    Finds the best global alignment between two sequences
    

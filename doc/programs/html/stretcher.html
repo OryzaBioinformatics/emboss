@@ -119,14 +119,12 @@ IT IS DONE FOR YOU.
    Mandatory qualifiers:
   [-sequencea]         sequence   Sequence USA
   [-sequenceb]         sequence   Sequence USA
-  [-outfile]           outfile    Output file name
+  [-outfile]           align      (no help text) align value
 
    Optional qualifiers:
    -datafile           matrix     Matrix file
    -gappenalty         integer    gappenalty
    -gaplength          integer    gap length penalty
-   -markx              integer    alternative displays
-   -length             integer    number per line
 
    Advanced qualifiers: (none)
    General qualifiers:
@@ -162,9 +160,9 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>[-outfile]<br>(Parameter 3)</td>
-<td>Output file name</td>
-<td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.stretcher</td>
+<td>(no help text) align value</td>
+<td>Alignment file</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -192,20 +190,6 @@ IT IS DONE FOR YOU.
 <td>gap length penalty</td>
 <td>Positive integer</td>
 <td>2 for protein, 4 for nucleic</td>
-</tr>
-
-<tr>
-<td>-markx</td>
-<td>alternative displays</td>
-<td>Positive integer up to 10</td>
-<td>0</td>
-</tr>
-
-<tr>
-<td>-length</td>
-<td>number per line</td>
-<td>Positive integer</td>
-<td>60</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -309,6 +293,7 @@ The directories are searched in the following order:
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="alignwrap.html">alignwrap</a></td><td>Aligns a set of sequences to a seed alignment</td></tr>
 <tr><td><a href="est2genome.html">est2genome</a></td><td>Align EST and genomic DNA sequences</td></tr>
 <tr><td><a href="needle.html">needle</a></td><td>Needleman-Wunsch global alignment</td></tr>
 </table>

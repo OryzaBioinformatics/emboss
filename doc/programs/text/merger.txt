@@ -117,7 +117,7 @@ Command line arguments
   [-seqa]              sequence   Sequence USA
   [-seqb]              sequence   Sequence USA
   [-outseq]            seqout     Output sequence USA
-   -report             outfile    Output alignment and explanation
+   -outfile            align      Output alignment and explanation
 
    Optional qualifiers:
    -datafile           matrixf    Matrix file
@@ -138,7 +138,7 @@ Command line arguments
    (Parameter 2) Sequence USA Readable sequence Required
    [-outseq]
    (Parameter 3) Output sequence USA Writeable sequence <sequence>.format
-   -report Output alignment and explanation Output file stdout
+   -outfile Output alignment and explanation Alignment file stdout
    Optional qualifiers Allowed values Default
    -datafile Matrix file Comparison matrix file in EMBOSS data path
    EBLOSUM62 for protein

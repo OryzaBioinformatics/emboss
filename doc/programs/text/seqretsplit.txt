@@ -144,10 +144,12 @@ Known bugs
 See also
 
    Program name                          Description
+   biosed       Replace or delete sequence sections
    cutseq       Removes a specified section from a sequence
    degapseq     Removes gap characters from sequences
    descseq      Alter the name or description of a sequence
    entret       Reads and writes (returns) flatfile entries
+   extractfeat  Extract features from a sequence
    extractseq   Extract regions from a sequence
    infoseq      Displays some simple information about sequences
    listor       Writes a list file of the logical OR of two sets of sequences

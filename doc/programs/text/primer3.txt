@@ -6,7 +6,7 @@
                                        
 Function
 
-   Picks primers for PCR reactions
+   Picks PCR primers and hybridization oligos
    
 Description
 
@@ -26,8 +26,8 @@ Description
        
    All of these criteria are user-specifiable as constraints.
    
-   primer3
-   can also pick hybridisation oligos that are internal to the product.
+   primer3 can also pick hybridisation oligos that are internal to the
+   product.
    
   ADVICE FOR PICKING PRIMERS
   
@@ -236,9 +236,7 @@ Command line arguments
                                   example AAAAAA.
 *  -productosize       integer    The optimum size for the PCR product. 0
                                   indicates that there is no optimum product
-                                  size. This parameter influences primer pair
-                                  selection only if PAIR-WT-PRODUCT-SIZE-GT or
-                                  PAIR-WT-PRODUCT-SIZE-LT is non-0.
+                                  size.
 *  -productsizerange   range      The associated values specify the lengths of
                                   the product that the user wants the primers
                                   to create, and is a space separated list of
@@ -677,7 +675,7 @@ Command line arguments
    given in Rychlik, Spencer and Rhoads, Nucleic Acids Research, vol 18,
    num 12, pp 6409-6412 and Breslauer, Frank, Bloeker and Marky, Proc.
    Natl. Acad. Sci. USA, vol 83, pp 3746-3750. Please refer to the former
-   paper for background discussion. Any integer value 60
+   paper for background discussion. Any integer value 60.0
    -mintm Minimum acceptable melting temperature(Celsius) for a primer
    oligo. Any integer value 57.0
    -maxtm Maximum acceptable melting temperature(Celsius) for a primer
@@ -714,9 +712,7 @@ Command line arguments
    -maxpolyx The maximum allowable length of a mononucleotide repeat in a
    primer, for example AAAAAA. Integer 0 or more 5
    -productosize The optimum size for the PCR product. 0 indicates that
-   there is no optimum product size. This parameter influences primer
-   pair selection only if PAIR-WT-PRODUCT-SIZE-GT or
-   PAIR-WT-PRODUCT-SIZE-LT is non-0. Integer 0 or more 0
+   there is no optimum product size. Integer 0 or more 200
    -productsizerange The associated values specify the lengths of the
    product that the user wants the primers to create, and is a space
    separated list of elements of the form (x)-(y) where an (x)-(y) pair
@@ -921,7 +917,7 @@ Command line arguments
    of Primers for Polymerase Chain Reaction' in BA White, Ed., 'Methods
    in Molecular Biology, Vol. 15: PCR Protocols: Current Methods and
    Applications', 1993, pp 31-40, Humana Press, Totowa NJ). Number up to
-   1000.000 100.0
+   1000.000 9.0
    -oligomishyblibrary Similar to MISPRIMING-LIBRARY, except that the
    event we seek to avoid is hybridization of the internal oligo to
    sequences in this library rather than priming from them. The file must
@@ -1035,6 +1031,14 @@ Output file format
    The 'Start' positions are given counting from the start of the
    sequence for both the forward and reverse primer (and for the internal
    oligos).
+   
+   Note that if you compare the results to the output from the public
+   Primer3 web site you will see a difference in the reverse primer
+   positions - this is because the original Primer3 program reports the
+   reverse primer positions as couted from the 3' end. The convention in
+   EMBOSS is to report both forward and reverse featyres as counted from
+   the 5' end, so the reverse primer positions are given counted from the
+   5' start of the sequence.
    
 Data files
 

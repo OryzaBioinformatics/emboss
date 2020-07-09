@@ -9,39 +9,39 @@ pkgdata_DATA =  abiview0.gif banana0.gif chaos0.gif cpgplot0.gif \
                alignment_differences_group.html \
                alignment_dot_plots_group.html alignment_global_group.html \
                alignment_local_group.html alignment_multiple_group.html \
-               antigenic.html backtranseq.html banana.html btwisted.html \
-               cai.html chaos.html charge.html checktrans.html chips.html \
-               cirdna.html clique.html codcmp.html coderet.html \
-               compseq.html cons.html consense.html contacts.html \
-               contml.html contrast.html cpgplot.html cpgreport.html \
-               cusp.html cutgextract.html cutseq.html dan.html \
-               dbiblast.html dbifasta.html dbiflat.html dbigcg.html \
-               degapseq.html descseq.html diffseq.html digest.html \
-               display_group.html distmat.html dnacomp.html dnadist.html \
-               dnainvar.html dnaml.html dnamlk.html dnapars.html \
-               dnapenny.html dollop.html dolpenny.html domainer.html \
-               dotmatcher.html dotpath.html dottup.html dreg.html \
-               eclique.html econsense.html econtml.html econtrast.html \
-               edit_group.html ednacomp.html ednadist.html ednainvar.html \
-               ednaml.html ednamlk.html ednapars.html ednapenny.html \
-               edollop.html edolpenny.html efactor.html efitch.html \
-               egendist.html einverted.html ekitsch.html embossdata.html \
-               embossversion.html emix.html emma.html emowse.html \
-               eneighbor.html entret.html enzyme_kinetics_group.html \
-               epenny.html eprotdist.html eprotpars.html equicktandem.html \
-               erestml.html eseqboot.html est2genome.html etandem.html \
-               extractfeat.html extractseq.html factor.html \
-               feature_tables_group.html findkm.html fitch.html freak.html \
-               fuzznuc.html fuzzpro.html fuzztran.html garnier.html \
-               geecee.html gendist.html getorf.html groups.html \
-               helixturnhelix.html hmoment.html iep.html index.html \
-               infoalign.html information_group.html infoseq.html
-pkgdata2_DATA = isochore.html kitsch.html lindna.html listor.html \
-               marscan.html maskfeat.html maskseq.html matcher.html \
-               megamerger.html menus_group.html merger.html mix.html \
-               msbar.html mse.html needle.html neighbor.html \
-               newcpgreport.html newcpgseek.html newseq.html noreturn.html \
-               notseq.html nrscope.html nthseq.html \
+               antigenic.html backtranseq.html banana.html biosed.html \
+               btwisted.html cai.html chaos.html charge.html \
+               checktrans.html chips.html cirdna.html clique.html \
+               codcmp.html coderet.html compseq.html cons.html \
+               consense.html contacts.html contml.html contrast.html \
+               cpgplot.html cpgreport.html cusp.html cutgextract.html \
+               cutseq.html dan.html dbiblast.html dbifasta.html \
+               dbiflat.html dbigcg.html degapseq.html descseq.html \
+               diffseq.html digest.html display_group.html distmat.html \
+               dnacomp.html dnadist.html dnainvar.html dnaml.html \
+               dnamlk.html dnapars.html dnapenny.html dollop.html \
+               dolpenny.html domainer.html dotmatcher.html dotpath.html \
+               dottup.html dreg.html eclique.html econsense.html \
+               econtml.html econtrast.html edit_group.html ednacomp.html \
+               ednadist.html ednainvar.html ednaml.html ednamlk.html \
+               ednapars.html ednapenny.html edollop.html edolpenny.html \
+               efactor.html efitch.html egendist.html einverted.html \
+               ekitsch.html embossdata.html embossversion.html emix.html \
+               emma.html emowse.html eneighbor.html entret.html \
+               enzyme_kinetics_group.html epenny.html eprotdist.html \
+               eprotpars.html equicktandem.html erestml.html eseqboot.html \
+               est2genome.html etandem.html extractfeat.html \
+               extractseq.html factor.html feature_tables_group.html \
+               findkm.html fitch.html freak.html fuzznuc.html fuzzpro.html \
+               fuzztran.html garnier.html geecee.html gendist.html \
+               getorf.html groups.html helixturnhelix.html hmoment.html \
+               iep.html index.html infoalign.html information_group.html
+pkgdata2_DATA = infoseq.html isochore.html kitsch.html lindna.html \
+               listor.html marscan.html maskfeat.html maskseq.html \
+               matcher.html megamerger.html menus_group.html merger.html \
+               mix.html msbar.html mse.html mwfilter.html needle.html \
+               neighbor.html newcpgreport.html newcpgseek.html newseq.html \
+               noreturn.html notseq.html nrscope.html nthseq.html \
                nucleic_2d_structure_group.html \
                nucleic_codon_usage_group.html \
                nucleic_composition_group.html \

@@ -51,14 +51,12 @@ Command line arguments
    Mandatory qualifiers:
   [-sequencea]         sequence   Sequence USA
   [-sequenceb]         sequence   Sequence USA
-  [-outfile]           outfile    Output file name
+  [-outfile]           align      (no help text) align value
 
    Optional qualifiers:
    -datafile           matrix     Matrix file
    -gappenalty         integer    gappenalty
    -gaplength          integer    gap length penalty
-   -markx              integer    alternative displays
-   -length             integer    number per line
 
    Advanced qualifiers: (none)
    General qualifiers:
@@ -73,7 +71,7 @@ Command line arguments
    [-sequenceb]
    (Parameter 2) Sequence USA Readable sequence Required
    [-outfile]
-   (Parameter 3) Output file name Output file <sequence>.stretcher
+   (Parameter 3) (no help text) align value Alignment file
    Optional qualifiers Allowed values Default
    -datafile Matrix file Comparison matrix file in EMBOSS data path
    EBLOSUM62 for protein
@@ -81,8 +79,6 @@ Command line arguments
    -gappenalty gappenalty Positive integer 12 for protein, 16 for nucleic
    -gaplength gap length penalty Positive integer 2 for protein, 4 for
    nucleic
-   -markx alternative displays Positive integer up to 10 0
-   -length number per line Positive integer 60
    Advanced qualifiers Allowed values Default
    (none)
    
@@ -129,7 +125,8 @@ Known bugs
 
 See also
 
-   Program name             Description
+   Program name                  Description
+   alignwrap    Aligns a set of sequences to a seed alignment
    est2genome   Align EST and genomic DNA sequences
    needle       Needleman-Wunsch global alignment
    

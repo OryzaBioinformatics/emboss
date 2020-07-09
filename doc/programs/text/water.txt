@@ -78,12 +78,10 @@ Command line arguments
                                   penalty to zero (or very low) and using the
                                   gap extension penalty to control gap
                                   scoring.
-  [-outfile]           outfile    Output file name
+  [-outfile]           align      (no help text) align value
 
    Optional qualifiers:
    -datafile           matrixf    Matrix file
-   -showinternals      bool       Show debugging information on the internal
-                                  state of the search.
 
    Advanced qualifiers:
    -[no]similarity     bool       Display percent identity and similarity
@@ -115,13 +113,11 @@ Command line arguments
    penalty to zero (or very low) and using the gap extension penalty to
    control gap scoring. Number from 0.100 to 10.000 0.5 for any sequence
    [-outfile]
-   (Parameter 3) Output file name Output file <sequence>.water
+   (Parameter 3) (no help text) align value Alignment file
    Optional qualifiers Allowed values Default
    -datafile Matrix file Comparison matrix file in EMBOSS data path
    EBLOSUM62 for protein
    EDNAFULL for DNA
-   -showinternals Show debugging information on the internal state of the
-   search. Yes/No No
    Advanced qualifiers Allowed values Default
    -[no]similarity Display percent identity and similarity Yes/No Yes
    -fasta Output overlap as fasta sequences Yes/No No

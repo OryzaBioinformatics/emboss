@@ -559,16 +559,36 @@ GCG-Alignment file created      [5345B]
 
 Command line arguments
 
-   Mandatory qualifiers (* if not always prompted):
+   Mandatory qualifiers:
   [-inseqs]            seqall     Sequence database USA
   [-outseq]            seqoutset  The sequence alignment output filename
   [-dendoutfile]       outfile    The dendogram output filename
+
+   Optional qualifiers (* if not always prompted):
+   -onlydend           bool       only produce dendrogram file
+*  -dend               bool       select if you want to do alignment using an
+                                  old dendrogram
 *  -dendfile           string     name of old dendrogram file
+   -insist             bool       Insist that the sequence type is changed to
+                                  protein
+   -slowfast           list       A distance is calculated between every pair
+                                  of sequences and these are used to construct
+                                  the dendrogram which guides the final
+                                  multiple alignment. The scores are
+                                  calculated from separate pairwise
+                                  alignments. These can be calculated using 2
+                                  methods: dynamic programming (slow but
+                                  accurate) or by the method of Wilbur and
+                                  Lipman (extremely fast but approximate).
+                                  The slow-accurate method is fine for short
+                                  sequences but will be VERY SLOW for many
+                                  (e.g. >100) long (e.g. >1000 residue)
+                                  sequences.
 *  -pwgapc             float      The penalty for opening a gap in the
                                   pairwise alignments.
 *  -pwgapv             float      The penalty for extending a gap by 1 residue
                                   in the pairwise alignments.
-*  -pwmatrix           select     The scoring table which describes the
+*  -pwmatrix           list       The scoring table which describes the
                                   similarity of each amino acid to each other.
                                   There are three 'in-built' series of weight
                                   matrices offered. Each consists of several
@@ -605,7 +625,7 @@ Command line arguments
                                   gives a score of 1.0 to two identical amino
                                   acids and a score of zero otherwise. This
                                   matrix is not very useful.
-*  -pwdnamatrix        select     The scoring table which describes the scores
+*  -pwdnamatrix        list       The scoring table which describes the scores
                                   assigned to matches and mismatches
                                   (including IUB ambiguity codes).
 *  -pairwisedata       string     Filename of user pairwise matrix
@@ -631,28 +651,7 @@ Command line arguments
                                   sensitivity.
 *  -nopercent          bool       Fast pairwise alignment: similarity scores:
                                   suppresses percentage score
-*  -mamatrix           string     Filename of user multiple alignment matrix
-
-   Optional qualifiers (* if not always prompted):
-   -onlydend           bool       only produce dendrogram file
-*  -dend               bool       select if you want to do alignment using an
-                                  old dendrogram
-   -insist             bool       Insist that the sequence type is changed to
-                                  protein
-   -slowfast           select     A distance is calculated between every pair
-                                  of sequences and these are used to construct
-                                  the dendrogram which guides the final
-                                  multiple alignment. The scores are
-                                  calculated from separate pairwise
-                                  alignments. These can be calculated using 2
-                                  methods: dynamic programming (slow but
-                                  accurate) or by the method of Wilbur and
-                                  Lipman (extremely fast but approximate).
-                                  The slow-accurate method is fine for short
-                                  sequences but will be VERY SLOW for many
-                                  (e.g. >100) long (e.g. >1000 residue)
-                                  sequences.
-*  -matrix             select     This gives a menu where you are offered a
+*  -matrix             list       This gives a menu where you are offered a
                                   choice of weight matrices. The default for
                                   proteins is the PAM series derived by Gonnet
                                   and colleagues. Note, a series is used! The
@@ -697,9 +696,10 @@ Command line arguments
                                   matrix is not very useful. Alternatively,
                                   you can read in your own (just one matrix,
                                   not a series).
-*  -dnamatrix          select     This gives a menu where you are offered
+*  -dnamatrix          list       This gives a menu where you are offered
                                   amenu where a single matrix (not a series)
                                   can be selected.
+*  -mamatrix           string     Filename of user multiple alignment matrix
    -gapc               float      The penalty for opening a gap in the
                                   alignment. Increasing the gap opening
                                   penalty will make gaps less frequent.
@@ -759,16 +759,7 @@ Command line arguments
                                   sequences will be aligned later.
 
    Advanced qualifiers:
-   -tmpprot            bool       Temporary holder for input protein sequence
-                                  type
-   -prot               bool       Protein input sequence
-   -slow               bool       Slow and accurate alignment
-   -displayslow        bool       Prompt for slow alignment options
-   -usermatrix         bool       User defined matrix required
-   -umatrix            bool       User defined matrix (not used)
-   -displayfast        bool       Prompt for fast alignment options
-   -usermamatrix       bool       Prompt for user multiple alignment matrix
-   -umamatrix          bool       User defined multiple alignment matrix
+   -prot               bool       Do not change this value
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -785,7 +776,23 @@ Command line arguments
    [-dendoutfile]
    (Parameter 3) The dendogram output filename Output file
    <sequence>.emma
+   Optional qualifiers Allowed values Default
+   -onlydend only produce dendrogram file Yes/No No
+   -dend select if you want to do alignment using an old dendrogram
+   Yes/No No
    -dendfile name of old dendrogram file Any string is accepted NULL
+   -insist Insist that the sequence type is changed to protein Yes/No No
+   -slowfast A distance is calculated between every pair of sequences and
+   these are used to construct the dendrogram which guides the final
+   multiple alignment. The scores are calculated from separate pairwise
+   alignments. These can be calculated using 2 methods: dynamic
+   programming (slow but accurate) or by the method of Wilbur and Lipman
+   (extremely fast but approximate). The slow-accurate method is fine for
+   short sequences but will be VERY SLOW for many (e.g. >100) long (e.g.
+   >1000 residue) sequences.
+   s (slow)
+   f (fast)
+   s
    -pwgapc The penalty for opening a gap in the pairwise alignments.
    Number 0.000 or more 10.0
    -pwgapv The penalty for extending a gap by 1 residue in the pairwise
@@ -812,17 +819,18 @@ Command line arguments
    use the GONNET 40, 80, 120, 160, 250 and 350 matrices. We also supply
    an identity matrix which gives a score of 1.0 to two identical amino
    acids and a score of zero otherwise. This matrix is not very useful.
-   blosum
-   pam
-   gonnet
-   id
-   own
-   blosum
+   b (blosum)
+   p (pam)
+   g (gonnet)
+   i (id)
+   o (own)
+   b
    -pwdnamatrix The scoring table which describes the scores assigned to
-   matches and mismatches (including IUB ambiguity codes). iub
-   clustalw
-   own
-   iub
+   matches and mismatches (including IUB ambiguity codes).
+   i (iub)
+   c (clustalw)
+   o (own)
+   i
    -pairwisedata Filename of user pairwise matrix Any string is accepted
    NULL
    -ktup This is the size of exactly matching fragment that is used.
@@ -843,23 +851,6 @@ Command line arguments
    sensitivity. Positive integer 5 for protein, 4 for nucleic
    -nopercent Fast pairwise alignment: similarity scores: suppresses
    percentage score Yes/No No
-   -mamatrix Filename of user multiple alignment matrix Any string is
-   accepted NULL
-   Optional qualifiers Allowed values Default
-   -onlydend only produce dendrogram file Yes/No No
-   -dend select if you want to do alignment using an old dendrogram
-   Yes/No No
-   -insist Insist that the sequence type is changed to protein Yes/No No
-   -slowfast A distance is calculated between every pair of sequences and
-   these are used to construct the dendrogram which guides the final
-   multiple alignment. The scores are calculated from separate pairwise
-   alignments. These can be calculated using 2 methods: dynamic
-   programming (slow but accurate) or by the method of Wilbur and Lipman
-   (extremely fast but approximate). The slow-accurate method is fine for
-   short sequences but will be VERY SLOW for many (e.g. >100) long (e.g.
-   >1000 residue) sequences. slow
-   fast
-   slow
    -matrix This gives a menu where you are offered a choice of weight
    matrices. The default for proteins is the PAM series derived by Gonnet
    and colleagues. Note, a series is used! The actual matrix that is used
@@ -886,17 +877,21 @@ Command line arguments
    matrices. We also supply an identity matrix which gives a score of 1.0
    to two identical amino acids and a score of zero otherwise. This
    matrix is not very useful. Alternatively, you can read in your own
-   (just one matrix, not a series). blosum
-   pam
-   gonnet
-   id
-   own
-   blosum
+   (just one matrix, not a series).
+   b (blosum)
+   p (pam)
+   g (gonnet)
+   i (id)
+   o (own)
+   b
    -dnamatrix This gives a menu where you are offered amenu where a
-   single matrix (not a series) can be selected. iub
-   clustalw
-   own
-   iub
+   single matrix (not a series) can be selected.
+   i (iub)
+   c (clustalw)
+   o (own)
+   i
+   -mamatrix Filename of user multiple alignment matrix Any string is
+   accepted NULL
    -gapc The penalty for opening a gap in the alignment. Increasing the
    gap opening penalty will make gaps less frequent. Positive foating
    point number 10.0
@@ -940,23 +935,8 @@ Command line arguments
    than this level to any other sequences will be aligned later. Integer
    from 0 to 100 30
    Advanced qualifiers Allowed values Default
-   -tmpprot Temporary holder for input protein sequence type Yes/No Yes
-   for protein sequences
-   -prot Protein input sequence Yes/No Yes if -insist was set
-   -slow Slow and accurate alignment Yes/No Yes unless -slowfast is
-   'fast'
-   -displayslow Prompt for slow alignment options Yes/No Yes if -options
-   and -slow are both set
-   -usermatrix User defined matrix required Yes/No Yes if -pwmatrix is
-   set
-   -umatrix User defined matrix (not used) Yes/No Yes if -pwdnamatrix is
-   set
-   -displayfast Prompt for fast alignment options Yes/No Yes if -options
-   is true and -slow is false
-   -usermamatrix Prompt for user multiple alignment matrix Yes/No True if
-   -matrix was set
-   -umamatrix User defined multiple alignment matrix Yes/No True if
-   -dnamatrix was set
+   -prot Do not change this value Yes/No @($(insist) ?
+   @(!$(inseqs.protein)):$(inseqs.protein))
    
 Input file format
 

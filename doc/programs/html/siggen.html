@@ -164,6 +164,10 @@ Name of signature file for output [sig.sig]:
 *  -conthresh          integer    Threshold contact number
 *  -conpath            string     Location of contact files for input
 *  -conextn            string     Extension of contact files
+*  -cpdbpath           string     Location of coordinate files for input
+                                  (embl-like format)
+*  -cpdbextn           string     Extension of coordinate files (embl-like
+                                  format)
 *  -filterpsim         bool       Ignore alignment postitions with
                                   post_similar value of 0
 
@@ -274,6 +278,20 @@ Name of signature file for output [sig.sig]:
 <td>Extension of contact files</td>
 <td>Any string is accepted</td>
 <td>.con</td>
+</tr>
+
+<tr>
+<td>-cpdbpath</td>
+<td>Location of coordinate files for input (embl-like format)</td>
+<td>Any string is accepted</td>
+<td>/data/cpdbscop/</td>
+</tr>
+
+<tr>
+<td>-cpdbextn</td>
+<td>Extension of coordinate files (embl-like format)</td>
+<td>Any string is accepted</td>
+<td>.pxyz</td>
 </tr>
 
 <tr>
@@ -659,7 +677,10 @@ None.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="contacts.html">contacts</a></td><td>Reads coordinate files and writes contact files</td></tr>
+<tr><td><a href="dichet.html">dichet</a></td><td>Parse dictionary of heterogen groups</td></tr>
+<tr><td><a href="psiblasts.html">psiblasts</a></td><td>Runs PSI-BLAST given scopalign alignments</td></tr>
 <tr><td><a href="scopalign.html">scopalign</a></td><td>Generate alignments for SCOP families</td></tr>
+<tr><td><a href="sigscan.html">sigscan</a></td><td>Scans a sparse protein signature against swissprot</td></tr>
 </table>
 
 <!-- 

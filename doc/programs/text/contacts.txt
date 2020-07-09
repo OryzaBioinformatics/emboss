@@ -311,9 +311,12 @@ Known bugs
    
 See also
 
-   Program name              Description
+   Program name                    Description
+   dichet       Parse dictionary of heterogen groups
+   psiblasts    Runs PSI-BLAST given scopalign alignments
    scopalign    Generate alignments for SCOP families
    siggen       Generates a sparse protein signature
+   sigscan      Scans a sparse protein signature against swissprot
    
 Author(s)
 

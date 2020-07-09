@@ -133,7 +133,7 @@ IT IS DONE FOR YOU.
    Mandatory qualifiers:
   [-sequencea]         sequence   Sequence USA
   [-sequenceb]         sequence   Sequence USA
-  [-outfile]           outfile    Output file name
+  [-outfile]           align      (no help text) align value
 
    Optional qualifiers:
    -datafile           matrix     Matrix file
@@ -165,26 +165,6 @@ IT IS DONE FOR YOU.
                                   the gap penalty to zero (or very low) and
                                   using the gap extension penalty to control
                                   gap scoring.
-   -markx              integer    This sets the alternate display of matches
-                                  and mismatches in alignments.
-                                  -markx=0 uses ':','.',' ', for identities,
-                                  conservative replacements, and
-                                  non-conservative replacements, respectively.
-                                  -markx=1 uses ' ','x', and 'X'.
-                                  -markx=2 does not show the second sequence,
-                                  but uses the second alignment line to
-                                  display matches with a '.' for identity, or
-                                  with the mismatched residue for mismatches.
-                                  -markx=3 outputs a title line with the
-                                  percentage identity and score and then
-                                  outputs the gapped sequences in multiple
-                                  FASTA format.
-                                  -markx=4 outputs only the title line with
-                                  the percentage identity and score.
-                                  -markx=5,6,7,8 and 9 are the same as
-                                  -markx=1
-                                  -markx=10 outputs a parseable output.
-   -length             integer    Number of residues per line
 
    Advanced qualifiers: (none)
    General qualifiers:
@@ -220,9 +200,9 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>[-outfile]<br>(Parameter 3)</td>
-<td>Output file name</td>
-<td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.matcher</td>
+<td>(no help text) align value</td>
+<td>Alignment file</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -257,27 +237,6 @@ IT IS DONE FOR YOU.
 <td>The gap length, or gap extension, penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty. An exception is where one or both sequences are single reads with possible sequencing errors in which case you would expect many single base gaps. You can get this result by setting the gap penalty to zero (or very low) and using the gap extension penalty to control gap scoring.</td>
 <td>Positive integer</td>
 <td>4 for any sequence</td>
-</tr>
-
-<tr>
-<td>-markx</td>
-<td>This sets the alternate display of matches and mismatches in alignments.
--markx=0 uses ':','.',' ', for identities, conservative replacements, and non-conservative replacements, respectively.
--markx=1 uses ' ','x', and 'X'.
--markx=2 does not show the second sequence, but uses the second alignment line to display matches with a '.' for identity, or with the mismatched residue for mismatches.
--markx=3 outputs a title line with the percentage identity and score and then outputs the gapped sequences in multiple FASTA format.
--markx=4 outputs only the title line with the percentage identity and score.
--markx=5,6,7,8 and 9 are the same as -markx=1
--markx=10 outputs a parseable output.</td>
-<td>Integer up to 10</td>
-<td>0</td>
-</tr>
-
-<tr>
-<td>-length</td>
-<td>Number of residues per line</td>
-<td>Integer from 1 to 200</td>
-<td>60</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">

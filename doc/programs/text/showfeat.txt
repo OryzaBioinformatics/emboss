@@ -422,6 +422,7 @@ See also
    abiview Reads ABI file and display the trace
    cirdna Draws circular maps of DNA constructs
    coderet Extract CDS, mRNA and translations from feature tables
+   extractfeat Extract features from a sequence
    lindna Draws linear maps of DNA constructs
    maskfeat Mask off features of a sequence
    pepnet Displays proteins as a helical net

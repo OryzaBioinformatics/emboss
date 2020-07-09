@@ -312,6 +312,7 @@ Known bugs
 See also
 
    Program name                          Description
+   biosed       Replace or delete sequence sections
    coderet      Extract CDS, mRNA and translations from feature tables
    cutseq       Removes a specified section from a sequence
    degapseq     Removes gap characters from sequences

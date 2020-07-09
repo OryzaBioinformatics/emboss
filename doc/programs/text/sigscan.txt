@@ -339,6 +339,8 @@ See also
 
    Program name                   Description
    contacts     Reads coordinate files and writes contact files
+   dichet       Parse dictionary of heterogen groups
+   psiblasts    Runs PSI-BLAST given scopalign alignments
    scopalign    Generate alignments for SCOP families
    siggen       Generates a sparse protein signature
    

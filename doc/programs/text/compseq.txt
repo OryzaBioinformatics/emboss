@@ -267,6 +267,7 @@ See also
    freak Residue/base frequency table or plot
    iep Calculates the isoelectric point of a protein
    isochore Plots isochores in large DNA sequences
+   mwfilter Filter noisy molwts from mass spec output
    octanol Displays protein hydropathy
    pepinfo Plots simple amino acid properties in parallel
    pepstats Protein statistics

@@ -77,6 +77,10 @@ Command line arguments
 *  -conthresh          integer    Threshold contact number
 *  -conpath            string     Location of contact files for input
 *  -conextn            string     Extension of contact files
+*  -cpdbpath           string     Location of coordinate files for input
+                                  (embl-like format)
+*  -cpdbextn           string     Extension of coordinate files (embl-like
+                                  format)
 *  -filterpsim         bool       Ignore alignment postitions with
                                   post_similar value of 0
 
@@ -124,6 +128,10 @@ Command line arguments
    -conpath Location of contact files for input Any string is accepted
    /data/contacts/
    -conextn Extension of contact files Any string is accepted .con
+   -cpdbpath Location of coordinate files for input (embl-like format)
+   Any string is accepted /data/cpdbscop/
+   -cpdbextn Extension of coordinate files (embl-like format) Any string
+   is accepted .pxyz
    -filterpsim Ignore alignment postitions with post_similar value of 0
    Yes/No No
    Optional qualifiers Allowed values Default
@@ -284,9 +292,12 @@ Known bugs
    
 See also
 
-   Program name                   Description
+   Program name                    Description
    contacts     Reads coordinate files and writes contact files
+   dichet       Parse dictionary of heterogen groups
+   psiblasts    Runs PSI-BLAST given scopalign alignments
    scopalign    Generate alignments for SCOP families
+   sigscan      Scans a sparse protein signature against swissprot
    
 Author(s)
 

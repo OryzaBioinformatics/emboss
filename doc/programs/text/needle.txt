@@ -75,7 +75,7 @@ Command line arguments
                                   penalty to zero (or very low) and using the
                                   gap extension penalty to control gap
                                   scoring.
-   -outfile            outfile    Output file name
+  [-outfile]           align      (no help text) align value
 
    Optional qualifiers:
    -datafile           matrixf    Matrix file
@@ -83,8 +83,6 @@ Command line arguments
    Advanced qualifiers:
    -[no]similarity     bool       Display percent identity and similarity
    -fasta              bool       Output overlap as fasta sequences
-   -showinternals      bool       Show debugging information on the internal
-                                  state of the search.
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -112,7 +110,8 @@ Command line arguments
    penalty to zero (or very low) and using the gap extension penalty to
    control gap scoring. Floating point number from 0.0 to 10.0 0.5 for
    any sequence
-   -outfile Output file name Output file <sequence>.needle
+   [-outfile]
+   (Parameter 3) (no help text) align value Alignment file
    Optional qualifiers Allowed values Default
    -datafile Matrix file Comparison matrix file in EMBOSS data path
    EBLOSUM62 for protein
@@ -120,8 +119,6 @@ Command line arguments
    Advanced qualifiers Allowed values Default
    -[no]similarity Display percent identity and similarity Yes/No Yes
    -fasta Output overlap as fasta sequences Yes/No No
-   -showinternals Show debugging information on the internal state of the
-   search. Yes/No No
    
 Input file format
 
@@ -241,6 +238,7 @@ Known bugs
 See also
 
    Program name                      Description
+   alignwrap    Aligns a set of sequences to a seed alignment
    est2genome   Align EST and genomic DNA sequences
    stretcher    Finds the best global alignment between two sequences
    

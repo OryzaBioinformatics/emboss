@@ -265,6 +265,7 @@ See also
 
    Program name                          Description
    backtranseq  Back translate a protein sequence
+   extractfeat  Extract features from a sequence
    maskfeat     Mask off features of a sequence
    plotorf      Plot potential open reading frames
    prettyseq    Output sequence with translated ranges

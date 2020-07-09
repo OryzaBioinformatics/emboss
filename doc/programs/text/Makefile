@@ -37,12 +37,12 @@ pkglibdir = $(libdir)/EMBOSS
 pkgincludedir = $(includedir)/EMBOSS
 top_builddir = ../../..
 
-ACLOCAL = aclocal
-AUTOCONF = autoconf
-AUTOMAKE = automake
-AUTOHEADER = autoheader
+ACLOCAL = ${SHELL} /m2/emboss/emboss/missing --run aclocal
+AUTOCONF = ${SHELL} /m2/emboss/emboss/missing --run autoconf
+AUTOMAKE = ${SHELL} /m2/emboss/emboss/missing --run automake
+AUTOHEADER = ${SHELL} /m2/emboss/emboss/missing --run autoheader
 
-INSTALL = ../../.././install-sh -c
+INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_SCRIPT = ${INSTALL}
@@ -55,9 +55,9 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = 
-host_triplet = sparc-sun-solaris2.7
-AJAX_FIXED_ROOT = \"/packages/emboss/compile/CURRENT/SOLARIS/emboss/emboss/emboss\"
-AMTAR = tar
+host_triplet = i686-pc-linux-gnu
+AJAX_FIXED_ROOT = \"/m2/emboss/emboss/emboss\"
+AMTAR = ${SHELL} /m2/emboss/emboss/missing --run tar
 AS = @AS@
 AWK = gawk
 CC = gcc
@@ -67,7 +67,8 @@ DLLTOOL = @DLLTOOL@
 ECHO = echo
 EXEEXT = 
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
-JAVA_OK = 
+ISAIXIA64 = 
+JAVA_OK = yes
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 OBJDUMP = @OBJDUMP@
@@ -75,24 +76,24 @@ OBJEXT = o
 PACKAGE = EMBOSS
 RANLIB = ranlib
 STRIP = strip
-VERSION = 2.1.0
-XLIB =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib -lX11 -lsocket -lsocket  -lnsl -lnsl
-X_CFLAGS =  -I/usr/openwin/include -I/usr/openwin/include
-X_EXTRA_LIBS = -lsocket -lsocket  -lnsl -lnsl
-X_LIBS =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib
+VERSION = 2.2.0
+XLIB =  -L/usr/X11R6/lib -L/usr/X11R6/lib -lX11 
+X_CFLAGS =  -I/usr/X11R6/include -I/usr/X11R6/include
+X_EXTRA_LIBS = 
+X_LIBS =  -L/usr/X11R6/lib -L/usr/X11R6/lib
 X_PRE_LIBS =  -lSM -lICE -lSM -lICE
 am__include = include
 am__quote = 
-havejavac = 
-install_sh = /packages/emboss/compile/CURRENT/SOLARIS/emboss/emboss/install-sh
+havejavac = yes
+install_sh = /m2/emboss/emboss/install-sh
 
 pkgdatadir = $(prefix)/share/$(PACKAGE)/doc/programs/text
 
 pkgdata_DATA = SITE-DIRECTED.txt abiview.txt ajtest.txt antigenic.txt \
-               backtranseq.txt banana.txt btwisted.txt cai.txt chaos.txt \
-               charge.txt checktrans.txt chips.txt cirdna.txt clique.txt \
-               codcmp.txt coderet.txt complex.txt compseq.txt cons.txt \
-               consense.txt contacts.txt contml.txt contrast.txt \
+               backtranseq.txt banana.txt biosed.txt btwisted.txt cai.txt \
+               chaos.txt charge.txt checktrans.txt chips.txt cirdna.txt \
+               clique.txt codcmp.txt coderet.txt complex.txt compseq.txt \
+               cons.txt consense.txt contacts.txt contml.txt contrast.txt \
                cpgplot.txt cpgreport.txt cusp.txt cutgextract.txt \
                cutseq.txt dan.txt dbiblast.txt dbifasta.txt dbiflat.txt \
                dbigcg.txt degapseq.txt descseq.txt diffseq.txt digest.txt \
@@ -115,28 +116,28 @@ pkgdata_DATA = SITE-DIRECTED.txt abiview.txt ajtest.txt antigenic.txt \
 pkgdata2_DATA = infoseq.txt isochore.txt kitsch.txt lindna.txt listor.txt \
                marscan.txt maskfeat.txt maskseq.txt matcher.txt \
                megamerger.txt merger.txt mix.txt msbar.txt mse.txt \
-               needle.txt neighbor.txt newcpgreport.txt newcpgseek.txt \
-               newseq.txt noreturn.txt notseq.txt nrscope.txt nthseq.txt \
-               octanol.txt oddcomp.txt palindrome.txt pasteseq.txt \
-               patmatdb.txt patmatmotifs.txt penny.txt pepcoil.txt \
-               pepinfo.txt pepnet.txt pepstats.txt pepwheel.txt \
-               pepwindow.txt pepwindowall.txt plotcon.txt plotorf.txt \
-               polydot.txt preg.txt prettyplot.txt prettyseq.txt prima.txt \
-               primer3.txt primersearch.txt printsextract.txt profit.txt \
-               prophecy.txt prophet.txt prosextract.txt protdist.txt \
-               pscan.txt rebaseextract.txt recode.txt recoder.txt \
-               redata.txt remap.txt restml.txt restover.txt restrict.txt \
-               revseq.txt scopalign.txt scope.txt seealso.txt seqboot.txt \
-               seqmatchall.txt seqret.txt seqretall.txt seqretallfeat.txt \
-               seqretfeat.txt seqretset.txt seqretsplit.txt showalign.txt \
-               showdb.txt showfeat.txt showorf.txt showseq.txt \
-               shuffleseq.txt sigcleave.txt siggen.txt sigscan.txt \
-               silent.txt splitter.txt stamps.txt stretcher.txt \
-               stssearch.txt supermatcher.txt swissparse.txt syco.txt \
-               textsearch.txt tfextract.txt tfm.txt tfscan.txt tmap.txt \
-               topo.txt transeq.txt trimest.txt trimseq.txt vectorstrip.txt \
-               water.txt wobble.txt wordcount.txt wordmatch.txt \
-               wossname.txt
+               mwfilter.txt needle.txt neighbor.txt newcpgreport.txt \
+               newcpgseek.txt newseq.txt noreturn.txt notseq.txt \
+               nrscope.txt nthseq.txt octanol.txt oddcomp.txt \
+               palindrome.txt pasteseq.txt patmatdb.txt patmatmotifs.txt \
+               penny.txt pepcoil.txt pepinfo.txt pepnet.txt pepstats.txt \
+               pepwheel.txt pepwindow.txt pepwindowall.txt plotcon.txt \
+               plotorf.txt polydot.txt preg.txt prettyplot.txt \
+               prettyseq.txt prima.txt primer3.txt primersearch.txt \
+               printsextract.txt profit.txt prophecy.txt prophet.txt \
+               prosextract.txt protdist.txt pscan.txt rebaseextract.txt \
+               recode.txt recoder.txt redata.txt remap.txt restml.txt \
+               restover.txt restrict.txt revseq.txt scopalign.txt scope.txt \
+               seealso.txt seqboot.txt seqmatchall.txt seqret.txt \
+               seqretall.txt seqretallfeat.txt seqretfeat.txt seqretset.txt \
+               seqretsplit.txt showalign.txt showdb.txt showfeat.txt \
+               showorf.txt showseq.txt shuffleseq.txt sigcleave.txt \
+               siggen.txt sigscan.txt silent.txt splitter.txt stamps.txt \
+               stretcher.txt stssearch.txt supermatcher.txt swissparse.txt \
+               syco.txt textsearch.txt tfextract.txt tfm.txt tfscan.txt \
+               tmap.txt topo.txt transeq.txt trimest.txt trimseq.txt \
+               vectorstrip.txt water.txt wobble.txt wordcount.txt \
+               wordmatch.txt wossname.txt
 
 pkgdata2dir = $(prefix)/share/$(PACKAGE)/doc/programs/text
 subdir = doc/programs/text

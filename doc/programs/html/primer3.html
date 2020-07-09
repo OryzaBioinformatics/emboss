@@ -36,7 +36,7 @@ Program primer3
 <H2>
     Function
 </H2>
-Picks primers for PCR reactions
+Picks PCR primers and hybridization oligos
 
 <!--
 DON'T WRITE ANYTHING HERE.
@@ -89,7 +89,7 @@ All of these criteria are user-specifiable as constraints.
 
 <p>
 
-<p>primer3</p> can also pick hybridisation oligos that are internal to
+<b>primer3</b> can also pick hybridisation oligos that are internal to
 the product. 
 
 
@@ -346,9 +346,7 @@ Here is a sample session with primer3:
                                   example AAAAAA.
 *  -productosize       integer    The optimum size for the PCR product. 0
                                   indicates that there is no optimum product
-                                  size. This parameter influences primer pair
-                                  selection only if PAIR-WT-PRODUCT-SIZE-GT or
-                                  PAIR-WT-PRODUCT-SIZE-LT is non-0.
+                                  size.
 *  -productsizerange   range      The associated values specify the lengths of
                                   the product that the user wants the primers
                                   to create, and is a space separated list of
@@ -838,7 +836,7 @@ E.g. 401,407 68,70 forbids selection of primers in the 7 bases starting at 401 a
 <td>-otm</td>
 <td>Optimum melting temperature(Celsius) for a primer oligo. Primer3 will try to pick primers with melting temperatures are close to this temperature. The oligo melting temperature formula in Primer3 is that given in Rychlik, Spencer and Rhoads, Nucleic Acids Research, vol 18, num 12, pp 6409-6412 and Breslauer, Frank, Bloeker and Marky, Proc. Natl. Acad. Sci. USA, vol 83, pp 3746-3750. Please refer to the former paper for background discussion.</td>
 <td>Any integer value</td>
-<td>60</td>
+<td>60.0</td>
 </tr>
 
 <tr>
@@ -907,9 +905,9 @@ See ADVICE FOR PICKING PRIMERS.</td>
 
 <tr>
 <td>-productosize</td>
-<td>The optimum size for the PCR product. 0 indicates that there is no optimum product size. This parameter influences primer pair selection only if PAIR-WT-PRODUCT-SIZE-GT or PAIR-WT-PRODUCT-SIZE-LT is non-0.</td>
+<td>The optimum size for the PCR product. 0 indicates that there is no optimum product size.</td>
 <td>Integer 0 or more</td>
-<td>0</td>
+<td>200</td>
 </tr>
 
 <tr>
@@ -1168,7 +1166,7 @@ The scoring system is as for the Maximum Complementarity argument. In the exampl
 <td>-maxendstability</td>
 <td>The maximum stability for the five 3' bases of a forward or reverse primer. Bigger numbers mean more stable 3' ends. The value is the maximum delta G for duplex disruption for the five 3' bases as calculated using the nearest neighbor parameters published in Breslauer, Frank, Bloeker and Marky, Proc. Natl. Acad. Sci. USA, vol 83, pp 3746-3750. Primer3 uses a completely permissive default value for backward compatibility (which we may change in the next release). Rychlik recommends a maximum value of 9 (Wojciech Rychlik, 'Selection of Primers for Polymerase Chain Reaction' in BA White, Ed., 'Methods in Molecular Biology, Vol. 15: PCR Protocols: Current Methods and Applications', 1993, pp 31-40, Humana Press, Totowa NJ).</td>
 <td>Number up to 1000.000</td>
-<td>100.0</td>
+<td>9.0</td>
 </tr>
 
 <tr>
@@ -1329,6 +1327,15 @@ forward sense sequence.
 The 'Start' positions are given counting from the start of the sequence
 for both the forward and reverse primer (and for the internal oligos). 
 
+<p>
+
+Note that if you compare the results to the output from the public
+Primer3 web site you will see a difference in the reverse primer
+positions - this is because the original Primer3 program reports the
+reverse primer positions as couted from the 3' end.  The convention in
+EMBOSS is to report both forward and reverse featyres as counted from
+the 5' end, so the reverse primer positions are given counted from the
+5' start of the sequence. 
 
 
 

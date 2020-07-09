@@ -205,6 +205,7 @@ See also
    compseq Counts the composition of dimer/trimer/etc words in a sequence
    emowse Protein identification by mass spectrometry
    iep Calculates the isoelectric point of a protein
+   mwfilter Filter noisy molwts from mass spec output
    octanol Displays protein hydropathy
    pepstats Protein statistics
    pepwindow Displays protein hydropathy

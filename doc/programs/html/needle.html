@@ -146,7 +146,7 @@ IT IS DONE FOR YOU.
                                   penalty to zero (or very low) and using the
                                   gap extension penalty to control gap
                                   scoring.
-   -outfile            outfile    Output file name
+  [-outfile]           align      (no help text) align value
 
    Optional qualifiers:
    -datafile           matrixf    Matrix file
@@ -154,8 +154,6 @@ IT IS DONE FOR YOU.
    Advanced qualifiers:
    -[no]similarity     bool       Display percent identity and similarity
    -fasta              bool       Output overlap as fasta sequences
-   -showinternals      bool       Show debugging information on the internal
-                                  state of the search.
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -203,10 +201,10 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-outfile</td>
-<td>Output file name</td>
-<td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.needle</td>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>(no help text) align value</td>
+<td>Alignment file</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -238,13 +236,6 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-fasta</td>
 <td>Output overlap as fasta sequences</td>
-<td>Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-showinternals</td>
-<td>Show debugging information on the internal state of the search.</td>
 <td>Yes/No</td>
 <td>No</td>
 </tr>
@@ -428,6 +419,7 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="alignwrap.html">alignwrap</a></td><td>Aligns a set of sequences to a seed alignment</td></tr>
 <tr><td><a href="est2genome.html">est2genome</a></td><td>Align EST and genomic DNA sequences</td></tr>
 <tr><td><a href="stretcher.html">stretcher</a></td><td>Finds the best global alignment between two sequences</td></tr>
 </table>

@@ -150,6 +150,7 @@ See also
    sequence
    compseq Counts the composition of dimer/trimer/etc words in a sequence
    emowse Protein identification by mass spectrometry
+   mwfilter Filter noisy molwts from mass spec output
    octanol Displays protein hydropathy
    pepinfo Plots simple amino acid properties in parallel
    pepstats Protein statistics
