@@ -1,0 +1,12 @@
+appl: seqretsingle [
+  documentation: "Reads and writes (returns) a single sequence"
+  groups: "Test"
+]
+
+sequence: sequence  [
+  parameter: "Y"
+]
+
+seqoutall: outseq  [
+  parameter: "Y"
+]
