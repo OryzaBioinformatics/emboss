@@ -1,4 +1,3 @@
-/*  Last edited: Mar  1 17:07 2000 (pmr) */
 #ifdef __cplusplus
 extern "C"
 {
@@ -9,6 +8,10 @@ extern "C"
 
 #define PAZ  26
 #define PAZ1 27
+
+void embAlignCalcSimilarity(AjPStr m, AjPStr n, float **sub, AjPSeqCvt cvt,
+			    int lenm, int lenn, float *id, float *sim,
+			    float *idx, float *simx);
 
 void embAlignPathCalc(char *a, char *b, int lena, int lenb, float gapopen,
 		     float gapextend, float *path, float **sub, AjPSeqCvt cvt,

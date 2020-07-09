@@ -43,7 +43,21 @@ with possible sequencing errors in which case you would expect many
 single base gaps.  You can get this result by setting the gap open
 penalty to zero (or very low) and using the gap extension penalty to
 control gap scoring."
-   ]
+]
+
+ bool: similarity [
+	def: Y
+	opt: N
+	info: "Display percent identity and similarity"
+	help: "Display percent identity and similarity"
+]
+
+ bool: fasta [
+	def: N
+	opt: N
+	info: "Output overlap as fasta sequences"
+	help: "Output overlap as fasta sequences"
+]
 
  outfile: outfile [param: Y ]
 

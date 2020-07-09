@@ -14,6 +14,11 @@ appl: prophet [
   ]
 
 
+  seqall: sequence [
+	param: Y
+	type: any
+  ]
+
   infile: infile [
 	param: Y
 	prompt: "Profile or matrix file"
@@ -30,11 +35,6 @@ appl: prophet [
         req: Y
         def: 0.1
         prompt: "Gap extension coefficient"
-  ]
-
-  seqall: sequence [
-	param: Y
-	type: any
   ]
 
   outfile: outfile [
