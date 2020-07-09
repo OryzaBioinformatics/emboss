@@ -39,6 +39,9 @@ typedef struct AjSReport {
   AjPStr Tail;			/* Text to add to tail with newlines */
   AjPList FileNames;		/* Names of extra files (see FileTypes) */
   AjPList FileTypes;		/* Types of extra files (see FileNames) */
+  ajint Precision;		/* Floating precision for score */
+  AjBool Showacc;		/* Report accession number */
+  AjBool Showdes;		/* Report sequence description */
   AjBool Showusa;		/* Report USA (-rusa) or only seqname */
   AjBool Multi;			/* if true, assume >1 sequence */
   ajint Mintags;		/* Minimum number of tags to report */
