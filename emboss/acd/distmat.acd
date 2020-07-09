@@ -1,0 +1,101 @@
+# distmat application
+# AJAX COMMAND DEFINITION (ACD) FILE
+#
+# TJC 27/3/2001
+
+appl: distmat [
+	doc: "Creates a distance matrix from multiple alignments"
+	groups: "phylogeny"
+]
+
+  seqset: msf [ 
+	param: Y 
+        type: "gapany"
+        help: "File containing a sequence alignment."
+  ]
+
+  list: nucmethod [
+        req: "@(!$(msf.protein))"
+        default: "0"
+        min: 1
+        max: 1
+        header: "Multiple substitution correction methods for nucleotides"
+        values: "0:Uncorrected;
+                1:Jukes-Cantor;
+                2:Kimura;
+                3:Tamura;
+                4:Tajima-Nei;
+                5:Jin-Nei Gamma"
+        delim: ";"
+        codedelim: ":"
+        prompt: "Method to use"
+        help: "Multiple substitution correction methods for nucleotides."
+  ]
+
+  list: protmethod [
+        req: "$(msf.protein)"
+        default: "0"
+        min: 1
+        max: 1
+        header: "Multiple substitution correction methods for proteins"
+        values: "0:Uncorrected;
+                1:Jukes-Cantor;
+                2:Kimura Protein;"
+        delim: ";"
+        codedelim: ":"
+        prompt: "Method to use"
+        help: "Multiple substitution correction methods for proteins."
+  ]
+
+  outfile: outf [
+        param: Y
+        info: "Enter a name for the distance matrix"
+  ]
+
+  bool: ambiguous [
+        opt: "@(@(@(!$(msf.protein)) & $(nucmethod)==1) |
+                @($(msf.protein) & @($(protmethod)!=2)))"
+        def: N
+        info: "Use the abiguous codes in the calculation."
+        help: "Option to use the abiguous codes in the 
+              calculation of the Jukes-Cantor method or
+              if the sequences are proteins."
+  ]
+
+  float: gapweight [
+        optional: "@(@($(nucmethod)<2 & @(!$(msf.protein))) |
+                @($(msf.protein) & @($(protmethod)!=2)))"
+        info: "Weight given to gaps"
+        def: 0.
+        help: "Option to weight gaps in the uncorrected
+              (nucleotide) and Jukes-Cantor distance methods."
+  ]
+
+  int: position [
+        optional: "@(@(!$(msf.protein)) & @($(nucmethod)!=4)))"
+        def: 123
+        info: "Base position to analyse."
+        help: "Choose base positions to analyse in each codon
+               i.e. 123 (all bases), 12 (the first two bases),
+               1, 2, or 3 individual bases."
+  ]
+
+  bool: calculatea [
+        optional: "@(@(!$(msf.protein)) & @($(nucmethod)==5)))"
+        def: N
+        info: "Calculate the a-parameter"
+        help: "This will force the calculation of the a-parameter
+              in the Jin-Nei Gamma distance calculation, otherwise
+              the default is 1.0 (see -parametera option)."
+  ]
+
+  float: parametera [
+	optional: "@(@(!$(calculatea)) & @($(nucmethod)==5))"
+        def: 1.0
+        info: "a-parameter"
+        help: "User defined a parameter to be use in the 
+              Jin-Nei Gamma distance calculation. The
+              suggested value to be used is 1.0 [Jin et al.]
+              and this is the default."
+  ]
+
