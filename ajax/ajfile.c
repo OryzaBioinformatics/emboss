@@ -1035,8 +1035,11 @@ AjBool ajFileGetsL (const AjPFile thys, AjPStr* pdest, ajlong* fpos) {
     }
 
     *fpos = ajFileTell (thys);
+#ifndef __ppc__
     cp = fgets (&buff[ipos], isize, thys->fp);
-
+#else
+    cp = ajSysFgets (&buff[ipos], isize, thys->fp);
+#endif
     if (!cp) {
       if (feof(thys->fp)) {
 	thys->End = ajTrue;
@@ -3253,27 +3256,35 @@ ajint ajFileScan(AjPStr path, AjPStr filename, AjPList *result,
 ** @param [r] inc [AjPStr] List of wildcard names to include
 ** @param [r] keep [AjBool] Default to keep if ajTrue, else skip unless
 **                          inc is matched.
+** @param [r] ignoredirectory [AjBool] Delete directory from name
+**                                     before testing.
 ** @return [AjBool] ajTrue if the filename is accepted.
 ** @@
 ******************************************************************************/
 
 AjBool ajFileTestSkip (AjPStr fullname, AjPStr exc, AjPStr inc,
-		       AjBool keep) {
+		       AjBool keep, AjBool ignoredirectory) {
 
   AjBool ret = keep;
   static AjPStrTok handle = NULL;
   static AjPStr token = NULL;
+  static AjPStr tmpname=NULL;
 
-  /*  ajDebug ("ajFileTestSkip: file '%S' exclude: '%S' include: '%S'\n",
-      fullname, exc, inc);*/
+  ajDebug ("ajFileTestSkip: file '%S' exclude: '%S' include: '%S'\n",
+	   fullname, exc, inc);
+
+  ajStrAssS (&tmpname, fullname);
+  if (ignoredirectory)
+    ajFileDirTrim(&tmpname);
 
   if (keep) {			/* keep, so test exclude first */
     (void) ajStrTokenAss (&handle, exc, " \t,;\n");
     while (ajStrToken (&token, &handle, NULL)) {
-      if (ajStrMatchWild (fullname, token)) {
+      if (ajStrMatchWild (fullname, token) ||
+	  (ignoredirectory && ajStrMatchWild (tmpname, token))) {
 	ret = ajFalse;
-	/*ajDebug ("ajFileTestSkip: file '%S' excluded by '%S'\n",
-	  fullname, token);*/
+	ajDebug ("ajFileTestSkip: file '%S' excluded by '%S'\n",
+	  fullname, token);
       }
     }
     (void) ajStrTokenReset (&handle);
@@ -3281,10 +3292,11 @@ AjBool ajFileTestSkip (AjPStr fullname, AjPStr exc, AjPStr inc,
 
   (void) ajStrTokenAss (&handle, inc, " \t,;\n");
   while (ajStrToken (&token, &handle, NULL)) {
-    if (ajStrMatchWild (fullname, token)) {
+    if (ajStrMatchWild (fullname, token) ||
+	  (ignoredirectory && ajStrMatchWild (tmpname, token))) {
       ret = ajTrue;
-      /*      ajDebug ("ajFileTestSkip: file '%S' included by '%S'\n",
-	      fullname, token);*/
+      ajDebug ("ajFileTestSkip: file '%S' included by '%S'\n",
+	       fullname, token);
     }
   }
   (void) ajStrTokenReset (&handle);
@@ -3292,16 +3304,43 @@ AjBool ajFileTestSkip (AjPStr fullname, AjPStr exc, AjPStr inc,
   if (!keep) {			/* nokeep, test exclude last */
     (void) ajStrTokenAss (&handle, exc, " \t,;\n");
     while (ajStrToken (&token, &handle, NULL)) {
-      if (ajStrMatchWild (fullname, token)) {
+      if (ajStrMatchWild (fullname, token) ||
+	  (ignoredirectory && ajStrMatchWild (tmpname, token))) {
 	ret = ajFalse;
-	/*ajDebug ("ajFileTestSkip: file '%S' excluded by '%S'\n",
-	  fullname, token);*/
+	ajDebug ("ajFileTestSkip: file '%S' excluded by '%S'\n",
+	  fullname, token);
       }
     }
     (void) ajStrTokenReset (&handle);
   }
 
   return ret;
+}
+
+/* @func ajFileDirTrim *******************************************************
+**
+** Trims the directory path (if any) from a filename
+**
+** @param [U] name [AjPStr*] Filename
+** @return [AjBool] ajTrue is there was a directory
+******************************************************************************/
+
+AjBool ajFileDirTrim (AjPStr* name)
+{
+  ajint i;
+
+  ajDebug ("ajFileDirTrim input: '%S'\n", *name);
+  if (!ajStrLen(*name))
+    return ajFalse;
+
+  i = ajStrRFindC(*name, "/");
+  if (i < 0)
+    return ajFalse;
+
+  ajStrTrim (name, i+1);
+  ajDebug ("ajFileDirTrim result: '%S'\n", *name);
+
+  return ajTrue;
 }
 
 /* @func ajFileTempName ****************************************************

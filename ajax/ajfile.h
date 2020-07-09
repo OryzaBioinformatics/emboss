@@ -148,6 +148,7 @@ AjBool      ajFileDir (AjPStr* dir);
 void        ajFileDirFix (AjPStr* dir);
 AjBool      ajFileDirUp (AjPStr* dir);
 AjBool      ajFileDirPath (AjPStr* dir);
+AjBool      ajFileDirTrim (AjPStr* name);
 void        ajFileExit (void);
 FILE*       ajFileFp (const AjPFile thys);
 AjBool      ajFileGetwd (AjPStr* dir);
@@ -195,7 +196,7 @@ AjBool      ajFileStdout (const AjPFile file);
 ajlong        ajFileTell (const AjPFile thys);
 char*       ajFileTempName(const char *dir);
 AjBool      ajFileTestSkip (AjPStr fullname, AjPStr exc, AjPStr inc,
-			    AjBool keep);
+			    AjBool keep, AjBool ignoredirectory);
 void        ajFileTrace (const AjPFile thys);
 void        ajFileUnbuffer (const AjPFile thys);
 size_t      ajFileWrite (const AjPFile thys, const void* ptr,
