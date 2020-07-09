@@ -1,14 +1,19 @@
-# PREG application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-
 appl: preg [
-	doc: "Regular expression search of a protein sequence"
-	groups: "Protein:Motifs"
+  documentation: "Regular expression search of a protein sequence"
+  groups: "Protein:Motifs"
 ]
 
-  seqall: sequence [ param: Y type: protein ]
+seqall: sequence  [
+  parameter: "Y"
+  type: "protein"
+]
 
-  outfile: outfile [ param: Y ]
+outfile: outfile  [
+  parameter: "Y"
+]
 
-  regexp: pattern [ param: Y upper: Y info: "Regular expression pattern" ]
+regexp: pattern  [
+  parameter: "Y"
+  upper: "Y"
+  information: "Regular expression pattern"
+]

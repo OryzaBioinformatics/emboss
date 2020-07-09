@@ -1,25 +1,22 @@
-appl: swissparse
-[
-	doc: "Retrieves sequences from swissprot using keyword search"
-	groups: "Edit, Feature Tables"
+appl: swissparse [
+  documentation: "Retrieves sequences from swissprot using keyword search"
+  groups: "Edit, Feature Tables"
 ]
 
-infile: keyfile [
-	prompt: "Name of keywords file for input"
-	def: "scop.terms"
-	param: Y
+infile: keyfile  [
+  prompt: "Name of keywords file for input"
+  default: "scop.terms"
+  parameter: "Y"
 ]
 
-infile: spfile [
-	prompt: "Name of swissprot database to read"
-	def: "./seq.dat"
-	param: Y
+infile: spfile  [
+  prompt: "Name of swissprot database to read"
+  default: "./seq.dat"
+  parameter: "Y"
 ]
 
-outfile: outfile [
-	prompt: "Name of search results file for output"
-	def: "scop.seqs"
-	param: Y
+outfile: outfile  [
+  prompt: "Name of search results file for output"
+  default: "scop.seqs"
+  parameter: "Y"
 ]
-
-

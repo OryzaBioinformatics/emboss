@@ -1,63 +1,38 @@
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# use "" for missing values - these are required.
-# values in "" are trimmed to single spaces.
-# everything is treated as single tokens delimited by white space
-# (space, tab, newline)
-
-# GWW 23 March 1999
-
 appl: newseq [
-	doc: "Type in a short new sequence."
-	groups: "Edit"
+  documentation: "Type in a short new sequence."
+  groups: "Edit"
 ]
 
+seqout: outseq  [
+  parameter: "Y"
+]
 
-  seqout: outseq [ 
-	param: Y
-  ]
+string: name  [
+  parameter: "Y"
+  information: "Name of the sequence"
+  help: "The name of of the sequence should be a single word that you will use to identify the sequence. It should have no (or few) punctuation characters in it."
+]
 
-  string: name [
-  	param: Y
-	info: "Name of the sequence"
-	help: "The name of of the sequence should be a single word that
-               you will use to identify the sequence.  It should have no
-	       (or few) punctuation characters in it."
-  ]
-  
-  string: description [
-  	param: Y
-	info: "Description of the sequence"
-	help: "Enter any description of the sequence that you require."
-  ]
-  
-  list: type [
-        param: Y
-        min: 1
-        max: 1
-	def: "N"
-        header: "Type of sequence"
-        values: "N:Nucleic, P:Protein"
-        delim: ","
-        codedelim: ":"
-        info: "Type of sequence"
-  ]
+string: description  [
+  parameter: "Y"
+  information: "Description of the sequence"
+  help: "Enter any description of the sequence that you require."
+]
 
-  string: sequence [
-	param: Y
-	info: "Enter the sequence"
+list: type  [
+  parameter: "Y"
+  minimum: "1"
+  maximum: "1"
+  default: "N"
+  header: "Type of sequence"
+  values: "N:Nucleic, P:Protein"
+  delimiter: ","
+  codedelimiter: ":"
+  information: "Type of sequence"
+]
 
-	help: "The sequence itself. \
-
-               Because of the limitation of the operating system,
-	       you will only be able to type in a short sequence of
-	       (typically) 250 characters, or so. \
-
-	       The keyboard will beep at you when you have reached
-	       this limit and you will not be able to press the
-	       RETURN/ENTER key until you have deleted a few
-	       characters."
-  ]
-
-
-
+string: sequence  [
+  parameter: "Y"
+  information: "Enter the sequence"
+  help: "The sequence itself. \ Because of the limitation of the operating system, you will only be able to type in a short sequence of (typically) 250 characters, or so. \ The keyboard will beep at you when you have reached this limit and you will not be able to press the RETURN/ENTER key until you have deleted a few characters."
+]

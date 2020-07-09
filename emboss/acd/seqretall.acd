@@ -1,18 +1,12 @@
-# SEQRET application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# use "" for missing values - these are required.
-# values in "" are trimmed to single spaces.
-# everything is treated as single tokens delimited by white space
-# (space, tab, newline)
-
-# pmr 22-apr-98
-
 appl: seqretall [
-	doc: "Reads and writes (returns) a set of sequences one at a time"
-	groups: "Edit"
+  documentation: "Reads and writes (returns) a set of sequences one at a time"
+  groups: "Edit"
 ]
 
-  seqall: sequence [ param: Y ]
+seqall: sequence  [
+  parameter: "Y"
+]
 
-  seqoutall: outseq [ param: Y ]
+seqoutall: outseq  [
+  parameter: "Y"
+]

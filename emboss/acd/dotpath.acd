@@ -1,40 +1,52 @@
-# dotpath application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
 appl: dotpath [
-	doc: "Displays a non-overlapping wordmatch dotplot of two sequences"
-	groups: "Alignment:Dot plots"
+  documentation: "Displays a non-overlapping wordmatch dotplot of two sequences"
+  groups: "Alignment:Dot plots"
 ]
 
-  sequence: sequencea [ param: y type: any ]
+sequence: sequencea  [
+  parameter: "y"
+  type: "any"
+]
 
-  sequence: sequenceb [ param: y 
-     type: "@($(sequencea.protein) ? protein : nucleotide)" ]
+sequence: sequenceb  [
+  parameter: "y"
+  type: "@($(sequencea.protein) ? protein : nucleotide)"
+]
 
-  int: wordsize [ req: Y def: 4 min: 2
-                    info: "Word size" ]
+integer: wordsize  [
+  required: "Y"
+  default: "4"
+  minimum: "2"
+  information: "Word size"
+]
 
-  bool: overlaps [
-	opt: Y
-	def: N
-	info: "Display the overlapping matches"
-	help: "Displays the overlapping matches (in red) as well as the
-minimal set of non-overlapping matches"
-  ]
+bool: overlaps  [
+  optional: "Y"
+  default: "N"
+  information: "Display the overlapping matches"
+  help: "Displays the overlapping matches (in red) as well as the minimal set of non-overlapping matches"
+]
 
+bool: data  [
+  required: "N"
+  default: "N"
+  information: "Display as data"
+  help: "Output the match data to a file instead of plotting it"
+]
 
-  bool: data [
-	req: N
-	def: N 
-	info: "Display as data" 
-	help: "Output the match data to a file instead of plotting it"
-  ]
+graph: graph  [
+  required: "@(!$(data))"
+  gxtitle: "$(sequenceb.name)"
+  gytitle: "$(sequencea.name)"
+]
 
-  graph: graph [ req: @(!$(data))
-  gxtitle: $(sequenceb.name) gytitle: $(sequencea.name) ]
+bool: boxit  [
+  default: "Y"
+  optional: "Y"
+  information: "Draw a box around dotplot"
+]
 
-
-
-  bool: boxit [def: Y opt: Y info: "Draw a box around dotplot" ]
-
-  outfile: outfile [ req: $(data) nullok: Y ]
+outfile: outfile  [
+  required: "$(data)"
+  nullok: "Y"
+]

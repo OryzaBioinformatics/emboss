@@ -1,63 +1,52 @@
-appl: domainer
-[
-	doc: "Build domain coordinate files"
-	groups: "Utils:Database creation"
+appl: domainer [
+  documentation: "Build domain coordinate files"
+  groups: "Utils:Database creation"
 ]
 
-infile: scop 	
-[ 
-	param: Y
-	prompt: "Name of scop file for input (embl-like format)"
-	def: "Escop.dat"
+infile: scop  [
+  parameter: "Y"
+  prompt: "Name of scop file for input (embl-like format)"
+  default: "Escop.dat"
 ]
 
-string: cpdb 	
-[ 
-	param: Y
-	info: "Location of coordinate files for input (embl-like format)"
-	def: "./"
+string: cpdb  [
+  parameter: "Y"
+  information: "Location of coordinate files for input (embl-like format)"
+  default: "./"
 ]
 
-string: cpdbscop	 	
-[ 
-	param: Y
-	info: "Location of coordinate files for output (embl-like format)"
-	def: "./"
+string: cpdbscop  [
+  parameter: "Y"
+  information: "Location of coordinate files for output (embl-like format)"
+  default: "./"
 ]
 
-string: cpdbextn
-[ 
-	param: Y
-	info: "Extension of coordinate files (embl-like format)"
-	def: ".pxyz"
+string: cpdbextn  [
+  parameter: "Y"
+  information: "Extension of coordinate files (embl-like format)"
+  default: ".pxyz"
 ]
 
-
-string: pdbscop	 	
-[ 
-	param: Y
-	info: "Location of coordinate files for output (pdb format)"
-	def: "./"
+string: pdbscop  [
+  parameter: "Y"
+  information: "Location of coordinate files for output (pdb format)"
+  default: "./"
 ]
 
-string: pdbextn
-[ 
-	param: Y
-	info: "Extension of coordinate files (pdb format)"
-	def: ".ent"
+string: pdbextn  [
+  parameter: "Y"
+  information: "Extension of coordinate files (pdb format)"
+  default: ".ent"
 ]
 
-outfile: cpdberrf
-[ 
-	param: Y
-	prompt: "Name of log file for the embl-like format build"
-	def: "domainer.log1"
+outfile: cpdberrf  [
+  parameter: "Y"
+  prompt: "Name of log file for the embl-like format build"
+  default: "domainer.log1"
 ]
 
-outfile: pdberrf
-[ 
-	param: Y
-	prompt: "Name of log file for the pdb format build"
-	def: "domainer.log2"
+outfile: pdberrf  [
+  parameter: "Y"
+  prompt: "Name of log file for the pdb format build"
+  default: "domainer.log2"
 ]
-

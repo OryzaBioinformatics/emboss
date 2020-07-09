@@ -1,41 +1,49 @@
 appl: octanol [
-        doc: "Displays protein hydropathy"
-        groups: "Protein:Composition"
+  documentation: "Displays protein hydropathy"
+  groups: "Protein:Composition"
 ]
 
-  sequence: sequencea [ param: Y type: pureprotein ]
+sequence: sequencea  [
+  parameter: "Y"
+  type: "pureprotein"
+]
 
-  xygraph: graph [param:Y  multi:3 gxtitle: $(sequencea.name)
-	gytitle: "Total Free Energy (Kcal/mol)" gtitle: "White-Wimley Plot" ]
+xygraph: graph  [
+  parameter: "Y"
+  multiple: "3"
+  gxtitle: "$(sequencea.name)"
+  gytitle: "Total Free Energy (Kcal/mol)"
+  gtitle: "White-Wimley Plot"
+]
 
-  datafile: datafile [
-        optional: Y
-        info: "White-Wimley data file (Ewhite-wimley.dat)"
-        def: "Ewhite-wimley.dat"
-  ]
+datafile: datafile  [
+  optional: "Y"
+  information: "White-Wimley data file (Ewhite-wimley.dat)"
+  default: "Ewhite-wimley.dat"
+]
 
-  int: width [
-        optional: Y 
-        info: "window size"
-        def : "19"
-        min : "1"
-        max : "200"
-  ]
+integer: width  [
+  optional: "Y"
+  information: "window size"
+  default: "19"
+  minimum: "1"
+  maximum: "200"
+]
 
-  bool: octanolplot [ 
-        optional: Y
-        def : N
-        info: "Display the octanol plot"
-  ]
+bool: octanolplot  [
+  optional: "Y"
+  default: "N"
+  information: "Display the octanol plot"
+]
 
-  bool: interfaceplot [ 
-        optional: Y
-        def : N
-        info: "Display the interface plot"
-  ]
+bool: interfaceplot  [
+  optional: "Y"
+  default: "N"
+  information: "Display the interface plot"
+]
 
-  bool: differenceplot [ 
-        optional: Y
-        def : Y
-        info: "Do not display the difference plot"
-  ]
+bool: differenceplot  [
+  optional: "Y"
+  default: "Y"
+  information: "Do not display the difference plot"
+]

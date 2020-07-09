@@ -1,19 +1,29 @@
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-
-# ajb 9th March 1999
 appl: pscan [
-	doc: "Scans proteins using PRINTS"
-	groups: "Protein:Motifs"
+  documentation: "Scans proteins using PRINTS"
+  groups: "Protein:Motifs"
 ]
 
-  seqall: sequence [ param: Y type: Protein ]
+seqall: sequence  [
+  parameter: "Y"
+  type: "Protein"
+]
 
-  int: emin [ req: Y min: 1 max: 20 def: 2
-              info:"Minimum number of elements per fingerprint" ]
+integer: emin  [
+  required: "Y"
+  minimum: "1"
+  maximum: "20"
+  default: "2"
+  information: "Minimum number of elements per fingerprint"
+]
 
-  int: emax [ req: Y min: $(emin) max: 20 def: 20
-              info:"Maximum number of elements per fingerprint" ]
+integer: emax  [
+  required: "Y"
+  minimum: "$(emin)"
+  maximum: "20"
+  default: "20"
+  information: "Maximum number of elements per fingerprint"
+]
 
-  outfile: outfile [ param: Y ]
-
+outfile: outfile  [
+  parameter: "Y"
+]

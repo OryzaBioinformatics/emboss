@@ -1,56 +1,53 @@
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-
 appl: vectorstrip [
-	doc: "Strips out DNA between a pair of vector sequences"
-	groups: "Edit"
+  documentation: "Strips out DNA between a pair of vector sequences"
+  groups: "Edit"
 ]
 
-seqall: sequence [
-	param: Y
-        type: dna
+seqall: sequence  [
+  parameter: "Y"
+  type: "dna"
 ]
 
-bool: vectorfile [
-	param: Y
-	def: Y
-	prompt: "Are your vector sequences in a file?"
+bool: vectorfile  [
+  parameter: "Y"
+  default: "Y"
+  prompt: "Are your vector sequences in a file?"
 ]
 
-infile: vectors [
-	param: Y
-	req: @($(vectorfile)?Y:N)
-	nullok: Y
-	def: ""
-	prompt: "Name of vectorfile"
+infile: vectors  [
+  parameter: "Y"
+  required: "@($(vectorfile)?Y:N)"
+  nullok: "Y"
+  default: ""
+  prompt: "Name of vectorfile"
 ]
 
-string: linkerA [
-	req: @(!$(vectorfile))
-	prompt:"5' sequence"
+string: linkera  [
+  required: "@(!$(vectorfile))"
+  prompt: "5' sequence"
 ]
 
-string: linkerB [
-	req: @(!$(vectorfile))
-	prompt: "3' sequence"
+string: linkerb  [
+  required: "@(!$(vectorfile))"
+  prompt: "3' sequence"
 ]
 
-int: mismatch [
-	req: Y
-	def: 10
-	prompt: "Max allowed % mismatch"
+integer: mismatch  [
+  required: "Y"
+  default: "10"
+  prompt: "Max allowed % mismatch"
 ]
 
-bool: besthits [
-	req: Y
-	def: Y
-	prompt: "Show only the best hits (minimise mismatches)?"
+bool: besthits  [
+  required: "Y"
+  default: "Y"
+  prompt: "Show only the best hits (minimise mismatches)?"
 ]
 
-outfile: outf [
-	param: Y
+outfile: outf  [
+  parameter: "Y"
 ]
 
-seqoutall: outseq [
-	param: Y
+seqoutall: outseq  [
+  parameter: "Y"
 ]

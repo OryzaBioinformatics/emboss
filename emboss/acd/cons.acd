@@ -1,64 +1,49 @@
-# cons application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# tjc 4/10/2000
-
 appl: cons [
-	doc: "Creates a consensus from multiple alignments"
-	groups: "Alignment:Consensus"
+  documentation: "Creates a consensus from multiple alignments"
+  groups: "Alignment:Consensus"
 ]
 
-  seqset: msf [ 
-	param: Y 
-	type: gapany 
-        help: "File containing a sequence alignment."
-  ]
+seqset: msf  [
+  parameter: "Y"
+  type: "gapany"
+  help: "File containing a sequence alignment."
+]
 
-  matrix: datafile [ 
-	optional: Y  
-	info: "Scoring matrix"
-	protein: "$(msf.protein)"
-  ]
+matrix: datafile  [
+  optional: "Y"
+  information: "Scoring matrix"
+  protein: "$(msf.protein)"
+]
 
-  float:  plurality [
-        optional: Y
-        info: "Plurality check value"
-        help: "Set a cut-off for the number of positive matches below
-which there is no consensus.  The default plurality is taken as half the
-total weight of all the sequences in the alignment."
-        def: "@( $(msf.totweight) / 2)"
-        expect: "Half the total sequence weighting"
-  ]
+float: plurality  [
+  optional: "Y"
+  information: "Plurality check value"
+  help: "Set a cut-off for the number of positive matches below which there is no consensus. The default plurality is taken as half the total weight of all the sequences in the alignment."
+  default: "@( $(msf.totweight) / 2)"
+  expected: "Half the total sequence weighting"
+]
 
-  float: setcase [
-	optional: Y
-        info: "Define a threshold above which the consensus is given 
-               in uppercase"
-	help: "Sets the threshold for the positive matches above which
-the consensus is is upper-case and below which the consensus is in
-lower-case."
+float: setcase  [
+  optional: "Y"
+  information: "Define a threshold above which the consensus is given in uppercase"
+  help: "Sets the threshold for the positive matches above which the consensus is is upper-case and below which the consensus is in lower-case."
+  default: "0"
+]
 
-	def: 0
-  ]
+integer: identity  [
+  optional: "Y"
+  information: "Required number of identities at a position"
+  help: "Provides the facility of setting the required number of identities at a site for it to give a consensus at that position. Therefore, if this is set to the number of sequences in the alignment only columns of identities contribute to the consensus."
+  default: "0"
+  minimum: "0"
+]
 
-  int: identity [
-       	optional: Y
-        info: "Required number of identities at a position"
-	help: "Provides the facility of setting the required number of
-identities at a site for it to give a consensus at that position. 
-Therefore, if this is set to the number of sequences in the alignment
-only columns of identities contribute to the consensus."
-        def : 0
-        min : 0
-  ]
+seqout: outseq  [
+  parameter: "Y"
+]
 
-  seqout: outseq [
-        param: Y
-  ]
-
-  string: name [
-        opt: Y
-        def: ""
-        info: "Name of the consensus sequence"
-  ]
-
+string: name  [
+  optional: "Y"
+  default: ""
+  information: "Name of the consensus sequence"
+]

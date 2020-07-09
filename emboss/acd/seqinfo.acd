@@ -1,22 +1,13 @@
-# seqinfo application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# use "" for missing values - these are required.
-# values in "" are trimmed to single spaces.
-# everything is treated as single tokens delimited by white space
-# (space, tab, newline)
-#
-# Returns basic sequence information
-#
-# rbsk 16-oct-99
-
 appl: seqinfo [
-	doc: "Returns sequence information"
-	groups: "Test"
+  documentation: "Returns sequence information"
+  groups: "Test"
 ]
 
-  seqall: sequence [ param: Y ]
+seqall: sequence  [
+  parameter: "Y"
+]
 
-  outfile: outfile [ param: Y def: stdout ]
-
-
+outfile: outfile  [
+  parameter: "Y"
+  default: "stdout"
+]

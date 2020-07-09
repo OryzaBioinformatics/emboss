@@ -1,53 +1,63 @@
 appl: stretcher [
-        doc: "Finds the best global alignment between two sequences"
-        groups: "Alignment:Global"
+  documentation: "Finds the best global alignment between two sequences"
+  groups: "Alignment:Global"
 ]
 
-  sequence: sequencea [ param: Y type: any]
+sequence: sequencea  [
+  parameter: "Y"
+  type: "any"
+]
 
-  sequence: sequenceb [ param: Y
-     type: "@($(sequencea.protein) ? protein : nucleotide)" ]
+sequence: sequenceb  [
+  parameter: "Y"
+  type: "@($(sequencea.protein) ? protein : nucleotide)"
+]
 
-  outfile: outfile [ param: Y ]
+align: outfile  [
+  parameter: "Y"
+  aformat: "markx0"
+  minseq: 2
+  maxseq: 2
+  aglobal: "Y"
+]
 
-  matrix: datafile [
-        optional: Y
-        help: "Matrix file"
-	protein: $(sequencea.protein)
-  ]
+matrix: datafile  [
+  optional: "Y"
+  help: "Matrix file"
+  protein: "$(sequencea.protein)"
+]
 
-  int: gappenalty [
-        optional: Y 
-        help: "gappenalty"
-        def : "@($(sequencea.protein)? 12 : 16)"
-        min : "0"
-        valid: "Positive integer"
-        expect: "12 for protein, 16 for nucleic"
-  ]
+integer: gappenalty  [
+  optional: "Y"
+  help: "gappenalty"
+  default: "@($(sequencea.protein)? 12 : 16)"
+  minimum: "0"
+  valid: "Positive integer"
+  expected: "12 for protein, 16 for nucleic"
+]
 
-  int: gaplength [
-        optional: Y 
-        help: "gap length penalty"
-        def : "@($(sequencea.protein)? 2 : 4)"
-        min : "0"
-        valid: "Positive integer"
-        expect: "2 for protein, 4 for nucleic"
-  ]
+integer: gaplength  [
+  optional: "Y"
+  help: "gap length penalty"
+  default: "@($(sequencea.protein)? 2 : 4)"
+  minimum: "0"
+  valid: "Positive integer"
+  expected: "2 for protein, 4 for nucleic"
+]
 
-  int: markx [
-        optional: Y 
-        help: "alternative displays"
-        def : "0"
-        max : "10"
-        valid: "Positive integer up to 10"
-  ]
+#integer: markx  [
+#  optional: "Y"
+#  help: "alternative displays"
+#  default: "0"
+#  maximum: "10"
+#  valid: "Positive integer up to 10"
+#]
 
-  int: length [
-        optional: Y 
-        help: "number per line"
-        def : "60"
-        min : "1"
-        max : "200"
-        valid: "Positive integer"
-  ]
- 
+#integer: length  [
+#  optional: "Y"
+#  help: "number per line"
+#  default: "60"
+#  minimum: "1"
+#  maximum: "200"
+#  valid: "Positive integer"
+#]

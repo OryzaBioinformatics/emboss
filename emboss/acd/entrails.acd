@@ -1,21 +1,16 @@
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# GWW 12 May 1999
-
 appl: entrails [
-	doc: "Reports the internal data from the EMBOSS code"
-	groups: "Utils:Misc"
+  documentation: "Reports the internal data from the EMBOSS code"
+  groups: "Utils:Misc"
 ]
 
-  outfile: outfile [
-        param: Y
-        opt: Y
-  ]
+outfile: outfile  [
+  parameter: "Y"
+  optional: "Y"
+]
 
-
-  bool: fullreport [
-        opt: Y
-        def: N
-        prompt: "Full report"
-	help: "By default, only the essential details are reported"
-  ]
+bool: fullreport  [
+  optional: "Y"
+  default: "N"
+  prompt: "Full report"
+  help: "By default, only the essential details are reported"
+]

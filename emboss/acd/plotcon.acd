@@ -1,46 +1,43 @@
 appl: plotcon [
-	doc: "Plots the quality of conservation of a sequence alignment"
-	groups: "Alignment:Multiple"
+  documentation: "Plots the quality of conservation of a sequence alignment"
+  groups: "Alignment:Multiple"
 ]
 
-  seqset: msf [ 
-	param: Y
-	type: gapany
-	info: "Sequences file to be read in"
-	help: "File containing a sequence alignment"
-  ]
-	
-  int: winsize [
-         req: Y
-         info: "Window size"
-         help: "Number of columns to average alignment quality over. 
-The larger this value is, the smoother the plot will be."
-         def : "4"
-  ]
+seqset: msf  [
+  parameter: "Y"
+  type: "gapany"
+  information: "Sequences file to be read in"
+  help: "File containing a sequence alignment"
+]
 
-  matrix: scorefile [
-        optional: Y
-        info: "Comparison matrix file"
-        protein: "$(msf.protein)"
-  ]
+integer: winsize  [
+  required: "Y"
+  information: "Window size"
+  help: "Number of columns to average alignment quality over. The larger this value is, the smoother the plot will be."
+  default: "4"
+]
 
-  bool: data [ 
-        req: N
-        def: N
-        info: "Display as data"
-        help: "Output the match data to a file instead of plotting it"
-  ]
+matrix: scorefile  [
+  optional: "Y"
+  information: "Comparison matrix file"
+  protein: "$(msf.protein)"
+]
 
-  xygraph: graph [
-	req: @(!$(data))
-        opt: N
-        gxtitle: "Relative Residue Position"
-  ]
- 
+bool: data  [
+  required: "N"
+  default: "N"
+  information: "Display as data"
+  help: "Output the match data to a file instead of plotting it"
+]
 
-  outfile: outfile [
-	req: $(data)
-        nullok: Y
-        info: "Display as data"
-  ]
+xygraph: graph  [
+  required: "@(!$(data))"
+  optional: "N"
+  gxtitle: "Relative Residue Position"
+]
 
+outfile: outfile  [
+  required: "$(data)"
+  nullok: "Y"
+  information: "Display as data"
+]

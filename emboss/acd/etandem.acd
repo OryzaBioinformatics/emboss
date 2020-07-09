@@ -1,24 +1,44 @@
 appl: etandem [
-	doc: "Looks for tandem repeats in a nucleotide sequence"
-	groups: "Nucleic:Repeats"
+  documentation: "Looks for tandem repeats in a nucleotide sequence"
+  groups: "Nucleic:Repeats"
 ]
 
-  sequence: sequence [ param: Y type: dna ]
+sequence: sequence  [
+  parameter: "Y"
+  type: "dna"
+]
 
-  outfile: outfile [ param: Y ext: tan ]
+outfile: outfile  [
+  parameter: "Y"
+  extension: "tan"
+]
 
-  int: minrepeat [ req: Y  def: 10 min: 2
-                    info: "Minimum repeat size"
-                    valid: "Integer, 2 or higher" ]
+integer: minrepeat  [
+  required: "Y"
+  default: "10"
+  minimum: "2"
+  information: "Minimum repeat size"
+  valid: "Integer, 2 or higher"
+]
 
-  int: maxrepeat  [ req: Y def: "$(minrepeat)"  min: "$(minrepeat)"
-                     info: "Maximum repeat size"
-		     valid: "Integer, same as -minrepeat or higher"
-                     expect: "Same as -minrepeat" ]
+integer: maxrepeat  [
+  required: "Y"
+  default: "$(minrepeat)"
+  minimum: "$(minrepeat)"
+  information: "Maximum repeat size"
+  valid: "Integer, same as -minrepeat or higher"
+  expected: "Same as -minrepeat"
+]
 
-  int: threshold [ def: 20 info: "Threshold score" ]
+integer: threshold  [
+  default: "20"
+  information: "Threshold score"
+]
 
-  bool: mismatch [ info: "Allow N as a mismatch" ]
+bool: mismatch  [
+  information: "Allow N as a mismatch"
+]
 
-  bool: uniform [ info: "Allow uniform consensus" ]
-
+bool: uniform  [
+  information: "Allow uniform consensus"
+]

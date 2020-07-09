@@ -1,3 +1,9 @@
-appl: demostring [ doc: "demonstration of the string functions"  group: demo ]
+appl: demostring [
+  documentation: "demonstration of the string functions"
+  groups: "demo"
+]
 
-string: instring [ required: Y prompt: "Value for instr" ]
+string: instring  [
+  required: "Y"
+  prompt: "Value for instr"
+]

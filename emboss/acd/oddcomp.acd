@@ -1,57 +1,36 @@
-# ODDCOMP application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# use "" for missing values - these are required.
-# values in "" are trimmed to single spaces.
-# everything is treated as single tokens delimited by white space
-# (space, tab, newline)
-
-# DMAM 3 November 1999
-# modified from GWW COMPSEQ ACD file.
-
 appl: oddcomp [
-        doc: "Finds protein sequence regions with a biased composition"     
-	groups: "Protein:Motifs"
-  ]
+  documentation: "Finds protein sequence regions with a biased composition"
+  groups: "Protein:Motifs"
+]
 
-  seqall: sequence [
-	param: Y
-	type: Protein 
-  ]
+seqall: sequence  [
+  parameter: "Y"
+  type: "Protein"
+]
 
+outfile: outfile  [
+  parameter: "Y"
+  extension: "oddcomp"
+  help: "This is the results file."
+]
 
-  outfile: outfile [
-	param: Y
-	ext: "oddcomp"
-	help: "This is the results file."
-  ]
+infile: compdata  [
+  parameter: "Y"
+  required: "Y"
+  information: "'compseq' file to use for expected word frequencies"
+  help: "This is a file in the format of the output produced by 'compseq' that is used to set the minimum frequencies of words in this analysis."
+]
 
-  infile: compdata [
-	param: Y
-	req: Y
-	info: "'compseq' file to use for expected word frequencies"
-	help: "This is a file in the format of the output produced by 
-	       'compseq' that is used to set the minimum frequencies of 
-	       words in this analysis."  
-  ]
+integer: window  [
+  parameter: "Y"
+  minimum: "10"
+  default: "30"
+  information: "Window size to consider (e.g. 30 aa)"
+  help: "This is the size of window in which to count. \ Thus if you want to count frequencies in a 40 aa stretch you should enter 40 here."
+]
 
-  
-  int: window [
-	param: Y 
-	min: 10
-	def: "30"
-	info: "Window size to consider (e.g. 30 aa)"
-	help: "This is the size of window in which to count. \
-               Thus if you want to count frequencies in a 40 aa 
-               stretch you should enter 40 here."
-	]
-
-  bool: ignorebz [
-	def: Y
-	info: "Ignore the amino acids B and Z and just count them as 'Other'"
-	help: "The amino acid code B represents Asparagine or Aspartic
-               acid and the code Z represents Glutamine or Glutamic acid. \
-               These are not commonly used codes and you may wish not to
-               count words containing them, just noting them in the count of
-               'Other' words."
-  ]
+bool: ignorebz  [
+  default: "Y"
+  information: "Ignore the amino acids B and Z and just count them as 'Other'"
+  help: "The amino acid code B represents Asparagine or Aspartic acid and the code Z represents Glutamine or Glutamic acid. \ These are not commonly used codes and you may wish not to count words containing them, just noting them in the count of 'Other' words."
+]

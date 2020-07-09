@@ -1,11 +1,17 @@
 appl: patmattest [
-	doc: "test of pattern matching"
-	groups: "Test"
+  documentation: "test of pattern matching"
+  groups: "Test"
 ]
 
-  sequence: sequence [ param: Y type: any ]
+sequence: sequence  [
+  parameter: "Y"
+  type: "any"
+]
 
-  string: expression [ param: Y def: "" req: Y minlen: 2
-                       info:"Regular expression to search sequence for." ]
-
-
+string: expression  [
+  parameter: "Y"
+  default: ""
+  required: "Y"
+  minlength: "2"
+  information: "Regular expression to search sequence for."
+]

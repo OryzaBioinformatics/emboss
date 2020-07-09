@@ -1,23 +1,13 @@
-# DEGAPSEQ application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# use "" for missing values - these are required.
-# values in "" are trimmed to single spaces.
-# everything is treated as single tokens delimited by white space
-# (space, tab, newline)
-
-# gww 6 March 2001
-
 appl: degapseq [
-	doc: "Removes gap characters from sequences"
-	groups: "Edit"
+  documentation: "Removes gap characters from sequences"
+  groups: "Edit"
 ]
 
-seqall: sequence [ 
-  param: Y 
-  type: gapany
+seqall: sequence  [
+  parameter: "Y"
+  type: "gapany"
 ]
 
-seqoutall: outseq [ param: Y ]
-
-  
+seqoutall: outseq  [
+  parameter: "Y"
+]

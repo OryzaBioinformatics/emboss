@@ -1,19 +1,12 @@
-# PROPHECY application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# use "" for missing values - these are required.
-# values in "" are trimmed to single spaces.
-# everything is treated as single tokens delimited by white space
-# (space, tab, newline)
-
-# ajb 23-jul-199
-
 appl: prophecy [
-	doc: "Creates matrices/profiles from multiple alignments"
-	groups: "Nucleic:Profiles, Protein:Profiles"
+  documentation: "Creates matrices/profiles from multiple alignments"
+  groups: "Nucleic:Profiles, Protein:Profiles"
 ]
 
-  seqset: sequence [ param: Y type: gapany ]
+seqset: sequence  [
+  parameter: "Y"
+  type: "gapany"
+]
 
 list: type  [
   required: "Y"
@@ -22,28 +15,48 @@ list: type  [
   maximum: "1"
   values: "F:Frequency,G:Gribskov,H:Henikoff"
   delimiter: ","
-  codedelim: ":"
+  codedelimiter: ":"
   header: "Profile type"
   prompt: "Select type"
   button: "Y"
 ]
 
-  var: dogap "@($(type) != f)"
+variable:  dogap "@($(type) != f)"
 
-  string: name [ req: Y def: "mymatrix"
-                 info: "Enter a name for the profile" ]
+string: name  [
+  required: "Y"
+  default: "mymatrix"
+  information: "Enter a name for the profile"
+]
 
-  int: threshold [ req: @($(type)==F) def: 75 min: 1 max: 100
-                  info: "Enter threshold reporting percentage" ]
+integer: threshold  [
+  required: "@($(type)==F)"
+  default: "75"
+  minimum: "1"
+  maximum: "100"
+  information: "Enter threshold reporting percentage"
+]
 
-  matrixf: datafile [ req: @($(type)!=F)  info: "Scoring matrix"
-	def: "@($(type) = G: Epprofile H: EBLOSUM62 F: EBLOSUM62)"
-	protein: $(sequence.protein) 
-        expect: "'Epprofile' for Gribskov type, or EBLOSUM62" ]
+matrixf: datafile  [
+  required: "@($(type)!=F)"
+  information: "Scoring matrix"
+  default: "@($(type) = G: Epprofile H: EBLOSUM62 F: EBLOSUM62)"
+  protein: "$(sequence.protein)"
+  expected: "'Epprofile' for Gribskov type, or EBLOSUM62"
+]
 
+float: open  [
+  required: "$(dogap)"
+  information: "Gap opening penalty"
+  default: "3.0"
+]
 
-  float: open [req: $(dogap) info: "Gap opening penalty" def: 3.0 ]
+float: extension  [
+  required: "$(dogap)"
+  information: "Gap extension penalty"
+  default: "0.3"
+]
 
-  float: extension [ req: $(dogap) info: "Gap extension penalty" def: 0.3 ]
-
-  outfile: outf [ param: Y ]
+outfile: outf  [
+  parameter: "Y"
+]

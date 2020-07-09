@@ -1,29 +1,31 @@
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# use "" for missing values - these are required.
-# values in "" are trimmed to single spaces.
-# everything is treated as single tokens delimited by white space
-# (space, tab, newline)
-
-# AJB 2 Nov 1999
-
 appl: wobble [
-	doc: "Wobble base plot"
-	groups: "Nucleic:Gene finding"
+  documentation: "Wobble base plot"
+  groups: "Nucleic:Gene finding"
 ]
 
-  sequence: sequence [
-	param: Y
-	type: dna
-  ]
+sequence: sequence  [
+  parameter: "Y"
+  type: "dna"
+]
 
-  string: bases [ opt: N def: GC info: "Bases used" ]
+string: bases  [
+  optional: "N"
+  default: "GC"
+  information: "Bases used"
+]
 
+integer: window  [
+  optional: "Y"
+  default: "30"
+  minimum: "1"
+  information: "Window size in codons"
+]
 
-  int: window [ opt: Y def: 30 min: 1 info: "Window size in codons" ]
+xygraph: graph  [
+  required: "Y"
+  multiple: "6"
+]
 
-  xygraph: graph [
-        req: Y multi: 6
-  ]
-
-  outfile: outf [ req: Y ]
+outfile: outf  [
+  required: "Y"
+]

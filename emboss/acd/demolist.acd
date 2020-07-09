@@ -1,8 +1,10 @@
-appl: demolist [ doc: "demonstration of the list functions"  groups: "Test" ]
+appl: demolist [
+  documentation: "demonstration of the list functions"
+  groups: "Test"
+]
 
-infile: gff [
-        parameter: Y
-	info: "gff file to be read in"
-        help: "File containing normal tab delimted gff's"
-        ]
-
+infile: gff  [
+  parameter: "Y"
+  information: "gff file to be read in"
+  help: "File containing normal tab delimted gff's"
+]

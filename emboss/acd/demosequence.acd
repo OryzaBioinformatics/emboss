@@ -1,3 +1,4 @@
-appl: demosequence [ doc: "demonstration of the sequence functions"
-      groups: "Test" ]
-
+appl: demosequence [
+  documentation: "demonstration of the sequence functions"
+  groups: "Test"
+]

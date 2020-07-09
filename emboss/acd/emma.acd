@@ -14,17 +14,14 @@ seqoutset: outseq  [
   information: "The sequence alignment output filename"
 ]
 
-
-var: options "N"
-
-outfile: dendoutfile [
+outfile: dendoutfile  [
   parameter: "Y"
   extension: "dnd"
   information: "The dendogram output filename"
 ]
 
 bool: onlydend  [
-  optional: Y
+  optional: "Y"
   default: "No"
   information: "only produce dendrogram file"
   prompt: "Do you want to produce only the dendrogram file?"
@@ -38,383 +35,254 @@ bool: dend  [
 ]
 
 string: dendfile  [
-  required: "$(dend)"
+  optional: "$(dend)"
   default: "NULL"
   information: "name of old dendrogram file"
   prompt: "What is the name of the old dendrogram file"
 ]
 
 bool: insist  [
-  optional: Y
+  optional: "Y"
   default: "No"
   information: "Insist that the sequence type is changed to protein"
 ]
 
-bool: tmpprot  [
-  required: "N"
-  default: "@(!$(inseqs.protein))"
-  expect: "Yes for protein sequences"
-  info: "Temporary holder for input protein sequence type"
+bool: prot [
+  optional: N
+  default : "@($(insist) ? @(!$(inseqs.protein)):$(inseqs.protein))"
+  information: "Do not change this value"
 ]
 
-bool: prot  [
-  required: "N"
-  default: "@($(insist)?$(tmpprot):$(inseqs.protein))"
-  expect: "Yes if -insist was set"
-  info: "Protein input sequence"
-]
-
-select: slowfast  [
-  optional: Y
-  default: "slow"
+list: slowfast  [
+  optional: "Y"
+  default: "s"
   header: "Do you want to carry out slow or fast pairwise alignment"
   minimum: "1"
   maximum: "1"
-  values: "slow, fast"
-  delim: ","
+  values: "s:slow, f:fast"
+  delimiter: ","
+  codedelimiter: ":"
   prompt: "Please select one"
   button: "Y"
-  help: "A distance is calculated between every pair of sequences and these are used to
-construct the dendrogram which guides the final multiple alignment. The scores
-are calculated from separate pairwise alignments. These can be calculated using
-2 methods: dynamic programming (slow but accurate) or by the method of Wilbur  
-and Lipman (extremely fast but approximate). \ The
-slow-accurate method is fine for short sequences but will be VERY SLOW for 
-many (e.g. >100) long (e.g. >1000 residue) sequences."
+  help: "A distance is calculated between every pair of sequences and these are used to construct the dendrogram which guides the final multiple alignment. The scores are calculated from separate pairwise alignments. These can be calculated using 2 methods: dynamic programming (slow but accurate) or by the method of Wilbur and Lipman (extremely fast but approximate). \ The slow-accurate method is fine for short sequences but will be VERY SLOW for many (e.g. >100) long (e.g. >1000 residue) sequences."
 ]
 
-bool: slow  [
-  default: "@($(slowfast)= slow : True fast : False else : True )"
-  expect: "Yes unless -slowfast is 'fast'"
-  info: "Slow and accurate alignment"
-]
+variable: slow "@($(slowfast) != f)"
 
-bool: displayslow  [
-  default: "@($(options)?$(slow):False)"
-  expect: "Yes if -options and -slow are both set"
-  info: "Prompt for slow alignment options"
-]
 
 float: pwgapc  [
-  required: "$(displayslow)"
+  optional: "$(slow)"
   default: "10.0"
   minimum: "0.0"
-  information: 	"Slow pairwise alignment: gap opening penalty"
+  information: "Slow pairwise alignment: gap opening penalty"
   prompt: "Input value for gap open penalty"
   help: "The penalty for opening a gap in the pairwise alignments."
 ]
 
 float: pwgapv  [
-  required: "$(displayslow)"
+  optional: "$(slow)"
   default: "0.1"
   minimum: "0.0"
   information: "Slow pairwise alignment: gap extension penalty"
   prompt: "Input value for gap extension penalty"
-  help: "The penalty for extending a gap by 1 residue in the pairwise
-alignments."
+  help: "The penalty for extending a gap by 1 residue in the pairwise alignments."
 ]
 
-select: pwmatrix  [
-  required: "@($(prot)?$(displayslow):False)"
-  default: "blosum"
+list: pwmatrix  [
+  optional: "@($(prot)?$(slow):False)"
+  default: "b"
   minimum: "1"
   maximum: "1"
   header: "Protein pairwise alignment matrix options"
-  values: "blosum, pam, gonnet, id, own"
-  delim: ","
+  values: "b:blosum, p:pam, g:gonnet, i:id, o:own"
+  delimiter: ","
+  codedelimiter: ":"
   prompt: "Select matrix"
   button: "Y"
-  help: "The scoring table which describes the similarity of each amino
-acid to each other. \ There are three 'in-built' series of weight matrices
-offered.  Each consists of several matrices which work differently at
-different evolutionary distances.  To see the exact details, read the
-documentation.  Crudely, we store several matrices in memory, spanning
-the full range of amino acid distance (from almost identical sequences
-to highly divergent ones).  For very similar sequences, it is best to
-use a strict weight matrix which only gives a high score to identities
-and the most favoured conservative substitutions.  For more divergent
-sequences, it is appropriate to use 'softer' matrices which give a high
-score to many other frequent substitutions.  \ 1) BLOSUM (Henikoff). 
-These matrices appear to be the best available for carrying out data
-base similarity (homology searches).  The matrices used are: Blosum80,
-62, 45 and 30.  \ 2) PAM (Dayhoff).  These have been extremely widely
-used since the late '70s.  We use the PAM 120, 160, 250 and 350
-matrices.  \ 3) GONNET .  These matrices were derived using almost the
-same procedure as the Dayhoff one (above) but are much more up to date
-and are based on a far larger data set.  They appear to be more
-sensitive than the Dayhoff series.  We use the GONNET 40, 80, 120, 160,
-250 and 350 matrices.  \ We also supply an identity matrix which gives a
-score of 1.0 to two identical amino acids and a score of zero otherwise. 
-This matrix is not very useful."
+  help: "The scoring table which describes the similarity of each amino acid to each other. \ There are three 'in-built' series of weight matrices offered. Each consists of several matrices which work differently at different evolutionary distances. To see the exact details, read the documentation. Crudely, we store several matrices in memory, spanning the full range of amino acid distance (from almost identical sequences to highly divergent ones). For very similar sequences, it is best to use a strict weight matrix which only gives a high score to identities and the most favoured conservative substitutions. For more divergent sequences, it is appropriate to use 'softer' matrices which give a high score to many other frequent substitutions. \ 1) BLOSUM (Henikoff). These matrices appear to be the best available for carrying out data base similarity (homology searches). The matrices used are: Blosum80, 62, 45 and 30. \ 2) PAM (Dayhoff). These have been extremely widely used since the late '70s. We use the PAM 120, 160, 250 and 350 matrices. \ 3) GONNET . These matrices were derived using almost the same procedure as the Dayhoff one (above) but are much more up to date and are based on a far larger data set. They appear to be more sensitive than the Dayhoff series. We use the GONNET 40, 80, 120, 160, 250 and 350 matrices. \ We also supply an identity matrix which gives a score of 1.0 to two identical amino acids and a score of zero otherwise. This matrix is not very useful."
 ]
 
-bool: usermatrix  [
-  default: "@($(pwmatrix)= own : True else : False)"
-  expect: "Yes if -pwmatrix is set"
-  info: "User defined matrix required"
-]
+variable: usermatrix "@($(pwmatrix) == o)"
 
-select: pwdnamatrix  [
-  required: "@($(prot)?False:$(displayslow))"
-  default: "iub"
+list: pwdnamatrix  [
+  optional: "@($(prot)?False:$(slow))"
+  default: "i"
   minimum: "1"
   maximum: "1"
   header: "DNA pairwise alignment matrix options"
-  values: "iub, clustalw, own"
-  delim: ","
+  values: "i:iub, c:clustalw, o:own"
+  delimiter: ","
+  codedelimiter: ":"
   prompt: "Select matrix"
   button: "Y"
-  help: "The scoring table which describes the scores assigned
-to matches and mismatches (including IUB ambiguity codes)."
-]
-
-bool: umatrix  [
-  default: "@($(pwdnamatrix)= own : True else : False)"
-  expect: "Yes if -pwdnamatrix is set"
-  info: "User defined matrix (not used)"
+  help: "The scoring table which describes the scores assigned to matches and mismatches (including IUB ambiguity codes)."
 ]
 
 string: pairwisedata  [
-  required: "$(usermatrix)"
+  optional: "$(usermatrix)"
   default: "NULL"
   information: "Filename of user pairwise matrix"
   prompt: "Input the filename of your pairwise matrix"
 ]
 
-bool: displayfast  [
-  default: "@($(slow)?False:$(options))"
-  expect: "Yes if -options is true and -slow is false"
-  info: "Prompt for fast alignment options"
-]
 
 integer: ktup  [
-  required: "$(displayfast)"
+  optional: "@(!$(slow))"
   default: "@($(prot)?1:2)"
   minimum: "0"
   maximum: "4"
   information: "Fast pairwise alignment: similarity scores: K-Tuple size"
-  expect: "1 for protein, 2 for nucleic"
+  expected: "1 for protein, 2 for nucleic"
   valid: "integer from 0 to 4"
-  help: "This is the size of exactly matching fragment that is used. 
-INCREASE for speed (max= 2 for proteins; 4 for DNA), DECREASE for
-sensitivity.  For longer sequences (e.g.  >1000 residues) you may need
-to increase the default."
+  help: "This is the size of exactly matching fragment that is used. INCREASE for speed (max= 2 for proteins; 4 for DNA), DECREASE for sensitivity. For longer sequences (e.g. >1000 residues) you may need to increase the default."
 ]
 
 integer: gapw  [
-  required: "$(displayfast)"
+  optional: "@(!$(slow))"
   default: "@($(prot)?3:5)"
   minimum: "0"
   information: "Fast pairwise alignment: similarity scores: gap penalty"
-  expect: "3 for protein, 5 for nucleic"
+  expected: "3 for protein, 5 for nucleic"
   valid: "Positive integer"
-  help: "This is a penalty for each gap in the fast alignments.  It has
-little affect on the speed or sensitivity except for extreme values."
+  help: "This is a penalty for each gap in the fast alignments. It has little affect on the speed or sensitivity except for extreme values."
 ]
 
 integer: topdiags  [
-  required: "$(displayfast)"
+  optional: "@(!$(slow))"
   default: "@($(prot)?5:4)"
   minimum: "0"
   information: "Fast pairwise alignment: similarity scores: number of diagonals to be considered"
-  expect: "5 for protein, 4 for nucleic"
+  expected: "5 for protein, 4 for nucleic"
   valid: "Positive integer"
-  help: "The number of k-tuple matches on each diagonal (in an imaginary
-dot-matrix plot) is calculated.  Only the best ones (with most matches)
-are used in the alignment.  This parameter specifies how many.  Decrease
-for speed; increase for sensitivity."
+  help: "The number of k-tuple matches on each diagonal (in an imaginary dot-matrix plot) is calculated. Only the best ones (with most matches) are used in the alignment. This parameter specifies how many. Decrease for speed; increase for sensitivity."
 ]
 
 integer: window  [
-  required: "$(displayfast)"
+  optional: "@(!$(slow))"
   default: "@($(prot)?5:4)"
   minimum: "0"
   information: "Fast pairwise alignment: similarity scores: diagonal window size"
-  expect: "5 for protein, 4 for nucleic"
+  expected: "5 for protein, 4 for nucleic"
   valid: "Positive integer"
-  help: "This is the number of diagonals around each of the 'best'
-diagonals that will be used.  Decrease for speed; increase for
-sensitivity."
+  help: "This is the number of diagonals around each of the 'best' diagonals that will be used. Decrease for speed; increase for sensitivity."
 ]
 
 bool: nopercent  [
-  required: "$(displayfast)"
+  optional: "@(!$(slow))"
   default: "No"
   information: "Fast pairwise alignment: similarity scores: suppresses percentage score"
 ]
 
-select: matrix  [
+list: matrix  [
   optional: "$(prot)"
-  default: "blosum"
+  default: "b"
   minimum: "1"
   maximum: "1"
   header: "Protein multiple alignment matrix options"
-  values: "blosum, pam, gonnet, id, own"
-  delim: ","
+  values: "b:blosum, p:pam, g:gonnet, i:id, o:own"
+  delimiter: ","
   prompt: "Select matrix"
   button: "Y"
-  help: "This gives a menu where you are offered a choice of weight
-matrices.  The default for proteins is the PAM series derived by Gonnet
-and colleagues.  Note, a series is used! The actual matrix that is used
-depends on how similar the sequences to be aligned at this alignment
-step are.  Different matrices work differently at each evolutionary
-distance.  \ There are three 'in-built' series of weight matrices
-offered.  Each consists of several matrices which work differently at
-different evolutionary distances.  To see the exact details, read the
-documentation.  Crudely, we store several matrices in memory, spanning
-the full range of amino acid distance (from almost identical sequences
-to highly divergent ones).  For very similar sequences, it is best to
-use a strict weight matrix which only gives a high score to identities
-and the most favoured conservative substitutions.  For more divergent
-sequences, it is appropriate to use 'softer' matrices which give a high
-score to many other frequent substitutions.  \ 1) BLOSUM (Henikoff). 
-These matrices appear to be the best available for carrying out data
-base similarity (homology searches).  The matrices used are: Blosum80,
-62, 45 and 30.  \ 2) PAM (Dayhoff).  These have been extremely widely
-used since the late '70s.  We use the PAM 120, 160, 250 and 350
-matrices.  \ 3) GONNET .  These matrices were derived using almost the
-same procedure as the Dayhoff one (above) but are much more up to date
-and are based on a far larger data set.  They appear to be more
-sensitive than the Dayhoff series.  We use the GONNET 40, 80, 120, 160,
-250 and 350 matrices.  \ We also supply an identity matrix which gives a
-score of 1.0 to two identical amino acids and a score of zero otherwise. 
-This matrix is not very useful.  Alternatively, you can read in your own
-(just one matrix, not a series)."
+  help: "This gives a menu where you are offered a choice of weight matrices. The default for proteins is the PAM series derived by Gonnet and colleagues. Note, a series is used! The actual matrix that is used depends on how similar the sequences to be aligned at this alignment step are. Different matrices work differently at each evolutionary distance. \ There are three 'in-built' series of weight matrices offered. Each consists of several matrices which work differently at different evolutionary distances. To see the exact details, read the documentation. Crudely, we store several matrices in memory, spanning the full range of amino acid distance (from almost identical sequences to highly divergent ones). For very similar sequences, it is best to use a strict weight matrix which only gives a high score to identities and the most favoured conservative substitutions. For more divergent sequences, it is appropriate to use 'softer' matrices which give a high score to many other frequent substitutions. \ 1) BLOSUM (Henikoff). These matrices appear to be the best available for carrying out data base similarity (homology searches). The matrices used are: Blosum80, 62, 45 and 30. \ 2) PAM (Dayhoff). These have been extremely widely used since the late '70s. We use the PAM 120, 160, 250 and 350 matrices. \ 3) GONNET . These matrices were derived using almost the same procedure as the Dayhoff one (above) but are much more up to date and are based on a far larger data set. They appear to be more sensitive than the Dayhoff series. We use the GONNET 40, 80, 120, 160, 250 and 350 matrices. \ We also supply an identity matrix which gives a score of 1.0 to two identical amino acids and a score of zero otherwise. This matrix is not very useful. Alternatively, you can read in your own (just one matrix, not a series)."
 ]
 
-bool: usermamatrix  [
-  default: "@($(matrix)= own : True else : False)"
-  expect: "True if -matrix was set" 
-  info: "Prompt for user multiple alignment matrix"
-]
+variable: usermamatrix "@($(matrix) == o)"
 
-select: dnamatrix  [
+list: dnamatrix  [
   optional: "@(!$(prot))"
-  default: "iub"
+  default: "i"
   minimum: "1"
   maximum: "1"
   header: "Nucleotide multiple alignment matrix options"
-  values: "iub, clustalw, own"
-  delim: ","
+  values: "i:iub, c:clustalw, o:own"
+  delimiter: ","
+  codedelimiter: ":"
   prompt: "Select matrix"
   button: "Y"
-  help: "This gives a menu where you are offered amenu where a single
-matrix (not a series) can be selected."
+  help: "This gives a menu where you are offered amenu where a single matrix (not a series) can be selected."
 ]
 
-bool: umamatrix  [
-  default: "@($(dnamatrix)= own : True else : False)"
-  expect: "True if -dnamatrix was set" 
-  info: "User defined multiple alignment matrix"
-]
+variable: umamatrix "(@($(dnamatrix) == own) ? True : False)"
+
+
 
 string: mamatrix  [
-  required: "@($(usermamatrix)?True:$(umamatrix))"
+  optional: "@($(usermamatrix)?True:@$(umamatrix))"
   default: "NULL"
   information: "Filename of user multiple alignment matrix"
   prompt: "Input the filename of your alignment matrix"
 ]
 
 float: gapc  [
-  optional: Y
+  optional: "Y"
   default: "10.0"
   minimum: "0.0"
   information: "Multiple alignment: Gap opening penalty"
   prompt: "Enter gap penalty"
   valid: "Positive foating point number"
-  help: "The penalty for opening a gap in the alignment.  Increasing the
-gap opening penalty will make gaps less frequent."
+  help: "The penalty for opening a gap in the alignment. Increasing the gap opening penalty will make gaps less frequent."
 ]
 
 float: gapv  [
-  optional: Y
+  optional: "Y"
   default: "5.0"
   minimum: "0.00"
   information: "Multiple alignment: Gap extension penalty"
   prompt: "Enter variable gap penalty"
   valid: "Positive foating point number"
-  help: "The penalty for extending a gap by 1 residue.  Increasing the
-gap extension penalty will make gaps shorter.  Terminal gaps are not
-penalised."
+  help: "The penalty for extending a gap by 1 residue. Increasing the gap extension penalty will make gaps shorter. Terminal gaps are not penalised."
 ]
 
 bool: unweighted  [
   optional: "@(!$(prot))"
   default: "No"
   information: "Transitions are unweighted"
-  help: "The 'Transition weight' gives transitions (A <--> G or C <--> T
-i.e.  purine-purine or pyrimidine-pyrimidine substitutions) a weight
-between 0 and 1; a weight of zero means that the transitions are scored
-as mismatches, while a weight of 1 gives the transitions the match
-score.  For distantly related DNA sequences, the weight should be near
-to zero; for closely related sequences it can be useful to assign a
-higher score."
+  help: "The 'Transition weight' gives transitions (A <--> G or C <--> T i.e. purine-purine or pyrimidine-pyrimidine substitutions) a weight between 0 and 1; a weight of zero means that the transitions are scored as mismatches, while a weight of 1 gives the transitions the match score. For distantly related DNA sequences, the weight should be near to zero; for closely related sequences it can be useful to assign a higher score."
 ]
 
 bool: endgaps  [
-  optional: Y
+  optional: "Y"
   default: "Yes"
   information: "Use end gap separation penalty"
-  help: "'End gap separation' treats end gaps just like internal gaps
-for the purposes of avoiding gaps that are too close (set by 'gap
-separation distance').  If you turn this off, end gaps
-will be ignored for this purpose.  This is useful when you wish to align
-fragments where the end gaps are not biologically meaningful."
+  help: "'End gap separation' treats end gaps just like internal gaps for the purposes of avoiding gaps that are too close (set by 'gap separation distance'). If you turn this off, end gaps will be ignored for this purpose. This is useful when you wish to align fragments where the end gaps are not biologically meaningful."
 ]
 
 integer: gapdist  [
-  optional: Y
+  optional: "Y"
   default: "8"
   minimum: "0"
   information: "Gap separation distance"
   valid: "Positive integer"
-  help: "'Gap separation distance' tries to decrease the chances of gaps
-being too close to each other.  Gaps that are less than this distance
-apart are penalised more than other gaps.  This does not prevent close
-gaps; it makes them less frequent, promoting a block-like appearance of
-the alignment."
+  help: "'Gap separation distance' tries to decrease the chances of gaps being too close to each other. Gaps that are less than this distance apart are penalised more than other gaps. This does not prevent close gaps; it makes them less frequent, promoting a block-like appearance of the alignment."
 ]
 
 bool: norgap  [
   optional: "$(prot)"
   default: "No"
   information: "No residue specific gaps"
-  help: "'Residue specific penalties' are amino acid specific gap
-penalties that reduce or increase the gap opening penalties at each
-position in the alignment or sequence.  As an example, positions that
-are rich in glycine are more likely to have an adjacent gap than
-positions that are rich in valine."
+  help: "'Residue specific penalties' are amino acid specific gap penalties that reduce or increase the gap opening penalties at each position in the alignment or sequence. As an example, positions that are rich in glycine are more likely to have an adjacent gap than positions that are rich in valine."
 ]
 
 string: hgapres  [
   optional: "$(prot)"
   default: "GPSNDQEKR"
   information: "List of hydrophilic residues"
-  help: "This is a set of the residues 'considered' to be hydrophilic. 
-It is used when introducing Hydrophilic gap penalties."
+  help: "This is a set of the residues 'considered' to be hydrophilic. It is used when introducing Hydrophilic gap penalties."
 ]
 
 bool: nohgap  [
   optional: "$(prot)"
   default: "No"
   information: "No hydrophilic gaps"
-  help: "'Hydrophilic gap penalties' are used to increase the chances of
-a gap within a run (5 or more residues) of hydrophilic amino acids;
-these are likely to be loop or random coil regions where gaps are more
-common.  The residues that are 'considered' to be hydrophilic are set by
-'-hgapres'."
+  help: "'Hydrophilic gap penalties' are used to increase the chances of a gap within a run (5 or more residues) of hydrophilic amino acids; these are likely to be loop or random coil regions where gaps are more common. The residues that are 'considered' to be hydrophilic are set by '-hgapres'."
 ]
 
 integer: maxdiv  [
-  optional: Y
+  optional: "Y"
   default: "30"
   minimum: "0"
   maximum: "100"
   information: "Cut-off to delay the alignment of the most divergent sequences"
   valid: "Integer from 0 to 100"
-  help: "This switch, delays the alignment of the most distantly related
-sequences until after the most closely related sequences have been
-aligned.  The setting shows the percent identity level required to delay
-the addition of a sequence; sequences that are less identical than this
-level to any other sequences will be aligned later."
+  help: "This switch, delays the alignment of the most distantly related sequences until after the most closely related sequences have been aligned. The setting shows the percent identity level required to delay the addition of a sequence; sequences that are less identical than this level to any other sequences will be aligned later."
 ]

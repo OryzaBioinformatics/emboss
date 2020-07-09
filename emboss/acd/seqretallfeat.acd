@@ -1,33 +1,34 @@
-# SEQRET application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# use "" for missing values - these are required.
-# values in "" are trimmed to single spaces.
-# everything is treated as single tokens delimited by white space
-# (space, tab, newline)
-
-# pmr 22-apr-98
-
 appl: seqretallfeat [
-	doc: "Reads and writes (returns) one or more sequences"
-	groups: "Test"
+  documentation: "Reads and writes (returns) one or more sequences"
+  groups: "Test"
 ]
 
-# testing sections
-# type can be 'frame' or 'page'
+variable:  fred "2 + 2"
 
-  variable: fred "2 + 2"
-  section: secinseq [ info: "input sequence" type: "frame"
-   border:2
-   side:top
-  ]
-  seqall: sequence [ param: Y feat: Y ]
+section: secinseq  [
+  info: "input sequence"
+  type: "frame"
+  border: "2"
+  side: "top"
+]
 
-  section: secoutseq [ info: "output sequence" type: "page"
-   comment: "testing sections"
-   folder:fred 
-  ]
-  seqoutall: outseq [ param: Y feat: Y ]
+seqall: sequence  [
+  parameter: "Y"
+  features: "Y"
+]
 
-  endsection: secoutseq
-  endsection: secinseq
+section: secoutseq  [
+  info: "output sequence"
+  type: "page"
+  comment: "testing sections"
+  folder: "fred"
+]
+
+seqoutall: outseq  [
+  parameter: "Y"
+  features: "Y"
+]
+
+endsection:  secoutseq
+
+endsection:  secinseq

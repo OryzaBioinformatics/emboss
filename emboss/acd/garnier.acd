@@ -1,17 +1,25 @@
 appl: garnier [
-        doc: "Predicts protein secondary structure"
-        groups: "Protein:2D Structure"
+  documentation: "Predicts protein secondary structure"
+  groups: "Protein:2D Structure"
 ]
 
-  seqall: sequencea [ param: Y type: PureProtein ]
+seqall: sequencea  [
+  parameter: "Y"
+  type: "PureProtein"
+]
+  report: outfile [ param: Y
+            rformat: tagseq
+	    taglist: "str:helix str:sheet str:turns str:coil"
+  ]
 
-  integer: idc [ 
-	required: N
-	default: 0
-	minimum: 0
-	maximum: 6
-	information: "idc param"
-	]
+# Obsolete - replaced by report file
+# Source code will use this to write the original output format if enabled
+#  outfile: outfile [ param: Y ]
 
-  outfile: outfile [ param: Y ]
-
+integer: idc  [
+  required: "N"
+  default: "0"
+  minimum: "0"
+  maximum: "6"
+  information: "idc param"
+]

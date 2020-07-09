@@ -1,8 +1,12 @@
 appl: intconv [
-        doc: "Convert ints to ajints and longs to ajlongs"
-        groups: "Test"
+  documentation: "Convert ints to ajints and longs to ajlongs"
+  groups: "Test"
 ]
 
- infile: infile [ param: Y ]
+infile: infile  [
+  parameter: "Y"
+]
 
- outfile: outfile [ param: Y ]
+outfile: outfile  [
+  parameter: "Y"
+]

@@ -1,10 +1,18 @@
 appl: codcmp [
-        doc: "Codon usage table comparison"
-        groups: "Nucleic:Codon usage"
+  documentation: "Codon usage table comparison"
+  groups: "Nucleic:Codon usage"
 ]
 
- codon: first [ param: Y info: "First codon usage file" ]
+codon: first  [
+  parameter: "Y"
+  information: "First codon usage file"
+]
 
- codon: second [ param: Y info: "Second codon usage file" ]
+codon: second  [
+  parameter: "Y"
+  information: "Second codon usage file"
+]
 
- outfile: outfile [ param: Y ]
+outfile: outfile  [
+  parameter: "Y"
+]

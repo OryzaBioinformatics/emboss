@@ -1,108 +1,74 @@
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-
 appl: fuzztran [
-	doc: "Protein pattern search after translation"
-	groups: "Nucleic:Motifs, Protein:Motifs"
+  documentation: "Protein pattern search after translation"
+  groups: "Nucleic:Motifs, Protein:Motifs"
 ]
 
-seqall: sequence [
-	param: Y
-        type: dna
+seqall: sequence  [
+  parameter: "Y"
+  type: "dna"
 ]
 
-
-list: frame [
-	opt: Y
-	default: "1"
-	min: 1
-	max: 1
-	header: "Translation frames"
-	values:
-		"1:1,
-		2:2,
-		3:3,
-		F:Forward three frames,
-		-1:-1,
-		-2:-2,
-		-3:-3,
-		R:Reverse three frames,
-		6:All six frames"
-	delim: ","
-	codedelim: ":"
-	prompt: "Frame(s) to translate"
+list: frame  [
+  optional: "Y"
+  default: "1"
+  minimum: "1"
+  maximum: "1"
+  header: "Translation frames"
+  values: "1:1, 2:2, 3:3, F:Forward three frames, -1:-1, -2:-2, -3:-3, R:Reverse three frames, 6:All six frames"
+  delimiter: ","
+  codedelimiter: ":"
+  prompt: "Frame(s) to translate"
 ]
 
-list: table [
-      opt: Y
-      default: "0"
-      min: 1
-      max: 1
-      header: "Genetic codes"
-      values:
-              "0:Standard;
-              1:Standard (with alternative initiation codons);
-              2:Vertebrate Mitochondrial;
-              3:Yeast Mitochondrial;
-              4:Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma;
-              5:Invertebrate Mitochondrial;
-              6:Ciliate Macronuclear and Dasycladacean;
-              9:Echinoderm Mitochondrial;
-              10:Euplotid Nuclear;
-              11:Bacterial;
-              12:Alternative Yeast Nuclear;
-              13:Ascidian Mitochondrial;
-              14:Flatworm Mitochondrial;
-              15:Blepharisma Macronuclear;
-              16:Chlorophycean Mitochondrial;
-              21:Trematode Mitochondrial;
-              22:Scenedesmus obliquus;
-              23:Thraustochytrium Mitochondrial"
-      delim: ";"
-      codedelim: ":"
-      prompt: "Code to use"
+list: table  [
+  optional: "Y"
+  default: "0"
+  minimum: "1"
+  maximum: "1"
+  header: "Genetic codes"
+  values: "0:Standard; 1:Standard (with alternative initiation codons); 2:Vertebrate Mitochondrial; 3:Yeast Mitochondrial; 4:Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma; 5:Invertebrate Mitochondrial; 6:Ciliate Macronuclear and Dasycladacean; 9:Echinoderm Mitochondrial; 10:Euplotid Nuclear; 11:Bacterial; 12:Alternative Yeast Nuclear; 13:Ascidian Mitochondrial; 14:Flatworm Mitochondrial; 15:Blepharisma Macronuclear; 16:Chlorophycean Mitochondrial; 21:Trematode Mitochondrial; 22:Scenedesmus obliquus; 23:Thraustochytrium Mitochondrial"
+  delimiter: ";"
+  codedelimiter: ":"
+  prompt: "Code to use"
 ]
 
-string: pattern [
-	req: Y
-	prompt: "Search pattern"
+string: pattern  [
+  required: "Y"
+  prompt: "Search pattern"
 ]
 
-int: mismatch [ 
-	req: Y
-	def: 0
-	min: 0
-	prompt: "Number of mismatches"
+integer: mismatch  [
+  required: "Y"
+  default: "0"
+  minimum: "0"
+  prompt: "Number of mismatches"
 ]
 
-bool: mmshow [
-	opt: N
-	def: 0
-	info: "Show mismatches"
+bool: mmshow  [
+  optional: "N"
+  default: "0"
+  information: "Show mismatches"
 ]
 
-bool: accshow [
-	opt: N
-	def: 0
-	info: "Show accession numbers"
+bool: accshow  [
+  optional: "N"
+  default: "0"
+  information: "Show accession numbers"
 ]
 
-bool: usashow [   
-        opt: N  
-        def: 0
-        info: "Show USA"         
-        help: "Showing the USA (Uniform Sequence Address) of the 
-matching sequences will turn your output file into a 'list' file that    
-can then be read in by many other EMBOSS programs by specifying it with
-a '@' in front of the filename."
+bool: usashow  [
+  optional: "N"
+  default: "0"
+  information: "Show USA"
+  help: "Showing the USA (Uniform Sequence Address) of the matching sequences will turn your output file into a 'list' file that can then be read in by many other EMBOSS programs by specifying it with a '@' in front of the filename."
 ]
 
-bool: descshow [
-	opt: N
-	def: 0
-	info: "Show descriptions"
+bool: descshow  [
+  optional: "N"
+  default: "0"
+  information: "Show descriptions"
 ]
 
-  outfile: outf [
-	param: Y
+outfile: outf  [
+  parameter: "Y"
 ]

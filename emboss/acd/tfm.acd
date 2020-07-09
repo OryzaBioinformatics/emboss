@@ -1,42 +1,33 @@
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# GWW 5 July 2000
-
 appl: tfm [
-	doc: "Displays a program's help documentation manual"
-	groups: "Information"
+  documentation: "Displays a program's help documentation manual"
+  groups: "Information"
 ]
 
-  string: program [
-	param: Y
-	def: ""
-	missing: N
-	prompt: "Program to search for"
-	help: "Enter the name of an EMBOSS program"
-  ]
+string: program  [
+  parameter: "Y"
+  default: ""
+  missing: "N"
+  prompt: "Program to search for"
+  help: "Enter the name of an EMBOSS program"
+]
 
-  outfile: outfile [
-        opt: Y
-	def: "stdout"
-        prompt: "Output program details to a file"
-        help: "If you enter the name of a file here then this program
-will write the program names and brief descriptions into that file."
-  ]
+outfile: outfile  [
+  optional: "Y"
+  default: "stdout"
+  prompt: "Output program details to a file"
+  help: "If you enter the name of a file here then this program will write the program names and brief descriptions into that file."
+]
 
+bool: html  [
+  optional: "Y"
+  default: "N"
+  prompt: "Format the output for HTML"
+  help: "This will format the output for displaying as a WWW document."
+]
 
-  bool: html [
-        opt: Y
-        def: N
-        prompt: "Format the output for HTML"
-        help: "This will format the output for displaying as a WWW document."
-  ]
-
-  bool: more [
-	opt: Y
-	def: @(!$(html))
-	prompt: "Display a screenful at a time"
-	help: "This uses the standard UNIX utility 'more' to display the
-text page-by-page, waiting for you to read one screen-full before going
-on to the next page.  When you have finished reading a page, press the
-SPACE bar to proceed to the next page."
-  ]
+bool: more  [
+  optional: "Y"
+  default: "@(!$(html))"
+  prompt: "Display a screenful at a time"
+  help: "This uses the standard UNIX utility 'more' to display the text page-by-page, waiting for you to read one screen-full before going on to the next page. When you have finished reading a page, press the SPACE bar to proceed to the next page."
+]

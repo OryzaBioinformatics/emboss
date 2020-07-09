@@ -1,49 +1,55 @@
 appl: dotmatcher [
-        doc: "Displays a thresholded dotplot of two sequences"
-        groups: "Alignment:Dot plots"
+  documentation: "Displays a thresholded dotplot of two sequences"
+  groups: "Alignment:Dot plots"
 ]
 
-  sequence: sequencea [ param: y type: any]
+sequence: sequencea  [
+  parameter: "y"
+  type: "any"
+]
 
-  sequence: sequenceb [ param: y
-     type: "@($(sequencea.protein) ? protein : nucleotide)" ]
+sequence: sequenceb  [
+  parameter: "y"
+  type: "@($(sequencea.protein) ? protein : nucleotide)"
+]
 
-  int: windowsize [
-        optional: Y 
-        info: "window size over which to test threshhold"
-        def : "10"
-        min : "3"
-  ]
+integer: windowsize  [
+  optional: "Y"
+  information: "window size over which to test threshhold"
+  default: "10"
+  minimum: "3"
+]
 
-  float: threshold [
-        optional: Y 
-        info: "threshold"
-        def : "17.0"
-        min : "0"
-  ]
+integer: threshold  [
+  optional: "Y"
+  information: "threshold"
+  default: "17"
+  minimum: "0"
+]
 
-  matrix: matrixfile [
-        optional: Y
-        info: "Matrix file"
-        protein: $(sequencea.protein)
-  ]
+matrix: matrixfile  [
+  optional: "Y"
+  information: "Matrix file"
+  protein: "$(sequencea.protein)"
+]
 
-  bool: data [ 
-	req: N
-        def: N
-        info: "Display as data"
-        help: "Output the match data to a file instead of plotting it"
-  ]
+bool: data  [
+  required: "N"
+  default: "N"
+  information: "Display as data"
+  help: "Output the match data to a file instead of plotting it"
+]
 
-  graph: graph [ req: @(!$(data))
-	opt: N
-	gtitle: "Dotmatcher:  $(sequencea.name) vs $(sequenceb.name)"
-	gxtitle: "$(sequencea.name)"
-	gytitle: "$(sequenceb.name)"
-  ]
- 
+graph: graph  [
+  required: "@(!$(data))"
+  optional: "N"
+  gtitle: "Dotmatcher: $(sequencea.name) vs $(sequenceb.name)"
+  gxtitle: "$(sequencea.name)"
+  gytitle: "$(sequenceb.name)"
+]
 
-  outfile: outfile [ req: $(data)
-	nullok: Y
-	info: "Display as data"
-  ]
+outfile: outfile  [
+  required: "$(data)"
+  nullok: "Y"
+  information: "Display as data"
+]

@@ -1,13 +1,26 @@
 appl: equicktandem [
-	doc: "Finds tandem repeats"
-	groups: "Nucleic:Repeats"
+  documentation: "Finds tandem repeats"
+  groups: "Nucleic:Repeats"
 ]
 
+sequence: sequence  [
+  parameter: "Y"
+  type: "dna"
+]
 
-  sequence: sequence [ param: Y type: dna ]
+outfile: outfile  [
+  parameter: "Y"
+  extension: "qtan"
+]
 
-  outfile: outfile [ param: Y  ext: qtan ]
+integer: maxrepeat  [
+  required: "Y"
+  default: "600"
+  information: "Maximum repeat size"
+]
 
-  int: maxrepeat  [ req: Y  def: 600 info: "Maximum repeat size" ]
-
-  int: threshold [ req: Y  def: 20 info: "Threshold score" ]
+integer: threshold  [
+  required: "Y"
+  default: "20"
+  information: "Threshold score"
+]

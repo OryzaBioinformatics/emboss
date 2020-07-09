@@ -1,164 +1,118 @@
 appl: infoalign [
-	doc: "Information on a multiple sequence alignment"
-	groups: "Alignment:Multiple, Information"
+  documentation: "Information on a multiple sequence alignment"
+  groups: "Alignment:Multiple, Information"
 ]
 
-  seqset: sequence [ 
-	param: Y
-        type: gapany
-	help: "The sequence alignment to be displayed."
-  ]
-
-  outfile: outfile [
-        opt: Y
-        def: "stdout"
-        info: "Output sequence details to a file"
-        help: "If you enter the name of a file here then this program
-               will write the sequence details into that file."
-  ]
-
-  string: refseq [
-        opt: Y
-        def: "0"
-        info: "The number or the name of the reference sequence"
-        help: "If you give the number in the alignment or the name of a
-sequence, it will be taken to be the reference sequence.  The reference
-sequence is the one against which all the
-other sequences are compared.  If this is set to 0 then the consensus
-sequence will be used as the reference sequence.  By default the
-consensus sequence is used as the reference sequence."
-  ]
-
-  matrix: matrix [
-        optional: Y
-        info: "Similarity scoring Matrix file"
-        protein: $(sequence.protein)
-  ]
-
-
-#
-# Consensus sequence parameters
-#
-
-  float:  plurality [
-        def: 50.0
-        min : 0.0
-	max: 100.0
-        info: "Plurality check % for consensus"
-        help: "Set a cut-off for the % of positive scoring matches below
-which there is no consensus.  The default plurality is taken as 50% of the
-total weight of all the sequences in the alignment."
-  ]
-
-  float: identity [
-        def : 0.0
-        min : 0.0
-	max: 100.0
-        info: "Required % of identities at a position fro consensus"
-        help: "Provides the facility of setting the required number of
-identities at a position for it to give a consensus. 
-Therefore, if this is set to 100%
-only columns of identities contribute to the consensus."
-  ]
-
-
-#
-# Display parameters
-#
-
-bool: html [ 
-  opt: Y
-  default: N 
-  info: "Format output as an HTML table"
+seqset: sequence  [
+  parameter: "Y"
+  type: "gapany"
+  help: "The sequence alignment to be displayed."
 ]
 
-
-# Not very interesting set of qualifiers to display various columns
-# Leave these as 'advanced' qualifiers (i.e. not required or optional)
-
-# The 'only' qualifier negates the behaviour of the following qualifiers
-# It is only used in the ACD file, it is not read by the program itself
-bool: only [ 
-  default: N 
-  info: "Display the specified columns"
-  help: "This is a way of shortening the command line if you only want a
-few things to be displayed.  Instead of specifying: \ 
-'-nohead -nousa -noname -noalign -nogaps -nogapcount -nosimcount -noidcount -nodiffcount' \ 
-to get only the sequence length output, you can specify \ 
-'-only -seqlength'"
+outfile: outfile  [
+  optional: "Y"
+  default: "stdout"
+  information: "Output sequence details to a file"
+  help: "If you enter the name of a file here then this program will write the sequence details into that file."
 ]
 
-
-bool: heading [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display column headings"
+string: refseq  [
+  optional: "Y"
+  default: "0"
+  information: "The number or the name of the reference sequence"
+  help: "If you give the number in the alignment or the name of a sequence, it will be taken to be the reference sequence. The reference sequence is the one against which all the other sequences are compared. If this is set to 0 then the consensus sequence will be used as the reference sequence. By default the consensus sequence is used as the reference sequence."
 ]
 
-bool: usa [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display the USA of the sequence"
+matrix: matrix  [
+  optional: "Y"
+  information: "Similarity scoring Matrix file"
+  protein: "$(sequence.protein)"
 ]
 
-bool: name [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display 'name' column"
+float: plurality  [
+  default: "50.0"
+  minimum: "0.0"
+  maximum: "100.0"
+  information: "Plurality check % for consensus"
+  help: "Set a cut-off for the % of positive scoring matches below which there is no consensus. The default plurality is taken as 50% of the total weight of all the sequences in the alignment."
 ]
 
-bool: seqlength [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display 'seqlength' column"
+float: identity  [
+  default: "0.0"
+  minimum: "0.0"
+  maximum: "100.0"
+  information: "Required % of identities at a position fro consensus"
+  help: "Provides the facility of setting the required number of identities at a position for it to give a consensus. Therefore, if this is set to 100% only columns of identities contribute to the consensus."
 ]
 
-bool: alignlength [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display 'alignlength' column"
+bool: html  [
+  optional: "Y"
+  default: "N"
+  information: "Format output as an HTML table"
 ]
 
-# number of gaps opened in the alignment
-bool: gaps [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display number of gaps"
+bool: only  [
+  default: "N"
+  information: "Display the specified columns"
+  help: "This is a way of shortening the command line if you only want a few things to be displayed. Instead of specifying: \ '-nohead -nousa -noname -noalign -nogaps -nogapcount -nosimcount -noidcount -nodiffcount' \ to get only the sequence length output, you can specify \ '-only -seqlength'"
 ]
 
-bool: gapcount [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display number of gap positions"
+bool: heading  [
+  default: "@(!$(only))"
+  information: "Display column headings"
 ]
 
-bool: idcount [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display number of identical positions"
+bool: usa  [
+  default: "@(!$(only))"
+  information: "Display the USA of the sequence"
 ]
 
-bool: simcount [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display number of similar positions"
+bool: name  [
+  default: "@(!$(only))"
+  information: "Display 'name' column"
 ]
 
-bool: diffcount [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display number of different positions"
+bool: seqlength  [
+  default: "@(!$(only))"
+  information: "Display 'seqlength' column"
 ]
 
-bool: change [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display % number of changed positions"
+bool: alignlength  [
+  default: "@(!$(only))"
+  information: "Display 'alignlength' column"
 ]
 
-bool: description [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display 'description' column"
+bool: gaps  [
+  default: "@(!$(only))"
+  information: "Display number of gaps"
 ]
 
+bool: gapcount  [
+  default: "@(!$(only))"
+  information: "Display number of gap positions"
+]
+
+bool: idcount  [
+  default: "@(!$(only))"
+  information: "Display number of identical positions"
+]
+
+bool: simcount  [
+  default: "@(!$(only))"
+  information: "Display number of similar positions"
+]
+
+bool: diffcount  [
+  default: "@(!$(only))"
+  information: "Display number of different positions"
+]
+
+bool: change  [
+  default: "@(!$(only))"
+  information: "Display % number of changed positions"
+]
+
+bool: description  [
+  default: "@(!$(only))"
+  information: "Display 'description' column"
+]

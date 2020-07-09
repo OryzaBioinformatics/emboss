@@ -1,96 +1,67 @@
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# GWW 23 April 1999
-# modified 04/02/2000 rbsk@sanger - added pgc
-
 appl: infoseq [
-	doc: "Displays some simple information about sequences"
-	groups: "Edit, Information"
+  documentation: "Displays some simple information about sequences"
+  groups: "Edit, Information"
 ]
 
-seqall: sequence [
-      param: Y
+seqall: sequence  [
+  parameter: "Y"
 ]
 
-outfile: outfile [
-  opt: Y
-  def: "stdout"
-  info: "Output sequence details to a file"
-  help: "If you enter the name of a file here then this program
-         will write the sequence details into that file."
+outfile: outfile  [
+  optional: "Y"
+  default: "stdout"
+  information: "Output sequence details to a file"
+  help: "If you enter the name of a file here then this program will write the sequence details into that file."
 ]
 
-
-bool: html [ 
-  opt: Y
-  default: N 
-  info: "Format output as an HTML table"
+bool: html  [
+  optional: "Y"
+  default: "N"
+  information: "Format output as an HTML table"
 ]
 
-
-# Not very interesting set of qualifiers to display various columns
-# Leave these as 'advanced' qualifiers (i.e. not required or optional)
-
-# The 'only' qualifier negates the behaviour of the following qualifiers
-# It is only used in the ACD file, it is not read by the program itself
-bool: only [ 
-  default: N 
-  info: "Display the specified columns"
-  help: "This is a way of shortening the command line if you only want a
-few things to be displayed.  Instead of specifying: \ 
-'-nohead -noname -noacc -notype -nopgc -nodesc' \ 
-to get only the length output, you can specify \ 
-'-only -length'"
+bool: only  [
+  default: "N"
+  information: "Display the specified columns"
+  help: "This is a way of shortening the command line if you only want a few things to be displayed. Instead of specifying: \ '-nohead -noname -noacc -notype -nopgc -nodesc' \ to get only the length output, you can specify \ '-only -length'"
 ]
 
-
-bool: heading [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display column headings"
+bool: heading  [
+  default: "@(!$(only))"
+  information: "Display column headings"
 ]
 
-bool: usa [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display the USA of the sequence"
+bool: usa  [
+  default: "@(!$(only))"
+  information: "Display the USA of the sequence"
 ]
 
-bool: name [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display 'name' column"
+bool: name  [
+  default: "@(!$(only))"
+  information: "Display 'name' column"
 ]
 
-bool: accession [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display 'accession' column"
+bool: accession  [
+  default: "@(!$(only))"
+  information: "Display 'accession' column"
 ]
 
-bool: type [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display 'type' column"
+bool: type  [
+  default: "@(!$(only))"
+  information: "Display 'type' column"
 ]
 
-bool: length [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display 'length' column"
+bool: length  [
+  default: "@(!$(only))"
+  information: "Display 'length' column"
 ]
 
-bool: pgc [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display 'percent GC content' column"
+bool: pgc  [
+  default: "@(!$(only))"
+  information: "Display 'percent GC content' column"
 ]
 
-bool: description [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
-  info: "Display 'description' column"
+bool: description  [
+  default: "@(!$(only))"
+  information: "Display 'description' column"
 ]
-
-
-

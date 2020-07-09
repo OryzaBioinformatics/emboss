@@ -1,18 +1,24 @@
-# CHAOS application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# use "" for missing values - these are required.
-# values in "" are trimmed to single spaces.
-# everything is treated as single tokens delimited by white space
-# (space, tab, newline)
-
 appl: chaos [
-	doc: "Create a chaos game representation plot for a sequence"
-	groups: "Nucleic:Composition"
+  documentation: "Create a chaos game representation plot for a sequence"
+  groups: "Nucleic:Composition"
 ]
 
+sequence: sequence  [
+  parameter: "Y"
+  type: "dna"
+]
 
-  sequence: sequence [ param: Y type: dna ]
-  bool: data [ opt: N def: N info: "Display as data" ]
-  graph: graph [ req: @(!$(data)) ]
-  outfile: outfile [ req: $(data) nullok: Y ]
+bool: data  [
+  optional: "N"
+  default: "N"
+  information: "Display as data"
+]
+
+graph: graph  [
+  required: "@(!$(data))"
+]
+
+outfile: outfile  [
+  required: "$(data)"
+  nullok: "Y"
+]

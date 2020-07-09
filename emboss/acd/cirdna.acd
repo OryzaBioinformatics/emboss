@@ -1,92 +1,92 @@
 appl: cirdna [
-	doc: "Draws circular maps of DNA constructs"
-	groups: "Display"
-	]
+  documentation: "Draws circular maps of DNA constructs"
+  groups: "Display"
+]
 
-graph: graphout [
-	required: Y
-	]
+graph: graphout  [
+  required: "Y"
+]
 
-infile: inputfile [
-	required: Y
-	default: "inputfile"
-	info: "input file containing mapping data"
-	]
+infile: inputfile  [
+  required: "Y"
+  default: "inputfile"
+  information: "input file containing mapping data"
+]
 
-float: originangle [
-	optional: Y
-	default: "90"
-	info: "position of the molecule's origin on the circle (enter a number in the range 0 - 360)"
-	]
+float: originangle  [
+  optional: "Y"
+  default: "90"
+  information: "position of the molecule's origin on the circle (enter a number in the range 0 - 360)"
+]
 
-string: posticks [
-	required: Y
-	default: "Out"
-	info: "ticks inside or outside the circle (enter In or Out)"
-	]
+string: posticks  [
+  required: "Y"
+  default: "Out"
+  information: "ticks inside or outside the circle (enter In or Out)"
+]
 
-string: posblocks [
-	required: Y
-	default: "In"
-	info: "text inside or outside the blocks (enter In or Out)"
-	]
+string: posblocks  [
+  required: "Y"
+  default: "In"
+  information: "text inside or outside the blocks (enter In or Out)"
+]
 
-string: intersymbol [
-	optional: Y
-	default: "Y"
-	info: "do you want horizontal junctions between blocks (Y or N)"
-	]
+string: intersymbol  [
+  optional: "Y"
+  default: "Y"
+  information: "do you want horizontal junctions between blocks (Y or N)"
+]
 
-int: intercolor [
-	optional: Y
-	default: "1"
-	info: "color for junctions between blocks (enter a color number)"
-	]
+integer: intercolor  [
+  optional: "Y"
+  default: "1"
+  information: "color for junctions between blocks (enter a color number)"
+]
 
-string: interticks [
-	optional: Y
-	default: "N"
-	info: "do you want horizontal junctions between ticks (Y or N)"
-	]
+string: interticks  [
+  optional: "Y"
+  default: "N"
+  information: "do you want horizontal junctions between ticks (Y or N)"
+]
 
-int: gapsize [
-	optional: Y
-	default: "500"
-	info: "interval between ticks in the ruler (enter an integer)"
-	]
+integer: gapsize  [
+  optional: "Y"
+  default: "500"
+  information: "interval between ticks in the ruler (enter an integer)"
+]
 
-string: ticklines [
-	optional: Y
-	default: "N"
-	info: "do you want vertical lines at the ruler's ticks (Y or N)"
-	]
+string: ticklines  [
+  optional: "Y"
+  default: "N"
+  information: "do you want vertical lines at the ruler's ticks (Y or N)"
+]
 
-float: tickheight [
-	optional: Y
-	default: "1"
-	info: "height of ticks (enter a number to multiply the default height)"
-	]
+float: tickheight  [
+  optional: "Y"
+  default: "1"
+  information: "height of ticks (enter a number to multiply the default height)"
+]
 
-float: blockheight [
-	optional: Y
-	default: "1"
-	info: "height of blocks (enter a number to multiply the default height)"
-	]
+float: blockheight  [
+  optional: "Y"
+  default: "1"
+  information: "height of blocks (enter a number to multiply the default height)"
+]
 
-float: rangeheight [
-	optional: Y
-	default: "1"
-	info: "height of range ends (enter a number to multiply the default height)"
-	]
+float: rangeheight  [
+  optional: "Y"
+  default: "1"
+  information: "height of range ends (enter a number to multiply the default height)"
+]
 
-float: gapgroup [
-	optional: Y
-	default: "1"
-	info: "space between groups (enter a number to multiply the default space)"
-	]
+float: gapgroup  [
+  optional: "Y"
+  default: "1"
+  information: "space between groups (enter a number to multiply the default space)"
+]
 
-float: postext [
-	optional: Y
-	default: "1"
-	info: "space between text and ticks, blocks, and ranges (enter a number to multiply the default space)"
-	]
+float: postext  [
+  optional: "Y"
+  default: "1"
+  information: "space between text and ticks, blocks, and ranges (enter a number to multiply the default space)"
+]

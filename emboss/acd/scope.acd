@@ -1,17 +1,16 @@
 appl: scope [
-        doc: "Convert raw scop classification file to embl-like format"
-        groups: "Utils:Database creation"
+  documentation: "Convert raw scop classification file to embl-like format"
+  groups: "Utils:Database creation"
 ]
 
-
-infile: infile [
-	prompt: "Name of scop file for input (raw format)"
-	def: "scop.orig"
-	param: Y
+infile: infile  [
+  prompt: "Name of scop file for input (raw format)"
+  default: "scop.orig"
+  parameter: "Y"
 ]
 
-outfile: outfile [
-	prompt: "Name of scop file for output (embl-like format)"
-	def: "Escop.dat"
-	param: Y
+outfile: outfile  [
+  prompt: "Name of scop file for output (embl-like format)"
+  default: "Escop.dat"
+  parameter: "Y"
 ]

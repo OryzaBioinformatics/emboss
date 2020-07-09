@@ -1,20 +1,36 @@
-# silent mutation application 
-#
 appl: silent [
-          doc: "Silent mutation restriction enzyme scan"
-          groups: "Nucleic:Restriction"
+  documentation: "Silent mutation restriction enzyme scan"
+  groups: "Nucleic:Restriction"
 ]
 
-  sequence: seq [ param: Y ]
+sequence: seq  [
+  parameter: "Y"
+]
 
-  string: enzymes [ req: Y def: all info: "Comma separated enzyme list" ]
-   
-  bool: sshow [ req: N def: N info: "Display untranslated sequence" ]
+string: enzymes  [
+  required: "Y"
+  default: "all"
+  information: "Comma separated enzyme list"
+]
 
-  bool: tshow [ req: N def: N info: "Display translated sequence" ]
+bool: sshow  [
+  required: "N"
+  default: "N"
+  information: "Display untranslated sequence"
+]
 
-  bool: allmut [ req: N def: N info: "Display all mutations" ]
-  
-  outfile: outf [ param: Y ]
+bool: tshow  [
+  required: "N"
+  default: "N"
+  information: "Display translated sequence"
+]
 
+bool: allmut  [
+  required: "N"
+  default: "N"
+  information: "Display all mutations"
+]
 
+outfile: outf  [
+  parameter: "Y"
+]

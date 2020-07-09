@@ -1,45 +1,12 @@
-# AJTEST application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# use "" for missing values - these are required.
-# values in "" are trimmed to single spaces.
-# everything is treated as single tokens delimited by white space
-# (space, tab, newline)
-
-# pmr 4-mar-98
-
 appl: ajtest [
-        doc: "Test file for ACD parsing"
-        groups: "Test"
+  documentation: "Test file for ACD parsing"
+  groups: "Test"
 ]
 
-  seqall: sequence [ param: Y]
+seqall: sequence  [
+  parameter: "Y"
+]
 
-  seqset: seqset [ param: Y ]
-
-#  bool: reqbool [ def: Y req: Y  info: "Required bool" ]
-#  bool: bool [ def: N info: "Required bool"  ]
-
-#  int: reqint [ min: -50 max: +50 req: Y  info: "Number -50 to 50" ]
-#  int: int [ def: 3 min: -50 max: +50 
-#             info: "Enter a number -50 to 50" optional: y ]
-
-#  float: reqfloat [ min: -0.07  max: 2.5 required: Y  info: "Float to 2.5" ]
-#  float: float [ def: 1.234 min: -7e-2  max: 2.5 info: "Float -0.07 to 2.5" ]
-
-#   infile: testfile [def: tests  info "Any input file" ]
-#   outfile: outfile [def: tests.out  ]
-#  sequence: psequence [param: y type: any ]
-#  seqset: seqset [param: y type: any]
-#  seqall: seqall [param: y type: any]
-
-#  seqout: outseq [ ext: "test" name: "ajtest" req: Y 
-#    ]
-
-#  float: testf [ req: y def: $(seqset.totweight) info: "Weighting value"
-#                 expect: "Total weighting for sequence set" ]
-
-#  sequence: qsequence [ param: y type: any]
-
-#  string: reqstring [ def: "abcd" req: Y info: "rqstring" minlen: 4 ]
-#  string: string [ def: "b" info: "string" minlen: 1 maxlen: 50 ]
+seqset: seqset  [
+  parameter: "Y"
+]

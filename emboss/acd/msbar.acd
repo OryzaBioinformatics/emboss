@@ -1,100 +1,75 @@
-# GWW Mon Aug 10 14:35:22 BST 1999
-
 appl: msbar [
-	doc: "Mutate sequence beyond all recognition"
-	groups: "Nucleic:Mutation, Protein:Mutation"
+  documentation: "Mutate sequence beyond all recognition"
+  groups: "Nucleic:Mutation, Protein:Mutation"
 ]
 
-  seqall: sequence [ 
-    param: Y
-    type: any
-  ]
-  
-  seqoutall: outseq [ 
-    param: Y  
-  ]
-  
-  int: count [
-    req: Y
-    def: 1
-    min: 0
-    info: "Number of times to perform the mutation operations"
-  ]
-  
-  bool: inframe [
-    opt: "@($(sequence.protein)?N:Y)"
-    def: N
-    info: "Do 'codon' and 'block' operations in frame"
-  ]
-  
-  list: point [
-        req: Y
-        default: "0"
-        min: 1
-        max: 4
-        header: "Point mutation operations"
-        values: 
-                "0:None;
-                1:Any of the following;
-                2:Insertions;
-                3:Deletions;
-                4:Changes;
-                5:Duplications;
-                6:Moves"
-        delim: ";"
-        codedelim: ":"
-        info: "Types of point mutations to perform"
-  ]
+seqall: sequence  [
+  parameter: "Y"
+  type: "any"
+]
 
-  list: codon [
-# we only want to do codon operations if the input sequence is nucleic
-        req: "@($(sequence.protein)?N:Y)"
-        default: "0"
-        min: 1
-        max: 4
-        header: "Codon mutation operations"
-        values: 
-                "0:None;
-                1:Any of the following;
-                2:Insertions;
-                3:Deletions;
-                4:Changes;
-                5:Duplications;
-                6:Moves"
-        delim: ";"
-        codedelim: ":"
-        info: "Types of codon mutations to perform"
-        help: "Types of codon mutations to perform.
-               These are only done if the sequence is nucleic."
-  ]
+seqoutall: outseq  [
+  parameter: "Y"
+]
 
-  list: block [
-        req: Y
-        default: "0"
-        min: 1
-        max: 4
-        header: "Block mutation operations"
-        values: 
-                "0:None;
-                1:Any of the following;
-                2:Insertions;
-                3:Deletions;
-                4:Changes;
-                5:Duplications;
-                6:Moves"
-        delim: ";"
-        codedelim: ":"
-        info: "Types of block mutations to perform"
-  ]
+integer: count  [
+  required: "Y"
+  default: "1"
+  minimum: "0"
+  information: "Number of times to perform the mutation operations"
+]
 
-  int: minimum [
-    def: 1
-    min: 0
-    info: "Minimum size for a block mutation"
-  ]
+bool: inframe  [
+  optional: "@($(sequence.protein)?N:Y)"
+  default: "N"
+  information: "Do 'codon' and 'block' operations in frame"
+]
 
-  int: maximum [
-    def: 10
-    min: $(minimum)
-    info: "Maximum size for a block mutation"
-  ]
+list: point  [
+  required: "Y"
+  default: "0"
+  minimum: "1"
+  maximum: "4"
+  header: "Point mutation operations"
+  values: "0:None; 1:Any of the following; 2:Insertions; 3:Deletions; 4:Changes; 5:Duplications; 6:Moves"
+  delimiter: ";"
+  codedelimiter: ":"
+  information: "Types of point mutations to perform"
+]
+
+list: codon  [
+  required: "@($(sequence.protein)?N:Y)"
+  default: "0"
+  minimum: "1"
+  maximum: "4"
+  header: "Codon mutation operations"
+  values: "0:None; 1:Any of the following; 2:Insertions; 3:Deletions; 4:Changes; 5:Duplications; 6:Moves"
+  delimiter: ";"
+  codedelimiter: ":"
+  information: "Types of codon mutations to perform"
+  help: "Types of codon mutations to perform. These are only done if the sequence is nucleic."
+]
+
+list: block  [
+  required: "Y"
+  default: "0"
+  minimum: "1"
+  maximum: "4"
+  header: "Block mutation operations"
+  values: "0:None; 1:Any of the following; 2:Insertions; 3:Deletions; 4:Changes; 5:Duplications; 6:Moves"
+  delimiter: ";"
+  codedelimiter: ":"
+  information: "Types of block mutations to perform"
+]
+
+integer: minimum  [
+  default: "1"
+  minimum: "0"
+  information: "Minimum size for a block mutation"
+]
+
+integer: maximum  [
+  default: "10"
+  minimum: "$(minimum)"
+  information: "Maximum size for a block mutation"
+]

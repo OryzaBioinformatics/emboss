@@ -1,41 +1,25 @@
-# notseq application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# use "" for missing values - these are required.
-# values in "" are trimmed to single spaces.
-# everything is treated as single tokens delimited by white space
-# (space, tab, newline)
-
-
 appl: notseq [
-	doc: "Excludes a set of sequences and writes out the remaining ones"
-	groups: "Edit"
+  documentation: "Excludes a set of sequences and writes out the remaining ones"
+  groups: "Edit"
 ]
 
-  seqall: sequence [ param: Y]
+seqall: sequence  [
+  parameter: "Y"
+]
 
-  seqoutall: outseq [ param: Y ]
+seqoutall: outseq  [
+  parameter: "Y"
+]
 
-  string: exclude [
-	param: Y
-	info: "Sequence names to exclude"
-	help: "Enter a list of sequence names or accession numbers to
-exclude from the sequences read in.  The excluded sequences will be
-written to the file specified in the 'junkout' parameter.  The remainder
-will be written out to the file specified in the 'outseq' parameter. \ 
-The list of sequence names can be separated by either spaces or commas. \ 
-The sequence names can be wildcarded. \ 
-The sequence names are case independent. \ 
-An example of a list of sequences to be excluded is: \
-myseq, hs*, one two three"
-  ]
+string: exclude  [
+  parameter: "Y"
+  information: "Sequence names to exclude"
+  help: "Enter a list of sequence names or accession numbers to exclude from the sequences read in. The excluded sequences will be written to the file specified in the 'junkout' parameter. The remainder will be written out to the file specified in the 'outseq' parameter. \ The list of sequence names can be separated by either spaces or commas. \ The sequence names can be wildcarded. \ The sequence names are case independent. \ An example of a list of sequences to be excluded is: \ myseq, hs*, one two three"
+]
 
-  seqoutall: junkout [ 
-	opt: Y
-	def: "/dev/null"
-	info: "file of excluded sequences"
-	help: "This file collects the sequences which you have excluded from
-the main output file of sequences."
-  ]
-
-
+seqoutall: junkout  [
+  optional: "Y"
+  default: "/dev/null"
+  information: "file of excluded sequences"
+  help: "This file collects the sequences which you have excluded from the main output file of sequences."
+]

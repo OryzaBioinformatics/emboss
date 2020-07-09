@@ -1,8 +1,12 @@
 appl: noreturn [
-        doc: "Removes carriage return from ASCII files"
-        groups: "Edit"
+  documentation: "Removes carriage return from ASCII files"
+  groups: "Edit"
 ]
 
-  infile:  infile  [ param: Y ]
+infile: infile  [
+  parameter: "Y"
+]
 
-  outfile: outfile [ param: Y ]
+outfile: outfile  [
+  parameter: "Y"
+]

@@ -1,45 +1,118 @@
 appl: restover [
-	doc: "Finds restriction enzymes that produce a specific overhang"
-	groups: "Nucleic:Restriction"
+  documentation: "Finds restriction enzymes that produce a specific overhang"
+  groups: "Nucleic:Restriction"
 ]
 
-  seqall: sequence [ param: Y type: DNA ]
+seqall: sequence  [
+  parameter: "Y"
+  type: "DNA"
+]
 
-  string: seqcomp [ param: Y info: "Overlap sequence" ]
+string: seqcomp  [
+  parameter: "Y"
+  information: "Overlap sequence"
+]
 
-  int: min [ opt: N min: 1 max: 1000 def: 1 info:"Minimum cuts per RE" ]
+integer: min  [
+  optional: "N"
+  minimum: "1"
+  maximum: "1000"
+  default: "1"
+  information: "Minimum cuts per RE"
+]
 
-  int: max [ opt: N min: $(min) max: 2000000000 def: 2000000000
-             info:"Maximum cuts per RE" ]
+integer: max  [
+  optional: "N"
+  minimum: "$(min)"
+  maximum: "2000000000"
+  default: "2000000000"
+  information: "Maximum cuts per RE"
+]
 
-  bool: single [ opt: N def: N info: "Force single site only cuts"]
+bool: single  [
+  optional: "N"
+  default: "N"
+  information: "Force single site only cuts"
+]
 
-  bool: threeprime [ opt: N def: N info: "3' overhang? (else 5')
-  e.g. BamHI has CTAG as a 5' overhang, and ApaI has CCGG as 3' overhang."]
+bool: threeprime  [
+  optional: "N"
+  default: "N"
+  information: "3' overhang? (else 5') e.g. BamHI has CTAG as a 5' overhang, and ApaI has CCGG as 3' overhang."
+]
 
-  bool: html [ opt: N def: N info: "Create HTML output"]
+bool: html  [
+  optional: "N"
+  default: "N"
+  information: "Create HTML output"
+]
 
-  bool: blunt [ opt: N def: Y info: "Allow blunt end cutters" ]
+bool: blunt  [
+  optional: "N"
+  default: "Y"
+  information: "Allow blunt end cutters"
+]
 
-  bool: sticky [ opt: N def: Y info: "Allow sticky end cutters" ]
+bool: sticky  [
+  optional: "N"
+  default: "Y"
+  information: "Allow sticky end cutters"
+]
 
-  bool: ambiguity [ opt: N def: Y info: "Allow ambiguous matches" ]
+bool: ambiguity  [
+  optional: "N"
+  default: "Y"
+  information: "Allow ambiguous matches"
+]
 
-  bool: plasmid [ opt: N def: N info: "Allow circular DNA" ]
+bool: plasmid  [
+  optional: "N"
+  default: "N"
+  information: "Allow circular DNA"
+]
 
-  bool: commercial [ opt: N def: Y info: "Only enzymes with suppliers" ]
+bool: commercial  [
+  optional: "N"
+  default: "Y"
+  information: "Only enzymes with suppliers"
+]
 
-  bool: limit [ opt: N def: Y info: "Limits reports to one isoschizomer" ]
+bool: limit  [
+  optional: "N"
+  default: "Y"
+  information: "Limits reports to one isoschizomer"
+]
 
-  bool: preferred [ opt: N def: N info: "Report preferred isoschizomers" ]
+bool: preferred  [
+  optional: "N"
+  default: "N"
+  information: "Report preferred isoschizomers"
+]
 
-  bool: alphabetic [ opt: N def: N info: "Sort output alphabetically" ]
+bool: alphabetic  [
+  optional: "N"
+  default: "N"
+  information: "Sort output alphabetically"
+]
 
-  bool: fragments [ opt: N def: N info: "Show fragment lengths" ]
+bool: fragments  [
+  optional: "N"
+  default: "N"
+  information: "Show fragment lengths"
+]
 
-  bool: name [ opt: N def: N info: "Show sequence name" ]
+bool: name  [
+  optional: "N"
+  default: "N"
+  information: "Show sequence name"
+]
 
-  string: datafile [ req: N def: "" info: "Alternative RE data file" ]
+string: datafile  [
+  required: "N"
+  default: ""
+  information: "Alternative RE data file"
+]
 
-
-  outfile: outfile [ param: Y ]
+outfile: outfile  [
+  parameter: "Y"
+]

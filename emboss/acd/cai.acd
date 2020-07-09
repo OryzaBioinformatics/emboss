@@ -1,10 +1,19 @@
 appl: cai [
-        doc: "CAI codon adaptation index"
-        groups: "Nucleic:Codon usage"
+  documentation: "CAI codon adaptation index"
+  groups: "Nucleic:Codon usage"
 ]
 
- seqall: seqall [ param: Y type: DNA ]
+seqall: seqall  [
+  parameter: "Y"
+  type: "DNA"
+]
 
- codon: cfile [ req: Y info: "Codon usage file" def: Eyeastcai.cut ]
+codon: cfile  [
+  required: "Y"
+  information: "Codon usage file"
+  default: "Eyeastcai.cut"
+]
 
- outfile: outfile [ param: Y ]
+outfile: outfile  [
+  parameter: "Y"
+]

@@ -1,58 +1,51 @@
-# abiview application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# tjc 19/12/2000
-
 appl: abiview [
-	doc: "Reads ABI file and display the trace"
-	groups: "Display"
+  documentation: "Reads ABI file and display the trace"
+  groups: "Display"
 ]
 
-  string: fname [
-        param: Y
-        def: ""
-        info: "Name of the ABI trace file"
-  ]
+string: fname  [
+  parameter: "Y"
+  default: ""
+  information: "Name of the ABI trace file"
+]
 
-  seqout: outseq [
-        param: Y
-        info: "Sequence file"
-  ]
+seqout: outseq  [
+  parameter: "Y"
+  information: "Sequence file"
+]
 
-  xygraph: graph [
-        req: Y
-        opt: N
-        gxtitle: "Residue Position"
-  ]
+xygraph: graph  [
+  required: "Y"
+  optional: "N"
+  gxtitle: "Residue Position"
+]
 
-  bool: separate [ 
-        req: N
-	def: N 
-	info: "Separate the trace graphs for the 4 bases" 
-  ]
+bool: separate  [
+  required: "N"
+  default: "N"
+  information: "Separate the trace graphs for the 4 bases"
+]
 
-  bool: yticks [
-        opt: Y
-        def: N
-        info: "Display y-axis ticks"
-  ]
+bool: yticks  [
+  optional: "Y"
+  default: "N"
+  information: "Display y-axis ticks"
+]
 
-  bool: sequence [
-        opt: Y
-        def: Y
-        info: "Display the sequence on the graph"
-  ]
+bool: sequence  [
+  optional: "Y"
+  default: "Y"
+  information: "Display the sequence on the graph"
+]
 
-  int: window [ 
-	opt: Y 
-	def: 40 
-	info: "Sequence display window size" 
-  ]
+integer: window  [
+  optional: "Y"
+  default: "40"
+  information: "Sequence display window size"
+]
 
-  string: bases [
-        opt: Y
-        def: "GATC"
-        info: "Base graphs to be displayed"
-  ]
-
-
+string: bases  [
+  optional: "Y"
+  default: "GATC"
+  information: "Base graphs to be displayed"
+]

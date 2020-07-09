@@ -1,22 +1,49 @@
 appl: iep [
-        doc: "Calculates the isoelectric point of a protein"
-        groups: "Protein:Composition"
+  documentation: "Calculates the isoelectric point of a protein"
+  groups: "Protein:Composition"
 ]
 
- seqall: sequencea [ param: Y type: pureprotein ]
+seqall: sequencea  [
+  parameter: "Y"
+  type: "pureprotein"
+]
 
+bool: plot  [
+  required: "N"
+  default: "N"
+  information: "Plot charge vs pH"
+]
 
- bool: plot [ req: N def: N info: "Plot charge vs pH" ]
+bool: report  [
+  required: "N"
+  default: "Y"
+  information: "Write results to a file"
+]
 
- bool: report [ req: N def: Y info: "Write results to a file" ]
+float: step  [
+  required: "N"
+  information: "pH step value"
+  minimum: ".01"
+  maximum: "1."
+  default: ".5"
+]
 
- float: step [ req: N info: "pH step value" min: .01 max: 1.
-                  def: .5 ]
+integer: amino  [
+  required: "N"
+  information: "Number of N-termini"
+  default: "1"
+]
 
- int: amino [ req: N info: "Number of N-termini" def: 1 ]
+bool: termini  [
+  required: "N"
+  default: "Y"
+  information: "Include charge at N and C terminus"
+]
 
- bool: termini [ req: N def: Y info: "Include charge at N and C terminus" ]
+xygraph: graph  [
+  required: "$(plot)"
+]
 
- xygraph: graph [ req: $(plot)  ]
-
- outfile: outfile [req: $(report) ]
+outfile: outfile  [
+  required: "$(report)"
+]

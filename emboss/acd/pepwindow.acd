@@ -1,24 +1,31 @@
 appl: pepwindow [
-        doc: "Displays protein hydropathy"
-        groups: "Protein:Composition"
+  documentation: "Displays protein hydropathy"
+  groups: "Protein:Composition"
 ]
 
-  sequence: sequencea [ param: Y type: pureprotein]
+sequence: sequencea  [
+  parameter: "Y"
+  type: "pureprotein"
+]
 
-  xygraph: graph [required:Y  multi:1 gxtitle: $(sequencea.name)
-	gytitle: "Hydropathy" gtitle: "Kyte-Doolittle Plot" ]
+xygraph: graph  [
+  required: "Y"
+  multiple: "1"
+  gxtitle: "$(sequencea.name)"
+  gytitle: "Hydropathy"
+  gtitle: "Kyte-Doolittle Plot"
+]
 
-  datafile: datafile [
-        optional: Y
-        info: "nakai database file"
-        def: "Enakai.dat"
-  ]
+datafile: datafile  [
+  optional: "Y"
+  information: "nakai database file"
+  default: "Enakai.dat"
+]
 
-  int: length [
-        optional: Y 
-        info: "window size"
-        def : "7"
-        min : "1"
-        max : "200"
-  ]
-
+integer: length  [
+  optional: "Y"
+  information: "window size"
+  default: "7"
+  minimum: "1"
+  maximum: "200"
+]

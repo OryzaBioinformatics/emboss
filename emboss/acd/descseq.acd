@@ -1,44 +1,30 @@
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# use "" for missing values - these are required.
-# values in "" are trimmed to single spaces.
-# everything is treated as single tokens delimited by white space
-# (space, tab, newline)
-
-# GWW 22 March 1999
-
 appl: descseq [
-	doc: "Alter the name or description of a sequence."
-	groups: "Edit"
+  documentation: "Alter the name or description of a sequence."
+  groups: "Edit"
 ]
 
-  sequence: sequence [ 
-	param: Y
-	type: gapany
-  ]
+sequence: sequence  [
+  parameter: "Y"
+  type: "gapany"
+]
 
-  seqout: outseq [ 
-	param: Y
-  ]
+seqout: outseq  [
+  parameter: "Y"
+]
 
-  string: name [
-  	opt: Y
-	def: ""
-	info: "Name of the sequence"
-  ]
-  
-  string: description [
-  	opt: Y
-	def: ""
-	info: "Description of the sequence"
-  ]
-  
-  bool: append [
-	info: "Append to the existing description"
-	help: "This allows you to append the name or description you
-               have given on to the end of the existing name or description
-               of the sequence."
-  ]
+string: name  [
+  optional: "Y"
+  default: ""
+  information: "Name of the sequence"
+]
 
+string: description  [
+  optional: "Y"
+  default: ""
+  information: "Description of the sequence"
+]
 
-
+bool: append  [
+  information: "Append to the existing description"
+  help: "This allows you to append the name or description you have given on to the end of the existing name or description of the sequence."
+]

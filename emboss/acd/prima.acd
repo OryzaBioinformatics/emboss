@@ -1,81 +1,129 @@
-#  prima Sinead O'Leary May 1999
-# PRIMA - APPLICATION TO SELECT FORWARD AND REVERSE PRIMERS FOR PCR
-# AND DNA AMPLIFICATION.
-# AJAX COMMAND DEFINITION (ACD) FILE
+appl: prima [
+  documentation: "Selects primers for PCR and DNA amplification."
+  groups: "Nucleic:Primers"
+]
 
-appl: 	prima [ doc: "Selects primers for PCR and DNA amplification."
-	        groups: "Nucleic:Primers" ]
+sequence: sequence  [
+  parameter: "Y"
+  required: "Y"
+]
 
-sequence: sequence [param: "Y" req: "Y" ]
+bool: targetrange  [
+  parameter: "Y"
+  default: "N"
+  information: "Specify a Target Range?"
+]
 
+integer: targetstart  [
+  required: "$(targetrange)"
+  default: "$(sequence.begin)"
+  information: "Target start position."
+  expected: "Start of sequence"
+]
 
+integer: targetend  [
+  required: "$(targetrange)"
+  default: "$(sequence.length)"
+  information: "Target end position."
+  expected: "End of sequence"
+]
 
-bool:   targetrange [param:"Y" default:"N"
-            info: "Specify a Target Range?"]
+integer: overlap  [
+  required: "N"
+  default: "50"
+  information: "Minimum overlap of sequences"
+]
 
-int:	targetstart [req: $(targetrange) default: $(sequence.begin)
-            info:"Target start position."
-            expect: "Start of sequence" ] 
+integer: minprimerlen  [
+  required: "N"
+  default: "18"
+  information: "Minimum primer length"
+]
 
-int:	targetend [req: $(targetrange) default: $(sequence.length)
-            info:"Target end position."
-            expect: "End of sequence" ]
+integer: maxprimerlen  [
+  required: "N"
+  default: "22"
+  information: "Maximum primer length"
+]
 
-int:	overlap [req: N default: 50
-            info: "Minimum overlap of sequences"]
+float: minpmgccont  [
+  required: "N"
+  minimum: ".30"
+  maximum: ".70"
+  default: ".40"
+  information: "Minimum primer GC fraction"
+]
 
+float: maxpmgccont  [
+  required: "N"
+  minimum: ".30"
+  maximum: ".70"
+  default: ".55"
+  information: "Maximum primer GC fraction"
+]
 
-int:	minprimerlen [req: N default: 18
-			info:"Minimum primer length"]
+float: minprimertm  [
+  required: "Y"
+  default: "53"
+  information: "Minimum Primer Tm (deg Celsius)"
+]
 
-int:	maxprimerlen [req: N default: 22
-			info:"Maximum primer length"]        
+float: maxprimertm  [
+  required: "Y"
+  default: "58"
+  information: "Maximum Primer Tm (deg Celsius)"
+]
 
-float: 	minpmGCcont [req: N min: .30 max: .70 default: .40
-			info:"Minimum primer GC fraction"]
+integer: minprodlen  [
+  required: "@(!$(targetrange))"
+  default: "100"
+  information: "Minimum product length"
+]
 
-float: 	maxpmGCcont [req: N min: .30 max: .70 default: .55
-			info:"Maximum primer GC fraction"]
+integer: maxprodlen  [
+  required: "@(!$(targetrange))"
+  default: "300"
+  information: "Maximum product length"
+]
 
-float: minprimerTm [req: Y default: 53
-            info: "Minimum Primer Tm (deg Celsius)"]
-            
-float: maxprimerTm [req: Y default: 58
-            info: "Maximum Primer Tm (deg Celsius)"]
+float: minprodgccont  [
+  required: "N"
+  minimum: ".30"
+  maximum: ".70"
+  default: ".40"
+  information: "Minimum product GC fraction"
+]
 
-int:    minprodlen [req: @($(targetrange)==False) default: 100
-            info: "Minimum product length"]
-            
-int:    maxprodlen [req: @($(targetrange)==False) default: 300
-            info: "Maximum product length"]    
+float: maxprodgccont  [
+  required: "N"
+  minimum: ".30"
+  maximum: ".70"
+  default: ".55"
+  information: "Maximum product GC fraction"
+]
 
-float: 	minprodGCcont [req: N min: .30 max: .70 default: .40
-			info:"Minimum product GC fraction"]
+float: saltconc  [
+  required: "N"
+  minimum: "1"
+  maximum: "100"
+  default: "50"
+  information: "Salt concentration (mM)"
+]
 
-float: 	maxprodGCcont [req: N min: .30 max: .70 default: .55
-			info:"Maximum product GC fraction"]
-            
-                        
+float: dnaconc  [
+  required: "N"
+  minimum: "1"
+  maximum: "100"
+  default: "50"
+  information: "DNA concentration (mM)"
+]
 
-float:	saltconc [req: N min: 1 max: 100  default: 50
-			info:"Salt concentration (mM)"]
+bool: list  [
+  optional: "N"
+  default: "N"
+  information: "Force list-style output"
+]
 
-float:	dnaconc [req: N min: 1 max: 100 default: 50
-			info:"DNA concentration (mM)"]
-
-bool:   list [opt: N def: N info: "Force list-style output" ]
-
-outfile: outf [param: Y ]
-
-            
-            
-            
-            
-
-
-
-
-
-
-
-
+outfile: outf  [
+  parameter: "Y"
+]

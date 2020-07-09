@@ -1,12 +1,24 @@
 appl: chips [
-        doc: "Codon usage statistics"
-        groups: "Nucleic:Codon usage"
+  documentation: "Codon usage statistics"
+  groups: "Nucleic:Codon usage"
 ]
 
- seqall: seqall [ param: Y type: DNA ]
+seqall: seqall  [
+  parameter: "Y"
+  type: "DNA"
+]
 
- codon: cfile [ opt: N info: "Codon usage file" ]
+codon: cfile  [
+  optional: "N"
+  information: "Codon usage file"
+]
 
- int: window [ opt: N def: 30 info: "Averaging window" ]
+integer: window  [
+  optional: "N"
+  default: "30"
+  information: "Averaging window"
+]
 
- outfile: outfile [ param: Y ]
+outfile: outfile  [
+  parameter: "Y"
+]

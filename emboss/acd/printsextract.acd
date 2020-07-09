@@ -1,10 +1,10 @@
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# Last Edited March 25 1999 AJB
-
 appl: printsextract [
-	doc: "Extract data from PRINTS"
-	groups: "Utils:Database creation"
+  documentation: "Extract data from PRINTS"
+  groups: "Utils:Database creation"
 ]
-	 
-	infile: inf [param: Y  req: Y  info: "Full pathname of prints.dat" ]
+
+infile: inf  [
+  parameter: "Y"
+  required: "Y"
+  information: "Full pathname of prints.dat"
+]

@@ -1,15 +1,16 @@
-# AJAX COMMAND DEFINITION (ACD) FILE
-
 appl: cutgextract [
-	doc: "Extract data from CUTG"
-	groups: "Utils:Database creation"
-]
-	 
-dirlist: directory [
-	param: Y  req: Y
-	prompt: "CUTG directory"
+  documentation: "Extract data from CUTG"
+  groups: "Utils:Database creation"
 ]
 
-string: wildspec [ req: N def: "*.codon"
-	info: "Type of codon file"
+dirlist: directory  [
+  parameter: "Y"
+  required: "Y"
+  prompt: "CUTG directory"
+]
+
+string: wildspec  [
+  required: "N"
+  default: "*.codon"
+  information: "Type of codon file"
 ]

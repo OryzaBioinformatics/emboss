@@ -1,57 +1,66 @@
-# POLYDOT application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# use "" for missing values - these are required.
-# values in "" are trimmed to single spaces.
-# everything is treated as single tokens delimited by white space
-# (space, tab, newline)
-
-# il 14-jun-98
-
 appl: polydot [
-	doc: "Displays all-against-all dotplots of a set of sequences"
-	groups: "Alignment:Dot plots"
+  documentation: "Displays all-against-all dotplots of a set of sequences"
+  groups: "Alignment:Dot plots"
 ]
 
-  seqset: sequences [ 
-        param: Y
-	type: any
-        info: "Sequences file to be read in"
-        help: "File containing a sequence alignment"
-  ]
+seqset: sequences  [
+  parameter: "Y"
+  type: "any"
+  information: "Sequences file to be read in"
+  help: "File containing a sequence alignment"
+]
 
-  int: wordsize [ req: Y def: 6 min: 2
-                    info: "Word size" ]
+integer: wordsize  [
+  required: "Y"
+  default: "6"
+  minimum: "2"
+  information: "Word size"
+]
 
-  bool: data [ 
-	req: N
-        def: N
-        info: "Display as data"
-        help: "Output the match data to a file instead of plotting it"
-  ]
+bool: data  [
+  required: "N"
+  default: "N"
+  information: "Display as data"
+  help: "Output the match data to a file instead of plotting it"
+]
 
-  graph: graph [ 
-	req: @(!$(data)) 
-        gtitle: "Polydot:" 
-  ]
+graph: graph  [
+  required: "@(!$(data))"
+  gtitle: "Polydot:"
+]
 
-  int: gap [ 
-	def: "10" 
-	min: 0 
-	info: "Gap (in residues) between dotplots"
-	help: "This specifies the size of the gap that is used to
-separate the individual dotplots in the display.  The size is measured
-in residues, as displayed in the output."
-  ]
+integer: gap  [
+  default: "10"
+  minimum: "0"
+  information: "Gap (in residues) between dotplots"
+  help: "This specifies the size of the gap that is used to separate the individual dotplots in the display. The size is measured in residues, as displayed in the output."
+]
 
-  bool: boxit [def: Y opt: Y info: "Draw a box around each dotplot" ]
+bool: boxit  [
+  default: "Y"
+  optional: "Y"
+  information: "Draw a box around each dotplot"
+]
 
-  bool: dumpfeat [def: N opt: Y info: "Dump all matches as feature files" ]
+bool: dumpfeat  [
+  default: "N"
+  optional: "Y"
+  information: "Dump all matches as feature files"
+]
 
-  string: format [ def: "gff" opt: Y info: "format to Dump out as" ]
+string: format  [
+  default: "gff"
+  optional: "Y"
+  information: "format to Dump out as"
+]
 
-  string: ext    [ def: "gff"  opt: Y info: "Extension for feature file" ]
+string: ext  [
+  default: "gff"
+  optional: "Y"
+  information: "Extension for feature file"
+]
 
-  outfile: outfile [ req: $(data)
-         nullok: Y
-  ]
+outfile: outfile  [
+  required: "$(data)"
+  nullok: "Y"
+]

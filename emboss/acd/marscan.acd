@@ -1,22 +1,15 @@
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-
 appl: marscan [
-	doc: "Finds MAR/SAR sites in nucleic sequences"
-	groups: "Nucleic:Gene finding, Nucleic:Motifs"
+  documentation: "Finds MAR/SAR sites in nucleic sequences"
+  groups: "Nucleic:Gene finding, Nucleic:Motifs"
 ]
 
-seqall: sequence [
-	param: Y
-        type: dna
+seqall: sequence  [
+  parameter: "Y"
+  type: "dna"
 ]
 
-featout: outf [
-	param: Y
-	info: "Output feature file"
-	help: "File for output of MAR/SAR recognition signature (MRS)
-regions.  This contains details of the MRS in normal GFF format.  The
-MRS consists of two recognition sites, one of 8 bp and one of 16 bp on
-either sense strand of the genomic DNA, within 200 bp of each other."
+featout: outf  [
+  parameter: "Y"
+  information: "Output feature file"
+  help: "File for output of MAR/SAR recognition signature (MRS) regions. This contains details of the MRS in normal GFF format. The MRS consists of two recognition sites, one of 8 bp and one of 16 bp on either sense strand of the genomic DNA, within 200 bp of each other."
 ]
-

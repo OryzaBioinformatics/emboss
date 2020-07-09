@@ -1,43 +1,72 @@
 appl: emowse [
-        doc: "Protein identification by mass spectrometry"
-        groups: "Protein:Composition"
+  documentation: "Protein identification by mass spectrometry"
+  groups: "Protein:Composition"
 ]
 
- seqall: sequences [ param: Y type: protein ]
+seqall: sequences  [
+  parameter: "Y"
+  type: "protein"
+]
 
- infile: infile [ param: Y info: "Name of molecular weight data file" ]
+infile: infile  [
+  parameter: "Y"
+  information: "Name of molecular weight data file"
+]
 
-list: enzyme [
-        opt: N
-        default: "1"
-        min: 1
-        max: 1
-        header: "Enzymes and reagents"
-        values: 
-                "1:Trypsin, 
-                2:Lys-C, 
-                3:Arg-C, 
-                4:Asp-N, 
-                5:V8-bicarb, 
-                6:V8-phosph, 
-                7:Chymotrypsin, 
-                8:CNBr" 
-        delim: ","
-        codedelim: ":"
-        prompt: "Enzyme or reagent"
- ]
+list: enzyme  [
+  optional: "N"
+  default: "1"
+  minimum: "1"
+  maximum: "1"
+  header: "Enzymes and reagents"
+  values: "1:Trypsin, 2:Lys-C, 3:Arg-C, 4:Asp-N, 5:V8-bicarb, 6:V8-phosph, 7:Chymotrypsin, 8:CNBr"
+  delimiter: ","
+  codedelimiter: ":"
+  prompt: "Enzyme or reagent"
+]
 
- int: weight [ req: Y def: 0 info: "Whole sequence molwt" ]
+string: aadata  [
+  optional: "N"
+  information: "Amino acid data file"
+  help: "Molecular weight data for amino acids"
+  default: "Eamino.dat"
+]
 
- int: pcrange [ req: N def: 25 min: 0 max: 75
-                info: "Allowed whole sequence weight variability" ]
+integer: weight  [
+  required: "Y"
+  default: "0"
+  information: "Whole sequence molwt"
+]
 
+integer: pcrange  [
+  required: "N"
+  default: "25"
+  minimum: "0"
+  maximum: "75"
+  information: "Allowed whole sequence weight variability"
+]
 
- string: frequencies [ req: N def: "Efreqs.dat" info: "Frequencies file" ]
+string: frequencies  [
+  required: "N"
+  default: "Efreqs.dat"
+  information: "Frequencies file"
+]
 
- float: tolerance [ req: N def: 0.1 min: 0.1 max: 1.0 ]
+float: tolerance  [
+  required: "N"
+  default: "0.1"
+  minimum: "0.1"
+  maximum: "1.0"
+]
 
- float: partials [ req: N def: 0.4 min: 0.1 max: 1.0
-		   info: "Partials factor" ]
+float: partials  [
+  required: "N"
+  default: "0.4"
+  minimum: "0.1"
+  maximum: "1.0"
+  information: "Partials factor"
+]
 
- outfile: outfile [ req: Y ]
+outfile: outfile  [
+  required: "Y"
+]

@@ -17,8 +17,8 @@ outfile: out  [
   parameter: "Y"
 ]
 
-int: mismatchpercent [
-  parameter: Y
+integer: mismatchpercent  [
+  parameter: "Y"
   default: "0"
   prompt: "Allowed percent mismatch"
 ]

@@ -1,10 +1,17 @@
 appl: cusp [
-        doc: "Create a codon usage table"
-        groups: "Nucleic:Codon usage"
+  documentation: "Create a codon usage table"
+  groups: "Nucleic:Codon usage"
 ]
 
- seqall: sequence [ param: Y type: DNA ]
+seqall: sequence  [
+  parameter: "Y"
+  type: "DNA"
+]
 
- codon: cfile [ req: N ]
+codon: cfile  [
+  required: "N"
+]
 
- outfile: outfile [ param: Y ]
+outfile: outfile  [
+  parameter: "Y"
+]

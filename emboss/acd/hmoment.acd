@@ -1,22 +1,53 @@
 appl: hmoment [
-        doc: "Hydrophobic moment calculation"
-        groups: "Protein:2D Structure"
+  documentation: "Hydrophobic moment calculation"
+  groups: "Protein:2D Structure"
 ]
 
- seqall: seqall [ param: Y type: pureprotein ]
+seqall: seqall  [
+  parameter: "Y"
+  type: "pureprotein"
+]
 
- bool: plot [ opt: N def: N info: "Produce graphic" ]
+bool: plot  [
+  optional: "N"
+  default: "N"
+  information: "Produce graphic"
+]
 
- int: window [ opt: Y def: 10 info: "Window" ]
+integer: window  [
+  optional: "Y"
+  default: "10"
+  information: "Window"
+]
 
- int: aangle [ opt: N def: 100 info: "Alpha helix angle (degrees)" ]
+integer: aangle  [
+  optional: "N"
+  default: "100"
+  information: "Alpha helix angle (degrees)"
+]
 
- int: bangle [ opt: Y def: 160 info: "Beta sheet angle (degrees)" ]
+integer: bangle  [
+  optional: "Y"
+  default: "160"
+  information: "Beta sheet angle (degrees)"
+]
 
- float: baseline [ opt: N def: 0.35 info: "Graph marker line" ]
+float: baseline  [
+  optional: "N"
+  default: "0.35"
+  information: "Graph marker line"
+]
 
- bool: double [ opt: N def: N info: "Plot two graphs" ]
+bool: double  [
+  optional: "N"
+  default: "N"
+  information: "Plot two graphs"
+]
 
- xygraph: graph [ req: $(plot) ]
+xygraph: graph  [
+  required: "$(plot)"
+]
 
- outfile: outfile [ req: @(!$(plot)) ]
+outfile: outfile  [
+  required: "@(!$(plot))"
+]

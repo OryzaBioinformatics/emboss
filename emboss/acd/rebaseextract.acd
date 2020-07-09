@@ -1,11 +1,10 @@
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# Last Edited March 25 1999 AJB
-
 appl: rebaseextract [
-	doc: "Extract data from REBASE"
-	groups: "Utils:Database creation"
+  documentation: "Extract data from REBASE"
+  groups: "Utils:Database creation"
 ]
-	 
-	infile: inf [param: Y  req: Y
-		prompt: "Full pathname of WITHREFM"]
+
+infile: inf  [
+  parameter: "Y"
+  required: "Y"
+  prompt: "Full pathname of WITHREFM"
+]

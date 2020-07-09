@@ -1,49 +1,29 @@
-# SEQRET application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# use "" for missing values - these are required.
-# values in "" are trimmed to single spaces.
-# everything is treated as single tokens delimited by white space
-# (space, tab, newline)
-
-# GWW 3 March 1999
-
 appl: maskseq [
-	doc: "Mask off regions of a sequence."
-	groups: "Edit"
+  documentation: "Mask off regions of a sequence."
+  groups: "Edit"
 ]
 
-  sequence: sequence [
-	param: Y
-	type: any
-  ]
+sequence: sequence  [
+  parameter: "Y"
+  type: "any"
+]
 
-  seqout: outseq [
-	param: Y
-  ]
+seqout: outseq  [
+  parameter: "Y"
+]
 
-  range: regions [
-	req: Y 
-        def: ""
-	info: "Regions to mask (eg: 4-57,78-94)" 
-	help: "Regions to mask. \
-               A set of regions is specified by a set of pairs of positions. \
-               The positions are integers. \
-               They are separated by any non-digit, non-alpha character. \
-               Examples of region specifications are: \
-	       24-45, 56-78 \
-	       1:45, 67=99;765..888 \
-	       1,5,8,10,23,45,57,99"
-       expect: "None"
-  ]
+range: regions  [
+  required: "Y"
+  default: ""
+  information: "Regions to mask (eg: 4-57,78-94)"
+  help: "Regions to mask. \ A set of regions is specified by a set of pairs of positions. \ The positions are integers. \ They are separated by any non-digit, non-alpha character. \ Examples of region specifications are: \ 24-45, 56-78 \ 1:45, 67=99;765..888 \ 1,5,8,10,23,45,57,99"
+  expected: "None"
+]
 
-  string: maskchar [ 
-	opt: Y
-	def: "@($(sequence.protein)?X:N)"
-	info: "Character to mask with" 
-	help: "Character to use when masking. \
-	       Default is 'X' for protein sequences,
-	       'N' for nucleic sequences."
-        expect: "'X' for protein, 'N' for nucleic"
-  ]
-
+string: maskchar  [
+  optional: "Y"
+  default: "@($(sequence.protein)?X:N)"
+  information: "Character to mask with"
+  help: "Character to use when masking. \ Default is 'X' for protein sequences, 'N' for nucleic sequences."
+  expected: "'X' for protein, 'N' for nucleic"
+]

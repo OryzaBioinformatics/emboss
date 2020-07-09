@@ -1,110 +1,77 @@
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# GWW 23 April 1999
-
 appl: showdb [
-	doc: "Displays information on the currently available databases"
-	groups: "Display, Information"
+  documentation: "Displays information on the currently available databases"
+  groups: "Display, Information"
 ]
 
-string:	database [
+string: database  [
   default: ""
-  opt: Y
+  optional: "Y"
   prompt: "Name of a single database to give information on"
 ]
 
-
-outfile: outfile [
-  opt: Y
-  def: "stdout"
+outfile: outfile  [
+  optional: "Y"
+  default: "stdout"
   prompt: "Output database details to a file"
-  help: "If you enter the name of a file here then this program
-will write the database details into that file."
+  help: "If you enter the name of a file here then this program will write the database details into that file."
 ]
 
-
-
-bool: html [ 
-  opt: Y
-  default: N 
+bool: html  [
+  optional: "Y"
+  default: "N"
   prompt: "Format output as an HTML table"
 ]
 
-bool: protein [ 
-  opt: Y
-  default: Y
+bool: protein  [
+  optional: "Y"
+  default: "Y"
   prompt: "Display protein databases"
 ]
 
-bool: nucleic [ 
-  opt: Y
-  default: Y
+bool: nucleic  [
+  optional: "Y"
+  default: "Y"
   prompt: "Display nucleic acid databases"
 ]
 
-
-
-# Not very interesting set of qualifiers to display various columns
-# Leave these as 'advanced' qualifiers (i.e. not required or optional)
-
-# The 'only' qualifier negates the behaviour of the following qualifiers
-# It is only used in the ACD file, it is not read by the program itself
-bool: only [ 
-  default: N 
-  info: "Display the specified columns"
-  help: "This is a way of shortening the command line if you only want a
-few things to be displayed.  Instead of specifying: \ 
-'-nohead -notype -noid -noquery -noall' \ 
-to get only the comment output, you can specify \ 
-'-only -comment'"
+bool: only  [
+  default: "N"
+  information: "Display the specified columns"
+  help: "This is a way of shortening the command line if you only want a few things to be displayed. Instead of specifying: \ '-nohead -notype -noid -noquery -noall' \ to get only the comment output, you can specify \ '-only -comment'"
 ]
 
-
-bool: heading [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
+bool: heading  [
+  default: "@(!$(only))"
   prompt: "Display column headings"
 ]
 
-bool: type [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
+bool: type  [
+  default: "@(!$(only))"
   prompt: "Display 'type' column"
 ]
 
-bool: id [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
+bool: id  [
+  default: "@(!$(only))"
   prompt: "Display 'id' column"
 ]
 
-bool: query [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
+bool: query  [
+  default: "@(!$(only))"
   prompt: "Display 'qry' column"
 ]
 
-bool: all [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
+bool: all  [
+  default: "@(!$(only))"
   prompt: "Display 'all' column"
 ]
 
-bool: comment [ 
-# the default is the inverse of 'only' in order to shorten the command line
-  default: @(!$(only))
+bool: comment  [
+  default: "@(!$(only))"
   prompt: "Display 'comment' column"
 ]
 
-
-
-# '-release' is an optional parameter because it was added after the
-# program had been in use for a year or so and I didn't want to change it
-# default behaviour. GWW 20 March 2001.
-bool: release [ 
-  opt: Y
-  default: N
+bool: release  [
+  optional: "Y"
+  default: "N"
   prompt: "Display 'release' column"
 ]
-
-

@@ -1,57 +1,46 @@
-# PEPNET Helical Net Display
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# ajb 17th March 1999
 appl: pepnet [
-	doc: "Displays proteins as a helical net"
-	groups: "Display, Protein:2D Structure"
+  documentation: "Displays proteins as a helical net"
+  groups: "Display, Protein:2D Structure"
 ]
 
-  sequence: sequence [
-	param: Y 
-	type: Protein 
-  ]
+sequence: sequence  [
+  parameter: "Y"
+  type: "Protein"
+]
 
-  bool: amphipathic [ 
-	info: "Prompt for amphipathic residue marking" 
-        help: "If this is true then the residues ACFGILMVWY are marked
-as squares and all other residues are unmarked.  This overrides any
-other markup that you may have specified using the qualifiers
-'-squares', '-diamonds' and '-octags'."
-  ]
+bool: amphipathic  [
+  information: "Prompt for amphipathic residue marking"
+  help: "If this is true then the residues ACFGILMVWY are marked as squares and all other residues are unmarked. This overrides any other markup that you may have specified using the qualifiers '-squares', '-diamonds' and '-octags'."
+]
 
-  string: squares [ 
-        opt: @(!$(amphipathic))
-	def: "ILVM" 
-	info: "Mark as squares"
-        help: "By default the aliphatic residues ILVM are marked with
-squares."
-  ]
+string: squares  [
+  optional: "@(!$(amphipathic))"
+  default: "ILVM"
+  information: "Mark as squares"
+  help: "By default the aliphatic residues ILVM are marked with squares."
+]
 
-  string: diamonds [ 
-        opt: @(!$(amphipathic))
-	def: "DENQST" 
-	info: "Mark as diamonds"
-        help: "By default the residues DENQST are marked with diamonds."
-  ]
+string: diamonds  [
+  optional: "@(!$(amphipathic))"
+  default: "DENQST"
+  information: "Mark as diamonds"
+  help: "By default the residues DENQST are marked with diamonds."
+]
 
-  string: octags [
-        opt: @(!$(amphipathic))
-	def: "HKR"
-	info: "Mark as octagons"
-        help: "By default the positively charged residues HKR are marked
-with octagons."
-  ]
+string: octags  [
+  optional: "@(!$(amphipathic))"
+  default: "HKR"
+  information: "Mark as octagons"
+  help: "By default the positively charged residues HKR are marked with octagons."
+]
 
-  bool: data [
-	req: N
-	def: N
-	info: "Display as data"
-        help: "Output the data to a file instead of plotting it"
-  ]
+bool: data  [
+  required: "N"
+  default: "N"
+  information: "Display as data"
+  help: "Output the data to a file instead of plotting it"
+]
 
-  graph: graph [
-	req: @(!$(data)) 
-  ]
-
-
+graph: graph  [
+  required: "@(!$(data))"
+]

@@ -1,100 +1,114 @@
-appl: siggen
-[
-        doc: "Generates a sparse protein signature"
-        groups: "PROTEIN:3D STRUCTURE"
+appl: siggen [
+  documentation: "Generates a sparse protein signature"
+  groups: "PROTEIN:3D STRUCTURE"
 ]
 
-string: algpath
-[
-        param: Y
-        prompt: "Location of alignment files for input"
-        def: "./"
+string: algpath  [
+  parameter: "Y"
+  prompt: "Location of alignment files for input"
+  default: "./"
 ]
 
-string: algextn
-[
-        param: Y
-        prompt: "Extension of alignment files for input"
-        def: ".align"
+string: algextn  [
+  parameter: "Y"
+  prompt: "Extension of alignment files for input"
+  default: ".align"
 ]
 
-string: conpath
-[ 
-        param: Y
-        info: "Location of contact files for input"
-        def: "./"
-]
-
-string: conextn
-[ 
-        param: Y
-        info: "Extension of contact files"
-        def: ".con"
-]
-
-int: sparsity
-[
-        param: Y
-        info: "% sparsity of signature"
-        def: 10
-]
-
-bool: randomize
-[
-        param: Y
-        info: "Generate a randomized signature"
-        def: N
-]
-
-matrixf: datafile
-[
-        param: Y
-        info: "Substitution matrix to be used"
-        def: "./EBLOSUM62"
-]
-
-bool: scoreseq
-[
-        param: Y
-        info: "Score alignment on basis of residue conservation"
-        def: Y
+string: sigpath  [
+  parameter: "Y"
+  prompt: "Location of signature files for output"
+  default: "./"
 ]
 
 
-bool: scorencon
-[
-        param: Y
-        info: "Score alignment on basis of number of contacts"
-
-        def: Y
+string: sigextn  [
+  parameter: "Y"
+  prompt: "Extension of signature files for output"
+  default: ".sig"
 ]
 
-bool: scoreccon
-[
-        param: Y
-
-        info: "Score alignment on basis of conservation of contacts"
-        def: Y
+integer: sparsity  [
+  parameter: "Y"
+  prompt: "% sparsity of signature"
+  default: "10"
 ]
 
-bool: scoreboth
-[
-        param: Y
-        info: "Score alignment on a combined measure of number and conservation of contacts"
-        def: N
+bool: randomise  [
+  parameter: "Y"
+  prompt: "Generate a randomised signature"
+  default: "N"
 ]
 
-bool: postsim
-[
-        param: Y
-        info: "Ignore alignment postitions with post_similar value of 0"
-        def: Y
+list: seqoption  [
+  required: "@(!$(randomise))"
+  default: "3"
+  minimum: "1"
+  maximum: "3"
+  delimiter: ","
+  codedelimiter: ":"
+  values: "1: Substitution matrix, 2: Residue class, 3: None"
+  header: "Sequence variability scoring method"
+  prompt: "Select number"
 ]
 
+matrixf: datafile  [
+  required: "@($(seqoption)==1)"
+  prompt: "Substitution matrix to be used"
+  default: "./EBLOSUM62"
+]
 
-outfile: sigfile
-[ 
-        param: Y
-        prompt: "Name of signature file for output"
-        def: "sig.sig"
+list: conoption  [
+  required: "@(!$(randomise))"
+  default: "4"
+  minimum: "1"
+  maximum: "4"
+  delimiter: ","
+  codedelimiter: ":"
+  values: "1: Number, 2: Conservation, 3: Number and conservation, 4: None"
+  header: "Residue contacts scoring method"
+  prompt: "Select number"
+]
+
+bool: filtercon  [
+  required: "@(!$(randomise))"
+  prompt: "Ignore alignment positions making less than a threshold number of contacts"
+  default: "N"
+]
+
+integer: conthresh  [
+  required: "$(filtercon)"
+  prompt: "Threshold contact number"
+  default: "10"
+]
+
+string: conpath  [
+  required: "@(!$(randomise))"
+  prompt: "Location of contact files for input"
+  default: "/data/contacts/"
+]
+
+string: conextn  [
+  required: "@(!$(randomise))"
+  prompt: "Extension of contact files"
+  default: ".con"
+]
+
+string: cpdbpath  [
+  required: "@(!$(randomise))"
+  information: "Location of coordinate files for input (embl-like format)"
+  default: "/data/cpdbscop/"
+
+]
+
+string: cpdbextn  [
+  required: "@(!$(randomise))"
+  information: "Extension of coordinate files (embl-like format)"
+  default: ".pxyz"
+]
+
+bool: filterpsim  [
+  required: "@(!$(randomise))"
+  prompt: "Ignore alignment postitions with post_similar value of 0"
+  default: "N"
 ]

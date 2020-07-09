@@ -1,23 +1,34 @@
-# SEQRET application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# use "" for missing values - these are required.
-# values in "" are trimmed to single spaces.
-# everything is treated as single tokens delimited by white space
-# (space, tab, newline)
-
-# pmr 22-apr-98
-
 appl: isochore [
-	doc: "Plots isochores in large DNA sequences"
-	groups: "Nucleic:Composition"
+  documentation: "Plots isochores in large DNA sequences"
+  groups: "Nucleic:Composition"
 ]
 
-  sequence: sequence [ param: Y type: dna ]
+sequence: sequence  [
+  parameter: "Y"
+  type: "dna"
+]
 
-  outfile: out [ param: Y extension: "iso" ]
+outfile: out  [
+  parameter: "Y"
+  extension: "iso"
+]
 
-  int: window [ opt: Y def: 1000 min: 1 max: "@($(sequence.end)/2)" info: "Window size" ]
-  int: shift [ opt: Y def: 100 min: 1 max: "@($(sequence.end)/10)" info: "Shift increment" ]
+integer: window  [
+  optional: "Y"
+  default: "1000"
+  minimum: "1"
+  maximum: "@($(sequence.end)/2)"
+  information: "Window size"
+]
 
-  xygraph: graph [ req: Y ]
+integer: shift  [
+  optional: "Y"
+  default: "100"
+  minimum: "1"
+  maximum: "@($(sequence.end)/10)"
+  information: "Shift increment"
+]
+
+xygraph: graph  [
+  required: "Y"
+]

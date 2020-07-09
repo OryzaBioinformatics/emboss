@@ -1,44 +1,68 @@
-# NewCpGReport
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-
-# ajb 14th March 1999
-# rls 3rd  Sept  1999
-
 appl: newcpgreport [
-	doc: "Report CpG rich areas"
-	groups: "Nucleic:CpG Islands"
+  documentation: "Report CpG rich areas"
+  groups: "Nucleic:CpG Islands"
 ]
 
-  seqall: sequence [ param: Y type: DNA ]
+seqall: sequence  [
+  parameter: "Y"
+  type: "DNA"
+]
 
-  int: window [ req: Y min: 1 max: $(sequence.end) def: 100
-                  info: "Window size" ]
+integer: window  [
+  required: "Y"
+  minimum: "1"
+  maximum: "$(sequence.end)"
+  default: "100"
+  information: "Window size"
+]
 
-  int: shift [ req: Y min: 1 max: $(window) def: 1 info: "Shift increment" ]
+integer: shift  [
+  required: "Y"
+  minimum: "1"
+  maximum: "$(window)"
+  default: "1"
+  information: "Shift increment"
+]
 
-  int: minlen [ req: Y min: 1 max: $(sequence.end) def: 200
-                  info: "Minimum Length" ]
+integer: minlen  [
+  required: "Y"
+  minimum: "1"
+  maximum: "$(sequence.end)"
+  default: "200"
+  information: "Minimum Length"
+]
 
-  float: minoe [ req: Y min: 0. max: 10. def: 0.6
-                   info: "Minimum observed/expected" ]
+float: minoe  [
+  required: "Y"
+  minimum: "0."
+  maximum: "10."
+  default: "0.6"
+  information: "Minimum observed/expected"
+]
 
-  float: minpc [ req: Y min: 0. max: 100. def: 50.
-                   info: "Minimum percentage" ]
+float: minpc  [
+  required: "Y"
+  minimum: "0."
+  maximum: "100."
+  default: "50."
+  information: "Minimum percentage"
+]
 
-  outfile: outfile [ param: Y ]
+outfile: outfile  [
+  parameter: "Y"
+]
 
+bool: obsexp  [
+  default: "Y"
+  information: "Show observed/expected threshold line"
+]
 
-  bool: obsexp [ def: Y info: "Show observed/expected threshold line" ]
+bool: cg  [
+  default: "Y"
+  information: "Show CpG rich regions"
+]
 
-  bool: cg [ def: Y info: "Show CpG rich regions" ]
-
-  bool: pc [ def: Y info: "Show percentage line" ]
-
-
-
-
-
-
-
-
+bool: pc  [
+  default: "Y"
+  information: "Show percentage line"
+]

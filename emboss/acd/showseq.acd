@@ -1,265 +1,296 @@
 appl: showseq [
-	doc: "Display a sequence with features, translation etc.."
-	groups: "Display, Nucleic:Translation, Nucleic:Restriction"
+  documentation: "Display a sequence with features, translation etc.."
+  groups: "Display, Nucleic:Translation, Nucleic:Restriction"
 ]
 
-  seqall: sequence [ 
-	param: Y
-	feat: Y
-  ]
+seqall: sequence  [
+  parameter: "Y"
+  features: "Y"
+]
 
-  outfile: outfile [
-        param: Y
-        def: "stdout"
-        info: "Output sequence details to a file"
-        help: "If you enter the name of a file here then this program
-               will write the sequence details into that file."
-  ]
+outfile: outfile  [
+  parameter: "Y"
+  default: "stdout"
+  information: "Output sequence details to a file"
+  help: "If you enter the name of a file here then this program will write the sequence details into that file."
+]
+
+list: format  [
+  required: "Y"
+  default: "2"
+  minimum: "1"
+  maximum: "1"
+  header: "Things to display"
+  values: "0:Enter your own list of things to display, 1:Sequence only, 2:Default sequence with features, 3:Pretty sequence, 4:One frame translation, 5:Three frame translations, 6:Six frame translations, 7:Restriction enzyme map, 8:Baroque"
+  delimiter: ","
+  codedelimiter: ":"
+  information: "Display format"
+]
+
+list: things  [
+  required: "@($(format) == 0)"
+  default: "B N T S A F"
+  minimum: "1"
+  maximum: "100"
+  header: "Specify your own things to display"
+  values: "S:Sequence, B:Blank line, 1:Frame1 translation, 2:Frame2 translation, 3:Frame3 translation, -1:CompFrame1 translation, -2:CompFrame2 translation, -3:CompFrame3 translation, T:Ticks line, N:Number ticks line, C:Complement sequence, F:Features, R:Restriction enzyme cut sites in forward sense, -R:Restriction enzyme cut sites in reverse sense, A:Annotation"
+  delimiter: ","
+  codedelimiter: ":"
+  information: "Enter a list of things to display"
+  help: "Specify a list of one or more code characters in the order in
+which you wish things to be displayed one above the other down the page. 
+For example if you wish to see things displayed in the order: sequence,
+complement sequence, ticks line, frame 1 translation, blank line; then
+you should enter 'S,C,T,1,B'."
+]
+
+range: translate  [
+  optional: "Y"
+  default: ""
+  information: "Regions to translate (eg: 4-57,78-94)"
+  help: "Regions to translate (if translating). \ If this is left blank the complete sequence is translated. \ A set of regions is specified by a set of pairs of positions. \ The positions are integers. \ They are separated by any non-digit, non-alpha character. \ Examples of region specifications are: \ 24-45, 56-78 \ 1:45, 67=99;765..888 \ 1,5,8,10,23,45,57,99"
+  expected: "If this is left blank the complete sequence is translated."
+]
+
+integer: orfminsize  [
+  default: "0"
+  minimum: "0"
+  information: "Minimum size of ORFs"
+  help: "Minimum size of Open Reading Frames (ORFs) to display in the translations."
+]
+
+range: uppercase  [
+  optional: "Y"
+  default: ""
+  information: "Regions to put in uppercase (eg: 4-57,78-94)"
+  help: "Regions to put in uppercase. \ If this is left blank, then the sequence case is left alone. \ A set of regions is specified by a set of pairs of positions. \ The positions are integers. \ They are separated by any non-digit, non-alpha character. \ Examples of region specifications are: \ 24-45, 56-78 \ 1:45, 67=99;765..888 \ 1,5,8,10,23,45,57,99"
+  expected: "If this is left blank, then the sequence case is left alone."
+]
+
+range: highlight  [
+  optional: "Y"
+  default: ""
+  information: "Regions to colour in HTML (eg: 4-57 red 78-94 green)"
+  help: "Regions to colour if formatting for HTML. \ If this is left blank, then the sequence is left alone. \ A set of regions is specified by a set of pairs of positions. \ The positions are integers. \ They are followed by any valid HTML font colour. \ Examples of region specifications are: \ 24-45 blue 56-78 orange \ 1-100 green 120-156 red \ A file of ranges to colour (one range per line) can be specified as '@filename'."
+]
+
+range: annotation  [
+  optional: "Y"
+  default: ""
+  information: "Regions to mark (eg: 4-57 promoter region 78-94 first exon)"
+  help: "Regions to annotate by marking.  \ If this is left blank, then
+no annotation is added.  \ A set of regions is specified by a set of
+pairs of positions followed by optional text.  \ The positions are
+integers.  \ They are followed by any text (but not digits when on the
+command-line).  \ Examples of region specifications are: \ 24-45 new
+domain 56-78 match to Mouse \ 1-100 First part 120-156 oligo \ A file of
+ranges to annotate (one range per line) can be specified as
+'@filename'."
+  expected: "If this is left blank, then no annotation is added."
+]
+
+bool: flatreformat  [
+  optional: "N"
+  default: "N"
+  prompt: "Display RE sites in flat format"
+]
+
+integer: mincuts  [
+  optional: "N"
+  minimum: "1"
+  maximum: "1000"
+  default: "1"
+  information: "Minimum cuts per RE"
+]
+
+integer: maxcuts  [
+  optional: "N"
+  minimum: "$(mincuts)"
+  maximum: "2000000000"
+  default: "2000000000"
+  information: "Maximum cuts per RE"
+]
+
+integer: sitelen  [
+  optional: "N"
+  minimum: "2"
+  maximum: "20"
+  default: "4"
+  information: "Minimum recognition site length"
+]
+
+bool: single  [
+  optional: "N"
+  default: "N"
+  information: "Force single RE site only cuts"
+]
+
+bool: blunt  [
+  optional: "N"
+  default: "Y"
+  information: "Allow blunt end RE cutters"
+]
+
+bool: sticky  [
+  optional: "N"
+  default: "Y"
+  information: "Allow sticky end RE cutters"
+]
+
+bool: ambiguity  [
+  optional: "N"
+  default: "Y"
+  information: "Allow ambiguous RE matches"
+]
+
+bool: plasmid  [
+  optional: "N"
+  default: "N"
+  information: "Allow circular DNA"
+]
+
+bool: commercial  [
+  optional: "N"
+  default: "Y"
+  information: "Only use restriction enzymes with suppliers"
+]
+
+bool: limit  [
+  optional: "N"
+  default: "Y"
+  information: "Limits RE hits to one isoschizomer"
+]
+
+bool: preferred  [
+  optional: "N"
+  default: "N"
+  information: "Report preferred isoschizomers"
+]
+
+string: enzymes  [
+  optional: "Y"
+  default: "all"
+  information: "Comma separated restriction enzyme list"
+  help: "The name 'all' reads in all enzyme names from the REBASE database. You can specify enzymes by giving their names with commas between then, such as: 'HincII,hinfI,ppiI,hindiii'. \ The case of the names is not important. You can specify a file of enzyme names to read in by giving the name of the file holding the enzyme names with a '@' character in front of it, for example, '@enz.list'. \ Blank lines and lines starting with a hash character or '!' are ignored and all other lines are concatenated together with a comma character ',' and then treated as the list of enzymes to search for. \ An example of a file of enzyme names is: \ ! my enzymes \ HincII, ppiII \ ! other enzymes \ hindiii \ HinfI \ PpiI"
+]
+
+list: table  [
+  optional: "Y"
+  default: "0"
+  minimum: "1"
+  maximum: "1"
+  header: "Genetic codes"
+  values: "0:Standard; 1:Standard (with alternative initiation codons); 2:Vertebrate Mitochondrial; 3:Yeast Mitochondrial; 4:Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma; 5:Invertebrate Mitochondrial; 6:Ciliate Macronuclear and Dasycladacean; 9:Echinoderm Mitochondrial; 10:Euplotid Nuclear; 11:Bacterial; 12:Alternative Yeast Nuclear; 13:Ascidian Mitochondrial; 14:Flatworm Mitochondrial; 15:Blepharisma Macronuclear; 16:Chlorophycean Mitochondrial; 21:Trematode Mitochondrial; 22:Scenedesmus obliquus; 23:Thraustochytrium Mitochondrial"
+  delimiter: ";"
+  codedelimiter: ":"
+  prompt: "Code to use"
+]
+
+bool: threeletter  [
+  default: "N"
+  information: "Display protein sequences in three-letter code"
+]
+
+bool: number  [
+  default: "N"
+  information: "Number the sequences"
+]
+
+integer: width  [
+  default: "60"
+  minimum: "1"
+  information: "Width of sequence to display"
+]
+
+integer: length  [
+  default: "0"
+  minimum: "0"
+  information: "Line length of page (0 for indefinite)"
+]
+
+integer: margin  [
+  default: "10"
+  minimum: "0"
+  information: "Margin around sequence for numbering"
+]
+
+bool: name  [
+  default: "Y"
+  information: "Show sequence ID"
+  help: "Set this to be false if you do not wish to display the ID name of the sequence"
+]
+
+bool: description  [
+  default: "Y"
+  information: "Show description"
+  help: "Set this to be false if you do not wish to display the description of the sequence"
+]
+
+integer: offset  [
+  default: "1"
+  information: "Offset to start numbering the sequence from"
+]
+
+bool: html  [
+  default: "N"
+  information: "Use HTML formatting"
+]
+
+###################
+# Feature Criteria
+###################
 
 
-  list: format [
-        req: Y
-        default: "2"
-        min: 1
-        max: 1
-        header: "Things to display"
-        values: 
-		"0:Enter your own list of things to display,
-		1:Sequence only,
-		2:Default sequence with features,
-		3:Pretty sequence,
-		4:One frame translation,
-		5:Three frame translations,
-		6:Six frame translations,
-		7:Restriction enzyme map,
-		8:Baroque"
-        delim: ","
-        codedelim: ":"
-        info: "Display format"
-  ]
+string: matchsource  [
+  optional: "Y"
+  default: "*"
+  information: "Source of feature to display"
+  help: "By default any feature source in the feature table is shown. You can set this to match any feature source you wish to show. \ The source name is usually either the name of the program that detected the feature or it is the feature table (eg: EMBL) that the feature came from. \ The source may be wildcarded by using '*'. \ If you wish to show more than one source, separate their names with the character '|', eg: \ gene* | embl"
+]
 
-  list: things [
-        req: "@($(format) == 0)"
-        default: "B N T S F"
-        min: 1
-        max: 100
-        header: "Specify your own things to display"
-        values: 
-                "S:Sequence,
-		B:Blank line,
-                1:Frame1 translation, 
-                2:Frame2 translation, 
-                3:Frame3 translation, 
-                -1:CompFrame1 translation, 
-                -2:CompFrame2 translation, 
-                -3:CompFrame3 translation, 
-		T:Ticks line,
-		N:Number ticks line,
-		C:Complement sequence,
-		F:Features,
-		R:Restriction enzyme cut sites in forward sense,
-		-R:Restriction enzyme cut sites in reverse sense"
-        delim: ","
-        codedelim: ":"
-        info: "Enter a list of things to display"
-	help: "Specify a list of one or more code characters in the
-order in which you wish things to be displayed one above the other down
-the page.  For example if you wish to see things displayed in the order:
-sequence, complement sequence, ticks line, frame 1 translation, blank
-line; then you should enter 'S,C,T,1,B'."
-  ]
+string: matchtype  [
+  optional: "Y"
+  default: "*"
+  information: "Type of feature to display"
+  help: "By default any feature type in the feature table is shown. You can set this to match any feature type you wish to show. \ See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types. \ The type may be wildcarded by using '*'. \ If you wish to show more than one type, separate their names with the character '|', eg: \ *UTR | intron"
+]
 
-  range: translate [ 
-        opt: Y
-        def: ""
-#        def: $(sequence.begin)-$(sequence.end)
-        info: "Regions to translate (eg: 4-57,78-94)" 
-        help: "Regions to translate (if translating). \
-	       If this is left blank the complete sequence is translated. \
-               A set of regions is specified by a set of pairs of positions. \
-               The positions are integers. \
-               They are separated by any non-digit, non-alpha character. \
-               Examples of region specifications are: \
-	       24-45, 56-78 \
-	       1:45, 67=99;765..888 \
-	       1,5,8,10,23,45,57,99"
-        expect: "If this is left blank the complete sequence is translated."
-  ]
+int: matchsense  [
+  optional: "Y"
+  default: "0"
+  information: "Sense of feature to display"
+  expect: "0 - any sense, 1 - forward sense, -1 - reverse sense"
+  help: "By default any feature type in the feature table is shown.  You
+can set this to match any feature sense you wish to show.
+0 - any sense, 1 - forward sense, -1 - reverse sense"
+]
 
-  int: orfminsize [
-	def: 0
-	min: 0
-	info: "Minimum size of ORFs"
-	help: "Minimum size of Open Reading Frames (ORFs) to display
-               in the translations."
-  ]
+float: minscore [
+  optional: "Y"
+  default: "0.0"
+  information: "Minimum score of feature to display"
+  help: "If this is greater than or equal to the maximum score, then any
+score is permitted"
+]
 
-  range: uppercase [ 
-        opt: Y
-	def: ""
-        info: "Regions to put in uppercase (eg: 4-57,78-94)" 
-        help: "Regions to  put in uppercase. \
-	       If this is left blank, then the sequence case is left alone. \
-	       A set of regions is specified by a set of pairs of positions. \
-	       The positions are integers. \
-	       They are separated by any non-digit, non-alpha character. \
-	       Examples of region specifications are: \
-	       24-45, 56-78 \
-	       1:45, 67=99;765..888 \
-	       1,5,8,10,23,45,57,99"
-        expect: "If this is left blank, then the sequence case is left alone."
-  ]
+float: maxscore [
+  optional: "Y"
+  default: "0.0"
+  information: "Maximum score of feature to display"
+  help: "If this is less than or equal to the maximum score, then any
+score is permitted"
+]
 
-  range: highlight [ 
-        opt: Y
-	def: ""
-        info: "Regions to colour in HTML (eg: 4-57 red 78-94 green)" 
-        help: "Regions to colour if formatting for HTML. \
-	       If this is left blank, then the sequence is left alone. \
-	       A set of regions is specified by a set of pairs of positions. \
-	       The positions are integers. \
-	       They are followed by any valid HTML font colour. \
-	       Examples of region specifications are: \
-	       24-45 blue 56-78 orange \
-	       1-100 green 120-156 red \
-	       A file of ranges to colour (one range per line) can be specified
-	       as '@filename'."
-  ]
+string: matchtag  [
+  optional: "Y"
+  default: "*"
+  information: "Tag of feature to display"
+  help: "Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Some of these tags also have values, for example '/gene' can have the value of the gene name. \ By default any feature tag in the feature table is shown. You can set this to match any feature tag you wish to show. \ The tag may be wildcarded by using '*'. \ If you wish to show more than one tag, separate their names with the character '|', eg: \ gene | label"
+]
 
-
-#
-# Restriction Enzyme stuff
-#
-
-  bool: flatreformat [opt: N def: N prompt: "Display RE sites in flat format" ]
-
-  int: mincuts [ opt: N min: 1 max: 1000 def: 1 info: "Minimum cuts per RE" ]
-
-  int: maxcuts [ opt: N min: $(mincuts) max: 2000000000 def: 2000000000
-             info: "Maximum cuts per RE" ]
-
-  int: sitelen [ opt: N min: 2 max: 20 def: 4
-                 info: "Minimum recognition site length" ]
-
-  bool: single [ opt: N def: N info: "Force single RE site only cuts"]
-
-  bool: blunt [ opt: N def: Y info: "Allow blunt end RE cutters" ]
-
-  bool: sticky [ opt: N def: Y info: "Allow sticky end RE cutters" ]
-
-  bool: ambiguity [ opt: N def: Y info: "Allow ambiguous RE matches" ]
-
-  bool: plasmid [ opt: N def: N info: "Allow circular DNA" ]
-
-  bool: commercial [ opt: N def: Y
-                     info: "Only use restriction enzymes with suppliers" ]
-
-  bool: limit [ opt: N def: Y info: "Limits RE hits to one isoschizomer" ]
-
-  bool: preferred [ opt: N def: N info: "Report preferred isoschizomers" ]
-
-  string: enzymes [  
-        opt: Y
-        def: all
-        info: "Comma separated restriction enzyme list"
-        help: "The name 'all' reads in all enzyme names from the REBASE
-database.  You can specify enzymes by giving their names with commas
-between then, such as: 'HincII,hinfI,ppiI,hindiii'.  \ The case of the
-names is not important.  You can specify a file of enzyme names to read
-in by giving the name of the file holding the enzyme names with a '@'
-character in front of it, for example, '@enz.list'.  \ Blank lines and
-lines starting with a hash character or '!' are ignored and all other
-lines are concatenated together with a comma character ',' and then
-treated as the list of enzymes to search for.  \ An example of a file of
-enzyme names is: \ ! my enzymes \ HincII, ppiII \ ! other enzymes \  
-hindiii \ HinfI \ PpiI"  
-  ]  
-
-
-
-
-
-#
-# Advanced features
-#
- list: table [
-        opt: Y
-        default: "0"
-        min: 1
-        max: 1
-        header: "Genetic codes"
-        values:
-                "0:Standard;
-                1:Standard (with alternative initiation codons);
-                2:Vertebrate Mitochondrial;
-                3:Yeast Mitochondrial;
-                4:Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma;
-                5:Invertebrate Mitochondrial;
-                6:Ciliate Macronuclear and Dasycladacean;
-                9:Echinoderm Mitochondrial;
-                10:Euplotid Nuclear;
-                11:Bacterial;
-                12:Alternative Yeast Nuclear;
-                13:Ascidian Mitochondrial;
-                14:Flatworm Mitochondrial;
-                15:Blepharisma Macronuclear;
-                16:Chlorophycean Mitochondrial;
-                21:Trematode Mitochondrial;
-                22:Scenedesmus obliquus;
-                23:Thraustochytrium Mitochondrial"
-        delim: ";"
-        codedelim: ":"
-        prompt: "Code to use"
-  ]
-
-  bool: threeletter [
-	def: N
-	info: "Display protein sequences in three-letter code"
-  ]
-
-  bool: number [
-	def: N
-	info: "Number the sequences"
-  ]
-
-  int: width [
-	def: 60
-	min: 1
-	info: "Width of sequence to display"
-  ]
-
-  int: length [
-	def: 0
-	min: 0
-	info: "Line length of page (0 for indefinite)"
-  ]
-
-  int: margin [
-	def: 10
-	min: 0
-	info: "Margin around sequence for numbering"
-  ]
-
-  bool: name [
-	def: Y
-	info: "Show sequence ID"
-	help: "Set this to be false if you do not wish to display the
-               ID name of the sequence"
-  ]
-
-  bool: description [
-	def: Y
-	info: "Show description"
-	help: "Set this to be false if you do not wish to display the
-               description of the sequence"
-  ]
-
-  int: offset [
-	def: 1
-	info: "Offset to start numbering the sequence from"
-  ]
-
-  bool: html [
-	def: N
-	info: "Use HTML formatting"
-  ]
+string: matchvalue  [
+  optional: "Y"
+  default: "*"
+  information: "Value of feature tags to display"
+  help: "Tag values are the values associated with a feature tag. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Only some of these tags can have values, for example '/gene' can have the value of the gene name. By default any feature tag value in the feature table is shown. You can set this to match any feature tag valueyou wish to show. \ The tag value may be wildcarded by using '*'. \ If you wish to show more than one tag value, separate their names with the character '|', eg: \ pax* | 10"
+]

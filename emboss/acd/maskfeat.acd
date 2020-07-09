@@ -1,50 +1,29 @@
-# maskfeat application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# use "" for missing values - these are required.
-# values in "" are trimmed to single spaces.
-# everything is treated as single tokens delimited by white space
-# (space, tab, newline)
-
-# GWW 16 Feb 2000
-
 appl: maskfeat [
-	doc: "Mask off features of a sequence."
-	groups: "Edit, Feature tables"
+  documentation: "Mask off features of a sequence."
+  groups: "Edit, Feature tables"
 ]
 
-  seqall: sequence [
-	param: Y
-	type: any
-	feat: Y
-  ]
+seqall: sequence  [
+  parameter: "Y"
+  type: "any"
+  features: "Y"
+]
 
-  seqout: outseq [
-	param: Y
-  ]
+seqout: outseq  [
+  parameter: "Y"
+]
 
-  string: type [ 
-	opt: Y
-	def: "repeat*"
-	info: "Type of feature to mask" 
-	help: "By default any feature in the feature table with a type
-starting 'repeat' is masked.  You can set this to be any feature type
-you wish to mask.  \ See http://www3.ebi.ac.uk/Services/WebFeat/ for a
-list of the EMBL feature types and see Appendix A of the Swissprot user
-manual in http://www.expasy.ch/txt/userman.txt for a list of the
-Swissprot feature types.  \ The type may be wildcarded by using '*'.  \ 
-If you wish to mask more than one type, separate their names with spaces
-or commas, eg: \ *UTR repeat*"
-  ]
+string: type  [
+  optional: "Y"
+  default: "repeat*"
+  information: "Type of feature to mask"
+  help: "By default any feature in the feature table with a type starting 'repeat' is masked. You can set this to be any feature type you wish to mask. \ See http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature types and see Appendix A of the Swissprot user manual in http://www.expasy.ch/txt/userman.txt for a list of the Swissprot feature types. \ The type may be wildcarded by using '*'. \ If you wish to mask more than one type, separate their names with spaces or commas, eg: \ *UTR repeat*"
+]
 
-  string: maskchar [ 
-	opt: Y
-	def: "@($(sequence.protein)?X:N)"
-	info: "Character to mask with" 
-	help: "Character to use when masking. \
-	       Default is 'X' for protein sequences,
-	       'N' for nucleic sequences."
-        expect: "'X' for protein, 'N' for nucleic"
-  ]
-
-
+string: maskchar  [
+  optional: "Y"
+  default: "@($(sequence.protein)?X:N)"
+  information: "Character to mask with"
+  help: "Character to use when masking. \ Default is 'X' for protein sequences, 'N' for nucleic sequences."
+  expected: "'X' for protein, 'N' for nucleic"
+]

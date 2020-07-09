@@ -4,27 +4,23 @@ appl: patmatmotifs [
 ]
 
 sequence: sequence  [
-  param: "Y"
+  parameter: "Y"
   type: "Protein"
 ]
 
 outfile: outfile  [
-  param: "Y"
+  parameter: "Y"
 ]
 
 bool: full  [
-  opt: Y
+  optional: "Y"
   default: "N"
-  info: "Provide full documentation for matching patterns"
+  information: "Provide full documentation for matching patterns"
 ]
 
 bool: prune  [
-  opt: Y
+  optional: "Y"
   default: "Y"
-  info: "Ignore simple patterns"
-  help: "Ignore simple patterns.  If this is true then these simple
-post-translational modification sites are not reported: myristyl,
-asn_glycosylation, camp_phospho_site, pkc_phospho_site,
-ck2_phospho_site, and tyr_phospho_site. 
-"
+  information: "Ignore simple patterns"
+  help: "Ignore simple patterns. If this is true then these simple post-translational modification sites are not reported: myristyl, asn_glycosylation, camp_phospho_site, pkc_phospho_site, ck2_phospho_site, and tyr_phospho_site."
 ]

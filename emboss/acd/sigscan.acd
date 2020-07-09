@@ -1,118 +1,86 @@
-appl: sigscan
-[
-	doc: "Scans a sparse protein signature against swissprot"
-	groups: "PROTEIN:3D STRUCTURE"
+appl: sigscan [
+  documentation: "Scans a sparse protein signature against swissprot"
+  groups: "PROTEIN:3D STRUCTURE"
 ]
 
-infile: sigin
-[ 
-	param: Y
-	prompt: "Name of signature file for input"
-	def: "test.sig"
+infile: sigin  [
+  parameter: "Y"
+  prompt: "Name of signature file for input"
+  default: "test.sig"
 ]
 
-
-seqall: database
-[ 
-	param: Y
-	info: "Name of sequence database to search"
-	def: "./test.seq"
+seqall: database  [
+  parameter: "Y"
+  prompt: "Name of sequence database to search"
+  default: "./test.seq"
 ]
 
-
-infile: targetf
-[ 
-	param: Y
-	prompt: "Name of (optionally grouped) scop families file for input"
-	def: "test.fam"
+infile: targetf  [
+  parameter: "Y"
+  prompt: "Name of (optionally grouped) scop families file for input"
+  default: "test.fam"
 ]
 
-int: thresh
-[
-	param: Y
-	info: "Minimum length (residues) of overlap required for two hits with the same code to be counted as the same hit."
-	def: 20
+integer: thresh  [
+  parameter: "Y"
+  information: "Minimum length (residues) of overlap required for two hits with the same code to be counted as the same hit."
+  default: "20"
 ]
 
-matrixf: sub
-[
-	param: Y
-	prompt: "Residue substitution matrix"
-	default: "./EBLOSUM62"
-]	
-
-
-
-float: gapo 
-[ 
-	param: Y
-	info: "Gap insertion penalty" 
-	min: 1. 
-	max: 100.
-	def : 10
-	valid: "Floating point number from 1.0 to 100.0"
-	expect: "10.0 for any sequence"
-        help: "The gap insertion penalty is the score taken away when a gap
-is created.  The best value depends on the choice of comparison matrix. 
-The default value assumes you are using the EBLOSUM62 matrix for protein
-sequences, and the EDNAMAT matrix for nucleotide sequences."
+matrixf: sub  [
+  parameter: "Y"
+  prompt: "Residue substitution matrix"
+  default: "./EBLOSUM62"
 ]
 
-float: gape 
-[ 
-	param: Y
-	info: "Gap extension penalty" 
-	min: 0.0 
-	max: 10.
-	def : 0.5
-	valid: "Floating point number from 0.0 to 10.0"
-	expect: "0.5 for any sequence"
-        help: "The gap extension, penalty is added to the standard gap
-penalty for each base or residue in the gap.  This is how long gaps are
-penalized.  Usually you will expect a few long gaps rather than many
-short gaps, so the gap extension penalty should be lower than the gap
-penalty.  An exception is where one or both sequences are single reads
-with possible sequencing errors in which case you would expect many
-single base gaps.  You can get this result by setting the gap open
-penalty to zero (or very low) and using the gap extension penalty to
-control gap scoring."
+float: gapo  [
+  parameter: "Y"
+  information: "Gap insertion penalty"
+  minimum: "1."
+  maximum: "100."
+  default: "10"
+  valid: "Floating point number from 1.0 to 100.0"
+  expected: "10.0 for any sequence"
+  help: "The gap insertion penalty is the score taken away when a gap is created. The best value depends on the choice of comparison matrix. The default value assumes you are using the EBLOSUM62 matrix for protein sequences, and the EDNAMAT matrix for nucleotide sequences."
 ]
 
+float: gape  [
+  parameter: "Y"
+  information: "Gap extension penalty"
+  minimum: "0.0"
+  maximum: "10."
+  default: "0.5"
+  valid: "Floating point number from 0.0 to 10.0"
+  expected: "0.5 for any sequence"
+  help: "The gap extension, penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty. An exception is where one or both sequences are single reads with possible sequencing errors in which case you would expect many single base gaps. You can get this result by setting the gap open penalty to zero (or very low) and using the gap extension penalty to control gap scoring."
+]
 
 list: nterm  [
-    required: "Y"
-    default: "1"
-    minimum: "1"
-    maximum: "1"
-    values: "1: Align anywhere and allow only complete signature-sequence fit,2: Align anywhere and allow partial signature-sequence fit,3: Use empirical gaps only"
-    delimiter: ","
-    codedelim: ":"
-    header: "N-terminal matching options"
-    prompt: "Select number"
-  ]
-
-
-int: nhits
-[
-	param: Y
-	info: "Number of hits to output"
-	def: 100
+  required: "Y"
+  default: "1"
+  minimum: "1"
+  maximum: "1"
+  values: "1: Align anywhere and allow only complete signature-sequence fit,2: Align anywhere and allow partial signature-sequence fit,3: Use empirical gaps only"
+  delimiter: ","
+  codedelimiter: ":"
+  header: "N-terminal matching options"
+  prompt: "Select number"
 ]
 
-outfile: hitsf
-[ 
-	param: Y
-	prompt: "Name of signature hits file for output"
-	def: "test.hits"
+integer: nhits  [
+  parameter: "Y"
+  information: "Number of hits to output"
+  default: "100"
 ]
 
-outfile: alignf
-[ 
-	param: Y
-	prompt: "Name of signature alignments file for output"
-	def: "test.align"
+outfile: hitsf  [
+  parameter: "Y"
+  prompt: "Name of signature hits file for output"
+  default: "test.hits"
 ]
 
-	
-
-
+outfile: alignf  [
+  parameter: "Y"
+  prompt: "Name of signature alignments file for output"
+  default: "test.align"
+]

@@ -1,24 +1,45 @@
-# HELIXTURNHELIX nucleic acid binding site determination
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-
-# ajb 11th March 1999
 appl: helixturnhelix [
-	doc: "Report nucleic acid binding motifs"
-	groups: "Protein:2D Structure, Protein:Motifs"
+  documentation: "Report nucleic acid binding motifs"
+  groups: "Protein:2D Structure, Protein:Motifs"
 ]
 
-  seqall: sequence [ param: Y type: PureProtein  ]
+seqall: sequence  [
+  parameter: "Y"
+  type: "PureProtein"
+]
 
-  float: mean [ opt: Y min: 1. max: 10000. def: 238.71
-                 info: "Mean value" ]
+float: mean  [
+  optional: "Y"
+  minimum: "1."
+  maximum: "10000."
+  default: "238.71"
+  information: "Mean value"
+]
 
-  float: sd [ opt: Y min: 1. max: 10000. def: 293.61
-                 info: "Standard Deviation value" ]
+float: sd  [
+  optional: "Y"
+  minimum: "1."
+  maximum: "10000."
+  default: "293.61"
+  information: "Standard Deviation value"
+]
 
-  float: minsd [ opt: Y min: 0. max: 100. def: 2.5
-                 info: "Minimum SD" ]
+float: minsd  [
+  optional: "Y"
+  minimum: "0."
+  maximum: "100."
+  default: "2.5"
+  information: "Minimum SD"
+]
 
-  bool: eightyseven [ opt: Y info: "Use the old (1987) weight data" ]
+bool: eightyseven  [
+  optional: "Y"
+  information: "Use the old (1987) weight data"
+]
 
-  outfile: outfile [ param: Y ext: "hth" expect: "seqname.hth" ]
+report: outfile  [
+  parameter: "Y"
+  rformat: "motif"
+  rextension: "hth"
+  taglist: "int:pos=Maximum_score_at float:sd=Standard_deviations"
+]

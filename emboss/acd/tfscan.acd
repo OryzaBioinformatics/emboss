@@ -15,7 +15,7 @@ list: menu  [
   maximum: "1"
   values: "F:fungi,I:insect,P:plant,V:vertebrate,O:other"
   delimiter: ","
-  codedelim: ":"
+  codedelimiter: ":"
   header: "Transcription Factor Class"
   prompt: "Select class"
   button: "Y"

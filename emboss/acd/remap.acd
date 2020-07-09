@@ -1,208 +1,198 @@
 appl: remap [
-	doc: "Display a sequence with restriction cut sites, translation etc.."
-	groups: "Display, Nucleic:Restriction, Nucleic:Translation"
+  documentation: "Display a sequence with restriction cut sites, translation etc.."
+  groups: "Display, Nucleic:Restriction, Nucleic:Translation"
 ]
 
-  seqall: sequence [ 
-	param: Y
-	type: DNA
-  ]
+seqall: sequence  [
+  parameter: "Y"
+  type: "DNA"
+]
 
-  outfile: outfile [
-        param: Y
-        info: "Output sequence details to a file"
-        help: "If you enter the name of a file here then this program
-               will write the sequence details into that file."
-  ]
+outfile: outfile  [
+  parameter: "Y"
+  information: "Output sequence details to a file"
+  help: "If you enter the name of a file here then this program will write the sequence details into that file."
+]
 
+string: enzymes  [
+  required: "Y"
+  default: "all"
+  information: "Comma separated enzyme list"
+  help: "The name 'all' reads in all enzyme names from the REBASE database. You can specify enzymes by giving their names with commas between then, such as: 'HincII,hinfI,ppiI,hindiii'. \ The case of the names is not important. You can specify a file of enzyme names to read in by giving the name of the file holding the enzyme names with a '@' character in front of it, for example, '@enz.list'. \ Blank lines and lines starting with a hash character or '!' are ignored and all other lines are concatenated together with a comma character ',' and then treated as the list of enzymes to search for. \ An example of a file of enzyme names is: \ ! my enzymes \ HincII, ppiII \ ! other enzymes \ hindiii \ HinfI \ PpiI"
+]
 
+integer: sitelen  [
+  required: "Y"
+  minimum: "2"
+  maximum: "20"
+  default: "4"
+  information: "Minimum recognition site length"
+]
 
-#
-# Restriction Enzyme stuff
-#
+bool: cutlist  [
+  optional: "Y"
+  default: "Y"
+  prompt: "List the enzymes that cut"
+]
 
-  string: enzymes [ 
-	req: Y
-	def: all
-	info: "Comma separated enzyme list"
-	help: "The name 'all' reads in all enzyme names from the REBASE
-database.  You can specify enzymes by giving their names with commas
-between then, such as: 'HincII,hinfI,ppiI,hindiii'.  \ The case of the
-names is not important.  You can specify a file of enzyme names to read
-in by giving the name of the file holding the enzyme names with a '@'
-character in front of it, for example, '@enz.list'.  \ Blank lines and
-lines starting with a hash character or '!' are ignored and all other
-lines are concatenated together with a comma character ',' and then
-treated as the list of enzymes to search for.  \ An example of a file of
-enzyme names is: \ ! my enzymes \ HincII, ppiII \ ! other enzymes \
-hindiii \ HinfI \ PpiI"
-  ]
+bool: flatreformat  [
+  optional: "Y"
+  default: "N"
+  prompt: "Display RE sites in flat format"
+]
 
-  int: sitelen [ req: Y min: 2 max: 20 def: 4
-                 info: "Minimum recognition site length" ]
+integer: mincuts  [
+  optional: "Y"
+  minimum: "1"
+  maximum: "1000"
+  default: "1"
+  information: "Minimum cuts per RE"
+]
 
-#
-# Optional
-#
+integer: maxcuts  [
+  optional: "Y"
+  minimum: "$(mincuts)"
+  maximum: "2000000000"
+  default: "2000000000"
+  information: "Maximum cuts per RE"
+]
 
+bool: single  [
+  optional: "Y"
+  default: "N"
+  information: "Force single site only cuts"
+]
 
-  bool: cutlist [ opt: Y def: Y prompt: "List the enzymes that cut" ]
+bool: blunt  [
+  optional: "Y"
+  default: "Y"
+  information: "Allow blunt end cutters"
+]
 
-  bool: flatreformat [opt: Y def: N prompt: "Display RE sites in flat format" ]
+bool: sticky  [
+  optional: "Y"
+  default: "Y"
+  information: "Allow sticky end cutters"
+]
 
+bool: ambiguity  [
+  optional: "Y"
+  default: "Y"
+  information: "Allow ambiguous matches"
+]
 
-  int: mincuts [ opt: Y min: 1 max: 1000 def: 1 info:"Minimum cuts per RE" ]
+bool: plasmid  [
+  optional: "Y"
+  default: "N"
+  information: "Allow circular DNA"
+]
 
-  int: maxcuts [ opt: Y min: $(mincuts) max: 2000000000 def: 2000000000
-             info:"Maximum cuts per RE" ]
+bool: commercial  [
+  optional: "Y"
+  default: "Y"
+  information: "Only enzymes with suppliers"
+]
 
-  bool: single [ opt: Y def: N info: "Force single site only cuts"]
+bool: limit  [
+  optional: "Y"
+  default: "Y"
+  information: "Limits reports to one isoschizomer"
+]
 
-  bool: blunt [ opt: Y def: Y info: "Allow blunt end cutters" ]
+bool: preferred  [
+  optional: "Y"
+  default: "N"
+  information: "Report preferred isoschizomers"
+]
 
-  bool: sticky [ opt: Y def: Y info: "Allow sticky end cutters" ]
+bool: translation  [
+  default: "Y"
+  information: "Display translation"
+]
 
-  bool: ambiguity [ opt: Y def: Y info: "Allow ambiguous matches" ]
+bool: reverse  [
+  default: "Y"
+  information: "Display cut sites and translation of reverse sense"
+]
 
-  bool: plasmid [ opt: Y def: N info: "Allow circular DNA" ]
+integer: orfminsize  [
+  default: "0"
+  minimum: "0"
+  information: "Minimum size of ORFs"
+  help: "Minimum size of Open Reading Frames (ORFs) to display in the translations."
+]
 
-  bool: commercial [ opt: Y def: Y info: "Only enzymes with suppliers" ]
+range: uppercase  [
+  default: ""
+  information: "Regions to put in uppercase (eg: 4-57,78-94)"
+  help: "Regions to put in uppercase. \ If this is left blank, then the sequence case is left alone. \ A set of regions is specified by a set of pairs of positions. \ The positions are integers. \ They are separated by any non-digit, non-alpha character. \ Examples of region specifications are: \ 24-45, 56-78 \ 1:45, 67=99;765..888 \ 1,5,8,10,23,45,57,99"
+  expected: "If this is left blank, then the sequence case is left alone."
+]
 
-  bool: limit [ opt: Y def: Y info: "Limits reports to one isoschizomer" ]
+range: highlight  [
+  default: ""
+  information: "Regions to colour in HTML (eg: 4-57 red 78-94 green)"
+  help: "Regions to colour if formatting for HTML. \ If this is left blank, then the sequence is left alone. \ A set of regions is specified by a set of pairs of positions. \ The positions are integers. \ They are followed by any valid HTML font colour. \ Examples of region specifications are: \ 24-45 blue 56-78 orange \ 1-100 green 120-156 red \ A file of ranges to colour (one range per line) can be specifed as '@filename'."
+]
 
-  bool: preferred [ opt: Y def: N info: "Report preferred isoschizomers" ]
+list: table  [
+  optional: "Y"
+  default: "0"
+  minimum: "1"
+  maximum: "1"
+  header: "Genetic codes"
+  values: "0:Standard; 1:Standard (with alternative initiation codons); 2:Vertebrate Mitochondrial; 3:Yeast Mitochondrial; 4:Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma; 5:Invertebrate Mitochondrial; 6:Ciliate Macronuclear and Dasycladacean; 9:Echinoderm Mitochondrial; 10:Euplotid Nuclear; 11:Bacterial; 12:Alternative Yeast Nuclear; 13:Ascidian Mitochondrial; 14:Flatworm Mitochondrial; 15:Blepharisma Macronuclear; 16:Chlorophycean Mitochondrial; 21:Trematode Mitochondrial; 22:Scenedesmus obliquus; 23:Thraustochytrium Mitochondrial"
+  delimiter: ";"
+  codedelimiter: ":"
+  prompt: "Code to use"
+]
 
+bool: threeletter  [
+  default: "N"
+  information: "Display protein sequences in three-letter code"
+]
 
-#
-# Advanced features
-#
+bool: number  [
+  default: "N"
+  information: "Number the sequences"
+]
 
-  bool: translation [
-	def: Y
-	info: "Display translation"
-  ]
+integer: width  [
+  default: "60"
+  minimum: "1"
+  information: "Width of sequence to display"
+]
 
-  bool: reverse [
-	def: Y
-	info: "Display cut sites and translation of reverse sense"
-  ]
+integer: length  [
+  default: "0"
+  minimum: "0"
+  information: "Line length of page (0 for indefinite)"
+]
 
-  int: orfminsize [
-	def: 0
-	min: 0
-	info: "Minimum size of ORFs"
-	help: "Minimum size of Open Reading Frames (ORFs) to display in
-               the translations."
-  ]
+integer: margin  [
+  default: "10"
+  minimum: "0"
+  information: "Margin around sequence for numbering"
+]
 
-  range: uppercase [ 
-	def: ""
-        info: "Regions to put in uppercase (eg: 4-57,78-94)" 
-        help: "Regions to  put in uppercase. \
-	       If this is left blank, then the sequence case is left alone. \
-	       A set of regions is specified by a set of pairs of positions. \
-	       The positions are integers. \
-	       They are separated by any non-digit, non-alpha character. \
-	       Examples of region specifications are: \
-	       24-45, 56-78 \
-	       1:45, 67=99;765..888 \
-	       1,5,8,10,23,45,57,99"
-        expect: "If this is left blank, then the sequence case is left alone."
-  ]
+bool: name  [
+  default: "Y"
+  information: "Display sequence ID"
+  help: "Set this to be false if you do not wish to display the ID name of the sequence"
+]
 
-  range: highlight [ 
-	def: ""
-        info: "Regions to colour in HTML (eg: 4-57 red 78-94 green)" 
-        help: "Regions to colour if formatting for HTML. \
-	       If this is left blank, then the sequence is left alone. \
-	       A set of regions is specified by a set of pairs of positions. \
-	       The positions are integers. \
-	       They are followed by any valid HTML font colour. \
-	       Examples of region specifications are: \
-	       24-45 blue 56-78 orange \
-	       1-100 green 120-156 red \
-	       A file of ranges to colour (one range per line) can be specifed
-	       as '@filename'."
-  ]
+bool: description  [
+  default: "Y"
+  information: "Display description"
+  help: "Set this to be false if you do not wish to display the description of the sequence"
+]
 
- list: table [
-        opt: Y
-        default: "0"
-        min: 1
-        max: 1
-        header: "Genetic codes"
-        values:
-                "0:Standard;
-                1:Standard (with alternative initiation codons);
-                2:Vertebrate Mitochondrial;
-                3:Yeast Mitochondrial;
-                4:Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma;
-                5:Invertebrate Mitochondrial;
-                6:Ciliate Macronuclear and Dasycladacean;
-                9:Echinoderm Mitochondrial;
-                10:Euplotid Nuclear;
-                11:Bacterial;
-                12:Alternative Yeast Nuclear;
-                13:Ascidian Mitochondrial;
-                14:Flatworm Mitochondrial;
-                15:Blepharisma Macronuclear;
-                16:Chlorophycean Mitochondrial;
-                21:Trematode Mitochondrial;
-                22:Scenedesmus obliquus;
-                23:Thraustochytrium Mitochondrial"
-        delim: ";"
-        codedelim: ":"
-        prompt: "Code to use"
-  ]
+integer: offset  [
+  default: "1"
+  information: "Offset to start numbering the sequence from"
+]
 
-  bool: threeletter [
-	def: N
-	info: "Display protein sequences in three-letter code"
-  ]
-
-  bool: number [
-	def: N
-	info: "Number the sequences"
-  ]
-
-  int: width [
-	def: 60
-	min: 1
-	info: "Width of sequence to display"
-  ]
-
-  int: length [
-	def: 0
-	min: 0
-	info: "Line length of page (0 for indefinite)"
-  ]
-
-  int: margin [
-	def: 10
-	min: 0
-	info: "Margin around sequence for numbering"
-  ]
-
-  bool: name [
-	def: Y
-	info: "Display sequence ID"
-	help: "Set this to be false if you do not wish to display the
-               ID name of the sequence"
-  ]
-
-  bool: description [
-	def: Y
-	info: "Display description"
-	help: "Set this to be false if you do not wish to display the
-               description of the sequence"
-  ]
-
-  int: offset [
-	def: 1
-	info: "Offset to start numbering the sequence from"
-  ]
-
-  bool: html [
-	def: N
-	info: "Use HTML formatting"
-  ]
+bool: html  [
+  default: "N"
+  information: "Use HTML formatting"
+]

@@ -1,57 +1,51 @@
-# diffseq application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
 appl: diffseq [
-	doc: "Find differences (SNPs) between nearly identical sequences"
-	groups: "Alignment:Differences"
+  documentation: "Find differences (SNPs) between nearly identical sequences"
+  groups: "Alignment:Differences"
 ]
 
-  sequence: asequence [
-	param: Y
-	type: any
-	feat: Y
-  ]
+sequence: asequence  [
+  parameter: "Y"
+  type: "any"
+  features: "Y"
+]
 
-  sequence: bsequence [ 
-	param: Y 
-	type: "@($(asequence.protein) ? protein : nucleotide)" 
-	feat: Y
-  ]
+sequence: bsequence  [
+  parameter: "Y"
+  type: "@($(asequence.protein) ? protein : nucleotide)"
+  features: "Y"
+]
 
-  int: wordsize [
-	req: Y
-	def: 10
-	min: 2
-	info: "Word size"
-  ]
+integer: wordsize  [
+  required: "Y"
+  default: "10"
+  minimum: "2"
+  information: "Word size"
+]
 
-  outfile: outfile [
-	req: Y
-	info: "Output report file"
-  ]
+report: outfile  [
+  required: "Y"
+  rformat: "diffseq"
+  information: "Output report file"
+  taglist: "int:start int:end int:length str:name str:sequence str:first_feature str:second_feature"
+]
 
-  featout: afeatout [
-        opt: Y
-	def: "$(asequence.name).diffgff"
-        info: "Feature file for output asequence"
-        help: "File for output of first sequence's normal tab delimited gff's"
-  ]
+featout: afeatout  [
+  optional: "Y"
+  default: "$(asequence.name).diffgff"
+  information: "Feature file for output asequence"
+  help: "File for output of first sequence's normal tab delimited gff's"
+]
 
-  featout: bfeatout [
-        opt: Y
-	def: "$(bsequence.name).diffgff"
-        info: "Feature file for output bsequence"
-        help: "File for output of second sequence's normal tab delimited gff's"
-  ]
+featout: bfeatout  [
+  optional: "Y"
+  default: "$(bsequence.name).diffgff"
+  information: "Feature file for output bsequence"
+  help: "File for output of second sequence's normal tab delimited gff's"
+]
 
-  bool: columns [
-	opt: Y
-	def: N
-	info: "Output in columns format"
-
-	help: "The default format for the output report file is to have
-several lines per difference giving the sequence positions, sequences
-and features.  \ If this option is set true then the output report
-file's format is changed to a set of columns and no feature information
-is given."
-  ]
+bool: columns  [
+  optional: "Y"
+  default: "N"
+  information: "Output in columns format"
+  help: "The default format for the output report file is to have several lines per difference giving the sequence positions, sequences and features. \ If this option is set true then the output report file's format is changed to a set of columns and no feature information is given."
+]

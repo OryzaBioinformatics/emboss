@@ -1,10 +1,26 @@
 appl: pepstats [
-        doc: "Protein statistics"
-        groups: "Protein:Composition"
+  documentation: "Protein statistics"
+  groups: "Protein:Composition"
 ]
 
-  sequence: sequencea [ param: Y type: PureProtein ]
+sequence: sequencea  [
+  parameter: "Y"
+  type: "PureProtein"
+]
 
-  bool: termini [ req: N def: Y  info: "Include charge at N and C terminus"]
+bool: termini  [
+  required: "N"
+  default: "Y"
+  information: "Include charge at N and C terminus"
+]
 
-  outfile: outfile [req: Y ]
+string: aadata  [
+  optional: "N"
+  information: "Amino acid data file"
+  help: "Molecular weight data for amino acids"
+  default: "Eamino.dat"
+]
+
+outfile: outfile  [
+  required: "Y"
+]

@@ -1,63 +1,56 @@
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-
 appl: fuzznuc [
-	doc: "Nucleic acid pattern search"
-	groups: "Nucleic:Motifs"
+  documentation: "Nucleic acid pattern search"
+  groups: "Nucleic:Motifs"
 ]
 
-seqall: sequence [
-	param: Y
-        type: dna
+seqall: sequence  [
+  parameter: "Y"
+  type: "dna"
 ]
 
-string: pattern [
-	req: Y
-	prompt: "Search pattern"
+string: pattern  [
+  required: "Y"
+  prompt: "Search pattern"
 ]
 
-int: mismatch [ 
-	req: Y
-	def: 0
-	min: 0
-	prompt: "Number of mismatches"
+integer: mismatch  [
+  required: "Y"
+  default: "0"
+  minimum: "0"
+  prompt: "Number of mismatches"
 ]
 
-bool: mmshow [
-	opt: N
-	def: 0
-	info: "Show mismatches"
+bool: mmshow  [
+  optional: "N"
+  default: "0"
+  information: "Show mismatches"
 ]
 
-bool: accshow [
-	opt: N
-	def: 0
-	info: "Show accession numbers"
+bool: accshow  [
+  optional: "N"
+  default: "0"
+  information: "Show accession numbers"
 ]
 
-bool: descshow [
-	opt: N
-	def: 0
-	info: "Show descriptions"
+bool: descshow  [
+  optional: "N"
+  default: "0"
+  information: "Show descriptions"
 ]
 
-bool: usashow [
-	opt: N
-	def: 0
-	info: "Show USA"
-	help: "Showing the USA (Uniform Sequence Address) of the
-matching sequences will turn your output file into a 'list' file that
-can then be read in by many other EMBOSS programs by specifying it with
-a '@' in front of the filename."
+bool: usashow  [
+  optional: "N"
+  default: "0"
+  information: "Show USA"
+  help: "Showing the USA (Uniform Sequence Address) of the matching sequences will turn your output file into a 'list' file that can then be read in by many other EMBOSS programs by specifying it with a '@' in front of the filename."
 ]
 
-bool: complement [
-	opt: N
-	def: 0
-	prompt: "Search complementary strand"
+bool: complement  [
+  optional: "N"
+  default: "0"
+  prompt: "Search complementary strand"
 ]
 
-outfile: outf [
-	param: Y
+outfile: outf  [
+  parameter: "Y"
 ]
-

@@ -1,31 +1,31 @@
 appl: checktrans [
-        doc: "Reports STOP codons and ORF statistics of a protein sequence"
-        groups: "Protein:Composition"
+  documentation: "Reports STOP codons and ORF statistics of a protein sequence"
+  groups: "Protein:Composition"
 ]
 
-  seqall: sequence [ 
-	param: Y  
-	type: stopprotein 
-  ]
+seqall: sequence  [
+  parameter: "Y"
+  type: "stopprotein"
+]
 
-  int: orfml [
-	req: Y 
-	min:1 
-	def: 100 
-	info: "Minimum ORF Length to report"
-  ]
+integer: orfml  [
+  required: "Y"
+  minimum: "1"
+  default: "100"
+  information: "Minimum ORF Length to report"
+]
 
-  outfile: report [
-	param: Y 
-  ]
+outfile: report  [
+  parameter: "Y"
+]
 
-  seqoutall: outseq [
-	req: Y
-	info: "Sequence file to hold output ORF sequences"
-  ]
+seqoutall: outseq  [
+  required: "Y"
+  information: "Sequence file to hold output ORF sequences"
+]
 
-  featout: featout [
-        parameter: N
-	info: "feature file for output "
-        help: "File for output features"
-        ]
+featout: featout  [
+  parameter: "N"
+  information: "feature file for output"
+  help: "File for output features"
+]

@@ -1,35 +1,51 @@
-# SIGCLEAVE Signal Peptide Determination
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-
-# ajb 14th March 1999
 appl: sigcleave [
-	doc: "Reports protein signal cleavage sites"
-	groups: "Protein:Motifs"
+  documentation: "Reports protein signal cleavage sites"
+  groups: "Protein:Motifs"
 ]
 
-  seqall: sequence [ param: Y type: PureProtein ]
+seqall: sequence  [
+  parameter: "Y"
+  type: "PureProtein"
+]
 
-  outfile: outfile [ param: Y extension: "sig" ]
+report: outfile  [
+  parameter: "Y"
+  rextension: "sig"
+  rformat: "motif"
+  multiple: "Y"
+  taglist: "str:mature_peptide"
+]
 
-  bool: prokaryote [ opt: Y
-         help: "Specifies the sequence is prokaryotic and changes the
-                default scoring data file name"
-         info: "Use prokaryotic cleavage data" ]
+bool: prokaryote  [
+  optional: "Y"
+  help: "Specifies the sequence is prokaryotic and changes the default scoring data file name"
+  information: "Use prokaryotic cleavage data"
+]
 
-  int: pval [ req: N min: -13 max: -1 def: -13 info: "Pval"
-              help: "Specifies the number of columns before the residue
-                     at the cleavage site in the weight matrix table"
-            ]
+integer: pval  [
+  required: "N"
+  minimum: "-13"
+  maximum: "-1"
+  default: "-13"
+  information: "Pval"
+  help: "Specifies the number of columns before the residue at the cleavage site in the weight matrix table"
+]
 
-  int: nval [ req: N min: 1 max: @(15+$(pval)) def: @(15+$(pval))
-                info: "Nval" 
-            help: "specifies the number of columns after the residue at
-                   the cleavage site in the weight matrix table"
-            expect: "Pval+15 (2)"
-    ]
+integer: nval  [
+  required: "N"
+  minimum: "1"
+  maximum: "@(15+$(pval))"
+  default: "@(15+$(pval))"
+  information: "Nval"
+  help: "specifies the number of columns after the residue at the cleavage site in the weight matrix table"
+  expected: "Pval+15 (2)"
+]
 
-  float: minweight [ req: Y min: 0. max: 100. def: 3.5
-                       info: "Minimum weight" 
-                     help: "Minimum scoring weight value for
-                            the predicted cleavage site" ]
+float: minweight  [
+  required: "Y"
+  minimum: "0."
+  maximum: "100."
+  default: "3.5"
+  information: "Minimum weight"
+  help: "Minimum scoring weight value for the predicted cleavage site"
+]

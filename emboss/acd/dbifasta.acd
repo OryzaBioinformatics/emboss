@@ -1,44 +1,78 @@
-appl: dbifasta [ groups: "Utils:Database indexing"
-                 doc: "Index a fasta database" ]
+appl: dbifasta [
+  groups: "Utils:Database indexing"
+  documentation: "Index a fasta database"
+]
 
-bool: staden [ prompt: "Use staden index file names" ]
+bool: staden  [
+  prompt: "Use staden index file names"
+]
 
-list: idformat [ req: y 
-   prompt: "ID line format"
-   value: "simple: >ID;
-	   idacc: >ID ACC;
-	   gcgid: >db:ID;
-	   gcgidacc: >db:ID ACC;
-           dbid: >db ID;
-	   ncbi: | formats;"
-   max: 1 min: 1
-   def: "idacc"
-  ]
+list: idformat  [
+  required: "y"
+  prompt: "ID line format"
+  values: "simple: >ID; idacc: >ID ACC; gcgid: >db:ID; gcgidacc: >db:ID ACC; dbid: >db ID; ncbi: | formats;"
+  maximum: "1"
+  minimum: "1"
+  default: "idacc"
+]
 
+string: dbname  [
+  parameter: "Y"
+  maxlength: "19"
+  minlength: "1"
+  prompt: "Database name"
+]
 
-string: dbname [ param: Y max: 19 min: 1 prompt: "Database name" ]
+variable:  dbknown "@(is: $(dbname))"
 
-var: dbknown "@(is: $(dbname))"
+string: directory  [
+  required: "$(dbknown)"
+  default: "."
+  prompt: "Database directory"
+]
 
-string: directory [ req: "$(dbknown)" def: "." prompt: "Database directory" ]
+string: filenames  [
+  required: "$(dbknown)"
+  default: "*.dat"
+  prompt: "Wildcard database filename"
+]
 
-string: filenames [ req: "$(dbknown)" def: "*.dat"
-       prompt: "Wildcard database filename" ]
+string: exclude  [
+  prompt: "wildcard filename(s) to exclude"
+]
 
-string: exclude [ 
-       prompt: "wildcard filename(s) to exclude" ]
+string: indexdirectory  [
+  default: "."
+  prompt: "Index directory"
+]
 
-string: indexdirectory [ def: "." prompt: "Index directory" ]
+string: sortoptions  [
+  default: "-T . -k 1,1"
+  prompt: "Sort option(s)"
+  help: "Sort options, typically '-T .' to use current directory for work files and '-k 1,1' to force GNU sort to use the first field"
+]
 
-string: sortoptions [ def: "-T . -k 1,1" prompt: "Sort option(s)"
-      help: "Sort options, typically '-T .' to use current directory for
-      work files and '-k 1,1' to force GNU sort to use the first field" ]
+string: release  [
+  required: "Y"
+  default: "0.0"
+  maxlength: "9"
+  prompt: "Release number"
+]
 
-string: release [ req: Y def: "0.0" max: 9 prompt: "Release number" ]
+string: date  [
+  required: "Y"
+  default: "00/00/00"
+  valid: "Date string dd/mm/yy"
+  prompt: "Index date"
+  pattern: "^([0-9]+.[0-9]+.[0-9]+)?$"
+]
 
-string: date [ req: Y def: "00/00/00" valid: "Date string dd/mm/yy"
-        prompt: "Index date" pattern: "^([0-9]+.[0-9]+.[0-9]+)?$" ]
+bool: systemsort  [
+  default: "Y"
+  information: "Use system sort utility"
+]
 
-bool: systemsort [def: Y info: "Use system sort utility" ]
-
-bool: cleanup [def: Y info: "Clean up temporary files" ]
+bool: cleanup  [
+  default: "Y"
+  information: "Clean up temporary files"
+]

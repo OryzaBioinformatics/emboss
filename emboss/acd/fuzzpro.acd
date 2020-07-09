@@ -1,56 +1,50 @@
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-
 appl: fuzzpro [
-	doc: "Protein pattern search"
-	groups: "Protein:Motifs"
+  documentation: "Protein pattern search"
+  groups: "Protein:Motifs"
 ]
 
-seqall: sequence [
-	param: Y
-        type: protein
+seqall: sequence  [
+  parameter: "Y"
+  type: "protein"
 ]
 
-string: pattern [
-	req: Y
-	prompt: "Search pattern"
+string: pattern  [
+  required: "Y"
+  prompt: "Search pattern"
 ]
 
-int: mismatch [ 
-	req: Y
-	def: 0
-	min: 0
-	prompt: "Number of mismatches"
+integer: mismatch  [
+  required: "Y"
+  default: "0"
+  minimum: "0"
+  prompt: "Number of mismatches"
 ]
 
-bool: mmshow [
-	opt: N
-	def: 0
-	info: "Show mismatches"
+bool: mmshow  [
+  optional: "N"
+  default: "0"
+  information: "Show mismatches"
 ]
 
-bool: accshow [
-	opt: N
-	def: 0
-	info: "Show accession numbers"
+bool: accshow  [
+  optional: "N"
+  default: "0"
+  information: "Show accession numbers"
 ]
 
-bool: usashow [   
-        opt: N  
-        def: 0
-        info: "Show USA"         
-        help: "Showing the USA (Uniform Sequence Address) of the 
-matching sequences will turn your output file into a 'list' file that    
-can then be read in by many other EMBOSS programs by specifying it with
-a '@' in front of the filename."
+bool: usashow  [
+  optional: "N"
+  default: "0"
+  information: "Show USA"
+  help: "Showing the USA (Uniform Sequence Address) of the matching sequences will turn your output file into a 'list' file that can then be read in by many other EMBOSS programs by specifying it with a '@' in front of the filename."
 ]
 
-bool: descshow [
-	opt: N
-	def: 0
-	info: "Show descriptions"
+bool: descshow  [
+  optional: "N"
+  default: "0"
+  information: "Show descriptions"
 ]
 
-outfile: outf [
-	param: Y
+outfile: outf  [
+  parameter: "Y"
 ]

@@ -5,31 +5,28 @@ appl: redata [
 
 string: enzyme  [
   parameter: "Y"
-  info: "Restriction enzyme name"
+  information: "Restriction enzyme name"
   default: "BamHI"
-  help: "Enter the name of the restrcition enzyme that you wish to get
-details of.  The names often have a 'I' in them - this is a capital 'i',
-not a '1' or an 'l'.  The names are case-indeppendent ('AaeI' is the
-same as 'aaei')"
+  help: "Enter the name of the restrcition enzyme that you wish to get details of. The names often have a 'I' in them - this is a capital 'i', not a '1' or an 'l'. The names are case-indeppendent ('AaeI' is the same as 'aaei')"
 ]
 
-bool: isoschizomers [
+bool: isoschizomers  [
   required: "N"
   default: "Y"
-  info: "Show isoschizomers"
+  information: "Show isoschizomers"
   help: "Show other enzymes with this specificity. (Isoschizomers)"
 ]
 
 bool: references  [
   required: "N"
   default: "Y"
-  info: "Show references"
+  information: "Show references"
 ]
 
 bool: suppliers  [
   required: "N"
   default: "Y"
-  info: "Show suppliers"
+  information: "Show suppliers"
 ]
 
 outfile: outfile  [

@@ -1,56 +1,52 @@
-appl: psiblasts
-[
-	doc: "Runs PSI-BLAST given scopalign alignments"
-	groups: "Protein:3D Structure"
+appl: psiblasts [
+  documentation: "Runs PSI-BLAST given scopalign alignments"
+  groups: "Protein:3D Structure"
 ]
 
-string: align
-[
-	param: Y
-	prompt: "Location of alignment files for input"
-	def: "./"
+string: align  [
+  parameter: "Y"
+  prompt: "Location of alignment files for input"
+  default: "./"
 ]
 
-string: alignextn
-[
-	param: Y
-	prompt: "File extension of alignment files"
-	def: ".align"
+string: alignextn  [
+  parameter: "Y"
+  prompt: "File extension of alignment files"
+  default: ".align"
 ]
 
-int: niter
-[
-	param: Y
-	prompt: "Number of PSIBLAST iterations"
-	def: 1
+integer: niter  [
+  parameter: "Y"
+  prompt: "Number of PSIBLAST iterations"
+  default: "1"
 ]
 
-float: evalue
-[
-	param: Y
-	prompt: "Threshold E-value for inclusion in family"
-	def: "0.001"
+float: evalue  [
+  parameter: "Y"
+  prompt: "Threshold E-value for inclusion in family"
+  default: "0.001"
 ]
 
-string: submatrix
-[
-	param: Y
-	prompt: "Residue substitution matrix"
-	default: "./EBLOSUM62"
-]	
-
-outfile: families
-[ 
-	param: Y
-	prompt: "Name of families file for output"
-	def: "scop.hits"
+integer: maxhits  [
+  parameter: "Y"
+  prompt: "Maximum number of hits"
+  default: "1000"
 ]
 
-outfile: logf
-[ 
-	param: Y
-	prompt: "Name of log file for the build"
-	def: "psiblasts.log"
+string: submatrix  [
+  parameter: "Y"
+  prompt: "Residue substitution matrix"
+  default: "./EBLOSUM62"
 ]
 
+outfile: families  [
+  parameter: "Y"
+  prompt: "Name of families file for output"
+  default: "scop.hits"
+]
 
+outfile: logf  [
+  parameter: "Y"
+  prompt: "Name of log file for the build"
+  default: "psiblasts.log"
+]

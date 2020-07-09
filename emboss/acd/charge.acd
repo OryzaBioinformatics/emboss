@@ -1,14 +1,36 @@
 appl: charge [
-        doc: "Protein charge plot"
-        groups: "Protein:Composition"
+  documentation: "Protein charge plot"
+  groups: "Protein:Composition"
 ]
 
- seqall: seqall [ param: Y type: protein ]
+seqall: seqall  [
+  parameter: "Y"
+  type: "protein"
+]
 
- bool: plot [ opt: N def: N info: "Produce graphic" ]
+bool: plot  [
+  optional: "N"
+  default: "N"
+  information: "Produce graphic"
+]
 
- int: window [ opt: Y min: 1 def: 5 info: "Window" ]
+integer: window  [
+  optional: "Y"
+  minimum: "1"
+  default: "5"
+  information: "Window"
+]
 
- xygraph: graph [ req: $(plot) ]
+xygraph: graph  [
+  required: "$(plot)"
+]
 
- outfile: outfile [ req: @(!$(plot)) ]
+outfile: outfile  [
+  required: "@(!$(plot))"
+]
+
+string: aadata  [
+  required: "N"
+  default: "Eamino.dat"
+  information: "Amino acid property data file name"
+]

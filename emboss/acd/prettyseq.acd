@@ -1,23 +1,51 @@
-appl:  prettyseq [
-        doc: "Output sequence with translated ranges"
-        groups: "Display, Nucleic:Translation"
+appl: prettyseq [
+  documentation: "Output sequence with translated ranges"
+  groups: "Display, Nucleic:Translation"
 ]
 
- sequence: sequence [ param: Y type: DNA ]
+sequence: sequence  [
+  parameter: "Y"
+  type: "DNA"
+]
 
- codon: cfile [ opt: N info: "Codon usage file" def: "Ehum.cut" ]
+codon: cfile  [
+  optional: "N"
+  information: "Codon usage file"
+  default: "Ehum.cut"
+]
 
- range: range [ req: Y info: "Range(s) to translate"
-	        def: $(sequence.begin)-$(sequence.end)
-                expect: "Whole sequence" ]
+range: range  [
+  required: "Y"
+  information: "Range(s) to translate"
+  default: "$(sequence.begin)-$(sequence.end)"
+  expected: "Whole sequence"
+]
 
- int: width [ opt: N min: 10 def: 60
-              info: "Width of screen" ]
+integer: width  [
+  optional: "N"
+  minimum: "10"
+  default: "60"
+  information: "Width of screen"
+]
 
- bool: ruler [ opt: Y def: Y info: "Add a ruler" ]
+bool: ruler  [
+  optional: "Y"
+  default: "Y"
+  information: "Add a ruler"
+]
 
- bool: plabel [ opt: Y def: Y info: "Number translations" ]
+bool: plabel  [
+  optional: "Y"
+  default: "Y"
+  information: "Number translations"
+]
 
- bool: nlabel [ opt: Y def: Y info: "Number DNA sequence" ]
+bool: nlabel  [
+  optional: "Y"
+  default: "Y"
+  information: "Number DNA sequence"
+]
 
- outfile: outfile [ param: Y ]
+outfile: outfile  [
+  parameter: "Y"
+]

@@ -1,10 +1,17 @@
 appl: backtranseq [
-        doc: "Back translate a protein sequence"
-        groups: "Nucleic:Translation, Protein:Composition"
+  documentation: "Back translate a protein sequence"
+  groups: "Nucleic:Translation, Protein:Composition"
 ]
 
- sequence: sequence [ param: Y type: PureProtein ]
+sequence: sequence  [
+  parameter: "Y"
+  type: "PureProtein"
+]
 
- codon: cfile [ opt: Y ]
+codon: cfile  [
+  optional: "Y"
+]
 
- seqout: outfile [param: Y  ]
+seqout: outfile  [
+  parameter: "Y"
+]

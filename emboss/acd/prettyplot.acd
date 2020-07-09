@@ -1,199 +1,180 @@
 appl: prettyplot [
-	doc: "Displays aligned sequences, with colouring and boxing"
-	groups: "Alignment:Multiple, Display"
+  documentation: "Displays aligned sequences, with colouring and boxing"
+  groups: "Alignment:Multiple, Display"
 ]
 
-	seqset: msf [ 
-	param: Y
-	type: gapany
-	info: "Sequences file to be read in"
-	help: "File containing a sequence alignment"
-	]
-	
-	int: residuesperline [
-	optional: Y 
-	def: 50
-	info: "Number of residues to be displayed on each line" 
-	help: "The number of residues to be displayed on each line"
-	]	
+seqset: msf  [
+  parameter: "Y"
+  type: "gapany"
+  information: "Sequences file to be read in"
+  help: "File containing a sequence alignment"
+]
 
-	int:	resbreak [
-	optional: Y 
-	min: 1
-	max: $(residuesperline)
-	info: "Residues before a space"
-	def: $(residuesperline) 
-        expect: "Same as -residuesperline to give no breaks"
-	]
+integer: residuesperline  [
+  optional: "Y"
+  default: "50"
+  information: "Number of residues to be displayed on each line"
+  help: "The number of residues to be displayed on each line"
+]
 
-	bool: ccolours [ 
-	optional: Y
-	def : Y
-	info: "Colour residues by their consensus value."
-	]
+integer: resbreak  [
+  optional: "Y"
+  minimum: "1"
+  maximum: "$(residuesperline)"
+  information: "Residues before a space"
+  default: "$(residuesperline)"
+  expected: "Same as -residuesperline to give no breaks"
+]
 
-	string: cidentity [ 
-	optional: Y 
-	info: "Colour to display identical residues (RED)"
-	def : "RED"
-	]
-	string: csimilarity [ 
-	optional: Y 
-	info: "Colour to display similar residues (GREEN)"
-	def : "GREEN"
-	]
-	string: cother [ 
-	optional: Y 
-	info: "Colour to display other residues (BLACK)"
-	def : "BLACK"
-	]
+bool: ccolours  [
+  optional: "Y"
+  default: "Y"
+  information: "Colour residues by their consensus value."
+]
 
-	bool: docolour [ 
-	optional: Y 
-	info: "Colour residues by table oily, amide etc."
-	def : N
-	]
+string: cidentity  [
+  optional: "Y"
+  information: "Colour to display identical residues (RED)"
+  default: "RED"
+]
 
-	bool: title [
-	optional: Y 
-	info: "Do not display the title"
-	def : Y
-	]
+string: csimilarity  [
+  optional: "Y"
+  information: "Colour to display similar residues (GREEN)"
+  default: "GREEN"
+]
 
-	string: shade [
-	optional: Y
-	info: "shading" 
-	help: "Set to BPLW for normal shading \
-               so for pair = 1.5,1.0,0.5 and shade = BPLW \
-               Residues score Colour  \
-               1.5 or over....... BLACK (B) \
-               1.0 to 1.5 ....... BROWN (P) \
-               0.5 to 1.0 ....... WHEAT (L) \
-               under  0.5 ....... WHITE (W) \
-              The only four letters allowed are BPLW, in any order."
-	def : ""
-	]
+string: cother  [
+  optional: "Y"
+  information: "Colour to display other residues (BLACK)"
+  default: "BLACK"
+]
 
-	string: pair [
-	optional: Y 
-	info: "Values to represent identical similar related"
-	def : "1.5,1.0,0.5"
-	]
+bool: docolour  [
+  optional: "Y"
+  information: "Colour residues by table oily, amide etc."
+  default: "N"
+]
 
-	int: identity [
-	optional: Y 
-	info: "Only match those which are identical in all sequences."
-	def : 0
-	min : 0
-	]
+bool: title  [
+  optional: "Y"
+  information: "Do not display the title"
+  default: "Y"
+]
 
-	bool: box [
-	optional: Y 
-	info: "Display prettyboxes"
-	def: Y
-	]
+string: shade  [
+  optional: "Y"
+  information: "shading"
+  help: "Set to BPLW for normal shading \ so for pair = 1.5,1.0,0.5 and shade = BPLW \ Residues score Colour \ 1.5 or over....... BLACK (B) \ 1.0 to 1.5 ....... BROWN (P) \ 0.5 to 1.0 ....... WHEAT (L) \ under 0.5 ....... WHITE (W) \ The only four letters allowed are BPLW, in any order."
+  default: ""
+]
 
-        bool: boxcol [
-        optional: Y 
-        info: "Colour the background in the boxes"
-        def: N
-        ]
+string: pair  [
+  optional: "Y"
+  information: "Values to represent identical similar related"
+  default: "1.5,1.0,0.5"
+]
 
-        string: boxcolval [
-        optional: Y 
-        info: "Colour to be used for background. (GREY)"
-        def: "GREY"
-        ]
+integer: identity  [
+  optional: "Y"
+  information: "Only match those which are identical in all sequences."
+  default: "0"
+  minimum: "0"
+]
 
-	bool: consensus [
-	optional: Y 
-	info: "Display the consensus"
-	def: N
-	]
+bool: box  [
+  optional: "Y"
+  information: "Display prettyboxes"
+  default: "Y"
+]
 
-	bool: name [
-	optional: Y 
-	info: "Display the sequence names"
-	def: Y
-	]
+bool: boxcol  [
+  optional: "Y"
+  information: "Colour the background in the boxes"
+  default: "N"
+]
 
-	int: maxnamelen [
-	optional: Y 
-	info: "Margin size for the sequence name."
-	def: 10
-	]
+string: boxcolval  [
+  optional: "Y"
+  information: "Colour to be used for background. (GREY)"
+  default: "GREY"
+]
 
-	bool: number [
-	optional: Y 
-	info: "Display the residue number"
-	def: Y
-	]
+bool: consensus  [
+  optional: "Y"
+  information: "Display the consensus"
+  default: "N"
+]
 
-	bool: listoptions [
-	optional: Y
-	info: "Display the date and options used"
-	def: Y
-	] 
+bool: name  [
+  optional: "Y"
+  information: "Display the sequence names"
+  default: "Y"
+]
 
-	float:  plurality [
-	optional: Y 
-	info: "Plurality check value (totweight/2)"
-	def: "@( $(msf.totweight) / 2)"
-        expect: "Half the total sequence weighting"
-	]	
+integer: maxnamelen  [
+  optional: "Y"
+  information: "Margin size for the sequence name."
+  default: "10"
+]
 
-	bool: collision [
-	optional: Y
-	info: "Allow collisions in calculating consensus"
-	def: Y
-	]
+bool: number  [
+  optional: "Y"
+  information: "Display the residue number"
+  default: "Y"
+]
 
-	int: alternative [
-	optional: Y
-	info: "Use alternative collisions routine"
-	help: "Use alternative collisions routine \
-              0) Normal collision check. (default) \
+bool: listoptions  [
+  optional: "Y"
+  information: "Display the date and options used"
+  default: "Y"
+]
 
-              1) checks identical scores with the max score
-              found. So if any other residue matches the
-              identical score then a collision has occurred. \
+float: plurality  [
+  optional: "Y"
+  information: "Plurality check value (totweight/2)"
+  default: "@( $(msf.totweight) / 2)"
+  expected: "Half the total sequence weighting"
+]
 
-              2) If another residue has a greater than or equal to
-              matching score and these do not match then a
-              collision has occurred. \
-                      
-              3) Checks all those not in the current
-              consensus.If any of these give a top score for
-              matching or identical scores then a collision
-              has occured."
-	def: 0
-	min: 0
-	max: 3
-	]
+bool: collision  [
+  optional: "Y"
+  information: "Allow collisions in calculating consensus"
+  default: "Y"
+]
 
-	bool: portrait [
-	optional: Y
-	info: "Set page to Portrait"
-	def: N
-	]
+integer: alternative  [
+  optional: "Y"
+  information: "Use alternative collisions routine"
+  help: "Use alternative collisions routine \ 0) Normal collision check. (default) \ 1) checks identical scores with the max score found. So if any other residue matches the identical score then a collision has occurred. \ 2) If another residue has a greater than or equal to matching score and these do not match then a collision has occurred. \ 3) Checks all those not in the current consensus.If any of these give a top score for matching or identical scores then a collision has occured."
+  default: "0"
+  minimum: "0"
+  maximum: "3"
+]
 
-	matrix: matrixfile [
-	optional: Y
-	info: "Matrix file"
-	protein: "$(msf.protein)"
-	]
+bool: portrait  [
+  optional: "Y"
+  information: "Set page to Portrait"
+  default: "N"
+]
 
-	int: showscore [
-	optional: Y
-	info: "Print residue scores"
-	def: -1
-	]
+matrix: matrixfile  [
+  optional: "Y"
+  information: "Matrix file"
+  protein: "$(msf.protein)"
+]
 
-	bool: data [
-	opt: N
-	def: N
-	]
+integer: showscore  [
+  optional: "Y"
+  information: "Print residue scores"
+  default: "-1"
+]
 
-	graph: graph [
-	req: @(!$(data))
-	]
+bool: data  [
+  optional: "N"
+  default: "N"
+]
+
+graph: graph  [
+  required: "@(!$(data))"
+]

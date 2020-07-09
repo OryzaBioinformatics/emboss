@@ -1,35 +1,52 @@
-# Palindrome  application
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-
-# mgf 26/11/98
-
-
 appl: palindrome [
-	doc: "Looks for inverted repeats in a nucleotide sequence"
-	groups: "Nucleic:Repeats"
+  documentation: "Looks for inverted repeats in a nucleotide sequence"
+  groups: "Nucleic:Repeats"
 ]
 
-  sequence: insequence [ param: Y type: nucleotide ]
+sequence: insequence  [
+  parameter: "Y"
+  type: "nucleotide"
+]
 
-  int: minpalLen [ req: Y default: 10  min: 1
-                   max: "@($(insequence.length)/2)"
-                   info:"Enter minimum length of palindrome" 
-                 ]
+integer: minpallen  [
+  required: "Y"
+  default: "10"
+  minimum: "1"
+  maximum: "@($(insequence.length)/2)"
+  information: "Enter minimum length of palindrome"
+]
 
-  int: maxpalLen [ req: Y default: 100  min: $(minpalLen)
-                   max: "@($(insequence.length)/2)"
-                   info:"Enter maximum length of palindrome" 
-                 ]
+integer: maxpallen  [
+  required: "Y"
+  default: "100"
+  minimum: "$(minpalLen)"
+  maximum: "@($(insequence.length)/2)"
+  information: "Enter maximum length of palindrome"
+]
 
-  int: gaplimit [ req: Y default: 100  min: 0
-                 max: "$(insequence.length)"
-                 info:"Enter maximum gap between repeated regions" 
-              ]
+integer: gaplimit  [
+  required: "Y"
+  default: "100"
+  minimum: "0"
+  maximum: "$(insequence.length)"
+  information: "Enter maximum gap between repeated regions"
+]
 
-  int: nummismatches [req: Y  default: 0 min: 0
-                      info: "Number of  mismatches allowed" 
-                      valid: "Positive integer" ]
+integer: nummismatches  [
+  required: "Y"
+  default: "0"
+  minimum: "0"
+  information: "Number of mismatches allowed"
+  valid: "Positive integer"
+]
 
-  outfile: outfile  [ param: Y extension: "pal" ]
-  bool: overlap  [ req: Y info: "Report overlapping matches" def: Y ]
+outfile: outfile  [
+  parameter: "Y"
+  extension: "pal"
+]
+
+bool: overlap  [
+  required: "Y"
+  information: "Report overlapping matches"
+  default: "Y"
+]

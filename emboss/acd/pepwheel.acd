@@ -1,88 +1,75 @@
-# PEPWHEEL protein helix representation
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-
-# ajb 16th March 1999
 appl: pepwheel [
-	doc: "Shows protein sequences as helices"
-	groups: "Display, Protein:2D Structure"
+  documentation: "Shows protein sequences as helices"
+  groups: "Display, Protein:2D Structure"
 ]
 
-  sequence: sequence [
-	param: Y
-	type: Protein
-  ]
+sequence: sequence  [
+  parameter: "Y"
+  type: "Protein"
+]
 
-  bool: amphipathic [
-	info: "Prompt for amphipathic residue marking"
-	help: "If this is true then the residues ACFGILMVWY are marked
-as squares and all other residues are unmarked.  This overrides any
-other markup that you may have specified using the qualifiers
-'-squares', '-diamonds' and '-octags'."
-  ]
+bool: amphipathic  [
+  information: "Prompt for amphipathic residue marking"
+  help: "If this is true then the residues ACFGILMVWY are marked as squares and all other residues are unmarked. This overrides any other markup that you may have specified using the qualifiers '-squares', '-diamonds' and '-octags'."
+]
 
-  bool: wheel [ 
-	def: Y
-	info: "Plot the wheel"
-  ]
+bool: wheel  [
+  default: "Y"
+  information: "Plot the wheel"
+]
 
-  int: steps [
-	opt: Y
-	min: 2
-	max: 100
-	def: 18
-	info: "Number of steps"
-	help: "The number of residues plotted per turn is this value
-divided by the 'turns' value."
-  ]
+integer: steps  [
+  optional: "Y"
+  minimum: "2"
+  maximum: "100"
+  default: "18"
+  information: "Number of steps"
+  help: "The number of residues plotted per turn is this value divided by the 'turns' value."
+]
 
-  int: turns [
-	opt: Y
-	min: 1
-	max: 100
-	def: 5
-	info: "Number of turns"
-	help: "The number of residues plotted per turn is the 'steps'
-value divided by this value."
-  ]
+integer: turns  [
+  optional: "Y"
+  minimum: "1"
+  maximum: "100"
+  default: "5"
+  information: "Number of turns"
+  help: "The number of residues plotted per turn is the 'steps' value divided by this value."
+]
 
-  string: squares [
-	opt: @(!$(amphipathic))
-	def: "ILVM"
-	info: "Mark as squares"
-	help: "By default the aliphatic residues ILVM are marked with
-squares."
-  ]
+string: squares  [
+  optional: "@(!$(amphipathic))"
+  default: "ILVM"
+  information: "Mark as squares"
+  help: "By default the aliphatic residues ILVM are marked with squares."
+]
 
-  string: diamonds [
-	opt: @(!$(amphipathic))
-	def: "DENQST"
-	info: "Mark as diamonds"
-	help: "By default the residues DENQST are marked with diamonds."
-  ]
+string: diamonds  [
+  optional: "@(!$(amphipathic))"
+  default: "DENQST"
+  information: "Mark as diamonds"
+  help: "By default the residues DENQST are marked with diamonds."
+]
 
-  string: octags [
-	opt: @(!$(amphipathic))
-	def: "HKR"
-	info: "Mark as octagons"
-	help: "By default the positively charged residues HKR are marked
-with octagons."
-  ]
+string: octags  [
+  optional: "@(!$(amphipathic))"
+  default: "HKR"
+  information: "Mark as octagons"
+  help: "By default the positively charged residues HKR are marked with octagons."
+]
 
+bool: data  [
+  required: "N"
+  default: "N"
+  information: "Display as data"
+  help: "Output the match data to a file instead of plotting it"
+]
 
-  bool: data [
-        req: N
-        def: N
-        info: "Display as data"
-        help: "Output the match data to a file instead of plotting it"
-  ]
+graph: graph  [
+  required: "@(!$(data))"
+  gxtitle: "$(sequence.name)"
+]
 
-  graph: graph [
-	req: @(!$(data))
-	gxtitle: $(sequence.name)
-  ]
-
-  outfile: outfile [
-        req: $(data)
-        nullok: Y
-  ]
+outfile: outfile  [
+  required: "$(data)"
+  nullok: "Y"
+]

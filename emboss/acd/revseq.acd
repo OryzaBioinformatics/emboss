@@ -1,41 +1,26 @@
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# use "" for missing values - these are required.
-# values in "" are trimmed to single spaces.
-# everything is treated as single tokens delimited by white space
-# (space, tab, newline)
-
-# GWW 26 Jan 1999
-
 appl: revseq [
-	doc: "Reverse and complement a sequence"
-	groups: "Edit"
+  documentation: "Reverse and complement a sequence"
+  groups: "Edit"
 ]
 
-  seqall: sequence [
-	param: Y
-	type: dna
-  ]
+seqall: sequence  [
+  parameter: "Y"
+  type: "dna"
+]
 
-  seqoutall: outseq [
-	param: Y
-	ext: "rev"
-  ]
+seqoutall: outseq  [
+  parameter: "Y"
+  extension: "rev"
+]
 
-  bool: reverse [
-	def: Y
-	prompt: "Reverse sequence"
-	help: "Set this to be false if you do not wish to reverse the
-	       output sequence"
-  ]
+bool: reverse  [
+  default: "Y"
+  prompt: "Reverse sequence"
+  help: "Set this to be false if you do not wish to reverse the output sequence"
+]
 
-  bool: complement [
-	def: Y
-	prompt: "Complement sequence"
-	help: "Set this to be false if you do not wish to complement the
-               output sequence"
-  ]
-
-
-
-
+bool: complement  [
+  default: "Y"
+  prompt: "Complement sequence"
+  help: "Set this to be false if you do not wish to complement the output sequence"
+]

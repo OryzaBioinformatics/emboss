@@ -1,26 +1,45 @@
 appl: einverted [
-	doc: "Finds DNA inverted repeats"
-	groups: "Nucleic:Repeats, Nucleic:2D structure"
+  documentation: "Finds DNA inverted repeats"
+  groups: "Nucleic:Repeats, Nucleic:2D structure"
 ]
 
-  sequence: sequence [ param: Y type: dna ]
+sequence: sequence  [
+  parameter: "Y"
+  type: "dna"
+]
 
-  outfile: outfile [ param: Y  ext: inv ]
+outfile: outfile  [
+  parameter: "Y"
+  extension: "inv"
+]
 
-  int: gap [def: 12 req: Y info: "Gap penalty" ]
+integer: gap  [
+  default: "12"
+  required: "Y"
+  information: "Gap penalty"
+]
 
-  int: threshold [ def: 50 req: Y info: "Minimum score threshold" ]
+integer: threshold  [
+  default: "50"
+  required: "Y"
+  information: "Minimum score threshold"
+]
 
-  int: match [ def: 3 req: Y info: "Match score" ]
+integer: match  [
+  default: "3"
+  required: "Y"
+  information: "Match score"
+]
 
-  int: mismatch [ def: -4 req: Y info: "Mismatch score" ]
+integer: mismatch  [
+  default: "-4"
+  required: "Y"
+  information: "Mismatch score"
+]
 
-  int: maxrepeat [ 
-        optional: Y
-        def: 4000
-        info: "Maximum extent of repeats"
-        help: "Maximum separation between the start of repeat
-               and the end of the inverted repeat (the default 
-               is 4000 bases)."
-  ]
-
+integer: maxrepeat  [
+  optional: "Y"
+  default: "4000"
+  information: "Maximum extent of repeats"
+  help: "Maximum separation between the start of repeat and the end of the inverted repeat (the default is 4000 bases)."
+]

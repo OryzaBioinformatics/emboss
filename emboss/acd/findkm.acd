@@ -1,33 +1,24 @@
-# findkm Sinead O'Leary September 1999
-# FINDKM - APPLICATION TO FIND THE MICHAELIS MENTON CONSTANT Km FOR A GIVEN 
-# ENZYME REACTION
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-# SEPTEMBER 1999 SOL
-# MAY 2000 rewritten to use a Hanes Woolf plot instead of Lineweaver Burke by David Martin.
-
-appl:	findkm [
-	doc: "Find Km and Vmax for an enzyme reaction by a Hanes/Woolf plot" 
-	groups: "Enzyme Kinetics"
+appl: findkm [
+  documentation: "Find Km and Vmax for an enzyme reaction by a Hanes/Woolf plot"
+  groups: "Enzyme Kinetics"
 ]
 
-infile:	infile [ 
-	param: Y
-	prompt: "Enter name of file containing data"
-]
-        
-outfile: outfile [
-	param: Y
-]
-        
-bool:	plot [ 
-	req: N 
-	def: Y 
-	info: "S/V vs S" 
-]
-      
-xygraph: graphLB [
-	req: Y
-	multi:2
+infile: infile  [
+  parameter: "Y"
+  prompt: "Enter name of file containing data"
 ]
 
+outfile: outfile  [
+  parameter: "Y"
+]
+
+bool: plot  [
+  required: "N"
+  default: "Y"
+  information: "S/V vs S"
+]
+
+xygraph: graphlb  [
+  required: "Y"
+  multiple: "2"
+]

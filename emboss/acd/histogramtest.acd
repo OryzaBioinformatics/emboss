@@ -1,24 +1,54 @@
 appl: histogramtest [
-	doc: "test of graphics"
-	groups: "Test"
+  documentation: "test of graphics"
+  groups: "Test"
 ]
 
-  int: sets   [ req: y def: 1 min: 1 max: 10
-	        info: "Number of sets of data"]
+integer: sets  [
+  required: "y"
+  default: "1"
+  minimum: "1"
+  maximum: "10"
+  information: "Number of sets of data"
+]
 
-  int: points [ req: y def: 10 min: 1 max: 200
-                info: "Number of data points per set"]
+integer: points  [
+  required: "y"
+  default: "10"
+  minimum: "1"
+  maximum: "200"
+  information: "Number of data points per set"
+]
 
-  int: bins   [ req: y def: $(points) min: 1 max: $(points)
-                info: "Number of bars"]
+integer: bins  [
+  required: "y"
+  default: "$(points)"
+  minimum: "1"
+  maximum: "$(points)"
+  information: "Number of bars"
+]
 
-  int: sidebyside [ opt: y def: 1 min: 0 max: 1
-                    info: "Display sets next to each other"]
+integer: sidebyside  [
+  optional: "y"
+  default: "1"
+  minimum: "0"
+  maximum: "1"
+  information: "Display sets next to each other"
+]
 
-  int: xstart [ opt: y def: 0 info: "start value for x axis"]
+integer: xstart  [
+  optional: "y"
+  default: "0"
+  information: "start value for x axis"
+]
 
-  int: xend [ opt: y def: "@($(xstart)+$(points))"
-              min: "@($(xstart)+1)" info: "end value for x axis"
-              expect: "Start value plus number of data points"]
+integer: xend  [
+  optional: "y"
+  default: "@($(xstart)+$(points))"
+  minimum: "@($(xstart)+1)"
+  information: "end value for x axis"
+  expected: "Start value plus number of data points"
+]
 
-  xygraph: graph [ req: Y ]
+xygraph: graph  [
+  required: "Y"
+]
