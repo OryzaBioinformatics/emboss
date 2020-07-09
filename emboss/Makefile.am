@@ -16,7 +16,7 @@ chaos checktrans chips cirdna codcmp complex \
 compseq cons cpgplot cpgreport cusp cutseq \
 dan dbiblast dbifasta dbiflat dbigcg \
 descseq diffseq digest dotmatcher dotpath dottup dreg \
-einverted embossdata emma emowse \
+einverted embossdata emma emowse entret \
 equicktandem est2genome etandem extractseq \
 findkm freak fuzznuc fuzzpro fuzztran \
 garnier geecee getorf helixturnhelix \
@@ -82,6 +82,7 @@ embossdata_SOURCES = embossdata.c
 emma_SOURCES = emma.c
 emowse_SOURCES = emowse.c
 entrails_SOURCES = entrails.c
+entret_SOURCES = entret.c
 equicktandem_SOURCES = equicktandem.c
 est2genome_SOURCES = est2genome.c
 etandem_SOURCES = etandem.c

@@ -11,6 +11,15 @@
 # read in from the EMBOSS application 'wossname'
 # group names, application name and which application is in which groups
 
+###################################################################
+# check that we are on the CVS machine
+require 'hostname.pl';
+if (hostname() ne "tin") {
+        die "This script should be executed on the CVS machine 'tin'\n";
+}
+###################################################################
+
+
 open (PROGS, "wossname -auto |") || die "Cannot run wossname";
 $grp = "";
 while (<PROGS>) {
@@ -44,6 +53,14 @@ $doctop = "/data/www/Software/EMBOSS";
 	    "$doctop/EMBASSY/MSE",
 	    "$doctop/EMBASSY/PHYLIP",
 	    "$doctop/EMBASSY/TOPO");
+
+# filenames for cvs add and commit commands
+$cvsdochtmladd = '';
+$cvsdochtmlcommit = '';
+$cvsdoctextadd = '';
+$cvsdoctextcommit = '';
+
+###################################################################
 
 # open the index.html file we will be putting in the distribution
 open (INDEX, "> i.i") || die "Cannot open i.i\n";
@@ -200,7 +217,8 @@ REMEMBER TO EDIT THESE FILES:
 	    if (filediff (0, "$cvsdoc/text/$x.txt", "x.x")) {
 		system "cp x.x $cvsdoc/text/$x.txt";
 		chmod 0664, "$cvsdoc/text/$x.txt";
-		system "cvs commit -m'documentation updated' $cvsdoc/text/$x.txt";
+#		system "cvs commit -m'documentation updated' $cvsdoc/text/$x.txt";
+		$cvsdoctextcommit .= " $x.txt";
 		print "$x.txt *replaced*\n";
 		unlink "x.x";
 	    }
@@ -208,8 +226,10 @@ REMEMBER TO EDIT THESE FILES:
 # it doesn't exist, so create the new text output
 	    system "lynx -dump -nolist $url/$x.html > $cvsdoc/text/$x.txt";
             chmod 0664, "$cvsdoc/text/$x.txt";
-	    system "cvs add -m'documentation created' $cvsdoc/text/$x.txt";
-	    system "cvs commit -m'documentation created' $cvsdoc/text/$x.txt";
+#	    system "cvs add -m'documentation created' $cvsdoc/text/$x.txt";
+	    $cvsdoctextadd .= " $x.txt";
+#	    system "cvs commit -m'documentation created' $cvsdoc/text/$x.txt";
+	    $cvsdoctextcommit .= " $x.txt";
 	    print "$x.txt *created*\n";
 	}
 
@@ -223,7 +243,8 @@ REMEMBER TO EDIT THESE FILES:
 	    if (filediff (0, "$cvsdoc/html/$x.html", "x.x")) {
 		system "cp x.x $cvsdoc/html/$x.html";
 		chmod 0664, "$cvsdoc/html/$x.html";
-		system "cvs commit -m'documentation updated' $cvsdoc/html/$x.html";
+#		system "cvs commit -m'documentation updated' $cvsdoc/html/$x.html";
+		$cvsdochtmlcommit .= " $x.html";
 		print "$x.html *replaced*\n";
 		unlink "x.x";
 	    }
@@ -234,8 +255,10 @@ REMEMBER TO EDIT THESE FILES:
             system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' $cvsdoc/html/$x.html";
             system "perl -p -i -e 's#\.\.\/emboss_icon.gif#emboss_icon.gif#g;' $cvsdoc/html/$x.html";
             chmod 0664, "$cvsdoc/html/$x.html";
-	    system "cvs add -m'documentation created' $cvsdoc/html/$x.html";
-	    system "cvs commit -m'documentation created' $cvsdoc/html/$x.html";
+#	    system "cvs add -m'documentation created' $cvsdoc/html/$x.html";
+	    $cvsdochtmladd .= " $x.html";
+#	    system "cvs commit -m'documentation created' $cvsdoc/html/$x.html";
+	    $cvsdochtmlcommit .= " $x.html";
 	    print "$x.html *created*\n";
 	}
 
@@ -251,7 +274,8 @@ close(INDEX);
 if (filediff (1, "$cvsdoc/html/index.html", "i.i")) {    
   system "cp i.i $cvsdoc/html/index.html";
   chmod 0664, "$cvsdoc/html/index.html";
-  system "cvs commit -m'index.html updated' $cvsdoc/html/index.html";
+#  system "cvs commit -m'index.html updated' $cvsdoc/html/index.html";
+  $cvsdochtmlcommit .= " index.html";
   print "index.html *replaced*\n";
   unlink "i.i";
 }
@@ -371,7 +395,8 @@ $progs{$p}
     if (filediff (1, "$cvsdoc/html/$g\_group.html", "x.x")) {
       system "cp x.x $cvsdoc/html/$g\_group.html";
       chmod 0664, "$cvsdoc/html/$g\_group.html";
-      system "cvs commit -m'documentation updated' $cvsdoc/html/$g\_group.html";
+#      system "cvs commit -m'documentation updated' $cvsdoc/html/$g\_group.html";
+      $cvsdochtmlcommit .= " $g\_group.html";
       print "$g\_group.html *replaced*\n";
       unlink "x.x";
     }
@@ -382,8 +407,10 @@ $progs{$p}
     system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' $cvsdoc/html/$g\_group.html";
     system "perl -p -i -e 's#\.\.\/emboss_icon.gif#emboss_icon.gif#g;' $cvsdoc/html/$g\_group.html";
     chmod 0664, "$cvsdoc/html/$g\_group.html";
-    system "cvs add -m'documentation created' $cvsdoc/html/$g\_group.html";
-    system "cvs commit -m'documentation created' $cvsdoc/html/$g\_group.html";
+#    system "cvs add -m'documentation created' $cvsdoc/html/$g\_group.html";
+    $cvsdochtmladd .= " $g\_group.html";
+#    system "cvs commit -m'documentation created' $cvsdoc/html/$g\_group.html";
+    $cvsdochtmlcommit .= " $g\_group.html";
     print "$g\_group.html *created*\n";
   }
 }
@@ -415,7 +442,8 @@ if (-e "$cvsdoc/html/groups.html") {
     if (filediff (1, "$cvsdoc/html/groups.html", "x.x")) {
       system "cp x.x $cvsdoc/html/groups.html";
       chmod 0664, "$cvsdoc/html/groups.html";
-      system "cvs commit -m'documentation updated' $cvsdoc/html/groups.html";
+#      system "cvs commit -m'documentation updated' $cvsdoc/html/groups.html";
+      $cvsdochtmlcommit .= " groups.html";
       print "groups.html *replaced*\n";
       unlink "x.x";
     }
@@ -426,12 +454,44 @@ if (-e "$cvsdoc/html/groups.html") {
     system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' $cvsdoc/html/groups.html";
     system "perl -p -i -e 's#\.\.\/emboss_icon.gif#emboss_icon.gif#g;' $cvsdoc/html/groups.html";
     chmod 0664, "$cvsdoc/html/groups.html";
-    system "cvs add -m'documentation created' $cvsdoc/html/groups.html";
-    system "cvs commit -m'documentation created' $cvsdoc/html/groups.html";
+#    system "cvs add -m'documentation created' $cvsdoc/html/groups.html";
+     $cvsdochtmladd .= " groups.html";
+#    system "cvs commit -m'documentation created' $cvsdoc/html/groups.html";
+     $cvsdochtmlcommit .= " groups.html";
     print "groups.html *created*\n";
 }
 
-##################################################################
+######################################################################
+# OK - we have updated all our files, now CVS add and CVS commit them 
+######################################################################
+
+chdir "$cvsdoc/html";
+
+if ($cvsdochtmladd ne "") {
+	system "cvs add -m'documentation created' $cvsdochtmladd";
+}
+if ($cvsdochtmlcommit ne "") {
+	system "cvs commit -m'documentation created' $cvsdochtmlcommit";
+}
+
+chdir "$cvsdoc/text";
+
+if ($cvsdoctextadd ne "") {
+        system "cvs add -m'documentation created' $cvsdoctextadd";
+}
+if ($cvsdoctextcommit ne "") {
+        system "cvs commit -m'documentation created' $cvsdoctextcommit";
+}
+
+
+
+######################################################################
+######################################################################
+######################################################################
+######################################################################
+# SUBROUTINES
+######################################################################
+
 sub filediff ( $$ ) {
     my ($silent, $afile, $bfile) = @_;
     system ("diff $afile $bfile > z.z");
