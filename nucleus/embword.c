@@ -1079,7 +1079,6 @@ void embWordMatchMin(AjPList matchlist, int seq1length, int seq2length) {
 
   AjIList iter = ajListIter(matchlist);
   EmbPWordMatch match, thismatch;
-  int i, j, ilen;
   AjPList minlist = ajListNew();	/* list of matches in min set */
   int deadx1, deady1, deadx2, deady2;	/* positions of the dead zones */
   AjBool truncated;	

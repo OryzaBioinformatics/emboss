@@ -138,7 +138,7 @@ int main (int argc, char * argv[])
     char *s1;
     int *position;
     int i,j,k,w;
-    int a,b;
+    int a;
     int midpoint,llen,maxlen;
     float total;
     float matrix[AZ];

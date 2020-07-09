@@ -1149,14 +1149,10 @@ static int gcgappent (AjPFile libr, AjPFile libs, AjPStr* libstr) {
   /* keep reading until we reach the end of entry
    and return the extra number of bases*/
 
-  static AjPStr gcgtype = NULL;
-  int rblock;
   static AjPStr reflibstr = NULL;
   static AjPStr seqlibstr = NULL;
   static AjPStr testlibstr = NULL;
   int ilen;
-  int applen=0;
-  long thislen;
   static AjPStr tmpstr = NULL;
 
   AjBool isend;
@@ -1310,7 +1306,7 @@ static AjBool parseGenbank (AjPStr line, AjPStr* id, AjPList acl) {
     idexp = ajRegCompC ("^ID   ([^ \t]+)");
 
   if (!acexp)
-    acexp = ajRegCompC ("^AC   ");
+    acexp = ajRegCompC ("^ACCESSION   ");
 
   if (!ac2exp)
     ac2exp = ajRegCompC ("([A-Za-z0-9]+)");

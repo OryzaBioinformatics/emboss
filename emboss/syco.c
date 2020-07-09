@@ -71,8 +71,6 @@ int main(int argc, char **argv)
 
     float amin;
     float amax;
-    float v;
-    
     
     int beg;
     int end;

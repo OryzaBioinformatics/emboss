@@ -26,6 +26,8 @@
 ********************************************************************/
 
 #include "ajax.h"
+#include "ajmem.h"
+#include "ajfile.h"
 #include "limits.h"
 #include <stdarg.h>
 #include <sys/types.h>
@@ -172,6 +174,7 @@ static void       seqCdTrgLine (SeqPCdTrg trgLine, int ipos, SeqPCdFile fp);
 static char*      seqCdTrgName (int ipos, SeqPCdFile fp);
 static AjBool     seqCdTrgOpen (AjPStr dir, char* name,
 			    SeqPCdFile *trgfil, SeqPCdFile *hitfil);
+static AjBool     seqCdTrgQuery (AjPSeqQuery qry);
 static int        seqCdTrgSearch (SeqPCdTrg trgLine, AjPStr name, SeqPCdFile fp);
 
 static AjBool     seqGcgAll (const AjPSeqin seqin);
@@ -261,9 +264,6 @@ static AjBool seqAccessEmblcd (AjPSeqin seqin) {
   SeqPCdQry qryd = qry->QryData;
 
   static int qrycalled = 0;
-
-  ajStrAssC(&qry->Filename,"pdb_seq.");
-  
 
 
   ajDebug ("seqAccessEmblcd type %d\n", qry->Type);
@@ -385,6 +385,8 @@ static AjBool seqCdAll (AjPSeqin seqin) {
 
     if (ajFileTestSkip (fullName, qry->Exclude, qry->Filename, ajTrue))
       ajListstrPushApp (list, fullName);
+    else
+	ajStrDel(&fullName);
   }
   seqin->Filebuff = ajFileBuffNewInList(list);
   fullName = NULL;
@@ -433,15 +435,24 @@ static AjPFile seqBlastFileOpen (AjPStr dir, AjPStr name) {
 
 static SeqPCdFile seqCdFileOpen (AjPStr dir, char* name, AjPStr* fullname) {
 
-  SeqPCdFile thys;
+  SeqPCdFile thys=NULL;
+  AjPFile fred;
+  
+  
 
   AJNEW0(thys);
 
   thys->File = ajFileNewDC(dir, name);
+
   if (!thys->File)
-    return NULL;
+  {
+      AJFREE(thys);
+      return NULL;
+  }
+  
 
   AJNEW0(thys->Header);
+
   (void) seqCdReadHeader (thys);
   thys->NRecords = thys->Header->NRecords;
   thys->RecSize = thys->Header->RecSize;
@@ -450,6 +461,8 @@ static SeqPCdFile seqCdFileOpen (AjPStr dir, char* name, AjPStr* fullname) {
 
   ajDebug ("seqCdFileOpen '%F' NRecords: %d RecSize: %d\n",
 	   thys->File, thys->NRecords, thys->RecSize);
+
+  
   return thys;
 }
 
@@ -1351,16 +1364,23 @@ static AjBool seqCdQryEntry (AjPSeqQuery qry) {
 ** @@
 ******************************************************************************/
 
-static AjBool seqCdQryQuery (AjPSeqQuery qry) {
+static AjBool seqCdQryQuery (AjPSeqQuery qry)
+{
 
-  if (ajStrLen(qry->Id)) {	/* search by ID */
-    if (!seqCdIdxQuery (qry)) {
-      return ajFalse;
+    if(ajStrLen(qry->Id))
+    {
+	if (!seqCdIdxQuery (qry))
+	    return ajFalse;
+	return ajTrue;
     }
-    return ajTrue;
-  }
-
-  return ajFalse;
+    else if(ajStrLen(qry->Acc))
+    {
+	if(!seqCdTrgQuery(qry))
+	    return ajFalse;
+	return ajTrue;
+    }
+      
+    return ajFalse;
 }
 
 /* @funcstatic seqCdQryNext ********************************************
@@ -3247,4 +3267,180 @@ static void seqBlastStripNcbi (AjPStr* line) {
   ajDebug ("trim to   '%S'\n", tmpline);
 
   return;
+}
+
+
+/* @funcstatic seqTrgIdxQuery ************************************************
+**
+** Binary search of an EMBL CD-ROM index file for entries matching a
+** wildcard accession number
+**
+** @param [r] qry [AjPSeqQuery] Sequence query object.
+** @return [AjBool] ajTrue on success.
+** @@
+******************************************************************************/
+
+static AjBool seqCdTrgQuery (AjPSeqQuery qry)
+{
+    SeqPCdQry wild = qry->QryData;
+    AjPList   l = wild->List;
+    SeqPCdTrg trgline = wild->trgLine;
+    SeqPCdIdx idxline = wild->idxLine;
+    AjPStr acname = qry->Acc;
+    SeqPCdFile idxfp = wild->ifp;
+    SeqPCdFile trgfp = wild->trgfp;
+    SeqPCdFile hitfp = wild->hitfp;
+    AjBool *skip = wild->Skip;
+    
+    AjPStr acstr = NULL;
+    AjPStr actmp = NULL;
+
+    int t;
+    int b;
+    int t2;
+    int b2;
+    int t3;
+    int pos;
+    int len;
+    int start;
+    int end;
+    int i;
+    int j;
+    int k;
+    int cmp;
+    
+    AjBool first;
+    char   *name;
+
+    SeqPCdEntry entry;
+
+
+    if(!seqCdTrgOpen (qry->IndexDir,"acnum",&trgfp, &hitfp))
+	return ajFalse;
+    
+
+    (void) ajStrAss(&acstr,acname);
+    (void) ajStrToUpper(&acstr);
+    (void) ajStrAssC(&actmp,ajStrStr(acstr));
+
+    (void) ajStrWildPrefix(&actmp);
+
+    b = b2 = 0;
+    t = t2 = t3 = trgfp->NRecords - 1;
+
+    len = ajStrLen(actmp);
+    first = ajTrue;
+
+    
+    if(len)
+    {
+	while(b<=t)
+	{
+	    pos = (t+b)/2;
+	    name = seqCdTrgName(pos,trgfp);
+	    name[len]='\0';
+	    cmp = ajStrCmpC(actmp,name);
+/*	    cmp = ajStrMatchWildC(acstr,name);*/
+	    ajDebug(" trg test %d '%s' %2d (+/- %d)\n",pos,name,cmp,t-b);
+	    if(!cmp)
+	    {
+		ajDebug(" trg hit %d\n",pos);
+		if(first)
+		{
+		    first = ajFalse;
+		    t2 = t;
+		    t3 = pos;
+		}
+		b2 = pos;
+	    }
+	    if(cmp>0)
+		b = pos+1;
+	    else
+		t = pos-1;
+	}
+
+	if(first)
+	{
+	    ajStrDel(&actmp);
+	    ajStrDel(&acstr);
+	    seqCdTrgClose(&trgfp,&hitfp);
+	    return ajFalse;
+	}
+	ajDebug("first pass: pos %d b2 %d t2 %d\n",pos,b2,t2);
+
+	b = b2-1;
+	t = t2;
+	while(b<=t)
+	{
+	    pos = (t+b)/2;
+	    name = seqCdTrgName(pos,trgfp);
+	    name[len]='\0';
+	    cmp = ajStrCmpC(actmp,name);
+/*	    cmp = ajStrMatchWildC(acstr,name);*/
+	    ajDebug(" trg test %d '%s' %2d (+/- %d)\n",pos,name,cmp,t-b);
+	    if(!cmp)
+	    {
+		ajDebug(" trg hit %d\n",pos);
+		t3 = pos;
+	    }
+	    if(cmp<0)
+		t = pos-1;
+	    else
+		b = pos+1;
+	}
+
+	ajDebug("second pass: pos %d b2 %d t3 %d\n",pos,b2,t3);
+	name = seqCdTrgName(b2,trgfp);
+	ajDebug("first %d '%s'\n",b2,name);
+	name = seqCdTrgName(t3,trgfp);
+	ajDebug("last %d '%s'\n",t3,name);
+
+    
+
+	start = b2;
+	end   = t3;
+	for(i=start;i<=end;++i)
+	{
+	    seqCdTrgLine (trgline, i, trgfp);	
+	    (void) seqCdFileSeek (hitfp,trgline->FirstHit-1);
+	    ajDebug("acnum First: %d Count: %d\n",
+		    trgline->FirstHit, trgline->NHits);
+	    pos = trgline->FirstHit;
+
+	    for (j=0;j<trgline->NHits;++j)
+	    {
+		(void) seqCdFileReadInt (&k,hitfp);
+		--k;
+		ajDebug("hitlist[%d] entry = %d\n",j,k);
+		(void) seqCdIdxLine (idxline,k,idxfp);
+
+		if (!skip[idxline->DivCode-1])
+		{
+		    AJNEW0(entry);
+		    entry->div = idxline->DivCode;
+		    entry->annoff = idxline->AnnOffset;
+		    entry->seqoff = idxline->SeqOffset;
+		    ajListPushApp(l,(void*)entry);
+		}
+		else
+		{
+		    ajDebug("SKIP: accnum '%S' [file %d]\n",
+			    qry->Acc,idxline->DivCode);
+		}
+	    }
+	
+	}
+    }
+    
+    (void) seqCdTrgClose (&trgfp, &hitfp);
+
+
+    ajStrDel(&trgline->Target);
+    ajStrDel(&acstr);
+    ajStrDel(&actmp);
+    
+    if(ajListLength(l))
+	return ajTrue;
+
+    return ajFalse;
 }

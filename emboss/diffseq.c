@@ -37,7 +37,6 @@ int main(int argc, char * argv[]) {
   AjPTable seq1MatchTable =0 ;
   AjPList matchlist=NULL ;
   AjPFile outfile;
-  int i;
   AjPFeatTable Tab1=NULL,Tab2=NULL;
   AjPFeatTabOut seq1out = NULL, seq2out = NULL;
   AjBool columns;	/* format output report files in columns */
@@ -327,11 +326,11 @@ static void diff (AjPList matchlist, AjPSeq seq1, AjPSeq seq2, AjPFile
 	outfile, AjBool columns) {
 
   AjIList iter=NULL;		/* match list iterator */
-  EmbPWordMatch p;  		/* match structure */
+  EmbPWordMatch p=NULL;		/* match structure */
   int count=0;			/* count of matches */
   AjPStr s1 = ajSeqStr(seq1);	/* string of seq1 */
   AjPStr s2 = ajSeqStr(seq2);	/* string of seq2 */
-  int prev1end, prev2end;	/* end positions (+1) of previous match */
+  int prev1end=0, prev2end=0;	/* end positions (+1) of previous match */
   AjPStr tmp = ajStrNew();	/* temporary string */
   AjPStr name1 = ajStrNewC(ajSeqName(seq1));	/* name of seq1 */
   AjPStr name2 = ajStrNewC(ajSeqName(seq2));	/* name of seq2 */
@@ -339,7 +338,7 @@ static void diff (AjPList matchlist, AjPSeq seq1, AjPSeq seq2, AjPFile
 
 /* stuff for counting SNPs, transitions & transversions */
   int snps=0, transitions=0, transversions = 0;	/* counts of SNP types */
-  char base1, base2;
+  char base1='\0', base2='\0';
   int len1, len2;
 
 /* get the feature table of the sequences */

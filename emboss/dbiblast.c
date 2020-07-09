@@ -179,7 +179,7 @@ static OParser parser[] = {
   {NULL, NULL}
 };
 
-static void   stripncbi (AjPStr* line);
+/* static void   stripncbi (AjPStr* line); */
 static Pac    acnumNew (void);
 static Pentry entryNew (void);
 static Pentry nextblastentry (PBlastDb db, int ifile);
@@ -1134,7 +1134,7 @@ static AjBool blastopenlib (AjPStr name, PBlastDb* pdb) {
 ** @@
 ******************************************************************************/
 
-static void stripncbi (AjPStr* line) {
+/* static void stripncbi (AjPStr* line) {
 
   static AjPRegexp gnlexp = NULL;
   static AjPRegexp giexp = NULL;
@@ -1165,7 +1165,7 @@ static void stripncbi (AjPStr* line) {
 
   return;
 }
-
+*/
 /* @funcstatic parseNcbi ********************************************
 **
 ** Parses an NCBI style header from the BLAST header table.

@@ -139,6 +139,9 @@ int main(int argc, char **argv)
     ajGraphxySetYStart(graph,0.0);
     ajGraphxySetYEnd(graph,100.0);
     ajGraphxyTitleC(graph,"Wobble bases");
+
+    ajGraphSetCharSize(0.7);
+    
     ajGraphxyDisplay(graph,ajTrue);
     
  

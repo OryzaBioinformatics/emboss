@@ -55,78 +55,96 @@ static void addGroupsToList(AjPList alpha, AjPList glist,
 ******************************************************************************/
 
 void embGrpGetProgGroups (AjPList glist, AjPList alpha, char **env,
-			  AjBool emboss, AjBool embassy, AjBool explode) {
+			  AjBool emboss, AjBool embassy, AjBool explode)
+{
 
-  AjPStr acdroot = NULL;
-  AjPStr acdrootdir = NULL;
-  AjPStr acdrootinst = NULL;
-  AjPStr acdpack = NULL;
-  AjPStr alphaname = NULL;
-  GPnode gpnode;	/* new member (first & only) of alpha being added */
-  AjBool doneinstall = ajFalse;
+    AjPStr acdroot = NULL;
+    AjPStr acdrootdir = NULL;
+    AjPStr acdrootinst = NULL;
+    AjPStr acdpack = NULL;
+    AjPStr alphaname = NULL;
+    GPnode gpnode;			/* new member (first & only) of alpha being added */
+    AjBool doneinstall = ajFalse;
 
-/* set up alpha programs group list */
-  (void) ajStrAssC(&alphaname, "Alphabetic list of programs");
-  gpnode = embGrpMakeNewGnode(alphaname);
-  ajListPushApp(alpha, gpnode);
-  ajStrDel(&alphaname);
+    /* set up alpha programs group list */
+    (void) ajStrAssC(&alphaname, "Alphabetic list of programs");
+    gpnode = embGrpMakeNewGnode(alphaname);
+    ajListPushApp(alpha, gpnode);
+    ajStrDel(&alphaname);
 
 
-/* look at all EMBOSS ACD files */
-  (void) ajNamRootPack (&acdpack);
-  (void) ajNamRootInstall (&acdrootinst);
-  if (emboss) {
-    if (ajNamGetValueC ("acdroot", &acdroot)) {
-      (void) ajFileDirFix (&acdroot);
-      /*(void) ajStrAppC (&acdroot, "acd/");*/
-    }
-    else {
-      (void) ajFileDirFix (&acdrootinst);
-      ajFmtPrintS (&acdroot, "%Sshare/%S/acd/",
-		   acdrootinst, acdpack);
-      if (ajFileDir(&acdroot)) {
-	doneinstall = ajTrue;
-      }
-      else {
-/*	ajDebug ("acd directory '%S' not opened\n", acdroot);*/
-	(void) ajNamRoot (&acdrootdir);
-	(void) ajFileDirFix (&acdrootdir);
-/*	ajDebug("acdroot set to %S\n",acdrootdir);*/
+    /* look at all EMBOSS ACD files */
+    acdpack     = ajStrNew();
+    acdroot     = ajStrNew();
+    acdrootdir  = ajStrNew();
+    acdrootinst = ajStrNew();
+    alphaname   = ajStrNew();
+
+    (void) ajNamRootPack (&acdpack);
+    (void) ajNamRootInstall (&acdrootinst);
+    if (emboss)
+    {
+	if (ajNamGetValueC ("acdroot", &acdroot))
+	{
+	    (void) ajFileDirFix (&acdroot);
+	    /*(void) ajStrAppC (&acdroot, "acd/");*/
+	}
+	else
+	{
+	    (void) ajFileDirFix (&acdrootinst);
+	    ajFmtPrintS (&acdroot, "%Sshare/%S/acd/",
+			 acdrootinst, acdpack);
+	    if (ajFileDir(&acdroot))
+		doneinstall = ajTrue;
+	    else
+	    {
+		/*	ajDebug ("acd directory '%S' not opened\n", acdroot);*/
+		(void) ajNamRoot (&acdrootdir);
+		(void) ajFileDirFix (&acdrootdir);
+		/*	ajDebug("acdroot set to %S\n",acdrootdir);*/
 	
-	ajFmtPrintS (&acdroot, "%Sacd/", acdrootdir);
-/*	ajFmtPrintS (&acdroot, "%S", acdrootdir);*/
-      }
-    }
+		ajFmtPrintS (&acdroot, "%Sacd/", acdrootdir);
+		/*	ajFmtPrintS (&acdroot, "%S", acdrootdir);*/
+	    }
+	}
 
-    getACDfiles(glist, alpha, env, acdroot, explode);	/* normal EMBOSS ACD */
-  }
+	/* normal EMBOSS ACD */
+	getACDfiles(glist, alpha, env, acdroot, explode);
+    }
   
-  if (embassy && !doneinstall) {
-
-    (void) ajFileDirFix (&acdroot);
-    ajFmtPrintS (&acdroot, "%Sshare/%S/acd/",	/* EMBOSS install directory */
-		 acdrootinst, acdpack);
-    if (ajFileDir(&acdroot)) {
-      getACDfiles(glist, alpha, env, acdroot, explode);	/* embassadir ACD files */
-    }
-    else {		/* look for all source directories */
-/*      ajDebug ("acd directory '%S' not opened\n", acdroot); */
-      (void) ajNamRoot (&acdrootdir);
-      (void) ajFileDirUp (&acdrootdir);
-      ajFmtPrintS (&acdroot, "%Sembassy/", acdrootdir);
-      getACDdirs(glist, alpha, env, acdroot, explode);	/* embassadir ACD files */
-    }
+    if (embassy && !doneinstall)
+    {
+	(void) ajFileDirFix (&acdroot);
+	/* EMBOSS install directory */
+	ajFmtPrintS (&acdroot, "%Sshare/%S/acd/",
+		     acdrootinst, acdpack);
+	if (ajFileDir(&acdroot))
+	    /* embassadir ACD files */
+	    getACDfiles(glist, alpha, env, acdroot, explode);
+	else
+	{   /* look for all source directories */
+	    /*      ajDebug ("acd directory '%S' not opened\n", acdroot); */
+	    (void) ajNamRoot (&acdrootdir);
+	    (void) ajFileDirUp (&acdrootdir);
+	    ajFmtPrintS (&acdroot, "%Sembassy/", acdrootdir);
+	    /* embassadir ACD files */
+	    getACDdirs(glist, alpha, env, acdroot, explode);
+	}
   	
-  }
+    }
   
-/* sort the groups and alpha lists */
-  embGrpSortGroupsList(glist);
-  embGrpSortGroupsList(alpha);
+    /* sort the groups and alpha lists */
+    embGrpSortGroupsList(glist);
+    embGrpSortGroupsList(alpha);
 
-/* tidy up */
-  ajStrDel(&acdroot);
-
-  return;
+    /* tidy up */
+    ajStrDel(&acdroot);
+    ajStrDel(&acdrootdir);
+    ajStrDel(&acdrootinst);
+    ajStrDel(&alphaname);
+    ajStrDel(&acdpack);
+  
+    return;
 }
 
 /* @funcstatic getACDdirs ************************************************
@@ -152,16 +170,18 @@ static void getACDdirs (AjPList glist, AjPList alpha, char **env,
   static AjPStr dirname = NULL;
 
 /* go through all the directories in this directory */
-  if ((dirp = opendir(ajStrStr(acddir))) == NULL) {   /* open our directory */
+  if ((dirp = opendir(ajStrStr(acddir))) == NULL)
+  {   /* open our directory */
     /*    ajDie("You do not have read permission on the directory '%S'",
 	  acddir); */
     return;			/* could be no embassy installed */
   }
 
-  for (dp = readdir(dirp); dp != NULL; dp = readdir(dirp)) {
-    if (dp->d_name[0] == '.') continue;	/* don't want hidden files */
-    (void) ajFmtPrintS(&dirname, "%S%s/emboss_acd/",
-		       acddir, dp->d_name);
+  for (dp = readdir(dirp); dp != NULL; dp = readdir(dirp))
+  {
+    if (dp->d_name[0] == '.')
+	continue;	/* don't want hidden files */
+    (void) ajFmtPrintS(&dirname, "%S%s/emboss_acd/", acddir, dp->d_name);
     if ((dirpa = opendir(ajStrStr(dirname)))) {
 /*      ajDebug ("testing directory '%S'\n", dirname); */
       getACDfiles (glist, alpha, env, dirname, explode);
@@ -171,7 +191,9 @@ static void getACDdirs (AjPList glist, AjPList alpha, char **env,
 /*      ajDebug ("no such directory '%S'\n", dirname); */
     }
   }
-  
+
+  closedir(dirp);
+  return;
 }
 
 /* @funcstatic getACDfiles ************************************************
@@ -763,16 +785,20 @@ not already there */
 ** @return [GPnode] pointer to a new GPnode struct
 ** @@
 ******************************************************************************/
-GPnode embGrpMakeNewGnode(AjPStr name) {
+GPnode embGrpMakeNewGnode(AjPStr name)
+{
   GPnode gpnode;
   AjPStr newstr = NULL;
   AjPStr dummy = NULL;
   
   (void) ajStrToUpper(&name);
-/*  ajDebug ("New groups gnode name=%S\n", name); */
+
+  /*  ajDebug ("New groups gnode name=%S\n", name); */
   AJNEW0(gpnode);
-/*  newstr = ajStrDup(name); */
+
+  /*  newstr = ajStrDup(name); */
   newstr = ajStrNewS(name);
+
   gpnode->name = newstr;
   (void) ajStrAssC(&dummy, "");
   gpnode->doc = dummy;
@@ -863,51 +889,54 @@ int embGrpCompareTwoGnodes(const void * a, const void * b) {
 ******************************************************************************/
 
 void embGrpOutputGroupsList(AjPFile outfile, AjPList groupslist,
-			   AjBool showprogs, AjBool html, AjPStr link1,
-			   AjPStr link2) {
-  GPnode gl;
-  AjIList giter;	/* 'groupslist' iterator */
+			    AjBool showprogs, AjBool html, AjPStr link1,
+			    AjPStr link2)
+{
+    GPnode gl;
+    AjIList giter;				/* 'groupslist' iterator */
 
-/* output the programs for each group */
-  giter = ajListIter (groupslist);
-  if (!showprogs && html) ajFmtPrintF(outfile,
-    "<ul>\n");
-  while ((gl = ajListIterNext(giter)) != NULL) {
-/*    ajDebug("display group %S\n", gl->name); */
-    if (html) {
-      if (showprogs) {
-        ajFmtPrintF(outfile,
-          "<a name=%S><h2>%S</h2></a>\n", gl->name, gl->name);
-      } else {
-        if (ajStrLen(link1) || ajStrLen(link2)) {
-          ajFmtPrintF(outfile,
-            "<li><a href=\"%S%S%S\">%S</a>\n", link1, gl->name, link2,
-		      gl->name);
-        } else {	          
-          ajFmtPrintF(outfile,
-            "<li>%S\n", gl->name);
-        }
-      }
-    } else {
-      ajFmtPrintF(outfile,
-        "%S\n", gl->name);
-    }
-    if (showprogs) {
-      if (html) ajFmtPrintF(outfile,
-        "<table border cellpadding=4 bgcolor=\"#FFFFF0\">\n");
-      embGrpOutputProgsList(outfile, gl->progs, html, link1, link2);
-      if (html) {
-      	ajFmtPrintF(outfile,
-      	  "</table>\n");
-      } else {
-        ajFmtPrintF(outfile,
-          "\n");
-      }
-    }
-  }  if (!showprogs && html) ajFmtPrintF(outfile,
-    "</ul>\n");
-  ajListIterFree(giter);
+    /* output the programs for each group */
+    giter = ajListIter (groupslist);
+    if (!showprogs && html)
+	ajFmtPrintF(outfile,"<ul>\n");
+
+    while ((gl = ajListIterNext(giter)) != NULL)
+    {
+	/*    ajDebug("display group %S\n", gl->name); */
+	if (html)
+	{
+	    if (showprogs)
+		ajFmtPrintF(outfile,"<a name=%S><h2>%S</h2></a>\n", gl->name,
+			    gl->name);
+	    else
+	    {
+		if (ajStrLen(link1) || ajStrLen(link2))
+		    ajFmtPrintF(outfile,"<li><a href=\"%S%S%S\">%S</a>\n",
+				link1,gl->name,link2,gl->name);
+		else
+		    ajFmtPrintF(outfile,"<li>%S\n", gl->name);
+	    }
+	}
+	else
+	    ajFmtPrintF(outfile,"%S\n", gl->name);
+
+	if (showprogs)
+	{
+	    if (html) ajFmtPrintF(outfile,"<table border cellpadding=4 "
+				  "bgcolor=\"#FFFFF0\">\n");
+	    embGrpOutputProgsList(outfile, gl->progs, html, link1, link2);
+	    if (html)
+		ajFmtPrintF(outfile,"</table>\n");
+	    else
+		ajFmtPrintF(outfile,"\n");
+	}
+    } 
   
+    if (!showprogs && html)
+	ajFmtPrintF(outfile,"</ul>\n");
+    ajListIterFree(giter);
+
+    return;
 }
 
 
@@ -1059,80 +1088,98 @@ and name/doc */
 **/
 
 void embGrpKeySearchSeeAlso(AjPList newlist, AjPList *appgroups,
-	AjPList alpha, AjPList glist, AjPStr key) {
+			    AjPList alpha, AjPList glist, AjPStr key)
+{
 
-  AjIList giter;	/* 'glist' iterator */
-  AjIList piter;	/* 'plist' iterator */
-  AjIList griter;	/* iterator through the list of groups we have found */
-  GPnode gl;		/* next member of glist */
-  GPnode gpnode;	/* new member of glist being added */
-  GPnode pl;		/* next member of plist */
-  GPnode gr;		/* next member of list of groups we have found */
-  AjPStr tmp = NULL;
-  AjPList base;
+    AjIList giter;	/* 'glist' iterator */
+    AjIList piter;	/* 'plist' iterator */
+    AjIList griter;	/* iterator through the list of groups we have found */
+    GPnode gl;		/* next member of glist */
+    GPnode gpnode;	/* new member of glist being added */
+    GPnode pl;		/* next member of plist */
+    GPnode gr;		/* next member of list of groups we have found */
+    AjPStr tmp = NULL;
+    AjPList base;
 
-/* make initial group node and push on newlist */
-  ajStrAssC(&tmp, "See also");  
-  gpnode = embGrpMakeNewGnode(tmp);
-  base = gpnode->progs;
-  ajListPushApp(newlist, gpnode);
+    /* make initial group node and push on newlist */
+    tmp = ajStrNewC("See also");
+    gpnode = embGrpMakeNewGnode(tmp);
+    base = gpnode->progs;
+    ajListPushApp(newlist, gpnode);
   
 
-/* set *appgroups to NULL initially - test to see if still NULL after
-we have searched for the application name */
-  *appgroups = NULL;
+    /*
+     *  set *appgroups to NULL initially - test to see if still NULL after
+     *  we have searched for the application name
+     */
+    *appgroups = NULL;
 
-/* initially look for our application in list 'alpha' to get its list of
-groups */
-  giter = ajListIter (alpha);	/* iterate through existing applications list */
-  while ((gl = ajListIterNext(giter)) != NULL) {
-    piter = ajListIter (gl->progs);
-    while ((pl = ajListIterNext(piter)) != NULL) {
-      if (!ajStrCmpCase(pl->name, key)) {
-/*ajDebug("Found the application we want: %S\n", pl->name); */
-        *appgroups = pl->progs;
-      }
+    /*
+     *  initially look for our application in list 'alpha' to get its list of
+     *  groups
+     */
+
+    /* iterate through existing applications list */
+    giter = ajListIter (alpha);
+    while ((gl = ajListIterNext(giter)) != NULL)
+    {
+	piter = ajListIter (gl->progs);
+	while ((pl = ajListIterNext(piter)) != NULL)
+	    if (!ajStrCmpCase(pl->name, key))
+		*appgroups = pl->progs;
+	ajListIterFree(piter);
     }
-    ajListIterFree(piter);
-  }
-  ajListIterFree(giter);
+    ajListIterFree(giter);
   
-/* did we find the application? */
-  if (*appgroups == NULL) return;
+    /* did we find the application? */
+    if (*appgroups == NULL) return;
 
-/* now we want to go through each group in glist finding those that are
-used by our application */
-  giter = ajListIter (glist);	/* iterate through existing applications list */
-  while ((gl = ajListIterNext(giter)) != NULL) {
-    griter = ajListIter (*appgroups);	/* iterate through groups we found */
-    while ((gr = ajListIterNext(griter)) != NULL) {
-      if (!ajStrCmpCase(gr->name, gl->name)) {
-/* we have found one of the groups we want - pull out the applications */
-        piter = ajListIter (gl->progs);
-        while ((pl = ajListIterNext(piter)) != NULL) {
-/*ajDebug("application = %S - %S\n", pl->name, pl->doc); */
-          if (!ajStrCmpO(pl->name, key)) continue;	/* don't want to include our key program */
+    /* now we want to go through each group in glist finding those that are
+       used by our application */
 
-/* make new application node and push on base */
-          gpnode = embGrpMakeNewPnode(pl->name, pl->doc);
-          ajListPushApp(base, gpnode);
+    /* iterate through existing applications list */
+    giter = ajListIter (glist);
+    while ((gl = ajListIterNext(giter)) != NULL)
+    {
+	griter = ajListIter (*appgroups); /* iterate through groups we found */
+	while ((gr = ajListIterNext(griter)) != NULL)
+	{
+	    if (!ajStrCmpCase(gr->name, gl->name))
+	    {
+		/*
+		 *  we have found one of the groups we want - pull out
+		 *  the applications
+		 */
+		piter = ajListIter (gl->progs);
+		while ((pl = ajListIterNext(piter)) != NULL)
+		{
+		    /* don't want to include our key program */
+		    if (!ajStrCmpO(pl->name, key))
+			continue;
 
-        }
-        ajListIterFree(piter);
+		    /* make new application node and push on base */
+		    gpnode = embGrpMakeNewPnode(pl->name, pl->doc);
+		    ajListPushApp(base, gpnode);
 
-      }
+		}
+		ajListIterFree(piter);
+
+	    }
+	}
+	ajListIterFree(griter);
+
     }
-    ajListIterFree(griter);
-
-  }
-  ajListIterFree(giter);
+    ajListIterFree(giter);
 
 
 
-/* sort the results and remove duplicates */
-  embGrpSortGroupsList(base);
-  embGrpMakeUnique(base);
+    /* sort the results and remove duplicates */
+    embGrpSortGroupsList(base);
+    embGrpMakeUnique(base);
 
+    ajStrDel(&tmp);
+
+    return;
 }
 
 
@@ -1146,36 +1193,45 @@ used by our application */
 ** @@
 **/
 
-void embGrpMakeUnique(AjPList list) {
+void embGrpMakeUnique(AjPList list)
+{
 
-  AjIList iter;
-  GPnode l;		/* next member of list */
-  AjPStr old=NULL;	/* previous name */
+    AjIList iter;
+    GPnode l;				/* next member of list */
+    AjPStr old=NULL;			/* previous name */
 
-  ajStrAssC(&old, "");	/* no old value of the name yet */
-  iter = ajListIter (list);
-  while ((l = ajListIterNext(iter)) != NULL) {
+    old = ajStrNewC("");
 
-    if (!ajStrCmpCase(l->name, old)) {
+    iter = ajListIter (list);
+    while ((l = ajListIterNext(iter)) != NULL)
+    {
 
-/* delete this GPnode's lists and data */
-      embGrpGroupsListDel(&l->progs);
-      ajStrDel(&(l->doc));
-      ajStrDel(&(l->name));
-      AJFREE(l);
+	if (!ajStrCmpCase(l->name, old))
+	{
 
-/* delete this element of the list */
-      ajListRemove(iter);
+	    /* delete this GPnode's lists and data */
+	    embGrpGroupsListDel(&l->progs);
+	    ajStrDel(&(l->doc));
+	    ajStrDel(&(l->name));
+	    AJFREE(l);
 
-    } else {
-      ajStrDel(&old);
-      old = ajStrDup(l->name);
-      embGrpMakeUnique(l->progs);      
+	    /* delete this element of the list */
+	    ajListRemove(iter);
+
+	}
+	else
+	{
+	    ajStrDel(&old);
+	    old = ajStrDup(l->name);
+	    embGrpMakeUnique(l->progs);      
+	}
+
     }
+    ajListIterFree(iter);
 
-  }
-  ajListIterFree(iter);
+    ajStrDel(&old);
   
+    return;
 }
 
 

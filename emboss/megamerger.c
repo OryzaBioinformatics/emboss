@@ -36,7 +36,6 @@ int main(int argc, char * argv[]) {
   AjPTable seq1MatchTable =0 ;
   AjPList matchlist=NULL ;
   AjPFile outfile;
-  int i;
 
   embInit("megamerger", argc, argv);
 
@@ -94,12 +93,12 @@ static void merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
 	AjPSeqout seqout, AjPFile outfile) {
 
   AjIList iter=NULL;		/* match list iterator */
-  EmbPWordMatch p;  		/* match structure */
+  EmbPWordMatch p=NULL;  		/* match structure */
   int count=0;			/* count of matches */
   AjPStr seqstr = ajStrNew();	/* merged sequence string */
   AjPStr s1 = ajSeqStr(seq1);	/* string of seq1 */
   AjPStr s2 = ajSeqStr(seq2);	/* string of seq2 */
-  int prev1end, prev2end;	/* end positions (+1) of previous match */
+  int prev1end=0, prev2end=0;	/* end positions (+1) of previous match */
   int mid1, mid2;		/* middle of a mismatch region */
   AjPStr tmp = ajStrNew();	/* holds sequence string while uppercasing */
 

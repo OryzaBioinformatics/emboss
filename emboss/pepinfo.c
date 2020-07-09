@@ -464,7 +464,6 @@ static void plotGraph2Float(AjPGraph graphs, AjPSeq seq, float * results,
     AjPGraphData plot;
 
     int npts = 0;
-    int i;
     
     float ymin=64000.;
     float ymax=-64000.;

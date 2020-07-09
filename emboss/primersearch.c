@@ -96,7 +96,6 @@ int main (int argc, char * argv[])
     AjPSeq seq = NULL;
     AjPFile primerFile; /* we read the primer pairs from a file */
     AjPFile outf;
-    AjPStr seqname=NULL;        
     AjPList primerList;
 
     int mmp=0;

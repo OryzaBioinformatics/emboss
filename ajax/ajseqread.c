@@ -720,43 +720,50 @@ AjBool ajSeqsetRead (AjPSeqset thys, AjPSeqin seqin) {
 ******************************************************************************/
 
 static int seqReadFmt (AjPSeq thys, AjPSeqin seqin,
-			  SeqPInFormat inform, int format) {
-  if (inform[format].Read (thys, seqin)) {
-    ajDebug ("success with format %d (%s)\n", format, inform[format].Name);
-    seqin->Format = format;
-    (void) ajStrAssC(&seqin->Formatstr, inform[format].Name);
-    (void) ajStrAssC(&thys->Formatstr, inform[format].Name);
-    (void) ajStrAssS(&thys->Db, seqin->Db);
-    (void) ajStrAssS(&thys->Entryname, seqin->Entryname);
-    (void) ajStrAssS(&thys->Filename, seqin->Filename);
+		       SeqPInFormat inform, int format)
+{
+    if (inform[format].Read (thys, seqin))
+    {
+	ajDebug ("success with format %d (%s)\n", format, inform[format].Name);
+	seqin->Format = format;
+	(void) ajStrAssC(&seqin->Formatstr, inform[format].Name);
+	(void) ajStrAssC(&thys->Formatstr, inform[format].Name);
+	(void) ajStrAssS(&thys->Db, seqin->Db);
+	(void) ajStrAssS(&thys->Entryname, seqin->Entryname);
+	(void) ajStrAssS(&thys->Filename, seqin->Filename);
 
-    if (seqQueryMatch(thys, seqin->Query)) {
-      if (seqin->Features && !thys->Fttable) {
-	(void) ajStrSet (&seqin->Ftquery->Seqname, thys->Name);
-	if (!ajFeatRead (&seqin->Fttable, seqin->Ftquery, seqin->Ufo)) {
-          /* GWW 21 Aug 2000 - don't warn about missing feature tables. Caveat emptor! */
-	  /* ajWarn ("seqReadFmt features input failed UFO: '%S'",
-		  seqin->Ufo); */
-	  /* return ajFalse;*/
-	}
-	else {
-	  ajFeatTrace(seqin->Fttable);
-	  thys->Fttable = seqin->Fttable;
-	  seqin->Fttable = NULL;
-	}
-      }
+	if (seqQueryMatch(thys, seqin->Query))
+	{
+	    if (seqin->Features && !thys->Fttable)
+	    {
+		(void) ajStrSet (&seqin->Ftquery->Seqname, thys->Name);
+		if (!ajFeatRead (&seqin->Fttable, seqin->Ftquery, seqin->Ufo))
+		{
+		    /* GWW 21 Aug 2000 - don't warn about missing feature tables. Caveat emptor! */
+		    /* ajWarn ("seqReadFmt features input failed UFO: '%S'",
+		       seqin->Ufo); */
+		    /*	   return ajFalse;*/
+		}
+		else
+		{
+		    ajFeatTrace(seqin->Fttable);
+		    thys->Fttable = seqin->Fttable;
+		    seqin->Fttable = NULL;
+		}
+	    }
 
-      if (ajSeqTypeCheck(thys, seqin)) {
-	ajSeqinTrace (seqin);
-	return 0;
-      }
-      else
-	return 2;
+	    if (ajSeqTypeCheck(thys, seqin))
+	    {
+		ajSeqinTrace (seqin);
+		return 0;
+	    }
+	    else
+		return 2;
+	}
+	ajDebug ("query match failed, continuing ...\n");
+	ajSeqClear (thys);
     }
-    ajDebug ("query match failed, continuing ...\n");
-    ajSeqClear (thys);
-  }
-  return 1;
+    return 1;
 }
 
 /* @funcstatic seqRead ********************************************************
@@ -2680,6 +2687,14 @@ static AjBool seqReadGenbank (AjPSeq thys, AjPSeqin seqin) {
 
   (void) ajFileBuffGet (buff, &rdline);
   bufflines++;
+
+
+  while (ajStrPrefixC(rdline, "WP ")) {
+      if (!ajFileBuffGet (buff, &rdline))
+	  return ajFalse;
+  }
+
+
   if (!ajStrPrefixC(rdline, "LOCUS")) {
     ajDebug("failed - LOCUS not found - first line was\n%S\n", rdline);
     ajFileBuffReset (buff);
@@ -2699,10 +2714,12 @@ static AjBool seqReadGenbank (AjPSeq thys, AjPSeqin seqin) {
     bufflines++;
     if (ajStrPrefixC(rdline, "ACCESSION")) {
       ajDebug("accession found\n");
-      (void) ajStrTokenAss (&handle, rdline, " \n\r");
+
+      (void) ajStrTokenAss (&handle, rdline, " ;\n\r");
       (void) ajStrToken (&token, &handle, NULL); /* 'ACCESSION' */
-      (void) ajStrToken (&token, &handle, NULL); /* accnum */
-      (void) seqAccSave (thys, token);
+      while (ajStrToken (&token, &handle, NULL)) {
+	seqAccSave (thys, token);
+      }
     }
     if (ajStrPrefixC(rdline, "FEATURES")) {
       if (seqin->Features && ! ajStrLen(seqin->Ufo)) {
@@ -2755,6 +2772,7 @@ static AjBool seqReadGenbank (AjPSeq thys, AjPSeqin seqin) {
   }
 
   if (ajStrLen(seqin->Inseq)) {	/* we have a sequence to use */
+      ajDebug("Got an Inseq sequence\n");
     ajStrAssS (&thys->Seq, seqin->Inseq);
   }
   else {			/* read the sequence and terminator */
@@ -2767,6 +2785,11 @@ static AjBool seqReadGenbank (AjPSeq thys, AjPSeqin seqin) {
       ok = ajFileBuffGet (buff, &rdline);
     }
   }
+
+  while(!ajStrPrefixC(rdline,"ORIGIN"))
+      ajFileBuffGet(buff,&rdline);
+  
+
   ajFileBuffClear (buff, 0);
 
   (void) ajStrTokenReset (&handle);
@@ -3799,7 +3822,7 @@ static AjBool seqQueryMatch (AjPSeq thys, AjPSeqQuery query) {
     iter = ajListIter (thys->Acclist);
     while (ajListIterMore(iter)) {
       accstr = ajListIterNext(iter);
-      /*ajDebug ("... try accession '%S' '%S'\n", accstr, query->Acc);*/
+/*      ajDebug ("... try accession '%S' '%S'\n", accstr, query->Acc);*/
       if (ajStrMatchWild (accstr, query->Acc)) {
 	ok = ajTrue;
 	break;
@@ -3948,12 +3971,11 @@ AjBool ajSeqParseNcbi(AjPStr str, AjPStr* id, AjPStr* acc, AjPStr* desc)
 {
     static AjPStrTok handle = NULL;
     static AjPStr token=NULL;
-    char *p;
     char *q;
     int  i;
     int  nt;
     
-    if(!(p=strchr((q=AJSTRSTR(str)),(int)'|')) || *AJSTRSTR(str)!='>')
+    if(!strchr((q=AJSTRSTR(str)),(int)'|') || *AJSTRSTR(str)!='>')
 	return ajFalse;
 
     (void) ajStrTokenAss(&handle,str,"| \r");

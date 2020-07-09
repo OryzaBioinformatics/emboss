@@ -57,7 +57,7 @@ static void read_vector_data(AjPFile vectorfile, AjPList* vectorlist);
 /* destructors */
 static void free_list(AjPList list);
 static void free_cp(CPattern* pat);
-static void free_vector(Vector* vec);
+/*static void free_vector(Vector* vec);*/
 
 
 /* data processing */
@@ -345,14 +345,14 @@ static void free_cp(CPattern* pat)
 ** Returns:
 ** void
 ******************************************************************************/
-static void free_vector(Vector* vec)
+/*static void free_vector(Vector* vec)
 {
   ajStrDel(&(*vec)->name);
   ajStrDel(&(*vec)->fiveprime);
   ajStrDel(&(*vec)->threeprime);
   
   AJFREE(*vec);
-}
+}*/
 
 /* data processing */
 /* @funcstatic process_pattern **********************************************
@@ -437,7 +437,7 @@ static void process_hits(AjPList fivelist, AjPList threelist,
   AjPInt five = ajIntNew(); /* start positions for hits with 5' pattern */
   AjPInt three = ajIntNew(); /* start positions for hits with 3' pattern */
 
-  EmbPMatMatch m;
+  EmbPMatMatch m=NULL;
   AjIList iter;
 
   iter = ajListIter(fivelist);
@@ -565,8 +565,6 @@ static void process_hits(AjPList fivelist, AjPList threelist,
 static void scan_sequence(Vector vector, AjPSeqout seqout, AjPFile outf, 
 			  AjPSeq sequence, int mis_per, AjBool besthits)
 {
-  int i = 0;
-  int start = 0;
   int begin = 0;
   int end = 0;
   
@@ -641,7 +639,6 @@ static void scan_sequence(Vector vector, AjPSeqout seqout, AjPFile outf,
 static void ccs_pattern(AjPStr pattern, AjPList* hitlist, AjPStr seqname, 
 			AjPStr seqstr, int begin, int* hits, int mm)
 {
-  int i=0;
   /* set up CPattern */
   CPattern cpat = NULL;
   initialise_cp(&cpat);
@@ -705,9 +702,6 @@ static void write_sequence(AjPSeq sequence, AjPSeqout seqout, int start, int end
 {
   AjPStr name = NULL;
   AjPStr num = NULL;
-  char *p;
-  int pos;
-  int len;
 
   /* copy the sequence */
   AjPSeq seqcp = NULL;

@@ -500,7 +500,6 @@ void dumpfeatout(AjPFeatTabOut featout, AjBool *thresh, char *seqname,
     AjBool island;
     int startpos=0;
     int endpos;
-    int slen;
     int i;
     AjPFeatTable feattable;
     AjPFeatLexicon dict=NULL;
@@ -526,10 +525,10 @@ void dumpfeatout(AjPFeatTabOut featout, AjBool *thresh, char *seqname,
 	    island = thresh[i];
 	    if(!island)
 	    {
-		slen = i - startpos;
 		endpos = i-1;
 		feature = ajFeatureNew(feattable, source, type,
-				       startpos+begin,endpos+begin, score, strand, frame,
+				       startpos+begin,endpos+begin, score,
+				       strand, frame,
 				       desc , 0, 0) ;    
 		if(!feature)
 		  ajDebug("Error feature not added to feature table");
@@ -544,11 +543,10 @@ void dumpfeatout(AjPFeatTabOut featout, AjBool *thresh, char *seqname,
 
     if(island)
     {
-	slen=len-startpos+1;
 	endpos=len;
-		feature = ajFeatureNew(feattable, source, type,
-				       startpos+begin,endpos+begin, score, strand, frame,
-				       desc , 0, 0) ;    
+	feature = ajFeatureNew(feattable, source, type,
+			       startpos+begin,endpos+begin, score, strand,
+			       frame, desc , 0, 0) ;    
     }
     ajFeatSortByStart(feattable);
     ajFeaturesWrite (featout, feattable);

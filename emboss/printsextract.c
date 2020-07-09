@@ -61,7 +61,7 @@ int main(int argc, char **argv)
     int nsets;
 
     long pos;
-    int *cnts;
+    int *cnts=NULL;
     int *lens=NULL;
     
     embInit("printsextract",argc,argv);
@@ -128,6 +128,7 @@ void write_accession(AjPFile *inf, AjPFile *outf, AjPStr *s, AjPStr *a)
 {
     if(!ajFileReadLine(*inf,s)) ajFatal("Premature EOF");
     if(!ajStrPrefixC(*s,"gx;")) ajFatal("No accnum (%s)",ajStrStr(*s));
+    ajStrChomp(s);
     ajStrAssC(a,ajStrStr(*s)+4);
     ajFmtPrintF(*outf,"%s\n",ajStrStr(*s)+4);
 }
@@ -252,20 +253,21 @@ void getSeqNumbers(AjPFile *inf, int *cnts, int *lens, AjPStr *s, int n)
 
 
 
-void    calcMatrices(AjPFile *inf, AjPFile *outf, int *cnts, int *lens,
-		     AjPStr *s, int n)
+void calcMatrices(AjPFile *inf, AjPFile *outf, int *cnts, int *lens,
+		  AjPStr *s, int n)
 {
     int i;
     int j;
     int k;
     int c;
-    int *mat[AZ];
+    static int *mat[AZ];
     char *p;
     int sum;
     int max;
     int min;
     int fmin;
     long pos;
+    int  t;
     
     for(i=0;i<n;++i)
     {
@@ -277,15 +279,22 @@ void    calcMatrices(AjPFile *inf, AjPFile *outf, int *cnts, int *lens,
 	}
 	ajFmtPrintF(*outf,"%d\n",lens[i]);
 
-	for(j=0,c=lens[i];j<AZ;++j)
-	{
+	c=lens[i];
+	for(j=0;j<AZ;++j)
 	    AJCNEW0(mat[j], c);
-	}
+
 
 	for(j=0;j<cnts[i];++j)
 	{
 	    p=ajStrStr(*s)+4;
-	    for(k=0;k<c;++k) ++mat[ajAZToInt(*(p+k))][k];
+	    for(k=0;k<c;++k)
+	    {
+		t = ajAZToInt(*(p+k));
+		if(t>AZ)
+		    printf("Error\n");
+		++mat[ajAZToInt(*(p+k))][k];
+	    }
+	    
 	    ajFileReadLine(*inf,s);
 	}
 
@@ -310,7 +319,12 @@ void    calcMatrices(AjPFile *inf, AjPFile *outf, int *cnts, int *lens,
 	{
 	    fmin=0;
 	    p=ajStrStr(*s)+4;
-	    for(k=0;k<c;++k) fmin+=mat[ajAZToInt(*(p+k))][k];
+	    for(k=0;k<c;++k)
+		{
+		    
+		    fmin+=mat[ajAZToInt(*(p+k))][k];
+		}
+	    
 	    min=(min<fmin) ? min : fmin;
 	    ajFileReadLine(*inf,s);
 	}
@@ -325,7 +339,8 @@ void    calcMatrices(AjPFile *inf, AjPFile *outf, int *cnts, int *lens,
 	    ajFmtPrintF(*outf,"\n");
 	}
 
-	for(j=0;j<AZ;++j) AJFREE (mat[j]);
+	for(j=0;j<AZ;++j)
+	    AJFREE (mat[j]);
     }
 }
 

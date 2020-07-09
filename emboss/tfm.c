@@ -26,9 +26,6 @@
 static void FindAppDocRoot (AjPStr* docroot) {
 
   AjPStr docrootinst = NULL;
-  AjPStr docpack = NULL;
-  AjBool doneinstall = ajFalse;
-
 
 
 /* look at EMBOSS doc files */

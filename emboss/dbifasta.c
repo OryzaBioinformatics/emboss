@@ -705,8 +705,6 @@ static Pentry nextflatentry (AjPFile libr, int ifile, AjPStr idformat,
   char* ac;
   int i;
   static AjPList acl = NULL;
-  static int called = 0;
-
 
   if (!acl)
     acl = ajListNew();
@@ -919,16 +917,11 @@ static AjBool parseFasta (AjPFile libr, int* dpos,
 			  AjPStr* id, AjPList acl, AjPRegexp exp,
 			  int type)
 {
-  static AjPStrTok handle = NULL;
   static AjPStr tmpac = NULL; 
   static AjPStr token = NULL;
-  static AjPStr tokenid = NULL;
   char* ac;
   int ipos;
-  int i=0;
-  int nt=0;
   static int num = 1;
-  AjBool ok = ajFalse;
   static AjPStr tstr = NULL;
 
 

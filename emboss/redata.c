@@ -63,7 +63,7 @@ int main( int argc, char **argv, char **env)
     AjPStr iso;
     
     AjPStr    *ea;
-    int       ne;
+    int       ne=0;
 
     int len;
     int ncuts;

@@ -121,7 +121,7 @@ int fillinboxes(float ystart,int length,int numseq,int resbreak,
     int count = 1,gapcount=0,countforgap=0;
     int table[16];
     int i,j,k,w,old=0;
-    int oldcol,l;
+    int oldcol=0,l;
     float y;
     char res[2]=" ";
     /*  static int start =0;*/

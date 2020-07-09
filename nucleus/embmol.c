@@ -74,7 +74,6 @@ int embMolGetFrags(AjPStr thys, int rno, AjPList *l)
     int end;
     int i;
     double mw;
-    int n;
     
 
     if(!defcut)
@@ -137,7 +136,7 @@ int embMolGetFrags(AjPStr thys, int rno, AjPList *l)
     if(defcnt)
     {
 	ajListReverse(*l);
-	n = ajListToArray(*l,(void ***)&ptr);
+	ajListToArray(*l,(void ***)&ptr);
 	for(i=0;i<defcnt-1;++i)
 	{
 	    beg = ptr[i]->begin;

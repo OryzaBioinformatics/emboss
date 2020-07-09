@@ -165,7 +165,7 @@ AjPFile ajFileNewInPipe (const AjPStr name) {
 
 AjPFile ajFileNewIn (const AjPStr name) {
 
-    AjPFile thys;
+    AjPFile thys=NULL;
     static AjPStr userstr = NULL;
     static AjPStr reststr = NULL;
     static AjPStr tmpname = NULL;
@@ -174,6 +174,8 @@ AjPFile ajFileNewIn (const AjPStr name) {
     struct passwd* pass = NULL;
     AjPStr dirname=NULL;
     AjPStr wildname=NULL;
+    AjPFile ptr;
+    
     char   *p=NULL;
     
     ajDebug("ajFileNewIn '%S'\n", name);
@@ -209,16 +211,22 @@ AjPFile ajFileNewIn (const AjPStr name) {
 	}
     }
     
-    if (!wildexp) wildexp = ajRegCompC("(.*/)?([^/]*[*?][^/]*)$");
+    if (!wildexp)
+	wildexp = ajRegCompC("(.*/)?([^/]*[*?][^/]*)$");
 
     if (ajRegExec(wildexp, tmpname))
     {					/* wildcard file names */
 	(void) ajRegSubI(wildexp, 1, &dirname);
 	(void) ajRegSubI(wildexp, 2, &wildname);
 	ajDebug("wild dir '%S' files '%S'\n", dirname, wildname);
-	return ajFileNewDW(dirname, wildname);
+	ptr = ajFileNewDW(dirname, wildname);
+	ajStrDel(&dirname);
+	ajStrDel(&wildname);
+	return ptr;
     }
 
+
+    
     AJNEW0(thys);
     ajStrAssS(&thys->Name, tmpname);
     (void) ajNamResolve(&thys->Name);
@@ -226,6 +234,7 @@ AjPFile ajFileNewIn (const AjPStr name) {
     if (!thys->fp)
     {
 	ajStrDel(&thys->Name);
+	
 	AJFREE (thys);
 	/*    thys->Handle = 0;*/
 	return NULL;
@@ -467,7 +476,6 @@ void ajFileClose (AjPFile* pthis) {
   if (!*pthis) return;
 
   fileClose(thys);
-
   AJFREE (*pthis);
 
   return;
@@ -1936,7 +1944,7 @@ AjPFile ajFileNewDF (const AjPStr dir, const AjPStr filename) {
 AjPFile ajFileNewDC (const AjPStr dir, const char* filename) {
 
   static AjPStr namefix = NULL;
-
+  
   if (ajStrLen(dir))
     (void) ajStrAssS (&namefix, dir);
   else

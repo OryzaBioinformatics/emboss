@@ -2113,7 +2113,7 @@ static void showFillFT(EmbPShow thys, AjPList lines,
   AjIList liter;			/* iterator for linelist */
   AjPStr namestr=NULL;			/* name of feature to insert into line */
   AjPStr linestr=NULL;			/* line graphics to insert */
-  int i, j;
+  int i;
   char *claimchar = "*";		/* char used to stake a claim to */
 				        /* that position in the string */
   AjBool freespace;			/* flag for found a free space to */
