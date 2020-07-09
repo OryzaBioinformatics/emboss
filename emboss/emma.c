@@ -69,7 +69,8 @@ int main( int argc, char ** argv, char ** env)
     AjPStr cmd = NULL;
     AjPStr tmp, tmpFilename;
     AjPStr line = NULL;
-   
+    int nb=0;
+    
    
     /*Lets get all the parameters*/
 
@@ -146,9 +147,12 @@ int main( int argc, char ** argv, char ** env)
          *  Write out sequences
          */
         ajSeqWrite( fil_file, seq);
+	++nb;
     }
     ajSeqWriteClose( fil_file);
-
+    if(nb < 2)
+	ajFatal("Multiple alignments need at least two sequences");
+    
     /* Generate clustalw command line */
     if (!ajNamGetValueC("clustalw", &cmd))
       cmd = ajStrNewC(prog_default);
