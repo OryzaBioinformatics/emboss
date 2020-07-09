@@ -387,13 +387,26 @@ public class JembossServer
   public Vector run_prog(String embossCommand, String options, Hashtable inFiles)
   {
 
-    System.out.println("Running runProg now.... " + tmproot );
+    Vector result = new Vector();
+    System.out.println("Running runProg now.... " + tmproot);
+    
+
+    //disallow pathnames and multiple command constructions
+    if((embossCommand.indexOf("/") > -1) || (embossCommand.indexOf(";") > -1) ||
+       (embossCommand.indexOf("/") > -1) )
+    {
+       result.add("msg");
+       result.add("ERROR: Disallowed command syntax "+embossCommand);
+       result.add("status");
+       result.add("1");
+       return result;
+    }
+
     Enumeration enum = inFiles.keys();
     String appl   = embossCommand.substring(0,embossCommand.indexOf(" "));
     String rest   = embossCommand.substring(embossCommand.indexOf(" "));
     embossCommand = embossBin.concat(embossCommand);
     String msg = new String("");
-    Vector result = new Vector();
 
     boolean ok;
     

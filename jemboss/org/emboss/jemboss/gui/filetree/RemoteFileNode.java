@@ -70,6 +70,8 @@ public class RemoteFileNode extends DefaultMutableTreeNode
         if(parentList.isDirectory(file))
           isDir = true;
       }
+      else if(parent != null)
+        fullname = "."+fs+file;
       else
         fullname = ".";
 

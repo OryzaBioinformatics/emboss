@@ -307,8 +307,13 @@ public class ParseAcd
     {
       String vName  = variables[i].getParamValueStr(0);
       String vValue = variables[i].getParamValueStr(1);
-      AcdVariableResolve avresolve = new AcdVariableResolve(res,vName,vValue);
-      res = avresolve.getResult();
+
+      //if we have something that might need resolving
+      if((res.indexOf("$") >-1) || (res.indexOf("@") >-1))
+      {
+        AcdVariableResolve avresolve = new AcdVariableResolve(res,vName,vValue);
+        res = avresolve.getResult();
+      }
     }
 
 //  if(!res.equals(svalue))

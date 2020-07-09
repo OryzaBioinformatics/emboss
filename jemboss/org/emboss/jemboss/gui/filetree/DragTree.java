@@ -310,16 +310,30 @@ public class DragTree extends JTree implements DragGestureListener,
 
     FileNode parentNode = null;
     Enumeration enum = openNodeDir.keys();
+
     while(enum.hasMoreElements())
     {
       String thiskey = (String)enum.nextElement();
-      if(thiskey.equals(path))
+ 
+      try
       {
-//      System.out.println("OPEN NODE EQUALS " + thiskey +  " :::: " + path  +  " :::: " + child);
-        parentNode = (FileNode)openNodeDir.get(thiskey);
-        break;
+        if(thiskey.equals(path))
+        {
+//        System.out.println("OPEN NODE EQUALS " + thiskey +  " :::: " + path  +  " :::: " + child);
+          parentNode = (FileNode)openNodeDir.get(thiskey);
+          break;
+        }
+        else if((new File(thiskey)).getCanonicalPath().equals(path))  //check canonical path -
+        {                                                             //resolves mount dirs
+          parentNode = (FileNode)openNodeDir.get(thiskey);
+          break;
+        }
       }
+      catch(IOException ioe) {}
     }
+
+
+
 
     if(parentNode == null)
       return null;

@@ -195,12 +195,52 @@ class RemoteDragTree extends JTree implements DragGestureListener,
                               fileData, null));
             EmbreoFileRequest gReq = new EmbreoFileRequest(mysettings,"put_file",params);
             System.out.println("DROPPED - SUCCESS!!!");
+
+            //add file to remote file tree
+            RemoteFileNode parentNode = fdropPath;
+            if(parentNode.isLeaf())
+              parentNode = (RemoteFileNode)fdropPath.getParent();
+            else
+              parentNode = fdropPath;
+           
+            if(parentNode.isExplored())
+            {
+//            System.out.println("FILE DROPPED " + parentNode.getFullName());
+
+              //create new file node
+              File newleaf = new File(parentNode.getFile() +
+                                      fs + lfn.getName());
+         
+              RemoteFileNode childNode = new RemoteFileNode(mysettings,froots,
+                                     lfn.getName(),null,parentNode.getFile());
+        
+              //find the index for the child
+              int num = parentNode.getChildCount();
+              int childIndex = num;
+              for(int i=0;i<num;i++)
+              {
+                String nodeName = ((RemoteFileNode)parentNode.getChildAt(i)).getFile();
+                if(nodeName.compareTo(lfn.getName()) > 0)
+                {
+                  childIndex = i;
+                  break;
+                }
+                else if (nodeName.compareTo(lfn.getName()) == 0)  //file already exists
+                {
+                  childIndex = -1;
+                  break;
+                }
+              }
+              if(childIndex != -1)
+                model.insertNodeInto(childNode,parentNode,childIndex);
+            }
           } 
           catch (Exception exp) 
           {
             System.out.println("RemoteDragTree: caught exception " + dropRoot +
                 " Destination: " + dropDest + " Local File " + lfn.toString());
           }
+         
         }
       }
       catch (Exception ex) {}
