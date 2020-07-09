@@ -1,0 +1,26 @@
+appl: mwfilter [
+  documentation: "Filter noisy molwts from mass spec output"
+  groups: "Protein:Composition"
+]
+
+infile: infile  [
+  parameter: "Y"
+  information: "Molecular weight file input"
+]
+
+float: tolerance  [
+  required: "Y"
+  information: "ppm tolerance"
+  default: "50.0"
+]
+
+string: datafile  [
+  optional: "N"
+  default: "Emwfilter.dat"
+  information: "Data file of noisy molecular weights"
+]
+
+outfile: outfile  [
+  parameter: "Y"
+  default: "mwfilter.out"
+]
