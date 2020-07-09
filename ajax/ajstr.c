@@ -2491,6 +2491,72 @@ int ajStrFindC (const AjPStr thys, const char* text) {
   return (cp - thys->Ptr);
 }
 
+/* @func ajStrFind ***********************************************************
+** 
+** Locates the first occurrence in the string of the second string.
+**
+** @param [r] thys [const AjPStr] String
+** @param [r] text [const AjPStr] text to find
+** @return [int] Position of the start of text in string if found.
+** @error -1 Text not found.
+** @@
+******************************************************************************/
+
+int ajStrFind (const AjPStr thys, const AjPStr text)
+{
+  const char* cp;
+  cp = strstr (thys->Ptr, text->Ptr);
+  if (!cp) return -1;
+  return (cp - thys->Ptr);
+}
+
+/* @func ajStrFindCaseC *******************************************************
+** 
+** Locates the first occurrence in the string of the second string.
+** Case insensitive
+**
+** @param [r] thys [const AjPStr] String
+** @param [r] text [const char*] text to find
+** @return [int] Position of the start of text in string if found.
+** @error -1 Text not found.
+** @@
+******************************************************************************/
+
+int ajStrFindCaseC (const AjPStr thys, const char *text) {
+
+    AjPStr t1;
+    AjPStr t2;
+    int v;
+    
+    t1 = ajStrNewC(thys->Ptr);
+    t2 = ajStrNewC(text);
+    ajStrToUpper(&t1);
+    ajStrToUpper(&t2);
+
+    v = ajStrFind(t1,t2);
+    ajStrDel(&t1);
+    ajStrDel(&t2);
+
+    return v;
+}
+
+/* @func ajStrFindCase *******************************************************
+** 
+** Locates the first occurrence in the string of the second string.
+** Case insensitive
+**
+** @param [r] thys [const AjPStr] String
+** @param [r] text [const AjPStr] text to find
+** @return [int] Position of the start of text in string if found.
+** @error -1 Text not found.
+** @@
+******************************************************************************/
+
+int ajStrFindCase (const AjPStr thys, AjPStr text) {
+
+    return ajStrFindCaseC(thys,text->Ptr);
+}
+
 /* @func ajStrRFindC **********************************************************
 ** 
 ** Locates the last occurrence in the string of the second text string.
@@ -4892,3 +4958,51 @@ char ajStrChar (const AjPStr thys, int pos) {
 ** String functions for now.
 **
 */
+
+
+/* @func ajStrListToArray ****************************************************
+**
+** Splits a newline separated multi-line string into an array of AjPStrs
+**
+** @param [r] thys [const AjPStr] String
+** @param [w] array [AjPStr**] pointer to array of AjPStrs
+**
+** @return [int] Number of array elements created
+** @@
+******************************************************************************/
+
+int ajStrListToArray(AjPStr thys, AjPStr **array)
+{
+    int c;
+    int len;
+    int i;
+    int n;
+    char *p=NULL;
+    char *q=NULL;
+
+    if(!thys->Len)
+	return 0;
+
+
+    p = q = ajStrStr(thys);
+
+    len = thys->Len;
+    for(i=c=n=0;i<len;++i)
+	if(*(p++)=='\n')
+	    ++c;
+    p=q;
+    
+    AJCNEW0(*array,c);
+
+
+    for(i=0;i<c;++i)
+    {
+	while(*q!='\n')
+	    ++q;
+	(*array)[n] = ajStrNew();
+	ajStrAssSubC(&(*array)[n++],p,0,q-p);
+	p = ++q;
+    }
+    
+    return c;
+}

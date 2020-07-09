@@ -112,7 +112,10 @@ extern "C"
 ** @mod ajStrFix  Reset string length when some nasty caller may have edited it
 ** @mod ajStrFixI Reset string length when some nasty caller may have edited it
 **
+** @use ajStrFind   Find
 ** @use ajStrFindC  Find
+** @use ajStrFindCase   Find
+** @use ajStrFindCaseC  Find
 ** @use ajStrRFindC Reverse find.
 ** @use ajStrCmp  String compare
 ** @use ajStrCmpO  String compare
@@ -290,7 +293,10 @@ AjBool     ajStrDelReuse (AjPStr *thys);
 AjPStr     ajStrDup (const AjPStr thys);
 void       ajStrExit (void);
 
+int        ajStrFind (const AjPStr thys, const AjPStr text);
 int        ajStrFindC  (const AjPStr thys, const char* txt);
+int        ajStrFindCase (const AjPStr thys, const AjPStr text);
+int        ajStrFindCaseC (const AjPStr thys, const char* txt);
 
 void       ajStrFill (AjPStr* thys, int count, char fill);
 void       ajStrFix (const AjPStr thys);
@@ -329,6 +335,7 @@ AjBool     ajStrJoinC (AjPStr* pthis, int pos1, const char* addbit, int pos2);
 int        ajStrLen(const AjPStr thys);
 
 #define    AJSTRLEN(str) str->Len
+int        ajStrListToArray(AjPStr str, AjPStr **array);
 AjBool     ajStrMask(AjPStr* str, int begin, int end, char maskchar);
 AjBool     ajStrMatch       (const AjPStr thys, const AjPStr str);
 AjBool     ajStrMatchC      (const AjPStr thys, const char* txt);
