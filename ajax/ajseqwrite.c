@@ -429,8 +429,14 @@ static void seqWriteFasta (AjPSeqout outseq) {
   seqDbName (&outseq->Name, outseq->Setdb);
 
   (void) ajFmtPrintF (outseq->File, ">%S", outseq->Name);
-  if (ajStrLen(outseq->Acc))
+
+  if (ajStrLen(outseq->Sv))
+    (void) ajFmtPrintF (outseq->File, " %S", outseq->Sv);
+  else if (ajStrLen(outseq->Acc))
     (void) ajFmtPrintF (outseq->File, " %S", outseq->Acc);
+
+  /* no need to bother with outseq->Gi because we have Sv anyway */
+
   if (ajStrLen(outseq->Desc))
     (void) ajFmtPrintF (outseq->File, " %S", outseq->Desc);
   (void) ajFmtPrintF (outseq->File, "\n");
@@ -460,7 +466,10 @@ static void seqWriteNcbi (AjPSeqout outseq) {
   static AjPStr seq = NULL;
   ajint linelen = 60;
 
-  (void) ajFmtPrintF (outseq->File, ">gnl|");
+  if (ajStrLen(outseq->Gi))
+    (void) ajFmtPrintF (outseq->File, ">gi|%S|gnl|", outseq->Gi);
+  else
+    (void) ajFmtPrintF (outseq->File, ">gnl|");
   if (ajStrLen(outseq->Db))
     (void) ajFmtPrintF (outseq->File, "%S|", outseq->Db);
   else
@@ -468,7 +477,9 @@ static void seqWriteNcbi (AjPSeqout outseq) {
 
   (void) ajFmtPrintF (outseq->File, "%S", outseq->Name);
 
-  if (ajStrLen(outseq->Acc))
+  if (ajStrLen(outseq->Sv))
+    (void) ajFmtPrintF (outseq->File, " (%S)", outseq->Sv);
+  else if (ajStrLen(outseq->Acc))
     (void) ajFmtPrintF (outseq->File, " (%S)", outseq->Acc);
 
   if (ajStrLen(outseq->Desc))
@@ -1710,6 +1721,9 @@ static void seqWriteEmbl (AjPSeqout outseq) {
   static SeqPSeqFormat sf = NULL;
   ajint b[5];
   static AjPStr ftfmt = NULL;
+  AjIList it;
+  AjPStr cur;
+  ajint ilen;
 
   if (!ftfmt)
     ajStrAssC (&ftfmt, "embl");
@@ -1722,10 +1736,104 @@ static void seqWriteEmbl (AjPSeqout outseq) {
   (void) ajFmtPrintF (outseq->File,
 	       "ID   %-10.10S standard; DNA; UNC; %d BP.\n",
 	       outseq->Name, ajStrLen(outseq->Seq));
-  if (ajStrLen(outseq->Acc))
-    (void) ajFmtPrintF (outseq->File, "AC   %S;\n", outseq->Acc);
+
+  if (ajListLength(outseq->Acclist))
+  {
+    ilen=0;
+    it = ajListIter(outseq->Acclist);
+    while ((cur = (AjPStr) ajListIterNext(it)))
+    {
+      if (ilen + ajStrLen(cur) > 77)
+      {
+	(void) ajFmtPrintF (outseq->File, ";\n", cur);
+	ilen = 0;
+      }
+      if (ilen == 0)
+      {
+	(void) ajFmtPrintF (outseq->File, "AC   ", cur);
+	ilen = 6;
+      }
+      else
+      {
+	(void) ajFmtPrintF (outseq->File, "; ", cur);
+	ilen += 2;
+      }
+
+      (void) ajFmtPrintF (outseq->File, "%S", cur);
+      ilen += ajStrLen(cur);
+
+    }
+    ajListIterFree(it) ;
+    (void) ajFmtPrintF (outseq->File, ";\n", cur);
+  }
+
+  if (ajStrLen(outseq->Sv))
+    (void) ajFmtPrintF (outseq->File, "SV   %S\n", outseq->Sv);
+
+  /* no need to bother with outseq->Gi because EMBL doesn't use it */
+
   if (ajStrLen(outseq->Desc))
     (void) ajFmtPrintF (outseq->File, "DE   %S\n", outseq->Desc);
+
+  if (ajListLength(outseq->Keylist))
+  {
+    ilen=0;
+    it = ajListIter(outseq->Keylist);
+    while ((cur = (AjPStr) ajListIterNext(it)))
+    {
+      if (ilen+ajStrLen(cur) >= 77)
+      {
+	(void) ajFmtPrintF (outseq->File, ";\n", cur);
+	ilen = 0;
+      }
+      if (ilen == 0)
+      {
+	(void) ajFmtPrintF (outseq->File, "KW   ", cur);
+	ilen = 6;
+      }
+      else
+      {
+	(void) ajFmtPrintF (outseq->File, "; ", cur);
+	ilen += 2;
+      }
+      (void) ajFmtPrintF (outseq->File, "%S", cur);
+      ilen += ajStrLen(cur);
+    }
+    ajListIterFree(it) ;
+    (void) ajFmtPrintF (outseq->File, ".\n", cur);
+  }
+
+  if (ajStrLen(outseq->Tax))
+    (void) ajFmtPrintF (outseq->File, "OS   %S\n", outseq->Tax);
+
+  if (ajListLength(outseq->Taxlist))
+  {
+    ilen=0;
+    it = ajListIter(outseq->Taxlist);
+    cur = (AjPStr) ajListIterNext(it); /* skip first, should be Tax */
+    while ((cur = (AjPStr) ajListIterNext(it)))
+    {
+      if (ilen+ajStrLen(cur) >= 77)
+      {
+	(void) ajFmtPrintF (outseq->File, ";\n", cur);
+	ilen = 0;
+      }
+      if (ilen == 0)
+      {
+	(void) ajFmtPrintF (outseq->File, "OC   ", cur);
+	ilen = 6;
+      }
+      else
+      {
+	(void) ajFmtPrintF (outseq->File, "; ", cur);
+	ilen += 2;
+      }
+      (void) ajFmtPrintF (outseq->File, "%S", cur);
+      ilen += ajStrLen(cur);
+    }
+    ajListIterFree(it) ;
+    (void) ajFmtPrintF (outseq->File, ".\n", cur);
+  }
 
   if (seqoutUfoLocal(outseq)) {
         outseq->Ftquery = ajFeattabOutNewSSF (ftfmt, outseq->Name,
@@ -1771,6 +1879,9 @@ static void seqWriteSwiss (AjPSeqout outseq) {
   ajint mw;
   ajuint crc;
   static AjPStr ftfmt = NULL;
+  AjIList it;
+  AjPStr cur;
+  ajint ilen;
 
   if (!ftfmt)
     ajStrAssC (&ftfmt, "swiss");
@@ -1783,10 +1894,102 @@ static void seqWriteSwiss (AjPSeqout outseq) {
   (void) ajFmtPrintF (outseq->File,
 	       "ID   %-10.10S     STANDARD;      PRT; %5d AA.\n",
 	       outseq->Name, ajStrLen(outseq->Seq));
-  if (ajStrLen(outseq->Acc))
-    (void) ajFmtPrintF (outseq->File, "AC   %S;\n", outseq->Acc);
+
+  if (ajListLength(outseq->Acclist))
+  {
+    ilen=0;
+    it = ajListIter(outseq->Acclist);
+    while ((cur = (AjPStr) ajListIterNext(it)))
+    {
+      if (ilen + ajStrLen(cur) > 77)
+      {
+	(void) ajFmtPrintF (outseq->File, ";\n", cur);
+	ilen = 0;
+      }
+      if (ilen == 0)
+      {
+	(void) ajFmtPrintF (outseq->File, "AC   ", cur);
+	ilen = 6;
+      }
+      else
+      {
+	(void) ajFmtPrintF (outseq->File, "; ", cur);
+	ilen += 2;
+      }
+
+      (void) ajFmtPrintF (outseq->File, "%S", cur);
+      ilen += ajStrLen(cur);
+
+    }
+
+    ajListIterFree(it) ;
+    (void) ajFmtPrintF (outseq->File, ";\n", cur);
+  }
+
   if (ajStrLen(outseq->Desc))
     (void) ajFmtPrintF (outseq->File, "DE   %S\n", outseq->Desc);
+
+  if (ajStrLen(outseq->Tax))
+    (void) ajFmtPrintF (outseq->File, "OS   %S\n", outseq->Tax);
+
+  if (ajListLength(outseq->Taxlist))
+  {
+    ilen=0;
+    it = ajListIter(outseq->Taxlist);
+    cur = (AjPStr) ajListIterNext(it); /* skip first, should be Tax */
+    while ((cur = (AjPStr) ajListIterNext(it)))
+    {
+      if (ilen+ajStrLen(cur) >= 77)
+      {
+	(void) ajFmtPrintF (outseq->File, ";\n", cur);
+	ilen = 0;
+      }
+      if (ilen == 0)
+      {
+	(void) ajFmtPrintF (outseq->File, "OC   ", cur);
+	ilen = 6;
+      }
+      else
+      {
+	(void) ajFmtPrintF (outseq->File, "; ", cur);
+	ilen += 2;
+      }
+      (void) ajFmtPrintF (outseq->File, "%S", cur);
+      ilen += ajStrLen(cur);
+    }
+
+    ajListIterFree(it) ;
+    (void) ajFmtPrintF (outseq->File, ".\n", cur);
+  }
+
+  if (ajListLength(outseq->Keylist))
+  {
+    ilen=0;
+    it = ajListIter(outseq->Keylist);
+    while ((cur = (AjPStr) ajListIterNext(it)))
+    {
+      if (ilen+ajStrLen(cur) >= 77)
+      {
+	(void) ajFmtPrintF (outseq->File, ";\n", cur);
+	ilen = 0;
+      }
+      if (ilen == 0)
+      {
+	(void) ajFmtPrintF (outseq->File, "KW   ", cur);
+	ilen = 6;
+      }
+      else
+      {
+	(void) ajFmtPrintF (outseq->File, "; ", cur);
+	ilen += 2;
+      }
+      (void) ajFmtPrintF (outseq->File, "%S", cur);
+      ilen += ajStrLen(cur);
+    }
+
+    ajListIterFree(it) ;
+    (void) ajFmtPrintF (outseq->File, ".\n", cur);
+  }
 
   if (seqoutUfoLocal(outseq)) {
     
@@ -1831,16 +2034,121 @@ static void seqWriteGenbank (AjPSeqout outseq) {
   static SeqPSeqFormat sf=NULL;
   ajint b[5];
   static AjPStr ftfmt = NULL;
+  AjIList it;
+  AjPStr cur;
+  ajint ilen;
 
   if (!ftfmt)
     ajStrAssC (&ftfmt, "genbank");
 
+  ajSeqoutTrace (outseq);
 
   (void) ajFmtPrintF (outseq->File, "LOCUS       %S\n", outseq->Name);
-  if (ajStrLen(outseq->Acc))
-    (void) ajFmtPrintF (outseq->File, "ACCESSION   %S\n", outseq->Acc);
   if (ajStrLen(outseq->Desc))
     (void) ajFmtPrintF (outseq->File, "DEFINITION  %S\n", outseq->Desc);
+  if (ajListLength(outseq->Acclist))
+  {
+    ilen=0;
+    it = ajListIter(outseq->Acclist);
+    while ((cur = (AjPStr) ajListIterNext(it)))
+    {
+      if (ilen + ajStrLen(cur) > 77)
+      {
+	(void) ajFmtPrintF (outseq->File, "\n", cur);
+	ilen = 0;
+      }
+      if (ilen == 0)
+      {
+	(void) ajFmtPrintF (outseq->File, "ACCESSION   ", cur);
+	ilen = 12;
+      }
+      else
+      {
+	(void) ajFmtPrintF (outseq->File, " ", cur);
+	ilen += 1;
+      }
+
+      (void) ajFmtPrintF (outseq->File, "%S", cur);
+      ilen += ajStrLen(cur);
+
+    }
+
+    ajListIterFree(it) ;
+    if (ilen > 0)
+      (void) ajFmtPrintF (outseq->File, "\n", cur);
+  }
+
+  if (ajStrLen(outseq->Sv))
+  {
+    if (ajStrLen(outseq->Gi))
+      (void) ajFmtPrintF (outseq->File, "VERSION     %S  GI:%S\n",
+			  outseq->Sv, outseq->Gi);
+    else 
+      (void) ajFmtPrintF (outseq->File, "VERSION     %S\n", outseq->Sv);
+  }
+
+  if (ajListLength(outseq->Keylist))
+  {
+    ilen=0;
+    it = ajListIter(outseq->Keylist);
+    while ((cur = (AjPStr) ajListIterNext(it)))
+    {
+      if (ilen+ajStrLen(cur) >= 77)
+      {
+	(void) ajFmtPrintF (outseq->File, ";\n", cur);
+	ilen = 0;
+      }
+      if (ilen == 0)
+      {
+	(void) ajFmtPrintF (outseq->File, "KEYWORDS    ", cur);
+	ilen = 12;
+      }
+      else
+      {
+	(void) ajFmtPrintF (outseq->File, "; ", cur);
+	ilen += 2;
+      }
+      (void) ajFmtPrintF (outseq->File, "%S", cur);
+      ilen += ajStrLen(cur);
+    }
+
+    ajListIterFree(it) ;
+    (void) ajFmtPrintF (outseq->File, ".\n", cur);
+  }
+
+  if (ajStrLen(outseq->Tax) && ajListLength(outseq->Taxlist))
+  {
+    (void) ajFmtPrintF (outseq->File, "SOURCE      %S.\n", outseq->Tax);
+      
+    (void) ajFmtPrintF (outseq->File, "  ORGANISM  %S\n", outseq->Tax);
+
+    ilen=0;
+    it = ajListIter(outseq->Taxlist);
+    cur = (AjPStr) ajListIterNext(it); /* skip first, should be Tax */
+    while ((cur = (AjPStr) ajListIterNext(it)))
+    {
+      if (ilen+ajStrLen(cur) >= 77)
+      {
+	(void) ajFmtPrintF (outseq->File, ";\n", cur);
+	ilen = 0;
+      }
+      if (ilen == 0)
+      {
+	(void) ajFmtPrintF (outseq->File, "            ", cur);
+	ilen = 12;
+      }
+      else
+      {
+	(void) ajFmtPrintF (outseq->File, "; ", cur);
+	ilen += 2;
+      }
+      (void) ajFmtPrintF (outseq->File, "%S", cur);
+      ilen += ajStrLen(cur);
+    }
+
+    ajListIterFree(it) ;
+    (void) ajFmtPrintF (outseq->File, ".\n", cur);
+  }
 
   if (seqoutUfoLocal(outseq)) {
         outseq->Ftquery = ajFeattabOutNewSSF (ftfmt, outseq->Name,
@@ -2279,12 +2587,49 @@ static void seqWriteAcedb (AjPSeqout outseq) {
 static void seqWriteDebug (AjPSeqout outseq) {
 
   static SeqPSeqFormat sf=NULL;
+  AjIList it;
+  AjPStr cur;
 
   (void) ajFmtPrintF (outseq->File, "Sequence output trace\n");
   (void) ajFmtPrintF (outseq->File, "=====================\n\n");
   (void) ajFmtPrintF (outseq->File, "  Name: '%S'\n", outseq->Name);
   (void) ajFmtPrintF (outseq->File, "  Accession: '%S'\n", outseq->Acc);
+  if (ajListLength(outseq->Acclist))
+  {
+    (void) ajFmtPrintF (outseq->File, "  Acclist: (%d)",
+			ajListLength(outseq->Acclist));
+    it = ajListIter(outseq->Acclist);
+    while ((cur = (AjPStr) ajListIterNext(it))) {
+      (void) ajFmtPrintF (outseq->File, " %S\n", cur);
+    }
+    (void) ajListIterFree (it);
+    (void) ajFmtPrintF (outseq->File, "\n");
+  }
+      
+  (void) ajFmtPrintF (outseq->File, "  SeqVersion: '%S'\n", outseq->Sv);
+  (void) ajFmtPrintF (outseq->File, "  GI Version: '%S'\n", outseq->Gi);
   (void) ajFmtPrintF (outseq->File, "  Description: '%S'\n", outseq->Desc);
+  if (ajListLength(outseq->Keylist))
+  {
+    (void) ajFmtPrintF (outseq->File, "  Keywordlist: (%d)\n",
+			ajListLength(outseq->Keylist));
+    it = ajListIter(outseq->Keylist);
+    while ((cur = (AjPStr) ajListIterNext(it))) {
+      (void) ajFmtPrintF (outseq->File, "    '%S'\n", cur);
+    }
+    (void) ajListIterFree (it);
+  }
+  (void) ajFmtPrintF (outseq->File, "  Taxonomy: '%S'\n", outseq->Tax);
+  if (ajListLength(outseq->Taxlist))
+  {
+    (void) ajFmtPrintF (outseq->File, "  Taxlist: (%d)\n",
+			ajListLength(outseq->Taxlist));
+    it = ajListIter(outseq->Taxlist);
+    while ((cur = (AjPStr) ajListIterNext(it))) {
+      (void) ajFmtPrintF (outseq->File, "    '%S'\n", cur);
+    }
+    (void) ajListIterFree (it);
+  }
   (void) ajFmtPrintF (outseq->File, "  Type: '%S'\n", outseq->Type);
   (void) ajFmtPrintF (outseq->File, "  Database: '%S'\n", outseq->Db);
   (void) ajFmtPrintF (outseq->File, "  Full name: '%S'\n", outseq->Full);
@@ -2960,6 +3305,12 @@ static void seqClone (AjPSeqout outseq, AjPSeq seq) {
 
   (void) ajStrSet (&outseq->Name, seq->Name);
   (void) ajStrSet (&outseq->Acc, seq->Acc);
+  (void) ajListstrClone(seq->Acclist, outseq->Acclist);
+  (void) ajStrSet (&outseq->Sv, seq->Sv);
+  (void) ajStrSet (&outseq->Gi, seq->Gi);
+  (void) ajStrSet (&outseq->Tax, seq->Tax);
+  (void) ajListstrClone(seq->Taxlist, outseq->Taxlist);
+  (void) ajListstrClone(seq->Keylist, outseq->Keylist);
   (void) ajStrSet (&outseq->Desc, seq->Desc);
   (void) ajStrSet (&outseq->Type, seq->Type);
   (void) ajStrSet (&outseq->Informatstr, seq->Formatstr);
@@ -3009,6 +3360,12 @@ static void seqAllClone (AjPSeqout outseq, AjPSeq seq) {
   (void) ajStrAssS (&outseq->Db, seq->Db);
   (void) ajStrAssS (&outseq->Name, seq->Name);
   (void) ajStrAssS (&outseq->Acc, seq->Acc);
+  (void) ajListstrClone(seq->Acclist, outseq->Acclist);
+  (void) ajStrAssS (&outseq->Sv, seq->Sv);
+  (void) ajStrAssS (&outseq->Gi, seq->Gi);
+  (void) ajStrAssS (&outseq->Tax, seq->Tax);
+  (void) ajListstrClone(seq->Taxlist, outseq->Taxlist);
+  (void) ajListstrClone(seq->Keylist, outseq->Keylist);
   (void) ajStrAssS (&outseq->Desc, seq->Desc);
   (void) ajStrAssS (&outseq->Type, seq->Type);
   (void) ajStrAssS (&outseq->Informatstr, seq->Formatstr);
@@ -3061,15 +3418,24 @@ static void seqsetClone (AjPSeqout outseq, AjPSeqset seqset, ajint i) {
 
 static void seqDeclone (AjPSeqout outseq) {
     
+  AjPStr ptr=NULL;
     
   (void) ajStrClear (&outseq->Db);
   (void) ajStrClear (&outseq->Name);
   (void) ajStrClear (&outseq->Acc);
+  (void) ajStrClear (&outseq->Sv);
+  (void) ajStrClear (&outseq->Gi);
+  (void) ajStrClear (&outseq->Tax);
   (void) ajStrClear (&outseq->Desc);
   (void) ajStrClear (&outseq->Type);
   (void) ajStrClear (&outseq->Informatstr);
   (void) ajStrClear (&outseq->Entryname);
-
+  while(ajListstrPop(outseq->Acclist,&ptr))
+	ajStrDel(&ptr);
+  while(ajListstrPop(outseq->Keylist,&ptr))
+	ajStrDel(&ptr);
+  while(ajListstrPop(outseq->Taxlist,&ptr))
+	ajStrDel(&ptr);
   (void) ajStrClear (&outseq->Seq);
 
   return;
@@ -3146,10 +3512,15 @@ void ajSeqoutUsa (AjPSeqout* pthis, AjPStr Usa) {
 
 void ajSeqoutClear (AjPSeqout thys) {
 
-  ajDebug ("ajSeqInClear called\n");
+  AjPStr ptr=NULL;
+    
+  ajDebug ("ajSeqoutClear called\n");
 
   (void) ajStrClear(&thys->Name);
   (void) ajStrClear(&thys->Acc);
+  (void) ajStrClear(&thys->Sv);
+  (void) ajStrClear(&thys->Gi);
+  (void) ajStrClear(&thys->Tax);
   (void) ajStrClear(&thys->Desc);
   (void) ajStrClear(&thys->Type);
   (void) ajStrClear(&thys->Full);
@@ -3175,6 +3546,12 @@ void ajSeqoutClear (AjPSeqout thys) {
   thys->Count = 0;
   thys->Single = ajFalse;
   thys->Features = ajFalse;
+  while(ajListstrPop(thys->Acclist,&ptr))
+	ajStrDel(&ptr);
+  while(ajListstrPop(thys->Keylist,&ptr))
+	ajStrDel(&ptr);
+  while(ajListstrPop(thys->Taxlist,&ptr))
+	ajStrDel(&ptr);
 
   return;
 }
@@ -3242,15 +3619,55 @@ static void seqDefName (AjPStr* name, AjBool multi) {
 
 void ajSeqoutTrace (AjPSeqout seq) {
 
+  AjIList it;
+  AjPStr cur;
+
   ajDebug ("\n\n\nSequence Out trace\n");
   ajDebug ( "==============\n\n");
   ajDebug ( "  Name: '%S'\n", seq->Name);
   if (ajStrLen(seq->Acc))
     ajDebug ( "  Accession: '%S'\n", seq->Acc);
+  if (ajListLength(seq->Acclist))
+  {
+    (void) ajDebug ("  Acclist: (%d)",
+		    ajListLength(seq->Acclist));
+    it = ajListIter(seq->Acclist);
+    while ((cur = (AjPStr) ajListIterNext(it))) {
+      (void) ajDebug (" %S\n", cur);
+    }
+    (void) ajListIterFree (it);
+    (void) ajDebug ("\n");
+  }
+  if (ajStrLen(seq->Sv))
+    ajDebug ( "  SeqVersion: '%S'\n", seq->Sv);
+  if (ajStrLen(seq->Gi))
+    ajDebug ( "  GI Version: '%S'\n", seq->Gi);
   if (ajStrLen(seq->Desc))
     ajDebug ( "  Description: '%S'\n", seq->Desc);
   if (ajStrSize(seq->Seq))
     ajDebug ( "  Reserved: %d\n", ajStrSize(seq->Seq));
+  if (ajListLength(seq->Keylist))
+  {
+    (void) ajDebug ("  Keywordlist: (%d)",
+			ajListLength(seq->Keylist));
+    it = ajListIter(seq->Keylist);
+    while ((cur = (AjPStr) ajListIterNext(it))) {
+      (void) ajDebug ("   '%S'\n", cur);
+    }
+    (void) ajListIterFree (it);
+    (void) ajDebug ("\n");
+  }
+  (void) ajDebug ("  Taxonomy: '%S'\n", seq->Tax);
+  if (ajListLength(seq->Taxlist))
+  {
+    (void) ajDebug ("  Taxlist: (%d)",
+		    ajListLength(seq->Taxlist));
+    it = ajListIter(seq->Taxlist);
+    while ((cur = (AjPStr) ajListIterNext(it))) {
+      (void) ajDebug ("   '%S'\n", cur);
+    }
+    (void) ajListIterFree (it);
+  }
   if (ajStrLen(seq->Type))
     ajDebug ( "  Type: '%S'\n", seq->Type);
   if (ajStrLen(seq->Db))

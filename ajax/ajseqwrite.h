@@ -28,6 +28,9 @@ extern "C"
 typedef struct AjSSeqout {
   AjPStr Name;
   AjPStr Acc;
+  AjPStr Sv;
+  AjPStr Gi;
+  AjPStr Tax;
   AjPStr Desc;
   AjPStr Type;
   AjEnum EType;
@@ -49,6 +52,9 @@ typedef struct AjSSeqout {
   AjEnum Format;
   AjPStr Filename;
   AjPStr Entryname;
+  AjPList Acclist;
+  AjPList Keylist;
+  AjPList Taxlist;
   AjPStr Seq;
   AjPFile File;
   AjPFile Knownfile;		/* File provided externally */
