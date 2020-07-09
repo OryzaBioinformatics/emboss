@@ -39,12 +39,14 @@ void embAlignReportGlobal (AjPAlign align, AjPSeq seqa, AjPSeq seqb,
 			  AjPStr m, AjPStr n,
 			  ajint start1, ajint start2,
 			  float gapopen, float gapextend,
-			  float score, AjPMatrixf matrix);
+			  float score, AjPMatrixf matrix,
+			   ajint offset1, ajint offset2);
 void embAlignReportLocal (AjPAlign align, AjPSeq seqa, AjPSeq seqb, 
 			  AjPStr m, AjPStr n,
 			  ajint start1, ajint start2,
 			  float gapopen, float gapextend,
-			  float score, AjPMatrixf matrix);
+			  float score, AjPMatrixf matrix,
+			  ajint offset1, ajint offset2);
 void embAlignReportProfile(AjPAlign align, AjPSeqset seqset,
 			   char *a, char *b, AjPStr m, AjPStr n,
 			   ajint start1, ajint start2,

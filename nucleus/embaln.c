@@ -29,7 +29,7 @@
 #define LEFT 1
 #define DOWN 2
 
-/* @func embAlignPathCalc  *************************************************
+/* @func embAlignPathCalc *************************************************
 **
 ** Create path matrix for Smith-Waterman and Needleman-Wunsch
 ** Nucleotides or proteins as needed.
@@ -595,8 +595,8 @@ float embAlignScoreSWMatrix(float *path, ajint *compass, float gapopen,
     float bimble;
     float wscore;
     
-    ajint ix;
-    ajint iy;
+    ajint ix=0;
+    ajint iy=0;
     ajint t;
     
     ajint xpos=0;
@@ -627,7 +627,13 @@ float embAlignScoreSWMatrix(float *path, ajint *compass, float gapopen,
     {
 	if(!compass[ypos*lenb+xpos])	/* diagonal */
 	{
-	    if(path[(ypos-1)*lenb+xpos-1]<0.) break;
+	    if(path[(ypos-1)*lenb+xpos-1]<0.)
+	    {
+	      *start1 = ypos;
+	      *start2 = xpos;
+	      ajDebug("break: trace done at ypos:%d xpos:%d\n", ypos, xpos);
+	      break;
+	    }
 
 	    /*	    ajDebug(" DIAG %c %c\n",
 		    p[ypos],q[xpos]);*/
@@ -646,7 +652,12 @@ float embAlignScoreSWMatrix(float *path, ajint *compass, float gapopen,
 	    while(1)
 	    {
 		bimble=path[ypos*lenb+ix]-gapopen-(gapcnt*gapextend)+match;
-		if(fabs((double)score-(double)bimble)<errbounds) break;
+		if(fabs((double)score-(double)bimble)<errbounds)
+		{
+		  ajDebug("inner break: ix errbounds at ypos:%d xpos:%d ix:%d t:%d bimble:%.3f\n",
+			  ypos, xpos, ix, t, bimble);
+		  break;
+		}
 		--ix;
 		if(ix<0)
 		    ajFatal("SW: Error walking left");
@@ -655,9 +666,11 @@ float embAlignScoreSWMatrix(float *path, ajint *compass, float gapopen,
 	    if(bimble<0.0)
 	    {
 		++ypos;
+		ajDebug("break: bimble<0 after ix  ypos:%d xpos:%d\n",
+			ypos, xpos);
 		break;
 	    }
-	    
+
 	    t -= (ajint)gapcnt;
 
 	    wscore += sub[ajSeqCvtK(cvt,p[ypos])][ajSeqCvtK(cvt,q[t-1])];
@@ -688,7 +701,12 @@ float embAlignScoreSWMatrix(float *path, ajint *compass, float gapopen,
 		/*ajDebug("score = %f bimble = %f fabs = %f\n",
 		  score,bimble,fabs((double)score-(double)bimble));*/
 
-		if( fabs((double)score-(double)bimble) < errbounds) break;
+		if( fabs((double)score-(double)bimble) < errbounds)
+		{
+		  ajDebug("inner break: iy errbounds at ypos:%d xpos:%d iy:%d t:%d bimble:%.3f\n",
+			  ypos, xpos, iy, t, bimble);
+		  break;
+		}
 
 		/*ajDebug("iy = %d\n",iy);*/
 
@@ -708,9 +726,10 @@ float embAlignScoreSWMatrix(float *path, ajint *compass, float gapopen,
 	    if(bimble<0.0)
 	    {
 		++xpos;
+		ajDebug("Break: bimble < 0 after iy with xpos %d\n", xpos);
 		break;
 	    }
-	    
+
 	    t -= (ajint)gapcnt;
 
 	    wscore += sub[ajSeqCvtK(cvt,p[t-1])][ajSeqCvtK(cvt,q[xpos])];
@@ -725,16 +744,21 @@ float embAlignScoreSWMatrix(float *path, ajint *compass, float gapopen,
 	    ajFatal("Walk Error in SW");
     }
 
-    *start1 = ypos;
-    *start2 = xpos;
-    
+    if (ypos > 0)
+      *start1 = ypos;
+    if (xpos > 0)
+      *start2 = xpos;
+
+    ajDebug ("ScoreSW ypos(start1):%d xpos(start2):%d iy:%d ix:%d\n",
+	     ypos, xpos, iy, ix);
+
     return wscore;
 }
 
 
 /* @func embAlignWalkSWMatrix *************************************************
 **
-** Walk down a matrix for Smith waterman. Form aligned strings.
+** Walk down a matrix for Smith Waterman. Form aligned strings.
 ** Nucleotides or proteins as needed.
 **
 ** @param [r] path [float *] path matrix
@@ -1593,7 +1617,7 @@ void embAlignUnused(void)
 ** Optimised to keep a maximum value to avoid looping down or left
 ** to find the maximum. (il 29/07/99)
 **
-** Further speeded up by using only width calculstions instead of lena.
+** Further speeded up by using only width calculations instead of lena.
 **
 ** @return [void]
 ******************************************************************************/
@@ -2867,22 +2891,19 @@ float embAlignScoreProfileMatrix(float *path, ajint *compass, float gapopen,
 ** Print a global alignment
 ** Nucleotides or proteins as needed.
 **
-** @param [r] thys [AjPAlign] Alignment object
-** @param [r] seqset [AjPSeqset] Aligned sequence set
-** @param [r] a [char *] complete first sequence
-** @param [r] b [char *] complete second sequence
+** @param [r] align [AjPAlign] Alignment object
+** @param [r] seqa [AjPSeq] Completefirst sequence
+** @param [r] seqb [AjPSeq] Complete second sequence
 ** @param [r] m [AjPStr] Walk alignment for first sequence
 ** @param [r] n [AjPStr] Walk alignment for second sequence
 ** @param [r] start1 [ajint] start of alignment in first sequence
 ** @param [r] start2 [ajint] start of alignment in second sequence
+** @param [r] gapopen [float] Gap open penalty to report
+** @param [r] gapextend [float] Gap extend penalty to report
 ** @param [r] score [float] alignment score from AlignScoreX
-** @param [r] mark [AjBool] mark matches and conservatives
-** @param [r] sub [float **] substitution matrix
-** @param [r] cvt [AjPSeqCvt] conversion table for matrix
-** @param [r] namea [char *] name of first sequence
-** @param [r] nameb [char *] name of second sequence
-** @param [r] begina [ajint] first sequence offset
-** @param [r] beginb [ajint] second sequence offset
+** @param [r] matrix [AjPMatrixf] Floating point matrix
+** @param [r] offset1 [ajint] first sequence offset
+** @param [r] offset2 [ajint] second sequence offset
 ** 
 ** @return [void]
 ******************************************************************************/
@@ -2891,7 +2912,8 @@ void embAlignReportGlobal(AjPAlign align, AjPSeq seqa, AjPSeq seqb,
 			 AjPStr m, AjPStr n,
 			 ajint start1, ajint start2,
 			 float gapopen, float gapextend,
-			 float score, AjPMatrixf matrix)
+			 float score, AjPMatrixf matrix,
+			 ajint offset1, ajint offset2)
 { 
   AjPSeq res1  = NULL;
   AjPSeq res2 = NULL;
@@ -3015,7 +3037,8 @@ void embAlignReportGlobal(AjPAlign align, AjPSeq seqa, AjPSeq seqb,
   ajAlignSetMatrixFloat (align, matrix);
   end1 = start1 - ajStrCountK(m, '-') + ajStrLen(m);
   end2 = start2 - ajStrCountK(n, '-') + ajStrLen(n);
-  ajAlignSetRange (align, start1+1, end1+1, start2+1, end2);
+  /* ajAlignSetRange (align, start1+1, end1+1, start2+1, end2);*/
+  ajAlignSetRange (align, offset1, end1+1, offset2, end2);
 
   ajAlignWrite (align);
   ajAlignReset(align);
@@ -3036,22 +3059,19 @@ void embAlignReportGlobal(AjPAlign align, AjPSeq seqa, AjPSeq seqb,
 ** Print a local alignment
 ** Nucleotides or proteins as needed.
 **
-** @param [r] thys [AjPAlign] Alignment object
-** @param [r] seqset [AjPSeqset] Aligned sequence set
-** @param [r] a [char *] complete first sequence
-** @param [r] b [char *] complete second sequence
+** @param [r] align [AjPAlign] Alignment object
+** @param [r] seqa [AjPSeq] complete first sequence
+** @param [r] seqb [AjPSeq] complete second sequence
 ** @param [r] m [AjPStr] Walk alignment for first sequence
 ** @param [r] n [AjPStr] Walk alignment for second sequence
 ** @param [r] start1 [ajint] start of alignment in first sequence
 ** @param [r] start2 [ajint] start of alignment in second sequence
 ** @param [r] score [float] alignment score from AlignScoreX
-** @param [r] mark [AjBool] mark matches and conservatives
-** @param [r] sub [float **] substitution matrix
-** @param [r] cvt [AjPSeqCvt] conversion table for matrix
-** @param [r] namea [char *] name of first sequence
-** @param [r] nameb [char *] name of second sequence
-** @param [r] begina [ajint] first sequence offset
-** @param [r] beginb [ajint] second sequence offset
+** @param [r] gapopen [float] Gap open penalty to report
+** @param [r] gapextend [float] Gap extend penalty to report
+** @param [r] matrix [AjPMatrixf] Floating point matrix
+** @param [r] offset1 [ajint] first sequence offset
+** @param [r] offset2 [ajint] second sequence offset
 ** 
 ** @return [void]
 ******************************************************************************/
@@ -3060,7 +3080,8 @@ void embAlignReportLocal(AjPAlign align, AjPSeq seqa, AjPSeq seqb,
 			 AjPStr m, AjPStr n,
 			 ajint start1, ajint start2,
 			 float gapopen, float gapextend,
-			 float score, AjPMatrixf matrix)
+			 float score, AjPMatrixf matrix,
+			 ajint offset1, ajint offset2)
 {
   AjPSeq res1  = NULL;
   AjPSeq res2 = NULL;
@@ -3089,7 +3110,7 @@ void embAlignReportLocal(AjPAlign align, AjPSeq seqa, AjPSeq seqb,
   ajAlignSetMatrixFloat (align, matrix);
   end1 = start1 - ajStrCountK(m, '-') + ajStrLen(m);
   end2 = start2 - ajStrCountK(n, '-') + ajStrLen(n);
-  ajAlignSetRange (align, start1+1, end1+1, start2+1, end2);
+  ajAlignSetRange (align, start1+offset1, end1+1, start2+offset2, end2);
 
   ajAlignWrite (align);
   ajAlignReset(align);
