@@ -2,7 +2,7 @@
 pkgdata_DATA = codes.english emboss.default \
 	abiview.acd ajbad.acd ajfeatest.acd ajtest.acd \
 	ajtest2.acd antigenic.acd backtranseq.acd banana.acd \
-	btwisted.acd chaos.acd charge.acd checktrans.acd chips.acd \
+	btwisted.acd cai.acd chaos.acd charge.acd checktrans.acd chips.acd \
 	cirdna.acd cluster.acd codcmp.acd coderet.acd \
 	complex.acd compseq.acd cons.acd corbatest.acd \
 	cpgplot.acd cpgreport.acd cusp.acd cutseq.acd \

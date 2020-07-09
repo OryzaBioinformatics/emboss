@@ -10,7 +10,7 @@
 
 appl: supermatcher [
 	doc: "Finds a match of a large sequence against one or more sequences"
-	groups: "sequence comparison"
+	groups: "alignment: local"
 ]
 
   seqall: seqa [ param: Y type: any ]

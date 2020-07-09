@@ -57,13 +57,24 @@ Extract regions from a sequence
 </H2>
 
 
-This allows you to specify one or more regions of a sequence to
+<b>extractseq</b> allows you to specify one or more regions of a sequence to
 extract sub-sequences from to build up a contiguous resulting sequence. 
 
 <p>
+
 This is modelled on the cell's process of splicing out exons from
 mRNA, but the program is generally applicable to any cutting and
 splicing or editing operation on a single sequence. 
+
+<p>
+
+<b>extractseq</b> reads in a sequence and a set of regions of that
+sequence as specified by pairs of start and end positions (either on the
+command-line or contained in a file) and writes out the specified
+regions of the input sequence in the order in which they have been
+specified.  Thus, if the sequence "AAAGGGTTT" has been input and the
+regions: "7-9, 3-4" have been specified, then the output sequence will
+be: "TTTAG". 
 
 <H2>
     Usage
@@ -234,13 +245,59 @@ An example range file is:
 The output is a normal sequence file.
 
 <p>
+
+For example, the coding regions of em:hsfau1 are joined as:
+
+<p>
+<pre>
+% extractseq em:hsfau1 -reg "782..856,951..1095,1557..1612,1787..1912" stdout
+
+>HSFAU X65923 H.sapiens fau mRNA
+atgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacg
+gtcgcccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtc
+gtgctcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggag
+gccctgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctg
+gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
+aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
+cccacctttggcaagaagaagggccccaatgccaactcttaa
+</pre>
+
+<p>
+
 If the option '-separate' is used then each specified region is written
 to the output file as a separate sequence.  The name of the sequence is
 created from the name of the original sequence with the start and end
 positions of the range appended with underscore characters between them,
 
 <p>
+
 For example: "XYZ region 2 to 34" is written as: "XYZ_2_34"
+
+<p>
+
+To output each of the exons in em:hsfau1 to a separate entry:
+
+<p>
+
+<pre>
+% extractseq em:hsfau1 -reg "782..856,951..1095,1557..1612,1787..1912" stdout -separate
+
+>HSFAU1_782_856 H.sapiens fau 1 gene
+atgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacg
+gtcgcccagatcaag
+>HSFAU1_951_1095 H.sapiens fau 1 gene
+gctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcctggcaggc
+gcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgactaccctg
+gaagtagcaggccgcatgcttggag
+>HSFAU1_1557_1612 H.sapiens fau 1 gene
+gtaaagtccatggttccctggcccgtgctggaaaagtgagaggtcagactcctaag
+>HSFAU1_1787_1912 H.sapiens fau 1 gene
+gtggccaaacaggagaagaagaagaagaagacaggtcgggctaagcggcggatgcagtac
+aaccggcgctttgtcaacgttgtgcccacctttggcaagaagaagggccccaatgccaac
+tcttaa
+</pre>
+
+
 
 <H2>
     Data files
@@ -344,7 +401,7 @@ href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
 </H2>
 
 
-Finished.
+Written (2000) - Gary Williams
 
 <H2>
     Target users

@@ -59,7 +59,8 @@ Command line arguments
                                   depends on the choice of comparison matrix.
                                   The default value assumes you are using the
                                   EBLOSUM62 matrix for protein sequences, and
-                                  the EDNAMAT matrix for nucleotide sequences.
+                                  the EDNAFULL matrix for nucleotide
+                                  sequences.
    -gapextend          float      The gap extension, penalty is added to the
                                   standard gap penalty for each base or
                                   residue in the gap. This is how long gaps
@@ -94,7 +95,7 @@ Command line arguments
    -gapopen The gap open penalty is the score taken away when a gap is
    created. The best value depends on the choice of comparison matrix.
    The default value assumes you are using the EBLOSUM62 matrix for
-   protein sequences, and the EDNAMAT matrix for nucleotide sequences.
+   protein sequences, and the EDNAFULL matrix for nucleotide sequences.
    Floating point number from 1.0 to 100.0 10.0 for any sequence
    -gapextend The gap extension, penalty is added to the standard gap
    penalty for each base or residue in the gap. This is how long gaps are
@@ -110,7 +111,7 @@ Command line arguments
    Optional qualifiers Allowed values Default
    -datafile Matrix file Comparison matrix file in EMBOSS data path
    EBLOSUM62 for protein
-   EDNAMAT for DNA
+   EDNAFULL for DNA
    Advanced qualifiers Allowed values Default
    -[no]similarity Display percent identity and similarity Yes/No Yes
    -fasta Output overlap as fasta sequences Yes/No No
@@ -163,7 +164,7 @@ Overall %id = 43.15             Overall %similarity = 60.27
 Data files
 
    For protein sequences EBLOSUM62 is used for the substitution matrix.
-   For nucleotide sequence, EDNAMAT is used. Others can be specified.
+   For nucleotide sequence, EDNAFULL is used. Others can be specified.
    
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by EMBOSS

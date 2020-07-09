@@ -1,6 +1,6 @@
 appl: stamps
 [
-        doc: "Generate alignments for SCOP families in EMBL-format SCOP file"
+        doc: "Generate alignments for SCOP families"
 	groups: "PROTEIN: structure"
 ]
 

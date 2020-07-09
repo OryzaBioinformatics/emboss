@@ -198,6 +198,7 @@ Known bugs
 See also
 
    Program name Description
+   charge Protein charge plot
    checktrans Reports STOP codons and ORF statistics of a protein
    sequence
    hmoment Hydrophobic moment calculation

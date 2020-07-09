@@ -61,6 +61,17 @@ This writes out a nicely formatted display of the sequence with the
 translation (within specified ranges) displayed beneath it. 
 
 <p>
+
+The translated nucleic acid region will be shown in lower-case letters
+while the rest of the input sequence will be left in the input case.
+
+<p>
+
+The base and residue numbers of the sequences are shown beside the
+sequences in the output. 
+
+<p>
+
 Slightly unusually, this application uses the codon usage tables to
 translate the codons. 
 
@@ -74,10 +85,10 @@ Here is a sample session with prettyseq.
 <pre>
 
 % prettyseq
+Output sequence with translated ranges
 Input sequence: embl:paamir
 Range(s) to translate [1-2167]: 135-1292        
 Output file [paamir.prettyseq]: 
-
 </pre>
 
 
@@ -246,8 +257,8 @@ Here is the output from the example run.
 
 <p>
 
+<hr>
 <pre>
-
 PRETTYSEQ of PAAMIR from 1 to 2167
 
            ---------|---------|---------|---------|---------|---------|
@@ -342,47 +353,134 @@ PRETTYSEQ of PAAMIR from 1 to 2167
       1321 CGAGTTGCAGGTGCTGGTCCTCAACCCGCCGGGGGAGGTCAGCGACGCCCTGGTCTTGCA 1380
                                                                         
 
+           ---------|---------|---------|---------|---------|---------|
+      1381 GCTGATCCGCATCGGTTGTTCGGTGCGCCAGTGCTGGCCGCCGCCGGAAGCCTTCGACGT 1440
+                                                                        
 
-...............
+           ---------|---------|---------|---------|---------|---------|
+      1441 GCCGGTGGACGTGGTCTTCACCAGCATTTTCCAGAATGGCCACCACGACGAGATCGCTGC 1500
+                                                                        
 
+           ---------|---------|---------|---------|---------|---------|
+      1501 GCTGCTCGCCGCCGGGACTCCGCGCACTACCCTGGTGGCGCTGGTGGAGTACGAAAGCCC 1560
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      1561 CGCGGTGCTCTCGCAGATCATCGAGCTGGAGTGCCACGGCGTGATCACCCAGCCGCTCGA 1620
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      1621 TGCCCACCGGGTGCTGCCTGTGCTGGTATCGGCGCGGCGCATCAGCGAGGAAATGGCGAA 1680
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      1681 GCTGAAGCAGAAGACCGAGCAGCTCCAGGACCGCATCGCCGGCCAGGCCCGGATCAACCA 1740
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      1741 GGCCAAGGTGTTGCTGATGCAGCGCCATGGCTGGGACGAGCGCGAGGCGCACCAGCACCT 1800
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      1801 GTCGCGGGAAGCGATGAAGCGGCGCGAGCCGATCCTGAAGATCGCTCAGGAGTTGCTGGG 1860
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      1861 AAACGAGCCGTCCGCCTGAGCGATCCGGGCCGACCAGAACAATAACAAGAGGGGTATCGT 1920
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      1921 CATCATGCTGGGACTGGTTCTGCTGTACGTTGGCGCGGTGCTGTTTCTCAATGCCGTCTG 1980
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      1981 GTTGCTGGGCAAGATCAGCGGTCGGGAGGTGGCGGTGATCAACTTCCTGGTCGGCGTGCT 2040
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      2041 GAGCGCCTGCGTCGCGTTCTACCTGATCTTTTCCGCAGCAGCCGGGCAGGGCTCGCTGAA 2100
+                                                                        
+
+           ---------|---------|---------|---------|---------|---------|
+      2101 GGCCGGAGCGCTGACCCTGCTATTCGCTTTTACCTATCTGTGGGTGGCCGCCAACCAGTT 2160
+                                                                        
+
+           -------
+      2161 CCTCGAG 2167
 </pre>
-
+<hr>
 
 
 <H2>
     Data files
 </H2>
 
+The codon usage table is read by default from "Ehum.cut" in the 'data/CODONS'
+directory of the EMBOSS distribution.  If the name of a codon usage file
+is specified on the command line, then this file will first be searched
+for in the current directory and then in the 'data/CODONS' directory of
+the EMBOSS distribution. 
+
+<p>
+
+To see the available EMBOSS codon usage files, run:
+
+<p>
+
+<pre>
+% embossdata -showall
+</pre>
+
+<p>
+
+To fetch one of the codon usage tables (for example 'Emus.cut') into your
+current directory for you to inspect or modify, run:
+
+<p>
+
+<pre>
+% embossdata -fetch -file Emus.cut
+</pre>
+
 
 <H2>
     Notes
 </H2>
 
+None.
 
 <H2>
     References
 </H2>
 
+None.
 
 <H2>
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
+
+"Range outside length of sequence" - this is self explanatory.  You
+should specify a range of sequences to translate that is within the
+length of the input sequence. 
 
 
 <H2>
     Exit status
 </H2>
 
+It always exits with a status of 0.
 
 <H2>
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -407,6 +505,12 @@ PRETTYSEQ of PAAMIR from 1 to 2167
         data files?) that seealso doesn't find.
    -->
 
+<p>
+
+<a href="showseq.html"><b>showseq</b></a> has more options for
+specifying various ways of displaying a sequence, with or without
+various ways of translating it. 
+
 
 <H2>
     Author(s)
@@ -420,6 +524,7 @@ href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
     History
 </H2>
 
+Written (1999) - Alan Bleasby
 
 <H2>
     Target users

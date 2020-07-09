@@ -10,8 +10,11 @@ Function
    
 Description
 
-   This produces a set of superimposed Kyte & Doolittle hydropathy plots
-   from an aligned set of protein sequences.
+   pepwindowall produces a set of superimposed Kyte & Doolittle
+   hydropathy plots from an aligned set of protein sequences.
+   
+   The result is the same as running pepwindow on a set of proteins with
+   aligning gaps and superimposing the plots.
    
    It is useful for visualising the average hydropathy and its
    variability along the alignment.
@@ -19,8 +22,10 @@ Description
 Usage
 
    Here is a sample session with pepwindowall.
-
+   
 % pepwindowall globin.msf -gxtitle="Base Number" -gytitle="hydropathy"
+Displays protein hydropathy of a set of sequences
+Graph type [x11]:
 
    click here for result
    
@@ -57,10 +62,14 @@ Input file format
    
 Output file format
 
-   .ps file if postscipt output requested.
+   An image is displayed.
+   .ps file if postscript output requested.
    
 Data files
 
+   pepwindow reads the Kyte-Doolittle hydropathy data from the file
+   'Enakai.dat'
+   
    The EMBOSS data file 'Enakai.dat' contains :-
    
 D Hydropathy index (Kyte-Doolittle, 1982)
@@ -91,24 +100,38 @@ I   A/L    R/K    N/M    D/F    C/P    Q/S    E/T    G/W    H/Y    I/V
 
 Notes
 
+   None.
+   
 References
+
+Kyte, J. and Doolittle, R.F.
+A simple method for displaying the hydropathic character of a protein
+J. Mol. Biol. 157, 105-132 (1982)
 
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
-   0 upon successfull completion.
+   0 upon successful completion.
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description
+   charge Protein charge plot
    checktrans Reports STOP codons and ORF statistics of a protein
    sequence
    digest Protein proteolytic enzyme or reagent cleavage digest
+   hmoment Hydrophobic moment calculation
    iep Calculates the isoelectric point of a protein
    octanol Displays protein hydropathy
    pepinfo Plots simple amino acid properties in parallel

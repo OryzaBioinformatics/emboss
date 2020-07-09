@@ -83,7 +83,8 @@ complete sequence is translated. \ A set of regions is specified by a set
 of pairs of positions. \ The positions are integers. \ They are separated
 by any non-digit, non-alpha character. \ Examples of region
 specifications are: \ 24-45, 56-78 \ 1:45, 67=99;765..888 \
-1,5,8,10,23,45,57,99"
+1,5,8,10,23,45,57,99 \ Note: you should not try to use this option with
+any other frame than the default, -frame=1"
        expect: "Whole sequence"
   ]
 

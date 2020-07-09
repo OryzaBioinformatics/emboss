@@ -179,6 +179,18 @@ Input file format
 
    The input primer file used in the example above has the following
    format:
+   
+   Comment lines start with a '#'
+   Lines with primer information have three fields separated by spaces or
+   TAB characters. The columns contain:
+    1. The name of the primer pair - this is reported in the output.
+    2. The sequence of the first primer.
+    3. The sequence of the second primer.
+       
+   Empty files will cause primersearch to note that no primers have been
+   found, and to exit.
+   
+   An example of the primer file follows:
      _________________________________________________________________
    
 # This is my primer file
@@ -190,12 +202,8 @@ D1S2893 aaaacatcaactctcccctg    ctcaaaccccaataagcctt
 D1S2660 cacacatgcacatgcac       agtgacaccagcaggg
      _________________________________________________________________
    
-   Comments can be inserted provided they are prefaced with "#"
-   
-   Empty files will cause primersearch to note that no primers have been
-   found, and to exit.
-   
-   In this example, seqs.list contains the following sequences:
+   In the example usage given above, the file 'seqs.list' contains the
+   following sequences:
      _________________________________________________________________
    
 embl:Z16979

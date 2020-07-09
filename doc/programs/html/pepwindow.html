@@ -56,19 +56,28 @@ Displays protein hydropathy
     Description
 </H2>
 
-Evaluation of protein hydropathy
+<b>pepwindow</b> reads in a protein sequence and displays a graph of the
+classic Kyte &amp; Doolittle hydropathy plot of that protein. 
+
+
+
+
 <H2>
     Usage
 </H2>
 
 
-Here is a sample session with pepwindow.
+Here is a sample session with <b>pepwindow</b>.
+
+<p>
 
 <pre>
-
 % pepwindow sw:hba_human
-
+Displays protein hydropathy
+Graph type [x11]:
 </pre>
+
+<p>
 
 <a href="./pepwindow0.gif">click here for result</a>
 
@@ -167,11 +176,18 @@ Any protein sequence USA.
     Output file format
 </H2>
 
-.ps file if postscipt output requested.
+An image is displayed.
+<br>
+.ps file if postscript output requested.
 
 <H2>
     Data files
 </H2>
+
+<b>pepwindow</b> reads the Kyte-Doolittle hydropathy data from the file
+'Enakai.dat'
+
+<p>
 
 The EMBOSS data file 'Enakai.dat' contains :-
 <p>
@@ -202,10 +218,12 @@ I   A/L    R/K    N/M    D/F    C/P    Q/S    E/T    G/W    H/Y    I/V
     3.8   -3.9    1.9    2.8   -1.6   -0.8   -0.7   -0.9   -1.3    4.2
 //
 </pre>
+
 <H2>
     Notes
 </H2>
 
+None.
 
 <H2>
     References
@@ -221,21 +239,25 @@ J. Mol. Biol. 157, 105-132 (1982)
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
 </H2>
 
-0 upon successfull completion.
+0 upon successful completion.
+
 <H2>
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -245,8 +267,10 @@ J. Mol. Biol. 157, 105-132 (1982)
 <a name=See also><h2>See also</h2></a>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="charge.html">charge</a></td><td>Protein charge plot</td></tr>
 <tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein sequence</td></tr>
 <tr><td><a href="digest.html">digest</a></td><td>Protein proteolytic enzyme or reagent cleavage digest</td></tr>
+<tr><td><a href="hmoment.html">hmoment</a></td><td>Hydrophobic moment calculation</td></tr>
 <tr><td><a href="iep.html">iep</a></td><td>Calculates the isoelectric point of a protein</td></tr>
 <tr><td><a href="octanol.html">octanol</a></td><td>Displays protein hydropathy</td></tr>
 <tr><td><a href="pepinfo.html">pepinfo</a></td><td>Plots simple amino acid properties in parallel</td></tr>
@@ -281,6 +305,7 @@ Based on Original program by Jack Kyte and Russell F. Doolittle.
 <pre>
 Completed 27th May 1999.
 </pre>
+
 <H2>
     Target users
 </H2>

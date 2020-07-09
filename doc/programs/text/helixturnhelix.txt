@@ -10,8 +10,12 @@ Function
    
 Description
 
-   Helixturnhelix uses the method of Dodd and Egan and finds
+   helixturnhelix uses the method of Dodd and Egan and finds
    helix-turn-helix nucleic acid binding motifs in proteins.
+   
+   The helix-turn-helix motif was originally identified as the
+   DNA-binding domain of phage repressors. One alpha-helix lies in the
+   wide groove of DNA; the other lies at an angle across DNA.
    
 Usage
 
@@ -116,6 +120,8 @@ Sample: 91 aligned sequences
 
 Notes
 
+   None.
+   
 References
 
     1. Dodd I.B., Egan J.B. (1987) "Systematic method for the detection
@@ -127,11 +133,13 @@ References
        
 Warnings
 
-   The program will warn you if a nucleic acid sequence is given or if
-   the data file is not mathematically accurate.
+   The program will warn you if the data file is not mathematically
+   accurate.
    
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    It exits with status 0 unless an error is reported.

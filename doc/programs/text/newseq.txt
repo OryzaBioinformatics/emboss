@@ -16,11 +16,11 @@ Description
    The length of the sequence you can type in is restricted to a fairly
    short length (typically less than 255 characters). This length
    restriction is not a property of the EMBOSS package, but of the
-   computer system you are using. This is because as you type in response
-   to a prompt from this program, what you type is stored in the computer
-   operating system before being handed over to the program. There is
-   often a limit of less than 255 characters on the length of a response
-   that a computer system will allow you to give.
+   computer system you are using. This is because, as you type in
+   response to a prompt from this program, what you type is stored in the
+   computer operating system before being handed over to the program.
+   There is often a limit of less than 255 characters on the length of a
+   response that a computer system will allow you to give.
    
    Despite this restriction, it is expected that this program will be a
    useful and easy way of constructing new sequence files.
@@ -31,6 +31,7 @@ Description
 Usage
 
    Type in a short sequence to the file 'mycc.pep' in EMBL format:
+   
 % newseq
 Type in a short new sequence.
 Output sequence [outfile.fasta]: embl::mycc.pep
@@ -141,7 +142,7 @@ Exit status
    
 Known bugs
 
-   None noted.
+   None.
    
 See also
 
@@ -168,7 +169,7 @@ Author(s)
    
 History
 
-   Finished.
+   Written (1999) - Gary Williams
    
 Target users
 

@@ -26,7 +26,7 @@
 
 void print_hits(AjPList *l, ajint hits, AjPFile outf, AjPStr seq, AjBool mms,
 		ajint begin, AjPStr desc, AjBool dodesc, AjPStr acc,
-		AjBool doacc);
+		AjBool doacc, AjPStr usa, AjBool dousa);
 
 
 
@@ -59,7 +59,10 @@ int main(int argc, char **argv)
     AjPStr acc=NULL;
     AjBool dodesc;
     AjBool doacc;
-    
+    AjPStr usa=NULL;
+    AjBool dousa;
+        
+
     EmbOPatBYPNode off[AJALPHA];
 
     ajuint *sotable=NULL;
@@ -81,6 +84,7 @@ int main(int argc, char **argv)
     mms      = ajAcdGetBool("mmshow");
     dodesc   = ajAcdGetBool("descshow");
     doacc    = ajAcdGetBool("accshow");
+    dousa    = ajAcdGetBool("usashow");
     
     seqname = ajStrNew();
     opattern=ajStrNew();
@@ -113,7 +117,9 @@ int main(int argc, char **argv)
 	{
 	    desc = ajSeqGetDesc(seq);
 	    acc  = ajSeqGetAcc(seq);
-	    print_hits(&l,hits,outf,text,mms,begin,desc,dodesc,acc,doacc);
+            usa  = ajSeqGetUsa(seq);
+	    print_hits(&l,hits,outf,text,mms,begin,desc,dodesc,acc,doacc,
+	    	usa,dousa);
 	}
 	
 
@@ -140,7 +146,7 @@ int main(int argc, char **argv)
 
 void print_hits(AjPList *l, ajint hits, AjPFile outf, AjPStr seq, AjBool mms,
 		ajint begin, AjPStr desc, AjBool dodesc, AjPStr acc,
-		AjBool doacc)
+		AjBool doacc, AjPStr usa, AjBool dousa)
 {
     ajint i;
     EmbPMatMatch m;
@@ -161,7 +167,9 @@ void print_hits(AjPList *l, ajint hits, AjPFile outf, AjPStr seq, AjBool mms,
 	    ajFmtPrintF(outf,"%S",desc);
 	if(doacc || dodesc)
 	    ajFmtPrintF(outf,"\n");
-	
+
+	if(dousa)
+	    ajFmtPrintF(outf,"%S\t",usa);
 
 	if(!mms)
 	    ajFmtPrintF(outf,"%15s %5d %s\n",ajStrStr(m->seqname),m->start,

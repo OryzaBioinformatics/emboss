@@ -26,13 +26,16 @@ Usage
 
    To mask off bases 10 to 12 from a sequence 'gatta.seq' and write to
    the new sequence file 'gatta2.seq':
+   
 % maskseq gatta.seq gatta2.seq -reg=10-12
 
    To mask off bases 20 to 30 from a sequence 'hdh.seq' using the
    character 'n' and write to the new sequence file 'hdh2.seq':
+   
 % maskseq hdh.seq hdh2.seq -reg=20-30 -mask=n
 
    To mask off the regions 20 to 23, 34 to 45 and 88 to 90 in 'yuy.seq':
+   
 % maskseq yuy.seq yuy2.seq -reg=20-23,34-45,88-90
 
 Command line arguments
@@ -79,7 +82,7 @@ Input file format
 
    This program reads in a single sequence file.
    
-   You can specifiy a file of ranges to mask out by giving the '-regions'
+   You can specify a file of ranges to mask out by giving the '-regions'
    qualifier the value '@' followed by the name of the file containing
    the ranges. (eg: '-regions @myfile').
    
@@ -95,24 +98,30 @@ Input file format
      * White-space before or after the text is removed.
        
    An example range file is:
-
+     _________________________________________________________________
+   
 # this is my set of ranges
 12   23
  4   5       this is like 12-23, but smaller
 67   10348   interesting region
-
+     _________________________________________________________________
+   
 Output file format
 
    Single sequence file.
    
 Data files
 
+   None.
+   
 Notes
 
-   This can be used as a simple sequence editor.
+   None.
    
 References
 
+   None.
+   
 Warnings
 
    You can mask out a complete sequence.
@@ -120,6 +129,7 @@ Warnings
 Diagnostic Error Messages
 
    Several warning messages about malformed region specifications:
+   
      * Non-digit found in region ...
      * Unpaired start of a region found in ...
      * Non-digit found in region ...
@@ -132,8 +142,6 @@ Exit status
    
 Known bugs
 
-   Bugs noted but not yet fixed.
-   
    None.
    
 See also
@@ -153,6 +161,9 @@ See also
    splitter     Split a sequence into (overlapping) smaller sequences
    trimseq      Trim ambiguous bits off the ends of sequences
    vectorstrip  Strips out DNA between a pair of vector sequences
+   
+   maskfeat masks parts of the input sequence that are annotated features
+   whose feature-names match the user-specified names.
    
 Author(s)
 

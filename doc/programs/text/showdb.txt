@@ -86,6 +86,7 @@ Command line arguments
    -html               bool       Format output as an HTML table
    -[no]protein        bool       Display protein databases
    -[no]nucleic        bool       Display nucleic acid databases
+   -release            bool       Display 'release' column
 
    Advanced qualifiers:
    -only               bool       This is a way of shortening the command line
@@ -113,6 +114,7 @@ Command line arguments
    -html Format output as an HTML table Yes/No No
    -[no]protein Display protein databases Yes/No Yes
    -[no]nucleic Display nucleic acid databases Yes/No Yes
+   -release Display 'release' column Yes/No No
    Advanced qualifiers Allowed values Default
    -only This is a way of shortening the command line if you only want a
    few things to be displayed. Instead of specifying: '-nohead -notype

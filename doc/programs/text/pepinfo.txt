@@ -26,19 +26,12 @@ Description
 Usage
 
    Here is a sample session with pepinfo.
-
+   
 % pepinfo
-Input sequence : sw:opsd_human
+Plots simple amino acid properties in parallel
+Input sequence: sw:opsd_human
+Graph type [x11]:
 Output file [pepinfo.out]:
-Which graphical output format would you like
-      1 : xwin
-      2 : postscript
-      3 : none
-Graphical output format [1]:
-Which plots would you like
-      1 : general properties
-      2 : hydropathy
-Please select one or more options [1, 2]:
 
    Click here to see the histogram
    
@@ -82,14 +75,18 @@ Command line arguments
    
 Input file format
 
+   It reads in a protein sequence.
+   
 Output file format
 
+   Graphs are written to the selected graphics device.
+   
    The output file contains the coordinates from the graphs.
    
    For the first set of graphs, 9 sets of true/false values are written
    out. For the second set of graphs, 3 sets of hydrophobicity values are
    written.
-
+   
 Printing out Tiny residues in OPSD_HUMAN from position 1 to 348
 
 Position  Residue                       Result
@@ -163,6 +160,8 @@ Data files
        
 Notes
 
+   None.
+   
 References
 
     1. Kyte J, Doolittle RF A simple method for displaying the
@@ -174,18 +173,28 @@ References
        
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description
+   charge Protein charge plot
    checktrans Reports STOP codons and ORF statistics of a protein
    sequence
    digest Protein proteolytic enzyme or reagent cleavage digest
+   hmoment Hydrophobic moment calculation
    iep Calculates the isoelectric point of a protein
    octanol Displays protein hydropathy
    pepnet Displays proteins as a helical net
@@ -200,6 +209,8 @@ Author(s)
    
 History
 
+   Written (1999) - Mark Faller
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

@@ -19,7 +19,17 @@
 
 #include "emboss.h"
 
-#define MAXSAVE 2000
+/*
+Comment from Richard Durbin 6 April 2001:
+A critical parameter is the maximal extent of the interval from start to
+end of the repeat.  I don't know whether this is compile time or run
+time - I suspect compile time and set to 4000 bp just now.  You should
+look at the code and find the value and say what it is in the
+documentation.  Ideally this should be a command line configurable
+parameter, but this may mean some non-trivial recoding because currently
+I think arrays are statically not dynamically defined. 
+*/
+#define MAXSAVE 4000
 #define TEST
 
 ajint match;

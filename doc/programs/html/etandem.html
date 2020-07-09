@@ -59,6 +59,8 @@ Description
 
 <b>etandem</b> looks for tandem repeats in a sequence. It is normally used after
 equicktandem has been run to identify potential repeat sizes.
+It calculates a consensus for the repeat region and gives a score for
+how many matches there are to the consensus - the number of mismatches. 
 
 <p>
 
@@ -88,7 +90,6 @@ sizes.
 
 
 
-
 <H2>
 Usage
 </H2>
@@ -96,6 +97,8 @@ Usage
 
 Here is a sample session with etandem. The input sequence is the
 human herpesvirus tandem repeat.
+
+<p>
 
 <pre>
 % etandem
@@ -354,8 +357,7 @@ sizes.
 Authors
 </H2>
 
-This program was originally written by Richard Durbin and Jean
-Thierry-Mieg as part of the ACEDB genome database package.
+This program was originally written by Richard Durbin at the Sanger Centre.
 <p>
 
 This application was modified for inclusion in EMBOSS by Peter Rice <a

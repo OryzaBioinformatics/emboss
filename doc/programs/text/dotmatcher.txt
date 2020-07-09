@@ -170,8 +170,6 @@ See also
    silent Silent mutation restriction enzyme scan
    stssearch Searches a DNA database for matches with a set of STS
    primers
-   supermatcher Finds a match of a large sequence against one or more
-   sequences
    tfscan Scans DNA sequences for transcription factors
    tmap Displays membrane spanning regions
    wordmatch Finds all exact matches of a given size between 2 sequences

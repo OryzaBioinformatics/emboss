@@ -3614,6 +3614,9 @@ static AjBool seqUsaProcess (AjPSeq thys, AjPSeqin seqin)
     /* \1 wildcard query */
 
     (void) ajStrAss (&usatest, seqin->Usa);
+    /* Strip any leading spaces */
+    ajStrTrimC(&usatest," \t\n");
+    
     ajDebug("USA to test: '%S'\n\n", usatest);
 
     liststat = ajRegExec (listexp, usatest);

@@ -10,11 +10,51 @@ Function
    
 Description
 
+   prophet finds matches between a GRIBSKOV or HENIKOFF profile produced
+   by prophecy and one or more sequences.
+   
+   Note: prophet does NOT use the 'simple frequency matrices' produced by
+   prophecy. If you have a 'simple frequency matrix'you should use the
+   program profit to scan sequences.
+   
 Usage
 
    Here is a sample session with prophet.
+   
+(The sequence alignment looks like:)
+% more m.seq
+>one
+DEVGGEA-GRLLVVYPWTQR
+>two
+DEVGREALGRLL-VYPWTQR
+>three
+DEVGGEALGRILVVY-WTQR
+>four
+DEVGGEAAGRVLVVYPWTQR
 
+(Create the profile:)
+% prophecy
+Creates matrices/profiles from multiple alignments
+Input sequence set: m.seq
+Profile type
+         F : Frequency
+         G : Gribskov
+         H : Henikoff
+Select type [F]: g
+Enter a name for the profile [mymatrix]:
+Scoring matrix [Epprofile]:
+Gap opening penalty [3.0]:
+Gap extension penalty [0.3]:
+Output file [outfile.prophecy]:
+
+(Now do the search:)
 % prophet
+Gapped alignment for profiles
+Input sequence(s): sw:*
+Profile or matrix file: outfile.prophecy
+Gap opening coefficient [1.0]:
+Gap extension coefficient [0.1]:
+Output file [100k_rat.prophet]:
 
 Command line arguments
 
@@ -44,22 +84,49 @@ Command line arguments
    
 Input file format
 
+   It reads a GRIBSKOV or a HENIKOFF profile produced by prophecy and
+   searches one or more sequences.
+   
 Output file format
 
+   The output of the above example follows:
+   
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   prophet does NOT use the 'simple frequency matrices' produced by
+   prophecy. If you have a 'simple frequency matrix'you should use the
+   program profit to scan sequences.
+   
 Diagnostic Error Messages
 
+   If you see something like:
+   
+   EMBOSS An error in prophet.c at line 110:
+Unrecognised profile/matrix file format
+
+   then you have probably given prophet a 'simple frequency matrix' and
+   not a a GRIBSKOV or HENIKOFF profile produced by prophecy.
+   
 Exit status
 
+   It exists with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                     Description
@@ -73,6 +140,8 @@ Author(s)
    
 History
 
+   Written (1999) - author - Alan Bleasby
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

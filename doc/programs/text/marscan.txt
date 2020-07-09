@@ -176,6 +176,7 @@ Known bugs
 See also
 
    Program name                          Description
+   cai          CAI codon adaptation index
    chaos        Create a chaos game representation plot for a sequence
    chips        Codon usage statistics
    cpgplot      Plot CpG rich areas

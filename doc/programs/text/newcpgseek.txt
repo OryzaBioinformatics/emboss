@@ -10,7 +10,41 @@ Function
    
 Description
 
-   Reports CpG rich regions of a sequence as candidate CpG islands.
+   newcpgseek reports CpG rich regions of a sequence as candidate CpG
+   islands.
+   
+   CpG refers to a C nucleotide immediately followed by a G. The 'p' in
+   'CpG' refers to the phosphate group linking the two bases.
+   
+   Detection of regions of genomic sequences that are rich in the CpG
+   pattern is important because such regions are resistant to methylation
+   and tend to be associated with genes which are frequently switched on.
+   Regions rich in the CpG pattern are known as CpG islands.
+   
+   It has been estimated that about half of all mammalian genes have a
+   CpG-rich region around their 5' end. It is said that all mammalian
+   house-keeping genes have a CpG island!
+   
+   Non-mammalian vertebrates have some CpG islands that are associated
+   with genes, but the association gets equivocal in the farther
+   taxonomic groups.
+   
+   Finding a CpG island upstream of predicted exons or genes is good
+   contributory evidence.
+   
+   By default, this program defines a CpG island as a region where, over
+   an average of 10 windows, the calculated % composition is over 50% and
+   the calculated Obs/Exp ratio is over 0.6 and the conditions hold for a
+   minimum of 200 bases. These conditions can be modified by setting the
+   values of the appropriate parameters.
+   
+   The Expected number of CpG patterns in a window is calculated as the
+   number of 'C's in the window multiplied by the number of 'G's in the
+   window, divided by the window length.
+   
+   This program reads in one or more sequences and finds regions where
+   there is a high absolute frequency of CpG dimers as well as a high
+   proportion of CpG compared to GpC.
    
 Usage
 
@@ -44,10 +78,13 @@ Command line arguments
    
 Input file format
 
+   A nucleic acid sequence.
+   
 Output file format
 
    Here is the output from the example run:
-
+     _________________________________________________________________
+   
 NEWCPGSEEK of RNU68037 from 1 to 1218
 with score > 17
 
@@ -56,24 +93,40 @@ with score > 17
   1072   1100    26          3  62.1   0.00
   1183   1193    26          2  72.7   2.00
 -------------------------------------------
-
+     _________________________________________________________________
+   
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                          Description
+   cai          CAI codon adaptation index
    chaos        Create a chaos game representation plot for a sequence
    chips        Codon usage statistics
    codcmp       Codon usage table comparison
@@ -113,6 +166,8 @@ Author(s)
    
 History
 
+   Written (1999) - Rodrigo Lopez
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

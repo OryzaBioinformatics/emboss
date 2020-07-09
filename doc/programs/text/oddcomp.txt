@@ -10,30 +10,30 @@ Function
    
 Description
 
-   Oddcomp searches a series of protein files, reporting the identifier
+   oddcomp searches a series of protein files, reporting the identifier
    for those that exceed a certain amino acid composition threshold in a
    portion of the sequence.
    
-   Oddcomp was written to answer the question 'which proteins contain at
+   oddcomp was written to answer the question 'which proteins contain at
    least n X and m Y in p residues'.
    
    One could search for serine rich or polyglutamine rich, collagen
    helix, or similar proteins using this program.
    
-   Oddcomp takes as input an amino acid composition data file in the same
+   oddcomp takes as input an amino acid composition data file in the same
    format as the output from compseq. It can tolerate any word length
    within reason for the memory capacity of the machine in question. Only
    the first two fields in the composition data file are used: the word
    and the number of occurrences. Any word not mentioned is initialised
    to a threshold of zero.
    
-   Oddcomp measures the amino acid composition (this can be dimers etc as
+   oddcomp measures the amino acid composition (this can be dimers etc as
    well as monomers) in a sliding window. If and when composition meets
    or exceeds all the specified thresholds, the sequence is reported and
    oddcomp moves to the next sequence. It does not report where in the
    sequence it found the matching region, merely the sequence ID.
    
-   Oddcomp was originally written to identify SR/RS containing proteins.
+   oddcomp was originally written to identify SR/RS containing proteins.
    eg. specifying a window of forty amino acids containing at least 3 SR
    and 4 RS words.
    
@@ -42,15 +42,16 @@ Description
    you are not interested. The search is a boolean AND so there must be
    (from the short example above) at least 3 SR AND at least 4 RS for the
    sequence to be reported. If your total words specified exceeds
-   window-wordlength+1 you will never get any hits. Only one word size
-   can be used and is specified at the top of the file in compseq-style
-   output.
+   window-wordlength+1 you will never get any hits.
+   
+   Only one word size can be used and is specified at the top of the file
+   in compseq-style output.
    
 Usage
 
    An example of the use of oddcomp to search for entries in swissprot
    with at least 1 SR AND at least 2 RS follows:
-
+   
 % oddcomp
 Finds protein sequence regions with a biased composition
 Input sequence(s): sw:*
@@ -107,7 +108,8 @@ Command line arguments
 Input file format
 
    The data file ('test.comp') used in the example follows:
-
+     _________________________________________________________________
+   
 # Example input file for oddcomp
 Word size       2
 Total count     0
@@ -119,14 +121,23 @@ RS      2               0               0               0
 SR      1               0               0               0
 
 Other   0               0               0               0
-
-   A minimal composition data file would look like this:
-
+     _________________________________________________________________
+   
+   The columns "Obs Frequency", "Exp Frequency" and "Obs/Exp Frequency"
+   are not required - they were simply included in this example to show
+   the similarity between this input file format and the output of the
+   program compseq. A compseq output file can be used as the input to
+   oddcomp - the extra columns are ignored by oddcomp.
+   
+   A minimal composition input data file would look like this:
+     _________________________________________________________________
+   
 Word size       2
 Total count     0
 RS      2
 SR      1
-
+     _________________________________________________________________
+   
    Blank lines and lines starting with '#' are ignored.
    
    The first non-comment line should start with 'Word size' and will
@@ -147,7 +158,8 @@ Output file format
    A list of sequence name identifiers.
    
    The output from the above example follows:
-
+     _________________________________________________________________
+   
 #
 # Output from 'oddcomp'
 #
@@ -163,18 +175,32 @@ Output file format
 
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                           Description
@@ -201,6 +227,8 @@ Author(s)
    
 History
 
+   Written (1999) - David Martin
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

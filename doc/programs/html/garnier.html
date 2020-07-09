@@ -60,6 +60,32 @@ Predicts protein secondary structure
 This is an implementation of the original Garnier Osguthorpe Robson
 algorithm (GOR I) for predicting protein secondary structure.
 
+<p>
+
+Secondary structure prediction is notoriously difficult to do accurately.
+The GOR I alogorithm is one of the first semi-successful methods.
+
+<p>
+
+The Garnier method is not regarded as the most accurate prediction, but
+is simple to calculate on most workstations.
+
+<p>
+
+The accuracy of any secondary structure prediction program is not much
+better than 70% to 80% at best.  This is an early algorithm and will
+probably not predict with much better than about 65% accuracy. 
+
+<p>
+
+The Web servers for PHD, DSC, and others are generally preferred.
+
+<p>
+
+<b>Do not rely on this (or any other) program alone to make your
+predictions with.  Use several programs and take a consensus of the
+results.</b>
+
 <H2>
     Usage
 </H2>
@@ -151,6 +177,22 @@ IT IS DONE FOR YOU.
 
 
 
+<p>
+
+The meaning and use of the parameter 'idc' is currently being
+investigated.  The original author, Bill Pearson writes:
+
+<p>
+<i>"In their paper, GOR mention that if you know something about the
+secondary structure content of the protein you are analyzing, you can do
+better in prediction.  "idc" is an index into a set of arrays, dharr[]
+and dsarr[], which provide "decision constants" (dch, dcs), which are
+offsets that are applied to the weights for the helix and sheet (extend)
+terms.  So, idc=0 says don't use the decision constant offsets, and
+idc=1 to 6 indicates that various combinations of dch,dcs offsets should
+be used.  I don't remember what they are, but I must have gotten the
+values from their paper."</i>
+
 <H2>
     Input file format
 </H2>
@@ -232,6 +274,8 @@ Here is the output from the example run.
     Data files
 </H2>
 
+None.
+
 
 <H2>
     Notes
@@ -242,9 +286,17 @@ The Garnier method is not regarded as the most accurate prediction, but
 is simple to calculate on most workstations.
 
 <p>
+
 The Web servers for PHD, DSC, and others are generally preferred.
 
 <p>
+
+<b>Do not rely on this (or any other) program alone to make your
+predictions with.  Use several programs and take a consensus of the
+results.</b>
+
+<p>
+
 The 3D structure for the example sequence is known, although the
 2D structure elements were not in the SwissProt feature table for
 release 38 when the test data was extracted.
@@ -284,21 +336,6 @@ DSSP shows:
 
 </pre>
 
-<p>
-The meaning and use of the parameter 'idc' is currently being
-investigated.  The original author, Bill Pearson writes:
-
-<p>
-<i>"In their paper, GOR mention that if you know something about the
-secondary structure content of the protein you are analyzing, you can do
-better in prediction.  "idc" is an index into a set of arrays, dharr[]
-and dsarr[], which provide "decision constants" (dch, dcs), which are
-offsets that are applied to the weights for the helix and sheet (extend)
-terms.  So, idc=0 says don't use the decision constant offsets, and
-idc=1 to 6 indicates that various combinations of dch,dcs offsets should
-be used.  I don't remember what they are, but I must have gotten the
-values from their paper."</i>
-
 <H2>
     References
 </H2>
@@ -328,14 +365,19 @@ and combine them to make a consensus prediction.
 </H2>
 
 
+None. 
+
 <H2>
     Exit status
 </H2>
 
+It always exist with a status of 0.
 
 <H2>
     Known bugs
 </H2>
+
+None. 
 
 
 <!--
@@ -387,6 +429,8 @@ Cambridge, CB10 1SD, UK.
 <H2>
     History
 </H2>
+
+None. 
 
 
 <H2>

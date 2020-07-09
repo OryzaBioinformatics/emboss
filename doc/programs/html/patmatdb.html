@@ -60,10 +60,7 @@ Search a protein sequence with a motif
 Takes a protein motif and compares it to a set of protein sequences. 
 
 <p>
-The motif is converted to a regular expression, and matches are
-completed using Henry Spencer's regular expression library of functions. 
 
-<p>
 It returns the number of matches there were between the motif and each
 matched sequence, length of match, start and end positions of match, and
 writes out an alignment. 
@@ -75,14 +72,14 @@ writes out an alignment.
 
 Here is a sample session with patmatdb.
 
-<pre>
+<p>
 
+<pre>
 % patmatdb
 Search a protein sequence with a motif
 Input sequence(s): sw:*
 Protein motif to search for: st[ty]s
 Output file [5h1d_fugru.patmatdb]:
-
 </pre>
 
 
@@ -177,12 +174,16 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
+It reads in one or more protein sequences.
+
+<p>
 
 Patterns for patmatdb are based on the format of pattern used in the
 PROSITE database, with the difference that the terminating dot '.' and
 the hyphens, '-', between the characters are optional.
 
 <p>
+
 The PROSITE pattern definition from the PROSITE documentation follows. 
 
 <ul>
@@ -217,20 +218,23 @@ accepted.
 </ul>
 
 <p>
+
 For example, in SWISSPROT entry 100K_RAT you can look for the pattern: 
 
+<p>
+
 <pre>
-
 [DE](2)HS{P}X(2)PX(2,4)C
-
 </pre>
 
 <p>
+
 This means: Two Asps or Glus in any order followed by His, Ser, any residue
 other then Pro, then two of any residue followed by Pro followed by two to four
 of any residue followed by Cys. 
 
 <p>
+
 The search is case-independent, so 'AAA' matches 'aaa'. 
 
 <H2>
@@ -240,8 +244,10 @@ The search is case-independent, so 'AAA' matches 'aaa'.
 
 The output from the above example follows:
 
-<pre>
+<p>
 
+<hr>
+<pre>
 Number of matches found in HD_FUGRU = 1
 Length of the sequence = 3148 basepairs
 Length of match = 4
@@ -267,20 +273,21 @@ patmatDB of GCN4_YEAST from 157 to 160 using pattern st[ty]s
 SNLEVSTTSFLPTP
      |  |
    157  160
-
 </pre>
+<hr>
 
 <H2>
     Data files
 </H2>
 
 
-See outfile file format above.
+None.
 
 <H2>
     Notes
 </H2>
 
+None.
 
 <H2>
     References
@@ -306,16 +313,14 @@ Edition.
     Warnings
 </H2>
 
-
-The program will warn user if input protein sequence file is 
-incorrectly formatted.
+None.
  
 <H2>
     Diagnostic Error Messages
 </H2>
 
 
-As in warnings.
+None.
         
 <H2>
     Exit status
@@ -328,6 +333,7 @@ It always exits with status 0
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -356,17 +362,20 @@ It always exits with status 0
    -->
 
 
-<ul>
+<a href="fuzzpro.html">fuzzpro</a> - Protein pattern search 
+<br>
+This does much the same is patmatdb, but has a slightly different style
+of output and allows mismatches. 
 
-<li><a href="fuzzpro.html">fuzzpro</a> - Protein pattern search This
-does much the same is patmatdb, but has a slightly different style of
-output and allows mismatches.
+<p>
 
-<li><a href="patmatmotifs.html">patmatmotifs</a> - Compares a protein
-sequence to the PROSITE motif database.  This does the opposite to
-patmatdb, comparing a database of motifs to one sequence.
+<a href="patmatmotifs.html">patmatmotifs</a> - Compares a protein
+sequence to the PROSITE motif database.
+<br>
+This does the opposite to patmatdb, comparing a database of motifs to
+one sequence. 
 
-</ul>
+
 
 <H2>
     Author(s)

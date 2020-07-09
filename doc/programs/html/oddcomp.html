@@ -57,12 +57,12 @@ Finds protein sequence regions with a biased composition
 </H2>
 
 
-Oddcomp searches a series of protein files, reporting the identifier for
+<b>oddcomp</b> searches a series of protein files, reporting the identifier for
 those that exceed a certain amino acid composition threshold in a
 portion of the sequence. 
 
 <p>
-Oddcomp was written to answer the question 'which proteins contain at
+<b>oddcomp</b> was written to answer the question 'which proteins contain at
 least n X and m Y in p residues'. 
 
 <p>
@@ -70,7 +70,7 @@ One could search for serine rich or polyglutamine rich, collagen helix,
 or similar proteins using this program. 
 
 <p>
-Oddcomp takes as input an amino acid composition data file in the same
+<b>oddcomp</b> takes as input an amino acid composition data file in the same
 format as the output from compseq.  It can tolerate any word length
 within reason for the memory capacity of the machine in question.  Only
 the first two fields in the composition data file are used: the word and
@@ -78,14 +78,14 @@ the number of occurrences.  Any word not mentioned is initialised to a
 threshold of zero. 
 
 <p>
-Oddcomp measures the amino acid composition (this can be dimers etc as
+<b>oddcomp</b> measures the amino acid composition (this can be dimers etc as
 well as monomers) in a sliding window.  If and when composition meets or
 exceeds all the specified thresholds, the sequence is reported and
-oddcomp moves to the next sequence.  It does not report where in the
+<b>oddcomp</b> moves to the next sequence.  It does not report where in the
 sequence it found the matching region, merely the sequence ID. 
 
 <p>
-Oddcomp was originally written to identify SR/RS containing proteins. 
+<b>oddcomp</b> was originally written to identify SR/RS containing proteins. 
 eg.  specifying a window of forty amino acids containing at least 3 SR
 and 4 RS words. 
 
@@ -97,25 +97,28 @@ you are not interested.  The search is a boolean AND so there must be
 sequence to be reported.  If your total words specified exceeds
 window-wordlength+1 you will never get any hits. 
 
+<p>
+
 Only one word size can be used and is specified at the top of the file
 in compseq-style output. 
+
 <H2>
     Usage
 </H2>
 
 
-An example of the use of oddcomp to search for entries in swissprot with
+An example of the use of <b>oddcomp</b> to search for entries in swissprot with
 at least 1 SR AND at least 2 RS follows:
 
-<pre>
+<p>
 
+<pre>
 % oddcomp
 Finds protein sequence regions with a biased composition
 Input sequence(s): sw:*
 Output file [5h1d_fugru.oddcomp]: out.odd
 Input file: test.comp
 Window size to consider (e.g. 30 aa) [30]: 
-
 </pre>
 
 
@@ -232,8 +235,8 @@ These are not commonly used codes and you may wish not to count words containing
 The data file ('test.comp') used in the example follows:
 
 
+<hr>
 <pre>
-
 # Example input file for oddcomp
 Word size       2
 Total count     0
@@ -245,36 +248,51 @@ RS      2               0               0               0
 SR      1               0               0               0
 
 Other   0               0               0               0
-
 </pre>
+<hr>
 
 <p>
-A minimal composition data file would look like this:
 
+The columns "Obs Frequency", "Exp Frequency" and "Obs/Exp Frequency" are
+not required - they were simply included in this example to show the
+similarity between this input file format and the output of the program
+<A HREF="compseq.html">compseq</A>.  A compseq output file can be used as the
+input to <b>oddcomp</b> - the extra columns are ignored by
+<b>oddcomp</b>. 
+
+<p>
+
+A minimal composition input data file would look like this:
+
+<hr>
 <pre>
-
 Word size       2
 Total count     0
 RS      2
 SR      1
-
 </pre>
+<hr>
 
 <p>
+
 Blank lines and lines starting with '#' are ignored.
 
 <p>
+
 The first non-comment line should start with 'Word size' and will
 specify the word size to use.
 
 <p>
+
 A line starting with the word 'Total' is required.
 
 <p>
+
 Anything after the line starting with the word 'Total' will be read as
 word count data. 
 
 <p>
+
 Word count data consists of a word to search for and the count of that
 word to search for within the sliding window.  The columns are separated
 by one or more spaces or TAB characters. Anything after these two columns
@@ -288,10 +306,13 @@ will be ignored.
 A list of sequence name identifiers.
 
 <p>
+
 The output from the above example follows:
 
-<pre>
+<p>
 
+<hr>
+<pre>
 #
 # Output from 'oddcomp'
 #
@@ -304,43 +325,49 @@ The output from the above example follows:
         RS7_FUGRU
 
 #       END     #
-
 </pre>
 
 <H2>
     Data files
 </H2>
 
+None.
 
 <H2>
     Notes
 </H2>
 
+None.
 
 <H2>
     References
 </H2>
 
+None.
 
 <H2>
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
 </H2>
 
+It always exits with a status of 0.
 
 <H2>
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -386,6 +413,7 @@ at the Norwegian EMBnet node.
     History
 </H2>
 
+Written (1999) - David Martin
 
 <H2>
     Target users

@@ -142,6 +142,7 @@ See also
    Program name                          Description
    abiview      Reads ABI file and display the trace
    cirdna       Draws circular maps of DNA constructs
+   degapseq     Removes gap characters from sequences
    entret       Reads and writes (returns) flatfile entries
    lindna       Draws linear maps of DNA constructs
    remap        Display a sequence with restriction cut sites, translation etc

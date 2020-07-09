@@ -14,6 +14,16 @@ Description
    specified size. The results can be used to run etandem on the
    candidate repeat lengths to identify genuine tandem repeats.
    
+   equicktandem is a simple program that looks for segments in which each
+   base tends to match the base back, i.e. with an autocorrelation peak
+   at . This can allow drift in the repeating sequence, i.e. it does not
+   look for a consensus sequence for the whole repeat block (that is what
+   etandem does). But it is much quicker than etandem. It does not
+   account for gaps.
+   
+   The score is +1 for a match to the corresponding base back and -1 for
+   a mismatch.
+   
 Usage
 
    Here is a sample session with equicktandem. The input sequence is the
@@ -69,18 +79,32 @@ Output file format
 
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                          Description
@@ -107,10 +131,15 @@ See also
    silent       Silent mutation restriction enzyme scan
    tfscan       Scans DNA sequences for transcription factors
    
+   equicktandem identifies regions wich are likely to contain tanden
+   repeats. tandem should then be run on those regions to confirm them
+   and to get an accurate specification of the repeats. tandem runs
+   slowly.
+   
 Author(s)
 
-   This program was originally written by Richard Durbin and Jean
-   Thierry-Mieg as part of the ACEDB genome database package.
+   This program was originally written by Richard Durbin at the Sanger
+   Centre.
    
    This application was modified for inclusion in EMBOSS by Peter Rice
    (pmr@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome

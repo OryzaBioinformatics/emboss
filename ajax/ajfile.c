@@ -2243,7 +2243,7 @@ void ajFileBuffStripHtml (const AjPFileBuff thys) {
   tagexp = ajRegCompC("^(.*)(<[!/A-Za-z][^>]*>)(.*)$");
   fullexp = ajRegCompC("^(.*)(<(TITLE)>.*</TITLE>)(.*)$");
   httpexp = ajRegCompC("^HTTP/");
-  nullexp = ajRegCompC("^\r?\n");
+  nullexp = ajRegCompC("^\r?\n?$");
   chunkexp = ajRegCompC("^Transfer-Excoding: +chunked");
   ncbiexp = ajRegCompC("^Entrez Reports\n$");
   ncbiexp2 = ajRegCompC("^----------------\n$");

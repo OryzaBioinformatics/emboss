@@ -1785,9 +1785,12 @@ AjBool ajIsAccession (AjPStr accnum) {
   if (isalpha((ajint)*cp))
     cp++;
 
-  while (*cp) {
-    if (!isdigit((ajint)*cp++))
-      return ajFalse;
+  while(*cp)
+  {
+    if(isdigit((int)*cp) || *cp=='.')
+       ++cp;
+    else
+       return ajFalse;
   }
 
   return ajTrue;

@@ -10,25 +10,42 @@ Function
    
 Description
 
-   Compares two sequences looking for local sequence similarities.
+   matcher compares two sequences looking for local sequence similarities
+   using a rigorous algorithm.
    
-   Matcher is based on Bill Pearson's 'lalign' application, version 2.0u4
+   matcher is based on Bill Pearson's 'lalign' application, version 2.0u4
    Feb. 1996
    
    Lalign uses code developed by X. Huang and W. Miller (Adv. Appl. Math.
-   (1991) 12:337-357) for the "sim" program.
+   (1991) 12:337-357) for the "sim" program, which is a linear-space
+   version of an algorithm described by M. S. Waterman and M. Eggert (J.
+   Mol. Biol. 197:723-728).
    
-   Matcher will report a specified number of alignments between the two
-   sequences showing the actual local alignments.
+   Like water, matcher is rigorous, but also very slow. The advantage of
+   matcher is that it uses far less memory than water, so you are much
+   less likely to run out of memory when aligning large sequences.
+   
+   matcher will also report a specified number of alignments between the
+   two sequences showing the actual local alignments. (water will only
+   report the single best match.) The default number of alignments output
+   is 1, but can be increased to (for example) the 10 best alignments by
+   using the '-alternatives 10' command-line qualifier. In some cases,
+   for example multidomain proteins or cDNA and genomic DNA comparisons,
+   there may be many interesting and significant alignments.
    
 Usage
 
    Here is a sample session with matcher.
-
- % matcher sw:hba_human sw:hbb_human
+   
+% matcher sw:hba_human sw:hbb_human
+Finds the best local alignments between two sequences
 Output file [hba_human.matcher]:
 
-  43.4% identity in 145 HBA_HUMAN overlap; score:  264
+   Here is an example to find the 10 best alignments:
+   
+% matcher sw:hba_human sw:hbb_human -alt 10
+Finds the best local alignments between two sequences
+Output file [hba_human.matcher]: hba_human.matcher10
 
 Command line arguments
 
@@ -51,7 +68,7 @@ Command line arguments
                                   the choice of comparison matrix. The
                                   default value of 14 assumes you are using
                                   the EBLOSUM62 matrix for protein sequences,
-                                  or a value of 16 and the EDNAMAT matrix for
+                                  or a value of 16 and the EDNAFULL matrix for
                                   nucleotide sequences.
    -gaplength          integer    The gap length, or gap extension, penalty is
                                   added to the standard gap penalty for each
@@ -100,7 +117,7 @@ Command line arguments
    Optional qualifiers Allowed values Default
    -datafile Matrix file Comparison matrix file in EMBOSS data path
    EBLOSUM62 for protein
-   EDNAMAT for DNA
+   EDNAFULL for DNA
    -alternatives This sets the number of alternative matches output. By
    default only the highest scoring alignment is shown. A value of 2 gves
    you other reasonable alignments. In some cases, for example
@@ -109,7 +126,7 @@ Command line arguments
    -gappenalty The gap penalty is the score taken away when a gap is
    created. The best value depends on the choice of comparison matrix.
    The default value of 14 assumes you are using the EBLOSUM62 matrix for
-   protein sequences, or a value of 16 and the EDNAMAT matrix for
+   protein sequences, or a value of 16 and the EDNAFULL matrix for
    nucleotide sequences. Positive integer 14 for protein, 16 for nucleic
    -gaplength The gap length, or gap extension, penalty is added to the
    standard gap penalty for each base or residue in the gap. This is how
@@ -144,10 +161,11 @@ Output file format
 
    The output from matcher is a sequence alignment.
    
-   There are several ways to change the output format using -markx.
-   
    Here is the output for the example:
+     _________________________________________________________________
+   
 
+  43.4% identity in 145 HBA_HUMAN overlap; score:  264
 
               10        20        30        40         50
 HBA_HU LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH-----GSAQV
@@ -167,8 +185,129 @@ HBA_HU EFTPAVHASLDKFLASVSTVLTSKY
 HBB_HU EFTPPVQAAYQKVVAGVANALAHKY
               130       140
 
-   Here are the example outputs using other values of -markx:
+----------
+     _________________________________________________________________
+   
+   Here is the output for the example giving the 10 best alignments:
+     _________________________________________________________________
+   
 
+  43.4% identity in 145 HBA_HUMAN overlap; score:  264
+
+              10        20        30        40         50
+HBA_HU LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH-----GSAQV
+       :.: .:. : : ::::  .. : :.::: :... .: :. .:  : :::      :. .:
+HBB_HU LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
+             10          20        30        40        50        60
+
+          60        70        80        90       100       110
+HBA_HU KGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPA
+       :.:::::  :.....::.:.. .....::.::. ::.::: ::.::.. :. .:: :.
+HBB_HU KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
+               70        80        90       100       110       120
+
+         120       130       140
+HBA_HU EFTPAVHASLDKFLASVSTVLTSKY
+       :::: :.:. .: .:.:...:. ::
+HBB_HU EFTPPVQAAYQKVVAGVANALAHKY
+              130       140
+
+----------
+
+  46.2% identity in 13 HBA_HUMAN overlap; score:   32
+
+      60        70
+HBA_HU KKVADALTNAVAH
+       .::. ...::.::
+HBB_HU QKVVAGVANALAH
+              140
+
+----------
+
+  38.9% identity in 18 HBA_HUMAN overlap; score:   28
+
+      90       100
+HBA_HU KLRVDPVNFKLLSHCLLV
+       :..:: :. . :.. :.:
+HBB_HU KVNVDEVGGEALGRLLVV
+         20        30
+
+----------
+
+  60.0% identity in 10 HBA_HUMAN overlap; score:   23
+
+      10
+HBA_HU VKAAWGKVGA
+       :.::. :: :
+HBB_HU VQAAYQKVVA
+         130
+
+----------
+
+  60.0% identity in 10 HBA_HUMAN overlap; score:   23
+
+      80
+HBA_HU LSALSDLHAH
+       :.:.::  ::
+HBB_HU LGAFSDGLAH
+        70
+
+----------
+
+  29.4% identity in 17 HBA_HUMAN overlap; score:   21
+
+         80        90
+HBA_HU PNALSALSDLHAHKLRV
+       :.:. .   . ::  .:
+HBB_HU PDAVMGNPKVKAHGKKV
+               60
+
+----------
+
+  41.7% identity in 12 HBA_HUMAN overlap; score:   21
+
+      30        40
+HBA_HU ERMFLSFPTTKT
+       .:.: ::   .:
+HBB_HU QRFFESFGDLST
+       40        50
+
+----------
+
+  50.0% identity in 8 HBA_HUMAN overlap; score:   20
+
+          110
+HBA_HU LLVTLAAH
+       .:: . ::
+HBB_HU VLVCVLAH
+      110
+
+----------
+
+  50.0% identity in 12 HBA_HUMAN overlap; score:   20
+
+             120
+HBA_HU HLPAEFTPAVHA
+       ::  :   :: :
+HBB_HU HLTPEEKSAVTA
+              10
+
+----------
+
+  28.6% identity in 21 HBA_HUMAN overlap; score:   19
+
+            10        20
+HBA_HU PADKTNVKAAWGKVGAHAGEY
+       :.. .  :.. : ..: : .:
+HBB_HU PVQAAYQKVVAGVANALAHKY
+          130       140
+
+----------
+     _________________________________________________________________
+   
+   Here are the example outputs using other values of -markx:
+     _________________________________________________________________
+   
 % matcher sw:hba_human sw:hbb_human stdout -markx 1
 Finds the best local alignments between two sequences
 
@@ -193,7 +332,6 @@ HBB_HU EFTPPVQAAYQKVVAGVANALAHKY
               130       140
      _________________________________________________________________
    
-
 % matcher sw:hba_human sw:hbb_human stdout -markx 2
 Finds the best local alignments between two sequences
 
@@ -212,7 +350,6 @@ HBA_HU EFTPAVHASLDKFLASVSTVLTSKY
 HBB_HU ....P.Q.AYQ.VV.G.ANA.AH..
      _________________________________________________________________
    
-
 % matcher sw:hba_human sw:hbb_human stdout -markx 3
 Finds the best local alignments between two sequences
 
@@ -227,14 +364,12 @@ PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDP
 ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
      _________________________________________________________________
    
-
 % matcher sw:hba_human sw:hbb_human stdout -markx 4
 Finds the best local alignments between two sequences
 
   43.4% identity in 145 HBA_HUMAN overlap; score:  264
      _________________________________________________________________
    
-
 % matcher sw:hba_human sw:hbb_human stdout -markx 10
 Finds the best local alignments between two sequences
 >>#1
@@ -287,7 +422,7 @@ ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
 Data files
 
    For protein sequences EBLOSUM62 is used for the substitution matrix.
-   For nucleotide sequence, EDNAMAT is used.
+   For nucleotide sequence, EDNAFULL is used.
    
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by EMBOSS
@@ -307,26 +442,41 @@ Data files
        
 Notes
 
+   None.
+   
 References
 
     1. X. Huang and W. Miller (1991) Adv. Appl. Math. 12:373-381
-    2. Needleman, S. B. and Wunsch, C. D. (1970) J. Mol. Biol. 48,
-       443-453.
+    2. M. S. Waterman and M. Eggert (J. Mol. Biol. 197:723-728).
        
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    0 upon successful completion.
    
 Known bugs
 
+   None.
+   
 See also
 
-   Program name          Description
-   water        Smith-Waterman local alignment
+   Program name Description
+   supermatcher Finds a match of a large sequence against one or more
+   sequences
+   water Smith-Waterman local alignment
+   
+   water will give a single best rigorous local alignment. It will use
+   memory of the order of the product of the lengths of the sequences to
+   be aligned. If you wish the 'best' local alignment you should use
+   water. If you run out of memory or want several possible good
+   alignments, use matcher.
    
 Author(s)
 

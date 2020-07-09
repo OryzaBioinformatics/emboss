@@ -26,7 +26,7 @@
 
 void print_hits(AjPList *l, ajint hits, AjPFile outf, AjPStr seq, AjBool mms,
 		ajint begin, ajint fnum, ajint end, AjPStr desc, AjBool dodesc,
-		AjPStr acc, AjBool doacc);
+		AjPStr acc, AjBool doacc, AjPStr usa, AjBool dousa);
 
 
 int main(int argc, char **argv)
@@ -60,6 +60,8 @@ int main(int argc, char **argv)
     AjPStr acc=NULL;
     AjBool doacc;
     AjBool dodesc;
+    AjPStr usa=NULL;
+    AjBool dousa;
     
     ajint    type=0;
     ajint    *buf=NULL;
@@ -92,7 +94,8 @@ int main(int argc, char **argv)
     lframe   = ajAcdGetList("frame");
     doacc    = ajAcdGetBool("accshow");
     dodesc   = ajAcdGetBool("descshow");
-    
+    dousa    = ajAcdGetBool("usashow");
+        
     seqname = ajStrNew();
     opattern=ajStrNew();
 
@@ -133,8 +136,9 @@ int main(int argc, char **argv)
 	    {
 		desc = ajSeqGetDesc(seq);
 		acc  = ajSeqGetAcc(seq);
+		usa  = ajSeqGetUsa(seq);
 		print_hits(&l,hits,outf,pro,mms,begin,1,end,desc,dodesc,
-			   acc,doacc);
+			   acc,doacc,usa,dousa);
 	    }
 
 	    ajStrAssC(&pro,"");
@@ -147,8 +151,9 @@ int main(int argc, char **argv)
 	    {
 		desc = ajSeqGetDesc(seq);
 		acc  = ajSeqGetAcc(seq);
-		print_hits(&l,hits,outf,pro,mms,begin,1,end,desc,dodesc,
-			   acc,doacc);
+		usa  = ajSeqGetUsa(seq);
+		print_hits(&l,hits,outf,pro,mms,begin,2,end,desc,dodesc,
+			   acc,doacc,usa,dousa);
 	    }
 	    ajStrAssC(&pro,"");
 
@@ -160,8 +165,9 @@ int main(int argc, char **argv)
 	    {
 		desc = ajSeqGetDesc(seq);
 		acc  = ajSeqGetAcc(seq);
-		print_hits(&l,hits,outf,pro,mms,begin,1,end,desc,dodesc,
-			   acc,doacc);
+		usa  = ajSeqGetUsa(seq);
+		print_hits(&l,hits,outf,pro,mms,begin,3,end,desc,dodesc,
+			   acc,doacc,usa,dousa);
 	    }
 	    ajStrAssC(&pro,"");
 	}
@@ -175,8 +181,9 @@ int main(int argc, char **argv)
 	    {
 		desc = ajSeqGetDesc(seq);
 		acc  = ajSeqGetAcc(seq);
-		print_hits(&l,hits,outf,pro,mms,begin,1,end,desc,dodesc,
-			   acc,doacc);
+		usa  = ajSeqGetUsa(seq);
+		print_hits(&l,hits,outf,pro,mms,begin,-1,end,desc,dodesc,
+			   acc,doacc,usa,dousa);
 	    }
 	    ajStrAssC(&pro,"");
 
@@ -188,8 +195,9 @@ int main(int argc, char **argv)
 	    {
 		desc = ajSeqGetDesc(seq);
 		acc  = ajSeqGetAcc(seq);
-		print_hits(&l,hits,outf,pro,mms,begin,1,end,desc,dodesc,
-			   acc,doacc);
+		usa  = ajSeqGetUsa(seq);
+		print_hits(&l,hits,outf,pro,mms,begin,-2,end,desc,dodesc,
+			   acc,doacc,usa,dousa);
 	    }
 	    ajStrAssC(&pro,"");
 
@@ -201,8 +209,9 @@ int main(int argc, char **argv)
 	    {
 		desc = ajSeqGetDesc(seq);
 		acc  = ajSeqGetAcc(seq);
-		print_hits(&l,hits,outf,pro,mms,begin,1,end,desc,dodesc,
-			   acc,doacc);
+		usa  = ajSeqGetUsa(seq);
+		print_hits(&l,hits,outf,pro,mms,begin,-3,end,desc,dodesc,
+			   acc,doacc,usa,dousa);
 	    }
 	    ajStrAssC(&pro,"");
 	}
@@ -216,8 +225,9 @@ int main(int argc, char **argv)
 	    {
 		desc = ajSeqGetDesc(seq);
 		acc  = ajSeqGetAcc(seq);
+		usa  = ajSeqGetUsa(seq);
 		print_hits(&l,hits,outf,pro,mms,begin,1,end,desc,dodesc,
-			   acc,doacc);
+			   acc,doacc,usa,dousa);
 	    }
 	    ajStrAssC(&pro,"");
 	    
@@ -229,8 +239,9 @@ int main(int argc, char **argv)
 	    {
 		desc = ajSeqGetDesc(seq);
 		acc  = ajSeqGetAcc(seq);
-		print_hits(&l,hits,outf,pro,mms,begin,1,end,desc,dodesc,
-			   acc,doacc);
+		usa  = ajSeqGetUsa(seq);
+		print_hits(&l,hits,outf,pro,mms,begin,2,end,desc,dodesc,
+			   acc,doacc,usa,dousa);
 	    }
 	    ajStrAssC(&pro,"");
 
@@ -242,8 +253,9 @@ int main(int argc, char **argv)
 	    {
 		desc = ajSeqGetDesc(seq);
 		acc  = ajSeqGetAcc(seq);
-		print_hits(&l,hits,outf,pro,mms,begin,1,end,desc,dodesc,
-			   acc,doacc);
+		usa  = ajSeqGetUsa(seq);
+		print_hits(&l,hits,outf,pro,mms,begin,3,end,desc,dodesc,
+			   acc,doacc,usa,dousa);
 	    }
 	    ajStrAssC(&pro,"");
 
@@ -255,8 +267,9 @@ int main(int argc, char **argv)
 	    {
 		desc = ajSeqGetDesc(seq);
 		acc  = ajSeqGetAcc(seq);
-		print_hits(&l,hits,outf,pro,mms,begin,1,end,desc,dodesc,
-			   acc,doacc);
+		usa  = ajSeqGetUsa(seq);
+		print_hits(&l,hits,outf,pro,mms,begin,-1,end,desc,dodesc,
+			   acc,doacc,usa,dousa);
 	    }
 	    ajStrAssC(&pro,"");
 
@@ -268,8 +281,9 @@ int main(int argc, char **argv)
 	    {
 		desc = ajSeqGetDesc(seq);
 		acc  = ajSeqGetAcc(seq);
-		print_hits(&l,hits,outf,pro,mms,begin,1,end,desc,dodesc,
-			   acc,doacc);
+		usa  = ajSeqGetUsa(seq);
+		print_hits(&l,hits,outf,pro,mms,begin,-2,end,desc,dodesc,
+			   acc,doacc,usa,dousa);
 	    }
 	    ajStrAssC(&pro,"");
 
@@ -281,8 +295,9 @@ int main(int argc, char **argv)
 	    {
 		desc = ajSeqGetDesc(seq);
 		acc  = ajSeqGetAcc(seq);
-		print_hits(&l,hits,outf,pro,mms,begin,1,end,desc,dodesc,
-			   acc,doacc);
+		usa  = ajSeqGetUsa(seq);
+		print_hits(&l,hits,outf,pro,mms,begin,-3,end,desc,dodesc,
+			   acc,doacc,usa,dousa);
 	    }
 	    ajStrAssC(&pro,"");
 	}
@@ -297,8 +312,9 @@ int main(int argc, char **argv)
 	    {
 		desc = ajSeqGetDesc(seq);
 		acc  = ajSeqGetAcc(seq);
-		print_hits(&l,hits,outf,pro,mms,begin,1,end,desc,dodesc,
-			   acc,doacc);
+		usa  = ajSeqGetUsa(seq);
+		print_hits(&l,hits,outf,pro,mms,begin,frameno,end,desc,dodesc,
+			   acc,doacc,usa,dousa);
 	    }
 	    ajStrAssC(&pro,"");
 	}
@@ -329,7 +345,7 @@ int main(int argc, char **argv)
 
 void print_hits(AjPList *l, ajint hits, AjPFile outf, AjPStr seq, AjBool mms,
 		ajint begin, ajint fnum, ajint end, AjPStr desc, AjBool dodesc,
-		AjPStr acc, AjBool doacc)
+		AjPStr acc, AjBool doacc, AjPStr usa, AjBool dousa)
 {
     ajint i;
     EmbPMatMatch m;
@@ -372,6 +388,8 @@ void print_hits(AjPList *l, ajint hits, AjPFile outf, AjPStr seq, AjBool mms,
 	if(doacc || dodesc)
 	    ajFmtPrintF(outf,"\n");
 
+	if(dousa)
+	    ajFmtPrintF(outf,"%S\t",usa);
 
 	if(forward)
 	    npos = (m->start*3) + ff + (begin-1);
@@ -380,11 +398,11 @@ void print_hits(AjPList *l, ajint hits, AjPFile outf, AjPStr seq, AjBool mms,
 	
 
 	if(!mms)
-	    ajFmtPrintF(outf,"%15s(%2d) %8d %s\n",ajStrStr(m->seqname),fnum,
+	    ajFmtPrintF(outf,"%15s %2d %8d %s\n",ajStrStr(m->seqname),fnum,
 			npos,
 			ajStrStr(s));
 	else
-	    ajFmtPrintF(outf,"%15s(%2d) %8d %5d %s\n",ajStrStr(m->seqname),
+	    ajFmtPrintF(outf,"%15s %2d %8d %5d %s\n",ajStrStr(m->seqname),
 			fnum,npos,
 			m->mm,ajStrStr(s));
 

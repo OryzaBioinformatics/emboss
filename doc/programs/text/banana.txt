@@ -183,9 +183,8 @@ Known bugs
    
 See also
 
-   Program name                      Description
+   Program name                 Description
    btwisted     Calculates the twisting in a B-DNA sequence
-   complex      Find the linguistic complexity in nucleotide sequences
    dan          Calculates DNA RNA/DNA melting temperature
    
 Author(s)

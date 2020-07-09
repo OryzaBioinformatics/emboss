@@ -5143,3 +5143,30 @@ void ajStrRemoveHtml(AjPStr *thys)
 
     return;
 }
+
+
+/* @func ajStrRemoveNewline **************************************************
+**
+** Removes any trailing newline
+**
+** @param [w] thys [AjPStr*] String
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajStrRemoveNewline(AjPStr *thys)
+{
+    char *p;
+    AjPStr pthis=*thys;
+
+    p = pthis->Ptr;
+
+    if(pthis->Len)
+      if(*(p+pthis->Len-1)=='\n')
+      {
+         *(p+pthis->Len-1)='\0';
+         --pthis->Len;
+      }
+
+    return;
+}

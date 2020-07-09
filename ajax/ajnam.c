@@ -271,12 +271,13 @@ static void namListStandards (ajint which)
 ** @param [w] qry [AjBool*] ajTrue = can access wild/query entries
 ** @param [w] all [AjBool*] ajTrue = can access all entries
 ** @param [w] comment [AjPStr*] comment about database
+** @param [w] release [AjPStr*] database release date
 ** @return [AjBool] ajTrue if database details were found
 ** @@
 ******************************************************************************/
 
 AjBool ajNamDbDetails (AjPStr name, AjPStr* type, AjBool* id, AjBool* qry,
-		       AjBool* all, AjPStr* comment) { 
+		       AjBool* all, AjPStr* comment, AjPStr* release) { 
   AjPNamStandards fnew = 0;
   AjPStr* dbattr = NULL;
   ajint i;
@@ -286,6 +287,7 @@ AjBool ajNamDbDetails (AjPStr name, AjPStr* type, AjBool* id, AjBool* qry,
   *id = *qry = *all = ajFalse;
   (void) ajStrDelReuse (type);
   (void) ajStrDelReuse (comment);
+  (void) ajStrDelReuse (release);
 
   fnew = ajTableGet(standardNames, ajStrStr(name));
   if (fnew) {
@@ -318,6 +320,8 @@ AjBool ajNamDbDetails (AjPStr name, AjPStr* type, AjBool* id, AjBool* qry,
         }
         if (!strcmp ("comment", namAttr[i].Name))
 	  (void) ajStrAss(comment, dbattr[i]);
+        if (!strcmp ("release", namAttr[i].Name))
+	  (void) ajStrAss(release, dbattr[i]);
       }
     }
 
@@ -1421,7 +1425,7 @@ static void namUser (char* fmt, ...) {  va_list args ;
 
 /* @func ajNamRootInstall *****************************************************
 **
-** Returns the insatll directory root for all file searches
+** Returns the install directory root for all file searches
 ** (package level)
 **
 ** @param [P] root [AjPStr*] Root.

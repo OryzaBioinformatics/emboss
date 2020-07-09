@@ -79,9 +79,9 @@ Command line arguments
                                   may wish not to count words containing them,
                                   just noting them in the count of 'Other'
                                   words.
-*  -reverse            bool       Set this to be false if you do not wish to
-                                  also count words in the reverse complement
-                                  of the sequence.
+*  -reverse            bool       Set this to be true if you also wish to also
+                                  count words in the reverse complement of a
+                                  nucleic sequence.
 
    Advanced qualifiers: (none)
    
@@ -116,9 +116,8 @@ Command line arguments
    acid and the code Z represents Glutamine or Glutamic acid. These are
    not commonly used codes and you may wish not to count words containing
    them, just noting them in the count of 'Other' words. Yes/No Yes
-   -reverse Set this to be false if you do not wish to also count words
-   in the reverse complement of the sequence. Yes/No Yes for nucleic
-   acid, No for protein
+   -reverse Set this to be true if you also wish to also count words in
+   the reverse complement of a nucleic sequence. Yes/No No
    Advanced qualifiers Allowed values Default
    (none)
    
@@ -251,6 +250,7 @@ Known bugs
 See also
 
    Program name                          Description
+   cai          CAI codon adaptation index
    chaos        Create a chaos game representation plot for a sequence
    chips        Codon usage statistics
    codcmp       Codon usage table comparison
@@ -273,6 +273,11 @@ Author(s)
 History
 
    Completed 2 March 2000
+   5 April 2001 (version 1.12.0) - the operation of the option '-reverse'
+   has changed. It is now 'False' by default instead of being 'True' by
+   default for nucleic sequences. Too many people were getting confused
+   by the counts being done on both senses, so this is now done on only
+   the forward sense by default.
    
 Target users
 

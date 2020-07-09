@@ -21,7 +21,7 @@ Description
    
    When files are transferred from PC machines to Unix machines, it is
    often useful to convert the file from the PC format to the Unix
-   format, otherwise commands like 'more' to display the file and text
+   format, otherwise commands like 'more', to display the file, and text
    editors can become confused.
    
    This simple utility removes 'carriage return' characters from such
@@ -70,6 +70,8 @@ Output file format
    
 Data files
 
+   None.
+   
 Notes
 
    EMBOSS programs can read in both PC and Unix text file formats, so it
@@ -77,14 +79,24 @@ Notes
    
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                      Description
@@ -109,6 +121,8 @@ Author(s)
    
 History
 
+   Written (1999) - Alan Bleasby
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

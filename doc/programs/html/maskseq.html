@@ -57,34 +57,57 @@ Mask off regions of a sequence
 </H2>
 
 
-	This simple editing program allows you to mask off regions of a
-	sequence with a specified letter. 
+This simple editing program allows you to mask off regions of a
+sequence with a specified letter. 
+
 <p>
-	Why would you wish to do this? It is common for database
-	searches to mask out low-complexity or biased composition
-	regions of a sequence so that spurious matches do not occur.
-	It is just possible that you have a program that has reported
-	such biased regions but which has not masked the sequence
-	itself.  In that case, you can use this program to do the
-	masking.
+
+Why would you wish to do this? It is common for database
+searches to mask out low-complexity or biased composition
+regions of a sequence so that spurious matches do not occur.
+It is just possible that you have a program that has reported
+such biased regions but which has not masked the sequence
+itself.  In that case, you can use this program to do the
+masking.
+
 <p>
-	You may find other uses for it.
+
+You may find other uses for it.
 
 <H2>
     Usage
 </H2>
 
 
-	To mask off bases 10 to 12 from a sequence 'gatta.seq' and write
-	to the new sequence file 'gatta2.seq':
-	<pre>% maskseq gatta.seq gatta2.seq -reg=10-12 </pre>
+To mask off bases 10 to 12 from a sequence 'gatta.seq' and write
+to the new sequence file 'gatta2.seq':
+
 <p>
-	To mask off bases 20 to 30 from a sequence 'hdh.seq' using the
-	character 'n' and write to the new sequence file 'hdh2.seq':
-	<pre>% maskseq hdh.seq hdh2.seq -reg=20-30 -mask=n</pre>
+
+<pre>
+% maskseq gatta.seq gatta2.seq -reg=10-12
+</pre>
+
 <p>
-	To mask off the regions 20 to 23, 34 to 45 and 88 to 90 in 'yuy.seq':
-	<pre>% maskseq yuy.seq yuy2.seq -reg=20-23,34-45,88-90</pre>
+
+To mask off bases 20 to 30 from a sequence 'hdh.seq' using the
+character 'n' and write to the new sequence file 'hdh2.seq':
+
+<p>
+
+<pre>
+% maskseq hdh.seq hdh2.seq -reg=20-30 -mask=n
+</pre>
+
+<p>
+
+To mask off the regions 20 to 23, 34 to 45 and 88 to 90 in 'yuy.seq':
+
+<p>
+
+<pre>
+% maskseq yuy.seq yuy2.seq -reg=20-23,34-45,88-90
+</pre>
 
 
 <H2>
@@ -196,11 +219,13 @@ Default is 'X' for protein sequences, 'N' for nucleic sequences.</td>
 This program reads in a single sequence file.
 
 <p>
-You can specifiy a file of ranges to mask out by giving the '-regions'
+
+You can specify a file of ranges to mask out by giving the '-regions'
 qualifier the value '@' followed by the name of the file containing the
 ranges. (eg: '-regions @myfile').
 
 <p>
+
 The format of the range file is:
 
 <ul>
@@ -215,54 +240,61 @@ The format of the range file is:
 </ul>
 
 <p>
+
 An example range file is:
 
-<pre>
+<p>
 
+<hr>
+<pre>
 # this is my set of ranges
 12   23
  4   5       this is like 12-23, but smaller
 67   10348   interesting region
-
 </pre>
+<hr>
 
 <H2>
     Output file format
 </H2>
 
 
-	Single sequence file.
+Single sequence file.
 
 <H2>
     Data files
 </H2>
 
+None.
 
 <H2>
     Notes
 </H2>
 
 
-	This can be used as a simple sequence editor.
+None.
 
 <H2>
     References
 </H2>
 
+None.
 
 <H2>
     Warnings
 </H2>
 
 
-	You can mask out a complete sequence.
+You can mask out a complete sequence.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
 
-	Several warning messages about malformed region specifications:
+Several warning messages about malformed region specifications:
+<p>
+
 <ul>
 	<li>Non-digit found in region ...
 	<li>Unpaired start of a region found in ...
@@ -282,10 +314,7 @@ An example range file is:
     Known bugs
 </H2>
 
-
-        Bugs noted but not yet fixed.
-<p>
-	None.
+None.
 
 <!--
 <H2>
@@ -316,6 +345,10 @@ An example range file is:
         data files?) that seealso doesn't find.
    -->
 
+<p>
+
+<b>maskfeat</b> masks parts of the input sequence that are annotated
+features whose feature-names match the user-specified names.
 
 
 
@@ -332,7 +365,7 @@ href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
 </H2>
 
 
-	Completed 3 March 1999
+Completed 3 March 1999
 
 <H2>
     Target users

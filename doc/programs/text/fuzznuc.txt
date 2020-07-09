@@ -43,6 +43,12 @@ Command line arguments
    -mmshow             bool       Show mismatches
    -accshow            bool       Show accession numbers
    -descshow           bool       Show descriptions
+   -usashow            bool       Showing the USA (Uniform Sequence Address)
+                                  of the matching sequences will turn your
+                                  output file into a 'list' file that can then
+                                  be read in by many other EMBOSS programs by
+                                  specifying it with a '@' in front of the
+                                  filename.
    -complement         bool       Search complementary strand
    
 
@@ -60,6 +66,10 @@ Command line arguments
    -mmshow Show mismatches Yes/No No
    -accshow Show accession numbers Yes/No No
    -descshow Show descriptions Yes/No No
+   -usashow Showing the USA (Uniform Sequence Address) of the matching
+   sequences will turn your output file into a 'list' file that can then
+   be read in by many other EMBOSS programs by specifying it with a '@'
+   in front of the filename. Yes/No No
    -complement Search complementary strand Yes/No No
    
 Input file format
@@ -125,7 +135,7 @@ Output file format
    If the option '-mmshow' is used, then an extra column of data is
    output indicating how many mismatches there are in the match, for
    example:
-
+   
 % fuzznuc embl:hhtetra -mmshow
 Nucleic acid pattern search
 Search pattern: AAGCTT
@@ -142,20 +152,101 @@ Output file [hhtetra.fuzznuc]: stdout
         HHTETRA     1259     1 AAGTTT
         HHTETRA     1267     0 AAGCTT
 
+   If the option '-desc' is used then the description of the sequence is
+   displayed before each line showing the match details. For example:
+   
+% fuzznuc embl:hhtetra -desc
+Nucleic acid pattern search
+Search pattern: AAGCTT
+Number of mismatches [0]:
+Output file [hhtetra.fuzznuc]: stdout
+
+
+Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
+        HHTETRA        1 AAGCTT
+Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
+        HHTETRA     1267 AAGCTT
+
+   If the option '-acc' is also used then the accession number of the
+   sequence is displayed before each line showing the match details. For
+   example:
+   
+% fuzznuc embl:hhtetra -desc -acc
+Nucleic acid pattern search
+Search pattern: AAGCTT
+Number of mismatches [0]:
+Output file [hhtetra.fuzznuc]: stdout
+
+
+L46634 Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
+        HHTETRA        1 AAGCTT
+L46634 Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
+        HHTETRA     1267 AAGCTT
+
+   If the option '-usa' is used then the Uniform Sequence Address is
+   output at the start of each line of match details. For example:
+   
+% fuzznuc embl:hhtetra -usa
+Nucleic acid pattern search
+Search pattern: AAGCTT
+Number of mismatches [0]:
+Output file [hhtetra.fuzznuc]: stdout
+
+
+embl-id:HHTETRA         HHTETRA        1 AAGCTT
+embl-id:HHTETRA         HHTETRA     1267 AAGCTT
+
+   This is useful because it turns the output into a 'list' file of
+   sequence names that can then be read in by other EMBOSS programs when
+   a '@' is put at the start of the file.
+   
+   If the option '-comp' is used, then the search will also be done on
+   the reverse sense strand. Any matches in that strand will be displayed
+   with the start position using the forward-sense positions (it actually
+   gives the position of the end of the match). The matching sequence
+   will be given in square brackets to distinguish this from a
+   forward-sense match. For example:
+   
+% fuzznuc embl:hhtetra -comp
+Nucleic acid pattern search
+Search pattern: AAGCTT
+Number of mismatches [0]:
+Output file [hhtetra.fuzznuc]: stdout
+
+
+        HHTETRA        1 AAGCTT
+        HHTETRA     1267 AAGCTT
+        HHTETRA        1 [AAGCTT]
+        HHTETRA     1267 [AAGCTT]
+
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                       Description
@@ -181,6 +272,9 @@ Author(s)
    
 History
 
+   Written (2000) - Alan Bleasby
+   '-usa' added (13 March 2001) - Gary Williams
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

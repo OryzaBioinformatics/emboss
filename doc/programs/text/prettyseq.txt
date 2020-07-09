@@ -13,6 +13,12 @@ Description
    This writes out a nicely formatted display of the sequence with the
    translation (within specified ranges) displayed beneath it.
    
+   The translated nucleic acid region will be shown in lower-case letters
+   while the rest of the input sequence will be left in the input case.
+   
+   The base and residue numbers of the sequences are shown beside the
+   sequences in the output.
+   
    Slightly unusually, this application uses the codon usage tables to
    translate the codons.
    
@@ -21,6 +27,7 @@ Usage
    Here is a sample session with prettyseq.
 
 % prettyseq
+Output sequence with translated ranges
 Input sequence: embl:paamir
 Range(s) to translate [1-2167]: 135-1292
 Output file [paamir.prettyseq]:
@@ -83,8 +90,8 @@ Input file format
 Output file format
 
    Here is the output from the example run.
+     _________________________________________________________________
    
-
 PRETTYSEQ of PAAMIR from 1 to 2167
 
            ---------|---------|---------|---------|---------|---------|
@@ -179,23 +186,105 @@ PRETTYSEQ of PAAMIR from 1 to 2167
       1321 CGAGTTGCAGGTGCTGGTCCTCAACCCGCCGGGGGAGGTCAGCGACGCCCTGGTCTTGCA 1380
 
 
+           ---------|---------|---------|---------|---------|---------|
+      1381 GCTGATCCGCATCGGTTGTTCGGTGCGCCAGTGCTGGCCGCCGCCGGAAGCCTTCGACGT 1440
 
-...............
 
+           ---------|---------|---------|---------|---------|---------|
+      1441 GCCGGTGGACGTGGTCTTCACCAGCATTTTCCAGAATGGCCACCACGACGAGATCGCTGC 1500
+
+
+           ---------|---------|---------|---------|---------|---------|
+      1501 GCTGCTCGCCGCCGGGACTCCGCGCACTACCCTGGTGGCGCTGGTGGAGTACGAAAGCCC 1560
+
+
+           ---------|---------|---------|---------|---------|---------|
+      1561 CGCGGTGCTCTCGCAGATCATCGAGCTGGAGTGCCACGGCGTGATCACCCAGCCGCTCGA 1620
+
+
+           ---------|---------|---------|---------|---------|---------|
+      1621 TGCCCACCGGGTGCTGCCTGTGCTGGTATCGGCGCGGCGCATCAGCGAGGAAATGGCGAA 1680
+
+
+           ---------|---------|---------|---------|---------|---------|
+      1681 GCTGAAGCAGAAGACCGAGCAGCTCCAGGACCGCATCGCCGGCCAGGCCCGGATCAACCA 1740
+
+
+           ---------|---------|---------|---------|---------|---------|
+      1741 GGCCAAGGTGTTGCTGATGCAGCGCCATGGCTGGGACGAGCGCGAGGCGCACCAGCACCT 1800
+
+
+           ---------|---------|---------|---------|---------|---------|
+      1801 GTCGCGGGAAGCGATGAAGCGGCGCGAGCCGATCCTGAAGATCGCTCAGGAGTTGCTGGG 1860
+
+
+           ---------|---------|---------|---------|---------|---------|
+      1861 AAACGAGCCGTCCGCCTGAGCGATCCGGGCCGACCAGAACAATAACAAGAGGGGTATCGT 1920
+
+
+           ---------|---------|---------|---------|---------|---------|
+      1921 CATCATGCTGGGACTGGTTCTGCTGTACGTTGGCGCGGTGCTGTTTCTCAATGCCGTCTG 1980
+
+
+           ---------|---------|---------|---------|---------|---------|
+      1981 GTTGCTGGGCAAGATCAGCGGTCGGGAGGTGGCGGTGATCAACTTCCTGGTCGGCGTGCT 2040
+
+
+           ---------|---------|---------|---------|---------|---------|
+      2041 GAGCGCCTGCGTCGCGTTCTACCTGATCTTTTCCGCAGCAGCCGGGCAGGGCTCGCTGAA 2100
+
+
+           ---------|---------|---------|---------|---------|---------|
+      2101 GGCCGGAGCGCTGACCCTGCTATTCGCTTTTACCTATCTGTGGGTGGCCGCCAACCAGTT 2160
+
+
+           -------
+      2161 CCTCGAG 2167
+     _________________________________________________________________
+   
 Data files
+
+   The codon usage table is read by default from "Ehum.cut" in the
+   'data/CODONS' directory of the EMBOSS distribution. If the name of a
+   codon usage file is specified on the command line, then this file will
+   first be searched for in the current directory and then in the
+   'data/CODONS' directory of the EMBOSS distribution.
+   
+   To see the available EMBOSS codon usage files, run:
+   
+% embossdata -showall
+
+   To fetch one of the codon usage tables (for example 'Emus.cut') into
+   your current directory for you to inspect or modify, run:
+   
+% embossdata -fetch -file Emus.cut
 
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   "Range outside length of sequence" - this is self explanatory. You
+   should specify a range of sequences to translate that is within the
+   length of the input sequence.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                          Description
@@ -208,12 +297,17 @@ See also
    showseq      Display a sequence with features, translation etc
    transeq      Translate nucleic acid sequences
    
+   showseq has more options for specifying various ways of displaying a
+   sequence, with or without various ways of translating it.
+   
 Author(s)
 
    This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
    
 History
 
+   Written (1999) - Alan Bleasby
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

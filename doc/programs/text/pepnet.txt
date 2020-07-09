@@ -23,7 +23,7 @@ Description
 Usage
 
    Here is a sample session with pepnet.
-
+   
 % pepnet -sask
 Input sequence: sw:gcn4_yeast
      Begin at position [start]: 253
@@ -80,30 +80,50 @@ Command line arguments
    
 Input file format
 
+   Any protein sequence USA.
+   
 Output file format
 
+   An image is displayed.
+   
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description
+   charge Protein charge plot
    checktrans Reports STOP codons and ORF statistics of a protein
    sequence
    digest Protein proteolytic enzyme or reagent cleavage digest
    garnier Predicts protein secondary structure
    helixturnhelix Report nucleic acid binding motifs
+   hmoment Hydrophobic moment calculation
    iep Calculates the isoelectric point of a protein
    octanol Displays protein hydropathy
    pepcoil Predicts coiled coil regions
@@ -120,6 +140,8 @@ Author(s)
    
 History
 
+   Writte (2000) - Alan Bleasby
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

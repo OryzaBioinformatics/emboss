@@ -80,6 +80,9 @@ Command line arguments
                                   24-45, 56-78
                                   1:45, 67=99;765..888
                                   1,5,8,10,23,45,57,99
+                                  Note: you should not try to use this option
+                                  with any other frame than the default,
+                                  -frame=1
    -trim               bool       This removes all X and * characters from the
                                   right end of the translation. The trimming
                                   process starts at the end and continues
@@ -131,7 +134,9 @@ Command line arguments
    set of pairs of positions. The positions are integers. They are
    separated by any non-digit, non-alpha character. Examples of region
    specifications are: 24-45, 56-78 1:45, 67=99;765..888
-   1,5,8,10,23,45,57,99 Sequence range Whole sequence
+   1,5,8,10,23,45,57,99 Note: you should not try to use this option with
+   any other frame than the default, -frame=1 Sequence range Whole
+   sequence
    -trim This removes all X and * characters from the right end of the
    translation. The trimming process starts at the end and continues
    until the next character is not a X or a * Yes/No No
@@ -299,6 +304,11 @@ Warnings
    the table carefully for deviations from your particular organism's
    code.
    
+   When using the '-regions' option, you should always leave the
+   '-frames' option at the default of frame '1'. If you change the frame
+   while specifying a region to translate, then the regions will be
+   offset by 1 or 2 bases, which is not what you want.
+   
 Diagnostic Error Messages
 
    Several warning messages about malformed region specifications:
@@ -314,9 +324,10 @@ Exit status
    
 Known bugs
 
-   Bugs noted but not yet fixed.
-   
-   None.
+   When using the '-regions' option, you should always leave the
+   '-frames' option at the default of frame '1'. If you change the frame
+   while specifying a region to translate, then the regions will be
+   offset by 1 or 2 bases, which is not what you want.
    
 See also
 

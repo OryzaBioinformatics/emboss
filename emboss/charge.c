@@ -59,7 +59,6 @@ int main(int argc, char **argv)
     float *x=NULL;
     float *y=NULL;
 
-    float val=0.;
     float sum=0.;
     
 

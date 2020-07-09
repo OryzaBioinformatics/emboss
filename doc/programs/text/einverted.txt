@@ -10,15 +10,25 @@ Function
    
 Description
 
-   This looks for inverted repeats (stem loops) in a nucleotide sequence.
+   einverted looks for inverted repeats (stem loops) in a nucleotide
+   sequence.
    
    It will find inverted repeats that include a proprtion of mismatches
    and gaps (bulges in the stem loop).
    
    It works by finding alignments between the sequence and its reverse
-   complement that exceed a threshold score. The score is calculated by
-   summing the values of each match, the penalties of each mismatch and
-   the large penalties of any gaps.
+   complement that exceed a threshold score. Gaps and Mismatches are
+   assigned a penalty (negative) score. Matches are assigned a positive
+   score. The score is calculated by summing the values of each match,
+   the penalties of each mismatch and the large penalties of any gaps.
+   Any region whose score exceeds the threshold is reported.
+   
+   einverted uses dynamic programming and thus is guaranteed to find the
+   optimal alignment, but is slower than, for example, a self-by-self
+   BLAST. It can find multiple inverted repeats in a sequence.
+   
+   Currently the maximal extent of the interval from start to end of the
+   repeat is set to 4000 bp.
    
    Secondary structures like inverted repeats in genomic sequences may be
    implicated in initiation of DNA replication.
@@ -87,11 +97,15 @@ Score 99: 53/65 ( 81%) matches, 1 gaps
 
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
-   Some references on inverted repeats:
+   Some assorted references on inverted repeats:
    
     1. Pearson CE, Zorbas H, Price GB, Zannis-Hadjopoulos M Inverted
        repeats, stem-loops, and cruciforms: significance for initiation
@@ -110,12 +124,20 @@ References
        
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                          Description
@@ -142,10 +164,13 @@ See also
    silent       Silent mutation restriction enzyme scan
    tfscan       Scans DNA sequences for transcription factors
    
+   palindrome also looks for inverted repeats but is much faster and less
+   sensitive, as it looks for near-perfect repeats.
+   
 Author(s)
 
-   This program was originally written by Richard Durbin and Jean
-   Thierry-Mieg as part of the ACEDB genome database package.
+   This program was originally written by Richard Durbin at the Sanger
+   Centre.
    
    This application was modified for inclusion in EMBOSS by Peter Rice
    (pmr@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
@@ -153,6 +178,8 @@ Author(s)
    
 History
 
+   Written (1999) - Peter Rice
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

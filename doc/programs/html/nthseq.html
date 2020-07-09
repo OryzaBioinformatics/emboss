@@ -64,19 +64,33 @@ sequences.
 <p>
 This default behaviour can be changed by using the qualifier '-ossingle'
 which writes many sequences into many files, each containing one
-sequence.  It can also be changed by using the qualifier '-osf=gcg'
-which forces the output sequence format to be 'GCG' format - this format
-cannot cope with holding multiple sequences in one file and so EMBOSS
-writes each GCG-format sequence into its own individual file. 
+sequence.  
 
 <p>
+
+The program <a href="seqretsplit.html">seqretsplit</a> will take a file
+containing many sequences and will output many files, each containing
+one sequence.  However you have no choice over the naming of the files -
+they are named after the ID name fo the sequence they contain. 
+
+<p>
+
 If, however you have the situation where you have a file containing
 multiple sequences and you wish to extract one of them, then this
 application may be useful. 
 
 <p>
+
+<b>nthseq</b> allows you to specify the name of the output file, so you
+may find that it is useful to include this program in scripts where you
+need to be able to specify the name of the resulting sequence files you
+create. 
+
+<p>
+
 This application extracts the indicated sequence from a multiple set of
 sequences and writes it out. 
+
 <H2>
     Usage
 </H2>
@@ -176,23 +190,26 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
+A file containing one or more sequences.
 
 <H2>
     Output file format
 </H2>
 
 
-The output is the first, second, third, etc. sequence from the input USA.
+The output is the specified ordinal sequence from the input USA.
 
 <p>
-In the example, the search will find entries ECLACA, ECLACI, ECLACY
-and ECLACZ in that order.
+
+In the example, the second sequence from the input file will be written
+out to the specified output file. 
 
 
 <H2>
     Data files
 </H2>
 
+None.
 
 <H2>
     Notes
@@ -205,6 +222,8 @@ output files in the way that you require.
 
 <p>
 For example:
+
+<p>
 
 <pre>
 #!/usr/local/bin/perl -w
@@ -223,26 +242,31 @@ while ($count &lt;= $#list+1) {
     References
 </H2>
 
+None.
 
 <H2>
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
 </H2>
 
+It always exits with a status of 0.
 
 <H2>
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -273,6 +297,14 @@ while ($count &lt;= $#list+1) {
         data files?) that seealso doesn't find.
    -->
 
+<p>
+
+The program <a href="seqretsplit.html">seqretsplit</a> will take a file
+containing many sequences and will output many files, each containing
+one sequence.  However you have no choice over the naming of the files -
+they are named after the ID name fo the sequence they contain. 
+
+
 
 <H2>
     Author(s)
@@ -287,6 +319,7 @@ href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
     History
 </H2>
 
+Written (2000) - Gary Williams
 
 <H2>
     Target users

@@ -130,7 +130,8 @@ IT IS DONE FOR YOU.
                                   depends on the choice of comparison matrix.
                                   The default value assumes you are using the
                                   EBLOSUM62 matrix for protein sequences, and
-                                  the EDNAMAT matrix for nucleotide sequences.
+                                  the EDNAFULL matrix for nucleotide
+                                  sequences.
    -gapextend          float      The gap extension, penalty is added to the
                                   standard gap penalty for each base or
                                   residue in the gap. This is how long gaps
@@ -184,7 +185,7 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-gapopen</td>
-<td>The gap open penalty is the score taken away when a gap is created. The best value depends on the choice of comparison matrix. The default value assumes you are using the EBLOSUM62 matrix for protein sequences, and the EDNAMAT matrix for nucleotide sequences.</td>
+<td>The gap open penalty is the score taken away when a gap is created. The best value depends on the choice of comparison matrix. The default value assumes you are using the EBLOSUM62 matrix for protein sequences, and the EDNAFULL matrix for nucleotide sequences.</td>
 <td>Floating point number from 1.0 to 100.0</td>
 <td>10.0 for any sequence</td>
 </tr>
@@ -213,7 +214,7 @@ IT IS DONE FOR YOU.
 <td>-datafile</td>
 <td>Matrix file</td>
 <td>Comparison matrix file in EMBOSS data path</td>
-<td>EBLOSUM62 for protein<br>EDNAMAT for DNA</td>
+<td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -308,7 +309,7 @@ longest of the two sequences.
 
 
 For protein sequences EBLOSUM62 is used for the substitution
-matrix. For nucleotide sequence, EDNAMAT is used. Others can be
+matrix. For nucleotide sequence, EDNAFULL is used. Others can be
 specified.
 
 <p>

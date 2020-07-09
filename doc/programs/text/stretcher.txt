@@ -72,7 +72,7 @@ Command line arguments
    Optional qualifiers Allowed values Default
    -datafile Matrix file Comparison matrix file in EMBOSS data path
    EBLOSUM62 for protein
-   EDNAMAT for DNA
+   EDNAFULL for DNA
    -gappenalty gappenalty Positive integer 12 for protein, 16 for nucleic
    -gaplength gap length penalty Positive integer 2 for protein, 4 for
    nucleic

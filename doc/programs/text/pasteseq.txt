@@ -68,24 +68,30 @@ Output file format
    
 Data files
 
+   None.
+   
 Notes
 
    This can be used as a simple sequence editor.
    
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    It always exits with status 0.
    
 Known bugs
 
-   Bugs noted but not yet fixed.
-   
    None.
    
 See also

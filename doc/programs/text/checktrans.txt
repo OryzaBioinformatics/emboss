@@ -146,7 +146,9 @@ Known bugs
 See also
 
    Program name                      Description
+   charge       Protein charge plot
    digest       Protein proteolytic enzyme or reagent cleavage digest
+   hmoment      Hydrophobic moment calculation
    iep          Calculates the isoelectric point of a protein
    octanol      Displays protein hydropathy
    pepinfo      Plots simple amino acid properties in parallel

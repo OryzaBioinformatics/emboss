@@ -10,13 +10,16 @@ Function
    
 Description
 
-   Evaluation of protein hydropathy
+   pepwindow reads in a protein sequence and displays a graph of the
+   classic Kyte & Doolittle hydropathy plot of that protein.
    
 Usage
 
    Here is a sample session with pepwindow.
-
+   
 % pepwindow sw:hba_human
+Displays protein hydropathy
+Graph type [x11]:
 
    click here for result
    
@@ -51,10 +54,14 @@ Input file format
    
 Output file format
 
-   .ps file if postscipt output requested.
+   An image is displayed.
+   .ps file if postscript output requested.
    
 Data files
 
+   pepwindow reads the Kyte-Doolittle hydropathy data from the file
+   'Enakai.dat'
+   
    The EMBOSS data file 'Enakai.dat' contains :-
    
 D Hydropathy index (Kyte-Doolittle, 1982)
@@ -85,6 +92,8 @@ I   A/L    R/K    N/M    D/F    C/P    Q/S    E/T    G/W    H/Y    I/V
 
 Notes
 
+   None.
+   
 References
 
 Kyte, J. and Doolittle, R.F.
@@ -93,20 +102,28 @@ J. Mol. Biol. 157, 105-132 (1982)
 
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
-   0 upon successfull completion.
+   0 upon successful completion.
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description
+   charge Protein charge plot
    checktrans Reports STOP codons and ORF statistics of a protein
    sequence
    digest Protein proteolytic enzyme or reagent cleavage digest
+   hmoment Hydrophobic moment calculation
    iep Calculates the isoelectric point of a protein
    octanol Displays protein hydropathy
    pepinfo Plots simple amino acid properties in parallel

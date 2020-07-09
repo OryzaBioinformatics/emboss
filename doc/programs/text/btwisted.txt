@@ -181,9 +181,8 @@ Known bugs
    
 See also
 
-   Program name                      Description
+   Program name                Description
    banana       Bending and curvature plot in B-DNA
-   complex      Find the linguistic complexity in nucleotide sequences
    dan          Calculates DNA RNA/DNA melting temperature
    
 Author(s)

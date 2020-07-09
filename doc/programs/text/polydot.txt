@@ -29,7 +29,7 @@ Description
 Usage
 
    Here is a sample session with polydot.
-
+   
 % polydot globin.fasta -gtitle="Polydot of globin.fasta"
 
    click here for result
@@ -78,22 +78,44 @@ Command line arguments
    individual dotplots in the display. The size is measured in residues,
    as displayed in the output. Integer 0 or more 10
    
+Input file format
+
+   It reads in a set of nucleic or protein sequences.
+   
+   The sequences may or may not be aligned.
+   
+Output file format
+
+   A graphical image is displayed.
+   
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    0 if successfull.
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description
@@ -128,8 +150,6 @@ See also
    silent Silent mutation restriction enzyme scan
    stssearch Searches a DNA database for matches with a set of STS
    primers
-   supermatcher Finds a match of a large sequence against one or more
-   sequences
    tfscan Scans DNA sequences for transcription factors
    tmap Displays membrane spanning regions
    wordmatch Finds all exact matches of a given size between 2 sequences

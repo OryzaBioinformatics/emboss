@@ -241,4 +241,10 @@ pldummy_PNG()
     return 0;
 }
 
+#else
+static int pngdummy()
+{
+    return 0;
+}
+
 #endif

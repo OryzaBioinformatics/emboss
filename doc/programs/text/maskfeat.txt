@@ -10,11 +10,42 @@ Function
    
 Description
 
+   maskfeat reads in a sequence with its associated features. The
+   features can be found in the annotation of the sequence if it is in a
+   format such as EMBL or SWISSPROT which includes features in the
+   annotation, or they may be supplied explicitly in a GFF file by using
+   the command-lin option '-gff filename'.
+   
+   The feature table is then searched for features whose type matches the
+   specified feature type to be masked. By default, the type is 'repeat*'
+   (i.e. any type whose name starts with 'repeat'). You can specify the
+   name of any other type of feature, or features that you wish to mask.
+   If you wish to specify more than one type of feature, separate their
+   names with spaces or commas. The names of the types of feature to be
+   found may be wild-carded with asterisks '*' to find gruops of feature
+   types sharing a common part of their names.
+   
+   If you are unsure of the names of feature types in use, please consult
+   http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature
+   types and see Appendix A of the Swissprot user manual in
+   http://www.expasy.ch/txt/userman.txt for a list of the Swissprot
+   feature types.
+   
+   If any features matching the specified names of feature types are
+   found, then those regions of the sequence will be masked out by
+   replacing that part of the sequence by masking characters. The default
+   masking characters are 'X' for a protein sequence and 'N' for a
+   nucleic acid sequence, although you can specify your own masking
+   character, if required.
+   
 Usage
 
-   Here is a sample session with maskfeat.
-
-% maskfeat
+   Here is a sample session with maskfeat. It masks out a feature whose
+   type is "repeat_region" from position 2331 to 2356:
+   
+% maskfeat em:AB000360
+Mask off features of a sequence.
+Output sequence [ab000360.fasta]:
 
 Command line arguments
 
@@ -65,22 +96,91 @@ Command line arguments
    
 Input file format
 
+   It reads in a sequence USA. You can optionally specify a GFF feature
+   file to use with the command-line option '-gff filename'.
+   
 Output file format
 
+   A normal, masked, sequence file.
+   
+   The output from the above example is:
+     _________________________________________________________________
+   
+>AB000360 AB000360 Homo sapiens PIGC gene, complete cds.
+ggatccctgctgcagagggggtaacggtgtctggcttgccaagcaatatttgttgtggtc
+tatcatggaagaaataaagtcgggcaatatgaattttttttttctcaaatttgccggatg
+gctgtggtgtttctgactcttagttttctcattgtgaaaaaggaatgattatcttcttcg
+atcctctcaagagtttccttgttttgagtagattgatagctctttaaaggatgctaagct
+cagctaatggaagaagagtctagtttctttgaggctttgattttggttaaactatagagc
+tcatacctttctgtatggtgcagcttactattgtctttggattggtaacttaaaaaatac
+aaataacatgcctttgagaaccaataaaaactatggatattatccctataaatttacaca
+aatccagatataagcatgcaatgtgatatacctaagggatatgtgaaccactgagttaag
+aactgctttagagggagatacaatgtgagacacaggctttgggataagactttggtttga
+atcctggctctgctctgttaccttagggcaaagttacttaagcatcttgaatctcagctt
+ttttaccaaagcaggactaatactaacttacaaggtggtgaggattaagtgaaagaagat
+acataaggcacttagcacatagtaggtactcaataagcgatagctaacagatgtctatta
+ttattcaaggaattataattttcaaatctgaaatgcagttttaatgtcccataaggtgac
+taccacatacatttttctcagacttttagtaaactgagttgatttgactttatctcagta
+ctactcttgacctttcacaactttcgtaggttcacagtctctctttttctaggaacttgg
+ctgtgttgtcctgcctcagagacaaattcatctattgtaggcctagcccctgcctttgaa
+aacaaggaaaggttggtagaacatcaacacagcatggaatttccagggaggtctcatttc
+aaaacttcataaagaacaagaaccacctggacttctgtgagggcgatgattaaactggcc
+tgagtttgaatgaaaggataatgtatgctcaacctgtgactaacaccaaggaggtcaagt
+ggcagaaggtcttgtatgagcgacagccctttcctgataactatgtggaccggcgattcc
+tggaagagctccggaaaaacatccatgctcggaaataccaatattgggctgtggtatttg
+agtccagtgtggtgatccagcagctgtgcagtgtttgtgtttttgtggttatctggtggt
+atatggatgagggtcttctggccccccattggcttttagggactggcctggcttcttcac
+tgattgggtatgttttgtttgatctcattgatggaggtgaagggcggaagaagagtgggc
+agacccggtgggctgacctgaagagtgccctagtcttcattactttcacttatgggtttt
+caccagtgctgaagacccttacagagtctgtcagcactgacaccatctatgccatgtcag
+tcttcatgctgttaggccatctcatcttttttgactatggtgccaatgctgccattgtat
+ccagcacactatccttgaacatggccatctttgcttctgtatgcttggcatcacgtcttc
+cccggtccctgcatgccttcatcatggtgacatttgccattcagatttttgccctgtggc
+ccatgttgcagaagaaactaaaggcatgtactccccggagctatgtgggggtcacactgc
+tttttgcattttcagccgtgggaggcctactgtccattagtgctgtgggagccgtactct
+ttgcccttctgctgatgtctatctcatgtctgtgttcattctacctcattcgcttgcagc
+tttttaaagaaaacattcatgggccttgggatgaagctgaaatcaaggaagacttgtcca
+ggttcctcagttaaattaggacatccattacattattaaagcaagctgatagattagcct
+cctaactagtatagaacttaaagacagagttccattctggaagcagcatgtcattgtggt
+aagagaatagagatcaaaaccaaaaaaaatgaaccaaaggcttgggtggtgagggtgctt
+atcctttctgttattttgtagatgaaaaaactttctggggacctcttgaattacatgctg
+taacatatgaagtgatgtggtttctattaaaaaaataacacatccatcaagttgtctcat
+gatttttccataaacaggaggcagacagaggggcatgaagagtgaagtaaNNNNNNNNNN
+NNNNNNNNNNNNNNNNaaagtcacttctttctacccttttcaatgtgctaatgctctttt
+atttatctagggctcaaatcttagaacacagggtgctatgctcagttttgttgcccaaga
+tcacagaattggttacttaaccttgactcagagtttctaccttgttcttagggaagcata
+tcacaactaattgcaaagcagagtgtgatgtgtcacaataagcagaatgctagggggaat
+tc
+     _________________________________________________________________
+   
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                      Description
@@ -99,6 +199,9 @@ See also
    trimseq      Trim ambiguous bits off the ends of sequences
    vectorstrip  Strips out DNA between a pair of vector sequences
    
+   maskseq simply masks a user-specified set of regions, without using
+   annotated features.
+   
 Author(s)
 
    This application was written by Gary Williams
@@ -106,6 +209,8 @@ Author(s)
    
 History
 
+   Written (2000) - Gary Williams
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

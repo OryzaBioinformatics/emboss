@@ -35,8 +35,10 @@ typedef struct AjSCod
 
 void    ajCodBacktranslate(AjPStr *b, AjPStr a, AjPCod thys);
 ajint   ajCodBase(ajint c);
+double  ajCodCai(AjPCod cod, AjPStr str);
 void    ajCodCalcGribskov(AjPCod *nrm, AjPStr s);
 double  ajCodCalcCai(AjPCod *thys);
+double  *ajCodCaiW(AjPCod cod);
 double  ajCodCalcNc(AjPCod *thys);
 void    ajCodCalculateUsage(AjPCod *thys, ajint c);
 void    ajCodClear(AjPCod *thys);

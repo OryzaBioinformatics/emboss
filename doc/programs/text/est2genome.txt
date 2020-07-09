@@ -398,3 +398,19 @@ Target users
    naive users to embedded scripts.
    
 Comments
+
+  Thu, 29 Mar 2001
+  
+   I found est2genome having problems finding very short exons with the
+   default parameters.
+   
+   With the folowing changes it detects also a 14bp exon correctly:
+   
+mismatch 1 -> 3
+intronpenalty 40 -> 20
+splicepenalty 20 -> 10
+minscore 30 -> 10
+Dr. David Bauer
+GenProfile AG, Max-Delbrueck-Center, Erwin-Negelein-Haus
+Robert-Roessle-Str. 10, D-13125 Berlin, Germany
+bauer@genprofile.com, Tel:49-30-94892165, FAX:49-30-94892151

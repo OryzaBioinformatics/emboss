@@ -57,7 +57,36 @@ Plot potential open reading frames
 </H2>
 
 
-Plot potential open reading frames
+Plot potential open reading frames.
+
+<p>
+
+A graphical representation of where the open reading frames are in all 6
+reading frames is shown.  The ORFs are displayed as blue boxes.  
+
+<p>
+
+ORFs in this program are defined as being regions between START and STOP
+codons. 
+
+<p>
+
+Note that this definition of an ORF would miss those exons in eukaryotic
+genomic sequences which do not contain a START codon.  <b>plotorf</b> is
+only really useful when dealing with prokaryotic or mRNA eukaryotic
+sequences. 
+
+<p>
+
+The default START codon is: "ATG".
+<br>
+The default STOP codons are: "TAA,TAG,TGA".
+
+<p>
+
+You can specify your own set of start and stop codons using the
+<b>-start</b> and <b>-stop</b> qualifiers. 
+
 
 <H2>
     Usage
@@ -66,16 +95,32 @@ Plot potential open reading frames
 
 Here is a sample session with plotorf.
 
-<pre>
+<p>
 
+<pre>
 % plotorf
+Plot potential open reading frames
 Input sequence: embl:paamir
 Graph type [x11]: 
-
 </pre>
+
+<p>
 
 <a href="plotorf0.gif">Click here to see the graph</a>
 
+<p>
+
+An example of specifying your own START and STOP codons with a
+mitochondrial sequence would be:
+
+<p>
+
+<pre>
+% plotorf -start ATT,ATC,ATA,ATG,GTG -stop TAA,TAG,AGA,AGG 
+Plot potential open reading frames
+Input sequence: mito.seq
+Graph type [x11]: 
+</pre>
 
 <H2>
     Command line arguments
@@ -95,7 +140,10 @@ IT IS DONE FOR YOU.
    -graph              xygraph    Graph type
 
    Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Advanced qualifiers:
+   -start              string     Start codons
+   -stop               string     Stop codons
+
 
 </pre>
 </td></tr></table>
@@ -139,7 +187,17 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td>-start</td>
+<td>Start codons</td>
+<td>Any string is accepted</td>
+<td>ATG</td>
+</tr>
+
+<tr>
+<td>-stop</td>
+<td>Stop codons</td>
+<td>Any string is accepted</td>
+<td>TAA,TAG,TGA</td>
 </tr>
 
 </table>
@@ -150,46 +208,64 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
+Any nucleic acid sequence.
 
 <H2>
     Output file format
 </H2>
 
+Graphical output.
 
 <H2>
     Data files
 </H2>
 
+None.
 
 <H2>
     Notes
 </H2>
+
+ORFs in this program are defined as being regions between START and STOP
+codons. 
+
+<p>
+
+Note that this definition of an ORF would miss those exons in eukaryotic
+genomic sequences which do not contain a START codon.  <b>plotorf</b> is
+only really useful when dealing with prokaryotic or mRNA eukaryotic
+sequences. 
 
 
 <H2>
     References
 </H2>
 
+None.
 
 <H2>
     Warnings
 </H2>
 
+See the Notes section.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
 </H2>
 
+It always exits with a status of 0.
 
 <H2>
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -227,6 +303,7 @@ href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
     History
 </H2>
 
+Written (1999) - Alan Bleasby
 
 <H2>
     Target users

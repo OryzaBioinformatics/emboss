@@ -218,6 +218,7 @@ See also
 
    Program name                          Description
    backtranseq  Back translate a protein sequence
+   cai          CAI codon adaptation index
    chips        Codon usage statistics
    cusp         Create a codon usage table
    marscan      Finds MAR/SAR sites in nucleic sequences

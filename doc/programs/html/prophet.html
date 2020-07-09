@@ -56,6 +56,18 @@ Gapped alignment for profiles
     Description
 </H2>
 
+<b>prophet</b> finds matches between a GRIBSKOV or HENIKOFF profile
+produced by <b>prophecy</b> and one or more sequences.
+
+<p>
+
+Note: <b>prophet</b> does <b>NOT</b> use the 'simple frequency matrices'
+produced by <b>prophecy</b>.  If you have a 'simple frequency matrix'you
+should use the program <b>profit</b> to scan sequences. 
+
+<p>
+
+
 
 <H2>
     Usage
@@ -64,10 +76,43 @@ Gapped alignment for profiles
 
 Here is a sample session with prophet.
 
+<p>
+
 <pre>
+(The sequence alignment looks like:)
+% more m.seq
+>one
+DEVGGEA-GRLLVVYPWTQR
+>two
+DEVGREALGRLL-VYPWTQR
+>three
+DEVGGEALGRILVVY-WTQR
+>four
+DEVGGEAAGRVLVVYPWTQR
 
+(Create the profile:)
+% prophecy
+Creates matrices/profiles from multiple alignments
+Input sequence set: m.seq
+Profile type
+         F : Frequency
+         G : Gribskov
+         H : Henikoff
+Select type [F]: g
+Enter a name for the profile [mymatrix]: 
+Scoring matrix [Epprofile]: 
+Gap opening penalty [3.0]: 
+Gap extension penalty [0.3]: 
+Output file [outfile.prophecy]: 
+
+(Now do the search:)
 % prophet
-
+Gapped alignment for profiles
+Input sequence(s): sw:*
+Profile or matrix file: outfile.prophecy
+Gap opening coefficient [1.0]: 
+Gap extension coefficient [0.1]: 
+Output file [100k_rat.prophet]: 
 </pre>
 
 
@@ -169,46 +214,77 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
+It reads a GRIBSKOV or a HENIKOFF profile produced by <b>prophecy</b> and
+searches one or more sequences. 
+
 
 <H2>
     Output file format
 </H2>
 
+The output of the above example follows:
+
+<p>
+
+<pre>
+</pre>
 
 <H2>
     Data files
 </H2>
 
+None.
 
 <H2>
     Notes
 </H2>
 
+None.
 
 <H2>
     References
 </H2>
 
+None.
 
 <H2>
     Warnings
 </H2>
+
+<b>prophet</b> does <b>NOT</b> use the 'simple frequency matrices'
+produced by <b>prophecy</b>.  If you have a 'simple frequency matrix'you
+should use the program <b>profit</b> to scan sequences. 
 
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+If you see something like:
+
+<p>
+
+<pre>
+   EMBOSS An error in prophet.c at line 110:
+Unrecognised profile/matrix file format
+</pre>
+
+<p>
+
+then you have probably given <b>prophet</b> a 'simple frequency matrix'
+and not a a GRIBSKOV or HENIKOFF profile produced by <b>prophecy</b>.
 
 <H2>
     Exit status
 </H2>
 
+It exists with a status of 0.
 
 <H2>
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -241,6 +317,7 @@ href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
     History
 </H2>
 
+Written (1999) - author - Alan Bleasby
 
 <H2>
     Target users

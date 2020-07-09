@@ -4,26 +4,29 @@
    
                               Program prettyplot
                                        
-   Displays aligned sequences, with colouring and boxing
-   
 Function
 
    Displays aligned sequences, with colouring and boxing
    
 Description
 
-   Prettyplot reads in a set of aligned DNA or protein sequences. It
-   reports them graphically, with conserved regions highlighted in
+   prettyplot reads in a set of aligned DNA or protein sequences. It
+   displays them graphically, with conserved regions highlighted in
    various ways.
    
 Usage
 
    Here is a sample session with prettyplot.
-% prettyplot $EMBOSS_DATA/globin.msf -resbreak=10 -boxcol -consensus -plurality
-=3
+   
+% prettyplot -resbreak=10 -boxcol -consensus -plurality=3
+Displays aligned sequences, with colouring and boxing
+Input sequence set: globin.msf
+Graph type [x11]:
 
    click here for result
-$ prettyplot $EMBOSS_DATA/globin.msf -plurality=3 -docolour
+$ prettyplot globin.msf -plurality=3 -docolour
+Displays aligned sequences, with colouring and boxing
+Graph type [x11]:
 
    click here for result
    
@@ -141,7 +144,7 @@ Command line arguments
    -portrait Set page to Portrait Yes/No No
    -matrixfile Matrix file Comparison matrix file in EMBOSS data path
    EBLOSUM62 for protein
-   EDNAMAT for DNA
+   EDNAFULL for DNA
    -showscore Print residue scores Any integer value -1
    Advanced qualifiers Allowed values Default
    -data (no help text) bool value Yes/No No
@@ -152,7 +155,7 @@ Input file format
    
 Output file format
 
-   .ps file if postscipt output requested.
+   An image of the alignment is displayed.
    
 Data files
 
@@ -160,7 +163,7 @@ Data files
    the consensus.
    
    For protein sequences EBLOSUM62 is used for the substitution matrix.
-   For nucleotide sequence, EDNAMAT is used.
+   For nucleotide sequence, EDNAFULL is used.
    
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by EMBOSS
@@ -180,21 +183,29 @@ Data files
        
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
- It exits with status 0 unless an error is reported.
-
+   It exits with status 0 unless an error is reported.
+   
 Known bugs
 
- Portrait mode does not cover the whole page! This is a "feature" in
- plplot.
-
+   Portrait mode does not cover the whole page! This is a "feature" in
+   plplot.
+   
 See also
 
    Program name                        Description
@@ -215,8 +226,8 @@ Author(s)
    
 History
 
- Completed 5th May 1999.
-
+   Completed 5th May 1999.
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

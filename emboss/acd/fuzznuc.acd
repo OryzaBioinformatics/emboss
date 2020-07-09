@@ -41,6 +41,16 @@ bool: descshow [
 	info: "Show descriptions"
 ]
 
+bool: usashow [
+	opt: N
+	def: 0
+	info: "Show USA"
+	help: "Showing the USA (Uniform Sequence Address) of the
+matching sequences will turn your output file into a 'list' file that
+can then be read in by many other EMBOSS programs by specifying it with
+a '@' in front of the filename."
+]
+
 bool: complement [
 	opt: N
 	def: 0

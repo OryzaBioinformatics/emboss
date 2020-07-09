@@ -16,15 +16,21 @@ Description
    
    This default behaviour can be changed by using the qualifier
    '-ossingle' which writes many sequences into many files, each
-   containing one sequence. It can also be changed by using the qualifier
-   '-osf=gcg' which forces the output sequence format to be 'GCG' format
-   - this format cannot cope with holding multiple sequences in one file
-   and so EMBOSS writes each GCG-format sequence into its own individual
-   file.
+   containing one sequence.
+   
+   The program seqretsplit will take a file containing many sequences and
+   will output many files, each containing one sequence. However you have
+   no choice over the naming of the files - they are named after the ID
+   name fo the sequence they contain.
    
    If, however you have the situation where you have a file containing
    multiple sequences and you wish to extract one of them, then this
    application may be useful.
+   
+   nthseq allows you to specify the name of the output file, so you may
+   find that it is useful to include this program in scripts where you
+   need to be able to specify the name of the resulting sequence files
+   you create.
    
    This application extracts the indicated sequence from a multiple set
    of sequences and writes it out.
@@ -61,16 +67,19 @@ Command line arguments
    
 Input file format
 
+   A file containing one or more sequences.
+   
 Output file format
 
-   The output is the first, second, third, etc. sequence from the input
-   USA.
+   The output is the specified ordinal sequence from the input USA.
    
-   In the example, the search will find entries ECLACA, ECLACI, ECLACY
-   and ECLACZ in that order.
+   In the example, the second sequence from the input file will be
+   written out to the specified output file.
    
 Data files
 
+   None.
+   
 Notes
 
    It may be useful to use this application in a small script that
@@ -78,6 +87,7 @@ Notes
    names the output files in the way that you require.
    
    For example:
+   
 #!/usr/local/bin/perl -w
 if ($#ARGV !=1) {
   die "Usage: scriptname in out\n";
@@ -91,14 +101,24 @@ while ($count <= $#list+1) {
 
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                      Description
@@ -117,6 +137,11 @@ See also
    trimseq      Trim ambiguous bits off the ends of sequences
    vectorstrip  Strips out DNA between a pair of vector sequences
    
+   The program seqretsplit will take a file containing many sequences and
+   will output many files, each containing one sequence. However you have
+   no choice over the naming of the files - they are named after the ID
+   name fo the sequence they contain.
+   
 Author(s)
 
    This application was written by Gary Williams
@@ -124,6 +149,8 @@ Author(s)
    
 History
 
+   Written (2000) - Gary Williams
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

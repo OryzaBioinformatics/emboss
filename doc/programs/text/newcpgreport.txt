@@ -67,10 +67,13 @@ Command line arguments
    
 Input file format
 
+   One or more nucleic acid sequences.
+   
 Output file format
 
    Here is the output file from the example run:
-
+     _________________________________________________________________
+   
 ID   RNU68037  1118 BP.
 XX
 DE   CpG Island report.
@@ -92,11 +95,16 @@ FT                    /Percent CG=66.45
 FT                    /ObsExp=0.96
 FT   numislands       2
 //
-
+     _________________________________________________________________
+   
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
     1. Larsen F., Gundersen, G., Lopez L., Prydz H. CpG island as Gene
@@ -104,15 +112,24 @@ References
        
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                          Description
+   cai          CAI codon adaptation index
    chaos        Create a chaos game representation plot for a sequence
    chips        Codon usage statistics
    codcmp       Codon usage table comparison
@@ -152,6 +169,8 @@ Author(s)
    
 History
 
+   Written (1999) - Rodrigo Lopez.
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

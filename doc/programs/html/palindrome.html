@@ -64,11 +64,13 @@ It will find inverted repeats that include a proportion of mismatches
 and gaps (bulges in the stem loop). 
 
 <p>
+
 It works by finding all possible inverted matches satisfying the
 specified conditions of minimum and maximum length of palindrome,
 maximum gap between repeated regions and number of mismatches allowed. 
 
 <p>
+
 Secondary structures like inverted repeats in genomic sequences may be
 implicated in initiation of DNA replication. 
 
@@ -292,6 +294,7 @@ Palindromes:
     Data files
 </H2>
 
+None.
 
 <H2>
     Notes
@@ -339,20 +342,27 @@ Some references on inverted repeats:
     Warnings
 </H2>
 
+None.
+
 
 <H2>
     Diagnostic Error Messages
 </H2>
+
+None.
 
 
 <H2>
     Exit status
 </H2>
 
+It always exists with a status of 0.
 
 <H2>
     Known bugs
 </H2>
+
+None.
 
 
 <!--
@@ -393,6 +403,12 @@ Some references on inverted repeats:
    -->
 
 
+<p>
+
+<b>einverted</b> also looks for inverted repeats but is much slower and
+more sensitive, as it finds low-quality (very mismatched) repeats and
+repeats with gaps. 
+
 
 
 
@@ -408,6 +424,7 @@ href="mailto:mfaller@hgmp.mrc.ac.uk">(mfaller@hgmp.mrc.ac.uk)</a>
     History
 </H2>
 
+Written (1999) - Mark Faller.
 
 <H2>
     Target users

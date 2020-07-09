@@ -10,18 +10,44 @@ Function
    
 Description
 
-   Plot potential open reading frames
+   Plot potential open reading frames.
+   
+   A graphical representation of where the open reading frames are in all
+   6 reading frames is shown. The ORFs are displayed as blue boxes.
+   
+   ORFs in this program are defined as being regions between START and
+   STOP codons.
+   
+   Note that this definition of an ORF would miss those exons in
+   eukaryotic genomic sequences which do not contain a START codon.
+   plotorf is only really useful when dealing with prokaryotic or mRNA
+   eukaryotic sequences.
+   
+   The default START codon is: "ATG".
+   The default STOP codons are: "TAA,TAG,TGA".
+   
+   You can specify your own set of start and stop codons using the -start
+   and -stop qualifiers.
    
 Usage
 
    Here is a sample session with plotorf.
-
+   
 % plotorf
+Plot potential open reading frames
 Input sequence: embl:paamir
 Graph type [x11]:
 
    Click here to see the graph
    
+   An example of specifying your own START and STOP codons with a
+   mitochondrial sequence would be:
+   
+% plotorf -start ATT,ATC,ATA,ATG,GTG -stop TAA,TAG,AGA,AGG
+Plot potential open reading frames
+Input sequence: mito.seq
+Graph type [x11]:
+
 Command line arguments
 
    Mandatory qualifiers:
@@ -29,8 +55,11 @@ Command line arguments
    -graph              xygraph    Graph type
 
    Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Advanced qualifiers:
+   -start              string     Start codons
+   -stop               string     Stop codons
    
+
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
@@ -41,26 +70,51 @@ Command line arguments
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
-   (none)
+   -start Start codons Any string is accepted ATG
+   -stop Stop codons Any string is accepted TAA,TAG,TGA
    
 Input file format
 
+   Any nucleic acid sequence.
+   
 Output file format
 
+   Graphical output.
+   
 Data files
 
+   None.
+   
 Notes
 
+   ORFs in this program are defined as being regions between START and
+   STOP codons.
+   
+   Note that this definition of an ORF would miss those exons in
+   eukaryotic genomic sequences which do not contain a START codon.
+   plotorf is only really useful when dealing with prokaryotic or mRNA
+   eukaryotic sequences.
+   
 References
 
+   None.
+   
 Warnings
 
+   See the Notes section.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                          Description
@@ -79,6 +133,8 @@ Author(s)
    
 History
 
+   Written (1999) - Alan Bleasby
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

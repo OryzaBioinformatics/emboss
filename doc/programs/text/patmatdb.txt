@@ -12,10 +12,6 @@ Description
 
    Takes a protein motif and compares it to a set of protein sequences.
    
-   The motif is converted to a regular expression, and matches are
-   completed using Henry Spencer's regular expression library of
-   functions.
-   
    It returns the number of matches there were between the motif and each
    matched sequence, length of match, start and end positions of match,
    and writes out an alignment.
@@ -23,7 +19,7 @@ Description
 Usage
 
    Here is a sample session with patmatdb.
-
+   
 % patmatdb
 Search a protein sequence with a motif
 Input sequence(s): sw:*
@@ -69,6 +65,8 @@ Command line arguments
    
 Input file format
 
+   It reads in one or more protein sequences.
+   
    Patterns for patmatdb are based on the format of pattern used in the
    PROSITE database, with the difference that the terminating dot '.' and
    the hyphens, '-', between the characters are optional.
@@ -96,7 +94,7 @@ Input file format
      * A period ends the pattern. (Optional in patmatdb).
        
    For example, in SWISSPROT entry 100K_RAT you can look for the pattern:
-
+   
 [DE](2)HS{P}X(2)PX(2,4)C
 
    This means: Two Asps or Glus in any order followed by His, Ser, any
@@ -108,7 +106,8 @@ Input file format
 Output file format
 
    The output from the above example follows:
-
+     _________________________________________________________________
+   
 Number of matches found in HD_FUGRU = 1
 Length of the sequence = 3148 basepairs
 Length of match = 4
@@ -134,13 +133,16 @@ patmatDB of GCN4_YEAST from 157 to 160 using pattern st[ty]s
 SNLEVSTTSFLPTP
      |  |
    157  160
-
+     _________________________________________________________________
+   
 Data files
 
-   See outfile file format above.
+   None.
    
 Notes
 
+   None.
+   
 References
 
     1. Bairoch, A., Bucher P. (1994) PROSITE: recent developments.
@@ -154,12 +156,11 @@ References
        
 Warnings
 
-   The program will warn user if input protein sequence file is
-   incorrectly formatted.
+   None.
    
 Diagnostic Error Messages
 
-   As in warnings.
+   None.
    
 Exit status
 
@@ -167,6 +168,8 @@ Exit status
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description
@@ -183,13 +186,15 @@ See also
    pscan Scans proteins using PRINTS
    tfscan Scans DNA sequences for transcription factors
    
-     * fuzzpro - Protein pattern search This does much the same is
-       patmatdb, but has a slightly different style of output and allows
-       mismatches.
-     * patmatmotifs - Compares a protein sequence to the PROSITE motif
-       database. This does the opposite to patmatdb, comparing a database
-       of motifs to one sequence.
-       
+   fuzzpro - Protein pattern search
+   This does much the same is patmatdb, but has a slightly different
+   style of output and allows mismatches.
+   
+   patmatmotifs - Compares a protein sequence to the PROSITE motif
+   database.
+   This does the opposite to patmatdb, comparing a database of motifs to
+   one sequence.
+   
 Author(s)
 
    This application was written by Sinead O'Leary

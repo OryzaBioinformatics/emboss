@@ -57,7 +57,7 @@ Protein statistics
 </H2>
 
 
-This outputs a report of simple protein sequence information including:
+<b>pepstats</b> outputs a report of simple protein sequence information including:
 
 <p>
 <ul>
@@ -83,12 +83,13 @@ per 1000 aa normalised to 100 by rls@ebi.ac.uk (original work from 1993)
 
 Here is a sample session with pepstats.
 
+<p>
+
 <pre>
-
 % pepstats
+Protein statistics
 Input sequence: sw:laci_ecoli
-Output file [laci_ecoli.pepstats]: 
-
+Output file [laci_ecoli.pepstats]:
 </pre>
 
 
@@ -171,6 +172,8 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
+Normal protein sequence USA.
+
 
 <H2>
     Output file format
@@ -179,8 +182,10 @@ IT IS DONE FOR YOU.
 
 Here is the output from the example run:
 
-<pre>
+<p>
 
+<hr>
+<pre>
 PEPSTATS of LACI_ECOLI from 1 to 360
 
 Molecular weight = 38563.98             Residues = 360   
@@ -222,8 +227,8 @@ Polar           (D+E+H+K+N+Q+R+S+T+Z)   161             44.722
 Charged         (B+D+E+H+K+R+Z)         69              19.167
 Basic           (H+K+R)                 37              10.278
 Acidic          (B+D+E+Z)               32               8.889
-
 </pre>
+<hr>
 
 <H2>
     Data files
@@ -261,31 +266,37 @@ The directories are searched in the following order:
     Notes
 </H2>
 
+None.
 
 <H2>
     References
 </H2>
 
+None.
 
 <H2>
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
 </H2>
 
+It always exits with a status of 0.
 
 <H2>
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -295,8 +306,10 @@ The directories are searched in the following order:
 <a name=See also><h2>See also</h2></a>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="charge.html">charge</a></td><td>Protein charge plot</td></tr>
 <tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein sequence</td></tr>
 <tr><td><a href="digest.html">digest</a></td><td>Protein proteolytic enzyme or reagent cleavage digest</td></tr>
+<tr><td><a href="hmoment.html">hmoment</a></td><td>Hydrophobic moment calculation</td></tr>
 <tr><td><a href="iep.html">iep</a></td><td>Calculates the isoelectric point of a protein</td></tr>
 <tr><td><a href="octanol.html">octanol</a></td><td>Displays protein hydropathy</td></tr>
 <tr><td><a href="pepinfo.html">pepinfo</a></td><td>Plots simple amino acid properties in parallel</td></tr>
@@ -327,6 +340,7 @@ href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
     History
 </H2>
 
+Written (1999) - Alan Bleasby
 
 <H2>
     Target users

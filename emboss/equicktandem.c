@@ -19,7 +19,7 @@
 AjPFile outfile;
 static AjPSeqCvt cvt;
 
-static void report (AjPFile outf);
+static void report (AjPFile outf, ajint begin);
 char *back, *front, *maxback=NULL, *maxfront=NULL;
 char* sq;
 ajint gap, max, score ;
@@ -30,12 +30,25 @@ int main(int argc, char **argv)
   ajint maxrepeat;
   AjPSeq sequence = NULL ;
   AjPStr tseq = NULL;
-
+  AjPStr str = NULL;
+  AjPStr substr = NULL;
+  
+  ajint  begin;
+  ajint  end;
+  
   embInit ("equicktandem", argc, argv);
   outfile = ajAcdGetOutfile ("outfile");
   sequence = ajAcdGetSeq ("sequence");
   thresh = ajAcdGetInt ("threshold");
   maxrepeat = ajAcdGetInt ("maxrepeat");
+
+  begin = ajSeqBegin(sequence) - 1;
+  end   = ajSeqEnd(sequence) - 1;
+
+  substr = ajStrNew();
+  str = ajSeqStrCopy(sequence);
+  ajStrAssSub(&substr,str,begin,end);
+  ajSeqReplace(sequence,substr);
 
   cvt = ajSeqCvtNewText ("ACGTN");
   ajSeqNum (sequence, cvt, &tseq);
@@ -48,7 +61,7 @@ int main(int argc, char **argv)
       { if (*front == 'Z')
 	{
 	    if (max >= thresh)
-	      { report (outfile);
+	      { report (outfile, begin);
 		back = maxfront ; front = back + gap ;
 		score = max = 0 ;
 	      }
@@ -62,7 +75,7 @@ int main(int argc, char **argv)
 	  else if (score <= 0)
 	  {
 	    if (max >= thresh)
-	      { report (outfile);
+	      { report (outfile, begin);
 		back = maxfront ; front = back + gap ;
 		score = max = 0 ;
 	      }
@@ -80,16 +93,20 @@ int main(int argc, char **argv)
 	}
 
       if (max >= thresh)
-	report (outfile);
+	report (outfile, begin);
     }
+
+  ajStrDel(&str);
+  ajStrDel(&substr);
+
   ajExit();
   return 0;
 }
 
-static void report (AjPFile outf) {
+static void report (AjPFile outf, ajint begin) {
   char* cp;
   ajFmtPrintF (outf, "%6d %10d %10d %2d %3d\n",
-	       max, 1+maxback-sq, 1+maxfront-sq,
+	       max, 1+maxback-sq+begin, 1+maxfront-sq+begin,
 	       gap, (maxfront-maxback+1)/gap) ;
   for (cp = maxback ; cp <= maxfront ; ++cp)
     *cp = 'Z' ;

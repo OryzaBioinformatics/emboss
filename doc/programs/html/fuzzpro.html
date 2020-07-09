@@ -111,6 +111,12 @@ IT IS DONE FOR YOU.
    Advanced qualifiers:
    -mmshow             bool       Show mismatches
    -accshow            bool       Show accession numbers
+   -usashow            bool       Showing the USA (Uniform Sequence Address)
+                                  of the matching sequences will turn your
+                                  output file into a 'list' file that can then
+                                  be read in by many other EMBOSS programs by
+                                  specifying it with a '@' in front of the
+                                  filename.
    -descshow           bool       Show descriptions
 
 
@@ -179,6 +185,13 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-accshow</td>
 <td>Show accession numbers</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-usashow</td>
+<td>Showing the USA (Uniform Sequence Address) of the matching sequences will turn your output file into a 'list' file that can then be read in by many other EMBOSS programs by specifying it with a '@' in front of the filename.</td>
 <td>Yes/No</td>
 <td>No</td>
 </tr>
@@ -289,8 +302,9 @@ It is composed of three columns of data.
 If the option '-mmshow' is used, then an extra column of data is output 
 indicating how many mismatches there are:
 
-<pre>
+<p>
 
+<pre>
 % fuzzpro -mmshow
 Protein pattern search
 Input sequence(s): sw:100k_rat
@@ -299,43 +313,133 @@ Number of mismatches [0]: 1
 Output file [100k_rat.fuzzpro]: stdout
 
        100K_RAT   613     1 EARLNCFRN
-
 </pre>
+
+<p>
+
+If the option '-desc' is used then the description of the sequence is
+displayed before each line showing the match details.  For example:
+
+<p>
+
+<pre>
+% fuzzpro 'sw:*_HUMAN' -desc
+Protein pattern search
+Search pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+Number of mismatches [0]: 
+Output file [143b_human.fuzzpro]: stdout
+
+ACTIN, AORTIC SMOOTH MUSCLE (ALPHA-ACTIN 2).
+     ACTA_HUMAN    55 YVGDEAQSKRG
+ACTIN, CYTOPLASMIC 1 (BETA-ACTIN).
+     ACTB_HUMAN    53 YVGDEAQSKRG
+ACTIN, ALPHA CARDIAC.
+     ACTC_HUMAN    55 YVGDEAQSKRG
+ACTIN, CYTOPLASMIC 2 (GAMMA-ACTIN).
+     ACTG_HUMAN    53 YVGDEAQSKRG
+ACTIN, GAMMA-ENTERIC SMOOTH MUSCLE (ALPHA-ACTIN 3).
+     ACTH_HUMAN    54 YVGDEAQSKRG
+ACTIN, ALPHA SKELETAL MUSCLE (ALPHA-ACTIN 1).
+     ACTS_HUMAN    55 YVGDEAQSKRG
+</pre>
+
+<p>
+
+If the option '-acc' is also used then the accession number of the sequence is
+displayed before each line showing the match details.  For example:
+
+<p>
+
+<pre>
+% fuzzpro 'sw:*_HUMAN' -desc -acc
+Protein pattern search
+Search pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+Number of mismatches [0]: 
+Output file [143b_human.fuzzpro]: stdout
+
+P03996 ACTIN, AORTIC SMOOTH MUSCLE (ALPHA-ACTIN 2).
+     ACTA_HUMAN    55 YVGDEAQSKRG
+P02570 ACTIN, CYTOPLASMIC 1 (BETA-ACTIN).
+     ACTB_HUMAN    53 YVGDEAQSKRG
+P04270 ACTIN, ALPHA CARDIAC.
+     ACTC_HUMAN    55 YVGDEAQSKRG
+P02571 ACTIN, CYTOPLASMIC 2 (GAMMA-ACTIN).
+     ACTG_HUMAN    53 YVGDEAQSKRG
+P12718 ACTIN, GAMMA-ENTERIC SMOOTH MUSCLE (ALPHA-ACTIN 3).
+     ACTH_HUMAN    54 YVGDEAQSKRG
+P02568 ACTIN, ALPHA SKELETAL MUSCLE (ALPHA-ACTIN 1).
+     ACTS_HUMAN    55 YVGDEAQSKRG
+</pre>
+
+<p>
+
+If the option '-usa' is used then the Uniform Sequence Address is output
+at the start of each line of match details.  For example:
+
+<p>
+
+<pre>
+% fuzzpro 'sw:*_HUMAN' -usa
+Protein pattern search
+Search pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+Number of mismatches [0]: 
+Output file [143b_human.fuzzpro]: stdout
+sw-id:ACTA_HUMAN             ACTA_HUMAN    55 YVGDEAQSKRG
+sw-id:ACTB_HUMAN             ACTB_HUMAN    53 YVGDEAQSKRG
+sw-id:ACTC_HUMAN             ACTC_HUMAN    55 YVGDEAQSKRG
+sw-id:ACTG_HUMAN             ACTG_HUMAN    53 YVGDEAQSKRG
+sw-id:ACTH_HUMAN             ACTH_HUMAN    54 YVGDEAQSKRG
+sw-id:ACTS_HUMAN             ACTS_HUMAN    55 YVGDEAQSKRG</pre>
+
+<p>
+
+This is useful because it turns the output into a 'list' file of
+sequence names that can then be read in by other EMBOSS programs when a
+'@' is put at the start of the file. 
+
+
 
 <H2>
     Data files
 </H2>
 
+None.
 
 <H2>
     Notes
 </H2>
 
+None.
 
 <H2>
     References
 </H2>
 
+None.
 
 <H2>
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
 </H2>
 
+It always exits with a status of 0.
 
 <H2>
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -399,6 +503,9 @@ href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
     History
 </H2>
 
+Written (2000) - Alan Bleasby
+<br>
+'-usa' added (13 March 2001) - Gary Williams
 
 <H2>
     Target users

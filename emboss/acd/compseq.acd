@@ -93,10 +93,9 @@ appl: compseq [
 
   bool: reverse [
         opt: "@(!$(sequence.protein))"
-        default: "@(!$(sequence.protein))"
+        default: "N"
         info: "Count words in the forward and reverse sense"
-        help: "Set this to be false if you do not wish to also count
-               words in the reverse complement of the sequence."
-        expect: "Yes for nucleic acid, No for protein"
+        help: "Set this to be true if you also wish to also count
+               words in the reverse complement of a nucleic sequence."
   ]
 

@@ -134,7 +134,7 @@ int main(int argc, char **argv)
 	    {
 		ajFmtPrintF(outf,"Window: %d Angle: %d Max uH: %.3f\n",
 			    window, aangle, ymax);
-		ajFmtPrintF(outf,"Position\tAngle\n");
+		ajFmtPrintF(outf,"Position\tuH\n");
 		for(i=0;i<limit;++i)
 		    ajFmtPrintF(outf,"%d\t\t%.3lf\n",(int)x[i],ya[i]);
 	    }

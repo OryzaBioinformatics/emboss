@@ -9,7 +9,7 @@ extern "C"
 AjBool ajNamDatabase(AjPStr name);
 AjBool ajNamDbAccess (AjPStr dbname, AjPSeqQuery qry, AjPStr* method);
 AjBool ajNamDbDetails (AjPStr name, AjPStr* type, AjBool* id,
-		       AjBool* qry, AjBool* all, AjPStr* comment);
+	       AjBool* qry, AjBool* all, AjPStr* comment, AjPStr* release);
 AjBool ajNamDbGetAlias (AjPStr dbname, AjPStr* dbalias);
 AjBool ajNamDbGetDbalias (AjPStr dbname, AjPStr* dbalias);
 AjBool ajNamDbGetUrl (AjPStr dbname, AjPStr* url);

@@ -180,7 +180,7 @@ Command line arguments
    Advanced qualifiers:
    -overlap            integer    Minimum overlap of sequences
    -minprimerlen       integer    Minimum primer length
-   -maxprimerlen       integer    Minimum primer length
+   -maxprimerlen       integer    Maximum primer length
    -minpmgccont        float      Minimum primer GC fraction
    -maxpmgccont        float      Maximum primer GC fraction
    -minprodgccont      float      Minimum product GC fraction
@@ -209,7 +209,7 @@ Command line arguments
    Advanced qualifiers Allowed values Default
    -overlap Minimum overlap of sequences Any integer value 50
    -minprimerlen Minimum primer length Any integer value 18
-   -maxprimerlen Minimum primer length Any integer value 22
+   -maxprimerlen Maximum primer length Any integer value 22
    -minpmgccont Minimum primer GC fraction Number from 0.300 to 0.700 .40
    -maxpmgccont Maximum primer GC fraction Number from 0.300 to 0.700 .55
    -minprodgccont Minimum product GC fraction Number from 0.300 to 0.700

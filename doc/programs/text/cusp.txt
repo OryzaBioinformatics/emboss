@@ -110,6 +110,7 @@ See also
 
    Program name                          Description
    backtranseq  Back translate a protein sequence
+   cai          CAI codon adaptation index
    chaos        Create a chaos game representation plot for a sequence
    chips        Codon usage statistics
    codcmp       Codon usage table comparison

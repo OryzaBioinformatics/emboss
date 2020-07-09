@@ -254,10 +254,9 @@ Known bugs
    
 See also
 
-   Program name                      Description
+   Program name                 Description
    banana       Bending and curvature plot in B-DNA
    btwisted     Calculates the twisting in a B-DNA sequence
-   complex      Find the linguistic complexity in nucleotide sequences
    
 Author(s)
 

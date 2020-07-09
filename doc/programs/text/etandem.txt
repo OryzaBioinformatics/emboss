@@ -11,7 +11,9 @@ Function
 Description
 
    etandem looks for tandem repeats in a sequence. It is normally used
-   after equicktandem has been run to identify potential repeat sizes.
+   after equicktandem has been run to identify potential repeat sizes. It
+   calculates a consensus for the repeat region and gives a score for how
+   many matches there are to the consensus - the number of mismatches.
    
    Input sequences are converted into ACGT or N (so ambiguity codes are
    ignored).
@@ -35,6 +37,7 @@ Usage
 
    Here is a sample session with etandem. The input sequence is the human
    herpesvirus tandem repeat.
+   
 % etandem
 Input sequence: embl:hhtetra
 Output file [hhtetra.tan]:
@@ -161,8 +164,8 @@ See also
    
 Authors
 
-   This program was originally written by Richard Durbin and Jean
-   Thierry-Mieg as part of the ACEDB genome database package.
+   This program was originally written by Richard Durbin at the Sanger
+   Centre.
    
    This application was modified for inclusion in EMBOSS by Peter Rice
    (pmr@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome

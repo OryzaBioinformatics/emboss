@@ -177,9 +177,11 @@ Known bugs
 See also
 
    Program name Description
+   charge Protein charge plot
    checktrans Reports STOP codons and ORF statistics of a protein
    sequence
    digest Protein proteolytic enzyme or reagent cleavage digest
+   hmoment Hydrophobic moment calculation
    iep Calculates the isoelectric point of a protein
    pepinfo Plots simple amino acid properties in parallel
    pepnet Displays proteins as a helical net

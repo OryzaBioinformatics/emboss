@@ -78,7 +78,7 @@ Command line arguments
    Optional qualifiers Allowed values Default
    -datafile Matrix file Comparison matrix file in EMBOSS data path
    EBLOSUM62 for protein
-   EDNAMAT for DNA
+   EDNAFULL for DNA
    -errorfile Error file to be written too Output file supermatcher.error
    -showinternals Show internals Yes/No No
    -scoreonly Calculate score only Yes/No No
@@ -153,13 +153,9 @@ Known bugs
    
 See also
 
-   Program name Description
-   dotmatcher Displays a thresholded dotplot of two sequences
-   polydot Displays all-against-all dotplots of a set of sequences
-   seqmatchall Does an all-against-all comparison of a set of sequences
-   stssearch Searches a DNA database for matches with a set of STS
-   primers
-   wordmatch Finds all exact matches of a given size between 2 sequences
+   Program name                      Description
+   matcher      Finds the best local alignments between two sequences
+   water        Smith-Waterman local alignment
    
 Author(s)
 

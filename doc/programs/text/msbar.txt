@@ -161,18 +161,32 @@ Output file format
    
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                     Description
@@ -185,6 +199,8 @@ Author(s)
    
 History
 
+   Writetn (1999) - Gary Williams
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

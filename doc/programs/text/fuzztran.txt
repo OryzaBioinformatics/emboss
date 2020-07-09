@@ -44,18 +44,22 @@ Genetic codes
          1 : Standard (with alternative initiation codons)
          2 : Vertebrate Mitochondrial
          3 : Yeast Mitochondrial
-         4 : Mold/Protozoan/Coelenterate Mitochondrial and Mycoplasma/Spiroplas
-ma
+         4 : Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiropl
+asma
          5 : Invertebrate Mitochondrial
-         6 : Ciliate Macronuclear and dasycladacean
-         9 : Echinoderm Mitochondrail
+         6 : Ciliate Macronuclear and Dasycladacean
+         9 : Echinoderm Mitochondrial
         10 : Euplotid Nuclear
         11 : Bacterial
         12 : Alternative Yeast Nuclear
         13 : Ascidian Mitochondrial
         14 : Flatworm Mitochondrial
         15 : Blepharisma Macronuclear
-Genetic code to use [0]:
+        16 : Chlorophycean Mitochondrial
+        21 : Trematode Mitochondrial
+        22 : Scenedesmus obliquus
+        23 : Thraustochytrium Mitochondrial
+Code to use [0]:
 Search pattern: RA
 Number of mismatches [0]:
 Output file [rnops.fuzztran]:
@@ -75,6 +79,12 @@ Command line arguments
    Advanced qualifiers:
    -mmshow             bool       Show mismatches
    -accshow            bool       Show accession numbers
+   -usashow            bool       Showing the USA (Uniform Sequence Address)
+                                  of the matching sequences will turn your
+                                  output file into a 'list' file that can then
+                                  be read in by many other EMBOSS programs by
+                                  specifying it with a '@' in front of the
+                                  filename.
    -descshow           bool       Show descriptions
    
 
@@ -122,6 +132,10 @@ Command line arguments
    Advanced qualifiers Allowed values Default
    -mmshow Show mismatches Yes/No No
    -accshow Show accession numbers Yes/No No
+   -usashow Showing the USA (Uniform Sequence Address) of the matching
+   sequences will turn your output file into a 'list' file that can then
+   be read in by many other EMBOSS programs by specifying it with a '@'
+   in front of the filename. Yes/No No
    -descshow Show descriptions Yes/No No
    
 Input file format
@@ -165,7 +179,7 @@ Input file format
 Output file format
 
    Here is the output from the example search:
-
+   
           RNOPS  1       97 RA
           RNOPS  1      133 RA
           RNOPS  1      421 RA
@@ -177,6 +191,7 @@ Output file format
           RNOPS  3       72 RA
 
    It is composed of four columns of data.
+   
      * The first column is the name of the sequence being searched.
      * The second is the frame of translation that the pattern was found
        in.
@@ -186,7 +201,7 @@ Output file format
        
    If the option '-mmshow' is used, then an extra fourth column of data
    is output indicating how many mismatches there are:
-
+   
 % fuzztran -mmshow -frame 6
 Protein pattern search after translation
 Input sequence(s): embl:rnops
@@ -197,6 +212,47 @@ Output file [rnops.fuzztran]: stdout
           RNOPS  1      316     0 TWLWLT
           RNOPS  1     1138     2 QRLWLT
 
+   If the option '-desc' is used then the description of the sequence is
+   displayed before each line showing the match details. For example:
+   
+% fuzztran embl:rnops -desc
+Protein pattern search after translation
+Search pattern: TWLWLT
+Number of mismatches [0]:
+Output file [rnops.fuzztran]: stdout
+R.norvegicus mRNA for rhodopsin.
+
+R.norvegicus mRNA for rhodopsin.
+          RNOPS  1      316 TWLWLT
+
+   If the option '-acc' is also used then the accession number of the
+   sequence is displayed before each line showing the match details. For
+   example:
+   
+% fuzztran embl:rnops -desc -acc
+Protein pattern search after translation
+Search pattern: TWLWLT
+Number of mismatches [0]:
+Output file [rnops.fuzztran]: stdout
+
+Z46957 R.norvegicus mRNA for rhodopsin.
+          RNOPS  1      316 TWLWLT
+
+   If the option '-usa' is used then the Uniform Sequence Address is
+   output at the start of each line of match details. For example:
+   
+% fuzztran embl:rnops -usa
+Protein pattern search after translation
+Search pattern: TWLWLT
+Number of mismatches [0]:
+Output file [rnops.fuzztran]: stdout
+
+embl-id:RNOPS             RNOPS  1      316 TWLWLT
+
+   This is useful because it turns the output into a 'list' file of
+   sequence names that can then be read in by other EMBOSS programs when
+   a '@' is put at the start of the file.
+   
 Data files
 
    EMBOSS data files are distributed with the application and stored in
@@ -298,8 +354,12 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
    When translating using non-standard genetic code table, always check
@@ -308,12 +368,16 @@ Warnings
    
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
-   It exits with status 0
+   It always exits with status 0.
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name                       Description
@@ -339,6 +403,9 @@ Author(s)
    
 History
 
+   Written (2000) - Alan Bleasby
+   '-usa' added (13 March 2001) - Gary Williams
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

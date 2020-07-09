@@ -335,7 +335,29 @@ IT IS DONE FOR YOU.
    -->
 
 The input primer file used in the example above has the following format:
+
 <p>
+Comment lines start with a '#'
+<br>
+Lines with primer information have three fields separated by spaces or TAB characters. The columns contain:
+<br>
+<ol>
+<li>The name of the primer pair - this is reported in the output.
+<li>The sequence of the first primer.
+<li>The sequence of the second primer.
+</ol>
+
+<p>
+
+Empty files will cause primersearch to note that no primers have 
+been found, and to exit.
+
+<p>
+
+An example of the primer file follows:
+
+<p>
+
 <hr>
 <pre>
 # This is my primer file
@@ -347,16 +369,11 @@ D1S2893 aaaacatcaactctcccctg    ctcaaaccccaataagcctt
 D1S2660 cacacatgcacatgcac       agtgacaccagcaggg    
 </pre>
 <hr>
+
 <p>
 
-Comments can be inserted provided they are prefaced with "#"
-<p>
 
-Empty files will cause primersearch to note that no primers have 
-been found, and to exit.
-<p>
-
-In this example, seqs.list contains the following sequences:
+In the example usage given above, the file 'seqs.list' contains the following sequences:
 <p>
 
 <hr>

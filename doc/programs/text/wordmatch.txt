@@ -124,8 +124,6 @@ See also
    seqmatchall Does an all-against-all comparison of a set of sequences
    stssearch Searches a DNA database for matches with a set of STS
    primers
-   supermatcher Finds a match of a large sequence against one or more
-   sequences
    
 Author(s)
 

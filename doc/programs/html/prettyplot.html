@@ -38,7 +38,6 @@ EMBOSS: prettyplot
 <H1>
 Program prettyplot
 </H1>
-Displays aligned sequences, with colouring and boxing
 
 
 <H2>
@@ -59,9 +58,9 @@ Displays aligned sequences, with colouring and boxing
 </H2>
 
 
-Prettyplot reads in a set of aligned DNA or protein sequences. It
-reports them graphically, with conserved regions highlighted in
-various ways.
+<b>prettyplot</b> reads in a set of aligned DNA or protein sequences. 
+It displays them graphically, with conserved regions highlighted in
+various ways. 
 
 <H2>
     Usage
@@ -70,12 +69,19 @@ various ways.
 
 Here is a sample session with prettyplot.
 
+<p>
+
 <pre>
-% prettyplot $EMBOSS_DATA/globin.msf -resbreak=10 -boxcol -consensus -plurality=3
+% prettyplot -resbreak=10 -boxcol -consensus -plurality=3
+Displays aligned sequences, with colouring and boxing
+Input sequence set: globin.msf
+Graph type [x11]:
 </pre>
 <a href="./prettyplot3.gif">click here for result</a>
 <pre>
-$ prettyplot $EMBOSS_DATA/globin.msf -plurality=3 -docolour
+$ prettyplot globin.msf -plurality=3 -docolour
+Displays aligned sequences, with colouring and boxing
+Graph type [x11]: 
 </pre>
 <a href="./prettyplot4.gif">click here for result</a>
 
@@ -358,7 +364,7 @@ The only four letters allowed are BPLW, in any order.</td>
 <td>-matrixfile</td>
 <td>Matrix file</td>
 <td>Comparison matrix file in EMBOSS data path</td>
-<td>EBLOSUM62 for protein<br>EDNAMAT for DNA</td>
+<td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
 </tr>
 
 <tr>
@@ -395,7 +401,7 @@ Any sequence USA.
     Output file format
 </H2>
 
-.ps file if postscipt output requested.
+An image of the alignment is displayed.
 
 <H2>
     Data files
@@ -407,7 +413,7 @@ the consensus.
 
 <p>
 For protein sequences EBLOSUM62 is used for the substitution matrix.
-For nucleotide sequence, EDNAMAT is used.
+For nucleotide sequence, EDNAFULL is used.
 
 <p>
 EMBOSS data files are distributed with the application and stored
@@ -437,37 +443,40 @@ The directories are searched in the following order:
     Notes
 </H2>
 
+None.
 
 <H2>
     References
 </H2>
 
+None.
 
 <H2>
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
 </H2>
 
-<pre>
- It exits with status 0 unless an error is reported.
-</pre>
+It exits with status 0 unless an error is reported.
+
 <H2>
     Known bugs
 </H2>
 
-<pre>
- Portrait mode does not cover the whole page! This is a "feature" in
- plplot.
-</pre>
+
+Portrait mode does not cover the whole page! This is a "feature" in
+plplot.
+
 <!--
 <H2>
     See also
@@ -497,20 +506,22 @@ Cambridge, CB10 1SA, UK.
 
 <p>
 
- Many features were first implemented in the EGCG program "prettyplot" by Peter Rice.
+Many features were first implemented in the EGCG program "prettyplot" by
+Peter Rice. 
 
 <p> 
- The original suggestions for the PrettyPlot program were from Denis
- Duboule and Sigfried Labeit at EMBL. Gert Vriend added the star
- marking. Rita Grandori suggested the -NOCOLLISION option. 
+
+The original suggestions for the PrettyPlot program were from Denis
+Duboule and Sigfried Labeit at EMBL. Gert Vriend added the star
+marking. Rita Grandori suggested the -NOCOLLISION option. 
 
 <H2>
     History
 </H2>
 
-<pre>
- Completed 5th May 1999.
-</pre>
+
+Completed 5th May 1999.
+
 <H2>
     Target users
 </H2>

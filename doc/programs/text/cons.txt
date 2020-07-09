@@ -89,7 +89,7 @@ Command line arguments
    Optional qualifiers Allowed values Default
    -datafile Scoring matrix Comparison matrix file in EMBOSS data path
    EBLOSUM62 for protein
-   EDNAMAT for DNA
+   EDNAFULL for DNA
    -plurality Set a cut-off for the number of positive matches below
    which there is no consensus. The default plurality is taken as half
    the total weight of all the sequences in the alignment. Any integer

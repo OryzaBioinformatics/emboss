@@ -97,3 +97,14 @@ bool: comment [
 ]
 
 
+
+# '-release' is an optional parameter because it was added after the
+# program had been in use for a year or so and I didn't want to change it
+# default behaviour. GWW 20 March 2001.
+bool: release [ 
+  opt: Y
+  default: N
+  prompt: "Display 'release' column"
+]
+
+

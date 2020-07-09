@@ -113,8 +113,6 @@ See also
    polydot Displays all-against-all dotplots of a set of sequences
    stssearch Searches a DNA database for matches with a set of STS
    primers
-   supermatcher Finds a match of a large sequence against one or more
-   sequences
    wordmatch Finds all exact matches of a given size between 2 sequences
    
    polydot will give a graphical view of the same matches.

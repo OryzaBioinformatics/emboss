@@ -57,10 +57,11 @@ Search a PROSITE motif database with a protein sequence
 </H2>
 
 
-This takes a protein sequence and compares it to the PROSITE database of
-motifs. 
+<b>patmatmotifs</b> takes a protein sequence and compares it to the
+PROSITE database of motifs. 
 
 <p>
+
 For a description of PROSITE, we can do no better than to quote the
 PROSITE user's documentation:
 
@@ -115,30 +116,34 @@ The home web page of PROSITE is: <a
 href="http://www.expasy.ch/prosite/">http://www.expasy.ch/prosite/</a>
 
 <p>
+
 It is common to find that a search of the PROSITE database against a
 protein sequence will report many matches to the short motifs that are
 indicative of the post-translational modification sites, such as
 glycolsylation, myristylation and phosphorylation sites.  These reports
-are often unwanted and can optionally be turned off. 
+are often unwanted and are not normally reported.  You can turn
+reporting of these short motifs on by giving the '-noprune' option on
+the command-line. 
 
 <p>
+
 Your EMBOSS administrator must have set up the local EMBOSS PROSITE
-database using the utility 'prosextract' before this program will run. 
+database using the utility '<b>prosextract</b>' before this program will run. 
 
 <H2>
     Usage
 </H2>
 
 
-Here is a sample session with patmatmotifs.
+Here is a sample session with <b>patmatmotifs</b>.
+
+<p>
 
 <pre>
-
 % patmatmotifs -full
 Matching Prosite Motif Database to a single sequence.
 Input sequence: sw:12s1_arath
 Output file [12s1_arath.patmatmotifs]: 
-
 </pre>
 
 
@@ -253,8 +258,9 @@ prosite entry is also reported.
 The output from the above example follows:
 
 <p>
-<pre>
 
+<hr>
+<pre>
 Number of matches found in this Sequence = 1
 
 Length of the sequence = 472 basepairs
@@ -309,8 +315,8 @@ disulfide bond.
 [ 2] Shotwell M.A., Afonso C., Davies E., Chesnut R.S., Larkins B.A.
      Plant Physiol. 87:698-704(1988).
 ***************
-
 </pre>
+<hr>
 
 <H2>
     Data files
@@ -318,15 +324,15 @@ disulfide bond.
 
 
 Data and documentation from PROSITE files is automatically read. This
-has been generated and formatted by running prosextract before running
-patmatmotifs.
+has been generated and formatted by running <b>prosextract</b> before running
+<b>patmatmotifs</b>.
 
 <H2>
     Notes
 </H2>
 
 
-Program is only useful when prosextract is used beforehand.  
+Program is only useful when <b>prosextract</b> is used beforehand.  
 
 <H2>
     References
@@ -339,6 +345,10 @@ If you want to refer to PROSITE in a publication you can do so by citing:
       Bairoch A., Bucher P., Hofmann K.
       The PROSITE datatase, its status in 1997.
       Nucleic Acids Res. 24:217-221(1997).
+
+<p>
+
+Other references:
 
 <p>
 <ol>
@@ -366,7 +376,7 @@ pp17-26, Oxford University Press, Oxford (1988).
 
 
 Your EMBOSS administrator must have set up the local EMBOSS PROSITE
-database using the utility 'prosextract' before this program will run.
+database using the utility '<b>prosextract</b>' before this program will run.
 
 <H2>
     Diagnostic Error Messages
@@ -375,13 +385,14 @@ database using the utility 'prosextract' before this program will run.
 
 The error message: 
 
+<p>
+
 <pre>
-
 "Either EMBOSS_DATA undefined or PROSEXTRACT needs running"
-
 </pre>
 
 <p>
+
 indicates that your local EMBOSS administrator has not yet correctly
 set up the local EMBOSS PROSITE database using the utility <a
 href="prosextract.html">'prosextract'.</a>
@@ -397,6 +408,7 @@ It always exits with status 0
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>

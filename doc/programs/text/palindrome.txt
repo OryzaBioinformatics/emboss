@@ -142,6 +142,8 @@ Palindromes:
 
 Data files
 
+   None.
+   
 Notes
 
    Unless the qualifier '-nooverlap' is specified, palindrome makes no
@@ -169,12 +171,20 @@ References
        
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exists with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                          Description
@@ -201,12 +211,18 @@ See also
    silent       Silent mutation restriction enzyme scan
    tfscan       Scans DNA sequences for transcription factors
    
+   einverted also looks for inverted repeats but is much slower and more
+   sensitive, as it finds low-quality (very mismatched) repeats and
+   repeats with gaps.
+   
 Author(s)
 
    This application was written by Mark Faller (mfaller@hgmp.mrc.ac.uk)
    
 History
 
+   Written (1999) - Mark Faller.
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

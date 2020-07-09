@@ -62,12 +62,15 @@ Command line arguments
    
 Input file format
 
+   It reads in a protein sequence.
+   
 Output file format
 
    Here is the output file from the example run. The SwissProt annotation
    marks the true leucine zipper motif as from 253 to 274. The leucine
    zipper is a special case of a coiled-coil region.
-
+     _________________________________________________________________
+   
 PEPCOIL of GCN4_YEAST
    using a window of 28 residues
 
@@ -78,11 +81,16 @@ Other structures from 1 to 232 (232 residues)
 Prediction starts at 233
 Probable coiled-coil from 233 to 281 (49 residues)
    Max score: 1.910 (probability 1.00)
-
+     _________________________________________________________________
+   
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
     1. Lupas A, van Dyke M & Stock J; Predicting Coiled Coils from
@@ -90,12 +98,20 @@ References
        
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
     Program name                           Description
@@ -123,6 +139,8 @@ Author(s)
    
 History
 
+   Written (1999) - Alan Bleasby
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

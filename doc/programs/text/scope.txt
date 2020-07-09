@@ -129,6 +129,55 @@ Output file format
        end positions refer to residue numbering given in the original pdb
        file and therefore must be treated as strings.
        
+   An example of an excerpt from an output file follows:
+     _________________________________________________________________
+   
+ID   D3SDHA_
+XX
+EN   3SDH
+XX
+OS   Ark clam (Scapharca inaequivalvis)
+XX
+CL   All alpha proteins
+XX
+FO   Globin-like
+XX
+SF   Globin-like
+XX
+FA   Globins
+XX
+DO   Hemoglobin I
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   a CHAIN; . START; . END;
+//
+ID   D3SDHB_
+XX
+EN   3SDH
+XX
+OS   Ark clam (Scapharca inaequivalvis)
+XX
+CL   All alpha proteins
+XX
+FO   Globin-like
+XX
+SF   Globin-like
+XX
+FA   Globins
+XX
+DO   Hemoglobin I
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   b CHAIN; . START; . END;
+//
+     _________________________________________________________________
+   
 Data files
 
    None.
@@ -162,6 +211,8 @@ See also
    Program name                          Description
    domainer     Build domain coordinate files
    nrscope      Converts redundant EMBL-format SCOP file to non-redundant one
+   scopalign    Generate alignments for SCOP families
+   stamps       Generate alignments for SCOP families
    
 Author(s)
 

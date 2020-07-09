@@ -10,8 +10,12 @@ Function
    
 Description
 
-   This calculates the percentage G+C of the input nucleic acid
+   This calculates the fraction of G+C bases of the input nucleic acid
    sequence(s).
+   
+   It reads in nucleic acid sequences, sums the number of 'G' and 'C'
+   bases and writes out the result as the fraction (in the interval 0.0
+   to 1.0) of the length of the whole sequence.
    
 Usage
 
@@ -57,23 +61,36 @@ HHTETRA       0.53
        
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    0 on successful completion.
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name                          Description
+   cai          CAI codon adaptation index
    chaos        Create a chaos game representation plot for a sequence
    chips        Codon usage statistics
    codcmp       Codon usage table comparison

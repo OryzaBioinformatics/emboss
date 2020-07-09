@@ -644,7 +644,7 @@ AjBool ajCodRead(AjPStr fn, AjPCod *thys)
 	    ajWarn("Corrupt codon index file");
 	    return ajFalse;
 	}
-	
+
 	(*thys)->aa[idx]=c;
 	(*thys)->num[idx]=num;
 	(*thys)->tcount[idx]=tcount;
@@ -837,7 +837,7 @@ static double ajCodRandom(ajint NA, ajint NC, ajint NG, ajint NT, ajint len, cha
 
 /* @func ajCodCalcCai ********************************************************
 **
-** Calculate codon adaptive index
+** Calculate codon adaptive index using equation 8
 ** NAR 15:1281-1295
 **
 ** @param [r] thys [AjPCod*] codon usage
@@ -893,4 +893,90 @@ double ajCodCalcCai(AjPCod *thys)
     cai = exp(total);    
 
     return cai;
+}
+
+
+
+/* @func ajCodCalcCaiW ********************************************************
+**
+** Calculate codon adaptive index W values
+** NAR 15:1281-1295
+**
+** @param [r] thys [AjPCod] codon usage
+**
+** @return [double*] w value array
+** @@
+******************************************************************************/
+
+double *ajCodCaiW(AjPCod thys)
+{
+    ajint i;
+    ajint j;
+    double *wk;
+    ajint thisaa;
+    double aamax;
+    
+    AJCNEW0(wk,AJCODSTART);
+
+
+    for(i=0;i<AJCODSTART;++i)
+    {
+	thisaa = thys->aa[i];
+	aamax =(double)INT_MIN;
+	
+	for(j=0;j<AJCODSTART;++j)
+	    if(thys->aa[j]==thisaa)
+		aamax = aamax > thys->tcount[j] ? aamax : thys->tcount[j];
+	if(aamax)
+	    wk[i] = thys->tcount[i] / aamax;
+    }
+    
+    return wk;
+}
+
+
+/* @func ajCodCai ********************************************************
+**
+** Calculate codon adaptive index using equation 7
+** NAR 15:1281-1295
+**
+** @param [r] thys [AjPCod] codon usage
+** @param [r] str [AjPStr] sequence
+**
+** @return [double] CAI
+** @@
+******************************************************************************/
+
+double ajCodCai(AjPCod thys, AjPStr str)
+{
+    double *wk;
+    ajint  i;
+    ajint  len;
+    char   *p;
+    ajint  limit;
+    ajint  idx;
+    double total;
+    
+    wk = ajCodCaiW(thys);
+
+
+    
+    len = ajStrLen(str);
+    p   = ajStrStr(str);
+
+    limit = len / 3;
+    total = (double)0.;
+    
+    for(i=0;i<limit; ++i,p+=3)
+    {
+	idx = ajCodIndexC(p);
+	if(wk[idx])
+	    total += log(wk[idx]);
+    }
+
+    total /= (double)limit;
+
+    AJFREE(wk);
+
+    return exp(total);
 }

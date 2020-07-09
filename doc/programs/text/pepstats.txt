@@ -10,7 +10,7 @@ Function
    
 Description
 
-   This outputs a report of simple protein sequence information
+   pepstats outputs a report of simple protein sequence information
    including:
    
      * molecular weight
@@ -30,8 +30,9 @@ Description
 Usage
 
    Here is a sample session with pepstats.
-
+   
 % pepstats
+Protein statistics
 Input sequence: sw:laci_ecoli
 Output file [laci_ecoli.pepstats]:
 
@@ -57,10 +58,13 @@ Command line arguments
    
 Input file format
 
+   Normal protein sequence USA.
+   
 Output file format
 
    Here is the output from the example run:
-
+     _________________________________________________________________
+   
 PEPSTATS of LACI_ECOLI from 1 to 360
 
 Molecular weight = 38563.98             Residues = 360
@@ -102,7 +106,8 @@ Polar           (D+E+H+K+N+Q+R+S+T+Z)   161             44.722
 Charged         (B+D+E+H+K+R+Z)         69              19.167
 Basic           (H+K+R)                 37              10.278
 Acidic          (B+D+E+Z)               32               8.889
-
+     _________________________________________________________________
+   
 Data files
 
    The Dayhoff statistic is read from the EMBOSS data file
@@ -127,22 +132,36 @@ Data files
        
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description
+   charge Protein charge plot
    checktrans Reports STOP codons and ORF statistics of a protein
    sequence
    digest Protein proteolytic enzyme or reagent cleavage digest
+   hmoment Hydrophobic moment calculation
    iep Calculates the isoelectric point of a protein
    octanol Displays protein hydropathy
    pepinfo Plots simple amino acid properties in parallel
@@ -157,6 +176,8 @@ Author(s)
    
 History
 
+   Written (1999) - Alan Bleasby
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

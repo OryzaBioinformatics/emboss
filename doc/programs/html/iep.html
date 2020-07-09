@@ -62,6 +62,16 @@ composition assuming that no electrostatic interactions change the
 propensity for ionization. 
 
 <p>
+
+Adjusting the pH of an aqueous protein solution to the point where the
+numbers of positive and negative charges on the protein are equal brings
+the protein to its isoelectric point.  This is often the point of lowest
+solubility, presumably because it is the point at which there are fewest
+intermolecular repulsions, so that the molecules tend to form
+aggregates. 
+
+<p>
+
 The application can make a plot of the ionization curve with respect to
 pH and can write an output file of the data. 
 
@@ -207,9 +217,13 @@ Any protein sequence USA.
 
 
 This is the output file from the example:
+<br>
+For each pH point it gives the number of bound electrons and the charge.
 
+<p>
+
+<hr>
 <pre>
-
 IEP of LACI_ECOLI from 1 to 360
 Isoelectric Point = 6.8820
 
@@ -241,44 +255,50 @@ Isoelectric Point = 6.8820
  13.00     4.64   -39.36
  13.50     1.75   -42.25
  14.00     0.59   -43.41
-
 </pre>
+<hr>
 
 <H2>
     Data files
 </H2>
 
+None.
 
 <H2>
     Notes
 </H2>
 
+None.
 
 <H2>
     References
 </H2>
 
+None.
 
 <H2>
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
 </H2>
 
-    0 if successfull.
+0 if successfull.
 
 <H2>
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -288,8 +308,10 @@ Isoelectric Point = 6.8820
 <a name=See also><h2>See also</h2></a>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="charge.html">charge</a></td><td>Protein charge plot</td></tr>
 <tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein sequence</td></tr>
 <tr><td><a href="digest.html">digest</a></td><td>Protein proteolytic enzyme or reagent cleavage digest</td></tr>
+<tr><td><a href="hmoment.html">hmoment</a></td><td>Hydrophobic moment calculation</td></tr>
 <tr><td><a href="octanol.html">octanol</a></td><td>Displays protein hydropathy</td></tr>
 <tr><td><a href="pepinfo.html">pepinfo</a></td><td>Plots simple amino acid properties in parallel</td></tr>
 <tr><td><a href="pepnet.html">pepnet</a></td><td>Displays proteins as a helical net</td></tr>
@@ -318,6 +340,7 @@ href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
 </H2>
 
 Completed 1st August 1999.
+
 <H2>
     Target users
 </H2>

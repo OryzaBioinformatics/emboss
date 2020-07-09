@@ -99,11 +99,12 @@ Description
 Usage
 
    Here is a sample session with preg.
-
+   
 % preg
-Input sequence: sw:*
-Output file [5h1d_fugru.preg]:
-Regular expression pattern: gc[^g]
+regular expression search of a protein sequence
+Input sequence(s): sw:*_rat
+Output file [100k_rat.preg]: stdout
+Regular expression pattern: IA[QWF]A
 
 Command line arguments
 
@@ -135,49 +136,87 @@ Input file format
 Output file format
 
    Here is the output from the example run:
-
-Matches in CO9_FUGRU
-      CO9_FUGRU   522 GCQ
-Matches in D1DR_FUGRU
-     D1DR_FUGRU    27 GCF
-     D1DR_FUGRU   345 GCH
-Matches in D5DR_FUGRU
-     D5DR_FUGRU    43 GCV
-     D5DR_FUGRU   349 GCS
-Matches in HD_FUGRU
-       HD_FUGRU   982 GCC
-Matches in SYH_FUGRU
-      SYH_FUGRU    15 GCR
-Matches in SYV_FUGRU
-      SYV_FUGRU   329 GCD
-      SYV_FUGRU  1128 GCA
-Matches in TCPD_FUGRU
-     TCPD_FUGRU   291 GCN
-     TCPD_FUGRU   375 GCA
-Matches in ACH2_DROME
-     ACH2_DROME     4 GCC
-     ACH2_DROME   433 GCN
-Matches in LACY_ECOLI
-     LACY_ECOLI   147 GCV
-     LACY_ECOLI   175 GCA
-     LACY_ECOLI   332 GCF
-Matches in BGAL_ECOLI
-     BGAL_ECOLI   121 GCY
-Matches in 12S1_ARATH
-     12S1_ARATH   111 GCA
-Matches in OPSD_HUMAN
-     OPSD_HUMAN   109 GCN
-Matches in AMIC_PSEAE
-     AMIC_PSEAE    80 GCY
-Matches in AMIR_PSEAE
-     AMIR_PSEAE    36 GCS
-
+     _________________________________________________________________
+   
+preg search of sw:*_rat with pattern IA[QWF]A
+Matches in 100K_RAT
+       100K_RAT   390 IAQA
+Matches in 5H6_RAT
+        5H6_RAT   289 IAQA
+Matches in ACDS_RAT
+       ACDS_RAT   282 IAQA
+Matches in ANX2_RAT
+       ANX2_RAT    70 IAFA
+Matches in APB3_RAT
+       APB3_RAT   336 IAQA
+Matches in AQP9_RAT
+       AQP9_RAT    44 IAQA
+Matches in ATHA_RAT
+       ATHA_RAT   122 IAFA
+Matches in CD14_RAT
+       CD14_RAT   178 IAQA
+Matches in CIKE_RAT
+       CIKE_RAT   231 IAFA
+Matches in CLCB_RAT
+       CLCB_RAT    90 IAQA
+Matches in CTR1_RAT
+       CTR1_RAT   590 IAFA
+Matches in CYGF_RAT
+       CYGF_RAT   359 IAQA
+Matches in DPY2_RAT
+       DPY2_RAT   264 IAQA
+Matches in ENOB_RAT
+       ENOB_RAT   327 IAQA
+Matches in ERBP_RAT
+       ERBP_RAT    40 IAFA
+Matches in GLPK_RAT
+       GLPK_RAT   392 IAFA
+Matches in GPV_RAT
+        GPV_RAT   529 IAQA
+Matches in IRKB_RAT
+       IRKB_RAT    93 IAFA
+Matches in KGP2_RAT
+       KGP2_RAT   477 IAFA
+Matches in NPX1_RAT
+       NPX1_RAT   407 IAWA
+Matches in NTDO_RAT
+       NTDO_RAT   160 IAWA
+Matches in NTSE_RAT
+       NTSE_RAT   180 IAWA
+Matches in PAX8_RAT
+       PAX8_RAT   188 IAQA
+Matches in SRA4_RAT
+       SRA4_RAT   491 IAWA
+Matches in SYNP_RAT
+       SYNP_RAT    43 IAFA
+Matches in TGN3_RAT
+       TGN3_RAT   330 IAFA
+Matches in TGR3_RAT
+       TGR3_RAT   792 IAFA
+Matches in UDB2_RAT
+       UDB2_RAT   325 IAWA
+Matches in UDB3_RAT
+       UDB3_RAT   325 IAWA
+Matches in UDB6_RAT
+       UDB6_RAT   325 IAWA
+Matches in UDBC_RAT
+       UDBC_RAT   325 IAWA
+Matches in VMT2_RAT
+       VMT2_RAT   462 IAFA
+     _________________________________________________________________
+   
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
    Regular expressions are case-sensitive. The pattern 'AAAA' will not
@@ -185,12 +224,16 @@ Warnings
    
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
-   Always returns 0.
+   It always exits with a status of 0. Always returns 0.
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name                       Description
@@ -218,6 +261,8 @@ Author(s)
    
 History
 
+   Written (1999) - Peter Rice
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

@@ -148,9 +148,9 @@ IT IS DONE FOR YOU.
                                   may wish not to count words containing them,
                                   just noting them in the count of 'Other'
                                   words.
-*  -reverse            bool       Set this to be false if you do not wish to
-                                  also count words in the reverse complement
-                                  of the sequence.
+*  -reverse            bool       Set this to be true if you also wish to also
+                                  count words in the reverse complement of a
+                                  nucleic sequence.
 
    Advanced qualifiers: (none)
 
@@ -228,9 +228,9 @@ These are not commonly used codes and you may wish not to count words containing
 
 <tr>
 <td>-reverse</td>
-<td>Set this to be false if you do not wish to also count words in the reverse complement of the sequence.</td>
+<td>Set this to be true if you also wish to also count words in the reverse complement of a nucleic sequence.</td>
 <td>Yes/No</td>
-<td>Yes for nucleic acid, No for protein</td>
+<td>No</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -411,6 +411,7 @@ amounts of memory.
 <a name=See also><h2>See also</h2></a>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="cai.html">cai</a></td><td>CAI codon adaptation index</td></tr>
 <tr><td><a href="chaos.html">chaos</a></td><td>Create a chaos game representation plot for a sequence</td></tr>
 <tr><td><a href="chips.html">chips</a></td><td>Codon usage statistics</td></tr>
 <tr><td><a href="codcmp.html">codcmp</a></td><td>Codon usage table comparison</td></tr>
@@ -447,6 +448,14 @@ href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
 
 
 Completed 2 March 2000
+
+<BR>
+
+5 April 2001 (version 1.12.0) - the operation of the option '-reverse'
+has changed.  It is now 'False' by default instead of being 'True' by
+default for nucleic sequences.  Too many people were getting confused by
+the counts being done on both senses, so this is now done on only the
+forward sense by default. 
 
 <H2>
     Target users

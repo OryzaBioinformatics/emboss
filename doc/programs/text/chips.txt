@@ -137,6 +137,7 @@ Known bugs
 See also
 
    Program name                          Description
+   cai          CAI codon adaptation index
    chaos        Create a chaos game representation plot for a sequence
    codcmp       Codon usage table comparison
    compseq      Counts the composition of dimer/trimer/etc words in a sequence

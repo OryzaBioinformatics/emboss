@@ -57,19 +57,36 @@ Finds DNA inverted repeats
 </H2>
 
 
-This looks for inverted repeats (stem loops) in a nucleotide sequence. 
+<b>einverted</b> looks for inverted repeats (stem loops) in a nucleotide
+sequence. 
 
 <p>
+
 It will find inverted repeats that include a proprtion of mismatches and
 gaps (bulges in the stem loop). 
 
 <p>
+
 It works by finding alignments between the sequence and its reverse
-complement that exceed a threshold score.  The score is calculated by
-summing the values of each match, the penalties of each mismatch and the
-large penalties of any gaps. 
+complement that exceed a threshold score.  Gaps and Mismatches are
+assigned a penalty (negative) score.  Matches are assigned a positive
+score.  The score is calculated by summing the values of each match, the
+penalties of each mismatch and the large penalties of any gaps.  Any
+region whose score exceeds the threshold is reported. 
 
 <p>
+
+<b>einverted</b>  uses dynamic programming and thus is guaranteed to find
+the optimal alignment, but is slower than, for example, a self-by-self BLAST.
+It can find multiple inverted repeats in a sequence.  
+
+<p>
+
+Currently the maximal extent of the interval from start to end of the
+repeat is set to 4000 bp. 
+
+<p>
+
 Secondary structures like inverted repeats in genomic sequences may be
 implicated in initiation of DNA replication.
 
@@ -200,7 +217,7 @@ IT IS DONE FOR YOU.
 </H2>
 
 
-The input for einverted is a nucleotide sequence
+The input for <b>einverted</b> is a nucleotide sequence
 
 <H2>
     Output file format
@@ -230,18 +247,20 @@ Score 99: 53/65 ( 81%) matches, 1 gaps
     Data files
 </H2>
 
+None.
 
 <H2>
     Notes
 </H2>
 
+None.
 
 <H2>
     References
 </H2>
 
 
-Some references on inverted repeats:
+Some assorted references on inverted repeats:
 
 <p>
 
@@ -280,21 +299,25 @@ Proc Natl Acad Sci U S A 1997 Mar 18;94(6):2174-9
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
 </H2>
 
+It always exits with a status of 0.
 
 <H2>
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -333,15 +356,17 @@ Proc Natl Acad Sci U S A 1997 Mar 18;94(6):2174-9
         data files?) that seealso doesn't find.
    -->
 
+<p>
 
+<b>palindrome</b> also looks for inverted repeats but is much faster
+and less sensitive, as it looks for near-perfect repeats.
 
 <H2>
     Author(s)
 </H2>
 
 
-This program was originally written by Richard Durbin and Jean
-Thierry-Mieg as part of the ACEDB genome database package.
+This program was originally written by Richard Durbin at the Sanger Centre.
 <p>
 
 This application was modified for inclusion in EMBOSS by Peter Rice <a
@@ -353,6 +378,7 @@ Cambridge, CB10 1SA, UK.
     History
 </H2>
 
+Written (1999) - Peter Rice
 
 <H2>
     Target users

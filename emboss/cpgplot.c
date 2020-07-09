@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 	strand = ajSeqStrCopy(seq);
 	(void) ajStrToUpper(&strand);
 
-	(void) ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
+	(void) ajStrAssSubC(&substr,ajStrStr(strand),--begin,--end);
 	len=ajStrLen(substr);
 
 	if (len > maxarr) {
@@ -129,10 +129,13 @@ int main(int argc, char **argv)
 
 	findbases(&substr, begin, len, window, shift, obsexp, xypc,
 		  &bases, &obsexpmax, &plstart, &plend);
+
 	
-	identify(outf, obsexp, xypc, thresh, begin+window/2, len-window, shift,
-		 ajStrStr(bases), ajSeqName(seq), minlen, minobsexp, minpc, featout);
+	identify(outf, obsexp, xypc, thresh, 0, len, shift,
+		 ajStrStr(bases), ajSeqName(seq), minlen, minobsexp, minpc,
+		 featout);
 	
+
 	plotit(ajSeqName(seq), begin, len, shift, obsexp, xypc, thresh,
 	       ajStrStr(bases), obsexpmax, plstart, plend,
 	       doobsexp, docg, dopc, mult);
@@ -151,9 +154,9 @@ int main(int argc, char **argv)
 
 
 
-void findbases(AjPStr *substr, ajint begin, ajint len, ajint window, ajint shift,
-               float *obsexp, float *xypc, AjPStr *bases, float *obsexpmax,
-	       ajint *plstart, ajint *plend)
+void findbases(AjPStr *substr, ajint begin, ajint len, ajint window,
+	       ajint shift, float *obsexp, float *xypc, AjPStr *bases,
+	       float *obsexpmax, ajint *plstart, ajint *plend)
 {
     ajint cxpy;
     ajint cx;
@@ -178,16 +181,17 @@ void findbases(AjPStr *substr, ajint begin, ajint len, ajint window, ajint shift
     *plstart = offset;
     q = ajStrStr(*bases);	
 
-    for(i=0; i<len-window;i+=shift)
+    for(i=0; i<(len-window+1);i+=shift)
     {
 	j = i+offset;
 	p = ajStrStr(*substr) + i;
 	countbases(p, q, window, &cx, &cy, &cxpy);
+	
 	obs = (float) cxpy;
-	exp = (float)(cx*cy)/windowf;
+	exp = ((float)(cx*cy))/windowf;
 	cxf=(float)cx;
 	cyf=(float)cy;
-	if(exp==0.0) obsexp[j]=0.0;
+	if(!exp) obsexp[j]=0.0;
 	else
 	{
 	    obsexp[j]=obs/exp;
@@ -195,7 +199,7 @@ void findbases(AjPStr *substr, ajint begin, ajint len, ajint window, ajint shift
 	}
 	xypc[j]=(cxf/windowf)*100.0 + (cyf/windowf)*100.0;
     }
-
+    
     *plend = j;
     return;
 }
@@ -232,6 +236,8 @@ void countbases(char *seq, char *bases, ajint window, ajint *cx, ajint *cy,
 	}
 	if(codea && !(codea & (15-codey))) ++*cy;
     }
+
+    return;
 }
 
 /*
@@ -245,7 +251,9 @@ void countbases(char *seq, char *bases, ajint window, ajint *cx, ajint *cy,
 
 void identify(AjPFile outf, float *obsexp, float *xypc, AjBool *thresh,
 	      ajint begin, ajint len, ajint shift, char *bases, char *name,
-	      ajint minlen, float minobsexp, float minpc, AjPFeatTabOut featout) {
+	      ajint minlen, float minobsexp, float minpc,
+	      AjPFeatTabOut featout)
+{
   static ajint avwindow=10;
   float avpc;
   float avobsexp;
@@ -254,19 +262,18 @@ void identify(AjPFile outf, float *obsexp, float *xypc, AjBool *thresh,
     
   ajint i;
   ajint pos;
-  ajint posmin;
   ajint sumlen;
-  ajint first;
+  ajint first=0;
   
   for(i=0; i<len; ++i) thresh[i]=ajFalse;
 
   sumlen=0;
-  posmin = begin;
-  for(pos=posmin,first=0;pos<len;pos+=shift)
+/*  posmin = begin;*/
+  for(pos=0,first=0;pos<(len-avwindow*shift);pos+=shift)
   {
     sumpc=sumobsexp=0.0;
     ajDebug("pos: %d max: %d\n", pos, pos+avwindow*shift);
-    for(i=pos;i<pos+avwindow*shift;i+=shift)
+    for(i=pos;i<=(pos+avwindow*shift);++i)
     {
       ajDebug("obsexp[%d] %.2f xypc[%d] %.2f\n",
 	      i, obsexp[i], i, xypc[i]);
@@ -322,7 +329,7 @@ void reportislands(AjPFile outf, AjBool *thresh, char *bases, char *name,
 
     (void) ajFmtPrintF(outf,"\n\nCPGPLOT islands of unusual %s composition\n",
 		bases);
-    (void) ajFmtPrintF(outf,"%s from %d to %d\n\n",name,begin,begin+len-1);
+    (void) ajFmtPrintF(outf,"%s from %d to %d\n\n",name,begin+1,begin+len);
     (void) ajFmtPrintF(outf,"     Observed/Expected ratio > %.2f\n",minobsexp);
     (void) ajFmtPrintF(outf,"     Percent %c + Percent %c > %.2f\n",bases[0],
 		bases[1],minpc);
@@ -337,9 +344,9 @@ void reportislands(AjPFile outf, AjBool *thresh, char *bases, char *name,
 	    if(!island)
 	    {
 		slen = i - startpos;
-		endpos = i-1;
+		endpos = i;
 		(void) ajFmtPrintF(outf,"\n Length %d (%d..%d)\n",slen,
-				   startpos+begin,endpos+begin);
+				   startpos+begin+1,endpos+begin);
 	    }
 	}
 	else
@@ -352,9 +359,9 @@ void reportislands(AjPFile outf, AjBool *thresh, char *bases, char *name,
     if(island)
     {
 	slen=len-startpos+1;
-	endpos=len;
-	(void) ajFmtPrintF(outf,"\n Length %d (%d..%d)\n",slen,startpos+begin,
-			   endpos+begin);
+	endpos=len-1;
+	(void) ajFmtPrintF(outf,"\n Length %d (%d..%d)\n",slen,
+			   startpos+begin+1, endpos+begin);
     }
 
     return;
@@ -525,9 +532,9 @@ void dumpfeatout(AjPFeatTabOut featout, AjBool *thresh, char *seqname,
 	    island = thresh[i];
 	    if(!island)
 	    {
-		endpos = i-1;
+		endpos = i;
 		feature = ajFeatureNew(feattable, source, type,
-				       startpos+begin,endpos+begin, score,
+				       startpos+begin+1,endpos+begin, score,
 				       strand, frame,
 				       desc , 0, 0) ;    
 		if(!feature)
@@ -543,9 +550,9 @@ void dumpfeatout(AjPFeatTabOut featout, AjBool *thresh, char *seqname,
 
     if(island)
     {
-	endpos=len;
+	endpos=len-1;
 	feature = ajFeatureNew(feattable, source, type,
-			       startpos+begin,endpos+begin, score, strand,
+			       startpos+begin+1,endpos+begin, score, strand,
 			       frame, desc , 0, 0) ;    
     }
     ajFeatSortByStart(feattable);

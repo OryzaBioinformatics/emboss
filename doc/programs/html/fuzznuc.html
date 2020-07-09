@@ -112,6 +112,12 @@ IT IS DONE FOR YOU.
    -mmshow             bool       Show mismatches
    -accshow            bool       Show accession numbers
    -descshow           bool       Show descriptions
+   -usashow            bool       Showing the USA (Uniform Sequence Address)
+                                  of the matching sequences will turn your
+                                  output file into a 'list' file that can then
+                                  be read in by many other EMBOSS programs by
+                                  specifying it with a '@' in front of the
+                                  filename.
    -complement         bool       Search complementary strand
 
 
@@ -187,6 +193,13 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-descshow</td>
 <td>Show descriptions</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-usashow</td>
+<td>Showing the USA (Uniform Sequence Address) of the matching sequences will turn your output file into a 'list' file that can then be read in by many other EMBOSS programs by specifying it with a '@' in front of the filename.</td>
 <td>Yes/No</td>
 <td>No</td>
 </tr>
@@ -299,17 +312,19 @@ It is composed of three columns of data.
 If the option '-mmshow' is used, then an extra column of data is output
 indicating how many mismatches there are in the match, for example:
 
-<pre>
 
+<p>
+
+<pre>
 % fuzznuc embl:hhtetra -mmshow
 Nucleic acid pattern search
 Search pattern: AAGCTT
 Number of mismatches [0]: 1
 Output file [hhtetra.fuzznuc]: stdout
-
 </pre>
 
 <p>
+
 <pre>
 
         HHTETRA       53     1 AAGCTG
@@ -323,39 +338,144 @@ Output file [hhtetra.fuzznuc]: stdout
 
 </pre>
 
+<p>
+
+If the option '-desc' is used then the description of the sequence is
+displayed before each line showing the match details.  For example:
+
+<p>
+
+<pre>
+% fuzznuc embl:hhtetra -desc
+Nucleic acid pattern search
+Search pattern: AAGCTT
+Number of mismatches [0]: 
+Output file [hhtetra.fuzznuc]: stdout
+
+
+Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
+        HHTETRA        1 AAGCTT
+Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
+        HHTETRA     1267 AAGCTT
+</pre>
+
+<p>
+
+If the option '-acc' is also used then the accession number of the sequence is
+displayed before each line showing the match details.  For example:
+
+<p>
+
+<pre>
+% fuzznuc embl:hhtetra -desc -acc
+Nucleic acid pattern search
+Search pattern: AAGCTT
+Number of mismatches [0]: 
+Output file [hhtetra.fuzznuc]: stdout
+
+
+L46634 Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
+        HHTETRA        1 AAGCTT
+L46634 Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
+        HHTETRA     1267 AAGCTT
+</pre>
+
+<p>
+
+If the option '-usa' is used then the Uniform Sequence Address is output
+at the start of each line of match details.  For example:
+
+<p>
+
+<pre>
+% fuzznuc embl:hhtetra -usa
+Nucleic acid pattern search
+Search pattern: AAGCTT
+Number of mismatches [0]: 
+Output file [hhtetra.fuzznuc]: stdout
+
+
+embl-id:HHTETRA         HHTETRA        1 AAGCTT
+embl-id:HHTETRA         HHTETRA     1267 AAGCTT
+</pre>
+
+<p>
+
+This is useful because it turns the output into a 'list' file of
+sequence names that can then be read in by other EMBOSS programs when a
+'@' is put at the start of the file. 
+
+<p>
+
+If the option '-comp' is used, then the search will also be done on the
+reverse sense strand.  Any matches in that strand will be displayed with
+the start position using the forward-sense positions (it actually gives
+the position of the end of the match).  The matching sequence will be
+given in square brackets to distinguish this from a forward-sense match. 
+For example:
+
+<p>
+
+<pre>
+% fuzznuc embl:hhtetra -comp
+Nucleic acid pattern search
+Search pattern: AAGCTT
+Number of mismatches [0]: 
+Output file [hhtetra.fuzznuc]: stdout
+
+
+        HHTETRA        1 AAGCTT
+        HHTETRA     1267 AAGCTT
+        HHTETRA        1 [AAGCTT]
+        HHTETRA     1267 [AAGCTT]
+</pre>
+
+	
 <H2>
     Data files
 </H2>
 
+None.
 
 <H2>
     Notes
 </H2>
+
+None.
 
 
 <H2>
     References
 </H2>
 
+None.
+
 
 <H2>
     Warnings
 </H2>
+
+None.
 
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
+
 
 <H2>
     Exit status
 </H2>
 
+It always exits with a status of 0.
 
 <H2>
     Known bugs
 </H2>
+
+None.
 
 
 <!--
@@ -412,6 +532,9 @@ href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
     History
 </H2>
 
+Written (2000) - Alan Bleasby
+<br>
+'-usa' added (13 March 2001) - Gary Williams
 
 <H2>
     Target users

@@ -141,6 +141,9 @@ IT IS DONE FOR YOU.
                                   24-45, 56-78
                                   1:45, 67=99;765..888
                                   1,5,8,10,23,45,57,99
+                                  Note: you should not try to use this option
+                                  with any other frame than the default,
+                                  -frame=1
    -trim               bool       This removes all X and * characters from the
                                   right end of the translation. The trimming
                                   process starts at the end and continues
@@ -203,7 +206,8 @@ They are separated by any non-digit, non-alpha character.
 Examples of region specifications are:
 24-45, 56-78
 1:45, 67=99;765..888
-1,5,8,10,23,45,57,99</td>
+1,5,8,10,23,45,57,99
+Note: you should not try to use this option with any other frame than the default, -frame=1</td>
 <td>Sequence range</td>
 <td>Whole sequence</td>
 </tr>
@@ -421,6 +425,14 @@ None.
 	check the table carefully for deviations from your particular
 	organism's code.
 
+<p>
+
+When using the '-regions' option, you should always leave the '-frames'
+option at the default of frame '1'.  If you change the frame while
+specifying a region to translate, then the regions will be offset by 1
+or 2 bases, which is not what you want. 
+
+
 <H2>
     Diagnostic Error Messages
 </H2>
@@ -446,9 +458,11 @@ None.
 </H2>
 
 
-	Bugs noted but not yet fixed.
-<p>
-	None.
+When using the '-regions' option, you should always leave the '-frames'
+option at the default of frame '1'.  If you change the frame while
+specifying a region to translate, then the regions will be offset by 1
+or 2 bases, which is not what you want. 
+
 
 <!--
 <H2>

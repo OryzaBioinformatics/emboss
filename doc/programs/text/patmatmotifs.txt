@@ -10,8 +10,8 @@ Function
    
 Description
 
-   This takes a protein sequence and compares it to the PROSITE database
-   of motifs.
+   patmatmotifs takes a protein sequence and compares it to the PROSITE
+   database of motifs.
    
    For a description of PROSITE, we can do no better than to quote the
    PROSITE user's documentation: 
@@ -60,7 +60,9 @@ Description
    protein sequence will report many matches to the short motifs that are
    indicative of the post-translational modification sites, such as
    glycolsylation, myristylation and phosphorylation sites. These reports
-   are often unwanted and can optionally be turned off.
+   are often unwanted and are not normally reported. You can turn
+   reporting of these short motifs on by giving the '-noprune' option on
+   the command-line.
    
    Your EMBOSS administrator must have set up the local EMBOSS PROSITE
    database using the utility 'prosextract' before this program will run.
@@ -68,7 +70,7 @@ Description
 Usage
 
    Here is a sample session with patmatmotifs.
-
+   
 % patmatmotifs -full
 Matching Prosite Motif Database to a single sequence.
 Input sequence: sw:12s1_arath
@@ -118,8 +120,8 @@ Output file format
    prosite entry is also reported.
    
    The output from the above example follows:
+     _________________________________________________________________
    
-
 Number of matches found in this Sequence = 1
 
 Length of the sequence = 472 basepairs
@@ -174,7 +176,8 @@ disulfide bond.
 [ 2] Shotwell M.A., Afonso C., Davies E., Chesnut R.S., Larkins B.A.
      Plant Physiol. 87:698-704(1988).
 ***************
-
+     _________________________________________________________________
+   
 Data files
 
    Data and documentation from PROSITE files is automatically read. This
@@ -192,6 +195,8 @@ References
    
    Bairoch A., Bucher P., Hofmann K. The PROSITE datatase, its status in
    1997. Nucleic Acids Res. 24:217-221(1997).
+   
+   Other references:
    
     1. Bairoch, A., Bucher P. (1994) PROSITE: recent developments.
        Nucleic Acids Research, Vol 22, No.17 3583-3589.
@@ -213,7 +218,7 @@ Warnings
 Diagnostic Error Messages
 
    The error message:
-
+   
 "Either EMBOSS_DATA undefined or PROSEXTRACT needs running"
 
    indicates that your local EMBOSS administrator has not yet correctly
@@ -226,6 +231,8 @@ Exit status
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description

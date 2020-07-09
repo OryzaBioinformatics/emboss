@@ -62,7 +62,7 @@ Command line arguments
    Optional qualifiers Allowed values Default
    -scorefile Comparison matrix file Comparison matrix file in EMBOSS
    data path EBLOSUM62 for protein
-   EDNAMAT for DNA
+   EDNAFULL for DNA
    Advanced qualifiers Allowed values Default
    -data Output the match data to a file instead of plotting it Yes/No No
    

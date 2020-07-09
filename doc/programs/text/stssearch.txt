@@ -132,15 +132,13 @@ Known bugs
    
 See also
 
-   Program name Description
-   dotmatcher Displays a thresholded dotplot of two sequences
-   polydot Displays all-against-all dotplots of a set of sequences
-   prima Selects primers for PCR and DNA amplification
+   Program name                         Description
+   dotmatcher   Displays a thresholded dotplot of two sequences
+   polydot      Displays all-against-all dotplots of a set of sequences
+   prima        Selects primers for PCR and DNA amplification
    primersearch Searches DNA sequences for matches with primer pairs
-   seqmatchall Does an all-against-all comparison of a set of sequences
-   supermatcher Finds a match of a large sequence against one or more
-   sequences
-   wordmatch Finds all exact matches of a given size between 2 sequences
+   seqmatchall  Does an all-against-all comparison of a set of sequences
+   wordmatch    Finds all exact matches of a given size between 2 sequences
    
    If you want something that only reports matches of both primer pairs
    and can find mismatches, use primersearch.

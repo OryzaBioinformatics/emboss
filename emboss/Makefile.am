@@ -2,20 +2,20 @@
 SUBDIRS = acd data
 
 check_PROGRAMS = ajtest ajtest2 ajtest3 ajtestajnam \
-cluster complex corbatest \
+contacts cluster complex corbatest \
 demofeatures demolist demosequence demostring demotable \
 entrails histogramtest intconv messtest \
 patmattest plplottest proteinmotifsearch \
 seqinfo \
 seqretallfeat seqretfeat seqtofeat \
-simplesw stamps testplot treetypedisplay 
+simplesw swissparse testplot treetypedisplay 
 
 bin_PROGRAMS = abiview acdc antigenic \
 backtranseq banana btwisted \
-chaos charge checktrans chips cirdna codcmp coderet \
+cai chaos charge checktrans chips cirdna codcmp coderet \
 compseq cons cpgplot cpgreport cusp cutseq \
 dan dbiblast dbifasta dbiflat dbigcg \
-degapseq descseq diffseq digest domainer \
+degapseq descseq diffseq digest distmat domainer \
 dotmatcher dotpath dottup dreg \
 einverted embossdata emma emowse entret \
 equicktandem est2genome etandem extractseq \
@@ -36,7 +36,7 @@ prosextract pscan \
 rebaseextract recode redata remap restover restrict revseq scope \
 seealso seqmatchall seqret seqretall seqretset seqretsplit \
 showdb showfeat showorf showseq \
-shuffleseq sigcleave silent splitter stretcher \
+shuffleseq sigcleave silent splitter scopalign stretcher \
 stssearch supermatcher syco \
 textsearch tfextract tfm tfscan \
 tmap transeq trimseq \
@@ -53,6 +53,7 @@ backtranseq_SOURCES = backtranseq.c
 banana_SOURCES = banana.c
 btwisted_SOURCES = btwisted.c
 chaos_SOURCES = chaos.c
+cai_SOURCES = cai.c
 charge_SOURCES = charge.c
 checktrans_SOURCES = checktrans.c
 chips_SOURCES = chips.c
@@ -76,6 +77,7 @@ degapseq_SOURCES = degapseq.c
 descseq_SOURCES = descseq.c
 diffseq_SOURCES = diffseq.c
 digest_SOURCES = digest.c
+distmat_SOURCES = distmat.c
 domainer_SOURCES = domainer.c
 dotmatcher_SOURCES = dotmatcher.c
 dottup_SOURCES = dottup.c
@@ -172,7 +174,7 @@ shuffleseq_SOURCES = shuffleseq.c
 sigcleave_SOURCES = sigcleave.c
 silent_SOURCES = silent.c
 splitter_SOURCES = splitter.c
-stamps_SOURCES = stamps.c
+scopalign_SOURCES = scopalign.c
 stretcher_SOURCES = stretcher.c
 stssearch_SOURCES = stssearch.c
 supermatcher_SOURCES = supermatcher.c
@@ -195,6 +197,7 @@ ajtest_SOURCES = ajtest.c
 ajtest2_SOURCES = ajtest2.c
 ajtest3_SOURCES = ajtest3.c
 ajtestajnam_SOURCES = ajtestajnam.c
+contacts_SOURCES = contacts.c
 cluster_SOURCES = cluster.c
 demofeatures_SOURCES = demofeatures.c
 demolist_SOURCES = demolist.c
@@ -206,6 +209,7 @@ messtest_SOURCES = messtest.c
 patmattest_SOURCES = patmattest.c
 plplottest_SOURCES = plplottest.c
 simplesw_SOURCES = simplesw.c
+swissparse_SOURCES = swissparse.c
 seqretallfeat_SOURCES = seqretallfeat.c
 seqretfeat_SOURCES = seqretfeat.c
 seqtofeat_SOURCES = seqtofeat.c

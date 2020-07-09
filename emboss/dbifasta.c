@@ -60,8 +60,8 @@ typedef struct Sentry {
 } Oentry, *Pentry;
 
 
-static ajint maxidlen = 12;
-static ajint maxaclen = 12;
+static ajint maxidlen = 20;
+static ajint maxaclen = 20;
 
 static AjPStr rline = NULL;
 
@@ -845,7 +845,7 @@ AjPRegexp getExpr(AjPStr idformat, ajint *type)
     if(ajStrMatchC(idformat,"simple"))
     {
 	*type = SIMPLE;
-	exp = ajRegCompC("^>([A-Za-z0-9_-]+)");
+	exp = ajRegCompC("^>([.A-Za-z0-9_-]+)");
     }
     else if(ajStrMatchC(idformat,"idacc"))
     {

@@ -23,9 +23,10 @@
 #include "emboss.h"
 
 static void DBOut(AjPFile outfile, AjPStr dbname, AjPStr type, AjBool
-id, AjBool qry, AjBool all, AjPStr comment, AjBool html, AjBool dotype,
-AjBool doid, AjBool doqry, AjBool doall, AjBool docomment);
-
+id, AjBool qry, AjBool all, AjPStr comment, AjPStr release, AjBool html,
+AjBool dotype, AjBool doid, AjBool doqry, AjBool doall, 
+AjBool docomment, AjBool dorelease);
+	
 int main(int argc, char **argv)
 {
   AjBool html;
@@ -37,6 +38,7 @@ int main(int argc, char **argv)
   AjBool doqry;
   AjBool doall;
   AjBool docomment;
+  AjBool dorelease;
 
   AjPFile outfile = NULL;
   AjPStr dbname = NULL;		/* the next database name to look at */
@@ -45,6 +47,7 @@ int main(int argc, char **argv)
   AjBool qry;
   AjBool all;
   AjPStr comment = NULL;
+  AjPStr release = NULL;
 
   AjPList dbnames = ajListstrNew();
   AjIList iter = NULL;
@@ -64,6 +67,7 @@ int main(int argc, char **argv)
   doqry = ajAcdGetBool("query");
   doall = ajAcdGetBool("all");
   docomment = ajAcdGetBool("comment");
+  dorelease = ajAcdGetBool("release");
 
 /* start the HTML table */
   if (html) {
@@ -107,6 +111,13 @@ int main(int argc, char **argv)
         (void) ajFmtPrintF(outfile, "All ");
       }
     }
+    if (dorelease) {
+      if (html) {
+        (void) ajFmtPrintF(outfile, "<th>Release</th>");
+      } else {
+        (void) ajFmtPrintF(outfile, "Release\t");
+      }
+    }
     if (docomment) {
       if (html) {
         (void) ajFmtPrintF(outfile, "<th>Comment</th>");
@@ -133,6 +144,9 @@ int main(int argc, char **argv)
       if (doall) {
         (void) ajFmtPrintF(outfile, "=== ");
       }
+      if (dorelease) {
+        (void) ajFmtPrintF(outfile, "=======\t");
+      }
       if (docomment) {
         (void) ajFmtPrintF(outfile, "=======");
       }
@@ -143,8 +157,8 @@ int main(int argc, char **argv)
 
 /* do we have just one specified name to get details on? */
   if (ajStrLen(dbname)) {  
-    if (ajNamDbDetails (dbname, &type, &id, &qry, &all, &comment)) {
-      (void) DBOut(outfile, dbname, type, id, qry, all, comment, html, dotype, doid, doqry, doall, docomment);
+    if (ajNamDbDetails (dbname, &type, &id, &qry, &all, &comment, &release)) {
+      (void) DBOut(outfile, dbname, type, id, qry, all, comment, release, html, dotype, doid, doqry, doall, docomment, dorelease);
     } else {
       (void) ajDie("The database '%S' does not exist", dbname);
     }
@@ -161,9 +175,9 @@ int main(int argc, char **argv)
 
 /* write out protein databases */
     while ((dbname = ajListIterNext(iter)) != NULL) {
-      if (ajNamDbDetails (dbname, &type, &id, &qry, &all, &comment)) {
+      if (ajNamDbDetails (dbname, &type, &id, &qry, &all, &comment, &release)) {
         if (!ajStrCmpC(type, "P") && protein) {
-          (void) DBOut(outfile, dbname, type, id, qry, all, comment, html, dotype, doid, doqry, doall, docomment);
+          (void) DBOut(outfile, dbname, type, id, qry, all, comment, release, html, dotype, doid, doqry, doall, docomment, dorelease);
         }
       } else {
         (void) ajDie("The database '%S' does not exist", dbname);
@@ -176,9 +190,9 @@ int main(int argc, char **argv)
 
 /* now write out nucleic databases */
     while ((dbname = ajListIterNext(iter)) != NULL) {
-      if (ajNamDbDetails (dbname, &type, &id, &qry, &all, &comment)) {
+      if (ajNamDbDetails (dbname, &type, &id, &qry, &all, &comment, &release)) {
         if (!ajStrCmpC(type, "N") && nucleic) {
-          (void) DBOut(outfile, dbname, type, id, qry, all, comment, html, dotype, doid, doqry, doall, docomment);
+          (void) DBOut(outfile, dbname, type, id, qry, all, comment, release, html, dotype, doid, doqry, doall, docomment, dorelease);
         }
       } else {
         (void) ajDie("The database '%S' does not exist", dbname);
@@ -200,8 +214,9 @@ int main(int argc, char **argv)
 /****************************************************************/
 
 static void DBOut(AjPFile outfile, AjPStr dbname, AjPStr type, AjBool
-id, AjBool qry, AjBool all, AjPStr comment, AjBool html, AjBool dotype,
-AjBool doid, AjBool doqry, AjBool doall, AjBool docomment) {
+id, AjBool qry, AjBool all, AjPStr comment, AjPStr release, AjBool html,
+AjBool dotype, AjBool doid, AjBool doqry, AjBool doall, 
+AjBool docomment, AjBool dorelease) {
 	
   if (html) {
     (void) ajFmtPrintF(outfile, "<tr><td>%S</td>", dbname);		/* start table line and output name */
@@ -246,6 +261,15 @@ output, otherwise, just output it and a space */
       (void) ajFmtPrintF(outfile, "%s", "OK  ");
     } else {
       (void) ajFmtPrintF(outfile, "%s", "-   ");
+    }
+    if (html) (void) ajFmtPrintF(outfile, "</td>");
+  }
+  if (dorelease) {
+    if (html) (void) ajFmtPrintF(outfile, "<td>");
+    if (release != NULL) {
+      (void) ajFmtPrintF(outfile, "%S\t", release);
+    } else {
+      (void) ajFmtPrintF(outfile, "-\t");
     }
     if (html) (void) ajFmtPrintF(outfile, "</td>");
   }
