@@ -18,7 +18,7 @@ Description
    in DNA), which is narrow in cold-blooded vertebrates, but broad in
    warm-blooded vertebrates.
    
-   This application plots GC content over a sequence. It is ntended for
+   This application plots GC content over a sequence. It is intended for
    large sequences such as complete chromosomes or large genomic contigs,
    although interesting results can also be obtained from shorter
    sequences.

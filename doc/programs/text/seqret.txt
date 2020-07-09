@@ -89,6 +89,8 @@ Description
    The output USA name 'stdout' is special. It makes the output go to the
    device 'standard output'. This is the screen, by default.
    
+  Example USAs
+  
    The following are valid USAs for sequences:
    
    USA Description
@@ -113,8 +115,8 @@ Description
    embl or EMBL:* All sequences in the EMBL database
    @mylist Reads file mylist and uses each line as a separate USA. This
    is standard VMS list file syntax, also used in SRS 4.0 but missing in
-   SRS 5.0. List files can contain references to other lists files or any
-   other standard USA.
+   SRS 5.0. The list file is a list of USAs (one per line). List files
+   can contain references to other lists files or any other standard USA.
    list::mylist Same as "@mylist" above
    'getz -e [embl-id:paamir] |' The pipe character "|" causes EMBOSS to
    fire up getz (SRS 5.1) to extract entry PAAMIR from EMBL in EMBL
@@ -125,80 +127,203 @@ Description
    This is a special case. It was intended as a joke, but could be quite
    useful for generating command lines.
    
-   The valid input sequence formats that are available in USAs are:
+  Input sequence formats
+  
+   To date, the following sequence formats are accepted as input.
+   
+   By default, (i.e. if no format is explicitly specified) EMBOSS tries
+   each format in turn until one succeeds.
    
    Input Format Comments
-   fasta
-   pearson
-   ncbi FASTA format with an optional accession number after the sequence
-   identifier, and with an optional database name in NCBI or GCG style
-   fasta format included as part of the sequence identifier. These are
-   defined as separate formats for output.
-   gcg GCG 9.x format with the format and sequence type identified on the
-   first line of the file
+   gcg GCG 9.x and 10.x format with the format and sequence type
+   identified on the first line of the file
    gcg8 GCG 8.x format where anything up to the first line containing
    ".." is considered as heading, and the remainder is sequence data.
    This format is complicated by the header appearing to be in other
    formats such as EMBL, and by the possibility of reading a large amount
    of data in the wrong format before discovering that there is no ".."
    line because it is not GCG format after all.
-   embl EMBL entry format, or at least a minimal subset of the fields.
-   The Staden package and others use EMBL or similar formats for sequence
+   embl
+   em EMBL entry format, or at least a minimal subset of the fields. The
+   Staden package and others use EMBL or similar formats for sequence
    data.
-   swiss SWISSPROT entry format, or at least a minimal subset of the
-   fields.
-   genbank GENBANK entry format, or at least a minimal subset of the
-   fields.
+   swiss
+   sw SWISSPROT entry format, or at least a minimal subset of the fields.
+   fasta
+   pearson FASTA format with an optional accession number after the
+   sequence identifier, eg:
+   >name description
+   or
+   >name accession description
+   and with an optional database name in GCG style fasta format included
+   as part of the sequence identifier, eg:
+   >database:name accession description
+   ncbi FASTA format with optional accession number and database name in
+   NCBI style included as part of the sequence identifier. eg
+   >database|accession|id description
+   (and other variants on this theme!)
+   genbank
+   gb GENBANK entry format, or at least a minimal subset of the fields.
+   nbrf
+   pir NBRF (PIR) format, as used in the PIR database sequence files.
+   codata CODATA format.
+   strider DNA strider format
+   clustal
+   aln ClustalW ALN (multiple alignment) format.
+   phylip PHYLIP non-interleaved multiple alignment format.
+   acedb ACeDB format
+   msf Wisconsin Package GCG's MSF multiple sequence format.
+   hennig86 Hennig86 format
+   jackknifer Jackknifer format
+   jackknifernon Jackknifernon format
+   nexus
+   paup Nexus/PAUP format
+   nexusnon
+   paupnon Nexusnon/PAUPnon format
+   treecon Treecon format
+   mega Mega format
+   meganon Meganon format
    ig IntelliGenetics format.
-   msf GCG MSF (multiple sequence file) format.
-   clustal ClustalW ALN (alignment) format.
    staden
    experiment The experiment file format used by the "gap" program in the
    Staden package, where the sequence identifier is optional and the
    remainer is plain text. Some alternative nucleotide ambiguity codes
    are used and must be converted.
+   unknown
    text
-   plain
-   raw Plain text. EMBOSS will attempt to check that the text is likely
-   to be sequence data rather than random "cut and paste" text by looking
-   for some regularity in the layout.
-   unknown Tries each format in turn until one succeeds. For all other
-   formats, failure is fatal but EMBOSS tries to tolerate most format
-   errors.
+   plain Plain text. This is the format with no format. The whole of the
+   file is read in as a sequence. No attempt is made to parse the file
+   contents in any way. Anything is acceptable in this format.
+   raw Like unknown/text/plain format except that it accepts only
+   alphanumeric and whitespace characters and rejects anything else.
+   asis This is not so much a sequence format as a quick way of entering
+   a sequence on the command line, but it is included here for
+   completeness. Where a filename would normally be given, in asis format
+   there is the sequence itself. An example would be:
+   asis::atacgcagttatctgaccat
+   In 'asis' format the name is the sequence so no file needs to be
+   opened. This is a special case. It was intended as a joke, but could
+   be quite useful for generating command lines.
    
-   The valid output sequence formats that are available in USAs are:
+  Output sequence formats
+  
+   To date, the following sequence formats are available as output.
    
-   Output Format Comments
-   fasta Standard Pearson FASTA format, but with the accession number
-   included after the identifier if available.
-   embl EMBL entry format with available fields filled in and others with
-   no infomation omitted. The EMBOSS command line allows missing data
-   such as accession numbers to be provided if they are not obtainable
-   from the input sequence.
-   genbank GENBANK entry format with available fields filled in and
+   Some sequence formats can hold multiple sequences in one file, these
+   are marked as multiple in the following table. The details of how many
+   sequences are held in one file differs between formats, but they
+   either allow many sequences to be concatenated one after the other, or
+   they hold the sequences together in some sort of aligned set of
+   sequences.
+   
+   Other formats, such as GCG, plain and staden formats can only hold one
+   sequence per file, these are marked as single. An attempt to
+   concatenate several sequences in one file leaves the results as a mess
+   that makes it impossible to decide where the sequences start and end
+   or what is annotation and what is sequence.
+   
+   These single formats therefore cause problems when there are multiple
+   sequences to write out because a single file containing multiple
+   sequences in that format is invalid. When these formats are specified
+   for output, an EMBOSS program will allow you to write many sequences
+   to one file, but EMBOSS programs will not be able to reliably read in
+   the resulting mess.
+   
+   N.B This behaviour changed in EMBOSS version 1.7.0. (31 Oct 2000)
+   Previously, EMBOSS programs that were asked to write multiple
+   sequences in a single format whould ignore the requested output file
+   name and would write each sequence into a separate file whose name was
+   constructed from the sequence name and the name of the format. This
+   resulted in ouput to files whose names could not be reliably
+   controlled. A decision was taken that EMBOSS users were intelligent
+   people who could live with the consequences of their actions and who
+   could learn not to write out multiple sequences to a file in formats
+   that could not cope with multiple sequences.
+   
+   It you really wish to write multiple sequences out in formats that can
+   not cope with multiple sequences, you are advised to add the global
+   qualifier -ossingle on the command line. This will force the EMBOSS
+   program to ignore the given output file name and will generate its own
+   file names. One sequence will be written to each such file. These file
+   names are made from the sequence ID name, with the name of the format
+   as the extension (e.g. hsfau.gcg).
+   
+   This is not ideal. Preferably, you should stay away from formats that
+   can't cope with multiple sequences in a file.
+   
+   Output Format Single/
+   Multiple Comments
+   gcg single Wisconsin Package GCG 9.x and 10.x format with the sequence
+   type on the first line of the file.
+   gcg8 single GCG 8.x format where anything up to the first line
+   containing ".." is considered as heading, and the remainder is
+   sequence data.
+   embl
+   em multiple EMBL entry format with available fields filled in and
    others with no infomation omitted. The EMBOSS command line allows
    missing data such as accession numbers to be provided if they are not
    obtainable from the input sequence.
-   ncbi NCBI style FASTA format with the database name, entry name and
-   accession number separated by pipe ("|") characters.
-   gcg Wisconsin Package GCG 9.x format with the sequence type on the
-   first line of the file.
-   asn1 A subset of ASN.1 containing entry name, accession number,
-   description and sequence, similar to the current ASN.1 output of
-   readseq
-   fitch Fitch format
-   ig Intelligenetics format, as used by the Intelligenetics package
-   nbrf NBRF (PIR) format, as used in the PIR database sequence files.
-   pearson Simple Pearson FASTA format, an alias for "fasta" format.
-   phylip PHYLIP non-interleaved format. This name may change in future
-   phylip3 PHYLIP interleaved format. This name may change in future
-   staden Staden package format
-   strider DNA strider format
-   text Plain text
-   trace EMBOSS sequence object report showing all available fields. Not
-   all fields will contain data - this depends very much on the input
-   format used.
+   swiss
+   sw multiple SwisProt entry format with available fields filled in and
+   others with no infomation omitted. The EMBOSS command line allows
+   missing data such as accession numbers to be provided if they are not
+   obtainable from the input sequence.
+   fasta multiple Standard Pearson FASTA format, but with the accession
+   number included after the identifier if available.
+   pearson multiple Simple Pearson FASTA format, an alias for "fasta"
+   format.
+   ncbi multiple NCBI style FASTA format with the database name, entry
+   name and accession number separated by pipe ("|") characters.
+   nbrf
+   pir multiple NBRF (PIR) format, as used in the PIR database sequence
+   files.
+   genbank
+   gb multiple GENBANK entry format with available fields filled in and
+   others with no infomation omitted. The EMBOSS command line allows
+   missing data such as accession numbers to be provided if they are not
+   obtainable from the input sequence.
+   ig multiple Intelligenetics format, as used by the Intelligenetics
+   package
+   codata multiple CODATA format.
+   strider multiple DNA strider format
+   acedb multiple ACeDB format
+   staden
+   experiment single The experiment file format used by the "gap" program
+   in the Staden package. Some alternative nucleotide ambiguity codes are
+   used and are converted.
+   text
+   plain
+   raw single Plain sequence, no annotation or heading.
+   fitch multiple Fitch format
+   msf multiple Wisconsin Package GCG's MSF multiple sequence format.
+   clustal
+   aln multiple Clustal multiple sequence format.
+   phylip multiple PHYLIP non-interleaved format.
+   phylip3 multiple PHYLIP interleaved format.
+   asn1 multiple A subset of ASN.1 containing entry name, accession
+   number, description and sequence, similar to the current ASN.1 output
+   of readseq
+   hennig86 multiple Hennig86 format
+   mega multiple Mega format
+   meganon multiple Meganon format
+   nexus
+   paup multiple Nexus/PAUP format
+   nexusnon
+   paupnon multiple Nexusnon/PAUPnon format
+   jackknifer multiple Jackknifer format
+   jackknifernon multiple Jackknifernon format
+   treecon multiple Treecon format
+   debug multiple EMBOSS sequence object report for debugging showing all
+   available fields. Not all fields will contain data - this depends very
+   much on the input format used.
    
+  Future directions
+  
+   More formats, both for input and for output, can be easily added, so
+   suggestions are always welcome.
+   
+  Associated qualifiers
+  
    As noted previously there are many 'associated' qualifiers that alter
    the behaviour of seqret when it reads in or writes out a sequence. As
    these are used in all EMBOSS programs that read in or write out
@@ -454,11 +579,12 @@ See also
 
    Program name                          Description
    cirdna       Draws circular maps of DNA constructs
+   entret       Reads and writes (returns) flatfile entries
    lindna       Draws linear maps of DNA constructs
    remap        Display a sequence with restriction cut sites, translation etc
    seqretall    Reads and writes (returns) a set of sequences one at a time
    seqretset    Reads and writes (returns) a set of sequences all at once
-   seqretsplit  Reads and writes (returns) sequences
+   seqretsplit  Reads and writes (returns) sequences in individual files
    showfeat     Show features of a sequence
    showseq      Display a sequence with features, translation etc
    

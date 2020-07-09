@@ -84,8 +84,11 @@ Command line arguments
    -showinternals      bool       Show debugging information on the internal
                                   state of the search.
 
-   Advanced qualifiers: (none)
+   Advanced qualifiers:
+   -[no]similarity     bool       Display percent identity and similarity
+   -fasta              bool       Output overlap as fasta sequences
    
+
    Mandatory qualifiers Allowed values Default
    [-sequencea]
    (Parameter 1) Sequence USA Readable sequence Required
@@ -114,7 +117,8 @@ Command line arguments
    -showinternals Show debugging information on the internal state of the
    search. Yes/No No
    Advanced qualifiers Allowed values Default
-   (none)
+   -[no]similarity Display percent identity and similarity Yes/No Yes
+   -fasta Output overlap as fasta sequences Yes/No No
    
 Input file format
 
@@ -142,8 +146,22 @@ HBB_HUMAN       91       LHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVA 135
 
 HBA_HUMAN       131      SVSTVLTSKY                                    140
                           |:  |  ||
-HBB_HUMAN       136      GVANALAHKY
+HBB_HUMAN       136      GVANALAHKY                                    145
+
+%id = 45.99                     %similarity = 64.23
+Overall %id = 43.15             Overall %similarity = 60.27
      _________________________________________________________________
+   
+   The %id is the percentage of identical matches between the two
+   sequences over the reported aligned region.
+   
+   The %similarity is the percentage of matches between the two sequences
+   over the reported aligned region where the scoring matrix value is
+   greater or equal to 0.0.
+   
+   The Overall %id and Overall %similarity are calculated in a similar
+   manner for the number of matches over the length of the longest of the
+   two sequences.
    
 Data files
 
@@ -242,7 +260,8 @@ Author(s)
 History
 
 Completed 7th July 1999.
-Last modified 27th July 1999.
+Modified 27th July 1999 - tweaking scoring.
+Modified 22 Oct 2000 - added ID and Similarity scores.
 
 Target users
 

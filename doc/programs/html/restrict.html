@@ -73,17 +73,13 @@ Here is a sample session with restrict.
 <pre>
 
 % restrict
-Input sequence [stdin]: ecrrnbz
-Begin at [1]: 
-End at [7508]: 
-Minimum cuts [1]:
-Maximum cuts [2]: 2
-Minimum recognition site length [4]: 6
-Output file [stdout]: ecrrnbz.out
+Finds restriction enzyme cleavage sites
+Input sequence(s): embl:hsfau
+Minimum recognition site length [4]: 
+Comma separated enzyme list [all]: 
+Output file [hsfau.restrict]: 
 
 </pre>
-
-
 
 <H2>
     Command line arguments
@@ -332,47 +328,47 @@ program also reports isoschizomers and enzymes having the same
 recognition sequence but different cut sites.
 
 Here is part of a sample output:
-
+<p>
+<hr>
 <pre>
-# Restrict of ECRRNBZ from 1 to 7508
+# Restrict of HSFAU from 1 to 518
 #
 # Minimum cuts per enzyme: 1
-# Maximum cuts per enzyme: 2
-# Minimum length of recognition site: 6
+# Maximum cuts per enzyme: 2000000000
+# Minimum length of recognition site: 4
 # Blunt ends allowed
 # Sticky ends allowed
 # DNA is linear
 # Ambiguities allowed
-# Number of hits: 442
-#
-# Base Number   Enzyme          Site            3'      5'      [3'     5']
-        1       Nsp29132II      GGATCC          1       5
-        1       BspAAIII        GGATCC          1       5
-        1       AccEBI          GGATCC          1       5
-        1       Bsp4009I        GGATCC          1       5
-        1       BstI            GGATCC          1       5
-        1       AliI            GGATCC          1       5
-        1       SolI            GGATCC          1       5
-        1       Mlu23I          GGATCC          1       5
-        1       ApaCI           GGATCC          1       5
-        1       BnaI            GGATCC          1       5
-        1       SurI            GGATCC          1       5
-        1       OkrAI           GGATCC          1       5
-        1       NspSAIV         GGATCC          1       5
-        1       RspLKII         GGATCC          1       5
-        1       BamHI           GGATCC          1       5
-        1       Bce751I         GGATCC          1       5
-        17      BssSI           CACGAG          17      21
-        17      BsiI            CACGAG          17      21
-        17      Bst2BI          CACGAG          17      21
-        24      NsbI            TGCGCA          26      26
-        24      AviII           TGCGCA          26      26
-        24      MstI            TGCGCA          26      26
-        24      Acc16I          TGCGCA          26      26
-        24      PamI            TGCGCA          26      26
-        24      AosI            TGCGCA          26      26
-        24      FspI            TGCGCA          26      26
-        24      FdiII           TGCGCA          26      26
+# Number of hits: 208
+# Base Number   Enzyme          Site            5'      3'      [5'     3']
+        3       MnlI            CCTC            13      12
+        9       Hpy188III       TCNNGA          10      12
+        11      TaqI            TCGA            11      13
+        13      HinfI           GANTC           13      16
+        17      MlyI            GAGTC           7       7
+        17      PleI            GAGTC           7       8
+        24      AccII           CGCG            25      25
+        24      MboII           GAAGA           12      11
+        28      AciI            CCGC            25      27
+        30      AluI            AGCT            31      31
+        30      CviJI           RGCY            31      31
+        31      MwoI            GCNNNNNNNGC     37      34
+        34      BscBI           GGNNCC          36      36
+        34      BsmFI           GGGAC           48      52
+        35      AspS9I          GGNCC           35      38
+        35      AvaII           GGWCC           35      38
+        38      AciI            CCGC            38      40
+        58      CviRI           TGCA            59      59
+        59      BbvI            GCAGC           71      75
+        59      Fnu4HI          GCNGC           60      61
+        59      TseI            GCWGC           59      62
+        61      AluI            AGCT            62      62
+        61      CviJI           RGCY            62      62
+        71      AciI            CCGC            71      73
+        71      Bsc4I           CCNNNNNNNGG     77      74
+        72      AccII           CGCG            73      73
+        73      AspLEI          GCGC            75      73
 </pre>
 
 <H2>

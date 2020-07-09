@@ -156,7 +156,10 @@ IT IS DONE FOR YOU.
    -showinternals      bool       Show debugging information on the internal
                                   state of the search.
 
-   Advanced qualifiers: (none)
+   Advanced qualifiers:
+   -[no]similarity     bool       Display percent identity and similarity
+   -fasta              bool       Output overlap as fasta sequences
+
 
 </pre>
 </td></tr></table>
@@ -231,7 +234,17 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td>-[no]similarity</td>
+<td>Display percent identity and similarity</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-fasta</td>
+<td>Output overlap as fasta sequences</td>
+<td>Yes/No</td>
+<td>No</td>
 </tr>
 
 </table>
@@ -271,10 +284,26 @@ HBB_HUMAN       91       LHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVA 135
 
 HBA_HUMAN       131      SVSTVLTSKY                                    140     
                           |:  |  ||
-HBB_HUMAN       136      GVANALAHKY          
+HBB_HUMAN       136      GVANALAHKY                                    145     
+
+%id = 45.99                     %similarity = 64.23
+Overall %id = 43.15             Overall %similarity = 60.27
 </PRE>
 <HR>
+<P>
 
+The <b>%id</b> is the percentage of identical matches between the two
+sequences over the reported aligned region. 
+<P>
+
+The <b>%similarity</b> is the percentage of matches between the two
+sequences over the reported aligned region where the scoring matrix
+value is greater or equal to 0.0. 
+<P>
+
+The <b>Overall %id</b> and <b>Overall %similarity</b> are calculated in
+a similar manner for the number of matches over the length of the
+longest of the two sequences. 
 
 <H2>
     Data files
@@ -425,7 +454,8 @@ href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
 
 <pre>
 Completed 7th July 1999.
-Last modified 27th July 1999.
+Modified 27th July 1999 - tweaking scoring.
+Modified 22 Oct 2000 - added ID and Similarity scores.
 </pre>
 <H2>
     Target users

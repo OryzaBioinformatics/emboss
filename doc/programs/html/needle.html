@@ -151,6 +151,8 @@ IT IS DONE FOR YOU.
    -datafile           matrixf    Matrix file
 
    Advanced qualifiers:
+   -[no]similarity     bool       Display percent identity and similarity
+   -fasta              bool       Output overlap as fasta sequences
    -showinternals      bool       Show debugging information on the internal
                                   state of the search.
 
@@ -221,6 +223,20 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
+<td>-[no]similarity</td>
+<td>Display percent identity and similarity</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-fasta</td>
+<td>Output overlap as fasta sequences</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
 <td>-showinternals</td>
 <td>Show debugging information on the internal state of the search.</td>
 <td>Yes/No</td>
@@ -243,29 +259,48 @@ IT IS DONE FOR YOU.
 
 
 Here is the output file from the example run:
+<P>
 
+<HR>
 <pre>
-
 Global: HBA_HUMAN vs HBB_HUMAN
 Score: 290.50
 
-HBA_HUMAN       1      VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFP 44   
-                        |:| :|: | | ||||  :  | | ||| |: : :| |: :| 
-HBB_HUMAN       1     VHLTPEEKSAVTALWGKV..NVDEVGGEALGRLLVVYPWTQRFFE 43   
+HBA_HUMAN       1         VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFP 44      
+                           |:| :|: | | ||||  :  | | ||| |: : :| |: :| 
+HBB_HUMAN       1        VHLTPEEKSAVTALWGKV..NVDEVGGEALGRLLVVYPWTQRFFE 43      
 
-HBA_HUMAN       45    HF.DLS.....HGSAQVKGHGKKVADALTNAVAHVDDMPNALSAL 83   
-                       | |||      |: :|| |||||  | :: :||:|::    : |
-HBB_HUMAN       44    SFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATL 88   
+HBA_HUMAN       45       HF.DLS.....HGSAQVKGHGKKVADALTNAVAHVDDMPNALSAL 83      
+                          | |||      |: :|| |||||  | :: :||:|::    : |
+HBB_HUMAN       44       SFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATL 88      
 
-HBA_HUMAN       84    SDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKF 128  
-                      |:||  || ||| ||:|| : |:  || |   |||| | |:  | 
-HBB_HUMAN       89    SELHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKV 133  
+HBA_HUMAN       84       SDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKF 128     
+                         |:||  || ||| ||:|| : |:  || |   |||| | |:  | 
+HBB_HUMAN       89       SELHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKV 133     
 
-HBA_HUMAN       129   LASVSTVLTSKYR                                 141  
-                      :| |:  |  || 
-HBB_HUMAN       134   VAGVANALAHKYH                                 146  
+HBA_HUMAN       129      LASVSTVLTSKYR                                 141     
+                         :| |:  |  || 
+HBB_HUMAN       134      VAGVANALAHKYH                                 146     
 
+%id = 45.32                     %similarity = 63.31
+Overall %id = 43.15             Overall %similarity = 60.27
 </pre>
+<HR>
+<P>
+
+The <b>%id</b> is the percentage of identical matches between the two
+sequences over the reported aligned region.
+<P>
+
+The <b>%similarity</b> is the percentage of matches between the two
+sequences over the reported aligned region where the scoring matrix
+value is greater or equal to 0.0.
+<P>
+
+The <b>Overall %id</b> and <b>Overall %similarity</b> are calculated in
+a similar manner for the number of matches over the length of the
+longest of the two sequences.
+
 
 <H2>
     Data files
@@ -347,16 +382,19 @@ two 100-residue sequences.
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
 </H2>
 
   0 upon successful completion.
+
 <H2>
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -401,7 +439,8 @@ href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
 
 <pre>
 Completed 8th July 1999.
-Last modified 26th July 1999.
+Modified 26th July 1999 - scoring tweaked.
+Modified 22 Oct 2000 - %ID and %Similaritty scores added.
 </pre>
 <H2>
     Target users

@@ -80,6 +80,8 @@ Command line arguments
    -datafile           matrixf    Matrix file
 
    Advanced qualifiers:
+   -[no]similarity     bool       Display percent identity and similarity
+   -fasta              bool       Output overlap as fasta sequences
    -showinternals      bool       Show debugging information on the internal
                                   state of the search.
    
@@ -110,6 +112,8 @@ Command line arguments
    EBLOSUM62 for protein
    EDNAMAT for DNA
    Advanced qualifiers Allowed values Default
+   -[no]similarity Display percent identity and similarity Yes/No Yes
+   -fasta Output overlap as fasta sequences Yes/No No
    -showinternals Show debugging information on the internal state of the
    search. Yes/No No
    
@@ -120,26 +124,42 @@ Input file format
 Output file format
 
    Here is the output file from the example run:
-
+     _________________________________________________________________
+   
 Global: HBA_HUMAN vs HBB_HUMAN
 Score: 290.50
 
-HBA_HUMAN       1      VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFP 44
-                        |:| :|: | | ||||  :  | | ||| |: : :| |: :|
-HBB_HUMAN       1     VHLTPEEKSAVTALWGKV..NVDEVGGEALGRLLVVYPWTQRFFE 43
+HBA_HUMAN       1         VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFP 44
+                           |:| :|: | | ||||  :  | | ||| |: : :| |: :|
+HBB_HUMAN       1        VHLTPEEKSAVTALWGKV..NVDEVGGEALGRLLVVYPWTQRFFE 43
 
-HBA_HUMAN       45    HF.DLS.....HGSAQVKGHGKKVADALTNAVAHVDDMPNALSAL 83
-                       | |||      |: :|| |||||  | :: :||:|::    : |
-HBB_HUMAN       44    SFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATL 88
+HBA_HUMAN       45       HF.DLS.....HGSAQVKGHGKKVADALTNAVAHVDDMPNALSAL 83
+                          | |||      |: :|| |||||  | :: :||:|::    : |
+HBB_HUMAN       44       SFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATL 88
 
-HBA_HUMAN       84    SDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKF 128
-                      |:||  || ||| ||:|| : |:  || |   |||| | |:  |
-HBB_HUMAN       89    SELHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKV 133
+HBA_HUMAN       84       SDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKF 128
+                         |:||  || ||| ||:|| : |:  || |   |||| | |:  |
+HBB_HUMAN       89       SELHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKV 133
 
-HBA_HUMAN       129   LASVSTVLTSKYR                                 141
-                      :| |:  |  ||
-HBB_HUMAN       134   VAGVANALAHKYH                                 146
+HBA_HUMAN       129      LASVSTVLTSKYR                                 141
+                         :| |:  |  ||
+HBB_HUMAN       134      VAGVANALAHKYH                                 146
 
+%id = 45.32                     %similarity = 63.31
+Overall %id = 43.15             Overall %similarity = 60.27
+     _________________________________________________________________
+   
+   The %id is the percentage of identical matches between the two
+   sequences over the reported aligned region.
+   
+   The %similarity is the percentage of matches between the two sequences
+   over the reported aligned region where the scoring matrix value is
+   greater or equal to 0.0.
+   
+   The Overall %id and Overall %similarity are calculated in a similar
+   manner for the number of matches over the length of the longest of the
+   two sequences.
+   
 Data files
 
    For protein sequences EBLOSUM62 is used for the substitution matrix.
@@ -192,12 +212,16 @@ Warnings
    
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    0 upon successful completion.
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name                      Description
@@ -219,7 +243,8 @@ Author(s)
 History
 
 Completed 8th July 1999.
-Last modified 26th July 1999.
+Modified 26th July 1999 - scoring tweaked.
+Modified 22 Oct 2000 - %ID and %Similaritty scores added.
 
 Target users
 
