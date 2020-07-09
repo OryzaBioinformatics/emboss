@@ -1,0 +1,120 @@
+
+                               EMBOSS: dichet
+     _________________________________________________________________
+   
+                                Program dichet
+                                       
+Function
+
+   Parse dictionary of heterogen groups
+   
+Description
+
+   **************** EDIT HERE ****************
+   
+Usage
+
+   Here is a sample session with dichet:
+
+% dichet
+
+   **************** EDIT HERE ****************
+   
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-inf]               infile     Name of raw input file (dictionary of
+                                  heterogen groups)
+  [-dogrep]            bool       Search a directory of files with keywords?
+  [-outf]              outfile    Name of output file
+*  -path               string     Directory to search with keywords
+*  -extn               string     Exension of files to search in above
+                                  directory
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-inf]
+   (Parameter 1) Name of raw input file (dictionary of heterogen groups)
+   Input file Required
+   [-dogrep]
+   (Parameter 2) Search a directory of files with keywords? Yes/No No
+   [-outf]
+   (Parameter 3) Name of output file Output file <sequence>.dichet
+   -path Directory to search with keywords Any string is accepted ./
+   -extn Exension of files to search in above directory Any string is
+   accepted .ent
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   **************** EDIT HERE ****************
+   
+Output file format
+
+   **************** EDIT HERE ****************
+   
+Data files
+
+   **************** EDIT HERE ****************
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   contacts Reads coordinate files and writes contact files
+   interface Reads coordinate files and writes inter-chain contact files
+   psiblasts Runs PSI-BLAST given scopalign alignments
+   scopalign Generate alignments for SCOP families
+   seqsort Removes ambiguities from a set of hits resulting from a
+   database search
+   siggen Generates a sparse protein signature
+   sigscan Scans a sparse protein signature against swissprot
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   **************** EDIT HERE ****************
+   
+History
+
+   Written (date) - author. **************** EDIT HERE ****************
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
