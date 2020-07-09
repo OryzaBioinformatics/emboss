@@ -109,6 +109,8 @@ typedef struct AjSFileBuff {
 void        ajFileBuffClear (const AjPFileBuff thys, ajint lines);
 void        ajFileBuffDel (AjPFileBuff* pthis);
 AjBool      ajFileBuffEmpty (const AjPFileBuff thys);
+AjBool      ajFileBuffEnd (const AjPFileBuff thys);
+AjBool      ajFileBuffEof (const AjPFileBuff thys);
 AjPFile     ajFileBuffFile (const AjPFileBuff thys);
 FILE*       ajFileBuffFp (const AjPFileBuff thys);
 void        ajFileBuffFreeClear (const AjPFileBuff thys);

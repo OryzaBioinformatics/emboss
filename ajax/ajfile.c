@@ -183,7 +183,11 @@ AjPFile ajFileNewIn (const AjPStr name) {
     (void) ajStrAssS(&tmpname, name);
 
     if (ajStrMatchC(tmpname, "stdin"))
-	return ajFileNewF(stdin);
+    {
+      thys = ajFileNewF(stdin);
+      ajStrAssC(&thys->Name, "stdin");
+      return thys;
+    }
 
     if (ajStrChar(tmpname, -1) == '|')	/* pipe character at end */
 	return ajFileNewInPipe(tmpname);
@@ -761,12 +765,18 @@ void ajFileDataNewC(const char *s, AjPFile *f)
 
 ajint ajFileSeek (const AjPFile thys, ajlong offset, ajint wherefrom) {
   ajint ret;
+
   clearerr(thys->fp);
   ret = fseek (thys->fp, offset, wherefrom);
-  if (feof(thys->fp))
+
+  if (feof(thys->fp)) {
     thys->End = ajTrue;
-  else
+    ajDebug ("EOF ajFileSeek file %F\n", thys);
+  }
+  else {
     thys->End = ajFalse;
+  }
+
   return ret;
 }
 
@@ -1020,7 +1030,7 @@ AjBool ajFileGetsL (const AjPFile thys, AjPStr* pdest, ajlong* fpos) {
   while (buff) {
     if (thys->End) {
       /* *fpos = 0; */   /* we don't really want to reset this */
-      ajDebug("File already read to end %F\n", thys);
+      ajDebug("at EOF: File already read to end %F\n", thys);
       return ajFalse;
     }
 
@@ -1031,7 +1041,7 @@ AjBool ajFileGetsL (const AjPFile thys, AjPStr* pdest, ajlong* fpos) {
       if (feof(thys->fp)) {
 	thys->End = ajTrue;
 	(void) ajStrAssC(pdest, "");
-	ajDebug("end of file %F\n", thys);
+	ajDebug("EOF ajFileGetsL file %F\n", thys);
 	return ajFalse;
       }
       else
@@ -1813,6 +1823,8 @@ AjPFileBuff ajFileBuffNewS (const AjPStr data) {
   AJNEW0(thys->File);
   thys->File->End = ajTrue;
 
+  ajDebug("EOF ajFileBuffNewS file <none>\n");
+
   thys->Lines = AJNEW0(thys->Last);
   (void) ajStrAssS(&thys->Last->Line,data);
 
@@ -2574,6 +2586,42 @@ void ajFileBuffLoadS (const AjPFileBuff thys, const AjPStr line) {
   return;
 }
 
+/* @func ajFileBuffEof ********************************************************
+**
+** Tests whether we have reached end of file already
+**
+** @param [u] thys [const AjPFileBuff] File buffer
+** @return [AjBool] ajTrue if we already set end-of-file
+** @@
+******************************************************************************/
+
+AjBool ajFileBuffEof (const AjPFileBuff thys) {
+  return thys->File->End;
+}
+
+/* @func ajFileBuffEnd ********************************************************
+**
+** Tests whether the file is exhausted. This means end of file is reached
+** and the buffer is empty
+**
+** @param [u] thys [const AjPFileBuff] File buffer
+** @return [AjBool] ajTrue if we already set end-of-file
+** @@
+******************************************************************************/
+
+AjBool ajFileBuffEnd (const AjPFileBuff thys) {
+
+  ajDebug("ajFileBuffEnd End: %B Size: %d\n", thys->File->End, thys->Size);
+
+  if (!thys->File->End)		/* not reached EOF yet */
+    return ajFalse;
+
+  if (thys->Size != 0)		/* Something in the buffer*/
+    return ajFalse;
+
+  return ajTrue;
+}
+
 /* @func ajFileBuffReset ******************************************************
 **
 ** Resets the pointer and current record of a file buffer so the next read
@@ -2607,7 +2655,11 @@ void ajFileBuffResetPos (const AjPFileBuff thys) {
   ajFileBuffTraceFull(thys, 10, 10);
   thys->Pos = 0;
   thys->Curr = thys->Lines;
-  ajFileSeek(thys->File, thys->Fpos, SEEK_SET);
+
+  if (!thys->File->End && (thys->File->fp != stdin))
+  {
+    ajFileSeek(thys->File, thys->Fpos, SEEK_SET);
+  }
   ajFileBuffTraceFull(thys,10,10);
 
   return;
