@@ -71,10 +71,10 @@ NM = /usr/ccs/bin/nm -p
 OBJDUMP = @OBJDUMP@
 PACKAGE = EMBOSS
 RANLIB = ranlib
-VERSION = 2.0.0
+VERSION = 2.0.1
 XLIB =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib -lX11 -lsocket -lsocket  -lnsl -lnsl
 
-pkgdata_DATA = pir1.header pir1.names pir1.numbers pir1.offset pir1.ref                pir1.seq pir2.header pir2.names pir2.numbers pir2.offset                pir2.ref pir2.seq pir3.header pir3.names pir3.numbers                pir3.offset pir3.ref pir3.seq pir4.header pir4.names                pir4.numbers pir4.offset pir4.ref pir4.seq
+pkgdata_DATA = acnum.hit acnum.trg division.lkp entrynam.idx                pir1.header pir1.names pir1.numbers pir1.offset pir1.ref                pir1.seq pir2.header pir2.names pir2.numbers pir2.offset                pir2.ref pir2.seq pir3.header pir3.names pir3.numbers                pir3.offset pir3.ref pir3.seq pir4.header pir4.names                pir4.numbers pir4.offset pir4.ref pir4.seq
 
 
 pkgdatadir = $(prefix)/share/$(PACKAGE)/test/pir
