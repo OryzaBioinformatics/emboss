@@ -34,6 +34,8 @@ typedef struct AjSAlign {
   AjPStr Header;		/* Text to add to header with newlines */
   AjPStr SubHeader;		/* Text to add to align subheader */
   AjPStr Tail;			/* Text to add to tail with newlines */
+  AjBool Showacc;		/* Report accession number */
+  AjBool Showdes;		/* Report sequence description */
   AjBool Showusa;		/* Report USA (-ausa) or only seqname */
   AjBool Multi;			/* if true, assume >1 alignment */
   AjBool Global;		/* if true, show full sequence beyond match */
@@ -49,6 +51,7 @@ typedef struct AjSAlign {
   AjPStr GapPen;		/* Gap penalty (converted to string)  */
   AjPStr ExtPen;		/* Gap extend penalty (to string) */
   AjBool SeqOnly;		/* Sequence output only, no head or tail */
+  AjBool SeqExternal;		/* Sequence is non-local, do not delete */
 } AjOAlign, *AjPAlign;
 
 void         ajAlignClose (AjPAlign thys);
@@ -61,6 +64,7 @@ AjBool       ajAlignFindFormat (AjPStr format, ajint* iformat);
 AjBool       ajAlignFormatDefault (AjPStr* pformat);
 AjPAlign     ajAlignNew (void);
 void         ajAlignReset (AjPAlign thys);
+void         ajAlignSetExternal (AjPAlign thys, AjBool external);
 void         ajAlignSetHeader (AjPAlign thys, AjPStr header);
 void         ajAlignSetHeaderApp (AjPAlign thys, AjPStr header);
 void         ajAlignSetHeaderC (AjPAlign thys, const char* header);

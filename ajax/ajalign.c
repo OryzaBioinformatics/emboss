@@ -35,17 +35,17 @@
 
 typedef struct AlignSData
 {
-    ajint  Nseqs;
-    ajint* Start;
-    ajint* End;
-    ajint* Offset;
-    AjBool* Rev;
-    AjPSeq* Seq;
-    ajint Len;
-    ajint NumId;			/* Number of identical positions */
-    ajint NumSim;			/* Number of similar positions */
-    ajint NumGap;			/* Number of gap positions */
-    AjPStr Score;
+    ajint  Nseqs;		/* Number of sequences */
+    ajint* Start;		/* Start position in sequence */
+    ajint* End;			/* End position in sequence */
+    ajint* Offset;		/* Offset for numbering start of sequence */
+    AjBool* Rev;		/* Reverse sequence? */
+    AjPSeq* Seq;		/* Sequence data */
+    ajint Len;			/* Alignment length */
+    ajint NumId;		/* Number of identical positions */
+    ajint NumSim;		/* Number of similar positions */
+    ajint NumGap;		/* Number of gap positions */
+    AjPStr Score;		/* Score statistic int/float as a string */
 } AlignOData, *AlignPData;
 
 typedef struct AlignSFormat
@@ -62,7 +62,7 @@ static void    alignConsStats(AjPAlign thys, ajint iali, AjPStr *cons,
 			      ajint* retident, ajint* retsim, ajint* retgap,
 			      ajint* retlen);
 static AlignPData alignData (AjPAlign thys, ajint iali);
-static void    alignDataDel (AlignPData* pthys);
+static void    alignDataDel (AlignPData* pthys, AjBool external);
 static void    alignDiff (AjPStr* pmark, AjPStr seq);
 static ajint   alignLen (AjPAlign thys, ajint iali);
 static AjPSeq  alignSeq (AjPAlign thys, ajint iseq, ajint iali);
@@ -81,6 +81,7 @@ static void    alignWriteMarkX1 (AjPAlign thys);
 static void    alignWriteMarkX2 (AjPAlign thys);
 static void    alignWriteMarkX3 (AjPAlign thys);
 static void    alignWriteMarkX10 (AjPAlign thys);
+static void    alignWriteMatch (AjPAlign thys);
 static void    alignWriteScore (AjPAlign thys);
 static void    alignWriteSrs (AjPAlign thys);
 static void    alignWriteSrsAny (AjPAlign thys, ajint imax, AjBool mark);
@@ -110,6 +111,7 @@ static AlignOFormat alignFormat[] = {
   {"markx2",    AJTRUE,  AJTRUE,  2, 2, alignWriteMarkX2},
   {"markx3",    AJTRUE,  AJTRUE,  2, 2, alignWriteMarkX3},
   {"markx10",   AJTRUE,  AJTRUE,  2, 2, alignWriteMarkX10},
+  {"match",     AJTRUE,  AJTRUE,  2, 2, alignWriteMatch},
   {"multiple",  AJTRUE,  AJTRUE,  0, 0, alignWriteSimple},
   {"pair",      AJTRUE,  AJTRUE,  2, 2, alignWriteSimple},
   {"simple",    AJTRUE,  AJTRUE,  0, 0, alignWriteSimple},
@@ -795,6 +797,43 @@ static void alignWriteMark (AjPAlign thys, ajint iali, ajint markx)
 }
 
 
+/* @funcstatic alignWriteMatch ************************************************
+**
+** Writes an alignment in Match format
+**
+** @param [R] thys [AjPAlign] Alignment object
+** @return [void]
+** @@
+******************************************************************************/
+
+static void alignWriteMatch (AjPAlign thys) {
+
+  AjPFile outf = thys->File;
+  ajint nali;
+  ajint iali;
+  ajint len0;
+  AlignPData* pdata;
+  AlignPData data;
+  
+  nali = ajListToArray (thys->Data, (void***) &pdata);
+
+  ajAlignWriteHeader (thys);
+
+  for (iali=0; iali<nali; iali++) {
+
+    data = pdata[iali];
+    len0 = data->End[0] - data->Start[0] + 1;
+    ajFmtPrintF (outf, "%6d %-15.15S %8d..%-8d %-15.15S %8d..%d\n",
+		 len0,
+		 alignSeqName(thys, 0), data->Start[0], data->End[0],
+		 alignSeqName(thys, 1), data->Start[1], data->End[1]);
+  }
+
+  AJFREE(pdata);
+
+  return;
+}
+
 /* @funcstatic alignWriteSimple ***********************************************
 **
 ** Writes an alignment in Simple format
@@ -936,7 +975,7 @@ static void alignWriteSimple (AjPAlign thys) {
   return;
 }
 
-/* @funcstatic alignWriteScore **************************************************
+/* @funcstatic alignWriteScore ************************************************
 **
 ** Writes an alignment in Score-only format
 **
@@ -1043,6 +1082,13 @@ static void alignWriteSrsAny (AjPAlign thys, ajint imax, AjBool mark) {
   AjBool pair = ajFalse;
 
   AjPStr tmphdr = NULL;
+
+  if (nseq < 1)
+  {
+    ajAlignWriteHeader (thys);
+    
+    return;
+  }
 
   if (thys->Width)
     iwidth = thys->Width;
@@ -1191,7 +1237,10 @@ AjBool ajAlignDefine (AjPAlign thys, AjPSeqset seqset) {
     data->End[i] = ajSeqLen(ajSeqsetGetSeq(seqset, i));
     data->Offset[i] = 0;
     data->Rev[i] = ajFalse;
-    data->Seq[i] = ajSeqNewS(ajSeqsetGetSeq(seqset, i));
+    if (thys->SeqExternal)
+      data->Seq[i] = ajSeqsetGetSeq(seqset, i);
+    else
+      data->Seq[i] = ajSeqNewS(ajSeqsetGetSeq(seqset, i));
     ajSeqGapStandard (data->Seq[i], '-');
   }
 
@@ -1228,6 +1277,7 @@ AjBool ajAlignDefineSS (AjPAlign thys, AjPSeq seqa, AjPSeq seqb) {
 
   AJCNEW0 (data->Start, 2);
   AJCNEW0 (data->End, 2);
+  AJCNEW0 (data->Offset, 2);
   AJCNEW0 (data->Rev, 2);
   AJCNEW0 (data->Seq, 2);
 
@@ -1235,14 +1285,20 @@ AjBool ajAlignDefineSS (AjPAlign thys, AjPSeq seqa, AjPSeq seqb) {
   data->End[0] = ajSeqLen(seqa);
   data->Offset[0] = 0;
   data->Rev[0] = ajFalse;
-  data->Seq[0] = ajSeqNewS(seqa);
+  if (thys->SeqExternal)
+    data->Seq[0] = seqa;
+  else
+    data->Seq[0] = ajSeqNewS(seqa);
   ajSeqGapStandard (data->Seq[0], '-');
 
   data->Start[1] = 1;
-  data->End[1] = ajSeqLen(seqa);
+  data->End[1] = ajSeqLen(seqb);
   data->Offset[1] = 0;
   data->Rev[1] = ajFalse;
-  data->Seq[1] = ajSeqNewS(seqa);
+  if (thys->SeqExternal)
+    data->Seq[1] = seqb;
+  else
+    data->Seq[1] = ajSeqNewS(seqb);
   ajSeqGapStandard (data->Seq[1], '-');
 
   data->Len = AJMAX (ajSeqLen(seqa), ajSeqLen(seqb));
@@ -1280,7 +1336,7 @@ void ajAlignDel (AjPAlign* pthys) {
   ajStrDel(&thys->ExtPen);
   
   while (ajListPop(thys->Data, (void**) &data)) {
-    alignDataDel(&data);
+    alignDataDel(&data, thys->SeqExternal);
   }
 
   ajListFree (&thys->Data);
@@ -1290,7 +1346,7 @@ void ajAlignDel (AjPAlign* pthys) {
   return;
 }
 
-/* @func ajAlignReset **********************************************************
+/* @func ajAlignReset *********************************************************
 **
 ** Reset for Alignment objects
 **
@@ -1304,7 +1360,7 @@ void ajAlignReset (AjPAlign thys) {
   AlignPData data;
 
   while (ajListPop(thys->Data, (void**) &data)) {
-    alignDataDel(&data);
+    alignDataDel(&data, thys->SeqExternal);
   }
 
   ajListFree (&thys->Data);
@@ -1560,8 +1616,13 @@ void ajAlignWriteHeader (AjPAlign thys) {
 
   ajFmtPrintF (outf, "# Aligned_sequences: %d\n", thys->Nseqs);
   for (i=0; i < thys->Nseqs; i++) {
-    ajFmtPrintF (outf, "# %d: %S\n",
-	       i+1, alignSeqName(thys, i));
+    ajStrAssC(&tmpstr, "");
+    if (thys->Showacc)
+      ajFmtPrintAppS (&tmpstr, " (%S)", ajSeqGetAcc(alignSeq(thys,i, 0)));
+    if (thys->Showdes)
+      ajFmtPrintAppS (&tmpstr, " %S", ajSeqGetDesc(alignSeq(thys,i, 0)));
+    ajFmtPrintF (outf, "# %d: %S%S\n",
+	       i+1, alignSeqName(thys, i), tmpstr);
   }
 
   if (ajStrLen(thys->Matrix))
@@ -2259,7 +2320,32 @@ void ajAlignSetType (AjPAlign thys) {
   return;
 }
 
-/* @func ajAlignSetRange ************************************************
+/* @func ajAlignSetExternal ***************************************************
+**
+** Sets the align object to use external sequence references, which are
+** to be copied pointers rather than clones of the whoe sequence.
+**
+** Intended for alignments of large sequences where there is no need to
+** keep many copies. An example is the EMBOSS application wordmatch.
+**
+** @param [R] thys [AjPAlign] Alignment object
+** @param [R] external [AjBool] If true, do not make copies of sequence data
+**                              and do not delete internal sequence data
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajAlignSetExternal (AjPAlign thys, AjBool external) {
+
+  ajDebug("ajAlignSetExternal old:%B new:%B\n",
+	  thys->SeqExternal, external);
+
+  thys->SeqExternal = external;
+
+  return;
+}
+
+/* @func ajAlignSetRange ******************************************************
 **
 ** Sets the alignment range in each sequence, but only for a
 ** pairwise alignment
@@ -2296,9 +2382,22 @@ AjBool ajAlignSetRange (AjPAlign thys,
   data = pdata[nali-1];
   data->Start[0] = start1;
   data->End[0] = end1;
+  data->Offset[0] = 0;
+  data->Rev[0] = ajFalse;
 
   data->Start[1] = start2;
   data->End[1] = end2;
+  data->Offset[1] = 0;
+  data->Rev[1] = ajFalse;
+
+  /* No ... do not set the length ... only set the range */
+  /* 
+  data->Len = (end1 - start1) + 1;
+  if (data->Len < (end2 - start2 + 1))
+    data->Len = (end2 - start2) + 1;
+
+  ajDebug("len:  %d\n", data->Len);
+  */
 
   AJFREE (pdata);
  
@@ -2321,6 +2420,9 @@ static AjPStr alignSeqName (AjPAlign thys, ajint i) {
 
   seq = alignSeq(thys, i, 0);
 
+  ajDebug ("alignSeqName acc '%S' des '%S'\n",
+	   ajSeqGetAcc(seq), ajSeqGetDesc(seq));
+
   if (thys->Showusa)
     return ajSeqGetUsa(seq);
 
@@ -2332,10 +2434,12 @@ static AjPStr alignSeqName (AjPAlign thys, ajint i) {
 ** Deletes an alignment data structure
 **
 ** @param [D] pthys [AlignPData*] Alignment data structure
+** @param [R] external [AjBool] Sequence is a pointer to an external
+**                              object, do not delete.
 ** @return [void]
 ******************************************************************************/
 
-static void alignDataDel (AlignPData* pthys) {
+static void alignDataDel (AlignPData* pthys, AjBool external) {
 
   AlignPData thys = *pthys;
   ajint i;
@@ -2346,8 +2450,12 @@ static void alignDataDel (AlignPData* pthys) {
   AJFREE (thys->Offset);
 
   ajStrDel(&thys->Score);
-  for(i=0;i<thys->Nseqs;++i)
+  if (!external)
+  {
+    for(i=0;i<thys->Nseqs;++i)
       ajSeqDel(&thys->Seq[i]);
+  }
+
   AJFREE(thys->Seq);
   AJFREE (*pthys);
 
