@@ -1,0 +1,223 @@
+
+                              EMBOSS: restover
+     _________________________________________________________________
+   
+                               Program restover
+                                       
+Function
+
+   Finds restriction enzymes that produce a specific overhang
+   
+Description
+
+   The Restriction Enzyme database (REBASE) is a collection of
+   information about restriction enzymes and related proteins. It
+   contains published and unpublished references, recognition and
+   cleavage sites, isoschizomers, commercial availability, methylation
+   sensitivity, crystal and sequence data. DNA methyltransferases, homing
+   endonucleases, nicking enzymes, specificity subunits and control
+   proteins are also included. Most recently, putative DNA
+   methyltransferases and restriction enzymes, as predicted from analysis
+   of genomic sequences, are also listed.
+   
+   The home page of REBASE is: http://rebase.neb.com/rebase/rebase.html
+   
+   restover takes a specified sequence and a short sequence of a cut-site
+   overhang and searches the REBASE database for matching enzymes that
+   create the desired overhang sequence when they cut the input sequence.
+   
+Usage
+
+   Here is a sample session with restover:
+
+% restover
+Finds restriction enzymes that produce a specific overhang
+Input sequence(s): em:hsfau
+Overlap sequence: cg
+Output file [hsfau.restover]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-seqcomp]           string     Overlap sequence
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -min                integer    Minimum cuts per RE
+   -max                integer    Maximum cuts per RE
+   -single             bool       Force single site only cuts
+   -threeprime         bool       3' overhang? (else 5') e.g. BamHI has CTAG
+                                  as a 5' overhang, and ApaI has CCGG as 3'
+                                  overhang.
+   -html               bool       Create HTML output
+   -[no]blunt          bool       Allow blunt end cutters
+   -[no]sticky         bool       Allow sticky end cutters
+   -[no]ambiguity      bool       Allow ambiguous matches
+   -plasmid            bool       Allow circular DNA
+   -[no]commercial     bool       Only enzymes with suppliers
+   -[no]limit          bool       Limits reports to one isoschizomer
+   -preferred          bool       Report preferred isoschizomers
+   -alphabetic         bool       Sort output alphabetically
+   -fragments          bool       Show fragment lengths
+   -name               bool       Show sequence name
+   -datafile           string     Alternative RE data file
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-seqcomp]
+   (Parameter 2) Overlap sequence Any string is accepted An empty string
+   is accepted
+   [-outfile]
+   (Parameter 3) Output file name Output file <sequence>.restover
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -min Minimum cuts per RE Integer from 1 to 1000 1
+   -max Maximum cuts per RE Integer up to 2000000000 2000000000
+   -single Force single site only cuts Yes/No No
+   -threeprime 3' overhang? (else 5') e.g. BamHI has CTAG as a 5'
+   overhang, and ApaI has CCGG as 3' overhang. Yes/No No
+   -html Create HTML output Yes/No No
+   -[no]blunt Allow blunt end cutters Yes/No Yes
+   -[no]sticky Allow sticky end cutters Yes/No Yes
+   -[no]ambiguity Allow ambiguous matches Yes/No Yes
+   -plasmid Allow circular DNA Yes/No No
+   -[no]commercial Only enzymes with suppliers Yes/No Yes
+   -[no]limit Limits reports to one isoschizomer Yes/No Yes
+   -preferred Report preferred isoschizomers Yes/No No
+   -alphabetic Sort output alphabetically Yes/No No
+   -fragments Show fragment lengths Yes/No No
+   -name Show sequence name Yes/No No
+   -datafile Alternative RE data file Any string is accepted An empty
+   string is accepted
+   
+Input file format
+
+   It reads in a normal DNA sequence USA.
+   
+Output file format
+
+   The output file from the above example is:
+     _________________________________________________________________
+   
+# Restrict of HSFAU from 1 to 518
+#
+# Minimum cuts per enzyme: 1
+# Maximum cuts per enzyme: 2000000000
+# Minimum length of recognition site: 2
+# Number of hits with any overlap: 208
+# Base Number   Enzyme          Site            5'      3'      [5'     3']
+        11      TaqI            TCGA            11      13
+        28      AciI            CCGC            25      27
+        38      AciI            CCGC            38      40
+        71      AciI            CCGC            71      73
+        73      Hin6I           GCGC            73      75
+        94      TaqI            TCGA            94      96
+        103     BsiSI           CCGG            103     105
+        162     BsiSI           CCGG            162     164
+        190     Hin6I           GCGC            190     192
+        192     Hin6I           GCGC            192     194
+        225     Bse1I           ACTGG           221     219
+        229     AciI            CCGC            226     228
+        263     AciI            CCGC            263     265
+        380     AciI            CCGC            377     379
+        383     AciI            CCGC            380     382
+        395     BsiSI           CCGG            395     397
+        398     Hin6I           GCGC            398     400
+        408     AclI            AACGTT          409     411
+        409     HpyCH4IV        ACGT            409     411
+     _________________________________________________________________
+   
+   The output from restover is a simple text one. The base number,
+   restriction enzyme name, recognition site and cut positions are shown.
+   Note that cuts are always to the right of the residue shown and that
+   5' cuts are referred to by their associated 3' number sequence. The
+   program reports enzymes that cut at two or four sites.
+   
+Data files
+
+   The data files are stored in the REBASE directory of the standard
+   EMBOSS data directory. The names are:
+   
+     * embossre.enz Cleavage information
+     * embossre.ref Reference/methylation information
+     * embossre.sup Supplier information
+       
+   The column information is described at the top of the data files
+   
+Notes
+
+   The data files must have been created before running this program.
+   This is done by running the rebaseextract program with the "withrefm"
+   file from an REBASE release. You may have to ask your system manager
+   to do this.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name                           Description
+   chaos         Create a chaos game representation plot for a sequence
+   cpgplot       Plot CpG rich areas
+   cpgreport     Reports all CpG rich regions
+   diffseq       Find differences (SNPs) between nearly identical sequences
+   dotmatcher    Displays a thresholded dotplot of two sequences
+   dotpath       Displays a non-overlapping wordmatch dotplot of two sequences
+   dottup        Displays a wordmatch dotplot of two sequences
+   einverted     Finds DNA inverted repeats
+   equicktandem  Finds tandem repeats
+   etandem       Looks for tandem repeats in a nucleotide sequence
+   isochore      Plots isochores in large DNA sequences
+   marscan       Finds MAR/SAR sites in nucleic sequences
+   newcpgreport  Report CpG rich areas
+   newcpgseek    Reports CpG rich regions
+   palindrome    Looks for inverted repeats in a nucleotide sequence
+   polydot       Displays all-against-all dotplots of a set of sequences
+   rebaseextract Extract data from REBASE
+   recode        Remove restriction sites but maintain the same translation
+   redata        Search REBASE for enzyme name, references, suppliers etc
+   remap         Display a sequence with restriction cut sites, translation etc
+   restrict      Finds restriction enzyme cleavage sites
+   showseq       Display a sequence with features, translation etc
+   silent        Silent mutation restriction enzyme scan
+   tfscan        Scans DNA sequences for transcription factors
+   
+Author(s)
+
+   This application was written by Bernd Jagla bernd@golgi.ski.mskcc.org
+   Cellular Biochemistry and Biophysics Program, Rockefeller Research
+   Laboratories, Memorial Sloan-Kettering Cancer Center, 1275 York
+   Avenue, Box 251,New York, NY 10021.
+   
+History
+
+   Written (Jan 2001) - Bernd Jagla
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
