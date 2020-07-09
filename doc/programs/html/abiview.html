@@ -1,0 +1,584 @@
+<!--START OF HEADER - DON'T ALTER -->
+
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: abiview
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
+</a>
+</td>
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: abiview
+</H2>
+</font>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<p><hr><p>
+
+<!--END OF HEADER-->
+
+<H1>
+Program abiview
+</H1>
+<H2>
+    Function
+</H2>
+Reads ABI file and display the trace
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+        Algorithms
+  -->
+
+<b>abiview</b> reads in an ABI sequence trace file and graphically
+displays the results. 
+
+<p>
+
+The data for each nucleotide is plotted and the assigned nucleotide (G,
+A, T, C or N) in the ABI file is overlayed on the graphs. 
+
+<p>
+
+It also writes out the sequence to an output sequence file. 
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+
+Here is a sample session with abiview:
+
+<pre>
+
+% abiview
+Name of the ABI trace file: ba16d2.s1
+Output sequence [outfile.fasta]: 
+Graph type [x11]: 
+
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-fname]             string     Name of the ABI trace file
+  [-outseq]            seqout     Sequence file
+   -graph              xygraph    Graph type
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -separate           bool       Separate the trace graphs for the 4 bases
+   -yticks             bool       Display y-axis ticks
+   -window             integer    Sequence display window size
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-fname]<br>(Parameter 1)</td>
+<td>Name of the ABI trace file</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Sequence file</td>
+<td>Writeable sequence</td>
+<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-separate</td>
+<td>Separate the trace graphs for the 4 bases</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-yticks</td>
+<td>Display y-axis ticks</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-window</td>
+<td>Sequence display window size</td>
+<td>Any integer value</td>
+<td>40</td>
+</tr>
+
+</table>
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+
+This reads in a standard ABI trace file.
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+   -->
+
+It outputs a file holding a normal nucleotide sequence.
+<p>
+
+It outputs a graphical image of the traces.
+<br>
+<a href = "abiview0.gif">The graphical output from the above example is here.</A>
+
+<p>
+
+The horizontal scale of the output image labelled 'Residue Position' is
+only a very approximate indication of the spacing of residues in the
+image.  The real residue spacing is variable, as it relies on the speed
+with which the oligo-nucleotides are eluted in the ABI sequencer.  Do
+not be surprised to see the nucleotide signals spaced at a much greater
+distance than the horizontal scale might suggest. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+   -->
+
+None.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<a name=See also><h2>See also</h2></a>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="cirdna.html">cirdna</a></td><td>Draws circular maps of DNA constructs</td></tr>
+<tr><td><a href="entret.html">entret</a></td><td>Reads and writes (returns) flatfile entries</td></tr>
+<tr><td><a href="lindna.html">lindna</a></td><td>Draws linear maps of DNA constructs</td></tr>
+<tr><td><a href="notseq.html">notseq</a></td><td>Excludes a set of sequences and writes out the remaining ones</td></tr>
+<tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
+<tr><td><a href="seqret.html">seqret</a></td><td>Reads and writes (returns) sequences</td></tr>
+<tr><td><a href="seqretall.html">seqretall</a></td><td>Reads and writes (returns) a set of sequences one at a time</td></tr>
+<tr><td><a href="seqretset.html">seqretset</a></td><td>Reads and writes (returns) a set of sequences all at once</td></tr>
+<tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
+<tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
+<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+<!--
+        Who has worked on the program in the past.
+   -->
+
+This application was written by Tim Carver <a
+href="mailto:tcarver@hgmp.mrc.ac.uk">(tcarver@hgmp.mrc.ac.uk)</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    History
+</H2>
+
+<!--
+        What changes have been made.
+   -->
+
+Written (January 2001) - Tim Carver
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Comments
+</H2>
+
+<!--
+	Any comments, requests etc. that people have about the program
+   -->
+
+
+
+
+
+
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

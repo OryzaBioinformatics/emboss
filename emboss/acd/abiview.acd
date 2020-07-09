@@ -1,0 +1,46 @@
+# abiview application
+# AJAX COMMAND DEFINITION (ACD) FILE
+
+# tjc 19/12/2000
+
+appl: abiview [
+	doc: "Reads ABI file and display the trace"
+	groups: "ABI trace files, sequence display"
+]
+
+  string: fname [
+        param: Y
+        def: ""
+        info: "Name of the ABI trace file"
+  ]
+
+  seqout: outseq [
+        param: Y
+        info: "Sequence file"
+  ]
+
+  xygraph: graph [
+        req: Y
+        opt: N
+        gxtitle: "Residue Position"
+  ]
+
+  bool: separate [ 
+        req: N
+	def: N 
+	info: "Separate the trace graphs for the 4 bases" 
+  ]
+
+  bool: yticks [
+        req: N
+        def: N
+        info: "Display y-axis ticks"
+  ]
+
+  int: window [ 
+	opt: N 
+	def: 40 
+	info: "Sequence display window size" 
+  ]
+
+
