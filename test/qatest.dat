@@ -102,7 +102,8 @@ FI amir_pseae.out2
 FZ = 564
 FP /^AMIR_PSEAE\tantigenic\tmisc_feature\t4\t60\t1\.222.*; note "max score at 53"\n/
 FI amir_pseae.antigenic
-FP /ANTIGENIC/
+FP /^# Program: antigenic\n/
+FP /Sequence: AMIR_PSEAE/
 FP /246/
 FP /1[.]246/
 FP / NS.[^P]GSL/
@@ -119,7 +120,7 @@ FI act1_fugru.out2
 FZ = 1877
 FP /^ACT1_FUGRU\tantigenic\tmisc_feature\t214\t222\t1\.207\t\+\t\.\tSequence "ACT1_FUGRU\.1" ; note "max score at 217"\n/
 FI act1_fugru.antigenic
-FP /ANTIGENIC/
+FP /^# Program: antigenic\n/
 FP /1[.]207/
 FP /AA[^AV]VV/
 FZ > 100
@@ -437,10 +438,9 @@ IN
 FI stderr
 FC = 2
 FI paamir.dan
-FP /   1 GGTACCGCTGGCCGAGCATC   20 Tm=64\.9 GC%=70\.0/
-FP /   2 GTACCGCTGGCCGAGCATCT   21 Tm=63\.7 GC%=65\.0/
-FZ = 103140
-FC = 2150
+FP / 1      20 64\.9   70\.0 .* ggtaccgctggccgagcatc *\n/
+FP / 2      21 63\.7   65\.0 .* gtaccgctggccgagcatct *\n/
+FC = 2164
 //
 
 ID dan-ex2
@@ -566,13 +566,13 @@ FI acnum.hit
 FZ = 312
 FP /\A.{300}\001/
 FI acnum.trg
-FZ = 384
+FZ = 414
 FP /\A.{308}L48662\000/
 FI division.lkp
 FZ = 322
 FP /\A.{300}\001\000emrod\000/
 FI entrynam.idx
-FZ = 390
+FZ = 420
 FP /\A.{300}MMAM\000/
 //
 
@@ -627,13 +627,13 @@ FI acnum.hit
 FZ = 320
 FP /\A.{300}\003/
 FI acnum.trg
-FZ = 440
+FZ = 490
 FP /\A.{308}P53450\000/
 FI division.lkp
 FZ = 322
 FP /\A.{300}\001\000swnew\000/
 FI entrynam.idx
-FZ = 450
+FZ = 500
 FP /\A.{300}CO9_FUGRU\000/
 //
 
@@ -972,9 +972,8 @@ IN
 FI stderr
 FC = 2
 FI ap000504.diffseq
-FZ = 13839
-FP /^AP000504 overlap starts at 1\n/
-FP /^AF129756 overlap starts at 6036\n/
+FP /^# AP000504 overlap starts at 1\n/
+FP /^# AF129756 overlap starts at 6036\n/
 FP /^AP000504 2655-2658 Length: 4\nSequence: tgtg\n/
 FI AF129756.diffgff
 FZ = 11823
@@ -992,9 +991,9 @@ IN
 FI stderr
 FC = 11
 FI opsd_human.digest
-FP /^246\s+248\s+346[.]383\s+\(K\) AEK \(E\)\s*\n/
+FP /^    246     248 346\.378    K      E      AEK\s*\n/
 FP /yields 14 fragments/
-FC = 18
+FC = 33
 //
 
 
@@ -1172,15 +1171,18 @@ FC = 3
 ## stdout is written by clustalw, invoked by emma
 ##
 ## exact output file contents depend on the clustalw version
+## this is for clustalw 1.82, built from
+## ftp://ftp.ebi.ac.uk/pub/software/unix/clustalw/clustalw1.82.UNIX.tar.gz
+## file size 606683 date 'Feb  6  2001'
 ##
 FI stdout
 FC > 50
 FP /^Sequences \(1:2\) Aligned. Score:  83\n/
-FP /^Alignment Score 2432\n/
+FP /^Alignment Score 4164\n/
 FP /^GCG-Alignment file created +\S+\Z/
 FI hbb_human.aln
-FZ = 1248
-FP /^--------VHLTPEEKSAVTALWGKVN-VDEVGGEALGR-LLVVYPWTQRFFESFGDLST\n/
+FZ = 1262
+FP /^--------VHLTPEEKSAVTALWGKVN--VDEVGGEALGRLLVVYPWTQRFFESFGDLST\n/
 FI hbb_human.dnd
 FZ = 186
 FP /^HBB_HUMAN:0.08080,\nHBB_HORSE:0\.08359\)\n/
@@ -1422,7 +1424,7 @@ ID feat-pir-togff
 AP seqretallfeat
 CL ../../data/featprot.fasta -ufo ../../data/feat.pir gff::test.out -auto
 FI test.out
-FZ = 5019
+FZ = 5023
 ## active site two locations with copied annotation (note and comment)
 FP /^OPSD_HUMAN\tPIR\tact_site\t38\t38\t0\.000\t\+\t\.\tSequence "OPSD_HUMAN\.11" ; note "Cys, His" ; comment "status experimental"\n/
 FP /^OPSD_HUMAN\tPIR\tact_site\t90\t90\t0\.000\t\+\t\.\tSequence "OPSD_HUMAN.11" ; FeatFlags "0x4"\n/
@@ -1459,7 +1461,7 @@ ID feat-swiss-togff
 AP seqretallfeat
 CL tsw:laci_ecoli gff::test.out -auto
 FI test.out
-FZ = 1424
+FZ = 1428
 FP /^LACI_ECOLI\tSWISSPROT\tdna_bind\t6\t25\t0\.000\t\+\t\.\tSequence "LACI_ECOLI\.1" ; note "H-T-H MOTIF"\n/
 FP /^LACI_ECOLI\tSWISSPROT\thelix\t32\t44\t0.000\t\+\t\.\tSequence "LACI_ECOLI\.9"\n/
 //
@@ -1472,8 +1474,7 @@ IN
 FI stderr
 FC = 2
 FI amic_pseae.garnier
-FZ = 2943
-FP /^ Residue totals: H:111   E: 98   T: 81   C: 94\n/
+FP /^#  Residue totals: H:111   E: 98   T: 81   C: 94\n/
 //
 
 ID geecee-ex
@@ -1510,8 +1511,8 @@ IN
 FI stderr
 FC = 2
 FI laci_ecoli.hth
-FZ = 240
-FP /^Score 2160 \(\+6\.54 SD\) in LACI_ECOLI at residue 4\n/
+FP /^[(]1[)] Score 2160[.]000 length 22 at residues 4->25\n/
+FP /^ Standard_deviations: 6.54\n/
 //
 
 ID hmoment-ex
@@ -1597,8 +1598,8 @@ FI stderr
 FC = 1
 FI stdout
 FZ = 1590
-FP /^<tr><tr>msf::\.\./\.\./data/globins\.msf:HBA_HORSE<\/tr>\n/
-FP /^<tr>HBA_HORSE<\/tr>\n/
+FP /^<tr><td>msf::\.\./\.\./data/globins\.msf:HBA_HORSE<\/td>\n/
+FP /^<td>HBA_HORSE<\/td>\n/
 //
 
 ID infoalign-ex7
@@ -1756,8 +1757,10 @@ IN
 FI stderr
 FC = 2
 FI hba_human.matcher
-FZ = 916
-FP /^  43\.4% identity in 145 HBA_HUMAN overlap; score:  264\n/
+FP /^# Identity: +63\/145 \(43\.4%\)/
+FP /^# Score: +264\n/
+FP /^HBA_HU -----GSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP\n/
+FC = 44
 //
 
 ID megamerger-ex
@@ -1791,10 +1794,10 @@ IN
 FI stderr
 FC = 2
 FI stdout 
-FZ = 16012
-FP /^Score: 795\.00\n/
-FP /^ECLACY +1351 +gtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccga 1395 +\n/
-FP /^ECLACA +10 +gtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccga 54 +\n/
+FZ > 1445
+FP /^# Score: 795\.0\n/
+FP /^ECLACY +1301 +cgcttagcggccccggcccgctttccctgctgcgtcgtcaggtgaatgaa +1350\n/
+FP /^ECLACA +1 +gtgaatgaa +9\n/
 ##
 ## starts with eclacy, ends with eclaca, small overlap
 ##
@@ -1830,10 +1833,10 @@ IN
 FI stderr
 FC = 2
 FI hba_human.needle 
-FZ = 1025
-FP /^Score: 290\.50\n/
-FP / 1 +VHLTPEEKSAVTALWGKV\.\.NVDEVGGEALGRLLVVYPWTQRFFE 43 /
-FP / 45 +HF\.DLS\.\.\.\.\.HGSAQVKGHGKKVADALTNAVAHVDDMPNALSAL 83 /
+FZ > 1270
+FP /^# Score: 290\.5\n/
+FP /HBB_HUMAN +1 +VHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDL +48\n/
+FP /HBA_HUMAN +49 +S-----HGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRV +93\n/
 //
 
 ID newcpgreport-ex
@@ -2140,7 +2143,7 @@ FI stderr
 FC = 2
 FI laci_ecoli.pepstats
 FZ = 1259
-FP /^Molecular weight = 38563\.98/
+FP /^Molecular weight = 38563\.97/
 FP /^Average Residue Weight  = 107\.122\s+Charge\s+= 1\.5\s+\n/
 FP /^Isoelectric Point = 6\.8820\n/
 FP /^A = Ala\s+44\s+12\.222\s+1\.421\s+\n/
@@ -2197,7 +2200,7 @@ FI plotcon.ps
 FZ = 20866
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 1\n/
-FI outfile.plotcon
+FI globins.plotcon
 FZ = 0
 //
 
@@ -2236,7 +2239,7 @@ FC = 2
 FI polydot.ps
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 1\n/
-FI outfile.polydot
+FI globins.polydot
 FZ = 0
 //
 
@@ -2297,6 +2300,7 @@ IN
 IN
 IN
 IN
+TI 120
 FI stderr
 FC = 2
 FI eclaci.prima 
@@ -2394,7 +2398,7 @@ IN
 IN
 FI stderr
 FC = 6
-FI outfile.prophecy 
+FI globins.prophecy 
 FZ = 13782
 FC = 173
 FP /^Maximum score\s+496\n/
@@ -2413,8 +2417,11 @@ IN
 IN
 FI stderr
 FC = 6
-FI outfile.prophecy 
-FZ = 24742
+FI globins.prophecy 
+##
+## Do not check file size. AIX reports -0.00 in some positions
+## so the file can be slightly larger
+##
 FP /^Max_score\s+645\.45\n/
 FP /^Consensus\s+PIVDT.*ELGYQG\n/
 FP /^0\.15 0\.00 0\.03 0\.03 0\.03 -0\.18 .* 0\.87 0\.87\n/
@@ -2440,6 +2447,7 @@ FP /^HBA_HUMAN +1 +VLSPADKTNVKAAWG\.GKVGAHAGEYGAEALERMFLSFPTTKTYF 44 +\n/
 # example needs modifying - what is prosite.lines
 ID prosextract-ex
 CC needs local copy of prosite
+TI 120
 AP prosextract
 IN /srsdata/flatfiles/prosite
 FI stderr
@@ -2447,6 +2455,7 @@ FC = 2
 //
 
 ID pscan-ex
+CC Needs printsextract to have been run
 AP pscan
 IN tsw:opsd_human
 IN
@@ -2470,6 +2479,7 @@ FC = 2
 //
 
 ID recoder-ex
+CC Needs rebasextract to have been run
 AP recoder
 IN tembl:hsfau
 IN EcoRII
@@ -2506,7 +2516,7 @@ IN
 FI stderr
 FC = 2
 FI eclac.remap 
-FZ = 888
+FZ = 1064
 FP /^# Enzymes that cut.*\n(\s+\S+\s+1\s+\n){4}\n/
 FP /^# Enzymes that do not cut.*\n\n/
 FP /^\s+AciI\s+1\s+\n/
@@ -2526,7 +2536,7 @@ IN
 FI stderr
 FC = 2
 FI eclac.remap
-FZ = 7325
+FZ = 7503
 FP /^\s+AspLEI\s+2\s+BstHHI,CfoI,HhaI\n/
 //
 
@@ -2545,7 +2555,7 @@ FP /^\s+11\s+TaqI\s+TCGA\s+11\s+13\s+\n/
 //
 
 ID restrict-ex
-CC Needs rebaseextract to reformat REBASE data
+CC Needs rebasextract to have been run
 AP restrict
 IN tembl:hsfau
 IN
@@ -2554,9 +2564,8 @@ IN
 FI stderr
 FC = 2
 FI hsfau.restrict
-FZ = 10033
-FP /^\s+11\s+TaqI\s+TCGA\s+11\s+13\s+\n/
-FP /^\s+125\s+Hin4I\s+GAYNNNNNVTC\s+116\s+111\s+148\s+143\n/
+FP /^HSFAU\s+11\s+14\s+0[.]000\s+TaqI\s+TCGA\s+11\s+13\s+[.]\s+[.]+\s+\n/
+FP /^HSFAU\s+125\s+135\s+0[.]000\s+Hin4I\s+GAYNNNNNVTC\s+116\s+111\s+148\s+143\s+\n/
 //
 
 ID revseq-ex
@@ -2632,7 +2641,7 @@ IN 15
 IN
 FI stderr
 FC = 2
-FI outfile.seqmatchall
+FI eclac.seqmatchall
 FZ = 210
 FP /^1832  5646 7477 ECLAC 1 1832 ECLACA\n/
 FP /^1113  49 1161 ECLAC 1 1113 ECLACI\n/
@@ -3561,7 +3570,7 @@ CL -auto ../../data/dna.embl gff::test.out
 FI test.out
 FZ = 191
 FP /^##gff-version 2\n/
-FP /^##source-version EMBOSS 2\.0\.0\n/
+FP /^##source-version EMBOSS [0-9.]+\n/
 FP /^##date [0-9\-]+\n/
 FP /^##DNA EMBL\n/
 FP /^##acgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgt\n/
@@ -3574,7 +3583,7 @@ CL -auto ../../data/dna.embl test.out -osf gff
 FI test.out
 FZ = 191
 FP /^##gff-version 2\n/
-FP /^##source-version EMBOSS 2\.0\.0\n/
+FP /^##source-version EMBOSS [0-9.]+\n/
 FP /^##date [0-9\-]+\n/
 FP /^##DNA EMBL\n/
 FP /^##acgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgtacgt\n/
@@ -4416,6 +4425,180 @@ FZ = 6376
 FP /^>HSFOS /
 //
 
+#####################################################
+# Testing NCBI formatted ID lines are correctly split
+#####################################################
+
+ID seqret-ncbi-gb
+AP seqret
+CL ../../data/testids.ncbi:GENBANK test.out -auto
+FI test.out
+FP 1 /^>/
+FP /^>GENBANK G12345 /
+FP /^GENBANK$/
+FZ = 58
+//
+
+ID seqret-ncbi-embl
+AP seqret
+CL ../../data/testids.ncbi:EMBL test.out -auto
+FI test.out
+FP 1 /^>/
+FP /^>EMBL E12345 /
+FP /^EMBL$/
+FZ = 49
+//
+
+ID seqret-ncbi-ddbj
+AP seqret
+CL ../../data/testids.ncbi:DDBJ test.out -auto
+FI test.out
+FP 1 /^>/
+FP /^>DDBJ D12345 /
+FP /^DDB-$/
+FZ = 49
+//
+
+ID seqret-ncbi-pir
+AP seqret
+CL ../../data/testids.ncbi:PIR test.out -auto
+FI test.out
+FP 1 /^>/
+FP /^>PIR PIR/
+FP /^PIR$/
+FZ = 40
+//
+
+ID seqret-ncbi-prf
+AP seqret
+CL ../../data/testids.ncbi:PRF test.out -auto
+FI test.out
+FP 1 /^>/
+FP /^>PRF Protein /
+FP /^PRF$/
+FZ = 58
+//
+
+ID seqret-ncbi-swissprt
+AP seqret
+CL ../../data/testids.ncbi:SWISS_PRT test.out -auto
+FI test.out
+FP 1 /^>/
+FP /^>SWISS_PRT P01234/
+FP /^SWISSPR-T$/
+FZ = 64
+//
+
+ID seqret-ncbi-pdb
+AP seqret
+CL ../../data/testids.ncbi:2PDBA test.out -auto
+FI test.out
+FP 1 /^>/
+FP /^>2PDBA PDB /
+FP /^-PDB-A$/
+FZ = 35
+//
+
+ID seqret-ncbi-pat
+AP seqret
+CL ../../data/testids.ncbi:12345 test.out -auto
+FI test.out
+FP 1 /^>/
+FP /^>12345 Patent/
+FP /^PAT-K$/
+FZ = 39
+//
+
+ID seqret-ncbi-bbs
+AP seqret
+CL ../../data/testids.ncbi:GENINFO test.out -auto
+FI test.out
+FP 1 /^>/
+FP /^>geninfo Geninfo/
+FP /^GENINF-$/
+FZ = 37
+//
+
+ID seqret-ncbi-gnl
+AP seqret
+CL ../../data/testids.ncbi:E1234 test.out -auto
+FI test.out
+FP 1 /^>/
+FP /^>e1234 General/
+FP /^GNLPID$/
+FZ = 68
+//
+
+ID seqret-ncbi-ref1
+AP seqret
+CL ../../data/testids.ncbi:REF_12345 test.out -auto
+FI test.out
+FP 1 /^>/
+FP /^>REF_12345 NP_007225[.]1/
+FP /^REFSEQ$/
+FZ = 54
+//
+
+ID seqret-ncbi-ref2
+AP seqret
+CL ../../data/testids.ncbi:NM_012488.1 test.out -auto
+FI test.out
+FP 1 /^>/
+FP /^>NM_012488[.]1 NM_012488[.]1 /
+FP /^REFSEQ$/
+FZ = 70
+//
+
+ID seqret-ncbi-lcl
+AP seqret
+CL ../../data/testids.ncbi:LOCALID test.out -auto
+FI test.out
+FP 1 /^>/
+FP /^>localid Local /
+FP /^L-CALID$/
+FZ = 53
+//
+
+ID seqret-ncbi-gi
+AP seqret
+CL ../../data/testids.ncbi:123456 test.out -auto
+FI test.out
+FP 1 /^>/
+FP /^>123456 gi prefix/
+FP /^GIPREFIX$/
+FZ = 27
+//
+
+ID seqret-ncbi-gigb
+AP seqret
+CL ../../data/testids.ncbi:GIGENBANK test.out -auto
+FI test.out
+FP 1 /^>/
+FP /^>GIGENBANK G67890 /
+FP /^GIGENBANK$/
+FZ = 52
+//
+
+ID seqret-ncbi-gisp
+AP seqret
+CL ../../data/testids.ncbi:GISWISS_PRT test.out -auto
+FI test.out
+FP 1 /^>/
+FP /^>GISWISS_PRT P01234 /
+FP /^GISWISSPR-T$/
+FZ = 58
+//
+
+ID seqret-ncbi-gnlblast
+AP seqret
+CL ../../data/testids.ncbi:BLAST test.out -auto
+FI test.out
+FP 1 /^>/
+FP /^>blast formatdb /
+FP /^BLAST$/
+FZ = 46
+//
+
 # change example to use globins.msf
 ID showalign-ex
 AP showalign
@@ -4572,10 +4755,9 @@ IN
 FI stderr
 FC = 2
 FI ach2_drome.sig
-FZ = 1690
-FP /^Maximum score 13\.7 at residue 42\n/
-FP /^ Sequence:  LLVLLLLCETVQA-NPD/
-FP 9 /^ Sequence:  /
+FP /^[(]1[)] Score 13\.739 length 13 at residues 29->41\n/
+FP /^ Sequence: LLVLLLLCETVQA\n/
+FP 9 /^ Sequence: /
 //
 
 ID silent-ex
@@ -4633,11 +4815,14 @@ IN
 FI stderr
 FC = 2
 FI hba_human.stretcher
-FZ = 1073
-FP /^scoring matrix: EBLOSUM62, gap penalties: 12/2\n/
-FP /^43\.2% identity;\s+Global alignment score: 272\n/
-FP /^HBA_HU V-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH-----GSA\n/
-FP /^HBB_HU VHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNP\n/
+FZ > 1445
+FP /^# Matrix: EBLOSUM62\n/
+FP /^# Gap_penalty: 12\n/
+FP /^# Extend_penalty: 2\n/
+FP /^# Identity: +64/148 \(43\.2%\)\n/
+FP /^# Score: 272\n/
+FP /^HBA_HU V-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DL\n/
+FP /^HBB_HU VHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDL\n/
 //
 
 ID stssearch-ex
@@ -4667,16 +4852,16 @@ FZ = 0
 FI supermatcher.error
 FZ = 0
 FI eclac.supermatcher
-FZ = 77788
-FP /^ECLAC           9/
-FP /^Score: 37305\.00/
-FP 5 /^Score: /
-FP /^ECLACY          1486/
+FZ > 71230
+FP /^ECLAC +1 /
+FP /^# Score: 37305\.0/
+FP 5 /^# Score: /
+FP /^ECLACY +1451 [acgt]+ +1492\n/
 //
 
 ID syco-ex
 AP syco
-CL -plot -cfile pae
+CL -plot -cfile Epae.cut
 IN tembl:paamir
 IN ps
 FI stderr
@@ -4739,7 +4924,7 @@ CL wossname
 FI stderr
 FC = 1
 FI stdout
-FZ = 14512
+FZ = 15434
 FP /EMBOSS: wossname/
 FP /Program wossname/
 //
@@ -4874,6 +5059,16 @@ FP /^>NC_001321.1_1/
 FP /^VNY\*SAHDHNMTEVSYIWYFFIFFGGLARTPLWP\*\*VSSQSDKL\*LGLDVFVIWLAQPTC\n/
 //
 
+ID trimest-ex
+AP trimest
+CL tembl:hsfau hsfau.seq
+FI stderr
+FC = 1
+FI hsfau.seq
+FZ = 572
+FP /poly-A tail removed/
+//
+
 # madness - never trims anything
 ID trimseq-ex
 AP trimseq
@@ -4973,12 +5168,16 @@ IN
 FI stderr
 FC = 2
 FI hba_human.water 
-FZ = 1021
-FP /^Score: 293.50\n/
-FP /^HBB_HUMAN +3 +LTPEEKSAVTALWGKV\.\.NVDEVGGEALGRLLVVYPWTQRFFESF 45 +\n/
-FP /^HBA_HUMAN +47 +\.DLS\.\.\.\.\.HGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSD 85 +\n/
-FP /^%id = 45.99\s+%similarity = 64.23\n/
-FP /^Overall %id = 43.15\s+Overall %similarity = 60.27\n/
+FZ > 1175
+FP /^# Score: 293.5\n/
+FP /^HBA_HUMAN +1 +LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLS- +48\n/
+FP /^HBB_HUMAN +1 +LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLST +48\n/
+FP /^HBA_HUMAN +49 +----HGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP +94\n/
+FP /^# Identity: +63/145 \(43\.4%\)\n/
+FP /^# Similarity: +88/145 \(60.7%\)\n/
+## Old scores ... check calculation method
+## FP /^%id = 45.99\s+%similarity = 64.23\n/
+## FP /^Overall %id = 43.15\s+Overall %similarity = 60.27\n/
 //
 
 ID wobble-ex
@@ -5096,7 +5295,7 @@ IN
 FI stderr
 FC = 2
 FI stdout
-FP /^<li><a href="#ALIGNMENT">ALIGNMENT<\/a><\/li>\n/
+FP /^<li><a href="#ALIGNMENT CONSENSUS">ALIGNMENT CONSENSUS</a></li>\n/
 //
 
 # change the URL :-)
