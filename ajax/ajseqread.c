@@ -1211,7 +1211,7 @@ static AjBool seqReadGcg (AjPSeq thys, AjPSeqin seqin) {
 	if(!seqed)
 	{
 	    p = ajStrStr(rdline);
-	    if(strstr(p,"<seqed") || strstr(p,">seqed"))
+	    if(strpbrk(p,"<>"))
 		seqed = ajTrue;
 	    else
 		(void) seqAppend (&thys->Seq, rdline);
