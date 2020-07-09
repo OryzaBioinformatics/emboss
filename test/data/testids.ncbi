@@ -12,7 +12,7 @@ PRF
 SWISSPR-T
 >pdb|2PDB|A PDB entry with chain
 -PDB-A
->pat|uk|123456 Patent entry with country
+>pat|uk|12345 Patent entry with country
 PAT-K
 >bbs|geninfo Geninfo Backbone Id
 GENINF-
