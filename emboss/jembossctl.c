@@ -27,8 +27,6 @@
 #include "emboss.h"
 #include <errno.h>
 #include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/un.h>
 #include <fcntl.h>
 #include <grp.h>
 
@@ -40,26 +38,46 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <strings.h>
+#include <sys/ioctl.h>
+#include <limits.h>
+
+#ifdef __hpux
+#include <stropts.h>
+#endif
+
+#ifdef HAVE_POLL
+#include <poll.h>
+#endif
+
+#if defined (__SVR4) && defined (__sun)
+#include <sys/filio.h>
+#endif
 
 #ifndef TOMCAT_UID
 #define TOMCAT_UID 506	  /* Set this to be the UID of the tomcat process */
 #endif
 
-#define UIDLIMIT 100
-#define GIDLIMIT 100
+#define UIDLIMIT 0
+#define GIDLIMIT 0
 
-#define R_BUFFER 2048
+
+#define TIMEOUT 30	/* Arbitrary pipe timeout (secs)                  */
+#define TIMEBUFFER 256	/* Arbitrary length buffer for time printing      */
+#define PUTTIMEOUT  120	/* Max no. of secs to write a file                */
+
+#define R_BUFFER 2048   /* Arbitrary length buffer for reentrant syscalls */
 
 static AjBool jctl_up(char *buf,int *uid,int *gid,AjPStr *home);
 static AjBool jctl_do_fork(char *buf, int uid, int gid);
+static AjBool jctl_do_batch(char *buf, int uid, int gid);
 static AjBool jctl_do_directory(char *buf, int uid, int gid);
 static AjBool jctl_do_deletefile(char *buf, int uid, int gid);
 static AjBool jctl_do_deletedir(char *buf, int uid, int gid);
 static AjBool jctl_do_listfiles(char *buf, int uid, int gid, AjPStr *retlist);
 static AjBool jctl_do_listdirs(char *buf, int uid, int gid, AjPStr *retlist);
 static AjBool jctl_do_getfile(char *buf, int uid, int gid,
-			      unsigned char **fbuf, int *size, int sockdes);
-static AjBool jctl_do_putfile(char *buf, int uid, int gid, int sockdes);
+			      unsigned char **fbuf, int *size);
+static AjBool jctl_do_putfile(char *buf, int uid, int gid);
 
 static char **jctl_make_array(AjPStr str);
 static void jctl_tidy_strings(AjPStr *tstr, AjPStr *home, AjPStr *retlist,
@@ -67,7 +85,6 @@ static void jctl_tidy_strings(AjPStr *tstr, AjPStr *home, AjPStr *retlist,
 static void jctl_fork_tidy(AjPStr *cl, AjPStr *prog, AjPStr *enviro,
 			   AjPStr *dir, AjPStr *outstd, AjPStr *errstd);
 static AjBool jctl_check_buffer(char *buf, int mlen);
-static AjBool jcntl_check_socket_owner(char *pname);
 static AjBool jctl_chdir(char *file);
 static AjBool jctl_initgroups(char *buf, int gid);
 static void jctl_zero(char *buf);
@@ -88,6 +105,9 @@ static void jctl_zero(char *buf);
 #ifdef R_SHADOW
 #include <shadow.h>
 #endif
+#ifdef HPUX_SHADOW
+#include <shadow.h>
+#endif
 
 #ifdef PAM
 #include <security/pam_appl.h>
@@ -98,7 +118,6 @@ static void jctl_zero(char *buf);
 #endif
 
 #ifdef HPUX_SHADOW
-#include <hpsecurity.h>
 #include <prot.h>
 #endif
 
@@ -116,7 +135,17 @@ static int jctl_pam_conv(int num_msg, struct pam_message **msg,
 
 #define JBUFFLEN 10000
 
+static int jctl_pipe_read(char *buf, int n, int seconds);
+static int jctl_pipe_write(char *buf, int n, int seconds);
+static int jctl_snd(char *buf,int len);
+static int jctl_rcv(char *buf);
 
+static int java_block(int chan, unsigned long flag);
+
+
+#if defined (__SVR4) && defined (__sun)
+#define exit(a) _exit(a)
+#endif
 
 
 /* @prog jembossctl **********************************************************
@@ -128,14 +157,10 @@ static int jctl_pam_conv(int num_msg, struct pam_message **msg,
 int main(int argc, char **argv)
 {
     AjPStr message=NULL;
-    AjPStr sockname=NULL;
-    char *pname=NULL;
-    struct sockaddr_un there;
-    int sockdes;
-    int nlen;
-    char *buf=NULL;
+    char *cbuf=NULL;
     int mlen;
     int command=0;
+
     
     int uid;
     int gid;
@@ -146,178 +171,159 @@ int main(int argc, char **argv)
     AjPStr retlist=NULL;
     unsigned char *fbuf=NULL;
     int size;
-    
 
-    if(argc!=2)
-	return -1;
-    
-    sockname = ajStrNewC(argv[1]);
-    pname = ajStrStr(sockname);
-
-    if(!jcntl_check_socket_owner(pname))
-    {
-	fprintf(stderr,"jctl Not socket owner error (jembossctl)\n");
+    /* Only allow user with the real uid TOMCAT_UID to proceed */
+    if(getuid() != TOMCAT_UID)
 	exit(-1);
-    }
-
-
+    
     home = ajStrNew();
     tstr = ajStrNew();
     retlist = ajStrNew();
     
-    if(!(buf=(char *)malloc(JBUFFLEN+1)))
+
+    if(!(cbuf=(char *)malloc(JBUFFLEN+1)))
     {
-	jctl_tidy_strings(&tstr,&home,&retlist,buf);
+	jctl_tidy_strings(&tstr,&home,&retlist,cbuf);
 	fprintf(stderr,"jctl buf malloc error (jembossctl)\n");
+	fflush(stderr);
 	exit(-1);
     }
     
-    bzero((void*)buf,JBUFFLEN+1);
+    bzero((void*)cbuf,JBUFFLEN+1);
     
     jctl_empty_core_dump();
     
-    
-    if((sockdes=socket(AF_UNIX,SOCK_STREAM,0)) == -1)
-    {
-	jctl_tidy_strings(&tstr,&home,&retlist,buf);
-	fprintf(stderr,"jctl socket error (jembossctl)\n");
-	exit(-1);
-    }
-
-    there.sun_family = AF_UNIX;
-    strcpy(there.sun_path,pname);
-    nlen = ajStrLen(sockname) + sizeof(there.sun_family);
-    if(connect(sockdes,(struct sockaddr*)&there,nlen)==-1)
-    {
-	jctl_tidy_strings(&tstr,&home,&retlist,buf);
-	fprintf(stderr,"jctl connect error (jembossctl)\n");
-	exit(-1);
-    }
-    
-
 
     message = ajStrNewC("OK");
-    if(send(sockdes,ajStrStr(message),ajStrLen(message),0)==-1)
+    if(jctl_snd(ajStrStr(message),ajStrLen(message))==-1)
     {
-	jctl_tidy_strings(&tstr,&home,&retlist,buf);
+	jctl_tidy_strings(&tstr,&home,&retlist,cbuf);
 	ajStrDel(&message);
 	fprintf(stderr,"jctl send error (jembossctl)\n");
+	fflush(stderr);
 	exit(-1);
     }
     
 
 
     /* Wait for a command from jni */
-    if((mlen = recv(sockdes,buf,JBUFFLEN,0)) < 0)
+
+    if((mlen = jctl_rcv(cbuf))==-1)
     {
-	jctl_tidy_strings(&tstr,&home,&retlist,buf);
+	jctl_tidy_strings(&tstr,&home,&retlist,cbuf);
 	ajStrDel(&message);
-	fprintf(stderr,"jctl recv error (jembossctl)\n");
+	fprintf(stderr,"jctl command recv error (jembossctl)\n");
+	fflush(stderr);
 	exit(-1);
     }
 
-
-    if(!jctl_check_buffer(buf,mlen))
+    if(!jctl_check_buffer(cbuf,mlen))
     {
-	jctl_tidy_strings(&tstr,&home,&retlist,buf);
+	jctl_tidy_strings(&tstr,&home,&retlist,cbuf);
 	ajStrDel(&message);
 	fprintf(stderr,"jctl bad buffer error (jembossctl)\n");
+	fflush(stderr);
 	exit(-1);
     }
 
 
-    if(sscanf(buf,"%d",&command)!=1)
+    if(sscanf(cbuf,"%d",&command)!=1)
     {
-	jctl_tidy_strings(&tstr,&home,&retlist,buf);
+	jctl_tidy_strings(&tstr,&home,&retlist,cbuf);
 	ajStrDel(&message);
 	fprintf(stderr,"jctl sscanf error (jembossctl)\n");
+	fflush(stderr);
 	exit(-1);
     }
 
-    
 
     switch(command)
     {
     case COMM_AUTH:
-	ajStrAssC(&tstr,buf);
+	ajStrAssC(&tstr,cbuf);
 	c='\0';
 	ok = jctl_up(ajStrStr(tstr),&uid,&gid,&home);
 	if(ok)
 	    c=1;
-	if((mlen = send(sockdes,&c,1,0)) < 0)
+	
+ 	if((mlen = jctl_snd(&c,1)) < 0)
 	{
-	    jctl_tidy_strings(&tstr,&home,&retlist,buf);
+	    jctl_tidy_strings(&tstr,&home,&retlist,cbuf);
 	    ajStrDel(&message);
 	    fprintf(stderr,"jctl command send error (auth)\n");
+	    fflush(stderr);
 	    exit(-1);
 	}
 	fprintf(stdout,"%s",ajStrStr(home));
 	break;
 
     case EMBOSS_FORK:
-	ajStrAssC(&tstr,buf);
-	c='\0';
+	ajStrAssC(&tstr,cbuf);
 	ok = jctl_up(ajStrStr(tstr),&uid,&gid,&home);
 
 	if(ok)
-	{
-	    ok = jctl_do_fork(buf,uid,gid);
-	    if(ok)
-		c=1;
-	}
+	    ok = jctl_do_fork(cbuf,uid,gid);
 	break;
 
     case MAKE_DIRECTORY:
-	ajStrAssC(&tstr,buf);
+	ajStrAssC(&tstr,cbuf);
 	ok = jctl_up(ajStrStr(tstr),&uid,&gid,&home);
 	if(ok)
-	    ok = jctl_do_directory(buf,uid,gid);
+	    ok = jctl_do_directory(cbuf,uid,gid);
 	break;
 
     case DELETE_FILE:
-	ajStrAssC(&tstr,buf);
+	ajStrAssC(&tstr,cbuf);
 	ok = jctl_up(ajStrStr(tstr),&uid,&gid,&home);
 	if(ok)
-	    ok = jctl_do_deletefile(buf,uid,gid);
+	    ok = jctl_do_deletefile(cbuf,uid,gid);
 	break;
 
     case DELETE_DIR:
-	ajStrAssC(&tstr,buf);
+	ajStrAssC(&tstr,cbuf);
 	ok = jctl_up(ajStrStr(tstr),&uid,&gid,&home);
 	if(ok)
-	    ok = jctl_do_deletedir(buf,uid,gid);
+	    ok = jctl_do_deletedir(cbuf,uid,gid);
 	break;
 
     case LIST_FILES:
-	ajStrAssC(&tstr,buf);
+	ajStrAssC(&tstr,cbuf);
 	ok = jctl_up(ajStrStr(tstr),&uid,&gid,&home);
 	if(ok)
-	    ok = jctl_do_listfiles(buf,uid,gid,&retlist);
+	    ok = jctl_do_listfiles(cbuf,uid,gid,&retlist);
 	fprintf(stdout,"%s",ajStrStr(retlist));
 	break;
 
     case LIST_DIRS:
-	ajStrAssC(&tstr,buf);
+	ajStrAssC(&tstr,cbuf);
 	ok = jctl_up(ajStrStr(tstr),&uid,&gid,&home);
 	if(ok)
-	    ok = jctl_do_listdirs(buf,uid,gid,&retlist);
+	    ok = jctl_do_listdirs(cbuf,uid,gid,&retlist);
 	fprintf(stdout,"%s",ajStrStr(retlist));
 	break;
 
     case GET_FILE:
-	ajStrAssC(&tstr,buf);
+	ajStrAssC(&tstr,cbuf);
 	ok = jctl_up(ajStrStr(tstr),&uid,&gid,&home);
 	if(ok)
-	    ok = jctl_do_getfile(buf,uid,gid,&fbuf,&size,sockdes);
+	    ok = jctl_do_getfile(cbuf,uid,gid,&fbuf,&size);
 
 	break;
 
     case PUT_FILE:
-	ajStrAssC(&tstr,buf);
+	ajStrAssC(&tstr,cbuf);
 	ok = jctl_up(ajStrStr(tstr),&uid,&gid,&home);
 	if(ok)
-	    ok = jctl_do_putfile(buf,uid,gid,sockdes);
+	    ok = jctl_do_putfile(cbuf,uid,gid);
 
+	break;
+
+    case BATCH_FORK:
+	ajStrAssC(&tstr,cbuf);
+	ok = jctl_up(ajStrStr(tstr),&uid,&gid,&home);
+
+	if(ok)
+	    ok = jctl_do_batch(cbuf,uid,gid);
 	break;
 
     default:
@@ -325,10 +331,13 @@ int main(int argc, char **argv)
     }
     
 
-    bzero((void*)buf,JBUFFLEN+1);
+    bzero((void*)cbuf,JBUFFLEN+1);
     ajStrDel(&message);
-    jctl_tidy_strings(&tstr,&home,&retlist,buf);
-    
+    jctl_tidy_strings(&tstr,&home,&retlist,cbuf);
+
+    fflush(stdout);
+    fflush(stderr);
+    exit(0);
     return 0;
 }
 
@@ -427,32 +436,65 @@ static AjBool jctl_check_pass(AjPStr username, AjPStr password, ajint *uid,
 
 #ifdef HPUX_SHADOW
 static AjBool jctl_check_pass(AjPStr username, AjPStr password, ajint *uid,
-			      ajint *gid, AjPStr *home)
+			ajint *gid, AjPStr *home)
 {
-    struct pr_passwd *shadow = NULL;
-    struct passwd pwd;
-    
+    struct spwd *shadow = NULL;
+    struct spwd sresult;
+    struct passwd *pwd  = NULL;
+    struct passwd presult;
     char *p = NULL;
-
-    shadow = getprpwnam(ajStrStr(username));
-    if(!shadow)	
-	return ajFalse;
-
-    *uid = shadow->ufld.fd_uid;
-
+    char *epwd = NULL;
+    char *buf  = NULL;
+    int ret=0;
+    int trusted;
     
-    pwd = getpwnam(ajStrStr(username));
-    if(!pwd)
+
+
+    trusted = iscomsec();
+    if(!(epwd=(char *)malloc(R_BUFFER)))
 	return ajFalse;
     
+
+    if(trusted)
+    {
+	shadow = getspnam(ajStrStr(username));
+	if(!shadow)
+	{
+	    AJFREE(epwd);
+	    return ajFalse;
+	}
+	strcpy(epwd,shadow->sp_pwdp);
+    }
+    
+
+    if(!(buf=(char *)malloc(R_BUFFER)))
+	return ajFalse;
+    ret = getpwnam_r(ajStrStr(username),&presult,buf,R_BUFFER,&pwd);
+    if(ret!=0)
+    {
+	AJFREE(buf);
+	AJFREE(epwd);
+	return ajFalse;
+    }
+    if(!trusted)
+	strcpy(epwd,pwd->pw_passwd);
+    
+    *uid = pwd->pw_uid;
     *gid = pwd->pw_gid;
-
     ajStrAssC(home,pwd->pw_dir);
 
-    p = crypt(ajStrStr(password),shadow->ufld.fd_encrypt);
+    p = crypt(ajStrStr(password),epwd);
 
-    if(!strcmp(p,shadow->ufld.fd_encrypt))
+    if(!strcmp(p,epwd))
+    {
+	AJFREE(buf);
+	AJFREE(epwd);
 	return ajTrue;
+    }
+    
+    AJFREE(buf);
+    AJFREE(epwd);
+
 
     return ajFalse;
 }
@@ -495,6 +537,9 @@ static AjBool jctl_check_pass(AjPStr username, AjPStr password, ajint *uid,
     char *p = NULL;
     char *sbuf = NULL;
     char *buf  = NULL;
+#ifdef _POSIX_C_SOURCE
+    int ret=0;
+#endif
 
     if(!(buf=(char*)malloc(R_BUFFER)) || !(sbuf=(char*)malloc(R_BUFFER)))
 	return ajFalse;
@@ -508,8 +553,17 @@ static AjBool jctl_check_pass(AjPStr username, AjPStr password, ajint *uid,
         return ajFalse;
     }
     
-    
 
+#ifdef _POSIX_C_SOURCE
+    ret = getpwnam_r(ajStrStr(username),&presult,buf,R_BUFFER,&pwd);
+    
+    if(ret!=0)
+    {
+	AJFREE(buf);
+	AJFREE(sbuf);
+        return ajFalse;
+    }
+#else    
     pwd = getpwnam_r(ajStrStr(username),&presult,buf,R_BUFFER);
     
     if(!pwd)
@@ -518,7 +572,7 @@ static AjBool jctl_check_pass(AjPStr username, AjPStr password, ajint *uid,
 	AJFREE(sbuf);
         return ajFalse;
     }
-    
+#endif    
     
     *uid = pwd->pw_uid;
     *gid = pwd->pw_gid;
@@ -536,6 +590,45 @@ static AjBool jctl_check_pass(AjPStr username, AjPStr password, ajint *uid,
 
     AJFREE(buf);
     AJFREE(sbuf);
+
+    return ajFalse;
+}
+#endif
+
+
+#ifdef RNO_SHADOW
+static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
+			ajint *gid, AjPStr *home)
+{
+    struct passwd *pwd  = NULL;
+    char *p = NULL;
+    struct passwd result;
+    char *buf=NULL;
+
+    if(!(buf=(char *)malloc(R_BUFFER)))
+	return ajFalse;
+    
+    pwd = getpwnam_r(ajStrStr(username),&result,buf,R_BUFFER);
+    if(!pwd)		 /* No such username */
+    {
+	AJFREE(buf);
+	return ajFalse;
+    }
+
+    *uid = pwd->pw_uid;
+    *gid = pwd->pw_gid;
+
+    ajStrAssC(home,pwd->pw_dir);
+
+    p = crypt(ajStrStr(password),pwd->pw_passwd);
+
+    if(!strcmp(p,pwd->pw_passwd))
+    {
+	AJFREE(buf);
+	return ajTrue;
+    }
+
+    AJFREE(buf);
 
     return ajFalse;
 }
@@ -694,7 +787,6 @@ static AjBool jctl_up(char *buf, int *uid, int *gid, AjPStr *home)
 	return ajFalse;
     }
     
-
     
 #ifndef NO_AUTH
     ok = jctl_check_pass(username,password,uid,gid,home);
@@ -723,6 +815,399 @@ static AjBool jctl_up(char *buf, int *uid, int *gid, AjPStr *home)
 }
 
 
+/* @funcstatic jctl_do_batch **************************************************
+**
+** Fork emboss program
+**
+** @param [w] buf [char*] socket buffer
+** @param [w] uid [ajint*] uid
+** @param [w] gid [ajint*] gid
+**
+** @return [AjBool] true if success
+******************************************************************************/
+
+static AjBool jctl_do_batch(char *buf, int uid, int gid)
+{
+    AjPStr cl     = NULL;
+    AjPStr prog   = NULL;
+    AjPStr enviro = NULL;
+    AjPStr dir    = NULL;
+    
+    char *p=NULL;
+    char *q=NULL;
+    char c='\0';
+
+    /* Fork stuff */
+    char **argp=NULL;
+    char **envp=NULL;
+    int  pid;
+    int  status = 0;
+    int  i=0;
+
+    int  outpipe[2];
+    int  errpipe[2];
+
+#ifdef HAVE_POLL
+    struct pollfd ufds[2];
+    unsigned int  nfds;
+#else
+    fd_set rec;
+    struct timeval t;
+#endif
+
+    int nread=0;
+
+    AjPStr outstd=NULL;
+    AjPStr errstd=NULL;
+    int retval=0;
+    unsigned long block=0;
+
+    FILE *fp;
+#if defined (__SVR4) && defined (__sun) && !defined (__GNUC__)
+    struct tm tbuf;
+#endif
+    struct tm *tp=NULL;
+    const time_t tim = time(0);
+    char timstr[TIMEBUFFER];
+    
+    outstd = ajStrNew();
+    errstd = ajStrNew();
+
+    cl     = ajStrNew();
+    prog   = ajStrNew();
+    enviro = ajStrNew();
+    dir    = ajStrNew();
+
+
+    if(!jctl_initgroups(buf,gid))
+    {
+	jctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
+	return ajFalse;
+    }
+
+    
+    /* Skip over authentication stuff */
+    p=buf;
+    while(*p)
+	++p;
+    ++p;
+
+    /* retrieve command line, environment and directory */
+    ajStrAssC(&cl,p);
+    while(*p)
+	++p;
+    ++p;
+
+    ajStrAssC(&enviro,p);
+    while(*p)
+	++p;
+    ++p;
+
+    ajStrAssC(&dir,p);
+
+    jctl_zero(buf);
+
+
+    p = q = ajStrStr(cl);
+    while((c=(*p))!=' ' && c && c!='\t' && c!='\n')
+      ++p;
+    ajStrAssSubC(&prog,q,0,p-q-1);
+
+    argp = jctl_make_array(cl);
+    envp = jctl_make_array(enviro);
+
+    if(!ajSysWhichEnv(&prog,envp))
+    {
+	jctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
+	return ajFalse;
+    }
+    
+
+    while(pipe(outpipe)==-1);
+    while(pipe(errpipe)==-1);
+
+
+#if defined (__SVR4) && defined (__sun)
+    pid = fork1();
+#else
+    pid = fork();
+#endif
+    if(pid == -1)
+    {
+	close(errpipe[0]);
+	close(errpipe[1]);
+	close(outpipe[0]);
+	close(outpipe[1]);
+	jctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
+	return ajFalse;
+    }
+    
+    
+    if(!pid)			/* Child */
+    {
+	dup2(outpipe[1],1);
+	dup2(errpipe[1],2);
+	if(setgid(gid)==-1)
+	{
+	    fprintf(stderr,"setgid failure");
+	    fflush(stderr);
+	    exit(-1);
+	}
+	if(setuid(uid)==-1)
+	{
+	    fprintf(stderr,"setuid failure");
+	    fflush(stderr);
+	    exit(-1);
+	}
+	if(chdir(ajStrStr(dir))==-1)
+	{
+	    fprintf(stderr,"chdir failure");
+	    fflush(stderr);
+	    exit(-1);
+	}
+	if(execve(ajStrStr(prog),argp,envp) == -1)
+	{
+	    fprintf(stderr,"execve failure");
+	    fflush(stderr);
+	    exit(-1);
+	}
+    }
+
+
+    /* Tell JNI to continue */
+    c=1;
+    jctl_snd((char *)&c,1);
+
+    block = 1;
+    if(java_block(outpipe[0],block)==-1)
+    {
+	fprintf(stderr,"Cannot unblock 1. %d\n",errno);
+	jctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
+	return ajFalse;
+    }
+    if(java_block(errpipe[0],block)==-1)
+    {
+	fprintf(stderr,"Cannot unblock 2. %d\n",errno);
+	jctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
+	return ajFalse;
+    }
+
+    *buf = '\0';
+
+#ifdef HAVE_POLL
+    while((retval=waitpid(pid,&status,WNOHANG))!=pid)
+    {
+	if(retval==-1)
+	    if(errno!=EINTR)
+		break;
+
+	ufds[0].fd = outpipe[0];
+	ufds[1].fd = errpipe[0];
+	ufds[0].events = POLLIN | POLLPRI;
+	ufds[1].events = POLLIN | POLLPRI;
+	nfds = 2;
+	if(!(retval=poll(ufds,nfds,1)) || retval==-1)
+	    continue;
+
+	if((ufds[0].revents & POLLIN) || (ufds[0].revents & POLLPRI))
+	{
+	    while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    buf[nread]='\0';
+	    ajStrAppC(&outstd,buf);
+	}
+
+
+	if((ufds[1].revents & POLLIN) || (ufds[1].revents & POLLPRI))
+	{
+	    while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    buf[nread]='\0';
+	    ajStrAppC(&errstd,buf);
+	}
+    }
+
+
+    ufds[0].fd = outpipe[0];
+    ufds[1].fd = errpipe[0];
+    ufds[0].events = POLLIN | POLLPRI;
+    ufds[1].events = POLLIN | POLLPRI;
+    nfds = 2;
+
+    retval=poll(ufds,nfds,1);
+
+    if(retval>0)
+	if((ufds[0].revents & POLLIN) || (ufds[0].revents & POLLPRI))
+	{
+	    while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    buf[nread]='\0';
+	    ajStrAppC(&outstd,buf);
+	}
+    
+    retval=poll(ufds,nfds,1);
+
+    if(retval>0)
+	if((ufds[1].revents & POLLIN) || (ufds[1].revents & POLLPRI))
+	{
+	    while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    buf[nread]='\0';
+	    ajStrAppC(&errstd,buf);
+	}
+#else
+    while((retval=waitpid(pid,&status,WNOHANG))!=pid)
+    {
+	if(retval==-1)
+	    if(errno!=EINTR)
+		break;
+
+	FD_ZERO(&rec);
+	FD_SET(outpipe[0],&rec);
+	t.tv_sec = 0;
+	t.tv_usec = 1000;
+	select(outpipe[0]+1,&rec,NULL,NULL,&t);
+	if(FD_ISSET(outpipe[0],&rec))
+	{
+	    while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    buf[nread]='\0';
+	    ajStrAppC(&outstd,buf);
+	}
+
+	FD_ZERO(&rec);
+	FD_SET(errpipe[0],&rec);
+	t.tv_sec = 0;
+	t.tv_usec = 1000;
+	select(errpipe[0]+1,&rec,NULL,NULL,&t);
+	if(FD_ISSET(errpipe[0],&rec))
+	{
+	    while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    buf[nread]='\0';
+	    ajStrAppC(&errstd,buf);
+	}
+
+
+    }
+
+
+    FD_ZERO(&rec);
+    FD_SET(outpipe[0],&rec);
+    t.tv_sec = 0;
+    t.tv_usec = 0;
+    select(outpipe[0]+1,&rec,NULL,NULL,&t);
+    if(FD_ISSET(outpipe[0],&rec))
+    {
+	while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
+	      && errno==EINTR);
+	buf[nread]='\0';
+	ajStrAppC(&outstd,buf);
+    }
+
+
+    FD_ZERO(&rec);
+    FD_SET(errpipe[0],&rec);
+    t.tv_sec = 0;
+    t.tv_usec = 0;
+    select(errpipe[0]+1,&rec,NULL,NULL,&t);
+    if(FD_ISSET(errpipe[0],&rec))
+    {
+	while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
+	      && errno==EINTR);
+	buf[nread]='\0';
+	ajStrAppC(&errstd,buf);
+    }
+#endif
+
+
+    block = 0;
+    if(java_block(outpipe[0],block)==-1)
+    {
+	fprintf(stderr,"Cannot block 3. %d\n",errno);
+	jctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
+	return ajFalse;
+    }
+    if(java_block(errpipe[0],block)==-1)
+    {
+	fprintf(stderr,"Cannot block 4. %d\n",errno);
+	jctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
+	return ajFalse;
+    }
+
+
+    close(errpipe[0]);
+    close(errpipe[1]);
+    close(outpipe[0]);
+    close(outpipe[1]);
+
+    i = 0;
+    while(argp[i])
+	AJFREE(argp[i]);
+    AJFREE(argp);
+
+    i = 0;
+    while(envp[i])
+	AJFREE(envp[i]);
+    AJFREE(envp);
+
+
+    if(setgid(gid)==-1)
+    {
+	fprintf(stderr,"Setgid error (do_batch)\n");
+	jctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
+	return ajFalse;
+    }
+
+
+    if(setuid(uid)==-1)
+    {
+	fprintf(stderr,"Setgid error (do_batch)\n");
+	jctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
+	return ajFalse;
+    }
+
+
+    if(chdir(ajStrStr(dir))==-1)
+    {
+	fprintf(stderr,"chdir error (do_batch)\n");
+	jctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
+	return ajFalse;
+    }
+
+
+#if defined (__SVR4) && defined (__sun) && !defined (__GNUC__)
+    tp = localtime_r(&tim,&tbuf);
+#else
+    tp = localtime(&tim);
+#endif
+    strftime(timstr,TIMEBUFFER,"%a %b %d %H:%M:%S %Z %Y",tp);
+
+
+    if(!(fp=fopen(".finished","w")))
+    {
+	fprintf(stderr,"fopen error (do_batch)\n");
+	jctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
+	return ajFalse;
+    }
+
+    fprintf(fp,"%s\n",timstr);
+    if(fclose(fp))
+    {
+	fprintf(stderr,"fclose error (do_batch)\n");
+	jctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
+	return ajFalse;
+    }
+
+    jctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
+
+
+    return ajTrue;
+}
+
+
+
+
 /* @funcstatic jctl_do_fork **************************************************
 **
 ** Fork emboss program
@@ -740,10 +1225,10 @@ static AjBool jctl_do_fork(char *buf, int uid, int gid)
     AjPStr prog   = NULL;
     AjPStr enviro = NULL;
     AjPStr dir    = NULL;
-    AjPStrTok handle=NULL;
     
     char *p=NULL;
-
+    char *q=NULL;
+    char c='\0';
 
     /* Fork stuff */
     char **argp=NULL;
@@ -754,14 +1239,22 @@ static AjBool jctl_do_fork(char *buf, int uid, int gid)
 
     int  outpipe[2];
     int  errpipe[2];
-    
+
+#ifdef HAVE_POLL
+    struct pollfd ufds[2];
+    unsigned int  nfds;
+#else
     fd_set rec;
     struct timeval t;
+#endif
+
     int nread=0;
 
     AjPStr outstd=NULL;
     AjPStr errstd=NULL;
     int retval=0;
+    unsigned long block=0;
+    
 
     outstd = ajStrNew();
     errstd = ajStrNew();
@@ -800,10 +1293,12 @@ static AjBool jctl_do_fork(char *buf, int uid, int gid)
 
     jctl_zero(buf);
 
-    handle = ajStrTokenInit(cl," \t\n");
-    ajStrToken(&prog,&handle,NULL);
-    ajStrTokenClear(&handle);
-    
+
+    p = q = ajStrStr(cl);
+    while((c=(*p))!=' ' && c && c!='\t' && c!='\n')
+      ++p;
+    ajStrAssSubC(&prog,q,0,p-q-1);
+
     argp = jctl_make_array(cl);
     envp = jctl_make_array(enviro);
 
@@ -814,12 +1309,15 @@ static AjBool jctl_do_fork(char *buf, int uid, int gid)
     }
     
 
-    pipe(outpipe);
-    pipe(errpipe);
+    while(pipe(outpipe)==-1);
+    while(pipe(errpipe)==-1);
 
 
-
+#if defined (__SVR4) && defined (__sun)
+    pid = fork1();
+#else
     pid = fork();
+#endif
     if(pid == -1)
     {
 	close(errpipe[0]);
@@ -838,36 +1336,124 @@ static AjBool jctl_do_fork(char *buf, int uid, int gid)
 	if(setgid(gid)==-1)
 	{
 	    fprintf(stderr,"setgid failure");
+	    fflush(stderr);
 	    exit(-1);
 	}
 	if(setuid(uid)==-1)
 	{
 	    fprintf(stderr,"setuid failure");
+	    fflush(stderr);
 	    exit(-1);
 	}
 	if(chdir(ajStrStr(dir))==-1)
 	{
 	    fprintf(stderr,"chdir failure");
+	    fflush(stderr);
 	    exit(-1);
 	}
 	if(execve(ajStrStr(prog),argp,envp) == -1)
 	{
 	    fprintf(stderr,"execve failure");
+	    fflush(stderr);
 	    exit(-1);
 	}
     }
 
 
-    while((retval=waitpid(pid,&status,WNOHANG))!=pid && !retval)
+    block = 1;
+    if(java_block(outpipe[0],block)==-1)
     {
+	fprintf(stderr,"Cannot unblock 5. %d\n",errno);
+	jctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
+	return ajFalse;
+    }
+    if(java_block(errpipe[0],block)==-1)
+    {
+	fprintf(stderr,"Cannot unblock 6. %d\n",errno);
+	jctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
+	return ajFalse;
+    }
+
+
+    *buf = '\0';
+
+#ifdef HAVE_POLL
+    while((retval=waitpid(pid,&status,WNOHANG))!=pid)
+    {
+	if(retval==-1)
+	    if(errno!=EINTR)
+		break;
+
+	ufds[0].fd = outpipe[0];
+	ufds[1].fd = errpipe[0];
+	ufds[0].events = POLLIN | POLLPRI;
+	ufds[1].events = POLLIN | POLLPRI;
+	nfds = 2;
+	if(!(retval=poll(ufds,nfds,1)) || retval==-1)
+	    continue;
+
+	if((ufds[0].revents & POLLIN) || (ufds[0].revents & POLLPRI))
+	{
+	    while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    buf[nread]='\0';
+	    ajStrAppC(&outstd,buf);
+	}
+
+
+	if((ufds[1].revents & POLLIN) || (ufds[1].revents & POLLPRI))
+	{
+	    while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    buf[nread]='\0';
+	    ajStrAppC(&errstd,buf);
+	}
+    }
+
+
+    ufds[0].fd = outpipe[0];
+    ufds[1].fd = errpipe[0];
+    ufds[0].events = POLLIN | POLLPRI;
+    ufds[1].events = POLLIN | POLLPRI;
+    nfds = 2;
+
+    retval=poll(ufds,nfds,1);
+
+    if(retval>0)
+	if((ufds[0].revents & POLLIN) || (ufds[0].revents & POLLPRI))
+	{
+	    while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    buf[nread]='\0';
+	    ajStrAppC(&outstd,buf);
+	}
+    
+    retval=poll(ufds,nfds,1);
+
+    if(retval>0)
+	if((ufds[1].revents & POLLIN) || (ufds[1].revents & POLLPRI))
+	{
+	    while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
+	    buf[nread]='\0';
+	    ajStrAppC(&errstd,buf);
+	}
+#else
+    while((retval=waitpid(pid,&status,WNOHANG))!=pid)
+    {
+	if(retval==-1)
+	    if(errno!=EINTR)
+		break;
+
 	FD_ZERO(&rec);
 	FD_SET(outpipe[0],&rec);
 	t.tv_sec = 0;
-	t.tv_usec = 0;
+	t.tv_usec = 1000;
 	select(outpipe[0]+1,&rec,NULL,NULL,&t);
 	if(FD_ISSET(outpipe[0],&rec))
 	{
-	    nread = read(outpipe[0],(void *)buf,JBUFFLEN);
+	    while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
 	    buf[nread]='\0';
 	    ajStrAppC(&outstd,buf);
 	}
@@ -875,11 +1461,12 @@ static AjBool jctl_do_fork(char *buf, int uid, int gid)
 	FD_ZERO(&rec);
 	FD_SET(errpipe[0],&rec);
 	t.tv_sec = 0;
-	t.tv_usec = 0;
+	t.tv_usec = 1000;
 	select(errpipe[0]+1,&rec,NULL,NULL,&t);
 	if(FD_ISSET(errpipe[0],&rec))
 	{
-	    nread = read(errpipe[0],(void *)buf,JBUFFLEN);
+	    while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
+		  && errno==EINTR);
 	    buf[nread]='\0';
 	    ajStrAppC(&errstd,buf);
 	}
@@ -895,7 +1482,8 @@ static AjBool jctl_do_fork(char *buf, int uid, int gid)
     select(outpipe[0]+1,&rec,NULL,NULL,&t);
     if(FD_ISSET(outpipe[0],&rec))
     {
-	nread = read(outpipe[0],(void *)buf,JBUFFLEN);
+	while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
+	      && errno==EINTR);
 	buf[nread]='\0';
 	ajStrAppC(&outstd,buf);
     }
@@ -908,10 +1496,29 @@ static AjBool jctl_do_fork(char *buf, int uid, int gid)
     select(errpipe[0]+1,&rec,NULL,NULL,&t);
     if(FD_ISSET(errpipe[0],&rec))
     {
-	nread = read(errpipe[0],(void *)buf,JBUFFLEN);
+	while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
+	      && errno==EINTR);
 	buf[nread]='\0';
 	ajStrAppC(&errstd,buf);
     }
+#endif
+
+
+    block = 0;
+    if(java_block(outpipe[0],block)==-1)
+    {
+	fprintf(stderr,"Cannot block 7. %d\n",errno);
+	jctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
+	return ajFalse;
+    }
+    if(java_block(errpipe[0],block)==-1)
+    {
+	fprintf(stderr,"Cannot block 8. %d\n",errno);
+	jctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
+	return ajFalse;
+    }
+
+
 
     fprintf(stdout,"%s",ajStrStr(outstd));
     fprintf(stderr,"%s",ajStrStr(errstd));
@@ -934,6 +1541,7 @@ static AjBool jctl_do_fork(char *buf, int uid, int gid)
 
     jctl_fork_tidy(&cl,&prog,&enviro,&dir,&outstd,&errstd);
 
+
     return ajTrue;
 }
 
@@ -952,25 +1560,27 @@ static char **jctl_make_array(AjPStr str)
 {
     int n;
     char **ptr=NULL;
-    AjPStrTok handle;
-    AjPStr token;
+    AjPStr buf;
+    char   *save=NULL;
     
-    token = ajStrNew();
+    buf = ajStrNew();
     
-    n = ajStrTokenCount(&str," \t\n");
+    n = ajStrTokenCountR(&str," \t\n");
 
     AJCNEW0(ptr,n+1);
 
     ptr[n] = NULL;
 
     n = 0;
-    
-    handle = ajStrTokenInit(str," \t\n");
-    while(ajStrToken(&token,&handle,NULL))
-	ptr[n++] = ajCharNew(token);
 
-    ajStrTokenClear(&handle);
-    ajStrDel(&token);
+    if(!ajSysStrtokR(ajStrStr(str)," \t\n",&save,&buf))
+	return ptr;
+    ptr[n++] = ajCharNew(buf);
+    
+    while(ajSysStrtokR(NULL," \t\n",&save,&buf))
+	ptr[n++] = ajCharNew(buf);
+
+    ajStrDel(&buf);
     
     return ptr;
 }
@@ -989,8 +1599,11 @@ static char **jctl_make_array(AjPStr str)
 
 static AjBool jctl_do_directory(char *buf, int uid, int gid)
 {
-    AjPStr dir    = NULL;
+    AjPStr dir = NULL;
+    AjPStr str = NULL;
     char *p=NULL;
+    char *dbuf=NULL;
+    int  len=0;
 
 
     dir    = ajStrNew();
@@ -1010,6 +1623,7 @@ static AjBool jctl_do_directory(char *buf, int uid, int gid)
 
     /* retrieve directory */
     ajStrAssC(&dir,p);
+
 
     jctl_zero(buf);
 
@@ -1034,20 +1648,33 @@ static AjBool jctl_do_directory(char *buf, int uid, int gid)
     }
 
 
-    if(mkdir(ajStrStr(dir),0711)==-1)
+    if(!(dbuf=(char *)malloc((len=ajStrLen(dir))+1)))
+	return ajFalse;
+    strcpy(dbuf,ajStrStr(dir));
+    
+    if(dbuf[len-1]=='/')
+	dbuf[len-1]='\0';
+    
+    str = ajStrNew();
+    ajStrAssC(&str,dbuf);
+
+    if(mkdir(ajStrStr(str),0711)==-1)
     {
+	AJFREE(dbuf);
+	ajStrDel(&str);
 	ajStrDel(&dir);
 	fprintf(stderr,"mkdir error (mkdir)\n");
 	return ajFalse;
     }
 
 
+    AJFREE(dbuf);
+    ajStrDel(&str);
     ajStrDel(&dir);
+
     
     return ajTrue;
 }
-
-
 
 
 /* @funcstatic jctl_do_deletefile *******************************************
@@ -1115,6 +1742,8 @@ static AjBool jctl_do_deletefile(char *buf, int uid, int gid)
     }
 
     ajStrDel(&ufile);    
+
+
     return ajTrue;
 }
 
@@ -1178,10 +1807,19 @@ static AjBool jctl_do_deletedir(char *buf, int uid, int gid)
 	return ajFalse;
     }
 
+    if(!jctl_chdir(ajStrStr(dir)))
+    {
+	fprintf(stderr,"jctl_chdir error (delete directory)\n");
+	ajStrDel(&dir);
+	return ajFalse;
+    }
+
+
     cmnd = ajStrNew();
     ajFmtPrintS(&cmnd,"rm -rf %S",dir);
     
 
+#ifndef __ppc__
     if(system(ajStrStr(cmnd))==-1)
     {
 	fprintf(stderr,"system error (delete directory)\n");
@@ -1190,8 +1828,14 @@ static AjBool jctl_do_deletedir(char *buf, int uid, int gid)
 	return ajFalse;
     }
     
+#else
+    ajSystem(&cmnd);
+#endif
+
     ajStrDel(&cmnd);
     ajStrDel(&dir);
+
+
     return ajTrue;
 }
 
@@ -1219,7 +1863,19 @@ static AjBool jctl_do_listfiles(char *buf, int uid, int gid,AjPStr *retlist)
     struct stat sbuf;
     AjPList list=NULL;
     AjPStr  tstr=NULL;
-    
+#if defined (__SVR4) && defined (__sun) && defined (_POSIX_C_SOURCE)
+    int ret=0;
+#endif
+#if defined (__SVR4) && defined (__sun)
+    char *dbuf=NULL;
+
+    if(!(dbuf=malloc(sizeof(struct dirent)+PATH_MAX)))
+    {
+	fprintf(stderr,"Readdir buffer failure (do_listfiles)\n");
+	return ajFalse;
+    }
+#endif
+
     dir     = ajStrNew();
     full    = ajStrNew();
 
@@ -1261,6 +1917,7 @@ static AjBool jctl_do_listfiles(char *buf, int uid, int gid,AjPStr *retlist)
     {
 	fprintf(stderr,"chdir error (list files)\n");
 	ajStrDel(&dir);
+	ajStrDel(&full);
 	return ajFalse;
     }
     
@@ -1276,8 +1933,18 @@ static AjBool jctl_do_listfiles(char *buf, int uid, int gid,AjPStr *retlist)
     ajFileDirFix(&dir);
 
     list = ajListNew();
-    
+
+#if defined (__SVR4) && defined (__sun) && defined (_POSIX_C_SOURCE)
+    for(ret=readdir_r(dirp,(struct dirent *)dbuf,&dp);dp;
+	ret=readdir_r(dirp,(struct dirent *)dbuf,&dp))
+#else
+#if defined (__SVR4) && defined (__sun) && !defined (__GNUC__)
+    for(dp=readdir_r(dirp,(struct dirent *)dbuf);dp;
+	dp=readdir_r(dirp,(struct dirent *)dbuf))
+#else
     for(dp=readdir(dirp);dp;dp=readdir(dirp))
+#endif
+#endif
     {
 	if(*(dp->d_name)=='.')
 	    continue;
@@ -1302,10 +1969,17 @@ static AjBool jctl_do_listfiles(char *buf, int uid, int gid,AjPStr *retlist)
 	ajStrDel(&tstr);
     }
     
-    ajListFree(&list);
+
+    ajListDel(&list);
     
     ajStrDel(&full);
     ajStrDel(&dir);
+
+
+#if defined (__SVR4) && defined (__sun)
+    AJFREE(dbuf);
+#endif
+
     return ajTrue;
 }
 
@@ -1334,7 +2008,19 @@ static AjBool jctl_do_listdirs(char *buf, int uid, int gid,AjPStr *retlist)
     struct stat sbuf;
     AjPList list=NULL;
     AjPStr  tstr=NULL;
-    
+#if defined (__SVR4) && defined (__sun) && defined (_POSIX_C_SOURCE)
+    int ret=0;
+#endif
+#if defined (__SVR4) && defined (__sun)
+    char *dbuf=NULL;
+
+    if(!(dbuf=malloc(sizeof(struct dirent)+PATH_MAX)))
+    {
+	fprintf(stderr,"Readdir buffer failure (do_listdirs)\n");
+	return ajFalse;
+    }
+#endif
+
 
     dir     = ajStrNew();
     full    = ajStrNew();
@@ -1374,7 +2060,7 @@ static AjBool jctl_do_listdirs(char *buf, int uid, int gid,AjPStr *retlist)
     }
     if(chdir(ajStrStr(dir))==-1)
     {
-	fprintf(stderr,"setuid error (list dirs)\n");
+	fprintf(stderr,"chdir error (list dirs)\n");
 	ajStrDel(&dir);
 	ajStrDel(&full);
 	return ajFalse;
@@ -1393,7 +2079,18 @@ static AjBool jctl_do_listdirs(char *buf, int uid, int gid,AjPStr *retlist)
 
     list = ajListNew();
 
+
+#if defined (__SVR4) && defined (__sun) && defined (_POSIX_C_SOURCE)
+    for(ret=readdir_r(dirp,(struct dirent *)dbuf,&dp);dp;
+	ret=readdir_r(dirp,(struct dirent *)dbuf,&dp))
+#else
+#if defined (__SVR4) && defined (__sun) && !defined (__GNUC__)
+    for(dp=readdir_r(dirp,(struct dirent *)dbuf);dp;
+	dp=readdir_r(dirp,(struct dirent *)dbuf))
+#else
     for(dp=readdir(dirp);dp;dp=readdir(dirp))
+#endif
+#endif
     {
 	if(*(dp->d_name)=='.')
 	    continue;
@@ -1418,10 +2115,15 @@ static AjBool jctl_do_listdirs(char *buf, int uid, int gid,AjPStr *retlist)
 	ajStrDel(&tstr);
     }
     
-    ajListFree(&list);
+    ajListDel(&list);
 
     ajStrDel(&full);
     ajStrDel(&dir);
+
+#if defined (__SVR4) && defined (__sun)
+    AJFREE(dbuf);
+#endif
+
     return ajTrue;
 }
 
@@ -1436,28 +2138,42 @@ static AjBool jctl_do_listdirs(char *buf, int uid, int gid,AjPStr *retlist)
 ** @param [w] gid [int*] gid
 ** @param [w] fbuf [unsigned char**] file
 ** @param [w] size [int*] uid
-** @param [r] sockdes [int] socket
 **
 ** @return [AjBool] true if success
 ******************************************************************************/
 
 static AjBool jctl_do_getfile(char *buf, int uid, int gid,
-			      unsigned char **fbuf, int *size, int sockdes)
+			      unsigned char **fbuf, int *size)
 {
     AjPStr file    = NULL;
     AjPStr message = NULL;
     
     char *p=NULL;
+    char *q=NULL;
     struct stat sbuf;
     int n=0;
     int sofar=0;
     int pos=0;
     int fd;
+    int sum=0;
+    unsigned long block=0;
+    long then=0L;
+    long now=0L;
+    struct timeval tv;
     
     file     = ajStrNew();
 
     if(!jctl_initgroups(buf,gid))
     {
+	message = ajStrNew();
+	ajFmtPrintS(&message,"-1");
+	if(jctl_snd(ajStrStr(message),ajStrLen(message)+1)==-1)
+	{
+	    fprintf(stderr,"get file send error\n");
+	    return ajFalse;
+	}
+	ajStrDel(&message);
+
 	fprintf(stderr,"Initgroups failure (do_getfile)\n");
 	ajStrDel(&file);
 	return ajFalse;
@@ -1476,12 +2192,53 @@ static AjBool jctl_do_getfile(char *buf, int uid, int gid,
 
     if(setgid(gid)==-1)
     {
+	message = ajStrNew();
+	ajFmtPrintS(&message,"-1");
+	if(jctl_snd(ajStrStr(message),ajStrLen(message)+1)==-1)
+	{
+	    fprintf(stderr,"get file send error\n");
+	    ajStrDel(&file);
+	    ajStrDel(&message);
+	    return ajFalse;
+	}
+	ajStrDel(&message);
+
 	fprintf(stderr,"setgid error (get file)\n");
 	ajStrDel(&file);
 	return ajFalse;
     }
+    if(setuid(uid)==-1)
+    {
+	message = ajStrNew();
+	ajFmtPrintS(&message,"-1");
+	if(jctl_snd(ajStrStr(message),ajStrLen(message)+1)==-1)
+	{
+	    fprintf(stderr,"get file send error\n");
+	    ajStrDel(&file);
+	    ajStrDel(&message);
+	    return ajFalse;
+	}
+	ajStrDel(&message);
+
+	fprintf(stderr,"setuid error (get file)\n");
+	ajStrDel(&file);
+	return ajFalse;
+    }
+
+
     if(!jctl_chdir(ajStrStr(file)))
     {
+	message = ajStrNew();
+	ajFmtPrintS(&message,"-1");
+	if(jctl_snd(ajStrStr(message),ajStrLen(message)+1)==-1)
+	{
+	    fprintf(stderr,"get file send error\n");
+	    ajStrDel(&file);
+	    ajStrDel(&message);
+	    return ajFalse;
+	}
+	ajStrDel(&message);
+
 	fprintf(stderr,"chdir error (get file)\n");
 	ajStrDel(&file);
 	return ajFalse;
@@ -1499,10 +2256,12 @@ static AjBool jctl_do_getfile(char *buf, int uid, int gid,
 
     message = ajStrNew();
     ajFmtPrintS(&message,"%d",n);
-    if(send(sockdes,ajStrStr(message),ajStrLen(message)+1,0)==-1)
+    if(jctl_snd(ajStrStr(message),ajStrLen(message)+1)==-1)
     {
 	fprintf(stderr,"get file send error\n");
-	exit(-1);
+	ajStrDel(&file);
+	ajStrDel(&message);
+	return ajFalse;
     }
 
 
@@ -1513,7 +2272,7 @@ static AjBool jctl_do_getfile(char *buf, int uid, int gid,
 	ajStrDel(&message);
 	return ajFalse;
     }
-    
+
     if(!(*fbuf=(unsigned char*)malloc(n)))
     {
 	fprintf(stderr,"malloc error (get file)\n");
@@ -1531,13 +2290,53 @@ static AjBool jctl_do_getfile(char *buf, int uid, int gid,
 	return ajFalse;
     }
 
-    if((sofar=read(fd,(void *)*fbuf,n))!=n)
+
+    block = 1;
+    if(java_block(fd,block)==-1)
     {
-	fprintf(stderr,"read loop required error (get file)\n");
-	ajStrDel(&message);
+	fprintf(stderr,"Cannot unblock 9. %d\n",errno);
 	ajStrDel(&file);
+	ajStrDel(&message);
 	return ajFalse;
     }
+
+
+    gettimeofday(&tv,NULL);
+    then = tv.tv_sec;
+
+    p = q = (char *)*fbuf;
+    while(sum!=n)
+    {
+	gettimeofday(&tv,NULL);
+	now = tv.tv_sec;
+	if(now-then >= TIMEOUT)
+	{
+	    fprintf(stderr,"getfile TIMEOUT\n");
+	    ajStrDel(&file);
+	    ajStrDel(&message);
+	    return ajFalse;
+	}
+
+	while((sofar=read(fd,p,n-(p-q)))==-1 && errno==EINTR);
+	if(sofar > 0)
+	{
+	    sum += sofar;
+	    p   += sofar;
+	    gettimeofday(&tv,NULL);
+	    then = tv.tv_sec;
+	}
+    }
+
+
+    block = 0;
+    if(java_block(fd,block)==-1)
+    {
+	fprintf(stderr,"Cannot block 10. %d\n",errno);
+	ajStrDel(&file);
+	ajStrDel(&message);
+	return ajFalse;
+    }
+
 
     if(close(fd)==-1)
     {
@@ -1548,14 +2347,55 @@ static AjBool jctl_do_getfile(char *buf, int uid, int gid,
     }
 
 
+    gettimeofday(&tv,NULL);
+    then = tv.tv_sec;
+
+
     while(pos+JBUFFLEN < n)
     {
-	fwrite((void*)&(*fbuf)[pos],1,JBUFFLEN,stdout);
-	pos += JBUFFLEN;
+	gettimeofday(&tv,NULL);
+	now = tv.tv_sec;
+	if(now-then >= TIMEOUT)
+	{
+	    fprintf(stderr,"getfile TIMEOUT\n");
+	    ajStrDel(&file);
+	    ajStrDel(&message);
+	    return ajFalse;
+	}
+
+	sofar = fwrite((void*)&(*fbuf)[pos],1,JBUFFLEN,stdout);
+	if(sofar > 0)
+	{
+	    pos += sofar;
+	    gettimeofday(&tv,NULL);
+	    then = tv.tv_sec;
+	}
     }
     if(n)
 	if(n-pos)
-	    fwrite((void *)&(*fbuf)[pos],1,n-pos,stdout);
+	{
+	    while(pos!=n)
+	    {
+		gettimeofday(&tv,NULL);
+		now = tv.tv_sec;
+		if(now-then >= TIMEOUT)
+		{
+		    fprintf(stderr,"getfile TIMEOUT\n");
+		    ajStrDel(&file);
+		    ajStrDel(&message);
+		    return ajFalse;
+		}
+
+		sofar = fwrite((void *)&(*fbuf)[pos],1,n-pos,stdout);
+		if(sofar > 0)
+		{
+		    pos += sofar;
+		    gettimeofday(&tv,NULL);
+		    then = tv.tv_sec;
+		}
+	    }
+	    
+	}
 	
     ajStrDel(&file);
     ajStrDel(&message);
@@ -1578,7 +2418,7 @@ static AjBool jctl_do_getfile(char *buf, int uid, int gid,
 ** @return [AjBool] true if success
 ******************************************************************************/
 
-static AjBool jctl_do_putfile(char *buf, int uid, int gid, int sockdes)
+static AjBool jctl_do_putfile(char *buf, int uid, int gid)
 {
     int sofar=0;
     int size;
@@ -1591,10 +2431,12 @@ static AjBool jctl_do_putfile(char *buf, int uid, int gid, int sockdes)
     long then;
     long now;
     AjPStr message = ajStrNewC("OK");
-    
+    int rval=0;
+    unsigned long block=0;
+    int sum=0;
+    int got=0;
 
-    gettimeofday(&tv,NULL);
-    then = tv.tv_sec;
+
     
     file     = ajStrNew();
 
@@ -1602,6 +2444,7 @@ static AjBool jctl_do_putfile(char *buf, int uid, int gid, int sockdes)
     {
 	fprintf(stderr,"Initgroups failure (do_putfile)\n");
 	ajStrDel(&file);
+	ajStrDel(&message);
 	return ajFalse;
     }
 
@@ -1616,7 +2459,7 @@ static AjBool jctl_do_putfile(char *buf, int uid, int gid, int sockdes)
 
     jctl_zero(buf);
 
-    if(send(sockdes,ajStrStr(message),2,0)==-1)
+    if(jctl_snd(ajStrStr(message),2)==-1)
     {
 	fprintf(stderr,"jctl OK1 error (jctl_do_putfile)\n");
 	ajStrDel(&file);
@@ -1626,7 +2469,8 @@ static AjBool jctl_do_putfile(char *buf, int uid, int gid, int sockdes)
 
 
 
-    if(recv(sockdes,buf,JBUFFLEN,0) < 0)
+    rval = jctl_rcv(buf);
+    if(rval==-1)
     {
 	fprintf(stderr,"jctl recv error (jctl_do_putfile)\n");
 	ajStrDel(&file);
@@ -1643,7 +2487,7 @@ static AjBool jctl_do_putfile(char *buf, int uid, int gid, int sockdes)
     }
 
 
-    if(send(sockdes,ajStrStr(message),2,0)==-1)
+    if(jctl_snd(ajStrStr(message),2)==-1)
     {
 	fprintf(stderr,"jctl OK2 error (jctl_do_putfile)\n");
 	ajStrDel(&file);
@@ -1665,11 +2509,14 @@ static AjBool jctl_do_putfile(char *buf, int uid, int gid, int sockdes)
     }
 
 
+    gettimeofday(&tv,NULL);
+    then = tv.tv_sec;
+
     while(sofar != size)
     {
 	gettimeofday(&tv,NULL);
 	now = tv.tv_sec;
-	if(now-then>120)
+	if(now-then>PUTTIMEOUT)
 	{
 	    fprintf(stderr,"jctl timeout error (jctl_do_putfile)\n");
 	    ajStrDel(&file);
@@ -1679,15 +2526,21 @@ static AjBool jctl_do_putfile(char *buf, int uid, int gid, int sockdes)
 	
 	
 
-	if((mlen=recv(sockdes,buf,JBUFFLEN,0))<0)
+	mlen=jctl_rcv(buf);
+	if(mlen==-1)
 	{
 	    fprintf(stderr,"jctl recv error (jctl_do_putfile)\n");
 	    ajStrDel(&file);
 	    ajStrDel(&message);
 	    return ajFalse;
 	}
-	memcpy((void *)&fbuf[sofar],(const void *)buf,mlen);
-	sofar += mlen;
+	if(mlen>0)
+	{
+	    memcpy((void *)&fbuf[sofar],(const void *)buf,mlen);
+	    sofar += mlen;
+	    gettimeofday(&tv,NULL);
+	    then = tv.tv_sec;
+	}
     }
 
 
@@ -1697,6 +2550,8 @@ static AjBool jctl_do_putfile(char *buf, int uid, int gid, int sockdes)
     if(setgid(gid)==-1)
     {
 	fprintf(stderr,"setgid error (put file)\n");
+	if(size)
+	    AJFREE(fbuf);
 	ajStrDel(&file);
 	ajStrDel(&message);
 	return ajFalse;
@@ -1704,6 +2559,8 @@ static AjBool jctl_do_putfile(char *buf, int uid, int gid, int sockdes)
     if(setuid(uid)==-1)
     {
 	fprintf(stderr,"setuid error (put file)\n");
+	if(size)
+	    AJFREE(fbuf);
 	ajStrDel(&file);
 	ajStrDel(&message);
 	return ajFalse;
@@ -1711,7 +2568,10 @@ static AjBool jctl_do_putfile(char *buf, int uid, int gid, int sockdes)
     if(!jctl_chdir(ajStrStr(file)))
     {
 	fprintf(stderr,"chdir error (put file)\n");
+	if(size)
+	    AJFREE(fbuf);
 	ajStrDel(&file);
+	ajStrDel(&message);
 	return ajFalse;
     }
 
@@ -1719,14 +2579,55 @@ static AjBool jctl_do_putfile(char *buf, int uid, int gid, int sockdes)
     if((fd=open(ajStrStr(file),O_CREAT|O_WRONLY|O_TRUNC,0600))<0)
     {
 	fprintf(stderr,"jctl open error (jctl_do_putfile)\n");
+	if(size)
+	    AJFREE(fbuf);
 	ajStrDel(&file);
 	ajStrDel(&message);
 	return ajFalse;
     }
 
-    if(write(fd,(void *)fbuf,size)<0)
+
+    block = 1;
+    if(java_block(fd,block)==-1)
     {
-	fprintf(stderr,"jctl write error %d %d(jctl_do_putfile)\n",size,fd);
+	fprintf(stderr,"Cannot unblock 11. %d\n",errno);
+	if(size)
+	    AJFREE(fbuf);
+	ajStrDel(&file);
+	ajStrDel(&message);
+	return ajFalse;
+    }
+
+
+    gettimeofday(&tv,NULL);
+    then = tv.tv_sec;
+
+    while(sum<size)
+    {
+	gettimeofday(&tv,NULL);
+	now = tv.tv_sec;
+	if(now-then>PUTTIMEOUT)
+	{
+	    fprintf(stderr,"jctl timeout error (jctl_do_putfile)\n");
+	    ajStrDel(&file);
+	    ajStrDel(&message);
+	    return ajFalse;
+	}
+
+	if((got=write(fd,(void *)fbuf,size))>0)
+	{
+	    sum += got;
+	    gettimeofday(&tv,NULL);
+	    then = tv.tv_sec;
+	}
+    }
+
+    block = 0;
+    if(java_block(fd,block)==-1)
+    {
+	fprintf(stderr,"Cannot unblock 12. %d\n",errno);
+	if(size)
+	    AJFREE(fbuf);
 	ajStrDel(&file);
 	ajStrDel(&message);
 	return ajFalse;
@@ -1735,6 +2636,8 @@ static AjBool jctl_do_putfile(char *buf, int uid, int gid, int sockdes)
     if(close(fd)<0)
     {
 	fprintf(stderr,"jctl close error (jctl_do_putfile)\n");
+	if(size)
+	    AJFREE(fbuf);
 	ajStrDel(&file);
 	ajStrDel(&message);
 	return ajFalse;
@@ -1745,6 +2648,7 @@ static AjBool jctl_do_putfile(char *buf, int uid, int gid, int sockdes)
 
     ajStrDel(&file);
     ajStrDel(&message);
+
 
     return ajTrue;
 }
@@ -1839,7 +2743,7 @@ static AjBool jctl_check_buffer(char *buf, int mlen)
     if(sscanf(buf,"%d",&command)!=1)
 	return ajFalse;
 
-    if(command<COMM_AUTH || command>PUT_FILE)
+    if(command<COMM_AUTH || command>BATCH_FORK)
 	return ajFalse;
 
     if(command==COMM_AUTH)
@@ -1856,7 +2760,7 @@ static AjBool jctl_check_buffer(char *buf, int mlen)
 	return ajFalse;
 
     /* All commands except the fork have two strings */
-    if(command != EMBOSS_FORK)
+    if((command != EMBOSS_FORK) && (command!=BATCH_FORK))
 	return ajTrue;
 
     /* Check for valid third string */
@@ -1884,31 +2788,6 @@ static AjBool jctl_check_buffer(char *buf, int mlen)
     return ajTrue;
 }
 
-
-/* @funcstatic jctl_check_socket_owner ***************************************
-**
-** Check socket ownership and if it is a socket
-**
-** @param [r] pname [char*] socket name
-**
-** @return [AjBool] true if sane
-******************************************************************************/
-
-static AjBool jcntl_check_socket_owner(char *pname)
-{
-    struct stat sbuf;
-    
-
-    if(stat(pname,&sbuf)==-1)
-	return ajFalse;
-    if(sbuf.st_uid != TOMCAT_UID)
-	return ajFalse;
-
-    if(!(sbuf.st_mode & S_IFSOCK))
-	return ajFalse;
-    
-    return ajTrue;
-}
 
 
 /* @funcstatic jctl_chdir ****************************************************
@@ -2001,6 +2880,361 @@ static void jctl_zero(char *buf)
 
     return;
 }
+
+
+
+/* @funcstatic jctl_pipe_read ************************************************
+**
+** Read a byte stream from stdin (unblocked)
+**
+** @param [r] buf [char *] buffer to read
+** @param [r] n [int] number of bytes to read
+** @param [r] seconds [int] time-out
+**
+** @return [int] 0=success  -1=failure
+** @@
+******************************************************************************/
+
+static int jctl_pipe_read(char *buf, int n, int seconds)
+{
+#ifdef HAVE_POLL
+    struct pollfd ufds;
+    unsigned int  nfds;
+#else
+    fd_set fdr;
+    fd_set fdw;
+    struct timeval tfd;
+#endif
+
+    int  sum;
+    int  got=0;
+    int  ret=0;
+    char *p;
+    int  rchan=0;
+    unsigned long block=0;
+    long then = 0;
+    long now  = 0;
+    struct timeval tv;
+    
+    gettimeofday(&tv,NULL);
+    then = tv.tv_sec;
+    
+
+    block = 1;
+    if(java_block(rchan,block)==-1)
+    {
+	fprintf(stderr,"Cannot unblock 13. %d\n",errno);
+	return -1;
+    }
+
+
+    p = buf;
+    sum = 0;
+
+
+#ifdef HAVE_POLL
+    while(sum!=n)
+    {
+	gettimeofday(&tv,NULL);
+	now = tv.tv_sec;
+	if(now-then >= seconds)
+	{
+	    fprintf(stderr,"jctl_pipe_read timeout\n");
+	    return -1;
+	}
+
+	/* Check pipe is readable */
+	ufds.fd = rchan;
+	ufds.events = POLLIN | POLLPRI;
+	nfds = 1;
+
+	ret=poll(&ufds,nfds,1);
+
+	if(ret && ret!=-1)
+	{
+	    if((ufds.revents & POLLIN) || (ufds.revents & POLLPRI))
+	    {
+		while((got=read(rchan,p,n-(p-buf)))==-1 && errno==EINTR);
+		if(got == -1)
+		{
+		    fprintf(stderr,"jctl_pipe_read read error\n");
+		    return -1;
+		}
+		sum += got;
+		p += got;
+		gettimeofday(&tv,NULL);
+		then = tv.tv_sec;
+	    }
+	}
+    }
+#else
+    while(sum!=n)
+    {
+	gettimeofday(&tv,NULL);
+	now = tv.tv_sec;
+	if(now-then >= seconds)
+	{
+	    fprintf(stderr,"jctl_pipe_read timeout\n");
+	    return -1;
+	}
+
+	/* Check pipe is readable */
+	tfd.tv_sec  = 0;
+	tfd.tv_usec = 1000;
+	FD_ZERO(&fdr);
+	FD_SET(rchan,&fdr);
+	fdw = fdr;
+	
+	ret = select(rchan+1,&fdr,&fdw,NULL,&tfd);
+
+	if(ret && ret!=-1 && FD_ISSET(rchan,&fdr))
+	{
+	    while((got=read(rchan,p,n-(p-buf)))==-1 && errno==EINTR);
+	    if(got == -1)
+	    {
+		fprintf(stderr,"jctl_pipe_read read error\n");
+		return -1;
+	    }
+	    sum += got;
+	    p += got;
+	    gettimeofday(&tv,NULL);
+	    then = tv.tv_sec;
+	}
+    }
+#endif
+
+    block = 0;
+    if(java_block(rchan,block)==-1)
+    {
+	fprintf(stderr,"Cannot block 14. %d\n",errno);
+	return -1;
+    }
+
+
+    return 0;
+}
+
+
+
+
+/* @funcstatic jctl_pipe_write ************************************************
+**
+** Write a byte stream to stdout (unblocked)
+**
+** @param [r] buf [char *] buffer to write
+** @param [r] n [int] number of bytes to write
+** @param [r] seconds [int] time-out
+**
+** @return [int] 0=success  -1=failure
+** @@
+******************************************************************************/
+
+static int jctl_pipe_write(char *buf, int n, int seconds)
+{
+#ifdef HAVE_POLL
+    struct pollfd ufds;
+    unsigned int  nfds;
+#else
+    fd_set fdr;
+    fd_set fdw;
+    struct timeval tfd;
+#endif
+
+    int  written;
+    int  sent=0;
+    int  ret=0;
+    char *p;
+    int tchan=1;
+    unsigned long block=0;
+    long then = 0;
+    long now  = 0;
+    struct timeval tv;
+    
+    gettimeofday(&tv,NULL);
+    then = tv.tv_sec;
+    
+
+    block = 1;
+    if(java_block(tchan,block)==-1)
+    {
+	fprintf(stderr,"Cannot unblock 15. %d\n",errno);
+	return -1;
+    }
+
+
+    p = buf;
+    written = 0;
+
+#ifdef HAVE_POLL
+    while(written!=n)
+    {
+	gettimeofday(&tv,NULL);
+	now = tv.tv_sec;
+	if(now-then >= seconds)
+	{
+	    fprintf(stderr,"jctl_pipe_write timeout\n");
+	    return -1;
+	}
+
+	/* Check pipe is writeable */
+	ufds.fd = tchan;
+	ufds.events = POLLOUT;
+	nfds = 1;
+	ret=poll(&ufds,nfds,1);
+
+	if(ret && ret!=-1 && (ufds.revents & POLLOUT))
+	{
+	    while((sent=write(tchan,p,n-(p-buf)))==-1 && errno==EINTR);
+	    if(sent == -1)
+	    {
+		fprintf(stderr,"jctl_pipe_write send error\n");
+		return -1;
+	    }
+	    written += sent;
+	    p += sent;
+	    gettimeofday(&tv,NULL);
+	    then = tv.tv_sec;
+	}
+    }
+#else
+    while(written!=n)
+    {
+	gettimeofday(&tv,NULL);
+	now = tv.tv_sec;
+	if(now-then >= seconds)
+	{
+	    fprintf(stderr,"jctl_pipe_write timeout\n");
+	    return -1;
+	}
+
+	/* Check pipe is writeable */
+	tfd.tv_sec  = 0;
+	tfd.tv_usec = 1000;
+	FD_ZERO(&fdw);
+	FD_SET(tchan,&fdw);
+	fdr = fdw;
+	
+	ret = select(tchan+1,&fdr,&fdw,NULL,&tfd);
+
+	if(ret && ret!=-1 && FD_ISSET(tchan,&fdw))
+	{
+	    while((sent=write(tchan,p,n-(p-buf)))==-1 && errno==EINTR);
+	    if(sent == -1)
+	    {
+		fprintf(stderr,"jctl_pipe_write send error\n");
+		return -1;
+	    }
+	    written += sent;
+	    p += sent;
+	    gettimeofday(&tv,NULL);
+	    then = tv.tv_sec;
+	}
+    }
+#endif
+
+    block = 0;
+    if(java_block(tchan,block)==-1)
+    {
+	fprintf(stderr,"Cannot block 16. %d\n",errno);
+	return -1;
+    }
+
+
+
+    return 0;
+}
+
+
+/* @funcstatic jctl_snd ************************************************
+**
+** Mimic socket write using pipes
+**
+** @param [r] buf [char *] buffer to write
+** @param [r] len [int] number of bytes to write
+**
+** @return [int] 0=success  -1=failure
+** @@
+******************************************************************************/
+
+static int jctl_snd(char *buf,int len)
+{
+
+    if(jctl_pipe_write((char *)&len,sizeof(int),TIMEOUT)==-1)
+    {
+	fprintf(stderr,"jctl_snd error\n");
+	return -1;
+    }
+    if(jctl_pipe_write(buf,len,TIMEOUT)==-1)
+    {
+	fprintf(stderr,"jctl_snd error\n");
+	return -1;
+    }
+
+    return 0;
+}
+
+
+/* @funcstatic jctl_rcv ************************************************
+**
+** Mimic socket read using pipes
+**
+** @param [r] buf [char *] buffer for read
+**
+** @return [int] 0=success  -1=failure
+** @@
+******************************************************************************/
+
+static int jctl_rcv(char *buf)
+{
+    int len;
+    
+    if(jctl_pipe_read((char *)&len,sizeof(int),TIMEOUT)==-1)
+    {
+	fprintf(stderr,"jctl_rcv error\n");
+	return -1;
+    }
+    if(jctl_pipe_read(buf,len,TIMEOUT)==-1)
+    {
+	fprintf(stderr,"jctl_rcv error\n");
+	return -1;
+    }
+
+    return len;
+}
+
+
+
+/* @funcstatic java_block ************************************************
+**
+** File descriptor block/unblock
+**
+** @param [r] chan [int] file descriptor
+** @param [r] flag [unsigned long] block=1 unblock=0
+**
+** @return [int] 0=success  -1=failure
+** @@
+******************************************************************************/
+
+static int java_block(int chan, unsigned long flag)
+{
+    
+    if(ioctl(chan,FIONBIO,&flag)==-1)
+    {
+#ifdef __sgi
+	if(errno==ENOSYS)
+	    return 0;
+#endif
+#ifdef __hpux
+	if(errno==ENOTTY)
+	    return 0;
+#endif
+	return -1;
+    }
+
+    return 0;
+}
+
+
 
 #else
 #include <stdio.h>
