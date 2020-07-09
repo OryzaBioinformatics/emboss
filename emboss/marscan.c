@@ -53,8 +53,8 @@ int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq seq;
-    AjPFeattabOut outf=NULL;
     AjPFeattable tab=NULL;
+    AjPReport report=NULL;
 
     AjPStr pattern16=ajStrNewC("awwrtaannwwgnnnc");
     AjPStr opattern16=NULL;
@@ -151,7 +151,8 @@ int main(int argc, char **argv)
     embInit ("marscan", argc, argv);
     
     seqall   = ajAcdGetSeqall("sequence");
-    outf     = ajAcdGetFeatout("outf");
+    /*  outf     = ajAcdGetFeatout("outf"); */
+    report = ajAcdGetReport ("outfile");
     
     seqname = ajStrNew();
     opattern16=ajStrNew();
@@ -260,7 +261,7 @@ int main(int argc, char **argv)
 	    marscan_stepdown (l16, l8, &tab);
 
 	    /* write features and tidy up */
-	    (void) ajFeatWrite(outf, tab);        
+	    (void) ajReportWrite(report, tab, seq);        
 	    ajFeattableDel(&tab);
 	}
 	
@@ -308,6 +309,9 @@ int main(int argc, char **argv)
 
     ajStrDel(&seqname);
     ajSeqDel(&seq);
+
+    (void) ajReportClose(report);
+    ajReportDel(&report);    
 
     ajExit();
     return 0;
@@ -650,7 +654,7 @@ static void marscan_output_stored_match(AjBool stored_match, ajint stored_dist,
 {
 
     /*
-     *  strand is set to unknown because the MAR/SAR recognition
+     *  strand is set to forward because the MAR/SAR recognition
      *  signature (MRS) is not dependent on the strand(s) it is on
      */
     char strand='+';
@@ -660,9 +664,8 @@ static void marscan_output_stored_match(AjBool stored_match, ajint stored_dist,
     AjPStr source=NULL;
     AjPStr type=NULL;
 /*    AjPStr desc=NULL;*/
-    AjPStr note=NULL;
     AjPFeature feature;
-    AjPStr notestr=NULL;
+    static AjPStr tmp=NULL;
     ajint start;
     ajint end;
     ajint e8;
@@ -671,9 +674,11 @@ static void marscan_output_stored_match(AjBool stored_match, ajint stored_dist,
     if (!stored_match)
 	return;
   	
-    ajStrAssC(&source,"marscan");
-    ajStrAssC(&type,"misc_signal");
-    ajStrAssC(&note, "note");
+    if (!type)
+    {
+      ajStrAssC(&source,"marscan");
+      ajStrAssC(&type,"misc_signal");
+    }
 
     /*
      *  get the start and end positions of the 8bp and 16bp patterns and get
@@ -696,16 +701,27 @@ static void marscan_output_stored_match(AjBool stored_match, ajint stored_dist,
     feature = ajFeatNew(*tab, source, type, start, end,
 			score, strand, frame) ;
 
-    ajFmtPrintS(&notestr,
-		"MAR/SAR recognition site (MRS). 8bp pattern=%d..%d. 16bp "
-		"pattern = %d..%d",
-		s8, e8, s16, e16);
-    ajFeatTagSet(feature, note, notestr);
+    /*
+//    ajFmtPrintS(&notestr,
+//		"MAR/SAR recognition site (MRS). 8bp pattern=%d..%d. 16bp "
+//		"pattern = %d..%d",
+//		s8, e8, s16, e16);
+    */
 
-    ajStrDel(&source);
-    ajStrDel(&type);
-    ajStrDel(&note);
-    ajStrDel(&notestr);
-    
+    ajFmtPrintS(&tmp, "*type MAR/SAR recognition site (MRS)");
+    ajFeatTagAdd(feature, NULL, tmp);
+
+    ajFmtPrintS(&tmp, "*start8bp %d", s8);
+    ajFeatTagAdd(feature, NULL, tmp);
+
+    ajFmtPrintS(&tmp, "*end8bp %d", e8);
+    ajFeatTagAdd(feature, NULL, tmp);
+
+    ajFmtPrintS(&tmp, "*start16bp %d", s16);
+    ajFeatTagAdd(feature, NULL, tmp);
+
+    ajFmtPrintS(&tmp, "*end16bp %d", e16);
+    ajFeatTagAdd(feature, NULL, tmp);
+
     return;
 }
