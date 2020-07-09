@@ -168,6 +168,7 @@ AjPFile     ajFileNewDF (const AjPStr dir, const AjPStr filename);
 AjPFile     ajFileNewDW (const AjPStr dir, const AjPStr wildfile);
 AjPFile     ajFileNewF (FILE* file);
 AjPFile     ajFileNewIn (const AjPStr name);
+AjPFile     ajFileNewInC (const char *name);
 AjPFile     ajFileNewInPipe (const AjPStr name);
 AjPFile     ajFileNewInList (const AjPList list);
 AjPFile     ajFileNewOut (const AjPStr name);
@@ -180,7 +181,7 @@ size_t      ajFileRead (void* ptr, size_t element_size, size_t count,
 FILE*       ajFileReopen (const AjPFile thys, AjPStr name);
 AjBool      ajFileReadLine (const AjPFile thys, AjPStr *pdest);
 ajuint      ajFileReadUint (const AjPFile thys, AjBool Bigendian);
-void 	    ajFileScan(AjPStr path, AjPStr filename, AjPList *result,
+ajint 	    ajFileScan(AjPStr path, AjPStr filename, AjPList *result,
 		       AjBool show, AjBool dolist, AjPList *list,
 		       AjPList rlist, AjBool recurs, const AjPFile outf);
 ajint       ajFileSeek (const AjPFile thys, ajlong offset, ajint wherefrom);

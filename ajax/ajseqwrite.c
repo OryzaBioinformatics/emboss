@@ -337,7 +337,11 @@ void ajSeqWriteClose (AjPSeqout outseq) {
   if (seqOutFormat[outseq->Format].Save)
     seqOutFormat[outseq->Format].Write (outseq);
 
-  ajFileClose (&outseq->File);
+  if (outseq->Knownfile)
+    outseq->File = NULL;
+  else
+    ajFileClose (&outseq->File);
+
   return;
 }
 
@@ -1582,8 +1586,15 @@ static void seqWriteMsf (AjPSeqout outseq) {
   
   seqWriteSeq (outseq, sf);
   */
+
+  /* AJB: Shouldn't this be left to ajSeqoutDel? */
+  while(ajListPop(outseq->Savelist,(void **)&seq))
+      ajSeqDel(&seq);
   ajListDel(&outseq->Savelist);
 
+
+  AJFREE(seqs);
+  
   return;
 }
 
@@ -1917,6 +1928,13 @@ static void seqWriteGff (AjPSeqout outseq) {
     outseq->Ftquery = ajFeattabOutNewSSF (ftfmt, outseq->Name,
 					  ajStrStr(outseq->Type),
 					  outseq->File);
+    if (ajStrMatchC(outseq->Type, "P")) {
+      ajFeattableSetProt(outseq->Fttable);
+    }
+    else {
+       ajFeattableSetDna(outseq->Fttable);
+   }
+  
     if (!ajFeatWrite (outseq->Ftquery, outseq->Fttable)) {
       ajWarn ("seqWriteGff features output failed UFO: '%S'",
 	      outseq->Ufo);
@@ -2406,7 +2424,10 @@ static AjBool seqoutUsaProcess (AjPSeqout thys) {
       ajDebug ("single output file per sequence, open later\n");
     }
     else {
-      thys->File = ajFileNewOut (thys->Filename);
+      if (thys->Knownfile)
+	thys->File = thys->Knownfile;
+      else
+	thys->File = ajFileNewOut (thys->Filename);
       if (!thys->File) {
 	ajErr ("failed to open filename %S", thys->Filename);
 	return ajFalse;
@@ -2446,7 +2467,7 @@ return ajTrue;
 
 AjBool ajSeqoutOpen (AjPSeqout thys) {
 
-  AjBool ret;
+  AjBool ret = ajFalse;
 
   ret = seqoutUsaProcess (thys);
 
@@ -2939,8 +2960,9 @@ static void seqClone (AjPSeqout outseq, AjPSeq seq) {
   outseq->Offset = ibegin;
   (void) ajStrAssSub (&outseq->Seq, seq->Seq, ibegin-1, iend-1);
 
-  ajDebug ("seqClone %d .. %d %d .. %d len; %d\n",
-	   seq->Begin, seq->End, ibegin, iend, ajStrLen(outseq->Seq));
+  ajDebug ("seqClone %d .. %d %d .. %d len: %d type: '%S'\n",
+	   seq->Begin, seq->End, ibegin, iend,
+	   ajStrLen(outseq->Seq), outseq->Type);
   ajDebug ("  Db: '%S' Name: '%S' Entryname: '%S'\n",
 	   outseq->Db, outseq->Name, outseq->Entryname);
 
@@ -2987,8 +3009,9 @@ static void seqAllClone (AjPSeqout outseq, AjPSeq seq) {
 
   (void) ajStrAssSub (&outseq->Seq, seq->Seq, ibegin-1, iend-1);
 
-  ajDebug ("seqAllClone %d .. %d %d .. %d len; %d\n",
-	   seq->Begin, seq->End, ibegin, iend, ajStrLen(outseq->Seq));
+  ajDebug ("seqAllClone %d .. %d %d .. %d len: %d type: '%S'\n",
+	   seq->Begin, seq->End, ibegin, iend,
+	   ajStrLen(outseq->Seq), outseq->Type);
   ajDebug ("  Db: '%S' Name: '%S' Entryname: '%S'\n",
 	   outseq->Db, outseq->Name, outseq->Entryname);
 
@@ -3027,7 +3050,8 @@ static void seqsetClone (AjPSeqout outseq, AjPSeqset seqset, ajint i) {
 ******************************************************************************/
 
 static void seqDeclone (AjPSeqout outseq) {
-
+    
+    
   (void) ajStrClear (&outseq->Db);
   (void) ajStrClear (&outseq->Name);
   (void) ajStrClear (&outseq->Acc);
@@ -3057,6 +3081,9 @@ static AjBool seqFileReopen (AjPSeqout outseq) {
 
   if (outseq->File)
     ajFileClose (&outseq->File);
+
+  if (outseq->Knownfile)
+    outseq->Knownfile = NULL;
 
   (void) ajFmtPrintS(&name, "%S.%S", outseq->Name, outseq->Extension);
   (void) ajStrToLower (&name);
@@ -3129,8 +3156,12 @@ void ajSeqoutClear (AjPSeqout thys) {
   thys->EType = 0;
   thys->Rev = ajFalse;
   thys->Format = 0;
-  if (thys->File)
-    ajFileClose(&thys->File);
+  if (thys->File) {
+    if (thys->Knownfile)
+      thys->File = NULL;
+    else
+      ajFileClose(&thys->File);
+  }
   thys->Count = 0;
   thys->Single = ajFalse;
   thys->Features = ajFalse;

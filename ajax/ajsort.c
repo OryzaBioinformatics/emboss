@@ -116,6 +116,41 @@ void ajSortIntIncI(ajint *a, ajint *p, ajint n)
 	    }
 }
 
+
+/* @func ajSortTwoIntIncI ****************************************************
+**
+** Based on an array of ints, sort (ascending) two ajint element array.
+**
+** @param [r] a [ajint*] Array of ints used in sort tests
+** @param [rw] p [ajint*] Second array of ints to be sorted
+** @param [r] n [ajint] Number of elements to sort
+**
+** @return [void]
+** @@
+******************************************************************************/
+void ajSortTwoIntIncI(ajint *a, ajint *p, ajint n)
+{
+    ajint s;
+    ajint i;
+    ajint j;
+    ajint t;
+
+    for(s=n/2; s>0; s /= 2)
+	for(i=s; i<n; ++i)
+	    for(j=i-s;j>=0 && a[j]>a[j+s]; j-=s)
+	    {
+		t = a[j];
+		a[j] = a[j+s];
+		a[j+s] = t;
+
+		t = p[j];
+		p[j] = p[j+s];
+		p[j+s] = t;
+	    }	    
+}
+
+
+
 /* @func ajSortFloatDec *******************************************************
 **
 ** Sort a float array.

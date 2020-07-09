@@ -109,7 +109,8 @@ AjPFile ajFileNewInPipe (const AjPStr name) {
 
   AJNEW0(thys);
   (void) ajStrAssS (&tmpname, name);
-  (void) ajStrTrim (&tmpname, -1);
+  if (ajStrChar(tmpname, -1) == '|')	/* pipe character at end */
+    (void) ajStrTrim (&tmpname, -1);
   if (pipe(pipefds) < 0)
     ajFatal("pipe create failed");
   pid = fork();  /* negative return indicates failure */
@@ -155,7 +156,7 @@ AjPFile ajFileNewInPipe (const AjPStr name) {
 **
 ** Creates a new file object to read a named file.
 **
-** If the filename begins with a pipe character then a pipe is opened
+** If the filename ends with a pipe character then a pipe is opened
 ** using ajFileNewInPipe.
 **
 ** @param [r] name [const AjPStr] File name.
@@ -250,6 +251,33 @@ AjPFile ajFileNewIn (const AjPStr name) {
 
     return thys;
 }
+
+
+
+/* @func ajFileNewInC *******************************************************
+**
+** Creates a new file object to read a named file.
+**
+** If the filename begins with a pipe character then a pipe is opened
+** using ajFileNewInPipe.
+**
+** @param [r] name [const char*] File name.
+** @return [AjPFile] New file object.
+** @@
+******************************************************************************/
+
+AjPFile ajFileNewInC (const char *name)
+{
+    AjPStr tmp;
+    AjPFile fp;
+    
+    tmp = ajStrNewC(name);
+    fp = ajFileNewIn(tmp);
+    ajStrDel(&tmp);
+
+    return fp;
+}
+
 
 /* @func ajFileNewInList ******************************************************
 **
@@ -516,8 +544,10 @@ static void fileClose (const AjPFile thys) {
 
   if (thys->Handle) {
     ajDebug ("closing file '%F'\n", thys);
-    if(fclose (thys->fp))
-      ajFatal("File close in fileClose");
+    if (thys->fp != stdout && thys->fp != stderr) {
+      if(fclose (thys->fp))
+	ajFatal("File close problem in fileClose");
+    }
     thys->Handle = 0;
 
     fileCloseCnt++;
@@ -2078,8 +2108,10 @@ void ajFileBuffDel (AjPFileBuff* pthis) {
   if (!thys)
     return;
 
+/* Causes seqfault with asis::ACDEFGH
   ajDebug("ajFileBuffDel %x '%F' Buff %x Name %x\n",
 	  thys, thys->File, thys->File->Buff->Ptr, thys->File->Name->Ptr);
+*/
 
   ajFileBuffClear (thys, -1);
   ajFileBuffFreeClear (thys);
@@ -2533,7 +2565,7 @@ void ajFileBuffReset (const AjPFileBuff thys) {
   return;
 }
 
-/* @func ajFileBuffResetPos ******************************************************
+/* @func ajFileBuffResetPos ***************************************************
 **
 ** Resets the pointer and current record of a file buffer so the next read
 ** starts at the first buffered line.
@@ -3006,13 +3038,13 @@ AjBool ajFileNameExtC (AjPStr* filename, const char* extension)
 ** @param [r] recurs [AjBool] Do recursion
 ** @param [w] outf [const AjPFile] File for "show" results (or NULL)
 **
-** @return [void]
+** @return [ajint] number of entries in list
 ** @@
 ******************************************************************************/
 
-void ajFileScan(AjPStr path, AjPStr filename, AjPList *result,
-		AjBool show, AjBool dolist, AjPList *list,
-		AjPList rlist, AjBool recurs, const AjPFile outf)
+ajint ajFileScan(AjPStr path, AjPStr filename, AjPList *result,
+		 AjBool show, AjBool dolist, AjPList *list,
+		 AjPList rlist, AjBool recurs, const AjPFile outf)
 {
     AjPList dirs=NULL;
     AjIList iter=NULL;
@@ -3040,14 +3072,14 @@ void ajFileScan(AjPStr path, AjPStr filename, AjPList *result,
     if(!ajFileDir(&tpath))
     {
 	ajStrDel(&tpath);
-	return;
+	return 0;
     }
     
 
     if(!(indir=opendir(ajStrStr(tpath))))
     {
 	ajStrDel(&tpath);
-	return;
+	return 0;
     }
     
 
@@ -3124,7 +3156,10 @@ void ajFileScan(AjPStr path, AjPStr filename, AjPList *result,
     ajStrDel(&tpath);
     ajListDel(&dirs);
 
-    return;
+    if(result)
+	return ajListLength(*result);
+
+    return 0;
 }
 
 /* @func ajFileTestSkip ****************************************************

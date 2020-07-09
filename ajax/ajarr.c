@@ -1528,6 +1528,9 @@ ajint ajArrCommaList(AjPStr s, AjPStr **a)
 
     
     n = ajStrTokenCount(&s,",\n");
+    if(!n)
+	return 0;
+    
     AJCNEW(*a, n);
     
     x = ajStrNew();

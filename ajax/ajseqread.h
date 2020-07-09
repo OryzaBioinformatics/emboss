@@ -46,7 +46,10 @@ AjBool       ajSeqReadSelex(AjPFile inf, AjPFile outf);
 void         ajSeqinUsa (AjPSeqin* pthis, AjPStr Usa);
 void         ajSeqPrintInFormat (AjPFile outf, AjBool full);
 AjBool       ajSeqRead (AjPSeq thys, AjPSeqin seqin);
+ajint        ajSeqsetApp (AjPSeqset thys, AjPSeq seq);
 AjBool       ajSeqsetRead (AjPSeqset thys, AjPSeqin seqin);
+AjBool       ajSeqsetFromList (AjPSeqset thys, AjPList list);
+ajint        ajSeqsetFromPair (AjPSeqset thys, AjPSeq seqa, AjPSeq seqb);
 
 #endif
 

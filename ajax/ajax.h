@@ -38,6 +38,7 @@ extern "C"
 #include "ajreport.h"
 #include "ajfmt.h"
 #include "ajmatrices.h"
+#include "ajalign.h"
 
 #include "ajrange.h"
 #include "ajcod.h"
@@ -63,6 +64,7 @@ extern "C"
 #include "ajacd.h"
 #include "ajcall.h"
 #include "ajcorba.h"
+#include "ajjava.h"
 
 #endif
 

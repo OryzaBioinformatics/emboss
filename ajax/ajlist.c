@@ -387,6 +387,8 @@ void ajListAppend(AjPList thys, AjPListNode morenodes)
 {
     AjPListNode more = morenodes;
         
+    assert (thys);
+
     listNodesTrace(morenodes);
 
     more->Next->Prev = thys->Last;
@@ -422,6 +424,8 @@ void ajListPushApp(AjPList thys, void* x)
        penultimate node, so we use the dummy node and make a new dummy node
        instead */
     AjPListNode tmp=NULL;
+
+    assert (thys);
 
     if(!thys->Count)
     {
@@ -700,6 +704,9 @@ void ajListReverse(AjPList thys)
     AjPListNode head = thys->Last;
     AjPListNode savenext;
     AjPListNode node;
+
+    if (!thys)
+        return;
 
     if (thys->Count <= 1)
 	return;
@@ -1047,6 +1054,8 @@ AjBool ajListFind(AjPList thys, AjBool apply(void** x, void* cl), void* cl)
 {
     AjPListNode list;
 
+    assert (thys);
+
     assert(apply);
 
     for ( list = thys->First; list->Next; list = list->Next)
@@ -1071,6 +1080,8 @@ AjBool ajListstrFind (AjPList thys, AjBool apply(AjPStr* x, void* cl),
 		      void* cl)
 {
     AjPListNode list;
+
+    assert (thys);
 
     assert(apply);
 
@@ -1794,4 +1805,159 @@ AjBool ajListstrPopEnd(AjPList thys, AjPStr *x)
 void ajListDummyFunction(void** array)
 {
     listArrayTrace(array);
+}
+
+
+/* @func ajListGarbageCollect ***********************************************
+**
+** Garbage collect a list
+**
+** @param [r] thys [AjPList] List.
+** @param [r] destruct [void* function] Wrapper function for item destructor
+** @param [r] compar [AjBool* function] Function to test whether to delete
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajListGarbageCollect(AjPList list, void (*destruct)(const void **),
+			  AjBool (*compar)(const void *))
+{
+    AjIList iter=NULL;
+    void    *ret;
+    
+
+    iter = ajListIter(list);
+    while((ret=ajListIterNext(iter)))
+	if(compar(ret))
+	    ajListRemove(iter);
+
+    ajListIterFree(iter);
+
+    return;
+}
+
+
+/* @func ajListSort2 *******************************************************
+**
+** Sort the items in a list using 2 fields in the same object hierarchy.
+**
+** @param [r] thys [AjPList] List.
+** @param [r] sort1 [int* function] 1st function to compare two list items.
+** @param [r] sort2 [int* function] 2nd function to compare two list items.
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajListSort2(AjPList thys, int (*sort1) (const void*, const void*),
+		 int (*sort2) (const void*, const void*))
+{
+    AjPListNode node = thys->First;    
+    void **ptrs=NULL;
+    ajint len;
+    ajint limit;
+    ajint pos;
+    ajint base;
+    ajint n;
+    
+    ajListSort(thys,sort1);
+    
+    len = ajListToArray(thys,&ptrs);
+    
+    if(len<2)
+	return;
+
+    pos = base = 0;
+    limit = len-2;
+
+    while(pos < limit)
+    {
+	while(!sort1(&ptrs[pos],&ptrs[pos+1]))
+	{
+	    ++pos;
+	    if(pos>limit)
+		break;
+	}
+	++pos;
+	
+	n = pos-base;
+	if(n>1)
+	    qsort((void *)&ptrs[base],n,sizeof(void*),sort2);
+	
+	base = pos;
+    }
+    
+    pos = 0;
+    while(node->Next)
+    {
+	node->Item = ptrs[pos++];
+	node = node->Next;
+    }
+    
+    AJFREE(ptrs);
+    return;
+}
+
+
+/* @func ajListSort3 *******************************************************
+**
+** Sort the items in a list using 3 fields in the same object hierarchy.
+**
+** @param [r] thys [AjPList] List.
+** @param [r] sort1 [int* function] 1st function to compare two list items.
+** @param [r] sort2 [int* function] 2nd function to compare two list items.
+** @param [r] sort3 [int* function] 3rd function to compare two list items.
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajListSort3(AjPList thys, int (*sort1) (const void*, const void*),
+		 int (*sort2) (const void*, const void*),
+		 int (*sort3) (const void*, const void*))
+{
+    AjPListNode node = thys->First;    
+    void **ptrs=NULL;
+    ajint len;
+    ajint limit;
+    ajint pos;
+    ajint base;
+    ajint n;
+
+    len = ajListLength(thys);
+
+    if(len<2)
+	return;
+    
+    ajListSort2(thys,sort1,sort2);
+    
+    len = ajListToArray(thys,&ptrs);
+    
+    pos = base = 0;
+    limit = len-2;
+
+    while(pos < limit)
+    {
+	while(!sort1(&ptrs[pos],&ptrs[pos+1]) &&
+	      !sort2(&ptrs[pos],&ptrs[pos+1]))
+	{
+	    ++pos;
+	    if(pos>limit)
+		break;
+	}
+	++pos;
+
+	n = pos-base;
+	if(n>1)
+	    qsort((void *)&ptrs[base],n,sizeof(void*),sort3);
+	base = pos;
+    }
+
+    pos = 0;
+    while(node->Next)
+    {
+	node->Item = ptrs[pos++];
+	node = node->Next;
+    }
+    
+    AJFREE(ptrs);
+    return;
 }

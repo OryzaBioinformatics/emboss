@@ -1556,8 +1556,6 @@ void ajGraphPlenv (float xmin, float xmax, float ymin, float ymax,
   ajDebug ("ajGraphPlenv (%.3f, %.3f, %.3f, %.3f, flags:%x)\n",
 	   xmin, xmax, ymin, ymax, flags);
   GraphSubPage(0);
-  /*  plvsta();*/
-  /*  plwind(xmin,xmax,ymin,ymax);*/
   GraphSetWin2(xmin,xmax,ymin,ymax);
 
   if(flags & AJGRAPH_X_BOTTOM)

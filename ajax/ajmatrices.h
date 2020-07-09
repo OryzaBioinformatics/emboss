@@ -37,14 +37,15 @@ typedef struct AjSMatrixf {
   AjPSeqCvt Cvt;
 } AjOMatrixf, *AjPMatrixf;
 
-ajint**     ajMatrixArray (AjPMatrix thys);
-char      ajMatrixChar (AjPMatrix thys, ajint i);
-AjPSeqCvt ajMatrixCvt (AjPMatrix thys);
-AjPStr    ajMatrixName (AjPMatrix thys);
-AjPMatrix ajMatrixNew (char* codes, AjPStr filename);
-AjBool    ajMatrixSeqNum (AjPMatrix thys, AjPSeq seq, AjPStr* numseq);
-AjBool    ajMatrixRead (AjPMatrix* matrix, AjPStr filename) ;
-ajint       ajMatrixSize (AjPMatrix thys);
+ajint**    ajMatrixArray (AjPMatrix thys);
+char       ajMatrixChar (AjPMatrix thys, ajint i);
+AjPSeqCvt  ajMatrixCvt (AjPMatrix thys);
+void       ajMatrixDel (AjPMatrix *thys);
+AjPStr     ajMatrixName (AjPMatrix thys);
+AjPMatrix  ajMatrixNew (char* codes, AjPStr filename);
+AjBool     ajMatrixSeqNum (AjPMatrix thys, AjPSeq seq, AjPStr* numseq);
+AjBool     ajMatrixRead (AjPMatrix* matrix, AjPStr filename) ;
+ajint      ajMatrixSize (AjPMatrix thys);
 
 float**    ajMatrixfArray (AjPMatrixf thys);
 char       ajMatrixfChar (AjPMatrixf thys, ajint i);
@@ -54,7 +55,7 @@ AjPStr     ajMatrixfName (AjPMatrixf thys);
 AjPMatrixf ajMatrixfNew (char* codes, AjPStr filename);
 AjBool     ajMatrixfSeqNum (AjPMatrixf thys, AjPSeq seq, AjPStr* numseq);
 AjBool     ajMatrixfRead (AjPMatrixf* matrix, AjPStr filename) ;
-ajint        ajMatrixfSize (AjPMatrixf thys);
+ajint      ajMatrixfSize (AjPMatrixf thys);
 
 
 #endif

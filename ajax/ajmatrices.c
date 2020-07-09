@@ -131,6 +131,36 @@ void ajMatrixfDel (AjPMatrixf *thys)
   return;
 }
 
+/* @func ajMatrixDel *******************************************************
+**
+** Delete an integer matrix
+**
+** @param [w] thys [AjPMatrix*] Matrix to delete
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajMatrixDel (AjPMatrix *thys)
+{
+  ajint isize;
+  ajint i;
+
+  if(!*thys || !thys)
+      return;
+
+  ajStrDel(&(*thys)->Codes);
+  ajStrDel(&(*thys)->Name);
+  isize = (*thys)->Size;
+  for(i=0;i<isize;++i)
+      AJFREE( (*thys)->Matrix[i]);
+  AJFREE((*thys)->Matrix);
+
+  ajSeqCvtDel(&(*thys)->Cvt);
+  AJFREE(*thys);
+  
+  return;
+}
+
 /* @func ajMatrixArray *******************************************************
 **
 ** Returns the comparison matrix as an array of integer arrays.

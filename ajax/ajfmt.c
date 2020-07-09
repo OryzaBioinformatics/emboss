@@ -996,7 +996,7 @@ void ajFmtFmt(ajint put(ajint c, void* cl), void* cl, const char* fmt, ...)
     return;
 }
 
-/* @func  ajFmtPrint *****************************************************
+/* @func ajFmtPrint *****************************************************
 **
 ** format and emit the "..." arguments according to fmt;writes to stdout.
 **
@@ -1490,6 +1490,7 @@ void ajFmtVfmt (int put(int c, void* cl), void* cl, const char* fmt,
 
     (void) assert(put);
     (void) assert(fmt);
+    (void) assert(cl);
 
     while(*fmt)
     {

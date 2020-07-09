@@ -1538,6 +1538,44 @@ AjBool ajStrReplaceC ( AjPStr* pthis, ajint begin, const char* overwrite,
   return ajTrue;
 }
 
+/* @func ajStrReplaceK ********************************************************
+** 
+** Replace string at pos1 and add len copies of character overwrite.
+** Or to the end of the existing string
+**
+** @param [uP] pthis [AjPStr*] Target string
+** @param [r] begin [ajint] Number of characters of target string to keep.
+** @param [r] overwrite [const char] Character to replace.
+** @param [r] ilen [ajint] Number of characters to copy from text.
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
+
+AjBool ajStrReplaceK ( AjPStr* pthis, ajint begin, const char overwrite,
+		       ajint ilen) {
+
+  AjPStr thys;
+  ajint ibegin;
+  ajint iend;
+  char* ptr1 = 0;
+
+  (void) ajStrMod (pthis);
+  thys = *pthis;
+
+  ibegin = ajStrPos (thys, begin);
+  iend = ibegin + ilen;
+
+  if(iend  > thys->Len) /* can't fit */
+    return ajFalse;
+
+  ptr1 = &thys->Ptr[ibegin];
+  
+  for(;ilen>0;ilen--) {
+    *ptr1++ = overwrite;
+  }
+  return ajTrue;
+}
+
 /* @func ajStrJoin ************************************************************
 ** 
 ** Cut down string at pos1 and add string2 from position pos2.
@@ -1674,6 +1712,38 @@ AjBool ajStrSubstituteCC(AjPStr *pthis, const char* replace,
 	cycle = ajFalse;
     }
   }
+  *pthis = thys;
+
+  return ret;
+}
+  
+/* @func ajStrSubstituteKK ****************************************************
+**
+** Replace all occurrences of character replace with putin in string pthis.
+**
+** @param [uP] pthis [AjPStr*]  Target string.
+** @param [r]  replace [ char] Character to replace.
+** @param [r]  putin [char] Character to insert.
+** @return [AjBool] ajTrue if string was reallocated
+** @@
+******************************************************************************/
+
+AjBool ajStrSubstituteKK(AjPStr *pthis, char replace,
+			 char putin){
+
+  AjBool ret = ajFalse;
+  AjPStr thys;
+  char* cp;
+
+  ret = ajStrMod (pthis);
+  thys = *pthis;
+  cp = thys->Ptr;
+
+  while (*cp) {
+    if (*cp == replace) *cp = putin;
+    cp++;
+  }
+  
   *pthis = thys;
 
   return ret;
@@ -5365,3 +5435,44 @@ void ajStrRemoveNewline(AjPStr *thys)
 
     return;
 }
+
+/* @func ajStrCountK *******************************************************
+**
+** Counts occurrences of a character in a string
+**
+** @param [r] thys [AjPStr] String
+** @param [r] ch [char] Character to count
+** @return [ajint] Number of times character was found in string
+******************************************************************************/
+
+ajint ajStrCountK (AjPStr thys, char ch) {
+  ajint ret = 0;
+  char* cp = thys->Ptr;
+  while (*cp) {
+    if (*cp == ch) ret++;
+    cp++;
+  }
+  return ret;
+}
+
+/* @func ajStrCountC *******************************************************
+**
+** Counts occurrences of a character set in a string
+**
+** @param [r] thys [AjPStr] String
+** @param [r] str [const char*] Characters to count
+** @return [ajint] Number of times character was found in string
+******************************************************************************/
+
+ajint ajStrCountC (AjPStr thys, const char* str) {
+  ajint ret = 0;
+  const char* cp = str;
+
+  while (*cp) {
+    ret += ajStrCountK(thys, *cp);
+    cp++;
+  }
+
+  return ret;
+}
+

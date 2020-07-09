@@ -9,6 +9,7 @@ extern "C"
 extern void ajSortFloatDecI(float *a, ajint *p, ajint n);
 extern void ajSortIntDecI(ajint *a, ajint *p, ajint n);
 extern void ajSortFloatIncI(float *a, ajint *p, ajint n);
+extern void ajSortTwoIntIncI(ajint *a, ajint *p, ajint n);
 extern void ajSortIntIncI(ajint *a, ajint *p, ajint n);
 extern void ajSortFloatDec(float *a, ajint n);
 extern void ajSortIntDec(ajint *a, ajint n);

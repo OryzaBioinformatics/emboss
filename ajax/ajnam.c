@@ -32,6 +32,10 @@
 #define TYPE_ENV 2
 #define TYPE_DB  3
 #define TYPE_OPT 4
+#define TYPE_IFILE 5
+
+#define NAM_INCLUDE_ESTIMATE 5	/* estimate of maximum number of include */
+                                /* statements in emboss.default          */
 
 /* Scope values for entry methods returned from nameMethod2Scope */
 #define METHOD_ENTRY 1
@@ -45,7 +49,7 @@ static AjPStr namRootStr  = NULL;
 
 static AjBool namListParseOK = AJFALSE;
 
-char* namTypes[] = {"unknown", "START", "ENV", "DB", "OPT"};
+char* namTypes[] = { "unknown", "START", "ENV", "DB", "OPT", "IFILE" };
 
 /* source directory where control and data files can be found */
 
@@ -131,7 +135,6 @@ static void namPrintDatabase(AjPStr* dbattr);
 static void namListStandards(ajint which);
 static ajint namMethod2Scope (AjPStr method);
 static void namDebugStandards(ajint which);
-void   namDebugDatabases(void);
 static void namDebugEnvironmentals(void);
 static void namListParse(void **x,void *cl);
 static void namProcessFile(FILE *file);
@@ -606,7 +609,8 @@ static void namDebugEnvironmentals (void)
 ** @@
 ******************************************************************************/
 
-static void namListParse (void** x,void* cl) {
+static void namListParse (void** x,void* cl)
+{
   static char* tabname = 0;
   static AjPStr name = 0;
   static AjPStr value = 0;
@@ -618,34 +622,39 @@ static void namListParse (void** x,void* cl) {
   AjBool dbsave = ajFalse;
   AjBool saveit = ajFalse;
   ajint nattr = 0;
-
+  AjPStr includefn=NULL;
+  AjPFile iinf=NULL;
+  AjPStr key=NULL;
+  AjPStr val=NULL;
+  static AjPTable Ifiles=NULL;
+  
   for (nattr=0; namAttr[nattr].Name; nattr++) ;	/* nattr = count attributes */
 
   namUser("namListParse <%S>\n", *p);
 
-  if (!namParseType){
-    namNoColon(p);
-    (void) ajStrToLower(p);
-    if (ajStrPrefixCO ("env", *p)) {
-      namParseType = TYPE_ENV;
-    }
-    if (ajStrPrefixCO ("setenv", *p)) {
-      namParseType = TYPE_ENV;
-    }
-    if (ajStrPrefixCO ("start", *p)) {
-      return;
-    }
-    else if(ajStrPrefixCO ("dbname",*p)){
-      namParseType = TYPE_DB;
-    }
-    else if(ajStrPrefixCO ("option",*p)){
-      namParseType = TYPE_OPT;
-    }
-    if (!namParseType)
-      ajWarn ("%S: Invalid type '%S'\n", namRootStr, *p);
-    namUser("type set to %s\n", namTypes[namParseType]);
+  if (!namParseType)
+  {
+      namNoColon(p);
+      (void) ajStrToLower(p);
+      if (ajStrPrefixCO ("env", *p))
+	  namParseType = TYPE_ENV;
+      if (ajStrPrefixCO ("setenv", *p))
+	  namParseType = TYPE_ENV;
+      if (ajStrPrefixCO ("start", *p))
+	  return;
+      else if(ajStrPrefixCO ("dbname",*p))
+	  namParseType = TYPE_DB;
+      else if(ajStrPrefixCO ("option",*p))
+	  namParseType = TYPE_OPT;
+      else if(ajStrPrefixCO("include",*p))
+	  namParseType = TYPE_IFILE;
+	
+      if (!namParseType)
+	  ajWarn ("%S: Invalid type '%S'\n", namRootStr, *p);
+      namUser("type set to %s\n", namTypes[namParseType]);
   }
-  else if (quoteopen){		/* quote is open, so append word */
+  else if (quoteopen)
+  {		/* quote is open, so append word */
 				/* till close quote found */
     namUser ("<%c>..<%c> quote processing\n", quoteopen, quoteclose);
     (void) ajStrAppC(&value," ");    
@@ -661,44 +670,42 @@ static void namListParse (void** x,void* cl) {
 	dbsave = ajTrue;
     }
   }
-  else if(namParseType == TYPE_ENV) {
-    if (name && value) {
+  else if(namParseType == TYPE_ENV)
+  {
+    if (name && value)
       saveit= ajTrue;
-    }
-    else if (name) {		/* if name already got then it must be */
-				/* the value */
-      if(ajStrChar(*p,0) == '\'') {
+    else if (name)
+    {		/* if name already got then it must be */
+		/* the value */
+      if(ajStrChar(*p,0) == '\'')
 	quoteopen = quoteclose = '\'';
-      }
-      else if (ajStrChar(*p,0) == '\"') {
+      else if (ajStrChar(*p,0) == '\"')
 	quoteopen = quoteclose = '\"';
-      }
 
       (void) ajStrAss (&value, *p);
-      if(quoteopen) {                        /* remove open quote */
+      if(quoteopen)	                /* remove open quote */
 	(void) ajStrTrim(&value, 1);
-      }
       else
 	saveit = ajTrue;
 
-      if(ajStrChar(*p, -1) == quoteclose){ /* end of quote on same word */
+      if(ajStrChar(*p, -1) == quoteclose)
+      {					/* end of quote on same word */
 	quoteopen = quoteclose = 0;
 	saveit= ajTrue;
-	(void) ajStrTrim(&value, -1);       /* remove quote at the end */ 
+	(void) ajStrTrim(&value, -1);   /* remove quote at the end */ 
       }
     }
-    else {
+    else
       (void) ajStrAss (&name, *p);
-    }
   }
-  else if(namParseType == TYPE_DB) {
-    if(ajStrMatchC(*p, "[")) {           /* [ therefore new database */
+  else if(namParseType == TYPE_DB)
+  {
+    if(ajStrMatchC(*p, "["))	           /* [ therefore new database */
       dbattr = AJCALLOC0(nattr, sizeof(AjPStr));   /* new database structure */
-    }
-    else if (ajStrMatchC(*p, "]")) {     /* ] therefore end of database */
+    else if (ajStrMatchC(*p, "]"))         /* ] therefore end of database */
       saveit = ajTrue;
-    }
-    else if(name){
+    else if(name)
+    {
       if(ajStrChar(*p, -1) == ':'){  /* if last character is a : */
 				          /* then it a keyword */
 	(void) ajStrToLower(p);                  /* make it lower case */
@@ -708,14 +715,15 @@ static void namListParse (void** x,void* cl) {
 	  ajWarn ("%S: bad attribute '%S' for database '%S'\n",
 		  namRootStr, *p, name);
       }
-      else if(db_input >= 0){        /* So if keyword type has been set */
-	if(ajStrChar(*p, 0) == '\'') {   /* is there a quote? If so expect the */
-	    /* same at the end. No ()[] etc yet here*/
+      else if(db_input >= 0)
+      {				        /* So if keyword type has been set */
+	if(ajStrChar(*p, 0) == '\'')
+	{			   /* is there a quote? If so expect the */
+	                           /* same at the end. No ()[] etc yet here*/
 	  quoteopen = quoteclose = '\'';
 	}
-	else if (ajStrChar(*p, 0) == '\"') {
+	else if (ajStrChar(*p, 0) == '\"')
 	  quoteopen = quoteclose = '\"';
-	}
 
 	(void) ajStrAss (&value, *p);
 	if (quoteopen)
@@ -723,7 +731,8 @@ static void namListParse (void** x,void* cl) {
 	else
 	  dbsave = ajTrue;
 
-	if(ajStrChar(*p, -1) == quoteclose){  
+	if(ajStrChar(*p, -1) == quoteclose)
+	{  
 	  quoteopen = quoteclose = 0;
 	  (void) ajStrTrim(&value,-1);   /* ignore quote if there is */
 				              /* one at end*/ 
@@ -733,11 +742,47 @@ static void namListParse (void** x,void* cl) {
 	  dbsave = ajTrue;
       }
     }
-    else {
+    else
       (void) ajStrAss (&name, *p);
-    }
   }
-  if (dbsave) {                                /* Save the keyword value */
+  else if(namParseType == TYPE_IFILE)
+  {
+      if(!Ifiles)
+	  Ifiles = ajStrTableNew(NAM_INCLUDE_ESTIMATE);
+      namParseType = 0;
+      if(!ajTableGet(Ifiles,*p))
+      {
+	  includefn = ajStrNew();	  
+	  ajStrAss(&includefn,*p);
+
+	  if(namFileOrig)
+	      (void) ajStrAppC(&namFileOrig,", ");
+	  ajStrApp(&namFileOrig,includefn);
+
+	  key = ajStrNewC(ajStrStr(includefn));
+	  val = ajStrNewC(ajStrStr(includefn));
+	  ajTablePut(Ifiles,key,val);
+
+	  if(!(iinf = ajFileNewIn(includefn)))
+	      (void) ajStrAppC(&namFileOrig,"(Failed)");
+	  else
+	  {
+	      (void) ajStrAppC(&namFileOrig,"(OK)");	      
+	      namProcessFile(ajFileFp(iinf));
+	      ajFileClose(&iinf);
+	  }
+
+	  ajStrDel(&includefn);
+      }
+      else
+	  ajDebug("%S already read .. skipping",*p);
+
+      namListParseOK = ajTrue;
+  }
+
+
+  if (dbsave)
+  {	                                /* Save the keyword value */
     (void) ajStrAss(&dbattr[db_input], value);
     db_input =-1;
     ajStrDel(&value);
@@ -746,7 +791,8 @@ static void namListParse (void** x,void* cl) {
     
   namListParseOK = saveit;
 
-  if (saveit) {
+  if(saveit)
+  {
 
     AJNEW0(fnew);
     fnew->name = 0;
@@ -758,9 +804,9 @@ static void namListParse (void** x,void* cl) {
     value = 0;
     fnew->scope = 0;
     fnew->type = namParseType;
-    if(namParseType == TYPE_DB) {
+
+    if(namParseType == TYPE_DB)
       fnew->data = dbattr;
-    } 
     else
       fnew->data = 0;
 
@@ -769,7 +815,8 @@ static void namListParse (void** x,void* cl) {
       /* is not about to be deallocated - so do not use "name" here */
 
     entry = ajTablePut (standardNames, tabname, fnew);
-    if (entry) {  /* it existed so over write previous table entry */
+    if (entry)
+    {  /* it existed so over write previous table entry */
       ajDebug ("%S: replaced previous definition of '%S'\n",
 	      namRootStr,entry->name); /* never writes - too soon to debug */
       namEntryDelete (entry);

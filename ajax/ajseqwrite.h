@@ -51,6 +51,7 @@ typedef struct AjSSeqout {
   AjPStr Entryname;
   AjPStr Seq;
   AjPFile File;
+  AjPFile Knownfile;		/* File provided externally */
   AjBool Single;
   AjBool Features;
   AjPStr Extension;
@@ -66,6 +67,7 @@ void         ajSeqoutDel (AjPSeqout* thys);
 AjBool       ajSeqOutFormatDefault (AjPStr* pformat);
 AjBool       ajSeqOutFormatSingle (AjPStr format);
 AjPSeqout    ajSeqoutNew (void);
+AjPSeqout    ajSeqoutNewF (AjPFile file);
 AjBool       ajSeqoutOpen (AjPSeqout thys);
 AjBool       ajSeqOutSetFormat (AjPSeqout thys, AjPStr format);
 AjBool       ajSeqOutSetFormatC (AjPSeqout thys, char* format);

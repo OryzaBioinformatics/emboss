@@ -31,6 +31,11 @@
 AjBool acdDebugSet = 0;
 AjBool acdDebug = 0;
 AjPStr acdProgram = NULL;
+AjOError AjErrorLevel =
+{
+    AJTRUE, AJTRUE, AJTRUE, AJFALSE
+};
+
 /***************************************************/
 
 
@@ -125,7 +130,6 @@ void ajMessInvokeDebugger (void) {
 
   if (!reentrant) {
     reentrant = AJTRUE ;
-    /* messalloccheck() ;*/
     reentrant = AJFALSE ;
   }
 }
@@ -179,13 +183,13 @@ static void messDump (char *message);
 /*                                                                           */
 
 #define MESG_TITLE "EMBOSS"
-#define ERROR_PREFIX "   An error has been found: "
-#define WARNING_PREFIX "   This is a warning: "
+#define ERROR_PREFIX "Error: "
+#define WARNING_PREFIX "Warning: "
 #define EXIT_PREFIX "   An error spotted (non-EMBOSS): "
-#define DIE_PREFIX "   There is a serious problem: "
+#define DIE_PREFIX "Died: "
 #define CRASH_PREFIX_FORMAT "\n   %s An error in %s at line %d:\n"
 #define FULL_CRASH_PREFIX_FORMAT "\n   %s Program cannot continue (%s, in file %s, at line %d):\n"
-#define SYSERR_FORMAT "Something wrong with a system call %d - %s"
+#define SYSERR_FORMAT "Something wrong with a system call (%d - %s)"
 
 /******************************************************************************
 ** ajMessCrash now reports the file/line no. where ajMessCrash was issued
@@ -502,21 +506,25 @@ void ajMessError (char *format, ...) {
 
   ++errorCount ;
 
-  /* Format the message string. */
+  if(AjErrorLevel.error)
+  {
+      /* Format the message string. */
 
-  AJAXFORMATSTRING(args, format, mesg_buf, prefix) ;
+      AJAXFORMATSTRING(args, format, mesg_buf, prefix) ;
 
-  if (errorJmpBuf)  /* throw back up to the function that registered it */
-    longjmp (*errorJmpBuf, 1) ;
+      if (errorJmpBuf)	/* throw back up to the function that registered it */
+	  longjmp (*errorJmpBuf, 1) ;
 
-  messDump(mesg_buf) ;
+      messDump(mesg_buf) ;
 
-  if (errorRoutine)
-    (*errorRoutine)(mesg_buf) ;
-  else
-    (void) fprintf (stderr, "%s\n", mesg_buf) ;
+      if (errorRoutine)
+	  (*errorRoutine)(mesg_buf) ;
+      else
+	  (void) fprintf (stderr, "%s\n", mesg_buf) ;
 
-  ajMessInvokeDebugger () ;
+      ajMessInvokeDebugger () ;
+  }
+  
   return;
 }
 
@@ -551,8 +559,10 @@ void ajMessVError (char *format, va_list args) {
   if (errorRoutine)
     (*errorRoutine)(mesg_buf) ;
   else
-    (void) fprintf (stderr, "%s\n", mesg_buf) ;
-
+  {
+      if(AjErrorLevel.error)
+	(void) fprintf (stderr, "%s\n", mesg_buf) ;
+  }
   ajMessInvokeDebugger () ;
   return;
 }
@@ -578,21 +588,25 @@ void ajMessDie (char *format, ...) {
 
   ++errorCount ;
 
-  /* Format the message string. */
+  if(AjErrorLevel.die)
+  {
+      /* Format the message string. */
 
-  AJAXFORMATSTRING(args, format, mesg_buf, prefix) ;
+      AJAXFORMATSTRING(args, format, mesg_buf, prefix) ;
 
-  if (errorJmpBuf)  /* throw back up to the function that registered it */
-    longjmp (*errorJmpBuf, 1) ;
+      if (errorJmpBuf)	/* throw back up to the function that registered it */
+	  longjmp (*errorJmpBuf, 1) ;
 
-  messDump(mesg_buf) ;
+      messDump(mesg_buf) ;
 
-  if (errorRoutine)
-    (*errorRoutine)(mesg_buf) ;
-  else
-    (void) fprintf (stderr, "%s\n", mesg_buf) ;
+      if (errorRoutine)
+	  (*errorRoutine)(mesg_buf) ;
+      else
+	  (void) fprintf (stderr, "%s\n", mesg_buf) ;
 
-  ajMessInvokeDebugger () ;
+      ajMessInvokeDebugger () ;
+  }
+  
 
   exit(EXIT_FAILURE) ;
 
@@ -655,20 +669,24 @@ void ajMessWarning (char *format, ...) {
 
   /* Format the message string. */
 
-  AJAXFORMATSTRING(args, format, mesg_buf, prefix) ;
+  if(AjErrorLevel.warning)
+  {
+      
+      AJAXFORMATSTRING(args, format, mesg_buf, prefix) ;
 
-  if (errorJmpBuf)  /* throw back up to the function that registered it */
-    longjmp (*errorJmpBuf, 1) ;
+      if (errorJmpBuf)	/* throw back up to the function that registered it */
+	  longjmp (*errorJmpBuf, 1) ;
     
-  messDump(mesg_buf) ;
+      messDump(mesg_buf) ;
 
-  if (warningRoutine)
-    (*warningRoutine)(mesg_buf) ;
-  else
-    (void) fprintf (stderr, "%s\n", mesg_buf) ;
+      if (warningRoutine)
+	  (*warningRoutine)(mesg_buf) ;
+      else
+	  (void) fprintf (stderr, "%s\n", mesg_buf) ;
 
-  ajMessInvokeDebugger () ;
-
+      ajMessInvokeDebugger () ;
+  }
+  
   return;
 }
 
@@ -787,23 +805,27 @@ void ajMessCrashFL (char *format, ...) {
   if (rc < 0)
     ajMessCrash("sprintf failed") ;
 
-  /* Format the message string. */
+  if(AjErrorLevel.fatal)
+  {
+      /* Format the message string. */
 
-  AJAXFORMATSTRING(args, format, mesg_buf, prefix) ;
+      AJAXFORMATSTRING(args, format, mesg_buf, prefix) ;
 
 
-  if (crashJmpBuf)	/* throw back up to the function that registered it */
-    longjmp(*crashJmpBuf, 1) ;
+      if (crashJmpBuf)	/* throw back up to the function that registered it */
+	  longjmp(*crashJmpBuf, 1) ;
 
   
-  messDump(mesg_buf) ;
+      messDump(mesg_buf) ;
 
-  if (crashRoutine)
-    (*crashRoutine)(mesg_buf) ;
-  else
-    (void) fprintf(stderr, "%s\n", mesg_buf) ;
+      if (crashRoutine)
+	  (*crashRoutine)(mesg_buf) ;
+      else
+	  (void) fprintf(stderr, "%s\n", mesg_buf) ;
 
-  ajMessInvokeDebugger() ;
+      ajMessInvokeDebugger() ;
+  }
+  
 
   exit(EXIT_FAILURE) ;
 

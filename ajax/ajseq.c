@@ -150,6 +150,49 @@ void ajSeqallDel(AjPSeqall *thys)
     return;
 }
 
+
+/* @func ajSeqsetDel **********************************************************
+**
+** Destructor for sequence set objects
+**
+** @param [d] thys [AjPSeqset*] Sequence set object reference
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajSeqsetDel(AjPSeqset *thys)
+{
+    ajint n;
+    ajint i;
+    AjPSeqset pthis=NULL;
+
+    if(!thys || !*thys)
+	return;
+
+    pthis = *thys;
+    if(!(n = pthis->Size))
+	return;
+
+    ajStrDel(&pthis->Type);
+    ajStrDel(&pthis->Formatstr);
+    ajStrDel(&pthis->Filename);
+    ajStrDel(&pthis->Full);
+    ajStrDel(&pthis->Name);
+    ajStrDel(&pthis->Usa);
+    ajStrDel(&pthis->Ufo);
+
+    for(i=0; i<n; ++i)
+	ajSeqDel(&pthis->Seq[i]);
+
+    AJFREE(pthis->Seq);
+    AJFREE(pthis->Seqweight);
+
+    AJFREE(pthis);
+
+    return;
+}
+
+
 /* ==================================================================== */
 /* ========================== Assignments ============================= */
 /* ==================================================================== */
@@ -221,10 +264,8 @@ void ajSeqallReverse (AjPSeqall thys)
     ajDebug ("ajSeqallReverse len: %d Begin: %d End: %d\n",
 	     ajSeqallLen(thys), thys->Begin, thys->End);
 
-    if (ibegin)
-	thys->End = -(ibegin);
-    if (iend)
-	thys->Begin = -(iend);
+    thys->End = -(ibegin);
+    thys->Begin = -(iend);
 
     (void) ajSeqReverse(thys->Seq);
 
@@ -445,6 +486,26 @@ AjPStr ajSeqallGetNameSeq (AjPSeqall thys)
     ajDebug ("ajSeqallGetNameSeq '%S'\n", thys->Seq->Name);
 
     return ajSeqGetName(thys->Seq);
+}
+
+/* @func ajSeqsetGetUsa *****************************************************
+**
+** Returns the sequence name of a sequence set.
+** Because this is a pointer to the real internal string
+** the caller must take care not to change the character string in any way.
+** If the string is to be changed (case for example) then it must first
+** be copied.
+**
+** @param [u] thys [AjPSeqset] Sequence set object.
+** @return [AjPStr] Name as a string.
+** @@
+******************************************************************************/
+
+AjPStr ajSeqsetGetUsa (AjPSeqset thys)
+{
+    ajDebug ("ajSeqetGetUsa '%S'\n", thys->Usa);
+
+    return thys->Usa;
 }
 
 /* @func ajSeqGetUsa *****************************************************
@@ -965,7 +1026,10 @@ AjPStr ajSeqsetGetName (AjPSeqset thys)
 {
     ajDebug ("ajSeqsetGetName '%S'\n", thys->Name);
 
-    return thys->Name;
+    if (ajStrLen(thys->Name))
+      return thys->Name;
+
+    return thys->Usa;
 }
 
 /* @func ajSeqsetGetSeq *****************************************************
@@ -1254,7 +1318,7 @@ void ajSeqDel (AjPSeq* pthis)
     ajStrDel (&thys->Seq);
 
     if(thys->Fttable)
-	ajFeattabDel(&thys->Fttable);
+	ajFeattableDel(&thys->Fttable);
 
     while(ajListstrPop(thys->Acclist,&ptr))
 	ajStrDel(&ptr);
@@ -1393,6 +1457,8 @@ void ajSelexdataDel(AjPSelexdata *thys)
 
 void ajSeqClear (AjPSeq thys)
 {
+    AjPStr ptr=NULL;
+
     (void) ajStrClear (&thys->Name);
     (void) ajStrClear (&thys->Acc);
     (void) ajStrClear (&thys->Type);
@@ -1410,7 +1476,14 @@ void ajSeqClear (AjPSeq thys)
     (void) ajStrClear (&thys->TextPtr);
     (void) ajStrClear (&thys->Seq);
 
-    ajFeattabDel(&thys->Fttable);
+    thys->Begin=0;
+    thys->End=0;
+    thys->Rev = ajFalse;
+
+    while(ajListstrPop(thys->Acclist,&ptr))
+	ajStrDel(&ptr);
+
+    ajFeattableDel(&thys->Fttable);
 
     return;
 }
@@ -1703,6 +1776,24 @@ void ajSeqAssSeqC (AjPSeq thys, char* text)
     return;
 }
 
+/* @func ajSeqAssSeqCI ********************************************************
+**
+** Assigns a modified sequence to an existing AjPSeq sequence.
+**
+** @param [u] thys [AjPSeq] Sequence object.
+** @param [r] text [char*] New sequence as a C character string.
+** @param [r] ilen [ajint] Numbur of characters to use
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajSeqAssSeqCI (AjPSeq thys, char* text, ajint ilen)
+{
+    (void) ajStrAssCI(&thys->Seq, text, ilen);
+
+    return;
+}
+
 /* @func ajSeqAssDesc ********************************************************
 **
 ** Assigns a modified description to an existing AjPSeq sequence.
@@ -1806,15 +1897,17 @@ void ajSeqReplaceC (AjPSeq thys, char* seq)
 
 void ajSeqSetRange (AjPSeq seq, ajint ibegin, ajint iend)
 {
-    ajDebug ("ajSeqSetRange (len: %d %d, %d)\n", ajSeqLen(seq), ibegin, iend);
+    ajDebug ("ajSeqSetRange (len: %d %d..%d old %d..%d)\n",
+	     ajSeqLen(seq), ibegin, iend,
+	     seq->Begin, seq->End);
 
-    if (ibegin)
+    if (ibegin && !seq->Begin)
 	seq->Begin = ibegin;
 
-    if (iend)
+    if (iend && !seq->End)
 	seq->End = iend;
 
-    ajDebug ("      result: (len: %d %d, %d)\n",
+    ajDebug ("      result: (len: %d %d..%d)\n",
 	     ajSeqLen(seq), seq->Begin, seq->End);
 
     return;
@@ -1912,10 +2005,8 @@ void ajSeqReverse (AjPSeq thys)
     ajDebug ("ajSeqReverse len: %d Begin: %d End: %d\n",
 	     ajSeqLen(thys), thys->Begin, thys->End);
 
-    if (ibegin)
-	thys->End = -(ibegin);
-    if (iend)
-	thys->Begin = -(iend);
+    thys->End = -(ibegin);
+    thys->Begin = -(iend);
 
     (void) ajSeqReverseStr(&thys->Seq);
 
@@ -2871,11 +2962,13 @@ AjPStr ajSeqGetDesc (AjPSeq thys)
 
 /* @func ajSeqGetFeat ********************************************************
 **
-** Returns the sequence description.
-** Because this is a pointer to the real internal string
-** the caller must take care not to change the character string in any way.
-** If the string is to be changed (case for example) then it must first
-** be copied.
+** Returns the sequence feature table.
+** Because this is a pointer to the real internal table
+** the caller must take care not to change it in any way,
+** or to delete it.
+**
+** If the table is to be changed or deleted then it must first
+** be copied with ajSeqCopyFeat
 **
 ** @param [u] thys [AjPSeq] Sequence object.
 ** @return [AjPFeattable] feature table (if any)
@@ -2885,6 +2978,27 @@ AjPStr ajSeqGetDesc (AjPSeq thys)
 AjPFeattable ajSeqGetFeat (AjPSeq thys)
 {
     return thys->Fttable;
+}
+
+/* @func ajSeqCopyFeat ********************************************************
+**
+** Returns a copy of the sequence feature table.
+** Because this is a copy of all the data, the caller is responsible
+** for deleting it after use.
+**
+** If the table is not to be changed or deleted then ajSeqGetFeat
+** can return a copy of the internal pointer.
+**
+** @param [u] thys [AjPSeq] Sequence object.
+** @return [AjPFeattable] feature table (if any)
+** @@
+******************************************************************************/
+
+AjPFeattable ajSeqCopyFeat (AjPSeq thys)
+{
+  AjPFeattable ret = NULL;
+  ajFeattableCopy (&ret, thys->Fttable);
+  return ret;
 }
 
 /* @func ajSeqGetName ********************************************************
@@ -2983,6 +3097,24 @@ AjPSeqout ajSeqoutNew (void)
     return pthis;
 }
 
+/* @func ajSeqoutNewF *********************************************************
+**
+** Creates a new sequence output object using a preopened file.
+**
+** @param [R] file [AjPFile;
+** @return [AjPSeqout] New sequence output object.
+** @@
+******************************************************************************/
+
+AjPSeqout ajSeqoutNewF (AjPFile file)
+{
+  AjPSeqout pthis;
+  pthis = ajSeqoutNew();
+  pthis->Knownfile = file;
+
+  return pthis;
+}
+
 /* ==================================================================== */
 /* ========================== destructors ============================= */
 /* ==================================================================== */
@@ -2997,7 +3129,8 @@ AjPSeqout ajSeqoutNew (void)
 void ajSeqoutDel (AjPSeqout* pthis)
 {
     AjPSeqout thys = *pthis;
-
+    AjPSeq    seq=NULL;
+    
     ajStrDel (&thys->Name);
     ajStrDel (&thys->Acc);
     ajStrDel (&thys->Desc);
@@ -3015,6 +3148,8 @@ void ajSeqoutDel (AjPSeqout* pthis)
     ajStrDel (&thys->Seq);
     ajStrDel (&thys->Extension);
 
+    while(ajListPop(thys->Savelist,(void **)&seq))
+	ajSeqDel(&seq);
     ajListDel(&thys->Savelist);
 
     AJFREE(thys->Ftquery);
@@ -3318,4 +3453,74 @@ AjBool ajSeqTrim(AjPSeq thys)
     ajDebug("After Triming len = %d\n",thys->Seq->Len);
 
     return okay;
+}
+
+/* @func ajSeqGapCount *****************************************************
+**
+** returns the number of gaps in a sequence (counting any possible
+** gap character
+**
+** @param [w] thys [AjPSeq] Sequence object
+** @return [ajint] Number of gaps 
+******************************************************************************/
+
+ajint ajSeqGapCount (AjPSeq thys) {
+  return ajSeqGapCountS (thys->Seq);
+}
+
+/* @func ajSeqGapCountS *****************************************************
+**
+** returns the number of gaps in a string (counting any possible
+** gap character
+**
+** @param [w] str [AjPStr] String object
+** @return [ajint] Number of gaps 
+******************************************************************************/
+
+ajint ajSeqGapCountS (AjPStr str) {
+
+  ajint ret=0;
+
+  static char testchars[] = "-~."; /* all known gap characters */
+  char *testgap = testchars;
+
+  ajDebug("ajSeqGapCountS '%S'\n", str);
+
+  while (*testgap) {
+    ret += ajStrCountK(str, *testgap);
+    testgap++;
+  }
+
+  return ret;
+}
+
+/* @func ajSeqGapStandard *****************************************************
+**
+** Makes all gaps in a sequence use a standard gap character
+**
+** @param [w] thys [AjPSeq] Sequence object
+** @param [r] gapch [char] Gap character (or '-' if zero)
+** @return [void]
+******************************************************************************/
+
+void ajSeqGapStandard (AjPSeq thys, char gapch) {
+
+  char newgap = '-';
+  static char testchars[] = "-~."; /* all known gap characters */
+  char *testgap = testchars;
+
+  if (gapch)
+    newgap = gapch;
+
+  ajDebug("ajSeqGapStandard '%c'=>'%c' '%S'\n", gapch, newgap, thys->Seq);
+
+  while (*testgap) {
+    if (newgap != *testgap) {
+      ajStrSubstituteKK (&thys->Seq, *testgap, newgap);
+      ajDebug(" replaced         '%c'=>'%c' '%S'\n", *testgap, newgap, thys->Seq);
+    }
+    testgap++;
+  }
+
+  return;
 }

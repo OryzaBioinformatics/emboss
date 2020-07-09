@@ -11,6 +11,7 @@ extern "C"
 AjBool        ajAcdDebug (void);
 AjBool        ajAcdDebugIsSet (void);
 AjBool        ajAcdFilter (void);
+AjPAlign      ajAcdGetAlign (char *token);
 AjPFloat      ajAcdGetArray (char *token);
 AjBool        ajAcdGetBool (char *token);
 AjPCod        ajAcdGetCodon (char *token);

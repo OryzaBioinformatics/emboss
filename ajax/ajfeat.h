@@ -39,11 +39,23 @@ AjPFeature    ajFeatAddC (AjPFeattable thys, char* type,
 			  char strand, ajint frame, AjPStr desc);
 void *        ajFeatClearTag(AjPFeature thys, AjPFeattable table,
 			     AjPStr tag) ;
+void          ajFeatCopy (AjPFeature* pthys, AjPFeature orig);
 void          ajFeatDel(AjPFeature *pthis) ;
 void          ajFeatExit (void);
+ajint         ajFeatGetEnd (AjPFeature thys);
+AjBool        ajFeatGetForward (AjPFeature thys);
+ajint         ajFeatGetFrame (AjPFeature thys);
 ajint         ajFeatGetLocs(AjPStr str, AjPStr **cds, char *type);
-AjPStr        ajFeatGetName (AjPFeattable thys);
+AjBool        ajFeatGetNote (AjPFeature thys, AjPStr name, AjPStr* val);
+AjBool        ajFeatGetNoteI (AjPFeature thys, AjPStr name, ajint count,
+			      AjPStr* val);
+ajint         ajFeatGetStart (AjPFeature thys);
+AjBool        ajFeatGetTag (AjPFeature thys, AjPStr name, ajint num,
+			    AjPStr* val);
+AjPStr        ajFeatGetType (AjPFeature thys);
 ajint         ajFeatGetTrans(AjPStr str, AjPStr **cds);
+AjBool        ajFeatIsLocal (AjPFeature gf);
+AjBool        ajFeatIsLocalRange (AjPFeature gf, ajint start, ajint end);
 AjBool        ajFeatIsProt (AjPFeattable thys);
 ajint         ajFeatLen (AjPFeattable thys);
 AjBool        ajFeatLocToSeq(AjPStr seq, AjPStr line, AjPStr *res,
@@ -52,6 +64,8 @@ AjPFeature    ajFeatNew (AjPFeattable thys,
 			 AjPStr source, AjPStr type,
 			 ajint Start, ajint End,  float score,
 			 char strand, ajint frame);
+AjPFeature    ajFeatNewII (AjPFeattable thys,
+			 ajint Start, ajint End);
 AjPFeature    ajFeatNewProt (AjPFeattable thys,
 			     AjPStr source, AjPStr type,
 			     ajint Start, ajint End,  float score);
@@ -62,12 +76,17 @@ ajint         ajFeatSize (AjPFeattable thys);
 void          ajFeatSortByEnd(AjPFeattable Feattab);
 void          ajFeatSortByStart(AjPFeattable Feattab);
 void          ajFeatSortByType(AjPFeattable Feattab);
-void          ajFeattabAdd (AjPFeattable thys, AjPFeature feature) ;
-void          ajFeattabDel (AjPFeattable *pthis) ;
+void          ajFeattableAdd (AjPFeattable thys, AjPFeature feature) ;
+void          ajFeattableClear ( AjPFeattable thys );
+void          ajFeattableCopy (AjPFeattable* pthys, AjPFeattable orig);
+void          ajFeattableDel (AjPFeattable *pthis) ;
+AjPStr        ajFeattableGetName (AjPFeattable thys);
 AjPFeattable  ajFeattableNew( AjPStr name );
 AjPFeattable  ajFeattableNewDna( AjPStr name );
 AjPFeattable  ajFeattableNewProt( AjPStr name );
 AjPFeattable  ajFeattableNewSeq( AjPSeq seq );
+void          ajFeattableSetDna (AjPFeattable thys);
+void          ajFeattableSetProt (AjPFeattable thys);
 void          ajFeattableTrace (AjPFeattable thys);
 AjBool        ajFeattableWriteDdbj (AjPFeattable features,
 				    AjPFile file);
@@ -88,6 +107,8 @@ AjPFeattabIn  ajFeattabInNewSS (AjPStr fmt, AjPStr name, char* type);
 AjPFeattabIn  ajFeattabInNewSSF (AjPStr fmt, AjPStr name, char* type,
 				 AjPFileBuff buff);
 void          ajFeattabOutDel( AjPFeattabOut* pthis);
+AjPFile       ajFeattabOutFile (AjPFeattabOut thys);
+AjPStr        ajFeattabOutFilename (AjPFeattabOut thys);
 AjBool        ajFeattabOutIsOpen (AjPFeattabOut thys);
 AjPFeattabOut ajFeattabOutNew (void);
 AjPFeattabOut ajFeattabOutNewSSF (AjPStr fmt, AjPStr name, char* type,
@@ -110,7 +131,6 @@ AjBool        ajFeatUfoRead (AjPFeattable* pthis,
 AjBool        ajFeatUfoWrite (AjPFeattable thys,
 			      AjPFeattabOut tabout, AjPStr Ufo);
 AjBool        ajFeatWrite ( AjPFeattabOut ftout, AjPFeattable ft) ; 
-
 
 
 

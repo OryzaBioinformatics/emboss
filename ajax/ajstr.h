@@ -86,6 +86,8 @@ extern "C"
 **                        the string object.
 ** @mod ajStrSubstituteCC Replace all occurances of char *text  with
 **                        another char* in the string object.
+** @mod ajStrSubstituteKK Replace all occurances of char text  with
+**                        another char in the string object.
 ** @mod ajStrChomp Removes white space from front and end of string.
 ** @mod ajStrChompC Removes white space from front and end of string.
 ** @mod ajStrChop  Removes the last character from a string
@@ -288,6 +290,8 @@ AjBool     ajStrConvert   (AjPStr* pthis, const AjPStr oldc,
 AjBool     ajStrConvertCC (AjPStr* pthis, const char* oldc, const char* newc);
 AjBool     ajStrCopy (AjPStr* pthis, const AjPStr str);
 AjBool     ajStrCopyC (AjPStr* pthis, const char* str);
+ajint      ajStrCountC (AjPStr thys, const char* str);
+ajint      ajStrCountK (AjPStr thys, char ch);
 AjBool     ajStrCut (AjPStr* pthis, ajint begin, ajint end);
 void       ajStrDegap(AjPStr* thys);
 void       ajStrDel (AjPStr *thys);
@@ -386,6 +390,8 @@ AjBool     ajStrReplace  (AjPStr* pthis, ajint pos1,
 			  const AjPStr overwrite, ajint len);
 AjBool     ajStrReplaceC (AjPStr* pthis, ajint pos1,
 			  const char* overwrite, ajint len);
+AjBool     ajStrReplaceK (AjPStr* pthis, ajint pos1,
+			  char overwrite, ajint len);
 ajint      ajStrRef(const AjPStr thys);
 #define    MAJSTRREF(str) str->Use
 void       ajStrRemoveHtml(AjPStr *thys);
@@ -397,6 +403,7 @@ AjBool     ajStrSet   (AjPStr* pthis, const AjPStr str);
 AjBool     ajStrSetC  (AjPStr* pthis, const char* str);
 ajint      ajStrSize (const AjPStr thys);
 #define    MAJSTRSIZE(str) str->Res
+#define    MAJSTRSUBK(str,pos,c) str->Ptr[pos]=c
 void       ajStrStat (char* title);
 char*      ajStrStr (const AjPStr thys);
 #define    MAJSTRSTR(str) str->Ptr
@@ -405,6 +412,8 @@ AjBool     ajStrSubstitute   (AjPStr* pthis, const AjPStr replace,
 			      const AjPStr putin);
 AjBool     ajStrSubstituteCC (AjPStr* pthis, const char* replace,
 			      const char* putin);
+AjBool     ajStrSubstituteKK (AjPStr* pthis, char replace,
+			      char putin);
 AjBool     ajStrSuffix (const AjPStr thys, const AjPStr suff);
 AjBool     ajStrSuffixC (const AjPStr thys, const char* suff);
 AjBool     ajStrSuffixCC (const char *str, const char* suff);

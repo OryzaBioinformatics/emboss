@@ -18,6 +18,15 @@ extern AjBool acdDebugSet;
 extern AjBool acdDebug;
 extern AjPStr acdProgram;
 
+typedef struct AjSError
+{
+    AjBool warning;
+    AjBool error;
+    AjBool fatal;
+    AjBool die;
+} AjOError, *AjPError;
+
+extern AjOError AjErrorLevel;
 
 #define SUBDIR_DELIMITER_STR "\\"
 

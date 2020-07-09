@@ -30,16 +30,19 @@ extern "C"
 ******************************************************************************/
 typedef struct AjSScorealg
 {   
-/*JC AjPInt ==> AjPFloat */    AjPFloat  seq_score;    /* Array of scores based on residue convervation */
-    AjPInt    post_similar; /* Array of scores based on stamp pij value      */
-/*JC AjPInt ==> AjPFloat */    AjPFloat    ncon_score;   /* Array of scores based on number of contacts   */
-/*JC AjPInt ==> AjPFloat */     AjPFloat    ccon_score;   /* Array of scores based on convervation of contacts */
-    AjPInt    nccon_score; /* Array of total score based on convervation and number of contacts */
-
-    AjPInt    combi_score;  /* Array of total score based on users scoring criteria  */
-    
-    AjBool    seq_do;       /* Whether to use score based on residue convervation */
-    AjBool    filter;       /* Whether to filter on basis of post_similar line      */
+    AjPFloat  seqmat_score;    /* Array of scores based on residue convervation */
+    AjPFloat  seqvar_score;    /* Array of scores based on residue variability */
+    AjPInt    post_similar;    /* Array of scores based on stamp pij value      */
+    AjPFloat  ncon_score;      /* Array of scores based on number of contacts   */
+    AjPFloat  ccon_score;      /* Array of scores based on convervation of contacts */
+    AjPInt    nccon_score;     /* Array of total score based on convervation and number of contacts */
+    AjPInt    combi_score;     /* Array of total score based on users scoring criteria  */
+    AjPInt    ncon_thresh;     /* Array of positions with > threshold number of contacts */
+    AjBool    seqmat_do;       /* Whether to use score based on residue convervation */
+    AjBool    seqvar_do;       /* Whether to use score based on residue variablility */
+    AjBool    filterpsim;       /* Whether to filter on basis of post_similar line      */
+    AjBool    filtercon;       /* Whether to filter on basis of number of contacts      */
+    ajint     conthresh;     /* Threshold number of contacts for filtercon */
     AjBool    ncon_do;      /* Whether to use score based on number of contacts   */
     AjBool    ccon_do;      /* Whether to use score based on convervation of contacts */
     AjBool    nccon_do;    /* Whether to use score based on convervation and number of contacts */
@@ -191,6 +194,9 @@ typedef struct AjSScophit
     float     Score;      /* Score of hit */
     float     Eval;       /* E-value of hit */
     AjPStr    Alg;        /* Alignment, e.g. of a signature to the sequence */
+    AjBool    Target;     /* True if the Scophit is targetted for removal from 
+			     a list of Scophit objects */
+    AjBool    Priority;   /* True if the Scop hit is high priority. */
 } AjOScophit, *AjPScophit;
 
 
@@ -251,6 +257,7 @@ typedef struct AjSHitlist
     AjPStr  Fold;
     AjPStr  Superfamily;
     AjPStr  Family;
+    AjBool  Priority;   /* True if the Hitlist is high priority. */
     ajint   N;            /* No. of hits */
     AjPHit *hits;        /* Array of hits */
 } AjOHitlist, *AjPHitlist;
@@ -302,6 +309,7 @@ typedef struct AjSAtom
 {
   ajint        Mod;        /*Model number*/
   ajint        Chn;        /*Chain number*/
+  ajint        Gpn;        /*Group number*/
   char       Type;       /*'P' (protein atom), 'H' ("heterogens") or 'w' 
 			   (water)*/
   ajint        Idx;        /*Residue number - index into sequence*/
@@ -337,12 +345,12 @@ typedef struct AjSChain
   char       Id;         /*Chain id, ('.' if one wasn't specified in the 
 			   original PDB file)*/
   ajint        Nres;       /*No. of amino acid residues*/
-  ajint        Nhet;       /*No. of atoms which are non-covalently associated 
+  ajint        Nlig;       /*No. of groups which are non-covalently associated 
 			   with the chain, excluding water ("heterogens")*/
-  ajint        Nwat;       /*No. of water atoms which are associated with the 
-			   chain*/
   AjPStr     Seq;	 /* sequence as string */
-  AjPList    Atoms;      /*List of Atoms */
+  AjPList    Atoms;      /*List of Atom objects for (potentially multiple models)
+			  of the polypeptide chain and any groups (ligands) that 
+			  could be uniquely associated with a chain*/
 } AjOChain, *AjPChain;
 
 
@@ -371,6 +379,14 @@ typedef struct AjSPdb
   ajint        Nmod;       /*No. of models (always 1 for XRAY structures)*/
   ajint        Nchn;       /*No. polypeptide chains */
   AjPChain  *Chains;     /*Array of pointers to AjSChain structures*/
+  ajint      Ngp;        /* No. groups that could not be uniquely associated with a chain 
+			    in the SEQRES records */
+  AjPChar    gpid;	   /*Array of chain (group) id's for groups that 
+			     could not be uniquely associated with a chain */
+  AjPList   Groups;     /*List of Atom objects for groups that could not 
+			   be uniquely associated with a chain */
+  AjPList   Water;     /*List of Atom objects for water molecules (which can 
+			   never be uniquely associated with a chain */
 }AjOPdb, *AjPPdb;
 
 /* @data AjPScop *******************************************************
@@ -553,10 +569,22 @@ AjPScop  ajXyzScopNew(ajint n);
 
 AjPScophit  ajXyzScophitNew(void);
 void     ajXyzScophitDel(AjPScophit *pthis);
+void     ajXyzScophitDelWrap(const void  **ptr);
 AjBool ajXyzHitlistToScophits(AjPList in, AjPList *out);
 AjBool        ajXyzHitsOverlap(AjPHit h1, AjPHit h2, ajint n);
 AjBool        ajXyzScophitsOverlap(AjPScophit h1, AjPScophit h2, ajint n);
+AjBool        ajXyzScophitsOverlapAcc(AjPScophit h1, AjPScophit h2, ajint n);
 AjBool ajXyzScophitCopy(AjPScophit *to, AjPScophit from);
+AjPList ajXyzScophitListCopy(AjPList ptr);
+AjBool   ajXyzScophitCheckTarget(AjPScophit ptr);
+AjBool        ajXyzScophitTarget(AjPScophit *h);
+AjBool        ajXyzScophitTargetLowPriority(AjPScophit *h);
+
+AjBool   ajXyzScophitMergeInsertThis(AjPList list, AjPScophit hit1, 
+				     AjPScophit hit2,  AjIList iter);
+AjBool   ajXyzScophitMergeInsertOther(AjPList list, AjPScophit hit1, AjPScophit hit2);
+AjPScophit  ajXyzScophitMerge(AjPScophit hit1, AjPScophit hit2);
+
 
 
 
@@ -588,6 +616,7 @@ AjBool   ajXyzPrintPdbSeqresDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 AjBool   ajXyzPrintPdbAtomChain(AjPFile outf, AjPPdb pdb, ajint mod, ajint chn);
 AjBool   ajXyzPrintPdbAtomDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 				 AjPScop scop, ajint mod);
+AjBool   ajXyzPrintPdbHeterogen(AjPFile outf, AjPPdb pdb, ajint mod);
 AjBool   ajXyzPrintPdbText(AjPFile outf, AjPStr str, char *prefix);
 AjBool   ajXyzPrintPdbHeader(AjPFile outf, AjPPdb pdb);
 AjBool   ajXyzPrintPdbHeaderScop(AjPFile outf, AjPScop scop);
@@ -599,6 +628,9 @@ AjBool   ajXyzPrintPdbResolution(AjPFile outf, AjPPdb pdb);
 
 AjBool   ajXyzPdbChain(char id, AjPPdb pdb, ajint *chn);
 void     ajXyzScopToPdb(AjPStr scop, AjPStr *pdb);
+
+AjBool   ajXyzPdbAtomIndexI(AjPPdb pdb, ajint chn, AjPInt *idx);
+AjBool   ajXyzPdbAtomIndexC(AjPPdb pdb, char chn, AjPInt *idx);
 
 
 AjBool   ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys);
@@ -658,7 +690,18 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
 				   ajint thresh);
 
 
+AjBool       ajXyzHitlistPriorityHigh(AjPHitlist *list);
+AjBool       ajXyzHitlistPriorityLow(AjPHitlist *list);
+ajint ajXyzScophitCompId(const void *hit1, const void *hit2);
+ajint ajXyzScophitCompStart(const void *hit1, const void *hit2);
+ajint ajXyzScophitCompFold(const void *hit1, const void *hit2);
+ajint ajXyzScophitCompSfam(const void *hit1, const void *hit2);
+ajint ajXyzScophitCompFam(const void *hit1, const void *hit2);
+AjBool ajXyzInContact(AjPAtom atm1, AjPAtom atm2, float thresh,
+			  AjPVdwall vdw);
+float ajXyzVdwRad(AjPAtom atm, AjPVdwall vdw);
 
+AjBool ajXyzHitlistToThreeScophits(AjPList in, AjPList *fam, AjPList *sfam, AjPList *fold);
 
 
 

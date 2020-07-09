@@ -12,7 +12,27 @@ extern "C"
 **
 ** @alias AjORange
 ** @alias AjSRange
+**
+** @new ajRangeNewI Default constructor for range objects
+** @delete ajRangeDel Default destructor for range objects
+** @mod ajRangeGet Load a range object
+** @mod ajRangeFile Load a range object from a file
+** @mod ajRangeChange Set the values of a start and end in a range element
+** @mod ajRangeBegin Sets the range values relative to the Begin value
+** @use ajRangeNumber Return the number of ranges in a range object
+** @use ajRangeValues Return (as parameters) start and end values in a range
+** @use ajRangeText Return (as parameters) text value of a range
+** @use ajRangeStrExtractList PushApp substrings defined by range onto list
+** @use ajRangeStrExtract Extract substrings defined by range
+** @use ajRangeStrStuff The opposite of ajRangeStrExtract
+** @use ajRangeStrMask Mask the range in a String
+** @use ajRangeOverlapSingle Detect an overlap of a range to a sequence region
+** @use ajRangeOverlaps Detect overlaps of a set of ranges to a seq region 
+** @use ajRangeOrdered Test if ranges are in ascending non-overlapping order
+** @use ajRangeDefault Test if the default range has been set
+** @@
 ******************************************************************************/
+
 
 typedef struct AjSRange
 {
