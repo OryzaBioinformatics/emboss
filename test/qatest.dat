@@ -1,0 +1,423 @@
+ID antigenic-command
+AP antigenic
+CL tsw:amir_pseae -auto
+## temporary feature output file
+FI amir_pseae.out2
+FI amir_pseae.antigenic
+FP /ANTIGENIC/
+FP /246/
+FP /1[.]246/
+FP / NS.[^P]GSL/
+FZ >100
+FC >5
+CC
+CC Only kidding - both stdout and stderr should be empty
+FI stdout
+FZ <5
+FI stderr
+FC =0
+//
+
+ID antigenic-ex
+AP antigenic
+IN tsw:act1_fugru
+IN
+IN
+FI act1_fugru.out2
+FI act1_fugru.antigenic
+FP /ANTIGENIC/
+FP /1[.]207/
+FP /AA[^AV]VV/
+FZ >100
+FC >5
+CC
+CC stderr should have 1 line of doc, 1 of prompts
+FI stderr
+FC =2
+//
+
+ID backtranseq-ex
+AP backtranseq
+IN tsw:ach2_drome
+IN
+FI ach2_drome.fasta
+FP /^>ACH2_DROME.*GAGAAGAAGAAC$/
+FZ =1838
+FI stderr
+FC = 2
+//
+
+ID banana-ex
+AP banana
+CL -graph ps
+IN tembl:rnu68037
+FI banana.profile
+FZ =21906
+FI banana.ps
+FZ =308957
+FI stderr
+FC = 2
+//
+ID btwisted-ex
+AP btwisted
+CL -auto tembl:ab000095 -sbegin 100 -send 120
+FI ab000095.btwisted
+//
+
+ID cai-ex
+AP cai
+CL TEMBL:AB009602
+IN
+IN
+FI stderr
+FC = 2
+FI ab009602.cai
+FP /0[.]188/
+//
+
+ID chaos-ex
+AP chaos
+CL tembl:eclac -graph ps
+FI stderr
+FC = 2
+FI eclac.chaos
+FZ = 0
+FI chaos.ps
+FZ > 100
+//
+
+ID charge-ex
+AP charge
+CL tsw:hbb_human
+IN
+FI stderr
+FC = 2
+FI hbb_human.charge
+FP /CHARGE of HBB_HUMAN from 1 to 146: window 5/
+FC = 145
+//
+
+ID checktrans-ex
+AP checktrans
+IN ../../data/paamir.pep
+IN
+IN
+IN
+FI stderr
+FC = 2
+FI paamir_1.checktrans
+FP /Total STOPS:\s+7$/
+FI paamir_1.fasta
+FI paamir_1.out3
+//
+
+ID chips-ex
+AP chips
+CL -sbeg 135 -send 1292
+IN tembl:paamir
+IN
+FI stderr
+FC = 2
+FI paamir.chips
+FP /Nc = 32[.]951/
+//
+
+ID cirdna-ex
+AP cirdna
+CL -graph data
+IN ../../data/data.cirp
+IN
+IN
+FI stderr
+FC = 2
+//
+
+ID codcmp-ex
+AP codcmp
+IN Eeco.cut
+IN Ehin.cut
+IN
+FI stderr
+FC = 2
+FI outfile.codcmp
+FP /^Mean Squared Difference = 0[.]037$/
+FP /^Sum Squared Difference = 2[.]337$/
+FP /^Root Mean Squared Difference = 0[.]191$/
+FP /^Sum Difference         = 9[.]840$/
+FP /^Mean Difference         = 0[.]154$/
+FP /^Codons not appearing   = 0$/
+//
+
+ID coderet-ex
+AP coderet
+IN tembl:X03487
+IN
+FI stderr
+FC = 2
+FI hsferg1.fasta
+FP />x03487_cds_1\natgacgaccgcgt/
+FP /\naatgaaagctaa\n>x03487_mrna_1\ncagacgttcttcgc/
+FP /ctcctacgtttacctgtccatg\n>x03487_pro_1\nMTTASTSQVRQNY/
+//
+
+ID coderet-ex2
+AP coderet
+CL -nocds -notranslation
+IN tembl:X03487
+IN
+FI stderr
+FC = 2
+FI hsferg1.fasta
+FP 0 />x03487_cds_1/
+FP />x03487_mrna_1\ncagacgttcttcgc/
+FP 0 />x03487_pro_1/
+//
+
+ID compseq-ex
+AP compseq
+CL tembl:hsfau 2 result3.comp
+FI stderr
+FC = 1
+FI result3.comp
+//
+
+ID compseq-ex2
+AP compseq
+CL tembl:hsfau 6 result6.comp -nozero
+FI stderr
+FC = 1
+FI result6.comp
+//
+
+ID compseq-ex3
+AP compseq
+CL tembl:hsfau 3 result3.comp -frame 2 -in ../../data/prev.comp
+FI stderr
+FC = 1
+FI result3.comp
+//
+
+ID cons-ex
+AP cons
+IN ../../data/dna.msf
+IN aligned.cons
+FI stderr
+FC = 2
+FI aligned.cons
+//
+
+ID cpgplot-ex
+AP cpgplot
+CL tembl:rnu68037 -graph data
+IN
+IN
+IN
+IN
+IN
+IN
+FI stderr
+FC = 7
+FI rnu68037.cpgplot
+FP /RNU68037 from 1 to 1218/
+FP /Observed\/Expected ratio > 0\.60/
+FP /Length 406 \(104\.\.509\)/
+FP /Length 329 \(596\.\.924\)/
+FI rnu68037.out2
+FZ = 0
+//
+
+ID cpgreport-ex
+AP cpgreport
+CL tembl:rnu68037
+IN
+IN
+FI stderr
+FC = 2
+FI rnu68037.cpgreport
+FP /CPGREPORT of RNU68037 from 1 to 1218/
+FP /RNU68037                 12     13    17          1 100\.0    -/
+FP /RNU68037               1183   1193    26          2  72\.7   2\.00/
+FI rnu68037.out2
+FZ = 0
+//
+
+ID cusp-ex
+AP cusp
+CL -sbeg 135 -send 1292
+IN tembl:paamir
+IN
+FI stderr
+FC = 2
+FI paamir.cusp
+FP /GCA\tA\t\t0\.077\t7\.772\t3/
+FP /GCC\tA\t\t0\.462\t46\.632\t18/
+FP /GCG\tA\t\t0\.462\t46\.632\t18/
+FP /GCT\tA\t\t0\.000\t0\.000\t0/
+//
+
+ID cutseq-ex
+AP cutseq
+CL tembl:paamir gatta2.seq -from=10 -to=12
+FI stderr
+FC = 1
+FI gatta2.seq
+FZ = 2291
+//
+
+ID cutseq-ex2
+AP cutseq
+CL tembl:paamir -from=1 -to=20 -out=jsh.seq
+FI stderr
+FC = 1
+FI jsh.seq
+FZ = 2273
+//
+
+ID cutseq-ex3
+AP cutseq
+CL tembl:paamir starta.seq -sbeg=-100 -send=1290
+IN
+IN
+FI stderr
+FC = 2
+FI starta.seq
+FZ = 90
+//
+
+ID dan-ex
+AP dan
+IN tembl:paamir
+IN
+IN
+IN
+IN
+IN
+FI stderr
+FC = 2
+FI paamir.dan
+FP /   1 GGTACCGCTGGCCGAGCATC   20 Tm=64\.9 GC%=70\.0/
+FP /   2 GTACCGCTGGCCGAGCATCT   21 Tm=63\.7 GC%=65\.0/
+FZ = 103140
+FC = 2150
+//
+
+ID dan-ex2
+AP dan
+CL -plot -graph data
+IN tembl:paamir
+IN
+IN
+IN
+IN
+IN
+FI stderr
+FC = 2
+//
+
+ID dbiblast-ex
+AP dbiblast
+IN swnew
+IN ../../data
+IN
+IN
+IN
+IN
+IN
+FI stderr
+FC = 2
+FI acnum.hit
+FZ = 320
+FI acnum.trg
+FZ = 400
+FI division.lkp
+FZ = 322
+FI entrynam.idx
+FZ = 410
+//
+
+ID dbifasta-ex
+AP dbifasta
+IN simple
+IN EMROD
+IN ../../data
+IN emrod
+IN
+IN
+FI stderr
+FC = 8
+FI acnum.hit
+FZ = 312
+FI acnum.trg
+FZ = 384
+FI division.lkp
+FZ = 322
+FI entrynam.idx
+FZ = 390
+//
+
+ID dbifasta-swiss
+AP dbifasta
+IN simple
+IN SWNEW
+IN ../../data
+IN swnew
+IN
+IN
+FI stderr
+FC = 8
+FI acnum.hit
+FZ = 320
+FI acnum.trg
+FZ = 440
+FI division.lkp
+FZ = 322
+FI entrynam.idx
+FZ = 450
+//
+
+ID dbiflat-ex
+AP dbiflat
+IN EMBL
+IN EMBL
+IN ../../embl
+IN rod.dat
+IN
+IN
+FI acnum.hit
+FZ = 312
+FI acnum.trg
+FZ = 360
+FI division.lkp
+FZ = 322
+FI entrynam.idx
+FZ = 366
+//
+
+ID dbiflat-swiss
+AP dbiflat
+IN
+IN SWNEW
+IN ../../swnew
+IN
+IN
+IN
+FI stderr
+FC = 2
+FI acnum.hit
+FZ = 320
+FI acnum.trg
+FZ = 400
+FI division.lkp
+FZ = 378
+FI entrynam.idx
+FZ = 410
+//
+
+ID degapseq-ex
+AP degapseq
+CL ../../data/dnagap.fasta nogaps.seq
+FI stderr
+FC = 1
+FI nogaps.seq
+FZ = 138
+//
