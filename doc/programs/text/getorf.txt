@@ -75,7 +75,7 @@ Command line arguments
                                   output. If the region of flanking
                                   nucleotides crosses the start or end of the
                                   sequence, no output is given for this codon.
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -190,17 +190,17 @@ Known bugs
 
 See also
 
-   Program name Description
-   backtranseq Back translate a protein sequence
-   chips Codon usage statistics
-   cusp Create a codon usage table
-   plotorf Plot potential open reading frames
-   prettyseq Output sequence with translated ranges
-   remap Display a sequence with restriction cut sites, translation etc
-   showorf Pretty output of DNA translations
-   showseq Display a sequence with features, translation etc
-   syco Synonymous codon usage Gribskov statistic plot
-   transeq Translate nucleic acid sequences
+   Program name                          Description
+   backtranseq  Back translate a protein sequence
+   chips        Codon usage statistics
+   cusp         Create a codon usage table
+   plotorf      Plot potential open reading frames
+   prettyseq    Output sequence with translated ranges
+   remap        Display a sequence with restriction cut sites, translation etc
+   showorf      Pretty output of DNA translations
+   showseq      Display a sequence with features, translation etc
+   syco         Synonymous codon usage Gribskov statistic plot
+   transeq      Translate nucleic acid sequences
    
      * checktrans - Reports STOP codons and ORF statistics of a protein
        sequence

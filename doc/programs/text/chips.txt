@@ -43,7 +43,7 @@ Command line arguments
    Advanced qualifiers:
    -cfile              codon      Codon usage file
    -window             integer    Averaging window
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-seqall]
@@ -112,20 +112,20 @@ Known bugs
 
 See also
 
-   Program name Description
-   chaos Create a chaos game representation plot for a sequence
-   codcmp Codon usage table comparison
-   compseq Counts the composition of dimer/trimer/etc words in a sequence
-   cusp Create a codon usage table
-   freak Residue/base frequency table or plot
-   geecee Calculates the fractional GC content of nucleic acid sequences
-   getorf Finds and extracts open reading frames (ORFs)
-   isochore Plots isochores in large DNA sequences
+   Program name                          Description
+   chaos        Create a chaos game representation plot for a sequence
+   codcmp       Codon usage table comparison
+   compseq      Counts the composition of dimer/trimer/etc words in a sequence
+   cusp         Create a codon usage table
+   freak        Residue/base frequency table or plot
+   geecee       Calculates the fractional GC content of nucleic acid sequences
+   getorf       Finds and extracts open reading frames (ORFs)
+   isochore     Plots isochores in large DNA sequences
    newcpgreport Report CpG rich areas
-   newcpgseek Reports CpG rich regions
-   syco Synonymous codon usage Gribskov statistic plot
-   wobble Wobble base plot
-   wordcount Counts words of a specified size in a DNA sequence
+   newcpgseek   Reports CpG rich regions
+   syco         Synonymous codon usage Gribskov statistic plot
+   wobble       Wobble base plot
+   wordcount    Counts words of a specified size in a DNA sequence
    
 Author(s)
 

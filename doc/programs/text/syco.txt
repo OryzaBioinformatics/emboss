@@ -49,7 +49,7 @@ Command line arguments
    -uncommon           bool       Show common codon usage
    -minimum            float      Minimum value for a common codon
    -plot               bool       Produce plot
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -133,10 +133,10 @@ Known bugs
    
 See also
 
-   Program name Description
-   chips Codon usage statistics
-   cusp Create a codon usage table
-   getorf Finds and extracts open reading frames (ORFs)
+   Program name                  Description
+   chips        Codon usage statistics
+   cusp         Create a codon usage table
+   getorf       Finds and extracts open reading frames (ORFs)
    
    wobble does the analysis of the third base.
    

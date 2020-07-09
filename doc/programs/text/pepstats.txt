@@ -44,7 +44,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers:
    -[no]termini        bool       Include charge at N and C terminus
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequencea]

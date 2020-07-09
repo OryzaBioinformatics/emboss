@@ -76,7 +76,7 @@ Command line arguments
    -[no]systemsort     bool       Use system sort utility
    -[no]cleanup        bool       Clean up temporary files
    -sourcefile         bool       Use FASTA source file
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-dbname]
@@ -152,10 +152,10 @@ Known bugs
 
 See also
 
-   Program name Description
-   dbifasta Index a fasta database
-   dbiflat Index a flat file database
-   dbigcg Index a GCG formatted database
+   Program name          Description
+   dbifasta     Index a fasta database
+   dbiflat      Index a flat file database
+   dbigcg       Index a GCG formatted database
    
 Author(s)
 

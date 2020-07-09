@@ -29,9 +29,9 @@ $ prettyplot $EMBOSS_DATA/globin.msf -plurality=3 -docolour
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Mandatory qualifiers (* if not always prompted):
   [-msf]               seqset     File containing a sequence alignment
-   -graph              graph      Graph type
+*  -graph              graph      Graph type
 
    Optional qualifiers:
    -residuesperline    integer    The number of residues to be displayed on
@@ -80,10 +80,12 @@ Command line arguments
                                   for matching or identical scores then a
                                   collision has occured.
    -portrait           bool       Set page to Portrait
-   -datafile           matrix     Matrix file
+   -matrixfile         matrix     Matrix file
    -showscore          integer    Print residue scores
 
-   Advanced qualifiers: (none)
+   Advanced qualifiers:
+   -data               bool       (no help text) bool value
+   
 
    Mandatory qualifiers Allowed values Default
    [-msf]
@@ -137,12 +139,12 @@ Command line arguments
    a top score for matching or identical scores then a collision has
    occured. Integer from 0 to 3 0
    -portrait Set page to Portrait Yes/No No
-   -datafile Matrix file Comparison matrix file in EMBOSS data path
+   -matrixfile Matrix file Comparison matrix file in EMBOSS data path
    EBLOSUM62 for protein
    EDNAMAT for DNA
    -showscore Print residue scores Any integer value -1
    Advanced qualifiers Allowed values Default
-   (none)
+   -data (no help text) bool value Yes/No No
    
 Input file format
 
@@ -195,7 +197,8 @@ Known bugs
 
 See also
 
-   Program name Description
+   Program name                        Description
+   plotcon      Plots the quality of conservation of a sequence alignment
    
 Author(s)
 

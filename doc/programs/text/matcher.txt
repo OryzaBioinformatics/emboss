@@ -89,7 +89,7 @@ Command line arguments
    -length             integer    number of residues per line
 
    Advanced qualifiers: (none)
-
+   
    Mandatory qualifiers Allowed values Default
    [-sequencea]
    (Parameter 1) Sequence USA Readable sequence Required
@@ -325,8 +325,8 @@ Known bugs
 
 See also
 
-   Program name Description
-   water Smith-Waterman local alignment
+   Program name          Description
+   water        Smith-Waterman local alignment
    
 Author(s)
 

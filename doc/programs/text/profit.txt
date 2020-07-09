@@ -25,7 +25,7 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
-
+   
    Mandatory qualifiers Allowed values Default
    [-infile]
    (Parameter 1) Profile or matrix file Input file Required
@@ -58,9 +58,10 @@ Known bugs
 
 See also
 
-   Program name Description
-   prophecy Creates matrices/profiles from multiple alignments
-   prophet Gapped alignment for profiles
+   Program name                    Description
+   cons         Creates a consensus from multiple alignments
+   prophecy     Creates matrices/profiles from multiple alignments
+   prophet      Gapped alignment for profiles
    
 Author(s)
 

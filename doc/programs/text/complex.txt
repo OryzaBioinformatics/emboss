@@ -73,7 +73,7 @@ Command line arguments
    -print              bool       generate a file named UjTable containing the
                                   values of Uj for each word j in the real
                                   sequence(s) and in any simulated sequences
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -158,10 +158,10 @@ Known bugs
 
 See also
 
-   Program name Description
-   banana Bending and curvature plot in B-DNA
-   btwisted Calculates the twisting in a B-DNA sequence
-   dan Calculates DNA RNA/DNA melting temperature
+   Program name                 Description
+   banana       Bending and curvature plot in B-DNA
+   btwisted     Calculates the twisting in a B-DNA sequence
+   dan          Calculates DNA RNA/DNA melting temperature
    
 Author(s)
 

@@ -52,14 +52,14 @@ Command line arguments
                                   field
    -[no]systemsort     bool       Use system sort utility
    -[no]cleanup        bool       Clean up temporary files
-
+   
 
    Mandatory qualifiers Allowed values Default
    -idformat Entry format
-   EMBL (EMBL)
-   SWISS (Swiss-Prot, SpTrEMBL, TrEMBLnew)
+   EMBL    (EMBL)
+   SWISS   (Swiss-Prot, SpTrEMBL, TrEMBLnew)
    GENBANK (Genbank, DDBJ)
-   PIR (NBRF)
+   PIR     (NBRF)
    EMBL
    [-dbname]
    (Parameter 1) Database name A string from 1 to 19 characters Required
@@ -123,10 +123,10 @@ Known bugs
 
 See also
 
-   Program name Description
-   dbiblast Index a BLAST database
-   dbifasta Index a fasta database
-   dbiflat Index a flat file database
+   Program name        Description
+   dbiblast     Index a BLAST database
+   dbifasta     Index a fasta database
+   dbiflat      Index a flat file database
    
 Author(s)
 

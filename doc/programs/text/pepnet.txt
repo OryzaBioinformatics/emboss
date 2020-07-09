@@ -55,7 +55,7 @@ Command line arguments
                                   and '-octags'.
    -data               bool       Output the data to a file instead of
                                   plotting it
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]

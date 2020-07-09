@@ -61,7 +61,7 @@ Command line arguments
    -length             integer    number per line
 
    Advanced qualifiers: (none)
-
+   
    Mandatory qualifiers Allowed values Default
    [-sequencea]
    (Parameter 1) Sequence USA Readable sequence Required
@@ -124,8 +124,8 @@ Known bugs
 
 See also
 
-   Program name Description
-   needle Needleman-Wunsch global alignment
+   Program name            Description
+   needle       Needleman-Wunsch global alignment
    
 Author(s)
 

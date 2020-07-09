@@ -38,7 +38,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers:
    -featout            featout    File for output features
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -122,15 +122,15 @@ Known bugs
 
 See also
 
-   Program name Description
-   digest Protein proteolytic enzyme or reagent cleavage digest
-   iep Calculates the isoelectric point of a protein
-   octanol Displays protein hydropathy
-   pepinfo Plots simple amino acid properties in parallel
-   pepnet Displays proteins as a helical net
-   pepstats Protein statistics
-   pepwheel Shows protein sequences as helices
-   pepwindow Displays protein hydropathy
+   Program name                      Description
+   digest       Protein proteolytic enzyme or reagent cleavage digest
+   iep          Calculates the isoelectric point of a protein
+   octanol      Displays protein hydropathy
+   pepinfo      Plots simple amino acid properties in parallel
+   pepnet       Displays proteins as a helical net
+   pepstats     Protein statistics
+   pepwheel     Shows protein sequences as helices
+   pepwindow    Displays protein hydropathy
    pepwindowall Displays protein hydropathy of a set of sequences
    
      * transeq : Translate nucleic acid sequences

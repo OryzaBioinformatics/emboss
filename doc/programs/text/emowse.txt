@@ -41,7 +41,7 @@ Command line arguments
    -frequencies        string     Frequencies file
    -tolerance          float      (no help text) float value
    -partials           float      Partials factor
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequences]
@@ -107,9 +107,9 @@ Known bugs
    
 See also
 
-   Program name Description
-   compseq Counts the composition of dimer/trimer/etc words in a sequence
-   oddcomp Finds protein sequence regions with a biased composition
+   Program name                          Description
+   compseq      Counts the composition of dimer/trimer/etc words in a sequence
+   oddcomp      Finds protein sequence regions with a biased composition
    
 Author(s)
 

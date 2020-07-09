@@ -59,7 +59,7 @@ Command line arguments
    Advanced qualifiers:
    -[no]generalplot    bool       plot histogram of general properties
    -[no]hydropathyplot bool       plot graphs of hydropathy
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-inseq]

@@ -40,7 +40,7 @@ Command line arguments
    Advanced qualifiers:
    -afeatout           featout    File for output of normal tab delimted gff's
    -bfeatout           featout    File for output of normal tab delimted gff's
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-asequence]

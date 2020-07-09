@@ -51,7 +51,7 @@ Command line arguments
    Advanced qualifiers:
    -cfile              codon      Codon usage file
    -width              integer    Width of screen
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -189,15 +189,15 @@ Known bugs
 
 See also
 
-   Program name Description
-   backtranseq Back translate a protein sequence
-   cusp Create a codon usage table
-   getorf Finds and extracts open reading frames (ORFs)
-   plotorf Plot potential open reading frames
-   prettyseq Output sequence with translated ranges
-   remap Display a sequence with restriction cut sites, translation etc
-   showseq Display a sequence with features, translation etc
-   transeq Translate nucleic acid sequences
+   Program name                          Description
+   backtranseq  Back translate a protein sequence
+   cusp         Create a codon usage table
+   getorf       Finds and extracts open reading frames (ORFs)
+   plotorf      Plot potential open reading frames
+   prettyseq    Output sequence with translated ranges
+   remap        Display a sequence with restriction cut sites, translation etc
+   showseq      Display a sequence with features, translation etc
+   transeq      Translate nucleic acid sequences
    
 Author(s)
 

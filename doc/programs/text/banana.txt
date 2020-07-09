@@ -26,17 +26,19 @@ Usage
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Mandatory qualifiers (* if not always prompted):
   [-sequence]          sequence   Sequence USA
-   -graph              graph      Graph type
+*  -graph              graph      Graph type
 
    Optional qualifiers:
-   -datafile           datafile   angles file
+   -anglesfile         datafile   angles file
    -residuesperline    integer    Number of residues to be displayed on each
                                   line
    -outfile            outfile    Output file name
 
-   Advanced qualifiers: (none)
+   Advanced qualifiers:
+   -data               bool       Output as data
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -46,12 +48,12 @@ Command line arguments
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm
    EMBOSS_GRAPHICS value, or x11
    Optional qualifiers Allowed values Default
-   -datafile angles file Data file Eangles_tri.dat
+   -anglesfile angles file Data file Eangles_tri.dat
    -residuesperline Number of residues to be displayed on each line Any
    integer value 50
    -outfile Output file name Output file banana.profile
    Advanced qualifiers Allowed values Default
-   (none)
+   -data Output as data Yes/No No
    
 Input file format
 
@@ -87,10 +89,10 @@ Known bugs
 
 See also
 
-   Program name Description
-   btwisted Calculates the twisting in a B-DNA sequence
-   complex Find the linguistic complexity in nucleotide sequences
-   dan Calculates DNA RNA/DNA melting temperature
+   Program name                      Description
+   btwisted     Calculates the twisting in a B-DNA sequence
+   complex      Find the linguistic complexity in nucleotide sequences
+   dan          Calculates DNA RNA/DNA melting temperature
    
 Author(s)
 

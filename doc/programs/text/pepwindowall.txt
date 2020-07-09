@@ -35,7 +35,7 @@ Command line arguments
    -length             integer    window size
 
    Advanced qualifiers: (none)
-
+   
    Mandatory qualifiers Allowed values Default
    [-msf]
    (Parameter 1) File containing a sequence alignment Readable sequences

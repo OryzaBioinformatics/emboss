@@ -39,7 +39,7 @@ Command line arguments
 
    Advanced qualifiers:
    -bases              string     Bases used
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -74,19 +74,19 @@ Known bugs
 
 See also
 
-   Program name Description
-   chaos Create a chaos game representation plot for a sequence
-   chips Codon usage statistics
-   codcmp Codon usage table comparison
-   compseq Counts the composition of dimer/trimer/etc words in a sequence
-   cusp Create a codon usage table
-   freak Residue/base frequency table or plot
-   geecee Calculates the fractional GC content of nucleic acid sequences
-   isochore Plots isochores in large DNA sequences
+   Program name                          Description
+   chaos        Create a chaos game representation plot for a sequence
+   chips        Codon usage statistics
+   codcmp       Codon usage table comparison
+   compseq      Counts the composition of dimer/trimer/etc words in a sequence
+   cusp         Create a codon usage table
+   freak        Residue/base frequency table or plot
+   geecee       Calculates the fractional GC content of nucleic acid sequences
+   isochore     Plots isochores in large DNA sequences
    newcpgreport Report CpG rich areas
-   newcpgseek Reports CpG rich regions
-   tfscan Scans DNA sequences for transcription factors
-   wordcount Counts words of a specified size in a DNA sequence
+   newcpgseek   Reports CpG rich regions
+   tfscan       Scans DNA sequences for transcription factors
+   wordcount    Counts words of a specified size in a DNA sequence
    
 Author(s)
 

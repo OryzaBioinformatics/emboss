@@ -389,7 +389,7 @@ Command line arguments
                                   display the description of the sequence
    -offset             integer    Offset to start numbering the sequence from
    -html               bool       Use HTML formatting
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -413,19 +413,19 @@ Command line arguments
    page. For example if you wish to see things displayed in the order:
    sequence, complement sequence, ticks line, frame 1 translation, blank
    line; then you should enter 'S,C,T,1,B'.
-   S (Sequence)
-   B (Blank line)
-   1 (Frame1 translation)
-   2 (Frame2 translation)
-   3 (Frame3 translation)
+   S  (Sequence)
+   B  (Blank line)
+   1  (Frame1 translation)
+   2  (Frame2 translation)
+   3  (Frame3 translation)
    -1 (CompFrame1 translation)
    -2 (CompFrame2 translation)
    -3 (CompFrame3 translation)
-   T (Ticks line)
-   N (Number ticks line)
-   C (Complement sequence)
-   F (Features)
-   R (Restriction enzyme cut sites in forward sense)
+   T  (Ticks line)
+   N  (Number ticks line)
+   C  (Complement sequence)
+   F  (Features)
+   R  (Restriction enzyme cut sites in forward sense)
    -R (Restriction enzyme cut sites in reverse sense)
    B N T S F
    Optional qualifiers Allowed values Default
@@ -771,49 +771,50 @@ Known bugs
    
 See also
 
-   Program name Description
-   antigenic Finds antigenic sites in proteins
-   backtranseq Back translate a protein sequence
-   chaos Create a chaos game representation plot for a sequence
-   cirdna Draws circular maps of DNA constructs
-   cpgplot Plot CpG rich areas
-   cpgreport Reports all CpG rich regions
-   cusp Create a codon usage table
-   diffseq Find differences (SNPs) between nearly identical sequences
-   dotmatcher Displays a thresholded dotplot of two sequences
-   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
-   dottup Displays a wordmatch dotplot of two sequences
-   einverted Finds DNA inverted repeats
-   equicktandem Finds tandem repeats
-   etandem Looks for tandem repeats in a nucleotide sequence
-   garnier Predicts protein secondary structure
-   getorf Finds and extracts open reading frames (ORFs)
-   helixturnhelix Report nucleic acid binding motifs
-   isochore Plots isochores in large DNA sequences
-   lindna Draws linear maps of DNA constructs
-   newcpgreport Report CpG rich areas
-   newcpgseek Reports CpG rich regions
-   oddcomp Finds protein sequence regions with a biased composition
-   palindrome Looks for inverted repeats in a nucleotide sequence
-   pepcoil Predicts coiled coil regions
-   plotorf Plot potential open reading frames
-   polydot Displays all-against-all dotplots of a set of sequences
-   prettyseq Output sequence with translated ranges
-   pscan Scans proteins using PRINTS
-   rebaseextract Extract data from REBASE
-   redata Search REBASE for enzyme name, references, suppliers etc
-   remap Display a sequence with restriction cut sites, translation etc
-   restrict Finds restriction enzyme cleavage sites
-   seqret Reads and writes (returns) sequences
-   seqretall Reads and writes (returns) a set of sequences one at a time
-   seqretset Reads and writes (returns) a set of sequences all at once
-   showfeat Show features of a sequence
-   showorf Pretty output of DNA translations
-   sigcleave Reports protein signal cleavage sites
-   silent Silent mutation restriction enzyme scan
-   tfscan Scans DNA sequences for transcription factors
-   tmap Displays membrane spanning regions
-   transeq Translate nucleic acid sequences
+   Program name                           Description
+  antigenic      Finds antigenic sites in proteins
+  backtranseq    Back translate a protein sequence
+  chaos          Create a chaos game representation plot for a sequence
+  cirdna         Draws circular maps of DNA constructs
+  cpgplot        Plot CpG rich areas
+  cpgreport      Reports all CpG rich regions
+  cusp           Create a codon usage table
+  diffseq        Find differences (SNPs) between nearly identical sequences
+  dotmatcher     Displays a thresholded dotplot of two sequences
+  dotpath        Displays a non-overlapping wordmatch dotplot of two sequences
+  dottup         Displays a wordmatch dotplot of two sequences
+  einverted      Finds DNA inverted repeats
+  equicktandem   Finds tandem repeats
+  etandem        Looks for tandem repeats in a nucleotide sequence
+  garnier        Predicts protein secondary structure
+  getorf         Finds and extracts open reading frames (ORFs)
+  helixturnhelix Report nucleic acid binding motifs
+  isochore       Plots isochores in large DNA sequences
+  lindna         Draws linear maps of DNA constructs
+  newcpgreport   Report CpG rich areas
+  newcpgseek     Reports CpG rich regions
+  oddcomp        Finds protein sequence regions with a biased composition
+  palindrome     Looks for inverted repeats in a nucleotide sequence
+  pepcoil        Predicts coiled coil regions
+  plotorf        Plot potential open reading frames
+  polydot        Displays all-against-all dotplots of a set of sequences
+  prettyseq      Output sequence with translated ranges
+  pscan          Scans proteins using PRINTS
+  rebaseextract  Extract data from REBASE
+  redata         Search REBASE for enzyme name, references, suppliers etc
+  remap          Display a sequence with restriction cut sites, translation etc
+  restrict       Finds restriction enzyme cleavage sites
+  seqret         Reads and writes (returns) sequences
+  seqretall      Reads and writes (returns) a set of sequences one at a time
+  seqretset      Reads and writes (returns) a set of sequences all at once
+  seqretsplit    Reads and writes (returns) sequences
+  showfeat       Show features of a sequence
+  showorf        Pretty output of DNA translations
+  sigcleave      Reports protein signal cleavage sites
+  silent         Silent mutation restriction enzyme scan
+  tfscan         Scans DNA sequences for transcription factors
+  tmap           Displays membrane spanning regions
+  transeq        Translate nucleic acid sequences
    
 Author(s)
 

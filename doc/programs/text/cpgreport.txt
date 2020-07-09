@@ -1,0 +1,164 @@
+
+                             EMBOSS: cpgreport
+     _________________________________________________________________
+   
+                               Program cpgreport
+                                       
+Function
+
+   Reports all CpG rich regions
+   
+Description
+
+   cpgreport scans a nucleotide sequence for regions with higher than
+   expected frequencies of the dinucleotide CG.
+   
+   CpG refers to a C nucleotide immediately followed by a G. The 'p' in
+   'CpG' refers to the phosphate group linking the two bases.
+   
+   Detection of regions of genomic sequences that are rich in the CpG
+   pattern is important because such regions are resistant to methylation
+   and tend to be associated with genes which are frequently switched on.
+   Regions rich in the CpG pattern are known as CpG islands.
+   
+   This program does not find CpG islands as normally defined (see
+   cpgplot).
+   
+Usage
+
+   Here is a sample session with cpgreport.
+
+% cpgreport embl:rnu68037
+Reports CpG rich regions
+CpG score [17]:
+Output file [rnu68037.cpgreport]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -score              integer    This sets the score for each CG sequence
+                                  found. A value of 17 is more sensitive, but
+                                  28 has also been used with some success.
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -featout            featout    File for output features
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   -score This sets the score for each CG sequence found. A value of 17
+   is more sensitive, but 28 has also been used with some success.
+   Integer from 1 to 200 17
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.cpgreport
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -featout File for output features Writeable feature table unknown.gff
+   
+Input file format
+
+   Any DNA sequence USA.
+   
+Output file format
+
+   The output file from the above example (rnu68037.cpgreport) follows:
+
+CPGREPORT of RNU68037 from 1 to 1218
+
+Sequence              Begin    End Score        CpG   %CG  CG/GC
+RNU68037                 12     13    17          1 100.0    -
+RNU68037                 47     48    17          1 100.0    -
+RNU68037                 96   1032   630         87  66.1   0.65
+RNU68037               1072   1100    26          3  62.1   0.00
+RNU68037               1139   1140    17          1 100.0    -
+RNU68037               1183   1193    26          2  72.7   2.00
+
+   The first non-blank line of the output file is the title line giving
+   the program name, the name of sequence being analysed and the start
+   and end positions of the sequence.
+   
+   The second non-blank line contains the headings of teh columns.
+   
+   Subsequent lines contain columns with the following information:
+     * The name of the sequence.
+     * The begin position and the end position of the CpG-rich region.
+     * The score of the CpG-rich region.
+     * The number of CpG's in the CpG-rich region.
+     * The %(G+C) in the CpG-rich region.
+     * The ratio of CpG to GpC in the CpG-rich region.
+       
+   If the count of GpC in the region is zero, then the ratio of CG/GC is
+   reported as '-'.
+   
+Data files
+
+Notes
+
+   This program does not find CpG islands as normally defined (see
+   cpgplot).
+   
+References
+
+Warnings
+
+Diagnostic Error Messages
+
+Exit status
+
+   0 if successfull.
+   
+Known bugs
+
+See also
+
+   Program name                          Description
+   chaos        Create a chaos game representation plot for a sequence
+   cpgplot      Plot CpG rich areas
+   diffseq      Find differences (SNPs) between nearly identical sequences
+   dotmatcher   Displays a thresholded dotplot of two sequences
+   dotpath      Displays a non-overlapping wordmatch dotplot of two sequences
+   dottup       Displays a wordmatch dotplot of two sequences
+   einverted    Finds DNA inverted repeats
+   equicktandem Finds tandem repeats
+   etandem      Looks for tandem repeats in a nucleotide sequence
+   geecee       Calculates the fractional GC content of nucleic acid sequences
+   isochore     Plots isochores in large DNA sequences
+   newcpgreport Report CpG rich areas
+   newcpgseek   Reports CpG rich regions
+   palindrome   Looks for inverted repeats in a nucleotide sequence
+   polydot      Displays all-against-all dotplots of a set of sequences
+   redata       Search REBASE for enzyme name, references, suppliers etc
+   restrict     Finds restriction enzyme cleavage sites
+   showseq      Display a sequence with features, translation etc
+   silent       Silent mutation restriction enzyme scan
+   tfscan       Scans DNA sequences for transcription factors
+   
+Author(s)
+
+   This program was originally written by Gos Micklem (E-mail:
+   gos@sanger.ac.uk Post: Informatics Division, The Sanger Centre,
+   Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK).
+   
+   It was modified for inclusion in EGCG under the name 'CPGSPANS' by
+   Rodrigo Lopez S. (E-mail: rls@ebi.ac.uk Post: EMBL Outstation Hinxton,
+   The European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge, CB10 1SD, UK).
+   
+   This application was modified for inclusion in EMBOSS by Alan Bleasby
+   (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+   Completed 22nd March 1999.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

@@ -56,7 +56,7 @@ Command line arguments
    -accession          bool       Display 'accession' column
    -name               bool       Display 'name' column
    -description        bool       Display 'description' column
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -151,8 +151,8 @@ Known bugs
    
 See also
 
-   Program name Description
-   infoseq Displays some simple information about sequences
+   Program name                   Description
+   infoseq      Displays some simple information about sequences
    
 Author(s)
 

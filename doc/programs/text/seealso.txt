@@ -64,22 +64,25 @@ Command line arguments
                                   half of the URL.
                                   For example, if you wish the program name to
                                   be a hyperlink to the URL:
-                                  http://www.sanger.ac.uk/Software/EMBOSS/Apps/
-programname.shtml
+                                  http://www.uk.embnet.org/Software/EMBOSS/Apps
+/
+                                  programname.shtml
                                   then if you enter
-                                  http://www.sanger.ac.uk/Software/EMBOSS/Apps/
+                                  http://www.uk.embnet.org/Software/EMBOSS/Apps
+/
                                   here, then the first half of the URL before
-                                  the programname will be set.
+                                  the program name will be set.
 *  -postlink           string     If you are outputting to a file in HTML
                                   format, you can make the program names into
                                   hyper-links by setting this to be the second
                                   half of the URL.
                                   For example, if you wish the program name to
                                   be a hyperlink to the URL:
-                                  http://www.sanger.ac.uk/Software/EMBOSS/Apps/
-programname.shtml
+                                  http://www.uk.embnet.org/Software/EMBOSS/Apps
+/
+                                  programname.shtml
                                   then if you enter '.shtml' here, the second
-                                  half of the URL after the programname will
+                                  half of the URL after the program name will
                                   be set.
    -groups             bool       If you use this option, then only the group
                                   names will output to the file
@@ -125,7 +128,7 @@ programname.shtml
                                   people who wish the programs to be outside
                                   of the GNU Public Licence scheme, ie. they
                                   may wish to charge money for them.
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-search]
@@ -140,19 +143,18 @@ programname.shtml
    -prelink If you are outputting to a file in HTML format, you can make
    the program names into hyper-links by setting this to be the first
    half of the URL. For example, if you wish the program name to be a
-   hyperlink to the URL:
-   http://www.sanger.ac.uk/Software/EMBOSS/Apps/programname.shtml then if
-   you enter http://www.sanger.ac.uk/Software/EMBOSS/Apps/ here, then the
-   first half of the URL before the programname will be set. Any string
-   is accepted An empty string is accepted
+   hyperlink to the URL: http://www.uk.embnet.org/Software/EMBOSS/Apps/
+   programname.shtml then if you enter
+   http://www.uk.embnet.org/Software/EMBOSS/Apps/ here, then the first
+   half of the URL before the program name will be set. Any string is
+   accepted An empty string is accepted
    -postlink If you are outputting to a file in HTML format, you can make
    the program names into hyper-links by setting this to be the second
    half of the URL. For example, if you wish the program name to be a
-   hyperlink to the URL:
-   http://www.sanger.ac.uk/Software/EMBOSS/Apps/programname.shtml then if
-   you enter '.shtml' here, the second half of the URL after the
-   programname will be set. Any string is accepted An empty string is
-   accepted
+   hyperlink to the URL: http://www.uk.embnet.org/Software/EMBOSS/Apps/
+   programname.shtml then if you enter '.shtml' here, the second half of
+   the URL after the program name will be set. Any string is accepted An
+   empty string is accepted
    -groups If you use this option, then only the group names will output
    to the file Yes/No No
    -explode The groups that EMBOSS applications belong to have two forms,
@@ -231,8 +233,8 @@ Known bugs
    
 See also
 
-   Program name Description
-   wossname Finds programs by keywords in their one-line documentation
+   Program name                        Description
+   wossname     Finds programs by keywords in their one-line documentation
    
 Author(s)
 

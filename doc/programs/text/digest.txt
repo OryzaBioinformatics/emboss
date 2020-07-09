@@ -51,7 +51,7 @@ Command line arguments
                                   potential cut site within it.
    -allpartials        bool       As for overlap but fragments containing more
                                   than one potential cut site are included.
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequencea]

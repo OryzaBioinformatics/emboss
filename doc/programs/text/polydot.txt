@@ -55,7 +55,7 @@ Command line arguments
                                   used to separate the individual dotplots in
                                   the display. The size is measured in
                                   residues, as displayed in the output.
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequences]

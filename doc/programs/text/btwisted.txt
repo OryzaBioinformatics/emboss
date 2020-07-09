@@ -32,7 +32,7 @@ Command line arguments
    Advanced qualifiers:
    -angledata          string     File containing base pair twist angles
    -energydata         string     File containing base pair stacking energies
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -181,10 +181,10 @@ Known bugs
    
 See also
 
-   Program name Description
-   banana Bending and curvature plot in B-DNA
-   complex Find the linguistic complexity in nucleotide sequences
-   dan Calculates DNA RNA/DNA melting temperature
+   Program name                      Description
+   banana       Bending and curvature plot in B-DNA
+   complex      Find the linguistic complexity in nucleotide sequences
+   dan          Calculates DNA RNA/DNA melting temperature
    
 Author(s)
 

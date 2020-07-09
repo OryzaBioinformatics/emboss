@@ -185,7 +185,7 @@ Command line arguments
                                   displayed. The value of the 'translation'
                                   tag is never displayed as it is often
                                   extremely long.
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -236,8 +236,8 @@ Command line arguments
    names with the character '|', eg: pax* | 10 Any string is accepted *
    -sort Sort features by Type, Start or Source
    source (Sort by Source)
-   start (Sort by Start position)
-   type (Sort by Type)
+   start  (Sort by Start position)
+   type   (Sort by Type)
    start
    Advanced qualifiers Allowed values Default
    -html Use HTML formatting Yes/No No
@@ -396,14 +396,15 @@ Known bugs
 
 See also
 
-   Program name Description
-   cirdna Draws circular maps of DNA constructs
-   lindna Draws linear maps of DNA constructs
-   remap Display a sequence with restriction cut sites, translation etc
-   seqret Reads and writes (returns) sequences
-   seqretall Reads and writes (returns) a set of sequences one at a time
-   seqretset Reads and writes (returns) a set of sequences all at once
-   showseq Display a sequence with features, translation etc
+   Program name                          Description
+   cirdna       Draws circular maps of DNA constructs
+   lindna       Draws linear maps of DNA constructs
+   remap        Display a sequence with restriction cut sites, translation etc
+   seqret       Reads and writes (returns) sequences
+   seqretall    Reads and writes (returns) a set of sequences one at a time
+   seqretset    Reads and writes (returns) a set of sequences all at once
+   seqretsplit  Reads and writes (returns) sequences
+   showseq      Display a sequence with features, translation etc
    
 Author(s)
 

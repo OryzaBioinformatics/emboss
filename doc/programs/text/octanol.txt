@@ -66,7 +66,7 @@ Command line arguments
    -[no]differenceplot bool       Do not display the difference plot
 
    Advanced qualifiers: (none)
-
+   
    Mandatory qualifiers Allowed values Default
    [-sequencea]
    (Parameter 1) Sequence USA Readable sequence Required

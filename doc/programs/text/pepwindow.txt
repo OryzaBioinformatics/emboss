@@ -31,7 +31,7 @@ Command line arguments
    -length             integer    window size
 
    Advanced qualifiers: (none)
-
+   
    Mandatory qualifiers Allowed values Default
    [-sequencea]
    (Parameter 1) Sequence USA Readable sequence Required

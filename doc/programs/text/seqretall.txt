@@ -33,7 +33,7 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
-
+   
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
@@ -77,14 +77,15 @@ Known bugs
 
 See also
 
-   Program name Description
-   cirdna Draws circular maps of DNA constructs
-   lindna Draws linear maps of DNA constructs
-   remap Display a sequence with restriction cut sites, translation etc
-   seqret Reads and writes (returns) sequences
-   seqretset Reads and writes (returns) a set of sequences all at once
-   showfeat Show features of a sequence
-   showseq Display a sequence with features, translation etc
+   Program name                          Description
+   cirdna       Draws circular maps of DNA constructs
+   lindna       Draws linear maps of DNA constructs
+   remap        Display a sequence with restriction cut sites, translation etc
+   seqret       Reads and writes (returns) sequences
+   seqretset    Reads and writes (returns) a set of sequences all at once
+   seqretsplit  Reads and writes (returns) sequences
+   showfeat     Show features of a sequence
+   showseq      Display a sequence with features, translation etc
    
 Author(s)
 

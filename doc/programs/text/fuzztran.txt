@@ -76,7 +76,7 @@ Command line arguments
    -mmshow             bool       Show mismatches
    -accshow            bool       Show accession numbers
    -descshow           bool       Show descriptions
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -88,15 +88,15 @@ Command line arguments
    (Parameter 2) Output file name Output file <sequence>.fuzztran
    Optional qualifiers Allowed values Default
    -frame Frame(s) to translate
-   1 (1)
-   2 (2)
-   3 (3)
-   F (Forward three frames)
+   1  (1)
+   2  (2)
+   3  (3)
+   F  (Forward three frames)
    -1 (-1)
    -2 (-2)
    -3 (-3)
-   R (Reverse three frames)
-   6 (All six frames)
+   R  (Reverse three frames)
+   6  (All six frames)
    1
    -table Genetic code to use
    0 (Standard)
@@ -312,15 +312,15 @@ Known bugs
 
 See also
 
-   Program name Description
-   dreg regular expression search of a nucleotide sequence
-   fuzznuc Nucleic acid pattern search
-   fuzzpro Protein pattern search
-   patmatdb Search a protein sequence with a motif
+   Program name                       Description
+   dreg         regular expression search of a nucleotide sequence
+   fuzznuc      Nucleic acid pattern search
+   fuzzpro      Protein pattern search
+   patmatdb     Search a protein sequence with a motif
    patmatmotifs Search a PROSITE motif database with a protein sequence
-   preg regular expression search of a protein sequence
-   pscan Scans proteins using PRINTS
-   tfscan Scans DNA sequences for transcription factors
+   preg         regular expression search of a protein sequence
+   pscan        Scans proteins using PRINTS
+   tfscan       Scans DNA sequences for transcription factors
    
    Other EMBOSS programs allow you to search for regular expression
    patterns but may be less easy for the user who has never used regular

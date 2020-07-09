@@ -37,7 +37,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers:
    -shuffle            integer    Number of shuffles
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -117,8 +117,8 @@ Known bugs
    
 See also
 
-   Program name Description
-   msbar Mutate sequence beyond all recognition
+   Program name              Description
+   msbar        Mutate sequence beyond all recognition
    
 Author(s)
 

@@ -56,7 +56,7 @@ Command line arguments
    -[no]wheel          bool       Plot the wheel
    -data               bool       Output the match data to a file instead of
                                   plotting it
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]

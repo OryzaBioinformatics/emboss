@@ -35,7 +35,7 @@ Command line arguments
    -sshow              bool       Display untranslated sequence
    -tshow              bool       Display translated sequence
    -allmut             bool       Display all mutations
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-seq]
@@ -113,28 +113,28 @@ Known bugs
    
 See also
 
-   Program name Description
-   chaos Create a chaos game representation plot for a sequence
-   cpgplot Plot CpG rich areas
-   cpgreport Reports all CpG rich regions
-   diffseq Find differences (SNPs) between nearly identical sequences
-   dotmatcher Displays a thresholded dotplot of two sequences
-   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
-   dottup Displays a wordmatch dotplot of two sequences
-   einverted Finds DNA inverted repeats
-   equicktandem Finds tandem repeats
-   etandem Looks for tandem repeats in a nucleotide sequence
-   isochore Plots isochores in large DNA sequences
-   newcpgreport Report CpG rich areas
-   newcpgseek Reports CpG rich regions
-   palindrome Looks for inverted repeats in a nucleotide sequence
-   polydot Displays all-against-all dotplots of a set of sequences
+   Program name                           Description
+   chaos         Create a chaos game representation plot for a sequence
+   cpgplot       Plot CpG rich areas
+   cpgreport     Reports all CpG rich regions
+   diffseq       Find differences (SNPs) between nearly identical sequences
+   dotmatcher    Displays a thresholded dotplot of two sequences
+   dotpath       Displays a non-overlapping wordmatch dotplot of two sequences
+   dottup        Displays a wordmatch dotplot of two sequences
+   einverted     Finds DNA inverted repeats
+   equicktandem  Finds tandem repeats
+   etandem       Looks for tandem repeats in a nucleotide sequence
+   isochore      Plots isochores in large DNA sequences
+   newcpgreport  Report CpG rich areas
+   newcpgseek    Reports CpG rich regions
+   palindrome    Looks for inverted repeats in a nucleotide sequence
+   polydot       Displays all-against-all dotplots of a set of sequences
    rebaseextract Extract data from REBASE
-   redata Search REBASE for enzyme name, references, suppliers etc
-   remap Display a sequence with restriction cut sites, translation etc
-   restrict Finds restriction enzyme cleavage sites
-   showseq Display a sequence with features, translation etc
-   tfscan Scans DNA sequences for transcription factors
+   redata        Search REBASE for enzyme name, references, suppliers etc
+   remap         Display a sequence with restriction cut sites, translation etc
+   restrict      Finds restriction enzyme cleavage sites
+   showseq       Display a sequence with features, translation etc
+   tfscan        Scans DNA sequences for transcription factors
    
 Author(s)
 

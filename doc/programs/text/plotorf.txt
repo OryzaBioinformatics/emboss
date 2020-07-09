@@ -30,7 +30,7 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
-
+   
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
@@ -63,15 +63,15 @@ Known bugs
 
 See also
 
-   Program name Description
-   backtranseq Back translate a protein sequence
-   cusp Create a codon usage table
-   getorf Finds and extracts open reading frames (ORFs)
-   prettyseq Output sequence with translated ranges
-   remap Display a sequence with restriction cut sites, translation etc
-   showorf Pretty output of DNA translations
-   showseq Display a sequence with features, translation etc
-   transeq Translate nucleic acid sequences
+   Program name                          Description
+   backtranseq  Back translate a protein sequence
+   cusp         Create a codon usage table
+   getorf       Finds and extracts open reading frames (ORFs)
+   prettyseq    Output sequence with translated ranges
+   remap        Display a sequence with restriction cut sites, translation etc
+   showorf      Pretty output of DNA translations
+   showseq      Display a sequence with features, translation etc
+   transeq      Translate nucleic acid sequences
    
 Author(s)
 

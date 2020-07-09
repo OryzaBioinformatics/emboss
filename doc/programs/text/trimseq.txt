@@ -94,7 +94,7 @@ Command line arguments
    Advanced qualifiers:
    -[no]left           bool       Trim at the start
    -[no]right          bool       Trim at the end
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -161,21 +161,21 @@ Known bugs
    
 See also
 
-   Program name Description
-   cutseq Removes a specified section from a sequence
-   descseq Alter the name or description of a sequence
-   extractseq Extract regions from a sequence
-   maskfeat Mask off features of a sequence
-   maskseq Mask off regions of a sequence
-   megamerger Merge two large overlapping nucleic acid sequences
-   merger Merge two overlapping nucleic acid sequences
-   newseq Type in a short new sequence
-   noreturn Removes carriage return from ASCII files
-   nthseq Writes one sequence from a multiple set of sequences
-   pasteseq Insert one sequence into another
-   revseq Reverse and complement a sequence
-   splitter Split a sequence into (overlapping) smaller sequences
-   vectorstrip Strips out DNA between a pair of vector sequences
+   Program name                      Description
+   cutseq       Removes a specified section from a sequence
+   descseq      Alter the name or description of a sequence
+   extractseq   Extract regions from a sequence
+   maskfeat     Mask off features of a sequence
+   maskseq      Mask off regions of a sequence
+   megamerger   Merge two large overlapping nucleic acid sequences
+   merger       Merge two overlapping nucleic acid sequences
+   newseq       Type in a short new sequence
+   noreturn     Removes carriage return from ASCII files
+   nthseq       Writes one sequence from a multiple set of sequences
+   pasteseq     Insert one sequence into another
+   revseq       Reverse and complement a sequence
+   splitter     Split a sequence into (overlapping) smaller sequences
+   vectorstrip  Strips out DNA between a pair of vector sequences
    
 Author(s)
 

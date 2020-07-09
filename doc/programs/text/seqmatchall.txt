@@ -41,7 +41,7 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
-
+   
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence set USA Readable sequences Required

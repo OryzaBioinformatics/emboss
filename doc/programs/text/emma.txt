@@ -136,7 +136,7 @@ Command line arguments
    -displayfast        bool       Prompt for fast alignment options
    -usermamatrix       bool       Prompt for user multiple alignment matrix
    -umamatrix          bool       User defined multiple alignment matrix
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-inseqs]

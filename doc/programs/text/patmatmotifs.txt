@@ -89,7 +89,7 @@ Command line arguments
                                   myristyl, asn_glycosylation,
                                   camp_phospho_site, pkc_phospho_site,
                                   ck2_phospho_site, and tyr_phospho_site.
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]

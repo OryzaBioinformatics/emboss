@@ -207,21 +207,21 @@ Description
    
    Some of the more useful associated qualifiers are:
    
-   Qualifier Description
-   -sbegin The first position to be used in the sequence
-   -send The last position to be used in the sequence
+   Qualifier                        Description
+   -sbegin   The first position to be used in the sequence
+   -send     The last position to be used in the sequence
    -sreverse Use the reverse complement of a nucleic acid sequence
-   -sask Ask the user for begin/end/reverse information
-   -slower Convert the sequence to lower case
-   -supper Convert the sequence to upper case
-   -sformat Specify the input sequence format
+   -sask     Ask the user for begin/end/reverse information
+   -slower   Convert the sequence to lower case
+   -supper   Convert the sequence to upper case
+   -sformat  Specify the input sequence format
    -osformat Specify the output sequence format
    -ossingle Write each entry into a separate file
-   -auto Turn off prompts and don't report the one-line description
-   -stdout Write the results to 'standard output' (the screen)
-   -filter Read input from another program, write to the screen
-   -options Prompt for optional qualifiers
-   -help Display a table of the command-line options
+   -auto     Turn off prompts and don't report the one-line description
+   -stdout   Write the results to 'standard output' (the screen)
+   -filter   Read input from another program, write to the screen
+   -options  Prompt for optional qualifiers
+   -help     Display a table of the command-line options
    
    The set of associated qualifiers for sequences behave in different
    ways depending on where they appear.
@@ -386,7 +386,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers:
    -firstonly          bool       Read one sequence and stop
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -452,14 +452,15 @@ Known bugs
 
 See also
 
-   Program name Description
-   cirdna Draws circular maps of DNA constructs
-   lindna Draws linear maps of DNA constructs
-   remap Display a sequence with restriction cut sites, translation etc
-   seqretall Reads and writes (returns) a set of sequences one at a time
-   seqretset Reads and writes (returns) a set of sequences all at once
-   showfeat Show features of a sequence
-   showseq Display a sequence with features, translation etc
+   Program name                          Description
+   cirdna       Draws circular maps of DNA constructs
+   lindna       Draws linear maps of DNA constructs
+   remap        Display a sequence with restriction cut sites, translation etc
+   seqretall    Reads and writes (returns) a set of sequences one at a time
+   seqretset    Reads and writes (returns) a set of sequences all at once
+   seqretsplit  Reads and writes (returns) sequences
+   showfeat     Show features of a sequence
+   showseq      Display a sequence with features, translation etc
    
    Valid names of the databases set up in your local implementation of
    EMBOSS can be seen by using the program 'showdb'.

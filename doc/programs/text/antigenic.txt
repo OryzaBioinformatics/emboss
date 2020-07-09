@@ -33,7 +33,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers:
    -featout            featout    File for output features
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -162,20 +162,20 @@ Known bugs
    
 See also
 
-   Program name Description
-   diffseq Find differences (SNPs) between nearly identical sequences
-   dotmatcher Displays a thresholded dotplot of two sequences
-   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
-   dottup Displays a wordmatch dotplot of two sequences
-   garnier Predicts protein secondary structure
+    Program name                           Description
+   diffseq        Find differences (SNPs) between nearly identical sequences
+   dotmatcher     Displays a thresholded dotplot of two sequences
+   dotpath        Displays a non-overlapping wordmatch dotplot of two sequences
+   dottup         Displays a wordmatch dotplot of two sequences
+   garnier        Predicts protein secondary structure
    helixturnhelix Report nucleic acid binding motifs
-   oddcomp Finds protein sequence regions with a biased composition
-   pepcoil Predicts coiled coil regions
-   polydot Displays all-against-all dotplots of a set of sequences
-   pscan Scans proteins using PRINTS
-   showseq Display a sequence with features, translation etc
-   sigcleave Reports protein signal cleavage sites
-   tmap Displays membrane spanning regions
+   oddcomp        Finds protein sequence regions with a biased composition
+   pepcoil        Predicts coiled coil regions
+   polydot        Displays all-against-all dotplots of a set of sequences
+   pscan          Scans proteins using PRINTS
+   showseq        Display a sequence with features, translation etc
+   sigcleave      Reports protein signal cleavage sites
+   tmap           Displays membrane spanning regions
    
 Author(s)
 

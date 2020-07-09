@@ -136,7 +136,7 @@ Command line arguments
                                   display the description of the sequence
    -offset             integer    Offset to start numbering the sequence from
    -html               bool       Use HTML formatting
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -385,25 +385,26 @@ Known bugs
 
 See also
 
-   Program name Description
-   backtranseq Back translate a protein sequence
-   cirdna Draws circular maps of DNA constructs
-   cusp Create a codon usage table
-   getorf Finds and extracts open reading frames (ORFs)
-   lindna Draws linear maps of DNA constructs
-   plotorf Plot potential open reading frames
-   prettyseq Output sequence with translated ranges
+   Program name                          Description
+   backtranseq   Back translate a protein sequence
+   cirdna        Draws circular maps of DNA constructs
+   cusp          Create a codon usage table
+   getorf        Finds and extracts open reading frames (ORFs)
+   lindna        Draws linear maps of DNA constructs
+   plotorf       Plot potential open reading frames
+   prettyseq     Output sequence with translated ranges
    rebaseextract Extract data from REBASE
-   redata Search REBASE for enzyme name, references, suppliers etc
-   restrict Finds restriction enzyme cleavage sites
-   seqret Reads and writes (returns) sequences
-   seqretall Reads and writes (returns) a set of sequences one at a time
-   seqretset Reads and writes (returns) a set of sequences all at once
-   showfeat Show features of a sequence
-   showorf Pretty output of DNA translations
-   showseq Display a sequence with features, translation etc
-   silent Silent mutation restriction enzyme scan
-   transeq Translate nucleic acid sequences
+   redata        Search REBASE for enzyme name, references, suppliers etc
+   restrict      Finds restriction enzyme cleavage sites
+   seqret        Reads and writes (returns) sequences
+   seqretall     Reads and writes (returns) a set of sequences one at a time
+   seqretset     Reads and writes (returns) a set of sequences all at once
+   seqretsplit   Reads and writes (returns) sequences
+   showfeat      Show features of a sequence
+   showorf       Pretty output of DNA translations
+   showseq       Display a sequence with features, translation etc
+   silent        Silent mutation restriction enzyme scan
+   transeq       Translate nucleic acid sequences
    
 Author(s)
 

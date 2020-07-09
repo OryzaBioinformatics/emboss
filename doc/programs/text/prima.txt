@@ -10,6 +10,146 @@ Function
    
 Description
 
+   prima analyzes a template DNA sequence and chooses primer pairs for
+   the polymerase chain reaction (PCR) and primers for DNA sequencing.
+   For PCR primer pair selection, you can choose a target range of the
+   template sequence to be amplified. For DNA sequencing primers, you can
+   specify positions on the template that must be included in the
+   sequencing. You can allow prima to choose primers from the whole
+   template or limit the choices to a particular set of primers listed in
+   a file.
+   
+   In selecting appropriate primers, prima considers a variety of
+   constraints on the primer and amplified product sequences. You either
+   can use the program's default constraint values or modify those values
+   to customize the analysis. You can specify upper and lower limits for
+   primer and product melting temperatures and for primer and product GC
+   contents. For primers, you can specify a range of acceptable primer
+   sizes, any required bases at the 3' end of the primer (3' clamp), and
+   a maximum difference in primer melting temperatures for PCR primer
+   pairs. For PCR products, you can specify a range of acceptable product
+   sizes.
+   
+   For efficient priming, you should avoid primers with extensive
+   self-complementarity in order to minimize primer secondary structure
+   and primer dimer formation. Additionally, in PCR experiments, primer
+   pairs with extensive complementarity between the two primers should be
+   avoided in order to minimize primer dimer formation. prima uses the
+   annealing test described in the ALGORITHM topic to check individual
+   primers for self-complementarity and to check the two primers in a PCR
+   primer pair for complementarity to each other. Using this same
+   annealing test, prima optionally can screen against non-specific
+   primer binding on the template sequence and on any repeated sequences
+   you specify.
+   
+   The terms forward primer and reverse primer are used in the remainder
+   of this document and in the program output. Forward primers are
+   complementary to sequences on the reverse template strand and create
+   copies of the forward strand by primer extension. Conversely, reverse
+   primers are complementary to sequences on the forward template strand
+   and create copies of the reverse strand by primer extension.
+   
+   The name prima is a truly European one. In searching for yet another
+   primer program name, we discovered that not only can "prima" be
+   pronounced in English as "Primer", but it has additional meanings in
+   other languages. In Italian it means "first", in German it means
+   "super", and in Spanish it means "cousin".
+   
+  Thermodynamic Calculations
+  
+   prima determines primer melting temperatures by a calculation using
+   the nearest-neighbor model of Borer, et al. (J. Mol. Biol. 86; 843-853
+   (1974)) as modified slightly by Rychlik, et al. (Nucleic Acids Res.
+   18; 6409-6412 (1990)) and the thermodynamic parameters for DNA
+   nearest-neighbor interactions determined by Breslauer, et al. (Proc.
+   Natl. Acad. Sci. USA. 83; 3746-3750 (1986)):
+   
+   T(m)primer) = delta H / (delta S + R x ln(c/4) - 273.15 + 16.6 x
+   log[K(+)]
+   
+   where delta H is the enthalpy of helix formation, delta S is the
+   entropy of helix formation (including helix initiation), R is the
+   molar gas constant (1.987 cal/degree Celsius/mol), and c is the primer
+   concentration.
+   
+   prima determines PCR product melting temperatures using the formula of
+   Baldino, et al. (in Methods Enzymol. 168; 761-777 (1989)) as modified
+   slightly by Rychlik, et al. (Nucleic Acids Res. 18; 6409-6412 (1990)).
+   
+   T(m)product) = 0.41 x (% G+C) + 16.6 x log[K(+)] - 675 / len + 81.5
+   
+   where len is the length of the product.
+   
+   If you are selecting PCR primer pairs, the output includes a proposed
+   annealing temperature for each listed primer pair. The annealing
+   temperature is calculated using the formula of Rychlik, et al.
+   (Nucleic Acids Res. 18; 6409-6412 (1990)).
+   
+   T(a) = 0.3 x T(m)primer) + 0.7 x T(m)product) - 14.9
+   
+  Annealing Tests
+  
+   prima uses an annealing test described by Hillier and Green (PCR
+   Methods and Applications. 1; 124-128 (1991)), with slight
+   modification, to check individual primers for self-complementarity and
+   to check the two primers in a PCR primer pair for complementarity to
+   each other. For tests of self-complementarity, a primer sequence in
+   the 5' to 3' orientation is compared with the same sequence in the 3'
+   to 5' orientation. For tests of complementarity between two different
+   primers, one of the primer sequences in the 5' to 3' orientation is
+   compared to the other sequence in the 3' to 5' orientation. The
+   sequences are compared in every register of comparison, using a
+   scoring matrix containing values of complementarity for every pair of
+   nucleotide symbols. For each register of comparison, the score of each
+   base pair comparison is determined. The scores of contiguous base
+   pairs with positive comparison values are summed. The maximum score of
+   all such contiguous segments, taken over all registers of comparison
+   between the sequences, determines the total primer-primer annealing
+   score. Complementarity at the 3' ends of the primer sequences has a
+   particularly large influence on primer-dimer formation. Therefore, the
+   maximum score of all contiguous segments that include the 3' position
+   of either primer sequence, taken over all registers of comparison, is
+   separately determined as the 3' primer-primer annealing score.
+   
+   The same annealing test is used to determine complementarity between
+   the primer and any non-specific binding sites on the template
+   sequences. In this case, the primer in the 5' to 3' orientation is
+   compared over all registers of comparison with the template sequence
+   in the 3' to 5' orientation to determine a total primer-template
+   annealing score. Since complementarity at the 3' end of the primer
+   sequence has a particularly large effect on non-specific primer
+   binding, the 3' primer-template annealing score is also determined. If
+   you screen against non-specific primer binding on any specified
+   repeated sequences, then total primer-repeat and 3' primer-repeat
+   annealing scores, taken over all registers of comparison in all
+   repeated sequences, are also determined.
+   
+   Total and 3' annealing scores are saved in tests of primer
+   self-complementarity (to check for secondary structure and primer
+   dimer formation) and in tests of complementarity between the two
+   primers in PCR primer pairs (to check for primer dimer formation).
+   Total and 3' annealing scores are also saved when you screen against
+   non-specific primer binding on the template sequence and when you
+   screen against non-specific primer binding on any specified repeated
+   sequences. Primers are rejected that exceed the maximum score you
+   specify for any of these tests. For those primers that are accepted,
+   the program uses the sum of all annealing scores to determine the
+   order of primers or PCR primer pairs in the output list. You can
+   specify weights for each of these scores to adjust their relative
+   contributions in determining the output order. By default, 3'
+   annealing scores have twice the weight of total annealing scores in
+   determining the output order.
+   
+  The Polymerase Chain Reaction
+  
+   The Polymerase Chain Reaction (PCR) process for amplifying nucleic
+   acids is covered by U.S. Patent Nos. 4,683,195 and 4,683,202 owned by
+   Hoffmann La Roche. A license for research may be obtained through the
+   purchase and use of authorized reagents and thermocyclers from
+   Perkin-Elmer Corp., or by otherwise negotiating a license with
+   Perkin-Elmer. No license to use PCR is granted by the purchase or use
+   of the EMBOSS package.
+   
 Usage
 
    Here is a sample session with prima.
@@ -48,7 +188,7 @@ Command line arguments
    -saltconc           float      Salt concentration (mM)
    -dnaconc            float      DNA concentration (mM)
    -list               bool       Force list-style output
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -82,6 +222,8 @@ Command line arguments
    
 Input file format
 
+   Nucleic acid sequence USA.
+   
 Output file format
 
    Here is the output from the example run:
@@ -151,20 +293,91 @@ PRIMER/PRODUCT PAIR CALCULATIONS & OUTPUT
        Length:     232
 
 
+   The output file begins with a summary listing all of the constraints
+   used by the program to select appropriate primers or PCR primer pairs.
+   Most of these constraints can be modified by adjusting prompted and
+   optional program parameters.
+   
+   Following these summaries is an ordered listing of the most
+   appropriate primers or PCR primer pairs selected by prima. The list is
+   ordered by total annealing score so that those primers or PCR primer
+   pairs with the least amount of complementarity to sequences other than
+   the appropriate primer binding sites are listed first. Each output
+   primer or PCR primer pair is designated by a number that corresponds
+   to a line number in the plot of primer sites. While the text output
+   file lists the location of the primer binding site along with each
+   primer sequence, the plot provides a convenient way to review the
+   primer binding sites of many of the selected primers at once.
+   
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   Borer, P.N., Dengler, B., and Tinoco, I., Jr. (1974). "Stability of
+   Ribonucleic Acid and Double-stranded Helices." Journal of Molecular
+   Biology 86, 843-853.
+   
+   Rychlik, W. and Rhoads, R.E. (1990). "Optimization of the Annealing
+   Temperature for DNA Amplification in vitro." Nucleic Acids Research
+   18, 6409-6412.
+   
+   Breslauer, K.J., Frank, R., Blocker, H., and Marky, L.A. (1986).
+   "Predicting DNA Duplex Stability from the Base Sequence." Proceedings
+   of the National Academy of Sciences USA 83, 3746-3750.
+   
+   Baldino, M., Jr. (1989). "High Resolution In Situ Hybridization
+   Histochemistry." In Methods in Enzymology, (P.M. Conn, ed.), 168,
+   761-777, Academic Press, San Diego, California, USA.
+   
+   Hillier, L. and Green, P. (1991). "OSP: A Computer Program for
+   Choosing PCR and DNA Sequencing Primers." PCR Methods and Applications
+   1, 124-128.
+   
+   Slightom et al. (1994) "Nucleotide sequencing double-stranded plasmids
+   with primers selected from a nonamer library." Biotechniques 17(3),
+   536-7, 540-4.
+   
 Warnings
 
+   The template sequence may contain ambiguous bases, but prima will not
+   select primers complementary to any ambiguous sites on the template
+   sequence.
+   
+   When several acceptable PCR primer pairs have the same 3' ends for
+   both primers, prima outputs only the PCR primer pair with the shortest
+   primer sequences. By not allowing duplicate primer endpoints, prima
+   increases the diversity among the PCR primer pairs in the output list.
+   
+   prima only determines melting temperatures for DNA primers. We do not
+   know of any appropriate nearest-neighbor thermodynamic parameters for
+   RNA-DNA hybrids, so we haven't attempted to calculate melting
+   temperatures for RNA primers. While thermodynamic parameters for RNA
+   duplexes involving mismatches have been described, we do not know of
+   any similar results for DNA duplexes. Therefore, we have not attempted
+   to calculate melting temperatures or other thermodynamic properties
+   for DNA duplexes involving mismatches.
+   
+   prima does not currently consider formamide concentration in
+   determining primer melting temperatures.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description
@@ -179,6 +392,8 @@ Author(s)
    
 History
 
+   Finished 2000
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

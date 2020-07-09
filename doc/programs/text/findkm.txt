@@ -6,7 +6,7 @@
                                        
 Function
 
-   Calculates Km and Vmax for an enzyme reaction using a Hanes/Woolf plot
+   Find Km and Vmax for an enzyme reaction by a Hanes/Woolf plot
    
 Description
 
@@ -33,7 +33,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers:
    -[no]plot           bool       S/V vs S
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-infile]

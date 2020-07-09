@@ -106,7 +106,7 @@ Command line arguments
    Advanced qualifiers:
    -minimum            integer    Minimum size for a block mutation
    -maximum            integer    Maximum size for a block mutation
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -175,8 +175,8 @@ Known bugs
 
 See also
 
-   Program name Description
-   shuffleseq Shuffles a set of sequences maintaining composition
+   Program name                     Description
+   shuffleseq   Shuffles a set of sequences maintaining composition
    
 Author(s)
 

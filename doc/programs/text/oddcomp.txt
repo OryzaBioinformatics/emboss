@@ -81,7 +81,7 @@ Command line arguments
                                   may wish not to count words containing them,
                                   just noting them in the count of 'Other'
                                   words.
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -177,22 +177,22 @@ Known bugs
 
 See also
 
-   Program name Description
-   antigenic Finds antigenic sites in proteins
-   compseq Counts the composition of dimer/trimer/etc words in a sequence
-   diffseq Find differences (SNPs) between nearly identical sequences
-   dotmatcher Displays a thresholded dotplot of two sequences
-   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
-   dottup Displays a wordmatch dotplot of two sequences
-   emowse Protein identification by mass spectrometry
-   garnier Predicts protein secondary structure
-   helixturnhelix Report nucleic acid binding motifs
-   pepcoil Predicts coiled coil regions
-   polydot Displays all-against-all dotplots of a set of sequences
-   pscan Scans proteins using PRINTS
-   showseq Display a sequence with features, translation etc
-   sigcleave Reports protein signal cleavage sites
-   tmap Displays membrane spanning regions
+   Program name                           Description
+  antigenic      Finds antigenic sites in proteins
+  compseq        Counts the composition of dimer/trimer/etc words in a sequence
+  diffseq        Find differences (SNPs) between nearly identical sequences
+  dotmatcher     Displays a thresholded dotplot of two sequences
+  dotpath        Displays a non-overlapping wordmatch dotplot of two sequences
+  dottup         Displays a wordmatch dotplot of two sequences
+  emowse         Protein identification by mass spectrometry
+  garnier        Predicts protein secondary structure
+  helixturnhelix Report nucleic acid binding motifs
+  pepcoil        Predicts coiled coil regions
+  polydot        Displays all-against-all dotplots of a set of sequences
+  pscan          Scans proteins using PRINTS
+  showseq        Display a sequence with features, translation etc
+  sigcleave      Reports protein signal cleavage sites
+  tmap           Displays membrane spanning regions
    
 Author(s)
 

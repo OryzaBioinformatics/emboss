@@ -101,7 +101,7 @@ Command line arguments
    -query              bool       Display 'qry' column
    -all                bool       Display 'all' column
    -comment            bool       Display 'comment' column
-
+   
 
    Mandatory qualifiers Allowed values Default
    (none)

@@ -30,7 +30,7 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
-
+   
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence set USA Readable sequences Required
@@ -73,9 +73,10 @@ Known bugs
 
 See also
 
-   Program name Description
-   profit Scan a sequence or database with a matrix or profile
-   prophet Gapped alignment for profiles
+   Program name                     Description
+   cons         Creates a consensus from multiple alignments
+   profit       Scan a sequence or database with a matrix or profile
+   prophet      Gapped alignment for profiles
    
 Author(s)
 

@@ -94,7 +94,7 @@ Command line arguments
                                   exceed the machine's physical RAM)
    -shuffle            integer    Shuffle
    -seed               integer    Random number seed
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-est]
@@ -374,9 +374,9 @@ Known bugs
    
 See also
 
-   Program name Description
-   megamerger Merge two large overlapping nucleic acid sequences
-   merger Merge two overlapping nucleic acid sequences
+   Program name                    Description
+   megamerger   Merge two large overlapping nucleic acid sequences
+   merger       Merge two overlapping nucleic acid sequences
    
 Author(s)
 

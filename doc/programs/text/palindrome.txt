@@ -50,7 +50,7 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
-
+   
    Mandatory qualifiers Allowed values Default
    [-insequence]
    (Parameter 1) Sequence USA Readable sequence Required
@@ -177,26 +177,26 @@ Known bugs
 
 See also
 
-   Program name Description
-   chaos Create a chaos game representation plot for a sequence
-   cpgplot Plot CpG rich areas
-   cpgreport Reports all CpG rich regions
-   diffseq Find differences (SNPs) between nearly identical sequences
-   dotmatcher Displays a thresholded dotplot of two sequences
-   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
-   dottup Displays a wordmatch dotplot of two sequences
-   einverted Finds DNA inverted repeats
+   Program name                          Description
+   chaos        Create a chaos game representation plot for a sequence
+   cpgplot      Plot CpG rich areas
+   cpgreport    Reports all CpG rich regions
+   diffseq      Find differences (SNPs) between nearly identical sequences
+   dotmatcher   Displays a thresholded dotplot of two sequences
+   dotpath      Displays a non-overlapping wordmatch dotplot of two sequences
+   dottup       Displays a wordmatch dotplot of two sequences
+   einverted    Finds DNA inverted repeats
    equicktandem Finds tandem repeats
-   etandem Looks for tandem repeats in a nucleotide sequence
-   isochore Plots isochores in large DNA sequences
+   etandem      Looks for tandem repeats in a nucleotide sequence
+   isochore     Plots isochores in large DNA sequences
    newcpgreport Report CpG rich areas
-   newcpgseek Reports CpG rich regions
-   polydot Displays all-against-all dotplots of a set of sequences
-   redata Search REBASE for enzyme name, references, suppliers etc
-   restrict Finds restriction enzyme cleavage sites
-   showseq Display a sequence with features, translation etc
-   silent Silent mutation restriction enzyme scan
-   tfscan Scans DNA sequences for transcription factors
+   newcpgseek   Reports CpG rich regions
+   polydot      Displays all-against-all dotplots of a set of sequences
+   redata       Search REBASE for enzyme name, references, suppliers etc
+   restrict     Finds restriction enzyme cleavage sites
+   showseq      Display a sequence with features, translation etc
+   silent       Silent mutation restriction enzyme scan
+   tfscan       Scans DNA sequences for transcription factors
    
 Author(s)
 

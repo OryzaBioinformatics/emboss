@@ -54,7 +54,7 @@ Command line arguments
    Advanced qualifiers:
    -data               bool       Output the match data to a file instead of
                                   plotting it
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequencea]

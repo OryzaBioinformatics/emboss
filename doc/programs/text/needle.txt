@@ -82,7 +82,7 @@ Command line arguments
    Advanced qualifiers:
    -showinternals      bool       Show debugging information on the internal
                                   state of the search.
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequencea]
@@ -200,8 +200,8 @@ Known bugs
 
 See also
 
-   Program name Description
-   stretcher Finds the best global alignment between two sequences
+   Program name                      Description
+   stretcher    Finds the best global alignment between two sequences
    
    When you want an alignment that covers the whole length of both
    sequences, use needle. 

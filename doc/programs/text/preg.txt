@@ -114,7 +114,7 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
-
+   
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
@@ -193,15 +193,15 @@ Known bugs
 
 See also
 
-   Program name Description
-   dreg regular expression search of a nucleotide sequence
-   fuzznuc Nucleic acid pattern search
-   fuzzpro Protein pattern search
-   fuzztran Protein pattern search after translation
-   patmatdb Search a protein sequence with a motif
+   Program name                       Description
+   dreg         regular expression search of a nucleotide sequence
+   fuzznuc      Nucleic acid pattern search
+   fuzzpro      Protein pattern search
+   fuzztran     Protein pattern search after translation
+   patmatdb     Search a protein sequence with a motif
    patmatmotifs Search a PROSITE motif database with a protein sequence
-   pscan Scans proteins using PRINTS
-   tfscan Scans DNA sequences for transcription factors
+   pscan        Scans proteins using PRINTS
+   tfscan       Scans DNA sequences for transcription factors
    
    Other EMBOSS programs allow you to search for simple patterns and may
    be easier for the user who has never used regular expressions before:

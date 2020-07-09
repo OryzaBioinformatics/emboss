@@ -57,7 +57,7 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
-
+   
    Mandatory qualifiers Allowed values Default
    [-infdat]
    (Parameter 1) Enter name of prosite directory Any string is accepted

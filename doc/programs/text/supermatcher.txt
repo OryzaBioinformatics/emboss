@@ -64,7 +64,7 @@ Command line arguments
    -wordlen            integer    word length for initial matching
 
    Advanced qualifiers: (none)
-
+   
    Mandatory qualifiers Allowed values Default
    [-seqa]
    (Parameter 1) Sequence database USA Readable sequence(s) Required

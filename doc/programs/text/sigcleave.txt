@@ -43,7 +43,7 @@ Command line arguments
    -nval               integer    specifies the number of columns after the
                                   residue at the cleavage site in the weight
                                   matrix table
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -190,22 +190,22 @@ Known bugs
    
 See also
 
-   Program name Description
-   antigenic Finds antigenic sites in proteins
-   diffseq Find differences (SNPs) between nearly identical sequences
-   dotmatcher Displays a thresholded dotplot of two sequences
-   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
-   dottup Displays a wordmatch dotplot of two sequences
-   garnier Predicts protein secondary structure
+    Program name                           Description
+   antigenic      Finds antigenic sites in proteins
+   diffseq        Find differences (SNPs) between nearly identical sequences
+   dotmatcher     Displays a thresholded dotplot of two sequences
+   dotpath        Displays a non-overlapping wordmatch dotplot of two sequences
+   dottup         Displays a wordmatch dotplot of two sequences
+   garnier        Predicts protein secondary structure
    helixturnhelix Report nucleic acid binding motifs
-   oddcomp Finds protein sequence regions with a biased composition
-   pepcoil Predicts coiled coil regions
-   pepnet Displays proteins as a helical net
-   pepwheel Shows protein sequences as helices
-   polydot Displays all-against-all dotplots of a set of sequences
-   pscan Scans proteins using PRINTS
-   showseq Display a sequence with features, translation etc
-   tmap Displays membrane spanning regions
+   oddcomp        Finds protein sequence regions with a biased composition
+   pepcoil        Predicts coiled coil regions
+   pepnet         Displays proteins as a helical net
+   pepwheel       Shows protein sequences as helices
+   polydot        Displays all-against-all dotplots of a set of sequences
+   pscan          Scans proteins using PRINTS
+   showseq        Display a sequence with features, translation etc
+   tmap           Displays membrane spanning regions
    
 Author(s)
 

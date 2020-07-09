@@ -38,7 +38,7 @@ Command line arguments
    -step               float      pH step value
    -amino              integer    Number of N-termini
    -[no]termini        bool       Include charge at N and C terminus
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequencea]

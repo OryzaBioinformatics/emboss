@@ -126,7 +126,7 @@ programname.shtml
                                   people who wish the programs to be outside
                                   of the GNU Public Licence sheme, ie. they
                                   may wish to charge money for them.
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-search]
@@ -253,8 +253,8 @@ Known bugs
    
 See also
 
-   Program name Description
-   seealso Finds programs sharing group names
+   Program name            Description
+   seealso      Finds programs sharing group names
    
 Author(s)
 

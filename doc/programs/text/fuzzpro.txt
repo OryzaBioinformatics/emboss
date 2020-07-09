@@ -43,7 +43,7 @@ Command line arguments
    -mmshow             bool       Show mismatches
    -accshow            bool       Show accession numbers
    -descshow           bool       Show descriptions
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -145,15 +145,15 @@ Known bugs
 
 See also
 
-   Program name Description
-   dreg regular expression search of a nucleotide sequence
-   fuzznuc Nucleic acid pattern search
-   fuzztran Protein pattern search after translation
-   patmatdb Search a protein sequence with a motif
+   Program name                       Description
+   dreg         regular expression search of a nucleotide sequence
+   fuzznuc      Nucleic acid pattern search
+   fuzztran     Protein pattern search after translation
+   patmatdb     Search a protein sequence with a motif
    patmatmotifs Search a PROSITE motif database with a protein sequence
-   preg regular expression search of a protein sequence
-   pscan Scans proteins using PRINTS
-   tfscan Scans DNA sequences for transcription factors
+   preg         regular expression search of a protein sequence
+   pscan        Scans proteins using PRINTS
+   tfscan       Scans DNA sequences for transcription factors
    
      * fuzznuc - Nucleic acid pattern search
      * fuzztran - Protein pattern search after translation

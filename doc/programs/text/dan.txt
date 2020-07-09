@@ -92,7 +92,7 @@ Command line arguments
    -thermo             bool       Output the DeltaG, DeltaH and DeltaS values
                                   of the sequence windows to the output data
                                   file.
-
+   
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
@@ -248,10 +248,10 @@ Known bugs
 
 See also
 
-   Program name Description
-   banana Bending and curvature plot in B-DNA
-   btwisted Calculates the twisting in a B-DNA sequence
-   complex Find the linguistic complexity in nucleotide sequences
+   Program name                      Description
+   banana       Bending and curvature plot in B-DNA
+   btwisted     Calculates the twisting in a B-DNA sequence
+   complex      Find the linguistic complexity in nucleotide sequences
    
 Author(s)
 
