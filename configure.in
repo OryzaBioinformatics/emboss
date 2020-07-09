@@ -6,7 +6,7 @@ dnl Process this file with autoconf to produce a configure script.
 #CC=cc
 
 AC_INIT(ajax/ajacd.c)
-AM_INIT_AUTOMAKE(EMBOSS, 2.1.0)
+AM_INIT_AUTOMAKE(EMBOSS, 2.2.0)
 
 
 dnl Use libtool to make a shared library.
@@ -63,8 +63,6 @@ CHECK_PNGDRIVER
 CHECK_JAVA
 CHECK_JAVAOS
 
-CFLAGS="-O"
-
 
 dnl Test if --enable-corba is given
 AC_ARG_ENABLE(corba,
@@ -92,7 +90,7 @@ fi
 
 dnl Turn off irritating linker warnings in IRIX
 if test "`uname`" = "IRIX"; then
-CFLAGS="-Wl,-LD_MSG:off=84:off=16 $CFLAGS"
+CFLAGS="-Wl,-LD_MSG:off=85:off=84:off=16 $CFLAGS"
 fi
 
 
@@ -206,7 +204,15 @@ dnl and -Wl,brtl -Wl,-bdynamic in emboss
 dnl We therefore need a static test as well
 AM_CONDITIONAL(ISAIXIA64, test "`uname`" = "AIX")
 AM_CONDITIONAL(ISSHARED, test "${enable_shared}" = "yes")
+AC_SUBST(ISAIXIA64)
 
+if test "`uname`" = "AIX"; then
+if test -d ajax/.libs ; then
+	echo AIX ajax/.libs exists
+else
+	mkdir ajax/.libs
+fi
+fi
 
 AC_OUTPUT(plplot/Makefile plplot/lib/Makefile nucleus/Makefile ajax/Makefile
 emboss/Makefile emboss/acd/Makefile test/Makefile test/data/Makefile

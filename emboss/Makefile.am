@@ -11,23 +11,22 @@ AM_CFLAGS =
 endif
 endif
 
-check_PROGRAMS = alignwrap ajtest \
+check_PROGRAMS = ajtest \
 complex corbatest \
-demoalign demofeatures demolist demoreport demosequence demostring demotable dichet \
+demoalign demofeatures demolist demoreport demosequence demostring demotable \
 entrails histogramtest intconv \
 patmattest \
 prima primers \
-psiblasts \
 seqinfo seqretsingle \
-sigplot sigscan \
+sigplot \
 testplot treetypedisplay
 
-bin_PROGRAMS = abiview acdc antigenic \
-backtranseq banana btwisted \
+bin_PROGRAMS = abiview acdc alignwrap antigenic \
+backtranseq banana biosed btwisted \
 cai chaos charge checktrans chips cirdna codcmp coderet \
 contacts compseq cons cpgplot cpgreport cusp cutgextract cutseq \
 dan dbiblast dbifasta dbiflat dbigcg \
-degapseq descseq diffseq digest distmat domainer \
+degapseq descseq dichet diffseq digest distmat domainer \
 dotmatcher dotpath dottup dreg \
 einverted embossdata embossversion emma emowse entret \
 equicktandem est2genome etandem extractfeat extractseq \
@@ -45,11 +44,11 @@ pepwheel pepwindow pepwindowall \
 plotcon plotorf polydot preg \
 prettyplot prettyseq primer3 primersearch printsextract \
 profit prophecy prophet \
-prosextract pscan \
+prosextract pscan psiblasts \
 rebaseextract recoder redata remap restover restrict revseq scope \
 seealso seqmatchall seqret seqretall seqretallfeat seqretset seqretsplit \
 showalign showdb showfeat showorf showseq \
-shuffleseq sigcleave siggen silent splitter scopalign stretcher \
+shuffleseq sigcleave siggen sigscan silent splitter scopalign stretcher \
 stssearch supermatcher swissparse syco \
 textsearch tfextract tfm tfscan \
 tmap transeq trimest trimseq \
@@ -64,6 +63,7 @@ acdc_SOURCES = acdc.c
 antigenic_SOURCES = antigenic.c
 backtranseq_SOURCES = backtranseq.c
 banana_SOURCES = banana.c
+biosed_SOURCES = biosed.c
 btwisted_SOURCES = btwisted.c
 chaos_SOURCES = chaos.c
 cai_SOURCES = cai.c

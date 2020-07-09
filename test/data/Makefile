@@ -37,12 +37,12 @@ pkglibdir = $(libdir)/EMBOSS
 pkgincludedir = $(includedir)/EMBOSS
 top_builddir = ../..
 
-ACLOCAL = aclocal
-AUTOCONF = autoconf
-AUTOMAKE = automake
-AUTOHEADER = autoheader
+ACLOCAL = ${SHELL} /m2/emboss/emboss/missing --run aclocal
+AUTOCONF = ${SHELL} /m2/emboss/emboss/missing --run autoconf
+AUTOMAKE = ${SHELL} /m2/emboss/emboss/missing --run automake
+AUTOHEADER = ${SHELL} /m2/emboss/emboss/missing --run autoheader
 
-INSTALL = ../.././install-sh -c
+INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_SCRIPT = ${INSTALL}
@@ -55,9 +55,9 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = 
-host_triplet = sparc-sun-solaris2.7
-AJAX_FIXED_ROOT = \"/packages/emboss/compile/CURRENT/SOLARIS/emboss/emboss/emboss\"
-AMTAR = tar
+host_triplet = i686-pc-linux-gnu
+AJAX_FIXED_ROOT = \"/m2/emboss/emboss/emboss\"
+AMTAR = ${SHELL} /m2/emboss/emboss/missing --run tar
 AS = @AS@
 AWK = gawk
 CC = gcc
@@ -67,7 +67,8 @@ DLLTOOL = @DLLTOOL@
 ECHO = echo
 EXEEXT = 
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
-JAVA_OK = 
+ISAIXIA64 = 
+JAVA_OK = yes
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 OBJDUMP = @OBJDUMP@
@@ -75,16 +76,16 @@ OBJEXT = o
 PACKAGE = EMBOSS
 RANLIB = ranlib
 STRIP = strip
-VERSION = 2.1.0
-XLIB =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib -lX11 -lsocket -lsocket  -lnsl -lnsl
-X_CFLAGS =  -I/usr/openwin/include -I/usr/openwin/include
-X_EXTRA_LIBS = -lsocket -lsocket  -lnsl -lnsl
-X_LIBS =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib
+VERSION = 2.2.0
+XLIB =  -L/usr/X11R6/lib -L/usr/X11R6/lib -lX11 
+X_CFLAGS =  -I/usr/X11R6/include -I/usr/X11R6/include
+X_EXTRA_LIBS = 
+X_LIBS =  -L/usr/X11R6/lib -L/usr/X11R6/lib
 X_PRE_LIBS =  -lSM -lICE -lSM -lICE
 am__include = include
 am__quote = 
-havejavac = 
-install_sh = /packages/emboss/compile/CURRENT/SOLARIS/emboss/emboss/install-sh
+havejavac = yes
+install_sh = /m2/emboss/emboss/install-sh
 
 pkgdatadir = $(prefix)/share/$(PACKAGE)/test/data
 
@@ -94,12 +95,13 @@ pkgdata_DATA = dna.acedb dna.aln dna.asn1 dna.codata dna.embl dna.fasta \
                dna.m-ncbi dna.m-strider dna.msf dna.msf8 dna.ncbi \
                dna.phylip dna.phylip3 dna.staden dna.strider dna.text \
                feat.emft feat.fasta feat.pir \
-               paamir.pep \
+               paamir.pep pax6_cdna.fasta \
                prot.acedb prot.codata prot.fasta prot.gcg prot.gcg8 \
                prot.ig prot.m-acedb prot.m-codata prot.m-fasta prot.m-nbrf \
                prot.m-ncbi prot.m-swiss prot.nbrf prot.ncbi prot.swiss \
-               prot.text \
-               aligna.dna alignapart.dna alignb.dna
+               prot.text z83307.seq \
+               aligna.dna alignapart.dna alignb.dna \
+               aligna.prot alignapart.prot alignb.prot
 
 subdir = test/data
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs

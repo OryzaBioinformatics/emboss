@@ -9,4 +9,4 @@ FullUpdate= 1
 QUpdate= 1
 StructID=    0
 Comment=  hth.s prior frequencies
-/* $Header: /packages/emboss/MASTER/emboss/emboss/emboss/data/Eprior1.plib,v 1.1.1.1 2001/12/24 09:05:41 ableasby Exp $ */
+/* $Header: /home/repository/emboss/emboss/emboss/emboss/data/Eprior1.plib,v 1.1 2000/11/02 07:21:46 ajb Exp $ */
