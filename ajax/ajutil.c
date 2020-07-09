@@ -30,6 +30,7 @@ void ajExit (void) {
   ajDebug("\nstr done\n");
   ajFileExit();
   ajFeatExit();
+  ajAcdExit(ajFalse);
   ajMemExit();
   exit (0);
   return;
