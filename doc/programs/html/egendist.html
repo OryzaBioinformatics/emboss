@@ -1,0 +1,256 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: egendist
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: egendist
+</H2>
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program egendist
+</H1>
+<H2>
+    Function
+</H2>Conversion of PHYLIP's gendist
+
+<H2>
+    Description
+</H2>EGENDIST - Embossified compute genetic distances from gene
+    frequencies<p>
+
+<a href="gendist.html">Phylip gendist documentation.</a>
+
+<H2>
+    Usage
+</H2>
+Here is a sample session with egendist using the data :-
+<pre>
+    5    10
+2 2 2 2 2 2 2 2 2 2
+European   0.2868 0.5684 0.4422 0.4286 0.3828 0.7285 0.6386 0.0205 0.8055 0.5043
+African    0.1356 0.4840 0.0602 0.0397 0.5977 0.9675 0.9511 0.0600 0.7582 0.6207
+Chinese    0.1628 0.5958 0.7298 1.0000 0.3811 0.7986 0.7782 0.0726 0.7482 0.7334
+American   0.0144 0.6990 0.3280 0.7421 0.6606 0.8603 0.7924 0.0000 0.8086 0.8636
+Australian 0.1211 0.2274 0.5821 1.0000 0.2018 0.9000 0.9837 0.0396 0.9097 0.2976
+
+</pre>
+<pre>
+
+% egendist test
+
+Genetic Distance Matrix program
+Output file [egendist.outfile]: stdout
+Distance methods
+       Nei : Nei genetic distance
+       Cav : Cavalli-Sforza chord measur
+       Rey : Reynolds genetic distance
+    prompt : "Choose the method to use
+-method : enter list value [Nei]: 
+    5
+European    0.0000  0.0780  0.0807  0.0668  0.1030
+African     0.0780  0.0000  0.2347  0.1050  0.2273
+Chinese     0.0807  0.2347  0.0000  0.0539  0.0633
+American    0.0668  0.1050  0.0539  0.0000  0.1348
+Australian  0.1030  0.2273  0.0633  0.1348  0.0000
+
+
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers (* if not always prompted):
+  [-infile]            infile     data file
+  [-outfile]           outfile    Output file name
+   -method             list       (no help text) list value
+*  -datasets           integer    How many data sets
+
+   Optional qualifiers:
+   -all                bool       Input file contains all alleles at each
+                                  locus (else one)
+   -lowertriangle      bool       Lower-triangular (else Square)
+   -multsets           bool       Analyze multiple data sets
+   -progress           bool       Print indications of progress of run
+
+   Advanced qualifiers: (none)
+</pre>
+</td></tr></table>
+
+<p>
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>data file</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>egendist.outfile</td>
+</tr>
+
+<tr>
+<td>-method</td>
+<td>(no help text) list value</td>
+<td><table><tr><td>Nei</td> <td><i>(Nei genetic distance)</i></td></tr><tr><td>Cav</td> <td><i>(Cavalli-Sforza chord measur)</i></td></tr><tr><td>Rey</td> <td><i>(Reynolds genetic distance)</i></td></tr><tr><td>prompt</td> <td><i>("Choose the method to use)</i></td></tr></table></td>
+<td>Nei</td>
+</tr>
+
+<tr>
+<td>-datasets</td>
+<td>How many data sets</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-all</td>
+<td>Input file contains all alleles at each locus (else one)</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-lowertriangle</td>
+<td>Lower-triangular (else Square)</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-multsets</td>
+<td>Analyze multiple data sets</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-progress</td>
+<td>Print indications of progress of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+<H2>
+    Output file format
+</H2>
+<H2>
+    Data files
+</H2>
+<H2>
+    Notes
+</H2>
+<H2>
+    References
+</H2>
+<H2>
+    Warnings
+</H2>
+<H2>
+    Diagnostics
+</H2>
+<H2>
+    Exit status
+</H2>
+<H2>
+    Known bugs
+</H2>
+<H2>
+    See also
+</H2>
+<H2>
+    Author(s)
+</H2>
+(c) Copyright  1986-1993  by  Joseph  Felsenstein  and  by  the  University  of
+Washington.  Written by Joseph Felsenstein.  Permission is granted to copy this
+document provided that no fee is charged for it and that this copyright  notice
+is not removed.<p>
+
+
+This application was modified for inclusion in EMBOSS by Ian Longden <a
+href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+    Priority
+</H2>
+<H2>
+    Target users
+</H2>
+<H2>
+    Comments
+</H2>
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

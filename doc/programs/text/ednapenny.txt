@@ -1,0 +1,341 @@
+
+                             EMBOSS: ednapenny
+     _________________________________________________________________
+   
+                               Program ednapenny
+                                       
+Function
+
+   Conversion of PHYLIP's dnapenny
+   
+Description
+
+   EDNAPENNY - Branch and bound to find all most parsimonious trees for
+   nucleic acid sequence parsimony criteria
+   
+   Phylip dnapenny documentation.
+   
+Usage
+
+   Here is a sample session with ednapenny using the data:-
+    8    6
+Alpha1    AAGAAG
+Alpha2    AAGAAG
+Beta1     AAGGGG
+Beta2     AAGGGG
+Gamma1    AGGAAG
+Gamma2    AGGAAG
+Delta     GGAGGA
+Epsilon   GGAAAG
+
+
+% ednapenny test
+
+Penny algorithm for DNA
+Output file [ednapenny.outfile]: stdout
+Create a tree file [Y]:
+Output treefile name [ednapenny.treefile]:
+
+Penny algorithm for DNA, version 3.573c
+ branch-and-bound to find all most parsimonious trees
+
+
+requires a total of              8.000
+
+     9 trees in all found
+
+
+
+
+  +--------------------Alpha1
+  !
+  !                 +--Delta
+  !              +--3
+  !           +--7  +--Epsilon
+--1           !  !
+  !     +-----6  +-----Gamma2
+  !     !     !
+  !  +--4     +--------Gamma1
+  !  !  !
+  !  !  !           +--Beta2
+  +--2  +-----------5
+     !              +--Beta1
+     !
+     +-----------------Alpha2
+
+  remember: this is an unrooted tree!
+
+
+
+
+
+  +--------------------Alpha1
+  !
+  !                 +--Delta
+  !           +-----3
+  !           !     +--Epsilon
+--1     +-----6
+  !     !     !     +--Gamma2
+  !     !     +-----7
+  !  +--4           +--Gamma1
+  !  !  !
+  !  !  !           +--Beta2
+  +--2  +-----------5
+     !              +--Beta1
+     !
+     +-----------------Alpha2
+
+  remember: this is an unrooted tree!
+
+
+
+
+
+  +--------------------Alpha1
+  !
+  !                 +--Delta
+  !              +--3
+  !           +--6  +--Epsilon
+--1           !  !
+  !     +-----7  +-----Gamma1
+  !     !     !
+  !  +--4     +--------Gamma2
+  !  !  !
+  !  !  !           +--Beta2
+  +--2  +-----------5
+     !              +--Beta1
+     !
+     +-----------------Alpha2
+
+  remember: this is an unrooted tree!
+
+
+
+
+
+  +--------------------Alpha1
+  !
+  !                 +--Delta
+  !              +--3
+--1           +--7  +--Epsilon
+  !           !  !
+  !  +--------6  +-----Gamma2
+  !  !        !
+  !  !        +--------Gamma1
+  +--2
+     !              +--Beta2
+     !           +--5
+     +-----------4  +--Beta1
+                 !
+                 +-----Alpha2
+
+  remember: this is an unrooted tree!
+
+
+
+
+
+  +--------------------Alpha1
+  !
+  !                 +--Delta
+  !           +-----3
+--1           !     +--Epsilon
+  !  +--------6
+  !  !        !     +--Gamma2
+  !  !        +-----7
+  +--2              +--Gamma1
+     !
+     !              +--Beta2
+     !           +--5
+     +-----------4  +--Beta1
+                 !
+                 +-----Alpha2
+
+  remember: this is an unrooted tree!
+
+
+
+
+
+  +--------------------Alpha1
+  !
+  !                 +--Delta
+  !              +--3
+--1           +--6  +--Epsilon
+  !           !  !
+  !  +--------7  +-----Gamma1
+  !  !        !
+  !  !        +--------Gamma2
+  +--2
+     !              +--Beta2
+     !           +--5
+     +-----------4  +--Beta1
+                 !
+                 +-----Alpha2
+
+  remember: this is an unrooted tree!
+
+
+
+
+
+  +--------------------Alpha1
+  !
+  !                 +--Delta
+  !              +--3
+  !           +--7  +--Epsilon
+--1           !  !
+  !        +--6  +-----Gamma2
+  !        !  !
+  !  +-----2  +--------Gamma1
+  !  !     !
+  +--4     +-----------Alpha2
+     !
+     !              +--Beta2
+     +--------------5
+                    +--Beta1
+
+  remember: this is an unrooted tree!
+
+
+
+
+
+  +--------------------Alpha1
+  !
+  !                 +--Delta
+  !           +-----3
+  !           !     +--Epsilon
+--1        +--6
+  !        !  !     +--Gamma2
+  !  +-----2  +-----7
+  !  !     !        +--Gamma1
+  !  !     !
+  +--4     +-----------Alpha2
+     !
+     !              +--Beta2
+     +--------------5
+                    +--Beta1
+
+  remember: this is an unrooted tree!
+
+
+
+
+
+  +--------------------Alpha1
+  !
+  !                 +--Delta
+  !              +--3
+  !           +--6  +--Epsilon
+--1           !  !
+  !        +--7  +-----Gamma1
+  !        !  !
+  !  +-----2  +--------Gamma2
+  !  !     !
+  +--4     +-----------Alpha2
+     !
+     !              +--Beta2
+     +--------------5
+                    +--Beta1
+
+  remember: this is an unrooted tree!
+
+
+
+
+% more ednapenny.treefile
+(Alpha1,(((((Delta,Epsilon),Gamma2),Gamma1),(Beta2,Beta1)),Alpha2))[0.1111];
+(Alpha1,((((Delta,Epsilon),(Gamma2,Gamma1)),(Beta2,Beta1)),Alpha2))[0.1111];
+(Alpha1,(((((Delta,Epsilon),Gamma1),Gamma2),(Beta2,Beta1)),Alpha2))[0.1111];
+(Alpha1,((((Delta,Epsilon),Gamma2),Gamma1),((Beta2,Beta1),Alpha2)))[0.1111];
+(Alpha1,(((Delta,Epsilon),(Gamma2,Gamma1)),((Beta2,Beta1),Alpha2)))[0.1111];
+(Alpha1,((((Delta,Epsilon),Gamma1),Gamma2),((Beta2,Beta1),Alpha2)))[0.1111];
+(Alpha1,(((((Delta,Epsilon),Gamma2),Gamma1),Alpha2),(Beta2,Beta1)))[0.1111];
+(Alpha1,((((Delta,Epsilon),(Gamma2,Gamma1)),Alpha2),(Beta2,Beta1)))[0.1111];
+(Alpha1,(((((Delta,Epsilon),Gamma1),Gamma2),Alpha2),(Beta2,Beta1)))[0.1111];
+
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-msf]               seqset     File containing a sequence
+  [-outfile]           outfile    Output file name
+*  -outgnum            integer    number of the outgroup
+*  -valthresh          float      threshold value
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+
+   Optional qualifiers:
+   -numgroups          integer    How many groups of 100 trees
+   -howoften           integer    How often to report, in trees
+   -simple             bool       Branch and bound is simple
+   -og                 bool       Outgroup root
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+   -steps              bool       Print out steps in each site
+   -seqatnodes         bool       Print sequences at all nodes of tree
+   -[no]drawtree       bool       Draw tree
+
+   Advanced qualifiers:
+   -thresh             bool       Use Threshold parsimony
+   
+   Mandatory qualifiers Allowed values Default
+   [-msf]
+   (Parameter 1) File containing a sequence Readable sequences Required
+   [-outfile]
+   (Parameter 2) Output file name Output file ednapenny.outfile
+   -outgnum number of the outgroup Integer 1 or more 1
+   -valthresh threshold value Number 1.000 or more 1.0
+   [-[no]trout]
+   (Parameter 3) Create a tree file Yes/No Yes
+   -treefile Tree file name Output file ednapenny.treefile
+   Optional qualifiers Allowed values Default
+   -numgroups How many groups of 100 trees Any integer value 1000
+   -howoften How often to report, in trees Any integer value 100
+   -simple Branch and bound is simple Yes/No No
+   -og Outgroup root Yes/No No
+   -printdata Print out the data at start of run Yes/No No
+   -progress Print indications of progress of run Yes/No No
+   -steps Print out steps in each site Yes/No No
+   -seqatnodes Print sequences at all nodes of tree Yes/No No
+   -[no]drawtree Draw tree Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   -thresh Use Threshold parsimony Yes/No No
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1986-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

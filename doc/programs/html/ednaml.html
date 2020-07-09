@@ -1,0 +1,477 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: ednaml
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: ednaml
+</H2>
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program ednaml
+</H1>
+<H2>
+    Function
+</H2>
+Conversion of PHYLIP's dnaml
+
+<H2>
+    Description
+</H2>EDNAML -- Embossified DNA Maximum Likelihood program<p>
+
+<a href="dnaml.html">Phylip dnaml documentation.</a>
+
+<H2>
+    Usage
+</H2>
+Here is a sample session with ednaml using the test data:-
+<pre>
+   5   13
+Alpha     AACGTGGCCAAAT
+Beta      AAGGTCGCCAAAC
+Gamma     CATTTCGTCACAA
+Delta     GGTATTTCGGCCT
+Epsilon   GGGATCTCGGCCC
+
+
+run with two categories with rates 1.0 and 3.2, and with
+probabilities 0.4 and 0.6 for these rates, and with patch length
+parameter = 1.5
+</pre>
+
+<pre>
+
+% ednaml test -options
+
+Estimates phylogenies from nucleic acid sequence Maximum Likelihood
+Output file [ednaml.outfile]: stdout
+Search for best tree [Y]: 
+Global rearrangements [N]: 
+Randomize input order of species [N]: 
+Transition/transversion ratio [2.0]: 
+Use empirical base frequencies [Y]: 
+More then one category of substitution rates [N]: y
+Number of categories of substitution rates [2]: 
+space seperated categorie values: 1.0 3.2
+space seperated probabillity values: 0.4 0.6
+Use Defualt Mean block length of sites [N]: 
+Mean block length of sites having the same rate (greater than 1) [1.0]: 1.5
+Outgroup root [N]: 
+Print out the data at start of run [N]: 
+Print indications of progress of run [N]: 
+Draw tree [Y]: 
+Create a tree file [Y]: 
+Output treefile name [ednaml.treefile]: 
+
+
+Nucleic acid sequence Maximum Likelihood method, version 3.573c
+
+
+
+Site category   Rate of change    Probability
+
+           1        1.000            0.400
+           2        3.200            0.600
+
+
+Expected length of a patch of sites having the same rate =    1.500
+
+Empirical Base Frequencies:
+
+   A       0.24615
+   C       0.29231
+   G       0.24615
+  T(U)     0.21538
+
+
+Transition/transversion ratio =   2.000000
+
+(Transition/transversion parameter =   1.523077)
+
+
+                                                       +Epsilon   
+     +-------------------------------------------------3  
+  +--2                                                 +----Delta     
+  !  !  
+  !  +Beta      
+  !  
+--1---------------------Gamma     
+  !  
+  +---Alpha     
+
+
+remember: this is an unrooted tree!
+
+Ln Likelihood =   -72.22209
+
+Examined   15 trees
+
+ Between        And            Length      Approx. Confidence Limits
+ -------        ---            ------      ------- ---------- ------
+
+   1             2              0.06470     (     zero,     0.47007)
+   2             3              3.33631     (     zero,    12.06173) **
+   3          Epsilon           0.00003     (     zero,     0.42144)
+   3          Delta             0.31956     (     zero,     0.73912) **
+   2          Beta              0.00003     (     zero,     0.41860)
+   1          Gamma             1.47621     (     zero,     3.63348) **
+   1          Alpha             0.28041     (     zero,     0.73601) *
+
+     *  = significantly positive, P &lt; 0.05
+     ** = significantly positive, P &lt; 0.01
+
+Combination of categories that contributes the most to the likelihood:
+
+             2222111111 222
+
+
+
+
+% more ednaml.treefile
+(((Epsilon:0.00012,Delta:0.31956):3.33631,Beta:0.00012):0.06470,Gamma:1.47621,Alpha:0.28041);
+
+
+
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers (* if not always prompted):
+  [-msf]               seqset     File containing a sequence allignment
+  [-outfile]           outfile    Output file name
+*  -lengths            bool       Use lengths from user trees
+*  -global             bool       Global rearrangements
+*  -random             bool       Randomize input order of species
+*  -randseed           integer    Random number seed (must be odd)
+*  -randtimes          integer    How many times to randomise
+*  -freqa              float      Frequency for A
+*  -freqc              float      Frequency for C
+*  -freqg              float      Frequency for G
+*  -freqt              float      Frequency for T/U
+*  -catnum             integer    Number of categories of substitution rates
+*  -catvals            string     space seperated category values
+*  -catprob            string     space seperated probabillity values
+*  -autog              bool       Use Defualt Mean block length of sites
+*  -lambda             float      Mean block length of sites having the same
+                                  rate (greater than 1)
+*  -outgnum            integer    number of the outgroup
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+
+   Optional qualifiers:
+   -[no]besttree       bool       Search for best tree
+   -ttratio            float      Transition/transversion ratio
+   -[no]basefrequency  bool       Use empirical base frequencies
+   -categories         bool       More then one category of substitution rates
+   -og                 bool       Outgroup root
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+   -[no]drawtree       bool       Draw tree
+
+   Advanced qualifiers: (none)
+</pre>
+</td></tr></table>
+
+<p>
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-msf]<br>(Parameter 1)</td>
+<td>File containing a sequence allignment</td>
+<td>Readable sequences</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>ednaml.outfile</td>
+</tr>
+
+<tr>
+<td>-lengths</td>
+<td>Use lengths from user trees</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-global</td>
+<td>Global rearrangements</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-random</td>
+<td>Randomize input order of species</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-randseed</td>
+<td>Random number seed (must be odd)</td>
+<td>Any integer value</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>-randtimes</td>
+<td>How many times to randomise</td>
+<td>Any integer value</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>-freqa</td>
+<td>Frequency for A</td>
+<td>Number from 0.000 to 1.000</td>
+<td>0.25</td>
+</tr>
+
+<tr>
+<td>-freqc</td>
+<td>Frequency for C</td>
+<td>Number from 0.000 to 1.000</td>
+<td>0.25</td>
+</tr>
+
+<tr>
+<td>-freqg</td>
+<td>Frequency for G</td>
+<td>Number from 0.000 to 1.000</td>
+<td>0.25</td>
+</tr>
+
+<tr>
+<td>-freqt</td>
+<td>Frequency for T/U</td>
+<td>Number from 0.000 to 1.000</td>
+<td>0.25</td>
+</tr>
+
+<tr>
+<td>-catnum</td>
+<td>Number of categories of substitution rates</td>
+<td>Integer from 2 to 9</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>-catvals</td>
+<td>space seperated category values</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-catprob</td>
+<td>space seperated probabillity values</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-autog</td>
+<td>Use Defualt Mean block length of sites</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-lambda</td>
+<td>Mean block length of sites having the same rate (greater than 1)</td>
+<td>Number 1.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-outgnum</td>
+<td>number of the outgroup</td>
+<td>Integer 1 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>[-[no]trout]<br>(Parameter 3)</td>
+<td>Create a tree file</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-treefile</td>
+<td>Tree file name</td>
+<td>Output file</td>
+<td>ednaml.treefile</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]besttree</td>
+<td>Search for best tree</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-ttratio</td>
+<td>Transition/transversion ratio</td>
+<td>Any integer value</td>
+<td>2.0</td>
+</tr>
+
+<tr>
+<td>-[no]basefrequency</td>
+<td>Use empirical base frequencies</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-categories</td>
+<td>More then one category of substitution rates</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-og</td>
+<td>Outgroup root</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-printdata</td>
+<td>Print out the data at start of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-progress</td>
+<td>Print indications of progress of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]drawtree</td>
+<td>Draw tree</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Data files
+</H2>
+<H2>
+    Notes
+</H2>Multiple sequences sets not implemented yet!.
+
+<H2>
+    References
+</H2>
+<H2>
+    Warnings
+</H2>
+<H2>
+    Diagnostics
+</H2>
+<H2>
+    Exit status
+</H2>
+<H2>
+    Known bugs
+</H2>
+<H2>
+    See also
+</H2>
+<H2>
+    Author(s)
+</H2>(c) Copyright  1986-1993  by  Joseph  Felsenstein  and  by  the  University  of
+Washington.  Written by Joseph Felsenstein.  Permission is granted to copy this
+document provided that no fee is charged for it and that this copyright  notice
+is not removed.<p>
+
+This application was modified for inclusion in EMBOSS by Ian Longden <a
+href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+    Priority
+</H2>
+<H2>
+    Target users
+</H2>
+<H2>
+    Comments
+</H2>
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,158 @@
+
+                             EMBOSS: eneighbor
+     _________________________________________________________________
+   
+                               Program eneighbor
+                                       
+Function
+
+   Conversion of PHYLIP's neighbor
+   
+Description
+
+   ENEIGHBOR -- Embossified Neighbor-Joining and UPGMA methods
+   
+   Phylip neighbor documentation.
+   
+Usage
+
+   Here is a sample session with eneighbor with the data:-
+    5
+Alpha      0.000 1.000 2.000 3.000 3.000
+Beta       1.000 0.000 2.000 3.000 3.000
+Gamma      2.000 2.000 0.000 3.000 3.000
+Delta      3.000 3.000 3.000 0.000 1.000
+Epsilon    3.000 3.000 3.000 1.000 0.000
+
+
+% eneighbor test
+
+estimates phylogenies from distance matrix data using the Neighbor-Joining
+method or the UPGMA method of clustering
+Output file [eneighbor.outfile]: stdout
+Create a tree file [Y]:
+Treefile name [eneighbor.treefile]:
+Neighbor-joining [Y]:
+Outgroup root [N]:
+
+   5 Populations
+
+ Neighbor-joining method
+
+ Negative branch lengths allowed
+
+
+  +-------------------Gamma
+  !
+  !                             +---------Delta
+--3-----------------------------1
+  !                             +---------Epsilon
+  !
+  !         +---------Alpha
+  +---------2
+            +---------Beta
+
+
+remember: this is an unrooted tree!
+
+Between        And            Length
+-------        ---            ------
+   3          Gamma             1.00000
+   3             1              1.50000
+   1          Delta             0.50000
+   1          Epsilon           0.50000
+   3             2              0.50000
+   2          Alpha             0.50000
+   2          Beta              0.50000
+
+
+
+
+% more eneighbor.treefile
+(Gamma:1.00000,(Delta:0.50000,Epsilon:0.50000):1.50000,(Alpha:0.50000,
+Beta:0.50000):0.50000);
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-infile]            infile     (no help text) infile value
+  [-outfile]           outfile    Output file name
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+   -[no]nj             bool       Neighbor-joining
+*  -og                 bool       Outgroup root
+*  -outgnum            integer    number of the outgroup
+*  -randseed           integer    Random number seed (must be odd)
+*  -datasets           integer    How many data sets
+
+   Optional qualifiers:
+   -[no]drawtree       bool       Draw tree
+   -lt                 bool       Lower-triangular data matrix
+   -ut                 bool       Upper-triangular data matrix
+   -[no]sr             bool       Subreplicates
+   -random             bool       Randomize input order of species
+   -multsets           bool       Analyze multiple data sets
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+
+   Advanced qualifiers: (none)
+   
+   Mandatory qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) (no help text) infile value Input file Required
+   [-outfile]
+   (Parameter 2) Output file name Output file eneighbor.outfile
+   [-[no]trout]
+   (Parameter 3) Create a tree file Yes/No Yes
+   -treefile Tree file name Output file eneighbor.treefile
+   -[no]nj Neighbor-joining Yes/No Yes
+   -og Outgroup root Yes/No No
+   -outgnum number of the outgroup Any integer value 0
+   -randseed Random number seed (must be odd) Any integer value 0
+   -datasets How many data sets Any integer value 0
+   Optional qualifiers Allowed values Default
+   -[no]drawtree Draw tree Yes/No Yes
+   -lt Lower-triangular data matrix Yes/No No
+   -ut Upper-triangular data matrix Yes/No No
+   -[no]sr Subreplicates Yes/No Yes
+   -random Randomize input order of species Yes/No No
+   -multsets Analyze multiple data sets Yes/No No
+   -printdata Print out the data at start of run Yes/No No
+   -progress Print indications of progress of run Yes/No No
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Data files
+
+Notes
+
+   Multiple sequences sets not implemented yet!.
+   
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1991-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

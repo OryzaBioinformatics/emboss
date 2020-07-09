@@ -1,0 +1,411 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: epenny
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: epenny
+</H2>
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program epenny
+</H1>
+<H2>
+    Function
+</H2>Conversion of PHYLIP's penny
+
+<H2>
+    Description
+</H2>EPENNY - Embossified branch and bound to find all most parsimonious trees<p>
+
+<a href="penny.html">Phylip penny documentation.</a>
+
+<H2>
+    Usage
+</H2>
+Here is a sample session with epenny using the data:-
+<pre>
+    7    6
+Alpha1    110110
+Alpha2    110110
+Beta1     110000
+Beta2     110000
+Gamma1    100110
+Delta     001001
+Epsilon   001110
+</pre>
+
+<pre>
+
+% epenny test
+
+Penny algorithm, branch-and-bound to find all most parsimonious trees
+Output file [epenny.outfile]: stdout
+Method
+       Wag : Wagner
+       Cam : Camin-Sokal
+       Mix : Mixed
+    prompt : "Choose the method to use
+-method : enter list value [Wag]: 
+Create a tree file [Y]: 
+Output treefile name [epenny.treefile]: 
+
+Wagner parsimony method
+
+                     
+
+
+requires a total of              8.000
+
+    3 trees in all found
+
+
+
+
+  +-----------------Alpha1    
+  !  
+  !        +--------Alpha2    
+--1        !  
+  !  +-----4     +--Epsilon   
+  !  !     !  +--6  
+  !  !     +--5  +--Delta     
+  +--2        !  
+     !        +-----Gamma1    
+     !  
+     !           +--Beta2     
+     +-----------3  
+                 +--Beta1     
+
+  remember: this is an unrooted tree!
+
+
+
+
+  +-----------------Alpha1    
+  !  
+--1  +--------------Alpha2    
+  !  !  
+  !  !           +--Epsilon   
+  +--2        +--6  
+     !  +-----5  +--Delta     
+     !  !     !  
+     +--4     +-----Gamma1    
+        !  
+        !        +--Beta2     
+        +--------3  
+                 +--Beta1     
+
+  remember: this is an unrooted tree!
+
+
+
+
+  +-----------------Alpha1    
+  !  
+  !           +-----Alpha2    
+--1  +--------2  
+  !  !        !  +--Beta2     
+  !  !        +--3  
+  +--4           +--Beta1     
+     !  
+     !           +--Epsilon   
+     !        +--6  
+     +--------5  +--Delta     
+              !  
+              +-----Gamma1    
+
+  remember: this is an unrooted tree!
+
+
+
+
+
+% more epenny.treefile 
+(Alpha1,((Alpha2,((Epsilon,Delta),Gamma1)),(Beta2,Beta1)))[0.3333];
+(Alpha1,(Alpha2,(((Epsilon,Delta),Gamma1),(Beta2,Beta1))))[0.3333];
+(Alpha1,((Alpha2,(Beta2,Beta1)),((Epsilon,Delta),Gamma1)))[0.3333];
+
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers (* if not always prompted):
+  [-infile]            infile     data file
+  [-outfile]           outfile    Output file name
+   -method             list       (no help text) list value
+*  -outgnum            integer    number of the outgroup
+*  -valthresh          float      threshold value
+*  -datasets           integer    How many data sets
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+
+   Optional qualifiers:
+   -numgroups          integer    How many groups of 100 trees
+   -howoften           integer    How often to report, in trees
+   -simple             bool       Branch and bound is simple
+   -og                 bool       Outgroup root
+   -multsets           bool       Analyze multiple data sets
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+   -steps              bool       Print out steps in each site
+   -seqatnodes         bool       Print sequences at all nodes of tree
+   -[no]drawtree       bool       Draw tree
+
+   Advanced qualifiers:
+   -thresh             bool       Use Threshold parsimony
+
+</pre>
+</td></tr></table>
+
+<p>
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>data file</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>epenny.outfile</td>
+</tr>
+
+<tr>
+<td>-method</td>
+<td>(no help text) list value</td>
+<td><table><tr><td>Wag</td> <td><i>(Wagner)</i></td></tr><tr><td>Cam</td> <td><i>(Camin-Sokal)</i></td></tr><tr><td>Mix</td> <td><i>(Mixed)</i></td></tr><tr><td>prompt</td> <td><i>("Choose the method to use)</i></td></tr></table></td>
+<td>Wag</td>
+</tr>
+
+<tr>
+<td>-outgnum</td>
+<td>number of the outgroup</td>
+<td>Integer 1 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-valthresh</td>
+<td>threshold value</td>
+<td>Number 1.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-datasets</td>
+<td>How many data sets</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>[-[no]trout]<br>(Parameter 3)</td>
+<td>Create a tree file</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-treefile</td>
+<td>Tree file name</td>
+<td>Output file</td>
+<td>epenny.treefile</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-numgroups</td>
+<td>How many groups of 100 trees</td>
+<td>Any integer value</td>
+<td>1000</td>
+</tr>
+
+<tr>
+<td>-howoften</td>
+<td>How often to report, in trees</td>
+<td>Any integer value</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>-simple</td>
+<td>Branch and bound is simple</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-og</td>
+<td>Outgroup root</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-multsets</td>
+<td>Analyze multiple data sets</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-printdata</td>
+<td>Print out the data at start of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-progress</td>
+<td>Print indications of progress of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-steps</td>
+<td>Print out steps in each site</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-seqatnodes</td>
+<td>Print sequences at all nodes of tree</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]drawtree</td>
+<td>Draw tree</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-thresh</td>
+<td>Use Threshold parsimony</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+<H2>
+    Output file format
+</H2>
+<H2>
+    Data files
+</H2>
+<H2>
+    Notes
+</H2>
+<H2>
+    References
+</H2>
+<H2>
+    Warnings
+</H2>
+<H2>
+    Diagnostics
+</H2>
+<H2>
+    Exit status
+</H2>
+<H2>
+    Known bugs
+</H2>
+<H2>
+    See also
+</H2>
+<H2>
+    Author(s)
+</H2>
+(c) Copyright  1986-1993  by  Joseph  Felsenstein  and  by  the  University  of
+Washington.  Written by Joseph Felsenstein.  Permission is granted to copy this
+document provided that no fee is charged for it and that this copyright  notice
+is not removed.<p>
+
+
+This application was modified for inclusion in EMBOSS by Ian Longden <a
+href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+
+<H2>
+    Priority
+</H2>
+<H2>
+    Target users
+</H2>
+<H2>
+    Comments
+</H2>
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

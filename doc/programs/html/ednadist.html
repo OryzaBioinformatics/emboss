@@ -1,0 +1,285 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: ednadist
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: ednadist
+</H2>
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program ednadist
+</H1>
+<H2>
+    Function
+</H2>
+Conversion of PHYLIP's dnadist
+
+<H2>
+    Description
+</H2>EDNADIST -- Embossified program to compute distance matrix from
+    nucleotide sequences<p>
+<a href="dnadist.html">Phylip dnadist documentation.</a>
+
+<H2>
+    Usage
+</H2>
+Here is a sample session with ednadist.
+
+<pre>
+with the test data of:-
+
+   5   13
+Alpha     AACGTGGCCACAT
+Beta      AAGGTCGCCACAC
+Gamma     CAGTTCGCCACAA
+Delta     GAGATTTCCGCCT
+Epsilon   GAGATCTCCGCCC
+
+% ednadist test
+
+Nucleic acid sequence Distance Matrix program
+Output file [ednadist.outfile]: stdout
+Distance methods
+    Kimura : Kimura 2-parameter distance
+    JinNei : Jin and Nei distance
+        ML : Maximum Likelihood distance
+     Jukes : Jukes-Cantor distance
+Choose the method to use [Kimura]: 
+Transition/transversion ratio [2.0]: 
+Form of distance matrix
+         S : Square
+         L : Lower-triangular
+Form [S]: 
+Kimura
+    5
+Alpha       0.0000  0.2997  0.7820  1.1716  1.4617
+Beta        0.2997  0.0000  0.3219  0.8997  0.5653
+Gamma       0.7820  0.3219  0.0000  1.4481  1.0726
+Delta       1.1716  0.8997  1.4481  0.0000  0.1679
+Epsilon     1.4617  0.5653  1.0726  0.1679  0.0000
+
+
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-msf]               seqset     File containing a sequence allignment
+  [-outfile]           outfile    Output file name
+   -method             list       Choose the method to use
+   -ttratio            float      Transition/transversion ratio
+   -matrix             list       Form
+
+   Optional qualifiers (* if not always prompted):
+   -categories         integer    Number of categories of substitution rates
+*  -[no]basefrequency  bool       Use empirical base frequencies
+   -printinitial       bool       Print out the data at start of run
+*  -freqa              float      Frequency for A
+*  -freqc              float      Frequency for C
+*  -freqg              float      Frequency for G
+*  -freqt              float      Frequency for T/U
+
+   Advanced qualifiers: (none)
+</pre>
+</td></tr></table>
+
+<p>
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-msf]<br>(Parameter 1)</td>
+<td>File containing a sequence allignment</td>
+<td>Readable sequences</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>ednadist.outfile</td>
+</tr>
+
+<tr>
+<td>-method</td>
+<td>Choose the method to use</td>
+<td><table><tr><td>Kimura</td> <td><i>(Kimura 2-parameter distance)</i></td></tr><tr><td>JinNei</td> <td><i>(Jin and Nei distance)</i></td></tr><tr><td>ML</td> <td><i>(Maximum Likelihood distance)</i></td></tr><tr><td>Jukes</td> <td><i>(Jukes-Cantor distance)</i></td></tr></table></td>
+<td>Kimura</td>
+</tr>
+
+<tr>
+<td>-ttratio</td>
+<td>Transition/transversion ratio</td>
+<td>Number up to 100.000</td>
+<td>2.0</td>
+</tr>
+
+<tr>
+<td>-matrix</td>
+<td>Form</td>
+<td><table><tr><td>S</td> <td><i>(Square)</i></td></tr><tr><td>L</td> <td><i>(Lower-triangular)</i></td></tr></table></td>
+<td>S</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-categories</td>
+<td>Number of categories of substitution rates</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-[no]basefrequency</td>
+<td>Use empirical base frequencies</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-printinitial</td>
+<td>Print out the data at start of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-freqa</td>
+<td>Frequency for A</td>
+<td>Number from 0.000 to 1.000</td>
+<td>0.25</td>
+</tr>
+
+<tr>
+<td>-freqc</td>
+<td>Frequency for C</td>
+<td>Number from 0.000 to 1.000</td>
+<td>0.25</td>
+</tr>
+
+<tr>
+<td>-freqg</td>
+<td>Frequency for G</td>
+<td>Number from 0.000 to 1.000</td>
+<td>0.25</td>
+</tr>
+
+<tr>
+<td>-freqt</td>
+<td>Frequency for T/U</td>
+<td>Number from 0.000 to 1.000</td>
+<td>0.25</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Data files
+</H2>
+<H2>
+    Notes
+</H2>Multiple sequences sets not implemented yet!.
+
+<H2>
+    References
+</H2>
+<H2>
+    Warnings
+</H2>
+<H2>
+    Diagnostics
+</H2>
+<H2>
+    Exit status
+</H2>
+<H2>
+    Known bugs
+</H2>
+<H2>
+    See also
+</H2>
+<H2>
+    Author(s)
+</H2>(c) Copyright  1986-1993  by  Joseph  Felsenstein  and  by  the  University  of
+Washington.  Written by Joseph Felsenstein.  Permission is granted to copy this
+document provided that no fee is charged for it and that this copyright  notice
+is not removed.<p>
+
+This application was modified for inclusion in EMBOSS by Ian Longden <a
+href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+    Priority
+</H2>
+<H2>
+    Target users
+</H2>
+<H2>
+    Comments
+</H2>
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

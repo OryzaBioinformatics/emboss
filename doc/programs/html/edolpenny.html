@@ -1,0 +1,396 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: edolpenny
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: edolpenny
+</H2>
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program edolpenny
+</H1>
+<H2>
+    Function
+</H2>Conversion of PHYLIP's dolpenny
+
+<H2>
+    Description
+</H2>EDOLPENNY - Branch and bound to find all most parsimonious trees
+                  for Dollo, polymorphism parsimony criteria<p>
+
+<a href="dolpenny.html">Phylip dolpenny documentation.</a>
+
+<H2>
+    Usage
+</H2>
+Here is a sample session with edolpenny using the data:-
+<pre>
+    7    6
+Alpha1    110110
+Alpha2    110110
+Beta1     110000
+Beta2     110000
+Gamma1    100110
+Delta     001001
+Epsilon   001110
+
+</pre>
+<pre>
+
+% edolpenny test
+
+Penny algorithm Dollo or polymorphism
+Output file [edolpenny.outfile]: stdout
+Dollo Parsimony method (else Polymorphis) [Y]: 
+Create a tree file [Y]: 
+Output treefile name [edolpenny.treefile]: 
+
+Penny algorithm for Dollo or polymorphism parsimony, version 3.573c
+ branch-and-bound to find all most parsimonious trees
+
+Dollo parsimony method
+
+                     
+
+
+requires a total of              3.000
+
+    3 trees in all found
+
+
+
+
+  +-----------------Delta     
+  !  
+--2  +--------------Epsilon   
+  !  !  
+  +--3  +-----------Gamma1    
+     !  !  
+     +--6  +--------Alpha2    
+        !  !  
+        +--1     +--Beta2     
+           !  +--5  
+           +--4  +--Beta1     
+              !  
+              +-----Alpha1    
+
+
+
+
+
+  +-----------------Delta     
+  !  
+--2  +--------------Epsilon   
+  !  !  
+  +--3  +-----------Gamma1    
+     !  !  
+     +--6        +--Beta2     
+        !  +-----5  
+        !  !     +--Beta1     
+        +--4  
+           !     +--Alpha2    
+           +-----1  
+                 +--Alpha1    
+
+
+
+
+
+  +-----------------Delta     
+  !  
+--2  +--------------Epsilon   
+  !  !  
+  +--3  +-----------Gamma1    
+     !  !  
+     !  !        +--Beta2     
+     +--6     +--5  
+        !  +--4  +--Beta1     
+        !  !  !  
+        +--1  +-----Alpha2    
+           !  
+           +--------Alpha1    
+
+
+
+
+% more edolpenny.treefile 
+(Delta,(Epsilon,(Gamma1,(Alpha2,((Beta2,Beta1),Alpha1)))))[0.3333];
+(Delta,(Epsilon,(Gamma1,((Beta2,Beta1),(Alpha2,Alpha1)))))[0.3333];
+(Delta,(Epsilon,(Gamma1,(((Beta2,Beta1),Alpha2),Alpha1))))[0.3333];
+
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers (* if not always prompted):
+  [-datafile]          infile     data file
+  [-outfile]           outfile    Output file name
+  [-[no]dollo]         bool       Dollo Parsimony method (else Polymorphis)
+*  -valthresh          float      threshold value
+*  -datasets           integer    number of sets
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+
+   Optional qualifiers:
+   -numgroups          integer    How many groups of 100 trees
+   -howoften           integer    How often to report, in trees
+   -simple             bool       Branch and bound is simple
+   -ancest             bool       Use ancestral states in input file
+   -multsets           bool       Analyze multiple data sets
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+   -steps              bool       Print out steps in each site
+   -statesatnodes      bool       Print states at all nodes of tree
+   -[no]drawtree       bool       Draw tree
+
+   Advanced qualifiers:
+   -thresh             bool       Use Threshold parsimony
+
+</pre>
+</td></tr></table>
+
+<p>
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-datafile]<br>(Parameter 1)</td>
+<td>data file</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>edolpenny.outfile</td>
+</tr>
+
+<tr>
+<td>[-[no]dollo]<br>(Parameter 3)</td>
+<td>Dollo Parsimony method (else Polymorphis)</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-valthresh</td>
+<td>threshold value</td>
+<td>Number 1.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-datasets</td>
+<td>number of sets</td>
+<td>Integer 2 or more</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>[-[no]trout]<br>(Parameter 4)</td>
+<td>Create a tree file</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-treefile</td>
+<td>Tree file name</td>
+<td>Output file</td>
+<td>edolpenny.treefile</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-numgroups</td>
+<td>How many groups of 100 trees</td>
+<td>Any integer value</td>
+<td>1000</td>
+</tr>
+
+<tr>
+<td>-howoften</td>
+<td>How often to report, in trees</td>
+<td>Any integer value</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>-simple</td>
+<td>Branch and bound is simple</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-ancest</td>
+<td>Use ancestral states in input file</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-multsets</td>
+<td>Analyze multiple data sets</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-printdata</td>
+<td>Print out the data at start of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-progress</td>
+<td>Print indications of progress of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-steps</td>
+<td>Print out steps in each site</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-statesatnodes</td>
+<td>Print states at all nodes of tree</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]drawtree</td>
+<td>Draw tree</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-thresh</td>
+<td>Use Threshold parsimony</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+<H2>
+    Output file format
+</H2>
+<H2>
+    Data files
+</H2>
+<H2>
+    Notes
+</H2>
+<H2>
+    References
+</H2>
+<H2>
+    Warnings
+</H2>
+<H2>
+    Diagnostics
+</H2>
+<H2>
+    Exit status
+</H2>
+<H2>
+    Known bugs
+</H2>
+<H2>
+    See also
+</H2>
+<H2>
+    Author(s)
+</H2>
+(c) Copyright  1986-1993  by  Joseph  Felsenstein  and  by  the  University  of
+Washington.  Written by Joseph Felsenstein.  Permission is granted to copy this
+document provided that no fee is charged for it and that this copyright  notice
+is not removed.<p>
+
+
+This application was modified for inclusion in EMBOSS by Ian Longden <a
+href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+    Priority
+</H2>
+<H2>
+    Target users
+</H2>
+<H2>
+    Comments
+</H2>
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

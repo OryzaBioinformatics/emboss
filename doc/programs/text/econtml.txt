@@ -1,0 +1,170 @@
+
+                              EMBOSS: econtml
+     _________________________________________________________________
+   
+                                Program econtml
+                                       
+Function
+
+   Conversion of PHYLIP's contml
+   
+Description
+
+   ECONTML - Gene Frequencies and Continuous Characters Maximum
+   Likelihood method
+   
+   Phylip contml documentation.
+   
+Usage
+
+   Here is a sample session with econtml using the data:-
+   5    10
+2 2 2 2 2 2 2 2 2 2
+European   0.2868 0.5684 0.4422 0.4286 0.3828 0.7285 0.6386 0.0205 0.8055 0.504
+3
+African    0.1356 0.4840 0.0602 0.0397 0.5977 0.9675 0.9511 0.0600 0.7582 0.620
+7
+Chinese    0.1628 0.5958 0.7298 1.0000 0.3811 0.7986 0.7782 0.0726 0.7482 0.733
+4
+American   0.0144 0.6990 0.3280 0.7421 0.6606 0.8603 0.7924 0.0000 0.8086 0.863
+6
+Australian 0.1211 0.2274 0.5821 1.0000 0.2018 0.9000 0.9837 0.0396 0.9097 0.297
+6
+
+
+% econtml test
+
+Continuous character Maximum Likelihood method
+Output file [econtml.outfile]: stdout
+Global rearrangements [N]:
+Randomize input order of species [N]:
+Input file has all alleles at each locus [N]:
+Create a tree file [Y]:
+Output treefile name [econtml.treefile]:
+
+   5 Populations,   10 Loci
+
+  +----------------------------------African
+  !
+  !              +--------American
+--1--------------2
+  !              !                    +-----------------------Australian
+  !              +--------------------3
+  !                                   +Chinese
+  !
+  +--European
+
+
+remember: this is an unrooted tree!
+
+Ln Likelihood =    33.29060
+
+examined   15 trees
+
+Between     And             Length      Approx. Confidence Limits
+-------     ---             ------      ------- ---------- ------
+  1       African           0.08464   (     0.02351,     0.17917)
+  1          2              0.03569   (    -0.00262,     0.09493)
+  2       American          0.02094   (    -0.00904,     0.06731)
+  2          3              0.05098   (     0.00555,     0.12124)
+  3       Australian        0.05959   (     0.01775,     0.12430)
+  3       Chinese           0.00221   (    -0.02034,     0.03710)
+  1       European          0.00624   (    -0.01948,     0.04601)
+
+
+
+
+% more econtml.treefile
+(African:0.08464,(American:0.02094,(Australian:0.05959,Chinese:0.00221):0.05098
+):0.03569,
+European:0.00624);
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-infile]            infile     input file
+  [-outfile]           outfile    Output file name
+*  -lengths            bool       Use lengths from user trees
+*  -global             bool       Global rearrangements
+*  -random             bool       Randomize input order of species
+*  -randseed           integer    Random number seed (must be odd)
+*  -all                bool       Input file has all alleles at each locus
+*  -outgnum            integer    number of the outgroup
+*  -datasets           integer    How many data sets
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+
+   Optional qualifiers:
+   -[no]besttree       bool       Search for best tree
+   -continuous         bool       continuous characters (else Gene
+                                  frequencies)
+   -og                 bool       Outgroup root
+   -multsets           bool       Analyze multiple data sets
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+   -[no]drawtree       bool       Draw tree
+
+   Advanced qualifiers: (none)
+   
+   Mandatory qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) input file Input file Required
+   [-outfile]
+   (Parameter 2) Output file name Output file econtml.outfile
+   -lengths Use lengths from user trees Yes/No No
+   -global Global rearrangements Yes/No No
+   -random Randomize input order of species Yes/No No
+   -randseed Random number seed (must be odd) Any integer value 3
+   -all Input file has all alleles at each locus Yes/No No
+   -outgnum number of the outgroup Integer 1 or more 1
+   -datasets How many data sets Integer 1 or more 1
+   [-[no]trout]
+   (Parameter 3) Create a tree file Yes/No Yes
+   -treefile Tree file name Output file econtml.treefile
+   Optional qualifiers Allowed values Default
+   -[no]besttree Search for best tree Yes/No Yes
+   -continuous continuous characters (else Gene frequencies) Yes/No No
+   -og Outgroup root Yes/No No
+   -multsets Analyze multiple data sets Yes/No No
+   -printdata Print out the data at start of run Yes/No No
+   -progress Print indications of progress of run Yes/No No
+   -[no]drawtree Draw tree Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1986-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

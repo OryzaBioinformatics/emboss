@@ -1,0 +1,318 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: ednainvar
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: ednainvar
+</H2>
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program ednainvar
+</H1>
+<H2>
+    Function
+</H2>Conversion of PHYLIP's dnainvar
+
+<H2>
+    Description
+</H2> EDNAINVAR -- Embossified program to compute Lake's and Cavender's phylogenetic
+                     invariants from nucleotide sequences<p>
+
+<a href="dnainvar.html">Phylip dnainvar documentation.</a>
+
+<H2>
+    Usage
+</H2>
+Here is a sample session with ednainvar using the data :-
+<pre>
+   4   13
+Alpha     AACGTGGCCAAAT
+Beta      AAGGTCGCCAAAC
+Gamma     CATTTCGTCACAA
+Delta     GGTATTTCGGCCT
+
+</pre>
+<pre>
+
+% ednainvar test
+
+Nucleic acid sequence Invariants method
+Output file [ednainvar.outfile]: stdout
+
+Nucleic acid sequence Invariants method, version 3.573c
+
+
+
+   Pattern   Number of times
+
+     AAAC         1
+     AAAG         2
+     AACC         1
+     AACG         1
+     CCCG         1
+     CCTC         1
+     CGTT         1
+     GCCT         1
+     GGGT         1
+     GGTA         1
+     TCAT         1
+     TTTT         1
+
+
+Symmetrized patterns (1, 2 = the two purines  and  3, 4 = the two pyrimidines
+                  or  1, 2 = the two pyrimidines  and  3, 4 = the two purines)
+
+     1111         1
+     1112         2
+     1113         3
+     1121         1
+     1132         2
+     1133         1
+     1231         1
+     1322         1
+     1334         1
+
+Tree topologies (unrooted): 
+
+    I:  ((Alpha,Beta),(Gamma,Delta))
+   II:  ((Alpha,Gamma),(Beta,Delta))
+  III:  ((Alpha,Delta),(Beta,Gamma))
+
+
+Lake's linear invariants
+ (these are expected to be zero for the two incorrect tree topologies.
+  This is tested by testing the equality of the two parts
+  of each expression using a one-sided exact binomial test.
+  The null hypothesis is that the first part is no larger than the second.)
+
+ Tree                             Exact test P value    Significant?
+
+   I      1    -     0   =     1       0.5000               no
+   II     0    -     0   =     0       1.0000               no
+   III    0    -     0   =     0       1.0000               no
+
+
+Cavender's quadratic invariants (type L) using purines vs. pyrimidines
+ (these are expected to be zero, and thus have a nonsignificant
+  chi-square, for the correct tree topology)
+They will be misled if there are substantially
+different evolutionary rate between sites, or
+different purine:pyrimidine ratios from 1:1.
+
+  Tree I:
+
+   Contingency Table
+
+      2     8
+      1     2
+
+   Quadratic invariant =             4.0
+
+   Chi-square =    0.23111 (not significant)
+
+
+  Tree II:
+
+   Contingency Table
+
+      1     5
+      1     6
+
+   Quadratic invariant =            -1.0
+
+   Chi-square =    0.01407 (not significant)
+
+
+  Tree III:
+
+   Contingency Table
+
+      1     2
+      6     4
+
+   Quadratic invariant =             8.0
+
+   Chi-square =    0.66032 (not significant)
+
+
+
+
+Cavender's quadratic invariants (type K) using purines vs. pyrimidines
+ (these are expected to be zero for the correct tree topology)
+They will be misled if there are substantially
+different evolutionary rate between sites, or
+different purine:pyrimidine ratios from 1:1.
+No statistical test is done on them here.
+
+  Tree I:              -9.0
+  Tree II:              4.0
+  Tree III:             5.0
+
+
+
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-msf]               seqset     File containing sequences
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers:
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+
+   Advanced qualifiers: (none)
+</pre>
+</td></tr></table>
+
+<p>
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-msf]<br>(Parameter 1)</td>
+<td>File containing sequences</td>
+<td>Readable sequences</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>ednainvar.outfile</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-printdata</td>
+<td>Print out the data at start of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-progress</td>
+<td>Print indications of progress of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+<H2>
+    Output file format
+</H2>
+<H2>
+    Data files
+</H2>
+<H2>
+    Notes
+</H2>
+<H2>
+    References
+</H2>
+<H2>
+    Warnings
+</H2>
+<H2>
+    Diagnostics
+</H2>
+<H2>
+    Exit status
+</H2>
+<H2>
+    Known bugs
+</H2>
+<H2>
+    See also
+</H2>
+<H2>
+    Author(s)
+</H2>(c) Copyright  1986-1993  by  Joseph  Felsenstein  and  by  the  University  of
+Washington.  Written by Joseph Felsenstein.  Permission is granted to copy this
+document provided that no fee is charged for it and that this copyright  notice
+is not removed.<p>
+
+
+This application was modified for inclusion in EMBOSS by Ian Longden <a
+href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+    Priority
+</H2>
+<H2>
+    Target users
+</H2>
+<H2>
+    Comments
+</H2>
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

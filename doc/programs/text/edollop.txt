@@ -1,0 +1,154 @@
+
+                              EMBOSS: edollop
+     _________________________________________________________________
+   
+                                Program edollop
+                                       
+Function
+
+   Conversion of PHYLIP's dollop
+   
+Description
+
+   EDOLLOP -- Embossified Dollo and Polymorphism Parsimony Program
+   
+   Phylip dollop documentation.
+   
+Usage
+
+   Here is a sample session with edollop using the data:-
+     5    6
+Alpha     110110
+Beta      110000
+Gamma     100110
+Delta     001001
+Epsilon   001110
+
+% edollop test
+
+Dollo and polymorphism parsimony algorithm
+Output file [edollop.outfile]: stdout
+Create a tree file [Y]:
+Output treefile name [edollop.treefile]:
+
+Dollo and polymorphism parsimony algorithm, version 3.573c
+
+Dollo parsimony method
+
+
+
+
+
+One most parsimonious tree found:
+
+
+
+
+  +-----------Delta
+--3
+  !  +--------Epsilon
+  +--4
+     !  +-----Gamma
+     +--2
+        !  +--Beta
+        +--1
+           +--Alpha
+
+
+requires a total of      3.000
+
+
+
+
+% more edollop.treefile
+(Delta,(Epsilon,(Gamma,(Beta,Alpha))));
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-datafile]          infile     data file to be read in
+  [-outfile]           outfile    Output file name
+*  -randseed           integer    Random number seed (must be odd)
+*  -randtimes          integer    How many times to randomise
+*  -valthresh          float      threshold value
+*  -datasets           integer    number of sets
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+
+   Optional qualifiers (* if not always prompted):
+   -[no]besttree       bool       Search for best tree
+*  -random             bool       Randomize input order of species
+   -[no]dollo          bool       Do Dollo (else Polymorphism)
+   -ancest             bool       Use ancestral states in input file
+   -multsets           bool       Analyze multiple data sets
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+   -steps              bool       Print out steps in each site
+   -statesatnodes      bool       Print states at all nodes of tree
+   -[no]drawtree       bool       Draw tree
+
+   Advanced qualifiers:
+   -thresh             bool       Use Threshold parsimony
+   
+   Mandatory qualifiers Allowed values Default
+   [-datafile]
+   (Parameter 1) data file to be read in Input file Required
+   [-outfile]
+   (Parameter 2) Output file name Output file edollop.outfile
+   -randseed Random number seed (must be odd) Any integer value 3
+   -randtimes How many times to randomise Any integer value 3
+   -valthresh threshold value Number 1.000 or more 1.0
+   -datasets number of sets Integer 2 or more 2
+   [-[no]trout]
+   (Parameter 3) Create a tree file Yes/No Yes
+   -treefile Tree file name Output file edollop.treefile
+   Optional qualifiers Allowed values Default
+   -[no]besttree Search for best tree Yes/No Yes
+   -random Randomize input order of species Yes/No No
+   -[no]dollo Do Dollo (else Polymorphism) Yes/No Yes
+   -ancest Use ancestral states in input file Yes/No No
+   -multsets Analyze multiple data sets Yes/No No
+   -printdata Print out the data at start of run Yes/No No
+   -progress Print indications of progress of run Yes/No No
+   -steps Print out steps in each site Yes/No No
+   -statesatnodes Print states at all nodes of tree Yes/No No
+   -[no]drawtree Draw tree Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   -thresh Use Threshold parsimony Yes/No No
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1986-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

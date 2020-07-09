@@ -1,0 +1,363 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: econtml
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: econtml
+</H2>
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program econtml
+</H1>
+<H2>
+    Function
+</H2>Conversion of PHYLIP's contml
+
+<H2>
+    Description
+</H2>ECONTML - Gene Frequencies and Continuous Characters Maximum Likelihood
+    method<p>
+<a href="contml.html">Phylip contml documentation.</a>
+
+<H2>
+    Usage
+</H2>
+Here is a sample session with econtml using the data:-
+<pre>
+   5    10
+2 2 2 2 2 2 2 2 2 2
+European   0.2868 0.5684 0.4422 0.4286 0.3828 0.7285 0.6386 0.0205 0.8055 0.5043
+African    0.1356 0.4840 0.0602 0.0397 0.5977 0.9675 0.9511 0.0600 0.7582 0.6207
+Chinese    0.1628 0.5958 0.7298 1.0000 0.3811 0.7986 0.7782 0.0726 0.7482 0.7334
+American   0.0144 0.6990 0.3280 0.7421 0.6606 0.8603 0.7924 0.0000 0.8086 0.8636
+Australian 0.1211 0.2274 0.5821 1.0000 0.2018 0.9000 0.9837 0.0396 0.9097 0.2976
+
+</pre>
+
+<pre>
+
+% econtml test
+
+Continuous character Maximum Likelihood method
+Output file [econtml.outfile]: stdout
+Global rearrangements [N]: 
+Randomize input order of species [N]: 
+Input file has all alleles at each locus [N]: 
+Create a tree file [Y]: 
+Output treefile name [econtml.treefile]: 
+
+   5 Populations,   10 Loci
+
+  +----------------------------------African   
+  !  
+  !              +--------American  
+--1--------------2  
+  !              !                    +-----------------------Australian
+  !              +--------------------3  
+  !                                   +Chinese   
+  !  
+  +--European  
+
+
+remember: this is an unrooted tree!
+
+Ln Likelihood =    33.29060
+
+examined   15 trees
+
+Between     And             Length      Approx. Confidence Limits
+-------     ---             ------      ------- ---------- ------
+  1       African           0.08464   (     0.02351,     0.17917)
+  1          2              0.03569   (    -0.00262,     0.09493)
+  2       American          0.02094   (    -0.00904,     0.06731)
+  2          3              0.05098   (     0.00555,     0.12124)
+  3       Australian        0.05959   (     0.01775,     0.12430)
+  3       Chinese           0.00221   (    -0.02034,     0.03710)
+  1       European          0.00624   (    -0.01948,     0.04601)
+
+
+
+
+% more econtml.treefile 
+(African:0.08464,(American:0.02094,(Australian:0.05959,Chinese:0.00221):0.05098):0.03569,
+European:0.00624);
+
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers (* if not always prompted):
+  [-infile]            infile     input file
+  [-outfile]           outfile    Output file name
+*  -lengths            bool       Use lengths from user trees
+*  -global             bool       Global rearrangements
+*  -random             bool       Randomize input order of species
+*  -randseed           integer    Random number seed (must be odd)
+*  -all                bool       Input file has all alleles at each locus
+*  -outgnum            integer    number of the outgroup
+*  -datasets           integer    How many data sets
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+
+   Optional qualifiers:
+   -[no]besttree       bool       Search for best tree
+   -continuous         bool       continuous characters (else Gene
+                                  frequencies)
+   -og                 bool       Outgroup root
+   -multsets           bool       Analyze multiple data sets
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+   -[no]drawtree       bool       Draw tree
+
+   Advanced qualifiers: (none)
+</pre>
+</td></tr></table>
+
+<p>
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>input file</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>econtml.outfile</td>
+</tr>
+
+<tr>
+<td>-lengths</td>
+<td>Use lengths from user trees</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-global</td>
+<td>Global rearrangements</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-random</td>
+<td>Randomize input order of species</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-randseed</td>
+<td>Random number seed (must be odd)</td>
+<td>Any integer value</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>-all</td>
+<td>Input file has all alleles at each locus</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-outgnum</td>
+<td>number of the outgroup</td>
+<td>Integer 1 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-datasets</td>
+<td>How many data sets</td>
+<td>Integer 1 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>[-[no]trout]<br>(Parameter 3)</td>
+<td>Create a tree file</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-treefile</td>
+<td>Tree file name</td>
+<td>Output file</td>
+<td>econtml.treefile</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]besttree</td>
+<td>Search for best tree</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-continuous</td>
+<td>continuous characters (else Gene frequencies)</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-og</td>
+<td>Outgroup root</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-multsets</td>
+<td>Analyze multiple data sets</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-printdata</td>
+<td>Print out the data at start of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-progress</td>
+<td>Print indications of progress of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]drawtree</td>
+<td>Draw tree</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+<H2>
+    Output file format
+</H2>
+<H2>
+    Data files
+</H2>
+<H2>
+    Notes
+</H2>
+<H2>
+    References
+</H2>
+<H2>
+    Warnings
+</H2>
+<H2>
+    Diagnostics
+</H2>
+<H2>
+    Exit status
+</H2>
+<H2>
+    Known bugs
+</H2>
+<H2>
+    See also
+</H2>
+<H2>
+    Author(s)
+</H2>(c) Copyright  1986-1993  by  Joseph  Felsenstein  and  by  the  University  of
+Washington.  Written by Joseph Felsenstein.  Permission is granted to copy this
+document provided that no fee is charged for it and that this copyright  notice
+is not removed.<p>
+
+
+This application was modified for inclusion in EMBOSS by Ian Longden <a
+href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+    Priority
+</H2>
+<H2>
+    Target users
+</H2>
+<H2>
+    Comments
+</H2>
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,215 @@
+
+                              EMBOSS: ednamlk
+     _________________________________________________________________
+   
+                                Program ednamlk
+                                       
+Function
+
+   Conversion of PHYLIP's dnamlk
+   
+Description
+
+   EDNAMLK -- Embossified DNA Maximum Likelihood program with molecular
+   clock
+   
+   Phylip dnamlk documentation.
+   
+Usage
+
+   Here is a sample session with ednamlk.
+
+% ednamlk test -options
+
+Estimates phylogenies from nucleic acid sequence Maximum Likelihood with
+molecular clock
+Output file [ednamlk.outfile]: stdout
+Search for best tree [Y]:
+Global rearrangements [N]:
+Randomize input order of species [N]:
+Transition/transversion ratio [2.0]:
+Use empirical base frequencies [Y]:
+More than one category of substitution rates [N]: y
+Number of categories of substitution rates [2]:
+space seperated category values: 1.0 3.2
+space seperated probabilliyy values: 0.4 0.6
+Use Defualt Mean block length of sites [N]:
+Mean block length of sites having the same rate (greater than 1) [1.0]: 1.5
+Print out the data at start of run [N]:
+Print indications of progress of run [N]:
+Draw tree [Y]:
+Create a tree file [Y]:
+Output treefile name [ednamlk.treefile]:
+
+Nucleic acid sequence
+   Maximum Likelihood method with molecular clock, version 3.573c
+
+
+
+Site category   Rate of change    Probability
+
+           1        1.000            0.400
+           2        3.200            0.600
+
+
+Expected length of a patch of sites having the same rate =    1.500
+
+Empirical Base Frequencies:
+
+   A       0.24615
+   C       0.29231
+   G       0.24615
+  T(U)     0.21538
+
+Transition/transversion ratio =   2.000000
+
+(Transition/transversion parameter =   1.523077)
+
+
+
+
+
+                                                           +--Delta
+  +--------------------------------------------------------4
+  !                                                        +--Epsilon
+--3
+  !                                             +-------------Gamma
+  +---------------------------------------------2
+                                                !          +--Alpha
+                                                +----------1
+                                                           +--Beta
+
+
+Ln Likelihood =   -72.40499
+
+ Ancestor      Node      Node Time     Length
+ --------      ----      ---- ----     ------
+ root            3
+   3             4         3.40036     3.40036
+   4          Delta        3.55871     0.15834
+   4          Epsilon      3.55871     0.15834
+   3             2         2.75249     2.75249
+   2          Gamma        3.55871     0.80621
+   2             1         3.38652     0.63403
+   1          Alpha        3.55871     0.17218
+   1          Beta         3.55871     0.17218
+
+
+Combination of categories that contributes the most to the likelihood:
+             2222221111 112
+
+
+
+
+
+
+% more ednamlk.treefile
+((Delta:0.15834,Epsilon:0.15834):3.40036,(Gamma:0.80621,
+(Alpha:0.17218,Beta:0.17218):0.63403):2.75249);
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-msf]               seqset     File containing a sequence allignment
+  [-outfile]           outfile    Output file name
+*  -lengths            bool       Use lengths from user trees
+*  -global             bool       Global rearrangements
+*  -random             bool       Randomize input order of species
+*  -randseed           integer    Random number seed (must be odd)
+*  -randtimes          integer    How many times to randomise
+*  -freqa              float      Frequency for A
+*  -freqc              float      Frequency for C
+*  -freqg              float      Frequency for G
+*  -freqt              float      Frequency for T/U
+*  -catnum             integer    Number of categories of substitution rates
+*  -catvals            string     space seperated category values
+*  -catprob            string     space seperated probabillity values
+*  -autog              bool       Use Defualt Mean block length of sites
+*  -lambda             float      Mean block length of sites having the same
+                                  rate (greater than 1)
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+
+   Optional qualifiers:
+   -[no]besttree       bool       Search for best tree
+   -ttratio            float      Transition/transversion ratio
+   -[no]basefrequency  bool       Use empirical base frequencies
+   -categories         bool       More than one category of substitution rates
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+   -[no]drawtree       bool       Draw tree
+
+   Advanced qualifiers: (none)
+   
+   Mandatory qualifiers Allowed values Default
+   [-msf]
+   (Parameter 1) File containing a sequence allignment Readable sequences
+   Required
+   [-outfile]
+   (Parameter 2) Output file name Output file ednamlk.outfile
+   -lengths Use lengths from user trees Yes/No No
+   -global Global rearrangements Yes/No No
+   -random Randomize input order of species Yes/No No
+   -randseed Random number seed (must be odd) Any integer value 3
+   -randtimes How many times to randomise Any integer value 3
+   -freqa Frequency for A Number from 0.000 to 1.000 0.25
+   -freqc Frequency for C Number from 0.000 to 1.000 0.25
+   -freqg Frequency for G Number from 0.000 to 1.000 0.25
+   -freqt Frequency for T/U Number from 0.000 to 1.000 0.25
+   -catnum Number of categories of substitution rates Integer from 2 to 9
+   2
+   -catvals space seperated category values Any string is accepted An
+   empty string is accepted
+   -catprob space seperated probabillity values Any string is accepted An
+   empty string is accepted
+   -autog Use Defualt Mean block length of sites Yes/No No
+   -lambda Mean block length of sites having the same rate (greater than
+   1) Number 1.000 or more 1.0
+   [-[no]trout]
+   (Parameter 3) Create a tree file Yes/No Yes
+   -treefile Tree file name Output file ednamlk.treefile
+   Optional qualifiers Allowed values Default
+   -[no]besttree Search for best tree Yes/No Yes
+   -ttratio Transition/transversion ratio Any integer value 2.0
+   -[no]basefrequency Use empirical base frequencies Yes/No Yes
+   -categories More than one category of substitution rates Yes/No No
+   -printdata Print out the data at start of run Yes/No No
+   -progress Print indications of progress of run Yes/No No
+   -[no]drawtree Draw tree Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Data files
+
+Notes
+
+   Multiple sequences sets not implemented yet!.
+   
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1986-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

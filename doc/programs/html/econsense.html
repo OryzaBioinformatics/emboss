@@ -1,0 +1,336 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: econsense
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: econsense
+</H2>
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program econsense
+</H1>
+<H2>
+    Function
+</H2>
+Conversion of PHYLIP's consense
+
+<H2>
+    Description
+</H2>ECONSENSE -- Embossified consensus tree program<p>
+<a href="consense.html">Phylip consense documentation.</a>
+
+<H2>
+    Usage
+</H2>
+Here is a sample session with econsense using the test data :-
+<pre>
+(A,(B,(H,(D,(J,(((G,E),(F,I)),C))))));
+(A,(B,(D,((J,H),(((G,E),(F,I)),C)))));
+(A,(B,(D,(H,(J,(((G,E),(F,I)),C))))));
+(A,(B,(E,(G,((F,I),((J,(H,D)),C))))));
+(A,(B,(E,(G,((F,I),(((J,H),D),C))))));
+(A,(B,(E,((F,I),(G,((J,(H,D)),C))))));
+(A,(B,(E,((F,I),(G,(((J,H),D),C))))));
+(A,(B,(E,((G,(F,I)),((J,(H,D)),C)))));
+(A,(B,(E,((G,(F,I)),(((J,H),D),C)))));
+</pre>
+
+<pre>
+
+% econsense test
+Majority-rule and strict consensus tree
+Output file [econsense.outfile]: stdout
+Create a tree file [Y]: 
+tree file [econsense.treefile]: 
+
+Majority-rule and strict consensus tree program, version 3.573c
+
+
+Species in order: 
+
+  A
+  B
+  H
+  D
+  J
+  G
+  E
+  F
+  I
+  C
+
+
+Sets included in the consensus tree
+
+Set (species in order)     How many times out of   9.00
+
+.......**.                   9.00
+..********                   9.00
+..***....*                   6.00
+..****.***                   6.00
+..***.....                   6.00
+..*.*.....                   4.00
+..***..***                   2.00
+
+
+Sets NOT included in consensus tree:
+
+Set (species in order)     How many times out of   9.00
+
+.....**...                   3.00
+.....****.                   3.00
+..**......                   3.00
+.....*****                   3.00
+..*.******                   2.00
+.....*.**.                   2.00
+..****...*                   2.00
+....******                   2.00
+...*******                   1.00
+
+
+CONSENSUS TREE:
+the numbers at the forks indicate the number
+of times the group consisting of the species
+which are to the right of that fork occurred
+among the trees, out of   9.00 trees
+
+  +---------------------------------------A                   
+  !
+  !         +-----------------------------E                   
+  !         !
+  !         !                        +----I                   
+  !         !         +------------9.0
+  !         !         !              +----F                   
+  !    +--9.0         !
+  !    !    !    +--2.0         +---------D                   
+  !    !    !    !    !    +--6.0
+  !    !    !    !    !    !    !    +----J                   
+  !    !    !    !    +--6.0    +--4.0
+  +--9.0    +--6.0         !         +----H                   
+       !         !         !
+       !         !         +--------------C                   
+       !         !
+       !         +------------------------G                   
+       !
+       +----------------------------------B                   
+
+
+  remember: this is an unrooted tree!
+
+
+
+% more econsense.treefile
+(A:9.0,((E:9.0,(((I:9.0,F:9.0):9.0,((D:9.0,(J:9.0,H:9.0):4.0):6.0,C:9.0):6.0):2.0,G:9.0):6.0):9.0,
+B:9.0):9.0);
+
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers (* if not always prompted):
+  [-infile]            infile     file to read in (New Hampshire standard
+                                  form)
+  [-outfile]           outfile    Output file name
+  [-[no]trout]         bool       Create a tree file
+  [-treefile]          outfile    tree file name
+*  -og                 bool       Outgroup root
+*  -outgnum            integer    number of the outgroup
+
+   Optional qualifiers:
+   -[no]drawtree       bool       Draw tree
+   -root               bool       Trees to be treated as Rooted
+   -progress           bool       Print indications of progress of run
+   -[no]printsets      bool       Print out the sets of species
+
+   Advanced qualifiers: (none)
+</pre>
+</td></tr></table>
+
+<p>
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>file to read in (New Hampshire standard form)</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>econsense.outfile</td>
+</tr>
+
+<tr>
+<td>[-[no]trout]<br>(Parameter 3)</td>
+<td>Create a tree file</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>[-treefile]<br>(Parameter 4)</td>
+<td>tree file name</td>
+<td>Output file</td>
+<td>econsense.treefile</td>
+</tr>
+
+<tr>
+<td>-og</td>
+<td>Outgroup root</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-outgnum</td>
+<td>number of the outgroup</td>
+<td>Integer 1 or more</td>
+<td>1</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]drawtree</td>
+<td>Draw tree</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-root</td>
+<td>Trees to be treated as Rooted</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-progress</td>
+<td>Print indications of progress of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]printsets</td>
+<td>Print out the sets of species</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+<H2>
+    Input file
+</H2>Must be in New Hampshire standard form.
+
+<H2>
+    Data files
+</H2>
+<H2>
+    Notes
+</H2>Multiple sequences sets not implemented yet!.
+
+<H2>
+    References
+</H2>
+<H2>
+    Warnings
+</H2>
+<H2>
+    Diagnostics
+</H2>
+<H2>
+    Exit status
+</H2>
+<H2>
+    Known bugs
+</H2>
+<H2>
+    See also
+</H2>
+<H2>
+    Author(s)
+</H2>(c) Copyright  1986-1993  by  Joseph  Felsenstein  and  by  the  University  of
+Washington.  Written by Joseph Felsenstein. Permission is granted to copy this
+document provided that no fee is charged for it and that this copyright  notice
+is not removed.<p>
+
+This application was modified for inclusion in EMBOSS by Ian Longden <a
+href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+    Priority
+</H2>
+<H2>
+    Target users
+</H2>
+<H2>
+    Comments
+</H2>
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

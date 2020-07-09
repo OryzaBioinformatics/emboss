@@ -1,0 +1,293 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: eprotdist
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: eprotdist
+</H2>
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program eprotdist
+</H1>
+<H2>
+    Function
+</H2>
+Conversion of PHYLIP's protdist
+
+<H2>
+    Description
+</H2>     EPROTDIST --Embossified program to compute distance matrix from
+    protein sequences<p>
+
+<a href="protdist.html">Phylip protdist documentation.</a><p>
+
+<H2>
+    Usage
+</H2>
+Here is a sample session with eprotdist using the data:-
+<pre>
+   5   13
+Alpha     AACGTGGCCACAT
+Beta      AAGGTCGCCACAC
+Gamma     CAGTTCGCCACAA
+Delta     GAGATTTCCGCCT
+Epsilon   GAGATCTCCGCCC
+</pre>
+
+<pre>
+
+% eprotdist test
+
+Protein distance algorithm
+Output file [eprotdist.outfile]: stdout
+Method
+       Pam : Dayhoff PAM matrix
+       Kim : Kimura formula
+       Cat : Categories model
+Choose the method to use [Pam]: 
+    5
+Alpha          0.00000  0.47285  0.88304  1.29841  2.12269
+Beta           0.47285  0.00000  0.45192  1.34185  0.84009
+Gamma          0.88304  0.45192  0.00000  1.30693  1.21582
+Delta          1.29841  1.34185  1.30693  0.00000  0.27536
+Epsilon        2.12269  0.84009  1.21582  0.27536  0.00000
+
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-msf]               seqset     File containing sequences
+  [-outfile]           outfile    Output file name
+   -method             list       Choose the method to use
+
+   Optional qualifiers (* if not always prompted):
+*  -categ              list       Choose the categorie to use
+*  -gencode            list       Which genetic code
+*  -prob               float      Prob change category (1.0=easy)
+*  -tranrate           float      Transition/transversion ratio
+*  -[no]basefrequency  bool       Use empirical base frequencies
+*  -freqa              float      Frequency for A
+*  -freqc              float      Frequency for C
+*  -freqg              float      Frequency for G
+*  -freqt              float      Frequency for T/U
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+
+   Advanced qualifiers: (none)
+</pre>
+</td></tr></table>
+
+<p>
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-msf]<br>(Parameter 1)</td>
+<td>File containing sequences</td>
+<td>Readable sequences</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>eprotdist.outfile</td>
+</tr>
+
+<tr>
+<td>-method</td>
+<td>Choose the method to use</td>
+<td><table><tr><td>Pam</td> <td><i>(Dayhoff PAM matrix)</i></td></tr><tr><td>Kim</td> <td><i>(Kimura formula)</i></td></tr><tr><td>Cat</td> <td><i>(Categories model)</i></td></tr></table></td>
+<td>Pam</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-categ</td>
+<td>Choose the categorie to use</td>
+<td><table><tr><td>G</td> <td><i>(George/Hunt/Barker (Cys), (Met Val Leu Ileu), (Gly Ala Ser Thr Pro))</i></td></tr><tr><td>C</td> <td><i>(Chemical (Cys Met), (Val Leu Ileu Gly Ala Ser Thr), (Pro))</i></td></tr><tr><td>H</td> <td><i>(Hall (Cys), (Met Val Leu Ileu), (Gly Ala Ser Thr), (Pro))</i></td></tr></table></td>
+<td>G</td>
+</tr>
+
+<tr>
+<td>-gencode</td>
+<td>Which genetic code</td>
+<td><table><tr><td>U</td> <td><i>(Universal)</i></td></tr><tr><td>M</td> <td><i>(Mitochondrial)</i></td></tr><tr><td>V</td> <td><i>(Vertebrate mitochondrial)</i></td></tr><tr><td>F</td> <td><i>(Fly mitochondrial)</i></td></tr><tr><td>Y</td> <td><i>(Yeast mitochondrial)</i></td></tr></table></td>
+<td>U</td>
+</tr>
+
+<tr>
+<td>-prob</td>
+<td>Prob change category (1.0=easy)</td>
+<td>Number from 0.000 to 1.000</td>
+<td>0.457</td>
+</tr>
+
+<tr>
+<td>-tranrate</td>
+<td>Transition/transversion ratio</td>
+<td>Number 0.000 or more</td>
+<td>2.0</td>
+</tr>
+
+<tr>
+<td>-[no]basefrequency</td>
+<td>Use empirical base frequencies</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-freqa</td>
+<td>Frequency for A</td>
+<td>Number from 0.000 to 1.000</td>
+<td>0.25</td>
+</tr>
+
+<tr>
+<td>-freqc</td>
+<td>Frequency for C</td>
+<td>Number from 0.000 to 1.000</td>
+<td>0.25</td>
+</tr>
+
+<tr>
+<td>-freqg</td>
+<td>Frequency for G</td>
+<td>Number from 0.000 to 1.000</td>
+<td>0.25</td>
+</tr>
+
+<tr>
+<td>-freqt</td>
+<td>Frequency for T/U</td>
+<td>Number from 0.000 to 1.000</td>
+<td>0.25</td>
+</tr>
+
+<tr>
+<td>-printdata</td>
+<td>Print out the data at start of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-progress</td>
+<td>Print indications of progress of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Data files
+</H2>
+<H2>
+    Notes
+</H2>Multiple sequences sets not implemented yet!.
+
+<H2>
+    References
+</H2>
+<H2>
+    Warnings
+</H2>
+<H2>
+    Diagnostics
+</H2>
+<H2>
+    Exit status
+</H2>
+<H2>
+    Known bugs
+</H2>
+<H2>
+    See also
+</H2>
+<H2>
+    Author(s)
+</H2>(c) Copyright 1993 by Joseph Felsenstein.  Permission is granted to  copy  this
+document  provided that no fee is charged for it and that this copyright notice
+is not removed.<p>
+
+This application was modified for inclusion in EMBOSS by Ian Longden <a
+href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+    Priority
+</H2>
+<H2>
+    Target users
+</H2>
+<H2>
+    Comments
+</H2>
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

@@ -1,0 +1,143 @@
+
+                              EMBOSS: ednacomp
+     _________________________________________________________________
+   
+                               Program ednacomp
+                                       
+Function
+
+   Conversion of PHYLIP's dnacomp
+   
+Description
+
+   EDNACOMP -- Embossified DNA Compatibility Program
+   
+   Phylip dnacomp documentation.
+   
+Usage
+
+   Here is a sample session with ednacomp using the data:-
+    5   13
+Alpha     AACGUGGCCAAAU
+Beta      AAGGUCGCCAAAC
+Gamma     CAUUUCGUCACAA
+Delta     GGUAUUUCGGCCU
+Epsilon   GGGAUCUCGGCCC
+
+
+% ednacomp test
+
+DNA compatibility algorithm
+Output file [ednacomp.outfile]: stdout
+Create a tree file [Y]:
+Treefile name [ednacomp.treefile]:
+Outgroup root [N]:
+
+
+One most parsimonious tree found:
+
+
+
+
+           +--Epsilon
+        +--4
+     +--3  +--Delta
+     !  !
+  +--2  +-----Gamma
+  !  !
+--1  +--------Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+total number of compatible sites is       11.0
+
+
+
+
+% more ednacomp.treefile
+((((Epsilon,Delta),Gamma),Beta),Alpha);
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-msf]               seqset     File containing a sequence allignment
+  [-outfile]           outfile    Output file name
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+   -og                 bool       Outgroup root
+*  -outgnum            integer    number of the outgroup
+*  -randseed           integer    Random number seed (must be odd)
+*  -randtimes          integer    Number of times to jumble
+
+   Optional qualifiers:
+   -[no]drawtree       bool       Draw tree
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+   -stepoutput         bool       Print steps & compatibility at sites
+   -allnodes           bool       Print sequences at all nodes of tree
+   -random             bool       Randomize input order of species
+
+   Advanced qualifiers: (none)
+   
+   Mandatory qualifiers Allowed values Default
+   [-msf]
+   (Parameter 1) File containing a sequence allignment Readable sequences
+   Required
+   [-outfile]
+   (Parameter 2) Output file name Output file ednacomp.outfile
+   [-[no]trout]
+   (Parameter 3) Create a tree file Yes/No Yes
+   -treefile Tree file name Output file ednacomp.treefile
+   -og Outgroup root Yes/No No
+   -outgnum number of the outgroup Integer 1 or more 1
+   -randseed Random number seed (must be odd) Any integer value 0
+   -randtimes Number of times to jumble Any integer value 0
+   Optional qualifiers Allowed values Default
+   -[no]drawtree Draw tree Yes/No Yes
+   -printdata Print out the data at start of run Yes/No No
+   -progress Print indications of progress of run Yes/No No
+   -stepoutput Print steps & compatibility at sites Yes/No No
+   -allnodes Print sequences at all nodes of tree Yes/No No
+   -random Randomize input order of species Yes/No No
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1986-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

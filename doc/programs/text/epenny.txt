@@ -1,0 +1,211 @@
+
+                               EMBOSS: epenny
+     _________________________________________________________________
+   
+                                Program epenny
+                                       
+Function
+
+   Conversion of PHYLIP's penny
+   
+Description
+
+   EPENNY - Embossified branch and bound to find all most parsimonious
+   trees
+   
+   Phylip penny documentation.
+   
+Usage
+
+   Here is a sample session with epenny using the data:-
+    7    6
+Alpha1    110110
+Alpha2    110110
+Beta1     110000
+Beta2     110000
+Gamma1    100110
+Delta     001001
+Epsilon   001110
+
+% epenny test
+
+Penny algorithm, branch-and-bound to find all most parsimonious trees
+Output file [epenny.outfile]: stdout
+Method
+       Wag : Wagner
+       Cam : Camin-Sokal
+       Mix : Mixed
+    prompt : "Choose the method to use
+-method : enter list value [Wag]:
+Create a tree file [Y]:
+Output treefile name [epenny.treefile]:
+
+Wagner parsimony method
+
+
+
+
+requires a total of              8.000
+
+    3 trees in all found
+
+
+
+
+  +-----------------Alpha1
+  !
+  !        +--------Alpha2
+--1        !
+  !  +-----4     +--Epsilon
+  !  !     !  +--6
+  !  !     +--5  +--Delta
+  +--2        !
+     !        +-----Gamma1
+     !
+     !           +--Beta2
+     +-----------3
+                 +--Beta1
+
+  remember: this is an unrooted tree!
+
+
+
+
+  +-----------------Alpha1
+  !
+--1  +--------------Alpha2
+  !  !
+  !  !           +--Epsilon
+  +--2        +--6
+     !  +-----5  +--Delta
+     !  !     !
+     +--4     +-----Gamma1
+        !
+        !        +--Beta2
+        +--------3
+                 +--Beta1
+
+  remember: this is an unrooted tree!
+
+
+
+
+  +-----------------Alpha1
+  !
+  !           +-----Alpha2
+--1  +--------2
+  !  !        !  +--Beta2
+  !  !        +--3
+  +--4           +--Beta1
+     !
+     !           +--Epsilon
+     !        +--6
+     +--------5  +--Delta
+              !
+              +-----Gamma1
+
+  remember: this is an unrooted tree!
+
+
+
+
+
+% more epenny.treefile
+(Alpha1,((Alpha2,((Epsilon,Delta),Gamma1)),(Beta2,Beta1)))[0.3333];
+(Alpha1,(Alpha2,(((Epsilon,Delta),Gamma1),(Beta2,Beta1))))[0.3333];
+(Alpha1,((Alpha2,(Beta2,Beta1)),((Epsilon,Delta),Gamma1)))[0.3333];
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-infile]            infile     data file
+  [-outfile]           outfile    Output file name
+   -method             list       (no help text) list value
+*  -outgnum            integer    number of the outgroup
+*  -valthresh          float      threshold value
+*  -datasets           integer    How many data sets
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+
+   Optional qualifiers:
+   -numgroups          integer    How many groups of 100 trees
+   -howoften           integer    How often to report, in trees
+   -simple             bool       Branch and bound is simple
+   -og                 bool       Outgroup root
+   -multsets           bool       Analyze multiple data sets
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+   -steps              bool       Print out steps in each site
+   -seqatnodes         bool       Print sequences at all nodes of tree
+   -[no]drawtree       bool       Draw tree
+
+   Advanced qualifiers:
+   -thresh             bool       Use Threshold parsimony
+   
+   Mandatory qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) data file Input file Required
+   [-outfile]
+   (Parameter 2) Output file name Output file epenny.outfile
+   -method (no help text) list value
+   Wag    (Wagner)
+   Cam    (Camin-Sokal)
+   Mix    (Mixed)
+   prompt ("Choose the method to use)
+   Wag
+   -outgnum number of the outgroup Integer 1 or more 1
+   -valthresh threshold value Number 1.000 or more 1.0
+   -datasets How many data sets Any integer value 0
+   [-[no]trout]
+   (Parameter 3) Create a tree file Yes/No Yes
+   -treefile Tree file name Output file epenny.treefile
+   Optional qualifiers Allowed values Default
+   -numgroups How many groups of 100 trees Any integer value 1000
+   -howoften How often to report, in trees Any integer value 100
+   -simple Branch and bound is simple Yes/No No
+   -og Outgroup root Yes/No No
+   -multsets Analyze multiple data sets Yes/No No
+   -printdata Print out the data at start of run Yes/No No
+   -progress Print indications of progress of run Yes/No No
+   -steps Print out steps in each site Yes/No No
+   -seqatnodes Print sequences at all nodes of tree Yes/No No
+   -[no]drawtree Draw tree Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   -thresh Use Threshold parsimony Yes/No No
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1986-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

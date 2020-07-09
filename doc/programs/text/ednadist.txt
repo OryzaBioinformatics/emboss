@@ -1,0 +1,136 @@
+
+                              EMBOSS: ednadist
+     _________________________________________________________________
+   
+                               Program ednadist
+                                       
+Function
+
+   Conversion of PHYLIP's dnadist
+   
+Description
+
+   EDNADIST -- Embossified program to compute distance matrix from
+   nucleotide sequences
+   
+   Phylip dnadist documentation.
+   
+Usage
+
+   Here is a sample session with ednadist.
+with the test data of:-
+
+   5   13
+Alpha     AACGTGGCCACAT
+Beta      AAGGTCGCCACAC
+Gamma     CAGTTCGCCACAA
+Delta     GAGATTTCCGCCT
+Epsilon   GAGATCTCCGCCC
+
+% ednadist test
+
+Nucleic acid sequence Distance Matrix program
+Output file [ednadist.outfile]: stdout
+Distance methods
+    Kimura : Kimura 2-parameter distance
+    JinNei : Jin and Nei distance
+        ML : Maximum Likelihood distance
+     Jukes : Jukes-Cantor distance
+Choose the method to use [Kimura]:
+Transition/transversion ratio [2.0]:
+Form of distance matrix
+         S : Square
+         L : Lower-triangular
+Form [S]:
+Kimura
+    5
+Alpha       0.0000  0.2997  0.7820  1.1716  1.4617
+Beta        0.2997  0.0000  0.3219  0.8997  0.5653
+Gamma       0.7820  0.3219  0.0000  1.4481  1.0726
+Delta       1.1716  0.8997  1.4481  0.0000  0.1679
+Epsilon     1.4617  0.5653  1.0726  0.1679  0.0000
+
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-msf]               seqset     File containing a sequence allignment
+  [-outfile]           outfile    Output file name
+   -method             list       Choose the method to use
+   -ttratio            float      Transition/transversion ratio
+   -matrix             list       Form
+
+   Optional qualifiers (* if not always prompted):
+   -categories         integer    Number of categories of substitution rates
+*  -[no]basefrequency  bool       Use empirical base frequencies
+   -printinitial       bool       Print out the data at start of run
+*  -freqa              float      Frequency for A
+*  -freqc              float      Frequency for C
+*  -freqg              float      Frequency for G
+*  -freqt              float      Frequency for T/U
+
+   Advanced qualifiers: (none)
+   
+   Mandatory qualifiers Allowed values Default
+   [-msf]
+   (Parameter 1) File containing a sequence allignment Readable sequences
+   Required
+   [-outfile]
+   (Parameter 2) Output file name Output file ednadist.outfile
+   -method Choose the method to use
+   Kimura (Kimura 2-parameter distance)
+   JinNei (Jin and Nei distance)
+   ML     (Maximum Likelihood distance)
+   Jukes  (Jukes-Cantor distance)
+   Kimura
+   -ttratio Transition/transversion ratio Number up to 100.000 2.0
+   -matrix Form
+   S (Square)
+   L (Lower-triangular)
+   S
+   Optional qualifiers Allowed values Default
+   -categories Number of categories of substitution rates Any integer
+   value 1
+   -[no]basefrequency Use empirical base frequencies Yes/No Yes
+   -printinitial Print out the data at start of run Yes/No No
+   -freqa Frequency for A Number from 0.000 to 1.000 0.25
+   -freqc Frequency for C Number from 0.000 to 1.000 0.25
+   -freqg Frequency for G Number from 0.000 to 1.000 0.25
+   -freqt Frequency for T/U Number from 0.000 to 1.000 0.25
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Data files
+
+Notes
+
+   Multiple sequences sets not implemented yet!.
+   
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1986-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

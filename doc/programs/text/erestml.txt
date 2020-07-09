@@ -1,0 +1,175 @@
+
+                              EMBOSS: erestml
+     _________________________________________________________________
+   
+                                Program erestml
+                                       
+Function
+
+   Conversion of PHYLIP's restml
+   
+Description
+
+   ERESTML -- Embossified restriction sites Maximum Likelihood program
+   
+   Phylip restml documentation.
+   
+Usage
+
+   Here is a sample session with erestml uisng the data :-
+   5   13   2
+Alpha     ++-+-++--+++-
+Beta      ++++--+--+++-
+Gamma     -+--+-++-+-++
+Delta     ++-+----++---
+Epsilon   ++++----++---
+
+
+% erestml test
+
+Restriction site Maximum Likelihood method
+Output file [erestml.outfile]: stdout
+Randomize input order of species [N]:
+Create a tree file [Y]:
+Output treefile name [erestml.treefile]:
+
+Restriction site Maximum Likelihood method, version 3.573c
+
+
+  Recognition sequences all 6 bases long
+
+Sites absent from all species are assumed to have been omitted
+
+
+
+
+      +Epsilon
+  +---3
+  !   +Delta
+  !
+  !  +-----Gamma
+--2--1
+  !  +Beta
+  !
+  +Alpha
+
+
+remember: this is an unrooted tree!
+
+Ln Likelihood =   -40.35857
+
+Examined   15 trees
+
+ Between        And            Length      Approx. Confidence Limits
+ -------        ---            ------      ------- ---------- ------
+   2             3            0.05855     (  0.05681,     0.06030) **
+   3          Epsilon         0.00005     (  0.00000,     0.00010)
+   3          Delta           0.01458     (  0.01374,     0.01543) **
+   2             1            0.00002     (     zero,     0.00006)
+   1          Gamma           0.11430     (  0.11177,     0.11683) **
+   1          Beta            0.00008     (  0.00002,     0.00014)
+   2          Alpha           0.02468     (  0.02357,     0.02578) **
+
+     *  = significantly positive, P < 0.05
+     ** = significantly positive, P < 0.01
+
+
+
+
+
+% more erestml.treefile
+((Epsilon:0.00005,Delta:0.01458):0.05855,(Gamma:0.11430,
+Beta:0.00008):0.00002,Alpha:0.02468);
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-datafile]          infile     Input file
+  [-outfile]           outfile    Output file name
+*  -random             bool       Randomize input order of species
+*  -randseed           integer    Random number seed (must be odd)
+*  -randtimes          integer    How many times to randomise
+*  -outgnum            integer    number of the outgroup
+*  -datasets           integer    number of sets
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+
+   Optional qualifiers (* if not always prompted):
+   -[no]besttree       bool       Search for best tree
+   -[no]allsites       bool       Are all sites detected
+*  -lengths            bool       Use lengths from user trees
+   -sitelen            integer    Site length
+   -extrap             float      Extrapolation factor
+*  -global             bool       Global rearrangements
+   -og                 bool       Outgroup root
+   -multsets           bool       Analyze multiple data sets
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+   -[no]drawtree       bool       Draw tree
+
+   Advanced qualifiers: (none)
+   
+   Mandatory qualifiers Allowed values Default
+   [-datafile]
+   (Parameter 1) Input file Input file Required
+   [-outfile]
+   (Parameter 2) Output file name Output file erestml.outfile
+   -random Randomize input order of species Yes/No No
+   -randseed Random number seed (must be odd) Any integer value 3
+   -randtimes How many times to randomise Any integer value 3
+   -outgnum number of the outgroup Integer 1 or more 1
+   -datasets number of sets Integer 2 or more 2
+   [-[no]trout]
+   (Parameter 3) Create a tree file Yes/No Yes
+   -treefile Tree file name Output file erestml.treefile
+   Optional qualifiers Allowed values Default
+   -[no]besttree Search for best tree Yes/No Yes
+   -[no]allsites Are all sites detected Yes/No Yes
+   -lengths Use lengths from user trees Yes/No No
+   -sitelen Site length Integer from 1 to 8 6
+   -extrap Extrapolation factor Number 0.001 or more 100.0
+   -global Global rearrangements Yes/No No
+   -og Outgroup root Yes/No No
+   -multsets Analyze multiple data sets Yes/No No
+   -printdata Print out the data at start of run Yes/No No
+   -progress Print indications of progress of run Yes/No No
+   -[no]drawtree Draw tree Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1986-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

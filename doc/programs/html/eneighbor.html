@@ -1,0 +1,347 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: eneighbor
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: eneighbor
+</H2>
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program eneighbor
+</H1>
+<H2>
+    Function
+</H2>
+Conversion of PHYLIP's neighbor
+
+<H2>
+    Description
+</H2>ENEIGHBOR -- Embossified Neighbor-Joining and UPGMA methods<p>
+
+<a href="neighbor.html">Phylip neighbor documentation.</a><p>
+
+<H2>
+    Usage
+</H2>
+Here is a sample session with eneighbor with the data:-
+<pre>
+    5
+Alpha      0.000 1.000 2.000 3.000 3.000
+Beta       1.000 0.000 2.000 3.000 3.000
+Gamma      2.000 2.000 0.000 3.000 3.000
+Delta      3.000 3.000 3.000 0.000 1.000
+Epsilon    3.000 3.000 3.000 1.000 0.000
+
+</pre>
+<pre>
+
+% eneighbor test
+
+estimates phylogenies from distance matrix data using the Neighbor-Joining
+method or the UPGMA method of clustering
+Output file [eneighbor.outfile]: stdout
+Create a tree file [Y]: 
+Treefile name [eneighbor.treefile]: 
+Neighbor-joining [Y]: 
+Outgroup root [N]: 
+
+   5 Populations
+
+ Neighbor-joining method
+
+ Negative branch lengths allowed
+
+
+  +-------------------Gamma     
+  !  
+  !                             +---------Delta     
+--3-----------------------------1  
+  !                             +---------Epsilon   
+  !  
+  !         +---------Alpha     
+  +---------2  
+            +---------Beta      
+
+
+remember: this is an unrooted tree!
+
+Between        And            Length
+-------        ---            ------
+   3          Gamma             1.00000
+   3             1              1.50000
+   1          Delta             0.50000
+   1          Epsilon           0.50000
+   3             2              0.50000
+   2          Alpha             0.50000
+   2          Beta              0.50000
+
+
+
+
+% more eneighbor.treefile
+(Gamma:1.00000,(Delta:0.50000,Epsilon:0.50000):1.50000,(Alpha:0.50000,
+Beta:0.50000):0.50000);
+
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers (* if not always prompted):
+  [-infile]            infile     (no help text) infile value
+  [-outfile]           outfile    Output file name
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+   -[no]nj             bool       Neighbor-joining
+*  -og                 bool       Outgroup root
+*  -outgnum            integer    number of the outgroup
+*  -randseed           integer    Random number seed (must be odd)
+*  -datasets           integer    How many data sets
+
+   Optional qualifiers:
+   -[no]drawtree       bool       Draw tree
+   -lt                 bool       Lower-triangular data matrix
+   -ut                 bool       Upper-triangular data matrix
+   -[no]sr             bool       Subreplicates
+   -random             bool       Randomize input order of species
+   -multsets           bool       Analyze multiple data sets
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+
+   Advanced qualifiers: (none)
+</pre>
+</td></tr></table>
+
+<p>
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>(no help text) infile value</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>eneighbor.outfile</td>
+</tr>
+
+<tr>
+<td>[-[no]trout]<br>(Parameter 3)</td>
+<td>Create a tree file</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-treefile</td>
+<td>Tree file name</td>
+<td>Output file</td>
+<td>eneighbor.treefile</td>
+</tr>
+
+<tr>
+<td>-[no]nj</td>
+<td>Neighbor-joining</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-og</td>
+<td>Outgroup root</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-outgnum</td>
+<td>number of the outgroup</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-randseed</td>
+<td>Random number seed (must be odd)</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-datasets</td>
+<td>How many data sets</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]drawtree</td>
+<td>Draw tree</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-lt</td>
+<td>Lower-triangular data matrix</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-ut</td>
+<td>Upper-triangular data matrix</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]sr</td>
+<td>Subreplicates</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-random</td>
+<td>Randomize input order of species</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-multsets</td>
+<td>Analyze multiple data sets</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-printdata</td>
+<td>Print out the data at start of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-progress</td>
+<td>Print indications of progress of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Data files
+</H2>
+<H2>
+    Notes
+</H2>Multiple sequences sets not implemented yet!.
+<H2>
+    References
+</H2>
+<H2>
+    Warnings
+</H2>
+<H2>
+    Diagnostics
+</H2>
+<H2>
+    Exit status
+</H2>
+<H2>
+    Known bugs
+</H2>
+<H2>
+    See also
+</H2>
+<H2>
+    Author(s)
+</H2>(c) Copyright  1991-1993  by  Joseph  Felsenstein  and  by  the  University  of
+Washington.  Written by Joseph Felsenstein.  Permission is granted to copy this
+document provided that no fee is charged for it and that this copyright  notice
+is not removed.<p>
+
+This application was modified for inclusion in EMBOSS by Ian Longden <a
+href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+    Priority
+</H2>
+<H2>
+    Target users
+</H2>
+<H2>
+    Comments
+</H2>
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

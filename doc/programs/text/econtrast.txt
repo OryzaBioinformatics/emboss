@@ -1,0 +1,130 @@
+
+                             EMBOSS: econtrast
+     _________________________________________________________________
+   
+                               Program econtrast
+                                       
+   Conversion of PHYLIP's contrast
+   
+Function
+
+   ECONTRAST -- Computes contrasts for comparative method
+   
+Description
+
+   Phylip contrast documentation.
+   
+Usage
+
+   Here is a sample session with econtrast for the data:-
+    5   2
+Homo        4.09434  4.74493
+Pongo       3.61092  3.33220
+Macaca      2.37024  3.36730
+Ateles      2.02815  2.89037
+Galago     -1.46968  2.30259
+
+and the tree input file of
+
+((((Homo:0.21,Pongo:0.21):0.28,Macaca:0.49):0.13,Ateles:0.62):0.38,Galago:1.00)
+;
+
+
+% econtrast test tree.test
+
+Continuous character Contrasts
+Output file [econtrast.outfile]: stdout
+
+Contrasts (columns are different characters)
+--------- -------- --- --------- -----------
+   0.74593   2.17989
+   1.58474   0.71761
+   1.19293   0.86790
+   3.35832   0.89706
+
+Covariance matrix
+---------- ------
+
+    3.9423    1.7028
+    1.7028    1.7062
+
+Regressions (columns on rows)
+----------- -------- -- -----
+
+    1.0000    0.4319
+    0.9980    1.0000
+
+Correlations
+------------
+
+    1.0000    0.6566
+    0.6566    1.0000
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-infile]            infile     input file
+  [-treefile]          infile     input tree file
+  [-outfile]           outfile    Output file name
+*  -datasets           integer    How many data sets
+
+   Optional qualifiers:
+   -[no]corplusreg     bool       Print out correlations and regressions
+   -multsets           bool       Analyze multiple data sets
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+
+   Advanced qualifiers: (none)
+   
+   Mandatory qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) input file Input file Required
+   [-treefile]
+   (Parameter 2) input tree file Input file Required
+   [-outfile]
+   (Parameter 3) Output file name Output file econtrast.outfile
+   -datasets How many data sets Integer 1 or more 1
+   Optional qualifiers Allowed values Default
+   -[no]corplusreg Print out correlations and regressions Yes/No Yes
+   -multsets Analyze multiple data sets Yes/No No
+   -printdata Print out the data at start of run Yes/No No
+   -progress Print indications of progress of run Yes/No No
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1986-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

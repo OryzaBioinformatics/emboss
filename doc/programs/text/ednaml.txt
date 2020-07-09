@@ -1,0 +1,233 @@
+
+                               EMBOSS: ednaml
+     _________________________________________________________________
+   
+                                Program ednaml
+                                       
+Function
+
+   Conversion of PHYLIP's dnaml
+   
+Description
+
+   EDNAML -- Embossified DNA Maximum Likelihood program
+   
+   Phylip dnaml documentation.
+   
+Usage
+
+   Here is a sample session with ednaml using the test data:-
+   5   13
+Alpha     AACGTGGCCAAAT
+Beta      AAGGTCGCCAAAC
+Gamma     CATTTCGTCACAA
+Delta     GGTATTTCGGCCT
+Epsilon   GGGATCTCGGCCC
+
+
+run with two categories with rates 1.0 and 3.2, and with
+probabilities 0.4 and 0.6 for these rates, and with patch length
+parameter = 1.5
+
+% ednaml test -options
+
+Estimates phylogenies from nucleic acid sequence Maximum Likelihood
+Output file [ednaml.outfile]: stdout
+Search for best tree [Y]:
+Global rearrangements [N]:
+Randomize input order of species [N]:
+Transition/transversion ratio [2.0]:
+Use empirical base frequencies [Y]:
+More then one category of substitution rates [N]: y
+Number of categories of substitution rates [2]:
+space seperated categorie values: 1.0 3.2
+space seperated probabillity values: 0.4 0.6
+Use Defualt Mean block length of sites [N]:
+Mean block length of sites having the same rate (greater than 1) [1.0]: 1.5
+Outgroup root [N]:
+Print out the data at start of run [N]:
+Print indications of progress of run [N]:
+Draw tree [Y]:
+Create a tree file [Y]:
+Output treefile name [ednaml.treefile]:
+
+
+Nucleic acid sequence Maximum Likelihood method, version 3.573c
+
+
+
+Site category   Rate of change    Probability
+
+           1        1.000            0.400
+           2        3.200            0.600
+
+
+Expected length of a patch of sites having the same rate =    1.500
+
+Empirical Base Frequencies:
+
+   A       0.24615
+   C       0.29231
+   G       0.24615
+  T(U)     0.21538
+
+
+Transition/transversion ratio =   2.000000
+
+(Transition/transversion parameter =   1.523077)
+
+
+                                                       +Epsilon
+     +-------------------------------------------------3
+  +--2                                                 +----Delta
+  !  !
+  !  +Beta
+  !
+--1---------------------Gamma
+  !
+  +---Alpha
+
+
+remember: this is an unrooted tree!
+
+Ln Likelihood =   -72.22209
+
+Examined   15 trees
+
+ Between        And            Length      Approx. Confidence Limits
+ -------        ---            ------      ------- ---------- ------
+
+   1             2              0.06470     (     zero,     0.47007)
+   2             3              3.33631     (     zero,    12.06173) **
+   3          Epsilon           0.00003     (     zero,     0.42144)
+   3          Delta             0.31956     (     zero,     0.73912) **
+   2          Beta              0.00003     (     zero,     0.41860)
+   1          Gamma             1.47621     (     zero,     3.63348) **
+   1          Alpha             0.28041     (     zero,     0.73601) *
+
+     *  = significantly positive, P < 0.05
+     ** = significantly positive, P < 0.01
+
+Combination of categories that contributes the most to the likelihood:
+
+             2222111111 222
+
+
+
+
+% more ednaml.treefile
+(((Epsilon:0.00012,Delta:0.31956):3.33631,Beta:0.00012):0.06470,Gamma:1.47621,A
+lpha:0.28041);
+
+
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-msf]               seqset     File containing a sequence allignment
+  [-outfile]           outfile    Output file name
+*  -lengths            bool       Use lengths from user trees
+*  -global             bool       Global rearrangements
+*  -random             bool       Randomize input order of species
+*  -randseed           integer    Random number seed (must be odd)
+*  -randtimes          integer    How many times to randomise
+*  -freqa              float      Frequency for A
+*  -freqc              float      Frequency for C
+*  -freqg              float      Frequency for G
+*  -freqt              float      Frequency for T/U
+*  -catnum             integer    Number of categories of substitution rates
+*  -catvals            string     space seperated category values
+*  -catprob            string     space seperated probabillity values
+*  -autog              bool       Use Defualt Mean block length of sites
+*  -lambda             float      Mean block length of sites having the same
+                                  rate (greater than 1)
+*  -outgnum            integer    number of the outgroup
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+
+   Optional qualifiers:
+   -[no]besttree       bool       Search for best tree
+   -ttratio            float      Transition/transversion ratio
+   -[no]basefrequency  bool       Use empirical base frequencies
+   -categories         bool       More then one category of substitution rates
+   -og                 bool       Outgroup root
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+   -[no]drawtree       bool       Draw tree
+
+   Advanced qualifiers: (none)
+   
+   Mandatory qualifiers Allowed values Default
+   [-msf]
+   (Parameter 1) File containing a sequence allignment Readable sequences
+   Required
+   [-outfile]
+   (Parameter 2) Output file name Output file ednaml.outfile
+   -lengths Use lengths from user trees Yes/No No
+   -global Global rearrangements Yes/No No
+   -random Randomize input order of species Yes/No No
+   -randseed Random number seed (must be odd) Any integer value 3
+   -randtimes How many times to randomise Any integer value 3
+   -freqa Frequency for A Number from 0.000 to 1.000 0.25
+   -freqc Frequency for C Number from 0.000 to 1.000 0.25
+   -freqg Frequency for G Number from 0.000 to 1.000 0.25
+   -freqt Frequency for T/U Number from 0.000 to 1.000 0.25
+   -catnum Number of categories of substitution rates Integer from 2 to 9
+   2
+   -catvals space seperated category values Any string is accepted An
+   empty string is accepted
+   -catprob space seperated probabillity values Any string is accepted An
+   empty string is accepted
+   -autog Use Defualt Mean block length of sites Yes/No No
+   -lambda Mean block length of sites having the same rate (greater than
+   1) Number 1.000 or more 1.0
+   -outgnum number of the outgroup Integer 1 or more 1
+   [-[no]trout]
+   (Parameter 3) Create a tree file Yes/No Yes
+   -treefile Tree file name Output file ednaml.treefile
+   Optional qualifiers Allowed values Default
+   -[no]besttree Search for best tree Yes/No Yes
+   -ttratio Transition/transversion ratio Any integer value 2.0
+   -[no]basefrequency Use empirical base frequencies Yes/No Yes
+   -categories More then one category of substitution rates Yes/No No
+   -og Outgroup root Yes/No No
+   -printdata Print out the data at start of run Yes/No No
+   -progress Print indications of progress of run Yes/No No
+   -[no]drawtree Draw tree Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Data files
+
+Notes
+
+   Multiple sequences sets not implemented yet!.
+   
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1986-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

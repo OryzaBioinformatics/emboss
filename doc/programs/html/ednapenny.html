@@ -1,0 +1,530 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: ednapenny
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: ednapenny
+</H2>
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program ednapenny
+</H1>
+<H2>
+    Function
+</H2>Conversion of PHYLIP's dnapenny
+
+
+<H2>
+    Description
+</H2>                      EDNAPENNY - Branch and bound to find
+                          all most parsimonious trees
+                 for nucleic acid sequence parsimony criteria<p>
+
+<a href="dnapenny.html">Phylip dnapenny documentation.</a>
+
+<H2>
+    Usage
+</H2>
+Here is a sample session with ednapenny using the data:-
+<pre>
+    8    6
+Alpha1    AAGAAG
+Alpha2    AAGAAG
+Beta1     AAGGGG
+Beta2     AAGGGG
+Gamma1    AGGAAG
+Gamma2    AGGAAG
+Delta     GGAGGA
+Epsilon   GGAAAG
+
+</pre>
+
+
+<pre>
+
+% ednapenny test
+
+Penny algorithm for DNA
+Output file [ednapenny.outfile]: stdout
+Create a tree file [Y]: 
+Output treefile name [ednapenny.treefile]: 
+
+Penny algorithm for DNA, version 3.573c
+ branch-and-bound to find all most parsimonious trees
+
+
+requires a total of              8.000
+
+     9 trees in all found
+
+
+
+
+  +--------------------Alpha1    
+  !  
+  !                 +--Delta     
+  !              +--3  
+  !           +--7  +--Epsilon   
+--1           !  !  
+  !     +-----6  +-----Gamma2    
+  !     !     !  
+  !  +--4     +--------Gamma1    
+  !  !  !  
+  !  !  !           +--Beta2     
+  +--2  +-----------5  
+     !              +--Beta1     
+     !  
+     +-----------------Alpha2    
+
+  remember: this is an unrooted tree!
+
+
+
+
+
+  +--------------------Alpha1    
+  !  
+  !                 +--Delta     
+  !           +-----3  
+  !           !     +--Epsilon   
+--1     +-----6  
+  !     !     !     +--Gamma2    
+  !     !     +-----7  
+  !  +--4           +--Gamma1    
+  !  !  !  
+  !  !  !           +--Beta2     
+  +--2  +-----------5  
+     !              +--Beta1     
+     !  
+     +-----------------Alpha2    
+
+  remember: this is an unrooted tree!
+
+
+
+
+
+  +--------------------Alpha1    
+  !  
+  !                 +--Delta     
+  !              +--3  
+  !           +--6  +--Epsilon   
+--1           !  !  
+  !     +-----7  +-----Gamma1    
+  !     !     !  
+  !  +--4     +--------Gamma2    
+  !  !  !  
+  !  !  !           +--Beta2     
+  +--2  +-----------5  
+     !              +--Beta1     
+     !  
+     +-----------------Alpha2    
+
+  remember: this is an unrooted tree!
+
+
+
+
+
+  +--------------------Alpha1    
+  !  
+  !                 +--Delta     
+  !              +--3  
+--1           +--7  +--Epsilon   
+  !           !  !  
+  !  +--------6  +-----Gamma2    
+  !  !        !  
+  !  !        +--------Gamma1    
+  +--2  
+     !              +--Beta2     
+     !           +--5  
+     +-----------4  +--Beta1     
+                 !  
+                 +-----Alpha2    
+
+  remember: this is an unrooted tree!
+
+
+
+
+
+  +--------------------Alpha1    
+  !  
+  !                 +--Delta     
+  !           +-----3  
+--1           !     +--Epsilon   
+  !  +--------6  
+  !  !        !     +--Gamma2    
+  !  !        +-----7  
+  +--2              +--Gamma1    
+     !  
+     !              +--Beta2     
+     !           +--5  
+     +-----------4  +--Beta1     
+                 !  
+                 +-----Alpha2    
+
+  remember: this is an unrooted tree!
+
+
+
+
+
+  +--------------------Alpha1    
+  !  
+  !                 +--Delta     
+  !              +--3  
+--1           +--6  +--Epsilon   
+  !           !  !  
+  !  +--------7  +-----Gamma1    
+  !  !        !  
+  !  !        +--------Gamma2    
+  +--2  
+     !              +--Beta2     
+     !           +--5  
+     +-----------4  +--Beta1     
+                 !  
+                 +-----Alpha2    
+
+  remember: this is an unrooted tree!
+
+
+
+
+
+  +--------------------Alpha1    
+  !  
+  !                 +--Delta     
+  !              +--3  
+  !           +--7  +--Epsilon   
+--1           !  !  
+  !        +--6  +-----Gamma2    
+  !        !  !  
+  !  +-----2  +--------Gamma1    
+  !  !     !  
+  +--4     +-----------Alpha2    
+     !  
+     !              +--Beta2     
+     +--------------5  
+                    +--Beta1     
+
+  remember: this is an unrooted tree!
+
+
+
+
+
+  +--------------------Alpha1    
+  !  
+  !                 +--Delta     
+  !           +-----3  
+  !           !     +--Epsilon   
+--1        +--6  
+  !        !  !     +--Gamma2    
+  !  +-----2  +-----7  
+  !  !     !        +--Gamma1    
+  !  !     !  
+  +--4     +-----------Alpha2    
+     !  
+     !              +--Beta2     
+     +--------------5  
+                    +--Beta1     
+
+  remember: this is an unrooted tree!
+
+
+
+
+
+  +--------------------Alpha1    
+  !  
+  !                 +--Delta     
+  !              +--3  
+  !           +--6  +--Epsilon   
+--1           !  !  
+  !        +--7  +-----Gamma1    
+  !        !  !  
+  !  +-----2  +--------Gamma2    
+  !  !     !  
+  +--4     +-----------Alpha2    
+     !  
+     !              +--Beta2     
+     +--------------5  
+                    +--Beta1     
+
+  remember: this is an unrooted tree!
+
+
+
+
+% more ednapenny.treefile 
+(Alpha1,(((((Delta,Epsilon),Gamma2),Gamma1),(Beta2,Beta1)),Alpha2))[0.1111];
+(Alpha1,((((Delta,Epsilon),(Gamma2,Gamma1)),(Beta2,Beta1)),Alpha2))[0.1111];
+(Alpha1,(((((Delta,Epsilon),Gamma1),Gamma2),(Beta2,Beta1)),Alpha2))[0.1111];
+(Alpha1,((((Delta,Epsilon),Gamma2),Gamma1),((Beta2,Beta1),Alpha2)))[0.1111];
+(Alpha1,(((Delta,Epsilon),(Gamma2,Gamma1)),((Beta2,Beta1),Alpha2)))[0.1111];
+(Alpha1,((((Delta,Epsilon),Gamma1),Gamma2),((Beta2,Beta1),Alpha2)))[0.1111];
+(Alpha1,(((((Delta,Epsilon),Gamma2),Gamma1),Alpha2),(Beta2,Beta1)))[0.1111];
+(Alpha1,((((Delta,Epsilon),(Gamma2,Gamma1)),Alpha2),(Beta2,Beta1)))[0.1111];
+(Alpha1,(((((Delta,Epsilon),Gamma1),Gamma2),Alpha2),(Beta2,Beta1)))[0.1111];
+
+
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers (* if not always prompted):
+  [-msf]               seqset     File containing a sequence
+  [-outfile]           outfile    Output file name
+*  -outgnum            integer    number of the outgroup
+*  -valthresh          float      threshold value
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+
+   Optional qualifiers:
+   -numgroups          integer    How many groups of 100 trees
+   -howoften           integer    How often to report, in trees
+   -simple             bool       Branch and bound is simple
+   -og                 bool       Outgroup root
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+   -steps              bool       Print out steps in each site
+   -seqatnodes         bool       Print sequences at all nodes of tree
+   -[no]drawtree       bool       Draw tree
+
+   Advanced qualifiers:
+   -thresh             bool       Use Threshold parsimony
+
+</pre>
+</td></tr></table>
+
+<p>
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-msf]<br>(Parameter 1)</td>
+<td>File containing a sequence</td>
+<td>Readable sequences</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>ednapenny.outfile</td>
+</tr>
+
+<tr>
+<td>-outgnum</td>
+<td>number of the outgroup</td>
+<td>Integer 1 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-valthresh</td>
+<td>threshold value</td>
+<td>Number 1.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>[-[no]trout]<br>(Parameter 3)</td>
+<td>Create a tree file</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-treefile</td>
+<td>Tree file name</td>
+<td>Output file</td>
+<td>ednapenny.treefile</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-numgroups</td>
+<td>How many groups of 100 trees</td>
+<td>Any integer value</td>
+<td>1000</td>
+</tr>
+
+<tr>
+<td>-howoften</td>
+<td>How often to report, in trees</td>
+<td>Any integer value</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>-simple</td>
+<td>Branch and bound is simple</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-og</td>
+<td>Outgroup root</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-printdata</td>
+<td>Print out the data at start of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-progress</td>
+<td>Print indications of progress of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-steps</td>
+<td>Print out steps in each site</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-seqatnodes</td>
+<td>Print sequences at all nodes of tree</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]drawtree</td>
+<td>Draw tree</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-thresh</td>
+<td>Use Threshold parsimony</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Input file format
+</H2>
+<H2>
+    Output file format
+</H2>
+<H2>
+    Data files
+</H2>
+<H2>
+    Notes
+</H2>
+<H2>
+    References
+</H2>
+<H2>
+    Warnings
+</H2>
+<H2>
+    Diagnostics
+</H2>
+<H2>
+    Exit status
+</H2>
+<H2>
+    Known bugs
+</H2>
+<H2>
+    See also
+</H2>
+<H2>
+    Author(s)
+</H2>(c) Copyright  1986-1993  by  Joseph  Felsenstein  and  by  the  University  of
+Washington.  Written by Joseph Felsenstein.  Permission is granted to copy this
+document provided that no fee is charged for it and that this copyright  notice
+is not removed.<p>
+
+
+This application was modified for inclusion in EMBOSS by Ian Longden <a
+href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+    Priority
+</H2>
+<H2>
+    Target users
+</H2>
+<H2>
+    Comments
+</H2>
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+

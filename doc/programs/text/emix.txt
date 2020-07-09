@@ -1,0 +1,231 @@
+
+                                EMBOSS: emix
+     _________________________________________________________________
+   
+                                 Program emix
+                                       
+Function
+
+   Conversion of PHYLIP's mix
+   
+Description
+
+   EMIX - Embossified mixed method parsimony
+   
+   Phylip mix documentation.
+   
+Usage
+
+   Here is a sample session with emix using the data :-
+     5    6
+Alpha     110110
+Beta      110000
+Gamma     100110
+Delta     001001
+Epsilon   001110
+
+% emix test
+
+Mixed parsimony algorithm
+Output file [emix.outfile]: stdout
+Search for best tree [Y]:
+Method
+       Wag : Wagner
+       Cam : Camin-Sokal
+       Mix : Mixed
+    prompt : "Choose the method to use
+-method : enter list value [Wag]:
+Outgroup root [N]:
+Create a tree file [Y]:
+Treefile name [emix.treefile]:
+Wagner parsimony method
+
+
+
+
+
+     4 trees in all found
+
+
+
+
+           +--Epsilon
+     +-----4
+     !     +--Gamma
+  +--2
+  !  !     +--Delta
+--1  +-----3
+  !        +--Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+requires a total of      9.000
+
+
+
+
+
+     +--------Gamma
+     !
+  +--2     +--Epsilon
+  !  !  +--4
+  !  +--3  +--Delta
+--1     !
+  !     +-----Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+requires a total of      9.000
+
+
+
+
+
+     +--------Epsilon
+  +--4
+  !  !  +-----Gamma
+  !  +--2
+--1     !  +--Delta
+  !     +--3
+  !        +--Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+requires a total of      9.000
+
+
+
+
+
+     +--------Gamma
+  +--2
+  !  !  +-----Epsilon
+  !  +--4
+--1     !  +--Delta
+  !     +--3
+  !        +--Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+requires a total of      9.000
+
+
+
+
+% more emix.treefile
+(((Epsilon,Gamma),(Delta,Beta)),Alpha)[0.2500];
+((Gamma,((Epsilon,Delta),Beta)),Alpha)[0.2500];
+((Epsilon,(Gamma,(Delta,Beta))),Alpha)[0.2500];
+((Gamma,(Epsilon,(Delta,Beta))),Alpha)[0.2500];
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-infile]            infile     data file
+  [-outfile]           outfile    Output file name
+  [-[no]besttree]      bool       Search for best tree
+   -method             list       (no help text) list value
+*  -randseed           integer    Random number seed (must be odd)
+*  -randtimes          integer    Number of times to jumble
+   -og                 bool       Outgroup root
+*  -outgnum            integer    number of the outgroup
+*  -valthresh          float      threshold value
+*  -datasets           integer    How many data sets
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+
+   Optional qualifiers (* if not always prompted):
+*  -random             bool       Randomize input order of species
+   -ancestral          bool       Use ancestral states in input file
+   -multsets           bool       Analyze multiple data sets
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+   -statesatnodes      bool       Print states at all nodes of tree
+   -steps              bool       Print out steps in each character
+   -[no]drawtree       bool       Draw tree
+
+   Advanced qualifiers:
+   -thresh             bool       Use Threshold parsimony
+   
+   Mandatory qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) data file Input file Required
+   [-outfile]
+   (Parameter 2) Output file name Output file emix.outfile
+   [-[no]besttree]
+   (Parameter 3) Search for best tree Yes/No Yes
+   -method (no help text) list value
+   Wag    (Wagner)
+   Cam    (Camin-Sokal)
+   Mix    (Mixed)
+   prompt ("Choose the method to use)
+   Wag
+   -randseed Random number seed (must be odd) Any integer value 0
+   -randtimes Number of times to jumble Any integer value 0
+   -og Outgroup root Yes/No No
+   -outgnum number of the outgroup Integer 1 or more 1
+   -valthresh threshold value Number 1.000 or more 1.0
+   -datasets How many data sets Any integer value 0
+   [-[no]trout]
+   (Parameter 4) Create a tree file Yes/No Yes
+   -treefile Tree file name Output file emix.treefile
+   Optional qualifiers Allowed values Default
+   -random Randomize input order of species Yes/No No
+   -ancestral Use ancestral states in input file Yes/No No
+   -multsets Analyze multiple data sets Yes/No No
+   -printdata Print out the data at start of run Yes/No No
+   -progress Print indications of progress of run Yes/No No
+   -statesatnodes Print states at all nodes of tree Yes/No No
+   -steps Print out steps in each character Yes/No No
+   -[no]drawtree Draw tree Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   -thresh Use Threshold parsimony Yes/No No
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1986-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

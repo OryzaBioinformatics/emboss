@@ -1,0 +1,177 @@
+
+                               EMBOSS: efitch
+     _________________________________________________________________
+   
+                                Program efitch
+                                       
+Function
+
+   Conversion of PHYLIP's fitch
+   
+Description
+
+   EFITCH -- Embossified Fitch-Margoliash and Least-Squares Distance
+   Methods
+   
+   Phylip fitch documentation.
+   
+Usage
+
+   Here is a sample session with efitch using the data:-
+    5
+Alpha      0.000 1.000 2.000 3.000 3.000
+Beta       1.000 0.000 2.000 3.000 3.000
+Gamma      2.000 2.000 0.000 3.000 3.000
+Delta      3.000 3.000 3.000 0.000 1.000
+Epsilon    3.000 3.000 3.000 1.000 0.000
+
+
+% efitch test
+
+Fitch-Margoliash and Least-Squares Distance Methods
+Output file [efitch.outfile]: stdout
+Search for best tree [Y]:
+Outgroup root [N]:
+Create a tree file [Y]:
+Treefile name [efitch.treefile]:
+
+   5 Populations
+                  __ __             2
+                  \  \   (Obs - Exp)
+Sum of squares =  /_ /_  ------------
+                                3
+                   i  j      Obs
+
+Negative branch lengths not allowed
+
+
+  +---------Beta
+  !
+  !                                       +---------Epsilon
+  !         +-----------------------------3
+--1---------2                             +---------Delta
+  !         !
+  !         +-------------------Gamma
+  !
+  +---------Alpha
+
+
+remember: this is an unrooted tree!
+
+Sum of squares =     0.00000
+
+examined   15 trees
+
+Between        And            Length
+-------        ---            ------
+   1          Beta              0.50000
+   1             2              0.50000
+   2             3              1.50000
+   3          Epsilon           0.50000
+   3          Delta             0.50000
+   2          Gamma             1.00000
+   1          Alpha             0.50000
+
+
+
+
+
+% more efitch.treefile
+(Beta:0.50000,((Epsilon:0.50000,Delta:0.50000):1.50000,Gamma:1.00000):0.50000,A
+lpha:0.50000);
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-infile]            infile     data file
+  [-outfile]           outfile    Output file name
+  [-[no]besttree]      bool       Search for best tree
+*  -randseed           integer    Random number seed (must be odd)
+*  -randtimes          integer    Number of times to jumble
+   -og                 bool       Outgroup root
+*  -outgnum            integer    number of the outgroup
+*  -datasets           integer    How many data sets
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+
+   Optional qualifiers (* if not always prompted):
+*  -length             bool       Use lengths from user trees
+   -power              float      Power
+   -negbranch          bool       Negative branch lengths allowed
+*  -random             bool       Randomize input order of species
+*  -global             bool       Global rearrangements
+   -lt                 bool       Lower-triangular data matrix
+   -ut                 bool       Upper-triangular data matrix
+   -replicates         bool       Subreplicates
+   -multsets           bool       Analyze multiple data sets
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+   -[no]drawtree       bool       Draw tree
+
+   Advanced qualifiers: (none)
+   
+   Mandatory qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) data file Input file Required
+   [-outfile]
+   (Parameter 2) Output file name Output file efitch.outfile
+   [-[no]besttree]
+   (Parameter 3) Search for best tree Yes/No Yes
+   -randseed Random number seed (must be odd) Any integer value 0
+   -randtimes Number of times to jumble Any integer value 0
+   -og Outgroup root Yes/No No
+   -outgnum number of the outgroup Integer 1 or more 1
+   -datasets How many data sets Any integer value 0
+   [-[no]trout]
+   (Parameter 4) Create a tree file Yes/No Yes
+   -treefile Tree file name Output file <sequence>.efitch
+   Optional qualifiers Allowed values Default
+   -length Use lengths from user trees Yes/No No
+   -power Power Any integer value 3.0
+   -negbranch Negative branch lengths allowed Yes/No No
+   -random Randomize input order of species Yes/No No
+   -global Global rearrangements Yes/No No
+   -lt Lower-triangular data matrix Yes/No No
+   -ut Upper-triangular data matrix Yes/No No
+   -replicates Subreplicates Yes/No No
+   -multsets Analyze multiple data sets Yes/No No
+   -printdata Print out the data at start of run Yes/No No
+   -progress Print indications of progress of run Yes/No No
+   -[no]drawtree Draw tree Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Data files
+
+Notes
+
+   Multiple sequences sets not implemented yet!.
+   
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1986-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

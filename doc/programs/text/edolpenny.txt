@@ -1,0 +1,199 @@
+
+                             EMBOSS: edolpenny
+     _________________________________________________________________
+   
+                               Program edolpenny
+                                       
+Function
+
+   Conversion of PHYLIP's dolpenny
+   
+Description
+
+   EDOLPENNY - Branch and bound to find all most parsimonious trees for
+   Dollo, polymorphism parsimony criteria
+   
+   Phylip dolpenny documentation.
+   
+Usage
+
+   Here is a sample session with edolpenny using the data:-
+    7    6
+Alpha1    110110
+Alpha2    110110
+Beta1     110000
+Beta2     110000
+Gamma1    100110
+Delta     001001
+Epsilon   001110
+
+
+% edolpenny test
+
+Penny algorithm Dollo or polymorphism
+Output file [edolpenny.outfile]: stdout
+Dollo Parsimony method (else Polymorphis) [Y]:
+Create a tree file [Y]:
+Output treefile name [edolpenny.treefile]:
+
+Penny algorithm for Dollo or polymorphism parsimony, version 3.573c
+ branch-and-bound to find all most parsimonious trees
+
+Dollo parsimony method
+
+
+
+
+requires a total of              3.000
+
+    3 trees in all found
+
+
+
+
+  +-----------------Delta
+  !
+--2  +--------------Epsilon
+  !  !
+  +--3  +-----------Gamma1
+     !  !
+     +--6  +--------Alpha2
+        !  !
+        +--1     +--Beta2
+           !  +--5
+           +--4  +--Beta1
+              !
+              +-----Alpha1
+
+
+
+
+
+  +-----------------Delta
+  !
+--2  +--------------Epsilon
+  !  !
+  +--3  +-----------Gamma1
+     !  !
+     +--6        +--Beta2
+        !  +-----5
+        !  !     +--Beta1
+        +--4
+           !     +--Alpha2
+           +-----1
+                 +--Alpha1
+
+
+
+
+
+  +-----------------Delta
+  !
+--2  +--------------Epsilon
+  !  !
+  +--3  +-----------Gamma1
+     !  !
+     !  !        +--Beta2
+     +--6     +--5
+        !  +--4  +--Beta1
+        !  !  !
+        +--1  +-----Alpha2
+           !
+           +--------Alpha1
+
+
+
+
+% more edolpenny.treefile
+(Delta,(Epsilon,(Gamma1,(Alpha2,((Beta2,Beta1),Alpha1)))))[0.3333];
+(Delta,(Epsilon,(Gamma1,((Beta2,Beta1),(Alpha2,Alpha1)))))[0.3333];
+(Delta,(Epsilon,(Gamma1,(((Beta2,Beta1),Alpha2),Alpha1))))[0.3333];
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-datafile]          infile     data file
+  [-outfile]           outfile    Output file name
+  [-[no]dollo]         bool       Dollo Parsimony method (else Polymorphis)
+*  -valthresh          float      threshold value
+*  -datasets           integer    number of sets
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+
+   Optional qualifiers:
+   -numgroups          integer    How many groups of 100 trees
+   -howoften           integer    How often to report, in trees
+   -simple             bool       Branch and bound is simple
+   -ancest             bool       Use ancestral states in input file
+   -multsets           bool       Analyze multiple data sets
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+   -steps              bool       Print out steps in each site
+   -statesatnodes      bool       Print states at all nodes of tree
+   -[no]drawtree       bool       Draw tree
+
+   Advanced qualifiers:
+   -thresh             bool       Use Threshold parsimony
+   
+   Mandatory qualifiers Allowed values Default
+   [-datafile]
+   (Parameter 1) data file Input file Required
+   [-outfile]
+   (Parameter 2) Output file name Output file edolpenny.outfile
+   [-[no]dollo]
+   (Parameter 3) Dollo Parsimony method (else Polymorphis) Yes/No Yes
+   -valthresh threshold value Number 1.000 or more 1.0
+   -datasets number of sets Integer 2 or more 2
+   [-[no]trout]
+   (Parameter 4) Create a tree file Yes/No Yes
+   -treefile Tree file name Output file edolpenny.treefile
+   Optional qualifiers Allowed values Default
+   -numgroups How many groups of 100 trees Any integer value 1000
+   -howoften How often to report, in trees Any integer value 100
+   -simple Branch and bound is simple Yes/No No
+   -ancest Use ancestral states in input file Yes/No No
+   -multsets Analyze multiple data sets Yes/No No
+   -printdata Print out the data at start of run Yes/No No
+   -progress Print indications of progress of run Yes/No No
+   -steps Print out steps in each site Yes/No No
+   -statesatnodes Print states at all nodes of tree Yes/No No
+   -[no]drawtree Draw tree Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   -thresh Use Threshold parsimony Yes/No No
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1986-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

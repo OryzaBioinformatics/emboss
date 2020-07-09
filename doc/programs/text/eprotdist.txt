@@ -1,0 +1,134 @@
+
+                             EMBOSS: eprotdist
+     _________________________________________________________________
+   
+                               Program eprotdist
+                                       
+Function
+
+   Conversion of PHYLIP's protdist
+   
+Description
+
+   EPROTDIST --Embossified program to compute distance matrix from
+   protein sequences
+   
+   Phylip protdist documentation.
+   
+Usage
+
+   Here is a sample session with eprotdist using the data:-
+   5   13
+Alpha     AACGTGGCCACAT
+Beta      AAGGTCGCCACAC
+Gamma     CAGTTCGCCACAA
+Delta     GAGATTTCCGCCT
+Epsilon   GAGATCTCCGCCC
+
+% eprotdist test
+
+Protein distance algorithm
+Output file [eprotdist.outfile]: stdout
+Method
+       Pam : Dayhoff PAM matrix
+       Kim : Kimura formula
+       Cat : Categories model
+Choose the method to use [Pam]:
+    5
+Alpha          0.00000  0.47285  0.88304  1.29841  2.12269
+Beta           0.47285  0.00000  0.45192  1.34185  0.84009
+Gamma          0.88304  0.45192  0.00000  1.30693  1.21582
+Delta          1.29841  1.34185  1.30693  0.00000  0.27536
+Epsilon        2.12269  0.84009  1.21582  0.27536  0.00000
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-msf]               seqset     File containing sequences
+  [-outfile]           outfile    Output file name
+   -method             list       Choose the method to use
+
+   Optional qualifiers (* if not always prompted):
+*  -categ              list       Choose the categorie to use
+*  -gencode            list       Which genetic code
+*  -prob               float      Prob change category (1.0=easy)
+*  -tranrate           float      Transition/transversion ratio
+*  -[no]basefrequency  bool       Use empirical base frequencies
+*  -freqa              float      Frequency for A
+*  -freqc              float      Frequency for C
+*  -freqg              float      Frequency for G
+*  -freqt              float      Frequency for T/U
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+
+   Advanced qualifiers: (none)
+   
+   Mandatory qualifiers Allowed values Default
+   [-msf]
+   (Parameter 1) File containing sequences Readable sequences Required
+   [-outfile]
+   (Parameter 2) Output file name Output file eprotdist.outfile
+   -method Choose the method to use
+   Pam (Dayhoff PAM matrix)
+   Kim (Kimura formula)
+   Cat (Categories model)
+   Pam
+   Optional qualifiers Allowed values Default
+   -categ Choose the categorie to use
+   G (George/Hunt/Barker (Cys), (Met Val Leu Ileu), (Gly Ala Ser Thr
+   Pro))
+   C (Chemical (Cys Met), (Val Leu Ileu Gly Ala Ser Thr), (Pro))
+   H (Hall (Cys), (Met Val Leu Ileu), (Gly Ala Ser Thr), (Pro))
+   G
+   -gencode Which genetic code
+   U (Universal)
+   M (Mitochondrial)
+   V (Vertebrate mitochondrial)
+   F (Fly mitochondrial)
+   Y (Yeast mitochondrial)
+   U
+   -prob Prob change category (1.0=easy) Number from 0.000 to 1.000 0.457
+   -tranrate Transition/transversion ratio Number 0.000 or more 2.0
+   -[no]basefrequency Use empirical base frequencies Yes/No Yes
+   -freqa Frequency for A Number from 0.000 to 1.000 0.25
+   -freqc Frequency for C Number from 0.000 to 1.000 0.25
+   -freqg Frequency for G Number from 0.000 to 1.000 0.25
+   -freqt Frequency for T/U Number from 0.000 to 1.000 0.25
+   -printdata Print out the data at start of run Yes/No No
+   -progress Print indications of progress of run Yes/No No
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Data files
+
+Notes
+
+   Multiple sequences sets not implemented yet!.
+   
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1993 by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

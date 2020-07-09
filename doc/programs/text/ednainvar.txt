@@ -1,0 +1,202 @@
+
+                             EMBOSS: ednainvar
+     _________________________________________________________________
+   
+                               Program ednainvar
+                                       
+Function
+
+   Conversion of PHYLIP's dnainvar
+   
+Description
+
+   EDNAINVAR -- Embossified program to compute Lake's and Cavender's
+   phylogenetic invariants from nucleotide sequences
+   
+   Phylip dnainvar documentation.
+   
+Usage
+
+   Here is a sample session with ednainvar using the data :-
+   4   13
+Alpha     AACGTGGCCAAAT
+Beta      AAGGTCGCCAAAC
+Gamma     CATTTCGTCACAA
+Delta     GGTATTTCGGCCT
+
+
+% ednainvar test
+
+Nucleic acid sequence Invariants method
+Output file [ednainvar.outfile]: stdout
+
+Nucleic acid sequence Invariants method, version 3.573c
+
+
+
+   Pattern   Number of times
+
+     AAAC         1
+     AAAG         2
+     AACC         1
+     AACG         1
+     CCCG         1
+     CCTC         1
+     CGTT         1
+     GCCT         1
+     GGGT         1
+     GGTA         1
+     TCAT         1
+     TTTT         1
+
+
+Symmetrized patterns (1, 2 = the two purines  and  3, 4 = the two pyrimidines
+                  or  1, 2 = the two pyrimidines  and  3, 4 = the two purines)
+
+     1111         1
+     1112         2
+     1113         3
+     1121         1
+     1132         2
+     1133         1
+     1231         1
+     1322         1
+     1334         1
+
+Tree topologies (unrooted):
+
+    I:  ((Alpha,Beta),(Gamma,Delta))
+   II:  ((Alpha,Gamma),(Beta,Delta))
+  III:  ((Alpha,Delta),(Beta,Gamma))
+
+
+Lake's linear invariants
+ (these are expected to be zero for the two incorrect tree topologies.
+  This is tested by testing the equality of the two parts
+  of each expression using a one-sided exact binomial test.
+  The null hypothesis is that the first part is no larger than the second.)
+
+ Tree                             Exact test P value    Significant?
+
+   I      1    -     0   =     1       0.5000               no
+   II     0    -     0   =     0       1.0000               no
+   III    0    -     0   =     0       1.0000               no
+
+
+Cavender's quadratic invariants (type L) using purines vs. pyrimidines
+ (these are expected to be zero, and thus have a nonsignificant
+  chi-square, for the correct tree topology)
+They will be misled if there are substantially
+different evolutionary rate between sites, or
+different purine:pyrimidine ratios from 1:1.
+
+  Tree I:
+
+   Contingency Table
+
+      2     8
+      1     2
+
+   Quadratic invariant =             4.0
+
+   Chi-square =    0.23111 (not significant)
+
+
+  Tree II:
+
+   Contingency Table
+
+      1     5
+      1     6
+
+   Quadratic invariant =            -1.0
+
+   Chi-square =    0.01407 (not significant)
+
+
+  Tree III:
+
+   Contingency Table
+
+      1     2
+      6     4
+
+   Quadratic invariant =             8.0
+
+   Chi-square =    0.66032 (not significant)
+
+
+
+
+Cavender's quadratic invariants (type K) using purines vs. pyrimidines
+ (these are expected to be zero for the correct tree topology)
+They will be misled if there are substantially
+different evolutionary rate between sites, or
+different purine:pyrimidine ratios from 1:1.
+No statistical test is done on them here.
+
+  Tree I:              -9.0
+  Tree II:              4.0
+  Tree III:             5.0
+
+
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-msf]               seqset     File containing sequences
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers:
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+
+   Advanced qualifiers: (none)
+   
+   Mandatory qualifiers Allowed values Default
+   [-msf]
+   (Parameter 1) File containing sequences Readable sequences Required
+   [-outfile]
+   (Parameter 2) Output file name Output file ednainvar.outfile
+   Optional qualifiers Allowed values Default
+   -printdata Print out the data at start of run Yes/No No
+   -progress Print indications of progress of run Yes/No No
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1986-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

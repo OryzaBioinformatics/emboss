@@ -1,0 +1,164 @@
+
+                             EMBOSS: eprotpars
+     _________________________________________________________________
+   
+                               Program eprotpars
+                                       
+Function
+
+   Conversion of PHYLIP's protpars
+   
+Description
+
+   EPROTPARS -- Embossified Protein Sequence Parsimony Method
+   
+   This program infers an unrooted phylogeny from protein sequences,
+   using a new method intermediate between the approaches of Eck and
+   Dayhoff (1966) and Fitch (1971). Eck and Dayhoff (1966) allowed any
+   amino acid to change to any other, and counted the number of such
+   changes needed to evolve the protein sequences on each given
+   phylogeny. This has the problem that it allows replacements which are
+   not consistent with the genetic code, counting them equally with
+   replacements that are consistent. Fitch, on the other hand, counted
+   the minimum number of nucleotide substitutions that would be needed to
+   achieve the given protein sequences. This counts silent changes
+   equally with those that change the amino acid.
+   
+   The present method insists that any changes of amino acid be
+   consistent with the genetic code so that, for example, lysine is
+   allowed to change to methionine but not to proline. However, changes
+   between two amino acids via a third are allowed and counted as two
+   changes if each of the two replacements is individually allowed. This
+   sometimes allows changes that at first sight you would think should be
+   outlawed. Thus we can change from phenylalanine to glutamine via
+   leucine in two steps total. Consulting the genetic code, you will find
+   that there is a leucine codon one step away from a phenylalanine
+   codon, and a leucine codon one step away from glutamine. But they are
+   not the same leucine codon. It actually takes three base substitutions
+   to get from either of the phenylalanine codons UUU and UUC to either
+   of the glutamine codons CAA or CAG. Why then does this program count
+   only two? The answer is that recent DNA sequence comparisons seem to
+   show that synonymous changes are considerably faster and easier than
+   ones that change the amino acid. We are assuming that, in effect,
+   synonymous changes occur so much more readily that they need not be
+   counted. Thus, in the chain of changes UUU (Phe) --> CUU (Leu) --> CUA
+   (Leu) --> CAA (Glu), the middle one is not counted because it does not
+   change the amino acid (leucine).
+   
+   To maintain consistency with the genetic code, it is necessary for the
+   program internally to treat serine as two separate states (ser1 and
+   ser2) since the two groups of serine codons are not adjacent in the
+   code. Changes to the state "deletion" are counted as three steps to
+   prevent the algorithm from assuming unnecessary deletions. The state
+   "unknown" is simply taken to mean that the amino acid, which has not
+   been determined, will in each tree that is evaluated be assumed be
+   whichever one causes the fewest steps.
+   
+   The assumptions of this method (which has not been described in the
+   literature), are thus something like this:
+   
+       1.  Change in different sites is independent.
+
+       2.  Change in different lineages is independent.
+
+       3.  The probability of a base substitution that changes the  amino  acid
+          sequence  is  small  over the lengths of time involved in a branch of
+          the phylogeny.
+
+       4.  The  expected  amounts  of  change  in  different  branches  of  the
+          phylogeny  do  not  vary  by  so much that two changes in a high-rate
+          branch are more probable than one change in a low-rate branch.
+
+       5.  The expected amounts of change do not vary enough among  sites  that
+          two changes in one site are more probable than one change in another.
+
+       6.  The probability of a base change that is synonymous is  much  higher
+          than the probability of a change that is not synonymous.
+
+   That these are the assumptions of parsimony methods has been
+   documented in a series of papers of mine: (1973a, 1978b, 1979, 1981b,
+   1983b, 1988b). For an opposing view arguing that the parsimony methods
+   make no substantive assumptions such as these, see the works by Farris
+   (1983) and Sober (1983a, 1983b, 1988), but also read the exchange
+   between Felsenstein and Sober (1986).
+   
+   The protein sequences are given by the one-letter code used by
+   described in the Molecular Sequence Programs documentation file. Note
+   that if two polypeptide chains are being used that are of different
+   length owing to one terminating before the other, they should be coded
+   as (say)
+   
+             HIINMA*????
+             HIPNMGVWABT
+
+   since after the stop codon we do not definitely know that there has
+   been a deletion, and do not know what amino acid would have been
+   there. If DNA studies tell us that there is DNA sequence in that
+   region, then we could use "X" rather than "?". Note that "X" means an
+   unknown amino acid, but definitely an amino acid, while "?" could mean
+   either that or a deletion. The distinction is often significant in
+   regions where there are deletions: one may want to encode a six-base
+   deletion as "-?????" since that way the program will only count one
+   deletion, not six deletion events, when the deletion arises. However,
+   if there are overlapping deletions it may not be so easy to know what
+   coding is correct.
+   
+   One will usually want to use "?" after a stop codon, if one does not
+   know what amino acid is there. If the DNA sequence has been observed
+   there, one probably ought to resist putting in the amino acids that
+   this DNA would code for, and one should use "X" instead, because under
+   the assumptions implicit in this parsimony method, changes to any
+   noncoding sequence are much easier than changes in a coding region
+   that change the amino acid, so that they shouldn't be counted anyway!
+   
+Usage
+
+   Here is a sample session with eprotpars using the data:-
+     5    10
+Alpha     ABCDEFGHIK
+Beta      AB--EFGHIK
+Gamma     ?BCDSFG.??
+Delta     CIKDEFGHIK
+Epsilon   DIKDEFGHIK
+
+
+% eprotpars
+
+Command line arguments
+
+  eprotpars
+
+Data files
+
+Notes
+
+   Multiple sequences sets not implemented yet!.
+   
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1986-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

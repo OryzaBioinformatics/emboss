@@ -1,0 +1,193 @@
+
+                             EMBOSS: econsense
+     _________________________________________________________________
+   
+                               Program econsense
+                                       
+Function
+
+   Conversion of PHYLIP's consense
+   
+Description
+
+   ECONSENSE -- Embossified consensus tree program
+   
+   Phylip consense documentation.
+   
+Usage
+
+   Here is a sample session with econsense using the test data :-
+(A,(B,(H,(D,(J,(((G,E),(F,I)),C))))));
+(A,(B,(D,((J,H),(((G,E),(F,I)),C)))));
+(A,(B,(D,(H,(J,(((G,E),(F,I)),C))))));
+(A,(B,(E,(G,((F,I),((J,(H,D)),C))))));
+(A,(B,(E,(G,((F,I),(((J,H),D),C))))));
+(A,(B,(E,((F,I),(G,((J,(H,D)),C))))));
+(A,(B,(E,((F,I),(G,(((J,H),D),C))))));
+(A,(B,(E,((G,(F,I)),((J,(H,D)),C)))));
+(A,(B,(E,((G,(F,I)),(((J,H),D),C)))));
+
+% econsense test
+Majority-rule and strict consensus tree
+Output file [econsense.outfile]: stdout
+Create a tree file [Y]:
+tree file [econsense.treefile]:
+
+Majority-rule and strict consensus tree program, version 3.573c
+
+
+Species in order:
+
+  A
+  B
+  H
+  D
+  J
+  G
+  E
+  F
+  I
+  C
+
+
+Sets included in the consensus tree
+
+Set (species in order)     How many times out of   9.00
+
+.......**.                   9.00
+..********                   9.00
+..***....*                   6.00
+..****.***                   6.00
+..***.....                   6.00
+..*.*.....                   4.00
+..***..***                   2.00
+
+
+Sets NOT included in consensus tree:
+
+Set (species in order)     How many times out of   9.00
+
+.....**...                   3.00
+.....****.                   3.00
+..**......                   3.00
+.....*****                   3.00
+..*.******                   2.00
+.....*.**.                   2.00
+..****...*                   2.00
+....******                   2.00
+...*******                   1.00
+
+
+CONSENSUS TREE:
+the numbers at the forks indicate the number
+of times the group consisting of the species
+which are to the right of that fork occurred
+among the trees, out of   9.00 trees
+
+  +---------------------------------------A
+  !
+  !         +-----------------------------E
+  !         !
+  !         !                        +----I
+  !         !         +------------9.0
+  !         !         !              +----F
+  !    +--9.0         !
+  !    !    !    +--2.0         +---------D
+  !    !    !    !    !    +--6.0
+  !    !    !    !    !    !    !    +----J
+  !    !    !    !    +--6.0    +--4.0
+  +--9.0    +--6.0         !         +----H
+       !         !         !
+       !         !         +--------------C
+       !         !
+       !         +------------------------G
+       !
+       +----------------------------------B
+
+
+  remember: this is an unrooted tree!
+
+
+
+% more econsense.treefile
+(A:9.0,((E:9.0,(((I:9.0,F:9.0):9.0,((D:9.0,(J:9.0,H:9.0):4.0):6.0,C:9.0):6.0):2
+.0,G:9.0):6.0):9.0,
+B:9.0):9.0);
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-infile]            infile     file to read in (New Hampshire standard
+                                  form)
+  [-outfile]           outfile    Output file name
+  [-[no]trout]         bool       Create a tree file
+  [-treefile]          outfile    tree file name
+*  -og                 bool       Outgroup root
+*  -outgnum            integer    number of the outgroup
+
+   Optional qualifiers:
+   -[no]drawtree       bool       Draw tree
+   -root               bool       Trees to be treated as Rooted
+   -progress           bool       Print indications of progress of run
+   -[no]printsets      bool       Print out the sets of species
+
+   Advanced qualifiers: (none)
+   
+   Mandatory qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) file to read in (New Hampshire standard form) Input file
+   Required
+   [-outfile]
+   (Parameter 2) Output file name Output file econsense.outfile
+   [-[no]trout]
+   (Parameter 3) Create a tree file Yes/No Yes
+   [-treefile]
+   (Parameter 4) tree file name Output file econsense.treefile
+   -og Outgroup root Yes/No No
+   -outgnum number of the outgroup Integer 1 or more 1
+   Optional qualifiers Allowed values Default
+   -[no]drawtree Draw tree Yes/No Yes
+   -root Trees to be treated as Rooted Yes/No No
+   -progress Print indications of progress of run Yes/No No
+   -[no]printsets Print out the sets of species Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file
+
+   Must be in New Hampshire standard form.
+   
+Data files
+
+Notes
+
+   Multiple sequences sets not implemented yet!.
+   
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1986-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

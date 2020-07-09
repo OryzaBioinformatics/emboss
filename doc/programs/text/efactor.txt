@@ -1,0 +1,107 @@
+
+                              EMBOSS: efactor
+     _________________________________________________________________
+   
+                                Program efactor
+                                       
+Function
+
+   Conversion of PHYLIP's factor
+   
+Description
+
+   EFACTOR - Embossified program to factor multistate characters
+   
+   Phylip factor documentation.
+   
+Usage
+
+   Here is a sample session with efactor using the data:-
+   4   6   A
+1 A:B B:C
+2 A:B B:.
+4
+5 0:1 1:2 .:0
+6 .:# #:$ #:%
+999
+Alpha     CAW00#
+Beta      BBX01%
+Gamma     ABY12#
+Epsilon   CAZ01$
+
+% efactor test -options
+
+multistate to binary recoding program
+Output file [efactor.outfile]: stdout
+put ancestral states in output file [N]: Y
+put factors information in output file [N]:
+show progress [Y]: n
+    5     8    A
+ANCESTOR  ??0?0000
+Alpha     11100000
+Beta      10001001
+Gamma     00011100
+Epsilon   11101010
+
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-datafile]          infile     data file
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers:
+   -anc                bool       put ancestral states in output file
+   -factors            bool       put factors information in output file
+   -[no]progress       bool       show progress
+
+   Advanced qualifiers: (none)
+   
+   Mandatory qualifiers Allowed values Default
+   [-datafile]
+   (Parameter 1) data file Input file Required
+   [-outfile]
+   (Parameter 2) Output file name Output file efactor.outfile
+   Optional qualifiers Allowed values Default
+   -anc put ancestral states in output file Yes/No No
+   -factors put factors information in output file Yes/No No
+   -[no]progress show progress Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1986-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

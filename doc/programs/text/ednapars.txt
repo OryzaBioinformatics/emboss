@@ -1,0 +1,144 @@
+
+                              EMBOSS: ednapars
+     _________________________________________________________________
+   
+                               Program ednapars
+                                       
+Function
+
+   Conversion of PHYLIP's dnapars
+   
+Description
+
+   EDNAPARS -- Embossified DNA Parsimony Program
+   
+   Phylip dnapars documentation.
+   
+Usage
+
+   Here is a sample session with ednapars using test data:-
+   5   13
+Alpha     AACGUGGCCAAAU
+Beta      AAGGUCGCCAAAC
+Gamma     CAUUUCGUCACAA
+Delta     GGUAUUUCGGCCU
+Epsilon   GGGAUCUCGGCCC
+
+% ednapars test
+
+DNA parsimony algorithm
+Output file [ednapars.outfile]: stdout
+Randomize input order of species [N]:
+Create a tree file [Y]:
+Output treefile name [ednapars.treefile]:
+
+One most parsimonious tree found:
+
+
+
+           +--Epsilon
+        +--4
+     +--3  +--Delta
+     !  !
+  +--2  +-----Gamma
+  !  !
+--1  +--------Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+requires a total of     19.000
+
+
+
+
+% more more ednapars.treefile
+((((Epsilon,Delta),Gamma),Beta),Alpha);
+
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-msf]               seqset     File containing a sequence allignment
+  [-outfile]           outfile    Output file name
+*  -random             bool       Randomize input order of species
+*  -randseed           integer    Random number seed (must be odd)
+*  -randtimes          integer    How many times to randomise
+*  -outgnum            integer    number of the outgroup
+*  -valthresh          float      threshold value
+  [-[no]trout]         bool       Create a tree file
+*  -treefile           outfile    Tree file name
+
+   Optional qualifiers:
+   -[no]besttree       bool       Search for best tree
+   -og                 bool       Outgroup root
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+   -steps              bool       Print out steps in each site
+   -seqatnodes         bool       Print sequences at all nodes of tree
+   -[no]drawtree       bool       Draw tree
+
+   Advanced qualifiers:
+   -thresh             bool       Use Threshold parsimony
+   
+   Mandatory qualifiers Allowed values Default
+   [-msf]
+   (Parameter 1) File containing a sequence allignment Readable sequences
+   Required
+   [-outfile]
+   (Parameter 2) Output file name Output file ednapars.outfile
+   -random Randomize input order of species Yes/No No
+   -randseed Random number seed (must be odd) Any integer value 3
+   -randtimes How many times to randomise Any integer value 3
+   -outgnum number of the outgroup Integer 1 or more 1
+   -valthresh threshold value Number 1.000 or more 1.0
+   [-[no]trout]
+   (Parameter 3) Create a tree file Yes/No Yes
+   -treefile Tree file name Output file ednapars.treefile
+   Optional qualifiers Allowed values Default
+   -[no]besttree Search for best tree Yes/No Yes
+   -og Outgroup root Yes/No No
+   -printdata Print out the data at start of run Yes/No No
+   -progress Print indications of progress of run Yes/No No
+   -steps Print out steps in each site Yes/No No
+   -seqatnodes Print sequences at all nodes of tree Yes/No No
+   -[no]drawtree Draw tree Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   -thresh Use Threshold parsimony Yes/No No
+   
+Data files
+
+Notes
+
+   Multiple sequences sets not implemented yet!.
+   
+References
+
+Warnings
+
+Diagnostics
+
+Exit status
+
+Known bugs
+
+See also
+
+Author(s)
+
+   (c) Copyright 1986-1993 by Joseph Felsenstein and by the University of
+   Washington. Written by Joseph Felsenstein. Permission is granted to
+   copy this document provided that no fee is charged for it and that
+   this copyright notice is not removed.
+   
+   This application was modified for inclusion in EMBOSS by Ian Longden
+   (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   
+Priority
+
+Target users
+
+Comments

@@ -1,0 +1,355 @@
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: ekitsch
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face="Arial,Helvetica" size=6 color="#ffffff">
+<H2>
+EMBOSS: ekitsch
+</H2>
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+<H1>
+Program ekitsch
+</H1>
+<H2>
+    Function
+</H2>
+Conversion of PHYLIP's kitsch
+
+<H2>
+    Description
+</H2>EKITSCH -- Embossified Fitch-Margoliash and Least Squares Methods with
+ Evolutionary Clock<p>
+
+<a href="kitsch.html">Phylip kitsch documentation.</a><p>
+
+<H2>
+    Usage
+</H2>
+Here is a sample session with ekitsch using the data:-
+<pre>
+    5
+Alpha      0.000 1.000 2.000 3.000 3.000
+Beta       1.000 0.000 2.000 3.000 3.000
+Gamma      2.000 2.000 0.000 3.000 3.000
+Delta      3.000 3.000 3.000 0.000 1.000
+Epsilon    3.000 3.000 3.000 1.000 0.000
+</pre>
+
+<pre>
+
+% ekitsch test
+
+Fitch-Margoliash method with contemporary tips
+Output file [ekitsch.outfile]: stdout
+Search for best tree [Y]: 
+Treefile name [ekitsch.treefile]: 
+
+   5 Populations
+                  __ __             2
+                  \  \   (Obs - Exp)
+Sum of squares =  /_ /_  ------------
+                                3
+                   i  j      Obs
+
+negative branch lengths not allowed
+
+
+
+
+                                +--------------Epsilon   
+  +-----------------------------4  
+  !                             +--------------Delta     
+--3  
+  !                             +--------------Beta      
+  !              +--------------1  
+  +--------------2              +--------------Alpha     
+                 !  
+                 +-----------------------------Gamma     
+
+
+Sum of squares =      0.000
+
+examined   76 trees
+
+From    To           Length          Time
+----    --           ------          ----
+
+   4  Epsilon         0.50000        1.50000
+   3     4            1.00000        1.00000
+   4  Delta           0.50000        1.50000
+   1  Beta            0.50000        1.50000
+   2     1            0.50000        1.00000
+   1  Alpha           0.50000        1.50000
+   3     2            0.50000        0.50000
+   2  Gamma           1.00000        1.50000
+
+
+
+% more ekitsch.treefile
+(Epsilon:0.50000,Delta:0.50000):1.00000,((Beta:0.50000,
+Alpha:0.50000):0.50000,Gamma:1.00000):0.50000);
+
+</pre>
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers (* if not always prompted):
+  [-infile]            infile     data file
+  [-outfile]           outfile    Output file name
+  [-[no]besttree]      bool       Search for best tree
+*  -randseed           integer    Random number seed (must be odd)
+*  -randtimes          integer    Number of times to jumble
+*  -datasets           integer    How many data sets
+   -treefile           outfile    Tree file name
+
+   Optional qualifiers (* if not always prompted):
+   -power              float      Power
+   -negbranch          bool       Negative branch lengths allowed
+*  -random             bool       Randomize input order of species
+   -lt                 bool       Lower-triangular data matrix
+   -ut                 bool       Upper-triangular data matrix
+   -replicates         bool       Subreplicates
+   -multsets           bool       Analyze multiple data sets
+   -printdata          bool       Print out the data at start of run
+   -progress           bool       Print indications of progress of run
+   -[no]drawtree       bool       Draw tree
+
+   Advanced qualifiers: (none)
+</pre>
+</td></tr></table>
+
+<p>
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>data file</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td>ekitsch.outfile</td>
+</tr>
+
+<tr>
+<td>[-[no]besttree]<br>(Parameter 3)</td>
+<td>Search for best tree</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-randseed</td>
+<td>Random number seed (must be odd)</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-randtimes</td>
+<td>Number of times to jumble</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-datasets</td>
+<td>How many data sets</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-treefile</td>
+<td>Tree file name</td>
+<td>Output file</td>
+<td>ekitsch.treefile</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-power</td>
+<td>Power</td>
+<td>Any integer value</td>
+<td>3.0</td>
+</tr>
+
+<tr>
+<td>-negbranch</td>
+<td>Negative branch lengths allowed</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-random</td>
+<td>Randomize input order of species</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-lt</td>
+<td>Lower-triangular data matrix</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-ut</td>
+<td>Upper-triangular data matrix</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-replicates</td>
+<td>Subreplicates</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-multsets</td>
+<td>Analyze multiple data sets</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-printdata</td>
+<td>Print out the data at start of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-progress</td>
+<td>Print indications of progress of run</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]drawtree</td>
+<td>Draw tree</td>
+<td>Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H2>
+    Data files
+</H2>
+<H2>
+    Notes
+</H2>Multiple sequences sets not implemented yet!.
+
+<H2>
+    References
+</H2>
+<H2>
+    Warnings
+</H2>
+<H2>
+    Diagnostics
+</H2>
+<H2>
+    Exit status
+</H2>
+<H2>
+    Known bugs
+</H2>
+<H2>
+    See also
+</H2>
+<H2>
+    Author(s)
+</H2>
+(c) Copyright  1986-1993  by  Joseph  Felsenstein  and  by  the  University  of
+Washington.  Written by Joseph Felsenstein.  Permission is granted to copy this
+document provided that no fee is charged for it and that this copyright  notice
+is not removed.<p>
+
+This application was modified for inclusion in EMBOSS by Ian Longden <a
+href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
+Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.
+
+<H2>
+    Priority
+</H2>
+<H2>
+    Target users
+</H2>
+<H2>
+    Comments
+</H2>
+<pre>
+
+</pre>
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+
