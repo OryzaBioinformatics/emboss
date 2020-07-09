@@ -26,10 +26,9 @@ import javax.swing.tree.*;
 import java.io.*;
 import java.util.*;
 
-import uk.ac.mrc.hgmp.embreo.EmbreoParams;
-import uk.ac.mrc.hgmp.embreo.EmbreoAuthException;
-import uk.ac.mrc.hgmp.embreo.filemgr.EmbreoFileRoots;
-import uk.ac.mrc.hgmp.embreo.filemgr.EmbreoFileList;
+import org.emboss.jemboss.soap.*;
+
+import org.emboss.jemboss.JembossParams;
 
 
 public class RemoteFileNode extends DefaultMutableTreeNode 
@@ -39,11 +38,13 @@ public class RemoteFileNode extends DefaultMutableTreeNode
     private boolean isDir = false;
     private String[] childrenNames;
     private String fullname;
+    private String serverPathToFile;
+
     private Vector children;
     private String rootdir;   
-    private transient EmbreoFileList parentList;  // make transient for
-    private transient EmbreoParams mysettings;    // Transferable to work
-    private transient EmbreoFileRoots froots;
+    private transient FileList parentList;        // make transient for
+    private transient JembossParams mysettings;    // Transferable to work
+    private transient FileRoots froots;
 
 //  private String fs = new String(System.getProperty("file.separator"));
     private String fs = "/";
@@ -53,13 +54,14 @@ public class RemoteFileNode extends DefaultMutableTreeNode
     static DataFlavor flavors[] = { REMOTEFILENODE, DataFlavor.stringFlavor };
 
 
-    public RemoteFileNode(EmbreoParams mysettings, EmbreoFileRoots froots,
-                    String file, EmbreoFileList parentList, String parent)
+    public RemoteFileNode(JembossParams mysettings, FileRoots froots,
+                    String file, FileList parentList, String parent)
     { 
       this.mysettings = mysettings;
       this.froots = froots;
       this.parentList = parentList;
       rootdir = froots.getCurrentRoot();
+      serverPathToFile = (String)froots.getRoots().get(rootdir);
 
       if(file.equals(" "))
         isDir = true;
@@ -84,6 +86,7 @@ public class RemoteFileNode extends DefaultMutableTreeNode
     public String getFile() { return (String)getUserObject(); }
     public String getRootDir() { return rootdir; }
     public String getFullName() { return fullname; }
+    public String getPathName() { return serverPathToFile; }
     public boolean isExplored() { return explored; }
     public String getServerName() 
     { 
@@ -101,14 +104,14 @@ public class RemoteFileNode extends DefaultMutableTreeNode
         try
         {
 //        System.out.println(froots.getCurrentRoot() + " :: " + fullname);
-          EmbreoFileList efl = new EmbreoFileList(mysettings,
+          FileList efl = new FileList(mysettings,
                                    froots.getCurrentRoot(),fullname);
           children = efl.fileVector();
           for(int i=0;i<children.size();i++)
             add(new RemoteFileNode(mysettings,froots,(String)children.get(i),
                                    efl,fullname));
         }
-        catch(EmbreoAuthException eae) {}
+        catch(JembossSoapException eae) {}
       }
       explored = true;
     }

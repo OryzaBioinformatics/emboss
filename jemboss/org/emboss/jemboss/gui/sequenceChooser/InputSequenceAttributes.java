@@ -330,7 +330,8 @@ public class InputSequenceAttributes
 
   public boolean isBeginSeqDefault()
   {
-    if(sbeg.getText() == null)
+    if(sbeg.getText() == null ||
+       sbeg.getText().equals("") )
      return true;
     else
      return false; 
@@ -338,7 +339,8 @@ public class InputSequenceAttributes
 
   public boolean isEndSeqDefault()
   {
-    if(send.getText() == null)
+    if(send.getText() == null ||
+       sbeg.getText().equals("") )
      return true;
     else
      return false;

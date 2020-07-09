@@ -18,7 +18,7 @@
 
 package org.emboss.jemboss.soap;
 
-import uk.ac.mrc.hgmp.embreo.*;
+import org.emboss.jemboss.JembossParams;
 import org.emboss.jemboss.gui.*;
 import org.emboss.jemboss.programs.*;
 
@@ -33,7 +33,7 @@ public class PendingResults
 
   private int completed_jobs = 0;
   private int running_jobs = 0;
-  private EmbreoParams mysettings;
+  private JembossParams mysettings;
   private Vector pendingResults;
   private String currentRes = null;
   private JButton jobButton = null;
@@ -44,7 +44,7 @@ public class PendingResults
   final Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
   final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
 
-  public PendingResults(EmbreoParams mysettings)
+  public PendingResults(JembossParams mysettings)
   {
     this.mysettings = mysettings;
     pendingResults = new Vector();

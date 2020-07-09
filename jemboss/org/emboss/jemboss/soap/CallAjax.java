@@ -14,6 +14,9 @@
 *  License along with this library; if not, write to the
 *  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 *  Boston, MA  02111-1307, USA.
+*
+*  @author: Copyright (C) Tim Carver
+*
 ********************************************************************/
 
 package org.emboss.jemboss.soap;
@@ -21,7 +24,7 @@ package org.emboss.jemboss.soap;
 import java.io.*;
 import java.util.*;
 import org.apache.soap.rpc.*;
-import uk.ac.mrc.hgmp.embreo.*;
+import org.emboss.jemboss.JembossParams;
 
 public class CallAjax {
 
@@ -30,10 +33,10 @@ public class CallAjax {
   private int length;
   private float weight;
   private boolean protein;
-  private EmbreoPublicRequest epr;
+  private PublicRequest epr;
 
-   public CallAjax(String fileContent, String seqtype, EmbreoParams mysettings) 
-       throws EmbreoAuthException 
+   public CallAjax(String fileContent, String seqtype, JembossParams mysettings) 
+       throws JembossSoapException 
    {
 
      Vector params = new Vector();
@@ -42,7 +45,7 @@ public class CallAjax {
      params.addElement(new Parameter("seqtype", String.class,
                                      seqtype, null));
 
-     epr = new EmbreoPublicRequest(mysettings,"call_ajax",params);
+     epr = new PublicRequest(mysettings,"call_ajax",params);
 
      Hashtable res = epr.getHash();
      Enumeration enumRes = res.keys();

@@ -25,7 +25,7 @@ package org.emboss.jemboss.soap;
 import java.io.*;
 import java.util.*;
 
-import uk.ac.mrc.hgmp.embreo.EmbreoParams;
+import org.emboss.jemboss.JembossParams;
 
 import java.net.*;
 import org.w3c.dom.*;
@@ -51,13 +51,13 @@ public class PrivateRequest
 /**
 *
 * Make a soap call to a private server, using the default service
-* @param mysettings EmbreoParams defining server parameters
+* @param mysettings JembossParams defining server parameters
 * @param method     String defining which method to call
 * @param args       Vector of arguments
 * @throws JembossSoapException If authentication fails
 *
 */
-   public PrivateRequest(EmbreoParams mysettings, String method, Vector args) 
+   public PrivateRequest(JembossParams mysettings, String method, Vector args) 
                 throws JembossSoapException 
    {
      this(mysettings, mysettings.getPrivateSoapService(), method, args);
@@ -66,13 +66,13 @@ public class PrivateRequest
 /**
 *
 * Make a soap call to a private server
-* @param mysettings EmbreoParams defining server parameters
+* @param mysettings JembossParams defining server parameters
 * @param service    String defining which service to call
 * @param method     String defining which method to call
 *
 * @throws JembossSoapException If authentication fails
 */
-   public PrivateRequest(EmbreoParams mysettings, String service, String method)
+   public PrivateRequest(JembossParams mysettings, String service, String method)
                 throws JembossSoapException
    {
      this(mysettings, service, method, (Vector) null);
@@ -81,15 +81,15 @@ public class PrivateRequest
 /**
 *
 * Make a soap call to a private server
-* @param mysettings EmbreoParams defining server parameters
+* @param mysettings JembossParams defining server parameters
 * @param service    String defining which service to call
 * @param method     String defining which method to call
 * @param args       Vector of arguments
 *
 * @throws JembossSoapException If authentication fails
 */
-   public PrivateRequest(EmbreoParams mysettings, String service, String method,
-                Vector args) throws JembossSoapException 
+   public PrivateRequest(JembossParams mysettings, String service, String method,
+                         Vector args) throws JembossSoapException 
    {
 
      if (mysettings.getDebug()) 
@@ -130,24 +130,36 @@ public class PrivateRequest
        }
      }
 
-
-     // add authentication headers if required
-     if(mysettings.getUseAuth() == true) 
+     
+     if(JembossParams.isJembossServer())  //JembossServer.java servers
      {
-       if(mysettings.getServiceUserName() != null) 
-	 if (mysettings.getServicePasswd() != null) 
-         {
-	   proglistconn.setUserName(mysettings.getServiceUserName());
-	   proglistconn.setPassword(mysettings.getServicePasswd());
-	 }
-     }
-     else          //No authorization required, so use user name here 
-     {             //to create own sand box on server
-                  
-        String userName = System.getProperty("user.name");
-        args.addElement(new Parameter("USERNAME", String.class,
+       if(mysettings.getUseAuth() == true)
+       {
+         if(args == null)
+           args = new Vector();
+         args.addElement(new Parameter("user", String.class,
+                    mysettings.getServiceUserName(), null));
+   
+         args.addElement(new Parameter("p",  byte[].class,
+                         mysettings.getServicePasswdByte(), null));
+
+//       args.addElement(new Parameter("p", String.class,
+//                 mysettings.getServicePasswd(), null));
+       }
+       else       //No authorization reqd, so use user name here
+       {          //to create own sand box on server
+
+          String userName = System.getProperty("user.name");
+          args.addElement(new Parameter("USERNAME", String.class,
                                       userName, null));
+       }
      }
+     else         //cgi server at HGMP, add authentication headers
+     {
+       proglistconn.setUserName(mysettings.getServiceUserName());
+       proglistconn.setPassword(new String(mysettings.getServicePasswd()));
+     }
+
 
      Call proglistcall = new Call();
      proglistcall.setSOAPTransport(proglistconn);
@@ -155,10 +167,10 @@ public class PrivateRequest
      proglistcall.setMethodName(method);
      proglistcall.setEncodingStyleURI(Constants.NS_URI_SOAP_ENC);
 
+
      if(args != null) 
        proglistcall.setParams(args);
      
-
      Response proglistresp = null;
      try 
      {
@@ -180,7 +192,7 @@ public class PrivateRequest
        } 
        else 
        {
-	 mysettings.setServerStatus(soapURLName, EmbreoParams.SERVER_DOWN);
+	 mysettings.setServerStatus(soapURLName, JembossParams.SERVER_DOWN);
 	 if (mysettings.getPrivateServerFailover()) 
          {
 	   if (mysettings.getDebug()) 
@@ -245,8 +257,14 @@ public class PrivateRequest
 	  Vector vans = (Vector)progvalue;
 
 	  int n = vans.size();
-	  for(int j=0;j<n;j+=2) //assumes it's even sized
+	  for(int j=0;j<n;j+=2)  //assumes it's even sized
+          {
+            if(vans.get(j).equals("msg"))
+              if(((String)vans.get(j+1)).startsWith("Failed Authorisation"))
+                throw new JembossSoapException("Authentication Failed");
+
 	    proganswer.put(vans.get(j),vans.get(j+1));
+          }
         }
       }
 
@@ -259,7 +277,9 @@ public class PrivateRequest
       System.out.println("  Fault String = " + fault.getFaultString());
     }
 
+
    }
+
 
 /**
 *

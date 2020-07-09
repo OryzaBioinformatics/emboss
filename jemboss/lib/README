@@ -1,6 +1,9 @@
-jalview.jar - JalView 1.3 beta - Michele Clamp
-jakarta-regexp-1.2.jar - From Jakarta Project, Regexp 1.2
-xerces.jar - Xerces XML parser, version 1.4.0, from the Apache project
-soap.jar - Apache SOAP 2.2
-mail.jar - Javamail, from Sun, v1.2
-activation.jar - Sun's Java Activation Framework (Glasgow), v1.0.1
+jalview.jar 		- JalView 1.3 beta - Michele Clamp
+jakarta-regexp-1.2.jar 	- From Jakarta Project, Regexp 1.2
+xerces.jar 		- Xerces XML parser, version 1.4.0, 
+			  from the Apache project
+soap.jar 		- Apache SOAP 2.2
+mail.jar 		- Javamail, from Sun, v1.2
+activation.jar 		- Sun's Java Activation Framework (Glasgow), v1.0.1
+jcert.jar , jnet.jar, jsse.jar - Sun's Java Secure Socket Extension 1.0.2
+

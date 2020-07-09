@@ -20,7 +20,8 @@
 ********************************************************************/
 
 package org.emboss.jemboss.gui.form;
-//package org.emboss.jemboss.gui.sequenceChooser;
+
+import org.emboss.jemboss.gui.SequenceData;
 
 import java.awt.datatransfer.*;
 import javax.swing.*;
@@ -92,7 +93,8 @@ public class TextFieldSink extends JTextField implements DropTargetListener
 
   public void dragEnter(DropTargetDragEvent e) 
   {
-    if(e.isDataFlavorSupported(DataFlavor.stringFlavor)) 
+    if(e.isDataFlavorSupported(DataFlavor.stringFlavor) ||
+       e.isDataFlavorSupported(SequenceData.SEQUENCEDATA) ) 
     {
       e.acceptDrag(DnDConstants.ACTION_COPY_OR_MOVE);
       this.setBorder(dropBorder);
@@ -120,6 +122,22 @@ public class TextFieldSink extends JTextField implements DropTargetListener
       catch (Exception ex) {}
         
     } 
+    else if(t.isDataFlavorSupported(SequenceData.SEQUENCEDATA))
+    {
+      e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+      try
+      {
+        SequenceData seqData = (SequenceData)
+             t.getTransferData(SequenceData.SEQUENCEDATA);
+        String seq = seqData.s_name;
+        if(seqData.s_listFile.booleanValue())
+          seq = "@".concat(seq);
+
+        this.replaceSelection(seq);
+        e.dropComplete(true);
+      }
+      catch (Exception ex) {}
+    }
     else
     {
       e.rejectDrop();

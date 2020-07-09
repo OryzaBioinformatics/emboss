@@ -14,6 +14,9 @@
 *  License along with this library; if not, write to the
 *  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 *  Boston, MA  02111-1307, USA.
+*
+*  @author: Copyright (C) Tim Carver
+*
 ********************************************************************/
 
 package org.emboss.jemboss.soap;
@@ -21,7 +24,7 @@ package org.emboss.jemboss.soap;
 import java.io.*;
 import java.util.*;
 
-import uk.ac.mrc.hgmp.embreo.*;
+import org.emboss.jemboss.JembossParams;
 
 
 public class GetWossname 
@@ -30,12 +33,12 @@ public class GetWossname
    private String statusmsg;
    private String status;
    private String dbText;
-   private EmbreoPublicRequest epr;
+   private PublicRequest epr;
 
-   public GetWossname(EmbreoParams mysettings)
+   public GetWossname(JembossParams mysettings)
    {
 
-     epr = new EmbreoPublicRequest(mysettings,"getWossname");
+     epr = new PublicRequest(mysettings,"getWossname");
 
    }
 

@@ -26,7 +26,7 @@ import java.io.*;
 import java.util.*;
 
 import org.emboss.jemboss.soap.*;
-import uk.ac.mrc.hgmp.embreo.EmbreoParams;
+import org.emboss.jemboss.JembossParams;
 
 import org.apache.soap.rpc.*;
 
@@ -41,11 +41,11 @@ public class ResultList
 /**
 *
 * Holds the list of stored results
-* @param mysettings EmbreoParams defining server parameters
+* @param mysettings JembossParams defining server parameters
 * @throws JembossSoapException If authentication fails
 *
 */
-  public ResultList(EmbreoParams mysettings) throws JembossSoapException 
+  public ResultList(JembossParams mysettings) throws JembossSoapException 
   {
     this(mysettings,null,"list_saved_results");
   }
@@ -53,12 +53,12 @@ public class ResultList
 /**
 *
 * Manipulate a dataset.
-* @param mysettings EmbreoParams defining server parameters
+* @param mysettings JembossParams defining server parameters
 * @param dataset    Which dataset to manipulate
 * @param methodname What method to invoke on this dataset
 *
 */
-   public ResultList(EmbreoParams mysettings, String dataset, 
+   public ResultList(JembossParams mysettings, String dataset, 
                               String methodname) throws JembossSoapException 
    {
 

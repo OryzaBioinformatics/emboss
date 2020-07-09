@@ -30,15 +30,14 @@ import javax.swing.event.*;
 import java.util.*;
 import java.awt.event.*;
 import java.io.*;
-import org.apache.regexp.*;
 
 import org.emboss.jemboss.gui.AdvancedOptions;
 import org.emboss.jemboss.parser.*;
 import org.emboss.jemboss.programs.ListFile;
 import org.emboss.jemboss.gui.sequenceChooser.*;
 import org.emboss.jemboss.soap.CallAjax;
-import uk.ac.mrc.hgmp.embreo.EmbreoParams;
-import uk.ac.mrc.hgmp.embreo.EmbreoAuthException;
+import org.emboss.jemboss.soap.JembossSoapException;
+import org.emboss.jemboss.JembossParams;
 
 
 /**
@@ -46,7 +45,6 @@ import uk.ac.mrc.hgmp.embreo.EmbreoAuthException;
 * Responsible for displaying the graphical representation
 * of an ACD section. This also handles events related to
 * dependent parameters.
-*
 *
 */
 public class SectionPanel
@@ -77,7 +75,7 @@ public class SectionPanel
   private JPanel sectionPane;
   private Box sectionBox;
 
-  private EmbreoParams mysettings;
+  private JembossParams mysettings;
 
 // input, required, advanced & output sections
   private boolean isInp = false;
@@ -112,7 +110,7 @@ public class SectionPanel
 * @param String containing the one line description for the application
 * @param Box for all the component labels
 * @param int total number of fields
-* @param EmbreoParams mysettings
+* @param JembossParams mysettings
 *
 * 
 */
@@ -123,7 +121,7 @@ public class SectionPanel
             InputSequenceAttributes inSeqAttr[],
             myComboPopup fieldOption[], JList multiOption[], SetInFileCard inSeq[],
             String db[], String des, Box lab[], int numofFields,
-            EmbreoParams mysettings, boolean withSoap)
+            JembossParams mysettings, boolean withSoap)
   {
 
     Border etched = BorderFactory.createEtchedBorder();
@@ -174,7 +172,7 @@ public class SectionPanel
     {
       TitledBorder title;
       title = BorderFactory.createTitledBorder(etched, 
-                parseAcd.getInfoParamValue(nf),
+                parseAcd.getInfoParamValue(nf).toLowerCase(),
                 TitledBorder.LEFT,TitledBorder.TOP,
                 new Font("SansSerif", Font.BOLD, 13),
                 Color.blue);
@@ -260,7 +258,8 @@ public class SectionPanel
         }
         else if(att.startsWith("matrix") || att.startsWith("string") ||
                 att.startsWith("infile") || att.startsWith("regexp") ||
-                att.startsWith("codon")  || att.startsWith("featout") )
+                att.startsWith("codon")  || att.startsWith("featout") ||
+                att.startsWith("dirlist") )
         {
           if(parseAcd.isDefaultParamValueStr(nf)) 
             if( !(parseAcd.getDefaultParamValueStr(nf).startsWith("@") ||
@@ -635,30 +634,23 @@ public class SectionPanel
           public void actionPerformed(ActionEvent e)
           {
             f.setCursor(cbusy);
-            findatt:
-            if(!withSoap)    //Ajax without SOAP
+            String fc = null;
+            String fname;
+            if(sifc.isFileName() || sifc.isListFile())
             {
-              String fc = new String("");
-              if(sifc.isFileName())             // Sequence file/database
-                fc = sifc.getFileChosen();
-              else if(sifc.isListFile())        // List file
-                fc = sifc.getSequence(1);
-              else                              // Cut-n-Paste
-                fc = sifc.getCutNPasteText();
+              if(sifc.isListFile())
+                fname = sifc.getSequence(1);
+              else
+                fname = sifc.getFileChosen();
+              fc = AjaxUtil.getFileOrDatabaseForAjax(fname,db,f,withSoap);
+            }
+            else                                     // Cut-n-Paste
+            {
+              fc = sifc.getCutNPasteText();
+            }    
 
-              if(fc.endsWith(":") || fc.endsWith(":*"))
-              {
-                 int n = JOptionPane.showConfirmDialog(f,
-                       "Do you really want to extract\n"+
-                       "the whole of " + fc + " databese?",
-                       "Confirm the sequence entry",
-                       JOptionPane.YES_NO_OPTION);
-                 if(n == JOptionPane.NO_OPTION)
-                 {
-                   break findatt;
-                 }
-              }
-
+            if(!withSoap && fc!=null)    //Ajax without SOAP
+            {
               Ajax aj = new Ajax();
               boolean ok;
               if(att.startsWith("seqset"))
@@ -670,9 +662,12 @@ public class SectionPanel
                 ajaxLength  = aj.length;
                 ajaxWeight  = aj.weight;
                 ajaxProtein = aj.protein;
-                if(updateBeginEnd(inSeqAttr[h].getBegSeq(),inSeqAttr[h].getEndSeq()))
+                if( (updateBeginEnd(inSeqAttr[h].getBegSeq(),
+                                    inSeqAttr[h].getEndSeq())) &&
+                    (!att.startsWith("seqset")) &&
+                    (!att.startsWith("seqall"))  )
                 {
-                  inSeqAttr[h].setBegSeq(0);
+                  inSeqAttr[h].setBegSeq(1);
                   inSeqAttr[h].setEndSeq(aj.length);
                 }
                 resolveDependents(nod,dep,sifc.getFileChosen(),varName);
@@ -685,77 +680,8 @@ public class SectionPanel
                           "Error Message", JOptionPane.ERROR_MESSAGE);
               }
             }
-            else    //Ajax with SOAP
+            else if(fc!=null)    //Ajax with SOAP
             {
-              String fc = new String("");
-              try
-              {
-                String line = new String("");
-                if(sifc.isFileName() || sifc.isListFile())
-                {
-                  String fname;
-                  if(sifc.isListFile())
-                    fname = sifc.getSequence(1);
-                  else
-                    fname = sifc.getFileChosen();
-
-                  //get the first seqs we meet in a list file
-                  if(fname.startsWith("@") || fname.startsWith("list::"))
-                  {
-                    Hashtable filesInList = new Hashtable();
-                    ListFile.parse(fname,filesInList);
-                    Enumeration en = filesInList.keys();
-                    if(en.hasMoreElements())
-                    {
-                      Object obj = en.nextElement();
-                      fname = (String)filesInList.get(obj);
-                      int col = fname.indexOf(":");
-                      if(col>-1)
-                      {
-                        String possDB = fname.substring(0,col);
-                        for(int i=0;i<db.length;i++)
-                          if(db[i].equalsIgnoreCase(possDB))
-                          {
-                            fname = fname.substring(0,fname.indexOf("\n"));  
-                            break;
-                          }
-                      }
-                    }
-                  }
-
-                  if( (new File(fname)).exists() )       // Sequence file
-                  {
-                    BufferedReader in = new BufferedReader(new FileReader(fname));
-                    while((line = in.readLine()) != null)
-                      fc = fc.concat(line + "\n");
-                  }
-                  else                                   // Database
-                  {
-                    fc = fname;
-                    if(fc.endsWith(":") || fc.endsWith(":*"))
-                    {
-                       int n = JOptionPane.showConfirmDialog(f,
-                             "Do you really want to extract\n"+
-                             "the whole of " + fc + " databese?",
-                             "Confirm the sequence entry",
-                             JOptionPane.YES_NO_OPTION);
-                       if(n == JOptionPane.NO_OPTION)
-                       {
-                         break findatt;
-                       }
-                    }
-
-                  }
-                }
-                else                                     // Cut-n-Paste
-                {
-                  fc = sifc.getCutNPasteText(); 
-                }
-              }
-              catch (IOException ioe)
-              {
-                System.out.println("Error in reading the sequence for Ajax");
-              }
 
               try
               {
@@ -766,9 +692,12 @@ public class SectionPanel
                   ajaxWeight  = ca.getWeight();
                   ajaxProtein = ca.isProtein();
                   int seqLen  = ca.getLength();
-                  if(updateBeginEnd(inSeqAttr[h].getBegSeq(),inSeqAttr[h].getEndSeq()))
+                  if( (updateBeginEnd(inSeqAttr[h].getBegSeq(),
+                                    inSeqAttr[h].getEndSeq())) &&
+                    (!att.startsWith("seqset")) &&
+                    (!att.startsWith("seqall"))  )
                   {
-                    inSeqAttr[h].setBegSeq(0);     
+                    inSeqAttr[h].setBegSeq(1);     
                     inSeqAttr[h].setEndSeq(seqLen);
                   }
                   resolveDependents(nod,dep,sifc.getFileChosen(),varName);
@@ -782,7 +711,7 @@ public class SectionPanel
                 }
 //              System.out.println("PROPERTIES::: " + ajaxLength + " " + ajaxWeight );
               }
-              catch (EmbreoAuthException eae)
+              catch (JembossSoapException eae)
               {
                 System.out.println("Call to Ajax library failed");
               }
@@ -858,10 +787,8 @@ public class SectionPanel
   private void resolveDependents(int nod, Dependent dep[], String textVal, 
                                  String varName)
   {
-
     for(int i=0;i<nod;i++)
     {
-      
       String exp = dep[i].getDependentExp();
       int field = dep[i].getDependentField();
       int param = dep[i].getDependentParam();
@@ -878,8 +805,8 @@ public class SectionPanel
       String att = parseAcd.getParameterAttribute(
                     dep[i].getDependentField(),0).toLowerCase();
       String type = dep[i].getDependentType();
-//    System.out.println(varName + " RESULT ==> " + result + " " + type + " att " + att
-//               + " : " + parseAcd.getParamValueStr(dep[i].getDependentField(),0));
+//    System.out.println(varName + " RES => " + result +" "+ type +" att "+ att
+//            +" : "+ parseAcd.getParamValueStr(dep[i].getDependentField(),0));
       int h = parseAcd.getGuiHandleNumber(field);
 
 
@@ -910,7 +837,7 @@ public class SectionPanel
               att.startsWith("string")  || att.startsWith("seqout") ||
               att.startsWith("outfile") || att.startsWith("matrix") ||
               att.startsWith("infile")  || att.startsWith("regexp") ||
-              att.startsWith("codon") )
+              att.startsWith("codon")   || att.startsWith("dirlist") )
       {
 
         if( (type.startsWith("opt") || type.startsWith("req"))
@@ -1006,7 +933,6 @@ public class SectionPanel
     p3.setVisible(true);   //it to re-display sections properly!!
 
   }
-
 
 
   private void setShadingAndVisibility(Component c, boolean useThis, int field)

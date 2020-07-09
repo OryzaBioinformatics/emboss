@@ -65,12 +65,14 @@ CPP = @CPP@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
+EMBOSS_TOP = @EMBOSS_TOP@
 EXEEXT = @EXEEXT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 ISAIXIA64 = @ISAIXIA64@
 JAVA_OK = @JAVA_OK@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
+NEEDAJAX = @NEEDAJAX@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
@@ -90,7 +92,7 @@ pkgdatadir = $(prefix)/share/$(PACKAGE)/jemboss/org/emboss/jemboss
 
 SUBDIRS = gui parser programs server soap
 
-pkgdata_DATA = Jemboss.java JembossLogo.java JembossParams.java
+pkgdata_DATA = Jemboss.java JembossLogo.java JembossParams.java JembossJarUtil.java
 subdir = jemboss/org/emboss/jemboss
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =

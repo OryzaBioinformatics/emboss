@@ -54,7 +54,7 @@ public class TextFieldInt extends TextFieldSink
     {
       // This should never happen because insertString allows
       // only properly formatted data to get in the field.
-      toolkit.beep();
+      //toolkit.beep();
     }
     return retVal;
   }

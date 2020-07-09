@@ -25,14 +25,14 @@ package org.emboss.jemboss.soap;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-import uk.ac.mrc.hgmp.embreo.*;
+import org.emboss.jemboss.JembossParams;
 
 public class AuthPopup 
 {
 
   private int iprogress = 0;
   private int iprogressmax;
-  private EmbreoParams mysettings;
+  private JembossParams mysettings;
   private JPanel splashp;
   private JFrame splashf;
   JProgressBar progressBar;
@@ -42,12 +42,12 @@ public class AuthPopup
 
 /**
 *
-* Display a popup asking the user to enter their username and password
-* @param mysettings EmbreoParams defining server parameters
+* Display a popup asking the user to enter a username and password
+* @param mysettings JembossParams defining server parameters
 * @param f          Parent frame the popup is associated with
 *
 */
-  public AuthPopup(final EmbreoParams mysettings, JFrame f) 
+  public AuthPopup(final JembossParams mysettings, JFrame f) 
   {
 
     if(f != null)
@@ -56,15 +56,11 @@ public class AuthPopup
       if (mysettings.getUseAuth() == true) 
       {
         if (mysettings.getServiceUserName() == null) 
-        {
 	  text = "You need to supply a username and password\n"
 	       + "before running an application.";
-        } 
         else 
-        {
           text = "Login to server failed\n"
 	       + "Please check your login details.";
-        }
       } 
       else
       {
@@ -73,7 +69,7 @@ public class AuthPopup
              + "Please supply the correct login details.";
       }
       JOptionPane.showMessageDialog(f,text,"Authentication failed",
-                                      JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.ERROR_MESSAGE);
     }
 
 // setup a Jemboss login box
@@ -92,10 +88,7 @@ public class AuthPopup
       splashf = new JFrame("Login");
       JPanel promptPanel = new JPanel(new BorderLayout());
       JPanel loginPanel = new JPanel();
-      if (mysettings.getUseX11()) 
-	loginPanel.setLayout(new GridLayout(3,2));
-      else 
-	loginPanel.setLayout(new GridLayout(2,2));
+      loginPanel.setLayout(new GridLayout(2,2));
       
       final JTextField ufield = new JTextField(16);
       if (mysettings.getServiceUserName() != null) 
@@ -103,19 +96,27 @@ public class AuthPopup
       
       final JPasswordField pfield = new JPasswordField(16);
       final JTextField xfield = new JTextField(16);
+
+      //close login box on carriage return in passwd field
+      pfield.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          mysettings.setServiceUserName(ufield.getText());
+          mysettings.setServicePasswd(pfield.getPassword());
+          exitOnDone = true;
+          splashf.dispose();
+        }
+      });
+
       JLabel ulab = new JLabel(" Username:", SwingConstants.LEFT);
       JLabel plab = new JLabel(" Password:", SwingConstants.LEFT);
-      JLabel xlab = new JLabel("X Display:", SwingConstants.LEFT);
       //add labels etc
       loginPanel.add(ulab);
       loginPanel.add(ufield);
       loginPanel.add(plab);
       loginPanel.add(pfield);
-      if (mysettings.getUseX11()) 
-      {
-	loginPanel.add(xlab);
-	loginPanel.add(xfield);
-      }
+
       promptPanel.add(loginPanel, BorderLayout.CENTER);
       // buttons across the bottom
       JPanel buttonPanel = new JPanel();
@@ -144,11 +145,7 @@ public class AuthPopup
 	public void actionPerformed(ActionEvent e)
         {
 	  mysettings.setServiceUserName(ufield.getText());
-	  mysettings.setServicePasswd(String.valueOf(pfield.getPassword()));
-	  if (mysettings.getUseX11()) 
-          {
-	    mysettings.setX11display(xfield.getText());
-	  }
+	  mysettings.setServicePasswd(pfield.getPassword());
           exitOnDone = true;
 	  splashf.dispose();
 	}
@@ -186,7 +183,7 @@ public class AuthPopup
 * Called on startup to display the login and progress bar.
 *
 */
-  public AuthPopup(final EmbreoParams mysettings, int iprogressmax)
+  public AuthPopup(final JembossParams mysettings, int iprogressmax)
   {
      this(mysettings,null);
      this.mysettings = mysettings;
@@ -214,7 +211,6 @@ public class AuthPopup
     // all added, display the frame
     splashf.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     splashf.setVisible(true);
-
   }
 
 /**
@@ -257,32 +253,6 @@ public class AuthPopup
     }
   }
 
-/**
-*
-* Called if something went wrong in startup.
-*
-*/
-  public void startupFailed()
-  {
-    // hide the splash so it doesn't obscure the dialogs
-    //splashf.setVisible(false);
-    EmbreoUtils.errorPopup(null, "Embreo startup failed. Please check\n"
-                           +"your server and proxy settings");
-    mysettings.editFrame();
-    Object[] options = {"Try again", "Exit"};
-    int itry = JOptionPane.showOptionDialog(null,
-                                 "Would you like to start over?",
-                                 "Restart?",
-                                 JOptionPane.YES_NO_OPTION,
-                                 JOptionPane.QUESTION_MESSAGE,
-                                 null,
-                                 options,
-                                 options[0]);
-    if (itry == JOptionPane.YES_OPTION) 
-      return;
-    else 
-      System.exit(1);
-  }
 
   public JFrame getSplashFrame()
   {

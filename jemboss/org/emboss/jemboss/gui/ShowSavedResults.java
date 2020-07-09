@@ -34,7 +34,7 @@ import java.util.*;
 
 import org.emboss.jemboss.programs.*;
 import org.emboss.jemboss.soap.*;
-import uk.ac.mrc.hgmp.embreo.*;
+import org.emboss.jemboss.JembossParams;
 
 /**
 *
@@ -90,7 +90,7 @@ public class ShowSavedResults
 * Show the saved results on the server.
 *
 */
-  public ShowSavedResults(final EmbreoParams mysettings, final JFrame f) 
+  public ShowSavedResults(final JembossParams mysettings, final JFrame f) 
   {
 
     this("Saved Results on Server");
@@ -133,7 +133,9 @@ public class ShowSavedResults
             } 
             else 
             {
-              EmbreoUtils.warningPopup(savedResFrame,newlist.getStatusMsg());
+              JOptionPane.showMessageDialog(savedResFrame,
+                     newlist.getStatusMsg(), "Soap Error",
+                              JOptionPane.ERROR_MESSAGE);
             }
           } 
           catch (JembossSoapException eae) 
@@ -304,7 +306,7 @@ public class ShowSavedResults
 * Show the results sent to a batch queue.
 *
 */
-  public ShowSavedResults(final EmbreoParams mysettings, final PendingResults epr)
+  public ShowSavedResults(final JembossParams mysettings, final PendingResults epr)
                                            throws JembossSoapException
   {
 
@@ -399,8 +401,10 @@ public class ShowSavedResults
 	    savedResFrame.setCursor(cdone);
 	    if (thisres.getStatus().equals("0")) 
               new ShowResultSet(thisres.hash());
-            else  
-	      EmbreoUtils.errorPopup(savedResFrame,thisres.getStatusMsg());
+            else 
+              JOptionPane.showMessageDialog(savedResFrame,
+                     thisres.getStatusMsg(), "Soap Error",
+                              JOptionPane.ERROR_MESSAGE);
  
 	  } 
           catch (JembossSoapException eae) 
@@ -430,8 +434,9 @@ public class ShowSavedResults
 	    if (thisres.getStatus().equals("0")) 
               new ShowResultSet(thisres.hash());
             else 
-	      EmbreoUtils.errorPopup(savedResFrame,thisres.getStatusMsg());
-	    
+              JOptionPane.showMessageDialog(savedResFrame,
+                     thisres.getStatusMsg(), "Soap Error",
+                              JOptionPane.ERROR_MESSAGE);
 	  } 
           catch (JembossSoapException eae) 
           {

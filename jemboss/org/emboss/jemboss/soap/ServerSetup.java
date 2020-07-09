@@ -28,7 +28,7 @@ import java.util.*;
 
 import java.awt.event.*;
 import org.emboss.jemboss.gui.MemoryComboBox;
-import uk.ac.mrc.hgmp.embreo.*;
+import org.emboss.jemboss.JembossParams;
 
 
 public class ServerSetup extends JPanel 
@@ -41,15 +41,15 @@ public class ServerSetup extends JPanel
 
   private JCheckBox userAuth;
 
-  private EmbreoParams mysettings; 
+  private JembossParams mysettings; 
 
 /**
 *
 * Setting for public and private settings panel.
-* @param EmbreoParams SOAP parameters
+* @param JembossParams SOAP parameters
 *
 */
-  public ServerSetup(EmbreoParams mysettings)
+  public ServerSetup(JembossParams mysettings)
   {
 
     this.mysettings = mysettings;
@@ -109,7 +109,7 @@ public class ServerSetup extends JPanel
     add(userAuth,BorderLayout.SOUTH);
   }
 
-  public EmbreoParams setNewSettings()
+  public JembossParams setNewSettings()
   {
     String settings[] = new String[5];
     settings[0] = 
@@ -126,7 +126,7 @@ public class ServerSetup extends JPanel
     else
       settings[4] = new String("user.auth=false");
 
-    mysettings.updateEmbreoPropStrings(settings);
+    mysettings.updateJembossPropStrings(settings);
 
     return mysettings;
   }

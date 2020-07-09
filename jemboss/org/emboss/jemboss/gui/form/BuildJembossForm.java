@@ -31,7 +31,6 @@ import java.net.URL;
 import java.util.*;
 import java.awt.event.*;
 import java.io.*;
-import uk.ac.mrc.hgmp.embreo.*;
 import org.emboss.jemboss.parser.*;
 import org.emboss.jemboss.programs.*;
 import org.emboss.jemboss.*;
@@ -74,15 +73,10 @@ public class BuildJembossForm implements ActionListener
   private JButton bresults;
   private String applName;
   private String db[];
-  private String allDes[];
-  private String allAcd[];
   private String[] envp;
 
   private String cwd;
   private ParseAcd parseAcd;
-  private Hashtable acdStore;
-
-  private String acdDirToParse;
 
   private Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
   private Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
@@ -97,44 +91,37 @@ public class BuildJembossForm implements ActionListener
   private String embossBin;
 
   private int numofFields;
-  private EmbreoParams mysettings;
+  private JembossParams mysettings;
 
   
-  public BuildJembossForm(int i, String allDes[], String db[],
-        String allAcd[], String[] envp, String cwd, String embossBin,
-        String acdDirToParse, final boolean withSoap, JPanel p2, 
-        final EmbreoParams mysettings, Hashtable acdStore, final JFrame f)
+  public BuildJembossForm(String appDescription, String db[],
+        final String applName, String[] envp, String cwd, String embossBin,
+        String acdText, final boolean withSoap, JPanel p2, 
+        final JembossParams mysettings, final JFrame f)
   {
 
     this.f = f;
     this.p2 = p2;
-    this.allAcd = allAcd;
     this.db = db;
-    this.allDes = allDes;
     this.cwd = cwd;
     this.mysettings = mysettings;
     this.withSoap = withSoap;
-    this.acdDirToParse = acdDirToParse;
     this.embossBin = embossBin;
-    this.acdStore  = acdStore;
     this.envp = envp;
-
-    applName = allAcd[i];
+    this.applName = applName;
 
     JPanel pC = new JPanel();
     pC.setBackground(Color.white);
 
-    p2.add(pC, allAcd[i]);
+    p2.add(pC, applName);
     pC.setLayout(new BorderLayout());
 
     Box fieldPane = Box.createVerticalBox();
 
-    String acdText = getAcdText();
-
     parseAcd = new ParseAcd(acdText,false);
     numofFields = parseAcd.getNumofFields();
 
-    attach(i, pC, fieldPane);
+    attach(pC, fieldPane, appDescription);
 
     JScrollPane scroll = new JScrollPane(fieldPane);
 //  scroll.getViewport().setBackground(Color.lightGray);
@@ -176,7 +163,7 @@ public class BuildJembossForm implements ActionListener
         }
         else
         {
-          EmbreoHelp thishelp = new EmbreoHelp(applName,mysettings);
+          GetHelp thishelp = new GetHelp(applName,mysettings);
           text = thishelp.getHelpText();
         }
         JTextArea helpText = new JTextArea(text);
@@ -243,7 +230,8 @@ public class BuildJembossForm implements ActionListener
   }
 
 
-  public void attach(int app, JPanel p3, Box fieldPane)
+  public void attach(JPanel p3, Box fieldPane, 
+                     String appDescription)
   {
 
     String appN = "";
@@ -335,7 +323,7 @@ public class BuildJembossForm implements ActionListener
       {
         SectionPanel sp = new SectionPanel(f,p3,fieldPane,parseAcd,
               nfield,textf,textInt,textFloat,rangeField,checkBox,
-              inSeqAttr,fieldOption,multiOption,inSeq,db,allDes[app],
+              inSeqAttr,fieldOption,multiOption,inSeq,db,appDescription,
               lab,numofFields,mysettings,withSoap);
 
         if(sp.isAdvancedSection())
@@ -397,14 +385,19 @@ public class BuildJembossForm implements ActionListener
 
         if(!embossCommand.equals("NOT OK"))
         {
-          RunEmbossApplication rea = new RunEmbossApplication(embossCommand,envp,null);
+          RunEmbossApplication rea = new RunEmbossApplication(
+                                           embossCommand,envp,null);
           rea.isProcessStdout();
           stdout = rea.getProcessStdout();
           Process p = rea.getProcess();
           try
           {
             p.waitFor();
-          } catch (InterruptedException interre){}
+          } 
+          catch (InterruptedException interre)
+          {
+            f.setCursor(cdone);
+          }
           bresults.setVisible(true);
         }
       }
@@ -421,7 +414,8 @@ public class BuildJembossForm implements ActionListener
 
           try
           {
-            JembossRun thisrun = new JembossRun(embossCommand,"",filesToMove,mysettings);
+            JembossRun thisrun = new JembossRun(embossCommand,"",
+                                          filesToMove,mysettings);
             if (mysettings.getCurrentMode().equals("batch"))
             {
               JembossProcess er = new JembossProcess((String)thisrun.get("jobid"));
@@ -474,7 +468,8 @@ public class BuildJembossForm implements ActionListener
         hashRes.put("stdout",stdout);
       }
 
-      for(int j=0;j<numofFields;j++) {
+      for(int j=0;j<numofFields;j++) 
+      {
         presults = new JPanel(new BorderLayout());
         pscroll = new JPanel(new BorderLayout());
         rscroll = new JScrollPane(pscroll);
@@ -493,6 +488,7 @@ public class BuildJembossForm implements ActionListener
             while((line = in.readLine()) != null)
               text = text.concat(line + "\n");
 
+            in.close();
             JTextArea seqText = new JTextArea(text);
             seqText.setFont(new Font("monospaced", Font.PLAIN, 12));
             pscroll.add(seqText, BorderLayout.CENTER);
@@ -537,7 +533,7 @@ public class BuildJembossForm implements ActionListener
             }
             else
             {
-              System.out.println("Not opened png file " + cwd +applName + ".1.png");
+              System.out.println("Not opened file " +cwd+applName+".1.png");
             }
           }
         }
@@ -616,7 +612,8 @@ public class BuildJembossForm implements ActionListener
       if ( att.startsWith("datafile")|| att.startsWith("featout")||
            att.startsWith("string")  || att.startsWith("seqout") ||
            att.startsWith("outfile") || att.startsWith("matrix") ||
-           att.startsWith("regexp") || att.startsWith("codon") )
+           att.startsWith("regexp") || att.startsWith("codon") ||
+           att.startsWith("dirlist") )
       {
         if(!(textf[h].getText()).equals("") && textf[h].isVisible()
                                             && textf[h].isEnabled()) 
@@ -744,8 +741,8 @@ public class BuildJembossForm implements ActionListener
           fn = new String(inSeq[h].getFileChosen());
           
           fn = fn.trim();
-          if((fn.indexOf(":")>-1) && (fn.indexOf(":\\") < 0))  // remove unwanted spaces from db entries
-          {
+          if((fn.indexOf(":")>-1) && (fn.indexOf(":\\") < 0))  //remove spaces
+          {                                                    //from db entries
             int n;
             while((n = fn.indexOf(" ")) > -1)
               fn = new String(fn.substring(0,n) + fn.substring(n+1));
@@ -794,7 +791,7 @@ public class BuildJembossForm implements ActionListener
 
           if(withSoap)
           {
-            EmbreoMakeFileSafe sf = new EmbreoMakeFileSafe(fn);
+            MakeFileSafe sf = new MakeFileSafe(fn);
             sfn = sf.getSafeFileName();
             filesToMove.put(sfn,cp);
             options = options.concat(" -" + val + " " + sfn);
@@ -802,7 +799,8 @@ public class BuildJembossForm implements ActionListener
           }
           else
           {
-            try {
+            try
+            {
               File tf = File.createTempFile(fn, ".jembosstmp",
                                   new File(cwd));
               PrintWriter out = new PrintWriter(new FileWriter(tf));
@@ -827,75 +825,76 @@ public class BuildJembossForm implements ActionListener
                              Hashtable filesToMove)
   {
 
-      String sfn;
+    String sfn;
 
-      if (fn.startsWith("@")||fn.startsWith("list::")||
-          fn.startsWith("internalList::"))        // list file
+    if (fn.startsWith("@")||fn.startsWith("list::")||
+        fn.startsWith("internalList::"))        // list file
+    {
+      String lfn = "";
+      if (fn.startsWith("@"))
+        lfn = fn.substring(1);
+      else if(fn.startsWith("list::"))
+        lfn = fn.substring(6);
+
+      File inFile = new File(lfn);  
+      if( (inFile.exists() && inFile.canRead() && 
+           inFile.isFile())||
+           fn.startsWith("internalList::") )    // local list file 
       {
-        String lfn = "";
-        if (fn.startsWith("@"))
-          lfn = fn.substring(1);
-        else if(fn.startsWith("list::"))
-          lfn = fn.substring(6);
-
-        File inFile = new File(lfn);  
-        if( (inFile.exists() && inFile.canRead() && 
-             inFile.isFile())||
-             fn.startsWith("internalList::") )    // local list file 
+        ListFile.parse(fn, filesToMove);
+        if(fn.startsWith("internalList::"))
+          options = options.concat(" -" + val + " list::internalList");
+        else
         {
-          ListFile.parse(fn, filesToMove);
-          if(fn.startsWith("internalList::"))
-            options = options.concat(" -" + val + " list::internalList");
-          else
-          {
-            EmbreoMakeFileSafe sf = new EmbreoMakeFileSafe(lfn);
-            String sfs = sf.getSafeFileName();
-            options = options.concat(" -" + val + " list::" +  sfs);
-          }
+          MakeFileSafe sf = new MakeFileSafe(lfn);
+          String sfs = sf.getSafeFileName();
+          options = options.concat(" -" + val + " list::" +  sfs);
         }
-        else                                      // presume remote
-        {
-          System.out.println("Can't find list file "+lfn);
-          options = options.concat(" -" + val + " list::" +  lfn);
-        }
-        
-        sfn=lfn;
       }
-      else                                        // not list file
-      {                                  
-        EmbreoMakeFileSafe sf = new EmbreoMakeFileSafe(fn);
-        sfn = sf.getSafeFileName();
-        if ((new File(fn)).exists())    // read & add to transfer list
+      else                                      // presume remote
+      {
+        System.out.println("Can't find list file "+lfn);
+        options = options.concat(" -" + val + " list::" +  lfn);
+      }
+      
+      sfn=lfn;
+    }
+    else                                        // not list file
+    {                                  
+      MakeFileSafe sf = new MakeFileSafe(fn);
+      sfn = sf.getSafeFileName();
+      if ((new File(fn)).exists())    // read & add to transfer list
+      {
+        File inFile = new File(fn);
+        if (inFile.exists() && inFile.canRead() && inFile.isFile())
         {
-          File inFile = new File(fn);
-          if (inFile.exists() && inFile.canRead() && inFile.isFile())
+          try
           {
-            try
-            {
-              BufferedReader in = new BufferedReader(new FileReader(inFile));
-              String text = "";
-              String line;
-              while((line = in.readLine()) != null)
-                text = text.concat(line+"\n");
-              
-              filesToMove.put(sfn,text);
-            } catch (IOException e) {}
-            options = options.concat(" -" + val + " " +  sfn);
-          }
-          else
-          {
-            System.out.println("Ignoring invalid local file "+fn);
-            options = options.concat(" -" + val + " " +  fn);
-          }
+            BufferedReader in = new BufferedReader(new FileReader(inFile));
+            String text = "";
+            String line;
+            while((line = in.readLine()) != null)
+              text = text.concat(line+"\n");
+            in.close();
+ 
+            filesToMove.put(sfn,text);
+          } catch (IOException e) {}
+          options = options.concat(" -" + val + " " +  sfn);
         }
-        else     //presume remote
+        else
         {
-          System.out.println("Can't find plain file "+fn);
+          System.out.println("Ignoring invalid local file "+fn);
           options = options.concat(" -" + val + " " +  fn);
         }
       }
+      else     //presume remote
+      {
+        System.out.println("Can't find plain file "+fn);
+        options = options.concat(" -" + val + " " +  fn);
+      }
+    }
 
-      return options;
+    return options;
   }
 
 /**
@@ -946,57 +945,15 @@ public class BuildJembossForm implements ActionListener
   }
 
 
-/**
-*
-* Get the contents of an ACD file in the form of a String.
-* @param String of the ACD file name
-* @param String representation of the ACD
-*
-*/
-  public String getAcdText()
+  /**
+  *
+  * Ensures garbaged collected when there are
+  * no more pointers to this.
+  * 
+  */
+  public void finalize() throws Throwable
   {
-
-    String acdText = new String("");
-    String line;
-
-
-    if(!withSoap)
-    {
-      String acdToParse = acdDirToParse.concat(applName).concat(".acd");
-      try
-      {
-        BufferedReader in = new BufferedReader(new FileReader(acdToParse));
-        while((line = in.readLine()) != null){
-          acdText = acdText.concat(line + "\n");
-        }
-      }
-      catch (IOException e)
-      {
-        System.out.println("Cannot read EMBOSS acd file " + acdText);
-      }
-    } else {
-      if (acdStore.containsKey(applName)) 
-      {
-        acdText = (String)acdStore.get(applName);
-//      System.out.println("Retrieved "+applName+" acd file from cache");
-      }
-      else
-      {
-        EmbreoACD progacd = new EmbreoACD(applName,mysettings);
-        acdText = progacd.getAcd();
-//      System.out.println("Retrieved "+applName+" acd file via soap");
-        acdStore.put(applName,acdText);
-      }
-    }
-
-    return acdText;
-
-  }
-
-
-  public Hashtable getacdStore()
-  {
-    return acdStore;
+    super.finalize();
   }
 
 }

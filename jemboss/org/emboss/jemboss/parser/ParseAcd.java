@@ -25,58 +25,77 @@ import org.emboss.jemboss.parser.acd.*;
 import java.io.*;
 import java.util.StringTokenizer;
 import java.util.Hashtable;
+import java.util.Vector;
 
 
 /**
 *
 * ACD (Ajax command line definition) file parser.
 *
-*
 */
-
 public class ParseAcd
 {
 
-  private Application current;
+ 		       /** number of ACD fields */
   private int numofFields = 0;
+ 		       /** number of parameters in a field */
   private int numofParams;
-  private ApplicationFields appF[] = new ApplicationFields[200];
+ 		       /** vector containing the application fields */
+  private Vector vappF = new Vector();
+ 		       /** string value of a parameter */
   private String svalue;
+ 		       /** double value of a parameter */
   private double nvalue;
+ 		       /** parameter data type */
   private String attr;
+ 		       /** aaray of dependent variables */
   private Dependent dep[];
+ 		       /** number of dependent variables */
   private int numOfDependents;
+ 		       /** String of the groups application belongs to */
   private String groupList = "";
+ 		       /** number of sections */
+  private int nsection = 0;
+ 		       /** number of subsections */
+  private int nsubsection = 0;
 
-  private int nsection;
-  private int nsubsection;
+// data types in ACD
 
-// number of data types in ACD
+                      /** number of text fields */
   private int ntextf;
+                      /** number of integer fields */
   private int nint;
+                      /** number of float fields */
   private int nfloat;
+                      /** number of checkbox fields */
   private int nbool;
+                      /** number of sequence fields */
   private int nseqs;
+                      /** number of list & selection fields 
+                          - single selection */
   private int nlist;
+                      /** number of list & selection fields 
+                          - multiple selection */
   private int mlist;
+                      /** number of range fields */
   private int nrange;
-
+                      
+                      /** default for list or select data type */
   private int listdefault;
 
-// Program groups
+// Groups the program belongs to
+                      /** true if primary group is defined */
   private boolean isPrimaryGp;
+                      /** true if secondary group is defined */
   private boolean isSecondaryGp;
+                      /** primary group */
   private String primaryGp;
+                      /** secondary group */
   private String secondaryGp;
-
-  private static String LINE_SEPARATOR = 
-             System.getProperty("line.separator");
-
 
 /**
 *
 * The constructor takes the ACD as a string. 
-*
 * @param acdText String representation of the ACD file
 * @param groups  Boolean determing whether just to retieve the groups 
 *
@@ -86,36 +105,27 @@ public class ParseAcd
   {
 
     ApplicationFields variables[] = new ApplicationFields[20];
+    ApplicationFields appF;
     int nvars = 0;
-
-    int len;
     int colonPos=0;
     int braketPos=0;
     int ttype;
-
     String param;
     String line;
-
-    nsection = 0;
-    nsubsection = 0;
-
 
     try 
     {
       BufferedReader in = new BufferedReader(new StringReader(acdText));
       line = new String();
-      char c;
-
       in.mark(2500);
       line = in.readLine();
 
-// loop over all parameter definitions
+// loop over all fields defined in the ACD
       do 
       {
         line = line.trim();    // removes leading & trailing whitespace
-        len = line.length();
      
-        if(line.startsWith("#") || len ==0)
+        if(line.startsWith("#") || (line.length() ==0))
         {
           in.mark(2500);
           continue;
@@ -125,18 +135,13 @@ public class ParseAcd
         if(colonPos < 0) colonPos  = line.indexOf('=');
         if(colonPos < 0) continue;
 
-        String dataType = new String(line.substring(0,colonPos));
-
+        String dataType = line.substring(0,colonPos).toLowerCase();
         braketPos = line.indexOf('[');
 
         if(braketPos >= 0) 
-          param = new String(line.substring(colonPos+1,braketPos).trim());
+          param = line.substring(colonPos+1,braketPos).trim();
         else 
-          param = new String(line.substring(colonPos+1).trim());
-
-        dataType = dataType.toLowerCase();
-        if(dataType.startsWith("appl"))
-          current = new Application(param);
+          param = line.substring(colonPos+1).trim();
 
         if(line.startsWith("var:") || line.startsWith("variable"))
         {
@@ -160,10 +165,11 @@ public class ParseAcd
         }
         else if(line.startsWith("endsection"))
         {
-          appF[numofFields] = new ApplicationFields();
-          appF[numofFields].setNumberOfParam(1);
-          appF[numofFields].setParam(0, dataType, param);
+          appF = new ApplicationFields();
+          appF.setNumberOfParam(1);
+          appF.setParam(0, dataType, param);
           numofFields++;
+          vappF.add(appF);
           in.mark(2500);
           continue;
         }
@@ -180,13 +186,10 @@ public class ParseAcd
 
         StreamTokenizer st = new StreamTokenizer(in);
         if(! line.endsWith("[")) 
-        {                                              // rewind to start 
-         in.reset();                                   // tokeniser on same line
-         
-         st.nextToken();
-         st.nextToken();
-         st.nextToken();
-         st.nextToken();
+        {                                        // rewind to start 
+          in.reset();                            // tokeniser on same line
+          st.nextToken(); st.nextToken();
+          st.nextToken(); st.nextToken();
         }
 
         in.mark(2500);
@@ -195,10 +198,13 @@ public class ParseAcd
           ttype = parseParam(in, st);
         } while(attr != null);
 
-        appF[numofFields] = new ApplicationFields();
-        appF[numofFields].setNumberOfParam(numofParams);
+        appF = new ApplicationFields();
+        vappF.add(appF);
+        appF.setNumberOfParam(numofParams);
         numofParams = 0;
-        appF[numofFields].setParam(numofParams, dataType, param);
+
+        //set param name to lowercase as ACD is case insensitive
+        appF.setParam(numofParams, dataType, param.toLowerCase());
  
         in.reset();
         do 
@@ -206,98 +212,52 @@ public class ParseAcd
           ttype = parseParam(in, st);
           // is the value a number or string
           if( ttype != java.io.StreamTokenizer.TT_NUMBER &&
-              attr != null) 
+               attr != null) 
           {
              if(nvars>0)
                svalue = resolveVariables(variables,nvars,svalue);
 
-             appF[numofFields].setParam(numofParams, attr, svalue);
+             //set variables to lower case as ACD is case insensitive
+             if(svalue.indexOf("$") > -1 || svalue.indexOf("@") > -1)
+               svalue = svalue.toLowerCase();
+
+             appF.setParam(numofParams, attr, svalue);
 //           System.out.println(" ATTR " + attr + " SVALUE " + 
 //                          getParamValueStr(numofFields,numofParams));
           }   
           else if ( ttype == java.io.StreamTokenizer.TT_NUMBER) 
           {
 //           System.out.println(" ATTR " + attr + " NVALUE " + nvalue);
-             appF[numofFields].setParam(numofParams, attr, nvalue);
+             appF.setParam(numofParams, attr, nvalue);
           }
-
         } while (attr != null);
 
-
-// set gui handle
-        if ( dataType.startsWith("datafile") || dataType.startsWith("featout")||
-             dataType.startsWith("string")   || dataType.startsWith("seqout") ||
-             dataType.startsWith("outfile")  || dataType.startsWith("matrix") ||
-             dataType.startsWith("infile")   || dataType.startsWith("regexp") ||
-             dataType.startsWith("codon") )
-        {
-          appF[numofFields].setGuiHandleNumber(ntextf);
-          ntextf++;
-        }
-        else if (dataType.startsWith("int"))
-        {
-          appF[numofFields].setGuiHandleNumber(nint);
-          nint++;
-        }
-        else if (dataType.startsWith("float"))
-        {
-          appF[numofFields].setGuiHandleNumber(nfloat);
-          nfloat++;
-        }
-        else if (dataType.startsWith("bool"))
-        {
-          appF[numofFields].setGuiHandleNumber(nbool);
-          nbool++;
-        }
-        else if (dataType.startsWith("seqset") || dataType.startsWith("seqall")||
-                 dataType.startsWith("sequence") )
-        {
-          appF[numofFields].setGuiHandleNumber(nseqs);
-          nseqs++;
-        }
-        else if (dataType.startsWith("list") || dataType.startsWith("select"))
-        {
-          double max = 1.;
-          if(isMaxParamValue(numofFields))
-            max = Double.parseDouble(getMaxParam(numofFields));
-
-          if(max > 1.0)       // multiple list selection
-          {
-            appF[numofFields].setGuiHandleNumber(mlist);
-            mlist++;
-          }
-          else                // single selection
-          {
-            appF[numofFields].setGuiHandleNumber(nlist);
-            nlist++;
-          }
-        }
-        else if (dataType.startsWith("range"))
-        {
-          appF[numofFields].setGuiHandleNumber(nrange);
-          nrange++;
-        }
+// set gui handle (based on data type)
+        setGuiHandleNumber(dataType,appF);
 
         numofFields++;
         in.mark(2500);
 
-        if(groups && dataType.startsWith("appl")) 
-        {
-           setGroups(--numofFields);
-           break;
-        }
-        
       } while((line = in.readLine()) != null);
    
     }
     catch (IOException e) 
     {
-      System.out.println("Parsing acd file error" );
+      System.out.println("PareAcd: Parsing acd file error" );
     }
 
   }
 
 
+/**
+*
+* Used to replace the "variable:" or "var:" shorthand notation in
+* the ACD to the full expression it represent
+* @param ApplicationFields array of var ACD fields
+* @param int number of var's used
+* @param String value to be resolved if necessary
+*
+*/
   private String resolveVariables(ApplicationFields variables[],int nvars,
                                   String svalue)
   {
@@ -317,34 +277,37 @@ public class ParseAcd
     }
 
 //  if(!res.equals(svalue))
-//    System.out.println("START VALUE " + svalue  + " FINAL VALUE" + res + "\n");
+//    System.out.println("START VAL "+svalue+" END VAL "+res);
     return res;
   }
 
 /**
 *
 * Gets the application field.
-*
 * @return ApplicationField 
 *
 */
-  public ApplicationFields[] getApplicationFields() 
-  {
-    return appF;
-  }
+//public ApplicationFields[] getApplicationFields() 
+//{
+//  int nfield = vappF.size();
+//  ApplicationFields aF[] = new ApplicationFields[nfield];
+//  for(int i=0;i<nfield; i++)
+//    aF[i] = (ApplicationFields)vappF.get(i);
+//  return aF;
+//}
 
 
 /**
 *
 * Gets the handle for a gui component on the Jemboss form.
-*
 * @param  int field number in the ACD file
 * @return Handle integer.
 *
 */
   public int getGuiHandleNumber(int field) 
   {
-    return appF[field].getGuiHandleNumber();
+    ApplicationFields aF = (ApplicationFields)vappF.get(field);
+    return aF.getGuiHandleNumber();
   }
 
 
@@ -477,7 +440,8 @@ public class ParseAcd
 */
   public String getParameterAttribute(int field, int param)
   {
-    return appF[field].getParamAttribute(param);
+    ApplicationFields aF = (ApplicationFields)vappF.get(field);
+    return aF.getParamAttribute(param);
   }
 
 
@@ -489,7 +453,8 @@ public class ParseAcd
 */
   public boolean isParamValueStr(int field, int param) 
   {
-    return appF[field].isParamValueStr(param);
+    ApplicationFields aF = (ApplicationFields)vappF.get(field);
+    return aF.isParamValueStr(param);
   }
 
 
@@ -501,14 +466,76 @@ public class ParseAcd
 */
   public String getParamValueStr(int field, int param) 
   {
-    return appF[field].getParamValueStr(param).trim();
+    ApplicationFields aF = (ApplicationFields)vappF.get(field);
+    return aF.getParamValueStr(param).trim();
   }
 
 
-  public void setParamValueStr(int field, int param, String svalue)
+/**
+*
+* Sets the gui handle depending on the data type.
+* @param String data type
+*
+*/
+  private void setGuiHandleNumber(String dataType, ApplicationFields appF)
   {
-    appF[field].resetParam(param,svalue);
+
+    if ( dataType.startsWith("datafile") || dataType.startsWith("featout")||
+         dataType.startsWith("string")   || dataType.startsWith("seqout") ||
+         dataType.startsWith("outfile")  || dataType.startsWith("matrix") ||
+         dataType.startsWith("infile")   || dataType.startsWith("regexp") ||
+         dataType.startsWith("codon")    || dataType.startsWith("dirlist") )
+    {
+      appF.setGuiHandleNumber(ntextf);
+      ntextf++;
+    }
+    else if (dataType.startsWith("int"))
+    {
+      appF.setGuiHandleNumber(nint);
+      nint++;
+    }
+    else if (dataType.startsWith("float"))
+    {
+      appF.setGuiHandleNumber(nfloat);
+      nfloat++;
+    }
+    else if (dataType.startsWith("bool"))
+    {
+      appF.setGuiHandleNumber(nbool);
+      nbool++;
+    }
+    else if (dataType.startsWith("seqset") ||
+             dataType.startsWith("seqall") ||
+             dataType.startsWith("sequence") )
+    {
+      appF.setGuiHandleNumber(nseqs);
+      nseqs++;
+    }
+    else if (dataType.startsWith("list") || dataType.startsWith("select"))
+    {
+      double max = 1.;
+      if(isMaxParamValue(numofFields))
+        max = Double.parseDouble(getMaxParam(numofFields));
+
+      if(max > 1.0)       // multiple list selection
+      {
+        appF.setGuiHandleNumber(mlist);
+        mlist++;
+      }
+      else                // single selection
+      {
+        appF.setGuiHandleNumber(nlist);
+        nlist++;
+      }
+    }
+    else if (dataType.startsWith("range"))
+    {
+      appF.setGuiHandleNumber(nrange);
+      nrange++;
+    }
+
   }
+
 
 /**
 *
@@ -518,7 +545,8 @@ public class ParseAcd
 */
   public double getParamValueDbl(int field, int param) 
   {
-    return appF[field].getParamValueDbl(param);
+    ApplicationFields aF = (ApplicationFields)vappF.get(field);
+    return aF.getParamValueDbl(param);
   }
 
 
@@ -554,17 +582,14 @@ public class ParseAcd
   {
     int num = getNumofParams(field);
     
+    ApplicationFields aF = (ApplicationFields)vappF.get(field);
     for(int i=0;i<num;i++) 
     {
       if (getParameterAttribute(field,i).startsWith("def")) 
-      {
-        return appF[field].getParamValueDbl(i);
-      }
+        return aF.getParamValueDbl(i);
     }
     return 0.0;
   }
-
-
 
 
 //  Methods for dealing with dependent variables. 
@@ -653,9 +678,6 @@ public class ParseAcd
   }
 
 
-
-// Methods for finding min/max values for parameters
-
 /**
 *
 * Locates the min parameter in a field and returns it as a String.
@@ -672,11 +694,12 @@ public class ParseAcd
     {
       if (getParameterAttribute(field,i).startsWith("min")) 
       {
+        ApplicationFields aF = (ApplicationFields)vappF.get(field);
         if(isParamValueStr(field,i)) 
-          min = appF[field].getParamValueStr(i);
+          min = aF.getParamValueStr(i);
         else 
         {
-          Double val = new Double(appF[field].getParamValueDbl(i));
+          Double val = new Double(aF.getParamValueDbl(i));
           if(getParameterAttribute(field,0).startsWith("int"))
             min = (new Integer(val.intValue())).toString();           
           else
@@ -706,11 +729,12 @@ public class ParseAcd
     {
       if (getParameterAttribute(field,i).startsWith("max")) 
       {
+        ApplicationFields aF = (ApplicationFields)vappF.get(field);
         if(isParamValueStr(field,i))
-          max = appF[field].getParamValueStr(i);
+          max = aF.getParamValueStr(i);
         else 
         {
-          Double val = new Double(appF[field].getParamValueDbl(i));
+          Double val = new Double(aF.getParamValueDbl(i));
           if(getParameterAttribute(field,0).startsWith("int"))
             max = (new Integer(val.intValue())).toString();
           else
@@ -739,8 +763,9 @@ public class ParseAcd
     {
       if (getParameterAttribute(field,i).startsWith("min")) 
       {
+        ApplicationFields aF = (ApplicationFields)vappF.get(field);
         if(isParamValueStr(field,i) )
-          if(appF[field].getParamValueStr(i).startsWith("$"))
+          if(aF.getParamValueStr(i).startsWith("$"))
             return false;
         return true;
       }
@@ -790,20 +815,22 @@ public class ParseAcd
     int num = getNumofParams(field);
     int i;
 
+    ApplicationFields aF = (ApplicationFields)vappF.get(field);
+
     for(i=0;i<num;i++) 
     {
       if (getParameterAttribute(field,i).startsWith("prompt")) 
-        return appF[field].getParamValueStr(i);
+        return aF.getParamValueStr(i);
     }
     for(i=0;i<num;i++) 
     {
       if (getParameterAttribute(field,i).startsWith("info")) 
-        return appF[field].getParamValueStr(i);
+        return aF.getParamValueStr(i);
     }
     for(i=0;i<num;i++)
     {
       if (getParameterAttribute(field,i).startsWith("help"))
-        return appF[field].getParamValueStr(i);
+        return aF.getParamValueStr(i);
     }
 
     return "";
@@ -825,9 +852,10 @@ public class ParseAcd
     String help = "";
     String helpText = "";
 
+    ApplicationFields aF = (ApplicationFields)vappF.get(field);
     for(i=0;i<num;i++) 
       if (getParameterAttribute(field,i).startsWith("help")) 
-        return formatHelpText(appF[field].getParamValueStr(i));
+        return formatHelpText(aF.getParamValueStr(i));
 
 //  for(i=0;i<num;i++) 
 //    if (getParameterAttribute(field,i).startsWith("info")) 
@@ -848,11 +876,13 @@ public class ParseAcd
   {
 
     int num = getNumofParams(0);
+    ApplicationFields aF = (ApplicationFields)vappF.get(0);
+
     for(int i=0;i<num;i++)
     {
       if(getParameterAttribute(0,i).startsWith("batch"))
-        if(appF[0].getParamValueStr(i).equalsIgnoreCase("Y") ||
-           appF[0].getParamValueStr(i).equalsIgnoreCase("Yes") )
+        if(aF.getParamValueStr(i).equalsIgnoreCase("Y") ||
+           aF.getParamValueStr(i).equalsIgnoreCase("Yes") )
              return true;
     }
 
@@ -870,10 +900,11 @@ public class ParseAcd
   {
     String cpu = "";
     int num = getNumofParams(0);
+    ApplicationFields aF = (ApplicationFields)vappF.get(0);
     for(int i=0;i<num;i++)
     {
       if(getParameterAttribute(0,i).startsWith("cpu"))
-        return appF[0].getParamValueStr(i);
+        return aF.getParamValueStr(i);
     }
 
     return cpu;
@@ -1007,115 +1038,6 @@ public class ParseAcd
 
 /**
 *
-* Finds the primary and secondary groups, defined in the
-* ACD file. Call this before using the other group methods.
-*
-* @param   int field number
-* 
-*/
-  public void setGroups(int field) 
-  {
-    
-    int num = getNumofParams(field);
-    int i;
-    int sep;
-
-    isPrimaryGp   = false;
-    isSecondaryGp = false;
-
-    for(i=0;i<num;i++) 
-    {
-      if (getParameterAttribute(field,i).startsWith("groups")) 
-      {
-       isPrimaryGp = true;
-       groupList = appF[field].getParamValueStr(i);
-       sep = groupList.indexOf(":");
-       if(sep > 0) 
-       {
-         primaryGp = new String(groupList.substring(0,sep).trim());
-         isSecondaryGp = true;
-       } 
-       else
-       {
-         primaryGp = new String(groupList);
-       }
-       if(isSecondaryGp) 
-       {
-         secondaryGp = new String(groupList.substring(sep+1,groupList.length()));
-         sep = secondaryGp.indexOf(",");
-         if(sep > 0)
-           secondaryGp = new String(secondaryGp.substring(0,sep));
-       }
-       sep = primaryGp.indexOf(",");
-       if(sep > 0) 
-         primaryGp = new String(primaryGp.substring(0,sep));
-  
-       return;
-      }
-    }
-    return;
-  }
-
-/**
-*
-* True if a primary group is defined.
-* @return  True if a primary group is defined.
-*
-*/
-  public boolean isPrimaryGroup()
-  {
-    return isPrimaryGp;
-  }
-
-/**
-*
-* True if a secondary group is defined.
-* @return  True if a secondary group is defined.
-*
-*/
-  public boolean isSecondaryGroup()
-  {
-    return isSecondaryGp;
-  }
-
-/**
-*
-* Gets the primary groups the application is a member of.
-* @return  Primary groups the application is a member of.
-*
-*/
-  public String getPrimaryGroup() 
-  {
-    return primaryGp;
-  }
-
-
-/**
-*
-* Gets the secondary groups the application is a member of.
-* @return  Secondary groups the application is a member of.
-*
-*/
-  public String getSecondaryGroup() 
-  {
-    return secondaryGp;
-  }
-
-
-/**
-*
-* Gets the list of groups defined by setGroups.
-* @return Group list defined in setGroups().
-*
-*/
-  public String getGroups() 
-  {
-    return groupList;
-  }
-
-
-/**
-*
 * Gets a String default parameter.
 * @param  int field number
 * @return Default parameter for this field.
@@ -1125,10 +1047,11 @@ public class ParseAcd
   {
     int num = getNumofParams(field);
 
+    ApplicationFields aF = (ApplicationFields)vappF.get(field);
     for(int i=0;i<num;i++) 
     {
       if (getParameterAttribute(field,i).startsWith("def")) 
-        return appF[field].getParamValueStr(i);
+        return aF.getParamValueStr(i);
     }
     return "";
   }
@@ -1150,15 +1073,17 @@ public class ParseAcd
     String listAll = null;
     String list[];
     String item;
+  
+    ApplicationFields aF = (ApplicationFields)vappF.get(field);
 
     for(int i=0;i<num;i++) 
     {
       if (getParameterAttribute(field,i).startsWith("val")) 
-        listAll = appF[field].getParamValueStr(i);
+        listAll = aF.getParamValueStr(i);
       if (getParameterAttribute(field,i).startsWith("delim")) 
-        delim = appF[field].getParamValueStr(i);
+        delim = aF.getParamValueStr(i);
       if (getParameterAttribute(field,i).startsWith("codedelim"))
-        codedelim = appF[field].getParamValueStr(i);
+        codedelim = aF.getParamValueStr(i);
     }
 
     if(delim == null || listAll == null)
@@ -1218,15 +1143,16 @@ public class ParseAcd
     String item;
     String key="";
 
+    ApplicationFields aF = (ApplicationFields)vappF.get(field);
 
     for(int i=0;i<num;i++) 
     {
       if (getParameterAttribute(field,i).startsWith("val"))
-        listAll = appF[field].getParamValueStr(i);
+        listAll = aF.getParamValueStr(i);
       if (getParameterAttribute(field,i).startsWith("delim"))
-        delim = appF[field].getParamValueStr(i);
+        delim = aF.getParamValueStr(i);
       if (getParameterAttribute(field,i).startsWith("codedelim"))
-        codedelim = appF[field].getParamValueStr(i);
+        codedelim = aF.getParamValueStr(i);
     }
 
     if(delim == null || listAll == null)
@@ -1267,12 +1193,14 @@ public class ParseAcd
     String list[];
     String item;
 
+    ApplicationFields aF = (ApplicationFields)vappF.get(field);
+
     for(int i=0;i<num;i++) 
     {
       if (getParameterAttribute(field,i).startsWith("val"))
-        listAll = appF[field].getParamValueStr(i);
+        listAll = aF.getParamValueStr(i);
       if (getParameterAttribute(field,i).startsWith("delim"))
-        delim = appF[field].getParamValueStr(i);
+        delim = aF.getParamValueStr(i);
     }
 
     if(delim == null || listAll == null)
@@ -1331,7 +1259,6 @@ public class ParseAcd
 */
   public boolean isOptionalParam()
   {
-     
     for(int i=0;i<numofFields;i++)
       if(isOptionalParamValue(i)) return true; 
     
@@ -1359,13 +1286,14 @@ public class ParseAcd
 */ 
   public int getNumofParams(int field) 
   {
-    return appF[field].getNumberOfParam();
+    ApplicationFields aF = (ApplicationFields)vappF.get(field);
+    return aF.getNumberOfParam();
   }
 
 
 /**
 *
-* Parses each parameter in a field
+* Parses a parameter in a ACD field 
 *
 * @param  BufferedReader 
 * @param  StreamTokenizer
@@ -1375,62 +1303,52 @@ public class ParseAcd
   public int parseParam(BufferedReader in, StreamTokenizer st) throws IOException 
   {
  
-   char c;
-   svalue = null;   
-
-   st.eolIsSignificant(false);
+    char c;
+    svalue = null;   
+    st.eolIsSignificant(false);
    
 // the following are not token delimeters
-   st.wordChars((int)'-',(int)'-'); st.wordChars((int)'$',(int)'$');
-   st.wordChars((int)'(',(int)'('); st.wordChars((int)')',(int)')');
-   st.wordChars((int)'@',(int)'@'); st.wordChars((int)'?',(int)'?');
-   st.wordChars((int)'!',(int)'!'); 
+    st.wordChars((int)'-',(int)'-'); st.wordChars((int)'$',(int)'$');
+    st.wordChars((int)'(',(int)'('); st.wordChars((int)')',(int)')');
+    st.wordChars((int)'@',(int)'@'); st.wordChars((int)'?',(int)'?');
+    st.wordChars((int)'!',(int)'!'); st.wordChars((int)'#', (int)'#');
 // the following are token delimeters
-   st.whitespaceChars((int)'\n',(int)'\n');
-   st.whitespaceChars((int)' ',(int)' ');
-   st.whitespaceChars((int)':',(int)':');
-   st.whitespaceChars((int)'=',(int)'=');
-   st.ordinaryChars((int)'\"', (int)'\"');
-   st.ordinaryChars((int)'\'',(int)'\'');
-   st.wordChars((int)'#', (int)'#');
+    st.whitespaceChars((int)'\n',(int)'\n');
+    st.whitespaceChars((int)' ',(int)' ');
+    st.whitespaceChars((int)':',(int)':');
+    st.whitespaceChars((int)'=',(int)'=');
+    st.ordinaryChars((int)'\"', (int)'\"');
+    st.ordinaryChars((int)'\'',(int)'\'');
 
-// loop over all parameter settings
-
-   st.nextToken();
-
-   attr = st.sval;
-
-   if(attr == null) return 0;
-
-//skip commented lines
-   if(attr.startsWith("#")) 
-   {
-    while( (c = (char)in.read()) != '\n') {}
     st.nextToken();
     attr = st.sval;
-   }
-   if(attr == null) return 0;
+    if(attr == null) return 0;
 
-   st.nextToken();
-   svalue = st.sval;
-   nvalue = st.nval;
-
-   // cope with double quotes
-   if( svalue == null &&
-       st.ttype != java.io.StreamTokenizer.TT_NUMBER ) 
-   {
-     svalue = "";
-     while( (c = (char)in.read()) != '\"') 
-     {
-       svalue = svalue.concat(java.lang.String.valueOf(c));
-     }
-   }
-
-   numofParams++;
-   return st.ttype;
-
+//skip commented lines
+    if(attr.startsWith("#")) 
+    {
+      while( (c = (char)in.read()) != '\n') {}
+      st.nextToken();
+      attr = st.sval;
+    }
+    if(attr == null) return 0;
+ 
+    st.nextToken();
+    svalue = st.sval;
+    nvalue = st.nval;
+ 
+   // cope with double quotes by forwarding to end quote
+    if( svalue == null &&
+        st.ttype != java.io.StreamTokenizer.TT_NUMBER ) 
+    {
+      svalue = "";
+      while( (c = (char)in.read()) != '\"') 
+        svalue = svalue.concat(java.lang.String.valueOf(c));
+    }
+ 
+    numofParams++;
+    return st.ttype;
   }
-
   
 }
 

@@ -30,10 +30,11 @@ import javax.swing.event.*;
 import javax.swing.tree.*;
 import java.io.*;
 import java.util.*;
+import org.apache.soap.rpc.*;
 
+import org.emboss.jemboss.soap.*;
 import org.emboss.jemboss.gui.ResultsMenuBar;
-import uk.ac.mrc.hgmp.embreo.filemgr.EmbreoFileGet;
-import uk.ac.mrc.hgmp.embreo.EmbreoParams;
+import org.emboss.jemboss.JembossParams;
 
 /**
 *
@@ -47,7 +48,7 @@ public class DragTree extends JTree implements DragGestureListener,
 
   public static DefaultTreeModel model;
   private Hashtable openNodeDir;
-  private EmbreoParams mysettings;
+  private JembossParams mysettings;
 
   private File root;
   private String fs = new String(System.getProperty("file.separator"));
@@ -55,7 +56,7 @@ public class DragTree extends JTree implements DragGestureListener,
   final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
 
 
-  public DragTree(File rt, final JFrame f, EmbreoParams mysettings) 
+  public DragTree(File rt, final JFrame f, JembossParams mysettings) 
   {
     this.mysettings = mysettings;
     this.root = rt;
@@ -196,8 +197,16 @@ public class DragTree extends JTree implements DragGestureListener,
             FileSave fsave = new FileSave(dropDest); //check we want to & can save
             if(fsave.doWrite())
             {
-              EmbreoFileGet efg = new EmbreoFileGet(mysettings,fn.getRootDir(),fn.getFullName());
-              fsave.fileSaving(efg.contents());
+
+              Vector params = new Vector();
+              params.addElement(new Parameter("options", String.class,
+                                    "fileroot=" + fn.getRootDir(), null));
+              params.addElement(new Parameter("filename", String.class,
+                                    fn.getFullName(), null));
+              PrivateRequest gReq = new PrivateRequest(mysettings,"EmbreoFile",
+                                                    "get_file",params);
+
+              fsave.fileSaving(gReq.getHash().get("contents"));
 
               if(fsave.writeOK() && !fsave.fileExists())
               {
@@ -367,7 +376,7 @@ public class DragTree extends JTree implements DragGestureListener,
 * @param the file name
 *
 */
-  public void showFilePane(String filename)
+  public static void showFilePane(String filename)
   {
     JFrame ffile = new JFrame(filename);
     JPanel pfile = (JPanel)ffile.getContentPane();

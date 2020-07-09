@@ -1,9 +1,10 @@
 SUBDIRS = filetree form sequenceChooser startup
 
+pkgdata_DATA = AdvancedOptions.java ResultsMenuBar.java ShowResultSet.java \
+BuildProgramMenu.java SequenceData.java ShowSavedResults.java \
+LaunchJalView.java SequenceList.java SwingWorker.java \
+MemoryComboBox.java SetUpMenuBar.java  
 
-pkgdata_DATA = AdvancedOptions.java BuildProgramMenu.java \
-ResultsMenuBar.java SetUpMenuBar.java ShowResultSet.java \
-ShowSavedResults.java SwingWorker.java LaunchJalView.java
 pkgdatadir=$(prefix)/share/$(PACKAGE)/jemboss/org/emboss/jemboss/gui
 
 install-exec-hook:

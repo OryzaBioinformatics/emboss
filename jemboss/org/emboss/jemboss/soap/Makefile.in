@@ -65,12 +65,14 @@ CPP = @CPP@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
+EMBOSS_TOP = @EMBOSS_TOP@
 EXEEXT = @EXEEXT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 ISAIXIA64 = @ISAIXIA64@
 JAVA_OK = @JAVA_OK@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
+NEEDAJAX = @NEEDAJAX@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
@@ -86,11 +88,15 @@ am__include = @am__include@
 am__quote = @am__quote@
 havejavac = @havejavac@
 install_sh = @install_sh@
+
 pkgdatadir = $(prefix)/share/$(PACKAGE)/jemboss/org/emboss/jemboss/soap
 
-pkgdata_DATA = AuthPopup.java CallAjax.java GetWossname.java \
-JembossRun.java JembossSoapException.java PendingResults.java \
-PrivateRequest.java
+pkgdata_DATA = AuthPopup.java JembossSoapException.java \
+CallAjax.java PendingResults.java \
+GetWossname.java PrivateRequest.java \
+JembossRun.java ServerSetup.java \
+FileRoots.java FileList.java PublicRequest.java \
+GetACD.java GetHelp.java ShowDB.java MakeFileSafe.java
 
 subdir = jemboss/org/emboss/jemboss/soap
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs

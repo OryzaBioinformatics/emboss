@@ -1,6 +1,6 @@
 SUBDIRS = gui parser programs server soap
 
-pkgdata_DATA = Jemboss.java JembossLogo.java JembossParams.java
+pkgdata_DATA = Jemboss.java JembossLogo.java JembossParams.java JembossJarUtil.java
 pkgdatadir=$(prefix)/share/$(PACKAGE)/jemboss/org/emboss/jemboss
 
 install-exec-hook:

@@ -26,7 +26,7 @@ import javax.swing.tree.*;
 import java.io.*;
 import java.util.*;
 
-class FileNode extends DefaultMutableTreeNode 
+public class FileNode extends DefaultMutableTreeNode 
                  implements Transferable, Serializable
 {
     private boolean explored = false;

@@ -27,7 +27,7 @@ package org.emboss.jemboss.soap;
 import java.io.*;
 import java.util.*;
 
-import uk.ac.mrc.hgmp.embreo.EmbreoParams;
+import org.emboss.jemboss.JembossParams;
 import org.apache.soap.rpc.*;
 
 public class JembossRun
@@ -43,12 +43,12 @@ public class JembossRun
 * @param appl       String defining command
 * @param options    String defining options
 * @param filesToMove  Hashtable of filenames and contents
-* @param mysettings EmbreoParams defining server parameters
+* @param mysettings JembossParams defining server parameters
 * @throws JembossSoapException if authentication fails
 *
 */
    public JembossRun(String appl, String options, Hashtable filesToMove, 
-                    EmbreoParams mysettings) throws JembossSoapException 
+                    JembossParams mysettings) throws JembossSoapException 
 {
 
      String fulloptions;
@@ -59,8 +59,8 @@ public class JembossRun
 
      //construct a full options string
      fulloptions = "mode="+mysettings.getCurrentMode()+" "+options;
-     if (mysettings.getUseX11()) 
-       fulloptions = "display="+mysettings.getX11display()+" "+fulloptions;
+//   if (mysettings.getUseX11()) 
+//     fulloptions = "display="+mysettings.getX11display()+" "+fulloptions;
      
      params.addElement(new Parameter("options", String.class,
 				     fulloptions, null));

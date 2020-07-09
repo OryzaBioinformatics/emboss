@@ -65,12 +65,14 @@ CPP = @CPP@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
+EMBOSS_TOP = @EMBOSS_TOP@
 EXEEXT = @EXEEXT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 ISAIXIA64 = @ISAIXIA64@
 JAVA_OK = @JAVA_OK@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
+NEEDAJAX = @NEEDAJAX@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
@@ -86,13 +88,15 @@ am__include = @am__include@
 am__quote = @am__quote@
 havejavac = @havejavac@
 install_sh = @install_sh@
+
 pkgdatadir = $(prefix)/share/$(PACKAGE)/jemboss/org/emboss/jemboss/gui
 
 SUBDIRS = filetree form sequenceChooser startup
 
-pkgdata_DATA = AdvancedOptions.java BuildProgramMenu.java \
-ResultsMenuBar.java SetUpMenuBar.java ShowResultSet.java \
-ShowSavedResults.java SwingWorker.java LaunchJalView.java
+pkgdata_DATA = AdvancedOptions.java ResultsMenuBar.java ShowResultSet.java \
+BuildProgramMenu.java SequenceData.java ShowSavedResults.java \
+LaunchJalView.java SequenceList.java SwingWorker.java \
+MemoryComboBox.java SetUpMenuBar.java  
 
 subdir = jemboss/org/emboss/jemboss/gui
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs

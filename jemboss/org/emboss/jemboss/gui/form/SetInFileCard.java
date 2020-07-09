@@ -28,6 +28,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 
+import org.emboss.jemboss.gui.SetUpMenuBar;
 import org.emboss.jemboss.gui.sequenceChooser.*;
 
 
@@ -157,6 +158,12 @@ public class SetInFileCard
       bdown[k] =  Box.createVerticalBox();
 
     fileChoose = new FileChooser(bdown[0],name);
+
+//find any default sequence in the user's SequenceList
+    String defaultSeq = SetUpMenuBar.seqList.getDefaultSequenceName();
+    if(defaultSeq != null)
+      fileChoose.setText(defaultSeq);
+   
 
 //sequence attibute options
     final JButton boption = new JButton("Input Sequence Options");

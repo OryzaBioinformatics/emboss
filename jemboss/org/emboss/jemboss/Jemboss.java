@@ -24,13 +24,14 @@ package org.emboss.jemboss;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
-
 import java.awt.event.*;
 import java.io.*;
 
+import java.security.Security; //ssl
+import java.net.*;
+
 import org.emboss.jemboss.gui.startup.*;    // splash window
 import org.emboss.jemboss.gui.filetree.*;   // local files
-import uk.ac.mrc.hgmp.embreo.*;             // SOAP settings
 import org.emboss.jemboss.gui.*;            // Jemboss graphics
 import org.emboss.jemboss.soap.*;           // results manager
 
@@ -48,34 +49,20 @@ public class Jemboss implements ActionListener
 // system properties
   private String fs = new String(System.getProperty("file.separator")); 
   private String ps = new String(System.getProperty("path.separator"));
-
-// path names
-  private String plplot;
-  private String embossData;
-  private String embossBin;
-  private String embossPath;
-  private String acdDirToParse;
-
   private String cwd = new String(
                        System.getProperty("user.dir") + fs);
-  private String homeDirectory = new String(
-                       System.getProperty("user.home") + fs);
 
 // Swing components
   private JFrame f;
   private JSplitPane pmain;
-  private JSplitPane ptree;
 
   private JPanel p3;
   public static DragTree tree;
   private JButton extend;
   private JScrollPane scrollTree;
 
-/** environment variables */
-  private String[] envp = new String[4];
-
 /** SOAP settings */
-  static EmbreoParams mysettings;
+  static JembossParams mysettings;
 
 /** true if in client-server mode (using SOAP) */
   static boolean withSoap;
@@ -98,20 +85,68 @@ public class Jemboss implements ActionListener
     bwdArrow = new ImageIcon(cl.getResource("images/Backward_arrow_button.gif"));
 
     AuthPopup splashing = null;
+    String embossBin = "";
+    String acdDirToParse = "";
+    String[] envp = new String[4];  /* environment vars */
+
     if(!withSoap)
     {
-      JembossParams jp = new JembossParams();
-      plplot = jp.getPlplot();
-      embossData = jp.getEmbossData();
-      embossBin = jp.getEmbossBin();
-      embossPath = jp.getEmbossPath();
-      acdDirToParse = jp.getAcdDirToParse();
+      String plplot = mysettings.getPlplot();
+      String embossData = mysettings.getEmbossData();
+      embossBin = mysettings.getEmbossBin();
+      String embossPath = mysettings.getEmbossPath();
+      acdDirToParse = mysettings.getAcdDirToParse();
       embossPath = new String("PATH" + ps +
-                               embossPath + ps);
+                      embossPath + ps + embossBin + ps);
       envp[0] = "PATH=" + embossPath;        
       envp[1] = "PLPLOT_LIB=" + plplot;
       envp[2] = "EMBOSS_DATA=" + embossData;
+
+      String homeDirectory = new String(
+                       System.getProperty("user.home") + fs);
+
       envp[3] = "HOME=" + homeDirectory;
+    }
+    else if(mysettings.getPublicSoapURL().startsWith("https"))
+    {
+      //SSL settings
+
+//    System.setProperty ("javax.net.debug", "all");
+      com.sun.net.ssl.internal.ssl.Provider p =
+                     new com.sun.net.ssl.internal.ssl.Provider();
+      Security.addProvider(p);
+
+      //have to do it this way to work with JNLP
+      URL.setURLStreamHandlerFactory( new URLStreamHandlerFactory()
+      {
+        public URLStreamHandler createURLStreamHandler(final String protocol)
+        {
+          if(protocol != null && protocol.compareTo("https") == 0)
+          {
+            return new com.sun.net.ssl.internal.www.protocol.https.Handler();
+          }
+          return null;
+        }
+      });
+//    System.setProperty("java.protocol.handler.pkgs",
+//                        "com.sun.net.ssl.internal.www.protocol");
+
+      //location of keystore
+      System.setProperty("javax.net.ssl.trustStore",
+                        "resources/client.keystore");
+
+      String jembossClientKeyStore = System.getProperty("user.home") + 
+                       fs + ".jembossClientKeystore";
+
+      try
+      {
+        new JembossJarUtil("resources/client.jar").writeByteFile(
+                     "client.keystore",jembossClientKeyStore);
+        System.setProperty("javax.net.ssl.trustStore",
+                            jembossClientKeyStore);
+      }
+      catch(Exception exp){}
+
     }
 
     f = new JFrame("Jemboss");
@@ -268,7 +303,7 @@ public class Jemboss implements ActionListener
   {
     
     // initialize settings
-    mysettings = new EmbreoParams("jemboss");
+    mysettings = new JembossParams();
 
     if(args.length > 0)
     {

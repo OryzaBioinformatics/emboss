@@ -65,12 +65,14 @@ CPP = @CPP@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
+EMBOSS_TOP = @EMBOSS_TOP@
 EXEEXT = @EXEEXT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 ISAIXIA64 = @ISAIXIA64@
 JAVA_OK = @JAVA_OK@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
+NEEDAJAX = @NEEDAJAX@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
@@ -86,12 +88,13 @@ am__include = @am__include@
 am__quote = @am__quote@
 havejavac = @havejavac@
 install_sh = @install_sh@
+
 pkgdatadir = $(prefix)/share/$(PACKAGE)/jemboss/org/emboss/jemboss/parser
 
 SUBDIRS = acd
 
-pkgdata_DATA = AcdFunResolve.java AcdVarResolve.java Ajax.java \
-Dependent.java ParseAcd.java
+pkgdata_DATA = AcdFunResolve.java  AcdVariableResolve.java  AcdVarResolve.java \
+Ajax.java  AjaxUtil.java  Dependent.java  ParseAcd.java
 
 subdir = jemboss/org/emboss/jemboss/parser
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs

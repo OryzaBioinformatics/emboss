@@ -27,7 +27,8 @@ package org.emboss.jemboss.programs;
 
 import java.io.*;
 import java.util.Hashtable;
-import uk.ac.mrc.hgmp.embreo.*;
+
+import org.emboss.jemboss.soap.MakeFileSafe;
 
 
 public class ListFile 
@@ -50,11 +51,11 @@ public class ListFile
     if((inFile.exists() && inFile.canRead() && inFile.isFile()) 
         || fn.startsWith("internalList::")) 
     {
-      EmbreoMakeFileSafe sf;
+      MakeFileSafe sf;
       String sfs = new String("internalList");  //default name1
       if(inFile.exists())
       {
-        sf = new EmbreoMakeFileSafe(lfn);
+        sf = new MakeFileSafe(lfn);
         sfs = sf.getSafeFileName();
       }
 
@@ -80,7 +81,7 @@ public class ListFile
 	      
             if((new File(lfn)).exists()) 
             {
-              EmbreoMakeFileSafe lf = new EmbreoMakeFileSafe(lfn);
+              MakeFileSafe lf = new MakeFileSafe(lfn);
 	      String slf = lf.getSafeFileName();
 
 	      if(!filesToMove.containsKey(slf)) 
@@ -97,7 +98,7 @@ public class ListFile
 	    File pFile = new File(line);
             if(pFile.exists() && pFile.canRead() && pFile.isFile()) 
             {
-	      EmbreoMakeFileSafe pf = new EmbreoMakeFileSafe(line);
+	      MakeFileSafe pf = new MakeFileSafe(line);
 	      String spf = pf.getSafeFileName();
 	      // only read if we haven't already
 	      if(!filesToMove.containsKey(spf)) 

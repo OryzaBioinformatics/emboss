@@ -19,13 +19,10 @@
 *
 ********************************************************************/
 
-
 package org.emboss.jemboss.gui;
-
 
 import org.emboss.jemboss.*;
 import org.emboss.jemboss.soap.*;
-import uk.ac.mrc.hgmp.embreo.*;
 import org.emboss.jemboss.gui.filetree.*;
 
 import java.net.URL;
@@ -44,20 +41,20 @@ import java.awt.event.*;
 public class SetUpMenuBar
 {
 
-// cursors to show when we're at work
-  final Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
-  final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
+  public static SequenceList seqList;
 
-
-  public SetUpMenuBar(final EmbreoParams mysettings, final JFrame f,
+  public SetUpMenuBar(final JembossParams mysettings, final JFrame f,
                       final String envp[], final String cwd,
                       final boolean withSoap)
   {
 
+    // cursors to show when we're at work
+    final Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
+    final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
 
     JMenuBar menuPanel = new JMenuBar();
     new BoxLayout(menuPanel,BoxLayout.X_AXIS);
-    menuPanel.add(Box.createRigidArea(new Dimension(5,30))); 
+    menuPanel.add(Box.createRigidArea(new Dimension(5,24))); 
 
     JMenu fileMenu = new JMenu("File");
     fileMenu.setMnemonic(KeyEvent.VK_F);
@@ -102,6 +99,10 @@ public class SetUpMenuBar
     {
       public void actionPerformed(ActionEvent e) 
       {
+
+        if(seqList.isStoreSequenceList())  //create a SequenceList file
+          saveSequenceList();
+
         deleteTmp(new File(cwd), ".jembosstmp");
         System.exit(0);
       }
@@ -176,8 +177,19 @@ public class SetUpMenuBar
       }
     });
     toolMenu.add(toolJalview);
-//  menuPanel.add(Box.createHorizontalStrut(5));
-    menuPanel.add(toolMenu); 
+    toolMenu.addSeparator();
+
+    JMenuItem toolWorkList = new JMenuItem("Sequence List");
+    seqList = new SequenceList(withSoap,mysettings);
+    toolWorkList.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        seqList.setVisible(true); 
+      }
+    });
+    toolMenu.add(toolWorkList);
+    menuPanel.add(toolMenu);
 
     JMenu helpMenu = new JMenu("Help");
     helpMenu.setMnemonic(KeyEvent.VK_H);
@@ -243,8 +255,6 @@ public class SetUpMenuBar
     });
     helpMenu.add(helpMenuAbout);
 
-//  menuPanel.add(Box.createHorizontalStrut((int)(Jemboss.jdim.getWidth()-195)));
-
     menuPanel.add(helpMenu);
     menuPanel.add(Box.createHorizontalGlue());
 
@@ -275,6 +285,42 @@ public class SetUpMenuBar
     }
   }
 
+/**
+*
+* Save the sequence list for a future session.
+*
+*/
+  public static void saveSequenceList()
+  {
+    File fseq = new File(System.getProperty("user.home")
+                + System.getProperty("file.separator")
+                + ".jembossSeqList");
+    try
+    {
+      PrintWriter fout = new PrintWriter(new FileWriter(fseq));
+
+      for(int i=0;i<seqList.getRowCount();i++)
+      {
+        SequenceData seqData = seqList.getSequenceData(i);
+        String sbeg = seqData.s_beg;
+        if(sbeg.equals(""))
+          sbeg = "-";
+        String send = seqData.s_end;
+        if(send.equals(""))
+          send = "-";
+
+        if(!seqData.s_name.equals(""))
+          fout.println(seqData.s_name + " " +
+                     sbeg + " " + send + " " +
+                     seqData.s_listFile.toString()+ " " +
+                     seqData.s_default.toString() + " " +
+                     seqData.s_remote.toString() );
+      }
+      fout.close();
+    }
+    catch (IOException ioe){}
+
+  }
 
 }
 

@@ -33,11 +33,7 @@ import java.util.*;
 
 import org.emboss.jemboss.gui.ResultsMenuBar;
 import org.emboss.jemboss.soap.*;
-import uk.ac.mrc.hgmp.embreo.EmbreoParams;
-import uk.ac.mrc.hgmp.embreo.EmbreoAuthException;
-import uk.ac.mrc.hgmp.embreo.filemgr.EmbreoFileRoots;
-import uk.ac.mrc.hgmp.embreo.filemgr.EmbreoFileRequest;
-import uk.ac.mrc.hgmp.embreo.filemgr.EmbreoFileGet;
+import org.emboss.jemboss.JembossParams;
 import org.apache.soap.rpc.*;
 
 /**
@@ -45,20 +41,20 @@ import org.apache.soap.rpc.*;
 * Creates a remote file tree which is a drag source & sink
 *
 */
-class RemoteDragTree extends JTree implements DragGestureListener,
+public class RemoteDragTree extends JTree implements DragGestureListener,
                            DragSourceListener, DropTargetListener 
 {
 
   public static DefaultTreeModel model;
-  private EmbreoParams mysettings; 
-  private EmbreoFileRoots froots;
+  private static JembossParams mysettings; 
+  private static FileRoots froots;
 
   private String fs = new String(System.getProperty("file.separator"));
   final Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
   final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
 
 
-  public RemoteDragTree(EmbreoParams mysettings, EmbreoFileRoots froots,
+  public RemoteDragTree(JembossParams mysettings, FileRoots froots,
                         final JPanel viewPane) 
   {
 
@@ -193,7 +189,7 @@ class RemoteDragTree extends JTree implements DragGestureListener,
                               dropDest, null));
             params.addElement(new Parameter("filedata", fileData.getClass(),
                               fileData, null));
-            EmbreoFileRequest gReq = new EmbreoFileRequest(mysettings,"put_file",params);
+            PrivateRequest gReq = new PrivateRequest(mysettings,"EmbreoFile","put_file",params);
             System.out.println("DROPPED - SUCCESS!!!");
 
             //add file to remote file tree
@@ -361,10 +357,8 @@ class RemoteDragTree extends JTree implements DragGestureListener,
 * @param the file name
 *
 */
-  public void showFilePane(String filename)
+  public static void showFilePane(String filename)
   {
-    setCursor(cbusy);
-
     try
     {
       JFrame ffile = new JFrame(filename);
@@ -373,8 +367,16 @@ class RemoteDragTree extends JTree implements DragGestureListener,
       JPanel pscroll = new JPanel(new BorderLayout());
       JScrollPane rscroll = new JScrollPane(pscroll);
 
-      EmbreoFileGet efg = new EmbreoFileGet(mysettings, froots.getCurrentRoot(),filename);
-      FileEditorDisplay fed = new FileEditorDisplay(ffile,filename,efg.contents());
+      Vector params = new Vector();
+      String options= "fileroot=" + froots.getCurrentRoot();
+      params.addElement(new Parameter("options", String.class,
+                                       options, null));
+      params.addElement(new Parameter("filename", String.class,
+                                       filename, null));
+      PrivateRequest gReq = new PrivateRequest(mysettings,"EmbreoFile",
+                                                    "get_file",params);
+      FileEditorDisplay fed = new FileEditorDisplay(ffile,filename,
+                                   gReq.getHash().get("contents"));
       new ResultsMenuBar(ffile,fed);
       pfile.add(rscroll, BorderLayout.CENTER);
       JTextPane seqText = fed.getJTextPane();
@@ -383,11 +385,8 @@ class RemoteDragTree extends JTree implements DragGestureListener,
       ffile.setSize(450,400);
       ffile.setVisible(true);
     }
-    catch(EmbreoAuthException eae)
-    {
-      setCursor(cdone);
-    }
-    setCursor(cdone);
+    catch(JembossSoapException eae){}
+    
   }
 
 
