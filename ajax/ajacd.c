@@ -304,9 +304,9 @@ static AjBool acdAttrToStr (AcdPAcd thys,
 			    char *attr, char* defval, AjPStr *result);
 static AjBool acdQualToBool (AcdPAcd thys, char *qual, 
 			     AjBool defval, AjBool *result, AjPStr* valstr);
-/*static AjBool acdQualToFloat (AcdPAcd thys, char *qual,
+static AjBool acdQualToFloat (AcdPAcd thys, char *qual,
 			      float defval, ajint precision,
-			      float *result, AjPStr* valstr);*/
+			      float *result, AjPStr* valstr);
 static AjBool acdQualToInt (AcdPAcd thys, char *qual,
 			      ajint defval, ajint *result, AjPStr* valstr);
 static AjBool acdQualToSeqbegin (AcdPAcd thys, char *qual,
@@ -759,6 +759,13 @@ typedef struct AcdSKey
   AcdPAttr Attr;		/* type-specific attributes */
   void (*Set)(AcdPAcd thys);	/* function to set value and prompt user */
 } AcdOKey, *AcdPKey;
+
+/* @funclist acdKeywords ******************************************************
+**
+** Processing predefined ACD keywords (application, variable, section,
+** endsection)
+**
+******************************************************************************/
 
 AcdOKey acdKeywords[] =
 {

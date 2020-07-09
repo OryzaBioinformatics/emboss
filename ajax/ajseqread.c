@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 #include "ajax.h"
+#include "limits.h"
 
 static ajint seqMaxGcglines = 5000;
 static AjPRegexp qrywildexp = 0;
@@ -94,6 +95,15 @@ static AjBool     seqReadNexus (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadNexusnon (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadPhylip (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadRaw (AjPSeq thys, AjPSeqin seqin);
+static AjBool     seqReadSelex(AjPSeq thys, AjPSeqin seqin);
+static void       seqSelexAppend(AjPStr src, AjPStr *dest, ajint beg,
+				 ajint end);
+static void       seqSelexCopy(AjPSeq *thys, AjPSeqin seqin, ajint n);
+static AjBool     seqSelexHeader(AjPSelex *thys, AjPStr line, ajint n,
+				 AjBool *named, ajint *sqcnt);
+static void       seqSelexPos(AjPStr line, ajint *begin, ajint *end);
+static AjBool     seqSelexReadBlock(AjPSelex *thys, AjBool *named, ajint n,
+				    AjPStr *line, AjPFileBuff buff);
 static AjBool     seqReadStaden (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadStrider (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadSwiss (AjPSeq thys, AjPSeqin seqin);
@@ -120,11 +130,13 @@ static SeqOInFormat seqInFormatDef[] = { /* AJFALSE = ignore (duplicates) */
   {"em",         AJFALSE, seqReadEmbl},	/* alias for embl */
   {"swiss",      AJTRUE,  seqReadSwiss},
   {"sw",         AJFALSE, seqReadSwiss}, /* alias for swiss */
+  {"swissprot",  AJTRUE,  seqReadSwiss},
   {"ncbi",       AJTRUE,  seqReadNcbi},
   {"fasta",      AJTRUE,  seqReadFasta},
   {"pearson",    AJFALSE, seqReadFasta}, /* alias for fasta */
   {"genbank",    AJTRUE,  seqReadGenbank},
   {"gb",         AJFALSE, seqReadGenbank}, /* alias for genbank */
+  {"ddbj",       AJFALSE, seqReadGenbank}, /* alias for genbank */
   {"nbrf",       AJTRUE,  seqReadNbrf},
   {"pir",        AJFALSE, seqReadNbrf},	/* alias for nbrf */
   {"codata",     AJTRUE,  seqReadCodata},
@@ -152,6 +164,7 @@ static SeqOInFormat seqInFormatDef[] = { /* AJFALSE = ignore (duplicates) */
   {"plain",      AJFALSE, seqReadText},	/* alias for text */
   {"abi",        AJTRUE,  seqReadAbi},
   {"gff",        AJTRUE,  seqReadGff},
+  {"selex",      AJTRUE,  seqReadSelex},
   {"raw",        AJTRUE,  seqReadRaw}, /* OK - only sequence chars allowed */
   {NULL, 0, NULL}
 };
@@ -265,7 +278,7 @@ void ajSeqinDel (AjPSeqin* pthis)
     ajStrDel(&thys->Filename);
     ajStrDel(&thys->Entryname);
     ajStrDel(&thys->Inseq);
-
+    ajSelexDel(&thys->Selex);
     ajSeqQueryDel(&thys->Query);
 
     ajFileBuffDel(&thys->Filebuff);
@@ -1549,6 +1562,502 @@ static AjBool seqReadNcbi (AjPSeq thys, AjPSeqin seqin)
 
     return ajTrue;
 }
+
+
+/* @func ajSeqReadSelex ************************************************
+**
+** Read a Selex file. (temporary)
+**
+** @param [r] inf [AjPFile] Selex input file
+** @param [w] outf [AjPFile] Output file
+** @return [AjBool] ajTrue if success
+** @@
+******************************************************************************/
+
+static AjBool seqReadSelex(AjPSeq thys, AjPSeqin seqin)
+{
+    AjPFileBuff buff  = seqin->Filebuff;
+    AjPStr      line  = NULL;
+    AjPSelex    selex;
+    ajint       n     = 0;
+    char        *p    = NULL;
+    AjBool      ok    = ajFalse;
+    AjBool      isseq = ajFalse;
+    AjBool      named  = ajFalse;
+    AjBool      head   = ajTrue;
+    ajint       sqcnt  = 0;
+    ajint       i;
+    char        c='\0';
+    AjBool      first=ajTrue;
+    
+    line = ajStrNew();
+
+    
+    if(!seqin->Selex)
+    {
+	ajFileBuffClear(buff,-1);
+	ajFileBuffReset(buff);
+	buff->Fpos = 0;
+	ajFileSeek(buff->File, 0L, 0);
+
+	/* First count the sequences, and get any header information */
+	while(!isseq && (ok=ajFileBuffGet(buff,&line)))
+	{
+	    if(first)
+	    {
+		first=ajFalse;
+		if(!ajStrPrefixC(line,"#="))
+		{
+		    ajStrDel(&line);
+		    ajFileBuffReset(buff);
+		    return ajFalse;
+		}
+	    }
+	    ajStrClean(&line);
+	    p = ajStrStr(line);
+	    if(!*p || *p=='#')
+		continue;
+	    else
+		isseq = ajTrue;
+	}
+	if(!ok && !isseq)
+	    return ajFalse;
+	++n;
+
+	ok = ajTrue;
+	while(ok && ajFileBuffGet(buff,&line))
+	{
+	    ajStrClean(&line);
+	    p = ajStrStr(line);
+	    if(*p=='#')
+		continue;
+	    if(!*p)
+		ok = ajFalse;
+	    else
+		++n;
+	}
+
+	ajFileBuffClear(buff,-1);
+	ajFileBuffReset(buff);
+	buff->Fpos = 0;
+	ajFileSeek(buff->File, 0L, 0);
+	selex = ajSelexNew(n);
+    
+	while(head && ajFileBuffGet(buff,&line))
+	{
+	    if(ajStrPrefixC(line,"#=RF") ||ajStrPrefixC(line,"#=CS"))
+		break;
+	    
+	    if(ajStrPrefixC(line,"#="))
+	    {
+		head=seqSelexHeader(&selex,line,n,&named,&sqcnt);
+		continue;
+	    }
+	    c = *ajStrStr(line);
+	    if(c>='0')
+		head = ajFalse;
+	}
+
+	/* Should now be at start of first block, whether RF or sequence */
+	ajDebug("First Block Line: %S",line);
+	
+	ok = ajTrue;
+	while(ok)
+	{
+	    seqSelexReadBlock(&selex,&named,n,&line,buff);
+	    ok = ajFileBuffGet(buff,&line);
+	}
+	seqin->Selex = selex;
+    }
+
+
+    /* At this point the Selex structure is fully loaded */
+    if(seqin->Selex->Count >= seqin->Selex->n)
+    {
+	ajStrDel(&line);
+	return ajFalse;
+    }
+
+    i = seqin->Selex->Count;
+    
+    seqSelexCopy(&thys,seqin,i);
+
+    ++seqin->Selex->Count;
+
+    ajFileBuffClear(buff,0);
+    
+    ajStrDel(&line);
+    return ajTrue;
+}
+
+
+
+/* @funcstatic seqSelexCopy ************************************************
+**
+** Copy Selex data to sequence object.
+** Pad with gaps to make lengths equal.
+**
+** @param [w] thys [AjPSeq*] sequence object
+** @param [r] seqin [AjPSeqin] seqin containing selex info
+** @param [r] n [ajint] index into selex object
+** @return [void]
+** @@
+******************************************************************************/
+
+static void seqSelexCopy(AjPSeq *thys, AjPSeqin seqin, ajint n)
+{
+    AjPSeq pthis   = *thys;
+    AjPSelex selex = seqin->Selex;
+    AjPSelexdata sdata;
+    
+    ajStrAssS(&pthis->Seq, selex->str[n]);
+    ajStrAssS(&pthis->Name, selex->name[n]);
+    pthis->Weight = selex->sq[n]->wt;
+
+    if(!(*thys)->Selexdata)
+	(*thys)->Selexdata = ajSelexdataNew();
+    
+    sdata = (*thys)->Selexdata;
+
+    ajStrAssS(&sdata->id,selex->id);
+    ajStrAssS(&sdata->ac,selex->ac);
+    ajStrAssS(&sdata->de,selex->de);
+    ajStrAssS(&sdata->au,selex->au);
+    ajStrAssS(&sdata->cs,selex->cs);
+    ajStrAssS(&sdata->rf,selex->rf);
+    ajStrAssS(&sdata->name,selex->name[n]);
+    ajStrAssS(&sdata->str,selex->str[n]);
+    ajStrAssS(&sdata->ss,selex->ss[n]);
+
+    sdata->ga[0] = selex->ga[0];
+    sdata->ga[1] = selex->ga[1];
+    sdata->tc[0] = selex->tc[0];
+    sdata->tc[1] = selex->tc[1];
+    sdata->nc[0] = selex->nc[0];
+    sdata->nc[1] = selex->nc[1];
+
+    ajStrAssS(&sdata->sq->name,selex->sq[n]->name);
+
+    ajStrAssS(&sdata->sq->ac,selex->sq[n]->ac);
+    ajStrAssS(&sdata->sq->source,selex->sq[n]->source);
+    ajStrAssS(&sdata->sq->de,selex->sq[n]->de);
+
+    sdata->sq->wt    = selex->sq[n]->wt;
+    sdata->sq->start = selex->sq[n]->start;
+    sdata->sq->stop  = selex->sq[n]->stop;
+    sdata->sq->len   = selex->sq[n]->len;
+
+    return;
+}
+
+
+/* @funcstatic seqSelexAppend ************************************************
+**
+** Append sequence and related Selex info to selex object.
+** Pad with gaps to make lengths equal.
+**
+** @param [r] src [AjPStr] source line from Selex file
+** @param [w] dest [AjPStr*] Destination in Selex object
+** @param [r] beg  [ajint] start of info in src
+** @param [r] end  [ajint] end of info in src
+** @return [void]
+** @@
+******************************************************************************/
+
+static void seqSelexAppend(AjPStr src, AjPStr *dest, ajint beg, ajint end)
+{
+    char *p=NULL;
+    char c;
+    ajint len;
+    ajint i;
+    ajint pad=0;
+
+    len = end-beg+1;
+    p = ajStrStr(src);
+
+    if(beg>=ajStrLen(src))
+    {
+	for(i=0;i<len;++i)
+	    ajStrAppK(dest,'-');
+	return;
+    }
+
+    p += beg;
+    pad = end - ajStrLen(src) + 2;
+    
+    while((c=*p) && *p!='\n')
+    {
+	if(c=='.' || c=='_' || c==' ')
+	    c='-';
+	ajStrAppK(dest,c);
+	++p;
+    }
+
+    for(i=0;i<pad;++i)
+	ajStrAppK(dest,'-');
+
+    return;
+}
+
+
+/* @funcstatic seqSelexHeader ************************************************
+**
+** Load a Selex object with header information for a single line
+**
+** @param [w] thys [AjPSelex*] Selex object
+** @param [r] line [AjPStr] Selex header line
+** @param [r] n  [ajint] Number of sequences in Selex file
+** @param [w] named  [AjBool*] Whether names of sequences have been read
+** @param [w] sqcnt  [ajint*] Number of SQ names read
+** @return [AjBool] ajTrue if the line contained header information
+** @@
+******************************************************************************/
+
+static AjBool seqSelexHeader(AjPSelex *thys, AjPStr line, ajint n,
+			     AjBool *named, ajint *sqcnt)
+{
+    AjPSelex pthis = *thys;
+    AjPStrTok token=NULL;
+    AjPStr handle=NULL;
+
+    if(ajStrPrefixC(line,"#=ID"))
+    {
+	ajFmtScanS(line,"#=ID %S",&pthis->id);
+	return ajTrue;
+    }
+    else if(ajStrPrefixC(line,"#=AC"))
+    {
+	ajFmtScanS(line,"#=AC %S",&pthis->ac);
+	return ajTrue;
+    }
+    else if(ajStrPrefixC(line,"#=DE"))
+    {
+	ajStrAssC(&pthis->de,ajStrStr(line)+5);
+	ajStrClean(&pthis->de);
+	return ajTrue;
+    }
+    else if(ajStrPrefixC(line,"#=AU"))
+    {
+	ajStrAssC(&pthis->au,ajStrStr(line)+5);
+	ajStrClean(&pthis->au);
+	return ajTrue;
+    }
+    else if(ajStrPrefixC(line,"#=GA"))
+    {
+	ajFmtScanS(line,"%*s %f %f",&pthis->ga[0],&pthis->ga[1]);
+	return ajTrue;
+    }
+    else if(ajStrPrefixC(line,"#=TC"))
+    {
+	ajFmtScanS(line,"%*s %f %f",&pthis->tc[0],&pthis->tc[1]);
+	return ajTrue;
+    }
+    else if(ajStrPrefixC(line,"#=NC"))
+    {
+	ajFmtScanS(line,"%*s %f %f",&pthis->nc[0],&pthis->nc[1]);
+	return ajTrue;
+    }
+    else if(ajStrPrefixC(line,"#=SQ"))
+    {
+	handle = ajStrNew();
+	token = ajStrTokenInit(line," \t\n");
+	ajStrToken(&handle,&token,NULL);
+	
+	ajStrToken(&pthis->sq[*sqcnt]->name,&token,NULL);
+	ajStrAssS(&pthis->name[*sqcnt],pthis->sq[*sqcnt]->name);
+	
+	ajStrToken(&handle,&token,NULL);
+	ajStrToFloat(handle,&pthis->sq[*sqcnt]->wt);
+
+	ajStrToken(&handle,&token,NULL);
+	ajStrAssS(&pthis->sq[*sqcnt]->source,handle);
+
+	ajStrToken(&handle,&token,NULL);
+	ajStrAssS(&pthis->sq[*sqcnt]->ac,handle);
+
+	ajStrToken(&handle,&token,NULL);
+	ajFmtScanS(handle,"%d..%d:%d",&pthis->sq[*sqcnt]->start,
+		   &pthis->sq[*sqcnt]->stop,&pthis->sq[*sqcnt]->len);
+
+	ajStrToken(&handle,&token,"\n");
+	ajStrAssS(&pthis->sq[*sqcnt]->de,handle);
+
+	ajStrTokenClear(&token);
+	ajStrDel(&handle);
+	*named = ajTrue;
+	++(*sqcnt);
+	return ajTrue;
+    }
+    
+
+    return ajFalse;
+}
+
+
+/* @funcstatic seqSelexPos ************************************************
+**
+** Find start and end positions of sequence & related Selex information
+**
+** @param [r] line [AjPStr] Selex sequence or related line
+** @param [w] begin  [ajint*] start pos
+** @param [w] end  [ajint*] end pos
+** @return [void]
+** @@
+******************************************************************************/
+
+static void seqSelexPos(AjPStr line, ajint *begin, ajint *end)
+{
+    ajint pos = 0;
+    ajint len   = 0;
+    
+    char  *p;
+
+    /*
+     *  Selex sequence info can start any number of spaces
+     *  after the names so we need to find out where to
+     *  start counting chars from and where to end
+     */
+    len = ajStrLen(line) - 1;
+    pos = len -1;
+    *end = (pos > *end) ? pos : *end;
+    p = ajStrStr(line);
+
+    while(*p && *p!=' ')
+	++p;
+    while(*p && *p==' ')
+	++p;
+    if(p)
+	pos = p - ajStrStr(line);
+    *begin = (pos < *begin) ? pos : *begin;
+
+    
+    return;
+}
+
+
+/* @funcstatic seqSelexReadBlock **********************************************
+**
+** Read a block of sequence information from a selex file
+**
+** @param [w] thys [AjPSelex*] Selex object
+** @param [w] named  [AjBool*] Whether names of sequences have been read
+** @param [r] n  [ajint] Number of sequences in Selex file
+** @param [rw] line [AjPStr*] Line from Selex file
+** @param [r] buff  [AjPFileBuff] Selex file buffer
+** @return [AjBool] ajTrue if success
+** @@
+******************************************************************************/
+
+static AjBool seqSelexReadBlock(AjPSelex *thys, AjBool *named, ajint n,
+				AjPStr *line, AjPFileBuff buff)
+{
+    AjPSelex pthis = *thys;
+    AjPStr *seqs=NULL;
+    AjPStr *ss=NULL;
+    
+    AjPStr rf=NULL;
+    AjPStr cs=NULL;
+    ajint  i;
+    ajint  begin;
+    ajint  end;
+    AjBool ok;
+    ajint  cnt;
+    AjPStr tmp=NULL;
+    AjBool haverf=ajFalse;
+    AjBool havecs=ajFalse;
+    AjBool havess=ajFalse;
+
+    begin = INT_MAX;
+    end   = -(INT_MAX);
+
+    tmp = ajStrNew();
+    rf = ajStrNew();
+    cs = ajStrNew();
+    AJCNEW(seqs,n);
+    AJCNEW(ss,n);
+    for(i=0;i<n;++i)
+    {
+	seqs[i] = ajStrNew();
+	ss[i]  = ajStrNew();
+    }
+    
+    ok = ajTrue;
+    cnt = 0;
+    
+    while(ok)
+    {
+	seqSelexPos(*line,&begin,&end);
+	if(ajStrPrefixC(*line,"#=RF"))
+	{
+	    haverf=ajTrue;
+	    ajStrAssS(&rf,*line);
+	}
+	if(ajStrPrefixC(*line,"#=CS"))
+	{
+	    havecs=ajTrue;
+	    ajStrAssS(&cs,*line);
+	}
+	if(ajStrPrefixC(*line,"#=SS"))
+	{
+	    havess=ajTrue;
+	    ajStrAssS(&ss[--cnt],*line);
+	    ++cnt;
+	}
+
+	if(!ajStrPrefixC(*line,"#"))
+	{
+	    if(!*named)
+	    {
+		ajFmtScanS(*line,"%S",&pthis->name[cnt]);
+		ajStrAssS(&pthis->sq[cnt]->name,pthis->name[cnt]);
+	    }
+	    else
+	    {
+		ajFmtScanS(*line,"%S",&tmp);
+		if(!ajStrPrefix(pthis->name[cnt],tmp))
+		    ajWarn("Sequence names do not match [%S %S]",
+			   pthis->name[cnt],tmp);
+	    }
+	    
+	    ajStrAssS(&seqs[cnt],*line);
+	    ++cnt;
+	}
+
+	ok = ajFileBuffGet(buff,line);
+	if(ajStrPrefixC(*line,"\n"))
+	    ok = ajFalse;
+    }
+    
+
+    if(haverf)
+	seqSelexAppend(rf,&pthis->rf,begin,end);
+    if(havecs)
+	seqSelexAppend(cs,&pthis->cs,begin,end);
+    for(i=0;i<n;++i)
+    {
+	seqSelexAppend(seqs[i],&pthis->str[i],begin,end);
+	if(havess)
+	    seqSelexAppend(ss[i],&pthis->ss[i],begin,end);
+    }
+    
+
+    for(i=0;i<n;++i)
+    {
+	ajStrDel(&seqs[i]);
+	ajStrDel(&ss[i]);
+    }
+    AJFREE(seqs);
+    AJFREE(ss);
+
+    ajStrDel(&rf);
+    ajStrDel(&cs);
+    ajStrDel(&tmp);
+
+    *named = ajTrue;
+    
+    return ajTrue;
+}
+
 
 /* @funcstatic seqReadStaden **************************************************
 **

@@ -57,6 +57,7 @@ AjPFeature    ajFeatNewProt (AjPFeattable thys,
 			     ajint Start, ajint End,  float score);
 AjPFeattable  ajFeatRead  ( AjPFeattabIn  ftin ) ;
 AjBool        ajFeatSetDesc (AjPFeature thys, AjPStr desc);
+AjBool        ajFeatSetDescApp (AjPFeature thys, AjPStr desc);
 ajint         ajFeatSize (AjPFeattable thys);
 void          ajFeatSortByEnd(AjPFeattable Feattab);
 void          ajFeatSortByStart(AjPFeattable Feattab);
@@ -87,10 +88,12 @@ AjPFeattabIn  ajFeattabInNewSS (AjPStr fmt, AjPStr name, char* type);
 AjPFeattabIn  ajFeattabInNewSSF (AjPStr fmt, AjPStr name, char* type,
 				 AjPFileBuff buff);
 void          ajFeattabOutDel( AjPFeattabOut* pthis);
+AjBool        ajFeattabOutIsOpen (AjPFeattabOut thys);
 AjPFeattabOut ajFeattabOutNew (void);
 AjPFeattabOut ajFeattabOutNewSSF (AjPStr fmt, AjPStr name, char* type,
 				  AjPFile buff);
 AjBool        ajFeattabOutOpen (AjPFeattabOut thys, AjPStr ufo);
+AjBool        ajFeattabOutSet (AjPFeattabOut thys, AjPStr ufo);
 AjPFeattable  ajFeattabRead  ( AjPFeattabIn  ftin ) ; 
 void          ajFeatTagAdd (AjPFeature thys, AjPStr tag, AjPStr value);
 AjIList       ajFeatTagIter (AjPFeature thys);

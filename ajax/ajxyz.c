@@ -882,9 +882,12 @@ void ajXyzVdwallDel(AjPVdwall *pthis)
 ******************************************************************************/
 void ajXyzCmapDel(AjPCmap *pthis)
 {
-    ajStrDel(&(*pthis)->Id);
-    ajInt2dDel(&(*pthis)->Mat);
-    AJFREE(*pthis);    
+    if((*pthis)->Id)
+	ajStrDel(&(*pthis)->Id);
+    if((*pthis)->Mat)
+	ajInt2dDel(&(*pthis)->Mat);
+    if((*pthis))
+	AJFREE(*pthis);    
     *pthis=NULL;
 
     return;
@@ -997,18 +1000,32 @@ void     ajXyzHitDel(AjPHit *pthis)
 void ajXyzHitlistDel(AjPHitlist *pthis)
 {
     int x=0;  /* Counter */
+
+    if(!(*pthis))
+    {
+	ajWarn("Null pointer passed to ajXyzHitlistDel");
+	return;
+    }
     
-    ajStrDel(&(*pthis)->Class);
-    ajStrDel(&(*pthis)->Fold);
-    ajStrDel(&(*pthis)->Superfamily);
-    ajStrDel(&(*pthis)->Family);
+    if((*pthis)->Class)
+	ajStrDel(&(*pthis)->Class);
+    if((*pthis)->Fold)
+	ajStrDel(&(*pthis)->Fold);
+    if((*pthis)->Superfamily)
+	ajStrDel(&(*pthis)->Superfamily);
+    if((*pthis)->Family)
+	ajStrDel(&(*pthis)->Family);
     
     for(x=0;x<(*pthis)->N; x++)
-	ajXyzHitDel(&(*pthis)->hits[x]);
+	if((*pthis)->hits[x])
+	    ajXyzHitDel(&(*pthis)->hits[x]);
 
-    AJFREE((*pthis)->hits);
+    if((*pthis)->hits)
+	AJFREE((*pthis)->hits);
     
-    AJFREE(*pthis);
+    if(*pthis)
+	AJFREE(*pthis);
+    
     *pthis=NULL;
     
     return;
@@ -1964,8 +1981,6 @@ AjBool        ajXyzSignatureAlignWrite(AjPFile outf, AjPSignature sig,
     ajFmtPrintF(outf,"XX\n");
     
 
-    printf("hits: %d\n", hits->N);
-    
 
     /*Main loop for printing alignment*/
     for(num=0, idx=0, y=0;y<niter;y++)
@@ -2097,7 +2112,8 @@ AjBool        ajXyzSignatureHitsWrite(AjPFile outf, AjPSignature sig,
 AjBool ajXyzSignatureAlignSeqall(AjPSignature sig, AjPSeqall db, ajint n, 
 				 AjPHitlist *hits, ajint nterm)
 {
-    ajint        nhits =0;       /* Counter of number of hits */
+    ajint        nhits=0;        /* Number of hits written to Hitlist object*/
+    ajint        hitcnt=0;       /* Counter of number of hits */
     AjPHit       hit =NULL;	 /* The current hit */    
     AjPHit       ptr=NULL;	 /* Temp. pointer to hit structure */    
     AjPSeq       seq=NULL;       /* The current protein sequence from db */ 
@@ -2112,16 +2128,11 @@ AjBool ajXyzSignatureAlignSeqall(AjPSignature sig, AjPSeqall db, ajint n,
 	return ajFalse;
     }
     
-    printf("1\n");
-    fflush(stdout);
-    
 
     /* Memory allocation*/
     listhits = ajListNew();
 /*    seq=ajSeqNew();    */
 
-printf("2\n");
-    fflush(stdout);
 
     /*Initialise Hitlist object with SCOP records from Signature*/
     ajStrAss(&(*hits)->Class, sig->Class);
@@ -2130,22 +2141,12 @@ printf("2\n");
     ajStrAss(&(*hits)->Family, sig->Family);
 
         
-printf("3\n");
-    fflush(stdout);
-
     /*Search the database*/
     while(ajSeqallNext(db,&seq))
     {
-
-printf("4\n");
-    fflush(stdout);
-
 	/* Allocate memory for hit */
 	hit=ajXyzHitNew();
 	
-
-printf("5\n");
-    fflush(stdout);
 
 	if(!ajXyzSignatureAlignSeq(sig, seq, &hit, nterm))
 	{	
@@ -2153,59 +2154,34 @@ printf("5\n");
 	    continue;
 	}
 	else
-	    nhits++;
+	    hitcnt++;
 	
-
-printf("6\n");
-    fflush(stdout);
 
 	/* Push hit onto list */
 	ajListPush(listhits,(AjPHit) hit);
 	
 
-printf("7\n");
-    fflush(stdout);
-
-	if(nhits>n)
+	if(hitcnt>n)
 	{	
-
-printf("8\n");
-    fflush(stdout);
-
 	    /* Sort list according to score, highest first*/
 	    ajListSort(listhits, ajXyzCompScore);
 	 
-printf("9\n");
-    fflush(stdout);   
 
 	    /* Pop the hit (lowest scoring) from the bottom of the list */
 	    ajListPopEnd(listhits, (void *) &ptr);
 	    ajXyzHitDel(&ptr);
-
-printf("10\n");
-    fflush(stdout);
-
 	}
     }
     
 
-printf("11 nhits: %d\n", nhits);
-    fflush(stdout);
-    
     /* Sort list according to score, highest first*/
     ajListSort(listhits, ajXyzCompScore);
 
 
-printf("12\n");
-    fflush(stdout);
-
     /* Convert list to array within Hitlist object */
-    ajListToArray(listhits, (void ***)  &(*hits)->hits);
+    nhits=ajListToArray(listhits, (void ***)  &(*hits)->hits);
     (*hits)->N = nhits;
     
-
-printf("13\n");
-    fflush(stdout);
 
     /*Tidy up and return */
     ajListDel(&listhits);
@@ -4485,7 +4461,8 @@ AjBool   ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys)
     AjBool  done_1st_blk    =ajFalse;  /* Flag for whether we've read first block of sequences */
     ajint   x               =0;        /* Loop counter */
     ajint   y               =0;        /* Loop counter */
-    ajint   cnt             =0;
+    ajint   cnt             =0;        /* Temp. counter of sequence*/
+    ajint   nseq            =0;        /* No. of sequences in alignment*/
     
     AjPList list_seqs    =NULL;     /* List of sequences */
     AjPList list_codes   =NULL;     /* List of codes */
@@ -4595,13 +4572,14 @@ AjBool   ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys)
 	    /* ajFileReadLine will trim the tailing \n */
 
 	    done_1st_blk=ajTrue;
-	    cnt = 0;
 	    y++;
 
+	    /* The first blank line*/
 	    if(y == 1)
 	    {
 		x = ajListstrToArray(list_seqs, &arr_seqs); 
 	    }
+	    cnt = 0;
 	    continue;
 	}
 	else
@@ -4619,6 +4597,7 @@ AjBool   ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys)
 	    {
 		/* It is a sequence line from the first block */
 		/* Read in sequence */
+		nseq++;
 		seq = ajStrNew();		
 		code = ajStrNew();		
 		ajFmtScanS(line, "%S%S", &code, &seq);
@@ -4633,7 +4612,7 @@ AjBool   ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys)
 
     ajStrDel(&seq1);
     
-    if(!cnt)
+    if(!nseq)
     {
 	ajWarn("No sequences in alignment !\n");
 	ajListstrDel(&list_seqs); 
@@ -4643,7 +4622,7 @@ AjBool   ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys)
 
 
     /* Allocate memory for Scopalg structure */
-    (*thys) = ajXyzScopalgNew(cnt);
+    (*thys) = ajXyzScopalgNew(nseq);
 
 
 
@@ -4657,7 +4636,7 @@ AjBool   ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys)
 
     
     /* Assign sequences and free memory */
-    for(x=0; x<cnt; x++)
+    for(x=0; x<nseq; x++)
     {
 	ajStrAssS(&(*thys)->Seqs[x],arr_seqs[x]); 
 	ajStrDel(&arr_seqs[x]);
@@ -4707,7 +4686,8 @@ AjBool   ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys)
 ** Read a hitlist object from a file in embl-like format. 
 ** 
 ** @param [r] inf      [AjPFile] Input file stream
-** @param [r] delim    [char *]  Delimiter for block of hits
+** @param [r] delim    [char *]  Delimiter for block of hits (in case the file
+** contains multiple hitlists).
 ** @param [w] thys     [AjPHitlist*] Hitlist object
 **
 ** @return [AjBool] True on success (a list of hits was read)
@@ -4790,7 +4770,7 @@ AjBool   ajXyzHitlistRead(AjPFile inf, char *delim, AjPHitlist *thys)
 	}
 	else if(ajStrPrefixC(line,"NS"))
 	{
-	    ajFmtScanS(line, "NS%d", &nset);
+	    ajFmtScanS(line, "NS %d", &nset);
 
 
 	    /* Create hitlist structure */
@@ -4800,12 +4780,14 @@ AjBool   ajXyzHitlistRead(AjPFile inf, char *delim, AjPHitlist *thys)
 	    ajStrAssS(&(*thys)->Fold, fold);
 	    ajStrAssS(&(*thys)->Superfamily, super);
 	    ajStrAssS(&(*thys)->Family, family);
+
 	}
 	else if(ajStrPrefixC(line,"NN"))
 	{
 	    /* Increment hit counter */
 	    n++;
-
+	    
+	    
 	    /* Safety check */
 	    if(n>nset)
 		ajFatal("Dangerous error in input file caught in ajXyzHitlistRead.\n Email jison@hgmp.mrc.ac.uk");
@@ -4831,7 +4813,6 @@ AjBool   ajXyzHitlistRead(AjPFile inf, char *delim, AjPHitlist *thys)
 	    ajStrCleanWhite(&(*thys)->hits[n-1]->Seq);
 	    continue;
 	}
-	
 	
 	ok = ajFileReadLine(inf,&line);
     }
@@ -4886,7 +4867,7 @@ AjBool ajXyzHitlistWrite(AjPFile outf, AjPHitlist thys)
 	ajFmtPrintF(outf, "%-5s%d START; %d END;\n", "RA", thys->hits[x]->Start, thys->hits[x]->End);
 	ajFmtPrintF(outf, "XX\n");
 	ajSeqWriteCdb(outf, thys->hits[x]->Seq);
-	ajFmtPrintF(outf, "XX\n//\n");
+	ajFmtPrintF(outf, "XX\n");
     }
     
 
@@ -5356,7 +5337,7 @@ ajint ajXyzCompId(const void *hit1, const void *hit2)
 ** @param [r] thresh  [ajint]       Minimum length (residues) of overlap 
 ** required for two hits with the same code to be counted as the same hit.
 **
-** @return [AjBool] True on success
+** @return [AjBool] True on success, else False
 ** @@
 ******************************************************************************/
 AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets, 
@@ -5377,7 +5358,17 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
     ajint       tpos=0;			/*Temp. position counter */
     ajint       x=0;			/*Loop counter*/
 
+
+
     
+    /* Check args */
+    if(!(*hits) || (!targets))
+    {
+	ajWarn("NULL args passed to ajXyzHitlistClassify\n");
+	return ajFalse;
+    }
+    
+
 
     /*Create list & list iterator*/
     itert=ajListIter(targets);

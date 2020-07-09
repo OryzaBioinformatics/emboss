@@ -153,6 +153,7 @@ AjBool      ajFileGets (const AjPFile thys, AjPStr *pdest);
 AjBool      ajFileGetsL (const AjPFile thys, AjPStr *pdest, ajlong* fpos);
 AjBool      ajFileGetsTrim  (const AjPFile thys, AjPStr *pdest);
 AjBool      ajFileGetsTrimL (const AjPFile thys, AjPStr *pdest, ajlong* fpos);
+ajlong      ajFileLength(AjPStr fname);
 const char* ajFileName (const AjPFile thys);
 AjBool      ajFileNameDirSetC (AjPStr* filename, const char* dir);
 AjBool      ajFileNameDirSet (AjPStr* filename, const AjPStr dir);

@@ -82,8 +82,8 @@ void callRegister(char *name, CallFunc func)
 
 /* @func call *********************************************
 **
-** Call a function by it's name. If it does not exist then give
-** a error message saying so. 
+** Call a function by its name. If it does not exist then give
+** an error message saying so. 
 **
 ** @param [r] name [char *] name of the function to call. 
 ** @param [v] [...] Optional arguments

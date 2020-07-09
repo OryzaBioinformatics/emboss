@@ -83,6 +83,7 @@ static void       seqWriteNexus (AjPSeqout outseq);
 static void       seqWriteNexusnon (AjPSeqout outseq);
 static void       seqWritePhylip (AjPSeqout outseq);
 static void       seqWritePhylip3 (AjPSeqout outseq);
+static void       seqWriteSelex (AjPSeqout outseq);
 static void       seqWriteSeq (AjPSeqout outseq, SeqPSeqFormat sf);
 static void       seqWriteStaden (AjPSeqout outseq);
 static void       seqWriteStrider (AjPSeqout outseq);
@@ -125,6 +126,7 @@ static SeqOOutFormat seqOutFormat[] = { /* AJFALSE = write one file */
   {"fitch",      AJFALSE, AJFALSE, seqWriteFitch},
   {"msf",        AJFALSE, AJTRUE,  seqWriteMsf},
   {"clustal",    AJFALSE, AJTRUE,  seqWriteClustal},
+  {"selex",      AJFALSE, AJTRUE,  seqWriteSelex},
   {"aln",        AJFALSE, AJTRUE,  seqWriteClustal}, /* alias for clustal */
   {"phylip",     AJFALSE, AJTRUE,  seqWritePhylip},
   {"phylip3",    AJFALSE, AJTRUE,  seqWritePhylip3},
@@ -193,9 +195,13 @@ void ajSeqAllWrite (AjPSeqout outseq, AjPSeq seq) {
   if (outseq->Single)
     (void) seqFileReopen(outseq);
 
-  if (outseq->Features) {
+  seqOutFormat[outseq->Format].Write (outseq);
+  outseq->Count++;
+
+  if (outseq->Features && !ajFeattabOutIsOpen(outseq->Ftquery)) {
       /* ajWarn ("ajSeqAllWrite features cloned from ajSeqWrite\n"); */
 
+    (void) ajFeattabOutOpen (outseq->Ftquery, outseq->Ufo);
     (void) ajStrSet (&outseq->Ftquery->Seqname, seq->Name);
     (void) ajStrSet (&outseq->Ftquery->Type, seq->Type);
     ajFeattableTrace(outseq->Fttable);
@@ -206,8 +212,6 @@ void ajSeqAllWrite (AjPSeqout outseq, AjPSeq seq) {
     }
   }
     
-  seqOutFormat[outseq->Format].Write (outseq);
-  outseq->Count++;
   seqDeclone (outseq);
 
   return;
@@ -265,11 +269,12 @@ void ajSeqsetWrite (AjPSeqout outseq, AjPSeqset seq) {
     if (outseq->Single)
       (void) seqFileReopen(outseq);
 
-    if (outseq->Features)
-      ajWarn("ajSeqsetWrite Features not yet implemented");
-
     seqOutFormat[outseq->Format].Write (outseq);
     outseq->Count++;
+
+    if (outseq->Features && !ajFeattabOutIsOpen(outseq->Ftquery))
+      ajWarn("ajSeqsetWrite Features not yet implemented");
+
     seqDeclone (outseq);
   }
 
@@ -309,7 +314,7 @@ static void seqWriteListAppend (AjPSeqout outseq, AjPSeq seq) {
     seqOutFormat[outseq->Format].Write (outseq);
   }
 
-  if (outseq->Features)
+  if (outseq->Features && !ajFeattabOutIsOpen(outseq->Ftquery))
     ajWarn ("seqWriteListAppend features output not yet implemented");
 
   return;
@@ -376,8 +381,10 @@ void ajSeqWrite (AjPSeqout outseq, AjPSeq seq) {
     (void) seqFileReopen(outseq);
 
   seqOutFormat[outseq->Format].Write (outseq);
+  outseq->Count++;
 
-  if (outseq->Features) {
+  if (outseq->Features && !ajFeattabOutIsOpen(outseq->Ftquery)) {
+    (void) ajFeattabOutOpen (outseq->Ftquery, outseq->Ufo);
     (void) ajStrSet (&outseq->Ftquery->Seqname, seq->Name);
     (void) ajStrSet (&outseq->Ftquery->Type, seq->Type);
     ajFeattableTrace(outseq->Fttable);
@@ -388,7 +395,6 @@ void ajSeqWrite (AjPSeqout outseq, AjPSeq seq) {
     }
   }
     
-  outseq->Count++;
   seqDeclone (outseq);
 
   return;
@@ -1171,6 +1177,290 @@ static void seqWriteClustal (AjPSeqout outseq) {
   return;
 }
 
+
+/* @funcstatic seqWriteSelex ************************************************
+**
+** Writes a sequence in Selex format.
+**
+** @param [P] outseq [AjPSeqout] Sequence output object.
+** @return [void]
+** @@
+******************************************************************************/
+
+static void seqWriteSelex (AjPSeqout outseq)
+{
+    ajint n;
+    ajint len=0;
+    ajint i=0;
+    ajint j=0;
+    ajint k=0;
+    
+    AjPSeq seq=NULL;
+    AjPSeq* seqs=NULL;
+    ajint test;
+    AjPSelexdata sdata=NULL;
+    AjPSelexSQ qdata=NULL;
+    ajint namelen=0;
+    ajint v=0;
+    AjBool sep=ajFalse;
+    AjPStr rfstr=NULL;
+    AjPStr csstr=NULL;
+    AjPStr ssstr=NULL;
+    char *p=NULL;
+    AjPStr *names;
+    ajint  extra;
+    ajint  nlen=0;
+    ajint  slen=0;
+    AjPStr *aseqs=NULL;
+    
+    ajDebug ("seqWriteSelex list size %d\n", ajListLength(outseq->Savelist));
+    
+    rfstr = ajStrNewC("#=RF");
+    csstr = ajStrNewC("#=CS");
+    ssstr = ajStrNewC("#=SS");
+    
+    n = ajListLength(outseq->Savelist);
+    if (!n)
+	return;
+    
+    test = ajListToArray (outseq->Savelist, (void***) &seqs);
+    ajDebug ("ajListToArray listed %d items\n", test);
+    
+    
+    
+    for (i=0; i < n; ++i)
+    {
+	seq = seqs[i];
+	if (len < ajSeqLen(seq))
+	    len = ajSeqLen(seq);
+    }  
+
+    sdata = seqs[0]->Selexdata;
+    if(sdata)
+    {
+
+	if(ajStrLen(sdata->id))
+	{
+	    sep=ajTrue;
+	    ajFmtPrintF(outseq->File,"#=ID %S\n",sdata->id);
+	}
+	if(ajStrLen(sdata->ac))
+	{
+	    sep=ajTrue;
+	    ajFmtPrintF(outseq->File,"#=AC %S\n",sdata->ac);
+	}
+	if(ajStrLen(sdata->de))
+	{
+	    sep=ajTrue;
+	    ajFmtPrintF(outseq->File,"#=DE %S\n",sdata->de);
+	}
+
+	if(sdata->ga[0] || sdata->ga[1])
+	{
+	    sep=ajTrue;
+	    ajFmtPrintF(outseq->File,"#=GA %.2f %.2f\n",sdata->ga[0],
+			sdata->ga[1]);
+	}
+
+	if(sdata->tc[0] || sdata->tc[1])
+	{
+	    sep=ajTrue;
+	    ajFmtPrintF(outseq->File,"#=TC %.2f %.2f\n",sdata->tc[0],
+			sdata->tc[1]);
+	}
+
+	if(sdata->nc[0] || sdata->nc[1])
+	{
+	    sep=ajTrue;
+	    ajFmtPrintF(outseq->File,"#=NC %.2f %.2f\n",sdata->nc[0],
+			sdata->nc[1]);
+	}
+	
+	if(ajStrLen(sdata->au))
+	{
+	    sep=ajTrue;
+	    ajFmtPrintF(outseq->File,"#=AU %S\n",sdata->au);
+	}
+
+	if(sep)
+	    ajFmtPrintF(outseq->File,"\n");
+
+
+	v=4;
+	for(i=0;i<n;++i)
+	{
+	    v = ajStrLen(seqs[i]->Selexdata->sq->name);
+	    namelen = (namelen > v) ? namelen : v;
+	}
+	for(i=0;i<n;++i)
+	{
+	    v = namelen - ajStrLen(seqs[i]->Selexdata->sq->name);
+	    for(j=0;j<v;++j)
+		ajStrAppK(&seqs[i]->Selexdata->sq->name,' ');
+	}
+	
+	
+	if(ajStrLen(sdata->sq->ac))
+	{
+	    for(i=0;i<n;++i)
+	    {
+		qdata = seqs[i]->Selexdata->sq;
+		ajFmtPrintF(outseq->File,"#=SQ %S %.2f %S %S %d..%d:%d %S\n",
+			    qdata->name,qdata->wt,qdata->source,qdata->ac,
+			    qdata->start,qdata->stop,qdata->len,qdata->de);
+	    }
+	}
+	ajFmtPrintF(outseq->File,"\n");
+
+
+
+	if(ajStrLen(seqs[0]->Selexdata->rf))
+	{
+	    v = namelen - 4;
+	    for(k=0;k<v;++k)
+		ajStrAppK(&rfstr,' ');
+	}
+	if(ajStrLen(seqs[0]->Selexdata->cs))
+	{
+	    v = namelen - 4;
+	    for(k=0;k<v;++k)
+		ajStrAppK(&csstr,' ');
+	}
+	if(ajStrLen(seqs[0]->Selexdata->ss))
+	{
+	    v = namelen - 4;
+	    for(k=0;k<v;++k)
+		ajStrAppK(&ssstr,' ');
+	}
+    
+
+    
+	for(i=0;i<len;i+=50)
+	{
+	    if(ajStrLen(seqs[0]->Selexdata->rf))
+	    {
+		p = ajStrStr(seqs[0]->Selexdata->rf);
+		if(i+50>=len)
+		    ajFmtPrintF(outseq->File,"%S %s\n",rfstr,&p[i]);
+		else
+		    ajFmtPrintF(outseq->File,"%S %-50.50s\n",rfstr,
+				&p[i]);
+	    }
+
+	    if(ajStrLen(seqs[0]->Selexdata->cs))
+	    {
+		p = ajStrStr(seqs[0]->Selexdata->cs);
+		if(i+50>=len)
+		    ajFmtPrintF(outseq->File,"%S %s\n",csstr,&p[i]);
+		else
+		    ajFmtPrintF(outseq->File,"%S %-50.50s\n",csstr,
+				&p[i]);
+	    }
+	    
+
+	    for(j=0;j<n;++j)
+	    {
+		sdata = seqs[j]->Selexdata;
+
+		p = ajStrStr(sdata->str);
+		if(i+50>=len)
+		    ajFmtPrintF(outseq->File,"%S %s\n",sdata->sq->name,&p[i]);
+		else
+		    ajFmtPrintF(outseq->File,"%S %-50.50s\n",sdata->sq->name,
+				&p[i]);
+		if(ajStrLen(seqs[0]->Selexdata->ss))
+		{
+		    p = ajStrStr(seqs[0]->Selexdata->ss);
+		    if(i+50>=len)
+			ajFmtPrintF(outseq->File,"%S %s\n",ssstr,&p[i]);
+		    else
+			ajFmtPrintF(outseq->File,"%S %-50.50s\n",ssstr,
+				    &p[i]);
+		}
+
+	    }
+	    if(i+50<len)
+		ajFmtPrintF(outseq->File,"\n");
+	
+	}
+    }    
+    else	/* Wasn't originally Selex format */
+    {
+	AJCNEW0(aseqs,n);
+	AJCNEW0(names,n);
+	for (i=0; i < n; ++i)
+	{
+	    seq = seqs[i];
+	    aseqs[i] = ajStrNew();
+	    names[i] = ajStrNew();
+	    ajStrAssS(&names[i],seq->Name);
+	    if((len=ajStrLen(names[i])) > nlen)
+		nlen = len;
+	    if((len=ajStrLen(seq->Seq)) > slen)
+		slen = len;
+	    ajStrAssS(&aseqs[i],seq->Seq);
+	}
+	for(i=0;i<n;++i)
+	{
+	    seq = seqs[i];
+	    extra = nlen - ajStrLen(names[i]);
+	    for(j=0;j<extra;++j)
+		ajStrAppK(&names[i],' ');
+	    extra = slen - ajStrLen(seq->Seq);
+	    for(j=0;j<extra;++j)
+		ajStrAppK(&aseqs[i],' ');
+
+	    ajFmtPrintF(outseq->File,"#=SQ %S %.2f - - 0..0:0 ",
+			names[i],seq->Weight);
+	    if(ajStrLen(seq->Desc))
+		ajFmtPrintF(outseq->File,"%S\n",seq->Desc);
+	    else
+		ajFmtPrintF(outseq->File,"-\n");
+	}
+	ajFmtPrintF(outseq->File,"\n");	
+
+
+	for(i=0;i<slen;i+=50)
+	{
+	    for(j=0;j<n;++j)
+	    {
+		p = ajStrStr(aseqs[j]);
+		if(i+50>=len)
+		    ajFmtPrintF(outseq->File,"%S %s\n",names[j],&p[i]);
+		else
+		    ajFmtPrintF(outseq->File,"%S %-50.50s\n",names[j],
+				&p[i]);
+	    }
+	    if(i+50<len)
+		ajFmtPrintF(outseq->File,"\n");
+	
+	}
+	
+	for(i=0;i<n;++i)
+	{
+	    ajStrDel(&names[i]);
+	    ajStrDel(&aseqs[i]);
+	}
+	AJFREE(names);
+	AJFREE(aseqs);
+    }
+    
+
+
+
+
+
+
+
+    AJFREE(seqs);
+
+    ajStrDel(&rfstr);
+    ajStrDel(&csstr);
+    ajStrDel(&ssstr);
+    
+    return;
+}
+
 /* @funcstatic seqWriteMsf ***************************************************
 **
 ** Writes a sequence in GCG Multiple Sequence File format.
@@ -1519,12 +1809,28 @@ static void seqWriteGenbank (AjPSeqout outseq) {
 
   static SeqPSeqFormat sf=NULL;
   ajint b[5];
+  static AjPStr ftfmt = NULL;
+
+  if (!ftfmt)
+    ajStrAssC (&ftfmt, "genbank");
+
 
   (void) ajFmtPrintF (outseq->File, "LOCUS       %S\n", outseq->Name);
   if (ajStrLen(outseq->Acc))
     (void) ajFmtPrintF (outseq->File, "ACCESSION   %S\n", outseq->Acc);
   if (ajStrLen(outseq->Desc))
     (void) ajFmtPrintF (outseq->File, "DEFINITION  %S\n", outseq->Desc);
+
+  if (seqoutUfoLocal(outseq)) {
+        outseq->Ftquery = ajFeattabOutNewSSF (ftfmt, outseq->Name,
+					  ajStrStr(outseq->Type),
+					  outseq->File);
+    if (!ajFeatWrite (outseq->Ftquery, outseq->Fttable)) {
+      ajWarn ("seqWriteGenbank features output failed UFO: '%S'",
+	      outseq->Ufo);
+    }
+  }
+
   ajSeqCount (outseq->Seq, b);
   if (b[4])
     (void) ajFmtPrintF (outseq->File,
@@ -2150,7 +2456,7 @@ AjBool ajSeqoutOpen (AjPSeqout thys) {
     return ret;
 
   (void) ajStrSet (&thys->Ftquery->Seqname, thys->Name);
-  ret = ajFeattabOutOpen (thys->Ftquery, thys->Ufo);
+  ret = ajFeattabOutSet (thys->Ftquery, thys->Ufo);
   return ret;
 }
 

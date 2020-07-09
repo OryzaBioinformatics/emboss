@@ -1521,6 +1521,25 @@ AjBool ajFileStat(AjPStr *fname, ajint mode)
     return ajFalse;
 }
 
+/* @func ajFileLength ********************************************************
+**
+** Returns the length of a file
+**
+** @param [r] fname [AjPStr] Filename.
+** @return [ajlong] length or -1 if file doesn't exist
+** @@
+******************************************************************************/
+
+ajlong ajFileLength(AjPStr fname)
+{
+    struct stat buf;
+
+    if(!stat(ajStrStr(fname), &buf))
+	return (ajlong)buf.st_size;
+
+    return -1;
+}
+
 /* @func ajFileTell *******************************************************
 **
 ** Returns the current position in an open file.

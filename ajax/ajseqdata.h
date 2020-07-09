@@ -54,6 +54,85 @@ typedef struct AjSSeqQuery {
   void* QryData;		/* Private data for access function */
 } AjOSeqQuery, *AjPSeqQuery;
 
+
+/* @data AjPSelexSQ *******************************************************
+**
+** Ajax Selex object for #=SQ information.
+**
+** @new ajSelexSQNew Default constructor
+** @delete ajSelexSQDel Default destructor
+** @@
+******************************************************************************/
+
+typedef struct AjSSelexSQ
+{
+    AjPStr name;
+    AjPStr source;
+    AjPStr ac;
+    AjPStr de;
+    float  wt;
+    ajint  start;
+    ajint  stop;
+    ajint  len;
+} AjOSelexSQ, *AjPSelexSQ;
+
+/* @data AjPSelex *******************************************************
+**
+** Ajax Selex object.
+**
+** @new ajSelexNew Default constructor
+** @delete ajSelexDel Default destructor
+** @@
+******************************************************************************/
+
+typedef struct AjSSelex
+{
+    AjPStr id;
+    AjPStr ac;
+    AjPStr de;
+    AjPStr au;
+    AjPStr cs;
+    AjPStr rf;
+    AjPStr *name;
+    AjPStr *str;
+    AjPStr *ss;
+    float  ga[2];
+    float  tc[2];
+    float  nc[2];
+    AjPSelexSQ *sq;
+    ajint  n;
+    ajint  Count;
+} AjOSelex,*AjPSelex;
+
+
+/* @data AjPSelexData *******************************************************
+**
+** Ajax Selex data object (individual sequences)
+**
+** @new ajSelexdataNew Default constructor
+** @delete ajSelexdataDel Default destructor
+** @@
+******************************************************************************/
+
+typedef struct AjSSelexdata
+{
+    AjPStr id;
+    AjPStr ac;
+    AjPStr de;
+    AjPStr au;
+    AjPStr cs;
+    AjPStr rf;
+    AjPStr name;
+    AjPStr str;
+    AjPStr ss;
+    float  ga[2];
+    float  tc[2];
+    float  nc[2];
+    AjPSelexSQ sq;
+} AjOSelexdata,*AjPSelexdata;
+
+
+
 /* @data AjPSeqin *******************************************************
 **
 ** Ajax Sequence Input object.
@@ -118,9 +197,11 @@ typedef struct AjSSeqin {
   ajint Filecount;		/* Unused */
   ajlong Fpos;			/* File position (fseek) for building USA */
   AjPSeqQuery Query;		/* Query data - see AjPSeqQuery */
+  AjPSelex Selex;
   void *Data;			/* Format data for reuse,
 				   e.g. multiple sequence input */
 } AjOSeqin, *AjPSeqin;
+
 
 
 /* @data AjPSeq *******************************************************
@@ -212,6 +293,7 @@ typedef struct AjSSeq {
   float Weight;			/* Weight from multiple alignment */
   AjPList Acclist;		/* Secondary accessions */
   AjPStr Seq;			/* The sequence */
+  AjPSelexdata Selexdata;
 } AjOSeq, *AjPSeq;
 
 /* @data AjPSeqset *******************************************************

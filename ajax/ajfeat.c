@@ -104,7 +104,8 @@ static void        featDumpGff (AjPFeature thys, AjPFeattable owner,
 				AjPFile file);
 static void        featDumpPir (AjPFeature thys, AjPStr location,
 				AjPFile file);
-static void        featDumpSwiss (AjPFeature thys, AjPFile file);
+static void        featDumpSwiss (AjPFeature thys, AjPFile file,
+				  AjPFeature gftop);
 static AjPFeature  featFeatNew (AjPFeattable thys,
 				AjPStr       source, 
 				AjPStr       type,
@@ -175,7 +176,6 @@ static AjBool      feattableWriteEmbl (AjPFeattable Feattab, AjPFile file,
 static AjBool      featTagAllLimit(AjPStr* pval, AjPStr values);
 static AjPStr      featTagDna (AjPStr type);
 static void        featTagEmblDefault(AjPStr* pout, AjPStr tag, AjPStr* pval);
-static void        featTagEmblQuote(AjPStr* pval);
 static void        featTagEmblWrapC(AjPStr* pval, ajint width, char* prefix,
 				    AjPStr* retstr);
 static void        featTagFmt (AjPStr name, AjPTable table, AjPStr* retstr);
@@ -183,6 +183,8 @@ static void        featTagGffDefault(AjPStr* pout, AjPStr tag, AjPStr* pval);
 static AjBool      featTagGffSpecial(AjPStr* pval, AjPStr tag);
 static void        featTagLimit (AjPStr name, AjPTable table, AjPStr* retstr);
 static AjPStr      featTagProt (AjPStr type);
+static void        featTagQuoteEmbl(AjPStr* pval);
+static void        featTagQuoteGff(AjPStr* pval);
 static void        featTagSetDefault (AjPFeature thys,
 				      AjPStr tag, AjPStr value,
 				      AjPStr* pdeftag, AjPStr* pdefval);
@@ -227,7 +229,7 @@ typedef struct FeatSInFormat {
 /* name             Dna   Protein
    input-function   init-regex-function del-regex-function */
 
-/* @funcstatic featInFormatDef ************************************************
+/* @funclist featInFormatDef ************************************************
 **
 ** Input feature formats
 **
@@ -241,6 +243,8 @@ static FeatOInFormat featInFormatDef[] = {
    featReadUnknown, NULL,               NULL},
   {"embl",          AJTRUE,  AJFALSE, AJFALSE,
    featReadEmbl,    featRegInitEmbl,    featDelRegEmbl},
+  {"em",            AJTRUE,  AJFALSE, AJFALSE,
+   featReadEmbl,    featRegInitEmbl,    featDelRegEmbl},
   {"genbank",       AJTRUE,  AJFALSE, AJFALSE,
    featReadEmbl,    featRegInitEmbl,    featDelRegEmbl},
   {"gb",            AJTRUE,  AJFALSE, AJFALSE,
@@ -251,13 +255,15 @@ static FeatOInFormat featInFormatDef[] = {
    featReadGff,     featRegInitGff,     featDelRegGff},
   /*  {"acedb",         AJTRUE,  AJFALSE, AJFALSE,
       featReadAcedb,   featRegInitAcedb,   featDelRegAcedb},*/
-  {"swissprot",     AJFALSE, AJTRUE,  AJFALSE,
-   featReadSwiss,   featRegInitSwiss,   featDelRegSwiss},
   {"swiss",         AJFALSE, AJTRUE,  AJFALSE,
    featReadSwiss,   featRegInitSwiss,   featDelRegSwiss},
   {"sw",            AJFALSE, AJTRUE,  AJFALSE,
    featReadSwiss,   featRegInitSwiss,   featDelRegSwiss},
+  {"swissprot",     AJFALSE, AJTRUE,  AJFALSE,
+   featReadSwiss,   featRegInitSwiss,   featDelRegSwiss},
   {"pir",           AJFALSE, AJTRUE,  AJFALSE,
+   featReadPir,     featRegInitPir,     featDelRegPir},
+  {"nbrf",           AJFALSE, AJTRUE,  AJFALSE,
    featReadPir,     featRegInitPir,     featDelRegPir},
   {NULL, AJFALSE, AJFALSE, AJFALSE, NULL, NULL, NULL}
 };
@@ -270,22 +276,53 @@ typedef struct FeatSTypePir {
 } FeatOTypePir, *FeatPTypePir;
 
 static FeatOTypePir FeatPirType[] = {
+
+  /* internal names for PIR feature types */
+
+  /* Start with these - we take the first match we find */
+
   {"Active_site",        "act_site"},
   {"Binding_site",       "binding"},
-  {"Binding_site",       "ca_bind"},
-  {"Binding_site",       "dna_bind"},
-  {"Binding_site",       "metal"},
-  {"Binding_site",       "np_bind"},
   {"Cleavage_site",      "cleavage_site"},
   {"Cross-link",         "cross-link"},
   {"Disulfide_bonds",    "disulfid"},
   {"Domain",             "domain"},
   {"Inhibitory_site",    "inhibitory_site"},
   {"Modified_site",      "mod_res"},
-  {"Modified_site",      "carbohyd"},
-  {"Modified_site",      "lipid"},
   {"Product",            "product"},
   {"Region",             "site"},
+
+  /* Closest PIR matches for other internal feature types */
+
+  {"Binding_site",       "ca_bind"},
+  {"Binding_site",       "dna_bind"},
+  {"Binding_site",       "metal"},
+  {"Binding_site",       "np_bind"},
+  {"Binding_site",       "zn_fing"},
+  {"Modified_site",      "carbohyd"},
+  {"Modified_site",      "lipid"},
+  {"Modified_site",      "init_met"},
+  {"Modified_site",      "se_cys"},
+  {"Modified_site",      "thioeth"},
+  {"Modified_site",      "thiolest"},
+  {"Product",            "chain"},
+  {"Product",            "peptide"},
+  {"Product",            "propep"},
+  {"Region",             "conflict"},
+  {"Region",             "helix"},
+  {"Region",             "strand"},
+  {"Region",             "turn"},
+  {"Region",             "mutagen"},
+  {"Region",             "non_cons"},
+  {"Region",             "non_ter"},
+  {"Region",             "repeat"},
+  {"Region",             "signal"},
+  {"Region",             "transit"},
+  {"Region",             "similar"},
+  {"Region",             "transmem"},
+  {"Region",             "unsure"},
+  {"Region",             "variant"},
+  {"Region",             "varsplic"},
   {NULL, NULL}
 };
 
@@ -301,8 +338,8 @@ static AjPFeature  featEmblProcess  ( AjPFeattable thys, AjPStr feature,
 static AjPFeature  featGffFromLine ( AjPFeattable thys, AjPStr line,
 				     float version);
 
-static void        GFFProcessTagValues (AjPFeature gf, AjPFeattable table,
-					AjPStr groupfield, float version);
+static void        featGffProcessTagval (AjPFeature gf, AjPFeattable table,
+					 AjPStr groupfield, float version);
 
 typedef struct FeatSOutFormat {
   char *Name;
@@ -429,14 +466,56 @@ AjBool ajFeattabOutOpen (AjPFeattabOut thys, AjPStr ufo) {
   if (thys->Handle)
     return ajTrue;
 
-  if (!featoutUfoProcess (thys, ufo))
-    return ajFalse;
+  if (!ajStrLen(thys->Filename)) {
+    if (!featoutUfoProcess (thys, ufo))
+      return ajFalse;
+  }
 
   ajDebug("trying to open '%S'\n", thys->Filename);
   thys->Handle = ajFileNewOut(thys->Filename);
   if (!thys->Handle) return ajFalse;
   ajDebug("after opening '%S'\n", thys->Filename);
   
+  return ajTrue;
+}
+
+/* @func ajFeattabOutIsOpen ***************************************************
+**
+** Checks whether feature output file has already been opened
+**
+** @param [r] thys [AjPFeattabOut] Features table output object
+** @return [AjBool] ajTrue if file is open
+** @@
+******************************************************************************/
+
+AjBool ajFeattabOutIsOpen (AjPFeattabOut thys) {
+
+  ajDebug("ajFeattabOutIsOpen\n");
+  if (thys->Handle)
+    return ajTrue;
+
+  return ajFalse;
+}
+
+/* @func ajFeattabOutSet *****************************************************
+**
+** Processes the specified UFO, and specifies the resulting output file.
+**
+** @param [r] thys [AjPFeattabOut] Features table output object
+** @param [r] ufo [AjPStr] UFO feature output specifier
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
+
+AjBool ajFeattabOutSet (AjPFeattabOut thys, AjPStr ufo) {
+
+  ajDebug("ajFeattabOutSet UFO '%S'\n", ufo);
+  if (thys->Handle)
+    return ajTrue;
+
+  if (!featoutUfoProcess (thys, ufo))
+    return ajFalse;
+
   return ajTrue;
 }
 
@@ -2123,7 +2202,7 @@ static void featGroupSet (AjPFeature gf, AjPFeattable table,
 
 }
 
-/* @funcstatic GFFProcessTagValues ********************************************
+/* @funcstatic featGffProcessTagval *******************************************
 **
 ** Parses and adds a tag-value set to the specified AjPFeature;
 ** looked at 'parse_group' method in GFF::GeneFeature.pm Perl module
@@ -2136,15 +2215,15 @@ static void featGroupSet (AjPFeature gf, AjPFeattable table,
 ** @@
 ******************************************************************************/
 
-static void GFFProcessTagValues (AjPFeature gf, AjPFeattable table,
-				 AjPStr groupfield, float version) 
+static void featGffProcessTagval (AjPFeature gf, AjPFeattable table,
+				  AjPStr groupfield, float version) 
 {
   static AjPStr  TvString  = NULL ;
   AjPStr  tmptag      = NULL ;
   AjPStr  tmpval      = NULL ;
   AjBool  grpset = ajFalse;
 
-  ajDebug("GFFProcessTagValues  version %3.1f '%S'\n", version, groupfield);
+  ajDebug("featGffProcessTagval version %3.1f '%S'\n", version, groupfield);
 
   /* Validate arguments */
   if(!ajStrLen(groupfield))	/* no tags, must be new */
@@ -2161,7 +2240,7 @@ static void GFFProcessTagValues (AjPFeature gf, AjPFeattable table,
 /*
  *     Version 2 or greater: parse groupfield for semicolon ';'
  *     delimited tag-value structures, taking special care about
- *     double quoted string context. rbskfirst versin of code was
+ *     double quoted string context. rbskfirst version of code was
  *     adapted from GFF.pm (th/rbsk), itself inherited from AceParse.pm,
  *     courtesy of James Gilbert 
 */
@@ -2180,8 +2259,12 @@ static void GFFProcessTagValues (AjPFeature gf, AjPFeattable table,
       }
       else if (ajStrMatchC (tmptag, "FeatFlags"))
 	(void) featFlagSet (gf, tmpval) ;
-      else
+      else {
+	ajDebug("Before QuoteStrip: '%S'\n", tmpval);
+	ajStrQuoteStrip(&tmpval);
+	ajDebug(" After QuoteStrip: '%S'\n", tmpval);
 	(void) ajFeatTagAdd (gf,tmptag,tmpval) ;
+      }
     }
     else {
       ajDebug("Choked on '%S'\n", TvString);
@@ -2241,7 +2324,7 @@ static AjPFeature featSwissFromLine ( AjPFeattable thys,
     newft = ajRegExec(SwRegexNew, origline);
   }
 
-  if ((newft || !origline)) { /* process the last feature */
+  if (newft || !origline) { /* process the last feature */
     ajDebug ("++ feat+from+to '%S' '%S' '%S'\n+ saveline '%S'\n",
 	     *savefeat, *savefrom, *saveto, *saveline);
     if (ajStrLen(*savefrom)) {	/* finish the current feature */
@@ -2258,6 +2341,9 @@ static AjPFeature featSwissFromLine ( AjPFeattable thys,
     ajStrDelReuse(saveline);
   }
 
+  if (!origline)		/* we are only cleaning up */
+    return gf;
+
   if (newft) {	/* if new feature initialise for it */
     ajRegSubI (SwRegexNew, 2, savefeat);
     ajRegSubI (SwRegexNew, 3, savefrom);
@@ -2269,11 +2355,15 @@ static AjPFeature featSwissFromLine ( AjPFeattable thys,
     return gf;
   }
 
-  else {			/* tag-values */
-    ajRegExec(SwRegexNext, origline); 
-    ajRegSubI(SwRegexNext, 1, &temp);
-    ajStrAppC (saveline, " ");
-    ajStrApp (saveline, temp);
+  else {             /* more tag-values */
+    if (ajRegExec(SwRegexNext, origline)) {
+      ajRegSubI(SwRegexNext, 1, &temp);
+      ajStrAppC (saveline, " ");
+      ajStrApp (saveline, temp);
+    }
+    else {
+      ajWarn ("Bad SwissProt feature line:\n%S", origline);
+    }
   }
 
   return gf;
@@ -2339,7 +2429,8 @@ static AjPFeature featSwissProcess  ( AjPFeattable thys, AjPStr feature,
     ajRegSubI (SwRegexFtid, 2, &ftid);
     ajDebug("Swiss ftid found\nftid: '%S'\n",
 	    ftid);
-    ajFeatTagAdd (ret, tagftid, ftid);
+    if (ajStrLen(ftid))
+      ajFeatTagAdd (ret, tagftid, ftid);
     ajStrAssS(&tagstr, note);
     ajStrTrimC(&tagstr, " .");
   }
@@ -2350,12 +2441,15 @@ static AjPFeature featSwissProcess  ( AjPFeattable thys, AjPStr feature,
     ajDebug("Swiss comment found\nNote:  '%S'\nComment: '%S'\n",
 	    note, comment);
     ajStrTrimC(&note, " .");
-    ajFeatTagAdd (ret, tagnote, note);
+    if (ajStrLen(note))
+      ajFeatTagAdd (ret, tagnote, note);
+    if (ajStrLen(comment))
     ajFeatTagAdd (ret, tagcomm, comment);
   }
   else {
     ajDebug("Simple swiss note: '%S'\n", tagstr);
-    ajFeatTagAdd (ret, tagnote, tagstr);
+    if (ajStrLen(tagstr))
+      ajFeatTagAdd (ret, tagnote, tagstr);
   }
 
   return ret;
@@ -2388,6 +2482,8 @@ static AjPFeature featEmblFromLine ( AjPFeattable thys,
   if(!source)
     source = ajStrNewC("EMBL");
 
+  ajDebug("featEmblFromLine '%S'\n", origline);
+
   ajStrAssS(&line,origline);              /* As BufferFile cannot be edited */
 
   if (origline)
@@ -2398,7 +2494,7 @@ static AjPFeature featEmblFromLine ( AjPFeattable thys,
 	   newft, line);
   */
 
-  if ((newft || !origline)) { /* process the last feature */
+  if (newft || !origline) { /* process the last feature */
     ajDebug ("++ saveloc '%S'\n+ saveline '%S'\n",
 	     *saveloc, *saveline);
     if (ajStrLen(*saveloc)) {
@@ -2411,6 +2507,9 @@ static AjPFeature featEmblFromLine ( AjPFeattable thys,
     ajStrDelReuse(saveline);
   }
 
+  if (!origline)		/* we are only cleaning up */
+    return gf;
+
   if (newft) {	/* if new feature initialise for it */
     ajRegSubI (EmblRegexNew, 1, savefeat);
     ajRegSubI (EmblRegexNew, 2, saveloc);
@@ -2419,20 +2518,30 @@ static AjPFeature featEmblFromLine ( AjPFeattable thys,
     return gf;
   }
   else if(!ajStrLen(*saveline)) { /* more location? */
-    ajRegExec(EmblRegexNext, line); 
-    ajRegSubI(EmblRegexNext, 1, &temp);
-    if (temp)
-      ajStrApp (saveloc, temp);
-    ajRegSubI(EmblRegexNext, 2, &temp);
-    if (temp)
-      ajStrApp (saveline, temp);
+    if (ajRegExec(EmblRegexNext, line)) {
+      ajRegSubI(EmblRegexNext, 1, &temp);
+      if (temp)
+	ajStrApp (saveloc, temp);
+      ajRegSubI(EmblRegexNext, 2, &temp);
+      if (temp)
+	ajStrApp (saveline, temp);
+    }
+    else {
+      ajDebug ("Bad EMBL feature line:\n%S\n", line);
+      ajWarn ("Bad EMBL feature line:\n%S", line);
+    }
   }
   else {			/* tag-values */
-    ajRegExec(EmblRegexTv, line); 
-    ajRegSubI(EmblRegexTv, 1, &temp);
-    ajStrApp (saveline, temp);
+    if (ajRegExec(EmblRegexTv, line)) { 
+      ajRegSubI(EmblRegexTv, 1, &temp);
+      ajStrApp (saveline, temp);
+    }
+    else {
+      ajDebug ("Bad EMBL feature line:\n%S\n", line);
+      ajWarn ("Bad EMBL feature line:\n%S", line);
+    }
   }
-
+    
   return gf;
 }
 
@@ -2668,9 +2777,7 @@ static AjPFeature featEmblProcess  ( AjPFeattable thys, AjPStr feature,
   while (ajStrLen(*tags) && ajRegExec (EmblRegexTvTag, *tags)) {
 
     /* first process quoted values, which can look like multiple values */
-    /* the expressions cheat - they include the first quote because we
-       always need it but exclude the last quote so we can add '\' for
-       internal quotes, and append '"' for the last quote */
+    /* watch for "" double internal quotes */
 
     if (ajRegExec (EmblRegexTvTagQuote, *tags)) { /* /tag="val" */
       ajRegSubI (EmblRegexTvTagQuote, 1, &tag);
@@ -2678,16 +2785,17 @@ static AjPFeature featEmblProcess  ( AjPFeattable thys, AjPStr feature,
       ajRegPost (EmblRegexTvTagQuote, &tmpstr);
       ajStrAssS (tags, tmpstr);
 
-      /* internal quotes are "" and turn into two strings */
+      /* internal quotes are "" - save and fix after */
       while (ajRegExec (EmblRegexTvTagQuote2, *tags)) { /* "quoted ""val""" */
        ajRegSubI (EmblRegexTvTagQuote2, 1, &tmpstr);
-       ajStrAppC (&val, "\\");	/* escape the internal leading quote */
        ajStrApp (&val, tmpstr);
        ajRegPost (EmblRegexTvTagQuote2, &tmpstr);
        ajStrAssS (tags, tmpstr);
       }
-      ajStrAppC (&val, "\"");	/* add the closing quote */
-      ajDebug ("(a) /%S=%S\n", tag, val);
+      ajDebug("Before QuoteStrip: '%S'\n", val);
+      ajStrQuoteStrip(&val);
+      ajDebug(" After QuoteStrip: '%S'\n", val);
+      ajDebug ("(a) /%S='%S'\n", tag, val);
     }
     else {
       ajRegSubI (EmblRegexTvTag, 1, &tag);
@@ -2809,7 +2917,7 @@ static AjPFeature featGffFromLine ( AjPFeattable thys, AjPStr line,
 			   0,0,0, entryid, label, 0 ) ;
 
         if( ajStrTokenRest(&groupfield, &split))
-           GFFProcessTagValues( gf, thys, groupfield, version) ;
+           featGffProcessTagval( gf, thys, groupfield, version) ;
 
 	ajStrDel(&groupfield) ; 
 	ajStrTokenClear(&split) ;
@@ -3023,8 +3131,8 @@ static AjBool featRegInitEmbl (void) {
   EmblRegexTv = ajRegCompC("^..    +( .*)") ; /* start of new feature */
   EmblRegexTvTag = ajRegCompC("^ */([^/= ]+)(=([^/ ]+))?") ; /* tag=val */
   /* quoted strings include the first quote, but not the last */
-  EmblRegexTvTagQuote = ajRegCompC("^ */([^/\"= ]+)=(\"[^\"]*)\"") ; /* quoted string */
-  EmblRegexTvTagQuote2 = ajRegCompC("^(\"[^\"]*)\"") ; /* more string */
+  EmblRegexTvTagQuote = ajRegCompC("^ */([^/\"= ]+)=(\"[^\"]*\")") ; /* quoted string */
+  EmblRegexTvTagQuote2 = ajRegCompC("^(\"[^\"]*\")") ; /* more string */
 
   FeatInitEmbl = ajTrue;
 
@@ -3052,7 +3160,7 @@ static AjBool featRegInitSwiss (void)
   ajDebug ("Tables swiss Type: %x Tags: %x\n",
 	   FeatTypeTableSwiss, FeatTagsTableSwiss);
 
-  ajDebug ("featRegInitSwiss Compiling featDumpSwiss() regexps\n");
+  ajDebug ("featRegInitSwiss Compiling regexps\n");
   if (!SwRegexNew)
     SwRegexNew = ajRegCompC("^FT   (([^ ]+) +([0-9]+) +([0-9]+) *)(.*)$") ;
   if (!SwRegexNext)
@@ -3078,7 +3186,7 @@ static AjBool featRegInitSwiss (void)
 
 static AjBool featRegInitPir (void) 
 {
-  if (FeatInitSwiss)
+  if (FeatInitPir)
     return ajTrue;
 
   featInit();
@@ -3088,7 +3196,7 @@ static AjBool featRegInitPir (void)
   ajDebug ("Tables pir Type: %x Tags: %x\n",
 	   FeatTypeTablePir, FeatTagsTablePir);
 
-  ajDebug ("featRegInitPir Compiling featDumpPir() regexps\n");
+  ajDebug ("featRegInitPir Compiling regexps\n");
   if (!PirRegexAll)
     PirRegexAll = ajRegCompC("^F;([^/]+)/([^:]+):([^#]*)") ;
   if (!PirRegexCom)
@@ -3122,28 +3230,14 @@ static AjBool featRegInitGff (void) {
 
   featVocabInitGff();
 
-  ajDebug ("featRegInitGff Compiling featDumpGff() regexps\n");
-  GffRegexNumeric = ajRegCompC("^[\\+-]?[0-9]+\\.?[0-9]*$") ;
+  ajDebug ("featRegInitGff Compiling regexps\n");
 
-  ajDebug ("featRegInitGff  Compiling featReadGff() regexps\n");
+  GffRegexNumeric = ajRegCompC("^[\\+-]?[0-9]+\\.?[0-9]*$") ;
   GffRegexblankline = ajRegCompC("^[ ]*$") ;
   GffRegexversion   = ajRegCompC("^##gff-version[ ]+([0-9]+)") ;
   GffRegexdate      = ajRegCompC("^##date[ ]+([0-9][0-9][0-9][0-9])-([0-9][0-9]?)-([0-9][0-9]?)") ;
   GffRegexregion    = ajRegCompC("^##sequence-region[ ]+([0-9a-zA-Z]+)[ ]+([\\+-]?[0-9]+)[ ]+([\\+-]?[0-9]+)") ;
   GffRegexcomment   = ajRegCompC ("^#[ ]*(.*)") ;
-
-  ajDebug ("featRegInitGff  Compiling GFFProcessTagValues() regexps\n");
-
-  /*
-    GffTvRegex1 = ajRegCompC ("^\"+([ ]+|;|$)"); 
-    GffTvRegex2 = ajRegCompC ("^\\\\(\")"); 
-    GffTvRegex3 = ajRegCompC ("^([^\"]*)"); 
-    GffTvRegex4 = ajRegCompC ("^\""); 
-    GffTvRegex5 = ajRegCompC ("^;"); 
-    GffTvRegex6 = ajRegCompC ("^([^; ]+)[ ]*"); 
-    GffTvRegex7 = ajRegCompC ("^[ ]+"); 
-    GffTvRegex8 = ajRegCompC ("^(.+) ([0-9]+) ([0-9]+)$"); 
-  */
 
   GffRegexTvTagval = ajRegCompC (" *([^ ]+) *((\"(\\.|[^\\\"])*\"|[^;]+)*)(;|$)"); /* "tag name */
 
@@ -3549,6 +3643,8 @@ static AjBool ajFeattableWriteUnknown (AjPFeattable thys, AjPFile file) {
 AjBool ajFeattableWriteSwiss (AjPFeattable thys, AjPFile file) {
   AjIList    iter = NULL ;
   AjPFeature gf   = NULL ;
+  AjPFeature gftop = NULL;
+  ajint oldgroup = -1;
 
   /* Check arguments */
   ajDebug ("ajFeattableWriteSwiss Checking arguments\n");
@@ -3562,7 +3658,15 @@ AjBool ajFeattableWriteSwiss (AjPFeattable thys, AjPFile file) {
     iter = ajListIter(thys->Features) ;
     while(ajListIterMore(iter)) {
       gf = ajListIterNext (iter) ;
-      featDumpSwiss(gf, file) ;
+      if (oldgroup != gf->Group) {
+	oldgroup = gf->Group;
+	gftop = gf;
+      }
+      else {
+      if (!(gf->Flags & FEATFLAG_CHILD)) /* this is the parent/only feature */
+	gftop = gf;
+      }
+      featDumpSwiss(gf, file, gftop) ;
     }
     ajListIterFree(iter) ;
   }
@@ -4273,24 +4377,30 @@ static AjBool featGetUsaSection(AjPStr* thys, AjPStr token, ajint* begin,
 void ajFeatTest (void) {
   AjPFeattable table=NULL;
   AjPStr desc=NULL;
+  AjPStr source=NULL;
+  AjPStr type=NULL;
   AjPFeature ft=NULL;
 
   featInit();
   table = ajFeattableNew(NULL);
 
-  ajStrAssC(&desc, "Testing feature addition");
+  ajStrAssC(&source, "testft");
+  ajStrAssC(&type, "misc_feature");
+  ajStrAssC(&desc, "Just testing");
 
-  ft = ajFeatAddC(table, "testft",  5, 7, 1.23, '+', 0, desc);
-  ajStrAssC(&desc, "And again...");
+  ft = ajFeatNew(table, source, type, 5, 7, 1.23, '+', 0);
+  ajFeatSetDesc(ft, desc);
 
-  ft = ajFeatAddC(table, "testft",  9, 19, 4.56, '-', 3, desc);
-  ajStrAssC(&desc, "...but subject to change");
+  ajStrAssC(&desc, "Testing again");
+  ft = ajFeatNew(table, source, type, 9, 19, 4.56, '-', 3);
   ajFeatSetDesc(ft, desc);
 
   ajFeattableTrace(table);
 
   ajFeattabDel(&table);
   ajStrDel (&desc);
+  ajStrDel (&source);
+  ajStrDel (&type);
 
   return;
 }
@@ -4654,64 +4764,6 @@ static AjBool featVocabInitSwiss (void) {
 
 }
 
-/* @func ajFeatAdd ************************************************************
-**
-** Adds a feature to a feature table
-**
-** @param [r] thys [AjPFeattable] Feature table
-** @param [r] type [AjPStr] Feature type
-** @param [r] start [ajint] Start position
-** @param [r] end [ajint] End position
-** @param [r] score [float] Score (0.0 if missing) 
-** @param [r] strand [char] Strand '+' or '-'
-** @param [r] frame [ajint] Frame or 0 if not relevent
-** @param [r] desc [AjPStr] Description (simple text)
-** @return [AjPFeature] Feature record
-** @@
-******************************************************************************/
-
-AjPFeature ajFeatAdd (AjPFeattable thys, AjPStr type,
-		      ajint start, ajint end, float score,
-		      char strand, ajint frame, AjPStr desc) {
-
-  ajDebug("ajFeatAdd '%S' %d..%d (%.3f) '%c' %d '%S'\n",
-	  type, start, end, score, strand, frame, desc);
-
-  return ajFeatNew (thys, NULL, type, start, end, score,
-		    strand, frame);
-}
-
-/* @func ajFeatAddC ***********************************************************
-**
-** Adds a feature to a feature table
-**
-** @param [r] thys [AjPFeattable] Feature table
-** @param [r] type [char*] Feature type
-** @param [r] start [ajint] Start position
-** @param [r] end [ajint] End position
-** @param [r] score [float] Score (0.0 if missing) 
-** @param [r] strand [char] Strand '+' or '-'
-** @param [r] frame [ajint] Frame or 0 if not relevent
-** @param [r] desc [AjPStr] Description (simple text)
-** @return [AjPFeature] ajTrue on success
-** @@
-******************************************************************************/
-
-AjPFeature ajFeatAddC (AjPFeattable thys, char* type,
-		       ajint start, ajint end, float score,
-		       char strand, ajint frame, AjPStr desc) {
-  
-  static AjPStr stype = NULL;
-
-  ajStrAssC (&stype, type);
-
-  ajDebug("ajFeatAdd '%S' %d..%d (%.3f) '%c' %d '%S'\n",
-	  stype, start, end, score, strand, frame, desc);
-
-  return ajFeatNew (thys, NULL, stype, start, end,
-		    score, strand, frame);
-}
-
 /* @func ajObsFeatNew *********************************************************
 **
 ** Constructor for a new feature.
@@ -4769,13 +4821,41 @@ AjPFeature ajObsFeatNew (AjPFeattable thys,
   ret->End = end;
 
 
-  ajFeatSetDesc (ret, desc);
-
   ajListPushApp (thys->Features, ret);
 
   return ret;
 }
 
+/* @func ajFeatSetDesc ********************************************************
+**
+** Sets the description for a feature
+**
+** @param [r] thys [AjPFeature] Feature
+** @param [r] desc [AjPStr] Feature description (simple text)
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
+
+AjBool ajFeatSetDescApp (AjPFeature thys, AjPStr desc) {
+
+  FeatPTagval tv = NULL;
+  static AjPStr tagnote = NULL;
+
+  if (!tagnote)
+    ajStrAssC (&tagnote, "note");
+
+  tv = featTagval(thys, tagnote);
+  if (tv) {
+    ajStrAppC (&tv->Value, ", ");
+    ajStrApp (&tv->Value, desc);
+  }
+  else {
+    ajFeatTagSet (thys, tagnote, desc);
+  }
+
+  return ajTrue;
+}
+ 
 /* @func ajFeatSetDesc ********************************************************
 **
 ** Sets the description for a feature
@@ -5583,8 +5663,8 @@ static AjBool featTagSpecialAllAnticodon (AjPStr* pval) {
   }
 
   if (!ret) {
-    ajDebug("bad EMBL /anticodon value '%S'\n", *pval);
-    ajWarn ("bad EMBL /anticodon value '%S'",   *pval);
+    ajDebug("bad /anticodon value '%S'\n", *pval);
+    ajWarn ("bad /anticodon value '%S'",   *pval);
   }
 
   return ret;
@@ -5618,8 +5698,8 @@ static AjBool featTagSpecialAllCitation (AjPStr* pval) {
   }
 
   if (!ret) {
-    ajDebug("bad EMBL /citation value '%S'\n", *pval);
-    ajWarn ("bad EMBL /citation value '%S'",   *pval);
+    ajDebug("bad /citation value '%S'\n", *pval);
+    ajWarn ("bad /citation value '%S'",   *pval);
   }
 
   return ret;
@@ -5655,8 +5735,8 @@ static AjBool featTagSpecialAllCodon (AjPStr* pval) {
   }
 
   if (!ret) {
-    ajDebug("bad EMBL /codon value '%S'\n", *pval);
-    ajWarn ("bad EMBL /codon value '%S'",   *pval);
+    ajDebug("bad /codon value '%S'\n", *pval);
+    ajWarn ("bad /codon value '%S'",   *pval);
   }
 
   return ret;
@@ -5694,8 +5774,8 @@ static AjBool featTagSpecialAllConssplice (AjPStr* pval) {
   }
 
   if (!ret) {
-    ajDebug("bad EMBL /cons_splice value '%S'\n", *pval);
-    ajWarn ("bad EMBL /cons_splice value '%S'",   *pval);
+    ajDebug("bad /cons_splice value '%S'\n", *pval);
+    ajWarn ("bad /cons_splice value '%S'",   *pval);
   }
 
   return ret;
@@ -5731,8 +5811,8 @@ static AjBool featTagSpecialAllRptunit (AjPStr* pval) {
  }
 
   if (!ret) {
-    ajDebug("bad EMBL /rpt_unit value '%S'\n", *pval);
-    ajWarn ("bad EMBL /rpt_unit value '%S'",   *pval);
+    ajDebug("bad /rpt_unit value '%S'\n", *pval);
+    ajWarn ("bad /rpt_unit value '%S'",   *pval);
   }
 
   return ret;
@@ -5770,8 +5850,8 @@ static AjBool featTagSpecialAllTranslexcept (AjPStr* pval) {
   }
 
   if (!ret) {
-    ajDebug("bad EMBL /transl_except value '%S'\n", *pval);
-    ajWarn ("bad EMBL /transl_except value '%S'",   *pval);
+    ajDebug("bad /transl_except value '%S'\n", *pval);
+    ajWarn ("bad /transl_except value '%S'",   *pval);
   }
 
   return ret;
@@ -5798,7 +5878,10 @@ static AjBool featTagSpecialAllDbxref (AjPStr* pval) {
   AjBool ret = ajFalse;
 
   if (!exp)
-    exp = ajRegCompC("^\"([^:]+):(.+)\"$");
+    exp = ajRegCompC("^([^:]+):(.+)$");
+
+  /*  if (!exp)
+      exp = ajRegCompC("^\"([^:]+):(.+)\"$");*/
 
   if (ajRegExec(exp, *pval)) {
     ret = ajTrue;
@@ -5807,8 +5890,8 @@ static AjBool featTagSpecialAllDbxref (AjPStr* pval) {
   }
 
   if (!ret) {
-    ajDebug("bad EMBL /db_xref value '%S'\n", *pval);
-    ajWarn ("bad EMBL /db_xref value '%S'",   *pval);
+    ajDebug("bad /db_xref value '%S'\n", *pval);
+    ajWarn ("bad /db_xref value '%S'",   *pval);
   }
 
   return ret;
@@ -5835,7 +5918,10 @@ static AjBool featTagSpecialAllProteinid (AjPStr* pval) {
   AjBool ret = ajFalse;
 
   if (!exp)
-    exp = ajRegCompC("^\"(([A-Z0-9]+)[.][0-9]+)\"$");
+    exp = ajRegCompC("^(([A-Z0-9]+)[.][0-9]+)$");
+
+  /* if (!exp)
+     exp = ajRegCompC("^\"(([A-Z0-9]+)[.][0-9]+)\"$");*/
 
   if (ajRegExec(exp, *pval)) {
     ret = ajTrue;
@@ -5844,8 +5930,8 @@ static AjBool featTagSpecialAllProteinid (AjPStr* pval) {
   }
 
   if (!ret) {
-    ajDebug("bad EMBL /protein_id value '%S'\n", *pval);
-    ajWarn ("bad EMBL /protein_id value '%S'",   *pval);
+    ajDebug("bad /protein_id value '%S'\n", *pval);
+    ajWarn ("bad /protein_id value '%S'",   *pval);
   }
 
   return ret;
@@ -5871,13 +5957,20 @@ static AjBool featTagSpecialAllReplace (AjPStr* pval) {
   AjBool ret = ajFalse;
 
   if (!exp)
-    exp = ajRegCompC("^\"([acgt]*)\"$");
+    exp = ajRegCompC("^([acgt]*)$");
 
+  /* if (!exp)
+     exp = ajRegCompC("^\"([acgt]*)\"$");*/
+
+  /* no need to add quotes here - we will add them if needed on output */
+
+  /*
   ajDebug("Before quote '%S' %c %c\n", *pval,
 	  ajStrChar(*pval, 0), ajStrChar(*pval, -1));
   ajStrQuote (pval);
   ajDebug(" After quote '%S' %c %c\n", *pval,
 	  ajStrChar(*pval, 0), ajStrChar(*pval, -1));
+  */
 
   if (ajRegExec(exp, *pval)) {
     ret = ajTrue;
@@ -5885,8 +5978,8 @@ static AjBool featTagSpecialAllReplace (AjPStr* pval) {
   }
 
   if (!ret) {
-    ajDebug("bad EMBL /replace value '%S'\n", *pval);
-    ajWarn ("bad EMBL /replace value '%S'",   *pval);
+    ajDebug("bad /replace value '%S'\n", *pval);
+    ajWarn ("bad /replace value '%S'",   *pval);
   }
 
   return ret;
@@ -5912,9 +6005,13 @@ static AjBool featTagSpecialAllTranslation (AjPStr* pval) {
   static AjPStr seqstr = NULL;
   AjBool ret = ajFalse;
 
-  ajStrCleanWhite(pval);
   if (!exp)
-    exp = ajRegCompC("^\"([ACDEFGHIKLMNPQRSTVWYX]+)\"$");
+    exp = ajRegCompC("^([ACDEFGHIKLMNPQRSTVWYX]+)$");
+
+  /* if (!exp)
+     exp = ajRegCompC("^\"([ACDEFGHIKLMNPQRSTVWYX]+)\"$"); */
+
+  ajStrCleanWhite(pval);
 
   if (ajRegExec(exp, *pval)) {
     ret = ajTrue;
@@ -5922,16 +6019,16 @@ static AjBool featTagSpecialAllTranslation (AjPStr* pval) {
   }
 
   if (!ret) {
-    ajDebug("bad EMBL /translation value '%S'\n", *pval);
-    ajWarn ("bad EMBL /translation value '%S'",   *pval);
+    ajDebug("bad /translation value '%S'\n", *pval);
+    ajWarn ("bad /translation value '%S'",   *pval);
   }
 
   return ret;
 }
 
-/* @funcstatic featTagEmblQuote ***********************************************
+/* @funcstatic featTagQuoteEmbl ***********************************************
 **
-** Escaped quotes converted to two double quotes
+** Internal quotes converted to two double quotes
 ** for EMBL feature tag values
 **
 ** @param  [r] pval [AjPStr*] parameter value
@@ -5939,7 +6036,7 @@ static AjBool featTagSpecialAllTranslation (AjPStr* pval) {
 ** @@
 ******************************************************************************/
 
-static void featTagEmblQuote (AjPStr* pval) {
+static void featTagQuoteEmbl (AjPStr* pval) {
 
   static AjPRegexp quoteexp = NULL;
   static AjPStr substr = NULL;
@@ -5947,22 +6044,62 @@ static void featTagEmblQuote (AjPStr* pval) {
   static AjPStr tmpstr = NULL;
 
   if (!quoteexp)
-    quoteexp = ajRegCompC("([^\\\\]*)\\\\\"");
+    quoteexp = ajRegCompC("([^\"]*)\"");
 
-  /* ajDebug("featTagEmblQuote '%S'\n", *pval); */
+  ajDebug("featTagQuoteEmbl '%S'\n", *pval);
  
   ajStrAssS (&valcopy, *pval);
   ajStrDelReuse (pval);
   while (ajRegExec(quoteexp, valcopy)) {
     ajRegSubI(quoteexp, 1, &substr);
-    /* ajDebug("part '%S'\n", substr); */
+    ajDebug("part '%S'\n", substr);
     ajStrApp(pval, substr);
     ajStrAppC(pval, "\"\"");
     ajRegPost (quoteexp, &tmpstr);
     ajStrAssS (&valcopy, tmpstr);
   }
-  /* ajDebug("rest '%S'\n", valcopy); */
+  ajDebug("rest '%S'\n", valcopy);
   ajStrApp(pval, valcopy);
+  ajStrQuote (pval);
+
+  return;
+}
+
+/* @funcstatic featTagQuoteGff ***********************************************
+**
+** Internal quotes converted to escaped quotes
+** for EMBL feature tag values
+**
+** @param  [r] pval [AjPStr*] parameter value
+** @return [void]
+** @@
+******************************************************************************/
+
+static void featTagQuoteGff (AjPStr* pval) {
+
+  static AjPRegexp quoteexp = NULL;
+  static AjPStr substr = NULL;
+  static AjPStr valcopy = NULL;
+  static AjPStr tmpstr = NULL;
+
+  if (!quoteexp)
+    quoteexp = ajRegCompC("([^\"]*)\"");
+
+  ajDebug("featTagQuoteGff '%S'\n", *pval);
+ 
+  ajStrAssS (&valcopy, *pval);
+  ajStrDelReuse (pval);
+  while (ajRegExec(quoteexp, valcopy)) {
+    ajRegSubI(quoteexp, 1, &substr);
+    ajDebug("part '%S'\n", substr);
+    ajStrApp(pval, substr);
+    ajStrAppC(pval, "\\\"");
+    ajRegPost (quoteexp, &tmpstr);
+    ajStrAssS (&valcopy, tmpstr);
+  }
+  ajDebug("rest '%S'\n", valcopy);
+  ajStrApp(pval, valcopy);
+  ajStrQuote (pval);
 
   return;
 }
@@ -6233,7 +6370,7 @@ static void featTagEmblDefault (AjPStr* pout, AjPStr tag, AjPStr* pval) {
 
   ajDebug("featTagEmblDefault '%S' '%S'\n", tag, *pval);
  
-  featTagEmblQuote(pval);
+  featTagQuoteEmbl(pval);
   ajFmtPrintS(pout, "/note=\"%S: %S\"", tag, *pval);
   return;
 }
@@ -6253,7 +6390,7 @@ static void featTagGffDefault (AjPStr* pout, AjPStr tag, AjPStr* pval) {
 
   ajDebug("featTagGffDefault '%S' '%S'\n", tag, *pval);
  
-  featTagEmblQuote(pval);
+  featTagQuoteGff(pval);
   ajFmtPrintS(pout, "note \"%S: %S\"", tag, *pval);
   return;
 }
@@ -6443,7 +6580,7 @@ static void featDumpEmbl (AjPFeature feat, AjPStr location, AjPFile file,
 	ajDebug ("case qlimited\n");
 	featTagLimit (tmptag, FeatTagsTableEmbl, &tmplim);
 	featTagAllLimit (&tmpval, tmplim);
-	featTagEmblQuote (&tmpval);
+	featTagQuoteEmbl (&tmpval);
 	ajFmtPrintAppS (&outstr, "=%S\n", tmpval);
 	ajStrDel(&tmplim);
 	break;
@@ -6453,7 +6590,7 @@ static void featDumpEmbl (AjPFeature feat, AjPStr location, AjPFile file,
 	  featTagEmblDefault(&outstr, tmptag, &tmpval);
 	}
 	else {
-	  featTagEmblQuote(&tmpval);
+	  featTagQuoteEmbl(&tmpval);
 	  ajFmtPrintAppS (&outstr, "=%S\n", tmpval);
 	}
 	break;
@@ -6476,7 +6613,7 @@ static void featDumpEmbl (AjPFeature feat, AjPStr location, AjPFile file,
 	break;
       case CASE2('Q','T') :	/* escape quotes, wrap at space */
 	ajDebug ("case qtext\n");
-	featTagEmblQuote(&tmpval);
+	featTagQuoteEmbl(&tmpval);
 	ajFmtPrintAppS (&outstr, "=%S\n", tmpval);
 	break;
       default:
@@ -6514,6 +6651,7 @@ static void featDumpPir (AjPFeature thys, AjPStr location, AjPFile file) {
   AjPStr outtyp = NULL;		/* these come from AjPTable */
   AjPStr outtag = NULL;		/* so please, please */
 				/* don't delete them */
+  static AjPStr tmptyp = NULL;
   static AjPStr outcomm = NULL;
   static AjPStr outfmt = NULL;
   static AjPStr outstr = NULL;
@@ -6521,11 +6659,17 @@ static void featDumpPir (AjPFeature thys, AjPStr location, AjPFile file) {
   AjPStr outval = NULL;
   FeatPTagval tv = NULL;
   char* cp;
-
+  AjBool typmod;
   ajStrAssC (&outcomm, "");
 
-  ajStrAssS (&outtyp, thys->Type);
-  featTypePirOut (&outtyp);
+  ajStrAssS (&tmptyp, thys->Type);
+  typmod = featTypePirOut (&tmptyp);	/* try to pick the best type if any */
+
+  if (typmod)
+    ajFeatSetDescApp (thys, thys->Type);
+
+  outtyp = featTableType (tmptyp, FeatTypeTablePir); /* make sure it's PIR */
+
   ajStrSubstituteCC (&outtyp, "_", " ");
 
   ajFmtPrintF (file, "F;%S/%S:", location, outtyp);
@@ -6565,6 +6709,7 @@ static void featDumpPir (AjPFeature thys, AjPStr location, AjPFile file) {
   ajListIterFree(iter);
 
   ajFmtPrintF (file, "%S\n", outcomm);
+
   return;
 }
 
@@ -6574,11 +6719,13 @@ static void featDumpPir (AjPFeature thys, AjPStr location, AjPFile file) {
 **
 ** @param [r] feat [AjPFeature] Feature
 ** @param [r] file [AjPFile] Output file
+** @param [r] gftop [AjPFeature] Parent feature
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void featDumpSwiss (AjPFeature thys, AjPFile file) {
+static void featDumpSwiss (AjPFeature thys, AjPFile file,
+			   AjPFeature gftop) {
 
   AjIList iter = NULL;
   AjPStr outtyp = NULL;		/* these come from AjPTable */
@@ -6599,9 +6746,9 @@ static void featDumpSwiss (AjPFeature thys, AjPFile file) {
   ajFmtPrintS (&outstr, "FT   %-8.8S %6d %6d",
 	       outtyp, thys->Start, thys->End);
 
-  /* For all tag-values... */
+  /* For all tag-values... from gftop which could be the same as thys */
 
-  iter = ajFeatTagIter (thys);
+  iter = ajFeatTagIter (gftop);
 
   while (ajListIterMore(iter)) {
     tv = ajListIterNext(iter);
@@ -6783,10 +6930,17 @@ static void featDumpGff (AjPFeature thys, AjPFeattable owner, AjPFile file) {
       cp = ajStrStr(outfmt);
       switch (CASE2(cp[0], cp[1])) {
       case CASE2('L','I') :	/* limited */
-      case CASE2('Q', 'L') :	/* limited, escape quotes */
 	ajDebug ("case limited\n");
 	featTagLimit (outtag, FeatTagsTableGff, &tmplim);
 	featTagAllLimit (&tmpval, tmplim);
+	ajFmtPrintAppS (&outstr, " %S", tmpval);
+	ajStrDel(&tmplim);
+	break;
+      case CASE2('Q', 'L') :	/* limited, escape quotes */
+	ajDebug ("case qlimited\n");
+	featTagLimit (outtag, FeatTagsTableGff, &tmplim);
+	featTagAllLimit (&tmpval, tmplim);
+	featTagQuoteGff(&tmpval);
 	ajFmtPrintAppS (&outstr, " %S", tmpval);
 	ajStrDel(&tmplim);
 	break;
@@ -6797,7 +6951,7 @@ static void featDumpGff (AjPFeature thys, AjPFeattable owner, AjPFile file) {
 	break;
       case CASE2('Q','T') :	/* escape quotes, wrap at space */
 	ajDebug ("case qtext\n");
-	ajStrQuote(&tmpval);
+	featTagQuoteGff(&tmpval);
 	ajFmtPrintAppS (&outstr, " %S", tmpval);
 	break;
       case CASE2('Q', 'S') :	/* special regexp, quoted */
@@ -6806,7 +6960,7 @@ static void featDumpGff (AjPFeature thys, AjPFeattable owner, AjPFile file) {
 	  featTagGffDefault(&outstr, outtag, &tmpval);
 	}
 	else {
-	  ajStrQuote(&tmpval);
+	  featTagQuoteGff(&tmpval);
 	  ajFmtPrintAppS (&outstr, " %S", tmpval);
 	}
 	break;

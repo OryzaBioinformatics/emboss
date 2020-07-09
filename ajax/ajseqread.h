@@ -42,6 +42,7 @@ AjBool       ajSeqParseNcbi(AjPStr str, AjPStr* id, AjPStr* acc, AjPStr* desc);
 void         ajSeqinSetNuc (AjPSeqin seqin);
 void         ajSeqinSetProt (AjPSeqin seqin);
 void         ajSeqinSetRange (AjPSeqin seqin, ajint ibegin, ajint iend);
+AjBool       ajSeqReadSelex(AjPFile inf, AjPFile outf);
 void         ajSeqinUsa (AjPSeqin* pthis, AjPStr Usa);
 void         ajSeqPrintInFormat (AjPFile outf, AjBool full);
 AjBool       ajSeqRead (AjPSeq thys, AjPSeqin seqin);
