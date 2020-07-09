@@ -53,6 +53,11 @@ DB tgb [ type: N method: srswww format: genbank
    fields: "sv des org key"
    comment: "Genbank IDs" ]
 
+DB tgenbank [ type: N dir: $emboss_tempdata/genbank
+   method: emblcd format: genbank release: 01 
+   fields: "sv des org key"
+   comment: "GenBank in native format with EMBL CD-ROM index" ]
+
 #############################################
 # DATABASE SETTING EXAMPLES
 #############################################
