@@ -68,7 +68,7 @@ typedef struct AjSPosRegexp{
 } AjOPosRegexp, *AjPPosRegexp;
 
 /* === hsp_regcomp.c === */
-extern ajint hsp_regcomp(regex_t *, const char *, int);
+extern ajint hsp_regcomp(regex_t *, const char *, ajint);
 #define	REG_BASIC	0000
 #define	REG_EXTENDED	0001
 #define	REG_ICASE	0002
@@ -99,12 +99,12 @@ extern ajint hsp_regcomp(regex_t *, const char *, int);
 #define	REG_INVARG	16
 #define	REG_ATOI	255	/* convert name to number (!) */
 #define	REG_ITOA	0400	/* convert number to name (!) */
-extern size_t hsp_regerror(int, const regex_t *, char *, size_t);
+extern size_t hsp_regerror(ajint, const regex_t *, char *, size_t);
 
 
 /* === regexec.c === */
 extern ajint hsp_regexec(const regex_t *, const char *, size_t,
-		       regmatch_t [], int);
+		       regmatch_t [], ajint);
 
 #define	REG_NOTBOL	00001
 #define	REG_NOTEOL	00002

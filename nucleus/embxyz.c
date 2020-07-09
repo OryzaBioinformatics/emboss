@@ -33,7 +33,7 @@
 ** @param [r] input  [AjPList]    List of ajPSeq's 
 ** @param [w] keep   [AjPInt*]    0: rejected (redundant) sequence, 1: the 
                                   sequence was retained
-** @param [w] nset   [int*]       Number of sequences in nr set (no. of 1's in
+** @param [w] nset   [ajint*]     Number of sequences in nr set (no. of 1's in
 **                                the keep array)
 ** @param [r] matrix    [AjPMatrixf] Residue substitution matrix
 ** @param [r] gapopen   [float]      Gap insertion penalty
@@ -61,7 +61,7 @@ AjBool embXyzSeqsetNR(AjPList input, AjPInt *keep, ajint *nset,
 
     float     **sub;
     float       id       =0.;	/*Passed as arg but not used here*/
-    float       sim      =0.;	/*Passed as arg but not used here*/
+    float       sim      =0.;	
     float       idx      =0.;	/*Passed as arg but not used here*/
     float       simx     =0.;	/*Passed as arg but not used here*/
     float      *path;

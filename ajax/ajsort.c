@@ -6,7 +6,7 @@
 ** Based on an array of floats, sort an ajint element array.
 **
 ** @param [r] a [float*] Array of floats used in sort tests
-** @param [rw] p [int*] Array of ints to be sorted depending on floats.
+** @param [rw] p [ajint*] Array of ints to be sorted depending on floats.
 ** @param [r] n [ajint] Number of elements to sort
 **
 ** @return [void]
@@ -34,8 +34,8 @@ void ajSortFloatDecI(float *a, ajint *p, ajint n)
 **
 ** Based on an array of ints, sort an ajint element array.
 **
-** @param [r] a [int*] Array of ints used in sort tests
-** @param [rw] p [int*] Array of ints to be sorted depending on floats.
+** @param [r] a [ajint*] Array of ints used in sort tests
+** @param [rw] p [ajint*] Array of ints to be sorted depending on floats.
 ** @param [r] n [ajint] Number of elements to sort
 **
 ** @return [void]
@@ -64,7 +64,7 @@ void ajSortIntDecI(ajint *a, ajint *p, ajint n)
 ** Based on an array of floats, sort (ascending) an ajint element array.
 **
 ** @param [r] a [float*] Array of floats used in sort tests
-** @param [rw] p [int*] Array of ints to be sorted depending on floats.
+** @param [rw] p [ajint*] Array of ints to be sorted depending on floats.
 ** @param [r] n [ajint] Number of elements to sort
 **
 ** @return [void]
@@ -92,8 +92,8 @@ void ajSortFloatIncI(float *a, ajint *p, ajint n)
 **
 ** Based on an array of ints, sort (ascending) an ajint element array.
 **
-** @param [r] a [int*] Array of ints used in sort tests
-** @param [rw] p [int*] Array of ints to be sorted depending on floats.
+** @param [r] a [ajint*] Array of ints used in sort tests
+** @param [rw] p [ajint*] Array of ints to be sorted depending on floats.
 ** @param [r] n [ajint] Number of elements to sort
 **
 ** @return [void]
@@ -148,7 +148,7 @@ void ajSortFloatDec(float *a, ajint n)
 **
 ** Sort an ajint array.
 **
-** @param [rw] a [int*] Array of ints to sort
+** @param [rw] a [ajint*] Array of ints to sort
 ** @param [r] n [ajint] Number of elements to sort
 **
 ** @return [void]
@@ -203,7 +203,7 @@ void ajSortFloatInc(float *a, ajint n)
 **
 ** Sort an ajint array (ascending)
 **
-** @param [rw] a [int*] Array of ints to sort
+** @param [rw] a [ajint*] Array of ints to sort
 ** @param [r] n [ajint] Number of elements to sort
 **
 ** @return [void]

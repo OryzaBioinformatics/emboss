@@ -429,8 +429,8 @@ ajint ajRangeNumber(AjPRange thys)
 **
 ** @param [r] thys [AjPRange] range object
 ** @param [r] element [ajint] range element (0 to n-1)
-** @param [w] start [int *] start value
-** @param [w] end [int *] end value
+** @param [w] start [ajint *] start value
+** @param [w] end [ajint *] end value
 **
 ** @return [AjBool] true if range exists
 ** @@

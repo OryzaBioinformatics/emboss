@@ -26,6 +26,10 @@
 #define GAPO 26
 #define GAPE 27
 
+#define DIAG 0
+#define LEFT 1
+#define DOWN 2
+
 /* @func embAlignPathCalc  *************************************************
 **
 ** Create path matrix for Smith-Waterman and Needleman-Wunsch
@@ -40,7 +44,7 @@
 ** @param [w] path [float *] path matrix
 ** @param [r] sub [float **] substitution matrix from AjPMatrixf
 ** @param [r] cvt [AjPSeqCvt] Conversion array for AjPMatrixf
-** @param [w] compass [int *] Path direction pointer array
+** @param [w] compass [ajint *] Path direction pointer array
 ** @param [r] show [AjBool] Display path matrix
 ** 
 ** Optimised to keep a maximum value to avoid looping down or left
@@ -206,7 +210,7 @@ void embAlignPathCalc(char *a, char *b, ajint lena, ajint lenb, float gapopen,
 ** @param [w] path [float *] path matrix
 ** @param [r] sub [float **] substitution matrix from AjPMatrixf
 ** @param [r] cvt [AjPSeqCvt] Conversion array for AjPMatrixf
-** @param [w] compass [int *] Path direction pointer array
+** @param [w] compass [ajint *] Path direction pointer array
 ** @param [r] show [AjBool] Display path matrix
 ** 
 ** @return [void]
@@ -383,10 +387,10 @@ static void alignPathCalcOld(char *a, char *b, ajint lena, ajint lenb,
 ** @param [r] lena [ajint] length of first sequence
 ** @param [r] lenb [ajint] length of second sequence
 ** @param [r] gapopen [float] gap opening coefficient
-** @param [r] compass [int*] Path direction pointer array
+** @param [r] compass [ajint*] Path direction pointer array
 ** @param [r] gapextend [float] gap extension coefficient
-** @param [w] start1 [int *] start of alignment in first sequence
-** @param [w] start2 [int *] start of alignment in second sequence
+** @param [w] start1 [ajint *] start of alignment in first sequence
+** @param [w] start2 [ajint *] start of alignment in second sequence
 ** 
 ** @return [float] Maximum path axis score
 ** @@
@@ -551,7 +555,7 @@ float embAlignScoreNWMatrix(float *path, AjPSeq a, AjPSeq b, float **fmatrix,
 ** Nucleotides or proteins as needed.
 **
 ** @param [r] path [float *] path matrix
-** @param [r] compass [int *] Path direction pointer array
+** @param [r] compass [ajint *] Path direction pointer array
 ** @param [r] gapopen [float] gap opening penalty
 ** @param [r] gapextend [float] gap extension penalty
 ** @param [r] a [AjPSeq] first sequence
@@ -560,8 +564,8 @@ float embAlignScoreNWMatrix(float *path, AjPSeq a, AjPSeq b, float **fmatrix,
 ** @param [r] lenb [ajint] length of second sequence
 ** @param [r] sub [float **] substitution matrix from AjPMatrixf
 ** @param [r] cvt [AjPSeqCvt] Conversion array for AjPMatrixf
-** @param [w] start1 [int *] start of alignment in first sequence
-** @param [w] start2 [int *] start of alignment in second sequence
+** @param [w] start1 [ajint *] start of alignment in first sequence
+** @param [w] start2 [ajint *] start of alignment in second sequence
 ** 
 ** @return [float] Score of best matching segment
 ******************************************************************************/
@@ -708,7 +712,7 @@ float embAlignScoreSWMatrix(float *path, ajint *compass, float gapopen,
 ** Nucleotides or proteins as needed.
 **
 ** @param [r] path [float *] path matrix
-** @param [r] compass [int *] Path direction pointer array
+** @param [r] compass [ajint *] Path direction pointer array
 ** @param [r] gapopen [float] gap opening penalty
 ** @param [r] gapextend [float] gap extension penalty
 ** @param [r] a [AjPSeq] first sequence
@@ -719,8 +723,8 @@ float embAlignScoreSWMatrix(float *path, ajint *compass, float gapopen,
 ** @param [r] lenb [ajint] length of second sequence
 ** @param [r] sub [float **] substitution matrix from AjPMatrixf
 ** @param [r] cvt [AjPSeqCvt] Conversion array for AjPMatrixf
-** @param [w] start1 [int *] start of alignment in first sequence
-** @param [w] start2 [int *] start of alignment in second sequence
+** @param [w] start1 [ajint *] start of alignment in first sequence
+** @param [w] start2 [ajint *] start of alignment in second sequence
 ** 
 ** @return [void]
 ******************************************************************************/
@@ -881,12 +885,12 @@ void embAlignWalkSWMatrix(float *path, ajint *compass, float gapopen,
 ** @param [w] n [AjPStr *] alignment for second sequence
 ** @param [r] lena [ajint] length of first sequence
 ** @param [r] lenb [ajint] length of second sequence
-** @param [w] start1 [int *] start of alignment in first sequence
-** @param [w] start2 [int *] start of alignment in second sequence
+** @param [w] start1 [ajint *] start of alignment in first sequence
+** @param [w] start2 [ajint *] start of alignment in second sequence
 ** @param [r] gapopen [float] gap open penalty
 ** @param [r] gapextend [float] gap extension penalty
 ** @param [r] cvt [AjPSeqCvt] Conversion array for AjPMatrixf
-** @param [r] compass [int *] Path direction pointer array
+** @param [r] compass [ajint *] Path direction pointer array
 ** @param [r] sub [float **] substitution matrix from AjPMatrixf
 ** 
 ** @return [void]
@@ -1555,7 +1559,7 @@ void embAlignUnused(void)
 ** @param [w] path [float *] path matrix
 ** @param [r] sub [float **] substitution matrix from AjPMatrixf
 ** @param [r] cvt [AjPSeqCvt] Conversion array for AjPMatrixf
-** @param [w] compass [int *] Path direction pointer array
+** @param [w] compass [ajint *] Path direction pointer array
 ** @param [r] show [AjBool] Display path matrix
 ** @param [r] width [ajint] width of path matrix
 ** 
@@ -1568,7 +1572,7 @@ void embAlignUnused(void)
 ******************************************************************************/
 void embAlignPathCalcFast(char *a, char *b, ajint lena, ajint lenb, float gapopen,
 		     float gapextend, float *path, float **sub, AjPSeqCvt cvt,
-		     ajint *compass, AjBool show,int width)
+		     ajint *compass, AjBool show, ajint width)
 {
     ajint xpos;
     ajint i;
@@ -1713,7 +1717,7 @@ void embAlignPathCalcFast(char *a, char *b, ajint lena, ajint lenb, float gapope
 ** Nucleotides or proteins as needed.
 **
 ** @param [r] path [float *] path matrix
-** @param [r] compass [int *] Path direction pointer array
+** @param [r] compass [ajint *] Path direction pointer array
 ** @param [r] gapopen [float] gap opening penalty
 ** @param [r] gapextend [float] gap extension penalty
 ** @param [r] a [AjPSeq] first sequence
@@ -1722,16 +1726,17 @@ void embAlignPathCalcFast(char *a, char *b, ajint lena, ajint lenb, float gapope
 ** @param [r] lenb [ajint] length of second sequence
 ** @param [r] sub [float **] substitution matrix from AjPMatrixf
 ** @param [r] cvt [AjPSeqCvt] Conversion array for AjPMatrixf
-** @param [w] start1 [int *] start of alignment in first sequence
-** @param [w] start2 [int *] start of alignment in second sequence
+** @param [w] start1 [ajint *] start of alignment in first sequence
+** @param [w] start2 [ajint *] start of alignment in second sequence
 ** @param [r] width [ajint] width of path matrix
 ** 
 ** @return [float] Score of best matching segment
 ******************************************************************************/
 float embAlignScoreSWMatrixFast(float *path, ajint *compass, float gapopen,
-                          float gapextend,  AjPSeq a, AjPSeq b,
-                          ajint lena, ajint lenb, float **sub,
-                          AjPSeqCvt cvt, ajint *start1, ajint *start2,int width)
+				float gapextend,  AjPSeq a, AjPSeq b,
+				ajint lena, ajint lenb, float **sub,
+				AjPSeqCvt cvt, ajint *start1, ajint *start2,
+				ajint width)
 {
     ajint i;
     ajint j;
@@ -1887,7 +1892,7 @@ float embAlignScoreSWMatrixFast(float *path, ajint *compass, float gapopen,
 ** Nucleotides or proteins as needed.
 **
 ** @param [r] path [float *] path matrix
-** @param [r] compass [int *] Path direction pointer array
+** @param [r] compass [ajint *] Path direction pointer array
 ** @param [r] gapopen [float] gap opening penalty
 ** @param [r] gapextend [float] gap extension penalty
 ** @param [r] a [AjPSeq] first sequence
@@ -1898,17 +1903,18 @@ float embAlignScoreSWMatrixFast(float *path, ajint *compass, float gapopen,
 ** @param [r] lenb [ajint] length of second sequence
 ** @param [r] sub [float **] substitution matrix from AjPMatrixf
 ** @param [r] cvt [AjPSeqCvt] Conversion array for AjPMatrixf
-** @param [w] start1 [int *] start of alignment in first sequence
-** @param [w] start2 [int *] start of alignment in second sequence
+** @param [w] start1 [ajint *] start of alignment in first sequence
+** @param [w] start2 [ajint *] start of alignment in second sequence
 ** @param [r] width [ajint] width of path matrix
 ** 
 ** @return [void]
 ******************************************************************************/
 
 void embAlignWalkSWMatrixFast(float *path, ajint *compass, float gapopen,
-			 float gapextend, AjPSeq a, AjPSeq b, AjPStr *m,
-			 AjPStr *n, ajint lena, ajint lenb, float **sub,
-			 AjPSeqCvt cvt, ajint *start1, ajint *start2,int width)
+			      float gapextend, AjPSeq a, AjPSeq b, AjPStr *m,
+			      AjPStr *n, ajint lena, ajint lenb, float **sub,
+			      AjPSeqCvt cvt, ajint *start1, ajint *start2,
+			      ajint width)
 {
     ajint i;
     ajint j;
@@ -2054,108 +2060,119 @@ void embAlignWalkSWMatrixFast(float *path, ajint *compass, float gapopen,
 ** Nucleotides or proteins as needed.
 **
 ** @param [r] a [char *] sequence
-** @param [r] mlen [ajint] length of profile
-** @param [r] slen [ajint] length of sequence
+** @param [r] proflen [ajint] length of profile
+** @param [r] seqlen [ajint] length of sequence
 ** @param [r] gapopen [float] gap opening coefficient
 ** @param [r] gapextend [float] gap extension coefficient
 ** @param [w] path [float *] path matrix
 ** @param [r] fmatrix [float **] profile matrix
-** @param [w] compass [int *] Path direction pointer array
+** @param [w] compass [ajint *] Path direction pointer array
 ** @param [r] show [AjBool] Display path matrix
 ** 
 ** @return [void]
 ******************************************************************************/
 
-void embAlignProfilePathCalc(char *a, ajint mlen, ajint slen, float gapopen,
-			    float gapextend, float *path, float **fmatrix,
-			    ajint *compass, AjBool show)
+void embAlignProfilePathCalc(char *a, ajint proflen, ajint seqlen,
+			     float gapopen,
+			     float gapextend, float *path, float **fmatrix,
+			     ajint *compass, AjBool show)
 {
-    ajint i;
-
-    float match;
-    float mscore;
-    float tsc;
-    float pen;
+    ajint row;		/* profile position in path */
+    ajint rowx;
+    
+    
+    ajint column;	/* sequence position in path */
+    ajint columnx;
+    
+    float penalty;
     static AjPStr outstr = NULL;
 
-    ajint mp=0;
-    ajint sp=0;
-    ajint spp=0;
-    ajint mpp=0;
+    float score;
+    float fmscore;
+    float diagscore;
+    float currmax;
     
-
     
     ajDebug("embAlignProfilePathCalc\n");
 
     /* First initialise the first column and row */
-    for(sp=0;sp<slen;++sp)
+    for(column=0;column<seqlen;++column)
     {
-	path[sp] = fmatrix[0][ajAZToInt(a[sp])];
-	compass[sp] = 0;
+	path[column] = fmatrix[0][ajAZToInt(a[column])];
+	compass[column] = DIAG;
     }
-    for(mp=0;mp<mlen;++mp)
+    for(row=0;row<proflen;++row)
     {
-	path[mp*slen] = fmatrix[mp][ajAZToInt(*a)];
-	compass[mp*slen] = 0;
+	path[row*seqlen] = fmatrix[row][ajAZToInt(*a)];
+	compass[row*seqlen] = DIAG;
     }
 
 
-    /* xpos and ypos are our diagonal steps so start at 1 */
-    mp=sp=1;
-    while(sp!=slen)
+    /* diagonal steps start at 1 */
+    column=1;
+    while(column!=seqlen)
     {
-	for(i=mp;i<mlen;++i)
+	for(row=1;row<proflen;++row)
 	{
 	    /* get match for current xpos/ypos */
-	    match = fmatrix[i][ajAZToInt(a[sp])];
+	    fmscore = fmatrix[row][ajAZToInt(a[column])];
 
 	    /* Get diag score */
-	    mscore = path[(i-1)*slen+sp-1] + match;
+	    diagscore = path[(row-1)*seqlen+(column-1)];
 
-	    /* Set compass to diagonal value 0 */
-	    compass[i*slen+sp] = 0;
-	    path[i*slen+sp] = mscore;
+	    /* Initialise current maximum to diagonal score */
+	    currmax = diagscore + fmscore;
+
+	    /* Initialise compass to diagonal value */
+	    compass[row*seqlen+column] = DIAG;
+	    path[row*seqlen+column] = currmax;
 	
 	    /* Now parade back along X axis */
-	    if(sp-2>-1)
+	    if(column-2>-1)
 	    {
-	    
-		for(spp=sp-2;spp>-1;--spp)
+		for(columnx=column-2;columnx>-1;--columnx)
 		{
-		    tsc = path[(i-1)*slen+spp];
-		    pen = -(fmatrix[spp][GAPO] * gapopen +
-			    ((sp-spp-2) *gapextend*fmatrix[spp][GAPE]));
+		    score = path[(row-1)*seqlen+columnx];
+		    score += fmscore;
+		    penalty  = -(fmatrix[(row-1)][GAPO] * gapopen +
+				 ((column-columnx-2) * gapextend *
+				  fmatrix[(row-1)][GAPE]));
+		    score += penalty;
 		    
-		    tsc += (pen + match);
-		    if(tsc>mscore)
+
+		    if(score>currmax)
 		    {
-			mscore=tsc;
-			path[i*slen+sp] = tsc;
-			compass[i*slen+sp] = 1; /* Score comes from left */
+			currmax=score;
+			path[row*seqlen+column] = currmax;
+			compass[row*seqlen+column] = LEFT;
 		    }
 		}
 	    }
 
 	    /* And then bimble down Y axis */
-	    if(i-2>-1)
+	    if(row-2>-1)
 	    {
-		for(mpp=i-2;mpp>-1;--mpp)
+		for(rowx=row-2;rowx>-1;--rowx)
 		{
-		    tsc = path[mpp*slen+sp-1];
-		    pen = -(fmatrix[mpp][GAPO] * gapopen+((i-mpp-2)
-				 *gapextend*fmatrix[mpp][GAPE]));
-		    tsc += (pen + match);
-		    if(tsc>mscore)
+		    score = path[rowx*seqlen+(column-1)];
+		    score += fmscore;
+		    
+		    penalty  = -(fmatrix[rowx][GAPO] * gapopen +
+				 ((float) (row-rowx-2.)
+				  * gapextend * fmatrix[rowx][GAPE]));
+		    score += penalty;
+
+		    if(score>currmax)
 		    {
-			mscore=tsc;
-			path[i*slen+sp] = tsc;
-			compass[i*slen+sp] = 2; /* Score comes from bottom */
+			currmax = score;
+			path[row*seqlen+column] = currmax;
+			compass[row*seqlen+column] = DOWN;
 		    }
 		}
 	    }
 	}
 
-	++sp;
+	++column;
     }
 
 
@@ -2164,11 +2181,12 @@ void embAlignProfilePathCalc(char *a, ajint mlen, ajint slen, float gapopen,
 
     if(show)
     {
-	for(mp=mlen-1;mp>-1;--mp)
+	for(row=proflen-1;row>-1;--row)
 	{
 	    ajStrDelReuse(&outstr);
-	    for(sp=0;sp<slen;++sp)
-		(void) ajFmtPrintAppS(&outstr,"%6.2f ",path[mp*slen+sp]);
+	    for(column=0;column<seqlen;++column)
+		(void) ajFmtPrintAppS(&outstr,"%6.2f ",
+				      path[row*seqlen+column]);
 	    (void) ajUser("%S", outstr);
 	}
     }
@@ -2184,142 +2202,6 @@ void embAlignProfilePathCalc(char *a, ajint mlen, ajint slen, float gapopen,
 
 
 
-/* @func embAlignScoreProfileMatrix *******************************************
-**
-** Score a profile path matrix for Smith waterman.
-** Nucleotides or proteins as needed.
-**
-** @param [r] path [float *] path matrix
-** @param [r] compass [int *] Path direction pointer array
-** @param [r] gapopen [float] gap opening coeff
-** @param [r] gapextend [float] gap extension coeff
-** @param [r] b [AjPStr] second sequence
-** @param [r] clen [ajint] length of consensus sequence
-** @param [r] slen [ajint] length of test sequence
-** @param [r] fmatrix [float **] profile
-** @param [w] start1 [int *] start of alignment in consensus sequence
-** @param [w] start2 [int *] start of alignment in test sequence
-** 
-** @return [float] profile alignment score
-******************************************************************************/
-
-float embAlignScoreProfileMatrix(float *path, ajint *compass, float gapopen,
-				float gapextend, AjPStr b,
-				ajint clen, ajint slen, float **fmatrix,
-				ajint *start1, ajint *start2)
-{
-    float pmax=0.;
-    float score=0.;
-    float match=0.;
-    float gapcnt=0.;
-    float pen=0.;
-    float partial=0.;
-    
-    ajint xpos=0;
-    ajint ypos=0;
-    ajint cp=0;
-    ajint sp=0;
-    ajint spp=0;
-    ajint cpp=0;
-    
-    char *q=NULL;
-
-    float wscore=0.;
-    float errbounds = 0.01;
-
-    ajDebug ("embAlignScoreProfileMatrix\n");
-
-    /* Get maximum path score and save position */
-    pmax = (float) -(INT_MAX);
-    for(cp=0;cp<clen;++cp)
-	for(sp=0;sp<slen;++sp)
-	    if(path[cp*slen+sp]>pmax)
-	    {
-		pmax=path[cp*slen+sp];
-		ypos=cp;
-		xpos=sp;
-	    }
-    
-    q = ajStrStr(b);
-
-
-    cp = ypos;
-    sp = xpos;
-
-    wscore = fmatrix[cp][ajAZToInt(q[sp])];
-    
-    while(cp && sp)
-    {
-	if(!compass[cp*slen+sp])	/* diagonal */
-	{
-	    if(path[(cp-1)*slen+sp-1]<0.)
-		break;
-	    wscore += fmatrix[--cp][ajAZToInt(q[--sp])];
-	    continue;
-	}
-	else if(compass[cp*slen+sp]==1)	/* Left, gap(s) in vertical */
-	{
-	    score = path[cp*slen+sp];
-	    gapcnt=0.;
-	    spp=sp-2;
-	    match = (float) -(INT_MAX);
-
-	    --cp;
-	    while(fabs(score-match) < errbounds)
-	    {
-		match = fmatrix[cp][ajAZToInt(q[spp])];
-		pen = -(fmatrix[cp][GAPO] + (fmatrix[cp][GAPE]*
-					       (gapcnt*gapextend)));
-		match += pen;
-		match += (partial=path[cp*slen+spp]);
-		if(partial<0.0)
-		{
-		    ++cp;
-		    break;
-		}
-		++gapcnt;
-		--spp;
-	    }
-	    wscore += (partial+pen);
-	    sp=spp+1;
-	    continue;
-	}
-	else if(compass[cp*slen+sp]==2)	/* Down, gap(s) in horizontal */
-	{
-	    score=path[cp*slen+sp];
-	    gapcnt=0.;
-	    cpp=cp-2;
-	    match = (float) -(INT_MAX);
-
-	    --sp;
-	    while(fabs(score-match) < errbounds)
-	    {
-		match = fmatrix[cpp][ajAZToInt(q[sp])];
-		pen = -(fmatrix[cpp][GAPO] + (fmatrix[cpp][GAPE]*
-					       (gapcnt*gapextend)));
-		match += pen;
-		match += (partial=path[cpp*slen+sp]);
-		if(partial<0.0)
-		{
-		    ++sp;
-		    break;
-		}
-		++gapcnt;
-		--cpp;
-	    }
-	    wscore += (partial+pen);
-	    cp=cpp+1;
-	    continue;
-	}
-	else
-	    ajFatal("Walk Error in Profile Score");
-    }
-
-    *start1 = cp;
-    *start2 = sp;
-    
-    return wscore;
-}
 
 /* @func embAlignWalkProfileMatrix *******************************************
 **
@@ -2327,42 +2209,49 @@ float embAlignScoreProfileMatrix(float *path, ajint *compass, float gapopen,
 ** Nucleotides or proteins as needed.
 **
 ** @param [r] path [float *] path matrix
-** @param [r] compass [int *] Path direction pointer array
+** @param [r] compass [ajint *] Path direction pointer array
 ** @param [r] gapopen [float] gap opening coeff
 ** @param [r] gapextend [float] gap extension coeff
 ** @param [r] cons [AjPStr] consensus sequence
-** @param [r] b [AjPStr] second sequence
+** @param [r] seq [AjPStr] second sequence
 ** @param [w] m [AjPStr *] alignment for consensus sequence
 ** @param [w] n [AjPStr *] alignment for second sequence
-** @param [r] clen [ajint] length of consensus sequence
-** @param [r] slen [ajint] length of test sequence
+** @param [r] proflen [ajint] length of consensus sequence
+** @param [r] seqlen [ajint] length of test sequence
 ** @param [r] fmatrix [float **] profile
-** @param [w] start1 [int *] start of alignment in consensus sequence
-** @param [w] start2 [int *] start of alignment in test sequence
+** @param [w] start1 [ajint *] start of alignment in consensus sequence
+** @param [w] start2 [ajint *] start of alignment in test sequence
 ** 
 ** @return [void]
 ******************************************************************************/
 
 void embAlignWalkProfileMatrix(float *path, ajint *compass, float gapopen,
-			 float gapextend, AjPStr cons, AjPStr b, AjPStr *m,
-			 AjPStr *n, ajint clen, ajint slen, float **fmatrix,
-			 ajint *start1, ajint *start2)
+			       float gapextend, AjPStr cons, AjPStr seq,
+			       AjPStr *m, AjPStr *n, ajint proflen,
+			       ajint seqlen, float **fmatrix,
+			       ajint *start1, ajint *start2)
 {
     ajint i;
-    float pmax;
-    float score;
-    float match;
-    float gapcnt;
-    float pen=0.;
-    float partial=0.;
+    float pathmax;
+    float targetscore;
+    float currscore;
     
-    ajint cp=0;
-    ajint cpp=0;
-    ajint sp=0;
-    ajint spp=0;
+    float match;
+    ajint gapcnt;
+    float penalty=0.;
+    
+    ajint row    = 0;
+    ajint column = 0;
+
+    ajint colstep;
+    ajint rowstep;
+    
+
+    ajint direction=0;
 
     ajint xpos=0;
     ajint ypos=0;
+
     char *p;
     char *q;
     char r[2]="?";
@@ -2373,123 +2262,124 @@ void embAlignWalkProfileMatrix(float *path, ajint *compass, float gapopen,
     ajDebug("embAlignWalkProfileMatrix\n");
 
     /* Get maximum path score and save position */
-    pmax = (float) -(INT_MAX);
-    for(cp=0;cp<clen;++cp)
-	for(sp=0;sp<slen;++sp)
-	    if(path[cp*slen+sp]>pmax)
+    pathmax = -(float) INT_MAX;
+    for(row=0;row<proflen;++row)
+	for(column=0;column<seqlen;++column)
+	    if(path[row*seqlen+column] > pathmax)
 	    {
-		pmax=path[cp*slen+sp];
-		xpos=sp;
-		ypos=cp;
+		pathmax=path[row*seqlen+column];
+		xpos=column;
+		ypos=row;
 	    }
     
 
-    sp = xpos;
-    cp = ypos;
+    column = xpos;
+    row = ypos;
 
     p = ajStrStr(cons);
-    q = ajStrStr(b);
+    q = ajStrStr(seq);
 
-    *r = p[cp];
+    *r = p[row];
     (void) ajStrAssC(m,r);
-    *r = q[sp];
+    *r = q[column];
     (void) ajStrAssC(n,r);
 
     
-    while(cp && sp)
+    while(row && column)
     {
-	if(!compass[cp*slen+sp])	/* diagonal */
+	direction = compass[row*seqlen+column];
+	if(direction == DIAG)
 	{
-	    if(path[(cp-1)*slen+sp-1]<0.)
+	    if(path[(row-1)*seqlen+(column-1)]<0.)
 		break;
-	    *r=p[--cp];
+	    *r=p[--row];
 	    (void) ajStrInsertC(m,0,r);
-	    *r=q[--sp];
+	    *r=q[--column];
 	    (void) ajStrInsertC(n,0,r);
 	    continue;
 	}
-	else if(compass[cp*slen+sp]==1)	/* Left, gap(s) in vertical */
+	else if(direction == LEFT)
 	{
-	    score = path[cp*slen+sp];
-	    gapcnt=0.;
-	    spp=sp-2;
-	    match = 0.;
+	    targetscore = path[row*seqlen+column];
+	    gapcnt = 0;
+	    colstep=column-2;
+	    currscore = -(float)INT_MAX;
+	    match = fmatrix[row][ajAZToInt(q[column])];
 
-	    --cp;
-	    while(fabs(score-match) < errbounds)
+	    while(fabs(targetscore-currscore) > errbounds)
 	    {
-		match = fmatrix[cp][ajAZToInt(q[spp])];
-		pen = -(fmatrix[cp][GAPO] + (fmatrix[cp][GAPE]*
-					       (gapcnt*gapextend)));
-		match += pen;
-		match += (partial=path[cp*slen+spp]);
-		if(partial<0.0)
-		{
-		    ++cp;
-		    break;
-		}
+		currscore = path[(row-1)*seqlen+colstep];
+		penalty = -(fmatrix[row-1][GAPO] * gapopen +
+			    fmatrix[row-1][GAPE] * (float)gapcnt * gapextend);
+		currscore += penalty;
+		currscore += match;
+		
 		++gapcnt;
-		--spp;
-	    }
+		if(currscore-penalty < 0.)
+		    break;
 
+		--colstep;
+	    }
+	    
 	    for(i=0;i<gapcnt;++i)
 	    {
 		(void) ajStrInsertC(m,0,dot);
-		*r=q[--sp];
+		*r=q[--column];
 		(void) ajStrInsertC(n,0,r);
 	    }
-	    *r=q[--sp];
+
+	    *r=q[--column];
 	    (void) ajStrInsertC(n,0,r);
-	    *r=p[cp];
+	    *r=p[--row];
 	    (void) ajStrInsertC(m,0,r);
 
-	    sp=spp+1;
 	    continue;
 	}
-	else if(compass[cp*slen+sp]==2) /* Down, gap(s) in horizontal */
+	else if(direction == DOWN)
 	{
-	    score=path[cp*slen+sp];
-	    gapcnt=0.;
-	    cpp=cp-2;
-	    match = (float) -(INT_MAX);
+	    targetscore=path[row*seqlen+column];
+	    gapcnt=0;
+	    rowstep=row-2;
+	    currscore = -(float)(INT_MAX);
+	    match = fmatrix[row][ajAZToInt(q[column])];
 
-	    --sp;
-	    while(fabs(score-match) < errbounds)
+	    while(fabs(targetscore-currscore) > errbounds)
 	    {
-		match = fmatrix[cpp][ajAZToInt(q[sp])];
-		pen = -(fmatrix[cpp][GAPO] + (fmatrix[cpp][GAPE]*
-					       (gapcnt*gapextend)));
-		match += pen;
-		match += (partial=path[cpp*slen+sp]);
-		if(partial<0.0)
-		{
-		    ++sp;
-		    break;
-		}
+		currscore = path[rowstep*seqlen+(column-1)];
+		penalty = -(fmatrix[rowstep][GAPO] * gapopen +
+			    fmatrix[rowstep][GAPE] * (float)gapcnt *
+			    gapextend);
+		currscore += penalty;
+		currscore += match;
+		
 		++gapcnt;
-		--cpp;
+
+		if(currscore-penalty < 0.)
+		    break;
+
+		--rowstep;
 	    }
 
 	    for(i=0;i<gapcnt;++i)
 	    {
 		(void) ajStrInsertC(n,0,dot);
-		*r=p[--cp];
+		*r=p[--row];
 		(void) ajStrInsertC(m,0,r);
 	    }
-	    *r=p[--cp];
+
+	    *r=p[--row];
 	    (void) ajStrInsertC(m,0,r);
-	    *r=q[sp];
+	    *r=q[column];
 	    (void) ajStrInsertC(n,0,r);
 
-	    cp=cpp+1;
 	    continue;
 	}
 	else
 	    ajFatal("Walk Error in Profile Walk");
     }
 
-    *start1 = cp;
-    *start2 = sp;
+    *start1 = row;
+    *start2 = column;
     
     return;
 }
@@ -2546,6 +2436,7 @@ void embAlignPrintProfile(AjPFile outf, char *a, char *b, AjPStr m, AjPStr n,
     
     ajint len;
     ajint pos;
+    ajint cpos;
     
     fm = ajStrNewC("");
     ap = ajStrNewC("");
@@ -2559,16 +2450,23 @@ void embAlignPrintProfile(AjPFile outf, char *a, char *b, AjPStr m, AjPStr n,
     olen=strlen(p);
     fa=m;
     fb=n;
+
+
+    cpos = start1;
+    --cpos;
+    
     if(mark)
     {
 	for(i=0;i<olen;++i)
 	{
+	    if(p[i]!='.')
+		++cpos;
 	    if(p[i]=='.' || q[i]=='.')
 	    {
 		(void) ajStrAppC(&fm," ");
 		continue;
 	    }
-	    match=fmatrix[/*start2+*/i][ajAZToInt(p[i])];
+	    match=fmatrix[cpos][ajAZToInt(q[i])];
 	    if(p[i]==q[i])
 	    {
 		(void) ajStrAppC(&fm,"|");
@@ -2688,6 +2586,8 @@ void embAlignPrintProfile(AjPFile outf, char *a, char *b, AjPStr m, AjPStr n,
     ajStrDel(&bp);
     ajStrDel(&ap);
     ajStrDel(&fm);
+
+    return;
 }
 
 
@@ -2763,3 +2663,157 @@ void embAlignCalcSimilarity(AjPStr m, AjPStr n, float **sub, AjPSeqCvt cvt,
     return;
 }
 
+
+/* @func embAlignScoreProfileMatrix *******************************************
+**
+** Score a profile path matrix for Smith waterman.
+** Nucleotides or proteins as needed.
+**
+** @param [r] path [float *] path matrix
+** @param [r] compass [ajint *] Path direction pointer array
+** @param [r] gapopen [float] gap opening coeff
+** @param [r] gapextend [float] gap extension coeff
+** @param [r] seq [AjPStr] second sequence
+** @param [r] proflen [ajint] length of consensus sequence
+** @param [r] seqlen [ajint] length of test sequence
+** @param [r] fmatrix [float **] profile
+** @param [w] start1 [ajint *] start of alignment in consensus sequence
+** @param [w] start2 [ajint *] start of alignment in test sequence
+** 
+** @return [float] profile alignment score
+******************************************************************************/
+
+float embAlignScoreProfileMatrix(float *path, ajint *compass, float gapopen,
+				float gapextend, AjPStr seq,
+				ajint proflen, ajint seqlen, float **fmatrix,
+				ajint *start1, ajint *start2)
+{
+    ajint i;
+    float pathmax;
+    float targetscore;
+    float currscore;
+    float wscore=0.;
+    
+    float match;
+    ajint gapcnt;
+    float penalty=0.;
+    
+    ajint row    = 0;
+    ajint column = 0;
+
+    ajint colstep;
+    ajint rowstep;
+    
+
+    ajint direction=0;
+
+    ajint xpos=0;
+    ajint ypos=0;
+
+    char *q;
+
+    float errbounds=0.01;
+    
+    ajDebug("embAlignWalkProfileMatrix\n");
+
+    /* Get maximum path score and save position */
+    pathmax = -(float) INT_MAX;
+    for(row=0;row<proflen;++row)
+	for(column=0;column<seqlen;++column)
+	    if(path[row*seqlen+column] > pathmax)
+	    {
+		pathmax=path[row*seqlen+column];
+		xpos=column;
+		ypos=row;
+	    }
+    
+
+    column = xpos;
+    row = ypos;
+
+    q = ajStrStr(seq);
+
+    wscore = fmatrix[row][ajAZToInt(q[column])];
+    
+    while(row && column)
+    {
+	direction = compass[row*seqlen+column];
+	if(direction == DIAG)
+	{
+	    if(path[(row-1)*seqlen+(column-1)]<0.)
+		break;
+	    wscore += fmatrix[--row][ajAZToInt(q[--column])];
+	    continue;
+	}
+	else if(direction == LEFT)
+	{
+	    targetscore = path[row*seqlen+column];
+	    gapcnt = 0;
+	    colstep=column-2;
+	    currscore = -(float)INT_MAX;
+	    match = fmatrix[row][ajAZToInt(q[column])];
+
+	    while(fabs(targetscore-currscore) > errbounds)
+	    {
+		currscore = path[(row-1)*seqlen+colstep];
+		penalty = -(fmatrix[row-1][GAPO] * gapopen +
+			    fmatrix[row-1][GAPE] * (float)gapcnt * gapextend);
+		currscore += penalty;
+		currscore += match;
+		
+		++gapcnt;
+		if(currscore-penalty < 0.)
+		    break;
+
+		--colstep;
+	    }
+
+	    
+	    for(i=0;i<gapcnt;++i)
+		--column;
+
+	    wscore += fmatrix[--row][ajAZToInt(q[--column])];	    
+
+	    continue;
+	}
+	else if(direction == DOWN)
+	{
+	    targetscore=path[row*seqlen+column];
+	    gapcnt=0;
+	    rowstep=row-2;
+	    currscore = -(float)(INT_MAX);
+	    match = fmatrix[row][ajAZToInt(q[column])];
+
+	    while(fabs(targetscore-currscore) > errbounds)
+	    {
+		currscore = path[rowstep*seqlen+(column-1)];
+		penalty = -(fmatrix[rowstep][GAPO] * gapopen +
+			    fmatrix[rowstep][GAPE] * (float)gapcnt *
+			    gapextend);
+		currscore += penalty;
+		currscore += match;
+		
+		++gapcnt;
+
+		if(currscore-penalty < 0.)
+		    break;
+
+		--rowstep;
+	    }
+
+	    for(i=0;i<gapcnt;++i)
+		--row;
+
+	    wscore += fmatrix[--row][ajAZToInt(q[--column])];	    
+
+	    continue;
+	}
+	else
+	    ajFatal("Walk Error in Profile Score");
+    }
+
+    *start1 = row;
+    *start2 = column;
+    
+    return wscore;
+}

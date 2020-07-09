@@ -106,7 +106,7 @@ int main(int argc, char **argv)
 	ajStrAssC(&seqname,ajSeqName(seq));
 	begin = ajSeqallBegin(seqall);
 	end   = ajSeqallEnd(seqall);
-	ajStrAssSubC(&text,ajSeqCharCopy(seq),begin-1,end-1);
+	ajStrAssSubC(&text,ajSeqChar(seq),begin-1,end-1);
 	ajStrToUpper(&text);
 	
 	embPatFuzzSearch(type,begin,pattern,opattern,seqname,text,&l,

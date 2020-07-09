@@ -117,7 +117,7 @@ static ajint never = 0;		/* for use in asserts; shuts lint up */
 
 /*
  - regcomp - interface for parser and compilation
- = extern ajint regcomp(regex_t *, const char *, int);
+ = extern ajint regcomp(regex_t *, const char *, ajint);
  = #define	REG_BASIC	0000
  = #define	REG_EXTENDED	0001
  = #define	REG_ICASE	0002
@@ -1410,7 +1410,7 @@ static void mccase(register struct parse *p,register cset *cs)
  == static ajint isinsets(register REGUTSSTRUCT *g, ajint c);
  */
 			/* predicate */
-static ajint isinsets(register REGUTSSTRUCT *g,int c)
+static ajint isinsets(register REGUTSSTRUCT *g, ajint c)
 {
     register UCH *col;
     register ajint i;
@@ -1432,7 +1432,7 @@ static ajint isinsets(register REGUTSSTRUCT *g,int c)
  == static ajint samesets(register REGUTSSTRUCT *g, ajint c1, ajint c2);
  */
 			/* predicate */
-static ajint samesets(register REGUTSSTRUCT *g,int c1,int c2)
+static ajint samesets(register REGUTSSTRUCT *g, ajint c1, ajint c2)
 {
     register UCH *col;
     register ajint i;

@@ -24,8 +24,8 @@
 
 #include "emboss.h"
 
-static void merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
-	AjPSeqout seqout, AjPFile outfile);
+static void megamergerMerge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
+			     AjPSeqout seqout, AjPFile outfile);
 
 
 int main(int argc, char **argv)
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 
   if (ajListLength(matchlist)) {
 /* make the output file */
-    merge(matchlist, seq1, seq2, seqout, outfile);
+    megamergerMerge(matchlist, seq1, seq2, seqout, outfile);
   
 /* tidy up */
     embWordMatchListDelete(matchlist); /* free the match structures */
@@ -77,7 +77,7 @@ int main(int argc, char **argv)
 }
 
 
-/* @funcstatic merge ********************************************
+/* @funcstatic megamergerMerge ********************************************
 **
 ** Marge and write a report on the merge of the two sequences.
 **
@@ -90,8 +90,8 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-static void merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
-	AjPSeqout seqout, AjPFile outfile) {
+static void megamergerMerge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
+			     AjPSeqout seqout, AjPFile outfile) {
 
   AjIList iter=NULL;		/* match list iterator */
   EmbPWordMatch p=NULL;  		/* match structure */

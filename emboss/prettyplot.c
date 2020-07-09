@@ -112,10 +112,10 @@ ajint calcseqperpage(float yincr,float y,AjBool consensus)
 
 
 
-ajint fillinboxes(float ystart,int length,int numseq,int resbreak,
-		AjPSeqCvt cvt, float yincr,int numres,AjBool consensus,
-		AjBool title,int start,int end,AjBool boxcol,
-		AjBool boxit,int seqstart, ajint seqend, AjPFile outf,
+ajint fillinboxes(float ystart, ajint length, ajint numseq, ajint resbreak,
+		AjPSeqCvt cvt, float yincr, ajint numres,AjBool consensus,
+		AjBool title, ajint start, ajint end,AjBool boxcol,
+		AjBool boxit, ajint seqstart, ajint seqend, AjPFile outf,
 		AjBool data, ajint datacol, float datacs)
 {
     ajint count = 1,gapcount=0,countforgap=0;

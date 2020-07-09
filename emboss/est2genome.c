@@ -35,23 +35,22 @@ extern ajint lsimmat[256][256];
 #define FORWARD_ONLY 1
 #define REVERSE_ONLY 2
 
-extern ajint verbose;
-extern ajint debug;
-extern ajint indentation;
+ajint verbose;
+ajint debug;
 
 void 
-make_output( AjPFile ofile, SEQUENCE *genome, SEQUENCE *est, ge_alignment *ge,
-	    ajint match, ajint mismatch, ajint gap_penalty, ajint intron_penalty,
-	    ajint splice_penalty, ajint minscore, ajint align, ajint width,
-	    ajint reverse);
+make_output( AjPFile ofile, AjPSeq genome, AjPSeq est, EmbPEstAlign ge,
+	     ajint match, ajint mismatch, ajint gap_penalty,
+	     ajint intron_penalty, ajint splice_penalty, ajint minscore,
+	     ajint align, ajint width, ajint reverse);
 
 ajint 
 main( ajint argc, char *argv[])
 {
-  SEQUENCE *genome;
-  SEQUENCE *splice_sites, *reversed_splice_sites;
-  SEQUENCE *est, *reversed_est=NULL;
-  ge_alignment *fge=NULL, *rge=NULL, *bge=NULL;
+  AjPSeq genome;
+  AjPSeq splice_sites, reversed_splice_sites;
+  AjPSeq est, reversed_est=NULL;
+  EmbPEstAlign fge=NULL, rge=NULL, bge=NULL;
   ajint width=50;
   ajint match=1;
   ajint mismatch=1;
@@ -73,14 +72,13 @@ main( ajint argc, char *argv[])
   AjPStr modestr;
   AjPFile outfile;
   AjPSeqall estset;
-  AjPSeq genomeseq;
 
   /* the fasta input files */
 
   embInit ("est2genome", argc, argv);
 
   estset = ajAcdGetSeqall ("est");
-  genomeseq = ajAcdGetSeq ("genome");
+  genome = ajAcdGetSeq ("genome");
   outfile = ajAcdGetOutfile ("outfile");
 
   /* the alignment penalties */
@@ -152,13 +150,20 @@ main( ajint argc, char *argv[])
 
   if (verbose) ajDebug ("debugging set to %d\n", debug);
 
+  if (verbose)
+      embEstSetVerbose();
+  if (debug)
+      embEstSetDebug();
+
   /* shuffle the sequences to test for statistical
      significance this many times */
 
   shuffles = ajAcdGetInt("shuffle");
   seed = ajAcdGetInt("seed");
 
-  getseed(&seed,argc,argv); /* random number seed */
+  seed = ajAcdGetInt("seed");
+  if (!seed)
+      seed = embEstGetSeed();
   seed = -seed;
 
   if ( mismatch < 0 )
@@ -170,36 +175,34 @@ main( ajint argc, char *argv[])
   if ( splice_penalty < 0 )
     splice_penalty = -splice_penalty;
 
-  matinit( match, mismatch, gap_penalty, 0, '-' );
+  embEstMatInit( match, mismatch, gap_penalty, 0, '-' );
 
-  genome = seq_to_sequence(genomeseq);
-  if ( genome )
+  if ( ajSeqLen(genome) )
     {
-      /* Make sure we have enough space to hold the genomic sequence */
+      /* Make sure we have enough space to hold the genomic AjPSeq /
 
-      if ( megabytes < genome->len*1.5e-6 ) 
+      if ( megabytes < ajSeqLen(genome)*1.5e-6 ) 
 	{
 	  ajWarn ("increasing space from %.3f to %.3f Mb\n",
-		  megabytes, 1.5e-6*genome->len );
-	  megabytes = 1.5e-6*genome->len;
+		  megabytes, 1.5e-6*ajSeqLen(genome)* );
+	  megabytes = 1.5e-6*ajSeqLen(genome)*;
 	}
 
       /* find the GT/AG splice sites */
 
       if ( splice )
-	splice_sites = find_splice_sites( genome, 1 );
+	splice_sites = embEstFindSpliceSites( genome, 1 );
       else
 	splice_sites = NULL;
 
       if ( search_mode == BOTH )
-	reversed_splice_sites = find_splice_sites( genome, 0 );
+	reversed_splice_sites = embEstFindSpliceSites( genome, 0 );
       else
 	reversed_splice_sites = NULL;
 
       /* process each est */
       
-      while ( (est = get_next_sq( estset )) )
-	{
+      while (ajSeqallNext(estset, &est)) {
 
 	  /* if required, make shuffled comparisons
              to get statistical significance */
@@ -207,30 +210,30 @@ main( ajint argc, char *argv[])
 	  ajDebug("shuffles: %d\n", shuffles);
 	  if ( shuffles > 0 )
 	    {
-	      SEQUENCE *shuffled_est = seqdup( est );
+	      AjPSeq shuffled_est = ajSeqNewS(est);
 	      ajint n;
 	      ajint score;
 	      double mean=0, std=0;
-	      ge_alignment *sge;
+	      EmbPEstAlign sge;
 
 	      for(n=0;n<shuffles;n++)
 		{
-		  shuffle_seq( shuffled_est, 1, &seed );
-		  sge = non_recursive_est_to_genome( shuffled_est,
-						    genome, match, mismatch,
-						    gap_penalty,
-						    intron_penalty,
-						    splice_penalty,
-						    splice_sites, 0, 0,
-						    DIAGONAL );  
+		  embEstShuffleSeq( shuffled_est, 1, &seed );
+		  sge = embEstAlignNonRecursive( shuffled_est,
+						 genome, match, mismatch,
+						 gap_penalty,
+						 intron_penalty,
+						 splice_penalty,
+						 splice_sites, 0, 0,
+						 DIAGONAL );  
 		  score = sge->score;
-		  ajDebug("%30.30s\n", shuffled_est->s );
+		  ajDebug("%30.30S\n", ajSeqStr(shuffled_est) );
 		  ajDebug("%5d score %d seed %d\n", n, score, seed );
 		  if ( score > max_score ) 
 		    max_score = score;
 		  mean += score;
 		  std += score*score;
-		  free_ge(sge);
+		  embEstFreeAlign(&sge);
 		}
 	      
 	      mean /= shuffles;
@@ -238,14 +241,14 @@ main( ajint argc, char *argv[])
 	      ajDebug ("shuffles: %d max: %d mean: %.2f std dev: %.2f\n",
 		      shuffles, max_score, mean, std );
 	      minscore = max_score+1; 
-	      free_seq(shuffled_est);
+	      ajSeqDel(&shuffled_est);
 	    }
 		  
 	  if ( search_mode != REVERSE_ONLY ) { /* forward strand */
-	    fge = linear_space_est_to_genome( est, genome, match,
-					       mismatch, gap_penalty,
-					       intron_penalty, splice_penalty,
-					       splice_sites, megabytes );
+	    fge = embEstAlignLinearSpace ( est, genome, match,
+					   mismatch, gap_penalty,
+					   intron_penalty, splice_penalty,
+					   splice_sites, megabytes );
 	    if (!fge)
 	      ajFatal ("forward strand alignment failed");
 	  }
@@ -254,13 +257,13 @@ main( ajint argc, char *argv[])
 
 	  if ( search_mode != FORWARD_ONLY ) /* reverse strand */
 	    {
-	      reversed_est = seqdup(est);
-	      complement_seq(reversed_est->s);
+	      reversed_est = ajSeqNewS(est);
+	      ajSeqReverse(reversed_est);
 
-	      rge = linear_space_est_to_genome( reversed_est, genome,
-					       match, mismatch, gap_penalty,
-					       intron_penalty, splice_penalty,
-					       splice_sites, megabytes );
+	      rge = embEstAlignLinearSpace ( reversed_est, genome,
+					     match, mismatch, gap_penalty,
+					     intron_penalty, splice_penalty,
+					     splice_sites, megabytes );
 	      if (!rge)
 		ajFatal ("reverse strand alignment failed");
 	    }
@@ -272,12 +275,12 @@ main( ajint argc, char *argv[])
 	      if ( fge->score > rge->score ) 
 		{ 		  /* redo forward search with
 				     reversed splice sites */
-		  bge = linear_space_est_to_genome( est, genome, match,
-						   mismatch, gap_penalty,
-						   intron_penalty,
-						   splice_penalty,
-						   reversed_splice_sites,
-						   megabytes );
+		  bge = embEstAlignLinearSpace ( est, genome, match,
+						 mismatch, gap_penalty,
+						 intron_penalty,
+						 splice_penalty,
+						 reversed_splice_sites,
+						 megabytes );
 		  if (  bge->score > fge->score ) /* probably have a
 						     reversed gene */
 		    {
@@ -312,13 +315,13 @@ main( ajint argc, char *argv[])
 		}
 	      else 
 		{
-		  bge = linear_space_est_to_genome( reversed_est,genome,
-						   match, mismatch,
-						   gap_penalty,
-						   intron_penalty,
-						   splice_penalty,
-						   reversed_splice_sites,
-						   megabytes );
+		  bge = embEstAlignLinearSpace ( reversed_est,genome,
+						 match, mismatch,
+						 gap_penalty,
+						 intron_penalty,
+						 splice_penalty,
+						 reversed_splice_sites,
+						 megabytes );
 		  if (  bge->score > rge->score ) /* probably have a
 						     reversed gene */
 		    {
@@ -356,31 +359,21 @@ main( ajint argc, char *argv[])
 
 
 	    }
-	  if ( bge ) {
-	    free_ge(bge);
-	    bge = NULL;
-	  }
-	  if ( rge ) {
-	    free_ge(rge);
-	    rge = NULL;
-	  }
-	  if ( fge ) {
-	    free_ge(fge);
-	    fge = NULL;
-	  }
-
-	  free_seq_copy(est);
-	  if (reversed_est) 
-	    free_seq(reversed_est);
+	  embEstFreeAlign(&bge);
+	  embEstFreeAlign(&rge);
+	  embEstFreeAlign(&fge);
+	  
+	  ajSeqDel(&est);
+	  ajSeqDel(&reversed_est);
 	}
 
       if ( splice_sites )
-	free_seq( splice_sites );
+	ajSeqDel( &splice_sites );
 
       if ( reversed_splice_sites ) 
-	free_seq( reversed_splice_sites );
+	ajSeqDel( &reversed_splice_sites );
 
-      free_seq_copy(genome); 
+      ajSeqDel(&genome); 
       return 0;
     }
   return 1;
@@ -388,24 +381,26 @@ main( ajint argc, char *argv[])
 
 
 
-void 
-make_output( AjPFile ofile, SEQUENCE *genome, SEQUENCE *est, ge_alignment *ge,
-	    ajint match, ajint mismatch, ajint gap_penalty, ajint intron_penalty,
-	    ajint splice_penalty, ajint minscore, ajint align, ajint width,
-	    ajint reverse)
-{
+void make_output( AjPFile ofile, AjPSeq genome, AjPSeq est, EmbPEstAlign ge,
+		  ajint match, ajint mismatch, ajint gap_penalty,
+		  ajint intron_penalty, ajint splice_penalty, ajint minscore,
+		  ajint align, ajint width, ajint reverse) {
+
   if ( ge->score >= minscore )
     {
-      blast_style_output( ofile, genome, est, ge, match, mismatch, gap_penalty,
-			 intron_penalty, splice_penalty, 1, reverse );
+      embEstOutBlastStyle( ofile, genome, est, ge,
+			   match, mismatch, gap_penalty,
+			   intron_penalty, splice_penalty, 1, reverse );
       ajFmtPrintF( ofile, "\n");
-      blast_style_output( ofile, genome, est, ge, match, mismatch, gap_penalty,
-			 intron_penalty, splice_penalty, 0, reverse );
+      embEstOutBlastStyle ( ofile, genome, est, ge,
+			    match, mismatch, gap_penalty,
+			    intron_penalty, splice_penalty, 0, reverse );
 	      
       if ( align )
 	{
-	  ajFmtPrintF(ofile, "\n\n%s vs %s:\n", genome->name, est->name );
-	  print_align( ofile, genome, est, ge, width );
+	  ajFmtPrintF(ofile, "\n\n%s vs %s:\n",
+		      ajSeqName(genome), ajSeqName(est) );
+	  embEstPrintAlign( ofile, genome, est, ge, width );
 	}
     }
 }

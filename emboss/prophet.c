@@ -306,14 +306,15 @@ void scan_profile(AjPStr substr, AjPStr pname, AjPStr name, AjPStr mname,
     score=embAlignScoreProfileMatrix(path,compass,opencoeff,extendcoeff,
 				     substr,mlen,slen,fmatrix,&start1,
 				     &start2);
-
+    
     embAlignWalkProfileMatrix(path,compass,opencoeff,extendcoeff,*cons,
 			      substr,m,n,mlen,slen,fmatrix,&start1,
 			      &start2);
+
     
-    embAlignPrintProfile(outf,ajStrStr(*cons),ajStrStr(substr),*n,*m,
-			 start2,start1,score,1,fmatrix,ajStrStr(pname),
-			 "Consensus",begin,1);
+    embAlignPrintProfile(outf,ajStrStr(*cons),ajStrStr(substr),*m,*n,
+			 start1,start2,score,1,fmatrix,"Consensus",
+			 ajStrStr(pname),1,begin);
 
     return;
 }

@@ -201,7 +201,10 @@ int main (int argc, char * argv[])
 **
 ** K Tamura, Mol. Biol. Evol. 1992, 9, 678.
 **
-** returns: corrected distance matrix
+** @param [r] seqcharptr [char**] Array of sequences as C strings 
+** @param [r] len [ajint] Length
+** @param [r] nseqs [ajint] Number of sequences
+** @return [AjPFloat2d] corrected distance matrix
 **
 *************************************************************************/
 static AjPFloat2d Tamura(char** seqcharptr, ajint len, ajint nseqs)
@@ -353,7 +356,10 @@ static AjPFloat2d Tamura(char** seqcharptr, ajint len, ajint nseqs)
 **
 ** M Kimura, J. Mol. Evol., 1980, 16, 111.
 **
-** returns: corrected distance matrix
+** @param [r] seqcharptr [char**] Array of sequences as C strings 
+** @param [r] len [ajint] Length
+** @param [r] nseqs [ajint] Number of sequences
+** @return [AjPFloat2d] corrected distance matrix
 **
 *************************************************************************/
 
@@ -453,7 +459,10 @@ static AjPFloat2d Kimura(char** seqcharptr, ajint len, ajint nseqs)
 **
 ** Kimura protein distance
 **
-** returns: corrected distance matrix
+** @param [r] seqcharptr [char**] Array of sequences as C strings 
+** @param [r] mlen [ajint] Length
+** @param [r] nseqs [ajint] Number of sequences
+** @return [AjPFloat2d] corrected distance matrix
 **
 *************************************************************************/
 
@@ -540,7 +549,13 @@ static AjPFloat2d KimuraProt(char** seqcharptr, ajint mlen, ajint nseqs)
 ** Sum the no. of matches between each pair of sequence in an 
 ** alignment.
 **
-** returns: matches matrix 
+** @param [r] seqcharptr [char**] Array of sequences as C strings 
+** @param [r] len [ajint] Length
+** @param [r] nseqs [ajint] Number of sequences
+** @param [r] ambig [AjBool] Ambiguity codes
+** @param [r] nuc [AjBool] Nucleotide
+** @param [r] gap [AjPFloat2d*] Gaps
+** @return [AjPFloat2d] corrected distance matrix
 **
 *************************************************************************/
 
@@ -624,7 +639,13 @@ static AjPFloat2d calc_match(char** seqcharptr, ajint len, ajint nseqs,
 **
 **        D = p-distance = 1 - (matches/(posns_scored + gaps*gap_penalty))
 **
-** returns: uncorrected distance matrix D
+** @param [r] match [AjPFloat2d] Matches
+** @param [r] gap [AjPFloat2d] Gaps
+** @param [r] gapwt [float] Gap weight
+** @param [r] len [ajint] Length
+** @param [r] nseqs [ajint] Number of sequences
+** @param [r] nuc [AjBool] Nucleotide
+** @return [AjPFloat2d] uncorrected distance matrix D
 **
 *************************************************************************/
 
@@ -677,7 +698,12 @@ static AjPFloat2d uncorrected(AjPFloat2d match, AjPFloat2d gap, float gapwt,
 **
 ** Tajima and Nei, Mol. Biol. Evol. 1984, 1, 269.
 **
-** returns: corrected distance matrix 
+** @param [r] seqcharptr [char**] Array of sequences as C strings
+** @param [r] match [AjPFloat2d] Matches
+** @param [r] mlen [ajint] Length
+** @param [r] nseqs [ajint] Number of sequences
+** @param [r] nuc [AjBool] Nucleotide
+** @return [AjPFloat2d] corrected distance matrix
 **
 *************************************************************************/
 static AjPFloat2d TajimaNei(char** seqcharptr, AjPFloat2d match, 
@@ -883,6 +909,12 @@ static AjPFloat2d TajimaNei(char** seqcharptr, AjPFloat2d match,
 **
 **  Jin and Nei, Mol. Biol. Evol. 82, 7, 1990.
 **
+** @param [r] seqcharptr [char**] Array of sequences as C strings
+** @param [r] mlen [ajint] Length
+** @param [r] nseqs [ajint] Number of sequences
+** @param [r] calc_a [AjBool] Calculation
+** @param [r] var_a [float] Variable
+** @return [AjPFloat2d] corrected distance matrix
 *************************************************************************/
 static AjPFloat2d JinNei(char** seqcharptr, ajint mlen, ajint nseqs, 
                          AjBool calc_a, float var_a)
@@ -1050,7 +1082,13 @@ static AjPFloat2d JinNei(char** seqcharptr, ajint mlen, ajint nseqs,
 ** of Protein Molecules", Jukes & Cantor, in Mammalian Prot. Metab.,
 ** III, 1969, pp. 21-132.
 **
-** returns: corrected distance matrix
+** @param [r] match [AjPFloat2d] Matches
+** @param [r] gap [AjPFloat2d] Gaps
+** @param [r] gapwt [float] Gap weight
+** @param [r] mlen [ajint] Length
+** @param [r] nseqs [ajint] Number of sequences
+** @param [r] nuc [AjBool] Nucleotide
+** @return [AjPFloat2d] corrected distance matrix
 **
 *************************************************************************/
 
@@ -1104,7 +1142,11 @@ static AjPFloat2d JukesCantor(AjPFloat2d match, AjPFloat2d gap,
 ** Check substitutions (not found by checkSubs) involving abiguity codes 
 ** R (A or G) & Y (C or T) for transitions & transversions.
 **
-** returns:
+** @param [r] t1 [ajint] Transition score
+** @param [r] t2 [ajint] Transversion score
+** @param [r] trans [ajint*] Transitions
+** @param [r] tranv [ajint*] Transversions
+** @return [void]
 **
 *************************************************************************/
 static void checkRY(ajint t1, ajint t2, ajint* trans, ajint* tranv)
@@ -1149,7 +1191,11 @@ static void checkRY(ajint t1, ajint t2, ajint* trans, ajint* tranv)
 ** Check substitutions for transitions & transversions (ignores 
 ** ambiguity codes).
 **
-** returns: 
+** @param [r] t1 [ajint] Transition score
+** @param [r] t2 [ajint] Transversion score
+** @param [r] trans [ajint*] Transitions
+** @param [r] tranv [ajint*] Transversions
+** @return [void]
 **
 *************************************************************************/
 static void checkSubs(ajint t1, ajint t2, ajint* trans, ajint* tranv)
@@ -1202,7 +1248,9 @@ static void checkSubs(ajint t1, ajint t2, ajint* trans, ajint* tranv)
 **
 ** Check amino acid ambiguity codes  to estimate the distance score.
 **
-** returns: estimated match
+** @param [r] t1 [ajint] Transition score
+** @param [r] t2 [ajint] Transversion score
+** @return [float] Estimated distance score
 **
 *************************************************************************/
 static float checkambigProt(ajint t1, ajint t2)
@@ -1233,7 +1281,9 @@ static float checkambigProt(ajint t1, ajint t2)
 **
 ** Check ambiguity codes (IUB) to estimate the distance score.
 **
-** returns: estimated match 
+** @param [r] m1 [char] First base to compare
+** @param [r] m2 [char] Second base to compare
+** @return [float] estimated match 
 **
 *************************************************************************/
 static float checkambigNuc(char m1, char m2)
@@ -1295,7 +1345,13 @@ static float checkambigNuc(char m1, char m2)
 ** Get the part of the sequences that the distances are calculated from.
 ** i.e. codon positions 1, 2, 3 or 1 & 2.
 **
-** returns:
+** @param [r] seqset [AjPSeqset] Sequence set object
+** @param [r] nseqs [ajint] Number of sequences
+** @param [r] mlen [ajint] Length
+** @param [r] incr [ajint] Increment
+** @param [r] posn [ajint] Position
+** @param [r] len [ajint*] length of longest sequence
+** @return [char**] Sequences as an array of C strings
 **
 *************************************************************************/
 static char** getSeq(AjPSeqset seqset, ajint nseqs, ajint mlen, ajint incr,
@@ -1354,7 +1410,19 @@ static char** getSeq(AjPSeqset seqset, ajint nseqs, ajint mlen, ajint incr,
 **
 ** Output the distance matrix
 **
-** returns: 
+** @param [r] outf [AjPFile] Output file
+** @param [r] nseqs [ajint] Number of sequences
+** @param [r] mlen [ajint] Length
+** @param [r] seqset [AjPSeqset] Sequence set object
+** @param [r] match [AjPFloat2d] Matches
+** @param [r] gap [AjPFloat2d] Gaps
+** @param [r] gapwt [float] Gap weight
+** @param [r] method [ajint] Method
+** @param [r] ambig [AjBool] Ambiguities
+** @param [r] nuc [AjBool] Nucleotide
+** @param [r] posn [ajint] Position
+** @param [r] incr [ajint] Incvrement
+** @return [void]
 **
 *************************************************************************/
 static void outputDist(AjPFile outf, ajint nseqs, ajint mlen, AjPSeqset seqset,

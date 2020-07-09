@@ -230,15 +230,16 @@ void ajCorbafeatDel(AjPCorbafeat *thys)
 **
 ** @param [r] code [char *] EMBL id or accesion number
 ** @param [w] exerr [char **] Error string
-** @param [w] exint [int *] Error number
-** @param [w] thys [AjPCorbafeat *] corba feature structure
+** @param [w] exint [ajint *] Error number
+** @param [w] feat [AjPCorbafeat *] corba feature structure
 ** @param [r] dofeat [AjBool] Return features
 **
 ** @return [AjPStr] constructed sequence or NULL if error
 ** @@
 ******************************************************************************/
 
-AjPStr ajSeqCorbaEmbl(char *code, char **exerr, ajint *exint, AjPCorbafeat *feat,
+AjPStr ajSeqCorbaEmbl(char *code, char **exerr, ajint *exint,
+		      AjPCorbafeat *feat,
 		      AjBool dofeat)
 {
     AjPFile inf      = NULL;

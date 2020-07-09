@@ -73,7 +73,7 @@ NM = /usr/ccs/bin/nm -p
 OBJDUMP = @OBJDUMP@
 PACKAGE = EMBOSS
 RANLIB = ranlib
-VERSION = 1.12.0
+VERSION = 1.13.0
 XLIB =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib -lX11 -lsocket -lsocket  -lnsl -lnsl
 
 pkgdata_DATA = plstnd5.fnt  plxtnd5.fnt

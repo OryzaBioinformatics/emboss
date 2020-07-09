@@ -131,6 +131,8 @@ void ajListstrTrace   (AjPList list);
 
 AjBool ajListPop    (AjPList list, void** x);
 AjBool ajListstrPop    (AjPList list, AjPStr* x);
+AjBool ajListPopEnd(AjPList thys, void** x);
+AjBool ajListstrPopEnd(AjPList thys, AjPStr *x);
 
 ajint ajListToArray (AjPList list, void*** array);
 ajint ajListstrToArray (AjPList list, AjPStr** array);

@@ -66,11 +66,11 @@
 ** the scop classification file (see scope documentation).
 ** (6)  NS - Number in set. The number of sequences retrieved by the search 
 ** for this family or superfamily. The file will have a section containing an 
-** NN, ID, CL, RA and SQ records (see below) for each sequence in the set for 
+** NN, AC, CL, RA and SQ records (see below) for each sequence in the set for 
 ** each family / superfamily.
 ** (7) NN - Sequence number.  The number given in brackets after this record 
 ** indicates the start of the data for the relevent sequence in the current set.
-** (8) ID - Database identifier code of the hit.
+** (8) AC - Accession number of the hit.
 ** (9) TY - Classification of hit.  Always has the value 'OTHER' (the values 
 ** HIT or ALIGN are used for psiblasts output (see psiblasts documentation).
 ** (10) RA - Sequence range. The numbers before START and END give the start and 
@@ -139,7 +139,7 @@
 **  XX
 **  NN   [1]   
 **  XX
-**  ID   HBDEX1
+**  AC   P67983
 **  XX
 **  TY   OTHER
 **  XX
@@ -152,7 +152,7 @@
 **  XX
 **  NN   [2]   
 **  XX
-**  ID   HBDEX2
+**  AC   P673383
 **  XX
 **  TY   OTHER
 **  XX
@@ -520,12 +520,13 @@ AjBool   keysearch(AjPFile inf, AjPTerms terms, AjPHitlist *hits)
     /* Start of main loop */
     while((ajFileReadLine(inf,&line)))
     {
-	/* Parse the ID line */
-	if(ajStrPrefixC(line,"ID"))
+	/* Parse the AC line */
+	if(ajStrPrefixC(line,"AC"))
 	{
-	    /* Copy id */
+	    /* Copy accesion number and remove the ';' from the end*/
 	    ajFmtScanS(line, "%*s %S", &id);
-
+	    ajStrSubstituteCC(&id, ";", "\0");
+	    
 	    
 	    /* Reset flags & no. hits*/
 	    foundkw=ajFalse;

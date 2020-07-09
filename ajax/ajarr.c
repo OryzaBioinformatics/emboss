@@ -93,6 +93,8 @@ AjPInt ajIntNewL(ajint size)
 {
     AjPInt thys;
 
+    size = ajRound(size,RESERVED_SIZE);
+
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(ajint));
     thys->Len = 0;
@@ -296,7 +298,7 @@ static AjBool ajIntResize(AjPInt *thys, ajint size)
 ** the array is resized or deleted.
 **
 ** @param [r] thys [AjPInt] Source array
-** @return [int*] Current array pointer, or a null string if undefined.
+** @return [ajint*] Current array pointer, or a null string if undefined.
 ** @@
 ******************************************************************************/
 ajint* ajIntInt(AjPInt thys)
@@ -359,6 +361,8 @@ AjPFloat ajFloatNew(void)
 AjPFloat ajFloatNewL(ajint size)
 {
     AjPFloat thys;
+
+    size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(float));
@@ -577,6 +581,8 @@ AjPDouble ajDoubleNewL(ajint size)
 {
     AjPDouble thys;
 
+    size = ajRound(size,RESERVED_SIZE);
+
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(double));
     thys->Len = 0;
@@ -793,6 +799,8 @@ AjPShort ajShortNew(void)
 AjPShort ajShortNewL(ajint size)
 {
     AjPShort thys;
+
+    size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(short));
@@ -1011,6 +1019,8 @@ AjPLong ajLongNewL(ajint size)
 {
     AjPLong thys;
 
+    size = ajRound(size,RESERVED_SIZE);
+
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(ajlong));
     thys->Len = 0;
@@ -1164,7 +1174,7 @@ static AjBool ajLongResize(AjPLong *thys, ajint size)
 ** the array is resized or deleted.
 **
 ** @param [r] thys [AjPLong] Source array
-** @return [long*] Current array pointer, or a null string if undefined.
+** @return [ajlong*] Current array pointer, or a null string if undefined.
 ** @@
 ******************************************************************************/
 ajlong* ajLongLong(AjPLong thys)
@@ -1177,7 +1187,7 @@ ajlong* ajLongLong(AjPLong thys)
 
 
 
-/* @func ajLongLen *************************************************************
+/* @func ajLongLen ************************************************************
 **
 ** Get length of dynamic 1d ajlong array
 **
@@ -1378,7 +1388,7 @@ double* ajArrDoubleLine(AjPStr *line, const char *delim, ajint cols,
 ** @param [r] cols [ajint] Number of tokens in the string
 ** @param [r] startcol [ajint] Start token (1 to n)
 ** @param [r] endcol [ajint] End token (1 to n)
-** @return [int*] Allocated array of integers
+** @return [ajint*] Allocated array of integers
 ** @@
 ******************************************************************************/
 
@@ -1508,6 +1518,7 @@ AjPInt2d ajInt2dNewL(ajint size)
     AjPInt2d thys;
     ajint i;
     
+    size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPInt*));
@@ -1697,8 +1708,8 @@ static AjBool ajInt2dResize(AjPInt2d *thys, ajint size)
 **
 **
 ** @param  [r] thys [AjPInt2d] Pointer to the ajint array.
-** @param  [w] len1 [int*] Length of 1st dim
-** @param  [w] len2 [int*] Length of 2nd dim
+** @param  [w] len1 [ajint*] Length of 1st dim
+** @param  [w] len2 [ajint*] Length of 2nd dim
 **
 ** @return [void]
 ** @@
@@ -1726,7 +1737,7 @@ void ajInt2dLen(AjPInt2d thys, ajint* len1, ajint* len2)
 **
 ** @param  [r] thys [AjPInt2d] Pointer to the ajint array.
 **
-** @return [int**] coverted value.
+** @return [ajint**] coverted value.
 ** @@
 ******************************************************************************/
 
@@ -1794,7 +1805,8 @@ AjPInt3d ajInt3dNewL(ajint size)
 {
     AjPInt3d thys;
     ajint i;
-    
+
+    size = ajRound(size,RESERVED_SIZE);    
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPInt2d*));
@@ -1986,9 +1998,9 @@ static AjBool ajInt3dResize(AjPInt3d *thys, ajint size)
 **
 **
 ** @param  [r] thys [AjPInt3d] Pointer to the ajint array.
-** @param  [w] len1 [int*] Length of 1st dim
-** @param  [w] len2 [int*] Length of 2nd dim
-** @param  [w] len3 [int*] Length of 3rd dim
+** @param  [w] len1 [ajint*] Length of 1st dim
+** @param  [w] len2 [ajint*] Length of 2nd dim
+** @param  [w] len3 [ajint*] Length of 3rd dim
 **
 ** @return [void]
 ** @@
@@ -2028,7 +2040,7 @@ void ajInt3dLen(AjPInt3d thys, ajint* len1, ajint* len2, ajint* len3)
 **
 ** @param  [r] thys [AjPInt3d] Pointer to the ajint array.
 **
-** @return [int***] converted values.
+** @return [ajint***] converted values.
 ** @@
 ******************************************************************************/
 
@@ -2109,7 +2121,8 @@ AjPFloat2d ajFloat2dNewL(ajint size)
 {
     AjPFloat2d thys;
     ajint i;
-    
+
+    size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPFloat*));
@@ -2299,8 +2312,8 @@ static AjBool ajFloat2dResize(AjPFloat2d *thys, ajint size)
 **
 **
 ** @param  [r] thys [AjPFloat2d] Pointer to the float array.
-** @param  [w] len1 [int*] Length of 1st dim
-** @param  [w] len2 [int*] Length of 2nd dim
+** @param  [w] len1 [ajint*] Length of 1st dim
+** @param  [w] len2 [ajint*] Length of 2nd dim
 **
 ** @return [void] 
 ** @@
@@ -2397,6 +2410,7 @@ AjPFloat3d ajFloat3dNewL(ajint size)
     AjPFloat3d thys;
     ajint i;
     
+    size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPFloat2d*));
@@ -2588,9 +2602,9 @@ static AjBool ajFloat3dResize(AjPFloat3d *thys, ajint size)
 **
 **
 ** @param  [r] thys [AjPFloat3d] Pointer to the float array.
-** @param  [w] len1 [int*] Length of 1st dim
-** @param  [w] len2 [int*] Length of 2nd dim
-** @param  [w] len3 [int*] Length of 3rd dim
+** @param  [w] len1 [ajint*] Length of 1st dim
+** @param  [w] len2 [ajint*] Length of 2nd dim
+** @param  [w] len3 [ajint*] Length of 3rd dim
 **
 ** @return [void]
 ** @@
@@ -2712,6 +2726,7 @@ AjPDouble2d ajDouble2dNewL(ajint size)
     AjPDouble2d thys;
     ajint i;
     
+    size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPDouble*));
@@ -2901,8 +2916,8 @@ static AjBool ajDouble2dResize(AjPDouble2d *thys, ajint size)
 **
 **
 ** @param  [r] thys [AjPDouble2d] Pointer to the double array.
-** @param  [w] len1 [int*] Length of 1st dim
-** @param  [w] len2 [int*] Length of 2nd dim
+** @param  [w] len1 [ajint*] Length of 1st dim
+** @param  [w] len2 [ajint*] Length of 2nd dim
 **
 ** @return [void]
 ** @@
@@ -2999,6 +3014,7 @@ AjPDouble3d ajDouble3dNewL(ajint size)
     AjPDouble3d thys;
     ajint i;
     
+    size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPDouble2d*));
@@ -3190,9 +3206,9 @@ static AjBool ajDouble3dResize(AjPDouble3d *thys, ajint size)
 **
 **
 ** @param  [r] thys [AjPDouble3d] Pointer to the double array.
-** @param  [w] len1 [int*] Length of 1st dim
-** @param  [w] len2 [int*] Length of 2nd dim
-** @param  [w] len3 [int*] Length of 3rd dim
+** @param  [w] len1 [ajint*] Length of 1st dim
+** @param  [w] len2 [ajint*] Length of 2nd dim
+** @param  [w] len3 [ajint*] Length of 3rd dim
 **
 ** @return [void]
 ** @@
@@ -3314,6 +3330,7 @@ AjPShort2d ajShort2dNewL(ajint size)
     AjPShort2d thys;
     ajint i;
     
+    size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPShort*));
@@ -3503,8 +3520,8 @@ static AjBool ajShort2dResize(AjPShort2d *thys, ajint size)
 **
 **
 ** @param  [r] thys [AjPShort2d] Pointer to the short array.
-** @param  [w] len1 [int*] Length of 1st dim
-** @param  [w] len2 [int*] Length of 2nd dim
+** @param  [w] len1 [ajint*] Length of 1st dim
+** @param  [w] len2 [ajint*] Length of 2nd dim
 **
 ** @return [void]
 ** @@
@@ -3601,6 +3618,7 @@ AjPShort3d ajShort3dNewL(ajint size)
     AjPShort3d thys;
     ajint i;
     
+    size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPShort2d*));
@@ -3792,9 +3810,9 @@ static AjBool ajShort3dResize(AjPShort3d *thys, ajint size)
 **
 **
 ** @param  [r] thys [AjPShort3d] Pointer to the short array.
-** @param  [w] len1 [int*] Length of 1st dim
-** @param  [w] len2 [int*] Length of 2nd dim
-** @param  [w] len3 [int*] Length of 3rd dim
+** @param  [w] len1 [ajint*] Length of 1st dim
+** @param  [w] len2 [ajint*] Length of 2nd dim
+** @param  [w] len3 [ajint*] Length of 3rd dim
 **
 ** @return [void]
 ** @@
@@ -3916,6 +3934,7 @@ AjPLong2d ajLong2dNewL(ajint size)
     AjPLong2d thys;
     ajint i;
     
+    size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPLong*));
@@ -4105,8 +4124,8 @@ static AjBool ajLong2dResize(AjPLong2d *thys, ajint size)
 **
 **
 ** @param  [r] thys [AjPLong2d] Pointer to the ajlong array.
-** @param  [w] len1 [int*] Length of 1st dim
-** @param  [w] len2 [int*] Length of 2nd dim
+** @param  [w] len1 [ajint*] Length of 1st dim
+** @param  [w] len2 [ajint*] Length of 2nd dim
 **
 ** @return [void]
 ** @@
@@ -4134,7 +4153,7 @@ void ajLong2dLen(AjPLong2d thys, ajint* len1, ajint* len2)
 **
 ** @param  [r] thys [AjPLong2d] Pointer to the ajlong array.
 **
-** @return [long**] converted values.
+** @return [ajlong**] converted values.
 ** @@
 ******************************************************************************/
 
@@ -4203,6 +4222,7 @@ AjPLong3d ajLong3dNewL(ajint size)
     AjPLong3d thys;
     ajint i;
     
+    size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPLong2d*));
@@ -4394,9 +4414,9 @@ static AjBool ajLong3dResize(AjPLong3d *thys, ajint size)
 **
 **
 ** @param  [r] thys [AjPLong3d] Pointer to the ajlong array.
-** @param  [w] len1 [int*] Length of 1st dim
-** @param  [w] len2 [int*] Length of 2nd dim
-** @param  [w] len3 [int*] Length of 3rd dim
+** @param  [w] len1 [ajint*] Length of 1st dim
+** @param  [w] len2 [ajint*] Length of 2nd dim
+** @param  [w] len3 [ajint*] Length of 3rd dim
 **
 ** @return [void]
 ** @@
@@ -4436,7 +4456,7 @@ void ajLong3dLen(AjPLong3d thys, ajint* len1, ajint* len2, ajint* len3)
 **
 ** @param  [r] thys [AjPLong3d] Pointer to the ajlong array.
 **
-** @return [long***] converted values.
+** @return [ajlong***] converted values.
 ** @@
 ******************************************************************************/
 

@@ -296,13 +296,12 @@ AjPHit  ajXyzHitNew(void)
 
 
 
-/* @func ajXyzHitlistNew ***********************************************************
+/* @func ajXyzHitlistNew ******************************************************
 **
 ** Hitlist object constructor. This is normally called by the ajXyzHitlistRead
 ** function. Fore-knowledge of the number of hits is required.
 **
-** @param [r] n [int *] Number of hits
-** 
+** @param [r] n [int] Number of hits
 ** @return [AjPHitlist] Pointer to a hitlist object
 ** @@
 ******************************************************************************/
@@ -1077,21 +1076,15 @@ AjBool ajXyzCpdbRead(AjPFile inf, AjPPdb *thys)
     return ajTrue;
 }
 
-
-
-
-
-
-
-/* @func ajXyzCpdbWriteDomain ***************************************************
+/* @func ajXyzCpdbWriteDomain *************************************************
 **
 ** Writes a Cpdb file for a SCOP domain. Where coordinates for multiple 
 ** models (e.g. NMR structures) are given, data for model 1 are written.
 ** In the Cpdb file, the coordinates are presented as belonging to a single 
 ** chain regardless of how many chains the domain comprised.
 **
-** @param [w] outf [AjPFile] Output file stream
 ** @param [w] errf [AjPFile] Output file stream for error messages
+** @param [w] outf [AjPFile] Output file stream
 ** @param [r] pdb  [AjPPdb]  Pdb object
 ** @param [r] scop [AjPScop] Scop object
 **
@@ -1451,11 +1444,7 @@ AjBool ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb, AjPScop scop
     return ajTrue;
 }
 
-
-
-
-
-/* @func ajXyzCpdbWriteAll ******************************************************
+/* @func ajXyzCpdbWriteAll ****************************************************
 **
 ** Writes a Cpdb file for a protein.
 **
@@ -1473,11 +1462,6 @@ AjBool ajXyzCpdbWriteAll(AjPFile outf, AjPPdb thys)
     AjIList  iter =NULL;
     AjPAtom   tmp =NULL;
     
-
-
-
-
-
     /* Write the header information*/
     ajFmtPrintF(outf, "%-5s%S\n", "ID", thys->Pdb);
     ajFmtPrintF(outf, "XX\n");
@@ -1559,19 +1543,13 @@ AjBool ajXyzCpdbWriteAll(AjPFile outf, AjPPdb thys)
     return ajTrue;
 }
 
-
-
-
-
-
-
-/* @func ajXyzPdbChain **********************************************************
+/* @func ajXyzPdbChain ********************************************************
 **
 ** Finds the chain number for a given chain identifier in a pdb structure
 **
-** @param [w] chn [int *] Chain number
 ** @param [r] id  [char] Chain identifier
 ** @param [r] pdb [AjPPdb] Pdb object
+** @param [w] chn [ajint *] Chain number
 **
 ** @return [AjBool] True on succcess
 ** @@
@@ -1594,12 +1572,9 @@ AjBool ajXyzPdbChain(char id, AjPPdb pdb, ajint *chn)
 	*chn=1;
 	return ajTrue;
     }
-    
-	
+
     return ajFalse;
 }
-
-
 
 
 /* @func ajXyzPrintPdbText ******************************************************
@@ -1663,8 +1638,6 @@ AjBool  ajXyzPrintPdbText(AjPFile outf, AjPStr str, char *prefix)
     {
 	ajFmtPrintF(outf,"%-*S\n",69, tmp);
     }
-    
-
     ajStrTokenClear(&handle);
     ajStrDel(&token);
     ajStrDel(&tmp);
@@ -1672,20 +1645,15 @@ AjBool  ajXyzPrintPdbText(AjPFile outf, AjPStr str, char *prefix)
     return ajTrue;
 }
 
-
-
-
-
-
-/* @func ajXyzPrintPdbAtomDomain ************************************************
+/* @func ajXyzPrintPdbAtomDomain **********************************************
 **
 ** Writes coordinates for a SCOP domain to an output file in pdb format (ATOM 
 ** records).  Coordinates are taken from a Pdb structure, domain definition is 
-** taken from a Scop structure. The model number argument should have a value of 
-** 1 for x-ray structures.
+** taken from a Scop structure. The model number argument should have a value
+** of 1 for x-ray structures.
 **
-** @param [w] outf [AjPFile] Output file stream
 ** @param [w] errf [AjPFile] Output file stream for error messages
+** @param [w] outf [AjPFile] Output file stream
 ** @param [r] pdb  [AjPPdb] Pdb object
 ** @param [r] scop [AjPScop] Scop object
 ** @param [r] mod  [ajint] Model number, beginning at 1
@@ -1867,23 +1835,16 @@ AjBool ajXyzPrintPdbAtomDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
     return ajTrue;
 }
 
-
-
-
-
-
-
-
-/* @func ajXyzPrintPdbAtomChain *************************************************
+/* @func ajXyzPrintPdbAtomChain ***********************************************
 **
-** Writes coordinates for a protein chain to an output file in pdb format (ATOM 
-** records). Coordinates are taken from a Pdb structure. The model number 
-** argument should have a value of 1 for x-ray structures.
+** Writes coordinates for a protein chain to an output file in pdb format 
+** (ATOM records). Coordinates are taken from a Pdb structure. The model 
+** number argument should have a value of 1 for x-ray structures.
 **
 ** @param [w] outf [AjPFile] Output file stream
 ** @param [r] pdb  [AjPPdb] Pdb object
-** @param [r] chn  [ajint] Chain number, beginning at 1
 ** @param [r] mod  [ajint] Model number, beginning at 1
+** @param [r] chn  [ajint] Chain number, beginning at 1
 **
 ** @return [AjBool] True on succcess
 ** @@
@@ -1896,7 +1857,6 @@ AjBool ajXyzPrintPdbAtomChain(AjPFile outf, AjPPdb pdb, ajint mod, ajint chn)
     AjPAtom  atm2=NULL;
     ajint      acnt;
     
-
     /* Check args are not NULL */
     if(!outf || !pdb || mod<1 || chn<1)
 	return ajFalse;
@@ -1973,23 +1933,15 @@ AjBool ajXyzPrintPdbAtomChain(AjPFile outf, AjPPdb pdb, ajint mod, ajint chn)
     return ajTrue;
 }
 
-
-
-
-
-
-
-
-
-/* @func ajXyzPrintPdbSeqresDomain **********************************************
+/* @func ajXyzPrintPdbSeqresDomain ********************************************
 **
 ** Writes sequence for a SCOP domain to an output file in pdb format (SEQRES 
-** records). Sequence is taken from a Pdb structure, domain definition is taken 
-** from a Scop structure.  Where coordinates for multiple models (e.g. NMR 
-** structures) are given, data for model 1 are written.
+** records). Sequence is taken from a Pdb structure, domain definition is 
+** taken from a Scop structure.  Where coordinates for multiple models (e.g. 
+** NMR structures) are given, data for model 1 are written.
 **
-** @param [w] outf [AjPFile] Output file stream
 ** @param [w] errf [AjPFile] Output file stream for error messages
+** @param [w] outf [AjPFile] Output file stream
 ** @param [r] pdb  [AjPPdb] Pdb object
 ** @param [r] scop [AjPScop] Scop object
 **
@@ -2229,20 +2181,14 @@ AjBool ajXyzPrintPdbSeqresDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
     return ajTrue;
 }
 
-       
-
-
-
-
-
-/* @func ajXyzPrintPdbSeqresChain ***********************************************
+/* @func ajXyzPrintPdbSeqresChain *********************************************
 **
 ** Writes sequence for a protein chain to an output file in pdb format (SEQRES
-** records).  Sequence is taken from a Pdb structure.  The model number argument 
-** should have a value of 1 for x-ray structures.
+** records).  Sequence is taken from a Pdb structure.  The model number
+** argument should have a value of 1 for x-ray structures.
 **
-** @param [w] outf [AjPFile] Output file stream
 ** @param [w] errf [AjPFile] Output file stream for error messages
+** @param [w] outf [AjPFile] Output file stream
 ** @param [r] pdb  [AjPPdb] Pdb object
 ** @param [r] chn  [ajint] chain number, beginning at 1
 **
@@ -2547,10 +2493,7 @@ AjBool ajXyzPrintPdbHeaderScop(AjPFile outf, AjPScop scop)
 	return ajFalse;
 }
 
-
-
-
-/* @func ajXyzPdbWriteDomain ****************************************************
+/* @func ajXyzPdbWriteDomain **************************************************
 **
 ** Writes a pdb file for a SCOP domain. Where coordinates for multiple 
 ** models (e.g. NMR structures) are given, data for model 1 are written. 
@@ -2559,15 +2502,16 @@ AjBool ajXyzPrintPdbHeaderScop(AjPFile outf, AjPScop scop)
 ** In the pdb file, the coordinates are presented as belonging to a single 
 ** chain regardless of how many chains the domain comprised.
 **
-** @param [w] outf [AjPFile] Output file stream
 ** @param [w] errf [AjPFile] Output file stream for error messages
+** @param [w] outf [AjPFile] Output file stream
 ** @param [r] pdb  [AjPPdb] Pdb object
 ** @param [r] scop [AjPScop] Scop object
 **
 ** @return [AjBool] True on succcess
 ** @@
 ******************************************************************************/
-AjBool   ajXyzPdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb, AjPScop scop)
+AjBool   ajXyzPdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
+			     AjPScop scop)
 {
     ajint z;     /* A counter */
     ajint chn;   /* No. of the chain in the pdb structure */
@@ -2635,19 +2579,12 @@ AjBool   ajXyzPdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb, AjPScop sco
     return ajTrue;
 }
 
-
-
-
-
-
-
-
-/* @func ajXyzPdbWriteAll *******************************************************
+/* @func ajXyzPdbWriteAll *****************************************************
 **
 ** Writes a pdb file for a protein.
 **
-** @param [w] outf [AjPFile] Output file stream
 ** @param [w] errf [AjPFile] Output file stream for error messages
+** @param [w] outf [AjPFile] Output file stream
 ** @param [r] pdb  [AjPPdb] Pdb object
 **
 ** @return [AjBool] True on succcess
@@ -3305,7 +3242,7 @@ AjBool   ajXyzHitlistRead(AjPFile inf, char *delim, AjPHitlist *thys)
 	    if(n>nset)
 		ajFatal("Dangerous error in input file caught in ajXyzHitlistRead.\n Email jison@hgmp.mrc.ac.uk");
 	}
-	else if(ajStrPrefixC(line,"ID"))
+	else if(ajStrPrefixC(line,"AC"))
 	    ajStrAssC(&(*thys)->hits[n-1]->Id,ajStrStr(line)+3);
 	else if(ajStrPrefixC(line,"TY"))
 	    ajStrAssC(&(*thys)->hits[n-1]->Type,ajStrStr(line)+3);
@@ -3363,7 +3300,7 @@ AjBool ajXyzHitlistWrite(AjPFile outf, AjPHitlist thys)
     for(x=0;x<thys->N;x++)
     {
 	ajFmtPrintF(outf, "%-5s[%d]\nXX\n", "NN", x+1);
-	ajFmtPrintF(outf, "%-5s%S\n", "ID", thys->hits[x]->Id);
+	ajFmtPrintF(outf, "%-5s%S\n", "AC", thys->hits[x]->Id);
 	ajFmtPrintF(outf, "XX\n");
 	ajFmtPrintF(outf, "%-5s%S\n", "TY", thys->hits[x]->Type);
 	ajFmtPrintF(outf, "XX\n");
@@ -3507,7 +3444,7 @@ AjBool   ajXyzVdwallRead(AjPFile inf, AjPVdwall *thys)
     /* Start of main loop */
     while((ajFileReadLine(inf, &line)))
     {
-	/* Parse ID line */
+	/* Parse NR line */
 	if(ajStrPrefixC(line, "NR"))
 	    {	
 		ajFmtScanS(line, "%*s %d", &nres);

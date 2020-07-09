@@ -377,7 +377,7 @@ int main(int argc, char **argv)
 **
 ** @param [r] outfile [AjPFile] file to output to.
 ** @param [r] seq     [AjPSeq]  Sequence
-** @param [r] results [int*]    ajint array of reuslts.
+** @param [r] results [ajint*]    ajint array of reuslts.
 ** @param [r] header  [char*]   header line
 ** @return [void]
 ** @@
@@ -499,7 +499,7 @@ static void plotGraph2Float(AjPGraph graphs, AjPSeq seq, float * results,
 **
 ** @param [rw] hist   [AjPHist] Histogram set to add new set to.
 ** @param [r] seq     [AjPSeq]  Sequence
-** @param [r] results [int*]  float array of results.
+** @param [r] results [ajint*]  float array of results.
 ** @param [r] hist_num [ajint] the number of the histogram set. 
 ** @param [r] header  [char*] title.      
 ** @param [r] xtext   [char*] x label.      

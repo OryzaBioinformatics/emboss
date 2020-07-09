@@ -121,7 +121,7 @@ ajulong embNmerProt2int(char *seq, ajint wordsize, ajint offset,
 			AjBool *otherflag, AjBool ignorebz) {
   ajint i;
   ajulong result = 0;
-/* MATHOG, it's used as an int, so let it be an ajint 
+/* MATHOG, it's used as an ajint, so let it be an ajint 
   signed char c;
 */
   ajint c;
@@ -216,7 +216,7 @@ return 1;
 **
 ** Calculates the maximum number required to encode a sequence of size 'word'.
 **
-** @param [w] no_elements [ajulong ] the returned number
+** @param [w] no_elements [ajulong*] the returned number
 ** @param [r] word [ajint] the size of word to produce
 ** @param [r] seqisnuc [AjBool] True is the sequence is nucleic,
 **                              False if protein

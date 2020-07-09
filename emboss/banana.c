@@ -133,13 +133,13 @@ int main(int argc, char **argv)
 	else if(*ptr=='C' || *ptr=='c')
 	    iseq[i+1] = 3;
 	else
-	    ajMessDie("%c is not an ATCG hence not vaild",*ptr);
+	    ajErr("%c is not an ATCG hence not valid",*ptr);
 	ptr++;
     }
 
 
     if(!file)
-	ajMessDie("EMBOSS_DATA undefined");
+	ajErr("EMBOSS_DATA undefined");
   
     ajFileGets(file,&buffer);		/* 3 junk lines */
     ajFileGets(file,&buffer);
@@ -156,7 +156,7 @@ int main(int argc, char **argv)
 		       &twist[i][3][k]);	
 	    }
 	    else
-		ajMessDie("Error reading angle file");
+		ajErr("Error reading angle file");
 	    for(j=0;j<4;j++)
 		twist[i][j][k] *= pifac;
 	}
@@ -172,7 +172,7 @@ int main(int argc, char **argv)
 		       &roll[i][1][k],&roll[i][2][k],&roll[i][3][k]);
 	    }
 	    else
-		ajMessDie("Error reading angle file");
+		ajErr("Error reading angle file");
 	}
     }
 
@@ -184,7 +184,7 @@ int main(int argc, char **argv)
 		sscanf(ajStrStr(buffer),"%f,%f,%f,%f",&tilt[i][0][k],
 		       &tilt[i][1][k],&tilt[i][2][k],&tilt[i][3][k]);
 	    else
-		ajMessDie("Error reading angle file");
+		ajErr("Error reading angle file");
 	}
     }
 
@@ -194,7 +194,7 @@ int main(int argc, char **argv)
 	sscanf(ajStrStr(buffer),"%f,%f,%f,%f",&rbend,&rcurve,
 	       &bendscale,&curvescale);
     else
-	ajMessDie("Error reading angle file");
+	ajErr("Error reading angle file");
   
     ajFileClose(&file);
   

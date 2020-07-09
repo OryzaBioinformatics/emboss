@@ -177,7 +177,7 @@ AjBool embReadAminoDataFloatC(char *s, float **a, float fill)
 ** Read amino acid properties from amino.dat
 **
 ** @param [r] s [char*] datafile name
-** @param [w] a [int**] array for amino acid values
+** @param [w] a [ajint**] array for amino acid values
 ** @param [r] fill [ajint] initialisation value
 **
 ** @return [AjBool] ajTrue on success

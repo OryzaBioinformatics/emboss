@@ -33,8 +33,6 @@ includedir = @includedir@
 oldincludedir = /usr/include
 
 DESTDIR =
-
-pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
@@ -78,10 +76,12 @@ XLIB = @XLIB@
 
 SUBDIRS = acd data
 
+EXTRA_DIST = emboss.default.template
+
 check_PROGRAMS = ajtest ajtest2 ajtest3 ajtestajnam contacts cluster complex corbatest demofeatures demolist demosequence demostring demotable entrails histogramtest intconv messtest patmattest plplottest proteinmotifsearch seqinfo seqretallfeat seqretfeat seqtofeat simplesw swissparse testplot treetypedisplay 
 
 
-bin_PROGRAMS = abiview acdc antigenic backtranseq banana btwisted cai chaos charge checktrans chips cirdna codcmp coderet compseq cons cpgplot cpgreport cusp cutseq dan dbiblast dbifasta dbiflat dbigcg degapseq descseq diffseq digest distmat domainer dotmatcher dotpath dottup dreg einverted embossdata emma emowse entret equicktandem est2genome etandem extractseq findkm freak fuzznuc fuzzpro fuzztran garnier geecee getorf helixturnhelix hmoment iep infoseq isochore lindna marscan maskfeat maskseq matcher megamerger merger msbar needle newcpgreport newcpgseek newseq noreturn notseq nrscope nthseq octanol oddcomp palindrome pasteseq patmatdb patmatmotifs pepcoil pepinfo pepnet pepstats pepwheel pepwindow pepwindowall plotcon plotorf polydot preg prettyplot prettyseq prima primersearch printsextract profit prophecy prophet prosextract pscan rebaseextract recode redata remap restover restrict revseq scope seealso seqmatchall seqret seqretall seqretset seqretsplit showdb showfeat showorf showseq shuffleseq sigcleave silent splitter scopalign stretcher stssearch supermatcher syco textsearch tfextract tfm tfscan tmap transeq trimseq vectorstrip water wobble wordcount wordmatch wossname
+bin_PROGRAMS = abiview acdc antigenic backtranseq banana btwisted cai chaos charge checktrans chips cirdna codcmp coderet compseq cons cpgplot cpgreport cusp cutseq dan dbiblast dbifasta dbiflat dbigcg degapseq descseq diffseq digest distmat domainer dotmatcher dotpath dottup dreg einverted embossdata embossversion emma emowse entret equicktandem est2genome etandem extractseq findkm freak fuzznuc fuzzpro fuzztran garnier geecee getorf helixturnhelix hmoment iep infoseq isochore lindna marscan maskfeat maskseq matcher megamerger merger msbar needle newcpgreport newcpgseek newseq noreturn notseq nrscope nthseq octanol oddcomp palindrome pasteseq patmatdb patmatmotifs pepcoil pepinfo pepnet pepstats pepwheel pepwindow pepwindowall plotcon plotorf polydot preg prettyplot prettyseq prima primersearch printsextract profit prophecy prophet prosextract pscan rebaseextract recoder redata remap restover restrict revseq scope seealso seqmatchall seqret seqretall seqretset seqretsplit showalign showdb showfeat showorf showseq shuffleseq sigcleave silent splitter scopalign stretcher stssearch supermatcher syco textsearch tfextract tfm tfscan tmap transeq trimseq vectorstrip water wobble wordcount wordmatch wossname
 
 
 INCLUDES = -I$(top_srcdir)/nucleus -I$(top_srcdir)/ajax -I$(top_srcdir)/plplot
@@ -131,6 +131,7 @@ entret_SOURCES = entret.c
 equicktandem_SOURCES = equicktandem.c
 est2genome_SOURCES = est2genome.c
 etandem_SOURCES = etandem.c
+embossversion_SOURCES = embossversion.c
 extractseq_SOURCES = extractseq.c
 findkm_SOURCES = findkm.c
 freak_SOURCES = freak.c
@@ -191,7 +192,7 @@ prosextract_SOURCES = prosextract.c
 proteinmotifsearch_SOURCES = proteinmotifsearch.c
 pscan_SOURCES = pscan.c
 rebaseextract_SOURCES = rebaseextract.c
-recode_SOURCES = recode.c
+recoder_SOURCES = recoder.c
 redata_SOURCES = redata.c
 remap_SOURCES = remap.c
 restover_SOURCES = restover.c
@@ -205,6 +206,7 @@ seqinfo_SOURCES = seqinfo.c
 seqretall_SOURCES = seqretall.c
 seqretset_SOURCES = seqretset.c
 seqretsplit_SOURCES = seqretsplit.c
+showalign_SOURCES = showalign.c
 showdb_SOURCES = showdb.c
 showfeat_SOURCES = showfeat.c
 showorf_SOURCES = showorf.c
@@ -256,6 +258,9 @@ testplot_SOURCES = testplot.c
 treetypedisplay_SOURCES = treetypedisplay.c
 
 LDADD = ../nucleus/libnucleus.la ../ajax/libajaxg.la ../ajax/libajax.la ../plplot/libplplot.la $(XLIB)
+
+pkgdata_DATA = emboss.default.template
+pkgdatadir = $(prefix)/share/$(PACKAGE)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 
 PROGRAMS =  $(bin_PROGRAMS)
@@ -455,6 +460,11 @@ embossdata_LDADD = $(LDADD)
 embossdata_DEPENDENCIES =  ../nucleus/libnucleus.la ../ajax/libajaxg.la \
 ../ajax/libajax.la ../plplot/libplplot.la
 embossdata_LDFLAGS = 
+embossversion_OBJECTS =  embossversion.o
+embossversion_LDADD = $(LDADD)
+embossversion_DEPENDENCIES =  ../nucleus/libnucleus.la \
+../ajax/libajaxg.la ../ajax/libajax.la ../plplot/libplplot.la
+embossversion_LDFLAGS = 
 emma_OBJECTS =  emma.o
 emma_LDADD = $(LDADD)
 emma_DEPENDENCIES =  ../nucleus/libnucleus.la ../ajax/libajaxg.la \
@@ -778,11 +788,11 @@ rebaseextract_LDADD = $(LDADD)
 rebaseextract_DEPENDENCIES =  ../nucleus/libnucleus.la \
 ../ajax/libajaxg.la ../ajax/libajax.la ../plplot/libplplot.la
 rebaseextract_LDFLAGS = 
-recode_OBJECTS =  recode.o
-recode_LDADD = $(LDADD)
-recode_DEPENDENCIES =  ../nucleus/libnucleus.la ../ajax/libajaxg.la \
+recoder_OBJECTS =  recoder.o
+recoder_LDADD = $(LDADD)
+recoder_DEPENDENCIES =  ../nucleus/libnucleus.la ../ajax/libajaxg.la \
 ../ajax/libajax.la ../plplot/libplplot.la
-recode_LDFLAGS = 
+recoder_LDFLAGS = 
 redata_OBJECTS =  redata.o
 redata_LDADD = $(LDADD)
 redata_DEPENDENCIES =  ../nucleus/libnucleus.la ../ajax/libajaxg.la \
@@ -843,6 +853,11 @@ seqretsplit_LDADD = $(LDADD)
 seqretsplit_DEPENDENCIES =  ../nucleus/libnucleus.la ../ajax/libajaxg.la \
 ../ajax/libajax.la ../plplot/libplplot.la
 seqretsplit_LDFLAGS = 
+showalign_OBJECTS =  showalign.o
+showalign_LDADD = $(LDADD)
+showalign_DEPENDENCIES =  ../nucleus/libnucleus.la ../ajax/libajaxg.la \
+../ajax/libajax.la ../plplot/libplplot.la
+showalign_LDFLAGS = 
 showdb_OBJECTS =  showdb.o
 showdb_LDADD = $(LDADD)
 showdb_DEPENDENCIES =  ../nucleus/libnucleus.la ../ajax/libajaxg.la \
@@ -1118,6 +1133,8 @@ COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CF
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+DATA =  $(pkgdata_DATA)
+
 DIST_COMMON =  COPYING Makefile.am Makefile.in
 
 
@@ -1125,8 +1142,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-SOURCES = $(abiview_SOURCES) $(acdc_SOURCES) $(antigenic_SOURCES) $(backtranseq_SOURCES) $(banana_SOURCES) $(btwisted_SOURCES) $(cai_SOURCES) $(chaos_SOURCES) $(charge_SOURCES) $(checktrans_SOURCES) $(chips_SOURCES) $(cirdna_SOURCES) $(codcmp_SOURCES) $(coderet_SOURCES) $(compseq_SOURCES) $(cons_SOURCES) $(cpgplot_SOURCES) $(cpgreport_SOURCES) $(cusp_SOURCES) $(cutseq_SOURCES) $(dan_SOURCES) $(dbiblast_SOURCES) $(dbifasta_SOURCES) $(dbiflat_SOURCES) $(dbigcg_SOURCES) $(degapseq_SOURCES) $(descseq_SOURCES) $(diffseq_SOURCES) $(digest_SOURCES) $(distmat_SOURCES) $(domainer_SOURCES) $(dotmatcher_SOURCES) dotpath.c $(dottup_SOURCES) $(dreg_SOURCES) $(einverted_SOURCES) $(embossdata_SOURCES) $(emma_SOURCES) $(emowse_SOURCES) $(entret_SOURCES) $(equicktandem_SOURCES) $(est2genome_SOURCES) $(etandem_SOURCES) $(extractseq_SOURCES) $(findkm_SOURCES) $(freak_SOURCES) $(fuzznuc_SOURCES) $(fuzzpro_SOURCES) $(fuzztran_SOURCES) $(garnier_SOURCES) $(geecee_SOURCES) $(getorf_SOURCES) $(helixturnhelix_SOURCES) $(hmoment_SOURCES) $(iep_SOURCES) $(infoseq_SOURCES) $(isochore_SOURCES) lindna.c marscan.c $(maskfeat_SOURCES) $(maskseq_SOURCES) $(matcher_SOURCES) $(megamerger_SOURCES) $(merger_SOURCES) $(msbar_SOURCES) $(needle_SOURCES) $(newcpgreport_SOURCES) $(newcpgseek_SOURCES) $(newseq_SOURCES) $(noreturn_SOURCES) $(notseq_SOURCES) $(nrscope_SOURCES) $(nthseq_SOURCES) $(octanol_SOURCES) $(oddcomp_SOURCES) $(palindrome_SOURCES) $(pasteseq_SOURCES) $(patmatdb_SOURCES) $(patmatmotifs_SOURCES) $(pepcoil_SOURCES) pepinfo.c $(pepnet_SOURCES) $(pepstats_SOURCES) $(pepwheel_SOURCES) $(pepwindow_SOURCES) $(pepwindowall_SOURCES) $(plotcon_SOURCES) $(plotorf_SOURCES) $(polydot_SOURCES) $(preg_SOURCES) $(prettyplot_SOURCES) $(prettyseq_SOURCES) $(prima_SOURCES) $(primersearch_SOURCES) $(printsextract_SOURCES) $(profit_SOURCES) $(prophecy_SOURCES) $(prophet_SOURCES) $(prosextract_SOURCES) $(pscan_SOURCES) $(rebaseextract_SOURCES) $(recode_SOURCES) $(redata_SOURCES) $(remap_SOURCES) $(restover_SOURCES) $(restrict_SOURCES) $(revseq_SOURCES) $(scope_SOURCES) $(seealso_SOURCES) $(seqmatchall_SOURCES) $(seqret_SOURCES) $(seqretall_SOURCES) $(seqretset_SOURCES) $(seqretsplit_SOURCES) $(showdb_SOURCES) $(showfeat_SOURCES) $(showorf_SOURCES) $(showseq_SOURCES) $(shuffleseq_SOURCES) $(sigcleave_SOURCES) $(silent_SOURCES) $(splitter_SOURCES) $(scopalign_SOURCES) $(stretcher_SOURCES) $(stssearch_SOURCES) $(supermatcher_SOURCES) $(syco_SOURCES) $(textsearch_SOURCES) $(tfextract_SOURCES) $(tfm_SOURCES) $(tfscan_SOURCES) $(tmap_SOURCES) $(transeq_SOURCES) $(trimseq_SOURCES) $(vectorstrip_SOURCES) $(water_SOURCES) $(wobble_SOURCES) $(wordcount_SOURCES) $(wordmatch_SOURCES) $(wossname_SOURCES) $(ajtest_SOURCES) $(ajtest2_SOURCES) $(ajtest3_SOURCES) $(ajtestajnam_SOURCES) $(contacts_SOURCES) $(cluster_SOURCES) $(complex_SOURCES) $(corbatest_SOURCES) $(demofeatures_SOURCES) $(demolist_SOURCES) $(demosequence_SOURCES) $(demostring_SOURCES) $(demotable_SOURCES) $(entrails_SOURCES) $(histogramtest_SOURCES) $(intconv_SOURCES) $(messtest_SOURCES) $(patmattest_SOURCES) $(plplottest_SOURCES) $(proteinmotifsearch_SOURCES) $(seqinfo_SOURCES) $(seqretallfeat_SOURCES) $(seqretfeat_SOURCES) $(seqtofeat_SOURCES) $(simplesw_SOURCES) $(swissparse_SOURCES) $(testplot_SOURCES) $(treetypedisplay_SOURCES)
-OBJECTS = $(abiview_OBJECTS) $(acdc_OBJECTS) $(antigenic_OBJECTS) $(backtranseq_OBJECTS) $(banana_OBJECTS) $(btwisted_OBJECTS) $(cai_OBJECTS) $(chaos_OBJECTS) $(charge_OBJECTS) $(checktrans_OBJECTS) $(chips_OBJECTS) $(cirdna_OBJECTS) $(codcmp_OBJECTS) $(coderet_OBJECTS) $(compseq_OBJECTS) $(cons_OBJECTS) $(cpgplot_OBJECTS) $(cpgreport_OBJECTS) $(cusp_OBJECTS) $(cutseq_OBJECTS) $(dan_OBJECTS) $(dbiblast_OBJECTS) $(dbifasta_OBJECTS) $(dbiflat_OBJECTS) $(dbigcg_OBJECTS) $(degapseq_OBJECTS) $(descseq_OBJECTS) $(diffseq_OBJECTS) $(digest_OBJECTS) $(distmat_OBJECTS) $(domainer_OBJECTS) $(dotmatcher_OBJECTS) dotpath.o $(dottup_OBJECTS) $(dreg_OBJECTS) $(einverted_OBJECTS) $(embossdata_OBJECTS) $(emma_OBJECTS) $(emowse_OBJECTS) $(entret_OBJECTS) $(equicktandem_OBJECTS) $(est2genome_OBJECTS) $(etandem_OBJECTS) $(extractseq_OBJECTS) $(findkm_OBJECTS) $(freak_OBJECTS) $(fuzznuc_OBJECTS) $(fuzzpro_OBJECTS) $(fuzztran_OBJECTS) $(garnier_OBJECTS) $(geecee_OBJECTS) $(getorf_OBJECTS) $(helixturnhelix_OBJECTS) $(hmoment_OBJECTS) $(iep_OBJECTS) $(infoseq_OBJECTS) $(isochore_OBJECTS) lindna.o marscan.o $(maskfeat_OBJECTS) $(maskseq_OBJECTS) $(matcher_OBJECTS) $(megamerger_OBJECTS) $(merger_OBJECTS) $(msbar_OBJECTS) $(needle_OBJECTS) $(newcpgreport_OBJECTS) $(newcpgseek_OBJECTS) $(newseq_OBJECTS) $(noreturn_OBJECTS) $(notseq_OBJECTS) $(nrscope_OBJECTS) $(nthseq_OBJECTS) $(octanol_OBJECTS) $(oddcomp_OBJECTS) $(palindrome_OBJECTS) $(pasteseq_OBJECTS) $(patmatdb_OBJECTS) $(patmatmotifs_OBJECTS) $(pepcoil_OBJECTS) pepinfo.o $(pepnet_OBJECTS) $(pepstats_OBJECTS) $(pepwheel_OBJECTS) $(pepwindow_OBJECTS) $(pepwindowall_OBJECTS) $(plotcon_OBJECTS) $(plotorf_OBJECTS) $(polydot_OBJECTS) $(preg_OBJECTS) $(prettyplot_OBJECTS) $(prettyseq_OBJECTS) $(prima_OBJECTS) $(primersearch_OBJECTS) $(printsextract_OBJECTS) $(profit_OBJECTS) $(prophecy_OBJECTS) $(prophet_OBJECTS) $(prosextract_OBJECTS) $(pscan_OBJECTS) $(rebaseextract_OBJECTS) $(recode_OBJECTS) $(redata_OBJECTS) $(remap_OBJECTS) $(restover_OBJECTS) $(restrict_OBJECTS) $(revseq_OBJECTS) $(scope_OBJECTS) $(seealso_OBJECTS) $(seqmatchall_OBJECTS) $(seqret_OBJECTS) $(seqretall_OBJECTS) $(seqretset_OBJECTS) $(seqretsplit_OBJECTS) $(showdb_OBJECTS) $(showfeat_OBJECTS) $(showorf_OBJECTS) $(showseq_OBJECTS) $(shuffleseq_OBJECTS) $(sigcleave_OBJECTS) $(silent_OBJECTS) $(splitter_OBJECTS) $(scopalign_OBJECTS) $(stretcher_OBJECTS) $(stssearch_OBJECTS) $(supermatcher_OBJECTS) $(syco_OBJECTS) $(textsearch_OBJECTS) $(tfextract_OBJECTS) $(tfm_OBJECTS) $(tfscan_OBJECTS) $(tmap_OBJECTS) $(transeq_OBJECTS) $(trimseq_OBJECTS) $(vectorstrip_OBJECTS) $(water_OBJECTS) $(wobble_OBJECTS) $(wordcount_OBJECTS) $(wordmatch_OBJECTS) $(wossname_OBJECTS) $(ajtest_OBJECTS) $(ajtest2_OBJECTS) $(ajtest3_OBJECTS) $(ajtestajnam_OBJECTS) $(contacts_OBJECTS) $(cluster_OBJECTS) $(complex_OBJECTS) $(corbatest_OBJECTS) $(demofeatures_OBJECTS) $(demolist_OBJECTS) $(demosequence_OBJECTS) $(demostring_OBJECTS) $(demotable_OBJECTS) $(entrails_OBJECTS) $(histogramtest_OBJECTS) $(intconv_OBJECTS) $(messtest_OBJECTS) $(patmattest_OBJECTS) $(plplottest_OBJECTS) $(proteinmotifsearch_OBJECTS) $(seqinfo_OBJECTS) $(seqretallfeat_OBJECTS) $(seqretfeat_OBJECTS) $(seqtofeat_OBJECTS) $(simplesw_OBJECTS) $(swissparse_OBJECTS) $(testplot_OBJECTS) $(treetypedisplay_OBJECTS)
+SOURCES = $(abiview_SOURCES) $(acdc_SOURCES) $(antigenic_SOURCES) $(backtranseq_SOURCES) $(banana_SOURCES) $(btwisted_SOURCES) $(cai_SOURCES) $(chaos_SOURCES) $(charge_SOURCES) $(checktrans_SOURCES) $(chips_SOURCES) $(cirdna_SOURCES) $(codcmp_SOURCES) $(coderet_SOURCES) $(compseq_SOURCES) $(cons_SOURCES) $(cpgplot_SOURCES) $(cpgreport_SOURCES) $(cusp_SOURCES) $(cutseq_SOURCES) $(dan_SOURCES) $(dbiblast_SOURCES) $(dbifasta_SOURCES) $(dbiflat_SOURCES) $(dbigcg_SOURCES) $(degapseq_SOURCES) $(descseq_SOURCES) $(diffseq_SOURCES) $(digest_SOURCES) $(distmat_SOURCES) $(domainer_SOURCES) $(dotmatcher_SOURCES) dotpath.c $(dottup_SOURCES) $(dreg_SOURCES) $(einverted_SOURCES) $(embossdata_SOURCES) $(embossversion_SOURCES) $(emma_SOURCES) $(emowse_SOURCES) $(entret_SOURCES) $(equicktandem_SOURCES) $(est2genome_SOURCES) $(etandem_SOURCES) $(extractseq_SOURCES) $(findkm_SOURCES) $(freak_SOURCES) $(fuzznuc_SOURCES) $(fuzzpro_SOURCES) $(fuzztran_SOURCES) $(garnier_SOURCES) $(geecee_SOURCES) $(getorf_SOURCES) $(helixturnhelix_SOURCES) $(hmoment_SOURCES) $(iep_SOURCES) $(infoseq_SOURCES) $(isochore_SOURCES) lindna.c marscan.c $(maskfeat_SOURCES) $(maskseq_SOURCES) $(matcher_SOURCES) $(megamerger_SOURCES) $(merger_SOURCES) $(msbar_SOURCES) $(needle_SOURCES) $(newcpgreport_SOURCES) $(newcpgseek_SOURCES) $(newseq_SOURCES) $(noreturn_SOURCES) $(notseq_SOURCES) $(nrscope_SOURCES) $(nthseq_SOURCES) $(octanol_SOURCES) $(oddcomp_SOURCES) $(palindrome_SOURCES) $(pasteseq_SOURCES) $(patmatdb_SOURCES) $(patmatmotifs_SOURCES) $(pepcoil_SOURCES) pepinfo.c $(pepnet_SOURCES) $(pepstats_SOURCES) $(pepwheel_SOURCES) $(pepwindow_SOURCES) $(pepwindowall_SOURCES) $(plotcon_SOURCES) $(plotorf_SOURCES) $(polydot_SOURCES) $(preg_SOURCES) $(prettyplot_SOURCES) $(prettyseq_SOURCES) $(prima_SOURCES) $(primersearch_SOURCES) $(printsextract_SOURCES) $(profit_SOURCES) $(prophecy_SOURCES) $(prophet_SOURCES) $(prosextract_SOURCES) $(pscan_SOURCES) $(rebaseextract_SOURCES) $(recoder_SOURCES) $(redata_SOURCES) $(remap_SOURCES) $(restover_SOURCES) $(restrict_SOURCES) $(revseq_SOURCES) $(scope_SOURCES) $(seealso_SOURCES) $(seqmatchall_SOURCES) $(seqret_SOURCES) $(seqretall_SOURCES) $(seqretset_SOURCES) $(seqretsplit_SOURCES) $(showalign_SOURCES) $(showdb_SOURCES) $(showfeat_SOURCES) $(showorf_SOURCES) $(showseq_SOURCES) $(shuffleseq_SOURCES) $(sigcleave_SOURCES) $(silent_SOURCES) $(splitter_SOURCES) $(scopalign_SOURCES) $(stretcher_SOURCES) $(stssearch_SOURCES) $(supermatcher_SOURCES) $(syco_SOURCES) $(textsearch_SOURCES) $(tfextract_SOURCES) $(tfm_SOURCES) $(tfscan_SOURCES) $(tmap_SOURCES) $(transeq_SOURCES) $(trimseq_SOURCES) $(vectorstrip_SOURCES) $(water_SOURCES) $(wobble_SOURCES) $(wordcount_SOURCES) $(wordmatch_SOURCES) $(wossname_SOURCES) $(ajtest_SOURCES) $(ajtest2_SOURCES) $(ajtest3_SOURCES) $(ajtestajnam_SOURCES) $(contacts_SOURCES) $(cluster_SOURCES) $(complex_SOURCES) $(corbatest_SOURCES) $(demofeatures_SOURCES) $(demolist_SOURCES) $(demosequence_SOURCES) $(demostring_SOURCES) $(demotable_SOURCES) $(entrails_SOURCES) $(histogramtest_SOURCES) $(intconv_SOURCES) $(messtest_SOURCES) $(patmattest_SOURCES) $(plplottest_SOURCES) $(proteinmotifsearch_SOURCES) $(seqinfo_SOURCES) $(seqretallfeat_SOURCES) $(seqretfeat_SOURCES) $(seqtofeat_SOURCES) $(simplesw_SOURCES) $(swissparse_SOURCES) $(testplot_SOURCES) $(treetypedisplay_SOURCES)
+OBJECTS = $(abiview_OBJECTS) $(acdc_OBJECTS) $(antigenic_OBJECTS) $(backtranseq_OBJECTS) $(banana_OBJECTS) $(btwisted_OBJECTS) $(cai_OBJECTS) $(chaos_OBJECTS) $(charge_OBJECTS) $(checktrans_OBJECTS) $(chips_OBJECTS) $(cirdna_OBJECTS) $(codcmp_OBJECTS) $(coderet_OBJECTS) $(compseq_OBJECTS) $(cons_OBJECTS) $(cpgplot_OBJECTS) $(cpgreport_OBJECTS) $(cusp_OBJECTS) $(cutseq_OBJECTS) $(dan_OBJECTS) $(dbiblast_OBJECTS) $(dbifasta_OBJECTS) $(dbiflat_OBJECTS) $(dbigcg_OBJECTS) $(degapseq_OBJECTS) $(descseq_OBJECTS) $(diffseq_OBJECTS) $(digest_OBJECTS) $(distmat_OBJECTS) $(domainer_OBJECTS) $(dotmatcher_OBJECTS) dotpath.o $(dottup_OBJECTS) $(dreg_OBJECTS) $(einverted_OBJECTS) $(embossdata_OBJECTS) $(embossversion_OBJECTS) $(emma_OBJECTS) $(emowse_OBJECTS) $(entret_OBJECTS) $(equicktandem_OBJECTS) $(est2genome_OBJECTS) $(etandem_OBJECTS) $(extractseq_OBJECTS) $(findkm_OBJECTS) $(freak_OBJECTS) $(fuzznuc_OBJECTS) $(fuzzpro_OBJECTS) $(fuzztran_OBJECTS) $(garnier_OBJECTS) $(geecee_OBJECTS) $(getorf_OBJECTS) $(helixturnhelix_OBJECTS) $(hmoment_OBJECTS) $(iep_OBJECTS) $(infoseq_OBJECTS) $(isochore_OBJECTS) lindna.o marscan.o $(maskfeat_OBJECTS) $(maskseq_OBJECTS) $(matcher_OBJECTS) $(megamerger_OBJECTS) $(merger_OBJECTS) $(msbar_OBJECTS) $(needle_OBJECTS) $(newcpgreport_OBJECTS) $(newcpgseek_OBJECTS) $(newseq_OBJECTS) $(noreturn_OBJECTS) $(notseq_OBJECTS) $(nrscope_OBJECTS) $(nthseq_OBJECTS) $(octanol_OBJECTS) $(oddcomp_OBJECTS) $(palindrome_OBJECTS) $(pasteseq_OBJECTS) $(patmatdb_OBJECTS) $(patmatmotifs_OBJECTS) $(pepcoil_OBJECTS) pepinfo.o $(pepnet_OBJECTS) $(pepstats_OBJECTS) $(pepwheel_OBJECTS) $(pepwindow_OBJECTS) $(pepwindowall_OBJECTS) $(plotcon_OBJECTS) $(plotorf_OBJECTS) $(polydot_OBJECTS) $(preg_OBJECTS) $(prettyplot_OBJECTS) $(prettyseq_OBJECTS) $(prima_OBJECTS) $(primersearch_OBJECTS) $(printsextract_OBJECTS) $(profit_OBJECTS) $(prophecy_OBJECTS) $(prophet_OBJECTS) $(prosextract_OBJECTS) $(pscan_OBJECTS) $(rebaseextract_OBJECTS) $(recoder_OBJECTS) $(redata_OBJECTS) $(remap_OBJECTS) $(restover_OBJECTS) $(restrict_OBJECTS) $(revseq_OBJECTS) $(scope_OBJECTS) $(seealso_OBJECTS) $(seqmatchall_OBJECTS) $(seqret_OBJECTS) $(seqretall_OBJECTS) $(seqretset_OBJECTS) $(seqretsplit_OBJECTS) $(showalign_OBJECTS) $(showdb_OBJECTS) $(showfeat_OBJECTS) $(showorf_OBJECTS) $(showseq_OBJECTS) $(shuffleseq_OBJECTS) $(sigcleave_OBJECTS) $(silent_OBJECTS) $(splitter_OBJECTS) $(scopalign_OBJECTS) $(stretcher_OBJECTS) $(stssearch_OBJECTS) $(supermatcher_OBJECTS) $(syco_OBJECTS) $(textsearch_OBJECTS) $(tfextract_OBJECTS) $(tfm_OBJECTS) $(tfscan_OBJECTS) $(tmap_OBJECTS) $(transeq_OBJECTS) $(trimseq_OBJECTS) $(vectorstrip_OBJECTS) $(water_OBJECTS) $(wobble_OBJECTS) $(wordcount_OBJECTS) $(wordmatch_OBJECTS) $(wossname_OBJECTS) $(ajtest_OBJECTS) $(ajtest2_OBJECTS) $(ajtest3_OBJECTS) $(ajtestajnam_OBJECTS) $(contacts_OBJECTS) $(cluster_OBJECTS) $(complex_OBJECTS) $(corbatest_OBJECTS) $(demofeatures_OBJECTS) $(demolist_OBJECTS) $(demosequence_OBJECTS) $(demostring_OBJECTS) $(demotable_OBJECTS) $(entrails_OBJECTS) $(histogramtest_OBJECTS) $(intconv_OBJECTS) $(messtest_OBJECTS) $(patmattest_OBJECTS) $(plplottest_OBJECTS) $(proteinmotifsearch_OBJECTS) $(seqinfo_OBJECTS) $(seqretallfeat_OBJECTS) $(seqretfeat_OBJECTS) $(seqtofeat_OBJECTS) $(simplesw_OBJECTS) $(swissparse_OBJECTS) $(testplot_OBJECTS) $(treetypedisplay_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -1358,6 +1375,10 @@ einverted: $(einverted_OBJECTS) $(einverted_DEPENDENCIES)
 embossdata: $(embossdata_OBJECTS) $(embossdata_DEPENDENCIES)
 	@rm -f embossdata
 	$(LINK) $(embossdata_LDFLAGS) $(embossdata_OBJECTS) $(embossdata_LDADD) $(LIBS)
+
+embossversion: $(embossversion_OBJECTS) $(embossversion_DEPENDENCIES)
+	@rm -f embossversion
+	$(LINK) $(embossversion_LDFLAGS) $(embossversion_OBJECTS) $(embossversion_LDADD) $(LIBS)
 
 emma: $(emma_OBJECTS) $(emma_DEPENDENCIES)
 	@rm -f emma
@@ -1615,9 +1636,9 @@ rebaseextract: $(rebaseextract_OBJECTS) $(rebaseextract_DEPENDENCIES)
 	@rm -f rebaseextract
 	$(LINK) $(rebaseextract_LDFLAGS) $(rebaseextract_OBJECTS) $(rebaseextract_LDADD) $(LIBS)
 
-recode: $(recode_OBJECTS) $(recode_DEPENDENCIES)
-	@rm -f recode
-	$(LINK) $(recode_LDFLAGS) $(recode_OBJECTS) $(recode_LDADD) $(LIBS)
+recoder: $(recoder_OBJECTS) $(recoder_DEPENDENCIES)
+	@rm -f recoder
+	$(LINK) $(recoder_LDFLAGS) $(recoder_OBJECTS) $(recoder_LDADD) $(LIBS)
 
 redata: $(redata_OBJECTS) $(redata_DEPENDENCIES)
 	@rm -f redata
@@ -1666,6 +1687,10 @@ seqretset: $(seqretset_OBJECTS) $(seqretset_DEPENDENCIES)
 seqretsplit: $(seqretsplit_OBJECTS) $(seqretsplit_DEPENDENCIES)
 	@rm -f seqretsplit
 	$(LINK) $(seqretsplit_LDFLAGS) $(seqretsplit_OBJECTS) $(seqretsplit_LDADD) $(LIBS)
+
+showalign: $(showalign_OBJECTS) $(showalign_DEPENDENCIES)
+	@rm -f showalign
+	$(LINK) $(showalign_LDFLAGS) $(showalign_OBJECTS) $(showalign_LDADD) $(LIBS)
 
 showdb: $(showdb_OBJECTS) $(showdb_DEPENDENCIES)
 	@rm -f showdb
@@ -1883,6 +1908,25 @@ treetypedisplay: $(treetypedisplay_OBJECTS) $(treetypedisplay_DEPENDENCIES)
 	@rm -f treetypedisplay
 	$(LINK) $(treetypedisplay_LDFLAGS) $(treetypedisplay_OBJECTS) $(treetypedisplay_LDADD) $(LIBS)
 
+install-pkgdataDATA: $(pkgdata_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)
+	@list='$(pkgdata_DATA)'; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(pkgdatadir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(pkgdatadir)/$$p; \
+	  else if test -f $$p; then \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(pkgdatadir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(pkgdatadir)/$$p; \
+	  fi; fi; \
+	done
+
+uninstall-pkgdataDATA:
+	@$(NORMAL_UNINSTALL)
+	list='$(pkgdata_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(pkgdatadir)/$$p; \
+	done
+
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run `make' without going through this Makefile.
 # To change the values of `make' variables: instead of editing Makefiles,
@@ -2012,11 +2056,12 @@ abiview.o: abiview.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 acdc.o: acdc.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2032,11 +2077,12 @@ acdc.o: acdc.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 antigenic.o: antigenic.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -2053,10 +2099,11 @@ antigenic.o: antigenic.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 backtranseq.o: backtranseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -2074,10 +2121,11 @@ backtranseq.o: backtranseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 banana.o: banana.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -2094,11 +2142,12 @@ banana.o: banana.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 btwisted.o: btwisted.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -2115,10 +2164,11 @@ btwisted.o: btwisted.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 cai.o: cai.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -2135,11 +2185,12 @@ cai.o: cai.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 chaos.o: chaos.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2155,11 +2206,12 @@ chaos.o: chaos.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 charge.o: charge.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2175,11 +2227,12 @@ charge.o: charge.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 checktrans.o: checktrans.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -2196,10 +2249,11 @@ checktrans.o: checktrans.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 chips.o: chips.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -2216,11 +2270,12 @@ chips.o: chips.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 cirdna.o: cirdna.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2236,11 +2291,12 @@ cirdna.o: cirdna.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 codcmp.o: codcmp.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2256,11 +2312,12 @@ codcmp.o: codcmp.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 coderet.o: coderet.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2276,11 +2333,12 @@ coderet.o: coderet.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 compseq.o: compseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2296,11 +2354,12 @@ compseq.o: compseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 cons.o: cons.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2316,11 +2375,12 @@ cons.o: cons.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 cpgplot.o: cpgplot.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2336,11 +2396,12 @@ cpgplot.o: cpgplot.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 cpgreport.o: cpgreport.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -2357,10 +2418,11 @@ cpgreport.o: cpgreport.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 cusp.o: cusp.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -2377,11 +2439,12 @@ cusp.o: cusp.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 cutseq.o: cutseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2397,11 +2460,12 @@ cutseq.o: cutseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 dan.o: dan.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2417,11 +2481,12 @@ dan.o: dan.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 dbiblast.o: dbiblast.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -2438,10 +2503,11 @@ dbiblast.o: dbiblast.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 dbifasta.o: dbifasta.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -2459,10 +2525,11 @@ dbifasta.o: dbifasta.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 dbiflat.o: dbiflat.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -2479,11 +2546,12 @@ dbiflat.o: dbiflat.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 dbigcg.o: dbigcg.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2499,11 +2567,12 @@ dbigcg.o: dbigcg.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 degapseq.o: degapseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -2520,10 +2589,11 @@ degapseq.o: degapseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 descseq.o: descseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -2540,11 +2610,12 @@ descseq.o: descseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 diffseq.o: diffseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2560,11 +2631,12 @@ diffseq.o: diffseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 digest.o: digest.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2580,11 +2652,12 @@ digest.o: digest.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 distmat.o: distmat.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2600,11 +2673,12 @@ distmat.o: distmat.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 domainer.o: domainer.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -2621,10 +2695,11 @@ domainer.o: domainer.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 dotmatcher.o: dotmatcher.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -2642,10 +2717,11 @@ dotmatcher.o: dotmatcher.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 dotpath.o: dotpath.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -2662,11 +2738,12 @@ dotpath.o: dotpath.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 dottup.o: dottup.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2682,11 +2759,12 @@ dottup.o: dottup.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 dreg.o: dreg.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2702,11 +2780,12 @@ dreg.o: dreg.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 einverted.o: einverted.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -2723,10 +2802,11 @@ einverted.o: einverted.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 embossdata.o: embossdata.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -2744,10 +2824,33 @@ embossdata.o: embossdata.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
+	../nucleus/embxyz.h
+embossversion.o: embossversion.c ../nucleus/emboss.h ../ajax/ajax.h \
+	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
+	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
+	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
+	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
+	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
+	../ajax/ajseq.h ../ajax/ajseqdata.h ../ajax/ajseqtype.h \
+	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
+	../ajax/ajseqdb.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
+	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
+	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
+	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
+	../ajax/ajbase.h ../ajax/ajdan.h ../ajax/ajsort.h \
+	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
+	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
+	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 emma.o: emma.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -2764,11 +2867,12 @@ emma.o: emma.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 emowse.o: emowse.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2784,11 +2888,12 @@ emowse.o: emowse.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 entret.o: entret.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2804,11 +2909,12 @@ entret.o: entret.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 equicktandem.o: equicktandem.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -2825,10 +2931,11 @@ equicktandem.o: equicktandem.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 est2genome.o: est2genome.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -2846,10 +2953,11 @@ est2genome.o: est2genome.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h ../nucleus/embest.h
 etandem.o: etandem.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -2866,11 +2974,12 @@ etandem.o: etandem.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 extractseq.o: extractseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -2887,10 +2996,11 @@ extractseq.o: extractseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 findkm.o: findkm.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -2907,11 +3017,12 @@ findkm.o: findkm.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 freak.o: freak.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2927,11 +3038,12 @@ freak.o: freak.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 fuzznuc.o: fuzznuc.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2947,11 +3059,12 @@ fuzznuc.o: fuzznuc.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 fuzzpro.o: fuzzpro.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -2967,11 +3080,12 @@ fuzzpro.o: fuzzpro.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 fuzztran.o: fuzztran.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -2988,10 +3102,11 @@ fuzztran.o: fuzztran.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 garnier.o: garnier.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -3008,11 +3123,12 @@ garnier.o: garnier.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 geecee.o: geecee.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3028,11 +3144,12 @@ geecee.o: geecee.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 getorf.o: getorf.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3048,11 +3165,12 @@ getorf.o: getorf.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 helixturnhelix.o: helixturnhelix.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -3069,10 +3187,11 @@ helixturnhelix.o: helixturnhelix.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 hmoment.o: hmoment.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -3089,11 +3208,12 @@ hmoment.o: hmoment.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 iep.o: iep.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3109,11 +3229,12 @@ iep.o: iep.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 infoseq.o: infoseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3129,11 +3250,12 @@ infoseq.o: infoseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 isochore.o: isochore.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -3150,10 +3272,11 @@ isochore.o: isochore.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 lindna.o: lindna.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -3170,11 +3293,12 @@ lindna.o: lindna.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 marscan.o: marscan.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3190,11 +3314,12 @@ marscan.o: marscan.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 maskfeat.o: maskfeat.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -3211,10 +3336,11 @@ maskfeat.o: maskfeat.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 maskseq.o: maskseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -3231,11 +3357,12 @@ maskseq.o: maskseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 matcher.o: matcher.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3251,11 +3378,12 @@ matcher.o: matcher.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 megamerger.o: megamerger.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -3272,10 +3400,11 @@ megamerger.o: megamerger.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 merger.o: merger.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -3292,11 +3421,12 @@ merger.o: merger.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 msbar.o: msbar.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3312,11 +3442,12 @@ msbar.o: msbar.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 needle.o: needle.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3332,11 +3463,12 @@ needle.o: needle.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 newcpgreport.o: newcpgreport.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -3353,10 +3485,11 @@ newcpgreport.o: newcpgreport.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 newcpgseek.o: newcpgseek.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -3374,10 +3507,11 @@ newcpgseek.o: newcpgseek.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 newseq.o: newseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -3394,11 +3528,12 @@ newseq.o: newseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 noreturn.o: noreturn.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -3415,10 +3550,11 @@ noreturn.o: noreturn.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 notseq.o: notseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -3435,11 +3571,12 @@ notseq.o: notseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 nrscope.o: nrscope.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3455,11 +3592,12 @@ nrscope.o: nrscope.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 nthseq.o: nthseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3475,11 +3613,12 @@ nthseq.o: nthseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 octanol.o: octanol.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3495,11 +3634,12 @@ octanol.o: octanol.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 oddcomp.o: oddcomp.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3515,11 +3655,12 @@ oddcomp.o: oddcomp.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 palindrome.o: palindrome.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -3536,10 +3677,11 @@ palindrome.o: palindrome.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 pasteseq.o: pasteseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -3557,10 +3699,11 @@ pasteseq.o: pasteseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 patmatdb.o: patmatdb.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -3578,10 +3721,11 @@ patmatdb.o: patmatdb.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 patmatmotifs.o: patmatmotifs.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -3599,10 +3743,11 @@ patmatmotifs.o: patmatmotifs.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 pepcoil.o: pepcoil.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -3619,11 +3764,12 @@ pepcoil.o: pepcoil.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 pepinfo.o: pepinfo.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3639,11 +3785,12 @@ pepinfo.o: pepinfo.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h \
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h \
 	../ajax/ajhist.h
 pepnet.o: pepnet.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -3660,11 +3807,12 @@ pepnet.o: pepnet.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 pepstats.o: pepstats.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -3681,10 +3829,11 @@ pepstats.o: pepstats.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 pepwheel.o: pepwheel.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -3702,10 +3851,11 @@ pepwheel.o: pepwheel.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 pepwindow.o: pepwindow.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -3723,10 +3873,11 @@ pepwindow.o: pepwindow.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 pepwindowall.o: pepwindowall.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -3744,10 +3895,11 @@ pepwindowall.o: pepwindowall.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 plotcon.o: plotcon.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -3764,11 +3916,12 @@ plotcon.o: plotcon.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 plotorf.o: plotorf.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3784,11 +3937,12 @@ plotorf.o: plotorf.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 polydot.o: polydot.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3804,11 +3958,12 @@ polydot.o: polydot.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 preg.o: preg.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -3824,11 +3979,12 @@ preg.o: preg.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 prettyplot.o: prettyplot.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -3845,10 +4001,11 @@ prettyplot.o: prettyplot.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 prettyseq.o: prettyseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -3866,10 +4023,11 @@ prettyseq.o: prettyseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 prima.o: prima.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -3886,11 +4044,12 @@ prima.o: prima.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 primersearch.o: primersearch.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -3907,10 +4066,11 @@ primersearch.o: primersearch.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 printsextract.o: printsextract.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -3928,10 +4088,11 @@ printsextract.o: printsextract.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 profit.o: profit.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -3948,11 +4109,12 @@ profit.o: profit.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 prophecy.o: prophecy.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -3969,10 +4131,11 @@ prophecy.o: prophecy.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 prophet.o: prophet.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -3989,11 +4152,12 @@ prophet.o: prophet.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 prosextract.o: prosextract.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -4010,10 +4174,11 @@ prosextract.o: prosextract.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 pscan.o: pscan.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -4030,11 +4195,12 @@ pscan.o: pscan.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 rebaseextract.o: rebaseextract.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -4051,12 +4217,13 @@ rebaseextract.o: rebaseextract.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
-recode.o: recode.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
+recoder.o: recoder.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
 	../ajax/ajfile.h ../ajax/ajlist.h ../ajax/ajfeat.h \
@@ -4071,11 +4238,12 @@ recode.o: recode.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 redata.o: redata.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -4091,11 +4259,12 @@ redata.o: redata.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 remap.o: remap.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -4111,11 +4280,12 @@ remap.o: remap.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 restover.o: restover.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -4132,10 +4302,11 @@ restover.o: restover.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 restrict.o: restrict.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -4153,10 +4324,11 @@ restrict.o: restrict.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 revseq.o: revseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -4173,11 +4345,12 @@ revseq.o: revseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 scopalign.o: scopalign.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -4194,10 +4367,11 @@ scopalign.o: scopalign.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 scope.o: scope.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -4214,11 +4388,12 @@ scope.o: scope.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 seealso.o: seealso.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -4234,11 +4409,12 @@ seealso.o: seealso.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 seqmatchall.o: seqmatchall.c ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -4255,10 +4431,11 @@ seqmatchall.o: seqmatchall.c ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../nucleus/emboss.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 seqret.o: seqret.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -4275,11 +4452,12 @@ seqret.o: seqret.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 seqretall.o: seqretall.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -4296,10 +4474,11 @@ seqretall.o: seqretall.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 seqretset.o: seqretset.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -4317,10 +4496,11 @@ seqretset.o: seqretset.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 seqretsplit.o: seqretsplit.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -4338,10 +4518,33 @@ seqretsplit.o: seqretsplit.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
+	../nucleus/embxyz.h
+showalign.o: showalign.c ../nucleus/emboss.h ../ajax/ajax.h \
+	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
+	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
+	../ajax/ajtable.h ../ajax/ajfile.h ../ajax/ajlist.h \
+	../ajax/ajfeat.h ../ajax/ajmem.h ../ajax/ajreg.h \
+	../ajax/hsregexp.h ../ajax/hsregmagic.h ../ajax/ajfmt.h \
+	../ajax/ajseq.h ../ajax/ajseqdata.h ../ajax/ajseqtype.h \
+	../ajax/ajarr.h ../ajax/ajseqread.h ../ajax/ajseqwrite.h \
+	../ajax/ajseqdb.h ../ajax/ajmatrices.h ../ajax/ajrange.h \
+	../ajax/ajcod.h ../ajax/ajmath.h ../ajax/ajutil.h \
+	../ajax/ajnam.h ../ajax/ajmess.h ../ajax/ajposreg.h \
+	../ajax/hsp_regex.h ../ajax/ajtranslate.h ../ajax/ajsys.h \
+	../ajax/ajbase.h ../ajax/ajdan.h ../ajax/ajsort.h \
+	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
+	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
+	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 showdb.o: showdb.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -4358,11 +4561,12 @@ showdb.o: showdb.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 showfeat.o: showfeat.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -4379,10 +4583,11 @@ showfeat.o: showfeat.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 showorf.o: showorf.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -4399,11 +4604,12 @@ showorf.o: showorf.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 showseq.o: showseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -4419,11 +4625,12 @@ showseq.o: showseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 shuffleseq.o: shuffleseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -4440,10 +4647,11 @@ shuffleseq.o: shuffleseq.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 sigcleave.o: sigcleave.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -4461,10 +4669,11 @@ sigcleave.o: sigcleave.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 silent.o: silent.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -4481,11 +4690,12 @@ silent.o: silent.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 splitter.o: splitter.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -4502,10 +4712,11 @@ splitter.o: splitter.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 stretcher.o: stretcher.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -4523,10 +4734,11 @@ stretcher.o: stretcher.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 stssearch.o: stssearch.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -4544,10 +4756,11 @@ stssearch.o: stssearch.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 supermatcher.o: supermatcher.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -4565,10 +4778,11 @@ supermatcher.o: supermatcher.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 syco.o: syco.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -4585,11 +4799,12 @@ syco.o: syco.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 textsearch.o: textsearch.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -4606,10 +4821,11 @@ textsearch.o: textsearch.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 tfextract.o: tfextract.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -4627,10 +4843,11 @@ tfextract.o: tfextract.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 tfm.o: tfm.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -4647,11 +4864,12 @@ tfm.o: tfm.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 tfscan.o: tfscan.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -4667,11 +4885,12 @@ tfscan.o: tfscan.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 tmap.o: tmap.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -4687,11 +4906,12 @@ tmap.o: tmap.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 transeq.o: transeq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -4707,11 +4927,12 @@ transeq.o: transeq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 trimseq.o: trimseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -4727,11 +4948,12 @@ trimseq.o: trimseq.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 vectorstrip.o: vectorstrip.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -4748,10 +4970,11 @@ vectorstrip.o: vectorstrip.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 water.o: water.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -4768,11 +4991,12 @@ water.o: water.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 wobble.o: wobble.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
 	../ajax/ajtime.h ../ajax/ajstr.h ../ajax/ajtable.h \
@@ -4788,11 +5012,12 @@ wobble.o: wobble.c ../nucleus/emboss.h ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajdan.h ../ajax/ajsort.h ../ajax/ajgraphstruct.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../ajax/ajgraph.h ../plplot/plplot.h \
-	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embread.h \
-	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
-	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
-	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
-	../nucleus/embshow.h ../nucleus/embmol.h ../nucleus/embxyz.h
+	../nucleus/embaln.h ../nucleus/embcom.h ../nucleus/embcons.h \
+	../nucleus/embdbi.h ../nucleus/embread.h ../nucleus/embiep.h \
+	../nucleus/embprop.h ../nucleus/embinit.h ../nucleus/embword.h \
+	../nucleus/embpat.h ../nucleus/embmat.h ../nucleus/embdata.h \
+	../nucleus/embnmer.h ../nucleus/embgroup.h ../nucleus/embshow.h \
+	../nucleus/embmisc.h ../nucleus/embmol.h ../nucleus/embxyz.h
 wordcount.o: wordcount.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
 	../ajax/ajdefine.h ../ajax/ajtime.h ../ajax/ajstr.h \
@@ -4809,10 +5034,11 @@ wordcount.o: wordcount.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 wordmatch.o: wordmatch.c ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajassert.h ../ajax/ajexcept.h ../ajax/ajdefine.h \
@@ -4830,10 +5056,11 @@ wordmatch.o: wordmatch.c ../ajax/ajax.h ../ajax/ajarch.h \
 	../ajax/ajxyz.h ../ajax/ajacd.h ../ajax/ajcall.h \
 	../ajax/ajcorba.h ../nucleus/emboss.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 wossname.o: wossname.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajarch.h ../ajax/ajassert.h ../ajax/ajexcept.h \
@@ -4851,10 +5078,11 @@ wossname.o: wossname.c ../nucleus/emboss.h ../ajax/ajax.h \
 	../ajax/ajgraphstruct.h ../ajax/ajxyz.h ../ajax/ajacd.h \
 	../ajax/ajcall.h ../ajax/ajcorba.h ../ajax/ajgraph.h \
 	../plplot/plplot.h ../nucleus/embaln.h ../nucleus/embcom.h \
-	../nucleus/embread.h ../nucleus/embiep.h ../nucleus/embprop.h \
-	../nucleus/embinit.h ../nucleus/embword.h ../nucleus/embpat.h \
-	../nucleus/embmat.h ../nucleus/embdata.h ../nucleus/embnmer.h \
-	../nucleus/embgroup.h ../nucleus/embshow.h ../nucleus/embmol.h \
+	../nucleus/embcons.h ../nucleus/embdbi.h ../nucleus/embread.h \
+	../nucleus/embiep.h ../nucleus/embprop.h ../nucleus/embinit.h \
+	../nucleus/embword.h ../nucleus/embpat.h ../nucleus/embmat.h \
+	../nucleus/embdata.h ../nucleus/embnmer.h ../nucleus/embgroup.h \
+	../nucleus/embshow.h ../nucleus/embmisc.h ../nucleus/embmol.h \
 	../nucleus/embxyz.h
 
 info-am:
@@ -4869,21 +5097,21 @@ installcheck: installcheck-recursive
 install-exec-am: install-binPROGRAMS
 install-exec: install-exec-recursive
 
-install-data-am:
+install-data-am: install-pkgdataDATA
 install-data: install-data-recursive
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-recursive
-uninstall-am: uninstall-binPROGRAMS
+uninstall-am: uninstall-binPROGRAMS uninstall-pkgdataDATA
 uninstall: uninstall-recursive
-all-am: Makefile $(PROGRAMS)
+all-am: Makefile $(PROGRAMS) $(DATA)
 all-redirect: all-recursive
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs: installdirs-recursive
 installdirs-am:
-	$(mkinstalldirs)  $(DESTDIR)$(bindir)
+	$(mkinstalldirs)  $(DESTDIR)$(bindir) $(DESTDIR)$(pkgdatadir)
 
 
 mostlyclean-generic:
@@ -4928,7 +5156,8 @@ mostlyclean-checkPROGRAMS distclean-checkPROGRAMS clean-checkPROGRAMS \
 maintainer-clean-checkPROGRAMS mostlyclean-compile distclean-compile \
 clean-compile maintainer-clean-compile mostlyclean-libtool \
 distclean-libtool clean-libtool maintainer-clean-libtool \
-install-data-recursive uninstall-data-recursive install-exec-recursive \
+uninstall-pkgdataDATA install-pkgdataDATA install-data-recursive \
+uninstall-data-recursive install-exec-recursive \
 uninstall-exec-recursive installdirs-recursive uninstalldirs-recursive \
 all-recursive check-recursive installcheck-recursive info-recursive \
 dvi-recursive mostlyclean-recursive distclean-recursive clean-recursive \

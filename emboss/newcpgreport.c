@@ -77,7 +77,7 @@ int main(int argc, char **argv)
 	strand = ajSeqStrCopy(seq);
 	ajStrToUpper(&strand);
 
-	ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
+	ajStrAssSubC(&substr,ajStrStr(strand),--begin,--end);
 	len=ajStrLen(substr);
 
 	if (len > maxarr) {
@@ -92,7 +92,7 @@ int main(int argc, char **argv)
 	findbases(&substr, begin, len, window, shift, obsexp, xypc,
 		  &bases, &obsexpmax, &plstart, &plend, ajStrStr(strand));
 	
-	identify(outf, obsexp, xypc, thresh, begin+window/2, len-window, shift,
+	identify(outf, obsexp, xypc, thresh, 0, len, shift,
 		 ajStrStr(bases), ajSeqName(seq), minlen, minobsexp, minpc,
 		 ajStrStr(strand));
 	
@@ -139,7 +139,7 @@ void findbases(AjPStr *substr, ajint begin, ajint len, ajint window, ajint shift
     *plstart = offset;
     q = ajStrStr(*bases);	
 
-    for(i=0; i<len-window;i+=shift)
+    for(i=0; i<(len-window+1);i+=shift)
     {
 	j = i+offset;
 	/*	start = i;
@@ -150,7 +150,7 @@ void findbases(AjPStr *substr, ajint begin, ajint len, ajint window, ajint shift
 	exp = (float)(cx*cy)/windowf;
 	cxf=(float)cx;
 	cyf=(float)cy;
-	if(exp==0.0) obsexp[j]=0.0;
+	if(!exp) obsexp[j]=0.0;
 	else
 	{
 	    obsexp[j]=obs/exp;
@@ -228,11 +228,11 @@ void identify(AjPFile outf, float *obsexp, float *xypc, AjBool *thresh,
 
   sumlen=0;
   posmin = begin;
-  for(pos=posmin,first=0;pos<len;pos+=shift) {
+  for(pos=0,first=0;pos<(len-avwindow*shift);pos+=shift) {
     sumpc=sumobsexp=0.0;
     /*    posmax = pos+avwindow*shift; NOT USED */
     ajDebug("pos: %d max: %d\n", pos, pos+avwindow*shift);
-    for(i=pos;i<pos+avwindow*shift;i+=shift) {
+    for(i=pos;i<=(pos+avwindow*shift);++i) {
       ajDebug("obsexp[%d] %.2f xypc[%d] %.2f\n",
 	      i, obsexp[i], i, xypc[i]);
       sumpc += xypc[i];
@@ -281,7 +281,7 @@ void reportislands(AjPFile outf, AjBool *thresh, char *bases, char *name,
     AjBool island;
     ajint startpos=0;
     ajint endpos;
-    /*    ajint slen;*/
+    ajint slen;
     ajint i;
     ajint cnt=0;
     
@@ -305,13 +305,13 @@ void reportislands(AjPFile outf, AjBool *thresh, char *bases, char *name,
 	    island = thresh[i];
 	    if(!island)
 	    {
-	      /*		slen = i - startpos; NOT USED*/
-		endpos = i-1;
+	       slen = i - startpos;
+		endpos = i;
 		ajFmtPrintF(outf,"FT   CpG island       %d..%d\n",
-			    startpos+begin, endpos+begin);
+			    startpos+begin+1, endpos+begin);
 		ajFmtPrintF(outf,"FT                    /size=%d\n",
-			    (endpos+begin)-(startpos+begin)+1);
-		compisl(outf, seq, startpos+begin, endpos+begin);	
+			    slen);
+		compisl(outf, seq, startpos+begin+1, endpos+begin);	
 		++cnt;
 		
 	    }
@@ -326,13 +326,14 @@ void reportislands(AjPFile outf, AjBool *thresh, char *bases, char *name,
 		
     if(island)
     {
-      /*	slen=len-startpos+1; NOT USED*/
-	endpos=len;
+        slen=len-startpos+1;
+	endpos=len-1;
        	ajFmtPrintF(outf,"FT   CpG island       %d..%d\n",
-			    startpos+begin, endpos+begin);
+			    startpos+begin+1, endpos+begin);
         ajFmtPrintF(outf,"FT                    /size=%d\n",
-		    (endpos+begin)-(startpos+begin));
-	compisl(outf, seq, startpos+begin, endpos+begin);
+		    slen);
+	compisl(outf, seq, startpos+begin+1, endpos+begin);
+	++cnt;
     }
     
     if(cnt < 1)

@@ -345,7 +345,7 @@ void ajRegSubC (AjPRegexp rp, const char* source, AjPStr* dest) {
     hsregerror("NULL parameter to regsub");
     return;
   }
-  if ((unsigned int)((unsigned char)*(prog->program)) != MAGIC) {
+  if ((ajuint)((unsigned char)*(prog->program)) != MAGIC) {
     hsregerror("damaged regexp");
     return;
   }

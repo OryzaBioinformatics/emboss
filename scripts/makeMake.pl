@@ -54,7 +54,7 @@ foreach $file (glob("*.gif"), glob("*.html"), glob("*.txt")) {
   } else {
     $line .= " $file";
   } 
-  if ($file =~ /^lindna/) {
+  if ($file =~ /^lindna.html/ || $file =~ /^lindna.txt/) {
 #    print "Found lindna - breaking in half here\n";
     $flag = 0;
   }

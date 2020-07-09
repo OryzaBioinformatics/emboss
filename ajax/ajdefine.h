@@ -21,7 +21,7 @@ enum capacity {default_size, reserve};
 **
 ** Used to store true (ajTrue) and false (ajFalse) values.
 **
-** ajFalse is defined as zero, and the data type is equivalent to "int".
+** ajFalse is defined as zero, and the data type is equivalent to "ajint".
 **
 ** For definitions, macros AJTRUE and AJFALSE are also defined.
 **
@@ -37,7 +37,7 @@ typedef ajint AjBool;
 **
 ** Date/time data type
 **
-** Used to store date/time values. Equivalent to "int".
+** Used to store date/time values. Equivalent to "ajint".
 **
 ** On output, conversion code "%D" writes the date.
 ** @@
@@ -87,6 +87,12 @@ static const ajint ajStatusFatal = 8;
 #define ajStatusError 4
 #define ajStatusFatal 8
 #endif
+
+#define CASE2(a,b) ((a << 8) + b)
+#define CASE3(a,b,c) ((a << 16) + (b << 8) + c)
+#define CASE4(a,b,c,d) ((a << 24) + (b << 16) + (c << 8) + d)
+
+#define STRCASE2(a) ((a[0] << 8) + a[1])
 
 #endif
 

@@ -127,7 +127,7 @@ typedef struct {
 #define CHadd(cs, c)    ((cs)->ptr[(UCH)(c)] |= (cs)->mask, (cs)->hash += (c))
 #define CHsub(cs, c)    ((cs)->ptr[(UCH)(c)] &= ~(cs)->mask, (cs)->hash -= (c))
 
-#define	CHIN(cs, c)	((unsigned int)(cs)->ptr[(unsigned int)(c)] & (unsigned int)(cs)->mask)
+#define	CHIN(cs, c)	((ajuint)(cs)->ptr[(ajuint)(c)] & (ajuint)(cs)->mask)
 #define	MCadd(p, cs, cp)	mcadd(p, cs, cp)  /* regcomp() internal fns */
 #define	MCsub(p, cs, cp)	mcsub(p, cs, cp)
 #define	MCin(p, cs, cp)	mcin(p, cs, cp)

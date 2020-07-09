@@ -61,7 +61,7 @@ static struct rerr {
 
 /*
    - regerror - the interface to error numbers
-   = extern size_t regerror(int, const regex_t *, char *, size_t);
+   = extern size_t regerror(ajint, const regex_t *, char *, size_t);
    */
 /* ARGSUSED */
 size_t hsp_regerror(ajint errcode,const regex_t *preg,char *errbuf,

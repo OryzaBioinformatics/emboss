@@ -38,8 +38,8 @@ void scan_profile(AjPStr substr, AjPStr pname, AjPStr name, AjPStr mname,
 		   float gapopen, float gapextend, AjPFile outf,
 		   AjPStr *cons);
 
-void scan_simple(AjPStr substr, AjPStr pname, AjPStr name,int mlen,int maxs,
-		 ajint thresh,int **matrix,AjPFile outf,AjPStr *cons);
+void scan_simple(AjPStr substr, AjPStr pname, AjPStr name, ajint mlen, ajint maxs,
+		 ajint thresh, ajint **matrix,AjPFile outf,AjPStr *cons);
 
 void printHits(AjPStr substr,AjPStr pname, ajint pos, AjPStr name, ajint score,
 	       ajint thresh,float maxs, AjPFile outf,AjPStr *cons);
@@ -398,8 +398,8 @@ static void read_profile(AjPFile inf, AjPStr *name, AjPStr *mname, ajint *mlen,
 
 
 
-void scan_simple(AjPStr substr, AjPStr pname, AjPStr name,int mlen,int maxs,
-		 ajint thresh,int **matrix,AjPFile outf, AjPStr *cons)
+void scan_simple(AjPStr substr, AjPStr pname, AjPStr name, ajint mlen, ajint maxs,
+		 ajint thresh, ajint **matrix,AjPFile outf, AjPStr *cons)
 {
     ajint len;
     ajint i;

@@ -346,6 +346,41 @@ char* ajCharNewLS (size_t size, const AjPStr thys) {
   return cp;
 }
 
+/* #funcstatic ajCharNewBuffC ********************************************
+**
+** OBSOLETE: used in the EMBOSS DBI programs, replaced by ajNewCharC
+**
+** Constructor for a text string from an AjPStr, using a large buffer
+** to reduce the number of mallocs.
+**
+** #param [r] str [char*] Text object
+** #param [r] i [ajint] Length
+** #return [char*] New text string.
+******************************************************************************/
+
+/*
+static char* newcharCI (char* str, ajint i) {
+
+  static char* buffer = NULL;
+  static ajint ipos=0;
+  static ajint imax=0;
+
+  char* ret;
+
+  if ((ipos+i) > imax) {
+    AJCNEW(buffer, 1000000);
+    ajDebug ("newchar need more memory ipos: %d i: %d  imax: %d buffer: %x\n",
+	     ipos, i, imax, buffer);
+    imax = 1000000;
+    ipos = 0;
+  }
+  ret = &buffer[ipos];
+  strncpy (ret, str, i);
+  ipos += i;
+  return ret;
+}
+*/
+
 /* @funcstatic strNewNew ****************************************************
 **
 ** Internal constructor for modifiable AJAX strings. Used by all the string
@@ -848,6 +883,60 @@ AjBool ajStrAssCL (AjPStr* pthis, const char* txt, size_t i) {
   return ret;
 }
 
+/* @func ajStrCopy ***********************************************************
+**
+** Copies a string, using the reference count.
+**
+** Sets the destination string to NULL if the source string is NULL.
+**
+** @param [wPN] pthis [AjPStr*] Target string which is overwritten.
+** @param [rN] str [const AjPStr] Source string object
+**        A NULL pointer makes the target NULL too.
+** @return [AjBool] ajTrue if string was reallocated
+** @cre If both arguments point to the same string object, nothing happens.
+** @@
+******************************************************************************/
+
+AjBool ajStrCopy (AjPStr* pthis, const AjPStr str) {	
+
+  AjBool ret = ajTrue;		/* true if ajStrDup is used */
+
+  ajStrDel(pthis);
+
+  if (!str)
+    return ret;
+  else 
+    *pthis = ajStrDup (str);
+
+  return ret;
+}
+
+/* @func ajStrCopyC ***********************************************************
+**
+** Copies a string.
+**
+** Sets the destination string to NULL if the source string is NULL.
+**
+** @param [wPN] pthis [AjPStr*] Target string which is overwritten.
+** @param [rN] str [const char*] Source string object
+**        A NULL pointer makes the target NULL too.
+** @return [AjBool] ajTrue if string was reallocated
+** @cre If both arguments point to the same string object, nothing happens.
+** @@
+******************************************************************************/
+
+AjBool ajStrCopyC (AjPStr* pthis, const char* str) {	
+
+  AjBool ret = ajTrue;		/* true if ajStrDup is used */
+
+  if (!str)
+    ajStrDel (pthis);
+  else 
+    ajStrAssC (pthis, str);
+
+  return ret;
+}
+
 /* @func ajStrAssSub **********************************************************
 **
 ** Copies a substring to a string object.
@@ -1017,7 +1106,7 @@ AjBool ajStrFromFloat (AjPStr* pthis, float val, ajint precision) {
   char fmt[12];
   AjPStr thys;
 
-  int ival = abs((ajint) val);
+  ajint ival = abs((ajint) val);
 
   if (ival)
     i = precision + (ajint) log10((double)ival) + 4;
@@ -1052,7 +1141,7 @@ AjBool ajStrFromDouble (AjPStr* pthis, double val, ajint precision) {
   char fmt[12];
   AjPStr thys;
 
-  int ival = abs((ajint) val);
+  ajint ival = abs((ajint) val);
 
   if (ival)
     i = precision + (ajint) log10((double)ival) + 4;
@@ -1543,7 +1632,7 @@ AjBool ajStrJoinC (AjPStr* pthis, ajint begin, const char* addbit,
 
 /* @func ajStrSubstitute ****************************************************
 **
-** Replace all occurrances of replace with putin in string pthis.
+** Replace all occurrences of replace with putin in string pthis.
 **
 ** @param [uP] pthis [AjPStr*]  Target string.
 ** @param [r]  replace [const AjPStr] string to replace.
@@ -1581,7 +1670,7 @@ AjBool ajStrSubstitute (AjPStr *pthis,
 
 /* @func ajStrSubstituteCC ****************************************************
 **
-** Replace all occurrances of replace with putin in string pthis.
+** Replace all occurrences of replace with putin in string pthis.
 **
 ** @param [uP] pthis [AjPStr*]  Target string.
 ** @param [r]  replace [const char*] string to replace.
@@ -2571,7 +2660,7 @@ ajint ajStrFindCaseC (const AjPStr thys, const char *text) {
 ** Case insensitive
 **
 ** @param [r] thys [const AjPStr] String
-** @param [r] text [const AjPStr] text to find
+** @param [r] text [AjPStr] text to find
 ** @return [ajint] Position of the start of text in string if found.
 ** @error -1 Text not found.
 ** @@
@@ -2815,7 +2904,7 @@ int ajStrCmpCaseCC (const char* str1, const char* str2) {
 
 AjBool ajStrMatch (const AjPStr thys, const AjPStr str) {
 
-  if (!thys || !thys->Len || !str->Len)
+  if (!thys || !str)
     return ajFalse;
 
   if (!strcmp (thys->Ptr, str->Ptr))
@@ -2836,7 +2925,7 @@ AjBool ajStrMatch (const AjPStr thys, const AjPStr str) {
 
 AjBool ajStrMatchC (const AjPStr thys, const char* text) {
 
-  if (!thys || !thys->Len || !*text)
+  if (!thys || !text)
     return ajFalse;
 
   if (!strcmp (thys->Ptr, text))
@@ -2856,7 +2945,7 @@ AjBool ajStrMatchC (const AjPStr thys, const char* text) {
 ******************************************************************************/
 
 AjBool ajStrMatchCC (const char* thys, const char* text) {
-  if (!thys || !*thys || !*text)
+  if (!thys || !text)
     return ajFalse;
 
   if (!strcmp (thys, text))
@@ -2877,7 +2966,7 @@ AjBool ajStrMatchCC (const char* thys, const char* text) {
 
 AjBool ajStrMatchCase (const AjPStr thys, const AjPStr str) {
 
-  if (!thys || !thys->Len || !str->Len)
+  if (!thys || !str)
     return ajFalse;
 
   return ajStrMatchCaseCC (thys->Ptr, str->Ptr);
@@ -2895,7 +2984,7 @@ AjBool ajStrMatchCase (const AjPStr thys, const AjPStr str) {
 
 AjBool ajStrMatchCaseC (const AjPStr thys, const char* text) {
 
-  if (!thys || !thys->Len || !*text)
+  if (!thys || !text)
     return ajFalse;
 
   return ajStrMatchCaseCC (thys->Ptr, text);
@@ -3339,7 +3428,7 @@ void ajStrExit (void) {
 ******************************************************************************/
 
 
-/* @macro AJSTRSTR *******************************************************
+/* @macro MAJSTRSTR *******************************************************
 **
 ** A macro version of {ajStrStr} available in case it is needed for speed.
 **
@@ -3365,7 +3454,7 @@ char* ajStrStr (const AjPStr thys) {
   return thys->Ptr;
 }
 
-/* @macro AJSTRLEN *******************************************************
+/* @macro MAJSTRLEN *******************************************************
 **
 ** A macro version of {ajStrLen} available in case it is needed for speed.
 **
@@ -3391,7 +3480,7 @@ ajint ajStrLen (const AjPStr thys) {
   return thys->Len;
 }
 
-/* @macro AJSTRSIZE *******************************************************
+/* @macro MAJSTRSIZE *******************************************************
 **
 ** A macro version of {ajStrSize} available in case it is needed for speed.
 **
@@ -3417,7 +3506,7 @@ ajint ajStrSize (const AjPStr thys) {
   return thys->Res;
 }
 
-/* @macro AJSTRREF *******************************************************
+/* @macro MAJSTRREF *******************************************************
 **
 ** A macro version of {ajStrRef} available in case it is needed for speed.
 **
@@ -3567,6 +3656,32 @@ AjBool ajStrIsBool (const AjPStr thys) {
   if (!thys->Len) return ajFalse;
 
   if (!strchr("YyTt1NnFf0", *cp)) return ajFalse;
+
+  return ajTrue;
+}
+
+/* @func ajStrIsHex ***********************************************************
+**
+** Simple test for a string having a valid hexadecimal value, using the strtol
+** call in the C RTL.
+**
+** @param [rE] thys [const AjPStr] String
+** @return [AjBool] ajTrue if the string is acceptable as a hexadecimal value.
+** @cre an empty string always returns false.
+** @@
+******************************************************************************/
+
+AjBool ajStrIsHex (const AjPStr thys) {
+
+  char* cp = ajStrStr(thys);
+  char* ptr = NULL;
+
+  if (!thys->Len) return ajFalse;
+
+  errno = 0;
+  (void) strtol (cp, &ptr, 16);
+  if (*ptr || errno == ERANGE)
+    return ajFalse;
 
   return ajTrue;
 }
@@ -3727,13 +3842,48 @@ AjBool ajStrToBool (const AjPStr thys, AjBool* result) {
   return ret;
 }
 
+/* @func ajStrToHex ***********************************************************
+**
+** Converts a string from hexadecimal into an integer value,
+** using the strtol call in the C RTL.
+**
+** @param [r] thys [const AjPStr] String
+** @param [w] result [ajint*] String represented as an integer.
+** @return [AjBool] ajTrue if the string had a valid hexadecimal value.
+** @cre an empty string returns ajFalse.
+** @see ajStrIsHex
+** @@
+******************************************************************************/
+
+AjBool ajStrToHex (const AjPStr thys, ajint* result) {
+
+  AjBool ret=ajFalse;
+  char* cp = ajStrStr(thys);
+  ajlong l;
+  char* ptr;
+
+  *result = 0;
+  if (!thys->Len) return ret;
+
+  errno = 0;
+  l = strtol (cp, &ptr, 16);
+  if (!*ptr && errno != ERANGE) {
+    l = AJMAX(INT_MIN, l);
+    l = AJMIN(INT_MAX, l);
+    *result = (ajint) l;
+    ret = ajTrue;
+  }
+
+  return ret;
+}
+
 /* @func ajStrToInt ***********************************************************
 **
 ** Converts a string into an integer value, using the strtol call
 ** in the C RTL.
 **
 ** @param [r] thys [const AjPStr] String
-** @param [w] result [int*] String represented as an integer.
+** @param [w] result [ajint*] String represented as an integer.
 ** @return [AjBool] ajTrue if the string had a valid integer value.
 ** @cre an empty string returns ajFalse.
 ** @see ajStrIsInt
@@ -3768,7 +3918,7 @@ AjBool ajStrToInt (const AjPStr thys, ajint* result) {
 ** in the C RTL.
 **
 ** @param [r] thys [const AjPStr] String
-** @param [w] result [long*] String represented as an integer.
+** @param [w] result [ajlong*] String represented as an integer.
 ** @return [AjBool] ajTrue if the string had a valid integer value.
 ** @cre an empty string returns ajFalse.
 ** @see ajStrIsInt
@@ -5029,7 +5179,7 @@ char ajStrChar (const AjPStr thys, ajint pos) {
 **
 ** Splits a newline separated multi-line string into an array of AjPStrs
 **
-** @param [r] thys [const AjPStr] String
+** @param [r] thys [AjPStr] String
 ** @param [w] array [AjPStr**] pointer to array of AjPStrs
 **
 ** @return [ajint] Number of array elements created

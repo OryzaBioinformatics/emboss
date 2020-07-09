@@ -5,6 +5,200 @@
 # Warns of missing documentation pages
 # Updates the doc/programs/{text,html} files in the CVS tree
 
+######################################################################
+######################################################################
+######################################################################
+######################################################################
+# SUBROUTINES
+######################################################################
+
+sub filediff ( $$$ ) {
+    my ($silent, $afile, $bfile) = @_;
+    system ("diff $afile $bfile > z.z");
+    if ( -s "z.z" ) {
+	if (!$silent) {
+	    print "$afile ** differences **\n";
+            open (DIF, "z.z") || die "cannot open diff output file";
+	    while (<DIF>) { print "> $_";}
+            close DIF;
+	}
+        unlink "z.z";
+	return 1;
+    }
+    unlink "z.z";
+    return 0;
+}
+
+
+##################################################################
+sub header1 (*) {
+    local (*OUT) = @_;
+
+print OUT "
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR=\"#FFFFFF\" text=\"#000000\">
+
+<table align=center bgcolor=\"#000070\" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href=\"../index.html\" onmouseover=\"self.status='Go to the EMBOSS home page';return true\">
+<img border=0 src=\"../emboss_icon.gif\" alt=\"\" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face=\"Arial,Helvetica\" size=6 color=\"#ffffff\">
+<H2>
+EMBOSS: ";
+
+}
+
+
+##################################################################
+sub header2 (*) {
+    local (*OUT) = @_;
+   
+print OUT "
+</H2>
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+
+<!--END OF HEADER-->
+
+
+
+
+";
+}
+
+
+
+##################################################################
+sub footer (*) {
+    local (*OUT) = @_;
+print OUT "
+
+</table>
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+";
+}
+
+
+##################################################################
+
+sub indexheader (*) {
+	local (*OUT) = @_;
+
+print OUT "
+<HTML>
+
+<HEAD>
+  <TITLE>
+  EMBOSS: The Applications (programs)
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR=\"#FFFFFF\" text=\"#000000\">
+
+<table align=center bgcolor=\"#000070\" border=0 cellspacing=0 cellpadding=10>
+<tr>
+<td>
+
+<a href=\"http://www.uk.embnet.org/Software/EMBOSS/index.html\" onmouseover=\"self.status='Go to the EMBOSS home page';return true\">
+<img border=0 src=\"emboss_icon.gif\" alt=\"\" width=55 height=55>
+</a>
+
+</td>
+
+<td align=middle valign=middle>
+<font face=\"Arial,Helvetica\" size=6 color=\"#ffffff\">
+<H2>
+EMBOSS: The Applications (programs)
+</H2>
+
+
+</font>
+</td>
+
+</tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p><hr><p>
+
+The programs are listed in alphabetical order, Look at the individual
+applications or go to the 
+<a href=\"groups.html\">GROUPS</a>
+page. 
+<p>
+
+
+<h3><A NAME=\"current\">Applications</A> in the <a
+href=\"ftp://ftp.uk.embnet.org/pub/EMBOSS/\">current release</a></h3>
+
+<table border cellpadding=4 bgcolor=\"#FFFFF0\">
+
+<tr>
+<th>Program name</th>
+<th>Description</th>
+</tr>
+
+";
+
+}
+
+##################################################################
+
+sub indexfooter (*) {
+	local (*OUT) = @_;
+
+print OUT "
+
+</table>
+
+
+
+
+</TD></TR></TABLE>
+</CENTER>
+
+</BODY>
+</HTML>
+";
+}
+
+##################################################################
+##################################################################
+#
+# Main routine
+#
+##################################################################
+##################################################################
+
 %progdone = ();
 %progdir = ();
 
@@ -24,7 +218,7 @@ open (PROGS, "wossname -auto |") || die "Cannot run wossname";
 $grp = "";
 while (<PROGS>) {
   if (/^\s*$/) {next}
-    if (/^([A-Z ]+)$/) {
+    if (/^([A-Z0-9 ]+)$/) {
       $capgrp = $1;
       $grp = lc($capgrp);
       $grp =~ s/ +/_/g;
@@ -498,192 +692,4 @@ print "Create make files\n";
 chdir "/packages/emboss_dev/$ENV{'USER'}/emboss/emboss/scripts";
 system("./makeMake.pl");	# no parameter == do text
 system("./makeMake.pl html");
-
-######################################################################
-######################################################################
-######################################################################
-######################################################################
-# SUBROUTINES
-######################################################################
-
-sub filediff ( $$ ) {
-    my ($silent, $afile, $bfile) = @_;
-    system ("diff $afile $bfile > z.z");
-    if ( -s "z.z" ) {
-	if (!$silent) {
-	    print "$afile ** differences **\n";
-            open (DIF, "z.z") || die "cannot open diff output file";
-	    while (<DIF>) { print "> $_";}
-            close DIF;
-	}
-        unlink "z.z";
-	return 1;
-    }
-    unlink "z.z";
-    return 0;
-}
-
-
-##################################################################
-sub header1 (*) {
-    local (*OUT) = @_;
-
-print OUT "
-<HTML>
-
-<HEAD>
-  <TITLE>
-  EMBOSS
-  </TITLE>
-</HEAD>
-<BODY BGCOLOR=\"#FFFFFF\" text=\"#000000\">
-
-<table align=center bgcolor=\"#000070\" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
-
-<a href=\"../index.html\" onmouseover=\"self.status='Go to the EMBOSS home page';return true\">
-<img border=0 src=\"../emboss_icon.gif\" alt=\"\" width=55 height=55>
-</a>
-
-</td>
-
-<td align=middle valign=middle>
-<font face=\"Arial,Helvetica\" size=6 color=\"#ffffff\">
-<H2>
-EMBOSS: ";
-
-}
-
-
-##################################################################
-sub header2 (*) {
-    local (*OUT) = @_;
-   
-print OUT "
-</H2>
-</font>
-</td>
-
-</tr>
-</table>
-</td>
-
-</tr>
-</table>
-
-<p><hr><p>
-
-<!--END OF HEADER-->
-
-
-
-
-";
-}
-
-
-
-##################################################################
-sub footer (*) {
-    local (*OUT) = @_;
-print OUT "
-
-</table>
-
-</TD></TR></TABLE>
-</CENTER>
-
-</BODY>
-</HTML>
-";
-}
-
-
-##################################################################
-
-sub indexheader (*) {
-	local (*OUT) = @_;
-
-print OUT "
-<HTML>
-
-<HEAD>
-  <TITLE>
-  EMBOSS: The Applications (programs)
-  </TITLE>
-</HEAD>
-<BODY BGCOLOR=\"#FFFFFF\" text=\"#000000\">
-
-<table align=center bgcolor=\"#000070\" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
-
-<a href=\"http://www.uk.embnet.org/Software/EMBOSS/index.html\" onmouseover=\"self.status='Go to the EMBOSS home page';return true\">
-<img border=0 src=\"emboss_icon.gif\" alt=\"\" width=55 height=55>
-</a>
-
-</td>
-
-<td align=middle valign=middle>
-<font face=\"Arial,Helvetica\" size=6 color=\"#ffffff\">
-<H2>
-EMBOSS: The Applications (programs)
-</H2>
-
-
-</font>
-</td>
-
-</tr>
-</table>
-</td>
-
-</tr>
-</table>
-
-<p><hr><p>
-
-The programs are listed in alphabetical order, Look at the individual
-applications or go to the 
-<a href=\"groups.html\">GROUPS</a>
-page. 
-<p>
-
-
-<h3><A NAME=\"current\">Applications</A> in the <a
-href=\"ftp://ftp.uk.embnet.org/pub/EMBOSS/\">current release</a></h3>
-
-<table border cellpadding=4 bgcolor=\"#FFFFF0\">
-
-<tr>
-<th>Program name</th>
-<th>Description</th>
-</tr>
-
-";
-
-}
-
-##################################################################
-
-sub indexfooter (*) {
-	local (*OUT) = @_;
-
-print OUT "
-
-</table>
-
-
-
-
-</TD></TR></TABLE>
-</CENTER>
-
-</BODY>
-</HTML>
-";
-}
-
-##################################################################
 

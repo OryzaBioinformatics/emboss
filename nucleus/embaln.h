@@ -61,20 +61,23 @@ void embAlignWalkSWMatrix(float *path, ajint *compass, float gapopen,
 			 AjPStr *n, ajint lena, ajint lenb, float **sub,
 			 AjPSeqCvt cvt, ajint *start1, ajint *start2);
 
-void embAlignPathCalcFast(char *a, char *b, ajint lena, ajint lenb, float gapopen,
-		     float gapextend, float *path, float **sub, AjPSeqCvt cvt,
-		     ajint *compass, AjBool show,int width);
+void embAlignPathCalcFast(char *a, char *b, ajint lena, ajint lenb,
+			  float gapopen, float gapextend, float *path,
+			  float **sub, AjPSeqCvt cvt,
+			  ajint *compass, AjBool show, ajint width);
 
 float embAlignScoreSWMatrixFast(float *path, ajint *compass, float gapopen,
-                          float gapextend,  AjPSeq a, AjPSeq b,
-                          ajint lena, ajint lenb, float **sub,
-                          AjPSeqCvt cvt, ajint *start1, ajint *start2,int width);
+				float gapextend,  AjPSeq a, AjPSeq b,
+				ajint lena, ajint lenb, float **sub,
+				AjPSeqCvt cvt, ajint *start1, ajint *start2,
+				ajint width);
 
 void embAlignWalkSWMatrixFast(float *path, ajint *compass, float gapopen,
-			 float gapextend, AjPSeq a, AjPSeq b, AjPStr *m,
-			 AjPStr *n, ajint lena, ajint lenb, float **sub,
-			 AjPSeqCvt cvt, ajint *start1, ajint *start2,int width);
-
+			      float gapextend, AjPSeq a, AjPSeq b, AjPStr *m,
+			      AjPStr *n, ajint lena, ajint lenb, float **sub,
+			      AjPSeqCvt cvt, ajint *start1, ajint *start2,
+			      ajint width);
+  
 #endif
 
 #ifdef __cplusplus

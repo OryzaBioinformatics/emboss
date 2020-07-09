@@ -263,7 +263,7 @@ regexp * hsregcomp(const char *exp)
  * follows makes it hard to avoid.
  */
 
-static char * reg(register struct comp *cp,int paren,int *flagp)
+static char * reg(register struct comp *cp, ajint paren, ajint *flagp)
 {
     register char *ret=NULL;
     register char *br;

@@ -148,6 +148,9 @@ ajint         embPatRestrictScan (EmbPPatRestrict *enz, AjPStr *substr,
 				AjBool ambiguity, AjBool plasmid, ajint min,
 				ajint max, ajint begin, AjPList *l);
 
+ajint    embPatRestrictCutCompare(const void *a, const void *b);
+ajint    embPatRestrictNameCompare(const void *a, const void *b);
+ajint    embPatRestrictStartCompare(const void *a, const void *b);
 EmbPPatMatch embPatSeqMatchFind  (AjPSeq seq, AjPStr reg);
 EmbPPatMatch embPatSeqMatchFindC (AjPSeq seq, char *reg);
 AjPStr      embPatSeqCreateRegExp  (AjPStr thys, AjBool protein);

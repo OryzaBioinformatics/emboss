@@ -35,8 +35,6 @@ static void stepdown (AjPList l16, AjPList l8, AjPFeatTable *tab);
 static void output_stored_match(AjBool stored_match, ajint stored_dist,
 	ajint s8, ajint s16, AjPFeatTable *tab);	
 
-static ajint    patRestrictStartCompare(const void *a, const void *b);
-
 
 /* the maximum distance between a length 16 pattern and a length 8
 pattern in a MRS */
@@ -46,81 +44,89 @@ pattern in a MRS */
 int main(int argc, char **argv)
 {
     AjPSeqall seqall;
-    AjPSeq seq;
+    AjPSeq    seq;
     AjPFeatTabOut outf=NULL;
-    AjPFeatTable tab=NULL;
+    AjPFeatTable  tab=NULL;
 
     AjPStr pattern16=ajStrNewC("awwrtaannwwgnnnc");
     AjPStr opattern16=NULL;
-    AjBool amino16;
-    AjBool carboxyl16;
-    ajint    type16=0;
-    ajint    m16;
-    ajint    plen16;
-    ajint    *buf16=NULL;    
+    AjBool amino16=ajFalse;
+    AjBool carboxyl16=ajFalse;
+    ajint  type16=0;
+    ajint  m16=0;
+    ajint  plen16=0;
+    ajint  *buf16=NULL;
+        
     EmbOPatBYPNode off16[AJALPHA];
-    ajuint   *sotable16=NULL;
-    ajuint   solimit16;
-    AjPStr	   regexp16=NULL;
-    ajint            **skipm16=NULL;
-    ajint    mismatch16=1;	/* allow a single mismatch */
+
+    ajuint *sotable16=NULL;
+    ajuint solimit16=0;
+    AjPStr regexp16=NULL;
+    ajint  **skipm16=NULL;
+    ajint  mismatch16=1;	/* allow a single mismatch */
     AjPList l16;
-    ajint    hits16=0;
+    ajint  hits16=0;
     void   *tidy16=NULL;
     
     AjPStr pattern16rev=ajStrNewC("gnnncwwnnttaywwt");
     AjPStr opattern16rev=NULL;
-    AjBool amino16rev;
-    AjBool carboxyl16rev;
-    ajint    type16rev=0;
-    ajint    m16rev;
-    ajint    plen16rev;
-    ajint    *buf16rev=NULL;    
+    AjBool amino16rev=ajFalse;
+    AjBool carboxyl16rev=ajFalse;
+    ajint  type16rev=0;
+    ajint  m16rev=0;
+    ajint  plen16rev=0;
+    ajint  *buf16rev=NULL;    
+
     EmbOPatBYPNode off16rev[AJALPHA];
+
     ajuint   *sotable16rev=NULL;
-    ajuint   solimit16rev;
-    AjPStr	   regexp16rev=NULL;
-    ajint            **skipm16rev=NULL;
+    ajuint   solimit16rev=0;
+    AjPStr   regexp16rev=NULL;
+    ajint    **skipm16rev=NULL;
     ajint    mismatch16rev=1;	/* allow a single mismatch */
-    AjPList l16rev;
+    AjPList  l16rev;
     ajint    hits16rev=0;
-    void   *tidy16rev=NULL;
+    void     *tidy16rev=NULL;
     
     AjPStr pattern8=ajStrNewC("aataayaa");
     AjPStr opattern8=NULL;
-    AjBool amino8;
-    AjBool carboxyl8;
-    ajint    type8=0;
-    ajint    m8;
-    ajint    plen8;
-    ajint    *buf8=NULL;    
+    AjBool amino8=ajFalse;
+    AjBool carboxyl8=ajFalse;
+    ajint  type8=0;
+    ajint  m8=0;
+    ajint  plen8=0;
+    ajint  *buf8=NULL;    
+
     EmbOPatBYPNode off8[AJALPHA];
+
     ajuint   *sotable8=NULL;
-    ajuint   solimit8;
-    AjPStr	   regexp8=NULL;
-    ajint            **skipm8=NULL;
+    ajuint   solimit8=0;
+    AjPStr   regexp8=NULL;
+    ajint    **skipm8=NULL;
     ajint    mismatch8=0;
-    AjPList l8;
+    AjPList  l8;
     ajint    hits8=0;
-    void   *tidy8=NULL;
+    void     *tidy8=NULL;
     
     AjPStr pattern8rev=ajStrNewC("ttrttatt");
     AjPStr opattern8rev=NULL;
-    AjBool amino8rev;
-    AjBool carboxyl8rev;
-    ajint    type8rev=0;
-    ajint    m8rev;
-    ajint    plen8rev;
-    ajint    *buf8rev=NULL;    
+    AjBool amino8rev=ajFalse;
+    AjBool carboxyl8rev=ajFalse;
+    ajint  type8rev=0;
+    ajint  m8rev=0;
+    ajint  plen8rev=0;
+    ajint  *buf8rev=NULL;    
+
     EmbOPatBYPNode off8rev[AJALPHA];
+
     ajuint   *sotable8rev=NULL;
-    ajuint   solimit8rev;
-    AjPStr	   regexp8rev=NULL;
-    ajint            **skipm8rev=NULL;
+    ajuint   solimit8rev=0;
+    AjPStr   regexp8rev=NULL;
+    ajint    **skipm8rev=NULL;
     ajint    mismatch8rev=0;
-    AjPList l8rev;
+    AjPList  l8rev;
     ajint    hits8rev=0;
-    void   *tidy8rev=NULL;
+    void     *tidy8rev=NULL;
     
     AjPStr seqname=NULL;
     AjPStr text=NULL;
@@ -129,6 +135,8 @@ int main(int argc, char **argv)
     ajint    begin;
     ajint    end;
     ajint    adj;
+
+    EmbPMatMatch aptr=NULL;
 
 /* feature table stuff */    
     AjPFeatLexicon dict=NULL;
@@ -212,21 +220,21 @@ int main(int argc, char **argv)
 		carboxyl8rev, buf8rev, off8rev, sotable8rev, solimit8rev,
 		regexp8rev, skipm8rev, &hits8rev, m8rev, &tidy8rev);
 
-	if((hits16||hits16rev) && (hits8 || hits8rev)) {
+	if((hits16 || hits16rev) && (hits8 || hits8rev)) {
 
 /* append reverse lists to forward lists and sort them by match position */
 	  ajListPushList(l8, &l8rev);
-	  ajListSort(l8, patRestrictStartCompare);
+	  ajListSort(l8, embPatRestrictStartCompare);
 
 	  ajListPushList(l16, &l16rev);
-	  ajListSort(l16, patRestrictStartCompare);
+	  ajListSort(l16, embPatRestrictStartCompare);
 
 /* initialise the output feature table */
           dict = ajFeatGffDictionaryCreate();
           if(!tab)
             tab = ajFeatTabNew(seqname,dict);
 
-/* find pairs of hits withing the required distance and output the results */
+/* find pairs of hits within the required distance and output the results */
           stepdown (l16, l8, &tab);
 
 /* write features and tidy up */
@@ -235,10 +243,25 @@ int main(int argc, char **argv)
           ajFeatTabDel(&tab);
 	}
 	
+        while(ajListPop(l16,(void **)&aptr))
+            embMatMatchDel(&aptr);
+        while(ajListPop(l16rev,(void **)&aptr))
+            embMatMatchDel(&aptr);
+        while(ajListPop(l8,(void **)&aptr))
+            embMatMatchDel(&aptr);
+        while(ajListPop(l8rev,(void **)&aptr))
+            embMatMatchDel(&aptr);
+                
 	
 /* tidy up - (l8rev and l16rev have already been deleted in ajListPushList) */;
+/*
+ *   but not if the routine was never called. Doesn't hurt trying to delete
+ *   a null ptr though
+ */
 	ajListDel(&l16);
 	ajListDel(&l8);
+        ajListDel(&l16rev);
+        ajListDel(&l8rev);
     }
     
     if(type16==6)
@@ -540,21 +563,3 @@ the end position of the MRS = second pattern + length of second pattern -1 */
     
 
 }
-/* @funcstatic patRestrictStartCompare ****************************************
-**      
-** Sort pattern hits on the basis of start position
-**
-** @param [r] a [const void *] First EmbPMatMatch hit
-** @param [r] b [const void *] Second EmbPMatMatch hit
-**       
-** @return [ajint] 0 if a and b are equal
-**               -ve if a is less than b,
-**               +ve if a is greater than b
-******************************************************************************/
-            
-static ajint patRestrictStartCompare(const void *a, const void *b)
-{
-    return (*(EmbPMatMatch *)a)->start - (*(EmbPMatMatch *)b)->start;
-} 
-
-

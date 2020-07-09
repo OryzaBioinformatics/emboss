@@ -51,7 +51,6 @@
 #define BLASTPREFNCBI  1
 
 
-static AjBool doReverse = AJFALSE;
 static AjBool readReverse = AJFALSE;
 
 AjPList idlist;
@@ -59,21 +58,6 @@ AjPList aclist;
 
 AjBool systemsort;
 AjBool cleanup;
-
-typedef struct Sac {
-  char* ac;
-  char* entry;
-  ajint nid;			/* entry number */
-} Oac, *Pac;
-
-typedef struct Sentry {
-  ajint nac;
-  ajint rpos;
-  ajint spos;
-  ajint filenum;
-  char* entry;
-  char** ac;
-} Oentry, *Pentry;
 
 typedef struct SMemFile {
   AjBool IsMem;
@@ -184,38 +168,18 @@ static OParser parser[] = {
 };
 
 /* static void   stripncbi (AjPStr* line); */
-static Pac    acnumNew (void);
-static Pentry entryNew (void);
-static Pentry nextblastentry (PBlastDb db, ajint ifile);
+static EmbPentry nextblastentry (PBlastDb db, ajint ifile);
 static AjBool blastopenlib(AjPStr lname, PBlastDb* pdb);
-
-static char* newcharS (AjPStr str);
-static char* newcharCI (char* str, ajint i);
 
 static void newname(AjPStr* nname, AjPStr oname, char *suff);
 
-static ajint cmpid (const void* a, const void* b);
-static ajint cmpacid (const void* a, const void* b);
-static ajint cmpacac (const void* a, const void* b);
-static AjPList fileList (AjPStr dir, AjPStr wildfile);
-
-static ajint  writeInt2 (short i, AjPFile file);
-static ajint  writeInt4 (ajint i, AjPFile file);
-static ajint writeStr (AjPStr str, ajint len, AjPFile file);
-static ajint writeChar (char* str, ajint len, AjPFile file);
-static ajint writeByte (char ch, AjPFile file);
-
-static void readUInt4(PMemFile fd, ajuint *val);
+static void memreadUInt4(PMemFile fd, ajuint *val);
 
 static PMemFile memfopenfile (AjPStr name);
 static size_t memfseek (PMemFile mf, ajlong offset, ajint whence);
 static size_t memfread (void* dest, size_t size, size_t num_items, PMemFile mf);
 static size_t memfreadS (AjPStr dest, size_t size, size_t num_items, PMemFile mf);
 
-static void syscmd (AjPStr cmdstr);
-static void sortfile (const char* ext1, const char* ext2, ajint nfiles);
-static void rmfile (const char* ext, ajint nfiles);
-static void rmfileI (const char* ext, ajint ifile);
 static ajint loadtable (ajuint* table, ajint isize, PBlastDb db,
 	       ajint top, ajint pos);
 static ajint ncblreadhdr (AjPStr* hline, PBlastDb db,
@@ -233,8 +197,8 @@ int main(int argc, char **argv)
   AjPStr alistfname = NULL;
   AjPStr blistfname = NULL;
 
-  Pentry entry;
-  Pac acnum=NULL;
+  EmbPentry entry;
+  EmbPac acnum=NULL;
   char* lastac=NULL;
 
   PBlastDb db=NULL;
@@ -300,11 +264,9 @@ int main(int argc, char **argv)
   embInit ("dbiblast", argc, argv);
 
   if (ajUtilBigendian()) {
-    doReverse = ajTrue;
     readReverse = ajFalse;
   }
   else {
-    doReverse = ajFalse;
     readReverse = ajTrue;
   }
 
@@ -342,14 +304,14 @@ int main(int argc, char **argv)
   idlist = ajListNew ();
   aclist = ajListNew ();
 
-  inlist = fileList (directory, filename);
+  inlist = embDbiFileList (directory, filename, NULL);
   ajListSort (inlist, ajStrCmp);
   nfiles = ajListToArray(inlist, &files);
 
   AJCNEW0(divfiles, nfiles);
 
   if (systemsort)
-    acnum = acnumNew();
+    acnum = embDbiAcnumNew();
 
   for (ifile=0; ifile<nfiles; ifile++) {
     curfilename = (AjPStr) files[ifile];
@@ -383,7 +345,7 @@ int main(int argc, char **argv)
 	ajListPushApp (idlist, entry);
 	for (i=0;i<entry->nac; i++) {
 	  if (!systemsort)
-	    acnum = acnumNew();
+	    acnum = embDbiAcnumNew();
 	  acnum->entry = entry->entry;
 	  acnum->ac = entry->ac[i];
 	  ajListPushApp (aclist, acnum);
@@ -395,8 +357,8 @@ int main(int argc, char **argv)
     ajFileClose (&alistfile);
   }
   if (systemsort) {
-    sortfile ("list", "idsrt", nfiles);
-    sortfile ("acid", "acsrt", nfiles);
+    embDbiSortFile (dbname, "list", "idsrt", nfiles, cleanup, sortopt);
+    embDbiSortFile (dbname, "acid", "acsrt", nfiles, cleanup, sortopt);
 
     /* put in the entry numbers and remove the names */
     /* read dbname.acsrt, for each entry, increment the count */
@@ -431,8 +393,8 @@ int main(int argc, char **argv)
 
     /* sort again */
 
-    rmfile ("acsrt", 0);
-    sortfile ("acid2", "acsrt2", 0);
+    embDbiRmFile (dbname, "acsrt", 0, cleanup);
+    embDbiSortFile (dbname, "acid2", "acsrt2", 0, cleanup, sortopt);
  
   }
     
@@ -444,32 +406,32 @@ int main(int argc, char **argv)
     /*
       for (i=0; i<nid; i++) {
       ajDebug("ids %3d %x %x '%s'\n",
-      i, &ids[i], ids[i], ((Pentry)ids[i])->entry);
+      i, &ids[i], ids[i], ((EmbPentry)ids[i])->entry);
       }
     */
-    qsort (ids, nid, sizeof(void*), cmpid);
+    qsort (ids, nid, sizeof(void*), embDbiCmpId);
     ajDebug ("ids sorted\n");
 
     /*
       for (i=0; i<nid; i++) {
       ajDebug("sort ids %3d %x %x '%s'\n",
-      i, &ids[i], ids[i], ((Pentry)ids[i])->entry);
+      i, &ids[i], ids[i], ((EmbPentry)ids[i])->entry);
       }
     */
 
-    qsort (acs, nac, sizeof(void*), cmpacid);
+    qsort (acs, nac, sizeof(void*), embDbiCmpAcId);
     ajDebug ("acs sorted by id\n");
     /*
       for (i=0; i<nac; i++) {
       ajDebug("sort acs %3d %x %x '%s' '%s'\n",
-      i, &acs[i], acs[i], ((Pac)acs[i])->entry,((Pac)acs[i])->ac);
+      i, &acs[i], acs[i], ((EmbPac)acs[i])->entry,((EmbPac)acs[i])->ac);
       }
     */
     i=0;
     j=0;
 
     while (ids[i] && acs[j]) {
-      k = strcmp(((Pentry)ids[i])->entry, ((Pac)acs[j])->entry);
+      k = strcmp(((EmbPentry)ids[i])->entry, ((EmbPac)acs[j])->entry);
       if (k < 0) {
 	i++;
       }
@@ -478,18 +440,18 @@ int main(int argc, char **argv)
       }
 
       else {
-	((Pac)acs[j++])->nid = i+1;	/* we need (i+1) */
+	((EmbPac)acs[j++])->nid = i+1;	/* we need (i+1) */
       }
     }
     ajDebug ("checked ids: %d %d acs: %d %d\n", i, nid, j, nac);
 
-    qsort (acs, nac, sizeof(void*), cmpacac);
+    qsort (acs, nac, sizeof(void*), embDbiCmpAcAc);
     ajDebug ("acs sorted by ac\n");
     /*
       for (i=0; i<nac; i++) {
       ajDebug("sort acs %3d %x %x '%s' '%s' %d\n",
-      i, &acs[i], acs[i], ((Pac)acs[i])->entry,((Pac)acs[i])->ac,
-      ((Pac)acs[i])->nid);
+      i, &acs[i], acs[i], ((EmbPac)acs[i])->entry,((EmbPac)acs[i])->ac,
+      ((EmbPac)acs[i])->nid);
       }
     */
 
@@ -503,25 +465,25 @@ int main(int argc, char **argv)
 	  ajFatal("Cannot open %S for writing",dfname);
 
   dsize = 256 + 44 + (nfiles * (maxfilelen+2));
-  writeInt4 (dsize, dfile); /* filesize */
+  ajFileWriteInt4 (dfile, dsize); /* filesize */
 
-  writeInt4 (nfiles, dfile); /* #records */
+  ajFileWriteInt4 (dfile, nfiles); /* #records */
 
   recsize = maxfilelen + 2;
-  writeInt2 (recsize, dfile); /* recordsize */
+  ajFileWriteInt2 (dfile, recsize); /* recordsize */
 
   /* rest of the header */
-  writeStr  (dbname,  20, dfile); /* dbname */
-  writeStr  (release, 10, dfile); /* release */
-  writeByte (date[0], dfile); /* release date */
-  writeByte (date[1], dfile); /* release date */
-  writeByte (date[2], dfile); /* release date */
-  writeByte (date[3], dfile); /* release date */
-  ajFileWrite (padding, 256, 1, dfile); /* padding 256 bytes */
+  ajFileWriteStr  (dfile, dbname,  20); /* dbname */
+  ajFileWriteStr  (dfile, release, 10); /* release */
+  ajFileWriteByte (dfile, date[0]); /* release date */
+  ajFileWriteByte (dfile, date[1]); /* release date */
+  ajFileWriteByte (dfile, date[2]); /* release date */
+  ajFileWriteByte (dfile, date[3]); /* release date */
+  ajFileWrite (dfile, padding, 256, 1); /* padding 256 bytes */
 
   for (i=0; i<nfiles; i++) {
-    writeInt2 ((short)(i+1), dfile);
-    writeStr (divfiles[i], maxfilelen, dfile);
+    ajFileWriteInt2 (dfile, (short)(i+1));
+    ajFileWriteStr (dfile, divfiles[i], maxfilelen);
   }
   ajFileClose (&dfile);
 
@@ -536,18 +498,18 @@ int main(int argc, char **argv)
 
   elen = maxidlen+10;
   esize = 300 + (nid*(ajint)elen);
-  writeInt4 (esize, efile);
-  writeInt4 (nid, efile);
-  writeInt2 (elen, efile);
+  ajFileWriteInt4 (efile, esize);
+  ajFileWriteInt4 (efile, nid);
+  ajFileWriteInt2 (efile, elen);
 
   /* rest of the header */
-  writeStr  (dbname,  20, efile); /* dbname */
-  writeStr  (release, 10, efile); /* release */
-  writeByte (date[0], efile); /* release date */
-  writeByte (date[1], efile); /* release date */
-  writeByte (date[2], efile); /* release date */
-  writeByte (date[3], efile); /* release date */
-  ajFileWrite (padding, 256, 1, efile); /* padding 256 bytes */
+  ajFileWriteStr  (efile, dbname,  20); /* dbname */
+  ajFileWriteStr  (efile, release, 10); /* release */
+  ajFileWriteByte (efile, date[0]); /* release date */
+  ajFileWriteByte (efile, date[1]); /* release date */
+  ajFileWriteByte (efile, date[2]); /* release date */
+  ajFileWriteByte (efile, date[3]); /* release date */
+  ajFileWrite (efile, padding, 256, 1); /* padding 256 bytes */
 
   if (systemsort) {
     ajFmtPrintS (&elistfname, "%S.idsrt", dbname);
@@ -563,21 +525,21 @@ int main(int argc, char **argv)
       ajStrToInt (tmpstr, &spos);
       ajRegSubI (idsrtexp, 4, &tmpstr);
       ajStrToInt (tmpstr, &filenum);
-      writeStr (idstr, maxidlen, efile);
-      writeInt4 (rpos, efile);
-      writeInt4 (spos, efile);
-      writeInt2 (filenum, efile);
+      ajFileWriteStr (efile, idstr, maxidlen);
+      ajFileWriteInt4 (efile, rpos);
+      ajFileWriteInt4 (efile, spos);
+      ajFileWriteInt2 (efile, filenum);
     }
     ajFileClose (&elistfile);
-    rmfile ("idsrt", 0);
+    embDbiRmFile (dbname, "idsrt", 0, cleanup);
   }
   else {
     for (i = 0; i < nid; i++) {
-      entry = (Pentry)ids[i];
-      writeChar (entry->entry, maxidlen, efile);
-      writeInt4 (entry->rpos, efile);
-      writeInt4 (entry->spos, efile);
-      writeInt2 (entry->filenum, efile);
+      entry = (EmbPentry)ids[i];
+      ajFileWriteChar (efile, entry->entry, maxidlen);
+      ajFileWriteInt4 (efile, entry->rpos);
+      ajFileWriteInt4 (efile, entry->spos);
+      ajFileWriteInt2 (efile, entry->filenum);
     }
   }
   ajFileClose (&efile);
@@ -593,38 +555,38 @@ int main(int argc, char **argv)
   if(!ahfile)
 	  ajFatal("Cannot open %S for writing",ahfname);
   if (!systemsort)
-    lastac = ((Pac)acs[0])->ac;
+    lastac = ((EmbPac)acs[0])->ac;
 
   ajDebug("writing acnum.hit %d\n", nac);
 
   alen = maxaclen+8;
   asize = 300 + (nac*(ajint)alen); /* to be fixed later */
-  writeInt4 (asize, atfile);
-  writeInt4 (nac, atfile);
-  writeInt2 (alen, atfile);
+  ajFileWriteInt4 (atfile, asize);
+  ajFileWriteInt4 (atfile, nac);
+  ajFileWriteInt2 (atfile, alen);
 
   /* rest of the header */
-  writeStr  (dbname,  20, atfile); /* dbname */
-  writeStr  (release, 10, atfile); /* release */
-  writeByte (date[0], atfile); /* release date */
-  writeByte (date[1], atfile); /* release date */
-  writeByte (date[2], atfile); /* release date */
-  writeByte (date[3], atfile); /* release date */
-  ajFileWrite (padding, 256, 1, atfile); /* padding 256 bytes */
+  ajFileWriteStr  (atfile, dbname,  20); /* dbname */
+  ajFileWriteStr  (atfile, release, 10); /* release */
+  ajFileWriteByte (atfile, date[0]); /* release date */
+  ajFileWriteByte (atfile, date[1]); /* release date */
+  ajFileWriteByte (atfile, date[2]); /* release date */
+  ajFileWriteByte (atfile, date[3]); /* release date */
+  ajFileWrite (atfile, padding, 256, 1); /* padding 256 bytes */
 
   ahsize = 300 + (nac*4);
-  writeInt4 (ahsize, ahfile);
-  writeInt4 (nac, ahfile);
-  writeInt2 (4, ahfile);
+  ajFileWriteInt4 (ahfile, ahsize);
+  ajFileWriteInt4 (ahfile, nac);
+  ajFileWriteInt2 (ahfile, 4);
 
   /* rest of the header */
-  writeStr  (dbname,  20, ahfile); /* dbname */
-  writeStr  (release, 10, ahfile); /* release */
-  writeByte (date[0], ahfile); /* release date */
-  writeByte (date[1], ahfile); /* release date */
-  writeByte (date[2], ahfile); /* release date */
-  writeByte (date[3], ahfile); /* release date */
-  ajFileWrite (padding, 256, 1, ahfile); /* padding 256 bytes */
+  ajFileWriteStr  (ahfile, dbname,  20); /* dbname */
+  ajFileWriteStr  (ahfile, release, 10); /* release */
+  ajFileWriteByte (ahfile, date[0]); /* release date */
+  ajFileWriteByte (ahfile, date[1]); /* release date */
+  ajFileWriteByte (ahfile, date[2]); /* release date */
+  ajFileWriteByte (ahfile, date[3]); /* release date */
+  ajFileWrite (ahfile, padding, 256, 1); /* padding 256 bytes */
 
   iac=0;
   j = 0;
@@ -640,13 +602,13 @@ int main(int argc, char **argv)
       ajRegSubI (acsrt2exp, 1, &idstr);
       ajRegSubI (acsrt2exp, 2, &tmpstr);
       ajStrToInt (tmpstr, &idnum);
-      writeInt4 (idnum, ahfile);
+      ajFileWriteInt4 (ahfile, idnum);
       if (!i)
 	ajStrAssS (&lastidstr, idstr);
       if (!ajStrMatch(lastidstr, idstr)) {
-	writeInt4 (j, atfile);
-	writeInt4 (k, atfile);
-	writeStr (lastidstr, maxaclen, atfile);
+	ajFileWriteInt4 (atfile, j);
+	ajFileWriteInt4 (atfile, k);
+	ajFileWriteStr (atfile, lastidstr, maxaclen);
 	j = 0;			/* number of hits */
 	k = i+1;		/* first hit */
 	ajStrAssS (&lastidstr, idstr);
@@ -656,20 +618,20 @@ int main(int argc, char **argv)
       i++;
     }
     ajFileClose (&alistfile);
-    rmfile ("acsrt2", 0);
-    writeInt4 (j, atfile);
-    writeInt4 (k, atfile);
-    writeStr (lastidstr, maxaclen, atfile);
+    embDbiRmFile (dbname,"acsrt2", 0, cleanup);
+    ajFileWriteInt4 (atfile, j);
+    ajFileWriteInt4 (atfile, k);
+    ajFileWriteStr (atfile, lastidstr, maxaclen);
     iac++;
   }
   else {
     for (i = 0; i < nac; i++) {
-      acnum = (Pac)acs[i];
-      writeInt4 (acnum->nid, ahfile);
+      acnum = (EmbPac)acs[i];
+      ajFileWriteInt4 (ahfile, acnum->nid);
       if (strcmp(lastac, acnum->ac)) {
-	writeInt4 (j, atfile);
-	writeInt4 (k, atfile);
-	writeChar (lastac, maxaclen, atfile);
+	ajFileWriteInt4 (atfile, j);
+	ajFileWriteInt4 (atfile, k);
+	ajFileWriteChar (atfile, lastac, maxaclen);
 	j = 0;
 	k = i;
 	lastac = acnum->ac;
@@ -677,16 +639,16 @@ int main(int argc, char **argv)
       }
       j++;
     }
-    writeInt4 (j, atfile);
-    writeInt4 (k, atfile);
-    writeChar (lastac, maxaclen, atfile);
+    ajFileWriteInt4 (atfile, j);
+    ajFileWriteInt4 (atfile, k);
+    ajFileWriteChar (atfile, lastac, maxaclen);
     iac++;
   }
 
   ajDebug ("wrote acnum.trg %d\n", iac);
   ajFileSeek (atfile, 0, 0);	/* fix up the record count */
-  writeInt4 (300+iac*(ajint)alen, atfile);
-  writeInt4 (iac, atfile);
+  ajFileWriteInt4 (atfile, 300+iac*(ajint)alen);
+  ajFileWriteInt4 (atfile, iac);
 
   ajFileClose (&atfile);
   ajFileClose (&ahfile);
@@ -697,116 +659,22 @@ int main(int argc, char **argv)
   return 0;
 }
 
-/* @funcstatic cmpid ********************************************
-**
-** Comparison function for two entries.
-**
-** @param [r] a [const void*] First id (Pentry*)
-** @param [r] b [const void*] Second id (Pentry*)
-** @return [ajint] Comparison value, -1, 0 or +1.
-** @@
-******************************************************************************/
-
-static ajint cmpid (const void* a, const void* b) {
-
-  Pentry aa = *(Pentry*) a;
-  Pentry bb = *(Pentry*) b;
-
-  return strcmp(aa->entry, bb->entry);
-}
-
-/* @funcstatic cmpacid ********************************************
-**
-** Comparison function for two accession entries.
-**
-** @param [r] a [const void*] First id (Pac*)
-** @param [r] b [const void*] Second id (Pentryca*)
-** @return [ajint] Comparison value, -1, 0 or +1.
-** @@
-******************************************************************************/
-
-static ajint cmpacid (const void* a, const void* b) {
-  Pac aa = *(Pac*) a;
-  Pac bb = *(Pac*) b;
-
-  return strcmp(aa->entry, bb->entry);
-}
-
-/* @funcstatic cmpacac ********************************************
-**
-** Comparison function for two accession numbers.
-**
-** @param [r] a [const void*] First id (Pac*)
-** @param [r] b [const void*] Second id (Pentryca*)
-** @return [ajint] Comparison value, -1, 0 or +1.
-** @@
-******************************************************************************/
-
-static ajint cmpacac (const void* a, const void* b) {
-  Pac aa = *(Pac*) a;
-  Pac bb = *(Pac*) b;
-
-  return strcmp(aa->ac, bb->ac);
-}
-
-
-/******************************************************************************
-**
-** Step through, allocating one ID and multiple AC for each entry.
-** Allocate more space for these as needed, using maxidlen and maxaclen.
-** 
-**
-******************************************************************************/
-
-
-/* @funcstatic acnumNew ********************************************
-**
-** Constructor for accession structures.
-**
-** @return [Pac] Accession structure.
-******************************************************************************/
-
-static Pac acnumNew (void) {
-
-  Pac ret;
-  AJNEW0 (ret);
-
-  return ret;
-}
-
-
-/* @funcstatic entryNew ********************************************
-**
-** Constructor for entry structures.
-**
-** @return [Pentry] Entry structure.
-******************************************************************************/
-
-static Pentry entryNew (void) {
-
-  Pentry ret;
-
-  AJNEW0 (ret);
-
-  return ret;
-}
-
 /* @funcstatic nextblastentry ********************************************
 **
-** Returns next  database entry as a Pentry object
+** Returns next  database entry as an EmbPentry object
 **
 ** @param [r] db [PBlastDb] Blast database object
 ** @param [r] ifile [ajint] File number.
-** @return [Pentry] Entry data object.
+** @return [EmbPentry] Entry data object.
 ** @@
 ******************************************************************************/
 
-static Pentry nextblastentry (PBlastDb db, ajint ifile) {
+static EmbPentry nextblastentry (PBlastDb db, ajint ifile) {
 
 #define TABLESIZE 10000
 #define HDRSIZE 1000
 
-  static Pentry ret=NULL;
+  static EmbPentry ret=NULL;
   ajint i;
   static AjPList acl = NULL;
   static ajint lastfile = -1;
@@ -852,7 +720,7 @@ static Pentry nextblastentry (PBlastDb db, ajint ifile) {
   }
 
   if (!ret || !systemsort)
-    ret = entryNew();
+    ret = embDbiEntryNew();
 
   /* pick up the next entry, parse it and dump it */
 
@@ -888,7 +756,7 @@ static Pentry nextblastentry (PBlastDb db, ajint ifile) {
     ajFmtPrintF (elistfile, "%S %d %d %d\n", id, ir, is, ifile+1);
   }
   else {
-    ret->entry = newcharS(id);
+    ret->entry = ajCharNew(id);
     ret->rpos = ir;
     ret->spos = is;
     ret->filenum = ifile+1;
@@ -915,50 +783,6 @@ static Pentry nextblastentry (PBlastDb db, ajint ifile) {
   
   return ret;
 }
-
-/* @funcstatic newcharS ********************************************
-**
-** Constructor for a text string from an AjPStr
-**
-** @param [r] str [AjPStr] String object
-** @return [char*] New text string.
-******************************************************************************/
-
-static char* newcharS (AjPStr str) {
-
-  return newcharCI (ajStrStr(str), ajStrLen(str)+1);
-}
-
-/* @funcstatic newcharCI ********************************************
-**
-** Constructor for a text string from an AjPStr
-**
-** @param [r] str [char*] Text object
-** @param [r] i [ajint] Length
-** @return [char*] New text string.
-******************************************************************************/
-
-static char* newcharCI (char* str, ajint i) {
-
-  static char* buffer = NULL;
-  static ajint ipos=0;
-  static ajint imax=0;
-
-  char* ret;
-
-  if ((ipos+i) > imax) {
-    AJCNEW(buffer, 1000000);
-    ajDebug ("newchar need more memory ipos: %d i: %d  imax: %d buffer: %x\n",
-	     ipos, i, imax, buffer);
-    imax = 1000000;
-    ipos = 0;
-  }
-  ret = &buffer[ipos];
-  strncpy (ret, str, i);
-  ipos += i;
-  return ret;
-}
-
 
 /* @funcstatic blastopenlib ********************************************
 **
@@ -1011,8 +835,8 @@ static AjBool blastopenlib (AjPStr name, PBlastDb* pdb) {
 
   /* read the type and format - all databases */
 
-  readUInt4(ret->TFile,(ajuint*)&ret->DbType);
-  readUInt4(ret->TFile,(ajuint*)&ret->DbFormat);
+  memreadUInt4(ret->TFile,(ajuint*)&ret->DbType);
+  memreadUInt4(ret->TFile,(ajuint*)&ret->DbFormat);
   ret->HeaderLen += 8;
 
   ajDebug ("dbtype: %x dbformat: %x\n", ret->DbType, ret->DbFormat);
@@ -1037,7 +861,7 @@ static AjBool blastopenlib (AjPStr name, PBlastDb* pdb) {
 
   /* read the title - all formats */
 
-  readUInt4(ret->TFile,(ajuint*)&ret->TitleLen);
+  memreadUInt4(ret->TFile,(ajuint*)&ret->TitleLen);
   if (ret->IsBlast2) {		/* blast2 does not align after the title */
     rdtmp = ret->TitleLen;
   }
@@ -1061,7 +885,7 @@ static AjBool blastopenlib (AjPStr name, PBlastDb* pdb) {
   /* read the date - blast2 */
 
   if (ret->IsBlast2) {
-    readUInt4(ret->TFile,(ajuint*)&ret->DateLen);
+    memreadUInt4(ret->TFile,(ajuint*)&ret->DateLen);
     rdtmp2 = ret->DateLen;
     ajStrAssCL(&ret->Date, "", rdtmp2+1);
     memfreadS (ret->Date,(size_t)1,(size_t)rdtmp2,ret->TFile);
@@ -1073,27 +897,27 @@ static AjBool blastopenlib (AjPStr name, PBlastDb* pdb) {
   /* read the rest of the header (different for protein and DNA) */
 
   if (!ret->IsBlast2 && !ret->IsProtein) {
-    readUInt4(ret->TFile,(ajuint*)&ret->LineLen);	/* length of source lines */
+    memreadUInt4(ret->TFile,(ajuint*)&ret->LineLen);	/* length of source lines */
     ret->HeaderLen += 4;
   }
 
   /* all formats have the next 3 */
 
-  readUInt4 (ret->TFile,(ajuint*)&ret->Size);
+  memreadUInt4 (ret->TFile,(ajuint*)&ret->Size);
   if (ret->IsProtein) {		/* mad, but they are the other way for DNA */
-    readUInt4 (ret->TFile,(ajuint*)&ret->TotLen);
-    readUInt4 (ret->TFile,(ajuint*)&ret->MaxSeqLen);
+    memreadUInt4 (ret->TFile,(ajuint*)&ret->TotLen);
+    memreadUInt4 (ret->TFile,(ajuint*)&ret->MaxSeqLen);
   }
   else {
-    readUInt4 (ret->TFile,(ajuint*)&ret->MaxSeqLen);
-    readUInt4 (ret->TFile,(ajuint*)&ret->TotLen);
+    memreadUInt4 (ret->TFile,(ajuint*)&ret->MaxSeqLen);
+    memreadUInt4 (ret->TFile,(ajuint*)&ret->TotLen);
   }
 
   ret->HeaderLen += 12;
 
   if (!ret->IsBlast2 && !ret->IsProtein)  {     /* Blast 1.4 DNA only */
-    readUInt4 (ret->TFile,(ajuint*)&ret->CompLen);	/* compressed db length */
-    readUInt4 (ret->TFile,(ajuint*)&ret->CleanCount);	/* count of nt's cleaned */
+    memreadUInt4 (ret->TFile,(ajuint*)&ret->CompLen);	/* compressed db length */
+    memreadUInt4 (ret->TFile,(ajuint*)&ret->CleanCount);	/* count of nt's cleaned */
     ret->HeaderLen += 8;
   }
 
@@ -1130,13 +954,13 @@ static AjBool blastopenlib (AjPStr name, PBlastDb* pdb) {
 
 
 
-/* @funcstatic stripncbi ********************************************
+/* #funcstatic stripncbi ********************************************
 **
 ** trim the ncbi line.
 **
-** @param [r] line [AjPStr*] Input line
-** @return [void] 
-** @@
+** #param [r] line [AjPStr*] Input line
+** #return [void] 
+** ##
 ******************************************************************************/
 
 /* static void stripncbi (AjPStr* line) {
@@ -1211,7 +1035,7 @@ static AjBool parseNcbi (AjPStr line, PBlastDb db,
     ajFmtPrintF (alistfile, "%S %S\n", *id, tmpac);
   }
   else {
-    ac = newcharS (tmpac);
+    ac = ajCharNew (tmpac);
     ajListPushApp (acl, ac);
   }
 
@@ -1252,7 +1076,7 @@ static AjBool parseGcg (AjPStr line, PBlastDb db,
     ajFmtPrintF (alistfile, "%S %S\n", *id, tmpac);
   }
   else {
-    ac = newcharS (tmpac);
+    ac = ajCharNew (tmpac);
     ajListPushApp (acl, ac);
   }
 
@@ -1293,7 +1117,7 @@ static AjBool parseSimple (AjPStr line, PBlastDb db,
     ajFmtPrintF (alistfile, "%S %S\n", *id, tmpac);
   }
   else {
-    ac = newcharS (tmpac);
+    ac = ajCharNew (tmpac);
     ajListPushApp (acl, ac);
   }
 
@@ -1354,197 +1178,7 @@ static AjBool parseUnknown (AjPStr line, PBlastDb db,
   return ajFalse;
 }
 
-/* @funcstatic fileList ********************************************
-**
-** Makes a list of all files in a directory matching a wildcard file name.
-**
-** @param [r] dir [AjPStr] Directory
-** @param [r] wildfile [AjPStr] Wildcard file name
-** @return [AjPList] New list of all files with full paths
-** @@ 
-******************************************************************************/
-
-static AjPList fileList (AjPStr dir, AjPStr wildfile) {
-
-  AjPList retlist=NULL;
-    
-  DIR* dp;
-  struct dirent* de;
-  ajint dirsize;
-  AjPStr name = NULL;
-  static AjPStr dirfix = NULL;
-  AjPStr tmp;
-  AjPStr s;
-  AjPStr s2;
-  AjPStr t;
-  
-  char *p;
-  char *q;
-  AjPList l;
-  ajint ll;
-  ajint i;
-  AjBool d;
-  
-  tmp = ajStrNewC(ajStrStr(wildfile));
-
-  if (ajStrLen(dir))
-    (void) ajStrAss (&dirfix, dir);
-  else
-    (void) ajStrAssC (&dirfix, "./");
-
-  if (ajStrChar(dirfix, -1) != '/')
-    (void) ajStrAppC (&dirfix, "/");
-
-  (void) ajStrAppC(&wildfile,"*");
-
-  dp = opendir (ajStrStr(dirfix));
-  if (!dp)
-    ajFatal("opendir failed on '%S'", dirfix);
-
-  s = ajStrNew();
-  l = ajListNew();
-  dirsize = 0;
-  retlist = ajListstrNew ();
-  while ((de = readdir(dp))) {
-    if (!de->d_ino) continue;	/* skip deleted files with inode zero */
-    if (!ajStrMatchWildCO(de->d_name, wildfile)) continue;
-    (void) ajStrAssC(&s,de->d_name);
-    p=q=ajStrStr(s);
-    p=strrchr(p,(ajint)'.');
-    if(p)
-	*p='\0';
-    s2 = ajStrNewC(q);
-    
-    ll=ajListLength(l);
-    
-    d=ajFalse;
-    for(i=0;i<ll;++i)
-    {
-	ajListPop(l,(void *)&t);
-	if(ajStrMatch(t,s2))
-	   d=ajTrue;
-	ajListPushApp(l,(void *)t);
-    }
-    if(!d)
-	ajListPush(l,(void *)s2);
-    else
-    {
-	ajStrDel(&s2);
-	continue;
-    }
-
-    dirsize++;
-    ajDebug ("accept '%S'\n", s2);
-    name = NULL;
-    (void) ajFmtPrintS (&name, "%S%S", dirfix, s2);
-    ajListstrPushApp (retlist, name);
-  }
-
-  if(!ajListLength(retlist))
-      ajFatal("No match for file specification %S",tmp);
-
-  while(ajListPop(l,(void *)&t))
-      ajStrDel(&t);
-  ajStrDel(&s);
-  ajStrDel(&tmp);
-
-  (void) closedir (dp);
-  ajDebug ("%d files for '%S' '%S'\n", dirsize, dir, wildfile);
-
-  return retlist;
-
-}
-
-/* @funcstatic writeInt2 ********************************************
-**
-** Writes a 2 byte integer to a binary file, with the correct byte orientation
-**
-** @param [r] i [short] Integer
-** @param [r] file [AjPFile] Output file
-** @return [ajint] Return value from fwrite
-** @@
-******************************************************************************/
-
-static ajint  writeInt2 (short i, AjPFile file) {
-  short j = i;
-  if (doReverse)ajUtilRev2(&j);
-    
-  return fwrite (&j, 2, 1, ajFileFp(file));
-}
-
-/* @funcstatic writeInt4 ********************************************
-**
-** Writes a 4 byte integer to a binary file, with the correct byte orientation
-**
-** @param [r] i [ajint] Integer
-** @param [r] file [AjPFile] Output file
-** @return [ajint] Return value from fwrite
-** @@
-******************************************************************************/
-
-static ajint  writeInt4 (ajint i, AjPFile file) {
-  ajint j=i;
-  if (doReverse)ajUtilRev4(&j);
-  return fwrite (&j, 4, 1, ajFileFp(file));
-}
-
-/* @funcstatic writeStr ********************************************
-**
-** Writes a string to a binary file
-**
-** @param [r] str [AjPStr] String
-** @param [r] len [ajint] Length (padded) to use in the file
-** @param [r] file [AjPFile] Output file
-** @return [ajint] Return value from fwrite
-** @@
-******************************************************************************/
-
-static ajint writeStr (AjPStr str, ajint len, AjPFile file) {
-  static char buf[256];
-  ajint i = ajStrLen(str);
-  strcpy(buf, ajStrStr(str));
-  if (i < len)
-    memset (&buf[i], '\0', len-i);
-
-  return fwrite (buf, len, 1, ajFileFp(file));
-}
-
-/* @funcstatic writeChar ********************************************
-**
-** Writes a text string to a binary file
-**
-** @param [r] str [char*] Text string
-** @param [r] len [ajint] Length (padded) to use in the file
-** @param [r] file [AjPFile] Output file
-** @return [ajint] Return value from fwrite
-** @@
-******************************************************************************/
-
-static ajint writeChar (char* str, ajint len, AjPFile file) {
-  static char buf[256];
-  ajint i = strlen(str);
-  strcpy(buf, str);
-  if (i < len)
-    memset (&buf[i], '\0', len-i);
-
-  return fwrite (buf, len, 1, ajFileFp(file));
-}
-
-/* @funcstatic writeByte ********************************************
-**
-** Writes a single byte to a binary file
-**
-** @param [r] ch [char] Character
-** @param [r] file [AjPFile] Output file
-** @return [ajint] Return value from fwrite
-** @@
-******************************************************************************/
-
-static ajint writeByte (char ch, AjPFile file) {
-  return fwrite (&ch, 1, 1, ajFileFp(file));
-}
-
-/* @funcstatic readUInt4 ********************************************
+/* @funcstatic memreadUInt4 ********************************************
 **
 ** Reads a 4 byte unsigned integer from a (possibly memory mapped)
 ** binary file, with the correct byte orientation
@@ -1555,7 +1189,7 @@ static ajint writeByte (char ch, AjPFile file) {
 ** @@
 ******************************************************************************/
 
-static void readUInt4 (PMemFile fd, ajuint *val) {
+static void memreadUInt4 (PMemFile fd, ajuint *val) {
 
   memfread((char *)val,(size_t)4,(size_t)1,fd);
   if (readReverse) ajUtilRev4((ajint *)val);
@@ -1644,150 +1278,6 @@ static size_t memfread (void* dest, size_t size, size_t num_items, PMemFile mf) 
   }
 }
 
-/* @funcstatic sortfile ********************************************
-**
-** Sort a file, or a set of numbered files, individually
-**
-** @param [r] ext1 [const char*] Input file extension
-** @param [r] ext2 [const char*] Output file extension
-** @param [r] nfiles [ajint] Number of files to sort (zero if unnumbered)
-** @return [void]
-** @@
-******************************************************************************/
-
-static void sortfile (const char* ext1, const char* ext2, ajint nfiles) {
-
-  static AjPStr cmdstr = NULL;
-  ajint i;
-  static AjPStr infname = NULL;
-  static AjPStr outfname = NULL;
-  static AjPStr srtext = NULL;
-
-  if (nfiles) {
-    for (i=1; i<=nfiles; i++) {
-      ajFmtPrintS (&infname, "%S%02d.%s ", dbname, i, ext1);
-      ajFmtPrintS (&outfname, "%S%02d.%s.srt", dbname, i, ext1);
-      ajFmtPrintS (&cmdstr, "sort -o %S %S %S",
-		   outfname, sortopt, infname);
-
-      syscmd (cmdstr);
-
-      rmfileI (ext1, i);
-    }
-
-    ajFmtPrintS (&cmdstr, "sort -m -o %S.%s %S",
-		 dbname, ext2, sortopt);
-    for (i=1; i<=nfiles; i++) {
-      ajFmtPrintAppS (&cmdstr, " %S%02d.%s.srt", dbname, i, ext1);
-    }
-    syscmd (cmdstr);
-
-    ajFmtPrintS (&srtext, "%s.srt ", ext1);
-    for (i=1; i<=nfiles; i++) {
-      rmfileI (ajStrStr(srtext), i);
-    }
-  }
-  else {
-    ajFmtPrintS (&infname, "%S.%s ", dbname, ext1);
-    ajFmtPrintS (&outfname, "%S.%s", dbname, ext2);
-    ajFmtPrintS (&cmdstr, "sort -o %S %S %S",
-		 outfname, sortopt, infname);
-    syscmd (cmdstr);
-    rmfile (ext1, 0);
-  }
-
-  return;
-}
-
-/* @funcstatic rmfileI ********************************************
-**
-** Remove a numbered file
-**
-** @param [r] ext [const char*] Base file extension
-** @param [r] ifile [ajint] File number.
-** @return [void]
-******************************************************************************/
-
-static void rmfileI (const char* ext, ajint ifile) {
-
-  static AjPStr cmdstr = NULL;
-
-  if (!cleanup) return;
-
-  ajFmtPrintS (&cmdstr, "rm %S%02d.%s ", dbname, ifile, ext);
-
-  syscmd (cmdstr);
-
-  return;
-}
-
-/* @funcstatic rmfile ********************************************
-**
-** Remove a file or a set of numbered files
-**
-** @param [r] ext [const char*] Base file extension
-** @param [r] nfiles [ajint] Number of files, or zero for unnumbered.
-** @return [void]
-** @@
-******************************************************************************/
-
-static void rmfile (const char* ext, ajint nfiles) {
-
-  static AjPStr cmdstr = NULL;
-  ajint i;
-
-  if (!cleanup) return;
-
-  if (nfiles) {
-    ajFmtPrintS (&cmdstr, "rm ");
-    for (i=1; i<= nfiles; i++) {
-      ajFmtPrintAppS (&cmdstr, "%S%02d.%s ", dbname, i, ext);
-    }
-  }
-  else
-    ajFmtPrintS (&cmdstr, "rm %S.%s", dbname, ext);
-    
-
-  syscmd (cmdstr);
-
-  return;
-}
-
-/* @funcstatic syscmd ********************************************
-**
-** Fork a system command
-**
-** @param [r] cmdstr [AjPStr] Command line
-** @return [void]
-** @@
-******************************************************************************/
-
-static void syscmd (AjPStr cmdstr) {
-
-  char** arglist = NULL;
-  char* pgm;
-  pid_t pid;
-  ajint status;
-
-  ajDebug ("forking '%S'", cmdstr);
-  (void) ajSysArglist (cmdstr, &pgm, &arglist);
-
-  pid=fork();
-  if(pid==-1)
-    ajFatal("System fork failed");
-
-  if(!pid) {
-    (void) execvp (pgm, arglist);
-    return;
-  }
-  while(wait(&status)!=pid);
-
-  ajSysArgListFree (&arglist);
-  ajCharFree (pgm);
-
-  return;
-}
-
 /* @funcstatic newname ********************************************
 **
 ** Generate a new filename with a different suffix.
@@ -1871,7 +1361,7 @@ static ajint loadtable (ajuint* table, ajint isize, PBlastDb db,
   j=0;
   for (i=pos; i<=imax; i++) {
     ajDebug ("reading at %d\n", ajFileTell(db->TFile->File));
-    readUInt4(db->TFile,&table[j++]);
+    memreadUInt4(db->TFile,&table[j++]);
     ajDebug ("read i: %d j: %d value: %d\n", i, j-1, table[j-1]);
   }
 

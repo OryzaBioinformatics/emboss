@@ -557,7 +557,7 @@ int main(int argc, char **argv)
 ** @param [r] out [AjPStr] Name of output file
 ** @param [r] scop [AjPScop] SCOP structure with SCOP classification records
 **
-** @return [AjBool] True on success
+** @return [void]
 ** @@
 *****************************************************************************/
 void ProcessStampFile(AjPStr in, AjPStr out, AjPScop scop)

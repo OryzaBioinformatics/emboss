@@ -105,7 +105,7 @@ AjPMatrixf ajMatrixfNew (char* codes, AjPStr filename) {
 **
 ** Delete a float matrix
 **
-** @param [w] codes [AjPMatrixf*] Matrix to delete
+** @param [w] thys [AjPMatrixf*] Matrix to delete
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -138,7 +138,7 @@ void ajMatrixfDel (AjPMatrixf *thys)
 ** Sequence Conversion table in the matrix (see ajMatrixCvt)
 **
 ** @param [r] thys [AjPMatrix] Matrix object
-** @return [int**] array of integer arrays for comparison values.
+** @return [ajint**] array of integer arrays for comparison values.
 ** @@
 ******************************************************************************/
 

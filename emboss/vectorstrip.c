@@ -161,15 +161,8 @@ int main(int argc, char **argv)
 **
 ** Initialises data members of a CPattern. 
 **
-** Parameters:
-**
-** CPattern* pat - CPattern to be initialised
-**
-** Parameters modified:
-** data members of pat are initialised
-**
-** Returns:
-** void
+** @param [w] pat [CPattern*] CPattern to be initialised
+** @return [void]
 ******************************************************************************/
 static void initialise_cp(CPattern* pat)
 {
@@ -188,18 +181,11 @@ static void initialise_cp(CPattern* pat)
 **
 ** Initialises data members of a Vector. 
 **
-** Parameters:
-**
-** Vector* vec - Vector to be initialised
-** AjPStr name - string representing name of vector
-** AjPStr five - string representing 5' pattern
-** AjPStr three - string representing 3' pattern
-**
-** Parameters modified:
-** data members of vec are initialised
-**
-** Returns:
-** void
+** @param [w] vec [Vector*] New vector object
+** @param [r] name [AjPStr] string representing name of vector
+** @param [r] five [AjPStr] string representing 5' pattern
+** @param [r] three [AjPStr] string representing 3' pattern
+** @return [void]
 ******************************************************************************/
 static void initialise_vector(Vector* vec, AjPStr name, 
 			      AjPStr five, AjPStr three)
@@ -214,16 +200,11 @@ static void initialise_vector(Vector* vec, AjPStr name,
 **
 ** REads vector data from a file into a list of Vectors. 
 **
-** Parameters:
-**
-** AjPFile vectorfile - the file containing vector data
-** AjPList* vectorlist - list to store vector data
-**
-** Parameters modified:
-** list contains one node for each set of vector data in vectorfile
-**
-** Returns:
-** void
+** @param [r] vectorfile [AjPFile] the file containing vector data
+** @param [w] vectorlist [AjPList*] list to store vector data
+**                                  contains one node for each set of
+**                                  vector data in vectorfile
+** @return [void]
 ******************************************************************************/
 static void read_vector_data(AjPFile vectorfile, AjPList* vectorlist)
 {
@@ -271,15 +252,8 @@ static void read_vector_data(AjPFile vectorfile, AjPList* vectorlist)
 **
 ** Frees a list of EmbPMatMatch. 
 **
-** Parameters:
-**
-** AjPList list - the list of EmbPMatMatch to be free'd
-**
-** Parameters modified:
-** elements of list, and list itself, are free'd
-**
-** Returns:
-** void
+** @param [d] list [AjPList] the list of EmbPMatMatch to be freed
+** @return [void]
 ******************************************************************************/
 static void free_list(AjPList list)
 {
@@ -301,15 +275,8 @@ static void free_list(AjPList list)
 **
 ** Frees a CPattern. 
 **
-** Parameters:
-**
-** CPattern* pat - the pattern to be to be free'd
-**
-** Parameters modified:
-** pat is free'd
-**
-** Returns:
-** void
+** @param [d] pat [CPattern*] the pattern to be to be freed
+** @return [void]
 ******************************************************************************/
 static void free_cp(CPattern* pat)
 {
@@ -331,19 +298,12 @@ static void free_cp(CPattern* pat)
   AJFREE(*pat);
 }
 
-/* @funcstatic free_vector **************************************************
+/* #funcstatic free_vector ***********************************************
 **
 ** Frees a Vector. 
 **
-** Parameters:
-**
-** Vector* vec - the Vector to be to be free'd
-**
-** Parameters modified:
-** vec is free'd
-**
-** Returns:
-** void
+** #param [d] vec [Vector*] the vector to be freed
+** #return [void]
 ******************************************************************************/
 /*static void free_vector(Vector* vec)
 {
@@ -364,21 +324,15 @@ static void free_cp(CPattern* pat)
 ** The pattern may be repeatedly recompiled using embPatCompile in order to
 ** allow searching with different numbers of mismatches.
 **
-** Parameters:
-**
-** AjPStr pattern - the pattern to be searched
-** AjPList* hitlist - list to which hits will be written
-** AjPStr seqname - the name of the sequence
-** AjPStr seqstr - string representing the sequence to be searched
-** ajint threshold - max allowable % mismatch based on length of pattern
-** ajint begin - start position of sequence
-** AjBool besthits - 
-**
-** Parameters modified:
-** list has been populated with hits of pattern against sequence
-**
-** Returns:
-** void
+** @param [r] pattern [AjPStr] the pattern to be searched
+** @param [w] hitlist [AjPList*] list to which hits will be written
+** @param [r] seqname [AjPStr] the name of the sequence
+** @param [r] seqstr [AjPStr] string representing the sequence to be searched
+** @param [r] threshold [ajint] max allowable percent mismatch based on length
+**                              of pattern
+** @param [r] begin [ajint] start position of sequence
+** @param [r] besthits [AjBool] Best hits
+** @return [void]
 ******************************************************************************/
 static void process_pattern(AjPStr pattern, AjPList* hitlist, 
 			    AjPStr seqname, AjPStr seqstr, 
@@ -423,8 +377,14 @@ static void process_pattern(AjPStr pattern, AjPList* hitlist,
 ** Parameters modified:
 ** results written to outf and seqout
 **
-** Returns:
-** void
+** @param [r] fivelist [AjPList] list of EmbPMatMatch representing hits of 5' 
+**                               pattern against the sequence
+** @param [r] threelist [AjPList] list of EmbPMatMatch representing hits of 3'
+**                                pattern against the sequence
+** @param [r] sequence [AjPSeq] the sequence itself
+** @param [r] seqout [AjPSeqout] place to writesubsequences
+** @param [r] outf [AjPFile] file for writing information about the hits
+** @return [void]
 ******************************************************************************/
 static void process_hits(AjPList fivelist, AjPList threelist, 
 			 AjPSeq sequence, AjPSeqout seqout, 
@@ -546,21 +506,14 @@ static void process_hits(AjPList fivelist, AjPList threelist,
 **
 ** Scans a Vector against a sequence
 **
-** Parameters:
-**
-** Vector vector - the vector data
-** AjPSeqout seqout - where toi write out subsequences
-** AjPFile outf - file for writing results details
-** AjPSeq sequence - the sequence to be scanned
-** ajint mis_per - max mistmatch percentage
-** AjBool besthits - stop scanning when we get hits, even if mis_per 
-**                   not reached yet?
-**
-** Parameters modified:
-** subsequences are written to seqout, and hit details to outf
-**
-** Returns:
-** void
+** @param [r] vector [Vector] the vector data
+** @param [r] seqout [AjPSeqout] where to write out subsequences
+** @param [w] outf [AjPFile] file for writing results details
+** @param [w] sequence [AjPSeq] the sequence to be scanned
+** @param [r] mis_per [ajint] max mismatch percentage
+** @param [r] besthits [AjBool] stop scanning when we get hits, even if
+**                              mis_per is not reached yet
+** @return [void]
 ******************************************************************************/
 static void scan_sequence(Vector vector, AjPSeqout seqout, AjPFile outf, 
 			  AjPSeq sequence, ajint mis_per, AjBool besthits)
@@ -619,22 +572,14 @@ static void scan_sequence(Vector vector, AjPSeqout seqout, AjPFile outf,
 ** Classifies, compiles and searches pattern against seqstr with 
 ** mm mismatches
 **
-** Parameters:
-**
-** AjPStr pattern - patrern to be searched for
-** AjPList* hitlist - list of hits
-** AjPStr seqname - name of sequence to be searched
-** AjPStr seqstr - string representing sequence to be searched
-** ajint begin - start position of sequence
-** ajint* hits - number of hits
-** ajint mm - number of mismatches
-**
-** Parameters modified:
-** hits and hitlist hold the number of hits and the hits 
-** themselves, respectively
-**
-** Returns:
-** void
+** @param [r] pattern [AjPStr] pattern to be searched for
+** @param [w] hitlist [AjPList*] list of hits
+** @param [r] seqname [AjPStr] name of sequence to be searched
+** @param [r] seqstr [AjPStr] string representing sequence to be searched
+** @param [r] begin [ajint] start position of sequence
+** @param [w] hits [ajint*] number of hits
+** @param [r] mm [ajint] number of mismatches
+** @return [void]
 ******************************************************************************/
 static void ccs_pattern(AjPStr pattern, AjPList* hitlist, AjPStr seqname, 
 			AjPStr seqstr, ajint begin, ajint* hits, ajint mm)
@@ -680,23 +625,18 @@ static void ccs_pattern(AjPStr pattern, AjPList* hitlist, AjPStr seqname,
 
 /* @funcstatic write_sequence *************************************************
 **
-** Writes out a subsequence.
-**
-** Parameters:
-**
-** AjPSeq sequence - the entire sequence
-** AjPSeqout seqout - where to write out subsequences
-** ajint start - start position of desired subsequence relative to sequence
-** ajint end - end position of desired subsequence relative to sequence 
-** AjPFile outf - file to write details of output subsequence
-**
-** Parameters modified:
-** subsequence has been written to seqout and details of the output 
+** Details of the output 
 ** sequence (hit positions, number of mismatches, sequences trimmed 
-** from 5' and 3' ends) have been written to outf
+** from 5' and 3' ends) are written to outf
 **
-** Returns:
-** void
+** @param [r] sequence [AjPSeq] the entire sequence
+** @param [w] seqout [AjPSeqout] where to write out subsequences
+** @param [r] start [ajint] start position of desired subsequence relative
+**                          to sequence
+** @param [r] end [ajint] end position of desired subsequence relative
+**                        to sequence 
+** @param [w] outf [AjPFile] file to write details of output subsequence
+** @return [void]
 ******************************************************************************/
 static void write_sequence(AjPSeq sequence, AjPSeqout seqout, ajint start, ajint end, AjPFile outf)
 {
@@ -761,19 +701,11 @@ static void write_sequence(AjPSeq sequence, AjPSeqout seqout, ajint start, ajint
 ** Output hit positions and number of mismatches of a pattern against a 
 ** sequence to file 
 **
-** Parameters:
-**
-** AjPList hitlist - list of hits of pattern against the sequence
-** AjPFile outf - file for writing information about the hits
-** AjPStr seq - string representation of sequence
-** AjPSeqout seqout - place to write sequence
-** ajint begin - start of sequence
-** 
-** Parameters modified:
-** results written to outf
-**
-** Returns:
-** void
+** @param [r] hitlist [AjPList] list of hits of pattern against the sequence
+** @param [w] outf [AjPFile] file for writing information about the hits
+** @param [r] seq [AjPStr] string representation of sequence
+** @param [r] begin [ajint] start of sequence
+** @return [void]
 ******************************************************************************/
 static void print_hits(AjPList hitlist, AjPFile outf, AjPStr seq, ajint begin)
 {
@@ -804,17 +736,11 @@ static void print_hits(AjPList hitlist, AjPFile outf, AjPStr seq, ajint begin)
 /* @funcstatic reportseq **************************************************
 **
 ** Formatted output of sequence data. 
-**
-** Parameters:
-**
-** AjPStr seqstr - sequence to be output
-** AjPFile outf - file to write to
-**
-** Parameters modified:
 ** sequence is written to outf in lines of length 50.
 **
-** Returns:
-** void
+** @param [r] seqstr [AjPStr] sequence to be output
+** @param [r] outf [AjPFile] file to write to
+** @return [void]
 ******************************************************************************/
 static void reportseq(AjPStr seqstr, AjPFile outf)
 {

@@ -23,10 +23,10 @@
 
 #include "emboss.h"
 
-void merge(AjPStr *merged, AjPFile outf, char *a, char *b, AjPStr m, AjPStr n,
-                        ajint start1, ajint start2, float score, AjBool mark,
-                        float **sub, AjPSeqCvt cvt, char *namea,
-                        char *nameb, ajint begina, ajint beginb);
+static void mergerMerge (AjPStr *merged, AjPFile outf, char *a, char *b,
+			 AjPStr m, AjPStr n, ajint start1, ajint start2,
+			 float score, AjBool mark, float **sub, AjPSeqCvt cvt,
+			 char *namea, char *nameb, ajint begina, ajint beginb);
 
 float quality (char * seq, ajint pos, ajint window);
 
@@ -130,8 +130,8 @@ using in the merge by uppercasing it */
 
 /* now construct the merged sequence, uppercase the bits of the two
 input sequences which are used in the merger */
-    (void) merge(&merged, outf,p,q,m,n,start1,start2,score,1,sub,cvt,
-                   ajSeqName(a),ajSeqName(b),begina,beginb);
+    (void) mergerMerge(&merged, outf,p,q,m,n,start1,start2,score,1,sub,cvt,
+		       ajSeqName(a),ajSeqName(b),begina,beginb);
 
 /* print the alignment */
     (void) embAlignPrintGlobal(outf,p,q,m,n,start1,start2,score,1,sub,cvt,
@@ -152,7 +152,7 @@ input sequences which are used in the merger */
     return 0;
 }
 
-/* @func merge *******************************************
+/* @funcstatic mergerMerge *******************************************
 ** 
 ** Print a global alignment
 ** Nucleotides or proteins as needed.   
@@ -177,10 +177,11 @@ input sequences which are used in the merger */
 ** @return [void]
 ******************************************************************************/
 
-void merge(AjPStr *ms, AjPFile outf, char *a, char *b, AjPStr m, AjPStr n,
-                        ajint start1, ajint start2, float score, AjBool mark,
-                        float **sub, AjPSeqCvt cvt, char *namea,
-                        char *nameb, ajint begina, ajint beginb) {
+static void mergerMerge (AjPStr *ms, AjPFile outf, char *a, char *b,
+			 AjPStr m, AjPStr n, ajint start1, ajint start2,
+			 float score, AjBool mark, float **sub, AjPSeqCvt cvt,
+			 char *namea, char *nameb, ajint begina, ajint beginb)
+{
 
   ajint apos, bpos;
   ajint i;                                                                        

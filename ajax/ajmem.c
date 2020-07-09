@@ -192,7 +192,7 @@ void* ajMemResize (void* ptr, ajlong nbytes,
 ** Use AJFREE to free the memory when no longer needed.
 **
 ** @param [r] size [size_t] Number of array elements.
-** @return [int*] Newly allocated array.
+** @return [ajint*] Newly allocated array.
 ** @@
 ******************************************************************************/
 
@@ -206,7 +206,7 @@ ajint* ajMemArrB (size_t size) {
 ** Use AJFREE to free the memory when no longer needed.
 **
 ** @param [r] size [size_t] Number of array elements.
-** @return [int*] Newly allocated array.
+** @return [ajint*] Newly allocated array.
 ** @@
 ******************************************************************************/
 

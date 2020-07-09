@@ -63,6 +63,7 @@ void ajTableTrace   (AjPTable table);
 void *ajTablePut   (AjPTable table, const void *key,
 		    void *value);
 void *ajTableGet   (AjPTable table, const void *key);
+void *ajTableKey   (AjPTable table, const void *key);
 void *ajTableRemove(AjPTable table, const void *key);
 void   ajTableMap    (AjPTable table,
 		      void apply(const void *key, void **value, void *cl),
@@ -83,6 +84,7 @@ AjPTable   ajStrTableNewCase (ajint hint);
 AjPTable   ajStrTableNewCaseC (ajint hint);
 void       ajStrTablePrint (AjPTable table);
 void       ajStrTablePrintC (AjPTable table);
+void       ajStrTableTrace   (AjPTable table);
 #endif
 
 #ifdef __cplusplus

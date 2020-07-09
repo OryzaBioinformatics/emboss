@@ -99,7 +99,7 @@ ajint nope=0;
 /*
  - regexec - interface for matching
  = extern ajint regexec(const regex_t *, const char *, size_t, \
- =					regmatch_t [], int);
+ =					regmatch_t [], ajint);
  = #define	REG_NOTBOL	00001
  = #define	REG_NOTEOL	00002
  = #define	REG_STARTEND	00004

@@ -274,7 +274,17 @@ int main(int argc, char **argv)
 **
 ** Load in ABI trace data into graph data object.
 **
-** returns: graph data object 
+** @param [r] graphs [AjPGraph] Graph
+** @param [r] trace [AjPInt2d] Trace array
+** @param [r] nstart [ajint] Start position
+** @param [r] nstop [ajint] End position
+** @param [r] basePositions [AjPShort] Number of bases
+** @param [r] base [ajint] Base number
+** @param [r] colour [ajint] Colour code
+** @param [r] overlay [AjBool] Overlay plot
+** @param [r] tmax [float] Maximum
+** @param [r] nt [ajint*] Array
+** @return [AjPGraphData] graph data object 
 **     
 *************************************************************************/
 static AjPGraphData graphDisplay(AjPGraph graphs, AjPInt2d trace, 
@@ -331,7 +341,15 @@ static AjPGraphData graphDisplay(AjPGraph graphs, AjPInt2d trace,
 ** Draw sequence in a separate graph if the trace data is plotted
 ** in separate graphs (i.e. not overlayed).
 **
-** returns: graph data object containing the sequence text
+** @param [r] graphs [AjPGraph] Graph
+** @param [r] nstart [ajint] Start
+** @param [r] nstop [ajint] Stop
+** @param [r] basePositions [AjPShort] Base positions
+** @param [r] overlay [AjBool] Overlay
+** @param [r] nseq [AjPStr] Sequence number
+** @param [r] tmax [float] Maximum
+** @param [r] nt [ajint] Nt data
+** @return [AjPGraphData] graph data object containing the sequence text
 **          
 *************************************************************************/
 static AjPGraphData graphTextDisplay(AjPGraph graphs, ajint nstart,
@@ -373,7 +391,12 @@ static AjPGraphData graphTextDisplay(AjPGraph graphs, ajint nstart,
 ** Add sequence on top of the same graph as the trace data 
 ** (i.e. overlayed).
 **
-** returns: 
+** @param [r] graphs [AjPGraph] Graph
+** @param [r] nstart [ajint] Start
+** @param [r] nstop [ajint] Stop
+** @param [r] nseq [AjPStr] Sequence number
+** @param [r] tmax [float] Maximum
+** @return [void] 
 **          
 *************************************************************************/
 static void TextDisplay(AjPGraph graphs, ajint nstart, ajint nstop,
@@ -401,7 +424,9 @@ static void TextDisplay(AjPGraph graphs, ajint nstart, ajint nstop,
 ** Test to see if this base, i.e. res, is selected to be drawn 
 ** (default is to draw graphs for all bases);
 **
-** returns: Boolean
+** @param [r] res [char*] Base
+** @param [r] baseN [AjPStr] Base number
+** @return [AjBool] ajTrue on success
 **
 *************************************************************************/
 static AjBool drawbase(char* res, AjPStr baseN)
@@ -436,7 +461,8 @@ static AjBool drawbase(char* res, AjPStr baseN)
 **
 ** Assign colour to a given nucleotide.
 **
-** returns: base colour
+** @param [r] B [char] Base
+** @return [ajint] base colour code
 **         
 *************************************************************************/
 static ajint getResColour(char B)

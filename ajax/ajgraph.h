@@ -107,10 +107,11 @@ void          ajGraphDumpDevices (void);
 ajint*          ajGraphGetBaseColour (void);
 void          ajGraphGetCharSize (float *defheight, float *currentheight);
 ajint           ajGraphGetColour(void);
-void          ajGraphGetOut (float *xp,float *yp,int
-			     *xleng,int *yleng,int *xoff,int *yoff);
+void          ajGraphGetOut (float *xp,float *yp, ajint *xleng,
+			     ajint *yleng, ajint *xoff, ajint *yoff);
 void          ajGraphGetOutputDeviceParams(float *xp,float *yp,
-					   ajint *xleng,int *yleng,int *xoff,
+					   ajint *xleng, ajint *yleng,
+					   ajint *xoff,
 					   ajint *yoff);
 void          ajGraphHoriBars (ajint numofpoints, PLFLT *y,
 				   PLFLT *xmin, PLFLT *xmax);
@@ -201,7 +202,7 @@ void          ajGraphxyCheckMaxMin (AjPGraph graphs);
 AjBool        ajGraphxySet (AjPGraph thys, AjPStr type);
 void          ajGraphxySetCirclePoints (AjPGraph graphs, AjBool set);
 void          ajGraphxySetColour (AjPGraphData graph, ajint colour);
-void          ajGraphxySetFlag (AjPGraph graphs,int flag, AjBool istrue);
+void          ajGraphxySetFlag (AjPGraph graphs, ajint flag, AjBool istrue);
 void          ajGraphxySetGaps(AjPGraph graphs, AjBool overlap);
 void          ajGraphxySetJoinPoints (AjPGraph graphs, AjBool set);
 void          ajGraphxySetLineType (AjPGraphData graph, ajint type);

@@ -70,7 +70,8 @@ static void     GraphSetPen (ajint colour);
 static void     GraphSetWin (float xmin, float xmax, float ymin, float ymax);
 static void     GraphSetWin2 (float xmin, float xmax, float ymin, float ymax);
 static void     GraphSubPage (ajint page);
-static void     GraphSymbols (float *x1, float *y1, ajint numofdots,int symbol);
+static void     GraphSymbols (float *x1, float *y1, ajint numofdots,
+			      ajint symbol);
 static void     GraphText (float x1, float y1, float x2, float y2,
 			   float just,char *text);
 static AjBool   GraphTracearg (char *name, va_list args);
@@ -429,8 +430,8 @@ static void GraphArrayGaps(ajint numofpoints, float *x, float *y){
 ** Gaps are declared by having values of INT_MIN.
 **
 ** @param [r] numofpoints [ajint] Number of data points
-** @param [r] x [int*] Array of x axis values
-** @param [r] y [int*] Array of y axis values
+** @param [r] x [ajint*] Array of x axis values
+** @param [r] y [ajint*] Array of y axis values
 **
 ** @return [void]
 ** @@
@@ -448,7 +449,7 @@ static void GraphArrayGapsI(ajint numofpoints, ajint *x, ajint *y){
 
   for(i=0;i<numofpoints-1;i++){
     if(*x2 != INT_MIN && *x1 != INT_MIN && *y2 != INT_MIN && *y1 != INT_MIN) {
-      ajDebug("=g= pljoin (%.2f, %.2f, %.2f, %.2f) [ xy xy] [int xy xy]\n",
+      ajDebug("=g= pljoin (%.2f, %.2f, %.2f, %.2f) [ xy xy] [ajint xy xy]\n",
 	      (float)*x1, (float)*x2, (float)*y1, (float)*y2);
       pljoin((float)*x1,(float)*y1,(float)*x2,(float)*y2);
     }
@@ -508,7 +509,8 @@ static void GraphPen(ajint pen, ajint red, ajint green, ajint blue){
 ** @@
 ******************************************************************************/
 
-static void GraphSymbols(float *x1, float *y1, ajint numofdots,int symbol){
+static void GraphSymbols(float *x1, float *y1, ajint numofdots,
+			 ajint symbol){
   ajDebug ("=g= plpoin (%d, %.2f .. %.2f, %.2f .. %.2f, %d) [size, x..x y..y sym ]\n",
 	   numofdots,x1[0], x1[numofdots-1], y1[0], y1[numofdots-1], symbol);
   plpoin(numofdots,x1,y1, symbol);
@@ -1427,14 +1429,14 @@ ajint ajGraphCheckColour(AjPStr colour){
 **
 ** Initialize a base colours array for sequence characters
 **
-** @return [int*] Array of colours (see PLPLOT)
+** @return [ajint*] Array of colours (see PLPLOT)
 ** @@
 ******************************************************************************/
 
 ajint* ajGraphGetBaseColour(void){
   ajint *ret;
 
-  ret = (int *) AJALLOC(sizeof(ajint)*AZ);
+  ret = (ajint *) AJALLOC(sizeof(ajint)*AZ);
 
   ret[0] = BLACK; /* A */
   ret[1] = BLACK; /* B */
@@ -1490,16 +1492,16 @@ void ajGraphGetCharSize(float *defheight, float *currentheight){
 **
 ** @param [rw] xp [float *] where to store the default char height
 ** @param [rw] yp [float *] where to the current  char height
-** @param [rw] xleng [int *] where to store the default char height
-** @param [rw] yleng [int *] where to the current  char height
-** @param [rw] xoff [int *] where to store the default char height
-** @param [rw] yoff [int *] where to the current  char height
+** @param [rw] xleng [ajint *] where to store the default char height
+** @param [rw] yleng [ajint *] where to the current  char height
+** @param [rw] xoff [ajint *] where to store the default char height
+** @param [rw] yoff [ajint *] where to the current  char height
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
-void ajGraphGetOut(float *xp,float *yp,int *xleng,int *yleng,
-		   ajint *xoff,int *yoff){
+void ajGraphGetOut(float *xp,float *yp, ajint *xleng, ajint *yleng,
+		   ajint *xoff, ajint *yoff){
 
   ajDebug ("=g= plgpage (&f &f) [&xp, &yp, &xleng, &yleng, &xoff, &yoff]\n"); 
   plgpage(xp,yp,xleng,yleng,xoff,yoff);
@@ -2970,7 +2972,7 @@ void ajGraphxyDataSetSubtitleC (AjPGraphData graph, char *title) {
 ** @return [void]
 ** @@
 ******************************************************************************/
-void ajGraphxySetFlag(AjPGraph graphs,int flag, AjBool istrue){ 
+void ajGraphxySetFlag(AjPGraph graphs, ajint flag, AjBool istrue){ 
   if(graphs->flags & flag){
     if(!istrue)
       graphs->flags -= flag;
@@ -3329,9 +3331,9 @@ void ajGraphDataxySetMaxMin(AjPGraphData graphdata, float xmin, float xmax,
 ** Get the max and min of the data points you wish to display. 
 **
 ** @param [r] array [float*] array
-** @param [r] npoints
-** @param [w] min [float]  min.
-** @param [w] max [float]  max.
+** @param [r] npoints [ajint] Number of data points
+** @param [w] min [float*]  min.
+** @param [w] max [float*]  max.
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -4398,7 +4400,7 @@ static AjPGraph GraphxyNewIarg(char *name, va_list args){
   ajint temp = 0;
   AjPGraph retval;
 
-  temp = va_arg(args, int);
+  temp = va_arg(args, ajint);
   retval = ajGraphxyNewI(temp);
 
   return retval;

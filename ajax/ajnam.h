@@ -15,6 +15,9 @@ AjBool ajNamDbGetDbalias (AjPStr dbname, AjPStr* dbalias);
 AjBool ajNamDbGetUrl (AjPStr dbname, AjPStr* url);
 AjBool ajNamDbQuery (AjPSeqQuery qry);
 AjBool ajNamDbTest (AjPStr dbname);
+void   ajNamDebugOrigin (void);
+void   ajNamDebugDatabases (void);
+void   ajNamDebugEnvironmentals (void);
 void   ajNamEnvironmentals(void); /* "" "" may want to delete later */
 void   ajNamExit (void);
 AjBool ajNamGetenv (AjPStr name, AjPStr* value);
@@ -29,6 +32,7 @@ AjBool ajNamRoot (AjPStr* root);
 AjBool ajNamRootBase (AjPStr* rootbase);
 AjBool ajNamRootInstall (AjPStr* root);
 AjBool ajNamRootPack (AjPStr* pack);
+AjBool ajNamRootVersion (AjPStr* version);
 #endif
 
 #ifdef __cplusplus

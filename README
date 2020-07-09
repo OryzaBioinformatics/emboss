@@ -10,11 +10,11 @@ by default if it is found. You can force 'configure' to use the
 standard C compiler (cc) by either adding a line to the 'configure'
 script:
 
-CC=cc
+     CC=cc
 
 or by defining a shell variable:
 
-set CC="cc"
+     set CC="cc"
 
 The file 'config.cache' seems to retain the value for this option. If you
 have already run 'configure' you may need to delete the 'config.cache' file
@@ -36,9 +36,8 @@ PLplot graphics
 EMBOSS now comes with a stripped down version of PLplot which
 is now compiled under the same system as EMBOSS.
 
-PLplot can be obtained from http://emma.la.asu.edu/plplot/ which will
-direct you to the FTP server ftp://dino.ph.utexas.edu/plplot/distrib/alpha/
-
+The full PLplot can be obtained from http://www.plplot.org/
+and by FTP from ftp://plplot.sourceforge.net/pub/plplot/
 
 PLplot is a scientific graphics library distributed under the GNU
 Library license. This license is a requirement to integrate a graphics
@@ -46,33 +45,31 @@ library into EMBOSS while allowing third party packages (for example
 PHYLIP) to be integrated with the EMBOSS libraries. We are interested
 in any other GNU Library licensed scientific graphics packages.
 
-
 The only major thing to know about PLplot for the normal user are the
 device types. These consist of various plotters e.g.
 "xterm","xwin","ps" (postscipt) ,"psc" (colour postscript).
 
-  X devices. 
-  ---------
+X devices. 
+----------
 
-To get xterm you must have X installed else PLplot will not build the
+To get xterm you must have X installed or else PLplot will not build the
 required driver.
 
-  PNG driver.
-  ----------
+PNG driver.
+-----------
 
-To get the PNG driver you will need to have installed z,png and gd
-librarys. In particular gd version >=  1.6.3 must be used.
-If for some reason you do not have the required librarys and your 
-system support group will not update these ( In particular gd, as
-the older versions support GIF which is NOT supported in later
-versions) then install all three latest versions (z,gd,png) to a 
-new directory and then add this new directory to your configure
-line for EMBOSS.
+To get the PNG driver you will need to have installed the z, png and
+gd libraries. In particular gd version >= 1.7.3 must be used.  If for
+some reason you do not have the required libraries and your system
+support group will not update these ( In particular gd, as the older
+versions support GIF which is NOT supported in later versions) then
+install all three latest versions (z, gd, png) to a new directory and
+then add this new directory to your configure line for EMBOSS.
 
-i.e. ./configure --with-pngdriver=my_dir
+     ./configure --with-pngdriver=my_dir
 
-as i installed gd etc using --prefix=my_dir 
-in the configure of each.
+as gd (and the others) were installed using --prefix=my_dir 
+in their ./configure commands.
 
 
 
@@ -80,7 +77,7 @@ Other graphics libraries
 ------------------------
 
 We have considered other graphics libraries, including the GNU libplot
-library. The problem with GNU libplot currently is that is uses the
+library. The problem with GNU libplot currently is that it uses the
 full GNU license which is not suitable for the non-EMBOSS applications.
 We understand that there will be a future release of GNU libplot under
 the GNU Library license. If this happens then we will consider using
@@ -89,24 +86,24 @@ the GNU libplot library as an alternative or a replacement for PLplot.
 
 Compilation scripts
 -------------------
- 
-	Are no longer necessary due to PLplot being included in the
+
+Are no longer necessary due to PLplot being included in the
 EMBOSS configure system. See INSTALL.
 
-       But you will need to set PLPLOT_LIB to get the fonts needed for 
+But you will need to set PLPLOT_LIB to get the fonts needed for 
 the graphics package.  
       
+     setenv PLPLOT_LIB my_dir/EMBOSS-1.0.0/plplot/lib
 
-      setenv PLPLOT_LIB my_dir/EMBOSS-1.0.0/plplot/lib
-
-      You should add the PLPLOT_LIB line to your .cshrc to avoid
-      typing this in each session.
+Using the current version number for the EMBOSS-1.n.n directory.
+You should add the PLPLOT_LIB line to your .cshrc to avoid
+typing this in each session.
 
 
 Installation.
 -------------
 
-	If you install EMBOSS (i.e, make install) then you will have
+If you install EMBOSS (i.e, make install) then you will have
 to setenv PLPLOT_LIB to the appropriate new directory given by:-
 setenv PLPLOT_LIB $(prefix)/share/EMBOSS (see INSTALL for more info
 on the prefix)
@@ -121,28 +118,33 @@ where to look
 
 You will need to use this command:
 
-setenv EMBOSS_ACDROOT $(prefix)/share/EMBOSS/acd
+     setenv EMBOSS_ACDROOT $(prefix)/share/EMBOSS/acd
 
 or in your site emboss.default file (in the share/EMBOSS install
 directory or under emboss/ in the original source directory) or in
 ~/.embossrc file put
 
-env emboss_acdroot $(prefix)/share/EMBOSS/acd
+     env emboss_acdroot $(prefix)/share/EMBOSS/acd
 
 
-Compilation Problems
---------------------
+Compilation problems for the CVS developers version
+---------------------------------------------------
 
 On some systems there may be compatibility problems with different
 automake, autoconf or libtool versions. Always make sure that you keep
-up to date with releases of these tools and let us know of any problems
-you experience. If a libtool problem does arise you can try deleting
+up to date with releases of these tools and let us know of any
+problems you experience (emboss-bug@embnet.org). If a libtool problem
+does arise you can try deleting the following files:
+
    config.cache
    ltmain.sh
    ltconfig
    libtool
+
 and then type
+
    aclocal -I m4
    autoconf
    automake -a
+
 and then retry the make.

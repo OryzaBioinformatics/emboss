@@ -1,6 +1,8 @@
 
 SUBDIRS = acd data
 
+EXTRA_DIST = emboss.default.template
+
 check_PROGRAMS = ajtest ajtest2 ajtest3 ajtestajnam \
 contacts cluster complex corbatest \
 demofeatures demolist demosequence demostring demotable \
@@ -17,7 +19,7 @@ compseq cons cpgplot cpgreport cusp cutseq \
 dan dbiblast dbifasta dbiflat dbigcg \
 degapseq descseq diffseq digest distmat domainer \
 dotmatcher dotpath dottup dreg \
-einverted embossdata emma emowse entret \
+einverted embossdata embossversion emma emowse entret \
 equicktandem est2genome etandem extractseq \
 findkm freak fuzznuc fuzzpro fuzztran \
 garnier geecee getorf helixturnhelix hmoment \
@@ -33,9 +35,9 @@ plotcon plotorf polydot preg \
 prettyplot prettyseq prima primersearch printsextract \
 profit prophecy prophet \
 prosextract pscan \
-rebaseextract recode redata remap restover restrict revseq scope \
+rebaseextract recoder redata remap restover restrict revseq scope \
 seealso seqmatchall seqret seqretall seqretset seqretsplit \
-showdb showfeat showorf showseq \
+showalign showdb showfeat showorf showseq \
 shuffleseq sigcleave silent splitter scopalign stretcher \
 stssearch supermatcher syco \
 textsearch tfextract tfm tfscan \
@@ -91,6 +93,7 @@ entret_SOURCES = entret.c
 equicktandem_SOURCES = equicktandem.c
 est2genome_SOURCES = est2genome.c
 etandem_SOURCES = etandem.c
+embossversion_SOURCES = embossversion.c
 extractseq_SOURCES = extractseq.c
 findkm_SOURCES = findkm.c
 freak_SOURCES = freak.c
@@ -151,7 +154,7 @@ prosextract_SOURCES = prosextract.c
 proteinmotifsearch_SOURCES = proteinmotifsearch.c
 pscan_SOURCES = pscan.c
 rebaseextract_SOURCES = rebaseextract.c
-recode_SOURCES = recode.c
+recoder_SOURCES = recoder.c
 redata_SOURCES = redata.c
 remap_SOURCES = remap.c
 restover_SOURCES = restover.c
@@ -166,6 +169,7 @@ seqretall_SOURCES = seqretall.c
 seqretset_SOURCES = seqretset.c
 seqretsplit_SOURCES = seqretsplit.c
 scope_SOURCES = scope.c
+showalign_SOURCES = showalign.c
 showdb_SOURCES = showdb.c
 showfeat_SOURCES = showfeat.c
 showorf_SOURCES = showorf.c
@@ -217,6 +221,9 @@ testplot_SOURCES = testplot.c
 treetypedisplay_SOURCES = treetypedisplay.c
 
 LDADD = ../nucleus/libnucleus.la ../ajax/libajaxg.la ../ajax/libajax.la ../plplot/libplplot.la $(XLIB)
+
+pkgdata_DATA = emboss.default.template
+pkgdatadir=$(prefix)/share/$(PACKAGE)
 
 if PURIFY
   LINK = purify $(LIBTOOL) --mode=link $(CC) $(CFLAGS) $(LDFLAGS) -o $@

@@ -52,7 +52,7 @@ int main(int argc, char **argv)
       for (from = 0; from <= seqlen; from += size) {
 
         to = from + size-1;
-	start = from - overlap;
+	start = from;
         if (start < 0) {start = 0;}
 
 	end = to + overlap;

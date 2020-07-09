@@ -781,16 +781,16 @@ ajuint ajFileReadUint (const AjPFile thys, AjBool Bigendian) {
 **
 ** Binary write to an output file object using the C 'fwrite' function.
 **
+** @param [r] thys [const AjPFile] Output file.
 ** @param [w] ptr [const void*] Buffer for output.
 ** @param [r] element_size [size_t] Number of bytes per element.
 ** @param [r] count [size_t] Number of elements to write.
-** @param [r] thys [const AjPFile] Output file.
 ** @return [size_t] Return value from 'fwrite'
 ** @@
 ******************************************************************************/
 
-size_t ajFileWrite (const void* ptr, size_t element_size, size_t count,
-		   const AjPFile thys) {
+size_t ajFileWrite (const AjPFile thys, const void* ptr,
+		    size_t element_size, size_t count) {
   return fwrite (ptr, element_size, count, thys->fp);
 }
 
@@ -869,7 +869,7 @@ AjBool ajFileReadLine (const AjPFile thys, AjPStr* pdest) {
 **
 ** @param [r] thys [const AjPFile] Input file.
 ** @param [w] pdest [AjPStr*] Buffer to hold the current line.
-** @param [w] fpos [long*] File position before the read.
+** @param [w] fpos [ajlong*] File position before the read.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -943,7 +943,7 @@ AjBool ajFileGets (const AjPFile thys, AjPStr* pdest) {
 **
 ** @param [r] thys [const AjPFile] Input file.
 ** @param [w] pdest [AjPStr*] Buffer to hold the current line.
-** @param [w] fpos [long*] File position before the read.
+** @param [w] fpos [ajlong*] File position before the read.
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -965,7 +965,14 @@ AjBool ajFileGetsL (const AjPFile thys, AjPStr* pdest, ajlong* fpos) {
 
   if (!thys->fp)
     ajWarn("ajFileGets file not found");
+
   while (buff) {
+    if (thys->End) {
+      *fpos = 0;
+      ajDebug("File already read to end %F\n", thys);
+      return ajFalse;
+    }
+
     *fpos = ajFileTell (thys);
     cp = fgets (&buff[ipos], isize, thys->fp);
 
@@ -1167,6 +1174,7 @@ AjBool ajFileNameTrim (AjPStr* fname) {
 void ajFileDataNewWrite(const AjPStr tfile, AjPFile *fnew)
 {
     static AjPStr fname = NULL;
+    static AjPStr pname = NULL;
 
     if(tfile == NULL) return;
 
@@ -1184,7 +1192,23 @@ void ajFileDataNewWrite(const AjPStr tfile, AjPFile *fnew)
 
     }
 
-    if(ajNamRoot(&fname))	/* just emboss/data under installation */
+    if(ajNamRootInstall(&fname)) /* just emboss/data under installation */
+    {
+    
+        (void) ajNamRootPack(&pname);	/* just EMBOSS */
+	(void) ajFileDirFix(&fname);
+	(void) ajStrAppC(&fname,"share/");
+	(void) ajStrApp(&fname,pname);
+	(void) ajStrAppC(&fname,"/data/");
+	(void) ajStrApp(&fname,tfile);
+	if(!(*fnew = ajFileNewOut(fname)))
+	    ajFatal("Cannot write to file %s\n",ajStrStr(fname));
+	ajStrDel(&fname);
+	return;
+
+    }
+
+    if(ajNamRoot(&fname))	/* just emboss/data under source */
     {
     
 	(void) ajStrAppC(&fname,"/data/");
@@ -1476,7 +1500,7 @@ AjBool ajFileStat(AjPStr *fname, ajint mode)
     struct stat buf;
 
     if(!stat(ajStrStr(*fname), &buf))
-	if((unsigned int)buf.st_mode & mode)
+	if((ajuint)buf.st_mode & mode)
 	    return ajTrue;
 
     return ajFalse;
@@ -2109,7 +2133,7 @@ AjBool ajFileBuffGetStore (const AjPFileBuff thys, AjPStr* pdest,
 **
 ** @param [r] thys [const AjPFileBuff] Buffered input file.
 ** @param [w] pdest [AjPStr*] Buffer to hold results.
-** @param [w] fpos [long*] File position before the read.
+** @param [w] fpos [ajlong*] File position before the read.
 ** @return [AjBool] ajTrue if data was read.
 ** @@
 ******************************************************************************/
@@ -2302,31 +2326,32 @@ void ajFileBuffStripHtml (const AjPFileBuff thys) {
       ajRegSubI (tagexp, 3, &s3);
       ajDebug ("removing '%S' [%d]\n", s2, ajStrRef(plist->Line));
       (void) ajFmtPrintS (&plist->Line, "%S%S", s1, s3);
+      ajDebug ("leaving '%S''%S'\n", s1,s3);
     }
-      if(ajRegExec(srsdbexp, plist->Line))
-      {
-	  ajRegSubI(srsdbexp,1,&s1);
-	  ajRegSubI(srsdbexp,2,&s2);
-	  ajRegSubI(srsdbexp,3,&s3);
-	  ajDebug ("removing '%S%S%S' [%d]\n",s1,s2,s3,ajStrRef(plist->Line));
-	  pdellist = plist;
-	  if (plast)
-	  {
-	      plast->Next = plist->Next;
-	      plist = plast->Next;
-	  }
-	  else
-	  {			/* we are on the first line */
-	      plist = thys->Lines = thys->Curr = plist->Next;
-	  }
-	  ajStrDel(&pdellist->Line);
-	  AJFREE (pdellist);
-	  thys->Size--;
-	  if (thys->Pos > i)
-	      thys->Pos--;
-	  ++i;
-	  continue;
-      }
+    if(ajRegExec(srsdbexp, plist->Line))
+    {
+      ajRegSubI(srsdbexp,1,&s1);
+      ajRegSubI(srsdbexp,2,&s2);
+      ajRegSubI(srsdbexp,3,&s3);
+      ajDebug ("removing '%S%S%S' [%d]\n",s1,s2,s3,ajStrRef(plist->Line));
+      pdellist = plist;
+      if (plast)
+	{
+	  plast->Next = plist->Next;
+	  plist = plast->Next;
+	}
+      else
+	{			/* we are on the first line */
+	  plist = thys->Lines = thys->Curr = plist->Next;
+	}
+      ajStrDel(&pdellist->Line);
+      AJFREE (pdellist);
+      thys->Size--;
+      if (thys->Pos > i)
+	thys->Pos--;
+      ++i;
+      continue;
+    }
 
     if (ajRegExec(nullexp, plist->Line)) { /* allow for newline */
       ajDebug ("<blank line deleted> [%d]\n", ajStrRef(plist->Line));
@@ -3112,13 +3137,13 @@ AjBool ajFileTestSkip (AjPStr fullname, AjPStr exc, AjPStr inc,
 ** successful or the file cannot be opened for writing.
 ** This function returns only the filename, not a file pointer.
 **
-** @param [r] dir [char*] Directory for filename or NULL for current dir (.)
-**                          inc is matched.
+** @param [r] dir [const char*] Directory for filename
+**                              or NULL for current dir (.)
 ** @return [char*] available filename or NULL if error.
 ** @@
 ******************************************************************************/
 
-char *ajFileTempName(const char *dir)
+char* ajFileTempName(const char *dir)
 {
     struct  stat buf;
     static  AjPStr  dt=NULL;
@@ -3176,4 +3201,95 @@ char *ajFileTempName(const char *dir)
 	return NULL;
 
     return ajStrStr(dt);
+}
+
+/* @func ajFileWriteByte ********************************************
+**
+** Writes a single byte to a binary file
+**
+** @param [r] thys [AjPFile] Output file
+** @param [r] ch [char] Character
+** @return [ajint] Return value from fwrite
+** @@
+******************************************************************************/
+
+ajint ajFileWriteByte (AjPFile thys, char ch) {
+  return fwrite (&ch, 1, 1, ajFileFp(thys));
+}
+
+/* @func ajFileWriteChar ********************************************
+**
+** Writes a text string to a binary file
+**
+** @param [r] thys [AjPFile] Output file
+** @param [r] str [char*] Text string
+** @param [r] len [ajint] Length (padded) to use in the file
+** @return [ajint] Return value from fwrite
+** @@
+******************************************************************************/
+
+ajint ajFileWriteChar (AjPFile thys, char* str, ajint len) {
+  static char buf[256];
+  ajint i = strlen(str);
+
+  strcpy(buf, str);
+  if (i < len)
+    memset (&buf[i], '\0', len-i);
+
+  return fwrite (buf, len, 1, ajFileFp(thys));
+}
+
+/* @func ajFileWriteInt2 ********************************************
+**
+** Writes a 2 byte integer to a binary file, with the correct byte orientation
+**
+** @param [r] thys [AjPFile] Output file
+** @param [r] i [short] Integer
+** @return [ajint] Return value from fwrite
+** @@
+******************************************************************************/
+
+ajint ajFileWriteInt2 (AjPFile thys, short i) {
+  short j = i;
+  if (ajUtilBigendian())ajUtilRev2(&j);
+    
+  return fwrite (&j, 2, 1, ajFileFp(thys));
+}
+
+/* @func ajFileWriteInt4 ********************************************
+**
+** Writes a 4 byte integer to a binary file, with the correct byte orientation
+**
+** @param [r] thys [AjPFile] Output file
+** @param [r] i [ajint] Integer
+** @return [ajint] Return value from fwrite
+** @@
+******************************************************************************/
+
+ajint ajFileWriteInt4 (AjPFile thys, ajint i) {
+  ajint j=i;
+
+  if (ajUtilBigendian())ajUtilRev4(&j);
+  return fwrite (&j, 4, 1, ajFileFp(thys));
+}
+
+/* @func ajFileWriteStr ********************************************
+**
+** Writes a string to a binary file
+**
+** @param [r] thys [AjPFile] Output file
+** @param [r] str [AjPStr] String
+** @param [r] len [ajint] Length (padded) to use in the file
+** @return [ajint] Return value from fwrite
+** @@
+******************************************************************************/
+
+ajint ajFileWriteStr (AjPFile thys, AjPStr str, ajint len) {
+  static char buf[256];
+  ajint i = ajStrLen(str);
+  strcpy(buf, ajStrStr(str));
+  if (i < len)
+    memset (&buf[i], '\0', len-i);
+
+  return fwrite (buf, len, 1, ajFileFp(thys));
 }

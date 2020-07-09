@@ -264,7 +264,7 @@ void cleanup_Cluster(AjPList list){
   ajListFree(&list);
 }
 
-void consensus_output(AjPList unorderedlist, ajint addblanks,int number) {
+void consensus_output(AjPList unorderedlist, ajint addblanks, ajint number) {
 
   void **array = NULL;
   struct homol *homol;

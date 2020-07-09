@@ -30,7 +30,7 @@ extern Except_Frame *Except_stack;
 
 extern const Except_T Assert_Failed;
 
-void ajExceptRaise(const T *e, const char *file,int line);
+void ajExceptRaise(const T *e, const char *file, ajint line);
 #define AJRAISE(e) ajExceptRaise(&(e), __FILE__, __LINE__)
 #define AJRERAISE ajExceptRaise(Except_frame.exception, \
 	Except_frame.file, Except_frame.line)

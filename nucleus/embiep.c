@@ -155,7 +155,7 @@ void embIepPkRead(void)
 **
 ** @param [r] s [char *] protein sequence
 ** @param [r] amino [ajint] number of amino termini
-** @param [w] c [int *] amino acid composition
+** @param [w] c [ajint *] amino acid composition
 **
 ** @return [void]
 ******************************************************************************/
@@ -211,8 +211,8 @@ void embIepCalcK(double *K)
 ** Amino acids for which there is no entry in Epk.dat have this set to 0.0
 **
 ** @param [r] K [double *] dissociation constants
-** @param [r] c [int *] sequence composition
-** @param [w] op [int *] printout flags
+** @param [r] c [ajint *] sequence composition
+** @param [w] op [ajint *] printout flags
 ** @param [r] H [double] hydrogen ion concentration
 ** @param [w] pro [double *] number of protons bound
 **
@@ -246,7 +246,7 @@ void embIepGetProto(double *K, ajint *c, ajint *op, double H, double *pro)
 **
 ** Calculate the number of H+ bound
 **
-** @param [r] c [int *] sequence composition
+** @param [r] c [ajint *] sequence composition
 ** @param [r] pro [double *] number of protons
 ** @param [w] total [double *] total protons
 **
@@ -278,9 +278,9 @@ double embIepGetCharge(ajint *c, double *pro, double *total)
 **
 ** Calculate the pH nearest the IEP or return 0.0 if one doesn't exist
 **
-** @param [r] c [int *] sequence composition
+** @param [r] c [ajint *] sequence composition
 ** @param [r] K [double *] sequence dissociation constants
-** @param [w] op [int *] printout flags
+** @param [w] op [ajint *] printout flags
 ** @param [w] pro [double *] number of protons
 **
 ** @return [double] IEP or 0.0

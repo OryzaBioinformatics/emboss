@@ -1424,9 +1424,9 @@ ajint ajTrnStartStop (AjPTrn trnObj, AjPStr codon, char *aa) {
 
   char * res=NULL;
   
-int tc1 = trnconv[(ajint)res[0]];
-int tc2 = trnconv[(ajint)res[1]];
-int tc3 = trnconv[(ajint)res[2]];
+  ajint tc1 = trnconv[(ajint)res[0]];
+  ajint tc2 = trnconv[(ajint)res[1]];
+  ajint tc3 = trnconv[(ajint)res[2]];
 
   *aa = trnObj->GC[tc1][tc2][tc3];
   
@@ -1454,9 +1454,9 @@ int tc3 = trnconv[(ajint)res[2]];
 
 ajint ajTrnStartStopC (AjPTrn trnObj, char *codon, char *aa) {
 
-int tc1 = trnconv[(ajint)codon[0]];
-int tc2 = trnconv[(ajint)codon[1]];
-int tc3 = trnconv[(ajint)codon[2]];
+  ajint tc1 = trnconv[(ajint)codon[0]];
+  ajint tc2 = trnconv[(ajint)codon[1]];
+  ajint tc3 = trnconv[(ajint)codon[2]];
 
   *aa = trnObj->GC[tc1][tc2][tc3];
   

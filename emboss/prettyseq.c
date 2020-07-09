@@ -37,8 +37,9 @@ static void showTransb(ajint *ppos, ajint *npos, AjPStr pro, AjPStr substr,
 		  ajint len, char *ruler, ajint begin,
 		  AjPFile outf, AjBool isrule, AjBool isp, AjBool isn,
 		  ajint start, ajint end);
-static void prettyTranslate(AjPFile outf,int beg,int end,AjPStr s,AjPCod codon,
-		       AjPRange range, ajint width, AjPStr pro);
+static void prettyTranslate(AjPFile outf, ajint beg, ajint end, AjPStr s,
+			    AjPCod codon, AjPRange range, ajint width,
+			    AjPStr pro);
 
 int main(int argc, char **argv)
 {
@@ -107,8 +108,9 @@ int main(int argc, char **argv)
 
 
 
-static void prettyTranslate(AjPFile outf,int beg,int end,AjPStr s,AjPCod codon,
-		       AjPRange range, ajint width, AjPStr pro)
+static void prettyTranslate(AjPFile outf, ajint beg, ajint end, AjPStr s,
+			    AjPCod codon, AjPRange range, ajint width,
+			    AjPStr pro)
 {
     ajint limit;
     ajint i;

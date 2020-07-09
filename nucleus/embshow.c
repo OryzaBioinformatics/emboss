@@ -119,8 +119,6 @@ static void    showPrintLines(AjPFile out, AjPList lines);
 static void    showMargin(EmbPShow thys, AjPList lines);
 static void    showMarginNumber(EmbPShow thys, AjPList lines, ajint number);
 static void    showPad(AjPList lines, ajint number);
-static void    showUpperRange(AjPStr *line, AjPRange upperrange, ajint pos);
-static void    showColourRange(AjPStr *line, AjPRange colour, ajint pos);
 static void    showInsertHTML(AjPStr *target, ajint pos, AjPStr insert);
 
 static void    showFillSeq(EmbPShow thys, AjPList lines, EmbPShowSeq info,
@@ -964,7 +962,7 @@ static void showPad(AjPList lines, ajint number) {
   (void) ajStrDel(&marginfmt);
 }
 
-/* @funcstatic showUpperRange *************************************************
+/* @func embShowUpperRange *************************************************
 **
 ** Uppercase a string from a sequence with a range
 ** I.e ranges of a sequence are to be uppercased.
@@ -977,7 +975,7 @@ static void showPad(AjPList lines, ajint number) {
 ** @return [void]
 ** @@
 ******************************************************************************/
-static void showUpperRange(AjPStr * line, AjPRange upperrange, ajint pos) {
+void embShowUpperRange(AjPStr * line, AjPRange upperrange, ajint pos) {
 
   ajint nr = ajRangeNumber(upperrange);
   ajint i,j;
@@ -1013,7 +1011,7 @@ static void showUpperRange(AjPStr * line, AjPRange upperrange, ajint pos) {
 	
 }
 
-/* @funcstatic showColourRange ************************************************
+/* @func embShowColourRange ************************************************
 **
 ** colour a string from a sequence with a range
 ** I.e ranges of a sequence are to be coloured in HTML.
@@ -1026,7 +1024,7 @@ static void showUpperRange(AjPStr * line, AjPRange upperrange, ajint pos) {
 ** @return [void]
 ** @@
 ******************************************************************************/
-static void showColourRange(AjPStr * line, AjPRange colour, ajint pos) {
+void embShowColourRange(AjPStr * line, AjPRange colour, ajint pos) {
 
   ajint nr = ajRangeNumber(colour);
   ajint i;
@@ -1182,11 +1180,11 @@ static void showFillSeq(EmbPShow thys, AjPList lines, EmbPShowSeq info,
 /* nucleic or single-letter code */  	
 /* do uppercase ranges */
     if (ajRangeOverlaps(info->upperrange, pos, thys->width)) {
-      (void) showUpperRange(&line, info->upperrange, pos);
+      (void) embShowUpperRange(&line, info->upperrange, pos);
     }
 /* do colour ranges if we are displaying HTML*/
     if (thys->html && ajRangeOverlaps(info->highlight, pos, thys->width)) {
-      (void) showColourRange(&line, info->highlight, pos);
+      (void) embShowColourRange(&line, info->highlight, pos);
     }
     (void) ajListstrPushApp(lines, line);
   }

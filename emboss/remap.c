@@ -299,51 +299,47 @@ static void CutList (AjPFile outfile, AjPList restrictlist, AjBool isos,
   }
   if (html) (void) ajFmtPrintF(outfile, "</H2>");  
 
-
-  miter = ajListIter(restrictlist);
-  while ((m = ajListIterNext(miter)) != NULL) {
+/* if no hits then ignore much of this routine */
+  if (ajListLength(restrictlist)) {
+  	
+    miter = ajListIter(restrictlist);
+    while ((m = ajListIterNext(miter)) != NULL) {
     
-    key = m->cod;
-
-/* debug */
-/* (void) ajFmtPrintF(outfile, "%S =|= %S\n", key, m->iso); */
-
+      key = m->cod;
 
 /* increment the count of key */
-    value = (PValue) ajTableGet(table, (const void *)key);
-    if (value == NULL) {
-      AJNEW0(value);
-      value->count = 1;          	
-      value->iso = ajStrNew();
-      ajStrAss(&(value->iso), m->iso);
-    } else {
-      value->count++;
+      value = (PValue) ajTableGet(table, (const void *)key);
+      if (value == NULL) {
+        AJNEW0(value);
+        value->count = 1;          	
+        value->iso = ajStrNew();
+        ajStrAss(&(value->iso), m->iso);
+      } else {
+        value->count++;
+      }
+      ajTablePut(table, (const void *)key, (void *)value);
     }
-    ajTablePut(table, (const void *)key, (void *)value);
-/* debug
-    (PValue) value = ajTableGet(table, (const void *)key);
-    ajDebug("key=%S value=%d", key, value->count);
-*/
-  }
-  (void) ajListIterFree(miter);
+    (void) ajListIterFree(miter);
 
 /* print out results */
-  if (html) {(void) ajFmtPrintF(outfile, "<PRE>");} 
-  array = ajTableToarray(table, NULL);
-  qsort(array, ajTableLength(table), 2*sizeof (*array), ajStrCmp);
-  for (i = 0; array[i]; i += 2) {
-    value = (PValue) array[i+1];
-    (void) ajFmtPrintF (outfile, "%10S\t    %d\t%S\n", (AjPStr) array[i], value->count, value->iso);
-    ajStrDel(&(value->iso));
-    AJFREE(array[i+1]);		/* free the ajint* value */
-  }  
-  AJFREE(array);
+    if (html) {(void) ajFmtPrintF(outfile, "<PRE>");} 
+    if (ajTableLength(table)) {
+      array = ajTableToarray(table, NULL);
+      qsort(array, ajTableLength(table), 2*sizeof (*array), ajStrCmp);
+      for (i = 0; array[i]; i += 2) {
+        value = (PValue) array[i+1];
+        (void) ajFmtPrintF (outfile, "%10S\t    %d\t%S\n", (AjPStr) array[i], value->count, value->iso);
+        ajStrDel(&(value->iso));
+        AJFREE(array[i+1]);		/* free the ajint* value */
+      }  
+      AJFREE(array);
+    }
+  }
   (void) ajFmtPrintF (outfile, "\n");
   if (html) {(void) ajFmtPrintF(outfile, "</PRE>");} 
 
 /* tidy up */
   ajTableFree (&table);
-
 }
 
 
@@ -383,6 +379,7 @@ static void NoCutList (AjPFile outfile, AjPList restrictlist, AjBool
   AjPStr code = NULL;
   AjPStr code2 = NULL;
 
+
 /* check on number of enzymes specified */
   ne = 0;
   if (!enzymes) {
@@ -401,7 +398,6 @@ static void NoCutList (AjPFile outfile, AjPList restrictlist, AjBool
 
   netmp = ne;
   
-
 
   if (isall) {
 /* list all files in REBASE that don't cut */
@@ -430,7 +426,6 @@ static void NoCutList (AjPFile outfile, AjPList restrictlist, AjBool
       AJFREE (ea);
 
 
-
 /* make ea[] and populate it with enzyme names */
     AJCNEW(ea, ne);
     (void) ajFileSeek(enzfile,0L,0);
@@ -449,7 +444,7 @@ static void NoCutList (AjPFile outfile, AjPList restrictlist, AjBool
     ajFileClose(&enzfile);
 
   }
-  
+
 /* find enzymes that don't cut and blank them out */
   miter = ajListIter(restrictlist);
   while ((m = ajListIterNext(miter)) != NULL) {
@@ -473,11 +468,10 @@ static void NoCutList (AjPFile outfile, AjPList restrictlist, AjBool
       ajStrAss(&code2, code);
       ajListstrPush(iso, code2);
     }
+    ajStrTokenClear(&tok);
   }
-  ajStrTokenClear(&tok);
   (void) ajListIterFree(iter);
    
-
 /* now check if it matches an isoschizomer - blank out if it does */
   iter = ajListIter(iso);
   while ((code2 = (AjPStr)ajListIterNext(iter)) != NULL) {
@@ -513,9 +507,6 @@ static void NoCutList (AjPFile outfile, AjPList restrictlist, AjBool
   }  
   (void) ajFmtPrintF (outfile, "\n");
   if (html) {(void) ajFmtPrintF(outfile, "</PRE>");} 
-
-
-
 
 /* tidy up */
   for (i=0; i<ne; ++i) 

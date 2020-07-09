@@ -185,8 +185,8 @@ char* embPropIntToThree(ajint c)
 ** @param [r] unfavoured [AjBool] allow unfavoured cuts
 ** @param [r] overlap [AjBool] show overlapping partials
 ** @param [r] allpartials [AjBool] show all possible partials
-** @param [w] ncomp [int *] number of complete digest fragments
-** @param [w] npart [int *] number of partial digest fragments
+** @param [w] ncomp [ajint *] number of complete digest fragments
+** @param [w] npart [ajint *] number of partial digest fragments
 ** @param [w] rname [AjPStr *] name of reagent
 **
 ** @return [void]

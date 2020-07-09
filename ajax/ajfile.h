@@ -170,6 +170,8 @@ AjPFile     ajFileNewInPipe (const AjPStr name);
 AjPFile     ajFileNewInList (const AjPList list);
 AjPFile     ajFileNewOut (const AjPStr name);
 AjPFile     ajFileNewOutD (const AjPStr dir, const AjPStr name);
+void        ajFileOutHeader (const AjPFile thys);
+void        ajFileOutClose (AjPFile *pthis);
 AjBool      ajFileNext (const AjPFile thys);
 size_t      ajFileRead (void* ptr, size_t element_size, size_t count,
 			const AjPFile thys);
@@ -190,12 +192,14 @@ AjBool      ajFileTestSkip (AjPStr fullname, AjPStr exc, AjPStr inc,
 			    AjBool keep);
 void        ajFileTrace (const AjPFile thys);
 void        ajFileUnbuffer (const AjPFile thys);
-size_t      ajFileWrite (const void* ptr, size_t element_size, size_t count,
-			 const AjPFile thys);
+size_t      ajFileWrite (const AjPFile thys, const void* ptr,
+			 size_t element_size, size_t count);
 
-void        ajFileOutHeader (const AjPFile thys);
-void        ajFileOutClose (AjPFile *pthis);
-
+ajint       ajFileWriteByte (const AjPFile thys, char ch);
+ajint       ajFileWriteChar (const AjPFile thys, char* str, ajint len);
+ajint       ajFileWriteInt2 (const AjPFile thys, short i);
+ajint       ajFileWriteInt4 (const AjPFile thys, ajint i);
+ajint       ajFileWriteStr  (const AjPFile thys, AjPStr str, ajint len);
 
 /* ============= definitions =========================*/
 #define AJ_FILE_R S_IRUSR

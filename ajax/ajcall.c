@@ -11,25 +11,28 @@
 ** So in ajgraph.c you will see the register calls which list all the calls
 ** needed by ajacd.c.  
 ** At the start of ajgraph.c all the calls that call plplot are done first.
-** These are the ones that will need to be replaced if the graphics are changed.
+** These are the ones that will need to be replaced if the graphics
+** are changed.
 */ 
 
+static ajint callCmpStr(const void *x, const void *y);
+static unsigned callStrHash(const void *key, unsigned hashsize);
 
-
-/* @funcstatic wordCmpStr *********************************************
+/* @funcstatic callCmpStr *********************************************
 **
-** Compare two words for first n chars. n set by embWordLength.
+** Compare two words.
 **
 ** @param [r] x [const void *] First word
 ** @param [r] y [const void *] Second word
 ** @return [ajint] difference 
 ** @@
 ******************************************************************************/
-static ajint wordCmpStr(const void *x, const void *y) {
+
+static ajint callCmpStr(const void *x, const void *y) {
   return strcmp((char *)x, (char *)y);
 }
 
-/* @funcstatic wordStrHash *********************************************
+/* @funcstatic callStrHash *********************************************
 **
 ** Create hash value from key.
 **
@@ -38,7 +41,8 @@ static ajint wordCmpStr(const void *x, const void *y) {
 ** @return [unsigned] hash value
 ** @@
 ******************************************************************************/
-static unsigned wordStrHash(const void *key, unsigned hashsize)
+
+static unsigned callStrHash(const void *key, unsigned hashsize)
 {
   unsigned hashval;
   char *s = (char *) key;
@@ -61,12 +65,13 @@ static AjPTable calls=NULL;
 ** @return [void] 
 ** @@
 ******************************************************************************/
+
 void callRegister(char *name, CallFunc func)
 {
   void *rec;
 
   if(!calls)
-    calls = ajTableNew(0, wordCmpStr,wordStrHash);
+    calls = ajTableNew(0, callCmpStr,callStrHash);
   
   rec = ajTableGet(calls, name);    /* does it exist already */
 
@@ -81,7 +86,8 @@ void callRegister(char *name, CallFunc func)
 ** a error message saying so. 
 **
 ** @param [r] name [char *] name of the function to call. 
-** @return [void] NULL if function call not found.
+** @param [v] [...] Optional arguments
+** @return [void*] NULL if function call not found.
 ** @@
 ******************************************************************************/
 void* call(char *name, ...)

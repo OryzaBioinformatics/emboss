@@ -61,17 +61,18 @@ static AjBool     seqABIGetFlagW(AjPFile fp, ajlong flagLabel,
 static ajshort    seqABIBaseIdx(char B);
 
 static void       seqAccSave (AjPSeq thys, AjPStr acc);
-static ajint        seqAppend (AjPStr* seq, AjPStr line);
+static ajint      seqAppend (AjPStr* seq, AjPStr line);
 static AjBool     seqClustalReadseq (AjPStr rdline, AjPTable msftable);
 static AjBool     seqFindInFormat (AjPStr format, ajint *iformat);
 static AjBool     seqFormatSet (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqGcgDots (AjPSeq thys, AjPSeqin seqin, AjPStr* pline,
-			  ajint maxlines, ajint *len);
+			      ajint maxlines, ajint *len);
 static AjBool     seqGcgMsfDots (AjPSeq thys, AjPSeqin seqin, AjPStr* pline,
-			     ajint maxlines, ajint *len);
+				 ajint maxlines, ajint *len);
 static AjBool     seqGcgMsfHeader (AjPStr line, SeqPMsfItem* msfitem);
 static AjBool     seqGcgMsfReadseq(AjPStr rdline, AjPTable msftable);
 static AjBool     seqHennig86Readseq (AjPStr rdline, AjPTable msftable);
+static AjBool     seqinUfoLocal (AjPSeqin thys);
 static void       seqListNoComment (AjPStr* text);
 static AjBool     seqListProcess (AjPSeq thys, AjPSeqin seqin, AjPStr usa);
 static void       seqMsfTabDel (const void *key, void **value, void *cl);
@@ -91,6 +92,7 @@ static AjBool     seqReadFmt (AjPSeq thys, AjPSeqin seqin,
 			      SeqPInFormat inform, ajint format);
 static AjBool     seqReadGcg (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadGenbank (AjPSeq thys, AjPSeqin seqin);
+static AjBool     seqReadGff (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadHennig86 (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadIg (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadJackknifer (AjPSeq thys, AjPSeqin seqin);
@@ -154,8 +156,9 @@ static SeqOInFormat seqInFormatDef[] = { /* AJFALSE = ignore (duplicates) */
   {"staden",     AJFALSE, seqReadStaden},
   {"text",       AJFALSE, seqReadText},
   {"plain",      AJFALSE, seqReadText},
-  {"raw",        AJTRUE,  seqReadRaw},
   {"abi",        AJTRUE,  seqReadAbi},
+  {"gff",        AJTRUE,  seqReadGff},
+  {"raw",        AJTRUE,  seqReadRaw},
   {NULL, 0, NULL} };
 
 static SeqPInFormat seqInFormat = seqInFormatDef;
@@ -246,7 +249,6 @@ AjPSeqin ajSeqinNew (void)
 void ajSeqinDel (AjPSeqin* pthis)
 {
     AjPSeqin thys = *pthis;
-    AjPFeatLexicon dict=NULL;
   
     ajStrDel(&thys->Name);
     ajStrDel(&thys->Acc);
@@ -268,8 +270,6 @@ void ajSeqinDel (AjPSeqin* pthis)
 
     if(thys->Fttable)
     {
-	dict = ajFeatTableDict(thys->Fttable);
-	ajFeatDeleteDict(dict);
 	ajFeatTabDel(&thys->Fttable);
     }
   
@@ -440,15 +440,15 @@ AjBool ajSeqAllRead (AjPSeq thys, AjPSeqin seqin)
     return ret;
 }
 
-/* @func ajSeqAllFile *********************************************************
+/* @func ajSeqallFile *********************************************************
 **
 ** Parse a USA Uniform Sequence Address
 **
 ** Return the results in the AjPSeqall object but leave the file open for
 ** future calls.
 **
-** @param [r] thys [AjPStr] sequence usa.
-** @return [AjPseqall] seqall object
+** @param [r] usa [AjPStr] sequence usa.
+** @return [AjPSeqall] seqall object
 ** @@
 ******************************************************************************/
 
@@ -613,7 +613,7 @@ AjBool ajSeqRead (AjPSeq thys, AjPSeqin seqin)
 
     if (!calls)
     {					/* we need a copy of the formatlist */
-	for (i=0; seqInFormatDef[i].Name; i++);
+	for (i=0; seqInFormatDef[i].Name; i++); 
 	ajDebug("Initializing seqInFormat, %d formats\n", i);
 	AJCNEW(seqInFormat,i+1);
 	for (i=0; seqInFormatDef[i].Name; i++)
@@ -857,7 +857,7 @@ static ajint seqReadFmt (AjPSeq thys, AjPSeqin seqin, SeqPInFormat inform,
 		}
 		else
 		{
-		    ajFeatTrace(seqin->Fttable);
+/*ajb		    ajFeatTableTrace(seqin->Fttable);*/
 		    thys->Fttable = seqin->Fttable;
 		    seqin->Fttable = NULL;
 		}
@@ -877,6 +877,10 @@ static ajint seqReadFmt (AjPSeq thys, AjPSeqin seqin, SeqPInFormat inform,
 	}
 	ajDebug ("query match failed, continuing ...\n");
 	ajSeqClear (thys);
+    }
+    else
+    {
+        ajFileBuffReset(seqin->Filebuff);
     }
     return 1;
 }
@@ -1324,7 +1328,7 @@ static AjBool seqReadGcg (AjPSeq thys, AjPSeqin seqin)
     /* test GCG 9.x file types if available */
     /* any type on the .. line will override this */
 
-    if (ajStrPrefixC(rdline, "!!NA_EQUENCE"))
+    if (ajStrPrefixC(rdline, "!!NA_SEQUENCE"))
 	ajSeqSetNuc(thys);
     else if (ajStrPrefixC(rdline, "!!AA_SEQUENCE"))
 	ajSeqSetProt(thys);
@@ -1647,7 +1651,7 @@ static AjBool seqReadClustal (AjPSeq thys, AjPSeqin seqin)
 	blankexp = ajRegCompC ("^[ \t\n\r]*$");
 
     if (!markexp)
-	markexp = ajRegCompC ("^[ \t]");
+	markexp = ajRegCompC ("^[ \t\n]"); /* space or empty line */
 
     if (!seqexp)
 	seqexp = ajRegCompC ("^([^ \t\n\r]+)");
@@ -1848,8 +1852,10 @@ static AjBool seqReadPhylip (AjPSeq thys, AjPSeqin seqin)
 
 	ajDebug("first line:\n'%S'\n", rdline);
 
-	if (!ajRegExec(topexp, rdline)) /* first line test */
-	    return ajFalse;
+	if (!ajRegExec(topexp, rdline)) { /* first line test */
+	  ajFileBuffReset (buff);
+	  return ajFalse;
+	}
 
 	ajRegSubI(topexp, 1, &tmpstr);
 	(void) ajStrToInt (tmpstr, &iseq);
@@ -1871,6 +1877,7 @@ static AjBool seqReadPhylip (AjPSeq thys, AjPSeqin seqin)
 	    if (!ajRegExec (headexp, rdline))
 	    {
 		ajDebug ("FAIL (not headexp): '%S'\n", rdline);
+		ajFileBuffReset (buff);
 		return ajFalse;
 	    }
 	    AJNEW0(phyitem);
@@ -2751,7 +2758,7 @@ static AjBool seqReadSwiss (AjPSeq thys, AjPSeqin seqin)
 	}
 	if (ajStrPrefixC(rdline, "FT   "))
 	{
-	    if (seqin->Features && ! ajStrLen(seqin->Ufo))
+	    if (seqinUfoLocal(seqin))
 	    {
 		if (!dofeat)
 		{
@@ -2759,7 +2766,7 @@ static AjBool seqReadSwiss (AjPSeq thys, AjPSeqin seqin)
 		    ftfile = ajFileBuffNew();
 		}
 		ajFileBuffLoadS (ftfile, rdline);
-		ajDebug ("EMBL FEAT saved line:\n'%S'\n", rdline);
+		/* ajDebug ("EMBL FEAT saved line:\n%S", rdline); */
 	    }
 	}
 	ok = ajFileBuffGetStore (buff, &rdline, seqin->Text, &thys->TextPtr);
@@ -2768,10 +2775,10 @@ static AjBool seqReadSwiss (AjPSeq thys, AjPSeqin seqin)
     if (dofeat)
     {
 	seqin->Ftquery = ajFeatTabInNewSSF (ftfmt, thys->Name, ftfile);
-	ajDebug ("EMBL FEAT TabIn %x\n", seqin->Ftquery);
+	ajDebug ("SWISS FEAT TabIn %x\n", seqin->Ftquery);
 	ftfile = NULL;			/* now copied to seqin->FeatTabIn */
 	seqin->Fttable = ajFeaturesRead (seqin->Ftquery);
-	ajFeatTrace(seqin->Fttable);
+/*ajb	ajFeatTableTrace(seqin->Fttable);*/
 	thys->Fttable = seqin->Fttable;
 	seqin->Fttable = NULL;
     }
@@ -2837,14 +2844,14 @@ static AjBool seqReadEmbl (AjPSeq thys, AjPSeqin seqin)
     
     bufflines++;
     
-    
-    while (ajStrPrefixC(rdline, "WP "))
-	if (!ajFileBuffGet (buff, &rdline))
-	    return ajFalse;
-    
-    
-    
-    
+    /* for GCG formatted databases */
+
+    while (ajStrPrefixC(rdline, "WP ")) {
+      if (!ajFileBuffGet (buff, &rdline))
+	return ajFalse;
+      bufflines++;
+    }
+
     ajDebug ("seqReadEmbl first line '%S'\n", rdline);
     
     if (!ajStrPrefixC(rdline, "ID   "))
@@ -2887,7 +2894,7 @@ static AjBool seqReadEmbl (AjPSeq thys, AjPSeqin seqin)
 	}
 	if (ajStrPrefixC(rdline, "FT   "))
 	{
-	    if (seqin->Features && ! ajStrLen(seqin->Ufo))
+	    if (seqinUfoLocal(seqin))
 	    {
 		if (!dofeat)
 		{
@@ -2895,7 +2902,7 @@ static AjBool seqReadEmbl (AjPSeq thys, AjPSeqin seqin)
 		    ftfile = ajFileBuffNew();
 		}
 		ajFileBuffLoadS (ftfile, rdline);
-		ajDebug ("EMBL FEAT saved line:\n'%S'\n", rdline);
+		/* ajDebug ("EMBL FEAT saved line:\n%S", rdline); */
 	    }
 	}
 	ok = ajFileBuffGetStore (buff, &rdline, seqin->Text, &thys->TextPtr);
@@ -2910,7 +2917,7 @@ static AjBool seqReadEmbl (AjPSeq thys, AjPSeqin seqin)
 	ajDebug ("EMBL FEAT TabIn %x\n", seqin->Ftquery);
 	ftfile = NULL;			/* now copied to seqin->FeatTabIn */
 	seqin->Fttable = ajFeaturesRead (seqin->Ftquery);
-	ajFeatTrace(seqin->Fttable);
+/*ajb	ajFeatTableTrace(seqin->Fttable);*/
 	thys->Fttable = seqin->Fttable;
 	seqin->Fttable = NULL;
     }
@@ -2973,13 +2980,14 @@ static AjBool seqReadGenbank (AjPSeq thys, AjPSeqin seqin)
     (void) ajFileBuffGet (buff, &rdline);
     bufflines++;
 
+    /* for GCG formatted databases */
 
     while (ajStrPrefixC(rdline, "WP "))
     {
 	if (!ajFileBuffGet (buff, &rdline))
 	    return ajFalse;
+	bufflines++;
     }
-
 
     if (!ajStrPrefixC(rdline, "LOCUS"))
     {
@@ -3015,14 +3023,14 @@ static AjBool seqReadGenbank (AjPSeq thys, AjPSeqin seqin)
 	}
 	if (ajStrPrefixC(rdline, "FEATURES"))
 	{
-	    if (seqin->Features && ! ajStrLen(seqin->Ufo))
+	    if (seqinUfoLocal(seqin))
 	    {
 		ajDebug("features found\n");
 		if (!dofeat)
 		{
 		    dofeat = ajTrue;
 		    ftfile = ajFileBuffNew();
-		    ajDebug ("GENBANK FEAT first line:\n'%S'\n", rdline);
+		    /* ajDebug ("GENBANK FEAT first line:\n%S", rdline); */
 		}
 		ajFileBuffLoadS (ftfile, rdline);
 		ok = ajFileBuffGet (buff, &rdline);
@@ -3031,7 +3039,7 @@ static AjBool seqReadGenbank (AjPSeq thys, AjPSeqin seqin)
 		{
 		    bufflines++;
 		    ajFileBuffLoadS (ftfile, rdline);
-		    ajDebug ("GENBANK FEAT saved line:\n'%S'\n", rdline);
+		    /* ajDebug ("GENBANK FEAT saved line:\n%S", rdline); */
 		    ok = ajFileBuffGetStore (buff, &rdline, seqin->Text,
 					     &thys->TextPtr);
 		}
@@ -3069,7 +3077,7 @@ static AjBool seqReadGenbank (AjPSeq thys, AjPSeqin seqin)
 	ajDebug ("GENBANK FEAT TabIn %x\n", seqin->Ftquery);
 	ftfile = NULL;			/* now copied to seqin->FeatTabIn */
 	seqin->Fttable = ajFeaturesRead (seqin->Ftquery);
-	ajFeatTrace(seqin->Fttable);
+/*ajb	ajFeatTableTrace(seqin->Fttable);*/
 	thys->Fttable = seqin->Fttable;
 	seqin->Fttable = NULL;
     }
@@ -3090,9 +3098,9 @@ static AjBool seqReadGenbank (AjPSeq thys, AjPSeqin seqin)
 	{
 	    if (!ajStrPrefixC(rdline, "ORIGIN"))
 		(void) seqAppend (&thys->Seq, rdline);
-	    bufflines++;
 	    ok = ajFileBuffGetStore (buff, &rdline, seqin->Text,
 				     &thys->TextPtr);
+	    bufflines++;
 	}
     }
 
@@ -3111,6 +3119,120 @@ static AjBool seqReadGenbank (AjPSeq thys, AjPSeqin seqin)
     return ajTrue;
 }
 
+/* @funcstatic seqReadGff *****************************************************
+**
+** Given data in a sequence structure, tries to read everything needed
+** using GFF format.
+**
+** GFF only offers the sequence, and the type, with the DNA, RNA and
+** Protein and End-xxx headers. GFF allows other header lines to be defined,
+** so EMBOSS can add more lines for accession number and description
+**
+** GFF also defines Type and sequence-region headers, but they only
+** provide information that is also in the DNA, RNA or Protein header
+** and these are required for sequence storage so we ignore the alternatives.
+**
+** @param [wP] thys [AjPSeq] Sequence object
+** @param [P] seqin [AjPSeqin] Sequence input object
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
+
+static AjBool seqReadGff (AjPSeq thys, AjPSeqin seqin)
+{
+    
+  static AjPRegexp typexp = NULL;
+  static AjPStr rdline = NULL;
+  ajint bufflines = 0;
+  AjBool ok;
+  AjBool isseq = ajFalse;
+  AjPFileBuff buff = seqin->Filebuff;
+  AjPFileBuff ftfile = NULL;
+  static AjPStr ftfmt = NULL;
+  AjBool dofeat = ajFalse;
+  static AjPStr typstr;
+  static AjPStr verstr = NULL;	/* copy of version line */
+  static AjPStr outstr = NULL;	/* generated Type line */
+
+  if (!typexp)
+    typexp = ajRegCompC("^##([DR]NA|Protein) +([^ \t\r\n]+)");
+
+  if (!ftfmt)
+    ajStrAssC (&ftfmt, "gff");
+    
+  ok = ajFileBuffGet (buff, &rdline);
+  if (!ok)
+    return ajFalse;
+
+  bufflines++;
+
+  ajDebug ("seqReadGff first line '%S'\n", rdline);
+
+  if (!ajStrPrefixC(rdline, "##gff-version ")) {
+    ajFileBuffReset (buff);
+    return ajFalse;
+  }
+  ajStrAssS (&verstr, rdline);
+
+  if(seqin->Text)
+    ajStrAssS(&thys->TextPtr,rdline);
+
+  ok = ajFileBuffGetStore (buff, &rdline, seqin->Text, &thys->TextPtr);
+  while (ok && ajStrPrefixC (rdline, "##")) {
+    if (ajRegExec(typexp, rdline)) {
+      isseq = ajTrue;
+      ajRegSubI(typexp, 1, &typstr);
+      ajRegSubI(typexp, 2, &thys->Name);
+      if (ajStrMatchC(typstr, "Protein"))
+	ajSeqSetProt(thys);
+      else
+	ajSeqSetNuc(thys);
+      ajFmtPrintS (&outstr, "##Type %S %S", typstr, thys->Name);
+    }
+    else if (ajStrPrefixC(rdline, "##end-")) {
+      isseq = ajFalse;
+    }
+    else if (isseq) {
+      (void) seqAppend (&thys->Seq, rdline);
+    }
+    ok = ajFileBuffGetStore (buff, &rdline, seqin->Text, &thys->TextPtr);
+  }
+
+  if (!ajSeqLen(thys)) {
+    ajFileBuffReset (buff);
+    return ajFalse;
+  }
+
+  /* do we want the features now? */
+
+  if (ok & seqinUfoLocal(seqin)) {
+    dofeat = ajTrue;
+    ftfile = ajFileBuffNew();
+    ajFileBuffLoadS (ftfile, verstr);
+    ajFileBuffLoadS (ftfile, outstr);
+    while (ok && !ajStrPrefixC(rdline, "##")) {
+      ajFileBuffLoadS (ftfile, rdline);
+      /* ajDebug ("GFF FEAT saved line:\n%S", rdline); */
+      ok = ajFileBuffGetStore (buff, &rdline, seqin->Text, &thys->TextPtr);
+    }
+  }
+
+  if (dofeat) {
+    ajFeatTabInDel(&seqin->Ftquery);
+    seqin->Ftquery = ajFeatTabInNewSSF (ftfmt, thys->Name, ftfile);
+    ajDebug ("GFF FEAT TabIn %x\n", seqin->Ftquery);
+    ftfile = NULL;			/* now copied to seqin->FeatTabIn */
+    seqin->Fttable = ajFeaturesRead (seqin->Ftquery);
+/*ajb    ajFeatTableTrace(seqin->Fttable);*/
+    thys->Fttable = seqin->Fttable;
+    seqin->Fttable = NULL;
+  }
+
+  ajFileBuffClear (buff, 0);
+
+  return ajTrue;
+}    
+   
 /* @func ajSeqPrintInFormat ************************************************
 **
 ** Reports the internal data structures
@@ -3153,7 +3275,7 @@ void ajSeqPrintInFormat (AjPFile outf, AjBool full)
 ** so that only these ones are tested.
 **
 ** @param [P] format [AjPStr] Format required.
-** @param [w] iformat [int*] Index
+** @param [w] iformat [ajint*] Index
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -3292,7 +3414,7 @@ static ajint seqAppend (AjPStr* pseq, AjPStr line)
 ** @param [P] seqin [AjPSeqin] Sequence input.
 ** @param [P] pline [AjPStr*] Input buffer.
 ** @param [r] maxlines [ajint] Maximum number of lines to read before giving up.
-** @param [w] len [int*] Length of sequence read.
+** @param [w] len [ajint*] Length of sequence read.
 ** @return [AjBool] ajTrue on success. ajFalse on failure or aborting.
 ** @@
 ******************************************************************************/
@@ -3387,7 +3509,7 @@ static AjBool seqGcgDots (AjPSeq thys, AjPSeqin seqin, AjPStr* pline,
 ** @param [P] seqin [AjPSeqin] Sequence input.
 ** @param [P] pline [AjPStr*] Input buffer.
 ** @param [r] maxlines [ajint] Maximum number of lines to read before giving up.
-** @param [w] len [int*] Length of sequence read.
+** @param [w] len [ajint*] Length of sequence read.
 ** @return [AjBool] ajTrue on success. ajFalse on failure or aborting.
 ** @@
 ******************************************************************************/
@@ -3944,6 +4066,22 @@ static AjBool seqFormatSet (AjPSeq thys, AjPSeqin seqin)
     return ajFalse;
 }
 
+/* @funcstatic seqinUfoLocal **************************************************
+**
+** Tests whether a sequence input object will read features from the
+** sequence input file. The alternative is to use a separate UFO.
+**
+** @param [u] thys [AjPSeqin] Sequence input object.
+** @return [AjBool] ajTrue if the features will be read from the sequence
+** @@
+******************************************************************************/
+
+static AjBool seqinUfoLocal (AjPSeqin thys) {
+  if (thys->Features && ! ajStrLen(thys->Ufo))
+    return ajTrue;
+
+  return ajFalse;
+}
 /* @funcstatic seqSetName *****************************************************
 **
 ** Sets the name for a sequence object by applying simple conversion
@@ -4367,7 +4505,7 @@ AjBool ajSeqParseNcbi(AjPStr str, AjPStr* id, AjPStr* acc, AjPStr* desc)
     ajint  i;
     ajint  nt;
     
-    if(!strchr((q=AJSTRSTR(str)),(ajint)'|') || *AJSTRSTR(str)!='>')
+    if(!strchr((q=MAJSTRSTR(str)),(ajint)'|') || *MAJSTRSTR(str)!='>')
 	return ajFalse;
 
     (void) ajStrTokenAss(&handle,str,"| \r");
@@ -4466,15 +4604,14 @@ AjBool ajSeqParseNcbi(AjPStr str, AjPStr* id, AjPStr* acc, AjPStr* desc)
 }
 
 
-/* @funcstatic ajSeqGetFromUsa ***********************************************
+/* @func ajSeqGetFromUsa ***********************************************
 **
 ** Returns a sequence given a USA
 **
 ** @param [r] thys [AjPStr] USA
 ** @param [r] protein [AjBool] True if protein
-** @param [w] thys [AjPSeq*] sequence
-**
-** @return [void]
+** @param [w] seq [AjPSeq*] sequence
+** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 
@@ -4510,16 +4647,14 @@ AjBool ajSeqGetFromUsa (AjPStr thys, AjBool protein, AjPSeq *seq)
 ** Test file type is ABI format - look for 'ABIF' flag (which may be in one
 ** of 2 places).
 **
-** @param [r] fp [AjPStr ] ABI datafile name
+** @param [r] fp [AjPFile] ABI format file
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 
 AjBool ajSeqABITest(AjPFile fp)
 {   
-
     char pabi[5];
-
     pabi[4] = '\0'; 
 
     if(ajFileRead((void *)pabi,4,1,fp))
@@ -4545,10 +4680,10 @@ AjBool ajSeqABITest(AjPFile fp)
 **
 ** Read in a sequence from an ABI trace file.
 **
-** @param [r] fp [AjPStr ] ABI datafile name
-** @param [r] baseO [ajlong ] BASE offset in an ABI file
-** @param [r] numBases [ajlong ] number of bases
-** @param [w] nseq [AjPStr* ] read sequence
+** @param [r] fp [AjPFile] ABI format input file
+** @param [r] baseO [ajlong] BASE offset in an ABI file
+** @param [r] numBases [ajlong] number of bases
+** @param [w] nseq [AjPStr*] read sequence
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
@@ -4575,8 +4710,8 @@ AjBool ajSeqABIReadSeq(AjPFile fp,ajlong baseO,ajlong numBases,
 **
 ** Get the name of the machine used to obtain an ABI trace file.
 **
-** @param [r] fp [AjPStr ] ABI datafile name
-** @param [w] machine [AjPStr* ] machine name
+** @param [r] fp [AjPFile] ABI format file
+** @param [w] machine [AjPStr*] machine name
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
@@ -4613,8 +4748,8 @@ AjBool ajSeqABIMachineName(AjPFile fp,AjPStr *machine)
 **
 ** Find 'DATA' tag and get the number of data points.
 **
-** @param [r] fp [AjPStr ] ABI datafile name
-** @return [AjBool] ajTrue on success
+** @param [r] fp [AjPFile] ABI format file
+** @return [ajint] Number of data points in file
 ** @@
 ******************************************************************************/
 
@@ -4631,13 +4766,12 @@ ajint ajSeqABIGetNData(AjPFile fp)
     return numPoints;
 }
 
-
 /* @func ajSeqABIGetNBase *****************************************************
 **
 ** Find the 'BASE' tag in an ABI trace file and get the number of bases.
 **
-** @param [r] fp [AjPStr ] ABI datafile name
-** @return [AjBool] ajTrue on success
+** @param [r] fp [AjPFile] ABI format file
+** @return [ajint] Number of bases in file
 ** @@
 ******************************************************************************/
 
@@ -4658,10 +4792,10 @@ ajint ajSeqABIGetNBase(AjPFile fp)
 **
 ** Read in the processed trace data from an ABI file.
 **
-** @param [r] fp [AjPStr ] ABI datafile name
-** @param [r] Offset [ajlong] data offset in ABI file
+** @param [r] fp [AjPFile] ABI format file
+** @param [r] Offset [ajlong*] data offset in ABI file
 ** @param [r] numPoints [ajlong] number of data points
-** @param [w] trace [AjPInt2d ] (4xnumPoints) array of trace data
+** @param [w] trace [AjPInt2d] (4xnumPoints) array of trace data
 ** @return [void] 
 ** @@
 ******************************************************************************/
@@ -4692,9 +4826,9 @@ void ajSeqABIGetData(AjPFile fp,ajlong *Offset,ajlong numPoints,
 **
 ** Read in the base positions from an ABI file.
 **
-** @param [r] fp [AjPStr ] ABI datafile name
-** @param [r] numBases [ajlong] number of bases
-** @param [w] basePositions [AjPShort* ] base positions
+** @param [r] fp [AjPFile] ABI format file
+** @param [r] numBases [ajlong] number of bases to be read
+** @param [w] basePositions [AjPShort*] base positions output
 ** @return [void] 
 ** @@
 ******************************************************************************/
@@ -4721,7 +4855,7 @@ void ajSeqABIGetBasePosition(AjPFile fp,ajlong numBases,
 **
 ** Read in the signal strength information from an ABI file.
 **
-** @param [r] fp [AjPStr ] ABI datafile name
+** @param [r] fp [AjPFile] ABI format file
 ** @param [r] fwo_ [ajlong] field order 
 ** @param [w] sigC [ajshort] average signal strength for C
 ** @param [w] sigA [ajshort] average signal strength for A
@@ -4767,7 +4901,7 @@ void ajSeqABIGetSignal(AjPFile fp,ajlong fwo_,
 **
 ** Read in the base spacing from an ABI file.
 **
-** @param [r] fp [AjPStr ] ABI datafile name
+** @param [r] fp [AjPFile] ABI format file
 ** @return [float] base spacing
 ** @@
 ******************************************************************************/
@@ -4783,12 +4917,11 @@ float ajSeqABIGetBaseSpace(AjPFile fp)
     return spacing;
 }
 
-
 /* @func ajSeqABIGetBaseOffset ***********************************************
 **
 ** Routine to get the 'BASE' tag offset in an ABI file.
 **
-** @param [r] fp [AjPStr ] ABI datafile name
+** @param [r] fp [AjPFile] ABI format file
 ** @return [ajint] 'BASE' tag offset in an ABI file
 ** @@
 ******************************************************************************/
@@ -4810,7 +4943,7 @@ ajint ajSeqABIGetBaseOffset(AjPFile fp)
 **
 ** Routine to get the 'PLOC', base position, tag offset in an ABI file
 **
-** @param [r] fp [AjPStr ] ABI datafile name
+** @param [r] fp [AjPFile] ABI format file
 ** @return [ajint] base position offset in an ABI file
 ** @@
 ******************************************************************************/
@@ -4832,7 +4965,7 @@ ajint ajSeqABIGetBasePosOffset(AjPFile fp)
 **
 ** Routine to get the "FWO" tag, field order ("GATC"), tag. 
 **
-** @param [r] fp [AjPStr ] ABI datafile name
+** @param [r] fp [AjPFile] ABI format file
 ** @return [ajint] field order
 ** @@
 ******************************************************************************/
@@ -4855,8 +4988,8 @@ ajint ajSeqABIGetFWO(AjPFile fp)
 **
 ** Routine to get the primer offset in an ABI file.
 **
-** @param [r] fp [AjPStr ] ABI datafile name
-** @return [ajshort] primer offset
+** @param [r] fp [AjPFile] ABI format file
+** @return [ajint] primer offset
 ** @@
 ******************************************************************************/
 
@@ -4879,7 +5012,7 @@ ajint ajSeqABIGetPrimerOffset(AjPFile fp)
 **
 ** Routine to get the primer position in an ABI file.
 **
-** @param [r] fp [AjPStr ] ABI datafile name
+** @param [r] fp [AjPFile] ABI format file
 ** @return [ajint] primer position
 ** @@
 ******************************************************************************/
@@ -4907,8 +5040,8 @@ ajint ajSeqABIGetPrimerPosition(AjPFile fp)
 **
 ** Get the processed trace data ('DATA' tag) offset in an ABI file.
 **
-** @param [r] fp [AjPStr ] ABI datafile name
-** @param [w] Offset [ajlong * ] trace data offset, used in ajSeqABIGetData
+** @param [r] fp [AjPFile] ABI format file
+** @param [w] Offset [ajlong *] trace data offset, used in ajSeqABIGetData
 ** @return [AjBool]  ajTrue on success
 ** @@
 ******************************************************************************/
@@ -4953,8 +5086,8 @@ AjBool ajSeqABIGetTraceOffset(AjPFile fp, ajlong *Offset)
 **
 ** Routine to read 4 bytes from a file and return the integer. 
 **
-** @param [r] fp [AjPStr ] ABI datafile name
-** @param [w] i4 [ajlong * ] ajlong integer read in from ABI file
+** @param [r] fp [AjPFile] ABI format file
+** @param [w] i4 [ajlong *] ajlong integer read in from ABI file
 ** @return [AjBool] true if read successfully
 ** @@
 ******************************************************************************/
@@ -4980,8 +5113,8 @@ static AjBool seqReadABIInt4(AjPFile fp,ajlong *i4)
 **
 ** Routine to read 4 bytes from a file and return the float.
 **
-** @param [r] fp [AjPStr ] ABI datafile name
-** @param [w] f4 [float * ] float read in from ABI file
+** @param [r] fp [AjPFile] ABI format file
+** @param [w] f4 [float *] float read in from ABI file
 ** @return [AjBool] true if read successfully
 ** @@
 ******************************************************************************/
@@ -5007,8 +5140,8 @@ static AjBool seqABIReadFloat4(AjPFile fp,float* f4)
 **
 ** Routine to read 2 bytes from a file and return the short integer.
 **
-** @param [r] fp [AjPStr ] ABI datafile name
-** @param [w] i2 [ajshort * ] short integer read in from ABI file
+** @param [r] fp [AjPFile] ABI format file
+** @param [w] i2 [ajshort *] short integer read in from ABI file
 ** @return [AjBool] true if read successfully
 ** @@
 ******************************************************************************/
@@ -5026,7 +5159,6 @@ static AjBool seqABIReadInt2(AjPFile fp, ajshort *i2)
     return ajTrue;
 }
 
-
 /* @funcstatic seqABIGetFlag ************************************************
 **
 ** Routine to read through an ABI trace file until it reaches a flag
@@ -5035,7 +5167,7 @@ static AjBool seqABIReadInt2(AjPFile fp, ajshort *i2)
 ** It  will then return the *integer* value (val) of the word+1 from
 ** that flag record.
 **
-** @param [r] fp [AjPStr ] ABI datafile name
+** @param [r] fp [AjPFile] ABI format file
 ** @param [r] flagLabel [ajlong] flag in the ABI file
 ** @param [r] flagInstance [ajlong] flag instance in the ABI file
 ** @param [r] word [ajlong] number of fields to ignore in this record
@@ -5043,7 +5175,6 @@ static AjBool seqABIReadInt2(AjPFile fp, ajshort *i2)
 ** @return [AjBool] true if read successfully
 ** @@
 ******************************************************************************/
-
 
 static AjBool seqABIGetFlag(AjPFile fp, ajlong flagLabel,
          ajlong flagInstance, ajlong word, ajlong* val)
@@ -5090,11 +5221,11 @@ static AjBool seqABIGetFlag(AjPFile fp, ajlong flagLabel,
 ** It  will then return the *float* value (val) of the word+1 from
 ** that flag record.
 **
-** @param [r] fp [AjPStr ] ABI datafile name
+** @param [r] fp [AjPFile] ABI format file
 ** @param [r] flagLabel [ajlong] flag in the ABI file
 ** @param [r] flagInstance [ajlong] flag instance in the ABI file
 ** @param [r] word [ajlong] number of fields to ignore in this record
-** @param [w] val [float* ] integer value of the word+1
+** @param [w] val [float*] integer value of the word+1
 ** @return [AjBool] true if read successfully
 ** @@
 ******************************************************************************/
@@ -5135,7 +5266,7 @@ static AjBool seqABIGetFlagF(AjPFile fp, ajlong flagLabel,
 }
 
 
-/* @funcstatic seqABIGetFlagF ************************************************
+/* @funcstatic seqABIGetFlagW ************************************************
 **
 ** Routine to read through an ABI trace file until it reaches a flag
 ** (flagLabel). If there are multiple flags in the file it will search
@@ -5143,9 +5274,8 @@ static AjBool seqABIGetFlagF(AjPFile fp, ajlong flagLabel,
 ** It  will then return the *short ajint* value (val) of the word+1 from
 ** that flag record.
 **
-** @param [r] fp [AjPStr ] ABI datafile name
+** @param [r] fp [AjPFile] ABI format file
 ** @param [r] flagLabel [ajlong] flag in the ABI file
-** @param [r] flagInstance [ajlong] flag instance in the ABI file
 ** @param [r] word [ajlong] number of fields to ignore in this record
 ** @param [w] val [ajshort*] integer value of the word+1
 ** @return [AjBool] true if read successfully
@@ -5190,7 +5320,7 @@ static AjBool seqABIGetFlagW(AjPFile fp, ajlong flagLabel,
 **
 ** Returns: 0 if C, 1 if A, 2 if G, 3 if anything else
 **
-** @param [r] B [char ] base (C, A, G or T)
+** @param [r] B [char] base (C, A, G or T)
 ** @return [ajshort] 0 if C, 1 if A, 2 if G, 3 if anything else
 ** @@
 ******************************************************************************/
@@ -5205,8 +5335,8 @@ static ajshort seqABIBaseIdx(char B)
 **
 ** Get the sample name from an ABI trace file.
 **
-** @param [r] fp [AjPStr ] ABI datafile name
-** @param [w] sample [AjPStr* ] sample name
+** @param [r] fp [AjPFile] ABI format file
+** @param [w] sample [AjPStr*] sample name
 ** @return [AjBool] true if read successfully
 ** @@
 ******************************************************************************/

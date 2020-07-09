@@ -53,11 +53,11 @@ typedef struct AjSSilent
 /* Prototypes */
 
 AjPList mismatch(AjPStr sstr, AjPList ressite, AjPFile outf, AjPStr sname,
-                 ajint RStotal,int begin,int radj, AjBool rev, ajint end, 
+                 ajint RStotal, ajint begin, ajint radj, AjBool rev, ajint end, 
                  AjBool tshow);
 ajint restr_read(AjPList *relist, AjPStr enzymes);
 AjBool checktrans(AjPStr seq,AjPFile outf,EmbPMatMatch match, AjPRinfo rlp,
-		  ajint begin,int radj, AjBool rev, ajint end, AjPSilent *res);
+		  ajint begin, ajint radj, AjBool rev, ajint end, AjPSilent *res);
 void fmt_sequence(AjPStr seq, AjPFile outf, ajint start, AjBool num);
 void fmt_hits(AjPList hits, AjPFile outf);
 void split_hits(AjPList *hits, AjPList *silents, AjPList *nonsilents, 
@@ -208,7 +208,7 @@ int main(int argc, char **argv)
 
 
 AjPList mismatch(AjPStr sstr, AjPList relist, AjPFile outf, AjPStr sname,
-	         ajint RStotal,int begin,int radj,AjBool rev,int end,
+	         ajint RStotal, ajint begin, ajint radj,AjBool rev, ajint end,
                  AjBool tshow)
 { 
     AjPSilent res;
@@ -425,7 +425,7 @@ ajint restr_read(AjPList *relist,AjPStr enzymes)
 
 
 AjBool checktrans(AjPStr seq,AjPFile outf,EmbPMatMatch match, AjPRinfo rlp,
-		  ajint begin,int radj, AjBool rev, ajint end, AjPSilent *res)
+		  ajint begin, ajint radj, AjBool rev, ajint end, AjPSilent *res)
 {
     char *p=NULL;
     char *q=NULL; 

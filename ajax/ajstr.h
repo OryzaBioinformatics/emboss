@@ -165,6 +165,7 @@ extern "C"
 ** @cast ajStrIsFloat returns true if the string is a valid float
 ** @cast ajStrIsDouble returns true if the string is a valid double
 ** @cast ajStrToBool Converts a string to an AjBool
+** @cast ajStrToHex Converts a string to an int using hexadecimal
 ** @cast ajStrToInt Converts a string to an int
 ** @cast ajStrToLong Converts a string to a ajlong int
 ** @cast ajStrToFloat Converts a string to a float
@@ -285,6 +286,8 @@ int        ajStrCmpWildCC (const char* str, const char* text);
 AjBool     ajStrConvert   (AjPStr* pthis, const AjPStr oldc,
 			   const AjPStr newc);
 AjBool     ajStrConvertCC (AjPStr* pthis, const char* oldc, const char* newc);
+AjBool     ajStrCopy (AjPStr* pthis, const AjPStr str);
+AjBool     ajStrCopyC (AjPStr* pthis, const char* str);
 AjBool     ajStrCut (AjPStr* pthis, ajint begin, ajint end);
 void       ajStrDegap(AjPStr* thys);
 void       ajStrDel (AjPStr *thys);
@@ -315,6 +318,7 @@ AjBool     ajStrIsAlpha (const AjPStr thys);
 AjBool     ajStrIsBool (const AjPStr thys);
 AjBool     ajStrIsDouble (const AjPStr thys);
 AjBool     ajStrIsFloat (const AjPStr thys);
+AjBool     ajStrIsHex (const AjPStr thys);
 AjBool     ajStrIsInt (const AjPStr thys);
 AjBool     ajStrIsLong (const AjPStr thys);
 AjBool     ajStrIsSpace (const AjPStr thys);
@@ -339,7 +343,7 @@ AjBool     ajStrJoinC (AjPStr* pthis, ajint pos1, const char* addbit, ajint pos2
 
 ajint        ajStrLen(const AjPStr thys);
 
-#define    AJSTRLEN(str) str->Len
+#define    MAJSTRLEN(str) str->Len
 ajint        ajStrListToArray(AjPStr str, AjPStr **array);
 AjBool     ajStrMask(AjPStr* str, ajint begin, ajint end, char maskchar);
 AjBool     ajStrMatch       (const AjPStr thys, const AjPStr str);
@@ -381,7 +385,7 @@ AjBool     ajStrReplace  (AjPStr* pthis, ajint pos1,
 AjBool     ajStrReplaceC (AjPStr* pthis, ajint pos1,
 			  const char* overwrite, ajint len);
 ajint        ajStrRef(const AjPStr thys);
-#define    AJSTRREF(str) str->Use
+#define    MAJSTRREF(str) str->Use
 void       ajStrRemoveHtml(AjPStr *thys);
 void       ajStrRemoveNewline(AjPStr *thys);
 AjBool     ajStrRev (AjPStr* pthis);
@@ -390,10 +394,10 @@ ajint        ajStrRoom (const AjPStr thys);
 AjBool     ajStrSet   (AjPStr* pthis, const AjPStr str);
 AjBool     ajStrSetC  (AjPStr* pthis, const char* str);
 ajint        ajStrSize (const AjPStr thys);
-#define    AJSTRSIZE(str) str->Res
+#define    MAJSTRSIZE(str) str->Res
 void       ajStrStat (char* title);
 char*      ajStrStr (const AjPStr thys);
-#define    AJSTRSTR(str) str->Ptr
+#define    MAJSTRSTR(str) str->Ptr
 AjBool     ajStrSub (AjPStr* pthis, ajint begin, ajint len);
 AjBool     ajStrSubstitute   (AjPStr* pthis, const AjPStr replace,
 			      const AjPStr putin);
@@ -407,6 +411,7 @@ AjBool     ajStrSuffixCO (const char *str, const AjPStr suff);
 AjBool     ajStrToBool (const AjPStr thys, AjBool* result);
 AjBool     ajStrToDouble (const AjPStr thys, double* result);
 AjBool     ajStrToFloat (const AjPStr thys, float* result);
+AjBool     ajStrToHex (const AjPStr thys, ajint* result);
 AjBool     ajStrToInt (const AjPStr thys, ajint* result);
 AjPStr     ajStrTok (const AjPStr thys);
 AjPStr     ajStrTokC (const AjPStr thys, const char* delim);

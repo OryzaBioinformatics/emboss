@@ -72,6 +72,12 @@ static char namPackage[] = PACKAGE;
 static char namPackage[] = "EMBOSS";
 #endif
 
+#ifdef VERSION
+static char namVersion[] = VERSION;
+#else
+static char namVersion[] = "1.x";
+#endif
+
 static AjPStr namFixedRootBaseStr = NULL;
 static AjPStr namPrefixStr = NULL;
 static AjPStr namFileOrig = NULL;
@@ -226,6 +232,28 @@ static void namPrintDatabase (AjPStr* dbattr){
   return;
 }
 
+/* @funcstatic namDebugDatabase ***********************************************
+**
+** Prints a report of defined attributes for a database definition.
+**
+** @param [P] dbattr [AjPStr*] Attribute list from a database entry.
+** @return [void]
+** @@
+******************************************************************************/
+
+static void namDebugDatabase (AjPStr* dbattr){
+
+  ajint i;
+
+  for (i=0; namAttr[i].Name; i++) {
+    if (ajStrLen(dbattr[i])) {
+      ajDebug ("\t%s: %S\n", namAttr[i].Name, dbattr[i]);
+    }
+  }
+
+  return;
+}
+
 /* @funcstatic namListStandards ***********************************************
 **
 ** Lists databases or variables defined in the internal table.
@@ -261,6 +289,41 @@ static void namListStandards (ajint which)
   return;
 }
 
+/* @funcstatic namDebugStandards **********************************************
+**
+** Lists databases or variables defined in the internal table.
+**
+** @param [r] which [ajint] Variable type, either TYPE_ENV for environment
+**                        variables or TYPE_DB for databases.
+** @return [void]
+** @@
+******************************************************************************/
+
+static void namDebugStandards (ajint which)
+{ ajint i;
+  AjPNamStandards fnew;
+  void **array = ajTableToarray(standardNames, NULL);
+  char *key;
+
+  for (i = 0; array[i]; i += 2) {
+    fnew = (AjPNamStandards) array[i+1];
+    key = (char*) array[i];
+    if(fnew->type == which){
+      if(TYPE_DB == which){
+	ajDebug ("DB %S\t *%s*\n", fnew->name, key);
+	namDebugDatabase(fnew->data);
+	ajDebug ("\n");
+      }
+      else if(TYPE_ENV == which) {
+	ajDebug ("ENV %S\t%S\t *%s*\n",fnew->name,fnew->value,key);
+      }
+    }
+  }
+  AJFREE(array); 
+
+  return;
+}
+
 /* @func ajNamDbDetails ***********************************************
 **
 ** Returns database access method information
@@ -283,8 +346,8 @@ AjBool ajNamDbDetails (AjPStr name, AjPStr* type, AjBool* id, AjBool* qry,
   ajint i;
   ajint scope;
 
-/* assume that the database can't be accessed by any method until we find otherwise */
   *id = *qry = *all = ajFalse;
+
   (void) ajStrDelReuse (type);
   (void) ajStrDelReuse (comment);
   (void) ajStrDelReuse (release);
@@ -324,6 +387,15 @@ AjBool ajNamDbDetails (AjPStr name, AjPStr* type, AjBool* id, AjBool* qry,
 	  (void) ajStrAss(release, dbattr[i]);
       }
     }
+
+    if (!ajStrLen(*type)) {
+      ajWarn("Bad database definition for %S: No type. 'P' assumed", name);
+      ajStrAssC (type, "P");
+    }
+    if (!*id && !*qry && !*all) {
+      ajWarn("Bad database definition for %S: No method(s) for access", name);
+    }
+
 
     return ajTrue;
   }
@@ -376,43 +448,6 @@ ajint result = 0;
   return result;
 }
 
-/* @funcstatic namDebugStandards **********************************************
-**
-** Writes report to standard output of databases or variables defined
-** in the internal table.
-**
-** @param [r] which [ajint] Variable type, either TYPE_ENV for environment
-**                        variables or TYPE_DB for databases.
-** @return [void]
-** @@
-******************************************************************************/
-
-static void namDebugStandards (ajint which)
-{ ajint i;
-  AjPNamStandards fnew;
-  void **array = ajTableToarray(standardNames, NULL);
-  char *key;
-
-  for (i = 0; array[i]; i += 2) {
-    fnew = (AjPNamStandards) array[i+1];
-    key = (char*) array[i];
-    if(fnew->type == which){
-      if(TYPE_DB == which){
-	namUser ("DB %S\t *%s*\n", fnew->name, key);
-	namPrintDatabase(fnew->data);
-      }
-      else if(TYPE_ENV == which) {
-	namUser ("ENV %S\t%S\t *%s* ",fnew->name,fnew->value,key);
-	namUser ("\n");
-      }
-    }
-  }
-
-  AJFREE(array); 
-
-  return;
-}
-
 /* @func ajNamListOrigin *********************************************
 **
 ** Writes a simple list of where the internal tables came from..
@@ -429,6 +464,19 @@ void ajNamListOrigin (void)
   ajUser("");
 }
 
+/* @func ajNamDebugOrigin *********************************************
+**
+** Writes a simple list of where the internal tables came from..
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajNamDebugOrigin (void)
+{
+  ajDebug("Defaults and .rc files: %S\n", namFileOrig);
+}
+
 /* @func ajNamListDatabases *********************************************
 **
 ** Writes a simple list of all databases in the internal table.
@@ -443,6 +491,43 @@ void ajNamListDatabases (void)
   namListStandards(TYPE_DB);
   ajUser("DB---------->");
   ajUser("");
+
+  return;
+}
+
+/* @func ajNamDebugDatabases *********************************************
+**
+** Writes a simple debug report of all databases in the internal table.
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajNamDebugDatabases (void)
+{
+  ajDebug("DB databases\n");
+  ajDebug("============\n");
+  namDebugStandards(TYPE_DB);
+  ajDebug("[DB done]\n\n");
+
+  return;
+}
+
+/* @func ajNamDebugEnvironmentals *********************************************
+**
+** Writes a simple debug report of all envornment variables
+** in the internal table.
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajNamDebugEnvironmentals (void)
+{
+  ajDebug("ENV variables\n");
+  ajDebug("=============\n");
+  namDebugStandards(TYPE_ENV);
+  ajDebug("[ENV done]\n\n");
 
   return;
 }
@@ -487,24 +572,6 @@ void ajNamEnvironmentals(void)
   namListStandards(TYPE_ENV);
   ajUser("ENV---------->");
   ajUser("");
-
-  return;
-}
-
-/* @funcstatic namDebugDatabases **********************************************
-**
-** Writes a simple list of all databases in the internal table.
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-static void namDebugDatabases (void)
-{
-  namUser ("DB---------->");
-  namDebugStandards(TYPE_DB);
-  namUser ("DB---------->");
-  namUser ("\n");
 
   return;
 }
@@ -969,12 +1036,13 @@ void ajNamInit (char* prefix)
     else
 	prefixRoot = namFixedRoot;
 
-    /* namFixedRootBase is the directory above the source root */
+    /* namFixedRootBaseStr is the directory above the source root */
 
     ajStrAssC (&namFixedRootBaseStr, prefixRoot);
     ajFileDirUp (&namFixedRootBaseStr);
 
-    /* look for $(PREFIX)_ROOT/../emboss.default */
+    /* look for default file in the install directory as
+       <install-prefix>/share/PREFIX/emboss.default */
 
     ajFmtPrintS (&namRootStr, "%s/share/%S/%s.default",
 		 namInstallRoot, prefixCap, prefix);
@@ -1052,7 +1120,6 @@ void ajNamInit (char* prefix)
 	else
 	    (void) ajStrAppC (&namFileOrig, "(failed)");
     }
-    
 
     ajStrDel(&prefixRootStr);
     ajStrDel(&prefixStr);
@@ -1454,6 +1521,21 @@ AjBool ajNamRootPack (AjPStr* pack) {
   return ajTrue;
 }
 
+/* @func ajNamRootVersion *****************************************************
+**
+** Returns the version number for the library
+**
+** @param [P] version [AjPStr*] Version number.
+** @return [AjBool] ajTrue on success.
+** @@
+******************************************************************************/
+
+AjBool ajNamRootVersion (AjPStr* version) {
+  (void) ajStrAssC (version, namVersion);
+
+  return ajTrue;
+}
+
 /* @func ajNamRoot ******************************************************
 **
 ** Returns the directory for all file searches
@@ -1540,6 +1622,5 @@ AjBool ajNamResolve (AjPStr* name) {
 
 void ajNamUnused(void)
 {
-    namDebugDatabases();
     return;
 }

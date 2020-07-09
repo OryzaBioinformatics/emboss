@@ -30,7 +30,7 @@ static void getACDdirs (AjPList glist, AjPList alpha, char **env,
 			 AjPStr acddir, AjBool explode);
 static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
 			AjBool explode);
-static void trnNoComment (AjPStr* text);	
+static void groupNoComment (AjPStr* text);	
 static AjPStr grpParseValueRB (AjPStrTok* tokenhandle, char* delim);
 static void splitlist (AjPList groups, AjPStr value, AjBool explode);
 static void subsplitlist (AjPList groups, AjPList sublist);
@@ -309,7 +309,7 @@ static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
 
 /* read file into one line, stripping out comment lines and blanks */
   while (ajFileReadLine (file, &line)) {
-    trnNoComment(&line);
+    groupNoComment(&line);
     if (ajStrLen(line)) {
       (void) ajStrApp (&text, line);
       (void) ajStrAppC (&text, " ");
@@ -383,7 +383,7 @@ static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
 }
 
 
-/* @funcstatic trnNoComment ***************************************************
+/* @funcstatic groupNoComment *************************************************
 **
 ** Strips comments from a character string (a line from an trn file).
 ** Comments are blank lines or any text following a "#" character.
@@ -394,7 +394,7 @@ static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
 ** @@
 ******************************************************************************/
 
-static void trnNoComment (AjPStr* text) {
+static void groupNoComment (AjPStr* text) {
   ajint i;
   char *cp;
 	    

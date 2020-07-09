@@ -25,7 +25,9 @@ static ajint utilBigendCalled = 0;
 void ajExit (void) {
   ajDebug("\nFinal Summary\n=============\n\n");
   ajLogInfo();
+  ajDebug("\nlog done\n");
   ajStrExit();
+  ajDebug("\nstr done\n");
   ajFileExit();
   ajMemExit();
   exit (0);
@@ -140,7 +142,7 @@ AjBool ajUtilBigendian (void) {
 **
 ** Reverses the byte order in a 4 byte integer.
 **
-** @param [u] ival [int*] Integer in wrong byte order.
+** @param [u] ival [ajint*] Integer in wrong byte order.
 **                        Returned in correct order.
 ** @return [void]
 ** @@

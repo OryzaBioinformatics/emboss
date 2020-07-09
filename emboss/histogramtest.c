@@ -3,7 +3,8 @@
 #include "ajhist.h"
 
 void ajGraphHistogram
-(ajint numofdatapoints, ajint numofsets, PLFLT *data,int sidebyside, ajint xmin, ajint xmax,int bins);
+(ajint numofdatapoints, ajint numofsets, PLFLT *data, ajint sidebyside,
+ ajint xmin, ajint xmax, ajint bins);
 
 int main(int argc, char **argv)
 {

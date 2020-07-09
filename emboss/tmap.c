@@ -174,15 +174,15 @@ ajint peak1(ajint start, ajint stopp, float *parameter);
 
 ajint vec_to_stst(ajint *vec, ajint *start, ajint *stopp, ajint length);
 
-void weights(char [][LENGTH], int, int, float *);
+void weights(char [][LENGTH], ajint, ajint, float *);
 
-void refpos2(int, int);
+void refpos2(ajint, ajint);
 
 float summa1(ajint start, ajint stopp, float *parameter);
 
-void plot1(char *, int, char [][60], ajint , ajint , ajint [][2]);
-ajint pred1(float, float, float, int);
-ajint pred1a(float, float, float, int);
+void plot1(char *, ajint, char [][60], ajint , ajint , ajint [][2]);
+ajint pred1(float, float, float, ajint);
+ajint pred1a(float, float, float, ajint);
 
 ajint insert_in_vector(ajint *start, ajint *stopp, ajint max, ajint starttmp, ajint stopptmp, ajint *pred, ajint predparameter);
 ajint tm_in_vector(ajint *start, ajint *stopp, ajint max, ajint starttmp, ajint stopptmp);

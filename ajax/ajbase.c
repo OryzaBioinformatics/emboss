@@ -240,14 +240,14 @@ void ajBaseInit(void)
 }
 
 
-/* @func ajBaseAa1ToAa3 **********************************************************
+/* @func ajBaseAa1ToAa3 *******************************************************
 **
 ** Writes an AjPStr with a amino acid 3 letter code
 ** JCI - This should probably be an emb function and might replace the use 
 ** of embPropCharToThree &  embPropIntToThree
 **
+** @param [r] aa1 [char]    Single letter identifier of amino acid
 ** @param [w] aa3  [AjPStr *] AjPStr object
-** @param [r] char [aa1]    Single letter identifier of amino acid
 **
 ** @return [AjBool] True on succcess
 ** @@

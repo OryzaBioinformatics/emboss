@@ -449,3 +449,4 @@ float ajXyzVdwRad(AjPAtom atm, AjPVdwall vdw);
 #ifdef __cplusplus
 }
 #endif
+

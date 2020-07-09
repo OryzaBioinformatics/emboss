@@ -827,7 +827,7 @@ vertexptr findmax()
 }
 
 ajint diff(A,B,M,N,tb,te) char *A, *B; ajint M, N; ajint tb, te;
-{int   midi, midj, type;	/* Midpoint, type, and cost */
+{ ajint   midi, midj, type;	/* Midpoint, type, and cost */
   ajint midc;
   ajint  zero = 0;				/* ajint type zero        */
 

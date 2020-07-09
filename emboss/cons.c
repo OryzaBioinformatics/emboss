@@ -33,14 +33,6 @@
 
 
 #include "emboss.h"
-#include <ctype.h>          /* for tolower function */
-#include <limits.h>         /* for INT_MAX */
-
-
-void calc_consensus(AjPSeqset seqset,AjPMatrix cmpmatrix,
-                    ajint nseqs, ajint mlen, float fplural, float setcase, 
-                    ajint identity, AjPStr *cons);
-
 
 int main(int argc, char **argv)
 {
@@ -77,14 +69,17 @@ int main(int argc, char **argv)
     for(i=0;i<nseqs;++i)         /* check sequences are same length */
     {
       p = ajSeqsetSeq(seqset,i);
-      if(strlen(p)!=mlen)
-          ajWarn("Sequence lengths are not equal!");
-      ajSeqsetToUpper(seqset);
+      if(strlen(p)!=mlen) {
+        ajWarn("Sequence lengths are not equal!");
+	break;
+      }
     }
 
+    ajSeqsetToUpper(seqset);
+
     cons = ajStrNew();
-    calc_consensus(seqset,cmpmatrix,nseqs,mlen,
-                   fplural,setcase,identity,&cons);
+    embConsCalc (seqset, cmpmatrix, nseqs, mlen,
+                   fplural, setcase, identity, &cons);
 
     /* write out consensus sequence */
     seqo = ajSeqNew();
@@ -102,167 +97,3 @@ int main(int argc, char **argv)
     return 0;
 
 }
-
-void calc_consensus(AjPSeqset seqset,AjPMatrix cmpmatrix,
-                    ajint nseqs,int mlen,float fplural,float setcase,
-                    ajint identity, AjPStr *cons)
-{
-    ajint   i; 
-    ajint   j; 
-    ajint   k;
-    ajint   **matrix;
-    ajint   m1=0;
-    ajint   m2=0;
-    ajint   highindex;
-    ajint   matsize;
-    ajint   matchingmaxindex;
-    ajint   identicalmaxindex;
-
-    float max;
-    float contri=0;
-    float contrj=0;
-    float *identical;
-    float *matching;
-
-    AjPSeqCvt cvt=0;
-    AjPFloat score=NULL;
-    char **seqcharptr;
-    char res;
-    char nocon;
-
-
-    matrix  = ajMatrixArray(cmpmatrix);
-    cvt     = ajMatrixCvt(cmpmatrix);    /* return conversion table */
-    matsize = ajMatrixSize(cmpmatrix);
-
-    AJCNEW(seqcharptr,nseqs);
-    AJCNEW(identical,matsize);
-    AJCNEW(matching,matsize);
-
-    score = ajFloatNew();
-
-    nocon = '-';
-    if(ajSeqsetIsNuc(seqset))        /* set non-consensus character */
-       nocon = 'N'; 
-    else if ( ajSeqsetIsProt(seqset))
-       nocon = 'X';
-    
-   
-    for(i=0;i<nseqs;i++)                  /* get sequence as string */
-      seqcharptr[i] =  ajSeqsetSeq(seqset, i);  
-
-    for(k=0; k< mlen; k++)
-    {
-      res = nocon;
-
-      for(i=0;i<matsize;i++)          /* reset id's and +ve matches */
-      {
-        identical[i] = 0.0;
-        matching[i] = 0.0;
-      }
-
-      for(i=0;i<nseqs;i++) 
-        ajFloatPut(&score,i,0.);
-
-      for(i=0;i<nseqs;i++)            /* generate score for columns */
-      {
-        m1 = ajSeqCvtK(cvt,seqcharptr[i][k]);
-        if(m1)
-          identical[m1] += ajSeqsetWeight(seqset,i);
-        for(j=i+1;j<nseqs;j++) 
-        {
-          m2 = ajSeqCvtK(cvt,seqcharptr[j][k]);
-          if(m1 && m2)
-          {
-            contri = (float)matrix[m1][m2]*ajSeqsetWeight(seqset,j) 
-                                          +ajFloatGet(score,i);
-            contrj = (float)matrix[m1][m2]*ajSeqsetWeight(seqset,i)
-                                          +ajFloatGet(score,j);
-                    
-            ajFloatPut(&score,i,contri);
-            ajFloatPut(&score,j,contrj);
-          }
-        }
-      }
-
-      highindex = -1;
-      max  = -(float)INT_MAX;
-      for(i=0;i<nseqs;i++)
-      {
-        if(ajFloatGet(score,i) > max) 
-        {
-          highindex = i;
-          max       = ajFloatGet(score,i);
-        }
-      }
-
-      for(i=0;i<nseqs;i++)        /* find +ve matches in the column */
-      {
-        m1 = ajSeqCvtK (cvt, seqcharptr[i][k]);
-        if(!matching[m1])
-        {
-          for(j=0;j<nseqs;j++)
-          {
-            if( i != j) 
-            {
-              m2 = ajSeqCvtK (cvt, seqcharptr[j][k]);
-              if(m1 && m2 && matrix[m1][m2] > 0)
-                matching[m1] += ajSeqsetWeight(seqset, j);
-            }
-          }
-        }
-      }
-
-
-      matchingmaxindex  = 0;      /* get max matching and identical */
-      identicalmaxindex = 0;
-      for(i=0;i<nseqs;i++)
-      {
-        m1 = ajSeqCvtK(cvt,seqcharptr[i][k]);
-        if(identical[m1] > identical[identicalmaxindex])
-          identicalmaxindex= m1;
-      }
-      for(i=0;i<nseqs;i++)
-      {
-        m1 = ajSeqCvtK(cvt,seqcharptr[i][k]);
-        if(matching[m1] > matching[matchingmaxindex])
-          matchingmaxindex= m1;
-        else if(matching[m1] ==  matching[matchingmaxindex])
-        {
-          if(identical[m1] > identical[matchingmaxindex])
-            matchingmaxindex= m1;
-        }
-      }
-
-      /* plurality check */
-      if(matching[ajSeqCvtK(cvt,seqcharptr[highindex][k])] >= fplural
-         && seqcharptr[highindex][k] != '-')
-         res = seqcharptr[highindex][k];
-
-      if(matching[highindex]<= setcase)
-        res = tolower(res);
-
-      if(identity)                      /* if just looking for id's */
-      {
-        j=0;
-        for(i=0;i<nseqs;i++)
-        {
-          if(matchingmaxindex == ajSeqCvtK(cvt,seqcharptr[i][k]))
-          j++;
-        }
-        if(j<identity) 
-          res = nocon;
-      }
-
-      ajStrAppK(cons,res);
-    }
-
-    AJFREE(seqcharptr);
-    AJFREE(matching);
-    AJFREE(identical);
-    ajFloatDel(&score);
- 
-    return;
-
-}
-

@@ -85,7 +85,7 @@ static void findmax(void **x,void *cl) {
 }
 
 static ajint findstartpoints(AjPTable *seq1MatchTable,AjPSeq b,AjPSeq a,
-			   ajint *start1,int *start2,int *end1,int *end2,
+			   ajint *start1, ajint *start2, ajint *end1, ajint *end2,
 			   ajint width){
   ajint hwidth=0,max=-10,offset=0;
   AjPList matchlist = NULL,ordered=NULL;

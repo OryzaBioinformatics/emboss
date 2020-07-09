@@ -136,7 +136,8 @@ void embShowAddTran (EmbPShow thys, AjPTrn trnTable, ajint frame,
 void embShowAddRE (EmbPShow thys, ajint sense, AjPList restrictlist, AjBool flat);
 void embShowAddFT (EmbPShow thys, AjPFeatTable feat);
 void embShowPrint (AjPFile out, EmbPShow thys);
-
+void embShowUpperRange(AjPStr *line, AjPRange upperrange, ajint pos);
+void embShowColourRange(AjPStr *line, AjPRange colour, ajint pos);
 
 #endif
 

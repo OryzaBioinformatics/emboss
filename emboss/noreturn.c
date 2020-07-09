@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 
     while(ajFileReadLine(inf,&line))
     {
-	p   = AJSTRSTR(line);
+	p   = MAJSTRSTR(line);
 	len = ajStrLen(line);
 	if(p[len-1] == 0x0d)
 	    p[len-1] = 0x00;

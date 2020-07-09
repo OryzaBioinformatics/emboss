@@ -406,7 +406,7 @@ AjPHist ajHistNewG (ajint numofsets, ajint numofpoints, AjPGraph graph){
 ** @return [void]
 ** @@
 *************************************************************************/
-void ajHistSetMultiTitle(AjPHist hist,int index, AjPStr title){
+void ajHistSetMultiTitle(AjPHist hist, ajint index, AjPStr title){
 
   if(index >= hist->numofdatapoints || index < 0){
     ajErr("Histograms can only be allocated from 0 to %d. NOT %d",
@@ -426,7 +426,7 @@ void ajHistSetMultiTitle(AjPHist hist,int index, AjPStr title){
 ** @return [void]
 ** @@
 *************************************************************************/
-void ajHistSetMultiTitleC(AjPHist hist,int index, char *title){
+void ajHistSetMultiTitleC(AjPHist hist, ajint index, char *title){
 
   if(index >= hist->numofdatapoints || index < 0){
     ajErr("Histograms can only be allocated from 0 to %d. NOT %d",
@@ -446,7 +446,7 @@ void ajHistSetMultiTitleC(AjPHist hist,int index, char *title){
 ** @return [void]
 ** @@
 *************************************************************************/
-void ajHistSetMultiXTitle(AjPHist hist,int index, AjPStr title){
+void ajHistSetMultiXTitle(AjPHist hist, ajint index, AjPStr title){
 
   if(index >= hist->numofdatapoints || index < 0){
     ajErr("Histograms can only be allocated from 0 to %d. NOT %d",
@@ -466,7 +466,7 @@ void ajHistSetMultiXTitle(AjPHist hist,int index, AjPStr title){
 ** @return [void]
 ** @@
 *************************************************************************/
-void ajHistSetMultiXTitleC(AjPHist hist,int index, char *title){
+void ajHistSetMultiXTitleC(AjPHist hist, ajint index, char *title){
 
   if(index >= hist->numofdatapoints || index < 0){
     ajErr("Histograms can only be allocated from 0 to %d. NOT %d",
@@ -486,7 +486,7 @@ void ajHistSetMultiXTitleC(AjPHist hist,int index, char *title){
 ** @return [void]
 ** @@
 *************************************************************************/
-void ajHistSetMultiYTitle(AjPHist hist,int index, AjPStr title){
+void ajHistSetMultiYTitle(AjPHist hist, ajint index, AjPStr title){
 
   if(index >= hist->numofdatapoints || index < 0){
     ajErr("Histograms can only be allocated from 0 to %d. NOT %d",
@@ -506,7 +506,7 @@ void ajHistSetMultiYTitle(AjPHist hist,int index, AjPStr title){
 ** @return [void]
 ** @@
 *************************************************************************/
-void ajHistSetMultiYTitleC(AjPHist hist,int index, char *title){
+void ajHistSetMultiYTitleC(AjPHist hist, ajint index, char *title){
 
   if(index >= hist->numofdatapoints || index < 0){
     ajErr("Histograms can only be allocated from 0 to %d. NOT %d",
@@ -526,7 +526,7 @@ void ajHistSetMultiYTitleC(AjPHist hist,int index, char *title){
 ** @return [void]
 ** @@
 *************************************************************************/
-void ajHistSetPtrToData(AjPHist hist,int index, PLFLT *data){
+void ajHistSetPtrToData(AjPHist hist, ajint index, PLFLT *data){
 
   if(index >= hist->numofdatapoints || index < 0){
     ajErr("Histograms can only be allocated from 0 to %d. NOT %d",

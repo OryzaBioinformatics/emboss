@@ -35,7 +35,8 @@
 #include <limits.h>
 
 
-static double ajCodRandom(ajint NA,int NC,int NG,int NT,int len, char *p);
+static double ajCodRandom(ajint NA, ajint NC, ajint NG, ajint NT, ajint len,
+			  char *p);
 
 /* ==================================================================== */
 /* ========================== private data ============================ */
@@ -502,7 +503,7 @@ void ajCodClear(AjPCod *thys)
 **
 ** @param [w] thys [AjPCod *] Codon object
 ** @param [r] s [AjPStr] dna sequence
-** @param [w] c [int *] triplet count
+** @param [w] c [ajint *] triplet count
 **
 ** @return [void]
 ** @@
@@ -766,10 +767,10 @@ void ajCodWrite(AjPFile outf, AjPCod thys)
 **
 ** Calculate sequence composition
 **
-** @param [w] NA [int *] number of A's
-** @param [w] NC [int *] number of C's
-** @param [w] NG [int *] number of G's
-** @param [w] NT [int *] number of T'
+** @param [w] NA [ajint *] number of A's
+** @param [w] NC [ajint *] number of C's
+** @param [w] NG [ajint *] number of G's
+** @param [w] NT [ajint *] number of T'
 ** @param [r] str [char *] sequence
 **
 ** @return [void]
@@ -897,7 +898,7 @@ double ajCodCalcCai(AjPCod *thys)
 
 
 
-/* @func ajCodCalcCaiW ********************************************************
+/* @func ajCodCaiW ********************************************************
 **
 ** Calculate codon adaptive index W values
 ** NAR 15:1281-1295
@@ -908,7 +909,7 @@ double ajCodCalcCai(AjPCod *thys)
 ** @@
 ******************************************************************************/
 
-double *ajCodCaiW(AjPCod thys)
+double* ajCodCaiW(AjPCod thys)
 {
     ajint i;
     ajint j;

@@ -50,6 +50,68 @@ static AjPStr fileDebugName = NULL;
 
 static char* messGetFilename(char *path);
 
+/*============================================================================
+**======================== Macros ============================================
+=============================================================================*/
+
+/* @macro ajFatal *******************************************************
+**
+** Fatal error message to standard error.
+** Includes filename and line number in the source code that invokes it.
+** Newline is added automatically at the end of the format string.
+**
+** @param [r] format [char*] Format
+** @param [v] [...] Variable length argument list
+** @return [void]
+** @@
+******************************************************************************/
+
+/* @macro ajErr *******************************************************
+**
+** Error message to standard error.
+** Newline is added automatically at the end of the format string.
+**
+** @param [r] format [char*] Format
+** @param [v] [...] Variable length argument list
+** @return [void]
+** @@
+******************************************************************************/
+
+/* @macro ajWarn *******************************************************
+**
+** Warning message to standard error.
+** Newline is added automatically at the end of the format string.
+**
+** @param [r] format [char*] Format
+** @param [v] [...] Variable length argument list
+** @return [void]
+** @@
+******************************************************************************/
+
+/* @macro ajUser *******************************************************
+**
+** User information message to standard error.
+** Newline is added automatically at the end of the format string.
+**
+** @param [r] format [char*] Format
+** @param [v] [...] Variable length argument list
+** @return [void]
+** @@
+******************************************************************************/
+
+/* @macro ajMessCrash *******************************************************
+**
+** Crash error message to standard error.
+** Includes filename and line number in the source code that invokes it.
+** Newline is added automatically at the end of the format string.
+**
+** @param [r] format [char*] Format
+** @param [v] [...] Variable length argument list
+** @return [void]
+** @@
+******************************************************************************/
+
+
 /* @func ajMessInvokeDebugger *************************************************
 **
 ** Used to trace in a debugger as a breakpoint

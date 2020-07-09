@@ -560,10 +560,10 @@ static size_t seqCdFileReadName (char* name, size_t namesize,
 /* @funcstatic seqCdFileReadInt ***********************************************
 **
 ** Reads a 4 byte integer from an EMBL CD-ROM index file. If the byte
-** order isn the index file does not match the current system the bytes
+** order in the index file does not match the current system the bytes
 ** are reversed automatically.
 **
-** @param [w] i [int*] Integer read from file.
+** @param [w] i [ajint*] Integer read from file.
 ** @param [r] thys [SeqPCdFile] EMBL CR-ROM index file.
 ** @return [size_t] Number of bytes read.
 ** @@
@@ -584,7 +584,7 @@ static size_t seqCdFileReadInt (ajint* i, SeqPCdFile thys)
 /* @funcstatic seqCdFileReadShort *********************************************
 **
 ** Reads a 2 byte integer from an EMBL CD-ROM index file. If the byte
-** order isn the index file does not match the current system the bytes
+** order in the index file does not match the current system the bytes
 ** are reversed automatically.
 **
 ** @param [w] i [short*] Integer read from file.
@@ -1700,7 +1700,7 @@ static void seqGcgLoadBuff (const AjPSeqin seqin)
 **
 ** Copies text data to a buffered file for reading later
 **
-** @param [r] seqin [AjPSeqin] Sequence input object
+** @param [r] seqin [const AjPSeqin] Sequence input object
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
@@ -1755,7 +1755,7 @@ static AjBool seqGcgReadRef (const AjPSeqin seqin)
 ** Copies sequence data with a reformatted sequence to the "Inseq"
 ** data structure of the AjPSeqin object for later reuse.
 **
-** @param [r] seqin [AjPSeqin] Sequence input object
+** @param [r] seqin [const AjPSeqin] Sequence input object
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
@@ -2950,7 +2950,7 @@ static AjBool seqAccessDirect (AjPSeqin seqin)
 ** load the header and sequence for it. All that is needed is
 ** a set of open blast files (in qryd) and an idnum set.
 **
-** @param [r] seqin [AjPSeqin] Sequence input.
+** @param [r] seqin [const AjPSeqin] Sequence input.
 ** @param [P] hline [AjPStr*] header line. 
 ** @param [P] sline [AjPStr*] sequence line.
 ** @return [AjBool] ajTrue on success
@@ -3438,7 +3438,7 @@ static void seqBlastStripNcbi (AjPStr* line)
 }
 
 
-/* @funcstatic seqTrgIdxQuery ************************************************
+/* @funcstatic seqCdTrgQuery *************************************************
 **
 ** Binary search of an EMBL CD-ROM index file for entries matching a
 ** wildcard accession number

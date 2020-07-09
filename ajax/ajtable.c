@@ -88,12 +88,12 @@ AjPTable ajTableNew(ajint hint,
 
 /* @func ajTableGet ***************************************************
 **
-** returns the value assiociated with key in table, or null
+** returns the value associated with key in table, or null
 ** if table does not hold key.
 **
 ** @param [r] table [AjPTable] table to search
 ** @param [r] key   [const void*] key to find.
-** @return [void*] value assiociated with key
+** @return [void*]  value associated with key
 ** @error NULL if key not found in table.
 ** @@
 ************************************************************************/
@@ -113,6 +113,37 @@ void * ajTableGet(AjPTable table, const void *key) {
   }
 
   return p ? p->value : NULL;
+}
+
+/* @func ajTableKey ***************************************************
+**
+** returns the key value associated with key in table, or null
+** if table does not hold key.
+**
+** Intended for case-insensitive keys, to return the true key
+**
+** @param [r] table [AjPTable] table to search
+** @param [r] key   [const void*] key to find.
+** @return [void*] key value as stored in the table
+** @error NULL if key not found in table.
+** @@
+************************************************************************/
+
+void * ajTableKey(AjPTable table, const void *key) {
+
+  ajint i;
+  struct binding *p;
+
+  assert(table);
+  assert(key);
+
+  i = (*table->hash)(key, table->size);
+  for (p = table->buckets[i]; p; p = p->link) {
+    if ((*table->cmp)(key, p->key) == 0)
+      break;
+  }
+
+  return p ? (void*)p->key : NULL;
 }
 
 /* @func ajTableTrace ***************************************************
@@ -142,6 +173,46 @@ void ajTableTrace (AjPTable table) {
     if (table->buckets[i]) {
       j = 0;
       for (p = table->buckets[i]; p; p = p->link) {
+	j++;
+      }
+      k += j;
+    }
+  }
+  ajDebug(" links: %d\n", k);
+
+  return;
+}
+
+/* @func ajStrTableTrace ***************************************************
+**
+** Writes debug messages to trace the contents of a table,
+** assuming all keys and values are strings.
+**
+** @param [u] table [AjPTable] Table
+** @return [void]
+** @@
+*************************************************************************/
+
+void ajStrTableTrace (AjPTable table) {
+
+  ajint i;
+  ajint j;
+  ajint k=0;
+  struct binding *p;
+
+  assert(table);
+
+  ajDebug ("(string) table trace: ");
+  ajDebug (" length: %d", table->length);
+  ajDebug (" size: %d", table->size);
+  ajDebug (" timestamp: %u", table->timestamp);
+
+  for (i = 0; i < table->size; i++) {
+    if (table->buckets[i]) {
+      j = 0;
+      ajDebug("buckets[%d]\n", i);
+      for (p = table->buckets[i]; p; p = p->link) {
+	ajDebug("   '%S' => '%S'\n", (AjPStr) p->key, (AjPStr) p->value);
 	j++;
       }
       k += j;

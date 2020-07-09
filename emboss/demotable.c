@@ -20,7 +20,7 @@
 
 #include "emboss.h"
 
-static AjPStr getsubfromstring(AjPStr line,int which){
+static AjPStr getsubfromstring(AjPStr line, ajint which){
   static AjPRegexp gffexp=NULL;
   AjPStr temp =NULL;
  
