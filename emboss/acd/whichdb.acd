@@ -1,0 +1,20 @@
+appl: whichdb [
+  documentation: "Search all databases for an entry"
+  groups: "Information"
+]
+
+string: entry  [
+  parameter: "Y"
+  information: "ID or Accession number"
+]
+
+bool: get  [
+  required: "N"
+  default: "N"
+  information: "Retrieve sequences"
+]
+
+outfile: outfile  [
+  required: "@(!$(get))"
+  nullok: "Y"
+]

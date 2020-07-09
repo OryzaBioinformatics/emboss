@@ -1,0 +1,189 @@
+
+                              EMBOSS: whichdb
+     _________________________________________________________________
+   
+                                Program whichdb
+                                       
+Function
+
+   Search all databases for an entry
+   
+Description
+
+   whichdb searches all available EMBOSS databases for sequences with a
+   specified ID name or accession number.
+   
+   EMBOSS does not allow database entries to be specified by just the ID
+   name or accession number. You must specify both the name of the
+   database and the entry, for example 'embl:hsfau', not just 'hsfau'.
+   
+   If you do not know which database(s) contain the entry you are
+   interested in, whichdb will tell you.
+   
+   whichdb can also, optionally, write out the sequences it finds to
+   files.
+   
+  IDs and Accessions
+  
+   An entry in a database must have some way of being uniquely identified
+   in that database. Most sequence databases have two such identifiers
+   for each sequence - an ID name and an Accession number.
+   
+   Why are there two such identifiers? The ID name was originally
+   intended to be a human-readable name that had some indication of the
+   function of its sequence. In EMBL and GenBank the first two (or three)
+   letters indicated the species and the rest indicated the function, for
+   example 'hsfau' is the 'Homo Sapiens FAU pseudogene'. This naming
+   scheme started to be a problem when the number of entries added each
+   day was so vast that people could not make up the ID names fast
+   enough. Instead, the Accession numbers were used as the ID name.
+   Therefore you will now find ID names like 'AF061303', the same as the
+   Accession number for that sequence in EMBL.
+   
+   ID names are not guaranteed to remain the same between different
+   versions of a database (although in practice they usually do).
+   
+   Accession numbers are unique alphanumeric identifiers that are
+   guaranteed to remain with that sequence through the rest of the life
+   of the database. If two sequences are merged into one, then the new
+   sequence will get a new Accession number and the Accession numbers of
+   the merged sequences will be retained as 'secondary' Accession
+   numbers.
+   
+   EMBL, GenBank and SwissProt share an Accession numbering scheme - an
+   Accession number uniquely identifies a sequence within these three
+   databases.
+   
+Usage
+
+   Here is a sample session with whichdb:
+
+% whichdb
+Search all databases for an entry
+ID or Accession number: hsfau
+Output file [outfile.whichdb]:
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-entry]             string     ID or Accession number
+*  -outfile            outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -get                bool       Retrieve sequences
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-entry]
+   (Parameter 1) ID or Accession number Any string is accepted An empty
+   string is accepted
+   -outfile Output file name Output file <sequence>.whichdb
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -get Retrieve sequences Yes/No No
+   
+Input file format
+
+   None.
+   
+Output file format
+
+   The reported database entries are written out to the specified output
+   file.
+   
+   The results from the above example follow:
+     _________________________________________________________________
+   
+embl:hsfau
+human:hsfau
+tembl:hsfau
+em:hsfau
+genbank:hsfau
+gb:hsfau
+     _________________________________________________________________
+   
+   Each database that is defined in the local implementation of EMBOSS
+   which contains an entry called 'hsfau' is reported.
+   
+   Note that where a database is defined under several names ('embl',
+   'em'), each definition of that database containing the entry is
+   reported.
+   
+   When the '-get' option is used to output the sequences, they are
+   written to separate files. The sequence format they are written in is
+   always 'Fasta' format. The normal command-line qualifiers for changing
+   the output formats etc. will not work in this program.
+   
+   The names of the files that the sequences are written to is reported
+   as they are written, for example:
+     _________________________________________________________________
+   
+Writing hsfau.embl
+Writing hsfau.human
+Writing hsfau.tembl
+Writing hsfau.em
+Writing hsfau.genbank
+Writing hsfau.gb
+     _________________________________________________________________
+   
+Data files
+
+   None.
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   infoalign Information on a multiple sequence alignment
+   infoseq Displays some simple information about sequences
+   seealso Finds programs sharing group names
+   showdb Displays information on the currently available databases
+   textsearch Search sequence documentation text. SRS and Entrez are
+   faster!
+   tfm Displays a program's help documentation manual
+   wossname Finds programs by keywords in their one-line documentation
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (Jan 2002) - Alan Bleasby.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
