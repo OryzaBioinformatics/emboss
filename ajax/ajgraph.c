@@ -707,10 +707,8 @@ void ajGraphOpenWin (AjPGraph thys, float xmin, float xmax,
   graphType[thys->displaytype].GOpen(thys, graphType[thys->displaytype].ext);
 
 
-  if( ajStrLen(thys->title) <=1){
-    (void) ajStrAppC(&thys->title,ajFmtString("%s (%D)",ajAcdProgram(),
-					      &ajtime));
-  }
+  if( ajStrLen(thys->title) <=1)
+    (void) ajFmtPrintAppS(&thys->title,"%s (%D)",ajAcdProgram(),&ajtime);
 
   ajGraphColourBack();
   GraphInit(thys);

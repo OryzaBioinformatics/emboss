@@ -1,4 +1,3 @@
-/*  Last edited: Feb 17 10:59 2000 (pmr) */
 /* @source prettyseq application
 **
 ** Pretty translation of DNA sequences for publication

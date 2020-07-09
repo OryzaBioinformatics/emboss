@@ -1,4 +1,3 @@
-/*  Last edited: Feb  8 14:23 2000 (pmr) */
 /********************************************************************
 ** @source AJAX xxxxx functions ....description....
 ** @author Copyright (C) 1998 Peter Rice

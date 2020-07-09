@@ -1,5 +1,3 @@
-/*  Last edited: Mar 14 17:31 2000 (pmr) */
-
 #include "emboss.h"
 
 typedef struct primers {

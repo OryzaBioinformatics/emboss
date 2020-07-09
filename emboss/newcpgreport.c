@@ -1,4 +1,3 @@
-/* Last edited: Sep  9 13:41 1999 (pmr) */
 #include "emboss.h"
 #include <math.h>
 #include <stdlib.h>
@@ -67,7 +66,6 @@ int main( int argc, char **argv, char **env)
     dopc      = ajAcdGetBool("pc");  NOT USED */
     
     
-    seq=ajSeqNew();
     substr = ajStrNew();
     bases  = ajStrNewC("CG");
     maxarr = 0;

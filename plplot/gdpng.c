@@ -1,4 +1,3 @@
-/*  Last edited: Feb 29 20:34 2000 (pmr) */
 /*
 *
 * Version 2 of my PLplot PNG driver using the PNG-only gd library.

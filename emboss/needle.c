@@ -1,4 +1,3 @@
-/*  Last edited: Mar  1 17:08 2000 (pmr) */
 /* @source needle application
 **
 ** True Needleman-Wunsch global alignment

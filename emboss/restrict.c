@@ -138,7 +138,6 @@ int main( int argc, char **argv)
 	begin=ajSeqallBegin(seqall);
 	end=ajSeqallEnd(seqall);
 	ajFileSeek(enzfile,0L,0);
-/*	ajUser("\nScanning %s...",ajSeqName(seq));*/
 
 	hits = embPatRestrictMatch(seq,begin,end,enzfile,enzymes,sitelen,
 				   plasmid,ambiguity,min,max,blunt,sticky,
@@ -261,7 +260,7 @@ void printHits(AjPFile *outf, AjPList *l, AjPStr *name, int hits, int begin,
 	    ajFmtPrintF(*outf,"  %S",*name);
 	
 	ajFmtPrintF(*outf,"\n");
-
+	embMatMatchDel(&m);
     }
 
 

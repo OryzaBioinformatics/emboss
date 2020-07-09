@@ -1,4 +1,3 @@
-/*  Last edited: Mar  1 18:30 2000 (pmr) */
 /* @source prosextract.c
 ** @author: Copyright (C) Sinead O'Leary (soleary@hgmp.mrc.ac.uk)
 **

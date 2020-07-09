@@ -502,8 +502,13 @@ plD_tidy_xw(PLStream *pls)
     if (xwd->nstreams == 0) {
 	int ixwd = xwd->ixwd;
 	XFreeGC(xwd->display, dev->gc);
+
+	/* AJB addition */
+	if(xwd->gcXor)
+	    XFreeGC(xwd->display, xwd->gcXor);
+
 	XCloseDisplay(xwd->display);
-/*	XFreeGC(xwd->display, xwd->gcXor); Sometimes needed! */
+
 	free_mem(xwDisplay[ixwd]);
     }
     pls->plbuf_write = 0;
@@ -839,6 +844,10 @@ InitMain(PLStream *pls)
     char header[80];
 
     dbug_enter("InitMain");
+
+    /* AJB addition */
+    hint.x = hint.y = hint.width = hint.height = 0;
+    
 
 /* Get root window geometry */
 

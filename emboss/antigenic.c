@@ -35,8 +35,8 @@
 
 void readAunty(AjPFloat *agp);
 void padit(AjPFile *outf, int b, int e);
-void dumptoFeat(int nhits, AjPInt hp,AjPInt hpos,AjPInt hlen,AjPFloat thisap,AjPFloat hwt, AjPFeatTabOut featout, 
-		char *seqname,int begin);
+void dumptoFeat(int nhits, AjPInt hp,AjPInt hpos,AjPInt hlen,AjPFloat thisap,
+		AjPFloat hwt, AjPFeatTabOut featout,char *seqname,int begin);
 
 
 
@@ -45,12 +45,14 @@ int main( int argc, char **argv, char **env)
     AjPSeqall seqall;
     AjPSeq    seq=NULL;
     AjPFile   outf=NULL;
-    AjPFeatTabOut featout=NULL;
+
     AjPStr    strand=NULL;
     AjPStr    sstr=NULL;
     AjPStr    stmp=NULL;
     AjPStr    substr=NULL;
-    
+
+    AjPFeatTabOut featout=NULL;    
+
     int begin;
     int end;
     int len;
@@ -231,7 +233,8 @@ int main( int argc, char **argv, char **env)
 		padit(&outf,istart,iend);
 		ajFmtPrintF(outf,"%d\n",iend+begin);
 	    }
-	    dumptoFeat(nhits,hp,hpos,hlen,thisap,hwt,featout,ajSeqName(seq),begin);
+	    dumptoFeat(nhits,hp,hpos,hlen,thisap,hwt,featout,ajSeqName(seq),
+		       begin);
 	}
 	
 
@@ -365,58 +368,92 @@ void padit(AjPFile *outf, int b, int e)
 
 
 void dumptoFeat(int nhits, AjPInt hp, AjPInt hpos, AjPInt hlen,AjPFloat thisap,
-		AjPFloat hwt, AjPFeatTabOut featout, char *seqname,int begin){
-  AjPFeatLexicon dict=NULL;
-  AjPFeatTable feattable;
-  AjPStr name=NULL,score=NULL,desc=NULL,source=NULL,type=NULL,tag=NULL,val=NULL;
-  AjEFeatStrand strand=AjStrandWatson;
-  AjEFeatFrame frame=AjFrameUnknown;
-  int i=0,k=0,m=0,iend,istart,new;
-  AjPFeature feature;
+		AjPFloat hwt, AjPFeatTabOut featout, char *seqname,int begin)
+{
+    AjPFeatLexicon dict=NULL;
+    AjPFeatTable feattable;
+    AjPStr name=NULL;
+    AjPStr score=NULL;
+    AjPStr desc=NULL;
+    AjPStr source=NULL;
+    AjPStr type=NULL;
+    AjPStr tag=NULL;
+    AjPStr val=NULL;
+    AjEFeatStrand strand=AjStrandWatson;
+    AjEFeatFrame frame=AjFrameUnknown;
+    int i=0;
+    int k=0;
+    int m=0;
+    int iend;
+    int istart;
+    int new;
+    AjPFeature feature;
 
-  ajStrAssC(&name,seqname);
+    name = ajStrNew();
+    source = ajStrNew();
+    type = ajStrNew();
+    tag = ajStrNew();
+    score = ajStrNew();
 
-  feattable = ajFeatTabNew(name,dict);
-  dict = feattable->Dictionary;
 
-  ajStrAssC(&source,"antigenic");
-  ajStrAssC(&type,"misc_feature");
+    (void) ajStrAssC(&name,seqname);
 
-  ajStrAssC(&tag,"note");
+    feattable = ajFeatTabNew(name,dict);
+    dict = ajFeatTableDict(feattable);
 
-  for(i=nhits-1;i>-1;--i)
+    (void) ajStrAssC(&source,"antigenic");
+    (void) ajStrAssC(&type,"misc_feature");
+
+    (void) ajStrAssC(&tag,"note");
+
+    for(i=nhits-1;i>-1;--i)
     {
-      k = ajIntGet(hp,i);
+	k = ajIntGet(hp,i);
 
-      istart = ajIntGet(hpos,k);
+	istart = ajIntGet(hpos,k);
       
-      iend = istart + ajIntGet(hlen,k)-1;
+	iend = istart + ajIntGet(hlen,k)-1;
 
-      score = ajFmtPrintS(&score,"%.3f",ajFloatGet(hwt,k));
-      feature = ajFeatureNew(feattable, source, type,
-                          istart+begin, iend+begin, score, strand, frame,
-                          desc , 0, 0) ;    
+	(void) ajFmtPrintS(&score,"%.3f",ajFloatGet(hwt,k));
+	feature = ajFeatureNew(feattable, source, type,
+			       istart+begin, iend+begin, score, strand, frame,
+			       desc , 0, 0) ;    
 
-
-      
-      new = 0;
-      for(m=istart;m<=iend;++m)
-	if(ajFloatGet(thisap,m) == ajFloatGet(hwt,k)){  
-	  if(!new){
-	    val = ajStrNew();
-	    val = ajFmtPrintS(&val,"max score at %d",m);
-	    ajFeatSetTagValue(feature,tag,val,AJFALSE);
-	    new++;
-	  }
-	  else{
-	    val = ajStrNew();
-	    val = ajFmtPrintS(&val,",%d",m);
-	    ajFeatSetTagValue(feature,tag,val,AJTRUE);	    
-	  }
-	}
+	new = 0;
+	for(m=istart;m<=iend;++m)
+	    if(ajFloatGet(thisap,m) == ajFloatGet(hwt,k))
+	    {
+	      
+		if(!new)
+		{
+		    val = ajStrNew();
+		    (void) ajFmtPrintS(&val,"max score at %d",m);
+		    (void) ajFeatSetTagValue(feature,tag,val,AJFALSE);
+		    new++;
+		}
+		else
+		{
+		    val = ajStrNew();
+		    (void) ajFmtPrintS(&val,",%d",m);
+		    (void) ajFeatSetTagValue(feature,tag,val,AJTRUE);	    
+		}
+	    }
     }
-  ajFeatSortByStart(feattable);
-  ajFeaturesWrite (featout, feattable);
-  ajFeatTabDel(&feattable);
-  
+
+    ajFeatSortByStart(feattable);
+    (void) ajFeaturesWrite (featout, feattable);
+
+
+    ajFeatDeleteDict(dict);
+    ajFeatTabDel(&feattable);
+
+    
+
+    ajStrDel(&name);
+    ajStrDel(&source);
+    ajStrDel(&type);
+    ajStrDel(&tag);
+    ajStrDel(&score);
+
+    return;
 }

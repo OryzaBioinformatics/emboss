@@ -1,4 +1,3 @@
-/*  Last edited: Mar  1 17:24 2000 (pmr) */
 /* @source compseq application
 **
 ** Counts the composition of dimer/trimer/etc words in a sequence

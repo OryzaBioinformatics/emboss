@@ -931,6 +931,8 @@ static AjBool parseGenbank (AjPFile libr, int* dpos,
   if (!endexp)
     endexp = ajRegCompC ("^//");
 
+  ipos = ajFileTell(libr);
+  
 
   while (ajFileGets (libr, &rline)) {
     if (ajRegExec (endexp, rline)) {

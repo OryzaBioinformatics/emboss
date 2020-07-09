@@ -1,5 +1,3 @@
-/*  Last edited: Feb 15 17:03 2000 (pmr) */
-
 /* Written by Mark Faller 26 November 1998*/
 /* The algorithm pulls out palindromes and inverted repeats*/
 /* Mismatches are allowed but no gaps*/

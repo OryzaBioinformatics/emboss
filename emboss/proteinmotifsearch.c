@@ -1,4 +1,3 @@
-/*  Last edited: Mar  2 11:19 2000 (pmr) */
 /* @source proteinmotifsearch.c
 **
 ** General test routine for pattern matching.

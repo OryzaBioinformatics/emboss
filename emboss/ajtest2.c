@@ -1,5 +1,3 @@
-/*  Last edited: May 12 18:36 2000 (pmr) */
-
 #include "emboss.h"
 #include "stdlib.h"
 

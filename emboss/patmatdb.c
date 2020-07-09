@@ -1,4 +1,3 @@
-/*  Last edited: Mar  2 11:18 2000 (pmr) */
 /* @source patmatDB.c
 ** @author: Copyright (C) Sinead O'Leary (soleary@hgmp.mrc.ac.uk)
 ** @@

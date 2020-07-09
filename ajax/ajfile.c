@@ -1233,6 +1233,8 @@ AjBool ajFileDir (AjPStr* dir) {
   if (!odir)
     return ajFalse;
 
+  (void) closedir(odir);
+  
   return ajTrue;
 }
 
@@ -2194,6 +2196,8 @@ void ajFileBuffStripHtml (const AjPFileBuff thys) {
   AjPRegexp chunkexp = NULL;
   AjPRegexp ncbiexp = NULL;
   AjPRegexp ncbiexp2 = NULL;
+  AjPRegexp srsdbexp = NULL;
+  
   AjPFileBuffList plist;
   AjPFileBuffList pdellist;
   AjPFileBuffList plast = NULL;
@@ -2210,6 +2214,9 @@ void ajFileBuffStripHtml (const AjPFileBuff thys) {
   chunkexp = ajRegCompC("^Transfer-Excoding: +chunked");
   ncbiexp = ajRegCompC("^Entrez Reports\n$");
   ncbiexp2 = ajRegCompC("^----------------\n$");
+  srsdbexp = ajRegCompC("^([A-Za-z0-9_-]+)(:)([A-Za-z0-9_-]+)");
+
+  
   plist = thys->Curr;
   i = 0;
 
@@ -2246,6 +2253,9 @@ void ajFileBuffStripHtml (const AjPFileBuff thys) {
       (void) ajStrAssC(&plist->Line, "\n");
     if (ajRegExec(ncbiexp2, plist->Line))
       (void) ajStrAssC(&plist->Line, "\n");
+
+
+
     while (ajRegExec(fullexp, plist->Line)) {
       ajRegSubI (fullexp, 1, &s1);
       ajRegSubI (fullexp, 2, &s2);
@@ -2260,6 +2270,31 @@ void ajFileBuffStripHtml (const AjPFileBuff thys) {
       ajDebug ("removing '%S' [%d]\n", s2, ajStrRef(plist->Line));
       (void) ajFmtPrintS (&plist->Line, "%S%S", s1, s3);
     }
+      if(ajRegExec(srsdbexp, plist->Line))
+      {
+	  ajRegSubI(srsdbexp,1,&s1);
+	  ajRegSubI(srsdbexp,2,&s2);
+	  ajRegSubI(srsdbexp,3,&s3);
+	  ajDebug ("removing '%S%S%S' [%d]\n",s1,s2,s3,ajStrRef(plist->Line));
+	  pdellist = plist;
+	  if (plast)
+	  {
+	      plast->Next = plist->Next;
+	      plist = plast->Next;
+	  }
+	  else
+	  {			/* we are on the first line */
+	      plist = thys->Lines = thys->Curr = plist->Next;
+	  }
+	  ajStrDel(&pdellist->Line);
+	  AJFREE (pdellist);
+	  thys->Size--;
+	  if (thys->Pos > i)
+	      thys->Pos--;
+	  ++i;
+	  continue;
+      }
+
     if (ajRegExec(nullexp, plist->Line)) { /* allow for newline */
       ajDebug ("<blank line deleted> [%d]\n", ajStrRef(plist->Line));
       pdellist = plist;
@@ -2296,7 +2331,8 @@ void ajFileBuffStripHtml (const AjPFileBuff thys) {
   ajRegFree (&nullexp);
   ajRegFree (&chunkexp);
   ajRegFree (&ncbiexp);
-  ajRegFree (&ncbiexp2);  
+  ajRegFree (&ncbiexp2);
+  ajRegFree (&srsdbexp);
 
   return;
 }

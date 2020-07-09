@@ -1,4 +1,3 @@
-/*  Last edited: Jan 12 14:34 2000 (gww) */
 /* @source showseq application
 **
 ** Display a sequence with translations, features and other bits

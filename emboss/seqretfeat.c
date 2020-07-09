@@ -1,10 +1,8 @@
-/*  Last edited: Jun 24 17:52 1999 (pmr) */
-
 #include "emboss.h"
 
 
 AjPList buildListFromString(AjPStr string, AjPSeq seq, AjBool feat){
-  AjPRegexp comaseperated = NULL;
+  AjPRegexp commaseparated = NULL;
   AjPList newlist = NULL;
   AjPStr test=NULL;
   AjPFeatVocFeat item=NULL;
@@ -14,12 +12,12 @@ AjPList buildListFromString(AjPStr string, AjPSeq seq, AjBool feat){
   if(ajStrLen(string) <= 1)
     return NULL;
 
-  comaseperated = ajRegCompC("([^, ]+)") ;
+  commaseparated = ajRegCompC("([^, ]+)") ;
 
-  while(ajRegExec(comaseperated,string)){
-    ajRegSubI(comaseperated, 1, &test) ;
+  while(ajRegExec(commaseparated,string)){
+    ajRegSubI(commaseparated, 1, &test) ;
     /*    ajUser("test = *%S*\n",test);*/
-    (void) ajRegPost(comaseperated,&string);    
+    (void) ajRegPost(commaseparated,&string);    
     /*    ajUser("remainder = *%S*\n",string);*/
 
     if(feat){
@@ -50,7 +48,7 @@ AjPList buildListFromString(AjPStr string, AjPSeq seq, AjBool feat){
    }
   }
 
-  ajRegFree(&comaseperated);
+  ajRegFree(&commaseparated);
   
   return newlist;
 }
@@ -77,6 +75,7 @@ int main (int argc, char * argv[]) {
 
   sortbytype = ajAcdGetBool("sortbytype");
   sortbystart = ajAcdGetBool("sortbystart");
+
 
   /* Process Features */
   newlist =  buildListFromString(ignore, seq, ajTrue);
@@ -114,7 +113,6 @@ int main (int argc, char * argv[]) {
   ajSeqTrace (seq);
   ajSeqWriteClose (seqout);
   ajSeqDel (&seq);
-  ajFeatDictDel();
 
   ajExit ();
   return 0;

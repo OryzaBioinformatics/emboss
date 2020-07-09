@@ -1,4 +1,3 @@
-/*  Last edited: Feb 24 13:15 2000 (pmr) */
 /* @source align application
 **
 ** Simple Smith-Waterman alignment.

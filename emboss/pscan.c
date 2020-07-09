@@ -1,4 +1,3 @@
-/*  Last edited: Mar  2 11:22 2000 (pmr) */
 /* @source pscan application
 **
 ** Reports fingerprints in a protein sequence
@@ -66,7 +65,6 @@ int main( int argc, char **argv, char **env)
     emin      = ajAcdGetInt("emin");
     emax      = ajAcdGetInt("emax");
     
-    seq=ajSeqNew();
     substr=ajStrNew();
     name =ajStrNew();
     
@@ -182,7 +180,8 @@ void print_hits(AjPFile *outf, AjPList *l, int nmotifs, AjPStr *name,
 	    {
 		ajListPop(*l,(void **)&mm);
 		hpm = mm->hpm;
-		if(mm->all && mm->ordered && maxelem==mm->n) break;
+		if(mm->all && mm->ordered && maxelem==mm->n)
+		    break;
 		ajListPushApp(*l,(void *)mm);
 		for(j=1;j<hpm;++j)
 		{
@@ -190,6 +189,9 @@ void print_hits(AjPFile *outf, AjPList *l, int nmotifs, AjPStr *name,
 		    ajListPushApp(*l,(void *)mm);
 		}
 	    }
+
+	    if(mm->all && mm->ordered && maxelem==mm->n)
+	    {
 	    ajFmtPrintF(*outf,"Fingerprint %s Elements %d\n",
 			ajStrStr(mm->cod),mm->n);
 	    ajFmtPrintF(*outf,"    Accession number %s\n",ajStrStr(mm->acc));
@@ -198,8 +200,10 @@ void print_hits(AjPFile *outf, AjPList *l, int nmotifs, AjPStr *name,
 			mm->element+1, mm->thresh, mm->score);
 	    ajFmtPrintF(*outf,"             Start position %d Length %d\n",
 			mm->start+begin,mm->len);
-	    
+
 	    embMatMatchDel(&mm);
+	    }
+	    
 	    for(i=1;i<hpm;++i)
 	    {
 		ajListPop(*l,(void **)&mm);
@@ -255,7 +259,8 @@ void print_hits(AjPFile *outf, AjPList *l, int nmotifs, AjPStr *name,
 	    {
 		ajListPop(*l,(void **)&mm);
 		hpm = mm->hpm;
-		if(mm->all && maxelem==mm->n) break;
+		if(mm->all && maxelem==mm->n)
+		    break;
 		ajListPushApp(*l,(void *)mm);
 		for(j=1;j<hpm;++j)
 		{
@@ -263,6 +268,8 @@ void print_hits(AjPFile *outf, AjPList *l, int nmotifs, AjPStr *name,
 		    ajListPushApp(*l,(void *)mm);
 		}
 	    }
+	    if(mm->all && maxelem==mm->n)
+	    {
 	    ajFmtPrintF(*outf,"Fingerprint %s Elements %d\n",
 			ajStrStr(mm->cod),mm->n);
 	    ajFmtPrintF(*outf,"    Accession number %s\n",ajStrStr(mm->acc));
@@ -271,8 +278,10 @@ void print_hits(AjPFile *outf, AjPList *l, int nmotifs, AjPStr *name,
 			mm->element+1, mm->thresh, mm->score);
 	    ajFmtPrintF(*outf,"             Start position %d Length %d\n",
 			mm->start+begin,mm->len);
-	    
+
 	    embMatMatchDel(&mm);
+	    }
+	    
 	    for(i=1;i<hpm;++i)
 	    {
 		ajListPop(*l,(void **)&mm);
@@ -328,7 +337,8 @@ void print_hits(AjPFile *outf, AjPList *l, int nmotifs, AjPStr *name,
 	    {
 		ajListPop(*l,(void **)&mm);
 		hpm = mm->hpm;
-		if(mm->ordered && maxhpm==mm->hpm) break;
+		if(mm->ordered && maxhpm==mm->hpm)
+		    break;
 		ajListPushApp(*l,(void *)mm);
 		for(j=1;j<hpm;++j)
 		{
@@ -336,6 +346,8 @@ void print_hits(AjPFile *outf, AjPList *l, int nmotifs, AjPStr *name,
 		    ajListPushApp(*l,(void *)mm);
 		}
 	    }
+	    if(mm->ordered && maxhpm==mm->hpm)
+	    {
 	    ajFmtPrintF(*outf,"Fingerprint %s Elements %d\n",
 			ajStrStr(mm->cod),mm->n);
 	    ajFmtPrintF(*outf,"    Accession number %s\n",ajStrStr(mm->acc));
@@ -345,7 +357,10 @@ void print_hits(AjPFile *outf, AjPList *l, int nmotifs, AjPStr *name,
 	    ajFmtPrintF(*outf,"             Start position %d Length %d\n",
 			mm->start+begin,mm->len);
 	    
-	    embMatMatchDel(&mm);
+
+            embMatMatchDel(&mm);
+	    }
+	    
 	    for(i=1;i<hpm;++i)
 	    {
 		ajListPop(*l,(void **)&mm);
@@ -399,7 +414,8 @@ void print_hits(AjPFile *outf, AjPList *l, int nmotifs, AjPStr *name,
 	    {
 		ajListPop(*l,(void **)&mm);
 		hpm = mm->hpm;
-		if(maxhpm==mm->hpm) break;
+		if(maxhpm==mm->hpm)
+		    break;
 		ajListPushApp(*l,(void *)mm);
 		for(j=1;j<hpm;++j)
 		{
@@ -407,6 +423,8 @@ void print_hits(AjPFile *outf, AjPList *l, int nmotifs, AjPStr *name,
 		    ajListPushApp(*l,(void *)mm);
 		}
 	    }
+	    if(maxhpm==mm->hpm)
+	    {
 	    ajFmtPrintF(*outf,"Fingerprint %s Elements %d\n",
 			ajStrStr(mm->cod),mm->n);
 	    ajFmtPrintF(*outf,"    Accession number %s\n",ajStrStr(mm->acc));
@@ -416,7 +434,10 @@ void print_hits(AjPFile *outf, AjPList *l, int nmotifs, AjPStr *name,
 	    ajFmtPrintF(*outf,"             Start position %d Length %d\n",
 			mm->start+begin,mm->len);
 	    
+
 	    embMatMatchDel(&mm);
+	    }
+	    
 	    for(i=1;i<hpm;++i)
 	    {
 		ajListPop(*l,(void **)&mm);
@@ -433,4 +454,10 @@ void print_hits(AjPFile *outf, AjPList *l, int nmotifs, AjPStr *name,
 	
     }
     
+
+    while(ajListPop(*l,(void **)&mm))
+	if(mm)
+	    embMatMatchDel(&mm);
+    
+    return;
 }

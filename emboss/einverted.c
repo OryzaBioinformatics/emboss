@@ -11,7 +11,6 @@
 		thesis, fused/replaced by Gene Myers code.
  * Exported functions:
  * HISTORY:
- * Last edited: Feb 24 14:09 2000 (pmr)
  * Created: Sat Jan 23 15:16:29 1993 (rd)
  *-------------------------------------------------------------------
  */

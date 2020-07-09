@@ -1,4 +1,3 @@
-/*  Last edited: Mar  2 15:57 2000 (pmr) */
 #include "ajax.h"
 #include "emboss.h"
 static AjPSeq seq2;

@@ -1,9 +1,26 @@
-/*  Last edited: Jun 14 15:58 2000 (pmr) */
-/*  File: ajmess.c
- *  Author: Richard Durbin (rd@mrc-lmb.cam.ac.uk) and Ed Griffiths.
- *  as part of the ACEDB package (messubs.c)
- *  Modified: by I Longden for the EMBOSS package.
- */
+/********************************************************************
+** @source AJAX message functions
+**
+** @author Richard Durbin and Ed Griffiths from ACEdb (messubs.c)
+** @version 1.0 
+** @modified Ian Longden for EMBOSS
+** @@
+** 
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Library General Public
+** License as published by the Free Software Foundation; either
+** version 2 of the License, or (at your option) any later version.
+** 
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Library General Public License for more details.
+** 
+** You should have received a copy of the GNU Library General Public
+** License along with this library; if not, write to the
+** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+** Boston, MA  02111-1307, USA.
+********************************************************************/
 
 #include <string.h>
 
@@ -100,13 +117,13 @@ static void messDump (char *message);
 /*                                                                           */
 
 #define MESG_TITLE "EMBOSS"
-#define ERROR_PREFIX "   ERROR: "
-#define WARNING_PREFIX "   Warning: "
-#define EXIT_PREFIX "   NON-EMBOSS ERROR: "
-#define DIE_PREFIX "   FATAL ERROR: "
-#define CRASH_PREFIX_FORMAT "\n   %s FATAL ERROR reported by %s at line %d:\n"
-#define FULL_CRASH_PREFIX_FORMAT "\n   %s FATAL ERROR reported by program %s, in file %s, at line %d:\n"
-#define SYSERR_FORMAT "system error %d - %s"
+#define ERROR_PREFIX "   An error has been found: "
+#define WARNING_PREFIX "   This is a warning: "
+#define EXIT_PREFIX "   An error spotted (non-EMBOSS): "
+#define DIE_PREFIX "   There is a serious problem: "
+#define CRASH_PREFIX_FORMAT "\n   %s An error in %s at line %d:\n"
+#define FULL_CRASH_PREFIX_FORMAT "\n   %s Program cannot continue (%s, in file %s, at line %d):\n"
+#define SYSERR_FORMAT "Something wrong with a system call %d - %s"
 
 /******************************************************************************
 ** ajMessCrash now reports the file/line no. where ajMessCrash was issued
@@ -1331,6 +1348,8 @@ void ajDebug (char* fmt, ...) {
     if (fileDebug) {
       (void) ajFmtPrintS(&fileDebugName, "%s.dbg", ajStrStr(acdProgram));
       fileDebugFile = ajFileNewOut (fileDebugName);
+      if(!fileDebugFile)
+	  ajFatal("Cannot open debug file %S",fileDebugName);
       ajFileUnbuffer (fileDebugFile);
     }
     debugset = 1;

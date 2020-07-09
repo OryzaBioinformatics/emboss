@@ -2156,7 +2156,7 @@ int embPatBYGSearch(AjPStr *str, AjPStr *name, int begin, int plen,
 	    }
 	    ++p;
 	}
-	while(state!=initial);
+	while(state!=initial && *p);
     }
     while(p-q<slen);
 
@@ -2892,6 +2892,7 @@ int embPatVariablePattern (AjPStr *pattern, AjPStr opattern, AjPStr text,
 			   begin,plen,sotable,solimit,l,
 			   amino,carboxyl);
 	/*	tidy = (void *) sotable;*/
+	AJFREE (sotable);
 	return hits;
     }
     
@@ -2922,6 +2923,7 @@ int embPatVariablePattern (AjPStr *pattern, AjPStr opattern, AjPStr text,
 	}
 	embPatMatchDel(&ppm);
 	hits=n;
+	ajStrDel(&regexp);
 	return hits;
     }
     

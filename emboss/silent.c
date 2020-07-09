@@ -186,7 +186,6 @@ int main(int argc, char **argv)
  	ajFmtPrintF(outf,"\n\n");
     }
 
-    ajStrDel(&sname);
     ajSeqDel(&seq);
     ajStrDel(&revcomp);
     ajStrDel(&enzymes);    
@@ -293,7 +292,8 @@ AjPList mismatch(AjPStr sstr, AjPList relist, AjPFile outf, AjPStr sname,
                     
 	if(hits)
         {
-            	while(ajListPop(patlist,(void**)&match));
+            	while(ajListPop(patlist,(void**)&match))
+		    embMatMatchDel(&match);
         }
  	else
         { 
@@ -307,7 +307,8 @@ AjPList mismatch(AjPStr sstr, AjPList relist, AjPFile outf, AjPStr sname,
                 	(void)ajListPop(patlist,(void**)&match);
  			if(checktrans(sstr,outf,match,rlp,begin,radj,rev,end,
                                       &res)) 
-                        ajListPushApp(results,(void *)res);
+			    ajListPushApp(results,(void *)res);
+			embMatMatchDel(&match);
          	}
    	}  
         
@@ -648,7 +649,13 @@ void split_hits(AjPList *hits, AjPList *silents, AjPList *nonsilents,
 	if(allmut)
            	ajListPushApp(*nonsilents,(void *)res);
 	else
-	   	AJFREE(res);
+	{
+	    ajStrDel(&res->code);
+	    ajStrDel(&res->site);
+	    ajStrDel(&res->seqaa); 
+	    ajStrDel(&res->reaa);
+	    AJFREE(res);
+	}
     }
 
     return;

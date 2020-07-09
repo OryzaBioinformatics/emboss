@@ -1,4 +1,3 @@
-/*  Last edited: Oct  1 16:31 1999 (pmr) */
 /* @source backtranseq application
 **
 ** Backward translation to the most likely DNA sequence

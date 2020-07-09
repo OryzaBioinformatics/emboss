@@ -1,4 +1,3 @@
-/*  Last edited: Jan 24 15:43 2000 (pmr) */
 /* @source stretcher application
 **
 ** STRETCHER calculates a global alignment of two sequences

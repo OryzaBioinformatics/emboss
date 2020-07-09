@@ -1,4 +1,3 @@
-/*  Last edited: Mar  1 17:24 2000 (pmr) */
 /* @source oddcomp application
 **
 ** Identifies sequences with a region with a high composition of specific

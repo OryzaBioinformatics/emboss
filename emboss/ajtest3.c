@@ -1,4 +1,3 @@
-/*  Last edited: Feb 24 14:13 2000 (pmr) */
 /*
 **
 ** Test routine for hash functions from AJAX.

@@ -20,8 +20,6 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-/*  Last edited: Jul 27 10:02 1999 (pmr) */
-
 #include "emboss.h"
 
 int main (int argc, char * argv[]) {

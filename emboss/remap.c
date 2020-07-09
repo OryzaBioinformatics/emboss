@@ -1,4 +1,3 @@
-/*  Last edited: Mar  2 14:53 2000 (pmr) */
 /* @source remap application
 **
 ** Display a sequence with restriction cut sites
@@ -59,6 +58,7 @@ int main (int argc, char * argv[]) {
   AjBool reverse;
   AjBool cutlist;
   AjBool flat;
+  EmbPMatMatch mm=NULL;
     
 /* stuff lifted from Alan's 'restrict.c' */
     AjPStr    enzymes=NULL;
@@ -77,7 +77,7 @@ int main (int argc, char * argv[]) {
     AjPFile   equfile=NULL;
     AjPTable  retable=NULL;
     int       hits;
-    AjPList     restrictlist;
+    AjPList     restrictlist=NULL;
 #define ENZDATA "REBASE/embossre.enz"
 #define EQUDATA "embossre.equ"
 #define EQUGUESS 3500     /* Estimate of number of equivalent names */
@@ -170,7 +170,7 @@ int main (int argc, char * argv[]) {
       if (!equfile) equiv=ajFalse;
       else read_equiv(&equfile, &retable);   
     }    
-    restrictlist   = ajListNew();
+
     ajFileSeek(enzfile, 0L, 0);
     hits = embPatRestrictMatch(seq, begin+1, end+1, enzfile, enzymes,
 			       sitelen,plasmid, ambiguity, mincuts, maxcuts,
@@ -228,6 +228,8 @@ int main (int argc, char * argv[]) {
 /* tidy up */
     (void) embShowDel(&ss);
     (void) ajFeatTabDel(&feat);
+    while(ajListPop(restrictlist,(void **)&mm))
+	embMatMatchDel(&mm);
     (void) ajListDel(&restrictlist);
 
 
@@ -242,6 +244,9 @@ int main (int argc, char * argv[]) {
 
 /* tidy up */
   ajTrnDel (&trnTable);
+
+  
+
 
   (void) ajExit ();
   return 0;
@@ -344,7 +349,8 @@ static void NoCutList (AjPFile outfile, AjPList restrictlist, AjBool
   EmbPMatMatch m=NULL;	/* restriction enzyme match structure */
   EmbPPatRestrict enz;
   char *p;
-
+  int netmp;
+  
 /* check on number of enzymes specified */
   ne = 0;
   if (!enzymes) {
@@ -361,7 +367,8 @@ static void NoCutList (AjPFile outfile, AjPList restrictlist, AjBool
     }
   }
 
- 
+  netmp = ne;
+  
 
 
   if (isall) {
@@ -383,8 +390,17 @@ static void NoCutList (AjPFile outfile, AjPList restrictlist, AjBool
       ne++;
     }
 
+
+  for (i=0; i<netmp; ++i) 
+  	if (ea[i]) 
+  		ajStrDel(&ea[i]);
+  if (netmp)
+      AJFREE (ea);
+
+
+
 /* make ea[] and populate it with enzyme names */
-    AJCNEW(ea, ne);    
+    AJCNEW(ea, ne);
     (void) ajFileSeek(enzfile,0L,0);
     i = 0;
     while(embPatRestrictReadEntry(&enz,&enzfile)) {
@@ -449,9 +465,10 @@ static void NoCutList (AjPFile outfile, AjPList restrictlist, AjBool
   for (i=0; i<ne; ++i) 
   	if (ea[i]) 
   		ajStrDel(&ea[i]);
-  if (ne) AJFREE (ea);
+  if (ne)
+      AJFREE (ea);
 
-
+  return;
 }
 
 

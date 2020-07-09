@@ -726,7 +726,7 @@ int main (int argc, char **argv)
     if(listoptions)
     {
 	ajStrApp(&options,seqset->Name);
-	ajStrAppC(&options,ajFmtString("%D plur=%f ",&ajtime,fplural));
+	ajFmtPrintAppS(&options,"%D plur=%f ",&ajtime,fplural);
     
 	if(collision)
 	    ajStrAppC(&options,"-collision ");

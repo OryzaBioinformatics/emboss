@@ -1,4 +1,3 @@
-/*  Last edited: Mar  6 12:09 2000 (pmr) */
 /*** general routines ***/
 
 #include "ajmath.h"

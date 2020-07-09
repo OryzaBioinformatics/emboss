@@ -1,4 +1,3 @@
-/*  Last edited: Dec 20 18:57 1999 (pmr) */
 /*
 **
 ** EMBOSS initialization routine

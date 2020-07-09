@@ -28,19 +28,17 @@
 
 static void check_dir(AjPStr d, AjPFile outf);
 static void check_file(AjPStr d, AjPStr file, AjPFile outf);
+static AjPStr data_dir(void);
 
 
 
 int main (int argc, char * argv[])
 {
-  /*    AjPList rejects=NULL;*/
     AjPList rlist=NULL;
     AjPList flocs=NULL;
     AjPFile outf;
     AjPStr  t=NULL;
     
-    /*    AjBool  show;*/
-    /*    AjBool  dolist;*/
     AjBool  recurs=ajTrue;
     int i;
     
@@ -90,14 +88,7 @@ int main (int argc, char * argv[])
 
 
     /* get the full pathname of the  emboss/data installation directory */
-    if(!ajNamGetValueC("DATA", &ddir))
-    {
-	if(ajNamRoot(&ddir))
-	    (void) ajStrAppC(&ddir,"/data");
-	else
-	    ajDie("The EMBOSS 'DATA' directory has not been defined.");
-    }
-
+    ddir = data_dir();
 
     flocs = ajListNew();
 
@@ -254,4 +245,38 @@ static void check_file(AjPStr d, AjPStr file, AjPFile outf)
     ajStrDel(&s);
 
     return;
+}
+
+
+
+static AjPStr data_dir(void)
+{
+    static AjPStr where=NULL;
+    AjPStr tmp=NULL;
+    char *p=NULL;
+    
+    where = ajStrNew();
+    tmp = ajStrNew();
+
+
+    if(!ajNamGetValueC("DATA",&tmp))
+    {
+	ajNamRootInstall(&where);
+	ajFileDirFix(&where);
+	ajFmtPrintS(&tmp,"%Sshare/EMBOSS/data/",where);
+
+	if(!ajFileDir(&tmp))
+	{
+	    if(ajNamRoot(&tmp))
+		(void) ajStrAppC(&tmp,"/data");
+	    else
+		ajDie("The EMBOSS 'DATA' directory isn't defined.");
+	}
+    }
+
+    ajStrAssC(&where,ajStrStr(tmp));
+
+    ajStrDel(&tmp);
+
+    return where;
 }

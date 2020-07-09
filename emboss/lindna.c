@@ -150,6 +150,15 @@ int main(int argc, char **argv)
     float charsize;
     float minsize;
 
+    for(i=0;i<MAXLABELS;++i)
+	for(j=0;j<MAXLABELS;++j)
+	{
+	    Name[i][j] = ajStrNewC("");
+	    Style[i][j] = ajStrNewC("");
+	    To[i][j]=0.;
+	}
+    
+    
 
     /* read the ACD file for graphical programs */
     ajGraphInit("lindna", argc, argv);
@@ -828,7 +837,7 @@ void HorTextPile(float x, float y, AjPStr Name, float postext, int NumNames)
     float stringLength;
     float stringHeight;
     float totalHeight;
-    AjPStr token;
+    static AjPStr token=NULL;
     int i;
 
     totalHeight = y+postext;
@@ -844,6 +853,7 @@ void HorTextPile(float x, float y, AjPStr Name, float postext, int NumNames)
 	ajGraphDrawTextOnLine( x, (totalHeight+yupper)/2, x+stringLength, (totalHeight+yupper)/2, ajStrStr(token), 0.5 );
 	totalHeight+=(stringHeight+postext);
     }
+
 
     return;
 }
@@ -1050,7 +1060,7 @@ AjPStr ReadGroup(AjPFile infile, float *From, float *To, AjPStr *Name,
 
     line = ajStrNew();
     GroupName = ajStrNew();
-    style = (char *)AJALLOC( 10*sizeof(char) );
+    style = (char *)AJALLOC0( 10*sizeof(char) );
 
     /* read the group's name */
     pos = ajFileTell(infile);
@@ -1132,6 +1142,7 @@ AjPStr ReadGroup(AjPFile infile, float *From, float *To, AjPStr *Name,
     }
     *NumLabels = i;
 
+    AJFREE(style);
     ajStrDel(&line);
     return GroupName;
 }

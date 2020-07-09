@@ -1,4 +1,3 @@
-/*  Last edited: May 22 13:17 2000 (pmr) */
 #include "ajax.h"
 
 typedef struct SeqSOutFormat {

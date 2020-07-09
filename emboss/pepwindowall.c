@@ -27,26 +27,32 @@
 
 #define AZ 28
 
-AjPStr getnakaidata(AjPFile file, float matrix[])
+AjBool getnakaidata(AjPFile file, float matrix[])
 {
     AjPStr buffer = NULL;
     AjPStr buf2 = NULL;
     AjPStr delim = NULL; 
-    AjPStr description = NULL;
+    AjBool description = ajFalse;
     AjPStrTok token;
     int line =0;
     char *ptr;
     int cols;
 
-    delim = ajStrNewC(" :\t\n");
-
+    
     if(!file)
 	return 0;
+
+
+    delim = ajStrNewC(" :\t\n");
+    buffer = ajStrNew();
+    buf2 = ajStrNew();
+
+
     while (ajFileGets(file,&buffer))
     {
 	ptr = ajStrStr(buffer);
 	if(*ptr == 'D')			/* description */
-	    description = ajStrDup(buffer);
+	    description = ajTrue;
 	else if(*ptr == 'I')
 	    line = 1;
 	else if(line == 1)
@@ -86,6 +92,7 @@ AjPStr getnakaidata(AjPFile file, float matrix[])
 	    ajStrToken(&buf2,&token,ajStrStr(delim));
 	    ajStrToFloat(buf2,&matrix[8]);
 
+	    ajStrTokenClear(&token);
 	}
 	else if(line == 2)
 	{
@@ -122,8 +129,15 @@ AjPStr getnakaidata(AjPFile file, float matrix[])
 	    ajStrToken(&buf2,&token,ajStrStr(delim));
 	    ajStrToFloat(buf2,&matrix[21]);
 
+	    ajStrTokenClear(&token);
 	}
     }
+
+
+    ajStrDel(&buffer);
+    ajStrDel(&buf2);
+    ajStrDel(&delim);
+
     return description;
 }
 

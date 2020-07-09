@@ -1,4 +1,3 @@
-/*  Last edited: Jan 19 10:40 2000 (pmr) */
 /******************************************************************************
 ** @source AJAX REG (ajax regular expression) functions
 **

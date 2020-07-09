@@ -1,4 +1,3 @@
-/*  Last edited: Jun 14 16:03 2000 (pmr) */
 #include "ajax.h"
 #include "ajtime.h"
 #include <time.h>

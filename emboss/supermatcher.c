@@ -1,4 +1,3 @@
-/*  Last edited: Mar 14 09:16 2000 (pmr) */
 /* supermatcher
 ** Create a word table for the first sequence.
 ** Then go down second sequence checking to see if the word matches.

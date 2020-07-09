@@ -1,12 +1,12 @@
 # EMBOSS Restriction enzyme name equivalence data
 #
 # Maps enzymes reported by "restrict -preferred" to the names
-# commonly used in GCG and other packages (prefers prototypes
+# commonly used in some other packages (prefers prototypes
 # and commonly used enzymes)
 #
 # Author: Helge Horch <horch@mologen.com>
-# Version: 1.0 for EMBOSS-0.0.4
-# Date: 1999-09-07
+# Version: 1.2 for EMBOSS-1.5.6 with REBASE 009
+# Date: 2000-09-30
 #
 AaaI	EagI
 AagI	ClaI
@@ -49,6 +49,7 @@ Ama87I	AvaI
 AocI	Bsu36I
 AocII	Bsp1286I
 AseI	VspI
+AsiSI	SgfI
 Asp26HI	BsmI
 Asp700I	XmnI
 AspI	Tth111I
@@ -66,6 +67,8 @@ BbrI	HindIII
 BbrPI	PmlI
 BbuI	SphI
 Bca77I	BsaWI
+BceAI	BcefI
+BceCI	MwoI
 Bco116I	EarI
 Bco118I	BsrFI
 Bco188I	BsrFI
@@ -73,6 +76,7 @@ Bco27I	MspI
 BdiSI	SfcI
 BecAII	HaeIII
 Bfi89I	EaeI
+BfiI	BmrI
 Bli736I	BsaI
 BlpI	Bpu1102I
 Bme1390I	ScrFI
@@ -97,18 +101,24 @@ BspST5I	SfaNI
 BspWI	MwoI
 Bst4CI	TaaI
 BstDEI	DdeI
+BstEZ359I	HpaI
+BstFZ438I	FauI
 BstHPI	HpaI
+BstHZ55I	BstXI
 BstNSI	NspI
+BstPZ418I	FokI
+BstRZ246I	SwaI
 BstSNI	SnaBI
 BstSWI	SwaI
 BstX2I	BstYI
 CciNI	NotI
+CcoI	NaeI
 CeqI	EcoRV
 Cfr42I	SacII
 CfrJ4I	SmaI
 CfuI	DpnI
 CpoI	RsrII
-Csp68KIII	NsiI
+AspCIII	NsiI
 CviBI	HinfI
 DraII	EcoO109I
 Eco56I	NgoAIV
@@ -116,6 +126,7 @@ FauNDI	NdeI
 Hin1II	NlaIII
 HinJCI	HincII
 Hpy51I	Tsp45I
+HpyCH4IV	MaeII
 MchI	NarI
 MfeI	MunI
 MssI	PmeI

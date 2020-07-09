@@ -2883,7 +2883,6 @@ float rand3 (int *idum) {
 #undef MZ
 #undef FAC
 
-/*  Last edited: Jun 14 16:24 2000 (pmr) */
 /* functions for reading in lines (C) Richard Mott, ICRF */
 
 /* @func  read_line ***********************************************************
@@ -2998,7 +2997,6 @@ int uncomment( char *string ) {
     return 1;
 }
 
-/*  Last edited: Feb 29 11:13 1996 (rmott) */
 
 /* some functions for opening a file in a file search path */
 /* return value is the FILE pointer to the opened file, or NULL

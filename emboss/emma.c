@@ -1,4 +1,3 @@
-/*  Last edited: Mar  1 11:51 2000 (pmr) */
 /* @source emma application
 **
 ** EMBOSS interface to clustal

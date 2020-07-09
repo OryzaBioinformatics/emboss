@@ -771,6 +771,20 @@ static AjPFeatLexicon ajFeatVocNew(void)
 }
 
 
+/* @func ajFeatTableDict **********************************************
+**
+** Return lexicon entry of a feature table
+**
+** @param [r] thys [AjPFeatTable] pointer to feature table
+** @return [AjPFeatLexicon] Pointer to lexicon
+** @@
+** 
+*******************************************************************/
+
+AjPFeatLexicon ajFeatTableDict(AjPFeatTable thys)
+{
+    return thys->Dictionary;
+}
 
 
 /* @funcstatic FeatureNew **********************************************
@@ -985,6 +999,11 @@ void ajFeatDel(AjPFeature *pthis) {
   ajFeatObjVerify(*pthis,AjCFeature) ;
 
   featClear(*pthis) ;
+
+
+/*  ajListDel(&(*pthis)->Type->Tags);*/
+  
+
 
   AJFREE (*pthis) ; /* free the object */
   *pthis = NULL ;
@@ -5845,14 +5864,18 @@ static void featClear( AjPFeature thys )
   ajStrDel(&(thys->Score)) ;
   
   /* I need to delete the associated Tag data structures too!!!*/
-  if (thys->Tags) {
+  if (thys->Tags)
+  {
     iter = ajListIter(thys->Tags) ;
-    while(ajListIterMore(iter)) {
+    while(ajListIterMore(iter))
+    {
       item = (LPFeatTagValue)ajListIterNext (iter) ;
-      ajStrDel(&item->Value) ; /* assuming a simple block memory free for now...*/
+      /* assuming a simple block memory free for now...*/
+      ajStrDel(&item->Value) ;
       AJFREE(item);
       ajListRemove(iter) ;
     }
+      
   }
   ajListIterFree(iter) ;
   ajListFree(&(thys->Tags));
@@ -5932,8 +5955,12 @@ static void ajFeatAddTagToFeatList(AjPFeatVocFeat feature,void *tag, int flag){
   iter = ajListIter(feature->Tags) ;
   while(ajListIterMore(iter)) {
     key2 = (AjPFeatVocTagForFeat) ajListIterNext (iter);
-    if(key2->VocTag == key) 
-      return;
+    if(key2->VocTag == key)
+    {
+	ajListIterFree(iter);
+	return;
+    }
+    
   }
   ajListIterFree(iter) ;
 
@@ -6083,5 +6110,30 @@ static void ajFeatSetFlag(int *flags, int val){
   return;
 }
 
+/* @func ajFeatTabInClear ****************************************************
+**
+** Clears a Tabin input object back to "as new" condition, except
+** for the USA list which must be preserved.
+**
+** @param [P] thys [AjPFeatTabIn] Sequence input
+** @return [void]
+** @@
+******************************************************************************/
 
+void ajFeatTabInClear (AjPFeatTabIn thys)
+{
 
+  ajDebug ("ajFeatTabInClear called\n");
+
+  (void) ajStrClear(&thys->Ufo);
+  (void) ajStrClear(&thys->Seqname);
+  (void) ajStrClear(&thys->Formatstr);
+  (void) ajStrClear(&thys->Filename);
+  (void) ajStrClear(&thys->Entryname);
+  if (thys->Handle)
+    ajFileBuffDel(&thys->Handle);
+  if (thys->Handle)
+    ajFatal("ajFeatTabInClear did not delete Handle");
+
+  return;
+}

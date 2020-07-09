@@ -1,4 +1,3 @@
-/*  Last edited: Feb 14 13:57 2000 (pmr) */
 /* @source showorf application
 **
 ** Pretty translation of DNA sequences for publication

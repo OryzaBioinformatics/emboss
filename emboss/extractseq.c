@@ -1,4 +1,3 @@
-/*  Last edited: Mar 29 11:20 2000 (pmr) */
 /* @source extractseq application
 **
 ** Extract regions from a sequence

@@ -1,4 +1,3 @@
-/*  Last edited: Mar  2 11:18 2000 (pmr) */
 /* @source patmatmotifs.c
 ** @author: Copyright (C) Sinead O'Leary (soleary@hgmp.mrc.ac.uk) 
 ** @@
@@ -147,6 +146,9 @@ int main (int argc, char *argv[] )
 		length = embPatPosMatchGetLen(match, i);
 		ajFmtPrintF(outf, "Length of motif = %d\n\n", length);
 	
+
+
+
 		ajFmtPrintF(outf, 
 		     "patmatmotifs of %s with %s from %d to %d\n", 
 		      ajStrStr(name), ajSeqName(sequence), start+1, end+1);
@@ -195,6 +197,7 @@ int main (int argc, char *argv[] )
 		ajFileClose(&inf2);
 
 	    }
+	embPatMatchDel(&match);
 	}
     }
     
@@ -208,7 +211,7 @@ int main (int argc, char *argv[] )
     ajStrDel(&redatanew);
     ajStrDel(&accession);
     ajSeqDel(&sequence);
-    embPatMatchDel(&match);
+
     
     ajFileClose(&inf);
     ajFileClose(&outf);

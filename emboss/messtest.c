@@ -1,4 +1,3 @@
-/*  Last edited: Feb 24 14:08 2000 (pmr) */
 #include "ajax.h"
 #include "emboss.h"
 #include "ajmess.h"

@@ -1,4 +1,3 @@
-/*  Last edited: Feb 28 14:51 2000 (pmr) */
 /*	plcore.c
 
 	Central dispatch facility for PLplot.

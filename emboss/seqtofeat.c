@@ -1,5 +1,3 @@
-/*  Last edited: May  3 11:05 2000 (pmr) */
-
 #include "emboss.h"
 
 int main (int argc, char * argv[]) {

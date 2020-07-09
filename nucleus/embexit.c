@@ -1,4 +1,3 @@
-/*  Last edited: Feb  7 16:02 2000 (pmr) */
 /*
 **
 ** EMBOSS exit routine

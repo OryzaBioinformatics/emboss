@@ -150,7 +150,6 @@ void cpgsearch(AjPFile *outf, int from, int to, char *p, char *name,
 	    calcgc(lsum+1,t+2,p,&dcg,&dgc,&gc);
 	    if(dgc)
 	    {	      
-	        score2 = NULL;
 	        score2 = ajFmtPrintS(&score2,"%d.0",top);
 	        feature = ajFeatureNew(*feattable, source, type,
 				       lsum+2+z,t+2+z, score2, strand, frame,
@@ -165,7 +164,6 @@ void cpgsearch(AjPFile *outf, int from, int to, char *p, char *name,
 	    }
 	    else
 	    {
-	      score2 = NULL;
 	      score2 = ajFmtPrintS(&score2,"%d.0",top);
 	      feature = ajFeatureNew(*feattable, source, type,
 				     lsum+2+z,t+2+z, score2, strand, frame,
@@ -197,7 +195,6 @@ void cpgsearch(AjPFile *outf, int from, int to, char *p, char *name,
 	    ajFmtPrintF(*outf,"     %5d %5.1f %6.2f\n",
 			dcg,(float)gc*100.0/(float)(t+1-lsum),
 			((float)dcg/(float)dgc));
-	    score2 = NULL;
 	    score2 = ajFmtPrintS(&score2,"%d.0",top);
 	    feature = ajFeatureNew(*feattable, source, type,
 				   lsum+2+z,t+2+z, score2, strand, frame,
@@ -208,7 +205,6 @@ void cpgsearch(AjPFile *outf, int from, int to, char *p, char *name,
 	    ajFmtPrintF(*outf,"%-20s %6d %6d %5d ",name,lsum+2+z,t+2+z,top);
 	    ajFmtPrintF(*outf,"     %5d %5.1f    -\n",dcg,
 			(float)gc*100.0/(float)(t+1-lsum));
-	    score2 = NULL;
 	    score2 = ajFmtPrintS(&score2,"%d.0",top);
 	    feature = ajFeatureNew(*feattable, source, type,
 				   lsum+2+z,t+2+z, score2, strand, frame,
@@ -216,6 +212,12 @@ void cpgsearch(AjPFile *outf, int from, int to, char *p, char *name,
 	}
 	cpgsearch(outf,t+2,to,p,name,begin,score,featout,feattable);
     }
+
+
+    ajStrDel(&score2);
+    ajStrDel(&desc);
+    
+    return;
 }
 
 

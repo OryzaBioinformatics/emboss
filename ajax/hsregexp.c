@@ -1,4 +1,3 @@
-/*  Last edited: Feb  8 14:25 2000 (pmr) */
 /*
  * hsregcomp and hsregexec -- hsregsub and hsregerror are elsewhere
  */

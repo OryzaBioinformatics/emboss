@@ -1,4 +1,3 @@
-/*  Last edited: Feb 25 14:16 2000 (pmr) */
 /*
  * Revision 1.7 1997/03/17   15:26:00  pmr
  * when EST is reversed, need to reverse the EST sequence positions

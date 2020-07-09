@@ -1,4 +1,3 @@
-/*  Last edited: Jan 24 18:30 2000 (pmr) */
 /* @source profit application
 **
 ** Scan a protein database or sequence with a profile or matrix

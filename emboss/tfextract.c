@@ -1,4 +1,3 @@
-/*  Last edited: Jan 17 18:34 2000 (pmr) */
 /* @source tfextract application
 **
 ** Extracts pattern information from TRANSFAC site.dat file

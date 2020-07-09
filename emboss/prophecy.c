@@ -19,8 +19,6 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-/*  Last edited: Feb 29 14:00 2000 (pmr) */
-
 #include "emboss.h"
 #include <string.h>
 #include <ctype.h>

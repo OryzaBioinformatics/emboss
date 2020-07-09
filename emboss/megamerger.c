@@ -59,7 +59,7 @@ int main(int argc, char * argv[]) {
 /* get the minimal set of overlapping matches */    
   (void) embWordMatchMin(matchlist, ajSeqLen(seq1), ajSeqLen(seq2));
 
-  if (matchlist) {
+  if (ajListLength(matchlist)) {
 /* make the output file */
     merge(matchlist, seq1, seq2, seqout, outfile);
   
@@ -231,10 +231,9 @@ static void merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
   (void) ajSeqWrite (seqout, seq1);
 
 /* tidy up */
-  ajStrDel(&s1);
-  ajStrDel(&s2);
   ajStrDel(&tmp);
   ajStrDel(&seqstr);
-
-
+  ajListIterFree(iter);
+  
+  return;
 }

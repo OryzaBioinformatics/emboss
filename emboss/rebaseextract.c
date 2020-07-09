@@ -1,4 +1,3 @@
-/*  Last edited: Jan 18 10:47 2000 (pmr) */
 /* @source rebaseextract application
 **
 ** Extracts restriction enzyme information from REBASE

@@ -256,73 +256,86 @@ AjBool ajSeqMethod (AjPStr method, SeqPAccess* access) {
 ** @@
 ******************************************************************************/
 
-static AjBool seqAccessEmblcd (AjPSeqin seqin) {
+static AjBool seqAccessEmblcd (AjPSeqin seqin)
+{
 
-  AjBool retval = ajFalse;
+    AjBool retval = ajFalse;
 
-  AjPSeqQuery qry = seqin->Query;
-  SeqPCdQry qryd = qry->QryData;
+    AjPSeqQuery qry = seqin->Query;
+    SeqPCdQry qryd = qry->QryData;
 
-  static int qrycalled = 0;
+    static int qrycalled = 0;
 
 
-  ajDebug ("seqAccessEmblcd type %d\n", qry->Type);
+    ajDebug ("seqAccessEmblcd type %d\n", qry->Type);
 
-  if (qry->Type == QRY_ALL) {
-    return seqCdAll (seqin);
-  }
+    if (qry->Type == QRY_ALL)
+	return seqCdAll (seqin);
 
-  /* we need to search the index files and return a query */
+    /* we need to search the index files and return a query */
 
-  if (!qrycalled) {
-    if (ajUtilBigendian())
-      seqCdReverse = ajTrue;
-    qrycalled = 1;
-  }
-
-  if (qry->QryData) {		/* reuse unfinished query data */
-    if (!seqCdQryReuse(qry)) /* oops, we're finished */
-      return ajFalse;
-  }
-  else {			/* starting out, set up query */
-    seqin->Single = ajTrue;
-
-    if (!seqCdQryOpen(qry))
-      ajFatal ("seqCdQry failed");
-
-    qryd = qry->QryData;
-
-    /* binary search for the entryname we need */
-
-    if (qry->Type == QRY_ENTRY) {
-      ajDebug ("entry id: '%S' acc: '%S'\n", qry->Id, qry->Acc);
-      if (!seqCdQryEntry (qry)) {
-	ajErr ("EMBLCD Entry failed");
-      }
+    if (!qrycalled)
+    {
+	if (ajUtilBigendian())
+	    seqCdReverse = ajTrue;
+	qrycalled = 1;
     }
-    if (qry->Type == QRY_QUERY) {
-      ajDebug ("query id: '%S' acc: '%S'\n", qry->Id, qry->Acc);
-      if (!seqCdQryQuery (qry)) {
-	ajErr ("EMBLCD Query failed");
-      }
-    }
-  }
 
-  if (ajListLength(qryd->List)) {
-    retval = seqCdQryNext (qry);
-    if (retval) {
-      ajFileBuffSetFile (&seqin->Filebuff, qryd->libr);
+    if (qry->QryData)
+    {					/* reuse unfinished query data */
+	if (!seqCdQryReuse(qry))	/* oops, we're finished */
+	    return ajFalse;
     }
-  }
+    else
+    {					/* starting out, set up query */
+	seqin->Single = ajTrue;
+
+	if (!seqCdQryOpen(qry))
+	    ajFatal ("seqCdQry failed");
+
+	qryd = qry->QryData;
+
+	/* binary search for the entryname we need */
+
+	if (qry->Type == QRY_ENTRY)
+	{
+	    ajDebug ("entry id: '%S' acc: '%S'\n", qry->Id, qry->Acc);
+	    if (!seqCdQryEntry (qry))
+		ajErr ("EMBLCD Entry failed");
+	}
+	if (qry->Type == QRY_QUERY)
+	{
+	    ajDebug ("query id: '%S' acc: '%S'\n", qry->Id, qry->Acc);
+	    if (!seqCdQryQuery (qry)) {
+		ajErr ("EMBLCD Query failed");
+	    }
+	}
+    }
+
+    if (ajListLength(qryd->List))
+    {
+	retval = seqCdQryNext (qry);
+	if (retval)
+	    ajFileBuffSetFile (&seqin->Filebuff, qryd->libr);
+    }
   
-  if (!ajListLength(qryd->List)) { /* could have been emptied by code above */
-    seqCdQryClose (qry);
-  }
+    if (!ajListLength(qryd->List)) /* could have been emptied by code above */
+    {
+	seqCdQryClose (qry);
+	/* AJB addition */
+	if(qry->Type == QRY_ENTRY && !seqin->multi)
+	{
+/*	    if(seqin->Ftquery->Handle)
+		ajFileBuffClear(seqin->Ftquery->Handle,0);*/
+	    AJFREE(qryd);
+	}
+    }
+    
+    ajStrAssS (&seqin->Db, qry->DbName);
 
-  ajStrAssS (&seqin->Db, qry->DbName);
-
-  return retval;
+    return retval;
 }
+
 /* @funcstatic seqCdAll *********************************************
 **
 ** Reads the EMBLCD division lookup file and opens a list of all the
@@ -1183,6 +1196,11 @@ static AjBool seqAccessSrsfasta (AjPSeqin seqin) {
 static AjBool seqCdQryReuse (AjPSeqQuery qry) {
 
   SeqPCdQry qryd = qry->QryData;
+
+
+  if(!qry || !qryd)
+      return ajFalse;
+  
 
   ajDebug ("qryd->list  %x\n",qryd->List);
   if (!qryd->List) {

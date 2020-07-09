@@ -1,4 +1,3 @@
-/*  Last edited: Jun 14 16:22 2000 (pmr) */
 #include "ajax.h"
 #include "embmat.h"
 #include "stdlib.h"
@@ -78,6 +77,9 @@ void embMatMatchDel(EmbPMatMatch *s)
     ajStrDel(&(*s)->tit);
     ajStrDel(&(*s)->pat);
     AJFREE(*s);
+    *s = NULL;
+
+    return;
 }
 
 
@@ -126,7 +128,11 @@ AjBool embMatProtReadInt(AjPFile *fp, EmbPMatPrints *s)
     p=ajStrStr(line);
     while(!*p || *p=='#' || *p=='!' || *p=='\n')
     {
-	if(!ajFileReadLine(*fp,&line)) return ajFalse;
+	if(!ajFileReadLine(*fp,&line))
+	{
+	    ajStrDel(&line);
+	    return ajFalse;
+	}
 	p=ajStrStr(line);
     }
     

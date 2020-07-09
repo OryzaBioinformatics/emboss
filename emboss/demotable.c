@@ -1,4 +1,3 @@
-/*  Last edited: Jun 18 09:10 1999 (pmr) */
 /* @source demotable application
 **
 ** Demomnstration of how the table functions should be used.

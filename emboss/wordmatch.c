@@ -1,4 +1,3 @@
-/*  Last edited: Dec  3 12:44 1999 (pmr) */
 /* wordmatch
 ** Create a word table for the first sequence.
 ** Then go down second sequence checking to see if the word matches.

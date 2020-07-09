@@ -1,4 +1,3 @@
-/*  Last edited: Feb 24 17:33 2000 (pmr) */
 #include "emboss.h"
 #include "ajtable.h"
 

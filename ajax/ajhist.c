@@ -1,4 +1,3 @@
-/*  Last edited: Mar  6 12:08 2000 (pmr) */
 /********************************************************************
 ** @source AJAX GRAPH (ajax histogram) functions
 **

@@ -1,4 +1,3 @@
-/*  Last edited: Feb  1 12:32 2000 (pmr) */
 /********************************************************************
 ** @source AJAX list functions
 ** These functions create and control linked lists.

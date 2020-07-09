@@ -1,4 +1,3 @@
-/*  Last edited: Mar 29 10:58 2000 (pmr) */
 /*	plctrl.c
 
 	Misc. control routines, like begin, end, exit, change graphics/text

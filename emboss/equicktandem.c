@@ -10,7 +10,6 @@
  		tandem on anything that looks significant.
  * Exported functions:
  * HISTORY:
- * Last edited: Jun 18 17:34 1999 (pmr)
  * Created: Tue Jan 19 21:25:59 1993 (rd)
  *-------------------------------------------------------------------
  */

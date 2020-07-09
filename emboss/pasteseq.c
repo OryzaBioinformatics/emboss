@@ -20,16 +20,14 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-/*  Last edited: 26 Jan 1999 (GWW) */
-
 #include "emboss.h"
 
-int main (int argc, char * argv[]) {
-
-  AjPSeq seq;
-  AjPSeq insertseq;
-  AjPSeqout seqout;
-  int pos;	/* position to insert after - can be 0 to sequence.length */
+int main (int argc, char **argv)
+{
+  AjPSeq seq=NULL;
+  AjPSeq insertseq=NULL;
+  AjPSeqout seqout=NULL;
+  int pos=0;	/* position to insert after - can be 0 to sequence.length */
   AjPStr str=NULL;
 
   AjPSeq newseq=NULL; /* the new sequence */
@@ -55,7 +53,7 @@ sequences plus 1 for the terminating NULL */
   
 /* do the insertion here */
   str = ajSeqStr(newseq);
-  (void) ajStrAss(&str, ajSeqStr(seq));
+  (void) ajStrAssC(&str, ajSeqChar(seq));
   (void) ajStrInsert(&str, pos, ajSeqStr(insertseq));
 
 /* set the type of the output sequence (is this required?) */

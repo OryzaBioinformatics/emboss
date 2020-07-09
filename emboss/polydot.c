@@ -83,6 +83,7 @@ int main(int argc, char **argv)
     AjPStr ufo=NULL,format=NULL,ext=NULL;
     AjPFeatTabOut seq1out = NULL;
     AjBool text;
+    AjPStr sajb=NULL;
     
     (void) ajGraphInit("polydot", argc, argv);
 
@@ -98,6 +99,7 @@ int main(int argc, char **argv)
     
     ext = ajAcdGetString("ext");
 
+    sajb = ajStrNew();
     embWordLength (wordlen);
 
     AJCNEW(lines,ajSeqsetSize(seqset));
@@ -251,11 +253,11 @@ int main(int argc, char **argv)
 
     if(!text)
 	ajGraphTextStart (total+onefifth,total-(onefifth),
-		      ajFmtString("No. Length  Lines  Points Sequence"));
+		          "No. Length  Lines  Points Sequence");
     else
 	ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour 0 size 0.3 %s\n",
 		    total+onefifth,total-(onefifth),
-		      ajFmtString("No. Length  Lines  Points Sequence"));
+		    "No. Length  Lines  Points Sequence");
 
 
     for(i=0;i<ajSeqsetSize(seqset);i++)
@@ -263,17 +265,18 @@ int main(int argc, char **argv)
 	seq1 = ajSeqsetGetSeq (seqset, i);
 	/*    ajUser("%d %d %d %d %s",i+1,ajSeqLen(seq1),lines[i],pts[i],
 	      ajSeqName(seq1));*/
+	ajFmtPrintS(&sajb,"%3d %6d %5d %6d %s",i+1,
+		    ajSeqLen(seq1),lines[i],
+		    pts[i],ajSeqName(seq1));
+
 	if(!text)
+
 	    ajGraphTextStart (total+onefifth,total-(onefifth*(i+2)),
-			  ajFmtString("%3d %6d %5d %6d %s",i+1,
-				      ajSeqLen(seq1),lines[i],
-				      pts[i],ajSeqName(seq1)));
+			      ajStrStr(sajb));
 	else
 	    ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour 0 size 0.3 %s\n",
 			total+onefifth,total-(onefifth*(i+2)),
-			  ajFmtString("%3d %6d %5d %6d %s",i+1,
-				      ajSeqLen(seq1),lines[i],
-				      pts[i],ajSeqName(seq1)));
+			ajStrStr(sajb));
     }
 
     if(dumpfeat)
@@ -296,7 +299,9 @@ int main(int argc, char **argv)
 	ajGraphClose();
     else
 	ajFileClose(&outf);
-    
+
+
+    ajStrDel(&sajb);
     AJFREE(lines);
     AJFREE(pts);
     ajExit();

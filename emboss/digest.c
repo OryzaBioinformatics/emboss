@@ -1,4 +1,3 @@
-/*  Last edited: Mar  2 13:58 2000 (pmr) */
 /* @source digest application
 **
 ** Calculate protein proteolytic (and CNBr) digest fragments

@@ -1,4 +1,3 @@
-/*  Last edited: Feb 24 14:11 2000 (pmr) */
 /* @source checktrans application
 **
 ** Check translations made with transeq (document these translations)

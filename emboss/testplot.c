@@ -1,4 +1,3 @@
-/*  Last edited: Mar 23 12:26 2000 (pmr) */
 /* @source testplot.c
 **
 ** General test routine for graph plotting PLPLOT.

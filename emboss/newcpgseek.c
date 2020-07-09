@@ -1,4 +1,3 @@
-/*  Last edited: Sep  9 13:39 1999 (pmr) */
 /* @source newcpgseek application
 **
 ** Reports ALL cpg rich regions in a sequence
@@ -58,7 +57,6 @@ int main( int argc, char **argv, char **env)
     outf      = ajAcdGetOutfile("outfile");
 
     
-    seq=ajSeqNew();
     substr = ajStrNew();
 
 

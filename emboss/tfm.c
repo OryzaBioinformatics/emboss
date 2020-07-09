@@ -27,7 +27,8 @@ static void FindAppDocRoot (AjPStr* docroot) {
 
   AjPStr docrootinst = NULL;
 
-
+  docrootinst = ajStrNew();
+  
 /* look at EMBOSS doc files */
 
 /* try to open the installed doc directory */
@@ -46,6 +47,9 @@ static void FindAppDocRoot (AjPStr* docroot) {
 /*    ajDebug ("EMBOSS root directory '%S' not opened\n", *docroot); */
     }
   }
+
+  ajStrDel(&docrootinst);
+  return;
 }
 
 /* return the path to the program documentation html or text file */
@@ -53,6 +57,7 @@ static AjBool FindAppDoc (AjPStr program, AjBool html, AjPStr* path) {
 
   AjPStr docroot = NULL;
 
+  docroot = ajStrNew();
   FindAppDocRoot(&docroot);
 
   if (html) {
@@ -67,13 +72,14 @@ static AjBool FindAppDoc (AjPStr program, AjBool html, AjPStr* path) {
     (void) ajStrAppC (path, ".txt");
   }
 
+  ajStrDel(&docroot);
+
 /* is the file existant and readable? */
   if (ajFileStat(path, AJ_FILE_R)) {
     return ajTrue;
-  } else {
-    return ajFalse;  	
   }
 
+  return ajFalse;
 }
 
 

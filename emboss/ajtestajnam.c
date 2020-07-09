@@ -1,4 +1,3 @@
-/*  Last edited: May 13 11:52 1999 (ajb) */
 /*
 **
 ** Test routine for ajnam functions from AJAX.

@@ -1,4 +1,3 @@
-/*  Last edited: Jan 10 15:04 2000 (pmr) */
 #include "ajax.h"
 
 typedef struct SeqSType {

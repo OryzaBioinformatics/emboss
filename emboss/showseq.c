@@ -1,4 +1,3 @@
-/*  Last edited: Mar  2 15:20 2000 (pmr) */
 /* @source showseq application
 **
 ** Display a sequence with translations, features and other bits
@@ -252,7 +251,8 @@ int main (int argc, char * argv[]) {
 
 /* tidy up */
     (void) embShowDel(&ss);
-    (void) ajFeatTabDel(&feat);
+/* AJB fixed: trying to delete memory already deleted */
+/*   (void) ajFeatTabDel(&feat); */
     (void) ajListDel(&restrictlist);
 
 /* add a gratuitous newline at the end of the sequence */

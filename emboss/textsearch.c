@@ -19,7 +19,6 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
-/*  Last edited: Wed Nov 10 15:59:59 GMT 1999 (GWW) */
 
 #include "emboss.h"
 

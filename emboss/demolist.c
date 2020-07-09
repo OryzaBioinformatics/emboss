@@ -1,4 +1,3 @@
-/*  Last edited: Jun 18 09:09 1999 (pmr) */
 /* @source demolist application
 **
 ** Demomnstration of how the list functions should be used.

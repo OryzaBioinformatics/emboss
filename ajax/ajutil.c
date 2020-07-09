@@ -1,4 +1,3 @@
-/*  Last edited: Mar  6 12:20 2000 (pmr) */
 /*
 **
 ** AJAX library routines

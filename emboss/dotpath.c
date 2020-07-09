@@ -101,7 +101,6 @@ int main(int argc, char **argv)
     ajSeqTrim(seq1);
     ajSeqTrim(seq2);
 
-    matchlist = ajListNew();
 
     embWordLength (wordlen);
     if(embWordGetTable(&seq1MatchTable, seq1))
@@ -148,10 +147,10 @@ int main(int argc, char **argv)
 	    while(acceptableticksx[i]*numbofticks < ajSeqLen(seq1))
 		i++;
 
-	    if(i<=13)
+	    if(i<=11)
 		tickgap = acceptableticksx[i];
 	    else
-		tickgap = acceptableticksx[13];
+		tickgap = acceptableticksx[10];
 	    ticklen = xmargin*0.1;
 	    onefifth  = xmargin*0.2;
 	    ajGraphTextMid ((ajSeqLen(seq1))*0.5,0.0-(onefifth*3),
@@ -247,6 +246,7 @@ int main(int argc, char **argv)
   
     if(matchlist) 
 	embWordMatchListDelete(matchlist); /* free the match structures */
+
  
     ajExit();
     return 0;

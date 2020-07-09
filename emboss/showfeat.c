@@ -217,13 +217,13 @@ static void ShowFeatSeq (AjPFile outfile, AjPSeq seq, int beg, int end, AjPStr
 
   /*  int len = ajSeqLen(seq);*/
 
-  AjPStr lineout   = NULL;
+  AjPStr lineout   = ajStrNew();
   AjEFeatStrand strandout = AjStrandUnknown;
   AjBool first = ajTrue;
   AjPStr sourceout = NULL;
   AjPStr typeout   = NULL;
-  AjPStr tagsout   = ajStrNewC("");	/* blank string initialised */
-  AjPStr posout    = ajStrNewC("");	/* blank string initialised */
+  AjPStr tagsout   = NULL;
+  AjPStr posout    = NULL;
 
   AjBool gotoutput = ajFalse;	/* have a line to output */
       
@@ -252,6 +252,12 @@ static void ShowFeatSeq (AjPFile outfile, AjPSeq seq, int beg, int end, AjPStr
   feat = ajSeqGetFeat(seq);
   if(!feat)
     return;
+
+  lineout = ajStrNew();
+  tagsout = ajStrNewC("");
+  posout  = ajStrNewC("");
+  
+
 
 /* Check arguments */
   ajFeatObjVerify(feat, AjCFeatTable ) ;
@@ -331,6 +337,12 @@ static void ShowFeatSeq (AjPFile outfile, AjPSeq seq, int beg, int end, AjPStr
 
 /* tidy up */
   (void) ajFeatTabDel(&feat);
+
+  ajStrDel(&tagsout);
+  ajStrDel(&posout);
+  ajStrDel(&lineout);
+  
+  return;
 }
 
   

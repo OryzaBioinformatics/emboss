@@ -1,4 +1,3 @@
-/*  Last edited: Feb 24 13:11 2000 (pmr) */
 /* @source matcher application
 **
 ** MATCHER finds the best local alignments between two sequences

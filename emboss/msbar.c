@@ -20,10 +20,6 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-
-/*  Last edited: 10 Aug 1999 (GWW) */
-
-
 #include "emboss.h"
 #include <ctype.h>	/* for tolower, toupper */
 

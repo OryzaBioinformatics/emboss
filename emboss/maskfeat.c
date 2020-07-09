@@ -1,4 +1,3 @@
-/*  Last edited: Mar  6 14:06 2000 (pmr) */
 /* @source maskseq application
 **
 ** Mask off features of a sequence

@@ -3431,6 +3431,7 @@ AjPStr ajStrTokC (const AjPStr thys, const char* delim) {
       return NULL;
     }
     strp = ajStrNewL(thys->Res);
+    AJFREE(strp->Ptr);
   }
 
   if (thys) {
@@ -3448,7 +3449,7 @@ AjPStr ajStrTokC (const AjPStr thys, const char* delim) {
     return strp;
   }
   else {
-    strp->Len = 0;
+      strp->Len=0;
   }
 
   return NULL;

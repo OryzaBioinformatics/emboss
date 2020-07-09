@@ -1,4 +1,3 @@
-/*  Last edited: Feb 21 12:51 2000 (pmr) */
 /*emboss/histogramtest 3 10 10 1 20 30*/
 #include "emboss.h"
 #include "ajhist.h"

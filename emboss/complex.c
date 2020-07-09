@@ -1,4 +1,3 @@
-/*  Last edited: Jan 25 10:37 2000 (pmr) */
 /* @source complex application
 **
 ** Reports complexity of DNA

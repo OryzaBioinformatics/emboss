@@ -1,4 +1,3 @@
-/*  Last edited: May 22 15:48 2000 (pmr) */
 #ifdef __cplusplus
 extern "C"
 {
@@ -637,6 +636,8 @@ void                 ajFeatSortByType(AjPFeatTable FeatTab);
 void                 ajFeatSortByStart(AjPFeatTable FeatTab);
 void                 ajFeatSortByEnd(AjPFeatTable FeatTab);
 
+void                 ajFeatTabInClear (AjPFeatTabIn thys);
+
 AjBool               ajFeatTableWriteDdbj (AjPFeatTable features, AjPFile file);
 AjBool               ajFeatTableWriteEmbl (AjPFeatTable features, AjPFile file);
 AjBool               ajFeatTableWriteGenbank (AjPFeatTable features, AjPFile file);
@@ -646,6 +647,7 @@ AjBool               ajFeatTableWriteSwiss (AjPFeatTable features, AjPFile file)
 AjPFeatVocFeat       CheckDictForFeature(AjPFeatTable table, AjPStr feature);
 AjPFeatVocTag        CheckDictForTag(AjPFeatTable table, AjPStr tag);
 void                 ajFeatDickTracy(AjPFeatLexicon dictionary);
+AjPFeatLexicon       ajFeatTableDict(AjPFeatTable thys);
 
 
 

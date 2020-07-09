@@ -34,10 +34,17 @@ int getwhitewimbleydata(AjPFile file, float matrix[], float err[],
   int cols;
   int matpos;
 
-  delim = ajStrNewC(" :\t\n");
+
 
   if(!file)
     return 0;
+
+  delim = ajStrNewC(" :\t\n");
+  buffer = ajStrNew();
+  buf2   = ajStrNew();
+  
+
+
   while (ajFileGets(file,&buffer)){
     s1 = ajStrStr(buffer);
     if(*s1 == '#') /* ignore lines */
@@ -66,7 +73,14 @@ int getwhitewimbleydata(AjPFile file, float matrix[], float err[],
     ajStrToken(&buf2,&token,ajStrStr(delim)); /* get +/- error value */
     ajStrToFloat(buf2,&err2[matpos]);
 
+    ajStrTokenClear(&token);
   }
+
+  ajStrDel(&delim);
+  ajStrDel(&buffer);
+  ajStrDel(&buf2);
+  
+
   return 1;
 }
 

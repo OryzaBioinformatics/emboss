@@ -1,4 +1,3 @@
-/*  Last edited: Jan 24 17:50 2000 (pmr) */
 /** @source prima.c
  ** @author: Copyright (C) Sinead O'Leary (soleary@hgmp.mrc.ac.uk)
 ** @@

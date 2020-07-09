@@ -1,4 +1,3 @@
-/*  Last edited: Mar  1 17:15 2000 (pmr) */
 /* @source embread.c
 **
 ** Data file reading routines
@@ -120,7 +119,6 @@ AjBool embReadAminoDataFloatC(char *s, float **a, float fill)
     int  idx;
     int  i;
     
-    inf = ajFileNew();
     ajFileDataNewC(s,&inf);
     if(!inf)
     {

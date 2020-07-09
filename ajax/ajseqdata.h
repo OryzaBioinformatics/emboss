@@ -1,4 +1,3 @@
-/*  Last edited: Apr 12 14:00 2000 (pmr) */
 #ifdef __cplusplus
 extern "C"
 {
@@ -109,6 +108,7 @@ typedef struct AjSSeqin {
   AjBool Features;
   AjBool IsNuc;
   AjBool IsProt;
+  AjBool multi;
   int Count;
   int Filecount;
   long Fpos;

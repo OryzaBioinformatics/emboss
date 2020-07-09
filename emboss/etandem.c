@@ -1,4 +1,3 @@
-/*  Last edited: Feb  8 14:36 2000 (pmr) */
 /* @source etandem application
 **
 ** Tandem searches for tandem repeats

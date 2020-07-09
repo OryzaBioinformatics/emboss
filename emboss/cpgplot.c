@@ -553,5 +553,9 @@ void dumpfeatout(AjPFeatTabOut featout, AjBool *thresh, char *seqname,
     ajFeatTabDel(&feattable);
     ajFeatDeleteDict(dict);
 
+    ajStrDel(&source);
+    ajStrDel(&type);
+    ajStrDel(&name);
+    
     return;
 }

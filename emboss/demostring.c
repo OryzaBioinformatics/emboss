@@ -1,4 +1,3 @@
-/*  Last edited: Jun 21 14:11 1999 (pmr) */
 /* @source demostring application
 **
 ** Demomnstration of how the string functions should be used.

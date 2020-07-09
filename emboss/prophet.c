@@ -1,4 +1,3 @@
-/*  Last edited: Mar  1 17:09 2000 (pmr) */
 /* @source prophet application
 **
 ** Gapped alignment for profiles

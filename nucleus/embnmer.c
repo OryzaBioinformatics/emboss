@@ -1,4 +1,3 @@
-/*  Last edited: Mar  1 17:23 2000 (pmr) */
 #include "emboss.h"
 #include <math.h>
 #include <limits.h>

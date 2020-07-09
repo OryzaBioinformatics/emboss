@@ -1,3 +1,6 @@
+03/10/2000      Version 1.5.6 URL access handles new SRS6.07* format.
+                              Library and applications leak-free.
+                              Error messages made less daunting.
 28/09/2000      Version 1.5.5 dbigcg changes for genbank. Memory leaks plugged.
 23/09/2000      Version 1.5.4 Added blast multi-volume support. More gui.
 18/09/2000      Version 1.5.3 LinuxPPC support added

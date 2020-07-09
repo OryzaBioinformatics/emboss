@@ -1,4 +1,3 @@
-/*  Last edited: Jan 24 18:32 2000 (pmr) */
 /* @source printsextract application
 **
 ** Displays and plots nucleic acid duplex melting temperatures
@@ -126,9 +125,15 @@ void write_code(AjPFile *fp, AjPStr *s, AjPStr *c)
 
 void write_accession(AjPFile *inf, AjPFile *outf, AjPStr *s, AjPStr *a)
 {
+    char *p;
+    
     if(!ajFileReadLine(*inf,s)) ajFatal("Premature EOF");
     if(!ajStrPrefixC(*s,"gx;")) ajFatal("No accnum (%s)",ajStrStr(*s));
     ajStrChomp(s);
+    p = ajStrStr(*s)+4;
+    p = strchr(p,';');
+    if(p)
+	*p = '\0';
     ajStrAssC(a,ajStrStr(*s)+4);
     ajFmtPrintF(*outf,"%s\n",ajStrStr(*s)+4);
 }

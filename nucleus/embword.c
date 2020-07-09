@@ -685,6 +685,8 @@ AjPList embWordBuildMatchTable (AjPTable *seq1MatchTable,  AjPSeq seq2,
   EmbPWordMatch curmatch=NULL;
   AjIList newiter;
   AjIList curiter;
+  void *ptr=NULL;
+  
   int *k = 0;
   int kcur=0, knew=0;
 
@@ -697,7 +699,9 @@ AjPList embWordBuildMatchTable (AjPTable *seq1MatchTable,  AjPSeq seq2,
   match->sequence = seq2;  
 
   hitlist = ajListNew();
-  curlist = ajListNew();
+
+  if(!curlist)
+      curlist = ajListNew();
 
   if(ajSeqLen(seq2) < wordLength) {
     ajErr("ERROR: Sequence length = %d and word length = %d.\n",
@@ -852,6 +856,8 @@ AjPList embWordBuildMatchTable (AjPTable *seq1MatchTable,  AjPSeq seq2,
   /*wordCurListTrace(hitlist);*/
 
   AJFREE (match);
+
+  while(ajListPop(curlist,(void **)&ptr));
   
   return hitlist;
 }
@@ -1077,7 +1083,7 @@ If so it should be dead */
 void embWordMatchMin(AjPList matchlist, int seq1length, int seq2length) {
 
 
-  AjIList iter = ajListIter(matchlist);
+  AjIList iter = NULL;
   EmbPWordMatch match, thismatch;
   AjPList minlist = ajListNew();	/* list of matches in min set */
   int deadx1, deady1, deadx2, deady2;	/* positions of the dead zones */
