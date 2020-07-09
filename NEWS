@@ -1,3 +1,4 @@
+12/06/2001      Version 1.13.3 Further dbifasta & dbiflat fixes
 09/06/2001      Version 1.13.2 Fix remap, pepwindow, dbigcg, dbiblast
                                errors introduced in 1.13.0. Add CUTGEXTRACT
 25/05/2001      Version 1.13.1 Fix emboss.default.template problem
