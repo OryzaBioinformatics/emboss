@@ -1921,9 +1921,16 @@ static AjBool featReadEmbl     ( AjPFeattable thys, AjPFileBuff file){
 
   while( ajFileBuffGet (file, &line) ) {
 
-    (void) ajStrChomp(&line) ;
-    
-    if(!ajStrNCmpC(line, "FT", 2)){  /* if it's a feature do stuff */
+    /* if it's an EMBL feature do stuff */
+    if(!ajStrNCmpC(line, "FT   ", 5)){
+      (void) ajStrChompEnd(&line); /* remove newline */
+      if(featEmblFromLine(thys, line, &savefeat, &saveloc, &saveline)) 
+	found = ajTrue ;
+    }
+
+    /* if it's a GenBank feature do stuff */
+    else if(!ajStrNCmpC(line, "     ", 5)) {
+      (void) ajStrChompEnd(&line); /* remove newline */
       if(featEmblFromLine(thys, line, &savefeat, &saveloc, &saveline)) 
 	found = ajTrue ;
     }
