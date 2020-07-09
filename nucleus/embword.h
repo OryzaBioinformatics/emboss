@@ -49,8 +49,10 @@ AjPList embWordBuildMatchTable (AjPTable *seq1MatchTable,
 				AjPSeq seq2, ajint orderit);
 void    embWordClear (void);
 void    embWordFreeTable( AjPTable table);
-ajint     embWordGetTable (AjPTable *table, AjPSeq seq);
+ajint   embWordGetTable (AjPTable *table, AjPSeq seq);
 void    embWordLength (ajint wordlen);
+AjBool  embWordMatchIter (AjIList iter, ajint* start1, ajint* start2,
+			  ajint* len);
 void    embWordMatchListDelete (AjPList* plist);
 void    embWordMatchListPrint (AjPFile file, AjPList list);
 void    embWordPrintTable  (AjPTable table);

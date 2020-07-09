@@ -1296,6 +1296,34 @@ void embWordMatchMin(AjPList matchlist, ajint seq1length, ajint seq2length)
     return;
 }
 
+/* @func embWordMatchIter  ****************************************************
+**
+** Return the start positions and length for the next match.
+** The caller iterates over the list, which is a standard AjPList
+**
+** @param [U] iter [AjIList] List iterator
+** @param [W] start1 [ajint*] Start in first sequence
+** @param [W] start2 [ajint*] Start in second sequence
+** @param [W] len [ajint*] Length of match
+** @return [AjBool] ajFalse if the iterator was exhausted
+**
+******************************************************************************/
+
+AjBool embWordMatchIter (AjIList iter, ajint* start1, ajint* start2,
+			  ajint* len) {
+
+  EmbPWordMatch p;
+
+  if (!ajListIterMore(iter))
+    return ajFalse;
+
+  p = (EmbPWordMatch) ajListIterNext (iter);
+  *start1 = p->seq1start;
+  *start2 = p->seq2start;
+  *len = p->length;
+
+  return ajTrue;
+}
 
 /* @funcstatic wordListInsertOld ***********************************************
 **
