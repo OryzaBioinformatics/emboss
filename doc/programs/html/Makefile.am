@@ -10,14 +10,13 @@ pkgdata_DATA =  abiview0.gif banana0.gif chaos0.gif cpgplot0.gif \
                antigenic.html assorted_group.html backtranseq.html \
                banana.html btwisted.html chaos.html checktrans.html \
                chips.html cirdna.html clique.html codcmp.html coderet.html \
-               coding_regions_group.html comparison_group.html \
-               compseq.html cons.html consense.html contml.html \
-               contrast.html cpg_islands_group.html cpgplot.html \
-               cpgreport.html cusp.html cutseq.html dan.html \
-               database_entry_extraction_group.html \
+               coding_regions_group.html comparison_group.html compseq.html \
+               cons.html consense.html contml.html contrast.html \
+               cpg_islands_group.html cpgplot.html cpgreport.html cusp.html \
+               cutseq.html dan.html database_entry_extraction_group.html \
                database_indexing_group.html database_information_group.html \
                dbiblast.html dbifasta.html dbiflat.html dbigcg.html \
-               descseq.html diffseq.html digest.html \
+               degapseq.html descseq.html diffseq.html digest.html \
                display_alignment_multiple_group.html \
                dna_sequence_composition_group.html \
                dna_sequence_features_group.html \

@@ -21,8 +21,13 @@ Description
    and tend to be associated with genes which are frequently switched on.
    Regions rich in the CpG pattern are known as CpG islands.
    
-   This program does not find CpG islands as normally defined (see
-   cpgplot).
+   This program does not find CpG islands as normally defined: "a region
+   of greater than 200 bp with a %GC of greater than 50% and
+   observed/expected CpG > 0.6". cpgreport instead uses a running sum
+   rather than a window to create the score as follows: if not CpG at
+   position i, then decrement running-Sum counter, but if CpG then
+   running-Sum counter is incremented by the CPGSCORE. Spans greater than
+   the threshold are searched for recursively.
    
 Usage
 
@@ -97,6 +102,8 @@ RNU68037               1183   1193    26          2  72.7   2.00
    
 Data files
 
+   None.
+   
 Notes
 
    This program does not find CpG islands as normally defined (see
@@ -104,16 +111,24 @@ Notes
    
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    0 if successfull.
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name                          Description

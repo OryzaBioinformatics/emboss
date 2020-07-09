@@ -57,8 +57,37 @@ Description
 </H2>
 
 
-etandem looks for tandem repeats in a sequence. It is normally used after
+<b>etandem</b> looks for tandem repeats in a sequence. It is normally used after
 equicktandem has been run to identify potential repeat sizes.
+
+<p>
+
+Input sequences are converted into ACGT or N (so ambiguity codes are ignored).
+<br>
+The score is +1 for a match, -1 for a mismatch.
+<br>
+The first copy of a repeat is ignored.
+<br>
+The highest score is kept for each start position and repeat size.
+
+<p>
+
+The lowest score to be reported is set by the threshold score.  The
+threshold score can be set on the command-line using the
+<b>-threshold</b> qualifier, the default is 20.  For perfect repeats, the
+score is the length of the repeat (except for the first copy).  Reduce
+the threshold score a little if you wish to to allow mismatches.  Each
+mismatch scores -1 instead of +1 so it scores 2 less than a perfect
+match of the same number of bases. 
+
+<p>
+
+Running with a wide range of repeat sizes is inefficient. That is why
+equicktandem was written - to give a rapid estimate of the major repeat
+sizes.
+
+
+
 
 <H2>
 Usage
@@ -199,7 +228,10 @@ The output from etandem is an uncommented list of identified repeats.
 In a future version this will change to be annotated sequence features.
 
 <p>
+
 The columns of the report show:
+
+<p>
 
 <ol>
 <li>Score
@@ -212,6 +244,12 @@ The columns of the report show:
 </ol>
 
 <p>
+
+An example of the output is:
+
+<p>
+
+<hr>
 <pre>
    120        793        936  6  24  93.8 acccta
     90        283        420  6  23  84.8 taaccc
@@ -219,6 +257,9 @@ The columns of the report show:
     26        494        529  6   6  94.4 ccctaa
     24        568        597  6   5 100.0 aaccct
 </pre>
+<hr>
+
+
 <H2>
 Data files
 </H2>
@@ -228,6 +269,9 @@ Data files
 Notes
 </H2>
 
+Running with a wide range of repeat sizes is inefficient. That is why
+equicktandem was written - to give a rapid estimate of the major repeat
+sizes.
 
 <H2>
 References
@@ -299,6 +343,11 @@ None.
         data files?) that seealso doesn't find.
    -->
 
+<p>
+
+Running with a wide range of repeat sizes is inefficient. That is why
+equicktandem was written - to give a rapid estimate of the major repeat
+sizes.
 
 
 <H2>

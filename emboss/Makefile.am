@@ -12,10 +12,11 @@ simplesw stamps testplot treetypedisplay
 
 bin_PROGRAMS = abiview acdc antigenic \
 backtranseq banana btwisted \
-chaos checktrans chips cirdna codcmp coderet \
+chaos charge checktrans chips cirdna codcmp coderet \
 compseq cons cpgplot cpgreport cusp cutseq \
 dan dbiblast dbifasta dbiflat dbigcg \
-descseq diffseq digest domainer dotmatcher dotpath dottup dreg \
+degapseq descseq diffseq digest domainer \
+dotmatcher dotpath dottup dreg \
 einverted embossdata emma emowse entret \
 equicktandem est2genome etandem extractseq \
 findkm freak fuzznuc fuzzpro fuzztran \
@@ -52,6 +53,7 @@ backtranseq_SOURCES = backtranseq.c
 banana_SOURCES = banana.c
 btwisted_SOURCES = btwisted.c
 chaos_SOURCES = chaos.c
+charge_SOURCES = charge.c
 checktrans_SOURCES = checktrans.c
 chips_SOURCES = chips.c
 cirdna_SOURCES = cirdna.c
@@ -70,6 +72,7 @@ dbiblast_SOURCES = dbiblast.c
 dbifasta_SOURCES = dbifasta.c
 dbiflat_SOURCES = dbiflat.c
 dbigcg_SOURCES = dbigcg.c
+degapseq_SOURCES = degapseq.c
 descseq_SOURCES = descseq.c
 diffseq_SOURCES = diffseq.c
 digest_SOURCES = digest.c

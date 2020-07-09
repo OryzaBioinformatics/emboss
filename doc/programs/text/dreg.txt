@@ -126,7 +126,7 @@ Command line arguments
    
 Input file format
 
-   Any sequence.
+   Any nucleic sequence.
    
 Output file format
 
@@ -139,10 +139,16 @@ Matches in PAAMIR
 
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
    Regular expressions are case-sensitive. The pattern 'AAAA' will not
@@ -150,12 +156,16 @@ Warnings
    
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    Always returns 0.
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name                       Description
@@ -182,6 +192,8 @@ Author(s)
    
 History
 
+   Written (1999) - Peter Rice.
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

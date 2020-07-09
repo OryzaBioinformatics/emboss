@@ -91,7 +91,7 @@ Command line arguments
    [-word]
    (Parameter 2) This is the size of word (n-mer) to count. Thus if you
    want to count codon frequencies, you should enter 3 here. Integer from
-   1 to 10 2
+   1 to 20 2
    [-outfile]
    (Parameter 3) This is the results file. Output file <sequence>.compseq
    Optional qualifiers Allowed values Default
@@ -203,8 +203,13 @@ Notes
    
 References
 
+   None.
+   
 Warnings
 
+   If you use large word-sizes (over about 7 for nucleic, 5 for protein)
+   you will use huge amounts of memory.
+   
 Diagnostic Error Messages
 
    "The word size is too large for the data structure available."

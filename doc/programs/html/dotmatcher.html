@@ -61,23 +61,33 @@ A dotplot is a graphical representation of the regions of similarity
 between two sequences. 
 
 <p>
+
 The two sequences are placed on the axes of a rectangular image and
 (subject to threshold conditions) wherever there is a similarity between
 the sequences a dot is placed on the image. 
 
 <p>
+
 Where the two sequences have substantial regions of similarity, many
 dots align to form diagonal lines.  It is therefore possible to see at a
-glance where there are local regions of similarity.
+glance where there are local regions of similarity as these will have
+long diagonal lines.  It is also easy to see other features such as
+repeats (which form parallel diagonal lines), and insertions or
+deletions (which form breaks or discontinuities in the diagonal lines). 
 
 <p>
-dotmatcher uses a threshold to define whether a match is plotted
+
+<b>dotmatcher</b> uses a threshold to define whether a match is plotted
 (calculated from the substitution matrix).  A window of specified length
 is moved up all possible diagonals and a score is calculated within each
 window for each position along the diagonals.  The score is the sum of
 the comparisons of the two sequences using the given similarity matrix
 along the window.  If the score is above the threshold, then a line is
 plotted on the image over the position of the window. 
+
+<p>
+
+
 
 <H2>
     Usage
@@ -86,12 +96,15 @@ plotted on the image over the position of the window.
 
 Here is a sample session with dotmatcher.
 
+<p>
+
 <pre>
-
 % dotmatcher sw:hba_human sw:hbb_human
-
 </pre>
- <a href="dotmatcher0.gif">click here for result</a>
+
+<p>
+
+<a href="dotmatcher0.gif">click here for result</a>
 
 
 
@@ -187,7 +200,7 @@ IT IS DONE FOR YOU.
 <td>-matrixfile</td>
 <td>Matrix file</td>
 <td>Comparison matrix file in EMBOSS data path</td>
-<td>EBLOSUM62 for protein<br>EDNAMAT for DNA</td>
+<td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -219,34 +232,70 @@ Any 2 sequence USAs of the same type (DNA or protein).
 </H2>
 
 
-A .ps file is produced if postscript output is requested.
+An image is output to the requested graphics device.
 
 <H2>
     Data files
 </H2>
 
 
-Matrix substitution file. 
+It uses the specified matrix substitution file to compare the two sequences.
+
+<p>
+
+For protein sequences EBLOSUM62 is used for the substitution
+matrix. For nucleotide sequence, EDNAFULL is used. Others can be
+specified.
+
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul> 
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+
+
 
 <H2>
     Notes
 </H2>
+
+None.
 
 
 <H2>
     References
 </H2>
 
+None.
 
 <H2>
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
@@ -259,6 +308,7 @@ Matrix substitution file.
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -309,12 +359,12 @@ Matrix substitution file.
         data files?) that seealso doesn't find.
    -->
 
-
-<a href="dottup.html">dottup,</a> by comparison, has no threshold.
-
 <p>
-This is really just the <a href="wordmatch.html">wordmatch</a> method
-with a grahical output.
+
+<a href="dottup.html">dottup,</a> by comparison, has no threshold, using
+a wordmatch-style method.  <b>dottup</b> is less sensitive, but substantially
+faster than <b>dotmatcher</b>. 
+
 
 <H2>
     Author(s)
@@ -334,6 +384,7 @@ Cambridge, CB10 1SA, UK.
  Completed 1st June 1999. 
  Last modified 16th June 1999.
 </pre>
+
 <H2>
     Target users
 </H2>

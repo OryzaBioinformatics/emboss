@@ -71,7 +71,16 @@ and tend to be associated with genes which are frequently switched on.
 Regions rich in the CpG pattern are known as CpG islands. 
 
 <p>
-This program does not find CpG islands as normally defined (see cpgplot).
+
+This program does not find CpG islands as normally defined: "a region of
+greater than 200 bp with a %GC of greater than 50% and observed/expected
+CpG > 0.6".  <b>cpgreport</b> instead uses a running sum rather than a
+window to create the score as follows: if not CpG at position i, then
+decrement running-Sum counter, but if CpG then running-Sum counter is
+incremented by the CPGSCORE.  Spans greater than the threshold are
+searched for recursively. 
+
+
 
 
 <H2>
@@ -231,6 +240,7 @@ reported as '-'.
     Data files
 </H2>
 
+None.
 
 <H2>
     Notes
@@ -243,16 +253,19 @@ This program does not find CpG islands as normally defined (see cpgplot).
     References
 </H2>
 
+None.
 
 <H2>
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
@@ -264,6 +277,7 @@ This program does not find CpG islands as normally defined (see cpgplot).
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -330,6 +344,7 @@ href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
 </H2>
 
 Completed 22nd March 1999.
+
 <H2>
     Target users
 </H2>

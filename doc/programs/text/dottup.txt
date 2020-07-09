@@ -14,19 +14,27 @@ Description
    between two sequences.
    
    The two sequences are placed on the axes of a rectangular image and
-   wherever there is a similarity between the sequences a dot is placed
-   on the image.
+   (in the simplest forms of dotplot) wherever there is a similarity
+   between the sequences a dot is placed on the image.
    
    Where the two sequences have substantial regions of similarity, many
    dots align to form diagonal lines. It is therefore possible to see at
-   a glance where there are local regions of similarity.
+   a glance where there are local regions of similarity as these will
+   have long diagonal lines. It is also easy to see other features such
+   as repeats (which form parallel diagonal lines), and insertions or
+   deletions (which form breaks or discontinuities in the diagonal
+   lines).
    
    dottup looks for places where words (tuples) of a specified length
    have an exact match in both sequences and draws a diagonal line over
-   the position of these words.
+   the position of these words. This is a fast, but not especially
+   sensitive way of creating dotplots. It is an acceptable method for
+   displaying regions of substantial similarity between two sequences.
    
-   Using a longer word (tuple) size thus displays less random noise, runs
-   extremely quickly, but is less sensitive.
+   Using a longer word (tuple) size displays less random noise, runs
+   extremely quickly, but is less sensitive. Shorter word sizes are more
+   sensitive to shorter or fragmentary regions of similarity, but also
+   display more random points of similarity (noise) and runs slower.
    
 Usage
 
@@ -36,10 +44,6 @@ Usage
 
    click here for result
    
-   Here is a session writing the results to a data file:
-
-% dottup embl:eclac embl:eclaci -wordsize=6 -text -outfile=eclac.dottup
-
 Command line arguments
 
    Mandatory qualifiers (* if not always prompted):
@@ -79,59 +83,36 @@ Input file format
    
 Output file format
 
-   A .ps file is created if postscipt output is requested.
+   An image is output to the resquested output device.
    
-   If an output data file is requested using the '-text' qualifier, as in
-   the example usage given above, the file looks like:
-
-2250 matches found
-
-     ECLAC     ECLACI Length
-        49           1       1113
-      5510         195         12
-      2128         307         11
-      2329         212         11
-      2648         547         11
-      5250         394         11
-      5288         625         11
-      5572         776         11
-      1829        1034         10
-      3183         919         10
-      4546         503         10
-      4619         810         10
-      7366         973         10
-       193         332          9
-       353         926          9
-       380         145          9
-       670         626          9
-       674         622          9
-       864        1049          9
-etc.
-
-   The first line gives the number of matching words. The next non-blank
-   line is the column heading. The rest of the file is composed of three
-   columns of data on the positions of matching diagonals sorted by
-   length:
-     * The start position in the first sequence
-     * The start position in the second sequence
-     * The length of the alignment
-       
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    0 upon successful completion.
    
 Known bugs
 
+   None.
+   
 See also
 
     Program name                           Description

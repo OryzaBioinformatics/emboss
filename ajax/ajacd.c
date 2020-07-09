@@ -44,7 +44,7 @@
 #define DEFCODON  "Ehum.cut"
 #define DEFDLIST  "."
 #define DEFBLOSUM "EBLOSUM62"
-#define DEFDNA    "EDNAMAT"
+#define DEFDNA    "EDNAFULL"
 #define DEFCPDB   "1azu"
 #define DEFSCOP   "d3sdha"
 
@@ -7570,7 +7570,7 @@ static void acdHelpExpectScop (AcdPAcd thys, AjPStr* str) {
 
 static void acdHelpExpectMatrix (AcdPAcd thys, AjPStr* str) {
 
-  ajStrAssC (str, "EBLOSUM62 for protein<br>EDNAMAT for DNA");
+  ajStrAssC (str, "EBLOSUM62 for protein<br>EDNAFULL for DNA");
 
   return;
 }

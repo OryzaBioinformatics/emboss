@@ -60,24 +60,35 @@ Displays a wordmatch dotplot of two sequences
 A dotplot is a graphical representation of the regions of similarity
 between two sequences.
 
-<p>
-The two sequences are placed on the axes of a rectangular image and
-wherever there is a similarity between the sequences a dot is placed on
-the image. 
+<p> 
 
-<p>
+The two sequences are placed on the axes of a rectangular image and
+(in the simplest forms of dotplot) wherever there is a similarity
+between the sequences a dot is placed on the image. 
+
+<p> 
+
 Where the two sequences have substantial regions of similarity, many
 dots align to form diagonal lines.  It is therefore possible to see at a
-glance where there are local regions of similarity.
+glance where there are local regions of similarity as these will have
+long diagonal lines.  It is also easy to see other features such as
+repeats (which form parallel diagonal lines), and insertions or
+deletions (which form breaks or discontinuities in the diagonal lines). 
 
 <p>
-dottup looks for places where words (tuples) of a specified length
-have an exact match in both sequences and draws a diagonal line over
-the position of these words.
+
+<b>dottup</b> looks for places where words (tuples) of a specified
+length have an exact match in both sequences and draws a diagonal line
+over the position of these words.  This is a fast, but not especially
+sensitive way of creating dotplots.  It is an acceptable method for
+displaying regions of substantial similarity between two sequences. 
 
 <p>
-Using a longer word (tuple) size thus displays less random noise, runs
-extremely quickly, but is less sensitive.
+
+Using a longer word (tuple) size displays less random noise, runs
+extremely quickly, but is less sensitive.  Shorter word sizes are more
+sensitive to shorter or fragmentary regions of similarity, but also
+display more random points of similarity (noise) and runs slower. 
 
 <H2>
     Usage
@@ -93,14 +104,6 @@ Here is a sample session with dottup.
 </pre>
 <a href="./dottup0.gif">click here for result</a>
 
-<p>
-Here is a session writing the results to a data file:
-
-<pre>
-
-% dottup embl:eclac embl:eclaci -wordsize=6 -text -outfile=eclac.dottup
-
-</pre>
 
 
 <H2>
@@ -219,76 +222,42 @@ Any two sequence USAs of the same type (DNA or protein).
 </H2>
 
 
-A .ps file is created if postscipt output is requested. 
-
-<p>
-If an output data file is requested using the '-text' qualifier, as in
-the example usage given above, the file looks like:
-
-<pre>
-
-2250 matches found
-
-     ECLAC     ECLACI Length
-        49           1       1113
-      5510         195         12
-      2128         307         11
-      2329         212         11
-      2648         547         11
-      5250         394         11
-      5288         625         11
-      5572         776         11
-      1829        1034         10
-      3183         919         10
-      4546         503         10
-      4619         810         10
-      7366         973         10
-       193         332          9
-       353         926          9
-       380         145          9
-       670         626          9
-       674         622          9
-       864        1049          9
-etc.
-
-</pre>
-
-<p>
-The first line gives the number of matching words.
-The next non-blank line is the column heading.
-The rest of the file is composed of three columns of data on the
-positions of matching diagonals sorted by length:
-
-<ul>
-<li> The start position in the first sequence
-<li> The start position in the second sequence
-<li> The length of the alignment
-</ul>
+An image is output to the resquested output device.
 
 
 <H2>
     Data files
 </H2>
 
+None.
+
 
 <H2>
     Notes
 </H2>
+
+None.
 
 
 <H2>
     References
 </H2>
 
+None.
+
 
 <H2>
     Warnings
 </H2>
 
+None.
+
 
 <H2>
     Diagnostic Error Messages
 </H2>
+
+None.
 
 
 <H2>
@@ -301,6 +270,8 @@ positions of matching diagonals sorted by length:
 <H2>
     Known bugs
 </H2>
+
+None.
 
 
 <!--
@@ -349,6 +320,7 @@ positions of matching diagonals sorted by length:
         data files?) that seealso doesn't find.
    -->
 
+<p>
 
 <a href="dotmatcher.html">dotmatcher,</a> by comparison, moves a
 window of specified length up each diagonal and displays a line over

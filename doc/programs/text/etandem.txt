@@ -13,6 +13,24 @@ Description
    etandem looks for tandem repeats in a sequence. It is normally used
    after equicktandem has been run to identify potential repeat sizes.
    
+   Input sequences are converted into ACGT or N (so ambiguity codes are
+   ignored).
+   The score is +1 for a match, -1 for a mismatch.
+   The first copy of a repeat is ignored.
+   The highest score is kept for each start position and repeat size.
+   
+   The lowest score to be reported is set by the threshold score. The
+   threshold score can be set on the command-line using the -threshold
+   qualifier, the default is 20. For perfect repeats, the score is the
+   length of the repeat (except for the first copy). Reduce the threshold
+   score a little if you wish to to allow mismatches. Each mismatch
+   scores -1 instead of +1 so it scores 2 less than a perfect match of
+   the same number of bases.
+   
+   Running with a wide range of repeat sizes is inefficient. That is why
+   equicktandem was written - to give a rapid estimate of the major
+   repeat sizes.
+   
 Usage
 
    Here is a sample session with etandem. The input sequence is the human
@@ -64,6 +82,7 @@ Output file format
    features.
    
    The columns of the report show:
+   
     1. Score
     2. Start base position
     3. End base position
@@ -72,16 +91,24 @@ Output file format
     6. Percent identity
     7. Consensus sequence
        
+   An example of the output is:
+     _________________________________________________________________
+   
    120        793        936  6  24  93.8 acccta
     90        283        420  6  23  84.8 taaccc
     38        432        485  6   9  90.7 ccctaa
     26        494        529  6   6  94.4 ccctaa
     24        568        597  6   5 100.0 aaccct
-
+     _________________________________________________________________
+   
 Data files
 
 Notes
 
+   Running with a wide range of repeat sizes is inefficient. That is why
+   equicktandem was written - to give a rapid estimate of the major
+   repeat sizes.
+   
 References
 
    None.
@@ -127,6 +154,10 @@ See also
    showseq      Display a sequence with features, translation etc
    silent       Silent mutation restriction enzyme scan
    tfscan       Scans DNA sequences for transcription factors
+   
+   Running with a wide range of repeat sizes is inefficient. That is why
+   equicktandem was written - to give a rapid estimate of the major
+   repeat sizes.
    
 Authors
 

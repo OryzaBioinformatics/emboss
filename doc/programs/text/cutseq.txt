@@ -14,6 +14,9 @@ Description
    sequence by specifying the begin and end positions of the sequence to
    remove.
    
+   It removes the sequence from the specified start to the end positions
+   (inclusive) and returns the rest of the sequence in the output file.
+   
 Usage
 
    To remove bases 10 to 12 from a sequence 'gatta.seq' and write to the
@@ -65,12 +68,16 @@ Output file format
    
 Data files
 
+   None.
+   
 Notes
 
    This can be used as a simple sequence editor.
    
 References
 
+   None.
+   
 Warnings
 
    You can delete a complete sequence and write out an empty sequence
@@ -78,14 +85,14 @@ Warnings
    
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    It always exits with status 0
    
 Known bugs
 
-   Bugs noted but not yet fixed.
-   
    None.
    
 See also

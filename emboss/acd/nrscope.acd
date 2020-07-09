@@ -61,7 +61,7 @@ float: gapopen
         help: "The gap insertion penalty is the score taken away when a gap
 is created.  The best value depends on the choice of comparison matrix. 
 The default value assumes you are using the EBLOSUM62 matrix for protein
-sequences, and the EDNAMAT matrix for nucleotide sequences."
+sequences, and the EDNAFULL matrix for nucleotide sequences."
 ]
 
 float: gapextend 

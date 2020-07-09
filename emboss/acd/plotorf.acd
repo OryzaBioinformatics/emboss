@@ -20,3 +20,11 @@ appl: plotorf [
   xygraph: graph [
         req: Y multi: 6
   ]
+
+  string: start [ opt: N def: "ATG"
+                 info: "Start codons"
+  ]
+
+  string: stop [ opt: N def: "TAA,TAG,TGA"
+                 info: "Stop codons"
+  ]

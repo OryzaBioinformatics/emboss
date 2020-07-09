@@ -10,8 +10,36 @@ Function
    
 Description
 
-   This finds the positions where a specified proteolytic enzyme or
+   digest finds the positions where a specified proteolytic enzyme or
    reagent might cut a peptide sequence.
+   
+   This programs allows you to input a protein sequence and to specify
+   one proteolytic agent from a list. It will then output a file
+   containing the positions where the agent cuts, together with the
+   peptides produced.
+   
+   Trypsin will not normally cut after a K if it is followed by (e.g.)
+   another K or a P. Specifying the qualifier -unfavoured shows those
+   cuts. as well as the favoured ones.
+   
+   If you wish to emulate a partial digestion, then using the -overlap
+   qualifier will display the results from a digest in which all cut
+   sites are used and in which one site at a time is not cut. Thus the
+   resulting peptide fragments from the cut sites numbered 1, 2, 3, 4
+   etc. are shown, plus the fragments produced by cutting at the sites
+   1..3, 2..4, etc.
+   
+   i.e. fragments containing one potential cut site are also shown.
+   
+   If you wish to emulate a very partial digestion (!) then using the
+   -allpartials qualifier will do what -overlap did, but also show all
+   possible fragments from using all possible combinations of cut sites.
+   For example, fragments from the cut sites numbered 1, 2, 3, 4, 5 and
+   from the fragments produced by cutting between sites 1..3, 1..4, 1..5,
+   2..4, 2..5, 3..5, etc.
+   
+   i.e. fragments containing one or more potential cut site are also
+   shown.
    
 Usage
 
@@ -88,7 +116,8 @@ Input file format
 Output file format
 
    Here is the output from the example:
-
+     _________________________________________________________________
+   
 DIGEST of OPSD_HUMAN from 1 to 348 Molwt= 38892.536
 
 Complete digestion with Trypsin yields 14 fragments:
@@ -107,7 +136,8 @@ Start   End     Molwt      Sequence (up to 38 residues)
 249     252     503.555    (K) EVTR (M)
 312     314     449.509    (K) QFR (N)
 246     248     346.383    (K) AEK (E)
-
+     _________________________________________________________________
+   
    The first non-blank line is the title containing the name of the
    program and the name o fthe input sequence with the range considered
    and the calculated molecular weight of the protein.
@@ -139,23 +169,38 @@ Start   End     Molwt      Sequence (up to 38 residues)
        
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   ALways exist with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description
    checktrans Reports STOP codons and ORF statistics of a protein
    sequence
+   hmoment Hydrophobic moment calculation
    iep Calculates the isoelectric point of a protein
    octanol Displays protein hydropathy
    pepinfo Plots simple amino acid properties in parallel
@@ -171,6 +216,8 @@ Author(s)
    
 History
 
+   Written (1999) - Alan Bleasby
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

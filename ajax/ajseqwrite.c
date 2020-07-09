@@ -1588,11 +1588,11 @@ static void seqWritePhylip (AjPSeqout outseq)
 	    (void) ajStrBlock (&sseq, 10);
 	    if (ipos == 1)
 		(void) ajFmtPrintF (outseq->File,
-				    "%-12.12S%S\n",
+				    "%-10.10S%S\n",
 				    seq->Name, sseq);
 	    else
 		(void) ajFmtPrintF (outseq->File,
-				    "%12s%S\n",
+				    "%10s%S\n",
 				    " ", sseq);
 	}
 	if (iend < ilen)
@@ -1669,11 +1669,11 @@ static void seqWritePhylip3 (AjPSeqout outseq)
 	    (void) ajStrBlock (&sseq, 10);
 	    if (ipos == 1)
 		(void) ajFmtPrintF (outseq->File,
-				    "%-12.12S%S\n",
+				    "%-10.10S%S\n",
 				    seq->Name, sseq);
 	    else
 		(void) ajFmtPrintF (outseq->File,
-				    "%12s%S\n",
+				    "%10s%S\n",
 				    " ", sseq);
 	}
 	if (iend < ilen)

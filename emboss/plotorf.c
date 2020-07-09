@@ -25,7 +25,9 @@
 
 
 void norfs(char *seq, char *rev, ajint n, float **x, float **y, AjPInt *cnt,
-	   ajint beg);
+	   ajint beg, AjPStr *starts, ajint nstarts, AjPStr *stops,
+	   ajint nstops);
+AjBool isin(char *p, AjPStr *str, ajint n);
 
 
 int main(int argc, char **argv)
@@ -33,6 +35,12 @@ int main(int argc, char **argv)
     AjPSeq     seq;
     AjPStr     str;
     AjPStr     rev;
+    AjPStr     *starts=NULL;
+    AjPStr     *stops=NULL;
+    AjPStr     start;
+    AjPStr     stop;
+    ajint      nstarts;
+    ajint      nstops;
     
     AjPGraph   graph;
     AjPGraphData data;
@@ -59,6 +67,14 @@ int main(int argc, char **argv)
 
     seq       = ajAcdGetSeq("sequence");
     graph     = ajAcdGetGraphxy("graph");
+    start     = ajAcdGetString("start");
+    stop      = ajAcdGetString("stop");
+
+    ajStrToUpper(&start);
+    ajStrToUpper(&stop);
+
+    nstarts = ajArrCommaList(start,&starts);
+    nstops  = ajArrCommaList(stop,&stops);
 
     beg = ajSeqBegin(seq);
     end = ajSeqEnd(seq);
@@ -74,14 +90,11 @@ int main(int argc, char **argv)
 
     for(i=0;i<6;++i)
     {
-	norfs(ajStrStr(str),ajStrStr(rev),i,x,y,&cnt,beg);
+	norfs(ajStrStr(str),ajStrStr(rev),i,x,y,&cnt,beg,starts,nstarts,
+	      stops,nstops);
 	data = ajGraphxyDataNewI(2);
 	data->numofpoints = 0;
 	
-/*	data->x[0]=(float)beg;
-	data->y[0]=0.0;
-	data->x[1]=(float)end;
-	data->y[1]=0.0; */
 	
 	ajGraphxyAddGraph(graph,data);
 	ajGraphxySetOverLap(graph,ajFalse);
@@ -109,7 +122,16 @@ int main(int argc, char **argv)
  
     ajStrDel(&str);
     ajStrDel(&rev);
+    ajStrDel(&start);
+    ajStrDel(&stop);
     ajIntDel(&cnt);
+
+    for(i=0;i<nstarts;++i)
+	ajStrDel(&starts[i]);
+    AJFREE(starts);
+    for(i=0;i<nstops;++i)
+	ajStrDel(&stops[i]);
+    AJFREE(stops);
     
     ajExit();
     return 0;
@@ -118,7 +140,8 @@ int main(int argc, char **argv)
 
 
 void norfs(char *seq, char *rev, ajint n, float **x, float **y, AjPInt *cnt,
-	   ajint beg)
+	   ajint beg, AjPStr *starts, ajint nstarts, AjPStr *stops,
+	   ajint nstops)
 {
 
     ajint len;
@@ -153,7 +176,7 @@ void norfs(char *seq, char *rev, ajint n, float **x, float **y, AjPInt *cnt,
     
     for(i=po;i<len-2;i+=3)
     {
-	if(!strncmp(&p[i],"ATG",3))
+	if(isin(&p[i],starts,nstarts))
 	{
 	    if(!inframe)
 	    {
@@ -162,14 +185,14 @@ void norfs(char *seq, char *rev, ajint n, float **x, float **y, AjPInt *cnt,
 		continue;
 	    }
 	}
-
-	if(!strncmp(&p[i],"TAA",3) || !strncmp(&p[i],"TAG",3) ||
-	   !strncmp(&p[i],"TGA",3))
+	
+	if(isin(&p[i],stops,nstops))
 	    if(inframe)
 		inframe=ajFalse;
     }
 
-    if(count) {
+    if(count)
+    {
       AJCNEW (x[n], count);
       AJCNEW (y[n], count);
     }
@@ -181,7 +204,7 @@ void norfs(char *seq, char *rev, ajint n, float **x, float **y, AjPInt *cnt,
     
     for(i=po;i<len-2;i+=3)
     {
-	if(!strncmp(&p[i],"ATG",3))
+	if(isin(&p[i],starts,nstarts))
 	{
 	    if(!inframe)
 	    {
@@ -198,8 +221,7 @@ void norfs(char *seq, char *rev, ajint n, float **x, float **y, AjPInt *cnt,
 	    }
 	}
 
-	if(!strncmp(&p[i],"TAA",3) || !strncmp(&p[i],"TAG",3) ||
-	   !strncmp(&p[i],"TGA",3))
+	if(isin(&p[i],stops,nstops))
 	    if(inframe)
 	    {
 		if(ajIntGet(*cnt,n))
@@ -227,4 +249,19 @@ void norfs(char *seq, char *rev, ajint n, float **x, float **y, AjPInt *cnt,
     
     
     return;
+}
+
+
+AjBool isin(char *p, AjPStr *str, ajint n)
+{
+    ajint i;
+    AjBool ret;
+
+    ret = ajFalse;
+
+    for(i=0;i<n && !ret;++i)
+	if(!strncmp(p,ajStrStr(str[i]),3))
+	    ret = ajTrue;
+
+    return ret;
 }
