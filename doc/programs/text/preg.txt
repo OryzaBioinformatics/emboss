@@ -110,8 +110,8 @@ Command line arguments
 
    Mandatory qualifiers:
   [-sequence]          seqall     Sequence database USA
-  [-outfile]           outfile    Output file name
   [-pattern]           regexp     Regular expression pattern
+  [-outfile]           outfile    Output file name
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
@@ -124,11 +124,11 @@ Command line arguments
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.preg
    [-pattern]
-   (Parameter 3) Regular expression pattern Any regular epression pattern
+   (Parameter 2) Regular expression pattern Any regular epression pattern
    is accepted Required
+   [-outfile]
+   (Parameter 3) Output file name Output file <sequence>.preg
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default

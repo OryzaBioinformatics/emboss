@@ -40,11 +40,11 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -plot               bool       Plot charge vs pH
-   -[no]report         bool       Write results to a file
    -step               float      pH step value
    -amino              integer    Number of N-termini
    -[no]termini        bool       Include charge at N and C terminus
+   -plot               bool       Plot charge vs pH
+   -[no]report         bool       Write results to a file
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -63,11 +63,11 @@ Command line arguments
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
-   -plot Plot charge vs pH Yes/No No
-   -[no]report Write results to a file Yes/No Yes
    -step pH step value Number from 0.010 to 1.000 .5
    -amino Number of N-termini Any integer value 1
    -[no]termini Include charge at N and C terminus Yes/No Yes
+   -plot Plot charge vs pH Yes/No No
+   -[no]report Write results to a file Yes/No Yes
    
 Input file format
 
@@ -150,6 +150,7 @@ See also
    sequence
    compseq Counts the composition of dimer/trimer/etc words in a sequence
    emowse Protein identification by mass spectrometry
+   freak Residue/base frequency table or plot
    mwfilter Filter noisy molwts from mass spec output
    octanol Displays protein hydropathy
    pepinfo Plots simple amino acid properties in parallel

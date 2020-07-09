@@ -129,9 +129,6 @@ IT IS DONE FOR YOU.
                                   the sequence.
    -dnaconc            float      Enter DNA concentration (nM)
    -saltconc           float      Enter salt concentration (mM)
-*  -mintemp            float      Enter a minimum value for the temperature
-                                  scale (y-axis) of the plot.
-*  -graph              xygraph    Graph type
 *  -formamide          float      This specifies the percent formamide to be
                                   used in calculations (it is ignored unless
                                   -product is used).
@@ -141,6 +138,9 @@ IT IS DONE FOR YOU.
 *  -prodlen            integer    This specifies the product length to be used
                                   in calculations (it is ignored unless
                                   -product is used).
+*  -mintemp            float      Enter a minimum value for the temperature
+                                  scale (y-axis) of the plot.
+*  -graph              xygraph    Graph type
 *  -outfile            report     If a plot is not being produced then data on
                                   the melting point etc. in each window along
                                   the sequence is output to the file.
@@ -152,10 +152,6 @@ IT IS DONE FOR YOU.
                                   values.
 
    Advanced qualifiers:
-   -plot               bool       If this is not specified then the file of
-                                  output data is produced, else a plot of the
-                                  melting point along the sequence is
-                                  produced.
    -rna                bool       This specifies that the sequence is an RNA
                                   sequnce and not a DNA sequence.
    -product            bool       This prompts for percent formamide, percent
@@ -163,6 +159,10 @@ IT IS DONE FOR YOU.
    -thermo             bool       Output the DeltaG, DeltaH and DeltaS values
                                   of the sequence windows to the output data
                                   file.
+   -plot               bool       If this is not specified then the file of
+                                  output data is produced, else a plot of the
+                                  melting point along the sequence is
+                                  produced.
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -217,20 +217,6 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-mintemp</td>
-<td>Enter a minimum value for the temperature scale (y-axis) of the plot.</td>
-<td>Number from 0.000 to 150.000</td>
-<td>55.</td>
-</tr>
-
-<tr>
-<td>-graph</td>
-<td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
-<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
-</tr>
-
-<tr>
 <td>-formamide</td>
 <td>This specifies the percent formamide to be used in calculations (it is ignored unless -product is used).</td>
 <td>Number from 0.000 to 100.000</td>
@@ -249,6 +235,20 @@ IT IS DONE FOR YOU.
 <td>This specifies the product length to be used in calculations (it is ignored unless -product is used).</td>
 <td>Any integer value</td>
 <td>Window size (20)</td>
+</tr>
+
+<tr>
+<td>-mintemp</td>
+<td>Enter a minimum value for the temperature scale (y-axis) of the plot.</td>
+<td>Number from 0.000 to 150.000</td>
+<td>55.</td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
 <tr>
@@ -278,13 +278,6 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-plot</td>
-<td>If this is not specified then the file of output data is produced, else a plot of the melting point along the sequence is produced.</td>
-<td>Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
 <td>-rna</td>
 <td>This specifies that the sequence is an RNA sequnce and not a DNA sequence.</td>
 <td>Yes/No</td>
@@ -301,6 +294,13 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-thermo</td>
 <td>Output the DeltaG, DeltaH and DeltaS values of the sequence windows to the output data file.</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-plot</td>
+<td>If this is not specified then the file of output data is produced, else a plot of the melting point along the sequence is produced.</td>
 <td>Yes/No</td>
 <td>No</td>
 </tr>
@@ -326,28 +326,51 @@ oligomer window, its melting temperature under the specified conditions
 and its GC content. 
 
 <p>
-This is the start of the output file from the example. 
+This is the start and the end of the output file from the example. 
 
 <pre>
 
-DAN of: PAAMIR   from: 1  to: 2167
+########################################
+# Program: dan
+# Rundate: Mon Feb 11 12:07:10 2002
+# Report_file: paamir.dan
+########################################
 
-   1 GGTACCGCTGGCCGAGCATC   20 Tm=64.9 GC%=70.0
-   2 GTACCGCTGGCCGAGCATCT   21 Tm=63.7 GC%=65.0
-   3 TACCGCTGGCCGAGCATCTG   22 Tm=63.7 GC%=65.0
-   4 ACCGCTGGCCGAGCATCTGC   23 Tm=66.9 GC%=70.0
-   5 CCGCTGGCCGAGCATCTGCT   24 Tm=66.7 GC%=70.0
-   6 CGCTGGCCGAGCATCTGCTC   25 Tm=65.5 GC%=70.0
-   7 GCTGGCCGAGCATCTGCTCG   26 Tm=65.5 GC%=70.0
-   8 CTGGCCGAGCATCTGCTCGA   27 Tm=63.7 GC%=65.0
+#=======================================
+#
+# Sequence: PAAMIR     from: 1   to: 2167
+# HitCount: 2148
+#=======================================
+
+  Start     End Tm     GC     DeltaG DeltaH DeltaS TmProd Sequence
+      1      20 64.9   70.0   .      .      .      .      ggtaccgctggccgagcatc
+      2      21 63.7   65.0   .      .      .      .      gtaccgctggccgagcatct
+      3      22 63.7   65.0   .      .      .      .      taccgctggccgagcatctg
+      4      23 66.9   70.0   .      .      .      .      accgctggccgagcatctgc
+      5      24 66.7   70.0   .      .      .      .      ccgctggccgagcatctgct
+      6      25 65.5   70.0   .      .      .      .      cgctggccgagcatctgctc
+      7      26 65.5   70.0   .      .      .      .      gctggccgagcatctgctcg
+      8      27 63.7   65.0   .      .      .      .      ctggccgagcatctgctcga
+      9      28 62.9   60.0   .      .      .      .      tggccgagcatctgctcgat
+     10      29 62.6   65.0   .      .      .      .      ggccgagcatctgctcgatc
+     11      30 61.7   60.0   .      .      .      .      gccgagcatctgctcgatca
+     12      31 60.2   60.0   .      .      .      .      ccgagcatctgctcgatcac
 etc.
+
+   2143    2162 65.6   70.0   .      .      .      .      ggtggccgccaaccagttcc
+   2144    2163 64.4   65.0   .      .      .      .      gtggccgccaaccagttcct
+   2145    2164 64.1   65.0   .      .      .      .      tggccgccaaccagttcctc
+   2146    2165 65.4   70.0   .      .      .      .      ggccgccaaccagttcctcg
+   2147    2166 64.2   65.0   .      .      .      .      gccgccaaccagttcctcga
+   2148    2167 62.4   65.0   .      .      .      .      ccgccaaccagttcctcgag
+
+#---------------------------------------
+#---------------------------------------     
 
 </pre>
 
 <p>
-The first non-blank line is the title containing the program name, the
-sequence name and the start and end positions of the sequence to be
-considered. 
+The header information contains details of the program, date and sequence
 
 <p>
 Subsequent lines contain columns of data for each window into the
@@ -356,10 +379,10 @@ sequence as it is moved along, giving:
 <p>
 <ul>
 <li> The start postion of the window
-<li> The sequence of the window
 <li> The end position of the window
 <li> The melting temperature of the window
 <li> The percentage C+G of the window
+<li> The sequence of the window
 </ul>
 
 <p>
@@ -369,22 +392,30 @@ the output includes the melting temperature of the specified product:
 
 <pre>
 
-DAN of: PAAMIR   from: 1  to: 2167
+########################################
+# Program: dan
+# Rundate: Mon Feb 11 12:11:25 2002
+# Report_file: paamir.dan
+########################################
 
-   1 GGTACCGCTGGCCGAGCATC   20 Tm=64.9 GC%=70.0 Tm(prod)=54.9
-   2 GTACCGCTGGCCGAGCATCT   21 Tm=63.7 GC%=65.0 Tm(prod)=52.8
-   3 TACCGCTGGCCGAGCATCTG   22 Tm=63.7 GC%=65.0 Tm(prod)=52.8
-   4 ACCGCTGGCCGAGCATCTGC   23 Tm=66.9 GC%=70.0 Tm(prod)=54.9
-   5 CCGCTGGCCGAGCATCTGCT   24 Tm=66.7 GC%=70.0 Tm(prod)=54.9
-   6 CGCTGGCCGAGCATCTGCTC   25 Tm=65.5 GC%=70.0 Tm(prod)=54.9
-   7 GCTGGCCGAGCATCTGCTCG   26 Tm=65.5 GC%=70.0 Tm(prod)=54.9
-   8 CTGGCCGAGCATCTGCTCGA   27 Tm=63.7 GC%=65.0 Tm(prod)=52.8
+#=======================================
+#
+# Sequence: PAAMIR     from: 1   to: 2167
+# HitCount: 2148
+#=======================================
+
+  Start     End Tm     GC     DeltaG DeltaH DeltaS TmProd Sequence
+      1      20 64.9   70.0   .      .      .      54.9   ggtaccgctggccgagcatc
+      2      21 63.7   65.0   .      .      .      52.8   gtaccgctggccgagcatct
+      3      22 63.7   65.0   .      .      .      52.8   taccgctggccgagcatctg
+      4      23 66.9   70.0   .      .      .      54.9   accgctggccgagcatctgc
+
 etc.
 </pre>
 
 
 <p>
-If the qualifier '-thermo' is givedn then the DeltaG, DeltaH and DeltaS
+If the qualifier '-thermo' is gived then the DeltaG, DeltaH and DeltaS
 of the sequence in the window is also output. 
 
 <H2>

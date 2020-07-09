@@ -146,10 +146,6 @@ Output file [outfile.cons]: aligned.cons
                                   The default plurality is taken as half the
                                   total weight of all the sequences in the
                                   alignment.
-   -setcase            float      Sets the threshold for the positive matches
-                                  above which the consensus is is upper-case
-                                  and below which the consensus is in
-                                  lower-case.
    -identity           integer    Provides the facility of setting the
                                   required number of identities at a site for
                                   it to give a consensus at that position.
@@ -157,6 +153,10 @@ Output file [outfile.cons]: aligned.cons
                                   sequences in the alignment only columns of
                                   identities contribute to the consensus.
    -name               string     Name of the consensus sequence
+   -setcase            float      Sets the threshold for the positive matches
+                                  above which the consensus is is upper-case
+                                  and below which the consensus is in
+                                  lower-case.
 
    Advanced qualifiers: (none)
    General qualifiers:
@@ -210,13 +210,6 @@ Output file [outfile.cons]: aligned.cons
 </tr>
 
 <tr>
-<td>-setcase</td>
-<td>Sets the threshold for the positive matches above which the consensus is is upper-case and below which the consensus is in lower-case.</td>
-<td>Any integer value</td>
-<td>0</td>
-</tr>
-
-<tr>
 <td>-identity</td>
 <td>Provides the facility of setting the required number of identities at a site for it to give a consensus at that position. Therefore, if this is set to the number of sequences in the alignment only columns of identities contribute to the consensus.</td>
 <td>Integer 0 or more</td>
@@ -228,6 +221,13 @@ Output file [outfile.cons]: aligned.cons
 <td>Name of the consensus sequence</td>
 <td>Any string is accepted</td>
 <td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-setcase</td>
+<td>Sets the threshold for the positive matches above which the consensus is is upper-case and below which the consensus is in lower-case.</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">

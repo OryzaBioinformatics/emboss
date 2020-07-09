@@ -66,8 +66,8 @@ Command line arguments
   [-outseq]            seqoutall  Output sequence(s) USA
 
    Optional qualifiers:
-   -frame              list       Frame(s) to translate
-   -table              list       Code to use
+   -frame              menu       Frame(s) to translate
+   -table              menu       Code to use
    -regions            range      Regions to translate.
                                   If this is left blank, then the complete
                                   sequence is translated.

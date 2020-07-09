@@ -163,6 +163,28 @@ sequence can be displayed in any valid HTML colours.
 
 <p>
 
+<H3>The consensus line</H3>
+
+The consensus line can be displayed in a mixture of uppercase and
+lowercase symbols. 
+
+<p>
+
+The uppercase consensus symbol is meant to indicate that the consensus
+is strong and lowercase indicates that it is weak.  In practice, I don't
+really like this feature and genarally turn it off. 
+
+<p>
+
+The cutoff for setting the case of the consensus is set by the qualifier
+'-setcase'.  If the score of the matches is above this value, then the
+symbol is in uppercase, iot the score is below the -setcase value then
+the symbol is in lowercase. 
+
+<p>
+
+To put all of the consensus symbols into uppercase or lowercase, make
+-setcase very low (try -100000 ?) or very large (try 100000 ?).
 
 
 <H2>
@@ -248,8 +270,8 @@ Consensus eftpqvqaayqkvvagvanalahkyhxxxx
    -[no]bottom         bool       If this is true then the refernce sequence
                                   is displayed at the bottom of the alignment
                                   as well as at the top.
-   -show               list       What to show
-   -order              list       Output order of the sequences
+   -show               menu       What to show
+   -order              menu       Output order of the sequences
    -[no]similarcase    bool       If this is set True, then when -show is set
                                   to 'Similarities' or 'Non-identities' and a
                                   residue is similar but not identical to the

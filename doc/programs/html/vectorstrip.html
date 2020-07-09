@@ -363,11 +363,11 @@ IT IS DONE FOR YOU.
   [-sequence]          seqall     Sequence database USA
   [-[no]vectorfile]    bool       Are your vector sequences in a file?
 * [-vectors]           infile     Name of vectorfile
-*  -linkera            string     5' sequence
-*  -linkerb            string     3' sequence
    -mismatch           integer    Max allowed % mismatch
    -[no]besthits       bool       Show only the best hits (minimise
                                   mismatches)?
+*  -linkera            string     5' sequence
+*  -linkerb            string     3' sequence
   [-outf]              outfile    Output file name
   [-outseq]            seqoutall  Output sequence(s) USA
 
@@ -412,20 +412,6 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-linkera</td>
-<td>5' sequence</td>
-<td>Any string is accepted</td>
-<td><i>An empty string is accepted</i></td>
-</tr>
-
-<tr>
-<td>-linkerb</td>
-<td>3' sequence</td>
-<td>Any string is accepted</td>
-<td><i>An empty string is accepted</i></td>
-</tr>
-
-<tr>
 <td>-mismatch</td>
 <td>Max allowed % mismatch</td>
 <td>Any integer value</td>
@@ -437,6 +423,20 @@ IT IS DONE FOR YOU.
 <td>Show only the best hits (minimise mismatches)?</td>
 <td>Yes/No</td>
 <td>Yes</td>
+</tr>
+
+<tr>
+<td>-linkera</td>
+<td>5' sequence</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-linkerb</td>
+<td>3' sequence</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
 </tr>
 
 <tr>
@@ -763,7 +763,6 @@ None.
 <tr><td><a href="entret.html">entret</a></td><td>Reads and writes (returns) flatfile entries</td></tr>
 <tr><td><a href="extractfeat.html">extractfeat</a></td><td>Extract features from a sequence</td></tr>
 <tr><td><a href="extractseq.html">extractseq</a></td><td>Extract regions from a sequence</td></tr>
-<tr><td><a href="infoseq.html">infoseq</a></td><td>Displays some simple information about sequences</td></tr>
 <tr><td><a href="listor.html">listor</a></td><td>Writes a list file of the logical OR of two sets of sequences</td></tr>
 <tr><td><a href="maskfeat.html">maskfeat</a></td><td>Mask off features of a sequence</td></tr>
 <tr><td><a href="maskseq.html">maskseq</a></td><td>Mask off regions of a sequence</td></tr>
@@ -774,8 +773,6 @@ None.
 <tr><td><a href="pasteseq.html">pasteseq</a></td><td>Insert one sequence into another</td></tr>
 <tr><td><a href="revseq.html">revseq</a></td><td>Reverse and complement a sequence</td></tr>
 <tr><td><a href="seqret.html">seqret</a></td><td>Reads and writes (returns) sequences</td></tr>
-<tr><td><a href="seqretall.html">seqretall</a></td><td>Reads and writes (returns) a set of sequences one at a time</td></tr>
-<tr><td><a href="seqretset.html">seqretset</a></td><td>Reads and writes (returns) a set of sequences all at once</td></tr>
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
 <tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>

@@ -34,11 +34,11 @@ Index date [00/00/00]: 04/02/00
 
 Command line arguments
 
-   Mandatory qualifiers (* if not always prompted):
-   -idformat           list       Entry format
+   Mandatory qualifiers:
+   -idformat           menu       Entry format
+   -directory          string     Database directory
+   -filenames          string     Wildcard database filename
   [-dbname]            string     Database name
-*  -directory          string     Database directory
-*  -filenames          string     Wildcard database filename
    -release            string     Release number
    -date               string     Index date
 
@@ -66,10 +66,10 @@ Command line arguments
    SWISS (Swiss-Prot, SpTrEMBL, TrEMBLnew)
    GB    (Genbank, DDBJ)
    SWISS
-   [-dbname]
-   (Parameter 1) Database name A string from 1 to 19 characters Required
    -directory Database directory Any string is accepted .
    -filenames Wildcard database filename Any string is accepted *.dat
+   [-dbname]
+   (Parameter 1) Database name A string from 1 to 19 characters Required
    -release Release number A string up to 9 characters 0.0
    -date Index date Date string dd/mm/yy 00/00/00
    Optional qualifiers Allowed values Default

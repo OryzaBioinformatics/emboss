@@ -155,8 +155,8 @@ Command line arguments
    Mandatory qualifiers:
   [-sequences]         seqall     Sequence database USA
   [-primers]           infile     Primer file
-  [-out]               outfile    Output file name
   [-mismatchpercent]   integer    Allowed percent mismatch
+  [-out]               outfile    Output file name
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
@@ -171,10 +171,10 @@ Command line arguments
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    [-primers]
    (Parameter 2) Primer file Input file Required
-   [-out]
-   (Parameter 3) Output file name Output file <sequence>.primersearch
    [-mismatchpercent]
-   (Parameter 4) Allowed percent mismatch Any integer value 0
+   (Parameter 3) Allowed percent mismatch Any integer value 0
+   [-out]
+   (Parameter 4) Output file name Output file <sequence>.primersearch
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
@@ -292,8 +292,7 @@ Known bugs
 See also
 
    Program name Description
-   prima Selects primers for PCR and DNA amplification
-   primer3 Picks PCR primers and hybridization oligos
+   eprimer3 Picks PCR primers and hybridization oligos
    stssearch Searches a DNA database for matches with a set of STS
    primers
    

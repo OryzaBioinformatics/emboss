@@ -59,9 +59,6 @@ Command line arguments
 
    Mandatory qualifiers:
   [-sequence]          seqall     Sequence database USA
-  [-outfile]           outfile    If you enter the name of a file here then
-                                  this program will write the sequence details
-                                  into that file.
    -enzymes            string     The name 'all' reads in all enzyme names
                                   from the REBASE database. You can specify
                                   enzymes by giving their names with commas
@@ -85,10 +82,11 @@ Command line arguments
                                   HinfI
                                   PpiI
    -sitelen            integer    Minimum recognition site length
+  [-outfile]           outfile    If you enter the name of a file here then
+                                  this program will write the sequence details
+                                  into that file.
 
    Optional qualifiers:
-   -[no]cutlist        bool       List the enzymes that cut
-   -flatreformat       bool       Display RE sites in flat format
    -mincuts            integer    Minimum cuts per RE
    -maxcuts            integer    Maximum cuts per RE
    -single             bool       Force single site only cuts
@@ -97,9 +95,11 @@ Command line arguments
    -[no]ambiguity      bool       Allow ambiguous matches
    -plasmid            bool       Allow circular DNA
    -[no]commercial     bool       Only enzymes with suppliers
+   -table              menu       Code to use
+   -[no]cutlist        bool       List the enzymes that cut
+   -flatreformat       bool       Display RE sites in flat format
    -[no]limit          bool       Limits reports to one isoschizomer
    -preferred          bool       Report preferred isoschizomers
-   -table              list       Code to use
 
    Advanced qualifiers:
    -[no]translation    bool       Display translation
@@ -154,10 +154,6 @@ Command line arguments
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-outfile]
-   (Parameter 2) If you enter the name of a file here then this program
-   will write the sequence details into that file. Output file
-   <sequence>.remap
    -enzymes The name 'all' reads in all enzyme names from the REBASE
    database. You can specify enzymes by giving their names with commas
    between then, such as: 'HincII,hinfI,ppiI,hindiii'. The case of the
@@ -170,9 +166,11 @@ Command line arguments
    enzyme names is: ! my enzymes HincII, ppiII ! other enzymes hindiii
    HinfI PpiI Any string is accepted all
    -sitelen Minimum recognition site length Integer from 2 to 20 4
+   [-outfile]
+   (Parameter 2) If you enter the name of a file here then this program
+   will write the sequence details into that file. Output file
+   <sequence>.remap
    Optional qualifiers Allowed values Default
-   -[no]cutlist List the enzymes that cut Yes/No Yes
-   -flatreformat Display RE sites in flat format Yes/No No
    -mincuts Minimum cuts per RE Integer from 1 to 1000 1
    -maxcuts Maximum cuts per RE Integer up to 2000000000 2000000000
    -single Force single site only cuts Yes/No No
@@ -181,8 +179,6 @@ Command line arguments
    -[no]ambiguity Allow ambiguous matches Yes/No Yes
    -plasmid Allow circular DNA Yes/No No
    -[no]commercial Only enzymes with suppliers Yes/No Yes
-   -[no]limit Limits reports to one isoschizomer Yes/No Yes
-   -preferred Report preferred isoschizomers Yes/No No
    -table Code to use
    0 (Standard)
    1 (Standard (with alternative initiation codons))
@@ -204,6 +200,10 @@ Command line arguments
    22 (Scenedesmus obliquus)
    23 (Thraustochytrium Mitochondrial)
    0
+   -[no]cutlist List the enzymes that cut Yes/No Yes
+   -flatreformat Display RE sites in flat format Yes/No No
+   -[no]limit Limits reports to one isoschizomer Yes/No Yes
+   -preferred Report preferred isoschizomers Yes/No No
    Advanced qualifiers Allowed values Default
    -[no]translation Display translation Yes/No Yes
    -[no]reverse Display cut sites and translation of reverse sense Yes/No

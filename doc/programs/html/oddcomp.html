@@ -138,7 +138,6 @@ IT IS DONE FOR YOU.
 <pre>
    Mandatory qualifiers:
   [-sequence]          seqall     Sequence database USA
-  [-outfile]           outfile    This is the results file.
   [-compdata]          infile     This is a file in the format of the output
                                   produced by 'compseq' that is used to set
                                   the minimum frequencies of words in this
@@ -147,6 +146,7 @@ IT IS DONE FOR YOU.
                                   count.
                                   Thus if you want to count frequencies in a
                                   40 aa stretch you should enter 40 here.
+  [-outfile]           outfile    This is the results file.
 
    Optional qualifiers: (none)
    Advanced qualifiers:
@@ -183,25 +183,25 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>[-outfile]<br>(Parameter 2)</td>
-<td>This is the results file.</td>
-<td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.oddcomp</td>
-</tr>
-
-<tr>
-<td>[-compdata]<br>(Parameter 3)</td>
+<td>[-compdata]<br>(Parameter 2)</td>
 <td>This is a file in the format of the output produced by 'compseq' that is used to set the minimum frequencies of words in this analysis.</td>
 <td>Input file</td>
 <td><b>Required</b></td>
 </tr>
 
 <tr>
-<td>[-window]<br>(Parameter 4)</td>
+<td>[-window]<br>(Parameter 3)</td>
 <td>This is the size of window in which to count.
 Thus if you want to count frequencies in a 40 aa stretch you should enter 40 here.</td>
 <td>Integer 10 or more</td>
 <td>30</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 4)</td>
+<td>This is the results file.</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.oddcomp</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">

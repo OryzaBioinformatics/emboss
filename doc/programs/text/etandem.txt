@@ -48,9 +48,9 @@ Command line arguments
 
    Mandatory qualifiers:
   [-sequence]          sequence   Sequence USA
-  [-outfile]           outfile    Output file name
    -minrepeat          integer    Minimum repeat size
    -maxrepeat          integer    Maximum repeat size
+  [-outfile]           outfile    Output file name
 
    Optional qualifiers: (none)
    Advanced qualifiers:
@@ -67,11 +67,11 @@ Command line arguments
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
-   [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.etandem
    -minrepeat Minimum repeat size Integer, 2 or higher 10
    -maxrepeat Maximum repeat size Integer, same as -minrepeat or higher
    Same as -minrepeat
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.etandem
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default

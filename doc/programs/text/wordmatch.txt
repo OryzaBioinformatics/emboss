@@ -33,8 +33,8 @@ Command line arguments
    Mandatory qualifiers:
   [-asequence]         sequence   Sequence USA
   [-bsequence]         sequence   Sequence USA
-  [-outfile]           outfile    Output file name
    -wordsize           integer    Word size
+  [-outfile]           outfile    Output file name
 
    Optional qualifiers: (none)
    Advanced qualifiers:
@@ -52,9 +52,9 @@ Command line arguments
    (Parameter 1) Sequence USA Readable sequence Required
    [-bsequence]
    (Parameter 2) Sequence USA Readable sequence Required
+   -wordsize Word size Integer 2 or more 4
    [-outfile]
    (Parameter 3) Output file name Output file <sequence>.wordmatch
-   -wordsize Word size Integer 2 or more 4
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default

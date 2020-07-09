@@ -39,9 +39,9 @@ Command line arguments
 
    Mandatory qualifiers:
   [-sequence]          sequence   Sequence USA
-  [-outfile]           outfile    Output file name
    -maxrepeat          integer    Maximum repeat size
    -threshold          integer    Threshold score
+  [-outfile]           outfile    Output file name
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
@@ -54,10 +54,10 @@ Command line arguments
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
-   [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.equicktandem
    -maxrepeat Maximum repeat size Any integer value 600
    -threshold Threshold score Any integer value 20
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.equicktandem
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default

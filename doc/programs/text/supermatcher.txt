@@ -56,9 +56,9 @@ Command line arguments
 
    Optional qualifiers:
    -datafile           matrixf    Matrix file
-   -errorfile          outfile    Error file to be written to
    -width              integer    Alignment width
    -wordlen            integer    word length for initial matching
+   -errorfile          outfile    Error file to be written to
 
    Advanced qualifiers: (none)
    General qualifiers:
@@ -81,9 +81,9 @@ Command line arguments
    -datafile Matrix file Comparison matrix file in EMBOSS data path
    EBLOSUM62 for protein
    EDNAFULL for DNA
-   -errorfile Error file to be written to Output file supermatcher.error
    -width Alignment width Any integer value 16
    -wordlen word length for initial matching Integer 3 or more 6
+   -errorfile Error file to be written to Output file supermatcher.error
    Advanced qualifiers Allowed values Default
    (none)
    

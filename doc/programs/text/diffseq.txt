@@ -34,7 +34,7 @@ Usage
 
    Here is a sample session with diffseq:
 
-% diffseq embl:ap000504 embl:af129756
+% diffseq tembl:ap000504 tembl:af129756
 Find differences (SNPs) between nearly identical sequences
 Word size [10]:
 Output file [ap000504.diffseq]:
@@ -100,90 +100,111 @@ Output file format
    An example follows:
   __________________________________________________________________________
 
-# Report of diffseq of: AF129756 and AP000504
+########################################
+# Program: diffseq
+# Rundate: Mon Feb 11 13:16:56 2002
+# Report_file: ap000504.diffseq
+# Additional_files: 2
+# 1: AP000504.diffgff (Feature file for first sequence)
+# 2: AF129756.diffgff (Feature file for second sequence)
+########################################
 
-AF129756 overlap starts at 6036
-AP000504 overlap starts at 1
+#=======================================
+#
+# Sequence: AP000504     from: 1   to: 100000
+# HitCount: 119
+#
+# Compare: AF129756     from: 1   to: 184666
+#
+# AP000504 overlap starts at 1
+# AF129756 overlap starts at 6036
+#
+# (AP000504) start end length sequence
+# (AF129756) start end length sequence
+#
+#
+#
+#=======================================
 
 
-AF129756 6882-6882 Length: 1
-Sequence: t
-Sequence: a
 AP000504 847-847 Length: 1
-
-AF129756 7830-7830 Length: 1
 Sequence: a
-Sequence: g
+Sequence: t
+AF129756 6882-6882 Length: 1
+
 AP000504 1795-1795 Length: 1
+Sequence: g
+Sequence: a
+AF129756 7830-7830 Length: 1
 
-AF129756 8307 Length: 0
-Feature: repeat_region 7920-8351 rpt_family="MSTB"
-Sequence:
-Sequence: t
 AP000504 2273-2273 Length: 1
-
-AF129756 8500-8500 Length: 1
-Feature: repeat_region 8391-8686 rpt_family="AluSg"
-Sequence: a
-Sequence: g
-AP000504 2466-2466 Length: 1
-
-AF129756 8688 Length: 0
-Feature: repeat_region 8687-8731 rpt_family="(CA)n"
-Sequence:
-Sequence: tgtg
-AP000504 2655-2658 Length: 4
-
-AF129756 10945-10962 Length: 18
-Feature: repeat_region 10910-10972 rpt_family="(CA)n"
-Sequence: gtgtgtgtgtgtgtgtgt
-Sequence:
-AP000504 4914 Length: 0
-
-AF129756 10999-11001 Length: 3
-Feature: repeat_region 10991-11020 rpt_family="AT_rich"
-Sequence: tat
-Sequence: aaa
-AP000504 4951-4953 Length: 3
-
-AF129756 12647 Length: 0
-Feature: repeat_region 12628-12930 rpt_family="AluSq"
-Sequence:
 Sequence: t
-AP000504 6600-6600 Length: 1
-
-AF129756 12915-12915 Length: 1
-Feature: repeat_region 12628-12930 rpt_family="AluSq"
-Sequence: a
-Sequence: g
-AP000504 6868-6868 Length: 1
-
-AF129756 14264 Length: 0
 Sequence:
-Sequence: tgtg
-AP000504 8218-8221 Length: 4
+Feature: repeat_region 7920-8351 rpt_family='MSTB'
+AF129756 8307 Length: 0
 
-AF129756 15139-15139 Length: 1
+AP000504 2466-2466 Length: 1
+Sequence: g
+Sequence: a
+Feature: repeat_region 8391-8686 rpt_family='AluSg'
+AF129756 8500-8500 Length: 1
+
+AP000504 2655-2658 Length: 4
+Sequence: tgtg
+Sequence:
+Feature: repeat_region 8687-8731 rpt_family='(CA)n'
+AF129756 8688 Length: 0
+
+AP000504 4914 Length: 0
+Sequence:
+Sequence: gtgtgtgtgtgtgtgtgt
+Feature: repeat_region 10910-10972 rpt_family='(CA)n'
+AF129756 10945-10962 Length: 18
+
+AP000504 4951-4953 Length: 3
+Sequence: aaa
+Sequence: tat
+Feature: repeat_region 10991-11020 rpt_family='AT_rich'
+AF129756 10999-11001 Length: 3
+
+AP000504 6600-6600 Length: 1
+Sequence: t
+Sequence:
+Feature: repeat_region 12628-12930 rpt_family='AluSq'
+AF129756 12647 Length: 0
+
+
+etc.
+
+
+AP000504 97273-97274 Length: 2
+Sequence: aa
+Sequence:
+Feature: repeat_region 103299-103402 rpt_family='AluSq'
+AF129756 103302 Length: 0
+
+AP000504 97716-97716 Length: 1
 Sequence: a
 Sequence: g
-AP000504 9096-9096 Length: 1
+AF129756 103744-103744 Length: 1
 
-AF129756 17192-17192 Length: 1
-Feature: repeat_region 16933-17231 rpt_family="AluSx"
-Sequence: a
+AP000504 97827-97827 Length: 1
 Sequence: c
-AP000504 11149-11149 Length: 1
+Sequence: t
+Feature: repeat_region 103784-104083 rpt_family='AluSx'
+AF129756 103855-103855 Length: 1
 
-[many lines removed for brevity]
-
-AF129756 overlap ends at 106028
-AP000504 overlap ends at 100000
-
-
-
-No. of SNPs = 86
-No. of transitions = 58
-No. of transversions = 28
+#---------------------------------------
+#
+# Overlap_end: 100000 in AP000504
+# Overlap_end: 106028 in AF129756
+#
+# SNP_count: 86
+# Transitions: 58
+# Transversions: 28
+#
+#
+#---------------------------------------
   __________________________________________________________________________
 
    The first line is the title giving the names of the sequences used.
@@ -234,129 +255,148 @@ No. of transversions = 28
    If no regions of alignment are found, the following output is given:
   __________________________________________________________________________
 
-# Report of diffseq of: Fred and ECOMPA
+########################################
+# Program: diffseq
+# Rundate: Mon Feb 11 13:21:20 2002
+# Report_file: ap000504.diffseq
+# Additional_files: 2
+# 1: AP000504.diffgff (Feature file for first sequence)
+# 2: fred.diffgff (Feature file for second sequence)
+########################################
+
+#=======================================
+#
+# Sequence: AP000504     from: 1   to: 100000
+# HitCount: 0
+#=======================================
 
 
-
-No regions of alignment found.
+#---------------------------------------
+#
+# No regions of alignment found.
+#
+#
+#---------------------------------------
   __________________________________________________________________________
 
-   If the -columns qualifier is given then the output is given in a
+   If the -rformat table qualifier is given then the output is given in a
    columnar format.
    
    The columns are separated by one or more spaces or TAB characters in
    the order:
    
+     * sequence 1 name
      * sequence 1 start
      * sequence 1 end
-     * sequence 1 length
-     * sequence 1 sequence in quotes
+     * score (always 0.000)
      * sequence 2 start
      * sequence 2 end
-     * sequence 2 length
-     * sequence 2 sequence in quotes
+     * sequence 2 name
+     * sequence difference length
+     * sequence
+     * first feature
+     * second feature
        
-   Note: no features are reported in this format in order to keep the
-   columns lining up nicely.
-   
    For example:
   __________________________________________________________________________
 
-# Report of diffseq of: AF129756 and AP000504
+########################################
+# Program: diffseq
+# Rundate: Mon Feb 11 13:28:25 2002
+# Report_file: ap000504.diffseq
+# Additional_files: 2
+# 1: AP000504.diffgff (Feature file for first sequence)
+# 2: AF129756.diffgff (Feature file for second sequence)
+########################################
 
-# AF129756 overlap starts at 6036
+#=======================================
+#
+# Sequence: AP000504     from: 1   to: 100000
+# HitCount: 119
+#
+# Compare: AF129756     from: 1   to: 184666
+#
 # AP000504 overlap starts at 1
+# AF129756 overlap starts at 6036
+#
+# (AP000504) start end length sequence
+# (AF129756) start end length sequence
+#
+#
+#
+#=======================================
 
-# (AF129756) start end length sequence  (AP000504) start end length sequence
-
-6882    6882    1       't'     847     847     1       'a'
-7830    7830    1       'a'     1795    1795    1       'g'
-8307    8307    0       ''      2273    2273    1       't'
-8500    8500    1       'a'     2466    2466    1       'g'
-8688    8688    0       ''      2655    2658    4       'tgtg'
-10945   10962   18      'gtgtgtgtgtgtgtgtgt'    4914    4914    0       ''
-10999   11001   3       'tat'   4951    4953    3       'aaa'
-12647   12647   0       ''      6600    6600    1       't'
-12915   12915   1       'a'     6868    6868    1       'g'
-14264   14264   0       ''      8218    8221    4       'tgtg'
-15139   15139   1       'a'     9096    9096    1       'g'
-17192   17192   1       'a'     11149   11149   1       'c'
-19761   19761   1       'c'     13718   13718   1       'a'
-20291   20291   1       't'     14248   14248   1       'c'
-20462   20462   1       'c'     14419   14419   1       'g'
-25686   25686   1       'c'     19643   19643   1       't'
-26192   26192   1       't'     20149   20149   1       'c'
-27227   27227   1       't'     21183   21183   0       ''
-27359   27359   0       ''      21316   21319   4       'ctga'
-27837   27837   1       't'     21797   21797   1       'c'
-29328   29328   1       'a'     23288   23288   1       't'
-29458   29458   1       'c'     23418   23418   1       'a'
-29629   29629   1       'c'     23589   23589   1       't'
-29646   29646   1       'a'     23606   23606   1       'g'
-30838   30838   1       't'     24798   24798   1       'c'
-31349   31349   1       't'     25309   25309   1       'c'
-31901   31901   1       't'     25861   25861   1       'g'
-34078   34078   0       ''      28039   28040   2       'ac'
-36682   36682   1       't'     30644   30644   1       'c'
-38225   38226   2       'gt'    32186   32186   0       ''
-38379   38379   1       'g'     32339   32339   1       'c'
-38537   38537   1       'c'     32497   32497   1       't'
-39114   39114   1       'c'     33074   33074   1       't'
-39816   39816   1       'a'     33776   33776   1       'g'
-40807   40807   1       'c'     34767   34767   1       'a'
-40977   40977   1       'a'     34936   34936   0       ''
-41204   41204   1       'g'     35163   35163   1       'a'
-42548   42548   1       'a'     36507   36507   1       'g'
-43800   43800   0       ''      37760   37762   3       'aaa'
-44717   44717   0       ''      38680   38683   4       'aata'
-45315   45315   1       'a'     39280   39280   0       ''
-48382   48382   1       'g'     42347   42347   1       'a'
-48671   48671   0       ''      42637   42638   2       'gt'
-50635   50635   1       'c'     44602   44602   1       't'
-50809   50809   1       't'     44776   44776   1       'g'
-51286   51286   1       'a'     45253   45253   1       'g'
-51645   51645   1       't'     45611   45611   0       ''
-52388   52388   1       't'     46354   46354   1       'c'
-52646   52646   1       'g'     46612   46612   1       'a'
-53596   53596   1       'g'     47562   47562   1       'a'
-53621   53621   1       'c'     47587   47587   1       't'
-54883   54883   1       'a'     48849   48849   1       'g'
-55377   55377   1       'a'     49343   49343   1       'g'
-55571   55571   1       't'     49537   49537   1       'c'
-55611   55611   1       'c'     49577   49577   1       't'
-55655   55661   7       'aaaaaaa'       49620   49620   0       ''
-56357   56357   1       'g'     50316   50316   1       'a'
-58115   58115   1       'c'     52074   52074   1       'a'
-59922   59922   1       't'     53881   53881   1       'c'
-60092   60092   1       'c'     54051   54051   1       'g'
-63114   63114   1       't'     57073   57073   1       'a'
-64267   64271   5       'gtttt' 58225   58225   0       ''
-64731   64731   1       't'     58685   58685   1       'c'
-66604   66604   1       'c'     60558   60558   1       't'
-67254   67254   0       ''      61209   61209   1       'c'
-69002   69002   0       ''      62958   62959   2       'tt'
-69445   69445   1       'a'     63402   63402   1       'g'
-
-[many lines deleted for brevity]
-
-# AF129756 overlap ends at 106028
-# AP000504 overlap ends at 100000
+USA               Start     End   Score start  end    length name   sequence fi
+rst_feature second_feature
+AP000504            847     847   0.000 6882   6882   1      AF129756 t
+.             .
+AP000504           1795    1795   0.000 7830   7830   1      AF129756 a
+.             .
+AP000504           2273    2273   0.000 8307   8306   .      AF129756 .
+.             repeat_region 7920-8351 rpt_family='MSTB'
+AP000504           2466    2466   0.000 8500   8500   1      AF129756 a
+.             repeat_region 8391-8686 rpt_family='AluSg'
+AP000504           2655    2658   0.000 8688   8687   .      AF129756 .
+.             repeat_region 8687-8731 rpt_family='(CA)n'
+AP000504           4914    4913   0.000 10945  10962  18     AF129756 gtgtgtgtg
+tgtgtgtgt .             repeat_region 10910-10972 rpt_family='(CA)n'
 
 
+etc.
 
-# No. of SNPs = 86
-# No. of transitions = 58
-# No. of transversions = 28
+AP000504          93860   93860   0.000 99890  99890  1      AF129756 g
+.             .
+AP000504          95451   95451   0.000 101481 101481 1      AF129756 t
+.             .
+AP000504          96650   96650   0.000 102680 102680 1      AF129756 t
+.             .
+AP000504          97273   97274   0.000 103302 103301 .      AF129756 .
+.             repeat_region 103299-103402 rpt_family='AluSq'
+AP000504          97716   97716   0.000 103744 103744 1      AF129756 g
+.             .
+AP000504          97827   97827   0.000 103855 103855 1      AF129756 t
+.             repeat_region 103784-104083 rpt_family='AluSx'
+
+#---------------------------------------
+#
+# Overlap_end: 100000 in AP000504
+# Overlap_end: 106028 in AF129756
+#
+# SNP_count: 86
+# Transitions: 58
+# Transversions: 28
+#
+#
+#---------------------------------------
   __________________________________________________________________________
 
    If no regions of alignment are found, the following output is given:
   __________________________________________________________________________
 
-# Report of diffseq of: Fred and ECOMPA
+########################################
+# Program: diffseq
+# Rundate: Mon Feb 11 13:34:34 2002
+# Report_file: ap000504.diffseq
+# Additional_files: 2
+# 1: AP000504.diffgff (Feature file for first sequence)
+# 2: fred.diffgff (Feature file for second sequence)
+########################################
 
+#=======================================
+#
+# Sequence: AP000504     from: 1   to: 100000
+# HitCount: 0
+#=======================================
 
+USA               Start     End   Score start  end    length name   sequence fi
+rst_feature second_feature
 
+#---------------------------------------
+#
 # No regions of alignment found.
+#
+#
+#---------------------------------------
   __________________________________________________________________________
 
 Data files

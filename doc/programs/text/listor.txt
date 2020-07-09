@@ -105,7 +105,7 @@ Command line arguments
                                   to this list file
 
    Optional qualifiers:
-   -operator           list       The following logical operators combine the
+   -operator           menu       The following logical operators combine the
                                   sequences in the following ways:
                                   OR - gives all that occur in one set or the
                                   other
@@ -208,7 +208,6 @@ See also
    entret       Reads and writes (returns) flatfile entries
    extractfeat  Extract features from a sequence
    extractseq   Extract regions from a sequence
-   infoseq      Displays some simple information about sequences
    maskfeat     Mask off features of a sequence
    maskseq      Mask off regions of a sequence
    newseq       Type in a short new sequence
@@ -218,8 +217,6 @@ See also
    pasteseq     Insert one sequence into another
    revseq       Reverse and complement a sequence
    seqret       Reads and writes (returns) sequences
-   seqretall    Reads and writes (returns) a set of sequences one at a time
-   seqretset    Reads and writes (returns) a set of sequences all at once
    seqretsplit  Reads and writes (returns) sequences in individual files
    splitter     Split a sequence into (overlapping) smaller sequences
    swissparse   Retrieves sequences from swissprot using keyword search

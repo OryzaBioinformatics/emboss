@@ -62,9 +62,9 @@ Command line arguments
    Mandatory qualifiers:
   [-seqa]              sequence   Sequence USA
   [-seqb]              sequence   Sequence USA
+   -wordsize           integer    Word size
   [-outseq]            seqout     Output sequence USA
    -report             outfile    Output report
-   -wordsize           integer    Word size
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
@@ -79,10 +79,10 @@ Command line arguments
    (Parameter 1) Sequence USA Readable sequence Required
    [-seqb]
    (Parameter 2) Sequence USA Readable sequence Required
+   -wordsize Word size Integer 2 or more 20
    [-outseq]
    (Parameter 3) Output sequence USA Writeable sequence <sequence>.format
    -report Output report Output file stdout
-   -wordsize Word size Integer 2 or more 20
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default

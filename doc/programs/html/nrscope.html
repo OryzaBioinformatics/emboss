@@ -167,8 +167,6 @@ D5HBIB_
    Mandatory qualifiers:
   [-scopin]            infile     Name of scop file for input (embl-like
                                   format)
-  [-scopout]           outfile    Name of non-redundant scop file for output
-                                  (embl-like format)
   [-dpdb]              string     Location of clean domain coordinate files
                                   for input (embl-like format)
   [-extn]              string     File extension of clean domain coordinate
@@ -196,6 +194,8 @@ D5HBIB_
                                   penalty to zero (or very low) and using the
                                   gap extension penalty to control gap
                                   scoring.
+  [-scopout]           outfile    Name of non-redundant scop file for output
+                                  (embl-like format)
   [-errf]              outfile    Name of log file for the build
 
    Optional qualifiers: (none)
@@ -224,52 +224,52 @@ D5HBIB_
 </tr>
 
 <tr>
-<td>[-scopout]<br>(Parameter 2)</td>
-<td>Name of non-redundant scop file for output (embl-like format)</td>
-<td>Output file</td>
-<td>EscopNR.dat</td>
-</tr>
-
-<tr>
-<td>[-dpdb]<br>(Parameter 3)</td>
+<td>[-dpdb]<br>(Parameter 2)</td>
 <td>Location of clean domain coordinate files for input (embl-like format)</td>
 <td>Any string is accepted</td>
 <td>./</td>
 </tr>
 
 <tr>
-<td>[-extn]<br>(Parameter 4)</td>
+<td>[-extn]<br>(Parameter 3)</td>
 <td>File extension of clean domain coordinate files</td>
 <td>Any string is accepted</td>
 <td>.pxyz</td>
 </tr>
 
 <tr>
-<td>[-thresh]<br>(Parameter 5)</td>
+<td>[-thresh]<br>(Parameter 4)</td>
 <td>The % sequence identity redundancy threshold</td>
 <td>Any integer value</td>
 <td>95.0</td>
 </tr>
 
 <tr>
-<td>[-datafile]<br>(Parameter 6)</td>
+<td>[-datafile]<br>(Parameter 5)</td>
 <td>Residue substitution matrix</td>
 <td>Comparison matrix file in EMBOSS data path</td>
 <td>EBLOSUM62</td>
 </tr>
 
 <tr>
-<td>[-gapopen]<br>(Parameter 7)</td>
+<td>[-gapopen]<br>(Parameter 6)</td>
 <td>The gap insertion penalty is the score taken away when a gap is created. The best value depends on the choice of comparison matrix. The default value assumes you are using the EBLOSUM62 matrix for protein sequences, and the EDNAFULL matrix for nucleotide sequences.</td>
 <td>Floating point number from 1.0 to 100.0</td>
 <td>10.0 for any sequence</td>
 </tr>
 
 <tr>
-<td>[-gapextend]<br>(Parameter 8)</td>
+<td>[-gapextend]<br>(Parameter 7)</td>
 <td>The gap extension, penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty. An exception is where one or both sequences are single reads with possible sequencing errors in which case you would expect many single base gaps. You can get this result by setting the gap open penalty to zero (or very low) and using the gap extension penalty to control gap scoring.</td>
 <td>Floating point number from 0.0 to 10.0</td>
 <td>0.5 for any sequence</td>
+</tr>
+
+<tr>
+<td>[-scopout]<br>(Parameter 8)</td>
+<td>Name of non-redundant scop file for output (embl-like format)</td>
+<td>Output file</td>
+<td>EscopNR.dat</td>
 </tr>
 
 <tr>
@@ -650,10 +650,13 @@ None.
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
 <tr><td><a href="domainer.html">domainer</a></td><td>Build domain coordinate files</td></tr>
+<tr><td><a href="pdbtosp.html">pdbtosp</a></td><td>Convert raw swissprot:pdb equivalence file to embl-like format</td></tr>
 <tr><td><a href="printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
 <tr><td><a href="prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
 <tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
 <tr><td><a href="scope.html">scope</a></td><td>Convert raw scop classification file to embl-like format</td></tr>
+<tr><td><a href="scopparse.html">scopparse</a></td><td>Reads raw scop classifications file and writes embl-like format scop classification file</td></tr>
+<tr><td><a href="seqnr.html">seqnr</a></td><td>Converts redundant database results to a non-redundant set of hits</td></tr>
 <tr><td><a href="tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
 </table>
 

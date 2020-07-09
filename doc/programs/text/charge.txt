@@ -33,8 +33,8 @@ Command line arguments
    -window             integer    Window
 
    Advanced qualifiers:
-   -plot               bool       Produce graphic
    -aadata             string     Amino acid property data file name
+   -plot               bool       Produce graphic
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -53,9 +53,9 @@ Command line arguments
    Optional qualifiers Allowed values Default
    -window Window Integer 1 or more 5
    Advanced qualifiers Allowed values Default
-   -plot Produce graphic Yes/No No
    -aadata Amino acid property data file name Any string is accepted
    Eamino.dat
+   -plot Produce graphic Yes/No No
    
 Input file format
 
@@ -285,6 +285,7 @@ See also
    sequence
    compseq Counts the composition of dimer/trimer/etc words in a sequence
    emowse Protein identification by mass spectrometry
+   freak Residue/base frequency table or plot
    iep Calculates the isoelectric point of a protein
    mwfilter Filter noisy molwts from mass spec output
    octanol Displays protein hydropathy

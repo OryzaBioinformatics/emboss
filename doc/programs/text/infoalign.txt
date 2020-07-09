@@ -64,9 +64,6 @@ Command line arguments
   [-sequence]          seqset     The sequence alignment to be displayed.
 
    Optional qualifiers:
-   -outfile            outfile    If you enter the name of a file here then
-                                  this program will write the sequence details
-                                  into that file.
    -refseq             string     If you give the number in the alignment or
                                   the name of a sequence, it will be taken to
                                   be the reference sequence. The reference
@@ -77,6 +74,9 @@ Command line arguments
                                   the consensus sequence is used as the
                                   reference sequence.
    -matrix             matrix     Similarity scoring Matrix file
+   -outfile            outfile    If you enter the name of a file here then
+                                  this program will write the sequence details
+                                  into that file.
    -html               bool       Format output as an HTML table
 
    Advanced qualifiers:
@@ -123,8 +123,6 @@ Command line arguments
    (Parameter 1) The sequence alignment to be displayed. Readable
    sequences Required
    Optional qualifiers Allowed values Default
-   -outfile If you enter the name of a file here then this program will
-   write the sequence details into that file. Output file stdout
    -refseq If you give the number in the alignment or the name of a
    sequence, it will be taken to be the reference sequence. The reference
    sequence is the one against which all the other sequences are
@@ -134,6 +132,8 @@ Command line arguments
    -matrix Similarity scoring Matrix file Comparison matrix file in
    EMBOSS data path EBLOSUM62 for protein
    EDNAFULL for DNA
+   -outfile If you enter the name of a file here then this program will
+   write the sequence details into that file. Output file stdout
    -html Format output as an HTML table Yes/No No
    Advanced qualifiers Allowed values Default
    -plurality Set a cut-off for the % of positive scoring matches below
@@ -304,6 +304,7 @@ See also
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
    tfm Displays a program's help documentation manual
+   whichdb Search all databases for an entry
    wossname Finds programs by keywords in their one-line documentation
    
 Author(s)

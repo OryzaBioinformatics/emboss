@@ -64,13 +64,6 @@ Command line arguments
    -[no]splice         bool       Use donor and acceptor splice sites. If you
                                   want to ignore donor-acceptor sites then set
                                   this to be false.
-   -align              bool       Show the alignment. The alignment includes
-                                  the first and last 5 bases of each intron,
-                                  together with the intron width. The
-                                  direction of splicing is indicated by angle
-                                  brackets (forward or reverse) or ????
-                                  (unknown).
-   -width              integer    Alignment width
    -mode               string     This determines the comparion mode. The
                                   default value is 'both', in which case both
                                   strands of the est are compared assuming a
@@ -94,6 +87,13 @@ Command line arguments
                                   exceed the machine's physical RAM)
    -shuffle            integer    Shuffle
    -seed               integer    Random number seed
+   -align              bool       Show the alignment. The alignment includes
+                                  the first and last 5 bases of each intron,
+                                  together with the intron width. The
+                                  direction of splicing is indicated by angle
+                                  brackets (forward or reverse) or ????
+                                  (unknown).
+   -width              integer    Alignment width
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -122,11 +122,6 @@ Command line arguments
    -reverse Reverse the orientation of the EST sequence Yes/No No
    -[no]splice Use donor and acceptor splice sites. If you want to ignore
    donor-acceptor sites then set this to be false. Yes/No Yes
-   -align Show the alignment. The alignment includes the first and last 5
-   bases of each intron, together with the intron width. The direction of
-   splicing is indicated by angle brackets (forward or reverse) or ????
-   (unknown). Yes/No No
-   -width Alignment width Any integer value 50
    -mode This determines the comparion mode. The default value is 'both',
    in which case both strands of the est are compared assuming a forward
    gene direction (ie GT/AG splice sites), and the best comparsion redone
@@ -143,6 +138,11 @@ Command line arguments
    Any integer value 10.0
    -shuffle Shuffle Any integer value 0
    -seed Random number seed Any integer value 20825
+   -align Show the alignment. The alignment includes the first and last 5
+   bases of each intron, together with the intron width. The direction of
+   splicing is indicated by angle brackets (forward or reverse) or ????
+   (unknown). Yes/No No
+   -width Alignment width Any integer value 50
    
 Input file format
 

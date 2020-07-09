@@ -40,6 +40,7 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers:
+   -complement         bool       Search complementary strand
    -mmshow             bool       Show mismatches
    -accshow            bool       Show accession numbers
    -descshow           bool       Show descriptions
@@ -49,7 +50,6 @@ Command line arguments
                                   be read in by many other EMBOSS programs by
                                   specifying it with a '@' in front of the
                                   filename.
-   -complement         bool       Search complementary strand
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -68,6 +68,7 @@ Command line arguments
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
+   -complement Search complementary strand Yes/No No
    -mmshow Show mismatches Yes/No No
    -accshow Show accession numbers Yes/No No
    -descshow Show descriptions Yes/No No
@@ -75,7 +76,6 @@ Command line arguments
    sequences will turn your output file into a 'list' file that can then
    be read in by many other EMBOSS programs by specifying it with a '@'
    in front of the filename. Yes/No No
-   -complement Search complementary strand Yes/No No
    
 Input file format
 

@@ -20,7 +20,7 @@ Command line arguments
 
    Mandatory qualifiers (* if not always prompted):
   [-sequence]          seqset     Sequence set USA
-   -type               list       Select type
+   -type               menu       Select type
    -name               string     Enter a name for the profile
 *  -threshold          integer    Enter threshold reporting percentage
 *  -datafile           matrixf    Scoring matrix

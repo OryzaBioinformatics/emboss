@@ -152,13 +152,11 @@ Name of signature file for output [sig.sig]:
    Mandatory qualifiers (* if not always prompted):
   [-algpath]           string     Location of alignment files for input
   [-algextn]           string     Extension of alignment files for input
-  [-sigpath]           string     Location of signature files for output
-  [-sigextn]           string     Extension of signature files for output
   [-sparsity]          integer    % sparsity of signature
   [-randomise]         bool       Generate a randomised signature
-*  -seqoption          list       Select number
+*  -seqoption          menu       Select number
 *  -datafile           matrixf    Substitution matrix to be used
-*  -conoption          list       Select number
+*  -conoption          menu       Select number
 *  -filtercon          bool       Ignore alignment positions making less than
                                   a threshold number of contacts
 *  -conthresh          integer    Threshold contact number
@@ -170,6 +168,8 @@ Name of signature file for output [sig.sig]:
                                   format)
 *  -filterpsim         bool       Ignore alignment postitions with
                                   post_similar value of 0
+  [-sigpath]           string     Location of signature files for output
+  [-sigextn]           string     Extension of signature files for output
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
@@ -204,28 +204,14 @@ Name of signature file for output [sig.sig]:
 </tr>
 
 <tr>
-<td>[-sigpath]<br>(Parameter 3)</td>
-<td>Location of signature files for output</td>
-<td>Any string is accepted</td>
-<td>./</td>
-</tr>
-
-<tr>
-<td>[-sigextn]<br>(Parameter 4)</td>
-<td>Extension of signature files for output</td>
-<td>Any string is accepted</td>
-<td>.sig</td>
-</tr>
-
-<tr>
-<td>[-sparsity]<br>(Parameter 5)</td>
+<td>[-sparsity]<br>(Parameter 3)</td>
 <td>% sparsity of signature</td>
 <td>Any integer value</td>
 <td>10</td>
 </tr>
 
 <tr>
-<td>[-randomise]<br>(Parameter 6)</td>
+<td>[-randomise]<br>(Parameter 4)</td>
 <td>Generate a randomised signature</td>
 <td>Yes/No</td>
 <td>No</td>
@@ -299,6 +285,20 @@ Name of signature file for output [sig.sig]:
 <td>Ignore alignment postitions with post_similar value of 0</td>
 <td>Yes/No</td>
 <td>No</td>
+</tr>
+
+<tr>
+<td>[-sigpath]<br>(Parameter 5)</td>
+<td>Location of signature files for output</td>
+<td>Any string is accepted</td>
+<td>./</td>
+</tr>
+
+<tr>
+<td>[-sigextn]<br>(Parameter 6)</td>
+<td>Extension of signature files for output</td>
+<td>Any string is accepted</td>
+<td>.sig</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -678,8 +678,10 @@ None.
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="contacts.html">contacts</a></td><td>Reads coordinate files and writes contact files</td></tr>
 <tr><td><a href="dichet.html">dichet</a></td><td>Parse dictionary of heterogen groups</td></tr>
+<tr><td><a href="interface.html">interface</a></td><td>Reads coordinate files and writes inter-chain contact files</td></tr>
 <tr><td><a href="psiblasts.html">psiblasts</a></td><td>Runs PSI-BLAST given scopalign alignments</td></tr>
 <tr><td><a href="scopalign.html">scopalign</a></td><td>Generate alignments for SCOP families</td></tr>
+<tr><td><a href="seqsort.html">seqsort</a></td><td>Removes ambiguities from a set of hits resulting from a database search</td></tr>
 <tr><td><a href="sigscan.html">sigscan</a></td><td>Scans a sparse protein signature against swissprot</td></tr>
 </table>
 

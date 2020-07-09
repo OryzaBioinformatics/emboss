@@ -367,11 +367,16 @@ See also
    Program name Description
    cutgextract Extract data from CUTG
    nrscope Converts redundant EMBL-format SCOP file to non-redundant one
+   pdbtosp Convert raw swissprot:pdb equivalence file to embl-like format
    printsextract Extract data from PRINTS
    prosextract Builds the PROSITE motif database for patmatmotifs to
    search
    rebaseextract Extract data from REBASE
    scope Convert raw scop classification file to embl-like format
+   scopparse Reads raw scop classifications file and writes embl-like
+   format scop classification file
+   seqnr Converts redundant database results to a non-redundant set of
+   hits
    tfextract Extract data from TRANSFAC
    
 Author(s)

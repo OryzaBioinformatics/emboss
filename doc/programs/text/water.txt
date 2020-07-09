@@ -85,7 +85,6 @@ Command line arguments
 
    Advanced qualifiers:
    -[no]similarity     bool       Display percent identity and similarity
-   -fasta              bool       Output overlap as fasta sequences
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -120,7 +119,6 @@ Command line arguments
    EDNAFULL for DNA
    Advanced qualifiers Allowed values Default
    -[no]similarity Display percent identity and similarity Yes/No Yes
-   -fasta Output overlap as fasta sequences Yes/No No
    
 Input file format
 

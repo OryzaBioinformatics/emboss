@@ -123,6 +123,17 @@ IT IS DONE FOR YOU.
                                   all programs will be listed.
 
    Optional qualifiers (* if not always prompted):
+   -explode            bool       The groups that EMBOSS applications belong
+                                  to have two forms, exploded and not
+                                  exploded. The exploded group names are more
+                                  numerous and often vaguely phrased than the
+                                  non-exploded ones. The exploded names are
+                                  formed from definitions of the group names
+                                  that start like NAME1:NAME2 and which are
+                                  then expanded into many combinations of the
+                                  names as: 'NAME1', 'NAME2', 'NAME1 NAME2',
+                                  NAME2 NAME1'. The non-expanded names are
+                                  simply like: 'NAME1 NAME2'.
    -outfile            outfile    If you enter the name of a file here then
                                   this program will write the program names
                                   and brief descriptions into that file.
@@ -156,17 +167,6 @@ IT IS DONE FOR YOU.
                                   single list of the program names and
                                   descriptions instead of the programs being
                                   listed in their functional groups.
-   -explode            bool       The groups that EMBOSS applications belong
-                                  to have two forms, exploded and not
-                                  exploded. The exploded group names are more
-                                  numerous and often vaguely phrased than the
-                                  non-exploded ones. The exploded names are
-                                  formed from definitions of the group names
-                                  that start like NAME1:NAME2 and which are
-                                  then expanded into many combinations of the
-                                  names as: 'NAME1', 'NAME2', 'NAME1 NAME2',
-                                  NAME2 NAME1'. The non-expanded names are
-                                  simply like: 'NAME1 NAME2'.
 
    Advanced qualifiers:
    -[no]emboss         bool       If you use this option then EMBOSS program
@@ -241,6 +241,13 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
+<td>-explode</td>
+<td>The groups that EMBOSS applications belong to have two forms, exploded and not exploded. The exploded group names are more numerous and often vaguely phrased than the non-exploded ones. The exploded names are formed from definitions of the group names that start like NAME1:NAME2 and which are then expanded into many combinations of the names as: 'NAME1', 'NAME2', 'NAME1 NAME2', NAME2 NAME1'. The non-expanded names are simply like: 'NAME1 NAME2'.</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
 <td>-outfile</td>
 <td>If you enter the name of a file here then this program will write the program names and brief descriptions into that file.</td>
 <td>Output file</td>
@@ -285,13 +292,6 @@ then if you enter '.html' here, the second half of the URL after the programname
 <tr>
 <td>-alphabetic</td>
 <td>If you use this option, then you will get a single list of the program names and descriptions instead of the programs being listed in their functional groups.</td>
-<td>Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-explode</td>
-<td>The groups that EMBOSS applications belong to have two forms, exploded and not exploded. The exploded group names are more numerous and often vaguely phrased than the non-exploded ones. The exploded names are formed from definitions of the group names that start like NAME1:NAME2 and which are then expanded into many combinations of the names as: 'NAME1', 'NAME2', 'NAME1 NAME2', NAME2 NAME1'. The non-expanded names are simply like: 'NAME1 NAME2'.</td>
 <td>Yes/No</td>
 <td>No</td>
 </tr>
@@ -445,6 +445,7 @@ None.
 <tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
 <tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation text. SRS and Entrez are faster!</td></tr>
 <tr><td><a href="tfm.html">tfm</a></td><td>Displays a program's help documentation manual</td></tr>
+<tr><td><a href="whichdb.html">whichdb</a></td><td>Search all databases for an entry</td></tr>
 </table>
 
 <!--

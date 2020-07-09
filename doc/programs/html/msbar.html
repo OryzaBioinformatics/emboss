@@ -168,13 +168,13 @@ IT IS DONE FOR YOU.
 <pre>
    Mandatory qualifiers (* if not always prompted):
   [-sequence]          seqall     Sequence database USA
-  [-outseq]            seqoutall  Output sequence(s) USA
    -count              integer    Number of times to perform the mutation
                                   operations
-   -point              list       Types of point mutations to perform
-*  -codon              list       Types of codon mutations to perform. These
+   -point              menu       Types of point mutations to perform
+   -block              menu       Types of block mutations to perform
+*  -codon              menu       Types of codon mutations to perform. These
                                   are only done if the sequence is nucleic.
-   -block              list       Types of block mutations to perform
+  [-outseq]            seqoutall  Output sequence(s) USA
 
    Optional qualifiers (* if not always prompted):
 *  -inframe            bool       Do 'codon' and 'block' operations in frame
@@ -208,13 +208,6 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>[-outseq]<br>(Parameter 2)</td>
-<td>Output sequence(s) USA</td>
-<td>Writeable sequence(s)</td>
-<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
-</tr>
-
-<tr>
 <td>-count</td>
 <td>Number of times to perform the mutation operations</td>
 <td>Integer 0 or more</td>
@@ -229,6 +222,13 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
+<td>-block</td>
+<td>Types of block mutations to perform</td>
+<td><table><tr><td>0</td> <td><i>(None)</i></td></tr><tr><td>1</td> <td><i>(Any of the following)</i></td></tr><tr><td>2</td> <td><i>(Insertions)</i></td></tr><tr><td>3</td> <td><i>(Deletions)</i></td></tr><tr><td>4</td> <td><i>(Changes)</i></td></tr><tr><td>5</td> <td><i>(Duplications)</i></td></tr><tr><td>6</td> <td><i>(Moves)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr>
 <td>-codon</td>
 <td>Types of codon mutations to perform. These are only done if the sequence is nucleic.</td>
 <td><table><tr><td>0</td> <td><i>(None)</i></td></tr><tr><td>1</td> <td><i>(Any of the following)</i></td></tr><tr><td>2</td> <td><i>(Insertions)</i></td></tr><tr><td>3</td> <td><i>(Deletions)</i></td></tr><tr><td>4</td> <td><i>(Changes)</i></td></tr><tr><td>5</td> <td><i>(Duplications)</i></td></tr><tr><td>6</td> <td><i>(Moves)</i></td></tr></table></td>
@@ -236,10 +236,10 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-block</td>
-<td>Types of block mutations to perform</td>
-<td><table><tr><td>0</td> <td><i>(None)</i></td></tr><tr><td>1</td> <td><i>(Any of the following)</i></td></tr><tr><td>2</td> <td><i>(Insertions)</i></td></tr><tr><td>3</td> <td><i>(Deletions)</i></td></tr><tr><td>4</td> <td><i>(Changes)</i></td></tr><tr><td>5</td> <td><i>(Duplications)</i></td></tr><tr><td>6</td> <td><i>(Moves)</i></td></tr></table></td>
-<td>0</td>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Output sequence(s) USA</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr bgcolor="#FFFFD0">

@@ -38,12 +38,12 @@ text inside or outside the blocks (enter In or Out) [In]:
 Command line arguments
 
    Mandatory qualifiers:
-   -graphout           graph      Graph type
    -inputfile          infile     input file containing mapping data
    -posticks           string     ticks inside or outside the circle (enter In
                                   or Out)
    -posblocks          string     text inside or outside the blocks (enter In
                                   or Out)
+   -graphout           graph      Graph type
 
    Optional qualifiers:
    -originangle        float      position of the molecule's origin on the
@@ -78,15 +78,15 @@ Command line arguments
    
 
    Mandatory qualifiers Allowed values Default
-   -graphout Graph type EMBOSS has a list of known devices, including
-   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
-   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
    -inputfile input file containing mapping data Input file inputfile
    -posticks ticks inside or outside the circle (enter In or Out) Any
    string is accepted Out
    -posblocks text inside or outside the blocks (enter In or Out) Any
    string is accepted In
+   -graphout Graph type EMBOSS has a list of known devices, including
+   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
+   png EMBOSS_GRAPHICS value, or x11
    Optional qualifiers Allowed values Default
    -originangle position of the molecule's origin on the circle (enter a
    number in the range 0 - 360) Any integer value 90

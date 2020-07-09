@@ -63,7 +63,7 @@ Command line arguments
 
    Mandatory qualifiers:
   [-sequencea]         sequence   Sequence USA
-   -menu               list       Select number
+   -menu               menu       Select number
   [-outfile]           report     (no help text) report value
 
    Optional qualifiers: (none)
@@ -72,12 +72,12 @@ Command line arguments
                                   it is followed by (e.g.) another K or a P.
                                   Specifying this shows those cuts. as well as
                                   the favoured ones.
+   -aadata             string     Molecular weight data for amino acids
    -overlap            bool       Used for partial digestion. Shows all cuts
                                   from favoured cut sites plus 1..3, 2..4,
                                   3..5 etc but not (e.g.) 2..5. Overlaps are
                                   therefore fragments with exactly one
                                   potential cut site within it.
-   -aadata             string     Molecular weight data for amino acids
    -allpartials        bool       As for overlap but fragments containing more
                                   than one potential cut site are included.
 
@@ -108,12 +108,12 @@ Command line arguments
    -unfavoured Trypsin will not normally cut after a K if it is followed
    by (e.g.) another K or a P. Specifying this shows those cuts. as well
    as the favoured ones. Yes/No No
+   -aadata Molecular weight data for amino acids Any string is accepted
+   Eamino.dat
    -overlap Used for partial digestion. Shows all cuts from favoured cut
    sites plus 1..3, 2..4, 3..5 etc but not (e.g.) 2..5. Overlaps are
    therefore fragments with exactly one potential cut site within it.
    Yes/No No
-   -aadata Molecular weight data for amino acids Any string is accepted
-   Eamino.dat
    -allpartials As for overlap but fragments containing more than one
    potential cut site are included. Yes/No No
    
@@ -126,54 +126,58 @@ Output file format
    Here is the output from the example:
      _________________________________________________________________
    
-DIGEST of OPSD_HUMAN from 1 to 348 Molwt= 38892.536
+########################################
+# Program: digest
+# Rundate: Mon Feb 11 13:36:16 2002
+# Report_file: opsd_human.digest
+########################################
 
-Complete digestion with Trypsin yields 14 fragments:
-Start   End     Molwt      Sequence (up to 38 residues)
-70      135     7129.324   (R) TPLNYILLNLAVADLFMVLGGFTSTLYTSLHGYFVFGP (Y) ...
-178     231     6335.500   (R) YIPEGLQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIP (E) ...
-22      69      5788.878   (R) SPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTL (T) ...
-253     296     5004.090   (R) MVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTI (S) ...
-136     177     4600.464   (R) YVVVCKPMSNFRFGENHAIMGVAFTWVMALACAAPPLA (Y) ...
-1       21      2257.500    () MNGTEGPNFYVPFSNATGVVR (S)
-297     311     1728.093   (K) SAAIYNPVIYIMMNK (Q)
-232     245     1490.543   (K) EAAAQQQESATTQK (A)
-326     339     1403.462   (K) NPLGDDEASATVSK (T)
-315     325     1186.480   (R) NCMLTTICCGK (N)
-340     348     902.954    (K) TETSQVAPA  ()
-249     252     503.555    (K) EVTR (M)
-312     314     449.509    (K) QFR (N)
-246     248     346.383    (K) AEK (E)
+#=======================================
+#
+# Sequence: OPSD_HUMAN     from: 1   to: 348
+# HitCount: 14
+#
+# Complete digestion with Trypsin yields 14 fragments
+#
+#=======================================
+
+  Start     End Mol_Weight cterm  nterm  Sequence
+     70     135 7129.319   R      Y      TPLNYILLNLAVADLFMVLGGFTSTLYTSLHGYFVFGP
+TGCNLEGFFATLGGEIALWSLVVLAIER
+    178     231 6335.495   R      E      YIPEGLQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIP
+MIIIFFCYGQLVFTVK
+     22      69 5788.873   R      T      SPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTL
+YVTVQHKKLR
+    253     296 5004.085   R      S      MVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTI
+PAFFAK
+    136     177 4600.460   R      Y      YVVVCKPMSNFRFGENHAIMGVAFTWVMALACAAPPLA
+GWSR
+      1      21 2257.495   .      S      MNGTEGPNFYVPFSNATGVVR
+    297     311 1728.089   K      Q      SAAIYNPVIYIMMNK
+    232     245 1490.538   K      A      EAAAQQQESATTQK
+    326     339 1403.457   K      T      NPLGDDEASATVSK
+    315     325 1186.476   R      N      NCMLTTICCGK
+    340     348 902.950    K      .      TETSQVAPA
+    249     252 503.550    K      M      EVTR
+    312     314 449.504    K      N      QFR
+    246     248 346.378    K      E      AEK
+
+#---------------------------------------
+#---------------------------------------
      _________________________________________________________________
    
-   The first non-blank line is the title containing the name of the
-   program and the name o fthe input sequence with the range considered
-   and the calculated molecular weight of the protein.
-   
-   The next non-blank line gives the name of the reagent used to digest
-   the protein and the number of fragments reported. The line will report
-   is complete or partial digestion was chosen. If the protein is not
-   digested at all by the reagent chosen the following is reported:
-"Is not proteolytically digested using (reagent name)"
-
-   If '-overlap' was specified, the next line will be:
-"Only overlapping partials shown:"
-
-   If '-allpartials' was specified, the next line will be:
-"All partials shown:"
-
-   The next non-blank line gives the headings of the columns of data.
+   The header information contains the propgram name, date of run, name
+   of the reagent used to digest the protein and the number of fragments
+   reported. The header will report if complete or partial digestion was
+   chosen.
    
    The rest of the file consists of columns holding the following data:
      * The start position of the fragment
      * The end position of the fragment
-     * The residue before the cut site (in brackets)
-     * The sequence of the fragment. If the fragment is longer than 38
-       residues then the sequence reported is truncated to 38 residues
-       and '...' is in the last column
-     * The residue after the second cut site (in brackets)
-     * If the fragment is longer than 38 then '...' is in the last
-       column, else this is blank.
+     * The molecular weight of the fragment
+     * The residue before the cut site ('.' if start of sequence)
+     * The residue after the second cut site ('.' if end of sequence)
+     * The sequence of the fragment.
        
 Data files
 

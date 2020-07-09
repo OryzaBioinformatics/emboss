@@ -47,7 +47,10 @@ Command line arguments
    Mandatory qualifiers (* if not always prompted):
   [-sequencea]         sequence   Sequence USA
   [-sequenceb]         sequence   Sequence USA
+*  -data               bool       Output the match data to a file instead of
+                                  plotting it
 *  -graph              graph      Graph type
+*  -xygraph            xygraph    Graph type
 *  -outfile            outfile    Display as data
 
    Optional qualifiers:
@@ -56,8 +59,7 @@ Command line arguments
    -matrixfile         matrix     Matrix file
 
    Advanced qualifiers:
-   -data               bool       Output the match data to a file instead of
-                                  plotting it
+   -stretch            bool       Display a non-proportional graph
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -70,7 +72,12 @@ Command line arguments
    (Parameter 1) Sequence USA Readable sequence Required
    [-sequenceb]
    (Parameter 2) Sequence USA Readable sequence Required
+   -data Output the match data to a file instead of plotting it Yes/No No
    -graph Graph type EMBOSS has a list of known devices, including
+   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
+   png EMBOSS_GRAPHICS value, or x11
+   -xygraph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
@@ -83,7 +90,7 @@ Command line arguments
    EBLOSUM62 for protein
    EDNAFULL for DNA
    Advanced qualifiers Allowed values Default
-   -data Output the match data to a file instead of plotting it Yes/No No
+   -stretch Display a non-proportional graph Yes/No No
    
 Input file format
 

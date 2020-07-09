@@ -131,12 +131,12 @@ IT IS DONE FOR YOU.
    -[no]ambiguity      bool       Allow ambiguous matches
    -plasmid            bool       Allow circular DNA
    -[no]commercial     bool       Only enzymes with suppliers
+   -datafile           string     Alternative RE data file
    -[no]limit          bool       Limits reports to one isoschizomer
    -preferred          bool       Report preferred isoschizomers
    -alphabetic         bool       Sort output alphabetically
    -fragments          bool       Show fragment lengths
    -name               bool       Show sequence name
-   -datafile           string     Alternative RE data file
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -265,6 +265,13 @@ PpiI</td>
 </tr>
 
 <tr>
+<td>-datafile</td>
+<td>Alternative RE data file</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
 <td>-[no]limit</td>
 <td>Limits reports to one isoschizomer</td>
 <td>Yes/No</td>
@@ -299,13 +306,6 @@ PpiI</td>
 <td>No</td>
 </tr>
 
-<tr>
-<td>-datafile</td>
-<td>Alternative RE data file</td>
-<td>Any string is accepted</td>
-<td><i>An empty string is accepted</i></td>
-</tr>
-
 </table>
 
 
@@ -334,9 +334,18 @@ recognition sequence but different cut sites.
 
 Here is part of a sample output:
 <p>
-<hr>
 <pre>
-# Restrict of HSFAU from 1 to 518
+<hr>
+########################################
+# Program: restrict
+# Rundate: Mon Feb 11 13:46:44 2002
+# Report_file: hsfau.restrict
+########################################
+
+#=======================================
+#
+# Sequence: HSFAU     from: 1   to: 518
+# HitCount: 214
 #
 # Minimum cuts per enzyme: 1
 # Maximum cuts per enzyme: 2000000000
@@ -345,35 +354,39 @@ Here is part of a sample output:
 # Sticky ends allowed
 # DNA is linear
 # Ambiguities allowed
-# Number of hits: 208
-# Base Number   Enzyme          Site            5'      3'      [5'     3']
-        3       MnlI            CCTC            13      12
-        9       Hpy188III       TCNNGA          10      12
-        11      TaqI            TCGA            11      13
-        13      HinfI           GANTC           13      16
-        17      MlyI            GAGTC           7       7
-        17      PleI            GAGTC           7       8
-        24      AccII           CGCG            25      25
-        24      MboII           GAAGA           12      11
-        28      AciI            CCGC            25      27
-        30      AluI            AGCT            31      31
-        30      CviJI           RGCY            31      31
-        31      MwoI            GCNNNNNNNGC     37      34
-        34      BscBI           GGNNCC          36      36
-        34      BsmFI           GGGAC           48      52
-        35      AspS9I          GGNCC           35      38
-        35      AvaII           GGWCC           35      38
-        38      AciI            CCGC            38      40
-        58      CviRI           TGCA            59      59
-        59      BbvI            GCAGC           71      75
-        59      Fnu4HI          GCNGC           60      61
-        59      TseI            GCWGC           59      62
-        61      AluI            AGCT            62      62
-        61      CviJI           RGCY            62      62
-        71      AciI            CCGC            71      73
-        71      Bsc4I           CCNNNNNNNGG     77      74
-        72      AccII           CGCG            73      73
-        73      AspLEI          GCGC            75      73
+#
+#
+#=======================================
+
+USA               Start     End   Score Enzyme_name Restriction_site 5prime 3prime 5primerev 3primerev
+HSFAU                 3       6   0.000 MnlI        CCTC             13     12   .         .
+HSFAU                 9      14   0.000 Hpy188III   TCNNGA           10     12   .         .
+HSFAU                11      14   0.000 TaqI        TCGA             11     13   .         .
+HSFAU                13      17   0.000 HinfI       GANTC            13     16   .         .
+HSFAU                17      21   0.000 MlyI        GAGTC            7      7   .         .
+HSFAU                17      21   0.000 PleI        GAGTC            7      8   .         .
+HSFAU                24      27   0.000 AccII       CGCG             25     25   .         .
+HSFAU                24      28   0.000 MboII       GAAGA            12     11   .         .
+HSFAU                28      31   0.000 AciI        CCGC             25     27   .         .
+
+etc.
+
+HSFAU               437     443   0.000 DraII       RGGNCCY          438    441   .         .
+HSFAU               438     442   0.000 AspS9I      GGNCC            438    441   .         .
+HSFAU               438     443   0.000 BscBI       GGNNCC           440    440   .         .
+HSFAU               438     441   0.000 BshFI       GGCC             439    439   .         .
+HSFAU               438     441   0.000 CviJI       RGCY             439    439   .         .
+HSFAU               454     459   0.000 AflII       CTTAAG           454    458   .         .
+HSFAU               454     459   0.000 SmlI        CTYRAG           454    458   .         .
+HSFAU               455     458   0.000 MseI        TTAA             455    457   .         .
+HSFAU               468     471   0.000 Sse9I       AATT             467    471   .         .
+HSFAU               474     477   0.000 CviJI       RGCY             475    475   .         .
+HSFAU               492     495   0.000 CviJI       RGCY             493    493   .         .
+HSFAU               497     501   0.000 BstDEI      CTNAG            497    500   .         .
+
+#---------------------------------------
+#---------------------------------------
+<hr>
 </pre>
 
 <H2>

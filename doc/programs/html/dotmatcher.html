@@ -124,7 +124,10 @@ IT IS DONE FOR YOU.
    Mandatory qualifiers (* if not always prompted):
   [-sequencea]         sequence   Sequence USA
   [-sequenceb]         sequence   Sequence USA
+*  -data               bool       Output the match data to a file instead of
+                                  plotting it
 *  -graph              graph      Graph type
+*  -xygraph            xygraph    Graph type
 *  -outfile            outfile    Display as data
 
    Optional qualifiers:
@@ -133,8 +136,7 @@ IT IS DONE FOR YOU.
    -matrixfile         matrix     Matrix file
 
    Advanced qualifiers:
-   -data               bool       Output the match data to a file instead of
-                                  plotting it
+   -stretch            bool       Display a non-proportional graph
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -168,7 +170,21 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
+<td>-data</td>
+<td>Output the match data to a file instead of plotting it</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
 <td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr>
+<td>-xygraph</td>
 <td>Graph type</td>
 <td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
@@ -215,8 +231,8 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-data</td>
-<td>Output the match data to a file instead of plotting it</td>
+<td>-stretch</td>
+<td>Display a non-proportional graph</td>
 <td>Yes/No</td>
 <td>No</td>
 </tr>

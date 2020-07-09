@@ -65,13 +65,11 @@ Command line arguments
    Mandatory qualifiers (* if not always prompted):
   [-algpath]           string     Location of alignment files for input
   [-algextn]           string     Extension of alignment files for input
-  [-sigpath]           string     Location of signature files for output
-  [-sigextn]           string     Extension of signature files for output
   [-sparsity]          integer    % sparsity of signature
   [-randomise]         bool       Generate a randomised signature
-*  -seqoption          list       Select number
+*  -seqoption          menu       Select number
 *  -datafile           matrixf    Substitution matrix to be used
-*  -conoption          list       Select number
+*  -conoption          menu       Select number
 *  -filtercon          bool       Ignore alignment positions making less than
                                   a threshold number of contacts
 *  -conthresh          integer    Threshold contact number
@@ -83,6 +81,8 @@ Command line arguments
                                   format)
 *  -filterpsim         bool       Ignore alignment postitions with
                                   post_similar value of 0
+  [-sigpath]           string     Location of signature files for output
+  [-sigextn]           string     Extension of signature files for output
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
@@ -99,16 +99,10 @@ Command line arguments
    [-algextn]
    (Parameter 2) Extension of alignment files for input Any string is
    accepted .align
-   [-sigpath]
-   (Parameter 3) Location of signature files for output Any string is
-   accepted ./
-   [-sigextn]
-   (Parameter 4) Extension of signature files for output Any string is
-   accepted .sig
    [-sparsity]
-   (Parameter 5) % sparsity of signature Any integer value 10
+   (Parameter 3) % sparsity of signature Any integer value 10
    [-randomise]
-   (Parameter 6) Generate a randomised signature Yes/No No
+   (Parameter 4) Generate a randomised signature Yes/No No
    -seqoption Select number
    1 (Substitution matrix)
    2 (Residue class)
@@ -134,6 +128,12 @@ Command line arguments
    is accepted .pxyz
    -filterpsim Ignore alignment postitions with post_similar value of 0
    Yes/No No
+   [-sigpath]
+   (Parameter 5) Location of signature files for output Any string is
+   accepted ./
+   [-sigextn]
+   (Parameter 6) Extension of signature files for output Any string is
+   accepted .sig
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
@@ -292,12 +292,15 @@ Known bugs
    
 See also
 
-   Program name                    Description
-   contacts     Reads coordinate files and writes contact files
-   dichet       Parse dictionary of heterogen groups
-   psiblasts    Runs PSI-BLAST given scopalign alignments
-   scopalign    Generate alignments for SCOP families
-   sigscan      Scans a sparse protein signature against swissprot
+   Program name Description
+   contacts Reads coordinate files and writes contact files
+   dichet Parse dictionary of heterogen groups
+   interface Reads coordinate files and writes inter-chain contact files
+   psiblasts Runs PSI-BLAST given scopalign alignments
+   scopalign Generate alignments for SCOP families
+   seqsort Removes ambiguities from a set of hits resulting from a
+   database search
+   sigscan Scans a sparse protein signature against swissprot
    
 Author(s)
 

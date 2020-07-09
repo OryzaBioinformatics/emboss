@@ -930,6 +930,28 @@ SQ   Sequence 10 BP; 2 A; 2 C; 3 G; 3 T; 0 other;
 </pre>
 
 
+<p>
+
+To force <b>seqret</b> to both read in and write out features, use the
+command-line qualifier '<b>-feature</b>'. 
+
+<p>
+
+<b>seqret</b> does not read in features by default
+because this results in slightly faster performance.  If however you wish to
+read in features with your sequence and write them out on output, using
+'-feature' will change the default behaviour to use any features
+present in the sequence.    
+
+<pre>
+
+% seqret -feature
+Reads and writes (returns) sequences
+Input sequence(s): em:hs989235
+Output sequence [hs989235.fasta]: embl::hs989235.embl
+
+</pre>   
+
 
 
 <H2>
@@ -951,6 +973,7 @@ IT IS DONE FOR YOU.
 
    Optional qualifiers: (none)
    Advanced qualifiers:
+   -feature            bool       Use feature information
    -firstonly          bool       Read one sequence and stop
 
    General qualifiers:
@@ -998,6 +1021,13 @@ IT IS DONE FOR YOU.
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-feature</td>
+<td>Use feature information</td>
+<td>Yes/No</td>
+<td>No</td>
 </tr>
 
 <tr>
@@ -1119,7 +1149,6 @@ None.
 <tr><td><a href="entret.html">entret</a></td><td>Reads and writes (returns) flatfile entries</td></tr>
 <tr><td><a href="extractfeat.html">extractfeat</a></td><td>Extract features from a sequence</td></tr>
 <tr><td><a href="extractseq.html">extractseq</a></td><td>Extract regions from a sequence</td></tr>
-<tr><td><a href="infoseq.html">infoseq</a></td><td>Displays some simple information about sequences</td></tr>
 <tr><td><a href="listor.html">listor</a></td><td>Writes a list file of the logical OR of two sets of sequences</td></tr>
 <tr><td><a href="maskfeat.html">maskfeat</a></td><td>Mask off features of a sequence</td></tr>
 <tr><td><a href="maskseq.html">maskseq</a></td><td>Mask off regions of a sequence</td></tr>
@@ -1129,8 +1158,6 @@ None.
 <tr><td><a href="nthseq.html">nthseq</a></td><td>Writes one sequence from a multiple set of sequences</td></tr>
 <tr><td><a href="pasteseq.html">pasteseq</a></td><td>Insert one sequence into another</td></tr>
 <tr><td><a href="revseq.html">revseq</a></td><td>Reverse and complement a sequence</td></tr>
-<tr><td><a href="seqretall.html">seqretall</a></td><td>Reads and writes (returns) a set of sequences one at a time</td></tr>
-<tr><td><a href="seqretset.html">seqretset</a></td><td>Reads and writes (returns) a set of sequences all at once</td></tr>
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
 <tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
@@ -1167,6 +1194,8 @@ Cambridge, CB10 1SA, UK.
 </H2>
 
 1999 - Written by Peter Rice
+<br>
+Feb 2002 - '-feature' qualifier added by Peter Rice
 
 <H2>
     Target users

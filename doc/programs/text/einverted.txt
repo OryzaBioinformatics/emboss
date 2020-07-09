@@ -49,11 +49,11 @@ Command line arguments
 
    Mandatory qualifiers:
   [-sequence]          sequence   Sequence USA
-  [-outfile]           outfile    Output file name
    -gap                integer    Gap penalty
    -threshold          integer    Minimum score threshold
    -match              integer    Match score
    -mismatch           integer    Mismatch score
+  [-outfile]           outfile    Output file name
 
    Optional qualifiers:
    -maxrepeat          integer    Maximum separation between the start of
@@ -70,12 +70,12 @@ Command line arguments
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
-   [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.einverted
    -gap Gap penalty Any integer value 12
    -threshold Minimum score threshold Any integer value 50
    -match Match score Any integer value 3
    -mismatch Mismatch score Any integer value -4
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.einverted
    Optional qualifiers Allowed values Default
    -maxrepeat Maximum separation between the start of repeat and the end
    of the inverted repeat (the default is 4000 bases). Any integer value

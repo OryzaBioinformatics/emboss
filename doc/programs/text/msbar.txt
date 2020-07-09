@@ -92,13 +92,13 @@ Command line arguments
 
    Mandatory qualifiers (* if not always prompted):
   [-sequence]          seqall     Sequence database USA
-  [-outseq]            seqoutall  Output sequence(s) USA
    -count              integer    Number of times to perform the mutation
                                   operations
-   -point              list       Types of point mutations to perform
-*  -codon              list       Types of codon mutations to perform. These
+   -point              menu       Types of point mutations to perform
+   -block              menu       Types of block mutations to perform
+*  -codon              menu       Types of codon mutations to perform. These
                                   are only done if the sequence is nucleic.
-   -block              list       Types of block mutations to perform
+  [-outseq]            seqoutall  Output sequence(s) USA
 
    Optional qualifiers (* if not always prompted):
 *  -inframe            bool       Do 'codon' and 'block' operations in frame
@@ -116,12 +116,18 @@ Command line arguments
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-outseq]
-   (Parameter 2) Output sequence(s) USA Writeable sequence(s)
-   <sequence>.format
    -count Number of times to perform the mutation operations Integer 0 or
    more 1
    -point Types of point mutations to perform
+   0 (None)
+   1 (Any of the following)
+   2 (Insertions)
+   3 (Deletions)
+   4 (Changes)
+   5 (Duplications)
+   6 (Moves)
+   0
+   -block Types of block mutations to perform
    0 (None)
    1 (Any of the following)
    2 (Insertions)
@@ -140,15 +146,9 @@ Command line arguments
    5 (Duplications)
    6 (Moves)
    0
-   -block Types of block mutations to perform
-   0 (None)
-   1 (Any of the following)
-   2 (Insertions)
-   3 (Deletions)
-   4 (Changes)
-   5 (Duplications)
-   6 (Moves)
-   0
+   [-outseq]
+   (Parameter 2) Output sequence(s) USA Writeable sequence(s)
+   <sequence>.format
    Optional qualifiers Allowed values Default
    -inframe Do 'codon' and 'block' operations in frame Yes/No No
    Advanced qualifiers Allowed values Default

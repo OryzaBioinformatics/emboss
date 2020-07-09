@@ -310,11 +310,8 @@ Command line arguments
 
    Mandatory qualifiers (* if not always prompted):
   [-sequence]          seqall     Sequence database USA
-  [-outfile]           outfile    If you enter the name of a file here then
-                                  this program will write the sequence details
-                                  into that file.
-   -format             list       Display format
-*  -things             list       Specify a list of one or more code
+   -format             menu       Display format
+*  -things             menu       Specify a list of one or more code
                                   characters in the order in which you wish
                                   things to be displayed one above the other
                                   down the page. For example if you wish to
@@ -322,6 +319,9 @@ Command line arguments
                                   complement sequence, ticks line, frame 1
                                   translation, blank line; then you should
                                   enter 'S,C,T,1,B'.
+  [-outfile]           outfile    If you enter the name of a file here then
+                                  this program will write the sequence details
+                                  into that file.
 
    Optional qualifiers:
    -translate          range      Regions to translate (if translating).
@@ -397,7 +397,7 @@ Command line arguments
                                   hindiii
                                   HinfI
                                   PpiI
-   -table              list       Code to use
+   -table              menu       Code to use
    -matchsource        string     By default any feature source in the feature
                                   table is shown. You can set this to match
                                   any feature source you wish to show.
@@ -513,9 +513,6 @@ Command line arguments
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-outfile]
-   (Parameter 2) If you enter the name of a file here then this program
-   will write the sequence details into that file. Output file stdout
    -format Display format
    0 (Enter your own list of things to display)
    1 (Sequence only)
@@ -547,7 +544,10 @@ Command line arguments
    R  (Restriction enzyme cut sites in forward sense)
    -R (Restriction enzyme cut sites in reverse sense)
    A  (Annotation)
-   B N T S A F
+   B,N,T,S,A,F
+   [-outfile]
+   (Parameter 2) If you enter the name of a file here then this program
+   will write the sequence details into that file. Output file stdout
    Optional qualifiers Allowed values Default
    -translate Regions to translate (if translating). If this is left
    blank the complete sequence is translated. A set of regions is

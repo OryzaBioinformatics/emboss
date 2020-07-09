@@ -139,6 +139,7 @@ See also
    showdb Displays information on the currently available databases
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
+   whichdb Search all databases for an entry
    wossname Finds programs by keywords in their one-line documentation
    
 Author(s)

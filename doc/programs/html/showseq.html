@@ -421,11 +421,8 @@ IT IS DONE FOR YOU.
 <pre>
    Mandatory qualifiers (* if not always prompted):
   [-sequence]          seqall     Sequence database USA
-  [-outfile]           outfile    If you enter the name of a file here then
-                                  this program will write the sequence details
-                                  into that file.
-   -format             list       Display format
-*  -things             list       Specify a list of one or more code
+   -format             menu       Display format
+*  -things             menu       Specify a list of one or more code
                                   characters in the order in which you wish
                                   things to be displayed one above the other
                                   down the page. For example if you wish to
@@ -433,6 +430,9 @@ IT IS DONE FOR YOU.
                                   complement sequence, ticks line, frame 1
                                   translation, blank line; then you should
                                   enter 'S,C,T,1,B'.
+  [-outfile]           outfile    If you enter the name of a file here then
+                                  this program will write the sequence details
+                                  into that file.
 
    Optional qualifiers:
    -translate          range      Regions to translate (if translating).
@@ -508,7 +508,7 @@ IT IS DONE FOR YOU.
                                   hindiii
                                   HinfI
                                   PpiI
-   -table              list       Code to use
+   -table              menu       Code to use
    -matchsource        string     By default any feature source in the feature
                                   table is shown. You can set this to match
                                   any feature source you wish to show.
@@ -640,13 +640,6 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>[-outfile]<br>(Parameter 2)</td>
-<td>If you enter the name of a file here then this program will write the sequence details into that file.</td>
-<td>Output file</td>
-<td>stdout</td>
-</tr>
-
-<tr>
 <td>-format</td>
 <td>Display format</td>
 <td><table><tr><td>0</td> <td><i>(Enter your own list of things to display)</i></td></tr><tr><td>1</td> <td><i>(Sequence only)</i></td></tr><tr><td>2</td> <td><i>(Default sequence with features)</i></td></tr><tr><td>3</td> <td><i>(Pretty sequence)</i></td></tr><tr><td>4</td> <td><i>(One frame translation)</i></td></tr><tr><td>5</td> <td><i>(Three frame translations)</i></td></tr><tr><td>6</td> <td><i>(Six frame translations)</i></td></tr><tr><td>7</td> <td><i>(Restriction enzyme map)</i></td></tr><tr><td>8</td> <td><i>(Baroque)</i></td></tr></table></td>
@@ -657,7 +650,14 @@ IT IS DONE FOR YOU.
 <td>-things</td>
 <td>Specify a list of one or more code characters in the order in which you wish things to be displayed one above the other down the page. For example if you wish to see things displayed in the order: sequence, complement sequence, ticks line, frame 1 translation, blank line; then you should enter 'S,C,T,1,B'.</td>
 <td><table><tr><td>S</td> <td><i>(Sequence)</i></td></tr><tr><td>B</td> <td><i>(Blank line)</i></td></tr><tr><td>1</td> <td><i>(Frame1 translation)</i></td></tr><tr><td>2</td> <td><i>(Frame2 translation)</i></td></tr><tr><td>3</td> <td><i>(Frame3 translation)</i></td></tr><tr><td>-1</td> <td><i>(CompFrame1 translation)</i></td></tr><tr><td>-2</td> <td><i>(CompFrame2 translation)</i></td></tr><tr><td>-3</td> <td><i>(CompFrame3 translation)</i></td></tr><tr><td>T</td> <td><i>(Ticks line)</i></td></tr><tr><td>N</td> <td><i>(Number ticks line)</i></td></tr><tr><td>C</td> <td><i>(Complement sequence)</i></td></tr><tr><td>F</td> <td><i>(Features)</i></td></tr><tr><td>R</td> <td><i>(Restriction enzyme cut sites in forward sense)</i></td></tr><tr><td>-R</td> <td><i>(Restriction enzyme cut sites in reverse sense)</i></td></tr><tr><td>A</td> <td><i>(Annotation)</i></td></tr></table></td>
-<td>B N T S A F</td>
+<td>B,N,T,S,A,F</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>If you enter the name of a file here then this program will write the sequence details into that file.</td>
+<td>Output file</td>
+<td>stdout</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">

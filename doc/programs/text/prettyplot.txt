@@ -62,12 +62,12 @@ Command line arguments
    -[no]box            bool       Display prettyboxes
    -boxcol             bool       Colour the background in the boxes
    -boxcolval          string     Colour to be used for background. (GREY)
-   -consensus          bool       Display the consensus
    -[no]name           bool       Display the sequence names
    -maxnamelen         integer    Margin size for the sequence name.
    -[no]number         bool       Display the residue number
    -[no]listoptions    bool       Display the date and options used
    -plurality          float      Plurality check value (totweight/2)
+   -consensus          bool       Display the consensus
    -[no]collision      bool       Allow collisions in calculating consensus
    -alternative        integer    Use alternative collisions routine
                                   0) Normal collision check. (default)
@@ -82,9 +82,9 @@ Command line arguments
                                   consensus.If any of these give a top score
                                   for matching or identical scores then a
                                   collision has occured.
-   -portrait           bool       Set page to Portrait
    -matrixfile         matrix     Matrix file
    -showscore          integer    Print residue scores
+   -portrait           bool       Set page to Portrait
 
    Advanced qualifiers:
    -data               bool       (no help text) bool value
@@ -130,13 +130,13 @@ Command line arguments
    -boxcol Colour the background in the boxes Yes/No No
    -boxcolval Colour to be used for background. (GREY) Any string is
    accepted GREY
-   -consensus Display the consensus Yes/No No
    -[no]name Display the sequence names Yes/No Yes
    -maxnamelen Margin size for the sequence name. Any integer value 10
    -[no]number Display the residue number Yes/No Yes
    -[no]listoptions Display the date and options used Yes/No Yes
    -plurality Plurality check value (totweight/2) Any integer value Half
    the total sequence weighting
+   -consensus Display the consensus Yes/No No
    -[no]collision Allow collisions in calculating consensus Yes/No Yes
    -alternative Use alternative collisions routine 0) Normal collision
    check. (default) 1) checks identical scores with the max score found.
@@ -146,11 +146,11 @@ Command line arguments
    3) Checks all those not in the current consensus.If any of these give
    a top score for matching or identical scores then a collision has
    occured. Integer from 0 to 3 0
-   -portrait Set page to Portrait Yes/No No
    -matrixfile Matrix file Comparison matrix file in EMBOSS data path
    EBLOSUM62 for protein
    EDNAFULL for DNA
    -showscore Print residue scores Any integer value -1
+   -portrait Set page to Portrait Yes/No No
    Advanced qualifiers Allowed values Default
    -data (no help text) bool value Yes/No No
    

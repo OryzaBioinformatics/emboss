@@ -42,9 +42,9 @@ Command line arguments
   [-outseq]            seqoutall  Output sequence(s) USA
 
    Optional qualifiers:
-   -table              list       Code to use
+   -table              menu       Code to use
    -minsize            integer    Minimum nucleotide size of ORF to report
-   -find               list       This is a small menu of possible output
+   -find               menu       This is a small menu of possible output
                                   options. The first four options are to
                                   select either the protein translation or the
                                   original nucleic acid sequence of the open

@@ -71,13 +71,13 @@ Command line arguments
                                   altered when it is fetched.
 
    Optional qualifiers (* if not always prompted):
+   -showall            bool       Show all potential EMBOSS data files
+*  -fetch              bool       Fetch a data file
    -outf               outfile    This specifies the name of the file that the
                                   results of a search for a file in the
                                   various data directories is written to. By
                                   default these results are written to the
                                   screen (stdout).
-   -showall            bool       Show all potential EMBOSS data files
-*  -fetch              bool       Fetch a data file
 
    Advanced qualifiers:
    -reject             select     This specifies the names of the
@@ -98,11 +98,11 @@ Command line arguments
    the file is not altered when it is fetched. Any string is accepted An
    empty string is accepted
    Optional qualifiers Allowed values Default
+   -showall Show all potential EMBOSS data files Yes/No No
+   -fetch Fetch a data file Yes/No No
    -outf This specifies the name of the file that the results of a search
    for a file in the various data directories is written to. By default
    these results are written to the screen (stdout). Output file stdout
-   -showall Show all potential EMBOSS data files Yes/No No
-   -fetch Fetch a data file Yes/No No
    Advanced qualifiers Allowed values Default
    -reject This specifies the names of the sub-directories of the EMBOSS
    data directory that should be ignored when displaying data

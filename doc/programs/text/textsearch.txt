@@ -38,11 +38,11 @@ Command line arguments
                                   'mouse' in the text
 
    Optional qualifiers:
+   -casesensitive      bool       Do a case-sensitive search
+   -html               bool       Format output as an HTML table
    -outfile            outfile    If you enter the name of a file here then
                                   this program will write the sequence details
                                   into that file.
-   -html               bool       Format output as an HTML table
-   -casesensitive      bool       Do a case-sensitive search
 
    Advanced qualifiers:
    -only               bool       This is a way of shortening the command line
@@ -72,10 +72,10 @@ Command line arguments
    'human' OR 'mouse' in the text Any string is accepted An empty string
    is accepted
    Optional qualifiers Allowed values Default
+   -casesensitive Do a case-sensitive search Yes/No No
+   -html Format output as an HTML table Yes/No No
    -outfile If you enter the name of a file here then this program will
    write the sequence details into that file. Output file stdout
-   -html Format output as an HTML table Yes/No No
-   -casesensitive Do a case-sensitive search Yes/No No
    Advanced qualifiers Allowed values Default
    -only This is a way of shortening the command line if you only want a
    few things to be displayed. Instead of specifying: '-nohead -noname
@@ -173,6 +173,7 @@ See also
    showfeat     Show features of a sequence
    showseq      Display a sequence with features, translation etc
    tfm          Displays a program's help documentation manual
+   whichdb      Search all databases for an entry
    wossname     Finds programs by keywords in their one-line documentation
    
 Author(s)

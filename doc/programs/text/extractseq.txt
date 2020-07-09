@@ -38,7 +38,6 @@ Command line arguments
 
    Mandatory qualifiers:
   [-sequence]          seqall     Sequence database USA
-  [-outseq]            seqoutall  Output sequence(s) USA
    -regions            range      Regions to extract.
                                   A set of regions is specified by a set of
                                   pairs of positions.
@@ -49,6 +48,7 @@ Command line arguments
                                   24-45, 56-78
                                   1:45, 67=99;765..888
                                   1,5,8,10,23,45,57,99
+  [-outseq]            seqoutall  Output sequence(s) USA
 
    Optional qualifiers:
    -separate           bool       If this is set true then each specified
@@ -70,14 +70,14 @@ Command line arguments
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-outseq]
-   (Parameter 2) Output sequence(s) USA Writeable sequence(s)
-   <sequence>.format
    -regions Regions to extract. A set of regions is specified by a set of
    pairs of positions. The positions are integers. They are separated by
    any non-digit, non-alpha character. Examples of region specifications
    are: 24-45, 56-78 1:45, 67=99;765..888 1,5,8,10,23,45,57,99 Sequence
    range Whole sequence
+   [-outseq]
+   (Parameter 2) Output sequence(s) USA Writeable sequence(s)
+   <sequence>.format
    Optional qualifiers Allowed values Default
    -separate If this is set true then each specified region is written
    out as a separate sequence. The name of the sequence is created from
@@ -199,7 +199,6 @@ See also
    descseq      Alter the name or description of a sequence
    entret       Reads and writes (returns) flatfile entries
    extractfeat  Extract features from a sequence
-   infoseq      Displays some simple information about sequences
    listor       Writes a list file of the logical OR of two sets of sequences
    maskfeat     Mask off features of a sequence
    maskseq      Mask off regions of a sequence
@@ -210,8 +209,6 @@ See also
    pasteseq     Insert one sequence into another
    revseq       Reverse and complement a sequence
    seqret       Reads and writes (returns) sequences
-   seqretall    Reads and writes (returns) a set of sequences one at a time
-   seqretset    Reads and writes (returns) a set of sequences all at once
    seqretsplit  Reads and writes (returns) sequences in individual files
    splitter     Split a sequence into (overlapping) smaller sequences
    swissparse   Retrieves sequences from swissprot using keyword search

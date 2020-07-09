@@ -105,8 +105,8 @@ IT IS DONE FOR YOU.
 <pre>
    Mandatory qualifiers (* if not always prompted):
   [-sequence]          sequence   Sequence USA
-*  -graph              graph      Graph type
 *  -outfile            outfile    Output file name
+*  -graph              graph      Graph type
 
    Optional qualifiers (* if not always prompted):
    -steps              integer    The number of residues plotted per turn is
@@ -121,13 +121,13 @@ IT IS DONE FOR YOU.
                                   HKR are marked with octagons.
 
    Advanced qualifiers:
+   -[no]wheel          bool       Plot the wheel
    -amphipathic        bool       If this is true then the residues ACFGILMVWY
                                   are marked as squares and all other
                                   residues are unmarked. This overrides any
                                   other markup that you may have specified
                                   using the qualifiers '-squares', '-diamonds'
                                   and '-octags'.
-   -[no]wheel          bool       Plot the wheel
    -data               bool       Output the match data to a file instead of
                                   plotting it
 
@@ -156,17 +156,17 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-graph</td>
-<td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
-<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
-</tr>
-
-<tr>
 <td>-outfile</td>
 <td>Output file name</td>
 <td>Output file</td>
 <td><i>&lt;sequence&gt;</i>.pepwheel</td>
+</tr>
+
+<tr>
+<td>-graph</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -217,17 +217,17 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-amphipathic</td>
-<td>If this is true then the residues ACFGILMVWY are marked as squares and all other residues are unmarked. This overrides any other markup that you may have specified using the qualifiers '-squares', '-diamonds' and '-octags'.</td>
-<td>Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
 <td>-[no]wheel</td>
 <td>Plot the wheel</td>
 <td>Yes/No</td>
 <td>Yes</td>
+</tr>
+
+<tr>
+<td>-amphipathic</td>
+<td>If this is true then the residues ACFGILMVWY are marked as squares and all other residues are unmarked. This overrides any other markup that you may have specified using the qualifiers '-squares', '-diamonds' and '-octags'.</td>
+<td>Yes/No</td>
+<td>No</td>
 </tr>
 
 <tr>

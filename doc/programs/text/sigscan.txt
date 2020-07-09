@@ -72,7 +72,7 @@ Command line arguments
                                   penalty to zero (or very low) and using the
                                   gap extension penalty to control gap
                                   scoring.
-   -nterm              list       Select number
+   -nterm              menu       Select number
   [-nhits]             integer    Number of hits to output
   [-hitsf]             outfile    Name of signature hits file for output
   [-alignf]            outfile    Name of signature alignments file for output
@@ -337,12 +337,15 @@ Known bugs
    
 See also
 
-   Program name                   Description
-   contacts     Reads coordinate files and writes contact files
-   dichet       Parse dictionary of heterogen groups
-   psiblasts    Runs PSI-BLAST given scopalign alignments
-   scopalign    Generate alignments for SCOP families
-   siggen       Generates a sparse protein signature
+   Program name Description
+   contacts Reads coordinate files and writes contact files
+   dichet Parse dictionary of heterogen groups
+   interface Reads coordinate files and writes inter-chain contact files
+   psiblasts Runs PSI-BLAST given scopalign alignments
+   scopalign Generate alignments for SCOP families
+   seqsort Removes ambiguities from a set of hits resulting from a
+   database search
+   siggen Generates a sparse protein signature
    
 Author(s)
 

@@ -51,18 +51,18 @@ Command line arguments
    -threeprime         bool       3' overhang? (else 5') e.g. BamHI has CTAG
                                   as a 5' overhang, and ApaI has CCGG as 3'
                                   overhang.
-   -html               bool       Create HTML output
    -[no]blunt          bool       Allow blunt end cutters
    -[no]sticky         bool       Allow sticky end cutters
    -[no]ambiguity      bool       Allow ambiguous matches
    -plasmid            bool       Allow circular DNA
    -[no]commercial     bool       Only enzymes with suppliers
+   -datafile           string     Alternative RE data file
+   -html               bool       Create HTML output
    -[no]limit          bool       Limits reports to one isoschizomer
    -preferred          bool       Report preferred isoschizomers
    -alphabetic         bool       Sort output alphabetically
    -fragments          bool       Show fragment lengths
    -name               bool       Show sequence name
-   -datafile           string     Alternative RE data file
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -86,19 +86,19 @@ Command line arguments
    -single Force single site only cuts Yes/No No
    -threeprime 3' overhang? (else 5') e.g. BamHI has CTAG as a 5'
    overhang, and ApaI has CCGG as 3' overhang. Yes/No No
-   -html Create HTML output Yes/No No
    -[no]blunt Allow blunt end cutters Yes/No Yes
    -[no]sticky Allow sticky end cutters Yes/No Yes
    -[no]ambiguity Allow ambiguous matches Yes/No Yes
    -plasmid Allow circular DNA Yes/No No
    -[no]commercial Only enzymes with suppliers Yes/No Yes
+   -datafile Alternative RE data file Any string is accepted An empty
+   string is accepted
+   -html Create HTML output Yes/No No
    -[no]limit Limits reports to one isoschizomer Yes/No Yes
    -preferred Report preferred isoschizomers Yes/No No
    -alphabetic Sort output alphabetically Yes/No No
    -fragments Show fragment lengths Yes/No No
    -name Show sequence name Yes/No No
-   -datafile Alternative RE data file Any string is accepted An empty
-   string is accepted
    
 Input file format
 

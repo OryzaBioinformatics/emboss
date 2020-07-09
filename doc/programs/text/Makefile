@@ -65,18 +65,20 @@ CPP = gcc -E
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
+EMBOSS_TOP = /m2/emboss/emboss
 EXEEXT = 
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 ISAIXIA64 = 
-JAVA_OK = yes
+JAVA_OK = 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
+NEEDAJAX = 
 OBJDUMP = @OBJDUMP@
 OBJEXT = o
 PACKAGE = EMBOSS
 RANLIB = ranlib
 STRIP = strip
-VERSION = 2.2.0
+VERSION = 2.3.0
 XLIB =  -L/usr/X11R6/lib -L/usr/X11R6/lib -lX11 
 X_CFLAGS =  -I/usr/X11R6/include -I/usr/X11R6/include
 X_EXTRA_LIBS = 
@@ -84,7 +86,7 @@ X_LIBS =  -L/usr/X11R6/lib -L/usr/X11R6/lib
 X_PRE_LIBS =  -lSM -lICE -lSM -lICE
 am__include = include
 am__quote = 
-havejavac = yes
+havejavac = 
 install_sh = /m2/emboss/emboss/install-sh
 
 pkgdatadir = $(prefix)/share/$(PACKAGE)/doc/programs/text
@@ -96,25 +98,25 @@ pkgdata_DATA = SITE-DIRECTED.txt abiview.txt ajtest.txt antigenic.txt \
                cons.txt consense.txt contacts.txt contml.txt contrast.txt \
                cpgplot.txt cpgreport.txt cusp.txt cutgextract.txt \
                cutseq.txt dan.txt dbiblast.txt dbifasta.txt dbiflat.txt \
-               dbigcg.txt degapseq.txt descseq.txt diffseq.txt digest.txt \
-               distmat.txt dnacomp.txt dnadist.txt dnainvar.txt dnaml.txt \
-               dnamlk.txt dnapars.txt dnapenny.txt dollop.txt dolpenny.txt \
-               domainer.txt dotmatcher.txt dotpath.txt dottup.txt dreg.txt \
-               eclique.txt econsense.txt econtml.txt econtrast.txt \
-               ednacomp.txt ednadist.txt ednainvar.txt ednaml.txt \
-               ednamlk.txt ednapars.txt ednapenny.txt edollop.txt \
-               edolpenny.txt efactor.txt efitch.txt egendist.txt \
-               einverted.txt ekitsch.txt embossdata.txt embossversion.txt \
-               emix.txt emma.txt emowse.txt eneighbor.txt entret.txt \
-               epenny.txt eprotdist.txt eprotpars.txt equicktandem.txt \
-               erestml.txt eseqboot.txt est2genome.txt etandem.txt \
-               extractfeat.txt extractseq.txt factor.txt findkm.txt \
-               fitch.txt freak.txt fuzznuc.txt fuzzpro.txt fuzztran.txt \
-               garnier.txt geecee.txt gendist.txt getorf.txt \
-               helixturnhelix.txt hmoment.txt iep.txt infoalign.txt
+               dbigcg.txt degapseq.txt descseq.txt dichet.txt diffseq.txt \
+               digest.txt distmat.txt dnacomp.txt dnadist.txt dnainvar.txt \
+               dnaml.txt dnamlk.txt dnapars.txt dnapenny.txt dollop.txt \
+               dolpenny.txt domainer.txt dotmatcher.txt dotpath.txt \
+               dottup.txt dreg.txt eclique.txt econsense.txt econtml.txt \
+               econtrast.txt ednacomp.txt ednadist.txt ednainvar.txt \
+               ednaml.txt ednamlk.txt ednapars.txt ednapenny.txt \
+               edollop.txt edolpenny.txt efactor.txt efitch.txt \
+               egendist.txt einverted.txt ekitsch.txt embossdata.txt \
+               embossversion.txt emix.txt emma.txt emowse.txt eneighbor.txt \
+               entret.txt epenny.txt eprimer3.txt eprotdist.txt \
+               eprotpars.txt equicktandem.txt erestml.txt eseqboot.txt \
+               est2genome.txt etandem.txt extractfeat.txt extractseq.txt \
+               factor.txt findkm.txt fitch.txt freak.txt fuzznuc.txt \
+               fuzzpro.txt fuzztran.txt garnier.txt geecee.txt gendist.txt \
+               getorf.txt helixturnhelix.txt hmoment.txt iep.txt
 
-pkgdata2_DATA = infoseq.txt isochore.txt kitsch.txt lindna.txt listor.txt \
-               marscan.txt maskfeat.txt maskseq.txt matcher.txt \
+pkgdata2_DATA = infoalign.txt infoseq.txt isochore.txt kitsch.txt lindna.txt \
+               listor.txt marscan.txt maskfeat.txt maskseq.txt matcher.txt \
                megamerger.txt merger.txt mix.txt msbar.txt mse.txt \
                mwfilter.txt needle.txt neighbor.txt newcpgreport.txt \
                newcpgseek.txt newseq.txt noreturn.txt notseq.txt \
@@ -136,8 +138,8 @@ pkgdata2_DATA = infoseq.txt isochore.txt kitsch.txt lindna.txt listor.txt \
                stretcher.txt stssearch.txt supermatcher.txt swissparse.txt \
                syco.txt textsearch.txt tfextract.txt tfm.txt tfscan.txt \
                tmap.txt topo.txt transeq.txt trimest.txt trimseq.txt \
-               vectorstrip.txt water.txt wobble.txt wordcount.txt \
-               wordmatch.txt wossname.txt
+               vectorstrip.txt water.txt whichdb.txt wobble.txt \
+               wordcount.txt wordmatch.txt wossname.txt
 
 pkgdata2dir = $(prefix)/share/$(PACKAGE)/doc/programs/text
 subdir = doc/programs/text

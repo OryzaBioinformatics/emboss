@@ -33,11 +33,11 @@ Command line arguments
    Mandatory qualifiers:
   [-sequence]          sequence   Sequence USA
   [-insseq]            sequence   Sequence to insert
-  [-outseq]            seqout     Output sequence USA
    -pos                integer    The position in the main input sequence to
                                   insert after.
                                   To insert before the start use the position
                                   0.
+  [-outseq]            seqout     Output sequence USA
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
@@ -52,11 +52,11 @@ Command line arguments
    (Parameter 1) Sequence USA Readable sequence Required
    [-insseq]
    (Parameter 2) Sequence to insert Readable sequence Required
-   [-outseq]
-   (Parameter 3) Output sequence USA Writeable sequence <sequence>.format
    -pos The position in the main input sequence to insert after. To
    insert before the start use the position 0. Integer 0 or more
    $(sequence.end)
+   [-outseq]
+   (Parameter 3) Output sequence USA Writeable sequence <sequence>.format
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
@@ -109,7 +109,6 @@ See also
    entret       Reads and writes (returns) flatfile entries
    extractfeat  Extract features from a sequence
    extractseq   Extract regions from a sequence
-   infoseq      Displays some simple information about sequences
    listor       Writes a list file of the logical OR of two sets of sequences
    maskfeat     Mask off features of a sequence
    maskseq      Mask off regions of a sequence
@@ -119,8 +118,6 @@ See also
    nthseq       Writes one sequence from a multiple set of sequences
    revseq       Reverse and complement a sequence
    seqret       Reads and writes (returns) sequences
-   seqretall    Reads and writes (returns) a set of sequences one at a time
-   seqretset    Reads and writes (returns) a set of sequences all at once
    seqretsplit  Reads and writes (returns) sequences in individual files
    splitter     Split a sequence into (overlapping) smaller sequences
    swissparse   Retrieves sequences from swissprot using keyword search

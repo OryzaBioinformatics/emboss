@@ -198,9 +198,9 @@ Command line arguments
 
    Mandatory qualifiers (* if not always prompted):
   [-msf]               seqset     File containing a sequence alignment.
-*  -nucmethod          list       Multiple substitution correction methods for
+*  -nucmethod          menu       Multiple substitution correction methods for
                                   nucleotides.
-*  -protmethod         list       Multiple substitution correction methods for
+*  -protmethod         menu       Multiple substitution correction methods for
                                   proteins.
   [-outf]              outfile    Enter a name for the distance matrix
 

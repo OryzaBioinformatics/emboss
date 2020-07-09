@@ -33,8 +33,8 @@ Command line arguments
 
    Mandatory qualifiers (* if not always prompted):
   [-sequence]          sequence   Sequence USA
-*  -graph              graph      Graph type
 *  -outfile            outfile    Output file name
+*  -graph              graph      Graph type
 
    Optional qualifiers (* if not always prompted):
    -steps              integer    The number of residues plotted per turn is
@@ -49,13 +49,13 @@ Command line arguments
                                   HKR are marked with octagons.
 
    Advanced qualifiers:
+   -[no]wheel          bool       Plot the wheel
    -amphipathic        bool       If this is true then the residues ACFGILMVWY
                                   are marked as squares and all other
                                   residues are unmarked. This overrides any
                                   other markup that you may have specified
                                   using the qualifiers '-squares', '-diamonds'
                                   and '-octags'.
-   -[no]wheel          bool       Plot the wheel
    -data               bool       Output the match data to a file instead of
                                   plotting it
 
@@ -68,11 +68,11 @@ Command line arguments
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
+   -outfile Output file name Output file <sequence>.pepwheel
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
-   -outfile Output file name Output file <sequence>.pepwheel
    Optional qualifiers Allowed values Default
    -steps The number of residues plotted per turn is this value divided
    by the 'turns' value. Integer from 2 to 100 18
@@ -85,11 +85,11 @@ Command line arguments
    -octags By default the positively charged residues HKR are marked with
    octagons. Any string is accepted HKR
    Advanced qualifiers Allowed values Default
+   -[no]wheel Plot the wheel Yes/No Yes
    -amphipathic If this is true then the residues ACFGILMVWY are marked
    as squares and all other residues are unmarked. This overrides any
    other markup that you may have specified using the qualifiers
    '-squares', '-diamonds' and '-octags'. Yes/No No
-   -[no]wheel Plot the wheel Yes/No Yes
    -data Output the match data to a file instead of plotting it Yes/No No
    
 Input file format

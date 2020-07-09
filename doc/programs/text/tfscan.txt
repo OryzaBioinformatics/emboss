@@ -54,7 +54,7 @@ Command line arguments
 
    Mandatory qualifiers:
   [-sequence]          seqall     Sequence database USA
-   -menu               list       Select class
+   -menu               menu       Select class
    -mismatch           integer    Number of mismatches
   [-outfile]           outfile    Output file name
 

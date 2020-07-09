@@ -205,21 +205,42 @@ The input sequence can be one or more protein sequences.
 The output from helixturnhelix is a simple text one. It reports the highest
 scoring hit followed by all hits above the minimum standard deviation.
 
+<p>
+
 Here is a sample output:
 
+<p>
+
 <pre>
+<hr>
+########################################
+# Program: helixturnhelix
+# Rundate: Mon Feb 11 13:45:02 2002
+# Report_file: laci_ecoli.hth
+########################################
 
-HELIXTURNHELIX: Nucleic Acid Binding Domain search
+#=======================================
+#
+# Sequence: LACI_ECOLI     from: 1   to: 360
+# HitCount: 1
+#
+# Hits above +2.50 SD (972.73)
+#
+#=======================================
+
+Maximum_score_at at "*"
+
+(1) Score 2160.000 length 22 at residues 4->25
+           *
+ Sequence: VTLYDVAEYAGVSYQTVSRVVN
+           |                    |
+           4                    25
+ Standard_deviations: 6.54
 
 
-Hits above +2.50 SD (972.73)
-
-Score 2178 (+6.60 SD) in GALR_ECOLI at residue 2
-
- Sequence:  ATIKDVARLAGVSVATVSRVIN
-            |                    |
-            2                    23
-
+#---------------------------------------
+#---------------------------------------
+<hr>
 </pre>
 
 <H2>

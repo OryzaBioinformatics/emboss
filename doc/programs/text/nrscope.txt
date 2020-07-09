@@ -72,8 +72,6 @@ Command line arguments
    Mandatory qualifiers:
   [-scopin]            infile     Name of scop file for input (embl-like
                                   format)
-  [-scopout]           outfile    Name of non-redundant scop file for output
-                                  (embl-like format)
   [-dpdb]              string     Location of clean domain coordinate files
                                   for input (embl-like format)
   [-extn]              string     File extension of clean domain coordinate
@@ -101,6 +99,8 @@ Command line arguments
                                   penalty to zero (or very low) and using the
                                   gap extension penalty to control gap
                                   scoring.
+  [-scopout]           outfile    Name of non-redundant scop file for output
+                                  (embl-like format)
   [-errf]              outfile    Name of log file for the build
 
    Optional qualifiers: (none)
@@ -115,30 +115,27 @@ Command line arguments
    [-scopin]
    (Parameter 1) Name of scop file for input (embl-like format) Input
    file Escop.dat
-   [-scopout]
-   (Parameter 2) Name of non-redundant scop file for output (embl-like
-   format) Output file EscopNR.dat
    [-dpdb]
-   (Parameter 3) Location of clean domain coordinate files for input
+   (Parameter 2) Location of clean domain coordinate files for input
    (embl-like format) Any string is accepted ./
    [-extn]
-   (Parameter 4) File extension of clean domain coordinate files Any
+   (Parameter 3) File extension of clean domain coordinate files Any
    string is accepted .pxyz
    [-thresh]
-   (Parameter 5) The % sequence identity redundancy threshold Any integer
+   (Parameter 4) The % sequence identity redundancy threshold Any integer
    value 95.0
    [-datafile]
-   (Parameter 6) Residue substitution matrix Comparison matrix file in
+   (Parameter 5) Residue substitution matrix Comparison matrix file in
    EMBOSS data path EBLOSUM62
    [-gapopen]
-   (Parameter 7) The gap insertion penalty is the score taken away when a
+   (Parameter 6) The gap insertion penalty is the score taken away when a
    gap is created. The best value depends on the choice of comparison
    matrix. The default value assumes you are using the EBLOSUM62 matrix
    for protein sequences, and the EDNAFULL matrix for nucleotide
    sequences. Floating point number from 1.0 to 100.0 10.0 for any
    sequence
    [-gapextend]
-   (Parameter 8) The gap extension, penalty is added to the standard gap
+   (Parameter 7) The gap extension, penalty is added to the standard gap
    penalty for each base or residue in the gap. This is how long gaps are
    penalized. Usually you will expect a few long gaps rather than many
    short gaps, so the gap extension penalty should be lower than the gap
@@ -148,6 +145,9 @@ Command line arguments
    penalty to zero (or very low) and using the gap extension penalty to
    control gap scoring. Floating point number from 0.0 to 10.0 0.5 for
    any sequence
+   [-scopout]
+   (Parameter 8) Name of non-redundant scop file for output (embl-like
+   format) Output file EscopNR.dat
    [-errf]
    (Parameter 9) Name of log file for the build Output file nrscope.log
    Optional qualifiers Allowed values Default
@@ -280,11 +280,16 @@ See also
    Program name Description
    cutgextract Extract data from CUTG
    domainer Build domain coordinate files
+   pdbtosp Convert raw swissprot:pdb equivalence file to embl-like format
    printsextract Extract data from PRINTS
    prosextract Builds the PROSITE motif database for patmatmotifs to
    search
    rebaseextract Extract data from REBASE
    scope Convert raw scop classification file to embl-like format
+   scopparse Reads raw scop classifications file and writes embl-like
+   format scop classification file
+   seqnr Converts redundant database results to a non-redundant set of
+   hits
    tfextract Extract data from TRANSFAC
    
 Author(s)

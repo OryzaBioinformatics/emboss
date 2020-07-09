@@ -257,11 +257,11 @@ Command line arguments
   [-sequence]          seqall     Sequence database USA
   [-[no]vectorfile]    bool       Are your vector sequences in a file?
 * [-vectors]           infile     Name of vectorfile
-*  -linkera            string     5' sequence
-*  -linkerb            string     3' sequence
    -mismatch           integer    Max allowed % mismatch
    -[no]besthits       bool       Show only the best hits (minimise
                                   mismatches)?
+*  -linkera            string     5' sequence
+*  -linkerb            string     3' sequence
   [-outf]              outfile    Output file name
   [-outseq]            seqoutall  Output sequence(s) USA
 
@@ -280,13 +280,13 @@ Command line arguments
    (Parameter 2) Are your vector sequences in a file? Yes/No Yes
    [-vectors]
    (Parameter 3) Name of vectorfile Input file Required
+   -mismatch Max allowed % mismatch Any integer value 10
+   -[no]besthits Show only the best hits (minimise mismatches)? Yes/No
+   Yes
    -linkera 5' sequence Any string is accepted An empty string is
    accepted
    -linkerb 3' sequence Any string is accepted An empty string is
    accepted
-   -mismatch Max allowed % mismatch Any integer value 10
-   -[no]besthits Show only the best hits (minimise mismatches)? Yes/No
-   Yes
    [-outf]
    (Parameter 4) Output file name Output file <sequence>.vectorstrip
    [-outseq]
@@ -420,7 +420,6 @@ See also
    entret       Reads and writes (returns) flatfile entries
    extractfeat  Extract features from a sequence
    extractseq   Extract regions from a sequence
-   infoseq      Displays some simple information about sequences
    listor       Writes a list file of the logical OR of two sets of sequences
    maskfeat     Mask off features of a sequence
    maskseq      Mask off regions of a sequence
@@ -431,8 +430,6 @@ See also
    pasteseq     Insert one sequence into another
    revseq       Reverse and complement a sequence
    seqret       Reads and writes (returns) sequences
-   seqretall    Reads and writes (returns) a set of sequences one at a time
-   seqretset    Reads and writes (returns) a set of sequences all at once
    seqretsplit  Reads and writes (returns) sequences in individual files
    splitter     Split a sequence into (overlapping) smaller sequences
    swissparse   Retrieves sequences from swissprot using keyword search

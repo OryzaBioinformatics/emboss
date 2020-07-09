@@ -138,7 +138,7 @@ Known bugs
 See also
 
    Program name                     Description
-   primer3      Picks PCR primers and hybridization oligos
+   eprimer3     Picks PCR primers and hybridization oligos
    primersearch Searches DNA sequences for matches with primer pairs
    
    If you want something that only reports matches of both primer pairs

@@ -125,7 +125,6 @@ IT IS DONE FOR YOU.
 <pre>
    Mandatory qualifiers:
   [-sequence]          sequence   Sequence USA
-  [-outseq]            seqout     Output sequence USA
    -regions            range      Regions to mask.
                                   A set of regions is specified by a set of
                                   pairs of positions.
@@ -136,6 +135,7 @@ IT IS DONE FOR YOU.
                                   24-45, 56-78
                                   1:45, 67=99;765..888
                                   1,5,8,10,23,45,57,99
+  [-outseq]            seqout     Output sequence USA
 
    Optional qualifiers:
    -maskchar           string     Character to use when masking.
@@ -168,13 +168,6 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>[-outseq]<br>(Parameter 2)</td>
-<td>Output sequence USA</td>
-<td>Writeable sequence</td>
-<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
-</tr>
-
-<tr>
 <td>-regions</td>
 <td>Regions to mask.
 A set of regions is specified by a set of pairs of positions.
@@ -186,6 +179,13 @@ Examples of region specifications are:
 1,5,8,10,23,45,57,99</td>
 <td>Sequence range</td>
 <td>None</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 2)</td>
+<td>Output sequence USA</td>
+<td>Writeable sequence</td>
+<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -336,7 +336,6 @@ None.
 <tr><td><a href="entret.html">entret</a></td><td>Reads and writes (returns) flatfile entries</td></tr>
 <tr><td><a href="extractfeat.html">extractfeat</a></td><td>Extract features from a sequence</td></tr>
 <tr><td><a href="extractseq.html">extractseq</a></td><td>Extract regions from a sequence</td></tr>
-<tr><td><a href="infoseq.html">infoseq</a></td><td>Displays some simple information about sequences</td></tr>
 <tr><td><a href="listor.html">listor</a></td><td>Writes a list file of the logical OR of two sets of sequences</td></tr>
 <tr><td><a href="maskfeat.html">maskfeat</a></td><td>Mask off features of a sequence</td></tr>
 <tr><td><a href="newseq.html">newseq</a></td><td>Type in a short new sequence</td></tr>
@@ -346,8 +345,6 @@ None.
 <tr><td><a href="pasteseq.html">pasteseq</a></td><td>Insert one sequence into another</td></tr>
 <tr><td><a href="revseq.html">revseq</a></td><td>Reverse and complement a sequence</td></tr>
 <tr><td><a href="seqret.html">seqret</a></td><td>Reads and writes (returns) sequences</td></tr>
-<tr><td><a href="seqretall.html">seqretall</a></td><td>Reads and writes (returns) a set of sequences one at a time</td></tr>
-<tr><td><a href="seqretset.html">seqretset</a></td><td>Reads and writes (returns) a set of sequences all at once</td></tr>
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
 <tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>

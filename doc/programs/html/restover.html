@@ -145,18 +145,18 @@ Output file [hsfau.restover]:
    -threeprime         bool       3' overhang? (else 5') e.g. BamHI has CTAG
                                   as a 5' overhang, and ApaI has CCGG as 3'
                                   overhang.
-   -html               bool       Create HTML output
    -[no]blunt          bool       Allow blunt end cutters
    -[no]sticky         bool       Allow sticky end cutters
    -[no]ambiguity      bool       Allow ambiguous matches
    -plasmid            bool       Allow circular DNA
    -[no]commercial     bool       Only enzymes with suppliers
+   -datafile           string     Alternative RE data file
+   -html               bool       Create HTML output
    -[no]limit          bool       Limits reports to one isoschizomer
    -preferred          bool       Report preferred isoschizomers
    -alphabetic         bool       Sort output alphabetically
    -fragments          bool       Show fragment lengths
    -name               bool       Show sequence name
-   -datafile           string     Alternative RE data file
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -240,13 +240,6 @@ Output file [hsfau.restover]:
 </tr>
 
 <tr>
-<td>-html</td>
-<td>Create HTML output</td>
-<td>Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
 <td>-[no]blunt</td>
 <td>Allow blunt end cutters</td>
 <td>Yes/No</td>
@@ -282,6 +275,20 @@ Output file [hsfau.restover]:
 </tr>
 
 <tr>
+<td>-datafile</td>
+<td>Alternative RE data file</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-html</td>
+<td>Create HTML output</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
 <td>-[no]limit</td>
 <td>Limits reports to one isoschizomer</td>
 <td>Yes/No</td>
@@ -314,13 +321,6 @@ Output file [hsfau.restover]:
 <td>Show sequence name</td>
 <td>Yes/No</td>
 <td>No</td>
-</tr>
-
-<tr>
-<td>-datafile</td>
-<td>Alternative RE data file</td>
-<td>Any string is accepted</td>
-<td><i>An empty string is accepted</i></td>
 </tr>
 
 </table>

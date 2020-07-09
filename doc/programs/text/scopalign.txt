@@ -169,12 +169,15 @@ Known bugs
    
 See also
 
-   Program name                    Description
-   contacts     Reads coordinate files and writes contact files
-   dichet       Parse dictionary of heterogen groups
-   psiblasts    Runs PSI-BLAST given scopalign alignments
-   siggen       Generates a sparse protein signature
-   sigscan      Scans a sparse protein signature against swissprot
+   Program name Description
+   contacts Reads coordinate files and writes contact files
+   dichet Parse dictionary of heterogen groups
+   interface Reads coordinate files and writes inter-chain contact files
+   psiblasts Runs PSI-BLAST given scopalign alignments
+   seqsort Removes ambiguities from a set of hits resulting from a
+   database search
+   siggen Generates a sparse protein signature
+   sigscan Scans a sparse protein signature against swissprot
    
 Author(s)
 

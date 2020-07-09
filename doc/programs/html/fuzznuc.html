@@ -109,6 +109,7 @@ IT IS DONE FOR YOU.
 
    Optional qualifiers: (none)
    Advanced qualifiers:
+   -complement         bool       Search complementary strand
    -mmshow             bool       Show mismatches
    -accshow            bool       Show accession numbers
    -descshow           bool       Show descriptions
@@ -118,7 +119,6 @@ IT IS DONE FOR YOU.
                                   be read in by many other EMBOSS programs by
                                   specifying it with a '@' in front of the
                                   filename.
-   -complement         bool       Search complementary strand
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -182,6 +182,13 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
+<td>-complement</td>
+<td>Search complementary strand</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
 <td>-mmshow</td>
 <td>Show mismatches</td>
 <td>Yes/No</td>
@@ -205,13 +212,6 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-usashow</td>
 <td>Showing the USA (Uniform Sequence Address) of the matching sequences will turn your output file into a 'list' file that can then be read in by many other EMBOSS programs by specifying it with a '@' in front of the filename.</td>
-<td>Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-complement</td>
-<td>Search complementary strand</td>
 <td>Yes/No</td>
 <td>No</td>
 </tr>

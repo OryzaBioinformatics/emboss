@@ -80,13 +80,13 @@ Command line arguments
    Optional qualifiers:
    -database           string     Name of a single database to give
                                   information on
-   -outfile            outfile    If you enter the name of a file here then
-                                  this program will write the database details
-                                  into that file.
    -html               bool       Format output as an HTML table
    -[no]protein        bool       Display protein databases
    -[no]nucleic        bool       Display nucleic acid databases
    -release            bool       Display 'release' column
+   -outfile            outfile    If you enter the name of a file here then
+                                  this program will write the database details
+                                  into that file.
 
    Advanced qualifiers:
    -only               bool       This is a way of shortening the command line
@@ -114,12 +114,12 @@ Command line arguments
    Optional qualifiers Allowed values Default
    -database Name of a single database to give information on Any string
    is accepted An empty string is accepted
-   -outfile If you enter the name of a file here then this program will
-   write the database details into that file. Output file stdout
    -html Format output as an HTML table Yes/No No
    -[no]protein Display protein databases Yes/No Yes
    -[no]nucleic Display nucleic acid databases Yes/No Yes
    -release Display 'release' column Yes/No No
+   -outfile If you enter the name of a file here then this program will
+   write the database details into that file. Output file stdout
    Advanced qualifiers Allowed values Default
    -only This is a way of shortening the command line if you only want a
    few things to be displayed. Instead of specifying: '-nohead -notype
@@ -215,6 +215,7 @@ See also
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
    tfm Displays a program's help documentation manual
+   whichdb Search all databases for an entry
    wossname Finds programs by keywords in their one-line documentation
    
 Author(s)

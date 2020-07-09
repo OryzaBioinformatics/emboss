@@ -320,7 +320,7 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -enzyme             list       Enzyme or reagent
+   -enzyme             menu       Enzyme or reagent
    -aadata             string     Molecular weight data for amino acids
    -pcrange            integer    Allowed whole sequence weight variability
    -frequencies        string     Frequencies file
@@ -1078,6 +1078,7 @@ See also
    checktrans Reports STOP codons and ORF statistics of a protein
    sequence
    compseq Counts the composition of dimer/trimer/etc words in a sequence
+   freak Residue/base frequency table or plot
    iep Calculates the isoelectric point of a protein
    mwfilter Filter noisy molwts from mass spec output
    octanol Displays protein hydropathy

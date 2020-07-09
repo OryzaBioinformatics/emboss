@@ -168,9 +168,6 @@ Use the first sequence as the reference sequence to compare to
   [-sequence]          seqset     The sequence alignment to be displayed.
 
    Optional qualifiers:
-   -outfile            outfile    If you enter the name of a file here then
-                                  this program will write the sequence details
-                                  into that file.
    -refseq             string     If you give the number in the alignment or
                                   the name of a sequence, it will be taken to
                                   be the reference sequence. The reference
@@ -181,6 +178,9 @@ Use the first sequence as the reference sequence to compare to
                                   the consensus sequence is used as the
                                   reference sequence.
    -matrix             matrix     Similarity scoring Matrix file
+   -outfile            outfile    If you enter the name of a file here then
+                                  this program will write the sequence details
+                                  into that file.
    -html               bool       Format output as an HTML table
 
    Advanced qualifiers:
@@ -246,13 +246,6 @@ Use the first sequence as the reference sequence to compare to
 </tr>
 
 <tr>
-<td>-outfile</td>
-<td>If you enter the name of a file here then this program will write the sequence details into that file.</td>
-<td>Output file</td>
-<td>stdout</td>
-</tr>
-
-<tr>
 <td>-refseq</td>
 <td>If you give the number in the alignment or the name of a sequence, it will be taken to be the reference sequence. The reference sequence is the one against which all the other sequences are compared. If this is set to 0 then the consensus sequence will be used as the reference sequence. By default the consensus sequence is used as the reference sequence.</td>
 <td>Any string is accepted</td>
@@ -264,6 +257,13 @@ Use the first sequence as the reference sequence to compare to
 <td>Similarity scoring Matrix file</td>
 <td>Comparison matrix file in EMBOSS data path</td>
 <td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>If you enter the name of a file here then this program will write the sequence details into that file.</td>
+<td>Output file</td>
+<td>stdout</td>
 </tr>
 
 <tr>
@@ -675,6 +675,7 @@ None.
 <tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
 <tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation text. SRS and Entrez are faster!</td></tr>
 <tr><td><a href="tfm.html">tfm</a></td><td>Displays a program's help documentation manual</td></tr>
+<tr><td><a href="whichdb.html">whichdb</a></td><td>Search all databases for an entry</td></tr>
 <tr><td><a href="wossname.html">wossname</a></td><td>Finds programs by keywords in their one-line documentation</td></tr>
 </table>
 

@@ -66,10 +66,6 @@ Command line arguments
                                   The default plurality is taken as half the
                                   total weight of all the sequences in the
                                   alignment.
-   -setcase            float      Sets the threshold for the positive matches
-                                  above which the consensus is is upper-case
-                                  and below which the consensus is in
-                                  lower-case.
    -identity           integer    Provides the facility of setting the
                                   required number of identities at a site for
                                   it to give a consensus at that position.
@@ -77,6 +73,10 @@ Command line arguments
                                   sequences in the alignment only columns of
                                   identities contribute to the consensus.
    -name               string     Name of the consensus sequence
+   -setcase            float      Sets the threshold for the positive matches
+                                  above which the consensus is is upper-case
+                                  and below which the consensus is in
+                                  lower-case.
 
    Advanced qualifiers: (none)
    General qualifiers:
@@ -99,9 +99,6 @@ Command line arguments
    which there is no consensus. The default plurality is taken as half
    the total weight of all the sequences in the alignment. Any integer
    value Half the total sequence weighting
-   -setcase Sets the threshold for the positive matches above which the
-   consensus is is upper-case and below which the consensus is in
-   lower-case. Any integer value 0
    -identity Provides the facility of setting the required number of
    identities at a site for it to give a consensus at that position.
    Therefore, if this is set to the number of sequences in the alignment
@@ -109,6 +106,9 @@ Command line arguments
    more 0
    -name Name of the consensus sequence Any string is accepted An empty
    string is accepted
+   -setcase Sets the threshold for the positive matches above which the
+   consensus is is upper-case and below which the consensus is in
+   lower-case. Any integer value 0
    Advanced qualifiers Allowed values Default
    (none)
    

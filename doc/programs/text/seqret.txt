@@ -502,6 +502,20 @@ SQ   Sequence 10 BP; 2 A; 2 C; 3 G; 3 T; 0 other;
      ACTGATCGTG                                10
 //
 
+   To force seqret to both read in and write out features, use the
+   command-line qualifier '-feature'.
+   
+   seqret does not read in features by default because this results in
+   slightly faster performance. If however you wish to read in features
+   with your sequence and write them out on output, using '-feature' will
+   change the default behaviour to use any features present in the
+   sequence.
+
+% seqret -feature
+Reads and writes (returns) sequences
+Input sequence(s): em:hs989235
+Output sequence [hs989235.fasta]: embl::hs989235.embl
+
 Command line arguments
 
    Mandatory qualifiers:
@@ -510,6 +524,7 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers:
+   -feature            bool       Use feature information
    -firstonly          bool       Read one sequence and stop
 
    General qualifiers:
@@ -527,6 +542,7 @@ Command line arguments
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
+   -feature Use feature information Yes/No No
    -firstonly Read one sequence and stop Yes/No No
    
 Input file format
@@ -602,7 +618,6 @@ See also
    entret       Reads and writes (returns) flatfile entries
    extractfeat  Extract features from a sequence
    extractseq   Extract regions from a sequence
-   infoseq      Displays some simple information about sequences
    listor       Writes a list file of the logical OR of two sets of sequences
    maskfeat     Mask off features of a sequence
    maskseq      Mask off regions of a sequence
@@ -612,8 +627,6 @@ See also
    nthseq       Writes one sequence from a multiple set of sequences
    pasteseq     Insert one sequence into another
    revseq       Reverse and complement a sequence
-   seqretall    Reads and writes (returns) a set of sequences one at a time
-   seqretset    Reads and writes (returns) a set of sequences all at once
    seqretsplit  Reads and writes (returns) sequences in individual files
    splitter     Split a sequence into (overlapping) smaller sequences
    swissparse   Retrieves sequences from swissprot using keyword search
@@ -633,6 +646,7 @@ Author(s)
 History
 
    1999 - Written by Peter Rice
+   Feb 2002 - '-feature' qualifier added by Peter Rice
    
 Target users
 

@@ -55,6 +55,24 @@ Command line arguments
   [-search]            string     Enter the name of an EMBOSS program
 
    Optional qualifiers (* if not always prompted):
+   -explode            bool       The groups that EMBOSS applications belong
+                                  to have two forms, exploded and not
+                                  exploded. The exploded group names are more
+                                  numerous and often vaguely phrased than the
+                                  non-exploded ones. The exploded names are
+                                  formed from definitions of the group names
+                                  that start like NAME1:NAME2 and which are
+                                  then expanded into many combinations of the
+                                  names as: 'NAME1', 'NAME2', 'NAME1 NAME2',
+                                  NAME2 NAME1'. The non-expanded names are
+                                  simply like: 'NAME1 NAME2'.
+                                  Using expanded group names will find many
+                                  more programs which share at least some of
+                                  the expanded names than using the
+                                  non-exploded names and so you will get more
+                                  programs reported as sharing a similar
+                                  function than you will if you specify that
+                                  you wish to use non-exploded names
    -outfile            outfile    If you enter the name of a file here then
                                   this program will write the program names
                                   and brief descriptions into that file.
@@ -89,24 +107,6 @@ Command line arguments
                                   be set.
    -groups             bool       If you use this option, then only the group
                                   names will output to the file
-   -explode            bool       The groups that EMBOSS applications belong
-                                  to have two forms, exploded and not
-                                  exploded. The exploded group names are more
-                                  numerous and often vaguely phrased than the
-                                  non-exploded ones. The exploded names are
-                                  formed from definitions of the group names
-                                  that start like NAME1:NAME2 and which are
-                                  then expanded into many combinations of the
-                                  names as: 'NAME1', 'NAME2', 'NAME1 NAME2',
-                                  NAME2 NAME1'. The non-expanded names are
-                                  simply like: 'NAME1 NAME2'.
-                                  Using expanded group names will find many
-                                  more programs which share at least some of
-                                  the expanded names than using the
-                                  non-exploded names and so you will get more
-                                  programs reported as sharing a similar
-                                  function than you will if you specify that
-                                  you wish to use non-exploded names
 
    Advanced qualifiers:
    -[no]emboss         bool       If you use this option then EMBOSS program
@@ -153,6 +153,17 @@ Command line arguments
    (Parameter 1) Enter the name of an EMBOSS program Any string is
    accepted An empty string is accepted
    Optional qualifiers Allowed values Default
+   -explode The groups that EMBOSS applications belong to have two forms,
+   exploded and not exploded. The exploded group names are more numerous
+   and often vaguely phrased than the non-exploded ones. The exploded
+   names are formed from definitions of the group names that start like
+   NAME1:NAME2 and which are then expanded into many combinations of the
+   names as: 'NAME1', 'NAME2', 'NAME1 NAME2', NAME2 NAME1'. The
+   non-expanded names are simply like: 'NAME1 NAME2'. Using expanded
+   group names will find many more programs which share at least some of
+   the expanded names than using the non-exploded names and so you will
+   get more programs reported as sharing a similar function than you will
+   if you specify that you wish to use non-exploded names Yes/No No
    -outfile If you enter the name of a file here then this program will
    write the program names and brief descriptions into that file. Output
    file stdout
@@ -175,17 +186,6 @@ Command line arguments
    empty string is accepted
    -groups If you use this option, then only the group names will output
    to the file Yes/No No
-   -explode The groups that EMBOSS applications belong to have two forms,
-   exploded and not exploded. The exploded group names are more numerous
-   and often vaguely phrased than the non-exploded ones. The exploded
-   names are formed from definitions of the group names that start like
-   NAME1:NAME2 and which are then expanded into many combinations of the
-   names as: 'NAME1', 'NAME2', 'NAME1 NAME2', NAME2 NAME1'. The
-   non-expanded names are simply like: 'NAME1 NAME2'. Using expanded
-   group names will find many more programs which share at least some of
-   the expanded names than using the non-exploded names and so you will
-   get more programs reported as sharing a similar function than you will
-   if you specify that you wish to use non-exploded names Yes/No No
    Advanced qualifiers Allowed values Default
    -[no]emboss If you use this option then EMBOSS program documentation
    will be searched. If this option is set to be false, then only the
@@ -276,6 +276,7 @@ See also
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
    tfm Displays a program's help documentation manual
+   whichdb Search all databases for an entry
    wossname Finds programs by keywords in their one-line documentation
    
 Author(s)

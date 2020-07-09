@@ -109,11 +109,11 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers (* if not always prompted):
-   -idformat           list       Entry format
+   Mandatory qualifiers:
+   -idformat           menu       Entry format
+   -directory          string     Database directory
+   -filename           string     Wildcard database filename
   [-dbname]            string     Database name
-*  -directory          string     Database directory
-*  -filename           string     Wildcard database filename
    -release            string     Release number
    -date               string     Index date
 
@@ -153,13 +153,6 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>[-dbname]<br>(Parameter 1)</td>
-<td>Database name</td>
-<td>A string from 1 to 19 characters</td>
-<td><b>Required</b></td>
-</tr>
-
-<tr>
 <td>-directory</td>
 <td>Database directory</td>
 <td>Any string is accepted</td>
@@ -171,6 +164,13 @@ IT IS DONE FOR YOU.
 <td>Wildcard database filename</td>
 <td>Any string is accepted</td>
 <td>*.seq</td>
+</tr>
+
+<tr>
+<td>[-dbname]<br>(Parameter 1)</td>
+<td>Database name</td>
+<td>A string from 1 to 19 characters</td>
+<td><b>Required</b></td>
 </tr>
 
 <tr>

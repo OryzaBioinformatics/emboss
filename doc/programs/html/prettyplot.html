@@ -129,12 +129,12 @@ IT IS DONE FOR YOU.
    -[no]box            bool       Display prettyboxes
    -boxcol             bool       Colour the background in the boxes
    -boxcolval          string     Colour to be used for background. (GREY)
-   -consensus          bool       Display the consensus
    -[no]name           bool       Display the sequence names
    -maxnamelen         integer    Margin size for the sequence name.
    -[no]number         bool       Display the residue number
    -[no]listoptions    bool       Display the date and options used
    -plurality          float      Plurality check value (totweight/2)
+   -consensus          bool       Display the consensus
    -[no]collision      bool       Allow collisions in calculating consensus
    -alternative        integer    Use alternative collisions routine
                                   0) Normal collision check. (default)
@@ -149,9 +149,9 @@ IT IS DONE FOR YOU.
                                   consensus.If any of these give a top score
                                   for matching or identical scores then a
                                   collision has occured.
-   -portrait           bool       Set page to Portrait
    -matrixfile         matrix     Matrix file
    -showscore          integer    Print residue scores
+   -portrait           bool       Set page to Portrait
 
    Advanced qualifiers:
    -data               bool       (no help text) bool value
@@ -299,13 +299,6 @@ The only four letters allowed are BPLW, in any order.</td>
 </tr>
 
 <tr>
-<td>-consensus</td>
-<td>Display the consensus</td>
-<td>Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
 <td>-[no]name</td>
 <td>Display the sequence names</td>
 <td>Yes/No</td>
@@ -341,6 +334,13 @@ The only four letters allowed are BPLW, in any order.</td>
 </tr>
 
 <tr>
+<td>-consensus</td>
+<td>Display the consensus</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
 <td>-[no]collision</td>
 <td>Allow collisions in calculating consensus</td>
 <td>Yes/No</td>
@@ -359,13 +359,6 @@ The only four letters allowed are BPLW, in any order.</td>
 </tr>
 
 <tr>
-<td>-portrait</td>
-<td>Set page to Portrait</td>
-<td>Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
 <td>-matrixfile</td>
 <td>Matrix file</td>
 <td>Comparison matrix file in EMBOSS data path</td>
@@ -377,6 +370,13 @@ The only four letters allowed are BPLW, in any order.</td>
 <td>Print residue scores</td>
 <td>Any integer value</td>
 <td>-1</td>
+</tr>
+
+<tr>
+<td>-portrait</td>
+<td>Set page to Portrait</td>
+<td>Yes/No</td>
+<td>No</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">

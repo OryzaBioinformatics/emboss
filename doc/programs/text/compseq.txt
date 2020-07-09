@@ -56,9 +56,6 @@ Command line arguments
                                   must use one made from nucleotide
                                   frequencies if you and analysing a
                                   nucleotide sequence.
-   -[no]zerocount      bool       You can make the output results file much
-                                  smaller if you do not display the words with
-                                  a zero count.
    -frame              integer    The normal behaviour of 'compseq' is to
                                   count the frequencies of all words that
                                   occur by moving a window of length 'word' up
@@ -82,6 +79,9 @@ Command line arguments
 *  -reverse            bool       Set this to be true if you also wish to also
                                   count words in the reverse complement of a
                                   nucleic sequence.
+   -[no]zerocount      bool       You can make the output results file much
+                                  smaller if you do not display the words with
+                                  a zero count.
 
    Advanced qualifiers: (none)
    General qualifiers:
@@ -107,8 +107,6 @@ Command line arguments
    sequences if you are counting protein sequence word frequencies, and
    you must use one made from nucleotide frequencies if you and analysing
    a nucleotide sequence. Input file Required
-   -[no]zerocount You can make the output results file much smaller if
-   you do not display the words with a zero count. Yes/No Yes
    -frame The normal behaviour of 'compseq' is to count the frequencies
    of all words that occur by moving a window of length 'word' up by one
    each time. This option allows you to move the window up by the length
@@ -123,6 +121,8 @@ Command line arguments
    them, just noting them in the count of 'Other' words. Yes/No Yes
    -reverse Set this to be true if you also wish to also count words in
    the reverse complement of a nucleic sequence. Yes/No No
+   -[no]zerocount You can make the output results file much smaller if
+   you do not display the words with a zero count. Yes/No Yes
    Advanced qualifiers Allowed values Default
    (none)
    

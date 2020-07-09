@@ -95,9 +95,9 @@ IT IS DONE FOR YOU.
 <pre>
    Mandatory qualifiers:
   [-sequence]          seqall     Sequence database USA
-  [-outfile]           report     (no help text) report value
    -minweight          float      Minimum scoring weight value for the
                                   predicted cleavage site
+  [-outfile]           report     (no help text) report value
 
    Optional qualifiers:
    -prokaryote         bool       Specifies the sequence is prokaryotic and
@@ -136,17 +136,17 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>[-outfile]<br>(Parameter 2)</td>
-<td>(no help text) report value</td>
-<td>Report file</td>
-<td>&nbsp;</td>
-</tr>
-
-<tr>
 <td>-minweight</td>
 <td>Minimum scoring weight value for the predicted cleavage site</td>
 <td>Number from 0.000 to 100.000</td>
 <td>3.5</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>(no help text) report value</td>
+<td>Report file</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -204,40 +204,85 @@ Score is the calculated weight value for the predicted cleavage
 site.  Sequence shows the amino acid positions used to calculate the
 score with "-" used to indicate the predicted cleavage site.
 
+<p>
+
 Here is a sample output:
 
 <pre>
+<hr>
+########################################
+# Program: sigcleave
+# Rundate: Mon Feb 11 13:50:56 2002
+# Report_file: ach2_drome.sig
+########################################
 
-SIGCLEAVE of ACH2_DROME from 1 to 576
+#=======================================
+#
+# Sequence: ACH2_DROME     from: 1   to: 576
+# HitCount: 9
+#
+# Reporting scores over 3.50
+#
+#=======================================
+
+(1) Score 13.739 length 13 at residues 29->41
+ Sequence: LLVLLLLCETVQA
+           |           |
+          29           41
+ mature_peptide: NPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKDQIL
+
+(2) Score 3.632 length 13 at residues 308->320
+ Sequence: LLISEIIPSTSLA
+           |           |
+         308           320
+ mature_peptide: LPLLGKYLLFTMLLVGLSVVITIIILNIHYRKPSTHKMRPWIRSFFIKRL
+
+(3) Score 3.751 length 13 at residues 527->539
+ Sequence: LFLWLFMIASLVG
+           |           |
+         527           539
+ mature_peptide: TFVILGEAPSLYDDTKAIDVQLSDVAKQIYNLTEKKN
+
+(4) Score 4.026 length 13 at residues 31->43
+ Sequence: VLLLLCETVQANP
+           |           |
+          31           43
+ mature_peptide: DAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKDQILTT
+
+(5) Score 5.057 length 13 at residues 24->36
+ Sequence: KPLCLLLVLLLLC
+           |           |
+          24           36
+ mature_peptide: ETVQANPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNL
+
+(6) Score 6.981 length 13 at residues 330->342
+ Sequence: FTMLLVGLSVVIT
+           |           |
+         330           342
+ mature_peptide: IIILNIHYRKPSTHKMRPWIRSFFIKRLPKLLLMRVPKDLLRDLAANKIN
+
+(7) Score 7.360 length 13 at residues 528->540
+ Sequence: FLWLFMIASLVGT
+           |           |
+         528           540
+ mature_peptide: FVILGEAPSLYDDTKAIDVQLSDVAKQIYNLTEKKN
+
+(8) Score 10.465 length 13 at residues 28->40
+ Sequence: LLLVLLLLCETVQ
+           |           |
+          28           40
+ mature_peptide: ANPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKDQI
+
+(9) Score 12.135 length 13 at residues 26->38
+ Sequence: LCLLLVLLLLCET
+           |           |
+          26           38
+ mature_peptide: VQANPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKD
 
 
-Reporting scores over 3.50
-Maximum score 13.7 at residue 42
-
- Sequence:  LLVLLLLCETVQA-NPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKDQIL
-            | (signal)    | (mature peptide)
-           29             42
-
-
-
- Other entries above 3.50
-
-
-Score 12.1 at residue 39
-
- Sequence:  LCLLLVLLLLCET-VQANPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKD
-            | (signal)    | (mature peptide)
-           26             39
-
-
-Score 10.5 at residue 41
-
- Sequence:  LLLVLLLLCETVQ-ANPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKDQI
-            | (signal)    | (mature peptide)
-           28             41
-
-
-
+#---------------------------------------
+#---------------------------------------       
+<hr>
 </pre>
 
 <H2>
@@ -276,6 +321,8 @@ The data file names are:
 </ul>
 
 Here is the default file for eukaryotic signals:
+
+<p>
 
 <pre>
 # Amino acid counts for 161 Eukaryotic Signal Peptides,

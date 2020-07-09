@@ -134,13 +134,6 @@ IT IS DONE FOR YOU.
    -[no]splice         bool       Use donor and acceptor splice sites. If you
                                   want to ignore donor-acceptor sites then set
                                   this to be false.
-   -align              bool       Show the alignment. The alignment includes
-                                  the first and last 5 bases of each intron,
-                                  together with the intron width. The
-                                  direction of splicing is indicated by angle
-                                  brackets (forward or reverse) or ????
-                                  (unknown).
-   -width              integer    Alignment width
    -mode               string     This determines the comparion mode. The
                                   default value is 'both', in which case both
                                   strands of the est are compared assuming a
@@ -164,6 +157,13 @@ IT IS DONE FOR YOU.
                                   exceed the machine's physical RAM)
    -shuffle            integer    Shuffle
    -seed               integer    Random number seed
+   -align              bool       Show the alignment. The alignment includes
+                                  the first and last 5 bases of each intron,
+                                  together with the intron width. The
+                                  direction of splicing is indicated by angle
+                                  brackets (forward or reverse) or ????
+                                  (unknown).
+   -width              integer    Alignment width
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -272,20 +272,6 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-align</td>
-<td>Show the alignment. The alignment includes the first and last 5 bases of each intron, together with the intron width. The direction of splicing is indicated by angle brackets (forward or reverse) or ???? (unknown).</td>
-<td>Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-width</td>
-<td>Alignment width</td>
-<td>Any integer value</td>
-<td>50</td>
-</tr>
-
-<tr>
 <td>-mode</td>
 <td>This determines the comparion mode. The default value is 'both', in which case both strands of the est are compared assuming a forward gene direction (ie GT/AG splice sites), and the best comparsion redone assuming a reversed (CT/AC) gene splicing direction. The other allowed modes are 'forward', when just the forward strand is searched, and 'reverse', ditto for the reverse strand.</td>
 <td>Any string is accepted</td>
@@ -319,6 +305,20 @@ If you have a machine with plenty of memory you can raise this parameter (but do
 <td>Random number seed</td>
 <td>Any integer value</td>
 <td>20825</td>
+</tr>
+
+<tr>
+<td>-align</td>
+<td>Show the alignment. The alignment includes the first and last 5 bases of each intron, together with the intron width. The direction of splicing is indicated by angle brackets (forward or reverse) or ???? (unknown).</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-width</td>
+<td>Alignment width</td>
+<td>Any integer value</td>
+<td>50</td>
 </tr>
 
 </table>

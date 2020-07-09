@@ -139,8 +139,6 @@ Name of log file for the build [contacts.log]:
                                   (embl-like format)
   [-cpdbextn]          string     Extension of coordinate files (embl-like
                                   format)
-  [-con]               string     Location of contact files for output
-  [-conextn]           string     Extension of contact files
   [-thresh]            float      Threshold contact distance
   [-ignore]            float      If any two atoms from two different residues
                                   are at least this distance apart then no
@@ -148,6 +146,8 @@ Name of log file for the build [contacts.log]:
                                   for for that residue pair . This speeds the
                                   calculation up considerably.
   [-vdwf]              string     Name of data file with van der Waals radii
+  [-con]               string     Location of contact files for output
+  [-conextn]           string     Extension of contact files
   [-conerrf]           outfile    Name of log file for the build
 
    Optional qualifiers: (none)
@@ -183,38 +183,38 @@ Name of log file for the build [contacts.log]:
 </tr>
 
 <tr>
-<td>[-con]<br>(Parameter 3)</td>
-<td>Location of contact files for output</td>
-<td>Any string is accepted</td>
-<td>./</td>
-</tr>
-
-<tr>
-<td>[-conextn]<br>(Parameter 4)</td>
-<td>Extension of contact files</td>
-<td>Any string is accepted</td>
-<td>.con</td>
-</tr>
-
-<tr>
-<td>[-thresh]<br>(Parameter 5)</td>
+<td>[-thresh]<br>(Parameter 3)</td>
 <td>Threshold contact distance</td>
 <td>Any integer value</td>
 <td>1.0</td>
 </tr>
 
 <tr>
-<td>[-ignore]<br>(Parameter 6)</td>
+<td>[-ignore]<br>(Parameter 4)</td>
 <td>If any two atoms from two different residues are at least this distance apart then no futher inter-atomic contacts will be checked for for that residue pair . This speeds the calculation up considerably.</td>
 <td>Any integer value</td>
 <td>20.0</td>
 </tr>
 
 <tr>
-<td>[-vdwf]<br>(Parameter 7)</td>
+<td>[-vdwf]<br>(Parameter 5)</td>
 <td>Name of data file with van der Waals radii</td>
 <td>Any string is accepted</td>
 <td>Evdw.dat</td>
+</tr>
+
+<tr>
+<td>[-con]<br>(Parameter 6)</td>
+<td>Location of contact files for output</td>
+<td>Any string is accepted</td>
+<td>./</td>
+</tr>
+
+<tr>
+<td>[-conextn]<br>(Parameter 7)</td>
+<td>Extension of contact files</td>
+<td>Any string is accepted</td>
+<td>.con</td>
 </tr>
 
 <tr>
@@ -656,8 +656,10 @@ None.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="dichet.html">dichet</a></td><td>Parse dictionary of heterogen groups</td></tr>
+<tr><td><a href="interface.html">interface</a></td><td>Reads coordinate files and writes inter-chain contact files</td></tr>
 <tr><td><a href="psiblasts.html">psiblasts</a></td><td>Runs PSI-BLAST given scopalign alignments</td></tr>
 <tr><td><a href="scopalign.html">scopalign</a></td><td>Generate alignments for SCOP families</td></tr>
+<tr><td><a href="seqsort.html">seqsort</a></td><td>Removes ambiguities from a set of hits resulting from a database search</td></tr>
 <tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature</td></tr>
 <tr><td><a href="sigscan.html">sigscan</a></td><td>Scans a sparse protein signature against swissprot</td></tr>
 </table>

@@ -155,6 +155,7 @@ See also
    charge       Protein charge plot
    compseq      Counts the composition of dimer/trimer/etc words in a sequence
    emowse       Protein identification by mass spectrometry
+   freak        Residue/base frequency table or plot
    iep          Calculates the isoelectric point of a protein
    mwfilter     Filter noisy molwts from mass spec output
    octanol      Displays protein hydropathy

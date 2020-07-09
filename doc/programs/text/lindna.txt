@@ -37,8 +37,8 @@ text inside or outside the blocks (enter In or Out) [In]:
 Command line arguments
 
    Mandatory qualifiers:
-   -graphout           graph      Graph type
    -inputfile          infile     input file containing mapping data
+   -graphout           graph      Graph type
 
    Optional qualifiers:
    -intersymbol        string     type of junctions between blocks (enter
@@ -71,11 +71,11 @@ Command line arguments
    
 
    Mandatory qualifiers Allowed values Default
+   -inputfile input file containing mapping data Input file inputfile
    -graphout Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
-   -inputfile input file containing mapping data Input file inputfile
    Optional qualifiers Allowed values Default
    -intersymbol type of junctions between blocks (enter Straight, Up,
    Down, or No) Any string is accepted Straight

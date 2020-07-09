@@ -50,15 +50,17 @@ Command line arguments
   [-sequencea]         sequence   Sequence USA
   [-sequenceb]         sequence   Sequence USA
    -wordsize           integer    Word size
+*  -data               bool       Output the match data to a file instead of
+                                  plotting it
 *  -graph              graph      Graph type
+*  -xygraph            xygraph    Graph type
 *  -outfile            outfile    Output file name
 
-   Optional qualifiers:
-   -[no]boxit          bool       Draw a box around dotplot
+   Optional qualifiers (* if not always prompted):
+*  -[no]boxit          bool       Draw a box around dotplot
 
    Advanced qualifiers:
-   -data               bool       Output the match data to a file instead of
-                                  plotting it
+   -stretch            bool       Use non-proportional axes
 
    General qualifiers:
   -help                bool       report command line options. More
@@ -72,7 +74,12 @@ Command line arguments
    [-sequenceb]
    (Parameter 2) Sequence USA Readable sequence Required
    -wordsize Word size Integer 2 or more 4
+   -data Output the match data to a file instead of plotting it Yes/No No
    -graph Graph type EMBOSS has a list of known devices, including
+   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
+   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
+   png EMBOSS_GRAPHICS value, or x11
+   -xygraph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
@@ -80,7 +87,7 @@ Command line arguments
    Optional qualifiers Allowed values Default
    -[no]boxit Draw a box around dotplot Yes/No Yes
    Advanced qualifiers Allowed values Default
-   -data Output the match data to a file instead of plotting it Yes/No No
+   -stretch Use non-proportional axes Yes/No No
    
 Input file format
 
