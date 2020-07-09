@@ -185,6 +185,11 @@ Command line arguments
                                   displayed. The value of the 'translation'
                                   tag is never displayed as it is often
                                   extremely long.
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default
@@ -411,6 +416,7 @@ See also
    showalign Display a multiple sequence alignment
    showdb Displays information on the currently available databases
    showseq Display a sequence with features, translation etc
+   swissparse Retrieves sequences from swissprot using keyword search
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
    

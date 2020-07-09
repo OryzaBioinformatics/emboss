@@ -45,6 +45,11 @@ Command line arguments
    -step               float      pH step value
    -amino              integer    Number of N-termini
    -[no]termini        bool       Include charge at N and C terminus
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default

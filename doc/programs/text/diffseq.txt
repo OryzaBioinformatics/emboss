@@ -61,7 +61,12 @@ Command line arguments
                                   columns and no feature information is given.
 
    Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
+
    Mandatory qualifiers Allowed values Default
    [-asequence]
    (Parameter 1) Sequence USA Readable sequence Required

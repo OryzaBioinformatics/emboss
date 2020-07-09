@@ -41,6 +41,11 @@ Command line arguments
    -sshow              bool       Display untranslated sequence
    -tshow              bool       Display translated sequence
    -allmut             bool       Display all mutations
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default

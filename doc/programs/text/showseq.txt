@@ -389,6 +389,11 @@ Command line arguments
                                   display the description of the sequence
    -offset             integer    Offset to start numbering the sequence from
    -html               bool       Use HTML formatting
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default
@@ -633,36 +638,30 @@ Output file format
    
    An example of this display follows:
    
-% showseq embl:eclac stdout -send 60 -format 6 -enz TaqI,Hin6I,AciI,Hin6I,BssKI
+% showseq embl:eclac stdout -send 60 -format 7 -enz TaqI,Hin6I,AciI,Hin6I,BssKI
 ,Bsu6
 Display a sequence with features, translation etc..
 ECLAC
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
                                                       Hin6I
-                                                      | BssKI
-                 TaqI   Hin6I         AciI            | Bsu6I
+                 TaqI   Hin6I         AciI            | BssKI
                  \      \             \               \ \
           GACACCATCGAATGGCGCAAAACCTTTCGCGGTATGGCATGATAGCGCCCGGAAGAGAGT
                    10        20        30        40        50        60
           ----:----|----:----|----:----|----:----|----:----|----:----|
           CTGTGGTAGCTTACCGCGTTTTGGAAAGCGCCATACCGTACTATCGCGGGCCTTCTCTCA
-                   /      /             /               /  / /
-                   TaqI   Hin6I         AciI            |  | BssKI
-                                                        |  Bsu6I
+                   /      /             /               /    /
+                   TaqI   Hin6I         AciI            |    BssKI
                                                         Hin6I
 
           D  T  I  E  W  R  K  T  F  R  G  M  A  *  *  R  P  E  E  S
            T  P  S  N  G  A  K  P  F  A  V  W  H  D  S  A  R  K  R  V
             H  H  R  M  A  Q  N  L  S  R  Y  G  M  I  A  P  G  R  E  S
           ----:----|----:----|----:----|----:----|----:----|----:----|
-            V  G  D  F  P  A  F  G  K  A  T  H  C  S  L  A  R  F  L  T
            S  V  M  S  H  R  L  V  K  R  P  I  A  H  Y  R  G  S  S  L
           X  C  W  R  I  A  C  F  R  E  R  Y  P  M  I  A  G  P  L  S
-                         |
-          variation note="c in wild-type; t in 'up' promoter mutant I-Q [11]"
-                                                            |=========
-          mRNA note="lacI (repressor) mRNA; preferred in vivo 3' end [12],[29]"
+            V  G  D  F  P  A  F  G  K  A  T  H  C  S  L  A  R  F  L  T
 
 Data files
 

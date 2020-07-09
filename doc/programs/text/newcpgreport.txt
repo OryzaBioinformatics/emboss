@@ -46,6 +46,11 @@ Command line arguments
    -[no]obsexp         bool       Show observed/expected threshold line
    -[no]cg             bool       Show CpG rich regions
    -[no]pc             bool       Show percentage line
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default

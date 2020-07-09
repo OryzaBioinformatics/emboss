@@ -132,8 +132,17 @@ IT IS DONE FOR YOU.
    -match              integer    Match score
    -mismatch           integer    Mismatch score
 
-   Optional qualifiers: (none)
+   Optional qualifiers:
+   -maxrepeat          integer    Maximum separation between the start of
+                                  repeat and the end of the inverted repeat
+                                  (the default is 4000 bases).
+
    Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+
 
 </pre>
 </td></tr></table>
@@ -195,7 +204,10 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td>-maxrepeat</td>
+<td>Maximum separation between the start of repeat and the end of the inverted repeat (the default is 4000 bases).</td>
+<td>Any integer value</td>
+<td>4000</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -324,7 +336,7 @@ None.
     See also
 </H2>
 -->
-<a name=See also><h2>See also</h2></a>
+<h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="equicktandem.html">equicktandem</a></td><td>Finds tandem repeats</td></tr>

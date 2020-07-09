@@ -55,9 +55,18 @@ Command line arguments
    -match              integer    Match score
    -mismatch           integer    Mismatch score
 
-   Optional qualifiers: (none)
+   Optional qualifiers:
+   -maxrepeat          integer    Maximum separation between the start of
+                                  repeat and the end of the inverted repeat
+                                  (the default is 4000 bases).
+
    Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
+
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
@@ -68,7 +77,9 @@ Command line arguments
    -match Match score Any integer value 3
    -mismatch Mismatch score Any integer value -4
    Optional qualifiers Allowed values Default
-   (none)
+   -maxrepeat Maximum separation between the start of repeat and the end
+   of the inverted repeat (the default is 4000 bases). Any integer value
+   4000
    Advanced qualifiers Allowed values Default
    (none)
    

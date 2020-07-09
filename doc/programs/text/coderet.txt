@@ -187,6 +187,11 @@ Command line arguments
    -[no]cds            bool       Extract CDS sequences
    -[no]mrna           bool       Extract mrna sequences
    -[no]translation    bool       Extract translated sequences
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default
@@ -267,6 +272,7 @@ See also
    showfeat     Show features of a sequence
    showorf      Pretty output of DNA translations
    showseq      Display a sequence with features, translation etc
+   swissparse   Retrieves sequences from swissprot using keyword search
    transeq      Translate nucleic acid sequences
    
 Author(s)

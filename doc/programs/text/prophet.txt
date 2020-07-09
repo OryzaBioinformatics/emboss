@@ -67,7 +67,12 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
+
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
@@ -91,6 +96,45 @@ Output file format
 
    The output of the above example follows:
    
+Local: Consensus vs 100K_RAT
+Score: 161.00
+
+Consensus       1        DEV.G.GEALG.RLLVVYPWTQ                        19
+                         |:: : ::||| ||:  ||::|
+100K_RAT        479      DPLPAHRQALGERLY..YPRVQ                        498
+Local: Consensus vs 104K_THEPA
+Score: 138.25
+
+Consensus       1        D.EVGGEAL.GRLLVVY.PWTQR                       20
+                         : ||:::|  |  :|:: |::::
+104K_THEPA      160      KYEVETHAKNGANMVTFIPRNGH                       182
+Local: Consensus vs 108_LYCES
+Score: 107.50
+
+Consensus       1        DEVGGEAL.GRLLV.VYP..WTQ                       19
+                         ::::| :: :::|| : |  :|:
+108_LYCES       43       ASLTGLNVCAPFLVPGSPTASTE                       65
+Local: Consensus vs 10KD_VIGUN
+Score: 153.25
+
+Consensus       1        DE.V.GGEA.LGRLLV.VY..P.WT                     18
+                         :| | ::|| ::  || :|  | :|
+10KD_VIGUN      20       QEVVVQSEAKTCENLVDTYRGPCFT                     44
+Local: Consensus vs 110K_PLAKN
+Score: 123.00
+
+Consensus       1        DEVGGEALGRLLV..VYPW.TQ                        19
+                         || ::::::  :|  | :  ||
+110K_PLAKN      55       DENDEDEMTEQMVEEVADHITQ                        76
+Local: Consensus vs 11S3_HELAN
+Score: 156.50
+
+Consensus       1        D..EV.GGEALGRLLVVY.PWTQR                      20
+                         :  || ::|| : :  :: :::|:
+11S3_HELAN      41       EPIEVIQAEAGV.VTEIWDAYDQQ                      63
+
+etc.
+
 Data files
 
    None.
@@ -118,6 +162,19 @@ Unrecognised profile/matrix file format
 
    then you have probably given prophet a 'simple frequency matrix' and
    not a a GRIBSKOV or HENIKOFF profile produced by prophecy.
+   
+   If you see something like:
+   
+Uncaught exception
+Allocation Failed
+raised at prophet.c:147
+
+   then you have run out of memory. This will occur if your sequence
+   and/or your profile are large.
+   
+   prophet
+   allocates space based on the length of the sequence and the size of
+   the profile (8 x seqlen x profilelen)
    
 Exit status
 

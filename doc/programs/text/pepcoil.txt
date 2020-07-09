@@ -45,6 +45,11 @@ Command line arguments
    -[no]coil           bool       Report coiled coil regions
    -frame              bool       Show coil frameshifts
    -[no]other          bool       Report non coiled coil regions
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default

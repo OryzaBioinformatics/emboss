@@ -43,6 +43,11 @@ Command line arguments
    -nval               integer    specifies the number of columns after the
                                   residue at the cleavage site in the weight
                                   matrix table
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default

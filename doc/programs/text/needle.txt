@@ -85,6 +85,11 @@ Command line arguments
    -fasta              bool       Output overlap as fasta sequences
    -showinternals      bool       Show debugging information on the internal
                                   state of the search.
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default

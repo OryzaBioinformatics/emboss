@@ -102,6 +102,11 @@ Command line arguments
    -query              bool       Display 'qry' column
    -all                bool       Display 'all' column
    -comment            bool       Display 'comment' column
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default
@@ -195,6 +200,7 @@ See also
    Program name Description
    abiview Reads ABI file and display the trace
    cirdna Draws circular maps of DNA constructs
+   infoalign Information on a multiple sequence alignment
    infoseq Displays some simple information about sequences
    lindna Draws linear maps of DNA constructs
    pepnet Displays proteins as a helical net

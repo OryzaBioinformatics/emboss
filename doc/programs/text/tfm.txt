@@ -14,7 +14,7 @@ Description
    
    The contributors of the EMBOSS programs do attempt to provide an
    adequate description of the programs. This documentation is primarily
-   held as HTML pages at http://www.hgmp.mrc.ac.uk/Software/EMBOSS/Apps/
+   held as HTML pages at http://www.uk.embnet.org/Software/EMBOSS/Apps/
    
    The documentation is also available however through the program tfm as
    normal text.
@@ -66,7 +66,12 @@ Command line arguments
                                   proceed to the next page.
 
    Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
+
    Mandatory qualifiers Allowed values Default
    [-program]
    (Parameter 1) Enter the name of an EMBOSS program Any string is
@@ -128,6 +133,7 @@ Known bugs
 See also
 
    Program name Description
+   infoalign Information on a multiple sequence alignment
    infoseq Displays some simple information about sequences
    seealso Finds programs sharing group names
    showdb Displays information on the currently available databases

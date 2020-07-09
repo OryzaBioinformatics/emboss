@@ -76,6 +76,11 @@ Command line arguments
    -length             bool       Display 'length' column
    -pgc                bool       Display 'percent GC content' column
    -description        bool       Display 'description' column
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default
@@ -202,6 +207,7 @@ See also
    descseq Alter the name or description of a sequence
    entret Reads and writes (returns) flatfile entries
    extractseq Extract regions from a sequence
+   infoalign Information on a multiple sequence alignment
    maskfeat Mask off features of a sequence
    maskseq Mask off regions of a sequence
    newseq Type in a short new sequence
@@ -217,6 +223,7 @@ See also
    seqretsplit Reads and writes (returns) sequences in individual files
    showdb Displays information on the currently available databases
    splitter Split a sequence into (overlapping) smaller sequences
+   swissparse Retrieves sequences from swissprot using keyword search
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
    tfm Displays a program's help documentation manual

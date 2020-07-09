@@ -45,6 +45,11 @@ Command line arguments
    Advanced qualifiers:
    -data               bool       Output the match data to a file instead of
                                   plotting it
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default
@@ -132,6 +137,7 @@ See also
 
    Program name                        Description
    emma         Multiple alignment program - interface to ClustalW program
+   infoalign    Information on a multiple sequence alignment
    prettyplot   Displays aligned sequences, with colouring and boxing
    showalign    Display a multiple sequence alignment
    

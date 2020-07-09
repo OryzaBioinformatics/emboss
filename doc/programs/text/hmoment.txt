@@ -65,6 +65,11 @@ Command line arguments
    -aangle             integer    Alpha helix angle (degrees)
    -baseline           float      Graph marker line
    -double             bool       Plot two graphs
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default

@@ -41,6 +41,11 @@ Command line arguments
 
    Advanced qualifiers:
    -plot               bool       Produce graphic
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default

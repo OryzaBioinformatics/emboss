@@ -58,6 +58,11 @@ Command line arguments
    -[no]wheel          bool       Plot the wheel
    -data               bool       Output the match data to a file instead of
                                   plotting it
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default

@@ -92,6 +92,11 @@ Command line arguments
    -thermo             bool       Output the DeltaG, DeltaH and DeltaS values
                                   of the sequence windows to the output data
                                   file.
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default
@@ -105,7 +110,7 @@ Command line arguments
    Integer from 1 to 100 20
    -shiftincrement This is the amount by which the window is moved at
    each increment in order to find the melting point and other properties
-   along the sequence. Integer 1 or more Window size (20)
+   along the sequence. Integer 1 or more 1
    -dnaconc Enter DNA concentration (nM) Number from 1.000 to 100000.000
    50.
    -saltconc Enter salt concentration (mM) Number from 1.000 to 1000.000

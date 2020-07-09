@@ -102,6 +102,11 @@ IT IS DONE FOR YOU.
    -overlap            integer    Overlap between split sequences
 
    Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+
 
 </pre>
 </td></tr></table>
@@ -137,14 +142,14 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-size</td>
 <td>Size to split at</td>
-<td>Any integer value</td>
+<td>Integer 1 or more</td>
 <td>10000</td>
 </tr>
 
 <tr>
 <td>-overlap</td>
 <td>Overlap between split sequences</td>
-<td>Any integer value</td>
+<td>Integer 0 or more</td>
 <td>0</td>
 </tr>
 
@@ -242,7 +247,7 @@ IT IS DONE FOR YOU.
     See also
 </H2>
 -->
-<a name=See also><h2>See also</h2></a>
+<h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="cutseq.html">cutseq</a></td><td>Removes a specified section from a sequence</td></tr>
@@ -263,6 +268,7 @@ IT IS DONE FOR YOU.
 <tr><td><a href="seqretall.html">seqretall</a></td><td>Reads and writes (returns) a set of sequences one at a time</td></tr>
 <tr><td><a href="seqretset.html">seqretset</a></td><td>Reads and writes (returns) a set of sequences all at once</td></tr>
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
+<tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
 <tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
 <tr><td><a href="vectorstrip.html">vectorstrip</a></td><td>Strips out DNA between a pair of vector sequences</td></tr>
 </table>
@@ -287,6 +293,12 @@ href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
 
 
 	Completed 22 March 1999
+<br>
+
+	23 May 2001 - Gary Williams - changed the overlap so that the
+start of a new sequence section is one more than the split-point, the
+end is the split-point plus the overlap.  e.g.  splitting at 10000 with
+an overlap of 100 gives: 1-10100, 10001-20100, etc. 
 
 <H2>
     Target users

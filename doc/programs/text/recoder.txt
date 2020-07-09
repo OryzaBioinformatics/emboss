@@ -1,9 +1,194 @@
 
-                                   Forbidden
-                                       
-   You don't have permission to access
-   /Software/EMBOSS/Apps//recoder.html on this server.
+                              EMBOSS: recoder
      _________________________________________________________________
    
+                                Program recoder
+                                       
+Function
+
+   Remove restriction sites but maintain the same translation
    
-    Apache/1.3.12 Server at www.uk.embnet.org Port 80
+Description
+
+   recoder scans a given nucleotide sequence for restriction sites. It
+   reports single base positions in the restriction pattern which when
+   mutated remove the restriction site whilst maintaining the same
+   translation (in frame 1 of the input sequence).
+   
+   Several restriction enzymes can be specified or alternatively all the
+   enzymes in the REBASE database can be investigated. To find out
+   whether the single point mutations found by 'recoder', introduce new
+   restriction sites, 'silent' should be run on the original sequence.
+   ('Silent' searches for silent point mutation sites which maintain the
+   same translation.
+   
+   The output for 'recoder' is similar to the format used by 'silent'.
+   
+Usage
+
+   Here is a sample session with recoder:
+
+% recoder
+Find and remove restriction sites but maintain the same translation
+Input sequence: em:hsfau
+Comma separated enzyme list [all]: EcoRII
+Output file [hsfau.recoder]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-seq]               sequence   Nucleic acid sequence
+   -enzymes            string     Comma separated enzyme list
+  [-outf]              outfile    Results file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -sshow              bool       Display untranslated sequence
+   -tshow              bool       Display translated sequence
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-seq]
+   (Parameter 1) Nucleic acid sequence Readable sequence Required
+   -enzymes Comma separated enzyme list Any string is accepted all
+   [-outf]
+   (Parameter 2) Results file name Output file <sequence>.recoder
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -sshow Display untranslated sequence Yes/No No
+   -tshow Display translated sequence Yes/No No
+   
+Input file format
+
+   Normal nucleic acid USA.
+   
+Output file format
+
+   This is the out[ut from the above example:
+     _________________________________________________________________
+   
+Results for HSFAU:
+
+KEY:
+        Enzyme          Enzyme name
+        RS-Pattern      Restriction enzyme recognition site pattern
+        Match-Posn      Position of the first base of RS pattern in sequence
+        AA              Amino acid. Original sequence(.)After mutation
+        Base-Posn       Position of base to be mutated in sequence
+        Mutation        The base mutation to perform
+
+Creating silent mutations
+
+Enzyme      RS-Pattern  Match-Posn   AA  Base-Posn Mutation
+EcoRII      CCWGG          77        P.P    78       C->G
+EcoRII      CCWGG          77        P.P    78       C->A
+EcoRII      CCWGG          77        P.P    78       C->T
+EcoRII      CCWGG          77        R.R    79       A->C
+EcoRII      CCWGG          77        R.R    81       G->A
+EcoRII      CCWGG          107       A.A    108      C->G
+EcoRII      CCWGG          107       A.A    108      C->A
+EcoRII      CCWGG          107       A.A    108      C->T
+EcoRII      CCWGG          107       R.R    109      A->C
+EcoRII      CCWGG          107       R.R    111      G->A
+EcoRII      CCWGG          182       S.S    183      C->G
+EcoRII      CCWGG          182       S.S    183      C->A
+EcoRII      CCWGG          182       S.S    183      C->T
+EcoRII      CCWGG          197       P.P    198      C->G
+EcoRII      CCWGG          197       P.P    198      C->A
+EcoRII      CCWGG          197       P.P    198      C->T
+EcoRII      CCWGG          248       P.P    249      C->G
+EcoRII      CCWGG          248       P.P    249      C->A
+EcoRII      CCWGG          248       P.P    249      C->T
+EcoRII      CCWGG          293       P.P    294      C->G
+EcoRII      CCWGG          293       P.P    294      C->A
+EcoRII      CCWGG          293       P.P    294      C->T
+
+
+
+Results for reverse of HSFAU:
+
+Creating silent mutations
+
+Enzyme      RS-Pattern  Match-Posn   AA  Base-Posn Mutation
+EcoRII      CCWGG          77        P.P    79       T->G
+EcoRII      CCWGG          77        P.P    79       T->C
+EcoRII      CCWGG          107       P.P    109      T->G
+EcoRII      CCWGG          107       P.P    109      T->C
+EcoRII      CCWGG          182       P.P    184      A->G
+EcoRII      CCWGG          182       P.P    184      A->C
+EcoRII      CCWGG          197       P.P    199      A->G
+EcoRII      CCWGG          197       P.P    199      A->C
+EcoRII      CCWGG          248       P.P    250      A->G
+EcoRII      CCWGG          248       P.P    250      A->C
+EcoRII      CCWGG          293       P.P    295      A->C
+EcoRII      CCWGG          293       P.P    295      A->G
+     _________________________________________________________________
+   
+Data files
+
+   None.
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name                          Description
+   redata       Search REBASE for enzyme name, references, suppliers etc
+   remap        Display a sequence with restriction cut sites, translation etc
+   restover     Finds restriction enzymes that produce a specific overhang
+   restrict     Finds restriction enzyme cleavage sites
+   showseq      Display a sequence with features, translation etc
+   silent       Silent mutation restriction enzyme scan
+   
+   silent does the opposite to recoder. silent finds sites where a
+   restriction enzyme site can be introduced without changing the
+   translation in frame 1 of the sequence. recoder finds sites where a
+   restriction enzyme site can be removed without changing the
+   translation in frame 1 of the sequence.
+   
+Author(s)
+
+   This application was written by Tim Carver (tcarver@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (January 2001) - Tim Carver
+   
+   Renamed from recode to recoder 16 May 2001 as the old name clashed
+   with a common UNIX print utility:
+   http://www.iro.umontreal.ca/contrib/recode/HTML/
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

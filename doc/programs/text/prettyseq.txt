@@ -47,6 +47,11 @@ Command line arguments
    Advanced qualifiers:
    -cfile              codon      Codon usage file
    -width              integer    Width of screen
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default

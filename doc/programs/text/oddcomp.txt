@@ -82,6 +82,11 @@ Command line arguments
                                   may wish not to count words containing them,
                                   just noting them in the count of 'Other'
                                   words.
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default

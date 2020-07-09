@@ -40,6 +40,11 @@ Command line arguments
    Advanced qualifiers:
    -afeatout           featout    File for output of normal tab delimted gff's
    -bfeatout           featout    File for output of normal tab delimted gff's
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default

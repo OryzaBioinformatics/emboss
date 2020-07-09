@@ -32,6 +32,11 @@ Command line arguments
    Advanced qualifiers:
    -angledata          string     File containing base pair twist angles
    -energydata         string     File containing base pair stacking energies
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default

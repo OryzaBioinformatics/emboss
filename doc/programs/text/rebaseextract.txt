@@ -47,7 +47,12 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
+
    Mandatory qualifiers Allowed values Default
    [-inf]
    (Parameter 1) Full pathname of WITHREFM Input file Required
@@ -162,6 +167,7 @@ Known bugs
 See also
 
    Program name Description
+   cutgextract Extract data from CUTG
    domainer Build domain coordinate files
    nrscope Converts redundant EMBL-format SCOP file to non-redundant one
    printsextract Extract data from PRINTS

@@ -769,6 +769,11 @@ Command line arguments
    -displayfast        bool       Prompt for fast alignment options
    -usermamatrix       bool       Prompt for user multiple alignment matrix
    -umamatrix          bool       User defined multiple alignment matrix
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default
@@ -1106,6 +1111,7 @@ Known bugs
 See also
 
    Program name                        Description
+   infoalign    Information on a multiple sequence alignment
    plotcon      Plots the quality of conservation of a sequence alignment
    prettyplot   Displays aligned sequences, with colouring and boxing
    showalign    Display a multiple sequence alignment

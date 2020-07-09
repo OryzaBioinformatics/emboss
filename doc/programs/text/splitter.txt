@@ -34,7 +34,12 @@ Command line arguments
    -overlap            integer    Overlap between split sequences
 
    Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
+
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
@@ -42,8 +47,8 @@ Command line arguments
    (Parameter 2) Output sequence(s) USA Writeable sequence(s)
    <sequence>.format
    Optional qualifiers Allowed values Default
-   -size Size to split at Any integer value 10000
-   -overlap Overlap between split sequences Any integer value 0
+   -size Size to split at Integer 1 or more 10000
+   -overlap Overlap between split sequences Integer 0 or more 0
    Advanced qualifiers Allowed values Default
    (none)
    
@@ -112,6 +117,7 @@ See also
    seqretall    Reads and writes (returns) a set of sequences one at a time
    seqretset    Reads and writes (returns) a set of sequences all at once
    seqretsplit  Reads and writes (returns) sequences in individual files
+   swissparse   Retrieves sequences from swissprot using keyword search
    trimseq      Trim ambiguous bits off the ends of sequences
    vectorstrip  Strips out DNA between a pair of vector sequences
    
@@ -123,6 +129,10 @@ Author(s)
 History
 
    Completed 22 March 1999
+   23 May 2001 - Gary Williams - changed the overlap so that the start of
+   a new sequence section is one more than the split-point, the end is
+   the split-point plus the overlap. e.g. splitting at 10000 with an
+   overlap of 100 gives: 1-10100, 10001-20100, etc.
    
 Target users
 

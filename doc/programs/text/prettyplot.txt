@@ -88,6 +88,11 @@ Command line arguments
 
    Advanced qualifiers:
    -data               bool       (no help text) bool value
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default
@@ -212,6 +217,7 @@ See also
    abiview Reads ABI file and display the trace
    cirdna Draws circular maps of DNA constructs
    emma Multiple alignment program - interface to ClustalW program
+   infoalign Information on a multiple sequence alignment
    lindna Draws linear maps of DNA constructs
    pepnet Displays proteins as a helical net
    pepwheel Shows protein sequences as helices

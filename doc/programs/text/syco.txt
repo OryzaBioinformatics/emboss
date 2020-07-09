@@ -49,6 +49,11 @@ Command line arguments
    -uncommon           bool       Show common codon usage
    -minimum            float      Minimum value for a common codon
    -plot               bool       Produce plot
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default

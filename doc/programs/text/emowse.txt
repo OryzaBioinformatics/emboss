@@ -325,6 +325,11 @@ Command line arguments
    -frequencies        string     Frequencies file
    -tolerance          float      (no help text) float value
    -partials           float      Partials factor
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default

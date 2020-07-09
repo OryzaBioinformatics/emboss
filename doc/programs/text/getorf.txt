@@ -75,6 +75,11 @@ Command line arguments
                                   output. If the region of flanking
                                   nucleotides crosses the start or end of the
                                   sequence, no output is given for this codon.
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default
@@ -151,11 +156,11 @@ Output file format
    
    The results from the example run are:
    
-;gt&ECLACI_1 [735 - 1112] E. coli laci gene (codes for the lac repressor).
+>ECLACI_1 [735 - 1112] E. coli laci gene (codes for the lac repressor).
 GHRSHCDAGCQRSDGAGRNARHYRVRAARWCGYLGSGIRRYRRQLMLYPAVNHHQTGFSP
 AGANQRGPLAATLSGPGGEGQSAVARLTGEKKNHPGAQYANRLSPRVGRFINAAGTTGFP
 TGKRAV
-;gt&ECLACI_2 [1 - 1110] E. coli laci gene (codes for the lac repressor).
+>ECLACI_2 [1 - 1110] E. coli laci gene (codes for the lac repressor).
 PEESQFRVVNVKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPN
 RVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGVEACKAA
 VHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSIIFSHEDGTRLG
@@ -163,7 +168,7 @@ VEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWSAMSGFQQTM
 QMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSSCYIPPSTTIK
 QDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASPRALADSLMQLA
 RQVSRLESGQ*
-;gt&ECLACI_3 [465 - 49] E. coli laci gene (codes for the lac repressor).
+>ECLACI_3 [465 - 49] E. coli laci gene (codes for the lac repressor).
 RRNISAGSFHSNGILVIQRIVNDQPTDALREKIVHRRFTGFDAASFYHRHHHAGTQLIGA
 RFNRRDNLRRRVQGQTGGGNANQQRLFARQLLCHAVGNVIQLRHRRFHFFPRFRRNVAGL
 VHHAGNGLIRDTGILCDIV
@@ -183,12 +188,12 @@ VHHAGNGLIRDTGILCDIV
    If the ORF has been found in the reverse sense, then the start
    position will be smaller than the end position. The numbering uses the
    forward-sense positions, but read in the reverse sense. For example,
-   ;gt&ECLACI_3 [465 - 49] in the output above is a reverse-sense ORF
+   >ECLACI_3 [465 - 49] in the output above is a reverse-sense ORF
    running from position 465 to 49.
    
 Data files
 
-   None. 
+   None.
    
 Notes
 

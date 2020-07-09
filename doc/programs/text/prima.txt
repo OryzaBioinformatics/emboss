@@ -188,6 +188,11 @@ Command line arguments
    -saltconc           float      Salt concentration (mM)
    -dnaconc            float      DNA concentration (mM)
    -list               bool       Force list-style output
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default

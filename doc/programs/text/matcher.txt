@@ -103,10 +103,15 @@ Command line arguments
                                   -markx=5,6,7,8 and 9 are the same as
                                   -markx=1
                                   -markx=10 outputs a parseable output.
-   -length             integer    number of residues per line
+   -length             integer    Number of residues per line
 
    Advanced qualifiers: (none)
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
+
    Mandatory qualifiers Allowed values Default
    [-sequencea]
    (Parameter 1) Sequence USA Readable sequence Required
@@ -149,7 +154,7 @@ Command line arguments
    -markx=4 outputs only the title line with the percentage identity and
    score. -markx=5,6,7,8 and 9 are the same as -markx=1 -markx=10 outputs
    a parseable output. Integer up to 10 0
-   -length number of residues per line Integer from 1 to 200 60
+   -length Number of residues per line Integer from 1 to 200 60
    Advanced qualifiers Allowed values Default
    (none)
    

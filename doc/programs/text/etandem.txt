@@ -57,6 +57,11 @@ Command line arguments
    -threshold          integer    Threshold score
    -mismatch           bool       Allow N as a mismatch
    -uniform            bool       Allow uniform consensus
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default

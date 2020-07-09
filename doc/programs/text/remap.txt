@@ -144,6 +144,11 @@ Command line arguments
                                   display the description of the sequence
    -offset             integer    Offset to start numbering the sequence from
    -html               bool       Use HTML formatting
+
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default

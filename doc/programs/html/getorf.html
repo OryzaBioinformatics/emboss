@@ -145,6 +145,11 @@ IT IS DONE FOR YOU.
                                   nucleotides crosses the start or end of the
                                   sequence, no output is given for this codon.
 
+   General qualifiers:
+  -help                bool       report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+
 
 </pre>
 </td></tr></table>
@@ -256,11 +261,11 @@ The results from the example run are:
 
 <p>
 <pre>
-;gt&ECLACI_1 [735 - 1112] E. coli laci gene (codes for the lac repressor).
+&gt;ECLACI_1 [735 - 1112] E. coli laci gene (codes for the lac repressor).
 GHRSHCDAGCQRSDGAGRNARHYRVRAARWCGYLGSGIRRYRRQLMLYPAVNHHQTGFSP
 AGANQRGPLAATLSGPGGEGQSAVARLTGEKKNHPGAQYANRLSPRVGRFINAAGTTGFP
 TGKRAV
-;gt&ECLACI_2 [1 - 1110] E. coli laci gene (codes for the lac repressor).
+&gt;ECLACI_2 [1 - 1110] E. coli laci gene (codes for the lac repressor).
 PEESQFRVVNVKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPN
 RVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGVEACKAA
 VHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSIIFSHEDGTRLG
@@ -268,7 +273,7 @@ VEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWSAMSGFQQTM
 QMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSSCYIPPSTTIK
 QDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASPRALADSLMQLA
 RQVSRLESGQ*
-;gt&ECLACI_3 [465 - 49] E. coli laci gene (codes for the lac repressor).
+&gt;ECLACI_3 [465 - 49] E. coli laci gene (codes for the lac repressor).
 RRNISAGSFHSNGILVIQRIVNDQPTDALREKIVHRRFTGFDAASFYHRHHHAGTQLIGA
 RFNRRDNLRRRVQGQTGGGNANQQRLFARQLLCHAVGNVIQLRHRRFHFFPRFRRNVAGL
 VHHAGNGLIRDTGILCDIV
@@ -296,7 +301,7 @@ indicating any order, positioning or sense-strand of the ORFs.
 If the ORF has been found in the reverse sense, then the start position
 will be smaller than the end position.  The numbering uses the
 forward-sense positions, but read in the reverse sense.  For example,
-<b>;gt&ECLACI_3 [465 - 49]<b> in the output above is a reverse-sense ORF
+<b>&gt;ECLACI_3 [465 - 49]</b> in the output above is a reverse-sense ORF
 running from position 465 to 49. 
 
 <H2>
@@ -347,7 +352,7 @@ None.
     See also
 </H2>
 -->
-<a name=See also><h2>See also</h2></a>
+<h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="marscan.html">marscan</a></td><td>Finds MAR/SAR sites in nucleic sequences</td></tr>
