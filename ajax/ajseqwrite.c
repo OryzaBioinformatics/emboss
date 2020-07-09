@@ -1533,61 +1533,74 @@ static void seqWriteFitch (AjPSeqout outseq) {
 ** @@
 ******************************************************************************/
 
-static void seqWritePhylip (AjPSeqout outseq) {
+static void seqWritePhylip (AjPSeqout outseq)
+{
+    int isize;
+    int ilen=0;
+    int i = 0;
+    int j = 0;
+    char *p=NULL;
+    void** seqs;
+    AjPSeq seq;
+    AjPSeq* seqarr;
+    int itest;
+    static AjPStr sseq = NULL;
+    int ipos;
+    int iend;
+    AjPStr tstr=NULL;
 
-  int isize;
-  int ilen=0;
-  int i = 0;
-  void** seqs;
-  AjPSeq seq;
-  AjPSeq* seqarr;
-  int itest;
-  static AjPStr sseq = NULL;
-  int ipos;
-  int iend;
+    ajDebug ("seqWritePhylip list size %d\n", ajListLength(outseq->Savelist));
 
-  ajDebug ("seqWritePhylip list size %d\n", ajListLength(outseq->Savelist));
+    isize = ajListLength(outseq->Savelist);
+    if (!isize) return;
 
-  isize = ajListLength(outseq->Savelist);
-  if (!isize) return;
+    itest = ajListToArray (outseq->Savelist, (void***) &seqs);
+    ajDebug ("ajListToArray listed %d items\n", itest);
+    seqarr = (AjPSeq*) seqs;
+    for (i=0; i < isize; i++)
+    {
+	seq = seqarr[i];
+	if (ilen < ajSeqLen(seq))
+	    ilen = ajSeqLen(seq);
+    }  
 
-  itest = ajListToArray (outseq->Savelist, (void***) &seqs);
-  ajDebug ("ajListToArray listed %d items\n", itest);
-  seqarr = (AjPSeq*) seqs;
-  for (i=0; i < isize; i++) {
-    seq = seqarr[i];
-    if (ilen < ajSeqLen(seq))
-      ilen = ajSeqLen(seq);
-  }  
-
-  (void) ajFmtPrintF (outseq->File, " %d %d\n", isize, ilen);
+    tstr = ajStrNewL(ilen+1);
+    (void) ajFmtPrintF (outseq->File, " %d %d\n", isize, ilen);
   
-  for (ipos=1; ipos <= ilen; ipos += 50) {
-    iend = ipos + 50 -1;
-    if (iend > ilen)
-      iend = ilen;
+    for (ipos=1; ipos <= ilen; ipos += 50)
+    {
+	iend = ipos + 50 -1;
+	if (iend > ilen)
+	    iend = ilen;
 
-    for (i=0; i < isize; i++) {
-      seq = seqarr[i];
-      (void) ajStrAssSub(&sseq, seq->Seq, ipos-1, iend-1);
-      ajSeqGapS(&sseq, '-');
-      (void) ajStrBlock (&sseq, 10);
-      if (ipos == 1) {
-	(void) ajFmtPrintF (outseq->File,
-		   "%-12.12S%S\n",
-		   seq->Name, sseq);
-      }
-      else {
-	(void) ajFmtPrintF (outseq->File,
-		   "%12s%S\n",
-		   " ", sseq);
-      }
-    }
-    if (iend < ilen)
-      (void) ajFmtPrintF (outseq->File, "\n");
-  }  
+	for (i=0; i < isize; i++)
+	{
+	    seq = seqarr[i];
 
-  return;
+	    ajStrAssC(&tstr,ajStrStr(seq->Seq));
+	    p = ajStrStr(tstr);
+	    for(j=ajStrLen(tstr);j<ilen;++j)
+		*(p+j)='-';
+	    *(p+j)='\0';
+	    tstr->Len=ilen;
+	    (void) ajStrAssSub(&sseq, tstr, ipos-1, iend-1);
+	    ajSeqGapS(&sseq, '-');
+	    (void) ajStrBlock (&sseq, 10);
+	    if (ipos == 1)
+		(void) ajFmtPrintF (outseq->File,
+				    "%-12.12S%S\n",
+				    seq->Name, sseq);
+	    else
+		(void) ajFmtPrintF (outseq->File,
+				    "%12s%S\n",
+				    " ", sseq);
+	}
+	if (iend < ilen)
+	    (void) ajFmtPrintF (outseq->File, "\n");
+    }  
+
+    ajStrDel(&tstr);
+    return;
 }
 
 /* @funcstatic seqWritePhylip3 ************************************************
@@ -1599,21 +1612,77 @@ static void seqWritePhylip (AjPSeqout outseq) {
 ** @@
 ******************************************************************************/
 
-static void seqWritePhylip3 (AjPSeqout outseq) {
+static void seqWritePhylip3 (AjPSeqout outseq)
+{
+    int isize;
+    int ilen=0;
+    int i = 0;
+    int j = 0;
+    int n = 0;
+    char *p=NULL;
+    void** seqs;
+    AjPSeq seq;
+    AjPSeq* seqarr;
+    int itest;
+    static AjPStr sseq = NULL;
+    int ipos;
+    int iend;
+    AjPStr tstr=NULL;
 
-  static SeqPSeqFormat sf=NULL;
+    ajDebug ("seqWritePhylip3 list size %d\n", ajListLength(outseq->Savelist));
 
-  (void) ajFmtPrintF (outseq->File, " 1 %d YF\n", /* 1 is # sequences */
-	   ajStrLen(outseq->Seq)); 
-  (void) ajFmtPrintF (outseq->File, "%-10S  ", outseq->Name);
+    isize = ajListLength(outseq->Savelist);
+    if (!isize) return;
 
-  seqSeqFormat(ajStrLen(outseq->Seq), &sf);
-  sf->linepos = -1;
-  sf->tab = 12;
-  sf->spacer = 11;
-  seqWriteSeq (outseq, sf);
+    itest = ajListToArray (outseq->Savelist, (void***) &seqs);
+    ajDebug ("ajListToArray listed %d items\n", itest);
+    seqarr = (AjPSeq*) seqs;
+    for (i=0; i < isize; i++)
+    {
+	seq = seqarr[i];
+	if (ilen < ajSeqLen(seq))
+	    ilen = ajSeqLen(seq);
+    }  
 
-  return;
+    tstr = ajStrNewL(ilen+1);
+    (void) ajFmtPrintF (outseq->File, "1 %d YF\n", ilen);
+
+    for(n=0;n<isize;++n)
+    {
+	seq = seqarr[n];
+	ajStrAssC(&tstr,ajStrStr(seq->Seq));
+	p = ajStrStr(tstr);
+	for(j=ajStrLen(tstr);j<ilen;++j)
+	    *(p+j)='-';
+	*(p+j)='\0';
+	tstr->Len=ilen;
+
+  
+	for (ipos=1; ipos <= ilen; ipos += 50)
+	{
+	    iend = ipos + 50 -1;
+	    if (iend > ilen)
+		iend = ilen;
+
+	    (void) ajStrAssSub(&sseq, tstr, ipos-1, iend-1);
+	    ajSeqGapS(&sseq, '-');
+	    (void) ajStrBlock (&sseq, 10);
+	    if (ipos == 1)
+		(void) ajFmtPrintF (outseq->File,
+				    "%-12.12S%S\n",
+				    seq->Name, sseq);
+	    else
+		(void) ajFmtPrintF (outseq->File,
+				    "%12s%S\n",
+				    " ", sseq);
+	}
+	if (iend < ilen)
+	    (void) ajFmtPrintF (outseq->File, "\n");
+
+    } 
+
+    ajStrDel(&tstr);
+    return;
 }
 
 /* @funcstatic seqWriteAsn1 ***************************************************
