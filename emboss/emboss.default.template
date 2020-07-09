@@ -10,6 +10,7 @@
 
 DB tsw [ type: P dir: $emboss_tempdata/swiss
    method: emblcd format: swiss release: 36
+   fields: "sv des org key"
    comment: "Swissprot native format with EMBL CD-ROM index" ]
 
 # swnew (Puffer fish entries)
@@ -17,6 +18,7 @@ DB tsw [ type: P dir: $emboss_tempdata/swiss
 
 DB tswnew [ type: P dir: $emboss_tempdata/swnew
    method: emblcd format: swiss release: 37 
+   fields: "sv des org key"
    comment: "Swissnew as 3 files in native format with EMBL CD-ROM index" ]
 
 # wormpep (cosmid ZK637)
@@ -24,6 +26,7 @@ DB tswnew [ type: P dir: $emboss_tempdata/swnew
 
 DB twp [ type: P dir: $emboss_tempdata/wormpep
    method: emblcd format: fasta release: 16 
+   fields: "des"
    comment: "EMBL new in native format with EMBL CD-ROM index" ]
 
 # embl (worm cosmid ZK637 and a few other entries)
@@ -31,6 +34,7 @@ DB twp [ type: P dir: $emboss_tempdata/wormpep
 
 DB tembl [ type: N dir: $emboss_tempdata/embl
    method: emblcd format: embl release: 57 
+   fields: "sv des org key"
    comment: "EMBL in native format with EMBL CD-ROM index" ]
 
 # pir (cytochrome C plus first entries in other divisions)
@@ -40,10 +44,13 @@ DB tpir [ type: P dir: $emboss_tempdata/pir
    method: gcg
    file: pir*.seq
    format: nbrf
+   fields: "des org key"
    comment: "PIR using NBRF access for 4 files" ]
 
-DB tgb [ type: N method: url format: genbank
-   url: "http://www.ca.embnet.org/srs6bin/cgi-bin/wgetz?-id+-e+[genbank-id:'%s']+-vn+2"
+DB tgb [ type: N method: srswww format: genbank
+   url: "http://www.cbr.nrc.ca/srs6bin/cgi-bin/wgetz"
+   dbalias: genbank
+   fields: "sv des org key"
    comment: "Genbank IDs" ]
 
 #############################################
