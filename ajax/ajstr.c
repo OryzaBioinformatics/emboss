@@ -5395,12 +5395,12 @@ void ajStrRemoveHtml(AjPStr *thys)
 	}
 	while(*p)
 	{
+	    --(*thys)->Len;
 	    if(*p=='>')
 	    {
 		++p;
 		break;
 	    }
-	    --(*thys)->Len;
 	    ++p;
 	}
     }

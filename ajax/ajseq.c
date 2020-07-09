@@ -2548,7 +2548,7 @@ char* ajSeqName (AjPSeq seq)
     return ajStrStr(seq->Name);
 }
 
-/* @func ajSeqOffset *************************************************************
+/* @func ajSeqOffset **********************************************************
 **
 ** Returns the sequence offset from -sbegin originally.
 **
@@ -2562,9 +2562,10 @@ ajint ajSeqOffset (AjPSeq seq)
     return seq->Offset;
 }
 
-/* @func ajSeqOffend *************************************************************
+/* @func ajSeqOffend **********************************************************
 **
-** Returns the sequence offend value. Len choped off from -send originally.
+** Returns the sequence offend value.
+** This is the number of positions removed from the original end.
 **
 ** @param [P] seq [AjPSeq] Sequence object
 ** @return [ajint] Sequence offend.
@@ -3426,31 +3427,39 @@ ajint ajSeqPosII (ajint ilen, ajint imin, ajint ipos)
 ** Trim a sequence using the Begin and Ends.
 **
 ** @param [rw] thys [AjPSeq] Sequence to be trimmed.
-** @return [AjBool] Ajtrue returned if successfull.
+** @return [AjBool] AjTrue returned if successful.
 ** @@
 ******************************************************************************/
 
 AjBool ajSeqTrim(AjPSeq thys)
 {
     AjBool okay=ajTrue;
+    ajint begin;
+    ajint end;
 
-    ajDebug("Triming %d from %d to %d\n",thys->Seq->Len,thys->Begin,thys->End);
+    ajDebug("Trimming %d from %d to %d\n",
+	    thys->Seq->Len,thys->Begin,thys->End);
 
+    begin = ajSeqPos(thys, thys->Begin);
+    end = ajSeqPos(thys, thys->End);
+
+    ajDebug("Trimming %d from %d (%d) to %d (%d)\n",
+	    thys->Seq->Len,thys->Begin,begin, thys->End, end);
     if (thys->End)
     {
-	if(thys->End <= thys->Begin)
+	if(end < begin)
 	    return ajFalse;
-	okay = ajStrTrim(&(thys->Seq),(0 - (thys->Seq->Len-(thys->End)) ));
-	thys->Offend = thys->Seq->Len-(thys->End);
+	okay = ajStrTrim(&(thys->Seq),(0 - (thys->Seq->Len-(end)) ));
+	thys->Offend = thys->Seq->Len-(end);
 	thys->End = 0;
     }
     if(thys->Begin)
     {
-	okay = ajStrTrim(&thys->Seq,thys->Begin);
-	thys->Offset = thys->Begin;
+	okay = ajStrTrim(&thys->Seq,begin-1);
+	thys->Offset = begin-1;
 	thys->Begin =0;
     }
-    ajDebug("After Triming len = %d\n",thys->Seq->Len);
+    ajDebug("After Trimming len = %d '%S'\n",thys->Seq->Len, thys->Seq);
 
     return okay;
 }

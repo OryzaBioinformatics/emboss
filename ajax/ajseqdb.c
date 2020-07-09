@@ -2745,7 +2745,10 @@ static AjBool seqAccessUrl (AjPSeqin seqin)
 	return ajFalse;
     }
     ajFileBuffLoad(seqin->Filebuff);
-    ajFileBuffStripHtml(seqin->Filebuff);
+
+
+    if(!ajFileBuffStripSrs(seqin->Filebuff))
+	ajFileBuffStripHtml(seqin->Filebuff);
 
     ajStrDelReuse (&url);
     ajStrDelReuse (&host);

@@ -469,8 +469,12 @@ static void alignWriteMark (AjPAlign thys, ajint iali, ajint markx)
     n0 = ajSeqLen(seq);
     max0=nc;
     max1=nc;
-    min0=data->Offset[0] + data->Start[0];
-    min1=data->Offset[1] + data->Start[1];
+    /*
+//    min0=data->Offset[0] + data->Start[0];
+//    min1=data->Offset[1] + data->Start[1];
+    */
+    min0=data->Offset[0];
+    min1=data->Offset[1];
     sbegin0=data->Start[0];
     sbegin1=data->Start[1];
     ioff0=data->Offset[0];
@@ -860,7 +864,7 @@ static void alignWriteSimple (AjPAlign thys) {
     ajDebug ("# AliData [%d] len %d \n", iali, ilen);
     for (iseq=0; iseq < nseq; iseq++) {
       /*      ipos[iseq]=data->Offset[iseq] + data->Start[iseq]; */
-      ipos[iseq]=data->Offset[iseq];
+      ipos[iseq]=data->Offset[iseq] + data->Start[iseq]-1;
       ajDebug ("#   Seq[%d]'%S'\n",
 	       iseq, ajSeqStr(data->Seq[iseq]));
     }
@@ -896,10 +900,19 @@ static void alignWriteSimple (AjPAlign thys) {
 		       "                     %S\n",
 		       mrkcons);
 
-	ajFmtPrintF (outf,
+	if (ajStrLen(tmpstr))
+	{
+	  ajFmtPrintF (outf,
 		     "%-13.13S %6d %S %6d\n",
 		     alignSeqName(thys, iseq),
 		     ipos[iseq]+1, tmpstr, ipos[iseq]+icnt);
+	}
+	else
+	{
+	  ajFmtPrintF (outf,
+		       "%-13.13S\n",
+		       alignSeqName(thys, iseq));
+	}
 	ipos[iseq] += icnt;
       }
       if (nseq > 2) {		/* 3 or more seqs, markup under */
@@ -1068,10 +1081,12 @@ static void alignWriteSrsAny (AjPAlign thys, ajint imax, AjBool mark) {
     ajDebug ("# AliData [%d] len %d \n", iali, ilen);
 
     for (iseq=0; iseq < nseq; iseq++) {
-      ipos[iseq]=data->Offset[iseq];
-      ajDebug ("#   Seq[%d] '%S'\n",
-	       iseq, ajSeqStr(data->Seq[iseq]));
+      ipos[iseq]=data->Offset[iseq] + data->Start[iseq]-1;
+      ajDebug ("#   Seq[%d] Off:%d Sta:%d End:%d '%S'\n",
+	       iseq, data->Offset[iseq], data->Start[iseq], data->End[iseq],
+	       ajSeqStr(data->Seq[iseq]));
     }
+
     for (iseq=0; iseq < nseq; iseq++) {
       ajDebug ("#   Seq[%d] Start:%d End:%d Rev:%B\n",
 	       iseq, data->Start[iseq], data->End[iseq],
@@ -1103,10 +1118,19 @@ static void alignWriteSrsAny (AjPAlign thys, ajint imax, AjBool mark) {
 		       "                     %S\n",
 		       mrkcons);
 
-	ajFmtPrintF (outf,
+	if (ajStrLen(tmpstr))
+	{
+	  ajFmtPrintF (outf,
 		     "%-13.13S %6d %S %6d\n",
 		     alignSeqName(thys, iseq),
 		     ipos[iseq]+1, tmpstr, ipos[iseq]+icnt);
+	}
+	else
+	{
+	  ajFmtPrintF (outf,
+		       "%-13.13S\n",
+		       alignSeqName(thys, iseq));
+	}
 	ipos[iseq] += icnt;
       }
       if (mark && !pair) {		/* 3 or more seqs, markup under */

@@ -6935,14 +6935,14 @@ static void acdSetString (AcdPAcd thys) {
 
     if (len < minlen) {
       acdBadVal (thys, required,
-		 "Too short - minimum length is %d characters",
-		 minlen);
+		 "Too short (%S)- minimum length is %d characters",
+		 thys->Name,minlen);
       ok = ajFalse;
     }
     if (len > maxlen) {
       acdBadVal (thys, required,
-		 "Too long - maximum length is %d characters",
-		 maxlen);
+		 "Too long (%S)- maximum length is %d characters",
+		 thys->Name,maxlen);
       ok = ajFalse;
     }
     if (patexp && !ajRegExec (patexp, reply)) {

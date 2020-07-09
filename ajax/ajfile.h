@@ -134,6 +134,7 @@ void        ajFileBuffResetPos (const AjPFileBuff thys);
 AjBool      ajFileBuffSetFile (AjPFileBuff* pthys, AjPFile file);
 ajint         ajFileBuffSize (void);
 void        ajFileBuffStripHtml (const AjPFileBuff thys);
+ajint       ajFileBuffStripSrs(AjPFileBuff thys);
 void        ajFileBuffTrace (const AjPFileBuff thys);
 void        ajFileBuffTraceFull (const AjPFileBuff thys, size_t nlines,
 				 size_t nfree);
