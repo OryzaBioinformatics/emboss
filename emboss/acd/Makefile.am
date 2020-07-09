@@ -5,7 +5,7 @@ pkgdata_DATA = codes.english \
 	btwisted.acd cai.acd chaos.acd charge.acd checktrans.acd chips.acd \
 	cirdna.acd cluster.acd codcmp.acd coderet.acd \
 	complex.acd compseq.acd cons.acd corbatest.acd \
-	cpgplot.acd cpgreport.acd cusp.acd cutseq.acd \
+	cpgplot.acd cpgreport.acd cusp.acd cutgextract.acd cutseq.acd \
 	dan.acd dbiblast.acd dbifasta.acd dbiflat.acd \
 	dbigcg.acd demofeatures.acd demolist.acd demosequence.acd \
 	demostring.acd demotable.acd descseq.acd diffseq.acd \
@@ -16,8 +16,8 @@ pkgdata_DATA = codes.english \
 	freak.acd fuzznuc.acd fuzzpro.acd fuzztran.acd \
 	garnier.acd geecee.acd getorf.acd helixturnhelix.acd hmoment.acd \
 	histogramtest.acd iep.acd infoseq.acd isochore.acd \
-	lindna.acd marscan.acd maskfeat.acd maskseq.acd matcher.acd
-pkgdata2_DATA =	megamerger.acd merger.acd msbar.acd needle.acd \
+	lindna.acd marscan.acd maskfeat.acd maskseq.acd matcher.acd \
+	megamerger.acd merger.acd msbar.acd needle.acd \
 	newcpgreport.acd newcpgseek.acd newseq.acd noreturn.acd \
 	notseq.acd nrscope.acd nthseq.acd octanol.acd oddcomp.acd \
 	palindrome.acd pasteseq.acd patmatdb.acd patmatmotifs.acd \
@@ -41,4 +41,3 @@ pkgdata2_DATA =	megamerger.acd merger.acd msbar.acd needle.acd \
 	wordcount.acd wordmatch.acd wossname.acd
 
 pkgdatadir=$(prefix)/share/$(PACKAGE)/acd
-pkgdata2dir=$(prefix)/share/$(PACKAGE)/acd

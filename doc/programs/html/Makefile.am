@@ -24,8 +24,8 @@ pkgdata_DATA =  abiview0.gif banana0.gif chaos0.gif cpgplot0.gif \
                ednadist.html ednainvar.html ednaml.html ednamlk.html \
                ednapars.html ednapenny.html edollop.html edolpenny.html \
                efactor.html efitch.html egendist.html einverted.html \
-               ekitsch.html embossdata.html embossversion.html emix.html \
-               emma.html emowse.html eneighbor.html entret.html \
+               ekitsch.html embossdata.html emix.html emma.html emnu.html \
+               emowse.html eneighbor.html entret.html \
                enzyme_kinetics_group.html epenny.html eprotdist.html \
                eprotpars.html equicktandem.html erestml.html eseqboot.html \
                est2genome.html etandem.html extractseq.html factor.html \
@@ -63,12 +63,11 @@ pkgdata2_DATA = kitsch.html lindna.html marscan.html maskfeat.html \
                protein_mutation_group.html protein_profiles_group.html \
                pscan.html rebaseextract.html recode.html recoder.html \
                redata.html remap.html restml.html restover.html \
-               restrict.html revseq.html scopalign.html scope.html \
-               seealso.html seqboot.html seqmatchall.html seqret.html \
-               seqretall.html seqretfeat.html seqretset.html \
-               seqretsplit.html showalign.html showdb.html showfeat.html \
-               showorf.html showseq.html shuffleseq.html sigcleave.html \
-               silent.html splitter.html stamps.html stretcher.html \
+               restrict.html revseq.html scope.html seealso.html \
+               seqboot.html seqmatchall.html seqret.html seqretall.html \
+               seqretfeat.html seqretset.html seqretsplit.html showdb.html \
+               showfeat.html showorf.html showseq.html shuffleseq.html \
+               sigcleave.html silent.html splitter.html stretcher.html \
                stssearch.html supermatcher.html syco.html test_group.html \
                textsearch.html tfextract.html tfm.html tfscan.html \
                tmap.html topo.html transeq.html trimseq.html \

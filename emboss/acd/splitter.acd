@@ -23,14 +23,12 @@ appl: splitter [
 
   int: size [ 
 	opt: Y 
-	min: 1
 	def: 10000 
 	prompt: "Size to split at" 
   ]
 
   int: overlap [ 
-	opt: Y
-	min: 0 
+	opt: Y 
 	def: 0 
 	prompt: "Overlap between split sequences" 
   ]

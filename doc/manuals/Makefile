@@ -71,7 +71,7 @@ NM = /usr/ccs/bin/nm -p
 OBJDUMP = @OBJDUMP@
 PACKAGE = EMBOSS
 RANLIB = ranlib
-VERSION = 1.13.0
+VERSION = 1.13.2
 XLIB =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib -lX11 -lsocket -lsocket  -lnsl -lnsl
 
 pkgdata_DATA = admin.sty admin.tex admin.aux admin.dvi admin.log admin.pdf admin.ps admin.toc adminguide.tar.gz program.ps.gz EMBOSS-FreeBSD-HOWTO.txt emboss_qg.pdf emboss_qg.ps

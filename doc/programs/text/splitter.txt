@@ -123,10 +123,6 @@ Author(s)
 History
 
    Completed 22 March 1999
-   23 May 2001 - Gary Williams - changed the overlap so that the start of
-   a new sequence section is one more than the split-point, the end is
-   the split-point plus the overlap. e.g. splitting at 10000 with an
-   overlap of 100 gives: 1-10100, 10001-20100, etc.
    
 Target users
 

@@ -639,7 +639,7 @@ then
 # If everything found okay then proceed to include png driver in config.
 #
 	if test $CHECK = "1" ; then
-	  LIBS="$LIBS -lgd -lpng -lz"
+	  LIBS="$LIBS -lgd -lpng -lz -lm"
 	  AC_DEFINE(PLD_png)
 	else
 #

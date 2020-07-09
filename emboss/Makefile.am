@@ -15,7 +15,7 @@ simplesw swissparse testplot treetypedisplay
 bin_PROGRAMS = abiview acdc antigenic \
 backtranseq banana btwisted \
 cai chaos charge checktrans chips cirdna codcmp coderet \
-compseq cons cpgplot cpgreport cusp cutseq \
+compseq cons cpgplot cpgreport cusp cutgextract cutseq \
 dan dbiblast dbifasta dbiflat dbigcg \
 degapseq descseq diffseq digest distmat domainer \
 dotmatcher dotpath dottup dreg \
@@ -69,6 +69,7 @@ corbatest_SOURCES = corbatest.c
 cpgplot_SOURCES = cpgplot.c
 cpgreport_SOURCES = cpgreport.c
 cusp_SOURCES = cusp.c
+cutgextract_SOURCES = cutgextract.c
 cutseq_SOURCES = cutseq.c
 dan_SOURCES = dan.c
 dbiblast_SOURCES = dbiblast.c

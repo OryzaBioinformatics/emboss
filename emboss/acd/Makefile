@@ -71,19 +71,16 @@ NM = /usr/ccs/bin/nm -p
 OBJDUMP = @OBJDUMP@
 PACKAGE = EMBOSS
 RANLIB = ranlib
-VERSION = 1.13.0
+VERSION = 1.13.2
 XLIB =  -L/usr/openwin/lib -R/usr/openwin/lib -L/usr/openwin/lib -R/usr/openwin/lib -lX11 -lsocket -lsocket  -lnsl -lnsl
 
-pkgdata_DATA = codes.english 	abiview.acd ajbad.acd ajfeatest.acd ajtest.acd 	ajtest2.acd antigenic.acd backtranseq.acd banana.acd 	btwisted.acd cai.acd chaos.acd charge.acd checktrans.acd chips.acd 	cirdna.acd cluster.acd codcmp.acd coderet.acd 	complex.acd compseq.acd cons.acd corbatest.acd 	cpgplot.acd cpgreport.acd cusp.acd cutseq.acd 	dan.acd dbiblast.acd dbifasta.acd dbiflat.acd 	dbigcg.acd demofeatures.acd demolist.acd demosequence.acd 	demostring.acd demotable.acd descseq.acd diffseq.acd 	digest.acd domainer.acd dotmatcher.acd dotpath.acd dottup.acd 	dreg.acd einverted.acd embossdata.acd embossversion.acd emma.acd 	emowse.acd entrails.acd entret.acd equicktandem.acd 	est2genome.acd etandem.acd extractseq.acd findkm.acd 	freak.acd fuzznuc.acd fuzzpro.acd fuzztran.acd 	garnier.acd geecee.acd getorf.acd helixturnhelix.acd hmoment.acd 	histogramtest.acd iep.acd infoseq.acd isochore.acd 	lindna.acd marscan.acd maskfeat.acd maskseq.acd matcher.acd
-
-pkgdata2_DATA = megamerger.acd merger.acd msbar.acd needle.acd 	newcpgreport.acd newcpgseek.acd newseq.acd noreturn.acd 	notseq.acd nrscope.acd nthseq.acd octanol.acd oddcomp.acd 	palindrome.acd pasteseq.acd patmatdb.acd patmatmotifs.acd 	patmattest.acd pepcoil.acd pepinfo.acd pepnet.acd 	pepstats.acd pepwheel.acd pepwindow.acd pepwindowall.acd 	plotcon.acd plotorf.acd plplottest.acd polydot.acd 	preg.acd prettyplot.acd prettyseq.acd prima.acd 	primersearch.acd printsextract.acd profit.acd prophecy.acd 	prophet.acd prosextract.acd proteinmotifsearch.acd pscan.acd 	rebaseextract.acd recoder.acd redata.acd remap.acd 	restover.acd restrict.acd revseq.acd scope.acd seealso.acd 	seqinfo.acd seqmatchall.acd seqret.acd seqretall.acd 	seqretallfeat.acd seqretfeat.acd seqretset.acd 	seqretsplit.acd seqrettype.acd seqtofeat.acd showalign.acd 	showdb.acd showfeat.acd showorf.acd showseq.acd shuffleseq.acd 	sigcleave.acd silent.acd simplesw.acd splitter.acd 	stamps.acd stretcher.acd stssearch.acd supermatcher.acd syco.acd 	testplot.acd textsearch.acd tfextract.acd tfm.acd 	tfscan.acd tmap.acd transeq.acd treetypedisplay.acd 	trimseq.acd vectorstrip.acd water.acd wobble.acd 	wordcount.acd wordmatch.acd wossname.acd
+pkgdata_DATA = codes.english 	abiview.acd ajbad.acd ajfeatest.acd ajtest.acd 	ajtest2.acd antigenic.acd backtranseq.acd banana.acd 	btwisted.acd cai.acd chaos.acd charge.acd checktrans.acd chips.acd 	cirdna.acd cluster.acd codcmp.acd coderet.acd 	complex.acd compseq.acd cons.acd corbatest.acd 	cpgplot.acd cpgreport.acd cusp.acd cutgextract.acd cutseq.acd 	dan.acd dbiblast.acd dbifasta.acd dbiflat.acd 	dbigcg.acd demofeatures.acd demolist.acd demosequence.acd 	demostring.acd demotable.acd descseq.acd diffseq.acd 	digest.acd domainer.acd dotmatcher.acd dotpath.acd dottup.acd 	dreg.acd einverted.acd embossdata.acd embossversion.acd emma.acd 	emowse.acd entrails.acd entret.acd equicktandem.acd 	est2genome.acd etandem.acd extractseq.acd findkm.acd 	freak.acd fuzznuc.acd fuzzpro.acd fuzztran.acd 	garnier.acd geecee.acd getorf.acd helixturnhelix.acd hmoment.acd 	histogramtest.acd iep.acd infoseq.acd isochore.acd 	lindna.acd marscan.acd maskfeat.acd maskseq.acd matcher.acd 	megamerger.acd merger.acd msbar.acd needle.acd 	newcpgreport.acd newcpgseek.acd newseq.acd noreturn.acd 	notseq.acd nrscope.acd nthseq.acd octanol.acd oddcomp.acd 	palindrome.acd pasteseq.acd patmatdb.acd patmatmotifs.acd 	patmattest.acd pepcoil.acd pepinfo.acd pepnet.acd 	pepstats.acd pepwheel.acd pepwindow.acd pepwindowall.acd 	plotcon.acd plotorf.acd plplottest.acd polydot.acd 	preg.acd prettyplot.acd prettyseq.acd prima.acd 	primersearch.acd printsextract.acd profit.acd prophecy.acd 	prophet.acd prosextract.acd proteinmotifsearch.acd pscan.acd 	rebaseextract.acd recoder.acd redata.acd remap.acd 	restover.acd restrict.acd revseq.acd scope.acd seealso.acd 	seqinfo.acd seqmatchall.acd seqret.acd seqretall.acd 	seqretallfeat.acd seqretfeat.acd seqretset.acd 	seqretsplit.acd seqrettype.acd seqtofeat.acd showalign.acd 	showdb.acd showfeat.acd showorf.acd showseq.acd shuffleseq.acd 	sigcleave.acd silent.acd simplesw.acd splitter.acd 	stamps.acd stretcher.acd stssearch.acd supermatcher.acd syco.acd 	testplot.acd textsearch.acd tfextract.acd tfm.acd 	tfscan.acd tmap.acd transeq.acd treetypedisplay.acd 	trimseq.acd vectorstrip.acd water.acd wobble.acd 	wordcount.acd wordmatch.acd wossname.acd
 
 
 pkgdatadir = $(prefix)/share/$(PACKAGE)/acd
-pkgdata2dir = $(prefix)/share/$(PACKAGE)/acd
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 
-DATA =  $(pkgdata_DATA) $(pkgdata2_DATA)
+DATA =  $(pkgdata_DATA)
 
 DIST_COMMON =  Makefile.am Makefile.in
 
@@ -120,25 +117,6 @@ uninstall-pkgdataDATA:
 	list='$(pkgdata_DATA)'; for p in $$list; do \
 	  rm -f $(DESTDIR)$(pkgdatadir)/$$p; \
 	done
-
-install-pkgdata2DATA: $(pkgdata2_DATA)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(pkgdata2dir)
-	@list='$(pkgdata2_DATA)'; for p in $$list; do \
-	  if test -f $(srcdir)/$$p; then \
-	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(pkgdata2dir)/$$p"; \
-	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(pkgdata2dir)/$$p; \
-	  else if test -f $$p; then \
-	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(pkgdata2dir)/$$p"; \
-	    $(INSTALL_DATA) $$p $(DESTDIR)$(pkgdata2dir)/$$p; \
-	  fi; fi; \
-	done
-
-uninstall-pkgdata2DATA:
-	@$(NORMAL_UNINSTALL)
-	list='$(pkgdata2_DATA)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(pkgdata2dir)/$$p; \
-	done
 tags: TAGS
 TAGS:
 
@@ -174,20 +152,20 @@ installcheck: installcheck-am
 install-exec-am:
 install-exec: install-exec-am
 
-install-data-am: install-pkgdataDATA install-pkgdata2DATA
+install-data-am: install-pkgdataDATA
 install-data: install-data-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-am
-uninstall-am: uninstall-pkgdataDATA uninstall-pkgdata2DATA
+uninstall-am: uninstall-pkgdataDATA
 uninstall: uninstall-am
 all-am: Makefile $(DATA)
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs:
-	$(mkinstalldirs)  $(DESTDIR)$(pkgdatadir) $(DESTDIR)$(pkgdata2dir)
+	$(mkinstalldirs)  $(DESTDIR)$(pkgdatadir)
 
 
 mostlyclean-generic:
@@ -218,13 +196,12 @@ maintainer-clean-am:  maintainer-clean-generic distclean-am
 
 maintainer-clean: maintainer-clean-am
 
-.PHONY: uninstall-pkgdataDATA install-pkgdataDATA uninstall-pkgdata2DATA \
-install-pkgdata2DATA tags distdir info-am info dvi-am dvi check \
-check-am installcheck-am installcheck install-exec-am install-exec \
-install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+.PHONY: uninstall-pkgdataDATA install-pkgdataDATA tags distdir info-am \
+info dvi-am dvi check check-am installcheck-am installcheck \
+install-exec-am install-exec install-data-am install-data install-am \
+install uninstall-am uninstall all-redirect all-am all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
