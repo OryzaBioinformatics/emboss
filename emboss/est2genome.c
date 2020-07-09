@@ -193,7 +193,6 @@ int main(int argc, char **argv)
     shuffles = ajAcdGetInt("shuffle");
     seed = ajAcdGetInt("seed");
 
-    seed = ajAcdGetInt("seed");
     if (!seed)
 	seed = embEstGetSeed();
     seed = -seed;
