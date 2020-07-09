@@ -176,10 +176,9 @@ Known bugs
    
 See also
 
-   Program name                     Description
-   profit       Scan a sequence or database with a matrix or profile
-   prophecy     Creates matrices/profiles from multiple alignments
-   prophet      Gapped alignment for profiles
+   Program name                    Description
+   megamerger   Merge two large overlapping nucleic acid sequences
+   merger       Merge two overlapping nucleic acid sequences
    
 Author(s)
 

@@ -82,30 +82,31 @@ Command line arguments
   [-sequence]          sequence   Sequence USA
   [-outfile]           outfile    Output file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
-   -full               bool       Provide documentation for matching patterns
-   -[no]prune          bool       Don't use simple patterns. It this is true
-                                  then these simple post-translational
+   Optional qualifiers:
+   -full               bool       Provide full documentation for matching
+                                  patterns
+   -[no]prune          bool       Ignore simple patterns. If this is true then
+                                  these simple post-translational
                                   modification sites are not reported:
                                   myristyl, asn_glycosylation,
                                   camp_phospho_site, pkc_phospho_site,
                                   ck2_phospho_site, and tyr_phospho_site.
-   
 
+   Advanced qualifiers: (none)
+   
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
    [-outfile]
    (Parameter 2) Output file name Output file <sequence>.patmatmotifs
    Optional qualifiers Allowed values Default
-   (none)
-   Advanced qualifiers Allowed values Default
-   -full Provide documentation for matching patterns Yes/No No
-   -[no]prune Don't use simple patterns. It this is true then these
-   simple post-translational modification sites are not reported:
-   myristyl, asn_glycosylation, camp_phospho_site, pkc_phospho_site,
+   -full Provide full documentation for matching patterns Yes/No No
+   -[no]prune Ignore simple patterns. If this is true then these simple
+   post-translational modification sites are not reported: myristyl,
+   asn_glycosylation, camp_phospho_site, pkc_phospho_site,
    ck2_phospho_site, and tyr_phospho_site. Yes/No Yes
+   Advanced qualifiers Allowed values Default
+   (none)
    
 Input file format
 
@@ -235,19 +236,18 @@ Known bugs
    
 See also
 
-   Program name Description
-   dreg regular expression search of a nucleotide sequence
-   fuzznuc Nucleic acid pattern search
-   fuzzpro Protein pattern search
-   fuzztran Protein pattern search after translation
+    Program name                        Description
+   antigenic      Finds antigenic sites in proteins
+   digest         Protein proteolytic enzyme or reagent cleavage digest
+   fuzzpro        Protein pattern search
+   fuzztran       Protein pattern search after translation
    helixturnhelix Report nucleic acid binding motifs
-   patmatdb Search a protein sequence with a motif
-   preg regular expression search of a protein sequence
-   printsextract Extract data from PRINTS
-   prosextract Builds the PROSITE motif database for patmatmotifs to
-   search
-   pscan Scans proteins using PRINTS
-   tfscan Scans DNA sequences for transcription factors
+   oddcomp        Finds protein sequence regions with a biased composition
+   patmatdb       Search a protein sequence with a motif
+   pepcoil        Predicts coiled coil regions
+   preg           Regular expression search of a protein sequence
+   pscan          Scans proteins using PRINTS
+   sigcleave      Reports protein signal cleavage sites
    
 Author(s)
 

@@ -123,19 +123,11 @@ Known bugs
    
 See also
 
-   Program name                          Description
+   Program name                  Description
    cai          CAI codon adaptation index
-   chaos        Create a chaos game representation plot for a sequence
    chips        Codon usage statistics
-   compseq      Counts the composition of dimer/trimer/etc words in a sequence
    cusp         Create a codon usage table
-   freak        Residue/base frequency table or plot
-   geecee       Calculates the fractional GC content of nucleic acid sequences
-   isochore     Plots isochores in large DNA sequences
-   newcpgreport Report CpG rich areas
-   newcpgseek   Reports CpG rich regions
-   wobble       Wobble base plot
-   wordcount    Counts words of a specified size in a DNA sequence
+   syco         Synonymous codon usage Gribskov statistic plot
    
 Author(s)
 

@@ -93,19 +93,25 @@ Known bugs
    
 See also
 
-   Program name                     Description
+   Program name                          Description
    cutseq       Removes a specified section from a sequence
+   degapseq     Removes gap characters from sequences
    descseq      Alter the name or description of a sequence
+   entret       Reads and writes (returns) flatfile entries
    extractseq   Extract regions from a sequence
+   infoseq      Displays some simple information about sequences
    maskfeat     Mask off features of a sequence
    maskseq      Mask off regions of a sequence
-   megamerger   Merge two large overlapping nucleic acid sequences
-   merger       Merge two overlapping nucleic acid sequences
    newseq       Type in a short new sequence
    noreturn     Removes carriage return from ASCII files
+   notseq       Excludes a set of sequences and writes out the remaining ones
    nthseq       Writes one sequence from a multiple set of sequences
    pasteseq     Insert one sequence into another
    revseq       Reverse and complement a sequence
+   seqret       Reads and writes (returns) sequences
+   seqretall    Reads and writes (returns) a set of sequences one at a time
+   seqretset    Reads and writes (returns) a set of sequences all at once
+   seqretsplit  Reads and writes (returns) sequences in individual files
    trimseq      Trim ambiguous bits off the ends of sequences
    vectorstrip  Strips out DNA between a pair of vector sequences
    
@@ -117,6 +123,10 @@ Author(s)
 History
 
    Completed 22 March 1999
+   23 May 2001 - Gary Williams - changed the overlap so that the start of
+   a new sequence section is one more than the split-point, the end is
+   the split-point plus the overlap. e.g. splitting at 10000 with an
+   overlap of 100 gives: 1-10100, 10001-20100, etc.
    
 Target users
 

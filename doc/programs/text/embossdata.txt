@@ -244,12 +244,8 @@ Known bugs
    
 See also
 
-   Program name Description
-   printsextract Extract data from PRINTS
-   prosextract Builds the PROSITE motif database for patmatmotifs to
-   search
-   rebaseextract Extract data from REBASE
-   tfextract Extract data from TRANSFAC
+   Program name                Description
+   embossversion Writes the current EMBOSS version number
    
 Author(s)
 

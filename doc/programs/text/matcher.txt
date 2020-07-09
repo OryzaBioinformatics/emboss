@@ -468,9 +468,11 @@ Known bugs
 See also
 
    Program name Description
+   seqmatchall Does an all-against-all comparison of a set of sequences
    supermatcher Finds a match of a large sequence against one or more
    sequences
    water Smith-Waterman local alignment
+   wordmatch Finds all exact matches of a given size between 2 sequences
    
    water will give a single best rigorous local alignment. It will use
    memory of the order of the product of the lengths of the sequences to

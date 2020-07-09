@@ -183,9 +183,14 @@ Known bugs
    
 See also
 
-   Program name                 Description
+   Program name                          Description
    btwisted     Calculates the twisting in a B-DNA sequence
+   chaos        Create a chaos game representation plot for a sequence
+   compseq      Counts the composition of dimer/trimer/etc words in a sequence
    dan          Calculates DNA RNA/DNA melting temperature
+   freak        Residue/base frequency table or plot
+   isochore     Plots isochores in large DNA sequences
+   wordcount    Counts words of a specified size in a DNA sequence
    
 Author(s)
 

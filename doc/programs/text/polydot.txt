@@ -118,41 +118,10 @@ Known bugs
    
 See also
 
-   Program name Description
-   antigenic Finds antigenic sites in proteins
-   chaos Create a chaos game representation plot for a sequence
-   cpgplot Plot CpG rich areas
-   cpgreport Reports all CpG rich regions
-   diffseq Find differences (SNPs) between nearly identical sequences
-   dotmatcher Displays a thresholded dotplot of two sequences
-   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
-   dottup Displays a wordmatch dotplot of two sequences
-   einverted Finds DNA inverted repeats
-   equicktandem Finds tandem repeats
-   etandem Looks for tandem repeats in a nucleotide sequence
-   garnier Predicts protein secondary structure
-   helixturnhelix Report nucleic acid binding motifs
-   isochore Plots isochores in large DNA sequences
-   marscan Finds MAR/SAR sites in nucleic sequences
-   newcpgreport Report CpG rich areas
-   newcpgseek Reports CpG rich regions
-   oddcomp Finds protein sequence regions with a biased composition
-   palindrome Looks for inverted repeats in a nucleotide sequence
-   pepcoil Predicts coiled coil regions
-   pscan Scans proteins using PRINTS
-   recode Remove restriction sites but maintain the same translation
-   redata Search REBASE for enzyme name, references, suppliers etc
-   restover Finds restriction enzymes that produce a specific overhang
-   restrict Finds restriction enzyme cleavage sites
-   seqmatchall Does an all-against-all comparison of a set of sequences
-   showseq Display a sequence with features, translation etc
-   sigcleave Reports protein signal cleavage sites
-   silent Silent mutation restriction enzyme scan
-   stssearch Searches a DNA database for matches with a set of STS
-   primers
-   tfscan Scans DNA sequences for transcription factors
-   tmap Displays membrane spanning regions
-   wordmatch Finds all exact matches of a given size between 2 sequences
+   Program name                          Description
+   dotmatcher   Displays a thresholded dotplot of two sequences
+   dotpath      Displays a non-overlapping wordmatch dotplot of two sequences
+   dottup       Displays a wordmatch dotplot of two sequences
    
 Author(s)
 

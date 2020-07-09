@@ -124,7 +124,8 @@ Known bugs
 
 See also
 
-   Program name            Description
+   Program name             Description
+   est2genome   Align EST and genomic DNA sequences
    needle       Needleman-Wunsch global alignment
    
 Author(s)

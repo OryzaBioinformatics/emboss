@@ -109,10 +109,10 @@ Known bugs
 See also
 
    Program name Description
-   dotmatcher Displays a thresholded dotplot of two sequences
-   polydot Displays all-against-all dotplots of a set of sequences
-   stssearch Searches a DNA database for matches with a set of STS
-   primers
+   matcher Finds the best local alignments between two sequences
+   supermatcher Finds a match of a large sequence against one or more
+   sequences
+   water Smith-Waterman local alignment
    wordmatch Finds all exact matches of a given size between 2 sequences
    
    polydot will give a graphical view of the same matches.

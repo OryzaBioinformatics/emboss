@@ -333,8 +333,7 @@ See also
 
    Program name                          Description
    backtranseq  Back translate a protein sequence
-   cusp         Create a codon usage table
-   getorf       Finds and extracts open reading frames (ORFs)
+   coderet      Extract CDS, mRNA and translations from feature tables
    plotorf      Plot potential open reading frames
    prettyseq    Output sequence with translated ranges
    remap        Display a sequence with restriction cut sites, translation etc

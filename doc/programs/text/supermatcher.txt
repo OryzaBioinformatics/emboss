@@ -153,9 +153,11 @@ Known bugs
    
 See also
 
-   Program name                      Description
+   Program name                         Description
    matcher      Finds the best local alignments between two sequences
+   seqmatchall  Does an all-against-all comparison of a set of sequences
    water        Smith-Waterman local alignment
+   wordmatch    Finds all exact matches of a given size between 2 sequences
    
 Author(s)
 

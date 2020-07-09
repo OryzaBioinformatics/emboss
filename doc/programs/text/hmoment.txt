@@ -279,19 +279,13 @@ Known bugs
    
 See also
 
-   Program name Description
-   charge Protein charge plot
-   checktrans Reports STOP codons and ORF statistics of a protein
-   sequence
-   digest Protein proteolytic enzyme or reagent cleavage digest
-   iep Calculates the isoelectric point of a protein
-   octanol Displays protein hydropathy
-   pepinfo Plots simple amino acid properties in parallel
-   pepnet Displays proteins as a helical net
-   pepstats Protein statistics
-   pepwheel Shows protein sequences as helices
-   pepwindow Displays protein hydropathy
-   pepwindowall Displays protein hydropathy of a set of sequences
+    Program name              Description
+   garnier        Predicts protein secondary structure
+   helixturnhelix Report nucleic acid binding motifs
+   pepcoil        Predicts coiled coil regions
+   pepnet         Displays proteins as a helical net
+   pepwheel       Shows protein sequences as helices
+   tmap           Displays membrane spanning regions
    
 Author(s)
 

@@ -349,7 +349,6 @@ Known bugs
 See also
 
    Program name                    Description
-   cons         Creates a consensus from multiple alignments
    prophecy     Creates matrices/profiles from multiple alignments
    prophet      Gapped alignment for profiles
    

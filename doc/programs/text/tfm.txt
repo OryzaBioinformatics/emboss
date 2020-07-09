@@ -128,6 +128,12 @@ Known bugs
 See also
 
    Program name Description
+   infoseq Displays some simple information about sequences
+   seealso Finds programs sharing group names
+   showdb Displays information on the currently available databases
+   textsearch Search sequence documentation text. SRS and Entrez are
+   faster!
+   wossname Finds programs by keywords in their one-line documentation
    
 Author(s)
 

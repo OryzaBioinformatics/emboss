@@ -233,8 +233,24 @@ Known bugs
    
 See also
 
-   Program name                        Description
-   wossname     Finds programs by keywords in their one-line documentation
+   Program name Description
+   abiview Reads ABI file and display the trace
+   cirdna Draws circular maps of DNA constructs
+   infoseq Displays some simple information about sequences
+   lindna Draws linear maps of DNA constructs
+   pepnet Displays proteins as a helical net
+   pepwheel Shows protein sequences as helices
+   prettyplot Displays aligned sequences, with colouring and boxing
+   prettyseq Output sequence with translated ranges
+   remap Display a sequence with restriction cut sites, translation etc
+   showalign Display a multiple sequence alignment
+   showdb Displays information on the currently available databases
+   showfeat Show features of a sequence
+   showseq Display a sequence with features, translation etc
+   textsearch Search sequence documentation text. SRS and Entrez are
+   faster!
+   tfm Displays a program's help documentation manual
+   wossname Finds programs by keywords in their one-line documentation
    
 Author(s)
 

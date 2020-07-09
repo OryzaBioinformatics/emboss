@@ -197,19 +197,18 @@ Known bugs
    
 See also
 
-   Program name Description
-   charge Protein charge plot
-   checktrans Reports STOP codons and ORF statistics of a protein
-   sequence
-   hmoment Hydrophobic moment calculation
-   iep Calculates the isoelectric point of a protein
-   octanol Displays protein hydropathy
-   pepinfo Plots simple amino acid properties in parallel
-   pepnet Displays proteins as a helical net
-   pepstats Protein statistics
-   pepwheel Shows protein sequences as helices
-   pepwindow Displays protein hydropathy
-   pepwindowall Displays protein hydropathy of a set of sequences
+    Program name                        Description
+   antigenic      Finds antigenic sites in proteins
+   fuzzpro        Protein pattern search
+   fuzztran       Protein pattern search after translation
+   helixturnhelix Report nucleic acid binding motifs
+   oddcomp        Finds protein sequence regions with a biased composition
+   patmatdb       Search a protein sequence with a motif
+   patmatmotifs   Search a PROSITE motif database with a protein sequence
+   pepcoil        Predicts coiled coil regions
+   preg           Regular expression search of a protein sequence
+   pscan          Scans proteins using PRINTS
+   sigcleave      Reports protein signal cleavage sites
    
 Author(s)
 

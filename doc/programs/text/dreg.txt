@@ -168,15 +168,10 @@ Known bugs
    
 See also
 
-   Program name                       Description
+   Program name               Description
    fuzznuc      Nucleic acid pattern search
-   fuzzpro      Protein pattern search
    fuzztran     Protein pattern search after translation
-   patmatdb     Search a protein sequence with a motif
-   patmatmotifs Search a PROSITE motif database with a protein sequence
-   preg         regular expression search of a protein sequence
-   pscan        Scans proteins using PRINTS
-   tfscan       Scans DNA sequences for transcription factors
+   marscan      Finds MAR/SAR sites in nucleic sequences
    
    Other EMBOSS programs allow you to search for simple patterns and may
    be easier for the user who has never used regular expressions before:

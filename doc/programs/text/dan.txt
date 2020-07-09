@@ -254,9 +254,14 @@ Known bugs
    
 See also
 
-   Program name                 Description
+   Program name                          Description
    banana       Bending and curvature plot in B-DNA
    btwisted     Calculates the twisting in a B-DNA sequence
+   chaos        Create a chaos game representation plot for a sequence
+   compseq      Counts the composition of dimer/trimer/etc words in a sequence
+   freak        Residue/base frequency table or plot
+   isochore     Plots isochores in large DNA sequences
+   wordcount    Counts words of a specified size in a DNA sequence
    
 Author(s)
 

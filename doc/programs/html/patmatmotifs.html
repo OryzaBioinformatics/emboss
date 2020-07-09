@@ -164,16 +164,17 @@ IT IS DONE FOR YOU.
   [-sequence]          sequence   Sequence USA
   [-outfile]           outfile    Output file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
-   -full               bool       Provide documentation for matching patterns
-   -[no]prune          bool       Don't use simple patterns. It this is true
-                                  then these simple post-translational
+   Optional qualifiers:
+   -full               bool       Provide full documentation for matching
+                                  patterns
+   -[no]prune          bool       Ignore simple patterns. If this is true then
+                                  these simple post-translational
                                   modification sites are not reported:
                                   myristyl, asn_glycosylation,
                                   camp_phospho_site, pkc_phospho_site,
                                   ck2_phospho_site, and tyr_phospho_site.
 
+   Advanced qualifiers: (none)
 
 </pre>
 </td></tr></table>
@@ -207,7 +208,17 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td>-full</td>
+<td>Provide full documentation for matching patterns</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]prune</td>
+<td>Ignore simple patterns. If this is true then these simple post-translational modification sites are not reported: myristyl, asn_glycosylation, camp_phospho_site, pkc_phospho_site, ck2_phospho_site, and tyr_phospho_site.</td>
+<td>Yes/No</td>
+<td>Yes</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -217,17 +228,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-full</td>
-<td>Provide documentation for matching patterns</td>
-<td>Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-[no]prune</td>
-<td>Don't use simple patterns. It this is true then these simple post-translational modification sites are not reported: myristyl, asn_glycosylation, camp_phospho_site, pkc_phospho_site, ck2_phospho_site, and tyr_phospho_site.</td>
-<td>Yes/No</td>
-<td>Yes</td>
+<td colspan=4>(none)</td>
 </tr>
 
 </table>
@@ -418,17 +419,17 @@ None.
 <a name=See also><h2>See also</h2></a>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="dreg.html">dreg</a></td><td>regular expression search of a nucleotide sequence</td></tr>
-<tr><td><a href="fuzznuc.html">fuzznuc</a></td><td>Nucleic acid pattern search</td></tr>
+<tr><td><a href="antigenic.html">antigenic</a></td><td>Finds antigenic sites in proteins</td></tr>
+<tr><td><a href="digest.html">digest</a></td><td>Protein proteolytic enzyme or reagent cleavage digest</td></tr>
 <tr><td><a href="fuzzpro.html">fuzzpro</a></td><td>Protein pattern search</td></tr>
 <tr><td><a href="fuzztran.html">fuzztran</a></td><td>Protein pattern search after translation</td></tr>
 <tr><td><a href="helixturnhelix.html">helixturnhelix</a></td><td>Report nucleic acid binding motifs</td></tr>
+<tr><td><a href="oddcomp.html">oddcomp</a></td><td>Finds protein sequence regions with a biased composition</td></tr>
 <tr><td><a href="patmatdb.html">patmatdb</a></td><td>Search a protein sequence with a motif</td></tr>
-<tr><td><a href="preg.html">preg</a></td><td>regular expression search of a protein sequence</td></tr>
-<tr><td><a href="printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
-<tr><td><a href="prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
+<tr><td><a href="pepcoil.html">pepcoil</a></td><td>Predicts coiled coil regions</td></tr>
+<tr><td><a href="preg.html">preg</a></td><td>Regular expression search of a protein sequence</td></tr>
 <tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
-<tr><td><a href="tfscan.html">tfscan</a></td><td>Scans DNA sequences for transcription factors</td></tr>
+<tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>
 </table>
 
 <!--

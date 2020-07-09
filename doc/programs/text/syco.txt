@@ -133,12 +133,11 @@ Known bugs
    
 See also
 
-   Program name                  Description
+   Program name         Description
    cai          CAI codon adaptation index
    chips        Codon usage statistics
+   codcmp       Codon usage table comparison
    cusp         Create a codon usage table
-   getorf       Finds and extracts open reading frames (ORFs)
-   marscan      Finds MAR/SAR sites in nucleic sequences
    
    wobble does the analysis of the third base.
    

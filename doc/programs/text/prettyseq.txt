@@ -287,15 +287,26 @@ Known bugs
    
 See also
 
-   Program name                          Description
-   backtranseq  Back translate a protein sequence
-   cusp         Create a codon usage table
-   getorf       Finds and extracts open reading frames (ORFs)
-   plotorf      Plot potential open reading frames
-   remap        Display a sequence with restriction cut sites, translation etc
-   showorf      Pretty output of DNA translations
-   showseq      Display a sequence with features, translation etc
-   transeq      Translate nucleic acid sequences
+   Program name Description
+   abiview Reads ABI file and display the trace
+   backtranseq Back translate a protein sequence
+   cirdna Draws circular maps of DNA constructs
+   coderet Extract CDS, mRNA and translations from feature tables
+   lindna Draws linear maps of DNA constructs
+   pepnet Displays proteins as a helical net
+   pepwheel Shows protein sequences as helices
+   plotorf Plot potential open reading frames
+   prettyplot Displays aligned sequences, with colouring and boxing
+   remap Display a sequence with restriction cut sites, translation etc
+   seealso Finds programs sharing group names
+   showalign Display a multiple sequence alignment
+   showdb Displays information on the currently available databases
+   showfeat Show features of a sequence
+   showorf Pretty output of DNA translations
+   showseq Display a sequence with features, translation etc
+   textsearch Search sequence documentation text. SRS and Entrez are
+   faster!
+   transeq Translate nucleic acid sequences
    
    showseq has more options for specifying various ways of displaying a
    sequence, with or without various ways of translating it.

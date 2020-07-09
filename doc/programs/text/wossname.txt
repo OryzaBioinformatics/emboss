@@ -253,8 +253,13 @@ Known bugs
    
 See also
 
-   Program name            Description
-   seealso      Finds programs sharing group names
+   Program name Description
+   infoseq Displays some simple information about sequences
+   seealso Finds programs sharing group names
+   showdb Displays information on the currently available databases
+   textsearch Search sequence documentation text. SRS and Entrez are
+   faster!
+   tfm Displays a program's help documentation manual
    
 Author(s)
 

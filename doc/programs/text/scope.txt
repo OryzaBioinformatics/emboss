@@ -208,11 +208,14 @@ Known bugs
    
 See also
 
-   Program name                          Description
-   domainer     Build domain coordinate files
-   nrscope      Converts redundant EMBL-format SCOP file to non-redundant one
-   scopalign    Generate alignments for SCOP families
-   stamps       Generate alignments for SCOP families
+   Program name Description
+   domainer Build domain coordinate files
+   nrscope Converts redundant EMBL-format SCOP file to non-redundant one
+   printsextract Extract data from PRINTS
+   prosextract Builds the PROSITE motif database for patmatmotifs to
+   search
+   rebaseextract Extract data from REBASE
+   tfextract Extract data from TRANSFAC
    
 Author(s)
 

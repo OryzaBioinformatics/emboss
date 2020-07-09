@@ -74,7 +74,6 @@ Known bugs
 See also
 
    Program name                     Description
-   cons         Creates a consensus from multiple alignments
    profit       Scan a sequence or database with a matrix or profile
    prophet      Gapped alignment for profiles
    

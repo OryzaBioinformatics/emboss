@@ -287,9 +287,6 @@ Known bugs
 See also
 
    Program name Description
-   diffseq Find differences (SNPs) between nearly identical sequences
-   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
-   dottup Displays a wordmatch dotplot of two sequences
    prima Selects primers for PCR and DNA amplification
    stssearch Searches a DNA database for matches with a set of STS
    primers

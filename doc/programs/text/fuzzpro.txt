@@ -233,15 +233,18 @@ Known bugs
    
 See also
 
-   Program name                       Description
-   dreg         regular expression search of a nucleotide sequence
-   fuzznuc      Nucleic acid pattern search
-   fuzztran     Protein pattern search after translation
-   patmatdb     Search a protein sequence with a motif
-   patmatmotifs Search a PROSITE motif database with a protein sequence
-   preg         regular expression search of a protein sequence
-   pscan        Scans proteins using PRINTS
-   tfscan       Scans DNA sequences for transcription factors
+    Program name                        Description
+   antigenic      Finds antigenic sites in proteins
+   digest         Protein proteolytic enzyme or reagent cleavage digest
+   fuzztran       Protein pattern search after translation
+   helixturnhelix Report nucleic acid binding motifs
+   oddcomp        Finds protein sequence regions with a biased composition
+   patmatdb       Search a protein sequence with a motif
+   patmatmotifs   Search a PROSITE motif database with a protein sequence
+   pepcoil        Predicts coiled coil regions
+   preg           Regular expression search of a protein sequence
+   pscan          Scans proteins using PRINTS
+   sigcleave      Reports protein signal cleavage sites
    
      * fuzznuc - Nucleic acid pattern search
      * fuzztran - Protein pattern search after translation

@@ -130,8 +130,10 @@ Known bugs
    
 See also
 
-   Program name                      Description
+   Program name                        Description
+   emma         Multiple alignment program - interface to ClustalW program
    prettyplot   Displays aligned sequences, with colouring and boxing
+   showalign    Display a multiple sequence alignment
    
 Author(s)
 

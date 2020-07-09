@@ -117,22 +117,25 @@ Known bugs
 See also
 
    Program name Description
-   charge Protein charge plot
-   checktrans Reports STOP codons and ORF statistics of a protein
-   sequence
-   digest Protein proteolytic enzyme or reagent cleavage digest
+   abiview Reads ABI file and display the trace
+   cirdna Draws circular maps of DNA constructs
    garnier Predicts protein secondary structure
    helixturnhelix Report nucleic acid binding motifs
    hmoment Hydrophobic moment calculation
-   iep Calculates the isoelectric point of a protein
-   octanol Displays protein hydropathy
+   lindna Draws linear maps of DNA constructs
    pepcoil Predicts coiled coil regions
-   pepinfo Plots simple amino acid properties in parallel
-   pepstats Protein statistics
    pepwheel Shows protein sequences as helices
-   pepwindow Displays protein hydropathy
-   pepwindowall Displays protein hydropathy of a set of sequences
-   sigcleave Reports protein signal cleavage sites
+   prettyplot Displays aligned sequences, with colouring and boxing
+   prettyseq Output sequence with translated ranges
+   remap Display a sequence with restriction cut sites, translation etc
+   seealso Finds programs sharing group names
+   showalign Display a multiple sequence alignment
+   showdb Displays information on the currently available databases
+   showfeat Show features of a sequence
+   showseq Display a sequence with features, translation etc
+   textsearch Search sequence documentation text. SRS and Entrez are
+   faster!
+   tmap Displays membrane spanning regions
    
 Author(s)
 

@@ -257,31 +257,18 @@ Known bugs
 
 See also
 
-   Program name Description
-   antigenic Finds antigenic sites in proteins
-   diffseq Find differences (SNPs) between nearly identical sequences
-   dotmatcher Displays a thresholded dotplot of two sequences
-   dotpath Displays a non-overlapping wordmatch dotplot of two sequences
-   dottup Displays a wordmatch dotplot of two sequences
-   dreg regular expression search of a nucleotide sequence
-   fuzznuc Nucleic acid pattern search
-   fuzzpro Protein pattern search
-   fuzztran Protein pattern search after translation
-   garnier Predicts protein secondary structure
+    Program name                        Description
+   antigenic      Finds antigenic sites in proteins
+   digest         Protein proteolytic enzyme or reagent cleavage digest
+   fuzzpro        Protein pattern search
+   fuzztran       Protein pattern search after translation
    helixturnhelix Report nucleic acid binding motifs
-   oddcomp Finds protein sequence regions with a biased composition
-   patmatdb Search a protein sequence with a motif
-   patmatmotifs Search a PROSITE motif database with a protein sequence
-   pepcoil Predicts coiled coil regions
-   polydot Displays all-against-all dotplots of a set of sequences
-   preg regular expression search of a protein sequence
-   printsextract Extract data from PRINTS
-   prosextract Builds the PROSITE motif database for patmatmotifs to
-   search
-   showseq Display a sequence with features, translation etc
-   sigcleave Reports protein signal cleavage sites
-   tfscan Scans DNA sequences for transcription factors
-   tmap Displays membrane spanning regions
+   oddcomp        Finds protein sequence regions with a biased composition
+   patmatdb       Search a protein sequence with a motif
+   patmatmotifs   Search a PROSITE motif database with a protein sequence
+   pepcoil        Predicts coiled coil regions
+   preg           Regular expression search of a protein sequence
+   sigcleave      Reports protein signal cleavage sites
    
      * printsextract - Extract data from PRINTS. pscan uses the PRINTS
        data. Until printsextract has been run to set up the PRINTS data,

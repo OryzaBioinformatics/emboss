@@ -258,7 +258,16 @@ Known bugs
    
 See also
 
-   Program name Description
+   Program name                          Description
+   backtranseq  Back translate a protein sequence
+   maskfeat     Mask off features of a sequence
+   plotorf      Plot potential open reading frames
+   prettyseq    Output sequence with translated ranges
+   remap        Display a sequence with restriction cut sites, translation etc
+   showfeat     Show features of a sequence
+   showorf      Pretty output of DNA translations
+   showseq      Display a sequence with features, translation etc
+   transeq      Translate nucleic acid sequences
    
 Author(s)
 

@@ -216,21 +216,12 @@ Known bugs
    
 See also
 
-    Program name                           Description
-   antigenic      Finds antigenic sites in proteins
-   diffseq        Find differences (SNPs) between nearly identical sequences
-   dotmatcher     Displays a thresholded dotplot of two sequences
-   dotpath        Displays a non-overlapping wordmatch dotplot of two sequences
-   dottup         Displays a wordmatch dotplot of two sequences
+    Program name             Description
    helixturnhelix Report nucleic acid binding motifs
-   oddcomp        Finds protein sequence regions with a biased composition
+   hmoment        Hydrophobic moment calculation
    pepcoil        Predicts coiled coil regions
    pepnet         Displays proteins as a helical net
    pepwheel       Shows protein sequences as helices
-   polydot        Displays all-against-all dotplots of a set of sequences
-   pscan          Scans proteins using PRINTS
-   showseq        Display a sequence with features, translation etc
-   sigcleave      Reports protein signal cleavage sites
    tmap           Displays membrane spanning regions
    
 Author(s)

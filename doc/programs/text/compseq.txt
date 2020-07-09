@@ -249,21 +249,25 @@ Known bugs
    
 See also
 
-   Program name                          Description
-   cai          CAI codon adaptation index
-   chaos        Create a chaos game representation plot for a sequence
-   chips        Codon usage statistics
-   codcmp       Codon usage table comparison
-   cusp         Create a codon usage table
-   emowse       Protein identification by mass spectrometry
-   freak        Residue/base frequency table or plot
-   geecee       Calculates the fractional GC content of nucleic acid sequences
-   isochore     Plots isochores in large DNA sequences
-   newcpgreport Report CpG rich areas
-   newcpgseek   Reports CpG rich regions
-   oddcomp      Finds protein sequence regions with a biased composition
-   wobble       Wobble base plot
-   wordcount    Counts words of a specified size in a DNA sequence
+   Program name Description
+   backtranseq Back translate a protein sequence
+   banana Bending and curvature plot in B-DNA
+   btwisted Calculates the twisting in a B-DNA sequence
+   chaos Create a chaos game representation plot for a sequence
+   charge Protein charge plot
+   checktrans Reports STOP codons and ORF statistics of a protein
+   sequence
+   dan Calculates DNA RNA/DNA melting temperature
+   emowse Protein identification by mass spectrometry
+   freak Residue/base frequency table or plot
+   iep Calculates the isoelectric point of a protein
+   isochore Plots isochores in large DNA sequences
+   octanol Displays protein hydropathy
+   pepinfo Plots simple amino acid properties in parallel
+   pepstats Protein statistics
+   pepwindow Displays protein hydropathy
+   pepwindowall Displays protein hydropathy of a set of sequences
+   wordcount Counts words of a specified size in a DNA sequence
    
 Author(s)
 

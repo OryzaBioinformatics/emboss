@@ -148,15 +148,25 @@ Known bugs
    
 See also
 
-   Program name                          Description
-   cusp         Create a codon usage table
-   getorf       Finds and extracts open reading frames (ORFs)
-   plotorf      Plot potential open reading frames
-   prettyseq    Output sequence with translated ranges
-   remap        Display a sequence with restriction cut sites, translation etc
-   showorf      Pretty output of DNA translations
-   showseq      Display a sequence with features, translation etc
-   transeq      Translate nucleic acid sequences
+   Program name Description
+   charge Protein charge plot
+   checktrans Reports STOP codons and ORF statistics of a protein
+   sequence
+   coderet Extract CDS, mRNA and translations from feature tables
+   compseq Counts the composition of dimer/trimer/etc words in a sequence
+   emowse Protein identification by mass spectrometry
+   iep Calculates the isoelectric point of a protein
+   octanol Displays protein hydropathy
+   pepinfo Plots simple amino acid properties in parallel
+   pepstats Protein statistics
+   pepwindow Displays protein hydropathy
+   pepwindowall Displays protein hydropathy of a set of sequences
+   plotorf Plot potential open reading frames
+   prettyseq Output sequence with translated ranges
+   remap Display a sequence with restriction cut sites, translation etc
+   showorf Pretty output of DNA translations
+   showseq Display a sequence with features, translation etc
+   transeq Translate nucleic acid sequences
    
 Author(s)
 

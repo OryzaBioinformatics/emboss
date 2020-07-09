@@ -380,15 +380,21 @@ Known bugs
    
 See also
 
-   Program name                       Description
-   dreg         regular expression search of a nucleotide sequence
-   fuzznuc      Nucleic acid pattern search
-   fuzzpro      Protein pattern search
-   patmatdb     Search a protein sequence with a motif
-   patmatmotifs Search a PROSITE motif database with a protein sequence
-   preg         regular expression search of a protein sequence
-   pscan        Scans proteins using PRINTS
-   tfscan       Scans DNA sequences for transcription factors
+    Program name                        Description
+   antigenic      Finds antigenic sites in proteins
+   digest         Protein proteolytic enzyme or reagent cleavage digest
+   dreg           regular expression search of a nucleotide sequence
+   fuzznuc        Nucleic acid pattern search
+   fuzzpro        Protein pattern search
+   helixturnhelix Report nucleic acid binding motifs
+   marscan        Finds MAR/SAR sites in nucleic sequences
+   oddcomp        Finds protein sequence regions with a biased composition
+   patmatdb       Search a protein sequence with a motif
+   patmatmotifs   Search a PROSITE motif database with a protein sequence
+   pepcoil        Predicts coiled coil regions
+   preg           Regular expression search of a protein sequence
+   pscan          Scans proteins using PRINTS
+   sigcleave      Reports protein signal cleavage sites
    
    Other EMBOSS programs allow you to search for regular expression
    patterns but may be less easy for the user who has never used regular

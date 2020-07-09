@@ -162,18 +162,12 @@ Known bugs
 See also
 
    Program name Description
-   embossdata Finds or fetches the data files read in by the EMBOSS
-   programs
+   domainer Build domain coordinate files
+   nrscope Converts redundant EMBL-format SCOP file to non-redundant one
    printsextract Extract data from PRINTS
    prosextract Builds the PROSITE motif database for patmatmotifs to
    search
-   recode Remove restriction sites but maintain the same translation
-   redata Search REBASE for enzyme name, references, suppliers etc
-   remap Display a sequence with restriction cut sites, translation etc
-   restover Finds restriction enzymes that produce a specific overhang
-   restrict Finds restriction enzyme cleavage sites
-   showseq Display a sequence with features, translation etc
-   silent Silent mutation restriction enzyme scan
+   scope Convert raw scop classification file to embl-like format
    tfextract Extract data from TRANSFAC
    
 Author(s)

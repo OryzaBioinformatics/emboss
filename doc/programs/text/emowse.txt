@@ -1064,9 +1064,18 @@ Known bugs
    
 See also
 
-   Program name                          Description
-   compseq      Counts the composition of dimer/trimer/etc words in a sequence
-   oddcomp      Finds protein sequence regions with a biased composition
+   Program name Description
+   backtranseq Back translate a protein sequence
+   charge Protein charge plot
+   checktrans Reports STOP codons and ORF statistics of a protein
+   sequence
+   compseq Counts the composition of dimer/trimer/etc words in a sequence
+   iep Calculates the isoelectric point of a protein
+   octanol Displays protein hydropathy
+   pepinfo Plots simple amino acid properties in parallel
+   pepstats Protein statistics
+   pepwindow Displays protein hydropathy
+   pepwindowall Displays protein hydropathy of a set of sequences
    
 Author(s)
 

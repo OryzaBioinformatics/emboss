@@ -119,11 +119,11 @@ Known bugs
 See also
 
    Program name Description
-   dotmatcher Displays a thresholded dotplot of two sequences
-   polydot Displays all-against-all dotplots of a set of sequences
+   matcher Finds the best local alignments between two sequences
    seqmatchall Does an all-against-all comparison of a set of sequences
-   stssearch Searches a DNA database for matches with a set of STS
-   primers
+   supermatcher Finds a match of a large sequence against one or more
+   sequences
+   water Smith-Waterman local alignment
    
 Author(s)
 

@@ -226,20 +226,18 @@ Known bugs
    
 See also
 
-    Program name                           Description
-   diffseq        Find differences (SNPs) between nearly identical sequences
-   dotmatcher     Displays a thresholded dotplot of two sequences
-   dotpath        Displays a non-overlapping wordmatch dotplot of two sequences
-   dottup         Displays a wordmatch dotplot of two sequences
-   garnier        Predicts protein secondary structure
+    Program name                        Description
+   digest         Protein proteolytic enzyme or reagent cleavage digest
+   fuzzpro        Protein pattern search
+   fuzztran       Protein pattern search after translation
    helixturnhelix Report nucleic acid binding motifs
    oddcomp        Finds protein sequence regions with a biased composition
+   patmatdb       Search a protein sequence with a motif
+   patmatmotifs   Search a PROSITE motif database with a protein sequence
    pepcoil        Predicts coiled coil regions
-   polydot        Displays all-against-all dotplots of a set of sequences
+   preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
-   showseq        Display a sequence with features, translation etc
    sigcleave      Reports protein signal cleavage sites
-   tmap           Displays membrane spanning regions
    
 Author(s)
 

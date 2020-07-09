@@ -154,18 +154,13 @@ Known bugs
 See also
 
    Program name                          Description
-   cai          CAI codon adaptation index
+   banana       Bending and curvature plot in B-DNA
+   btwisted     Calculates the twisting in a B-DNA sequence
    chaos        Create a chaos game representation plot for a sequence
-   chips        Codon usage statistics
-   codcmp       Codon usage table comparison
    compseq      Counts the composition of dimer/trimer/etc words in a sequence
-   cusp         Create a codon usage table
+   dan          Calculates DNA RNA/DNA melting temperature
    freak        Residue/base frequency table or plot
-   geecee       Calculates the fractional GC content of nucleic acid sequences
    isochore     Plots isochores in large DNA sequences
-   newcpgreport Report CpG rich areas
-   newcpgseek   Reports CpG rich regions
-   wobble       Wobble base plot
    
 Author(s)
 

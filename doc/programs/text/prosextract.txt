@@ -113,17 +113,13 @@ Known bugs
 
 See also
 
-   Program name Description
-   embossdata Finds or fetches the data files read in by the EMBOSS
-   programs
-   helixturnhelix Report nucleic acid binding motifs
-   patmatdb Search a protein sequence with a motif
-   patmatmotifs Search a PROSITE motif database with a protein sequence
+   Program name                           Description
+   domainer      Build domain coordinate files
+   nrscope       Converts redundant EMBL-format SCOP file to non-redundant one
    printsextract Extract data from PRINTS
-   pscan Scans proteins using PRINTS
    rebaseextract Extract data from REBASE
-   tfextract Extract data from TRANSFAC
-   tfscan Scans DNA sequences for transcription factors
+   scope         Convert raw scop classification file to embl-like format
+   tfextract     Extract data from TRANSFAC
    
 Author(s)
 

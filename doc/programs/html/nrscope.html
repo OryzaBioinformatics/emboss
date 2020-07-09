@@ -174,7 +174,7 @@ D5HBIB_
   [-extn]              string     File extension of clean domain coordinate
                                   files
   [-thresh]            float      The % sequence identity redundancy threshold
-  [-datafile]          matrixf    Residue substitution file
+  [-datafile]          matrixf    Residue substitution matrix
   [-gapopen]           float      The gap insertion penalty is the score taken
                                   away when a gap is created. The best value
                                   depends on the choice of comparison matrix.
@@ -243,14 +243,14 @@ D5HBIB_
 <td>[-thresh]<br>(Parameter 5)</td>
 <td>The % sequence identity redundancy threshold</td>
 <td>Any integer value</td>
-<td>95</td>
+<td>95.0</td>
 </tr>
 
 <tr>
 <td>[-datafile]<br>(Parameter 6)</td>
-<td>Residue substitution file</td>
+<td>Residue substitution matrix</td>
 <td>Comparison matrix file in EMBOSS data path</td>
-<td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
+<td>EBLOSUM62</td>
 </tr>
 
 <tr>
@@ -644,9 +644,11 @@ None.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="domainer.html">domainer</a></td><td>Build domain coordinate files</td></tr>
-<tr><td><a href="scopalign.html">scopalign</a></td><td>Generate alignments for SCOP families</td></tr>
+<tr><td><a href="printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
+<tr><td><a href="prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
+<tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
 <tr><td><a href="scope.html">scope</a></td><td>Convert raw scop classification file to embl-like format</td></tr>
-<tr><td><a href="stamps.html">stamps</a></td><td>Generate alignments for SCOP families</td></tr>
+<tr><td><a href="tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
 </table>
 
 <!-- 

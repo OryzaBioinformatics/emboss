@@ -139,16 +139,15 @@ Known bugs
 See also
 
    Program name Description
+   backtranseq Back translate a protein sequence
    charge Protein charge plot
    checktrans Reports STOP codons and ORF statistics of a protein
    sequence
-   digest Protein proteolytic enzyme or reagent cleavage digest
-   hmoment Hydrophobic moment calculation
+   compseq Counts the composition of dimer/trimer/etc words in a sequence
+   emowse Protein identification by mass spectrometry
    octanol Displays protein hydropathy
    pepinfo Plots simple amino acid properties in parallel
-   pepnet Displays proteins as a helical net
    pepstats Protein statistics
-   pepwheel Shows protein sequences as helices
    pepwindow Displays protein hydropathy
    pepwindowall Displays protein hydropathy of a set of sequences
    

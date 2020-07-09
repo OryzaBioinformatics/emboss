@@ -79,7 +79,7 @@ Command line arguments
   [-extn]              string     File extension of clean domain coordinate
                                   files
   [-thresh]            float      The % sequence identity redundancy threshold
-  [-datafile]          matrixf    Residue substitution file
+  [-datafile]          matrixf    Residue substitution matrix
   [-gapopen]           float      The gap insertion penalty is the score taken
                                   away when a gap is created. The best value
                                   depends on the choice of comparison matrix.
@@ -121,11 +121,10 @@ Command line arguments
    string is accepted .pxyz
    [-thresh]
    (Parameter 5) The % sequence identity redundancy threshold Any integer
-   value 95
+   value 95.0
    [-datafile]
-   (Parameter 6) Residue substitution file Comparison matrix file in
-   EMBOSS data path EBLOSUM62 for protein
-   EDNAFULL for DNA
+   (Parameter 6) Residue substitution matrix Comparison matrix file in
+   EMBOSS data path EBLOSUM62
    [-gapopen]
    (Parameter 7) The gap insertion penalty is the score taken away when a
    gap is created. The best value depends on the choice of comparison
@@ -273,11 +272,14 @@ Known bugs
    
 See also
 
-   Program name                       Description
-   domainer     Build domain coordinate files
-   scopalign    Generate alignments for SCOP families
-   scope        Convert raw scop classification file to embl-like format
-   stamps       Generate alignments for SCOP families
+   Program name Description
+   domainer Build domain coordinate files
+   printsextract Extract data from PRINTS
+   prosextract Builds the PROSITE motif database for patmatmotifs to
+   search
+   rebaseextract Extract data from REBASE
+   scope Convert raw scop classification file to embl-like format
+   tfextract Extract data from TRANSFAC
    
 Author(s)
 

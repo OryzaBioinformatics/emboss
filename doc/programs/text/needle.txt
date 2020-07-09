@@ -236,6 +236,7 @@ Known bugs
 See also
 
    Program name                      Description
+   est2genome   Align EST and genomic DNA sequences
    stretcher    Finds the best global alignment between two sequences
    
    When you want an alignment that covers the whole length of both

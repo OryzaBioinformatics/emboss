@@ -374,9 +374,9 @@ Known bugs
    
 See also
 
-   Program name                    Description
-   megamerger   Merge two large overlapping nucleic acid sequences
-   merger       Merge two overlapping nucleic acid sequences
+   Program name                      Description
+   needle       Needleman-Wunsch global alignment
+   stretcher    Finds the best global alignment between two sequences
    
 Author(s)
 
