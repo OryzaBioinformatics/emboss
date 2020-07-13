@@ -140,6 +140,39 @@ AjBool ajUtilBigendian (void) {
   return utilBigendian;
 }
 
+/* @func ajUtilRev2 ***********************************************************
+**
+** Reverses the byte order in a 2 byte integer.
+**
+** @param [u] sval [short*] Short integer in wrong byte order.
+**                          Returned in correct order.
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajUtilRev2 (short* sval) {
+  union lbytes {
+    char chars[2];
+    short s;
+  } data, revdata;
+  char* cs;
+  char* cd;
+  ajint i;
+
+  data.s = *sval;
+  cs = data.chars;
+  cd =&revdata.chars[1];
+  for (i=0; i < 2; i++)
+  {
+      *cd = *cs++;
+      --cd;
+  }
+  
+  *sval = revdata.s;
+
+  return;
+}
+
 /* @func ajUtilRev4 ***********************************************************
 **
 ** Reverses the byte order in a 4 byte integer.
@@ -173,35 +206,55 @@ void ajUtilRev4 (ajint* ival) {
   return;
 }
 
-/* @func ajUtilRev2 ***********************************************************
+/* @func ajUtilRev8 ***********************************************************
 **
-** Reverses the byte order in a 2 byte integer.
+** Reverses the byte order in an 8 byte long.
 **
-** @param [u] sval [short*] Short integer in wrong byte order.
-**                          Returned in correct order.
+** @param [u] ival [ajlong*] Integer in wrong byte order.
+**                           Returned in correct order.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajUtilRev2 (short* sval) {
+void ajUtilRev8 (ajlong* ival) {
   union lbytes {
-    char chars[2];
-    short s;
+    char chars[8];
+    ajlong l;
   } data, revdata;
   char* cs;
   char* cd;
   ajint i;
 
-  data.s = *sval;
+  data.l = *ival;
   cs = data.chars;
-  cd =&revdata.chars[1];
-  for (i=0; i < 2; i++)
+  cd =&revdata.chars[7];
+  for (i=0; i < 8; i++)
   {
       *cd = *cs++;
       --cd;
   }
   
-  *sval = revdata.s;
+  *ival = revdata.l;
+
+  return;
+}
+/* @func ajUtilCatch *********************************************************
+**
+** Dummy function to be called in special cases so it can be used when
+** debugging in GDB.
+**
+** To use, simply put a call to ajUtilCatch() into your code, and use
+** "break ajUtilCatch" in gdb to get a traceback.
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajUtilCatch (void) {
+
+  static ajint calls=0;
+
+  calls = calls + 1;
 
   return;
 }
