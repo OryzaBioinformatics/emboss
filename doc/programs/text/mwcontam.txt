@@ -1,0 +1,190 @@
+
+                                 mwcontam 
+                                      
+   
+   
+Function
+
+   Shows molwts that match across a set of files
+   
+Description
+
+   mwcontam finds molecular weights that are common between a set of mass
+   spectrometry result files. Such molecular weights are usually a form
+   of contamination resulting from autolysis of a protease, degradation
+   of the matrix or presence of keratin from the sample preparer.
+   
+   The output of mwcontam, with minimal editing, can be added to the data
+   file for the mwfilter program ('Emwfilter.dat').
+   
+Usage
+
+   Here is a sample session with mwcontam:
+   
+% mwcontam
+Shows molwts that match across a set of files
+Comma separated file list: mw1.dat,mw2.dat,mw3.dat
+ppm tolerance [50.0]:
+Output file [outfile.mwcontam]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-files]             filelist   Comma separated file list
+   -tolerance          float      ppm tolerance
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+   General qualifiers:
+  -help                boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-files]
+   (Parameter 1) Comma separated file list Comma-separated file list
+   comma-separated file list
+   -tolerance ppm tolerance Any numeric value 50.0
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.mwcontam
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   The input is a comma-separated list of files containing simple list of
+   experimental molecular weights.
+   
+   There should be one weight per line.
+   
+   Comments in the data file start with a '#' character in the first
+   column.
+   
+   Blank lines are ignored.
+   
+   An example of the input data files follows:
+   
+File mw1.dat:
+  __________________________________________________________________________
+
+20.0
+33.0
+67.0
+128.0
+415.0
+999.0
+  __________________________________________________________________________
+
+
+File mw2.dat:
+  __________________________________________________________________________
+
+13.0
+41.0
+67.0
+415.0
+846.0
+781.0
+  __________________________________________________________________________
+
+
+File mw3.dat:
+  __________________________________________________________________________
+
+3.0
+18.0
+67.0
+124.0
+197.0
+236.0
+415.0
+587.0
+632.0
+  __________________________________________________________________________
+
+Output file format
+
+   The output is a list of the molecular weights common to all files.
+   
+   An example of the output data follows:
+     _________________________________________________________________
+   
+67.000
+415.000
+     _________________________________________________________________
+   
+Data files
+
+   mwcontam uses no data files.
+   
+   The output of mwcontam, with minimal editing, can be added to the data
+   file for the mwfilter program ('Emwfilter.dat'). For example you might
+   like to fetch 'Emwfilter.dat' using embossdata (as described in the
+   mwfilter documentation) and edit it to include the lines:
+     _________________________________________________________________
+   
+# data produced from the program mwcontam
+mwcontam        67.000
+mwcontam        415.000
+     _________________________________________________________________
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   backtranseq Back translate a protein sequence
+   charge Protein charge plot
+   checktrans Reports STOP codons and ORF statistics of a protein
+   sequence
+   compseq Counts the composition of dimer/trimer/etc words in a sequence
+   emowse Protein identification by mass spectrometry
+   freak Residue/base frequency table or plot
+   iep Calculates the isoelectric point of a protein
+   mwfilter Filter noisy molwts from mass spec output
+   octanol Displays protein hydropathy
+   pepinfo Plots simple amino acid properties in parallel
+   pepstats Protein statistics
+   pepwindow Displays protein hydropathy
+   pepwindowall Displays protein hydropathy of a set of sequences
+   
+Author(s)
+
+   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (July 2002) - Alan Bleasby.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

@@ -1,0 +1,660 @@
+<!--START OF HEADER - DON'T ALTER -->
+
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: mwcontam
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+mwcontam
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<!--END OF HEADER-->
+
+
+
+
+
+
+<H2>
+    Function
+</H2>
+Shows molwts that match across a set of files
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+        Algorithms
+  -->
+
+<b>mwcontam</b> finds molecular weights that are common between a set of
+mass spectrometry result files.  Such molecular weights are usually a form of
+contamination resulting from autolysis of a protease, degradation of the
+matrix or presence of keratin from the sample preparer. 
+
+<p>
+
+The output of <b>mwcontam</b>, with minimal editing, can be added to the
+data file for the <a href="mwfilter.html"><b>mwfilter</b></a> program
+('Emwfilter.dat').
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+
+Here is a sample session with mwcontam:
+
+<p>
+
+<pre>
+% mwcontam
+Shows molwts that match across a set of files
+Comma separated file list: mw1.dat,mw2.dat,mw3.dat
+ppm tolerance [50.0]: 
+Output file [outfile.mwcontam]:
+</pre>
+
+
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Mandatory qualifiers:
+  [-files]             filelist   Comma separated file list
+   -tolerance          float      ppm tolerance
+  [-outfile]           outfile    Output file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+   General qualifiers:
+  -help                boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-files]<br>(Parameter 1)</td>
+<td>Comma separated file list</td>
+<td>Comma-separated file list</td>
+<td><i>comma-separated file list</i></td>
+</tr>
+
+<tr>
+<td>-tolerance</td>
+<td>ppm tolerance</td>
+<td>Any numeric value</td>
+<td>50.0</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.mwcontam</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+
+
+The input is a comma-separated list of files containing simple list of
+experimental molecular weights. 
+
+<p>
+
+There should be one weight per line.
+   
+<p>
+
+Comments in the data file start with a '#' character in the first
+column. 
+
+<p>
+
+Blank lines are ignored.
+   
+<p>
+
+An example of the input data files follows:
+
+<p>
+
+<pre>
+File mw1.dat:
+
+<hr>
+20.0
+33.0
+67.0
+128.0
+415.0
+999.0
+<hr>
+
+File mw2.dat:
+
+<hr>
+13.0
+41.0
+67.0
+415.0
+846.0
+781.0
+<hr>
+
+File mw3.dat:
+
+<hr>
+3.0
+18.0
+67.0
+124.0
+197.0
+236.0
+415.0
+587.0
+632.0
+<hr>
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+<p>
+
+The output is a standard EMBOSS report file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+<p>
+
+See:
+<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html">
+http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+
+   -->
+
+The output is a list of the molecular weights common to all files.
+   
+<p>
+
+An example of the output data follows:
+
+<p>
+
+<hr>
+<pre>
+67.000
+415.000
+</pre>
+<hr>
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+   -->
+
+<b>mwcontam</b> uses no data files.
+
+<p>
+
+The output of <b>mwcontam</b>, with minimal editing, can be added to the
+data file for the <a href="mwfilter.html"><b>mwfilter</b></a> program
+('Emwfilter.dat').  For example you might like to fetch 'Emwfilter.dat'
+using <b>embossdata</b> (as described in the <b>mwfilter</b>
+documentation) and edit it to include the lines:
+
+<p>
+
+<hr>
+<pre>
+# data produced from the program mwcontam
+mwcontam	67.000
+mwcontam	415.000 
+</pre>
+<hr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="backtranseq.html">backtranseq</a></td><td>Back translate a protein sequence</td></tr>
+<tr><td><a href="charge.html">charge</a></td><td>Protein charge plot</td></tr>
+<tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein sequence</td></tr>
+<tr><td><a href="compseq.html">compseq</a></td><td>Counts the composition of dimer/trimer/etc words in a sequence</td></tr>
+<tr><td><a href="emowse.html">emowse</a></td><td>Protein identification by mass spectrometry</td></tr>
+<tr><td><a href="freak.html">freak</a></td><td>Residue/base frequency table or plot</td></tr>
+<tr><td><a href="iep.html">iep</a></td><td>Calculates the isoelectric point of a protein</td></tr>
+<tr><td><a href="mwfilter.html">mwfilter</a></td><td>Filter noisy molwts from mass spec output</td></tr>
+<tr><td><a href="octanol.html">octanol</a></td><td>Displays protein hydropathy</td></tr>
+<tr><td><a href="pepinfo.html">pepinfo</a></td><td>Plots simple amino acid properties in parallel</td></tr>
+<tr><td><a href="pepstats.html">pepstats</a></td><td>Protein statistics</td></tr>
+<tr><td><a href="pepwindow.html">pepwindow</a></td><td>Displays protein hydropathy</td></tr>
+<tr><td><a href="pepwindowall.html">pepwindowall</a></td><td>Displays protein hydropathy of a set of sequences</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+<!--
+        Who has worked on the program in the past.
+   -->
+
+This application was written by Alan Bleasby <a
+href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    History
+</H2>
+
+<!--
+        What changes have been made.
+   -->
+
+Written (July 2002) - Alan Bleasby.
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Comments
+</H2>
+
+<!--
+	Any comments, requests etc. that people have about the program
+   -->
+
+
+
+
+
+
+
+
+</BODY>
+</HTML>
+
