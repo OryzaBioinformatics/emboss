@@ -197,6 +197,9 @@ while (<PROGS>) {
 # where the CVS tree program doc pages are
   $cvsdoc = "/packages/emboss_dev/$ENV{'USER'}/emboss/emboss/doc/programs/";
 
+# where the CVS tree scripts are
+  $scripts = "/packages/emboss_dev/$ENV{'USER'}/emboss/emboss/scripts";
+ 
 # where the web pages live
   $doctop = "/data/www/Software/EMBOSS";
 
@@ -252,13 +255,13 @@ while (<PROGS>) {
 # if this is an EMBASSY document, note which EMBASSY directory it is in
       if ($embassy ne "") {$progdir{$x} = $embassy}
     } elsif ($embassy eq "") {
+
 # application's document is missing
       print "\n$x.html =missing=\n";
       print "Create a web page for this program? (y/n) ";
       $ans = <STDIN>;
-      if ($ans =~ /^n/) {
-        next;
-      } elsif ($ans =~ /^y/) {
+
+      if ($ans =~ /^y/) {
         $progdone{$x} = 1;
         system("cp $docdir/template.html.save $docdir/$x.html");
         system "perl -p -i -e 's/ProgramNameToBeReplaced/$x/g;' $docdir/$x.html";
@@ -282,8 +285,9 @@ REMEMBER TO EDIT THESE FILES:
  $docdir/index.html\n\n\n";
 	}
       } else {
-	die "Expecting an answer 'y' or 'n'";
+	next;
       }
+
     } else {
 # don't try to create documentation for an embassy program at present - should probably be added at some time
       next;
@@ -368,6 +372,9 @@ REMEMBER TO EDIT THESE FILES:
         chmod 0664, "$docdir/inc/$x.isee";
         print "$x.isee *created*\n";
       }
+
+# create the '.usage', '.input' and '.output' include files
+      system "$scripts/makeexample.pl $x";
 
 # check to see if the CVS tree copy of the text documentation needs updating
       if (-e "$cvsdoc/text/$x.txt") {
@@ -648,7 +655,7 @@ if ($cvsdoctextcommit ne "") {
 }
 
 print "Create make files\n";
-chdir "/packages/emboss_dev/$ENV{'USER'}/emboss/emboss/scripts";
-system("./makeMake.pl");	# no parameter == do text
-system("./makeMake.pl html");
+#chdir "/packages/emboss_dev/$ENV{'USER'}/emboss/emboss/scripts";
+system("$scripts/makeMake.pl");	# no parameter == do text
+system("$scripts/makeMake.pl html");
 
