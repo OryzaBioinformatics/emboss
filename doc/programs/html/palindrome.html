@@ -7,37 +7,26 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
 
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
 
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
+<td align=left valign=middle>
+<b><font size="+6">
 
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: palindrome
-</H2>
-
-
-</font>
-</td>
-
-</tr>
+palindrome
+</font></b>
+</td></tr>
 </table>
-</td>
+<br>&nbsp;
+<p>
 
-</tr>
-</table>
 
-<p><hr><p>
-<H1>
-Program palindrome
-</H1>
+
+
 
 <H2>
     Function
@@ -112,18 +101,18 @@ IT IS DONE FOR YOU.
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Mandatory qualifiers:
-  [-insequence]        sequence   Sequence USA
+  [-insequence]        seqall     Sequence database USA
    -minpallen          integer    Enter minimum length of palindrome
    -maxpallen          integer    Enter maximum length of palindrome
    -gaplimit           integer    Enter maximum gap between repeated regions
    -nummismatches      integer    Number of mismatches allowed
   [-outfile]           outfile    Output file name
-   -[no]overlap        bool       Report overlapping matches
+   -[no]overlap        boolean    Report overlapping matches
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -141,8 +130,8 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>[-insequence]<br>(Parameter 1)</td>
-<td>Sequence USA</td>
-<td>Readable sequence</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
 
@@ -429,9 +418,6 @@ from naive users to embedded scripts.
 
 </pre>
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

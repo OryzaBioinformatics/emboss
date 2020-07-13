@@ -1,9 +1,8 @@
 
-                             EMBOSS: palindrome
-     _________________________________________________________________
+                                palindrome 
+                                      
    
-                              Program palindrome
-                                       
+   
 Function
 
    Looks for inverted repeats in a nucleotide sequence
@@ -40,25 +39,25 @@ Report overlapping matches [Y]:
 Command line arguments
 
    Mandatory qualifiers:
-  [-insequence]        sequence   Sequence USA
+  [-insequence]        seqall     Sequence database USA
    -minpallen          integer    Enter minimum length of palindrome
    -maxpallen          integer    Enter maximum length of palindrome
    -gaplimit           integer    Enter maximum gap between repeated regions
    -nummismatches      integer    Number of mismatches allowed
   [-outfile]           outfile    Output file name
-   -[no]overlap        bool       Report overlapping matches
+   -[no]overlap        boolean    Report overlapping matches
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default
    [-insequence]
-   (Parameter 1) Sequence USA Readable sequence Required
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
    -minpallen Enter minimum length of palindrome Integer 1 or more 10
    -maxpallen Enter maximum length of palindrome Any integer value 100
    -gaplimit Enter maximum gap between repeated regions Integer 0 or more

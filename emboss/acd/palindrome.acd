@@ -4,7 +4,8 @@ appl: palindrome [
 ]
 
 section: input [ info: "input Section" type: page ]
-sequence: insequence  [
+
+seqall: insequence  [
   parameter: "Y"
   type: "nucleotide"
 ]
@@ -47,6 +48,7 @@ integer: nummismatches  [
 endsection: required
 
 section: output [ info: "output Section" type: page ]
+
 outfile: outfile  [
   parameter: "Y"
   extension: "pal"
