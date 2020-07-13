@@ -1,0 +1,94 @@
+appl: seqsearch [
+  documentation: "Generate files of hits for families in a scop classification file by using PSI-BLAST with seed alignments."
+  groups: "Protein:3D Structure"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
+]
+
+
+
+
+
+section: input [ info: "input Section" type: page ]
+infile: Escop  [
+  parameter: "Y"
+  prompt: "Name of scop classification file (embl format input)"
+  default: "Escop.dat"
+]
+
+string: align  [
+  parameter: "Y"
+  prompt: "Location of scop alignment files (input)"
+  default: "./"
+]
+
+string: alignextn  [
+  parameter: "Y"
+  prompt: "Extension of scop alignment files"
+  default: ".salign"
+]
+endsection: input
+
+
+
+
+
+section: required [ info: "required Section" type: page ]
+integer: niter  [
+  required: "Y"
+  prompt: "Number of PSIBLAST iterations"
+  default: "1"
+]
+
+float: evalue  [
+  required: "Y"
+  prompt: "Threshold E-value for inclusion in family"
+  default: "0.001"
+]
+
+integer: maxhits  [
+  required: "Y"
+  prompt: "Maximum number of hits"
+  default: "1000"
+]
+
+string: submatrix  [
+  required: "Y"
+  prompt: "Residue substitution matrix"
+  default: "./EBLOSUM62"
+]
+endsection: required
+
+
+
+
+
+section: output [ info: "output Section" type: page ]
+string: hits  [
+  parameter: "Y"
+  prompt: "Location of scop hits files (output)"
+  default: "./"
+]
+
+string: hitsextn  [
+  parameter: "Y"
+  prompt: "Extension of scop hits files"
+  default: ".hits"
+]
+outfile: logf  [
+  required: "Y"
+  prompt: "Name of log file for the build"
+  default: "seqsearch.log"
+]
+endsection: output
+
+
+
+
+
+
+
+
+
+
