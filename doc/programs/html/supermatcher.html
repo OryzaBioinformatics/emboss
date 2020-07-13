@@ -7,37 +7,31 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
 
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
 
+
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
+<td align=left valign=middle>
+<b><font size="+6">
 
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: supermatcher
-</H2>
-
-
-</font>
-</td>
-
-</tr>
+supermatcher
+</font></b>
+</td></tr>
 </table>
-</td>
+<br>&nbsp;
+<p>
 
-</tr>
-</table>
 
-<p><hr><p>
-<H1>
-Program supermatcher
-</H1>
+
+
+
+
 
 <H2>
     Function
@@ -62,7 +56,7 @@ This is a rough and ready local alignment program for large
     another sequence. Then by calculating the highest score for a
     diagonal we can then use this as the centre point for a
     Smith-Waterman type calculation of a width given by the user.
-    So a narrow diagonal smith-waterman is calculated hence the
+    So a narrow diagonal Smith-Waterman is calculated hence the
     results will be rough but due to the space saving much larger
     sequences can be aligned.   
 <H2>
@@ -74,27 +68,11 @@ Here is a sample session with supermatcher.
 
 <pre>
 
- supermatcher ~/wordtest/U68037 ~/wordtest/AB003171 -noscoreonly
-
+% supermatcher tembl:ec\* tembl:eclac -word 50 -sbegin2 101 -send2 -101
 Finds a match of a large sequence against one or more sequences
-Gap opening penalty [10.0]: 
-Gap extension penalty [0.5]: 3.0
-Output file [stdout]: 
-Local: RNU68037 vs EM:AB003171
-Score: 30.00
-
-RNU68037        820   tcaaccacagctgccctccgcagctctcggggag.gcggc.tccg 862  
-                      ||||| ||||   || |  ||||     |||||| ||  | ||| 
-EM:AB003171     2492  tcaactacag.aaccatgtgcag....aggggagagctccatcct 2531 
-
-RNU68037        863   cgcgcagggttcacgcacacga.cgtgg.aaatggtgggccagct 905  
-                       |  ||  ||| | || || || | ||| ||   ||||   |  |
-EM:AB003171     2532  tgaaca..gttaaagc.ca.gagcttggtaacaagtggataaatt 2572 
-
-RNU68037        906   .cgtgggcatcatggtggtgtc.gtg..catctgctggagc     942  
-                       | |    |||||  ||  ||| | |  ||  |||  ||||
-EM:AB003171     2573  acat....atcattttgcggtctgagaacacatgc.agagc      2608 
-
+Gap opening penalty [10.0]: 3.0
+Gap extension penalty [0.5]:
+Output alignment [eclac.supermatcher]:
 
 </pre>
 
@@ -118,17 +96,22 @@ IT IS DONE FOR YOU.
   [-seqb]              seqset     Sequence set USA
    -gapopen            float      Gap opening penalty
    -gapextend          float      Gap extension penalty
-   -outfile            align      (no help text) align value
+   -outfile            align      Output alignment file name
 
    Optional qualifiers:
-   -datafile           matrixf    Matrix file
+   -datafile           matrixf    This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
    -width              integer    Alignment width
    -wordlen            integer    word length for initial matching
    -errorfile          outfile    Error file to be written to
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -174,7 +157,7 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-outfile</td>
-<td>(no help text) align value</td>
+<td>Output alignment file name</td>
 <td>Alignment file</td>
 <td>&nbsp;</td>
 </tr>
@@ -187,7 +170,7 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-datafile</td>
-<td>Matrix file</td>
+<td>This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.</td>
 <td>Comparison matrix file in EMBOSS data path</td>
 <td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
 </tr>
@@ -237,10 +220,116 @@ Two sequence USAs.
     Output file format
 </H2>
 
-    supermatcher.error will contain any errors that occured during the
-    program. This maybe that wordmatch could not find any matches
-    hence no suitable start point is found for the smith-waterman
-    calculation.
+<p>
+
+The output is a standard EMBOSS alignment file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <b>-aformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  Some of the alignment formats can cope
+with an unlimited number of sequences, while others are only for pairs
+of sequences.  
+
+<p>
+
+The available multiple alignment format names are: unknown, multiple,
+simple, fasta, msf, trace, srs
+
+<p>
+
+The available pairwise alignment format names are: pair, markx0, markx1,
+markx2, markx3, markx10, srspair, score
+
+<p>
+
+See:
+<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html">
+http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html</A>
+for further information on alignment formats.
+
+<p>
+
+
+<p>
+
+The output from the example follows:
+
+<p>
+
+<pre>
+########################################
+# Program:  supermatcher
+# Rundate:  Mon May 20 16:32:00 2002
+# Report_file: eclac.supermatcher
+########################################
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: ECLAC
+# 2: ECLAC
+# Matrix: EDNAFULL
+# Gap_penalty: 3.0
+# Extend_penalty: 0.5
+#
+# Length: 7277
+# Identity:    7277/7277 (100.0%)
+# Similarity:  7277/7277 (100.0%)
+# Gaps:           0/7277 ( 0.0%)
+# Score: 36385.0
+#
+#
+#=======================================
+
+ECLAC            101 atgtcgcagagtatgccggtgtctcttatcagaccgtttcccgcgtggtg    150
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC            101 atgtcgcagagtatgccggtgtctcttatcagaccgtttcccgcgtggtg    150
+
+ECLAC            151 aaccaggccagccacgtttctgcgaaaacgcgggaaaaagtggaagcggc    200
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC            151 aaccaggccagccacgtttctgcgaaaacgcgggaaaaagtggaagcggc    200
+
+ECLAC            201 gatggcggagctgaattacattcccaaccgcgtggcacaacaactggcgg    250
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC            201 gatggcggagctgaattacattcccaaccgcgtggcacaacaactggcgg    250
+
+ECLAC            251 gcaaacagtcgttgctgattggcgttgccacctccagtctggccctgcac    300
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC            251 gcaaacagtcgttgctgattggcgttgccacctccagtctggccctgcac    300
+
+ECLAC            301 gcgccgtcgcaaattgtcgcggcgattaaatctcgcgccgatcaactggg    350
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC            301 gcgccgtcgcaaattgtcgcggcgattaaatctcgcgccgatcaactggg    350
+
+ECLAC            351 tgccagcgtggtggtgtcgatggtagaacgaagcggcgtcgaagcctgta    400
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC            351 tgccagcgtggtggtgtcgatggtagaacgaagcggcgtcgaagcctgta    400
+
+ECLAC            401 aagcggcggtgcacaatcttctcgcgcaacgcgtcagtgggctgatcatt    450
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC            401 aagcggcggtgcacaatcttctcgcgcaacgcgtcagtgggctgatcatt    450
+
+ECLAC            451 aactatccgctggatgaccaggatgccattgctgtggaagctgcctgcac    500
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC            451 aactatccgctggatgaccaggatgccattgctgtggaagctgcctgcac    500
+
+ECLAC            501 taatgttccggcgttatttcttgatgtctctgaccagacacccatcaaca    550
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC            501 taatgttccggcgttatttcttgatgtctctgaccagacacccatcaaca    550
+
+
+...........  etc. .............
+
+
+</pre>
+
+<p>
+
+The file 'supermatcher.error' will contain any errors that occured
+during the program.  This may be that wordmatch could not find any
+matches hence no suitable start point is found for the smith-waterman
+calculation. 
 
 
 <H2>
@@ -368,9 +457,6 @@ from naive users to embedded scripts.
 
 </pre>
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

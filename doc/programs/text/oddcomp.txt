@@ -1,9 +1,8 @@
 
-                              EMBOSS: oddcomp
-     _________________________________________________________________
+                                  oddcomp 
+                                      
    
-                                Program oddcomp
-                                       
+   
 Function
 
    Finds protein sequence regions with a biased composition
@@ -75,7 +74,7 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -[no]ignorebz       bool       The amino acid code B represents Asparagine
+   -[no]ignorebz       boolean    The amino acid code B represents Asparagine
                                   or Aspartic acid and the code Z represents
                                   Glutamine or Glutamic acid.
                                   These are not commonly used codes and you
@@ -84,7 +83,7 @@ Command line arguments
                                   words.
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

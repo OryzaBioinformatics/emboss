@@ -7,37 +7,25 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
 
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
 
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
+<td align=left valign=middle>
+<b><font size="+6">
 
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: matcher
-</H2>
-
-
-</font>
-</td>
-
-</tr>
+matcher
+</font></b>
+</td></tr>
 </table>
-</td>
+<br>&nbsp;
+<p>
 
-</tr>
-</table>
 
-<p><hr><p>
-<H1>
-Program matcher
-</H1>
+
 
 <H2>
     Function
@@ -99,7 +87,7 @@ Here is a sample session with matcher.
 <p>
 
 <pre>
-% matcher sw:hba_human sw:hbb_human
+% matcher tsw:hba_human tsw:hbb_human
 Finds the best local alignments between two sequences
 Output file [hba_human.matcher]: 
 </pre>
@@ -111,7 +99,7 @@ Here is an example to find the 10 best alignments:
 <p>
 
 <pre>
-% matcher sw:hba_human sw:hbb_human -alt 10
+% matcher tsw:hba_human tsw:hbb_human -alt 10
 Finds the best local alignments between two sequences
 Output file [hba_human.matcher]: hba_human.matcher10
 </pre>
@@ -133,10 +121,15 @@ IT IS DONE FOR YOU.
    Mandatory qualifiers:
   [-sequencea]         sequence   Sequence USA
   [-sequenceb]         sequence   Sequence USA
-  [-outfile]           align      (no help text) align value
+  [-outfile]           align      Output alignment file name
 
    Optional qualifiers:
-   -datafile           matrix     Matrix file
+   -datafile           matrix     This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
    -alternatives       integer    This sets the number of alternative matches
                                   output. By default only the highest scoring
                                   alignment is shown. A value of 2 gves you
@@ -168,7 +161,7 @@ IT IS DONE FOR YOU.
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -200,7 +193,7 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>[-outfile]<br>(Parameter 3)</td>
-<td>(no help text) align value</td>
+<td>Output alignment file name</td>
 <td>Alignment file</td>
 <td>&nbsp;</td>
 </tr>
@@ -213,7 +206,7 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-datafile</td>
-<td>Matrix file</td>
+<td>This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.</td>
 <td>Comparison matrix file in EMBOSS data path</td>
 <td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
 </tr>
@@ -265,7 +258,38 @@ Any 2 sequence USAs or the same type (DNA or protein).
 </H2>
 
 
-The output from matcher is a sequence alignment.
+<p>
+
+The output is a standard EMBOSS alignment file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <b>-aformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  Some of the alignment formats can cope
+with an unlimited number of sequences, while others are only for pairs
+of sequences.  
+
+<p>
+
+The available multiple alignment format names are: unknown, multiple,
+simple, fasta, msf, trace, srs
+
+<p>
+
+The available pairwise alignment format names are: pair, markx0, markx1,
+markx2, markx3, markx10, srspair, score
+
+<p>
+
+See:
+<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html">
+http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html</A>
+for further information on alignment formats.
+
+<p>
+
+ 
 
 <p>
 
@@ -275,28 +299,50 @@ Here is the output for the example:
 
 <hr>
 <pre>
+########################################
+# Program:  matcher
+# Rundate:  Mon May 20 17:12:29 2002
+# Report_file: hba_human.matcher
+########################################
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 145
+# Identity:      63/145 (43.4%)
+# Similarity:    88/145 (60.7%)
+# Gaps:           8/145 ( 5.5%)
+# Score: 264
+#
+#
+#=======================================
 
-  43.4% identity in 145 HBA_HUMAN overlap; score:  264
 
-              10        20        30        40         50          
-HBA_HU LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH-----GSAQV
-       :.: .:. : : ::::  .. : :.::: :... .: :. .:  : :::      :. .:
-HBB_HU LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
-             10          20        30        40        50        60
+              10        20        30        40         50
+HBA_HU LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH
+       :.: .:. : : ::::  .. : :.::: :... .: :. .:  : :::
+HBB_HU LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLST
+             10          20        30        40        50
 
-          60        70        80        90       100       110     
-HBA_HU KGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPA
-       :.:::::  :.....::.:.. .....::.::. ::.::: ::.::.. :. .:: :.  
-HBB_HU KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
-               70        80        90       100       110       120
+                    60        70        80        90
+HBA_HU -----GSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP
+            :. .::.:::::  :.....::.:.. .....::.::. ::.:::
+HBB_HU PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDP
+               60        70        80        90       100
 
-         120       130       140
-HBA_HU EFTPAVHASLDKFLASVSTVLTSKY
-       :::: :.:. .: .:.:...:. ::
-HBB_HU EFTPPVQAAYQKVVAGVANALAHKY
-              130       140     
+         100       110       120       130       140
+HBA_HU VNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKY
+        ::.::.. :. .:: :.  :::: :.:. .: .:.:...:. ::
+HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
+              110       120       130       140
 
-----------
+#---------------------------------------
+#--------------------------------------- 
 </pre>
 <hr>
 
@@ -308,275 +354,268 @@ Here is the output for the example giving the 10 best alignments:
 
 <hr> 
 <pre>
+########################################
+# Program:  matcher
+# Rundate:  Mon May 20 17:12:40 2002
+# Report_file: hba_human.matcher10
+########################################
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 145
+# Identity:      63/145 (43.4%)
+# Similarity:    88/145 (60.7%)
+# Gaps:           8/145 ( 5.5%)
+# Score: 264
+#
+#
+#=======================================
 
-  43.4% identity in 145 HBA_HUMAN overlap; score:  264
 
-              10        20        30        40         50          
-HBA_HU LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH-----GSAQV
-       :.: .:. : : ::::  .. : :.::: :... .: :. .:  : :::      :. .:
-HBB_HU LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
-             10          20        30        40        50        60
+              10        20        30        40         50
+HBA_HU LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH
+       :.: .:. : : ::::  .. : :.::: :... .: :. .:  : :::
+HBB_HU LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLST
+             10          20        30        40        50
 
-          60        70        80        90       100       110     
-HBA_HU KGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPA
-       :.:::::  :.....::.:.. .....::.::. ::.::: ::.::.. :. .:: :.  
-HBB_HU KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
-               70        80        90       100       110       120
+                    60        70        80        90
+HBA_HU -----GSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP
+            :. .::.:::::  :.....::.:.. .....::.::. ::.:::
+HBB_HU PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDP
+               60        70        80        90       100
 
-         120       130       140
-HBA_HU EFTPAVHASLDKFLASVSTVLTSKY
-       :::: :.:. .: .:.:...:. ::
-HBB_HU EFTPPVQAAYQKVVAGVANALAHKY
-              130       140     
+         100       110       120       130       140
+HBA_HU VNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKY
+        ::.::.. :. .:: :.  :::: :.:. .: .:.:...:. ::
+HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
+              110       120       130       140
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 13
+# Identity:       6/13 (46.2%)
+# Similarity:     9/13 (69.2%)
+# Gaps:           0/13 ( 0.0%)
+# Score: 32
+#
+#
+#=======================================
 
-----------
 
-  46.2% identity in 13 HBA_HUMAN overlap; score:   32
-
-      60        70  
+      60        70
 HBA_HU KKVADALTNAVAH
        .::. ...::.::
 HBB_HU QKVVAGVANALAH
-              140   
+              140
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14       
+# Extend_penalty: 4
+#
+# Length: 18
+# Identity:       7/18 (38.9%)
+# Similarity:    10/18 (55.6%)
+# Gaps:           0/18 ( 0.0%)
+# Score: 28
+#
+#
+#=======================================
 
-----------
 
-  38.9% identity in 18 HBA_HUMAN overlap; score:   28
-
-      90       100       
+      90       100
 HBA_HU KLRVDPVNFKLLSHCLLV
        :..:: :. . :.. :.:
 HBB_HU KVNVDEVGGEALGRLLVV
-         20        30    
+         20        30
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 10
+# Identity:       6/10 (60.0%)
+# Similarity:     8/10 (80.0%)
+# Gaps:           0/10 ( 0.0%)
+# Score: 23
+#
+#
+#=======================================
 
-----------
 
-  60.0% identity in 10 HBA_HUMAN overlap; score:   23
-
-      10         
+      10
 HBA_HU VKAAWGKVGA
        :.::. :: :
 HBB_HU VQAAYQKVVA
-         130     
+         130
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 10
+# Identity:       6/10 (60.0%)
+# Similarity:     6/10 (60.0%)
+# Gaps:           0/10 ( 0.0%)
+# Score: 23
+#
+#
+#=======================================
 
-----------
 
-  60.0% identity in 10 HBA_HUMAN overlap; score:   23
-
-      80         
+      80
 HBA_HU LSALSDLHAH
        :.:.::  ::
 HBB_HU LGAFSDGLAH
-        70       
+        70
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#          
+# Length: 17
+# Identity:       5/17 (29.4%)
+# Similarity:     9/17 (52.9%)
+# Gaps:           0/17 ( 0.0%)
+# Score: 21
+#
+#
+#=======================================
 
-----------
 
-  29.4% identity in 17 HBA_HUMAN overlap; score:   21
-
-         80        90   
+         80        90
 HBA_HU PNALSALSDLHAHKLRV
        :.:. .   . ::  .:
 HBB_HU PDAVMGNPKVKAHGKKV
-               60       
+               60
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 12
+# Identity:       5/12 (41.7%)
+# Similarity:     6/12 (50.0%)
+# Gaps:           0/12 ( 0.0%)
+# Score: 21
+#
+#
+#=======================================
 
-----------
 
-  41.7% identity in 12 HBA_HUMAN overlap; score:   21
-
-      30        40 
+      30        40
 HBA_HU ERMFLSFPTTKT
        .:.: ::   .:
 HBB_HU QRFFESFGDLST
        40        50
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 8
+# Identity:       4/8 (50.0%)
+# Similarity:     6/8 (75.0%)
+# Gaps:           0/8 ( 0.0%)
+# Score: 20
+#
+#
+#=======================================
 
-----------
 
-  50.0% identity in 8 HBA_HUMAN overlap; score:   20
-
-          110  
+          110
 HBA_HU LLVTLAAH
        .:: . ::
 HBB_HU VLVCVLAH
-      110      
+      110
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 12
+# Identity:       6/12 (50.0%) 
+# Similarity:     6/12 (50.0%)
+# Gaps:           0/12 ( 0.0%)
+# Score: 20
+#
+#
+#=======================================
 
-----------
 
-  50.0% identity in 12 HBA_HUMAN overlap; score:   20
-
-             120   
+             120
 HBA_HU HLPAEFTPAVHA
        ::  :   :: :
 HBB_HU HLTPEEKSAVTA
-              10   
+              10
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 14
+# Extend_penalty: 4
+#
+# Length: 21
+# Identity:       6/21 (28.6%)
+# Similarity:     7/21 (33.3%)
+# Gaps:           0/21 ( 0.0%)
+# Score: 19
+#
+#
+#=======================================
 
-----------
 
-  28.6% identity in 21 HBA_HUMAN overlap; score:   19
-
-            10        20    
+            10        20
 HBA_HU PADKTNVKAAWGKVGAHAGEY
        :.. .  :.. : ..: : .:
 HBB_HU PVQAAYQKVVAGVANALAHKY
-          130       140     
+          130       140
 
-----------
+#---------------------------------------
+#--------------------------------------- 
 </pre>
 <hr>
-
-<p>
-
-
-Here are the example outputs using other values of -markx:
-
-<p>
-
-<hr>
-<pre>
-% matcher sw:hba_human sw:hbb_human stdout -markx 1
-Finds the best local alignments between two sequences
-
-  43.4% identity in 145 HBA_HUMAN overlap; score:  264
-
-              10        20        30        40         50          
-HBA_HU LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH-----GSAQV
-        x Xx xX X X      xxX X x   X xxxXx X xXx XX     X      xXx 
-HBB_HU LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
-             10          20        30        40        50        60
-
-          60        70        80        90       100       110     
-HBA_HU KGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPA
-        x     XX xxxxx  x xxXxxxxx  x  xX  x   X  x  xxX xXx  X xXX
-HBB_HU KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
-               70        80        90       100       110       120
-
-         120       130       140
-HBA_HU EFTPAVHASLDKFLASVSTVLTSKY
-           X x xXx Xx x xxx xX  
-HBB_HU EFTPPVQAAYQKVVAGVANALAHKY
-              130       140     
-</pre>
-
-<p>
-<hr>
-<p>
-
-<pre>
-% matcher sw:hba_human sw:hbb_human stdout -markx 2
-Finds the best local alignments between two sequences
-
-  43.4% identity in 145 HBA_HUMAN overlap; score:  264
-
-              10        20        30        40         50          
-HBA_HU LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH-----GSAQV
-HBB_HU .T.EE.SA.T.L....--NVD.V.G...G.LLVVY.W.QRF.ES.G...TPDAVM.NPK.
-
-          60        70        80        90       100       110     
-HBA_HU KGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPA
-HBB_HU .A.....LG.FSDGL..L.NLKGTFAT..E..CD..H...E..R..GNV.VCV..H.FGK
-
-         120       130       140
-HBA_HU EFTPAVHASLDKFLASVSTVLTSKY
-HBB_HU ....P.Q.AYQ.VV.G.ANA.AH..
-</pre>
-
-<p>
-<hr>
-<p>
-
-<pre>
-% matcher sw:hba_human sw:hbb_human stdout -markx 3
-Finds the best local alignments between two sequences
-
-  43.4% identity in 145 HBA_HUMAN overlap; score:  264
-&gt;HBA_HUMAN ..
-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH
------GSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP
-VNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKY
-&gt;HBB_HUMAN ..
-LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLST
-PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDP
-ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
-</pre>
-
-<p>
-<hr>
-<p>
-
-<pre>
-% matcher sw:hba_human sw:hbb_human stdout -markx 4
-Finds the best local alignments between two sequences
-
-  43.4% identity in 145 HBA_HUMAN overlap; score:  264
-</pre>
-
-<p>
-<hr>
-<p>
-
-<pre>
-% matcher sw:hba_human sw:hbb_human stdout -markx 10
-Finds the best local alignments between two sequences
-&gt;&gt;#1
-; sw_score: 264
-; sw_ident: 0.434
-; sw_overlap: 145
-&gt;HBA_HUMAN ..
-; sq_len: -115
-; al_start: 2
-; al_stop: 140
-; al_display_start: 2
-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH
------GSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP
-VNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKY
-&gt;HBB_HUMAN ..
-; sq_len: 5
-; al_start: 3
-; al_stop: 145
-; al_display_start: 3
-LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLST
-PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDP
-ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
-</pre>
-
-<p>
-
-Note that the parseable output starts each alignment record with "&gt;&gt;"
-while each aligned sequence record starts with "&gt;".
-
-<p>
-All parameters produced will be of the form:
-	; xx_yyyyy
-
-<p>
-In this version, we have xx:
-        sw - Smith-Waterman scores
-        sq - sequence length, type
-        al - alignment start, stop, display_offset
-
-<p>
-All of the output parameters correspond to values that are presented
-in other output formats, with the exception of the "al_"
-parameters.
-
-<p>
-<i>al_start</i> gives the location of the alignment start in the
-        original sequence
-
-<p>
-<i>al_stop</i> gives the location of the end of the alignment in the
-        original sequence
-
-<p>
-<i>al_display_start</i>
-        gives the location of the first displayed amino acid residue
-        in the original sequence.  The -markx=10 alignments are the same
-        as those produced in the other modes.
-        If the beginning of the first sequence aligns with
-        the 10'th residue of the second sequence, then the first
-        sequence will be padded with ten leading "-" to produce the
-        alignment.  The leading '-' are a formatting convenience only;
-        they are not considered in the numbering system for
-        al_display_start, al_start, or al_stop.
 
 
 <H2>
@@ -719,9 +758,6 @@ from naive users to embedded scripts.
 
 </pre>
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

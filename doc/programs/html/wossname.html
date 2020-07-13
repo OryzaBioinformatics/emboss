@@ -7,37 +7,30 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
 
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
 
+
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
+<td align=left valign=middle>
+<b><font size="+6">
 
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: wossname
-</H2>
-
-
-</font>
-</td>
-
-</tr>
+wossname
+</font></b>
+</td></tr>
 </table>
-</td>
+<br>&nbsp;
+<p>
 
-</tr>
-</table>
 
-<p><hr><p>
-<H1>
-Program wossname
-</H1>
+
+
+
 
 <H2>
     Function
@@ -123,7 +116,7 @@ IT IS DONE FOR YOU.
                                   all programs will be listed.
 
    Optional qualifiers (* if not always prompted):
-   -explode            bool       The groups that EMBOSS applications belong
+   -explode            boolean    The groups that EMBOSS applications belong
                                   to have two forms, exploded and not
                                   exploded. The exploded group names are more
                                   numerous and often vaguely phrased than the
@@ -137,7 +130,7 @@ IT IS DONE FOR YOU.
    -outfile            outfile    If you enter the name of a file here then
                                   this program will write the program names
                                   and brief descriptions into that file.
-   -html               bool       If you are sending the output to a file,
+   -html               boolean    If you are sending the output to a file,
                                   this will format it for displaying as a
                                   table in a WWW document.
 *  -prelink            string     If you are outputting to a file in HTML
@@ -161,15 +154,15 @@ IT IS DONE FOR YOU.
                                   then if you enter '.html' here, the second
                                   half of the URL after the programname will
                                   be set.
-   -groups             bool       If you use this option, then only the group
+   -groups             boolean    If you use this option, then only the group
                                   names will output to the file
-   -alphabetic         bool       If you use this option, then you will get a
+   -alphabetic         boolean    If you use this option, then you will get a
                                   single list of the program names and
                                   descriptions instead of the programs being
                                   listed in their functional groups.
 
    Advanced qualifiers:
-   -[no]emboss         bool       If you use this option then EMBOSS program
+   -[no]emboss         boolean    If you use this option then EMBOSS program
                                   documentation will be searched. If this
                                   option is set to be false, then only the
                                   EMBASSY programs will be searched (if the
@@ -180,7 +173,7 @@ IT IS DONE FOR YOU.
                                   people who wish the programs to be outside
                                   of the GNU Public Licence sheme, ie. they
                                   may wish to charge money for them.
-   -[no]embassy        bool       If you use this option then EMBASSY program
+   -[no]embassy        boolean    If you use this option then EMBASSY program
                                   documentation will be searched. If this
                                   option is set to be false, then only the
                                   EMBOSS programs will be searched (if the
@@ -191,7 +184,7 @@ IT IS DONE FOR YOU.
                                   people who wish the programs to be outside
                                   of the GNU Public Licence sheme, ie. they
                                   may wish to charge money for them.
-   -colon              bool       The groups that EMBOSS applications belong
+   -colon              boolean    The groups that EMBOSS applications belong
                                   to up to two levels, for example the primary
                                   group 'ALIGNMENT' has several sub-groups,
                                   or second-level groups, e.g.: CONSENSUS,
@@ -200,8 +193,10 @@ IT IS DONE FOR YOU.
                                   output of wossname that require the names of
                                   these subgroups, a colon ':' will be placed
                                   between the first and second level of the
-                                  group name if this option is true.
-   -gui                bool       This option is intended to help those who
+                                  group name if this option is true. Note:
+                                  This does not apply if the group names have
+                                  been exploded with the 'explode' option.
+   -gui                boolean    This option is intended to help those who
                                   are designing Graphical User Interfaces to
                                   the EMBOSS applications. Some EMBOSS
                                   programs are inappropriate for running in a
@@ -211,7 +206,7 @@ IT IS DONE FOR YOU.
                                   run from a GUI
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -318,7 +313,7 @@ then if you enter '.html' here, the second half of the URL after the programname
 
 <tr>
 <td>-colon</td>
-<td>The groups that EMBOSS applications belong to up to two levels, for example the primary group 'ALIGNMENT' has several sub-groups, or second-level groups, e.g.: CONSENSUS, DIFFERENCES, DOT PLOTS, GLOBAL, LOCAL, MULTIPLE. To aid programs that parse the output of wossname that require the names of these subgroups, a colon ':' will be placed between the first and second level of the group name if this option is true.</td>
+<td>The groups that EMBOSS applications belong to up to two levels, for example the primary group 'ALIGNMENT' has several sub-groups, or second-level groups, e.g.: CONSENSUS, DIFFERENCES, DOT PLOTS, GLOBAL, LOCAL, MULTIPLE. To aid programs that parse the output of wossname that require the names of these subgroups, a colon ':' will be placed between the first and second level of the group name if this option is true. Note: This does not apply if the group names have been exploded with the 'explode' option.</td>
 <td>Yes/No</td>
 <td>No</td>
 </tr>
@@ -486,9 +481,6 @@ from naive users to embedded scripts.
 
 </pre>
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

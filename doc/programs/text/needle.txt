@@ -1,9 +1,8 @@
 
-                               EMBOSS: needle
-     _________________________________________________________________
+                                  needle 
+                                      
    
-                                Program needle
-                                       
+   
 Function
 
    Needleman-Wunsch global alignment
@@ -75,16 +74,21 @@ Command line arguments
                                   penalty to zero (or very low) and using the
                                   gap extension penalty to control gap
                                   scoring.
-  [-outfile]           align      (no help text) align value
+  [-outfile]           align      Output alignment file name
 
    Optional qualifiers:
-   -datafile           matrixf    Matrix file
+   -datafile           matrixf    This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
 
    Advanced qualifiers:
-   -[no]similarity     bool       Display percent identity and similarity
+   -[no]similarity     boolean    Display percent identity and similarity
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -110,10 +114,13 @@ Command line arguments
    control gap scoring. Floating point number from 0.0 to 10.0 0.5 for
    any sequence
    [-outfile]
-   (Parameter 3) (no help text) align value Alignment file
+   (Parameter 3) Output alignment file name Alignment file
    Optional qualifiers Allowed values Default
-   -datafile Matrix file Comparison matrix file in EMBOSS data path
-   EBLOSUM62 for protein
+   -datafile This is the scoring matrix file used when comparing
+   sequences. By default it is the file 'EBLOSUM62' (for proteins) or the
+   file 'EDNAFULL' (for nucleic sequences). These files are found in the
+   'data' directory of the EMBOSS installation. Comparison matrix file in
+   EMBOSS data path EBLOSUM62 for protein
    EDNAFULL for DNA
    Advanced qualifiers Allowed values Default
    -[no]similarity Display percent identity and similarity Yes/No Yes
@@ -124,30 +131,64 @@ Input file format
    
 Output file format
 
+   The output is a standard EMBOSS alignment file.
+   
+   The results can be output in one of several styles by using the
+   command-line qualifier -aformat xxx, where 'xxx' is replaced by the
+   name of the required format. Some of the alignment formats can cope
+   with an unlimited number of sequences, while others are only for pairs
+   of sequences.
+   
+   The available multiple alignment format names are: unknown, multiple,
+   simple, fasta, msf, trace, srs
+   
+   The available pairwise alignment format names are: pair, markx0,
+   markx1, markx2, markx3, markx10, srspair, score
+   
+   See: http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html
+   for further information on alignment formats.
+   
    Here is the output file from the example run:
      _________________________________________________________________
    
-Global: HBA_HUMAN vs HBB_HUMAN
-Score: 290.50
+########################################
+# Program:  needle
+# Rundate:  Mon May 20 16:22:49 2002
+# Report_file: hba_human.needle
+########################################
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 10.0
+# Extend_penalty: 0.5
+#
+# Length: 148
+# Identity:      63/148 (42.6%)
+# Similarity:    88/148 (59.5%)
+# Gaps:           9/148 ( 6.1%)
+# Score: 290.5
+#
+#
+#=======================================
 
-HBA_HUMAN       1         VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFP 44
-                           |:| :|: | | ||||  :  | | ||| |: : :| |: :|
-HBB_HUMAN       1        VHLTPEEKSAVTALWGKV..NVDEVGGEALGRLLVVYPWTQRFFE 43
+HBA_HUMAN          1  VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DL     48
+                      .|:|.:|:.|.|.||||  :..|.|.|||.|:.:.:|.|:.:|..| ||
+HBB_HUMAN          1 VHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDL     48
 
-HBA_HUMAN       45       HF.DLS.....HGSAQVKGHGKKVADALTNAVAHVDDMPNALSAL 83
-                          | |||      |: :|| |||||  | :: :||:|::    : |
-HBB_HUMAN       44       SFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATL 88
+HBA_HUMAN         49 S-----HGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRV     93
+                     |     .|:.:||.|||||..|.::.:||:|::....:.||:||..||.|
+HBB_HUMAN         49 STPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHV     98
 
-HBA_HUMAN       84       SDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKF 128
-                         |:||  || ||| ||:|| : |:  || |   |||| | |:  |
-HBB_HUMAN       89       SELHCDKLHVDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKV 133
+HBA_HUMAN         94 DPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKYR    141
+                     ||.||:||.:.|:..||.|...||||.|.|:..|.:|.|:..|..||.
+HBB_HUMAN         99 DPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH    146
 
-HBA_HUMAN       129      LASVSTVLTSKYR                                 141
-                         :| |:  |  ||
-HBB_HUMAN       134      VAGVANALAHKYH                                 146
 
-%id = 45.32                     %similarity = 63.31
-Overall %id = 43.15             Overall %similarity = 60.27
+#---------------------------------------
+#---------------------------------------
      _________________________________________________________________
    
    The %id is the percentage of identical matches between the two

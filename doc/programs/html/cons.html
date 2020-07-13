@@ -7,32 +7,27 @@
   </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: cons
-</H2>
-</font>
-</td>
-</tr>
+<td align=left valign=middle>
+<b><font size="+6">
+
+cons
+</font></b>
+</td></tr>
 </table>
-</td>
-</tr>
-</table>
-<p><hr><p>
+<br>&nbsp;
+<p>
+
+
 
 <!--END OF HEADER-->
 
-<H1>
-Program cons
-</H1>
+
 <H2>
     Function
 </H2>
@@ -140,7 +135,12 @@ Output file [outfile.cons]: aligned.cons
   [-outseq]            seqout     Output sequence USA
 
    Optional qualifiers:
-   -datafile           matrix     Scoring matrix
+   -datafile           matrix     This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
    -plurality          float      Set a cut-off for the number of positive
                                   matches below which there is no consensus.
                                   The default plurality is taken as half the
@@ -160,7 +160,7 @@ Output file [outfile.cons]: aligned.cons
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -197,7 +197,7 @@ Output file [outfile.cons]: aligned.cons
 
 <tr>
 <td>-datafile</td>
-<td>Scoring matrix</td>
+<td>This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.</td>
 <td>Comparison matrix file in EMBOSS data path</td>
 <td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
 </tr>
@@ -205,7 +205,7 @@ Output file [outfile.cons]: aligned.cons
 <tr>
 <td>-plurality</td>
 <td>Set a cut-off for the number of positive matches below which there is no consensus. The default plurality is taken as half the total weight of all the sequences in the alignment.</td>
-<td>Any integer value</td>
+<td>Any numeric value</td>
 <td>Half the total sequence weighting</td>
 </tr>
 
@@ -226,7 +226,7 @@ Output file [outfile.cons]: aligned.cons
 <tr>
 <td>-setcase</td>
 <td>Sets the threshold for the positive matches above which the consensus is is upper-case and below which the consensus is in lower-case.</td>
-<td>Any integer value</td>
+<td>Any numeric value</td>
 <td>0</td>
 </tr>
 
@@ -602,9 +602,6 @@ This program is intended to be used by everyone and everything, from naive users
 
 
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

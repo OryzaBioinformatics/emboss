@@ -1,9 +1,8 @@
 
-                              EMBOSS: prophet
-     _________________________________________________________________
+                                  prophet 
+                                      
    
-                                Program prophet
-                                       
+   
 Function
 
    Gapped alignment for profiles
@@ -68,7 +67,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -78,8 +77,8 @@ Command line arguments
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    [-infile]
    (Parameter 2) Profile or matrix file Input file Required
-   -gapopen Gap opening coefficient Any integer value 1.0
-   -gapextend Gap extension coefficient Any integer value 1.0
+   -gapopen Gap opening coefficient Any numeric value 1.0
+   -gapextend Gap extension coefficient Any numeric value 1.0
    [-outfile]
    (Parameter 3) Output file name Output file <sequence>.prophet
    Optional qualifiers Allowed values Default

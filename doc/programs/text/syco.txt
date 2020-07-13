@@ -1,9 +1,8 @@
 
-                                EMBOSS: syco
-     _________________________________________________________________
+                                   syco 
+                                      
    
-                                 Program syco
-                                       
+   
 Function
 
    Synonymous codon usage Gribskov statistic plot
@@ -46,12 +45,12 @@ Command line arguments
    Advanced qualifiers:
    -cfile              codon      Codon usage file
    -window             integer    Averaging window
-   -uncommon           bool       Show common codon usage
+   -uncommon           boolean    Show common codon usage
    -minimum            float      Minimum value for a common codon
-   -plot               bool       Produce plot
+   -plot               boolean    Produce plot
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

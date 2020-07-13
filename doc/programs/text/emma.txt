@@ -1,9 +1,8 @@
 
-                                EMBOSS: emma
-     _________________________________________________________________
+                                   emma 
+                                      
    
-                                 Program emma
-                                       
+   
 Function
 
    Multiple alignment program - interface to ClustalW program
@@ -565,11 +564,11 @@ Command line arguments
   [-dendoutfile]       outfile    The dendogram output filename
 
    Optional qualifiers (* if not always prompted):
-   -onlydend           bool       only produce dendrogram file
-*  -dend               bool       select if you want to do alignment using an
+   -onlydend           boolean    only produce dendrogram file
+*  -dend               boolean    select if you want to do alignment using an
                                   old dendrogram
 *  -dendfile           string     name of old dendrogram file
-   -insist             bool       Insist that the sequence type is changed to
+   -insist             boolean    Insist that the sequence type is changed to
                                   protein
    -slowfast           menu       A distance is calculated between every pair
                                   of sequences and these are used to construct
@@ -649,7 +648,7 @@ Command line arguments
                                   of the 'best' diagonals that will be used.
                                   Decrease for speed; increase for
                                   sensitivity.
-*  -nopercent          bool       Fast pairwise alignment: similarity scores:
+*  -nopercent          boolean    Fast pairwise alignment: similarity scores:
                                   suppresses percentage score
 *  -matrix             menu       This gives a menu where you are offered a
                                   choice of weight matrices. The default for
@@ -707,7 +706,7 @@ Command line arguments
                                   residue. Increasing the gap extension
                                   penalty will make gaps shorter. Terminal
                                   gaps are not penalised.
-   -[no]endgaps        bool       'End gap separation' treats end gaps just
+   -[no]endgaps        boolean    'End gap separation' treats end gaps just
                                   like internal gaps for the purposes of
                                   avoiding gaps that are too close (set by
                                   'gap separation distance'). If you turn this
@@ -722,7 +721,7 @@ Command line arguments
                                   This does not prevent close gaps; it makes
                                   them less frequent, promoting a block-like
                                   appearance of the alignment.
-*  -norgap             bool       'Residue specific penalties' are amino acid
+*  -norgap             boolean    'Residue specific penalties' are amino acid
                                   specific gap penalties that reduce or
                                   increase the gap opening penalties at each
                                   position in the alignment or sequence. As an
@@ -732,7 +731,7 @@ Command line arguments
 *  -hgapres            string     This is a set of the residues 'considered'
                                   to be hydrophilic. It is used when
                                   introducing Hydrophilic gap penalties.
-*  -nohgap             bool       'Hydrophilic gap penalties' are used to
+*  -nohgap             boolean    'Hydrophilic gap penalties' are used to
                                   increase the chances of a gap within a run
                                   (5 or more residues) of hydrophilic amino
                                   acids; these are likely to be loop or random
@@ -749,10 +748,10 @@ Command line arguments
                                   sequences will be aligned later.
 
    Advanced qualifiers:
-   -prot               bool       Do not change this value
+   -prot               boolean    Do not change this value
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

@@ -1,9 +1,8 @@
 
-                             EMBOSS: embossdata
-     _________________________________________________________________
+                                embossdata 
+                                      
    
-                              Program embossdata
-                                       
+   
 Function
 
    Finds or fetches the data files read in by the EMBOSS programs
@@ -71,8 +70,8 @@ Command line arguments
                                   altered when it is fetched.
 
    Optional qualifiers (* if not always prompted):
-   -showall            bool       Show all potential EMBOSS data files
-*  -fetch              bool       Fetch a data file
+   -showall            boolean    Show all potential EMBOSS data files
+*  -fetch              boolean    Fetch a data file
    -outf               outfile    This specifies the name of the file that the
                                   results of a search for a file in the
                                   various data directories is written to. By
@@ -80,13 +79,13 @@ Command line arguments
                                   screen (stdout).
 
    Advanced qualifiers:
-   -reject             select     This specifies the names of the
+   -reject             selection  This specifies the names of the
                                   sub-directories of the EMBOSS data directory
                                   that should be ignored when displaying data
                                   directories.
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -106,13 +105,7 @@ Command line arguments
    Advanced qualifiers Allowed values Default
    -reject This specifies the names of the sub-directories of the EMBOSS
    data directory that should be ignored when displaying data
-   directories. None
-   PROSITE
-   PRINTS
-   CVS
-   CODONS
-   REBASE
-   2, 3, 4
+   directories. Choose from selection list of values 2, 3, 4
    
 Input file format
 

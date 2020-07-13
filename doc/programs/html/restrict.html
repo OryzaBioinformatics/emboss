@@ -7,37 +7,29 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
 
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
 
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
+<td align=left valign=middle>
+<b><font size="+6">
 
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: restrict
-</H2>
-
-
-</font>
-</td>
-
-</tr>
+restrict
+</font></b>
+</td></tr>
 </table>
-</td>
+<br>&nbsp;
+<p>
 
-</tr>
-</table>
 
-<p><hr><p>
-<H1>
-Program restrict
-</H1>
+
+
+
 
 <H2>
     Function
@@ -119,27 +111,27 @@ IT IS DONE FOR YOU.
                                   hindiii
                                   HinfI
                                   PpiI
-  [-outfile]           report     (no help text) report value
+  [-outfile]           report     Output report file name
 
    Optional qualifiers: (none)
    Advanced qualifiers:
    -min                integer    Minimum cuts per RE
    -max                integer    Maximum cuts per RE
-   -single             bool       Force single site only cuts
-   -[no]blunt          bool       Allow blunt end cutters
-   -[no]sticky         bool       Allow sticky end cutters
-   -[no]ambiguity      bool       Allow ambiguous matches
-   -plasmid            bool       Allow circular DNA
-   -[no]commercial     bool       Only enzymes with suppliers
+   -single             boolean    Force single site only cuts
+   -[no]blunt          boolean    Allow blunt end cutters
+   -[no]sticky         boolean    Allow sticky end cutters
+   -[no]ambiguity      boolean    Allow ambiguous matches
+   -plasmid            boolean    Allow circular DNA
+   -[no]commercial     boolean    Only enzymes with suppliers
    -datafile           string     Alternative RE data file
-   -[no]limit          bool       Limits reports to one isoschizomer
-   -preferred          bool       Report preferred isoschizomers
-   -alphabetic         bool       Sort output alphabetically
-   -fragments          bool       Show fragment lengths
-   -name               bool       Show sequence name
+   -[no]limit          boolean    Limits reports to one isoschizomer
+   -preferred          boolean    Report preferred isoschizomers
+   -alphabetic         boolean    Sort output alphabetically
+   -fragments          boolean    Show fragment lengths
+   -name               boolean    Show sequence name
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -187,7 +179,7 @@ PpiI</td>
 
 <tr>
 <td>[-outfile]<br>(Parameter 2)</td>
-<td>(no help text) report value</td>
+<td>Output report file name</td>
 <td>Report file</td>
 <td>&nbsp;</td>
 </tr>
@@ -544,9 +536,6 @@ from naive users to embedded scripts.
 
 
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

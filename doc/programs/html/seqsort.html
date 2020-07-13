@@ -7,36 +7,37 @@
   </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
+
+
+
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: seqsort
-</H2>
-</font>
-</td>
-</tr>
+<td align=left valign=middle>
+<b><font size="+6">
+
+seqsort
+</font></b>
+</td></tr>
 </table>
-</td>
-</tr>
-</table>
-<p><hr><p>
+<br>&nbsp;
+<p>
+
+
+
+
+
 
 <!--END OF HEADER-->
 
-<H1>
-Program seqsort
-</H1>
 <H2>
     Function
 </H2>
-Removes ambiguities from a set of hits resulting from a database search
+Reads multiple files of hits and writes a non-ambiguous file of hits (scop families file) plus a validation file
 
 <!--
 DON'T WRITE ANYTHING HERE.
@@ -126,23 +127,24 @@ Here is a sample session with seqsort:
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Mandatory qualifiers (* if not always prompted):
-  [-mode]              menu       Select mode
-  [-overlap]           integer    number of overlapping residues required for
+   -mode               menu       Select mode
+*  -psipath            string     Location of scop hits files (input)
+*  -psiextn            string     Extension of scop hits files
+*  -swisspath          string     Location of seqwords hits files
+*  -swissextn          string     Extension of seqwords input files
+*  -psifile            string     Name of file containing processed scop hits
+                                  file (input)
+*  -swissfile          string     Name of file containing processed seqwords
+                                  hits file (input)
+   -overlap            integer    number of overlapping residues required for
                                   merging of two hits
-*  -psipath            string     Location of psiblasts hits files
-*  -psiextn            string     Extension of psiblasts hits files
-*  -swisspath          string     Location of swissparse hits files
-*  -swissextn          string     Extension of swissparse input files
-*  -psifile            string     Name of file containing sorted psiblasts
-                                  results
-*  -swissfile          string     Name of file containing sorted swissparse
-                                  results
-  [-outfile]           string     Name of output file
+  [-hitsf]             outfile    Name of scop hits file (output)
+  [-validf]            outfile    Name of validation file (output)
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -158,66 +160,73 @@ Here is a sample session with seqsort:
 </tr>
 
 <tr>
-<td>[-mode]<br>(Parameter 1)</td>
+<td>-mode</td>
 <td>Select mode</td>
 <td><table><tr><td>1</td> <td><i>(Process psiblast hits)</i></td></tr><tr><td>2</td> <td><i>(Process swissparse hits)</i></td></tr><tr><td>3</td> <td><i>(Merge psiblast and swissparse hits)</i></td></tr></table></td>
 <td>1</td>
 </tr>
 
 <tr>
-<td>[-overlap]<br>(Parameter 2)</td>
-<td>number of overlapping residues required for merging of two hits</td>
-<td>Any integer value</td>
-<td>10</td>
-</tr>
-
-<tr>
 <td>-psipath</td>
-<td>Location of psiblasts hits files</td>
+<td>Location of scop hits files (input)</td>
 <td>Any string is accepted</td>
 <td>./</td>
 </tr>
 
 <tr>
 <td>-psiextn</td>
-<td>Extension of psiblasts hits files</td>
+<td>Extension of scop hits files</td>
 <td>Any string is accepted</td>
-<td>.psiblasts</td>
+<td>.hits</td>
 </tr>
 
 <tr>
 <td>-swisspath</td>
-<td>Location of swissparse hits files</td>
+<td>Location of seqwords hits files</td>
 <td>Any string is accepted</td>
 <td>./</td>
 </tr>
 
 <tr>
 <td>-swissextn</td>
-<td>Extension of swissparse input files</td>
+<td>Extension of seqwords input files</td>
 <td>Any string is accepted</td>
 <td>.swissparse</td>
 </tr>
 
 <tr>
 <td>-psifile</td>
-<td>Name of file containing sorted psiblasts results</td>
+<td>Name of file containing processed scop hits file (input)</td>
 <td>Any string is accepted</td>
 <td><i>An empty string is accepted</i></td>
 </tr>
 
 <tr>
 <td>-swissfile</td>
-<td>Name of file containing sorted swissparse results</td>
+<td>Name of file containing processed seqwords hits file (input)</td>
 <td>Any string is accepted</td>
 <td><i>An empty string is accepted</i></td>
 </tr>
 
 <tr>
-<td>[-outfile]<br>(Parameter 3)</td>
-<td>Name of output file</td>
-<td>Any string is accepted</td>
-<td><i>An empty string is accepted</i></td>
+<td>-overlap</td>
+<td>number of overlapping residues required for merging of two hits</td>
+<td>Any integer value</td>
+<td>10</td>
+</tr>
+
+<tr>
+<td>[-hitsf]<br>(Parameter 1)</td>
+<td>Name of scop hits file (output)</td>
+<td>Output file</td>
+<td>seqsort.fam</td>
+</tr>
+
+<tr>
+<td>[-validf]<br>(Parameter 2)</td>
+<td>Name of validation file (output)</td>
+<td>Output file</td>
+<td>seqsort.all</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -510,13 +519,20 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="contacts.html">contacts</a></td><td>Reads coordinate files and writes contact files</td></tr>
+<tr><td><a href="contacts.html">contacts</a></td><td>Reads coordinate files and writes files of intra-chain residue-residue contact data</td></tr>
 <tr><td><a href="dichet.html">dichet</a></td><td>Parse dictionary of heterogen groups</td></tr>
-<tr><td><a href="interface.html">interface</a></td><td>Reads coordinate files and writes inter-chain contact files</td></tr>
+<tr><td><a href="hmmgen.html">hmmgen</a></td><td>Generates a hidden Markov model for each alignment in a directory</td></tr>
+<tr><td><a href="interface.html">interface</a></td><td>Reads coordinate files and writes files of inter-chain residue-residue contact data</td></tr>
+<tr><td><a href="profgen.html">profgen</a></td><td>Generates various profiles for each alignment in a directory</td></tr>
 <tr><td><a href="psiblasts.html">psiblasts</a></td><td>Runs PSI-BLAST given scopalign alignments</td></tr>
-<tr><td><a href="scopalign.html">scopalign</a></td><td>Generate alignments for SCOP families</td></tr>
-<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature</td></tr>
-<tr><td><a href="sigscan.html">sigscan</a></td><td>Scans a sparse protein signature against swissprot</td></tr>
+<tr><td><a href="scopalign.html">scopalign</a></td><td>Generate alignments for families in a scop classification file by using STAMP</td></tr>
+<tr><td><a href="scoprep.html">scoprep</a></td><td>Reorder scop classificaiton file so that the representative structure of each family is given first</td></tr>
+<tr><td><a href="scopreso.html">scopreso</a></td><td>Removes low resolution domains from a scop classification file</td></tr>
+<tr><td><a href="seqalign.html">seqalign</a></td><td>Generate extended alignments for families in a scop families file by using CLUSTALW with seed alignments</td></tr>
+<tr><td><a href="seqsearch.html">seqsearch</a></td><td>Generate files of hits for families in a scop classification file by using PSI-BLAST with seed alignments</td></tr>
+<tr><td><a href="seqwords.html">seqwords</a></td><td>Generate file of hits for scop families by searching swissprot with keywords</td></tr>
+<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment and residue contact data</td></tr>
+<tr><td><a href="sigscan.html">sigscan</a></td><td>Scans a signature against swissprot and writes a signature hits files</td></tr>
 </table>
 
 <!-- 
@@ -622,9 +638,6 @@ This program is intended to be used by everyone and everything, from naive users
 
 
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

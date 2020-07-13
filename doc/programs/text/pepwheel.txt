@@ -1,9 +1,8 @@
 
-                              EMBOSS: pepwheel
-     _________________________________________________________________
+                                 pepwheel 
+                                      
    
-                               Program pepwheel
-                                       
+   
 Function
 
    Shows protein sequences as helices
@@ -49,18 +48,18 @@ Command line arguments
                                   HKR are marked with octagons.
 
    Advanced qualifiers:
-   -[no]wheel          bool       Plot the wheel
-   -amphipathic        bool       If this is true then the residues ACFGILMVWY
+   -[no]wheel          boolean    Plot the wheel
+   -amphipathic        boolean    If this is true then the residues ACFGILMVWY
                                   are marked as squares and all other
                                   residues are unmarked. This overrides any
                                   other markup that you may have specified
                                   using the qualifiers '-squares', '-diamonds'
                                   and '-octags'.
-   -data               bool       Output the match data to a file instead of
+   -data               boolean    Output the match data to a file instead of
                                   plotting it
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

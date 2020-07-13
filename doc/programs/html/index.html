@@ -8,34 +8,24 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
 
-<a href="http://www.uk.embnet.org/Software/EMBOSS/index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
 
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="http://www.uk.embnet.org/Software/EMBOSS/index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true">
+<img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
-
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: The Applications (programs)
-</H2>
-
-
-</font>
-</td>
-
-</tr>
+<td align=left valign=middle>
+<b><font size="+6"> 
+The Applications (programs)
+</font></b>
+</td></tr>
 </table>
-</td>
+<br>&nbsp;
+<p>
 
-</tr>
-</table>
 
-<p><hr><p>
+
 
 The programs are listed in alphabetical order, Look at the individual
 applications or go to the 
@@ -54,6 +44,10 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <th>Description</th>
 </tr>
 
+<tr>
+<td><a href="aaindexextract.html">aaindexextract</a></td>
+<td>Extract data from AAINDEX</td>
+</tr>
 <tr>
 <td><a href="abiview.html">abiview</a></td>
 <td>Reads ABI file and display the trace</td>
@@ -124,7 +118,7 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 </tr>
 <tr>
 <td><a href="contacts.html">contacts</a></td>
-<td>Reads coordinate files and writes contact files</td>
+<td>Reads coordinate files and writes files of intra-chain residue-residue contact data</td>
 </tr>
 <tr>
 <td><a href="cpgplot.html">cpgplot</a></td>
@@ -192,7 +186,7 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 </tr>
 <tr>
 <td><a href="domainer.html">domainer</a></td>
-<td>Build domain coordinate files</td>
+<td>Reads protein coordinate files and writes domains coordinate files</td>
 </tr>
 <tr>
 <td><a href="dotmatcher.html">dotmatcher</a></td>
@@ -267,6 +261,10 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td>Residue/base frequency table or plot</td>
 </tr>
 <tr>
+<td><a href="funky.html">funky</a></td>
+<td>Reads clean coordinate files and writes file of protein-heterogen contact data</td>
+</tr>
+<tr>
 <td><a href="fuzznuc.html">fuzznuc</a></td>
 <td>Nucleic acid pattern search</td>
 </tr>
@@ -291,8 +289,20 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td>Finds and extracts open reading frames (ORFs)</td>
 </tr>
 <tr>
+<td><a href="groups.html">groups</a></td>
+<td>Removes redundant hits from a scop families file</td>
+</tr>
+<tr>
 <td><a href="helixturnhelix.html">helixturnhelix</a></td>
 <td>Report nucleic acid binding motifs</td>
+</tr>
+<tr>
+<td><a href="hetparse.html">hetparse</a></td>
+<td>Converts raw dictionary of heterogen groups to a file in embl-like format</td>
+</tr>
+<tr>
+<td><a href="hmmgen.html">hmmgen</a></td>
+<td>Generates a hidden Markov model for each alignment in a directory</td>
 </tr>
 <tr>
 <td><a href="hmoment.html">hmoment</a></td>
@@ -312,7 +322,7 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 </tr>
 <tr>
 <td><a href="interface.html">interface</a></td>
-<td>Reads coordinate files and writes inter-chain contact files</td>
+<td>Reads coordinate files and writes files of inter-chain residue-residue contact data</td>
 </tr>
 <tr>
 <td><a href="isochore.html">isochore</a></td>
@@ -353,6 +363,10 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <tr>
 <td><a href="msbar.html">msbar</a></td>
 <td>Mutate sequence beyond all recognition</td>
+</tr>
+<tr>
+<td><a href="mwcontam.html">mwcontam</a></td>
+<td>Shows molwts that match across a set of files</td>
 </tr>
 <tr>
 <td><a href="mwfilter.html">mwfilter</a></td>
@@ -413,6 +427,10 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <tr>
 <td><a href="patmatmotifs.html">patmatmotifs</a></td>
 <td>Search a PROSITE motif database with a protein sequence</td>
+</tr>
+<tr>
+<td><a href="pdbparse.html">pdbparse</a></td>
+<td>Parses pdb files and writes cleaned-up protein coordinate files</td>
 </tr>
 <tr>
 <td><a href="pdbtosp.html">pdbtosp</a></td>
@@ -479,6 +497,10 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td>Extract data from PRINTS</td>
 </tr>
 <tr>
+<td><a href="profgen.html">profgen</a></td>
+<td>Generates various profiles for each alignment in a directory</td>
+</tr>
+<tr>
 <td><a href="profit.html">profit</a></td>
 <td>Scan a sequence or database with a matrix or profile</td>
 </tr>
@@ -532,27 +554,43 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 </tr>
 <tr>
 <td><a href="scopalign.html">scopalign</a></td>
-<td>Generate alignments for SCOP families</td>
+<td>Generate alignments for families in a scop classification file by using STAMP</td>
 </tr>
 <tr>
 <td><a href="scope.html">scope</a></td>
 <td>Convert raw scop classification file to embl-like format</td>
 </tr>
 <tr>
+<td><a href="scopnr.html">scopnr</a></td>
+<td>Removes redundant domains from a scop classification file</td>
+</tr>
+<tr>
 <td><a href="scopparse.html">scopparse</a></td>
-<td>Reads raw scop classifications file and writes embl-like format scop classification file</td>
+<td>Converts raw scop classification files to a file in embl-like format</td>
+</tr>
+<tr>
+<td><a href="scoprep.html">scoprep</a></td>
+<td>Reorder scop classificaiton file so that the representative structure of each family is given first</td>
+</tr>
+<tr>
+<td><a href="scopreso.html">scopreso</a></td>
+<td>Removes low resolution domains from a scop classification file</td>
+</tr>
+<tr>
+<td><a href="scopseqs.html">scopseqs</a></td>
+<td>Adds pdb and swissprot sequence records to a scop classification file</td>
 </tr>
 <tr>
 <td><a href="seealso.html">seealso</a></td>
 <td>Finds programs sharing group names</td>
 </tr>
 <tr>
-<td><a href="seqmatchall.html">seqmatchall</a></td>
-<td>Does an all-against-all comparison of a set of sequences</td>
+<td><a href="seqalign.html">seqalign</a></td>
+<td>Generate extended alignments for families in a scop families file by using CLUSTALW with seed alignments</td>
 </tr>
 <tr>
-<td><a href="seqnr.html">seqnr</a></td>
-<td>Converts redundant database results to a non-redundant set of hits</td>
+<td><a href="seqmatchall.html">seqmatchall</a></td>
+<td>Does an all-against-all comparison of a set of sequences</td>
 </tr>
 <tr>
 <td><a href="seqret.html">seqret</a></td>
@@ -563,8 +601,16 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 <td>Reads and writes (returns) sequences in individual files</td>
 </tr>
 <tr>
+<td><a href="seqsearch.html">seqsearch</a></td>
+<td>Generate files of hits for families in a scop classification file by using PSI-BLAST with seed alignments</td>
+</tr>
+<tr>
 <td><a href="seqsort.html">seqsort</a></td>
-<td>Removes ambiguities from a set of hits resulting from a database search</td>
+<td>Reads multiple files of hits and writes a non-ambiguous file of hits (scop families file) plus a validation file</td>
+</tr>
+<tr>
+<td><a href="seqwords.html">seqwords</a></td>
+<td>Generate file of hits for scop families by searching swissprot with keywords</td>
 </tr>
 <tr>
 <td><a href="showalign.html">showalign</a></td>
@@ -596,15 +642,19 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 </tr>
 <tr>
 <td><a href="siggen.html">siggen</a></td>
-<td>Generates a sparse protein signature</td>
+<td>Generates a sparse protein signature from an alignment and residue contact data</td>
 </tr>
 <tr>
 <td><a href="sigscan.html">sigscan</a></td>
-<td>Scans a sparse protein signature against swissprot</td>
+<td>Scans a signature against swissprot and writes a signature hits files</td>
 </tr>
 <tr>
 <td><a href="silent.html">silent</a></td>
 <td>Silent mutation restriction enzyme scan</td>
+</tr>
+<tr>
+<td><a href="skipseq.html">skipseq</a></td>
+<td>Reads and writes (returns) sequences, skipping the first few</td>
 </tr>
 <tr>
 <td><a href="splitter.html">splitter</a></td>
@@ -708,9 +758,6 @@ href="ftp://ftp.uk.embnet.org/pub/EMBOSS/">current release</a></h3>
 
 
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

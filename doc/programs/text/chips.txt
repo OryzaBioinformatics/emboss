@@ -1,9 +1,8 @@
 
-                               EMBOSS: chips
-     _________________________________________________________________
+                                   chips 
+                                      
    
-                                 Program chips
-                                       
+   
 Function
 
    Codon usage statistics
@@ -52,10 +51,9 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers:
    -cfile              codon      Codon usage file
-   -window             integer    Averaging window
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -69,7 +67,6 @@ Command line arguments
    (none)
    Advanced qualifiers Allowed values Default
    -cfile Codon usage file Codon usage file in EMBOSS data path Ehum.cut
-   -window Averaging window Any integer value 30
    
 Input file format
 

@@ -1,9 +1,8 @@
 
-                              EMBOSS: fuzztran
-     _________________________________________________________________
+                                 fuzztran 
+                                      
    
-                               Program fuzztran
-                                       
+   
 Function
 
    Protein pattern search after translation
@@ -98,7 +97,7 @@ Command line arguments
                                   fuzztran).
                                   For example, [DE](2)HS{P}X(2)PX(2,4)C
    -mismatch           integer    Number of mismatches
-  [-outfile]           report     (no help text) report value
+  [-outfile]           report     Output report file name
 
    Optional qualifiers:
    -frame              menu       Frame(s) to translate
@@ -106,7 +105,7 @@ Command line arguments
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -134,7 +133,7 @@ Command line arguments
    accepted
    -mismatch Number of mismatches Integer 0 or more 0
    [-outfile]
-   (Parameter 2) (no help text) report value Report file
+   (Parameter 2) Output report file name Report file
    Optional qualifiers Allowed values Default
    -frame Frame(s) to translate
    1  (1)

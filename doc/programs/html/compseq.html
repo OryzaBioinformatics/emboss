@@ -7,37 +7,22 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
-
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
-
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
+<td align=left valign=middle>
+<b><font size="+6">
 
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: compseq
-</H2>
-
-
-</font>
-</td>
-
-</tr>
+compseq
+</font></b>
+</td></tr>
 </table>
-</td>
+<br>&nbsp;
+<p>
 
-</tr>
-</table>
 
-<p><hr><p>
-<H1>
-Program compseq
-</H1>
+
 
 <H2>
     Function
@@ -61,8 +46,52 @@ This takes a specified length of sequence and counts the number of
 distinct subsequences of that length that there are in the input
 sequence(s).
 
+<p>
+
 It can read in the result of a previous compseq analysis and use this
 to set the expected frequencies of the subsequences.
+
+<p>
+
+Unless you tell 'compseq' otherwise, it expects each word to be equally
+likely.  The 'Expected' frequency therefore of any dimer is 1/16 - this
+is simply the inverse of the number of possible dimers (AA, AC, AG, AT,
+CA, CC, CG, CT, GA, GC, GG, GT, TA, TC, TG, TT). 
+
+<p>
+
+
+Similarly, the 'Expected' frequency of any trimer is 1/64, etc. 
+
+<p>
+
+
+Obviously this is not the case in real sequences - there will be bias in
+favour of some words. 
+
+<p>
+
+
+Compseq cannot otherwise guess what the 'Expected' frequency is.  You
+can, however, tell it what the Expected frequencies are by giving
+compseq the output of the analysis of another set of sequences, produced
+by a previous compseq run. 
+
+<p>
+
+So you take a set of sequences that are representative of the type of
+sequence you expect and you run compseq on it to get your expected
+sequence frequencies. 
+
+<p>
+
+You then take the sequences you wish to investigate, run compseq on them
+giving compseq the expected frequencies that you have established,
+above.  You tell compseq what the file of expected frequencies is by
+specifying it with '-infile filename' on the command-line. 
+
+
+
 
 <H2>
     Usage
@@ -138,23 +167,23 @@ IT IS DONE FOR YOU.
                                   If you set it to 1 it will only count the
                                   words in frame 1, 2 will only count the
                                   words in frame 2 and so on.
-*  -[no]ignorebz       bool       The amino acid code B represents Asparagine
+*  -[no]ignorebz       boolean    The amino acid code B represents Asparagine
                                   or Aspartic acid and the code Z represents
                                   Glutamine or Glutamic acid.
                                   These are not commonly used codes and you
                                   may wish not to count words containing them,
                                   just noting them in the count of 'Other'
                                   words.
-*  -reverse            bool       Set this to be true if you also wish to also
+*  -reverse            boolean    Set this to be true if you also wish to also
                                   count words in the reverse complement of a
                                   nucleic sequence.
-   -[no]zerocount      bool       You can make the output results file much
+   -[no]zerocount      boolean    You can make the output results file much
                                   smaller if you do not display the words with
                                   a zero count.
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -427,6 +456,7 @@ amounts of memory.
 <tr><td><a href="freak.html">freak</a></td><td>Residue/base frequency table or plot</td></tr>
 <tr><td><a href="iep.html">iep</a></td><td>Calculates the isoelectric point of a protein</td></tr>
 <tr><td><a href="isochore.html">isochore</a></td><td>Plots isochores in large DNA sequences</td></tr>
+<tr><td><a href="mwcontam.html">mwcontam</a></td><td>Shows molwts that match across a set of files</td></tr>
 <tr><td><a href="mwfilter.html">mwfilter</a></td><td>Filter noisy molwts from mass spec output</td></tr>
 <tr><td><a href="octanol.html">octanol</a></td><td>Displays protein hydropathy</td></tr>
 <tr><td><a href="pepinfo.html">pepinfo</a></td><td>Plots simple amino acid properties in parallel</td></tr>
@@ -483,9 +513,6 @@ from naive users to embedded scripts.
 
 </pre>
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

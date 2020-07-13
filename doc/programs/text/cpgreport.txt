@@ -1,9 +1,8 @@
 
-                             EMBOSS: cpgreport
-     _________________________________________________________________
+                                 cpgreport 
+                                      
    
-                               Program cpgreport
-                                       
+   
 Function
 
    Reports all CpG rich regions
@@ -52,7 +51,7 @@ Command line arguments
    -featout            featout    File for output features
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

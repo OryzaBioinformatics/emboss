@@ -1,9 +1,8 @@
 
-                              EMBOSS: polydot
-     _________________________________________________________________
+                                  polydot 
+                                      
    
-                                Program polydot
-                                       
+   
 Function
 
    Displays all-against-all dotplots of a set of sequences
@@ -43,13 +42,13 @@ Command line arguments
 *  -outfile            outfile    Output file name
 
    Optional qualifiers:
-   -[no]boxit          bool       Draw a box around each dotplot
-   -dumpfeat           bool       Dump all matches as feature files
+   -[no]boxit          boolean    Draw a box around each dotplot
+   -dumpfeat           boolean    Dump all matches as feature files
    -format             string     format to Dump out as
    -ext                string     Extension for feature file
 
    Advanced qualifiers:
-   -data               bool       Output the match data to a file instead of
+   -data               boolean    Output the match data to a file instead of
                                   plotting it
    -gap                integer    This specifies the size of the gap that is
                                   used to separate the individual dotplots in
@@ -57,7 +56,7 @@ Command line arguments
                                   residues, as displayed in the output.
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

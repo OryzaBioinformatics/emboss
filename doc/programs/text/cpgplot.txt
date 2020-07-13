@@ -1,9 +1,8 @@
 
-                              EMBOSS: cpgplot
-     _________________________________________________________________
+                                  cpgplot 
+                                      
    
-                                Program cpgplot
-                                       
+   
 Function
 
    Plot CpG rich areas
@@ -31,14 +30,23 @@ Description
    
    By default, this program defines a CpG island as a region where, over
    an average of 10 windows, the calculated % composition is over 50% and
-   the calculated Obs/Exp ratio is over 0.6 and the conditions hold for a
-   minimum of 200 bases. These conditions can be modified by setting the
-   values of the appropriate parameters.
+   the calculated Obs/Exp (i.e. Observed/Expected) ratio is over 0.6 and
+   the conditions hold for a minimum of 200 bases. These conditions can
+   be modified by setting the values of the appropriate parameters.
    
-   The Expected number of CpG patterns in a window is calculated as the
-   number of 'C's in the window multiplied by the number of 'G's in the
-   window, divided by the window length.
+   The Observed number of CpG patterns in a window is simply the count of
+   the number of times a 'C' is found followed immediately by a 'G'.
    
+   The Expected number of CpG patterns is calculated for each window as
+   the number of CpG dinucleotides you would expect to see in that window
+   based on the frequency of C's and G's in that window. Thus, the
+   Expected frequency of CpG's in a window is calculated as the number of
+   'C's in the window multiplied by the number of 'G's in the window,
+   divided by the window length.
+   
+        Expected = (number of C's  * number of G's) / window length
+
+
    This program reads in one or more sequences and calculates the Obs/Exp
    ratio, the percentage CpG over a window which is moved along the
    sequence. These calculated values can be plotted, together with the
@@ -92,19 +100,19 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -[no]obsexp         bool       If this is set to true then the graph of the
+   -[no]obsexp         boolean    If this is set to true then the graph of the
                                   observed to expected ratio of C plus G to
                                   CpG within a window is displayed.
-   -[no]cg             bool       If this is set to true then the graph of the
+   -[no]cg             boolean    If this is set to true then the graph of the
                                   regions which have been determined to be
                                   CpG islands is displayed.
-   -[no]pc             bool       If this is set to true then the graph of the
+   -[no]pc             boolean    If this is set to true then the graph of the
                                   percentage C plus G within a window is
                                   displayed.
    -featout            featout    File for output features
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

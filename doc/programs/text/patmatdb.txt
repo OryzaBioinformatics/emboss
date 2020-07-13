@@ -1,9 +1,8 @@
 
-                              EMBOSS: patmatdb
-     _________________________________________________________________
+                                 patmatdb 
+                                      
    
-                               Program patmatdb
-                                       
+   
 Function
 
    Search a protein sequence with a motif
@@ -40,12 +39,12 @@ Command line arguments
                                   four of any residue followed by Cys. The
                                   search is case-independent, so 'AAA' matches
                                   'aaa'.
-  [-outfile]           report     (no help text) report value
+  [-outfile]           report     Output report file name
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -62,7 +61,7 @@ Command line arguments
    case-independent, so 'AAA' matches 'aaa'. A string of at least 2
    characters Required
    [-outfile]
-   (Parameter 3) (no help text) report value Report file
+   (Parameter 3) Output report file name Report file
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default

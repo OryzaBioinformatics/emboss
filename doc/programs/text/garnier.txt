@@ -1,9 +1,8 @@
 
-                              EMBOSS: garnier
-     _________________________________________________________________
+                                  garnier 
+                                      
    
-                                Program garnier
-                                       
+   
 Function
 
    Predicts protein secondary structure
@@ -42,14 +41,14 @@ Command line arguments
 
    Mandatory qualifiers:
   [-sequencea]         seqall     Sequence database USA
-  [-outfile]           report     (no help text) report value
+  [-outfile]           report     Output report file name
 
    Optional qualifiers: (none)
    Advanced qualifiers:
    -idc                integer    idc param
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -58,7 +57,7 @@ Command line arguments
    [-sequencea]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    [-outfile]
-   (Parameter 2) (no help text) report value Report file
+   (Parameter 2) Output report file name Report file
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default

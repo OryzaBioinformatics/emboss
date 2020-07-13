@@ -7,37 +7,27 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
 
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
 
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
+<td align=left valign=middle>
+<b><font size="+6">
 
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: digest
-</H2>
-
-
-</font>
-</td>
-
-</tr>
+digest
+</font></b>
+</td></tr>
 </table>
-</td>
+<br>&nbsp;
+<p>
 
-</tr>
-</table>
 
-<p><hr><p>
-<H1>
-Program digest
-</H1>
+
+
+
+
 
 <H2>
     Function
@@ -142,25 +132,25 @@ IT IS DONE FOR YOU.
    Mandatory qualifiers:
   [-sequencea]         sequence   Sequence USA
    -menu               menu       Select number
-  [-outfile]           report     (no help text) report value
+  [-outfile]           report     Output report file name
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -unfavoured         bool       Trypsin will not normally cut after a K if
+   -unfavoured         boolean    Trypsin will not normally cut after a K if
                                   it is followed by (e.g.) another K or a P.
                                   Specifying this shows those cuts. as well as
                                   the favoured ones.
    -aadata             string     Molecular weight data for amino acids
-   -overlap            bool       Used for partial digestion. Shows all cuts
+   -overlap            boolean    Used for partial digestion. Shows all cuts
                                   from favoured cut sites plus 1..3, 2..4,
                                   3..5 etc but not (e.g.) 2..5. Overlaps are
                                   therefore fragments with exactly one
                                   potential cut site within it.
-   -allpartials        bool       As for overlap but fragments containing more
+   -allpartials        boolean    As for overlap but fragments containing more
                                   than one potential cut site are included.
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -192,7 +182,7 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>[-outfile]<br>(Parameter 2)</td>
-<td>(no help text) report value</td>
+<td>Output report file name</td>
 <td>Report file</td>
 <td>&nbsp;</td>
 </tr>
@@ -448,9 +438,6 @@ from naive users to embedded scripts.
 
 </pre>
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

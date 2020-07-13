@@ -1,9 +1,8 @@
 
-                               EMBOSS: dbigcg
-     _________________________________________________________________
+                                  dbigcg 
+                                      
    
-                                Program dbigcg
-                                       
+   
 Function
 
    Index a GCG formatted database
@@ -57,11 +56,11 @@ Command line arguments
                                   current directory for work files and '-k
                                   1,1' to force GNU sort to use the first
                                   field
-   -[no]systemsort     bool       Use system sort utility
-   -[no]cleanup        bool       Clean up temporary files
+   -[no]systemsort     boolean    Use system sort utility
+   -[no]cleanup        boolean    Clean up temporary files
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

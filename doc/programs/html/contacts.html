@@ -7,36 +7,31 @@
   </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: contacts
-</H2>
-</font>
-</td>
-</tr>
+<td align=left valign=middle>
+<b><font size="+6">
+
+contacts
+</font></b>
+</td></tr>
 </table>
-</td>
-</tr>
-</table>
-<p><hr><p>
+<br>&nbsp;
+<p>
+
+
+
 
 <!--END OF HEADER-->
 
-<H1>
-Program contacts
-</H1>
 <H2>
     Function
 </H2>
-Reads coordinate files and writes contact files
+Reads coordinate files and writes files of intra-chain residue-residue contact data
 
 <!--
 DON'T WRITE ANYTHING HERE.
@@ -135,25 +130,25 @@ Name of log file for the build [contacts.log]:
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Mandatory qualifiers:
-  [-cpdb]              string     Location of coordinate files for input
-                                  (embl-like format)
-  [-cpdbextn]          string     Extension of coordinate files (embl-like
-                                  format)
-  [-thresh]            float      Threshold contact distance
-  [-ignore]            float      If any two atoms from two different residues
+  [-cpdb]              string     Location of coordinate files (embl format
+                                  input)
+  [-cpdbextn]          string     Extension of coordinate files
+   -vdwf               string     Name of data file with van der Waals radii
+   -thresh             float      Threshold contact distance
+  [-con]               string     Location of contact files for output
+  [-conextn]           string     Extension of contact files
+   -conerrf            outfile    Name of log file for the build
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -ignore             float      If any two atoms from two different residues
                                   are at least this distance apart then no
                                   futher inter-atomic contacts will be checked
                                   for for that residue pair . This speeds the
                                   calculation up considerably.
-  [-vdwf]              string     Name of data file with van der Waals radii
-  [-con]               string     Location of contact files for output
-  [-conextn]           string     Extension of contact files
-  [-conerrf]           outfile    Name of log file for the build
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -170,55 +165,48 @@ Name of log file for the build [contacts.log]:
 
 <tr>
 <td>[-cpdb]<br>(Parameter 1)</td>
-<td>Location of coordinate files for input (embl-like format)</td>
+<td>Location of coordinate files (embl format input)</td>
 <td>Any string is accepted</td>
 <td>./</td>
 </tr>
 
 <tr>
 <td>[-cpdbextn]<br>(Parameter 2)</td>
-<td>Extension of coordinate files (embl-like format)</td>
+<td>Extension of coordinate files</td>
 <td>Any string is accepted</td>
 <td>.pxyz</td>
 </tr>
 
 <tr>
-<td>[-thresh]<br>(Parameter 3)</td>
-<td>Threshold contact distance</td>
-<td>Any integer value</td>
-<td>1.0</td>
-</tr>
-
-<tr>
-<td>[-ignore]<br>(Parameter 4)</td>
-<td>If any two atoms from two different residues are at least this distance apart then no futher inter-atomic contacts will be checked for for that residue pair . This speeds the calculation up considerably.</td>
-<td>Any integer value</td>
-<td>20.0</td>
-</tr>
-
-<tr>
-<td>[-vdwf]<br>(Parameter 5)</td>
+<td>-vdwf</td>
 <td>Name of data file with van der Waals radii</td>
 <td>Any string is accepted</td>
 <td>Evdw.dat</td>
 </tr>
 
 <tr>
-<td>[-con]<br>(Parameter 6)</td>
+<td>-thresh</td>
+<td>Threshold contact distance</td>
+<td>Any numeric value</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>[-con]<br>(Parameter 3)</td>
 <td>Location of contact files for output</td>
 <td>Any string is accepted</td>
 <td>./</td>
 </tr>
 
 <tr>
-<td>[-conextn]<br>(Parameter 7)</td>
+<td>[-conextn]<br>(Parameter 4)</td>
 <td>Extension of contact files</td>
 <td>Any string is accepted</td>
 <td>.con</td>
 </tr>
 
 <tr>
-<td>[-conerrf]<br>(Parameter 8)</td>
+<td>-conerrf</td>
 <td>Name of log file for the build</td>
 <td>Output file</td>
 <td>contacts.log</td>
@@ -241,7 +229,10 @@ Name of log file for the build [contacts.log]:
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td>-ignore</td>
+<td>If any two atoms from two different residues are at least this distance apart then no futher inter-atomic contacts will be checked for for that residue pair . This speeds the calculation up considerably.</td>
+<td>Any numeric value</td>
+<td>20.0</td>
 </tr>
 
 </table>
@@ -656,12 +647,19 @@ None.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="dichet.html">dichet</a></td><td>Parse dictionary of heterogen groups</td></tr>
-<tr><td><a href="interface.html">interface</a></td><td>Reads coordinate files and writes inter-chain contact files</td></tr>
+<tr><td><a href="hmmgen.html">hmmgen</a></td><td>Generates a hidden Markov model for each alignment in a directory</td></tr>
+<tr><td><a href="interface.html">interface</a></td><td>Reads coordinate files and writes files of inter-chain residue-residue contact data</td></tr>
+<tr><td><a href="profgen.html">profgen</a></td><td>Generates various profiles for each alignment in a directory</td></tr>
 <tr><td><a href="psiblasts.html">psiblasts</a></td><td>Runs PSI-BLAST given scopalign alignments</td></tr>
-<tr><td><a href="scopalign.html">scopalign</a></td><td>Generate alignments for SCOP families</td></tr>
-<tr><td><a href="seqsort.html">seqsort</a></td><td>Removes ambiguities from a set of hits resulting from a database search</td></tr>
-<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature</td></tr>
-<tr><td><a href="sigscan.html">sigscan</a></td><td>Scans a sparse protein signature against swissprot</td></tr>
+<tr><td><a href="scopalign.html">scopalign</a></td><td>Generate alignments for families in a scop classification file by using STAMP</td></tr>
+<tr><td><a href="scoprep.html">scoprep</a></td><td>Reorder scop classificaiton file so that the representative structure of each family is given first</td></tr>
+<tr><td><a href="scopreso.html">scopreso</a></td><td>Removes low resolution domains from a scop classification file</td></tr>
+<tr><td><a href="seqalign.html">seqalign</a></td><td>Generate extended alignments for families in a scop families file by using CLUSTALW with seed alignments</td></tr>
+<tr><td><a href="seqsearch.html">seqsearch</a></td><td>Generate files of hits for families in a scop classification file by using PSI-BLAST with seed alignments</td></tr>
+<tr><td><a href="seqsort.html">seqsort</a></td><td>Reads multiple files of hits and writes a non-ambiguous file of hits (scop families file) plus a validation file</td></tr>
+<tr><td><a href="seqwords.html">seqwords</a></td><td>Generate file of hits for scop families by searching swissprot with keywords</td></tr>
+<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment and residue contact data</td></tr>
+<tr><td><a href="sigscan.html">sigscan</a></td><td>Scans a signature against swissprot and writes a signature hits files</td></tr>
 </table>
 
 <!-- 
@@ -765,9 +763,6 @@ This program is intended to be used by everyone and everything, from naive users
 
 
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

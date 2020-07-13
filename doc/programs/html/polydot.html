@@ -7,37 +7,28 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
 
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
 
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
+<td align=left valign=middle>
+<b><font size="+6">
 
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: polydot
-</H2>
-
-
-</font>
-</td>
-
-</tr>
+polydot
+</font></b>
+</td></tr>
 </table>
-</td>
+<br>&nbsp;
+<p>
 
-</tr>
-</table>
 
-<p><hr><p>
-<H1>
-Program polydot
-</H1>
+
+
+
 
 <H2>
     Function
@@ -115,13 +106,13 @@ IT IS DONE FOR YOU.
 *  -outfile            outfile    Output file name
 
    Optional qualifiers:
-   -[no]boxit          bool       Draw a box around each dotplot
-   -dumpfeat           bool       Dump all matches as feature files
+   -[no]boxit          boolean    Draw a box around each dotplot
+   -dumpfeat           boolean    Dump all matches as feature files
    -format             string     format to Dump out as
    -ext                string     Extension for feature file
 
    Advanced qualifiers:
-   -data               bool       Output the match data to a file instead of
+   -data               boolean    Output the match data to a file instead of
                                   plotting it
    -gap                integer    This specifies the size of the gap that is
                                   used to separate the individual dotplots in
@@ -129,7 +120,7 @@ IT IS DONE FOR YOU.
                                   residues, as displayed in the output.
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -360,9 +351,6 @@ from naive users to embedded scripts.
 
 </pre>
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

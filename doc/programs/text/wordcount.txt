@@ -1,9 +1,8 @@
 
-                             EMBOSS: wordcount
-     _________________________________________________________________
+                                 wordcount 
+                                      
    
-                               Program wordcount
-                                       
+   
 Function
 
    Counts words of a specified size in a DNA sequence
@@ -31,7 +30,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

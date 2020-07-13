@@ -1,9 +1,8 @@
 
-                              EMBOSS: restover
-     _________________________________________________________________
+                                 restover 
+                                      
    
-                               Program restover
-                                       
+   
 Function
 
    Finds restriction enzymes that produce a specific overhang
@@ -47,25 +46,25 @@ Command line arguments
    Advanced qualifiers:
    -min                integer    Minimum cuts per RE
    -max                integer    Maximum cuts per RE
-   -single             bool       Force single site only cuts
-   -threeprime         bool       3' overhang? (else 5') e.g. BamHI has CTAG
+   -single             boolean    Force single site only cuts
+   -threeprime         boolean    3' overhang? (else 5') e.g. BamHI has CTAG
                                   as a 5' overhang, and ApaI has CCGG as 3'
                                   overhang.
-   -[no]blunt          bool       Allow blunt end cutters
-   -[no]sticky         bool       Allow sticky end cutters
-   -[no]ambiguity      bool       Allow ambiguous matches
-   -plasmid            bool       Allow circular DNA
-   -[no]commercial     bool       Only enzymes with suppliers
+   -[no]blunt          boolean    Allow blunt end cutters
+   -[no]sticky         boolean    Allow sticky end cutters
+   -[no]ambiguity      boolean    Allow ambiguous matches
+   -plasmid            boolean    Allow circular DNA
+   -[no]commercial     boolean    Only enzymes with suppliers
    -datafile           string     Alternative RE data file
-   -html               bool       Create HTML output
-   -[no]limit          bool       Limits reports to one isoschizomer
-   -preferred          bool       Report preferred isoschizomers
-   -alphabetic         bool       Sort output alphabetically
-   -fragments          bool       Show fragment lengths
-   -name               bool       Show sequence name
+   -html               boolean    Create HTML output
+   -[no]limit          boolean    Limits reports to one isoschizomer
+   -preferred          boolean    Report preferred isoschizomers
+   -alphabetic         boolean    Sort output alphabetically
+   -fragments          boolean    Show fragment lengths
+   -name               boolean    Show sequence name
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

@@ -1,9 +1,8 @@
 
-                               EMBOSS: redata
-     _________________________________________________________________
+                                  redata 
+                                      
    
-                                Program redata
-                                       
+   
 Function
 
    Search REBASE for enzyme name, references, suppliers etc
@@ -50,13 +49,13 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -[no]isoschizomers  bool       Show other enzymes with this specificity.
+   -[no]isoschizomers  boolean    Show other enzymes with this specificity.
                                   (Isoschizomers)
-   -[no]references     bool       Show references
-   -[no]suppliers      bool       Show suppliers
+   -[no]references     boolean    Show references
+   -[no]suppliers      boolean    Show suppliers
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

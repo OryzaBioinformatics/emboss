@@ -1,9 +1,8 @@
 
-                              EMBOSS: hmoment
-     _________________________________________________________________
+                                  hmoment 
+                                      
    
-                                Program hmoment
-                                       
+   
 Function
 
    Hydrophobic moment calculation
@@ -63,11 +62,11 @@ Command line arguments
    Advanced qualifiers:
    -aangle             integer    Alpha helix angle (degrees)
    -baseline           float      Graph marker line
-   -plot               bool       Produce graphic
-   -double             bool       Plot two graphs
+   -plot               boolean    Produce graphic
+   -double             boolean    Plot two graphs
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -85,7 +84,7 @@ Command line arguments
    -bangle Beta sheet angle (degrees) Any integer value 160
    Advanced qualifiers Allowed values Default
    -aangle Alpha helix angle (degrees) Any integer value 100
-   -baseline Graph marker line Any integer value 0.35
+   -baseline Graph marker line Any numeric value 0.35
    -plot Produce graphic Yes/No No
    -double Plot two graphs Yes/No No
    

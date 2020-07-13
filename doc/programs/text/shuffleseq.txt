@@ -1,9 +1,8 @@
 
-                             EMBOSS: shuffleseq
-     _________________________________________________________________
+                                shuffleseq 
+                                      
    
-                              Program shuffleseq
-                                       
+   
 Function
 
    Shuffles a set of sequences maintaining composition
@@ -39,7 +38,7 @@ Command line arguments
    -shuffle            integer    Number of shuffles
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

@@ -1,9 +1,8 @@
 
-                             EMBOSS: est2genome
-     _________________________________________________________________
+                                est2genome 
+                                      
    
-                              Program est2genome
-                                       
+   
 Function
 
    Align EST and genomic DNA sequences
@@ -60,8 +59,8 @@ Command line arguments
                                   threshold score.
 
    Advanced qualifiers:
-   -reverse            bool       Reverse the orientation of the EST sequence
-   -[no]splice         bool       Use donor and acceptor splice sites. If you
+   -reverse            boolean    Reverse the orientation of the EST sequence
+   -[no]splice         boolean    Use donor and acceptor splice sites. If you
                                   want to ignore donor-acceptor sites then set
                                   this to be false.
    -mode               string     This determines the comparion mode. The
@@ -74,7 +73,7 @@ Command line arguments
                                   'forward', when just the forward strand is
                                   searched, and 'reverse', ditto for the
                                   reverse strand.
-   -[no]best           bool       You can print out all comparisons instead of
+   -[no]best           boolean    You can print out all comparisons instead of
                                   just the best one by setting this to be
                                   false.
    -space              float      for linear-space recursion. If product of
@@ -87,7 +86,7 @@ Command line arguments
                                   exceed the machine's physical RAM)
    -shuffle            integer    Shuffle
    -seed               integer    Random number seed
-   -align              bool       Show the alignment. The alignment includes
+   -align              boolean    Show the alignment. The alignment includes
                                   the first and last 5 bases of each intron,
                                   together with the intron width. The
                                   direction of splicing is indicated by angle
@@ -96,7 +95,7 @@ Command line arguments
    -width              integer    Alignment width
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -136,7 +135,7 @@ Command line arguments
    to control the memory requirements. In this way very long sequences
    can be aligned. If you have a machine with plenty of memory you can
    raise this parameter (but do not exceed the machine's physical RAM)
-   Any integer value 10.0
+   Any numeric value 10.0
    -shuffle Shuffle Any integer value 0
    -seed Random number seed Any integer value 20825
    -align Show the alignment. The alignment includes the first and last 5

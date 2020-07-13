@@ -1,9 +1,8 @@
 
-                              EMBOSS: octanol
-     _________________________________________________________________
+                                  octanol 
+                                      
    
-                                Program octanol
-                                       
+   
 Function
 
    Displays protein hydropathy
@@ -61,13 +60,13 @@ Command line arguments
    Optional qualifiers:
    -datafile           datafile   White-Wimley data file (Ewhite-wimley.dat)
    -width              integer    window size
-   -octanolplot        bool       Display the octanol plot
-   -interfaceplot      bool       Display the interface plot
-   -[no]differenceplot bool       Display the difference plot
+   -octanolplot        boolean    Display the octanol plot
+   -interfaceplot      boolean    Display the interface plot
+   -[no]differenceplot boolean    Display the difference plot
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -190,6 +189,7 @@ See also
    emowse Protein identification by mass spectrometry
    freak Residue/base frequency table or plot
    iep Calculates the isoelectric point of a protein
+   mwcontam Shows molwts that match across a set of files
    mwfilter Filter noisy molwts from mass spec output
    pepinfo Plots simple amino acid properties in parallel
    pepstats Protein statistics

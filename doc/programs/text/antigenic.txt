@@ -1,9 +1,8 @@
 
-                             EMBOSS: antigenic
-     _________________________________________________________________
+                                 antigenic 
+                                      
    
-                               Program antigenic
-                                       
+   
 Function
 
    Finds antigenic sites in proteins
@@ -41,12 +40,12 @@ Command line arguments
    Mandatory qualifiers:
   [-sequence]          seqall     Sequence database USA
    -minlen             integer    Minimum length
-  [-outfile]           report     (no help text) report value
+  [-outfile]           report     Output report file name
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -56,7 +55,7 @@ Command line arguments
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    -minlen Minimum length Integer from 1 to 50 6
    [-outfile]
-   (Parameter 2) (no help text) report value Report file
+   (Parameter 2) Output report file name Report file
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default

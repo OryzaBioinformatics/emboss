@@ -1,7 +1,3 @@
-<!--
-Edit this file to replace 'vectorstrip' with the name of the program.
--->
-
 <HTML>
 
 <HEAD>
@@ -11,32 +7,31 @@ Edit this file to replace 'vectorstrip' with the name of the program.
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
 
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
 
+
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
+<td align=left valign=middle>
+<b><font size="+6">
 
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: vectorstrip
-</H2>
-</font>
-</td>
-
-</tr>
+vectorstrip
+</font></b>
+</td></tr>
 </table>
-</td>
+<br>&nbsp;
+<p>
 
-</tr>
-</table>
 
-<p><hr><p>
+
+
+
+
 
 <!--END OF HEADER-->
 
@@ -361,10 +356,10 @@ IT IS DONE FOR YOU.
 <pre>
    Mandatory qualifiers (* if not always prompted):
   [-sequence]          seqall     Sequence database USA
-  [-[no]vectorfile]    bool       Are your vector sequences in a file?
+  [-[no]vectorfile]    boolean    Are your vector sequences in a file?
 * [-vectors]           infile     Name of vectorfile
    -mismatch           integer    Max allowed % mismatch
-   -[no]besthits       bool       Show only the best hits (minimise
+   -[no]besthits       boolean    Show only the best hits (minimise
                                   mismatches)?
 *  -linkera            string     5' sequence
 *  -linkerb            string     3' sequence
@@ -374,7 +369,7 @@ IT IS DONE FOR YOU.
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -774,6 +769,7 @@ None.
 <tr><td><a href="revseq.html">revseq</a></td><td>Reverse and complement a sequence</td></tr>
 <tr><td><a href="seqret.html">seqret</a></td><td>Reads and writes (returns) sequences</td></tr>
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
+<tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping the first few</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
 <tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
 <tr><td><a href="trimest.html">trimest</a></td><td>Trim poly-A tails off EST sequences</td></tr>
@@ -841,9 +837,6 @@ This program is intended to be used by everyone and everything, from naive users
    -->
 
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

@@ -1,9 +1,8 @@
 
-                              EMBOSS: showorf
-     _________________________________________________________________
+                                  showorf 
+                                      
    
-                                Program showorf
-                                       
+   
 Function
 
    Pretty output of DNA translations
@@ -44,16 +43,16 @@ Command line arguments
   [-outfile]           outfile    Output file name
 
    Optional qualifiers:
-   -[no]ruler          bool       Add a ruler
-   -[no]plabel         bool       Number translations
-   -[no]nlabel         bool       Number DNA sequence
+   -[no]ruler          boolean    Add a ruler
+   -[no]plabel         boolean    Number translations
+   -[no]nlabel         boolean    Number DNA sequence
 
    Advanced qualifiers:
    -cfile              codon      Codon usage file
    -width              integer    Width of screen
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

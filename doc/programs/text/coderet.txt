@@ -1,9 +1,8 @@
 
-                              EMBOSS: coderet
-     _________________________________________________________________
+                                  coderet 
+                                      
    
-                                Program coderet
-                                       
+   
 Function
 
    Extract CDS, mRNA and translations from feature tables
@@ -184,12 +183,12 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -[no]cds            bool       Extract CDS sequences
-   -[no]mrna           bool       Extract mrna sequences
-   -[no]translation    bool       Extract translated sequences
+   -[no]cds            boolean    Extract CDS sequences
+   -[no]mrna           boolean    Extract mrna sequences
+   -[no]translation    boolean    Extract translated sequences
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

@@ -1,9 +1,8 @@
 
-                               EMBOSS: revseq
-     _________________________________________________________________
+                                  revseq 
+                                      
    
-                                Program revseq
-                                       
+   
 Function
 
    Reverse and complement a sequence
@@ -38,13 +37,13 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -[no]reverse        bool       Set this to be false if you do not wish to
+   -[no]reverse        boolean    Set this to be false if you do not wish to
                                   reverse the output sequence
-   -[no]complement     bool       Set this to be false if you do not wish to
+   -[no]complement     boolean    Set this to be false if you do not wish to
                                   complement the output sequence
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -111,6 +110,7 @@ See also
    pasteseq     Insert one sequence into another
    seqret       Reads and writes (returns) sequences
    seqretsplit  Reads and writes (returns) sequences in individual files
+   skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
    swissparse   Retrieves sequences from swissprot using keyword search
    trimest      Trim poly-A tails off EST sequences

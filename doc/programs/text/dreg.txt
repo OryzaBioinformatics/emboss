@@ -1,9 +1,8 @@
 
-                                EMBOSS: dreg
-     _________________________________________________________________
+                                   dreg 
+                                      
    
-                                 Program dreg
-                                       
+   
 Function
 
    regular expression search of a nucleotide sequence
@@ -111,7 +110,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

@@ -1,12 +1,12 @@
 
-                              EMBOSS: contacts
-     _________________________________________________________________
+                                 contacts 
+                                      
    
-                               Program contacts
-                                       
+   
 Function
 
-   Reads coordinate files and writes contact files
+   Reads coordinate files and writes files of intra-chain residue-residue
+   contact data
    
 Description
 
@@ -49,57 +49,52 @@ Name of log file for the build [contacts.log]:
 Command line arguments
 
    Mandatory qualifiers:
-  [-cpdb]              string     Location of coordinate files for input
-                                  (embl-like format)
-  [-cpdbextn]          string     Extension of coordinate files (embl-like
-                                  format)
-  [-thresh]            float      Threshold contact distance
-  [-ignore]            float      If any two atoms from two different residues
+  [-cpdb]              string     Location of coordinate files (embl format
+                                  input)
+  [-cpdbextn]          string     Extension of coordinate files
+   -vdwf               string     Name of data file with van der Waals radii
+   -thresh             float      Threshold contact distance
+  [-con]               string     Location of contact files for output
+  [-conextn]           string     Extension of contact files
+   -conerrf            outfile    Name of log file for the build
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -ignore             float      If any two atoms from two different residues
                                   are at least this distance apart then no
                                   futher inter-atomic contacts will be checked
                                   for for that residue pair . This speeds the
                                   calculation up considerably.
-  [-vdwf]              string     Name of data file with van der Waals radii
-  [-con]               string     Location of contact files for output
-  [-conextn]           string     Extension of contact files
-  [-conerrf]           outfile    Name of log file for the build
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default
    [-cpdb]
-   (Parameter 1) Location of coordinate files for input (embl-like
-   format) Any string is accepted ./
+   (Parameter 1) Location of coordinate files (embl format input) Any
+   string is accepted ./
    [-cpdbextn]
-   (Parameter 2) Extension of coordinate files (embl-like format) Any
-   string is accepted .pxyz
-   [-thresh]
-   (Parameter 3) Threshold contact distance Any integer value 1.0
-   [-ignore]
-   (Parameter 4) If any two atoms from two different residues are at
-   least this distance apart then no futher inter-atomic contacts will be
-   checked for for that residue pair . This speeds the calculation up
-   considerably. Any integer value 20.0
-   [-vdwf]
-   (Parameter 5) Name of data file with van der Waals radii Any string is
+   (Parameter 2) Extension of coordinate files Any string is accepted
+   .pxyz
+   -vdwf Name of data file with van der Waals radii Any string is
    accepted Evdw.dat
+   -thresh Threshold contact distance Any numeric value 1.0
    [-con]
-   (Parameter 6) Location of contact files for output Any string is
+   (Parameter 3) Location of contact files for output Any string is
    accepted ./
    [-conextn]
-   (Parameter 7) Extension of contact files Any string is accepted .con
-   [-conerrf]
-   (Parameter 8) Name of log file for the build Output file contacts.log
+   (Parameter 4) Extension of contact files Any string is accepted .con
+   -conerrf Name of log file for the build Output file contacts.log
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
-   (none)
+   -ignore If any two atoms from two different residues are at least this
+   distance apart then no futher inter-atomic contacts will be checked
+   for for that residue pair . This speeds the calculation up
+   considerably. Any numeric value 20.0
    
 Input file format
 
@@ -313,13 +308,30 @@ See also
 
    Program name Description
    dichet Parse dictionary of heterogen groups
-   interface Reads coordinate files and writes inter-chain contact files
+   hmmgen Generates a hidden Markov model for each alignment in a
+   directory
+   interface Reads coordinate files and writes files of inter-chain
+   residue-residue contact data
+   profgen Generates various profiles for each alignment in a directory
    psiblasts Runs PSI-BLAST given scopalign alignments
-   scopalign Generate alignments for SCOP families
-   seqsort Removes ambiguities from a set of hits resulting from a
-   database search
-   siggen Generates a sparse protein signature
-   sigscan Scans a sparse protein signature against swissprot
+   scopalign Generate alignments for families in a scop classification
+   file by using STAMP
+   scoprep Reorder scop classificaiton file so that the representative
+   structure of each family is given first
+   scopreso Removes low resolution domains from a scop classification
+   file
+   seqalign Generate extended alignments for families in a scop families
+   file by using CLUSTALW with seed alignments
+   seqsearch Generate files of hits for families in a scop classification
+   file by using PSI-BLAST with seed alignments
+   seqsort Reads multiple files of hits and writes a non-ambiguous file
+   of hits (scop families file) plus a validation file
+   seqwords Generate file of hits for scop families by searching
+   swissprot with keywords
+   siggen Generates a sparse protein signature from an alignment and
+   residue contact data
+   sigscan Scans a signature against swissprot and writes a signature
+   hits files
    
 Author(s)
 

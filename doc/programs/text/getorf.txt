@@ -1,9 +1,8 @@
 
-                               EMBOSS: getorf
-     _________________________________________________________________
+                                  getorf 
+                                      
    
-                                Program getorf
-                                       
+   
 Function
 
    Finds and extracts open reading frames (ORFs)
@@ -61,14 +60,14 @@ Command line arguments
                                   calculated between two STOP codons.
 
    Advanced qualifiers:
-   -[no]methionine     bool       START codons at the beginning of protein
+   -[no]methionine     boolean    START codons at the beginning of protein
                                   products will usually code for Methionine,
                                   despite what the codon will code for when it
                                   is internal to a protein. This qualifier
                                   sets all such START codons to code for
                                   Methionine by default.
-   -circular           bool       Is the sequence circular
-   -[no]reverse        bool       Set this to be false if you do not wish to
+   -circular           boolean    Is the sequence circular
+   -[no]reverse        boolean    Set this to be false if you do not wish to
                                   find ORFs in the reverse complement of the
                                   sequence.
    -flanking           integer    If you have chosen one of the options of the
@@ -81,7 +80,7 @@ Command line arguments
                                   sequence, no output is given for this codon.
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

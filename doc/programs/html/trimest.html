@@ -7,32 +7,33 @@
   </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
+
+
+
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: trimest
-</H2>
-</font>
-</td>
-</tr>
+<td align=left valign=middle>
+<b><font size="+6">
+
+trimest
+</font></b>
+</td></tr>
 </table>
-</td>
-</tr>
-</table>
-<p><hr><p>
+<br>&nbsp;
+<p>
+
+
+
+
+
 
 <!--END OF HEADER-->
 
-<H1>
-Program trimest
-</H1>
 <H2>
     Function
 </H2>
@@ -165,7 +166,7 @@ Here is a sample session with trimest:
                                   of GCAAAAGAAAA would be removed; There are
                                   at least -minlength A's preceeding the last
                                   'G', so it is part of the tail.
-   -[no]reverse        bool       When a poly-T region at the 5' end of the
+   -[no]reverse        boolean    When a poly-T region at the 5' end of the
                                   sequence is found and removed, it is likely
                                   that the sequence is in the reverse sense.
                                   This option will change the sequence to the
@@ -174,14 +175,14 @@ Here is a sample session with trimest:
                                   not be changed.
 
    Advanced qualifiers:
-   -[no]fiveprime      bool       If this is set true, then the 5' end of teh
+   -[no]fiveprime      boolean    If this is set true, then the 5' end of teh
                                   sequence is inspected for poly-T tails.
                                   These will be removed if they are longer
                                   than any 3' poly-A tails. If this is false,
                                   then the 5' end is ignored.
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -534,6 +535,7 @@ None.
 <tr><td><a href="revseq.html">revseq</a></td><td>Reverse and complement a sequence</td></tr>
 <tr><td><a href="seqret.html">seqret</a></td><td>Reads and writes (returns) sequences</td></tr>
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
+<tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping the first few</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
 <tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
 <tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
@@ -645,9 +647,6 @@ This program is intended to be used by everyone and everything, from naive users
 
 
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

@@ -1,9 +1,8 @@
 
-                               EMBOSS: seqret
-     _________________________________________________________________
+                                  seqret 
+                                      
    
-                                Program seqret
-                                       
+   
 Function
 
    Reads and writes (returns) sequences
@@ -524,11 +523,11 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -feature            bool       Use feature information
-   -firstonly          bool       Read one sequence and stop
+   -feature            boolean    Use feature information
+   -firstonly          boolean    Read one sequence and stop
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -628,6 +627,7 @@ See also
    pasteseq     Insert one sequence into another
    revseq       Reverse and complement a sequence
    seqretsplit  Reads and writes (returns) sequences in individual files
+   skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
    swissparse   Retrieves sequences from swissprot using keyword search
    trimest      Trim poly-A tails off EST sequences

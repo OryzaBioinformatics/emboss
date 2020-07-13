@@ -1,6 +1,7 @@
 
-                                EMBOSS: tfm
-     _________________________________________________________________
+                                    tfm 
+                                      
+   
    
                                   Program tfm
                                        
@@ -56,9 +57,9 @@ Command line arguments
    -outfile            outfile    If you enter the name of a file here then
                                   this program will write the program names
                                   and brief descriptions into that file.
-   -html               bool       This will format the output for displaying
+   -html               boolean    This will format the output for displaying
                                   as a WWW document.
-   -more               bool       This uses the standard UNIX utility 'more'
+   -more               boolean    This uses the standard UNIX utility 'more'
                                   to display the text page-by-page, waiting
                                   for you to read one screen-full before going
                                   on to the next page. When you have finished
@@ -67,7 +68,7 @@ Command line arguments
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

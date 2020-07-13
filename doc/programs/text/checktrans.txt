@@ -1,9 +1,8 @@
 
-                             EMBOSS: checktrans
-     _________________________________________________________________
+                                checktrans 
+                                      
    
-                              Program checktrans
-                                       
+   
 Function
 
    Reports STOP codons and ORF statistics of a protein sequence
@@ -47,7 +46,7 @@ Command line arguments
    -featout            featout    File for output features
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -157,6 +156,7 @@ See also
    emowse       Protein identification by mass spectrometry
    freak        Residue/base frequency table or plot
    iep          Calculates the isoelectric point of a protein
+   mwcontam     Shows molwts that match across a set of files
    mwfilter     Filter noisy molwts from mass spec output
    octanol      Displays protein hydropathy
    pepinfo      Plots simple amino acid properties in parallel

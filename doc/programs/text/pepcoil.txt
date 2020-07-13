@@ -1,9 +1,8 @@
 
-                              EMBOSS: pepcoil
-     _________________________________________________________________
+                                  pepcoil 
+                                      
    
-                                Program pepcoil
-                                       
+   
 Function
 
    Predicts coiled coil regions
@@ -42,12 +41,12 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -[no]coil           bool       Report coiled coil regions
-   -frame              bool       Show coil frameshifts
-   -[no]other          bool       Report non coiled coil regions
+   -[no]coil           boolean    Report coiled coil regions
+   -frame              boolean    Show coil frameshifts
+   -[no]other          boolean    Report non coiled coil regions
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

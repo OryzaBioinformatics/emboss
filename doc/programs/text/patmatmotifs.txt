@@ -1,9 +1,8 @@
 
-                            EMBOSS: patmatmotifs
-     _________________________________________________________________
+                           EMBOSS: patmatmotifs 
+                                      
    
-                             Program patmatmotifs
-                                       
+   
 Function
 
    Search a PROSITE motif database with a protein sequence
@@ -80,12 +79,12 @@ Command line arguments
 
    Mandatory qualifiers:
   [-sequence]          sequence   Sequence USA
-  [-outfile]           report     (no help text) report value
+  [-outfile]           report     Output report file name
 
    Optional qualifiers:
-   -full               bool       Provide full documentation for matching
+   -full               boolean    Provide full documentation for matching
                                   patterns
-   -[no]prune          bool       Ignore simple patterns. If this is true then
+   -[no]prune          boolean    Ignore simple patterns. If this is true then
                                   these simple post-translational
                                   modification sites are not reported:
                                   myristyl, asn_glycosylation,
@@ -94,7 +93,7 @@ Command line arguments
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -103,7 +102,7 @@ Command line arguments
    [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
    [-outfile]
-   (Parameter 2) (no help text) report value Report file
+   (Parameter 2) Output report file name Report file
    Optional qualifiers Allowed values Default
    -full Provide full documentation for matching patterns Yes/No No
    -[no]prune Ignore simple patterns. If this is true then these simple

@@ -1,9 +1,8 @@
 
-                              EMBOSS: trimseq
-     _________________________________________________________________
+                                  trimseq 
+                                      
    
-                                Program trimseq
-                                       
+   
 Function
 
    Trim ambiguous bits off the ends of sequences
@@ -83,20 +82,20 @@ Command line arguments
    -percent            float      This is the threshold of the percentage
                                   ambiguity in the window required in order to
                                   trim a sequence.
-   -strict             bool       In nucleic sequences, trim off not only N's
+   -strict             boolean    In nucleic sequences, trim off not only N's
                                   and X's, but also the nucleotide IUPAC
                                   ambiguity codes M, R, W, S, Y, K, V, H, D
                                   and B. In protein sequences, trim off not
                                   only X's but also B and Z.
-   -star               bool       In protein sequences, trim off not only X's,
+   -star               boolean    In protein sequences, trim off not only X's,
                                   but also the *'s
 
    Advanced qualifiers:
-   -[no]left           bool       Trim at the start
-   -[no]right          bool       Trim at the end
+   -[no]left           boolean    Trim at the start
+   -[no]right          boolean    Trim at the end
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -115,7 +114,7 @@ Command line arguments
    done only if there is a greater or equal percentage of ambiguity than
    the threshold percentage. Any integer value 1
    -percent This is the threshold of the percentage ambiguity in the
-   window required in order to trim a sequence. Any integer value 100.0
+   window required in order to trim a sequence. Any numeric value 100.0
    -strict In nucleic sequences, trim off not only N's and X's, but also
    the nucleotide IUPAC ambiguity codes M, R, W, S, Y, K, V, H, D and B.
    In protein sequences, trim off not only X's but also B and Z. Yes/No
@@ -185,6 +184,7 @@ See also
    revseq       Reverse and complement a sequence
    seqret       Reads and writes (returns) sequences
    seqretsplit  Reads and writes (returns) sequences in individual files
+   skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
    swissparse   Retrieves sequences from swissprot using keyword search
    trimest      Trim poly-A tails off EST sequences

@@ -1,9 +1,8 @@
 
-                                EMBOSS: yank
-     _________________________________________________________________
+                                   yank 
+                                      
    
-                                 Program yank
-                                       
+   
 Function
 
    Reads a sequence range, appends the full USA to a list file
@@ -100,10 +99,10 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -newfile            bool       Overwrite existing output file
+   -newfile            boolean    Overwrite existing output file
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -188,6 +187,7 @@ See also
    revseq       Reverse and complement a sequence
    seqret       Reads and writes (returns) sequences
    seqretsplit  Reads and writes (returns) sequences in individual files
+   skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
    swissparse   Retrieves sequences from swissprot using keyword search
    trimest      Trim poly-A tails off EST sequences

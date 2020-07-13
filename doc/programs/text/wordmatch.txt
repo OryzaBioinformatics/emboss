@@ -1,9 +1,8 @@
 
-                             EMBOSS: wordmatch
-     _________________________________________________________________
+                                 wordmatch 
+                                      
    
-                               Program wordmatch
-                                       
+   
 Function
 
    Finds all exact matches of a given size between 2 sequences
@@ -23,10 +22,11 @@ Description
 Usage
 
    Here is a sample session with wordmatch.
-
-% wordmatch sw:hba_human sw:hbb_human
-Output file [hba_human.wordmatch]:
+   
+% wordmatch tsw:hba_human tsw:hbb_human
+Finds all exact matches of a given size between 2 sequences
 Word size [4]:
+Output alignment [hba_human.wordmatch]:
 
 Command line arguments
 
@@ -34,7 +34,7 @@ Command line arguments
   [-asequence]         sequence   Sequence USA
   [-bsequence]         sequence   Sequence USA
    -wordsize           integer    Word size
-  [-outfile]           align      (no help text) align value
+  [-outfile]           align      Output alignment file name
 
    Optional qualifiers: (none)
    Advanced qualifiers:
@@ -44,7 +44,7 @@ Command line arguments
                                   features
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -56,7 +56,7 @@ Command line arguments
    (Parameter 2) Sequence USA Readable sequence Required
    -wordsize Word size Integer 2 or more 4
    [-outfile]
-   (Parameter 3) (no help text) align value Alignment file
+   (Parameter 3) Output alignment file name Alignment file
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
@@ -71,29 +71,55 @@ Input file format
    
 Output file format
 
+   The output is a standard EMBOSS alignment file.
+   
+   The results can be output in one of several styles by using the
+   command-line qualifier -aformat xxx, where 'xxx' is replaced by the
+   name of the required format. Some of the alignment formats can cope
+   with an unlimited number of sequences, while others are only for pairs
+   of sequences.
+   
+   The available multiple alignment format names are: unknown, multiple,
+   simple, fasta, msf, trace, srs
+   
+   The available pairwise alignment format names are: pair, markx0,
+   markx1, markx2, markx3, markx10, srspair, score
+   
+   See: http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html
+   for further information on alignment formats.
+   
    The file produced in the above example is:
      _________________________________________________________________
    
-FINALLY length = 3
- HBA_HUMAN  HBB_HUMAN Length
-        58          63          5
-        14          15          4
-       116         121          4
+########################################
+# Program:  wordmatch
+# Rundate:  Mon May 20 16:36:46 2002
+# Report_file: hba_human.wordmatch
+########################################
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+#=======================================
+
+     5 HBA_HUMAN             58..62       HBB_HUMAN             63..67
+     4 HBA_HUMAN             14..17       HBB_HUMAN             15..18
+     4 HBA_HUMAN            116..119      HBB_HUMAN            121..124
+
+#---------------------------------------
+#---------------------------------------
      _________________________________________________________________
    
-   The first line ('FINALLY...') gives the number of regions found.
+   The normal 'report' header is output. It contains the details of the
+   program run and the input sequences.
    
-   The next line gives the headers for the subsequent columns of data.
-   This consists for the names of the two sequence and the word 'Length'.
-   
-   Subsequent lines consist of three columns fo numbers separated by
-   spaces or TAB characters. Each line contains the information on one
-   identical region. The first column is the start position in the first
-   sequence of the identical region. The second number is the start
-   position in the second sequence. the third number is the length of the
-   identical region.
-   
-   If no regions are found, the output file is blank.
+   The data lines consist of five columns separated by spaces or TAB
+   characters. Each line contains the information on one identical
+   region. The first column is the length of the match. The second column
+   is the name of the first sequence. The third column is the start and
+   end position of the match. The next two columns are the name and
+   positions of the second sequence.
    
 Data files
 

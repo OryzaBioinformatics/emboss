@@ -1,12 +1,13 @@
 
-                              EMBOSS: sigscan
-     _________________________________________________________________
+                                  sigscan 
+                                      
+   
    
                                 Program sigscan
                                        
 Function
 
-   Scans a sparse protein signature against swissprot
+   Scans a signature against swissprot and writes a signature hits files
    
 Description
 
@@ -44,21 +45,22 @@ Usage
 Command line arguments
 
    Mandatory qualifiers:
-  [-sigin]             infile     Name of signature file for input
-  [-database]          seqall     Name of sequence database to search
-  [-targetf]           infile     Name of (optionally grouped) scop families
-                                  file for input
-  [-thresh]            integer    Minimum length (residues) of overlap
+  [-sigin]             infile     Name of signature file (input)
+   -database           seqall     Name of swissprot sequence database to
+                                  search
+   -targetf            infile     Name of validation (input)
+   -thresh             integer    Minimum length (residues) of overlap
                                   required for two hits with the same code to
                                   be counted as the same hit.
-  [-sub]               matrixf    Residue substitution matrix
-  [-gapo]              float      The gap insertion penalty is the score taken
+   -sub                matrixf    This is the scoring matrix file used when
+                                  comparing sequences.
+   -gapo               float      The gap insertion penalty is the score taken
                                   away when a gap is created. The best value
                                   depends on the choice of comparison matrix.
                                   The default value assumes you are using the
                                   EBLOSUM62 matrix for protein sequences, and
                                   the EDNAMAT matrix for nucleotide sequences.
-  [-gape]              float      The gap extension, penalty is added to the
+   -gape               float      The gap extension, penalty is added to the
                                   standard gap penalty for each base or
                                   residue in the gap. This is how long gaps
                                   are penalized. Usually you will expect a few
@@ -73,44 +75,35 @@ Command line arguments
                                   gap extension penalty to control gap
                                   scoring.
    -nterm              menu       Select number
-  [-nhits]             integer    Number of hits to output
-  [-hitsf]             outfile    Name of signature hits file for output
-  [-alignf]            outfile    Name of signature alignments file for output
+   -nhits              integer    Number of hits to output
+  [-hitsf]             outfile    Name of signature hits file (output)
+  [-alignf]            outfile    Name of signature alignments file (output)
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default
    [-sigin]
-   (Parameter 1) Name of signature file for input Input file test.sig
-   [-database]
-   (Parameter 2) Name of sequence database to search Readable sequence(s)
-   ./test.seq
-   [-targetf]
-   (Parameter 3) Name of (optionally grouped) scop families file for
-   input Input file test.fam
-   [-thresh]
-   (Parameter 4) Minimum length (residues) of overlap required for two
-   hits with the same code to be counted as the same hit. Any integer
-   value 20
-   [-sub]
-   (Parameter 5) Residue substitution matrix Comparison matrix file in
-   EMBOSS data path ./EBLOSUM62
-   [-gapo]
-   (Parameter 6) The gap insertion penalty is the score taken away when a
-   gap is created. The best value depends on the choice of comparison
-   matrix. The default value assumes you are using the EBLOSUM62 matrix
-   for protein sequences, and the EDNAMAT matrix for nucleotide
-   sequences. Floating point number from 1.0 to 100.0 10.0 for any
-   sequence
-   [-gape]
-   (Parameter 7) The gap extension, penalty is added to the standard gap
-   penalty for each base or residue in the gap. This is how long gaps are
+   (Parameter 1) Name of signature file (input) Input file test.sig
+   -database Name of swissprot sequence database to search Readable
+   sequence(s) ./test.seq
+   -targetf Name of validation (input) Input file test.valid.in
+   -thresh Minimum length (residues) of overlap required for two hits
+   with the same code to be counted as the same hit. Any integer value 20
+   -sub This is the scoring matrix file used when comparing sequences.
+   Comparison matrix file in EMBOSS data path EBLOSUM62
+   -gapo The gap insertion penalty is the score taken away when a gap is
+   created. The best value depends on the choice of comparison matrix.
+   The default value assumes you are using the EBLOSUM62 matrix for
+   protein sequences, and the EDNAMAT matrix for nucleotide sequences.
+   Floating point number from 1.0 to 100.0 10.0 for any sequence
+   -gape The gap extension, penalty is added to the standard gap penalty
+   for each base or residue in the gap. This is how long gaps are
    penalized. Usually you will expect a few long gaps rather than many
    short gaps, so the gap extension penalty should be lower than the gap
    penalty. An exception is where one or both sequences are single reads
@@ -124,14 +117,13 @@ Command line arguments
    2 (Align anywhere and allow partial signature-sequence fit)
    3 (Use empirical gaps only)
    1
-   [-nhits]
-   (Parameter 8) Number of hits to output Any integer value 100
+   -nhits Number of hits to output Any integer value 100
    [-hitsf]
-   (Parameter 9) Name of signature hits file for output Output file
-   test.hits
+   (Parameter 2) Name of signature hits file (output) Output file
+   test.sighits
    [-alignf]
-   (Parameter 10) Name of signature alignments file for output Output
-   file test.align
+   (Parameter 3) Name of signature alignments file (output) Output file
+   test.sigalign
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
@@ -338,14 +330,31 @@ Known bugs
 See also
 
    Program name Description
-   contacts Reads coordinate files and writes contact files
+   contacts Reads coordinate files and writes files of intra-chain
+   residue-residue contact data
    dichet Parse dictionary of heterogen groups
-   interface Reads coordinate files and writes inter-chain contact files
+   hmmgen Generates a hidden Markov model for each alignment in a
+   directory
+   interface Reads coordinate files and writes files of inter-chain
+   residue-residue contact data
+   profgen Generates various profiles for each alignment in a directory
    psiblasts Runs PSI-BLAST given scopalign alignments
-   scopalign Generate alignments for SCOP families
-   seqsort Removes ambiguities from a set of hits resulting from a
-   database search
-   siggen Generates a sparse protein signature
+   scopalign Generate alignments for families in a scop classification
+   file by using STAMP
+   scoprep Reorder scop classificaiton file so that the representative
+   structure of each family is given first
+   scopreso Removes low resolution domains from a scop classification
+   file
+   seqalign Generate extended alignments for families in a scop families
+   file by using CLUSTALW with seed alignments
+   seqsearch Generate files of hits for families in a scop classification
+   file by using PSI-BLAST with seed alignments
+   seqsort Reads multiple files of hits and writes a non-ambiguous file
+   of hits (scop families file) plus a validation file
+   seqwords Generate file of hits for scop families by searching
+   swissprot with keywords
+   siggen Generates a sparse protein signature from an alignment and
+   residue contact data
    
 Author(s)
 

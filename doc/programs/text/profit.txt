@@ -1,9 +1,8 @@
 
-                               EMBOSS: profit
-     _________________________________________________________________
+                                  profit 
+                                      
    
-                                Program profit
-                                       
+   
 Function
 
    Scan a sequence or database with a matrix or profile
@@ -78,7 +77,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

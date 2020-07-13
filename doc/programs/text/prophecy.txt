@@ -1,20 +1,34 @@
 
-                              EMBOSS: prophecy
-     _________________________________________________________________
+                                 prophecy 
+                                      
    
-                               Program prophecy
-                                       
+   
 Function
 
    Creates matrices/profiles from multiple alignments
    
 Description
 
+   This creates a profile matrix file from a nucleic acid or a protein
+   sequence alignment.
+   
+   The profile matrix file can then be used by profit or prophet.
+   
 Usage
 
    Here is a sample session with prophecy.
 
 % prophecy
+Creates matrices/profiles from multiple alignments
+Input sequence set: globins.msf
+Profile type
+         F : Frequency
+         G : Gribskov
+         H : Henikoff
+Select type [F]:
+Enter a name for the profile [mymatrix]: globins
+Enter threshold reporting percentage [75]:
+Output file [globins.prophecy]:
 
 Command line arguments
 
@@ -31,7 +45,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -49,8 +63,8 @@ Command line arguments
    75
    -datafile Scoring matrix Comparison matrix file in EMBOSS data path
    'Epprofile' for Gribskov type, or EBLOSUM62
-   -open Gap opening penalty Any integer value 3.0
-   -extension Gap extension penalty Any integer value 0.3
+   -open Gap opening penalty Any numeric value 3.0
+   -extension Gap extension penalty Any numeric value 0.3
    [-outf]
    (Parameter 2) Output file name Output file <sequence>.prophecy
    Optional qualifiers Allowed values Default
@@ -60,22 +74,438 @@ Command line arguments
    
 Input file format
 
+   The input is a protein or a nucleic sequence alignment.
+   
+   The one used in the example is:
+     _________________________________________________________________
+   
+!!AA_MULTIPLE_ALIGNMENT 1.0
+
+  ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
+
+  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.14
+  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.15
+  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.15
+  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.19
+  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 0.23
+  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.21
+  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.10
+
+//
+
+           1                                               50
+HBB_HUMAN  ~~~~~~~~VHLTPEEKSAVTALWGKVN.VDEVGGEALGR.LLVVYPWTQR
+HBB_HORSE  ~~~~~~~~VQLSGEEKAAVLALWDKVN.EEEVGGEALGR.LLVVYPWTQR
+HBA_HUMAN  ~~~~~~~~~~~~~~VLSPADKTNVKAA.WGKVGAHAGEYGAEALERMFLS
+HBA_HORSE  ~~~~~~~~~~~~~~VLSAADKTNVKAA.WSKVGGHAGEYGAEALERMFLG
+MYG_PHYCA  ~~~~~~~VLSEGEWQLVLHVWAKVEAD.VAGHGQDILIR.LFKSHPETLE
+GLB5_PETMA PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQE
+LGB2_LUPLU ~~~~~~~~GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKD
+
+           51                                             100
+HBB_HUMAN  FFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSE
+HBB_HORSE  FFDSFGDLSNPGAVMGNPKVKAHGKKVLHSFGEGVHHLDNLKGTFAALSE
+HBA_HUMAN  FPTTKTYFPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSD
+HBA_HORSE  FPTTKTYFPHFDLSHGSAQVKAHGKKVGDALTLAVGHLDDLPGALSNLSD
+MYG_PHYCA  KFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQ
+GLB5_PETMA FFPKFKGLTTADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRD
+LGB2_LUPLU LFSFLKGTSEVPQNNPELQAHAGKVFKLVYEAAIQLQVTGVVVTDATLKN
+
+           101                                            150
+HBB_HUMAN  LHCDKLH..VDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVA
+HBB_HORSE  LHCDKLH..VDPENFRLLGNVLVVVLARHFGKDFTPELQASYQKVVAGVA
+HBA_HUMAN  LHAHKLR..VDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVS
+HBA_HORSE  LHAHKLR..VDPVNFKLLSHCLLSTLAVHLPNDFTPAVHASLDKFLSSVS
+MYG_PHYCA  SHATKHK..IPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFR
+GLB5_PETMA LSGKHAK..SFQVDPQYFKVLAAVIADTVAAGDAGFEKLMSMICILLRSA
+LGB2_LUPLU LGSVHVSKGVADAHFPVVKEAILKTIKEVVGAKWSEELNSAWTIAYDELA
+
+           151        164
+HBB_HUMAN  NALAHKYH~~~~~~
+HBB_HORSE  NALAHKYH~~~~~~
+HBA_HUMAN  TVLTSKYR~~~~~~
+HBA_HORSE  TVLTSKYR~~~~~~
+MYG_PHYCA  KDIAAKYKELGYQG
+GLB5_PETMA Y~~~~~~~~~~~~~
+LGB2_LUPLU IVIKKEMNDAA~~~
+     _________________________________________________________________
+   
 Output file format
 
+   The output is a profile file.
+   
+   The one produced by the above example is:
+     _________________________________________________________________
+   
+# Pure Frequency Matrix
+# Columns are amino acid counts A->Z
+# Rows are alignment positions 1->n
+Simple
+Name            globins
+Length          164
+Maximum score   496
+Thresh          75
+Consensus       PIVDTGSVVALSEEEKSAVDAAWVKANAVAEVGGHALERGLLALEPATLEFFDSFKDLSTFDA
+SHGSAQVKAHGKKVLDALGAAVAHLDDLEGTLAALSDLHADKLHKGVDPVNFKLLSEALLVTLAAHFGADFTPEVQASL
+DKALAGVANVLAHKYHDAAYQG
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0
+
+0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0
+
+1  0  0  0  0  0  1  0  0  0  0  1  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0
+
+1  0  0  0  0  0  0  1  0  0  0  0  0  0  0  1  1  0  1  0  0  0  0  0  0  0  0
+
+0  0  0  0  1  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  2  2  0  0  0  0  0  0  0
+
+1  0  0  0  2  0  1  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  1  0  0  0  0
+
+0  0  0  0  3  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  2  0  0  0  0  0
+
+1  0  0  0  0  0  0  0  0  0  3  3  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  1  0  1  0  0  0  0  0
+
+3  0  0  0  0  0  0  0  0  0  1  2  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0
+
+2  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0
+
+0  0  0  2  0  0  0  0  0  0  1  1  0  0  0  0  0  1  0  1  0  1  0  0  0  0  0
+
+2  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  2  0  0  0  1  0  0  0  0
+
+2  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  1  2  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  1  0  0  2  0  0  0  0  0  0  0  0  4  0  0  0  0
+
+1  0  0  1  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0
+
+0  0  0  0  2  0  0  0  0  0  4  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0
+
+3  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0
+
+2  0  0  1  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0  0  0  0  0  0  1  0  0
+
+1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0
+
+0  0  0  0  1  0  0  0  0  0  0  0  0  1  0  0  0  0  0  1  0  2  2  0  0  0  0
+
+1  0  0  1  1  0  1  0  1  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  1  0  0
+
+0  0  0  0  3  0  1  0  0  0  2  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  1  0  0  1  0  0  0  0  0  0  0  0  1  0  4  0  0  0  0  0
+
+0  0  0  0  0  0  5  1  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0
+
+1  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  1  0  0  1  0  0  0  0  0  0  0
+
+0  0  0  1  2  0  0  3  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0
+
+4  0  0  1  0  0  0  0  1  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  1  2  0  1  0  0  3  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  2  1  2  0  1  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  3  0  0  0  1  0  0  2  0  0
+
+0  0  0  0  0  0  2  0  0  0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+2  0  0  0  0  1  0  0  0  0  0  3  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0
+
+0  0  0  0  2  2  0  0  0  0  0  3  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+2  0  0  0  1  0  0  0  0  0  1  0  0  0  0  0  0  0  0  1  0  2  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  1  0  0  2  0  0  0  0  0  0  2  0  0  2  0  0  0  0  0
+
+1  0  0  0  2  0  0  1  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  2  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  5  0  2  0  0  0  0  0  0  0  0  0
+
+2  0  0  0  1  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  2  0  0  0  0
+
+2  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  1  3  0  0  0  0  3  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  1  2  0  1  0  0  0  0  0  0  0  0  0  0  2  1  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  5  0  0  0  0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  5  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  2  1  0  0  0  0  0  0  0  0  0  0  1  0  0  1  2  0  0  0  0  0  0  0
+
+0  0  0  0  0  1  0  0  0  0  1  0  0  0  0  0  0  1  2  2  0  0  0  0  0  0  0
+
+0  0  0  0  0  4  0  0  0  0  2  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  2  0  0  0  3  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0
+
+0  0  0  2  0  0  2  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0
+
+0  0  0  0  0  2  0  0  0  0  0  4  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  2  0  0  3  1  0  0  0  0  0  0  0
+
+0  0  0  0  1  0  0  2  0  0  0  0  0  1  0  0  0  0  0  3  0  0  0  0  0  0  0
+
+1  0  0  0  1  2  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  1  0  0  0  0  0
+
+1  0  0  4  0  0  1  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0
+
+2  0  0  0  1  0  0  0  0  0  0  2  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  1  1  1  0  0  0  0  2  0  0  2  0  0  0  0  0
+
+0  0  0  0  0  0  0  2  0  0  2  0  2  1  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  0  0  4  0  0  0  1  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  1  0  0  0  0  0  0  0  0  2  0  0  0  0  4  0  0  0  0  0  0  0  0
+
+3  0  0  0  1  0  0  0  0  0  0  1  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  2  0  0  0  0  0  0  2  0  0  0  0  0  3  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  5  0  0  0  0  0
+
+0  0  0  0  0  0  0  1  0  0  5  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0
+
+4  0  0  0  0  0  1  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0
+
+0  0  0  0  0  0  1  6  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  0  0  5  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  1  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0
+
+0  0  0  0  0  1  0  0  0  0  4  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0  0  5  0  0  0  0  0
+
+1  0  0  0  0  0  1  0  1  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  2  0  0  1  1  0  0  0  0  0  1  0  0  0  0  0  1  0  1  0  0  0  0  0
+
+5  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  1  0  0
+
+0  0  0  0  1  2  0  0  0  0  0  3  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0
+
+1  0  0  0  0  0  2  0  0  0  0  0  0  1  0  0  0  0  1  2  0  0  0  0  0  0  0
+
+2  0  0  2  1  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+3  0  0  0  0  0  2  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  1  0  0  0  0  4  0  0  0  0  0
+
+3  0  0  0  0  0  1  1  0  0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  4  0  0  1  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  1  3  1  0  0  0  0  0  0  0  0  2  0  0  0  0  0
+
+0  0  0  5  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0
+
+0  0  0  3  0  0  1  1  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  1  0  0  0  3  1  0  0  0  0  0  0  1  0  1  0  0  0  0  0
+
+0  0  0  0  2  0  0  0  0  0  2  0  0  0  0  2  0  0  0  0  0  1  0  0  0  0  0
+
+1  0  0  0  0  0  3  0  0  0  1  0  0  1  0  0  0  0  0  0  0  1  0  0  0  0  0
+
+2  0  0  0  1  0  0  0  0  0  0  0  1  0  0  0  0  0  0  3  0  0  0  0  0  0  0
+
+0  0  0  1  0  2  0  0  0  0  0  3  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0
+
+3  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  2  0  0  0  0  0  0  0  0
+
+2  0  0  0  0  0  0  0  0  0  1  0  0  1  0  1  0  0  0  2  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  7  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  1  4  0  0  0  0  0  0  0  0
+
+0  0  0  3  2  0  0  0  0  0  0  0  0  1  0  0  1  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  6  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  1  5  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0
+
+3  0  2  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0
+
+0  0  0  2  0  0  0  2  0  0  1  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0
+
+0  0  0  0  0  0  0  2  0  0  5  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  0  0  0  1  0  0  0  4  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0
+
+0  0  0  0  0  0  0  2  0  0  2  0  0  0  0  0  0  2  1  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  1  0  0  5  0  0  0  0  0
+
+1  0  0  4  0  1  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  1  0  0  0  0  1  0  0  0  0  0  0  4  1  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  2  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0
+
+0  0  0  1  0  0  0  1  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  1  0  0
+
+0  0  0  0  0  5  0  0  0  0  0  1  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  1  0  0  0  0  0  2  0  0  0  0  1  1  2  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  1  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  1  0  0  1  0  0
+
+0  0  0  0  0  1  0  0  1  0  0  4  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0
+
+0  0  0  0  0  0  2  0  0  0  2  0  0  0  0  0  0  0  3  0  0  0  0  0  0  0  0
+
+0  0  0  0  2  0  0  2  0  0  0  0  0  2  0  0  0  0  0  0  0  1  0  0  0  0  0
+
+2  0  2  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0
+
+1  0  0  0  0  0  0  0  2  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  0  0  0  0  1  0  0  3  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0
+
+0  0  1  0  0  0  0  1  0  0  1  0  0  0  0  0  0  0  1  0  0  3  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  3  0  3  0  0  0  0  0
+
+1  0  0  0  0  0  0  0  1  0  0  5  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+4  0  0  1  0  0  0  1  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  1  0  0  1  0  0  0  0  0  0  0  0  0  1  1  1  0  1  0  0  0  0  0
+
+0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  1  0  0  0  2  0  0  0  0  0
+
+1  0  0  0  0  2  0  1  0  0  0  2  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0
+
+1  0  0  0  0  0  3  0  0  0  0  0  0  0  0  3  0  0  0  0  0  0  0  0  0  0  0
+
+2  0  0  0  0  0  2  0  0  0  2  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  4  2  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  0  5  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0
+
+0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  1  4  0  0  0  0  0  0  0
+
+1  0  0  0  1  1  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0
+
+2  0  0  1  3  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  0  0  0  0  0  0  1  2  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0
+
+0  0  0  0  0  0  0  2  0  0  0  1  0  1  0  0  3  0  0  0  0  0  0  0  0  0  0
+
+4  0  0  0  0  0  1  0  0  0  0  0  1  0  0  0  0  0  1  0  0  0  0  0  0  0  0
+
+3  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  2  2  0  0  0  0  0  0  0  0  0  1  0  2  0  0
+
+0  0  0  2  0  0  0  0  1  0  0  0  0  1  0  0  2  0  0  1  0  0  0  0  0  0  0
+
+0  0  1  0  0  0  0  0  1  0  5  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+2  0  0  0  0  2  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  2  0  0  1  0  0
+
+3  0  0  1  1  0  0  0  0  0  0  1  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0
+
+0  0  0  0  1  0  2  0  0  0  0  1  0  0  0  0  0  1  2  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  1  0  0  0  0  0  1  0  0  0  0  0  0  1  0  0  4  0  0  0  0  0
+
+4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  2  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  1  0  1  0  0  2  0  0  0  0  0  2  0  0  0  0  1  0  0
+
+2  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  2  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+3  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0
+
+1  0  0  0  0  0  0  2  0  0  1  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0
+
+0  0  0  0  1  0  0  0  0  0  5  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  5  0  0
+
+0  0  0  0  0  0  0  2  0  0  1  0  0  1  0  0  0  2  0  0  0  0  0  0  0  0  0
+
+0  0  0  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+     _________________________________________________________________
+   
 Data files
 
+   None.
+   
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with status 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                     Description
@@ -88,6 +518,8 @@ Author(s)
    
 History
 
+   1999 - Written Alan Bleasby.
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

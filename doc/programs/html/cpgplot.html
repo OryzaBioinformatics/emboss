@@ -7,37 +7,26 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
-
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
-
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
+<td align=left valign=middle>
+<b><font size="+6">
 
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: cpgplot
-</H2>
-
-
-</font>
-</td>
-
-</tr>
+cpgplot
+</font></b>
+</td></tr>
 </table>
-</td>
+<br>&nbsp;
+<p>
 
-</tr>
-</table>
 
-<p><hr><p>
-<H1>
-Program cpgplot
-</H1>
+ 
+
+
+
+
 
 <H2>
     Function
@@ -81,18 +70,38 @@ Finding a CpG island upstream of predicted exons or genes is good
 contributory evidence. 
 
 <p>
+
 By default, this program defines a CpG island as a region where, over an
 average of 10 windows, the calculated % composition is over 50% and the
-calculated Obs/Exp ratio is over 0.6 and the conditions hold for a
-minimum of 200 bases.  These conditions can be modified by setting the
-values of the appropriate parameters. 
+calculated Obs/Exp (i.e.  Observed/Expected) ratio is over 0.6 and the
+conditions hold for a minimum of 200 bases.  These conditions can be
+modified by setting the values of the appropriate parameters. 
 
 <p>
-The Expected number of CpG patterns in a window is calculated as the
-number of 'C's in the window multiplied by the number of 'G's in the
-window, divided by the window length. 
+
+
+The Observed number of CpG patterns in a window is simply the count of
+the number of times a 'C' is found followed immediately by a 'G'. 
 
 <p>
+
+The Expected number of CpG patterns is calculated for each window as the
+number of CpG dinucleotides you would expect to see in that window based
+on the frequency of C's and G's in that window.  Thus, the Expected
+frequency of CpG's in a window is calculated as the number of 'C's in
+the window multiplied by the number of 'G's in the window, divided by
+the window length. 
+
+<p>
+
+<pre>
+	Expected = (number of C's  * number of G's) / window length
+
+
+</pre>
+
+<p>
+
 This program reads in one or more sequences and calculates the Obs/Exp
 ratio, the percentage CpG over a window which is moved along the
 sequence.  These calculated values can be plotted, together with the
@@ -165,19 +174,19 @@ IT IS DONE FOR YOU.
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -[no]obsexp         bool       If this is set to true then the graph of the
+   -[no]obsexp         boolean    If this is set to true then the graph of the
                                   observed to expected ratio of C plus G to
                                   CpG within a window is displayed.
-   -[no]cg             bool       If this is set to true then the graph of the
+   -[no]cg             boolean    If this is set to true then the graph of the
                                   regions which have been determined to be
                                   CpG islands is displayed.
-   -[no]pc             bool       If this is set to true then the graph of the
+   -[no]pc             boolean    If this is set to true then the graph of the
                                   percentage C plus G within a window is
                                   displayed.
    -featout            featout    File for output features
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -439,9 +448,6 @@ from naive users to embedded scripts.
 
 </pre>
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

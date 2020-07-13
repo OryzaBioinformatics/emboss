@@ -1,9 +1,8 @@
 
-                             EMBOSS: Stretcher
-     _________________________________________________________________
+                                 stretcher 
+                                      
    
-                               Program Stretcher
-                                       
+   
 Function
 
    Finds the best global alignment between two sequences
@@ -20,47 +19,30 @@ Usage
 
    Here is a sample session with stretcher.
 
- stretcher -sequencea s1 -sequenceb s2
-
-
- hbahum                                              141  vs.
- hbbhum                                              146
- scoring matrix: BLOSUM62, gap penalties: 12/2
- 43.2% identity;         Global alignment score: 272
-
-                 10        20        30        40         50
- hbahum V-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH-----GSA
-        : :.: .:. : : ::::  .. : :.::: :... .: :. .:  : :::      :.
- hbbhum VHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNP
-                10          20        30        40        50
-
-             60        70        80        90       100       110
- hbahum QVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHL
-        .::.:::::  :.....::.:.. .....::.::. ::.::: ::.::.. :. .:: :.
- hbbhum KVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHF
-        60        70        80        90       100       110
-
-            120       130       140
- hbahum PAEFTPAVHASLDKFLASVSTVLTSKYR
-          :::: :.:. .: .:.:...:. ::.
- hbbhum GKEFTPPVQAAYQKVVAGVANALAHKYH
-       120       130       140
+% stretcher tsw:hba_human tsw:hbb_human
+Finds the best global alignment between two sequences
+Output alignment [hba_human.stretcher]:
 
 Command line arguments
 
    Mandatory qualifiers:
   [-sequencea]         sequence   Sequence USA
   [-sequenceb]         sequence   Sequence USA
-  [-outfile]           align      (no help text) align value
+  [-outfile]           align      Output alignment file name
 
    Optional qualifiers:
-   -datafile           matrix     Matrix file
-   -gappenalty         integer    gappenalty
-   -gaplength          integer    gap length penalty
+   -datafile           matrix     This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
+   -gappenalty         integer    Gap penalty
+   -gaplength          integer    Gap length penalty
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -71,13 +53,17 @@ Command line arguments
    [-sequenceb]
    (Parameter 2) Sequence USA Readable sequence Required
    [-outfile]
-   (Parameter 3) (no help text) align value Alignment file
+   (Parameter 3) Output alignment file name Alignment file
    Optional qualifiers Allowed values Default
-   -datafile Matrix file Comparison matrix file in EMBOSS data path
-   EBLOSUM62 for protein
+   -datafile This is the scoring matrix file used when comparing
+   sequences. By default it is the file 'EBLOSUM62' (for proteins) or the
+   file 'EDNAFULL' (for nucleic sequences). These files are found in the
+   'data' directory of the EMBOSS installation. Comparison matrix file in
+   EMBOSS data path EBLOSUM62 for protein
    EDNAFULL for DNA
-   -gappenalty gappenalty Positive integer 12 for protein, 16 for nucleic
-   -gaplength gap length penalty Positive integer 2 for protein, 4 for
+   -gappenalty Gap penalty Positive integer 12 for protein, 16 for
+   nucleic
+   -gaplength Gap length penalty Positive integer 2 for protein, 4 for
    nucleic
    Advanced qualifiers Allowed values Default
    (none)
@@ -87,6 +73,70 @@ Input file format
    Any 2 sequence USAs of the same type (DNA or protein).
    
 Output file format
+
+   The output is a standard EMBOSS alignment file.
+   
+   The results can be output in one of several styles by using the
+   command-line qualifier -aformat xxx, where 'xxx' is replaced by the
+   name of the required format. Some of the alignment formats can cope
+   with an unlimited number of sequences, while others are only for pairs
+   of sequences.
+   
+   The available multiple alignment format names are: unknown, multiple,
+   simple, fasta, msf, trace, srs
+   
+   The available pairwise alignment format names are: pair, markx0,
+   markx1, markx2, markx3, markx10, srspair, score
+   
+   See: http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html
+   for further information on alignment formats.
+   
+   The output from the example follows:
+   
+########################################
+# Program:  stretcher
+# Rundate:  Mon May 20 16:25:11 2002
+# Report_file: hba_human.stretcher
+########################################
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+# Matrix: EBLOSUM62
+# Gap_penalty: 12
+# Extend_penalty: 2
+#
+# Length: 148
+# Identity:      64/148 (43.2%)
+# Similarity:    89/148 (60.1%)
+# Gaps:           9/148 ( 6.1%)
+# Score: 272
+#
+#
+#=======================================
+
+
+                10        20        30        40
+HBA_HU V-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DL
+       : :.: .:. : : ::::  .. : :.::: :... .: :. .:  : ::
+HBB_HU VHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDL
+               10          20        30        40
+
+       50             60        70        80        90
+HBA_HU SH-----GSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRV
+       :      :. .::.:::::  :.....::.:.. .....::.::. ::.:
+HBB_HU STPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHV
+       50        60        70        80        90
+
+           100       110       120       130       140
+HBA_HU DPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKYR
+       :: ::.::.. :. .:: :.  :::: :.:. .: .:.:...:. ::.
+HBB_HU DPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH
+      100       110       120       130       140
+
+#---------------------------------------
+#---------------------------------------
 
 Data files
 
@@ -111,18 +161,28 @@ Data files
        
 Notes
 
+   None.
+   
 References
 
     1. Myers and Miller, CABIOS (1989)
        
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                  Description

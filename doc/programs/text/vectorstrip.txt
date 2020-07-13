@@ -1,6 +1,7 @@
 
-                            EMBOSS: vectorstrip
-     _________________________________________________________________
+                                vectorstrip 
+                                      
+   
    
                               Program vectorstrip
                                        
@@ -255,10 +256,10 @@ Command line arguments
 
    Mandatory qualifiers (* if not always prompted):
   [-sequence]          seqall     Sequence database USA
-  [-[no]vectorfile]    bool       Are your vector sequences in a file?
+  [-[no]vectorfile]    boolean    Are your vector sequences in a file?
 * [-vectors]           infile     Name of vectorfile
    -mismatch           integer    Max allowed % mismatch
-   -[no]besthits       bool       Show only the best hits (minimise
+   -[no]besthits       boolean    Show only the best hits (minimise
                                   mismatches)?
 *  -linkera            string     5' sequence
 *  -linkerb            string     3' sequence
@@ -268,7 +269,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -431,6 +432,7 @@ See also
    revseq       Reverse and complement a sequence
    seqret       Reads and writes (returns) sequences
    seqretsplit  Reads and writes (returns) sequences in individual files
+   skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
    swissparse   Retrieves sequences from swissprot using keyword search
    trimest      Trim poly-A tails off EST sequences

@@ -1,9 +1,8 @@
 
-                               EMBOSS: showdb
-     _________________________________________________________________
+                                  showdb 
+                                      
    
-                                Program showdb
-                                       
+   
 Function
 
    Displays information on the currently available databases
@@ -80,31 +79,31 @@ Command line arguments
    Optional qualifiers:
    -database           string     Name of a single database to give
                                   information on
-   -html               bool       Format output as an HTML table
-   -[no]protein        bool       Display protein databases
-   -[no]nucleic        bool       Display nucleic acid databases
-   -release            bool       Display 'release' column
+   -html               boolean    Format output as an HTML table
+   -[no]protein        boolean    Display protein databases
+   -[no]nucleic        boolean    Display nucleic acid databases
+   -release            boolean    Display 'release' column
    -outfile            outfile    If you enter the name of a file here then
                                   this program will write the database details
                                   into that file.
 
    Advanced qualifiers:
-   -only               bool       This is a way of shortening the command line
+   -only               boolean    This is a way of shortening the command line
                                   if you only want a few things to be
                                   displayed. Instead of specifying:
                                   '-nohead -notype -noid -noquery -noall'
                                   to get only the comment output, you can
                                   specify
                                   '-only -comment'
-   -heading            bool       Display column headings
-   -type               bool       Display 'type' column
-   -id                 bool       Display 'id' column
-   -query              bool       Display 'qry' column
-   -all                bool       Display 'all' column
-   -comment            bool       Display 'comment' column
+   -heading            boolean    Display column headings
+   -type               boolean    Display 'type' column
+   -id                 boolean    Display 'id' column
+   -query              boolean    Display 'qry' column
+   -all                boolean    Display 'all' column
+   -comment            boolean    Display 'comment' column
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

@@ -1,9 +1,8 @@
 
-                              EMBOSS: plotcon
-     _________________________________________________________________
+                                  plotcon 
+                                      
    
-                                Program plotcon
-                                       
+   
 Function
 
    Plots the quality of conservation of a sequence alignment
@@ -40,14 +39,19 @@ Command line arguments
 *  -outfile            outfile    Display as data
 
    Optional qualifiers:
-   -scorefile          matrix     Comparison matrix file
+   -scorefile          matrix     This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
 
    Advanced qualifiers:
-   -data               bool       Output the match data to a file instead of
+   -data               boolean    Output the match data to a file instead of
                                   plotting it
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -65,8 +69,11 @@ Command line arguments
    png EMBOSS_GRAPHICS value, or x11
    -outfile Display as data Output file <sequence>.plotcon
    Optional qualifiers Allowed values Default
-   -scorefile Comparison matrix file Comparison matrix file in EMBOSS
-   data path EBLOSUM62 for protein
+   -scorefile This is the scoring matrix file used when comparing
+   sequences. By default it is the file 'EBLOSUM62' (for proteins) or the
+   file 'EDNAFULL' (for nucleic sequences). These files are found in the
+   'data' directory of the EMBOSS installation. Comparison matrix file in
+   EMBOSS data path EBLOSUM62 for protein
    EDNAFULL for DNA
    Advanced qualifiers Allowed values Default
    -data Output the match data to a file instead of plotting it Yes/No No

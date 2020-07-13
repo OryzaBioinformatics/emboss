@@ -1,9 +1,8 @@
 
-                               EMBOSS: remap
-     _________________________________________________________________
+                                   remap 
+                                      
    
-                                 Program remap
-                                       
+   
 Function
 
    Display a sequence with restriction cut sites, translation etc
@@ -89,21 +88,21 @@ Command line arguments
    Optional qualifiers:
    -mincuts            integer    Minimum cuts per RE
    -maxcuts            integer    Maximum cuts per RE
-   -single             bool       Force single site only cuts
-   -[no]blunt          bool       Allow blunt end cutters
-   -[no]sticky         bool       Allow sticky end cutters
-   -[no]ambiguity      bool       Allow ambiguous matches
-   -plasmid            bool       Allow circular DNA
-   -[no]commercial     bool       Only enzymes with suppliers
+   -single             boolean    Force single site only cuts
+   -[no]blunt          boolean    Allow blunt end cutters
+   -[no]sticky         boolean    Allow sticky end cutters
+   -[no]ambiguity      boolean    Allow ambiguous matches
+   -plasmid            boolean    Allow circular DNA
+   -[no]commercial     boolean    Only enzymes with suppliers
    -table              menu       Code to use
-   -[no]cutlist        bool       List the enzymes that cut
-   -flatreformat       bool       Display RE sites in flat format
-   -[no]limit          bool       Limits reports to one isoschizomer
-   -preferred          bool       Report preferred isoschizomers
+   -[no]cutlist        boolean    List the enzymes that cut
+   -flatreformat       boolean    Display RE sites in flat format
+   -[no]limit          boolean    Limits reports to one isoschizomer
+   -preferred          boolean    Report preferred isoschizomers
 
    Advanced qualifiers:
-   -[no]translation    bool       Display translation
-   -[no]reverse        bool       Display cut sites and translation of reverse
+   -[no]translation    boolean    Display translation
+   -[no]reverse        boolean    Display cut sites and translation of reverse
                                   sense
    -orfminsize         integer    Minimum size of Open Reading Frames (ORFs)
                                   to display in the translations.
@@ -132,21 +131,21 @@ Command line arguments
                                   1-100 green 120-156 red
                                   A file of ranges to colour (one range per
                                   line) can be specifed as '@filename'.
-   -threeletter        bool       Display protein sequences in three-letter
+   -threeletter        boolean    Display protein sequences in three-letter
                                   code
-   -number             bool       Number the sequences
+   -number             boolean    Number the sequences
    -width              integer    Width of sequence to display
    -length             integer    Line length of page (0 for indefinite)
    -margin             integer    Margin around sequence for numbering
-   -[no]name           bool       Set this to be false if you do not wish to
+   -[no]name           boolean    Set this to be false if you do not wish to
                                   display the ID name of the sequence
-   -[no]description    bool       Set this to be false if you do not wish to
+   -[no]description    boolean    Set this to be false if you do not wish to
                                   display the description of the sequence
    -offset             integer    Offset to start numbering the sequence from
-   -html               bool       Use HTML formatting
+   -html               boolean    Use HTML formatting
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

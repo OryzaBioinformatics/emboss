@@ -1,9 +1,8 @@
 
-                               EMBOSS: pepnet
-     _________________________________________________________________
+                                  pepnet 
+                                      
    
-                                Program pepnet
-                                       
+   
 Function
 
    Displays proteins as a helical net
@@ -47,17 +46,17 @@ Command line arguments
                                   HKR are marked with octagons.
 
    Advanced qualifiers:
-   -amphipathic        bool       If this is true then the residues ACFGILMVWY
+   -amphipathic        boolean    If this is true then the residues ACFGILMVWY
                                   are marked as squares and all other
                                   residues are unmarked. This overrides any
                                   other markup that you may have specified
                                   using the qualifiers '-squares', '-diamonds'
                                   and '-octags'.
-   -data               bool       Output the data to a file instead of
+   -data               boolean    Output the data to a file instead of
                                   plotting it
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

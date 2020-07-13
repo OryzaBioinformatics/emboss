@@ -1,9 +1,8 @@
 
-                                EMBOSS: dan
-     _________________________________________________________________
+                                    dan 
+                                      
    
-                                  Program dan
-                                       
+   
 Function
 
    Calculates DNA RNA/DNA melting temperature
@@ -81,20 +80,20 @@ Command line arguments
                                   values.
 
    Advanced qualifiers:
-   -rna                bool       This specifies that the sequence is an RNA
+   -rna                boolean    This specifies that the sequence is an RNA
                                   sequnce and not a DNA sequence.
-   -product            bool       This prompts for percent formamide, percent
+   -product            boolean    This prompts for percent formamide, percent
                                   of mismatches allowed and product length.
-   -thermo             bool       Output the DeltaG, DeltaH and DeltaS values
+   -thermo             boolean    Output the DeltaG, DeltaH and DeltaS values
                                   of the sequence windows to the output data
                                   file.
-   -plot               bool       If this is not specified then the file of
+   -plot               boolean    If this is not specified then the file of
                                   output data is produced, else a plot of the
                                   melting point along the sequence is
                                   produced.
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

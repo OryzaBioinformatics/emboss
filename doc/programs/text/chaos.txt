@@ -1,9 +1,8 @@
 
-                               EMBOSS: chaos
-     _________________________________________________________________
+                                   chaos 
+                                      
    
-                                 Program chaos
-                                       
+   
 Function
 
    Create a chaos game representation plot for a sequence
@@ -53,10 +52,10 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -data               bool       Display as data
+   -data               boolean    Display as data
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

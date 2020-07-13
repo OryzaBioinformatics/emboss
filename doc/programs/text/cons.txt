@@ -1,9 +1,8 @@
 
-                                EMBOSS: cons
-     _________________________________________________________________
+                                   cons 
+                                      
    
-                                 Program cons
-                                       
+   
 Function
 
    Creates a consensus from multiple alignments
@@ -60,7 +59,12 @@ Command line arguments
   [-outseq]            seqout     Output sequence USA
 
    Optional qualifiers:
-   -datafile           matrix     Scoring matrix
+   -datafile           matrix     This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
    -plurality          float      Set a cut-off for the number of positive
                                   matches below which there is no consensus.
                                   The default plurality is taken as half the
@@ -80,7 +84,7 @@ Command line arguments
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -92,12 +96,15 @@ Command line arguments
    [-outseq]
    (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
    Optional qualifiers Allowed values Default
-   -datafile Scoring matrix Comparison matrix file in EMBOSS data path
-   EBLOSUM62 for protein
+   -datafile This is the scoring matrix file used when comparing
+   sequences. By default it is the file 'EBLOSUM62' (for proteins) or the
+   file 'EDNAFULL' (for nucleic sequences). These files are found in the
+   'data' directory of the EMBOSS installation. Comparison matrix file in
+   EMBOSS data path EBLOSUM62 for protein
    EDNAFULL for DNA
    -plurality Set a cut-off for the number of positive matches below
    which there is no consensus. The default plurality is taken as half
-   the total weight of all the sequences in the alignment. Any integer
+   the total weight of all the sequences in the alignment. Any numeric
    value Half the total sequence weighting
    -identity Provides the facility of setting the required number of
    identities at a site for it to give a consensus at that position.
@@ -108,7 +115,7 @@ Command line arguments
    string is accepted
    -setcase Sets the threshold for the positive matches above which the
    consensus is is upper-case and below which the consensus is in
-   lower-case. Any integer value 0
+   lower-case. Any numeric value 0
    Advanced qualifiers Allowed values Default
    (none)
    

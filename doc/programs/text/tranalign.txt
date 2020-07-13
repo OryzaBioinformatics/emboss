@@ -1,9 +1,8 @@
 
-                             EMBOSS: tranalign
-     _________________________________________________________________
+                                 tranalign 
+                                      
    
-                               Program tranalign
-                                       
+   
 Function
 
    Align nucleic coding regions given the aligned proteins
@@ -61,7 +60,7 @@ Command line arguments
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

@@ -1,9 +1,8 @@
 
-                               EMBOSS: dottup
-     _________________________________________________________________
+                                  dottup 
+                                      
    
-                                Program dottup
-                                       
+   
 Function
 
    Displays a wordmatch dotplot of two sequences
@@ -50,20 +49,20 @@ Command line arguments
   [-sequencea]         sequence   Sequence USA
   [-sequenceb]         sequence   Sequence USA
    -wordsize           integer    Word size
-*  -data               bool       Output the match data to a file instead of
+*  -data               boolean    Output the match data to a file instead of
                                   plotting it
 *  -graph              graph      Graph type
 *  -xygraph            xygraph    Graph type
 *  -outfile            outfile    Output file name
 
    Optional qualifiers (* if not always prompted):
-*  -[no]boxit          bool       Draw a box around dotplot
+*  -[no]boxit          boolean    Draw a box around dotplot
 
    Advanced qualifiers:
-   -stretch            bool       Use non-proportional axes
+   -stretch            boolean    Use non-proportional axes
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

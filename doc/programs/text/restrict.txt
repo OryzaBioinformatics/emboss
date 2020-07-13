@@ -1,9 +1,8 @@
 
-                              EMBOSS: restrict
-     _________________________________________________________________
+                                 restrict 
+                                      
    
-                               Program restrict
-                                       
+   
 Function
 
    Finds restriction enzyme cleavage sites
@@ -54,27 +53,27 @@ Command line arguments
                                   hindiii
                                   HinfI
                                   PpiI
-  [-outfile]           report     (no help text) report value
+  [-outfile]           report     Output report file name
 
    Optional qualifiers: (none)
    Advanced qualifiers:
    -min                integer    Minimum cuts per RE
    -max                integer    Maximum cuts per RE
-   -single             bool       Force single site only cuts
-   -[no]blunt          bool       Allow blunt end cutters
-   -[no]sticky         bool       Allow sticky end cutters
-   -[no]ambiguity      bool       Allow ambiguous matches
-   -plasmid            bool       Allow circular DNA
-   -[no]commercial     bool       Only enzymes with suppliers
+   -single             boolean    Force single site only cuts
+   -[no]blunt          boolean    Allow blunt end cutters
+   -[no]sticky         boolean    Allow sticky end cutters
+   -[no]ambiguity      boolean    Allow ambiguous matches
+   -plasmid            boolean    Allow circular DNA
+   -[no]commercial     boolean    Only enzymes with suppliers
    -datafile           string     Alternative RE data file
-   -[no]limit          bool       Limits reports to one isoschizomer
-   -preferred          bool       Report preferred isoschizomers
-   -alphabetic         bool       Sort output alphabetically
-   -fragments          bool       Show fragment lengths
-   -name               bool       Show sequence name
+   -[no]limit          boolean    Limits reports to one isoschizomer
+   -preferred          boolean    Report preferred isoschizomers
+   -alphabetic         boolean    Sort output alphabetically
+   -fragments          boolean    Show fragment lengths
+   -name               boolean    Show sequence name
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -95,7 +94,7 @@ Command line arguments
    enzyme names is: ! my enzymes HincII, ppiII ! other enzymes hindiii
    HinfI PpiI Any string is accepted all
    [-outfile]
-   (Parameter 2) (no help text) report value Report file
+   (Parameter 2) Output report file name Report file
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default

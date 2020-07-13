@@ -1,9 +1,8 @@
 
-                             EMBOSS: dotmatcher
-     _________________________________________________________________
+                                dotmatcher 
+                                      
    
-                              Program dotmatcher
-                                       
+   
 Function
 
    Displays a thresholded dotplot of two sequences
@@ -47,7 +46,7 @@ Command line arguments
    Mandatory qualifiers (* if not always prompted):
   [-sequencea]         sequence   Sequence USA
   [-sequenceb]         sequence   Sequence USA
-*  -data               bool       Output the match data to a file instead of
+*  -data               boolean    Output the match data to a file instead of
                                   plotting it
 *  -graph              graph      Graph type
 *  -xygraph            xygraph    Graph type
@@ -56,13 +55,18 @@ Command line arguments
    Optional qualifiers:
    -windowsize         integer    window size over which to test threshhold
    -threshold          integer    threshold
-   -matrixfile         matrix     Matrix file
+   -matrixfile         matrix     This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
 
    Advanced qualifiers:
-   -stretch            bool       Display a non-proportional graph
+   -stretch            boolean    Display a non-proportional graph
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -85,9 +89,12 @@ Command line arguments
    Optional qualifiers Allowed values Default
    -windowsize window size over which to test threshhold Integer 3 or
    more 10
-   -threshold threshold Integer 0 or more 50
-   -matrixfile Matrix file Comparison matrix file in EMBOSS data path
-   EBLOSUM62 for protein
+   -threshold threshold Integer 0 or more 23
+   -matrixfile This is the scoring matrix file used when comparing
+   sequences. By default it is the file 'EBLOSUM62' (for proteins) or the
+   file 'EDNAFULL' (for nucleic sequences). These files are found in the
+   'data' directory of the EMBOSS installation. Comparison matrix file in
+   EMBOSS data path EBLOSUM62 for protein
    EDNAFULL for DNA
    Advanced qualifiers Allowed values Default
    -stretch Display a non-proportional graph Yes/No No

@@ -7,37 +7,26 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
 
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
 
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
+<td align=left valign=middle>
+<b><font size="+6">
 
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: dotmatcher
-</H2>
-
-
-</font>
-</td>
-
-</tr>
+dotmatcher
+</font></b>
+</td></tr>
 </table>
-</td>
+<br>&nbsp;
+<p>
 
-</tr>
-</table>
 
-<p><hr><p>
-<H1>
-Program dotmatcher
-</H1>
+
+
+
 
 <H2>
     Function
@@ -124,7 +113,7 @@ IT IS DONE FOR YOU.
    Mandatory qualifiers (* if not always prompted):
   [-sequencea]         sequence   Sequence USA
   [-sequenceb]         sequence   Sequence USA
-*  -data               bool       Output the match data to a file instead of
+*  -data               boolean    Output the match data to a file instead of
                                   plotting it
 *  -graph              graph      Graph type
 *  -xygraph            xygraph    Graph type
@@ -133,13 +122,18 @@ IT IS DONE FOR YOU.
    Optional qualifiers:
    -windowsize         integer    window size over which to test threshhold
    -threshold          integer    threshold
-   -matrixfile         matrix     Matrix file
+   -matrixfile         matrix     This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
 
    Advanced qualifiers:
-   -stretch            bool       Display a non-proportional graph
+   -stretch            boolean    Display a non-proportional graph
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -214,12 +208,12 @@ IT IS DONE FOR YOU.
 <td>-threshold</td>
 <td>threshold</td>
 <td>Integer 0 or more</td>
-<td>50</td>
+<td>23</td>
 </tr>
 
 <tr>
 <td>-matrixfile</td>
-<td>Matrix file</td>
+<td>This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.</td>
 <td>Comparison matrix file in EMBOSS data path</td>
 <td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
 </tr>
@@ -392,9 +386,6 @@ from naive users to embedded scripts.
 
 </pre>
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

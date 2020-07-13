@@ -1,9 +1,8 @@
 
-                               EMBOSS: silent
-     _________________________________________________________________
+                                  silent 
+                                      
    
-                                Program silent
-                                       
+   
 Function
 
    Silent mutation restriction enzyme scan
@@ -38,12 +37,12 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -sshow              bool       Display untranslated sequence
-   -tshow              bool       Display translated sequence
-   -allmut             bool       Display all mutations
+   -sshow              boolean    Display untranslated sequence
+   -tshow              boolean    Display translated sequence
+   -allmut             boolean    Display all mutations
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

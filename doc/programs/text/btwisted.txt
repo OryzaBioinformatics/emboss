@@ -1,9 +1,8 @@
 
-                              EMBOSS: btwisted
-     _________________________________________________________________
+                                 btwisted 
+                                      
    
-                               Program btwisted
-                                       
+   
 Function
 
    Calculates the twisting in a B-DNA sequence
@@ -34,7 +33,7 @@ Command line arguments
    -energydata         string     File containing base pair stacking energies
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

@@ -1,9 +1,8 @@
 
-                              EMBOSS: fuzznuc
-     _________________________________________________________________
+                                  fuzznuc 
+                                      
    
-                                Program fuzznuc
-                                       
+   
 Function
 
    Nucleic acid pattern search
@@ -64,14 +63,14 @@ Command line arguments
                                   fuzznuc).
                                   For example, [CG](5)TG{A}N(1,5)C
    -mismatch           integer    Number of mismatches
-  [-outfile]           report     (no help text) report value
+  [-outfile]           report     Output report file name
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -complement         bool       Search complementary strand
+   -complement         boolean    Search complementary strand
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -98,7 +97,7 @@ Command line arguments
    [CG](5)TG{A}N(1,5)C Any string is accepted An empty string is accepted
    -mismatch Number of mismatches Integer 0 or more 0
    [-outfile]
-   (Parameter 2) (no help text) report value Report file
+   (Parameter 2) Output report file name Report file
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default

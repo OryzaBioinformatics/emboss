@@ -1,9 +1,8 @@
 
-                              EMBOSS: dotpath
-     _________________________________________________________________
+                                  dotpath 
+                                      
    
-                                Program dotpath
-                                       
+   
 Function
 
    Displays a non-overlapping wordmatch dotplot of two sequences
@@ -59,17 +58,17 @@ Command line arguments
 *  -outfile            outfile    Output file name
 
    Optional qualifiers:
-   -overlaps           bool       Displays the overlapping matches (in red) as
+   -overlaps           boolean    Displays the overlapping matches (in red) as
                                   well as the minimal set of non-overlapping
                                   matches
-   -[no]boxit          bool       Draw a box around dotplot
+   -[no]boxit          boolean    Draw a box around dotplot
 
    Advanced qualifiers:
-   -data               bool       Output the match data to a file instead of
+   -data               boolean    Output the match data to a file instead of
                                   plotting it
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    

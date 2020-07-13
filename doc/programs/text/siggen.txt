@@ -1,12 +1,12 @@
 
-                               EMBOSS: siggen
-     _________________________________________________________________
+                                  siggen 
+                                      
    
-                                Program siggen
-                                       
+   
 Function
 
-   Generates a sparse protein signature
+   Generates a sparse protein signature from an alignment and residue
+   contact data
    
 Description
 
@@ -63,53 +63,52 @@ Name of signature file for output [sig.sig]:
 Command line arguments
 
    Mandatory qualifiers (* if not always prompted):
-  [-algpath]           string     Location of alignment files for input
-  [-algextn]           string     Extension of alignment files for input
-  [-sparsity]          integer    % sparsity of signature
-  [-randomise]         bool       Generate a randomised signature
+  [-algpath]           string     Location of scop structure-based sequence
+                                  alignment files (input)
+  [-algextn]           string     Extension of alignment files
+   -sparsity           integer    % sparsity of signature
 *  -seqoption          menu       Select number
-*  -datafile           matrixf    Substitution matrix to be used
+*  -datafile           matrixf    This is the scoring matrix file used when
+                                  comparing sequences.
 *  -conoption          menu       Select number
-*  -filtercon          bool       Ignore alignment positions making less than
+*  -filtercon          boolean    Ignore alignment positions making less than
                                   a threshold number of contacts
 *  -conthresh          integer    Threshold contact number
-*  -conpath            string     Location of contact files for input
+*  -conpath            string     Location of contact files (input)
 *  -conextn            string     Extension of contact files
-*  -cpdbpath           string     Location of coordinate files for input
-                                  (embl-like format)
-*  -cpdbextn           string     Extension of coordinate files (embl-like
-                                  format)
-*  -filterpsim         bool       Ignore alignment postitions with
+*  -cpdbpath           string     Location of domain coordinate files (embl
+                                  format input)
+*  -cpdbextn           string     Extension of coordinate files
+*  -filterpsim         boolean    Ignore alignment postitions with
                                   post_similar value of 0
-  [-sigpath]           string     Location of signature files for output
-  [-sigextn]           string     Extension of signature files for output
+  [-sigpath]           string     Location of signature files (output)
+  [-sigextn]           string     Extension of signature files
 
    Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Advanced qualifiers:
+   -randomise          boolean    Generate a randomised signature
+
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default
    [-algpath]
-   (Parameter 1) Location of alignment files for input Any string is
-   accepted ./
+   (Parameter 1) Location of scop structure-based sequence alignment
+   files (input) Any string is accepted ./
    [-algextn]
-   (Parameter 2) Extension of alignment files for input Any string is
-   accepted .align
-   [-sparsity]
-   (Parameter 3) % sparsity of signature Any integer value 10
-   [-randomise]
-   (Parameter 4) Generate a randomised signature Yes/No No
+   (Parameter 2) Extension of alignment files Any string is accepted
+   .salign
+   -sparsity % sparsity of signature Any integer value 10
    -seqoption Select number
    1 (Substitution matrix)
    2 (Residue class)
    3 (None)
    3
-   -datafile Substitution matrix to be used Comparison matrix file in
-   EMBOSS data path ./EBLOSUM62
+   -datafile This is the scoring matrix file used when comparing
+   sequences. Comparison matrix file in EMBOSS data path EBLOSUM62
    -conoption Select number
    1 (Number)
    2 (Conservation)
@@ -119,25 +118,22 @@ Command line arguments
    -filtercon Ignore alignment positions making less than a threshold
    number of contacts Yes/No No
    -conthresh Threshold contact number Any integer value 10
-   -conpath Location of contact files for input Any string is accepted
-   /data/contacts/
+   -conpath Location of contact files (input) Any string is accepted ./
    -conextn Extension of contact files Any string is accepted .con
-   -cpdbpath Location of coordinate files for input (embl-like format)
-   Any string is accepted /data/cpdbscop/
-   -cpdbextn Extension of coordinate files (embl-like format) Any string
-   is accepted .pxyz
+   -cpdbpath Location of domain coordinate files (embl format input) Any
+   string is accepted ./
+   -cpdbextn Extension of coordinate files Any string is accepted .pxyz
    -filterpsim Ignore alignment postitions with post_similar value of 0
    Yes/No No
    [-sigpath]
-   (Parameter 5) Location of signature files for output Any string is
+   (Parameter 3) Location of signature files (output) Any string is
    accepted ./
    [-sigextn]
-   (Parameter 6) Extension of signature files for output Any string is
-   accepted .sig
+   (Parameter 4) Extension of signature files Any string is accepted .sig
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
-   (none)
+   -randomise Generate a randomised signature Yes/No No
    
 Input file format
 
@@ -293,14 +289,31 @@ Known bugs
 See also
 
    Program name Description
-   contacts Reads coordinate files and writes contact files
+   contacts Reads coordinate files and writes files of intra-chain
+   residue-residue contact data
    dichet Parse dictionary of heterogen groups
-   interface Reads coordinate files and writes inter-chain contact files
+   hmmgen Generates a hidden Markov model for each alignment in a
+   directory
+   interface Reads coordinate files and writes files of inter-chain
+   residue-residue contact data
+   profgen Generates various profiles for each alignment in a directory
    psiblasts Runs PSI-BLAST given scopalign alignments
-   scopalign Generate alignments for SCOP families
-   seqsort Removes ambiguities from a set of hits resulting from a
-   database search
-   sigscan Scans a sparse protein signature against swissprot
+   scopalign Generate alignments for families in a scop classification
+   file by using STAMP
+   scoprep Reorder scop classificaiton file so that the representative
+   structure of each family is given first
+   scopreso Removes low resolution domains from a scop classification
+   file
+   seqalign Generate extended alignments for families in a scop families
+   file by using CLUSTALW with seed alignments
+   seqsearch Generate files of hits for families in a scop classification
+   file by using PSI-BLAST with seed alignments
+   seqsort Reads multiple files of hits and writes a non-ambiguous file
+   of hits (scop families file) plus a validation file
+   seqwords Generate file of hits for scop families by searching
+   swissprot with keywords
+   sigscan Scans a signature against swissprot and writes a signature
+   hits files
    
 Author(s)
 

@@ -1,12 +1,11 @@
 
-                              EMBOSS: domainer
-     _________________________________________________________________
+                                 domainer 
+                                      
    
-                               Program domainer
-                                       
+   
 Function
 
-   Build domain coordinate files
+   Reads protein coordinate files and writes domains coordinate files
    
 Description
 
@@ -67,54 +66,49 @@ D7HBIB_
 Command line arguments
 
    Mandatory qualifiers:
-  [-scop]              infile     Name of scop file for input (embl-like
-                                  format)
-  [-cpdb]              string     Location of coordinate files for input
-                                  (embl-like format)
-  [-cpdbscop]          string     Location of coordinate files for output
-                                  (embl-like format)
-  [-cpdbextn]          string     Extension of coordinate files (embl-like
-                                  format)
-  [-pdbscop]           string     Location of coordinate files for output (pdb
-                                  format)
+   -scop               infile     Name of scop classification file (embl
+                                  format input)
+  [-cpdb]              string     Location of protein coordinate files (embl
+                                  format input)
+  [-cpdbextn]          string     Extension of coordinate files (embl format)
+  [-cpdbscop]          string     Location of domain coordinate files (embl
+                                  format output)
+  [-pdbscop]           string     Location of domain coordinate files (pdb
+                                  format output)
   [-pdbextn]           string     Extension of coordinate files (pdb format)
-  [-cpdberrf]          outfile    Name of log file for the embl-like format
-                                  build
-  [-pdberrf]           outfile    Name of log file for the pdb format build
+   -cpdberrf           outfile    Name of log file for the embl format build
+   -pdberrf            outfile    Name of log file for the pdb format build
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default
-   [-scop]
-   (Parameter 1) Name of scop file for input (embl-like format) Input
-   file Escop.dat
+   -scop Name of scop classification file (embl format input) Input file
+   Escop.dat
    [-cpdb]
-   (Parameter 2) Location of coordinate files for input (embl-like
-   format) Any string is accepted ./
-   [-cpdbscop]
-   (Parameter 3) Location of coordinate files for output (embl-like
-   format) Any string is accepted ./
+   (Parameter 1) Location of protein coordinate files (embl format input)
+   Any string is accepted ./
    [-cpdbextn]
-   (Parameter 4) Extension of coordinate files (embl-like format) Any
-   string is accepted .pxyz
+   (Parameter 2) Extension of coordinate files (embl format) Any string
+   is accepted .pxyz
+   [-cpdbscop]
+   (Parameter 3) Location of domain coordinate files (embl format output)
+   Any string is accepted ./
    [-pdbscop]
-   (Parameter 5) Location of coordinate files for output (pdb format) Any
-   string is accepted ./
+   (Parameter 4) Location of domain coordinate files (pdb format output)
+   Any string is accepted ./
    [-pdbextn]
-   (Parameter 6) Extension of coordinate files (pdb format) Any string is
+   (Parameter 5) Extension of coordinate files (pdb format) Any string is
    accepted .ent
-   [-cpdberrf]
-   (Parameter 7) Name of log file for the embl-like format build Output
-   file domainer.log1
-   [-pdberrf]
-   (Parameter 8) Name of log file for the pdb format build Output file
-   domainer.log2
+   -cpdberrf Name of log file for the embl format build Output file
+   domainer_embl.log
+   -pdberrf Name of log file for the pdb format build Output file
+   domainer_pdb.log
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
@@ -365,17 +359,27 @@ Known bugs
 See also
 
    Program name Description
+   aaindexextract Extract data from AAINDEX
    cutgextract Extract data from CUTG
+   funky Reads clean coordinate files and writes file of
+   protein-heterogen contact data
+   groups Removes redundant hits from a scop families file
+   hetparse Converts raw dictionary of heterogen groups to a file in
+   embl-like format
    nrscope Converts redundant EMBL-format SCOP file to non-redundant one
+   pdbparse Parses pdb files and writes cleaned-up protein coordinate
+   files
    pdbtosp Convert raw swissprot:pdb equivalence file to embl-like format
    printsextract Extract data from PRINTS
    prosextract Builds the PROSITE motif database for patmatmotifs to
    search
    rebaseextract Extract data from REBASE
    scope Convert raw scop classification file to embl-like format
-   scopparse Reads raw-, and writes EMBL-like, scop classification files
-   seqnr Converts redundant database results to a non-redundant set of
-   hits
+   scopnr Removes redundant domains from a scop classification file
+   scopparse Converts raw scop classification files to a file in
+   embl-like format
+   scopseqs Adds pdb and swissprot sequence records to a scop
+   classification file
    tfextract Extract data from TRANSFAC
    
 Author(s)
