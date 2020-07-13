@@ -1,9 +1,8 @@
 
-                               EMBOSS: merger
-     _________________________________________________________________
+                                  merger 
+                                      
    
-                                Program merger
-                                       
+   
 Function
 
    Merge two overlapping nucleic acid sequences
@@ -64,52 +63,16 @@ Usage
    Here is a sample session with merger.
 
 % merger
-Input sequence: embl:eclacy
-Second sequence: embl:eclaca
+Merge two overlapping nucleic acid sequences
+Input sequence: tembl:eclacy
+Second sequence: tembl:eclaca
 Output sequence [eclacy.fasta]:
-Output file [stdout]:
-
-Global: ECLACY vs ECLACA
-Score: 795.00
-
-ECLACY          1     ttccagctgagcgccggtcgctaccattaccagttggtctggtgt 45
-
-ECLACA
-
-
-.................... until ......................
-
-
-ECLACY          1306  agcggccccggcccgctttccctgctgcgtcgtcaggtgaatgaa 1350
-                                                          |||||||||
-ECLACA          1                                         gtgaatgaa 9
-
-ECLACY          1351  gtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccga 1395
-                      |||||||||||||||||||||||||||||||||||||||||||||
-ECLACA          10    gtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccga 54
-
-ECLACY          1396  ccaacatatcataacggagtgatcgcattgaacatgccaatgacc 1440
-                      |||||||||||||||||||||||||||||||||||||||||||||
-ECLACA          55    ccaacatatcataacggagtgatcgcattgaacatgccaatgacc 99
-
-ECLACY          1441  gaaagaataagagcaggcaagctatttaccgatatgtgcgaaggc 1485
-                      |||||||||||||||||||||||||||||||||||||||||||||
-ECLACA          100   gaaagaataagagcaggcaagctatttaccgatatgtgcgaaggc 144
-
-ECLACY          1486  ttaccggaaaaaaga                               1500
-                      |||||||||||||||
-ECLACA          145   ttaccggaaaaaagacttcgtgggaaaacgttaatgtatgagttt 189
-
-ECLACY
-
-ECLACA          190   aatcactcgcatccatcagaagttgaaaaaagagaaagcctgatt 234
-
-ECLACY
+Output alignment [eclacy.out2]:
 
    Typically, one of the sequences will need to be reverse-complemented
    to put it into the correct orientation to make it join. For example:
    
-% merger file1.seq file2.seq -sreverse2 -out merged.seq
+% merger file1.seq file2.seq -sreverse2 -outseq merged.seq -outfile stdout
 
 Command line arguments
 
@@ -117,16 +80,21 @@ Command line arguments
   [-seqa]              sequence   Sequence USA
   [-seqb]              sequence   Sequence USA
   [-outseq]            seqout     Output sequence USA
-   -outfile            align      Output alignment and explanation
+  [-outfile]           align      Output alignment and explanation
 
    Optional qualifiers:
-   -datafile           matrixf    Matrix file
+   -datafile           matrixf    This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
    -gapopen            float      Gap opening penalty
    -gapextend          float      Gap extension penalty
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -138,10 +106,14 @@ Command line arguments
    (Parameter 2) Sequence USA Readable sequence Required
    [-outseq]
    (Parameter 3) Output sequence USA Writeable sequence <sequence>.format
-   -outfile Output alignment and explanation Alignment file stdout
+   [-outfile]
+   (Parameter 4) Output alignment and explanation Alignment file
    Optional qualifiers Allowed values Default
-   -datafile Matrix file Comparison matrix file in EMBOSS data path
-   EBLOSUM62 for protein
+   -datafile This is the scoring matrix file used when comparing
+   sequences. By default it is the file 'EBLOSUM62' (for proteins) or the
+   file 'EDNAFULL' (for nucleic sequences). These files are found in the
+   'data' directory of the EMBOSS installation. Comparison matrix file in
+   EMBOSS data path EBLOSUM62 for protein
    EDNAFULL for DNA
    -gapopen Gap opening penalty Number from 1.000 to 100.000 50.0
    -gapextend Gap extension penalty Number from 0.100 to 10.000 5
@@ -156,52 +128,112 @@ Output file format
    FASTA format. Where there is a mismatch in the alignment, the chosen
    base is written to the output sequence in uppercase.
    
+   The output is a standard EMBOSS alignment file.
+   
+   The results can be output in one of several styles by using the
+   command-line qualifier -aformat xxx, where 'xxx' is replaced by the
+   name of the required format. Some of the alignment formats can cope
+   with an unlimited number of sequences, while others are only for pairs
+   of sequences.
+   
+   The available multiple alignment format names are: unknown, multiple,
+   simple, fasta, msf, trace, srs
+   
+   The available pairwise alignment format names are: pair, markx0,
+   markx1, markx2, markx3, markx10, srspair, score
+   
+   See: http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html
+   for further information on alignment formats.
+   
    The output report file contains descriptions of the positions where
    there is a mismatch in the alignment and shows the alignment. Where
    there is a mismatch in the alignment, the chosen base is written in
    uppercase.
    
-   An example report file showing mismatches follows:
+########################################
+# Program:  merger
+# Rundate:  Mon May 20 16:17:43 2002
+# Report_file: stdout
+########################################
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: ECLACY
+# 2: ECLACA
+# Matrix: EDNAFULL
+# Gap_penalty: 50.0
+# Extend_penalty: 5.0
+#
+# Length: 3173
+# Identity:     159/3173 ( 5.0%)
+# Similarity:   159/3173 ( 5.0%)
+# Gaps:        3014/3173 (95.0%)
+# Score: 795.0
+#
+#
+#=======================================
 
-# j1 position base           j2 position base        Using
-        12      'G'             1       'a'             'G'
-        13      'C'             2       'a'             'C'
-        14      'G'             3       'a'             'G'
-        16      'T'             5       'a'             'T'
-        20      'T'             9       'g'             'T'
-        23      'G'             12      'c'             'G'
-        24      'C'             13      'g'             'C'
-        41      'G'             30      't'             'G'
-        57      't'             46      'C'             'C'
-Global: j1 vs j2
-Score: 188.00
+ECLACY             1 ttccagctgagcgccggtcgctaccattaccagttggtctggtgtcaaaa     50
 
-j1              1        gtatggtcgatGCGaTgcgTatGCtGacgttAgcggcggcGatat 45
-                                       | ||| ||  | ||||| |||||||| ||||
-j2              1                   aaaaagcggatcgtnacgttngcggcggctatat 34
+ECLACA             1                                                         0
 
-j1              46       attgcgagctatgatgctnatcgtngc                   72
-                         ||||||||||| |||||| ||||| ||
-j2              35       attgcgagctaCgatgctGatcgtAgcgtacgttgaaagctacta 79
 
-j1
+.................... until ......................
 
-j2              80       ctatgctgtgctagctgacgtagc                      103
+
+ECLACY          1301 cgcttagcggccccggcccgctttccctgctgcgtcgtcaggtgaatgaa   1350
+                                                              |||||||||
+ECLACA             1                                          gtgaatgaa      9
+
+ECLACY          1351 gtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccgaccaac   1400
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLACA            10 gtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccgaccaac     59
+
+ECLACY          1401 atatcataacggagtgatcgcattgaacatgccaatgaccgaaagaataa   1450
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLACA            60 atatcataacggagtgatcgcattgaacatgccaatgaccgaaagaataa    109
+
+ECLACY          1451 gagcaggcaagctatttaccgatatgtgcgaaggcttaccggaaaaaaga   1500
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLACA           110 gagcaggcaagctatttaccgatatgtgcgaaggcttaccggaaaaaaga    159
+
+
+.................... until ......................
+
+
+#---------------------------------------
+#
+# ECLACY position base          ECLACA position base    Using
+#
+#
+#---------------------------------------
 
 Data files
 
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It exits with a status of 0
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                    Description
@@ -215,6 +247,8 @@ Author(s)
    
 History
 
+   Written (Gary Williams) 1999
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

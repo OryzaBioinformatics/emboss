@@ -21,6 +21,7 @@ matrixf: datafile  [
   optional: "Y"
   information: "Matrix file"
   protein: "$(seqa.protein)"
+  help: "This is the scoring matrix file used when comparing sequences.  By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences).  These files are found in the 'data' directory of the EMBOSS installation."
 ]
 
 float: gapopen  [
@@ -47,8 +48,7 @@ seqout: outseq  [
 ]
 
 align: outfile  [
-  required: "Y"
-  default: "stdout"
+  parameter: "Y"
   information: "Output alignment and explanation"
   aformat: "simple"
   minseqs: "2"

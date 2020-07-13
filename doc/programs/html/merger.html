@@ -7,37 +7,28 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
 
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
 
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
+<td align=left valign=middle>
+<b><font size="+6">
 
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: merger
-</H2>
-
-
-</font>
-</td>
-
-</tr>
+merger
+</font></b>
+</td></tr>
 </table>
-</td>
+<br>&nbsp;
+<p>
 
-</tr>
-</table>
 
-<p><hr><p>
-<H1>
-Program merger
-</H1>
+
+
+
+
 
 <H2>
     Function
@@ -127,56 +118,23 @@ Here is a sample session with merger.
 <pre>
 
 % merger
-Input sequence: embl:eclacy
-Second sequence: embl:eclaca
+Merge two overlapping nucleic acid sequences
+Input sequence: tembl:eclacy
+Second sequence: tembl:eclaca
 Output sequence [eclacy.fasta]: 
-Output file [stdout]: 
-
-Global: ECLACY vs ECLACA
-Score: 795.00
-
-ECLACY          1     ttccagctgagcgccggtcgctaccattaccagttggtctggtgt 45   
-                                                                   
-ECLACA                                                              
-
-
-.................... until ......................
-
-
-ECLACY          1306  agcggccccggcccgctttccctgctgcgtcgtcaggtgaatgaa 1350 
-                                                          |||||||||
-ECLACA          1                                         gtgaatgaa 9    
-
-ECLACY          1351  gtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccga 1395 
-                      |||||||||||||||||||||||||||||||||||||||||||||
-ECLACA          10    gtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccga 54   
-
-ECLACY          1396  ccaacatatcataacggagtgatcgcattgaacatgccaatgacc 1440 
-                      |||||||||||||||||||||||||||||||||||||||||||||
-ECLACA          55    ccaacatatcataacggagtgatcgcattgaacatgccaatgacc 99   
-
-ECLACY          1441  gaaagaataagagcaggcaagctatttaccgatatgtgcgaaggc 1485 
-                      |||||||||||||||||||||||||||||||||||||||||||||
-ECLACA          100   gaaagaataagagcaggcaagctatttaccgatatgtgcgaaggc 144  
-
-ECLACY          1486  ttaccggaaaaaaga                               1500 
-                      |||||||||||||||                              
-ECLACA          145   ttaccggaaaaaagacttcgtgggaaaacgttaatgtatgagttt 189  
-
-ECLACY                                                              
-                                                                   
-ECLACA          190   aatcactcgcatccatcagaagttgaaaaaagagaaagcctgatt 234  
-
-ECLACY                                                              
+Output alignment [eclacy.out2]:
                                                                    
 </pre>
 
 <p>
+
 Typically, one of the sequences will need to be reverse-complemented to put it
 into the correct orientation to make it join. For example:
+
 <p>
+
 <pre>
-% merger file1.seq file2.seq -sreverse2 -out merged.seq
+% merger file1.seq file2.seq -sreverse2 -outseq merged.seq -outfile stdout
 </pre>
 
 <H2>
@@ -196,16 +154,21 @@ IT IS DONE FOR YOU.
   [-seqa]              sequence   Sequence USA
   [-seqb]              sequence   Sequence USA
   [-outseq]            seqout     Output sequence USA
-   -outfile            align      Output alignment and explanation
+  [-outfile]           align      Output alignment and explanation
 
    Optional qualifiers:
-   -datafile           matrixf    Matrix file
+   -datafile           matrixf    This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
    -gapopen            float      Gap opening penalty
    -gapextend          float      Gap extension penalty
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -243,10 +206,10 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-outfile</td>
+<td>[-outfile]<br>(Parameter 4)</td>
 <td>Output alignment and explanation</td>
 <td>Alignment file</td>
-<td>stdout</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -257,7 +220,7 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-datafile</td>
-<td>Matrix file</td>
+<td>This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.</td>
 <td>Comparison matrix file in EMBOSS data path</td>
 <td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
 </tr>
@@ -305,40 +268,107 @@ FASTA format.  Where there is a mismatch in the alignment, the chosen
 base is written to the output sequence in uppercase. 
 
 <p>
+
+<p>
+
+The output is a standard EMBOSS alignment file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <b>-aformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  Some of the alignment formats can cope
+with an unlimited number of sequences, while others are only for pairs
+of sequences.  
+
+<p>
+
+The available multiple alignment format names are: unknown, multiple,
+simple, fasta, msf, trace, srs
+
+<p>
+
+The available pairwise alignment format names are: pair, markx0, markx1,
+markx2, markx3, markx10, srspair, score
+
+<p>
+
+See:
+<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html">
+http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html</A>
+for further information on alignment formats.
+
+<p>
+
+ 
+<p>
+
 The output <i>report file</i> contains descriptions of the positions where
 there is a mismatch in the alignment and shows the alignment.  Where
 there is a mismatch in the alignment, the chosen base is written in
 uppercase. 
 
+
 <p>
-An example report file showing mismatches follows:
 
 <pre>
+########################################
+# Program:  merger
+# Rundate:  Mon May 20 16:17:43 2002
+# Report_file: stdout
+########################################
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: ECLACY
+# 2: ECLACA
+# Matrix: EDNAFULL
+# Gap_penalty: 50.0
+# Extend_penalty: 5.0
+#
+# Length: 3173
+# Identity:     159/3173 ( 5.0%)
+# Similarity:   159/3173 ( 5.0%)
+# Gaps:        3014/3173 (95.0%)
+# Score: 795.0
+#
+#
+#=======================================
 
-# j1 position base           j2 position base        Using
-        12      'G'             1       'a'             'G'
-        13      'C'             2       'a'             'C'
-        14      'G'             3       'a'             'G'
-        16      'T'             5       'a'             'T'
-        20      'T'             9       'g'             'T'
-        23      'G'             12      'c'             'G'
-        24      'C'             13      'g'             'C'
-        41      'G'             30      't'             'G'
-        57      't'             46      'C'             'C'
-Global: j1 vs j2
-Score: 188.00
+ECLACY             1 ttccagctgagcgccggtcgctaccattaccagttggtctggtgtcaaaa     50
 
-j1              1        gtatggtcgatGCGaTgcgTatGCtGacgttAgcggcggcGatat 45      
-                                       | ||| ||  | ||||| |||||||| ||||
-j2              1                   aaaaagcggatcgtnacgttngcggcggctatat 34      
+ECLACA             1                                                         0
+ 
 
-j1              46       attgcgagctatgatgctnatcgtngc                   72      
-                         ||||||||||| |||||| ||||| ||                  
-j2              35       attgcgagctaCgatgctGatcgtAgcgtacgttgaaagctacta 79      
+.................... until ......................
 
-j1                                                                     
-                                                 
-j2              80       ctatgctgtgctagctgacgtagc                      103     
+
+ECLACY          1301 cgcttagcggccccggcccgctttccctgctgcgtcgtcaggtgaatgaa   1350
+                                                              |||||||||
+ECLACA             1                                          gtgaatgaa      9
+
+ECLACY          1351 gtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccgaccaac   1400
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLACA            10 gtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccgaccaac     59
+
+ECLACY          1401 atatcataacggagtgatcgcattgaacatgccaatgaccgaaagaataa   1450
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLACA            60 atatcataacggagtgatcgcattgaacatgccaatgaccgaaagaataa    109
+
+ECLACY          1451 gagcaggcaagctatttaccgatatgtgcgaaggcttaccggaaaaaaga   1500
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLACA           110 gagcaggcaagctatttaccgatatgtgcgaaggcttaccggaaaaaaga    159
+ 
+
+.................... until ......................
+
+ 
+#---------------------------------------
+#
+# ECLACY position base          ECLACA position base    Using
+#
+#
+#---------------------------------------         
 
 </pre>
 
@@ -347,35 +377,43 @@ j2              80       ctatgctgtgctagctgacgtagc                      103
 </H2>
 
 
+
 <H2>
     Notes
 </H2>
 
 
+None.
+
 <H2>
     References
 </H2>
 
+None.
 
 <H2>
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
 </H2>
 
+It exits with a status of 0
 
 <H2>
     Known bugs
 </H2>
 
+None.
 
 <!--
 <H2>
@@ -407,6 +445,7 @@ href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
     History
 </H2>
 
+Written (Gary Williams) 1999
 
 <H2>
     Target users
@@ -425,9 +464,6 @@ from naive users to embedded scripts.
 
 </pre>
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>
