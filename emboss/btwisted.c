@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
     ajFileDataNew(efile,&energies);
     if(!energies)
 	ajFatal("Cannot open file %S",efile);
-    
+
     angletable  = btwisted_getdinucdata(angles);
     energytable = btwisted_getdinucdata(energies);
 
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
     end   = ajSeqEnd(seq);
 
     len   = end-begin+1;
- 
+
     dinuc = ajSeqChar(seq);
 
     for(i=begin-1; i<end-1; ++i)
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic btwisted_getdinucdata *****************************************
+/* @funcstatic btwisted_getdinucdata ******************************************
 **
 ** Undocumented.
 **
@@ -164,9 +164,9 @@ static AjPTable btwisted_getdinucdata(AjPFile inf)
 	ajTablePut(table,(const void *)key,(void *) valstr);
 	ajStrTokenClear(&token);
     }
-  
 
-    ajStrDel(&line);  
+
+    ajStrDel(&line);
     return table;
 }
 

@@ -11,12 +11,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     ajint      en;
     AjPFile  outf;
     AjBool   termini;
-    
+
     double molwt;
     double charge;
     double iep;
@@ -70,11 +70,11 @@ int main(int argc, char **argv)
     ajint de;
     double cv;
     double psolu;
-    
+
     float   *dhstat=NULL;
     AjPStr  datafn=NULL;
     AjPFile mfptr=NULL;
-    
+
     embInit("pepstats", argc, argv);
 
     a         = ajAcdGetSeq("sequencea");
@@ -99,13 +99,13 @@ int main(int argc, char **argv)
     if(!embReadAminoDataFloatC(DAYHOFF_FILE,&dhstat,0.001))
 	ajFatal("Set the EMBOSS_DATA environment variable");
 
-    
+
     AJCNEW (c, EMBIEPSIZE);
 
     embIepComp(ajStrStr(substr),1,c);
     if(!termini)
 	c[EMBIEPAMINO]=c[EMBIEPCARBOXYL]=0;
-    
+
     ajFmtPrintF(outf,"PEPSTATS of %s from %d to %d\n\n",ajSeqName(a),
 		be,en);
 
@@ -134,12 +134,13 @@ int main(int argc, char **argv)
 
     psolu = 0.4934 + 0.276*fabs((double)(cv-CVDISC)) -
 	0.0392*(cv-CVDISC)*(cv-CVDISC);
-    
+
     if(cv-CVDISC >= 0.0)
 	ajFmtPrintF(outf,"Imp");
     else
 	ajFmtPrintF(outf,"P");
-    ajFmtPrintF(outf,"robability of expression in inclusion bodies = %.3lf\n\n",
+    ajFmtPrintF(outf,
+		"robability of expression in inclusion bodies = %.3lf\n\n",
 		psolu);
 
 
@@ -152,7 +153,7 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf,"%c = %s\t\t%d\t\t%-7.3f\t\t%-7.3f\t\n",i+'A',
 		    embPropIntToThree(i),c[i],molpc,molpc/dhstat[i]);
     }
-    
+
 
     ajFmtPrintF(outf,"\nProperty\tResidues\t\tNumber\t\tMole%%\n");
     for(i=1;i<10;++i)
@@ -167,12 +168,12 @@ int main(int argc, char **argv)
 
     AJFREE(dhstat);
     AJFREE(c);
-    
+
     ajSeqDel(&a);
     ajStrDel(&substr);
     ajFileClose(&outf);
     ajFileClose(&mfptr);
-    
+
     ajExit();
     return 0;
 }

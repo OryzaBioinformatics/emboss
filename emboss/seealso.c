@@ -1,6 +1,6 @@
 /* @source seealso application
 **
-** Finds programs sharing group names 
+** Finds programs sharing group names
 **
 ** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -69,7 +69,7 @@ int main(int argc, char **argv, char **env)
 	ajDie ("No application specified.");
 
 
-    /* 
+    /*
     ** get the groups and program information - don't want to ignore
     ** applications that don't work well under GUIs
     */
@@ -77,11 +77,11 @@ int main(int argc, char **argv, char **env)
 		explode, colon, ajFalse);
 
     newlist = ajListNew();
-    (void) embGrpKeySearchSeeAlso(newlist, &appgroups, alpha, glist, search); 
+    (void) embGrpKeySearchSeeAlso(newlist, &appgroups, alpha, glist, search);
     if (appgroups == NULL)
 	ajDie("Invalid application name specified.");
 
-  
+
     if (groups)
 	(void) embGrpOutputGroupsList(outfile, appgroups, ajFalse, html,
 				      link1, link2);
@@ -90,8 +90,8 @@ int main(int argc, char **argv, char **env)
 				      link2);
 
     (void) embGrpGroupsListDel(&newlist);
-    (void) ajFileClose(&outfile);    
-    
+    (void) ajFileClose(&outfile);
+
     /* tidy up */
     (void) embGrpGroupsListDel(&glist);
     (void) embGrpGroupsListDel(&alpha);

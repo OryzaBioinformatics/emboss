@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -50,14 +50,14 @@ int main(int argc, char **argv)
     AjPStr    sstr=NULL;
     AjPStr    stmp=NULL;
     AjPStr    substr=NULL;
-   
+
     ajint begin;
     ajint end;
     ajint len;
-    
+
     char *p;
     char *q;
-    
+
     ajint i;
     ajint j;
     ajint k;
@@ -80,7 +80,7 @@ int main(int argc, char **argv)
     float maxscore;
     float maxmaxscore;
     float maxcoil;
-    
+
     ajint maxframe;
     ajint rescode;
     ajint wstart;
@@ -94,10 +94,10 @@ int main(int argc, char **argv)
     ajint startframe;
     ajint coilframe;
     ajint fframe;
-    
+
     AjBool     iscoil;
     AjPFloat2d rdat=NULL;
-    
+
 
     (void) ajGraphInit("pepcoil", argc, argv);
 
@@ -112,8 +112,8 @@ int main(int argc, char **argv)
     coil      = ajAcdGetBool("coil");
     frame     = ajAcdGetBool("frame");
     other     = ajAcdGetBool("other");
-    
-    
+
+
     substr = ajStrNew();
     sstr   = ajStrNew();
     stmp   = ajStrNew();
@@ -135,9 +135,9 @@ int main(int argc, char **argv)
 
 	ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
 	ajStrAssSubC(&sstr,ajStrStr(strand),begin-1,end-1);
-	    
+
 	len    = ajStrLen(substr);
-	
+
 	q = p = ajStrStr(substr);
 	for(i=0;i<len;++i,++p)
 	    *p = (char) ajAZToInt(*p);
@@ -180,7 +180,7 @@ int main(int argc, char **argv)
 	    if(ajFloatGet(pscores,i)>maxmaxscore)
 		maxmaxscore=ajFloatGet(pscores,i);
 	}
-	
+
 	for(i=0;i<len;++i) ajIntPut(&parray,i,i);
 
 	ajFmtPrintF(outf,"PEPCOIL of %s\n",ajSeqName(seq));
@@ -194,7 +194,7 @@ int main(int argc, char **argv)
 	if(iscoil && coil)
 	    ajFmtPrintF(outf,"\nPrediction starts at %d\n",startcoil +
 			begin);
-	
+
 	for(i=0;i<len;++i)
 	{
 	    if(ajFloatGet(probs,i) >= 0.5)
@@ -298,7 +298,7 @@ int main(int argc, char **argv)
 
 	ajStrDel(&strand);
     }
-    
+
     ajIntDel(&frames);
     ajIntDel(&parray);
 
@@ -308,12 +308,12 @@ int main(int argc, char **argv)
     ajFloatDel(&rframes);
 
     ajFloat2dDel(&rdat);
-    
+
     ajStrDel(&stmp);
     ajStrDel(&sstr);
     ajSeqDel(&seq);
     ajFileClose(&outf);
-    
+
     ajExit();
     return 0;
 }
@@ -321,7 +321,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic pepcoil_readcoildat *******************************************
+/* @funcstatic pepcoil_readcoildat ********************************************
 **
 ** Read coil data from emboss data area
 **
@@ -335,20 +335,20 @@ static void pepcoil_readcoildat(AjPFloat2d *rdat)
     AjPFile mfptr=NULL;
     AjPStr  line=NULL;
     static  char delim[]=" \t\n";
-    
+
     char *p;
     char *q;
     ajint  n;
     ajint  c;
-    
+
     float v;
-    
+
     ajFileDataNewC(COILFILE, &mfptr);
     if(!mfptr)
 	ajFatal("%s file not found\n",COILFILE);
 
     line=ajStrNew();
-    
+
     while(ajFileGets(mfptr, &line))
     {
 	p=ajStrStr(line);
@@ -372,7 +372,7 @@ static void pepcoil_readcoildat(AjPFloat2d *rdat)
 
 
 
-/* @funcstatic pepcoil_probcoil **********************************************
+/* @funcstatic pepcoil_probcoil ***********************************************
 **
 ** Calculate coil probability
 **
@@ -396,7 +396,7 @@ static float pepcoil_probcoil(float score)
 
 
 
-/* @funcstatic pepcoil_inframe ***********************************************
+/* @funcstatic pepcoil_inframe ************************************************
 **
 ** Return frame
 **

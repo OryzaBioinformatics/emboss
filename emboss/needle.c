@@ -8,12 +8,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -37,23 +37,23 @@ int main(int argc, char **argv)
     AjPStr m;
     AjPStr n;
     AjPStr ss;
-    
+
     AjPFile outf=NULL;
     AjBool show=ajFalse;
-    
+
     ajint    lena;
     ajint    lenb;
     ajint    i;
-    
+
     char   *p;
     char   *q;
 
     ajint start1=0;
     ajint start2=0;
-    
+
     float  *path;
     ajint    *compass;
-    
+
     AjPMatrixf matrix;
     AjPSeqCvt  cvt=0;
     float      **sub;
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     ajint begina;
     ajint beginb;
 
-    AjBool dosim=ajFalse;
+    AjBool dobrief=ajTrue;
 
     float id=0.;
     float sim=0.;
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
     float simx=0.;
 
     AjBool fasta=ajFalse;
-    
+    AjPStr tmpstr=NULL;
 
     embInit("needle", argc, argv);
 
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
     seqall    = ajAcdGetSeqall("seqall");
     gapopen   = ajAcdGetFloat("gapopen");
     gapextend = ajAcdGetFloat("gapextend");
-    dosim     = ajAcdGetBool("similarity");
+    dobrief   = ajAcdGetBool("brief");
     /* fasta     = ajAcdGetBool("fasta");*/
     align     = ajAcdGetAlign("outfile");
 
@@ -103,7 +103,7 @@ int main(int argc, char **argv)
     m  = ajStrNew();
     n  = ajStrNew();
     ss = ajStrNew();
-    
+
     sub = ajMatrixfArray(matrix);
     cvt = ajMatrixfCvt(matrix);
 
@@ -130,7 +130,7 @@ int main(int argc, char **argv)
 
 	p = ajSeqChar(a);
 	q = ajSeqChar(b);
-    
+
 	ajStrAssC(&m,"");
 	ajStrAssC(&n,"");
 
@@ -150,7 +150,7 @@ int main(int argc, char **argv)
 	    embAlignPrintGlobal(outf,p,q,m,n,start1,start2,score,1,sub,cvt,
 				ajSeqName(a),ajSeqName(b),begina,beginb);
 
-	    if(dosim)
+	    if(!dobrief)
 	    {
 		embAlignCalcSimilarity(m,n,sub,cvt,lena,lenb,&id,&sim,&idx,
 				       &simx);
@@ -160,7 +160,7 @@ int main(int argc, char **argv)
 			    "%%similarity = %5.2f\n",idx,simx);
 	    }
 	}
-	else if (outf)
+	else if (outf)		/* fasta format */
 	{
 	    ajFmtPrintF(outf,">%s\n",ajSeqName(a));
 
@@ -184,8 +184,25 @@ int main(int argc, char **argv)
 			     gapopen, gapextend,
 			     score, matrix, begina, beginb);
 
+	if (!dobrief)
+	{
+	  embAlignCalcSimilarity(m,n,sub,cvt,lena,lenb,&id,&sim,&idx,
+				 &simx);
+	  ajFmtPrintAppS(&tmpstr,"Longest_Identity = %5.2f%%\n",
+			 id);
+	  ajFmtPrintAppS(&tmpstr,"Longest_Similarity = %5.2f%%\n",
+			 sim);
+	  ajFmtPrintAppS(&tmpstr,"Shortest_Identity = %5.2f%%\n",
+			 idx);
+	  ajFmtPrintAppS(&tmpstr,"Shortest_Similarity = %5.2f%%",
+			 simx);
+	  ajAlignSetSubHeaderApp(align, tmpstr);
+	}
+	ajAlignWrite (align);
+	ajAlignReset(align);
+
     }
-    
+
     ajAlignClose(align);
     ajAlignDel(&align);
 
@@ -195,7 +212,8 @@ int main(int argc, char **argv)
     ajStrDel(&n);
     ajStrDel(&m);
     ajStrDel(&ss);
-    
+    ajStrDel(&tmpstr);
+
     ajExit();
     return 0;
 }

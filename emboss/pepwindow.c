@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -69,9 +69,9 @@ int main(int argc, char **argv)
     midpoint = (ajint)((llen+1)/2);
 
     ajGraphDataxySetTypeC(graphdata,"2D Plot");
-  
+
     ajGraphxyAddGraph(mult,graphdata);
-  
+
     for(i=0;i<ajSeqLen(seq);i++)
 	ajStrAppK(&aa0str,(char)ajAZToInt(*s1++));
 
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
     }
 
     ajGraphDataxySetMaxima(graphdata,0.,(float)ajSeqLen(seq),min,max);
-  
+
     min=min*1.1;
     max=max*1.1;
 
@@ -111,8 +111,8 @@ int main(int argc, char **argv)
 
     ajExit();
     return 0;
-}  
-			    
+}
+
 /* @funcstatic pepwindow_getnakaidata *****************************************
 **
 ** Read the NAKAI (AAINDEX) data file
@@ -143,7 +143,7 @@ static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[])
     buffer = ajStrNew();
     buf2   = ajStrNew();
     description = ajStrNew();
-  
+
 
 
     while (ajFileGets(file,&buffer))
@@ -157,7 +157,7 @@ static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[])
 	{
 	    line++;
 	    ajStrClean(&buffer);
-      
+
 	    token = ajStrTokenInit(buffer,ajStrStr(delim));
 
 	    ajStrToken(&buf2,&token,ajStrStr(delim));
@@ -238,6 +238,6 @@ static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[])
     ajStrDel(&description);
     ajStrDel(&buf2);
     ajStrDel(&delim);
-  
+
     return ajTrue;
 }

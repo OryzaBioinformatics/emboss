@@ -13,12 +13,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -30,22 +30,43 @@
 
 #include "emboss.h"
 
-typedef struct cons
+/* @datastatic EtandemPCons ***************************************************
+**
+** Consensus pattern structure
+**
+** @alias EtandemSCons
+** @alias EtandemOCons
+**
+** @attr phase [ajint] Undocumented
+** @attr tab [ajint*] Undocumented
+** @attr max [ajint*] Undocumented
+** @attr start [ajint] Undocumented
+** @attr score [ajint] Undocumented
+** @attr bestScore [ajint] Undocumented
+** @attr ibest [ajint] Undocumented
+** @attr bestMax [ajint*] Undocumented
+** @attr repeat [ajint] Undocumented
+** @attr next [struct EtandemSCons*] Next node in linked list
+** @@
+******************************************************************************/
+
+
+typedef struct EtandemSCons
 {
   ajint phase ;
-  ajint *tab ;
-  ajint *max ;
+  ajint* tab ;
+  ajint* max ;
   ajint start ;
   ajint score ;
   ajint bestScore ;
   ajint ibest ;
-  ajint *bestMax ;
-  ajint repeat ; 
-  struct cons *next ;
-} *Cons ;
+  ajint* bestMax ;
+  ajint repeat ;
+  struct EtandemSCons* next ;
+} EtandemOCons, *EtandemPCons ;
 
-static struct cons rootStruct ;
-static Cons root = &rootStruct ;
+static EtandemOCons rootStruct ;
+static EtandemPCons root = &rootStruct ;
 static ajint *ring ;
 static char letter[5] = "acgtn" ;
 static AjBool mismatch = AJFALSE ;
@@ -55,10 +76,11 @@ static ajint nbase;
 static ajint nmin, nmax;
 static AjPSeqCvt cvt;
 
-static Cons etandem_consCreate (void);
-static void etandem_consDestroy (Cons cons);
-static void etandem_basicReport (AjPFeattable tab, AjPFile outfile, Cons a);
-static void etandem_report (Cons a);
+static EtandemPCons etandem_consCreate (void);
+static void etandem_consDestroy (EtandemPCons cons);
+static void etandem_basicReport (AjPFeattable tab, AjPFile outfile,
+				 EtandemPCons a);
+static void etandem_report (EtandemPCons a);
 static void etandem_finalReport (AjPFeattable tab, AjPFile outfile);
 
 #define ATAB(x,y) (a->tab[x+5*y])
@@ -69,17 +91,17 @@ static ajint nCons = 0 ;
 
 
 
-/* @funcstatic etandem_consCreate ********************************************
+/* @funcstatic etandem_consCreate *********************************************
 **
 ** Undocumented.
 **
-** @return [Cons] Undocumented
+** @return [EtandemPCons] Undocumented
 ** @@
 ******************************************************************************/
 
-static Cons etandem_consCreate (void)
+static EtandemPCons etandem_consCreate (void)
 {
-    static Cons res;
+    static EtandemPCons res;
 
     AJNEW0(res);
     AJCNEW0(res->max, nmax+1);
@@ -90,15 +112,15 @@ static Cons etandem_consCreate (void)
     return res ;
 }
 
-/* @funcstatic etandem_consDestroy *******************************************
+/* @funcstatic etandem_consDestroy ********************************************
 **
 ** Undocumented.
 **
-** @param [?] cons [Cons] Undocumented
+** @param [?] cons [EtandemPCons] Undocumented
 ** @@
 ******************************************************************************/
 
-static void etandem_consDestroy (Cons cons)
+static void etandem_consDestroy (EtandemPCons cons)
 {
 
     if (!cons)
@@ -114,21 +136,22 @@ static void etandem_consDestroy (Cons cons)
 
 /***************** reporting code *****************/
 
-static struct cons reportRootStruct ;
-static Cons reportRoot = &reportRootStruct ;
+static EtandemOCons reportRootStruct ;
+static EtandemPCons reportRoot = &reportRootStruct ;
 
-/* @funcstatic etandem_basicReport *******************************************
+/* @funcstatic etandem_basicReport ********************************************
 **
 ** Undocumented.
 **
 ** @param [r] tab [AjPFeattable] Feature table
 ** @param [r] outfile [AjPFile] Output file (null unless original output
 **                              is needed)
-** @param [?] a [Cons] Undocumented
+** @param [?] a [EtandemPCons] Undocumented
 ** @@
 ******************************************************************************/
 
-static void etandem_basicReport (AjPFeattable tab, AjPFile outfile, Cons a)
+static void etandem_basicReport (AjPFeattable tab, AjPFile outfile,
+				 EtandemPCons a)
 {
     ajint j;
     ajint copies;
@@ -148,7 +171,7 @@ static void etandem_basicReport (AjPFeattable tab, AjPFile outfile, Cons a)
     perc = 100.0 * (a->bestScore + n * (copies + 1)) / (2.0 * n * copies) ;
     if (outfile)
       ajFmtPrintF (outfile, "%6d %10d %10d %2d %3d %5.1f ",
-		   a->bestScore, a->start+1, a->ibest+1, 
+		   a->bestScore, a->start+1, a->ibest+1,
 		   n, copies, perc) ;
 
     gf = ajFeatNew (tab, NULL, rpthit,
@@ -191,19 +214,19 @@ static void etandem_basicReport (AjPFeattable tab, AjPFile outfile, Cons a)
 
 
 
-/* @funcstatic etandem_report ************************************************
+/* @funcstatic etandem_report *************************************************
 **
 ** Undocumented.
 **
-** @param [?] a [Cons] Undocumented
+** @param [?] a [EtandemPCons] Undocumented
 ** @@
 ******************************************************************************/
 
-static void etandem_report (Cons a)
-{ 
+static void etandem_report (EtandemPCons a)
+{
     ajint j ;
     ajint firstchar ;
-  
+
     if (a->bestScore >= thresh)
     {
 	if (uniform)
@@ -229,7 +252,7 @@ static void etandem_report (Cons a)
 
 
 
-/* @funcstatic etandem_finalReport *******************************************
+/* @funcstatic etandem_finalReport ********************************************
 **
 ** Undocumented.
 **
@@ -242,10 +265,10 @@ static void etandem_report (Cons a)
 static void etandem_finalReport (AjPFeattable tab, AjPFile outfile)
 {
     ajint start;
-    ajint end ; 
-    Cons a;
-    Cons top;
-    Cons olda;
+    ajint end ;
+    EtandemPCons a;
+    EtandemPCons top;
+    EtandemPCons olda;
 
     ajDebug ("finalReport\n");
     while (reportRoot->next)
@@ -299,11 +322,11 @@ int main(int argc, char **argv)
     ajint x;
     ajint phase;
     ajint n;
-    Cons new;
-    Cons a;
-    Cons b;
-    Cons olda;
-    Cons oldb;
+    EtandemPCons new;
+    EtandemPCons a;
+    EtandemPCons b;
+    EtandemPCons olda;
+    EtandemPCons oldb;
     AjPStr nseq = NULL;
     AjPFeattable tab=NULL;
     AjPReport report=NULL;
@@ -450,7 +473,7 @@ int main(int argc, char **argv)
 		    nextb:
 			oldb = b ;
 		    }
-		nexta: 
+		nexta:
 		    ;
 		}
 	    }

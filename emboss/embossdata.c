@@ -11,12 +11,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -45,14 +45,14 @@ int main(int argc, char **argv)
     AjPList flocs=NULL;
     AjPFile outf;
     AjPStr  t=NULL;
-    
+
     AjBool  recurs=ajTrue;
     ajint i;
-    
+
 
     AjPStr filename = NULL;
     AjBool isname;
-    
+
     AjBool fetch;
     AjBool showall;
 
@@ -62,10 +62,10 @@ int main(int argc, char **argv)
     AjPStr path = NULL;
     AjPStr cmd = NULL;
     AjPStr *rstrs=NULL;
-    
+
     ajint result;
     char *p=NULL;
-    
+
     (void) embInit ("embossdata", argc, argv);
 
     filename = ajAcdGetString ("filename");
@@ -121,7 +121,7 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf, "File '%S' has been copied successfully.\n", t);
 	ajStrDel(&t);
 	ajStrDel(&cmd);
-    } 
+    }
 
 
     /*
@@ -154,7 +154,7 @@ int main(int argc, char **argv)
 	else
 	    embossdata_check_dir(directory,outf);
 
-	/* HOME */    
+	/* HOME */
 	if((p=getenv("HOME")))
 	{
 	    (void) ajStrAssC(&hdir, p);
@@ -172,7 +172,7 @@ int main(int argc, char **argv)
 	    else
 		embossdata_check_dir(directory,outf);
 	}
-	
+
 
 	/* DATA */
 	if(isname)
@@ -191,7 +191,7 @@ int main(int argc, char **argv)
 	else
 	    embossdata_check_dir(ddir,outf);
     }
-    
+
 
     /*
      *  Just show all the files in the EMBOSS Installation data directory
@@ -244,7 +244,7 @@ static void embossdata_check_dir(AjPStr d, AjPFile outf)
 
 
 
-/* @funcstatic embossdata_check_file *****************************************
+/* @funcstatic embossdata_check_file ******************************************
 **
 ** Undocumented.
 **
@@ -274,7 +274,7 @@ static void embossdata_check_file(AjPStr d, AjPStr file, AjPFile outf)
 }
 
 
-/* @funcstatic embossdata_data_dir *******************************************
+/* @funcstatic embossdata_data_dir ********************************************
 **
 ** Undocumented.
 **
@@ -287,7 +287,7 @@ static AjPStr embossdata_data_dir(void)
 {
     static AjPStr where=NULL;
     AjPStr tmp=NULL;
-    
+
     where = ajStrNew();
     tmp = ajStrNew();
 

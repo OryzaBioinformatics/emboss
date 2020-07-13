@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -55,28 +55,28 @@ int main(int argc, char **argv)
     AjPStr     stop;
     ajint      nstarts;
     ajint      nstops;
-    
+
     AjPGraph   graph;
     AjPGraphData data;
-    
+
     float      *x[6];
     float      *y[6];
     AjPInt     cnt;
     ajint        beg;
     ajint	       end;
-    
+
     ajint        i;
     ajint        j;
-    
+
     char *ftit[6]=
     {
 	"F1","F2","F3","R1","R2","R3"
     };
-    
-    
-    
-	
-    
+
+
+
+
+
 #ifdef PLD_png
 
     /*
@@ -107,10 +107,10 @@ int main(int argc, char **argv)
 
     str = ajStrNew();
     cnt = ajIntNew();
-    
+
     ajSeqToUpper(seq);
     (void) ajStrAssSubC(&str,ajSeqChar(seq),beg-1,end-1);
-    
+
     rev = ajStrNewC(ajStrStr(str));
     ajSeqReverseStr(&rev);
 
@@ -120,8 +120,8 @@ int main(int argc, char **argv)
 		      nstarts,stops,nstops);
 	data = ajGraphxyDataNewI(2);
 	data->numofpoints = 0;
-	
-	
+
+
 	ajGraphxyAddGraph(graph,data);
 	ajGraphxySetOverLap(graph,ajFalse);
 	ajGraphxySetYTick(graph, ajFalse);
@@ -135,17 +135,17 @@ int main(int argc, char **argv)
 	    ajGraphDataObjAddRect(data,y[i][j],0.0,
 					      x[i][j],1.0,4,1);
     }
-    
+
 
     ajGraphxySetTitleDo(graph, ajTrue);
     ajGraphxySetMaxMin(graph,(float)beg,(float)end,0.0,1.0);
-    
+
     ajGraphxySetYStart(graph,0.0);
     ajGraphxySetYEnd(graph,2.0);
     ajGraphxyTitleC(graph,"Potential codons (rectangles)");
     ajGraphxyDisplay(graph,ajTrue);
-    
- 
+
+
     ajStrDel(&str);
     ajStrDel(&rev);
     ajStrDel(&start);
@@ -158,7 +158,7 @@ int main(int argc, char **argv)
     for(i=0;i<nstops;++i)
 	ajStrDel(&stops[i]);
     AJFREE(stops);
-    
+
     ajExit();
     return 0;
 }
@@ -192,7 +192,7 @@ static void plotorf_norfs(char *seq, char *rev, ajint n, float **x, float **y,
     AjBool inframe;
     ajint po;
     char *p;
-    
+
 
 
     len = strlen(seq);
@@ -209,13 +209,13 @@ static void plotorf_norfs(char *seq, char *rev, ajint n, float **x, float **y,
 	if(po<0)
 	    po+=3;
     }
-    
+
 
 
 
     inframe=ajFalse;
     count = 0;
-    
+
     for(i=po;i<len-2;i+=3)
     {
 	if(plotorf_isin(&p[i],starts,nstarts))
@@ -227,7 +227,7 @@ static void plotorf_norfs(char *seq, char *rev, ajint n, float **x, float **y,
 		continue;
 	    }
 	}
-	
+
 	if(plotorf_isin(&p[i],stops,nstops))
 	    if(inframe)
 		inframe=ajFalse;
@@ -240,10 +240,10 @@ static void plotorf_norfs(char *seq, char *rev, ajint n, float **x, float **y,
     }
     (void) ajIntPut(cnt,n,count);
 
-    
+
     count = 0;
     inframe = ajFalse;
-    
+
     for(i=po;i<len-2;i+=3)
     {
 	if(plotorf_isin(&p[i],starts,nstarts))
@@ -288,12 +288,12 @@ static void plotorf_norfs(char *seq, char *rev, ajint n, float **x, float **y,
 	}
     }
 
-    
-    
+
+
     return;
 }
 
-/* @funcstatic plotorf_isin **************************************************
+/* @funcstatic plotorf_isin ***************************************************
 **
 ** True if codon at p occurs in string str
 **

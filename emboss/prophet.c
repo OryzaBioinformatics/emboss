@@ -8,12 +8,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -56,7 +56,7 @@ int main(int argc, char **argv)
     AjPSeq    seq=NULL;
     AjPFile   inf=NULL;
     AjPFile   outf=NULL;
-    
+
     AjPStr    strand=NULL;
     AjPStr    substr=NULL;
     AjPStr    name=NULL;
@@ -67,14 +67,14 @@ int main(int argc, char **argv)
     AjPStr    cons=NULL;
     AjPStr    m=NULL;
     AjPStr    n=NULL;
-    
+
     ajint       type;
     ajint       begin;
     ajint       end;
     ajint       len;
     ajint       i;
     ajint       j;
-    
+
     float **fmatrix=NULL;
 
     ajint mlen;
@@ -86,14 +86,14 @@ int main(int argc, char **argv)
     float gapextend;
     float opencoeff;
     float extendcoeff;
-    
+
     char *p;
 
     ajint maxarr=1000;
     ajint alen;
     float *path;
     ajint   *compass;
-    
+
 
     embInit("prophet", argc, argv);
 
@@ -102,7 +102,7 @@ int main(int argc, char **argv)
     opencoeff   = ajAcdGetFloat("gapopen");
     extendcoeff = ajAcdGetFloat("gapextend");
     outf        = ajAcdGetOutfile("outfile");
-    
+
     opencoeff = ajRoundF(opencoeff, 8);
     extendcoeff = ajRoundF(extendcoeff, 8);
 
@@ -113,11 +113,11 @@ int main(int argc, char **argv)
     line=ajStrNew();
     m=ajStrNewC("");
     n=ajStrNewC("");
-    
+
     type=prophet_getType(inf,&tname);
     if(!type)
       ajFatal("Unrecognised profile/matrix file format");
-    
+
     prophet_read_profile(inf,&name,&mname,&mlen,&gapopen,&gapextend,&thresh,
 			 &maxfs, &cons);
     AJCNEW(fmatrix, mlen);
@@ -135,15 +135,15 @@ int main(int argc, char **argv)
 	    p = strtok(NULL," \t");
 	}
     }
-    
+
     AJCNEW(path, maxarr);
     AJCNEW(compass, maxarr);
-    
+
     while(ajSeqallNext(seqall, &seq))
     {
 	begin=ajSeqallBegin(seqall);
 	end=ajSeqallEnd(seqall);
-	
+
 	ajStrAssC(&pname,ajSeqName(seq));
 	strand=ajSeqStrCopy(seq);
 
@@ -164,14 +164,14 @@ int main(int argc, char **argv)
 	prophet_scan_profile(substr,pname,name,mname,mlen,fmatrix,thresh,maxs,
 			     gapopen,gapextend,outf,&cons,opencoeff,
 			     extendcoeff,path,compass,&m,&n,len,begin);
-	
-	ajStrDel(&strand);    
+
+	ajStrDel(&strand);
     }
 
     for(i=0;i<mlen;++i)
 	AJFREE (fmatrix[i]);
     AJFREE (fmatrix);
-    
+
     ajStrDel(&line);
     ajStrDel(&name);
     ajStrDel(&mname);
@@ -201,7 +201,7 @@ static ajint prophet_getType(AjPFile inf, AjPStr *tname)
     AjPStr line=NULL;
     char *p=NULL;
     ajint  ret=0;
-    
+
     line=ajStrNew();
 
     while(ajFileReadLine(inf,&line))
@@ -247,7 +247,7 @@ static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 				 float *maxs, AjPStr *cons)
 {
     char *p;
-    
+
     AjPStr line=NULL;
 
     line=ajStrNew();
@@ -363,19 +363,19 @@ static void prophet_scan_profile(AjPStr substr, AjPStr pname, AjPStr name,
     float score;
     ajint start1;
     ajint start2;
-    
+
     embAlignProfilePathCalc(ajStrStr(substr),mlen,slen,opencoeff,extendcoeff,
 			    path,fmatrix,compass,0);
-    
+
     score=embAlignScoreProfileMatrix(path,compass,opencoeff,extendcoeff,
 				     substr,mlen,slen,fmatrix,&start1,
 				     &start2);
-    
+
     embAlignWalkProfileMatrix(path,compass,opencoeff,extendcoeff,*cons,
 			      substr,m,n,mlen,slen,fmatrix,&start1,
 			      &start2);
 
-    
+
     embAlignPrintProfile(outf,ajStrStr(*cons),ajStrStr(substr),*m,*n,
 			 start1,start2,score,1,fmatrix,"Consensus",
 			 ajStrStr(pname),1,begin);

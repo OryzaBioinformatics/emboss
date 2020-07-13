@@ -1,18 +1,20 @@
 /* @source patmatDB.c
 ** @author: Copyright (C) Sinead O'Leary (soleary@hgmp.mrc.ac.uk)
 ** @@
-** Application for pattern matching, one Prosite motif against a sequence database.
+**
+** Application for pattern matching, one Prosite motif against a
+** sequence database.
 **
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -35,28 +37,28 @@ static void patmatdb_spaces(AjPFile *outf, ajint length);
 
 int main(int argc, char **argv)
 {
-    AjPFile outf 		=NULL;	
+    AjPFile outf 		=NULL;
     AjPFeattable tab            =NULL;
     AjPReport report            =NULL;
 
     AjPSeqall seqall 		=NULL;
     AjPSeq seq			=NULL;
-    AjPStr str 			=NULL;	
+    AjPStr str 			=NULL;
     AjPStr regexp 		=NULL;
     AjPStr motif		=NULL;
     AjPStr temp = NULL;
-    
+
     AjPStr regexpdata	=NULL;
     EmbPPatMatch match 	=NULL;
-	
-	
+
+
     ajint i;
     ajint number;
     ajint start;
     ajint end;
     ajint length;
     ajint zstart;
-    ajint zend;    
+    ajint zend;
     ajint seqlength;
     ajint j;
     AjPStr         tmpstr = NULL;
@@ -64,7 +66,7 @@ int main(int argc, char **argv)
     AjPStr fthit = NULL;
 
     embInit ("patmatdb", argc, argv);
-	
+
     seqall	= ajAcdGetSeqall ("sequence");
     motif 	= ajAcdGetString ("motif");
     /* outf        = ajAcdGetOutfile("outfile"); */
@@ -74,17 +76,17 @@ int main(int argc, char **argv)
     ajStrToUpper(&motif);
     ajStrAssC (&fthit, "hit");
 
-    /*converting the Prosite motif to a reg exps */		
+    /*converting the Prosite motif to a reg exps */
     regexp =embPatPrositeToRegExp(&motif);
-   
+
     ajFmtPrintAppS (&tmpstr, "Motif: %S\n", motif);
     ajReportSetHeader (report, tmpstr);
 
     while (ajSeqallNext(seqall, &seq))
     {
-	str = ajSeqStr(seq); 
+	str = ajSeqStr(seq);
 	ajStrToUpper(&str);
-	
+
 	/* comparing the reg exps to sequence for matches. */
 	match 	= embPatPosMatchFind(regexp, str);
 
@@ -116,8 +118,8 @@ int main(int argc, char **argv)
 	    start = 1+embPatPosMatchGetStart(match, i);
 	    if (outf)
 	      ajFmtPrintF(outf, "Start of match = position %d of sequence\n",
-			  start);			
-	
+			  start);
+
 	    /* returns the end point for the pattern match for the
 	     * index'th item.
 	     */
@@ -133,7 +135,7 @@ int main(int argc, char **argv)
 	      ajFmtPrintF(outf,
 			  "patmatDB of %s from %d to %d using pattern %s\n\n",
 			  ajSeqName(seq), start, end, ajStrStr(motif));
-		
+
 
 	    if(start-5<0)
 	    {
@@ -144,18 +146,18 @@ int main(int argc, char **argv)
 		zstart=0;
 	    }
 	    else zstart=start-6;
-	    
+
 	    if (end+4> seqlength)
 		zend = end;
-	    else zend = end+4; 
+	    else zend = end+4;
 
 
-				
+
 	    ajStrAssSub(&temp, str, zstart, zend);
 	    if (outf)
 	    {
 	      ajFmtPrintF(outf, "%s\n", ajStrStr(temp));
-		
+
 	      ajFmtPrintF(outf, "     |");
 	      patmatdb_spaces(&outf, length);
 	      ajFmtPrintF(outf, "|\n");
@@ -171,11 +173,11 @@ int main(int argc, char **argv)
 	    ajFeattableDel(&tab);
 	}
 	embPatMatchDel(&match);
-    }	
+    }
 
 
     ajStrDel(&regexp);
-    ajStrDel(&temp);    
+    ajStrDel(&temp);
     ajStrDel(&motif);
     ajStrDel(&str);
     ajStrDel(&regexpdata);

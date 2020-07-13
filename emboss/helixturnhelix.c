@@ -6,19 +6,19 @@
 **
 ** Original program "HELIXTURNHELIX" by Peter Rice (EGCG 1990)
 ** This program uses the method of Dodd and Egan (1987) J. Mol. Biol.
-** 194:557-564 to determine the significance of possible helix-turn-helix 
+** 194:557-564 to determine the significance of possible helix-turn-helix
 ** matches in protein sequences
 **
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -75,18 +75,18 @@ int main(int argc, char **argv)
     float     sd;
     float     minsd;
     static DNAB      *lp;
-    
+
     AjPInt2d matrix=NULL;
     AjPStr    tmpStr = NULL;
     AjPFeattable TabRpt = NULL;
-    
+
     ajint begin;
     ajint end;
     ajint len;
 
     char *p;
     char *q;
-    
+
     ajint i;
     ajint j;
     ajint cols;
@@ -100,22 +100,22 @@ int main(int argc, char **argv)
 
     float minscore;
     float thissd;
-    
+
     embInit("helixturnhelix",argc,argv);
-    
+
     seqall    = ajAcdGetSeqall("sequence");
     report    = ajAcdGetReport("outfile");
     mean      = ajAcdGetFloat("mean");
     sd        = ajAcdGetFloat("sd");
     minsd     = ajAcdGetFloat("minsd");
-    
+
     /* obsolete. Can be uncommented in acd file and here to reuse */
 
     /* outf      = ajAcdGetOutfile("originalfile"); */
 
     substr = ajStrNew();
     matrix = ajInt2dNew();
-    
+
     eightyseven = ajAcdGetBool("eightyseven");
 
     cols=hth_readNab(&matrix,eightyseven);
@@ -123,10 +123,10 @@ int main(int argc, char **argv)
 
     lastcol = cols-3;
 
-    minscore = mean + (minsd*sd);    
+    minscore = mean + (minsd*sd);
 
     ajb=ajListNew();
-    
+
     (void) ajFmtPrintAppS(&tmpStr,
 			  "Hits above +%.2f SD (%.2f)",
 			  minsd,minscore);
@@ -151,7 +151,7 @@ int main(int argc, char **argv)
 	for(i=0;i<len;++i,++p)
 	    *p = (char) ajAZToInt(*p);
 	p=q;
-	
+
 	se = (len-lastcol)+1;
 	for(i=0;i<se;++i)
 	{
@@ -179,7 +179,7 @@ int main(int argc, char **argv)
 	ajFeattableDel(&TabRpt);
 	ajStrDel(&strand);
     }
-    
+
 
     if(!n) {
 	if (outf) {
@@ -204,7 +204,7 @@ int main(int argc, char **argv)
     ajListDel(&ajb);
     if (outf)
       ajFileClose(&outf);
-    
+
     (void) ajReportClose(report);
 
     ajExit();
@@ -214,7 +214,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic hth_readNab ***************************************************
+/* @funcstatic hth_readNab ****************************************************
 **
 ** Undocumented.
 **
@@ -231,13 +231,13 @@ static ajint hth_readNab(AjPInt2d *matrix,AjBool eightyseven)
     AjPStr  line=NULL;
     AjPStr  delim=NULL;
     AjBool  pass;
-    
+
     char *p;
     char *q;
-    
+
     ajint xcols=0;
     ajint cols=0;
-    
+
     float sample;
     float expected;
     float pee;
@@ -248,10 +248,10 @@ static ajint hth_readNab(AjPInt2d *matrix,AjBool eightyseven)
     ajint   j;
     ajint   c=0;
     ajint   v;
-    
+
     ajint d1;
     ajint d2;
-    
+
     ajint **mat;
 
     if(eightyseven)
@@ -264,7 +264,7 @@ static ajint hth_readNab(AjPInt2d *matrix,AjBool eightyseven)
     delim=ajStrNewC(" :\t\n");
 
     pass = ajTrue;
-    
+
     while(ajFileGets(mfptr, &line))
     {
 	p=ajStrStr(line);
@@ -287,7 +287,7 @@ static ajint hth_readNab(AjPInt2d *matrix,AjBool eightyseven)
 		ajFatal("Assymetric table");
 
 	d1 = ajAZToInt((char)toupper((ajint)*p));
-	
+
 	q=ajStrStr(line);
 	c = 0;
 	q = ajSysStrtok(q,ajStrStr(delim));
@@ -298,7 +298,7 @@ static ajint hth_readNab(AjPInt2d *matrix,AjBool eightyseven)
 	}
 
 	for(i=0,rt=0;i<c-2;++i) rt+=ajInt2dGet(*matrix,d1,i);
-	
+
 	if(rt!=ajInt2dGet(*matrix,d1,c-2))
 	    ajFatal("Row didn't match total");
     }
@@ -319,7 +319,7 @@ static ajint hth_readNab(AjPInt2d *matrix,AjBool eightyseven)
 	if(rt!=(ajint)sample)
 	    ajFatal("Column doesn't match sample size");
     }
-    
+
     exptot=0.0;
     for(i=0;i<d1;++i)
     {
@@ -358,7 +358,7 @@ static ajint hth_readNab(AjPInt2d *matrix,AjBool eightyseven)
 
 
 
-/* @funcstatic hth_print_hits ************************************************
+/* @funcstatic hth_print_hits *************************************************
 **
 ** Undocumented.
 **
@@ -381,7 +381,7 @@ static void hth_print_hits(AjPList *ajb, ajint n, float minsd, ajint lastcol,
     AjPFloat hsd=NULL;
 
     ajint   i;
-    
+
     AJCNEW (lp, n);
 
     hp  = ajIntNew();
@@ -396,7 +396,7 @@ static void hth_print_hits(AjPList *ajb, ajint n, float minsd, ajint lastcol,
     }
     ajSortFloatIncI(ajFloatFloat(hsd),ajIntInt(hp),n);
     ajFloatDel(&hsd);
-    
+
     for(i=0;i<n;++i)
     {
 	ajFmtPrintF(outf,"\nScore %d (+%.2f SD) in %s at residue %d\n",
@@ -431,7 +431,7 @@ static void hth_print_hits(AjPList *ajb, ajint n, float minsd, ajint lastcol,
     }
     AJFREE (lp);
     ajIntDel(&hp);
-    
+
     return;
 }
 
@@ -460,11 +460,11 @@ static void hth_report_hits(AjPList *ajb, ajint lastcol,
     ajint n;
     ajint i;
     AjPFeature gf = NULL;
-    
+
     AjPStr tmpStr = NULL;
     static AjPStr fthit = NULL;
     struct DNAB *dnab;
-    
+
     if (!fthit)
       ajStrAssC(&fthit, "hit");
 
@@ -488,7 +488,7 @@ static void hth_report_hits(AjPList *ajb, ajint lastcol,
     }
     ajSortFloatIncI(ajFloatFloat(hsd),ajIntInt(hp),n);
     ajFloatDel(&hsd);
-    
+
     for(i=0;i<n;++i)
     {
         gf = ajFeatNewProt (TabRpt, NULL, fthit,
@@ -511,7 +511,7 @@ static void hth_report_hits(AjPList *ajb, ajint lastcol,
 	ajStrDel(&dnab->seq);
 	AJFREE(dnab);
     }
-    
+
 
 /*    for(i=0;i<n;++i)
     {
@@ -521,6 +521,6 @@ static void hth_report_hits(AjPList *ajb, ajint lastcol,
 */
     AJFREE (lp);
     ajIntDel(&hp);
-    
+
     return;
 }

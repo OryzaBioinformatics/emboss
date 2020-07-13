@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -44,13 +44,13 @@ int main(int argc, char **argv)
     AjPFile    outf;
     AjPStr     str=NULL;
     AjPStr     st=NULL;
-    
+
     AjBool     plot;
     AjPGraph   graph=NULL;
     AjBool     twin;
     float      baseline;
     float      ymax;
-    
+
     ajint beg;
     ajint end;
     ajint window;
@@ -59,19 +59,19 @@ int main(int argc, char **argv)
 
     ajint aangle;
     ajint bangle;
-    
+
     ajint i;
 
     float *x=NULL;
     float *ya=NULL;
     float *yb=NULL;
-    
+
 
 
     char *p;
     char *sname;
-    
-    
+
+
     ajGraphInit("hmoment", argc, argv);
 
     seqall    = ajAcdGetSeqall("seqall");
@@ -81,25 +81,25 @@ int main(int argc, char **argv)
     bangle    = ajAcdGetInt("bangle");
     baseline  = ajAcdGetFloat("baseline");
     twin      = ajAcdGetBool("double");
-    
+
     /* only one will be used - see variable 'plot' */
 
     outf  = ajAcdGetOutfile("outfile");
     graph = ajAcdGetGraphxy("graph");
-    
+
 
     str = ajStrNew();
     st  = ajStrNew();
-    
+
     while(ajSeqallNext(seqall, &seq))
     {
 	beg = ajSeqallBegin(seqall);
 	end = ajSeqallEnd(seqall);
 	len = end-beg+1;
-	
+
 	limit = len-window+1;
 	sname = ajSeqName(seq);
-	
+
 	ajStrAssSubC(&str,ajSeqChar(seq),--beg,--end);
 	ajStrToUpper(&str);
 	p = ajStrStr(str);
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 	    AJCNEW0(ya,limit);
 	    AJCNEW0(yb,limit);
 	}
-	
+
 
 	for(i=0;i<limit;++i)
 	{
@@ -168,7 +168,7 @@ int main(int argc, char **argv)
 	    if(limit>0)
 		ajGraphxyDisplay(graph,ajFalse);
 	}
-	
+
 	if(limit>0)
 	{
 	    AJFREE(x);
@@ -176,7 +176,7 @@ int main(int argc, char **argv)
 	    AJFREE(yb);
 	}
     }
-    
+
     if(plot)
         ajGraphClose();
     else
@@ -189,7 +189,7 @@ int main(int argc, char **argv)
 }
 
 
-/* @funcstatic hmoment_addgraph **********************************************
+/* @funcstatic hmoment_addgraph ***********************************************
 **
 ** Undocumented.
 **
@@ -204,7 +204,7 @@ int main(int argc, char **argv)
 ** @param [?] baseline [float] Undocumented
 ** @param [?] sname [char*] Sequence name
 ** @@
-****************************************************************************/
+******************************************************************************/
 
 
 static void hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
@@ -218,7 +218,7 @@ static void hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
 
     if(limit<1)
 	return;
-    
+
 
     data = ajGraphxyDataNewI(limit);
 
@@ -229,10 +229,10 @@ static void hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
 	data->x[i] = x[i];
 	data->y[i] = y[i];
     }
-    
+
     ajGraphxySetColour(data,colour);
-    ajGraphDataxySetMaxMin(data,x[0],x[limit-1],0.,ymax);  
-    ajGraphDataxySetMaxima(data,x[0],x[limit-1],0.,ymax);  
+    ajGraphDataxySetMaxMin(data,x[0],x[limit-1],0.,ymax);
+    ajGraphDataxySetMaxima(data,x[0],x[limit-1],0.,ymax);
 
     ajGraphDataxySetTypeC(data,"2D Plot Float");
 
@@ -242,7 +242,7 @@ static void hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
     ajFmtPrintS(&st,"uH (%d deg)",angle);
     ajGraphxyDataSetYtitle(data,st);
 
-    ajFmtPrintS(&st,"Position (w=%d)",window);    
+    ajFmtPrintS(&st,"Position (w=%d)",window);
     ajGraphxyDataSetXtitle(data,st);
 
     ajGraphDataObjAddLine(data,x[0],baseline,x[limit-1],baseline,BLUE);
@@ -255,7 +255,7 @@ static void hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
 }
 
 
-/* @funcstatic hmoment_calchm ************************************************
+/* @funcstatic hmoment_calchm *************************************************
 **
 ** Undocumented.
 **
@@ -287,12 +287,12 @@ static float hmoment_calchm(char *p, int pos, int window, ajint angle)
 
     sumsin = sumcos = (double)0.;
     tangle = angle;
-    
+
     for(i=0;i<window;++i)
     {
 	res = p[pos+i];
 	h   = hydata[ajAZToInt(res)];
-	
+
 	sumsin  += (h * sin(ajDegToRad(tangle)));
 	sumcos  += (h * cos(ajDegToRad(tangle)));
 	tangle = (double) (((ajint)tangle+angle) % 360);
@@ -302,7 +302,7 @@ static float hmoment_calchm(char *p, int pos, int window, ajint angle)
     sumsin *= sumsin;
     sumcos *= sumcos;
 
-    
+
     hm = sqrt(sumsin+sumcos) / (double)window;
 
     return (float)hm;

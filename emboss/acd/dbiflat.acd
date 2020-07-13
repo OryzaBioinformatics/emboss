@@ -11,7 +11,7 @@ section: input [ info: "input Section" type: page ]
 list: idformat  [
   required: "y"
   information: "Entry format"
-  values: "EMBL:EMBL; SWISS:Swiss-Prot, SpTrEMBL, TrEMBLnew; GB:Genbank, DDBJ;"
+  values: "EMBL:EMBL; SWISS:Swiss-Prot, SpTrEMBL, TrEMBLnew; GB:Genbank, DDBJ; REFSEQ:Refseq;"
   maximum: "1"
   minimum: "1"
   default: "SWISS"

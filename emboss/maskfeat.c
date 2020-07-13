@@ -54,7 +54,7 @@ int main(int argc, char **argv)
   {
 /* mask the regions */
     (void) maskfeat_FeatSeqMask (seq, type, maskchar);
-  
+
     (void) ajSeqAllWrite (seqout, seq);
   }
 
@@ -67,14 +67,14 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic maskfeat_FeatSeqMask *****************************************
+/* @funcstatic maskfeat_FeatSeqMask *******************************************
 **
 ** Masks features of a sequence
 **
 ** @param [u] seq [AjPSeq] sequence
 ** @param [r] type [AjPStr] types of features to mask as wildcarded string
-** @param [r] maskchar [AjPStr] character to mask with 
-** @return [void] 
+** @param [r] maskchar [AjPStr] character to mask with
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -88,14 +88,14 @@ static void maskfeat_FeatSeqMask (AjPSeq seq, AjPStr type, AjPStr maskchar)
     char whiteSpace[] = " \t\n\r,;";	/* skip whitespace and , ; */
     AjPStrTok tokens;
     AjPStr key=NULL;
-      
+
     /* get the feature table of the sequence */
     feat = ajSeqGetFeat(seq);
-    
+
     (void) ajStrAss (&str, ajSeqStr(seq));
-                  
+
     /* For all features... */
-                    
+
     if (feat->Features)
     {
 	iter = ajListIter(feat->Features) ;
@@ -113,7 +113,7 @@ static void maskfeat_FeatSeqMask (AjPSeq seq, AjPStr type, AjPStr maskchar)
 	}
 	ajListIterFree(iter) ;
     }
-     
+
     (void) ajSeqReplace(seq, str);
 
     /* tidy up */
@@ -123,6 +123,6 @@ static void maskfeat_FeatSeqMask (AjPSeq seq, AjPStr type, AjPStr maskchar)
     return;
 }
 
-  
+
 
 

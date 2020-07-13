@@ -11,12 +11,12 @@
  ** modify it under the terms of the GNU General Public License
  ** as published by the Free Software Foundation; either version 2
  ** of the License, or (at your option) any later version.
- ** 
+ **
  ** This program is distributed in the hope that it will be useful,
  ** but WITHOUT ANY WARRANTY; without even the implied warranty of
  ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  ** GNU General Public License for more details.
- ** 
+ **
  ** You should have received a copy of the GNU General Public License
  ** along with this program; if not, write to the Free Software
  ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -84,17 +84,17 @@ int main(int argc, char **argv)
     AjBool equiv;
     AjBool frags;
     AjPStr dfile;
-    
+
     AjPFile   enzfile=NULL;
     AjPFile   equfile=NULL;
-    
+
     AjPStr    name=NULL;
 
     AjPTable  table=NULL;
-    
+
     ajint       hits;
 
-    
+
     AjPList     l;
 
     embInit("restrict", argc, argv);
@@ -117,7 +117,7 @@ int main(int argc, char **argv)
     frags      = ajAcdGetBool("fragments");
     nameit     = ajAcdGetBool("name");
     dfile      = ajAcdGetString("datafile");
-    
+
     /* obsolete. Can be uncommented in acd file and here to reuse */
 
     /* outf      = ajAcdGetOutfile("originalfile"); */
@@ -127,13 +127,13 @@ int main(int argc, char **argv)
 
 
     if(single) max=min=1;
-    
+
     table = ajStrTableNew(EQUGUESS);
 
-    
+
     /* read the local file of enzymes names */
     restrict_read_file_of_enzyme_names(&enzymes);
-  
+
      if(!*ajStrStr(dfile))
     {
 	ajFileDataNewC(ENZDATA,&enzfile);
@@ -146,8 +146,8 @@ int main(int argc, char **argv)
 	if(!enzfile)
 	    ajFatal("Cannot locate user supplied enzyme file %S.",dfile);
     }
-    
-	
+
+
 
     if(equiv)
     {
@@ -157,9 +157,9 @@ int main(int argc, char **argv)
 	else
 	    restrict_read_equiv(&equfile,&table);
     }
-    
 
-    
+
+
     while(ajSeqallNext(seqall, &seq))
     {
 	begin=ajSeqallBegin(seqall);
@@ -212,7 +212,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic restrict_printHits ********************************************
+/* @funcstatic restrict_printHits *********************************************
 **
 ** Print restriction sites
 **
@@ -255,7 +255,7 @@ static void restrict_printHits(AjPFile *outf, AjPList *l, AjPStr *name,
     ajint fn=0;
     ajint fb=0;
     ajint last=0;
-    
+
     AjPStr value=NULL;
 
     ajint i;
@@ -263,8 +263,8 @@ static void restrict_printHits(AjPFile *outf, AjPList *l, AjPStr *name,
 
     ps=ajStrNew();
     fn = 0;
-    
-    
+
+
     ajFmtPrintF(*outf,"# Restrict of %S from %d to %d\n#\n",
 		*name,begin,end);
     ajFmtPrintF(*outf,"# Minimum cuts per enzyme: %d\n",mincut);
@@ -284,7 +284,7 @@ static void restrict_printHits(AjPFile *outf, AjPList *l, AjPStr *name,
     else
 	ajFmtPrintF(*outf,"# Ambiguities allowed\n");
 
-    
+
 
     hits = embPatRestrictRestrict(l,hits,!limit,alpha);
 
@@ -293,7 +293,7 @@ static void restrict_printHits(AjPFile *outf, AjPList *l, AjPStr *name,
 	fa = AJALLOC(hits*2*sizeof(ajint));
 	fx = AJALLOC(hits*2*sizeof(ajint));
     }
-    
+
 
     ajFmtPrintF(*outf,"# Number of hits: %d\n",hits);
     ajFmtPrintF(*outf,"# Base Number\tEnzyme\t\tSite\t\t5'\t3'\t[5'\t3']\n");
@@ -315,13 +315,13 @@ static void restrict_printHits(AjPFile *outf, AjPList *l, AjPStr *name,
 		ajStrAss(&m->cod,value);
 	}
 
-	
+
 	ajFmtPrintF(*outf,"\t%-d\t%-16s%-16s%d\t%d\t",m->start,
 		    ajStrStr(m->cod),ajStrStr(m->pat),m->cut1,
 		    m->cut2);
 	if(frags)
 	    fa[fn++] = m->cut1;
-	    
+
 	if(m->cut3 && m->cut4)
 	{
 	    if(frags)
@@ -330,7 +330,7 @@ static void restrict_printHits(AjPFile *outf, AjPList *l, AjPStr *name,
 	}
 	if(nameit)
 	    ajFmtPrintF(*outf,"  %S",*name);
-	
+
 	ajFmtPrintF(*outf,"\n");
 	embMatMatchDel(&m);
     }
@@ -371,12 +371,12 @@ static void restrict_printHits(AjPFile *outf, AjPList *l, AjPStr *name,
 	AJFREE(fa);
 	AJFREE(fx);
     }
-    
-    
+
+
     ajListDel(l);
     ajStrDel(&ps);
 
-    
+
     return;
 }
 
@@ -427,7 +427,7 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
     ajint fn=0;
     ajint fb=0;
     ajint last=0;
-    
+
     AjPStr value=NULL;
     AjPStr tmpStr=NULL;
     AjPStr fthit = NULL;
@@ -437,7 +437,7 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
 
     ps=ajStrNew();
     fn = 0;
-    
+
     ajStrAssC(&fthit, "hit");
 
     ajFmtPrintAppS(&tmpStr,"Minimum cuts per enzyme: %d\n",mincut);
@@ -465,9 +465,9 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
 	fa = AJALLOC(hits*2*sizeof(ajint));
 	fx = AJALLOC(hits*2*sizeof(ajint));
     }
-    
+
     ajReportSetHeader(report, tmpStr);
-   
+
     /* not needed - column headings from the old report */
     /*
     // ajFmtPrintAppS(&tmpStr,
@@ -491,7 +491,7 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
 	    if(value)
 		ajStrAss(&m->cod,value);
 	}
-	
+
 	gf = ajFeatNewII (TabRpt,
 			   m->start, m->start+ajStrLen(m->pat)-1);
 	ajFmtPrintS(&tmpStr, "*enzyme %S", m->cod);
@@ -505,7 +505,7 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
 
 	if(frags)
 	    fa[fn++] = m->cut1;
-	    
+
 	if(m->cut3 && m->cut4)
 	{
 	    if(frags)
@@ -557,17 +557,17 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
 	AJFREE(fa);
 	AJFREE(fx);
     }
-    
-    
+
+
     ajListDel(l);
     ajStrDel(&ps);
     ajStrDel(&tmpStr);
     ajStrDel(&fthit);
-    
+
     return;
 }
-    
-/* @funcstatic restrict_read_equiv *******************************************
+
+/* @funcstatic restrict_read_equiv ********************************************
 **
 ** Read table of equivalents
 **
@@ -604,16 +604,16 @@ static void restrict_read_equiv(AjPFile *equfile, AjPTable *table)
     return;
 }
 
-/* @funcstatic restrict_read_file_of_enzyme_names ****************************
+/* @funcstatic restrict_read_file_of_enzyme_names *****************************
 **
 ** If the list of enzymes starts with a '@' if opens that file, reads in
 ** the list of enzyme names and replaces the input string with the enzyme names
-**  
+**
 ** @param [r] enzymes [AjPStr*] enzymes to search for or 'all' or '@file'
 ** @return [void]
 ** @@
 ******************************************************************************/
-      
+
 static void restrict_read_file_of_enzyme_names(AjPStr *enzymes)
 {
     AjPFile file=NULL;

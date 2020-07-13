@@ -155,8 +155,8 @@ int main(int argc, char **argv)
     commercial = ajAcdGetBool ("commercial");
     limit = ajAcdGetBool ("limit");
     enzymes = ajAcdGetString ("enzymes");
-    equiv = ajAcdGetBool("preferred");       
-  
+    equiv = ajAcdGetBool("preferred");
+
     /* feature filter criteria */
     matchsource = ajAcdGetString ("matchsource");
     matchtype = ajAcdGetString ("matchtype");
@@ -168,7 +168,7 @@ int main(int argc, char **argv)
 
     /* read the local file of enzymes names */
     showseq_read_file_of_enzyme_names(&enzymes);
-  
+
     /* check that the translate range is ordered */
     if (!ajRangeOrdered(translaterange))
 	(void) ajDie("Translation ranges are not in ascending, "
@@ -254,7 +254,7 @@ int main(int argc, char **argv)
 	/*
 	 *  most of this is lifted from the program 'restrict.c' by Alan
 	 *  Bleasby
-	 */    
+	 */
 	if (ajStrFindC(format, "R") != -1)
 	{
 	    if (single)
@@ -269,8 +269,8 @@ int main(int argc, char **argv)
 		if (!equfile)
 		    equiv=ajFalse;
 		else
-		    showseq_read_equiv(&equfile, &retable);   
-	    }    
+		    showseq_read_equiv(&equfile, &retable);
+	    }
 
 	    ajFileSeek(enzfile, 0L, 0);
 	    hits =embPatRestrictMatch(seq, 1, ajSeqLen(seq), enzfile, enzymes,
@@ -283,9 +283,9 @@ int main(int argc, char **argv)
 					      ajFalse);
 
 	    /* tidy up */
-	    ajFileClose(&enzfile);      
+	    ajFileClose(&enzfile);
 	}
-    	
+
 
 
 	/* make the Show Object */
@@ -329,7 +329,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic showseq_FormatShow ********************************************
+/* @funcstatic showseq_FormatShow *********************************************
 **
 ** Set up the EmbPShow object, according to the required format
 **
@@ -352,7 +352,7 @@ int main(int argc, char **argv)
 ******************************************************************************/
 
 static void showseq_FormatShow(EmbPShow ss, AjPStr format, AjPTrn trnTable,
-			       AjPRange translaterange, AjPRange uppercase, 
+			       AjPRange translaterange, AjPRange uppercase,
 			       AjPRange highlight,  AjBool threeletter,
 			       AjBool numberseq, AjPFeattable feat,
 			       ajint orfminsize, AjPList restrictlist,
@@ -419,7 +419,7 @@ static void showseq_FormatShow(EmbPShow ss, AjPStr format, AjPTrn trnTable,
 
 /* @funcstatic showseq_read_equiv *********************************************
 **
-** Lifted from Alan's restrict.c but reads the equ file. 
+** Lifted from Alan's restrict.c but reads the equ file.
 **
 ** @param [r] equfile [AjPFile*] file to read then close.
 ** @param [wP] table [AjPTable*] table to write to.
@@ -448,7 +448,7 @@ static void showseq_read_equiv(AjPFile *equfile, AjPTable *table)
         value=ajStrNewC(p);
         ajTablePut(*table,(const void *)key, (void *)value);
     }
-         
+
     ajFileClose(equfile);
     return;
 }
@@ -458,17 +458,18 @@ static void showseq_read_equiv(AjPFile *equfile, AjPTable *table)
 **
 ** If the list of enzymes starts with a '@' if opens that file, reads in
 ** the list of enzyme names and replaces the input string with the enzyme names
-**   
-** @param [r] enzymes [AjPStr*] names of enzymes to search for or 'all' or '@file'
+**
+** @param [r] enzymes [AjPStr*] names of enzymes to search for or 'all'
+**                              or '@file'
 ** @return [void]
 ** @@
 ******************************************************************************/
-      
+
 static void showseq_read_file_of_enzyme_names(AjPStr *enzymes)
 {
     AjPFile file=NULL;
     AjPStr line;
-    char   *p=NULL;   
+    char   *p=NULL;
 
     if (ajStrFindC(*enzymes, "@") == 0)
     {
@@ -495,14 +496,15 @@ static void showseq_read_file_of_enzyme_names(AjPStr *enzymes)
     return;
 }
 
-/* @funcstatic showseq_FeatureFilter *******************************
+/* @funcstatic showseq_FeatureFilter ******************************************
 **
 ** Removes unwanted features from a feature table
 **
 ** @param [r] featab [AjPFeattable] Feature table to filter
 ** @param [r] matchsource [AjPStr] Required Source pattern
 ** @param [r] matchtype [AjPStr] Required Type pattern
-** @param [r] matchsense [ajint] Required Sense pattern +1,0,-1 (or other value$
+** @param [r] matchsense [ajint] Required Sense pattern +1,0,-1
+**                               (or other value$
 ** @param [r] minscore [float] Min required Score pattern
 ** @param [r] maxscore [float] Max required Score pattern
 ** @param [r] matchtag [AjPStr] Required Tag pattern
@@ -521,7 +523,7 @@ static void showseq_FeatureFilter(AjPFeattable featab, AjPStr
     AjIList iter = NULL;
     AjPFeature gf = NULL;
     AjBool tagsmatch;
-    
+
     tagsmatch = ajFalse;
 
     /* foreach feature in the feature table */
@@ -538,7 +540,7 @@ static void showseq_FeatureFilter(AjPFeattable featab, AjPStr
 		/* no match, so delete feature from feature table */
 		ajFeatDel(&gf);
 		ajListRemove(iter);
-	    }  
+	    }
 	}
 	ajListIterFree(iter);
     }
@@ -546,7 +548,7 @@ static void showseq_FeatureFilter(AjPFeattable featab, AjPStr
     return;
 }
 
-/* @funcstatic showseq_MatchFeature *****************************************
+/* @funcstatic showseq_MatchFeature *******************************************
 **
 ** Test if a feature matches a set of criteria
 **
@@ -572,19 +574,19 @@ static AjBool showseq_MatchFeature (AjPFeature gf, AjPStr
 AjBool scoreok = (minscore < maxscore);
 
 
-/* 
-** is this not a child of a join() ? 
+/*
+** is this not a child of a join() ?
 ** if it is a child, then we use the previous result of MatchPatternTags
 */
   if (!ajFeatIsMultiple(gf) || !ajFeatIsChild(gf)) {
       *tagsmatch = showseq_MatchPatternTags(gf, tag, value);
   }
-    	
+
 
 /* ignore remote IDs */
   if (!ajFeatIsLocal(gf))
     return ajFalse;
-  
+
 /* check source, type, sense, score, tags, values */
 /* Match anything:
 **      for strings, '*'
@@ -600,10 +602,10 @@ AjBool scoreok = (minscore < maxscore);
       !*tagsmatch)
     return ajFalse;
 
-  return ajTrue;                        
+  return ajTrue;
 }
 
-/* @funcstatic showseq_MatchPatternTags **************************************
+/* @funcstatic showseq_MatchPatternTags ***************************************
 **
 ** Checks for a match of the tagpattern and valuepattern to at least one
 ** tag=value pair

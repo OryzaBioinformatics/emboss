@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -61,40 +61,40 @@ int main(int argc, char **argv)
     float ymax=-64000.;
     ajint   beg;
     ajint   end;
-    
+
     (void) ajGraphInit("pepwindowall", argc, argv);
-  
+
     seqset = ajAcdGetSeqset("msf");
     mult = ajAcdGetGraphxy ("graph");
     datafile  = ajAcdGetDatafile("datafile");
     llen = ajAcdGetInt("length");
-  
+
     if(!pepwindowall_getnakaidata(datafile,&matrix[0]))
 	exit(-1);
-  
-  
+
+
     maxlen = ajSeqsetLen(seqset);
     aa0str = ajStrNewL(maxlen);
     midpoint = (ajint)((llen+1)/2);
 
     AJCNEW(position, ajSeqsetLen(seqset));
-  
+
     for(i=0;i<ajSeqsetSize(seqset);i++)
     {
 	seq = ajSeqsetSeq (seqset, i);
 	ajStrClear(&aa0str);
 	ajDebug("HELLO (%d)   %d %d\n",
 		i,ajSeqsetSize(seqset),ajSeqsetLen(seqset));
-    
+
 	graphdata = ajGraphxyDataNewI(ajSeqsetLen(seqset));
 	ajGraphDataxySetTypeC(graphdata,"Overlay 2D Plot");
 	ymin = 64000.;
 	ymax = -64000.;
-    
-    
+
+
 	for(k=0;k<ajSeqsetLen(seqset) ;k++)
-	    graphdata->x[k] = FLT_MIN; 
-    
+	    graphdata->x[k] = FLT_MIN;
+
 	s1 = seq;
 	k=0; w=0;
 	while(*s1 != '\0')
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 
 
 
-	s1 = ajStrStr(aa0str);    
+	s1 = ajStrStr(aa0str);
 	for(j=0;j<k-llen;j++)
 	{
 	    total = 0;
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
 	    v = graphdata->y[position[j]] = total;
 	    ymin = (ymin<v) ? ymin : v;
 	    ymax = (ymax>v) ? ymax : v;
-      
+
 	    if(total > max)
 		max= total;
 	    if(total < min)
@@ -136,7 +136,7 @@ int main(int argc, char **argv)
 	while(graphdata->x[beg]<0.00001)
 	    ++beg;
 	graphdata->numofpoints -= beg;
-	
+
 	for(a=0;a<graphdata->numofpoints;++a)
 	{
 	    graphdata->x[a] = graphdata->x[a+beg];
@@ -145,7 +145,7 @@ int main(int argc, char **argv)
 	end = graphdata->numofpoints-1;
 	while(graphdata->x[end--]<0.00001)
 	    --graphdata->numofpoints;
-	
+
 
 
 
@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 
     ajGraphxySetMaxMin(mult,0.0,(float)ajSeqsetLen(seqset),min,max);
     ajGraphxyTitleC(mult,"Pepwindowall");
-  
+
 
     ajGraphxyDisplay(mult,AJTRUE);
 
@@ -186,14 +186,14 @@ static AjBool pepwindowall_getnakaidata(AjPFile file, float matrix[])
 {
     AjPStr buffer = NULL;
     AjPStr buf2 = NULL;
-    AjPStr delim = NULL; 
+    AjPStr delim = NULL;
     AjBool description = ajFalse;
     AjPStrTok token;
     ajint line =0;
     char *ptr;
     ajint cols;
 
-    
+
     if(!file)
 	return 0;
 

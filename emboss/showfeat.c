@@ -33,7 +33,7 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 				  AjBool unknown, AjBool strand,
 				  AjBool source, AjBool position,
 				  AjBool type, AjBool tags, AjBool values);
-    	
+
 static void showfeat_WriteFeat(AjPStr line, char strand, ajint fstart,
 			       ajint fend, ajint width, ajint beg, ajint end);
 
@@ -95,8 +95,8 @@ int main(int argc, char **argv)
     AjBool tags;
     AjBool values;
 
-  
-    ajint i;  
+
+    ajint i;
     ajint beg, end;
     AjPStr descriptionline;
 
@@ -113,7 +113,7 @@ int main(int argc, char **argv)
     id = ajAcdGetBool ("id");
     description = ajAcdGetBool ("description");
     scale = ajAcdGetBool ("scale");
-    width = ajAcdGetInt ("width");    
+    width = ajAcdGetInt ("width");
     collapse = ajAcdGetBool ("collapse");
     forward = ajAcdGetBool ("forward");
     reverse = ajAcdGetBool ("reverse");
@@ -124,11 +124,11 @@ int main(int argc, char **argv)
     type = ajAcdGetBool ("type");
     tags = ajAcdGetBool ("tags");
     values = ajAcdGetBool ("values");
- 
+
     while (ajSeqallNext(seqall, &seq))
     {
 	/* get begin and end positions */
-	beg = ajSeqBegin(seq)-1;  
+	beg = ajSeqBegin(seq)-1;
 	end = ajSeqEnd(seq)-1;
 
 	/* do the ID name and description */
@@ -201,7 +201,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic showfeat_ShowFeatSeq *****************************************
+/* @funcstatic showfeat_ShowFeatSeq *******************************************
 **
 ** Show the sequence features using clunky ascii graphics
 **
@@ -225,7 +225,7 @@ int main(int argc, char **argv)
 ** @param [r] type [AjBool] show type of feature
 ** @param [r] tags [AjBool] show tags and values of feature
 ** @param [r] values [AjBool] show tag values of feature
-** @return [void] 
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -255,7 +255,7 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
     AjPStr posout    = NULL;
 
     AjBool gotoutput = ajFalse;		/* have a line to output */
-      
+
     AjBool want_multiple_line = ajFalse;/* true if want a join()s line */
     AjBool in_multiple_line = ajFalse;	/* true if this is a join()s line */
     AjBool join = ajFalse;		/* want joins on a single line */
@@ -269,7 +269,7 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
     lineout = ajStrNew();
     tagsout = ajStrNewC("");
     posout  = ajStrNewC("");
-  
+
     if (feat->Features)
     {
 	if (!ajStrCmpC(sortlist[0], "source"))
@@ -305,11 +305,11 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 	    } else {
 	    	want_multiple_line = ajFalse;
 	    }
-	    
+
             /* ignore remote IDs */
             if (!ajFeatIsLocal(gf))
                 continue;
-            
+
 	    /* check that we want to output this sense */
 	    if (!forward && gf->Strand == '+')
 		continue;
@@ -319,7 +319,7 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 		continue;
 
 	    /* check that we want to output this match of source, type */
-	    if (!embMiscMatchPattern (gf->Source, matchsource) || 
+	    if (!embMiscMatchPattern (gf->Source, matchsource) ||
 		!embMiscMatchPattern (gf->Type, matchtype) ||
 		!showfeat_MatchPatternTags(gf, matchtag, matchvalue))
 		continue;
@@ -328,18 +328,18 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 	    if (beg+1 > gf->End || end+1 < gf->Start)
 		continue;
 
-	    /* 
+	    /*
 	    ** See if we are starting a new line.
 	    ** Don't start a new line if:
 	    **  collapse and source, type and sense are the same as the last gf
-	    **  or 
+	    **  or
 	    **  join and child and we are in an existing join multiple line
 	    */
-	    if ((!collapse || 
+	    if ((!collapse ||
 	         first ||
 		 gf->Strand != strandout ||
 		 (source && ajStrCmpCase(gf->Source, sourceout)) ||
-		 ajStrCmpCase(gf->Type, typeout)) 
+		 ajStrCmpCase(gf->Type, typeout))
 		&&
 		(!join ||
 		 ! child ||
@@ -362,13 +362,13 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 
 		/* note that we have something to output */
 		gotoutput = ajTrue;
-		
+
 		/* are we in a multiple line now? */
 		if (want_multiple_line) {
 		    in_multiple_line = ajTrue;
 		    want_multiple_line = ajFalse;
 		}
-	
+
 	    }
 	    /* add tags to tagout */
 	    showfeat_AddTagsStr(&tagsout, gf, values);
@@ -378,7 +378,7 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 	    /* write the feature on the line */
 	    showfeat_WriteFeat(lineout, strandout, gf->Start, gf->End, width,
 			       beg, end);
-      
+
 	    first = ajFalse;
 	}
 
@@ -401,12 +401,12 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
     ajStrDel(&lineout);
     ajStrDel(&sourceout);
     ajStrDel(&typeout);
-  
+
     return;
 }
 
-  
-/* @funcstatic showfeat_WriteFeat ********************************************
+
+/* @funcstatic showfeat_WriteFeat *********************************************
 **
 ** Show the sequence features using clunky ascii graphics
 **
@@ -417,7 +417,7 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 ** @param [r] width [ajint] width of line of features
 ** @param [r] beg [ajint] sequence start position
 ** @param [r] end [ajint] sequence end position
-** @return [void] 
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -426,7 +426,7 @@ static void showfeat_WriteFeat(AjPStr line, char strand, ajint fstart,
 {
     ajint i;
     ajint len;
-    ajint pos1; 
+    ajint pos1;
     ajint pos2;
 
     len = end-beg+1;
@@ -439,7 +439,7 @@ static void showfeat_WriteFeat(AjPStr line, char strand, ajint fstart,
 	    /* don't overwrite any characters except space */
 	    if (*(ajStrStr(line)+i) == ' ')
 		*(ajStrStr(line)+i) = '-';
-  
+
     /* write the end characters */
     if (pos1 >= 0 && pos1 < width)
     {
@@ -450,7 +450,7 @@ static void showfeat_WriteFeat(AjPStr line, char strand, ajint fstart,
 	else
 	    *(ajStrStr(line)+pos1) = '|';
     }
-  
+
     if (pos2 >= 0 && pos2 < width)
     {
 	if (strand == '+')
@@ -459,7 +459,7 @@ static void showfeat_WriteFeat(AjPStr line, char strand, ajint fstart,
 	    *(ajStrStr(line)+pos2) = '|';
 	else
 	    *(ajStrStr(line)+pos2) = '|';
-    } 
+    }
 
     return;
 }
@@ -467,17 +467,17 @@ static void showfeat_WriteFeat(AjPStr line, char strand, ajint fstart,
 
 
 
-/* @funcstatic showfeat_FeatOut********************************************
+/* @funcstatic showfeat_FeatOut************************************************
 **
 ** Show the sequence features  and source, type, etc.
 ** We guarantee to not have trailing whitespace at the end of a line.
 **
 ** @param [w] outfile [AjPFile] output file
 ** @param [r] lineout [AjPStr] ASCII graphics line
-** @param [r] strandout [char] strand of feature 
-** @param [r] sourceout [AjPStr] source of feature 
-** @param [r] posout [AjPStr] positions of feature 
-** @param [r] typeout [AjPStr] type of feature 
+** @param [r] strandout [char] strand of feature
+** @param [r] sourceout [AjPStr] source of feature
+** @param [r] posout [AjPStr] positions of feature
+** @param [r] typeout [AjPStr] type of feature
 ** @param [r] tagsout [AjPStr] tags string
 ** @param [r] width [ajint] width of graphics lines
 ** @param [r] strand [AjBool] show strand of feature
@@ -485,7 +485,7 @@ static void showfeat_WriteFeat(AjPStr line, char strand, ajint fstart,
 ** @param [r] type [AjBool] show type of feature
 ** @param [r] tags [AjBool] show tags and values of feature
 ** @param [r] position [AjBool] show positions of feature
-** @return [void] 
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -503,7 +503,7 @@ static void showfeat_FeatOut(AjPFile outfile, AjPStr lineout, char strandout,
 	if (strand || source || type || tags || position)
 	    (void) ajFmtPrintF(outfile, " ");
     }
-    
+
 
     if (strand)
     {
@@ -524,7 +524,7 @@ static void showfeat_FeatOut(AjPFile outfile, AjPStr lineout, char strandout,
 	if (type || tags || position)
 	    (void) ajFmtPrintF(outfile, " ");
     }
-  
+
 
     if (position)
     {
@@ -541,16 +541,16 @@ static void showfeat_FeatOut(AjPFile outfile, AjPStr lineout, char strandout,
     }
 
 
-    if (tags) 
+    if (tags)
 	(void) ajFmtPrintF(outfile, "%S", tagsout);
-    
-    
+
+
     (void) ajFmtPrintF(outfile, "\n");
 
     return;
 }
 
-/* @funcstatic showfeat_CompareFeatSource ************************************
+/* @funcstatic showfeat_CompareFeatSource *************************************
 **
 ** Compare two feature node to sort as: sense, source, type, start
 **
@@ -567,23 +567,23 @@ static ajint showfeat_CompareFeatSource (const void * a, const void * b)
 
     AjPFeature c = *(AjPFeature *)a;
     AjPFeature d = *(AjPFeature *)b;
-  
 
-    /* sort by strand */	
+
+    /* sort by strand */
     if (c->Strand == d->Strand)
     {
 	/* stands are the same, sort by source */
 	val = ajStrCmpCase(c->Source, d->Source);
 	if (val != 0)
 	    return val;
-  
- 
+
+
 	/* source is the same, sort by type */
 	val = ajStrCmpCase(c->Type, d->Type);
 	if (val != 0)
 	    return val;
-  
- 
+
+
 	/* type is the same, sort by start */
 	return (c->Start - d->Start);
     }
@@ -595,7 +595,7 @@ static ajint showfeat_CompareFeatSource (const void * a, const void * b)
     return 1;
 }
 
-/* @funcstatic showfeat_CompareFeatType **************************************
+/* @funcstatic showfeat_CompareFeatType ***************************************
 **
 ** Compare two feature node to sort as: sense, type, source, start
 **
@@ -613,21 +613,21 @@ static ajint showfeat_CompareFeatType (const void * a, const void * b)
 
     AjPFeature c = *(AjPFeature *)a;
     AjPFeature d = *(AjPFeature *)b;
-  
 
-    /* sort by strand */	
+
+    /* sort by strand */
     if (c->Strand == d->Strand)
     {
 	/* stands are the same, sort by type */
 	val = ajStrCmpCase(c->Type, d->Type);
 	if (val != 0)
 	    return val;
-  
+
 	/* type is the same, sort by source */
 	val = ajStrCmpCase(c->Source, d->Source);
 	if (val != 0)
 	    return val;
-  
+
 	/* source is the same, sort by start */
 	return (c->Start - d->Start);
     }
@@ -635,14 +635,14 @@ static ajint showfeat_CompareFeatType (const void * a, const void * b)
 	return -1;
     else if (c->Strand == '\0' && d->Strand == '-')
 	return -1;
-  
+
     return 1;
 }
 
 
 
 
-/* @funcstatic showfeat_CompareFeatPos ***************************************
+/* @funcstatic showfeat_CompareFeatPos ****************************************
 **
 ** Compare two feature node to sort as: sense, start, type, source
 **
@@ -659,9 +659,9 @@ static ajint showfeat_CompareFeatPos (const void * a, const void * b)
 
     AjPFeature c = *(AjPFeature *)a;
     AjPFeature d = *(AjPFeature *)b;
-  
 
-    /* sort by strand */	
+
+    /* sort by strand */
     if (c->Strand == d->Strand)
     {
 	/* strands are the same, sort by start */
@@ -673,7 +673,7 @@ static ajint showfeat_CompareFeatPos (const void * a, const void * b)
 	val = ajStrCmpCase(c->Type, d->Type);
 	if (val != 0)
 	    return val;
-  
+
 	/* type is the same, sort by source */
 	val = ajStrCmpCase(c->Source, d->Source);
 	return val;
@@ -751,7 +751,7 @@ static AjBool showfeat_MatchPatternTags (AjPFeature feat, AjPStr tpattern,
 
 
 
-/* @funcstatic showfeat_AddPos ***********************************************
+/* @funcstatic showfeat_AddPos ************************************************
 **
 ** writes the positions to the positions string
 **
@@ -759,7 +759,7 @@ static AjBool showfeat_MatchPatternTags (AjPFeature feat, AjPStr tpattern,
 ** @param [r] start [ajint] start position
 ** @param [r] end [ajint] end position
 **
-** @return [void] 
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -777,7 +777,7 @@ static void showfeat_AddPos(AjPStr *posout, ajint start, ajint end)
 
 
 
-/* @funcstatic showfeat_AddTagsStr *******************************************
+/* @funcstatic showfeat_AddTagsStr ********************************************
 **
 ** writes the tags to the tagsout string
 **
@@ -785,7 +785,7 @@ static void showfeat_AddPos(AjPStr *posout, ajint start, ajint end)
 ** @param [r] feat [AjPFeature] Feature to use
 ** @param [r] values [AjBool] display values of tags
 **
-** @return [void] 
+** @return [void]
 ** @@
 ******************************************************************************/
 

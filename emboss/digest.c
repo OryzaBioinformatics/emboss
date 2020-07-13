@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
     AjBool allpartials;
     AjPStr *menu;
     ajint    n;
-    
+
     AjPFile  outf=NULL;
     AjPReport report=NULL;
     AjPFeattable TabRpt=NULL;
@@ -61,11 +61,11 @@ int main(int argc, char **argv)
     AjPList  pa;
     AjPStr   datafn = NULL;
     AjPFile mfptr=NULL;
-    
+
     ajint     ncomp;
     ajint     npart;
-    
-    
+
+
     embInit("digest", argc, argv);
 
     a           = ajAcdGetSeq("sequencea");
@@ -82,7 +82,7 @@ int main(int argc, char **argv)
 
     sscanf(ajStrStr(*menu),"%d",&n);
     --n;
-    
+
     substr=ajStrNew();
     be=ajSeqBegin(a);
     en=ajSeqEnd(a);
@@ -100,10 +100,10 @@ int main(int argc, char **argv)
 	ajFatal("%S  not found\n",datafn);
 
     embPropAminoRead(mfptr);
-    
+
     embPropCalcFragments(ajStrStr(substr),n,be,&l,&pa,unfavoured,overlap,
 			allpartials,&ncomp,&npart,&rname);
-    
+
 
     if (outf)
       ajFmtPrintF(outf,"DIGEST of %s from %d to %d Molwt=%10.3f\n\n",
@@ -129,7 +129,7 @@ int main(int argc, char **argv)
 	ajReportWrite(report, TabRpt, a);
 	ajFeattableClear(TabRpt);
     }
-  
+
     if(overlap && !allpartials && npart)
     {
 	if (outf)
@@ -167,7 +167,7 @@ int main(int argc, char **argv)
 	ajReportWrite(report, TabRpt, a);
 	ajFeattableClear(TabRpt);
     }
-    
+
 
     ajFeattableDel(&TabRpt);
 
@@ -176,11 +176,11 @@ int main(int argc, char **argv)
     ajStrDel(&substr);
     ajListDel(&pa);
     ajListDel(&l);
-    
+
     if (outf)
       ajFileClose(&outf);
     ajFileClose(&mfptr);
-    
+
     ajExit();
     return 0;
 }
@@ -204,10 +204,10 @@ static void digest_print_hits(AjPList l, AjPFile outf, ajint be, char *s)
     EmbPPropFrag fr;
     AjPStr  t;
     ajint     len;
-    
+
     t=ajStrNew();
     len=strlen(s);
-    
+
     ajFmtPrintF(outf,
 		"Start   End     Molwt      Sequence (up to 38 residues)\n");
     while(ajListPop(l,(void **)&fr))
@@ -233,7 +233,7 @@ static void digest_print_hits(AjPList l, AjPFile outf, ajint be, char *s)
     }
 
     ajStrDel(&t);
-    
+
     return;
 }
 
@@ -264,7 +264,7 @@ static void digest_report_hits(AjPReport report, AjPSeq seq,
 
     t=ajStrNew();
     len=strlen(s);
-    
+
     while(ajListPop(l,(void **)&fr))
     {
 	ajStrAssSubC(&t,s,fr->start,fr->end);
@@ -288,6 +288,6 @@ static void digest_report_hits(AjPReport report, AjPSeq seq,
     }
 
     ajStrDel(&t);
-    
+
     return;
 }

@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
     AjBool    doobsexp;
     AjBool    dopc;
     AjBool    docg;
-    
+
     ajint begin;
     ajint end;
     ajint len;
@@ -86,19 +86,19 @@ int main(int argc, char **argv)
     ajint shift;
     ajint plstart;
     ajint plend;
-    
+
     float  *xypc=NULL;
     float  *obsexp=NULL;
     AjBool *thresh=NULL;
     float  obsexpmax;
-    
+
     ajint i;
     ajint maxarr;
     AjPFeattabOut featout=NULL;
 
-    
+
     (void) ajGraphInit("cpgplot",argc,argv);
-    
+
     seqall    = ajAcdGetSeqall("sequence");
     window    = ajAcdGetInt("window");
     shift     = ajAcdGetInt("shift");
@@ -111,12 +111,12 @@ int main(int argc, char **argv)
     docg      = ajAcdGetBool("cg");
     dopc      = ajAcdGetBool("pc");
     featout   = ajAcdGetFeatout("featout");
-    
-    
+
+
 
     substr = ajStrNew();
     bases  = ajStrNewC("CG");
-    
+
 
     maxarr = 0;
 
@@ -141,17 +141,17 @@ int main(int argc, char **argv)
 	    thresh[i]=ajFalse;
 	    obsexp[i]=xypc[i]=0.0;
 	}
-	
-	
+
+
 
 	cpgplot_findbases(&substr, begin, len, window, shift, obsexp, xypc,
 			  &bases, &obsexpmax, &plstart, &plend);
 
-	
+
 	cpgplot_identify(outf, obsexp, xypc, thresh, 0, len, shift,
 			 ajStrStr(bases), ajSeqName(seq), minlen, minobsexp,
 			 minpc, featout);
-	
+
 
 	cpgplot_plotit(ajSeqName(seq), begin, len, shift, obsexp, xypc, thresh,
 		       ajStrStr(bases), obsexpmax, plstart, plend,
@@ -159,19 +159,19 @@ int main(int argc, char **argv)
 
 	ajStrDel(&strand);
    }
-    
-    
+
+
     ajSeqDel(&seq);
     ajStrDel(&substr);
     ajFileClose(&outf);
-    
+
     ajExit();
     return 0;
 }
 
 
 
-/* @funcstatic cpgplot_findbases *********************************************
+/* @funcstatic cpgplot_findbases **********************************************
 **
 ** Undocumented.
 **
@@ -198,7 +198,7 @@ static void cpgplot_findbases(AjPStr *substr, ajint begin, ajint len,
     float cxf;
     float cyf;
     float windowf;
-    
+
 
     float obs;
     float exp;
@@ -213,14 +213,14 @@ static void cpgplot_findbases(AjPStr *substr, ajint begin, ajint len,
     *obsexpmax = 0.0;
     offset=window/2;
     *plstart = offset;
-    q = ajStrStr(*bases);	
+    q = ajStrStr(*bases);
 
     for(i=0; i<(len-window+1);i+=shift)
     {
 	j = i+offset;
 	p = ajStrStr(*substr) + i;
 	cpgplot_countbases(p, q, window, &cxf, &cyf, &cxpy);
-	
+
 	obs = cxpy;
 	exp = (cxf*cyf)/windowf;
 	if(!exp) obsexp[j]=0.0;
@@ -231,14 +231,14 @@ static void cpgplot_findbases(AjPStr *substr, ajint begin, ajint len,
 	}
 	xypc[j]=(cxf/windowf)*100.0 + (cyf/windowf)*100.0;
     }
-    
+
     *plend = j;
     return;
 }
 
 
 
-/* @funcstatic cpgplot_countbases ********************************************
+/* @funcstatic cpgplot_countbases *********************************************
 **
 ** Undocumented.
 **
@@ -257,7 +257,7 @@ static void cpgplot_countbases(char *seq, char *bases, ajint window,
 			       float *cx, float *cy, float *cxpy)
 {
     ajint i;
-    
+
     ajint codex;
     ajint codey;
     ajint codea;
@@ -278,10 +278,10 @@ static void cpgplot_countbases(char *seq, char *bases, ajint window,
         if(!(15-codea))   /* look for abiguity code 'N' */
         {
           *cx = *cx + 0.25;
-          if(!(15-codeb)) 
-             *cxpy = *cxpy + 0.0625; 
-        } 
-        else 
+          if(!(15-codeb))
+             *cxpy = *cxpy + 0.0625;
+        }
+        else
         {
           if(codea && !(codea & (15-codex)))
           {
@@ -298,7 +298,7 @@ static void cpgplot_countbases(char *seq, char *bases, ajint window,
 
 
 
-/* @funcstatic cpgplot_identify **********************************************
+/* @funcstatic cpgplot_identify ***********************************************
 **
 **    This subroutine identifies the CpG line, identifying the possible
 **    dinucleotide 'islands' in the sequence. These are defined as
@@ -333,12 +333,12 @@ static void cpgplot_identify(AjPFile outf, float *obsexp, float *xypc,
   float avobsexp;
   float sumpc;
   float sumobsexp;
-    
+
   ajint i;
   ajint pos;
   ajint sumlen;
   ajint first=0;
-  
+
   for(i=0; i<len; ++i) thresh[i]=ajFalse;
 
   sumlen=0;
@@ -354,7 +354,7 @@ static void cpgplot_identify(AjPFile outf, float *obsexp, float *xypc,
       sumpc += xypc[i];
       sumobsexp += obsexp[i];
     }
-	
+
     avpc = sumpc/(float)avwindow;
     avobsexp = sumobsexp/(float)avwindow;
     ajDebug("sumpc: %.2f sumobsexp: %.2f\n", sumpc, sumobsexp);
@@ -393,7 +393,7 @@ static void cpgplot_identify(AjPFile outf, float *obsexp, float *xypc,
 
 
 
-/* @funcstatic cpgplot_reportislands *****************************************
+/* @funcstatic cpgplot_reportislands ******************************************
 **
 ** Undocumented.
 **
@@ -463,7 +463,7 @@ static void cpgplot_reportislands(AjPFile outf, AjBool *thresh, char *bases,
 
 
 
-/* @funcstatic cpgplot_plotit ************************************************
+/* @funcstatic cpgplot_plotit *************************************************
 **
 ** Undocumented.
 **
@@ -493,13 +493,13 @@ static void cpgplot_plotit(char *seq, ajint begin, ajint len, ajint shift,
 
 {
     AjPGraphData tmGraph  = NULL;
-    AjPGraphData tmGraph2 = NULL; 
-    AjPGraphData tmGraph3 = NULL;   
+    AjPGraphData tmGraph2 = NULL;
+    AjPGraphData tmGraph3 = NULL;
     float *tmp=NULL;
     ajint i;
     float min=0.;
     float max=0.;
-    
+
     if(doobsexp)
     {
 
@@ -524,16 +524,16 @@ static void cpgplot_plotit(char *seq, ajint begin, ajint len, ajint shift,
 
 	ajGraphxySetXStart(graphs,(float)begin);
 	ajGraphxySetXEnd(graphs,(float)(begin+len-1));
-    
+
 	ajGraphxySetYStart(graphs,0.0);
 	ajGraphxySetYEnd(graphs,obsexpmax);
 	ajGraphxySetXRangeII(graphs,begin,begin+len-1);
 	ajGraphxySetYRangeII(graphs,0,(ajint)(obsexpmax+1.0));
 
-	ajGraphxyAddDataCalcPtr(tmGraph2,len,(float)begin,1.0,obsexp);    
+	ajGraphxyAddDataCalcPtr(tmGraph2,len,(float)begin,1.0,obsexp);
 	ajGraphxyAddGraph(graphs,tmGraph2);
     }
-    
+
     if(dopc)
     {
 	tmGraph3=ajGraphxyDataNew();
@@ -554,14 +554,14 @@ static void cpgplot_plotit(char *seq, ajint begin, ajint len, ajint shift,
 	ajGraphDataxySetMaxima(tmGraph3,(float)begin,(float)begin+len-1,
 			      0.0,max);
 	ajGraphDataxySetTypeC(tmGraph3,"Multi 2D Plot");
-    
+
 	ajGraphxySetXStart(graphs,(float)begin);
 	ajGraphxySetXEnd(graphs,(float)(begin+len-1));
 	ajGraphxySetYStart(graphs,0);
 	ajGraphxySetYEnd(graphs,100);
 	ajGraphxySetXRangeII(graphs,begin,begin+len-1);
 	ajGraphxySetYRangeII(graphs,0,100);
-    
+
 	ajGraphxyAddDataCalcPtr(tmGraph3,len,(float)begin,1.0,xypc);
 	ajGraphxyAddGraph(graphs,tmGraph3);
     }
@@ -576,7 +576,7 @@ static void cpgplot_plotit(char *seq, ajint begin, ajint len, ajint shift,
 	    else
 		tmp[i]=0.0;
 	}
-	
+
 	tmGraph=ajGraphxyDataNew();
 	ajGraphxyDataSetTitleC(tmGraph,"Putative Islands");
 	ajGraphxyDataSetXtitleC(tmGraph,"Base Number");
@@ -586,7 +586,7 @@ static void cpgplot_plotit(char *seq, ajint begin, ajint len, ajint shift,
 			       0.,1.);
 	ajGraphDataxySetTypeC(tmGraph,"Multi 2D Plot");
 
-    
+
 	ajGraphxySetXStart(graphs,(float)begin);
 	ajGraphxySetXEnd(graphs,(float)(begin+len-1));
 	ajGraphxySetYStart(graphs,0);
@@ -597,7 +597,7 @@ static void cpgplot_plotit(char *seq, ajint begin, ajint len, ajint shift,
 			       0.0,1.2);
 	ajGraphDataxySetMaxima(tmGraph,(float)begin,(float)(begin+len-1),
 			       0.0,1.0);
-    
+
 	ajGraphxyAddDataCalcPtr(tmGraph,len,(float)begin,1.0,tmp);
 	ajGraphxyAddGraph(graphs,tmGraph);
     }
@@ -606,10 +606,10 @@ static void cpgplot_plotit(char *seq, ajint begin, ajint len, ajint shift,
     if(docg || dopc || doobsexp)
     {
 	ajGraphxyTitleC(graphs,seq);
-	ajGraphxySetOverLap(graphs,ajFalse);    
+	ajGraphxySetOverLap(graphs,ajFalse);
 	ajGraphxyDisplay(graphs, AJTRUE);
     }
-    
+
 
     if(docg)
 	AJFREE (tmp);
@@ -620,7 +620,7 @@ static void cpgplot_plotit(char *seq, ajint begin, ajint len, ajint shift,
 
 
 
-/* @funcstatic cpgplot_dumpfeatout *******************************************
+/* @funcstatic cpgplot_dumpfeatout ********************************************
 **
 ** Undocumented.
 **
@@ -649,9 +649,9 @@ static void cpgplot_dumpfeatout(AjPFeattabOut featout, AjBool *thresh,
     float score = 0.0;
 
     ajStrAssC(&name,seqname);
-    
+
     feattable = ajFeattableNewDna(name);
-    
+
     ajStrAssC(&source,"cpgplot");
     ajStrAssC(&type,"misc_feature");
 
@@ -693,6 +693,6 @@ static void cpgplot_dumpfeatout(AjPFeattabOut featout, AjBool *thresh,
     ajStrDel(&source);
     ajStrDel(&type);
     ajStrDel(&name);
-    
+
     return;
 }

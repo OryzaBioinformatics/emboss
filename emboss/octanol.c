@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 {
     AjPFile datafile;
     float matrix[AZ];
-    float err[AZ];		/* interface values */       
+    float err[AZ];		/* interface values */
     float matrix2[AZ];
     float err2[AZ];		/* octanol values   */
     AjPSeq seq;
@@ -80,7 +80,7 @@ int main(int argc, char **argv)
     float ymin3=64000.;
     float ymax3=-64000.;
     float v;
-  
+
     ajGraphInit("octanol", argc, argv);
 
     seq = ajAcdGetSeq ("sequencea");
@@ -95,7 +95,7 @@ int main(int argc, char **argv)
     if(!octanol_getwhitewimbleydata(datafile,&matrix[0],&err[0],&matrix2[0],
 				    &err2[0]))
 	ajDie("Could not read data file");
-  
+
     graphdata = ajGraphxyDataNewI(ajSeqLen(seq)-llen);
     ajGraphxySetColour(graphdata,GREEN);
     if(interface)
@@ -146,7 +146,7 @@ int main(int argc, char **argv)
 	v = graphdata->x[i] = (float)i+midpoint;
 	xmin1 = (xmin1<v) ? xmin1 : v;
 	xmax1 = (xmax1>v) ? xmax1 : v;
-    
+
 	v = graphdata->y[i] = -total;
 	ymin1 = (ymin1<v) ? ymin1 : v;
 	ymax1 = (ymax1>v) ? ymax1 : v;
@@ -166,7 +166,7 @@ int main(int argc, char **argv)
 	v = graphdata3->y[i] = -(total2-total);
 	ymin3 = (ymin3<v) ? ymin3 : v;
 	ymax3 = (ymax3>v) ? ymax3 : v;
-      
+
 	if(-total > max)
 	    max= -total;
 	if(-total < min)
@@ -191,12 +191,12 @@ int main(int argc, char **argv)
     ajGraphDataxySetMaxima(graphdata,xmin1,xmax1,ymin1,ymax1);
     ajGraphDataxySetMaxima(graphdata2,xmin2,xmax2,ymin2,ymax2);
     ajGraphDataxySetMaxima(graphdata3,xmin3,xmax3,ymin3,ymax3);
-  
+
     ajGraphxyDisplay(mult,AJTRUE);
 
     ajExit();
     return 0;
-}  
+}
 
 
 
@@ -207,7 +207,7 @@ static ajint octanol_getwhitewimbleydata(AjPFile file, float matrix[],
 {
     AjPStr buffer = NULL;
     AjPStr buf2 = NULL;
-    AjPStr delim = NULL; 
+    AjPStr delim = NULL;
     AjPStrTok token;
     char *s1;
     ajint cols;
@@ -221,7 +221,7 @@ static ajint octanol_getwhitewimbleydata(AjPFile file, float matrix[],
     delim = ajStrNewC(" :\t\n");
     buffer = ajStrNew();
     buf2   = ajStrNew();
-  
+
 
 
     while (ajFileGets(file,&buffer))
@@ -233,14 +233,14 @@ static ajint octanol_getwhitewimbleydata(AjPFile file, float matrix[],
 	token = ajStrTokenInit(buffer,ajStrStr(delim));
 	cols = ajStrTokenCount(&buffer,ajStrStr(delim));
 	ajDebug("number of cols = %d\n",cols);
-    
+
 	ajStrToken(&buf2,&token,ajStrStr(delim)); /* get AA char code */
 	ajStrToLower(&buf2);
 
 	s1 = ajStrStr(buf2);		/* convert code to integer */
 	matpos = (ajint)s1[0];
-	matpos -= 97;                
-    
+	matpos -= 97;
+
 	ajStrToken(&buf2,&token,ajStrStr(delim)); /* get interface value */
 	ajStrToFloat(buf2,&matrix[matpos]);
 
@@ -259,7 +259,7 @@ static ajint octanol_getwhitewimbleydata(AjPFile file, float matrix[],
     ajStrDel(&delim);
     ajStrDel(&buffer);
     ajStrDel(&buf2);
-  
+
 
     return 1;
 }

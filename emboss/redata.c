@@ -8,12 +8,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -46,9 +46,9 @@ static AjPTable redata_supply_table(AjPFile inf);
 int main(int argc, char **argv)
 {
     AjPStr    enzyme=NULL;
-    
+
     AjPFile   outf=NULL;
-    
+
     AjPFile   enzfile=NULL;
     AjPFile   reffile=NULL;
     AjPFile   supfile=NULL;
@@ -63,12 +63,12 @@ int main(int argc, char **argv)
 
     AjPStr line    = NULL;
     AjPStr enzline = NULL;
-    
+
     char   *p;
     char   *q;
     AjPStr str;
     AjPStr iso;
-    
+
     AjPStr    *ea;
     ajint       ne=0;
 
@@ -82,7 +82,7 @@ int main(int argc, char **argv)
 
     ajint i;
     ajint n;
-    
+
     embInit("redata", argc, argv);
 
     ajFileDataNewC(ENZDATA,&enzfile);
@@ -90,8 +90,8 @@ int main(int argc, char **argv)
     ajFileDataNewC(SUPDATA,&supfile);
     if(!enzfile || !reffile || !supfile)
 	ajFatal("EMBOSS_DATA undefined or REBASEEXTRACT needs running");
-    
-    
+
+
 
 
     enzyme        = ajAcdGetString("enzyme");
@@ -102,11 +102,11 @@ int main(int argc, char **argv)
 
 
     ajStrCleanWhite(&enzyme);
-    
+
 
     enzline=ajStrNew();
     str    =ajStrNew();
-    key    =ajStrNewC(".");    
+    key    =ajStrNewC(".");
     iso    =ajStrNew();
 
 
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 	if(ajStrMatchCase(str,enzyme)) break;
     }
     ajFileClose(&supfile);
-    
+
 
     /* Only do the rest if a matching enzyme was found */
     if(ajStrMatchCase(str,enzyme))
@@ -141,7 +141,7 @@ int main(int argc, char **argv)
 	    ajStrAssC(&str,p);
 	    p=strtok(NULL," \t\n");
 	    ajStrAssC(&line,p);
-	    while(*p) ++p;	    
+	    while(*p) ++p;
 	    ++p;
 	    sscanf(p,"%d%d",&len,&ncuts);
 	    if(ncuts==2)
@@ -214,7 +214,7 @@ int main(int argc, char **argv)
 	    ajFmtPrintF(outf,"\nSuppliers:\n");
 	    p=ajStrStr(line);
 	    q=ajStrStr(key);
-	    
+
 	    while(*p)
 	    {
 		*q=*p;
@@ -242,7 +242,7 @@ int main(int argc, char **argv)
     else
 	ajFmtPrintF(outf,"Restriction enzyme %s not found\n",ajStrStr(enzyme));
 
-    
+
 
     ajStrDel(&str);
     ajStrDel(&iso);
@@ -260,7 +260,7 @@ int main(int argc, char **argv)
 }
 
 
-/* @funcstatic redata_supply_table *******************************************
+/* @funcstatic redata_supply_table ********************************************
 **
 ** Read list of RE suppliers into table
 **
@@ -278,11 +278,11 @@ static AjPTable redata_supply_table(AjPFile inf)
 
     AjPStr   key;
     AjPStr   value;
-    
+
     char     *p;
     char     *q;
     char     c;
-    
+
     t = ajStrTableNew(SUPPGUESS);
     line = ajStrNew();
 

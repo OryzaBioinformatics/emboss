@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     AjPFile infile;
     AjBool reverse;
     AjPStr ajb=NULL;
-  
+
     ajint pos;
     char *s;
     ajulong result;
@@ -120,7 +120,7 @@ int main(int argc, char **argv)
     (void) ajFmtPrintF(outfile, "#\n");
     (void) ajFmtPrintF(outfile, "# The input sequences are:\n");
 
-  
+
     /*
      *  see if we are using a sliding window or only looking at a word-sized
      *  single frame
@@ -132,6 +132,8 @@ int main(int argc, char **argv)
 
     while (ajSeqallNext(seqall, &seq))
     {
+	ajSeqTrim(seq);
+
 	/* note the name of the sequence */
 	if (count_of_sequence_names++ < 10)
 	    (void) ajFmtPrintF(outfile, "#\t%s\n", ajSeqName(seq));
@@ -153,7 +155,7 @@ int main(int argc, char **argv)
 	    (void) compseq_makebigarray(no_elements, &bigarray);
 	    first_time_round = ajFalse;
 	}
-    
+
 	(void) ajSeqToUpper(seq);
 	s = ajSeqChar(seq);
 
@@ -179,7 +181,7 @@ int main(int argc, char **argv)
 		other++;
 
 	    total++;
-	}	
+	}
 
 	if (seqisnuc && reverse)
 	{
@@ -202,7 +204,7 @@ int main(int argc, char **argv)
 		    other++;
 
 		total++;
-	    }	
+	    }
 	}
     }
 
@@ -213,7 +215,7 @@ int main(int argc, char **argv)
     (void) ajFmtPrintF(outfile,"Total count\t%Lu\n\n", total);
 
     /* we have now counted the frequency of the words in the sequences */
-    (void) ajFmtPrintF(outfile, 
+    (void) ajFmtPrintF(outfile,
 		       "#\n# Word\tObs Count\tObs Frequency\tExp Frequency\t"
 		       "Obs/Exp Frequency\n#\n");
 
@@ -234,7 +236,7 @@ int main(int argc, char **argv)
 	    (void) embNmerInt2nuc(&dispseq, word, count);
 	else
 	    (void) embNmerInt2prot(&dispseq, word, count, ignorebz);
-    
+
 	if (have_exp_freq)
 	{
 	    if((ajb=ajTableGet(exptable,dispseq)))
@@ -275,7 +277,7 @@ int main(int argc, char **argv)
 	obs_exp = 10000000000.0;
     }
     else
-	obs_exp = obs_freq/exp_freq;    
+	obs_exp = obs_freq/exp_freq;
 
 
     (void) ajFmtPrintF(outfile, "\nOther\t%Lu\t\t%.7f\t%.7f\t%.7f\n", other,
@@ -290,7 +292,7 @@ int main(int argc, char **argv)
 
     if (have_exp_freq)
 	(void) ajTableFree(&exptable);
-  
+
 
     (void) ajExit ();
     return 0;
@@ -299,7 +301,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic compseq_makebigarray ******************************************
+/* @funcstatic compseq_makebigarray *******************************************
 **
 ** Undocumented.
 **
@@ -321,7 +323,7 @@ static ajint compseq_makebigarray(ajulong no_elements, ajulong **bigarray)
 
 
 
-/* @funcstatic compseq_readexpfreq *******************************************
+/* @funcstatic compseq_readexpfreq ********************************************
 **
 ** Undocumented.
 **
@@ -346,7 +348,7 @@ static ajint compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 
     /* initialise the hash table - use case-insensitive comparison */
     *exptable = ajStrTableNewCase(350);
-  
+
 
     /* read the file */
     while (ajFileReadLine(infile, &line))
@@ -365,13 +367,13 @@ static ajint compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 	    (void) ajDie ("The word size you are counting (%d) is different "
 			  "to the word\nsize in the file of expected "
 			  "frequencies (%d).", size, thissize);
-      
+
 	}
 	else
 	    (void) ajDie ("The 'Word size' line was not found, instead "
 			  "found:\n%S\n", line);
     }
-  
+
     /* read the file */
     while (ajFileReadLine(infile, &line))
     {
@@ -379,7 +381,7 @@ static ajint compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 	/* skip comment and blank lines */
 	if (!ajStrFindC(line, "#")) continue;
 	if (!ajStrLen(line)) continue;
- 
+
 	/*
 	 *  look for the total number of counts - anything after this
 	 *  is our data
@@ -398,7 +400,7 @@ static ajint compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 	if (!ajStrLen(line))
 	    continue;
 
-	tokens = ajStrTokenInit(line, whiteSpace); 
+	tokens = ajStrTokenInit(line, whiteSpace);
 
 	/* get the word as the key */
 	key = ajStrNew();
@@ -416,7 +418,7 @@ static ajint compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 
 	(void) ajTablePut( *exptable, key, value);
 
-    }    
+    }
 
     /* tidy up */
     (void) ajStrDel(&line);

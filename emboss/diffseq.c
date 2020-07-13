@@ -1,5 +1,5 @@
 /* @source diffseq application
-** 
+**
 ** Find differences (SNPs) between nearly identical sequences
 **
 ** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -43,7 +43,7 @@ static void diffseq_AddTags(AjPFile outfile, AjPFeature feat, AjBool values);
 static void diffseq_AddTagsRpt(AjPStr* strval, AjPFeature feat,
 			       AjBool values);
 
-                                
+
 
 /* @prog diffseq **************************************************************
 **
@@ -53,7 +53,7 @@ static void diffseq_AddTagsRpt(AjPStr* strval, AjPFeature feat,
 
 int main(int argc, char **argv)
 {
-  
+
     AjPSeq seq1,seq2;
     ajint wordlen;
     AjPTable seq1MatchTable =0 ;
@@ -95,15 +95,15 @@ int main(int argc, char **argv)
 	matchlist = embWordBuildMatchTable(&seq1MatchTable, seq2, ajTrue);
 
 
-    /* get the minimal set of overlapping matches */    
+    /* get the minimal set of overlapping matches */
     if (matchlist)
 	(void) embWordMatchMin(matchlist, ajSeqLen(seq1), ajSeqLen(seq2));
 
-  
+
     if (matchlist)
     {
-	/* output the gff files */                                
-	(void) diffseq_WordMatchListConvDiffToFeat(matchlist, &Tab1, &Tab2, 
+	/* output the gff files */
+	(void) diffseq_WordMatchListConvDiffToFeat(matchlist, &Tab1, &Tab2,
 						   seq1, seq2);
 
 	/* make the output file */
@@ -112,11 +112,11 @@ int main(int argc, char **argv)
 
 	(void) diffseq_diffrpt (matchlist, seq1, seq2,
 				report, TabRpt, columns);
-    
+
 	/* tidy up */
 	embWordMatchListDelete(&matchlist); /* free the match structures */
     }
-   
+
     /* tidy up */
     if (outfile)
       (void) ajFileClose(&outfile);
@@ -135,13 +135,13 @@ int main(int argc, char **argv)
     (void) ajFeattableDel(&TabRpt);
     (void) ajReportClose(report);
     ajReportDel(&report);
-    
+
     ajExit();
     return 0;
 }
 
 
-/* @funcstatic diffseq_WordMatchListConvDiffToFeat ***************************
+/* @funcstatic diffseq_WordMatchListConvDiffToFeat ****************************
 **
 ** convert the word table differences to feature tables.
 **
@@ -186,7 +186,7 @@ static void diffseq_WordMatchListConvDiffToFeat(AjPList list,
     replace    = ajStrNew();
     replacestr = ajStrNew();
     notestr    = ajStrNew();
-  
+
     ajStrAssC(&source,"diffseq");
     ajStrAssC(&type,"conflict");
     ajStrAssC(&note,"note");
@@ -207,7 +207,7 @@ static void diffseq_WordMatchListConvDiffToFeat(AjPList list,
 	    if (misstart1 <= misend1)
 	    {	/* is there a gap between the matches? */
 		feature = ajFeatNew(*tab1, source, type,
-				    misstart1+1, misend1+1, 
+				    misstart1+1, misend1+1,
 				    score, strand, frame) ;
 		if (misstart1 == misend1 && misstart2 == misend2)
 		    ajFmtPrintS(&notestr, "SNP in %S", ajSeqGetName(seq2));
@@ -237,7 +237,7 @@ static void diffseq_WordMatchListConvDiffToFeat(AjPList list,
 	    if (misstart2 <= misend2)
 	    {	/* is there a gap between the matches? */
 		feature = ajFeatNew(*tab2, source, type,
-				    misstart2+1, misend2+1, 
+				    misstart2+1, misend2+1,
 				    score, strand, frame) ;
 
 		if (misstart2 == misend2 && misstart1 == misend1)
@@ -266,7 +266,7 @@ static void diffseq_WordMatchListConvDiffToFeat(AjPList list,
 	    }
 
 	}
-    
+
 	/* note the start position of the mismatch */
 	misstart1 = misend1 + p->length +1;
 	misstart2 = misend2 + p->length +1;
@@ -287,8 +287,8 @@ static void diffseq_WordMatchListConvDiffToFeat(AjPList list,
 
 
 
-/* @funcstatic diffseq_AddTags ***********************************************
-**  
+/* @funcstatic diffseq_AddTags ************************************************
+**
 ** Writes the tags to the output file
 ** Don't write out the translation - is it often far too long!
 **
@@ -335,7 +335,7 @@ static void diffseq_AddTags(AjPFile outfile, AjPFeature feat, AjBool values)
 }
 
 /* @funcstatic diffseq_AddTagsRpt *********************************************
-**  
+**
 ** Appends feature tag values to a string in a simple format.
 ** Don't write out the translation - is it often far too long!
 **
@@ -371,7 +371,7 @@ static void diffseq_AddTagsRpt (AjPStr* strval, AjPFeature feat, AjBool values)
     return;
 }
 
-/* @funcstatic diffseq_Features *****************************************
+/* @funcstatic diffseq_Features ***********************************************
 **
 ** Write out any features which overlap this region.
 ** Don't write out the source feature - far too irritating!
@@ -382,7 +382,7 @@ static void diffseq_AddTagsRpt (AjPStr* strval, AjPFeature feat, AjBool values)
 ** @param [r] feat [AjPFeattable] Feature table to search
 ** @param [r] start [ajint] Start position of region (in human coordinates)
 ** @param [r] end [ajint] End position of region (in human coordinates)
-** @return [void] 
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -391,7 +391,7 @@ static void diffseq_Features(AjPFile outfile, AjPFeattable feat, ajint start,
 {
     AjIList    iter = NULL ;
     AjPFeature gf   = NULL ;
-      
+
     /*
     ** Obsolete. Return now unless outfile is defined.
     */
@@ -428,7 +428,7 @@ static void diffseq_Features(AjPFile outfile, AjPFeattable feat, ajint start,
     return;
 }
 
-/* @funcstatic diffseq_FeaturesRpt *****************************************
+/* @funcstatic diffseq_FeaturesRpt ********************************************
 **
 ** Write out any features which overlap this region.
 ** Don't write out the source feature - far too irritating!
@@ -438,7 +438,7 @@ static void diffseq_Features(AjPFile outfile, AjPFeattable feat, ajint start,
 ** @param [r] feat [AjPFeattable] Feature table to search
 ** @param [r] start [ajint] Start position of region (in human coordinates)
 ** @param [r] end [ajint] End position of region (in human coordinates)
-** @return [void] 
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -485,7 +485,7 @@ static void diffseq_FeaturesRpt(char* typefeat, AjPFeature rf,
 
 
 
-/* @funcstatic diffseq_diff ********************************************
+/* @funcstatic diffseq_diff ***************************************************
 **
 ** Do a diff and write a report on the diff of the two sequences.
 **
@@ -496,7 +496,7 @@ static void diffseq_FeaturesRpt(char* typefeat, AjPFeature rf,
 ** @param [r] seq2 [AjPSeq] Sequence to be diff'd.
 ** @param [r] outfile [AjPFile] Output file containing report.
 ** @param [r] columns [AjBool] format in columns
-** @return [void] 
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -564,7 +564,7 @@ static void diffseq_diff (AjPList matchlist, AjPSeq seq1, AjPSeq seq2, AjPFile
 	}
 	else
 	{
-	    /* output the difference between the matching regions */   
+	    /* output the difference between the matching regions */
 	    /* seq1 details */
 	    start = prev1end+1;
 	    end = p->seq1start;
@@ -645,7 +645,7 @@ static void diffseq_diff (AjPList matchlist, AjPSeq seq1, AjPSeq seq2, AjPFile
 	    }
 
 	}
-    
+
 	/* output the match */
 	/*
 	 *  (void) ajFmtPrintF(outfile, "Matching region %S %d-%d : %S
@@ -711,7 +711,7 @@ static void diffseq_diff (AjPList matchlist, AjPSeq seq1, AjPSeq seq2, AjPFile
     return;
 }
 
-/* @funcstatic diffseq_diffrpt ********************************************
+/* @funcstatic diffseq_diffrpt ************************************************
 **
 ** Do a diff and build a report on the diff of the two sequences.
 **
@@ -721,7 +721,7 @@ static void diffseq_diff (AjPList matchlist, AjPSeq seq1, AjPSeq seq2, AjPFile
 ** @param [r] report [AjPReport] Report object.
 ** @param [r] ftab [AjPFeattable] Report feature table
 ** @param [r] columns [AjBool] format in columns
-** @return [void] 
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -787,7 +787,7 @@ static void diffseq_diffrpt (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
 	}
 	else			/* difference (gap to next match) */
 	{
-	    /* save the difference between the matching regions */   
+	    /* save the difference between the matching regions */
 	    /* seq1 details */
 	    start = prev1end+1;
 	    end = p->seq1start;
@@ -846,7 +846,7 @@ static void diffseq_diffrpt (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
 	    }
 
 	}
-    
+
 	/* output the match */
 	/*
 	 *  (void) ajFmtPrintF(rptfile, "Matching region %S %d-%d : %S
@@ -895,6 +895,6 @@ static void diffseq_diffrpt (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
     (void) ajFeattableDel(&feat2);
 
     ajStrDel(&tmpstr);
-    
+
     return;
 }

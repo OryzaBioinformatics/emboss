@@ -11,12 +11,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -39,13 +39,13 @@
  * Fixed problem of not initialising edge properly
  *
  * Revision 1.2  1996/08/07  10:12:05  rmott
- 
+
  * Linear-Space version
  *
    * Revision 1.1  1996/08/01  13:55:42  rmott
    * Initial revision
    *
-   
+
    */
 
 #include "emboss.h"
@@ -69,7 +69,7 @@ static void  est2genome_make_output( AjPFile ofile, AjPSeq genome, AjPSeq est,
 				    ajint align, ajint width, ajint reverse);
 
 
-/* @prog est2genome *********************************************************
+/* @prog est2genome ***********************************************************
 **
 ** Align EST and genomic DNA sequences
 **
@@ -103,58 +103,58 @@ int main(int argc, char **argv)
     AjPStr modestr=NULL;
     AjPFile outfile=NULL;
     AjPSeqall estset=NULL;
-    
+
     /* the fasta input files */
-    
+
     embInit ("est2genome", argc, argv);
-    
+
     estset = ajAcdGetSeqall ("est");
     genome = ajAcdGetSeq ("genome");
     outfile = ajAcdGetOutfile ("outfile");
-    
+
     /* the alignment penalties */
-    
+
     match = ajAcdGetInt ("match");
     mismatch = ajAcdGetInt ("mismatch");
     gap_penalty  = ajAcdGetInt ("gappenalty");
     intron_penalty  = ajAcdGetInt ("intronpenalty");
     splice_penalty  = ajAcdGetInt ("splicepenalty");
     doreverse  = ajAcdGetBool ("reverse");
-    
+
     /* the min score for an alignment to be output */
     minscore = ajAcdGetInt ("minscore");
-    
+
     if (doreverse)
 	isreverse = 1;
-    
+
     splice = ajAcdGetBool ("splice");
-    
+
     /* Print the alignment */
     align = ajAcdGetBool ("align");
     width = ajAcdGetInt ("width");
-    
+
     /* mode: This is complicated.
-       
+
        "forward"   just search forward strands of both sequences
        "reverse"   just search forward of genomic vs reverse of est
        "both"      search forward strand of genomic against forward and
-                   reverse 
-       THEN: take the best of these two, and re-align assuming 
-       a reversed gene so that the splice sites would be appear 
+                   reverse
+       THEN: take the best of these two, and re-align assuming
+       a reversed gene so that the splice sites would be appear
        as ct/ac. Only output the best alignment unless the
        flag -nobest is set.
-       
+
        Thus THREE alignments are made.
-       
-       The output cordinates are such that the genomic sequence  
+
+       The output cordinates are such that the genomic sequence
        is always in the forward direction.
-       
+
        */
-		   
+
     modestr = ajAcdGetString("mode");
     mode = ajStrStr(modestr);
 
-    if ( !strcmp(mode,"both")  ) 
+    if ( !strcmp(mode,"both")  )
 	search_mode = BOTH;
     else if (!strcmp(mode,"forward") )
 	search_mode = FORWARD_ONLY;
@@ -166,22 +166,22 @@ int main(int argc, char **argv)
 	       "both, forward, reverse\n", mode );
 	exit(1);
     }
-    
+
     /* just print the best alignment ? */
-    
+
     best = ajAcdGetBool("best");
-    
+
     /* max space in megabytes */
-    
+
     megabytes = ajAcdGetFloat("space");
-    
+
     /* print debugging info */
-    
+
     verbose = ajAcdGetBool ("verbose");
     debug = ajAcdGetBool ("debug");
-    
+
     if (verbose) ajDebug ("debugging set to %d\n", debug);
-    
+
     if (verbose)
 	embEstSetVerbose();
     if (debug)
@@ -205,34 +205,34 @@ int main(int argc, char **argv)
 	intron_penalty = -intron_penalty;
     if ( splice_penalty < 0 )
 	splice_penalty = -splice_penalty;
-    
+
     embEstMatInit( match, mismatch, gap_penalty, 0, '-' );
-    
+
     if ( ajSeqLen(genome) )
     {
 	/* Make sure we have enough space to hold the genomic AjPSeq */
-	
-	if ( megabytes < ajSeqLen(genome)*1.5e-6 ) 
+
+	if ( megabytes < ajSeqLen(genome)*1.5e-6 )
 	{
 	    ajWarn ("increasing space from %.3f to %.3f Mb\n",
 		    megabytes, 1.5e-6*ajSeqLen(genome) );
 	    megabytes = 1.5e-6*ajSeqLen(genome);
 	}
-	
+
 	/* find the GT/AG splice sites */
-	
+
 	if ( splice )
 	    splice_sites = embEstFindSpliceSites( genome, 1 );
 	else
 	    splice_sites = NULL;
-	
+
 	if ( search_mode == BOTH )
 	    reversed_splice_sites = embEstFindSpliceSites( genome, 0 );
 	else
 	    reversed_splice_sites = NULL;
-	
+
 	/* process each est */
-	
+
 	while (ajSeqallNext(estset, &est))
 	{
 
@@ -257,25 +257,25 @@ int main(int argc, char **argv)
 						  intron_penalty,
 						  splice_penalty,
 						  splice_sites, 0, 0,
-						  DIAGONAL );  
+						  DIAGONAL );
 		    score = sge->score;
 		    ajDebug("%30.30S\n", ajSeqStr(shuffled_est) );
 		    ajDebug("%5d score %d seed %d\n", n, score, seed );
-		    if ( score > max_score ) 
+		    if ( score > max_score )
 			max_score = score;
 		    mean += score;
 		    std += score*score;
 		    embEstFreeAlign(&sge);
 		}
-	      
+
 		mean /= shuffles;
 		std = sqrt( (std = shuffles*mean*mean)/(shuffles-1.0) );
 		ajDebug ("shuffles: %d max: %d mean: %.2f std dev: %.2f\n",
 			 shuffles, max_score, mean, std );
-		minscore = max_score+1; 
+		minscore = max_score+1;
 		ajSeqDel(&shuffled_est);
 	    }
-		  
+
 	    if ( search_mode != REVERSE_ONLY ) { /* forward strand */
 		fge = embEstAlignLinearSpace ( est, genome, match,
 					      mismatch, gap_penalty,
@@ -284,7 +284,7 @@ int main(int argc, char **argv)
 		if (!fge)
 		    ajFatal ("forward strand alignment failed");
 	    }
-	    else 
+	    else
 		fge = NULL;
 
 	    if ( search_mode != FORWARD_ONLY ) /* reverse strand */
@@ -304,7 +304,7 @@ int main(int argc, char **argv)
 
 	    if ( search_mode == BOTH )	/* search both strands */
 	    {
-		if ( fge->score > rge->score ) 
+		if ( fge->score > rge->score )
 		{			/* redo forward search with
 					   reversed splice sites */
 		    bge = embEstAlignLinearSpace ( est, genome, match,
@@ -351,7 +351,7 @@ int main(int argc, char **argv)
 						   align, width, reverse);
 		    }
 		}
-		else 
+		else
 		{
 		    bge = embEstAlignLinearSpace ( reversed_est,genome,
 						  match, mismatch,
@@ -400,8 +400,8 @@ int main(int argc, char **argv)
 						   align, width, isreverse);
 		    }
 		}
-		
-		
+
+
 	    }
 	    else if (search_mode == FORWARD_ONLY) {
 	      ajFmtPrintF(outfile,
@@ -438,21 +438,21 @@ int main(int argc, char **argv)
 	    embEstFreeAlign(&bge);
 	    embEstFreeAlign(&rge);
 	    embEstFreeAlign(&fge);
-	    
+
 	    /*	    ajSeqDel(&est); */ /* Clone from seqall: Don't delete */
 	    ajSeqDel(&reversed_est);
 	}
-	
+
 	if ( splice_sites )
 	    ajSeqDel( &splice_sites );
-	
-	if ( reversed_splice_sites ) 
+
+	if ( reversed_splice_sites )
 	    ajSeqDel( &reversed_splice_sites );
-	
-	ajSeqDel(&genome); 
+
+	ajSeqDel(&genome);
 	return 0;
     }
-    
+
     return 1;
 }
 
@@ -495,7 +495,7 @@ static void est2genome_make_output( AjPFile ofile, AjPSeq genome, AjPSeq est,
 	embEstOutBlastStyle ( ofile, genome, est, ge,
 			     match, mismatch, gap_penalty,
 			     intron_penalty, splice_penalty, 0, reverse );
-	      
+
 	if ( align )
 	{
 	    ajFmtPrintF(ofile, "\n\n%s vs %s:\n",

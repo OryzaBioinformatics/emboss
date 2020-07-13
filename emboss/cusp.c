@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -24,7 +24,7 @@
 
 
 
-/* @prog cusp ***************************************************************
+/* @prog cusp *****************************************************************
 **
 ** Create a codon usage table
 **
@@ -40,8 +40,8 @@ int main(int argc, char **argv)
     ajint beg;
     ajint end;
     ajint ccnt;
-    
-    
+
+
     embInit("cusp", argc, argv);
 
     seqall    = ajAcdGetSeqall("sequence");
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 
     ccnt=0;
     substr=ajStrNew();
-    
+
     while(ajSeqallNext(seqall, &seq))
     {
 	beg = ajSeqallBegin(seqall);
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 	ajStrAssSub(&substr,ajSeqStr(seq),beg-1,end-1);
 	ajCodCountTriplets(&codon,substr,&ccnt);
     }
-    
+
     ajCodCalculateUsage(&codon,ccnt);
 
     ajFmtPrintF(outf,"# CUSP codon usage file\n");
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 
     ajStrDel(&substr);
     ajCodDel(&codon);
-    
+
     ajExit();
     return 0;
 }

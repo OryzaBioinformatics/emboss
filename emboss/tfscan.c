@@ -10,12 +10,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -45,10 +45,10 @@ int main(int argc, char **argv)
     AjPSeq    seq=NULL;
     AjPFile   outf=NULL;
     AjPFile   inf=NULL;
-    
+
     ajint begin;
     ajint end;
-    
+
     AjPList   l=NULL;
 
     AjPStr    strand=NULL;
@@ -63,11 +63,11 @@ int main(int argc, char **argv)
     AjPStr    key=NULL;
     AjPStr    value=NULL;
     AjPTable  atable=NULL;
-    
+
     ajint mismatch;
     ajint sum;
     ajint v;
-    
+
     char *p;
 
 
@@ -88,17 +88,17 @@ int main(int argc, char **argv)
     ajFileDataNew(pname,&inf);
     if(!inf)
 	ajFatal("Either EMBOSS_DATA undefined or TFEXTRACT needs running");
-    
-    
 
-    
+
+
+
     name    = ajStrNew();
     acc     = ajStrNew();
     substr  = ajStrNew();
     line    = ajStrNew();
     pattern = ajStrNewC("AA");
     opattern = ajStrNew();
-    
+
     while(ajSeqallNext(seqall, &seq))
     {
 	begin=ajSeqallBegin(seqall);
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 
 	l=ajListNew();
 	atable = ajStrTableNew(1000);
-	
+
 	sum=0;
 	while(ajFileReadLine(inf,&line))
 	{
@@ -146,7 +146,7 @@ int main(int argc, char **argv)
 
 
 
-    
+
     ajStrDel(&line);
     ajStrDel(&name);
     ajStrDel(&acc);
@@ -160,7 +160,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-/* @funcstatic tfscan_print_hits *********************************************
+/* @funcstatic tfscan_print_hits **********************************************
 **
 ** Print matches to transcription factor sites
 **
@@ -186,7 +186,7 @@ static void tfscan_print_hits(AjPStr name, AjPList *l,
     AjPStr s=NULL;
 
     s = ajStrNew();
-    
+
 
     ajFmtPrintF(outf,"TFSCAN of %s from %d to %d\n\n",ajStrStr(name),
 		begin,end);

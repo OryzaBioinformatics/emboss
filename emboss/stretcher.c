@@ -2,7 +2,7 @@
 **
 ** STRETCHER calculates a global alignment of two sequences
 ** version 2.0u
-** Please cite: Myers and Miller, CABIOS (1989) 
+** Please cite: Myers and Miller, CABIOS (1989)
 **
 ** @author: Copyright (C) Ian Longden (il@sanger.ac.uk)
 ** @@
@@ -11,12 +11,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -30,7 +30,7 @@
 ** k-symbol indel score
 **
 ** @param [r] k [ajint] Symbol
-** @return [void]  
+** @return [void]
 ******************************************************************************/
 
 #define stretchergap(k)  ((k) <= 0 ? 0 : g+hh*(k)) /* k-symbol indel score */
@@ -58,7 +58,7 @@ static ajint hh;
 static ajint m;					/* g = G, hh = H, m = g+h */
 
 
-/* @macro STRETCHERDEL *******************************************************
+/* @macro STRETCHERDEL ********************************************************
 **
 ** Macro for a "Delete k" operation
 **
@@ -73,7 +73,7 @@ static ajint m;					/* g = G, hh = H, m = g+h */
     last = *sapp++ = -(k);		\
 }
 						/* Append "Insert k" op */
-/* @macro STRETCHERINS *******************************************************
+/* @macro STRETCHERINS ********************************************************
 **
 ** Macro for an "Insert k" operation
 **
@@ -88,7 +88,7 @@ static ajint m;					/* g = G, hh = H, m = g+h */
     last = *sapp++ = (k);		\
 }
 
-/* @macro STRETCHERREP *******************************************************
+/* @macro STRETCHERREP ********************************************************
 **
 ** Macro for a "Replace" operation
 **
@@ -183,8 +183,8 @@ int main(int argc, char **argv)
 
     aa0str = ajStrNewL(2+ajSeqLen(seq)); /* length + blank + trailing null */
     aa1str = ajStrNewL(2+ajSeqLen(seq2));
-    ajStrAppK(&aa0str,' ');   
-    ajStrAppK(&aa1str,' ');   
+    ajStrAppK(&aa0str,' ');
+    ajStrAppK(&aa1str,' ');
 
     for(i=0;i<ajSeqLen(seq);i++)
 	ajStrAppK(&aa0str,(char)ajSeqCvtK(cvt, *s1++));
@@ -256,7 +256,7 @@ int main(int argc, char **argv)
     ajSeqDel(&res1);
     ajSeqDel(&res2);
 
-    
+
     ajExit();
     return 0;
 }
@@ -265,7 +265,7 @@ int main(int argc, char **argv)
 
 static ajint nmax=0;
 
-/* @funcstatic stretcher_Ealign ********************************************
+/* @funcstatic stretcher_Ealign ***********************************************
 **
 ** Undocumented
 **
@@ -282,7 +282,7 @@ static ajint nmax=0;
 
 static ajint stretcher_Ealign(char *A,char *B,ajint M,ajint N,ajint G,
 			      ajint H,ajint *S,ajint *NC)
-{ 
+{
     ajint c;
     ajint ck;
 
@@ -311,7 +311,7 @@ static ajint stretcher_Ealign(char *A,char *B,ajint M,ajint N,ajint G,
 	AJCRESIZE(RR, nmax+1);
 	AJCRESIZE(SS, nmax+1);
     }
-  
+
     if (CC==NULL || DD==NULL || RR==NULL || SS==NULL)
     {
 	ajErr(" cannot allocate llmax arrays\n");
@@ -329,7 +329,7 @@ static ajint stretcher_Ealign(char *A,char *B,ajint M,ajint N,ajint G,
 
 
 
-/* @funcstatic stretcher_Align ********************************************
+/* @funcstatic stretcher_Align ************************************************
 **
 ** align(A,B,M,N,tb,te) returns the cost of an optimum conversion between
 ** A[1..M] and B[1..N] that begins(ends) with a delete if tb(te) is zero
@@ -509,7 +509,7 @@ static ajint stretcher_Align(char *A,char *B,ajint M,ajint N,ajint tb,ajint te)
 }
 
 
-/* @funcstatic stretcher_Calcons ********************************************
+/* @funcstatic stretcher_Calcons **********************************************
 **
 ** Undocumented
 **
@@ -547,7 +547,7 @@ static ajint stretcher_Calcons(char *aa0,ajint n0,char *aa1,ajint n1,
 
     sq1 = ajStrStr(ajSeqStr(seq));
     sq2 = ajStrStr(ajSeqStr(seq2));
-  
+
     while (i0 < n0 || i1 < n1)
     {
 	if (op == 0 && *rp == 0)
@@ -590,7 +590,7 @@ static ajint stretcher_Calcons(char *aa0,ajint n0,char *aa1,ajint n1,
 
 
 
-/* @funcstatic stretcher_Discons ********************************************
+/* @funcstatic stretcher_Discons **********************************************
 **
 ** Undocumented
 **
@@ -614,7 +614,7 @@ static ajint max1;
 
 static ajint llen;
 
-#define YES 1 
+#define YES 1
 #define NO 0
 
 static AjPSeqCvt cvt = NULL;
@@ -662,8 +662,8 @@ static ajint **sub;
     i0n = smark[1];
     i10 = smark[2];
     i1n = smark[3];
-  
-    /* (il) smins is always 0 ?? so why bother with this ?? 
+
+    /* (il) smins is always 0 ?? so why bother with this ??
        ioff0=smin0-smins;
        ioff1=smin1-smins;
     */
@@ -814,7 +814,7 @@ static ajint **sub;
 		sprintf(&cline[0][i],"%8ld",(long)qqoff+1);
 		cline[0][i+8]=' ';
 	    }
-      
+
 	    lloff = ajSeqBegin(seq2)-1 + /*loffset +*/ (ajlong)(ioff1-del1);
 	    if (cl1 && lloff%10 == 9)
 	    {
@@ -833,7 +833,7 @@ static ajint **sub;
 		sprintf(&cline[1][i],"%8ld",(long)lloff+1);
 		cline[1][i+8]=' ';
 	    }
-      
+
 
 	    line[1][i] = ' ';
 	    if (ioff0-del0 >= min0 && ioff0-del0 <= max0)
@@ -894,13 +894,13 @@ static ajint **sub;
 		}
 	    }
 	}
-    
+
 	for (i=0; i<3; i++)
 	    line[i][lend]=0;
 
 	for (i=0; i<2; i++)
 	    cline[i][lend+7]=0;
-    
+
 	ll01 = ll0&&ll1;
 	if (markx==2 && (ll0))
 	    ll1=0;
@@ -922,7 +922,7 @@ static ajint **sub;
 
 
 
-/* @funcstatic stretcher_CheckScore ******************************************
+/* @funcstatic stretcher_CheckScore *******************************************
 **
 ** return the score of the alignment stored in S
 **
@@ -937,7 +937,7 @@ static ajint **sub;
 
 static ajint stretcher_CheckScore(unsigned char *A,unsigned char *B,ajint M,
 				   ajint N,ajint *S,ajint *NC)
-{ 
+{
     register ajint i;
     register ajint j;
     register ajint op;

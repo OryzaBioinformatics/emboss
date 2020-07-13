@@ -9,14 +9,14 @@
 ** options.
 **
 ** -ccolours    Colour residues by there consensus value. (TRUE)
-** -cidentity   Colour to display identical matches. (RED)  
+** -cidentity   Colour to display identical matches. (RED)
 ** -csimilarity Colour to display similar matches.   (GREEN)
 ** -cother      Colour to display other matches.     (BLACK)
 **
 ** -docolour    Colour residues by table oily, amide, basic etc. (FALSE)
 **
 ** -title       Display a title.     (TRUE)
-**  
+**
 ** -shade       Colour residues by shades. (BLPW)
 **              B-Black L-Brown P-Wheat W-White
 **
@@ -52,12 +52,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -141,17 +141,17 @@ int main(int argc, char **argv)
     ajint     fcnt=1;
     ajint     datacol=0;
     float   datacs=0.0;
-    
+
     float *score=0;
     float scoremax=0;
-  
+
     float* identical;
     ajint   identicalmaxindex;
     float* matching;
     ajint   matchingmaxindex;
-  
+
     float* colcheck;
-  
+
     ajint **matrix;
     ajint m1=0,m2=0,ms=0,highindex=0,index;
     ajint *previous=0, con=0,currentstate=0,old=0;
@@ -177,14 +177,14 @@ int main(int argc, char **argv)
 
     ajtime.time = localtime(&tim);
     ajtime.format = 0;
-  
+
     (void) ajGraphInit ("prettyplot", argc, argv);
-  
+
     seqset = ajAcdGetSeqset("msf");
-  
+
     numres = ajAcdGetInt("residuesperline");
     resbreak = ajAcdGetInt("resbreak");
-  
+
     ajSeqsetFill (seqset);	/* Pads sequence set with gap characters */
     numseq = ajSeqsetSize (seqset);
 
@@ -229,19 +229,19 @@ int main(int argc, char **argv)
     cmpmatrix  = ajAcdGetMatrix("matrixfile");
     showscore = ajAcdGetInt("showscore");
     data      = ajAcdGetBool("data");
-    
-  
+
+
     matrix = ajMatrixArray(cmpmatrix);
     cvt = ajMatrixCvt(cmpmatrix);
     matsize = ajMatrixSize(cmpmatrix);
-  
+
     AJCNEW(identical,matsize);
     AJCNEW(matching,matsize);
     AJCNEW(colcheck,matsize);
-  
+
     numgaps = numres/resbreak;
     numgaps--;
-  
+
     if(portrait)
     {
 	if(!data)
@@ -265,7 +265,7 @@ int main(int argc, char **argv)
 	    relthresh = 0.5;
 	}
     }
-  
+
     /* shade is a formatted string. Needs a pattern in the ACD file */
 
     if(shade->Len)
@@ -299,8 +299,8 @@ int main(int argc, char **argv)
 	    ajFatal("Shade Selected but invalid must be 4 "
 		   "chars long %S",shade);
     }
-  
-  
+
+
     if(colourbyconsensus && colourbyresidues)
 	colourbyconsensus = AJFALSE;
 
@@ -310,46 +310,46 @@ int main(int argc, char **argv)
 
     if(colourbyconsensus)
     {
-    
+
 	cidentity = ajGraphCheckColour(sidentity);
 	if(cidentity == -1)
 	    cidentity = RED;
-    
+
 	csimilarity = ajGraphCheckColour(ssimilarity);
 	if(csimilarity == -1)
 	    csimilarity = GREEN;
-    
-    
+
+
 	cother = ajGraphCheckColour(sother);
 	if(cother == -1)
 	    cother = BLACK;
-    
+
     }
     else if(colourbyresidues)
 	colmat = ajGraphGetBaseColour();
-  
-  
+
+
     /* output the options used */
     if(listoptions)
     {
 	ajStrApp(&options,seqset->Name);
 	ajFmtPrintAppS(&options,"%D plur=%f ",&ajtime,fplural);
-    
+
 	if(collision)
 	    ajStrAppC(&options,"-collision ");
 	else
 	    ajStrAppC(&options,"-nocollision ");
-    
+
 	if(boxit)
 	    ajStrAppC(&options,"-box ");
 	else
 	    ajStrAppC(&options,"-nobox ");
-    
+
 	if(boxcol)
 	    ajStrAppC(&options,"-boxcol ");
 	else
 	    ajStrAppC(&options,"-noboxcol ");
-    
+
 	if(colourbyconsensus)
 	    ajStrAppC(&options,"colbyconsensus ");
 	else if (colourbyresidues)
@@ -358,7 +358,7 @@ int main(int argc, char **argv)
 	    ajStrAppC(&options,"colbyshade ");
 	else
 	    ajStrAppC(&options,"nocolour ");
-    
+
 	if(alternative==2)
 	    ajStrAppC(&options,"alt=2 ");
 	else if(alternative==1)
@@ -366,8 +366,8 @@ int main(int argc, char **argv)
 	else if(alternative==3)
 	    ajStrAppC(&options,"alt=3 ");
     }
-  
-  
+
+
     AJCNEW(seqcolptr, numseq);
     for(i=0;i<numseq;i++)
 	AJCNEW(seqcolptr[i], ajSeqsetLen(seqset));
@@ -377,7 +377,7 @@ int main(int argc, char **argv)
     AJCNEW(score, numseq);
     AJCNEW(previous, numseq);
     AJCNEW(seqcount, numseq);
-  
+
     for(i=0;i<numseq;i++)
     {
 	ajSeqsetToUpper(seqset);
@@ -388,14 +388,14 @@ int main(int argc, char **argv)
 	previous[i] = 0;
 	seqcount[i] = 0;
     }
-  
+
     /* user will pass the number of residues to fit a page */
     /* therefore we now need to calculate the size of the chars */
     /* based on this and get the new char width. */
     /* ten chars for the name */
     if(!data)
 	ajGraphGetCharSize(&defheight,&currentheight);
-  
+
     if(!data)
 	ajGraphOpenWin(graph,-1.0-charlen,
 		       (float)numres+10.0+(float)(numres/resbreak),
@@ -411,7 +411,7 @@ int main(int argc, char **argv)
 		    (float)numres+10.0+(float)(numres/resbreak),
 		    ystart+1.0);
     }
-    
+
     if(!data)
 	ajGraphGetOut(&fxp,&fyp,&ixlen,&iylen,&ixoff,&iyoff);
     else
@@ -421,7 +421,7 @@ int main(int argc, char **argv)
 	iylen=450;
 	ixoff=iyoff=0;
     }
-    
+
     /*  ajUser("%f\n%f\n%d\n%d\n%d\n%d",fxp,fyp,ixlen,iylen,ixoff,iyoff);*/
 
     if(ixlen == 0.0)
@@ -430,14 +430,14 @@ int main(int argc, char **argv)
 	{
 	    ixlen = 768;
 	    iylen = 960;
-	}      
+	}
 	else
 	{
 	    ixlen = 960;
 	    iylen = 768;
 	}
     }
-  
+
     if(!data)
 	ajGraphGetCharSize(&defheight,&currentheight);
     else
@@ -454,9 +454,9 @@ int main(int argc, char **argv)
 	ajGraphGetCharSize(&defheight,&currentheight);
     else
 	currentheight = datacs;
-    
+
     yincr = (currentheight +3.0)*0.3;
-  
+
     if(!title)
 	y=ystart;
     else
@@ -486,10 +486,10 @@ int main(int argc, char **argv)
 	if(seqperpage>numseq)
 	    seqperpage=numseq;
     }
-  
+
     count = 0;
-  
-  
+
+
     if(boxcol)
     {
 	if(!data)
@@ -500,11 +500,11 @@ int main(int argc, char **argv)
 	    datacol = iboxcolval;
 	}
     }
-    
+
     kmax = ajSeqsetLen(seqset) - 1;
     for(k=0; k<= kmax; k++)
     {
-    
+
 	/* calculate the consensus */
 	/* reset score and identical */
 	for(i=0;i<numseq;i++)
@@ -515,7 +515,7 @@ int main(int argc, char **argv)
 	    matching[i] = 0.0;
 	    colcheck[i] = 0.0;
 	}
-    
+
 	/* generate a score for each */
 	for(i=0;i<numseq;i++)
 	{
@@ -530,7 +530,7 @@ int main(int argc, char **argv)
 	    if(m1)
 		identical[m1] += ajSeqsetWeight(seqset, i);
 	}
-    
+
 	/* find the highest score */
 	highindex = -1;
 	scoremax = -3;
@@ -539,7 +539,7 @@ int main(int argc, char **argv)
 	for(i=0;i<numseq;i++)
 	{
 	    if(showscore==k+1)
-		ajUser("%d %c %f",k+1,seqcharptr[i][k],score[i]); 
+		ajUser("%d %c %f",k+1,seqcharptr[i][k],score[i]);
 	    if(score[i] > scoremax)
 	    {
 		scoremax = score[i];
@@ -559,7 +559,7 @@ int main(int argc, char **argv)
 		}
 	    }
 	}
-    
+
 	/* find highs for matching and identical */
 	matchingmaxindex = 0;
 	identicalmaxindex = 0;
@@ -577,7 +577,7 @@ int main(int argc, char **argv)
 	    else if(matching[m1] ==  matching[matchingmaxindex])
 	    {
 		if(identical[m1] > identical[matchingmaxindex])
-		    matchingmaxindex= m1;	  
+		    matchingmaxindex= m1;
 	    }
 	}
 	if(showscore==k+1)
@@ -586,17 +586,17 @@ int main(int argc, char **argv)
 	    for(i=0;i<numseq;i++)
 	    {
 		m1 = ajSeqCvtK (cvt, seqcharptr[i][k]);
-		ajUser("%d %c %f",k+1,seqcharptr[i][k],identical[m1]); 
+		ajUser("%d %c %f",k+1,seqcharptr[i][k],identical[m1]);
 	    }
 	    ajUser("Matching------------>");
 	    for(i=0;i<numseq;i++)
 	    {
 		m1 = ajSeqCvtK (cvt, seqcharptr[i][k]);
 		ajUser("%d %c %f %d",k+1,seqcharptr[i][k],matching[m1],
-		       m1==matchingmaxindex); 
+		       m1==matchingmaxindex);
 	    }
 	}
-    
+
 	con=0;
 	boxindex = -1;
 	max = -3;
@@ -610,7 +610,7 @@ int main(int argc, char **argv)
 	{
 	    for(i=0;i<numseq;i++)
 	    {
-		m1 = ajSeqCvtK (cvt, seqcharptr[i][k]);	
+		m1 = ajSeqCvtK (cvt, seqcharptr[i][k]);
 		if(matching[m1] > max)
 		{
 		    max = matching[m1];
@@ -632,51 +632,51 @@ int main(int argc, char **argv)
 		boxindex = highindex;
 	    }
 	}
-    
-    
+
+
 	if(con)
 	{
 	    if(collision)
 	    {
 		/* check for collisions */
-	
+
 		if(alternative == 1 )
 		{
 		    if(showscore==k+1)
-			ajUser("before alt coll test %d ",con); 
-	  
+			ajUser("before alt coll test %d ",con);
+
 		    /* check to see if this is unique for collisions */
 		    if(showscore==k+1)
 			ajUser("col test  identicalmax %d %f",k+1,
-			       identical[identicalmaxindex]); 
+			       identical[identicalmaxindex]);
 		    for(i=0;i<numseq;i++)
 		    {
 			m1 = ajSeqCvtK (cvt, seqcharptr[i][k]);
 			if(showscore==k+1)
 			    ajUser("col test  %d %c %f %d",k+1,
-				   seqcharptr[i][k],identical[m1],m1); 
+				   seqcharptr[i][k],identical[m1],m1);
 			if(identical[m1] >= identical[identicalmaxindex] &&
 			   m1 != identicalmaxindex)
 			    con = 0;
 		    }
 		    if(showscore==k+1)
-			ajUser("after (alt=1) coll test %d ",con); 
+			ajUser("after (alt=1) coll test %d ",con);
 		}
-	
+
 		else if(alternative == 2)
 		{
 		    for(i=0;i<numseq;i++){
 			m1 = ajSeqCvtK (cvt, seqcharptr[i][k]);
 			if(showscore==k+1)
 			    ajUser("col test (alt=2) %d %c %f",k+1,
-				   seqcharptr[i][k],matching[m1]); 
+				   seqcharptr[i][k],matching[m1]);
 			if((matching[m1] >= matching[matchingmaxindex] &&
 			    m1 != matchingmaxindex &&
 			    matrix[m1][matchingmaxindex] < 0.1)||
-			   (identical[m1] >= identical[matchingmaxindex] 
+			   (identical[m1] >= identical[matchingmaxindex]
 			   && m1 != matchingmaxindex))
 			    con = 0;
-		    }	  
+		    }
 		}
 		else if (alternative == 3)
 		{
@@ -685,16 +685,16 @@ int main(int argc, char **argv)
 		     * can get a plu of fplural
 		     */
 		    if(showscore==k+1)
-			ajUser("before coll test %d ",con); 
+			ajUser("before coll test %d ",con);
 		    ms = ajSeqCvtK (cvt, seqcharptr[highindex][k]);
 		    for(i=0;i<numseq;i++)
 		    {
-			m1 = ajSeqCvtK (cvt, seqcharptr[i][k]);	
+			m1 = ajSeqCvtK (cvt, seqcharptr[i][k]);
 			if(ms != m1 && colcheck[m1] == 0.0)
 			    /* NOT in the current consensus */
 			    for(j=0;j<numseq;j++)
 			    {
-				m2 = ajSeqCvtK (cvt, seqcharptr[j][k]);	
+				m2 = ajSeqCvtK (cvt, seqcharptr[j][k]);
 				if( matrix[ms][m2] < 0.1)
 				{ /* NOT in the current consensus */
 				    if( matrix[m1][m2] > 0.1)
@@ -704,11 +704,11 @@ int main(int argc, char **argv)
 			    }
 		    }
 		    for(i=0;i<numseq;i++)
-		    {        
+		    {
 			m1 = ajSeqCvtK (cvt, seqcharptr[i][k]);
 			if(showscore==k+1)
 			    ajUser("col test  %d %c %f",k+1,seqcharptr[i][k],
-				   colcheck[m1]); 
+				   colcheck[m1]);
 			/* if any other matches then we have a collision */
 			if(colcheck[m1] >= fplural)
 			    con = 0;
@@ -723,16 +723,16 @@ int main(int argc, char **argv)
 			m1 = ajSeqCvtK (cvt, seqcharptr[i][k]);
 			if(showscore==k+1)
 			    ajUser("col test (alt=2) %d %c %f",k+1,
-				   seqcharptr[i][k],matching[m1]); 
+				   seqcharptr[i][k],matching[m1]);
 			if((matching[m1] >= matching[matchingmaxindex] &&
-			    m1 != matchingmaxindex && 
+			    m1 != matchingmaxindex &&
 			    matrix[m1][matchingmaxindex] < 0.1))
 			    con = 0;
 			if(identical[m1] >= identical[matchingmaxindex] &&
-			   m1 != matchingmaxindex && 
+			   m1 != matchingmaxindex &&
 			   matrix[m1][matchingmaxindex] > 0.1)
 			    con = 0;
-		    }	
+		    }
 		    if(!con)
 		    {	/* matches failed try identicals */
 			if(identical[identicalmaxindex] >= fplural)
@@ -760,10 +760,10 @@ int main(int argc, char **argv)
 				highindex = j;
 			}
 		    }
-	  
+
 		}
 	    }
-      
+
 	    if(identity)
 	    {
 		j=0;
@@ -775,8 +775,8 @@ int main(int argc, char **argv)
 		    con=0;
 	    }
 	}
-    
-    
+
+
 	/* newline start */
 	if(count >= numres )
 	{
@@ -823,18 +823,18 @@ int main(int argc, char **argv)
 		    }
 		}
 	    }
-	    
+
 	    count = 0;
 	    gapcount = 0;
 	}
-	
+
 	count++;
 	countforgap++;
 
 	for(j=0;j<numseq;j++)
 	{
 	    /* START OF BOXES */
-      
+
 	    if(boxit)
 	    {
 		seqboxptr[j][k] = 0;
@@ -843,7 +843,7 @@ int main(int argc, char **argv)
 		    index = boxindex;
 		    if(matrix[ajSeqCvtK (cvt, seqcharptr[j][k])]
 		       [ajSeqCvtK (cvt, seqcharptr[index][k])] > 0)
-			part = 1.0; 
+			part = 1.0;
 		    else
 		    {
 			if(identical[ajSeqCvtK (cvt, seqcharptr[j][k])] >=
@@ -851,7 +851,7 @@ int main(int argc, char **argv)
 			    part = 1.0;
 			else
 			    part = 0.0;
-		    }	  
+		    }
 		    if(previous[j] != part)
 			/* draw vertical line */
 			seqboxptr[j][k] |= BOXLEF;
@@ -867,7 +867,7 @@ int main(int argc, char **argv)
 			else
 			    currentstate = 0;
 		    }
-		    else 
+		    else
 		    {	/* j != 0  Normal case for horizontal line */
 			if(part != currentstate)
 			{
@@ -901,7 +901,7 @@ int main(int argc, char **argv)
 		    }
 		    previous[j] = 0;
 		}
-	
+
 	    } /* end box */
 	    if(boxcol)
 		if(boxindex != -1)
@@ -914,17 +914,17 @@ int main(int argc, char **argv)
 
 			seqboxptr[j][k] |= BOXCOLOURED;
 		}
-      
+
 	    /* END OF BOXES */
-      
-      
-      
-      
+
+
+
+
 	    if(ajSeqCvtK (cvt, seqcharptr[j][k]))
 		res[0] = seqcharptr[j][k];
 	    else
 		res[0] = '-';
-      
+
 	    if(colourbyconsensus)
 	    {
 		if(con && seqcharptr[highindex][k] == seqcharptr[j][k])
@@ -946,7 +946,7 @@ int main(int argc, char **argv)
 		    seqcolptr[j][k] = shadecolour[1];
 		else if(part >= 0.5)
 		    seqcolptr[j][k] = shadecolour[2];
-		else 
+		else
 		    seqcolptr[j][k] = shadecolour[3];
 	    }
 	    else if (colourbyshade)
@@ -968,9 +968,9 @@ int main(int argc, char **argv)
 	    gapcount++;
 	    countforgap=0;
 	}
-    
+
     }
-  
+
 
     startseq=0;
     endseq=seqperpage;
@@ -1002,11 +1002,11 @@ int main(int argc, char **argv)
 			ystart+1.0);
 	}
     }
-    
-  
+
+
     if(!data)
 	ajGraphGetCharSize(&defheight,&currentheight);
-  
+
     if(boxcol)
 	if(!data)
 	    old = ajGraphSetFore(old);
@@ -1015,13 +1015,13 @@ int main(int argc, char **argv)
 	ajGraphCloseWin();
     else
 	ajFileClose(&outf);
-  
-  
+
+
     ajStrDel(&sidentity);
     ajStrDel(&ssimilarity);
     ajStrDel(&sother);
     ajStrDel(&options);
-  
+
     for(i=0;i<numseq;i++)
 	ajStrDel(&seqnames[i]);
 
@@ -1046,7 +1046,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic prettyplot_calcseqperpage *************************************
+/* @funcstatic prettyplot_calcseqperpage **************************************
 **
 ** Undocumented.
 **
@@ -1068,10 +1068,10 @@ static ajint prettyplot_calcseqperpage(float yincr,float y,AjBool consensus)
 	yep=y-(yincr*((float)numallowed+2.0+((float)consensus*2)));
 	numallowed++;
     }
-  
+
     /*  ajUser("numallowed = %d\n",numallowed-1);*/
 
-    return numallowed-1;  
+    return numallowed-1;
 }
 
 
@@ -1080,7 +1080,7 @@ static ajint prettyplot_calcseqperpage(float yincr,float y,AjBool consensus)
 
 
 
-/* @funcstatic prettyplot_fillinboxes ****************************************
+/* @funcstatic prettyplot_fillinboxes *****************************************
 **
 ** Undocumented.
 **
@@ -1171,7 +1171,7 @@ static ajint prettyplot_fillinboxes(float ystart, ajint length, ajint numseq,
 		thiscol = ajGraphGetColour();
 	    else
 		thiscol = datacol;
-	    
+
 	    for(j=seqstart,l=0;j<seqend;j++,l++)
 	    {
 		if(seqboxptr[j][k] & BOXCOLOURED)
@@ -1210,7 +1210,7 @@ static ajint prettyplot_fillinboxes(float ystart, ajint length, ajint numseq,
 	ajGraphGetCharSize(&defcs,&curcs);
     else
 	curcs = datacs;
-    
+
 
     if(shownames)
     {
@@ -1223,7 +1223,7 @@ static ajint prettyplot_fillinboxes(float ystart, ajint length, ajint numseq,
 			    (float)-charlen,y-(yincr*l),curcs,
 			    ajStrStr(seqnames[i]));
 	}
-	
+
 	if(consensus && (numseq==seqend))
 	{
 	    if(!data)
@@ -1290,7 +1290,7 @@ static ajint prettyplot_fillinboxes(float ystart, ajint length, ajint numseq,
 				    ystart,curcs,ajStrStr(seqset->Usa));
 		}
 	    }
-	    
+
 	    count = 0;
 	    gapcount = 0;
 	    if(shownames)
@@ -1306,7 +1306,7 @@ static ajint prettyplot_fillinboxes(float ystart, ajint length, ajint numseq,
 				    y-(yincr*l),curcs,ajStrStr(seqnames[i]));
 
 		}
-		
+
 		if(consensus &&(numseq==seqend))
 		{
 		    if(!data)
@@ -1407,7 +1407,7 @@ static ajint prettyplot_fillinboxes(float ystart, ajint length, ajint numseq,
 		ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour 0 size %f %s\n",
 			    (float)(count+gapcount),
 			    y-(yincr*((seqend-seqstart)+1)),curcs,res);
-			    
+
 	}
     }
     if(shownumbers)
@@ -1439,7 +1439,7 @@ static ajint prettyplot_fillinboxes(float ystart, ajint length, ajint numseq,
 
 
     ajStrDel(&strcon);
-    
+
     for(i=0;i<16;i++)
 	table[i] = -1;
     for(i=0;i<numseq;i++)
@@ -1448,7 +1448,7 @@ static ajint prettyplot_fillinboxes(float ystart, ajint length, ajint numseq,
 	    table[seqcolptr[i][k]] = 1;
     }
     /* now display again but once for each colour */
-  
+
     /*    for(w=0;w<15;w++)*/
     for(w=0;w<16;w++)
     {	/* not 16 as we can ignore white on plotters*/
@@ -1493,11 +1493,11 @@ static ajint prettyplot_fillinboxes(float ystart, ajint length, ajint numseq,
 					"size %f %s\n",(float)(count+gapcount),
 					     y-(yincr*l),w,curcs,res);
 		    }
-		}	
+		}
 	    }
 	}
 	if(!data)
-	    old = ajGraphSetFore(old); 
+	    old = ajGraphSetFore(old);
     }
 
     if(!data)

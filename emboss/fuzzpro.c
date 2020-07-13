@@ -8,12 +8,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -46,9 +46,9 @@ int main(int argc, char **argv)
     AjPStr opattern=NULL;
     AjPStr seqname=NULL;
     AjPStr text=NULL;
-    
+
     AjPList l;
-    
+
     ajint plen;
     ajint mismatch;
 
@@ -70,18 +70,18 @@ int main(int argc, char **argv)
     AjPStr	regexp=NULL;
 
     ajint **skipm=NULL;
-    
+
 
     AjPStr         tmpstr = NULL;
     void   *tidy=NULL;
 
     embInit ("fuzzpro", argc, argv);
-    
+
     seqall   = ajAcdGetSeqall("sequence");
     report = ajAcdGetReport ("outfile");
     pattern  = ajAcdGetString("pattern");
     mismatch = ajAcdGetInt("mismatch");
-    
+
     ajFmtPrintAppS (&tmpstr, "Pattern: %S\n", pattern);
     ajFmtPrintAppS (&tmpstr, "Mismatch: %d\n", mismatch);
     ajReportSetHeader (report, tmpstr);
@@ -96,9 +96,9 @@ int main(int argc, char **argv)
 	ajFatal("Illegal pattern");
     embPatCompile(type,pattern,opattern,&plen,&buf,off,&sotable,&solimit,&m,
 		  &regexp,&skipm,mismatch);
-    
+
     text = ajStrNew();
-    
+
 
     while(ajSeqallNext(seqall,&seq))
     {
@@ -108,35 +108,35 @@ int main(int argc, char **argv)
 	end   = ajSeqallEnd(seqall);
 	ajStrAssSubC(&text,ajSeqChar(seq),begin-1,end-1);
 	ajStrToUpper(&text);
-	
+
 	embPatFuzzSearch(type,begin,pattern,opattern,seqname,text,&l,
 			 plen,mismatch,amino,carboxyl,buf,off,sotable,
 			 solimit,regexp,skipm,&hits,m,&tidy);
-	
+
 	if(hits)
 	{
 	    tab = ajFeattableNewProt(seqname);
 	    fuzzpro_report_hits(&l,hits,report, tab, seq);
 	    ajFeattableDel(&tab);
 	}
-	
+
 
 	ajListDel(&l);
     }
-    
+
 
 
     if(type==6)
       for(i=0;i<m;++i) AJFREE(skipm[i]);
-    
+
     if(tidy) AJFREE(tidy);
-    
+
     ajStrDel(&pattern);
     ajStrDel(&seqname);
     ajSeqDel(&seq);
 
     (void) ajReportClose(report);
-    ajReportDel(&report);    
+    ajReportDel(&report);
 
     ajExit();
     return 0;
@@ -144,7 +144,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic fuzzpro_report_hits ***************************************
+/* @funcstatic fuzzpro_report_hits ********************************************
 **
 ** Undocumented.
 **
@@ -176,7 +176,7 @@ static void fuzzpro_report_hits(AjPList *l, ajint hits,
     s=ajStrNew();
 
     ajListReverse(*l);
-    
+
     for(i=0;i<hits;++i)
     {
 	ajListPop(*l,(void **)&m);
@@ -194,7 +194,7 @@ static void fuzzpro_report_hits(AjPList *l, ajint hits,
 	embMatMatchDel(&m);
     }
 
-    (void) ajReportWrite(report, tab, seq);        
+    (void) ajReportWrite(report, tab, seq);
 
     ajStrDel(&s);
 

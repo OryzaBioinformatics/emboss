@@ -32,10 +32,10 @@
 
 /* declare functions */
 static void remap_read_equiv(AjPFile *equfile, AjPTable *table);
-static void remap_RemoveMinMax(AjPList restrictlist, 
+static void remap_RemoveMinMax(AjPList restrictlist,
 	AjPTable hittable, ajint mincuts, ajint maxcuts);
-static void remap_CutList (AjPFile outfile, 
-	AjPTable hittable, AjBool isos, AjBool html, ajint mincuts, 
+static void remap_CutList (AjPFile outfile,
+	AjPTable hittable, AjBool isos, AjBool html, ajint mincuts,
 	ajint maxcuts);
 static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
 			     AjBool html, AjPStr enzymes, AjBool blunt,
@@ -53,7 +53,7 @@ typedef struct SValue
 
 
 
-/* @prog remap ***************************************************************
+/* @prog remap ****************************************************************
 **
 ** Display a sequence with restriction cut sites, translation etc
 **
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
     ajint default_mincuts = 1;
     ajint default_maxcuts = 2000000000;
     AjPTable hittable; /* enzyme hits */
-    
+
     /* stuff lifted from Alan's 'restrict.c' */
     AjPStr    enzymes=NULL;
     ajint mincuts;
@@ -152,7 +152,7 @@ int main(int argc, char **argv)
     equiv = ajAcdGetBool("preferred");
 
     if (!blunt  && !sticky)
-	ajFatal("Blunt/Sticky end cutters shouldn't both be disabled.");    
+	ajFatal("Blunt/Sticky end cutters shouldn't both be disabled.");
 
     /* get the number of the genetic code used */
     (void) ajStrToInt(tablelist[0], &table);
@@ -201,7 +201,7 @@ int main(int argc, char **argv)
 	/*
 	 *  most of this is lifted from the program 'restrict.c' by Alan
 	 *  Bleasby
-	 */    
+	 */
 	if (single)
 	    maxcuts=mincuts=1;
 	retable = ajStrTableNew(EQUGUESS);
@@ -214,8 +214,8 @@ int main(int argc, char **argv)
 	    if (!equfile)
 		equiv=ajFalse;
 	    else
-		remap_read_equiv(&equfile, &retable);   
-	}    
+		remap_read_equiv(&equfile, &retable);
+	}
 
 	ajFileSeek(enzfile, 0L, 0);
 	/* search for hits, but don't use mincuts and maxcuts criteria yet */
@@ -230,10 +230,10 @@ int main(int argc, char **argv)
 					  ajFalse);
 
 	/* tidy up */
-	ajFileClose(&enzfile);      
+	ajFileClose(&enzfile);
 
 
-	/* 
+	/*
 	** Remove those violating the mincuts and maxcuts
 	** criteria, but save them in hittable for printing out later.
 	** Keep a count of how many hits each enzyme gets in hittable.
@@ -292,7 +292,7 @@ int main(int argc, char **argv)
 	/* display a list of the Enzymes that cut and don't cut */
 	if (cutlist)
 	{
-	    remap_CutList(outfile, hittable, 
+	    remap_CutList(outfile, hittable,
 	    		limit, html, mincuts, maxcuts);
 	    remap_NoCutList(outfile, hittable, html, enzymes, blunt,
 			sticky, sitelen, commercial);
@@ -322,9 +322,9 @@ int main(int argc, char **argv)
 
 
 /* @funcstatic remap_DelTable *************************************************
-** 
+**
 ** Delete the tables with PValue structures
-** 
+**
 ** @param [r] table [AjPTable *] table to delete
 ** @return [void]
 ** @@
@@ -333,7 +333,7 @@ int main(int argc, char **argv)
 static void remap_DelTable(AjPTable * table)
 {
 
-    void **array;		/* array for table */  
+    void **array;		/* array for table */
     ajint i;
     PValue value;
 
@@ -346,19 +346,19 @@ static void remap_DelTable(AjPTable * table)
           ajStrDel(&(value->iso));
           AJFREE(array[i+1]);	/* free the ajint* value */
 	  ajStrDel((AjPStr*)&array[i]);
-      }  
+      }
       AJFREE(array);
     }
     ajTableFree (table);
 
 }
 
-/* @funcstatic remap_RemoveMinMax *************************************************
-** 
+/* @funcstatic remap_RemoveMinMax *********************************************
+**
 ** Remove the enzymes that hit more than maxcut or less than mincut from
 ** restrictlist.
 ** Populate hittable with enzymes names and hit counts.
-** 
+**
 ** @param [r] restrictlist [AjPList] List to prune
 ** @param [r] hittable [AjPTable] table of number of hits for each enzyme
 ** @param [r] mincuts [ajint] mincuts
@@ -367,7 +367,7 @@ static void remap_DelTable(AjPTable * table)
 ** @@
 ******************************************************************************/
 
-static void remap_RemoveMinMax(AjPList restrictlist, 
+static void remap_RemoveMinMax(AjPList restrictlist,
 	AjPTable hittable, ajint mincuts, ajint maxcuts)
 {
 
@@ -394,7 +394,7 @@ static void remap_RemoveMinMax(AjPList restrictlist,
 	    if (value == NULL)
 	    {
 		AJNEW0(value);
-		value->count = 1;          	
+		value->count = 1;
 		value->iso = ajStrNew();
 		ajStrAssS(&(value->iso), m->iso);
 		keyv = ajStrNew();
@@ -427,7 +427,7 @@ static void remap_RemoveMinMax(AjPList restrictlist,
 
 
 
-/* @funcstatic remap_CutList *************************************************
+/* @funcstatic remap_CutList **************************************************
 **
 ** display a list of the enzymes that cut
 **
@@ -441,17 +441,17 @@ static void remap_RemoveMinMax(AjPList restrictlist,
 ** @@
 ******************************************************************************/
 
-static void remap_CutList (AjPFile outfile, 
-	AjPTable hittable, AjBool isos, AjBool html, ajint mincuts, 
+static void remap_CutList (AjPFile outfile,
+	AjPTable hittable, AjBool isos, AjBool html, ajint mincuts,
 	ajint maxcuts)
 {
     PValue value;
-    void **array=NULL;		/* array for table */  
+    void **array=NULL;		/* array for table */
     ajint i;
 
     /* print title */
     if (html)
-	(void) ajFmtPrintF(outfile, "<H2>");  
+	(void) ajFmtPrintF(outfile, "<H2>");
     (void) ajFmtPrintF(outfile, "\n\n# Enzymes that cut  Frequency");
     if (isos)
 	(void) ajFmtPrintF(outfile, "\tIsoschizomers\n");
@@ -459,7 +459,7 @@ static void remap_CutList (AjPFile outfile,
 	(void) ajFmtPrintF(outfile, "\n");
 
     if (html)
-	(void) ajFmtPrintF(outfile, "</H2>\n");  
+	(void) ajFmtPrintF(outfile, "</H2>\n");
 
     if (ajTableLength(hittable))
     {
@@ -477,7 +477,7 @@ static void remap_CutList (AjPFile outfile,
 	    (void) ajFmtPrintF (outfile, "%10S\t    %d\t%S\n",
 		    (AjPStr) array[i], value->count,
 		    value->iso);
-        }  
+        }
         (void) ajFmtPrintF (outfile, "\n");
         if (html)
 	    (void) ajFmtPrintF(outfile, "</PRE>\n");
@@ -485,7 +485,7 @@ static void remap_CutList (AjPFile outfile,
 /* enzymes that cut <mincuts */
     /* print title */
     if (html)
-        (void) ajFmtPrintF(outfile, "<H2>");  
+        (void) ajFmtPrintF(outfile, "<H2>");
     (void) ajFmtPrintF(outfile, "\n\n# Enzymes < MINCUTS Frequency");
     if (isos)
         (void) ajFmtPrintF(outfile, "\tIsoschizomers\n");
@@ -493,7 +493,7 @@ static void remap_CutList (AjPFile outfile,
 	(void) ajFmtPrintF(outfile, "\n");
 
     if (html)
-	(void) ajFmtPrintF(outfile, "</H2>\n");  
+	(void) ajFmtPrintF(outfile, "</H2>\n");
 
     if (ajTableLength(hittable))
     {
@@ -508,7 +508,7 @@ static void remap_CutList (AjPFile outfile,
 	    (void) ajFmtPrintF (outfile, "%10S\t    %d\t%S\n",
 			    (AjPStr) array[i], value->count,
 			    value->iso);
-	}  
+	}
         (void) ajFmtPrintF (outfile, "\n");
         if (html)
 	    (void) ajFmtPrintF(outfile, "</PRE>\n");
@@ -517,7 +517,7 @@ static void remap_CutList (AjPFile outfile,
 /* enzymes that cut >maxcuts */
     /* print title */
     if (html)
-	(void) ajFmtPrintF(outfile, "<H2>");  
+	(void) ajFmtPrintF(outfile, "<H2>");
     (void) ajFmtPrintF(outfile, "\n\n# Enzymes > MAXCUTS Frequency");
     if (isos)
 	(void) ajFmtPrintF(outfile, "\tIsoschizomers\n");
@@ -525,7 +525,7 @@ static void remap_CutList (AjPFile outfile,
 	(void) ajFmtPrintF(outfile, "\n");
 
     if (html)
-	(void) ajFmtPrintF(outfile, "</H2>\n");  
+	(void) ajFmtPrintF(outfile, "</H2>\n");
 
     if (ajTableLength(hittable))
     {
@@ -540,7 +540,7 @@ static void remap_CutList (AjPFile outfile,
 	    (void) ajFmtPrintF (outfile, "%10S\t    %d\t%S\n",
 			    (AjPStr) array[i], value->count,
 			    value->iso);
-	}  
+	}
 
         (void) ajFmtPrintF (outfile, "\n");
         if (html)
@@ -554,7 +554,7 @@ static void remap_CutList (AjPFile outfile,
 }
 
 
-/* @funcstatic remap_NoCutList **********************************************
+/* @funcstatic remap_NoCutList ************************************************
 **
 ** display a list of the enzymes that do NOT cut
 **
@@ -577,7 +577,7 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
 
     /* for iterating over hittable */
     PValue value;
-    void **array;		/* array for table */  
+    void **array;		/* array for table */
     ajint i;
 
     /* list of enzymes that cut */
@@ -585,7 +585,7 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
     AjIList citer;		/* iterator for cutlist */
     AjPStr cutname = NULL;
     AjBool found;
-    
+
     /* for parsing value->iso string */
     AjPStrTok tok;
     char tokens[] = " ,";
@@ -605,12 +605,12 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
 
     /* count of rejected enzymes not matching criteria */
     ajint rejected_count = 0;
-       
+
     EmbPPatRestrict enz;
-    
-/* 
+
+/*
 **
-** Make a list of enzymes ('cutlist') that hit 
+** Make a list of enzymes ('cutlist') that hit
 ** including the isoschizomer names
 **
 */
@@ -622,7 +622,7 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
         cutname = ajStrNew();
         ajStrCopy(&cutname, array[i]);
         ajListstrPushApp(cutlist, cutname);
-    
+
         /*** Add to cutlist all isoschizomers of enzymes that cut */
         ajDebug("Add to cutlist all isoschizomers of enzymes that cut\n");
         /* start token to parse isoschizomers names */
@@ -634,13 +634,13 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
             ajListstrPushApp(cutlist, cutname);
         }
         ajStrTokenClear(&tok);
-    }  
+    }
     ajStrDel(&code);
     AJFREE(array);
 
 
 
-/* 
+/*
 **
 ** Read in list of enzymes ('nocutlist') - either all or the input enzyme list.
 ** Exclude those that don't match the selection criteria - count these.
@@ -648,7 +648,7 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
 */
 
     ajDebug("Read in a list of all input enzyme names\n");
-    
+
     ne = 0;
     if (!enzymes)
 	isall = ajTrue;
@@ -674,7 +674,8 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
     enz = embPatRestrictNew();
     while(embPatRestrictReadEntry(&enz, &enzfile))
     {
-        /* if user entered explicit enzyme list, then check to see if this it one */
+        /* if user entered explicit enzyme list, then check to see if
+	   this it one */
         if (!isall) {
             found = AJFALSE;
             for(i=0; i<ne; ++i) {
@@ -716,16 +717,16 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
     embPatRestrictDel(&enz);
     ajFileClose(&enzfile);
 
-    /* tidy up ea[] */  
-    for (i=0; i<ne; ++i) 
-	if (ea[i]) 
+    /* tidy up ea[] */
+    for (i=0; i<ne; ++i)
+	if (ea[i])
 	    ajStrDel(&ea[i]);
 
     if (ne)
 	AJFREE (ea);
-    
 
-/* 
+
+/*
 **
 ** Iterate through the list of input enzymes removing those that are in
 ** the cutlist.
@@ -734,31 +735,31 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
 
     ajDebug("Remove from the nocutlist all enzymes and isoschizomers "
 	    "that cut\n");
-    
+
     /*
      *  This steps down both lists at the same time, comparing names and
      *  iterating to the next name in whichever list whose name compares
      *  alphabetically before the other.  Where a match is found, the
      *  nocutlist item is deleted.
      */
-    
+
     ajListSort(nocutlist, remap_ajStrCmpCase);
     ajListSort(cutlist, remap_ajStrCmpCase);
-    
+
     citer = ajListIter(cutlist);
     niter = ajListIter(nocutlist);
-    
+
     /* debug */
     /*
     while((cutname = (AjPStr)ajListIterNext(citer)) != NULL)
         ajDebug("dbg cutname = %S\n", cutname);
        */
-    
+
     nocutname = (AjPStr)ajListIterNext(niter);
     cutname = (AjPStr)ajListIterNext(citer);
-    
+
     ajDebug("initial cutname, nocutname: '%S' '%S'\n", cutname, nocutname);
-    
+
     while (nocutname != NULL && cutname != NULL)
     {
 	i = ajStrCmpCase(cutname, nocutname);
@@ -782,26 +783,26 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
     ajListIterFree(citer);
     ajListIterFree(niter);
     ajListstrFree(&cutlist);
-    
 
-/* 
+
+/*
 **
-** Print the resulting list of those that do not cut 
+** Print the resulting list of those that do not cut
 **
 */
 
     ajDebug("Print out the list\n");
-    
+
     /* print the title */
     if (html)
-	(void) ajFmtPrintF(outfile, "<H2>");  
+	(void) ajFmtPrintF(outfile, "<H2>");
     (void) ajFmtPrintF(outfile, "\n\n# Enzymes that do not cut\n\n");
     if (html)
-	(void) ajFmtPrintF(outfile, "</H2>\n");  
-    
+	(void) ajFmtPrintF(outfile, "</H2>\n");
+
     if (html)
 	(void) ajFmtPrintF(outfile, "<PRE>");
-    
+
     /*  ajListSort(nocutlist, ajStrCmp);*/
     niter = ajListIter(nocutlist);
     i = 0;
@@ -816,30 +817,32 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
 	}
     }
     ajListIterFree(niter);
-    
-    
+
+
     /* end the output */
     (void) ajFmtPrintF (outfile, "\n");
-    if (html) {(void) ajFmtPrintF(outfile, "</PRE>\n");} 
-    
+    if (html) {(void) ajFmtPrintF(outfile, "</PRE>\n");}
 
 
-/* 
+
+/*
 **
-** Print the count of rejected enzymes 
+** Print the count of rejected enzymes
 **
 */
 
     if (html)
         (void) ajFmtPrintF(outfile, "<H2>");
-    (void) ajFmtPrintF(outfile, "\n\n# Number of enzymes not matching SITELEN, BLUNT, STICKY, COMMERCIAL criteria\n\n");
+    (void) ajFmtPrintF(outfile,
+		       "\n\n# Number of enzymes not matching "
+		       "SITELEN, BLUNT, STICKY, COMMERCIAL criteria\n\n");
     if (html)
-	(void) ajFmtPrintF(outfile, "</H2>\n");  
+	(void) ajFmtPrintF(outfile, "</H2>\n");
     (void) ajFmtPrintF(outfile, "%d\n", rejected_count);
-    
-/* 
+
+/*
 **
-** Tidy up 
+** Tidy up
 **
 */
     ajDebug("Tidy up\n");
@@ -850,7 +853,7 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
 }
 
 
-/* @funcstatic remap_read_equiv **********************************************
+/* @funcstatic remap_read_equiv ***********************************************
 **
 ** Lifted from Alan's restrict.c but reads the equ file.
 **
@@ -881,12 +884,12 @@ static void remap_read_equiv(AjPFile *equfile, AjPTable *table)
         value=ajStrNewC(p);
         ajTablePut(*table,(const void *)key, (void *)value);
     }
-         
+
     ajFileClose(equfile);
 }
 
 
-/* @funcstatic remap_read_file_of_enzyme_names *******************************
+/* @funcstatic remap_read_file_of_enzyme_names ********************************
 **
 ** If the list of enzymes starts with a '@' it opens that file, reads in
 ** the list of enzyme names and replaces the input string with the enzyme names
@@ -922,18 +925,18 @@ static void remap_read_file_of_enzyme_names(AjPStr *enzymes)
 	    ajStrAppC(enzymes, ",");
 	}
 	ajStrDel(&line);
-   
-	ajFileClose(&file);  
+
+	ajFileClose(&file);
     }
 
     return;
 }
 
-/* @funcstatic remap_ajStrCmpCase ************************************************************
-**  
+/* @funcstatic remap_ajStrCmpCase *********************************************
+**
 ** Compares the value of two strings for use in sorting (e.g. ajListSort)
 ** Case Independent!
-** 
+**
 ** @param [r] str1 [const void*] First string
 ** @param [r] str2 [const void*] Second string
 ** @return [int] -1 if first string should sort before second, +1 if the
@@ -943,17 +946,19 @@ static void remap_read_file_of_enzyme_names(AjPStr *enzymes)
 ******************************************************************************/
 
 static int remap_ajStrCmpCase (const void* str1, const void* str2) {
-  const char* cp; 
-  const char* cq;  
+  const char* cp;
+  const char* cq;
 
-  for (cp = (*(AjPStr*)str1)->Ptr, cq = (*(AjPStr*)str2)->Ptr; *cp && *cq; cp++, cq++) {
+  for (cp = (*(AjPStr*)str1)->Ptr, cq = (*(AjPStr*)str2)->Ptr;
+       *cp && *cq;
+       cp++, cq++) {
     if (toupper((ajint) *cp) != toupper((ajint) *cq)) {
       if (toupper((ajint) *cp) > toupper((ajint) *cq)) return 1;
       else return -1;
     }
   }
 
-  if (*cp) return 1;  
+  if (*cp) return 1;
   if (*cq) return -1;
   return 0;
 

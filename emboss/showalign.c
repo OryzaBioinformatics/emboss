@@ -22,15 +22,15 @@
 ******************************************************************************/
 
 
-/**************************************************************************
+/******************************************************************************
 
 Outputs a set of sequence as compared to a reference sequence as follows:
-	
+
 With reference: AII
 and sequence:   ALW
 ie. 		identical, similar, not-similar
 
-Show			
+Show
 ----
 
 All		ALw
@@ -41,7 +41,7 @@ Dissimilar	..W
 
 
 
-***************************************************************************/
+******************************************************************************/
 
 
 #include "emboss.h"
@@ -80,11 +80,11 @@ static void showalign_MakeDissimilar (AjPSeq ref, AjPSeq seq, ajint **sub,
 static void showalign_Order(AjPStr *order, AjPSeqset seqset, AjPSeq consensus,
 			    ajint nrefseq, ajint **sub, AjPSeqCvt cvt,
 			    AjOOrder *aorder);
-static ajint showalign_Output (AjPFile outf, AjPSeqset seqset, ajint nrefseq, 
+static ajint showalign_Output (AjPFile outf, AjPSeqset seqset, ajint nrefseq,
 			       ajint width, ajint margin, AjPSeq consensus,
 			       AjBool docon, AjBool bottom, AjOOrder * aorder,
 			       AjBool html, AjPRange highlight,
-			       AjPRange uppercase, AjBool number, 
+			       AjPRange uppercase, AjBool number,
 			       AjBool ruler);
 static ajint showalign_OutputNums (AjPFile outf, ajint pos, ajint width,
 				   ajint margin);
@@ -124,7 +124,7 @@ int main(int argc, char **argv)
     AjBool similarcase;
     float identity;
     ajint ident;
-    float fplural; 
+    float fplural;
     float setcase;
     AjPStr cons = ajStrNew();
     AjPSeq consensus = ajSeqNew();
@@ -142,7 +142,7 @@ int main(int argc, char **argv)
     AjBool number;			/* display number line */
     AjBool ruler;			/* display ruler line */
     AjPStr xxx = NULL;
-    
+
     embInit ("showalign", argc, argv);
 
     seqset = ajAcdGetSeqset ("sequence");
@@ -172,7 +172,7 @@ int main(int argc, char **argv)
 
     /* get conversion table and scoring matrix */
     cvt = ajMatrixCvt(matrix);
-    sub = ajMatrixArray(matrix);  
+    sub = ajMatrixArray(matrix);
 
     /* get the number of the reference sequence */
     nrefseq = showalign_Getrefseq(refseq, seqset);
@@ -224,8 +224,8 @@ int main(int argc, char **argv)
 ** The first sequence in the set is returned as 0.
 ** -1 is returned as the consensus sequence.
 **
-** @param [r] refseq [AjPStr] input name/number of reference sequence 
-** @param [r] seqset [AjPSeqset] the sequences 
+** @param [r] refseq [AjPStr] input name/number of reference sequence
+** @param [r] seqset [AjPSeqset] the sequences
 ** @return [ajint] the number of the reference sequence
 ** @@
 ******************************************************************************/
@@ -259,17 +259,17 @@ static ajint showalign_Getrefseq (AjPStr refseq, AjPSeqset seqset)
 
 
 
- 
+
 /* @funcstatic showalign_NiceMargin *******************************************
 **
 ** If margin is input as -1, change it to the margin which allows
 ** the longest name to be displayed plus one extra space after it
 **
-** @param [r] seqset [AjPSeqset] the sequences 
+** @param [r] seqset [AjPSeqset] the sequences
 ** @param [rw] margin [ajint*] margin
 ** @param [r] docon [AjBool] displaying the consensus line
 ** @param [r] nrefseq [ajint] the sequence being displayed
-** @return [void] 
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -304,17 +304,17 @@ static void showalign_NiceMargin(AjPSeqset seqset, ajint *margin,
     *margin = longest+1;	/* use longest name plus one extra space */
 
     return;
-} 
+}
 
 
 
 
 /* @funcstatic showalign_Convert **********************************************
-** 
+**
 ** Convert all sequences except the refseq to the required symbols
 **
 ** @param [r] seqset [AjPSeqset] the sequences
-** @param [r] show [AjPStr*] type of thing to show 
+** @param [r] show [AjPStr*] type of thing to show
 ** @param [r] similarcase [AjBool] change case according to similarity
 ** @param [r] nrefseq [ajint] number of the refseq
 ** @param [r] sub [ajint**] scoring matrix
@@ -333,14 +333,14 @@ static void showalign_Convert (AjPSeqset seqset, AjPStr *show,
     AjPSeq ref;
     char showchar = ajStrStr(show[0])[0]; /* first char of 'show' */
 
-	
+
     /* get the reference sequence */
     if (nrefseq == -1)
 	ref = consensus;
     else
 	ref = ajSeqsetGetSeq(seqset, nrefseq);
 
-    /* convert the other sequences */  
+    /* convert the other sequences */
     for (i=0; i<ajSeqsetSize(seqset); i++)
 	if (i != nrefseq)
 	{				/* don't convert the reference sequence */
@@ -430,7 +430,7 @@ static void showalign_MakeAll (AjPSeq ref, AjPSeq seq, ajint **sub,
 ******************************************************************************/
 static void showalign_MakeIdentity (AjPSeq ref, AjPSeq seq)
 {
-	
+
     ajint i;
     ajint lenseq = ajSeqLen(seq);
     ajint lenref = ajSeqLen(ref);
@@ -583,7 +583,7 @@ static void showalign_MakeSimilar (AjPSeq ref, AjPSeq seq, ajint **sub,
 static void showalign_MakeDissimilar (AjPSeq ref, AjPSeq seq, ajint **sub,
 				      AjPSeqCvt cvt)
 {
-	
+
     ajint i;
     ajint lenref = ajSeqLen(ref);
 
@@ -619,18 +619,18 @@ static void showalign_MakeDissimilar (AjPSeq ref, AjPSeq seq, ajint **sub,
 static void showalign_Order(AjPStr *order, AjPSeqset seqset, AjPSeq consensus,
 			    ajint nrefseq, ajint **sub, AjPSeqCvt cvt,
 			    AjOOrder *aorder)
-{ 
+{
     char orderchar = ajStrStr(order[0])[0]; /* first char of 'order' */
     AjPSeq ref;
     ajint i, j, k;
     char *s;
     char *r;
     ajint rlen, len;
-	
+
     /* get the reference sequence */
     if (nrefseq == -1)
 	ref = consensus;
-    else 
+    else
 	ref = ajSeqsetGetSeq(seqset, nrefseq);
 
     rlen = ajSeqLen(ref);
@@ -692,7 +692,7 @@ static void showalign_Order(AjPStr *order, AjPSeqset seqset, AjPSeq consensus,
        for (i=0; i<ajSeqsetSize(seqset); i++)
        if (aorder[i].seq != NULL)
        ajUser("%s", ajSeqName(aorder[i].seq));
-       
+
        */
 
     return;
@@ -724,12 +724,12 @@ static void showalign_Order(AjPStr *order, AjPSeqset seqset, AjPSeq consensus,
 ** @@
 ******************************************************************************/
 
-static ajint showalign_Output (AjPFile outf, AjPSeqset seqset, ajint nrefseq, 
+static ajint showalign_Output (AjPFile outf, AjPSeqset seqset, ajint nrefseq,
 			       ajint width, ajint margin, AjPSeq consensus,
 			       AjBool docon, AjBool bottom, AjOOrder * aorder,
 			       AjBool html, AjPRange highlight,
 			       AjPRange uppercase, AjBool number, AjBool ruler)
-{ 
+{
     ajint pos;		/* start position in sequences of next line */
     ajint i;
     ajint nseqs = ajSeqsetSize(seqset);	/* number of sequences */
@@ -755,11 +755,11 @@ static ajint showalign_Output (AjPFile outf, AjPSeqset seqset, ajint nrefseq,
     /* format for html display */
     if (html)
 	ajFmtPrintF(outf, "<pre>\n");
-    
+
     /* get next set of lines to output */
     for (pos=begin; pos<=end; pos+=width)
     {
-	/* numbers line */ 
+	/* numbers line */
 	if (number)
 	    showalign_OutputNums(outf, pos, width, margin);
 
@@ -771,18 +771,18 @@ static ajint showalign_Output (AjPFile outf, AjPSeqset seqset, ajint nrefseq,
 	/* refseq always at the top */
 	showalign_OutputSeq(outf, ref, pos, end, width, margin, html,
 			    highlight, uppercase);
-  
+
 	/* sequences */
 	for (i=0; i<nseqs; i++)
 	    showalign_OutputSeq(outf, aorder[i].seq, pos, end, width, margin,
 				html, highlight, uppercase);
 
-    
+
 	/* refseq at the bottom also */
 	if (bottom)
 	    showalign_OutputSeq(outf, ref, pos, end, width, margin, html,
 				highlight, uppercase);
-   
+
 	/* consensus line (if not already displayed) */
 	if (docon && nrefseq != -1)
 	    showalign_OutputSeq(outf, consensus, pos, end, width, margin,
@@ -792,7 +792,7 @@ static ajint showalign_Output (AjPFile outf, AjPSeqset seqset, ajint nrefseq,
 	/* blank line */
 	ajFmtPrintF(outf, "\n");
     }
-  
+
     /* format for html display */
     if (html)
 	ajFmtPrintF(outf, "</pre>\n");
@@ -805,7 +805,7 @@ static ajint showalign_Output (AjPFile outf, AjPSeqset seqset, ajint nrefseq,
 
 
 /* @funcstatic showalign_OutputNums *******************************************
-** 
+**
 ** Writes the numbers line
 **
 ** @param [r]  outf [AjPFile] output file handle
@@ -818,7 +818,7 @@ static ajint showalign_Output (AjPFile outf, AjPSeqset seqset, ajint nrefseq,
 
 static ajint showalign_OutputNums (AjPFile outf, ajint pos, ajint width,
 				   ajint margin)
-{ 
+{
 
     AjPStr line=ajStrNewL(81);		/* line of ticks to print */
     ajint i;
@@ -859,7 +859,7 @@ static ajint showalign_OutputNums (AjPFile outf, ajint pos, ajint width,
 
 
 /* @funcstatic showalign_OutputTicks ******************************************
-** 
+**
 ** Writes the ticks line
 **
 ** @param [r]  outf [AjPFile] output file handle
@@ -872,7 +872,7 @@ static ajint showalign_OutputNums (AjPFile outf, ajint pos, ajint width,
 
 static ajint showalign_OutputTicks (AjPFile outf, ajint pos, ajint width,
 				    ajint margin)
-{ 
+{
     AjPStr line=ajStrNewL(81);		/* line of ticks to print */
     ajint i;
 
@@ -888,7 +888,7 @@ static ajint showalign_OutputTicks (AjPFile outf, ajint pos, ajint width,
 	    (void) ajStrAppC(&line, ":");
 	else
 	    (void) ajStrAppC(&line, "-");
-    }         
+    }
 
     /* print the ticks */
     ajFmtPrintF(outf, "%S\n", line);
@@ -903,7 +903,7 @@ static ajint showalign_OutputTicks (AjPFile outf, ajint pos, ajint width,
 
 
 /* @funcstatic showalign_OutputSeq ********************************************
-** 
+**
 ** Writes the specified sequence line to the output file
 **
 ** @param [r] outf [AjPFile] output file handle
@@ -923,7 +923,7 @@ static ajint showalign_OutputSeq (AjPFile outf, AjPSeq seq, ajint pos,
 				  ajint end, ajint width, ajint margin,
 				  AjBool html, AjPRange highlight,
 				  AjPRange uppercase)
-{ 
+{
     AjPStr line=ajStrNew();		/* next line of sequence to print */
     AjPStr marginfmt=ajStrNewL(10);
 
@@ -946,11 +946,11 @@ static ajint showalign_OutputSeq (AjPFile outf, AjPSeq seq, ajint pos,
 
     /* +++ colour the sequences */
     /*  if (html) {
-	
-	}
-	*/  
 
-    /* highlight required ranges */  
+	}
+	*/
+
+    /* highlight required ranges */
     if (html)
 	embShowColourRange(&line, highlight, pos);
 
@@ -983,8 +983,8 @@ static ajint showalign_CompareTwoSeqNames(const void * a, const void * b)
     return strcmp(ajSeqName((*(AjOOrder *)a).seq),
 		  ajSeqName((*(AjOOrder *)b).seq));
 }
-               
-              
+
+
 /* @funcstatic showalign_CompareTwoSeqSimilarities ****************************
 **
 ** Compare two Sequences by their similarity to the reference sequence
@@ -1001,6 +1001,6 @@ static ajint showalign_CompareTwoSeqSimilarities(const void * a,
 {
     return (*(AjOOrder *)b).similarity - (*(AjOOrder *)a).similarity;
 }
-               
-              
+
+
 

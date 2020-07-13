@@ -13,12 +13,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -99,7 +99,7 @@ int main(int argc, char **argv)
     AjPStr  fname = NULL;
     ajint     fno=1;
     AjBool  data;
-    
+
 
 
     ajGraphInit ("banana", argc, argv);
@@ -109,7 +109,7 @@ int main(int argc, char **argv)
     graph  = ajAcdGetGraph("graph");
     numres = ajAcdGetInt("residuesperline");
     data   = ajAcdGetBool("data");
-    
+
 
 
 
@@ -147,7 +147,7 @@ int main(int argc, char **argv)
 
     if(!file)
 	ajErr("EMBOSS_DATA undefined");
-  
+
     ajFileGets(file,&buffer);		/* 3 junk lines */
     ajFileGets(file,&buffer);
     ajFileGets(file,&buffer);
@@ -160,7 +160,7 @@ int main(int argc, char **argv)
 	    {
 		sscanf(ajStrStr(buffer),"%f,%f,%f,%f",
 		       &twist[i][0][k],&twist[i][1][k],&twist[i][2][k],
-		       &twist[i][3][k]);	
+		       &twist[i][3][k]);
 	    }
 	    else
 		ajErr("Error reading angle file");
@@ -196,16 +196,16 @@ int main(int argc, char **argv)
     }
 
 
-  
+
     if(ajFileGets(file,&buffer))
 	sscanf(ajStrStr(buffer),"%f,%f,%f,%f",&rbend,&rcurve,
 	       &bendscale,&curvescale);
     else
 	ajErr("Error reading angle file");
-  
+
     ajFileClose(&file);
-  
-  
+
+
     for(i=1;i<ajStrLen(sstr)-1;i++)
     {
 	float dx,dy;
@@ -215,8 +215,8 @@ int main(int argc, char **argv)
 	    (tilt[iseq[i]][iseq[i+1]][iseq[i+2]]*sinf(twistsum-pi2));
 	dy = roll[iseq[i]][iseq[i+1]][iseq[i+2]]*cosf(twistsum) +
 	    tilt[iseq[i]][iseq[i+1]][iseq[i+2]]*cosf(twistsum-pi2);
- 
-	x[i+1] = x[i]+dx;   
+
+	x[i+1] = x[i]+dx;
 	y[i+1] = y[i]+dy;
 
     }
@@ -258,7 +258,7 @@ int main(int argc, char **argv)
 			((yave[i+(ajint)rcurve]-yave[i-(ajint)rcurve])*
 			 (yave[i+(ajint)rcurve]-yave[i-(ajint)rcurve])));
     }
- 
+
 
     ajFmtPrintF(outf,"Base   Bend      Curve\n");
     ptr= ajStrStr(sstr);
@@ -266,7 +266,7 @@ int main(int argc, char **argv)
     {
 	ajFmtPrintF(outf,"%c    %6.1f   %6.1f\n",*ptr, bend[i], curve[i]);
 	ptr++;
-    } 
+    }
     ajFileClose(&outf);
 
     maxbend = minbend = 0.0;
@@ -296,14 +296,14 @@ int main(int argc, char **argv)
 	ajFmtPrintF(goutf,"##Graphic\n##Screen x1 %f y1 %f x2 %f y2 %f\n",
 		    -1.0,0.0,(float)numres+10.0,ystart+5.0);
     }
-    
+
 
     if(!data)
 	ajGraphTextMid ((numres+10.0)/2.0, ystart+2.5,ajStrStr(graph->title));
     else
 	ajFmtPrintF(goutf,"Text2 x1 %f y1 %f colour 0 size 1.0 %s\n",
 		    (numres+10.0)/2.0,ystart+2.5,ajSeqName(seq));
-    
+
     if(!data)
 	ajGraphGetOut(&fxp,&fyp,&ixlen,&iylen,&ixoff,&iyoff);
     else
@@ -313,16 +313,16 @@ int main(int argc, char **argv)
 	iylen=450;
 	ixoff=iyoff=0;
     }
-    
+
     /*ajUser("%f\n%f\n%d\n%d\n%d\n%d",fxp,fyp,ixlen,iylen,ixoff,iyoff);*/
-  
+
     if(ixlen == 0.0)
     {	/* for postscript these are 0.0 ????? */
 	if(portrait)
 	{
 	    ixlen = 768;
 	    iylen = 960;
-	}      
+	}
 	else{
 	    ixlen = 960;
 	    iylen = 768;
@@ -343,10 +343,10 @@ int main(int argc, char **argv)
 				     ((float)(numres)*(currentheight+1.0)))
 	    /currentheight;
     }
-    
-  
+
+
     yincr = (currentheight +3.0)*0.3;
-  
+
     if(!title)
 	y1=ystart;
     else
@@ -400,7 +400,7 @@ int main(int argc, char **argv)
 	else
 	    ajFmtPrintF(goutf,"Text3 x1 %f y1 %f colour 0 size %f %s\n",
 			(float)(count)+2.0,y1,currentheight,residue);
-	
+
 	if(i>1 && i < ajStrLen(sstr))
 	{
 	    float yp1,yp2;
@@ -411,7 +411,7 @@ int main(int argc, char **argv)
 	    else
 		ajFmtPrintF(goutf,"Line x1 %f y1 %f x2 %f y2 %f colour 0\n",
 			    (float)count+1.5,yp1,(float)(count)+2.5,yp2);
-	    
+
 	}
 	if(i>(ajint)rcurve+5 && i< ajStrLen(sstr)-(ajint)rcurve-7)
 	{
@@ -423,18 +423,18 @@ int main(int argc, char **argv)
 	    else
 		ajFmtPrintF(goutf,"Line x1 %f y1 %f x2 %f y2 %f colour 0\n",
 			    (float)count+1.7,yp1,(float)(count)+2.3,yp2);
-	    
+
 	}
 	if(!data)
 	    ajGraphLine((float)count+1.5,y1+yincr,(float)(count)+2.5,y1+yincr);
 	else
 	    ajFmtPrintF(goutf,"Line x1 %f y1 %f x2 %f y2 %f colour 0\n",
 			(float)count+1.5,y1+yincr,(float)(count)+2.5,y1+yincr);
-      
+
 	count++;
 	ptr++;
-    } 
- 
+    }
+
     if(!data)
 	ajGraphCloseWin();
     else

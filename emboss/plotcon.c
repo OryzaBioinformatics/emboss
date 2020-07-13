@@ -18,10 +18,10 @@
 **
 **
 ** Average similarity calculation:
-** 
+**
 ** Av. Sim. =       sum( Mij*wi + Mji*w2  )
 **            -----------------------------------
-**               (Nseq*Wsize)*((Nseq-1)*Wsize)              
+**               (Nseq*Wsize)*((Nseq-1)*Wsize)
 **
 **     sum   - over column*window size
 **     M     - matrix comparison table
@@ -33,12 +33,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -71,7 +71,7 @@ typedef struct SPoint
 
 int main(int argc, char **argv)
 {
-  
+
     AjPSeqset seqset;
     AjPFile outf=NULL;
     ajint i;
@@ -84,9 +84,9 @@ int main(int argc, char **argv)
     AjBool text;
     AjOTime ajtime;
     const time_t tim = time(0);
-  
+
     char **seqcharptr;
- 
+
     float *x;
     float *y;
     AjPFloat2d score=NULL;
@@ -102,7 +102,7 @@ int main(int argc, char **argv)
     ajint highindex=0;
     ajint winsize;	/* window size */
     ajint numbins;	/* total no. of bins making up the seq length */
-    ajint binup;            
+    ajint binup;
     ajint binlo;
     ajint binmid;
     ajint bin;
@@ -117,8 +117,8 @@ int main(int argc, char **argv)
     ajtime.format = 0;
 
     (void) ajGraphInit ("plotcon", argc, argv);
-  
-    seqset = ajAcdGetSeqset("msf");	
+
+    seqset = ajAcdGetSeqset("msf");
 
     ajSeqsetFill(seqset);               /* Pads seq set with gap characters */
     numseq = ajSeqsetSize (seqset);
@@ -133,8 +133,8 @@ int main(int argc, char **argv)
 
     matrix  = ajMatrixArray(cmpmatrix);
     cvt     = ajMatrixCvt(cmpmatrix);	/* Returns conversion table */
-  
-  
+
+
     /****************** Memory allocation *****************/
 
     AJCNEW(seqcharptr, numseq);		/* sequence string */
@@ -155,10 +155,10 @@ int main(int argc, char **argv)
 	for(j=0;j<ajSeqsetLen(seqset);j++)
 	    ajFloat2dPut(&score,i,j,0.);
     }
-  
+
     for(bin=0; bin<numbins; bin++)
 	sumscore[bin] = 0.;
- 
+
 
     /************** Loop over the sequence set length **************/
     for(k=0; k< ajSeqsetLen(seqset); k++)
@@ -197,7 +197,7 @@ int main(int argc, char **argv)
 		for(bin=binlo;bin<binup;bin++)
 		    sumscore[binmid] += ajFloat2dGet(score,i,bin);
 	}
-   
+
 	/* find the highest score */
 	highindex = -1;
 	scoremax = -3;
@@ -205,7 +205,7 @@ int main(int argc, char **argv)
     }
 
     /*************** End of Loop ***************/
-  
+
     if(!text) ajGraphSetCharSize(0.50);
     gdata = ajGraphxyDataNewI(ajSeqsetLen(seqset));
 
@@ -224,7 +224,7 @@ int main(int argc, char **argv)
 	    {
 		ymin = sumscore[bin-1];
 		ymax = sumscore[bin-1];
-	    } 
+	    }
 	    else
 	    {
 		if(ymin > sumscore[bin-1]) ymin=sumscore[bin-1];
@@ -239,8 +239,8 @@ int main(int argc, char **argv)
 	    gdata->x[bin] = (float)(bin+1);
 	    gdata->y[bin] = sumscore[bin];
 	}
-  
-  
+
+
 
     if(!text)
     {
@@ -287,8 +287,8 @@ int main(int argc, char **argv)
     AJFREE(sumscore);
     AJFREE(seqcharptr);
     ajListDel(&list);
-    ajFloat2dDel(&score); 
-  
+    ajFloat2dDel(&score);
+
     ajExit ();
     return 0;
 }

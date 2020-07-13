@@ -3,7 +3,7 @@
 ** Highlight best non-overlapping set of word matches in dotplot
 **
 ** Heavily based on the application 'dottup'.
-** 
+**
 ** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** @@
 **
@@ -11,12 +11,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -71,7 +71,7 @@ int main(int argc, char **argv)
     ajint begin2;
     ajint end1;
     ajint end2;
-    
+
     ajGraphInit("dotpath", argc, argv);
 
     wordlen = ajAcdGetInt ("wordsize");
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
     begin2 = ajSeqBegin(seq2);
     end1   = ajSeqEnd(seq1);
     end2   = ajSeqEnd(seq2);
-    
+
     ajSeqTrim(seq1);
     ajSeqTrim(seq2);
 
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
     xmargin = ymargin = max *0.15;
 
     if(!text)
-    {  
+    {
 	ajGraphOpenWin(graph, 0.0-ymargin,(max*1.35)+ymargin,
 		       0.0-xmargin,(float)max+xmargin);
 
@@ -118,15 +118,15 @@ int main(int argc, char **argv)
 	if(overlaps && ajListLength(matchlist))
 	{
 	    oldcolour = ajGraphSetFore(RED);
-	    dotpath_plotMatches(matchlist); 
+	    dotpath_plotMatches(matchlist);
 	    ajGraphSetFore(oldcolour);	/* restore colour we were using */
 	}
 
-	/* get the minimal set of overlapping matches */    
+	/* get the minimal set of overlapping matches */
 	(void) embWordMatchMin(matchlist, ajSeqLen(seq1), ajSeqLen(seq2));
 
-	
-	
+
+
 	/* display them */
 	if (ajListLength(matchlist))
 	    dotpath_plotMatches(matchlist);
@@ -151,12 +151,12 @@ int main(int argc, char **argv)
 		ajGraphLine(0.0,0.0,0.0,0.0-ticklen);
 		sprintf(ptr,"%d",ajSeqOffset(seq1));
 		ajGraphTextMid ( 0.0,0.0-(onefifth),ptr);
-	
+
 		ajGraphLine((float)(ajSeqLen(seq1)),0.0,
 			    (float)ajSeqLen(seq1),0.0-ticklen);
 		sprintf(ptr,"%d",ajSeqLen(seq1)+ajSeqOffset(seq1));
 		ajGraphTextMid ( (float)ajSeqLen(seq1),0.0-(onefifth),ptr);
-	
+
 	    }
 	    else
 	    {
@@ -201,7 +201,7 @@ int main(int argc, char **argv)
 	    }
 	}
 	ajGraphClose();
-  
+
     }
     else
     {
@@ -238,9 +238,9 @@ int main(int argc, char **argv)
 
 
 	if(overlaps && np)
-	    ajListMap(matchlist,dotpath_objtofile1, outfile);	
+	    ajListMap(matchlist,dotpath_objtofile1, outfile);
 
-	/* get the minimal set of overlapping matches */    
+	/* get the minimal set of overlapping matches */
 	(void) embWordMatchMin(matchlist, ajSeqLen(seq1), ajSeqLen(seq2));
 	embWordFreeTable(seq1MatchTable); /* free table of words */
 	npp = ajListLength(matchlist);
@@ -248,16 +248,16 @@ int main(int argc, char **argv)
 
 	ajFmtPrintF(outfile,"##DataObjects\n##Number %d\n",npp);
 
-/* output the minal overlapping set of data with colour=BLACK */	
-	ajListMap(matchlist,dotpath_objtofile2, outfile);	
+/* output the minal overlapping set of data with colour=BLACK */
+	ajListMap(matchlist,dotpath_objtofile2, outfile);
 
 	ajFmtPrintF(outfile,"##GraphObjects\n##Number 0\n");
     }
-  
-    if(matchlist) 
+
+    if(matchlist)
 	embWordMatchListDelete(&matchlist); /* free the match structures */
 
- 
+
     ajExit();
     return 0;
 }
@@ -289,7 +289,7 @@ static void dotpath_objtofile1(void **x,void *cl)
     y1 = (*p).seq2start;
     x2 = x1 + (*p).length;
     y2 = y1 + (*p).length;
-  
+
     (void) ajFmtPrintF(file, "Line x1 %f y1 %f x2 %f y2 %f colour %d\n",
 		       (float)x1,(float)y1,(float)x2,(float)y2,RED);
     return;
@@ -298,7 +298,7 @@ static void dotpath_objtofile1(void **x,void *cl)
 
 
 
-/* @funcstatic dotpath_objtofile2 ********************************************
+/* @funcstatic dotpath_objtofile2 *********************************************
 **
 ** Undocumented.
 **
@@ -322,7 +322,7 @@ static void dotpath_objtofile2(void **x,void *cl)
     y1 = (*p).seq2start;
     x2 = x1 + (*p).length;
     y2 = y1 + (*p).length;
-  
+
     (void) ajFmtPrintF(file, "Line x1 %f y1 %f x2 %f y2 %f colour %d\n",
 		       (float)x1,(float)y1,(float)x2,(float)y2,BLACK);
     return;
@@ -332,7 +332,7 @@ static void dotpath_objtofile2(void **x,void *cl)
 
 #ifndef NO_PLOT
 
-/* @funcstatic dotpath_drawPlotlines *****************************************
+/* @funcstatic dotpath_drawPlotlines ******************************************
 **
 ** Undocumented.
 **
@@ -351,7 +351,7 @@ static void dotpath_drawPlotlines(void **x, void *cl)
     y1 = y2 = (PLFLT)((*p).seq2start)+1;
     x2 += (*p).length;
     y2 += (PLFLT)(*p).length;
- 
+
     ajGraphLine(x1, y1, x2, y2);
 }
 

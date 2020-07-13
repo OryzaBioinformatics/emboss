@@ -1,7 +1,7 @@
 /* @source hmmgen application
 **
 ** Generates a hidden Markov model for each alignment in a directory.
-** 
+**
 ** @author: Copyright (C) Ranjeeva Ranasinghe (rranasin@hgmp.mrc.ac.uk)
 ** @@
 **
@@ -9,32 +9,32 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 **
-******************************************************************************
+*******************************************************************************
 **IMPORTANT NOTE      IMPORTANT NOTE      IMPORTANT NOTE        IMPORTANT NOTE
-******************************************************************************
+*******************************************************************************
 **
 ** Mon May 20 11:43:39 BST 2002
 **
-** The following documentation is out-of-date and should be disregarded.  It 
-** will be updated shortly. 
-** 
-******************************************************************************
+** The following documentation is out-of-date and should be disregarded.  It
+** will be updated shortly.
+**
+*******************************************************************************
 **IMPORTANT NOTE      IMPORTANT NOTE      IMPORTANT NOTE        IMPORTANT NOTE
-******************************************************************************
-** 
+*******************************************************************************
+**
 **
 ** OPERATION
-** 
+**
 ** Need to type 'use hmmer' if application is used at or remotely from
 ** the HGMP.
 **
@@ -43,7 +43,7 @@
 #include "emboss.h"
 
 
-/* @prog hmmgen****** *******************************************************
+/* @prog hmmgen****** *********************************************************
 **
 ** Generate hidden markov models using the hmmer package.
 **
@@ -90,38 +90,38 @@ int main(int argc, char **argv)
     tmp      = ajStrNew();
     cmd      = ajStrNew();
     tmpname  = ajStrNew();
-   
+
     list = ajListNew();
 
     /* Check directories */
     if((!ajFileDir(&infpath)) || (!ajFileDir(&outfpath)) || (!(infextn)))
-        ajFatal("Could not open extended alignment directory");    
-    
+        ajFatal("Could not open extended alignment directory");
+
     /* Create list of files in the path */
     ajStrAssC(&tmp, "*");               /* assign a wildcard to tmp */
-        
+
     if((ajStrChar(infextn, 0)=='.'))    /* checks if the file
                                            extension starts with "."  */
         ajStrApp(&tmp, infextn);        /* assign the acd input file
                                            extension to tmp */
- 
+
     /* this picks up situations where the user has specified an
        extension without a "." */
     else
     {
-        ajStrAppC(&tmp, ".");           /* assign "." to tmp */  
+        ajStrAppC(&tmp, ".");           /* assign "." to tmp */
         ajStrApp(&tmp, infextn);        /* append tmp with a user
                                            specified extension */
-    }   
+    }
 
     /* all files containing extended alignments will be in a list */
     ajFileScan(infpath, tmp, &list, ajFalse, ajFalse, NULL, NULL,
-	       ajFalse, NULL);    
+	       ajFalse, NULL);
 
     /* read each each extended alignment file and run prophecy to
        generate profile */
     while(ajListPop(list,(void **)&filename))
-    {  
+    {
         if((inf = ajFileNewIn(filename)) == NULL)
         {
             ajWarn("Could not open file %S\n",filename);
@@ -145,11 +145,11 @@ int main(int argc, char **argv)
                                                         starts with
                                                         "." */
                 ajStrInsertC(&outfextn, 0, ".");
-                
+
             /* Create the name of the output file */
             posdash = ajStrRFindC(filename, "/");
             posdot  = ajStrRFindC(filename, ".");
-                
+
             if(posdash >= posdot)
                 ajFatal("Could not create filename. "
 			"Email rranasin@hgmp.mrc.ac.uk");
@@ -159,24 +159,24 @@ int main(int argc, char **argv)
                 ajStrAppSub(&outfile, filename, posdash+1, posdot-1);
                 ajStrApp(&outfile,outfextn);
             }
-                
+
             /* read alignment file into a scopalg structure */
             ajXyzScopalgRead(inf,&scopalg);
-                    
+
 	    printf("scopalg structure read ok\n");
 	    fflush(stdout);
-	    
+
 
             /* open up a file and write out the alignment in CLUSTAL format */
             seqsinf = ajFileNewOut(seqsin);
-          
+
             ajXyzScopalgWriteClustal2(scopalg,&seqsinf);
-          
+
 	    printf("ScopalgWriteClustal2 called ok\n");
 	    fflush(stdout);
 
             ajFileClose(&seqsinf);
-          
+
             /* construct command line to run hmmer to build model */
             ajFmtPrintS(&cmd,"hmmbuild -g %S %S",outfile,seqsin);
 
@@ -193,7 +193,7 @@ int main(int argc, char **argv)
 	    ajFileClose(&inf);
         }
     }
-    
+
     /* clean up */
     ajStrDel(&infpath);
     ajStrDel(&infextn);
@@ -203,10 +203,10 @@ int main(int argc, char **argv)
     ajStrDel(&tmp);
     ajStrDel(&cmd);
     ajStrDel(&tmpname);
-    
+
     ajListDel(&list);
 
-    /* exit */ 
+    /* exit */
     ajExit();
     return 0;
 }

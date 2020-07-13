@@ -8,12 +8,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     AjPFile   outf=NULL;
     AjPStr    name=NULL;
     AjPStr    cons=NULL;
-    
+
     ajint       thresh;
     char *p;
     AjPStr *type;
@@ -65,7 +65,7 @@ int main(int argc, char **argv)
     AjPSeqCvt cvt=NULL;
     float gapopen;
     float gapextend;
-    
+
     embInit ("prophecy", argc, argv);
 
 
@@ -78,22 +78,22 @@ int main(int argc, char **argv)
 
     gapopen   = ajAcdGetFloat("open");
     gapextend = ajAcdGetFloat("extension");
-    
+
     gapopen = ajRoundF(gapopen, 8);
     gapextend = ajRoundF(gapextend, 8);
 
     p = ajStrStr(*type);
     cons = ajStrNewC("");
 
-    
+
     if(*p=='F') prophecy_simple_matrix(seqset,outf,name,thresh);
     if(*p=='G') prophecy_gribskov_profile(seqset,sub,outf,name,thresh,
 				 gapopen,gapextend,&cons);
     if(*p=='H') prophecy_henikoff_profile(seqset,imtx,sub,thresh,cvt,outf,name,
 				 gapopen,gapextend,&cons);
-  
 
-  
+
+
     ajFileClose(&outf);
     ajExit ();
     return 0;
@@ -124,18 +124,18 @@ static void prophecy_simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
     ajint j;
     ajint x;
     ajint px;
-    
+
     ajint maxscore;
     ajint score;
     ajint *matrix[AZ+2];
     AjPStr cons=NULL;
-    
+
     nseqs = ajSeqsetSize(seqset);
     if(nseqs<2)
 	ajFatal("Insufficient sequences (%d) to create a matrix",nseqs);
 
     mlen = ajSeqsetLen(seqset);
-    
+
     /* Check sequences are the same length. Warn if not */
     for(i=0;i<nseqs;++i)
     {
@@ -143,14 +143,14 @@ static void prophecy_simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
 	if(strlen(p)!=mlen)
 	    ajWarn("Sequence lengths are not equal!");
     }
-    
+
     for(i=0;i<AZ+2;++i)
 	AJCNEW0(matrix[i], mlen);
 
     /* Load matrix */
     for(i=0;i<nseqs;++i)
     {
-	p = ajSeqsetSeq(seqset,i);	
+	p = ajSeqsetSeq(seqset,i);
 	len = strlen(p);
 	for(j=0;j<len;++j)
 	{
@@ -172,7 +172,7 @@ static void prophecy_simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
 	    }
 	ajStrAppK(&cons,(char)(px+'A'));
     }
-    
+
     /* Find maximum score for matrix */
     maxscore=0;
     for(i=0;i<mlen;++i)
@@ -199,7 +199,7 @@ static void prophecy_simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
 	    ajFmtPrintF(outf,"%-2d ",matrix[j][i]);
 	ajFmtPrintF(outf,"\n");
     }
-    
+
     for(i=0;i<AZ+2;++i)
 	AJFREE (matrix[i]);
 
@@ -208,7 +208,7 @@ static void prophecy_simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
     return;
 }
 
-    
+
 /* @funcstatic prophecy_gribskov_profile **************************************
 **
 ** Undocumented.
@@ -224,7 +224,7 @@ static void prophecy_simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
 ** @@
 ******************************************************************************/
 
-    
+
 static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
 				      AjPFile outf, AjPStr name, ajint thresh,
 				      float gapopen, float gapextend,
@@ -233,7 +233,7 @@ static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
     AjPMatrixf imtx=0;
     AjPSeqCvt cvt=0;
     AjPStr mname=NULL;
-    
+
     float **mat;
     ajint nseqs;
     ajint mlen;
@@ -253,15 +253,15 @@ static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
     ajint  pos;
     float  x;
     ajint  px;
-    
+
     float **weights;
     ajint *gaps;
 
-    
+
     mname=ajStrNewC("Epprofile");
     ajMatrixfRead(&imtx,mname);
     ajStrDel(&mname);
-		 
+
     nseqs = ajSeqsetSize(seqset);
     mlen  = ajSeqsetLen(seqset);
 
@@ -345,8 +345,8 @@ static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
 	    }
 	ajStrAppK(cons,(char)(px+'A'));
     }
-    
-    
+
+
     /* Now normalise the weights */
     for(i=0;i<mlen;++i)
 	for(j=0;j<GRIBSKOV_LENGTH;++j)
@@ -388,7 +388,7 @@ static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
 	    pmax=(pmax>mat[i][j]) ? pmax : mat[i][j];
 	psum+=pmax;
     }
-    
+
     /* Print matrix */
 
     ajFmtPrintF(outf,"# Gribskov Protein Profile\n");
@@ -404,7 +404,7 @@ static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
     ajFmtPrintF(outf,"Gap_open\t%.2f\n",gapopen);
     ajFmtPrintF(outf,"Gap_extend\t%.2f\n",gapextend);
     ajFmtPrintF(outf,"Consensus\t%s\n",ajStrStr(*cons));
-    
+
     for(i=0;i<mlen;++i)
     {
 	for(j=0;j<GRIBSKOV_LENGTH;++j)
@@ -424,7 +424,7 @@ static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
     AJFREE (gaps);
 
     ajMatrixfDel(&imtx);
-    
+
 
     return;
 }
@@ -473,14 +473,14 @@ static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
     ajint  start;
     ajint  end;
     ajint  pos;
-    
+
     float **weights;
     ajint *gaps;
     ajint *pcnt;
 
     float x;
     ajint px;
-    
+
 
     nseqs = ajSeqsetSize(seqset);
     mlen  = ajSeqsetLen(seqset);
@@ -562,7 +562,7 @@ static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
 	    }
 	ajStrAppK(cons,(char)(px+'A'));
     }
-    
+
 
 
     /* Count the number of different residues at each position */
@@ -573,7 +573,7 @@ static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
 	for(j=0;j<HENIKOFF_LENGTH-1;++j)
 	    if(weights[i][j])
 		++pcnt[i];
-    
+
     /* weights = 1/(num diff res * count of residues at that position */
     for(i=0;i<mlen;++i)
 	for(j=0;j<HENIKOFF_LENGTH-1;++j)
@@ -585,7 +585,7 @@ static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
     AJCNEW(mat, mlen);
     for(i=0;i<mlen;++i)
       AJCNEW0(mat[i],HENIKOFF_LENGTH);
-    
+
     /* Fill the profile with aa scores */
     for(i=0;i<mlen;++i)
 	for(p=valid;*p;++p)
@@ -640,7 +640,7 @@ static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
 	    ajFmtPrintF(outf,"%.2f ",mat[i][j]);
 	ajFmtPrintF(outf,"%.2f\n",mat[i][j-1]);
     }
-    
+
 
     for(i=0;i<mlen;++i)
     {

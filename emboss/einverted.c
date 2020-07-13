@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -48,10 +48,10 @@ time - I suspect compile time and set to 4000 bp just now.  You should
 look at the code and find the value and say what it is in the
 documentation.  Ideally this should be a command line configurable
 parameter, but this may mean some non-trivial recoding because currently
-I think arrays are statically not dynamically defined. 
+I think arrays are statically not dynamically defined.
 
 Tim Carver 26/04/01:
-maxsave has been made a command line parameter 
+maxsave has been made a command line parameter
 */
 
 #define TEST
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
     ajint lastReported = -1 ;
     char *cp ;
     register ajint a, c, d, *t0, *t1, max ;
-    AjPInt localMax=NULL; 
+    AjPInt localMax=NULL;
     AjPInt back=NULL;
 
     AjPSeq sequence = NULL ;
@@ -116,12 +116,12 @@ int main(int argc, char **argv)
 
     ajDebug("sequence length: %d\n", length);
 
-    /* 
+    /*
        build revmatch etc. to be a,t,g,c matched to reverse sequence
        ending in MAXSAVE ROGUE values
        */
     for (i = 5 ; i-- ;)
-    { 
+    {
 	AJCNEW(revmatch[i], (length+maxsave));
 	ip = revmatch[i];
 	for(j = length ; j-- ; )
@@ -190,8 +190,8 @@ int main(int argc, char **argv)
 		(maxsave-1)*sizeof(ajint)) ;
 	t1[maxsave-2] = t1[maxsave-1] = rogue ;
 
-	/* Gene Myers' version of dynamic progamming: 
-	   a is current *t0, d is diagonal sum, c is working *t1 value 
+	/* Gene Myers' version of dynamic progamming:
+	   a is current *t0, d is diagonal sum, c is working *t1 value
 	   */
 
 #ifdef TEST
@@ -254,8 +254,8 @@ int main(int argc, char **argv)
 	{
 	    ajIntPut(&localMax,irel,max);
 	    j = (i-jmax-1) % maxsave;
-	    if (i-jmax-1 > lastReported && 
-		(!ajIntGet(back,j) || 
+	    if (i-jmax-1 > lastReported &&
+		(!ajIntGet(back,j) ||
 		 ajIntGet(localMax,ajIntGet(back,j)%maxsave) < max))
 		ajIntPut(&back,j,i);
 	}
@@ -276,7 +276,7 @@ int main(int argc, char **argv)
 }
 
 
-/* @funcstatic einverted_report **********************************************
+/* @funcstatic einverted_report ***********************************************
 **
 ** Undocumented.
 **
@@ -319,7 +319,7 @@ static void einverted_report (ajint max, ajint imax)
 	*ip++ = i ;
 	*jp++ = i-j ;			/* seqpt + 1 */
 #ifdef TEST
-	ajDebug ("i j, max (local): %d %d, %4d (%2d)\n", 
+	ajDebug ("i j, max (local): %d %d, %4d (%2d)\n",
 		 i, j, max, revmatch[(ajint)sq[i]][length-i+j]) ;
 #endif
 	if (t1[j-1] == max + gap)
@@ -346,8 +346,8 @@ static void einverted_report (ajint max, ajint imax)
 #endif
     /* report reconstruction */
 
-    ajFmtPrintF (outfile, "\nScore %d: %d/%d (%3d%%) matches, %d gaps\n", 
-		 saveMax, nmatch, (nmatch+nmis), 
+    ajFmtPrintF (outfile, "\nScore %d: %d/%d (%3d%%) matches, %d gaps\n",
+		 saveMax, nmatch, (nmatch+nmis),
 		 (100*nmatch)/(nmatch+nmis), ngap) ;
 
     ajFmtPrintF (outfile, "%8d ", *align2) ; /* NB *jp is 1+coord */

@@ -1,6 +1,6 @@
 /* @source primers application
 ** Simple version of primer3 to pick PCR primers
-** 
+**
 ** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
 ** 5 Nov 2001 - GWW - written
 ** @@
@@ -9,16 +9,16 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*****************************************************************************/
+******************************************************************************/
 
 #include "emboss.h"
 
@@ -34,21 +34,23 @@ static void primers_write(AjPStr str, FILE *stream);
 static void primers_end_write(FILE *stream);
 static AjPStr primers_read(int fd);
 static void primers_send_range(FILE * stream, char * tag, AjPRange value);
-/* static void primers_send_range2(FILE * stream, char * tag, AjPRange value); */
+/* static void primers_send_range2(FILE * stream,
+   char * tag, AjPRange value); */
 static void primers_send_int(FILE * stream, char * tag, ajint value);
 static void primers_send_float(FILE * stream, char * tag, float value);
 static void primers_send_bool(FILE * stream, char * tag, AjBool value);
 static void primers_send_string(FILE * stream, char * tag, AjPStr value);
-/* static void primers_send_stringC(FILE * stream, char * tag, char * value); */
+/* static void primers_send_stringC(FILE * stream,
+   char * tag, char * value); */
 static void primers_send_end(FILE * stream);
 static void primers_report (AjPFile outfile, AjPStr output, ajint numreturn);
-static void primers_output_report(AjPFile outfile, AjPTable table, 
+static void primers_output_report(AjPFile outfile, AjPTable table,
 	ajint numreturn);
-static AjPStr primers_tableget(char * key1, ajint number, char *key2, 
+static AjPStr primers_tableget(char * key1, ajint number, char *key2,
 	AjPTable table);
-static void primers_write_primer(AjPFile outfile, char *tag, AjPStr pos, 
-	AjPStr tm, AjPStr gc, AjPStr seq);	
-	
+static void primers_write_primer(AjPFile outfile, char *tag, AjPStr pos,
+	AjPStr tm, AjPStr gc, AjPStr seq);
+
 /* @prog primers **************************************************************
 **
 ** EMBOSS wrapper for the Whitehead's primer3 program
@@ -109,7 +111,7 @@ int main(int argc, char **argv, char **env)
  *   ajint		max_poly_x
  */
 
-  
+
 /* Sequence Quality */
 /* these are not (yet) implemented */
 /*
@@ -169,14 +171,14 @@ int main(int argc, char **argv, char **env)
 
 /*
   ajint		internal_oligo_min_quality;
-*/  
-  
+*/
+
 /* Internal Oligo penalties */
 /* these are not (yet) implemented */
 
 /* EMBOSS-wrapper-specific stuff */
   AjPFile	outfile;
-  
+
 
 /* other variables */
   AjPStr    result = NULL;
@@ -250,7 +252,7 @@ int main(int argc, char **argv, char **env)
  *   self_end            = ajAcdGetFloat("selfend");
  *   max_poly_x          = ajAcdGetInt("maxpolyx");
  */
-  
+
 /* Sequence Quality */
 /* these are not (yet) implemented */
 /*
@@ -286,7 +288,7 @@ int main(int argc, char **argv, char **env)
  *   internal_oligo_excluded_region = ajAcdGetRange("oligoexcludedregion");
  *   internal_oligo_input          = ajAcdGetString("oligoinput");
  */
-  
+
 /* Internal Oligo "Global" Input Tags */
 /*
  *   internal_oligo_opt_size       = ajAcdGetInt("oligoosize");
@@ -308,14 +310,14 @@ int main(int argc, char **argv, char **env)
  */
 /*
   internal_oligo_min_quality    = ajAcdGetInt("oligominquality");
-*/  
-  
+*/
+
 /* Internal Oligo penalties */
 /* these are not (yet) implemented */
 
 /* EMBOSS-wrapper-specific stuff */
   outfile                       = ajAcdGetOutfile("outfile");
-  
+
 
     /* open the pipes to connect to primer3 */
     if ( pipe( pipeto ) != 0 )
@@ -323,7 +325,7 @@ int main(int argc, char **argv, char **env)
     if ( pipe( pipefrom ) != 0 )
         ajFatal( "Couldn't open pipe() from" );
 
-    
+
     /* fork off the primer3 executable */
     nPid = fork();
     if ( nPid < 0 )
@@ -332,7 +334,7 @@ int main(int argc, char **argv, char **env)
     {
         /* CHILD PROCESS */
         /* dup pipe read/write to stdin/stdout */
-       /* 
+       /*
        ** I'm not sure how standard these STDIN/OUT_FILENO macros are,
        ** so use fileno to get stdin/out file numbers
        */
@@ -347,21 +349,24 @@ int main(int argc, char **argv, char **env)
         close( pipeto[1] );
         close( pipefrom[0] );
         close( pipefrom[1] );
-	
+
 	program = ajStrNew();
 	ajStrAssC(&program, "primer3_core");
 	if (ajSysWhich(&program)) {
 	    execlp( "primer3_core", "primer3_core", NULL );
 	    ajFatal("There was a problem while executing primer3");
 	} else {
-	    ajFatal("The program 'primer3_core' must be on the path.\nIt is part of the 'primer3' package,\navailable from the Whitehead Institute.\nSee: http://www-genome.wi.mit.edu/");
+	    ajFatal("The program 'primer3_core' must be on the path.\n"
+		    "It is part of the 'primer3' package,\n"
+		    "available from the Whitehead Institute.\n"
+		    "See: http://www-genome.wi.mit.edu/");
 	}
 	ajStrDel(&program);
-	
+
     } else {
         /* PARENT PROCESS */
         /* Close unused pipe ends. This is especially important for the
-        * pipefrom[1] write descriptor, otherwise primers_read will never 
+        * pipefrom[1] write descriptor, otherwise primers_read will never
         * get an EOF.
         */
         close( pipeto[0] );
@@ -397,10 +402,11 @@ int main(int argc, char **argv, char **env)
  * 	primers_send_int(stream, "PRIMER_FIRST_BASE_INDEX", first_base_index);
  * 	primers_send_bool(stream, "PRIMER_PICK_ANYWAY", pick_anyway);
  */
-        /* +++ mispriming library - should this be a string, not an infile? */	
+        /* +++ mispriming library - should this be a string, not an infile? */
 /*
  * 	primers_send_float(stream, "PRIMER_MAX_MISPRIMING", max_mispriming);
- * 	primers_send_float(stream, "PRIMER_PAIR_MAX_MISPRIMING", pair_max_mispriming);
+ * 	primers_send_float(stream, "PRIMER_PAIR_MAX_MISPRIMING",
+ *                          pair_max_mispriming);
  * 	primers_send_int(stream, "PRIMER_GC_CLAMP", gc_clamp);
  * 	primers_send_int(stream, "PRIMER_OPT_SIZE", opt_size);
  */
@@ -422,33 +428,53 @@ int main(int argc, char **argv, char **env)
  * 	primers_send_float(stream, "PRIMER_SELF_ANY", self_any);
  * 	primers_send_float(stream, "PRIMER_SELF_END", self_end);
  * 	primers_send_int(stream, "PRIMER_MAX_POLY_X", max_poly_x);
- *         primers_send_int(stream, "PRIMER_PRODUCT_OPT_SIZE", product_opt_size);
- * 	primers_send_range2(stream, "PRIMER_PRODUCT_SIZE_RANGE", product_size_range);
- *         primers_send_float(stream, "PRIMER_PRODUCT_OPT_TM", product_opt_tm);
- * 	primers_send_float(stream, "PRIMER_PRODUCT_MIN_TM", product_min_tm);
- * 	primers_send_float(stream, "PRIMER_PRODUCT_MAX_TM", product_max_tm);
+ *         primers_send_int(stream, "PRIMER_PRODUCT_OPT_SIZE",
+ *                          product_opt_size);
+ * 	primers_send_range2(stream, "PRIMER_PRODUCT_SIZE_RANGE",
+ *                          product_size_range);
+ *         primers_send_float(stream, "PRIMER_PRODUCT_OPT_TM",
+ *                          product_opt_tm);
+ * 	primers_send_float(stream, "PRIMER_PRODUCT_MIN_TM",
+ *                          product_min_tm);
+ * 	primers_send_float(stream, "PRIMER_PRODUCT_MAX_TM",
+ *                          product_max_tm);
  */
-	 
-/* send primer3 Internal Oligo "Global" parameters */	
+
+/* send primer3 Internal Oligo "Global" parameters */
 /*
- * 	primers_send_int(stream, "PRIMER_INTERNAL_OLIGO_OPT_SIZE", internal_oligo_opt_size);
- * 	primers_send_int(stream, "PRIMER_INTERNAL_OLIGO_MIN_SIZE", internal_oligo_min_size);
- * 	primers_send_int(stream, "PRIMER_INTERNAL_OLIGO_MAX_SIZE", internal_oligo_max_size);
- * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_OPT_TM", internal_oligo_opt_tm);
- * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_MIN_TM", internal_oligo_min_tm);
- * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_TM", internal_oligo_max_tm);
- * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_OPT_GC_PERCENT", internal_oligo_opt_gc_percent);
- * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_MIN_GC", internal_oligo_min_gc);
- * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_GC", internal_oligo_max_gc);
- * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_SALT_CONC", internal_oligo_salt_conc);
- * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_DNA_CONC", internal_oligo_dna_conc);
- * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_SELF_ANY", internal_oligo_self_any);
- * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_SELF_END", internal_oligo_self_end);
- * 	primers_send_int(stream, "PRIMER_INTERNAL_OLIGO_MAX_POLY_X", internal_oligo_max_poly_x);
+ * 	primers_send_int(stream, "PRIMER_INTERNAL_OLIGO_OPT_SIZE",
+ *                          internal_oligo_opt_size);
+ * 	primers_send_int(stream, "PRIMER_INTERNAL_OLIGO_MIN_SIZE",
+ *                          internal_oligo_min_size);
+ * 	primers_send_int(stream, "PRIMER_INTERNAL_OLIGO_MAX_SIZE",
+ *                          internal_oligo_max_size);
+ * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_OPT_TM",
+ *                          internal_oligo_opt_tm);
+ * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_MIN_TM",
+ *                          internal_oligo_min_tm);
+ * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_TM",
+ *                          internal_oligo_max_tm);
+ * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_OPT_GC_PERCENT",
+ *                          internal_oligo_opt_gc_percent);
+ * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_MIN_GC",
+ *                          internal_oligo_min_gc);
+ * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_GC",
+ *                          internal_oligo_max_gc);
+ * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_SALT_CONC",
+ *                          internal_oligo_salt_conc);
+ * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_DNA_CONC",
+ *                          internal_oligo_dna_conc);
+ * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_SELF_ANY",
+ *                          internal_oligo_self_any);
+ * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_SELF_END",
+ *                          internal_oligo_self_end);
+ * 	primers_send_int(stream, "PRIMER_INTERNAL_OLIGO_MAX_POLY_X",
+ *                          internal_oligo_max_poly_x);
  */
         /* +++ mispriming library - should this be a string, not an infile? */
 /*
- * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_MISHYB", internal_oligo_max_mishyb);
+ * 	primers_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_MISHYB",
+ *                         internal_oligo_max_mishyb);
  */
 
 
@@ -464,7 +490,8 @@ int main(int argc, char **argv, char **env)
 
 /* send primer3 Primer "Sequence" parameters */
             primers_send_string(stream, "SEQUENCE", substr);
-            primers_send_string(stream, "PRIMER_SEQUENCE_ID", ajSeqGetName(seq));
+            primers_send_string(stream, "PRIMER_SEQUENCE_ID",
+				ajSeqGetName(seq));
 /*
  *             primers_send_range(stream, "INCLUDED_REGION", included_region);
  */
@@ -477,15 +504,18 @@ int main(int argc, char **argv, char **env)
 
 /* send primer3 Internal Oligo "Sequence" parameters */
 /*
- *             primers_send_range(stream, "PRIMER_INTERNAL_OLIGO_EXCLUDED_REGION", internal_oligo_excluded_region);
- * 	    primers_send_string(stream, "PRIMER_INTERNAL_OLIGO_INPUT", internal_oligo_input);
+ *             primers_send_range(stream,
+ *                                "PRIMER_INTERNAL_OLIGO_EXCLUDED_REGION",
+ *                                 internal_oligo_excluded_region);
+ * 	    primers_send_string(stream, "PRIMER_INTERNAL_OLIGO_INPUT",
+ *                              internal_oligo_input);
  */
-            
+
 
 /* end the primer3 input sequence record with a '=' */
             primers_send_end(stream);
         }
-	
+
  	primers_end_write(stream);
 	close( pipeto[1] );
 
@@ -496,27 +526,27 @@ int main(int argc, char **argv, char **env)
        	primers_report (outfile, result, num_return);
     }
 
-/* tidy up */    
+/* tidy up */
     ajStrDel(&result);
     ajSeqDel(&seq);
     ajStrDel(&strand);
     ajStrDel(&substr);
     ajFileClose(&outfile);
     ajStrDel(&taskstr);
-  
+
     ajExit();
     return 0;
 }
 
 
-/* @funcstatic primers_read *******************************************
+/* @funcstatic primers_read ***************************************************
 **
 ** Reads the output from primer3_core into a returned AjPStr until EOF
 **
 ** @param [r] fd [int] file descriptor
 ** @return [AjPStr] output string
-**          
-*************************************************************************/
+**
+******************************************************************************/
 
 static AjPStr primers_read(int fd)
 {
@@ -525,10 +555,10 @@ static AjPStr primers_read(int fd)
     AjPStr ret=ajStrNew();
 
     ajDebug( "reading primer3_core output\n" );
-    
+
     if ( (stream = fdopen( fd, "r" )) == NULL )
         ajFatal( "fdopen() read error" );
-	
+
     while ( (ch = getc( stream )) != EOF )
         ajStrAppK(&ret, ch);
 
@@ -539,14 +569,14 @@ static AjPStr primers_read(int fd)
 }
 
 
-/* @funcstatic primers_send_end *******************************************
+/* @funcstatic primers_send_end ***********************************************
 **
 ** Writes the end-of-input flag '=' to the input stream of primer3_core
 **
 ** @param [r] stream [FILE *] File handle
-** @return [void] 
-**          
-*************************************************************************/
+** @return [void]
+**
+******************************************************************************/
 static void primers_send_end(FILE * stream)
 {
   fputs( "=\n", stream );
@@ -554,16 +584,16 @@ static void primers_send_end(FILE * stream)
 
 /* display ranges as 'start,length start2,length2' */
 
-/* @funcstatic primers_send_range *******************************************
+/* @funcstatic primers_send_range *********************************************
 **
 ** Write range data to primer3_core as 'start,length start2,length2,etc'
 **
 ** @param [r] stream [FILE *] File handle
 ** @param [r] tag [char *] Tag of primer3 data type
 ** @param [r] value [AjPRange] Ranges to write
-** @return [void] 
-**          
-*************************************************************************/
+** @return [void]
+**
+******************************************************************************/
 
 static void primers_send_range(FILE * stream, char * tag, AjPRange value)
 {
@@ -571,14 +601,14 @@ static void primers_send_range(FILE * stream, char * tag, AjPRange value)
   AjPStr str=ajStrNew();
   ajint n;
   ajint start, end;
-  
+
   if (ajRangeNumber(value)) {
       (void) ajFmtPrintS(&str, "%s=", tag);
       primers_write(str, stream);
       ajStrClear(&str);
       for (n=0; n < ajRangeNumber(value); n++) {
           ajRangeValues(value, n, &start, &end);
-          (void) ajFmtPrintS(&str, "%d,%d ", start, end-start+1);  
+          (void) ajFmtPrintS(&str, "%d,%d ", start, end-start+1);
           primers_write(str, stream);
 	  ajStrClear(&str);
       }
@@ -590,16 +620,16 @@ static void primers_send_range(FILE * stream, char * tag, AjPRange value)
 }
 
 
-/* #funcstatic primers_send_range2 *******************************************
+/* #funcstatic primers_send_range2 ********************************************
 **
 ** Write alternate display of ranges as 'a-b c-d' to primer3_core
 **
 ** #param [r] stream [FILE *] File handle
 ** #param [r] tag [char *] Tag of primer3 data type
 ** #param [r] value [AjPRange] Ranges to write
-** #return [void] 
-**          
-*************************************************************************/
+** #return [void]
+**
+******************************************************************************/
 /* NOT USED
 //static void primers_send_range2(FILE * stream, char * tag, AjPRange value)
 //{
@@ -607,14 +637,14 @@ static void primers_send_range(FILE * stream, char * tag, AjPRange value)
 //  AjPStr str=ajStrNew();
 //  ajint n;
 //  ajint start, end;
-//  
+//
 //  if (ajRangeNumber(value)) {
 //      (void) ajFmtPrintS(&str, "%s=", tag);
 //      primers_write(str, stream);
 //      ajStrClear(&str);
 //      for (n=0; n < ajRangeNumber(value); n++) {
 //          ajRangeValues(value, n, &start, &end);
-//          (void) ajFmtPrintS(&str, "%d-%d ", start, end);  
+//          (void) ajFmtPrintS(&str, "%d-%d ", start, end);
 //          primers_write(str, stream);
 //	  ajStrClear(&str);
 //      }
@@ -626,87 +656,87 @@ static void primers_send_range(FILE * stream, char * tag, AjPRange value)
 //}
 */
 
-/* @funcstatic primers_send_int *******************************************
+/* @funcstatic primers_send_int ***********************************************
 **
 ** Write integer to primer3_core
 **
 ** @param [r] stream [FILE *] File handle
 ** @param [r] tag [char *] Tag of primer3 data type
 ** @param [r] value [ajint] Integer value to write
-** @return [void] 
-**          
-*************************************************************************/
+** @return [void]
+**
+******************************************************************************/
 static void primers_send_int(FILE * stream, char * tag, ajint value)
 {
 
   AjPStr str=ajStrNew();
- 
-  (void) ajFmtPrintS(&str, "%s=%d\n", tag, value);  
+
+  (void) ajFmtPrintS(&str, "%s=%d\n", tag, value);
   primers_write(str, stream);
- 
+
   ajStrDel(&str);
 }
 
-/* @funcstatic primers_send_float *******************************************
+/* @funcstatic primers_send_float *********************************************
 **
 ** Write float to primer3_core
 **
 ** @param [r] stream [FILE *] File handle
 ** @param [r] tag [char *] Tag of primer3 data type
 ** @param [r] value [float] Float value to write
-** @return [void] 
-**          
-*************************************************************************/
+** @return [void]
+**
+******************************************************************************/
 static void primers_send_float(FILE * stream, char * tag, float value)
 {
 
   AjPStr str=ajStrNew();
 
-  (void) ajFmtPrintS(&str, "%s=%f\n", tag, value);  
+  (void) ajFmtPrintS(&str, "%s=%f\n", tag, value);
   primers_write(str, stream);
 
   ajStrDel(&str);
 }
 
-/* @funcstatic primers_send_bool *******************************************
+/* @funcstatic primers_send_bool **********************************************
 **
 ** Write boolean to primer3_core
 **
 ** @param [r] stream [FILE *] File handle
 ** @param [r] tag [char *] Tag of primer3 data type
 ** @param [r] value [AjBool] Boolean value to write
-** @return [void] 
-**          
-*************************************************************************/
+** @return [void]
+**
+******************************************************************************/
 static void primers_send_bool(FILE * stream, char * tag, AjBool value)
 {
 
   AjPStr str=ajStrNew();
 
-  (void) ajFmtPrintS(&str, "%s=%d\n", tag, value?1:0);  
+  (void) ajFmtPrintS(&str, "%s=%d\n", tag, value?1:0);
   primers_write(str, stream);
 
   ajStrDel(&str);
 }
 
-/* @funcstatic primers_send_string *******************************************
+/* @funcstatic primers_send_string ********************************************
 **
 ** Write string to primer3_core
 **
-** 
+**
 ** @param [r] stream [FILE *] File handle
 ** @param [r] tag [char *] Tag of primer3 data type
 ** @param [r] value [AjPStr] String value to write
-** @return [void] 
-**          
-*************************************************************************/
+** @return [void]
+**
+******************************************************************************/
 static void primers_send_string(FILE * stream, char * tag, AjPStr value)
 {
 
   AjPStr str=ajStrNew();
 
   if (ajStrLen(value)) {
-      (void) ajFmtPrintS(&str, "%s=%S\n", tag, value);  
+      (void) ajFmtPrintS(&str, "%s=%S\n", tag, value);
       primers_write(str, stream);
   }
 
@@ -720,9 +750,9 @@ static void primers_send_string(FILE * stream, char * tag, AjPStr value)
 ** #param [r] stream [FILE *] File handle
 ** #param [r] tag [char *] Tag of primer3 data type
 ** #param [r] value [char *] Char * value to write
-** #return [void] 
-**          
-*************************************************************************/
+** #return [void]
+**
+******************************************************************************/
 /* NOT USED
 //static void primers_send_stringC(FILE * stream, char * tag, char * value)
 //{
@@ -730,7 +760,7 @@ static void primers_send_string(FILE * stream, char * tag, AjPStr value)
 //  AjPStr str=ajStrNew();
 //
 //  if (strlen(value)) {
-//      (void) ajFmtPrintS(&str, "%s=%s\n", tag, value);  
+//      (void) ajFmtPrintS(&str, "%s=%s\n", tag, value);
 //      primers_write(str, stream);
 //  }
 //
@@ -738,14 +768,14 @@ static void primers_send_string(FILE * stream, char * tag, AjPStr value)
 //}
 */
 
-/* @funcstatic primers_start_write *******************************************
+/* @funcstatic primers_start_write ********************************************
 **
 ** Open a file descriptor as a stream to pipe to primer3_core
 **
 ** @param [r] fd [int] File descriptor
 ** @return [FILE*] File stream
-**          
-*************************************************************************/
+**
+******************************************************************************/
 static FILE* primers_start_write(int fd)
 {
   FILE *stream;
@@ -753,49 +783,49 @@ static FILE* primers_start_write(int fd)
   ajDebug( "start writing\n" );
   if ( (stream = fdopen( fd, "w" )) == NULL )
       ajFatal( "Couldn't open pipe with fdopen()" );
-  
+
   return stream;
 }
-/* @funcstatic primers_write *******************************************
+/* @funcstatic primers_write **************************************************
 **
 ** Write a tag=value AjPStr to the primer3_core input stream
 **
 ** @param [r] str [AjPStr] Input string
 ** @param [r] stream [FILE *] Stream piped to primer3_core
-** @return [void] 
-**          
-*************************************************************************/
+** @return [void]
+**
+******************************************************************************/
 static void primers_write(AjPStr str, FILE *stream)
 {
- 
+
   fputs( ajStrStr(str), stream );
 
 }
-/* @funcstatic primers_end_write *******************************************
+/* @funcstatic primers_end_write **********************************************
 **
 ** Close the stream piping in to primer3_core
 **
 ** @param [r] stream [FILE *] Stream
-** @return [void] 
-**          
-*************************************************************************/
+** @return [void]
+**
+******************************************************************************/
 static void primers_end_write(FILE *stream)
 {
- 
+
   fclose( stream );
-  
+
 }
 
-/* @funcstatic primers_report *******************************************
+/* @funcstatic primers_report *************************************************
 **
 ** Read output of primer3_core into a temporary table of tag/value results
 **
 ** @param [r] outfile [AjPFile] Report outfile
 ** @param [r] output [AjPStr] Output from primer3_core
 ** @param [r] numreturn [ajint] Number of results to return for each sequence
-** @return [void] 
-**          
-*************************************************************************/
+** @return [void]
+**
+******************************************************************************/
 static void primers_report (AjPFile outfile, AjPStr output, ajint numreturn)
 {
 
@@ -816,7 +846,7 @@ static void primers_report (AjPFile outfile, AjPStr output, ajint numreturn)
   while (ajStrToken (&line, &linetokenhandle, eol)) {
     if (!gotsequenceid) {
 
-/* 
+/*
 ** Are we at the start of another sequence's results?
 ** Start storing the results in the table.
 */
@@ -831,7 +861,7 @@ static void primers_report (AjPFile outfile, AjPStr output, ajint numreturn)
 
     } else {
 
-/* 
+/*
 ** Are we at the end of this sequence? - marked by a '=' in the primer3
 ** output - then output the results.
 */
@@ -839,15 +869,15 @@ static void primers_report (AjPFile outfile, AjPStr output, ajint numreturn)
       if (ajStrCmpC(line, "=") == 0) {
         gotsequenceid = AJFALSE;
         primers_output_report(outfile, table, numreturn);
-        ajStrTableFree(&table);	
+        ajStrTableFree(&table);
         continue;
       }
-    }	
-    
+    }
+
 /* store key and value in table and parse values when have all of the sequence
 results in the table because the LEFT, RIGHT and INTERNAL results for each
 resulting primer are interleaved */
-    
+
     keytokenhandle = ajStrTokenInit (line, equals);
 
     key = ajStrNew();
@@ -863,7 +893,7 @@ resulting primer are interleaved */
 
     (void) ajStrTokenClear(&keytokenhandle);
   }
- 
+
 /* tidy up */
   ajStrDel(&line);
   (void) ajStrTokenClear(&linetokenhandle);
@@ -873,20 +903,20 @@ resulting primer are interleaved */
 
 }
 
-/* @funcstatic primers_output_report *******************************************
+/* @funcstatic primers_output_report ******************************************
 **
 ** Read the results out of the tag/value table and write to report
 **
 ** @param [r] outfile [AjPFile] Report outfile
 ** @param [r] table [AjPTable] Table of tag/value result pairs
 ** @param [r] numreturn [ajint] Number of results to return for each sequence
-** @return [void] 
-**          
-*************************************************************************/
+** @return [void]
+**
+******************************************************************************/
 static void primers_output_report(AjPFile outfile, AjPTable table,
 	ajint numreturn)
 {
-  AjPStr key = NULL;  
+  AjPStr key = NULL;
   AjPStr error = NULL;
   AjPStr explain = NULL;
   AjPStr seqid = NULL;
@@ -940,7 +970,7 @@ PRIMER_PRODUCT_SIZE=137
   if (error != NULL) {
     ajWarn("%S", error);
   }
-  
+
 /* get the sequence id */
   ajStrAssC(&key, "PRIMER_SEQUENCE_ID");
   seqid = (AjPStr)ajTableGet(table, (const void*)key);
@@ -951,29 +981,34 @@ PRIMER_PRODUCT_SIZE=137
   explain = (AjPStr)ajTableGet(table, (const void*)key);
   if (explain != NULL) {
     ajStrSubstituteCC(&explain, ",", "\n#");
-    (void) ajFmtPrintF(outfile, "# FORWARD PRIMER STATISTICS:\n# %S\n\n", explain);
+    (void) ajFmtPrintF(outfile, "# FORWARD PRIMER STATISTICS:\n# %S\n\n",
+		       explain);
   }
   ajStrAssC(&key, "PRIMER_RIGHT_EXPLAIN");
   explain = (AjPStr)ajTableGet(table, (const void*)key);
   if (explain != NULL) {
     ajStrSubstituteCC(&explain, ",", "\n#");
-    (void) ajFmtPrintF(outfile, "# REVERSE PRIMER STATISTICS:\n# %S\n\n", explain);
+    (void) ajFmtPrintF(outfile, "# REVERSE PRIMER STATISTICS:\n# %S\n\n",
+		       explain);
   }
   ajStrAssC(&key, "PRIMER_PAIR_EXPLAIN");
   explain = (AjPStr)ajTableGet(table, (const void*)key);
   if (explain != NULL) {
     ajStrSubstituteCC(&explain, ",", "\n#");
-    (void) ajFmtPrintF(outfile, "# PRIMER PAIR STATISTICS:\n# %S\n\n", explain);
+    (void) ajFmtPrintF(outfile, "# PRIMER PAIR STATISTICS:\n# %S\n\n",
+		       explain);
   }
   ajStrAssC(&key, "PRIMER_INTERNAL_OLIGO_EXPLAIN");
   explain = (AjPStr)ajTableGet(table, (const void*)key);
   if (explain != NULL) {
     ajStrSubstituteCC(&explain, ",", "\n#");
-   (void) ajFmtPrintF(outfile, "# INTERNAL OLIGO STATISTICS:\n# %S\n\n", explain);
+   (void) ajFmtPrintF(outfile, "# INTERNAL OLIGO STATISTICS:\n# %S\n\n",
+		      explain);
   }
-  
+
 /* table header */
-  (void) ajFmtPrintF(outfile, "#                      Start  Len   Tm     GC%%   Sequence\n\n");
+  (void) ajFmtPrintF(outfile, "#                      Start  Len   Tm     "
+		     "GC%%   Sequence\n\n");
 
 /* get the results */
   for (i=0; i <= numreturn; i++) {
@@ -1019,7 +1054,7 @@ PRIMER_PRODUCT_SIZE=137
 }
 
 
-/* @funcstatic primers_tableget *******************************************
+/* @funcstatic primers_tableget ***********************************************
 **
 ** Read the results out of the tag/value table
 **
@@ -1028,8 +1063,8 @@ PRIMER_PRODUCT_SIZE=137
 ** @param [r] key2 [char *] Second half of table key base string (minus '_')
 ** @param [r] table [AjPTable] Table of tag/value result pairs
 ** @return [AjPStr] Table value
-**          
-*************************************************************************/
+**
+******************************************************************************/
 static AjPStr primers_tableget(char *key1, ajint number, char *key2,
 			       AjPTable table)
 {
@@ -1067,10 +1102,10 @@ static AjPStr primers_tableget(char *key1, ajint number, char *key2,
 ** @param [r] tm [AjPStr] Tm of primer
 ** @param [r] gc [AjPStr] GC% of primer
 ** @param [r] seq [AjPStr] Sequence of primer
-** @return [void] 
-**          
-*************************************************************************/
-static void primers_write_primer(AjPFile outfile, char *tag, AjPStr pos, 
+** @return [void]
+**
+******************************************************************************/
+static void primers_write_primer(AjPFile outfile, char *tag, AjPStr pos,
 	AjPStr tm, AjPStr gc, AjPStr seq)
 {
 
@@ -1093,7 +1128,7 @@ static void primers_write_primer(AjPFile outfile, char *tag, AjPStr pos,
     (void) ajFmtPrintF(outfile, "     %s  %6d %4d  %2.2f  %2.2f  %S\n\n",
     	tag, startint, lenint, tmfloat, gcfloat, seq);
   }
-  
+
 /* tidy up */
   ajStrDel(&start);
 

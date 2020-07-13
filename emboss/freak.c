@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -24,7 +24,7 @@
 
 
 
-/* @prog freak ***************************************************************
+/* @prog freak ****************************************************************
 **
 ** Residue/base frequency table or plot
 **
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     AjPGraph   graph=NULL;
     AjPGraphData fgraph=NULL;
     AjPStr     st=NULL;
-    
+
     ajint c;
     ajint pos;
     ajint end;
@@ -55,14 +55,14 @@ int main(int argc, char **argv)
     char *p;
     char *q;
     float f;
-    
+
     float *x=NULL;
     float *y=NULL;
-    
+
     float max=0.;
     float min=0.;
-    
-    
+
+
     ajGraphInit("freak", argc, argv);
 
     seqall    = ajAcdGetSeqall("seqall");
@@ -75,22 +75,22 @@ int main(int argc, char **argv)
 
     outf  = ajAcdGetOutfile("outfile");
     graph = ajAcdGetGraphxy("graph");
-    
+
 
     st = ajStrNew();
 
     ajStrToUpper(&bases);
     q = ajStrStr(bases);
-    
+
     while(ajSeqallNext(seqall, &seq))
     {
 	pos = ajSeqallBegin(seqall);
 	end = ajSeqallEnd(seqall);
-	
+
 	str = ajSeqStr(seq);
 	ajStrToUpper(&str);
 	p = ajStrStr(str);
-	
+
 	c=0;
 	--pos;
 	--end;
@@ -101,14 +101,14 @@ int main(int argc, char **argv)
 	    t += step;
 	}
 
-	
+
 	if(c)
 	{
 	    x = (float *) AJALLOC(c * sizeof(float));
 	    y = (float *) AJALLOC(c * sizeof(float));
 	}
-	
-	
+
+
 	for(i=0;i<c;++i)
 	{
 	    t = i*step+pos;
@@ -122,7 +122,7 @@ int main(int argc, char **argv)
 	    }
 	    y[i] = f / (float)window;
 	}
-	
+
 	if(!plot && c)
 	{
 	    ajFmtPrintF(outf,"FREAK of %s from %d to %d Window %d Step %d\n\n",
@@ -149,12 +149,12 @@ int main(int argc, char **argv)
 	    ajGraphDataxyMaxMin(y,c,&min,&max);
 	    ajGraphDataxySetMaxima(fgraph,x[0],x[c-1],min,max);
 	    ajGraphDataxySetTypeC(fgraph,"2D Plot");
-	    
+
 	    ajGraphxyAddDataPtrPtr(fgraph,x,y);
 	    ajGraphxyReplaceGraph(graph,fgraph);
 	    ajGraphxyDisplay(graph,ajFalse);
 	}
-	
+
 
 	AJFREE(x);
 	AJFREE(y);
@@ -167,7 +167,7 @@ int main(int argc, char **argv)
     ajStrDel(&str);
     ajStrDel(&bases);
     ajStrDel(&st);
-    
+
     ajExit();
     return 0;
 }

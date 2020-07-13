@@ -1,5 +1,5 @@
 /* @source patmatmotifs.c
-** @author: Copyright (C) Sinead O'Leary (soleary@hgmp.mrc.ac.uk) 
+** @author: Copyright (C) Sinead O'Leary (soleary@hgmp.mrc.ac.uk)
 ** @@
 ** Application for pattern matching, a sequence against a database of motifs.
 **
@@ -7,12 +7,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -20,9 +20,9 @@
 
 
 #include "emboss.h"
-   
-static void patmat_spaces(AjPFile *outf, ajint length); 
-  
+
+static void patmat_spaces(AjPFile *outf, ajint length);
+
 
 /* @prog patmatmotifs *********************************************************
 **
@@ -48,15 +48,15 @@ int main(int argc, char **argv)
     AjPStr text       = NULL;
     AjPStr docdata    = NULL;
     AjPStr data       = NULL;
-    AjPStr accession  = NULL; 
+    AjPStr accession  = NULL;
     AjPStr name       = NULL;
     EmbPPatMatch match = NULL;
     AjPStr savereg=NULL;
     AjPStr fthit = NULL;
-    
+
     AjBool full;
     AjBool prune;
-    
+
     ajint i;
     ajint number;
     ajint start;
@@ -83,26 +83,26 @@ int main(int argc, char **argv)
     accession = ajStrNew();
     text = ajStrNew();
     name = ajStrNew();
-    
+
     sequence = ajAcdGetSeq("sequence");
     /* outf     = ajAcdGetOutfile("outfile"); */
     report = ajAcdGetReport ("outfile");
     full     = ajAcdGetBool("full");
     prune    = ajAcdGetBool("prune");
-    
+
     tab = ajFeattableNewSeq(sequence);
     ajStrAssC (&tailstr, "");
 
     seqlength = ajStrLen(str);
     str       = ajSeqStrCopy(sequence);
-    
+
     redatanew = ajStrNewC("PROSITE/prosite.lines");
     docdata   = ajStrNewC("PROSITE/");
 
     ajFileDataNew(redatanew, &inf);
     if(!inf)
 	ajFatal("Either EMBOSS_DATA undefined or PROSEXTRACT needs running");
-    
+
     ajFmtPrintAppS (&tmpstr, "Full: %B\n", full);
     ajFmtPrintAppS (&tmpstr, "Prune: %B\n", prune);
     ajFmtPrintAppS (&tmpstr, "Data_file: %F\n", inf);
@@ -128,24 +128,24 @@ int main(int argc, char **argv)
 		    continue;
 		}
 	    p=strtok(NULL," ");
-	    ajStrAssC(&accession,p); 	    
+	    ajStrAssC(&accession,p);
 	}
 
 	if (ajStrPrefixC(regexp, "^"))
 	{
 	    p = ajStrStr(regexp);
-	    
+
 	    ajStrAssC(&temp,p+1);
 	    ajStrAssC(&savereg,p+1);
 
 	    match = embPatPosMatchFind(temp, str);
-	    number = embPatPosMatchGetNumber(match); 
-	    
+	    number = embPatPosMatchGetNumber(match);
+
 	    if(number && outf)
-		ajFmtPrintF(outf, 
+		ajFmtPrintF(outf,
 		      "\nNumber of matches found in this Sequence = %d\n\n",
 		      number);
-	
+
 	    for (i=0; i<number; i++)
 	    {
 		seqlength = ajStrLen(str);
@@ -153,29 +153,29 @@ int main(int argc, char **argv)
 		  ajFmtPrintF(outf,
 			      "Length of the sequence = %d basepairs\n",
 			      seqlength);
-			
-		start = 1+embPatPosMatchGetStart(match, i); 
+
+		start = 1+embPatPosMatchGetStart(match, i);
 		if (outf)
 		  ajFmtPrintF(outf,
 			      "Start of match = position %d of sequence\n",
 			      start+1);
-	
-		end = 1+embPatPosMatchGetEnd(match, i);  		
+
+		end = 1+embPatPosMatchGetEnd(match, i);
 		if (outf)
-		  ajFmtPrintF(outf, 
+		  ajFmtPrintF(outf,
 			      "End of match = position %d of sequence\n",
 			      end+1);
-		
+
 		length = embPatPosMatchGetLen(match, i);
 		if (outf)
 		  ajFmtPrintF(outf, "Length of motif = %d\n\n", length);
-	
+
 		gf = ajFeatNew (tab, NULL, fthit, start, end,
 				(float) length, ' ', 0);
 
 		if (outf)
-		  ajFmtPrintF(outf, 
-			      "patmatmotifs of %s with %s from %d to %d\n", 
+		  ajFmtPrintF(outf,
+			      "patmatmotifs of %s with %s from %d to %d\n",
 			      ajStrStr(name), ajSeqName(sequence),
 			      start+1, end+1);
 
@@ -189,27 +189,27 @@ int main(int argc, char **argv)
 		    zstart = 0;
 		}
 		else zstart = start-5;
-		
+
 		if (end+5> seqlength)
 		    zend = end;
-		else zend = end+5; 
-	
-			
+		else zend = end+5;
+
+
 		ajStrAssSub(&temp, str, zstart, zend);
 		if (outf)
 		  {
 		    ajFmtPrintF(outf, "%s\n", ajStrStr(temp));
-		
+
 		    ajFmtPrintF(outf, "     |");
 		    patmat_spaces(&outf, length);
 		    ajFmtPrintF(outf, "|\n");
-	    
+
 		    ajFmtPrintF(outf, "%6d", start+1);
 		    patmat_spaces(&outf, length);
 		    ajFmtPrintF(outf, "%-d\n\n", end+1);
 		  }
 	    }
-	
+
 
 	    if(full && number)
 	    {
@@ -218,7 +218,7 @@ int main(int argc, char **argv)
 		ajFileDataNew(redatanew, &inf2);
 		if(!inf2)
 		    continue;
-		
+
 		/*
 		 * Insert Prosite documentation from files made by
 		 * prosextract.c
@@ -242,7 +242,7 @@ int main(int argc, char **argv)
 
     ajReportSetTail(report,tailstr);
     ajReportWrite(report, tab, sequence);
-    
+
     ajStrDel(&temp);
     ajStrDel(&regexp);
     ajStrDel(&savereg);
@@ -262,7 +262,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-/* @funcstatic patmat_spaces *************************************************
+/* @funcstatic patmat_spaces **************************************************
 **
 ** Pad output with spaces
 **

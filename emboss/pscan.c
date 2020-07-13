@@ -8,12 +8,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -29,7 +29,7 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 
 
 
-/* @prog pscan ***************************************************************
+/* @prog pscan ****************************************************************
 **
 ** Scans proteins using PRINTS
 **
@@ -44,22 +44,22 @@ int main(int argc, char **argv)
     ajint end;
     ajint emin;
     ajint emax;
-    
+
     EmbPMatMatch mm=NULL;
-    
+
     AjPFile   mfile=NULL;
     EmbPMatPrints s=NULL;
     AjPList   l=NULL;
     AjPStr    strand=NULL;
     AjPStr    substr=NULL;
     AjPStr    name=NULL;
-    
+
     AjBool    all;
     AjBool    ordered;
-    
+
     ajint hits;
     ajint nmotifs;
-    
+
 
     embInit("pscan", argc, argv);
 
@@ -67,19 +67,19 @@ int main(int argc, char **argv)
     outf      = ajAcdGetOutfile("outfile");
     emin      = ajAcdGetInt("emin");
     emax      = ajAcdGetInt("emax");
-    
+
     substr=ajStrNew();
     name =ajStrNew();
-    
+
     all=ordered=ajTrue;
 
 
-    
+
     while(ajSeqallNext(seqall, &seq))
     {
 	begin=ajSeqallBegin(seqall);
 	end=ajSeqallEnd(seqall);
-	
+
 	ajStrAssC(&name,ajSeqName(seq));
 	strand=ajSeqStrCopy(seq);
 
@@ -106,13 +106,13 @@ int main(int argc, char **argv)
 	ajListDel(&l);
 
 
-	ajStrDel(&strand);    
+	ajStrDel(&strand);
 	ajFileClose(&mfile);
     }
 
 
 
-    
+
 
     ajStrDel(&substr);
     ajSeqDel(&seq);
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic pscan_print_hits **********************************************
+/* @funcstatic pscan_print_hits ***********************************************
 **
 ** Undocumented.
 **
@@ -155,7 +155,7 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
     ajint hpm=0;
 
     nleft = nmotifs;
-    
+
 
     ajFmtPrintF(*outf,"\n\nCLASS 1\n");
     ajFmtPrintF(*outf,"Fingerprints with all elements in order\n\n");
@@ -176,7 +176,7 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 		found = ajTrue;
 	    }
 	    hpm = mm->hpm;
-	    
+
 	    ajListPushApp(*l,(void *)mm);
 	    for(j=1;j<hpm;++j)
 	    {
@@ -217,7 +217,7 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 
 	    embMatMatchDel(&mm);
 	    }
-	    
+
 	    for(i=1;i<hpm;++i)
 	    {
 		ajListPop(*l,(void **)&mm);
@@ -225,22 +225,22 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 			    mm->element+1, mm->thresh, mm->score);
 		ajFmtPrintF(*outf,"             Start position %d Length %d\n",
 			    mm->start+begin,mm->len);
-	    
+
 		embMatMatchDel(&mm);
 	    }
-	    
+
 	    --nleft;
 	}
-	
+
     }
-    
 
 
 
 
-    ajFmtPrintF(*outf,"\n\nCLASS 2\n");	
+
+    ajFmtPrintF(*outf,"\n\nCLASS 2\n");
     ajFmtPrintF(*outf,"All elements match but not all in the "
-		"correct order\n\n");	
+		"correct order\n\n");
 
     found = ajTrue;
 
@@ -296,7 +296,7 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 
 	    embMatMatchDel(&mm);
 	    }
-	    
+
 	    for(i=1;i<hpm;++i)
 	    {
 		ajListPop(*l,(void **)&mm);
@@ -304,13 +304,13 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 			    mm->element+1, mm->thresh, mm->score);
 		ajFmtPrintF(*outf,"             Start position %d Length %d\n",
 			    mm->start+begin,mm->len);
-	    
+
 		embMatMatchDel(&mm);
 	    }
-	    
+
 	    --nleft;
 	}
-	
+
     }
 
 
@@ -371,11 +371,11 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 			mm->element+1, mm->thresh, mm->score);
 	    ajFmtPrintF(*outf,"             Start position %d Length %d\n",
 			mm->start+begin,mm->len);
-	    
+
 
             embMatMatchDel(&mm);
 	    }
-	    
+
 	    for(i=1;i<hpm;++i)
 	    {
 		ajListPop(*l,(void **)&mm);
@@ -383,13 +383,13 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 			    mm->element+1, mm->thresh, mm->score);
 		ajFmtPrintF(*outf,"             Start position %d Length %d\n",
 			    mm->start+begin,mm->len);
-	    
+
 		embMatMatchDel(&mm);
 	    }
-	    
+
 	    --nleft;
 	}
-	
+
     }
 
 
@@ -448,11 +448,11 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 			mm->element+1, mm->thresh, mm->score);
 	    ajFmtPrintF(*outf,"             Start position %d Length %d\n",
 			mm->start+begin,mm->len);
-	    
+
 
 	    embMatMatchDel(&mm);
 	    }
-	    
+
 	    for(i=1;i<hpm;++i)
 	    {
 		ajListPop(*l,(void **)&mm);
@@ -460,19 +460,19 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 			    mm->element+1, mm->thresh, mm->score);
 		ajFmtPrintF(*outf,"             Start position %d Length %d\n",
 			    mm->start+begin,mm->len);
-	    
+
 		embMatMatchDel(&mm);
 	    }
-	    
+
 	    --nleft;
 	}
-	
+
     }
-    
+
 
     while(ajListPop(*l,(void **)&mm))
 	if(mm)
 	    embMatMatchDel(&mm);
-    
+
     return;
 }

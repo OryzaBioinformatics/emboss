@@ -38,7 +38,7 @@ int main(int argc, char **argv)
     AjPStr desc = NULL;
     AjPStr temp = NULL;
     AjBool append;
-  
+
     (void) embInit ("descseq", argc, argv);
 
     seqout = ajAcdGetSeqout ("outseq");
@@ -51,14 +51,14 @@ int main(int argc, char **argv)
     /* if appending, then do this */
     if (append)
     {
-	/* do we have a name? */  	
+	/* do we have a name? */
 	if (ajStrLen(name))
 	{
 	    (void) ajStrAss(&temp, ajSeqGetName(seq));
 	    (void) ajStrApp(&temp, name);
 	    (void) ajSeqAssName(seq, temp);
 	}
-  
+
 	/* do we have a description? */
 	if (ajStrLen(desc))
 	{
@@ -71,16 +71,16 @@ int main(int argc, char **argv)
     }
     else
     {
-	/* do we have a name? */  	
+	/* do we have a name? */
 	if (ajStrLen(name))
 	    (void) ajSeqAssName(seq, name);
-  
+
 	/* do we have a description? */
 	if (ajStrLen(desc))
 	    (void) ajSeqAssDesc(seq, desc);
     }
 
-    (void) ajSeqWrite (seqout, seq);  
+    (void) ajSeqWrite (seqout, seq);
     (void) ajSeqWriteClose (seqout);
 
     ajExit ();

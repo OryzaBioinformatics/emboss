@@ -1,5 +1,5 @@
 /* @source megamerger application
-** 
+**
 ** Merge two large overlapping nucleic acid sequences
 **
 ** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -37,7 +37,7 @@ static void megamerger_Merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
 
 int main(int argc, char **argv)
 {
-  
+
     AjPSeq seq1;
     AjPSeq seq2;
     AjPSeqout seqout;
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
     outfile = ajAcdGetOutfile ("report");
     seqout = ajAcdGetSeqout ("outseq");
 
-    /* trim sequences to -sbegin and -send */    
+    /* trim sequences to -sbegin and -send */
     ajSeqTrim(seq1);
     ajSeqTrim(seq2);
 
@@ -66,28 +66,28 @@ int main(int argc, char **argv)
 	ajFatal("No match found\n");
 
 
-    /* get the minimal set of overlapping matches */    
+    /* get the minimal set of overlapping matches */
     (void) embWordMatchMin(matchlist, ajSeqLen(seq1), ajSeqLen(seq2));
 
     if (ajListLength(matchlist))
     {
 	/* make the output file */
 	megamerger_Merge(matchlist, seq1, seq2, seqout, outfile);
-  
+
 	/* tidy up */
 	embWordMatchListDelete(&matchlist); /* free the match structures */
     }
 
-    /* tidy up */   
+    /* tidy up */
     (void) ajSeqWriteClose (seqout);
     (void) ajFileClose(&outfile);
-  
+
     ajExit();
     return 0;
 }
 
 
-/* @funcstatic megamerger_Merge ********************************************
+/* @funcstatic megamerger_Merge ***********************************************
 **
 ** Marge and write a report on the merge of the two sequences.
 **
@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 ** @param [r] seq2 [AjPSeq] Sequence to be merged.
 ** @param [r] seqout [AjPSeqout] Output merged sequence
 ** @param [r] outfile [AjPFile] Output file containing report.
-** @return [void] 
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -157,7 +157,7 @@ static void megamerger_Merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
 				   "sequence\n\n", ajSeqName(seq1),
 				   p->seq1start);
 		ajStrAssSub(&seqstr, s1, 0, p->seq1start-1);
-      	
+
 	    }
 	    else
 	    {
@@ -182,8 +182,8 @@ static void megamerger_Merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
 		    ajStrAssSub(&tmp, s2, 0, p->seq2start-1);
 		    ajStrToUpper(&tmp);
 		    ajStrAss(&seqstr, tmp);
-          
-		}      	 
+
+		}
 	    }
 	}
 	else
@@ -191,13 +191,13 @@ static void megamerger_Merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
 	    /*
 	     *  output the intervening mismatch between the previous
 	     *  matching region
-	     */   
+	     */
 	    (void) ajFmtPrintF(outfile, "\nWARNING!\nMismatch region "
-			       "found:\n");  
+			       "found:\n");
 	    if (prev1end<p->seq1start)
 		(void) ajFmtPrintF(outfile, "Mismatch %s %d-%d\n",
 				   ajSeqName(seq1), prev1end+1,
-				   p->seq1start);  
+				   p->seq1start);
 	    else
 		(void) ajFmtPrintF(outfile, "Mismatch %s %d\n",
 				   ajSeqName(seq1), prev1end);
@@ -224,12 +224,15 @@ static void megamerger_Merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
 		    (void) ajStrAssSub(&tmp, s2, prev2end, p->seq2start-1);
 		    ajStrToUpper(&tmp);
 		    ajStrApp(&seqstr, tmp);
-                    
+
 		}
 	    }
 	    else
 	    {
-		(void) ajFmtPrintF(outfile, "Mismatch is closer to the ends of %s, so use %s in the merged sequence\n\n", ajSeqName(seq2), ajSeqName(seq1));
+		(void) ajFmtPrintF(outfile,
+				   "Mismatch is closer to the ends of %s, "
+				   "so use %s in the merged sequence\n\n",
+				   ajSeqName(seq2), ajSeqName(seq1));
 		if (prev1end < p->seq1start)
 		{
 		    (void) ajStrAssSub(&tmp, s1, prev1end, p->seq1start-1);
@@ -238,7 +241,7 @@ static void megamerger_Merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
 		}
 	    }
 	}
-    
+
 	/* output the match */
 	(void) ajFmtPrintF(outfile, "Matching region %s %d-%d : %s %d-%d\n",
 			   ajSeqName(seq1), p->seq1start+1,
@@ -248,10 +251,11 @@ static void megamerger_Merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
 	(void) ajStrAppSub(&seqstr, s1, p->seq1start,
 			   p->seq1start + p->length-1);
 
-	/* note the end positions (+1) to get the intervening region between matches */
+	/* note the end positions (+1) to get the intervening region
+	   between matches */
 	prev1end = p->seq1start + p->length;
 	prev2end = p->seq2start + p->length;
-    }   	
+    }
 
     /* end of overlapping region */
     (void) ajFmtPrintF(outfile, "\n%s overlap ends at %d\n", ajSeqName(seq1),
@@ -275,7 +279,7 @@ static void megamerger_Merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
 			   "sequence\n\n", ajSeqName(seq2), prev2end+1,
 			   ajSeqLen(seq2));
 	ajStrAppSub(&seqstr, s2, prev2end, ajSeqLen(seq2)-1);
-      	
+
 	/* both are longer! */
     }
     else if (prev1end < ajSeqLen(seq1) && prev2end < ajSeqLen(seq2))
@@ -301,8 +305,8 @@ static void megamerger_Merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
 	    ajStrAssSub(&tmp, s2, prev2end, ajSeqLen(seq2)-1);
 	    ajStrToUpper(&tmp);
 	    ajStrApp(&seqstr, tmp);
-          
-	}      	 
+
+	}
     }
 
     /* write out sequence at end */
@@ -313,6 +317,6 @@ static void megamerger_Merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
     ajStrDel(&tmp);
     ajStrDel(&seqstr);
     ajListIterFree(iter);
-  
+
     return;
 }

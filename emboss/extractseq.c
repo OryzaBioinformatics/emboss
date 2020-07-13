@@ -73,7 +73,7 @@ int main(int argc, char **argv)
 	    /* new sequence */
 	    newseq = ajSeqNew ();
 
-	    /* create a nice name for the new sequence */        
+	    /* create a nice name for the new sequence */
 	    (void) ajStrAss(&name, ajSeqGetName(seq));
 	    (void) ajStrAppC(&name, "_");
 	    (void) ajStrFromInt(&value, st);
@@ -99,7 +99,7 @@ int main(int argc, char **argv)
 	    /* write this region of the sequence */
 	    (void) ajSeqAllWrite (seqout, newseq);
 
-	    /* tidy up */        
+	    /* tidy up */
 	    (void) ajStrDel(&name);
 	    (void) ajStrDel(&value);
 	    (void) ajStrDel(&str);
@@ -120,8 +120,8 @@ int main(int argc, char **argv)
 	(void) ajStrClear(&newstr);
 	(void) ajSeqAllWrite (seqout, seq);
     }
-    	
-  
+
+
     ajSeqWriteClose (seqout);
 
     ajExit ();

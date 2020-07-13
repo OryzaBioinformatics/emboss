@@ -8,12 +8,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -24,7 +24,9 @@
 #include <stdlib.h>
 
 
-#define NOY (AJGRAPH_X_BOTTOM + AJGRAPH_Y_LEFT + AJGRAPH_Y_RIGHT+ AJGRAPH_Y_INVERT_TICK + AJGRAPH_X_INVERT_TICK + AJGRAPH_X_TICK + AJGRAPH_X_LABEL + AJGRAPH_Y_LABEL + AJGRAPH_TITLE )
+#define NOY (AJGRAPH_X_BOTTOM + AJGRAPH_Y_LEFT + AJGRAPH_Y_RIGHT + \
+ AJGRAPH_Y_INVERT_TICK + AJGRAPH_X_INVERT_TICK + AJGRAPH_X_TICK + \
+ AJGRAPH_X_LABEL + AJGRAPH_Y_LABEL + AJGRAPH_TITLE )
 
 
 static void pepinfo_plotHistInt2( AjPHist hist, AjPSeq seq,
@@ -92,7 +94,7 @@ int main(int argc, char **argv)
     AjPGraph graphs = NULL;
     AjPHist hist = NULL;
     ajint numGraphs = 0;
-   
+
     /*   Data_table aa_props, aa_hydro, aa_acc;*/
     AjPList aa_props;
     AjPList aa_hydro;
@@ -153,7 +155,7 @@ int main(int argc, char **argv)
 
     do_plot = do_general || do_hydropathy;
 
-    /*    
+    /*
        {
        FILE* fp;
        fp = fopen ("pltrace.1", "w");
@@ -196,7 +198,7 @@ int main(int argc, char **argv)
 	{
 	    if (!ajListIterDone( listIter))
 	    {
-		  
+
 		/* ajalloc new ajint array for storing results */
 		AJCNEW(ival,(seq_end-seq_start));
 		iv[i] = ival;
@@ -217,7 +219,7 @@ int main(int argc, char **argv)
 			}
 		    }
 		    else
-		    {    
+		    {
 			ajErr( "At position %d in seq, couldn't find key "
 			      "%s in table", j, ajStrStr(key));
 			ajExit();
@@ -330,7 +332,7 @@ int main(int argc, char **argv)
 
 	    /* Get next table of parameters */
 	    table = ajListIterNext( listIter);
-      
+
 	    win_mid = (hwindow / 2);
 
 	    /* get array to store result */
@@ -340,7 +342,7 @@ int main(int argc, char **argv)
 	    /* Fill in 0.00 for seq begin to win_mid */
 	    for (j=0,cnt=0;j<win_mid; j++)
 		pfloat[cnt++]=0.0;
-      
+
 	    /* start loop */
 	    for (j = seq_start; j<=(seq_end-hwindow); j++)
 	    {
@@ -377,7 +379,7 @@ int main(int argc, char **argv)
 	for (i=0; i<3; i++)
 	{
 	    ajFmtPrintS(&tmpa,  "Results from %s", hydroTitles[i]);
-	    pepinfo_printFloatResults( outfile, inseq, pf[i], ajStrStr(tmpa)); 
+	    pepinfo_printFloatResults( outfile, inseq, pf[i], ajStrStr(tmpa));
 	}
 
 	/*Plot results*/
@@ -413,7 +415,7 @@ int main(int argc, char **argv)
 
 	ajGraphSetCharSize(0.50);
 	ajGraphxyTitleC(graphs,"Pepinfo");
-    
+
 	ajGraphxyDisplay(graphs,AJTRUE);
     }
 
@@ -458,9 +460,9 @@ static void pepinfo_printIntResults( AjPFile outfile, AjPSeq seq,
        ajFmtPrintF(outfile,  "   %5d%8s%32d\n", (i+1),
 			ajStrStr(aa), *results++);
     }
-	  
+
     ajFmtPrintF( outfile,  "\n\n\n");
-   
+
     /* clean up */
     ajStrDel(&aa);
 
@@ -503,7 +505,7 @@ static void pepinfo_printFloatResults( AjPFile outfile, AjPSeq seq,
     return;
 }
 
-/* @funcstatic pepinfo_plotGraph2Float ***************************************
+/* @funcstatic pepinfo_plotGraph2Float ****************************************
 **
 ** Create and add graph from set of results to graph set.
 **
@@ -511,7 +513,7 @@ static void pepinfo_printFloatResults( AjPFile outfile, AjPSeq seq,
 ** @param [r] seq     [AjPSeq]  Sequence
 ** @param [r] results [float*]  float array of results.
 ** @param [r] title_text [char*] title for graph
-** @param [r] xtext      [char*] x label.      
+** @param [r] xtext      [char*] x label.
 ** @param [r] ytext      [char*] y label.
 ** @param [r] plotcolour [ajint]   Pen colour to plot the graph in.
 ** @return [void]
@@ -527,20 +529,20 @@ static void pepinfo_plotGraph2Float(AjPGraph graphs, AjPSeq seq,
     AjPGraphData plot;
 
     ajint npts = 0;
-    
+
     float ymin=64000.;
     float ymax=-64000.;
-    
+
     npts = seq_end - seq_start;
 
     ajGraphDataxyMaxMin(results,npts,&ymin,&ymax);
-    
+
     /*
      *  initialise plot, the number of points will be the length of the data
      *  in the results structure
      */
     plot = ajGraphxyDataNewI( npts);
-   
+
     /*Set up rest of plot information*/
     ajGraphxyDataSetTitleC( plot, title_text);
     ajGraphxyDataSetXtitleC( plot, xtext);
@@ -555,16 +557,16 @@ static void pepinfo_plotGraph2Float(AjPGraph graphs, AjPSeq seq,
     return;
 }
 
-/* @funcstatic pepinfo_plotHistInt2 ******************************************
+/* @funcstatic pepinfo_plotHistInt2 *******************************************
 **
 ** Add a histogram data to the set set.
 **
 ** @param [rw] hist   [AjPHist] Histogram set to add new set to.
 ** @param [r] seq     [AjPSeq]  Sequence
 ** @param [r] results [ajint*]  float array of results.
-** @param [r] hist_num [ajint] the number of the histogram set. 
-** @param [r] header  [char*] title.      
-** @param [r] xtext   [char*] x label.      
+** @param [r] hist_num [ajint] the number of the histogram set.
+** @param [r] header  [char*] title.
+** @param [r] xtext   [char*] x label.
 ** @param [r] ytext   [char*] y label.
 ** @return [void]
 **

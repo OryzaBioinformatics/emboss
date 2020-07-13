@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -59,15 +59,15 @@ int main(int argc, char **argv)
     ajint end;
 
     ajint lc;
-    
+
     ajint i;
     ajint j;
     ajint r;
-    
+
     ajint count;
     ajint pstart;
     ajint pstop;
-    
+
     float xmin=   0.0;
     float xmax= 150.0;
     float ymin=   0.0;
@@ -82,12 +82,12 @@ int main(int argc, char **argv)
     AjPFile outf=NULL;
     ajint fno;
     AjPStr fstr=NULL;
-    
+
 
 
     float x;
     float y;
-    
+
 
     (void) ajGraphInit("pepnet", argc, argv);
 
@@ -99,7 +99,7 @@ int main(int argc, char **argv)
     diamonds    = ajAcdGetString("diamonds");
     amphipathic = ajAcdGetBool("amphipathic");
     text        = ajAcdGetBool("data");
-    
+
     ajStrToUpper(&octags);
     ajStrToUpper(&squares);
     ajStrToUpper(&diamonds);
@@ -116,15 +116,15 @@ int main(int argc, char **argv)
     txt    = ajStrNew();
     fno    = 1;
     fstr   = ajStrNew();
-    
 
-    
-    
+
+
+
     begin=ajSeqBegin(seq);
     end=ajSeqEnd(seq);
-	
+
     strand = ajSeqStrCopy(seq);
-	
+
     ajStrToUpper(&strand);
     ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
 
@@ -142,13 +142,13 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf,"##Graphic\n##Screen x1 %f y1 %f x2 %f y2 %f\n",
 		    xmin,ymin,xmax,ymax);
     }
-    
+
 
     for(count=begin-1,r=0;count<end;count+=231)
     {
 	pstart=count;
 	pstop = AJMIN(end-1, count+230);
-	    
+
 	ajFmtPrintS(&txt,"PEPNET of %s from %d to %d",ajSeqName(seq),
 		    pstart+1,pstop+1);
 
@@ -162,17 +162,17 @@ int main(int argc, char **argv)
 	else
 	    ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour %d size 0.5 %s\n",
 			75.,110.,RED,ajStrStr(txt));
-	
-	
-	
+
+
+
 	xstart = 145.0;
 	ystart =  80.0;
 
 	yinc = ch * 2.5;
 	xinc = yinc / 2.5;
-	
+
 	x = xstart;
-	
+
 	for(i=pstart;i<=pstop;i+=7)
 	{
 	    lc = i;
@@ -182,7 +182,7 @@ int main(int argc, char **argv)
 		ystart -= 7.5*yinc;
 	    }
 	    y=ystart;
-	    
+
 	    ajFmtPrintS(&txt,"%d",i+1);
 
 	    if(!text)
@@ -234,32 +234,32 @@ int main(int argc, char **argv)
 		ajFmtPrintF(outf,"##Graphic\n##Screen x1 %f y1 %f x2 %f "
 			    "y2 %f\n",xmin,ymin,xmax,ymax);
 	    }
-	    
+
 	}
-	
+
     }
 
     if(!text)
 	ajGraphCloseWin();
     else
 	ajFileClose(&outf);
-    
+
     ajStrDel(&strand);
     ajStrDel(&fstr);
-    
 
-    
+
+
 
     ajSeqDel(&seq);
     ajStrDel(&substr);
-    
+
     ajExit();
     return 0;
 }
 
 
 
-/* @funcstatic pepnet_drawocta *********************************************
+/* @funcstatic pepnet_drawocta ************************************************
 **
 ** Draw an octagon
 **
@@ -295,14 +295,14 @@ static void pepnet_drawocta(float x, float y, float size, AjBool text,
 			x+polyx[i]*size,y+polyy[i]*size,x+polyx[i+1]*size,
 			y+polyy[i+1]*size,BLUEVIOLET);
     }
-    
+
     return;
 }
 
 
 
 
-/* @funcstatic pepnet_plotresidue *******************************************
+/* @funcstatic pepnet_plotresidue *********************************************
 **
 ** Plot a residue
 **
@@ -325,8 +325,8 @@ static void pepnet_plotresidue(char c, float x, float y, char *squares,
 
     cs[1]='\0';
     *cs=c;
-    
-    
+
+
     if(!text)
 	ajGraphSetFore(GREEN);
 

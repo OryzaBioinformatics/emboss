@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -30,7 +30,7 @@ static void listor_Write(AjPFile list, AjPSeqset seqset, ajint i);
 enum {L_OR, L_AND, L_XOR, L_NOT};
 
 
-/* @prog listor ************************************************************
+/* @prog listor ***************************************************************
 **
 ** Writes a list file of the logical OR of two sets of sequences
 **
@@ -65,11 +65,11 @@ int main(int argc, char **argv)
     case 'A': Operator = L_AND; break;
     case 'X': Operator = L_XOR; break;
     case 'N': Operator = L_NOT; break;
-    default: 
+    default:
       (void) ajFatal("Invalid operator type: %S", operator[0]);
       exit(0);
-  }    
-            
+  }
+
 
 /* get the order of seqset 1 by length */
   n1 = ajSeqsetSize(seq1);
@@ -102,19 +102,19 @@ lengths */
   while (curr1 < n1 &&  curr2 < n2) {
     if (lengths1[order1[curr1]] < lengths2[order2[curr2]]) {
 /* seq1 is shorter - increment curr1 index */
-      curr1++;      
+      curr1++;
     } else if (lengths1[order1[curr1]] > lengths2[order2[curr2]]) {
 /* seq2 is shorter - increment curr2 index */
-      curr2++;      
+      curr2++;
     } else {
 /* identical lengths - check all seq1/seq2 entries of this length */
-      for (tmp1=curr1; tmp1<n1 
+      for (tmp1=curr1; tmp1<n1
       		&& lengths1[order1[tmp1]] == lengths2[order2[curr2]]; tmp1++) {
-        for (tmp2=curr2; tmp2<n2 
+        for (tmp2=curr2; tmp2<n2
       		&& lengths2[order2[tmp2]] == lengths2[order2[curr2]]; tmp2++) {
 
 /* check to see if the sequences are identical */
-          if (!ajStrCmpCase(ajSeqStr(ajSeqsetGetSeq(seq1, order1[tmp1])), 
+          if (!ajStrCmpCase(ajSeqStr(ajSeqsetGetSeq(seq1, order1[tmp1])),
       		    ajSeqStr(ajSeqsetGetSeq(seq2, order2[tmp2])))) {
             hits1[order1[tmp1]] = order2[tmp2];
             hits2[order2[tmp2]] = order1[tmp1];
@@ -123,7 +123,7 @@ lengths */
       }
       curr1 = tmp1;
       curr2 = tmp2;
-    }      
+    }
   }
 
 /* output the required entries to the list file */
@@ -151,13 +151,13 @@ lengths */
 **
 ** @param [r] list [AjPFile] Output file
 ** @param [r] Operator [ajint] logical operation to perform
-** @param [r] seq1 [AjPSeqset] first seqset 
-** @param [r] seq2 [AjPSeqset] second seqset 
-** @param [r] hits1 [ajint *] array of hits to seq1 
-** @param [r] hits2 [ajint *] array of hits to seq2 
-** @param [r] n1 [ajint] number of sequences in seq1 
-** @param [r] n2 [ajint] number of sequences in seq2 
-** @return [void] 
+** @param [r] seq1 [AjPSeqset] first seqset
+** @param [r] seq2 [AjPSeqset] second seqset
+** @param [r] hits1 [ajint *] array of hits to seq1
+** @param [r] hits2 [ajint *] array of hits to seq2
+** @param [r] n1 [ajint] number of sequences in seq1
+** @param [r] n2 [ajint] number of sequences in seq2
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -165,7 +165,7 @@ static void listor_Output(AjPFile list, ajint Operator, AjPSeqset seq1,
 	AjPSeqset seq2, ajint *hits1, ajint *hits2, ajint n1, ajint n2)
 {
 
-/* 
+/*
 ** OR - output all of seq1 and then those of seq2 with no hits
 **
 ** AND - output only those of seq1 with hits
@@ -205,13 +205,13 @@ static void listor_Output(AjPFile list, ajint Operator, AjPSeqset seq1,
 }
 
 /* @funcstatic listor_Write ***************************************************
-**   
+**
 ** Writes out USA of a sequence to a file
 **
 ** @param [r] list [AjPFile] Output file
 ** @param [r] seqset [AjPSeqset] seqset
 ** @param [r] i [ajint] index into seqset for the sequence to write
-** @return [void] 
+** @return [void]
 ** @@
 ******************************************************************************/
 

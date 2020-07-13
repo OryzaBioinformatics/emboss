@@ -7,12 +7,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -27,7 +27,7 @@ static void demotable_freetype (const void* key, void** value, void* cl);
 
 
 
-/* @prog demotable *******************************************************
+/* @prog demotable ************************************************************
 **
 ** Testing
 **
@@ -40,10 +40,10 @@ int main(int argc, char **argv)
     AjPStr  line=NULL;
     AjPTable type;
     ajint *intptr;
- 
+
     embInit ("demotable", argc, argv);
 
-  
+
     /*open file */
     gfffile = ajAcdGetInfile("gff");
 
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic demotable_getsubfromstring ************************************
+/* @funcstatic demotable_getsubfromstring *************************************
 **
 ** Undocumented.
 **
@@ -105,20 +105,20 @@ static AjPStr demotable_getsubfromstring(AjPStr line, ajint which)
 {
     static AjPRegexp gffexp=NULL;
     AjPStr temp =NULL;
- 
+
     if(!gffexp)
 	gffexp = ajRegCompC("([^\t]+)\t([^\t]+)\t([^\t]+)");
 
     if(ajRegExec(gffexp,line))
 	ajRegSubI(gffexp,which,&temp);
-   
+
     return temp;
 }
 
 
 
 
-/* @funcstatic demotable_typePrint *******************************************
+/* @funcstatic demotable_typePrint ********************************************
 **
 ** Undocumented.
 **
@@ -142,7 +142,7 @@ static void demotable_typePrint (const void* key, void** value, void* cl)
 
 
 
-/* @funcstatic demotable_freetype ********************************************
+/* @funcstatic demotable_freetype *********************************************
 **
 ** Undocumented.
 **

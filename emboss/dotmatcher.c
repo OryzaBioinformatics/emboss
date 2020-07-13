@@ -10,12 +10,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -117,11 +117,11 @@ int main(int argc, char **argv)
     float x2=0.;
     float y1=0.;
     float y2=0.;
-    
+
     se1 = ajStrNew();
     se2 = ajStrNew();
-    
-    
+
+
     ajtime.time = localtime(&tim);
     ajtime.format = 0;
 
@@ -133,11 +133,11 @@ int main(int argc, char **argv)
     graph = ajAcdGetGraph ("graph");
     xygraph = ajAcdGetGraphxy("xygraph");
     windowsize = ajAcdGetInt("windowsize");
-    ithresh = ajAcdGetInt("threshold");  
+    ithresh = ajAcdGetInt("threshold");
     matrix  = ajAcdGetMatrix("matrixfile");
     text = ajAcdGetBool("data");
     outf = ajAcdGetOutfile("outfile");
-  
+
     sub = ajMatrixArray(matrix);
     cvt = ajMatrixCvt(matrix);
 
@@ -152,7 +152,7 @@ int main(int argc, char **argv)
     ajStrAssSubC(&se2,ajSeqChar(seq2),b2-1,e2-1);
     ajSeqReplace(seq,se1);
     ajSeqReplace(seq2,se2);
-    
+
 
     s1 = ajStrStr(ajSeqStr(seq));
     s2 = ajStrStr(ajSeqStr(seq2));
@@ -162,7 +162,7 @@ int main(int argc, char **argv)
     aa1str = ajStrNewL(1+ajSeqLen(seq2));
 
     list = ajListNew();
-    
+
 
     for(i=0;i<ajSeqLen(seq);i++)
 	ajStrAppK(&aa0str,(char)ajSeqCvtK(cvt, *s1++));
@@ -173,7 +173,7 @@ int main(int argc, char **argv)
     max= ajSeqLen(seq);
     if(ajSeqLen(seq2) > max)
 	max = ajSeqLen(seq2);
-  
+
     xmargin = ymargin = max *0.15;
     ticklen = xmargin*0.1;
     onefifth  = xmargin*0.2;
@@ -181,7 +181,7 @@ int main(int argc, char **argv)
     subt = ajStrNewC((strret=
 		  ajFmtString("(windowsize = %d, threshold = %3.2f  %D)",
 			      windowsize,thresh,&ajtime)));
-    
+
 
     if(!text && !stretch)
 	if( ajStrLen(graph->subtitle) <=1)
@@ -200,17 +200,17 @@ int main(int argc, char **argv)
 	ajGraphTextLine (0.0-(xmargin*0.75),(ajSeqLen(seq2))*0.5,
 			 0.0-(xmargin*0.75),(ajSeqLen(seq)),
 			 ajStrStr(graph->yaxis),0.5);
-  
+
 	ajGraphSetCharSize(0.5);
 	ajGraphTextMid (max*0.5,(ajSeqLen(seq2))+xmargin-(onefifth*3),
 			ajStrStr(graph->subtitle));
     }
-    
-  
+
+
 
     s1= ajStrStr(aa0str);
     s2 = ajStrStr(aa1str);
-  
+
     for(j=0;j < ajSeqLen(seq2)-windowsize;j++)
     {
 	i =0;
@@ -240,14 +240,14 @@ int main(int argc, char **argv)
 		    /* draw the line */
 		    dotmatcher_pushpoint(&list,(float)starti,(float)startj,
 					 (float)i-1,(float)k-1,text,stretch);
-		}	    
+		}
 	    }
 	    else if (total >= thresh)
 	    {
 		starti = i-windowsize;
 		startj = k-windowsize;
 		abovethresh= 1;
-	    }      
+	    }
 	    i++;k++;
 	}
 	if(abovethresh)
@@ -264,7 +264,7 @@ int main(int argc, char **argv)
 	j =0;
 	total = 0;
 	abovethresh =0;
-    
+
 	k = i;
 	for(l=0;l<windowsize;l++)
 	    total = total + sub[(ajint)s1[k++]][(ajint)s2[j++]];
@@ -288,14 +288,14 @@ int main(int argc, char **argv)
 		    /* draw the line */
 		    dotmatcher_pushpoint(&list,(float)starti,(float)startj,
 					 (float)k-1,(float)j-1,text,stretch);
-		}	    
+		}
 	    }
 	    else if (total >= thresh)
 	    {
 		starti = k-windowsize;
 		startj = j-windowsize;
 		abovethresh= 1;
-	    }      
+	    }
 	    j++;k++;
 	}
 	if(abovethresh)
@@ -328,12 +328,12 @@ int main(int argc, char **argv)
 	    ajGraphLine(0.0,0.0,0.0,0.0-ticklen);
 	    sprintf(ptr,"%d",b1-1);
 	    ajGraphTextMid ( 0.0,0.0-(onefifth),ptr);
-      
+
 	    ajGraphLine((float)(ajSeqLen(seq)),0.0,
 			(float)ajSeqLen(seq),0.0-ticklen);
 	    sprintf(ptr,"%d",ajSeqLen(seq)+b1-1);
 	    ajGraphTextMid ( (float)ajSeqLen(seq),0.0-(onefifth),ptr);
-      
+
 	}
 	else
 	{
@@ -344,7 +344,7 @@ int main(int argc, char **argv)
 		ajGraphTextMid ( k2,0.0-(onefifth),ptr);
 	    }
 	}
-    
+
 	i=0;
 	while(acceptableticks[i]*numbofticks < ajSeqLen(seq2))
 	    i++;
@@ -357,7 +357,7 @@ int main(int argc, char **argv)
 	    ajGraphLine(0.0,0.0,0.0-ticklen,0.0);
 	    sprintf(ptr,"%d",b2-1);
 	    ajGraphTextEnd ( 0.0-(onefifth),0.0,ptr);
-      
+
 	    ajGraphLine(0.0,(float)ajSeqLen(seq2),0.0-ticklen,
 			(float)ajSeqLen(seq2));
 	    sprintf(ptr,"%d",ajSeqLen(seq2)+b2-1);
@@ -404,12 +404,12 @@ int main(int argc, char **argv)
     {
 	tit = ajStrNew();
 	ajFmtPrintS(&tit,"%S",xygraph->title);
-    
+
 
 	gdata = ajGraphxyDataNewI(1);
 	xa[0] = (float)b1;
 	ya[0] = (float)b2;
-    
+
 	ajGraphxyTitleC(xygraph,ajStrStr(tit));
 
 	ajGraphxyXtitleC(xygraph,ajSeqName(seq));
@@ -424,7 +424,7 @@ int main(int argc, char **argv)
 	ajGraphxySetXEnd(xygraph,(float)e1);
 	ajGraphxySetYStart(xygraph,(float)b2);
 	ajGraphxySetYEnd(xygraph,(float)e2);
-    
+
 	ajGraphxySetXRangeII(xygraph,b1,e1);
 	ajGraphxySetYRangeII(xygraph,b2,e2);
 
@@ -448,12 +448,12 @@ int main(int argc, char **argv)
 
 
 	ajGraphxyDisplay(xygraph,ajFalse);
-	ajGraphClose();    
+	ajGraphClose();
 
 	ajStrDel(&tit);
     }
-    
-    
+
+
 
     ajListDel(&list);
 
@@ -463,14 +463,14 @@ int main(int argc, char **argv)
     ajStrDel(&aa1str);
     ajStrDel(&se1);
     ajStrDel(&se2);
-    
+
     AJFREE (strret);			/* created withing ajFmtString */
 
     ajExit();
     return 0;
 }
 
-/* @funcstatic dotmatcher_pushpoint ******************************************
+/* @funcstatic dotmatcher_pushpoint *******************************************
 **
 ** Undocumented.
 **
@@ -496,7 +496,7 @@ static void dotmatcher_pushpoint(AjPList *l, float x1, float y1, float x2,
 	ajGraphLine(x1+1,y1+1,x2+1,y2+1);
 	return;
     }
-    
+
     AJNEW0(p);
     p->x1=x1+1;
     p->y1=y1+1;
@@ -507,7 +507,7 @@ static void dotmatcher_pushpoint(AjPList *l, float x1, float y1, float x2,
     return;
 }
 
-/* @funcstatic dotmatcher_datapoints *****************************************
+/* @funcstatic dotmatcher_datapoints ******************************************
 **
 ** Undocumented.
 **

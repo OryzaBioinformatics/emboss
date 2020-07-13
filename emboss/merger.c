@@ -10,12 +10,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -52,9 +52,9 @@ int main(int argc, char **argv)
     AjPStr n;
 
     AjPStr merged=NULL;
-    
+
     AjPFile outf=NULL;
-    
+
     ajint    lena;
     ajint    lenb;
 
@@ -63,10 +63,10 @@ int main(int argc, char **argv)
 
     ajint start1=0;
     ajint start2=0;
-    
+
     float  *path;
     ajint    *compass;
-    
+
     AjPMatrixf matrix;
     AjPSeqCvt  cvt=0;
     float      **sub;
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
     float score;
     ajint begina;
     ajint beginb;
-    
+
     (void) embInit("merger", argc, argv);
 
     a      = ajAcdGetSeq("seqa");
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 
     m=ajStrNew();
     n=ajStrNew();
-    
+
     sub = ajMatrixfArray(matrix);
     cvt = ajMatrixfCvt(matrix);
 
@@ -135,7 +135,7 @@ int main(int argc, char **argv)
 
     p = ajSeqChar(a);
     q = ajSeqChar(b);
-    
+
     (void) ajStrAssC(&m,"");
     (void) ajStrAssC(&n,"");
 
@@ -163,7 +163,10 @@ int main(int argc, char **argv)
 			 start1, start2, gapopen, gapextend,
 			 score, matrix, begina, beginb);
 
-    /* write the merged sequence */    
+    ajAlignWrite (align);
+    ajAlignReset(align);
+
+    /* write the merged sequence */
     (void) ajSeqReplace(a, merged);
     (void) ajSeqWrite (seqout, a);
     (void) ajSeqWriteClose (seqout);
@@ -184,11 +187,11 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic merger_Merge *******************************************
-** 
+/* @funcstatic merger_Merge ***************************************************
+**
 ** Print a global alignment
-** Nucleotides or proteins as needed.   
-** 
+** Nucleotides or proteins as needed.
+**
 ** @param [w] align [AjPAlign] Alignment object
 ** @param [w] ms [AjPStr *] output merged sequence
 ** @param [w] outf [AjPFile] output stream
@@ -222,7 +225,7 @@ static void merger_Merge (AjPAlign align,
 
     char *p = ajStrStr(m);
     char *q = ajStrStr(n);
-  
+
     ajint olen = ajStrLen(m);	/* length of walk alignment */
     /* lengths of the sequences after the aligned region */
     ajint alen;
@@ -319,7 +322,7 @@ static void merger_Merge (AjPAlign align,
 	    if (merger_bestquality(a, b, apos, bpos))
 	    {
 		p[i] = toupper((ajint)p[i]);
-		if (p[i] != '.' && p[i] != ' ') (void) ajStrAppK(ms, p[i]); 
+		if (p[i] != '.' && p[i] != ' ') (void) ajStrAppK(ms, p[i]);
 		  (void) ajFmtPrintS(&tmpstr,
 				     "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
 				     apos+1, p[i],bpos+1, q[i], p[i]);
@@ -330,14 +333,14 @@ static void merger_Merge (AjPAlign align,
 	    else
 	    {
 		q[i] = toupper((ajint)q[i]);
-		if (q[i] != '.' && q[i] != ' ') (void) ajStrAppK(ms, q[i]); 
+		if (q[i] != '.' && q[i] != ' ') (void) ajStrAppK(ms, q[i]);
 		  (void) ajFmtPrintS(&tmpstr,
 				     "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
 				     apos+1, p[i],bpos+1, q[i], q[i]);
 		  ajAlignSetTailApp(align, tmpstr);
 		  if (outf)
 		    ajFmtPrintF (outf, "%S", tmpstr);
-	    }      	      	
+	    }
 
 	}
 	else if (p[i]=='n' || p[i]=='N')
@@ -363,11 +366,11 @@ static void merger_Merge (AjPAlign align,
 	    /*
 	     *  get the sequence with the best quality and use the base
 	     *  from that one
-	     */   
+	     */
 	    if (merger_bestquality(a, b, apos, bpos))
 	    {
 		p[i] = toupper((ajint)p[i]);
-		(void) ajStrAppK(ms, p[i]);   
+		(void) ajStrAppK(ms, p[i]);
 		(void) ajFmtPrintS(&tmpstr,
 				   "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
 				   apos+1, p[i],bpos+1, q[i], p[i]);
@@ -378,7 +381,7 @@ static void merger_Merge (AjPAlign align,
 	    else
 	    {
 		q[i] = toupper((ajint)q[i]);
-		(void) ajStrAppK(ms, q[i]);   
+		(void) ajStrAppK(ms, q[i]);
 		(void) ajFmtPrintS(&tmpstr,
 				   "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
 				   apos+1, p[i],bpos+1, q[i], q[i]);
@@ -393,15 +396,15 @@ static void merger_Merge (AjPAlign align,
 	    (void) ajStrAppK(ms, p[i]);
 	}
 
-	/* update the positions in the unaligned complete sequences */    
+	/* update the positions in the unaligned complete sequences */
 	if (p[i] != '.' &&  p[i] != ' ') apos++;
 	if (q[i] != '.' &&  q[i] != ' ') bpos++;
-    }  
-    
+    }
+
     /* output the right hand side */
     alen=strlen(&a[apos]);
     blen=strlen(&b[bpos]);
-    
+
     if (alen > blen)
     {
 	(void) ajStrAppC(ms, &a[apos]);
@@ -422,9 +425,9 @@ static void merger_Merge (AjPAlign align,
 	      ajFmtPrintF (outf, "%S", tmpstr);
 	    ajStrDel(&tmpstr);
 	}
-    
+
     }
-    
+
     if (blen > alen)
     {
 	(void) ajStrAppC(ms, &b[bpos]);
@@ -463,14 +466,14 @@ static void merger_Merge (AjPAlign align,
 	  ajFmtPrintF (outf, "%S", tmpstr);
 	ajStrDel(&tmpstr);
     }
-    
+
     return;
 }
 
 
 
 
-/* @funcstatic merger_bestquality *******************************************
+/* @funcstatic merger_bestquality *********************************************
 **
 ** Return ajTrue if the first sequence has the best quality
 ** If both sequences have the same quality, pick the first
@@ -496,15 +499,15 @@ static AjBool merger_bestquality (char * a, char *b, ajint apos, ajint bpos)
 	/* both have the same quality, use a larger window */
 	qa = merger_quality(a, apos, 10);
 	qb = merger_quality(b, bpos, 10);
-    } 
-  
+    }
+
     if (qa == qb)
     {
 	/* both have the same quality, use a larger window */
 	qa = merger_quality(a, apos, 20);
 	qb = merger_quality(b, bpos, 20);
-    } 
-  
+    }
+
     if (qa >= qb)
 	/*  both have the same quality, use the first sequence */
 	return ajTrue;
@@ -515,7 +518,7 @@ static AjBool merger_bestquality (char * a, char *b, ajint apos, ajint bpos)
 
 
 
-/* @funcstatic merger_quality *******************************************
+/* @funcstatic merger_quality *************************************************
 **
 ** Calculate the quality of a window of a sequence
 **
@@ -544,7 +547,7 @@ static AjBool merger_bestquality (char * a, char *b, ajint apos, ajint bpos)
 static float merger_quality (char * seq, ajint pos, ajint window)
 {
     ajint value=0;
-    ajint i;	
+    ajint i;
 
     for (i=pos; i<pos+window && i < strlen(seq); i++)
 	if (strchr("aAcCgGtTuU", seq[i]))

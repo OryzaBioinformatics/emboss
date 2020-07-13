@@ -8,12 +8,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
     AjPFile pout = NULL;
     AjPFile oout = NULL;
     AjPFile fp   = NULL;
-    
+
     AjPStr  line;
     AjPStr  acc;
     AjPStr  id;
@@ -51,9 +51,9 @@ int main(int argc, char **argv)
 
     AjBool  gid=ajFalse;
     AjBool  done=ajFalse;
-    
+
     embInit("tfextract",argc,argv);
-    
+
     inf = ajAcdGetInfile("inf");
 
     pfname = ajStrNewC("tffungi");
@@ -77,7 +77,7 @@ int main(int argc, char **argv)
     id      = ajStrNewC("");
     acc     = ajStrNew();
     pattern = ajStrNew();
-    
+
 
     while(ajFileReadLine(inf,&line))
     {
@@ -141,8 +141,8 @@ int main(int argc, char **argv)
 	    ajFmtPrintF(fp,"%-20s %s %s\n",ajStrStr(id),ajStrStr(pattern),
 			ajStrStr(acc));
     }
-    
-	
+
+
     ajFileClose(&inf);
     ajFileClose(&fout);
     ajFileClose(&iout);

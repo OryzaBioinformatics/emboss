@@ -10,12 +10,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
     ajint len;
     ajint pos;
     AjBool addover;
-    
+
     (void) embInit ("splitter", argc, argv);
 
     seqout = ajAcdGetSeqoutall ("outseq");
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     size = ajAcdGetInt ("size");
     overlap = ajAcdGetInt ("overlap");
     addover = ajAcdGetBool("addoverlap");
-    
+
     subseq = ajSeqNew ();
     str    = ajStrNew();
 
@@ -94,9 +94,9 @@ int main(int argc, char **argv)
 	    ajSeqReplace(subseq, str);
 	    splitter_write(seqout,subseq,pos,len-1,seq);
 	}
-	
+
     }
-  
+
     ajSeqWriteClose(seqout);
 
     ajSeqDel(&subseq);
@@ -107,7 +107,7 @@ int main(int argc, char **argv)
 }
 
 
-/* @funcstatic splitter_write  *********************************************
+/* @funcstatic splitter_write  ************************************************
 **
 ** Write out split sequence
 **
@@ -125,7 +125,7 @@ static void splitter_write(AjPSeqout seqout, AjPSeq subseq, ajint start,
 {
     AjPStr name  = NULL;
     AjPStr value = NULL;
-    
+
     name  = ajStrNew();
     value = ajStrNew();
 
@@ -136,18 +136,18 @@ static void splitter_write(AjPSeqout seqout, AjPSeq subseq, ajint start,
     ajStrFromInt(&value, ajSeqBegin(seq)+start);
     ajStrApp(&name, value);
     ajStrAppC(&name, "-");
-    ajStrFromInt(&value, ajSeqBegin(seq)+end);	
+    ajStrFromInt(&value, ajSeqBegin(seq)+end);
     ajStrApp(&name, value);
     ajSeqAssName(subseq, name);
-    
+
     /* set the description of the subsequence */
     ajSeqAssDesc(subseq, ajSeqGetDesc(seq));
-    
+
     /* set the type of the subsequence */
     ajSeqType(subseq);
-    
+
     ajSeqAllWrite (seqout, subseq);
-    
+
 
     ajStrDel(&name);
     ajStrDel(&value);

@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -33,7 +33,7 @@ extern int PNGHeight;
 #endif
 
 
-/* @prog syco ***************************************************************
+/* @prog syco *****************************************************************
 **
 ** Synonymous codon usage Gribskov statistic plot
 **
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     AjPStr       substr;
     AjPStr       tmp;
     float        min;
-    
+
     AjPGraph     graph=NULL;
     AjPGraphData this=NULL;
 
@@ -58,17 +58,17 @@ int main(int argc, char **argv)
     {
 	"Frame 1","Frame 2","Frame 3"
     };
-    
-    
+
+
     float *xarr[3];
     float *farr[3];
     ajint   *unc[3];
-    
+
     float sum;
 
     char *p;
     char *q;
-    
+
     ajint base;
     ajint limit;
     ajint startp;
@@ -85,11 +85,11 @@ int main(int argc, char **argv)
 
     float amin;
     float amax;
-    
+
     ajint beg;
     ajint end;
     ajint window;
-    
+
 #ifdef PLD_png
 
     /*
@@ -111,19 +111,19 @@ int main(int argc, char **argv)
     outf      = ajAcdGetOutfile("outfile");
     show      = ajAcdGetBool("uncommon");
     min       = ajAcdGetFloat("minimum");
-    
+
     if(plot)
     {
         graph = ajAcdGetGraphxy("graph");
 	(void) ajGraphSetCharSize(0.60);
     }
-    
+
 
     cdup = ajCodDup(codon);
 
     substr = ajStrNew();
     tmp    = ajStrNew();
-    
+
     beg = ajSeqBegin(a);
     end = ajSeqEnd(a);
     ajStrAssSubC(&substr,ajSeqChar(a),beg-1,end-1);
@@ -133,7 +133,7 @@ int main(int argc, char **argv)
     p=ajStrStr(substr);
     len=ajStrLen(substr);
     ajStrToUpper(&substr);
-    
+
     w=window*3;
 
     limit=len-w-3;
@@ -153,7 +153,7 @@ int main(int argc, char **argv)
 	ajExit();
 	return 0;
     }
-    
+
 
 
     if(!plot)
@@ -163,12 +163,12 @@ int main(int argc, char **argv)
 
     miny=FLT_MAX;
     maxy=FLT_MIN;
-    
+
     for(base=0;base<3;++base)
     {
 	q=p+base;
 	(void) ajStrAssC(&tmp,q);
-	
+
 	ajCodCalcGribskov(&cdup, tmp);
 	startp=(w/2)+base;
 	for(i=0,pos=base;i<count;++i,pos+=3)
@@ -189,7 +189,7 @@ int main(int argc, char **argv)
 	    miny=(miny<farr[base][j]) ? miny : farr[base][j];
 	    maxy=(maxy>farr[base][j]) ? maxy : farr[base][j];
 	}
-	
+
 	if(plot)
 	{
 	    this = ajGraphxyDataNewI(count);
@@ -220,8 +220,8 @@ int main(int argc, char **argv)
 		      ajGraphDataObjAddLine(this,xarr[base][i],1.,
 			        		   xarr[base][i],1.005,3);
 	    }
-	    
-	    
+
+
 	    ajGraphxyDataSetYtitleC(this,"Gribskov value");
 	    ajGraphxyDataSetXtitleC(this,"Sequence position");
 	    ajGraphxyDataSetTitleC(this,frames[base]);
@@ -247,13 +247,13 @@ int main(int argc, char **argv)
 	ajGraphxyTitleC(graph,"Gribskov Codon Plot");
 	ajGraphxyDisplay(graph,ajTrue);
     }
-    
+
 
     ajStrDel(&substr);
     ajFileClose(&outf);
     ajCodDel(&codon);
     ajCodDel(&cdup);
-    
+
     ajExit();
     return 0;
 }

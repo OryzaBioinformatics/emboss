@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     AjPSeqall seqall=NULL;
     AjPSeq seq=NULL;
     AjPSeqout seqout=NULL;
-    
+
     ajint ncds=0;
     ajint nmrna=0;
     ajint ntran=0;
@@ -48,7 +48,7 @@ int main(int argc, char **argv)
     AjPStr cds=NULL;
     AjPStr mrna=NULL;
     AjPStr usa=NULL;
-    
+
     AjBool ret=ajFalse;
     AjPStr *cdslines=NULL;
     AjPStr *mrnalines=NULL;
@@ -56,18 +56,18 @@ int main(int argc, char **argv)
     AjBool docds=ajFalse;
     AjBool domrna=ajFalse;
     AjBool dotran=ajFalse;
-    
-    
+
+
     embInit("coderet",argc,argv);
-    
+
     seqall  = ajAcdGetSeqall("seqall");
-    
+
     domrna = ajAcdGetBool("mrna");
     docds  = ajAcdGetBool("cds");
     dotran = ajAcdGetBool("translation");
-    
+
     seqout = ajAcdGetSeqout("seqout");
-    
+
     cds  = ajStrNew();
     mrna = ajStrNew();
     usa  = ajStrNew();
@@ -78,13 +78,13 @@ int main(int argc, char **argv)
      *  can be resolved
      */
     ajStrAssS(&usa,ajSeqallGetUsa(seqall));
-    
+
     while(ajSeqallNext(seqall,&seq))
     {
 	if(docds)
 	{
 	    ncds = ajFeatGetLocs(seq->TextPtr, &cdslines, "CDS");
-    
+
 	    for(i=0;i<ncds;++i)
 	    {
 		ret = ajFeatLocToSeq(ajSeqStr(seq),cdslines[i],&cds,usa);
@@ -99,11 +99,11 @@ int main(int argc, char **argv)
 	    if(ncds)
 		AJFREE(cdslines);
 	}
-    
+
 	if(domrna)
 	{
 	    nmrna = ajFeatGetLocs(seq->TextPtr, &mrnalines, "mRNA");
-    
+
 	    for(i=0;i<nmrna;++i)
 	    {
 		ret = ajFeatLocToSeq(ajSeqStr(seq),mrnalines[i],&mrna,usa);
@@ -124,7 +124,7 @@ int main(int argc, char **argv)
 	if(dotran)
 	{
 	    ntran = ajFeatGetTrans(seq->TextPtr, &tranlines);
-    
+
 	    for(i=0;i<ntran;++i)
 	    {
 		coderet_put_seq(seq,tranlines[i],i,"pro",1,seqout);
@@ -136,7 +136,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    
+
     ajSeqWriteClose(seqout);
 
 
@@ -151,7 +151,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic coderet_put_seq ***********************************************
+/* @funcstatic coderet_put_seq ************************************************
 **
 ** Undocumented.
 **
@@ -169,9 +169,9 @@ static void coderet_put_seq(AjPSeq seq, AjPStr strseq, ajint n, char *name,
 {
     AjPSeq nseq=NULL;
     AjPStr fn=NULL;
-    
+
     fn = ajStrNew();
-    
+
 
     ajFmtPrintS(&fn,"%S_%s_%d",ajSeqGetAcc(seq),name,n+1);
     ajStrToLower(&fn);
@@ -184,16 +184,16 @@ static void coderet_put_seq(AjPSeq seq, AjPStr strseq, ajint n, char *name,
 	ajSeqSetNuc(nseq);
     else
 	ajSeqSetProt(nseq);
-    
+
     ajSeqReplace(nseq,strseq);
 
 
-    ajSeqWrite (seqout,nseq);  
+    ajSeqWrite (seqout,nseq);
 
 
     ajSeqDel(&nseq);
     ajStrDel(&fn);
 
-    
+
     return;
 }

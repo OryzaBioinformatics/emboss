@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -62,19 +62,19 @@ int main(int argc, char **argv)
     AjBool       isrule;
     AjBool       isp;
     AjBool       isn;
-    
+
     AjPStr       pro;
-    
+
     ajint beg;
     ajint end;
     ajint len;
-    
+
     ajint width;
 
     char *ruler;
     ajint  *ppos=NULL;
     ajint  *npos=NULL;
-    
+
 
     embInit("prettyseq", argc, argv);
 
@@ -112,7 +112,7 @@ int main(int argc, char **argv)
     ajStrDel(&substr);
     ajCodDel(&codon);
     ajRangeDel(&range);
-    
+
     ajExit();
     return 0;
 }
@@ -141,7 +141,7 @@ static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end, AjPStr s,
     ajint limit;
     ajint i;
     ajint j;
-    
+
     ajint nr;
     ajint st;
     ajint en;
@@ -149,13 +149,13 @@ static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end, AjPStr s,
     char *p;
     char *q;
     char c;
-    
+
     char tri[4];
     ajint  idx;
-    
-    
+
+
     tri[3]='0';
-    
+
     ajStrToUpper(&s);
 
     /* Convert ranges to subsequence values */
@@ -166,7 +166,7 @@ static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end, AjPStr s,
 	range->end[i] -= beg;
     }
     limit = ajStrLen(s);
-    
+
     /* Test ranges for validity */
     for(i=0;i<nr;++i)
     {
@@ -185,7 +185,7 @@ static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end, AjPStr s,
 	for(j=st;j<=en;++j)
 	    p[j] = (char)tolower((ajint)p[j]);
     }
-    
+
 
     /* Do the translation */
     q=ajStrStr(pro);
@@ -268,21 +268,21 @@ static void prettyseq_makeRuler(ajint len, ajint begin, char *ruler,
 static void prettyseq_calcProteinPos(ajint *ppos, AjPStr pro, ajint len)
 {
     ajint j;
-    
+
     ajint pos;
     ajint v;
-    
+
     char *p;
-    
+
 
 
     pos=0;
     v=1;
-	
+
     p=ajStrStr(pro);
     while(p[pos]==' ')
 	ppos[pos++]=0;
-	    
+
     while(pos<len)
     {
 	if(p[pos]=='*')
@@ -297,7 +297,7 @@ static void prettyseq_calcProteinPos(ajint *ppos, AjPStr pro, ajint len)
 	    v=1;
 	    continue;
 	}
-	    
+
 	if(p[pos]!=' ')
 	{
 	    ppos[pos]=v+POFF;
@@ -352,7 +352,7 @@ static void prettyseq_showTrans(ajint *ppos, ajint *npos, AjPStr pro,
 
     ajFmtPrintF(outf,"PRETTYSEQ of %s from %d to %d\n\n",name,begin,
 		begin+len-1);
-    
+
 
     pos=0;
     while(pos<len)
@@ -406,9 +406,9 @@ static void prettyseq_showTransb(ajint *ppos, ajint *npos, AjPStr pro,
     ajint e=0;
     ajint v;
     ajint pos;
-    
+
     s=ajStrNew();
-    
+
     if(isrule)
     {
 	ajStrAssSubC(&s,ruler,start,end);
@@ -478,17 +478,17 @@ static void prettyseq_showTransb(ajint *ppos, ajint *npos, AjPStr pro,
     }
     else
 	ajFmtPrintF(outf,"           ");
-	
+
     ajStrAssSub(&s,pro,start,end);
     ajFmtPrintF(outf,"%s ",ajStrStr(s));
     if(isp && e)
 	ajFmtPrintF(outf,"%d",e);
     ajFmtPrintF(outf,"\n");
 
-    
+
     ajFmtPrintF(outf,"\n");
 
     ajStrDel(&s);
-    
+
     return;
 }

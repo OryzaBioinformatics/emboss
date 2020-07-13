@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -227,7 +227,7 @@ static ajint trimseq_trim(AjPSeq seq, ajint sense, AjBool isnuc, ajint window,
 		leroy_brown = suspect;
 	}
     }
-  
+
     /*
      *  do a final tidy up of gap characters left at the new end of the
      *  sequence
@@ -246,10 +246,10 @@ static ajint trimseq_trim(AjPSeq seq, ajint sense, AjBool isnuc, ajint window,
     return leroy_brown;
 }
 
-/* @funcstatic trimseq_parole ***********************************************
+/* @funcstatic trimseq_parole *************************************************
 **
 **  sets the upper and lowercase characters in the array 'gang' to be ajFalse
-** 
+**
 ** @param [w] gang [AjBool*] array of flags for whether a character
 **                           is required or not
 ** @param [r] good_guys [char*] string of chars that are required
@@ -268,12 +268,12 @@ static void trimseq_parole(AjBool *gang, char *good_guys)
 
     return;
 }
-	
 
-/* #funcstatic trimseq_arrest ************************************************
+
+/* #funcstatic trimseq_arrest *************************************************
 **
 **  resets the upper and lowercase characters in the array 'gang' to be ajTrue
-** 
+**
 ** #param [w] gang [AjBool*] array of flags for whether a character
 **                           is required or not
 ** #param [r] bad_guys [char*] string of chars that are not required

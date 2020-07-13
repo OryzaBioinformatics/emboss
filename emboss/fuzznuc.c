@@ -1,24 +1,23 @@
 /* @source fuzznuc application
- **
- ** Finds fuzzy patterns in nucleic acid sequences
- ** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
- ** @@
- **
- ** This program is free software; you can redistribute it and/or
- ** modify it under the terms of the GNU General Public License
- ** as published by the Free Software Foundation; either version 2
- ** of the License, or (at your option) any later version.
- ** 
- ** This program is distributed in the hope that it will be useful,
- ** but WITHOUT ANY WARRANTY; without even the implied warranty of
- ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- ** GNU General Public License for more details.
- ** 
- ** You should have received a copy of the GNU General Public License
- ** along with this program; if not, write to the Free Software
- ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- ******************************************************************************/
-
+**
+** Finds fuzzy patterns in nucleic acid sequences
+** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @@
+**
+** This program is free software; you can redistribute it and/or
+** modify it under the terms of the GNU General Public License
+** as published by the Free Software Foundation; either version 2
+** of the License, or (at your option) any later version.
+**
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+**
+** You should have received a copy of the GNU General Public License
+** along with this program; if not, write to the Free Software
+** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+******************************************************************************/
 
 #include "emboss.h"
 #include "stdlib.h"
@@ -54,13 +53,13 @@ int main(int argc, char **argv)
 //    AjPStr usa=NULL;
 //    AjBool dousa;
     */
-    
+
     AjPList l;
-    
+
     ajint plen;
     ajint mismatch;
     ajint thits=0;
-    
+
     AjBool amino;
     AjBool carboxyl;
     AjBool sc;
@@ -72,24 +71,24 @@ int main(int argc, char **argv)
     ajint    begin;
     ajint    end;
     ajint    adj;
-    
+
     EmbOPatBYPNode off[AJALPHA];
     ajuint         *sotable=NULL;
     ajuint         solimit;
     AjPStr	   regexp=NULL;
     ajint          **skipm=NULL;
-    ajint          *buf=NULL;    
+    ajint          *buf=NULL;
     AjPStr         tmpstr = NULL;
     void   *tidy=NULL;
 
     embInit ("fuzznuc", argc, argv);
-    
+
     seqall   = ajAcdGetSeqall("sequence");
     report = ajAcdGetReport ("outfile");
     pattern  = ajAcdGetString("pattern");
     mismatch = ajAcdGetInt("mismatch");
     sc       = ajAcdGetBool("complement");
-    
+
     ajFmtPrintAppS (&tmpstr, "Pattern: %S\n", pattern);
     ajFmtPrintAppS (&tmpstr, "Mismatch: %d\n", mismatch);
     ajFmtPrintAppS (&tmpstr, "Complement: %B\n", sc);
@@ -105,9 +104,9 @@ int main(int argc, char **argv)
 	ajFatal("Illegal pattern");
     embPatCompile(type,pattern,opattern,&plen,&buf,off,&sotable,&solimit,&m,
 		  &regexp,&skipm,mismatch);
-    
+
     text = ajStrNew();
-    
+
 
     while(ajSeqallNext(seqall,&seq))
     {
@@ -130,8 +129,8 @@ int main(int argc, char **argv)
 			     solimit,regexp,skipm,&thits,m,&tidy);
 	    ajSeqReverseStr(&text);
 	}
-	
-	    
+
+
 
 	if(hits || (thits&&sc))
 	{
@@ -140,25 +139,25 @@ int main(int argc, char **argv)
 				report, tab, seq);
 	    ajFeattableDel(&tab);
 	}
-	
-	
+
+
 
 	ajListDel(&l);
     }
-    
+
 
 
     if(type==6)
 	for(i=0;i<m;++i) AJFREE(skipm[i]);
-    
+
     if(tidy) AJFREE(tidy);
-    
+
     ajStrDel(&pattern);
     ajStrDel(&seqname);
     ajSeqDel(&seq);
 
     (void) ajReportClose(report);
-    ajReportDel(&report);    
+    ajReportDel(&report);
 
     ajExit();
     return 0;
@@ -203,7 +202,7 @@ static void fuzznuc_report_hits(AjPList *l, ajint hits,
     s=ajStrNew();
 
     ajListReverse(*l);
-    
+
     for(i=0;i<hits;++i)
     {
 	ajListPop(*l,(void **)&m);
@@ -251,10 +250,10 @@ static void fuzznuc_report_hits(AjPList *l, ajint hits,
 	    embMatMatchDel(&m);
 	}
     }
-    
-    (void) ajReportWrite(report, tab, seq);        
+
+    (void) ajReportWrite(report, tab, seq);
 
     ajStrDel(&s);
-    
+
     return;
 }

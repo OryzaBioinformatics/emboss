@@ -8,12 +8,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -68,7 +68,7 @@ int main(int argc, char **argv)
     AjPSeq    seq=NULL;
     AjPFile   inf=NULL;
     AjPFile   outf=NULL;
-    
+
     AjPStr    strand=NULL;
     AjPStr    substr=NULL;
     AjPStr    name=NULL;
@@ -76,19 +76,19 @@ int main(int argc, char **argv)
     AjPStr    pname=NULL;
     AjPStr    line=NULL;
     AjPStr    cons=NULL;
-    
+
     ajint       type;
     ajint       begin;
     ajint       end;
     /*    ajint       len;*/
     ajint       i;
     ajint       j;
-    
+
     ajint   **matrix=NULL;
     float **fmatrix=NULL;
 
     void  **fptr=NULL;
-    
+
     ajint mlen;
     ajint maxs;
     float maxfs;
@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 
     float gapopen;
     float gapextend;
-    
+
     char *p;
 
 
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
     seqall    = ajAcdGetSeqall("sequence");
     inf       = ajAcdGetInfile("infile");
     outf      = ajAcdGetOutfile("outfile");
-    
+
     substr=ajStrNew();
     name=ajStrNew();
     mname=ajStrNew();
@@ -113,14 +113,14 @@ int main(int argc, char **argv)
 
     if(!(type=profit_getType(inf)))
 	ajFatal("Unrecognised profile/matrix file format");
-    
+
     switch(type)
     {
     case 1:
 	profit_read_simple(inf, &name, &mlen, &maxs, &thresh, &cons);
 	AJCNEW(matrix, mlen);
 	fptr=(void **)matrix;
-    
+
 	for(i=0;i<mlen;++i)
 	{
 	    AJCNEW(matrix[i], AZ);
@@ -189,13 +189,13 @@ int main(int argc, char **argv)
 	ajFatal("Switch type error");
 	break;
     }
-    
-    
+
+
     while(ajSeqallNext(seqall, &seq))
     {
 	begin=ajSeqallBegin(seqall);
 	end=ajSeqallEnd(seqall);
-	
+
 	ajStrAssC(&pname,ajSeqName(seq));
 	strand=ajSeqStrCopy(seq);
 
@@ -218,14 +218,14 @@ int main(int argc, char **argv)
 	default:
 	    break;
 	}
-	
-	ajStrDel(&strand);    
+
+	ajStrDel(&strand);
     }
 
     for(i=0;i<mlen;++i)
 	AJFREE (fptr[i]);
     AJFREE (fptr);
-    
+
     ajStrDel(&line);
     ajStrDel(&name);
     ajStrDel(&mname);
@@ -254,7 +254,7 @@ static ajint profit_getType(AjPFile inf)
     AjPStr line=NULL;
     char *p=NULL;
     ajint  ret=0;
-    
+
     line=ajStrNew();
 
     while(ajFileReadLine(inf,&line))
@@ -294,7 +294,7 @@ static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
 			       ajint *maxs, ajint *thresh, AjPStr *cons)
 {
     char *p;
-    
+
     AjPStr line=NULL;
 
     line=ajStrNew();
@@ -367,7 +367,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 				ajint *thresh, float *maxs, AjPStr *cons)
 {
     char *p;
-    
+
     AjPStr line=NULL;
 
     line=ajStrNew();
@@ -476,11 +476,11 @@ static void profit_scan_simple(AjPStr substr, AjPStr pname, AjPStr name,
     ajint score;
     ajint sum;
 
-    
+
     len = ajStrLen(substr);
     lim = len-mlen+1;
     p = ajStrStr(substr);
-    
+
     for(i=0;i<lim;++i)
     {
 	sum=0;
@@ -556,11 +556,11 @@ static void profit_scan_profile(AjPStr substr, AjPStr pname, AjPStr name,
     float score;
     float sum;
 
-    
+
     len = ajStrLen(substr);
     lim = len-mlen+1;
     p = ajStrStr(substr);
-    
+
     for(i=0;i<lim;++i)
     {
 	sum=0.0;

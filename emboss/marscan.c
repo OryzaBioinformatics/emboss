@@ -1,23 +1,23 @@
 /* @source marscan application
- **
- ** Finds MAR/SAR sites in nucleic sequences
- ** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
- ** @@
- **
- ** This program is free software; you can redistribute it and/or
- ** modify it under the terms of the GNU General Public License
- ** as published by the Free Software Foundation; either version 2
- ** of the License, or (at your option) any later version.
- ** 
- ** This program is distributed in the hope that it will be useful,
- ** but WITHOUT ANY WARRANTY; without even the implied warranty of
- ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- ** GNU General Public License for more details.
- ** 
- ** You should have received a copy of the GNU General Public License
- ** along with this program; if not, write to the Free Software
- ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- ******************************************************************************/
+**
+** Finds MAR/SAR sites in nucleic sequences
+** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @@
+**
+** This program is free software; you can redistribute it and/or
+** modify it under the terms of the GNU General Public License
+** as published by the Free Software Foundation; either version 2
+** of the License, or (at your option) any later version.
+**
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+**
+** You should have received a copy of the GNU General Public License
+** along with this program; if not, write to the Free Software
+** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+******************************************************************************/
 
 
 #include "emboss.h"
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
     ajint  m16=0;
     ajint  plen16=0;
     ajint  *buf16=NULL;
-        
+
     EmbOPatBYPNode off16[AJALPHA];
 
     ajuint *sotable16=NULL;
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
     AjPList l16;
     ajint  hits16=0;
     void   *tidy16=NULL;
-    
+
     AjPStr pattern16rev=ajStrNewC("gnnncwwnnttaywwt");
     AjPStr opattern16rev=NULL;
     AjBool amino16rev=ajFalse;
@@ -83,7 +83,7 @@ int main(int argc, char **argv)
     ajint  type16rev=0;
     ajint  m16rev=0;
     ajint  plen16rev=0;
-    ajint  *buf16rev=NULL;    
+    ajint  *buf16rev=NULL;
 
     EmbOPatBYPNode off16rev[AJALPHA];
 
@@ -95,7 +95,7 @@ int main(int argc, char **argv)
     AjPList  l16rev;
     ajint    hits16rev=0;
     void     *tidy16rev=NULL;
-    
+
     AjPStr pattern8=ajStrNewC("aataayaa");
     AjPStr opattern8=NULL;
     AjBool amino8=ajFalse;
@@ -103,7 +103,7 @@ int main(int argc, char **argv)
     ajint  type8=0;
     ajint  m8=0;
     ajint  plen8=0;
-    ajint  *buf8=NULL;    
+    ajint  *buf8=NULL;
 
     EmbOPatBYPNode off8[AJALPHA];
 
@@ -115,7 +115,7 @@ int main(int argc, char **argv)
     AjPList  l8;
     ajint    hits8=0;
     void     *tidy8=NULL;
-    
+
     AjPStr pattern8rev=ajStrNewC("ttrttatt");
     AjPStr opattern8rev=NULL;
     AjBool amino8rev=ajFalse;
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
     ajint  type8rev=0;
     ajint  m8rev=0;
     ajint  plen8rev=0;
-    ajint  *buf8rev=NULL;    
+    ajint  *buf8rev=NULL;
 
     EmbOPatBYPNode off8rev[AJALPHA];
 
@@ -135,10 +135,10 @@ int main(int argc, char **argv)
     AjPList  l8rev;
     ajint    hits8rev=0;
     void     *tidy8rev=NULL;
-    
+
     AjPStr seqname=NULL;
     AjPStr text=NULL;
-    
+
     ajint    i;
     ajint    begin;
     ajint    end;
@@ -146,14 +146,14 @@ int main(int argc, char **argv)
 
     EmbPMatMatch aptr=NULL;
 
-    /* feature table stuff */    
+    /* feature table stuff */
 
     embInit ("marscan", argc, argv);
-    
+
     seqall   = ajAcdGetSeqall("sequence");
     /*  outf     = ajAcdGetFeatout("outf"); */
     report = ajAcdGetReport ("outfile");
-    
+
     seqname = ajStrNew();
     opattern16=ajStrNew();
     opattern16rev=ajStrNew();
@@ -174,7 +174,7 @@ int main(int argc, char **argv)
     embPatCompile(type16, pattern16, opattern16, &plen16, &buf16, off16,
 		  &sotable16, &solimit16, &m16, &regexp16, &skipm16,
 		  mismatch16);
-    
+
     if(!(type16rev=embPatGetType(&pattern16rev, mismatch16rev, 0, &m16rev,
 				 &amino16rev, &carboxyl16rev)))
 	ajFatal("Illegal pattern");
@@ -182,14 +182,14 @@ int main(int argc, char **argv)
     embPatCompile(type16rev, pattern16rev, opattern16rev, &plen16rev,
 		  &buf16rev, off16rev, &sotable16rev, &solimit16rev, &m16rev,
 		  &regexp16rev, &skipm16rev, mismatch16rev);
-    
+
     if(!(type8=embPatGetType(&pattern8, mismatch8, 0, &m8, &amino8,
 			     &carboxyl8)))
 	ajFatal("Illegal pattern");
 
     embPatCompile(type8, pattern8, opattern8, &plen8, &buf8, off8,
 		  &sotable8, &solimit8, &m8, &regexp8, &skipm8, mismatch8);
-    
+
     if(!(type8rev=embPatGetType(&pattern8rev, mismatch8rev, 0, &m8rev,
 				&amino8rev, &carboxyl8rev)))
 	ajFatal("Illegal pattern");
@@ -197,10 +197,10 @@ int main(int argc, char **argv)
     embPatCompile(type8rev, pattern8rev, opattern8rev, &plen8rev,
 		  &buf8rev, off8rev, &sotable8rev, &solimit8rev, &m8rev,
 		  &regexp8rev, &skipm8rev, mismatch8rev);
-    
+
 
     text = ajStrNew();
-    
+
 
     while(ajSeqallNext(seqall, &seq))
     {
@@ -261,16 +261,16 @@ int main(int argc, char **argv)
 	    marscan_stepdown (l16, l8, &tab);
 
 	    /* write features and tidy up */
-	    (void) ajReportWrite(report, tab, seq);        
+	    (void) ajReportWrite(report, tab, seq);
 	    ajFeattableDel(&tab);
 	}
-	
+
         while(ajListPop(l16,(void **)&aptr))
             embMatMatchDel(&aptr);
 
         while(ajListPop(l8,(void **)&aptr))
             embMatMatchDel(&aptr);
-	
+
 	/*
 	 *  tidy up - (l8rev and l16rev have already been deleted in
 	 *  ajListPushList)
@@ -280,7 +280,7 @@ int main(int argc, char **argv)
 	ajListDel(&l8);
 
     }
-    
+
     if(type16==6)
 	for(i=0;i<m16;++i)
 	    AJFREE(skipm16[i]);
@@ -292,7 +292,7 @@ int main(int argc, char **argv)
     if(type8rev==6)
 	for(i=0;i<m8rev;++i)
 	    AJFREE(skipm8rev[i]);
-    
+
     if(tidy16)
 	AJFREE(tidy16);
     if(tidy16rev)
@@ -301,7 +301,7 @@ int main(int argc, char **argv)
 	AJFREE(tidy8);
     if(tidy8rev)
 	AJFREE(tidy8rev);
-    
+
     ajStrDel(&pattern16);
     ajStrDel(&pattern16rev);
     ajStrDel(&pattern8);
@@ -311,7 +311,7 @@ int main(int argc, char **argv)
     ajSeqDel(&seq);
 
     (void) ajReportClose(report);
-    ajReportDel(&report);    
+    ajReportDel(&report);
 
     ajExit();
     return 0;
@@ -320,7 +320,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic marscan_stepdown ********************************************
+/* @funcstatic marscan_stepdown ***********************************************
 **
 ** steps down the two lists of matches looking for hits within the required
 ** maximum distance
@@ -332,7 +332,7 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-static void marscan_stepdown (AjPList l16, AjPList l8, AjPFeattable *tab) 
+static void marscan_stepdown (AjPList l16, AjPList l8, AjPFeattable *tab)
 {
     ajint prev16 = -1;	/* we have not got a stored position for length 16 */
     ajint prev8 = -1;	/* we have not got a stored position for length 8  */
@@ -353,15 +353,15 @@ static void marscan_stepdown (AjPList l16, AjPList l8, AjPFeattable *tab)
     /* position of end of second pattern in stored match */
     ajint stored_lastpos;
 
-    /* flag for empty list of length 16 pattern matches*/  
+    /* flag for empty list of length 16 pattern matches*/
     AjBool notend16=ajTrue;
 
     /* flag for empty list of length 8 pattern matches*/
-    AjBool notend8=ajTrue;	
+    AjBool notend8=ajTrue;
 
     /* used to prevent clusters of MRS within MAXDIST of each other */
     ajint end_of_last_output_match = -(MAXDIST+1);
-  
+
     while (notend16 || notend8)
     {
 	notend16 = marscan_getpos(l16, &prev16, prev8, &stored_match,
@@ -415,12 +415,12 @@ static void marscan_stepdown (AjPList l16, AjPList l8, AjPFeattable *tab)
 
 
 
-/* @funcstatic marscan_getpos ********************************************
+/* @funcstatic marscan_getpos *************************************************
 **
 ** gets the next position from a list and checks to see if we have a match
 ** within MAXDIST of the last match in the other list
 **
-** @param [r] l [AjPList] the list of matching positions 
+** @param [r] l [AjPList] the list of matching positions
 ** @param [rw] thisprev [ajint *] pointer to last stored position of
 **                                this pattern
 ** @param [r] otherprev [ajint] last stored position of the other pattern
@@ -444,7 +444,7 @@ static void marscan_stepdown (AjPList l16, AjPList l8, AjPFeattable *tab)
 static AjBool marscan_getpos (AjPList l, ajint *thisprev, ajint otherprev,
 			      AjBool *stored_match, ajint *stored_dist,
 			      ajint *stored_8_pos, ajint *stored_16_pos,
-			      ajint *stored_lastpos, 
+			      ajint *stored_lastpos,
 			      AjPFeattable *tab, AjBool this_is_8,
 			      ajint *end_of_last_output_match)
 {
@@ -496,11 +496,11 @@ static AjBool marscan_getpos (AjPList l, ajint *thisprev, ajint otherprev,
 	if (e8 < s16)
 	    dist = s16-e8;
 	else if (e16 < s8)
-	    dist = s8-e16; 
+	    dist = s8-e16;
 	else				/* overlap */
 	    dist = 0;
 
-  
+
 	/* the first position of the two patterns */
 	if (s8>s16)
 	    firstpos = s16;
@@ -515,11 +515,11 @@ static AjBool marscan_getpos (AjPList l, ajint *thisprev, ajint otherprev,
 	    firstpos = MAXDIST + 1;
 	}
 
-	/* if they are overlapping, we may still have a negative length */     
+	/* if they are overlapping, we may still have a negative length */
 	if (dist < 0)
 	    ajFatal("Have a negative distance!\n");
 
-   
+
 	/* if dist to other stored pos is within range */
 	if (dist <= MAXDIST)
 	{
@@ -629,13 +629,13 @@ static AjBool marscan_getpos (AjPList l, ajint *thisprev, ajint otherprev,
 	    }
 	}
     }
-  
+
     return ajTrue;
-  
+
 }
 
 
-/* @funcstatic marscan_output_stored_match ***********************************
+/* @funcstatic marscan_output_stored_match ************************************
 **
 ** Outputs the results of finding a match of the two patterns
 **
@@ -673,7 +673,7 @@ static void marscan_output_stored_match(AjBool stored_match, ajint stored_dist,
 
     if (!stored_match)
 	return;
-  	
+
     if (!type)
     {
       ajStrAssC(&source,"marscan");

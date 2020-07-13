@@ -8,12 +8,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
     AjPFile outf  = NULL;
     AjPFile outf2 = NULL;
     AjPFile outf3 = NULL;
-    
+
     AjPStr  line;
     AjPStr  code;
     AjPStr  pattern;
@@ -70,14 +70,14 @@ int main(int argc, char **argv)
     AjBool  isrefm = ajFalse;
     AjBool  isref  = ajFalse;
     AjBool hassup;
-    
+
     ajint     count;
     ajlong    pos;
     ajint     i;
 
-    
+
     embInit("rebaseextract",argc,argv);
-    
+
     inf = ajAcdGetInfile("inf");
     pfname = ajStrNewC(DATANAME);
     ajFileDataNewWrite(pfname,&outf);
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
     ajFileDataNewWrite(pfname,&outf3);
     rebex_printSuppHeader(outf3);
     ajStrDel(&pfname);
-    
+
     line     = ajStrNew();
     code     = ajStrNew();
     pattern  = ajStrNew();
@@ -112,7 +112,7 @@ int main(int argc, char **argv)
 	    isrefm = ajTrue;
 	if(ajStrFindC(line,"withref.")>=0)
 	    isref = ajTrue;
-	
+
 	if(strstr(ajStrStr(line),"REBASE codes"))
 	    break;
     }
@@ -124,8 +124,8 @@ int main(int argc, char **argv)
 	else
 	    ajFatal("Invalid withrefm file");
     }
-    
-	
+
+
     if(!ajFileReadLine(inf,&line))
 	ajFatal("No Supplier Information Found");
     if(!ajFileReadLine(inf,&line))
@@ -141,7 +141,7 @@ int main(int argc, char **argv)
     ajFileClose(&outf3);
 
 
-    
+
     while(ajFileReadLine(inf,&line))
     {
 	/* Get RE */
@@ -269,7 +269,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic rebex_process_pattern *****************************************
+/* @funcstatic rebex_process_pattern ******************************************
 **
 ** Convert rebase pattern into emboss pattern
 **
@@ -287,12 +287,12 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
     AjPStr temp;
     AjPStr ppat;
     AjPStrTok tokens;
-    
+
     char   *p;
     char   *q;
     char   *r;
     char   *t;
-    
+
     /*  ajint    carat;*/
     AjBool hascarat;
 
@@ -305,8 +305,8 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
     ajint nc;
     ajint i;
     AjBool blunt=ajFalse;
-    
-    
+
+
     ajStrToUpper(pattern);
     temp = ajStrNew();
     ppat = ajStrNew();
@@ -318,7 +318,7 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 	ajFmtPrintF(outf,"%s\t",ajStrStr(*code));
 
 	ajStrAssC(&temp,ajStrStr(ppat));
-	
+
 	hascarat = ajFalse;
 	/*      carat=0; NOT USED */
 	p=ajStrStr(ppat);
@@ -328,7 +328,7 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 	    ajFmtPrintF(outf,"?\t0\t0\t0\t0\t0\t0\t0\n");
 	    continue;
 	}
-    
+
 
 	t=p;
 	if(*p=='(')
@@ -346,7 +346,7 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 
 	    if(!(p=strchr(p,(ajint)')')))
 		ajFatal("%s mismatched parentheses",ajStrStr(*code));
-	
+
 	    p=ajStrStr(ppat);
 	    r=ajStrStr(temp);
 	    while(*p)
@@ -396,7 +396,7 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 		r=ajStrStr(temp);
 		cut1=0;
 		hascarat=ajFalse;
-	    
+
 		while(*p)
 		{
 		    if(*p>='A' && *p<='Z')
@@ -451,7 +451,7 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 	/* Mark RE's with no suppliers with lc sequence */
 	if(!hassup)
 	    ajStrToLower(&ppat);
-    
+
 
 	if(ncuts==4)
 	    ajFmtPrintF(outf,"%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n",
@@ -470,7 +470,7 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 
 
 
-/* @funcstatic rebex_printEnzHeader ******************************************
+/* @funcstatic rebex_printEnzHeader *******************************************
 **
 ** print comments at start of embossre.enz
 **
@@ -515,7 +515,7 @@ static void rebex_printEnzHeader(AjPFile outf)
 
 
 
-/* @funcstatic rebex_printRefHeader ******************************************
+/* @funcstatic rebex_printRefHeader *******************************************
 **
 ** Print header to embossre.ref
 **
@@ -543,7 +543,7 @@ static void rebex_printRefHeader(AjPFile outf)
 }
 
 
-/* @funcstatic rebex_printSuppHeader *****************************************
+/* @funcstatic rebex_printSuppHeader ******************************************
 **
 ** Print header to embossre.sup
 **

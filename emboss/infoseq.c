@@ -10,12 +10,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -31,10 +31,10 @@
 
 int main(int argc, char **argv)
 {
-    
+
     AjPSeqall seqall;
     AjPSeq seq;
-    
+
     AjBool html;
     AjBool doheader;
     AjBool dotype;
@@ -46,9 +46,9 @@ int main(int argc, char **argv)
     AjBool dolength;
     AjBool dodesc;
     AjBool dopgc;
-    
+
     AjPFile outfile;
-    
+
     AjPStr usa;
     AjPStr name;
     AjPStr acc;
@@ -65,11 +65,11 @@ int main(int argc, char **argv)
     float pgc = 0.0;
     AjPStr desc;
     AjBool firsttime=ajTrue;
-    
+
     (void) embInit ("infoseq", argc, argv);
-    
+
     outfile = ajAcdGetOutfile ("outfile");
-    
+
     seqall = ajAcdGetSeqall ("sequence");
     html = ajAcdGetBool("html");
     doheader = ajAcdGetBool("heading");
@@ -82,16 +82,17 @@ int main(int argc, char **argv)
     dolength = ajAcdGetBool("length");
     dopgc = ajAcdGetBool("pgc");
     dodesc = ajAcdGetBool("description");
-    
-    
+
+
     /* start the HTML table */
     if (html)
 	(void) ajFmtPrintF(outfile,
 			   "<table border cellpadding=4 bgcolor=\"#FFFFF0"
 			   "\">\n");
-    
+
     while (ajSeqallNext(seqall, &seq))
     {
+	ajSeqTrim(seq);
 	ajSeqTrace(seq);
 	if (firsttime)
 	{
@@ -106,7 +107,7 @@ int main(int argc, char **argv)
 		    (void) ajFmtPrintF(outfile, "<tr>");
 		else
 		    (void) ajFmtPrintF(outfile, "%s", "# ");
-    
+
 		if (dousa)
 		{
 		    if (html)
@@ -186,30 +187,30 @@ int main(int argc, char **argv)
 		    (void) ajFmtPrintF(outfile, "\n");
 	    }
 	    firsttime = ajFalse;
-	}  	
+	}
 
 
-	/* get the usa ('-' if unknown) */    
-	usa = ajSeqGetUsa(seq);	
+	/* get the usa ('-' if unknown) */
+	usa = ajSeqGetUsa(seq);
 	if (ajStrLen(usa) == 0)
 	    usa = altusa;
 
-	/* get the name ('-' if unknown) */    
+	/* get the name ('-' if unknown) */
 	name = ajSeqGetName(seq);
 	if (ajStrLen(name) == 0)
 	    name = altname;
 
-	/* get the accession number ('-' if unknown) */    
+	/* get the accession number ('-' if unknown) */
 	acc = ajSeqGetAcc(seq);
 	if (ajStrLen(acc) == 0)
 	    acc = altacc;
 
-	/* get the GI number ('-' if unknown) */    
+	/* get the GI number ('-' if unknown) */
 	gi = ajSeqGetGi(seq);
 	if (ajStrLen(gi) == 0)
 	    gi = altgi;
 
-	/* get the version number ('-' if unknown) */    
+	/* get the version number ('-' if unknown) */
 	sv = ajSeqGetSv(seq);
 	if (ajStrLen(sv) == 0)
 	    sv = altsv;
@@ -230,12 +231,12 @@ int main(int argc, char **argv)
 	if (dousa)
 	{
 	    if (html)
-		(void) ajFmtPrintF(outfile, "<td>%S</td>", usa);  
+		(void) ajFmtPrintF(outfile, "<td>%S</td>", usa);
 	    else
 	    {
-		/* 
+		/*
 		 *  Make the formatting nice:
-		 *  
+		 *
 		 *  If this is the last item, don't put spaces or TABs after
 		 *  it. Try to fit the name in 18 spaces, else just add a
 		 *  TAB after it
@@ -244,13 +245,13 @@ int main(int argc, char **argv)
 		{
 		    if (doname || doacc || dogi || dosv || dotype || dolength ||
 			(!type && dopgc) || dodesc)
-			(void) ajFmtPrintF(outfile, "%-18.17S", usa);  
+			(void) ajFmtPrintF(outfile, "%-18.17S", usa);
 		    else
-			(void) ajFmtPrintF(outfile, "%S", usa);  
+			(void) ajFmtPrintF(outfile, "%S", usa);
 		}
 		else
 		{
-		    (void) ajFmtPrintF(outfile, "%S", usa);  
+		    (void) ajFmtPrintF(outfile, "%S", usa);
 		    if (doname || doacc || dogi || dosv || dotype || dolength ||
 			(!type && dopgc) || dodesc)
 			(void) ajFmtPrintF(outfile, "\t");
@@ -260,28 +261,28 @@ int main(int argc, char **argv)
 	if (doname)
 	{
 	    if (html)
-		(void) ajFmtPrintF(outfile, "<td>%S</td>", name);  
+		(void) ajFmtPrintF(outfile, "<td>%S</td>", name);
 	    else
 	    {
-		/* 
+		/*
 		 *  Make the formatting nice:
-		 *  
+		 *
 		 *  If this is the last item, don't put spaces or TABs after
 		 *  it. Try to fit the name in 14 space, else just add a
 		 *  TAB after it
 		 */
 		if (ajStrLen(name) < 14)
 		{
-		    if (doacc || dogi || dosv || dotype || dolength || 
+		    if (doacc || dogi || dosv || dotype || dolength ||
 		        (!type && dopgc) || dodesc)
-			(void) ajFmtPrintF(outfile, "%-14.13S", name);  
+			(void) ajFmtPrintF(outfile, "%-14.13S", name);
 		    else
-			(void) ajFmtPrintF(outfile, "%S", name);  
+			(void) ajFmtPrintF(outfile, "%S", name);
 		}
 		else
 		{
-		    (void) ajFmtPrintF(outfile, "%S", name);  
-		    if (doacc || dogi || dosv || dotype || dolength || 
+		    (void) ajFmtPrintF(outfile, "%S", name);
+		    if (doacc || dogi || dosv || dotype || dolength ||
 		        (!type && dopgc) || dodesc)
 			(void) ajFmtPrintF(outfile, "\t");
 		}
@@ -295,11 +296,11 @@ int main(int argc, char **argv)
 	    else
 	    {
 		(void) ajFmtPrintF(outfile, "%S", acc);
-		if (dogi || dosv || dotype || dolength || 
+		if (dogi || dosv || dotype || dolength ||
 		    (!type && dopgc) || dodesc)
 		    (void) ajFmtPrintF(outfile, "\t");
-	    }    	
-	}    
+	    }
+	}
 
 	if (dogi)
 	{
@@ -308,11 +309,11 @@ int main(int argc, char **argv)
 	    else
 	    {
 		(void) ajFmtPrintF(outfile, "%S", gi);
-		if (dosv || dotype || dolength || 
+		if (dosv || dotype || dolength ||
 		    (!type && dopgc) || dodesc)
 		    (void) ajFmtPrintF(outfile, "\t");
-	    }    	
-	}    
+	    }
+	}
 
 	if (dosv)
 	{
@@ -321,33 +322,33 @@ int main(int argc, char **argv)
 	    else
 	    {
 		(void) ajFmtPrintF(outfile, "%S", sv);
-		if (dotype || dolength || 
+		if (dotype || dolength ||
 		    (!type && dopgc) || dodesc)
 		    (void) ajFmtPrintF(outfile, "\t");
-	    }    	
-	}    
+	    }
+	}
 
 	if (dotype)
 	{
 	    if (html)
-		(void) ajFmtPrintF(outfile, "<td>%c</td>", type?'P':'N');  
+		(void) ajFmtPrintF(outfile, "<td>%c</td>", type?'P':'N');
 	    else
 	    {
-		(void) ajFmtPrintF(outfile, "%c", type?'P':'N');  
+		(void) ajFmtPrintF(outfile, "%c", type?'P':'N');
 		if (dolength || (!type && dopgc) || dodesc)
-		    (void) ajFmtPrintF(outfile, "    ");  
+		    (void) ajFmtPrintF(outfile, "    ");
 	    }
 	}
 
 	if (dolength)
 	{
 	    if (html)
-		(void) ajFmtPrintF(outfile, "<td>%d</td>", length);  
+		(void) ajFmtPrintF(outfile, "<td>%d</td>", length);
 	    else
 	    {
-		(void) ajFmtPrintF(outfile, "%d", length);  
+		(void) ajFmtPrintF(outfile, "%d", length);
 		if ((!type && dopgc) || dodesc )
-		    (void) ajFmtPrintF(outfile, "\t");  
+		    (void) ajFmtPrintF(outfile, "\t");
 	    }
 	}
 
@@ -364,19 +365,19 @@ int main(int argc, char **argv)
 	    {
 		/* don't use %-6.2f here as we guaranteed there would be no
 		   trailing spaces */
-		(void) ajFmtPrintF(outfile, "%6.2f", pgc);  
+		(void) ajFmtPrintF(outfile, "%6.2f", pgc);
 		if (dodesc)
-		    (void) ajFmtPrintF(outfile, " ");  
+		    (void) ajFmtPrintF(outfile, " ");
 	    }
 	}
 
 	if (dodesc)
 	{
 	    if (html)
-		(void) ajFmtPrintF(outfile, "<td>%S</td>", desc);  
+		(void) ajFmtPrintF(outfile, "<td>%S</td>", desc);
 	    else
 	    {
-		(void) ajFmtPrintF(outfile, "%S", desc);  
+		(void) ajFmtPrintF(outfile, "%S", desc);
 	    }
 	}
 

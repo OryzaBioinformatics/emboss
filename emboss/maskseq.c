@@ -56,7 +56,7 @@ int main(int argc, char **argv)
     (void) ajRangeBegin (regions, beg+1);
     (void) ajRangeStrMask (&str, regions, maskchar);
     (void) ajSeqReplace(seq, str);
-  
+
     (void) ajSeqWrite (seqout, seq);
     (void) ajSeqWriteClose (seqout);
 

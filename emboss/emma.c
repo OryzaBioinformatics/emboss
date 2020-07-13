@@ -8,12 +8,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -31,7 +31,7 @@ static AjPStr emma_getUniqueFileName();
 
 
 
-/* @prog emma ***************************************************************
+/* @prog emma *****************************************************************
 **
 ** Multiple alignment program - interface to ClustalW program
 **
@@ -44,7 +44,7 @@ int main(int argc, char **argv, char **env)
     AjPFile dend_outfile;
     AjPStr tmp_dendfilename = NULL;
     AjPFile tmp_dendfile;
-    
+
     AjPStr tmp_aln_outfile = NULL;
     AjPSeqset seqset = NULL;
     AjPSeqout seqout = NULL;
@@ -71,14 +71,14 @@ int main(int argc, char **argv, char **env)
     AjPStr m3str=NULL;
     char   m1c='\0';
     char   m2c='\0';
-    
+
     AjPStr *matrix, *dna_matrix;
     AjPStr ma_matrix = NULL;
     float gapc, gapv;
     AjBool endgaps, norgap, nohgap;
     ajint gap_dist, maxdiv;
     AjPStr hgapres = NULL;
- 
+
 
     AjPSeqout fil_file = NULL;
     AjPSeq seq;
@@ -89,8 +89,8 @@ int main(int argc, char **argv, char **env)
     AjPStr tmp, tmpFilename;
     AjPStr line = NULL;
     ajint nb=0;
-    
-   
+
+
     /*Lets get all the parameters*/
 
     embInit("emma", argc, argv);
@@ -100,7 +100,7 @@ int main(int argc, char **argv, char **env)
     m1str  = ajStrNew();
     m2str  = ajStrNew();
     m3str  = ajStrNew();
-    
+
 
     seqall = ajAcdGetSeqall( "inseqs");
     seqout = ajAcdGetSeqoutset( "outseq");
@@ -163,7 +163,7 @@ int main(int argc, char **argv, char **env)
 	ajStrAssC(&m1str,"id");
     else if(m1c=='o')
 	ajStrAssC(&m1str,"own");
-    
+
 
     dna_matrix = ajAcdGetList( "dnamatrix");
     m2c = *ajStrStr(*dna_matrix);
@@ -225,7 +225,7 @@ int main(int argc, char **argv, char **env)
     ajSeqWriteClose( fil_file);
     if(nb < 2)
 	ajFatal("Multiple alignments need at least two sequences");
-    
+
     /* Generate clustalw command line */
     if (!ajNamGetValueC("clustalw", &cmd))
       cmd = ajStrNewC(prog_default);
@@ -284,7 +284,7 @@ int main(int argc, char **argv, char **env)
             ajStrFromInt( &tmp, gapw);
             ajStrApp( &cmd, tmp);
         }
-        else 
+        else
         {
             if (ajStrCmpC( pairwise_matrix, "NULL") == 0)
             {
@@ -315,7 +315,7 @@ int main(int argc, char **argv, char **env)
             ajStrApp( &cmd, tmp);
         }
     }
-    
+
     /* Multiple alignments */
     /* Are we using existing tree or generating new tree */
     if (use_dend)
@@ -344,9 +344,9 @@ int main(int argc, char **argv, char **env)
 	    ajStrApp( &cmd, m2str);
 	}
     }
-    else 
+    else
     {
-	if (are_prot) 
+	if (are_prot)
 	    ajStrAppC( &cmd, " -matrix=");
 	else
 	    ajStrAppC( &cmd, " -pwmatrix=");
@@ -371,7 +371,7 @@ int main(int argc, char **argv, char **env)
     ajStrFromInt( &tmp, maxdiv);
     ajStrApp( &cmd, tmp);
 
-   
+
     /* let's run clustalw */
 
     ajFmtError( "..%s..\n\n", ajStrStr( cmd));
@@ -406,7 +406,7 @@ int main(int argc, char **argv, char **env)
 	    ajFmtError( "Problem writing out EMBOSS alignment file");
     }
 
-    
+
     /*
      *  read in new tmp dend file (if produced) to outpt through EMBOSS
      * output (why?)
@@ -420,8 +420,8 @@ int main(int argc, char **argv, char **env)
 	ajSysUnlink( &tmp_dendfilename);
     }
 
-	 
-	  
+
+
     /* tidy up */
     ajSysUnlink( &tmpFilename);
     if (!only_dend) ajSysUnlink( &tmp_aln_outfile);
@@ -429,7 +429,7 @@ int main(int argc, char **argv, char **env)
     return 0;
 }
 
-/* @funcstatic emma_getUniqueFileName ****************************************
+/* @funcstatic emma_getUniqueFileName *****************************************
 **
 ** routine to return a name of a unique file; the  unique file name is the
 ** process id
@@ -441,7 +441,7 @@ int main(int argc, char **argv, char **env)
 static AjPStr emma_getUniqueFileName()
 {
     static char ext[2] = "A";
-  
+
     AjPStr filename = NULL;
 
     ajStrFromInt( &filename, getpid());
@@ -449,6 +449,6 @@ static AjPStr emma_getUniqueFileName()
     if (++ext[0] > 'Z')
 	ext[0] = 'A';
 
-    
+
     return filename;
 }

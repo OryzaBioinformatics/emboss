@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -114,31 +114,31 @@ int main(int argc, char **argv)
     ajFmtPrintF( outfile, "Minimum length of Palindromes is: %d \n", minLen);
     ajFmtPrintF( outfile, "Maximum length of Palindromes is: %d \n", maxLen);
     ajFmtPrintF( outfile, "Maximum gap between elements is: %d \n", maxGap);
-    ajFmtPrintF( outfile, "Number of mismatches allowed in Palindrome: %d\n", 
+    ajFmtPrintF( outfile, "Number of mismatches allowed in Palindrome: %d\n",
           maxmismatches);
     ajFmtPrintF( outfile, "\n\n\n");
     ajFmtPrintF( outfile, "Palindromes:\n");
-  
+
     /* check sequence is of type nucleotide else return error */
     if (!ajSeqIsNuc( sequence))
     {
       ajFmtPrintF( outfile, "Error, sequence must be a nucleotide sequence");
       ajExit();
     }
-  
-  
+
+
     /* set vars in readiness to enter loop */
     seqstr = ajStrNewC(ajSeqChar( sequence));
     begin = beginPos - 1;
     end = endPos - 1;
-  
+
     /* loop to look for inverted repeats */
     for (current = begin; current < end; current++)
     {
       iend = current + 2*(maxLen) + maxGap;
       if (iend > end) iend = end;
       istart = current + minLen;
-  
+
       for (rev = iend; rev > istart; rev--)
       {
         count = 0;
@@ -166,13 +166,13 @@ int main(int argc, char **argv)
         }
         count -= mismatchAtEnd;
         gap = rev - current - count - count + 1;
-  
+
         /* Find out if we have found reverse repeat long enough*/
         if (count >= minLen && gap <= maxGap)
         {
-          /* create new palindrome struct to hold new palindrome data */ 
+          /* create new palindrome struct to hold new palindrome data */
           ppal = palindrome_New(current,(current+count),rev,(rev-count));
-  
+
           /*
            *  if it is our first palindrome find then save it as start
            *  of palindrome list
@@ -210,7 +210,7 @@ int main(int argc, char **argv)
               }
               pnext = pnext->next;
             }
-  
+
             /* if new palindrome add to end of list */
             if (!found)
             {
@@ -223,9 +223,9 @@ int main(int argc, char **argv)
         }
       }
     }
-  
-  
-  
+
+
+
     /*Print out palindromes*/
     ppal = pfirstpal;
     while (ppal != NULL)
@@ -233,8 +233,8 @@ int main(int argc, char **argv)
       palindrome_Print( outfile, seqstr, ppal, maxLen);
       ppal = ppal->next;
     }
-  
-  
+
+
     /* make nice gap beween outputs of different sequences */
     ajFmtPrintF( outfile, "\n\n\n");
 
@@ -430,7 +430,7 @@ static void palindrome_Print( AjPFile outfile, AjPStr seq, Palindrome pal,
   }
   ajFmtPrintF(outfile, " %5d\n      ", pal->forwardEnd);
 
-  for (i = pal->forwardStart, 
+  for (i = pal->forwardStart,
      j=pal->revStart; i < pal->forwardEnd; i++)
   {
     if (ajStrChar(seq, i) == ajSeqBaseComp(ajStrChar(seq, j--)))

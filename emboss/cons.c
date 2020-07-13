@@ -4,8 +4,8 @@
 ** @author: Copyright (C) Tim Carver (tcarver@hgmp.mrc.ac.uk)
 ** @@
 **
-**  
-** -plurality  	- defines no. of +ve scoring matches below 
+**
+** -plurality  	- defines no. of +ve scoring matches below
 **                which there is no consensus.
 **
 ** -identity   	- defines the number of identical symbols
@@ -20,22 +20,22 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*****************************************************************************/
+******************************************************************************/
 
 
 #include "emboss.h"
 
 
-/* @prog cons ***************************************************************
+/* @prog cons *****************************************************************
 **
 ** Creates a consensus from multiple alignments
 **
@@ -56,7 +56,7 @@ int main(int argc, char **argv)
     AjPStr    name = NULL;
     AjPStr    cons;
     AjPMatrix cmpmatrix=0;
- 
+
 
     embInit ("cons", argc, argv);
 
@@ -98,7 +98,7 @@ int main(int argc, char **argv)
 	ajSeqAssName(seqo,name);
 
     ajSeqWrite(seqout,seqo);
-    
+
     ajStrDel(&cons);
     ajSeqDel(&seqo);
 

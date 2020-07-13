@@ -22,7 +22,7 @@ data
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 02111-1307, USA.
-******************************************************************************
+*******************************************************************************
 **
 **
 ** Operation
@@ -169,7 +169,7 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
 				     ajint vali_true, AjBool split_hit,
 				     float *prop);
 static AjBool  sigplot_DataWrite(AjPFile datafile, AjPFile ssdatafile,
-				 AjPScopdata data, 
+				 AjPScopdata data,
 				 AjPFloat2d prob_array,
 				 AjPFloat sensi_array,
 				 AjPFloat speci_array,
@@ -177,17 +177,17 @@ static AjBool  sigplot_DataWrite(AjPFile datafile, AjPFile ssdatafile,
 static AjBool  sigplot_SeedIdCalc(AjPList seedlist,  AjPScopalg alg,
 				  AjPFile matrixout,
 				  AjPMatrixf submat,
-				  float gapopen, float gapextn); 
+				  float gapopen, float gapextn);
 static AjBool  sigplot_HitIdCalc(AjPList seedlist, AjPList hitlist,
-				 AjPScopalg alg, 
+				 AjPScopalg alg,
 				 AjPFile matrixout, AjPMatrixf submat,
 				 float gapopen, float gapextn,
-				 AjPStr **codes, AjPInt rank); 
+				 AjPStr **codes, AjPInt rank);
 static AjBool  sigplot_AlignSeqExtract(AjPFile sigalignfile,
-				       AjPInt truehits, AjPInt2d range, 
+				       AjPInt truehits, AjPInt2d range,
 				       AjPStr **sig_seqs, AjPStr **temp_seqs,
 				       ajint num,
-				       ajint num_true); 
+				       ajint num_true);
 static void sigplot_ScopdataDel(AjPScopdata *pthis);
 static AjPScopdata  sigplot_ScopdataNew();
 
@@ -200,7 +200,7 @@ static AjPScopdata  sigplot_ScopdataNew();
 
 
 
-/* @prog sigplot *************************************************************
+/* @prog sigplot **************************************************************
 **
 ** Signature performance plotting program
 **
@@ -270,19 +270,19 @@ int main(int argc, char **argv)
     AjPSeq      hit_seq     = NULL;      /* A sequence object to hold
                                             the constructed sequence */
 
-    
+
     AjPStr      *codes      = NULL;
     AjPStr      *sig_seqs   = NULL;
     AjPStr      *temp_seqs  = NULL;
-    
+
 
     embInit("sigplot", argc, argv);
 
-    
+
     /* Assign variables */
     seedlist = ajListNew();
     hitlist  = ajListNew();
-       
+
     /* GET VALUES FROM ACD */
     hitsin      = ajAcdGetInfile("hitsin");
     validatin   = ajAcdGetInfile("validatin");
@@ -299,7 +299,7 @@ int main(int argc, char **argv)
         gapextn     = ajAcdGetFloat("gapextn");
         matrixout   = ajAcdGetOutfile("matrixout");
     }
-    
+
 
     /* Check signature hits file */
     if(!hitsin)
@@ -312,7 +312,7 @@ int main(int argc, char **argv)
         ajFatal("Could not open validation file\n");
     else
         ajFmtPrint("Validation file read ok\n");
-    
+
 
     /* Check seed id requirements */
     if(seedid == ajTrue)
@@ -325,8 +325,8 @@ int main(int argc, char **argv)
     }
 
 
-        
-    
+
+
 
 
     /* Call sigplot_CountHits */
@@ -346,7 +346,7 @@ int main(int argc, char **argv)
     sigplot_HitProportion(hitsin, &data, &prob_array, &sensi_array,
 			  &speci_array,
                           vali_TN, vali_FN, vali_true, split_hit, &prop);
-    
+
 
     /* Call sigplot_DataWrite */
     sigplot_DataWrite(datafile, ssdatafile, data, prob_array,
@@ -355,42 +355,42 @@ int main(int argc, char **argv)
 
     if(seedid == ajTrue)
     {
-        
+
         /* Call sigplot_AlignSeqExtract */
         sigplot_AlignSeqExtract(sigalignfile, truehits, range,
-				&sig_seqs, &temp_seqs, 
-                                data->num_hits, data->num_true); 
+				&sig_seqs, &temp_seqs,
+                                data->num_hits, data->num_true);
 
 
         /* Section for generating AjPSeq lists     */
         /* to pass to seq id calculating functions */
 
-        /* Read alignment file, write Scopalgn structure */ 
+        /* Read alignment file, write Scopalgn structure */
         ajXyzScopalgRead(alignfile, &alg);
 
         /* Remove gaps from Seqs array and assign to seed_array */
         nseqs=ajXyzScopalgGetseqs(alg, &seed_array);
-    
+
 
         /* Push seed sequences onto list */
         for(x=0;x<nseqs;x++)
         {
-            seed_seq = ajSeqNew();      
+            seed_seq = ajSeqNew();
             ajStrAssS(&seed_seq->Seq, seed_array[x]);
-            ajListPushApp(seedlist, seed_seq); 
+            ajListPushApp(seedlist, seed_seq);
         }
 
         /* Push hit sequences onto list */
         for(x=0;x<data->num_true;x++)
         {
-            hit_seq = ajSeqNew();       
+            hit_seq = ajSeqNew();
             ajStrAssS(&hit_seq->Seq, sig_seqs[x]);
-            ajListPushApp(hitlist, hit_seq); 
+            ajListPushApp(hitlist, hit_seq);
         }
 
         /* Call sigplot_SeedIdCalc */
         sigplot_SeedIdCalc(seedlist, alg, matrixout, submat,
-			   gapopen, gapextn); 
+			   gapopen, gapextn);
 
         /* Call sigplot_HitIdCalc */
         sigplot_HitIdCalc(seedlist, hitlist, alg, matrixout, submat,
@@ -402,16 +402,16 @@ int main(int argc, char **argv)
 
         /* Delete string arrays and pointers */
         for(x=0;x<alg->N;x++)
-            ajStrDel(&seed_array[x]);   
+            ajStrDel(&seed_array[x]);
         AJFREE(seed_array);
-    
+
         for(x=0;x<data->num_true;x++)
-            ajStrDel(&sig_seqs[x]);     
-        AJFREE(sig_seqs);    
+            ajStrDel(&sig_seqs[x]);
+        AJFREE(sig_seqs);
 
         for(x=0;x<data->num_hits;x++)
-            ajStrDel(&temp_seqs[x]);    
-        AJFREE(temp_seqs);    
+            ajStrDel(&temp_seqs[x]);
+        AJFREE(temp_seqs);
 
         ajFileClose(&alignfile);
         ajFileClose(&sigalignfile);
@@ -435,18 +435,18 @@ int main(int argc, char **argv)
         ajSeqDel(&seed_seq);
         ajSeqDel(&hit_seq);
     }
-    
+
     else if(seedid == ajFalse)
     {
         AJFREE(seed_array);
-        AJFREE(sig_seqs);    
-        AJFREE(temp_seqs);    
+        AJFREE(sig_seqs);
+        AJFREE(temp_seqs);
     }
-    
+
 
     /* Tidy up the rest */
     for(x=0;x<data->num_hits;x++)
-        ajStrDel(&codes[x]);    
+        ajStrDel(&codes[x]);
     AJFREE(codes);
 
 
@@ -478,7 +478,7 @@ int main(int argc, char **argv)
 
 /* @funcstatic sigplot_CountHits **********************************************
 **
-** Read signature hits file and count the number of hits, by reading the 
+** Read signature hits file and count the number of hits, by reading the
 ** HI line and storing the value for the rank of the hit.
 **
 ** @param [r] hitsin   [AjPFile]      File pointer to signature hits file
@@ -499,8 +499,8 @@ static AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data,
 				  AjPInt *rank,
 				  ajint *redun, ajint *non_redun)
 {
-    
-    AjPStr   line           = NULL;     /* Line of text */    
+
+    AjPStr   line           = NULL;     /* Line of text */
     AjPStr   name           = NULL;     /* String for file name */
     AjPStr   second         = NULL;     /* String for secondary
                                            clasification */
@@ -525,7 +525,7 @@ static AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data,
 
     /* initialize strings */
     name     = ajStrNew();
-    line     = ajStrNew();    
+    line     = ajStrNew();
     class    = ajStrNew();
     fold     = ajStrNew();
     super    = ajStrNew();
@@ -535,8 +535,8 @@ static AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data,
     str2     = ajStrNew();
     code     = ajStrNew();
     type     = ajStrNew();
-    
-    
+
+
     ajStrAssC(&str, "TRUE");
     ajStrAssC(&str2, "CROSS");
 
@@ -557,7 +557,7 @@ static AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data,
         {
             ajFmtScanS(line, "%*s %d\n", &sunid);
         }
-        
+
         else if(ajStrPrefixC(line,"CL"))
             {
                 ajStrAssC(&class,ajStrStr(line)+3);
@@ -603,13 +603,13 @@ static AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data,
             continue;
 
         /* Start of loop to count number of hits */
-        else if(ajStrPrefixC(line,"HI")) 
+        else if(ajStrPrefixC(line,"HI"))
         {
             ajFmtScanS(line, "%*s %d %*s %*d %*d %S %*s %S",
 		       &num_hits, &type, &second);
 
                 if((ajStrMatch(second, str)) || (ajStrMatch(second, str2)))
-                {    
+                {
                     /* If classification = TRUE then increment redun
                        or non_redun counters */
                     if(ajStrMatch(second, str))
@@ -618,10 +618,10 @@ static AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data,
                         {
                             (*non_redun)++;
 
-                            /*ajFmtPrint("num_hits %4d non_redun = %2d ", 
+                            /*ajFmtPrint("num_hits %4d non_redun = %2d ",
 			      num_hits, *non_redun);*/
                         }
-                        
+
 
                         else if(ajStrMatchC(type, "REDUNDANT"))
                         {
@@ -629,21 +629,21 @@ static AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data,
                             /*ajFmtPrint("num_hits %4d       redun = %2d ",
 			      num_hits, *redun);*/
                         }
-                        
+
                         /*ajFmtPrint("type                        = %S\n",
 			  type);*/
                         true_cnt++;
                     }
-                    
+
                     /* If classificaiton != TRUE then increment
                        true_cnt ONLY!! */
                     else if(ajStrMatch(second, str2))
                     {
                         true_cnt++;
                     }
-                    
+
                 }
-            
+
             /* loop through HI lines */
             /* Read in and store the rank (no. of hits) */
             /* from the HI line */
@@ -663,19 +663,19 @@ static AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data,
                            /*ajFmtPrint("num_hits %4d non_redun = %2d ",
 			     num_hits, *non_redun);*/
                        }
-                        
+
                         else if(ajStrMatchC(type, "REDUNDANT"))
                         {
                             (*redun)++;
                             /*ajFmtPrint("num_hits %4d     redun = %2d ",
 			      num_hits, *redun);*/
                         }
-                        
+
                         /*ajFmtPrint("type                      = %S\n",
 			  type);*/
                         true_cnt++;
                     }
-                    
+
                     /* If classification != TRUE then increment
                        true_cnt ONLY!! */
                     else if(ajStrMatch(second, str2))
@@ -700,9 +700,9 @@ static AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data,
         ajIntPut(truehits,x,0);
 
     /* Assign strings in codes array */
-    for(x=0;x<true_cnt;x++)    
+    for(x=0;x<true_cnt;x++)
         (*codes)[x] = ajStrNew();
-    
+
     /* Fill range array */
     for(x=0;x<num_hits;x++)
         for(y=0;y<2;y++)
@@ -714,7 +714,7 @@ static AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data,
 
 
 
-    
+
     /* read file again and fill arrays and strings */
     while(ajFileReadLine(hitsin, &line) && !ajStrPrefixC(line,"//"))
     {
@@ -735,33 +735,33 @@ static AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data,
             continue;
 
         /* Start of loop to parse HI data */
-        else if(ajStrPrefixC(line,"HI")) 
+        else if(ajStrPrefixC(line,"HI"))
         {
-            ajFmtScanS(line, "%*s %*d %S %d %d %*s %*s %S", 
+            ajFmtScanS(line, "%*s %*d %S %d %d %*s %*s %S",
                        &code, &start, &end, &second);
             if((ajStrMatch(second, str)) || (ajStrMatch(second, str2)))
             {
                 ajIntPut(truehits, hi_cnt, 1);
                 ajInt2dPut(range, hi_cnt, 0, start);
-                ajInt2dPut(range, hi_cnt, 1, end);              
+                ajInt2dPut(range, hi_cnt, 1, end);
 
                 ajStrAssS(&(*codes[temp]), code);
                 temp++;
             }
-            
+
             /* loop through HI lines */
             /* Read in and store the rank (no. of hits) */
             /* from the HI line */
             while(ajFileReadLine(hitsin, &line) && !ajStrPrefixC(line,"//"))
             {
                 hi_cnt++;
-                ajFmtScanS(line, "%*s %*d %S %d %d %*s %*s %S", 
+                ajFmtScanS(line, "%*s %*d %S %d %d %*s %*s %S",
                        &code, &start, &end, &second);
                 if((ajStrMatch(second, str)) || (ajStrMatch(second, str2)))
-                {       
-                    ajIntPut(truehits, hi_cnt, 1);              
+                {
+                    ajIntPut(truehits, hi_cnt, 1);
                     ajInt2dPut(range, hi_cnt, 0, start);
-                    ajInt2dPut(range, hi_cnt, 1, end);          
+                    ajInt2dPut(range, hi_cnt, 1, end);
                     ajStrAssS(&(*codes)[temp], code);
                     temp++;
                 }
@@ -787,10 +787,10 @@ static AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data,
     ajStrAssS(&(*data)->Class,class);
     ajStrAssS(&(*data)->Fold,fold);
     ajStrAssS(&(*data)->Superfamily,super);
-    ajStrAssS(&(*data)->Family,family); 
+    ajStrAssS(&(*data)->Family,family);
     (*data)->Sunid = sunid;
     (*data)->num_true = true_cnt;
-    
+
 
     y=0;
     /* Process truehits array */
@@ -801,7 +801,7 @@ static AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data,
             ajIntPut(rank,y,x);
             y++;
         }
-        
+
         else
             continue;
     }
@@ -833,15 +833,15 @@ static AjBool   sigplot_CountHits(AjPFile hitsin, AjPScopdata *data,
 /* @funcstatic sigplot_ValidatRead ********************************************
 **
 ** Read validation file and count the number of sequences classified as
-** seed, other and hit for the family of the signature in question and 
-** also the number in different folds. 
+** seed, other and hit for the family of the signature in question and
+** also the number in different folds.
 **
 ** @param [r] validatin     [AjPFile]      File pointer to signature hits file
 ** @param [r] data          [AjPScopdata*] Scopdata object pointer
 ** @param [w] vali_TN       [ajint*]        ajint for number in different fold
 ** @param [w] vali_FN       [ajint*]        ajint for number in family
 ** @param [w] vali_true  [ajint*]        Undocumented
-** 
+**
 ** @return [AjBool] True on success
 ** @@
 ******************************************************************************/
@@ -854,12 +854,12 @@ static AjBool  sigplot_ValidatRead(AjPFile validatin, AjPScopdata *data,
 
     ajint       fn_temp         = 0;
 
-    
+
     AjPStr      line            = NULL;
     AjPStr      string          = NULL;
     AjPStr      fold            = NULL;
     AjPStr      family          = NULL;
-    
+
     AjBool      done            = ajFalse;
 
 
@@ -867,9 +867,9 @@ static AjBool  sigplot_ValidatRead(AjPFile validatin, AjPScopdata *data,
     string = ajStrNew();
     fold   = ajStrNew();
     family   = ajStrNew();
-    
 
-    /* Check args */    
+
+    /* Check args */
     if(!validatin)
         return ajFalse;
 
@@ -985,7 +985,7 @@ static AjBool  sigplot_ValidatRead(AjPFile validatin, AjPScopdata *data,
             {
                 /* reset bool */
                 done = ajFalse;
-                
+
                 while(ajFileReadLine(validatin, &line) &&
 		      !ajStrPrefixC(line,"//"))
                 {
@@ -1020,10 +1020,10 @@ static AjBool  sigplot_ValidatRead(AjPFile validatin, AjPScopdata *data,
                         }
                     }
                 }
-            }            
+            }
         }
     }
-    
+
 
 
     /*ajFmtPrint("vali_FN = %d vali_TN = %d vali_true = %d\n",
@@ -1036,14 +1036,14 @@ static AjBool  sigplot_ValidatRead(AjPFile validatin, AjPScopdata *data,
 
     /* return */
     return ajTrue;
-    
+
 }
 
 
 
-/* @funcstatic sigplot_HitProportion *****************************************
+/* @funcstatic sigplot_HitProportion ******************************************
 **
-** Read signature hits file and count the number of hits, by reading the 
+** Read signature hits file and count the number of hits, by reading the
 ** HI line and storing the value for the rank of the hit.
 **
 ** @param [r] hitsin     [AjPFile]      File pointer to signature hits file
@@ -1056,7 +1056,7 @@ static AjBool  sigplot_ValidatRead(AjPFile validatin, AjPScopdata *data,
 ** @param [?] vali_true [ajint] Undocumented
 ** @param [?] split_hit [AjBool] Undocumented
 ** @param [?] prop [float*] Undocumented
-** 
+**
 ** @return [AjBool] True on success
 ** @@
 ******************************************************************************/
@@ -1093,12 +1093,12 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
     ajint    FN             = 0;   /* (vali_FN - TP) */
     float    sensi_temp     = 0;
     float    speci_temp     = 0;
-    
 
-    /* Check args */    
+
+    /* Check args */
     if(!hitsin)
         return ajFalse;
-    
+
 
     /* reset posinter to start of file */
     ajFileSeek(hitsin, 0, 0);
@@ -1108,7 +1108,7 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
     *prob_array = ajFloat2dNewL((*data)->num_hits);
     *sensi_array = ajFloatNewL((*data)->num_hits);
     *speci_array = ajFloatNewL((*data)->num_hits);
-    
+
 
     /* Set reserved size */
     for(x=0; x<6; x++)
@@ -1121,7 +1121,7 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
         ajFloatPut(sensi_array, x, (ajint)0);
         ajFloatPut(speci_array, x, (ajint)0);
     }
-    
+
 
     /* assign strings */
     line    = ajStrNew();
@@ -1141,7 +1141,7 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
 
         else if(ajStrPrefixC(line,"FO"))
             continue;
-        
+
         else if(ajStrPrefixC(line,"SF"))
             continue;
 
@@ -1159,8 +1159,8 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
         {
             /* perform calculation on first line of HI */
             ajFmtScanS(line, "%*s %d %*s %*d %*d %S %*s %S",
-		       &rank, &type, &temp);            
-            
+		       &rank, &type, &temp);
+
             /* If classification = true, determine the                */
             /* proportion of each classification and write into array */
             if(ajStrPrefixC(temp, "TRUE"))
@@ -1174,7 +1174,7 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
 			     (float)((float)cross/(float)rank));
                 ajFloat2dPut(prob_array, 3, rank-1,
 			     (float)((float)unknown/(float)rank));
-                
+
                 if(split_hit == ajTrue)
 
                 {
@@ -1185,14 +1185,14 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
                         /*printf("redun\n");*/
                         /* increment no. of redundants counter */
                         red++;
-                        
+
                         /* determine proportion of true hits that are
                            (non)redundant */
-                        ajFloat2dPut(prob_array, 4, rank-1, 
+                        ajFloat2dPut(prob_array, 4, rank-1,
                                      (float)((float)red/(float)true));
-                        ajFloat2dPut(prob_array, 5, rank-1, 
+                        ajFloat2dPut(prob_array, 5, rank-1,
                                      (float)((float)non/(float)true));
-                    }   
+                    }
 
                     /* In hit = redundant fill array */
                     else if(ajStrMatchC(type, "NON_REDUNDANT"))
@@ -1200,19 +1200,19 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
                         /*printf("non-redun\n");*/
                         /* increment no. of non_redundants counter */
                         non++;
-                        
+
                         /* determine proportion of true hits that are
                            (non)redundant */
-                        ajFloat2dPut(prob_array, 5, rank-1, 
+                        ajFloat2dPut(prob_array, 5, rank-1,
                                      (float)((float)non/(float)true));
-                        ajFloat2dPut(prob_array, 4, rank-1, 
+                        ajFloat2dPut(prob_array, 4, rank-1,
                                      (float)((float)red/(float)true));
-                    }   
+                    }
                 }
-                
+
 
             }
-            
+
             /* If classification = false, determine the */
             /* proportion of each classification and write value into array */
             else if(ajStrPrefixC(temp, "FALSE"))
@@ -1227,7 +1227,7 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
                 ajFloat2dPut(prob_array, 3, rank-1,
 			     (float)((float)unknown/(float)rank));
             }
-            
+
             /* If classification = cross, determine the */
             /* proportion of each classification and write value into array */
             else if(ajStrPrefixC(temp, "CROSS"))
@@ -1243,7 +1243,7 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
                 ajFloat2dPut(prob_array, 3, rank-1,
 			     (float)((float)unknown/(float)rank));
             }
-            
+
             /* If classification = unknown, determine the */
             /* proportion of each classification and write value into array */
             else if(ajStrPrefixC(temp, "UNKNOWN"))
@@ -1259,48 +1259,48 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
 			     (float)((float)unknown/(float)rank));
             }
             /* calculate specificity and sensitivity values */
-            
+
             /* Determine and assign true positives */
             TP = (true + cross);
 
             /*printf("TP = %d\n", TP);*/
-            
+
             /* Determine and assign false positives */
             FP = false;
             /*printf("FP = %d\n", FP);*/
-            
+
             /* Determine and assign true negatives */
             TN = (vali_TN - FP);
             /*printf("TN = %d\n", TN);*/
-            
+
             /* Determine and assign false negatives */
             FN = (vali_FN - TP);
             /*printf("FN = %d\n", FN);*/
-            
+
             /* Perform calculations and assign to arrays */
             /* Sensitivity */
             sensi_temp =  (float)(((float)TP)/((float)TP+(float)FN));
             /*printf("sensi = %f\n", sensi_temp);*/
-            
-            ajFloatPut(sensi_array, rank-1, sensi_temp); 
-            
+
+            ajFloatPut(sensi_array, rank-1, sensi_temp);
+
             /* Specificity */
             speci_temp =  (float)(((float)TN)/((float)TN+(float)FP));
             /*printf("speci = %f\n", speci_temp);*/
-            
-            ajFloatPut(speci_array, rank-1, speci_temp); 
-        
+
+            ajFloatPut(speci_array, rank-1, speci_temp);
+
 
 
             /* Start of loop for calculating      */
             /* proportion of each classification  */
             /* and sensitivity/specificity values */
             while(ajFileReadLine(hitsin, &line) &&
-		  !ajStrPrefixC(line,"XX"))        
+		  !ajStrPrefixC(line,"XX"))
             {
                 /* Scan rank and secondary classification into variables */
                 ajFmtScanS(line, "%*s %d %*s %*d %*d %S %*s %S",
-			   &rank, &type, &temp);        
+			   &rank, &type, &temp);
 
 
                 /* If classification = true, determine the */
@@ -1326,14 +1326,14 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
                             /*printf("redun\n");*/
                             /* increment no. of redundants counter */
                             red++;
-                        
+
                             /* determine proportion of true hits that
                                are redundant */
-                            ajFloat2dPut(prob_array, 4, rank-1, 
+                            ajFloat2dPut(prob_array, 4, rank-1,
                                      (float)((float)red/(float)true));
-                            ajFloat2dPut(prob_array, 5, rank-1, 
+                            ajFloat2dPut(prob_array, 5, rank-1,
                                      (float)((float)non/(float)true));
-                        }       
+                        }
 
                         /* In hit = redundant fill array */
                         else if(ajStrMatchC(type, "NON_REDUNDANT"))
@@ -1341,14 +1341,14 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
                             /*printf("non-redun\n");*/
                             /* increment no. of non_redundants counter */
                             non++;
-                            
+
                             /* determine proportion of true hits that
                                are redundant */
-                            ajFloat2dPut(prob_array, 5, rank-1, 
+                            ajFloat2dPut(prob_array, 5, rank-1,
                                          (float)((float)non/(float)true));
-                            ajFloat2dPut(prob_array, 4, rank-1, 
+                            ajFloat2dPut(prob_array, 4, rank-1,
                                          (float)((float)red/(float)true));
-                        }               
+                        }
                     }
                 }
 
@@ -1383,14 +1383,14 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
 				 (float)((float)cross/(float)rank));
                     ajFloat2dPut(prob_array, 3, rank-1,
 				 (float)((float)unknown/(float)rank));
-                }       
+                }
 
                 /* If classification = unknown, determine the */
                 /* proportion of each classification and write value
                    into array */
                 else if(ajStrPrefixC(temp, "UNKNOWN"))
                 {
-                    unknown++;  
+                    unknown++;
                     ajFloat2dPut(prob_array, 0, rank-1,
 				 (float)((float)true/(float)rank));
                     ajFloat2dPut(prob_array, 1, rank-1,
@@ -1400,21 +1400,21 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
                     ajFloat2dPut(prob_array, 3, rank-1,
 				 (float)((float)unknown/(float)rank));
                 }
-                
+
                 /* calculate specificity and sensitivity values */
 
                 /* Determine and assign true positives */
                 TP = (true + cross);
                 /*printf("rank = %4d TP = %4d\n", rank, TP);*/
-                
+
                 /* Determine and assign false positives */
                 FP = false;
                 /*printf("rank = %4d FP = %4d\n", rank,FP);*/
-                
+
                 /* Determine and assign true negatives */
                 TN = (vali_TN - FP);
                 /*printf("rank = %4d TN = %4d\n", rank,TN);*/
-                
+
                 /* Determine and assign false negatives */
                 FN = (vali_FN - TP);
                 /*printf("rank = %4d FN = %4d\n", rank,FN);*/
@@ -1423,14 +1423,14 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
                 /* Sensitivity */
                 sensi_temp =  (float)(((float)TP)/((float)TP+(float)FN));
                 /*printf("sensi = %f\n", sensi_temp);*/
-                
-                ajFloatPut(sensi_array, rank-1, sensi_temp); 
+
+                ajFloatPut(sensi_array, rank-1, sensi_temp);
 
                 /* Specificity */
                 speci_temp =  (float)(((float)TN)/((float)TN+(float)FP));
                 /*printf("speci = %f\n", speci_temp);*/
 
-                ajFloatPut(speci_array, rank-1, speci_temp); 
+                ajFloatPut(speci_array, rank-1, speci_temp);
             }
         }
     }
@@ -1446,11 +1446,11 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
             }*/
 
 /*    ajFmtPrint("Total true detected = %d\n", true);
-    ajFmtPrint("Proportion of total family members detected = %.2f\n", 
+    ajFmtPrint("Proportion of total family members detected = %.2f\n",
                (((float)true/(float)vali_true)*100));  */
 
-    (*prop) = (((float)true/(float)vali_true)*100);  
-    
+    (*prop) = (((float)true/(float)vali_true)*100);
+
 
     /* Tidy up */
     ajStrDel(&line);
@@ -1460,7 +1460,7 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
 
     /* return */
     return ajTrue;
-    
+
 }
 
 
@@ -1487,12 +1487,12 @@ static AjBool  sigplot_HitProportion(AjPFile hitsin, AjPScopdata *data,
 ** @@
 ******************************************************************************/
 static AjBool  sigplot_DataWrite(AjPFile datafile, AjPFile ssdatafile,
-				 AjPScopdata data, 
+				 AjPScopdata data,
 				 AjPFloat2d prob_array,
 				 AjPFloat sensi_array, AjPFloat speci_array,
 				 AjBool split_hit, float prop)
 {
-    
+
     ajint       x          = 0;     /* Loop counter */
     AjPFile     truePtr    = NULL;  /* Pointer to true data file */
     AjPFile     crossPtr   = NULL;  /* Pointer to cross data file */
@@ -1518,20 +1518,20 @@ static AjBool  sigplot_DataWrite(AjPFile datafile, AjPFile ssdatafile,
     AjPStr      speci      = NULL;  /* String of specificity output
                                        data file name */
 
-    
+
     /* initialize strings */
     true    = ajStrNew();
     cross   = ajStrNew();
-    false   = ajStrNew(); 
+    false   = ajStrNew();
     unknown = ajStrNew();
     red     = ajStrNew();
-    non     = ajStrNew();   
+    non     = ajStrNew();
     sensi   = ajStrNew();
     speci   = ajStrNew();
-    
+
 
     /* Assign name to filename string               */
-    /* Append 'classification'.dat to end of string */ 
+    /* Append 'classification'.dat to end of string */
     if(split_hit == ajTrue)
     {
         ajStrAssS(&non, data->file_name);
@@ -1539,13 +1539,13 @@ static AjBool  sigplot_DataWrite(AjPFile datafile, AjPFile ssdatafile,
         ajStrAssS(&red, data->file_name);
         ajStrAppC(&red, "_red.dat");
     }
-    
+
     else if(split_hit == ajFalse)
     {
         ajStrAssS(&true, data->file_name);
         ajStrAppC(&true, "_true.dat");
-    }   
- 
+    }
+
     ajStrAssS(&cross, data->file_name);
     ajStrAppC(&cross, "_cross.dat");
     ajStrAssS(&false, data->file_name);
@@ -1558,7 +1558,7 @@ static AjBool  sigplot_DataWrite(AjPFile datafile, AjPFile ssdatafile,
     ajStrAssS(&speci, data->file_name);
     ajStrAppC(&speci, "_speci.dat");
 
-    
+
     /* Assign file pointers */
     if(split_hit == ajTrue)
     {
@@ -1588,11 +1588,11 @@ static AjBool  sigplot_DataWrite(AjPFile datafile, AjPFile ssdatafile,
             ajFmtPrintF(nonPtr,     "%d    %4f\n",
 			x, ajFloat2dGet(prob_array, 5, x));
         }
-            
+
         else if(split_hit == ajFalse)
             ajFmtPrintF(truePtr,    "%d    %4f\n",
 			x, ajFloat2dGet(prob_array, 0, x));
-        
+
         ajFmtPrintF(falsePtr,   "%d    %4f\n",
 		    x, ajFloat2dGet(prob_array, 1, x));
         ajFmtPrintF(crossPtr,   "%d    %4f\n",
@@ -1644,17 +1644,17 @@ static AjBool  sigplot_DataWrite(AjPFile datafile, AjPFile ssdatafile,
 		    " \"Unknown Hits\"\n",
 		    red, non, cross, false, unknown);
     }
-    
+
     else if(split_hit == ajFalse)
         ajFmtPrintF(datafile,    "plot \"%S\" smooth bezier "
 		    "title \"True Hits\", \"%S\" "
 		    "smooth bezier title \"Cross Hits\", \"%S\" "
 		    "smooth bezier title"
 		    " \"False Hits\", \"%S\" smooth bezier "
-		    "title \"Unknown Hits\"\n", 
+		    "title \"Unknown Hits\"\n",
 		    true, cross, false, unknown);
- 
-   
+
+
     /* Write specificity and sensitivity .dat file */
     ajFmtPrintF(ssdatafile,    "#  GNUPLOT data file suitable for plotting "
 		"signature sensitivity and specificity\n");
@@ -1685,7 +1685,7 @@ static AjBool  sigplot_DataWrite(AjPFile datafile, AjPFile ssdatafile,
 		"title \"Sensitivity\", "
 		"\"%S\" smooth bezier title \"Specificity\"\n",
 		sensi, speci);
- 
+
     /* Close files */
 
     if(split_hit == ajTrue)
@@ -1713,11 +1713,11 @@ static AjBool  sigplot_DataWrite(AjPFile datafile, AjPFile ssdatafile,
     ajStrDel(&non);
     ajStrDel(&sensi);
     ajStrDel(&speci);
-    
+
 
     /* Return */
     return ajTrue;
-    
+
 
 }
 
@@ -1734,15 +1734,15 @@ static AjBool  sigplot_DataWrite(AjPFile datafile, AjPFile ssdatafile,
 ** @param [r] temp_seqs [AjPStr**] Undocumented
 ** @param [r] num [ajint] Undocumented
 ** @param [r] num_true [ajint] Undocumented
-** 
+**
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 static AjBool  sigplot_AlignSeqExtract(AjPFile sigalignfile, AjPInt truehits,
-				       AjPInt2d range, 
+				       AjPInt2d range,
 				       AjPStr **sig_seqs, AjPStr **temp_seqs,
-				       ajint num, 
-				       ajint num_true) 
+				       ajint num,
+				       ajint num_true)
 {
 
     AjPStr              seq             = NULL;
@@ -1753,24 +1753,24 @@ static AjBool  sigplot_AlignSeqExtract(AjPFile sigalignfile, AjPInt truehits,
     ajint               x               = 0;
     ajint               cnt             = 0;
     ajint               sigcnt          = 0;
-    
-    
+
+
 
     /* check args */
     if(!sigalignfile || !truehits || !range || !sig_seqs)
     {
         printf("Bad arguments passed to sigplot_AlignSeqExtract...... "
 	       "exiting\n");
-        return ajFalse; 
-    }    
-    
+        return ajFalse;
+    }
+
 
     /* Assign Strings */
     seq = ajStrNew();
     line = ajStrNew();
     check = ajStrNew();
 
-    
+
 
     /* Allocate memory and Strings */
     *temp_seqs = (AjPStr *) AJCALLOC0(num, sizeof(AjPStr));
@@ -1784,7 +1784,7 @@ static AjBool  sigplot_AlignSeqExtract(AjPFile sigalignfile, AjPInt truehits,
 
 
 
-    
+
     /* Start of main application loop */
     while(ajFileReadLine(sigalignfile,&line) && (!ajStrPrefixC(line,"//")))
     {
@@ -1826,7 +1826,7 @@ static AjBool  sigplot_AlignSeqExtract(AjPFile sigalignfile, AjPInt truehits,
 
             /* Read rest of sig/seq data lines */
             while(ajFileReadLine(sigalignfile,&line) &&
-		  (!ajStrPrefixC(line,"//")))         
+		  (!ajStrPrefixC(line,"//")))
             {
                 /* If line = XX, i.e. end of block, reset cnt */
                 if(ajStrPrefixC(line,"XX"))
@@ -1853,16 +1853,16 @@ static AjBool  sigplot_AlignSeqExtract(AjPFile sigalignfile, AjPInt truehits,
                             continue;
                         }
 
-                        
+
                     }
-                    
+
                     else
                         continue;
                 }
             }
-        }                   
+        }
     }
-    
+
 
 
 
@@ -1874,7 +1874,7 @@ static AjBool  sigplot_AlignSeqExtract(AjPFile sigalignfile, AjPInt truehits,
         /* Check if hit is a 'TRUE' hit */
         if(ajIntGet(truehits, x) == 1)
         {
-/*          ajFmtPrint("\nFound true hit at pos %3d (%d) range = %3d-%3d\n", 
+/*          ajFmtPrint("\nFound true hit at pos %3d (%d) range = %3d-%3d\n",
                        x, ajIntGet(truehits,x), ajInt2dGet(range,x, 0),
 		       ajInt2dGet(range, x, 1));
             ajFmtPrint("Sequence at rank   =  %S\n", (*temp_seqs)[x]);*/
@@ -1894,7 +1894,7 @@ static AjBool  sigplot_AlignSeqExtract(AjPFile sigalignfile, AjPInt truehits,
             continue;
         }
     }
-    
+
     /*for(x=0;x<num_true;x++)
           ajFmtPrint("Extracted range =  %S\n", (*sig_seqs)[x]);*/
 
@@ -1902,14 +1902,14 @@ static AjBool  sigplot_AlignSeqExtract(AjPFile sigalignfile, AjPInt truehits,
 
 
 
-    ajStrDel(&seq);    
-    ajStrDel(&line);    
-    ajStrDel(&check);    
-    
+    ajStrDel(&seq);
+    ajStrDel(&line);
+    ajStrDel(&check);
+
 
     /* return */
     return ajTrue;
-    
+
 
 
 }
@@ -1928,14 +1928,14 @@ static AjBool  sigplot_AlignSeqExtract(AjPFile sigalignfile, AjPInt truehits,
 ** @param [r] submat [AjPMatrixf] Undocumented
 ** @param [r] gapopen [float] Undocumented
 ** @param [r] gapextn [float] Undocumented
-** 
+**
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 static AjBool  sigplot_SeedIdCalc(AjPList seedlist,  AjPScopalg alg,
 				  AjPFile matrixout,
 				  AjPMatrixf submat,
-				  float gapopen, float gapextn) 
+				  float gapopen, float gapextn)
 {
     ajint       start1          = 0;    /*Start of seq 1, passed as
                                           arg but not used*/
@@ -1944,7 +1944,7 @@ static AjBool  sigplot_SeedIdCalc(AjPList seedlist,  AjPScopalg alg,
     ajint       maxarr          = 300;  /*Initial size for matrix*/
     ajint       len;
     ajint       x;                      /*Counter for seq 1*/
-    ajint       y;                      /*Counter for seq 2*/ 
+    ajint       y;                      /*Counter for seq 2*/
     ajint       nin;                    /*Number of sequences in input list*/
     ajint       *compass;
 
@@ -1953,7 +1953,7 @@ static AjBool  sigplot_SeedIdCalc(AjPList seedlist,  AjPScopalg alg,
 
     float     **sub;
     float       id              = 0.;   /*Passed as arg but not used here*/
-    float       sim             = 0.;   
+    float       sim             = 0.;
     float       idx             = 0.;   /*Passed as arg but not used here*/
     float       simx            = 0.;   /*Passed as arg but not used here*/
     float      *path;
@@ -1976,14 +1976,14 @@ static AjBool  sigplot_SeedIdCalc(AjPList seedlist,  AjPScopalg alg,
     /*Intitialise variables*/
     AJCNEW(path, maxarr);
     AJCNEW(compass, maxarr);
-    m = ajStrNew();    
-    n = ajStrNew();    
+    m = ajStrNew();
+    n = ajStrNew();
     gapopen   = ajRoundF(gapopen,8);
     gapextn = ajRoundF(gapextn,8);
     sub = ajMatrixfArray(submat);
     cvt = ajMatrixfCvt(submat);
 
-    
+
     /*Convert the AjPList to an array of AjPseq*/
     if(!(nin=ajListToArray(seedlist,(void ***)&inseqs)))
     {
@@ -1996,15 +1996,15 @@ static AjBool  sigplot_SeedIdCalc(AjPList seedlist,  AjPScopalg alg,
         return ajFalse;
     }
 
-                               
+
     /*Create an ajint array to hold lengths of sequences*/
-    lens = ajIntNewL(nin);     
+    lens = ajIntNewL(nin);
     for(x=0; x<nin; x++)
         ajIntPut(&lens,x,ajSeqLen(inseqs[x]));
 
 
     /*Create a 2d float array to hold the similarity scores*/
-    scores = ajFloat2dNew();   
+    scores = ajFloat2dNew();
 
     /* Assign array values to zero */
     for(x=0;x<nin;x++)
@@ -2014,20 +2014,20 @@ static AjBool  sigplot_SeedIdCalc(AjPList seedlist,  AjPScopalg alg,
 
 
     /*Start of main application loop*/
-    for(x=0; x<nin; x++)       
-    { 
-        for(y=x+1; y<nin; y++) 
+    for(x=0; x<nin; x++)
+    {
+        for(y=x+1; y<nin; y++)
         {
-            /*Process w/o alignment identical sequences*/       
+            /*Process w/o alignment identical sequences*/
             if(ajStrMatch(inseqs[x]->Seq, inseqs[y]->Seq))
             {
                 ajFloat2dPut(&scores,x,y,(float)100.0);
                 ajFloat2dPut(&scores,y,x,(float)100.0);
                 continue;
-            } 
-                                       
+            }
 
-            /* Intitialise variables for use by alignment functions*/       
+
+            /* Intitialise variables for use by alignment functions*/
             len = ajIntGet(lens,x)*ajIntGet(lens,y);
 
             if(len>maxarr)
@@ -2036,9 +2036,9 @@ static AjBool  sigplot_SeedIdCalc(AjPList seedlist,  AjPScopalg alg,
                 AJCRESIZE(compass,len);
                 maxarr=len;
             }
-                                       
-            p = ajSeqChar(inseqs[x]); 
-            q = ajSeqChar(inseqs[y]); 
+
+            p = ajSeqChar(inseqs[x]);
+            q = ajSeqChar(inseqs[y]);
 
             ajStrAssC(&m,"");
 
@@ -2057,7 +2057,7 @@ static AjBool  sigplot_SeedIdCalc(AjPList seedlist,  AjPScopalg alg,
                 ajFloat2dDel(&scores);
                 ajIntDel(&lens);
                 AJFREE(inseqs);
-                                           
+
                 return ajFalse;
             }
 
@@ -2077,8 +2077,8 @@ static AjBool  sigplot_SeedIdCalc(AjPList seedlist,  AjPScopalg alg,
 
             embAlignCalcSimilarity(m,n,sub,cvt,ajIntGet(lens,x),
                                    ajIntGet(lens,y),&id,&sim,&idx, &simx);
-            
-            
+
+
             /* Write array with score*/
             ajFloat2dPut(&scores,x,y,sim);
             ajFloat2dPut(&scores,y,x,sim);
@@ -2101,7 +2101,7 @@ static AjBool  sigplot_SeedIdCalc(AjPList seedlist,  AjPScopalg alg,
     ajFmtPrintF(matrixout, "------------\n");
     ajFmtPrintF(matrixout, "Seed Id Data\n");
     ajFmtPrintF(matrixout, "------------\n");
-    
+
 
     ajFmtPrintF(matrixout, "      ");
 
@@ -2110,7 +2110,7 @@ static AjBool  sigplot_SeedIdCalc(AjPList seedlist,  AjPScopalg alg,
         ajFmtPrintF(matrixout, "%8S", alg->Codes[x]);
 
     ajFmtPrintF(matrixout, "\n");
-    
+
     for(x=0;x<nin;x++)
     {
         ajFmtPrintF(matrixout, "%7S", alg->Codes[x]);
@@ -2138,7 +2138,7 @@ static AjBool  sigplot_SeedIdCalc(AjPList seedlist,  AjPScopalg alg,
         av_temp = 0.0;
         for(y=0;y<nin;y++)
         {
-            av_temp += ajFloat2dGet(scores, x, y); 
+            av_temp += ajFloat2dGet(scores, x, y);
         }
         if(x == 0)
         {
@@ -2146,30 +2146,30 @@ static AjBool  sigplot_SeedIdCalc(AjPList seedlist,  AjPScopalg alg,
             ajFmtPrintF(matrixout, "%8.2f", (av_temp/(float)(nin - 1)));
         }
         else
-            ajFmtPrintF(matrixout, "%8.2f", (av_temp/(float)(nin - 1))); 
-    }    
+            ajFmtPrintF(matrixout, "%8.2f", (av_temp/(float)(nin - 1)));
+    }
 
     ajFmtPrintF(matrixout, "\n");
 
-    /* Write line to file */    
+    /* Write line to file */
     for(x=0;x<(6+(nin * 8));x++)
         ajFmtPrintF(matrixout, "-");
 
     ajFmtPrintF(matrixout, "\n");
 
-    
+
     av_temp = 0.0;
-    
+
     /* Calculate overall average */
     for(x=0;x<nin;x++)
         for(y=0;y<nin;y++)
-            av_temp += ajFloat2dGet(scores, x, y); 
+            av_temp += ajFloat2dGet(scores, x, y);
 
     ajFmtPrintF(matrixout, "overall average id = %.2f\n",
-		(av_temp/(float)((nin * nin) - nin)));            
-  
+		(av_temp/(float)((nin * nin) - nin)));
 
-                               
+
+
     /* Tidy up */
     AJFREE(compass);
     AJFREE(path);
@@ -2178,11 +2178,11 @@ static AjBool  sigplot_SeedIdCalc(AjPList seedlist,  AjPScopalg alg,
     ajFloat2dDel(&scores);
     ajIntDel(&lens);
     AJFREE(inseqs);
-    
-                               
+
+
     /* Bye Bye */
     return ajTrue;
-}    
+}
 
 
 
@@ -2204,10 +2204,10 @@ static AjBool  sigplot_SeedIdCalc(AjPList seedlist,  AjPScopalg alg,
 ** @@
 ******************************************************************************/
 static AjBool  sigplot_HitIdCalc(AjPList seedlist, AjPList hitlist,
-				 AjPScopalg alg, 
+				 AjPScopalg alg,
 				 AjPFile matrixout, AjPMatrixf submat,
 				 float gapopen, float gapextn,
-				 AjPStr **codes, AjPInt rank) 
+				 AjPStr **codes, AjPInt rank)
 {
     ajint       start1          = 0;    /*Start of seq 1, passed as
                                           arg but not used*/
@@ -2216,19 +2216,19 @@ static AjBool  sigplot_HitIdCalc(AjPList seedlist, AjPList hitlist,
     ajint       maxarr          = 300;  /*Initial size for matrix*/
     ajint       len;
     ajint       x;                      /*Counter for seq 1*/
-    ajint       y;                      /*Counter for seq 2*/ 
+    ajint       y;                      /*Counter for seq 2*/
     ajint       nin;                    /*Number of sequences in input list*/
     ajint       hitn;
     ajint       *compass;
     ajint       num             = 0;
-    
+
 
     char        *p;
     char        *q;
 
     float     **sub;
     float       id              = 0.;   /*Passed as arg but not used here*/
-    float       sim             = 0.;   
+    float       sim             = 0.;
     float       idx             = 0.;   /*Passed as arg but not used here*/
     float       simx            = 0.;   /*Passed as arg but not used here*/
     float      *path;
@@ -2254,14 +2254,14 @@ static AjBool  sigplot_HitIdCalc(AjPList seedlist, AjPList hitlist,
     /*Intitialise variables*/
     AJCNEW(path, maxarr);
     AJCNEW(compass, maxarr);
-    m = ajStrNew();    
-    n = ajStrNew();    
+    m = ajStrNew();
+    n = ajStrNew();
     gapopen   = ajRoundF(gapopen,8);
     gapextn = ajRoundF(gapextn,8);
     sub = ajMatrixfArray(submat);
     cvt = ajMatrixfCvt(submat);
 
-    
+
     /*Convert the AjPList to an array of AjPseq*/
     if(!(nin=ajListToArray(seedlist,(void ***)&seedseqs)))
     {
@@ -2286,47 +2286,47 @@ static AjBool  sigplot_HitIdCalc(AjPList seedlist, AjPList hitlist,
         return ajFalse;
     }
 
-                               
+
     /*Create an ajint array to hold lengths of sequences*/
-    seedlens = ajIntNewL(nin);     
+    seedlens = ajIntNewL(nin);
     for(x=0; x<nin; x++)
         ajIntPut(&seedlens,x,ajSeqLen(seedseqs[x]));
 
     /*Create an ajint array to hold lengths of sequences*/
-    hitlens = ajIntNewL(hitn);     
+    hitlens = ajIntNewL(hitn);
     for(x=0; x<hitn; x++)
         ajIntPut(&hitlens,x,ajSeqLen(hitseqs[x]));
 
 
     /*Create a 2d float array to hold the similarity scores*/
-    scores = ajFloat2dNew();   
+    scores = ajFloat2dNew();
 
     /* Assign array values to zero */
     for(x=0;x<hitn;x++)
         for(y=0;y<nin;y++)
             ajFloat2dPut(&scores, x, y, 0.0);
 
-    
+
 
 
     /*Start of main application loop*/
-    for(x=0; x<hitn; x++)       
+    for(x=0; x<hitn; x++)
 
-    { 
+    {
         num++;
-        for(y=0; y<nin; y++) 
+        for(y=0; y<nin; y++)
         {
 
-            /* Process identical sequences */       
+            /* Process identical sequences */
             if(ajStrMatch(hitseqs[x]->Seq, seedseqs[y]->Seq))
             {
                 ajFloat2dPut(&scores,x,y,(float)100.0);
                 /*ajFloat2dPut(&scores,y,x,(float)100.0);*/
                 continue;
-            } 
+            }
 
 
-            /* Intitialise variables for use by alignment functions*/       
+            /* Intitialise variables for use by alignment functions*/
             len = ajIntGet(hitlens,x)*ajIntGet(seedlens,y);
 
             if(len>maxarr)
@@ -2336,9 +2336,9 @@ static AjBool  sigplot_HitIdCalc(AjPList seedlist, AjPList hitlist,
                 AJCRESIZE(compass,len);
                 maxarr=len;
             }
-                                       
-            p = ajSeqChar(hitseqs[x]); 
-            q = ajSeqChar(seedseqs[y]); 
+
+            p = ajSeqChar(hitseqs[x]);
+            q = ajSeqChar(seedseqs[y]);
 
             ajStrAssC(&m,"");
             ajStrAssC(&n,"");
@@ -2359,7 +2359,7 @@ static AjBool  sigplot_HitIdCalc(AjPList seedlist, AjPList hitlist,
                 ajIntDel(&hitlens);
                 AJFREE(seedseqs);
                 AJFREE(hitseqs);
-                                           
+
                 return ajFalse;
             }
 
@@ -2381,8 +2381,8 @@ static AjBool  sigplot_HitIdCalc(AjPList seedlist, AjPList hitlist,
 
             embAlignCalcSimilarity(m,n,sub,cvt,ajIntGet(hitlens,x),
                                    ajIntGet(seedlens,y),&id,&sim,&idx, &simx);
-            
-            
+
+
             /* Write score to array */
             ajFloat2dPut(&scores,x,y,sim);
             /*ajFmtPrint("%8.3f%8.3f%8.3f%8.3f\n", id, idx, sim, simx);*/
@@ -2401,27 +2401,27 @@ static AjBool  sigplot_HitIdCalc(AjPList seedlist, AjPList hitlist,
     for(x=0;x<nin;x++)
         ajFmtPrintF(matrixout, "%8S", alg->Codes[x]);
     ajFmtPrintF(matrixout, "  av. id\n");
-    
+
 
     for(x=0;x<hitn;x++)
     {
         av_temp = 0.0;
-        
+
         ajFmtPrintF(matrixout, "%S%5d", (*codes)[x], (ajIntGet(rank,x)+1));
         for(y=0;y<nin;y++)
         {
 
             ajFmtPrintF(matrixout,"%8.2f", ajFloat2dGet(scores, x, y));
-            av_temp += ajFloat2dGet(scores, x, y); 
+            av_temp += ajFloat2dGet(scores, x, y);
         }
-        
+
         /* Print average id of hit to all seeds to output file */
         ajFmtPrintF(matrixout, "%8.2f\n", (av_temp) / (float)nin);
     }
 
     ajFmtPrintF(matrixout, "//");
-    
-                               
+
+
     /* Tidy up */
     AJFREE(compass);
     AJFREE(path);
@@ -2433,10 +2433,10 @@ static AjBool  sigplot_HitIdCalc(AjPList seedlist, AjPList hitlist,
 
     AJFREE(seedseqs);
     AJFREE(hitseqs);
-                               
+
     /* Bye Bye */
     return ajTrue;
-}    
+}
 
 
 
@@ -2446,14 +2446,14 @@ static AjBool  sigplot_HitIdCalc(AjPList seedlist, AjPList hitlist,
 **
 ** Scopdata object constructor.
 **
-** 
+**
 ** @return [AjPScopdata] Pointer to a Scopdata object
 ** @@
 ******************************************************************************/
 static AjPScopdata  sigplot_ScopdataNew()
 {
     AjPScopdata ret = NULL;
-    
+
 
     AJNEW0(ret);
     ret->Class=ajStrNew();
@@ -2490,17 +2490,17 @@ static void sigplot_ScopdataDel(AjPScopdata *pthis)
     ajStrDel(&(*pthis)->file_name);
 
 
-    
+
     AJFREE(*pthis);
     *pthis=NULL;
-    
+
     /* return */
     return;
 }
 
 
 
- 
+
 
 
 

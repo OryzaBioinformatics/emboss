@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     AjPStr str=NULL;
 
     AjPSeq newseq=NULL;			/* the new sequence */
-  
+
 
     embInit ("pasteseq", argc, argv);
 
@@ -57,10 +57,10 @@ int main(int argc, char **argv)
 
     /* create a name for the sequence */
     ajSeqAssName(newseq, ajSeqGetName(seq));
-  
+
     /* set the description of the sequence */
     ajSeqAssDesc(newseq, ajSeqGetDesc(seq));
-  
+
     /* do the insertion here */
     str = ajSeqStr(newseq);
     ajStrAssC(&str, ajSeqChar(seq));

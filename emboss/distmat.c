@@ -1,7 +1,7 @@
 /* @source distmat application
 **
-**   Calculates the evolutionary distance matrix for a set of 
-** aligned sequences. Measures the pairwise evolutionary 
+**   Calculates the evolutionary distance matrix for a set of
+** aligned sequences. Measures the pairwise evolutionary
 ** distances between aligned sequences. Distances are expressed
 ** as substitutions per 100 bases or a.a.'s.
 **
@@ -19,16 +19,16 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*****************************************************************************/
+******************************************************************************/
 
 
 #include "emboss.h"
@@ -56,7 +56,7 @@ static AjPFloat2d distmat_KimuraProt(char** seqcharptr, ajint mlen,
 static AjPFloat2d distmat_Tamura(char** seqcharptr, ajint len, ajint nseqs);
 static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
                             ajint mlen, ajint nseqs, AjBool nuc);
-static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint len, ajint nseqs, 
+static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint len, ajint nseqs,
 				 AjBool calc_a, float var_a);
 
 /* output routine and misc routines */
@@ -96,7 +96,7 @@ int main (int argc, char * argv[])
     AjPFloat2d gap=NULL;
     AjPStr* methodlist;
     AjPFile outf=NULL;
-    
+
     AjBool nuc=ajFalse;
     AjBool ambig;
     AjBool calc_a;
@@ -133,7 +133,7 @@ int main (int argc, char * argv[])
     {
 	incr = 3;
 	posn--;
-    }     
+    }
     else if(posn == 123)
 	posn = 0;
     else if(posn == 23 || posn == 13 || posn != 12)
@@ -205,12 +205,12 @@ int main (int argc, char * argv[])
 **
 ** K Tamura, Mol. Biol. Evol. 1992, 9, 678.
 **
-** @param [r] seqcharptr [char**] Array of sequences as C strings 
+** @param [r] seqcharptr [char**] Array of sequences as C strings
 ** @param [r] len [ajint] Length
 ** @param [r] nseqs [ajint] Number of sequences
 ** @return [AjPFloat2d] corrected distance matrix
 **
-*************************************************************************/
+******************************************************************************/
 static AjPFloat2d distmat_Tamura(char** seqcharptr, ajint len, ajint nseqs)
 {
 
@@ -300,9 +300,9 @@ static AjPFloat2d distmat_Tamura(char** seqcharptr, ajint len, ajint nseqs)
     }
 
     /* calc transition & transversion subst.'s */
-    for(i=0;i<nseqs;i++)               
+    for(i=0;i<nseqs;i++)
     {
-	for(j=i+1;j<nseqs;j++)            
+	for(j=i+1;j<nseqs;j++)
 	{
 	    for(k=0; k< len; k++)
 	    {
@@ -314,7 +314,7 @@ static AjPFloat2d distmat_Tamura(char** seqcharptr, ajint len, ajint nseqs)
 		    tranv = ajInt2dGet(Qtranv,i,j);
 
 		    distmat_checkSubs(t1,t2,&trans,&tranv);
-		    ajInt2dPut(&Ptrans,i,j,trans); 
+		    ajInt2dPut(&Ptrans,i,j,trans);
 		    ajInt2dPut(&Qtranv,i,j,tranv);
 		    m = ajInt2dGet(score,i,j)+1;
 		    ajInt2dPut(&score,i,j,m);
@@ -325,9 +325,9 @@ static AjPFloat2d distmat_Tamura(char** seqcharptr, ajint len, ajint nseqs)
 
 
     /* calc distance matrix */
-    for(i=0;i<nseqs;i++)             
+    for(i=0;i<nseqs;i++)
     {
-	for(j=i+1;j<nseqs;j++)            
+	for(j=i+1;j<nseqs;j++)
 	{
 	    C = ajFloat2dGet(GC,j,i)+ajFloat2dGet(GC,i,j);
 	    C = C - (2*ajFloat2dGet(GC,j,i)*ajFloat2dGet(GC,i,j));
@@ -337,34 +337,34 @@ static AjPFloat2d distmat_Tamura(char** seqcharptr, ajint len, ajint nseqs)
 	    if(P != 0.)
 		P = P/C;
 	    D = -(C*log(1-P-Q)) - (0.5*(1-C)*log(1-2*Q));
-	    ajFloat2dPut(&matDist,i,j,D); 
+	    ajFloat2dPut(&matDist,i,j,D);
 	}
     }
-  
+
     ajInt2dDel(&Ptrans);
     ajInt2dDel(&Qtranv);
     ajInt2dDel(&score);
     ajFloat2dDel(&GC);
     ajFloat2dDel(&gap);
 
-    return matDist;   
+    return matDist;
 }
 
 
 
 
-/* @funcstatic distmat_Kimura ************************************************
+/* @funcstatic distmat_Kimura *************************************************
 **
 ** Kimura 2-parameter distance - nucleic acid only.
 **
 ** M Kimura, J. Mol. Evol., 1980, 16, 111.
 **
-** @param [r] seqcharptr [char**] Array of sequences as C strings 
+** @param [r] seqcharptr [char**] Array of sequences as C strings
 ** @param [r] len [ajint] Length
 ** @param [r] nseqs [ajint] Number of sequences
 ** @return [AjPFloat2d] corrected distance matrix
 **
-*************************************************************************/
+******************************************************************************/
 
 static AjPFloat2d distmat_Kimura(char** seqcharptr, ajint len, ajint nseqs)
 {
@@ -395,7 +395,7 @@ static AjPFloat2d distmat_Kimura(char** seqcharptr, ajint len, ajint nseqs)
     Qtranv  = ajInt2dNew();
     match   = ajInt2dNew();
 
- 
+
     /* initialise array */
     for(i=0;i<nseqs;++i)
     {
@@ -409,9 +409,9 @@ static AjPFloat2d distmat_Kimura(char** seqcharptr, ajint len, ajint nseqs)
     }
 
     /* calc transition & transversion subst.'s */
-    for(i=0;i<nseqs;i++)               
+    for(i=0;i<nseqs;i++)
     {
-	for(j=i+1;j<nseqs;j++)            
+	for(j=i+1;j<nseqs;j++)
 	{
 	    for(k=0; k< len; k++)
 	    {
@@ -425,7 +425,7 @@ static AjPFloat2d distmat_Kimura(char** seqcharptr, ajint len, ajint nseqs)
 
 		    distmat_checkSubs(t1,t2,&trans,&tranv);
 		    distmat_checkRY(t1,t2,&trans,&tranv);
-		    ajInt2dPut(&Ptrans,i,j,trans); 
+		    ajInt2dPut(&Ptrans,i,j,trans);
 		    ajInt2dPut(&Qtranv,i,j,tranv);
 		    m = ajInt2dGet(match,i,j)+1;
 		    ajInt2dPut(&match,i,j,m);
@@ -436,23 +436,23 @@ static AjPFloat2d distmat_Kimura(char** seqcharptr, ajint len, ajint nseqs)
 
 
     /* calc distance matrix */
-    for(i=0;i<nseqs;i++)             
+    for(i=0;i<nseqs;i++)
     {
-	for(j=i+1;j<nseqs;j++)            
+	for(j=i+1;j<nseqs;j++)
 	{
 	    P = (float)ajInt2dGet(Ptrans,i,j)/(float)ajInt2dGet(match,i,j);
 	    Q = (float)ajInt2dGet(Qtranv,i,j)/(float)ajInt2dGet(match,i,j);
 	    D = -0.5*log((1-(2*P)-Q)*sqrt(1-(2*Q)));
-     
-	    ajFloat2dPut(&matDist,i,j,D); 
+
+	    ajFloat2dPut(&matDist,i,j,D);
 	}
     }
-  
+
     ajInt2dDel(&Ptrans);
     ajInt2dDel(&Qtranv);
     ajInt2dDel(&match);
 
-    return matDist;   
+    return matDist;
 }
 
 
@@ -461,12 +461,12 @@ static AjPFloat2d distmat_Kimura(char** seqcharptr, ajint len, ajint nseqs)
 **
 ** Kimura protein distance
 **
-** @param [r] seqcharptr [char**] Array of sequences as C strings 
+** @param [r] seqcharptr [char**] Array of sequences as C strings
 ** @param [r] mlen [ajint] Length
 ** @param [r] nseqs [ajint] Number of sequences
 ** @return [AjPFloat2d] corrected distance matrix
 **
-*************************************************************************/
+******************************************************************************/
 
 static AjPFloat2d distmat_KimuraProt(char** seqcharptr, ajint mlen,
 				     ajint nseqs)
@@ -492,7 +492,7 @@ static AjPFloat2d distmat_KimuraProt(char** seqcharptr, ajint mlen,
     match   = ajFloat2dNew();
     scored  = ajInt2dNew();
 
- 
+
     /* initialise array */
     for(i=0;i<nseqs;++i)
     {
@@ -505,9 +505,9 @@ static AjPFloat2d distmat_KimuraProt(char** seqcharptr, ajint mlen,
     }
 
     /* calc matches */
-    for(i=0;i<nseqs;i++)               
+    for(i=0;i<nseqs;i++)
     {
-	for(j=i+1;j<nseqs;j++)            
+	for(j=i+1;j<nseqs;j++)
 	{
 	    for(k=0; k< mlen; k++)
 	    {
@@ -515,7 +515,7 @@ static AjPFloat2d distmat_KimuraProt(char** seqcharptr, ajint mlen,
 		m2 = seqcharptr[j][k];
 		if(m1 != '-' && m2 != '-')
 		{
-            
+
 		    m = ajFloat2dGet(match,i,j)+
 			distmat_checkambigProt(toupper((int) m1),
 					       toupper((int) m2));
@@ -529,30 +529,30 @@ static AjPFloat2d distmat_KimuraProt(char** seqcharptr, ajint mlen,
 
 
     /* calc distance matrix */
-    for(i=0;i<nseqs;i++)             
+    for(i=0;i<nseqs;i++)
     {
-	for(j=i+1;j<nseqs;j++)            
+	for(j=i+1;j<nseqs;j++)
 	{
 	    D = 1.-(ajFloat2dGet(match,i,j)/
 		    (float)ajInt2dGet(scored,i,j));
 	    D = -log(1-D-(0.2*D*D));
-	    ajFloat2dPut(&matDist,i,j,D); 
+	    ajFloat2dPut(&matDist,i,j,D);
 	}
     }
-  
+
     ajInt2dDel(&scored);
     ajFloat2dDel(&match);
 
-    return matDist;   
+    return matDist;
 }
 
 
 /* @funcstatic distmat_calc_match *********************************************
 **
-** Sum the no. of matches between each pair of sequence in an 
+** Sum the no. of matches between each pair of sequence in an
 ** alignment.
 **
-** @param [r] seqcharptr [char**] Array of sequences as C strings 
+** @param [r] seqcharptr [char**] Array of sequences as C strings
 ** @param [r] len [ajint] Length
 ** @param [r] nseqs [ajint] Number of sequences
 ** @param [r] ambig [AjBool] Ambiguity codes
@@ -560,12 +560,12 @@ static AjPFloat2d distmat_KimuraProt(char** seqcharptr, ajint mlen,
 ** @param [r] gap [AjPFloat2d*] Gaps
 ** @return [AjPFloat2d] corrected distance matrix
 **
-*************************************************************************/
+******************************************************************************/
 
 static AjPFloat2d distmat_calc_match(char** seqcharptr, ajint len, ajint nseqs,
 				     AjBool ambig, AjBool nuc, AjPFloat2d* gap)
 {
- 
+
     ajint i;
     ajint j;
     ajint k;
@@ -593,9 +593,9 @@ static AjPFloat2d distmat_calc_match(char** seqcharptr, ajint len, ajint nseqs,
     }
 
 
-    for(i=0;i<nseqs;i++)          
-    { 
-	for(j=i+1;j<nseqs;j++)       
+    for(i=0;i<nseqs;i++)
+    {
+	for(j=i+1;j<nseqs;j++)
 	{
 	    for(k=0; k< len; k++)
 	    {
@@ -607,7 +607,7 @@ static AjPFloat2d distmat_calc_match(char** seqcharptr, ajint len, ajint nseqs,
 		    m = ajFloat2dGet(match,i,j)+m;
 		    ajFloat2dPut(&match,i,j,m);
 		}
-		else if( ambig && !nuc && m1 != '-' && m2 != '-') 
+		else if( ambig && !nuc && m1 != '-' && m2 != '-')
 		{
 		    m = distmat_checkambigProt(toupper((int) m1),
 					       toupper((int) m2));
@@ -617,7 +617,7 @@ static AjPFloat2d distmat_calc_match(char** seqcharptr, ajint len, ajint nseqs,
 		else if( m2 == m1 && m1 != '-' )
 		{
 		    m = ajFloat2dGet(match,i,j)+1;
-		    ajFloat2dPut(&match,i,j,m); 
+		    ajFloat2dPut(&match,i,j,m);
 		}
 
 		if( m1 == '-' || m2 == '-' ) /* gap in seq */
@@ -635,7 +635,7 @@ static AjPFloat2d distmat_calc_match(char** seqcharptr, ajint len, ajint nseqs,
 
 
 
-/* @funcstatic distmat_uncorrected *******************************************
+/* @funcstatic distmat_uncorrected ********************************************
 **
 ** No correction for multiple substitutions is used in the calculation
 ** of the distance matrix.
@@ -650,7 +650,7 @@ static AjPFloat2d distmat_calc_match(char** seqcharptr, ajint len, ajint nseqs,
 ** @param [r] nuc [AjBool] Nucleotide
 ** @return [AjPFloat2d] uncorrected distance matrix D
 **
-*************************************************************************/
+******************************************************************************/
 
 static AjPFloat2d distmat_uncorrected(AjPFloat2d match, AjPFloat2d gap,
 				      float gapwt, ajint len, ajint nseqs,
@@ -672,8 +672,8 @@ static AjPFloat2d distmat_uncorrected(AjPFloat2d match, AjPFloat2d gap,
         for(j=0;j<nseqs;++j)
             ajFloat2dPut(&matchUn,i,j,0);
 
-    for(i=0;i<nseqs;i++)       
-	for(j=i+1;j<nseqs;j++)    
+    for(i=0;i<nseqs;i++)
+	for(j=i+1;j<nseqs;j++)
 	{
 	    m = ajFloat2dGet(match,i,j); /* no. matches */
 	    g = ajFloat2dGet(gap,i,j);	/* no. gaps    */
@@ -688,14 +688,14 @@ static AjPFloat2d distmat_uncorrected(AjPFloat2d match, AjPFloat2d gap,
 
 
 
-/* @funcstatic distmat_TajimaNei *********************************************
+/* @funcstatic distmat_TajimaNei **********************************************
 **
 ** Tajima-Nei correction used for multiple substitutions in the calc
 ** of the distance matrix. Nucleic acids only.
 **
 **  D = p-distance = 1 - (matches/(posns_scored + gaps)
 **
-**  distance = -b * ln(1-D/b) 
+**  distance = -b * ln(1-D/b)
 **
 ** Tajima and Nei, Mol. Biol. Evol. 1984, 1, 269.
 **
@@ -706,8 +706,8 @@ static AjPFloat2d distmat_uncorrected(AjPFloat2d match, AjPFloat2d gap,
 ** @param [r] nuc [AjBool] Nucleotide
 ** @return [AjPFloat2d] corrected distance matrix
 **
-*************************************************************************/
-static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match, 
+******************************************************************************/
+static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
 				    ajint mlen, ajint nseqs, AjBool nuc)
 {
 
@@ -724,7 +724,7 @@ static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
 
     AjPInt2d len=NULL;
     AjPInt3d pfreq=NULL;
-    AjPInt3d cbase=NULL; 
+    AjPInt3d cbase=NULL;
 
     float fi;
     float fj;
@@ -761,7 +761,7 @@ static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
 	}
 
     /* calc content of each seq  - ignoring gaps */
-    for(i=0;i<nseqs;i++)    
+    for(i=0;i<nseqs;i++)
     {
 	for(j=0;j<nseqs;j++)
 	{
@@ -787,7 +787,7 @@ static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
 			    val = ajInt3dGet(cbase,i,j,2)+1;
 			    ajInt3dPut(&cbase,i,j,2,val);
 			}
-			else if(strchr("T",ti)) 
+			else if(strchr("T",ti))
 			{
 			    val = ajInt3dGet(cbase,i,j,1)+1;
 			    ajInt3dPut(&cbase,i,j,1,val);
@@ -798,43 +798,43 @@ static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
 			    ajInt3dPut(&cbase,i,j,0,val);
 			}
 		    }
-         
+
 		    if(ti != tj)
 		    {
-         
-			if( (strchr("A",ti) && strchr("T",tj)) ||      
+
+			if( (strchr("A",ti) && strchr("T",tj)) ||
 			   (strchr("T",ti) && strchr("A",tj)) )
 			{		/* AT pair */
 			    val = ajInt3dGet(pfreq,i,j,0)+1;
 			    ajInt3dPut(&pfreq,i,j,0,val);
 			}
-			else if( (strchr("A",ti) && strchr("C",tj)) || 
+			else if( (strchr("A",ti) && strchr("C",tj)) ||
 				(strchr("C",ti) && strchr("A",tj)) )
-			{		/* AC pair */      
+			{		/* AC pair */
 			    val = ajInt3dGet(pfreq,i,j,1)+1;
 			    ajInt3dPut(&pfreq,i,j,1,val);
 			}
-			else if( (strchr("A",ti) && strchr("G",tj)) || 
+			else if( (strchr("A",ti) && strchr("G",tj)) ||
 				(strchr("G",ti) && strchr("A",tj)) )
-			{		/* AG pair */     
+			{		/* AG pair */
 			    val = ajInt3dGet(pfreq,i,j,2)+1;
 			    ajInt3dPut(&pfreq,i,j,2,val);
 			}
-			else if( (strchr("T",ti) && strchr("C",tj)) || 
+			else if( (strchr("T",ti) && strchr("C",tj)) ||
 				(strchr("C",ti) && strchr("T",tj)) )
-			{		/* TC pair */      
+			{		/* TC pair */
 			    val = ajInt3dGet(pfreq,i,j,3)+1;
 			    ajInt3dPut(&pfreq,i,j,3,val);
 			}
-			else if( (strchr("T",ti) && strchr("G",tj)) ||  
+			else if( (strchr("T",ti) && strchr("G",tj)) ||
 				(strchr("G",ti) && strchr("T",tj)) )
-			{		/* TG pair */      
+			{		/* TG pair */
 			    val = ajInt3dGet(pfreq,i,j,4)+1;
 			    ajInt3dPut(&pfreq,i,j,4,val);
-			}                                               
-			else if( (strchr("C",ti) && strchr("G",tj)) || 
+			}
+			else if( (strchr("C",ti) && strchr("G",tj)) ||
 				(strchr("G",ti) && strchr("C",tj)) )
-			{		/* CG pair */     
+			{		/* CG pair */
 			    val = ajInt3dGet(pfreq,i,j,5)+1;
 			    ajInt3dPut(&pfreq,i,j,5,val);
 			}
@@ -845,11 +845,11 @@ static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
     }
 
     /* calc distance matrix */
-    for(i=0;i<nseqs;i++)       
+    for(i=0;i<nseqs;i++)
     {
-	for(j=i+1;j<nseqs;j++) 
+	for(j=i+1;j<nseqs;j++)
 	{
-	    slen = (float)ajInt2dGet(len,i,j);   
+	    slen = (float)ajInt2dGet(len,i,j);
 
 	    fij2 = 0.;
 	    for(bs=0;bs<4;bs++)
@@ -881,7 +881,7 @@ static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
 		    pair++;
 		}
 	    }
-         
+
 	    m = ajFloat2dGet(match,i,j); /* no. matches */
 	    D = 1. - m/slen;
 	    b = 0.5*(1-fij2+((D*D)/h));
@@ -902,7 +902,7 @@ static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
 
 
 
-/* @funcstatic distmat_JinNei ***********************************************
+/* @funcstatic distmat_JinNei *************************************************
 **
 **  Nucleic acids only.
 **
@@ -914,8 +914,8 @@ static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
 ** @param [r] calc_a [AjBool] Calculation
 ** @param [r] var_a [float] Variable
 ** @return [AjPFloat2d] corrected distance matrix
-*************************************************************************/
-static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint mlen, ajint nseqs, 
+******************************************************************************/
+static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint mlen, ajint nseqs,
 				 AjBool calc_a, float var_a)
 {
 
@@ -1022,7 +1022,7 @@ static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint mlen, ajint nseqs,
 			tranv = 0;
 			distmat_checkSubs(t1,t2,&trans,&tranv);
 			distmat_checkRY(t1,t2,&trans,&tranv);
- 
+
 			var+= (av-(float)(trans+(2*tranv)))*
 			    (av-(float)(trans+(2*tranv)));
 		    }
@@ -1032,13 +1032,13 @@ static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint mlen, ajint nseqs,
 	    }
 	}
     }
-    
+
     /* calc the dist matrix */
-    for(i=0;i<nseqs;i++)       
+    for(i=0;i<nseqs;i++)
     {
-	for(j=i+1;j<nseqs;j++)    
+	for(j=i+1;j<nseqs;j++)
 	{
-	    slen = ajInt2dGet(len,i,j); 
+	    slen = ajInt2dGet(len,i,j);
 	    P = (float)ajInt2dGet(Ptrans,i,j)/slen;
 	    Q = (float)ajInt2dGet(Qtranv,i,j)/slen;
 	    if(calc_a)
@@ -1074,8 +1074,8 @@ static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint mlen, ajint nseqs,
 **
 ** distance = -b * ln(1-D/b)        b = 3/4    nucleic acid
 **                                    = 19/20  protein
-** 
-** "Phylogenetic Inference", Swoffrod, Olsen, Waddell and Hillis, 
+**
+** "Phylogenetic Inference", Swoffrod, Olsen, Waddell and Hillis,
 ** in Mol. Systematics, 2nd ed, 1996, Ch 11. Derived from "Evolution
 ** of Protein Molecules", Jukes & Cantor, in Mammalian Prot. Metab.,
 ** III, 1969, pp. 21-132.
@@ -1088,7 +1088,7 @@ static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint mlen, ajint nseqs,
 ** @param [r] nuc [AjBool] Nucleotide
 ** @return [AjPFloat2d] corrected distance matrix
 **
-*************************************************************************/
+******************************************************************************/
 
 static AjPFloat2d distmat_JukesCantor(AjPFloat2d match, AjPFloat2d gap,
 				      float gapwt, ajint mlen, ajint nseqs,
@@ -1116,9 +1116,9 @@ static AjPFloat2d distmat_JukesCantor(AjPFloat2d match, AjPFloat2d gap,
             ajFloat2dPut(&matchJC,j,i,0);
 
 
-    for(j=0;j<nseqs;j++)         
-    { 
-	for(i=j;i<nseqs;i++)      
+    for(j=0;j<nseqs;j++)
+    {
+	for(i=j;i<nseqs;i++)
 	{
 	    m = ajFloat2dGet(match,j,i); /* no. matches */
 	    g = ajFloat2dGet(gap,j,i);	/* no. gaps    */
@@ -1135,9 +1135,9 @@ static AjPFloat2d distmat_JukesCantor(AjPFloat2d match, AjPFloat2d gap,
 
 
 
-/* @funcstatic distmat_checkRY **********************************************
+/* @funcstatic distmat_checkRY ************************************************
 **
-** Check substitutions (not found by checkSubs) involving abiguity codes 
+** Check substitutions (not found by checkSubs) involving abiguity codes
 ** R (A or G) & Y (C or T) for transitions & transversions.
 **
 ** @param [r] t1 [ajint] Transition score
@@ -1146,7 +1146,7 @@ static AjPFloat2d distmat_JukesCantor(AjPFloat2d match, AjPFloat2d gap,
 ** @param [r] tranv [ajint*] Transversions
 ** @return [void]
 **
-*************************************************************************/
+******************************************************************************/
 static void distmat_checkRY(ajint t1, ajint t2, ajint* trans, ajint* tranv)
 {
 
@@ -1183,9 +1183,9 @@ static void distmat_checkRY(ajint t1, ajint t2, ajint* trans, ajint* tranv)
 }
 
 
-/* @funcstatic distmat_checkSubs *******************************************
+/* @funcstatic distmat_checkSubs **********************************************
 **
-** Check substitutions for transitions & transversions (ignores 
+** Check substitutions for transitions & transversions (ignores
 ** ambiguity codes).
 **
 ** @param [r] t1 [ajint] Transition score
@@ -1194,11 +1194,11 @@ static void distmat_checkRY(ajint t1, ajint t2, ajint* trans, ajint* tranv)
 ** @param [r] tranv [ajint*] Transversions
 ** @return [void]
 **
-*************************************************************************/
+******************************************************************************/
 static void distmat_checkSubs(ajint t1, ajint t2, ajint* trans, ajint* tranv)
 {
 
-    
+
     if(strchr("A",t1))
     {
 	if(strchr("G",t2))		/* transitions */
@@ -1214,22 +1214,22 @@ static void distmat_checkSubs(ajint t1, ajint t2, ajint* trans, ajint* tranv)
 	    ++*tranv;
     }
     else if(strchr("C",t1))
-    {                             
+    {
 	if(strchr("TU",t2))		/* transitions */
 	    ++*trans;
 	else if(strchr("AG",t2))	/* transversion */
 	    ++*tranv;
     }
-    else if(strchr("T",t1))      
+    else if(strchr("T",t1))
     {
 	if(strchr("CU",t2))		/* transitions */
 	    ++*trans;
 	else if(strchr("AG",t2))	/* transversion */
 	    ++*tranv;
     }
-    else if(strchr("U",t1))        
+    else if(strchr("U",t1))
     {
-	if(strchr("TC",t2))		/* transitions */  
+	if(strchr("TC",t2))		/* transitions */
 	    ++*trans;
 	else if(strchr("AG",t2))	/* transversion */
 	    ++*tranv;
@@ -1241,7 +1241,7 @@ static void distmat_checkSubs(ajint t1, ajint t2, ajint* trans, ajint* tranv)
 
 
 
-/* @funcstatic distmat_checkambigProt **************************************
+/* @funcstatic distmat_checkambigProt *****************************************
 **
 ** Check amino acid ambiguity codes  to estimate the distance score.
 **
@@ -1249,12 +1249,12 @@ static void distmat_checkSubs(ajint t1, ajint t2, ajint* trans, ajint* tranv)
 ** @param [r] t2 [ajint] Transversion score
 ** @return [float] Estimated distance score
 **
-*************************************************************************/
+******************************************************************************/
 static float distmat_checkambigProt(ajint t1, ajint t2)
 {
     float n;
 
-   
+
     n = 0.;
 
     if( !strchr("X",t1) && t1 == t2 )
@@ -1274,15 +1274,15 @@ static float distmat_checkambigProt(ajint t1, ajint t2)
 }
 
 
-/* @funcstatic distmat_checkambigNuc ****************************************
+/* @funcstatic distmat_checkambigNuc ******************************************
 **
 ** Check ambiguity codes (IUB) to estimate the distance score.
 **
 ** @param [r] m1 [char] First base to compare
 ** @param [r] m2 [char] Second base to compare
-** @return [float] estimated match 
+** @return [float] estimated match
 **
-*************************************************************************/
+******************************************************************************/
 static float distmat_checkambigNuc(char m1, char m2)
 {
     AjPStr b1 = NULL;
@@ -1322,11 +1322,11 @@ static float distmat_checkambigNuc(char m1, char m2)
 	ajStrDel(&b);
     }
 
-  
+
     ajStrDel(&b1);
     ajStrDel(&b2);
 
-    if(pmatch) 
+    if(pmatch)
 	n = (1./len1)*(1./len2);
     else
 	n = 0.;
@@ -1336,7 +1336,7 @@ static float distmat_checkambigNuc(char m1, char m2)
 
 
 
-/* @funcstatic distmat_getSeq ************************************************
+/* @funcstatic distmat_getSeq *************************************************
 **
 ** Get the part of the sequences that the distances are calculated from.
 ** i.e. codon positions 1, 2, 3 or 1 & 2.
@@ -1349,7 +1349,7 @@ static float distmat_checkambigNuc(char m1, char m2)
 ** @param [r] len [ajint*] length of longest sequence
 ** @return [char**] Sequences as an array of C strings
 **
-*************************************************************************/
+******************************************************************************/
 static char** distmat_getSeq(AjPSeqset seqset, ajint nseqs, ajint mlen,
 			     ajint incr, ajint posn, ajint* len)
 {
@@ -1401,7 +1401,7 @@ static char** distmat_getSeq(AjPSeqset seqset, ajint nseqs, ajint mlen,
 }
 
 
-/* @funcstatic distmat_outputDist ********************************************
+/* @funcstatic distmat_outputDist *********************************************
 **
 ** Output the distance matrix
 **
@@ -1419,7 +1419,7 @@ static char** distmat_getSeq(AjPSeqset seqset, ajint nseqs, ajint mlen,
 ** @param [r] incr [ajint] Incvrement
 ** @return [void]
 **
-*************************************************************************/
+******************************************************************************/
 static void distmat_outputDist(AjPFile outf, ajint nseqs, ajint mlen,
 			       AjPSeqset seqset, AjPFloat2d match,
 			       AjPFloat2d gap, float gapwt, ajint method,
@@ -1438,7 +1438,7 @@ static void distmat_outputDist(AjPFile outf, ajint nseqs, ajint mlen,
 	    posn = 123;
     }
 
-    /* print title and parameters */  
+    /* print title and parameters */
     ajFmtPrintF(outf,"Distance Matrix\n---------------\n\n");
     if(method == 0)
 	ajFmtPrintF(outf,"Uncorrected for Multiple Substitutions\n");

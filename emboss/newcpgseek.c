@@ -17,12 +17,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -52,19 +52,19 @@ int main(int argc, char **argv)
     AjPFile   outf=NULL;
     AjPStr    strand=NULL;
     AjPStr    substr=NULL;
-    
+
     ajint begin;
     ajint end;
     ajint len;
     ajint score;
 
     embInit("newcpgseek",argc,argv);
-    
+
     seqall    = ajAcdGetSeqall("sequence");
     score     = ajAcdGetInt("score");
     outf      = ajAcdGetOutfile("outfile");
 
-    
+
     substr = ajStrNew();
 
 
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
     {
 	begin=ajSeqallBegin(seqall);
 	end=ajSeqallEnd(seqall);
-	
+
 	strand = ajSeqStrCopy(seq);
 	ajStrToUpper(&strand);
 
@@ -83,29 +83,29 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf,"\n\nNEWCPGSEEK of %s from %d to %d\n",
 		    ajSeqName(seq),begin,begin+len-1);
 	ajFmtPrintF(outf,"with score > %d \n\n",score);
-	
+
 	ajFmtPrintF(outf," Begin    End  Score");
 	ajFmtPrintF(outf,"        CpG  %%CG  CG/GC\n");
 
 	newcpgseek_cpgsearch(&outf,0,len,ajStrStr(substr),ajSeqName(seq),
 			     begin,&score);
 	ajFmtPrintF(outf,"-------------------------------------------\n");
-	
+
 	ajStrDel(&strand);
     }
-    
-    
+
+
     ajSeqDel(&seq);
     ajStrDel(&substr);
     ajFileClose(&outf);
-    
+
     ajExit();
     return 0;
 }
 
 
 
-/* @funcstatic newcpgseek_cpgsearch *****************************************
+/* @funcstatic newcpgseek_cpgsearch *******************************************
 **
 ** Perform cpg search
 **
@@ -127,13 +127,13 @@ static void newcpgseek_cpgsearch(AjPFile *outf, ajint from, ajint to,
     ajint i;
     ajint c;
     ajint z;
-    
+
     ajint sum;
-    ajint ssum; 
+    ajint ssum;
     ajint lsum;
     ajint t;
     ajint top;
-  
+
     ajint dcg;
     ajint dgc;
     ajint gc;
@@ -167,8 +167,8 @@ static void newcpgseek_cpgsearch(AjPFile *outf, ajint from, ajint to,
 	}
 	if(!sum) lsum=i;
     }
-  
-  
+
+
     if(sum)
     {
 	newcpgseek_calcgc(lsum+1,t+2,p,&dcg,&dgc,&gc);
@@ -190,7 +190,7 @@ static void newcpgseek_cpgsearch(AjPFile *outf, ajint from, ajint to,
 
 
 
-/* @funcstatic newcpgseek_calcgc *********************************************
+/* @funcstatic newcpgseek_calcgc **********************************************
 **
 ** Calculate gc content
 **
@@ -212,11 +212,11 @@ static void newcpgseek_calcgc(ajint from, ajint to, char *p, ajint *dcg,
 
     c=to-1;
 
-    for(i=from,*gc=*dgc=*dcg=0;i<=c;++i) 
+    for(i=from,*gc=*dgc=*dcg=0;i<=c;++i)
     {
 	if(p[i]=='G' || p[i]=='C') ++*gc;
-	if(p[i]=='C' && p[i+1]=='G' && c-i) ++*dcg ; 
-	if(p[i]=='G' && p[i+1]=='C' && c-i ) ++*dgc ; 
+	if(p[i]=='C' && p[i+1]=='G' && c-i) ++*dcg ;
+	if(p[i]=='G' && p[i+1]=='C' && c-i ) ++*dgc ;
     }
 
     return;

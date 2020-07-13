@@ -53,11 +53,11 @@ matrixf: datafile  [
 endsection: advanced
 
 section: output [ info: "output Section" type: page ]
-bool: similarity  [
+bool: brief  [
   default: "Y"
   optional: "N"
-  information: "Display percent identity and similarity"
-  help: "Display percent identity and similarity"
+  information: "Brief identity and similarity"
+  help: "Brief identity and similarity"
 ]
 
 #bool: fasta  [

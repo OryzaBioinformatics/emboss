@@ -11,12 +11,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -46,20 +46,20 @@ int main(int argc, char **argv)
 {
     AjPSeqall  seqall;
     AjPSeq     seq;
-    
+
     AjPFloat   chg=NULL;
-    
+
     AjPFile    outf;
     AjPFile    cdata;
     AjPStr     str=NULL;
     AjPStr     aadata=NULL;
-    
+
     AjBool     plot;
     AjPGraph   graph=NULL;
 
     float      ymax;
     float      ymin;
-    
+
     ajint beg;
     ajint end;
     ajint window;
@@ -69,24 +69,24 @@ int main(int argc, char **argv)
     ajint i;
     ajint j;
     ajint idx;
-    
+
     float *x=NULL;
     float *y=NULL;
 
     float sum=0.;
-    
+
 
     char *p;
     char *sname;
-    
-    
+
+
     ajGraphInit("charge", argc, argv);
 
     seqall    = ajAcdGetSeqall("seqall");
     plot      = ajAcdGetBool("plot");
     window    = ajAcdGetInt("window");
     aadata    = ajAcdGetString("aadata");
-    
+
     /* only one will be used - see variable 'plot' */
 
     outf  = ajAcdGetOutfile("outfile");
@@ -106,13 +106,13 @@ int main(int argc, char **argv)
 	beg = ajSeqallBegin(seqall);
 	end = ajSeqallEnd(seqall);
 	len = end-beg+1;
-	
+
 	limit = len-window+1;
 	sname = ajSeqName(seq);
 
 	ymin = (float)0.;
 	ymax = (float)0.;
-	
+
 	ajStrAssSubC(&str,ajSeqChar(seq),--beg,--end);
 	ajStrToUpper(&str);
 	p = ajStrStr(str);
@@ -122,7 +122,7 @@ int main(int argc, char **argv)
 	    AJCNEW0(x,limit);
 	    AJCNEW0(y,limit);
 	}
-	
+
 
 	for(i=0;i<limit;++i)
 	{
@@ -163,14 +163,14 @@ int main(int argc, char **argv)
 	    if(limit>0)
 		ajGraphxyDisplay(graph,ajFalse);
 	}
-	
+
 	if(limit>0)
 	{
 	    AJFREE(x);
 	    AJFREE(y);
 	}
     }
-    
+
     if(plot)
         ajGraphClose();
     else
@@ -179,14 +179,14 @@ int main(int argc, char **argv)
     ajStrDel(&str);
 
     ajFileClose(&cdata);
-    
+
     ajExit();
     return 0;
 }
 
 
 
-/* @funcstatic charge_addgraph ***********************************************
+/* @funcstatic charge_addgraph ************************************************
 **
 ** Undocumented.
 **
@@ -213,7 +213,7 @@ static void charge_addgraph(AjPGraph graph, ajint limit, float *x,
 
     if(limit<1)
 	return;
-    
+
     data = ajGraphxyDataNewI(limit);
 
     st = ajStrNew();
@@ -223,20 +223,20 @@ static void charge_addgraph(AjPGraph graph, ajint limit, float *x,
 	data->x[i] = x[i];
 	data->y[i] = y[i];
     }
-    
+
     ajGraphxySetColour(data,BLACK);
-    ajGraphDataxySetMaxMin(data,x[0],x[limit-1],ymin,ymax);  
+    ajGraphDataxySetMaxMin(data,x[0],x[limit-1],ymin,ymax);
     ajGraphDataxySetMaxima(data,x[0],x[limit-1],ymin,ymax);
 
     ajFmtPrintS(&st,"CHARGE of %s. Window:%d",sname,window);
     ajGraphxyDataSetTitle(data,st);
     ajGraphxyTitleC(graph,ajStrStr(st));
-    
+
     ajGraphDataxySetTypeC(data,"2D Plot Float");
     ajFmtPrintS(&st,"Charge");
     ajGraphxyDataSetYtitle(data,st);
 
-    ajFmtPrintS(&st,"Position");    
+    ajFmtPrintS(&st,"Position");
     ajGraphxyDataSetXtitle(data,st);
 
     ajGraphDataObjAddLine(data,x[0],baseline,x[limit-1],baseline,BLUE);
@@ -249,7 +249,7 @@ static void charge_addgraph(AjPGraph graph, ajint limit, float *x,
 }
 
 
-/* @funcstatic charge_read_amino *********************************************
+/* @funcstatic charge_read_amino **********************************************
 **
 ** Undocumented.
 **
@@ -266,7 +266,7 @@ static AjPFloat charge_read_amino(AjPFile* fp)
     char     c;
     float    v=0.;
     ajint    idx;
-    
+
     /*    ajFileDataNewC(AMINOFILE,fp);
     if(!*fp)
 	ajFatal("Cannot find data file %s\n",AMINOFILE);
@@ -274,13 +274,13 @@ static AjPFloat charge_read_amino(AjPFile* fp)
 
     line = ajStrNew();
     chg  = ajFloatNew();
-    
+
 
     while(ajFileReadLine(*fp,&line))
     {
 	if(*ajStrStr(line)=='#' || !ajStrLen(line))
 	    continue;
-    
+
 	ajFmtScanS(line,"%c%*f%*d%*d%*d%*d%*d%*d%f",&c,&v);
 	idx = toupper(ajAZToInt((int)c));
 	ajFloatPut(&chg,idx,v);
@@ -288,6 +288,6 @@ static AjPFloat charge_read_amino(AjPFile* fp)
 
     ajFileClose(fp);
     ajStrDel(&line);
-    
+
     return chg;
 }

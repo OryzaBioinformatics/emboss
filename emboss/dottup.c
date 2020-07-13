@@ -10,12 +10,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
     ajint end1;
     ajint end2;
     AjBool stretch;
-    
+
     ajGraphInit("dottup", argc, argv);
 
     wordlen = ajAcdGetInt ("wordsize");
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
     begin2 = ajSeqBegin(seq2);
     end1   = ajSeqEnd(seq1);
     end2   = ajSeqEnd(seq2);
-    
+
     ajSeqTrim(seq1);
     ajSeqTrim(seq2);
 
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
     {
 	dottup_stretchplot(xygraph,matchlist,seq1,seq2,begin1,begin2,end1,
 			   end2);
-	if(matchlist) 
+	if(matchlist)
 	    embWordMatchListDelete(&matchlist); /* free the match structures */
 	ajExit();
 	return 0;
@@ -121,7 +121,7 @@ int main(int argc, char **argv)
     xmargin = ymargin = max *0.15;
 
     if(!text)
-    {  
+    {
 	ajGraphOpenWin(graph, 0.0-ymargin,(max*1.35)+ymargin,
 		       0.0-xmargin,(float)max+xmargin);
 
@@ -152,12 +152,12 @@ int main(int argc, char **argv)
 		ajGraphLine(0.0,0.0,0.0,0.0-ticklen);
 		sprintf(ptr,"%d",ajSeqOffset(seq1));
 		ajGraphTextMid ( 0.0,0.0-(onefifth),ptr);
-	
+
 		ajGraphLine((float)(ajSeqLen(seq1)),0.0,
 			    (float)ajSeqLen(seq1),0.0-ticklen);
 		sprintf(ptr,"%d",ajSeqLen(seq1)+ajSeqOffset(seq1));
 		ajGraphTextMid ( (float)ajSeqLen(seq1),0.0-(onefifth),ptr);
-	
+
 	    }
 	    else
 	    {
@@ -202,7 +202,7 @@ int main(int argc, char **argv)
 	    }
 	}
 	ajGraphClose();
-  
+
     }
     else
     {
@@ -239,23 +239,23 @@ int main(int argc, char **argv)
 		ajListPushApp(matchlist,(void *)wmp);
 	    }
 	}
-	
+
 
 	if(matchlist)
-	    ajListMap(matchlist,dottup_objtofile, outfile);	
+	    ajListMap(matchlist,dottup_objtofile, outfile);
 	ajFmtPrintF(outfile,"##GraphObjects\n##Number 0\n");
 
     }
-  
-    if(matchlist) 
+
+    if(matchlist)
 	embWordMatchListDelete(&matchlist); /* free the match structures */
- 
+
     ajExit();
     return 0;
 }
 
 
-/* @funcstatic dottup_objtofile **********************************************
+/* @funcstatic dottup_objtofile ***********************************************
 **
 ** Undocumented.
 **
@@ -279,7 +279,7 @@ static void dottup_objtofile(void **x,void *cl)
     y1 = (*p).seq2start;
     x2 = x1 + (*p).length;
     y2 = y1 + (*p).length;
-  
+
     (void) ajFmtPrintF(file, "Line x1 %f y1 %f x2 %f y2 %f colour 0\n",
 		       (float)x1,(float)y1,(float)x2,(float)y2);
     return;
@@ -287,7 +287,7 @@ static void dottup_objtofile(void **x,void *cl)
 
 #ifndef NO_PLOT
 
-/* @funcstatic dottup_drawPlotlines ******************************************
+/* @funcstatic dottup_drawPlotlines *******************************************
 **
 ** Undocumented.
 **
@@ -306,7 +306,7 @@ static void dottup_drawPlotlines(void **x, void *cl)
     y1 = y2 = (PLFLT)((*p).seq2start)+1;
     x2 += (*p).length;
     y2 += (PLFLT)(*p).length;
- 
+
     ajGraphLine(x1, y1, x2, y2);
 
     return;
@@ -369,15 +369,15 @@ static void dottup_stretchplot(AjPGraph graph, AjPList matchlist, AjPSeq seq1,
     float x2;
     float y2;
     AjIList iter=NULL;
-    
+
     tit = ajStrNew();
     ajFmtPrintS(&tit,"%S",graph->title);
-    
+
 
     gdata = ajGraphxyDataNewI(1);
     xa[0] = (float)begin1;
     ya[0] = (float)begin2;
-    
+
     ajGraphxyTitleC(graph,ajStrStr(tit));
 
     ajGraphxyXtitleC(graph,ajSeqName(seq1));
@@ -392,7 +392,7 @@ static void dottup_stretchplot(AjPGraph graph, AjPList matchlist, AjPSeq seq1,
     ajGraphxySetXEnd(graph,(float)end1);
     ajGraphxySetYStart(graph,(float)begin2);
     ajGraphxySetYEnd(graph,(float)end2);
-    
+
     ajGraphxySetXRangeII(graph,begin1,end1);
     ajGraphxySetYRangeII(graph,begin2,end2);
 
@@ -416,9 +416,9 @@ static void dottup_stretchplot(AjPGraph graph, AjPList matchlist, AjPSeq seq1,
 
 
     ajGraphxyDisplay(graph,ajFalse);
-    ajGraphClose();    
+    ajGraphClose();
 
     ajStrDel(&tit);
- 
+
     return;
 }

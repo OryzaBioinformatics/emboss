@@ -22,12 +22,12 @@
 
 #include "emboss.h"
 
-static void tranalign_AddGaps (AjPSeq newseq, AjPSeq nseq, AjPSeq pseq, 
+static void tranalign_AddGaps (AjPSeq newseq, AjPSeq nseq, AjPSeq pseq,
 	ajint npos);
 
 
 
-/* @prog tranalign **************************************************************
+/* @prog tranalign ************************************************************
 **
 ** Align nucleic sequences guided by the alignment of the translation
 **
@@ -49,8 +49,8 @@ int main(int argc, char **argv)
     AjPStr degapstr = NULL;
     ajint pos=0;       	/* start position of guide protein in translation */
     AjPSeq newseq = NULL;	/* output aligned nucleic sequence */
-    ajint frame;    
-    
+    ajint frame;
+
     (void) embInit ("tranalign", argc, argv);
 
     nucseq = ajAcdGetSeqall ("nsequence");
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 
     outseqset = ajSeqsetNew();
     degapstr = ajStrNew();
-    
+
     /* initialise the translation table */
     (void) ajStrToInt(tablelist[0], &table);
     trnTable = ajTrnNewI (table);
@@ -69,16 +69,19 @@ int main(int argc, char **argv)
 
     while (ajSeqallNext(nucseq, &nseq))
     {
-    	if ((pseq = ajSeqsetGetSeq(protseq, proteinseqcount++)) == NULL) 
-    	    ajErr("No guide protein sequence available for nucleic sequence %S",
-    	    		ajSeqGetName(nseq));
+    	if ((pseq = ajSeqsetGetSeq(protseq, proteinseqcount++)) == NULL)
+    	    ajErr("No guide protein sequence available for "
+		  "nucleic sequence %S",
+		  ajSeqGetName(nseq));
 
-	ajDebug("Aligning %S and %S\n", ajSeqGetName(nseq), ajSeqGetName(pseq));
+	ajDebug("Aligning %S and %S\n",
+		ajSeqGetName(nseq), ajSeqGetName(pseq));
         /* get copy of pseq string with no gaps */
         ajStrAssS (&degapstr, ajSeqStr(pseq));
         ajStrDegap(&degapstr);
 
-        /* for each translation frame look for subset of pep that matches pseq */
+        /* for each translation frame look for subset of pep that
+	   matches pseq */
         for (frame = 1; frame <4; frame++) {
 	    ajDebug("trying frame %d\n", frame);
             pep = ajTrnSeqOrig(trnTable, nseq, frame);
@@ -90,7 +93,7 @@ int main(int argc, char **argv)
         }
 
         if (pos == -1) {
-          ajErr("Guide protein sequence %S not found in nucleic sequence %S", 
+          ajErr("Guide protein sequence %S not found in nucleic sequence %S",
           		ajSeqGetName(pseq), ajSeqGetName(nseq));
 	} else {
 	    ajDebug("got a match with frame=%d\n", frame);
@@ -100,10 +103,10 @@ int main(int argc, char **argv)
             ajSeqAssName(newseq, ajSeqGetName(nseq));
             ajSeqAssDesc(newseq, ajSeqGetDesc(nseq));
             tranalign_AddGaps (newseq, nseq, pseq, (pos*3)+frame-1);
-	    
+
             /* output the gapped nucleic sequence */
             ajSeqsetApp (outseqset, newseq);
-            
+
             ajSeqDel(&newseq);
         }
 
@@ -123,7 +126,7 @@ int main(int argc, char **argv)
 }
 
 
-/* @funcstatic tranalign_AddGaps ********************************************
+/* @funcstatic tranalign_AddGaps **********************************************
 **
 ** Adds bases or gaps to newstr from nseq guided by pseq
 ** starting at npos
@@ -136,7 +139,7 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-static void tranalign_AddGaps (AjPSeq newseq, AjPSeq nseq, AjPSeq pseq, 
+static void tranalign_AddGaps (AjPSeq newseq, AjPSeq nseq, AjPSeq pseq,
 	ajint npos)
 {
 
@@ -152,9 +155,9 @@ static void tranalign_AddGaps (AjPSeq newseq, AjPSeq nseq, AjPSeq pseq,
     	    ajStrAppSub(&newstr, ajSeqStr(nseq), npos, npos+2);
     	    npos+=3;
     	}
-    }    
+    }
     ajDebug("aligned seq=%S\n", newstr);
-    ajSeqReplace (newseq, newstr);    
+    ajSeqReplace (newseq, newstr);
 
-    ajStrDel(&newstr);    
+    ajStrDel(&newstr);
 }

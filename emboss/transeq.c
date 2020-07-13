@@ -54,7 +54,7 @@ int main(int argc, char **argv)
     AjBool alternate;
 
     int i;
-    
+
     (void) embInit ("transeq", argc, argv);
 
     seqout = ajAcdGetSeqoutall ("outseq");
@@ -94,7 +94,7 @@ int main(int argc, char **argv)
             if (frames[i]) {
                 if (i<3)
 	            pep = ajTrnSeqOrig(trnTable, seq, i+1);
-	        else 
+	        else
 		    if (alternate) /* frame -1 uses codons starting at end */
 	              pep = ajTrnSeqOrig(trnTable, seq, -i-1);
 		    else	/* frame -1 uses frame 1 codons */
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
 	    }
 	}
     }
-  
+
     (void) ajSeqWriteClose (seqout);
 
     /* tidy up */
@@ -117,7 +117,7 @@ int main(int argc, char **argv)
 }
 
 
-/* @funcstatic transeq_GetRegions ********************************************
+/* @funcstatic transeq_GetRegions *********************************************
 **
 ** Changes a sequence to only the specified regions
 ** A set of regions is specified by a set of pairs of positions.
@@ -144,13 +144,13 @@ static void transeq_GetRegions(AjPRange regions, AjPSeq seq)
     (void) ajRangeStrExtract (&newstr, regions, ajSeqStr(seq));
     (void) ajSeqReplace(seq, newstr);
 
-    (void) ajStrDel(&newstr);  
+    (void) ajStrDel(&newstr);
 
     return;
 }
 
 
-/* @funcstatic transeq_Trim **************************************************
+/* @funcstatic transeq_Trim ***************************************************
 **
 ** Removes X, and/or * characters from the end of the translation
 **
@@ -167,7 +167,7 @@ static void transeq_Trim (AjPSeq seq)
     char c;
     ajint i;
     ajint len = ajStrLen(s)-1;
-  
+
     for (i=len; i>=0; i--)
     {
 	c = *(p+i);
@@ -183,7 +183,7 @@ static void transeq_Trim (AjPSeq seq)
 
 
 
-/* @funcstatic transeq_GetFrames **************************************************
+/* @funcstatic transeq_GetFrames **********************************************
 **
 ** Converts the list of frame numbers into a boolean vector.
 ** Frame numbers are ordered in the vector as:
@@ -199,7 +199,7 @@ static void transeq_GetFrames (AjPStr *framelist, AjBool *frames)
 {
 
     int i;
-    
+
     /* reset the vector */
     for (i=0; i<6; i++)
         frames[i] = ajFalse;

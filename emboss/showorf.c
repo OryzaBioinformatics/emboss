@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -74,17 +74,17 @@ int main(int argc, char **argv)
     ajint          *npos=NULL;
     ajint		 *ppos[6];
     ajint          mark[6];
-    
+
     ajint beg;
     ajint end;
     ajint len;
     ajint i;
     ajint v=0;
-    
+
     char *p;
-    
+
     ajint width;
-    
+
     embInit("showorf", argc, argv);
 
     a         = ajAcdGetSeq("sequence");
@@ -95,7 +95,7 @@ int main(int argc, char **argv)
     isrule    = ajAcdGetBool("ruler");
     isp       = ajAcdGetBool("plabel");
     isn       = ajAcdGetBool("nlabel");
-    
+
     for(i=0;i<6;++i)
 	mark[i]=0;
     f=frames;
@@ -113,7 +113,7 @@ int main(int argc, char **argv)
 	++f;
     }
 
-    
+
     beg = ajSeqBegin(a);
     end = ajSeqEnd(a);
 
@@ -134,13 +134,13 @@ int main(int argc, char **argv)
     }
     AJCNEW (ruler, len);
     AJCNEW (npos, len);
-    
+
     showorf_SixTranslate(substr,revstr,len,pseqs,beg,codon);
     showorf_MakeRuler(len,beg,ruler,npos);
     showorf_CalcProteinPos(ppos,pseqs,len);
     showorf_showTrans(ppos,npos,pseqs,substr,len,mark,ruler,beg,
 		      outf,isrule,isp,isn,width,ajSeqName(a));
-    
+
 
     for(i=0;i<6;++i)
     {
@@ -149,17 +149,17 @@ int main(int argc, char **argv)
     }
     AJFREE (ruler);
     AJFREE (npos);
-    
+
     ajStrDel(&revstr);
     ajStrDel(&substr);
     ajCodDel(&codon);
-    
+
     ajExit();
     return 0;
 }
 
 
-/* @funcstatic showorf_SixTranslate ******************************************
+/* @funcstatic showorf_SixTranslate *******************************************
 **
 ** Translate in all six frames
 **
@@ -177,7 +177,7 @@ static void showorf_SixTranslate(AjPStr substr, AjPStr revstr, ajint len,
 				 AjPStr *pseqs, ajint begin, AjPCod codon)
 {
     ajint i;
-    
+
 
 
     for(i=0;i<6;++i)
@@ -213,13 +213,13 @@ static void showorf_DoTrans(AjPStr s, AjPStr r, ajint n, ajint len,
     char *q;
 
     ajint po;
-    
+
     ajint i;
     ajint c;
     ajint idx;
-    
+
     char tri[4];
-    
+
 
     if(n<3)
     {
@@ -262,7 +262,7 @@ static void showorf_DoTrans(AjPStr s, AjPStr r, ajint n, ajint len,
 
 
 
-/* @funcstatic showorf_MakeRuler *********************************************
+/* @funcstatic showorf_MakeRuler **********************************************
 **
 ** Create ruler string with a tick every ten bases
 **
@@ -305,22 +305,22 @@ static void showorf_CalcProteinPos(ajint **ppos, AjPStr *pseqs, ajint len)
 {
     ajint i;
     ajint j;
-    
+
     ajint pos;
     ajint v;
-    
+
     char *p;
-    
+
 
     for(i=0;i<3;++i)
     {
 	pos=0;
 	v=1;
-	
+
 	p=ajStrStr(pseqs[i]);
 	while(p[pos]==' ')
 	    ppos[i][pos++]=0;
-	    
+
 	while(pos<len)
 	{
 	    if(p[pos]=='*')
@@ -335,7 +335,7 @@ static void showorf_CalcProteinPos(ajint **ppos, AjPStr *pseqs, ajint len)
 		v=1;
 		continue;
 	    }
-	    
+
 	    if(p[pos]!=' ')
 	    {
 		ppos[i][pos]=v+POFF;
@@ -360,11 +360,11 @@ static void showorf_CalcProteinPos(ajint **ppos, AjPStr *pseqs, ajint len)
     {
 	pos=len-1;
 	v=1;
-	
+
 	p=ajStrStr(pseqs[i]);
 	while(p[pos]==' ')
 	    ppos[i][pos--]=0;
-	    
+
 	while(pos>-1)
 	{
 	    if(p[pos]=='*')
@@ -379,7 +379,7 @@ static void showorf_CalcProteinPos(ajint **ppos, AjPStr *pseqs, ajint len)
 		v=1;
 		continue;
 	    }
-	    
+
 	    if(p[pos]!=' ')
 	    {
 		ppos[i][pos]=v+POFF;
@@ -402,7 +402,7 @@ static void showorf_CalcProteinPos(ajint **ppos, AjPStr *pseqs, ajint len)
 
 
 
-/* @funcstatic showorf_showTrans ********************************************
+/* @funcstatic showorf_showTrans **********************************************
 **
 ** Output translations using given width
 **
@@ -434,7 +434,7 @@ static void showorf_showTrans(ajint **ppos, ajint *npos, AjPStr *pseqs,
 
     ajFmtPrintF(outf,"SHOWORF of %s from %d to %d\n\n",name,begin,
 		begin+len-1);
-    
+
 
     pos=0;
     while(pos<len)
@@ -456,7 +456,7 @@ static void showorf_showTrans(ajint **ppos, ajint *npos, AjPStr *pseqs,
 
 
 
-/* @funcstatic showorf_showTransb *******************************************
+/* @funcstatic showorf_showTransb *********************************************
 **
 ** Low level output
 **
@@ -494,9 +494,9 @@ static void showorf_showTransb(ajint **ppos, ajint *npos, AjPStr *pseqs,
     ajint e=0;
     ajint v;
     ajint pos;
-    
+
     s=ajStrNew();
-    
+
     if(isrule)
     {
 	ajStrAssSubC(&s,ruler,start,end);
@@ -570,14 +570,14 @@ static void showorf_showTransb(ajint **ppos, ajint *npos, AjPStr *pseqs,
 	}
 	else
 	    ajFmtPrintF(outf,"        ");
-	
+
 	ajStrAssSub(&s,pseqs[i],start,end);
 	ajFmtPrintF(outf,"%s ",ajStrStr(s));
 	if(isp && e)
 	    ajFmtPrintF(outf,"%d",e);
 	ajFmtPrintF(outf,"\n");
     }
-    
+
 
 
 
@@ -639,7 +639,7 @@ static void showorf_showTransb(ajint **ppos, ajint *npos, AjPStr *pseqs,
 	}
 	else
 	    ajFmtPrintF(outf,"        ");
-	
+
 	ajStrAssSub(&s,pseqs[i],start,end);
 	ajFmtPrintF(outf,"%s ",ajStrStr(s));
 	if(isp && e)
@@ -650,6 +650,6 @@ static void showorf_showTransb(ajint **ppos, ajint *npos, AjPStr *pseqs,
     ajFmtPrintF(outf,"\n");
 
     ajStrDel(&s);
-    
+
     return;
 }

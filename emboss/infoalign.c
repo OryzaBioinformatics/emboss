@@ -44,7 +44,7 @@ static void infoalign_Compare(AjPSeq ref, AjPSeq seq, ajint **sub,
 #define NOLIMIT -1
 
 
-/* @prog infoalign *******************************************************
+/* @prog infoalign ************************************************************
 **
 ** Information on a multiple sequence alignment
 **
@@ -61,14 +61,14 @@ int main(int argc, char **argv)
     AjPSeqCvt  cvt=0;	/* conversion table for scoring matrix */
     float identity;
     ajint ident;
-    float fplural; 
+    float fplural;
     AjPStr cons = ajStrNew();
     AjPSeq consensus = ajSeqNew();
 
     AjPSeq ref;
     AjPSeq seq;
     ajint i;
-    
+
     AjBool html;
     AjBool doheader;
     AjBool dousa;
@@ -76,11 +76,11 @@ int main(int argc, char **argv)
     AjBool doseqlength;
     AjBool doalignlength;
     AjBool dogaps;
-    AjBool dogapcount;    
-    AjBool doidcount;    
-    AjBool dosimcount;    
-    AjBool dodifcount;    
-    AjBool dochange;    
+    AjBool dogapcount;
+    AjBool doidcount;
+    AjBool dosimcount;
+    AjBool dodifcount;
+    AjBool dochange;
     AjBool dodesc;
     ajint  seqlength;
     ajint  alignlength;
@@ -90,9 +90,9 @@ int main(int argc, char **argv)
     ajint  simcount;
     ajint  difcount;
     float  change;
-    
+
     AjPFile outfile;
-    
+
     AjPStr usa;
     AjPStr name;
     AjPStr altusa=ajStrNewC("-");	/* default name when the real name
@@ -101,9 +101,9 @@ int main(int argc, char **argv)
     /*    ajint length; */
     AjPStr desc;
     AjPStr xxx=NULL;
-    
+
     (void) embInit ("infoalign", argc, argv);
-    
+
 
     seqset = ajAcdGetSeqset ("sequence");
     refseq = ajAcdGetString ("refseq");
@@ -112,7 +112,7 @@ int main(int argc, char **argv)
     ajSeqsetFill (seqset);
 
     outfile = ajAcdGetOutfile ("outfile");
-    
+
     html = ajAcdGetBool("html");
     doheader = ajAcdGetBool("heading");
     dousa = ajAcdGetBool("usa");
@@ -133,11 +133,11 @@ int main(int argc, char **argv)
 
     /* get conversion table and scoring matrix */
     cvt = ajMatrixCvt(matrix);
-    sub = ajMatrixArray(matrix);  
+    sub = ajMatrixArray(matrix);
 
     /* get the number of the reference sequence */
     nrefseq = infoalign_Getrefseq(refseq, seqset);
-  
+
     /* change the % plurality to the fraction of absolute total weight */
     fplural = ajSeqsetTotweight(seqset) * fplural / 100;
 
@@ -159,13 +159,13 @@ int main(int argc, char **argv)
 	ref = ajSeqsetGetSeq(seqset, nrefseq);
 
 
-    
+
     /* start the HTML table */
     if (html)
 	(void) ajFmtPrintF(outfile,
 			   "<table border cellpadding=4 bgcolor="
 			   "\"#FFFFF0\">\n");
-    
+
     /* print the header information */
     if (doheader)
     {
@@ -174,7 +174,7 @@ int main(int argc, char **argv)
 	    (void) ajFmtPrintF(outfile, "<tr>");
 	else
 	    (void) ajFmtPrintF(outfile, "%s", "# ");
-    
+
 	if (dousa)
 	{
 	    if (html)
@@ -264,23 +264,23 @@ int main(int argc, char **argv)
 	}
 
 	/* end the HTML table title line */
-	if (html) 
+	if (html)
 	    (void) ajFmtPrintF(outfile, "</tr>\n");
 	else
 	    (void) ajFmtPrintF(outfile, "\n");
-    }  	
+    }
 
 
     for (i=0; i<ajSeqsetSize(seqset); i++)
     {
     	seq = ajSeqsetGetSeq(seqset, i);
 
-	/* get the usa ('-' if unknown) */    
+	/* get the usa ('-' if unknown) */
 	usa = ajSeqGetUsa(seq);
 	if (ajStrLen(usa) == 0)
 	    usa = altusa;
 
-	/* get the name ('-' if unknown) */    
+	/* get the name ('-' if unknown) */
 	name = ajSeqGetName(seq);
 	if (ajStrLen(name) == 0)
 	    name = altname;
@@ -289,7 +289,7 @@ int main(int argc, char **argv)
 	desc = ajSeqGetDesc(seq);
 
 	/* get the stats from the comparison to the reference sequence */
-	infoalign_Compare(ref, seq, sub, cvt, &seqlength, &alignlength, 
+	infoalign_Compare(ref, seq, sub, cvt, &seqlength, &alignlength,
 			  &gaps, &gapcount, &idcount, &simcount,
 			  &difcount, &change);
 
@@ -382,7 +382,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic infoalign_OutputFloat ***************************************
+/* @funcstatic infoalign_OutputFloat ******************************************
 **
 ** Output a number.
 ** If this is not formatted for HTML, and is not the last item output
@@ -391,9 +391,11 @@ int main(int argc, char **argv)
 **
 ** @param [r] outfile [AjPFile] output file handle
 ** @param [r] num [float] number to be printed
-** @param [r] html [AjBool] True if want it formatted as an HTML table data item
-** @param [r] after [AjBool] True if we want to output more columns after this one
-** @return [void] 
+** @param [r] html [AjBool] True if want it formatted as an HTML table
+**                          data item
+** @param [r] after [AjBool] True if we want to output more columns after
+**                           this one
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -401,12 +403,12 @@ static void infoalign_OutputFloat (AjPFile outfile, float num, AjBool html,
 				   AjBool after)
 {
     if (html)
-	(void) ajFmtPrintF(outfile, "<td>");	
+	(void) ajFmtPrintF(outfile, "<td>");
 
-    (void) ajFmtPrintF(outfile, "%f", num);  
+    (void) ajFmtPrintF(outfile, "%f", num);
 
     if (html)
-	(void) ajFmtPrintF(outfile, "</td>\n");	
+	(void) ajFmtPrintF(outfile, "</td>\n");
     else
 	if (after)
 	    (void) ajFmtPrintF(outfile, "\t");
@@ -417,7 +419,7 @@ static void infoalign_OutputFloat (AjPFile outfile, float num, AjBool html,
 
 
 
-/* @funcstatic infoalign_OutputInt ****************************************
+/* @funcstatic infoalign_OutputInt ********************************************
 **
 ** Output a number.
 ** If this is not formatted for HTML, and is not the last item output
@@ -426,9 +428,11 @@ static void infoalign_OutputFloat (AjPFile outfile, float num, AjBool html,
 **
 ** @param [r] outfile [AjPFile] output file handle
 ** @param [r] num [ajint] number to be printed
-** @param [r] html [AjBool] True if want it formatted as an HTML table data item
-** @param [r] after [AjBool] True if we want to output more columns after this one
-** @return [void] 
+** @param [r] html [AjBool] True if want it formatted as an HTML table
+**                          data item
+** @param [r] after [AjBool] True if we want to output more columns
+**                           after this one
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -437,11 +441,11 @@ static void infoalign_OutputInt (AjPFile outfile, ajint num, AjBool html,
 {
 
     if (html)
-	(void) ajFmtPrintF(outfile, "<td>");	
+	(void) ajFmtPrintF(outfile, "<td>");
 
-    (void) ajFmtPrintF(outfile, "%d", num);  
+    (void) ajFmtPrintF(outfile, "%d", num);
     if (html)
-	(void) ajFmtPrintF(outfile, "</td>\n");	
+	(void) ajFmtPrintF(outfile, "</td>\n");
     else
 	if (after)
 	    (void) ajFmtPrintF(outfile, "\t");
@@ -461,10 +465,13 @@ static void infoalign_OutputInt (AjPFile outfile, ajint num, AjBool html,
 **
 ** @param [r] outfile [AjPFile] output file handle
 ** @param [r] str [AjPStr] string to be printed
-** @param [r] html [AjBool] True if want it formatted as an HTML table data item
-** @param [r] after [AjBool] True if we want to output more columns after this one
-** @param [r] minlength [ajint] minimum length of field to print the string in (NOLIMIT = no limit)
-** @return [void] 
+** @param [r] html [AjBool] True if want it formatted as an HTML table
+**                          data item
+** @param [r] after [AjBool] True if we want to output more columns
+**                           after this one
+** @param [r] minlength [ajint] minimum length of field to print the
+**                              string in (NOLIMIT = no limit)
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -472,18 +479,18 @@ static void infoalign_OutputStr (AjPFile outfile, AjPStr str, AjBool html,
 				 AjBool after, ajint minlength)
 {
     AjPStr marginfmt=ajStrNewL(10);
-  
+
     /* ajFmtPrintF doesn't seem to deal with formats like "%-*S"
        correctly, so ...  */
     ajFmtPrintS(&marginfmt, "%%-%dS", minlength);
-     
+
     if (html)
-	(void) ajFmtPrintF(outfile, "<td>");	
+	(void) ajFmtPrintF(outfile, "<td>");
 
     if (html || !after || minlength == NOLIMIT)
 	(void) ajFmtPrintF(outfile, "%S", str);
     else
-	/* 
+	/*
 	 *  Make the formatting nice:
 	 *  If this is the last item, don't put spaces or TABs after it.
 	 *  Try to fit the name in 'minlength' spaces, else just add a
@@ -492,12 +499,12 @@ static void infoalign_OutputStr (AjPFile outfile, AjPStr str, AjBool html,
 	(void) ajFmtPrintF(outfile, ajStrStr(marginfmt), str);
 
     if (html)
-	(void) ajFmtPrintF(outfile, "</td>\n");	
+	(void) ajFmtPrintF(outfile, "</td>\n");
     else
 	if (after &&  ajStrLen(str) >= minlength)
 	    (void) ajFmtPrintF(outfile, "\t");
 
-	
+
     /* tidy up */
     ajStrDel(&marginfmt);
 
@@ -513,8 +520,8 @@ static void infoalign_OutputStr (AjPFile outfile, AjPStr str, AjBool html,
 ** The first sequence in the set is returned as 0.
 ** -1 is returned as the consensus sequence.
 **
-** @param [r] refseq [AjPStr] input name/number of reference sequence 
-** @param [r] seqset [AjPSeqset] the sequences 
+** @param [r] refseq [AjPStr] input name/number of reference sequence
+** @param [r] seqset [AjPSeqset] the sequences
 ** @return [int] the number of the reference sequence
 ** @@
 ******************************************************************************/
@@ -545,11 +552,11 @@ static int infoalign_Getrefseq (AjPStr refseq, AjPSeqset seqset)
 
     return -1;		/* to make the compiler happy */
 }
- 
 
 
 
-/* @funcstatic infoalign_Compare ********************************************
+
+/* @funcstatic infoalign_Compare **********************************************
 **
 ** Returns lots of trivial measures of comparison between a sequence and a
 ** reference sequence
@@ -565,7 +572,7 @@ static int infoalign_Getrefseq (AjPStr refseq, AjPSeqset seqset)
 ** @param [r] idcount [ajint *] number of identical positions
 ** @param [r] simcount [ajint *] number of similar positions
 ** @param [r] difcount [ajint *] number of different positions
-** @param [r] change [float *] % difference 
+** @param [r] change [float *] % difference
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -575,7 +582,7 @@ static void infoalign_Compare(AjPSeq ref, AjPSeq seq, ajint **sub,
 			      ajint *alignlength, ajint *gaps,
 			      ajint *gapcount, ajint *idcount,
 			      ajint *simcount, ajint *difcount,
-			      float *change) 
+			      float *change)
 {
     ajint i;
 
@@ -601,7 +608,7 @@ static void infoalign_Compare(AjPSeq ref, AjPSeq seq, ajint **sub,
     /* ignore gaps at the ends of the sequence */
     for (begin = 0; s[begin] == '-'; begin++);
     for (end = lenseq-1; s[end] == '-'; end--);
-  
+
     for (i=begin; i<=end; i++)
     {
 	/* count gaps and their length */

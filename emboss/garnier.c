@@ -310,19 +310,19 @@ int main(int argc, char **argv)
     AjPFeattable TabRpt=NULL;
     AjPStr    strand=NULL;
     AjPStr    substr=NULL;
-    
+
     ajint begin;
     ajint end;
     ajint len;
     ajint Idc;
 
     embInit("garnier",argc,argv);
-    
+
     seqall    = ajAcdGetSeqall("sequencea");
     Idc       = ajAcdGetInt("idc");
     report    = ajAcdGetReport("outfile");
 
-    
+
     substr = ajStrNew();
 
 
@@ -351,8 +351,8 @@ int main(int argc, char **argv)
 	ajReportWrite (report, TabRpt, seq);
 	ajFeattableDel(&TabRpt);
     }
-    
-    
+
+
     ajSeqDel(&seq);
     ajStrDel(&substr);
     if (outf)
@@ -363,7 +363,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-/* @funcstatic garnier_do ****************************************************
+/* @funcstatic garnier_do *****************************************************
 **
 ** Undocumented.
 **
@@ -381,8 +381,9 @@ int main(int argc, char **argv)
 static void garnier_do(AjPFile outf, ajint from, ajint to, char *seq,
 		       char *name, ajint begin, ajint Idc)
 {
-    char *refstr="\n Please cite:\n Garnier, Osguthorpe and Robson (1978) J. Mol. Biol. 120:97-120\n";
-    
+    char *refstr="\n Please cite:\n Garnier, Osguthorpe and Robson (1978)"
+      " J. Mol. Biol. 120:97-120\n";
+
     ajint i;
     ajint end;
     ajint amap[20];
@@ -404,7 +405,7 @@ static void garnier_do(AjPFile outf, ajint from, ajint to, char *seq,
     ajint n0;
     ajint j, k, l0, l1, idc, dcs, dch, lastk;
     float fn0;
-    
+
     idc=Idc;
     end=to-from+1;
     n0=end;
@@ -413,9 +414,9 @@ static void garnier_do(AjPFile outf, ajint from, ajint to, char *seq,
     type = AJALLOC0(n0*sizeof(char));
 
     sascii = aascii;
-    
+
     if (idc<=0) dcs=dch=0;
-    else if (idc <4) 
+    else if (idc <4)
     {
 	dch=dharr[idc];
 	dcs=0;
@@ -426,22 +427,22 @@ static void garnier_do(AjPFile outf, ajint from, ajint to, char *seq,
 	dcs=dsarr[idc-3];
     }
     else dcs=dch=0;
-    
-    garnier_makemap(amino,amap,nna);  
 
-    
+    garnier_makemap(amino,amap,nna);
+
+
 /* copy from garnier.c original */
     --n0;  /* AJB: Added as n0 was one greater than the sequence length */
-    
+
   for (i=0; i<n0; i++)  {
 /*      ajDebug("seq[%d] '%c' %x", i, seq[i], seq[i]);
-*/      
+*/
     seq[i] = amap[aascii[(ajint)seq[i]]];
 /*
     ajDebug(" -> %x\n", seq[i]);
 */
-  }	
-    
+  }
+
   for(k=0;k<4;++k) iarr[k]=0;
 
   lastk = 0;
@@ -488,7 +489,7 @@ static void garnier_do(AjPFile outf, ajint from, ajint to, char *seq,
     for (i=l0*60+9; i<n0 && i<(l0+1)*60; i+=10)
       ajFmtPrintF(outf,"    .%5d",i+1);
     ajFmtPrintF(outf,"\n       ");
-    for (i=l0*60; i<n0 && i<(l0+1)*60; i++) 
+    for (i=l0*60; i<n0 && i<(l0+1)*60; i++)
       ajFmtPrintF(outf,"%c",amino[(ajint)seq[i]]);
     ajFmtPrintF(outf,"\n helix ");
     for (i=l0*60; i<n0 && i<(l0+1)*60; i++)
@@ -514,7 +515,7 @@ static void garnier_do(AjPFile outf, ajint from, ajint to, char *seq,
 		"---------------------\n\n");
 
     AJFREE(type);
-    
+
     return;
 }
 
@@ -540,8 +541,9 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
 			   ajint from, ajint to, char *seq,
 			   ajint begin, ajint Idc)
 {
-    char *refstr="\n Please cite:\n Garnier, Osguthorpe and Robson (1978) J. Mol. Biol. 120:97-120\n";
-    
+    char *refstr="\n Please cite:\n Garnier, Osguthorpe and Robson (1978)"
+      " J. Mol. Biol. 120:97-120\n";
+
     ajint i;
     ajint end;
     ajint amap[20];
@@ -582,11 +584,11 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
     idc=Idc;
     end=to-from+1;
     n0=end;
-      
+
     sascii = aascii;
-    
+
     if (idc<=0) dcs=dch=0;
-    else if (idc <4) 
+    else if (idc <4)
     {
 	dch=dharr[idc];
 	dcs=0;
@@ -597,21 +599,21 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
 	dcs=dsarr[idc-3];
     }
     else dcs=dch=0;
-    
-    garnier_makemap(amino,amap,nna);  
 
-    
+    garnier_makemap(amino,amap,nna);
+
+
 /* copy from garnier.c original */
-    
+
   for (i=0; i<n0; i++)  {
 /*      ajDebug("seq[%d] '%c' %x", i, seq[i], seq[i]);
-*/      
+*/
     seq[i] = amap[aascii[(ajint)seq[i]]];
 /*
     ajDebug(" -> %x\n", seq[i]);
 */
-  }	
-    
+  }
+
   for(k=0;k<4;++k) iarr[k]=0;
 
   lastk = 0;
@@ -654,7 +656,7 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
   ajFmtPrintAppS (&tmpStr, "%s\n",refstr);
 
   ajReportSetHeader (report, tmpStr);
-  
+
   /*
   l1 = n0/60 + 1;
   for (l0=0; l0<l1; l0++) {
@@ -662,7 +664,7 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
     for (i=l0*60+9; i<n0 && i<(l0+1)*60; i+=10)
       ajFmtPrintF(outf,"    .%5d",i+1);
     ajFmtPrintF(outf,"\n       ");
-    for (i=l0*60; i<n0 && i<(l0+1)*60; i++) 
+    for (i=l0*60; i<n0 && i<(l0+1)*60; i++)
       ajFmtPrintF(outf,"%c",amino[(ajint)seq[i]]);
     ajFmtPrintF(outf,"\n helix ");
     for (i=l0*60; i<n0 && i<(l0+1)*60; i++)
@@ -743,7 +745,7 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
   return;
 }
 
-/* @funcstatic garnier_makemap ***********************************************
+/* @funcstatic garnier_makemap ************************************************
 **
 ** Undocumented.
 **
@@ -757,14 +759,14 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
 static void garnier_makemap (char *input, ajint *map, ajint n)
 {
     ajint i;
-    
-    for (i=0;i<n;i++) 
+
+    for (i=0;i<n;i++)
     {
 	map[aascii[(ajint)input[i]]]=i;
 	/*
 	 *      ajDebug("i: %d map...[i] %x input[i] %x '%c'\n",
 	 *	i, map[aascii[input[i]]], input[i], input[i]);
-	 */	
+	 */
     }
 
     return;

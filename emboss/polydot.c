@@ -33,7 +33,7 @@ static void polydot_plotMatches(AjPList list, AjBool text);
 
 int main(int argc, char **argv)
 {
-  
+
     AjPSeqset seqset;
     AjPSeq seq1,seq2;
     ajint wordlen;
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
     AjPFeattabOut seq1out = NULL;
     AjBool text;
     AjPStr sajb=NULL;
-    
+
     (void) ajGraphInit("polydot", argc, argv);
 
     wordlen = ajAcdGetInt ("wordsize");
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
     format = ajAcdGetString("format");
     text = ajAcdGetBool("data");
     outf = ajAcdGetOutfile("outfile");
-    
+
     ext = ajAcdGetString("ext");
 
     sajb = ajStrNew();
@@ -83,7 +83,7 @@ int main(int argc, char **argv)
     {
 	seq1 = ajSeqsetGetSeq (seqset, i);
 	total += (float)ajSeqLen(seq1);
-    
+
     }
 
     total +=(float)(gap*(ajSeqsetSize(seqset)-1));
@@ -115,8 +115,8 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf,"##Graphic\n##Screen x1 %f y1 %f x2 %f y2 %f\n",
 		    0.0-xmargin,0.0-ymargin,(total+xmargin)*1.35,
 		    total+ymargin);
-    
-    
+
+
 
     for(i=0;i<ajSeqsetSize(seqset);i++)
     {
@@ -144,7 +144,7 @@ int main(int argc, char **argv)
 		    embWordMatchListConvToFeat(matchlist,&tabptr[i],
 					       &tabptr[j],seq1,
 					       seq2);
-     
+
 		if(matchlist)  /* free the match structures */
 		    embWordMatchListDelete(&matchlist);
 
@@ -205,20 +205,20 @@ int main(int argc, char **argv)
 		    if(!text)
 			ajGraphTextLine(xstart-(3*onefifth),
 				    ystart+((float)ajSeqLen(seq2)/2.0),
-				    xstart-(3*onefifth),ystart+ajSeqLen(seq2), 
+				    xstart-(3*onefifth),ystart+ajSeqLen(seq2),
 				    ajStrStr(ajSeqsetName(seqset, j)),0.5);
 		    else
 			ajFmtPrintF(outf,"Textline x1 %f y1 %f x2 %f y2 %f "
 				    "colour 0 size 0.5 %s\n",
 				    xstart-(3*onefifth),
 				    ystart+((float)ajSeqLen(seq2)/2.0),
-				    xstart-(3*onefifth),ystart+ajSeqLen(seq2), 
+				    xstart-(3*onefifth),ystart+ajSeqLen(seq2),
 				    ajStrStr(ajSeqsetName(seqset, j)));
 		}
 		ystart += (float)ajSeqLen(seq2)+(float)gap;
 	    }
 	}
-	embWordFreeTable(seq1MatchTable);              
+	embWordFreeTable(seq1MatchTable);
 	seq1MatchTable = NULL;
 	xstart += (float)ajSeqLen(seq1)+(float)gap;
 	ystart = 0.0;
@@ -306,7 +306,7 @@ static void polydot_drawPlotlines(void **x, void *cl)
     y1 = y2 = (PLFLT)((*p).seq2start)+ystart;
     x2 += (*p).length;
     y2 += (PLFLT)(*p).length;
- 
+
     ajGraphLine(x1, y1, x2, y2);
 }
 
@@ -334,7 +334,7 @@ static void polydot_dataPlotlines(void **x, void *cl)
     y1 = y2 = (PLFLT)((*p).seq2start)+ystart;
     x2 += (*p).length;
     y2 += (PLFLT)(*p).length;
- 
+
     ajFmtPrintF(outf,"Line x1 %f y1 %f x2 %f y2 %f colour 0\n",x1, y1, x2, y2);
 }
 

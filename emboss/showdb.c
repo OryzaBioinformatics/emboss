@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -25,9 +25,9 @@
 static void showdb_DBOut(AjPFile outfile, AjPStr dbname, AjPStr type,
 			 AjBool id, AjBool qry, AjBool all, AjPStr comment,
 			 AjPStr release, AjBool html, AjBool dotype,
-			 AjBool doid, AjBool doqry, AjBool doall, 
+			 AjBool doid, AjBool doqry, AjBool doall,
 			 AjBool docomment, AjBool dorelease);
-	
+
 
 /* @prog showdb ***************************************************************
 **
@@ -95,7 +95,7 @@ int main(int argc, char **argv)
 	    (void) ajFmtPrintF(outfile, "<tr><th>Name</th>");
 	else
 	    (void) ajFmtPrintF(outfile, "%-14.13s", "# Name");
-    
+
 	if (dotype)
 	{
 	    if (html)
@@ -228,7 +228,7 @@ int main(int argc, char **argv)
 	    }
 	    else
 		(void) ajDie("The database '%S' does not exist", dbname);
-	}    
+	}
 
 	(void) ajListIterFree(iter);
     }
@@ -269,10 +269,10 @@ int main(int argc, char **argv)
 static void showdb_DBOut(AjPFile outfile, AjPStr dbname, AjPStr type,
 			 AjBool id, AjBool qry, AjBool all, AjPStr comment,
 			 AjPStr release, AjBool html, AjBool dotype,
-			 AjBool doid, AjBool doqry, AjBool doall, 
+			 AjBool doid, AjBool doqry, AjBool doall,
 			 AjBool docomment, AjBool dorelease)
 {
-	
+
     if (html)
 	/* start table line and output name */
 	(void) ajFmtPrintF(outfile, "<tr><td>%S</td>", dbname);
@@ -281,9 +281,9 @@ static void showdb_DBOut(AjPFile outfile, AjPStr dbname, AjPStr type,
 	/* if the name is shorter than 14 characters make a nice formatted
 	   output, otherwise, just output it and a space */
 	if (ajStrLen(dbname) < 14)
-	    (void) ajFmtPrintF(outfile, "%-14.13S", dbname);  
+	    (void) ajFmtPrintF(outfile, "%-14.13S", dbname);
 	else
-	    (void) ajFmtPrintF(outfile, "%S ", dbname);  
+	    (void) ajFmtPrintF(outfile, "%S ", dbname);
     }
 
     if (dotype)
@@ -298,7 +298,7 @@ static void showdb_DBOut(AjPFile outfile, AjPStr dbname, AjPStr type,
     {
 	if (html)
 	    (void) ajFmtPrintF(outfile, "<td>");
-    
+
 	if (id)
 	    (void) ajFmtPrintF(outfile, "%s", "OK  ");
 	else

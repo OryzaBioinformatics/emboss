@@ -2,18 +2,18 @@
  **
  ** Reports restriction enzyme that produce specific overhangs
  ** @author: Copyright (C) Bernd Jagla
- ** @@ modified source from Alan 
+ ** @@ modified source from Alan
  **
  ** This program is free software; you can redistribute it and/or
  ** modify it under the terms of the GNU General Public License
  ** as published by the Free Software Foundation; either version 2
  ** of the License, or (at your option) any later version.
- ** 
+ **
  ** This program is distributed in the hope that it will be useful,
  ** but WITHOUT ANY WARRANTY; without even the implied warranty of
  ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  ** GNU General Public License for more details.
- ** 
+ **
  ** You should have received a copy of the GNU General Public License
  ** along with this program; if not, write to the Free Software
  ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -74,17 +74,17 @@ int main(int argc, char **argv)
     AjBool equiv;
     AjBool frags;
     AjPStr dfile;
-    
+
     AjPFile   enzfile=NULL;
     AjPFile   equfile=NULL;
-    
+
     AjPStr    name=NULL;
 
     AjPTable  table=NULL;
-    
+
     ajint       hits;
 
-    
+
     AjPList     l;
 
     embInit("restover", argc, argv);
@@ -94,7 +94,7 @@ int main(int argc, char **argv)
     ajStrToUpper(&seqcmp);
     outf      = ajAcdGetOutfile("outfile");
 
-    /* Some of these are not needed but I left them in case someone wants to 
+    /* Some of these are not needed but I left them in case someone wants to
        use them some time ... */
     enzymes   = ajStrNewC("all");
 
@@ -115,10 +115,10 @@ int main(int argc, char **argv)
     frags      = ajAcdGetBool("fragments");
     nameit     = ajAcdGetBool("name");
     dfile      = ajAcdGetString("datafile");
-    
+
     if(single)
 	max=min=1;
-    
+
     table = ajStrTableNew(EQUGUESS);
 
     if(threeprime)
@@ -126,7 +126,7 @@ int main(int argc, char **argv)
 
     /* read the local file of enzymes names */
     restover_read_file_of_enzyme_names(&enzymes);
-  
+
     if(!*ajStrStr(dfile))
     {
 	ajFileDataNewC(ENZDATA,&enzfile);
@@ -139,8 +139,8 @@ int main(int argc, char **argv)
 	if(!enzfile)
 	    ajFatal("Cannot locate user supplied enzyme file %S.",dfile);
     }
-    
-	
+
+
 
     if(equiv)
     {
@@ -150,9 +150,9 @@ int main(int argc, char **argv)
 	else
 	    restover_read_equiv(&equfile,&table);
     }
-    
 
-    
+
+
     while(ajSeqallNext(seqall, &seq))
     {
 	begin=ajSeqallBegin(seqall);
@@ -189,7 +189,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic restover_printHits ********************************************
+/* @funcstatic restover_printHits *********************************************
 **
 ** Print restover hits
 **
@@ -237,15 +237,15 @@ static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
     ajint fb=0;
     ajint last=0;
     AjPStr overhead=NULL;
-    
+
     AjPStr value=NULL;
-    
+
     ajint i;
     ajint c=0;
-    
+
     ps=ajStrNew();
     fn = 0;
-    
+
     if(html)
 	ajFmtPrintF(*outf,"<BR>");
     ajFmtPrintF(*outf,"# Restrict of %S from %d to %d\n",*name,begin,end);
@@ -264,7 +264,7 @@ static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
 		sitelen);
     if(html)
 	ajFmtPrintF(*outf,"<BR>");
-    
+
     /*    if(blunt)*/
     /*	ajFmtPrintF(*outf,"# Blunt ends allowed\n");*/
     /*    if(sticky)*/
@@ -277,17 +277,17 @@ static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
     /*	ajFmtPrintF(*outf,"# No ambiguities allowed\n");*/
     /*    else*/
     /*	ajFmtPrintF(*outf,"# Ambiguities allowed\n");*/
-    
-    
+
+
     hits = embPatRestrictRestrict(l,hits,!limit,alpha);
-    
+
     if(frags)
     {
 	fa = AJALLOC(hits*2*sizeof(ajint));
 	fx = AJALLOC(hits*2*sizeof(ajint));
     }
-    
-    
+
+
     ajFmtPrintF(*outf,"# Number of hits with any overlap: %d\n",hits);
     if(html)
 	ajFmtPrintF(*outf,"<BR>");
@@ -297,11 +297,11 @@ static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
     if(html)
 	ajFmtPrintF(*outf,
 		    "<th>Base Number</th><th>Enzyme</th><th>Site</th>"
-		    "<th>5'</th><th>3'</th><th>[5'</th><th>3']</th>\n");    
+		    "<th>5'</th><th>3'</th><th>[5'</th><th>3']</th>\n");
     else
 	ajFmtPrintF(*outf,"# Base Number\tEnzyme\t\tSite\t\t5'\t3'\t"
 		    "[5'\t3']\n");
-    
+
     for(i=0;i<hits;++i)
     {
 	ajListPop(*l,(void **)&m);
@@ -369,7 +369,7 @@ static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
 				m->cut1,m->cut2);
 	    }
 	}
-	
+
 	/* I am not sure what fragments are doing so I left it in ...*/
 	if(m->cut3 && m->cut4)
 	{
@@ -381,9 +381,9 @@ static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
 
 	embMatMatchDel(&m);
     }
-    
-    
-    
+
+
+
     if(frags)
     {
 	ajSortIntInc(fa,fn);
@@ -419,10 +419,10 @@ static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
 	AJFREE(fx);
     }
 
-    
+
     ajListDel(l);
     ajStrDel(&ps);
-    
+
     if(html)
 	ajFmtPrintF(*outf,"</table>\n");
 
@@ -430,7 +430,7 @@ static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
 }
 
 
-/* @funcstatic restover_read_equiv *******************************************
+/* @funcstatic restover_read_equiv ********************************************
 **
 ** Load table with equivalent RE names
 **
@@ -465,16 +465,16 @@ static void restover_read_equiv(AjPFile *equfile, AjPTable *table)
     ajFileClose(equfile);
 }
 
-/* @funcstatic restover_read_file_of_enzyme_names ****************************
+/* @funcstatic restover_read_file_of_enzyme_names *****************************
 **
 ** If the list of enzymes starts with a '@' if opens that file, reads in
 ** the list of enzyme names and replaces the input string with the enzyme names
-**  
+**
 ** @param [r] enzymes [AjPStr*] enzymes to search for or 'all' or '@file'
 ** @return [void]
 ** @@
 ******************************************************************************/
-      
+
 static void restover_read_file_of_enzyme_names(AjPStr *enzymes)
 {
     AjPFile file=NULL;

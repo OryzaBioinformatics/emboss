@@ -70,7 +70,7 @@ int main(int argc, char **argv)
     AjBool circular;
     AjBool reverse;
     ajint around;
-  
+
     AjPSeq seq=NULL;
     AjPTrn trnTable;
     AjPStr sseq=NULL;	/* sequence string */
@@ -93,14 +93,14 @@ int main(int argc, char **argv)
     circular = ajAcdGetBool("circular");
     reverse = ajAcdGetBool("reverse");
     around = ajAcdGetInt ("flanking");
-  
+
 
     /* initialise the translation table */
     (void) ajStrToInt(tablelist[0], &table);
     trnTable = ajTrnNewI (table);
 
     /* what sort of ORF are we looking for */
-    (void) ajStrToInt(findlist[0], &find);  
+    (void) ajStrToInt(findlist[0], &find);
 
     /* get the minimum size converted to protein length if we are storing
        protein sequences */
@@ -115,7 +115,7 @@ int main(int argc, char **argv)
 
 	/* get the length of the sequence */
 	len = ajSeqLen(seq);
-    
+
 	/* if the sequence is circular, append it to itself to triple its
 	   length so we can deal easily with wrapped ORFs, but don't update
 	   len */
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
 				   around);
 	}
     }
-  
+
     (void) ajSeqWriteClose (seqout);
 
     /* tidy up */
@@ -159,7 +159,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic getorf_FindORFs ***********************************************
+/* @funcstatic getorf_FindORFs ************************************************
 **
 ** finds all orfs in the current sense and writes them out
 **
@@ -201,7 +201,7 @@ static void getorf_FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable,
 					   sequences that we are growing */
     AjPSeq pep=NULL;
     ajint i;
-  
+
     ajint seqlen=ajSeqLen(seq);		/* length of the sequence passed
 					   over - this will differ from 'len'
 					   if circular=true */
@@ -222,7 +222,7 @@ static void getorf_FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable,
     GOTSTOP[0] = ajFalse;
     GOTSTOP[1] = ajFalse;
     GOTSTOP[2] = ajFalse;
-  
+
     if (circular || find == P_START2STOP || find == N_START2STOP ||
 	find == AROUND_START)
     {
@@ -251,7 +251,7 @@ static void getorf_FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable,
 	if (LASTORF[frame]) continue;	/* don't want to find extra ORFs when
 					   we have been round a circular
 					   genome once */
-    
+
 	if (find == P_STOP2STOP || find == N_STOP2STOP ||
 	    find == AROUND_INIT_STOP || find == AROUND_END_STOP)
 	{
@@ -313,7 +313,7 @@ static void getorf_FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable,
 		    start[frame] = pos+3; /* next start of the ORF for this
 					     frame */
 		}
-	
+
 	    }
 	    else if (ORF[frame])
 	    {
@@ -395,7 +395,7 @@ static void getorf_FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable,
 						getting ORFs in this frame */
 		    if (LASTORF[0] && LASTORF[1] && LASTORF[2]) break;
 		}
-	
+
 		/* reset the newstr to zero length so that we can start
 		   storing the next ORF for this frame in it */
 		(void) ajStrClear(&newstr[frame]);
@@ -406,12 +406,12 @@ static void getorf_FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable,
 		if (ORF[frame])
 		    (void) getorf_AppORF(find, &newstr[frame], chrseq, pos,
 					 aa);
-        	
-	    }      	
+
+	    }
 	}
-	
+
     }
-    
+
     /* So far we will currently miss reporting a STOP-to-STOP ORF that is
        the full length of a circular genome when there are no STOP codons in
        that frame - is this a problem? It is an unlikely situation, but I'm
@@ -501,7 +501,7 @@ static void getorf_WriteORF(AjPSeq seq, ajint len, ajint seqlen, AjBool sense,
     /* it is possible for an ORF in a circular genome to appear to start
        past the end of the genome if we have a START at the very end,
        eg:
-       START (end of genome) ORF ORF ORF ORF STOP 
+       START (end of genome) ORF ORF ORF ORF STOP
        */
     while (s > len)
     {
@@ -529,7 +529,7 @@ static void getorf_WriteORF(AjPSeq seq, ajint len, ajint seqlen, AjBool sense,
 					   goes over either end */
 	if (e > seqlen) return;
 	(void) ajStrAssSub(&aroundstr, ajSeqStr(seq), s-1, e-1);
-    
+
     }
     else if (find == AROUND_START)
     {
@@ -552,7 +552,7 @@ static void getorf_WriteORF(AjPSeq seq, ajint len, ajint seqlen, AjBool sense,
 	if (e > seqlen) return;
 	(void) ajStrAssSub(&aroundstr, ajSeqStr(seq), s-1, e-1);
     }
-  
+
 
 
     /* set the name and description */
@@ -562,7 +562,7 @@ static void getorf_WriteORF(AjPSeq seq, ajint len, ajint seqlen, AjBool sense,
 						 number for the next ORF */
     (void) ajStrApp(&name, value);
     (void) ajSeqAssName(new, name);
-  
+
     /* set the description of the translation */
     (void) ajStrAssC(&name, "[");
     if (sense)
@@ -575,7 +575,7 @@ static void getorf_WriteORF(AjPSeq seq, ajint len, ajint seqlen, AjBool sense,
     {
 	s = seqlen-s+1;
 	(void) ajStrFromInt(&value, s);	/* the base before the stop codon
-					   (numbering bases from 1) */    
+					   (numbering bases from 1) */
     }
     (void) ajStrApp(&name, value);
     (void) ajStrAppC(&name, " - ");
@@ -624,7 +624,7 @@ static void getorf_WriteORF(AjPSeq seq, ajint len, ajint seqlen, AjBool sense,
 
 
 
-/* @funcstatic getorf_AppORF *************************************************
+/* @funcstatic getorf_AppORF **************************************************
 **
 ** append aa to ORF sequence string
 **
@@ -649,5 +649,5 @@ static void getorf_AppORF(ajint find, AjPStr *str, char *chrseq, ajint pos,
     }
     else if(find == P_STOP2STOP || find == P_START2STOP ||
 	    find == AROUND_START)
-	(void) ajStrAppK(str, aa);            
+	(void) ajStrAppK(str, aa);
 }

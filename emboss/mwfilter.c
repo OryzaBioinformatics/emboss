@@ -11,16 +11,16 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*******************************************************************/
+******************************************************************************/
 
 #include "emboss.h"
 
@@ -52,11 +52,11 @@ static void mwfilter_arraytidy(AjPDouble exparray, ajint *expn);
 
 
 
-/* @prog mwfilter **************************************************
+/* @prog mwfilter *************************************************************
 **
 ** Remove 'noisy' molecular weights
 **
-*******************************************************************/
+******************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -64,22 +64,22 @@ int main(int argc, char **argv)
     AjPFile outf = NULL;
     AjBool  showdel;
     AjPList dlist = NULL;
-    
+
     float tolerance = 0.0;
-    
+
     AjPStr datafile = NULL;
 
     AjPDouble rmarray  = NULL;
     AjPDouble darray   = NULL;
     AjPDouble exparray = NULL;
-    
+
     ajint     rmn  = 0;
     ajint     dn   = 0;
     ajint     expn = 0;
 
     ajint i;
     AjPMwh dptr = NULL;
-    
+
     embInit("mwfilter", argc, argv);
 
     inf       = ajAcdGetInfile("infile");
@@ -102,7 +102,7 @@ int main(int argc, char **argv)
     /* Get experimental results */
     mwfilter_readexp(inf, &exparray);
     expn = ajDoubleLen(exparray);
-    
+
     /* Delete keratin noise etc */
     mwfilter_noisedel(exparray,expn,rmarray,rmn,tolerance,showdel,dlist);
     mwfilter_arraytidy(exparray,&expn);
@@ -123,8 +123,8 @@ int main(int argc, char **argv)
 	    AJFREE(dptr);
 	}
     }
-    
-    
+
+
     ajDoubleDel(&exparray);
     ajDoubleDel(&rmarray);
     ajDoubleDel(&darray);
@@ -132,10 +132,10 @@ int main(int argc, char **argv)
 
     ajListDel(&dlist);
 
-    
+
     ajFileClose(&inf);
     ajFileClose(&outf);
-    
+
     ajExit();
     return 0;
 }
@@ -162,7 +162,7 @@ static void mwfilter_readdata(AjPStr datafile, AjPDouble *rmarray,
     AjPStr  line = NULL;
     char    c;
     double  n;
-    
+
     ajFileDataNew(datafile,&inf);
     if(!inf)
 	ajFatal("Cannot open filter data file [%S]",datafile);
@@ -208,7 +208,7 @@ static void mwfilter_readdata(AjPStr datafile, AjPDouble *rmarray,
 
     ajStrDel(&line);
     ajFileClose(&inf);
-    
+
     return;
 }
 
@@ -230,7 +230,7 @@ static void mwfilter_readexp(AjPFile inf, AjPDouble *exparray)
     AjPStr  line = NULL;
     char    c;
     double  n;
-    
+
     line = ajStrNew();
 
     while(ajFileReadLine(inf,&line))
@@ -247,7 +247,7 @@ static void mwfilter_readexp(AjPFile inf, AjPDouble *exparray)
     }
 
     ajStrDel(&line);
-    
+
     return;
 }
 
@@ -279,14 +279,14 @@ static void mwfilter_noisedel(AjPDouble exparray, ajint expn,
     double ppmval;
     double mwexp;
     AjPMwh delwt=NULL;
-    
+
     for(i=0;i<expn;++i)
     {
 	mwexp = ajDoubleGet(exparray,i);
 	ppmval = mwexp * tol / MILLION;
 	mwmin  = mwexp - ppmval;
 	mwmax  = mwexp + ppmval;
-	
+
 	for(j=0;j<rmn;++j)
 	{
 	    n = ajDoubleGet(rmarray,j);
@@ -326,7 +326,7 @@ static void mwfilter_arraytidy(AjPDouble exparray, ajint *expn)
     ajint limit = *expn;
 
     double v=0.;
-    
+
     for(i=0,n=0;i<limit;++i)
 	if(ajDoubleGet(exparray,i) != DELETED)
 	{
@@ -378,7 +378,7 @@ static void mwfilter_moddel(AjPDouble exparray, ajint expn,
     double mwmod;
     double modmin;
     double modmax;
-    
+
     for(k=0;k<dn;++k)
     {
 	mwmod  = ajDoubleGet(darray,k);
@@ -393,7 +393,7 @@ static void mwfilter_moddel(AjPDouble exparray, ajint expn,
 		continue;
 	    mwmin = mwexp + modmin;
 	    mwmax = mwexp + modmax;
-	    
+
 	    for(j=i+1;j<expn;++j)
 	    {
 		n = ajDoubleGet(exparray,j);
@@ -402,7 +402,7 @@ static void mwfilter_moddel(AjPDouble exparray, ajint expn,
 		if(n>mwmin && n<mwmax)
 		    ajDoublePut(&exparray,i,DELETED);
 	    }
-	    
+
 	}
     }
 

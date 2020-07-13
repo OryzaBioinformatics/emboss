@@ -13,12 +13,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -66,7 +66,7 @@ int main(int argc, char **argv)
 
     AjPStr fthit = NULL;
 
-    AjPFeattabOut featout=NULL;    
+    AjPFeattabOut featout=NULL;
 
     ajint begin;
     ajint end;
@@ -94,7 +94,7 @@ int main(int argc, char **argv)
     AjPInt   hpos=NULL;
     AjPInt   hp=NULL;
     AjPInt   hlen=NULL;
-    
+
     float resap;
     float totap;
     float averap;
@@ -102,7 +102,7 @@ int main(int argc, char **argv)
     float score;
     float v;
     ajint maxscorepos;
-    
+
     AjPFloat agp=NULL;
 
     embInit("antigenic", argc, argv);
@@ -140,12 +140,12 @@ int main(int argc, char **argv)
 
 	TabRpt = ajFeattableNewSeq(seq);
 	strand = ajSeqStrCopy(seq);
-	
+
 	ajStrToUpper(&strand);
 	ajStrAssSubC(&substr,ajStrStr(strand),start,stop);
 	ajStrAssSubC(&sstr,ajStrStr(strand),start,stop);
 	len    = ajStrLen(substr);
-	
+
 	q = p = ajStrStr(substr);
 	for(i=0;i<len;++i,++p)
 	    *p = (char) ajAZToInt(*p);
@@ -153,7 +153,7 @@ int main(int argc, char **argv)
 	totap = 0.0;
 	fpos  = 0;
 	lpos  = len-7;
-	
+
 	for(i=0;i<len;++i)
 	    ajFloatPut(&thisap,i,0.0);
 
@@ -221,7 +221,7 @@ int main(int argc, char **argv)
 	if (outf) {
 	  ajFmtPrintF(outf,"Maximum length %d at residues %d->%d\n\n", maxlen,
 		      istart+begin, iend+begin);
-	  ajStrAssSubC(&stmp,ajStrStr(sstr),istart,iend);    
+	  ajStrAssSubC(&stmp,ajStrStr(sstr),istart,iend);
 	  ajFmtPrintF(outf," Sequence:  %S\n",stmp);
 	  ajFmtPrintF(outf,"            |");
 	  antigenic_padit(&outf,istart,iend);
@@ -242,7 +242,7 @@ int main(int argc, char **argv)
 	    {
 		k = ajIntGet(hp,i);
 		istart = ajIntGet(hpos,k);
-	    
+
 		iend = istart + ajIntGet(hlen,k) -1;
 		if (outf) {
 		  ajFmtPrintF(outf,
@@ -290,15 +290,15 @@ int main(int argc, char **argv)
 	      antigenic_dumptoFeat(nhits,hp,hpos,hlen,thisap,hwt,featout,
 				   ajSeqName(seq),begin);
 	}
-	
+
 	ajReportWrite(report, TabRpt, seq);
 
 	ajStrDel(&strand);
 	ajFeattableDel(&TabRpt);
 
     }
-    
-    
+
+
 
     ajStrDel(&stmp);
     ajStrDel(&sstr);
@@ -315,7 +315,7 @@ int main(int argc, char **argv)
     ajIntDel(&hpos);
     ajIntDel(&hp);
     ajIntDel(&hlen);
-    
+
     (void) ajReportClose(report);
 
     ajExit();
@@ -325,7 +325,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic antigenic_readAunty *******************************************
+/* @funcstatic antigenic_readAunty ********************************************
 **
 ** Undocumented.
 **
@@ -350,16 +350,16 @@ static void antigenic_readAunty(AjPFloat *agp)
     float vf1;
     float vf2;
     float vf3;
-    
+
     ajint deltae;
     ajint deltas;
     ajint deltap;
     float deltaaf;
     float deltasf;
-    
+
     char *p;
     char *q;
-    
+
     ajFileDataNewC(DATAFILE, &mfptr);
     if(!mfptr) ajFatal("Antigenicity file not found\n");
 
@@ -367,7 +367,7 @@ static void antigenic_readAunty(AjPFloat *agp)
 
     deltae=deltas=deltap=0;
     deltaaf=deltasf=0.0;
-    
+
     while(ajFileGets(mfptr, &line))
     {
 	p=ajStrStr(line);
@@ -379,12 +379,12 @@ static void antigenic_readAunty(AjPFloat *agp)
 			ajStrStr(line));
 	    continue;
 	}
-	
+
 	ajCharToUpper(p);
 	q=p;
 	q=ajSysStrtok(q," \t");
 	n=ajAZToInt(*q);
-	
+
 	if(sscanf(p,"%*s%d%d%d%f%f%f",&v1,&v2,&v3,&vf1,&vf2,&vf3)!=6)
 	{
 	    ajErr("Error in table: %s",p);
@@ -392,7 +392,7 @@ static void antigenic_readAunty(AjPFloat *agp)
 	}
 
 	ajFloatPut(agp,n,vf3);
-	
+
 	deltae += v1;
 	deltas += v2;
 	deltap += v3;
@@ -446,7 +446,7 @@ static void antigenic_padit(AjPFile *outf, ajint b, ajint e)
 }
 
 
-/* @funcstatic antigenic_dumptoFeat ******************************************
+/* @funcstatic antigenic_dumptoFeat *******************************************
 **
 ** Undocumented.
 **
@@ -496,7 +496,7 @@ static void antigenic_dumptoFeat(ajint nhits, AjPInt hp, AjPInt hpos,
     source = ajStrNew();
     type = ajStrNew();
     tag = ajStrNew();
-    
+
 
 
     (void) ajStrAssC(&name,seqname);
@@ -513,19 +513,19 @@ static void antigenic_dumptoFeat(ajint nhits, AjPInt hp, AjPInt hpos,
 	k = ajIntGet(hp,i);
 
 	istart = ajIntGet(hpos,k);
-      
+
 	iend = istart + ajIntGet(hlen,k)-1;
 
 	score = ajFloatGet(hwt,k);
 	feature = ajFeatNew(feattable, source, type,
 			    istart+begin, iend+begin,
-			    score, strand, frame) ;    
+			    score, strand, frame) ;
 
 	new = 0;
 	for(m=istart;m<=iend;++m)
 	    if(ajFloatGet(thisap,m) == ajFloatGet(hwt,k))
 	    {
-	      
+
 		if(!new)
 		{
 		    (void) ajFmtPrintS(&val,"max score at %d",m);
@@ -535,7 +535,7 @@ static void antigenic_dumptoFeat(ajint nhits, AjPInt hp, AjPInt hpos,
 		else
 		{
 		    (void) ajFmtPrintS(&val,",%d",m);
-		    (void) ajFeatTagSet(feature,tag,val);	    
+		    (void) ajFeatTagSet(feature,tag,val);
 		}
 	    }
     }
@@ -550,6 +550,6 @@ static void antigenic_dumptoFeat(ajint nhits, AjPInt hp, AjPInt hpos,
     ajStrDel(&type);
     ajStrDel(&tag);
     ajStrDel(&val);
-    
+
     return;
 }

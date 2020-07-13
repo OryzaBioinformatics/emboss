@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     AjPSeq seq = NULL;
     ajint n;
     ajint count;
-  
+
     embInit ("nthseq", argc, argv);
 
     seqall = ajAcdGetSeqall ("sequence");

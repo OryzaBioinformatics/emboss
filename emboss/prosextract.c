@@ -7,12 +7,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -21,7 +21,7 @@
 
 #include "emboss.h"
 
-#define DATANAME "PROSITE/prosite.lines" 
+#define DATANAME "PROSITE/prosite.lines"
 
 
 /* @prog prosextract **********************************************************
@@ -36,12 +36,12 @@ int main(int argc, char **argv)
     AjPFile infdoc 	=NULL;
     AjPFile outf	=NULL;
     AjPFile outs	=NULL;
-    
+
     AjBool  haspattern;
 
     char   *p;
-    
-    
+
+
     AjPStr line =NULL;
     AjPStr text =NULL;
     AjPStr temp = NULL;
@@ -51,16 +51,16 @@ int main(int argc, char **argv)
     AjPStr pa=NULL;
     AjPStr ps =NULL;
     AjPStr fn=NULL;
-    AjPStr re =NULL; 
+    AjPStr re =NULL;
     AjPStr fname =NULL;
     AjBool flag;
     AjBool isopen;
     AjBool goback;
 
     ajlong storepos=0L;
-    
 
-    
+
+
     embInit ("prosextract", argc, argv);
 
     temp = ajAcdGetString("infdat");
@@ -73,8 +73,8 @@ int main(int argc, char **argv)
     de = ajStrNew();
     pa = ajStrNew();
     ps = ajStrNew();
-   
-   
+
+
 
     fn=ajStrNew();
     ajStrAssC(&fn,ajStrStr(temp));
@@ -82,15 +82,15 @@ int main(int argc, char **argv)
     if(!(infdat=ajFileNewIn(fn)))
 	ajFatal("Cannot open file %s",ajStrStr(fn));
     ajStrDel(&fn);
-    
-    
+
+
 
     fn=ajStrNewC("PROSITE/prosite.lines");
     ajFileDataNewWrite(fn,&outf);
     ajStrDel(&fn);
-    
-    
-	
+
+
+
     haspattern=ajFalse;
 
     while (ajFileReadLine(infdat, &line) )
@@ -137,12 +137,12 @@ int main(int argc, char **argv)
 	    ajFmtPrintF (outf, "%s\n ", ajStrStr(de));
 	    continue;
 	}
-    
-    
+
+
 	if (ajStrPrefixC(line, "PA"))
-	{	
+	{
 	    ajStrAssC(&pa,"");
-		
+
 	    while(ajStrPrefixC(line,"PA"))
 	    {
 		p=ajStrStr(line);
@@ -151,20 +151,20 @@ int main(int argc, char **argv)
 		ajStrAppC(&pa,p);
 		ajFileReadLine(infdat, &line);
 	    }
-	    
-	    ajFmtPrintF (outf, "%s\n", ajStrStr(pa));	
+
+	    ajFmtPrintF (outf, "%s\n", ajStrStr(pa));
 	    re=embPatPrositeToRegExp(&pa);
-	    ajFmtPrintF (outf, "^%s\n\n", ajStrStr(re));		
+	    ajFmtPrintF (outf, "^%s\n\n", ajStrStr(re));
 	    ajStrDel(&re);
 	    continue;
 	}
-    
-		
-    }    
-    
-    
+
+
+    }
+
+
   /* Now we've finished processing prosite.dat so look at prosite.doc */
-        
+
 
     fn=ajStrNew();
     ajStrAssC(&fn,ajStrStr(temp));
@@ -179,17 +179,17 @@ int main(int argc, char **argv)
     flag  = ajFalse;
     isopen = ajFalse;
     goback = ajFalse;
-    
+
 
     while (ajFileReadLine(infdoc, &text))
     {
 
 	if(ajStrPrefixC(text, "{PS") && isopen && !goback)
 	    goback = ajTrue;
-	    
 
 
-	if(ajStrPrefixC(text, "{PS") && !isopen) 
+
+	if(ajStrPrefixC(text, "{PS") && !isopen)
 	{
 	    storepos = ajFileTell(infdoc);
 	    /* save out the documentation text to acc numbered outfiles . */
@@ -197,20 +197,20 @@ int main(int argc, char **argv)
 	    p=strtok(p, ";");
 	    ajStrAssC(&temp, ajStrStr(fname));
 	    ajStrAppC(&temp, p);
-	    
-	    ajFileDataNewWrite(temp, &outs); 
+
+	    ajFileDataNewWrite(temp, &outs);
 	    flag = ajTrue;
 	    isopen = ajTrue;
 	    continue;
 	}
-            
-            
+
+
 	if(ajStrPrefixC(text, "{BEGIN}") && flag)
-	{		
+	{
 	    while(ajFileReadLine(infdoc, &text))
 	    {
 		if(ajStrPrefixC(text,"{END}")) break;
-		ajFmtPrintF(outs, "%s\n", ajStrStr(text)); 
+		ajFmtPrintF(outs, "%s\n", ajStrStr(text));
 
 	    }
 	    ajFileClose(&outs);
@@ -220,10 +220,10 @@ int main(int argc, char **argv)
 		goback = ajFalse;
 		ajFileSeek(infdoc,storepos,0);
 	    }
-	    
+
 	}
-    }  
-    
+    }
+
     ajStrDel(&line);
     ajStrDel(&text);
     ajStrDel(&temp);
@@ -234,8 +234,8 @@ int main(int argc, char **argv)
     ajStrDel(&re);
     ajStrDel(&ps);
     ajStrDel(&fname);
-   
-    
+
+
     ajFileClose(&infdat);
     ajFileClose(&infdoc);
     ajFileClose(&outf);

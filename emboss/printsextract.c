@@ -8,12 +8,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -77,19 +77,19 @@ int main(int argc, char **argv)
     ajlong pos;
     ajint *cnts=NULL;
     ajint *lens=NULL;
-    
+
     embInit("printsextract",argc,argv);
-    
+
     inf = ajAcdGetInfile("inf");
     pfname = ajStrNewC(DATANAME);
     ajFileDataNewWrite(pfname,&outf);
     printsextract_printHeader(outf);
     ajStrDel(&pfname);
-    
+
     line = ajStrNew();
     acc  = ajStrNew();
     code = ajStrNew();
-    
+
     while(printsextract_prints_entry(&line,&inf))
     {
 	printsextract_write_code(&outf,&line,&code);
@@ -174,7 +174,7 @@ static void printsextract_write_accession(AjPFile *inf, AjPFile *outf,
 					  AjPStr *s, AjPStr *a)
 {
     char *p;
-    
+
     if(!ajFileReadLine(*inf,s)) ajFatal("Premature EOF");
     if(!ajStrPrefixC(*s,"gx;")) ajFatal("No accnum (%s)",ajStrStr(*s));
     ajStrChomp(s);
@@ -202,14 +202,14 @@ static ajint printsextract_write_sets(AjPFile *inf, AjPFile *outf, AjPStr *s)
 {
     char *p;
     ajint n;
-    
+
     if(!ajFileReadLine(*inf,s)) ajFatal("Premature EOF");
     if(!ajStrPrefixC(*s,"gn;")) ajFatal("No gn; (%s)",ajStrStr(*s));
     p=ajStrStr(*s);
     n=1;
     p=strchr(p,(ajint)'(');
     if(!p) ajFmtPrintF(*outf,"1\n");
-    else 
+    else
     {
 	sscanf(p+1,"%d",&n);
 	ajFmtPrintF(*outf,"%d\n",n);
@@ -236,7 +236,7 @@ static void printsextract_write_title(AjPFile *inf, AjPFile *outf, AjPStr *s)
     if(!ajStrPrefixC(*s,"gt;")) ajFatal("No title (%s)",ajStrStr(*s));
     ajFmtPrintF(*outf,"%s\n",ajStrStr(*s)+4);
 }
-    
+
 
 /* @funcstatic printsextract_write_desc ***************************************
 **
@@ -255,7 +255,7 @@ static void printsextract_write_desc(AjPFile *inf, AjPStr *s, AjPStr *a,
     AjPFile fp;
     AjPStr  fname;
     AjBool  e;
-    
+
     fname = ajStrNewC("PRINTS/");
     ajStrApp(&fname,*a);
     ajFileDataNewWrite(fname,&fp);
@@ -263,7 +263,7 @@ static void printsextract_write_desc(AjPFile *inf, AjPStr *s, AjPStr *a,
     while((e=ajFileReadLine(*inf,s)))
 	if(ajStrPrefixC(*s,"gd;")) break;
     if(!e) ajFatal("Premature EOF");
-    
+
     while(ajStrPrefixC(*s,"gd;"))
     {
 	if(ajStrLen(*s)<5) ajFmtPrintF(fp,"\n");
@@ -339,7 +339,7 @@ static void printsextract_getSeqNumbers(AjPFile *inf, ajint *cnts,
     ajint i;
     ajint c;
     ajint len;
-    
+
     for(i=0;i<n;++i)
     {
 	while(!ajStrPrefixC(*s,"fl;"))
@@ -400,7 +400,7 @@ static void printsextract_calcMatrices(AjPFile *inf, AjPFile *outf,
     ajint fmin;
     ajlong pos;
     ajint  t;
-    
+
     for(i=0;i<n;++i)
     {
 	pos = ajFileTell(*inf);
@@ -426,7 +426,7 @@ static void printsextract_calcMatrices(AjPFile *inf, AjPFile *outf,
 		    printf("Error\n");
 		++mat[ajAZToInt(*(p+k))][k];
 	    }
-	    
+
 	    ajFileReadLine(*inf,s);
 	}
 
@@ -441,7 +441,7 @@ static void printsextract_calcMatrices(AjPFile *inf, AjPFile *outf,
 
 	ajFileSeek(*inf,pos,SEEK_SET);
 	ajFileReadLine(*inf,s);
-	
+
 	while(!ajStrPrefixC(*s,"fd;"))
 	{
 	    if(!ajFileReadLine(*inf,s))
@@ -453,10 +453,10 @@ static void printsextract_calcMatrices(AjPFile *inf, AjPFile *outf,
 	    p=ajStrStr(*s)+4;
 	    for(k=0;k<c;++k)
 		{
-		    
+
 		    fmin+=mat[ajAZToInt(*(p+k))][k];
 		}
-	    
+
 	    min=(min<fmin) ? min : fmin;
 	    ajFileReadLine(*inf,s);
 	}
@@ -478,7 +478,7 @@ static void printsextract_calcMatrices(AjPFile *inf, AjPFile *outf,
 
 
 
-/* @funcstatic printsextract_printHeader *************************************
+/* @funcstatic printsextract_printHeader **************************************
 **
 ** Undocumented.
 **
@@ -489,8 +489,9 @@ static void printsextract_calcMatrices(AjPFile *inf, AjPFile *outf,
 
 static void printsextract_printHeader(AjPFile outf)
 {
-    ajFmtPrintF(outf,"# PRINTS matrix file for EMBOSS extracted from prints.dat\n");
-    
+    ajFmtPrintF(outf,"# PRINTS matrix file for EMBOSS extracted from "
+		"prints.dat\n");
+
     ajFmtPrintF(outf,"# Format:\n");
     ajFmtPrintF(outf,"# Line 1: PRINTS code\n");
     ajFmtPrintF(outf,"# Line 2: PRINTS accession number\n");

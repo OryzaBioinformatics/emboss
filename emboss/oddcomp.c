@@ -1,24 +1,24 @@
 /* @source oddcomp application
 **
 ** Identifies sequences with a region with a high composition of specific
-** words 
+** words
 **
 ** @author: Copyright (C) David Martin (david.martin@biotek.uio.no) based on
 ** compseq by Gary Williams
 ** @@
 **
 ** Last modified 8 November 1999 David Martin.
-** 
+**
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -80,6 +80,8 @@ int main(int argc, char **argv)
     window = ajAcdGetInt ("window");
     outfile = ajAcdGetOutfile ("outfile");
     compdata = ajAcdGetInfile ("compdata");
+    ignorebz = ajAcdGetBool ("ignorebz");
+
     /* number of overlapping words in a window */
     ringsize = window - word + 1;
 
@@ -126,25 +128,27 @@ int main(int argc, char **argv)
 
 	    (void) oddcomp_makebigarray(no_elements, &bigarray);
 
-	    (void) oddcomp_makebigarray(ringsize, &windowbuffer); /* create a ring buffer */
+	    (void) oddcomp_makebigarray(ringsize, &windowbuffer); /* create
+								     ring
+								     buffer */
 
 	    first_time_round = ajFalse;
 	}
-    
+
 	(void) ajSeqToUpper(seq);
 	s = ajSeqChar(seq);
 
-	/*  initialise the results buffer for this sequence. 
-	 *  each word will require a certain number of counts to get to the 
+	/*  initialise the results buffer for this sequence.
+	 *  each word will require a certain number of counts to get to the
 	 *  necessary frequency. Set the number of counts to negative this so
-	 *  it is only necessary to check for counts >0. Also set the steps 
-	 *  variable to go the number of steps needed before a new check needs 
+	 *  it is only necessary to check for counts >0. Also set the steps
+	 *  variable to go the number of steps needed before a new check needs
 	 *  to be made (count minimum number of words required before the state
-	 *  can change.) 
+	 *  can change.)
 	 */
 	for (count=0; count< no_elements;count++)
 	{
-	    (void) ajStrClear(&dispseq); 
+	    (void) ajStrClear(&dispseq);
 	    /*
 	     *  need to clear the string as embNmerInt2Prot will prepend
 	     *  to it
@@ -236,7 +240,7 @@ int main(int argc, char **argv)
 		windowbuffer[pos%ringsize] = -1;
 		other++;
 	    }
-	}	
+	}
     }
 
 
@@ -254,7 +258,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-/* @funcstatic oddcomp_makebigarray ******************************************
+/* @funcstatic oddcomp_makebigarray *******************************************
 **
 ** Undocumented.
 **
@@ -272,7 +276,7 @@ static ajint oddcomp_makebigarray(ajlong no_elements, ajlong **bigarray)
     return 0;
 }
 
-/* @funcstatic oddcomp_readexpfreq *******************************************
+/* @funcstatic oddcomp_readexpfreq ********************************************
 **
 ** Undocumented.
 **
@@ -297,7 +301,7 @@ static ajint oddcomp_readexpfreq(AjPTable *exptable, AjPFile compdata,
     /* initialise the hash table - use case-insensitive comparison */
 
     *exptable = ajStrTableNewCase(350);
-  
+
 
 
     /* read the file */
@@ -323,7 +327,7 @@ static ajint oddcomp_readexpfreq(AjPTable *exptable, AjPFile compdata,
 	    (void) ajDie ("The 'Word size' line was not found, "
 			  "instead found:\n%S\n",line);
     }
-  
+
     /* read the file */
     while (ajFileReadLine(compdata, &line))
     {
@@ -332,7 +336,7 @@ static ajint oddcomp_readexpfreq(AjPTable *exptable, AjPFile compdata,
 	    continue;
 	if (!ajStrLen(line))
 	    continue;
- 
+
 	/*
 	 *  look for the total number of counts - anything after this is
 	 *  our data
@@ -350,7 +354,7 @@ static ajint oddcomp_readexpfreq(AjPTable *exptable, AjPFile compdata,
 	if (!ajStrLen(line))
 	    continue;
 
-	tokens = ajStrTokenInit(line, whiteSpace); 
+	tokens = ajStrTokenInit(line, whiteSpace);
 
 	/* get the word as the key */
 	key = ajStrNew();
@@ -364,11 +368,11 @@ static ajint oddcomp_readexpfreq(AjPTable *exptable, AjPFile compdata,
 	(void) ajStrToken( &value, &tokens, NULL);
 	(void) ajTablePut( *exptable, key, value);
 	(void) ajStrTokenClear( &tokens);
-    }    
+    }
 
     /* tidy up */
     ajStrDel(&line);
     ajStrDel(&sizestr);
-  
+
     return 0;
 }

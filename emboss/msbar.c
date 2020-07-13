@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -39,7 +39,7 @@ static void msbar_Duplicate(AjPStr *str, ajint start, ajint end);
 
 
 
-/* @prog msbar ***************************************************************
+/* @prog msbar ****************************************************************
 **
 ** Mutate sequence beyond all recognition
 **
@@ -108,7 +108,7 @@ int main(int argc, char **argv)
     (void) ajSeqWriteClose (seqout);
 
     ajStrDel(&str);
-    
+
     ajExit ();
     return 0;
 }
@@ -116,7 +116,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic msbar_blockmutn ***********************************************
+/* @funcstatic msbar_blockmutn ************************************************
 **
 ** Undocumented.
 **
@@ -145,7 +145,7 @@ static void msbar_blockmutn(AjPStr *str, AjBool isnuc, AjPStr *blocklist,
 	/* None */
 	if (!ajStrCmpC(blocklist[i], "0"))
 	    return;
-      
+
 	/* get the option value */
 	(void) ajStrToInt(blocklist[i], &opt);
 
@@ -177,14 +177,14 @@ static void msbar_blockmutn(AjPStr *str, AjBool isnuc, AjPStr *blocklist,
 		(double)(max - min);
 	}
 
-    
+
 	if (opt == 2)
 	{
 	    /* Insert */
 	    (void) ajDebug("block insert from %d to %d\n", rposstart, rposend);
 	    (void) msbar_Insert(str, isnuc, rposstart, rposend);
 	}
-    
+
 	if (opt == 3)
 	{
 	    /* Delete */
@@ -192,15 +192,15 @@ static void msbar_blockmutn(AjPStr *str, AjBool isnuc, AjPStr *blocklist,
 			   rposend);
 	    (void) ajStrCut(str, rposstart, rposend);
 	}
-    
+
 	if (opt == 4)
 	{
 	    /* Change */
 	    (void) ajDebug("block change from %d to %d\n", rposstart, rposend);
 	    (void) ajStrCut(str, rposstart, rposend);
-	    (void) msbar_Insert(str, isnuc, rposstart, rposend);      
+	    (void) msbar_Insert(str, isnuc, rposstart, rposend);
 	}
-    
+
 	if (opt == 5)
 	{
 	    /* Duplication */
@@ -208,7 +208,7 @@ static void msbar_blockmutn(AjPStr *str, AjBool isnuc, AjPStr *blocklist,
 			   rposend);
 	    (void) msbar_Duplicate(str, rposstart, rposend);
 	}
-    
+
 	if (opt == 6)
 	{
 	    /* Move */
@@ -230,7 +230,7 @@ static void msbar_blockmutn(AjPStr *str, AjBool isnuc, AjPStr *blocklist,
 }
 
 
-/* @funcstatic msbar_codonmutn ***********************************************
+/* @funcstatic msbar_codonmutn ************************************************
 **
 ** Undocumented.
 **
@@ -255,7 +255,7 @@ static void msbar_codonmutn(AjPStr *str, AjBool isnuc, AjPStr *codonlist,
 
 	/* None */
 	if (!ajStrCmpC(codonlist[i], "0")) return;
-      
+
 	/* get the option value */
 	(void) ajStrToInt(codonlist[i], &opt);
 
@@ -281,9 +281,9 @@ static void msbar_codonmutn(AjPStr *str, AjBool isnuc, AjPStr *codonlist,
 	{
 	    /* Insert */
 	    (void) ajDebug("codon insert at %d\n", rpos);
-	    (void) msbar_Insert(str, isnuc, rpos, rpos+2);      
+	    (void) msbar_Insert(str, isnuc, rpos, rpos+2);
 	}
-    
+
 	if (opt == 3)
 	{
 	    /* Delete */
@@ -296,17 +296,17 @@ static void msbar_codonmutn(AjPStr *str, AjBool isnuc, AjPStr *codonlist,
 	    /* Change */
 	    (void) ajDebug("codon change at %d\n", rpos);
 	    (void) ajStrCut(str, rpos, rpos+2);
-	    (void) msbar_Insert(str, isnuc, rpos, rpos+2);      
-	} 
-    
+	    (void) msbar_Insert(str, isnuc, rpos, rpos+2);
+	}
+
 	if (opt == 5)
 	{
 	    /* Duplication */
 	    (void) ajDebug("codon duplication at %d\n", rpos);
 	    (void) msbar_Duplicate(str, rpos, rpos+2);
 
-	} 
-    
+	}
+
 	if (opt == 6)
 	{
 	    /* Move */
@@ -331,7 +331,7 @@ static void msbar_codonmutn(AjPStr *str, AjBool isnuc, AjPStr *codonlist,
 
 
 
-/* @funcstatic msbar_pointmutn ***********************************************
+/* @funcstatic msbar_pointmutn ************************************************
 **
 ** Undocumented.
 **
@@ -352,7 +352,7 @@ static void msbar_pointmutn(AjPStr *str, AjBool isnuc, AjPStr *pointlist)
 	(void) ajDebug("Next point mutation operation = %S\n", pointlist[i]);
 	/* None */
 	if (!ajStrCmpC(pointlist[i], "0")) return;
-      
+
 	/* get the option value */
 	(void) ajStrToInt(pointlist[i], &opt);
 
@@ -370,9 +370,9 @@ static void msbar_pointmutn(AjPStr *str, AjBool isnuc, AjPStr *pointlist)
 	{
 	    /* Insert */
 	    (void) ajDebug("Point insert at %d\n", rpos);
-	    (void) msbar_Insert(str, isnuc, rpos, rpos);      
+	    (void) msbar_Insert(str, isnuc, rpos, rpos);
 
-	} 
+	}
 
 	if (opt == 3)
 	{
@@ -380,24 +380,24 @@ static void msbar_pointmutn(AjPStr *str, AjBool isnuc, AjPStr *pointlist)
 	    (void) ajDebug("Point deletion at %d\n", rpos);
 	    (void) ajStrCut(str, rpos, rpos);
 
-	} 
-    
+	}
+
 	if (opt == 4)
 	{
 	    /* Change */
 	    (void) ajDebug("Point change at %d\n", rpos);
 	    (void) ajStrCut(str, rpos, rpos);
-	    (void) msbar_Insert(str, isnuc, rpos, rpos);      
+	    (void) msbar_Insert(str, isnuc, rpos, rpos);
 
-	} 
-    
+	}
+
 	if (opt == 5)
 	{
 	    /* Duplication */
 	    (void) ajDebug("Point duplication at %d\n", rpos);
 	    (void) msbar_Duplicate(str, rpos, rpos);
 
-	} 
+	}
 
 	if (opt == 6)
 	{
@@ -443,7 +443,7 @@ static void msbar_Insert(AjPStr *str, AjBool isnuc, ajint start, ajint end)
 	else
 	{
 	    r = ajRandomNumberD() * (double)strlen(prot);
-	    (void) ajStrAppK(&ins, prot[r]);      
+	    (void) ajStrAppK(&ins, prot[r]);
 	}
     }
     (void) ajDebug("Inserting %S at %d\n", ins, start);
@@ -453,7 +453,7 @@ static void msbar_Insert(AjPStr *str, AjBool isnuc, ajint start, ajint end)
     return;
 }
 
-/* @funcstatic msbar_Move ****************************************************
+/* @funcstatic msbar_Move *****************************************************
 **
 ** Undocumented.
 **
@@ -476,7 +476,7 @@ static void msbar_Move(AjPStr *str, ajint start, ajint end, ajint destination)
     return;
 }
 
-/* @funcstatic msbar_Duplicate ***********************************************
+/* @funcstatic msbar_Duplicate ************************************************
 **
 ** Undocumented.
 **

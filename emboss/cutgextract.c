@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 	"TCA","AGT","TCT","TCC","AGC","ACG","ACT","ACA",
 	"ACC","GTA","GTT","GTC","GTG","TGG","TAT","TAC"
     };
-    
+
     char *aa=
 	"***AAAACCDDEEFFGGGGHHIIIKKLLLLLLMNNPPPPQQRRRRRRSSSSSSTTTTVVVVWYY";
 
@@ -67,13 +67,13 @@ int main(int argc, char **argv)
     AjPStr key=NULL;
     AjPStr tmpkey=NULL;
     AjPInt value=NULL;
-    
+
     AjPTable table=NULL;
     ajint i=0;
     ajint j=0;
     ajint n=0;
     ajint x=0;
-    
+
     AjPStr *array=NULL;
     AjPCod codon=NULL;
     ajint sum=0;
@@ -82,8 +82,8 @@ int main(int argc, char **argv)
     AjPList flist = NULL;
     AjPStr  entry = NULL;
     AjPStr  wild  = NULL;
-    
-    
+
+
     embInit("cutgextract",argc,argv);
 
 
@@ -92,13 +92,13 @@ int main(int argc, char **argv)
     tmpkey = ajStrNew();
     fname  = ajStrNew();
 
-    
+
     table = ajStrTableNew(TABLE_ESTIMATE);
-    
+
 
     flist = ajAcdGetDirlist("directory");
     wild  = ajAcdGetString("wildspec");
-    
+
 
     while(ajListPop(flist,(void **)&entry))
     {
@@ -107,7 +107,7 @@ int main(int argc, char **argv)
 	    ajStrDel(&entry);
 	    continue;
 	}
-	
+
 	inf = ajFileNewIn(entry);
 	if(!inf)
 	    ajFatal("cannot open file %S",entry);
@@ -140,7 +140,7 @@ int main(int argc, char **argv)
 	ajStrDel(&entry);
 	ajFileClose(&inf);
     }
-    
+
 
     array = (AjPStr *) ajTableToarray(table,NULL);
     i=0;
@@ -179,14 +179,14 @@ int main(int argc, char **argv)
 	ajIntDel(&value);
 	ajCodDel(&codon);
     }
-    
+
 
 
     ajTableFree(&table);
 
 
     ajListDel(&flist);
-    
+
 
     ajExit();
     return 0;
@@ -213,13 +213,13 @@ static char* cutgextract_next(AjPFile inf, AjPInt *array)
     ajint len;
     char *p=NULL;
     char c;
-    
+
     if(!line)
     {
 	line = ajStrNew();
 	org  = ajStrNew();
     }
-    
+
     ajStrAssC(&line,"");
 
     while(*ajStrStr(line) != '>')
@@ -261,7 +261,7 @@ static char* cutgextract_next(AjPFile inf, AjPInt *array)
 
 static void cutgextract_readcodons(AjPFile inf, AjPInt *count)
 {
-    static int cutidx[] = 
+    static int cutidx[] =
     {
 	42,43,46,41,45,44,26,30,31,29,27,28,48,51,47,50,
 	52,49,55,56,53,54,36,38,35,37, 4, 6, 3, 5,17,18,
@@ -270,11 +270,11 @@ static void cutgextract_readcodons(AjPFile inf, AjPInt *count)
     };
     static AjPStr line=NULL;
     static AjPStr value=NULL;
-    
+
     AjPStrTok token=NULL;
     ajint i;
     ajint n=0;
-    
+
 
     if(!line)
     {
@@ -284,7 +284,7 @@ static void cutgextract_readcodons(AjPFile inf, AjPInt *count)
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature end of file");
-    
+
 
     token = ajStrTokenInit(line," \n\t\r");
     for(i=0;i<CODONS;++i)
@@ -293,7 +293,7 @@ static void cutgextract_readcodons(AjPFile inf, AjPInt *count)
 	ajStrToInt(value,&n);
 	ajIntPut(count,cutidx[i],n);
     }
-    
+
     ajStrTokenClear(&token);
 
     return;

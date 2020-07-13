@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 	p = ajSeqChar(seq);
 	ajStrAssSubC(&substr,p,begin-1,end-1);
 	ajStrToUpper(&substr);
-	
+
 	if(!delete)
 	    biosed_replace(&substr,target,replace);
 	else
@@ -81,17 +81,17 @@ int main(int argc, char **argv)
 	ajSeqReplace(seq,substr);
 	ajSeqAllWrite(outseq,seq);
     }
-    
+
     ajStrDel(&substr);
     ajStrDel(&str);
     ajSeqWriteClose(outseq);
-    
+
     ajExit();
     return 0;
 }
 
 
-/* @funcstatic biosed_replace ***********************************************
+/* @funcstatic biosed_replace *************************************************
 **
 ** Generic (unoptimised) replacement of all matching string subsections
 **
@@ -106,10 +106,10 @@ static void biosed_replace(AjPStr *substr, AjPStr target, AjPStr replace)
 {
     AjPStr str = NULL;
     AjPStr tmp = NULL;
-    
+
     ajint  tlen;
     ajint  end=0;
-    
+
     char   *p  = NULL;
     char   *q  = NULL;
     char   *v;
@@ -130,7 +130,7 @@ static void biosed_replace(AjPStr *substr, AjPStr target, AjPStr replace)
 	    ajStrAssSubC(&tmp,p,0,end);
 	    ajStrApp(&str,tmp);
 	}
-	
+
 	ajStrApp(&str,replace);
 	p = q+tlen;
     }
@@ -144,7 +144,7 @@ static void biosed_replace(AjPStr *substr, AjPStr target, AjPStr replace)
 }
 
 
-/* @funcstatic biosed_delete ***********************************************
+/* @funcstatic biosed_delete **************************************************
 **
 ** Generic (unoptimised) delete of all matching string subsections
 **
@@ -162,13 +162,13 @@ static void biosed_delete(AjPStr *substr, AjPStr target)
     char   *v  = NULL;
     char   *t  = NULL;
     ajint  tlen = 0;
-    
+
     str = ajStrNew();
     ajStrAssS(&str,*substr);
     p = ajStrStr(str);
     v = ajStrStr(target);
     tlen = ajStrLen(target);
-    
+
     while((q=strstr(p,v)))
     {
 	t = q + tlen;

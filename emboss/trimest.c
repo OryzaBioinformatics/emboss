@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
 
         /* get sequence description */
         (void) ajStrAss(&desc, ajSeqGetDesc(seq));
-                                    
+
         /* get positions to cut in 5' poly-T and 3' poly-A tails */
 	if (fiveprime)
 		tail5 = trimest_get_tail(seq, 5, minlength, mismatches);
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 	    ajDebug("Tail=%d\n", tail5);
 	    (void) ajStrSub (&str, tail5, ajSeqLen(seq)-1);
 	    (void) ajStrAppC (&desc, " [poly-T tail removed]");
-	    
+
 	} else if (tail3 > tail5) {
 	/* remove 3' poly-A tail */
 	    ajDebug("Tail=%d\n", tail3);
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-/* @funcstatic trimest_get_tail **********************************************
+/* @funcstatic trimest_get_tail ***********************************************
 **
 ** Trim sequence
 **
@@ -169,10 +169,11 @@ static ajint trimest_get_tail(AjPSeq seq, ajint direction, ajint minlength,
             polycount = 0;
             mismatchcount++;
         }
-        	 
+
         if (polycount >= minlength)
             result = length+1;
-	ajDebug("end = %d, polycount = %d, so far tail=%d\n", direction, polycount, result);
+	ajDebug("end = %d, polycount = %d, so far tail=%d\n",
+		direction, polycount, result);
         if (mismatchcount > mismatches)
             break;
 

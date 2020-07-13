@@ -8,12 +8,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
     AjPStr opattern=NULL;
     AjPStr seqname=NULL;
     AjPStr text=NULL;
-    
+
     AjPList l;
 
     AjPStr *lframe;
@@ -57,13 +57,13 @@ int main(int argc, char **argv)
     AjPStr pro=NULL;
     ajint    frameno;
 
-    
+
     ajint plen;
     ajint mismatch;
-    
+
     AjBool amino;
     AjBool carboxyl;
-   
+
     ajint    type=0;
     ajint    *buf=NULL;
     ajint    hits=0;
@@ -71,7 +71,7 @@ int main(int argc, char **argv)
     ajint    i;
     ajint    begin;
     ajint    end;
-    
+
     EmbOPatBYPNode off[AJALPHA];
 
     ajuint *sotable=NULL;
@@ -80,20 +80,20 @@ int main(int argc, char **argv)
     AjPStr	 regexp=NULL;
 
     ajint **skipm=NULL;
-    
+
 
     AjPStr         tmpstr = NULL;
     void   *tidy=NULL;
 
     embInit ("fuzztran", argc, argv);
-    
+
     seqall   = ajAcdGetSeqall("sequence");
     pattern  = ajAcdGetString("pattern");
     report = ajAcdGetReport ("outfile");
     mismatch = ajAcdGetInt("mismatch");
     lgcode   = ajAcdGetList("table");
     lframe   = ajAcdGetList("frame");
-        
+
     ajFmtPrintAppS (&tmpstr, "Pattern: %S\n", pattern);
     ajFmtPrintAppS (&tmpstr, "Mismatch: %d\n", mismatch);
     ajFmtPrintAppS (&tmpstr, "TransTable: %S\n", ajAcdValue("table"));
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
     frame = lframe[0];
     (void) ajStrToInt(lgcode[0],&table);
     ttable = ajTrnNewI(table);
-    
+
 
     plen = ajStrLen(pattern);
     ajStrAssC(&opattern,ajStrStr(pattern));
@@ -119,7 +119,7 @@ int main(int argc, char **argv)
 
     text = ajStrNew();
     pro  = ajStrNew();
-    
+
 
     while(ajSeqallNext(seqall,&seq))
     {
@@ -206,7 +206,7 @@ int main(int argc, char **argv)
 		fuzztran_save_hits(&l,hits, 1, pro, &tab, seq);
 	    }
 	    ajStrAssC(&pro,"");
-	    
+
 	    ajTrnStrFrame(ttable,text,2,&pro);
 	    embPatFuzzSearch(type,begin,pattern,opattern,seqname,pro,&l,
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
@@ -270,7 +270,7 @@ int main(int argc, char **argv)
 	    }
 	    ajStrAssC(&pro,"");
 	}
-	
+
 	if (ajFeattableSize(tab))
 	{
 	  (void) ajReportWrite(report, tab, seq);
@@ -278,14 +278,14 @@ int main(int argc, char **argv)
 	}
 	ajListDel(&l);
     }
-    
+
 
 
     if(type==6)
 	for(i=0;i<m;++i) AJFREE(skipm[i]);
-    
+
     if(tidy) AJFREE(tidy);
-    
+
     ajStrDel(&pro);
     ajStrDel(&text);
     ajStrDel(&pattern);
@@ -300,7 +300,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic fuzztran_save_hits ********************************************
+/* @funcstatic fuzztran_save_hits *********************************************
 **
 ** Save the hits in a feature table for later reporting.
 **
@@ -353,7 +353,7 @@ static void fuzztran_save_hits(AjPList *l, ajint hits, ajint fnum,
     }
 
     slen = end-begin+1;
-    
+
     s=ajStrNew();
     ff = abs(fnum);
     if(ff>3)
@@ -364,9 +364,9 @@ static void fuzztran_save_hits(AjPList *l, ajint hits, ajint fnum,
     ff%=3;
     if(ff)
 	ff-=3;
-    
+
     ajListReverse(*l);
-    
+
     for(i=0;i<hits;++i)
     {
 	ajListPop(*l,(void **)&m);
@@ -410,6 +410,6 @@ static void fuzztran_save_hits(AjPList *l, ajint hits, ajint fnum,
 
 
     ajStrDel(&s);
-    
+
     return;
 }

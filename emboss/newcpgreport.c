@@ -40,7 +40,7 @@ int main(int argc, char **argv)
     AjPStr    strand=NULL;
     AjPStr    substr=NULL;
     AjPStr    bases=NULL;
-    
+
     ajint begin;
     ajint end;
     ajint len;
@@ -53,18 +53,18 @@ int main(int argc, char **argv)
     ajint shift;
     ajint plstart;
     ajint plend;
-    
+
     float  *xypc=NULL;
     float  *obsexp=NULL;
     AjBool *thresh=NULL;
     float  obsexpmax;
-    
+
     ajint i;
     ajint maxarr;
 
-    
+
     embInit("newcpgreport",argc,argv);
-    
+
     seqall    = ajAcdGetSeqall("sequence");
     window    = ajAcdGetInt("window");
     shift     = ajAcdGetInt("shift");
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
     minobsexp = ajAcdGetFloat("minoe");
     minlen    = ajAcdGetInt("minlen");
     minpc     = ajAcdGetFloat("minpc");
-    
+
     substr = ajStrNew();
     bases  = ajStrNewC("CG");
     maxarr = 0;
@@ -96,23 +96,23 @@ int main(int argc, char **argv)
 	}
 	for(i=0;i<len;++i)
 	    obsexp[i]=xypc[i]=0.0;
-	
+
 
 	newcpgreport_findbases(&substr, begin, len, window, shift, obsexp,
 			       xypc, &bases, &obsexpmax, &plstart, &plend);
-	
+
 	newcpgreport_identify(outf, obsexp, xypc, thresh, 0, len, shift,
 			      ajStrStr(bases), ajSeqName(seq), minlen,
 			      minobsexp, minpc, ajStrStr(strand));
-	
+
 	ajStrDel(&strand);
    }
-    
-    
+
+
     ajSeqDel(&seq);
     ajStrDel(&substr);
     ajFileClose(&outf);
-    
+
     ajExit();
     return 0;
 }
@@ -149,7 +149,7 @@ static void newcpgreport_findbases(AjPStr *substr, ajint begin, ajint len,
     float cxf;
     float cyf;
     float windowf;
-    
+
 
     float obs;
     float exp;
@@ -166,7 +166,7 @@ static void newcpgreport_findbases(AjPStr *substr, ajint begin, ajint len,
     *obsexpmax = 0.0;
     offset=window/2;
     *plstart = offset;
-    q = ajStrStr(*bases);	
+    q = ajStrStr(*bases);
 
     for(i=0; i<(len-window+1);i+=shift)
     {
@@ -211,7 +211,7 @@ static void newcpgreport_countbases(char *seq, char *bases, ajint window,
 				    ajint *cx, ajint *cy, ajint *cxpy)
 {
     ajint i;
-    
+
     ajint codex;
     ajint codey;
     ajint codea;
@@ -267,14 +267,14 @@ static void newcpgreport_identify(AjPFile outf, float *obsexp, float *xypc,
 				  AjBool *thresh, ajint begin, ajint len,
 				  ajint shift, char *bases, char *name,
 				  ajint minlen, float minobsexp, float minpc,
-				  char *seq) 
+				  char *seq)
 {
     static ajint avwindow=10;
     float avpc;
     float avobsexp;
     float sumpc;
     float sumobsexp;
-    
+
     ajint i;
     ajint pos;
     ajint posmin;
@@ -300,7 +300,7 @@ static void newcpgreport_identify(AjPFile outf, float *obsexp, float *xypc,
 	    sumpc += xypc[i];
 	    sumobsexp += obsexp[i];
 	}
-	
+
 	avpc = sumpc/(float)avwindow;
 	avobsexp = sumobsexp/(float)avwindow;
 	ajDebug("sumpc: %.2f sumobsexp: %.2f\n", sumpc, sumobsexp);
@@ -329,7 +329,7 @@ static void newcpgreport_identify(AjPFile outf, float *obsexp, float *xypc,
     }
 
 
-  
+
 
     newcpgreport_reportislands(outf, thresh, bases, name, minobsexp, minpc,
 			       minlen, begin, len, seq);
@@ -369,7 +369,7 @@ static void newcpgreport_reportislands(AjPFile outf, AjBool *thresh,
     ajint slen;
     ajint i;
     ajint cnt=0;
-    
+
     ajFmtPrintF(outf,"ID   %s  %d BP.\n",name, len);
     ajFmtPrintF(outf,"XX\n");
     ajFmtPrintF(outf,"DE   CpG Island report.\n");
@@ -380,8 +380,8 @@ static void newcpgreport_reportislands(AjPFile outf, AjBool *thresh,
     ajFmtPrintF(outf,"CC   Length > %d.\n",minlen);
     ajFmtPrintF(outf,"XX\n");
     ajFmtPrintF(outf,"FH   Key              Location/Qualifiers\n");
-    
-    
+
+
     island = ajFalse;
     for(i=0;i<len;++i)
     {
@@ -397,9 +397,9 @@ static void newcpgreport_reportislands(AjPFile outf, AjBool *thresh,
 		ajFmtPrintF(outf,"FT                    /size=%d\n",
 			    slen);
 		newcpgreport_compisl(outf, seq, startpos+begin+1,
-				     endpos+begin);	
+				     endpos+begin);
 		++cnt;
-		
+
 	    }
 	}
 	else
@@ -409,7 +409,7 @@ static void newcpgreport_reportislands(AjPFile outf, AjBool *thresh,
 
 	}
     }
-		
+
     if(island)
     {
         slen=len-startpos+1;
@@ -421,14 +421,14 @@ static void newcpgreport_reportislands(AjPFile outf, AjBool *thresh,
 	newcpgreport_compisl(outf, seq, startpos+begin+1, endpos+begin);
 	++cnt;
     }
-    
+
     if(cnt < 1)
 	ajFmtPrintF(outf,"FT   no islands detected\n");
     else
 	ajFmtPrintF(outf,"FT   numislands       %d\n",cnt);
-    
+
     ajFmtPrintF(outf,"//\n");
-    
+
 
     return;
 }
@@ -461,8 +461,8 @@ static void newcpgreport_compisl(AjPFile outf, char *p, ajint begin1,
     float oe;
 
     len = end1-begin1+1;
-    
-    
+
+
     for(i=begin1;i<end1;++i)
     {
 	if(p[i]=='C')
@@ -471,11 +471,11 @@ static void newcpgreport_compisl(AjPFile outf, char *p, ajint begin1,
 	    if (p[i+1]=='G')
 		++CG;
 	}
-	
+
 	if (p[i]=='G')
 	    ++G;
     }
-    
+
     sumcg = C + G;
     pcg   = ((float)sumcg/(float)len) * 100.;
     oe    = (float)(CG * len)/(float)(C * G);
@@ -483,7 +483,7 @@ static void newcpgreport_compisl(AjPFile outf, char *p, ajint begin1,
     ajFmtPrintF(outf,"FT                    /Sum C+G=%d\n",sumcg);
     ajFmtPrintF(outf,"FT                    /Percent CG=%.2f\n",pcg);
     ajFmtPrintF(outf,"FT                    /ObsExp=%.2f\n",oe);
-    
-    
+
+
     return;
 }
