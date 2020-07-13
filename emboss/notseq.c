@@ -21,6 +21,7 @@
 ******************************************************************************/
 #include "emboss.h"
 
+static void notseq_readfile(AjPStr *pattern);
 
 /* @prog notseq ***************************************************************
 **
@@ -46,6 +47,8 @@ int main(int argc, char **argv)
     junkout = ajAcdGetSeqoutall ("junkout");
     seqall = ajAcdGetSeqall ("sequence");
     pattern = ajAcdGetString ("exclude");
+
+    notseq_readfile(&pattern);
 
     while (ajSeqallNext(seqall, &seq))
     {
@@ -79,3 +82,43 @@ int main(int argc, char **argv)
 
     return 0;
 }
+/* @funcstatic notseq_readfile ****************************
+**
+** If the list of names starts with a '@', open that file, read in
+** the list of names and replaces the input string with the names
+**
+** @param [r] pattern [AjPStr*] names to search for or '@file'
+** @return [void]
+** @@
+******************************************************************************/
+
+static void notseq_readfile(AjPStr *pattern)
+{
+    AjPFile file=NULL;
+    AjPStr line;
+    char   *p=NULL;
+
+    if (ajStrFindC(*pattern, "@") == 0)
+    {
+        ajStrTrimC(pattern, "@");       /* remove the @ */
+        file = ajFileNewIn(*pattern);
+        if (file == NULL)
+            ajDie("Cannot open the file of sequence names: '%S'", pattern);
+
+        /* blank off the file name and replace with the sequence names */
+        ajStrClear(pattern);
+        line = ajStrNew();
+        while(ajFileReadLine(file, &line))
+        {
+            p = ajStrStr(line);
+            if (!*p || *p == '#' || *p == '!') continue;
+            ajStrApp(pattern, line);
+            ajStrAppC(pattern, ",");
+        }
+        ajStrDel(&line);
+
+        ajFileClose(&file);
+    }
+
+    return;
+}              

@@ -1,9 +1,8 @@
 
-                               EMBOSS: notseq
-     _________________________________________________________________
+                                  notseq 
+                                      
    
-                                Program notseq
-                                       
+   
 Function
 
    Excludes a set of sequences and writes out the remaining ones
@@ -31,6 +30,14 @@ Description
    excluded sequences, and those that don't match are output to the file
    of sequences to be kept.
    
+   Note that the names of the sequences to be excluded are not standard
+   EMBOSS USAs. Only the name or accession number shoudl be specified,
+   not the database or file that these entries may occur in. These
+   excluded sequence names will be matched against the names of the input
+   sequences to see if there is a match. Wildcarded names may be
+   specified by using '*'s. Any specified names of sequences to be
+   excluded that are not found are simply ignored.
+   
 Usage
 
    Here is a sample session with notseq. In this case the excluded
@@ -38,17 +45,19 @@ Usage
    saved to any file.
    
 % notseq
-Input sequence(s): mydata.seq
-Output sequence [clone001.fasta]: mydata2.seq
-Sequence names to exclude: clone186, clone876
+Excludes a set of sequences and writes out the remaining ones
+Input sequence(s): globins.fasta
+Sequence names to exclude: myg_phyca,lgb2_luplu
+Output sequence [hbb_human.fasta]: mydata.seq
 
    Here is an example where the sequences to be excluded are saved to
    another file:
    
 % notseq -junkout excluded.seq
-Input sequence(s): mydata.seq
-Output sequence [clone001.fasta]: mydata2.seq
-Sequence names to exclude: clone99*
+Excludes a set of sequences and writes out the remaining ones
+Input sequence(s): globins.fasta
+Sequence names to exclude: hb*
+Output sequence [hbb_human.fasta]: mydata.seq
 
 Command line arguments
 
@@ -68,6 +77,9 @@ Command line arguments
                                   An example of a list of sequences to be
                                   excluded is:
                                   myseq, hs*, one two three
+                                  a file containing a list of sequence names
+                                  can be specified by giving the file name
+                                  preceeded by a '@', eg: '@names.dat'
   [-outseq]            seqoutall  Output sequence(s) USA
 
    Optional qualifiers:
@@ -77,7 +89,7 @@ Command line arguments
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -93,8 +105,10 @@ Command line arguments
    parameter. The list of sequence names can be separated by either
    spaces or commas. The sequence names can be wildcarded. The sequence
    names are case independent. An example of a list of sequences to be
-   excluded is: myseq, hs*, one two three Any string is accepted An empty
-   string is accepted
+   excluded is: myseq, hs*, one two three a file containing a list of
+   sequence names can be specified by giving the file name preceeded by a
+   '@', eg: '@names.dat' Any string is accepted An empty string is
+   accepted
    [-outseq]
    (Parameter 3) Output sequence(s) USA Writeable sequence(s)
    <sequence>.format
@@ -106,7 +120,17 @@ Command line arguments
    
 Input file format
 
-   Normal sequence USA.
+   The input sequences are a normal sequence USA.
+   
+   The names (or accession numbers) of the sequences to be excluded can
+   be entered as a file of such names by specifying an '@' followed by
+   the name of the file containing the sequence names. For example:
+   '@names.dat'.
+   
+   The names or accession numbers of the sequences to be excluded are not
+   standard EMBOSS USAs. Only the ID name or accession number can be
+   specified, you cannot specify the sequences as 'database:ID',
+   'file:accession', 'format::file', etc.
    
 Output file format
 
@@ -118,7 +142,10 @@ Data files
    
 Notes
 
-   None.
+   Note that the names or accession numbers of the sequences to be
+   excluded are not standard EMBOSS USAs. Only the ID name or accession
+   number can be specified, you cannot specify the sequences as
+   'database:ID', 'file:accession', 'format::file', etc.
    
 References
 
@@ -162,6 +189,7 @@ See also
    revseq       Reverse and complement a sequence
    seqret       Reads and writes (returns) sequences
    seqretsplit  Reads and writes (returns) sequences in individual files
+   skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
    swissparse   Retrieves sequences from swissprot using keyword search
    trimest      Trim poly-A tails off EST sequences
@@ -178,6 +206,9 @@ Author(s)
 History
 
    Written (9 Jan 2001) - Gary Williams
+   
+   Added ability to specify names to exclude as a list file (June 2002) -
+   Gary Williams
    
 Target users
 
