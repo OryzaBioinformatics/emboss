@@ -29,6 +29,9 @@
 # FP File pattern - /regexp/ to be found. Optional count to check exact number.
 # FZ [<=>]number File size test. Implicit test for zero size stdout/stderr unless stated
 # FC [<=>]number File linecount test
+# UC Comment (used un documenting the usage)
+# IC Comment (used in documenting the input files)
+# OC Comment (used in documenting the output files)
 # // End of test entry
 # 
 # Return codes: see %retcode definition
@@ -196,6 +199,10 @@ sub runtest ($) {
       }
       $outsize{$ifile-1} = $sizepatt;
       if ($sizepatt =~ /^[=]\s*0$/) {$filezero{$ifile-1}=1}
+    }
+
+# comments used by documentation scripts
+    elsif ($line =~ /^UC|^IC|^OC/) {
     }
 
 # end of test definition
