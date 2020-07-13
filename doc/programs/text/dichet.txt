@@ -1,9 +1,8 @@
 
-                               EMBOSS: dichet
-     _________________________________________________________________
+                                  dichet 
+                                      
    
-                                Program dichet
-                                       
+   
 Function
 
    Parse dictionary of heterogen groups
@@ -25,7 +24,7 @@ Command line arguments
    Mandatory qualifiers (* if not always prompted):
   [-inf]               infile     Name of raw input file (dictionary of
                                   heterogen groups)
-  [-dogrep]            bool       Search a directory of files with keywords?
+  [-dogrep]            boolean    Search a directory of files with keywords?
   [-outf]              outfile    Name of output file
 *  -path               string     Directory to search with keywords
 *  -extn               string     Exension of files to search in above
@@ -34,7 +33,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -94,14 +93,32 @@ Known bugs
 See also
 
    Program name Description
-   contacts Reads coordinate files and writes contact files
-   interface Reads coordinate files and writes inter-chain contact files
+   contacts Reads coordinate files and writes files of intra-chain
+   residue-residue contact data
+   hmmgen Generates a hidden Markov model for each alignment in a
+   directory
+   interface Reads coordinate files and writes files of inter-chain
+   residue-residue contact data
+   profgen Generates various profiles for each alignment in a directory
    psiblasts Runs PSI-BLAST given scopalign alignments
-   scopalign Generate alignments for SCOP families
-   seqsort Removes ambiguities from a set of hits resulting from a
-   database search
-   siggen Generates a sparse protein signature
-   sigscan Scans a sparse protein signature against swissprot
+   scopalign Generate alignments for families in a scop classification
+   file by using STAMP
+   scoprep Reorder scop classificaiton file so that the representative
+   structure of each family is given first
+   scopreso Removes low resolution domains from a scop classification
+   file
+   seqalign Generate extended alignments for families in a scop families
+   file by using CLUSTALW with seed alignments
+   seqsearch Generate files of hits for families in a scop classification
+   file by using PSI-BLAST with seed alignments
+   seqsort Reads multiple files of hits and writes a non-ambiguous file
+   of hits (scop families file) plus a validation file
+   seqwords Generate file of hits for scop families by searching
+   swissprot with keywords
+   siggen Generates a sparse protein signature from an alignment and
+   residue contact data
+   sigscan Scans a signature against swissprot and writes a signature
+   hits files
    
 Author(s)
 
