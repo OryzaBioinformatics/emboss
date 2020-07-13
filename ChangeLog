@@ -1,4 +1,39 @@
+Version 2.5.1
+
+	Whichdb new option -showall to see which databases are being
+	searched for use where searches hang. The order of searching is
+	undefined - it depends on the order in which databases are
+	returned from the internal table, which is unrelated to the order
+	in which they were defined.
+
+	Wordmatch alignments save the entire sequence but use part only.
+	Fixed all alignment formats to work with these by adding a
+	SubOffset attribute.
+	
+	Duplicate IDs fix. The database indexing programs skipped
+	duplicate IDs but did not reset the size of the entryname index
+	file so some queries could fail to find the later IDs in the
+	databases. Duplicate IDs are illegal for -nosystemsort (no easy
+	way to correct because entry numbers are stored internally). For
+	the default case duplicate IDs are merged even if they are
+	different. REFSEQ is the main problem area.
+	
+	Writing data files used EMBOSS_DATA, or by default the install
+	directory. Earlier versions, if not installed, could write to the
+	source tree emboss/data directory. Fixed to continue if there is
+	no install data directory, and to check EMBOSS_DATA (if defined) is
+	a real directory.
+	
+	sigcleave options pval and nval hardcoded. They depend on the
+	weight matrix size - which is hardcoded as 15 in the ACD file and
+	is not checked in the program. They were introduced in EGCG in
+	1988 but never used because no other weight matrix length was
+	tried.
 Version 2.5.0
+	"fasta" format now uses the "ncbi" parser, so both formats report
+	"fasta" as the format. "pearson" is the old "fasta" format for a few
+	cases (empty IDs for example) there ncbi parsing fails completely.
+
 	SPLITTER changed to match documentation. Old behaviour is
 	now selectable by using the -addoverlap command line
 	option.
@@ -28,7 +63,7 @@ Version 2.5.0
 	
 	Cleaned up string position code. Inspections showed ajStrPos and
 	related functions gave results from 0 to length of a string. This
-	caused confusion in many other functions and applictaions. These
+	caused confusion in many other functions and applications. These
 	functions are now static strPos functions because only ajstr.c had
 	calls to them (though the ajStrPos versions are still available).
 	All calls were checked for positions out of range. As a result,

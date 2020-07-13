@@ -37,10 +37,10 @@ pkglibdir = $(libdir)/EMBOSS
 pkgincludedir = $(includedir)/EMBOSS
 top_builddir = ../..
 
-ACLOCAL = ${SHELL} /m3/emboss/emboss/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /m3/emboss/emboss/missing --run autoconf
-AUTOMAKE = ${SHELL} /m3/emboss/emboss/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /m3/emboss/emboss/missing --run autoheader
+ACLOCAL = ${SHELL} /m6/emboss/emboss/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /m6/emboss/emboss/missing --run autoconf
+AUTOMAKE = ${SHELL} /m6/emboss/emboss/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /m6/emboss/emboss/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/bin/install -c
@@ -65,8 +65,8 @@ EXEEXT =
 OBJEXT = o
 PATH_SEPARATOR = :
 pkgdatadir = $(prefix)/share/$(PACKAGE)/doc/manuals
-AJAX_FIXED_ROOT = \"/m3/emboss/emboss/emboss\"
-AMTAR = ${SHELL} /m3/emboss/emboss/missing --run tar
+AJAX_FIXED_ROOT = \"/m6/emboss/emboss/emboss\"
+AMTAR = ${SHELL} /m6/emboss/emboss/missing --run tar
 AS = @AS@
 AWK = gawk
 CC = gcc
@@ -74,7 +74,7 @@ CPP = gcc -E
 DEPDIR = .deps
 DLLTOOL = @DLLTOOL@
 ECHO = echo
-EMBOSS_TOP = /m3/emboss/emboss
+EMBOSS_TOP = /m6/emboss/emboss
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 ISAIXIA64 = 
 JAVA_OK = 
@@ -85,7 +85,7 @@ OBJDUMP = @OBJDUMP@
 PACKAGE = EMBOSS
 RANLIB = ranlib
 STRIP = strip
-VERSION = 2.5.0
+VERSION = 2.5.1
 XLIB =  -L/usr/X11R6/lib -lX11 
 X_CFLAGS =  -I/usr/X11R6/include
 X_EXTRA_LIBS = 
@@ -94,7 +94,7 @@ X_PRE_LIBS =  -lSM -lICE
 am__include = include
 am__quote = 
 havejavac = 
-install_sh = /m3/emboss/emboss/install-sh
+install_sh = /m6/emboss/emboss/install-sh
 pkgdata_DATA = admin.sty admin.tex \
 admin.aux admin.dvi admin.log admin.pdf admin.ps admin.toc \
 adminguide.tar.gz program.ps.gz EMBOSS-FreeBSD-HOWTO.txt \
