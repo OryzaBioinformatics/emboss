@@ -37,7 +37,8 @@ int main(int argc, char **argv)
     AjPFile    outf;
     AjPCod     codon;
     AjPStr     substr;
-
+    AjBool     sum;
+    
     ajint ccnt;
     ajint beg;
     ajint end;
@@ -50,7 +51,8 @@ int main(int argc, char **argv)
     seqall    = ajAcdGetSeqall("seqall");
     codon     = ajAcdGetCodon("cfile");
     outf      = ajAcdGetOutfile("outfile");
-
+    sum       = ajAcdGetBool("sum");
+    
     ajCodClear(&codon);
 
     ccnt=0;
@@ -63,13 +65,25 @@ int main(int argc, char **argv)
 	ajStrAssSub(&substr,ajSeqStr(seq),beg-1,end-1);
 	ajStrToUpper(&substr);
 	ajCodCountTriplets(&codon,substr,&ccnt);
+	if(!sum)
+	{
+	    ajCodCalculateUsage(&codon,ccnt);
+	    Nc=ajCodCalcNc(&codon);
+	    
+	    ajFmtPrintF(outf,"%-20s Nc = %.3f\n",ajSeqName(seq),Nc);
+	    ajCodClear(&codon);
+	}
     }
 
-    ajCodCalculateUsage(&codon,ccnt);
-    Nc=ajCodCalcNc(&codon);
-
-    ajFmtPrintF(outf,"# CHIPS codon usage statistics\n\n");
-    ajFmtPrintF(outf,"Nc = %.3f\n",Nc);
+    if(sum)
+    {
+	ajCodCalculateUsage(&codon,ccnt);
+	Nc=ajCodCalcNc(&codon);
+	
+	ajFmtPrintF(outf,"# CHIPS codon usage statistics\n\n");
+	ajFmtPrintF(outf,"Nc = %.3f\n",Nc);
+    }
+    
 
 
 

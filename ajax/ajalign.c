@@ -2683,7 +2683,7 @@ static void alignDiff (AjPStr* pmark, AjPStr seq) {
     c = ajStrChar(*pmark, i);
     if (c == ' ') continue;
     d = ajStrChar(seq, i);
-    if (toupper(c) == toupper(d)) continue;
+    if (toupper((int)c) == toupper((int)d)) continue;
     ajStrReplaceC (pmark, i, s, 1);
   }
 
@@ -2718,7 +2718,7 @@ static void alignSim (AjPStr* pmark, const char idch, const char simch,
 
   for (i=0; i < ilen; i++) {
     c = ajStrChar(*pmark, i);
-    if (tolower(c) == 'x')
+    if (tolower((int)c) == 'x')
       ajStrReplaceK (pmark, i, misch, 1);
     else if (isupper((int)c))
       ajStrReplaceK (pmark, i, idch, 1);
@@ -3066,7 +3066,7 @@ static void alignConsStats(AjPAlign thys, ajint iali, AjPStr *cons,
     if(himatch >= fplural) {
       if (seqcharptr[highindex][khpos] != '-')
       {
-	res = toupper(seqcharptr[highindex][khpos]);
+	res = toupper((int)seqcharptr[highindex][khpos]);
       }
     }
 
@@ -3086,7 +3086,7 @@ static void alignConsStats(AjPAlign thys, ajint iali, AjPStr *cons,
     }
 
     if (issim && ! isident)
-      res = tolower(res);
+      res = tolower((int)res);
 
     ajStrAppK(cons,res);
     if (isident) ++*retident;

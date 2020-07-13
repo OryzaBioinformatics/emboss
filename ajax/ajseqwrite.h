@@ -84,6 +84,8 @@ void         ajSeqsetWrite (AjPSeqout seqout, AjPSeqset seq);
 void         ajSeqWrite (AjPSeqout seqout, AjPSeq seq);
 void         ajSeqWriteClose (AjPSeqout outseq);
 void         ajSeqWriteXyz(AjPFile outf, AjPStr seq, char *prefix);
+void         ajSssWriteXyz(AjPFile outf, AjPStr seq, char *prefix);
+
 
 #endif
 

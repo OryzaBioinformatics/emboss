@@ -94,7 +94,7 @@ int main(int argc, char **argv)
 
     if(!octanol_getwhitewimbleydata(datafile,&matrix[0],&err[0],&matrix2[0],
 				    &err2[0]))
-	ajDie("Could not read data file");
+	ajFatal ("Could not read data file");
 
     graphdata = ajGraphxyDataNewI(ajSeqLen(seq)-llen);
     ajGraphxySetColour(graphdata,GREEN);

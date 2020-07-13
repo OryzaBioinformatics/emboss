@@ -171,8 +171,8 @@ int main(int argc, char **argv)
 
     /* check that the translate range is ordered */
     if (!ajRangeOrdered(translaterange))
-	(void) ajDie("Translation ranges are not in ascending, "
-		     "non-overlapping order.");
+	(void) ajFatal ("Translation ranges are not in ascending, "
+			"non-overlapping order.");
 
 
     /* get the format to use */
@@ -375,23 +375,23 @@ static void showseq_FormatShow(EmbPShow ss, AjPStr format, AjPTrn trnTable,
 	else if (!ajStrCmpC(code, "B"))
 	    (void) embShowAddBlank(ss);
 	else if (!ajStrCmpC(code, "1"))
-	    (void) embShowAddTran (ss, trnTable, 1, threeletter, numberseq,
-				   translaterange, orfminsize);
+	    (void) embShowAddTran (ss, trnTable, 1, threeletter, numberseq, translaterange,
+				   orfminsize, AJFALSE, AJFALSE, AJFALSE, AJFALSE);
 	else if (!ajStrCmpC(code, "2"))
-	    (void) embShowAddTran (ss, trnTable, 2, threeletter, numberseq,
-				   NULL, orfminsize);
+	    (void) embShowAddTran (ss, trnTable, 2, threeletter, numberseq, NULL,
+				   orfminsize, AJFALSE, AJFALSE, AJFALSE, AJFALSE);
 	else if (!ajStrCmpC(code, "3"))
-	    (void) embShowAddTran (ss, trnTable, 3, threeletter, numberseq,
-				   NULL, orfminsize);
+	    (void) embShowAddTran (ss, trnTable, 3, threeletter, numberseq, NULL, 
+				   orfminsize, AJFALSE, AJFALSE, AJFALSE, AJFALSE);
 	else if (!ajStrCmpC(code, "-1"))
-	    (void) embShowAddTran (ss, trnTable, -1, threeletter, numberseq,
-				   NULL, orfminsize);
+	    (void) embShowAddTran (ss, trnTable, -1, threeletter, numberseq, NULL, 
+				   orfminsize, AJFALSE, AJFALSE, AJFALSE, AJFALSE);
 	else if (!ajStrCmpC(code, "-2"))
-	    (void) embShowAddTran (ss, trnTable, -2, threeletter, numberseq,
-				   NULL, orfminsize);
+	    (void) embShowAddTran (ss, trnTable, -2, threeletter, numberseq, NULL, 
+				   orfminsize, AJFALSE, AJFALSE, AJFALSE, AJFALSE);
 	else if (!ajStrCmpC(code, "-3"))
-	    (void) embShowAddTran (ss, trnTable, -3, threeletter, numberseq,
-				   NULL, orfminsize);
+	    (void) embShowAddTran (ss, trnTable, -3, threeletter, numberseq, NULL, 
+				   orfminsize, AJFALSE, AJFALSE, AJFALSE, AJFALSE);
 	else if (!ajStrCmpC(code, "T"))
 	    (void) embShowAddTicks(ss);
 	else if (!ajStrCmpC(code, "N"))
@@ -407,7 +407,7 @@ static void showseq_FormatShow(EmbPShow ss, AjPStr format, AjPTrn trnTable,
 	else if (!ajStrCmpC(code, "A"))
 	    (void) embShowAddNote (ss, annotation);
 	else
-	    (void) ajDie("Formatting code not recognised: '%S'", code);
+	    (void) ajFatal ("Formatting code not recognised: '%S'", code);
     }
 
     /* tidy up */
@@ -476,7 +476,7 @@ static void showseq_read_file_of_enzyme_names(AjPStr *enzymes)
 	ajStrTrimC(enzymes, "@");	/* remove the @ */
 	file = ajFileNewIn(*enzymes);
 	if (file == NULL)
-	    ajDie("Cannot open the file of enzyme names: '%S'", enzymes);
+	    ajFatal ("Cannot open the file of enzyme names: '%S'", enzymes);
 
 	/* blank off the enzyme file name and replace with the enzyme names */
 	ajStrClear(enzymes);

@@ -402,16 +402,16 @@ static void showalign_MakeAll (AjPSeq ref, AjPSeq seq, ajint **sub,
 	if (s[i] != '-')
 	{
 	    if (sub[ajSeqCvtK(cvt, r[i])][ajSeqCvtK(cvt, s[i])] <= 0)
-		s[i] = tolower(s[i]);	/* dissimilar to lowercase */
+		s[i] = tolower((int)s[i]);	/* dissimilar to lowercase */
 	    else
-		s[i] = toupper(s[i]);	/* similar to uppercase */
+		s[i] = toupper((int)s[i]);	/* similar to uppercase */
 	}
 
     /* is seq longer than ref? */
     if (lenseq > lenref)
 	for (; i<lenseq; i++)
 	    if (s[i] != '-')
-		s[i] = tolower(s[i]);	/* dissimilar to lowercase */;
+		s[i] = tolower((int)s[i]);	/* dissimilar to lowercase */;
 
     return;
 }
@@ -439,7 +439,7 @@ static void showalign_MakeIdentity (AjPSeq ref, AjPSeq seq)
     char *r = ajSeqChar(ref);
 
     for (i=0; i<lenref && s[i] != '\0'; i++)
-	if (toupper(s[i]) != toupper(r[i]) && s[i] != '-')
+	if (toupper((int)s[i]) != toupper((int)r[i]) && s[i] != '-')
 	    s[i] = '.';
 
     /* is seq longer than ref? */
@@ -482,7 +482,7 @@ static void showalign_MakeNonidentity (AjPSeq ref, AjPSeq seq, ajint **sub,
     for (i=0; i<lenref; i++)
 	if (s[i] != '-')
 	{
-	    if (toupper(s[i]) == toupper(r[i]))
+	    if (toupper((int)s[i]) == toupper((int)r[i]))
 		s[i] = '.';
 	    else
 	    {
@@ -490,9 +490,9 @@ static void showalign_MakeNonidentity (AjPSeq ref, AjPSeq seq, ajint **sub,
 		if (similarcase)
 		{
 		    if (sub[ajSeqCvtK(cvt, r[i])][ajSeqCvtK(cvt, s[i])] <= 0)
-			s[i] = toupper(s[i]);
+			s[i] = toupper((int)s[i]);
 		    else
-			s[i] = tolower(s[i]);
+			s[i] = tolower((int)s[i]);
 		}
 	    }
 	}
@@ -502,7 +502,7 @@ static void showalign_MakeNonidentity (AjPSeq ref, AjPSeq seq, ajint **sub,
     if (lenseq > lenref && similarcase)
 	for (; i<lenseq; i++)
 	    if (s[i] != '-')
-		s[i] = toupper(s[i]);
+		s[i] = toupper((int)s[i]);
 
 
     return;
@@ -546,10 +546,10 @@ static void showalign_MakeSimilar (AjPSeq ref, AjPSeq seq, ajint **sub,
 		/* change case based on similarity? */
 		if (similarcase)
 		{
-		    if (toupper(s[i]) == toupper(r[i]))
-			s[i] = toupper(s[i]);
+		    if (toupper((int)s[i]) == toupper((int)r[i]))
+			s[i] = toupper((int)s[i]);
 		    else
-			s[i] = tolower(s[i]);
+			s[i] = tolower((int)s[i]);
 		}
 	    }
 	}

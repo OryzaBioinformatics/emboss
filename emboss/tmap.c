@@ -798,7 +798,7 @@ static ajint tmap_pred1(float m_limit, float ml_limit, float e_limit, ajint nr)
 
     /*
      * 6.3.
-     * Divide segments ajlong enough to contain several tm segments
+     * Divide segments long enough to contain several tm segments
      */
 
     for (i=1; i<=tm_ant; i++)

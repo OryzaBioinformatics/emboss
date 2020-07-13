@@ -34,7 +34,7 @@ static void lindna_ReadInput(AjPFile infile, float *Start, float *End);
 static AjPStr lindna_ReadGroup(AjPFile infile, float *From, float *To,
 			       AjPStr *Name, char *FromSymbol, char *ToSymbol,
 			       AjPStr *Style, char *TextOri, ajint *NumLabels,
-			       ajint *NumNames, ajint *Color);
+			       ajint *NumNames, ajint *Colour);
 
 static float lindna_TextGroup(float Margin, float TextHeight, float TextLength,
 			      AjPStr *Name, char *TextOri, ajint NumLabels,
@@ -62,10 +62,10 @@ static void lindna_DrawGroup(float xDraw, float yDraw, float Border,
 			     float TextLength, float TextHeight, float *From,
 			     float *To, AjPStr *Name, char *FromSymbol,
 			     char *ToSymbol, AjPStr *Style,
-			     AjPStr InterSymbol, AjPStr InterTicks,
+			     AjPStr InterSymbol, AjBool InterTicks,
 			     char *TextOri, ajint NumLabels, ajint *NumNames,
 			     AjPStr GroupName, ajint *Adjust,
-			     ajint InterColor, ajint *Color, AjPStr BlockType);
+			     ajint InterColour, ajint *Colour, AjPStr BlockType);
 
 static float lindna_TextRuler(float Start, float End, ajint GapSize,
 			      float TextLength, float TextHeight,
@@ -80,19 +80,19 @@ static float lindna_HeightRuler(float Start, float End, ajint GapSize,
 static void lindna_DrawRuler(float xDraw, float yDraw, float Start, float End,
 			     float ReduceCoef, float TickHeight,
 			     float DrawLength, float RealLength, float Border,
-			     ajint GapSize, AjPStr TickLines,
+			     ajint GapSize, AjBool TickLines,
 			     float TextLength, float TextHeight, float postext,
-			     char TextOri, ajint Color);
+			     char TextOri, ajint Colour);
 
 static void lindna_DrawTicks(float xDraw, float yDraw, float TickHeight,
 			     float From, AjPStr Name, float TextLength,
 			     float TextHeight, float postext, char TextOri,
-			     ajint NumNames, ajint Adjust, ajint Color);
+			     ajint NumNames, ajint Adjust, ajint Colour);
 
 static void lindna_DrawBlocks(float xDraw, float yDraw, float BlockHeight,
 			      float TextHeight, float From, float To,
 			      AjPStr Name, float postext, char TextOri,
-			      ajint NumNames, ajint Adjust, ajint Color,
+			      ajint NumNames, ajint Adjust, ajint Colour,
 			      AjPStr BlockType);
 
 static void lindna_DrawRanges(float xDraw, float yDraw, float RangeHeight,
@@ -100,11 +100,11 @@ static void lindna_DrawRanges(float xDraw, float yDraw, float RangeHeight,
 			      char FromSymbol, char ToSymbol,
 			      float TextLength, float TextHeight,
 			      float postext, char TextOri, ajint NumNames,
-			      ajint Adjust, ajint Color);
+			      ajint Adjust, ajint Colour);
 
 static void lindna_InterBlocks(float xDraw, float yDraw, float BlockHeight,
 			       float From, float To, AjPStr InterSymbol,
-			       ajint Color);
+			       ajint Colour);
 
 static void lindna_DrawArrowHeadsOnLine(float xDraw, float yDraw, float Height,
 					float Length, ajint Way);
@@ -154,8 +154,8 @@ int main(int argc, char **argv)
     ajint NumLabels[MAXGROUPS];
     ajint NumNames[MAXGROUPS][MAXLABELS];
     ajint NumGroups;
-    ajint InterColor;
-    ajint Color[MAXGROUPS][MAXLABELS];
+    ajint InterColour;
+    ajint Colour[MAXGROUPS][MAXLABELS];
     ajint Adjust[MAXGROUPS][MAXLABELS];
     ajint AdjustMax[MAXGROUPS];
     char FromSymbol[MAXGROUPS][MAXLABELS];
@@ -189,10 +189,10 @@ int main(int argc, char **argv)
     AjPFile infile;
     AjPStr line;
     AjPStr GroupName[MAXGROUPS];
-    AjPStr Ruler;
+    AjBool Ruler;
     AjPStr InterSymbol;
-    AjPStr InterTicks;
-    AjPStr TickLines;
+    AjBool InterTicks;
+    AjBool TickLines;
     AjPStr BlockType;
     AjPStr Name[MAXGROUPS][MAXLABELS];
     AjPStr Style[MAXGROUPS][MAXLABELS];
@@ -213,22 +213,22 @@ int main(int argc, char **argv)
     ajGraphInit("lindna", argc, argv);
 
     /* to draw or not to draw the ruler */
-    Ruler = ajAcdGetString("ruler");
+    Ruler = ajAcdGetBool("ruler");
 
     /* get the type of blocks */
-    BlockType = ajAcdGetString("blocktype");
+    BlockType = ajAcdGetSelectI("blocktype", 1);
     /* get the type of junctions used to link blocks */
-    InterSymbol = ajAcdGetString("intersymbol");
-    /* get the color of junctions used to link blocks */
-    InterColor = ajAcdGetInt("intercolor");
+    InterSymbol = ajAcdGetSelectI("intersymbol",1);
+    /* get the colour of junctions used to link blocks */
+    InterColour = ajAcdGetInt("intercolour");
 
     /* to draw or not to draw junctions between ticks */
-    InterTicks = ajAcdGetString("interticks");
+    InterTicks = ajAcdGetBool("interticks");
 
     /* get the size of the intervals between the ruler's ticks */
     GapSize = ajAcdGetInt("gapsize");
     /* to draw or not to draw vertical lines at ruler's ticks */
-    TickLines = ajAcdGetString("ticklines");
+    TickLines = ajAcdGetBool("ticklines");
 
 
     /* set the output graphical context */
@@ -290,7 +290,7 @@ int main(int argc, char **argv)
 					    FromSymbol[i], ToSymbol[i],
 					    Style[i], TextOri[i],
 					    &NumLabels[i], NumNames[i],
-					    Color[i]);
+					    Colour[i]);
 	    i++;
 	}
     }
@@ -412,7 +412,7 @@ int main(int argc, char **argv)
 
     /* draw the ruler */
     yDraw-=RulerHeight;
-    if( ajStrCmpCaseCC(ajStrStr(Ruler), "Y")==0 ) {
+    if( Ruler ) {
       lindna_DrawRuler(xDraw, yDraw, Start, End, ReduceCoef, TickHeight,
 		     DrawLength, RealLength, Border, GapSize, TickLines,
 		     TextLength, TextHeight, postext, 'V', 1);
@@ -427,7 +427,7 @@ int main(int argc, char **argv)
 			 TextLength, TextHeight, From[i], To[i], Name[i],
 			 FromSymbol[i], ToSymbol[i], Style[i], InterSymbol,
 			 InterTicks, TextOri[i], NumLabels[i], NumNames[i],
-			 GroupName[i], Adjust[i], InterColor, Color[i],
+			 GroupName[i], Adjust[i], InterColour, Colour[i],
 			 BlockType);
 	ajStrDel(&GroupName[i]);
     }
@@ -674,35 +674,35 @@ static float lindna_HeightRuler(float Start, float End, ajint GapSize,
 ** @param [?] RealLength [float] Undocumented
 ** @param [?] Border [float] Undocumented
 ** @param [?] GapSize [ajint] Undocumented
-** @param [?] TickLines [AjPStr] Undocumented
+** @param [?] TickLines [AjBool] Undocumented
 ** @param [?] TextLength [float] Undocumented
 ** @param [?] TextHeight [float] Undocumented
 ** @param [?] postext [float] Undocumented
 ** @param [?] TextOri [char] Undocumented
-** @param [?] Color [ajint] Undocumented
+** @param [?] Colour [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
 static void lindna_DrawRuler(float xDraw, float yDraw, float Start, float End,
 			     float ReduceCoef, float TickHeight,
 			     float DrawLength, float RealLength, float Border,
-			     ajint GapSize, AjPStr TickLines,
+			     ajint GapSize, AjBool TickLines,
 			     float TextLength, float TextHeight,
-			     float postext, char TextOri, ajint Color)
+			     float postext, char TextOri, ajint Colour)
 {
     ajint i;
     AjPStr string = ajStrNew();
 
-    ajGraphSetFore(Color);
+    ajGraphSetFore(Colour);
 
     ajGraphDrawLine( xDraw, yDraw, xDraw+DrawLength, yDraw );
 
     /* set the molecule's start */
     ajStrFromInt(&string, Start);
-    if( ajStrCmpCaseCC(ajStrStr(TickLines), "Y")==0 )
+    if( TickLines )
 	ajGraphDrawLine(xDraw, Border, xDraw, yDraw);
     lindna_DrawTicks(xDraw, yDraw, TickHeight, 0.0, string,
-		     TextLength, TextHeight, postext, TextOri, 1, 0, Color);
+		     TextLength, TextHeight, postext, TextOri, 1, 0, Colour);
 
     /* draw the ruler's ticks */
     for(i=GapSize; i<End; i+=GapSize)
@@ -710,24 +710,24 @@ static void lindna_DrawRuler(float xDraw, float yDraw, float Start, float End,
 	if( i>Start )
 	{
 	    ajStrFromInt(&string, i);
-	    if( ajStrCmpCaseCC(ajStrStr(TickLines), "Y")==0 )
+	    if( TickLines )
 		ajGraphDrawLine(xDraw+1.0*(i-Start)/ReduceCoef,
 				Border, xDraw+1.0*(i-Start)/ReduceCoef,
 				yDraw);
 	    lindna_DrawTicks(xDraw, yDraw, TickHeight,
 			     1.0*(i-Start)/ReduceCoef, string, TextLength,
-			     TextHeight, postext, TextOri, 1, 0, Color);
+			     TextHeight, postext, TextOri, 1, 0, Colour);
 	}
     }
 
     /* set the molecule's end */
     ajStrFromInt(&string, End);
-    if( ajStrCmpCaseCC(ajStrStr(TickLines), "Y")==0 )
+    if( TickLines )
 	ajGraphDrawLine(xDraw+1.0*RealLength/ReduceCoef, Border,
 			xDraw+1.0*RealLength/ReduceCoef, yDraw);
     lindna_DrawTicks(xDraw, yDraw, TickHeight, 1.0*RealLength/ReduceCoef,
 		     string, TextLength, TextHeight, postext, TextOri, 1, 0,
-		     Color);
+		     Colour);
 
     ajStrDel(&string);
     return;
@@ -751,21 +751,21 @@ static void lindna_DrawRuler(float xDraw, float yDraw, float Start, float End,
 ** @param [?] TextOri [char] Undocumented
 ** @param [?] NumNames [ajint] Undocumented
 ** @param [?] Adjust [ajint] Undocumented
-** @param [?] Color [ajint] Undocumented
+** @param [?] Colour [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
 static void lindna_DrawTicks(float xDraw, float yDraw, float TickHeight,
 			     float From, AjPStr Name, float TextLength,
 			     float TextHeight, float postext, char TextOri,
-			     ajint NumNames, ajint Adjust, ajint Color)
+			     ajint NumNames, ajint Adjust, ajint Colour)
 {
     float x1Ticks = xDraw+From;
     float y1Ticks = yDraw;
     float x2Ticks = x1Ticks;
     float y2Ticks = y1Ticks+TickHeight;
 
-    ajGraphSetFore(Color);
+    ajGraphSetFore(Colour);
 
     ajGraphDrawLine( x1Ticks, y1Ticks, x2Ticks, y2Ticks );
     if( NumNames!=0 )
@@ -799,7 +799,7 @@ static void lindna_DrawTicks(float xDraw, float yDraw, float TickHeight,
 ** @param [?] TextOri [char] Undocumented
 ** @param [?] NumNames [ajint] Undocumented
 ** @param [?] Adjust [ajint] Undocumented
-** @param [?] Color [ajint] Undocumented
+** @param [?] Colour [ajint] Undocumented
 ** @param [?] BlockType [AjPStr] Undocumented
 ** @@
 ******************************************************************************/
@@ -807,7 +807,7 @@ static void lindna_DrawTicks(float xDraw, float yDraw, float TickHeight,
 static void lindna_DrawBlocks(float xDraw, float yDraw, float BlockHeight,
 			      float TextHeight, float From, float To,
 			      AjPStr Name, float postext, char TextOri,
-			      ajint NumNames, ajint Adjust, ajint Color,
+			      ajint NumNames, ajint Adjust, ajint Colour,
 			      AjPStr BlockType)
 {
     float x1Blocks = xDraw+From;
@@ -815,7 +815,7 @@ static void lindna_DrawBlocks(float xDraw, float yDraw, float BlockHeight,
     float x2Blocks = xDraw+To;
     float y2Blocks = y1Blocks-BlockHeight;
 
-    ajGraphSetFore(Color);
+    ajGraphSetFore(Colour);
     if( ajStrCmpCaseCC(ajStrStr(BlockType), "Open")==0 )
     {
 	ajGraphRect( x1Blocks, y1Blocks, x2Blocks, y2Blocks );
@@ -828,7 +828,7 @@ static void lindna_DrawBlocks(float xDraw, float yDraw, float BlockHeight,
       ajGraphRectFill( x1Blocks, y1Blocks, x2Blocks, y2Blocks );
       ajGraphSetFore(0);
       ajGraphRect( x1Blocks, y1Blocks, x2Blocks, y2Blocks );
-      ajGraphSetFore(Color);
+      ajGraphSetFore(Colour);
       }
 
     /* ajGraphSetFore(0); */
@@ -868,7 +868,7 @@ static void lindna_DrawBlocks(float xDraw, float yDraw, float BlockHeight,
 ** @param [?] TextOri [char] Undocumented
 ** @param [?] NumNames [ajint] Undocumented
 ** @param [?] Adjust [ajint] Undocumented
-** @param [?] Color [ajint] Undocumented
+** @param [?] Colour [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
@@ -877,7 +877,7 @@ static void lindna_DrawRanges(float xDraw, float yDraw, float RangeHeight,
 			      char FromSymbol, char ToSymbol,
 			      float TextLength, float TextHeight,
 			      float postext, char TextOri, ajint NumNames,
-			      ajint Adjust, ajint Color)
+			      ajint Adjust, ajint Colour)
 {
     float x1Ranges = xDraw+From;
     float y1Ranges = yDraw;
@@ -886,7 +886,7 @@ static void lindna_DrawRanges(float xDraw, float yDraw, float RangeHeight,
     float yupper = yDraw+(1.0*RangeHeight/2);
     float BoundaryLength;
 
-    ajGraphSetFore(Color);
+    ajGraphSetFore(Colour);
 
     ajGraphDrawLine( x1Ranges, y1Ranges, x2Ranges, y2Ranges );
     if( NumNames!=0 )
@@ -949,20 +949,20 @@ static void lindna_DrawRanges(float xDraw, float yDraw, float RangeHeight,
 ** @param [?] From [float] Undocumented
 ** @param [?] To [float] Undocumented
 ** @param [?] InterSymbol [AjPStr] Undocumented
-** @param [?] Color [ajint] Undocumented
+** @param [?] Colour [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
 static void lindna_InterBlocks(float xDraw, float yDraw, float BlockHeight,
 			       float From, float To, AjPStr InterSymbol,
-			       ajint Color)
+			       ajint Colour)
 {
     float x1Inter = xDraw+From;
     float y1Inter = yDraw+(1.0*BlockHeight/2);
     float x2Inter = xDraw+To;
     float y2Inter = y1Inter-BlockHeight;
 
-    ajGraphSetFore(Color);
+    ajGraphSetFore(Colour);
 
     if( ajStrCmpCaseCC(ajStrStr(InterSymbol), "Down")==0 )
     {
@@ -1375,7 +1375,7 @@ static void lindna_ReadInput(AjPFile infile, float *Start, float *End)
 ** @param [?] TextOri [char*] Undocumented
 ** @param [?] NumLabels [ajint*] Undocumented
 ** @param [?] NumNames [ajint*] Undocumented
-** @param [?] Color [ajint*] Undocumented
+** @param [?] Colour [ajint*] Undocumented
 ** @return [AjPStr] Undocumented
 ** @@
 ******************************************************************************/
@@ -1383,7 +1383,7 @@ static void lindna_ReadInput(AjPFile infile, float *Start, float *End)
 static AjPStr lindna_ReadGroup(AjPFile infile, float *From, float *To,
 			       AjPStr *Name, char *FromSymbol, char *ToSymbol,
 			       AjPStr *Style, char *TextOri, ajint *NumLabels,
-			       ajint *NumNames, ajint *Color)
+			       ajint *NumNames, ajint *Colour)
 {
     ajint i;
     ajint j;
@@ -1438,15 +1438,15 @@ static AjPStr lindna_ReadGroup(AjPFile infile, float *From, float *To,
 			    sscanf( ajStrStr(line), "%s", style );
 			    if( ajStrMatchCaseCC(style, "Tick") )
 				sscanf( ajStrStr(line), "%*s %f %d %c",
-				       &From[i], &Color[i], &TextOri[i] );
+				       &From[i], &Colour[i], &TextOri[i] );
 			    if( ajStrMatchCaseCC(style, "Block") )
 				sscanf( ajStrStr(line), "%*s %f %f %d %c",
-				       &From[i], &To[i], &Color[i],
+				       &From[i], &To[i], &Colour[i],
 				       &TextOri[i] );
 			    if( ajStrMatchCaseCC(style, "Range") )
 				sscanf( ajStrStr(line),"%*s %f %f %c %c %d %c",
 				       &From[i], &To[i], &FromSymbol[i],
-				       &ToSymbol[i], &Color[i], &TextOri[i] );
+				       &ToSymbol[i], &Colour[i], &TextOri[i] );
 			    ajStrAssC(&Style[i], style);
 			    break;
 			}
@@ -1861,14 +1861,14 @@ static ajint lindna_OverlapTextGroup(AjPStr *Name, AjPStr *Style,
 ** @param [?] ToSymbol [char*] Undocumented
 ** @param [?] Style [AjPStr*] Undocumented
 ** @param [?] InterSymbol [AjPStr] Undocumented
-** @param [?] InterTicks [AjPStr] Undocumented
+** @param [?] InterTicks [AjBool] Undocumented
 ** @param [?] TextOri [char*] Undocumented
 ** @param [?] NumLabels [ajint] Undocumented
 ** @param [?] NumNames [ajint*] Undocumented
 ** @param [?] GroupName [AjPStr] Undocumented
 ** @param [?] Adjust [ajint*] Undocumented
-** @param [?] InterColor [ajint] Undocumented
-** @param [?] Color [ajint*] Undocumented
+** @param [?] InterColour [ajint] Undocumented
+** @param [?] Colour [ajint*] Undocumented
 ** @param [?] BlockType [AjPStr] Undocumented
 ** @@
 ******************************************************************************/
@@ -1880,10 +1880,10 @@ static void lindna_DrawGroup(float xDraw, float yDraw, float Border,
 			     float TextLength, float TextHeight, float *From,
 			     float *To, AjPStr *Name, char *FromSymbol,
 			     char *ToSymbol, AjPStr *Style,
-			     AjPStr InterSymbol, AjPStr InterTicks,
+			     AjPStr InterSymbol, AjBool InterTicks,
 			     char *TextOri, ajint NumLabels, ajint *NumNames,
 			     AjPStr GroupName, ajint *Adjust,
-			     ajint InterColor, ajint *Color, AjPStr BlockType)
+			     ajint InterColour, ajint *Colour, AjPStr BlockType)
 {
     ajint i;
     ajint j;
@@ -1902,8 +1902,8 @@ static void lindna_DrawGroup(float xDraw, float yDraw, float Border,
 	{
 	    lindna_DrawTicks(xDraw, yDraw, TickHeight, From[i], Name[i],
 			     TextLength, TextHeight, postext, TextOri[i],
-			     NumNames[i], Adjust[i], Color[i]);
-	    if( ajStrCmpCaseCC(ajStrStr(InterTicks), "Y")==0 )
+			     NumNames[i], Adjust[i], Colour[i]);
+	    if( InterTicks )
 		ajGraphDrawLine( xDraw, yDraw, xDraw+DrawLength, yDraw );
 	}
 
@@ -1911,7 +1911,7 @@ static void lindna_DrawGroup(float xDraw, float yDraw, float Border,
 	{
 	    lindna_DrawBlocks(xDraw, yDraw-posblock, BlockHeight, TextHeight,
 			      From[i], To[i], Name[i], postext, TextOri[i],
-			      NumNames[i], Adjust[i], Color[i], BlockType);
+			      NumNames[i], Adjust[i], Colour[i], BlockType);
 	    Inter[j++] = i;
 	}
 
@@ -1919,14 +1919,14 @@ static void lindna_DrawGroup(float xDraw, float yDraw, float Border,
 	    lindna_DrawRanges(xDraw, yDraw-posrange, RangeHeight, From[i],
 			      To[i], Name[i], FromSymbol[i], ToSymbol[i],
 			      TextLength, TextHeight, postext, TextOri[i],
-			      NumNames[i], Adjust[i], Color[i]);
+			      NumNames[i], Adjust[i], Colour[i]);
     }
     NumBlocks = j;
 
     /* draw all interblocks */
     for(i=0; i<NumBlocks-1; i++)
 	lindna_InterBlocks(xDraw, yDraw-posblock, BlockHeight, To[Inter[i]],
-			   From[Inter[i+1]], InterSymbol, InterColor);
+			   From[Inter[i+1]], InterSymbol, InterColour);
 
     return;
 }

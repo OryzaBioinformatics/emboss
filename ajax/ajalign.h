@@ -89,6 +89,9 @@ void         ajAlignSetSubHeaderPre (AjPAlign thys, AjPStr subheader);
 void         ajAlignSetStats (AjPAlign thys, ajint iali, ajint len,
 				    ajint ident, ajint sim, ajint gaps,
 				    AjPStr score);
+AjBool       ajAlignSetSubRange (AjPAlign thys, ajint substart1, ajint start1,
+				 ajint end1, ajint substart2, ajint start2,
+				 ajint end2);
 void         ajAlignSetSubStandard (AjPAlign thys, ajint iali);
 void         ajAlignSetTail (AjPAlign thys, AjPStr tail);
 void         ajAlignSetTailApp (AjPAlign thys, AjPStr tail);

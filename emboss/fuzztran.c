@@ -100,6 +100,9 @@ int main(int argc, char **argv)
     ajFmtPrintAppS (&tmpstr, "Frames: %S\n", ajAcdValue("frame"));
     ajReportSetHeader (report, tmpstr);
 
+
+    ajStrTrimEndC(&pattern," .\t\n");
+
     seqname = ajStrNew();
     opattern=ajStrNew();
 

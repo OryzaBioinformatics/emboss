@@ -747,7 +747,7 @@ static void eprimer3_write(AjPStr str, FILE *stream)
 {
 
   fputs( ajStrStr(str), stream );
-
+  ajDebug ("eprimer3_write '%S'\n", str);
 }
 /* @funcstatic eprimer3_end_write *********************************************
 **
@@ -866,6 +866,7 @@ static void eprimer3_output_report(AjPFile outfile, AjPTable table,
   AjPStr key = NULL;
   AjPStr error = NULL;
   AjPStr explain = NULL;
+  AjPStr explainstr = NULL;
   AjPStr seqid = NULL;
   ajint i;
   AjPStr size = NULL;
@@ -927,30 +928,34 @@ PRIMER_PRODUCT_SIZE=137
   ajStrAssC(&key, "PRIMER_LEFT_EXPLAIN");
   explain = (AjPStr)ajTableGet(table, (const void*)key);
   if (explain != NULL) {
-    ajStrSubstituteCC(&explain, ",", "\n#");
+    ajStrAssS(&explainstr, explain);
+    ajStrSubstituteCC(&explainstr, ",", "\n#");
     (void) ajFmtPrintF(outfile, "# FORWARD PRIMER STATISTICS:\n# %S\n\n",
-		       explain);
+		       explainstr);
   }
   ajStrAssC(&key, "PRIMER_RIGHT_EXPLAIN");
   explain = (AjPStr)ajTableGet(table, (const void*)key);
   if (explain != NULL) {
-    ajStrSubstituteCC(&explain, ",", "\n#");
+    ajStrAssS(&explainstr, explain);
+    ajStrSubstituteCC(&explainstr, ",", "\n#");
     (void) ajFmtPrintF(outfile, "# REVERSE PRIMER STATISTICS:\n# %S\n\n",
-		       explain);
+		       explainstr);
   }
   ajStrAssC(&key, "PRIMER_PAIR_EXPLAIN");
   explain = (AjPStr)ajTableGet(table, (const void*)key);
   if (explain != NULL) {
-    ajStrSubstituteCC(&explain, ",", "\n#");
+    ajStrAssS(&explainstr, explain);
+    ajStrSubstituteCC(&explainstr, ",", "\n#");
     (void) ajFmtPrintF(outfile, "# PRIMER PAIR STATISTICS:\n# %S\n\n",
-		       explain);
+		       explainstr);
   }
   ajStrAssC(&key, "PRIMER_INTERNAL_OLIGO_EXPLAIN");
   explain = (AjPStr)ajTableGet(table, (const void*)key);
   if (explain != NULL) {
-    ajStrSubstituteCC(&explain, ",", "\n#");
+    ajStrAssS(&explainstr, explain);
+    ajStrSubstituteCC(&explainstr, ",", "\n#");
    (void) ajFmtPrintF(outfile, "# INTERNAL OLIGO STATISTICS:\n# %S\n\n",
-		      explain);
+		      explainstr);
   }
 
 /* table header */

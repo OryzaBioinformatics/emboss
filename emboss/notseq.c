@@ -103,7 +103,7 @@ static void notseq_readfile(AjPStr *pattern)
         ajStrTrimC(pattern, "@");       /* remove the @ */
         file = ajFileNewIn(*pattern);
         if (file == NULL)
-            ajDie("Cannot open the file of sequence names: '%S'", pattern);
+            ajFatal ("Cannot open the file of sequence names: '%S'", pattern);
 
         /* blank off the file name and replace with the sequence names */
         ajStrClear(pattern);

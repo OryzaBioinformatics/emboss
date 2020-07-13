@@ -122,8 +122,8 @@ int main(int argc, char **argv)
 	if (first_time_round) {
 
 	    if (!embNmerGetNoElements(&no_elements, word, seqisnuc, ignorebz))
-		(void) ajDie("The word size is too large for the data "
-			     "structure available.");
+		(void) ajFatal ("The word size is too large for the data "
+				"structure available.");
 
 
 	    (void) oddcomp_makebigarray(no_elements, &bigarray);
@@ -324,8 +324,8 @@ static ajint oddcomp_readexpfreq(AjPTable *exptable, AjPFile compdata,
 	    break;
 	}
 	else
-	    (void) ajDie ("The 'Word size' line was not found, "
-			  "instead found:\n%S\n",line);
+	    (void) ajFatal ("The 'Word size' line was not found, "
+			    "instead found:\n%S\n",line);
     }
 
     /* read the file */

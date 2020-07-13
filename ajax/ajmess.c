@@ -34,7 +34,7 @@ AjBool acdDebug = 0;
 AjPStr acdProgram = NULL;
 AjOError AjErrorLevel =
 {
-    AJTRUE, AJTRUE, AJTRUE, AJFALSE
+    AJTRUE, AJTRUE, AJTRUE, AJTRUE
 };
 
 /***************************************************/

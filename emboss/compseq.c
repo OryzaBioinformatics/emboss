@@ -149,8 +149,8 @@ int main(int argc, char **argv)
 	{
 	    seqisnuc = ajSeqIsNuc(seq);
 	    if (!embNmerGetNoElements(&no_elements, word, seqisnuc, ignorebz))
-		(void) ajDie("The word size is too large for the data "
-			     "structure available.");
+		(void) ajFatal ("The word size is too large for the data "
+				"structure available.");
 
 	    (void) compseq_makebigarray(no_elements, &bigarray);
 	    first_time_round = ajFalse;
@@ -364,14 +364,14 @@ static ajint compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 	    (void) ajStrChomp(&sizestr);
 	    (void) ajStrToInt(sizestr, &thissize);
 	    if (size == thissize) break;
-	    (void) ajDie ("The word size you are counting (%d) is different "
-			  "to the word\nsize in the file of expected "
-			  "frequencies (%d).", size, thissize);
+	    (void) ajFatal ("The word size you are counting (%d) is different "
+			    "to the word\nsize in the file of expected "
+			    "frequencies (%d).", size, thissize);
 
 	}
 	else
-	    (void) ajDie ("The 'Word size' line was not found, instead "
-			  "found:\n%S\n", line);
+	    (void) ajFatal ("The 'Word size' line was not found, instead "
+			    "found:\n%S\n", line);
     }
 
     /* read the file */

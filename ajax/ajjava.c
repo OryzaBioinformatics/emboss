@@ -746,16 +746,28 @@ static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
     char *p = NULL;
     struct passwd result;
     char *buf=NULL;
+#if defined(_OSF_SOURCE)
+    int ret=0;
+#endif
 
     if(!(buf=(char *)malloc(R_BUFFER)))
 	return ajFalse;
 
+#if defined(_OSF_SOURCE)
+    ret = getpwnam_r(ajStrStr(username),&result,buf,R_BUFFER,&pwd);
+    if(ret!=0)		 /* No such username */
+    {
+	AJFREE(buf);
+	return ajFalse;
+    }
+#else
     pwd = getpwnam_r(ajStrStr(username),&result,buf,R_BUFFER);
     if(!pwd)		 /* No such username */
     {
 	AJFREE(buf);
 	return ajFalse;
     }
+#endif
 
     *uid = pwd->pw_uid;
     *gid = pwd->pw_gid;
@@ -1153,12 +1165,12 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_fork
 	java_tidy_command(&prog,&cl,&envi,&dir,&outstd,&errstd);
 	i = 0;
 	while(argp[i])
-	    AJFREE(argp[i]);
+	    AJFREE(argp[i++]);
 	AJFREE(argp);
 
 	i = 0;
 	while(envp[i])
-	    AJFREE(envp[i]);
+	    AJFREE(envp[i++]);
 	AJFREE(envp);
 
 	return (unsigned char)ajFalse;
@@ -2138,10 +2150,14 @@ static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
 	select(outpipe[0]+1,&rec,NULL,NULL,&t);
 	if(FD_ISSET(outpipe[0],&rec))
 	{
+	    *buf = '\0';
 	    while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
 		  && errno==EINTR);
-	    buf[nread]='\0';
-	    ajStrAppC(outstd,buf);
+	    if(nread > 0)
+	    {
+		buf[nread]='\0';
+		ajStrAppC(outstd,buf);
+	    }
 	}
 
 	FD_ZERO(&rec);
@@ -2151,10 +2167,14 @@ static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
 	select(errpipe[0]+1,&rec,NULL,NULL,&t);
 	if(FD_ISSET(errpipe[0],&rec))
 	{
+	    *buf = '\0';
 	    while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
 		  && errno==EINTR);
-	    buf[nread]='\0';
-	    ajStrAppC(errstd,buf);
+	    if(nread>0)
+	    {
+		buf[nread]='\0';
+		ajStrAppC(errstd,buf);
+	    }
 	}
 
 
@@ -2168,10 +2188,14 @@ static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
     select(outpipe[0]+1,&rec,NULL,NULL,&t);
     if(FD_ISSET(outpipe[0],&rec))
     {
+	*buf = '\0';
 	while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
 	      && errno==EINTR);
-	buf[nread]='\0';
-	ajStrAppC(outstd,buf);
+	if(nread>0)
+	{
+	    buf[nread]='\0';
+	    ajStrAppC(outstd,buf);
+	}
     }
 
 
@@ -2182,10 +2206,14 @@ static void java_wait_for_term(int pid,AjPStr *outstd, AjPStr *errstd,
     select(errpipe[0]+1,&rec,NULL,NULL,&t);
     if(FD_ISSET(errpipe[0],&rec))
     {
+	*buf = '\0';
 	while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
 	      && errno==EINTR);
-	buf[nread]='\0';
-	ajStrAppC(errstd,buf);
+	if(nread >0)
+	{
+	    buf[nread]='\0';
+	    ajStrAppC(errstd,buf);
+	}
     }
 #endif
 
@@ -2348,6 +2376,7 @@ static void java_wait_for_file(int pid,AjPStr *outstd, AjPStr *errstd,
 	select(outpipe[0]+1,&rec,NULL,NULL,&t);
 	if(size && FD_ISSET(outpipe[0],&rec))
 	{
+	    *buf = '\0';
 	    while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
 		  && errno==EINTR);
 	    if(nread>0)
@@ -2364,6 +2393,7 @@ static void java_wait_for_file(int pid,AjPStr *outstd, AjPStr *errstd,
 	select(errpipe[0]+1,&rec,NULL,NULL,&t);
 	if(FD_ISSET(errpipe[0],&rec))
 	{
+	    *buf = '\0';
 	    while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
 		  && errno==EINTR);
 	    if(nread > -1)
@@ -2384,6 +2414,7 @@ static void java_wait_for_file(int pid,AjPStr *outstd, AjPStr *errstd,
     select(outpipe[0]+1,&rec,NULL,NULL,&t);
     if(size && FD_ISSET(outpipe[0],&rec))
     {
+	*buf = '\0';
 	while((nread = read(outpipe[0],(void *)buf,JBUFFLEN))==-1
 	      && errno==EINTR);
 	if(nread>0)
@@ -2401,6 +2432,7 @@ static void java_wait_for_file(int pid,AjPStr *outstd, AjPStr *errstd,
     select(errpipe[0]+1,&rec,NULL,NULL,&t);
     if(FD_ISSET(errpipe[0],&rec))
     {
+	*buf = '\0';
 	while((nread = read(errpipe[0],(void *)buf,JBUFFLEN))==-1
 	      && errno==EINTR);
 	if(nread>-1)
@@ -2522,7 +2554,7 @@ static int java_jembossctl(ajint command, AjPStr username, AjPStr password,
 	java_tidy_command2(&unused,&cl,&clemboss,&dir,&envi,&prog,buff);
 	i = 0;
 	while(envp[i])
-	    AJFREE(envp[i]);
+	    AJFREE(envp[i++]);
 	AJFREE(envp);
 	return -1;
     }
@@ -4087,6 +4119,9 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_listDirs
     estr = (*env)->NewStringUTF(env,ajStrStr(errstd));
     (*env)->SetObjectField(env,obj,field,estr);
 
+
+    if(ajStrLen(errstd))
+	ok = ajFalse;
 
     java_tidy_command(&username,&password,&envi,&directory,
 		      &outstd,&errstd);

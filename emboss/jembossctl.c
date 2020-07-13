@@ -639,23 +639,35 @@ static AjBool jctl_check_pass(AjPStr username, AjPStr password, ajint *uid,
 
 
 #ifdef RNO_SHADOW
-static AjBool java_pass(AjPStr username, AjPStr password, ajint *uid,
+static AjBool jctl_check_pass(AjPStr username, AjPStr password, ajint *uid,
 			ajint *gid, AjPStr *home)
 {
     struct passwd *pwd  = NULL;
     char *p = NULL;
     struct passwd result;
     char *buf=NULL;
+#if defined(_OSF_SOURCE)
+    int  ret=0;
+#endif
 
     if(!(buf=(char *)malloc(R_BUFFER)))
 	return ajFalse;
 
+#if defined(_OSF_SOURCE)
+    ret = getpwnam_r(ajStrStr(username),&result,buf,R_BUFFER,&pwd);
+    if(ret!=0)		 /* No such username */
+    {
+	AJFREE(buf);
+	return ajFalse;
+    }
+#else
     pwd = getpwnam_r(ajStrStr(username),&result,buf,R_BUFFER);
     if(!pwd)		 /* No such username */
     {
 	AJFREE(buf);
 	return ajFalse;
     }
+#endif
 
     *uid = pwd->pw_uid;
     *gid = pwd->pw_gid;

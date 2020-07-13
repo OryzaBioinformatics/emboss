@@ -127,7 +127,9 @@ void embConsCalc(AjPSeqset seqset,AjPMatrix cmpmatrix,
       max  = -(float)INT_MAX;
       for(i=0;i<nseqs;i++)
       {
-        if(ajFloatGet(score,i) > max)
+        if( ajFloatGet(score,i) > max ||
+           (ajFloatGet(score,i) == max &&
+            seqcharptr[highindex][k] == '-') )      
         {
           highindex = i;
           max       = ajFloatGet(score,i);
@@ -178,7 +180,7 @@ void embConsCalc(AjPSeqset seqset,AjPMatrix cmpmatrix,
          res = seqcharptr[highindex][k];
 
       if(matching[highindex]<= setcase)
-        res = tolower(res);
+        res = tolower((int)res);
 
       if(identity)                      /* if just looking for id's */
       {

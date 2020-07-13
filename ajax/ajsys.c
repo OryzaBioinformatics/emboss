@@ -182,26 +182,38 @@ AjBool ajSysWhichEnv(AjPStr *s, char **env)
     char   *save=NULL;
     AjPStr buf;
     AjPStr tmp=NULL;
-
-
+    
+    
     buf = ajStrNew();
     tname = ajStrNew();
     tmp = ajStrNew();
     ajStrAssS(&tname,*s);
-
+    
     fname = ajStrNew();
     path  = ajStrNew();
-
+    
     ajSysBasename(&tname);
-
-
+    
+    
     count=0;
-    while(*env[count])
+    while(env[count]!=NULL)
     {
+	if(!(*env[count]))
+	    break;
 	if(!strncmp("PATH=",env[count],5)) break;
 	++count;
     }
-
+    
+    if(env[count]==NULL || !(*env[count]))
+    {
+	ajStrDel(&fname);
+	ajStrDel(&tname);
+	ajStrDel(&path);
+	ajStrDel(&buf);
+	ajStrDel(&tmp);
+	return ajFalse;
+    }
+    
     if(!(*env[count]))
     {
 	ajStrDel(&fname);
@@ -211,7 +223,7 @@ AjBool ajSysWhichEnv(AjPStr *s, char **env)
 	ajStrDel(&tmp);
 	return ajFalse;
     }
-
+    
     ajStrAssC(&path, env[count]);
     p=ajStrStr(path);
     p+=5;
@@ -229,25 +241,24 @@ AjBool ajSysWhichEnv(AjPStr *s, char **env)
 	return ajFalse;
     }
 
-    while(1)
-    {
-	(void) ajFmtPrintS(&fname,"%s/%S",p,tname);
 
-	if(ajFileStat(&fname, AJ_FILE_X))
-	{
-	    ajStrAssS(s,fname);
-	    break;
-	}
+    ajFmtPrintS(&fname,"%s/%S",p,tname);
+    while(!ajFileStat(&fname, AJ_FILE_X))
+    {
 	if((p=ajSysStrtokR(NULL,":",&save,&buf))==NULL)
-        {
+	{
 	    ajStrDel(&fname);
 	    ajStrDel(&tname);
 	    ajStrDel(&path);
 	    ajStrDel(&buf);
 	    ajStrDel(&tmp);
 	    return ajFalse;
-        }
+	}
+	ajFmtPrintS(&fname,"%s/%S",p,tname);
     }
+
+
+    ajStrAssS(s,fname);
 
     ajStrDel(&fname);
     ajStrDel(&tname);
@@ -257,7 +268,7 @@ AjBool ajSysWhichEnv(AjPStr *s, char **env)
 
     return ajTrue;
 }
-
+    
 
 
 /* @func ajSystem *************************************************************

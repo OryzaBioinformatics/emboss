@@ -33,6 +33,7 @@ void   ajRandomSeed (void);
 void   ajRecToPol (float x, float y, float *radius, float *angle);
 ajint    ajRound (ajint i, ajint round);
 float  ajRoundF (float a, ajint nbits);
+unsigned long long ajSp64Crc(AjPStr thys);
 
 #endif
 

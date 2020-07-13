@@ -95,8 +95,9 @@ char seqCharNucDNA[] = "Tt";
 char seqCharNucRNA[] = "Uu";
 char seqCharGapany[] = ".-~Oo";	/* phylip uses O */
 char seqCharGapdash[] = "-";
-char seqCharGapdot[] = "..";
+char seqCharGapdot[] = ".";
 char seqGap = '-';		/* the (only) EMBOSS gap character */
+char seqCharGapTest[] = " .-~Oo";   /* phylip uses O - don't forget space */
 
 /* @func ajSeqTypeTest ********************************************************
 **
@@ -839,16 +840,18 @@ void ajSeqGapS (AjPStr* seq, char gapc) {
 static void seqGapSL (AjPStr* seq, char gapc, char padc, ajint ilen) {
 
   ajint i;
-  static char* newgap;
+  static char* newgap=NULL;
   static ajint igap;
   char* cp;
   char endc = gapc;
 
-  igap = strlen(seqCharGap);
+  igap = strlen(seqCharGapTest);
   if (!newgap){
     newgap = ajCharNewL(igap);
     newgap[0] = '\0';
   }
+
+  /* Set the newgap string to match gapc */
 
   if (*newgap != gapc) {
     for (i=0; i < igap; i++)
@@ -856,20 +859,28 @@ static void seqGapSL (AjPStr* seq, char gapc, char padc, ajint ilen) {
     newgap[i] = '\0';
   }
 
+  /*
+//  ajDebug("seqGapSL gapc '%c' padc '%c' len %d seqCharGapTest '%s'\n",
+//	  gapc, padc, ilen, seqCharGapTest);
+//  ajDebug("seqGapSL before '%S'\n", *seq);
+  */
+
   if (ilen)
     (void) ajStrModL (seq, ilen+1);
   else
     (void) ajStrMod(seq);
 
-  (void) ajStrConvertCC (seq, seqCharGap, newgap);
+  (void) ajStrConvertCC (seq, seqCharGapTest, newgap);
 
   if (padc) {			/* start and end characters updated */
     endc = padc;
     for (cp = ajStrStr(*seq);
-	 strchr(seqCharGap, *cp); cp++) /* pad start */
+	 strchr(seqCharGapTest, *cp); cp++) /* pad start */
+    {
       *cp = padc;
+    }
     cp = ajStrStr(*seq);
-    for (i=ajStrLen(*seq) - 1; i && strchr(seqCharGap, cp[i]);  i--)
+    for (i=ajStrLen(*seq) - 1; i && strchr(seqCharGapTest, cp[i]);  i--)
       cp[i] = padc;
   }
 
@@ -880,6 +891,8 @@ static void seqGapSL (AjPStr* seq, char gapc, char padc, ajint ilen) {
     cp[ilen] = '\0';
     ajStrFix(*seq);
   }
+
+  /*  ajDebug("seqGapSL after  '%S'\n", *seq); */
 
   return;
 }

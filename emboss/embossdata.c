@@ -109,7 +109,7 @@ int main(int argc, char **argv)
 	ajFileScan(path,filename,&flocs,ajFalse,ajFalse,NULL,rlist,
 		   recurs, outf);
 	if(!ajListPop(flocs,(void **)&t))
-	    ajDie("The file '%S' does not exist.", filename);
+	    ajFatal ("The file '%S' does not exist.", filename);
 	/* fetch it */
 	(void) ajStrAppC(&cmd, "cp ");
 	(void) ajStrApp(&cmd, t);
@@ -117,7 +117,7 @@ int main(int argc, char **argv)
 	(void) ajStrApp(&cmd, filename);
 	result = system(ajStrStr(cmd));
 	if (result)
-	    ajDie("File not copied.");
+	    ajFatal ("File not copied.");
 	ajFmtPrintF(outf, "File '%S' has been copied successfully.\n", t);
 	ajStrDel(&t);
 	ajStrDel(&cmd);
@@ -303,7 +303,7 @@ static AjPStr embossdata_data_dir(void)
 	    if(ajNamRoot(&tmp))
 		(void) ajStrAppC(&tmp,"/data");
 	    else
-		ajDie("The EMBOSS 'DATA' directory isn't defined.");
+		ajFatal ("The EMBOSS 'DATA' directory isn't defined.");
 	}
     }
 

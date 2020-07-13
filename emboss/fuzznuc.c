@@ -94,6 +94,8 @@ int main(int argc, char **argv)
     ajFmtPrintAppS (&tmpstr, "Complement: %B\n", sc);
     ajReportSetHeader (report, tmpstr);
 
+    ajStrTrimEndC(&pattern," .\t\n");
+
     seqname = ajStrNew();
     opattern=ajStrNew();
 

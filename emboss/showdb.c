@@ -184,7 +184,7 @@ int main(int argc, char **argv)
 				release, html, dotype, doid, doqry, doall,
 				docomment, dorelease);
 	else
-	    (void) ajDie("The database '%S' does not exist", dbname);
+	    (void) ajFatal ("The database '%S' does not exist", dbname);
     }
     else
     {
@@ -208,7 +208,7 @@ int main(int argc, char **argv)
 					doqry, doall, docomment, dorelease);
 	    }
 	    else
-		(void) ajDie("The database '%S' does not exist", dbname);
+		(void) ajFatal ("The database '%S' does not exist", dbname);
 
 
 	/* reset the iterator */
@@ -227,7 +227,7 @@ int main(int argc, char **argv)
 					doqry, doall, docomment, dorelease);
 	    }
 	    else
-		(void) ajDie("The database '%S' does not exist", dbname);
+		(void) ajFatal ("The database '%S' does not exist", dbname);
 	}
 
 	(void) ajListIterFree(iter);

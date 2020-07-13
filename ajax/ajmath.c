@@ -10,13 +10,15 @@
 #define AjRandomXmod 1000009711.0
 #define AjRandomYmod 33554432.0
 #define AjRandomTiny 1.0e-17
-
+#define AJCRC64LEN 256
 
 static AjBool aj_rand_i = 0;
 static ajint    aj_rand_index;
 static double aj_rand_poly[101];
 static double aj_rand_other;
 
+
+static void spcrc64calctab(unsigned long long *crctab);
 
 
 /* @func ajRound **************************************************************
@@ -360,3 +362,69 @@ double ajRandomNumberD(void)
     return x+AjRandomTiny;
 }
 
+
+
+/* @funcstatic spcrc64calctab *************************************************
+**
+** Initialise the crc table.
+** Polynomial x64+x4+x3+x1+1
+**
+** @param [w] crctab [unsigned long long*] CRC lookup table
+**
+** @return [void]
+******************************************************************************/
+
+static void spcrc64calctab(unsigned long long *crctab)
+{
+    unsigned long long v;
+    ajint i;
+    ajint j;
+
+    for(i=0;i<AJCRC64LEN;++i)
+    {
+	v = (unsigned long long)i;
+	for(j=0;j<8;++j)
+	    if(v&1)
+		v = 0xd800000000000000ULL ^ (v>>1);
+	    else
+		v >>= 1;
+	crctab[i] = v;
+    }
+}
+
+
+
+/* @func ajSp64Crc *********************************************************
+**
+** Calculate 64-bit crc
+**
+** @param [r] thys [AjPStr] sequence
+**
+** @return [unsigned long long] 64-bit CRC
+******************************************************************************/
+
+unsigned long long ajSp64Crc(AjPStr thys)
+{
+    static ajint initialised = 0;
+    static unsigned long long crctab[AJCRC64LEN];
+    unsigned long long crc;
+    ajint i;
+    ajint len;
+    char *p=NULL;
+    
+
+    if(!initialised)
+    {
+	spcrc64calctab(crctab);
+	++initialised;
+    }
+
+    crc = 0ULL;
+    p = ajStrStr(thys);
+    len = ajStrLen(thys);
+    
+    for(i=0;i<len;++i)
+	crc = crctab[(crc ^ (unsigned long long)p[i]) & 0xff] ^ (crc>>8);
+
+    return crc;
+}

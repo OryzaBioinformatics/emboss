@@ -144,8 +144,9 @@ static void       seqMsfTabDel (const void *key, void **value, void *cl);
 static void       seqMsfTabList (const void *key, void **value, void *cl);
 static AjBool     seqPhylipReadseq (AjPStr rdline, AjPTable phytable,
 				    AjPStr token);
-static AjBool     seqQueryMatch (AjPSeq thys, AjPSeqQuery query);
 static AjBool     seqQueryField (AjPSeqQuery qry, AjPStr field);
+static AjBool     seqQueryFieldC (AjPSeqQuery qry, char* field);
+static AjBool     seqQueryMatch (AjPSeq thys, AjPSeqQuery query);
 static void       seqQryWildComp (void);
 static AjBool     seqRead (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadAcedb (AjPSeq thys, AjPSeqin seqin);
@@ -5461,6 +5462,8 @@ static AjBool seqUsaProcess (AjPSeq thys, AjPSeqin seqin)
 	    {
 		(void) ajStrAss (&qry->Id, qry->QryString);
 		(void) ajStrAss (&qry->Acc, qry->QryString);
+		if (seqQueryFieldC(qry, "sv"))
+		  (void) ajStrAss (&qry->Sv, qry->QryString);
 	    }
 	}
 	dbstat = ajNamDbQuery (qry);
@@ -5592,14 +5595,29 @@ static AjBool seqUsaProcess (AjPSeq thys, AjPSeqin seqin)
 
 static AjBool seqQueryField (AjPSeqQuery qry, AjPStr field) {
 
+  return seqQueryFieldC (qry, ajStrStr(field));
+}
+
+/* @funcstatic seqQueryFieldC **************************************************
+**
+** Checks whether a query field is defined for a database as a "fields:"
+** string in the database definition.
+**
+** @param [w] qry [AjPSeqQuery] Sequence query object
+** @param [r] field [char*] field name
+** @return [AjBool] ajTrue if the field is defined
+******************************************************************************/
+
+static AjBool seqQueryFieldC (AjPSeqQuery qry, char* field) {
+
   static AjPStrTok handle = NULL;
   static AjPStr token = NULL;
 
-  ajDebug("seqQueryField usa '%S' fields '%S'\n", field, qry->DbFields);
+  ajDebug("seqQueryFieldC usa '%s' fields '%S'\n", field, qry->DbFields);
   (void) ajStrTokenAss (&handle, qry->DbFields, " ");
   while (ajStrToken (&token, &handle, NULL)) {
     ajDebug("seqQueryField test '%S'\n", token);
-    if (ajStrMatchCase(token, field)) {
+    if (ajStrMatchCaseC(token, field)) {
     ajDebug("seqQueryField match '%S'\n", token);
       (void) ajStrTokenReset (&handle);
       (void) ajStrDelReuse(&token);
@@ -6602,10 +6620,13 @@ AjBool ajSeqParseNcbi(AjPStr instr, AjPStr* id, AjPStr* acc,
     **   (prefix - remove)
     */
 
-    /* (void) ajDebug("ajSeqParseNcbi '%S'\n", instr);  */
+    (void) ajDebug("ajSeqParseNcbi '%S'\n", instr);
 
     if (ajStrChar(instr, 3) == ';')	/* then it is really PIR format */
-	return ajFalse;
+    {
+      ajDebug("ajSeqParseNcbi failed: this is PIR format\n");
+      return ajFalse;
+    }
 
      ajStrAssS (&str, instr);
 
@@ -6615,8 +6636,10 @@ AjBool ajSeqParseNcbi(AjPStr instr, AjPStr* id, AjPStr* acc,
 
     /* Line must start with '>', and include '|' bar, hopefully in the ID */
 
-    if(*MAJSTRSTR(str)!='>') {
-	return ajFalse;
+    if(*MAJSTRSTR(str)!='>')
+    {
+      ajDebug("ajSeqParseNcbi failed: no '>' at start\n");
+      return ajFalse;
     }
 
     /* pick out the ID */
@@ -6629,14 +6652,16 @@ AjBool ajSeqParseNcbi(AjPStr instr, AjPStr* id, AjPStr* acc,
     /* check we have an ID */
 
     if (!ajStrLen(idstr)) {
-      /* (void) ajDebug ("No ID string found\n"); */
-      return ajFalse;
+      (void) ajDebug ("No ID string found - but try FASTA\n");
+      return ajSeqParseFasta (str, id, acc, sv, desc);
     }
 
     /* NCBI ids always have | somewhere. Else we try a simple FASTA format */
 
-    if(!strchr(MAJSTRSTR(idstr),(ajint)'|')) {
-	return ajSeqParseFasta (str, id, acc, sv, desc);
+    if(!strchr(MAJSTRSTR(idstr),(ajint)'|'))
+    {
+      ajDebug("trying ajSeqParseFasta\n");
+      return ajSeqParseFasta (str, id, acc, sv, desc);
     }
 
     (void) ajStrTokenAss(&handle,idstr,"|");

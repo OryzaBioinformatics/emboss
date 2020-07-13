@@ -64,9 +64,10 @@ int main(int argc, char **argv, char **env)
     explode = ajAcdGetBool("explode");
     colon   = ajAcdGetBool("colon");
 
-    /* is a search string specified */
+    /* is a search string specified  - should be tested in seealso.acd */
+
     if (!ajStrLen(search))
-	ajDie ("No application specified.");
+	ajFatal ("No application specified.");
 
 
     /*
@@ -79,7 +80,7 @@ int main(int argc, char **argv, char **env)
     newlist = ajListNew();
     (void) embGrpKeySearchSeeAlso(newlist, &appgroups, alpha, glist, search);
     if (appgroups == NULL)
-	ajDie("Invalid application name specified.");
+	ajFatal ("Invalid application name specified.");
 
 
     if (groups)

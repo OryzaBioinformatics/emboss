@@ -321,6 +321,8 @@ static AjBool     seqCdQryQuery (AjPSeqQuery qry);
 static AjBool     seqCdQryReuse (AjPSeqQuery qry);
 static AjBool     seqCdReadHeader (SeqPCdFile fp);
 static AjBool     seqCdTrgClose (SeqPCdFile *trgfil, SeqPCdFile *hitfil);
+static ajint      seqCdTrgFind (AjPSeqQuery qry, char* indexname,
+				AjPStr qrystring);
 static void       seqCdTrgLine (SeqPCdTrg trgLine, ajuint ipos, SeqPCdFile fp);
 static char*      seqCdTrgName (ajuint ipos, SeqPCdFile fp);
 static AjBool     seqCdTrgOpen (AjPStr dir, char* name,
@@ -1096,6 +1098,9 @@ static ajint seqCdTrgSearch (SeqPCdTrg trgLine, AjPStr entry, SeqPCdFile fp)
 
     (void) ajStrAssS (&entrystr, entry);
     (void) ajStrToUpper (&entrystr);
+
+    if (fp->NRecords < 1)
+      return -1;
 
     ilo = 0;
     ihi = fp->NRecords;
@@ -2016,7 +2021,7 @@ static AjBool seqCdQryEntry (AjPSeqQuery qry)
     */
 
     if (ipos < 0 &&
-	ajStrLen(qry->Sv) &&
+	ajStrLen(qry->Des) &&
 	seqCdTrgOpen (qry->IndexDir, "des",
 		      &qryd->trgfp, &qryd->hitfp))
     {
@@ -2059,7 +2064,7 @@ static AjBool seqCdQryEntry (AjPSeqQuery qry)
     */
 
     if (ipos < 0 &&
-	ajStrLen(qry->Sv) &&
+	ajStrLen(qry->Key) &&
 	seqCdTrgOpen (qry->IndexDir, "keyword",
 		      &qryd->trgfp, &qryd->hitfp))
     {
@@ -2168,13 +2173,14 @@ static AjBool seqCdQryQuery (AjPSeqQuery qry)
 
     if(ajStrLen(qry->Id))
     {
-	if (!seqCdIdxQuery (qry))
-	    return ajFalse;
-	qryd = qry->QryData;
-	ajListUnique(qryd->List, seqCdEntryCmp, seqCdEntryDel);
-	return ajTrue;
+	if (seqCdIdxQuery (qry))
+	{
+	  qryd = qry->QryData;
+	  ajListUnique(qryd->List, seqCdEntryCmp, seqCdEntryDel);
+	  return ajTrue;
+	}
     }
-    else if(ajStrLen(qry->Acc) ||
+    if(ajStrLen(qry->Acc) ||
 	    ajStrLen(qry->Sv) ||
 	    ajStrLen(qry->Des) ||
 	    ajStrLen(qry->Key) ||
@@ -2355,7 +2361,7 @@ static AjBool seqCdQryClose (AjPSeqQuery qry)
 {
     SeqPCdQry qryd = qry->QryData;
 
-    ajDebug ("seqAccessEmblcd clean up qryd\n");
+    ajDebug ("seqCdQryClose clean up qryd\n");
     (void) ajCharFree(qryd->name);
     ajStrDel (&qryd->divfile);
     ajStrDel (&qryd->idxfile);
@@ -3131,8 +3137,15 @@ static AjBool seqBlastOpen (AjPSeqQuery qry, AjBool next)
 	     isblast2, TitleLen, rdtmp, Title);
     ajStrTrace(Title);
 
-    if (!ajFileRead(ajStrStr(Title), (size_t)1, (size_t)rdtmp, qryd->libt))
-      ajFatal ("error reading file %F", qryd->libt);
+    if (rdtmp)
+    {
+      if (!ajFileRead(ajStrStr(Title), (size_t)1, (size_t)rdtmp, qryd->libt))
+	ajFatal ("error reading file %F", qryd->libt);
+    }
+    else
+    {
+      ajStrAssC(&Title, "");
+    }
 
     if (isblast2)
 	ajStrFixI (Title, TitleLen);
@@ -4403,7 +4416,10 @@ static void seqBlastStripNcbi (AjPStr* line)
 /* @funcstatic seqCdTrgQuery **************************************************
 **
 ** Binary search of an EMBL CD-ROM index file for entries matching a
-** wildcard accession number
+** wildcard query.
+**
+** Where more than one query field is defined (usually acc and sv) it
+** can test all and append to a single list.
 **
 ** @param [r] qry [AjPSeqQuery] Sequence query object.
 ** @return [AjBool] ajTrue on success.
@@ -4412,11 +4428,54 @@ static void seqBlastStripNcbi (AjPStr* line)
 
 static AjBool seqCdTrgQuery (AjPSeqQuery qry)
 {
+  ajint ret=0;
+
+    if (ajStrLen(qry->Org))
+    {
+      ret += seqCdTrgFind (qry, "taxon", qry->Org);
+    }
+    if (ajStrLen(qry->Key))
+    {
+      ret += seqCdTrgFind (qry, "keyword", qry->Key);
+    }
+    if (ajStrLen(qry->Des))
+    {
+      ret += seqCdTrgFind (qry, "des", qry->Des);
+    }
+    if (ajStrLen(qry->Sv))
+    {
+      ret += seqCdTrgFind (qry, "seqvn", qry->Sv);
+    }
+    if (ajStrLen(qry->Acc))
+    {
+      ret += seqCdTrgFind (qry, "acnum", qry->Acc);
+    }
+
+    if (ret) return ajTrue;
+    return ajFalse;
+}
+
+/* @funcstatic seqCdTrgFind **************************************************
+**
+** Binary search of an EMBL CD-ROM index file for entries matching a
+** wildcard query.
+**
+** Where more than one query field is defined (usually acc and sv) it
+** can test all and append to a single list.
+**
+** @param [r] qry [AjPSeqQuery] Sequence query object.
+** @param [r] indexname [char*] Index name.
+** @param [r] queryName [AjPStr] Query string.
+** @return [ajint] Number of matches found
+** @@
+******************************************************************************/
+
+static ajint seqCdTrgFind (AjPSeqQuery qry, char* indexname, AjPStr queryName)
+{
     SeqPCdQry wild = qry->QryData;
     AjPList   l = wild->List;
     SeqPCdTrg trgline = wild->trgLine;
     SeqPCdIdx idxline = wild->idxLine;
-    AjPStr queryName = NULL;
     SeqPCdFile idxfp = wild->ifp;
     SeqPCdFile trgfp = wild->trgfp;
     SeqPCdFile hitfp = wild->hitfp;
@@ -4445,36 +4504,8 @@ static AjBool seqCdTrgQuery (AjPSeqQuery qry)
 
     SeqPCdEntry entry;
 
-    if (ajStrLen(qry->Org))
-    {
-      queryName = qry->Org;
-      if(!seqCdTrgOpen (qry->IndexDir,"taxon",&trgfp, &hitfp))
-	return ajFalse;
-    }
-    else if (ajStrLen(qry->Key))
-    {
-      queryName = qry->Key;
-      if(!seqCdTrgOpen (qry->IndexDir,"keyword",&trgfp, &hitfp))
-	return ajFalse;
-    }
-    else if (ajStrLen(qry->Des))
-    {
-      queryName = qry->Des;
-      if(!seqCdTrgOpen (qry->IndexDir,"des",&trgfp, &hitfp))
-	return ajFalse;
-    }
-    else if (ajStrLen(qry->Sv))
-    {
-      queryName = qry->Sv;
-      if(!seqCdTrgOpen (qry->IndexDir,"seqvn",&trgfp, &hitfp))
-	return ajFalse;
-    }
-    else if (ajStrLen(qry->Acc))
-    {
-      queryName = qry->Acc;
-      if(!seqCdTrgOpen (qry->IndexDir,"acnum",&trgfp, &hitfp))
-	return ajFalse;
-    }
+    if (!seqCdTrgOpen (qry->IndexDir, indexname, &trgfp, &hitfp))
+      return 0;
 
     /* fdstr is the original query string, in uppercase */
 
@@ -4622,10 +4653,7 @@ static AjBool seqCdTrgQuery (AjPSeqQuery qry)
     ajStrDel(&fdstr);
     ajStrDel(&fdprefix);
 
-    if(ajListLength(l))
-	return ajTrue;
-
-    return ajFalse;
+    return ajListLength(l);
 }
 
 /* @func ajSeqPrintAccess *****************************************************

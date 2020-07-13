@@ -120,9 +120,15 @@ int main (int argc, char * argv[])
     ambig  = ajAcdGetBool("ambiguous");
     gapwt  = ajAcdGetFloat("gapweight");
     if(nuc)
+    {
 	methodlist = ajAcdGetList("nucmethod");
+        ajAcdGetList("protmethod");
+    }
     else
+    {
+        ajAcdGetList("nucmethod");
 	methodlist = ajAcdGetList("protmethod");
+    }
     posn   = ajAcdGetInt("position");
     calc_a = ajAcdGetBool("calculatea");
     var_a  = ajAcdGetFloat("parametera");

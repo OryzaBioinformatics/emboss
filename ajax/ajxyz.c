@@ -1,27 +1,30 @@
- /*****************************************************************************
+/********************************************************************
 ** @source AJAX structure functions
 **
-** @author Copyright (C) 2000 Jon Ison (jison@hgmp.mrc.ac.uk)
-** @author Copyright (C) 2000 Alan Bleasby
-** @version 1.0
-** @modified Jan 22 JCI First version
+** @author: Copyright (C) 2002 Jon Ison (jison@hgmp.mrc.ac.uk)
+** @author: Copyright (C) 2002 Ranjeeva Ranasinghe (rranasin@hgmp.mrc.ac.uk)
+** @author: Copyright (C) 2002 Matt Blades (mblades@hgmp.mrc.ac.uk)
+** @author: Copyright (C) 2002 Waqas Awan (wawan@hgmp.mrc.ac.uk)
+** @author: Copyright (C) 2002 Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+** @version 1.0 
+** @modified Jul 3 Jon Ison
 ** @@
-**
+** 
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
 ** version 2 of the License, or (at your option) any later version.
-**
+** 
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Library General Public License for more details.
-**
+** 
 ** You should have received a copy of the GNU Library General Public
 ** License along with this library; if not, write to the
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ** Boston, MA  02111-1307, USA.
-******************************************************************************/
+********************************************************************/
 
 
 /* ==================================================================== */
@@ -51,7 +54,8 @@
 /* ========================= constructors ============================= */
 /* ==================================================================== */
 
-/* @section Protein Constructors **********************************************
+
+/* @section Protein Constructors ********************************************
 **
 ** All constructors return a new item by pointer. It is the responsibility
 ** of the user to first destroy any previous item. The target pointer
@@ -64,37 +68,37 @@
 ******************************************************************************/
 
 
-/* @func ajXyzHetentNew *******************************************************
+/* @func ajXyzHetentNew ******************************************************
 **
-** Hetent object constructor.
+** Hetent object constructor. 
 **
-**
+** 
 ** @return [AjPHetent] Pointer to a Hetent object
 ** @@
 ******************************************************************************/
 AjPHetent  ajXyzHetentNew(void)
 {
     AjPHetent ret=NULL;
-
+    
     AJNEW0(ret);
-
+    
     /*Create strings*/
     ret->abv = ajStrNew();
     ret->syn = ajStrNew();
     ret->ful = ajStrNew();
-
+    
     return ret;
 }
 
 
 
 
-/* @func ajXyzHetNew **********************************************************
+/* @func ajXyzHetent ******************************************************
 **
-** Het object constructor.
+** Het object constructor. 
 **
 ** @param [r] n [ajint] Number of entries in dictionary.
-**
+** 
 ** @return [AjPHet] Pointer to a Het object
 ** @@
 ******************************************************************************/
@@ -102,7 +106,7 @@ AjPHet     ajXyzHetNew(ajint n)
 {
     ajint i=0;
     AjPHet ret=NULL;
-
+    
     AJNEW0(ret);
 
     if(n)
@@ -118,7 +122,7 @@ AjPHet     ajXyzHetNew(ajint n)
 	ret->n=0;
 	ret->entries=NULL;
     }
-
+    
 
     return ret;
 }
@@ -126,46 +130,45 @@ AjPHet     ajXyzHetNew(ajint n)
 
 
 
-/* @func ajXyzSigposNew *******************************************************
+/* @func ajXyzSigposNew ******************************************************
 **
-** Sigpos object constructor. This is normally called by the
-** ajXyzSignatureCompile function. Fore-knowledge of the number of
-** permissible gaps is required.
+** Sigpos object constructor. This is normally called by the ajXyzSignatureCompile
+** function. Fore-knowledge of the number of permissible gaps is required.
 **
 ** @param [r] ngap [ajint]   Number of permissible gaps.
-**
+** 
 ** @return [AjPSigpos] Pointer to a Sigpos object
 ** @@
 ******************************************************************************/
 AjPSigpos     ajXyzSigposNew(ajint ngap)
 {
     AjPSigpos ret = NULL;
-
+    
     AJNEW0(ret);
     ret->ngaps=ngap;
-
+    
     /* Create arrays */
     AJCNEW0(ret->gsiz, ngap);
     AJCNEW0(ret->gpen, ngap);
     AJCNEW0(ret->subs, 26);
-
+        
     return ret;
 }
 
 
 
 
-/* @func ajXyzSigdatNew *******************************************************
+/* @func ajXyzSigdatNew ******************************************************
 **
 ** Sigdat object constructor. This is normally called by the ajXyzSignatureRead
-** function. Fore-knowledge of the number of empirical residues and gaps is
+** function. Fore-knowledge of the number of empirical residues and gaps is 
 ** required.
-** Important: Functions which manipulate the Sigdat object rely on data in the
+** Important: Functions which manipulate the Sigdat object rely on data in the 
 ** gap arrays (gsiz and grfq) being filled in order of increasing gap size.
 **
 ** @param [r] nres [ajint]   Number of emprical residues.
 ** @param [r] ngap [ajint]   Number of emprical gaps.
-**
+** 
 ** @return [AjPSigdat] Pointer to a Sigdat object
 ** @@
 ******************************************************************************/
@@ -179,12 +182,12 @@ AjPSigdat     ajXyzSigdatNew(ajint nres, ajint ngap)
     ret->ngap=ngap;
 
     /* Create arrays */
-/*
+/*  
     AJCNEW0(ret->gsiz, ngap);
     AJCNEW0(ret->gfrq, ngap);
     AJCNEW0(ret->rids, nres);
     AJCNEW0(ret->rfrq, nres); */
-
+        
     if(ngap)
     {
 	ret->gsiz = ajIntNewL((ajint) ngap);
@@ -214,7 +217,7 @@ AjPSigdat     ajXyzSigdatNew(ajint nres, ajint ngap)
 	ajIntPut(&ret->rfrq, 0, (ajint)0);
 	ajChararrPut(&ret->rids, 0, (char)' ');
     }
-
+    
     return ret;
 }
 
@@ -222,14 +225,13 @@ AjPSigdat     ajXyzSigdatNew(ajint nres, ajint ngap)
 
 
 
-/* @func ajXyzSignatureNew ****************************************************
+/* @func ajXyzSignatureNew ***************************************************
 **
-** Signature object constructor. This is normally called by the
-** ajXyzSignatureRead function. Fore-knowledge of the number of
-** signature positions is required.
+** Signature object constructor. This is normally called by the ajXyzSignatureRead
+** function. Fore-knowledge of the number of signature positions is required.
 **
 ** @param [r] n [ajint]   Number of signature positions
-**
+** 
 ** @return [AjPSignature] Pointer to a Signature object
 ** @@
 ******************************************************************************/
@@ -251,16 +253,16 @@ AjPSignature  ajXyzSignatureNew(ajint n)
 	ret->dat = AJCALLOC0(n, sizeof(AjPSigdat));
 	ret->pos = AJCALLOC0(n, sizeof(AjPSigpos));
     }
-
+    
     return ret;
 }
 
 
 
-/* @func ajXyzHitidxNew *******************************************************
+/* @func ajXyzHitidxNew ******************************************************
 **
-** Hitidx object constructor. This is normally called by the
-** ajXyzHitlistClassify function.
+** Hitidx object constructor. This is normally called by the ajXyzHitlistClassify
+** function.
 **
 ** @return [AjPHitidx] Pointer to a Hitidx object
 ** @@
@@ -274,7 +276,7 @@ AjPHitidx  ajXyzHitidxNew(void)
     ret->Id        =ajStrNew();
     ret->hptr       =NULL;
     ret->lptr       =NULL;
-
+    
     return ret;
 }
 
@@ -282,21 +284,21 @@ AjPHitidx  ajXyzHitidxNew(void)
 
 
 
-/* @func ajXyzScorealgNew *****************************************************
+/* @func ajXyzScorealgNew ***********************************************************
 **
-** Scorealg object constructor.
+** Scorealg object constructor. 
 ** Fore-knowledge of the length of the alignment is required.
 **
 ** @param  [r] len [ajint]   Length of alignment
 **
 ** @return [AjPScorealg] Pointer to a Scorealg object
-**
+** 
 ** @@
 ******************************************************************************/
 AjPScorealg  ajXyzScorealgNew(ajint len)
 {
     AjPScorealg ret=NULL;
-
+        
 
     AJNEW0(ret);
 
@@ -307,12 +309,12 @@ AjPScorealg  ajXyzScorealgNew(ajint len)
 	/*JCIMATT  ret->seq_score    = ajFloatNewL((ajint)len);
 	ajFloatPut(&ret->seq_score, len-1, (float)0.0); */
 
-    /* JCIMATT new stuff*/
+    /* JCIMATT new stuff*/  
 ret->seqmat_score    = ajFloatNewL((ajint)len);
 ajFloatPut(&ret->seqmat_score, len-1, (float)0.0);
 ret->seqvar_score    = ajFloatNewL((ajint)len);
 ajFloatPut(&ret->seqvar_score, len-1, (float)0.0);
-    /* JCIMATT new stuff*/
+    /* JCIMATT new stuff*/  
 
 
         ret->ncon_thresh = ajIntNewL((ajint)len);
@@ -320,6 +322,8 @@ ajFloatPut(&ret->seqvar_score, len-1, (float)0.0);
 
 	ret->post_similar = ajIntNewL((ajint)len);
 	ajIntPut(&ret->post_similar , len-1, (ajint)0);
+	ret->positions = ajIntNewL((ajint)len);
+	ajIntPut(&ret->positions, len-1, (ajint)0);
 	ret->ncon_score   = ajFloatNewL((ajint)len);
 	ajFloatPut(&ret->ncon_score , len-1, (float)0.0);
 	ret->ccon_score   = ajFloatNewL((ajint)len);
@@ -331,7 +335,7 @@ ajFloatPut(&ret->seqvar_score, len-1, (float)0.0);
     }
 /*    else
 	ajWarn("Zero sized arg passed to ajXyzScorealgNew.\n"); */
-
+    
 /* JCIMATT   ret->seq_do    = ajFalse; */
 ret->seqmat_do = ajFalse;
 ret->seqvar_do = ajFalse;
@@ -343,14 +347,19 @@ ret->seqvar_do = ajFalse;
     ret->ccon_do    = ajFalse;
     ret->nccon_do   = ajFalse;
     ret->conthresh  = 0;
-
+    ret->random     = ajFalse;
+    ret->manual     = ajFalse;
+    
     return ret;
 }
 
 
 
 
-/* @func ajXyzVdwallNew *******************************************************
+
+
+
+/* @func ajXyzVdwallNew ********************************************************
 **
 ** Vdwall object constructor. This is normally called by the ajXyzVdwallRead
 ** function. Fore-knowledge of the number of residues is required.
@@ -363,7 +372,7 @@ ret->seqvar_do = ajFalse;
 AjPVdwall  ajXyzVdwallNew(ajint n)
 {
     AjPVdwall ret=NULL;
-
+    
     AJNEW0(ret);
 
     ret->N=n;
@@ -380,7 +389,7 @@ AjPVdwall  ajXyzVdwallNew(ajint n)
 
 
 
-/* @func ajXyzVdwresNew *******************************************************
+/* @func ajXyzVdwresNew ********************************************************
 **
 ** Vdwres object constructor. This is normally called by the ajXyzVdwallRead
 ** function. Fore-knowledge of the number of atoms is required.
@@ -394,10 +403,10 @@ AjPVdwres  ajXyzVdwresNew(ajint n)
 {
     ajint x;
     AjPVdwres ret=NULL;
-
+    
     AJNEW0(ret);
 
-    ret->Id3=ajStrNew();
+    ret->Id3=ajStrNew();    
     ret->N=n;
 
     if(n)
@@ -418,27 +427,27 @@ AjPVdwres  ajXyzVdwresNew(ajint n)
 
 
 
-/* @func ajXyzCmapNew *********************************************************
+/* @func ajXyzCmapNew ***********************************************************
 **
 ** Cmap object constructor. This is normally called by the ajXyzCmapRead
-** function. Fore-knowledge of the dimension (number of residues) for the
+** function. Fore-knowledge of the dimension (number of residues) for the 
 ** contact map is required.
 **
 ** @param  [r] dim [ajint]   Dimenion of contact map
 **
 ** @return [AjPCmap] Pointer to a Cmap object
-**
+** 
 ** @@
 ******************************************************************************/
 AjPCmap  ajXyzCmapNew(ajint dim)
 {
     AjPCmap ret=NULL;
     ajint z=0;
-
+    
 
     AJNEW0(ret);
 
-    ret->Id=ajStrNew();
+    ret->Id=ajStrNew();    
 
     if(dim)
     {
@@ -459,13 +468,13 @@ AjPCmap  ajXyzCmapNew(ajint dim)
 }
 
 
-/* @func ajXyzScopalgNew ******************************************************
+/* @func ajXyzScopalgNew ***********************************************************
 **
 ** Scopalg object constructor. This is normally called by the ajXyzScopalgRead
 ** function. Fore-knowledge of the number of sequences is required.
 **
 ** @param [r] n [ajint]   Number of sequences
-**
+** 
 ** @return [AjPScopalg] Pointer to a Scopalg object
 ** @@
 ******************************************************************************/
@@ -473,7 +482,7 @@ AjPScopalg  ajXyzScopalgNew(ajint n)
 {
     AjPScopalg ret = NULL;
     ajint i=0;
-
+    
 
     AJNEW0(ret);
     ret->Class=ajStrNew();
@@ -481,6 +490,7 @@ AjPScopalg  ajXyzScopalgNew(ajint n)
     ret->Superfamily=ajStrNew();
     ret->Family=ajStrNew();
     ret->Post_similar=ajStrNew();
+    ret->Positions=ajStrNew();
     ret->width=0;
     ret->N=n;
 
@@ -507,9 +517,9 @@ AjPScopalg  ajXyzScopalgNew(ajint n)
 
 
 
-/* @func ajXyzScophitNew ******************************************************
+/* @func ajXyzScophitNew *********************************************************
 **
-** Scophit object constructor.
+** Scophit object constructor. 
 **
 ** @return [AjPScophit] Pointer to a Scophit object
 ** @@
@@ -529,25 +539,27 @@ AjPScophit  ajXyzScophitNew(void)
     ret->Spr         = ajStrNew();
     ret->Typeobj     = ajStrNew();
     ret->Typesbj     = ajStrNew();
+    ret->Model       = ajStrNew();
     ret->Alg         = ajStrNew();
     ret->Group       = ajStrNew();
     ret->Start       =0;
     ret->End         =0;
     ret->Rank        =0;
-    ret->Score       =0;
+    ret->Score       =0;    
     ret->Sunid_Family=0;
     ret->Eval        =0;
+    ret->Pval        =0;
     ret->Target      =ajFalse;
     ret->Target2     =ajFalse;
     ret->Priority    =ajFalse;
-
+    
     return ret;
 }
 
 
 
 
-/* @func ajXyzHitNew **********************************************************
+/* @func ajXyzHitNew *********************************************************
 **
 ** Hit object constructor. This is normally called by the ajXyzHitlistNew
 ** function.
@@ -563,15 +575,18 @@ AjPHit  ajXyzHitNew(void)
 
     ret->Seq       = ajStrNew();
     ret->Acc       = ajStrNew();
+    ret->Spr       = ajStrNew();
     ret->Typeobj   = ajStrNew();
     ret->Typesbj   = ajStrNew();
+    ret->Model     = ajStrNew();
     ret->Alg       = ajStrNew();
     ret->Group     = ajStrNew();
     ret->Start     =0;
     ret->End       =0;
     ret->Rank      =0;
-    ret->Score     =0;
+    ret->Score     =0;    
     ret->Eval      =0;
+    ret->Pval      =0;
     ret->Target      =ajFalse;
     ret->Target2     =ajFalse;
     ret->Priority    =ajFalse;
@@ -582,13 +597,13 @@ AjPHit  ajXyzHitNew(void)
 
 
 
-/* @func ajXyzHitlistNew ******************************************************
+/* @func ajXyzHitlistNew ***********************************************************
 **
 ** Hitlist object constructor. This is normally called by the ajXyzHitlistRead
 ** function. Fore-knowledge of the number of hits is required.
 **
-** @param [r] n [ajint] Number of hits
-**
+** @param [r] n [int] Number of hits
+** 
 ** @return [AjPHitlist] Pointer to a hitlist object
 ** @@
 ******************************************************************************/
@@ -596,7 +611,7 @@ AjPHitlist  ajXyzHitlistNew(ajint n)
 {
     AjPHitlist ret = NULL;
     ajint i=0;
-
+    
 
     AJNEW0(ret);
     ret->Class=ajStrNew();
@@ -604,7 +619,7 @@ AjPHitlist  ajXyzHitlistNew(ajint n)
     ret->Superfamily=ajStrNew();
     ret->Family=ajStrNew();
     ret->Priority=ajFalse;
-
+    
     ret->N=n;
 
     if(n)
@@ -612,7 +627,7 @@ AjPHitlist  ajXyzHitlistNew(ajint n)
 	AJCNEW0(ret->hits,n);
 	for(i=0;i<n;++i)
 	    ret->hits[i] = ajXyzHitNew();
-    }
+    }	
 /*    else
 	ajWarn("Zero sized arg passed to ajXyzHitlistNew.\n"); */
 
@@ -621,9 +636,9 @@ AjPHitlist  ajXyzHitlistNew(ajint n)
 
 
 
-/* @func ajXyzPdbNew **********************************************************
+/* @func ajXyzPdbNew ************************************************************
 **
-** Pdb object constructor. Fore-knowledge of the number of chains
+** Pdb object constructor. Fore-knowledge of the number of chains 
 ** is required. This is normally called by the ajXyzCpdbRead function.
 **
 ** @param [r] chains [ajint] Number of chains in this pdb file
@@ -636,9 +651,9 @@ AjPPdb ajXyzPdbNew(ajint chains)
 {
     AjPPdb ret=NULL;
     ajint i;
-
+    
     AJNEW0(ret);
-
+  
 
     ret->Pdb = ajStrNew();
     ret->Compnd = ajStrNew();
@@ -646,10 +661,10 @@ AjPPdb ajXyzPdbNew(ajint chains)
     ret->Groups = ajListNew();
     ret->Water  = ajListNew();
     ret->gpid   = ajChararrNew();
-
+    
 
     if(chains)
-    {
+    {	
 	AJCNEW0(ret->Chains,chains);
 	for(i=0;i<chains;++i)
 	    ret->Chains[i] = ajXyzChainNew();
@@ -657,14 +672,14 @@ AjPPdb ajXyzPdbNew(ajint chains)
 /*   else
        ajWarn("Zero sized arg passed to ajXyzPdbNew.\n"); */
 
-
+    
 
     return ret;
 }
 
-/* @func ajXyzChainNew ********************************************************
+/* @func ajXyzChainNew ***********************************************************
 **
-** Chain object constructor.
+** Chain object constructor. 
 ** This is normally called by the ajXyzPdbNew function
 **
 ** @return [AjPChain] Pointer to a chain object
@@ -674,7 +689,7 @@ AjPPdb ajXyzPdbNew(ajint chains)
 AjPChain ajXyzChainNew(void)
 {
   AjPChain ret=NULL;
-
+  
   AJNEW0(ret);
 
   ret->Seq    = ajStrNewC("");
@@ -683,7 +698,7 @@ AjPChain ajXyzChainNew(void)
   return ret;
 }
 
-/* @func ajXyzAtomNew *********************************************************
+/* @func ajXyzAtomNew ***********************************************************
 **
 ** Atom object constructor.
 ** This is normally called by the ajXyzChainNew function.
@@ -697,19 +712,144 @@ AjPAtom ajXyzAtomNew(void)
     AjPAtom ret=NULL;
 
     AJNEW0(ret);
-
+    
     ret->Id3   = ajStrNew();
     ret->Atm   = ajStrNew();
     ret->Pdb   = ajStrNew();
     ret->eId   = ajStrNew();
 
+    ret->Id1   = '.';
+    ret->eType = '.';
+    ajStrAssC(&ret->eId, ".");
+    ret->eStrideType = '.';
+    
+
     return ret;
 }
 
-/* @func ajXyzScopNew *********************************************************
+
+
+/* @func ajXyzAtomCopy ********************************************************
 **
-** Scop object constructor. Fore-knowledge of the number of chains is
-** required. This is normally called by the ajXyzScopReadC / ajXyzScopRead
+** Copies the data from an Atom object to an Atom object; the new object
+** is created if needed. 
+** 
+** IMPORTANT - THIS DOES NOT COPY THE eNum & eType ELEMENTS, WHICH ARE SET 
+** TO ZERO and '.' INSTEAD.
+** 
+** @param [w] to   [AjPAtome*]  Atom object pointer
+** @param [w] from [AjPAtom]    Atom object pointer
+**
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+AjBool ajXyzAtomCopy(AjPAtom *to, AjPAtom from)
+{
+    if(!to)
+    {
+	ajWarn("Bad arg (NULL) passed to ajXyzAtomCopy");
+	return ajFalse;
+    }
+
+    if(!(*to))
+	*to = ajXyzAtomNew();
+
+    (*to)->Mod   = from->Mod;
+    (*to)->Chn   = from->Chn;    
+    (*to)->Gpn   = from->Gpn;
+    (*to)->Type  = from->Type;
+    (*to)->Idx   = from->Idx;
+    ajStrAssS(&((*to)->Pdb), from->Pdb);
+    (*to)->Id1   = from->Id1;
+    ajStrAssS(&((*to)->Id3), from->Id3);
+    ajStrAssS(&((*to)->Atm), from->Atm);
+    (*to)->X     = from->X;
+    (*to)->Y     = from->Y;
+    (*to)->Z     = from->Z;
+    (*to)->O     = from->O;
+    (*to)->B     = from->B;
+
+    (*to)->eNum  = from->eNum; 
+    ajStrAssS(&((*to)->eId), from->eId);
+    (*to)->eType = from->eType;
+    (*to)->eClass= from->eClass; 
+
+    (*to)->eStrideNum  = from->eStrideNum; 
+    (*to)->eStrideType = from->eStrideType; 
+
+    (*to)->all_abs  = from->all_abs; 
+    (*to)->all_rel  = from->all_rel; 
+    (*to)->side_abs = from->side_abs; 
+    (*to)->side_rel = from->side_rel; 
+    (*to)->main_abs = from->main_abs;     
+    (*to)->main_rel = from->main_rel; 
+    (*to)->npol_abs = from->npol_abs; 
+    (*to)->npol_rel = from->npol_rel; 
+    (*to)->pol_abs  = from->pol_abs; 
+    (*to)->pol_rel  = from->pol_rel; 
+
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ajXyzAtomListCopy ****************************************************
+**
+** Read a list of Atom structures and returns a pointer to a list of Atom
+** objects, the data is copied. 
+** 
+** @param [r] ptr      [AjPList]  List of Atom objects
+**
+** @return [AjPList] Pointer to list of Atom objects
+** @@
+******************************************************************************/
+AjPList ajXyzAtomListCopy(AjPList ptr)
+{
+   AjPList       ret=NULL;
+   AjIList      iter=NULL;
+   AjPAtom       hit=NULL;
+   AjPAtom       new=NULL;
+
+   /* Check arg's */
+   if(!ptr)
+   {
+       ajWarn("Bad arg's passed to ajXyzAtomListCopy\n");
+       return NULL;
+   }
+    
+   /* Allocate the new list */
+   ret=ajListNew();
+    
+   /* Initialise the iterator*/
+   iter=ajListIter(ptr);
+    
+   /* Iterate through the list of Atom objects*/
+   while((hit=(AjPAtom)ajListIterNext(iter)))
+   {
+       new=ajXyzAtomNew();
+	
+       ajXyzAtomCopy(&new, hit);
+
+       /* Push scophit onto list */
+       ajListPushApp(ret,new);
+   }
+
+
+   /* Tidy up and return */
+   ajListIterFree(iter);
+   return ret;  
+}
+
+
+
+
+
+/* @func ajXyzScopNew ***********************************************************
+**
+** Scop object constructor. Fore-knowledge of the number of chains is 
+** required. This is normally called by the ajXyzScopReadC / ajXyzScopRead 
 ** functions.
 **
 ** @param [r] chains [ajint] Number of chains
@@ -731,8 +871,8 @@ AjPScop ajXyzScopNew(ajint chains)
     ret->Class       = ajStrNew();
     ret->Fold        = ajStrNew();
     ret->Superfamily = ajStrNew();
-    ret->Family      = ajStrNew();
-    ret->Domain      = ajStrNew();
+    ret->Family      = ajStrNew();  
+    ret->Domain      = ajStrNew();  
     ret->Source      = ajStrNew();
     ret->Acc         = ajStrNew();
     ret->Spr         = ajStrNew();
@@ -760,11 +900,11 @@ AjPScop ajXyzScopNew(ajint chains)
 }
 
 
-/* @func ajXyzPdbtospNew ******************************************************
+/* @func ajXyzPdbtospNew ***********************************************************
 **
-** Pdbtosp object constructor. Fore-knowledge of the number of entries
-** is required. This is normally called by the ajXyzPdbtospReadC /
-** ajXyzPdbtospRead functions.
+** Pdbtosp object constructor. Fore-knowledge of the number of entries is 
+** required. This is normally called by the ajXyzPdbtospReadC / ajXyzPdbtospRead 
+** functions.
 **
 ** @param [r] n [ajint] Number of entries
 **
@@ -799,11 +939,11 @@ AjPPdbtosp ajXyzPdbtospNew(ajint n)
 
 
 
-/* @func ajXyzScopclaNew ******************************************************
+/* @func ajXyzScopclaNew ***********************************************************
 **
-** Scopcla object constructor. Fore-knowledge of the number of chains
-** is required. This is normally called by the ajXyzScopclaReadC /
-** ajXyzScopclaRead functions.
+** Scopcla object constructor. Fore-knowledge of the number of chains is 
+** required. This is normally called by the ajXyzScopclaReadC / ajXyzScopclaRead 
+** functions.
 **
 ** @param [r] chains [ajint] Number of chains
 **
@@ -842,12 +982,11 @@ AjPScopcla ajXyzScopclaNew(ajint chains)
 
 
 
-/* @func ajXyzScopdesNew ******************************************************
+/* @func ajXyzScopdesNew ***********************************************************
 **
 ** Scopdes object constructor.
 **
-** This is normally called by the ajXyzScopdesReadC / ajXyzScopdesRead
-** functions.
+** This is normally called by the ajXyzScopdesReadC / ajXyzScopdesRead functions.
 **
 ** @return [AjPScopdes] Pointer to a scopdes object
 ** @@
@@ -863,7 +1002,7 @@ AjPScopdes ajXyzScopdesNew(void)
     ret->Sccs      = ajStrNew();
     ret->Entry     = ajStrNew();
     ret->Desc      = ajStrNew();
-
+    
     return ret;
 }
 
@@ -876,13 +1015,13 @@ AjPScopdes ajXyzScopdesNew(void)
 
 
 
-/* @func ajXyzScopdesDel ******************************************************
+/* @func ajXyzScopdesDel *****************************************************
 **
 ** Scopdes object destructor.
 **
 ** @param [w] ptr [AjPScopdes *] Scopdes object pointer
 **
-** @return [void]
+** @return [void] 
 ** @@
 ******************************************************************************/
 
@@ -891,28 +1030,28 @@ void ajXyzScopdesDel(AjPScopdes *ptr)
     /* Check arg's */
     if(*ptr==NULL)
 	return;
-
+    
     if((*ptr)->Type)
-	ajStrDel( &((*ptr)->Type));
+	ajStrDel( &((*ptr)->Type)); 
     if((*ptr)->Sccs)
-	ajStrDel( &((*ptr)->Sccs));
+	ajStrDel( &((*ptr)->Sccs)); 
     if((*ptr)->Entry)
-	ajStrDel( &((*ptr)->Entry));
+	ajStrDel( &((*ptr)->Entry)); 
     if((*ptr)->Desc)
-	ajStrDel( &((*ptr)->Desc));
+	ajStrDel( &((*ptr)->Desc)); 
 
     AJFREE(*ptr);
     *ptr=NULL;
-
+    
     return;
-
+    
 }
 
 
 
 
 
-/* @func ajXyzScopclaDel ******************************************************
+/* @func ajXyzScopclaDel ***********************************************************
 **
 ** Destructor for scopcla object.
 **
@@ -925,7 +1064,7 @@ void ajXyzScopdesDel(AjPScopdes *ptr)
 void ajXyzScopclaDel(AjPScopcla *thys)
 {
     AjPScopcla pthis = *thys;
-
+    
     ajint i;
 
     if(!pthis || !thys)
@@ -948,7 +1087,7 @@ void ajXyzScopclaDel(AjPScopcla *thys)
     }
 
     AJFREE(pthis);
-    pthis=NULL;
+    (*thys)=NULL;
 
     return;
 }
@@ -956,7 +1095,7 @@ void ajXyzScopclaDel(AjPScopcla *thys)
 
 
 
-/* @func ajXyzHetentDel *******************************************************
+/* @func ajXyzHetentDel ******************************************************
 **
 ** Destructor for Hetent object.
 **
@@ -971,17 +1110,17 @@ void   ajXyzHetentDel(AjPHetent *ptr)
     if(*ptr==NULL)
 	return;
 
-
+   
     if((*ptr)->abv)
-	ajStrDel( &((*ptr)->abv));
+	ajStrDel( &((*ptr)->abv)); 
     if((*ptr)->syn)
-	ajStrDel( &((*ptr)->syn));
+	ajStrDel( &((*ptr)->syn)); 
     if((*ptr)->ful)
-	ajStrDel( &((*ptr)->ful));
+	ajStrDel( &((*ptr)->ful)); 
 
     AJFREE(*ptr);
     *ptr=NULL;
-
+    
     return;
 }
 
@@ -989,7 +1128,7 @@ void   ajXyzHetentDel(AjPHetent *ptr)
 
 
 
-/* @func ajXyzHetDel **********************************************************
+/* @func ajXyzHetDel ******************************************************
 **
 ** Destructor for Het object.
 **
@@ -1001,7 +1140,7 @@ void   ajXyzHetentDel(AjPHetent *ptr)
 void          ajXyzHetDel(AjPHet *ptr)
 {
     ajint i=0;
-
+    
     /* Check arg's */
     if(*ptr==NULL)
 	return;
@@ -1012,8 +1151,8 @@ void          ajXyzHetDel(AjPHet *ptr)
 	{
 	    if((*ptr)->entries[i])
 		ajXyzHetentDel(&((*ptr)->entries[i]));
-	}
-
+	}	
+	
 	AJFREE((*ptr)->entries);
     }
     AJFREE(*ptr);
@@ -1027,7 +1166,7 @@ void          ajXyzHetDel(AjPHet *ptr)
 
 
 
-/* @func ajXyzSigposDel *******************************************************
+/* @func ajXyzSigposDel ******************************************************
 **
 ** Destructor for Sigpos object.
 **
@@ -1042,14 +1181,14 @@ void ajXyzSigposDel(AjPSigpos *pthis)
     AJFREE((*pthis)->gpen);
     AJFREE((*pthis)->subs);
 
-    AJFREE(*pthis);
+    AJFREE(*pthis); 
     *pthis=NULL;
-
-    return;
+    
+    return; 
 }
 
 
-/* @func ajXyzSigdatDel *******************************************************
+/* @func ajXyzSigdatDel ******************************************************
 **
 ** Destructor for Sigdat object.
 **
@@ -1070,16 +1209,16 @@ void ajXyzSigdatDel(AjPSigdat *pthis)
     ajIntDel(&(*pthis)->gfrq);
     ajIntDel(&(*pthis)->rfrq);
     ajChararrDel(&(*pthis)->rids);
-
-    AJFREE(*pthis);
+    
+    AJFREE(*pthis);    
     *pthis=NULL;
 
-    return;
+    return; 
 }
 
 
 
-/* @func ajXyzSignatureDel ****************************************************
+/* @func ajXyzSignatureDel ***************************************************
 **
 ** Destructor for Signature object.
 **
@@ -1091,10 +1230,10 @@ void ajXyzSigdatDel(AjPSigdat *pthis)
 void ajXyzSignatureDel(AjPSignature *pthis)
 {
     ajint x=0;
-
+    
     if(!(*pthis))
 	return;
-
+    
     if((*pthis)->dat)
 	for(x=0;x<(*pthis)->npos; ++x)
 	    if((*pthis)->dat[x])
@@ -1120,7 +1259,7 @@ void ajXyzSignatureDel(AjPSignature *pthis)
     if((*pthis)->pos)
 	AJFREE((*pthis)->pos);
 
-    AJFREE(*pthis);
+    AJFREE(*pthis);    
     *pthis=NULL;
 
     return;
@@ -1128,7 +1267,7 @@ void ajXyzSignatureDel(AjPSignature *pthis)
 
 
 
-/* @func ajXyzHitidxDel *******************************************************
+/* @func ajXyzHitidxDel ******************************************************
 **
 ** Destructor for Hitidx object.
 **
@@ -1143,7 +1282,7 @@ void     ajXyzHitidxDel(AjPHitidx *pthis)
 
     AJFREE(*pthis);
     *pthis=NULL;
-
+    
     return;
 }
 
@@ -1151,7 +1290,7 @@ void     ajXyzHitidxDel(AjPHitidx *pthis)
 
 
 
-/* @func ajXyzScorealgDel *****************************************************
+/* @func ajXyzScorealgDel *******************************************************
 **
 ** Destructor for Scorealg object.
 **
@@ -1164,24 +1303,25 @@ void ajXyzScorealgDel(AjPScorealg *pthis)
 {
 /*JCIMATT     ajFloatDel(&(*pthis)->seq_score);*/
 /* JCIMATT new stuff */
-
+    
     ajFloatDel(&(*pthis)->seqmat_score);
     ajFloatDel(&(*pthis)->seqvar_score);
 
 
 
     ajIntDel(&(*pthis)->post_similar);
+    ajIntDel(&(*pthis)->positions);
     ajFloatDel(&(*pthis)->ncon_score);
     ajFloatDel(&(*pthis)->ccon_score);
     ajIntDel(&(*pthis)->nccon_score);
     ajIntDel(&(*pthis)->combi_score);
     ajIntDel(&(*pthis)->ncon_thresh);
 
-    AJFREE(*pthis);
+    AJFREE(*pthis);    
     *pthis=NULL;
 
     return;
-}
+}	
 
 
 
@@ -1198,19 +1338,19 @@ void ajXyzScorealgDel(AjPScorealg *pthis)
 void ajXyzVdwresDel(AjPVdwres *pthis)
 {
     ajint x=0;
-
+    
     ajStrDel(&(*pthis)->Id3);
-
+    
     for(x=0;x<(*pthis)->N; ++x)
 	ajStrDel(&(*pthis)->Atm[x]);
-
+    
     AJFREE((*pthis)->Atm);
     AJFREE((*pthis)->Rad);
-    AJFREE(*pthis);
+    AJFREE(*pthis);    
     *pthis=NULL;
 
     return;
-}
+}	
 
 
 
@@ -1226,21 +1366,21 @@ void ajXyzVdwresDel(AjPVdwres *pthis)
 void ajXyzVdwallDel(AjPVdwall *pthis)
 {
     ajint x=0;
-
+    
     for(x=0;x<(*pthis)->N; ++x)
 	ajXyzVdwresDel(&(*pthis)->Res[x]);
-
+    
     AJFREE((*pthis)->Res);
-    AJFREE(*pthis);
+    AJFREE(*pthis);    
     *pthis=NULL;
 
     return;
-}
+}	
 
 
 
 
-/* @func ajXyzCmapDel *********************************************************
+/* @func ajXyzCmapDel *******************************************************
 **
 ** Destructor for Cmap object.
 **
@@ -1256,15 +1396,15 @@ void ajXyzCmapDel(AjPCmap *pthis)
     if((*pthis)->Mat)
 	ajInt2dDel(&(*pthis)->Mat);
     if((*pthis))
-	AJFREE(*pthis);
+	AJFREE(*pthis);    
     *pthis=NULL;
 
     return;
-}
+}	
 
 
 
-/* @func ajXyzScopalgDel ******************************************************
+/* @func ajXyzScopalgDel *******************************************************
 **
 ** Destructor for Scopalg object.
 **
@@ -1276,25 +1416,26 @@ void ajXyzCmapDel(AjPCmap *pthis)
 void ajXyzScopalgDel(AjPScopalg *pthis)
 {
     int x=0;  /* Counter */
-
+    
     ajStrDel(&(*pthis)->Class);
     ajStrDel(&(*pthis)->Fold);
     ajStrDel(&(*pthis)->Superfamily);
     ajStrDel(&(*pthis)->Family);
     ajStrDel(&(*pthis)->Post_similar);
+    ajStrDel(&(*pthis)->Positions);
 
     for(x=0;x<(*pthis)->N; x++)
     {
 	ajStrDel(&(*pthis)->Codes[x]);
 	ajStrDel(&(*pthis)->Seqs[x]);
     }
-
+    
     AJFREE((*pthis)->Codes);
     AJFREE((*pthis)->Seqs);
-
+    
     AJFREE(*pthis);
     *pthis=NULL;
-
+    
     return;
 }
 
@@ -1312,9 +1453,9 @@ void ajXyzScopalgDel(AjPScopalg *pthis)
 void     ajXyzScophitDelWrap(const void  **ptr)
 {
     AjPScophit *del = (AjPScophit *) ptr;
-
+    
     ajXyzScophitDel(del);
-
+    
     return;
 }
 
@@ -1342,19 +1483,20 @@ void     ajXyzScophitDel(AjPScophit *pthis)
     ajStrDel(&(*pthis)->Spr);
     ajStrDel(&(*pthis)->Typeobj);
     ajStrDel(&(*pthis)->Typesbj);
+    ajStrDel(&(*pthis)->Model);
     ajStrDel(&(*pthis)->Alg);
     ajStrDel(&(*pthis)->Group);
 
     AJFREE(*pthis);
     *pthis=NULL;
-
+    
     return;
 }
 
 
 
 
-/* @func ajXyzHitDel **********************************************************
+/* @func ajXyzHitDel ***********************************************************
 **
 ** Destructor for hit object.
 **
@@ -1367,20 +1509,22 @@ void     ajXyzHitDel(AjPHit *pthis)
 {
     ajStrDel(&(*pthis)->Seq);
     ajStrDel(&(*pthis)->Acc);
+    ajStrDel(&(*pthis)->Spr);
     ajStrDel(&(*pthis)->Typeobj);
     ajStrDel(&(*pthis)->Typesbj);
+    ajStrDel(&(*pthis)->Model);
     ajStrDel(&(*pthis)->Alg);
     ajStrDel(&(*pthis)->Group);
 
     AJFREE(*pthis);
     *pthis=NULL;
-
+    
     return;
 }
 
 
 
-/* @func ajXyzHitlistDel ******************************************************
+/* @func ajXyzHitlistDel *******************************************************
 **
 ** Destructor for hitlist object.
 **
@@ -1398,7 +1542,7 @@ void ajXyzHitlistDel(AjPHitlist *pthis)
 	ajWarn("Null pointer passed to ajXyzHitlistDel");
 	return;
     }
-
+    
     if((*pthis)->Class)
 	ajStrDel(&(*pthis)->Class);
     if((*pthis)->Fold)
@@ -1407,26 +1551,26 @@ void ajXyzHitlistDel(AjPHitlist *pthis)
 	ajStrDel(&(*pthis)->Superfamily);
     if((*pthis)->Family)
 	ajStrDel(&(*pthis)->Family);
-
+    
     for(x=0;x<(*pthis)->N; x++)
 	if((*pthis)->hits[x])
 	    ajXyzHitDel(&(*pthis)->hits[x]);
 
     if((*pthis)->hits)
 	AJFREE((*pthis)->hits);
-
+    
     if(*pthis)
 	AJFREE(*pthis);
-
+    
     *pthis=NULL;
-
+    
     return;
 }
 
 
 
 
-/* @func ajXyzPdbDel **********************************************************
+/* @func ajXyzPdbDel ***********************************************************
 **
 ** Destructor for pdb object.
 **
@@ -1446,7 +1590,7 @@ void ajXyzPdbDel(AjPPdb *thys)
 
     if(!pthis || !thys)
 	return;
-
+    
     nc = pthis->Nchn;
 
     ajStrDel(&pthis->Pdb);
@@ -1454,8 +1598,8 @@ void ajXyzPdbDel(AjPPdb *thys)
     ajStrDel(&pthis->Source);
 
     ajChararrDel(&pthis->gpid);
-
-
+    
+    
     while(ajListPop(pthis->Water,(void **)&atm))
 	ajXyzAtomDel(&atm);
     ajListDel(&pthis->Water);
@@ -1463,20 +1607,20 @@ void ajXyzPdbDel(AjPPdb *thys)
     while(ajListPop(pthis->Groups,(void **)&atm))
 	ajXyzAtomDel(&atm);
     ajListDel(&pthis->Groups);
-
-
+    
+    
     for(i=0;i<nc;++i)
 	ajXyzChainDel(&pthis->Chains[i]);
     AJFREE(pthis->Chains);
 
     AJFREE(pthis);
-    pthis=NULL;
+    (*thys)=NULL;
 
     return;
 }
 
 
-/* @func ajXyzChainDel ********************************************************
+/* @func ajXyzChainDel ***********************************************************
 **
 ** Destructor for chain object.
 **
@@ -1493,7 +1637,7 @@ void ajXyzChainDel(AjPChain *thys)
 
     if(!thys || !pthis)
 	return;
-
+    
     while(ajListPop(pthis->Atoms,(void **)&atm))
 	ajXyzAtomDel(&atm);
 
@@ -1501,12 +1645,12 @@ void ajXyzChainDel(AjPChain *thys)
     ajListDel(&pthis->Atoms);
 
     AJFREE(pthis);
-    pthis=NULL;
+    (*thys)=NULL;
 
     return;
 }
 
-/* @func ajXyzAtomDel *********************************************************
+/* @func ajXyzAtomDel ***********************************************************
 **
 ** Destructor for atom object.
 **
@@ -1529,12 +1673,12 @@ void ajXyzAtomDel(AjPAtom *thys)
     ajStrDel(&pthis->eId);
 
     AJFREE(pthis);
-    pthis=NULL;
+    (*thys)=NULL;
 
     return;
 }
 
-/* @func ajXyzScopDel *********************************************************
+/* @func ajXyzScopDel ***********************************************************
 **
 ** Destructor for scop object.
 **
@@ -1547,7 +1691,7 @@ void ajXyzAtomDel(AjPAtom *thys)
 void ajXyzScopDel(AjPScop *thys)
 {
     AjPScop pthis = *thys;
-
+    
     ajint i;
 
     if(!pthis || !thys)
@@ -1580,7 +1724,7 @@ void ajXyzScopDel(AjPScop *thys)
     }
 
     AJFREE(pthis);
-    pthis=NULL;
+    (*thys)=NULL;
 
     return;
 }
@@ -1588,7 +1732,7 @@ void ajXyzScopDel(AjPScop *thys)
 
 
 
-/* @func ajXyzPdbtospDel ******************************************************
+/* @func ajXyzPdbtospDel ***********************************************************
 **
 ** Destructor for Pdbtosp object.
 **
@@ -1601,7 +1745,7 @@ void ajXyzScopDel(AjPScop *thys)
 void ajXyzPdbtospDel(AjPPdbtosp *thys)
 {
     AjPPdbtosp pthis = *thys;
-
+    
     ajint i;
 
     if(!pthis || !thys)
@@ -1621,7 +1765,7 @@ void ajXyzPdbtospDel(AjPPdbtosp *thys)
     }
 
     AJFREE(pthis);
-    pthis=NULL;
+    (*thys)=NULL;
 
     return;
 }
@@ -1634,9 +1778,9 @@ void ajXyzPdbtospDel(AjPPdbtosp *thys)
 
 
 
-/* @func ajXyzHetRawRead ******************************************************
+/* @func ajXyzHetRawRead **************************************************
 **
-** Reads a dictionary of heterogen groups available at
+** Reads a dictionary of heterogen groups available at 
 ** http://pdb.rutgers.edu/het_dictionary.txt and writes a Het object.
 **
 ** @param [r] fptr [AjPFile]    Pointer to dictionary
@@ -1653,7 +1797,7 @@ AjBool        ajXyzHetRawRead(AjPFile fptr, AjPHet *ptr)
     AjPList       list=NULL;   /* List of entries */
     ajint       het_cnt=0;     /* Count of number of HET records in file */
     ajint       formul_cnt=0;  /* Count of number of FORMUL records in file */
-
+    
 
     /* Check arg's */
     if((!fptr)||(*ptr))
@@ -1661,19 +1805,19 @@ AjBool        ajXyzHetRawRead(AjPFile fptr, AjPHet *ptr)
 	ajWarn("Bad args passed to ajXyzHetRawRead\n");
 	return ajFalse;
     }
-
+    
     /* Create strings etc */
     line = ajStrNew();
     list = ajListNew();
 
-
+    
     /* Read lines from file */
     while(ajFileReadLine(fptr, &line))
     {
 	if(ajStrPrefixC(line,"HET "))
 	{
 	    het_cnt++;
-
+	    
 	    entry=ajXyzHetentNew();
 	    ajFmtScanS(line, "%*s %S", &entry->abv);
 	}
@@ -1696,7 +1840,7 @@ AjBool        ajXyzHetRawRead(AjPFile fptr, AjPHet *ptr)
 
 	    if(MAJSTRLEN(entry->syn)==0)
 		ajStrAssC(&entry->syn, ".");
-
+	    
 
 	    /* Push entry onto list */
 	    ajListPush(list, (AjPHetent) entry);
@@ -1704,25 +1848,25 @@ AjBool        ajXyzHetRawRead(AjPFile fptr, AjPHet *ptr)
     }
 
     if(het_cnt != formul_cnt)
-    {
+    {	
 	while(ajListPop(list, (void **) &tmp))
 	    ajXyzHetentDel(&tmp);
-
-	ajListDel(&list);
+	
+	ajListDel(&list);	    
 	ajStrDel(&line);
 
 	ajFatal("Fatal discrepancy in count of HET and FORMUL records\n"
 		"Email wawan@hgmp.mrc.ac.uk\n");
-    }
-
-
-
+    }	
+    
+   
+    
 
     *ptr=ajXyzHetNew(0);
     (*ptr)->n=ajListToArray(list, (void ***) &((*ptr)->entries));
-
-
-
+    
+   
+    
     /* Tidy up and return */
     ajStrDel(&line);
     ajListDel(&list);
@@ -1734,14 +1878,14 @@ AjBool        ajXyzHetRawRead(AjPFile fptr, AjPHet *ptr)
 
 
 
-/* @func ajXyzHetRead *********************************************************
+/* @func ajXyzHetRead **************************************************
 **
-** Read heterogen dictionary, the Het object is created within the
+** Read heterogen dictionary, the Het object is created within the 
 ** ajXyzHetRead function
-**
+** 
 ** @param [r] dic_fptr [AjPFile]    Pointer to Het file
 ** @param [w] hetdic   [AjPHet *]   Pointer to Het object
-**
+** 
 ** @return [AjBool] True on success
 ** @@
 ******************************************************************************/
@@ -1751,8 +1895,8 @@ AjBool    ajXyzHetRead(AjPFile dic_fptr, AjPHet *hetdic)
   AjPHetent  entry=NULL; /* current entry */
   AjPList       list=NULL;  /* List of entries */
   AjPStr        temp=NULL;  /* Temporary string */
-
-
+  
+  
   /*Check args */
   if((!dic_fptr))
   {
@@ -1765,14 +1909,14 @@ AjBool    ajXyzHetRead(AjPFile dic_fptr, AjPHet *hetdic)
   {
       *hetdic = ajXyzHetNew(0);
   }
-
+  
 
   /* Create string and list objects */
-
+  
   line=ajStrNew();
   temp=ajStrNew();
   list=ajListNew();
-
+  
   /* Read lines from file */
   while(ajFileReadLine(dic_fptr, &line))
   {
@@ -1780,9 +1924,8 @@ AjBool    ajXyzHetRead(AjPFile dic_fptr, AjPHet *hetdic)
       {
 	  entry=ajXyzHetentNew();
 	  ajFmtScanS(line, "%*s %S", &entry->abv);
-      }
-      else if(ajStrPrefixC(line, "DE   ")) /* NEED TO ACCOUNT FOR
-					      MULTIPLE LINES */
+      }	
+      else if(ajStrPrefixC(line, "DE   ")) /* NEED TO ACCOUNT FOR MULTIPLE LINES */
       {
 /*	  ajFmtScanS(line, "%*s %S", &temp); */
 	  ajStrAssSub(&temp, line, 5, -1);
@@ -1790,7 +1933,7 @@ AjBool    ajXyzHetRead(AjPFile dic_fptr, AjPHet *hetdic)
 	      ajStrApp(&entry->ful, temp);
 	  else
 	      ajStrAssS(&entry->ful, temp);
-      }
+      }	
       else if(ajStrPrefixC(line, "SY   "))
       {
 /*	  ajFmtScanS(line, "%*s %S", &entry->syn);*/
@@ -1811,7 +1954,7 @@ AjBool    ajXyzHetRead(AjPFile dic_fptr, AjPHet *hetdic)
   }
 
   (*hetdic)->n=ajListToArray(list, (void ***) &((*hetdic)->entries));
-
+  
   ajStrDel(&line);
   ajStrDel(&temp);
   ajListDel(&list);
@@ -1822,7 +1965,7 @@ AjBool    ajXyzHetRead(AjPFile dic_fptr, AjPHet *hetdic)
 
 
 
-/* @func ajXyzSignatureRead ***************************************************
+/* @func ajXyzSignatureRead **************************************************
 **
 ** Read the next Signature object from a file in embl-like format.
 **
@@ -1851,12 +1994,12 @@ AjBool ajXyzSignatureRead(AjPFile inf, AjPSignature *thys)
     ajint  v1             =0;
     ajint  v2             =0;
     char   c1             ='\0';
-
-
+    
+    
     /*CHECK ARG'S */
     if(!inf)
 	return ajFalse;
-
+    
 
     /* Only initialise strings if this is called for the first time*/
     if(!line)
@@ -1931,7 +2074,7 @@ AjBool ajXyzSignatureRead(AjPFile inf, AjPSignature *thys)
 	    ajStrAssS(&(*thys)->Fold, fold);
 	    ajStrAssS(&(*thys)->Superfamily, super);
 	    ajStrAssS(&(*thys)->Family, family);
-	    (*thys)->Sunid_Family = Sunid_Family;
+	    (*thys)->Sunid_Family = Sunid_Family;	
 	}
 	else if(ajStrPrefixC(line,"NN"))
 	{
@@ -1945,9 +2088,9 @@ AjBool ajXyzSignatureRead(AjPFile inf, AjPSignature *thys)
 	}
 	else if(ajStrPrefixC(line,"IN"))
 	    {
-		ajFmtScanS(line, "%*s %*s %d %*c %*s %d %*c %*s %d",
+		ajFmtScanS(line, "%*s %*s %d %*c %*s %d %*c %*s %d", 
 			   &nres, &ngap, &wsiz);
-
+	
 		/* Create Sigdat structures and fill some elements*/
 		(*thys)->dat[n-1]=ajXyzSigdatNew(nres, ngap);
 
@@ -1967,7 +2110,7 @@ AjBool ajXyzSignatureRead(AjPFile inf, AjPSignature *thys)
 		    ajIntPut(&(*thys)->dat[n-1]->rfrq,i,v2);
 		}
 		if(!ok) break;
-
+	       
 
 		/* Skip 'XX' line */
 		if(!(ok = ajFileReadLine(inf,&line)))
@@ -1987,7 +2130,7 @@ AjBool ajXyzSignatureRead(AjPFile inf, AjPSignature *thys)
 
 	ok = ajFileReadLine(inf,&line);
     }
-
+    
 
     /* Return */
     if(!ok)
@@ -1998,14 +2141,14 @@ AjBool ajXyzSignatureRead(AjPFile inf, AjPSignature *thys)
 
 
 
-/* @func ajXyzHetWrite ********************************************************
+/* @func ajXyzHetWrite **************************************************
 **
-** Writes the contents of a Het object to file.
+** Writes the contents of a Het object to file. 
 **
 ** @param [w] fptr    [AjPFile]   Output file
 ** @param [r] ptr     [AjPHet]    Het object
-** @param [r] dogrep  [AjBool]    Flag (True if we are to write and
-**                                element of the Het object to a file)
+** @param [r] dogrep  [AjBool]    Flag (True if we are to write <cnt> element of
+** the Het object to file)
 **
 ** @return [AjBool] True on success
 ** @@
@@ -2013,12 +2156,12 @@ AjBool ajXyzSignatureRead(AjPFile inf, AjPSignature *thys)
 AjBool        ajXyzHetWrite(AjPFile fptr, AjPHet ptr, AjBool dogrep)
 {
     ajint i=0;
-
+    
     /* Check arg's */
     if(!fptr || !ptr)
 	return ajFalse;
-
-
+    
+    
     for(i=0;i<ptr->n; i++)
     {
 	ajFmtPrintF(fptr, "ID   %S\n", ptr->entries[i]->abv);
@@ -2036,18 +2179,18 @@ AjBool        ajXyzHetWrite(AjPFile fptr, AjPHet ptr, AjBool dogrep)
 
 
 
-/* @func ajXyzSignatureWrite **************************************************
+/* @func ajXyzSignatureWrite *************************************************
 **
 ** Write contents of a Signature object to an output file in embl-like format.
 **
 ** @param [w] outf [AjPFile] Output file stream
 ** @param [r] thys [AjPSignature] Signature object
 **
-** @return [AjBool] ajTrue on success.
+** @return [void]
 ** @@
 ******************************************************************************/
 AjBool ajXyzSignatureWrite(AjPFile outf, AjPSignature thys)
-{
+{ 
     ajint i,j;
 
     if(!outf || !thys)
@@ -2066,8 +2209,7 @@ AjBool ajXyzSignatureWrite(AjPFile outf, AjPSignature thys)
     {
 	ajFmtPrintF(outf,"XX\nNN   [%d]\n",i+1);
 	ajFmtPrintF(outf,"XX\nIN   NRES %d ; NGAP %d ; WSIZ %d\nXX\n",
-		    thys->dat[i]->nres, thys->dat[i]->ngap,
-		    thys->dat[i]->wsiz);
+		    thys->dat[i]->nres, thys->dat[i]->ngap, thys->dat[i]->wsiz);
 
 	for(j=0;j<thys->dat[i]->nres;++j)
 	    ajFmtPrintF(outf,"AA   %c ; %d\n",
@@ -2080,7 +2222,7 @@ AjBool ajXyzSignatureWrite(AjPFile outf, AjPSignature thys)
 			(ajint) ajIntGet(thys->dat[i]->gfrq, j));
     }
     ajFmtPrintF(outf,"//\n");
-
+    
 
 
     return ajTrue;
@@ -2090,10 +2232,10 @@ AjBool ajXyzSignatureWrite(AjPFile outf, AjPSignature thys)
 
 
 
-/* @func ajXyzSignatureCompile ************************************************
+/* @func ajXyzSignatureCompile ***********************************************
 **
-** Calls ajXyzSigposNew to allocate an array of AjOSigpos objects within an
-** AjOSignature object, and then writes this array. A signature must have been
+** Calls ajXyzSigposNew to allocate an array of AjOSigpos objects within an 
+** AjOSignature object, and then writes this array. A signature must have been 
 ** allocated by using the ajXyzSignatureNew function.
 **
 ** @param [w] S      [AjPSignature*] Signature object
@@ -2104,63 +2246,66 @@ AjBool ajXyzSignatureWrite(AjPFile outf, AjPSignature thys)
 ** @return [AjBool] True if array was written succesfully.
 ** @@
 ******************************************************************************/
-AjBool ajXyzSignatureCompile(AjPSignature *S, float gapo, float gape,
+AjBool ajXyzSignatureCompile(AjPSignature *S, float gapo, float gape, 
 			     AjPMatrixf matrix)
 {
     AjPSeqCvt         cvt=NULL;   /* Conversion array for AjPMatrixf */
     float           **sub=NULL;   /* Substitution matrix from AjPMatrixf */
-    ajint               x=0;
-    ajint               y=0;
-    ajint               z=0;
-    AjBool           *tgap=NULL;   /* Temporary array of gap sizes. A cell
+    ajint               x=0;      
+    ajint               y=0;      
+    ajint               z=0;      
+    AjBool           *tgap=NULL;   /* Temporary array of gap sizes. A cell 
 				      == True if a gap is permissible */
     float            *tpen=NULL;   /* Temporary array of gap penalties */
     ajint              dim=0;      /* Dimension of tgap & tpen arrays */
     float              pen=0.0;    /* Gap penalty */
     ajint             ngap=0;      /* No. of gaps */
-    ajint              div=0;      /* Used in calculating residue
-				      match values */
-
-
+    ajint              div=0;      /* Used in calculating residue match values */
+    
+    
 
     /* CHECK ARGS */
     if(!(*S) || !((*S)->dat) || !((*S)->pos) || !matrix)
 	return ajFalse;
-
+    
 
     /* INITIALISE SUBSTITUTION MATRIX */
     sub  = ajMatrixfArray(matrix);
-    cvt  = ajMatrixfCvt(matrix);
+    cvt  = ajMatrixfCvt(matrix);    
 
-
+    
 
     /* LOOP FOR EACH SIGNATURE POSITION */
     for(x=0; x<(*S)->npos; x++)
     {
-	/* ALLOCATE TEMP. ARRAY OF GAP SIZES, OF SIZE ==
-	   LARGEST GAP + WINDOW SIZE */
+	/* ALLOCATE TEMP. ARRAY OF GAP SIZES, OF SIZE == 
+	   LARGEST GAP + WINDOW SIZE.  NOTE IT IS ESSENTIAL 
+	   THAT THE GAP DATA IS GIVEN IN ORDER OF INCREASING
+	   GAP SIZE IN THE STRUCTURE*/
 	/*      (*S)->dat[x]->gsiz[(*S)->dat[x]->ngap - 1] */
 	dim = (ajIntGet((*S)->dat[x]->gsiz, (*S)->dat[x]->ngap - 1))
 	    + (*S)->dat[x]->wsiz + 1;
 	AJCNEW0(tgap, dim);
 	AJCNEW0(tpen, dim);
-
+	
 	/*FILL TEMP ARRAYS */
 	for(y=0; y<(*S)->dat[x]->ngap; y++)
 	{
 	    /*GAP NOT EXTENDED BY WINDOW */
 	    tgap[(ajIntGet((*S)->dat[x]->gsiz, y))]=ajTrue;
 	    tpen[(ajIntGet((*S)->dat[x]->gsiz, y))]=0;
-
+	    
 
 	    /*GAP IS EXTENDED BY WINDOW */
 	    for(z=1; z<=(*S)->dat[x]->wsiz; z++)
 	    {
 		pen=gapo+gape*(z-1);
-
+		
 		/* A penalty has been assigned for this gap distance before*/
 		if(tgap[(ajIntGet((*S)->dat[x]->gsiz, y))+z])
 		{
+		    /* Write the new penalty value if it is lower than the 
+		       existing one */
 		    if( pen < tpen[(ajIntGet((*S)->dat[x]->gsiz, y))+z])
 			tpen[(ajIntGet((*S)->dat[x]->gsiz, y))+z]=pen;
 		}
@@ -2170,29 +2315,28 @@ AjBool ajXyzSignatureCompile(AjPSignature *S, float gapo, float gape,
 		    tpen[(ajIntGet((*S)->dat[x]->gsiz, y))+z]=pen;
 		    tgap[(ajIntGet((*S)->dat[x]->gsiz, y))+z]=ajTrue;
 		}
-
-
-
+		
+		
+		/* A penalty has been assigned for this gap distance before*/
 		if( ajIntGet((*S)->dat[x]->gsiz, y)-z >= 0)
 		{
-		    /* A penalty has been assigned for this gap
-		       distance before*/
+		    /* Write the new penalty value if it is lower than the 
+		       existing one */
 		    if(tgap[ajIntGet((*S)->dat[x]->gsiz, y)-z])
 		    {
 			if(pen < tpen[(ajIntGet((*S)->dat[x]->gsiz, y))-z])
 			    tpen[(ajIntGet((*S)->dat[x]->gsiz, y))-z]=pen;
 		    }
-		    /* We have not assigned a penalty to this gap
-		       distance before*/
+		    /* We have not assigned a penalty to this gap distance before*/
 		    else
-		    {
+		    { 
 			tpen[(ajIntGet((*S)->dat[x]->gsiz, y))-z]=pen;
 			tgap[(ajIntGet((*S)->dat[x]->gsiz, y))-z]=ajTrue;
 		    }
 		}
 	    }
 	}
-
+	
 
 	/* ALLOCATE ARRAY OF Sigpos OBJECTS */
 	for(ngap=0, y=0; y<dim; y++)
@@ -2216,24 +2360,22 @@ AjBool ajXyzSignatureCompile(AjPSignature *S, float gapo, float gape,
 	    for(div=0, y=0; y<(*S)->dat[x]->nres; y++)
 	    {
 		div+=(ajIntGet((*S)->dat[x]->rfrq, y));
-
-		(*S)->pos[x]->subs[z] +=
-		    (ajIntGet((*S)->dat[x]->rfrq, y)) *
+		
+		(*S)->pos[x]->subs[z] += 
+		    (ajIntGet((*S)->dat[x]->rfrq, y)) * 
 			sub[ajSeqCvtK(cvt,(char)((ajint)'A'+z))]
-			    [ajSeqCvtK(cvt,
-				       ajChararrGet((*S)->dat[x]->rids, y))];
+			    [ajSeqCvtK(cvt, ajChararrGet((*S)->dat[x]->rids, y))];
 	    }
 	    (*S)->pos[x]->subs[z] /= div;
 	}
-
-
+	
+	
 
 	/* FREE tgap & tpen ARRAYS */
 	AJFREE(tgap);
 	AJFREE(tpen);
-}
-
-
+    }
+        
 
     /* Return */
     return ajTrue;
@@ -2244,7 +2386,7 @@ AjBool ajXyzSignatureCompile(AjPSignature *S, float gapo, float gape,
 
 
 
-/* @func ajXyzSignatureAlignSeq ***********************************************
+/* @func ajXyzSignatureAlignSeq **********************************************
 **
 ** Performs an alignment of a signature to a protein sequence. The signature
 ** must have first been compiled by calling the ajXyzSignatureCompile function.
@@ -2255,59 +2397,56 @@ AjBool ajXyzSignatureCompile(AjPSignature *S, float gapo, float gape,
 ** @param [w] hit    [AjPHit*]      Hit object pointer
 ** @param [w] nterm  [ajint]        N-terminal matching option
 **
-** @return [AjBool] True if a signature-sequence alignment was successful and
-** the Hit object was written.  Returns False if there was an internal error,
-** bad arg's etc. or in cases where a sequence is rejected because of
-** N-terminal matching options).
+** @return [AjBool] True if a signature-sequence alignment was successful and 
+** the Hit object was written.  Returns False if there was an internal error, 
+** bad arg's etc. or in cases where a sequence is rejected because of 
+** N-terminal matching options). 
 ** @@
 ******************************************************************************/
-AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit,
+AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit, 
 				     ajint nterm)
 {
-    AjPStr            P=NULL;
+    AjPStr            P=NULL; 
     ajint             gidx=0;	  /*Index into gap array */
     ajint             glast=0;	  /*Index of last gap to try*/
     ajint             nres=0;	  /*No. of residues in protein*/
     ajint             nresm1=0;	  /*== nres-1*/
     static AjPSigcell path=NULL;  /*Path matrix as 1D array */
-    ajint             dim=0;      /*Dimension of 1D path matrix == nres
+    ajint             dim=0;      /*Dimension of 1D path matrix == nres 
 				   * S->npos */
     static char      *p=NULL;	  /*Protein sequence*/
-    ajint             start=0;	  /*Index into path matrix of first position
-				    in the previous row to grow an alignment
+    ajint             start=0;	  /*Index into path matrix of first position 
+				    in the previous row to grow an alignment 
 				    from*/
-    ajint             startp=0;	  /*Index into protein sequence for this
+    ajint             startp=0;	  /*Index into protein sequence for this 
 				    position*/
-    ajint             stop=0;	  /*Index into path matrix of last position in
+    ajint             stop=0;	  /*Index into path matrix of last position in 
 				    previous row to grow an alignment from*/
     ajint             this=0;	  /*Index into path matrix for current row*/
     ajint             last=0;	  /*Index into path matrix for last row*/
-    ajint             thisp=0;	  /*Index into protein sequence for
-				    current row*/
+    ajint             thisp=0;	  /*Index into protein sequence for current row*/
     ajint             lastp=0;	  /*Index into protein sequence for last row*/
     ajint             sidx=0;	  /*Index into signature*/
-    float             val=0;	  /*Value for signature
-				    position:residue match*/
-    float             mval=0;	  /*Max. value of matches of last signature
+    float             val=0;	  /*Value for signature position:residue match*/
+    float             mval=0;	  /*Max. value of matches of last signature 
 				    position:protein sequence*/
-    ajint             max=0;	  /*Index into path matrix for cell
-				    with mval */
-    ajint             maxp=0;     /*Index into protein sequence for path matrix
+    ajint             max=0;	  /*Index into path matrix for cell with mval */
+    ajint             maxp=0;     /*Index into protein sequence for path matrix 
 				    cell with mval */
     static char      *alg=NULL;   /*String for alignment*/
     ajint             cnt;        /*A loop counter */
-    ajint             mlen=0;     /*Min. possible length of the
-				    alignment of the signature*/
+    ajint             mlen=0;     /*Min. possible length of the alignment of the 
+				    signature*/
     float             score=0;    /*Score for alignment */
-
-
+    
+    
 
 
 
     /* CHECK ARGS AND CREATE STRINGS */
     if(!S || !seq || !hit)
 	return ajFalse;
-
+    
 
     P= ajSeqStr(seq);
     /*Check protein sequence contains alphabetic characters only */
@@ -2321,7 +2460,6 @@ AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit,
     dim = nres * S->npos;
 
 
-
     /* ALLOCATE MEMORY */
     /*First time the function is called */
     if(!path)
@@ -2332,8 +2470,8 @@ AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit,
 	/* CREATE ALIGNMENT AND PROTEIN SEQUENCE STRINGS */
 	alg = AJALLOC((nres*sizeof(char))+1);
 	p = AJALLOC((nres*sizeof(char))+1);
-    }
-    else
+    }	
+    else 
     {
 	/* CREATE PATH MATRIX */
 	if(dim > (ajint) sizeof(path)/sizeof(AjOSigcell))
@@ -2353,8 +2491,8 @@ AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit,
        Only necessary to initilise <try> element to ajFalse*/
     for(cnt=0;cnt<dim;cnt++)
 	path[cnt].try = ajFalse;
-
-
+    
+    
 
 
     /*COPY SEQUENCE AND CONVERT TO UPPER CASE, OVERWRITE ALIGNMENT STRING */
@@ -2363,7 +2501,7 @@ AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit,
     for(cnt=0;cnt<nres;cnt++)
 	alg[cnt]='-';
     alg[cnt]='\0';
-
+    
 
 
 
@@ -2371,17 +2509,17 @@ AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit,
     switch(nterm)
     {
     case 1:
-	/*The first position
+	/*The first position 
 	  can be aligned anywhere in the protein sequence, so long
-	  as there is sufficient space to align the rest of the
+	  as there is sufficient space to align the rest of the 
 	  signature (this is fast, but might not be ideal, e.g. for
-          detection of fragments.).  Note that gap distance for
-	  first signature position is ignored. Note the function
+          detection of fragments.).  Note that gap distance for 
+	  first signature position is ignored. Note the function 
 	  will return if the whole of the signature can not
 	  be aligned
 	  This is the RECOMMENDED option*/
-
-	/*Find last gap to try for first sig. position and return an
+	
+	/*Find last gap to try for first sig. position and return an 
 	  error if first sig. position cannot be fitted */
 	mlen=1;   /*For first signature position*/
 	for(sidx=1;sidx<S->npos;sidx++)
@@ -2389,76 +2527,71 @@ AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit,
 	start=startp=0;
 	stop=nres-mlen;
 	if(stop<0)
-	    return ajFalse;
-
-	/* Assign path matrix for row 0. 'this' is index into both
-		path matrix and protein sequence in this case.  There
-		is no gap penalty for the first position.  Assign
-		indices into path matrix of start and stop positions
-		for row 0.  Assign index into protein sequence for
-		start position.*/
+	    return ajFalse;    
+	
+	/*	Assign path matrix for row 0. 'this' is index into both path
+		matrix and protein sequence in this case.  There is no gap 
+		penalty for the first position.
+		Assign indeces into path matrix of start and stop positions for row 0.  
+		Assign index into protein sequence for start position.*/
 	for(this=0;this<=stop;this++)
 	{
-	    path[this].val=S->pos[0]->subs[(ajint)
-					  ((ajint)p[this] - (ajint)'A')];
+	    path[this].val=S->pos[0]->subs[(ajint) ((ajint)p[this] - (ajint)'A')];
 	    path[this].prev=0;
 	    path[this].try=ajTrue;
 	}
 	break;
-
+	
     case 2:
-	/*The first position
+	/*The first position 
 	  can be aligned anywhere in the protein sequence (this is
 	  slower, but means that, e.g. high scoring alignments that
-	  are lacking C-terminal signature positions, will not be
+	  are lacking C-terminal signature positions, will not be 
 	  discarded.    */
-
+	
 	for(this=0;this<nres;this++)
 	{
-	    path[this].val=S->pos[0]->subs[(ajint)
-					  ((ajint)p[this] - (ajint)'A')];
+	    path[this].val=S->pos[0]->subs[(ajint) ((ajint)p[this] - (ajint)'A')];
 	    path[this].prev=0;
 	    path[this].try=ajTrue;
 	}
 	start=startp=0;
 	stop=nresm1;
 	break;
-
+	
     case 3:
-	/* Use empirical gaps only, rather than allowing the
+	/* Use empirical gaps only, rather than allowing the 
 	   first signature positions to be aligned to anywhere
 	   within the sequence */
-
+	
 	for(glast=S->pos[0]->ngaps-1; glast>=0; glast--)
 	    if(S->pos[0]->gsiz[glast]<nresm1)
 		break;
 	if(glast==-1)
 	    return ajFalse;
-
-
-
+	
+	
+	
 	for(gidx=0; gidx<=glast; ++gidx)
-	{
+	{	
 	    this=S->pos[0]->gsiz[gidx];
-	    path[this].val=S->pos[0]->subs[(ajint)
-					  ((ajint)p[this] - (ajint)'A')];
+	    path[this].val=S->pos[0]->subs[(ajint) ((ajint)p[this] - (ajint)'A')];
 	    path[this].prev=0;
 	    path[this].try=ajTrue;
 	}
 	startp=start=S->pos[0]->gsiz[0];
 	stop=S->pos[0]->gsiz[gidx-1];
 	break;
-
+	
     default:
-	ajFatal("Bad nterm value for ajXyzSignatureAlignSeq. "
-		"This should never happen.\n");
+	ajFatal("Bad nterm value for ajXyzSignatureAlignSeq. This should never happen.\n");
 	break;
     }
+    
 
 
 
-
-
+    
     /*Assign path matrix for other rows */
     /*Loop for each signature position, beginning at row 1*/
     for(sidx=1;sidx<S->npos;sidx++)
@@ -2474,20 +2607,20 @@ AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit,
 	    {
 		if((thisp=lastp+S->pos[sidx]->gsiz[gidx]+1)>nresm1)
 		    break;
-
+		
 
 		this=last+nres+S->pos[sidx]->gsiz[gidx]+1;
 		val=path[last].val +
 		    S->pos[sidx]->subs[(ajint) (p[thisp] - (ajint)'A')] -
 			S->pos[sidx]->gpen[gidx];
-
+		
 
 		if((path[this].try==ajTrue)&&(val > path[this].val))
 		{
 		    path[this].val=val;
 		    path[this].prev=last;
 		    continue;
-		}
+		}				
 		/*The cell hasn't been visited before so give it a score*/
 		if(path[this].try==ajFalse)
 		{
@@ -2495,26 +2628,26 @@ AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit,
 		    path[this].prev=last;
 		    path[this].try=ajTrue;
 		    continue;
-		}
+		}	
 	    }
 	}
-
+    	
 	/*We cannot accomodate the next position*/
 	if((startp+=(1+S->pos[sidx]->gsiz[0]))>=nresm1)
 	    break;
 	start+=(nres+1+S->pos[sidx]->gsiz[0]);
 	/*last gives (index into last position tried)+1  because
 	  of loop increment.  */
-
+	
 	stop=this;
     }
 
 
-    /* Find index into protein sequence and number of signature position
+    /* Find index into protein sequence and number of signature position 
        (row) corresponding to the last cell in the path matrix which was
        assigned */
     thisp= this - (ajint) ((sidx=(ajint)floor((double)(this/nres))) * nres);
-
+    
 
 
     /*Find maximal value in this row ... give mval a silly value
@@ -2533,7 +2666,7 @@ AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit,
 
 
     /*Assign score for alignment*/
-    score=mval;
+    score=mval; 
     score /= S->npos;
 
 
@@ -2541,7 +2674,7 @@ AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit,
     alg[maxp]='*';
     for(this=path[max].prev, score=path[max].val; sidx>0; this=path[this].prev)
 	{
-	    thisp= this - (ajint) ((sidx=(ajint)floor((double)(this/nres)))
+	    thisp= this - (ajint) ((sidx=(ajint)floor((double)(this/nres))) 
 				   * nres);
 	    alg[thisp]='*';
 	}
@@ -2553,8 +2686,12 @@ AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit,
     (*hit)->Start=thisp;
     (*hit)->End=maxp;
     ajStrAssS(&(*hit)->Acc, ajSeqGetAcc(seq));
+    if(!MAJSTRLEN((*hit)->Acc))
+	ajStrAssS(&(*hit)->Acc, ajSeqGetName(seq));
+    if(!MAJSTRLEN((*hit)->Acc))
+	ajWarn("Could not find an accession number or name for a sequence in ajXyzSignatureAlignSeq");
     (*hit)->Score=score;
-
+    
 
     /* Clean up and return */
     return ajTrue;
@@ -2562,7 +2699,7 @@ AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit,
 
 
 
-/* @func ajXyzScophitsOverlap *************************************************
+/* @func ajXyzScophitsOverlap ****************************************************
 **
 ** Checks for overlap between two hits.
 **
@@ -2570,22 +2707,34 @@ AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit,
 ** @param [r] h2  [AjPScophit]     Pointer to hit object 2
 ** @param [r] n   [ajint]          Threshold number of residues for overlap
 **
-** @return [AjBool] True if the overlap between the sequences is at least as
+** @return [AjBool] True if the overlap between the sequences is at least as 
 ** long as the threshold. False otherwise.
 ** @@
 ******************************************************************************/
 AjBool        ajXyzScophitsOverlap(AjPScophit h1, AjPScophit h2, ajint n)
 {
+    if((MAJSTRLEN(h1->Seq)<n) || (MAJSTRLEN(h2->Seq)<n))
+    {
+	ajWarn("Sequence length smaller than overlap limit in "
+	       "ajXyzScophitsOverlap ... checking for string match instead");
+
+	if((ajStrFind(h1->Seq, h2->Seq)!=-1) ||
+	   (ajStrFind(h2->Seq, h1->Seq)!=-1))
+	    return ajTrue;
+	else
+	    return ajFalse;
+    }
+    
     if( (((h1->End - h2->Start + 1)>=n) && (h2->Start >= h1->Start)) ||
        (((h2->End - h1->Start + 1)>=n) && (h1->Start >= h2->Start)))
 	return ajTrue;
-    else
+    else 
 	return ajFalse;
 }
 
 
 
-/* @func ajXyzScophitTarget ***************************************************
+/* @func ajXyzScophitTarget ****************************************************
 **
 ** Sets the Target element of a Scophit object to True.
 **
@@ -2602,8 +2751,8 @@ AjBool        ajXyzScophitTarget(AjPScophit *h)
 	ajWarn("Bad arg's passed to ajXyzScophitTarget\n");
 	return ajFalse;
     }
-
-
+    
+        
     (*h)->Target=ajTrue;
 
     return ajTrue;
@@ -2614,7 +2763,7 @@ AjBool        ajXyzScophitTarget(AjPScophit *h)
 
 
 
-/* @func ajXyzScophitTarget2 **************************************************
+/* @func ajXyzScophitTarget2 ****************************************************
 **
 ** Sets the Target2 element of a Scophit object to True.
 **
@@ -2631,8 +2780,8 @@ AjBool        ajXyzScophitTarget2(AjPScophit *h)
 	ajWarn("Bad arg's passed to ajXyzScophitTarget2\n");
 	return ajFalse;
     }
-
-
+    
+        
     (*h)->Target2=ajTrue;
 
     return ajTrue;
@@ -2641,7 +2790,7 @@ AjBool        ajXyzScophitTarget2(AjPScophit *h)
 
 
 
-/* @func ajXyzScophitTargetLowPriority ****************************************
+/* @func ajXyzScophitTargetLowPriority ***************************************
 **
 ** Sets the Target element of a Scophit object to True if its Priority is low.
 **
@@ -2655,10 +2804,10 @@ AjBool        ajXyzScophitTargetLowPriority(AjPScophit *h)
     /* Check args */
     if(!(*h))
     {
-	ajWarn("Bad arg's passed to ajXyzScophitTargetLowPriority\n");
+	ajWarn("Bad arg's passed to ajXyzScophitTargetLowPriority\n"); 
 	return ajFalse;
     }
-
+    
 
     if((*h)->Priority==ajFalse)
 	(*h)->Target=ajTrue;
@@ -2669,7 +2818,7 @@ AjBool        ajXyzScophitTargetLowPriority(AjPScophit *h)
 
 
 
-/* @func ajXyzScophitsOverlapAcc **********************************************
+/* @func ajXyzScophitsOverlapAcc ****************************************************
 **
 ** Checks for overlap and identical accession numbers between two hits.
 **
@@ -2677,23 +2826,36 @@ AjBool        ajXyzScophitTargetLowPriority(AjPScophit *h)
 ** @param [r] h2  [AjPScophit]     Pointer to hit object 2
 ** @param [r] n   [ajint]      Threshold number of residues for overlap
 **
-** @return [AjBool] True if the overlap between the sequences is at least as
+** @return [AjBool] True if the overlap between the sequences is at least as 
 ** long as the threshold. False otherwise.
 ** @@
 ******************************************************************************/
 AjBool        ajXyzScophitsOverlapAcc(AjPScophit h1, AjPScophit h2, ajint n)
 {
+    if((MAJSTRLEN(h1->Seq)<n) || (MAJSTRLEN(h2->Seq)<n))
+    {
+	ajWarn("Sequence length smaller than overlap limit in "
+	       "ajXyzScophitsOverlapAcc ... checking for string match instead");
+
+	if(((ajStrFind(h1->Seq, h2->Seq)!=-1) ||
+	    (ajStrFind(h2->Seq, h1->Seq)!=-1)) &&
+	   (ajStrMatch(h1->Acc, h2->Acc)))
+	    return ajTrue;
+	else
+	    return ajFalse;
+    }
+
     if( ((((h1->End - h2->Start + 1)>=n) && (h2->Start >= h1->Start)) ||
 	 (((h2->End - h1->Start + 1)>=n) && (h1->Start >= h2->Start)))  &&
        (ajStrMatch(h1->Acc, h2->Acc)))
 	return ajTrue;
-    else
+    else 
 	return ajFalse;
 }
 
 
 
-/* @func ajXyzHitsOverlap *****************************************************
+/* @func ajXyzHitsOverlap ****************************************************
 **
 ** Checks for overlap between two hits.
 **
@@ -2701,26 +2863,39 @@ AjBool        ajXyzScophitsOverlapAcc(AjPScophit h1, AjPScophit h2, ajint n)
 ** @param [r] h2  [AjPHit]     Pointer to hit object 2
 ** @param [r] n   [ajint]      Threshold number of residues for overlap
 **
-** @return [AjBool] True if the overlap between the sequences is at least as
+** @return [AjBool] True if the overlap between the sequences is at least as 
 ** long as the threshold. False otherwise.
 ** @@
 ******************************************************************************/
 AjBool        ajXyzHitsOverlap(AjPHit h1, AjPHit h2, ajint n)
 {
+    if((MAJSTRLEN(h1->Seq)<n) || (MAJSTRLEN(h2->Seq)<n))
+    {
+	ajWarn("Sequence length smaller than overlap limit in "
+	       "ajXyzHitsOverlap ... checking for string match instead");
+
+	if((ajStrFind(h1->Seq, h2->Seq)!=-1) ||
+	   (ajStrFind(h2->Seq, h1->Seq)!=-1))
+	    return ajTrue;
+	else
+	    return ajFalse;
+    }
+
     if( (((h1->End - h2->Start + 1)>=n) && (h2->Start >= h1->Start)) ||
        (((h2->End - h1->Start + 1)>=n) && (h1->Start >= h2->Start)))
 	return ajTrue;
-    else
+    else 
 	return ajFalse;
 }
 
 
 
-/* @func ajXyzSignatureAlignWrite *********************************************
+/* @func ajXyzSignatureAlignWrite ********************************************
 **
-** Writes the alignments of a Signature to a list of AjOHit objects to
-** an output file. This is intended for displaying the results from
-** scans of a signature against a protein sequence database.
+** Writes the alignments of a Signature to a list of AjOHit objects to an output 
+** file. This is intended for displaying the results from scans of a signature 
+** against a protein sequence database.  Segments of sequences / alignment
+** are given for all sequences in the same block.
 **
 ** @param [w] outf [AjPFile]      Output file stream
 ** @param [r] sig  [AjPSignature] Signature object pointer
@@ -2729,30 +2904,30 @@ AjBool        ajXyzHitsOverlap(AjPHit h1, AjPHit h2, ajint n)
 ** @return [AjBool] True if file was written
 ** @@
 ******************************************************************************/
-AjBool        ajXyzSignatureAlignWrite(AjPFile outf, AjPSignature sig,
+AjBool        ajXyzSignatureAlignWrite(AjPFile outf, AjPSignature sig, 
 				       AjPHitlist hits)
 {
-    /*A line of the alignment (including accession number, a space and the
-      sequence) in the output file is 70 characters long. An index number is
+    /*A line of the alignment (including accession number, a space and the 
+      sequence) in the output file is 70 characters long. An index number is 
       also printed after this 70 character field.*/
     ajint  wid1=0;     /*Temp. width of Accession Number */
-    ajint  mwid1=0;    /*Max. width of Accession Number or the string "Number"
-			 This is the field width the accession numbers will be
+    ajint  mwid1=0;    /*Max. width of Accession Number or the string "Number". 
+			 This is the field width the accession numbers will be 
 			 printed into */
     ajint  mwid2=0;    /*Width of region to print sequence into*/
     ajint  len=0;      /*Temp. length of sequence*/
     ajint  mlen=0;     /*Max. length of sequence*/
-    char   *ptrp=NULL; /*Pointer to sequence string*/
-    char   *ptrs=NULL; /*Pointer to alignment string */
+    char   *ptrp=NULL; /*Pointer to sequence string*/ 
+    char   *ptrs=NULL; /*Pointer to alignment string */ 
     ajint  idx=0;      /*Start position for printing*/
-    ajint  niter=0;    /*No. iterations of loop for printing sequence blocks*/
-    ajint  fwid1=70;   /*Including accession number, a space, 7 characters
+    ajint  niter=0;    /*No. iterations of loop for printing out sequence blocks*/
+    ajint  fwid1=70;   /*Including accession number, a space, 7 characters 
 			 for the first index number, and the sequence*/
     ajint  fwid2=7;    /*Field width for the first index number*/
     ajint  num=0;      /*Index number for alignment*/
     ajint  y=0;        /*Loop counter*/
     ajint  x=0;        /*Loop counter*/
-
+    
 
     /*Check args*/
     if(!outf || !hits || !sig)
@@ -2760,11 +2935,11 @@ AjBool        ajXyzSignatureAlignWrite(AjPFile outf, AjPSignature sig,
 
     /*Cycle through hits to find longest width of accession number*/
     for(len=0, mlen=0, wid1=0, mwid1=0, x=0;
-	x<hits->N;
+	x<hits->N; 
 	x++)
     {
 	if((wid1=MAJSTRLEN(hits->hits[x]->Acc))>mwid1)
-	    mwid1=wid1;
+	    mwid1=wid1; 
 	if((len=MAJSTRLEN(hits->hits[x]->Seq))>mlen)
 	    mlen=len;
     }
@@ -2775,7 +2950,7 @@ AjBool        ajXyzSignatureAlignWrite(AjPFile outf, AjPSignature sig,
     mwid1++;   /*A space*/
     mwid2=fwid1-fwid2-mwid1;
     niter=(ajint)ceil( ((double)mlen/(double)mwid2));
-
+    
 
     /*Print header info and SCOP classification records of signature */
     ajFmtPrintF(outf, "DE   Results of signature search\nXX\n");
@@ -2785,14 +2960,14 @@ AjBool        ajXyzSignatureAlignWrite(AjPFile outf, AjPSignature sig,
     ajFmtPrintSplit(outf,sig->Family,"XX\nFA   ",75," \t\n\r");
     ajFmtPrintF(outf,"XX\nSI   %d\n", sig->Sunid_Family);
     ajFmtPrintF(outf,"XX\n");
-
+    
 
 
     /*Main loop for printing alignment*/
     for(num=0, idx=0, y=0;y<niter;y++)
     {
 	num+=mwid2;
-
+		
 
 	/*Loop for each protein in Hitlist*/
 	for(x=0;x<hits->N; x++)
@@ -2804,22 +2979,22 @@ AjBool        ajXyzSignatureAlignWrite(AjPFile outf, AjPSignature sig,
 	    /*There is some of the sequence left to print*/
 	    if(idx<MAJSTRLEN(hits->hits[x]->Seq))
 	    {
-		ajFmtPrintF(outf,"%-*S%-*d%-*.*s %d\n",
-			    mwid1, hits->hits[x]->Acc, fwid2,
+		ajFmtPrintF(outf,"%-*S%-*d%-*.*s %d\n", 
+			    mwid1, hits->hits[x]->Acc, fwid2, 
 			    (num-mwid2+1), mwid2, mwid2, ptrp+idx, num);
-		ajFmtPrintF(outf,"%-*s%-*c%-*.*s\n",
-			    mwid1, "SIGNATURE", fwid2, '-', mwid2,
+		ajFmtPrintF(outf,"%-*s%-*c%-*.*s\n", 
+			    mwid1, "SIGNATURE", fwid2, '-', mwid2, 
 			    mwid2, ptrs+idx);
-	    }
-
+	    }	
+	    
 	    /*We have printed all the sequence already*/
 	    else
 	    {
-		ajFmtPrintF(outf,"%-*S%-*d%-*.*s %d\n",
-			    mwid1, hits->hits[x]->Acc, fwid2,
+		ajFmtPrintF(outf,"%-*S%-*d%-*.*s %d\n", 
+			    mwid1, hits->hits[x]->Acc, fwid2,  
 			    (num-mwid2+1), mwid2, mwid2, ".", num);
-		ajFmtPrintF(outf,"%-*s%-*c%-*.*s\n",
-			    mwid1, "SIGNATURE", fwid2, '-', mwid2,
+		ajFmtPrintF(outf,"%-*s%-*c%-*.*s\n", 
+			    mwid1, "SIGNATURE", fwid2, '-', mwid2, 
 			    mwid2, "." );
 	    }
 	}
@@ -2828,46 +3003,170 @@ AjBool        ajXyzSignatureAlignWrite(AjPFile outf, AjPSignature sig,
 
 	/*Print spacer*/
 	ajFmtPrintF(outf, "XX\n");
-    }
+    }	 
 
-
+    
     /*Print tail info*/
     ajFmtPrintF(outf, "//\n");
 
-
+    
     /*Tidy up and return */
     return ajTrue;
 }
 
 
 
-
-
-/* @func ajXyzSignatureHitsWrite **********************************************
+/* @func ajXyzSignatureAlignWriteBlock ********************************************
 **
-** Writes a list of AjOHit objects to an output file. This is intended for
-** displaying the results from scans of a signature against a protein sequence
-** database.  The Hitlist must have first been classified by a call to
-** ajXyzHitlistClassify
+** Writes the alignments of a Signature to a list of AjOHit objects to an output 
+** file. This is intended for displaying the results from scans of a signature 
+** against a protein sequence database. The full sequence / alignment is 
+** printed out for each sequence in its own block.
 **
 ** @param [w] outf [AjPFile]      Output file stream
-** @param [w] sig  [AjPSignature] Signature object
+** @param [r] sig  [AjPSignature] Signature object pointer
 ** @param [r] hits [AjPHitlist]   Hitlist objects with hits from scan
 **
 ** @return [AjBool] True if file was written
 ** @@
 ******************************************************************************/
-AjBool        ajXyzSignatureHitsWrite(AjPFile outf, AjPSignature sig,
-				      AjPHitlist hits)
+AjBool        ajXyzSignatureAlignWriteBlock(AjPFile outf, AjPSignature sig, 
+				       AjPHitlist hits)
 {
-    ajint  x=0;
-
+    /*A line of the alignment (including accession number, a space and the 
+      sequence) in the output file is 70 characters long. An index number is 
+      also printed after this 70 character field.*/
+    ajint  wid1=0;     /*Temp. width of Accession Number */
+    ajint  mwid1=0;    /*Max. width of Accession Number or the string "Number". 
+			 This is the field width the accession numbers will be 
+			 printed into */
+    ajint  mwid2=0;    /*Width of region to print sequence into*/
+    ajint  len=0;      /*Temp. length of sequence*/
+    ajint  mlen=0;     /*Max. length of sequence*/
+    char   *ptrp=NULL; /*Pointer to sequence string*/ 
+    char   *ptrs=NULL; /*Pointer to alignment string */ 
+    ajint  idx=0;      /*Start position for printing*/
+    ajint  niter=0;    /*No. iterations of loop for printing out sequence blocks*/
+    ajint  fwid1=70;   /*Including accession number, a space, 7 characters 
+			 for the first index number, and the sequence*/
+    ajint  fwid2=7;    /*Field width for the first index number*/
+    ajint  num=0;      /*Index number for alignment*/
+    ajint  y=0;        /*Loop counter*/
+    ajint  x=0;        /*Loop counter*/
+    
 
     /*Check args*/
     if(!outf || !hits || !sig)
 	return ajFalse;
 
+    /*Cycle through hits to find longest width of accession number*/
+    for(len=0, mlen=0, wid1=0, mwid1=0, x=0;
+	x<hits->N; 
+	x++)
+    {
+	if((wid1=MAJSTRLEN(hits->hits[x]->Acc))>mwid1)
+	    mwid1=wid1; 
+	if((len=MAJSTRLEN(hits->hits[x]->Seq))>mlen)
+	    mlen=len;
+    }
 
+    /*Assign field widths and number of iterations for printing*/
+    if((wid1=strlen("SIGNATURE"))>mwid1)
+	mwid1=wid1;
+    mwid1++;   /*A space*/
+    mwid2=fwid1-fwid2-mwid1;
+    niter=(ajint)ceil( ((double)mlen/(double)mwid2));
+    
+
+    /*Print header info and SCOP classification records of signature */
+    ajFmtPrintF(outf, "DE   Results of signature search\nXX\n");
+    ajFmtPrintF(outf,"CL   %S",sig->Class);
+    ajFmtPrintSplit(outf,sig->Fold,"\nXX\nFO   ",75," \t\n\r");
+    ajFmtPrintSplit(outf,sig->Superfamily,"XX\nSF   ",75," \t\n\r");
+    ajFmtPrintSplit(outf,sig->Family,"XX\nFA   ",75," \t\n\r");
+    ajFmtPrintF(outf,"XX\nSI   %d\n", sig->Sunid_Family);
+    ajFmtPrintF(outf,"XX\n");
+    
+
+
+    /*Main loop for printing alignment*/
+    for(x=0;x<hits->N; x++)
+    {
+	/*Get pointer to sequence & alignment string*/
+	ptrp=ajStrStr(hits->hits[x]->Seq);
+	ptrs=ajStrStr(hits->hits[x]->Alg);
+
+	/*Loop for each protein in Hitlist*/
+	for(num=0, idx=0, y=0;y<niter;y++)
+	{
+	    num+=mwid2;
+
+	    /*There is some of the sequence left to print*/
+	    if(idx<MAJSTRLEN(hits->hits[x]->Seq))
+	    {
+		ajFmtPrintF(outf,"%-*S%-*d%-*.*s %d\n", 
+			    mwid1, hits->hits[x]->Acc, fwid2, 
+			    (num-mwid2+1), mwid2, mwid2, ptrp+idx, num);
+		ajFmtPrintF(outf,"%-*s%-*c%-*.*s\n", 
+			    mwid1, "SIGNATURE", fwid2, '-', mwid2, 
+			    mwid2, ptrs+idx);
+	    }	
+	    
+	    /*We have printed all the sequence already*/
+	    else
+	    {
+		ajFmtPrintF(outf,"%-*S%-*d%-*.*s %d\n", 
+			    mwid1, hits->hits[x]->Acc, fwid2,  
+			    (num-mwid2+1), mwid2, mwid2, ".", num);
+		ajFmtPrintF(outf,"%-*s%-*c%-*.*s\n", 
+			    mwid1, "SIGNATURE", fwid2, '-', mwid2, 
+			    mwid2, "." );
+	    }
+	    idx+=mwid2;
+	}
+	/*Print spacer*/
+	ajFmtPrintF(outf, "XX\n");
+    }	 
+
+    
+    /*Print tail info*/
+    ajFmtPrintF(outf, "//\n");
+
+    
+    /*Tidy up and return */
+    return ajTrue;
+}
+
+
+
+/* @func ajXyzSignatureHitsWrite *********************************************
+**
+** Writes a list of AjOHit objects to an output file. This is intended for 
+** displaying the results from scans of a signature against a protein sequence
+** database.  The Hitlist must have first been classified by a call to 
+** ajXyzHitlistClassify.  Hits up to the first user-specified number of false
+** hits are written.
+**
+** @param [w] outf [AjPFile]      Output file stream
+** @param [w] sig  [AjPSignature] Signature object
+** @param [r] hits [AjPHitlist]   Hitlist objects with hits from scan
+** @param [r] n    [ajint]        Max. no. false hits to output
+**
+** @return [AjBool] True if file was written
+** @@
+******************************************************************************/
+AjBool        ajXyzSignatureHitsWrite(AjPFile outf, AjPSignature sig, 
+				      AjPHitlist hits, ajint n)
+{
+    ajint  x=0;
+    ajint  nf=0;
+    
+    
+    /*Check args*/
+    if(!outf || !hits || !sig)
+	return ajFalse;
+
+    
     /*Print header info*/
     ajFmtPrintF(outf, "DE   Results of signature search\nXX\n");
 
@@ -2879,26 +3178,29 @@ AjBool        ajXyzSignatureHitsWrite(AjPFile outf, AjPSignature sig,
     ajFmtPrintSplit(outf,sig->Family,"XX\nFA   ",75," \t\n\r");
     ajFmtPrintF(outf,"XX\nSI   %d\n", sig->Sunid_Family);
     ajFmtPrintF(outf,"XX\n");
-
-
+    
+    
     /*Loop through list and print out data*/
     for(x=0;x<hits->N; x++)
     {
-	ajFmtPrintF(outf,
-		    "HI  %-6d%-10S%-5d%-5d%-15S%-10S%-10S%-7.1f%-7.3f\n",
-		    x+1, hits->hits[x]->Acc,
+	if(ajStrMatchC(hits->hits[x]->Typeobj, "FALSE"))
+	    nf++;
+	if(nf==n)
+	    break;
+	ajFmtPrintF(outf, "HI  %-6d%-10S%-5d%-5d%-15S%-10S%-10S%-7.1f%-7.3f%-7.3f\n", 
+		    x+1, hits->hits[x]->Acc, 
 		    hits->hits[x]->Start+1, hits->hits[x]->End+1,
-		    hits->hits[x]->Group,
-		    hits->hits[x]->Typeobj, hits->hits[x]->Typesbj,
-		    hits->hits[x]->Score, hits->hits[x]->Eval);
-
+		    hits->hits[x]->Group, 
+		    hits->hits[x]->Typeobj, hits->hits[x]->Typesbj, 
+		    hits->hits[x]->Score, hits->hits[x]->Pval, hits->hits[x]->Eval);
+	
     }
-
+    
     /*Print tail info*/
     ajFmtPrintF(outf, "XX\n//\n");
-
-
-    /*Clean up and return*/
+    
+    
+    /*Clean up and return*/ 
     return ajTrue;
 }
 
@@ -2906,31 +3208,31 @@ AjBool        ajXyzSignatureHitsWrite(AjPFile outf, AjPSignature sig,
 
 
 
-/* @func ajXyzSignatureAlignSeqall ********************************************
+/* @func ajXyzSignatureAlignSeqall *******************************************
 **
-** Aligns a signature to a set of sequences and writes a Hitlist object with
-** the results. The top-scoring <n> hits are written. The signature must have
+** Aligns a signature to a set of sequences and writes a Hitlist object with 
+** the results. The top-scoring <n> hits are written. The signature must have 
 ** first been compiled by calling the ajXyzSignatureCompile function.
-** Memory for an AjOHitlist object must be allocated beforehand by using the
+** Memory for an AjOHitlist object must be allocated beforehand by using the 
 ** Hitlist constructor with an arg. of 0.
 **
 ** @param [r] sig    [AjPSignature] Signature object
 ** @param [r] db     [AjPSeqall]    Protein sequences
-** @param [w] n      [ajint]        Number of top-scoring hits to store
+** @param [w] n      [ajint]        Max. number of top-scoring hits to store
 ** @param [w] hits   [AjPHitlist*]  Hitlist object pointer
 ** @param [w] nterm  [ajint]        N-terminal matching option
 **
 ** @return [AjBool] True if Hitlist object was written succesfully.
 ** @@
 ******************************************************************************/
-AjBool ajXyzSignatureAlignSeqall(AjPSignature sig, AjPSeqall db, ajint n,
+AjBool ajXyzSignatureAlignSeqall(AjPSignature sig, AjPSeqall db, ajint n, 
 				 AjPHitlist *hits, ajint nterm)
 {
     ajint        nhits=0;        /* Number of hits written to Hitlist object*/
     ajint        hitcnt=0;       /* Counter of number of hits */
-    AjPHit       hit =NULL;	 /* The current hit */
-    AjPHit       ptr=NULL;	 /* Temp. pointer to hit structure */
-    AjPSeq       seq=NULL;       /* The current protein sequence from db */
+    AjPHit       hit =NULL;	 /* The current hit */    
+    AjPHit       ptr=NULL;	 /* Temp. pointer to hit structure */    
+    AjPSeq       seq=NULL;       /* The current protein sequence from db */ 
     AjPList      listhits=NULL;  /* Temp. list of hits */
 
 
@@ -2941,7 +3243,7 @@ AjBool ajXyzSignatureAlignSeqall(AjPSignature sig, AjPSeqall db, ajint n,
 	ajWarn("NULL arg passed to ajXyzSignatureAlignSeqall");
 	return ajFalse;
     }
-
+    
 
     /* Memory allocation*/
     listhits = ajListNew();
@@ -2954,39 +3256,39 @@ AjBool ajXyzSignatureAlignSeqall(AjPSignature sig, AjPSeqall db, ajint n,
     ajStrAssS(&(*hits)->Superfamily, sig->Superfamily);
     ajStrAssS(&(*hits)->Family, sig->Family);
 
-
+        
     /*Search the database*/
     while(ajSeqallNext(db,&seq))
     {
 	/* Allocate memory for hit */
 	hit=ajXyzHitNew();
-
+	
 
 	if(!ajXyzSignatureAlignSeq(sig, seq, &hit, nterm))
-	{
+	{	
 	    ajXyzHitDel(&hit);
 	    continue;
 	}
 	else
 	    hitcnt++;
-
+	
 
 	/* Push hit onto list */
 	ajListPush(listhits,(AjPHit) hit);
-
+	
 
 	if(hitcnt>n)
-	{
+	{	
 	    /* Sort list according to score, highest first*/
 	    ajListSort(listhits, ajXyzCompScoreInv);
-
+	 
 
 	    /* Pop the hit (lowest scoring) from the bottom of the list */
 	    ajListPopEnd(listhits, (void *) &ptr);
 	    ajXyzHitDel(&ptr);
 	}
     }
-
+    
 
     /* Sort list according to score, highest first*/
     ajListSort(listhits, ajXyzCompScoreInv);
@@ -2995,7 +3297,7 @@ AjBool ajXyzSignatureAlignSeqall(AjPSignature sig, AjPSeqall db, ajint n,
     /* Convert list to array within Hitlist object */
     nhits=ajListToArray(listhits, (void ***)  &(*hits)->hits);
     (*hits)->N = nhits;
-
+    
 
     /*Tidy up and return */
     ajListDel(&listhits);
@@ -3005,7 +3307,89 @@ AjBool ajXyzSignatureAlignSeqall(AjPSignature sig, AjPSeqall db, ajint n,
 
 
 
-/* @func ajXyzCpdbRead ********************************************************
+
+
+
+/* @func ajXyzCpdbCopy ********************************************************
+**
+** Copies data from one Pdb object to another; the new object is 
+** always created. 
+** 
+** 
+** @param [w] to   [AjPPdb*] Pdb object pointer
+** @param [w] from [AjPPdb]  Pdb object pointer
+**
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+AjBool ajXyzCpdbCopy(AjPPdb *to, AjPPdb from)
+{
+    ajint x=0;
+    
+
+    if(!from)
+    {
+	ajWarn("NULL arg passed to ajXyzCpdbCopy");
+	return ajFalse;
+    }
+
+    
+    
+
+    if(  (*to) )
+    {
+	ajWarn("Pointer passed to ajXyzCpdbCopy should be NULL but isn't !");
+	return ajFalse;
+    }	
+
+
+    /* Copy data in Pdb object */
+    (*to) = ajXyzPdbNew(from->Nchn);
+    ajStrAssS(&((*to)->Pdb), from->Pdb);
+    ajStrAssS(&((*to)->Compnd), from->Compnd);
+    ajStrAssS(&((*to)->Source), from->Source);
+    (*to)->Method = from->Method;
+    (*to)->Reso = from->Reso;
+    (*to)->Nmod = from->Nmod;    
+    (*to)->Nchn = from->Nchn;    
+    (*to)->Ngp = from->Ngp;
+
+    for(x=0;x<from->Ngp;x++)
+	ajChararrPut(&((*to)->gpid), x, ajChararrGet(from->gpid, x));
+       
+    ajListDel(&((*to)->Groups));
+    ajListDel(&((*to)->Water));
+
+    (*to)->Groups = ajXyzAtomListCopy(from->Groups);
+    (*to)->Water  = ajXyzAtomListCopy(from->Water);
+    
+    
+    /* Copy data in Chain objects */
+    for(x=0;x<from->Nchn;x++)
+    {
+	ajListDel(&((*to)->Chains[x]->Atoms));
+	
+	(*to)->Chains[x]->Id         = from->Chains[x]->Id;
+	(*to)->Chains[x]->Nres       = from->Chains[x]->Nres;
+	(*to)->Chains[x]->Nlig       = from->Chains[x]->Nlig;
+	(*to)->Chains[x]->numHelices = from->Chains[x]->numHelices;
+	(*to)->Chains[x]->numStrands = from->Chains[x]->numStrands;
+	ajStrAssS(&((*to)->Chains[x]->Seq), from->Chains[x]->Seq);
+	(*to)->Chains[x]->Atoms = ajXyzAtomListCopy(from->Chains[x]->Atoms);
+    }
+    
+
+    return ajTrue;
+}
+
+
+
+
+
+
+
+
+/* @func ajXyzCpdbRead ***********************************************************
 **
 ** Reads a Cpdb file  (new format) and writes a filled Pdb object.
 ** Needs modifying to return ajFalse in case of bad format etc
@@ -3036,11 +3420,11 @@ AjBool ajXyzCpdbRead(AjPFile inf, AjPPdb *thys)
     AjPStr     osstr =NULL;
     AjPStr      xstr =NULL;
     AjPStrTok handle =NULL;
-
+    
     AjPAtom     atom =NULL;
 
 
-
+    
 
 
 
@@ -3061,7 +3445,7 @@ AjBool ajXyzCpdbRead(AjPFile inf, AjPPdb *thys)
     {
 	if(ajStrPrefixC(line,"XX"))
 	    continue;
-
+	
 
 	/* Parse ID */
 	if(ajStrPrefixC(line,"ID"))
@@ -3072,7 +3456,7 @@ AjBool ajXyzCpdbRead(AjPFile inf, AjPPdb *thys)
 	    continue;
 	}
 
-
+	
 	/* Parse number of chains*/
 	if(ajStrPrefixC(line,"CN"))
 	{
@@ -3082,7 +3466,7 @@ AjBool ajXyzCpdbRead(AjPFile inf, AjPPdb *thys)
 	    ajStrToInt(token,&nc);
 	    continue;
 	}
-
+	
 
 	/* Parse description text*/
 	if(ajStrPrefixC(line,"DE"))
@@ -3120,7 +3504,7 @@ AjBool ajXyzCpdbRead(AjPFile inf, AjPPdb *thys)
 		(void) ajStrAss (&osstr, token);
 	    continue;
 	}
-
+	
 
 	/* Parse experimental line*/
 	if(ajStrPrefixC(line,"EX"))
@@ -3160,7 +3544,7 @@ AjBool ajXyzCpdbRead(AjPFile inf, AjPPdb *thys)
 	    (*thys)->Nchn = ncha;
 	    (*thys)->Ngp  = ngrp;
 	}
-
+	
 
 	/* Parse information line*/
 	if(ajStrPrefixC(line,"IN"))
@@ -3175,24 +3559,27 @@ AjBool ajXyzCpdbRead(AjPFile inf, AjPPdb *thys)
 	    ajStrToInt(token,&(*thys)->Chains[nc-1]->Nres);
 	    ajStrToken(&token,&handle,NULL);
 	    /* hetatm */
-	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&token,&handle,NULL); 
 	    ajStrToInt(token,&(*thys)->Chains[nc-1]->Nlig);
 	    /* helices */
-	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&token,&handle,NULL); 
 	    ajStrToInt(token,&(*thys)->Chains[nc-1]->numHelices);
 	    /* strands */
-	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&token,&handle,NULL); 
 	    ajStrToInt(token,&(*thys)->Chains[nc-1]->numStrands);
 	    /* sheets */
-	    ajStrToken(&token,&handle,NULL);
+	    /*
+	    ajStrToken(&token,&handle,NULL); 
 	    ajStrToInt(token,&(*thys)->Chains[nc-1]->numSheets);
+	    */
 	    /* turns */
-	    ajStrToken(&token,&handle,NULL);
+	    /*
+	    ajStrToken(&token,&handle,NULL); 
 	    ajStrToInt(token,&(*thys)->Chains[nc-1]->numTurns);
-
+	    */
 	    continue;
 	}
-
+  
 
 	/* Parse sequence line*/
 	if(ajStrPrefixC(line,"SQ"))
@@ -3208,7 +3595,7 @@ AjBool ajXyzCpdbRead(AjPFile inf, AjPPdb *thys)
 	if(ajStrPrefixC(line,"CO"))
 	{
 	    mod=chn=gpn=0;
-
+	    
 	    ajStrTokenAss(&handle,line," \t\n\r");
 	    ajStrToken(&token,&handle,NULL);
 
@@ -3220,18 +3607,18 @@ AjBool ajXyzCpdbRead(AjPFile inf, AjPPdb *thys)
 
 	    ajStrToken(&token,&handle,NULL);
 	    ajStrToInt(token,&gpn);
-
+	    
 	    /* AJNEW0(atom); */
 	    atom = ajXyzAtomNew();
-
+	    
 	    atom->Mod = mod;
 	    atom->Chn = chn;
 	    atom->Gpn = gpn;
-
+	    
 
 	    ajStrToken(&token,&handle,NULL);
 	    atom->Type = *ajStrStr(token);
-
+	    
 	    ajStrToken(&token,&handle,NULL);
 	    ajStrToInt(token,&atom->Idx);
 
@@ -3246,13 +3633,19 @@ AjBool ajXyzCpdbRead(AjPFile inf, AjPPdb *thys)
 
 	    ajStrToken(&token,&handle,NULL);
 	    ajStrAssS(&atom->eId,token);
-
+	    
 	    ajStrToken(&token,&handle,NULL);
 	    ajStrToInt(token,&atom->eClass);
 
 	    ajStrToken(&token,&handle,NULL);
-	    atom->Id1 = *ajStrStr(token);
+	    atom->eStrideType = *ajStrStr(token);
 
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&atom->eStrideNum);
+
+	    ajStrToken(&token,&handle,NULL);
+	    atom->Id1 = *ajStrStr(token);
+	    
 	    ajStrToken(&token,&handle,NULL);
 	    ajStrAssS(&atom->Id3,token);
 
@@ -3274,6 +3667,46 @@ AjBool ajXyzCpdbRead(AjPFile inf, AjPPdb *thys)
 	    ajStrToken(&token,&handle,NULL);
 	    ajStrToFloat(token,&atom->B);
 
+	    ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->Phi);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->Psi);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->Area);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->all_abs);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->all_rel);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->side_abs);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->side_rel);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->main_abs);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->main_rel);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->npol_abs);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->npol_rel);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->pol_abs);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->pol_rel);
+
+
 	    /* Check for coordinates for water or groups that could not
 	       be uniquely assigned to a chain */
 	    if(chn==0)
@@ -3284,15 +3717,14 @@ AjBool ajXyzCpdbRead(AjPFile inf, AjPPdb *thys)
 		else if(atom->Type == 'W')
 		    ajListPushApp((*thys)->Water,(void *)atom);
 		else
-		    ajFatal("Unexpected parse error in ajXyzCpdbReadOld.\n"
-			    "Email jison@hgmp.mrc.ac.uk");
+		    ajFatal("Unexpected parse error in ajXyzCpdbRead. Email jison@hgmp.mrc.ac.uk");
 	    }
 	    else
 		ajListPushApp((*thys)->Chains[chn-1]->Atoms,(void *)atom);
 	}
     }
     /* End of main application loop*/
-
+    
 
 
     /* Tidy up*/
@@ -3310,7 +3742,7 @@ AjBool ajXyzCpdbRead(AjPFile inf, AjPPdb *thys)
 }
 
 
-/* @func ajXyzCpdbReadFirstModel **********************************************
+/* @func ajXyzCpdbReadFirstModel *********************************************
 **
 ** Reads a Cpdb file  (new format) and writes a filled Pdb object. Data for
 ** the first model only is read in.
@@ -3342,7 +3774,7 @@ AjBool ajXyzCpdbReadFirstModel(AjPFile inf, AjPPdb *thys)
     AjPStr     osstr =NULL;
     AjPStr      xstr =NULL;
     AjPStrTok handle =NULL;
-
+    
     AjPAtom     atom =NULL;
 
 
@@ -3364,7 +3796,7 @@ AjBool ajXyzCpdbReadFirstModel(AjPFile inf, AjPPdb *thys)
     {
 	if(ajStrPrefixC(line,"XX"))
 	    continue;
-
+	
 
 	/* Parse ID */
 	if(ajStrPrefixC(line,"ID"))
@@ -3375,7 +3807,7 @@ AjBool ajXyzCpdbReadFirstModel(AjPFile inf, AjPPdb *thys)
 	    continue;
 	}
 
-
+	
 	/* Parse number of chains*/
 	if(ajStrPrefixC(line,"CN"))
 	{
@@ -3385,7 +3817,7 @@ AjBool ajXyzCpdbReadFirstModel(AjPFile inf, AjPPdb *thys)
 	    ajStrToInt(token,&nc);
 	    continue;
 	}
-
+	
 
 	/* Parse description text*/
 	if(ajStrPrefixC(line,"DE"))
@@ -3423,7 +3855,7 @@ AjBool ajXyzCpdbReadFirstModel(AjPFile inf, AjPPdb *thys)
 		(void) ajStrAss (&osstr, token);
 	    continue;
 	}
-
+	
 
 	/* Parse experimental line*/
 	if(ajStrPrefixC(line,"EX"))
@@ -3460,13 +3892,13 @@ AjBool ajXyzCpdbReadFirstModel(AjPFile inf, AjPPdb *thys)
 
 	    (*thys)->Reso = reso;
 /*	    (*thys)->Nmod = nmod;*/
-	    /* Number of models is hard-coded to 1 as only the
+	    /* Number of models is hard-coded to 1 as only the 
 	       data for the first model is read in */
 	    (*thys)->Nmod = 1;
 	    (*thys)->Nchn = ncha;
 	    (*thys)->Ngp  = ngrp;
 	}
-
+	
 
 	/* Parse information line*/
 	if(ajStrPrefixC(line,"IN"))
@@ -3481,24 +3913,27 @@ AjBool ajXyzCpdbReadFirstModel(AjPFile inf, AjPPdb *thys)
 	    ajStrToInt(token,&(*thys)->Chains[nc-1]->Nres);
 	    ajStrToken(&token,&handle,NULL);
 	    /* hetatm */
-	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&token,&handle,NULL); 
 	    ajStrToInt(token,&(*thys)->Chains[nc-1]->Nlig);
 	    /* helices */
-	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&token,&handle,NULL); 
 	    ajStrToInt(token,&(*thys)->Chains[nc-1]->numHelices);
 	    /* strands */
-	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&token,&handle,NULL); 
 	    ajStrToInt(token,&(*thys)->Chains[nc-1]->numStrands);
 	    /* sheets */
-	    ajStrToken(&token,&handle,NULL);
+	    /*
+	    ajStrToken(&token,&handle,NULL); 
 	    ajStrToInt(token,&(*thys)->Chains[nc-1]->numSheets);
+	    */
 	    /* turns */
-	    ajStrToken(&token,&handle,NULL);
+	    /*
+	    ajStrToken(&token,&handle,NULL); 
 	    ajStrToInt(token,&(*thys)->Chains[nc-1]->numTurns);
-
+	    */
 	    continue;
 	}
-
+  
 
 	/* Parse sequence line*/
 	if(ajStrPrefixC(line,"SQ"))
@@ -3514,7 +3949,7 @@ AjBool ajXyzCpdbReadFirstModel(AjPFile inf, AjPPdb *thys)
 	if(ajStrPrefixC(line,"CO"))
 	{
 	    mod=chn=gpn=0;
-
+	    
 	    ajStrTokenAss(&handle,line," \t\n\r");
 	    ajStrToken(&token,&handle,NULL);
 
@@ -3523,25 +3958,25 @@ AjBool ajXyzCpdbReadFirstModel(AjPFile inf, AjPPdb *thys)
 
 	    if(mod!=1)
 		break;
-
+	    
 
 	    ajStrToken(&token,&handle,NULL);
 	    ajStrToInt(token,&chn);
 
 	    ajStrToken(&token,&handle,NULL);
 	    ajStrToInt(token,&gpn);
-
+	    
 	    /* AJNEW0(atom);*/
 	    atom = ajXyzAtomNew();
 
 	    atom->Mod = mod;
 	    atom->Chn = chn;
 	    atom->Gpn = gpn;
-
+	    
 
 	    ajStrToken(&token,&handle,NULL);
 	    atom->Type = *ajStrStr(token);
-
+	    
 	    ajStrToken(&token,&handle,NULL);
 	    ajStrToInt(token,&atom->Idx);
 
@@ -3556,13 +3991,19 @@ AjBool ajXyzCpdbReadFirstModel(AjPFile inf, AjPPdb *thys)
 
 	    ajStrToken(&token,&handle,NULL);
 	    ajStrAssS(&atom->eId,token);
-
+	    
 	    ajStrToken(&token,&handle,NULL);
 	    ajStrToInt(token,&atom->eClass);
 
 	    ajStrToken(&token,&handle,NULL);
-	    atom->Id1 = *ajStrStr(token);
+	    atom->eStrideType = *ajStrStr(token);
 
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&atom->eStrideNum);
+
+	    ajStrToken(&token,&handle,NULL);
+	    atom->Id1 = *ajStrStr(token);
+	    
 	    ajStrToken(&token,&handle,NULL);
 	    ajStrAssS(&atom->Id3,token);
 
@@ -3584,6 +4025,45 @@ AjBool ajXyzCpdbReadFirstModel(AjPFile inf, AjPPdb *thys)
 	    ajStrToken(&token,&handle,NULL);
 	    ajStrToFloat(token,&atom->B);
 
+	    ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->Phi);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->Psi);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->Area);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->all_abs);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->all_rel);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->side_abs);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->side_rel);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->main_abs);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->main_rel);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->npol_abs);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->npol_rel);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->pol_abs);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&atom->pol_rel);
+
 	    /* Check for coordinates for water or groups that could not
 	       be uniquely assigned to a chain */
 	    if(chn==0)
@@ -3594,15 +4074,14 @@ AjBool ajXyzCpdbReadFirstModel(AjPFile inf, AjPPdb *thys)
 		else if(atom->Type == 'W')
 		    ajListPushApp((*thys)->Water,(void *)atom);
 		else
-		    ajFatal("Unexpected parse error in ajXyzCpdbReadOld.\n"
-			    "Email jison@hgmp.mrc.ac.uk");
+		    ajFatal("Unexpected parse error in ajXyzCpdbReadFirstModel. Email jison@hgmp.mrc.ac.uk");
 	    }
 	    else
 		ajListPushApp((*thys)->Chains[chn-1]->Atoms,(void *)atom);
 	}
     }
     /* End of main application loop*/
-
+    
 
 
     /* Tidy up*/
@@ -3622,15 +4101,15 @@ AjBool ajXyzCpdbReadFirstModel(AjPFile inf, AjPPdb *thys)
 
 
 
-/* @func ajXyzCpdbReadOld *****************************************************
+/* @func ajXyzCpdbReadOld ****************************************************
 **
 ** Reads a Cpdb file  (old format) and writes a filled Pdb object.
 ** Needs modifying to return ajFalse in case of bad format etc
-** The following types of lines can be parsed:
+** The following types of lines can be parsed: 
 **
 ** EX   METHOD xray; RESO 2.80; NMOD 1; NCHA 2;
 ** IN   ID A; NR 210; NH 12; NW 0;
-** CO   1  1  P  3   2   P  PRO  N   31.631  1.734 37.188   1.00  47.72
+** CO   1    1    P    3     2     P    PRO    N     31.631    1.734   37.188     1.00    47.72
 **
 ** @param [r] inf  [AjPFile] Pointer to cpdb file
 ** @param [w] thys [AjPPdb*] Pdb object pointer
@@ -3658,11 +4137,11 @@ AjBool ajXyzCpdbReadOld(AjPFile inf, AjPPdb *thys)
     AjPStr     osstr =NULL;
     AjPStr      xstr =NULL;
     AjPStrTok handle =NULL;
-
+    
     AjPAtom     atom =NULL;
 
 
-
+    
 
 
     /* Intitialise strings */
@@ -3680,7 +4159,7 @@ AjBool ajXyzCpdbReadOld(AjPFile inf, AjPPdb *thys)
     {
 	if(ajStrPrefixC(line,"XX"))
 	    continue;
-
+	
 	/* Parse ID */
 	if(ajStrPrefixC(line,"ID"))
 	{
@@ -3691,7 +4170,7 @@ AjBool ajXyzCpdbReadOld(AjPFile inf, AjPPdb *thys)
 	    continue;
 	}
 
-
+	
 	/* Parse number of chains*/
 	if(ajStrPrefixC(line,"CN"))
 	{
@@ -3702,7 +4181,7 @@ AjBool ajXyzCpdbReadOld(AjPFile inf, AjPPdb *thys)
 
 	    continue;
 	}
-
+	
 
 	/* Parse description text*/
 	if(ajStrPrefixC(line,"DE"))
@@ -3742,7 +4221,7 @@ AjBool ajXyzCpdbReadOld(AjPFile inf, AjPPdb *thys)
 
 	    continue;
 	}
-
+	
 
 	/* Parse experimental line*/
 	if(ajStrPrefixC(line,"EX"))
@@ -3780,7 +4259,7 @@ AjBool ajXyzCpdbReadOld(AjPFile inf, AjPPdb *thys)
 	    (*thys)->Ngp  = ngrp;
 
 	}
-
+	
 
 	/* Parse information line*/
 	if(ajStrPrefixC(line,"IN"))
@@ -3795,18 +4274,18 @@ AjBool ajXyzCpdbReadOld(AjPFile inf, AjPPdb *thys)
 	    ajStrToInt(token,&(*thys)->Chains[nc-1]->Nres);
 	    ajStrToken(&token,&handle,NULL);
 	    /* hetatm */
-	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&token,&handle,NULL); 
 	    ajStrToInt(token,&(*thys)->Chains[nc-1]->Nlig);
 	    /* water */
 	    /*
 	    ajStrToken(&token,&handle,NULL);
-	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&token,&handle,NULL); 
 	    ajStrToInt(token,&(*thys)->Chains[nc-1]->Nwat);
 	    */
 
 	    continue;
 	}
-
+  
 
 	/* Parse sequence line*/
 	if(ajStrPrefixC(line,"SQ"))
@@ -3832,18 +4311,18 @@ AjBool ajXyzCpdbReadOld(AjPFile inf, AjPPdb *thys)
 
 /*	    ajStrToken(&token,&handle,NULL);
 	    ajStrToInt(token,&gpn); */
-
+	    
 	    /*AJNEW0(atom);*/
 	    atom = ajXyzAtomNew();
 
 	    atom->Mod = mod;
 	    atom->Chn = chn;
 	    atom->Gpn = gpn;
-
+	    
 
 	    ajStrToken(&token,&handle,NULL);
 	    atom->Type = *ajStrStr(token);
-
+	    
 	    ajStrToken(&token,&handle,NULL);
 	    ajStrToInt(token,&atom->Idx);
 
@@ -3852,7 +4331,7 @@ AjBool ajXyzCpdbReadOld(AjPFile inf, AjPPdb *thys)
 
 	    ajStrToken(&token,&handle,NULL);
 	    atom->Id1 = *ajStrStr(token);
-
+	    
 	    ajStrToken(&token,&handle,NULL);
 	    ajStrAssS(&atom->Id3,token);
 
@@ -3878,7 +4357,7 @@ AjBool ajXyzCpdbReadOld(AjPFile inf, AjPPdb *thys)
 	}
     }
     /* End of main application loop*/
-
+    
 
     /* Tidy up*/
     ajStrTokenClear(&handle);
@@ -3896,25 +4375,24 @@ AjBool ajXyzCpdbReadOld(AjPFile inf, AjPPdb *thys)
 
 
 
-/* @func ajXyzCpdbWriteDomain *************************************************
+/* @func ajXyzCpdbWriteDomain ***************************************************
 **
-** Writes a Cpdb file for a SCOP domain. Where coordinates for multiple
+** Writes a Cpdb file for a SCOP domain. Where coordinates for multiple 
 ** models (e.g. NMR structures) are given, data for model 1 are written.
-** In the Cpdb file, the coordinates are presented as belonging to a single
+** In the Cpdb file, the coordinates are presented as belonging to a single 
 ** chain regardless of how many chains the domain comprised.
 ** Coordinates for heterogens are NOT written to file.
 **
-** @param [w] errf [AjPFile] Output file stream for error messages
 ** @param [w] outf [AjPFile] Output file stream
+** @param [w] errf [AjPFile] Output file stream for error messages
 ** @param [r] pdb  [AjPPdb]  Pdb object
 ** @param [r] scop [AjPScop] Scop object
 **
 ** @return [AjBool] True on success
 ** @@
-**
+** 
 ******************************************************************************/
-AjBool ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf,
-			    AjPPdb pdb, AjPScop scop)
+AjBool ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb, AjPScop scop)
 {
     /*rn_mod is a modifier to the residue number to give correct residue
       numbering for the domain*/
@@ -3923,15 +4401,15 @@ AjBool ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf,
     ajint      start       =0;
     ajint      end         =0;
     ajint      finalrn     =0;
-    ajint      rn_mod      =0;
-    ajint      last_rn     =0;
+    ajint      rn_mod      =0;  
+    ajint      last_rn     =0;  
     ajint      this_rn;
     char     id;
-
-    AjPStr   tmpseq      =NULL;
-    AjPStr   seq         =NULL;
+    
+    AjPStr   tmpseq      =NULL;   
+    AjPStr   seq         =NULL;   
     AjPStr   tmpstr      =NULL;
-
+        
     AjBool   found_start =ajFalse;
     AjBool   found_end   =ajFalse;
     AjBool   nostart     =ajFalse;
@@ -3939,24 +4417,24 @@ AjBool ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf,
     AjIList  iter        =NULL;
     AjPAtom  atm         =NULL;
     AjPAtom  atm2        =NULL;
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
     /* Intitialise strings*/
     seq   =ajStrNew();
     tmpseq=ajStrNew();
     tmpstr=ajStrNew();
-
+    
     /* Check for unknown or zero-length chains*/
     for(z=0;z<scop->N;z++)
 	if(!ajXyzPdbChain(scop->Chain[z], pdb, &chn))
 	{
 	    ajWarn("Chain incompatibility error in "
-		   "ajXyzCpdbWriteDomain");
-
+		   "ajXyzCpdbWriteDomain");			
+		
 	    ajFmtPrintF(errf, "//\n%S\nERROR Chain incompatibility "
 			"error in ajXyzCpdbWriteDomain\n", scop->Entry);
 	    ajStrDel(&seq);
@@ -3965,74 +4443,74 @@ AjBool ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf,
 	    return ajFalse;
 	}
 	else if(pdb->Chains[chn-1]->Nres==0)
-	{
-	    ajWarn("Chain length zero");
-
-	    ajFmtPrintF(errf, "//\n%S\nERROR Chain length zero\n",
+	{		
+	    ajWarn("Chain length zero");			
+	    
+	    ajFmtPrintF(errf, "//\n%S\nERROR Chain length zero\n", 
 			scop->Entry);
 	    ajStrDel(&seq);
 	    ajStrDel(&tmpseq);
 	    ajStrDel(&tmpstr);
 	    return ajFalse;
 	}
-
-
+    
+    
     /* Write header info. to domain coordinate file*/
     ajFmtPrintF(outf, "%-5s%S\n", "ID", scop->Entry);
     ajFmtPrintF(outf, "XX\n");
-    ajFmtPrintF(outf, "%-5sCo-ordinates for SCOP domain %S\n",
+    ajFmtPrintF(outf, "%-5sCo-ordinates for SCOP domain %S\n", 
 		"DE", scop->Entry);
     ajFmtPrintF(outf, "XX\n");
-    ajFmtPrintF(outf, "%-5sSee Escop.dat for domain classification\n",
+    ajFmtPrintF(outf, "%-5sSee Escop.dat for domain classification\n", 
 		"OS");
     ajFmtPrintF(outf, "XX\n");
     ajFmtPrintF(outf, "%-5sMETHOD ", "EX");
     if(pdb->Method == ajXRAY)
-	ajFmtPrintF(outf, "xray; ");
+	ajFmtPrintF(outf, "xray; ");	
     else
-	ajFmtPrintF(outf, "nmr_or_model; ");
-    ajFmtPrintF(outf, "RESO %.2f; NMOD 1; NCHA 1; NGRP 0;\n",
+	ajFmtPrintF(outf, "nmr_or_model; ");		
+    ajFmtPrintF(outf, "RESO %.2f; NMOD 1; NCHA 1; NGRP 0;\n", 
 		pdb->Reso);
-
+    
     /* JCI The NCHA and NMOD are hard-coded to 1 for domain files*/
-
-
+    
+    
     /* Start of main application loop*/
     /* Print out data up to co-ordinates list*/
     for(z=0;
 	z<scop->N;
-	z++,found_start=ajFalse, found_end=ajFalse,
+	z++,found_start=ajFalse, found_end=ajFalse, 
 	nostart=ajFalse, noend=ajFalse, last_rn=0)
-    {
+    {	
 	/* Unknown or Zero sized chains have already been checked for
 	   so no additional checking is needed here */
 	ajXyzPdbChain(scop->Chain[z], pdb, &chn);
-
+	
 
 	/* Initialise the iterator*/
 	iter=ajListIter(pdb->Chains[chn-1]->Atoms);
 
 
-	/*If start of domain is unspecified
+	/*If start of domain is unspecified 
 	  then assign start to first residue in chain*/
 	if(!ajStrCmpC(scop->Start[z], "."))
 	{
 	    nostart = ajTrue;
 	    start=1;
-	    found_start=ajTrue;
+	    found_start=ajTrue;	
 	}
+		
 
 
-
-	/*If end of domain is unspecified
+	/*If end of domain is unspecified 
 	  then assign end to last residue in chain*/
 	if(!ajStrCmpC(scop->End[z], "."))
 	{
 	    noend = ajTrue;
 	    end=pdb->Chains[chn-1]->Nres;
-	    found_end=ajTrue;
+	    found_end=ajTrue;	
 	}
-
+		
 
 	/*Find start and end of domains in chain*/
 	if(!found_start || !found_end)
@@ -4041,10 +4519,16 @@ AjBool ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf,
 	    while((atm=(AjPAtom)ajListIterNext(iter)))
 	    {
 		/* JCI hard-coded to work on model 1*/
-		/* Break if a non-protein atom is found or model no. !=1*/
-		if(atm->Type!='P' || atm->Mod!=1
+		/* Continue if a non-protein atom is found or break if model no. !=1*/
+		if(atm->Mod!=1 || (found_start && found_end))
+		    break; 
+		if(atm->Type!='P')
+		    continue;
+
+
+/*		if(atm->Type!='P' || atm->Mod!=1 
 		   || (found_start && found_end))
-		    break;
+		    break; */
 
 
 		/* If we are onto a new residue*/
@@ -4054,40 +4538,38 @@ AjBool ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf,
 		    last_rn=this_rn;
 
 
-		    /* The start position was specified, but has not
+		    /* The start position was specified, but has not 
 		       been found yet*/
-		    if(!found_start && !nostart)
+		    if(!found_start && !nostart)		
 		    {
 			ajStrAssS(&tmpstr, scop->Start[z]);
 			ajStrAppK(&tmpstr, '*');
-
+			
 			/* Start position found */
 		        /*if(!ajStrCmpCase(atm->Pdb, scop->Start[z]))*/
 			if(ajStrMatchWild(atm->Pdb, tmpstr))
 			{
 			    if(!ajStrMatch(atm->Pdb, scop->Start[z]))
 			    {
-				ajWarn("Domain start found by wildcard match "
-				       "only in ajXyzCpdbWriteDomain");
-				ajFmtPrintF(errf,
-					    "//\n%S\nERROR Domain start found "
+				ajWarn("Domain start found by wildcard match only "
+				       "in ajXyzCpdbWriteDomain");
+				ajFmtPrintF(errf, "//\n%S\nERROR Domain start found "
 					    "by wildcard match only in "
-					    "ajXyzCpdbWriteDomain\n",
-					    scop->Entry);
+					    "ajXyzCpdbWriteDomain\n", scop->Entry);
 			    }
-
+			    
 
 			    start=atm->Idx;
-			    found_start=ajTrue;
+			    found_start=ajTrue;	
 			}
-			else
+			else	
 			    continue;
 		    }
 
 
-		    /* The end position was specified, but has not
+		    /* The end position was specified, but has not 
 		       been found yet*/
-		    if(!found_end && !noend)
+		    if(!found_end && !noend)		
 		    {
 			ajStrAssS(&tmpstr, scop->End[z]);
 			ajStrAppK(&tmpstr, '*');
@@ -4098,53 +4580,51 @@ AjBool ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf,
 			{
 			    if(!ajStrMatch(atm->Pdb, scop->End[z]))
 			    {
-				ajWarn("Domain end found by wildcard match "
-				       "only in ajXyzCpdbWriteDomain");
-				ajFmtPrintF(errf,
-					    "//\n%S\nERROR Domain end found "
+				ajWarn("Domain end found by wildcard match only "
+				       "in ajXyzCpdbWriteDomain");
+				ajFmtPrintF(errf, "//\n%S\nERROR Domain end found "
 					    "by wildcard match only in "
-					    "ajXyzCpdbWriteDomain\n",
-					    scop->Entry);
+					    "ajXyzCpdbWriteDomain\n", scop->Entry);
 			    }
 
 			    end=atm->Idx;
-			    found_end=ajTrue;
+			    found_end=ajTrue;       
 			    break;
 			}
-		    }
+		    }	
 		}
 	    }
 	}
-
-
+	
+	
 
 	/* Diagnostics if start position was not found*/
-	if(!found_start)
+	if(!found_start)		
 	{
 	    ajStrDel(&seq);
 	    ajStrDel(&tmpseq);
 	    ajStrDel(&tmpstr);
-	    ajListIterFree(iter);
+	    ajListIterFree(iter);	
 	    ajWarn("Domain start not found in ajXyzCpdbWriteDomain");
 	    ajFmtPrintF(errf, "//\n%S\nERROR Domain start not found "
 			"in in ajXyzCpdbWriteDomain\n", scop->Entry);
 	    return ajFalse;
 	}
-
+	
 
 	/* Diagnostics if end position was not found*/
-	if(!found_end)
+	if(!found_end)		
 	{
 	    ajStrDel(&seq);
 	    ajStrDel(&tmpseq);
 	    ajStrDel(&tmpstr);
-	    ajListIterFree(iter);
+	    ajListIterFree(iter);	
 	    ajWarn("Domain end not found in ajXyzCpdbWriteDomain");
 	    ajFmtPrintF(errf, "//\n%S\nERROR Domain end not found "
 			"in ajXyzCpdbWriteDomain\n", scop->Entry);
 	    return ajFalse;
 	}
-
+	
 
 	/*Write <seq> string here */
 	ajStrAssSub(&tmpseq, pdb->Chains[chn-1]->Seq, start-1, end-1);
@@ -4152,12 +4632,12 @@ AjBool ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf,
 
 
 	/* Free the iterator*/
-	ajListIterFree(iter);
+	ajListIterFree(iter);	
     }
     /* End of main application loop*/
-
-
-
+    
+    
+    
 
 
 
@@ -4171,28 +4651,36 @@ AjBool ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf,
 	    if(id == ' ')
 		id='.';
 	}
-
+    
 
 
     /* Write sequence to domain coordinate file*/
-    ajFmtPrintF(outf, "XX\n");
-    ajFmtPrintF(outf, "%-5s[1]\n", "CN");
-    ajFmtPrintF(outf, "XX\n");
-    ajFmtPrintF(outf, "%-5sID %c; NR %d; NL 0; NH %d; NE %d; NS %d; NT %d;\n",
-		"IN",
+    ajFmtPrintF(outf, "XX\n");	
+    ajFmtPrintF(outf, "%-5s[1]\n", "CN");	
+    ajFmtPrintF(outf, "XX\n");	
+    /*
+    ajFmtPrintF(outf, "%-5sID %c; NR %d; NL 0; NH %d; NE %d; NS %d; NT %d;\n", 
+		"IN", 
 		id,
 		ajStrLen(seq),
-		pdb->Chains[chn-1]->numHelices,
-		pdb->Chains[chn-1]->numStrands,
-		pdb->Chains[chn-1]->numSheets,
+		pdb->Chains[chn-1]->numHelices, 
+		pdb->Chains[chn-1]->numStrands, 
+		pdb->Chains[chn-1]->numSheets, 
 		pdb->Chains[chn-1]->numTurns);
-    ajFmtPrintF(outf, "XX\n");
+		*/
+    ajFmtPrintF(outf, "%-5sID %c; NR %d; NL 0; NH %d; NE %d;\n", 
+		"IN", 
+		id,
+		ajStrLen(seq),
+		pdb->Chains[chn-1]->numHelices, 
+		pdb->Chains[chn-1]->numStrands);
+    ajFmtPrintF(outf, "XX\n");	
     ajSeqWriteXyz(outf, seq, "SQ");
-    ajFmtPrintF(outf, "XX\n");
+    ajFmtPrintF(outf, "XX\n");	
 
-
-    /* Write co-ordinates list to domain coordinate file*/
-    for(nostart=ajFalse, noend=ajFalse,
+    
+    /* Write co-ordinates list to domain coordinate file*/        
+    for(nostart=ajFalse, noend=ajFalse, 
 	z=0;z<scop->N;
 	z++,found_start=ajFalse, found_end=ajFalse)
     {
@@ -4200,8 +4688,8 @@ AjBool ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf,
 	   so no additional checking is needed here */
 
 	ajXyzPdbChain(scop->Chain[z], pdb, &chn);
-
-
+	
+	
 	/* Initialise the iterator*/
 	iter=ajListIter(pdb->Chains[chn-1]->Atoms);
 
@@ -4209,30 +4697,36 @@ AjBool ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf,
 	/*Increment res. counter from last chain if appropriate*/
 	if(noend)
 	    rn_mod += atm2->Idx;
-	else
+	else	 
 	    rn_mod += finalrn;
 
-
+	
 	/*Check whether start and end of domain are specified*/
 	if(!ajStrCmpC(scop->Start[z], "."))
 	    nostart = ajTrue;
 	else
 	    nostart=ajFalse;
-
+	
 	if(!ajStrCmpC(scop->End[z], "."))
 	    noend = ajTrue;
-	else
+	else 
 	    noend=ajFalse;
-
+	
 
 	/* Iterate through the list of atoms*/
 	while((atm=(AjPAtom)ajListIterNext(iter)))
 	{
-	    /* Break if a non-protein atom is found or model no. !=1*/
-	    if(atm->Mod!=1 || atm->Type!='P')
+	    /* Continue if a non-protein atom is found or break if model no. !=1*/
+	    if(atm->Mod!=1)
 		break;
+	    if(atm->Type!='P')
+		continue;
 
 
+/*	    if(atm->Mod!=1 || atm->Type!='P')
+		break; */
+	    
+	    
 	    /* The start position has not been found yet*/
 	    if(!found_start)
 	    {
@@ -4244,34 +4738,32 @@ AjBool ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf,
 
 		    /* Start position found*/
 		    /*if(!ajStrCmpCase(atm->Pdb, scop->Start[z]))*/
-		    if(ajStrMatchWild(atm->Pdb, tmpstr))
+		    if(ajStrMatchWild(atm->Pdb, tmpstr))		    
 		    {
 			if(!ajStrMatch(atm->Pdb, scop->Start[z]))
 			{
 			    ajWarn("Domain start found by wildcard match only "
 				   "in ajXyzCpdbWriteDomain");
-			    ajFmtPrintF(errf,
-					"//\n%S\nERROR Domain start found "
+			    ajFmtPrintF(errf, "//\n%S\nERROR Domain start found "
 					"by wildcard match only in "
-					"ajXyzCpdbWriteDomain\n",
-					scop->Entry);
+					"ajXyzCpdbWriteDomain\n", scop->Entry);
 			}
-
+			    
 
 			rn_mod -= atm->Idx-1;
-			found_start=ajTrue;
+			found_start=ajTrue;	
 		    }
-		    else
+		    else	
 			continue;
 		}
-		else
+		else	
 		{
-		    found_start=ajTrue;
+		    found_start=ajTrue;	
 		}
-	    }
+	    }	
 
-
-	    /* The end position was specified, but has not
+	    
+	    /* The end position was specified, but has not 
 	       been found yet*/
 	    if(!found_end && !noend)
 	    {
@@ -4292,25 +4784,25 @@ AjBool ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf,
 				    "ajXyzCpdbWriteDomain\n", scop->Entry);
 		    }
 
-		    found_end=ajTrue;
+		    found_end=ajTrue;     
 		    finalrn=atm->Idx;
 		}
-	    }
+	    }	
 	    /* The end position was specified and has been found, and
 	       the current atom no longer belongs to this final residue*/
 	    else if(atm->Idx != finalrn && !noend)
 		break;
-
-
+	    
+	    
 	    /* Print out coordinate line*/
 	    ajFmtPrintF(outf, "%-5s%-5d%-5d%-5c%-5c%-6d%-6S%-5c",
-			"CO",
+			"CO", 
 			atm->Mod,       /* It will always be 1 */
 			1,		/*JCI chn number is always given as 1*/
 			'.',
-			atm->Type,
-			atm->Idx+rn_mod,
-			atm->Pdb,
+			atm->Type, 
+			atm->Idx+rn_mod, 
+			atm->Pdb, 
 			atm->eType);
 	    if(atm->eNum != 0)
 		ajFmtPrintF(outf, "%-5d", atm->eNum);
@@ -4323,32 +4815,53 @@ AjBool ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf,
 	    else
 		ajFmtPrintF(outf, "%-5c", '.');
 
-	    ajFmtPrintF(outf, "%-2c%6S    %-4S%8.3f%9.3f%9.3f%9.2f%9.2f\n",
-		       atm->Id1,
-		       atm->Id3,
-		       atm->Atm,
-		       atm->X,
-		       atm->Y,
-		       atm->Z,
-		       atm->O,
-		       atm->B);
 
+	    ajFmtPrintF(outf, "%-5c", atm->eStrideType);
+			if(atm->eStrideNum != 0)
+			    ajFmtPrintF(outf, "%-5d", atm->eStrideNum);
+			else
+			    ajFmtPrintF(outf, "%-5c", '.');
+
+	    ajFmtPrintF(outf, "%-2c%6S    %-4S%8.3f%9.3f%9.3f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f\n", 
+			atm->Id1, 
+			atm->Id3,
+			atm->Atm, 
+			atm->X, 
+			atm->Y, 
+			atm->Z, 
+			atm->O, 
+			atm->B,
+			atm->Phi,
+			atm->Psi,
+			atm->Area, 
+			atm->all_abs, 
+			atm->all_rel, 
+			atm->side_abs, 
+			atm->side_rel, 
+			atm->main_abs, 
+			atm->main_rel, 
+			atm->npol_abs, 
+			atm->npol_rel, 
+			atm->pol_abs, 
+			atm->pol_rel);
+	    
+	    
 	    /* Assign pointer for this chain*/
 	    atm2=atm;
 	}
 	/*Free list iterator*/
-	ajListIterFree(iter);
-    }
-
-
+	ajListIterFree(iter);			
+    } 	
+    
+    
     /* Write last line in file*/
-    ajFmtPrintF(outf, "//\n");
-
+    ajFmtPrintF(outf, "//\n");    
+    
 
     /* Tidy up*/
     ajStrDel(&seq);
     ajStrDel(&tmpseq);
-    ajStrDel(&tmpstr);
+    ajStrDel(&tmpstr);    
 
     /* Bye Bye*/
     return ajTrue;
@@ -4358,7 +4871,7 @@ AjBool ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf,
 
 
 
-/* @func ajXyzCpdbWriteAll ****************************************************
+/* @func ajXyzCpdbWriteAll ******************************************************
 **
 ** Writes a Cpdb file for a protein.
 **
@@ -4375,11 +4888,12 @@ AjBool ajXyzCpdbWriteAll(AjPFile outf, AjPPdb thys)
     ajint        y = 0;
     AjIList   iter = NULL;
     AjPAtom    tmp = NULL;
-
+    
 
 
 
     /* Write the header information*/
+
     ajFmtPrintF(outf, "%-5s%S\n", "ID", thys->Pdb);
     ajFmtPrintF(outf, "XX\n");
 
@@ -4391,22 +4905,22 @@ AjBool ajXyzCpdbWriteAll(AjPFile outf, AjPPdb thys)
 
     ajFmtPrintF(outf, "%-5sMETHOD ", "EX");
     if(thys->Method == ajXRAY)
-	ajFmtPrintF(outf, "xray; ");
+	ajFmtPrintF(outf, "xray; ");	
     else
-	ajFmtPrintF(outf, "nmr_or_model; ");
+	ajFmtPrintF(outf, "nmr_or_model; ");		
     ajFmtPrintF(outf, "RESO %.2f; NMOD %d; NCHA %d; NGRP %d;\n", thys->Reso,
 		thys->Nmod, thys->Nchn, thys->Ngp);
 
 
     /* Write chain-specific information*/
     for(x=0;x<thys->Nchn;x++)
-    {
-	ajFmtPrintF(outf, "XX\n");
-	ajFmtPrintF(outf, "%-5s[%d]\n",
-		    "CN",
-		    x+1);
-	ajFmtPrintF(outf, "XX\n");
-
+    { 
+	ajFmtPrintF(outf, "XX\n");	
+	ajFmtPrintF(outf, "%-5s[%d]\n", 
+		    "CN", 
+		    x+1);	
+	ajFmtPrintF(outf, "XX\n");	
+ 
 	ajFmtPrintF(outf, "%-5s", "IN");
 
 	if(thys->Chains[x]->Id == ' ')
@@ -4414,29 +4928,39 @@ AjBool ajXyzCpdbWriteAll(AjPFile outf, AjPPdb thys)
 	else
 	    ajFmtPrintF(outf, "ID %c; ", thys->Chains[x]->Id);
 
-
-	ajFmtPrintF(outf, "NR %d; NL %d; NH %d; NE %d; NS %d; NT %d;\n",
+	
+	/*
+	ajFmtPrintF(outf, "NR %d; NL %d; NH %d; NE %d; NS %d; NT %d;\n", 
 		    thys->Chains[x]->Nres,
 		    thys->Chains[x]->Nlig,
-		    thys->Chains[x]->numHelices,
-		    thys->Chains[x]->numStrands,
-		    thys->Chains[x]->numSheets,
+		    thys->Chains[x]->numHelices, 
+		    thys->Chains[x]->numStrands, 
+		    thys->Chains[x]->numSheets, 
 		    thys->Chains[x]->numTurns);
+		    */
+
+	ajFmtPrintF(outf, "NR %d; NL %d; NH %d; NE %d;\n", 
+		    thys->Chains[x]->Nres,
+		    thys->Chains[x]->Nlig,
+		    thys->Chains[x]->numHelices, 
+		    thys->Chains[x]->numStrands);
 
 	/*
-	ajFmtPrintF(outf, "%-5sID %c; NR %d; NH %d; NW %d;\n",
-		    "IN",
+	ajFmtPrintF(outf, "%-5sID %c; NR %d; NH %d; NW %d;\n", 
+		    "IN", 
 		    thys->Chains[x]->Id,
 		    thys->Chains[x]->Nres,
 		    thys->Chains[x]->Nhet,
 		    thys->Chains[x]->Nwat);
 		    */
-	ajFmtPrintF(outf, "XX\n");
+	ajFmtPrintF(outf, "XX\n");	
 	ajSeqWriteXyz(outf, thys->Chains[x]->Seq, "SQ");
     }
-    ajFmtPrintF(outf, "XX\n");
+    ajFmtPrintF(outf, "XX\n");	
 
 /*    printf("NCHN: %d   NMOD: %d\n", thys->Nchn, thys->Nmod); */
+    
+    
 
     /* Write coordinate list*/
     for(x=1;x<=thys->Nmod;x++)
@@ -4452,75 +4976,109 @@ AjBool ajXyzCpdbWriteAll(AjPFile outf, AjPPdb thys)
 		    break;
 		else if(tmp->Mod!=x)
 		    continue;
-		else
+		else	
 		{
 		    if(tmp->Type=='H')
-			ajFmtPrintF(outf,
-				    "%-5s%-5d%-5d%-5d%-5c%-6c%-6S"
-				    "%-5c%-5c%-5c%-5c%-2c"
+			ajFmtPrintF(outf, "%-5s%-5d%-5d%-5d%-5c%-6c%-6S%-5c%-5c%-5c%-5c%-5c%-5c%-2c"
 				    "%6S    %-4S"
-				    "%8.3f%9.3f%9.3f%9.2f%9.2f\n",
-				    "CO",
-				    tmp->Mod,
-				    tmp->Chn,
-				    tmp->Gpn,
-				    tmp->Type,
+				    "%8.3f%9.3f%9.3f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f\n", 
+				    "CO", 
+				    tmp->Mod, 
+				    tmp->Chn, 
+				    tmp->Gpn, 
+				    tmp->Type, 
 				    '.',
-				    tmp->Pdb,
-				    '.',
-				    '.',
-				    '.',
-				    '.',
+				    tmp->Pdb, 
+				    '.', 
+				    '.', 
+				    '.', 
+				    '.', 
+				    '.', 
+				    '.', 
 				    tmp->Id1,
 				    tmp->Id3,
-				    tmp->Atm,
-				    tmp->X,
-				    tmp->Y,
+				    tmp->Atm, 
+				    tmp->X, 
+				    tmp->Y, 
 				    tmp->Z,
 				    tmp->O,
-				    tmp->B);
+				    tmp->B, 
+				    tmp->Phi,
+				    tmp->Psi,
+				    tmp->Area, 
+				    tmp->all_abs, 
+				    tmp->all_rel, 
+				    tmp->side_abs, 
+				    tmp->side_rel, 
+				    tmp->main_abs, 
+				    tmp->main_rel, 
+				    tmp->npol_abs, 
+				    tmp->npol_rel, 
+				    tmp->pol_abs, 
+				    tmp->pol_rel);
 		    else
 		    {
-			ajFmtPrintF(outf, "%-5s%-5d%-5d%-5c%-5c%-6d%-6S%-5c",
-				    "CO",
-				    tmp->Mod,
-				    tmp->Chn,
+			ajFmtPrintF(outf, "%-5s%-5d%-5d%-5c%-5c%-6d%-6S%-5c", 
+				    "CO", 
+				    tmp->Mod, 
+				    tmp->Chn, 
 				    '.',
-				    tmp->Type,
-				    tmp->Idx,
+				    tmp->Type, 
+				    tmp->Idx, 
 				    tmp->Pdb,
 				    tmp->eType);
-
-
+			
 			if(tmp->eNum != 0)
 			    ajFmtPrintF(outf, "%-5d", tmp->eNum);
 			else
 			    ajFmtPrintF(outf, "%-5c", '.');
+
+
 			ajFmtPrintF(outf, "%-5S", tmp->eId);
-
-
 
 			if(tmp->eType == 'H')
 			    ajFmtPrintF(outf, "%-5d", tmp->eClass);
 			else
 			    ajFmtPrintF(outf, "%-5c", '.');
-			ajFmtPrintF(outf,
-				    "%-2c%6S    "
-				    "%-4S%8.3f%9.3f%9.3f%9.2f%9.2f\n",
-				    tmp->Id1,
+
+
+			ajFmtPrintF(outf, "%-5c", tmp->eStrideType);
+			if(tmp->eStrideNum != 0)
+			    ajFmtPrintF(outf, "%-5d", tmp->eStrideNum);
+			else
+			    ajFmtPrintF(outf, "%-5c", '.');
+
+
+
+			ajFmtPrintF(outf, "%-2c%6S    %-4S%8.3f%9.3f%9.3f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f\n", 
+				    tmp->Id1, 
 				    tmp->Id3,
-				    tmp->Atm,
-				    tmp->X,
-				    tmp->Y,
+				    tmp->Atm, 
+				    tmp->X, 
+				    tmp->Y, 
 				    tmp->Z,
 				    tmp->O,
-				    tmp->B);
-		    }
+				    tmp->B,
+				    tmp->Phi,
+				    tmp->Psi,
+				    tmp->Area, 
+				    tmp->all_abs, 
+				    tmp->all_rel, 
+				    tmp->side_abs, 
+				    tmp->side_rel, 
+				    tmp->main_abs, 
+				    tmp->main_rel, 
+				    tmp->npol_abs, 
+				    tmp->npol_rel, 
+				    tmp->pol_abs, 
+				    tmp->pol_rel);
 
+		    }
+		    
 		}
 	    }
-	    ajListIterFree(iter);
-	}
+	    ajListIterFree(iter);			
+	} 	
 
 	/* Print out group-specific coordinates for this model*/
 	iter=ajListIter(thys->Groups);
@@ -4531,34 +5089,49 @@ AjBool ajXyzCpdbWriteAll(AjPFile outf, AjPPdb thys)
 		break;
 	    else if(tmp->Mod!=x)
 		continue;
-	    else
+	    else	
 	    {
-		ajFmtPrintF(outf,
-			    "%-5s%-5d%-5c%-5d%-5c%-6c%-6S%-5c%-5c%-5c%-5c%-2c"
+		ajFmtPrintF(outf, "%-5s%-5d%-5c%-5d%-5c%-6c%-6S%-5c%-5c%-5c%-5c%-5c%-5c%-2c"
 			    "%6S    %-4S"
-			    "%8.3f%9.3f%9.3f%9.2f%9.2f\n",
-			    "CO",
-			    tmp->Mod,
+			    "%8.3f%9.3f%9.3f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f\n", 
+			    "CO", 
+			    tmp->Mod, 
 			    '.',
-			    tmp->Gpn,
-			    tmp->Type,
-			    '.',
-			    tmp->Pdb,
-			    '.',
-			    '.',
-			    '.',
+			    tmp->Gpn, 
+			    tmp->Type, 
+			    '.', 
+			    tmp->Pdb, 
+			    '.', 
+			    '.', 
+			    '.', 
+			    '.', 
+			    '.', 
 			    '.',
 			    tmp->Id1,
 			    tmp->Id3,
-			    tmp->Atm,
-			    tmp->X,
-			    tmp->Y,
+			    tmp->Atm, 
+			    tmp->X, 
+			    tmp->Y, 
 			    tmp->Z,
 			    tmp->O,
-			    tmp->B);
+			    tmp->B,
+			    tmp->Phi,
+			    tmp->Psi,
+			    tmp->Area, 
+			    tmp->all_abs, 
+			    tmp->all_rel, 
+			    tmp->side_abs, 
+			    tmp->side_rel, 
+			    tmp->main_abs, 
+			    tmp->main_rel, 
+			    tmp->npol_abs, 
+			    tmp->npol_rel, 
+			    tmp->pol_abs, 
+			    tmp->pol_rel);
+
 	    }
 	}
-	ajListIterFree(iter);
+	ajListIterFree(iter);			
 
 
 	/* Print out water-specific coordinates for this model*/
@@ -4570,36 +5143,50 @@ AjBool ajXyzCpdbWriteAll(AjPFile outf, AjPPdb thys)
 		break;
 	    else if(tmp->Mod!=x)
 		continue;
-	    else
+	    else	
 	    {
-		ajFmtPrintF(outf,
-			    "%-5s%-5d%-5c%-5c%-5c%-6c%-6S%-5c%-5c%-5c%-5c%-2c"
+		ajFmtPrintF(outf, "%-5s%-5d%-5c%-5c%-5c%-6c%-6S%-5c%-5c%-5c%-5c%-5c%-5c%-2c"
 			    "%6S    %-4S"
-			    "%8.3f%9.3f%9.3f%9.2f%9.2f\n",
-			    "CO",
-			    tmp->Mod,
+			    "%8.3f%9.3f%9.3f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f\n", 
+			    "CO", 
+			    tmp->Mod, 
+			    '.', 
+			    '.', 
+			    tmp->Type, 
+			    '.', 
+			    tmp->Pdb, 
+			    '.', 
+			    '.', 
+			    '.', 
 			    '.',
-			    '.',
-			    tmp->Type,
-			    '.',
-			    tmp->Pdb,
-			    '.',
-			    '.',
-			    '.',
+			    '.', 
 			    '.',
 			    tmp->Id1,
 			    tmp->Id3,
-			    tmp->Atm,
-			    tmp->X,
-			    tmp->Y,
+			    tmp->Atm, 
+			    tmp->X, 
+			    tmp->Y, 
 			    tmp->Z,
 			    tmp->O,
-			    tmp->B);
+			    tmp->B, 
+			    tmp->Phi,
+			    tmp->Psi,
+			    tmp->Area, 
+			    tmp->all_abs, 
+			    tmp->all_rel, 
+			    tmp->side_abs, 
+			    tmp->side_rel, 
+			    tmp->main_abs, 
+			    tmp->main_rel, 
+			    tmp->npol_abs, 
+			    tmp->npol_rel, 
+			    tmp->pol_abs, 
+			    tmp->pol_rel);
 	    }
 	}
-	ajListIterFree(iter);
+	ajListIterFree(iter);			
     }
-    ajFmtPrintF(outf, "//\n");
+    ajFmtPrintF(outf, "//\n");    
 
 
     /* Bye Bye*/
@@ -4612,7 +5199,7 @@ AjBool ajXyzCpdbWriteAll(AjPFile outf, AjPPdb thys)
 
 
 
-/* @func ajXyzPdbChain ********************************************************
+/* @func ajXyzPdbChain **********************************************************
 **
 ** Finds the chain number for a given chain identifier in a pdb structure
 **
@@ -4626,15 +5213,15 @@ AjBool ajXyzCpdbWriteAll(AjPFile outf, AjPPdb thys)
 AjBool ajXyzPdbChain(char id, AjPPdb pdb, ajint *chn)
 {
     ajint a;
-
+    
     for(a=0;a<pdb->Nchn;a++)
     {
-	if(toupper(pdb->Chains[a]->Id) == toupper(id))
+	if(toupper((int)pdb->Chains[a]->Id) == toupper((int)id))
 	{
 	    *chn=a+1;
 	    return ajTrue;
 	}
-	/* Cope with chain id's of ' ' (which might be given as '.' in
+	/* Cope with chain id's of ' ' (which might be given as '.' in 
 	   the Pdb object) */
 	if((id==' ')&&(pdb->Chains[a]->Id=='.'))
 	{
@@ -4642,7 +5229,7 @@ AjBool ajXyzPdbChain(char id, AjPPdb pdb, ajint *chn)
 	    return ajTrue;
 	}
     }
-
+    
     /* A '.' may be given as the id for domains comprising more than one
        chain*/
     if(id=='.')
@@ -4650,18 +5237,18 @@ AjBool ajXyzPdbChain(char id, AjPPdb pdb, ajint *chn)
 	*chn=1;
 	return ajTrue;
     }
-
-
+    
+	
     return ajFalse;
 }
 
 
 
 
-/* @func ajXyzPrintPdbText ****************************************************
+/* @func ajXyzPrintPdbText ******************************************************
 **
 ** Writes text to file in the format of pdb records
-**
+** 
 ** @param [w] outf   [AjPFile] Output file stream
 ** @param [r] str    [AjPStr]  Text to print out
 ** @param [r] prefix [char *]  pdb record (e.g. "HEADER")
@@ -4679,24 +5266,24 @@ AjBool  ajXyzPrintPdbText(AjPFile outf, AjPStr str, char *prefix)
     AjPStrTok  handle = NULL;
     AjPStr     token  = NULL;
     AjPStr     tmp    = NULL;
-
+    
     if(!outf)
 	return ajFalse;
 
 
 
-    /* Initialise strings*/
+    /* Initialise strings*/    
     token = ajStrNew();
     tmp   = ajStrNewC("");
-
+    
 
     handle = ajStrTokenInit(str,(char *) " \t\r\n");
-
+    
     while(ajStrToken(&token,&handle,NULL))
     {
 	if(!c)
 	    ajFmtPrintF(outf,"%-11s",prefix);
-
+	
 	if((l=n+ajStrLen(token)) < 68)
 	{
 	    if(c++)
@@ -4719,12 +5306,12 @@ AjBool  ajXyzPrintPdbText(AjPFile outf, AjPStr str, char *prefix)
     {
 	ajFmtPrintF(outf,"%-*S\n",69, tmp);
     }
-
+    
 
     ajStrTokenClear(&handle);
     ajStrDel(&token);
     ajStrDel(&tmp);
-
+    
     return ajTrue;
 }
 
@@ -4733,12 +5320,12 @@ AjBool  ajXyzPrintPdbText(AjPFile outf, AjPStr str, char *prefix)
 
 
 
-/* @func ajXyzPrintPdbAtomDomain **********************************************
+/* @func ajXyzPrintPdbAtomDomain ************************************************
 **
-** Writes coordinates for a SCOP domain to an output file in pdb
-** format (ATOM records).  Coordinates are taken from a Pdb structure,
-** domain definition is taken from a Scop structure. The model number
-** argument should have a value of 1 for x-ray structures.
+** Writes coordinates for a SCOP domain to an output file in pdb format (ATOM 
+** records).  Coordinates are taken from a Pdb structure, domain definition is 
+** taken from a Scop structure. The model number argument should have a value of 
+** 1 for x-ray structures.
 ** Coordinates for heterogens are NOT written to file.
 **
 ** @param [w] errf [AjPFile] Output file stream for error messages
@@ -4750,14 +5337,14 @@ AjBool  ajXyzPrintPdbText(AjPFile outf, AjPStr str, char *prefix)
 ** @return [AjBool] True on succcess
 ** @@
 ******************************************************************************/
-AjBool ajXyzPrintPdbAtomDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
+AjBool ajXyzPrintPdbAtomDomain(AjPFile errf, AjPFile outf, AjPPdb pdb, 
 			    AjPScop scop, ajint mod)
 {
-    /*rn_mod is a modifier to the residue number to give correct residue
+    /*rn_mod is a modifier to the residue number to give correct residue 
       numbering for the domain*/
 
     ajint      acnt        =1;
-    ajint      rn_mod      =0;
+    ajint      rn_mod      =0;  
     ajint      z;
     ajint      finalrn     =0;
     ajint      chn;
@@ -4771,11 +5358,11 @@ AjBool ajXyzPrintPdbAtomDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
     AjPAtom  atm         =NULL;
     AjPAtom  atm2        =NULL;
     AjPStr   tmpstr      =NULL;
-
+    
 
     /* Allocate strings etc */
     tmpstr = ajStrNew();
-
+    
 
 
     /* Loop for each chain in the domain*/
@@ -4784,67 +5371,73 @@ AjBool ajXyzPrintPdbAtomDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 	/* Check for chain error*/
 	if(!ajXyzPdbChain(scop->Chain[z], pdb, &chn))
 	    {
-		ajListIterFree(iter);
-		ajWarn("Chain incompatibility error "
-		       "in ajXyzPrintPdbAtomDomain");
+		ajListIterFree(iter);	
+		ajWarn("Chain incompatibility error in ajXyzPrintPdbAtomDomain");		
 		ajFmtPrintF(errf, "//\n%S\nERROR Chain incompatibility "
-			    "error in ajXyzPrintPdbAtomDomain\n",
-			    scop->Entry);
+			    "error in ajXyzPrintPdbAtomDomain\n", scop->Entry);
 		ajStrDel(&tmpstr);
 		return ajFalse;
 	    }
-
-
+	
+	
 	/* Iteratre up to the correct model*/
-	iter=ajListIter(pdb->Chains[chn-1]->Atoms);
-
+	iter=ajListIter(pdb->Chains[chn-1]->Atoms);	
+	
 	while((atm=(AjPAtom)ajListIterNext(iter)))
 	    if(atm->Mod==mod)
 		break;
-
-
+	
+	
 	/*Increment res. counter from last chain if appropriate*/
 	if(noend)
 	    rn_mod += atm2->Idx;
-	else
+	else	 
 	    rn_mod += finalrn;
 
 
 	/* Start of chain was not specified*/
 	if(!ajStrCmpC(scop->Start[z], "."))
 	    nostart = ajTrue;
-	else
+	else 
 	    nostart=ajFalse;
-
-
+	
+			    
 	/* End of chain was not specified*/
 	if(!ajStrCmpC(scop->End[z], "."))
 	    noend = ajTrue;
 	else
 	    noend=ajFalse;
-
+	
 
 	/* If the domain was composed of more than once chain then a '.' is
 	   given as the chain identifier*/
 	if(scop->N > 1)
 	    id = '.';
-	else
+	else 
 	{
-
+	    
 	    id = pdb->Chains[chn-1]->Id;
 	}
+	
 
-
-
-	for(; atm; atm=(AjPAtom)ajListIterNext(iter))
+	
+	for(; atm; atm=(AjPAtom)ajListIterNext(iter)) 	
 	{
-	    /* Break if a non-protein atom is found or model no. is
+
+	    /* Continue / break if a non-protein atom is found or model no. is
 	     incorrect */
-	    if(atm->Mod!=mod || atm->Type!='P')
+
+
+	    if(atm->Mod!=mod)  
 		break;
+	    if(atm->Type!='P')
+		continue;
+/*	    if(atm->Mod!=mod || atm->Type!='P')
+		break; */
 
 
-	    /* The start position was specified, but has not
+
+	    /* The start position was specified, but has not 
 		       been found yet*/
 	    if(!found_start && !nostart)
 	    {
@@ -4865,14 +5458,15 @@ AjBool ajXyzPrintPdbAtomDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 		    }
 
 		    rn_mod -= atm->Idx-1;
-		    found_start=ajTrue;
+		    found_start=ajTrue;	
 		}
-		else
+		else	
 		    continue;
-	    }
+	    }	
+	    
 
 
-	    /* The end position was specified, but has not
+	    /* The end position was specified, but has not 
 		       been found yet*/
 	    if(!found_end && !noend)
 	    {
@@ -4892,73 +5486,74 @@ AjBool ajXyzPrintPdbAtomDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 				    "ajXyzPrintPdbAtomDomain\n", scop->Entry);
 		    }
 
-		    found_end=ajTrue;
+		    found_end=ajTrue;     
 		    finalrn=atm->Idx;
 		}
-	    }
+	    }	
 	    else if(atm->Idx != finalrn && !noend)
 		break;
 
-
+	    
 	    /* Write out ATOM line to pdb file*/
 	    ajFmtPrintF(outf, "%-6s%5d  %-4S%-4S%c%4d%12.3f%8.3f"
-			"%8.3f%6.2f%6.2f%11s%-3c\n",
-			"ATOM",
-			acnt++,
-			atm->Atm,
-			atm->Id3,
+			"%8.3f%6.2f%6.2f%11s%-3c\n", 
+			"ATOM", 
+			acnt++, 
+			atm->Atm, 
+			atm->Id3, 
 			id,
-			atm->Idx+rn_mod,
-			atm->X,
-			atm->Y,
-			atm->Z,
-			atm->O,
-			atm->B,
-			" ",
+			atm->Idx+rn_mod, 
+			atm->X, 
+			atm->Y, 
+			atm->Z, 
+			atm->O, 
+			atm->B, 
+			" ", 
 			*ajStrStr(atm->Atm));
 
 	    /* Assign pointer for this chain*/
 	    atm2=atm;
 	}
 
-
+	
 	/* Diagnostic if start was specified but not found*/
 	if(!found_start && !nostart)
 	    {
-		ajListIterFree(iter);
-		ajWarn("Domain start not found in ajXyzPrintPdbAtomDomain");
+		ajListIterFree(iter);	
+		ajWarn("Domain start not found in ajXyzPrintPdbAtomDomain");		
 		ajFmtPrintF(errf, "//\n%S\nERROR Domain start not "
 			    "found in ajXyzPrintPdbAtomDomain\n", scop->Entry);
 		ajStrDel(&tmpstr);
 		return ajFalse;
 	    }
-
+	
 
 	/* Diagnostic if end was specified but not found*/
 	if(!found_end && !noend)
 	    {
-		ajListIterFree(iter);
-		ajWarn("Domain end not found in ajXyzPrintPdbAtomDomain");
+		ajListIterFree(iter);	
+		ajWarn("Domain end not found in ajXyzPrintPdbAtomDomain");		
 		ajFmtPrintF(errf, "//\n%S\nERROR Domain end not "
 			    "found in ajXyzPrintPdbAtomDomain\n", scop->Entry);
 		ajStrDel(&tmpstr);
 		return ajFalse;
 	    }
-
-
-	ajListIterFree(iter);
+	
+	
+	ajListIterFree(iter);	
     }
+    
 
 
     /* Write the TER record to the pdb file*/
-    ajFmtPrintF(outf, "%-6s%5d      %-4S%c%4d%54s\n",
-		"TER",
-		acnt++,
-		atm2->Id3,
-		id,
-		atm2->Idx+rn_mod,
+    ajFmtPrintF(outf, "%-6s%5d      %-4S%c%4d%54s\n", 
+		"TER", 
+		acnt++, 
+		atm2->Id3, 
+		id,	
+		atm2->Idx+rn_mod, 
 		" ");
-
+    
 
     ajStrDel(&tmpstr);
     return ajTrue;
@@ -4967,11 +5562,11 @@ AjBool ajXyzPrintPdbAtomDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 
 
 
-/* @func ajXyzPrintPdbHeterogen ***********************************************
+/* @func ajXyzPrintPdbHeterogen *********************************************
 **
-** Writes coordinates for heterogens that could not be uniquely associated
-** with a chain to an output file in pdb format (HETATM records). Coordinates
-** are taken from a Pdb structure. The model number argument should have a
+** Writes coordinates for heterogens that could not be uniquely associated 
+** with a chain to an output file in pdb format (HETATM records). Coordinates 
+** are taken from a Pdb structure. The model number argument should have a 
 ** value of 1 for x-ray structures.
 **
 ** @param [w] outf [AjPFile] Output file stream
@@ -4987,74 +5582,74 @@ AjBool   ajXyzPrintPdbHeterogen(AjPFile outf, AjPPdb pdb, ajint mod)
     AjPAtom  atm=NULL;
     AjPAtom  atm2=NULL;
     ajint      acnt;
-
+    
 
     /* Check args are not NULL */
     if(!outf || !pdb || mod<1)
 	return ajFalse;
+    
 
-
-        iter=ajListIter(pdb->Groups);
+        iter=ajListIter(pdb->Groups);	
 
     while((atm=(AjPAtom)ajListIterNext(iter)))
 	if(atm->Mod==mod)
 	    break;
-
-    for(acnt=1; atm; atm=(AjPAtom)ajListIterNext(iter))
+  
+    for(acnt=1; atm; atm=(AjPAtom)ajListIterNext(iter)) 	
     {
 	/* Break if on t0 a new model*/
 	if(atm->Mod!=mod)
 	    break;
-
+	
 	/* Write out HETATM line*/
 
 	if(atm->Type == 'H')
 	    ajFmtPrintF(outf, "%-6s%5d  %-4S%-4S%c%4d%12.3f%8.3f%8.3f"
-			"%6.2f%6.2f%11s%-3c\n",
-			"HETATM",
-			acnt++,
-			atm->Atm,
-			atm->Id3,
+			"%6.2f%6.2f%11s%-3c\n", 
+			"HETATM", 
+			acnt++, 
+			atm->Atm, 
+			atm->Id3, 
 			ajChararrGet(pdb->gpid, atm->Gpn-1),
-			atm->Idx,
-			atm->X,
-			atm->Y,
-			atm->Z,
+			atm->Idx, 
+			atm->X, 
+			atm->Y, 
+			atm->Z, 
 			atm->O,
 			atm->B,
-			" ",
+			" ", 
 			*ajStrStr(atm->Atm));
 	else
 	    ajFmtPrintF(outf, "%-6s%5d  %-4S%-4S%c%4d%12.3f%8.3f%8.3f"
-			"%6.2f%6.2f%11s%-3c\n",
-			"HETATM",
-			acnt++,
-			atm->Atm,
-			atm->Id3,
+			"%6.2f%6.2f%11s%-3c\n", 
+			"HETATM", 
+			acnt++, 
+			atm->Atm, 
+			atm->Id3, 
 			' ',
-			atm->Idx,
-			atm->X,
-			atm->Y,
-			atm->Z,
+			atm->Idx, 
+			atm->X, 
+			atm->Y, 
+			atm->Z, 
 			atm->O,
 			atm->B,
-			" ",
+			" ", 
 			*ajStrStr(atm->Atm));
 	atm2=atm;
     }
 
-
-    ajListIterFree(iter);
+    
+    ajListIterFree(iter);				    
 
     return ajTrue;
 }
 
 
 
-/* @func ajXyzPrintPdbAtomChain ***********************************************
+/* @func ajXyzPrintPdbAtomChain *************************************************
 **
-** Writes coordinates for a protein chain to an output file in pdb format (ATOM
-** records). Coordinates are taken from a Pdb structure. The model number
+** Writes coordinates for a protein chain to an output file in pdb format (ATOM 
+** records). Coordinates are taken from a Pdb structure. The model number 
 ** argument should have a value of 1 for x-ray structures.
 **
 ** @param [w] outf [AjPFile] Output file stream
@@ -5072,42 +5667,42 @@ AjBool ajXyzPrintPdbAtomChain(AjPFile outf, AjPPdb pdb, ajint mod, ajint chn)
     AjPAtom  atm=NULL;
     AjPAtom  atm2=NULL;
     ajint      acnt;
-
+    
 
     /* Check args are not NULL */
     if(!outf || !pdb || mod<1 || chn<1)
 	return ajFalse;
-
+    
 
     doneter=ajFalse;
-    iter=ajListIter(pdb->Chains[chn-1]->Atoms);
+    iter=ajListIter(pdb->Chains[chn-1]->Atoms);	
 
     while((atm=(AjPAtom)ajListIterNext(iter)))
 	if(atm->Mod==mod)
 	    break;
-
-    for(acnt=1; atm; atm=(AjPAtom)ajListIterNext(iter))
+  
+    for(acnt=1; atm; atm=(AjPAtom)ajListIterNext(iter)) 	
     {
 	/* Break if ont a new model*/
 	if(atm->Mod!=mod)
 	    break;
-
-
+		
+	
 	/* End of protein atoms - so write a TER record*/
 	if(atm->Type!='P' && (!doneter))
 	{
-	    ajFmtPrintF(outf, "%-6s%5d      %-4S%c%4d%54s\n",
-			"TER",
-			acnt++,
-			atm2->Id3,
-			pdb->Chains[chn-1]->Id,
-			atm2->Idx,
+	    ajFmtPrintF(outf, "%-6s%5d      %-4S%c%4d%54s\n", 
+			"TER", 
+			acnt++, 
+			atm2->Id3, 
+			pdb->Chains[chn-1]->Id, 
+			atm2->Idx, 
 			" ");
-
+	    
 	    doneter=ajTrue;
 	}
 
-
+	
 	/* Write out ATOM or HETATM line*/
 	if(atm->Type=='P')
 	    ajFmtPrintF(outf, "%-6s", "ATOM");
@@ -5115,37 +5710,37 @@ AjBool ajXyzPrintPdbAtomChain(AjPFile outf, AjPPdb pdb, ajint mod, ajint chn)
 	    ajFmtPrintF(outf, "%-6s", "HETATM");
 
 	ajFmtPrintF(outf, "%5d  %-4S%-4S%c%4d%12.3f%8.3f%8.3f"
-		    "%6.2f%6.2f%11s%-3c\n",
-		    acnt++,
-		    atm->Atm,
-		    atm->Id3,
-		    pdb->Chains[chn-1]->Id,
-		    atm->Idx,
-		    atm->X,
-		    atm->Y,
-		    atm->Z,
+		    "%6.2f%6.2f%11s%-3c\n", 
+		    acnt++, 
+		    atm->Atm, 
+		    atm->Id3, 
+		    pdb->Chains[chn-1]->Id, 
+		    atm->Idx, 
+		    atm->X, 
+		    atm->Y, 
+		    atm->Z, 
 		    atm->O,
 		    atm->B,
-		    " ",
+		    " ", 
 		    *ajStrStr(atm->Atm));
 
 	atm2=atm;
     }
 
-
+    
     /* Write TER record if its not already done*/
     if(!doneter)
     {
-	ajFmtPrintF(outf, "%-6s%5d      %-4S%c%4d%54s\n",
-		    "TER",
-		    acnt++,
-		    atm2->Id3,
-		    pdb->Chains[chn-1]->Id,
-		    atm2->Idx,
+	ajFmtPrintF(outf, "%-6s%5d      %-4S%c%4d%54s\n", 
+		    "TER", 
+		    acnt++, 
+		    atm2->Id3, 
+		    pdb->Chains[chn-1]->Id, 
+		    atm2->Idx, 
 		    " ");
 	doneter=ajTrue;
     }
-    ajListIterFree(iter);
+    ajListIterFree(iter);				    
 
     return ajTrue;
 }
@@ -5158,11 +5753,11 @@ AjBool ajXyzPrintPdbAtomChain(AjPFile outf, AjPPdb pdb, ajint mod, ajint chn)
 
 
 
-/* @func ajXyzPrintPdbSeqresDomain ********************************************
+/* @func ajXyzPrintPdbSeqresDomain **********************************************
 **
-** Writes sequence for a SCOP domain to an output file in pdb format (SEQRES
-** records). Sequence is taken from a Pdb structure, domain definition is taken
-** from a Scop structure.  Where coordinates for multiple models (e.g. NMR
+** Writes sequence for a SCOP domain to an output file in pdb format (SEQRES 
+** records). Sequence is taken from a Pdb structure, domain definition is taken 
+** from a Scop structure.  Where coordinates for multiple models (e.g. NMR 
 ** structures) are given, data for model 1 are written.
 **
 ** @param [w] errf [AjPFile] Output file stream for error messages
@@ -5173,10 +5768,10 @@ AjBool ajXyzPrintPdbAtomChain(AjPFile outf, AjPPdb pdb, ajint mod, ajint chn)
 ** @return [AjBool] True on succcess
 ** @@
 ******************************************************************************/
-AjBool ajXyzPrintPdbSeqresDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
+AjBool ajXyzPrintPdbSeqresDomain(AjPFile errf, AjPFile outf, AjPPdb pdb, 
 			      AjPScop scop)
 {
-    ajint      last_rn=0;
+    ajint      last_rn=0;  
     ajint      this_rn;
     ajint      x;
     ajint      y;
@@ -5196,32 +5791,32 @@ AjBool ajXyzPrintPdbSeqresDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
     AjIList  iter=NULL;
     AjPAtom  atm=NULL;
     AjPStr   tmpstr=NULL;
-
+    
 
     /* Allocate strings etc*/
     tmp1   = ajStrNew();
     tmp2   = ajStrNew();
     tmpstr = ajStrNew();
 
-
+    
 
     /* Loop for each chain in the domain*/
-    for(z=0;z<scop->N;z++,found_start=ajFalse, found_end=ajFalse,
+    for(z=0;z<scop->N;z++,found_start=ajFalse, found_end=ajFalse, 
 	last_rn=0)
     {
 	/*Check for error in chain id*/
 	if(!ajXyzPdbChain(scop->Chain[z], pdb, &chn))
 	    {
-		ajListIterFree(iter);
+		ajListIterFree(iter);			
 		ajStrDel(&tmp1);
 		ajStrDel(&tmp2);
 		ajStrDel(&tmpstr);
 
 		ajWarn("Chain incompatibility error in "
-		       "ajXyzPrintPdbSeqresDomain");
+		       "ajXyzPrintPdbSeqresDomain");		
 
 		ajFmtPrintF(errf, "//\n%S\nERROR Chain incompatibility "
-			    "error in ajXyzPrintPdbSeqresDomain\n",
+			    "error in ajXyzPrintPdbSeqresDomain\n", 
 			    scop->Entry);
 
 		return ajFalse;
@@ -5229,8 +5824,8 @@ AjBool ajXyzPrintPdbSeqresDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 
 
 	/* Intitialise iterator for list of atoms*/
-	iter=ajListIter(pdb->Chains[chn-1]->Atoms);
-
+	iter=ajListIter(pdb->Chains[chn-1]->Atoms);	
+	
 
 	/* Start of chain not specified*/
 	if(!ajStrCmpC(scop->Start[z], "."))
@@ -5238,106 +5833,105 @@ AjBool ajXyzPrintPdbSeqresDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 	else
 	    nostart=ajFalse;
 
-
+	
 	/* End of chain not specified*/
 	if(!ajStrCmpC(scop->End[z], "."))
 	    noend = ajTrue;
-	else
+	else	
 	    noend=ajFalse;
-
+	
 
 	/* Iterate through list of atoms*/
 	while((atm=(AjPAtom)ajListIterNext(iter)))
 	{
-	    /* JCI hard-coded to work on model 1*/
-	    /* Break if a non-protein atom is found or model no. !=1*/
-	    if(atm->Type!='P' || atm->Mod!=1)
+	    /* JCI hard-coded to work on model 1*/	
+	    /* Continue / break if a non-protein atom is found or model no. !=1*/
+	    if(atm->Mod!=1)
 		break;
-
-
+	    if(atm->Type!='P') 
+		continue;
+	
+	    
 	    /* If we are onto a new residue*/
 	    this_rn=atm->Idx;
 	    if(this_rn!=last_rn)
-	    {
-		/* The start position was specified, but has not
+	    {	
+		/* The start position was specified, but has not 
 		   been found yet*/
 		if(!found_start && !nostart)
 		{
 		    ajStrAssS(&tmpstr, scop->Start[z]);
 		    ajStrAppK(&tmpstr, '*');
-
+		    
 
 		    /* Start position found */
 		    /*if(!ajStrCmpCase(atm->Pdb, scop->Start[z]))*/
-		    if(ajStrMatchWild(atm->Pdb, tmpstr))
+		    if(ajStrMatchWild(atm->Pdb, tmpstr))		    
 		    {
 			if(!ajStrMatch(atm->Pdb, scop->Start[z]))
 			{
 			    ajWarn("Domain start found by wildcard match only "
 				   "in ajXyzPrintPdbSeqresDomain");
-			    ajFmtPrintF(errf,
-					"//\n%S\nERROR Domain start found "
+			    ajFmtPrintF(errf, "//\n%S\nERROR Domain start found "
 					"by wildcard match only in "
-					"ajXyzPrintPdbSeqresDomain\n",
-					scop->Entry);
-			}
+					"ajXyzPrintPdbSeqresDomain\n", scop->Entry);
+			}	
 
 			last_rn=this_rn;
-			found_start=ajTrue;
+			found_start=ajTrue;	
 		    }
-		    else
+		    else	
 		    {
 			last_rn=this_rn;
 			continue;
 		    }
-
+		    
 		}
-
+	    
 
 		/*Assign sequence for residues missing from the linked list*/
 		/*of atoms of known structure*/
 		for(x=last_rn; x<this_rn-1; x++)
-		{
+		{	
 		    /* Check that position x is in range for the sequence*/
-		    if(!ajBaseAa1ToAa3(ajStrChar(pdb->Chains[chn-1]->Seq, x),
+		    if(!ajBaseAa1ToAa3(ajStrChar(pdb->Chains[chn-1]->Seq, x), 
 				   &tmp2))
 		    {
-			ajListIterFree(iter);
+			ajListIterFree(iter);			
 			ajStrDel(&tmp1);
 			ajStrDel(&tmp2);
 			ajStrDel(&tmpstr);
 
 			ajWarn("Index out of range in "
-			       "ajXyzPrintPdbSeqresDomain");
+			       "ajXyzPrintPdbSeqresDomain");		
 			ajFmtPrintF(errf, "//\n%S\nERROR Index out of range "
-				    "in ajXyzPrintPdbSeqresDomain\n",
-				    scop->Entry);
+				    "in ajXyzPrintPdbSeqresDomain\n", scop->Entry);
 			return ajFalse;
 		    }
 		    else
-		    {
+		    {	
 			ajStrApp(&tmp1, tmp2);
 			ajStrAppC(&tmp1, " ");
 			rcnt++;
-		    }
+		    }	
 		}
 
 		last_rn=this_rn;
 
-
+		
 		/* Append the residue to the sequence*/
 		ajStrApp(&tmp1, atm->Id3);
 		ajStrAppC(&tmp1, " ");
 		rcnt++;
+		
 
-
-		/* The end position was specified, but has not
+		/* The end position was specified, but has not 
 		       been found yet*/
 		if(!found_end && !noend)
 		{
 		    ajStrAssS(&tmpstr, scop->End[z]);
 		    ajStrAppK(&tmpstr, '*');
-
+		    
 
 		    /* End found*/
 		    /*if(!ajStrCmpCase(atm->Pdb, scop->End[z]))*/
@@ -5349,42 +5943,41 @@ AjBool ajXyzPrintPdbSeqresDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 				   "in ajXyzPrintPdbSeqresDomain");
 			    ajFmtPrintF(errf, "//\n%S\nERROR Domain end found "
 					"by wildcard match only in "
-					"ajXyzPrintPdbSeqresDomain\n",
-					scop->Entry);
+					"ajXyzPrintPdbSeqresDomain\n", scop->Entry);
 			}
 
-			found_end=ajTrue;
+			found_end=ajTrue;       
 			break;
 		    }
-		}
+		}	
 	    }
 	}
-
-
+	
+	
 	/*Domain start specified but not found*/
 	if(!found_start && !nostart)
 	{
-	    ajListIterFree(iter);
+	    ajListIterFree(iter);			
 	    ajStrDel(&tmp1);
 	    ajStrDel(&tmp2);
 	    ajStrDel(&tmpstr);
 
-	    ajWarn("Domain start not found in ajXyzPrintPdbSeqresDomain");
+	    ajWarn("Domain start not found in ajXyzPrintPdbSeqresDomain");		
 	    ajFmtPrintF(errf, "//\n%S\nERROR Domain start not found "
 			"in ajXyzPrintPdbSeqresDomain\n", scop->Entry);
 	    return ajFalse;
 	}
-
+	
 
 	/*Domain end specified but not found*/
 	if(!found_end && !noend)
 	{
-	    ajListIterFree(iter);
+	    ajListIterFree(iter);			
 	    ajStrDel(&tmp1);
 	    ajStrDel(&tmp2);
 	    ajStrDel(&tmpstr);
 
-	    ajWarn("Domain end not found in ajXyzPrintPdbSeqresDomain");
+	    ajWarn("Domain end not found in ajXyzPrintPdbSeqresDomain");		
 	    ajFmtPrintF(errf, "//\n%S\nERROR Domain end not found "
 			"in ajXyzPrintPdbSeqresDomain\n", scop->Entry);
 	    return ajFalse;
@@ -5394,19 +5987,19 @@ AjBool ajXyzPrintPdbSeqresDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 	/*Assign sequence for residues missing from end of linked list*/
 	/*Only needs to be done where the end of the domain is not specified*/
 	if(noend)
-	{
-	    for(x=last_rn; x<pdb->Chains[chn-1]->Nres; x++)
-		if(!ajBaseAa1ToAa3(ajStrChar(pdb->Chains[chn-1]->Seq, x),
+	{	    
+	    for(x=last_rn; x<pdb->Chains[chn-1]->Nres; x++)    
+		if(!ajBaseAa1ToAa3(ajStrChar(pdb->Chains[chn-1]->Seq, x), 
 			       &tmp2))
-		{
+		{	 
 		    ajStrDel(&tmp1);
 		    ajStrDel(&tmp2);
 		    ajStrDel(&tmpstr);
 
-		    ajListIterFree(iter);
-    		    ajWarn("Index out of range in ajXyzPrintPdbSeqresDomain");
+		    ajListIterFree(iter);	
+    		    ajWarn("Index out of range in ajXyzPrintPdbSeqresDomain");		
 		    ajFmtPrintF(errf, "//\n%S\nERROR Index out of "
-				"range in ajXyzPrintPdbSeqresDomain\n",
+				"range in ajXyzPrintPdbSeqresDomain\n", 
 				scop->Entry);
 		    return ajFalse;
 		}
@@ -5415,30 +6008,30 @@ AjBool ajXyzPrintPdbSeqresDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 		    ajStrApp(&tmp1, tmp2);
 		    ajStrAppC(&tmp1, " ");
 		    rcnt++;
-		}
+		}	
 	}
 
 
 	/*Free iterator*/
-	ajListIterFree(iter);
+	ajListIterFree(iter);	 		
     }
-
+    
 
     /* If the domain was composed of more than once chain then a '.' is
        given as the chain identifier*/
     if(scop->N > 1)
 	id = '.';
-    else
+    else 
 	id = pdb->Chains[chn-1]->Id;
-
-
+       
+ 
     /*Print out SEQRES records*/
-    for(p=ajStrStr(tmp1), len=ajStrLen(tmp1), x=0, y=1;
-	x<len;
+    for(p=ajStrStr(tmp1), len=ajStrLen(tmp1), x=0, y=1; 
+	x<len; 
 	x+=52, y++, p+=52)
-	ajFmtPrintF(outf, "SEQRES%4d %c%5d  %-61.52s\n",
-		    y,
-		    id,
+	ajFmtPrintF(outf, "SEQRES%4d %c%5d  %-61.52s\n", 
+		    y, 
+		    id, 
 		    rcnt,
 		    p);
 
@@ -5452,18 +6045,17 @@ AjBool ajXyzPrintPdbSeqresDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
     return ajTrue;
 }
 
+       
 
 
 
 
 
-
-/* @func ajXyzPrintPdbSeqresChain *********************************************
+/* @func ajXyzPrintPdbSeqresChain ***********************************************
 **
-** Writes sequence for a protein chain to an output file in pdb format
-** (SEQRES records).  Sequence is taken from a Pdb structure.  The
-** model number argument should have a value of 1 for x-ray
-** structures.
+** Writes sequence for a protein chain to an output file in pdb format (SEQRES
+** records).  Sequence is taken from a Pdb structure.  The model number argument 
+** should have a value of 1 for x-ray structures.
 **
 ** @param [w] errf [AjPFile] Output file stream for error messages
 ** @param [w] outf [AjPFile] Output file stream
@@ -5473,10 +6065,10 @@ AjBool ajXyzPrintPdbSeqresDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 ** @return [AjBool] True on succcess
 ** @@
 ******************************************************************************/
-AjBool ajXyzPrintPdbSeqresChain(AjPFile errf, AjPFile outf, AjPPdb pdb,
+AjBool ajXyzPrintPdbSeqresChain(AjPFile errf, AjPFile outf, AjPPdb pdb, 
 			     ajint chn)
 {
-    ajint      last_rn =0;
+    ajint      last_rn =0;  
     ajint      this_rn;
     ajint      x;
     ajint      y;
@@ -5492,17 +6084,25 @@ AjBool ajXyzPrintPdbSeqresChain(AjPFile errf, AjPFile outf, AjPPdb pdb,
     tmp2 = ajStrNew();
 
 
-    iter=ajListIter(pdb->Chains[chn-1]->Atoms);
+    iter=ajListIter(pdb->Chains[chn-1]->Atoms);	
 
 
     /* Iterate through list of atoms*/
     while((atm=(AjPAtom)ajListIterNext(iter)))
     {
-	/* JCI hard-coded to work on model 1*/
+	/* JCI hard-coded to work on model 1*/	
 	/* Break if a non-protein atom is found or model no. !=1*/
-	if(atm->Type!='P' || atm->Mod!=1)
-	    break;
 
+	    /* Continue / break if a non-protein atom is found or model no. !=1*/
+	    if(atm->Mod!=1)
+		break;
+	    if(atm->Type!='P') 
+		continue;
+
+
+/*	if(atm->Type!='P' || atm->Mod!=1)
+	    break; */
+	
 
 	/* If we are onto a new residue*/
 	this_rn=atm->Idx;
@@ -5510,30 +6110,29 @@ AjBool ajXyzPrintPdbSeqresChain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 	{
 	    /*Assign sequence for residues missing from the linked list*/
 	    for(x=last_rn; x<this_rn-1; x++)
-	    {
+	    {	
 		/* Check that position x is in range for the sequence*/
-		if(!ajBaseAa1ToAa3(ajStrChar(pdb->Chains[chn-1]->Seq, x),
+		if(!ajBaseAa1ToAa3(ajStrChar(pdb->Chains[chn-1]->Seq, x), 
 				&tmp2))
 		    {
-			ajWarn("Index out of range "
-			       "in ajXyzPrintPdbSeqresChain");
+			ajWarn("Index out of range in ajXyzPrintPdbSeqresChain");		
 
 			ajFmtPrintF(errf, "//\n%S\nERROR Index out "
-				    "of range in ajXyzPrintPdbSeqresChain\n",
+				    "of range in ajXyzPrintPdbSeqresChain\n", 
 				    pdb->Pdb);
 
 			ajStrDel(&tmp1);
 			ajStrDel(&tmp2);
-			ajListIterFree(iter);
+			ajListIterFree(iter);	
 
 			return ajFalse;
 		    }
-
+		
 		else
 		{
 		    ajStrApp(&tmp1, tmp2);
 		    ajStrAppC(&tmp1, " ");
-		}
+		}	
 	    }
 	    ajStrApp(&tmp1, atm->Id3);
 	    ajStrAppC(&tmp1, " ");
@@ -5542,42 +6141,42 @@ AjBool ajXyzPrintPdbSeqresChain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 	}
     }
 
-
+    
     /*Assign sequence for residues missing from end of linked list*/
     for(x=last_rn; x<pdb->Chains[chn-1]->Nres; x++)
 	if(!ajBaseAa1ToAa3(ajStrChar(pdb->Chains[chn-1]->Seq, x), &tmp2))
-	    {
+	    { 
 		ajStrDel(&tmp1);
 		ajStrDel(&tmp2);
-		ajListIterFree(iter);
-		ajWarn("Index out of range in ajXyzPrintPdbSeqresChain");
+		ajListIterFree(iter);	
+		ajWarn("Index out of range in ajXyzPrintPdbSeqresChain");		
 		ajFmtPrintF(errf, "//\n%S\nERROR Index out of range "
 			    "in ajXyzPrintPdbSeqresChain\n", pdb->Pdb);
 		return ajFalse;
 	    }
-
+    
 	else
 	{
 	    ajStrApp(&tmp1, tmp2);
 	    ajStrAppC(&tmp1, " ");
-	}
+	}	
 
-
+    
     /*Print out SEQRES records*/
-    for(p=ajStrStr(tmp1), len=ajStrLen(tmp1), x=0, y=1;
-	x<len;
+    for(p=ajStrStr(tmp1), len=ajStrLen(tmp1), x=0, y=1; 
+	x<len; 
 	x+=52, y++, p+=52)
-	ajFmtPrintF(outf, "SEQRES%4d %c%5d  %-61.52s\n",
-		    y,
-		    pdb->Chains[chn-1]->Id,
-		    pdb->Chains[chn-1]->Nres,
+	ajFmtPrintF(outf, "SEQRES%4d %c%5d  %-61.52s\n", 
+		    y, 
+		    pdb->Chains[chn-1]->Id, 
+		    pdb->Chains[chn-1]->Nres, 
 		    p);
 
 
     /* Tidy up*/
     ajStrDel(&tmp1);
     ajStrDel(&tmp2);
-    ajListIterFree(iter);
+    ajListIterFree(iter);	
 
     return ajTrue;
 }
@@ -5586,9 +6185,9 @@ AjBool ajXyzPrintPdbSeqresChain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 
 
 
-/* @func ajXyzPrintPdbResolution **********************************************
+/* @func ajXyzPrintPdbResolution ************************************************
 **
-** Writes the Reso element of a Pdb structure to an output file in pdb
+** Writes the Reso element of a Pdb structure to an output file in pdb 
 ** format
 **
 ** @param [w] outf [AjPFile] Output file stream
@@ -5601,7 +6200,7 @@ AjBool ajXyzPrintPdbResolution(AjPFile outf, AjPPdb pdb)
 {
     if(pdb && outf)
     {
-	ajFmtPrintF(outf, "%-11sRESOLUTION. %-6.2f%-51s\n",
+	ajFmtPrintF(outf, "%-11sRESOLUTION. %-6.2f%-51s\n", 
 		    "REMARK", pdb->Reso, "ANGSTROMS.");
 	return ajTrue;
     }
@@ -5613,7 +6212,7 @@ AjBool ajXyzPrintPdbResolution(AjPFile outf, AjPPdb pdb)
 
 
 
-/* @func ajXyzPrintPdbEmptyRemark *********************************************
+/* @func ajXyzPrintPdbEmptyRemark ***********************************************
 **
 ** Writes an empty REMARK record to an output file in pdb format
 **
@@ -5639,9 +6238,9 @@ AjBool ajXyzPrintPdbEmptyRemark(AjPFile outf, AjPPdb pdb)
 
 
 
-/* @func ajXyzPrintPdbSource **************************************************
+/* @func ajXyzPrintPdbSource ****************************************************
 **
-** Writes the Source element of a Pdb structure to an output file in pdb
+** Writes the Source element of a Pdb structure to an output file in pdb 
 ** format
 **
 ** @param [w] outf [AjPFile] Output file stream
@@ -5665,9 +6264,9 @@ AjBool ajXyzPrintPdbSource(AjPFile outf, AjPPdb pdb)
 
 
 
-/* @func ajXyzPrintPdbCompnd **************************************************
+/* @func ajXyzPrintPdbCompnd ****************************************************
 **
-** Writes the Compnd element of a Pdb structure to an output file in pdb
+** Writes the Compnd element of a Pdb structure to an output file in pdb 
 ** format
 **
 ** @param [w] outf [AjPFile] Output file stream
@@ -5691,7 +6290,7 @@ AjBool ajXyzPrintPdbCompnd(AjPFile outf, AjPPdb pdb)
 
 
 
-/* @func ajXyzPrintPdbTitle ***************************************************
+/* @func ajXyzPrintPdbTitle ****************************************************
 **
 ** Writes a TITLE record to an output file in pdb format
 ** The text is hard-coded.
@@ -5707,7 +6306,7 @@ AjBool ajXyzPrintPdbTitle(AjPFile outf, AjPPdb pdb)
     if(pdb && outf)
     {
 	ajFmtPrintF(outf, "%-11sTHIS FILE IS MISSING MOST RECORDS FROM THE "
-		    "ORIGINAL PDB FILE%9s\n",
+		    "ORIGINAL PDB FILE%9s\n", 
 		    "TITLE", " ");
 	return ajTrue;
     }
@@ -5721,7 +6320,7 @@ AjBool ajXyzPrintPdbTitle(AjPFile outf, AjPPdb pdb)
 
 
 
-/* @func ajXyzPrintPdbHeader **************************************************
+/* @func ajXyzPrintPdbHeader ****************************************************
 **
 ** Writes the Pdb element of a Pdb structure to an output file in pdb format
 **
@@ -5735,9 +6334,9 @@ AjBool ajXyzPrintPdbHeader(AjPFile outf, AjPPdb pdb)
 {
     if(pdb && outf)
     {
-	ajFmtPrintF(outf, "%-11sCLEANED-UP PDB FILE FOR %-45S\n",
-		    "HEADER",
-		    pdb->Pdb);
+	ajFmtPrintF(outf, "%-11sCLEANED-UP PDB FILE FOR %-45S\n", 
+		    "HEADER", 
+		    pdb->Pdb);    
 	return ajTrue;
     }
     else
@@ -5748,9 +6347,9 @@ AjBool ajXyzPrintPdbHeader(AjPFile outf, AjPPdb pdb)
 
 
 
-/* @func ajXyzPrintPdbHeaderScop **********************************************
+/* @func ajXyzPrintPdbHeaderScop ************************************************
 **
-** Writes the Entry element of a Scop structure to an output file in pdb
+** Writes the Entry element of a Scop structure to an output file in pdb 
 ** format
 **
 ** @param [w] outf [AjPFile] Output file stream
@@ -5763,9 +6362,9 @@ AjBool ajXyzPrintPdbHeaderScop(AjPFile outf, AjPScop scop)
 {
     if(scop && outf)
     {
-	ajFmtPrintF(outf, "%-11sCLEANED-UP PDB FILE FOR SCOP DOMAIN %-33S\n",
-		    "HEADER",
-		    scop->Entry);
+	ajFmtPrintF(outf, "%-11sCLEANED-UP PDB FILE FOR SCOP DOMAIN %-33S\n", 
+		    "HEADER", 
+		    scop->Entry);    
 	return ajTrue;
     }
     else
@@ -5775,26 +6374,25 @@ AjBool ajXyzPrintPdbHeaderScop(AjPFile outf, AjPScop scop)
 
 
 
-/* @func ajXyzPdbWriteDomain **************************************************
+/* @func ajXyzPdbWriteDomain ****************************************************
 **
-** Writes a pdb file for a SCOP domain. Where coordinates for multiple
-** models (e.g. NMR structures) are given, data for model 1 are written.
-** Coordinates are taken from a Pdb structure, domain definition is taken from
+** Writes a pdb file for a SCOP domain. Where coordinates for multiple 
+** models (e.g. NMR structures) are given, data for model 1 are written. 
+** Coordinates are taken from a Pdb structure, domain definition is taken from 
 ** a Scop structure.
-** In the pdb file, the coordinates are presented as belonging to a single
+** In the pdb file, the coordinates are presented as belonging to a single 
 ** chain regardless of how many chains the domain comprised.
 ** Coordinates for heterogens are NOT written to file.
-**
-** @param [w] errf [AjPFile] Output file stream for error messages
+** 
 ** @param [w] outf [AjPFile] Output file stream
+** @param [w] errf [AjPFile] Output file stream for error messages
 ** @param [r] pdb  [AjPPdb] Pdb object
 ** @param [r] scop [AjPScop] Scop object
 **
 ** @return [AjBool] True on succcess
 ** @@
 ******************************************************************************/
-AjBool   ajXyzPdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
-			     AjPScop scop)
+AjBool   ajXyzPdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb, AjPScop scop)
 {
     ajint z;     /* A counter */
     ajint chn;   /* No. of the chain in the pdb structure */
@@ -5805,23 +6403,22 @@ AjBool   ajXyzPdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 	if(!ajXyzPdbChain(scop->Chain[z], pdb, &chn))
 	{
 	    ajWarn("Chain incompatibility error in "
-		   "ajXyzPdbWriteDomain");
-
+		   "ajXyzPdbWriteDomain");			
+		
 	    ajFmtPrintF(errf, "//\n%S\nERROR Chain incompatibility error "
 			"in ajXyzPdbWriteDomain\n", scop->Entry);
-
+		
 	    return ajFalse;
 	}
 	else if(pdb->Chains[chn-1]->Nres==0)
-	{
-	    ajWarn("Chain length zero");
-
-	    ajFmtPrintF(errf, "//\n%S\nERROR Chain length zero\n",
-			scop->Entry);
-
+	{		
+	    ajWarn("Chain length zero");			
+	    
+	    ajFmtPrintF(errf, "//\n%S\nERROR Chain length zero\n", scop->Entry);
+	    
 	    return ajFalse;
 	}
-
+    
 
     /* Write bibliographic info.*/
     ajXyzPrintPdbHeaderScop(outf, scop);
@@ -5831,14 +6428,14 @@ AjBool   ajXyzPdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
     ajXyzPrintPdbEmptyRemark(outf, pdb);
     ajXyzPrintPdbResolution(outf, pdb);
     ajXyzPrintPdbEmptyRemark(outf, pdb);
-
+    
 
     /* Write SEQRES records*/
     if(!ajXyzPrintPdbSeqresDomain(errf, outf, pdb, scop))
     {
-	ajWarn("Error writing file in ajXyzPdbWriteDomain");
+	ajWarn("Error writing file in ajXyzPdbWriteDomain"); 
 	return ajFalse;
-    }
+    } 
 
 
     /* Write MODEL record, if appropriate*/
@@ -5849,11 +6446,11 @@ AjBool   ajXyzPdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
     /* Write ATOM/HETATM records*/
     if(!ajXyzPrintPdbAtomDomain(errf, outf, pdb, scop, 1))
     {
-	ajWarn("Error writing file in ajXyzPdbWriteDomain");
+	ajWarn("Error writing file in ajXyzPdbWriteDomain"); 
 	return ajFalse;
-    }
+    }  
 
-
+    
     /* Write END/ENDMDL records*/
     if(pdb->Method == ajNMR)
 	ajFmtPrintF(outf, "%-80s\n", "ENDMDL");
@@ -5870,7 +6467,7 @@ AjBool   ajXyzPdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 
 
 
-/* @func ajXyzPdbWriteAll *****************************************************
+/* @func ajXyzPdbWriteAll *******************************************************
 **
 ** Writes a pdb file for a protein.
 **
@@ -5885,7 +6482,7 @@ AjBool   ajXyzPdbWriteAll(AjPFile errf, AjPFile outf, AjPPdb pdb)
 {
     ajint x;
     ajint y;
-
+    
 
     /* Write bibliographic info.*/
     ajXyzPrintPdbHeader(outf, pdb);
@@ -5895,17 +6492,17 @@ AjBool   ajXyzPdbWriteAll(AjPFile errf, AjPFile outf, AjPPdb pdb)
     ajXyzPrintPdbEmptyRemark(outf, pdb);
     ajXyzPrintPdbResolution(outf, pdb);
     ajXyzPrintPdbEmptyRemark(outf, pdb);
-
-
+    
+    
     /* Write SEQRES records*/
     for(x=0;x<pdb->Nchn;x++)
 	if(!ajXyzPrintPdbSeqresChain(errf, outf, pdb, x+1))
 	{
-	    ajWarn("Error writing file in ajXyzPdbWriteAll");
+	    ajWarn("Error writing file in ajXyzPdbWriteAll"); 
 	    return ajFalse;
 	}
 
-
+    
     /* Loop for each model */
     for(y=0;y<pdb->Nmod;y++)
     {
@@ -5913,33 +6510,33 @@ AjBool   ajXyzPdbWriteAll(AjPFile errf, AjPFile outf, AjPPdb pdb)
 	if(pdb->Method == ajNMR)
 	    ajFmtPrintF(outf, "MODEL%9d%66s\n", y+1, " ");
 
-
+	
 	/* Write ATOM/HETATM records*/
 	for(x=0;x<pdb->Nchn;x++)
 	    if(!ajXyzPrintPdbAtomChain(outf, pdb, y+1, x+1))
 	    {
-		ajWarn("Error writing file in ajXyzPdbWriteAll");
+		ajWarn("Error writing file in ajXyzPdbWriteAll"); 
 		return ajFalse;
 	    }
 
 	if(!ajXyzPrintPdbHeterogen(outf, pdb, y+1))
 	{
-	    ajWarn("Error writing file in ajXyzPdbWriteAll");
+	    ajWarn("Error writing file in ajXyzPdbWriteAll"); 
 	    return ajFalse;
 	}
-
+	
 
 	/* Write ENDMDL record*/
 	if(pdb->Method == ajNMR)
 	    ajFmtPrintF(outf, "%-80s\n", "ENDMDL");
     }
 
-
+    
     /* Write END record*/
     ajFmtPrintF(outf, "%-80s\n", "END");
-
+    
     return ajTrue;
-}
+}	
 
 
 
@@ -5947,7 +6544,7 @@ AjBool   ajXyzPdbWriteAll(AjPFile errf, AjPFile outf, AjPPdb pdb)
 
 
 
-/* @func ajXyzScopWrite *******************************************************
+/* @func ajXyzScopWrite ******************************************************
 **
 ** Write contents of a Scop object to an output file in embl-like format.
 **
@@ -5964,11 +6561,8 @@ void ajXyzScopWrite(AjPFile outf, AjPScop thys)
 
     ajFmtPrintF(outf,"ID   %S\nXX\n",thys->Entry);
     ajFmtPrintF(outf,"EN   %S\nXX\n",thys->Pdb);
-    ajFmtPrintF(outf,
-		"SI   %d CL; %d FO; %d SF; %d FA; %d DO; %d SO; %d DD;\nXX\n",
-		thys->Sunid_Class,thys->Sunid_Fold,
-		thys->Sunid_Superfamily, thys->Sunid_Family,
-		thys->Sunid_Domain, thys->Sunid_Source,thys->Sunid_Domdat);
+    ajFmtPrintF(outf,"SI   %d CL; %d FO; %d SF; %d FA; %d DO; %d SO; %d DD;\nXX\n",
+		thys->Sunid_Class,thys->Sunid_Fold, thys->Sunid_Superfamily, thys->Sunid_Family,thys->Sunid_Domain, thys->Sunid_Source,thys->Sunid_Domdat);
 
     ajFmtPrintF(outf,"CL   %S",thys->Class);
     ajFmtPrintSplit(outf,thys->Fold,"\nXX\nFO   ",75," \t\n\r");
@@ -5980,21 +6574,20 @@ void ajXyzScopWrite(AjPFile outf, AjPScop thys)
     if(ajStrLen(thys->SeqPdb))
     {
 	ajFmtPrintF(outf,"XX\n");
-	ajSeqWriteXyz(outf, thys->SeqPdb, "DS");
-    }
+	ajSeqWriteXyz(outf, thys->SeqPdb, "DS");		
+    }	
 
     if(ajStrLen(thys->Acc))
-	ajFmtPrintF(outf,"XX\nAC   %S\n",thys->Acc);
+	ajFmtPrintF(outf,"XX\nAC   %S\n",thys->Acc);    
     if(ajStrLen(thys->Spr))
 	ajFmtPrintF(outf,"XX\nSP   %S\n",thys->Spr);
     if(ajStrLen(thys->SeqSpr))
     {
-	ajFmtPrintF(outf, "XX\n%-5s%d START; %d END;\n", "RA",
-		    thys->Startd,thys->Endd);
-	ajFmtPrintF(outf, "XX\n");
+	ajFmtPrintF(outf, "XX\n%-5s%d START; %d END;\n", "RA", thys->Startd,thys->Endd);
+	ajFmtPrintF(outf, "XX\n");	
 	ajSeqWriteXyz(outf, thys->SeqSpr, "SQ");
     }
-
+    
     ajFmtPrintF(outf,"XX\nNC   %d\n",thys->N);
 
     for(i=0;i<thys->N;++i)
@@ -6006,12 +6599,12 @@ void ajXyzScopWrite(AjPFile outf, AjPScop thys)
 		    thys->End[i]);
     }
     ajFmtPrintF(outf,"//\n");
-
+    
     return;
 }
 
 
-/* @func ajXyzPdbtospRead *****************************************************
+/* @func ajXyzPdbtospRead *********************************************************
 **
 ** Read a Pdbtosp object from a file in embl-like format.
 **
@@ -6021,7 +6614,7 @@ void ajXyzScopWrite(AjPFile outf, AjPScop thys)
 **
 ** @return [AjBool] True on success
 ** @@
-******************************************************************************/
+*****************************************************************************/
 
 AjBool ajXyzPdbtospRead(AjPFile inf, AjPStr entry, AjPPdbtosp *thys)
 {
@@ -6029,9 +6622,9 @@ AjBool ajXyzPdbtospRead(AjPFile inf, AjPStr entry, AjPPdbtosp *thys)
 }
 
 
-/* @func ajXyzPdbtospReadAll **************************************************
+/* @func ajXyzPdbtospReadAll *********************************************************
 **
-** Read all the Pdbtosp objects in a file in embl-like format and writes a list
+** Read all the Pdbtosp objects in a file in embl-like format and writes a list 
 ** of these objects. It then sorts the list by PDB id.
 **
 ** @param [r] inf [AjPFile] Input file stream
@@ -6039,30 +6632,30 @@ AjBool ajXyzPdbtospRead(AjPFile inf, AjPStr entry, AjPPdbtosp *thys)
 **
 ** @return [AjBool] True on success
 ** @@
-******************************************************************************/
+*****************************************************************************/
 AjBool ajXyzPdbtospReadAll(AjPFile inf, AjPList *list)
 {
     AjPPdbtosp ptr=NULL;
-
+    
     /* Check args and allocate list if necessary */
     if(!list || !inf)
 	return ajFalse;
     if(!(*list))
 	*list = ajListNew();
-
+    
 
     while(ajXyzPdbtospReadC(inf, "*", &ptr))
 	ajListPush(*list, (void *) ptr);
 
     ajListSort(*list, ajXyzSortPdbtospPdb);
-
+    
     return ajTrue;
 }
 
 
 
 
-/* @func ajXyzScopRead ********************************************************
+/* @func ajXyzScopRead *********************************************************
 **
 ** Read a Scop object from a file in embl-like format.
 **
@@ -6080,7 +6673,7 @@ AjBool ajXyzScopRead(AjPFile inf, AjPStr entry, AjPScop *thys)
 }
 
 
-/* @func ajXyzScopclaRead *****************************************************
+/* @func ajXyzScopclaRead *********************************************************
 **
 ** Read a Scopcla object from a file in embl-like format.
 **
@@ -6098,7 +6691,7 @@ AjBool ajXyzScopclaRead(AjPFile inf, AjPStr entry, AjPScopcla *thys)
 }
 
 
-/* @func ajXyzScopdesRead *****************************************************
+/* @func ajXyzScopdesRead *********************************************************
 **
 ** Read a Scopdes object from a file in embl-like format.
 **
@@ -6117,7 +6710,7 @@ AjBool ajXyzScopdesRead(AjPFile inf, AjPStr entry, AjPScopdes *thys)
 
 
 
-/* @func ajXyzScopdesReadC ****************************************************
+/* @func ajXyzScopdesReadC ******************************************************
 **
 ** Read a Scopdes object from a file in embl-like format.
 **
@@ -6137,25 +6730,24 @@ AjBool ajXyzScopdesReadC(AjPFile inf, char *entry, AjPScopdes *thys)
     static AjPRegexp rexp    = NULL;
 
     AjBool ok = ajFalse;
-
-
+    
+    
     /* Only initialise strings if this is called for the first time*/
     if(!line)
-    {
+    {    
 	line     = ajStrNew();
 	tentry   = ajStrNew();
 	sunidstr = ajStrNew();
 	tmp      = ajStrNew();
 
-	rexp  = ajRegCompC("^([^ \t]+)[ \t]+([^ \t]+)[ \t]+"
-			   "([^ \t]+)[ \t]+([^ \t]+)[ \t]+");
+	rexp  = ajRegCompC("^([^ \t]+)[ \t]+([^ \t]+)[ \t]+([^ \t]+)[ \t]+([^ \t]+)[ \t]+");
     }
-
+    
 
     /* Read up to the correcty entry (line) */
     ajStrAssC(&tentry,entry);
     ajStrToUpper(&tentry);
-
+    
     while((ok=ajFileReadLine(inf,&line)))
     {
 	if((ajFmtScanS(line, "%S", &sunidstr)==0))
@@ -6164,32 +6756,30 @@ AjBool ajXyzScopdesReadC(AjPFile inf, char *entry, AjPScopdes *thys)
 	/* Ignore comment lines */
 	if(*(line->Ptr) == '#')
 	    continue;
-
+	
 	if(ajStrMatchWild(sunidstr,tentry))
 	    break;
     }
-
+    
     if(!ok)
 	return ajFalse;
 
     *thys = ajXyzScopdesNew();
-
-    if((ajFmtScanS(line, "%d %S %S %S",
-		   &(*thys)->Sunid,&(*thys)->Type, &(*thys)->Sccs,
-		   &(*thys)->Entry)!=4))
+    
+    if((ajFmtScanS(line, "%d %S %S %S", &(*thys)->Sunid,&(*thys)->Type, &(*thys)->Sccs, &(*thys)->Entry)!=4))
 	return ajFalse;
 
 
     /* Tokenise the line by ' ' and discard the first 4 strings */
 /*    ajFmtPrint("line: %S\n", line);*/
-
+    
     if(!ajRegExec(rexp,line))
     {
 	ajFmtPrint("-->  %S\n", line);
 	ajFatal("File read error in ajXyzScopdesReadC");
     }
 
-
+    
     ajRegSubI(rexp,1,&tmp);
     ajRegSubI(rexp,2,&tmp);
     ajRegSubI(rexp,3,&tmp);
@@ -6201,7 +6791,7 @@ AjBool ajXyzScopdesReadC(AjPFile inf, char *entry, AjPScopdes *thys)
 }
 
 
-/* @func ajXyzScopclaReadC ****************************************************
+/* @func ajXyzScopclaReadC ******************************************************
 **
 ** Read a Scopcla object from a file in embl-like format.
 **
@@ -6219,8 +6809,7 @@ AjBool ajXyzScopclaReadC(AjPFile inf, char *entry, AjPScopcla *thys)
     static AjPStr pdbid      = NULL;  /* PDB code */
     static AjPStr chains     = NULL;  /* Chain data */
     static AjPStr sccs       = NULL;  /* Scop compact classification string */
-    static AjPStr class      = NULL;  /* Classification containing all
-					 SCOP sunid's  */
+    static AjPStr class      = NULL;  /* Classification containing all SCOP sunid's  */
     static AjPStr tentry     = NULL;
     static AjPStr token      = NULL;
     static AjPStr str        = NULL;
@@ -6229,7 +6818,7 @@ AjBool ajXyzScopclaReadC(AjPFile inf, char *entry, AjPScopcla *thys)
 
     AjPStrTok handle         = NULL;
     AjPStrTok bhandle        = NULL;
-    AjBool ok                = ajFalse;
+    AjBool ok                = ajFalse;    
 
     char c                   = ' ';
     char *p                  = NULL;
@@ -6241,7 +6830,7 @@ AjBool ajXyzScopclaReadC(AjPFile inf, char *entry, AjPScopcla *thys)
 
     /* Only initialise strings if this is called for the first time*/
     if(!line)
-    {
+    {    
 	line    = ajStrNew();
 	scopid   = ajStrNew();
 	pdbid     = ajStrNew();
@@ -6250,15 +6839,15 @@ AjBool ajXyzScopclaReadC(AjPFile inf, char *entry, AjPScopcla *thys)
 	tentry  = ajStrNew();
 	token   = ajStrNew();
 	str     = ajStrNew();
-
+	
 	exp   = ajRegCompC("^([0-9]+)([A-Za-z]+)[-]([0-9]+)");
     }
-
+    
 
     /* Read up to the correcty entry (line) */
     ajStrAssC(&tentry,entry);
     ajStrToUpper(&tentry);
-
+    
     while((ok=ajFileReadLine(inf,&line)))
     {
 	if((ajFmtScanS(line, "%S", &scopid)==0))
@@ -6267,17 +6856,16 @@ AjBool ajXyzScopclaReadC(AjPFile inf, char *entry, AjPScopcla *thys)
 	/* Ignore comment lines */
 	if(*scopid->Ptr == '#')
 	    continue;
-
+		
 	if(ajStrMatchWild(scopid,tentry))
 	    break;
     }
-
+    
     if(!ok)
 	return ajFalse;
 
 
-    if((ajFmtScanS(line, "%*S %S %S %S %*d %S",
-		   &pdbid,&chains, &sccs, &class)!=4))
+    if((ajFmtScanS(line, "%*S %S %S %S %*d %S", &pdbid,&chains, &sccs, &class)!=4))
 	return ajFalse;
 
     /* Count chains and allocate Scopcla object */
@@ -6297,7 +6885,7 @@ AjBool ajXyzScopclaReadC(AjPFile inf, char *entry, AjPScopcla *thys)
     for(i=0;i<n;++i)
     {
 	ajStrToken(&token,&handle,NULL);
-
+	    	    
 	p = ajStrStr(token);
 	if(sscanf(p,"%d-%d",&from,&to)==2)
 	{
@@ -6338,8 +6926,8 @@ AjBool ajXyzScopclaReadC(AjPFile inf, char *entry, AjPScopcla *thys)
 	}
     }
     ajStrTokenClear(&handle);
-
-
+	      
+	      
     /* Read SCOP sunid's from classification string */
     bhandle = ajStrTokenInit(class,",\n");
     while(ajStrToken(&token,&bhandle,NULL))
@@ -6358,23 +6946,23 @@ AjBool ajXyzScopclaReadC(AjPFile inf, char *entry, AjPScopcla *thys)
 	    ajFmtScanS(token, "sp=%d", &(*thys)->Source);
 	else if(ajStrPrefixC(token,"px"))
 	    ajFmtScanS(token, "px=%d", &(*thys)->Domdat);
-
+	
     }
     ajStrTokenClear(&bhandle);
 
 
     return ajTrue;
-}
+}	
 
 
-/* @func ajXyzPdbtospReadC ****************************************************
+/* @func ajXyzPdbtospReadC ******************************************************
 **
 ** Read a Pdbtosp object from a file in embl-like format.  Memory for the
 ** object is allocated.
 **
 ** @param [r] inf [AjPFile] Input file stream
 ** @param [r] entry [char*] Pdb id
-** @param [w] thys [AjPPdbtosp*] Pdbtosp object
+** @param [w] thys [AjPPdbtosp*] Pdbtosp object 
 **
 ** @return [AjBool] True on success
 ** @@
@@ -6382,12 +6970,12 @@ AjBool ajXyzScopclaReadC(AjPFile inf, char *entry, AjPScopcla *thys)
 AjBool ajXyzPdbtospReadC(AjPFile inf, char *entry, AjPPdbtosp *thys)
 {
     static AjPStr line    =NULL;
-    static AjPStr tentry  =NULL;
-    static AjPStr pdb     =NULL;
+    static AjPStr tentry  =NULL;	
+    static AjPStr pdb     =NULL;	
     AjBool ok             =ajFalse;
     ajint  n              =0;
     ajint  i              =0;
-
+    
 
     /* Only initialise strings if this is called for the first time*/
     if(!line)
@@ -6400,7 +6988,7 @@ AjBool ajXyzPdbtospReadC(AjPFile inf, char *entry, AjPPdbtosp *thys)
 
     ajStrAssC(&tentry,entry);
     ajStrToUpper(&tentry);
-
+    
     while((ok=ajFileReadLine(inf,&line)))
     {
 	if(!ajStrPrefixC(line,"EN   "))
@@ -6427,20 +7015,19 @@ AjBool ajXyzPdbtospReadC(AjPFile inf, char *entry, AjPPdbtosp *thys)
 	}
 	else if(ajStrPrefixC(line,"IN"))
 	{
-	    ajFmtScanS(line, "%*S %S %*S %S",
-		       &(*thys)->Spr[i], &(*thys)->Acc[i]);
+	    ajFmtScanS(line, "%*S %S %*S %S", &(*thys)->Spr[i], &(*thys)->Acc[i]);
 	    i++;
 	}
-
+	
 	ok = ajFileReadLine(inf,&line);
     }
-
+    
     return ajTrue;
 }
 
 
 
-/* @func ajXyzScopReadC *******************************************************
+/* @func ajXyzScopReadC ******************************************************
 **
 ** Read a Scop object from a file in embl-like format.
 **
@@ -6468,26 +7055,26 @@ AjBool ajXyzScopReadC(AjPFile inf, char *entry, AjPScop *thys)
     static AjPStr pdb     =NULL;
     static AjPStr tentry  =NULL;
     static AjPStr stmp    =NULL;
-    static AjPStr Acc     =NULL;
-    static AjPStr Spr     =NULL;
-    static AjPStr SeqPdb  =NULL;
-    static AjPStr SeqSpr  =NULL;
+    static AjPStr Acc     =NULL;         
+    static AjPStr Spr     =NULL;          
+    static AjPStr SeqPdb  =NULL;	
+    static AjPStr SeqSpr  =NULL;	
 
     AjBool ok             =ajFalse;
-
+    
     char   *p;
     ajint    idx            =0;
     ajint    n=0;
-    ajint  Startd;      /* Start of sequence relative to full length
+    ajint  Startd;      /* Start of sequence relative to full length 
 			    swissprot sequence */
-    ajint  Endd;        /* End of sequence relative to full length
+    ajint  Endd;        /* End of sequence relative to full length 
 			    swissprot sequence */
 
     ajint  Sunid_Class;         /* SCOP sunid for class */
     ajint  Sunid_Fold;          /* SCOP sunid for fold */
     ajint  Sunid_Superfamily;   /* SCOP sunid for superfamily */
     ajint  Sunid_Family;        /* SCOP sunid for family */
-    ajint  Sunid_Domain;        /* SCOP sunid for domain */
+    ajint  Sunid_Domain;        /* SCOP sunid for domain */  
     ajint  Sunid_Source;        /* SCOP sunid for species */
     ajint  Sunid_Domdat;        /* SCOP sunid for domain data */
 
@@ -6510,23 +7097,23 @@ AjBool ajXyzScopReadC(AjPFile inf, char *entry, AjPScop *thys)
 	Acc     = ajStrNew();
 	Spr     = ajStrNew();
 	exp1    = ajRegCompC("^([^ \t\r\n]+)[ \t\n\r]+");
-	exp2    = ajRegCompC("^([A-Za-z0-9.]+)[ ]*[^ \t\r\n]+[ ]*"
-			     "([0-9.-]+)[ ]*[^ \t\r\n]+[ ]*([0-9.-]+)");
+	exp2    = ajRegCompC("^([A-Za-z0-9.]+)[ ]*[^ \t\r\n]+[ ]*([0-9.-]+)[ ]*"
+			     "[^ \t\r\n]+[ ]*([0-9.-]+)");
     }
-
+    
     SeqSpr  = ajStrNew();
     SeqPdb  = ajStrNew();
 
 
-
+    
     ajStrAssC(&tentry,entry);
     ajStrToUpper(&tentry);
-
+    
     while((ok=ajFileReadLine(inf,&line)))
     {
 	if(!ajStrPrefixC(line,"ID   "))
 	    continue;
-
+	
 	if(!ajRegExec(exp1,line))
 	    return ajFalse;
 	ajRegPost(exp1,&stmp);
@@ -6534,11 +7121,11 @@ AjBool ajXyzScopReadC(AjPFile inf, char *entry, AjPScop *thys)
 	    break;
     }
 
-
+    
     if(!ok)
 	return ajFalse;
-
-
+    
+    
     while(ok && !ajStrPrefixC(line,"//"))
     {
 	if(ajStrPrefixC(line,"XX"))
@@ -6639,10 +7226,10 @@ AjBool ajXyzScopReadC(AjPFile inf, char *entry, AjPScop *thys)
 	    ajRegSubI(exp2,1,&stmp);
 	    (*thys)->Chain[idx-1] = *ajStrStr(stmp);
 	    ajRegSubI(exp2,2,&str);
-	    ajStrAssC(&(*thys)->Start[idx-1],ajStrStr(str));
+	    ajStrAssC(&(*thys)->Start[idx-1],ajStrStr(str)); 
 
 	    ajRegSubI(exp2,3,&str);
-	    ajStrAssC(&(*thys)->End[idx-1],ajStrStr(str));
+	    ajStrAssC(&(*thys)->End[idx-1],ajStrStr(str)); 
 
 	}
 	/* Sequence from pdb file */
@@ -6679,21 +7266,19 @@ AjBool ajXyzScopReadC(AjPFile inf, char *entry, AjPScop *thys)
 	/* Sunid of domain data */
 	else if(ajStrPrefixC(line,"SI"))
 	{
-	    ajFmtScanS(line,
-		       "%*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d",
-		       &Sunid_Class, &Sunid_Fold,
-		       &Sunid_Superfamily, &Sunid_Family,
+	    ajFmtScanS(line, "%*s %d %*s %d %*s %d %*s %d %*s %d %*s %d %*s %d", 
+		       &Sunid_Class, &Sunid_Fold, &Sunid_Superfamily, &Sunid_Family, 
 		       &Sunid_Domain, &Sunid_Source, &Sunid_Domdat);
 	}
-
+	
 	ok = ajFileReadLine(inf,&line);
     }
-
+ 
 
     /* Tidy up */
     ajStrDel(&SeqSpr);
     ajStrDel(&SeqPdb);
-
+    
     return ajTrue;
 }
 
@@ -6701,18 +7286,18 @@ AjBool ajXyzScopReadC(AjPFile inf, char *entry, AjPScop *thys)
 
 
 
-/* @func ajXyzScopReadAll *****************************************************
+/* @func ajXyzScopReadAll **************************************************
 **
-** Reads the SCOP classification file (embl-format) and creates a list of
+** Reads the SCOP classification file (embl-format) and creates a list of 
 ** Scop objects for the entire content.
-**
+** 
 ** @param [r] fptr  [AjPFile]     Pointer to SCOP classification file
-** @param [w] list  [AjPList*]    Pointer to list for SCOP classification
-**
+** @param [w] list  [AjPList*]    Pointer to list for SCOP classification 
+** 
 ** @return [AjBool] True on success
 ** @@
 ******************************************************************************/
-AjBool    ajXyzScopReadAll(AjPFile fptr, AjPList *list)
+AjBool    ajXyzScopReadAll(AjPFile fptr, AjPList *list) 
 {
 
   AjPScop scop_object=NULL;
@@ -6731,7 +7316,7 @@ AjBool    ajXyzScopReadAll(AjPFile fptr, AjPList *list)
 
   while(ajXyzScopReadC(fptr, "*", &scop_object))
       ajListPushApp(*list, scop_object);
-
+  
   return ajTrue;
 }
 
@@ -6739,7 +7324,7 @@ AjBool    ajXyzScopReadAll(AjPFile fptr, AjPList *list)
 
 
 
-/* @func ajXyzScopToPdb *******************************************************
+/* @func ajXyzScopToPdb *********************************************************
 **
 ** Read a scop identifier code and writes the equivalent pdb identifier code
 **
@@ -6759,16 +7344,15 @@ AjPStr   ajXyzScopToPdb(AjPStr scop, AjPStr *pdb)
 
 /* @func ajXyzPdbToSp *********************************************************
 **
-** Read a pdb identifier code and writes the equivalent swissprot
-** identifier code Relies on list of Pdbtosp objects sorted by PDB
-** code, which is usually obtained by a call to ajXyzPdbtospReadAll.
-**
+** Read a pdb identifier code and writes the equivalent swissprot identifier code
+** Relies on list of Pdbtosp objects sorted by PDB code, which is usually obtained 
+** by a call to ajXyzPdbtospReadAll.
+** 
 ** @param [r] pdb  [AjPStr]   Pdb  identifier code
 ** @param [w] spr  [AjPStr*]  Swissprot identifier code
 ** @param [r] list [AjPList]  Sorted list of Pdbtosp objects
 **
-** @return [AjBool] True if a swissprot identifier code was found for
-** the Pdb code.
+** @return [AjBool]  True if a swissprot identifier code was found for the Pdb code.
 ** @@
 ******************************************************************************/
 AjBool   ajXyzPdbToSp(AjPStr pdb, AjPStr *spr, AjPList list)
@@ -6777,13 +7361,13 @@ AjBool   ajXyzPdbToSp(AjPStr pdb, AjPStr *spr, AjPList list)
     ajint       dim =0;      /* Size of array */
     ajint       idx =0;      /* Index into array for the Pdb code */
 
-
+    
     if(!pdb || !list)
     {
 	ajWarn("Bad args passed to ajXyzPdbToSp");
 	return ajFalse;
     }
-
+    
 
     dim = ajListToArray(list, (void ***) &(arr));
     if(!dim)
@@ -6804,26 +7388,25 @@ AjBool   ajXyzPdbToSp(AjPStr pdb, AjPStr *spr, AjPList list)
 
 
 
-/* @func ajXyzScopToSp ********************************************************
+/* @func ajXyzScopToSp *********************************************************
 **
-** Read a scop identifier code and writes the equivalent swissprot
-** identifier code Relies on a list of Pdbtosp objects sorted by PDB
-** code, which is usually obtained by a call to ajXyzPdbtospReadAll.
-**
+** Read a scop identifier code and writes the equivalent swissprot identifier code
+** Relies on a list of Pdbtosp objects sorted by PDB code, which is usually obtained 
+** by a call to ajXyzPdbtospReadAll.
+** 
 ** @param [r] scop  [AjPStr]  Scop domain identifier code
 ** @param [w] spr   [AjPStr*]  Swissprot identifier code
 ** @param [r] list  [AjPList]  Sorted list of Pdbtosp objects
 **
-** @return [AjBool] True if a swissprot identifier code was found for
-** the Scop code.
+** @return [AjBool]  True if a swissprot identifier code was found for the Scop code.
 ** @@
 ******************************************************************************/
 AjBool   ajXyzScopToSp(AjPStr scop, AjPStr *spr, AjPList list)
 {
     AjPStr pdb=NULL;
-
+    
     pdb=ajStrNew();
-
+    
     if(ajXyzPdbToSp(ajXyzScopToPdb(scop, &pdb), spr, list))
     {
 	ajStrDel(&pdb);
@@ -6839,18 +7422,17 @@ AjBool   ajXyzScopToSp(AjPStr scop, AjPStr *spr, AjPList list)
 
 
 
-/* @func ajXyzPdbToAcc ********************************************************
+/* @func ajXyzPdbToAcc *********************************************************
 **
 ** Read a pdb identifier code and writes the equivalent accession number.
-** Relies on list of Pdbtosp objects sorted by PDB code, which is usually
-** obtained by a call to ajXyzPdbtospReadAll.
-**
+** Relies on list of Pdbtosp objects sorted by PDB code, which is usually obtained 
+** by a call to ajXyzPdbtospReadAll.
+** 
 ** @param [r] pdb  [AjPStr]   Pdb  identifier code
-** @param [w] acc  [AjPStr*]  Accession number
+** @param [w] Acc  [AjPStr*]  Accession number
 ** @param [r] list [AjPList]  Sorted list of Pdbtosp objects
 **
-** @return [AjBool]  ajTrue if a swissprot identifier code was found
-**                   for the Pdb code.
+** @return [AjBool]  True if a swissprot identifier code was found for the Pdb code.
 ** @@
 ******************************************************************************/
 AjBool   ajXyzPdbToAcc(AjPStr pdb, AjPStr *acc, AjPList list)
@@ -6859,13 +7441,13 @@ AjBool   ajXyzPdbToAcc(AjPStr pdb, AjPStr *acc, AjPList list)
     ajint    dim =0;      /* Size of array */
     ajint    idx =0;      /* Index into array for the Pdb code */
 
-
+    
     if(!pdb || !list)
     {
 	ajWarn("Bad args passed to ajXyzPdbToSp");
 	return ajFalse;
     }
-
+    
 
     dim = ajListToArray(list, (void ***) &(arr));
     if(!dim)
@@ -6880,7 +7462,7 @@ AjBool   ajXyzPdbToAcc(AjPStr pdb, AjPStr *acc, AjPList list)
 	AJFREE(arr);
 	return ajFalse;
     }
-
+    
     else
     {
 	ajStrAssS(acc, arr[idx]->Acc[0]);
@@ -6891,26 +7473,25 @@ AjBool   ajXyzPdbToAcc(AjPStr pdb, AjPStr *acc, AjPList list)
 
 
 
-/* @func ajXyzScopToAcc *******************************************************
+/* @func ajXyzScopToAcc *********************************************************
 **
-** Read a scop identifier code and writes the equivalent accession
-** number Relies on a list of Pdbtosp objects sorted by PDB code,
-** which is usually obtained by a call to ajXyzPdbtospReadAll.
-**
+** Read a scop identifier code and writes the equivalent accession number
+** Relies on a list of Pdbtosp objects sorted by PDB code, which is usually obtained 
+** by a call to ajXyzPdbtospReadAll.
+** 
 ** @param [r] scop  [AjPStr]  Scop domain identifier code
 ** @param [w] acc   [AjPStr*]  Accession number
 ** @param [r] list  [AjPList]  Sorted list of Pdbtosp objects
 **
-** @return [AjBool] True if a swissprot identifier code was found for
-** the Scop code.
+** @return [AjBool]  True if a swissprot identifier code was found for the Scop code.
 ** @@
 ******************************************************************************/
 AjBool   ajXyzScopToAcc(AjPStr scop, AjPStr *acc, AjPList list)
 {
     AjPStr pdb=NULL;
-
+    
     pdb=ajStrNew();
-
+    
     if(ajXyzPdbToAcc(ajXyzScopToPdb(scop, &pdb), acc, list))
     {
 	ajStrDel(&pdb);
@@ -6927,21 +7508,21 @@ AjBool   ajXyzScopToAcc(AjPStr scop, AjPStr *acc, AjPList list)
 
 
 
-/* @func ajXyzScopBinSearch ***************************************************
+/* @func ajXyzScopBinSearchScop ********************************************
 **
 ** Performs a binary search for a SCOP domain id over an array of Scop
-** structures (which of course must first have been sorted). This is a
+** structures (which of course must first have been sorted). This is a 
 ** case-insensitive search.
 **
 ** @param [r] id  [AjPStr]      Search term
 ** @param [r] arr [AjPScop*]    Array of AjPScop objects
 ** @param [r] siz [ajint]       Size of array
 **
-** @return [ajint] Index of first AjPScop object found with an PDB code
+** @return [ajint] Index of first AjPScop object found with a SCOP domain id
 ** matching id, or -1 if id is not found.
 ** @@
 ******************************************************************************/
-ajint ajXyzScopBinSearch(AjPStr id, AjPScop *arr, ajint siz)
+ajint ajXyzScopBinSearchScop(AjPStr id, AjPScop *arr, ajint siz)
 {
     int l;
     int m;
@@ -6955,11 +7536,11 @@ ajint ajXyzScopBinSearch(AjPStr id, AjPScop *arr, ajint siz)
     {
         m=(l+h)>>1;
 
-        if((c=ajStrCmpCase(id, arr[m]->Entry)) < 0)
+        if((c=ajStrCmpCase(id, arr[m]->Entry)) < 0) 
 	    h=m-1;
-        else if(c>0)
+        else if(c>0) 
 	    l=m+1;
-        else
+        else 
 	    return m;
     }
     return -1;
@@ -6969,12 +7550,12 @@ ajint ajXyzScopBinSearch(AjPStr id, AjPScop *arr, ajint siz)
 
 
 
-/* @func ajXyzScopCopy ********************************************************
+/* @func ajXyzScopCopy ******************************************************
 **
 ** Copies the contents from one Scop object to another.
 **
-** @param [w] to   [AjPScop*] Scop object pointer
-** @param [r] from [AjPScop] Scop object
+** @param [w] to   [AjPScop*] Scop object pointer 
+** @param [r] from [AjPScop] Scop object 
 **
 ** @return [AjBool] True if copy was successful.
 ** @@
@@ -6982,7 +7563,7 @@ ajint ajXyzScopBinSearch(AjPStr id, AjPScop *arr, ajint siz)
 AjBool ajXyzScopCopy(AjPScop *to, AjPScop from)
 {
     ajint x=0;
-
+    
     /* Check args */
     if(!from)
 	return ajFalse;
@@ -6991,7 +7572,7 @@ AjBool ajXyzScopCopy(AjPScop *to, AjPScop from)
     {
 	(*to)=ajXyzScopNew(from->N);
     }
-
+    
 
     ajStrAssS(&(*to)->Entry, from->Entry);
     ajStrAssS(&(*to)->Pdb, from->Pdb);
@@ -7005,10 +7586,10 @@ AjBool ajXyzScopCopy(AjPScop *to, AjPScop from)
     for(x=0; x<from->N; x++)
     {
 	(*to)->Chain[x]=from->Chain[x];
-	ajStrAssS(&(*to)->Start[x], from->Start[x]);
-	ajStrAssS(&(*to)->End[x], from->End[x]);
+	ajStrAssS(&(*to)->Start[x], from->Start[x]);	
+	ajStrAssS(&(*to)->End[x], from->End[x]);	
     }
-
+    
     ajStrAssS(&(*to)->Acc, from->Acc);
     ajStrAssS(&(*to)->Spr, from->Spr);
     ajStrAssS(&(*to)->SeqPdb, from->SeqPdb);
@@ -7031,17 +7612,17 @@ AjBool ajXyzScopCopy(AjPScop *to, AjPScop from)
 
 
 
-/* @func ajXyzScopToScophit ***************************************************
+/* @func ajXyzScopToScophit **************************************************
 **
 ** Writes a Scophit structure with the common information in a Scop
-** structure. The swissprot sequence is taken in preference to the pdb
+** structure. The swissprot sequence is taken in preference to the pdb 
 ** sequence.
 **
 ** @param [r] source  [AjPScop]       The Scop object to convert
 ** @param [w] target  [AjPScophit*]   Destination of the the scophit structure
-**                                    to write to.
+**                                    to write to. 
 **
-** @return [AjBool] ajTrue on the success of creating a Scophit structure.
+** @return [ajTrue] On the success of creating a Scophit structure. 
 ** @@
 ******************************************************************************/
 AjBool ajXyzScopToScophit(AjPScop source, AjPScophit* target)
@@ -7052,7 +7633,7 @@ AjBool ajXyzScopToScophit(AjPScop source, AjPScophit* target)
 	ajWarn("bad args passed to ajXyzScopToScophit\n");
 	return ajFalse;
     }
-
+    
     else
     {
 	ajStrAssS(&(*target)->Class,source->Class);
@@ -7060,7 +7641,7 @@ AjBool ajXyzScopToScophit(AjPScop source, AjPScophit* target)
 	ajStrAssS(&(*target)->Superfamily,source->Superfamily);
 	ajStrAssS(&(*target)->Family,source->Family);
 	(*target)->Sunid_Family = source->Sunid_Family;
-
+	
 	/* The swissprot sequence was not available */
 	if(ajStrLen(source->SeqSpr)==0)
 	{
@@ -7078,7 +7659,7 @@ AjBool ajXyzScopToScophit(AjPScop source, AjPScophit* target)
 	    ajStrAssS(&(*target)->Acc,source->Acc);
 	    ajStrAssS(&(*target)->Spr,source->Spr);
 	}
-
+	
 	return ajTrue;
     }
 }
@@ -7087,9 +7668,9 @@ AjBool ajXyzScopToScophit(AjPScop source, AjPScophit* target)
 
 
 
-/* @func ajXyzScopalgWrite ****************************************************
+/* @func ajXyzScopalgWrite ***************************************************
 **
-** Write a Scopalg object to file in clusta format annotated with Scop
+** Write a Scopalg object to file in clusta format annotated with Scop 
 ** classification as below:
 **
 **
@@ -7106,14 +7687,14 @@ AjBool ajXyzScopToScophit(AjPScop source, AjPScophit* target)
 ** XX
 ** d1f0ia1      AATPHLDAVEQTLRQVSPGLEGDVWERTSGNKLDGSAADPSDWLLQTP-GCWGDDKC
 ** d1f0ia2      -----------------------------NVPV---------IAVG-GLG---VGIK
-**
+** 
 ** d1f0ia1      A-------------------------------D-RVGTKRLLAKMTENIGNATRTVD
 ** d1f0ia2      DVDPKSTFRPDLPTASDTKCVVGLHDNTNADRDYDTV-NPEESALRALVASAKGHIE
 **
 **
-**
+** 
 ** @param [r] outf     [AjPFile] Output file stream
-** @param [w] scop     [AjPScopalg]  Scopalg object
+** @param [w] scop     [AjPScopalg*]  Scopalg object
 **
 ** @return [AjBool] True on success (an alignment was written)
 ** @@
@@ -7122,8 +7703,8 @@ AjBool   ajXyzScopalgWrite(AjPFile outf, AjPScopalg scop)
 {
     /* JISON Could modify scopalign.c to use this function now it is done */
 
-    ajint     x       =0;
-    ajint     y       =0;
+    ajint     x       =0;    
+    ajint     y       =0;    
     ajint     tmp_wid =0;     /* Temp. variable for width */
     ajint     code_wid=0;     /* Max. code width +1 */
     ajint     seq_wid=0;      /* Width of alignment rounded up to nearest 60 */
@@ -7133,7 +7714,7 @@ AjBool   ajXyzScopalgWrite(AjPFile outf, AjPScopalg scop)
 				 length alignment */
     ajint     end     =0;     /* End position of sequence fragment wrt full
 				 length alignment */
-
+    
 
     /*Write SCOP classification records to file*/
     ajFmtPrintF(outf,"CL   %S",scop->Class);
@@ -7142,20 +7723,20 @@ AjBool   ajXyzScopalgWrite(AjPFile outf, AjPScopalg scop)
     ajFmtPrintSplit(outf,scop->Family,"XX\nFA   ",75," \t\n\r");
     ajFmtPrintF(outf,"XX\n");
     ajFmtPrintF(outf,"SI   %d\nXX",scop->Sunid_Family);
-
+    
 
     /* Find max. width of code, and add 1 to it for 1 whitespace */
     for(x=0;x<scop->N;x++)
 	if( (tmp_wid=MAJSTRLEN(scop->Codes[x]))>code_wid)
 	    code_wid = tmp_wid;
     code_wid++;
-
+    
 
     /* Calculate no. of blocks in alignment */
     seq_wid = ajRound(scop->width, 60);
     nblk = (ajint) (seq_wid / 60);
-
-
+    
+    
     /* Print out sequence in blocks */
     for(x=0;x<nblk;x++)
     {
@@ -7163,7 +7744,7 @@ AjBool   ajXyzScopalgWrite(AjPFile outf, AjPScopalg scop)
 	end = start + 59;
 	if(end>=scop->width)
 	    end = scop->width - 1;
-
+	
 	ajFmtPrintF(outf, "\n");
 	for(y=0; y<scop->N; y++)
 	{
@@ -7171,94 +7752,94 @@ AjBool   ajXyzScopalgWrite(AjPFile outf, AjPScopalg scop)
 	    ajFmtPrintF(outf, "%*S%-60S\n", code_wid, scop->Codes[y], tmp_seq);
 	}
     }
-
-
-
+    
+    
+    
     return ajTrue;
-
+    
 }
 
 
 
 
-/* @func ajXyzScopalgWriteClustal *********************************************
+/* @func ajXyzScopalgWriteClustal ********************************************
 **
-** Writes a Scopalg object to a specified file in CLUSTAL format (just the
+** Writes a Scopalg object to a specified file in CLUSTAL format (just the 
 ** alignment without the SCOP classification information).
 **
 ** @param [r] align      [AjPScopalg]  A list Hitlist structures.
 ** @param [w] outf       [AjPFile *]     Outfile file pointer
-**
+** 
 ** @return [AjBool] True on success (a file has been written)
 ** @@
 ******************************************************************************/
 AjBool ajXyzScopalgWriteClustal(AjPScopalg align, AjPFile* outf)
 {
     ajint i;
-
+    
     /*Check args*/
     if(!align)
     {
 	ajWarn("Null args passed to ajXyzScopalgWriteClustal ");
 	return ajFalse;
     }
-
+    
     /* remove i from the print statement before commiting */
     ajFmtPrintF(*outf,"CLUSTALW\n\n");
-    ajFmtPrintF(*outf, "\n");
+    ajFmtPrintF(*outf, "\n"); 
 
     for(i=0;i<align->N;++i)
     	ajFmtPrintF(*outf,"%S_%d   %S\n",align->Codes[i],i,align->Seqs[i]);
     ajFmtPrintF(*outf,"\n");
-    ajFmtPrintF(*outf,"\n");
-
+    ajFmtPrintF(*outf,"\n"); 
+    
     return ajTrue;
-}
+}	
 
 
 /* @func ajXyzScopalgWriteClustal2 ********************************************
 **
-** Writes a Scopalg object to a specified file in CLUSTAL format (just the
+** Writes a Scopalg object to a specified file in CLUSTAL format (just the 
 ** alignment without the SCOP classification information).
 **
 ** @param [r] align      [AjPScopalg]  A list Hitlist structures.
 ** @param [w] outf       [AjPFile *]     Outfile file pointer
-**
+** 
 ** @return [AjBool] True on success (a file has been written)
 ** @@
 ******************************************************************************/
 AjBool ajXyzScopalgWriteClustal2(AjPScopalg align, AjPFile* outf)
 {
     ajint i;
-
+    
     /*Check args*/
     if(!align)
     {
 	ajWarn("Null args passed to ajXyzScopalgWriteClustal ");
 	return ajFalse;
     }
-
+    
     /* remove i from the print statement before commiting */
 /*    ajFmtPrintF(*outf,"CLUSTALW\n\n"); */
-    ajFmtPrintF(*outf, "\n");
+    ajFmtPrintF(*outf, "\n"); 
 
     for(i=0;i<align->N;++i)
     	ajFmtPrintF(*outf,"%S_%d   %S\n",align->Codes[i],i,align->Seqs[i]);
     ajFmtPrintF(*outf,"\n");
 /*    ajFmtPrintF(*outf,"\n");  */
-
+    
     return ajTrue;
-}
+}	
 
 
 
-/* @func ajXyzScopalgGetseqs **************************************************
+/* @func ajXyzScopalgGetseqs *************************************************
 **
 ** Read a Scopalg object and writes an array of AjPStr containing the sequences
 ** without gaps.
-**
+** 
 ** @param [r] thys     [AjPScopalg]  Scopalg object
-** @param [w] arr      [AjPStr **]   Array of AjPStr
+** @param [w] arr      [AjPStr **]   Array of AjPStr 
 **
 ** @return [ajint] Number of sequences read
 ** @@
@@ -7266,27 +7847,27 @@ AjBool ajXyzScopalgWriteClustal2(AjPScopalg align, AjPFile* outf)
 ajint ajXyzScopalgGetseqs(AjPScopalg thys, AjPStr **arr)
 {
     ajint i;
-
+        
     /*Check args*/
     if(!thys)
 	{
 	    ajWarn("Null args passed to ajXyzScopalgGetseqs");
 	    return 0;
 	}
-
-
+    
+    
     *arr = (AjPStr *) AJCALLOC0(thys->N, sizeof(AjPStr));
-
+    
     for(i=0;i<thys->N;++i)
     {
 	(*arr)[i] = ajStrNew();
 
 	ajStrAssS(&((*arr)[i]), thys->Seqs[i]);
-
+	
 	ajStrDegap(&((*arr)[i]));
-
+	
 /*	ajFmtPrint("i:%d %S\n", i, (*arr)[i]); */
-
+	
     }
     return thys->N;
 
@@ -7298,7 +7879,7 @@ ajint ajXyzScopalgGetseqs(AjPScopalg thys, AjPStr **arr)
     {
 	*arr[i] = ajStrNew();
 
-	ajStrAssS(&(*arr[i]), thys->Seqs[i]);
+	ajStrAssS(&(*arr[i]), thys->Seqs[i]); 
 
 	ajStrDegap(&(*arr[i]));
 
@@ -7312,14 +7893,14 @@ ajint ajXyzScopalgGetseqs(AjPScopalg thys, AjPStr **arr)
 
 
 
-/* @func ajXyzScopalgRead *****************************************************
+/* @func ajXyzScopalgRead ****************************************************
 **
 ** Read a Scopalg object from a file in embl-like format.
-**
+** 
 ** @param [r] inf      [AjPFile] Input file stream
 ** @param [w] thys     [AjPScopalg*]  Scopalg object
 **
-** @return [AjBool] True if the file contained any data, even an empty
+** @return [AjBool] True if the file contained any data, even an empty 
 ** alignment.
 ** @@
 ******************************************************************************/
@@ -7331,31 +7912,32 @@ AjBool   ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys)
     static   AjPStr super   =NULL;
     static   AjPStr family  =NULL;
     static   AjPStr postsim =NULL;     /* Post-similar line */
-    static   AjPStr posttmp =NULL;     /* Temp. storage for
-					  post-similar line */
+    static   AjPStr posttmp =NULL;     /* Temp. storage for post-similar line */
 
-    AjBool  done_1st_blk    =ajFalse;  /* Flag for whether we've read
-					  first block of sequences */
+    static   AjPStr posisim =NULL;     /* Positions line */
+    static   AjPStr positmp =NULL;     /* Temp. storage for Positions line */
+    
+    AjBool  done_1st_blk    =ajFalse;  /* Flag for whether we've read first block of sequences */
     ajint   x               =0;        /* Loop counter */
     ajint   y               =0;        /* Loop counter */
     ajint   cnt             =0;        /* Temp. counter of sequence*/
     ajint   nseq            =0;        /* No. of sequences in alignment*/
     ajint   Sunid           =0;        /* SCOP Sunid for family */
-
-
+    
+    
     AjPList list_seqs    =NULL;     /* List of sequences */
     AjPList list_codes   =NULL;     /* List of codes */
     AjPStr  *arr_seqs       =NULL;     /* Array of sequences */
-    AjPStr  seq             =NULL;
+    AjPStr  seq             =NULL;     
     AjPStr  code            =NULL;     /* Id code of sequence */
     AjPStr  codetmp         =NULL;     /* Id code of sequence */
     AjPStr  seq1            =NULL;
 
 
-    /* Check args */
+    /* Check args */	
     if(!inf)
 	return ajFalse;
-
+    
 
     /* Allocate strings */
     /* Only initialise strings if this is called for the first time*/
@@ -7368,11 +7950,13 @@ AjBool   ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys)
 	line    = ajStrNew();
 	postsim = ajStrNew();
 	posttmp = ajStrNew();
+	posisim = ajStrNew();
+	positmp = ajStrNew();
 	seq1    = ajStrNew();
 	codetmp = ajStrNew();
     }
 
-
+    
     /* Create new lists */
     list_seqs = ajListstrNew();
     list_codes = ajListstrNew();
@@ -7446,11 +8030,22 @@ AjBool   ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys)
 		ajStrApp(&postsim, posttmp);
 	    else
 		ajStrAssS(&postsim, posttmp);
-
+	    
+	    continue;
+	}
+	else if (ajStrPrefixC(line,"Positions"))
+	{
+	    /* Parse Positions line */
+	    ajFmtScanS(line, "%*s%S", &positmp);
+	    if(done_1st_blk == ajTrue)
+		ajStrApp(&posisim, positmp);
+	    else
+		ajStrAssS(&posisim, positmp);
+	    
 	    continue;
 	}
 	else if(ajStrChar(line,1)=='\0')
-	{
+	{ 
 	    /* If we are on a blank line */
 	    /* ajFileReadLine will trim the tailing \n */
 
@@ -7476,27 +8071,27 @@ AjBool   ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys)
 		ajStrApp(&arr_seqs[cnt], seq1);
 		cnt++;
 		continue;
-	    }
+	    }	
 	    else
 	    {
 		/* It is a sequence line from the first block */
 		/* Read in sequence */
 		nseq++;
-		seq = ajStrNew();
-		code = ajStrNew();
+		seq = ajStrNew();		
+		code = ajStrNew();		
 		ajFmtScanS(line, "%S%S", &code, &seq);
-
+		
 		/* Push strings onto lists */
 		ajListstrPushApp(list_seqs,seq);
 		ajListstrPushApp(list_codes,code);
 		continue;
 	    }
-	}
+	}	
     }
 
 
-    /* Cope for cases where alignment is in one block only,
-       i.e. there were no empty lines
+    /* Cope for cases where alignment is in one block only, 
+       i.e. there were no empty lines 
 
        XX
        Number               10        20        30        40        50
@@ -7510,15 +8105,15 @@ AjBool   ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys)
 
 
     ajStrDel(&seq1);
-
+    
     if(!nseq)
     {
 	ajWarn("No sequences in alignment !\n");
-/*	ajListstrDel(&list_seqs);
-	ajListstrDel(&list_codes);
+/*	ajListstrDel(&list_seqs); 
+	ajListstrDel(&list_codes); 
 	return ajFalse; */
     }
-
+    
 
 
     /* Allocate memory for Scopalg structure */
@@ -7530,9 +8125,9 @@ AjBool   ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys)
     ajStrAssS(&(*thys)->Class,class);
     ajStrAssS(&(*thys)->Fold,fold);
     ajStrAssS(&(*thys)->Superfamily,super);
-    ajStrAssS(&(*thys)->Family,family);
+    ajStrAssS(&(*thys)->Family,family); 
     (*thys)->Sunid_Family = Sunid;
-
+    
 
 
     if(nseq)
@@ -7540,38 +8135,41 @@ AjBool   ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys)
 	/* Assign sequences and free memory */
 	for(x=0; x<nseq; x++)
 	{
-	    ajStrAssS(&(*thys)->Seqs[x],arr_seqs[x]);
+	    ajStrAssS(&(*thys)->Seqs[x],arr_seqs[x]); 
 	    ajStrDel(&arr_seqs[x]);
 
 	}
 	AJFREE(arr_seqs);
-
-
+	
+	
 	/* Assign width */
 	(*thys)->width = ajStrLen((*thys)->Seqs[0]);
-
-
+	
+	
 	for(x=0; ajListstrPop(list_codes,&codetmp); x++)
 	{
 	    ajStrAssS(&(*thys)->Codes[x],codetmp);
 	    ajStrDel(&codetmp);
 	}
-
+	
 	/*JC	ajStrAssS(&(*thys)->Codes[x],arr_seqs[x]); 	 */
-
-
-
-
+	
+	
+	
+	
 	/* Assign Post_similar line */
-	ajStrAssS(&(*thys)->Post_similar,postsim);
-    }
+	ajStrAssS(&(*thys)->Post_similar,postsim); 
 
+	/* Assign Positions line */
+	ajStrAssS(&(*thys)->Positions,posisim); 
+    }
+    
 
 
     /* Clean up */
-    ajListstrDel(&list_seqs);
-    ajListstrDel(&list_codes);
-
+    ajListstrDel(&list_seqs); 
+    ajListstrDel(&list_codes); 
+    
 
 
     /* Return */
@@ -7585,10 +8183,10 @@ AjBool   ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys)
 
 
 
-/* @func ajXyzHitlistRead *****************************************************
+/* @func ajXyzHitlistRead ****************************************************
 **
-** Read a hitlist object from a file in embl-like format.
-**
+** Read a hitlist object from a file in embl-like format. 
+** 
 ** @param [r] inf      [AjPFile] Input file stream
 ** @param [r] delim    [char *]  Delimiter for block of hits (in case the file
 ** contains multiple hitlists).
@@ -7617,9 +8215,9 @@ AjBool   ajXyzHitlistRead(AjPFile inf, char *delim, AjPHitlist *thys)
     super   = ajStrNew();
     family  = ajStrNew();
     line    = ajStrNew();
+    
 
-
-
+    
     /* Read first line */
     ok = ajFileReadLine(inf,&line);
 
@@ -7690,31 +8288,42 @@ AjBool   ajXyzHitlistRead(AjPFile inf, char *delim, AjPHitlist *thys)
 	{
 	    /* Increment hit counter */
 	    n++;
-
-
+	    
+	    
 	    /* Safety check */
 	    if(n>nset)
 	    {
-		ajFatal("Dangerous error in input file "
-			"caught in ajXyzHitlistRead.\n"
-			"Email jison@hgmp.mrc.ac.uk");
+		ajFatal("Dangerous error in input file caught in ajXyzHitlistRead.\n Email jison@hgmp.mrc.ac.uk");
 		printf("n...%d  nset...%d\n", n, nset);
 	    }
-
+	    
 	}
+	else if(ajStrPrefixC(line,"SC"))
+	    {
+		ajFmtScanS(line, "%*s %f", &(*thys)->hits[n-1]->Score);
+	    }
 	else if(ajStrPrefixC(line,"AC"))
 	    {
 		ajStrAssC(&(*thys)->hits[n-1]->Acc,ajStrStr(line)+3);
 		ajStrClean(&(*thys)->hits[n-1]->Acc);
 	    }
+	else if(ajStrPrefixC(line,"SP"))
+	    {
+		ajStrAssC(&(*thys)->hits[n-1]->Spr,ajStrStr(line)+3);
+		ajStrClean(&(*thys)->hits[n-1]->Spr);
+	    }
 	else if(ajStrPrefixC(line,"TY"))
 	    {
-		ajStrAssC(&(*thys)->hits[n-1]->Typeobj,ajStrStr(line)+3);
-		ajStrClean(&(*thys)->hits[n-1]->Typeobj);
+		ajStrAssC(&(*thys)->hits[n-1]->Typeobj,ajStrStr(line)+3);	
+		ajStrClean(&(*thys)->hits[n-1]->Typeobj);		
 	    }
+	else if(ajStrPrefixC(line,"MO"))
+	{
+	    ajStrAssC(&(*thys)->hits[n-1]->Model,ajStrStr(line)+3);	
+	    ajStrClean(&(*thys)->hits[n-1]->Model);		
+	}
 	else if(ajStrPrefixC(line,"RA"))
-	    ajFmtScanS(line, "%*s %d %*s %d",
-		       &(*thys)->hits[n-1]->Start, &(*thys)->hits[n-1]->End);
+	    ajFmtScanS(line, "%*s %d %*s %d", &(*thys)->hits[n-1]->Start, &(*thys)->hits[n-1]->End);
 	else if(ajStrPrefixC(line,"GP"))
 	    ajFmtScanS(line, "%*s %S", &(*thys)->hits[n-1]->Group);
 	else if(ajStrPrefixC(line,"SQ"))
@@ -7724,7 +8333,7 @@ AjBool   ajXyzHitlistRead(AjPFile inf, char *delim, AjPHitlist *thys)
 	    ajStrCleanWhite(&(*thys)->hits[n-1]->Seq);
 	    continue;
 	}
-
+	
 	ok = ajFileReadLine(inf,&line);
     }
 
@@ -7734,7 +8343,7 @@ AjBool   ajXyzHitlistRead(AjPFile inf, char *delim, AjPHitlist *thys)
     ajStrDel(&fold);
     ajStrDel(&super);
     ajStrDel(&family);
-
+    
 
     /* Return */
     if(!ok)
@@ -7746,33 +8355,32 @@ AjBool   ajXyzHitlistRead(AjPFile inf, char *delim, AjPHitlist *thys)
 
 
 
-/* @func ajXyzHitlistReadNode *************************************************
+/* @func ajXyzHitlistReadNode ************************************************
 **
-** Reads a scop families file and writes a list of Hitlist objects containing
+** Reads a scop families file and writes a list of Hitlist objects containing 
 ** all domains matching the scop classification provided.
 **
-** @param [r] scopf     [AjPFile]      The scop families file.
-** @param [r] list      [AjPList*]      List of Hitlist objects.
-** @param [r] fam       [AjPStr]      Family.
-** @param [r] sfam      [AjPStr]      Superfamily.
-** @param [r] fold      [AjPStr]      Fold.
-** @param [r] class     [AjPStr]      Class
-**
+** @param [r] scopf     [AjPFile  ]      The scop families file.
+** @param [r] list      [AjPList *]      List of Hitlist objects.
+** @param [r] fam       [AjPStr   ]      Family.
+** @param [r] sfam      [AjPStr   ]      Superfamily.
+** @param [r] fold      [AjPStr   ]      Fold.
+** @param [r] class     [AjPStr   ]      Class
+** 
 ** @return [AjBool] True on success (a list of hits was read)
 ** @@
 ******************************************************************************/
 
-AjBool ajXyzHitlistReadNode(AjPFile scopf, AjPList *list, AjPStr fam,
-			    AjPStr sfam, AjPStr fold, AjPStr class)
+AjBool ajXyzHitlistReadNode(AjPFile scopf, AjPList *list, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr class)
 {
-    AjBool donemem=ajFalse;
+    AjBool donemem=ajFalse;   
 
 
     if(!scopf)
     {
 	ajFatal("NULL arg passed to ajXyzHitlistReadNode");
     }
-
+    
 
     /* Allocate the list if it does not already exist */
     if(!(*list))
@@ -7780,9 +8388,8 @@ AjBool ajXyzHitlistReadNode(AjPFile scopf, AjPList *list, AjPStr fam,
 	donemem=ajTrue;
 	(*list)=ajListNew();
     }
-
-    /* if family is specified then the other fields also have to be
-       specified. */
+    
+    /* if family is specified then the other fields also have to be specified. */
     if(fam)
     {
 	if(!sfam || !fold || !class)
@@ -7793,11 +8400,18 @@ AjBool ajXyzHitlistReadNode(AjPFile scopf, AjPList *list, AjPStr fam,
 	    return ajFalse;
 	}
 	else
-	    ajXyzHitlistReadFam(scopf,fam,sfam,fold,class,list);
+	{
+	    if((ajXyzHitlistReadFam(scopf,fam,sfam,fold,class,list)))
+		return ajTrue;
+	    else
+	    {
+		if(donemem)
+		    ajListDel(&(*list));
+		return ajFalse;
+	    }
+	}
     }
-
-    /* if superfamily is specified then the other fields also have to
-       be specified. */
+    /* if superfamily is specified then the other fields also have to be specified. */
     else if(sfam)
     {
 	if(!fold || !class)
@@ -7808,9 +8422,18 @@ AjBool ajXyzHitlistReadNode(AjPFile scopf, AjPList *list, AjPStr fam,
 	    return ajFalse;
 	}
 	else
-	    ajXyzHitlistReadSfam(scopf,fam,sfam,fold,class,list);
+	{
+	    if((ajXyzHitlistReadSfam(scopf,fam,sfam,fold,class,list)))
+		return ajTrue;
+	    else
+	    {
+		if(donemem)
+		    ajListDel(&(*list));
+		return ajFalse;
+	    }
+	}	   
     }
-
+    
     /* if fold is specified then the other fields also have to be specified. */
     else if(fold)
     {
@@ -7822,9 +8445,17 @@ AjBool ajXyzHitlistReadNode(AjPFile scopf, AjPList *list, AjPStr fam,
 	    return ajFalse;
 	}
 	else
-	    ajXyzHitlistReadFold(scopf,fam,sfam,fold,class,list);
-    }
-
+	{
+	    if((ajXyzHitlistReadFold(scopf,fam,sfam,fold,class,list)))
+		return ajTrue;
+	    else
+	    {
+		if(donemem)
+		    ajListDel(&(*list));
+		return ajFalse;
+	    }
+	}
+    } 
     else
     {
 	ajWarn("Bad arguments passed to ajXyzHitlistReadNode\n");
@@ -7832,45 +8463,44 @@ AjBool ajXyzHitlistReadNode(AjPFile scopf, AjPList *list, AjPStr fam,
 	    ajListDel(&(*list));
 	return ajFalse;
     }
-
+    
     return ajTrue;
 }
 
 
 
-/* @func ajXyzHitlistReadFam **************************************************
+/* @func ajXyzHitlistReadFam ********************************************************
 **
-** Reads a scop families file, selects the entries with the specified
-** family, and create a list of Hitlist structures.  Only the first
-** familiy in the scop families file matching the specified
-** classification is read (the file should not normally contain
-** duplicate families).
+** Reads a scop families file, selects the entries with the specified family, and 
+** create a list of Hitlist structures.  Only the first familiy in the scop families
+** file matching the specified classification is read (the file should not normally
+** contain duplicate families).
 **
-** @param [r] scopf     [AjPFile]     The scop families file.
-** @param [r] fam       [AjPStr]     Family
-** @param [r] sfam      [AjPStr]     Superfamily
-** @param [r] fold      [AjPStr]     Fold
-** @param [r] class     [AjPStr]     Class
+** @param [r] scopf     [AjPFile ]     The scop families file.
+** @param [r] fam       [AjPStr  ]     Family
+** @param [r] sfam      [AjPStr  ]     Superfamily
+** @param [r] fold      [AjPStr  ]     Fold
+** @param [r] class     [AjPStr  ]     Class
 ** @param [w] list      [AjPList*]     A list of hitlist structures.
-**
+** 
 ** @return [AjBool] True on success (a file has been written)
 ** @@
-******************************************************************************/
+********************************************************************************/
 
-AjBool ajXyzHitlistReadFam(AjPFile scopf, AjPStr fam, AjPStr sfam,
-			   AjPStr fold, AjPStr class, AjPList* list)
+AjBool ajXyzHitlistReadFam(AjPFile scopf, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr class, AjPList* list)
 {
-    AjPHitlist hitlist = NULL;
+    AjPHitlist hitlist = NULL; 
+    AjBool done=ajFalse;
+    
 
-    /* if family is specified then the other fields also have to be
-       specified. */
-    /* check that the other fields are populated */
+    /* if family is specified then the other fields also have to be specified. */
+    /* check that the other fields are populated */ 
     if(!fam || !sfam || !fold || !class)
     {
 	ajWarn("Bad arguments passed to ajXyzHitlistReadFam\n");
 	return ajFalse;
     }
-
+    
 
     while(ajXyzHitlistRead(scopf,"//",&hitlist))
     {
@@ -7878,101 +8508,114 @@ AjBool ajXyzHitlistReadFam(AjPFile scopf, AjPStr fam, AjPStr sfam,
 	   ajStrMatch(sfam,hitlist->Superfamily) &&
 	   ajStrMatch(fold,hitlist->Fold) &&
 	   ajStrMatch(class,hitlist->Class))
-	{
+	{ 
 	    ajListPushApp(*list,hitlist);
+	    done=ajTrue;
 	    break;
 	}
 	else
 	    ajXyzHitlistDel(&hitlist);
     }
-
-    return ajTrue;
+    
+    if(done)
+	return ajTrue;
+    else
+	return ajFalse;
+    
 }
 
 
-/* @func ajXyzHitlistReadSfam *************************************************
+/* @func ajXyzHitlistReadSfam ***************************************************
 **
-** Reads a scop families file, selects the entries with the specified
+** Reads a scop families file, selects the entries with the specified 
 ** superfamily, and create a list of Hitlist structures.
 **
-** @param [r] scopf     [AjPFile]       The scop families file.
-** @param [r] fam       [AjPStr]       Family
-** @param [r] sfam      [AjPStr]       Superfamily
-** @param [r] fold      [AjPStr]       Fold
-** @param [r] class     [AjPStr]       Class
-** @param [w] list      [AjPList*]       A list of hitlist structures.
-**
+** @param [r] scopf     [AjPFile  ]       The scop families file.
+** @param [r] fam       [AjPStr   ]       Family
+** @param [r] sfam      [AjPStr   ]       Superfamily
+** @param [r] fold      [AjPStr   ]       Fold
+** @param [r] class     [AjPStr   ]       Class
+** @param [w] list      [AjPList *]       A list of hitlist structures.
+** 
 ** @return [AjBool] True on success (a file has been written)
 ** @@
 ******************************************************************************/
 
-AjBool ajXyzHitlistReadSfam(AjPFile scopf, AjPStr fam, AjPStr sfam,
-			    AjPStr fold, AjPStr class, AjPList* list)
+AjBool ajXyzHitlistReadSfam(AjPFile scopf, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr class, AjPList* list)
 {
-    AjPHitlist hitlist = NULL;
+    AjPHitlist hitlist = NULL; 
+    AjBool done=ajFalse;
 
-    /* if family is specified then the other fields also have to be
-       specified. */
-    /* check that the other fields are populated */
+    /* if family is specified then the other fields also have to be specified. */
+    /* check that the other fields are populated */ 
     if(!sfam || !fold || !class)
     {
 	ajWarn("Bad arguments passed to ajXyzHitlistReadSfam\n");
 	return ajFalse;
     }
-
-
+    
+    
     while(ajXyzHitlistRead(scopf,"//",&hitlist))
     {
 	if(ajStrMatch(fam,hitlist->Superfamily) &&
 	   ajStrMatch(fold,hitlist->Fold) &&
 	   ajStrMatch(class,hitlist->Class))
+	{
 	    ajListPushApp(*list,hitlist);
+	    done=ajTrue;
+	}
 	else
 	    ajXyzHitlistDel(&hitlist);
     }
-
-    return ajTrue;
+    if(done)
+	return ajTrue;
+    else
+	return ajFalse;
 }
 
 
-/* @func ajXyzHitlistReadFold *************************************************
+/* @func ajXyzHitlistReadFold ***************************************************
 **
-** Reads a scop families file, selects the entries with the specified
+** Reads a scop families file, selects the entries with the specified 
 ** fold, and create a list of Hitlist structures.
 **
-** @param [r] scopf     [AjPFile]       The scop families file.
-** @param [r] fam       [AjPStr]       Family
-** @param [r] sfam      [AjPStr]       Superfamily
-** @param [r] fold      [AjPStr]       Fold
-** @param [r] class     [AjPStr]       Class
-** @param [w] list      [AjPList*]       A list of hitlist structures.
-** @return [AjBool] ajTrue on success
+** @param [r] scopf     [AjPFile  ]       The scop families file.
+** @param [r] fam       [AjPStr   ]       Family
+** @param [r] sfam      [AjPStr   ]       Superfamily
+** @param [r] fold      [AjPStr   ]       Fold
+** @param [r] class     [AjPStr   ]       Class
+** @param [w] list      [AjPList *]       A list of hitlist structures.
 ** @@
 ******************************************************************************/
 
-AjBool ajXyzHitlistReadFold(AjPFile scopf, AjPStr fam, AjPStr sfam,
-			    AjPStr fold, AjPStr class,AjPList* list)
+AjBool ajXyzHitlistReadFold(AjPFile scopf, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr class,AjPList* list)
 {
-    AjPHitlist hitlist = NULL;
+    AjPHitlist hitlist = NULL; 
+    AjBool done=ajFalse;
 
-    /* if family is specified, the other fields also have to be specified. */
-    /* check that the other fields are populated */
+    /* if family is specified then the other fields also have to be specified. */
+    /* check that the other fields are populated */ 
     if(!fold || !class)
     {
 	ajWarn("Bad arguments passed to ajXyzHitlistReadFold\n");
 	return ajFalse;
     }
-
+    
     while(ajXyzHitlistRead(scopf,"//",&hitlist))
     {
 	if(ajStrMatch(fam,hitlist->Fold) &&
 	   ajStrMatch(class,hitlist->Class))
+	{
 	    ajListPushApp(*list,hitlist);
+	    done=ajTrue;
+	}
 	else
 	    ajXyzHitlistDel(&hitlist);
-    }
-
-    return ajTrue;
+    }	
+    if(done)
+	return ajTrue;
+    else
+	return ajFalse;	
 }
 
 
@@ -7980,12 +8623,12 @@ AjBool ajXyzHitlistReadFold(AjPFile scopf, AjPStr fam, AjPStr sfam,
 
 
 
-/* @func ajXyzHitlistWrite ****************************************************
+/* @func ajXyzHitlistWrite ***************************************************
 **
 ** Write contents of a Hitlist object to an output file in embl-like format.
 ** Text for Class, Fold, Superfamily and Family is only written if the text
-** is available - in case of a scop validation file, some of these records
-** may be written
+** is available - in case of a scop validation file, some of these records 
+** may be written 
 ** @param [w] outf [AjPFile] Output file stream
 ** @param [r] thys [AjPHitlist] Hitlist object
 **
@@ -7995,6 +8638,86 @@ AjBool ajXyzHitlistReadFold(AjPFile scopf, AjPStr fam, AjPStr sfam,
 AjBool ajXyzHitlistWrite(AjPFile outf, AjPHitlist thys)
 {
     ajint x=0;  /* Counter */
+    
+    if(!thys)
+	return ajFalse;
+
+    if(MAJSTRLEN(thys->Class))
+	ajFmtPrintF(outf,"CL   %S\n",thys->Class);
+    if(MAJSTRLEN(thys->Fold))
+	ajFmtPrintSplit(outf,thys->Fold,"XX\nFO   ",75," \t\n\r");
+    if(MAJSTRLEN(thys->Superfamily))
+	ajFmtPrintSplit(outf,thys->Superfamily,"XX\nSF   ",75," \t\n\r");
+    if(MAJSTRLEN(thys->Family))
+	ajFmtPrintSplit(outf,thys->Family,"XX\nFA   ",75," \t\n\r");
+    if(MAJSTRLEN(thys->Family))
+	ajFmtPrintF(outf,"XX\nSI   %d\n", thys->Sunid_Family);
+    
+
+    ajFmtPrintF(outf,"XX\nNS   %d\nXX\n",thys->N);
+
+    for(x=0;x<thys->N;x++)
+    {
+	ajFmtPrintF(outf, "%-5s[%d]\nXX\n", "NN", x+1);
+	if(MAJSTRLEN(thys->hits[x]->Model))
+	{
+	    ajFmtPrintF(outf, "%-5s%S\n", "MO", thys->hits[x]->Model);
+	    ajFmtPrintF(outf, "XX\n");
+	}
+	
+	ajFmtPrintF(outf, "%-5s%S\n", "TY", thys->hits[x]->Typeobj);
+	ajFmtPrintF(outf, "XX\n");
+	ajFmtPrintF(outf, "%-5s%.2f\n", "SC", thys->hits[x]->Score);
+	ajFmtPrintF(outf, "XX\n");
+	if(MAJSTRLEN(thys->hits[x]->Group))
+	{
+	    ajFmtPrintF(outf, "%-5s%S\n", "GP", thys->hits[x]->Group);
+	    ajFmtPrintF(outf, "XX\n");
+	}
+
+	ajFmtPrintF(outf, "%-5s%S\n", "AC", thys->hits[x]->Acc);
+	ajFmtPrintF(outf, "XX\n");
+	if(MAJSTRLEN(thys->hits[x]->Spr))
+	{
+	    ajFmtPrintF(outf, "%-5s%S\n", "SP", thys->hits[x]->Spr);
+	    ajFmtPrintF(outf, "XX\n");
+	}
+	
+	ajFmtPrintF(outf, "%-5s%d START; %d END;\n", "RA", thys->hits[x]->Start, thys->hits[x]->End);
+	ajFmtPrintF(outf, "XX\n");
+	ajSeqWriteXyz(outf, thys->hits[x]->Seq, "SQ");
+	ajFmtPrintF(outf, "XX\n");
+    }
+    ajFmtPrintF(outf, "//\n");
+
+    /* Return */
+    return ajTrue;
+}
+
+
+
+
+/* @func ajXyzHitlistWriteSubset *********************************************
+**
+** Write contents of a Hitlist object to an output file in embl-like format.
+** Only those hits are written for which a 1 is given in the corresponding
+** position in array of integers.
+** Text for Class, Fold, Superfamily and Family is only written if the text
+** is available - in case of a scop validation file, some of these records 
+** may be written 
+** @param [w] outf  [AjPFile]    Output file stream
+** @param [r] thys  [AjPHitlist] Hitlist object
+** @param [r] ok    [AjPInt]     Whether hits are to be printed or not
+**
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+AjBool ajXyzHitlistWriteSubset(AjPFile outf, AjPHitlist thys, AjPInt ok)
+{
+    ajint x=0;  /* Counter */
+    ajint y=0;  /* Counter */
+    ajint nset=0; /* No. in set to be printed out*/
+    
 
     if(!thys)
 	return ajFalse;
@@ -8011,28 +8734,51 @@ AjBool ajXyzHitlistWrite(AjPFile outf, AjPHitlist thys)
 	ajFmtPrintF(outf,"XX\nSI   %d\n", thys->Sunid_Family);
 
 
-    ajFmtPrintF(outf,"XX\nNS   %d\nXX\n",thys->N);
+    for(nset=0, x=0;x<thys->N;x++)
+	if(ajIntGet(ok, x) == 1)
+	    nset++;
+	    
+    ajFmtPrintF(outf,"XX\nNS   %d\nXX\n",nset);
 
     for(x=0;x<thys->N;x++)
-    {
-	ajFmtPrintF(outf, "%-5s[%d]\nXX\n", "NN", x+1);
-	ajFmtPrintF(outf, "%-5s%S\n", "AC", thys->hits[x]->Acc);
-	ajFmtPrintF(outf, "XX\n");
-	ajFmtPrintF(outf, "%-5s%S\n", "TY", thys->hits[x]->Typeobj);
-	ajFmtPrintF(outf, "XX\n");
-	if(MAJSTRLEN(thys->hits[x]->Group))
+    { 
+	if(ajIntGet(ok, x) == 1)
 	{
-	    ajFmtPrintF(outf, "%-5s%S\n", "GP", thys->hits[x]->Group);
+	    y++;
+
+	    ajFmtPrintF(outf, "%-5s[%d]\nXX\n", "NN", y);
+	    if(MAJSTRLEN(thys->hits[x]->Model))
+	    {
+		ajFmtPrintF(outf, "%-5s%S\n", "MO", thys->hits[x]->Model);
+		ajFmtPrintF(outf, "XX\n");
+	    }
+	    
+	    ajFmtPrintF(outf, "%-5s%S\n", "TY", thys->hits[x]->Typeobj);
+	    ajFmtPrintF(outf, "XX\n");
+	    ajFmtPrintF(outf, "%-5s%.2f\n", "SC", thys->hits[x]->Score);
+	    ajFmtPrintF(outf, "XX\n");
+	    if(MAJSTRLEN(thys->hits[x]->Group))
+	    {
+		ajFmtPrintF(outf, "%-5s%S\n", "GP", thys->hits[x]->Group);
+		ajFmtPrintF(outf, "XX\n");
+	    }
+	    
+	    ajFmtPrintF(outf, "%-5s%S\n", "AC", thys->hits[x]->Acc);
+	    ajFmtPrintF(outf, "XX\n");
+	    if(MAJSTRLEN(thys->hits[x]->Spr))
+	    {
+		ajFmtPrintF(outf, "%-5s%S\n", "SP", thys->hits[x]->Spr);
+		ajFmtPrintF(outf, "XX\n");
+	    }
+
+	    ajFmtPrintF(outf, "%-5s%d START; %d END;\n", "RA", thys->hits[x]->Start, thys->hits[x]->End);
+	    ajFmtPrintF(outf, "XX\n");
+	    ajSeqWriteXyz(outf, thys->hits[x]->Seq, "SQ");
 	    ajFmtPrintF(outf, "XX\n");
 	}
-	ajFmtPrintF(outf, "%-5s%d START; %d END;\n", "RA",
-		    thys->hits[x]->Start, thys->hits[x]->End);
-	ajFmtPrintF(outf, "XX\n");
-	ajSeqWriteXyz(outf, thys->hits[x]->Seq, "SQ");
-	ajFmtPrintF(outf, "XX\n");
     }
     ajFmtPrintF(outf, "//\n");
-
+	
     /* Return */
     return ajTrue;
 }
@@ -8043,51 +8789,49 @@ AjBool ajXyzHitlistWrite(AjPFile outf, AjPHitlist thys)
 
 
 
-
 /* @func ajXyzHitlistsWriteFasta **********************************************
 **
-** Takes a list of Hitlist structures, converts them into a list of
+** Takes a list of Hitlist structures, converts them into a list of 
 ** Scophit structures and then writes the sequences to a file in FASTA
 ** format.
 **
 ** @param [r] list      [AjPList *]    A list Hitlist structures.
 ** @param [w] outf      [AjPFile *]    Outfile file pointer
-**
+** 
 ** @return [AjBool] True on success (a file has been written)
 ** @@
 ******************************************************************************/
 
 AjBool ajXyzHitlistsWriteFasta(AjPList *list, AjPFile *outf)
 {
-    AjPList hitslist = NULL; /* list of populatd scophit objects */
+    AjPList hitslist = NULL; /* list of populatd scophit objects */ 
     AjIList iter     = NULL; /* a list iterator for hitslist */
     AjPScophit hit   = NULL; /* a scophit object to hold a hit */
-
+    
     /* check arguments */
     if(!(*list) || (!(*outf)))
     {
 	ajWarn("Bad arguments\n");
 	return ajFalse;
     }
-
+    
     hitslist = ajListNew();
-
+    
     if(ajXyzHitlistToScophits(*list,&hitslist))
     {
 	iter = ajListIter(hitslist);
-	/* iterate through the list and write out the accession number
-	   and sequence to outf in FASTA format. */
+	/* iterate through the list and write out the accession number and sequence to outf in FASTA format. */
 	while((hit = (AjPScophit)ajListIterNext(iter)))
 	{
 	    /* print the accession number and sequence to outfile */
 	    ajFmtPrintF(*outf,">%S_%d_%d\n",hit->Acc,hit->Start,hit->End);
 	    ajFmtPrintF(*outf,"%S\n",hit->Seq);
 	    ajXyzScophitDel(&hit);
-	}
+	}	
 	ajListIterFree(iter);
 	ajListDel(&hitslist);
-    }
-
+    }		
+    
     return ajTrue;
 }
 
@@ -8099,11 +8843,11 @@ AjBool ajXyzHitlistsWriteFasta(AjPList *list, AjPFile *outf)
 
 
 
-/* @func ajXyzCmapReadI *******************************************************
+/* @func ajXyzCmapReadI ****************************************************
 **
-** Read a Cmap object from a file in embl-like format. Takes the chain
+** Read a Cmap object from a file in embl-like format. Takes the chain 
 ** identifier as an integer.
-**
+** 
 ** @param [r] inf     [AjPFile]  Input file stream
 ** @param [r] chn     [ajint]    Chain number
 ** @param [r] mod     [ajint]    Model number
@@ -8116,17 +8860,17 @@ AjBool   ajXyzCmapReadI(AjPFile inf, ajint chn, ajint mod, AjPCmap *thys)
 {
     if(ajXyzCmapRead(inf, CMAP_MODE_I, chn, mod, thys))
 	return ajTrue;
-    else
+    else 
 	return ajFalse;
 }
 
 
 
-/* @func ajXyzCmapReadC *******************************************************
+/* @func ajXyzCmapReadC ****************************************************
 **
-** Read a Cmap object from a file in embl-like format. Takes the chain
+** Read a Cmap object from a file in embl-like format. Takes the chain 
 ** identifier as a character.
-**
+** 
 ** @param [r] inf     [AjPFile]  Input file stream
 ** @param [r] chn     [char]     Chain number
 ** @param [r] mod     [ajint]    Model number
@@ -8139,20 +8883,20 @@ AjBool   ajXyzCmapReadC(AjPFile inf, char chn, ajint mod, AjPCmap *thys)
 {
     if(ajXyzCmapRead(inf, CMAP_MODE_C, (ajint)chn, mod, thys))
 	return ajTrue;
-    else
+    else 
 	return ajFalse;
 }
 
 
 
 
-/* @func ajXyzCmapRead ********************************************************
+/* @func ajXyzCmapRead ****************************************************
 **
 ** Read a Cmap object from a file in embl-like format. This is not usually
 ** called by the user, who uses ajXyzCmapReadI or ajXyzCmapReadC instead.
-**
+** 
 ** @param [r] inf     [AjPFile]  Input file stream
-** @param [r] mode    [ajint]    Mode, either CMAP_MODE_I (treat chn arg as
+** @param [r] mode    [ajint]    Mode, either CMAP_MODE_I (treat chn arg as  
 ** an integer) or CMAP_MODE_C (treat chn arg as a character)
 ** @param [r] chn     [ajint]    Chain identifier / number
 ** @param [r] mod     [ajint]    Model number
@@ -8161,27 +8905,25 @@ AjBool   ajXyzCmapReadC(AjPFile inf, char chn, ajint mod, AjPCmap *thys)
 ** @return [AjBool] True on success (an object read)
 ** @@
 ******************************************************************************/
-AjBool   ajXyzCmapRead(AjPFile inf, ajint mode, ajint chn, ajint mod,
-		       AjPCmap *thys)
-{
+AjBool   ajXyzCmapRead(AjPFile inf, ajint mode, ajint chn, ajint mod, AjPCmap *thys)
+{	
     static   AjPStr line    =NULL;   /* Line of text */
     static   AjPStr temp_id =NULL;   /* Temp location for protein id */
-
-    ajint    num_res   	    =0;      /* No. of residues in domain */
-    ajint    num_con   	    =0;      /* Total no. of contacts in domain */
-    ajint    x		    =0;      /* No. of first residue making contact */
-    ajint    y              =0;      /* No. of second residue making contact */
+    
+    ajint    num_res   	    =0;      /* No. of residues in domain */	
+    ajint    num_con   	    =0;      /* Total no. of contacts in domain */	
+    ajint    x		    =0;      /* No. of first residue making contact */	
+    ajint    y              =0;      /* No. of second residue making contact */	
     ajint    md             =-1;     /* Model number */
     ajint    cn             =-1;     /* Chain number */
     char     chnid          ='.';    /* Temp. chain identifier*/
-    AjBool   idok           =ajFalse; /* If the required chain has
-					 been found */
+    AjBool   idok           =ajFalse; /* If the required chain has been found */
+    
 
-
-    /* Check args */
+    /* Check args */	
     if(!inf)
-    {
-	ajWarn("Invalid args to ajXyzCmapRead");
+    {	
+	ajWarn("Invalid args to ajXyzCmapRead");	
 	return ajFalse;
     }
 
@@ -8190,14 +8932,14 @@ AjBool   ajXyzCmapRead(AjPFile inf, ajint mode, ajint chn, ajint mod,
     if(mode==CMAP_MODE_C)
 	if(chn=='_')
 	    chn='.';
-
+    
     /* Initialise strings */
     if(!line)
     {
 	line     = ajStrNew();
 	temp_id  = ajStrNew();
     }
-
+    
 
     /* Start of main loop */
     while((ajFileReadLine(inf, &line)))
@@ -8211,38 +8953,35 @@ AjBool   ajXyzCmapRead(AjPFile inf, ajint mode, ajint chn, ajint mod,
 	/* Parse chain number */
 	else if(ajStrPrefixC(line, "CN"))
 	    ajFmtScanS(line, "%*s[%d]", &cn);
-	/* Read IN line */
+	/* Read IN line */	    
 	/* Parse number of residues and total number of contacts */
 	else if((ajStrPrefixC(line, "IN")) && (md==mod))
 	{
-	    ajFmtScanS(line, "%*s %*s %c; %*s %d; %*s %d;",
+	    ajFmtScanS(line, "%*s %*s %c; %*s %d; %*s %d;", 
 		       &chnid, &num_res, &num_con);
+	    
 
-
-	    /* The third conditional is to capture those few domains
-	       which are made up from more than one chain.  For these,
-	       the chain character passed in might be an A or a B
-	       (e.g. the character extracted from the scop domain
-	       code) whereas the chain id given in the contact map
-	       file will be a '.' - because of how scopparse copes
-	       with these cases.  (A '.' is also in the contact maps
-	       for where a chain id was not specified in the original
-	       pdb file)*/
+	    /* The third conditional is to capture those few domains which are made
+	       up from more than one chain.  For these, the chain character passed 
+	       in might be an A or a B (e.g. the character extracted from the scop 
+	       domain code) whereas the chain id given in the contact map file will
+	       be a '.' - because of how scopparse copes with these cases. 
+	       (A '.' is also in the contact maps for where a chain id was not 
+	       specified in the original pdb file)*/
 
 	    if(((cn==chn)&&(mode==CMAP_MODE_I)) ||
-	       ((toupper(chnid)==toupper((char)chn))&&(mode==CMAP_MODE_C))||
-	       ((toupper(chnid)=='.') && (toupper((char)chn)!='.') &&
-		(mode==CMAP_MODE_C)))
+	       ((toupper((int)chnid)==toupper(chn))&&(mode==CMAP_MODE_C))||
+	       ((toupper((int)chnid)=='.') && (toupper(chn)!='.') &&(mode==CMAP_MODE_C)))
 	    {
 		idok=ajTrue;
-
+		
 		/* Allocate contact map and write values */
 		(*thys)=ajXyzCmapNew(num_res);
 		(*thys)->Ncon = num_con;
 		ajStrAssS(&(*thys)->Id, temp_id);
 	    }
 	}
-
+    
 	/* Read and parse residue contacts */
 	else if((ajStrPrefixC(line, "SM")) && (md==mod) && (idok))
 	{
@@ -8250,28 +8989,27 @@ AjBool   ajXyzCmapRead(AjPFile inf, ajint mode, ajint chn, ajint mod,
 
 	    /* Check residue number is in range */
 	    if((x>(*thys)->Dim) || (y>(*thys)->Dim))
-		ajFatal("Fatal attempt to write bad data in ajXyzCmapRead\n"
-			"Email culprit: jison@hgmp.mrc.ac.uk\n");
-
+		ajFatal("Fatal attempt to write bad data in ajXyzCmapRead\nEmail culprit: jison@hgmp.mrc.ac.uk\n");
+	    
 
 	    /* Enter '1' in matrix to indicate contact */
 	    ajInt2dPut(&(*thys)->Mat, x-1, y-1, 1);
 	    ajInt2dPut(&(*thys)->Mat, y-1, x-1, 1);
 	}
-    }
-
+    }	
+    
     /* Return */
-    return ajTrue;
-}
+    return ajTrue;	
+}	
 
 
 
 
 
-/* @func ajXyzVdwallRead ******************************************************
+/* @func ajXyzVdwallRead ****************************************************
 **
-** Read a Vdwall object from a file in embl-like format.
-**
+** Read a Vdwall object from a file in embl-like format. 
+** 
 ** @param [r] inf     [AjPFile]  Input file stream
 ** @param [w] thys    [AjPVdwall*] Pointer to Vdwall object
 **
@@ -8287,8 +9025,8 @@ AjBool   ajXyzVdwallRead(AjPFile inf, AjPVdwall *thys)
     ajint  acnt    =0;      /* Atom count */
     char   id1     ='\0';             /* Residue 1 char id code */
     AjPStr id3     =NULL;   /* Residue 3 char id code */
-
-
+    
+    
     /* Allocate strings */
     line     = ajStrNew();
     id3      = ajStrNew();
@@ -8299,16 +9037,16 @@ AjBool   ajXyzVdwallRead(AjPFile inf, AjPVdwall *thys)
     {
 	/* Parse NR line */
 	if(ajStrPrefixC(line, "NR"))
-	    {
+	    {	
 		ajFmtScanS(line, "%*s %d", &nres);
-
+		
 		/* Allocate Vdwall object */
 		(*thys)=ajXyzVdwallNew(nres);
-
+		
 	    }
 	/* Parse residue id 3 char */
 	else if(ajStrPrefixC(line, "AA"))
-	    {
+	    {	
 		rcnt++;
 		acnt=0;
 		ajFmtScanS(line, "%*s %S", &id3);
@@ -8320,29 +9058,29 @@ AjBool   ajXyzVdwallRead(AjPFile inf, AjPVdwall *thys)
 	else if(ajStrPrefixC(line, "NN"))
 	{
 	    ajFmtScanS(line, "%*s %d", &natm);
-
+	    
 	    /* Allocate next Vdwres object */
 	    (*thys)->Res[rcnt-1]=ajXyzVdwresNew(natm);
-
+	    
 	    /* Write members of Vdwres object */
 	    (*thys)->Res[rcnt-1]->Id1=id1;
 	    ajStrAssS(&(*thys)->Res[rcnt-1]->Id3, id3);
-
+	    
 	}
 	/* Parse atom line */
 	else if(ajStrPrefixC(line, "AT"))
 	{
 	    acnt++;
-	    ajFmtScanS(line, "%*s %S %*c %f",
-		       &(*thys)->Res[rcnt-1]->Atm[acnt-1],
-		       &(*thys)->Res[rcnt-1]->Rad[acnt-1]);
+	    ajFmtScanS(line, "%*s %S %*c %f", 
+		       &(*thys)->Res[rcnt-1]->Atm[acnt-1], 
+		       &(*thys)->Res[rcnt-1]->Rad[acnt-1]);	
 	}
-    }
+    }	
 
     /* Clear up */
     ajStrDel(&line);
     ajStrDel(&id3);
-
+    
 
     /* Return */
     return ajTrue;
@@ -8351,12 +9089,12 @@ AjBool   ajXyzVdwallRead(AjPFile inf, AjPVdwall *thys)
 
 
 
-/* @func ajXyzScophitCopy *****************************************************
+/* @func ajXyzScophitCopy ******************************************************
 **
 ** Copies the contents from one Scophit object to another.
 **
-** @param [w] to   [AjPScophit*] Scophit object pointer
-** @param [r] from [AjPScophit] Scophit object
+** @param [w] to   [AjPScophit*] Scophit object pointer 
+** @param [r] from [AjPScophit] Scophit object 
 **
 ** @return [AjBool] True if copy was successful.
 ** @@
@@ -8376,6 +9114,7 @@ AjBool ajXyzScophitCopy(AjPScophit *to, AjPScophit from)
     ajStrAssS(&(*to)->Spr, from->Spr);
     ajStrAssS(&(*to)->Typeobj, from->Typeobj);
     ajStrAssS(&(*to)->Typesbj, from->Typesbj);
+    ajStrAssS(&(*to)->Model, from->Model);
     ajStrAssS(&(*to)->Alg, from->Alg);
     ajStrAssS(&(*to)->Group, from->Group);
     (*to)->Start = from->Start;
@@ -8383,6 +9122,7 @@ AjBool ajXyzScophitCopy(AjPScophit *to, AjPScophit from)
     (*to)->Rank = from->Rank;
     (*to)->Score = from->Score;
     (*to)->Eval = from->Eval;
+    (*to)->Pval = from->Pval;
     (*to)->Target = from->Target;
     (*to)->Target2 = from->Target2;
     (*to)->Priority = from->Priority;
@@ -8396,11 +9136,11 @@ AjBool ajXyzScophitCopy(AjPScophit *to, AjPScophit from)
 
 
 
-/* @func ajXyzScophitListCopy *************************************************
+/* @func ajXyzScophitListCopy **********************************************
 **
-** Read a list of Scophit structures and returns a pointer to a duplicate
-** of the list.
-**
+** Read a list of Scophit structures and returns a pointer to a duplicate 
+** of the list. 
+** 
 ** @param [r] ptr      [AjPList]  List of Scophit objects
 **
 ** @return [AjPList] True on success (list was duplicated ok)
@@ -8419,18 +9159,18 @@ AjPList ajXyzScophitListCopy(AjPList ptr)
 	ajWarn("Bad arg's passed to ajXyzScophitListCopy\n");
 	return NULL;
     }
-
+    
     /* Allocate the new list */
     ret=ajListNew();
-
+    
     /* Initialise the iterator*/
     iter=ajListIter(ptr);
-
+    
     /* Iterate through the list of Scophit objects*/
     while((hit=(AjPScophit)ajListIterNext(iter)))
     {
 	new=ajXyzScophitNew();
-
+	
 	ajXyzScophitCopy(&new, hit);
 
 	/* Push scophit onto list */
@@ -8450,7 +9190,7 @@ AjPList ajXyzScophitListCopy(AjPList ptr)
 ** Creates a new Scophit object which corresponds to a merging of two Scophit
 ** objects hit1 and hit2. Appends the new Scophit onto a list. Target
 ** hit1 and hit2 for removal (set the Target element to ajTrue).
-**
+** 
 ** @param [r] list   [AjPList]     List of Scophit objects
 ** @param [r] hit1   [AjPScophit]  Scophit object 1
 ** @param [r] hit2   [AjPScophit]  Scophit object 2
@@ -8458,22 +9198,96 @@ AjPList ajXyzScophitListCopy(AjPList ptr)
 ** @return [AjBool] True on success.
 ** @@
 ******************************************************************************/
-AjBool   ajXyzScophitMergeInsertOther(AjPList list,
-				      AjPScophit hit1, AjPScophit hit2)
+AjBool   ajXyzScophitMergeInsertOther(AjPList list, AjPScophit hit1, AjPScophit hit2)
 {
     AjPScophit new;
 
     /* Check args */
     if(!hit1 || !hit2 || !list)
 	return ajFalse;
-
+    
 
     new = ajXyzScophitMerge(hit1, hit2);
     ajXyzScophitTarget(&hit1);
     ajXyzScophitTarget(&hit2);
     ajListPushApp(list, (void *) new);
+    
+    
+
+    /* Tidy up and return */
+    return ajTrue;
+}
 
 
+
+/* @func ajXyzScophitMergeInsertOtherTarget **********************************
+**
+** Creates a new Scophit object which corresponds to a merging of two Scophit
+** objects hit1 and hit2. Appends the new Scophit onto a list. Target
+** hit1 and hit2 for removal (set the Target element to ajTrue).
+** 
+** @param [r] list   [AjPList]     List of Scophit objects
+** @param [r] hit1   [AjPScophit]  Scophit object 1
+** @param [r] hit2   [AjPScophit]  Scophit object 2
+**
+** @return [AjBool] True on success.
+** @@
+******************************************************************************/
+AjBool   ajXyzScophitMergeInsertOtherTarget(AjPList list, AjPScophit hit1, AjPScophit hit2)
+{
+    AjPScophit new;
+
+    /* Check args */
+    if(!hit1 || !hit2 || !list)
+	return ajFalse;
+    
+
+    new = ajXyzScophitMerge(hit1, hit2);
+    ajXyzScophitTarget(&new);
+    ajXyzScophitTarget(&hit1);
+    ajXyzScophitTarget(&hit2);
+    ajListPushApp(list, (void *) new);
+    
+    
+
+    /* Tidy up and return */
+    return ajTrue;
+}
+
+
+
+/* @func ajXyzScophitMergeInsertOtherTargetBoth *****************************
+**
+** Creates a new Scophit object which corresponds to a merging of two Scophit
+** objects hit1 and hit2. Appends the new Scophit onto a list. Target
+** hit1 and hit2 for removal (set the Target element to ajTrue).
+** 
+** @param [r] list   [AjPList]     List of Scophit objects
+** @param [r] hit1   [AjPScophit]  Scophit object 1
+** @param [r] hit2   [AjPScophit]  Scophit object 2
+**
+** @return [AjBool] True on success.
+** @@
+******************************************************************************/
+AjBool   ajXyzScophitMergeInsertOtherTargetBoth(AjPList list, AjPScophit hit1, AjPScophit hit2)
+{
+    AjPScophit new;
+
+    /* Check args */
+    if(!hit1 || !hit2 || !list)
+	return ajFalse;
+    
+
+    new = ajXyzScophitMerge(hit1, hit2);
+    ajXyzScophitTarget(&new);
+    ajXyzScophitTarget(&hit1);
+    ajXyzScophitTarget(&hit2);
+    ajXyzScophitTarget2(&new);
+    ajXyzScophitTarget2(&hit1);
+    ajXyzScophitTarget2(&hit2);
+    ajListPushApp(list, (void *) new);
+    
+    
 
     /* Tidy up and return */
     return ajTrue;
@@ -8482,12 +9296,12 @@ AjBool   ajXyzScophitMergeInsertOther(AjPList list,
 
 
 
-/* @func ajXyzScophitMergeInsertThis ******************************************
+/* @func ajXyzScophitMergeInsertThis *****************************************
 **
 ** Creates a new Scophit object which corresponds to a merging of two Scophit
 ** objects hit1 and hit2. Insert the new Scophit immediately after hit2. Target
 ** hit1 and hit2 for removal (set the Target element to ajTrue).
-**
+** 
 ** @param [r] list   [AjPList]     List of Scophit objects
 ** @param [r] hit1   [AjPScophit]  Scophit object 1
 ** @param [r] hit2   [AjPScophit]  Scophit object 2
@@ -8496,7 +9310,7 @@ AjBool   ajXyzScophitMergeInsertOther(AjPList list,
 ** @return [AjBool] True on success.
 ** @@
 ******************************************************************************/
-AjBool ajXyzScophitMergeInsertThis(AjPList list, AjPScophit hit1,
+AjBool ajXyzScophitMergeInsertThis(AjPList list, AjPScophit hit1, 
 				     AjPScophit hit2,  AjIList iter)
 {
     AjPScophit new;
@@ -8504,14 +9318,94 @@ AjBool ajXyzScophitMergeInsertThis(AjPList list, AjPScophit hit1,
     /* Check args */
     if(!hit1 || !hit2 || !list || !iter)
 	return ajFalse;
-
+    
 
     new = ajXyzScophitMerge(hit1, hit2);
     ajXyzScophitTarget(&hit1);
     ajXyzScophitTarget(&hit2);
     ajListInsert(iter, (void *) new);
+    
+    
+
+    /* Tidy up and return */
+    return ajTrue;
+}
 
 
+
+
+/* @func ajXyzScophitMergeInsertThisTarget ***********************************
+**
+** Creates a new Scophit object which corresponds to a merging of two Scophit
+** objects hit1 and hit2. Insert the new Scophit immediately after hit2. Target
+** hit1, hit2 and the new Scophit for removal (set the Target element to ajTrue).
+** 
+** @param [r] list   [AjPList]     List of Scophit objects
+** @param [r] hit1   [AjPScophit]  Scophit object 1
+** @param [r] hit2   [AjPScophit]  Scophit object 2
+** @param [r] iter   [AjIList]     List iterator
+**
+** @return [AjBool] True on success.
+** @@
+******************************************************************************/
+AjBool ajXyzScophitMergeInsertThisTarget(AjPList list, AjPScophit hit1, 
+					 AjPScophit hit2,  AjIList iter)
+{
+    AjPScophit new;
+
+    /* Check args */
+    if(!hit1 || !hit2 || !list || !iter)
+	return ajFalse;
+    
+
+    new = ajXyzScophitMerge(hit1, hit2);
+    ajXyzScophitTarget(&new);
+    ajXyzScophitTarget(&hit1);
+    ajXyzScophitTarget(&hit2);
+    ajListInsert(iter, (void *) new);
+    
+    
+
+    /* Tidy up and return */
+    return ajTrue;
+}
+
+/* @func ajXyzScophitMergeInsertThisTargetBoth  *****************************
+**
+** Creates a new Scophit object which corresponds to a merging of two Scophit
+** objects hit1 and hit2. Insert the new Scophit immediately after hit2. Target
+** hit1, hit2 and the new Scophit for removal (both the Target and Target2 
+** elements are set to ajTrue).
+** 
+** 
+** @param [r] list   [AjPList]     List of Scophit objects
+** @param [r] hit1   [AjPScophit]  Scophit object 1
+** @param [r] hit2   [AjPScophit]  Scophit object 2
+** @param [r] iter   [AjIList]     List iterator
+**
+** @return [AjBool] True on success.
+** @@
+******************************************************************************/
+AjBool ajXyzScophitMergeInsertThisTargetBoth(AjPList list, AjPScophit hit1, 
+					 AjPScophit hit2,  AjIList iter)
+{
+    AjPScophit new;
+
+    /* Check args */
+    if(!hit1 || !hit2 || !list || !iter)
+	return ajFalse;
+    
+
+    new = ajXyzScophitMerge(hit1, hit2);
+    ajXyzScophitTarget(&new);
+    ajXyzScophitTarget(&hit1);
+    ajXyzScophitTarget(&hit2);
+    ajXyzScophitTarget2(&new);
+    ajXyzScophitTarget2(&hit1);
+    ajXyzScophitTarget2(&hit2);
+    ajListInsert(iter, (void *) new);
+    
+    
 
     /* Tidy up and return */
     return ajTrue;
@@ -8521,17 +9415,17 @@ AjBool ajXyzScophitMergeInsertThis(AjPList list, AjPScophit hit1,
 
 
 
-/* @func ajXyzScophitMerge ****************************************************
+/* @func ajXyzScophitMerge *****************************************
 **
-** Creates a new Scophit object which corresponds to a merging of the two
-** sequences from the Scophit objects hit1 and hit2.
+** Creates a new Scophit object which corresponds to a merging of the two 
+** sequences from the Scophit objects hit1 and hit2. 
 **
-** The Typeobj of the merged hit is set.  The merged hit is classified
+** The Typeobj of the merged hit is set.  The merged hit is classified 
 ** as follows :
 ** If hit1 or hit2 is a SEED, the merged hit is classified as a SEED.
 ** Otherwise, if hit1 or hit2 is HIT, the merged hit is clsasified as a HIT.
 ** If hit1 and hit2 are both OTHER, the merged hit remains classified as OTHER.
-**
+** 
 ** @param [r] hit1     [AjPScophit]  Scophit 1
 ** @param [r] hit2     [AjPScophit]  Scophit 2
 **
@@ -8544,9 +9438,9 @@ AjPScophit  ajXyzScophitMerge(AjPScophit hit1, AjPScophit hit2)
     ajint start=0;    /* Start of N-terminal-most sequence */
     ajint end=0;      /* End of N-terminal-most sequence */
     AjPStr temp=NULL;
+    
 
-
-
+	
 
     /* Check args */
     if(!hit1 || !hit2)
@@ -8565,23 +9459,29 @@ AjPScophit  ajXyzScophitMerge(AjPScophit hit1, AjPScophit hit2)
     /* Allocate memory */
     ret = ajXyzScophitNew();
     temp = ajStrNew();
-
+    
 
     ajStrAssS(&(ret->Acc), hit1->Acc);
     ajStrAssS(&(ret->Spr), hit1->Spr);
-
+        
 
     if(ajStrMatch(hit1->Class, hit2->Class))
+    {
 	ajStrAssS(&(ret->Class), hit1->Class);
-    if(ajStrMatch(hit1->Fold, hit2->Fold))
-	ajStrAssS(&(ret->Fold), hit1->Fold);
-    if(ajStrMatch(hit1->Superfamily, hit2->Superfamily))
-	ajStrAssS(&(ret->Superfamily), hit1->Superfamily);
-    if(ajStrMatch(hit1->Family, hit2->Family))
-	ajStrAssS(&(ret->Family), hit1->Family);
+	if(ajStrMatch(hit1->Fold, hit2->Fold))
+	{
+	    ajStrAssS(&(ret->Fold), hit1->Fold);
+	    if(ajStrMatch(hit1->Superfamily, hit2->Superfamily))
+	    {
+		ajStrAssS(&(ret->Superfamily), hit1->Superfamily);
+		if(ajStrMatch(hit1->Family, hit2->Family))
+		    ajStrAssS(&(ret->Family), hit1->Family);
+	    }
+	}
+    }
+    
 
-
-    /* Copy the N-terminal most sequence to our new sequence
+    /* Copy the N-terminal most sequence to our new sequence 
        and assign start point of new hit */
     if(hit1->Start <= hit2->Start)
     {
@@ -8589,7 +9489,7 @@ AjPScophit  ajXyzScophitMerge(AjPScophit hit1, AjPScophit hit2)
 	ret->Start = hit1->Start;
 	end=hit1->End;
 	start=hit2->Start;
-    }
+    }	
     else
     {
 	ajStrAssS(&(ret->Seq), hit2->Seq);
@@ -8597,7 +9497,7 @@ AjPScophit  ajXyzScophitMerge(AjPScophit hit1, AjPScophit hit2)
 	end=hit2->End;
 	start=hit1->Start;
     }
-
+    
 
     /* Assign end point of new hit */
     if(hit1->End >= hit2->End)
@@ -8606,7 +9506,7 @@ AjPScophit  ajXyzScophitMerge(AjPScophit hit1, AjPScophit hit2)
     	ret->End = hit2->End;
 
 
-    /* Assign the C-terminus of the sequence of the new hit
+    /* Assign the C-terminus of the sequence of the new hit     
        if necessary */
     if(hit2->End > end)
     {
@@ -8621,26 +9521,24 @@ AjPScophit  ajXyzScophitMerge(AjPScophit hit1, AjPScophit hit2)
 
 
     /* Classify the merged hit */
-    if(ajStrMatchC(hit1->Typeobj, "SEED") ||
-       ajStrMatchC(hit1->Typeobj, "SEED"))
-    {
-        ajStrAssC(&(ret->Typeobj), "SEED");
-    }
-    else if(ajStrMatchC(hit1->Typeobj, "HIT") ||
-	    ajStrMatchC(hit1->Typeobj, "HIT"))
-    {
-        ajStrAssC(&(ret->Typeobj), "HIT");
-    }
+    if(ajStrMatchC(hit1->Typeobj, "SEED") || ajStrMatchC(hit1->Typeobj, "SEED"))
+	ajStrAssC(&(ret->Typeobj), "SEED");
+    else if(ajStrMatchC(hit1->Typeobj, "HIT") || ajStrMatchC(hit1->Typeobj, "HIT"))
+	ajStrAssC(&(ret->Typeobj), "HIT");
     else
 	ajStrAssC(&(ret->Typeobj), "OTHER");
 
 
+    if(ajStrMatch(hit1->Model, hit2->Model))
+	ajStrAssS(&ret->Model, hit1->Model);
+    
+
     if(hit1->Sunid_Family == hit2->Sunid_Family)
 	ret->Sunid_Family = hit1->Sunid_Family;
-
+    
     /* All other elements of structure are left as NULL / o / ajFalse */
-
-
+        
+    
 
     /* Tidy up and return */
     ajStrDel(&temp);
@@ -8649,13 +9547,132 @@ AjPScophit  ajXyzScophitMerge(AjPScophit hit1, AjPScophit hit2)
 
 
 
-/* @func ajXyzScophitToHit ****************************************************
+
+
+
+/* @func ajXyzHitMerge *****************************************
+**
+** Creates a new Hit object which corresponds to a merging of the two 
+** sequences from the Hit objects hit1 and hit2. 
+**
+** The Typeobj of the merged hit is set.  The merged hit is classified 
+** as follows :
+** If hit1 or hit2 is a SEED, the merged hit is classified as a SEED.
+** Otherwise, if hit1 or hit2 is HIT, the merged hit is clsasified as a HIT.
+** If hit1 and hit2 are both OTHER, the merged hit remains classified as OTHER.
+** 
+** @param [r] hit1     [AjPHit]  Hit 1
+** @param [r] hit2     [AjPHit]  Hit 2
+**
+** @return [AjPHit] Pointer to Hit object.
+** @@
+******************************************************************************/
+AjPHit  ajXyzHitMerge(AjPHit hit1, AjPHit hit2)
+{
+    AjPHit ret;
+    ajint start=0;    /* Start of N-terminal-most sequence */
+    ajint end=0;      /* End of N-terminal-most sequence */
+    AjPStr temp=NULL;
+    
+
+	
+
+    /* Check args */
+    if(!hit1 || !hit2)
+	{
+	    ajWarn("Bad arg's passed to AjPScophitMerge");
+	    return NULL;
+	}
+    if(!ajStrMatch(hit1->Acc, hit2->Acc))
+    {
+	ajWarn("Merge attempted on 2 hits with different accession numbers");
+	return NULL;
+    }
+
+
+
+    /* Allocate memory */
+    ret = ajXyzHitNew();
+    temp = ajStrNew();
+    
+
+    ajStrAssS(&(ret->Acc), hit1->Acc);
+    ajStrAssS(&(ret->Spr), hit1->Spr);
+        
+
+
+    /* Copy the N-terminal most sequence to our new sequence 
+       and assign start point of new hit */
+    if(hit1->Start <= hit2->Start)
+    {
+	ajStrAssS(&(ret->Seq), hit1->Seq);
+	ret->Start = hit1->Start;
+	end=hit1->End;
+	start=hit2->Start;
+    }	
+    else
+    {
+	ajStrAssS(&(ret->Seq), hit2->Seq);
+    	ret->Start = hit2->Start;
+	end=hit2->End;
+	start=hit1->Start;
+    }
+    
+
+    /* Assign end point of new hit */
+    if(hit1->End >= hit2->End)
+	ret->End = hit1->End;
+    else
+    	ret->End = hit2->End;
+
+
+    /* Assign the C-terminus of the sequence of the new hit     
+       if necessary */
+    if(hit2->End > end)
+    {
+	ajStrAssSub(&temp, hit2->Seq, end-start+1, -1);
+	ajStrApp(&(ret->Seq),temp);
+    }
+    else if(hit1->End > end)
+    {
+	ajStrAssSub(&temp, hit1->Seq, end-start+1, -1);
+	ajStrApp(&(ret->Seq),temp);
+    }
+
+
+    /* Classify the merged hit */
+    if(ajStrMatchC(hit1->Typeobj, "SEED") || ajStrMatchC(hit1->Typeobj, "SEED"))
+	ajStrAssC(&(ret->Typeobj), "SEED");
+    else if(ajStrMatchC(hit1->Typeobj, "HIT") || ajStrMatchC(hit1->Typeobj, "HIT"))
+	ajStrAssC(&(ret->Typeobj), "HIT");
+    else
+	ajStrAssC(&(ret->Typeobj), "OTHER");
+
+
+    if(ajStrMatch(hit1->Model, hit2->Model))
+	ajStrAssS(&ret->Model, hit1->Model);
+    
+
+    
+    /* All other elements of structure are left as NULL / o / ajFalse */
+        
+    
+
+    /* Tidy up and return */
+    ajStrDel(&temp);
+    return ret;
+}
+
+
+
+
+/* @func ajXyzScophitToHit **************************************************
 **
 ** Copies the contents from a Scophit to a Hit object. Creates the Hit object
 ** if necessary.
 **
-** @param [w] to   [AjPHit*] Hit object pointer
-** @param [r] from [AjPScophit] Scophit object
+** @param [w] to   [AjPHit*] Hit object pointer 
+** @param [r] from [AjPScophit] Scophit object 
 **
 ** @return [AjBool] True if copy was successful.
 ** @@
@@ -8667,7 +9684,7 @@ AjBool  ajXyzScophitToHit(AjPHit *to, AjPScophit from)
 	ajWarn("NULL arg passed to ajXyzScophitToHit");
 	return ajFalse;
     }
-
+    
     if(!(*to))
 	*to = ajXyzHitNew();
 
@@ -8675,13 +9692,16 @@ AjBool  ajXyzScophitToHit(AjPHit *to, AjPScophit from)
     (*to)->Start = from->Start;
     (*to)->End = from->End;
     ajStrAssS(&(*to)->Acc, from->Acc);
+    ajStrAssS(&(*to)->Spr, from->Spr);
     ajStrAssS(&(*to)->Typeobj, from->Typeobj);
     ajStrAssS(&(*to)->Typesbj, from->Typesbj);
+    ajStrAssS(&(*to)->Model, from->Model);
     ajStrAssS(&(*to)->Alg, from->Alg);
     ajStrAssS(&(*to)->Group, from->Group);
     (*to)->Rank = from->Rank;
     (*to)->Score = from->Score;
     (*to)->Eval = from->Eval;
+    (*to)->Pval = from->Pval;
     (*to)->Target = from->Target;
     (*to)->Target2 = from->Target2;
     (*to)->Priority = from->Priority;
@@ -8693,14 +9713,14 @@ AjBool  ajXyzScophitToHit(AjPHit *to, AjPScophit from)
 
 
 
-/* @func ajXyzScophitsToHitlist ***********************************************
+/* @func ajXyzScophitsToHitlist *******************************************
 **
-** Reads from a list of Scophit objects and writes a Hitlist object
-** with the next block of hits with identical SCOP classification. If the
-** iterator passed in is NULL it will read from the start of the list,
+** Reads from a list of Scophit objects and writes a Hitlist object 
+** with the next block of hits with identical SCOP classification. If the 
+** iterator passed in is NULL it will read from the start of the list, 
 ** otherwise it will read from the current position. Memory for the Hitlist
 ** will be allocated if necessary and must be freed by the user.
-**
+** 
 ** @param [r] in      [AjPList]     List of pointers to Scophit objects
 ** @param [w] out     [AjPHitlist*] Pointer to Hitlist object
 ** @param [r] iter    [AjIList*]    Pointer to iterator for list.
@@ -8722,7 +9742,7 @@ AjBool ajXyzScophitsToHitlist(AjPList in, AjPHitlist *out, AjIList *iter)
     AjPStr     fold=NULL;
     AjPStr     class=NULL;
     ajint Sunid_Family=0;
-
+    
 
 
 
@@ -8734,7 +9754,7 @@ AjBool ajXyzScophitsToHitlist(AjPList in, AjPHitlist *out, AjIList *iter)
     }
 
 
-    /* If the iterator passed in is NULL it will read from the start of the
+    /* If the iterator passed in is NULL it will read from the start of the 
        list, otherwise it will read from the current position.*/
     if(!(*iter))
 	*iter=ajListIter(in);
@@ -8743,7 +9763,7 @@ AjBool ajXyzScophitsToHitlist(AjPList in, AjPHitlist *out, AjIList *iter)
     if(!((scoptmp=(AjPScophit)ajListIterNext(*iter))))
     {
 	ajWarn("Empty list in ajXyzScophitsToHitlist");
-	ajListIterFree(*iter);
+	ajListIterFree(*iter);	
 	*iter=NULL;
 	return ajFalse;
     }
@@ -8752,7 +9772,7 @@ AjBool ajXyzScophitsToHitlist(AjPList in, AjPHitlist *out, AjIList *iter)
 
     if(!(*out))
 	*out = ajXyzHitlistNew(0);
-
+    
     fam   = ajStrNew();
     sfam  = ajStrNew();
     fold  = ajStrNew();
@@ -8761,12 +9781,12 @@ AjBool ajXyzScophitsToHitlist(AjPList in, AjPHitlist *out, AjIList *iter)
     list = ajListNew();
 
 
+    
 
-
-
+    
     Sunid_Family=scoptmp->Sunid_Family;
-
-
+    
+    
     if(scoptmp->Class)
     {
 	do_class = ajTrue;
@@ -8791,12 +9811,12 @@ AjBool ajXyzScophitsToHitlist(AjPList in, AjPHitlist *out, AjIList *iter)
     ajXyzScophitToHit(&tmp, scoptmp);
     ajListPush(list, (AjPHit) tmp);
     tmp=NULL;
-
+        
 
     while((scoptmp=(AjPScophit)ajListIterNext(*iter)))
     {
 	/*The ajListIterBackNext(*iter); return the
-	  iterator to the correct position for the
+	  iterator to the correct position for the 
 	  next read */
 
 	if(do_class)
@@ -8805,29 +9825,29 @@ AjBool ajXyzScophitsToHitlist(AjPList in, AjPHitlist *out, AjIList *iter)
 		    ajListIterBackNext(*iter);
 		    break;
 		}
-
+	
 	if(do_fold)
 	    if(!ajStrMatch(scoptmp->Fold, fold))
 		{
 		    ajListIterBackNext(*iter);
 		    break;
 		}
-
+	
 	if(do_sfam)
 	    if(!ajStrMatch(scoptmp->Superfamily, sfam))
 		{
 		    ajListIterBackNext(*iter);
 		    break;
 		}
-
+	
 	if(do_fam)
 	    if(!ajStrMatch(scoptmp->Family, fam))
 		{
 		    ajListIterBackNext(*iter);
 		    break;
 		}
-
-
+	
+	
 	ajXyzScophitToHit(&tmp, scoptmp);
 	ajListPush(list, (AjPHit) tmp);
 	tmp=NULL;
@@ -8837,7 +9857,7 @@ AjBool ajXyzScophitsToHitlist(AjPList in, AjPHitlist *out, AjIList *iter)
     ajStrAssS(&(*out)->Superfamily, sfam);
     ajStrAssS(&(*out)->Family, fam);
     (*out)->Sunid_Family = Sunid_Family;
-
+    
 
     /* Copy temp. list to Hitlist */
     (*out)->N = ajListToArray(list, (void ***) &((*out)->hits));
@@ -8847,7 +9867,7 @@ AjBool ajXyzScophitsToHitlist(AjPList in, AjPHitlist *out, AjIList *iter)
     ajStrDel(&sfam);
     ajStrDel(&fold);
     ajStrDel(&class);
-    ajListDel(&list);
+    ajListDel(&list);	    
     return ajTrue;
 }
 
@@ -8861,11 +9881,11 @@ AjBool ajXyzScophitsToHitlist(AjPList in, AjPHitlist *out, AjIList *iter)
 
 
 
-/* @func ajXyzHitlistToScophits ***********************************************
+/* @func ajXyzHitlistToScophits **********************************************
 **
-** Read from a list of Hitlist structures and writes a list of Scophit
+** Read from a list of Hitlist structures and writes a list of Scophit 
 ** structures.
-**
+** 
 ** @param [r] in      [AjPList]  List of pointers to Hitlist structures
 ** @param [w] out     [AjPList*] Pointer to list of Scophit structures
 **
@@ -8888,8 +9908,8 @@ AjBool ajXyzHitlistToScophits(AjPList in, AjPList *out)
     }
 
     /* Create list iterator and new list */
-    iter=ajListIter(in);
-
+    iter=ajListIter(in);	
+    
 
     /* Iterate through the list of Hitlist pointers */
     while((hitlist=(AjPHitlist)ajListIterNext(iter)))
@@ -8900,7 +9920,7 @@ AjBool ajXyzHitlistToScophits(AjPList in, AjPList *out)
 	    /* Create a new scophit structure */
 	    /*AJNEW0(scophit);*/
 	    scophit = ajXyzScophitNew();
-
+	    
 
 	    /* Assign scop classification records from hitlist structure */
 	    ajStrAssS(&scophit->Class, hitlist->Class);
@@ -8909,12 +9929,14 @@ AjBool ajXyzHitlistToScophits(AjPList in, AjPList *out)
 	    ajStrAssS(&scophit->Family, hitlist->Family);
 	    scophit->Sunid_Family = hitlist->Sunid_Family;
 	    scophit->Priority = hitlist->Priority;
-
+	    
 	    /* Assign records from hit structure */
 	    ajStrAssS(&scophit->Seq, hitlist->hits[x]->Seq);
 	    ajStrAssS(&scophit->Acc, hitlist->hits[x]->Acc);
+	    ajStrAssS(&scophit->Spr, hitlist->hits[x]->Spr);
 	    ajStrAssS(&scophit->Typeobj, hitlist->hits[x]->Typeobj);
 	    ajStrAssS(&scophit->Typesbj, hitlist->hits[x]->Typesbj);
+	    ajStrAssS(&scophit->Model, hitlist->hits[x]->Model);
 	    ajStrAssS(&scophit->Alg, hitlist->hits[x]->Alg);
 	    ajStrAssS(&scophit->Group, hitlist->hits[x]->Group);
 	    scophit->Start = hitlist->hits[x]->Start;
@@ -8922,16 +9944,17 @@ AjBool ajXyzHitlistToScophits(AjPList in, AjPList *out)
 	    scophit->Rank = hitlist->hits[x]->Rank;
 	    scophit->Score = hitlist->hits[x]->Score;
 	    scophit->Eval = hitlist->hits[x]->Eval;
-
-
+	    scophit->Pval = hitlist->hits[x]->Pval;
+	    
+           	     
 	    /* Push scophit onto list */
 	    ajListPushApp(*out,scophit);
 	}
-    }
-
+    }	
+    
 
     /* Clean up and return */
-    ajListIterFree(iter);
+    ajListIterFree(iter);	
 
     return ajTrue;
 }
@@ -8942,16 +9965,16 @@ AjBool ajXyzHitlistToScophits(AjPList in, AjPList *out)
 
 
 
-/* @func ajXyzHitlistToThreeScophits ******************************************
+/* @func ajXyzHitlistToThreeScophits *****************************************
 **
-** Read from a list of Hitlist structures and writes to three lists of
-** Scophit structures (for families, superfamilies and folds) depending on
+** Read from a list of Hitlist structures and writes to three lists of 
+** Scophit structures (for families, superfamilies and folds) depending on 
 ** which SCOP nodes are specified. For example, if the scop family name is
-** specified in a Hitlist (Family element of the Hitlist object != NULL) then
-** the hits would be written to the families list of Scophit structures. If
-** for example the Family and Superfamily element were both == NULL then the
+** specified in a Hitlist (Family element of the Hitlist object != NULL) then 
+** the hits would be written to the families list of Scophit structures. If 
+** for example the Family and Superfamily element were both == NULL then the 
 ** hits would be written to the folds list.
-**
+** 
 ** @param [r] in     [AjPList]  List of Hitlist structures
 ** @param [w] fam    [AjPList*] List of Scophit structures (families)
 ** @param [w] sfam   [AjPList*] List of Scophit structures (superfamilies)
@@ -8960,14 +9983,13 @@ AjBool ajXyzHitlistToScophits(AjPList in, AjPList *out)
 ** @return [AjBool] True on success (lists were processed ok)
 ** @@
 ******************************************************************************/
-AjBool ajXyzHitlistToThreeScophits(AjPList in, AjPList *fam,
-				   AjPList *sfam, AjPList *fold)
+AjBool ajXyzHitlistToThreeScophits(AjPList in, AjPList *fam, AjPList *sfam, AjPList *fold)
 {
     AjPScophit   scophit=NULL;   /* Pointer to Scophit object */
     AjPHitlist   hitlist=NULL;   /* Pointer to Hitlist object */
     AjIList      iter   =NULL;   /* List iterator */
     ajint        x      =0;      /* Loop counter */
-
+   
 
     /* Check args */
     if(!in)
@@ -8977,8 +9999,8 @@ AjBool ajXyzHitlistToThreeScophits(AjPList in, AjPList *fam,
     }
 
     /* Create list iterator and new list */
-    iter=ajListIter(in);
-
+    iter=ajListIter(in);	
+    
 
     /* Iterate through the list of Hitlist pointers */
     while((hitlist=(AjPHitlist)ajListIterNext(iter)))
@@ -8996,13 +10018,15 @@ AjBool ajXyzHitlistToThreeScophits(AjPList in, AjPList *fam,
 	    ajStrAssS(&scophit->Superfamily, hitlist->Superfamily);
 	    ajStrAssS(&scophit->Family, hitlist->Family);
 	    scophit->Sunid_Family = hitlist->Sunid_Family;
-
+	    
 
 	    /* Assign records from hit structure */
 	    ajStrAssS(&scophit->Seq, hitlist->hits[x]->Seq);
 	    ajStrAssS(&scophit->Acc, hitlist->hits[x]->Acc);
+	    ajStrAssS(&scophit->Spr, hitlist->hits[x]->Spr);
 	    ajStrAssS(&scophit->Typeobj, hitlist->hits[x]->Typeobj);
 	    ajStrAssS(&scophit->Typesbj, hitlist->hits[x]->Typesbj);
+	    ajStrAssS(&scophit->Model, hitlist->hits[x]->Model);
 	    ajStrAssS(&scophit->Alg, hitlist->hits[x]->Alg);
 	    ajStrAssS(&scophit->Group, hitlist->hits[x]->Group);
 	    scophit->Start = hitlist->hits[x]->Start;
@@ -9010,15 +10034,16 @@ AjBool ajXyzHitlistToThreeScophits(AjPList in, AjPList *fam,
 	    scophit->Rank = hitlist->hits[x]->Rank;
 	    scophit->Score = hitlist->hits[x]->Score;
 	    scophit->Eval = hitlist->hits[x]->Eval;
-
-
+	    scophit->Pval = hitlist->hits[x]->Pval;
+	    
+	    
 	    /* Push scophit onto list */
 	    if(scophit->Family)
 		ajListPushApp(*fam,scophit);
 	    else if(scophit->Superfamily)
-		ajListPushApp(*sfam,scophit);
+		ajListPushApp(*sfam,scophit);	    
 	    else if(scophit->Fold)
-		ajListPushApp(*fold,scophit);
+		ajListPushApp(*fold,scophit);	
 	    else
 	    {
 		ajWarn("Family, superfamily and fold not specified "
@@ -9026,11 +10051,11 @@ AjBool ajXyzHitlistToThreeScophits(AjPList in, AjPList *fam,
 		ajXyzScophitDel(&scophit);
 	    }
 	}
-    }
-
+    }	
+    
 
     /* Clean up and return */
-    ajListIterFree(iter);
+    ajListIterFree(iter);	
 
     return ajTrue;
 }
@@ -9039,10 +10064,10 @@ AjBool ajXyzHitlistToThreeScophits(AjPList in, AjPList *fam,
 
 
 
-/* @func ajXyzCompScoreInv ****************************************************
+/* @func ajXyzCompScoreInv ******************************************************
 **
-** Function to sort AjOHit objects by score record. Usually called by
-** ajListSort.  The sorting order is inverted - i.e. it returns -1 if score1
+** Function to sort AjOHit objects by score record. Usually called by 
+** ajListSort.  The sorting order is inverted - i.e. it returns -1 if score1 
 ** > score2 (as opposed to ajXyzCompScore).
 **
 ** @param [r] hit1  [const void*] Pointer to AjOHit object 1
@@ -9058,7 +10083,7 @@ ajint ajXyzCompScoreInv(const void *hit1, const void *hit2)
 
     p = (*(AjPHit*)hit1);
     q = (*(AjPHit*)hit2);
-
+    
     if(p->Score > q->Score)
 	return -1;
     else if (p->Score == q->Score)
@@ -9071,9 +10096,9 @@ ajint ajXyzCompScoreInv(const void *hit1, const void *hit2)
 
 
 
-/* @func ajXyzCompScore *******************************************************
+/* @func ajXyzCompScore ******************************************************
 **
-** Function to sort AjOHit objects by score record. Usually called by
+** Function to sort AjOHit objects by score record. Usually called by 
 ** ajListSort.
 **
 ** @param [r] hit1  [const void*] Pointer to AjOHit object 1
@@ -9089,7 +10114,7 @@ ajint ajXyzCompScore(const void *hit1, const void *hit2)
 
     p = (*(AjPHit*)hit1);
     q = (*(AjPHit*)hit2);
-
+    
     if(p->Score < q->Score)
 	return -1;
     else if (p->Score == q->Score)
@@ -9100,18 +10125,18 @@ ajint ajXyzCompScore(const void *hit1, const void *hit2)
 }
 
 
-/* @func ajXyzPdbtospBinSearch ************************************************
+/* @func ajXyzPdbtospBinSearch ***********************************************
 **
 ** Performs a binary search for a PDB code over an array of Pdbtosp
-** structures (which of course must first have been sorted). This is a
+** structures (which of course must first have been sorted). This is a 
 ** case-insensitive search.
 **
 ** @param [r] id  [AjPStr]      Search term
-** @param [r] arr [AjPPdbtosp*] Array of AjOPdbtosp objects
+** @Param [r] arr [AjPPdbtosp*] Array of AjOPdbtosp objects
 ** @param [r] siz [ajint]       Size of array
 **
-** @return [ajint] Index of first AjOPdbtosp object found with an PDB
-** code matching id, or -1 if id is not found.
+** @return [ajint] Index of first AjOPdbtosp object found with an PDB code
+** matching id, or -1 if id is not found.
 ** @@
 ******************************************************************************/
 ajint ajXyzPdbtospBinSearch(AjPStr id, AjPPdbtosp *arr, ajint siz)
@@ -9128,11 +10153,11 @@ ajint ajXyzPdbtospBinSearch(AjPStr id, AjPPdbtosp *arr, ajint siz)
     {
         m=(l+h)>>1;
 
-        if((c=ajStrCmpCase(id, arr[m]->Pdb)) < 0)
+        if((c=ajStrCmpCase(id, arr[m]->Pdb)) < 0) 
 	    h=m-1;
-        else if(c>0)
+        else if(c>0) 
 	    l=m+1;
-        else
+        else 
 	    return m;
     }
     return -1;
@@ -9142,17 +10167,17 @@ ajint ajXyzPdbtospBinSearch(AjPStr id, AjPPdbtosp *arr, ajint siz)
 
 
 
-/* @func ajXyzHitidxBinSearch *************************************************
+/* @func ajXyzHitidxBinSearch ******************************************************
 **
 ** Performs a binary search for an accession number over an array of Hitidx
-** structures (which of course must first have been sorted). This is a
+** structures (which of course must first have been sorted). This is a 
 ** case-insensitive search.
 **
 ** @param [r] id  [AjPStr]     Search term
 ** @param [r] arr [AjPHitidx*] Array of AjOHitidx objects
 ** @param [r] siz [ajint]      Size of array
 **
-** @return [ajint] Index of first AjOHitidx object found with an Id element
+** @return [ajint] Index of first AjOHitidx object found with an Id element 
 ** matching id, or -1 if id is not found.
 ** @@
 ******************************************************************************/
@@ -9170,11 +10195,11 @@ ajint ajXyzHitidxBinSearch(AjPStr id, AjPHitidx *arr, ajint siz)
     {
         m=(l+h)>>1;
 
-        if((c=ajStrCmpCase(id, arr[m]->Id)) < 0)
+        if((c=ajStrCmpCase(id, arr[m]->Id)) < 0) 
 	    h=m-1;
-        else if(c>0)
+        else if(c>0) 
 	    l=m+1;
-        else
+        else 
 	    return m;
     }
     return -1;
@@ -9182,17 +10207,16 @@ ajint ajXyzHitidxBinSearch(AjPStr id, AjPHitidx *arr, ajint siz)
 
 
 
-/* @func ajXyzSortPdbtospPdb **************************************************
+/* @func ajXyzSortPdbtospPdb *********************************************************
 **
-** Function to sort AjOPdbtosp objects by Pdb element. Usually called by
+** Function to sort AjOPdbtosp objects by Pdb element. Usually called by 
 ** ajXyzPdbtospReadAll.
 **
 ** @param [r] ptr1  [const void*] Pointer to AjOPdbtosp object 1
 ** @param [r] ptr2  [const void*] Pointer to AjOPdbtosp object 2
 **
-** @return [ajint] -1 if Pdb1 should sort before Pdb2,
-**                 +1 if the Pdb2 should sort first.
-**                  0 if they are identical in length and content.
+** @return [ajint] -1 if Pdb1 should sort before Pdb2, +1 if the Pdb2 should sort 
+** first. 0 if they are identical in length and content. 
 ** @@
 ******************************************************************************/
 ajint ajXyzSortPdbtospPdb(const void *ptr1, const void *ptr2)
@@ -9202,24 +10226,23 @@ ajint ajXyzSortPdbtospPdb(const void *ptr1, const void *ptr2)
 
     p = (*(AjPPdbtosp*)ptr1);
     q = (*(AjPPdbtosp*)ptr2);
-
+    
     return ajStrCmpO(p->Pdb, q->Pdb);
 }
 
 
 
 
-/* @func ajXyzCompId **********************************************************
+/* @func ajXyzCompId *********************************************************
 **
-** Function to sort AjOHitidx objects by Id element. Usually called by
+** Function to sort AjOHitidx objects by Id element. Usually called by 
 ** ajXyzHitlistClassify.
 **
 ** @param [r] hit1  [const void*] Pointer to AjOHitidx object 1
 ** @param [r] hit2  [const void*] Pointer to AjOHitidx object 2
 **
-** @return [ajint] -1 if Id1 should sort before Id2,
-**                 +1 if the Id2 should sort first.
-**                  0 if they are identical in length and content.
+** @return [ajint] -1 if Id1 should sort before Id2, +1 if the Id2 should sort 
+** first. 0 if they are identical in length and content. 
 ** @@
 ******************************************************************************/
 ajint ajXyzCompId(const void *hit1, const void *hit2)
@@ -9229,23 +10252,53 @@ ajint ajXyzCompId(const void *hit1, const void *hit2)
 
     p = (*(AjPHitidx*)hit1);
     q = (*(AjPHitidx*)hit2);
-
+    
     return ajStrCmpO(p->Id, q->Id);
 
 }
 
 
+/* @func ajXyzScophitCompScore ******************************************************
+ **
+ ** Function to sort AjOScophit objects by score record. Usually called by 
+ ** ajListSort.  The sorting order is inverted - i.e. it returns -1 if score1 
+ ** > score2 (as opposed to ajXyzCompScore).
+ **
+ ** @param [r] hit1  [const void*] Pointer to AjOHit object 1
+ ** @param [r] hit2  [const void*] Pointer to AjOHit object 2
+ **
+ ** @return [ajint] 1 if score1<score2, 0 if score1==score2, else -1.
+ ** @@
+ ******************************************************************************/
+ajint ajXyzScophitCompScore(const void *hit1, const void *hit2)
+{
+    AjPScophit p  = NULL;
+    AjPScophit q  = NULL;
 
-/* @func ajXyzScophitCompAcc **************************************************
+    p = (*(AjPScophit*)hit1);
+    q = (*(AjPScophit*)hit2);
+    
+    if(p->Score < q->Score)
+        return -1;
+    else if (p->Score == q->Score)
+        return 0;
+    else
+        return 1;
+
+
+}
+
+
+
+/* @func ajXyzScophitCompAcc *********************************************************
 **
-** Function to sort AjOScophit objects by Acc element.
+** Function to sort AjOScophit objects by Acc element. 
 **
 ** @param [r] hit1  [const void*] Pointer to AjOScophit object 1
 ** @param [r] hit2  [const void*] Pointer to AjOScophit object 2
 **
-** @return [ajint] -1 if Acc1 should sort before Acc2,
-**                 +1 if the Acc2 should sort
-** first. 0 if they are identical in length and content.
+** @return [ajint] -1 if Acc1 should sort before Acc2, +1 if the Acc2 should sort 
+** first. 0 if they are identical in length and content. 
 ** @@
 ******************************************************************************/
 ajint ajXyzScophitCompAcc(const void *hit1, const void *hit2)
@@ -9255,7 +10308,7 @@ ajint ajXyzScophitCompAcc(const void *hit1, const void *hit2)
 
     p = (*(AjPScophit*)hit1);
     q = (*(AjPScophit*)hit2);
-
+    
     return ajStrCmpO(p->Acc, q->Acc);
 
 
@@ -9263,15 +10316,15 @@ ajint ajXyzScophitCompAcc(const void *hit1, const void *hit2)
 
 
 
-/* @func ajXyzScopCompId ******************************************************
+/* @func ajXyzScopCompId ***************************************************
 **
-** Function to sort AjOScop object by Entry element.
+** Function to sort AjOScop object by Entry element. 
 **
 ** @param [r] hit1  [const void*] Pointer to AjOScop object 1
 ** @param [r] hit2  [const void*] Pointer to AjOScop object 2
 **
-** @return [ajint] -1 if Entry1 should sort before Entry2, +1 if the Entry2
-** should sort first. 0 if they are identical in length and content.
+** @return [ajint] -1 if Entry1 should sort before Entry2, +1 if the Entry2 
+** should sort first. 0 if they are identical in length and content. 
 ** @@
 ******************************************************************************/
 ajint ajXyzScopCompId(const void *hit1, const void *hit2)
@@ -9281,24 +10334,52 @@ ajint ajXyzScopCompId(const void *hit1, const void *hit2)
 
     p = (*(AjPScop*)hit1);
     q = (*(AjPScop*)hit2);
-
+    
     return ajStrCmpO(p->Entry, q->Entry);
 
 }
 
 
 
-
-/* @func ajXyzScophitCompSpr **************************************************
+/* @func ajXyzScophitCompSunid ******************************************************
 **
-** Function to sort AjOScophit object by Spr element.
+** Function to sort AjOScophit object by Start Sunid_Family.
 **
 ** @param [r] hit1  [const void*] Pointer to AjOScophit object 1
 ** @param [r] hit2  [const void*] Pointer to AjOScophit object 2
 **
-** @return [ajint] -1 if Spr1 should sort before Spr2,
-**                 +1 if the Spr2 should sort
-** first. 0 if they are identical in length and content.
+** @return [ajint] -1 if Start1 should sort before Start2, +1 if the Start2 
+** should sort first. 0 if they are identical.
+** @@
+******************************************************************************/
+ajint ajXyzScophitCompSunid(const void *entry1, const void *entry2)
+{
+    AjPScophit p  = NULL;
+    AjPScophit q  = NULL;
+
+    p = (*(AjPScophit*)entry1);
+    q = (*(AjPScophit*)entry2);
+   
+
+    if(p->Sunid_Family < q->Sunid_Family)
+        return -1;
+    else if(p->Sunid_Family == q->Sunid_Family)
+        return 0;
+    else
+        return 1;
+}
+
+
+
+/* @func ajXyzScophitCompSpr ***************************************************
+**
+** Function to sort AjOScophit object by Spr element. 
+**
+** @param [r] hit1  [const void*] Pointer to AjOScophit object 1
+** @param [r] hit2  [const void*] Pointer to AjOScophit object 2
+**
+** @return [ajint] -1 if Spr1 should sort before Spr2, +1 if the Spr2 should sort 
+** first. 0 if they are identical in length and content. 
 ** @@
 ******************************************************************************/
 ajint ajXyzScophitCompSpr(const void *hit1, const void *hit2)
@@ -9308,7 +10389,7 @@ ajint ajXyzScophitCompSpr(const void *hit1, const void *hit2)
 
     p = (*(AjPScophit*)hit1);
     q = (*(AjPScophit*)hit2);
-
+    
     return ajStrCmpO(p->Spr, q->Spr);
 
 }
@@ -9317,14 +10398,44 @@ ajint ajXyzScophitCompSpr(const void *hit1, const void *hit2)
 
 
 
-/* @func ajXyzScophitCompStart ************************************************
+/* @func ajXyzScophitCompEnd ***********************************************
 **
-** Function to sort AjOScophit object by Start element.
+** Function to sort AjOScophit object by End element. 
 **
 ** @param [r] hit1  [const void*] Pointer to AjOScophit object 1
 ** @param [r] hit2  [const void*] Pointer to AjOScophit object 2
 **
-** @return [ajint] -1 if Start1 should sort before Start2, +1 if the Start2
+** @return [ajint] -1 if End1 should sort before End2, +1 if the End2 
+** should sort first. 0 if they are identical.
+** @@
+******************************************************************************/
+ajint ajXyzScophitCompEnd(const void *hit1, const void *hit2)
+{
+    AjPScophit p  = NULL;
+    AjPScophit q  = NULL;
+
+    p = (*(AjPScophit*)hit1);
+    q = (*(AjPScophit*)hit2);
+   
+
+    if(p->End < q->End)
+	return -1;
+    else if(p->End == q->End)
+	return 0;
+    else
+	return 1;
+}
+
+
+
+/* @func ajXyzScophitCompStart ***********************************************
+**
+** Function to sort AjOScophit object by Start element. 
+**
+** @param [r] hit1  [const void*] Pointer to AjOScophit object 1
+** @param [r] hit2  [const void*] Pointer to AjOScophit object 2
+**
+** @return [ajint] -1 if Start1 should sort before Start2, +1 if the Start2 
 ** should sort first. 0 if they are identical.
 ** @@
 ******************************************************************************/
@@ -9335,7 +10446,7 @@ ajint ajXyzScophitCompStart(const void *hit1, const void *hit2)
 
     p = (*(AjPScophit*)hit1);
     q = (*(AjPScophit*)hit2);
-
+   
 
     if(p->Start < q->Start)
 	return -1;
@@ -9348,14 +10459,14 @@ ajint ajXyzScophitCompStart(const void *hit1, const void *hit2)
 
 
 
-/* @func ajXyzScophitCompFam **************************************************
+/* @func ajXyzScophitCompFam ***********************************************
 **
-** Function to sort AjOScophit object by Family element.
+** Function to sort AjOScophit object by Family element. 
 **
 ** @param [r] hit1  [const void*] Pointer to AjOScophit object 1
 ** @param [r] hit2  [const void*] Pointer to AjOScophit object 2
 **
-** @return [ajint] -1 if Family1 should sort before Family2, +1 if the Family2
+** @return [ajint] -1 if Family1 should sort before Family2, +1 if the Family2 
 ** should sort first. 0 if they are identical.
 ** @@
 ******************************************************************************/
@@ -9366,20 +10477,20 @@ ajint ajXyzScophitCompFam(const void *hit1, const void *hit2)
 
     p = (*(AjPScophit*)hit1);
     q = (*(AjPScophit*)hit2);
-
+    
     return ajStrCmpO(p->Family, q->Family);
 }
 
 
 
-/* @func ajXyzScophitCompSfam *************************************************
+/* @func ajXyzScophitCompSfam ***********************************************
 **
-** Function to sort AjOScophit object by Superfamily  element.
+** Function to sort AjOScophit object by Superfamily  element. 
 **
 ** @param [r] hit1  [const void*] Pointer to AjOScophit object 1
 ** @param [r] hit2  [const void*] Pointer to AjOScophit object 2
 **
-** @return [ajint] -1 if Superfamily1 should sort before Superfamily2, +1 if
+** @return [ajint] -1 if Superfamily1 should sort before Superfamily2, +1 if 
 ** the Superfamily2 should sort first. 0 if they are identical.
 ** @@
 ******************************************************************************/
@@ -9390,21 +10501,21 @@ ajint ajXyzScophitCompSfam(const void *hit1, const void *hit2)
 
     p = (*(AjPScophit*)hit1);
     q = (*(AjPScophit*)hit2);
-
+    
     return ajStrCmpO(p->Superfamily, q->Superfamily);
 }
 
 
 
 
-/* @func ajXyzScophitCompFold *************************************************
+/* @func ajXyzScophitCompFold ***********************************************
 **
-** Function to sort AjOScophit object by Fold element.
+** Function to sort AjOScophit object by Fold element. 
 **
 ** @param [r] hit1  [const void*] Pointer to AjOScophit object 1
 ** @param [r] hit2  [const void*] Pointer to AjOScophit object 2
 **
-** @return [ajint] -1 if Fold1 should sort before Fold2, +1 if the Fold2
+** @return [ajint] -1 if Fold1 should sort before Fold2, +1 if the Fold2 
 ** should sort first. 0 if they are identical.
 ** @@
 ******************************************************************************/
@@ -9415,81 +10526,97 @@ ajint ajXyzScophitCompFold(const void *hit1, const void *hit2)
 
     p = (*(AjPScophit*)hit1);
     q = (*(AjPScophit*)hit2);
-
+    
     return ajStrCmpO(p->Fold, q->Fold);
 }
 
 
 
+/* @func ajXyzHitlistCompFold ***********************************************
+**
+** Function to sort AjOHitlist object by Fold element. 
+**
+** @param [r] hit1  [const void*] Pointer to AjOHitlist object 1
+** @param [r] hit2  [const void*] Pointer to AjOHitlist object 2
+**
+** @return [ajint] -1 if Fold1 should sort before Fold2, +1 if the Fold2 
+** should sort first. 0 if they are identical.
+** @@
+******************************************************************************/
+ajint ajXyzHitlistCompFold(const void *hit1, const void *hit2)
+{
+    AjPHitlist p  = NULL;
+    AjPHitlist q  = NULL;
+
+    p = (*(AjPHitlist*)hit1);
+    q = (*(AjPHitlist*)hit2);
+    
+    return ajStrCmpO(p->Fold, q->Fold);
+}
+
+
+
+
+
 /* @func ajXyzHitlistClassify *************************************************
 **
-** Classifies a list of signature-sequence hits (held in a Hitlist object)
+** Classifies a list of signature-sequence hits (held in a Hitlist object) 
 ** according to list of target sequences (a list of AjOHitlist objects).
-**
+** 
 ** Writes the Group, Typeobj (primary classification) & Typesbj (secondary
-** classification) elements depending on how the SCOP classification
+** classification) elements depending on how the SCOP classification 
 ** records of the Hit object and target sequence in question compare.
+** 
 **
 ** The following classification of hits is taken from sigscan.c :
-** Definition of classes of hit
-** The primary classification is an objective definition of the hit and has
+** Definition of classes of hit 
+** The primary classification is an objective definition of the hit and has 
 ** one of the following values:
-**
-** SEED - the sequence was included in the original alignment from which the
+** SEED - the sequence was included in the original alignment from which the 
 ** signature was generated.
-**
-** HIT - A protein which was detected by psiblast  (see psiblasts.c) to
-** be a homologue to at least one of the proteins in the family from which
-** the signature was derived. Such proteins are identified by the 'HIT'
+** HIT - A protein which was detected by psiblast  (see psiblasts.c) to 
+** be a homologue to at least one of the proteins in the family from which 
+** the signature was derived. Such proteins are identified by the 'HIT' 
 ** record in the scop families file.
-**
-** OTHER - A true member of the family but not a homologue as detected by
-** psi-blast. Such proteins may have been found from the literature and
-** manually added to the scop families file or may have been detected by the
-** EMBOSS program swissparse (see swissparse.c). They are identified in the
+** OTHER - A true member of the family but not a homologue as detected by 
+** psi-blast. Such proteins may have been found from the literature and 
+** manually added to the scop families file or may have been detected by the 
+** EMBOSS program swissparse (see swissparse.c). They are identified in the 
 ** SCOP families file by the 'OTHER' record.
-**
 ** CROSS - A protein which is homologous to a protein of the same fold,
 ** but differnt family, of the proteins from which the signature was
 ** derived.
-**
 ** FALSE - A homologue to a protein with a different fold to the family
 ** of the signature.
-**
-** UNKNOWN - The protein is not known to be CROSS, FALSE or a true hit (a
+** UNKNOWN - The protein is not known to be CROSS, FALSE or a true hit (a 
 ** SEED, HIT or OTHER).
-**
-** The secondary classification is provided for convenience and a value as
+** The secondary classification is provided for convenience and a value as 
 ** follows:
-**
 ** Hits of SEED, HIT and OTHER classification are all listed as TRUE.
-**
-** Hits of CROSS, FALSE or UNKNOWN objective classification are listed
-** as CROSS, FALSE or UNKNOWN respectively.
+** Hits of CROSS, FALSE or UNKNOWN objective classification are listed as CROSS, 
+** FALSE or UNKNOWN respectively.
 **
 ** The Group element is copied from the target sequence for 'TRUE' objective
 ** hits, whereas 'NOT_APPLICABLE' is given for other types of hit.
 **
-** The subjective column allows for hand-annotation of the hits files
-** so that proteins of UNKNOWN objective classification can
-** re-classified by a human expert as TRUE, FALSE, CROSS or otherwise
-** left as UNKNOWN for the purpose of generating signature performance
-** plots with the EMBOSS application sigplot.
+** The subjective column allows for hand-annotation of the hits files so that 
+** proteins of UNKNOWN objective classification can re-classified by a human 
+** expert as TRUE, FALSE, CROSS or otherwise left as UNKNOWN for the purpose of 
+** generating signature performance plots with the EMBOSS application sigplot.
 **
 **
-** @param [r] hits    [AjPHitlist*]  Pointer to Hitlist object with hits
+** @param [r] hits    [AjPHitist *] Pointer to Hitlist object with hits
 ** @param [r] targets [AjPList]     List of AjOHitlist objects with targets
-** @param [r] thresh  [ajint]       Minimum length (residues) of overlap
-**                                  required for two hits with the same
-**                                  code to be counted as the same hit.
+** @param [r] thresh  [ajint]       Minimum length (residues) of overlap 
+** required for two hits with the same code to be counted as the same hit.
 **
 ** @return [AjBool] True on success, else False
 ** @@
 ******************************************************************************/
-AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
+AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets, 
 				   ajint thresh)
-{
-    /* A list of Hitidx structures is derived from the list of AjOHitlist
+{  
+    /* A list of Hitidx structures is derived from the list of AjOHitlist 
        objects to allow rapid searching for a given protein accession number*/
 
     AjIList     itert=NULL;		/*List iterator for targets*/
@@ -9499,27 +10626,27 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
     AjPHitidx  *idxarr=NULL;		/*Array of Hitidx structures */
     AjPList     idxlist=NULL;		/*List of Hitidx structures */
     ajint       idxsiz=0;		/*No.target sequences*/
-    ajint       pos=0;			/*Position of a matching code in Hitidx
+    ajint       pos=0;			/*Position of a matching code in Hitidx 
 					  structure*/
     ajint       tpos=0;			/*Temp. position counter */
     ajint       x=0;			/*Loop counter*/
 
 
 
-
+    
     /* Check args */
     if(!(*hits) || (!targets))
     {
 	ajWarn("NULL args passed to ajXyzHitlistClassify\n");
 	return ajFalse;
     }
-
+    
 
 
     /*Create list & list iterator*/
     itert=ajListIter(targets);
     idxlist = ajListNew();
-
+    
 
     /*Loop through list of targets filling list of Hitidx structures */
     while((ptrt=(AjPHitlist)ajListIterNext(itert)))
@@ -9535,12 +10662,12 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
 	}
     }
 
-
+    
     /* Order the list of Hitidx structures by Id and transform into an array*/
     ajListSort(idxlist, ajXyzCompId);
     idxsiz = ajListToArray(idxlist, (void ***) &idxarr);
-
-
+        
+    
 
 
     /*Loop through list of hits */
@@ -9549,29 +10676,32 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
 	if((pos=ajXyzHitidxBinSearch((*hits)->hits[x]->Acc, idxarr, idxsiz))!=-1)
 	{
 	    /* Id was found */
-	    /*The list may contain multiple entries for the same Id, so
-	      search the current position and then up the list for other
+	    /*The list may contain multiple entries for the same Id, so 
+	      search the current position and then up the list for other 
 	      matching strings*/
-	    tpos=pos;
+	    tpos=pos; 
 	    while(ajStrMatchCase(idxarr[tpos]->Id, (*hits)->hits[x]->Acc))
 	    {
-		if(ajXyzHitsOverlap(idxarr[tpos]->hptr,
+		if(ajXyzHitsOverlap(idxarr[tpos]->hptr, 
 				    (*hits)->hits[x], thresh))
-		{
+		{	
 
-		    if(ajStrMatchCase((idxarr[tpos]->lptr)->Family,
-				      (*hits)->Family))
+/*		    if(ajStrMatchCase((idxarr[tpos]->lptr)->Family, 
+				      (*hits)->Family)) */
+		    if( (idxarr[tpos]->lptr)->Sunid_Family == (*hits)->Sunid_Family)
 			/*SCOP family is identical*/
 		    {
-			ajStrAssS(&(*hits)->hits[x]->Typeobj,
+			ajStrAssS(&(*hits)->hits[x]->Typeobj, 
 				  (idxarr[tpos]->hptr)->Typeobj);
-			ajStrAssC(&(*hits)->hits[x]->Typesbj,
+			ajStrAssC(&(*hits)->hits[x]->Typesbj, 
 				  "TRUE");
-			ajStrAssS(&(*hits)->hits[x]->Group,
+			ajStrAssS(&(*hits)->hits[x]->Group, 
 				  (idxarr[tpos]->hptr)->Group);
 		    }
-		    else if(ajStrMatchCase((idxarr[tpos]->lptr)->Fold,
-					   (*hits)->Fold))
+		    else if((ajStrMatchCase((idxarr[tpos]->lptr)->Fold, 
+					   (*hits)->Fold)) &&
+			    (ajStrMatchCase((idxarr[tpos]->lptr)->Class, 
+					   (*hits)->Class)))
 			/*SCOP folds are identical*/
 		    {
 			ajStrAssC(&(*hits)->hits[x]->Typeobj, "CROSS");
@@ -9588,45 +10718,53 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
 		}
 		else
 		{
-		    /* Id was found but there was no overlap so set
-		       classification to UNKNOWN*/
-		    ajStrAssC(&(*hits)->hits[x]->Typeobj, "UNKNOWN");
-		    ajStrAssC(&(*hits)->hits[x]->Typesbj, "UNKNOWN");
-		    ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
+		    /* Id was found but there was no overlap so set 
+		       classification to UNKNOWN, but only if it has 
+		       not already been set */
+		    if((!ajStrMatchC((*hits)->hits[x]->Typesbj, "TRUE")) &&
+		       (!ajStrMatchC((*hits)->hits[x]->Typesbj, "CROSS")) &&
+		       (!ajStrMatchC((*hits)->hits[x]->Typesbj, "FALSE")))
+		    {
+			ajStrAssC(&(*hits)->hits[x]->Typeobj, "UNKNOWN");
+			ajStrAssC(&(*hits)->hits[x]->Typesbj, "UNKNOWN");
+			ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
+		    }
 		}
+		    
 
 
-
-		tpos--;
-		if(tpos<0)
+		tpos--;	
+		if(tpos<0) 
 		    break;
-	    }
-
+	    }	    
+				    
 	    /*Search down the list*/
-	    tpos=pos+1;
+	    tpos=pos+1; 
 
 
-	    if(tpos<idxsiz)
+	    if(tpos<idxsiz) 
 		while(ajStrMatchCase(idxarr[tpos]->Id, (*hits)->hits[x]->Acc))
 		{
 
-		    if(ajXyzHitsOverlap(idxarr[tpos]->hptr,
+		    if(ajXyzHitsOverlap(idxarr[tpos]->hptr, 
 					(*hits)->hits[x], thresh))
-		    {
-			if(ajStrMatchCase((idxarr[tpos]->lptr)->Family,
-					  (*hits)->Family))
+		    {	
+/*			if(ajStrMatchCase((idxarr[tpos]->lptr)->Family, 
+					  (*hits)->Family)) */
+			if( (idxarr[tpos]->lptr)->Sunid_Family == (*hits)->Sunid_Family)
+
 			    /*SCOP family is identical*/
 			{
-			    ajStrAssS(&(*hits)->hits[x]->Typeobj,
+			    ajStrAssS(&(*hits)->hits[x]->Typeobj, 
 				     (idxarr[tpos]->hptr)->Typeobj);
 			    ajStrAssC(&(*hits)->hits[x]->Typesbj, "TRUE");
-			    ajStrAssS(&(*hits)->hits[x]->Group,
+			    ajStrAssS(&(*hits)->hits[x]->Group, 
 				      (idxarr[tpos]->hptr)->Group);
 			}
-			else if(ajStrMatchCase((idxarr[tpos]->lptr)->Fold,
+			else if(ajStrMatchCase((idxarr[tpos]->lptr)->Fold, 
 					       (*hits)->Fold))
 			    /*SCOP fold is identical*/
-			{
+			{	
 			    ajStrAssC(&(*hits)->hits[x]->Typeobj, "CROSS");
 			    ajStrAssC(&(*hits)->hits[x]->Typesbj, "CROSS");
 			    ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
@@ -9641,7 +10779,7 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
 		    }
   		    else
 		    {
-			/* Id was found but there was no overlap so set
+			/* Id was found but there was no overlap so set 
 			   classification to UNKNOWN*/
 			ajStrAssC(&(*hits)->hits[x]->Typeobj, "UNKNOWN");
 			ajStrAssC(&(*hits)->hits[x]->Typesbj, "UNKNOWN");
@@ -9649,15 +10787,15 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
 		    }
 
 
-		    tpos++;
-		    if(tpos==idxsiz)
+		    tpos++;	
+		    if(tpos==idxsiz) 
 			break;
 		}
 
-
+	    
 	}
-
-
+    
+    
 	else
 	{
 	    /* Id was NOT found so set classification to UNKNOWN*/
@@ -9666,11 +10804,11 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
 	    ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
 	}
     }
+    
 
-
-    /*Clean up and return*/
+    /*Clean up and return*/ 
     while(ajListPop(idxlist, (void **) &ptri))
-	ajXyzHitidxDel(&ptri);
+	ajXyzHitidxDel(&ptri);	
     ajListDel(&idxlist);
     AJFREE(idxarr);
     ajListIterFree(itert);
@@ -9680,11 +10818,11 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
 
 
 
-/* @func ajXyzHitlistPriorityHigh *********************************************
+/* @func ajXyzHitlistPriorityHigh********************************************
 **
 ** Sets the Priority element of a Hitlist object to ajTrue.
 **
-** @param [w] list    [AjPHitlist*] Hitlist object
+** @param [w] list    [AjPHitist *] Hitlist object
 **
 ** @return [AjBool] True on success, else False
 ** @@
@@ -9697,7 +10835,7 @@ AjBool       ajXyzHitlistPriorityHigh(AjPHitlist *list)
 	ajWarn("Bad arg's passed to ajXyzHitlistPriorityHigh\n");
 	return ajFalse;
     }
-
+    
 
     (*list)->Priority = ajTrue;
     return ajTrue;
@@ -9709,11 +10847,11 @@ AjBool       ajXyzHitlistPriorityHigh(AjPHitlist *list)
 
 
 
-/* @func ajXyzHitlistPriorityLow **********************************************
+/* @func ajXyzHitlistPriorityLow *******************************************
 **
 ** Sets the Priority element of a Hitlist object to ajFalse
 **
-** @param [w] list    [AjPHitlist*] Hitlist object
+** @param [w] list    [AjPHitist *] Hitlist object
 **
 ** @return [AjBool] True on success, else False
 ** @@
@@ -9726,7 +10864,7 @@ AjBool       ajXyzHitlistPriorityLow(AjPHitlist *list)
 	ajWarn("Bad arg's passed to ajXyzHitlistPriorityHigh\n");
 	return ajFalse;
     }
-
+    
 
     (*list)->Priority = ajFalse;
     return ajTrue;
@@ -9736,13 +10874,13 @@ AjBool       ajXyzHitlistPriorityLow(AjPHitlist *list)
 
 
 
-/* @func ajXyzScophitCheckTarget **********************************************
+/* @func ajXyzScophitCheckTarget *********************************************
 **
 ** Checks to see if the Target element of a Scophit object == ajTrue.
 **
 ** @param [r] ptr [AjPScophit] Scophit object pointer
 **
-** @return [AjBool] Returns ajTrue if the Target element of the Scophit object
+** @return [AjBool] Returns ajTrue if the Target element of the Scophit object 
 ** == ajTrue, returns ajFalse otherwise.
 ** @@
 ******************************************************************************/
@@ -9756,17 +10894,17 @@ AjBool   ajXyzScophitCheckTarget(AjPScophit ptr)
 
 
 
-/* @func ajXyzInContact *******************************************************
+/* @func ajXyzInContact ********************************************
 **
-** Determines whether two atoms are in physical contact
+** Determines whether two atoms are in physical contact  
 **
 ** @param [r] atm1   [AjPAtom]     Atom 1 object
 ** @param [r] atm2   [AjPAtom]     Atom 1 object
 ** @param [r] thresh [float]       Threshold contact distance
 ** @param [r] vdw    [AjPVdwall]   Vdwall object
 **
-** Contact between two atoms is defined as when the van der Waals surface of
-** the first atom comes within the threshold contact distance (thresh) of the
+** Contact between two atoms is defined as when the van der Waals surface of 
+** the first atom comes within the threshold contact distance (thresh) of the 
 ** van der Waals surface of the second atom.
 **
 ** @return [AjBool] True if the two atoms form contact
@@ -9788,14 +10926,14 @@ AjBool ajXyzInContact(AjPAtom atm1, AjPAtom atm2, float thresh,
 	ajWarn("Bad args passed to ajXyzInContact");
 	return ajFalse;
     }
-
-
+    
+    
     val=((atm1->X -  atm2->X) * (atm1->X -  atm2->X)) +
 	((atm1->Y -  atm2->Y) * (atm1->Y -  atm2->Y)) +
 	    ((atm1->Z -  atm2->Z) * (atm1->Z -  atm2->Z));
 
 
-    /*  This calculation uses square root
+    /*  This calculation uses square root 
     if((sqrt(val) - ajXyzVdwRad(atm1, vdw) -
 	ajXyzVdwRad(atm2, vdw)) <= thresh)
 	return ajTrue;
@@ -9804,19 +10942,19 @@ AjBool ajXyzInContact(AjPAtom atm1, AjPAtom atm2, float thresh,
 
     /* Same calculation avoiding square root */
     val1 = ajXyzVdwRad(atm1, vdw) +	ajXyzVdwRad(atm2, vdw) + thresh;
-
+    
     if(val <= (val1*val1))
 	return ajTrue;
 
 
     return ajFalse;
-}
+} 
 
 
 
 
 
-/* @func ajXyzAtomDistance ****************************************************
+/* @func ajXyzAtomDistance ********************************************
 **
 ** Returns the distance (Angstroms) between two atoms.
 **
@@ -9837,7 +10975,7 @@ float ajXyzAtomDistance(AjPAtom atm1, AjPAtom atm2, AjPVdwall vdw)
     float val =0.0;
     float val1=0.0;
 
-
+    
     val=((atm1->X -  atm2->X) * (atm1->X -  atm2->X)) +
 	((atm1->Y -  atm2->Y) * (atm1->Y -  atm2->Y)) +
 	    ((atm1->Z -  atm2->Z) * (atm1->Z -  atm2->Z));
@@ -9845,25 +10983,25 @@ float ajXyzAtomDistance(AjPAtom atm1, AjPAtom atm2, AjPVdwall vdw)
 
     /*  This calculation uses square root */
     val1= sqrt(val) - ajXyzVdwRad(atm1, vdw) - ajXyzVdwRad(atm2, vdw);
-
-
+    
+        
     return val1;
-}
+} 
 
 
 
 
 
 
-/* @func ajXyzVdwRad **********************************************************
+/* @func ajXyzVdwRad ***********************************************
 **
 ** Returns the van der Waals radius of an atom. Returns 1.2 as default.
 **
 ** @param [r] atm    [AjPAtom]     Atom object
 ** @param [r] vdw    [AjPVdwall]   Vdwall object
 **
-** Contact between two atoms is defined as when the van der Waals surface of
-** the first atom comes within the threshold contact distance (thresh) of the
+** Contact between two atoms is defined as when the van der Waals surface of 
+** the first atom comes within the threshold contact distance (thresh) of the 
 ** van der Waals surface of the second atom.
 **
 ** @return [float] van der Waals radius of the atom
@@ -9875,14 +11013,14 @@ float ajXyzVdwRad(AjPAtom atm, AjPVdwall vdw)
 {
     ajint x=0;
     ajint y=0;
-
+    
     for(x=0;x<vdw->N;x++)
 	for(y=0;y<vdw->Res[x]->N;y++)
 	{
 	    if(ajStrMatch(atm->Atm, vdw->Res[x]->Atm[y]))
-		return(vdw->Res[x]->Rad[y]);
+		return(vdw->Res[x]->Rad[y]);	 
 	}
-
+    
     return((float)1.2);
 }
 
@@ -9890,19 +11028,87 @@ float ajXyzVdwRad(AjPAtom atm, AjPVdwall vdw)
 
 
 
+/* @func ajXyzPdbToIdx *******************************************************
+**
+** Reads a Pdb object and writes an integer which gives the index into the 
+** protein sequence for a residue with a specified pdb residue number in a 
+** specified chain number.
+** 
+** @param [r] pdb [AjPPdb  ] Pdb object
+** @param [r] chn [ajint   ] Chain number
+** @param [w] res [AjPStr  ]  Residue number (PDB numbering)
+** @param [w] idx [ajint * ]  Residue number (index into sequence)
+**
+** @return [AjBool] True on succcess (res was found in pdb object)
+** @@
+******************************************************************************/
+AjBool  ajXyzPdbToIdx(ajint *idx, AjPPdb pdb, AjPStr res, ajint chn)
+{
+    AjIList  iter        =NULL;
+    AjPAtom  atm         =NULL;
+    
+    
+    if(!pdb || !(res) || !(idx))
+    {
+	ajWarn("Bad arg's passed to ajXyzPdbAtomIndexI");
+	return ajFalse;
+    }
+    
+    if((chn > pdb->Nchn) || (!pdb->Chains) || (chn<1))
+    {
+	ajWarn("Bad arg's passed to ajXyzPdbAtomIndexI");
+	return ajFalse;
+    }
+    
+
+    /* Initialise the iterator*/
+    iter=ajListIter(pdb->Chains[chn-1]->Atoms);
 
 
-/* @func ajXyzPdbAtomIndexI ***************************************************
+    /* Iterate through the list of atoms*/
+    while((atm=(AjPAtom)ajListIterNext(iter)))
+    {
+	if(atm->Chn!=chn)
+	    continue;
+	
+	/* JCI hard-coded to work on model 1*/
+	/* Continue / break if a non-protein atom is found or model no. !=1*/
+	if(atm->Mod!=1)
+	    break;
+	if(atm->Type!='P') 
+	    continue;
+
+
+/*	if(atm->Type!='P' || atm->Mod!=1)
+	    break; */
+
+	/* If we have found the residue*/
+	if(ajStrMatch(res, atm->Pdb))
+	{
+	    ajListIterFree(iter);		
+	    *idx = atm->Idx;
+	    return ajTrue;
+	}
+    }
+        
+    ajWarn("Residue number not found in ajXyzPdbToIdx");
+    ajListIterFree(iter);		
+    return ajFalse;
+}
+
+
+
+
+/* @func ajXyzPdbAtomIndexI **************************************************
 **
-** Reads a Pdb object and writes an integer array which gives the
-** index into the protein sequence for structured residues (residues
-** for which electron density was determined) for a given chain. The
-** array length is of course equal to the number of structured
-** residues.
+** Reads a Pdb object and writes an integer array which gives the index into the 
+** protein sequence for structured residues (residues for which electron density
+** was determined) for a given chain. The array length is of course equal to the 
+** number of structured residues. 
 **
-** @param [r] pdb [AjPPdb] Pdb object
-** @param [r] chn [ajint] Chain number
-** @param [w] idx [AjPInt*] Index array
+** @param [r] pdb [AjPPdb  ] Pdb object
+** @param [r] chn [ajint   ] Chain number
+** @param [w] idx [AjPint *] Index array
 **
 ** @return [AjBool] True on succcess
 ** @@
@@ -9914,20 +11120,20 @@ AjBool   ajXyzPdbAtomIndexI(AjPPdb pdb, ajint chn, AjPInt *idx)
     ajint    this_rn     =0;
     ajint    last_rn     =-1000;
     ajint    resn        =0;     /* Sequential count of residues*/
-
-
+    
+    
     if(!pdb || !(*idx))
     {
 	ajWarn("Bad arg's passed to ajXyzPdbAtomIndexI");
 	return ajFalse;
     }
-
+    
     if((chn > pdb->Nchn) || (!pdb->Chains))
     {
 	ajWarn("Bad arg's passed to ajXyzPdbAtomIndexI");
 	return ajFalse;
     }
-
+    
 
     /* Initialise the iterator*/
     iter=ajListIter(pdb->Chains[chn-1]->Atoms);
@@ -9938,11 +11144,16 @@ AjBool   ajXyzPdbAtomIndexI(AjPPdb pdb, ajint chn, AjPInt *idx)
     {
 	if(atm->Chn!=chn)
 	    continue;
-
+	
 	/* JCI hard-coded to work on model 1*/
-	/* Break if a non-protein atom is found or model no. !=1*/
-	if(atm->Type!='P' || atm->Mod!=1)
+	/* Continue / break if a non-protein atom is found or model no. !=1*/
+	if(atm->Mod!=1)
 	    break;
+	if(atm->Type!='P') 
+	    continue;
+
+/*	if(atm->Type!='P' || atm->Mod!=1)
+	    break; */
 
 	/* If we are onto a new residue*/
 	this_rn=atm->Idx;
@@ -9952,31 +11163,30 @@ AjBool   ajXyzPdbAtomIndexI(AjPPdb pdb, ajint chn, AjPInt *idx)
 	    last_rn=this_rn;
 	}
     }
-
+        
     if(resn==0)
     {
 	ajWarn("Chain not found in ajXyzPdbAtomIndexI");
-	ajListIterFree(iter);
+	ajListIterFree(iter);		
 	return ajFalse;
     }
+    	
 
-
-    ajListIterFree(iter);
+    ajListIterFree(iter);		
     return ajTrue;
 }
 
 
-/* @func ajXyzPdbAtomIndexC ***************************************************
+/* @func ajXyzPdbAtomIndexC *************************************************
 **
-** Reads a Pdb object and writes an integer array which gives the
-** index into the protein sequence for structured residues (residues
-** for which electron density was determined) for a given chain.  The
-** array length is of course equal to the number of structured
-** residues.
+** Reads a Pdb object and writes an integer array which gives the index into the 
+** protein sequence for structured residues (residues for which electron density
+** was determined) for a given chain.  The array length is of course equal to the 
+** number of structured residues. 
 **
 ** @param [r] pdb [AjPPdb]  Pdb object
-** @param [r] chn [char]  Chain identifier
-** @param [w] idx [AjPInt*] Index array
+** @param [r] chn [ajint ]  Chain identifier
+** @param [w] idx [AjPint*] Index array
 **
 ** @return [AjBool] True on succcess
 ** @@
@@ -9984,13 +11194,13 @@ AjBool   ajXyzPdbAtomIndexI(AjPPdb pdb, ajint chn, AjPInt *idx)
 AjBool   ajXyzPdbAtomIndexC(AjPPdb pdb, char chn, AjPInt *idx)
 {
     ajint chnn;
-
+    
     if(!ajXyzPdbChain(chn, pdb, &chnn))
     {
 	ajWarn("Chain not found in ajXyzPdbAtomIndexC");
 	return ajFalse;
     }
-
+    
     if(!ajXyzPdbAtomIndexI(pdb, chnn, idx))
 	return ajFalse;
 
@@ -10000,20 +11210,26 @@ AjBool   ajXyzPdbAtomIndexC(AjPPdb pdb, char chn, AjPInt *idx)
 
 
 
-/* @func ajXyzPdbAtomIndexICA *************************************************
+
+
+
+
+
+
+/* @func ajXyzPdbAtomIndexICA ************************************************
 **
-** Reads a Pdb object and writes an integer array which gives the
-** index into the protein sequence for structured residues (residues
-** for which electron density was determined) for a given chain,
-** EXCLUDING those residues for which CA atoms are missing. The array
-** length is of course equal to the number of structured residues.
+** Reads a Pdb object and writes an integer array which gives the index into the 
+** protein sequence for structured residues (residues for which electron density
+** was determined) for a given chain, EXCLUDING those residues for which CA 
+** atoms are missing. The array length is of course equal to the number of 
+** structured residues. 
 **
-** @param [r] pdb  [AjPPdb] Pdb object
-** @param [r] chn  [ajint] Chain number
-** @param [w] idx  [AjPInt*] Index array
-** @param [r] nres [ajint*] Array length
+** @param [r] pdb  [AjPPdb  ] Pdb object
+** @param [r] chn  [ajint   ] Chain number
+** @param [w] idx  [AjPint *] Index array
+** @param [r] nres [ajint  *] Array length 
 **
-** @return [AjBool] True on success
+** @return [AjBool] True on succcess
 ** @@
 ******************************************************************************/
 AjBool   ajXyzPdbAtomIndexICA(AjPPdb pdb, ajint chn, AjPInt *idx, ajint *nres)
@@ -10023,19 +11239,19 @@ AjBool   ajXyzPdbAtomIndexICA(AjPPdb pdb, ajint chn, AjPInt *idx, ajint *nres)
     ajint    this_rn     =0;
     ajint    last_rn     =-1000;
     ajint    resn        =0;     /* Sequential count of residues*/
-
+    
     if(!pdb || !(*idx))
     {
 	ajWarn("Bad arg's passed to ajXyzPdbAtomIndexICA");
 	return ajFalse;
     }
-
+    
     if((chn > pdb->Nchn) || (!pdb->Chains))
     {
 	ajWarn("Bad arg's passed to ajXyzPdbAtomIndexICA");
 	return ajFalse;
     }
-
+    
 
     /* Initialise the iterator*/
     iter=ajListIter(pdb->Chains[chn-1]->Atoms);
@@ -10046,11 +11262,15 @@ AjBool   ajXyzPdbAtomIndexICA(AjPPdb pdb, ajint chn, AjPInt *idx, ajint *nres)
     {
 	if(atm->Chn!=chn)
 	    continue;
-
+	
 	/* JCI hard-coded to work on model 1*/
-	/* Break if a non-protein atom is found or model no. !=1*/
-	if(atm->Type!='P' || atm->Mod!=1)
+	/* Continue / break if a non-protein atom is found or model no. !=1*/
+	if(atm->Mod!=1)
 	    break;
+	if(atm->Type!='P') 
+	    continue;
+/*	if(atm->Type!='P' || atm->Mod!=1)
+	    break; */
 
 	/* If we are onto a new residue*/
 	this_rn=atm->Idx;
@@ -10061,33 +11281,33 @@ AjBool   ajXyzPdbAtomIndexICA(AjPPdb pdb, ajint chn, AjPInt *idx, ajint *nres)
 	}
     }
 
-
+        
     if(resn==0)
     {
 	ajWarn("Chain not found in ajXyzPdbAtomIndexICA");
-	ajListIterFree(iter);
+	ajListIterFree(iter);		
 	return ajFalse;
     }
-
+    	
     *nres=resn;
-
-    ajListIterFree(iter);
+    
+    ajListIterFree(iter);		
     return ajTrue;
 }
 
 
-/* @func ajXyzPdbAtomIndexCCA *************************************************
+/* @func ajXyzPdbAtomIndexCCA ***********************************************
 **
-** Reads a Pdb object and writes an integer array which gives the
-** index into the protein sequence for structured residues (residues
-** for which electron density was determined) for a given chain,
-** EXCLUDING those residues for which CA atoms are missing. The array
-** length is of course equal to the number of structured residues.
+** Reads a Pdb object and writes an integer array which gives the index into the 
+** protein sequence for structured residues (residues for which electron density
+** was determined) for a given chain, EXCLUDING those residues for which CA 
+** atoms are missing. The array length is of course equal to the number of 
+** structured residues. 
 **
 ** @param [r] pdb [AjPPdb]  Pdb object
-** @param [r] chn [char]  Chain identifier
-** @param [w] idx [AjPInt*] Index array
-** @param [r] nres [ajint*] Array length
+** @param [r] chn [ajint ]  Chain identifier
+** @param [w] idx [AjPint*] Index array
+** @param [r] nres [ajint  *] Array length 
 **
 ** @return [AjBool] True on succcess
 ** @@
@@ -10095,16 +11315,2294 @@ AjBool   ajXyzPdbAtomIndexICA(AjPPdb pdb, ajint chn, AjPInt *idx, ajint *nres)
 AjBool   ajXyzPdbAtomIndexCCA(AjPPdb pdb, char chn, AjPInt *idx, ajint *nres)
 {
     ajint chnn;
-
+    
     if(!ajXyzPdbChain(chn, pdb, &chnn))
     {
 	ajWarn("Chain not found in ajXyzPdbAtomIndexCCA");
 	return ajFalse;
     }
-
+    
     if(!ajXyzPdbAtomIndexICA(pdb, chnn, idx, nres))
 	return ajFalse;
 
 
     return ajTrue;
+}
+
+
+
+
+
+/* @func  ajXyzPdbToScop ******************************************
+**
+** Writes a list of scop identifier codes for the domains that a Pdb object
+** contains.  The domain data is taken from a list of scop objects.
+**
+** @param [r] pdb             [AjPPdb]   Pointer to pdb object
+** @param [r] list_allscop    [AjPList]  Pointer to SCOP list of SCOP classification 
+**                                       objects  
+** @param [w] list_pdbscopids [AjPList*] Pointer to list of scop domain ids in
+**                                       the current pdb object
+** 
+** @return [void]
+** @@
+******************************************************************************/
+AjBool      ajXyzPdbToScop(AjPPdb pdb, AjPList list_allscop, 
+				      AjPList *list_pdbscopids)
+{
+  
+  AjIList iter=NULL; /* List iterator for SCOP classification list */
+  AjPScop ptr=NULL;
+  AjPStr  tmpPdbId=NULL;
+  AjPStr  tmpDomId=NULL;
+  ajint   found=0;
+
+  iter=ajListIter(list_allscop);
+
+  /* ajFmtPrint("  GetDomains for PDB entry %S\n", pdb->Pdb); */
+
+  while((ptr=(AjPScop)ajListIterNext(iter)))
+    {
+      ajStrAssS(&tmpPdbId, ptr->Pdb);
+      ajStrToLower(&tmpPdbId);
+      /*ajFmtPrint("PDB file: %S  Domain %S\n", pdb->Pdb, temp);*/
+      if(ajStrMatch(pdb->Pdb, tmpPdbId))
+	{
+	  ajStrAssS(&tmpDomId, ptr->Entry);
+	  ajStrToLower(&tmpDomId);
+	  /* ajFmtPrint("   --PDB file %S.pxyz contains Domain %S\n", 
+	     pdb->Pdb, tmpDomId); */
+	  ajListPushApp(*list_pdbscopids, tmpDomId);
+	  /* ajFmtPrint("/////just pushed %S\n", tmpDomId); */
+	  tmpDomId=NULL;
+	  found=1;
+	}
+    }
+  ajListIterFree(iter);
+  ajStrDel(&tmpPdbId);
+  ajStrDel(&tmpDomId);
+  
+  if(found==1) 
+    {
+      return ajTrue;
+    }
+  else
+    {
+      return ajFalse;
+    }
+}
+
+
+
+
+
+
+
+/* @func  ajXyzCpdbListHeterogens ***********************************
+** 
+** Function to create a list of array of Atom objects for ligands in the current Pdb 
+** object (a single array for each ligand) 
+** 
+** @param [r] pdb             [AjPPdb]   Pointer to pdb object 
+** @param [w] list_heterogens [AjPList*] Pointer to list of heterogen Atom arrays 
+** @param [w] siz_heterogens  [AjPInt]   Pointer to integer array of sizes (number
+** of Atom objects in each array)
+** @param [w] nhet            [ajint *]  Number of arrays in the list that was written. 
+** @param [w] logf            [AjPFile]  Log file for error messages
+** @return [void]
+** @@ 
+******************************************************************************/ 
+/* JISON added line in comments above for new arg*/
+AjBool      ajXyzCpdbListHeterogens(AjPPdb pdb, AjPList *list_heterogens, 
+					    AjPInt *siz_heterogens, ajint *nhet, 
+					    AjPFile logf ) /* JISON added arg*/ 
+{ 
+
+  /* NOTE: EVERYTHING IN THE CLEAN PDB FILES IS CURRENTLY CHAIN ASSOCIATED! 	
+     THIS WILL BE CHANGED IN FUTURE */
+    
+  /* Declare variables */ 
+    
+  AjIList    iter=NULL;		        /* Iterator for atoms in current pdb object */
+  AjPAtom    hetat=NULL;		/* Pointer to current Atom object */
+  ajint      i=0;			/* Counter for chains */
+  ajint      prev_gpn=-10000;		/* Group number of atom object from previous iteration */
+  AjPList    GrpAtmList=NULL;		/* List to hold atoms from the current group */
+  AjPAtom    *AtmArray=NULL;		/* Array of atom objects */
+  ajint      n=0;			/* number of elements in AtmArray */
+  ajint      grp_count=0;		/* No. of groups */
+  ajint      arr_count=0;               /* Index for siz_heterogens */
+    
+  /* Check args */
+  if((pdb==NULL)||(list_heterogens==NULL)||(siz_heterogens==NULL))
+    {
+      ajWarn("Bad args passed to ajXyzCpdbListHeterogens\n");
+      return ajFalse;
+    }
+
+  if((!(*list_heterogens))||(!(*siz_heterogens)))
+    {
+      ajWarn("Bad args passed to ajXyzCpdbListHeterogens\n");
+      return ajFalse;
+    }
+    
+  if(pdb->Ngp>0) { ajFmtPrintF(logf, "\tNGP:%d\n", pdb->Ngp); }
+    
+  if(pdb->Nchn>0)
+    {      
+      /* ajFmtPrint("          Entry has %d chain(s)\n", pdb->Nchn); */
+      for(i=0;i<pdb->Nchn;++i) 
+	{
+	 /*  if(pdb->Chains[i]->Nlig==0) {continue;} */
+	  prev_gpn=-100000;		/* Reset prev_gpn for each chain */
+	  /* ajFmtPrint("          Chain %d\t %d group(s)\n", i, pdb->Chains[i]->Nlig);  */
+	  /* initialise iterator for pdb->Chains[i]->Atoms */
+	  iter=ajListIter(pdb->Chains[i]->Atoms);
+	  /* Iterate through list of Atom objects */
+	  while((hetat=(AjPAtom)ajListIterNext(iter)))
+	    {		
+	      /* check for type  */
+	      if(hetat->Type != 'H') { continue; }
+	      /* TEST FOR A NEW GROUP */
+	      if(prev_gpn != hetat->Gpn) 
+		{
+		  grp_count++;
+		  /* ajFmtPrint("          *****NEW GROUP %d*****\n", grp_count); */
+		  if(GrpAtmList)
+		    {
+		      /* ajFmtPrint("            Converting previous group (%d)\n", grp_count-1); */			
+		      n=(ajListToArray(GrpAtmList, (void ***) &AtmArray));
+		      ajListPushApp(*list_heterogens, AtmArray);
+		      /* ajFmtPrint("            AtmArray for group "
+			 "%d contains %d Atom(s)\n", grp_count-1,  n); */
+		      ajIntPut(siz_heterogens, arr_count, n);
+		      (*nhet)++;
+		      ajListDel(&GrpAtmList);
+		      GrpAtmList=NULL;
+		      arr_count++;
+		    }		    		    
+		  GrpAtmList=ajListNew();
+		  prev_gpn=hetat->Gpn;
+		} /* End of new group loop */
+	      ajListPushApp(GrpAtmList, (AjPAtom) hetat);
+	    } /* End of list iteration loop */
+
+	  /* Free list iterator */
+	  ajListIterFree(iter);
+	    
+	    
+	  /*  ajFmtPrint("  Group %d exists\n", grp_count);    */ 
+	    
+	} /* End of chain for loop */
+
+      if(GrpAtmList)
+	{
+	  /* ajFmtPrint("          Converting last group (%d)\n", grp_count); */
+	    n=(ajListToArray(GrpAtmList, (void ***) &AtmArray));
+	  ajListPushApp(*list_heterogens, AtmArray);
+	  /* ajFmtPrint("          AtmArray for last group (%d)"
+	     " contains %d Atom(s)\n", grp_count,  n); */
+	  ajIntPut(siz_heterogens, arr_count, n);
+	  (*nhet)++;
+	  ajListDel(&GrpAtmList);
+	  GrpAtmList=NULL;
+	}
+	
+      /* ajFmtPrint("            GrpAtmList created for group %d\n", grp_count); */
+      GrpAtmList=NULL;
+      prev_gpn = -10000;  
+
+    } /* End of chain loop */
+    
+    
+  return ajTrue;
+}
+
+
+
+
+
+/* @func StrBinSearchScop *************************************************
+**
+** Performs a binary search for a SCOP domain code over an array of AjPStr
+** (which of course must first have been sorted, e.g. by StrComp). This is a 
+** case-insensitive search.
+**
+** @param [r] id  [AjPStr]      Search term
+** @param [r] arr [AjPStr*]     Array of AjPStr objects
+** @param [r] siz [ajint]       Size of array
+**
+** @return [ajint] Index of first AjPStr object found with an PDB code
+** matching id, or -1 if id is not found.
+** @@
+******************************************************************************/
+ajint StrBinSearchScop(AjPStr id, AjPStr *arr, ajint siz)
+{
+    int l;
+    int m;
+    int h;
+    int c;
+
+
+    l=0;
+    h=siz-1;
+    while(l<=h)
+    {
+        m=(l+h)>>1;
+
+        if((c=ajStrCmpCase(id, arr[m])) < 0)
+	    h=m-1;
+        else if(c>0) 
+	    l=m+1;
+        else 
+	    return m;
+    }
+    return -1;
+}
+
+
+
+
+/* @func StrComp *******************************************************
+**
+** Function to sort strings.
+**
+** @param [r] str1  [const void*] AjPStr 1
+** @param [r] str2  [const void*] AjPStr 2
+**
+** @return [ajint] -1 if str1 should sort before str2, +1 if the str2 should 
+** sort first. 0 if they are identical in length and content. 
+** @@
+******************************************************************************/
+ajint StrComp(const void *str1, const void *str2)
+{
+    AjPStr p  = NULL;
+    AjPStr q  = NULL;
+
+    p = (*(AjPStr*)str1);
+    q = (*(AjPStr*)str2);
+    
+    return ajStrCmpO(p, q);
+}
+
+
+
+
+/* @func  ajXyzScopdesBinSearch *********************************************
+**
+** Performs a binary search for a Sunid over an array of Scopdes objects 
+** structures (which of course must first have been sorted, e.g. by using 
+** ajXyzScopdesCompSunid).
+**
+** @param [r] id  [ajint]       Search value of Sunid
+** @param [r] arr [AjPScopdes*] Array of AjOScopdes objects
+** @param [r] siz [ajint]       Size of array
+**
+** @return [ajint] Index of first AjOScopdes object found with an Sunid element 
+** matching id, or -1 if id is not found.
+** @@
+******************************************************************************/
+ajint ajXyzScopdesBinSearch(ajint id, AjPScopdes *arr, ajint siz)
+{
+    int l;
+    int m;
+    int h;
+    
+
+    l=0;
+    h=siz-1;
+    while(l<=h)
+    {
+        m=(l+h)>>1;
+
+	if(id < arr[m]->Sunid)
+	    h=m-1;
+	else if(id > arr[m]->Sunid)
+	    l=m+1;
+	else
+	    return m;
+    }
+    return -1;
+}
+
+
+
+
+/* @func  ajXyzScopdesCompSunid ******************************************
+**
+** Function to sort AjOScopdes objects by Sunid element.
+**
+** @param [r] scop1  [const void*] Pointer to AjOScopdes object 1
+** @param [r] scop2  [const void*] Pointer to AjOScopdes object 2
+**
+** @return [ajint] -1 if Sunid1 should sort before Sunid2, +1 if the Sunid2 
+** should sort first. 0 if they are identical in value.
+** @@
+******************************************************************************/
+ajint ajXyzScopdesCompSunid(const void *scop1, const void *scop2)
+{
+    AjPScopdes p  = NULL;
+    AjPScopdes q  = NULL;
+
+    p = (*  (AjPScopdes*)scop1);
+    q = (*  (AjPScopdes*)scop2);
+    
+    if(p->Sunid < q->Sunid)
+	return -1;
+    else if(p->Sunid == q->Sunid)
+	return 0;
+    else 
+	return 1;
+}
+
+
+
+
+/* @func ajXyzScopBinSearchSunid *************************************************
+**
+** Performs a binary search for a scop sunid over an array of Scop
+** structures (which of course must first have been sorted). This is a 
+** case-insensitive search.
+**
+** @param [r] id  [ajint]       Search term
+** @param [r] arr [AjPScop*]    Array of AjPScop objects
+** @param [r] siz [ajint]       Size of array
+**
+** @return [ajint] Index of first AjPScop object found with an PDB code
+** matching id, or -1 if id is not found.
+** @@
+******************************************************************************/
+ajint ajXyzScopBinSearchSunid(ajint id, AjPScop *arr, ajint siz)
+{
+    int l;
+    int m;
+    int h;
+
+    l=0;
+    h=siz-1;
+    while(l<=h)
+    {
+        m=(l+h)>>1;
+        
+        if(id < arr[m]->Sunid_Family)
+            h=m-1;
+        else if(id > arr[m]->Sunid_Family)
+            l=m+1;
+        else 
+            return m;
+    }
+    return -1;
+}
+
+
+
+/* @func ajXyzScopCompSunid ******************************************************
+**
+** Function to sort AjOScop object by Start Sunid_Family.
+**
+** @param [r] hit1  [const void*] Pointer to AjOScophit object 1
+** @param [r] hit2  [const void*] Pointer to AjOScophit object 2
+**
+** @return [ajint] -1 if Start1 should sort before Start2, +1 if the Start2 
+** should sort first. 0 if they are identical.
+** @@
+******************************************************************************/
+ajint ajXyzScopCompSunid(const void *entry1, const void *entry2)
+{
+    AjPScop p  = NULL;
+    AjPScop q  = NULL;
+
+    p = (*(AjPScop*)entry1);
+    q = (*(AjPScop*)entry2);
+   
+
+    if(p->Sunid_Family < q->Sunid_Family)
+        return -1;
+    else if(p->Sunid_Family == q->Sunid_Family)
+        return 0;
+    else
+        return 1;
+}
+
+
+
+
+/* @func ajXyzScopSeqFromSunid *********************************************************
+**
+** Writes a sequence corresponding for a Scop domain given a Sunid for the domain. 
+** The sequence is taken from one of a list of Scop objects that is
+** provided.  The swissprot sequence is taken in priority over the pdb sequence.
+** 
+** @param [r] pdb  [AjPStr]   Pdb  identifier code
+** @param [w] Acc  [AjPStr*]  Accession number
+** @param [r] list [AjPList]  Sorted list of Pdbtosp objects
+**
+** @return [AjBool]  True if a swissprot identifier code was found for the Pdb code.
+** @@
+******************************************************************************/
+AjBool ajXyzScopSeqFromSunid(ajint id, AjPStr *seq, AjPList list)
+{
+    AjPScop *arr = NULL;  /* Array derived from list */
+    ajint    dim =0;      /* Size of array */
+    ajint    idx =0;      /* Index into array for the Pdb code */
+
+    if(!id || !list)
+    {
+        ajWarn("Bad args passed to ajXyzScopSeqFromSunid");
+        return ajFalse;
+    }
+      
+    dim = ajListToArray(list, (void ***) &(arr));
+    if(!dim)
+    {
+        ajWarn("Empty list passed to ajXyzScopSeqFromSunid");
+        return ajFalse;
+    }
+
+    if((idx = ajXyzScopBinSearchSunid(id, arr, dim))==-1)
+    {
+        AJFREE(arr);
+        return ajFalse;
+    }
+    
+    else
+    {   
+        /* swissprot sequence has priority */
+        if((ajStrLen(arr[idx]->SeqSpr))==0)
+            ajStrAssS(seq, arr[idx]->SeqPdb);
+        else
+            ajStrAssS(seq, arr[idx]->SeqSpr);
+ 
+        AJFREE(arr);
+        return ajTrue;
+    }
+}
+
+
+
+/* @func ajXyzScopalgToScop *************************************
+**
+** Takes a Scopalg object (scop alignment) and an array of AjPScop objects
+** from the Escop database. 
+** Extracts the scop domain codes from the alignment and compiles a list of 
+** corresponding Scop objects from the scop database (EScop.dat). 
+**
+** @param [r] align     [AjPScopalgn]   Contains a seed alignment.
+** @param [r] scop_arr     [AjPScop *  ]   Array of AjPScop objects
+** @param [r] scop_dim       [ajint      ]   Size of array
+** @param [w] list      [AjPList*]      List of Scop objects.
+** 
+** @return [AjBool] A populated list has been returned (a file has been written)
+** @@
+********************************************************************************/
+AjBool ajXyzScopalgToScop(AjPScopalg align, AjPScop *scop_arr, ajint scop_dim, 
+				    AjPList* list)
+{
+    AjPStr   entry_up = NULL;  /* Current entry, upper case */
+    ajint  idx        = 0;     /* Index into array for the Pdb code */
+    ajint  i          = 0;     /* Simple loop counter */
+
+
+    entry_up  = ajStrNew();
+    
+
+    /* check for bad arguments */
+    if(!align)
+    {
+        ajWarn("Bad args passed to ajXyzScopalgToScop");
+	ajStrDel(&entry_up);
+        return ajFalse;
+    }
+
+
+
+    /* write to list the scop structures matching a particular family of domains */
+    for(i=0;i<align->N;i++)
+    {
+	ajStrAssS(&entry_up, align->Codes[i]);
+	ajStrToUpper(&entry_up);
+	
+	
+        if((idx = ajXyzScopBinSearchScop(entry_up,scop_arr,scop_dim))==-1)
+        {
+	    ajStrDel(&entry_up);
+	    return ajFalse;
+	}
+	else
+	{
+	    /* DIAGNOSTICS
+	    ajFmtPrint("Pushing %d (%S)\n", scop_arr[idx]->Sunid_Family, 
+		       scop_arr[idx]->Acc); */
+	    
+            ajListPushApp(*list,scop_arr[idx]);
+	}
+	
+    }
+    
+    /* clean up */
+    ajStrDel(&entry_up);
+    
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ajXyzScophitsWrite ***************************************************
+**
+** Write contents of a list of Scophits to an output file in embl-like format.
+** Text for Class, Fold, Superfamily and Family is only written if the text
+** is available - in case of a scop validation file, some of these records 
+** may be written 
+** @param [w] outf [AjPFile] Output file stream
+** @param [r] thys [AjPList] list object
+**
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+AjBool ajXyzScophitsWrite(AjPFile outf, AjPList list)
+{
+
+    AjIList iter     = NULL;
+    
+    AjPScophit thys = NULL;
+    
+
+    while((thys = (AjPScophit)ajListIterNext(iter)))
+    {
+        
+        if(!thys)
+            return ajFalse;
+
+        if(MAJSTRLEN(thys->Class))
+            ajFmtPrintF(outf,"CL   %S\n",thys->Class);
+        if(MAJSTRLEN(thys->Fold))
+            ajFmtPrintSplit(outf,thys->Fold,"XX\nFO   ",75," \t\n\r");
+        if(MAJSTRLEN(thys->Superfamily))
+            ajFmtPrintSplit(outf,thys->Superfamily,"XX\nSF   ",75," \t\n\r");
+        if(MAJSTRLEN(thys->Family))
+            ajFmtPrintSplit(outf,thys->Family,"XX\nFA   ",75," \t\n\r");
+        if(MAJSTRLEN(thys->Family))
+            ajFmtPrintF(outf,"XX\nSI   %d\n", thys->Sunid_Family);
+    
+        ajFmtPrintF(outf, "%-5s%S\n", "TY", thys->Typeobj);
+        ajFmtPrintF(outf, "XX\n");
+        ajFmtPrintF(outf, "%-5s%.5f\n", "SC", thys->Score);
+        ajFmtPrintF(outf, "XX\n");
+        ajFmtPrintF(outf, "%-5s%.5f\n", "EV", thys->Eval);
+        ajFmtPrintF(outf, "XX\n");
+        
+        if(MAJSTRLEN(thys->Group))
+        {
+            ajFmtPrintF(outf, "%-5s%S\n", "GP", thys->Group);
+            ajFmtPrintF(outf, "XX\n");
+        }
+
+        ajFmtPrintF(outf, "%-5s%S\n", "AC", thys->Acc);
+        ajFmtPrintF(outf, "XX\n");
+        ajFmtPrintF(outf, "%-5s%d START; %d END;\n", "RA", thys->Start, thys->End);
+        ajFmtPrintF(outf, "XX\n");
+        ajSeqWriteXyz(outf, thys->Seq, "SQ");
+        ajFmtPrintF(outf, "XX\n");
+    
+        ajFmtPrintF(outf, "//\n");
+    }
+
+    ajListIterFree(iter);
+    
+    
+    /* Return */
+    return ajTrue;
+}
+
+
+
+
+/* @func ajXyzScophitsAccToHitlist ***********************************
+**
+** Reads from a list of Scophit objects and writes a Hitlist object 
+** with the next block of hits with identical SCOP classification. A Hit is 
+** only written to the Hitlist if an accession number is given.  Also, only 
+** one of any pair of duplicate hits (overlapping hits with identical accession) 
+** will be written to the Hitlist. An 'overlap' is defined as a shared region 
+** of 10 or more residues.
+** To check for these the list is first be sorted by Accession number.
+** 
+** If the iterator passed in is NULL it will read from the start of the list, 
+** otherwise it will read from the current position. Memory for the Hitlist
+** will be allocated if necessary and must be freed by the user.
+** 
+** @param [r] in      [AjPList]     List of pointers to Scophit objects
+** @param [w] out     [AjPHitlist*] Pointer to Hitlist object
+** @param [r] iter    [AjIList*]    Pointer to iterator for list.
+**
+** @return [AjBool] True on success (lists were processed ok)
+** @@
+******************************************************************************/
+AjBool ajXyzScophitsAccToHitlist(AjPList in, AjPHitlist *out, AjIList *iter)
+{
+    AjPScophit scoptmp=NULL;        /* Temp. pointer to Scophit object */
+    AjPHit     tmp=NULL;            /* Temp. pointer to Hit object */
+    AjPList    list=NULL;           /* Temp. list of Hit objects */
+    AjBool     do_fam=ajFalse;
+    AjBool     do_sfam=ajFalse;
+    AjBool     do_fold=ajFalse;
+    AjBool     do_class=ajFalse;
+    AjPStr     fam=NULL;
+    AjPStr     sfam=NULL;
+    AjPStr     fold=NULL;
+    AjPStr     class=NULL;
+    ajint Sunid_Family=0;
+    
+
+
+    /* Check args and allocate memory */
+    if(!in || !iter)
+    {
+	ajWarn("NULL arg passed to ajXyzScophitsAccToHitlist");
+	return ajFalse;
+    }
+
+
+    /* If the iterator passed in is NULL it will read from the start of the 
+       list, otherwise it will read from the current position.*/
+    if(!(*iter))
+	*iter=ajListIter(in);
+
+
+    if(!((scoptmp=(AjPScophit)ajListIterNext(*iter))))
+    {
+	ajWarn("Empty list in ajXyzScophitsToHitlist");
+	ajListIterFree(*iter);	
+	*iter=NULL;
+	return ajFalse;
+    }
+    /* Find the first Scophit which has an accession number 
+       if necessary */
+    if((ajStrMatchC(scoptmp->Acc,"Not_available")) ||
+       (MAJSTRLEN(scoptmp->Acc)==0))
+    {
+	while((scoptmp=(AjPScophit)ajListIterNext(*iter)))
+	{
+	    if((ajStrMatchC(scoptmp->Acc,"Not_available") == ajFalse) &&
+	       (MAJSTRLEN(scoptmp->Acc)!=0))
+		break;
+	}
+	if(!scoptmp)
+	{
+	    ajWarn("List with no Scophits with Acc in ajXyzScophitsAccToHitlist");
+	    ajListIterFree(*iter);	
+	    *iter=NULL;
+	    return ajFalse;
+	}
+    }
+    
+
+
+    if(!(*out))
+	*out = ajXyzHitlistNew(0);
+    
+    fam   = ajStrNew();
+    sfam  = ajStrNew();
+    fold  = ajStrNew();
+    class = ajStrNew();
+
+    list = ajListNew();
+
+    
+    Sunid_Family=scoptmp->Sunid_Family;
+    
+    
+    if(scoptmp->Class)
+    {
+	do_class = ajTrue;
+	ajStrAssS(&class, scoptmp->Class);
+    }
+    if(scoptmp->Fold)
+    {
+	do_fold= ajTrue;
+	ajStrAssS(&fold, scoptmp->Fold);
+    }
+    if(scoptmp->Superfamily)
+    {
+	do_sfam = ajTrue;
+	ajStrAssS(&sfam, scoptmp->Superfamily);
+    }
+    if(scoptmp->Family)
+    {
+	do_fam = ajTrue;
+	ajStrAssS(&fam, scoptmp->Family);
+    }
+
+    /* Only want to push the hit if it is not targetted */
+    if(!scoptmp->Target2)
+    {
+	ajXyzScophitToHit(&tmp, scoptmp);
+	ajListPush(list, (AjPHit) tmp);
+	tmp=NULL;
+    }
+    
+        
+
+    while((scoptmp=(AjPScophit)ajListIterNext(*iter)))
+    {
+	if(do_class)
+	    if(!ajStrMatch(scoptmp->Class, class))
+		break;
+	if(do_fold)
+	    if(!ajStrMatch(scoptmp->Fold, fold))
+		break;
+	if(do_sfam)
+	    if(!ajStrMatch(scoptmp->Superfamily, sfam))
+		break;
+	if(do_fam)
+	    if(!ajStrMatch(scoptmp->Family, fam))
+		break;
+	
+	if((ajStrMatchC(scoptmp->Acc,"Not_available")) ||
+	   (MAJSTRLEN(scoptmp->Acc)==0))
+	    continue;
+
+	if(scoptmp->Target2)
+	    continue;
+		
+	ajXyzScophitToHit(&tmp, scoptmp);
+	ajListPush(list, (AjPHit) tmp);
+	tmp=NULL;
+
+	continue;
+    }
+    ajStrAssS(&(*out)->Class, class);
+    ajStrAssS(&(*out)->Fold, fold);
+    ajStrAssS(&(*out)->Superfamily, sfam);
+    ajStrAssS(&(*out)->Family, fam);
+    (*out)->Sunid_Family = Sunid_Family;
+    
+
+    /* Copy temp. list to Hitlist */
+    (*out)->N = ajListToArray(list, (void ***) &((*out)->hits));
+
+    /* Tidy up and return */
+    ajStrDel(&fam);
+    ajStrDel(&sfam);
+    ajStrDel(&fold);
+    ajStrDel(&class);
+    ajListDel(&list);	    
+    return ajTrue;
+}
+
+
+
+
+/* @func ajXyzCathWrite    
+***************************************************************************
+**
+** Write contents of a Scop object to an output file in embl-like format.
+** 
+** @param [w] outf [AjPFile] Output file stream
+** @param [r] ptr [AjPCath] Cath object
+**
+** @return [void]
+** @@
+**************************************************************************/
+     
+void ajXyzCathWrite(AjPFile outf, AjPCath ptr)  
+{
+    
+    ajint i;
+    AjPStr  tmp;
+    tmp=ajStrNew();
+    
+
+    ajStrAss(&tmp, ptr->DomainID);
+    ajStrToUpper(&tmp);
+    ajFmtPrintF(outf,"ID   %S\nXX\n",tmp);
+    
+    ajStrAss(&tmp, ptr->Pdb);
+    ajStrToUpper(&tmp);
+    ajFmtPrintF(outf,"EN   %S\nXX\n",tmp);
+    
+    ajFmtPrintF(outf,"CL   %S",ptr->Class);
+    ajFmtPrintSplit(outf,ptr->Architecture,"\nXX\nAR   ",75," \t\n\r");
+    ajFmtPrintSplit(outf,ptr->Topology,"XX\nTP   ",75," \t\n\r");
+    ajFmtPrintSplit(outf,ptr->Superfamily,"XX\nSP   ",75," \t\n\r");
+    ajFmtPrintF(outf,"XX\nLN   %d\n",ptr->Length);
+    ajFmtPrintF(outf,"XX\nNS   %d\n",ptr->NSegment);
+    
+    for(i=0;i<ptr->NSegment;++i)
+    {
+	ajFmtPrintF(outf,"XX\nSN   [%d]\n",i+1);
+	
+	ajFmtPrintF(outf,"XX\nCH   %c CHAIN; %S START; %S END;\n",
+		    ptr->Chain,
+		    ptr->Start[i],
+		    ptr->End[i]);
+	
+    }
+    ajFmtPrintF(outf,"//\n");
+}    
+
+
+
+
+/* @func ajXyzCathNew
+***************************************************************************
+**
+** Cath object constructor. Fore-knowledge of the number of chain segments
+** domain is comprised of is required. 
+**
+** @param [r] NSegment [ajint] No. of chain segments
+** 
+** @return [AjPCath] Pointer to a Cath object
+**
+**************************************************************************/
+AjPCath ajXyzCathNew(ajint NSegment)
+{
+    AjPCath ret = NULL;
+    ajint x=0;
+    
+    AJNEW0(ret);
+
+    
+    ret->DomainID      = ajStrNew();
+    ret->Pdb           = ajStrNew();  
+    ret->Class         = ajStrNew();  
+    ret->Architecture  = ajStrNew();  
+    ret->Topology      = ajStrNew();  
+    ret->Superfamily   = ajStrNew();  
+
+    
+    if(NSegment > 0)
+    {
+	AJCNEW0(ret->Start, NSegment);
+	AJCNEW0(ret->End, NSegment);
+	
+	for(x=0; x<NSegment; x++)
+	{
+	    ret->Start[x] = ajStrNew();
+	    ret->End[x]   = ajStrNew();
+	}
+    }
+    
+    ret->NSegment = NSegment;
+    
+    return ret;
+}
+ 
+
+
+
+    
+/* @func ajXyzCathDel
+***************************************************************************
+**
+** Destructor for Cath object. Fore-knowledge of the number of chain segments
+** domain is comprised of is required. 
+**
+** @param [w] ptr [AjPCath *] Cath object
+**
+** @return [void]
+**
+**************************************************************************/ 
+
+void ajXyzCathDel(AjPCath *ptr)
+{
+    AjPCath pthis = *ptr;
+    
+    ajint x;
+    
+    if(!pthis || !ptr)     /*(pthis==NULL)||(ptr==NULL)*/
+	return;
+  
+    ajStrDel(&pthis->DomainID);     
+    ajStrDel(&pthis->Pdb);         
+    ajStrDel(&pthis->Class);        
+    ajStrDel(&pthis->Architecture); 
+    ajStrDel(&pthis->Topology);      
+    ajStrDel(&pthis->Superfamily);   
+
+    if(pthis->NSegment)
+    {
+	for(x=0; x<pthis->NSegment; x++)
+	{
+	    ajStrDel(&pthis->Start[x]);
+	    ajStrDel(&pthis->End[x]);    
+	}
+    
+	AJFREE(pthis->Start);
+	AJFREE(pthis->End);
+    }
+    AJFREE(pthis);
+
+    pthis=NULL;
+    
+    (*ptr)=NULL;
+    
+    return;
+} 
+ 
+
+
+
+
+/* @func ajXyzCathReadC ******************************************************
+**
+** Read a Cath object from a file in embl-like format.
+**
+** @param [r] inf   [AjPFile]  Input file stream
+** @param [r] entry [char*]    id
+** @param [w] thys  [AjPCath*] Cath object
+**
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+
+AjBool ajXyzCathReadC(AjPFile inf, char *entry, AjPCath *thys)
+{
+    static AjPRegexp exp1 =NULL;
+    static AjPRegexp exp2 =NULL;
+    static AjPStr domainID      =NULL;
+    static AjPStr pdb           =NULL;
+    static AjPStr class         =NULL;
+    static AjPStr architecture  =NULL;
+    static AjPStr topology      =NULL;
+    static AjPStr superfamily   =NULL;
+    static AjPStr line    	=NULL; 	
+    static AjPStr str           =NULL;
+    static AjPStr stmp          =NULL;
+    static AjPStr tentry     = NULL;
+    
+    AjBool ok             =ajFalse; 
+    
+    ajint    idx            =0;     
+    ajint    n=0;                   
+    
+    
+    
+    ajint  Length;		/*No. of residues in domain*/
+    
+
+    /* Only initialise strings if this is called for the first time*/
+    if(!line)
+    {
+	domainID        = ajStrNew();
+	pdb             = ajStrNew();
+	class           = ajStrNew();
+	architecture    = ajStrNew();
+	topology        = ajStrNew();
+	superfamily     = ajStrNew();
+	line		= ajStrNew();
+	str		= ajStrNew();
+	tentry          = ajStrNew();
+	exp1    = ajRegCompC("^([^ \t\r\n]+)[ \t\n\r]+");
+	exp2    = ajRegCompC("^([A-Za-z0-9.]+)[ ]*[^ \t\r\n]+[ ]*([0-9.-]+)[ ]*"
+			     "[^ \t\r\n]+[ ]*([0-9.-]+)");
+    }
+
+    
+    ajStrAssC(&tentry,entry);    
+    ajStrToUpper(&tentry);	   
+    
+    while((ok=ajFileReadLine(inf,&line)))
+    {
+	if(!ajStrPrefixC(line,"ID   "))
+	    continue;
+	
+	ajFmtScanS(line, "%*S %S", &stmp);
+	
+	if(ajStrMatchWild(stmp,tentry))
+	    break;
+    }
+
+    
+    if(!ok)
+	return ajFalse;
+    
+    
+    while(ok && !ajStrPrefixC(line,"//"))
+    {
+	if(ajStrPrefixC(line,"XX"))
+	{
+	    ok = ajFileReadLine(inf,&line);
+	    continue;
+	}
+	
+	ajRegExec(exp1,line);
+	ajRegPost(exp1,&str);
+	
+
+	if(ajStrPrefixC(line,"ID"))
+	    ajStrAssS(&domainID,str);
+	else if(ajStrPrefixC(line,"EN"))
+	    ajStrAssS(&pdb,str);
+	else if(ajStrPrefixC(line,"CL"))
+	    ajStrAssS(&class,str);
+	else if(ajStrPrefixC(line,"AR"))
+	{
+	    ajStrAssS(&architecture,str);
+	    while(ajFileReadLine(inf,&line))
+	    {
+		if(ajStrPrefixC(line,"XX"))
+		    break;
+		ajStrAppC(&architecture,ajStrStr(line)+3);
+	    }
+	    ajStrClean(&architecture);
+	}
+	else if(ajStrPrefixC(line,"TP"))
+	{
+	    ajStrAssS(&topology,str);
+	    while(ajFileReadLine(inf,&line))
+	    {
+		if(ajStrPrefixC(line,"XX"))
+		    break;
+		ajStrAppC(&topology,ajStrStr(line)+3);
+	    }
+	    ajStrClean(&topology);
+	}
+	else if(ajStrPrefixC(line,"SP"))
+	{
+	    ajStrAssS(&superfamily,str);
+	    while(ajFileReadLine(inf,&line))
+	    {
+		if(ajStrPrefixC(line,"XX"))
+		    break;
+		ajStrAppC(&superfamily,ajStrStr(line)+3);
+	    }
+	    ajStrClean(&superfamily);
+	}
+	else if(ajStrPrefixC(line,"LN"))  /* Not sure about this bit*/
+	{
+	    ajFmtScanS(line, "%*S %d", &Length);
+	}
+	else if(ajStrPrefixC(line,"NS"))
+	{
+	    ajStrToInt(str,&n);
+	    (*thys) = ajXyzCathNew(n);
+	    ajStrAssS(&(*thys)->DomainID,domainID);
+	    ajStrAssS(&(*thys)->Pdb,pdb);
+	    ajStrAssS(&(*thys)->Class,class);
+	    ajStrAssS(&(*thys)->Architecture,architecture);
+	    ajStrAssS(&(*thys)->Topology, topology);
+	    ajStrAssS(&(*thys)->Superfamily,superfamily);
+	}
+	else if(ajStrPrefixC(line,"SN"))
+	{
+	    ajFmtScanS(line, "%*S %*c%d", &idx);
+/*
+	    p = ajStrStr(str);
+	    sscanf(p,"[%d]",&idx); */
+
+	}
+	else if(ajStrPrefixC(line,"CH"))
+	{
+	    if(!ajRegExec(exp2,str))
+		return ajFalse;
+	    ajRegSubI(exp2,1,&stmp);
+	    (*thys)->Chain = *ajStrStr(stmp);
+	    ajRegSubI(exp2,2,&str);
+	    ajStrAssC(&(*thys)->Start[idx-1],ajStrStr(str)); 
+
+	    ajRegSubI(exp2,3,&str);
+	    ajStrAssC(&(*thys)->End[idx-1],ajStrStr(str)); 
+
+	}
+	
+	
+	ok = ajFileReadLine(inf,&line);
+    }
+ 
+    
+    return ajTrue;
+}
+
+
+
+
+
+
+
+/* @func ajXyzScopCompPdbId ***************************************************
+**
+** Function to sort AjOScop object by Pdb element. 
+**
+** @param [r] hit1  [const void*] Pointer to AjOScop object 1
+** @param [r] hit2  [const void*] Pointer to AjOScop object 2
+**
+** @return [ajint] -1 if Pdb1 should sort before Pdb2, +1 if the Pdb2 
+** should sort first. 0 if they are identical in length and content. 
+** @@
+******************************************************************************/
+ajint ajXyzScopCompPdbId(const void *hit1, const void *hit2)
+{
+    AjPScop p  = NULL;
+    AjPScop q  = NULL;
+
+    p = (*(AjPScop*)hit1);
+    q = (*(AjPScop*)hit2);
+    
+    return ajStrCmpO(p->Pdb, q->Pdb);
+
+}
+
+
+/* @func ajXyzCathCompPdbId ***************************************************
+**
+** Function to sort AjOCath object by Pdb element. 
+**
+** @param [r] hit1  [const void*] Pointer to AjOCath object 1
+** @param [r] hit2  [const void*] Pointer to AjOCath object 2
+**
+** @return [ajint] -1 if Pdb1 should sort before Pdb2, +1 if the Pdb2 
+** should sort first. 0 if they are identical in length and content. 
+** @@
+******************************************************************************/
+ajint ajXyzCathCompPdbId(const void *hit1, const void *hit2)
+{
+    AjPCath p  = NULL;
+    AjPCath q  = NULL;
+
+    p = (*(AjPCath*)hit1);
+    q = (*(AjPCath*)hit2);
+    
+    return ajStrCmpO(p->Pdb, q->Pdb);
+
+}
+
+
+
+
+
+
+ 
+
+/* @func ajXyzScopBinSearchPdb ***********************************************
+**
+** Performs a binary search for a SCOP domain id over an array of Scop
+** structures (which of course must first have been sorted). This is a 
+** case-insensitive search.
+**
+** @param [r] id  [AjPStr]      Search term
+** @param [r] arr [AjPScop*]    Array of AjPScop objects
+** @param [r] siz [ajint]       Size of array
+**
+** @return [ajint] Index of first AjPScop object found with a PDB code
+** matching id, or -1 if id is not found.
+** @@
+******************************************************************************/
+ajint ajXyzScopBinSearchPdb(AjPStr id, AjPScop *arr, ajint siz)
+{
+    int l;
+    int m;
+    int h;
+    int c;
+
+
+    l=0;
+    h=siz-1;
+    while(l<=h)
+    {
+        m=(l+h)>>1;
+
+        if((c=ajStrCmpCase(id, arr[m]->Pdb)) < 0) 
+	    h=m-1;
+        else if(c>0) 
+	    l=m+1;
+        else 
+	    return m;
+    }
+    return -1;
+}
+
+
+
+
+
+
+
+/* @func ajXyzCathBinSearchPdb ***********************************************
+**
+** Performs a binary search for a CATH domain id over an array of Cath
+** structures (which of course must first have been sorted). This is a 
+** case-insensitive search.
+**
+** @param [r] id  [AjPStr]      Search term
+** @param [r] arr [AjPCath*]    Array of AjPCath objects
+** @param [r] siz [ajint]       Size of array
+**
+** @return [ajint] Index of first AjPCath object found with a PDB code
+** matching id, or -1 if id is not found.
+** @@
+******************************************************************************/
+ajint ajXyzCathBinSearchPdb(AjPStr id, AjPCath *arr, ajint siz)
+{
+    int l;
+    int m;
+    int h;
+    int c;
+
+
+    l=0;
+    h=siz-1;
+    while(l<=h)
+    {
+        m=(l+h)>>1;
+
+        if((c=ajStrCmpCase(id, arr[m]->Pdb)) < 0) 
+	    h=m-1;
+        else if(c>0) 
+	    l=m+1;
+        else 
+	    return m;
+    }
+    return -1;
+}
+
+
+
+
+
+
+
+
+
+
+/* @func ajXyzCoordNew ***********************************************************
+ **
+ ** Coord object constructor. This is normally called by the ajXyzDiscordToCoords
+ ** function.
+
+ **
+ ** 
+ ** @return [AjPCoord] Pointer to a Coord object
+ ** @@
+ ******************************************************************************/
+AjPCoord ajXyzCoordNew(void)
+{
+    AjPCoord ret   = NULL;
+
+    AJNEW0(ret);
+    ret->Class       = ajStrNew();
+    ret->Fold        = ajStrNew();
+    ret->Superfamily = ajStrNew();
+    ret->Family      = ajStrNew();
+    ret->Model_Type  = ajStrNew();
+    ret->Acc         = ajStrNew();
+    ret->Spr         = ajStrNew();
+    ret->x           = 0.0;
+    ret->y           = 0.0;
+
+
+    return ret;
+}
+
+
+/* @func ajXyzCoordDel *******************************************************
+ **
+ ** Destructor for Coord object.
+ **
+ ** @param [w] pthis [AjPCoord*] Coord object pointer
+ **
+ ** @return [void]
+ ** @@
+ ******************************************************************************/
+void ajXyzCoordDel(AjPCoord *pthis)
+{
+    ajStrDel(&(*pthis)->Class);
+    ajStrDel(&(*pthis)->Fold);
+    ajStrDel(&(*pthis)->Superfamily);
+    ajStrDel(&(*pthis)->Family);
+    ajStrDel(&(*pthis)->Acc);
+    ajStrDel(&(*pthis)->Spr);
+ 
+    AJFREE(*pthis);
+    *pthis=NULL;
+    
+    return;
+}
+
+
+/* @func ajXyzDiscordToCoords **********************************************
+ **
+ ** Read from a list of Discoord structures and writes a list of Coord 
+ ** structures.
+ ** 
+ ** @param [r] in      [AjPList]  List of pointers to Hitlist structures
+ ** @param [w] out     [AjPList*] Pointer to list of Scophit structures
+ **
+ ** @return [AjBool] True on success (lists were processed ok)
+ ** @@
+ ******************************************************************************/
+AjBool ajXyzDiscordToCoords(AjPDiscord dis_cord, AjPList *out)
+{
+    AjPCoord    coord    = NULL;        /* Pointer to  Coord */
+    ajint  x             = 0;           /* Loop counter */
+  
+  
+    /* Check args */
+    if(!dis_cord)
+    {
+        ajWarn("Null arg passed to ajXyzDiscordToCoords");
+        return ajFalse;
+    }
+  
+    /* Loop for each hit in discord structure */
+    for(x=0; x<dis_cord->N; ++x)
+    {
+        /* Create a new coord structure */
+        coord = ajXyzCoordNew();
+    
+        /* Assign scop classification records from discord structure */
+        ajStrAssS(&coord->Class, dis_cord->Class);
+        ajStrAssS(&coord->Fold, dis_cord->Fold);
+        ajStrAssS(&coord->Superfamily, dis_cord->Superfamily);
+        ajStrAssS(&coord->Family, dis_cord->Family);
+        coord->Sunid_Family = dis_cord->Sunid_Family;
+    
+        /* Assign records from hit structure */
+        ajStrAssS(&coord->Acc, dis_cord->Points[x]->Acc);
+        ajStrAssS(&coord->Spr, dis_cord->Points[x]->Spr);
+        coord->x = dis_cord->Points[x]->x;
+        coord->y = dis_cord->Points[x]->y;
+    
+        /* Push coord onto list */
+        ajListPushApp(*out,coord);
+    }
+  
+    return ajTrue;
+}
+
+
+/* @func ajXyzDiscordNew ***********************************************************
+ **
+ ** Discord object constructor. This is normally called by the ajXyzDiscordRead
+ ** function. Fore-knowledge of the number of coordinated is required.
+ **
+ ** @param [r] n [int] Number of coordinates
+ ** 
+ ** @return [AjPDiscord] Pointer to a Discord object
+ ** @@
+ ******************************************************************************/
+AjPDiscord  ajXyzDiscordNew(ajint n)
+{
+    AjPDiscord ret = NULL;
+    ajint i=0;
+    
+
+    AJNEW0(ret);
+    ret->Class = ajStrNew();
+    ret->Fold = ajStrNew();
+    ret->Superfamily = ajStrNew();
+    ret->Family = ajStrNew();
+    ret->Model_Type = ajStrNew();
+
+    ret->N = n;
+
+    if(n)
+    {
+        AJCNEW0(ret->Points,n);
+        for(i=0;i<n;++i)
+            ret->Points[i] = ajXyzDatapointNew();
+    }   
+
+    return ret;
+}
+
+
+/* @func ajXyzDatapointNew ***********************************************************
+ **
+ ** Datapoint object constructor.
+ ** This is normally called by the ajXyzDiscordNew function.
+ **
+ ** @return [AjPDatapoint] Pointer to an Datapoint object
+ ** @@
+ ******************************************************************************/
+
+AjPDatapoint ajXyzDatapointNew(void)
+{
+    AjPDatapoint ret = NULL;
+
+    AJNEW0(ret);
+    
+    ret->Acc   = ajStrNew();
+    ret->Spr   = ajStrNew();
+
+    return ret;
+}
+
+/* @func ajXyzDiscordDel *******************************************************
+ **
+ ** Destructor for Discord object.
+ **
+ ** @param [w] pthis [AjPDiscord*] Discord object pointer
+ **
+ ** @return [void]
+ ** @@
+ ******************************************************************************/
+void ajXyzDiscordDel(AjPDiscord *pthis)
+{
+    int x = 0;                          /* Counter */
+    
+    if(!(*pthis))
+    {
+        ajWarn("Null pointer passed to ajXyzHitlistDel");
+        return;
+    }
+    
+    if((*pthis)->Class)
+        ajStrDel(&(*pthis)->Class);
+    if((*pthis)->Fold)
+        ajStrDel(&(*pthis)->Fold);
+    if((*pthis)->Superfamily)
+        ajStrDel(&(*pthis)->Superfamily);
+    if((*pthis)->Family)
+        ajStrDel(&(*pthis)->Family);
+    
+    for(x=0;x<(*pthis)->N; x++)
+        if((*pthis)->Points[x])
+            ajXyzDatapointDel(&(*pthis)->Points[x]);
+
+    if((*pthis)->Points)
+        AJFREE((*pthis)->Points);
+    
+    if(*pthis)
+        AJFREE(*pthis);
+    
+    *pthis=NULL;
+    
+    return;
+}
+
+
+/* @func ajXyzDatapointDel ***********************************************************
+ **
+ ** Destructor for Datapoint object.
+ **
+ ** @param [w] thys [AjPDatapoint*] Datapoint object pointer
+ **
+ ** @return [void]
+ ** @@
+ ******************************************************************************/
+
+void ajXyzDatapointDel(AjPDatapoint *thys)
+{
+    AjPDatapoint pthis = *thys;
+
+    if(!thys || !pthis)
+        return;
+
+
+    ajStrDel(&pthis->Acc);
+    ajStrDel(&pthis->Spr);
+
+    AJFREE(pthis);
+    pthis=NULL;
+
+    return;
+}
+
+
+/* @func ajXyzDiscordRead ****************************************************
+**
+** Read a Discord object from a file in embl-like format. 
+** 
+** @param [r] inf      [AjPFile] Input file stream
+** @param [r] delim    [char *]  Delimiter for block of hits (in case the file
+**                               contains multiple hitlists).
+** @param [w] thys     [AjPDiscord*] Discord object
+**
+** @return [AjBool] True on success (a list of hits was read)
+** @@
+******************************************************************************/
+AjBool ajXyzDiscordRead(AjPFile inf, char *delim, AjPDiscord *thys)
+{
+  AjPStr  line         = NULL;     /* Line of text */
+  AjPStr  class        = NULL;
+  AjPStr  fold         = NULL;
+  AjPStr  super        = NULL;
+  AjPStr  family       = NULL;
+  AjPStr  model_type   = NULL;
+  AjBool  ok           = ajFalse;
+  ajint   x            = 0;        /* the x coordinate */
+  ajint   y            = 0;        /* the y coordinate */
+  ajint   n            = 0;        /* Number of current sequence */
+  ajint   nset         = 0;        /* Number in set */
+  ajint   Sunid_Family = 0;        /* SCOP sunid for family */
+  
+  /* Allocate strings */
+  class      = ajStrNew();
+  fold       = ajStrNew();
+  super      = ajStrNew();
+  family     = ajStrNew();
+
+  model_type = ajStrNew();
+  line       = ajStrNew();  
+  
+  /* Read first line */
+  ok = ajFileReadLine(inf,&line);
+  
+  while(ok && !ajStrPrefixC(line,delim))
+  {
+      if(ajStrPrefixC(line,"XX"))
+      {
+          ok = ajFileReadLine(inf,&line);
+          continue;
+      }
+
+
+      /* Get the sunid */
+      else if(ajStrPrefixC(line,"SI"))
+      {
+          ajFmtScanS(line, "%*s %d", &Sunid_Family);
+      }
+
+
+      /* Get the class */
+      else if(ajStrPrefixC(line,"CL"))
+      {
+          ajStrAssC(&class,ajStrStr(line)+3);
+          ajStrClean(&class);
+      }
+
+
+      /* Get the fold */
+      else if(ajStrPrefixC(line,"FO"))
+      {
+          ajStrAssC(&fold,ajStrStr(line)+3);
+          while((ok = ajFileReadLine(inf,&line)))
+          {
+              if(ajStrPrefixC(line,"XX"))
+                  break;
+              ajStrAppC(&fold,ajStrStr(line)+3);
+          }
+          ajStrClean(&fold);
+      }
+
+
+      /* Get the superfamily */
+      else if(ajStrPrefixC(line,"SF"))
+      {
+          ajStrAssC(&super,ajStrStr(line)+3);
+          while((ok = ajFileReadLine(inf,&line)))
+          {
+              if(ajStrPrefixC(line,"XX"))
+                  break;
+              ajStrAppC(&super,ajStrStr(line)+3);
+          }
+          ajStrClean(&super);
+      }
+
+
+      /* Get the family */
+      else if(ajStrPrefixC(line,"FA"))
+      {
+          ajStrAssC(&family,ajStrStr(line)+3);
+          while((ok = ajFileReadLine(inf,&line)))
+          {
+              if(ajStrPrefixC(line,"XX"))
+                  break;
+              ajStrAppC(&family,ajStrStr(line)+3);
+          }
+
+          ajStrClean(&family);
+      }
+
+      /* Get the type of model */
+      else if(ajStrPrefixC(line,"TY"))
+      {
+          ajStrAssC(&model_type,ajStrStr(line)+3);
+          ajStrClean(&model_type);
+      }
+
+ 
+      /* Get the number of points in the set */
+      else if(ajStrPrefixC(line,"NS"))
+      {
+          ajFmtScanS(line, "NS %d", &nset);
+            
+          /* Create discord structure */
+          (*thys)=ajXyzDiscordNew(nset);
+          (*thys)->N=nset;
+          ajStrAssS(&(*thys)->Class, class);
+          ajStrAssS(&(*thys)->Fold, fold);
+          ajStrAssS(&(*thys)->Superfamily, super);
+          ajStrAssS(&(*thys)->Family, family);
+          ajStrAssS(&(*thys)->Model_Type,model_type);
+          (*thys)->Sunid_Family = Sunid_Family;
+      }
+
+      else if(ajStrPrefixC(line,"NN"))
+      {
+          /* Increment hit counter */
+          n++;
+      
+
+          /* Safety check */
+          if(n>nset)
+          {
+              ajFatal("Dangerous error in input file caught in ajXyzHitlistRead.\n Email jison@hgmp.mrc.ac.uk");
+              printf("n...%d  nset...%d\n", n, nset);
+          }
+      }
+
+      /* get accession number for each data point */
+
+      else if(ajStrPrefixC(line,"AC"))
+      {
+          ajStrAssC(&(*thys)->Points[n-1]->Acc,ajStrStr(line)+3);
+          ajStrClean(&(*thys)->Points[n-1]->Acc);
+      }
+
+      /* get swissprot identifier for each data point */
+      else if(ajStrPrefixC(line,"ID"))
+      {
+          ajStrAssC(&(*thys)->Points[n-1]->Spr,ajStrStr(line)+3);
+          ajStrClean(&(*thys)->Points[n-1]->Spr);
+      }
+
+      /* get x,y co-ordiantes for each data point */
+      else if(ajStrPrefixC(line,"CO"))
+      {
+          ajFmtScanS(line, "%*s %d %*s %d", &x, &y);
+          (*thys)->Points[n-1]->x = x;
+          (*thys)->Points[n-1]->y = y;
+      }
+
+      ok = ajFileReadLine(inf,&line);
+  }
+  
+  ajStrDel(&line);
+  ajStrDel(&class);
+  ajStrDel(&fold);
+  ajStrDel(&super);
+  ajStrDel(&family);
+
+  
+  
+  /* Return */
+  if(!ok)
+      return ajFalse;
+  else
+      return ajTrue;
+}
+
+
+/* @func ajXyzDiscordWrite ***************************************************
+**
+** Write contents of a Discord object to an output file in embl-like format.
+** Text for Class, Fold, Superfamily and Family is only written if the text
+** is available - in case of a scop validation file, some of these records 
+** may be written 
+** @param [w] outf [AjPFile] Output file stream
+** @param [r] thys [AjPDiscord] Discord object
+**
+** @return [AjBool] True on success
+** @@
+******************************************************************************/
+AjBool ajXyzDiscordWrite(AjPFile outf, AjPDiscord thys)
+{
+    ajint x=0;  /* Counter */
+    
+    if(!thys)
+        return ajFalse;
+
+    if(MAJSTRLEN(thys->Class))
+        ajFmtPrintF(outf,"CL   %S\n",thys->Class);
+    if(MAJSTRLEN(thys->Fold))
+        ajFmtPrintSplit(outf,thys->Fold,"XX\nFO   ",75," \t\n\r");
+    if(MAJSTRLEN(thys->Superfamily))
+        ajFmtPrintSplit(outf,thys->Superfamily,"XX\nSF   ",75," \t\n\r");
+    if(MAJSTRLEN(thys->Family))
+        ajFmtPrintSplit(outf,thys->Family,"XX\nFA   ",75," \t\n\r");
+    if(MAJSTRLEN(thys->Family))
+        ajFmtPrintF(outf,"XX\nSI   %d\n", thys->Sunid_Family);
+    if(MAJSTRLEN(thys->Model_Type))
+      ajFmtPrintF(outf,"XX\nTY   %S\n",thys->Model_Type);
+
+
+
+    ajFmtPrintF(outf,"XX\nNS   %d\nXX\n",thys->N);
+
+    for(x=0;x<thys->N;x++)
+    {
+        ajFmtPrintF(outf, "%-5s[%d]\nXX\n", "NN", x+1);
+        ajFmtPrintF(outf, "%-5s%S\n", "AC", thys->Points[x]->Acc);
+        ajFmtPrintF(outf, "XX\n");
+        ajFmtPrintF(outf, "%-5s%S\n", "ID", thys->Points[x]->Spr);
+        ajFmtPrintF(outf, "XX\n");
+        ajFmtPrintF(outf, "%-5s%d X; %d Y;\n", "CO", thys->Points[x]->x, thys->Points[x]->y);
+        ajFmtPrintF(outf, "XX\n");
+    }
+    ajFmtPrintF(outf, "//\n");
+
+    /* Return */
+
+    return ajTrue;
+}
+
+
+/* @func ajXyzPvalueFromDist **********************************************************
+ **
+ ** Read a hmm distribution and calculates the p-value. Relies on a list 
+ ** of Coord objects sorted by score.
+ ** 
+ ** @param [r] score  [float]    The sunid_family 
+ ** @param [r] list   [AjPList]  Sorted list of Coord objects
+ **
+ ** @return [float] a p-value calculated from a list of score.
+ ** @@
+ *************************************************************************************/
+float ajXyzPvalueFromDist (float score, AjPList list)
+{
+    AjPCoord *arr     = NULL;           /* array derived from list */
+    ajint    dim      = 0;              /* size of the array */
+    ajint    idx      = 0;              /* index into the array for the score */
+
+    float    p_value  = 0.0;
+    ajint    i        = 0;
+    ajint    total    = 0;              /* total number of scores */
+    ajint    subtotal = 0;              /* the total of scores upto a particular score */
+
+
+    if(!score || !list)
+      ajWarn("Bad args passed to ajXyzPvalueFromDist");
+
+    if(!dim)
+      ajWarn("Empty list passed to ajXyzPvalueFromDist");
+
+    dim = ajListToArray(list,(void***)&(arr));
+
+    /* sum the total number of scores */
+    for(i = 0; i < dim; i++)
+      total = (total + (arr[i]->y));
+
+
+    if((idx = ajXyzCoordBinSearchScore(score, arr, dim))==-1)
+    {
+      AJFREE(arr);
+      ajFatal("ajXyzPvalueFromDist fatal error.");
+    }
+    
+      for(i=0;i<idx;i++)
+        subtotal = (subtotal+(arr[i]->y));
+        
+      p_value = (1-((float)subtotal/(float)total));  
+      AJFREE(arr);
+      
+      return p_value;
+}
+
+/* @func ajXyzScoreToPvalue *******************************************************
+ **
+ ** Read a score  and calculates the p-value. Relies on a list 
+ ** of Coord objects sorted by score.
+ ** 
+ ** @param [r] score  [float]    The sunid_family 
+ ** @param [r] list   [AjPList]  Sorted list of Coord objects
+ **
+ ** @return [float] a p-value calculated from a list of scores.
+ ** @@
+ *************************************************************************************/
+float ajXyzScoreToPvalue (float score, AjPList list)
+{
+    AjPCoord *arr     = NULL;           /* array derived from list */
+    ajint    dim      = 0;              /* size of the array */
+    ajint    idx      = 0;              /* index into the array for the score */
+    float    p_value  = 0.0;
+    
+    if(!score || !list)
+    {
+        ajWarn("Bad args passed to ajXyzScoreToPvalue");
+    }
+    
+    dim = ajListToArray(list,(void***)&(arr));
+    
+    if(!dim)
+    {
+        ajWarn("Empty list passed to ajXyzScoreToPvalue");
+    }
+    
+    if((idx = ajXyzCoordBinSearchScore(score, arr, dim))==-1)
+    {
+      AJFREE(arr);
+      ajFatal("ajXyzScoreToPvalue fatal error.");
+
+      return p_value;
+    }
+    
+    else
+    {
+/*      printf("subtotal = %d  total = %d\n",arr[idx]->y,arr[dim-1]->y);*/
+      p_value = ((1-(float)arr[idx]->y/(float)arr[dim-1]->y));  
+      AJFREE(arr);
+      
+      return p_value;
+    }
+    
+}
+
+/* @func ajXyzCoordBinSearchScore **********************************************
+ **
+ ** Performs a binary search for a given score over an array of score generated 
+ ** from a model on a set of randomly generated protein sequences. 
+ **
+ ** @param [r] id  [ajint]            Search score
+ ** @param [r] arr [AjPCoord    *]    Array of AjPCoord objects
+ ** @param [r] siz [ajint]            Size of array
+ **
+ ** @return [ajint] Index of first AjPScop object found with an PDB code
+ ** matching id, or -1 if id is not found.
+ ** @@
+ ******************************************************************************/
+ajint ajXyzCoordBinSearchScore(float score, AjPCoord *arr, ajint siz)
+{
+    int l;
+    int m;
+    int h;
+  
+    l=0;
+    h=siz-1;
+  
+    while(l<=h)
+    {
+        m=(l+h)>>1;
+    
+        if( (m==0) && (score < arr[m]->x))
+          return m;
+
+        else if( (m<siz-1) &&  (score >= arr[m]->x) && (score < arr[m+1]->x))
+          return m;
+
+        else if( (m==siz-1) &&  (score >= arr[m]->x))
+          return m;
+
+        else if(score < arr[m]->x)
+          h=m-1;
+
+        else if(score > arr[m]->x)
+          l=m+1;
+    }
+
+    return -1;
+}
+
+
+
+
+
+
+
+
+
+/* @func ajXyzSunidToScopInfo *******************************************************
+ **
+ ** Read a sunid  and writes the relavent scop infomation for it. Relies on a list 
+ ** of scop objects sorted by Sunid_Family code.
+ ** 
+ ** @param [r] sunid  [ajint]   The sunid_family 
+ ** @param [w] family [AjPStr*]  Family 
+ ** @param [w] family [AjPStr*]  Superfamily
+ ** @param [w] family [AjPStr*]  Fold
+ ** @param [r] list   [AjPList]  Sorted list of scop objects
+ **
+ ** @return [AjBool]  True if a swissprot identifier code was found for the Scop code.
+ ** @@
+ *************************************************************************************/
+AjBool ajXyzSunidToScopInfo (ajint sunid, AjPStr *family, AjPStr *superfamily, AjPStr *fold, AjPList list)
+{
+    AjPScop *arr    = NULL;             /* array derived from list */
+    ajint  dim      = 0;                /* size of the array */
+    ajint  idx      = 0;                /* index into the array for the Sunid_family */
+    
+    if(!sunid || !list)
+    {
+        ajWarn("Bad args passed to ajXyzSunidToScopInfo");
+        return ajFalse;
+    }
+    
+    dim = ajListToArray(list,(void***)&(arr));
+    
+    if(!dim)
+    {
+        ajWarn("Empty list passed to ajXyzSunidToScopInfo");
+        return ajFalse;
+    }
+
+    if( (idx = ajXyzScopBinSearchSunid(sunid, arr, dim))==-1)
+    {
+        AJFREE(arr);
+        return ajFalse;
+    }   
+    
+    else
+    {
+        ajStrAssS(family, arr[idx]->Family);
+        ajStrAssS(superfamily, arr[idx]->Superfamily);
+        ajStrAssS(fold, arr[idx]->Fold);
+
+        AJFREE(arr);
+        return ajTrue;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+/* @static  ajXyzDbaseNew **************************************************
+**
+** Constructor for Dbase object
+** @param [r] n [ajint] number of entries in database
+** 
+** @return [AjPDbase] Pointer to Dbase object
+** @@
+*************************************************************************/
+AjPDbase  ajXyzDbaseNew(ajint n)
+{
+    AjPDbase ret=NULL;
+    
+    AJNEW0(ret);
+    
+    ret->n=n;
+    
+    if(n)
+    {
+	AJCNEW0(ret->entries, n);
+    }
+    else
+    {
+	ajWarn("Arg with value zero passed to ajXyzDbaseNew");
+	ret->entries=NULL;
+    }
+    return ret;
+}
+
+
+/* @static  ajXyzDbaseDel ***********************************************
+**
+** Destructor for Dbase object 
+** @param [r] ptr [AjPDbase*] Pointer to the Dbase object
+**
+** @return [void] 
+** @@
+******************************************************************************/
+void ajXyzDbaseDel(AjPDbase *ptr)
+{
+  ajint i=0;
+  
+  /* Check arg's */
+  if(ptr==NULL) 
+    {	
+      ajWarn("Attemp to free NULL pointer in ajXyzDbaseDel");
+      return; 
+    }
+
+  if(*ptr==NULL) 
+    {	
+      ajWarn("Attemp to free NULL pointer in ajXyzDbaseDel");
+      return; 
+    }
+
+  if((*ptr)->entries)
+    {
+	for(i=0;i<(*ptr)->n;i++)
+	{
+	    if((*ptr)->entries[i])
+	    {
+		ajXyzDbaseEntDel(&((*ptr)->entries[i]));
+	    }
+	} 
+	AJFREE((*ptr)->entries);
+    }
+  AJFREE((*ptr));
+  *ptr=NULL;
+  return;
+}
+
+/* @static  ajXyzDbaseEntNew *******************************************
+**
+** Constructor for DbaseEnt object 
+** @param [r] n [ajint] number of entries in array of domain contact residues
+**
+** @return [AjPDbaseEnt] Pointer to DbaseEnt object
+** @@
+******************************************************************************/
+AjPDbaseEnt ajXyzDbaseEntNew(ajint n)
+{
+  AjPDbaseEnt ret=NULL;
+  AJNEW0(ret);
+
+
+  ret->abv=ajStrNew();
+  ret->ful=ajStrNew();
+  ret->tmp=ajListNew();
+  ret->no_dom = n;
+  
+
+  if(n)
+    {
+      AJCNEW0(ret->cont_data, n);
+    }
+  else
+    {
+      /*ajWarn("Zero sized arg passed to ajXyzDbaseEntNew.\n");*/
+      ret->cont_data = NULL;
+    }
+  return ret;
+}
+
+/* @static  ajXyzDbaseEntDel *******************************************
+**
+** Destructor for DbaseEnt object 
+** @param [w] ptr [AjPDbaseEnt *] DbaseEnt object pointer
+**
+** @return [void] 
+** @@
+******************************************************************************/
+void ajXyzDbaseEntDel(AjPDbaseEnt *ptr)
+{
+  ajint x=0;
+    
+  /* Check arg's */
+  if(*ptr==NULL) 
+    {	
+      ajWarn("Attemp to free NULL pointer in ajXyzDbaseEntDel");
+      return; 
+    }
+
+  ajStrDel(&(*ptr)->abv);
+  ajStrDel(&(*ptr)->ful);
+  ajListDel(&(*ptr)->tmp);
+  
+  if((*ptr)->cont_data)
+  {
+      /*
+      ajFmtPrint("no_dom = %d\n", (*ptr)->no_dom);
+      */
+
+      for(x=0;x<(*ptr)->no_dom;x++)
+      {
+	  ajXyzDomContsDel(&((*ptr)->cont_data[x]));
+      }
+      AJFREE((*ptr)->cont_data);
+  }
+  
+    
+  AJFREE((*ptr));
+  *ptr=NULL;
+
+  return;
+}
+
+
+/* @static  ajXyzDomContsNew *******************************************
+**
+** Constructor for DomConts object
+** @param [r] n [ajint] no. of amino acids that make contact with the ligand
+** 
+** @return [AjPDomConts] Pointer to DomConts object
+** @@
+******************************************************************************/
+AjPDomConts ajXyzDomContsNew(ajint n)
+{
+  AjPDomConts ret=NULL;
+  ajint i=0;
+  AJNEW0(ret);
+
+  ret->scop_name=ajStrNew();
+  ret->het_name=ajStrNew();
+  ret->no_keyres=n;
+  
+  if(n)
+    {
+	AJCNEW0(ret->aa_code, n);      
+	AJCNEW0(ret->res_pos2, n);      
+      for(i=0;i<n;i++)
+	{
+	  ret->aa_code[i]=ajStrNew();
+	  ret->res_pos2[i]=ajStrNew(); /* NEW */
+	}
+      ret->res_pos=ajIntNewL(n);    
+    }
+  else
+    {
+      /* ajWarn("Zero sized arg passed to ajXyzDomContsNew.\n"); */
+      ret->res_pos=ajIntNew();    
+      ret->aa_code=NULL;
+      ret->res_pos2=NULL;              /* NEW */
+    }	
+  return ret;
+}
+
+         
+/* @static  ajXyzDomContsDel *******************************************
+**
+** Destructor for DomConts object
+** @param [r]  ptr [AjPDomConts *] pointer to AjPDomConts object
+** 
+** @return [AjPDomConts] Pointer to DomConts object
+** @@
+******************************************************************************/
+void ajXyzDomContsDel(AjPDomConts *ptr) 
+{
+  ajint i=0;
+
+  /* Check arg's */
+  if(*ptr==NULL) 
+    {	
+      ajWarn("Attemp to free NULL pointer in ajXyzDomContsDel");
+      return; 
+    }
+  ajStrDel(&(*ptr)->scop_name);
+  ajStrDel(&(*ptr)->het_name);
+  
+
+  for(i=0;i<(*ptr)->no_keyres;++i)
+  {
+      ajStrDel(&(*ptr)->aa_code[i]);
+      ajStrDel(&(*ptr)->res_pos2[i]); /* NEW */
+  }
+  if((*ptr)->aa_code)
+      AJFREE((*ptr)->aa_code);
+  if((*ptr)->res_pos2)
+      AJFREE((*ptr)->res_pos2);           /* NEW */
+
+
+  ajIntDel(&(*ptr)->res_pos);
+  AJFREE(*ptr);
+  *ptr=NULL;
+
+  return;
+}
+
+
+
+
+
+
+
+/* @func ajXyzFunkyRead ***********************************************
+**
+** Undocumented
+**
+** @param [r]  funky_ptr [AjPFile]  Undocumented
+** @param [r]  all_entries [AjPList*]  Undocumented
+** 
+** @return [AjBool] Undocumented
+** @@
+******************************************************************************/
+AjBool ajXyzFunkyRead(AjPFile funky_fptr, AjPList *all_entries)
+{
+  AjPStr          line=NULL;        /*Current line*/
+  AjPDbaseEnt     entry=NULL;       /*DbaseEnt for current hetrogen*/
+  AjPDomConts     domc=NULL;        /*DomConts for current domain */
+  
+  AjPStr          temp1=NULL;       /*Temporary string to account for multiple 
+DE lines*/
+
+  AjPStr          temp_aacode=NULL; /*Temporary string for amino acid code*/
+  ajint           temp_respos=0;    /*Temporary integer for domain residue 
+position*/
+  AjPStr          temp_respos2=NULL;/*Temporary string for protein residue 
+position*/
+
+  ajint           resIdx=0;         /*Counter for residue index*/
+
+  AjPList          tempList_aacode=NULL;
+  AjPList          tempList_respos2=NULL;
+ 
+
+  /*Check args*/
+  if((!funky_fptr))
+    {
+      ajWarn("Bad args passed to ajXyzFunkyRead\n");
+      return ajFalse;
+    }
+
+  /*Create Dbase object if necessary*/
+  /*   if(!(dbase)) */
+  /*     { */
+  /*       *dbase=ajXyzDbaseNew(0); */
+  /*     } */
+  
+  /*Create string and list objects*/
+  line=ajStrNew();
+  
+  
+  /*Read lines from file*/
+  while(ajFileReadLine(funky_fptr, &line))
+    {
+      if(ajStrPrefixC(line, "ID   "))
+        {
+          if(entry)
+            {
+              ajListToArray(entry->tmp, (void ***) &(entry)->cont_data);
+              ajListPushApp(*all_entries, entry);
+            }
+          entry=ajXyzDbaseEntNew(0);
+          ajFmtScanS(line, "%*s %S", &entry->abv);
+          /* ajFmtPrint("%S\n", entry->abv); */
+        }
+      else if(ajStrPrefixC(line, "DE   "))
+        {
+          ajStrAssSub(&temp1, line, 5, -1);
+          if(ajStrLen(entry->ful))
+            ajStrApp(&entry->ful, temp1);
+          else
+            ajStrAssS(&entry->ful, temp1);
+        }
+      else if(ajStrPrefixC(line, "ND   "))
+        ajFmtScanS(line, "%*s %d", &entry->no_dom);
+      else if(ajStrPrefixC(line, "SC   "))
+        {
+          domc=ajXyzDomContsNew(0);
+          resIdx=0;
+          tempList_aacode=ajListNew();
+          tempList_respos2=ajListNew();
+          ajFmtScanS(line, "%*s %S", &domc->scop_name);
+          /* ajFmtPrint("%S\n", domc->scop_name); */
+          ajStrAss(&domc->het_name, entry->abv);
+        }
+      else if(ajStrPrefixC(line, "NR   "))
+        {
+          ajFmtScanS(line, "%*s %d", &domc->no_keyres);
+          /* ajFmtPrint("*******%d\n", domc->no_keyres); */
+        }
+      else if(ajStrPrefixC(line, "RE   "))
+        {
+          resIdx++;
+          temp_aacode=ajStrNew();
+          temp_respos2=ajStrNew();
+          temp_respos=0;
+          ajFmtScanS(line, "%*s %S %d %S", &temp_aacode, &temp_respos, 
+&temp_respos2);
+          /* ajFmtPrint("%d for %S\n", resIdx, domc->scop_name); */
+          /* ajFmtPrint("%S\t%d\t%S\n", temp_aacode, temp_respos, temp_respos2); 
+*/
+          ajListPushApp(tempList_aacode, temp_aacode);
+          ajIntPut(&domc->res_pos, resIdx-1, temp_respos);
+          ajListPushApp(tempList_respos2, temp_respos2);
+
+          temp_aacode=NULL;
+          temp_respos2=NULL;
+          
+          if(resIdx == domc->no_keyres)
+            {
+              ajListToArray(tempList_aacode, (void ***) &(domc)->aa_code);
+              ajListstrDel(&tempList_aacode);
+              ajListToArray(tempList_respos2, (void ***) &(domc)->res_pos2);
+              ajListstrDel(&tempList_respos2);
+              ajListPushApp(entry->tmp, domc);
+            }
+        }
+    }  
+  ajListToArray(entry->tmp, (void ***) &(entry)->cont_data);
+  ajListPushApp(*all_entries, entry);
+  return ajTrue;          
+  
 }

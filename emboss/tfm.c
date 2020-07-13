@@ -55,12 +55,12 @@ int main(int argc, char **argv)
     html = ajAcdGetBool("html");
     more = ajAcdGetBool("more");
 
-    /* is a search string specified */
+    /* is a search string specified - should be tested in tfm.acd file */
     if (!ajStrLen(program))
-	ajDie ("No program name specified.");
+	ajFatal ("No program name specified.");
 
     if (!tfm_FindAppDoc(program, html, &path))
-	ajDie ("The documentation for program '%S' was not found.", program);
+	ajFatal ("The documentation for program '%S' was not found.", program);
 
     /* are we outputting to STDOUT and piping through 'more'? */
     if (ajFileStdout(outfile) && more)

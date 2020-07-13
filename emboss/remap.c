@@ -269,21 +269,21 @@ int main(int argc, char **argv)
 		(void) embShowAddBlank(ss);
 
 	    (void) embShowAddTran (ss, trnTable, 1, threeletter, numberseq,
-				   NULL, orfminsize);
+				   NULL, orfminsize, AJFALSE, AJFALSE, AJFALSE, AJFALSE);
 	    (void) embShowAddTran (ss, trnTable, 2, threeletter, numberseq,
-				   NULL, orfminsize);
+				   NULL, orfminsize, AJFALSE, AJFALSE, AJFALSE, AJFALSE);
 	    (void) embShowAddTran (ss, trnTable, 3, threeletter, numberseq,
-				   NULL, orfminsize);
+				   NULL, orfminsize, AJFALSE, AJFALSE, AJFALSE, AJFALSE);
 
 	    if (reverse)
 	    {
 		(void) embShowAddTicks(ss);
-		(void) embShowAddTran (ss, trnTable, -3, threeletter,
-				       numberseq, NULL, orfminsize);
-		(void) embShowAddTran (ss, trnTable, -2, threeletter,
-				       numberseq, NULL, orfminsize);
-		(void) embShowAddTran (ss, trnTable, -1, threeletter,
-				       numberseq, NULL, orfminsize);
+		(void) embShowAddTran (ss, trnTable, -3, threeletter, numberseq, 
+				       NULL, orfminsize, AJFALSE, AJFALSE, AJFALSE, AJFALSE);
+		(void) embShowAddTran (ss, trnTable, -2, threeletter, numberseq, 
+				       NULL, orfminsize, AJFALSE, AJFALSE, AJFALSE, AJFALSE);
+		(void) embShowAddTran (ss, trnTable, -1, threeletter, numberseq, 
+				     NULL, orfminsize, AJFALSE, AJFALSE, AJFALSE, AJFALSE);
 	    }
 	}
 
@@ -911,7 +911,7 @@ static void remap_read_file_of_enzyme_names(AjPStr *enzymes)
 	ajStrTrimC(enzymes, "@");	/* remove the @ */
 	file = ajFileNewIn(*enzymes);
 	if (file == NULL)
-	    ajDie("Cannot open the file of enzyme names: '%S'", enzymes);
+	    ajFatal ("Cannot open the file of enzyme names: '%S'", enzymes);
 
 	/* blank off the enzyme file name and replace with the enzyme names */
 	ajStrClear(enzymes);

@@ -598,17 +598,17 @@ AjBool embPropTransition (char base1, char base2) {
   if (!u2 && !y2) return ajFalse;
 
 /* no change - return ajFalse */
-  if (tolower(base1) == tolower(base2)) return ajFalse;
+  if (tolower((int)base1) == tolower((int)base2)) return ajFalse;
 
 /* U to T is not a transition */
-  if (tolower(base1) == 't' && tolower(base2) == 'u') return ajFalse;
-  if (tolower(base1) == 'u' && tolower(base2) == 't') return ajFalse;
+  if (tolower((int)base1) == 't' && tolower((int)base2) == 'u') return ajFalse;
+  if (tolower((int)base1) == 'u' && tolower((int)base2) == 't') return ajFalse;
 
 /* C to Y, T to Y, A to R, G to R - ambiguous - not a transition */
-  if (u1 && tolower(base2) == 'r') return ajFalse;
-  if (u2 && tolower(base1) == 'r') return ajFalse;
-  if (y1 && tolower(base2) == 'y') return ajFalse;
-  if (y2 && tolower(base1) == 'y') return ajFalse;
+  if (u1 && tolower((int)base2) == 'r') return ajFalse;
+  if (u2 && tolower((int)base1) == 'r') return ajFalse;
+  if (y1 && tolower((int)base2) == 'y') return ajFalse;
+  if (y2 && tolower((int)base1) == 'y') return ajFalse;
 
   ajDebug("embPropTransition result = %d", (u1 == u2));
 

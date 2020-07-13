@@ -2714,7 +2714,8 @@ void embAlignCalcSimilarity(AjPStr m, AjPStr n, float **sub, AjPSeqCvt cvt,
 	    continue;
 	}
 
-	match=sub[ajSeqCvtK(cvt,toupper(p[i]))][ajSeqCvtK(cvt,toupper(q[i]))];
+	match=sub[ajSeqCvtK(cvt,toupper((int)p[i]))]
+	         [ajSeqCvtK(cvt,toupper((int)q[i]))];
 	if(p[i]==q[i])
 	{
 	    ++(*id);

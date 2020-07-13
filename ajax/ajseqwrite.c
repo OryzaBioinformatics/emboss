@@ -1931,7 +1931,8 @@ static void seqWriteSwiss (AjPSeqout outseq) {
 
   static SeqPSeqFormat sf=NULL;
   ajint mw;
-  ajuint crc;
+/*  ajuint crc; old 32-bit crc */
+  unsigned long long crc;
   static AjPStr ftfmt = NULL;
   AjIList it;
   AjPStr cur;
@@ -2057,11 +2058,21 @@ static void seqWriteSwiss (AjPSeqout outseq) {
   }
 
 
-  crc = ajSeqCrc (outseq->Seq);
+/*  crc = ajSeqCrc (outseq->Seq);    old 32-bit crc*/
+  crc = ajSp64Crc(outseq->Seq);
   mw = (ajint) (0.5+ajSeqMW (outseq->Seq));
+
+  /* old 32-bit crc
   (void) ajFmtPrintF (outseq->File,
 	       "SQ   SEQUENCE %5d AA; %6d MW;  %08X CRC32;\n",
 	       ajStrLen(outseq->Seq), mw, crc);
+  */
+
+  (void) ajFmtPrintF (outseq->File,
+	       "SQ   SEQUENCE %5d AA; %6d MW;  %08X",
+	       ajStrLen(outseq->Seq), mw, (crc>>32)&0xffffffff);
+  (void) ajFmtPrintF (outseq->File,
+	       "%08X CRC64;\n",crc&0xffffffff);
 
   seqSeqFormat(ajStrLen(outseq->Seq), &sf);
   (void) strcpy (sf->endstr, "\n//");
@@ -3818,6 +3829,55 @@ void ajSeqWriteXyz(AjPFile outf, AjPStr seq, char *prefix)
     (void) ajFmtPrintF (outseq->File,
 			"%-5sSEQUENCE %5d AA; %6d MW;  %08X CRC32;\n",
 			prefix, ajStrLen(outseq->Seq), mw, crc);
+
+    seqSeqFormat(ajStrLen(outseq->Seq), &sf);
+    (void) strcpy (sf->endstr, "");
+    sf->tab = 4;
+    sf->spacer = 11;
+    sf->width = 60;
+
+    seqWriteSeq (outseq, sf);
+
+    ajSeqoutDel(&outseq);
+
+    return;
+}
+
+
+
+
+
+/* @func ajSssWriteXyz
+********************************************************
+**
+** Writes a sequence in SWISSPROT format w/o checksum or molecular weight -
+** used for printing secondary structure strings.
+**
+** @param [w] outf [AjPFile] output stream
+** @param [r] seq [AjPStr] sequence
+** @param [r] prefix [char *] identifier code - should be 2 char's long
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajSssWriteXyz(AjPFile outf, AjPStr seq, char *prefix)
+{
+    AjPSeqout outseq=NULL;
+    static SeqPSeqFormat sf=NULL;
+
+    ajint mw;
+    ajint crc;
+
+    outseq = ajSeqoutNew();
+
+    outseq->File = outf;
+    ajStrAssS(&outseq->Seq,seq);
+
+    crc = ajSeqCrc (outseq->Seq);
+    mw = (ajint) (0.5+ajSeqMW (outseq->Seq));
+    (void) ajFmtPrintF (outseq->File,
+   "%-5sSEQUENCE %5d AA;\n",
+   prefix, ajStrLen(outseq->Seq));
 
     seqSeqFormat(ajStrLen(outseq->Seq), &sf);
     (void) strcpy (sf->endstr, "");

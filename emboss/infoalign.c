@@ -632,7 +632,7 @@ static void infoalign_Compare(AjPSeq ref, AjPSeq seq, ajint **sub,
 	else
 	{
 	    /* identity */
-	    if (toupper(r[i]) == toupper(s[i]))
+	    if (toupper((int)r[i]) == toupper((int)s[i]))
 		(*idcount)++;
 	    /* similarity */
 	    else if (sub[ajSeqCvtK(cvt, r[i])][ajSeqCvtK(cvt, s[i])] > 0)

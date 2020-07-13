@@ -282,7 +282,7 @@ AjPTrn ajTrnNew (AjPStr trnFileName) {
 
   ajFileDataNew(trnFileName, &trnFile);
   if (trnFile==NULL)
-    ajDie ("Translation table file '%S' not found\n", trnFileName);
+    ajFatal ("Translation table file '%S' not found\n", trnFileName);
 
 /* create and initialise the translation object */
   AJNEW0(pthis);
@@ -352,7 +352,7 @@ void ajTrnReadFile (AjPTrn trnObj, AjPFile trnFile) {
     trnNoComment(&trnLine);
     if (ajStrLen(trnLine)) {
       if (ajStrFindC (trnLine, "Genetic Code") == -1) {
-        ajDie ("The file '%S' is not a valid Genetic Code file.\n"
+        ajFatal ("The file '%S' is not a valid Genetic Code file.\n"
         "The 'Genetic Code' line was not found.", trnObj->FileName);
       } else {
       	break;
@@ -384,7 +384,7 @@ void ajTrnReadFile (AjPTrn trnObj, AjPFile trnFile) {
 
   (void) ajStrToken (&tmpstr, &tokenhandle, NULL);
   if (ajStrCmpC (tmpstr, "AAs") == -1) {
-    ajDie ("The file '%S' is not a valid Genetic Code file.\n"
+    ajFatal ("The file '%S' is not a valid Genetic Code file.\n"
     "The 'AAs' line was not found.", trnObj->FileName);
   }
   (void) ajStrToken (&aaline, &tokenhandle, NULL);
@@ -392,7 +392,7 @@ void ajTrnReadFile (AjPTrn trnObj, AjPFile trnFile) {
 
   (void) ajStrToken (&tmpstr, &tokenhandle, NULL);
   if (ajStrCmpC (tmpstr, "Starts") == -1) {
-    ajDie ("The file '%S' is not a valid Genetic Code file.\n"
+    ajFatal ("The file '%S' is not a valid Genetic Code file.\n"
     "The 'Starts' line was not found.", trnObj->FileName);
   }
   (void) ajStrToken (&startsline, &tokenhandle, NULL);
@@ -400,7 +400,7 @@ void ajTrnReadFile (AjPTrn trnObj, AjPFile trnFile) {
 
   (void) ajStrToken (&tmpstr, &tokenhandle, NULL);
   if (ajStrCmpC (tmpstr, "Base1") == -1) {
-    ajDie ("The file '%S' is not a valid Genetic Code file.\n"
+    ajFatal ("The file '%S' is not a valid Genetic Code file.\n"
     "The 'Base1' line was not found.", trnObj->FileName);
   }
   (void) ajStrToken (&base1line, &tokenhandle, NULL);
@@ -408,7 +408,7 @@ void ajTrnReadFile (AjPTrn trnObj, AjPFile trnFile) {
 
   (void) ajStrToken (&tmpstr, &tokenhandle, NULL);
   if (ajStrCmpC (tmpstr, "Base2") == -1) {
-    ajDie ("The file '%S' is not a valid Genetic Code file.\n"
+    ajFatal ("The file '%S' is not a valid Genetic Code file.\n"
     "The 'Base2' line was not found.", trnObj->FileName);
   }
   (void) ajStrToken (&base2line, &tokenhandle, NULL);
@@ -416,7 +416,7 @@ void ajTrnReadFile (AjPTrn trnObj, AjPFile trnFile) {
 
   (void) ajStrToken (&tmpstr, &tokenhandle, NULL);
   if (ajStrCmpC (tmpstr, "Base3") == -1) {
-    ajDie ("The file '%S' is not a valid Genetic Code file.\n"
+    ajFatal ("The file '%S' is not a valid Genetic Code file.\n"
     "The 'Base3' line was not found.", trnObj->FileName);
   }
   (void) ajStrToken (&base3line, &tokenhandle, NULL);
@@ -1295,7 +1295,7 @@ void ajTrnCFrame (AjPTrn trnObj, char *seq, ajint len, ajint frame,
   } else if (frame >= -6 && frame <= -4) {
     ajTrnAltRevC (trnObj, seq, len+frame+4 , pep);
   } else {
-    ajDie("Invalid frame '%d' in ajTrnCFrame()\n", frame);
+    ajFatal("Invalid frame '%d' in ajTrnCFrame()\n", frame);
   }
 
 }

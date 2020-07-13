@@ -486,7 +486,7 @@ static void restover_read_file_of_enzyme_names(AjPStr *enzymes)
 	ajStrTrimC(enzymes, "@");	/* remove the @ */
 	file = ajFileNewIn(*enzymes);
 	if (file == NULL)
-	    ajDie("Cannot open the file of enzyme names: '%S'", enzymes);
+	    ajFatal ("Cannot open the file of enzyme names: '%S'", enzymes);
 
 	/* blank off the enzyme file name and replace with the enzyme names */
 	ajStrClear(enzymes);

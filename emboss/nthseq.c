@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 	}
 
     ajSeqWriteClose (seqout);
-    (void) ajDie("No such sequence - only %d sequences were input.", count);
+    (void) ajFatal ("No such sequence - only %d sequences were input.", count);
 
     return 1;
 }

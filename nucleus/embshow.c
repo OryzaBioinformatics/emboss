@@ -635,13 +635,17 @@ void embShowAddComp (EmbPShow thys, AjBool number) {
 ** @param [r] number [AjBool] ajTrue for numbering
 ** @param [r] regions [AjPRange] Sequence range(s)
 ** @param [r] orfminsize [ajint] Minimum length of ORF to be shown
+** @param [r] lcinterorf [AjBool] ajTrue to put inter-orf regions in lowercase
+** @param [r] firstorf [AjBool] ajTrue beginning of the seq is a possible ORF
+** @param [r] lastorf [AjBool] ajTrue end of the seq is a possible ORF
+** @param [r] showframe [AjBool] ajTrue write the frame number
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 void embShowAddTran (EmbPShow thys, AjPTrn trnTable, ajint frame,
 		     AjBool threeletter, AjBool number, AjPRange regions,
-		     ajint orfminsize) {
+		     ajint orfminsize, AjBool lcinterorf, AjBool firstorf, AjBool lastorf, AjBool showframe) {
 
   EmbPShowTran info;
 (void) ajDebug("embShowAddTran\n");
@@ -658,6 +662,10 @@ void embShowAddTran (EmbPShow thys, AjPTrn trnTable, ajint frame,
 /* these are used by showFillTran */
   info->transeq = NULL;	/* we have not yet stored the translation here */
   info->tranpos = 0;		/* store translation position for numbering */
+  info->lcinterorf = lcinterorf; /* ajTrue = put the inter-orf regions in lower case */
+  info->firstorf = firstorf;
+  info->lastorf = lastorf;
+  info->showframe = showframe;
 
   (void) ajListPushApp(thys->list, showInfoNew(info, SH_TRAN));
 
@@ -1461,7 +1469,7 @@ static void showFillTran(EmbPShow thys, AjPList lines, EmbPShowTran info,
     ajint framepad=0;	/* number of spaces to pad to the correct frame pos */
     ajint linepos;
     ajint startpos;	/* number at start of line */
-    ajint endpos;		/* number at end of line */
+    ajint endpos;	/* number at end of line */
     ajint i, j;
     ajint last;
 
@@ -1542,17 +1550,82 @@ static void showFillTran(EmbPShow thys, AjPList lines, EmbPShowTran info,
 	    else if (frame == 3 || frame == 4)
 		framepad = 2;
 
-	    /* convert inter-ORF regions to '-'s */
+	    /* convert inter-ORF regions to '-'s or put it in lower case*/
 	    last = -1;
-	    for (i=0; i<ajSeqLen(tran); i++)
+	    /*	    for (i=0; i<ajSeqLen(tran); i++)
 		if (ajStrStr(ajSeqStr(tran))[i] == '*')
 		{
 		    if (i-last < info->orfminsize+1)
-			for (j=last+1; j<i; j++)
+		      {
+			if (info->lcinterorf)
+			  for (j=last+1; j<i; j++)
+			    ajStrStr(ajSeqStr(tran))[j] = tolower((ajint) ajStrStr(ajSeqStr(tran))[j]);
+			else
+			  for (j=last+1; j<i; j++)
 			    ajStrStr(ajSeqStr(tran))[j] = '-';
+		      }
 		    last = i;
-		}
+		    } */
 
+	    /* Thomas version */
+	    if (frame < 4)
+	      {
+		for (i=0; i<ajSeqLen(tran); i++)
+		  if (ajStrStr(ajSeqStr(tran))[i] == '*')
+		    {
+		      if (i-last < info->orfminsize+1) 
+			if (!(info->firstorf && last == -1))
+			  {
+			    if (info->lcinterorf)
+			      for (j=last+1; j<i; j++)
+				ajStrStr(ajSeqStr(tran))[j] = tolower((ajint) ajStrStr(ajSeqStr(tran))[j]);
+			    else
+			      for (j=last+1; j<i; j++)
+				ajStrStr(ajSeqStr(tran))[j] = '-';
+			  }
+		      last = i;
+		    }
+		/* put the last ORF in lower case or convert it to -'s */
+		if (i == ajSeqLen(tran) && !(info->lastorf)  
+		    && i-last < info->orfminsize+1)
+		  {
+		    if (info->lcinterorf)
+		      for (j=last+1; j<i; j++)
+			ajStrStr(ajSeqStr(tran))[j] = tolower((ajint) ajStrStr(ajSeqStr(tran))[j]);
+		    else
+		      for (j=last+1; j<i; j++)
+			ajStrStr(ajSeqStr(tran))[j] = '-';
+		  }
+	      }
+	    else /* frame 4,5,6 */
+	      {
+		for (i=0; i<ajSeqLen(tran); i++)
+		  if (ajStrStr(ajSeqStr(tran))[i] == '*')
+		    {
+		      if (i-last < info->orfminsize+1) 
+			if (!(info->lastorf && last == -1))
+			  {
+			    if (info->lcinterorf)
+			      for (j=last+1; j<i; j++)
+				ajStrStr(ajSeqStr(tran))[j] = tolower((ajint) ajStrStr(ajSeqStr(tran))[j]);
+			    else
+			      for (j=last+1; j<i; j++)
+				ajStrStr(ajSeqStr(tran))[j] = '-';
+			  }
+		      last = i;
+		    } 
+		/* put the first ORF in lower case or convert it to -'s */
+		if (i == ajSeqLen(tran) && !(info->firstorf) 
+		    && i-last < info->orfminsize+1)
+		  {
+		    if (info->lcinterorf)
+		      for (j=last+1; j<i; j++)
+			ajStrStr(ajSeqStr(tran))[j] = tolower((ajint) ajStrStr(ajSeqStr(tran))[j]);
+		    else
+		      for (j=last+1; j<i; j++)
+			ajStrStr(ajSeqStr(tran))[j] = '-';
+		  }
+	      }
 
 	    /* expand to fill line or change to three-letter code */
 	    if (info->threeletter)
@@ -1617,6 +1690,13 @@ static void showFillTran(EmbPShow thys, AjPList lines, EmbPShowTran info,
     if (info->number)
 	(void) ajListstrPushApp(lines, ajFmtStr(" %d", info->tranpos));
 
+    if (info->showframe)
+      {
+	frame = info->frame;
+	if (frame < 0)
+	  frame = 3 - frame;
+	(void) ajListstrPushApp(lines, ajFmtStr("%4s%d", "F", frame));
+      }
 
     /* end the output line */
     (void) ajListstrPushApp(lines, ajFmtStr("\n"));

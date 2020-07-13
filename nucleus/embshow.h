@@ -114,9 +114,13 @@ typedef struct EmbSShowTran {
   ajint frame;		/* 1,2,3,-1,-2 or -3 = frame to translate */
   AjBool threeletter;	/* ajTrue = display in three letter code */
   AjBool number;	/* ajTrue = number the translation */
-  ajint tranpos;		/* store of translation position for numbering */
+  ajint tranpos;	/* store of translation position for numbering */
   AjPRange regions;	/* only translate in these regions, NULL = do all */
   ajint orfminsize;	/* minimum size of ORF to display */
+  AjBool lcinterorf;    /* ajTrue = put the inter-orf regions in lower case */
+  AjBool firstorf;      /* ajTrue = beginning of the seq is a possible ORF */
+  AjBool lastorf;       /* ajTrue = end of the seq is a possible ORF */
+  AjBool showframe;     /* ajTrue = write the frame number*/
 } EmbOShowTran, *EmbPShowTran;
 
 /* @data EmbPShowComp *********************************************************
@@ -191,7 +195,7 @@ void     embShowAddTicknum (EmbPShow thys);
 void     embShowAddComp (EmbPShow thys, AjBool number);
 void     embShowAddTran (EmbPShow thys, AjPTrn trnTable, ajint frame,
 			 AjBool threeletter, AjBool number, AjPRange regions,
-			 ajint orfminsize);
+			 ajint orfminsize, AjBool lcinterorf, AjBool firstorf, AjBool lastorf, AjBool showframe);
 void     embShowAddRE (EmbPShow thys, ajint sense, AjPList restrictlist,
 		       AjBool flat);
 void     embShowAddFT (EmbPShow thys, AjPFeattable feat);
