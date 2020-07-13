@@ -34,7 +34,7 @@ chdir "$cvsdoc/$dir";
  
 open(M, ">make.temp") || die "Can't open make.temp\n";
    
-foreach $file (glob("*.gif"), glob("*.html"), glob("*.txt")) {  
+foreach $file (glob("*.gif"), glob("*.html"), glob("*.txt"), glob("*.jpg")) {  
 #print ">$file<\n";
   if (length($line) + length($file) +1 > 60) {
     if ($flag) {
