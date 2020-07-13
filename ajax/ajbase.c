@@ -1,26 +1,26 @@
-/********************************************************************
+/******************************************************************************
 ** @source AJAX IUB base nucleic acid functions
 **
 ** @author Copyright (C) 1999 Alan Bleasby
-** @version 1.0 
+** @version 1.0
 ** @modified Feb 28 ajb First version
 ** @@
-** 
+**
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
 ** version 2 of the License, or (at your option) any later version.
-** 
+**
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Library General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU Library General Public
 ** License along with this library; if not, write to the
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ** Boston, MA  02111-1307, USA.
-********************************************************************/
+******************************************************************************/
 
 #include "ajax.h"
 #include <string.h>
@@ -38,7 +38,7 @@ AjBool aj_base_I= 0;
 
 
 
-/* @func ajAZToInt *********************************************************
+/* @func ajAZToInt ************************************************************
 **
 ** Returns A=0 to Z=25  or 27 otherwise
 **
@@ -60,7 +60,7 @@ ajint ajAZToInt(ajint c)
 
 
 
-/* @func ajIntToAZ *********************************************************
+/* @func ajIntToAZ ************************************************************
 **
 ** Returns 'A' for 0 to  'Z' for 25
 **
@@ -79,7 +79,7 @@ ajint ajIntToAZ(ajint n)
 
 
 
-/* @func ajAZToBin *********************************************************
+/* @func ajAZToBin ************************************************************
 **
 ** Returns a binary OR'd representation of an IUB base where A=1, C=2,
 ** G=4 and T=8
@@ -98,7 +98,7 @@ ajint ajAZToBin(ajint c)
 
 
 
-/* @func ajAZToBinC *********************************************************
+/* @func ajAZToBinC ***********************************************************
 **
 ** Returns a binary OR'd representation of an IUB base where A=1, C=2,
 ** G=4 and T=8
@@ -119,7 +119,7 @@ char ajAZToBinC(char c)
 
 
 
-/* @func ajBaseInit *********************************************************
+/* @func ajBaseInit ***********************************************************
 **
 ** Sets up binary OR'd representation of an IUB bases in a table
 ** aj_base_table where A=1, C=2, G=4 and T=8
@@ -144,17 +144,17 @@ void ajBaseInit(void)
     ajint k;
 
     ajint c;
-    
+
     ajint l1;
     ajint l2;
-    
+
     ajint x;
     ajint y;
-    
+
     ajint n;
     char *p;
     char *q;
-    
+
     if(aj_base_I) return;
 
 
@@ -164,12 +164,12 @@ void ajBaseInit(void)
 	aj_base_iubS[i].list = ajStrNewC("");
 	aj_base_table[i] = 0;
     }
-    
+
     code = ajStrNew();
     list = ajStrNew();
     (void) ajStrAssC(&code,"");
     (void) ajStrAssC(&list,"ACGT");
-    
+
 
 
 
@@ -181,7 +181,7 @@ void ajBaseInit(void)
 
     line = ajStrNew();
 
-    
+
     while(ajFileGets(bfptr, &line))
     {
 	p=ajStrStr(line);
@@ -202,12 +202,12 @@ void ajBaseInit(void)
 	aj_base_table[toupper((ajint) *q)] = n;
 	aj_base_table[tolower((ajint) *q)] = n;
     }
-    
+
     ajStrDel(&code);
     ajStrDel(&list);
     ajStrDel(&line);
     ajStrDel(&bfname);
-    
+
     ajFileClose(&bfptr);
 
 
@@ -223,7 +223,7 @@ void ajBaseInit(void)
 		continue;
 	    }
 	    if(l1!=1) ajFatal("Bad IUB letter");
-	    
+
 
 	    p = ajStrStr(aj_base_iubS[x].list);
 	    q = ajStrStr(aj_base_iubS[y].list);
@@ -243,7 +243,7 @@ void ajBaseInit(void)
 /* @func ajBaseAa1ToAa3 *******************************************************
 **
 ** Writes an AjPStr with a amino acid 3 letter code
-** JCI - This should probably be an emb function and might replace the use 
+** JCI - This should probably be an emb function and might replace the use
 ** of embPropCharToThree &  embPropIntToThree
 **
 ** @param [r] aa1 [char]    Single letter identifier of amino acid
@@ -255,13 +255,13 @@ void ajBaseInit(void)
 AjBool  ajBaseAa1ToAa3(char aa1, AjPStr *aa3)
 {
     ajint idx;
-    
+
     static char *tab[]=
     {
 	"ALA\0","ASX\0","CYS\0","ASP\0","GLU\0","PHE\0","GLY\0","HIS\0",
 	"ILE\0","---\0","LYS\0","LEU\0","MET\0","ASN\0","---\0","PRO\0",
 	"GLN\0","ARG\0","SER\0","THR\0","---\0","VAL\0","TRP\0","XAA\0",
-	"TYR\0","GLX\0" 
+	"TYR\0","GLX\0"
     };
 
     if((idx=ajAZToInt(aa1))==27)

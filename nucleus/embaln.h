@@ -35,13 +35,13 @@ void embAlignProfilePathCalc(char *a, ajint mlen, ajint slen, float gapopen,
 			    float gapextend, float *path, float **fmatrix,
 			    ajint *compass, AjBool show);
 
-void embAlignReportGlobal (AjPAlign align, AjPSeq seqa, AjPSeq seqb, 
+void embAlignReportGlobal (AjPAlign align, AjPSeq seqa, AjPSeq seqb,
 			  AjPStr m, AjPStr n,
 			  ajint start1, ajint start2,
 			  float gapopen, float gapextend,
 			  float score, AjPMatrixf matrix,
 			   ajint offset1, ajint offset2);
-void embAlignReportLocal (AjPAlign align, AjPSeq seqa, AjPSeq seqb, 
+void embAlignReportLocal (AjPAlign align, AjPSeq seqa, AjPSeq seqb,
 			  AjPStr m, AjPStr n,
 			  ajint start1, ajint start2,
 			  float gapopen, float gapextend,
@@ -98,7 +98,7 @@ void embAlignWalkSWMatrixFast(float *path, ajint *compass, float gapopen,
 			      AjPStr *n, ajint lena, ajint lenb, float **sub,
 			      AjPSeqCvt cvt, ajint *start1, ajint *start2,
 			      ajint width);
-  
+
 #endif
 
 #ifdef __cplusplus

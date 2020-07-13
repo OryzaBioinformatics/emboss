@@ -9,7 +9,7 @@ extern "C"
 #include "ajlist.h"
 #include <sys/stat.h>
 
-/* @data AjPFile *******************************************************
+/* @data AjPFile **************************************************************
 **
 ** Ajax file object. Holds information for an open (unbuffered)
 ** input or output file.
@@ -44,7 +44,7 @@ typedef struct AjSFile {
   AjPStr Buff;			/* Buffer for latest line read */
 } AjOFile, *AjPFile;
 
-/* @data AjPFileBuffList ***************************************************
+/* @data AjPFileBuffList ******************************************************
 **
 ** Ajax file buffer, holding a simple linked list of buffered lines.
 ** This does not use the AjPList objects.
@@ -59,7 +59,7 @@ typedef struct AjSFileBuffList {
   ajlong Fpos;			/* File offset for start of this line */
 } AjOFileBuffList, *AjPFileBuffList;
 
-/* @data AjPFileBuff *******************************************************
+/* @data AjPFileBuff **********************************************************
 **
 ** Ajax buffered file object. Holds information for a buffered input file.
 **
@@ -93,7 +93,7 @@ typedef struct AjSFileBuffList {
 
 typedef struct AjSFileBuff {
   AjPFile File;			/* The input file - data to be buffered */
-  AjPFileBuffList Lines;	/* All lines ... where the data really is */ 
+  AjPFileBuffList Lines;	/* All lines ... where the data really is */
   AjPFileBuffList Curr;		/* Current line in Lines list */
   AjPFileBuffList Prev;		/* Previous line (points to Curr for delete) */
   AjPFileBuffList Last;		/* Last line for quick appending */
@@ -118,7 +118,8 @@ void        ajFileBuffFix (const AjPFileBuff thys);
 FILE*       ajFileBuffFp (const AjPFileBuff thys);
 void        ajFileBuffFreeClear (const AjPFileBuff thys);
 AjBool      ajFileBuffGet  (const AjPFileBuff thys, AjPStr *pdest);
-AjBool      ajFileBuffGetL (const AjPFileBuff thys, AjPStr *pdest, ajlong* fpos);
+AjBool      ajFileBuffGetL (const AjPFileBuff thys, AjPStr *pdest,
+			    ajlong* fpos);
 AjBool      ajFileBuffGetStore (const AjPFileBuff thys, AjPStr* pdest,
 				AjBool store, AjPStr *astr);
 void        ajFileBuffLoad (const AjPFileBuff thys);

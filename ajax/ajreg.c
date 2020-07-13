@@ -19,21 +19,21 @@
 ** string.
 **
 ** @author Copyright (C) 1998 Peter Rice
-** @version 1.0 
+** @version 1.0
 ** @modified Jun 25 pmr First version
 ** @@
 ** @@
-** 
+**
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
 ** version 2 of the License, or (at your option) any later version.
-** 
+**
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Library General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU Library General Public
 ** License along with this library; if not, write to the
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -45,7 +45,7 @@
 
 /* constructors */
 
-/* @func ajRegComp ********************************************************
+/* @func ajRegComp ************************************************************
 **
 ** Compiles a regular expression.
 **
@@ -58,7 +58,7 @@ AjPRegexp ajRegComp (AjPStr exp) {
   return hsregcomp (ajStrStr(exp));
 }
 
-/* @func ajRegCompC ********************************************************
+/* @func ajRegCompC ***********************************************************
 **
 ** Compiles a regular expression.
 **
@@ -74,7 +74,7 @@ AjPRegexp ajRegCompC (const char* exp) {
 
 /* execute expression match */
 
-/* @func ajRegExec ********************************************************
+/* @func ajRegExec ************************************************************
 **
 ** Execute a regular expression search.
 ** The expression must first have been compiled with ajRegComp or ajRegCompC.
@@ -99,7 +99,7 @@ AjBool ajRegExec (AjPRegexp prog, AjPStr str) {
   return ajFalse;
 }
 
-/* @func ajRegExecC ********************************************************
+/* @func ajRegExecC ***********************************************************
 **
 ** Execute a regular expression search.
 ** The expression must first have been compiled with ajRegComp or ajRegCompC.
@@ -124,7 +124,7 @@ AjBool ajRegExecC (AjPRegexp prog, const char* str) {
   return ajFalse;
 }
 
-/* @func ajRegOffset ********************************************************
+/* @func ajRegOffset **********************************************************
 **
 ** After a successful regular expression match, uses the regular
 ** expression and the original string to calculate the offset
@@ -133,7 +133,7 @@ AjBool ajRegExecC (AjPRegexp prog, const char* str) {
 ** This information is normally lost during processing.
 **
 ** @param [r] rp [AjPRegexp] Compiled regular expression.
-** @return [ajint] Offset of match from start of string. 
+** @return [ajint] Offset of match from start of string.
 **               -1 if the string and the expression do not match.
 ** @@
 ******************************************************************************/
@@ -143,7 +143,7 @@ ajint ajRegOffset (AjPRegexp rp) {
   return (rp->startp[0] - rp->orig);
 }
 
-/* @func ajRegOffsetI ********************************************************
+/* @func ajRegOffsetI *********************************************************
 **
 ** After a successful regular expression match, uses the regular
 ** expression and the original string to calculate the offset
@@ -153,7 +153,7 @@ ajint ajRegOffset (AjPRegexp rp) {
 **
 ** @param [r] rp [AjPRegexp] Compiled regular expression.
 ** @param [r] isub [ajint] Substring number.
-** @return [ajint] Offset of match from start of string. 
+** @return [ajint] Offset of match from start of string.
 **               -1 if the string and the expression do not match.
 ** @@
 ******************************************************************************/
@@ -163,7 +163,7 @@ ajint ajRegOffsetI (AjPRegexp rp, ajint isub) {
   return (rp->startp[isub] - rp->orig);
 }
 
-/* @func ajRegOffsetC ********************************************************
+/* @func ajRegOffsetC *********************************************************
 **
 ** After a successful regular expression match, uses the regular
 ** expression and the original character string to calculate the offset
@@ -172,7 +172,7 @@ ajint ajRegOffsetI (AjPRegexp rp, ajint isub) {
 ** This information is normally lost during processing.
 **
 ** @param [r] rp [AjPRegexp] Compiled regular expression.
-** @return [ajint] Offset of match from start of string. 
+** @return [ajint] Offset of match from start of string.
 **               -1 if the string and the expression do not match.
 ** @@
 ******************************************************************************/
@@ -192,7 +192,7 @@ ajint ajRegOffsetC (AjPRegexp rp) {
 **
 ** @param [r] rp [AjPRegexp] Compiled regular expression.
 ** @param [r] isub [ajint] Substring number.
-** @return [ajint] Offset of match from start of string. 
+** @return [ajint] Offset of match from start of string.
 **               -1 if the string and the expression do not match.
 ** @@
 ******************************************************************************/
@@ -202,7 +202,7 @@ ajint ajRegOffsetIC (AjPRegexp rp, ajint isub) {
   return (rp->startp[isub] - rp->orig);
 }
 
-/* @func ajRegLenI ********************************************************
+/* @func ajRegLenI ************************************************************
 **
 ** After a successful comparison, returns the length of a substring.
 **
@@ -220,7 +220,7 @@ ajint ajRegLenI (AjPRegexp rp, ajint isub) {
   return (rp->endp[isub] - rp->startp[isub]);
 }
 
-/* @func ajRegPost ********************************************************
+/* @func ajRegPost ************************************************************
 **
 ** After a successful match, returns the remainder of the string.
 **
@@ -240,7 +240,7 @@ AjBool ajRegPost (AjPRegexp rp, AjPStr* post) {
   return ajFalse;
 }
 
-/* @func ajRegPostC ********************************************************
+/* @func ajRegPostC ***********************************************************
 **
 ** After a successful match, returns the remainder of the string.
 ** Result is a character string, which is set to point to the internal
@@ -264,7 +264,7 @@ AjBool ajRegPostC (AjPRegexp rp, const char** post) {
   return ajFalse;
 }
 
-/* @func ajRegSubI ********************************************************
+/* @func ajRegSubI ************************************************************
 **
 ** After a successful match, returns a substring.
 **
@@ -298,7 +298,7 @@ void ajRegSubI (AjPRegexp rp, ajint isub, AjPStr* dest) {
 
 /* substitute substrings */
 
-/* @func ajRegSub ********************************************************
+/* @func ajRegSub *************************************************************
 **
 ** Processes a source string including possible substring references
 ** escaped with backslashes. Results are written to another string.
@@ -315,7 +315,7 @@ void ajRegSub (AjPRegexp rp, AjPStr source, AjPStr* dest) {
   return;
 }
 
-/* @func ajRegSubC ********************************************************
+/* @func ajRegSubC ************************************************************
 **
 ** Processes a source string including possible substring references
 ** escaped with backslashes. Results are written to another string.
@@ -406,7 +406,7 @@ void ajRegSubC (AjPRegexp rp, const char* source, AjPStr* dest) {
 
 /* destructor */
 
-/* @func ajRegFree ********************************************************
+/* @func ajRegFree ************************************************************
 **
 ** Clears and frees a compiled regular expression.
 **
@@ -420,7 +420,7 @@ void ajRegFree (AjPRegexp* pexp) {
   *pexp = NULL;
 }
 
-/* @func ajRegTrace ********************************************************
+/* @func ajRegTrace ***********************************************************
 **
 ** Traces a compiled regular expression with debug calls.
 **

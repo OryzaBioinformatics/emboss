@@ -9,7 +9,7 @@ extern "C"
 #include "ajdefine.h"
 #include "ajtable.h"
 
-/* @data AjPStr *******************************************************
+/* @data AjPStr ***************************************************************
 **
 ** Ajax string object.
 **
@@ -193,7 +193,7 @@ typedef struct AjSStr {
   char *Ptr;
 } AjOStr, *AjPStr;
 
-/* @data AjIStr *******************************************************
+/* @data AjIStr ***************************************************************
 **
 ** String iterator, used to test iterator functionality.
 **
@@ -217,7 +217,7 @@ typedef struct AjSStrIter {
 } *AjIStr;
 
 
-/* @data AjPStrTok *******************************************************
+/* @data AjPStrTok ************************************************************
 **
 ** String token parser object for the string parsing functions. These normally
 ** require a set of characters to be skipped, but some functions use a string
@@ -260,7 +260,8 @@ AjBool     ajStrApp  (AjPStr* pthis, const AjPStr src);
 AjBool     ajStrAppC (AjPStr* pthis, const char *txt);
 AjBool     ajStrAppK (AjPStr* pthis, const char chr);
 AjBool     ajStrAppKI (AjPStr* pthis, const char chr, ajint number);
-AjBool     ajStrAppSub (AjPStr* pthis, const AjPStr src, ajint begin, ajint end);
+AjBool     ajStrAppSub (AjPStr* pthis, const AjPStr src,
+			ajint begin, ajint end);
 AjBool     ajStrAss   (AjPStr* pthis, const AjPStr str);
 AjBool     ajStrAssC  (AjPStr* pthis, const char* txt);
 AjBool     ajStrAssCI (AjPStr* pthis, const char* txt, size_t i);
@@ -268,8 +269,10 @@ AjBool     ajStrAssCL (AjPStr* pthis, const char* txt, size_t i);
 AjBool     ajStrAssI  (AjPStr* pthis, const AjPStr str, size_t i);
 AjBool     ajStrAssL  (AjPStr* pthis, const AjPStr str, size_t i);
 AjBool     ajStrAssS  (AjPStr* pthis, const AjPStr str);
-AjBool     ajStrAssSub  (AjPStr* pthis, const AjPStr str, ajint begin, ajint end);
-AjBool     ajStrAssSubC (AjPStr* pthis, const char* txt, ajint begin, ajint end);
+AjBool     ajStrAssSub  (AjPStr* pthis, const AjPStr str,
+			 ajint begin, ajint end);
+AjBool     ajStrAssSubC (AjPStr* pthis, const char* txt,
+			 ajint begin, ajint end);
 AjBool     ajStrBlock (AjPStr* pthis, ajint blksize);
 char*      ajStrBool (AjBool boule);
 char       ajStrChar (const AjPStr thys, ajint pos);
@@ -346,9 +349,11 @@ void       ajStrIterFree (AjIStr *iter);
 #define    ajStrIterGetC(iter) (iter->Ptr)
 #define    ajStrIterMore(iter) (iter->Ptr < iter->End)
 AjIStr     ajStrIterNext (AjIStr iter);
-#define    ajStrIterPutK(iter,c) (*iter->Ptr = c) 
-AjBool     ajStrJoin  (AjPStr* pthis, ajint pos1, const AjPStr addbit, ajint pos2);
-AjBool     ajStrJoinC (AjPStr* pthis, ajint pos1, const char* addbit, ajint pos2);
+#define    ajStrIterPutK(iter,c) (*iter->Ptr = c)
+AjBool     ajStrJoin  (AjPStr* pthis, ajint pos1,
+		       const AjPStr addbit, ajint pos2);
+AjBool     ajStrJoinC (AjPStr* pthis, ajint pos1,
+		       const char* addbit, ajint pos2);
 
 ajint      ajStrLen(const AjPStr thys);
 

@@ -18,7 +18,7 @@ extern "C"
 
 /* constructors */
 
-AjPRegexp ajRegComp (AjPStr exp); 
+AjPRegexp ajRegComp (AjPStr exp);
 AjPRegexp ajRegCompC (const char* exp);
 
 /* execute expression match */

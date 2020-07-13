@@ -18,7 +18,7 @@ extern "C"
 #define EMBPROPPOSITIVE  8
 #define EMBPROPNEGATIVE  9
 
-  /* define monoisotopic masses for common N- and C- terminal 
+  /* define monoisotopic masses for common N- and C- terminal
      modifications */
 #define EMBPROPMSTN_H       1.00782
 #define EMBPROPMSTN_FORMYL 29.00274
@@ -52,7 +52,8 @@ void 	embPropCalcFragments (char *s, ajint n, ajint begin,
 			      AjPStr *rname);
 double  embPropCalcMolwt (char *s, ajint start, ajint end);
   /* new method for chemically modified ends */
-double  embPropCalcMolwtMod (char *s, ajint start, ajint end, double nmass, double cmass);
+double  embPropCalcMolwtMod (char *s, ajint start, ajint end,
+			     double nmass, double cmass);
 char*   embPropCharToThree (char c);
 char*   embPropIntToThree (ajint c);
 AjPStr  embPropProtGaps (AjPSeq seq, ajint pad);

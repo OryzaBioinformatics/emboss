@@ -6,7 +6,7 @@ extern "C"
 #ifndef ajrange_h
 #define ajrange_h
 
-/* @data AjPRange *******************************************************
+/* @data AjPRange *************************************************************
 **
 ** Data structure for AJAX sequence range specifications
 **
@@ -27,7 +27,7 @@ extern "C"
 ** @use ajRangeStrStuff The opposite of ajRangeStrExtract
 ** @use ajRangeStrMask Mask the range in a String
 ** @use ajRangeOverlapSingle Detect an overlap of a range to a sequence region
-** @use ajRangeOverlaps Detect overlaps of a set of ranges to a seq region 
+** @use ajRangeOverlaps Detect overlaps of a set of ranges to a seq region
 ** @use ajRangeOrdered Test if ranges are in ascending non-overlapping order
 ** @use ajRangeDefault Test if the default range has been set
 ** @@
@@ -50,18 +50,21 @@ void      ajRangeDel(AjPRange *thys);
 
 AjBool    ajRangeGet(AjPRange *r, AjPStr s);
 AjBool    ajRangeFile(AjPRange *r, AjPStr name);
-ajint       ajRangeNumber(AjPRange thys);
+ajint     ajRangeNumber(AjPRange thys);
 AjBool    ajRangeText(AjPRange thys, ajint element, AjPStr * text);
-AjBool    ajRangeValues(AjPRange thys, ajint element, ajint *start, ajint *end);
+AjBool    ajRangeValues(AjPRange thys, ajint element,
+			ajint *start, ajint *end);
 AjBool    ajRangeChange(AjPRange thys, ajint element, ajint start, ajint end);
 
 AjBool    ajRangeBegin (AjPRange thys, ajint begin);
 
-AjBool    ajRangeStrExtractList (AjPList outliststr, AjPRange thys, AjPStr instr);
+AjBool    ajRangeStrExtractList (AjPList outliststr, AjPRange thys,
+				 AjPStr instr);
 AjBool    ajRangeStrExtract (AjPStr *outstr, AjPRange thys, AjPStr instr);
 AjBool    ajRangeStrStuff (AjPStr *outstr, AjPRange thys, AjPStr instr);
 AjBool    ajRangeStrMask (AjPStr *str, AjPRange thys, AjPStr maskchar);
-ajint	  ajRangeOverlapSingle (ajint start, ajint end, ajint pos, ajint length);
+ajint	  ajRangeOverlapSingle (ajint start, ajint end,
+				ajint pos, ajint length);
 ajint	  ajRangeOverlaps (AjPRange thys, ajint pos, ajint length);
 AjBool    ajRangeOrdered (AjPRange thys);
 

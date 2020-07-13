@@ -10,8 +10,12 @@
 
 extern void ajDebug(char *fmt, ...);
 
-static const Except_T Mem_Failed = { "Allocation failed, insufficient memory available" };
-static const Except_T Mem_Badcount = { "Allocation bad byte count" };
+static const Except_T Mem_Failed = {
+  "Allocation failed, insufficient memory available"
+};
+static const Except_T Mem_Badcount = {
+  "Allocation bad byte count"
+};
 
 static ajlong memAlloc = 0;
 static ajlong memFree  = 0;
@@ -21,7 +25,7 @@ static ajlong memResizeCount = 0;
 static ajlong memTotal = 0;
 static ajlong memZero = 0;
 
-/* @func ajMemAlloc *******************************************************
+/* @func ajMemAlloc ***********************************************************
 **
 ** Allocates memory using malloc, and fails with an error message if
 ** unsuccessful.
@@ -44,7 +48,7 @@ void* ajMemAlloc (ajlong nbytes, const char* file, ajint line) {
       ajExceptRaise(&Mem_Badcount, file, line);
 #endif
   }
-    
+
   ptr = malloc(nbytes);
 #ifdef HAVE_JAVA
   if(ptr == NULL)
@@ -68,7 +72,7 @@ void* ajMemAlloc (ajlong nbytes, const char* file, ajint line) {
   return ptr;
 }
 
-/* @func ajMemCalloc *******************************************************
+/* @func ajMemCalloc **********************************************************
 **
 ** Allocates memory using calloc for an array of elements,
 ** and fails with an error message if unsuccessful.
@@ -112,7 +116,7 @@ void* ajMemCalloc (ajlong count, ajlong nbytes,
   return ptr;
 }
 
-/* @func ajMemCalloc0 *******************************************************
+/* @func ajMemCalloc0 *********************************************************
 **
 ** Allocates memory using malloc for an array of elements,
 ** and fails with an error message if unsuccessful.
@@ -142,7 +146,7 @@ void* ajMemCalloc0 (ajlong count, ajlong nbytes,
   return ptr;
 }
 
-/* @func ajMemFree *******************************************************
+/* @func ajMemFree ************************************************************
 **
 ** Frees memory using 'free' and zeroes the pointer. Ignores NULL
 ** (uninitialized) pointers.
@@ -164,7 +168,7 @@ void ajMemFree (void* ptr, const char* file, ajint line) {
   return;
 }
 
-/* @func ajMemResize *******************************************************
+/* @func ajMemResize **********************************************************
 **
 ** Resizes previously allocated memory, and ensures data is copied to
 ** the new location if it is moved.
@@ -213,7 +217,7 @@ void* ajMemResize (void* ptr, ajlong nbytes,
   return ptr;
 }
 
-/* @func ajMemArrB *******************************************************
+/* @func ajMemArrB ************************************************************
 **
 ** Creates an AjBool array.
 ** Use AJFREE to free the memory when no longer needed.
@@ -227,7 +231,7 @@ ajint* ajMemArrB (size_t size) {
   return AJCALLOC (size, sizeof(AjBool));
 }
 
-/* @func ajMemArrI *******************************************************
+/* @func ajMemArrI ************************************************************
 **
 ** Creates an integer array.
 ** Use AJFREE to free the memory when no longer needed.
@@ -241,7 +245,7 @@ ajint* ajMemArrI (size_t size) {
   return AJCALLOC (size, sizeof(ajint));
 }
 
-/* @func ajMemArrF *******************************************************
+/* @func ajMemArrF ************************************************************
 **
 ** Creates a float array.
 ** Use AJFREE to free the memory when no longer needed.

@@ -2,6 +2,18 @@
 #include "ajtime.h"
 #include <time.h>
 
+/* @datastatic TimePFormat ****************************************************
+**
+** Internal structure for known Ajax time formats
+**
+** @alias TimeSFormat
+** @alias TimeOFormat
+**
+** @attr Name [char*] format name
+** @attr Format [char*] C run time library time format string
+** @@
+******************************************************************************/
+
 typedef struct TimeSFormat {
   char* Name;
   char* Format;
@@ -15,17 +27,13 @@ static TimeOFormat timeFormat[] = { /* formats for strftime */
   { NULL, NULL}
 };
 
-/*
-static const Except_T Null_AjPTime_Pointer  = { "NULL AjPTime variable pointer encountered!" };
-*/
-
-/* @func ajTimeToday **********************************************
+/* @func ajTimeToday **********************************************************
 **
 ** AJAX function to return today's time as an AjPTime object
 ** @return [AjPTime] Pointer to time object containing today's date/time
 ** @exception  'Mem_Failed' from memory allocations
 ** @@
-*******************************************************************/
+******************************************************************************/
 AjPTime ajTimeToday (void) {
 
   static AjPTime thys = NULL;
@@ -38,14 +46,14 @@ AjPTime ajTimeToday (void) {
   return thys;
 }
 
-/* @funcstatic TimeFormat **********************************************
+/* @funcstatic TimeFormat *****************************************************
 **
 ** AJAX function to return the ANSI C format for an AJAX time string
 **
 ** @param [r] timefmt [char*] AJAX time format
 ** @return [char*] ANSI C time format, or NULL if none found
 ** @@
-*******************************************************************/
+******************************************************************************/
 static char* TimeFormat(char *timefmt)
 {
   ajint i;
@@ -66,7 +74,7 @@ static char* TimeFormat(char *timefmt)
   return format ;
 }
 
-/* @func ajTimeTodayF **********************************************
+/* @func ajTimeTodayF *********************************************************
 **
 ** AJAX function to return today's time as an AjPTime object
 ** with a specified output format
@@ -77,7 +85,7 @@ static char* TimeFormat(char *timefmt)
 ** @exception  'Mem_Failed' from memory allocations
 ** @@
 **
-*******************************************************************/
+******************************************************************************/
 AjPTime ajTimeTodayF (char* timefmt) {
 
   static AjPTime thys = NULL;
@@ -91,7 +99,7 @@ AjPTime ajTimeTodayF (char* timefmt) {
   return thys;
 }
 
-/* @func ajTimeTrace *******************************************************
+/* @func ajTimeTrace **********************************************************
 **
 ** Debug report on the contents of an AjPTime object
 **
@@ -105,10 +113,10 @@ void ajTimeTrace (AjPTime thys) {
   ajDebug ("format: '%s'\n", thys->format);
 }
 
-/* @func ajTimeSet **********************************************
+/* @func ajTimeSet ************************************************************
 **
 ** Constructor for user specification of an arbitrary AjPTime object.
-** Except for 'timefmt', the arguments are based upon the UNIX 
+** Except for 'timefmt', the arguments are based upon the UNIX
 ** 'tm' time structure defined in the time.h header file.
 ** The range validity of numbers given are not checked.
 **
@@ -118,14 +126,14 @@ void ajTimeTrace (AjPTime thys) {
 ** @param  [rN] year    [ajint]   Four digit year
 ** @return [AjPTime] An AjPTime object
 ** @@
-*******************************************************************/
+******************************************************************************/
 AjPTime ajTimeSet( char *timefmt, ajint mday, ajint mon, ajint year) {
    AjPTime thys = ajTimeTodayF (timefmt) ;
 
    thys->time->tm_mday  = mday ;
-   thys->time->tm_mon   = mon-1; 
+   thys->time->tm_mon   = mon-1;
    if (year > 1899) year = year-1900;
-   thys->time->tm_year  = year ;    
+   thys->time->tm_year  = year ;
 
    (void) mktime (thys->time);
 

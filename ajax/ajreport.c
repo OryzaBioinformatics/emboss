@@ -1,29 +1,29 @@
-/********************************************************************
+/******************************************************************************
 ** @source AJAX REPORT (ajax feature reporting) functions
 **
 ** These functions report AJAX sequence feature data in a variety
 ** of formats.
 **
 ** @author Copyright (C) 2000 Peter Rice, LION Bioscience Ltd.
-** @version 1.0 
+** @version 1.0
 ** @modified Nov 10 First version
 ** @@
-** 
+**
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
 ** version 2 of the License, or (at your option) any later version.
-** 
+**
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Library General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU Library General Public
 ** License along with this library; if not, write to the
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ** Boston, MA  02111-1307, USA.
-********************************************************************/
+******************************************************************************/
 
 #include <stddef.h>
 #include <stdarg.h>
@@ -32,6 +32,18 @@
 #include <math.h>
 
 #include "ajax.h"
+
+/* @datastatic ReportPFormat **************************************************
+**
+** Ajax feature report formats 
+**
+** @attr Name [] format name
+** @attr Mintags [] Minimum number of special tags needed
+** @attr Showseq [] ajTrue if sequence is to be included
+** @attr Nuc [] ajTrue if format can work with nucleotide sequences
+** @attr Prot [] ajTrue if format can work with protein sequences
+** @attr Write [(void*)] Function to write report
+******************************************************************************/
 
 typedef struct ReportSFormat {
   char *Name;
@@ -95,7 +107,7 @@ static char* reportCharname (AjPReport thys);
 **
 ******************************************************************************/
 
-static ReportOFormat reportFormat[] = { 
+static ReportOFormat reportFormat[] = {
   /* standard feature formats */
   {"embl",      0, AJFALSE, AJTRUE,  AJFALSE, reportWriteEmbl},
   {"genbank",   0, AJFALSE, AJTRUE,  AJFALSE, reportWriteGenbank},
@@ -293,7 +305,7 @@ static void reportWriteSwiss (AjPReport thys,
   return;
 }
 
-/* @funcstatic reportWriteDbMotif *******************************************
+/* @funcstatic reportWriteDbMotif *********************************************
 **
 ** Writes a report in DbMotif format
 **
@@ -397,7 +409,7 @@ static void reportWriteDbMotif (AjPReport thys,
   return;
 }
 
-/* @funcstatic reportWriteDiffseq *******************************************
+/* @funcstatic reportWriteDiffseq *********************************************
 **
 ** Writes a report in Diffseq format, based on the output from the
 ** diffseq application. The report describes matches, usually short,
@@ -556,12 +568,12 @@ static void reportWriteDiffseq (AjPReport thys,
   ajStrDel(&tmpstr);
   ajStrDel(&tagval);
   ajStrDel(&jname);
-  
+
   ajListIterFree(iterft);
   return;
 }
 
-/* @funcstatic reportWriteExcel *******************************************
+/* @funcstatic reportWriteExcel ***********************************************
 **
 ** Writes a report in Excel (tab delimited) format. Name, start, end
 ** and score are always reported. Other tags in the report definition
@@ -734,7 +746,7 @@ static void reportWriteFeatTable (AjPReport thys,
   return;
 }
 
-/* @funcstatic reportWriteListFile *******************************************
+/* @funcstatic reportWriteListFile ********************************************
 **
 ** Writes a report in ListFile format for use as input to another application.
 **
@@ -814,7 +826,7 @@ static void reportWriteListFile (AjPReport thys,
   return;
 }
 
-/* @funcstatic reportWriteMotif *******************************************
+/* @funcstatic reportWriteMotif ***********************************************
 **
 ** Writes a report in Motif format.  Based on the original output
 ** format of antigenic, helixturnhelix and sigcleave.
@@ -835,7 +847,7 @@ static void reportWriteListFile (AjPReport thys,
 **   pos (integer, maximum score position)
 **
 ** Tags reported: All
-**   
+**
 ** @param [R] thys [AjPReport] Report object
 ** @param [R] ftable [AjPFeattable] Feature table object
 ** @param [R] seq [AjPSeq] Sequence object
@@ -900,7 +912,7 @@ static void reportWriteMotif (AjPReport thys,
       else {
 	jpos = iend+1;
       }
-      
+
       ajStrAssCL (&tmpstr, "",ilen);
       for (j=istart; j<jpos; j++)
 	ajStrAppK (&tmpstr, ' ');
@@ -1042,7 +1054,7 @@ static void reportWriteNameTable (AjPReport thys,
   return;
 }
 
-/* @funcstatic reportWriteRegions *******************************************
+/* @funcstatic reportWriteRegions *********************************************
 **
 ** Writes a report in Regions format. The report (unusually for the current
 ** report formats) includes the feature type.
@@ -1131,7 +1143,7 @@ static void reportWriteRegions (AjPReport thys,
   return;
 }
 
-/* @funcstatic reportWriteSeqTable *******************************************
+/* @funcstatic reportWriteSeqTable ********************************************
 **
 ** Writes a report in SeqTable format Thie is a simple table format that
 ** includes the feature sequence. See reportWriteTable for a version
@@ -1270,7 +1282,7 @@ static void reportWriteSimple (AjPReport thys,
   return;
 }
 
-/* @funcstatic reportWriteSrs *******************************************
+/* @funcstatic reportWriteSrs *************************************************
 **
 ** Writes a report in SRS format This is a simple parsable format that
 ** includes the feature sequence.
@@ -1304,7 +1316,7 @@ static void reportWriteSrs (AjPReport thys,
   return;
 }
 
-/* @funcstatic reportWriteSrsFlags *******************************************
+/* @funcstatic reportWriteSrsFlags ********************************************
 **
 ** Writes a report in SRS format.
 ** A flag controls whether to include the sequence.
@@ -1592,7 +1604,7 @@ static void reportWriteTagseq (AjPReport thys,
 	else
 	  ajStrReplaceK (&seqmarkup[j], istart-1, '+', ilen);
       }
-    }    
+    }
   }
 
   for (i=seqbeg-1; i < seqend; i+=50) {
@@ -1609,7 +1621,7 @@ static void reportWriteTagseq (AjPReport thys,
     for (j=0; j < ntags; j++) {
       ajStrAssSub(&substr, seqmarkup[j], i, ilast);
       ajFmtPrintF (outf, "%5S %S\n", tagprints[j], substr);
-    }   
+    }
 
   }
 
@@ -1641,7 +1653,7 @@ void ajReportDel (AjPReport* pthys) {
 
   AjPReport thys = *pthys;
   AjPStr str=NULL;
-  
+
   ajStrDel (&thys->Name);
   ajStrDel (&thys->Type);
   ajStrDel (&thys->Formatstr);
@@ -1719,7 +1731,7 @@ AjBool ajReportFormatDefault (AjPStr* pformat) {
   return ajTrue;
 }
 
-/* @func ajReportFindFormat ***********************************************
+/* @func ajReportFindFormat ***************************************************
 **
 ** Looks for the specified report format in the internal definitions and
 ** returns the index.
@@ -1754,7 +1766,7 @@ AjBool ajReportFindFormat (AjPStr format, ajint* iformat) {
   return ajFalse;
 }
 
-/* @func ajReportSetTags *****************************************************
+/* @func ajReportSetTags ******************************************************
 **
 ** Constructor for a report object
 **
@@ -1813,7 +1825,7 @@ AjBool ajReportSetTags (AjPReport thys, AjPStr taglist, ajint mintags) {
   return ajTrue;
 }
 
-/* @func ajReportValid ************************************************
+/* @func ajReportValid ********************************************************
 **
 ** Test for a report object.
 **
@@ -1850,7 +1862,7 @@ AjBool ajReportValid (AjPReport thys) {
   return ajTrue;
 }
 
-/* @func ajReportNew ************************************************
+/* @func ajReportNew **********************************************************
 **
 ** Constructor for a report object
 **
@@ -1877,7 +1889,7 @@ AjPReport ajReportNew (void) {
   return pthis;
 }
 
-/* @func ajReportWrite ************************************************
+/* @func ajReportWrite ********************************************************
 **
 ** Writes a feature report
 **
@@ -1969,7 +1981,7 @@ ajint ajReportLists (AjPReport thys, AjPStr** types, AjPStr** names,
   return ntags;
 }
 
-/* @func ajReportWriteHeader ************************************************
+/* @func ajReportWriteHeader **************************************************
 **
 ** Writes a feature report header
 **
@@ -2063,11 +2075,11 @@ void ajReportWriteHeader (AjPReport thys, AjPFeattable ftable, AjPSeq seq) {
   ++thys->Count;
 
   ajStrDel(&tmpstr);
-  
+
   return;
 }
 
-/* @func ajReportWriteTail ************************************************
+/* @func ajReportWriteTail ****************************************************
 **
 ** Writes a feature report tail
 **
@@ -2111,11 +2123,11 @@ void ajReportWriteTail (AjPReport thys, AjPFeattable ftable, AjPSeq seq) {
   }
 
   ajStrDel(&tmpstr);
-  
+
   return;
 }
 
-/* @func ajReportSetHeader ************************************************
+/* @func ajReportSetHeader ****************************************************
 **
 ** Defines a feature report header
 **
@@ -2132,7 +2144,7 @@ void ajReportSetHeader (AjPReport thys, AjPStr header) {
   return;
 }
 
-/* @func ajReportSetHeaderC ************************************************
+/* @func ajReportSetHeaderC ***************************************************
 **
 ** Defines a feature report header
 **
@@ -2149,7 +2161,7 @@ void ajReportSetHeaderC (AjPReport thys, const char* header) {
   return;
 }
 
-/* @func ajReportSetTail ************************************************
+/* @func ajReportSetTail ******************************************************
 **
 ** Defines a feature report tail
 **
@@ -2166,7 +2178,7 @@ void ajReportSetTail (AjPReport thys, AjPStr tail) {
   return;
 }
 
-/* @func ajReportSetTailC ************************************************
+/* @func ajReportSetTailC *****************************************************
 **
 ** Defines a feature report tail
 **
@@ -2183,7 +2195,7 @@ void ajReportSetTailC (AjPReport thys, const char* tail) {
   return;
 }
 
-/* @func ajReportSetType ************************************************
+/* @func ajReportSetType ******************************************************
 **
 ** Sets the report type (if it is not set already)
 **
@@ -2242,7 +2254,7 @@ static char* reportCharname (AjPReport thys) {
   return protstr;
 }
 
-/* @func ajReportSeqName ************************************************
+/* @func ajReportSeqName ******************************************************
 **
 ** Returns the sequence name or USA depending on the setting in the
 ** report object (derived from the ACD and command line -rusa option)
@@ -2287,8 +2299,8 @@ void ajReportFileAdd (AjPReport thys, AjPFile file, AjPStr type) {
 
   return;
 }
- 
-/* @func ajReportPrintFormat ************************************************
+
+/* @func ajReportPrintFormat **************************************************
 **
 ** Reports the internal data structures
 **

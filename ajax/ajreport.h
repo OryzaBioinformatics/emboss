@@ -6,7 +6,7 @@ extern "C"
 #ifndef ajseqreport_h
 #define ajseqreport_h
 
-/* @data AjPReport *******************************************************
+/* @data AjPReport ************************************************************
 **
 ** Ajax Report Output object.
 **

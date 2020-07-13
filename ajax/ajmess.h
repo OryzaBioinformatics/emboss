@@ -19,7 +19,7 @@ extern AjBool acdDebugBuffer;
 extern AjBool acdDebug;
 extern AjPStr acdProgram;
 
-/* @data AjPError ***********************************************
+/* @data AjPError *************************************************************
 **
 ** Ajax error message levels object
 **
@@ -55,11 +55,11 @@ void ajMessVCrashFL (char *format, va_list args);
 void ajMessCrashCodeFL (char *code);
 
 /* External Interface.                                                       */
-/* Note that ajMesscrash is a macro and that it makes use of the ',' operator  */
-/* in C. This means that the ajMesscrash macro will only produce a single C    */
+/* Note: ajMesscrash is a macro and that it makes use of the ',' operator    */
+/* in C. This means that the ajMesscrash macro will only produce a single C  */
 /* statement and hence can be used within brackets etc. and will not break   */
 /* existing code, e.g.                                                       */
-/*                     funcblah(ajMesscrash("hello")) ;                        */
+/*                     funcblah(ajMesscrash("hello")) ;                      */
 /* will become:                                                              */
 /* funcblah(uMessSetErrorOrigin(__FILE__, __LINE__), uMessCrash("hello")) ;  */
 /*                                                                           */
@@ -69,17 +69,24 @@ void ajMessErrorInit(char *progname) ; /* Record the applications name for
 
 void ajMessBeep (void) ; /* make a beep */
 
-AjBool ajMessErrorSetFile(char *errfile);   /* set file to read codes/messages from */
+AjBool ajMessErrorSetFile(char *errfile);   /* set file to read
+					       codes/messages from */
 void ajMessCodesDelete(void);               /* Delete the code/message pairs */
 
 void ajMessOut (char *format, ...) ;  /* simple message, no newline */
-void ajMessOutCode(char *name);       /* as above but uses codes to get message */
+void ajMessOutCode(char *name);       /* as above but uses codes to
+					 get message */
 void ajMessOutLine (char *format, ...) ;  /* simple message with newline */
 void ajMessDump (char *format, ...) ; /* write to log file */
-void ajMessError (char *format, ...) ; /* error message and write to log file */
-void ajMessVError (char *format, va_list args) ; /* error message and write to log file */
-void ajMessErrorCode(char *name);      /* as above but uses code to get message */
-void ajMessExit(char *format, ...) ;  /* error message, write to log file & exit */
+void ajMessError (char *format, ...) ; /* error message and write to
+					  log file */
+void ajMessVError (char *format, va_list args) ; /* error message and
+						    write to log
+						    file */
+void ajMessErrorCode(char *name);      /* as above but uses code to
+					  get message */
+void ajMessExit(char *format, ...) ;  /* error message, write to log
+					 file & exit */
 void ajMessWarning (char *format, ...); /* warning message */
 void ajMessSetErr (char *filename, ajint line_num);
 
@@ -97,14 +104,11 @@ void ajMessSetErr (char *filename, ajint line_num);
 #define ajDie ajMessDie
 #define ajVDie ajMessDie
 
-/*AjBool ajMessReadErrorFile();*/ /* TEST REMOVE LATER AS IT SHOULD BE STATIC */
-
-
 AjBool ajMessQuery (char *text,...) ;   /* ask yes/no question */
 AjBool ajMessPrompt (char *prompt, char *dfault, char *fmt) ;
         /* ask for data satisfying format get results via freecard() */
 
-char* ajMessSysErrorText (void) ; 
+char* ajMessSysErrorText (void) ;
         /* wrapped system error message for use in ajMesserror/crash() */
 
 ajint ajMessErrorCount (void);

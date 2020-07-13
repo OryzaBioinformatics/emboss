@@ -129,7 +129,7 @@ struct comp {
 	char *regparse;		/* Input-scan pointer. */
 	ajint regnpar;		/* () count. */
 	/* moved to avoid internal padding */
-	ajlong regsize;		/* Code size. */ 
+	ajlong regsize;		/* Code size. */
 	char *regcode;		/* Code-emit pointer; &regdummy = don't. */
 	char regdummy[3];	/* NOTHING, 0 next ptr */
 };
@@ -535,7 +535,7 @@ static char * regatom(register struct comp *cp, ajint *flagp)
 		else
 		{
 		    range = (unsigned char)*(cp->regparse-2);
-		    /* What's this cast in here for???? rangeend and c are both register 
+		    /* What's this cast in here for???? rangeend and c are both register
 		       ajint from about 10 lines up
 		       rangeend = (unsigned char)c;*/
 		    rangeend = c;
@@ -1174,7 +1174,7 @@ void regdump(regexp *r)
 	next = regnext(s);
 	if (next == NULL)		/* Next ptr. */
 	    (void) printf("(0)");
-	else 
+	else
 	    (void) printf("(%d)", (s-r->program)+(next-s));
 	s += 3;
 	if (op == ANYOF || op == ANYBUT || op == EXACTLY)

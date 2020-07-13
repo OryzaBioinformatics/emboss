@@ -19,7 +19,7 @@ static void dataListRead( AjPList data, AjPFile pfile);
 
 /* @func embDataListDel *******************************************************
 **
-** Deletes the tables of data list. Calls ajTableFree for each table in the 
+** Deletes the tables of data list. Calls ajTableFree for each table in the
 ** list, and then calls ajListFree to free the actual list.
 **
 ** @param [w] data [AjPList] is the list of data tables to delete
@@ -49,9 +49,9 @@ void embDataListDel( AjPList data)
 
 
 
-/* @funcstatic dataListNextLine *********************************************
+/* @funcstatic dataListNextLine ***********************************************
 **
-** private function to read in the next line of data from the file. It is 
+** private function to read in the next line of data from the file. It is
 ** called from dataListRead.
 **
 ** @param [r] pfile [AjPFile] file poiter to the data file
@@ -85,7 +85,7 @@ static AjBool dataListNextLine( AjPFile pfile, char *commentLine,
 }
 
 
-/* @funcstatic dataListRead *************************************************
+/* @funcstatic dataListRead ***************************************************
 **
 ** General routine for reading in data from a file. The keys and values of
 ** each table are stored as AjPStr. This is a private routine, It is called
@@ -115,13 +115,13 @@ static void dataListRead( AjPList data, AjPFile pfile)
    static AjPTable table;
    AjIList iter=NULL;
    AjPTable ptable;
-   AjPStr tmp;  
+   AjPStr tmp;
 
    tmp = ajStrNew();
    line =ajStrNew();
-   
+
 /* Outer loop is for each data block */
-   
+
    while (dataListNextLine( pfile, commentLine, &line))
    {
       tokens = ajStrTokenInit( line, whiteSpace);
@@ -129,7 +129,7 @@ static void dataListRead( AjPList data, AjPFile pfile)
 /* the first token is the key for the row */
       key = ajStrNew();
       (void) ajStrToken( &key, &tokens, NULL);
-      if (!ajStrLen(key)) 
+      if (!ajStrLen(key))
       {
          ajFmtError( "Error, did not pick up first key");
          ajFatal( "Error, did not pick up first key");
@@ -183,7 +183,7 @@ static void dataListRead( AjPList data, AjPFile pfile)
 
 /* @func embDataListInit ******************************************************
 **
-** Reads in the data file and puts the data into the list of tables. The 
+** Reads in the data file and puts the data into the list of tables. The
 ** keys and values of each table are stored as AjPStr.
 **
 ** @param [w] data [AjPList] llist of data tables
@@ -212,22 +212,22 @@ void embDataListInit( AjPList data, AjPStr file_name)
 }
 
 
-/* @func embDataListGetTables ******************************************
+/* @func embDataListGetTables *************************************************
 **
 ** Returns a list of data tables as requested. The data must already have been
 ** read in and stored as a list of tables. An unsigned integer is used to
 ** request tables. The first table has a value of 1, the second a value of 2,
 ** the third a value of 4, the fourth a value of 8 etc. For example a value
-** of 10 would request the second and fourth tables from the list in that 
-** order. Only returns a list of pointers to the data. It does not copy the 
+** of 10 would request the second and fourth tables from the list in that
+** order. Only returns a list of pointers to the data. It does not copy the
 ** tables.
 **
 ** @param [r] fullList [AjPList] The list containing all the tables of data
 ** @param [w] returnList [AjPList] The new list containing just the tables
 **        requested
-** @param [r] required [ajuint] used to request tables. A value of 1 
-**        requests the first table, a value of 16 requests the fifth table, 
-**        a value of 14 returns the second third and fourth tables in the 
+** @param [r] required [ajuint] used to request tables. A value of 1
+**        requests the first table, a value of 16 requests the fifth table,
+**        a value of 14 returns the second third and fourth tables in the
 **        original list.
 ** @return [void]
 **
@@ -259,20 +259,20 @@ void embDataListGetTables( AjPList fullList, AjPList returnList,
 
 }
 
-/* @func embDataListGetTable ************************************************
+/* @func embDataListGetTable **************************************************
 **
-** Returns a single table of data from the list of data tables. The data must 
-** already have been read in and stored as a list of tables. An unsigned 
-** integer is used to request a table. The first table in the list has a 
+** Returns a single table of data from the list of data tables. The data must
+** already have been read in and stored as a list of tables. An unsigned
+** integer is used to request a table. The first table in the list has a
 ** value of 1, the second a value of 2, the third a value of 4, the fourth a
 ** value of 8 etc. For example a value of 64 would request the seventh data
-** table in the list. When looking for which table to return the position of 
+** table in the list. When looking for which table to return the position of
 ** the lowest set bit in the value determines which table is returned i.e.
 ** a value of 66 would request the second table (not the seventh)
 **
 ** @param [r] fullList [AjPList] The list containing all the tables of data
-** @param [r] required [ajuint] used to request a table. A value of 1 
-**        requests the first table, a value of 16 requests the fifth table, 
+** @param [r] required [ajuint] used to request a table. A value of 1
+**        requests the first table, a value of 16 requests the fifth table,
 **        a value of 14 returns the second table in the original list.
 ** @return [AjPTable] the data table. Key and value are stored as AjPStrs
 **
@@ -282,8 +282,9 @@ AjPTable embDataListGetTable( AjPList fullList, ajuint required)
 {
 
 /*This is a public routine to return a single table of data from a list of*/
-/*tables. embDataListInit must previously have been called. Uses list of tables*/
-/*generated from embDataListInit, an unsigned iterator telling routine which*/
+/*tables. embDataListInit must previously have been called. */
+/* Uses list of tables generated from embDataListInit, */
+/* an unsigned iterator telling routine which*/
 /*table to return from list. It returns the AjPTable*/
 
    AjIList iter;

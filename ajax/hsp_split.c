@@ -5,13 +5,13 @@
  - split - divide a string into fields, like awk split()
  = ajint split(char *string, char *fields[], ajint nfields, char *sep);
  */
-/* number of fields, including overflow 
+/* number of fields, including overflow
 char *string;
-char *fields[];			 list is not NULL-terminated 
-ajint nfields;			 number of entries available in fields[] 
+char *fields[];			 list is not NULL-terminated
+ajint nfields;			 number of entries available in fields[]
 char *sep;			 "" white, "c" single char, "ab" [ab]+ */
 
-/* @func split **************************************************************
+/* @func split ****************************************************************
 **
 ** Undocumented.
 **
@@ -246,7 +246,7 @@ ajint dosplit(char *string, char *seps)
 /* @func hsp_split_print ******************************************************
 **
 ** Undocumented
-** 
+**
 ** @param [r] nf [ajint] Undocumented
 ** @param [r] nfp [ajint] Undocumented
 ** @param [r] fields [char* []] Undocumented

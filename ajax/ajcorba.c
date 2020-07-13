@@ -1,26 +1,26 @@
-/********************************************************************
+/******************************************************************************
 ** @source AJAX corba functions
 **
 ** @author Copyright (C) 2000 Alan Bleasby
-** @version 1.0 
+** @version 1.0
 ** @modified Nov 10 ajb First version
 ** @@
-** 
+**
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
 ** version 2 of the License, or (at your option) any later version.
-** 
+**
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Library General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU Library General Public
 ** License along with this library; if not, write to the
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ** Boston, MA  02111-1307, USA.
-********************************************************************/
+******************************************************************************/
 
 #ifdef HAVE_ORB_ORBIT_H
 
@@ -48,7 +48,7 @@
 /* ========================= constructors ============================= */
 /* ==================================================================== */
 
-/* @section Corba Constructors ***********************************************
+/* @section Corba Constructors ************************************************
 **
 ** All constructors return a new object by pointer. It is the responsibility
 ** of the user to first destroy any previous object. The target pointer
@@ -57,7 +57,7 @@
 **
 ******************************************************************************/
 
-/* @func ajCorbafeatNew ******************************************************
+/* @func ajCorbafeatNew *******************************************************
 **
 ** Default constructor for empty AJAX corba feature objects.
 **
@@ -70,9 +70,9 @@
 AjPCorbafeat ajCorbafeatNew(ajint ntypes)
 {
     AjPCorbafeat feat;
-    
+
     AJNEW0(feat);
-    
+
     feat->Ntypes = ntypes;
 
     if(ntypes)
@@ -82,7 +82,7 @@ AjPCorbafeat ajCorbafeatNew(ajint ntypes)
 }
 
 
-/* @func ajCorbatypeNew ******************************************************
+/* @func ajCorbatypeNew *******************************************************
 **
 ** Default constructor for empty AJAX corba feature type objects.
 **
@@ -107,7 +107,7 @@ AjPCorbatype ajCorbatypeNew(ajint ntags, ajint nlocs)
     Ctype->Source = ajStrNew();
     Ctype->Id     = ajStrNew();
     Ctype->Nlocs  = nlocs;
-    
+
     if(ntags)
     {
 	AJCNEW0(Ctype->Tag,ntags);
@@ -133,7 +133,7 @@ AjPCorbatype ajCorbatypeNew(ajint ntags, ajint nlocs)
 }
 
 
-/* @func ajCorbatypeDel ******************************************************
+/* @func ajCorbatypeDel *******************************************************
 **
 ** Default destructor for AJAX corba feature type objects.
 **
@@ -148,10 +148,10 @@ void ajCorbatypeDel(AjPCorbatype *thys)
     AjPCorbatype pthis=NULL;
     ajint ntags;
     ajint nval;
-    
+
     ajint i;
     ajint j;
-    
+
     if(!thys)
 	return;
 
@@ -165,7 +165,7 @@ void ajCorbatypeDel(AjPCorbatype *thys)
 	    ajStrDel(&pthis->Val[i][j]);
 	ajStrDel(&pthis->Tag[i]);
     }
-    
+
     if(ntags)
     {
 	AJFREE(pthis->Tag);
@@ -183,7 +183,7 @@ void ajCorbatypeDel(AjPCorbatype *thys)
 	AJFREE(pthis->LEfuzzy);
 	AJFREE(pthis->LStrand);
     }
-    
+
     ajStrDel(&pthis->Name);
     ajStrDel(&pthis->Source);
     ajStrDel(&pthis->Id);
@@ -192,7 +192,7 @@ void ajCorbatypeDel(AjPCorbatype *thys)
     return;
 }
 
-/* @func ajCorbafeatDel ******************************************************
+/* @func ajCorbafeatDel *******************************************************
 **
 ** Default destructor for AJAX corba top level feature objects.
 ** Also deletes associated corba type objects
@@ -208,13 +208,13 @@ void ajCorbafeatDel(AjPCorbafeat *thys)
     AjPCorbafeat pthis=NULL;
     ajint i;
     ajint ntypes;
-    
+
 
     if(!thys)
 	return;
 
     pthis = *thys;
-    
+
     ntypes = pthis->Ntypes;
     for(i=0;i<ntypes;++i)
 	ajCorbatypeDel(&pthis->Types[i]);
@@ -224,7 +224,7 @@ void ajCorbafeatDel(AjPCorbafeat *thys)
     return;
 }
 
-/* @func ajSeqCorbaEmbl ******************************************************
+/* @func ajSeqCorbaEmbl *******************************************************
 **
 ** Returns a sequence and feature information from the Biocorba 0.2 EBI server
 **
@@ -261,7 +261,7 @@ AjPStr ajSeqCorbaEmbl(char *code, char **exerr, ajint *exint,
     org_biocorba_seqcore_SeqDB              CseqDB;
 /*  org_biocorba_seqcore_UpdateableSeqDB    CupdseqDB;      */
     org_biocorba_seqcore_BioEnv             Cbioenv;
-    
+
     CORBA_ORB orb;
     CORBA_Environment Cenv;
 
@@ -280,9 +280,9 @@ AjPStr ajSeqCorbaEmbl(char *code, char **exerr, ajint *exint,
     CORBA_long Esversion;
     CORBA_long Emaxlen;
     CORBA_long Eseqlen;
-    
+
     CORBA_char *sq;
-    
+
     CORBA_long Enfeat;
 
     CORBA_boolean morefeat;
@@ -298,7 +298,7 @@ AjPStr ajSeqCorbaEmbl(char *code, char **exerr, ajint *exint,
     org_biocorba_seqcore_StringList       Esl;
     org_biocorba_seqcore_SeqFeatureLocationList *Ell;
     org_biocorba_seqcore_SeqFeatureLocation *Esfl;
-    
+
     ajint i;
     ajint j;
     unsigned ajlong len;
@@ -306,8 +306,8 @@ AjPStr ajSeqCorbaEmbl(char *code, char **exerr, ajint *exint,
     ajint fcnt  = 0;
     ajint ntags = 0;
     ajint nlocs = 0;
-    
-    
+
+
 
     /*
      *  Get the EMBL IOR
@@ -337,7 +337,7 @@ AjPStr ajSeqCorbaEmbl(char *code, char **exerr, ajint *exint,
         return NULL;
     }
     ajStrDel(&ior);
-    
+
     /*
      *  Need a seqdb object to get dbname, dbversion, maxlen & sequences
      */
@@ -401,7 +401,7 @@ AjPStr ajSeqCorbaEmbl(char *code, char **exerr, ajint *exint,
 	*exint  = Cenv._major;
 	return NULL;
     }
-    
+
     /*
      *  Get the sequence length, Don't need to chunk yet as max seq size
      *  is 2Gb, so its out of interest only
@@ -537,7 +537,7 @@ AjPStr ajSeqCorbaEmbl(char *code, char **exerr, ajint *exint,
 
 	    nlocs = Ell->_length;
 	    Esfl  = Ell->_buffer;
-	    
+
 
 
 	    Efptr = org_biocorba_seqcore_SeqFeature_qualifiers(Cseqfeat,
@@ -564,9 +564,9 @@ AjPStr ajSeqCorbaEmbl(char *code, char **exerr, ajint *exint,
 		(*feat)->Types[fcnt]->LSfuzzy[i] = Esfl->start.fuzzy;
 		(*feat)->Types[fcnt]->LEfuzzy[i] = Esfl->end.fuzzy;
 	    }
-	    
 
-	
+
+
 
 	    /* Get Top-level feature information */
 	    Eftype = org_biocorba_seqcore_SeqFeature_type(Cseqfeat,&Cenv);
@@ -577,7 +577,7 @@ AjPStr ajSeqCorbaEmbl(char *code, char **exerr, ajint *exint,
 		return NULL;
 	    }
 	    ajStrAssC(&(*feat)->Types[fcnt]->Name,Eftype);
-	
+
 	    Efsource = org_biocorba_seqcore_SeqFeature_source(Cseqfeat,
 							      &Cenv);
 	    if(Cenv._major != CORBA_NO_EXCEPTION)
@@ -606,7 +606,7 @@ AjPStr ajSeqCorbaEmbl(char *code, char **exerr, ajint *exint,
 		return NULL;
 	    }
 	    (*feat)->Types[fcnt]->Start = Efstart;
-	
+
 	    Efend = org_biocorba_seqcore_SeqFeature_end(Cseqfeat,&Cenv);
 	    if(Cenv._major != CORBA_NO_EXCEPTION)
 	    {
@@ -640,7 +640,7 @@ AjPStr ajSeqCorbaEmbl(char *code, char **exerr, ajint *exint,
 		    (*feat)->Types[fcnt]->Val[i][j] =
 			ajStrNewC(Esl._buffer[j]);
 	    }
-	
+
 
 
 
@@ -660,9 +660,9 @@ AjPStr ajSeqCorbaEmbl(char *code, char **exerr, ajint *exint,
 	CORBA_Object_release(Cseqfeatiter, &Cenv);
 	CORBA_Object_release(Cseqfeatvec, &Cenv);
     }
-    
+
     sequence = ajStrNewC(sq);
-    
+
 
     /*
      *  Tidy
@@ -679,7 +679,7 @@ AjPStr ajSeqCorbaEmbl(char *code, char **exerr, ajint *exint,
     org_biocorba_seqcore_PrimarySeq_unref(Cpriseq,&Cenv);
     org_biocorba_seqcore_Seq_unref(Cseq,&Cenv);
     org_biocorba_seqcore_SeqDB_unref(CseqDB,&Cenv);
-    
+
 
     CORBA_Object_release(Cpriseq, &Cenv);
     CORBA_Object_release(Cseq, &Cenv);

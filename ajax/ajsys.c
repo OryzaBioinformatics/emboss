@@ -1,25 +1,25 @@
-/********************************************************************
+/******************************************************************************
 ** @source AJAX system functions
 **
 ** Copyright (c) Alan Bleasby 1999
-** @version 1.0 
+** @version 1.0
 ** @@
-** 
+**
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
 ** version 2 of the License, or (at your option) any later version.
-** 
+**
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Library General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU Library General Public
 ** License along with this library; if not, write to the
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ** Boston, MA  02111-1307, USA.
-********************************************************************/
+******************************************************************************/
 
 #include "ajsys.h"
 #ifndef __VMS
@@ -29,7 +29,7 @@
 #include <errno.h>
 #include <unistd.h>
 
-/* @func ajSysBasename *******************************************************
+/* @func ajSysBasename ********************************************************
 **
 ** Removes a directory specification from a filename
 **
@@ -54,15 +54,15 @@ void ajSysBasename(AjPStr *s)
 	if(*p=='/') break;
 	--p;
     }
-    
+
     if(p!=t)
 	(void) ajStrAssC(s, p+1);
 
     return;
 }
 
-    
-/* @func ajSysItoC *******************************************************
+
+/* @func ajSysItoC ************************************************************
 **
 ** Convert Int to Char
 ** Needed for very fussy compilers i.e. Digital C
@@ -81,7 +81,7 @@ char ajSysItoC(ajint v)
 }
 
 
-/* @func ajSysItoUC *******************************************************
+/* @func ajSysItoUC ***********************************************************
 **
 ** Convert Int to Unsigned Char
 ** Needed for very fussy compilers i.e. Digital C
@@ -100,7 +100,7 @@ unsigned char ajSysItoUC(ajint v)
 }
 
 
-/* @func ajSysWhich *******************************************************
+/* @func ajSysWhich ***********************************************************
 **
 ** Gets the Basename of a file then searches $PATH sequentially until it
 ** finds a user-EXECUTABLE file of the same name.
@@ -127,7 +127,7 @@ AjBool ajSysWhich(AjPStr *s)
 	fname = ajStrNew();
 
     ajSysBasename(&tname);
-    
+
     p=ajSysStrtok(p,":");
     if(p==NULL)
     {
@@ -161,7 +161,7 @@ AjBool ajSysWhich(AjPStr *s)
 
 
 
-/* @func ajSysWhichEnv *******************************************************
+/* @func ajSysWhichEnv ********************************************************
 **
 ** Gets the Basename of a file then searches $PATH sequentially until it
 ** finds a user-EXECUTABLE file of the same name. Reentrant.
@@ -182,7 +182,7 @@ AjBool ajSysWhichEnv(AjPStr *s, char **env)
     char   *save=NULL;
     AjPStr buf;
     AjPStr tmp=NULL;
-    
+
 
     buf = ajStrNew();
     tname = ajStrNew();
@@ -193,8 +193,8 @@ AjBool ajSysWhichEnv(AjPStr *s, char **env)
     path  = ajStrNew();
 
     ajSysBasename(&tname);
-    
-    
+
+
     count=0;
     while(*env[count])
     {
@@ -211,7 +211,7 @@ AjBool ajSysWhichEnv(AjPStr *s, char **env)
 	ajStrDel(&tmp);
 	return ajFalse;
     }
-    
+
     ajStrAssC(&path, env[count]);
     p=ajStrStr(path);
     p+=5;
@@ -260,7 +260,7 @@ AjBool ajSysWhichEnv(AjPStr *s, char **env)
 
 
 
-/* @func ajSystem *******************************************************
+/* @func ajSystem *************************************************************
 **
 ** Exec a command line as if from the C shell
 **
@@ -282,7 +282,7 @@ void ajSystem(AjPStr *cl)
     AjPStr pname=NULL;
 
     if(!ajSysArglist(*cl, &pgm, &argptr)) return;
-    
+
     (void) ajStrAssC(&pname, pgm);
     if (!ajSysWhich(&pname))
       ajFatal("cannot find program '%S'", pname);
@@ -290,7 +290,7 @@ void ajSystem(AjPStr *cl)
     pid=fork();
     if(pid==-1)
 	ajFatal("System fork failed");
-    
+
     if(pid)
 	while(wait(&status)!=pid);
     else
@@ -305,16 +305,16 @@ void ajSystem(AjPStr *cl)
 	++i;
     }
     AJFREE (argptr);
-    
+
     AJFREE (pgm);
-    
-    
+
+
     return;
 }
 
 
 
-/* @func ajSystemEnv *******************************************************
+/* @func ajSystemEnv **********************************************************
 **
 ** Exec a command line as if from the C shell
 **
@@ -338,12 +338,12 @@ void ajSystemEnv (AjPStr *cl, char **env)
     char *pgm;
     char **argptr;
     ajint i;
-    
+
 
     AjPStr pname=NULL;
 
     if(!ajSysArglist(*cl, &pgm, &argptr)) return;
-    
+
     (void) ajStrAssC(&pname, pgm);
     if (!ajSysWhichEnv(&pname, env))
       ajFatal("cannot find program '%S'", pname);
@@ -351,7 +351,7 @@ void ajSystemEnv (AjPStr *cl, char **env)
     pid=fork();
     if(pid==-1)
 	ajFatal("System fork failed");
-    
+
     if(pid)
 	while(wait(&status)!=pid);
     else
@@ -366,16 +366,16 @@ void ajSystemEnv (AjPStr *cl, char **env)
 	++i;
     }
     AJFREE (argptr);
-    
+
     AJFREE (pgm);
-    
-    
+
+
     return;
 }
 
 
 
-/* @func ajSysUnlink *******************************************************
+/* @func ajSysUnlink **********************************************************
 **
 ** Deletes a file or link
 **
@@ -394,7 +394,7 @@ AjBool ajSysUnlink(AjPStr *s)
 
 
 
-/* @func ajSysCanon  *******************************************************
+/* @func ajSysCanon  **********************************************************
 **
 ** Sets or unsets TTY canonical mode
 **
@@ -413,7 +413,7 @@ void ajSysCanon(AjBool state)
     tty.c_cc[VMIN]='\1';
     tty.c_cc[VTIME]='\0';
     tcsetattr(1,TCSANOW,&tty);
-    
+
     if(state)
 	tty.c_lflag |= ICANON;
     else
@@ -424,7 +424,7 @@ void ajSysCanon(AjBool state)
     return;
 }
 
-/* @func ajSysArglist *****************************************************
+/* @func ajSysArglist *********************************************************
 **
 ** Generates a program name and argument list from a command line string.
 **
@@ -488,7 +488,7 @@ AjBool ajSysArglist (AjPStr cmdline, char** pgm, char*** arglist) {
   argexp = NULL;
   ajStrDel(&tmpline);
   ajStrDel(&argstr);
-  
+
   return ajTrue;
 }
 
@@ -516,7 +516,7 @@ void ajSysArgListFree (char*** arglist) {
 }
 
 
-/* @func ajSysFdopen *******************************************************
+/* @func ajSysFdopen **********************************************************
 **
 ** Place non-ANSI fdopen here
 **
@@ -533,7 +533,7 @@ FILE* ajSysFdopen(ajint filedes, const char *mode)
 
 
 
-/* @func ajSysStrdup *******************************************************
+/* @func ajSysStrdup **********************************************************
 **
 ** Duplicate BSD strdup function for very strict ANSI compilers
 **
@@ -553,7 +553,7 @@ char* ajSysStrdup(const char *s)
 }
 
 
-/* @func ajSysIsRegular ******************************************************
+/* @func ajSysIsRegular *******************************************************
 **
 ** Test for regular file
 **
@@ -576,7 +576,7 @@ AjBool ajSysIsRegular(const char *s)
 #else
     if(stat(s,&buf)==-1)
 	return ajFalse;
-#endif    
+#endif
 
     if((ajint)buf.st_mode & AJ_FILE_REG)
 	return ajTrue;
@@ -585,7 +585,7 @@ AjBool ajSysIsRegular(const char *s)
 }
 
 
-/* @func ajSysIsDirectory ******************************************************
+/* @func ajSysIsDirectory *****************************************************
 **
 ** Test for a directory
 **
@@ -609,7 +609,7 @@ AjBool ajSysIsDirectory(const char *s)
     if(stat(s,&buf)==-1)
 	return ajFalse;
 #endif
-    
+
     if((ajint)buf.st_mode & AJ_FILE_DIR)
 	return ajTrue;
 
@@ -618,7 +618,7 @@ AjBool ajSysIsDirectory(const char *s)
 
 
 
-/* @func ajSysStrtok ******************************************************
+/* @func ajSysStrtok **********************************************************
 **
 ** strtok that doesn't corrupt the source string
 **
@@ -657,12 +657,12 @@ char* ajSysStrtok(const char *s, const char *t)
     p += len;
     len = strspn(p,t);
     p += len;
-    
+
     return ajStrStr(rets);
 }
 
 
-/* @func ajSysStrtokR ******************************************************
+/* @func ajSysStrtokR *********************************************************
 **
 ** Reentrant strtok that doesn't corrupt the source string
 **
@@ -688,7 +688,7 @@ char* ajSysStrtokR(const char *s, const char *t, char **ptrptr, AjPStr *buf)
     else
 	p = *ptrptr;
 
-    
+
     if(!*p)
 	return NULL;
 
@@ -701,7 +701,7 @@ char* ajSysStrtokR(const char *s, const char *t, char **ptrptr, AjPStr *buf)
     p += len;
 
     *ptrptr = p;
-    
+
     return ajStrStr(*buf);
 }
 

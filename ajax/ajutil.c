@@ -167,7 +167,7 @@ void ajUtilRev2 (short* sval) {
       *cd = *cs++;
       --cd;
   }
-  
+
   *sval = revdata.s;
 
   return;
@@ -200,7 +200,7 @@ void ajUtilRev4 (ajint* ival) {
       *cd = *cs++;
       --cd;
   }
-  
+
   *ival = revdata.i;
 
   return;
@@ -233,12 +233,12 @@ void ajUtilRev8 (ajlong* ival) {
       *cd = *cs++;
       --cd;
   }
-  
+
   *ival = revdata.l;
 
   return;
 }
-/* @func ajUtilCatch *********************************************************
+/* @func ajUtilCatch **********************************************************
 **
 ** Dummy function to be called in special cases so it can be used when
 ** debugging in GDB.

@@ -48,7 +48,8 @@ static char othercase(ajint ch);
 static void bothcases(register struct parse *p, ajint ch);
 static void ordinary(register struct parse *p, register ajint ch);
 static void nonnewline(register struct parse *p);
-static void repeat(register struct parse *p, sopno start, ajint from, ajint to);
+static void repeat(register struct parse *p, sopno start,
+		   ajint from, ajint to);
 static ajint seterr(register struct parse *p, ajint e);
 static cset *allocset(register struct parse *p);
 static void freeset(register struct parse *p, register cset *cs);
@@ -228,7 +229,7 @@ ajint hsp_regcomp(regex_t *preg, const char *pattern, ajint cflags)
 
 
 
-/* @funcstatic p_ere *********************************************************
+/* @funcstatic p_ere **********************************************************
 **
 ** ERE parser top level, concatenation and alternation
 **
@@ -523,7 +524,7 @@ static void p_bre( register struct parse *p, register ajint end1,
 **
 ** @param [?] p [register struct parse*] Undocumented
 ** @param [?] starordinary [ajint] is a leading * an ordinary character?
-** @return [ajint] was the simple RE an unbackslashed $? 
+** @return [ajint] was the simple RE an unbackslashed $?
 ** @@
 ******************************************************************************/
 
@@ -535,11 +536,12 @@ static ajint p_simp_re(register struct parse *p, ajint starordinary)
     register sopno pos;
     register ajint i;
     register sopno subno;
-#	define	BACKSL	(1<<CHAR_BIT)
 
-    pos = HERE();			/* repetion op, if any, covers from here */
+#define	BACKSL	(1<<CHAR_BIT)
 
-    assert(MORE());			/* caller should have ensured this */
+    pos = HERE();	       	/* repetition op, if any, covers from here */
+
+    assert(MORE());	      	/* caller should have ensured this */
     c = GETNEXT();
     if (c == '\\')
     {
@@ -577,7 +579,7 @@ static ajint p_simp_re(register struct parse *p, ajint starordinary)
 	EMIT(ORPAREN, subno);
 	(void)REQUIRE(EATTWO('\\', ')'), REG_EPAREN);
 	break;
-    case BACKSL|')':			/* should not get here -- must be user */
+    case BACKSL|')':	       	/* should not get here -- must be user */
     case BACKSL|'}':
 	(void) SETERROR(REG_EPAREN);
 	break;
@@ -950,7 +952,7 @@ static char p_b_symbol(register struct parse *p)
 **
 ** @param [?] p [register struct parse*] Undocumented
 ** @param [?] endc [ajint] name ended by endc,']'
-** @return [char] value of collating element 
+** @return [char] value of collating element
 ** @@
 ******************************************************************************/
 
@@ -1105,14 +1107,15 @@ static void nonnewline(register struct parse *p)
 ** generate code for a bounded repetition, recursively if needed
 **
 ** @param [?] p [register struct parse*] Undocumented
-** @param [?] start [sopno] operand from here to end of strip 
-** @param [?] from [ajint] repeated from this number 
+** @param [?] start [sopno] operand from here to end of strip
+** @param [?] from [ajint] repeated from this number
 ** @param [?] to [ajint] to this number of times (maybe INFINITY)
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void repeat( register struct parse *p, sopno start, ajint from, ajint to)
+static void repeat( register struct parse *p, sopno start,
+		    ajint from, ajint to)
 {
     register sopno finish = HERE();
 #	define	N	2
@@ -1121,7 +1124,7 @@ static void repeat( register struct parse *p, sopno start, ajint from, ajint to)
 #	define	MAP(n)	(((n) <= 1) ? (n) : ((n) == INFINITY) ? INF : N)
     register sopno copy;
 
-    if (p->error != 0)			/* head off possible runaway recursion */
+    if (p->error != 0)		      /* head off possible runaway recursion */
 	return;
 
     assert(from <= to);
@@ -1320,7 +1323,7 @@ static ajint freezeset( register struct parse *p, register cset *cs)
 
     /* look for an earlier one which is the same */
     for (cs2 = &p->g->sets[0]; cs2 < top; cs2++)
-	if (cs2->hash == h && cs2 != cs) 
+	if (cs2->hash == h && cs2 != cs)
 	{
 	    /* maybe */
 	    for (i = 0; i < css; i++)
@@ -1349,7 +1352,7 @@ static ajint freezeset( register struct parse *p, register cset *cs)
 **
 ** @param [?] p [register struct parse*] Undocumented
 ** @param [?] cs [register cset*] Undocumented
-** @return [ajint] character; there is no "none" value 
+** @return [ajint] character; there is no "none" value
 ** @@
 ******************************************************************************/
 
@@ -1652,7 +1655,7 @@ static void categorize(struct parse *p,register REGUTSSTRUCT *g)
 ** emit a duplicate of a bunch of sops
 **
 ** @param [?] p [register struct parse*] Undocumented
-** @param [?] start [sopno] from here 
+** @param [?] start [sopno] from here
 ** @param [?] finish [sopno] to this less one
 ** @return [sopno] start of duplicate
 ** @@
@@ -1818,7 +1821,7 @@ static void enlarge(register struct parse *p, register sopno size)
 
 
 
-/* @funcstatic stripsnug *****************************************************
+/* @funcstatic stripsnug ******************************************************
 **
 ** compact the strip
 **
@@ -1843,7 +1846,7 @@ static void stripsnug(register struct parse *p,register REGUTSSTRUCT *g)
 
 
 
-/* @funcstatic findmust ******************************************************
+/* @funcstatic findmust *******************************************************
 **
 ** fill in must and mlen with longest mandatory literal string
 **
@@ -2001,7 +2004,7 @@ static sopno pluscount(struct parse *p,register REGUTSSTRUCT *g)
 void regcompUnused(void)
 {
     cset ucset;
-    
+
     mcin(&ucset,"");
     mcsub(&ucset,"");
 }

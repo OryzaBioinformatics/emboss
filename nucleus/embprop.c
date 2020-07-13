@@ -13,12 +13,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -52,7 +52,7 @@ static ajint propFragCompare(const void *a, const void *b);
 
 
 
-/* @func embPropAminoRead *************************************************
+/* @func embPropAminoRead *****************************************************
 **
 ** Read amino acid properties from Eamino.dat
 **
@@ -66,7 +66,7 @@ void embPropAminoRead(AjPFile mfptr)
   /*    AjPFile mfptr=NULL; */
     AjPStr  line=NULL;
     AjPStr  delim=NULL;
-    
+
     char *p;
 
     ajint cols=0;
@@ -99,7 +99,7 @@ void embPropAminoRead(AjPFile mfptr)
 
 
 
-/* @func embPropCalcMolwt  ************************************************
+/* @func embPropCalcMolwt  ****************************************************
 **
 ** Calculate the molecular weight of a protein sequence
 ** This is a shell around embPropCalcMolwtMod using water as the modifier.
@@ -118,7 +118,7 @@ double embPropCalcMolwt(char *s, ajint start, ajint end)
 }
 
 
-/* @func embPropCalcMolwtMod  ************************************************
+/* @func embPropCalcMolwtMod  *************************************************
 **
 ** Calculate the molecular weight of a protein sequence
 ** with chemically modified termini
@@ -132,20 +132,21 @@ double embPropCalcMolwt(char *s, ajint start, ajint end)
 ** @return [double] molecular weight
 ** @@
 ******************************************************************************/
-double embPropCalcMolwtMod(char *s, ajint start, ajint end, double nmass, double cmass)
+double embPropCalcMolwtMod(char *s, ajint start, ajint end, double nmass,
+			   double cmass)
 {
 
     char *p;
     double sum;
     ajint i;
     ajint len;
-    
+
     if(!propInit)
       ajFatal("Amino Acid data not initialised. Call embPropAminoRead");
     /*embPropAminoRead();*/
 
     len = end-start+1;
-    
+
     p=s+start;
     sum=0.0;
 
@@ -158,7 +159,7 @@ double embPropCalcMolwtMod(char *s, ajint start, ajint end, double nmass, double
 
 
 
-/* @func embPropCharToThree  ************************************************
+/* @func embPropCharToThree  **************************************************
 **
 ** Return 3 letter amino acid code A=Ala B=Asx C=Cys etc
 **
@@ -174,7 +175,7 @@ char* embPropCharToThree(char c)
 
 
 
-/* @func embPropIntToThree  ************************************************
+/* @func embPropIntToThree  ***************************************************
 **
 ** Return 3 letter amino acid code 0=Ala 1=Asx 2=Cys etc
 **
@@ -189,10 +190,10 @@ char* embPropIntToThree(ajint c)
     {
 	"Ala","Asx","Cys","Asp","Glu","Phe","Gly","His","Ile","---","Lys",
 	"Leu","Met","Asn","---","Pro","Gln","Arg","Ser","Thr","---",
-	"Val","Trp","Xaa","Tyr","Glx" 
+	"Val","Trp","Xaa","Tyr","Glx"
     };
-    
-    
+
+
     return tab[c];
 }
 
@@ -216,7 +217,8 @@ char* embPropIntToThree(ajint c)
 ** @return [void]
 ** @@
 ******************************************************************************/
-void embPropCalcFragments(char *s, ajint n, ajint begin, AjPList *l, AjPList *pa,
+void embPropCalcFragments(char *s, ajint n, ajint begin,
+			  AjPList *l, AjPList *pa,
 			 AjBool unfavoured, AjBool overlap,
 			 AjBool allpartials, ajint *ncomp, ajint *npart,
 			 AjPStr *rname)
@@ -266,7 +268,7 @@ void embPropCalcFragments(char *s, ajint n, ajint begin, AjPList *l, AjPList *pa
     len = strlen(s);
 
     t=ajListNew();		/* Temporary list */
-    
+
 
     /* First get all potential cut points */
     for(i=0;i<len;++i)
@@ -334,14 +336,14 @@ void embPropCalcFragments(char *s, ajint n, ajint begin, AjPList *l, AjPList *pa
 	fr->isfrag = afrag[i];
 	ajListPush(*l,(void *) fr);
     }
-    
+
     ajListSort(*l,propFragCompare);
     *ncomp = defcnt;
 
 
     /* Now deal with overlaps */
     *npart = 0;
-    
+
     lim = defcnt -1;
     if(overlap && !allpartials)
     {
@@ -387,7 +389,7 @@ void embPropCalcFragments(char *s, ajint n, ajint begin, AjPList *l, AjPList *pa
 	}
 	ajListSort(*pa,propFragCompare);
     }
-		
+
     if(defcnt)
     {
 	AJFREE(molwtsa);
@@ -395,14 +397,14 @@ void embPropCalcFragments(char *s, ajint n, ajint begin, AjPList *l, AjPList *pa
 	AJFREE(begsa);
 	AJFREE(afrag);
     }
-    
+
     ajListFree(&t);
     return;
 }
 
 
 
-/* @funcstatic propFragCompare  *******************************************
+/* @funcstatic propFragCompare  ***********************************************
 **
 ** compare two molecular weight AjPFrag list elements for sorting
 **
@@ -430,7 +432,7 @@ static ajint propFragCompare(const void *a, const void *b)
 ******************************************************************************/
 
 AjPStr embPropProtGaps (AjPSeq seq, ajint pad) {
-  
+
   char *p;
   AjPStr temp = ajStrNewL(ajSeqLen(seq)*3 + pad+1);
   ajint i;
@@ -454,7 +456,7 @@ AjPStr embPropProtGaps (AjPSeq seq, ajint pad) {
 ** Creates a a 3-letter sequence protein string from single-letter sequence
 ** EMBOSS is bad at reading 3-letter sequences, but this may be useful
 ** when displaying translations.
-**   
+**
 ** @param [u] seq [AjPSeq] protein sequence to convert to 3-letter codes
 ** @param [r] pad [ajint] number of spaces to insert at the start of the result
 ** @return [AjPStr] string containing 3-letter protein sequence
@@ -471,7 +473,7 @@ AjPStr embPropProt1to3 (AjPSeq seq, ajint pad) {
   for (i=0; i<pad; i++) {
     (void) ajStrAppC(&temp, " ");
   }
- 
+
   for (p=ajSeqChar(seq); *p; p++) {
     if (*p == '*') {
       (void) ajStrAppC(&temp, "***");
@@ -492,11 +494,11 @@ AjPStr embPropProt1to3 (AjPSeq seq, ajint pad) {
   return temp;
 }
 
-/* @func embPropPurine ******************************************************
+/* @func embPropPurine ********************************************************
 **
 ** Returns ajTrue if the input base is a Purine.
 ** Returns ajFalse if it is a Pyrimidine or it is ambiguous.
-** 
+**
 ** @param [r] base [char] base
 ** @return [AjBool] return ajTrue if this is a Purine
 ** @@
@@ -509,11 +511,11 @@ AjBool embPropPurine (char base) {
 }
 
 
-/* @func embPropPyrimidine ******************************************************
+/* @func embPropPyrimidine ****************************************************
 **
 ** Returns ajTrue if the input base is a Pyrimidine.
 ** Returns ajFalse if it is a Purine or it is ambiguous.
-** 
+**
 ** @param [r] base [char] base
 ** @return [AjBool] return ajTrue if this is a Pyrimidine
 ** @@
@@ -526,13 +528,13 @@ AjBool embPropPyrimidine (char base) {
 }
 
 
-/* @func embPropTransversion ******************************************************
+/* @func embPropTransversion **************************************************
 **
 ** Returns ajTrue if the input two bases have undergone a tranversion.
 ** (Pyrimidine to Purine, or vice versa)
 ** Returns ajFalse if this is not a transversion or it can not be determined
 ** (e.g. no change A->A, transition C->T, unknown A->N)
-** 
+**
 ** @param [r] base1 [char] first base
 ** @param [r] base2 [char] second base
 ** @return [AjBool] return ajTrue if this is a transversion
@@ -551,7 +553,7 @@ AjBool embPropTransversion (char base1, char base2) {
 
   ajDebug("base1 py = %d, pu = %d", u1, y1);
   ajDebug("base2 py = %d, pu = %d", u2, y2);
-    
+
 
 /* not a purine or a pyrimidine - ambiguous - return ajFalse */
   if (!u1 && !y1) return ajFalse;
@@ -565,13 +567,13 @@ AjBool embPropTransversion (char base1, char base2) {
 
 
 
-/* @func embPropTransition ******************************************************
+/* @func embPropTransition ****************************************************
 **
 ** Returns ajTrue if the input two bases have undergone a transition.
 ** (Pyrimidine to Pyrimidine, or Purine to Purine)
 ** Returns ajFalse if this is not a transition or it can not be determined
 ** (e.g. no change A->A, transversion A->T, unknown A->N)
-** 
+**
 ** @param [r] base1 [char] first base
 ** @param [r] base2 [char] second base
 ** @return [AjBool] return ajTrue if this is a transition
@@ -603,10 +605,10 @@ AjBool embPropTransition (char base1, char base2) {
   if (tolower(base1) == 'u' && tolower(base2) == 't') return ajFalse;
 
 /* C to Y, T to Y, A to R, G to R - ambiguous - not a transition */
-  if (u1 && tolower(base2) == 'r') return ajFalse; 
-  if (u2 && tolower(base1) == 'r') return ajFalse; 
-  if (y1 && tolower(base2) == 'y') return ajFalse; 
-  if (y2 && tolower(base1) == 'y') return ajFalse; 
+  if (u1 && tolower(base2) == 'r') return ajFalse;
+  if (u2 && tolower(base1) == 'r') return ajFalse;
+  if (y1 && tolower(base2) == 'y') return ajFalse;
+  if (y2 && tolower(base1) == 'y') return ajFalse;
 
   ajDebug("embPropTransition result = %d", (u1 == u2));
 

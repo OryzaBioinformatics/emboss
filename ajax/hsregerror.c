@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include "ajax.h"
 
-/* @func hsregerror *******************************************************
+/* @func hsregerror ***********************************************************
 **
 ** Error message for the Henry Spencer (modified) regular expression routines.
 **
@@ -31,7 +31,7 @@ void hsregerror(const char *s)
 
 
 
-/* @func hsregerror2 *******************************************************
+/* @func hsregerror2 **********************************************************
 **
 ** Error message for the Henry Spencer (modified) regular expression routines.
 ** This version reports the message and the regular expression which

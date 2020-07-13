@@ -6,7 +6,7 @@
 
 #include "emboss.h"
 
-/* @func embMiscMatchPattern ***********************************************
+/* @func embMiscMatchPattern **************************************************
 **
 ** Does a simple OR'd test of matches to (possibly wildcarded) words.
 ** The words are tested one at a time until a match is found.
@@ -20,12 +20,12 @@
 ******************************************************************************/
 
 AjBool embMiscMatchPattern (AjPStr str, AjPStr pattern) {
-    
+
   char whiteSpace[] = " \t\n\r,;|";      /* skip whitespace and , ; | */
   AjPStrTok tokens;
   AjPStr key=NULL;
   AjBool val = ajFalse;		/* returned value */
-      
+
   tokens = ajStrTokenInit(pattern, whiteSpace);
   while (ajStrToken( &key, &tokens, NULL)) {
     if (ajStrMatchWild(str, key)) {

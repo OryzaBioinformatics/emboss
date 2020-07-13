@@ -3,7 +3,7 @@
 
 #define MAX_STRING 180
 
-/* @data AjPGraphObj *******************************************************
+/* @data AjPGraphObj **********************************************************
 **
 ** AJAX data structure for graph objects, conatined as a substructure
 ** in AjPGraphData
@@ -19,11 +19,11 @@ typedef struct AjSGraphObj {
   struct AjSGraphObj *next;
 } AjOGraphObj, *AjPGraphObj;
 
-/* @data AjPGraphData *******************************************************
+/* @data AjPGraphData *********************************************************
 **
 ** Graph data object. Substructure of AjPGraph. Still under development
-** 
-** @@ 
+**
+** @@
 ******************************************************************************/
 
 typedef struct AjSGraphData {
@@ -43,12 +43,12 @@ typedef struct AjSGraphData {
   AjPStr xaxis;
   AjPStr yaxis;
   AjPStr gtype;			/* 2D, Tick etc */
-  ajint colour;         
+  ajint colour;
   ajint lineType;
   AjPGraphObj Obj;
 } AjOGraphData, *AjPGraphData;
 
-/* @data AjPGraph *******************************************************
+/* @data AjPGraph *************************************************************
 **
 ** Graph object. Still under development
 **
@@ -60,8 +60,8 @@ typedef struct AjSGraph {
   ajint numofobjects;
   ajint numofgraphsmax;
   ajint flags;           /* over rides the EmbGraphData flags */
-  float minX,maxX;     /* min max over all graphs */ 
-  float minY,maxY;     
+  float minX,maxX;     /* min max over all graphs */
+  float minY,maxY;
   float xstart;
   float xend;   /* plot only between these points */
   float ystart;

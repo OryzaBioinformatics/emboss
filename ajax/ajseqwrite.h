@@ -6,7 +6,7 @@ extern "C"
 #ifndef ajseqwrite_h
 #define ajseqwrite_h
 
-/* @data AjPSeqout *******************************************************
+/* @data AjPSeqout ************************************************************
 **
 ** Ajax Sequence Output object.
 **

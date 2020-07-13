@@ -15,7 +15,7 @@ extern "C"
 
 
 
-/* @data AjPPdbtosp *******************************************************
+/* @data AjPPdbtosp ***********************************************************
 **
 ** Ajax Pdbtosp object.
 **
@@ -29,7 +29,7 @@ extern "C"
 ** @@
 ******************************************************************************/
 typedef struct AjSPdbtosp
-{   	
+{
     AjPStr     Pdb;    /* PDB code*/
     ajint      n;      /* No. entries for this pdb code */
     AjPStr    *Acc;    /* Accession numbers */
@@ -40,7 +40,7 @@ typedef struct AjSPdbtosp
 
 
 
-/* @data AjPScorealg *******************************************************
+/* @data AjPScorealg **********************************************************
 **
 ** Ajax Scorealg object.
 **
@@ -54,32 +54,48 @@ typedef struct AjSPdbtosp
 ** @@
 ******************************************************************************/
 typedef struct AjSScorealg
-{   
-    AjPFloat  seqmat_score;    /* Array of scores based on residue convervation */
-    AjPFloat  seqvar_score;    /* Array of scores based on residue variability */
-    AjPInt    post_similar;    /* Array of scores based on stamp pij value      */
-    AjPFloat  ncon_score;      /* Array of scores based on number of contacts   */
-    AjPFloat  ccon_score;      /* Array of scores based on convervation of contacts */
-    AjPInt    nccon_score;     /* Array of total score based on convervation and number of contacts */
-    AjPInt    combi_score;     /* Array of total score based on users scoring criteria  */
-    AjPInt    ncon_thresh;     /* Array of positions with > threshold number of contacts */
-    AjBool    seqmat_do;       /* Whether to use score based on residue convervation */
-    AjBool    seqvar_do;       /* Whether to use score based on residue variablility */
-    AjBool    filterpsim;       /* Whether to filter on basis of post_similar line      */
-    AjBool    filtercon;       /* Whether to filter on basis of number of contacts      */
+{
+    AjPFloat  seqmat_score;    /* Array of scores based on residue
+				  convervation */
+    AjPFloat  seqvar_score;    /* Array of scores based on residue
+				  variability */
+    AjPInt    post_similar;    /* Array of scores based on stamp pij
+				  value  */
+    AjPFloat  ncon_score;      /* Array of scores based on number of
+				  contacts  */
+    AjPFloat  ccon_score;      /* Array of scores based on
+				  convervation of contacts */
+    AjPInt    nccon_score;     /* Array of total score based on
+				  convervation and number of
+				  contacts */
+    AjPInt    combi_score;     /* Array of total score based on users
+				  scoring criteria  */
+    AjPInt    ncon_thresh;     /* Array of positions with > threshold
+				  number of contacts */
+    AjBool    seqmat_do;       /* Whether to use score based on
+				  residue convervation */
+    AjBool    seqvar_do;       /* Whether to use score based on
+				  residue variablility */
+    AjBool    filterpsim;       /* Whether to filter on basis of
+				   post_similar line  */
+    AjBool    filtercon;       /* Whether to filter on basis of number
+				  of contacts  */
     ajint     conthresh;     /* Threshold number of contacts for filtercon */
-    AjBool    ncon_do;      /* Whether to use score based on number of contacts   */
-    AjBool    ccon_do;      /* Whether to use score based on convervation of contacts */
-    AjBool    nccon_do;    /* Whether to use score based on convervation and number of contacts */
+    AjBool    ncon_do;      /* Whether to use score based on number of
+			       contacts  */
+    AjBool    ccon_do;      /* Whether to use score based on
+			       convervation of contacts */
+    AjBool    nccon_do;    /* Whether to use score based on
+			      convervation and number of contacts */
 } AjOScorealg, *AjPScorealg;
 
 
 
-/* @data AjPVdwres *******************************************************
+/* @data AjPVdwres ************************************************************
 **
 ** Ajax Vdwres object.
 **
-** Holds the Van der Waals radius for atoms in a residue 
+** Holds the Van der Waals radius for atoms in a residue
 **
 ** AjPVdwres is implemented as a pointer to a C data structure.
 **
@@ -103,7 +119,7 @@ typedef struct AjSVdwres
 
 
 
-/* @data AjPVdwall *******************************************************
+/* @data AjPVdwall ************************************************************
 **
 ** Ajax Vdwall object.
 **
@@ -127,7 +143,7 @@ typedef struct AjSVdwall
 
 
 
-/* @data AjPCmap *******************************************************
+/* @data AjPCmap **************************************************************
 **
 ** Ajax Cmap object.
 **
@@ -152,11 +168,11 @@ typedef struct AjSCmap
 
 
 
-/* @data AjPScopalg *******************************************************
+/* @data AjPScopalg ***********************************************************
 **
 ** Ajax Scopalg object.
 **
-** Holds data associated with a structure alignment that is generated 
+** Holds data associated with a structure alignment that is generated
 ** by the EMBOSS applications scopalign.
 **
 ** AjPScopalg is implemented as a pointer to a C data structure.
@@ -185,12 +201,12 @@ typedef struct AjSScopalg
 
 
 
-/* @data AjPScophit *******************************************************
+/* @data AjPScophit ***********************************************************
 **
 ** Ajax Scophit object.
 **
-** Holds data associated with a protein / domain sequence that is generated 
-** / manipulated by the EMBOSS applications psiblasts, swissparse, seqsort, 
+** Holds data associated with a protein / domain sequence that is generated
+** / manipulated by the EMBOSS applications psiblasts, swissparse, seqsort,
 ** seqmerge and groups.  Includes SCOP classification records.
 **
 ** AjPScophit is implemented as a pointer to a C data structure.
@@ -209,20 +225,22 @@ typedef struct AjSScophit
     AjPStr    Family;
     ajint    Sunid_Family;        /* SCOP sunid for family */
     AjPStr    Seq;	  /* Sequence as string */
-    ajint     Start;      /* Start of sequence or signature alignment relative to full length 
-			    swissprot sequence */
-    ajint     End;        /* End of sequence or signature alignment relative to full length 
-			    swissprot sequence */
+    ajint     Start;      /* Start of sequence or signature alignment
+			    relative to full length swissprot
+			    sequence */
+    ajint     End;        /* End of sequence or signature alignment
+			    relative to full length swissprot
+			    sequence */
     AjPStr    Acc;        /* Accession number of sequence entry  */
     AjPStr    Spr;        /* Swissprot code of sequence entry */
-    AjPStr    Typeobj;    /* Bibliographic information ... objective*/ 
-    AjPStr    Typesbj;    /* Bibliographic information ... subjective */ 
+    AjPStr    Typeobj;    /* Bibliographic information ... objective*/
+    AjPStr    Typesbj;    /* Bibliographic information ... subjective */
     AjPStr    Group;      /* 'REDUNDANT' or 'NON_REDUNDANT' */
-    ajint     Rank;       /* Rank order of hit */	
+    ajint     Rank;       /* Rank order of hit */
     float     Score;      /* Score of hit */
     float     Eval;       /* E-value of hit */
     AjPStr    Alg;        /* Alignment, e.g. of a signature to the sequence */
-    AjBool    Target;     /* True if the Scophit is targetted for removal from 
+    AjBool    Target;     /* True if the Scophit is targetted for removal from
 			     a list of Scophit objects */
     AjBool    Target2;    /* Also used for garbage collection */
     AjBool    Priority;   /* True if the Scop hit is high priority. */
@@ -231,12 +249,12 @@ typedef struct AjSScophit
 
 
 
-/* @data AjPHit *******************************************************
+/* @data AjPHit ***************************************************************
 **
 ** Ajax hit object.
 **
-** Holds data associated with a protein / domain sequence that is generated 
-** / manipulated by the EMBOSS applications psiblasts, swissparse, seqsort, 
+** Holds data associated with a protein / domain sequence that is generated
+** / manipulated by the EMBOSS applications psiblasts, swissparse, seqsort,
 ** seqmerge, groups and sigscan.
 **
 ** AjPHit is implemented as a pointer to a C data structure.
@@ -250,30 +268,32 @@ typedef struct AjSScophit
 typedef struct AjSHit
 {
   AjPStr    Seq;	/* Sequence as string */
-  ajint     Start;      /* Start of sequence or signature alignment relative to full length 
-			    swissprot sequence */
-  ajint     End;        /* End of sequence or signature alignment relative to full length 
-			    swissprot sequence */
+  ajint     Start;      /* Start of sequence or signature alignment
+			    relative to full length swissprot
+			    sequence */
+  ajint     End;        /* End of sequence or signature alignment
+			    relative to full length swissprot
+			    sequence */
   AjPStr Acc;           /* Accession number of sequence entry  */
   AjPStr    Typeobj;    /* Primary classification of hit - objective*/
   AjPStr    Typesbj;    /* Secondary classification of hit */
   AjPStr    Alg;        /* Alignment, e.g. of a signature to the sequence */
   AjPStr    Group;      /* 'REDUNDANT' or 'NON_REDUNDANT' */
-  ajint     Rank;       /* Rank order of hit */	
+  ajint     Rank;       /* Rank order of hit */
   float     Score;      /* Score of hit */
   float     Eval;       /* E-value of hit */
-  AjBool    Target;     /* True if the Scophit is targetted for removal from 
+  AjBool    Target;     /* True if the Scophit is targetted for removal from
 			     a list of Scophit objects */
   AjBool    Target2;    /* Also used for garbage collection */
   AjBool    Priority;   /* True if the Scop hit is high priority. */
 } AjOHit, *AjPHit;
 
 
-/* @data AjPHitlist *******************************************************
+/* @data AjPHitlist ***********************************************************
 **
 ** Ajax hitlist object.
 **
-** Holds an array of hit structures and associated SCOP classification 
+** Holds an array of hit structures and associated SCOP classification
 ** records.
 **
 ** AjPHitlist is implemented as a pointer to a C data structure.
@@ -300,7 +320,7 @@ typedef struct AjSHitlist
 
 
 
-/* @data AjPHitidx *******************************************************
+/* @data AjPHitidx ************************************************************
 **
 ** Ajax Hitidx object.
 **
@@ -314,8 +334,8 @@ typedef struct AjSHitlist
 ** @@
 ******************************************************************************/
 typedef struct AjSHitidx
-{  
-    AjPStr      Id;        /* Identifier */  
+{
+    AjPStr      Id;        /* Identifier */
     AjPHit      hptr;      /* Pointer to AjPHit structure*/
     AjPHitlist  lptr;      /* Pointer to AjPHitlist structure*/
 }AjOHitidx, *AjPHitidx;
@@ -325,7 +345,7 @@ typedef struct AjSHitidx
 
 
 
-/* @data AjPAtom *******************************************************
+/* @data AjPAtom **************************************************************
 **
 ** Ajax atom object.
 **
@@ -344,11 +364,11 @@ typedef struct AjSAtom
   ajint        Mod;        /*Model number*/
   ajint        Chn;        /*Chain number*/
   ajint        Gpn;        /*Group number*/
-  char       Type;       /*'P' (protein atom), 'H' ("heterogens") or 'w' 
+  char       Type;       /*'P' (protein atom), 'H' ("heterogens") or 'w'
 			   (water)*/
   ajint        Idx;        /*Residue number - index into sequence*/
   AjPStr     Pdb;        /*Residue number - according to original PDB file*/
-  char       Id1;        /*Standard residue identifier or 'X' for unknown 
+  char       Id1;        /*Standard residue identifier or 'X' for unknown
 			   types or '.' for heterogens and water*/
   AjPStr     Id3;        /*Residue or group identifier*/
   AjPStr     Atm;        /*Atom identifier*/
@@ -361,13 +381,16 @@ typedef struct AjSAtom
   /* Secondary structure-specific variables */
   ajint      eNum;       /* Serial number of the element */
   AjPStr     eId;        /* Element identifier */
-  char       eType;      /* Element type COIL ('C'), HELIX ('H'), SHEET ('E') or TURN ('T'). Has a default value of COIL. */
-  ajint      eClass;     /* Class of helix, an int from 1-10,  from 
-			    http://www.rcsb.org/pdb/docs/format/pdbguide2.2/guide2.2_frame.html (see below)*/
+  char       eType;      /* Element type COIL ('C'), HELIX ('H'),
+			    SHEET ('E') or TURN ('T'). Has a default
+			    value of COIL. */
+  ajint      eClass;     /* Class of helix, an int from 1-10, from
+			    http://www.rcsb.org/pdb/docs/format/pdbguide2.2/
+			    guide2.2_frame.html (see below)*/
 } AjOAtom, *AjPAtom;
 
 
-/* @data AjPChain ***********************************************************
+/* @data AjPChain *************************************************************
 **
 ** Ajax chain object.
 **
@@ -383,10 +406,10 @@ typedef struct AjSAtom
 
 typedef struct AjSChain
 {
-  char       Id;         /*Chain id, ('.' if one wasn't specified in the 
+  char       Id;         /*Chain id, ('.' if one wasn't specified in the
 			   original PDB file)*/
   ajint        Nres;       /*No. of amino acid residues*/
-  ajint        Nlig;       /*No. of groups which are non-covalently associated 
+  ajint        Nlig;       /*No. of groups which are non-covalently associated
 			   with the chain, excluding water ("heterogens")*/
 
   ajint    numHelices;   /* No. of helices in the chain */
@@ -395,14 +418,15 @@ typedef struct AjSChain
   ajint    numTurns;     /* No. of turns in the chain */
 
   AjPStr     Seq;	 /* sequence as string */
-  AjPList    Atoms;      /*List of Atom objects for (potentially multiple models)
-			  of the polypeptide chain and any groups (ligands) that 
-			  could be uniquely associated with a chain*/
+  AjPList    Atoms;      /*List of Atom objects for (potentially
+			  multiple models) of the polypeptide chain
+			  and any groups (ligands) that could be
+			  uniquely associated with a chain*/
 } AjOChain, *AjPChain;
 
 
 
-/* @data AjPPdb *******************************************************
+/* @data AjPPdb ***************************************************************
 **
 ** Ajax pdb object.
 **
@@ -426,20 +450,21 @@ typedef struct AjSPdb
   ajint        Nmod;       /*No. of models (always 1 for XRAY structures)*/
   ajint        Nchn;       /*No. polypeptide chains */
   AjPChain  *Chains;     /*Array of pointers to AjSChain structures*/
-  ajint      Ngp;        /* No. groups that could not be uniquely associated with a chain 
-			    in the SEQRES records */
-  AjPChar    gpid;	   /*Array of chain (group) id's for groups that 
+  ajint      Ngp;        /* No. groups that could not be uniquely
+			    associated with a chain in the SEQRES
+			    records */
+  AjPChar    gpid;	   /*Array of chain (group) id's for groups that
 			     could not be uniquely associated with a chain */
-  AjPList   Groups;     /*List of Atom objects for groups that could not 
+  AjPList   Groups;     /*List of Atom objects for groups that could not
 			   be uniquely associated with a chain */
-  AjPList   Water;     /*List of Atom objects for water molecules (which can 
+  AjPList   Water;     /*List of Atom objects for water molecules (which can
 			   never be uniquely associated with a chain */
 }AjOPdb, *AjPPdb;
 
 
 
 
-/* @data AjPScop *******************************************************
+/* @data AjPScop **************************************************************
 **
 ** Ajax scop object.
 **
@@ -447,18 +472,18 @@ typedef struct AjSPdb
 **
 ** The variables have the following meaning:
 **
-**  AjPStr Entry;          Domain identifer code 
+**  AjPStr Entry;          Domain identifer code
 **  AjPStr Pdb;            Corresponding pdb identifier code
-**  AjPStr Class;          SCOP class name as an AjPStr 
-**  AjPStr Fold;           SCOP fold  name as an AjPStr  
-**  AjPStr Superfamily;    SCOP superfamily name as an AjPStr 
-**  AjPStr Family;         SCOP family name as an AjPStr 
-**  AjPStr Domain;         SCOP domain name as an AjPStr 
-**  AjPStr Source;         SCOP source (species) as an AjPStr 
-**  ajint    N;            No. chains from which this domain is comprised 
-**  char   *Chain;         Chain identifiers 
-**  AjPStr *Start;         PDB residue number of first residue in domain 
-**  AjPStr *End;           PDB residue number of last residue in domain 
+**  AjPStr Class;          SCOP class name as an AjPStr
+**  AjPStr Fold;           SCOP fold  name as an AjPStr
+**  AjPStr Superfamily;    SCOP superfamily name as an AjPStr
+**  AjPStr Family;         SCOP family name as an AjPStr
+**  AjPStr Domain;         SCOP domain name as an AjPStr
+**  AjPStr Source;         SCOP source (species) as an AjPStr
+**  ajint    N;            No. chains from which this domain is comprised
+**  char   *Chain;         Chain identifiers
+**  AjPStr *Start;         PDB residue number of first residue in domain
+**  AjPStr *End;           PDB residue number of last residue in domain
 **
 ** AjPScop is implemented as a pointer to a C data structure.
 **
@@ -472,7 +497,7 @@ typedef struct AjSScop
     AjPStr Entry;         /* Domain identifer code */
     AjPStr Pdb;           /* Corresponding pdb identifier code*/
     AjPStr Class;         /* SCOP class name as an AjPStr */
-    AjPStr Fold;          /* SCOP fold  name as an AjPStr */ 
+    AjPStr Fold;          /* SCOP fold  name as an AjPStr */
     AjPStr Superfamily;   /* SCOP superfamily name as an AjPStr */
     AjPStr Family;        /* SCOP family name as an AjPStr */
     AjPStr Domain;        /* SCOP domain name as an AjPStr */
@@ -486,7 +511,7 @@ typedef struct AjSScop
     ajint  Sunid_Fold;          /* SCOP sunid for fold */
     ajint  Sunid_Superfamily;   /* SCOP sunid for superfamily */
     ajint  Sunid_Family;        /* SCOP sunid for family */
-    ajint  Sunid_Domain;        /* SCOP sunid for domain */  
+    ajint  Sunid_Domain;        /* SCOP sunid for domain */
     ajint  Sunid_Source;        /* SCOP sunid for species */
     ajint  Sunid_Domdat;        /* SCOP sunid for domain data */
 
@@ -494,9 +519,9 @@ typedef struct AjSScop
     AjPStr Spr;           /* Swissprot code of sequence entry */
     AjPStr SeqPdb;	  /* Sequence (from pdb) as string */
     AjPStr SeqSpr;	  /* Sequence (from swissprot) as string */
-    ajint  Startd;      /* Start of sequence relative to full length 
+    ajint  Startd;      /* Start of sequence relative to full length
 			    swissprot sequence */
-    ajint  Endd;        /* End of sequence relative to full length 
+    ajint  Endd;        /* End of sequence relative to full length
 			    swissprot sequence */
 } AjOScop,*AjPScop;
 
@@ -505,7 +530,7 @@ typedef struct AjSScop
 
 
 
-/* @data AjPScopcla *******************************************************
+/* @data AjPScopcla ***********************************************************
 **
 ** Ajax scopcla object.
 **
@@ -513,20 +538,20 @@ typedef struct AjSScop
 **
 ** The variables have the following meaning:
 **
-**  AjPStr Entry;          Domain identifer code 
+**  AjPStr Entry;          Domain identifer code
 **  AjPStr Pdb;            Corresponding pdb identifier code
 **  AjPStr Sccs;           Scop compact classification string
-**  ajint  Class;          SCOP sunid for class 
-**  ajint  Fold;           SCOP sunid for fold 
-**  ajint  Superfamily;    SCOP sunid for superfamily 
-**  ajint  Family;         SCOP sunid for family 
-**  ajint  Domain;         SCOP sunid for domain   
-**  ajint  Source;         SCOP sunid for species 
+**  ajint  Class;          SCOP sunid for class
+**  ajint  Fold;           SCOP sunid for fold
+**  ajint  Superfamily;    SCOP sunid for superfamily
+**  ajint  Family;         SCOP sunid for family
+**  ajint  Domain;         SCOP sunid for domain
+**  ajint  Source;         SCOP sunid for species
 **  ajint  Domdat;         SCOP sunid for domain data
-**  ajint  N;              No. chains from which this domain is comprised 
-**  char   *Chain;         Chain identifiers 
-**  AjPStr *Start;         PDB residue number of first residue in domain 
-**  AjPStr *End;           PDB residue number of last residue in domain 
+**  ajint  N;              No. chains from which this domain is comprised
+**  char   *Chain;         Chain identifiers
+**  AjPStr *Start;         PDB residue number of first residue in domain
+**  AjPStr *End;           PDB residue number of last residue in domain
 **
 ** AjPScopcla is implemented as a pointer to a C data structure.
 **
@@ -545,11 +570,11 @@ typedef struct AjSScopcla
     ajint  Class;
     ajint  Fold;
     ajint  Superfamily;
-    ajint  Family;  
+    ajint  Family;
     ajint  Domain;
     ajint  Source;
     ajint  Domdat;
-        
+
     ajint    N;
     char   *Chain;
     AjPStr *Start;
@@ -558,7 +583,7 @@ typedef struct AjSScopcla
 
 
 
-/* @data AjPScopdes *******************************************************
+/* @data AjPScopdes ***********************************************************
 **
 ** Ajax scopdes object.
 **
@@ -566,9 +591,9 @@ typedef struct AjSScopcla
 **
 ** The variables have the following meaning:
 **
-**  ajint  Sunid;   SCOP sunid for node 
+**  ajint  Sunid;   SCOP sunid for node
 **  AjPStr Type;    Type of node, either 'px' (domain data), 'cl' (class),
-**  'cf' (fold), 'sf' (superfamily), 'fa' (family), 'dm' (domain) or 
+**  'cf' (fold), 'sf' (superfamily), 'fa' (family), 'dm' (domain) or
 **  'sp' (species).
 **  AjPStr Sccs;    Scop compact classification string
 **  AjPStr Entry;   Domain identifer code (or '-' if Type!='px')
@@ -595,7 +620,7 @@ typedef struct AjSScopdes
 
 
 
-/* @data AjPSigcell *******************************************************
+/* @data AjPSigcell ***********************************************************
 **
 ** Ajax Sigcell object.
 **
@@ -619,12 +644,12 @@ typedef struct AjSSigcell
 
 
 
-/* @data AjPSigdat *******************************************************
+/* @data AjPSigdat ************************************************************
 **
 ** Ajax Sigdat object.
 **
-** Holds empirical data for an (uncompiled) signature position. 
-** Important: Functions which manipulate this structure rely on the data in 
+** Holds empirical data for an (uncompiled) signature position.
+** Important: Functions which manipulate this structure rely on the data in
 ** the gap arrays (gsiz and grfq) being filled in order of increasing gap size.
 **
 ** AjPSigdat is implemented as a pointer to a C data structure.
@@ -651,7 +676,7 @@ typedef struct AJSSigdat
 
 
 
-/* @data AjPSigpos *******************************************************
+/* @data AjPSigpos ************************************************************
 **
 ** Ajax Sigpos object.
 **
@@ -675,11 +700,11 @@ typedef struct AJSSigpos
 
 
 
-/* @data AjPSignature *******************************************************
+/* @data AjPSignature *********************************************************
 **
 ** Ajax Signature object.
 **
-** Holds data for 
+** Holds data for
 **
 ** AjPSignature is implemented as a pointer to a C data structure.
 **
@@ -696,7 +721,7 @@ typedef struct AjSSignature
     AjPStr     Family;
     ajint    Sunid_Family;        /* SCOP sunid for family */
     ajint      npos;       /*No. of signature positions*/
-    AjPSigpos *pos;        /*Array of derived data for puropses of 
+    AjPSigpos *pos;        /*Array of derived data for puropses of
 			     alignment*/
     AjPSigdat *dat;        /*Array of empirical data*/
 } AjOSignature, *AjPSignature;
@@ -707,7 +732,7 @@ typedef struct AjSSignature
 
 
 
-/* @data AjPHetent ***********************************************************
+/* @data AjPHetent ************************************************************
 **
 ** Ajax Hetent object.
 **
@@ -725,13 +750,14 @@ typedef struct AjSHetent
     AjPStr   abv;   /* 3-letter abbreviation of heterogen */
     AjPStr   syn;   /* Synonym */
     AjPStr   ful;   /* Full name */
-    ajint    cnt;   /* No. of occurences (files) of this heterogen in a directory */
+    ajint    cnt;   /* No. of occurences (files) of this heterogen in
+		       a directory */
 } AjOHetent, *AjPHetent;
 
 
 
 
-/* @data AjPHet ***********************************************************
+/* @data AjPHet ***************************************************************
 **
 ** Ajax Het object.
 ** Holds a dictionary of heterogen groups.
@@ -755,11 +781,11 @@ typedef struct AjSHet
 
 
 
-/* @data AjPXXX *******************************************************
+/* @data AjPXXX ***************************************************************
 **
 ** Ajax XXX object.
 **
-** Holds data for 
+** Holds data for
 **
 ** AjPXXX is implemented as a pointer to a C data structure.
 **
@@ -797,12 +823,14 @@ AjPPdb        ajXyzPdbNew(ajint chains);
 void          ajXyzPdbDel(AjPPdb *thys);
 AjBool        ajXyzPdbWriteAll(AjPFile errf, AjPFile outf, AjPPdb pdb);
 AjBool        ajXyzPdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
-				AjPScop scop); 
+				AjPScop scop);
 AjBool        ajXyzPdbChain(char id, AjPPdb pdb, ajint *chn);
 AjBool        ajXyzPdbAtomIndexI(AjPPdb pdb, ajint chn, AjPInt *idx);
 AjBool        ajXyzPdbAtomIndexC(AjPPdb pdb, char chn, AjPInt *idx);
-AjBool        ajXyzPdbAtomIndexICA(AjPPdb pdb, ajint chn, AjPInt *idx, ajint *nres);
-AjBool        ajXyzPdbAtomIndexCCA(AjPPdb pdb, char chn, AjPInt *idx, ajint *nres);
+AjBool        ajXyzPdbAtomIndexICA(AjPPdb pdb, ajint chn,
+				   AjPInt *idx, ajint *nres);
+AjBool        ajXyzPdbAtomIndexCCA(AjPPdb pdb, char chn,
+				   AjPInt *idx, ajint *nres);
 AjBool        ajXyzPdbToSp(AjPStr pdb, AjPStr *spr, AjPList list);
 AjBool        ajXyzPdbToAcc(AjPStr pdb, AjPStr *acc, AjPList list);
 
@@ -819,7 +847,7 @@ AjPScop       ajXyzScopNew(ajint n);
 void          ajXyzScopDel(AjPScop *pthis);
 AjBool        ajXyzScopRead(AjPFile inf, AjPStr entry, AjPScop *thys);
 AjBool        ajXyzScopReadC(AjPFile inf, char *entry, AjPScop *thys);
-AjBool        ajXyzScopReadAll(AjPFile fptr, AjPList *list); 
+AjBool        ajXyzScopReadAll(AjPFile fptr, AjPList *list);
 void          ajXyzScopWrite(AjPFile outf, AjPScop thys);
 AjPStr        ajXyzScopToPdb(AjPStr scop, AjPStr *pdb);
 AjBool        ajXyzScopToSp(AjPStr scop, AjPStr *spr, AjPList list);
@@ -848,7 +876,8 @@ AjBool        ajXyzScopdesReadC(AjPFile inf, char *entry, AjPScopdes *thys);
 AjPScophit    ajXyzScophitNew(void);
 void          ajXyzScophitDel(AjPScophit *pthis);
 void          ajXyzScophitDelWrap(const void  **ptr);
-AjBool        ajXyzScophitsToHitlist(AjPList in, AjPHitlist *out,   AjIList *iter);
+AjBool        ajXyzScophitsToHitlist(AjPList in, AjPHitlist *out,
+				     AjIList *iter);
 AjBool        ajXyzScophitsOverlap(AjPScophit h1, AjPScophit h2, ajint n);
 AjBool        ajXyzScophitsOverlapAcc(AjPScophit h1, AjPScophit h2, ajint n);
 AjBool        ajXyzScophitCopy(AjPScophit *to, AjPScophit from);
@@ -858,9 +887,10 @@ AjBool        ajXyzScophitCheckTarget(AjPScophit ptr);
 AjBool        ajXyzScophitTarget(AjPScophit *h);
 AjBool        ajXyzScophitTarget2(AjPScophit *h);
 AjBool        ajXyzScophitTargetLowPriority(AjPScophit *h);
-AjBool        ajXyzScophitMergeInsertThis(AjPList list, AjPScophit hit1, 
+AjBool        ajXyzScophitMergeInsertThis(AjPList list, AjPScophit hit1,
 				   AjPScophit hit2,  AjIList iter);
-AjBool        ajXyzScophitMergeInsertOther(AjPList list, AjPScophit hit1, AjPScophit hit2);
+AjBool        ajXyzScophitMergeInsertOther(AjPList list,
+					   AjPScophit hit1, AjPScophit hit2);
 AjPScophit    ajXyzScophitMerge(AjPScophit hit1, AjPScophit hit2);
 ajint         ajXyzScophitCompSpr(const void *hit1, const void *hit2);
 ajint         ajXyzScophitCompStart(const void *hit1, const void *hit2);
@@ -880,17 +910,23 @@ ajint         ajXyzCompId(const void *hit1, const void *hit2);
 AjPHitlist    ajXyzHitlistNew(ajint n);
 void          ajXyzHitlistDel(AjPHitlist *pthis);
 AjBool        ajXyzHitlistRead(AjPFile inf, char *delim, AjPHitlist *thys);
-AjBool        ajXyzHitlistReadNode(AjPFile scopf, AjPList *list, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr class);
-AjBool        ajXyzHitlistReadFam(AjPFile scopf, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr class, AjPList* list);
-AjBool        ajXyzHitlistReadSfam(AjPFile scopf, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr class,AjPList* list);
-AjBool        ajXyzHitlistReadFold(AjPFile scopf, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr class,AjPList* list);
+AjBool        ajXyzHitlistReadNode(AjPFile scopf, AjPList *list,
+				   AjPStr fam, AjPStr sfam, AjPStr fold,
+				   AjPStr class);
+AjBool        ajXyzHitlistReadFam(AjPFile scopf, AjPStr fam, AjPStr sfam,
+				  AjPStr fold, AjPStr class, AjPList* list);
+AjBool        ajXyzHitlistReadSfam(AjPFile scopf, AjPStr fam, AjPStr sfam,
+				   AjPStr fold, AjPStr class,AjPList* list);
+AjBool        ajXyzHitlistReadFold(AjPFile scopf, AjPStr fam, AjPStr sfam,
+				   AjPStr fold, AjPStr class,AjPList* list);
 AjBool        ajXyzHitlistWrite(AjPFile outf, AjPHitlist thys);
 AjBool        ajXyzHitlistToScophits(AjPList in, AjPList *out);
-AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets, 
+AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
 				   ajint thresh);
 AjBool        ajXyzHitlistPriorityHigh(AjPHitlist *list);
 AjBool        ajXyzHitlistPriorityLow(AjPHitlist *list);
-AjBool        ajXyzHitlistToThreeScophits(AjPList in, AjPList *fam, AjPList *sfam, AjPList *fold);
+AjBool        ajXyzHitlistToThreeScophits(AjPList in, AjPList *fam,
+					  AjPList *sfam, AjPList *fold);
 
 AjBool        ajXyzHitlistsWriteFasta(AjPList *list, AjPFile *outf);
 
@@ -900,7 +936,8 @@ AjBool        ajXyzPrintPdbSeqresChain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 				  ajint chn);
 AjBool        ajXyzPrintPdbSeqresDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 				   AjPScop scop);
-AjBool        ajXyzPrintPdbAtomChain(AjPFile outf, AjPPdb pdb, ajint mod, ajint chn);
+AjBool        ajXyzPrintPdbAtomChain(AjPFile outf, AjPPdb pdb,
+				     ajint mod, ajint chn);
 AjBool        ajXyzPrintPdbAtomDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 				 AjPScop scop, ajint mod);
 AjBool        ajXyzPrintPdbHeterogen(AjPFile outf, AjPPdb pdb, ajint mod);
@@ -925,13 +962,14 @@ ajint         ajXyzScopalgGetseqs(AjPScopalg thys, AjPStr **arr);
 
 AjPCmap       ajXyzCmapNew(ajint dim);
 void          ajXyzCmapDel(AjPCmap *pthis);
-AjBool        ajXyzCmapRead(AjPFile inf, ajint mode, ajint chn, ajint mod, AjPCmap *thys);
+AjBool        ajXyzCmapRead(AjPFile inf, ajint mode, ajint chn,
+			    ajint mod, AjPCmap *thys);
 AjBool        ajXyzCmapReadC(AjPFile inf, char chn, ajint mod, AjPCmap *thys);
 AjBool        ajXyzCmapReadI(AjPFile inf, ajint chn, ajint mod, AjPCmap *thys);
 
 
 float         ajXyzVdwRad(AjPAtom atm, AjPVdwall vdw);
- 
+
 AjPVdwall     ajXyzVdwallNew(ajint n);
 void          ajXyzVdwallDel(AjPVdwall *pthis);
 AjBool        ajXyzVdwallRead(AjPFile inf, AjPVdwall *thys);
@@ -962,15 +1000,16 @@ AjPSignature  ajXyzSignatureNew(ajint n);
 void          ajXyzSignatureDel(AjPSignature *pthis);
 AjBool        ajXyzSignatureRead(AjPFile inf, AjPSignature *thys);
 AjBool        ajXyzSignatureWrite(AjPFile outf, AjPSignature thys);
-AjBool        ajXyzSignatureCompile(AjPSignature *S, float gapo, float gape, 	
+AjBool        ajXyzSignatureCompile(AjPSignature *S, float gapo, float gape,
 				    AjPMatrixf matrix);
-AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit, 
+AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit,
 				     ajint nterm);
-AjBool        ajXyzSignatureAlignSeqall(AjPSignature sig, AjPSeqall db, ajint n, 
+AjBool        ajXyzSignatureAlignSeqall(AjPSignature sig, AjPSeqall db,
+					ajint n,
 					AjPHitlist *hits, ajint nterm);
-AjBool        ajXyzSignatureHitsWrite(AjPFile outf, AjPSignature sig, 
+AjBool        ajXyzSignatureHitsWrite(AjPFile outf, AjPSignature sig,
 				      AjPHitlist hits);
-AjBool        ajXyzSignatureAlignWrite(AjPFile outf, AjPSignature sig, 
+AjBool        ajXyzSignatureAlignWrite(AjPFile outf, AjPSignature sig,
 				       AjPHitlist hits);
 
 

@@ -49,7 +49,7 @@ typedef ajlong sopno;
 #define	OPND(n)	((n)&OPDMASK)
 #define	SOP(op, opnd)	((op)|(opnd))
 
-/* 
+/*
  * Should not use these in switch/case statements
  * Use AJ_ forms instead
  */
@@ -102,7 +102,7 @@ typedef ajlong sopno;
 #define AJ_OEOW        (20)      /* end word      -                      */
 
 
-/* @data cset *******************************************************
+/* @data cset *****************************************************************
  * Structure for [] character-set representation.  Character sets are
  * done as bit vectors, grouped 8 to a byte vector for compactness.
  * The individual set therefore has both a pointer to the byte vector
@@ -137,7 +137,7 @@ typedef struct {
 typedef unsigned char cat_t;
 
 
-/* @data re_guts *******************************************************
+/* @data re_guts **************************************************************
  * main compiled-expression structure
  */
 

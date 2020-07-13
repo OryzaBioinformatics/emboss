@@ -6,7 +6,7 @@ extern "C"
 #ifndef ajseqread_h
 #define ajseqread_h
 
-/* @data SeqPAccess *****************************************************
+/* @data SeqPAccess ***********************************************************
 **
 ** Ajax Sequence Access database reading object.
 **

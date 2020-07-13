@@ -1,7 +1,7 @@
 #include "ajax.h"
 
 
-/* @func ajSortFloatDecI ********************************************************
+/* @func ajSortFloatDecI ******************************************************
 **
 ** Based on an array of floats, sort an ajint element array.
 **
@@ -117,7 +117,7 @@ void ajSortIntIncI(ajint *a, ajint *p, ajint n)
 }
 
 
-/* @func ajSortTwoIntIncI ****************************************************
+/* @func ajSortTwoIntIncI *****************************************************
 **
 ** Based on an array of ints, sort (ascending) two ajint element array.
 **
@@ -146,7 +146,7 @@ void ajSortTwoIntIncI(ajint *a, ajint *p, ajint n)
 		t = p[j];
 		p[j] = p[j+s];
 		p[j+s] = t;
-	    }	    
+	    }
 }
 
 
@@ -206,7 +206,7 @@ void ajSortIntDec(ajint *a, ajint n)
 	    }
 }
 
-/* @func ajSortFloatInc ******************************************************
+/* @func ajSortFloatInc *******************************************************
 **
 ** Sort a float array (ascending).
 **

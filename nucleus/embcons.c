@@ -7,12 +7,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -23,7 +23,7 @@
 #include <limits.h>         /* for INT_MAX */
 
 
-/* @func embConsCalc *************************************************
+/* @func embConsCalc **********************************************************
 **
 ** Calculates a consensus.
 **
@@ -45,8 +45,8 @@ void embConsCalc(AjPSeqset seqset,AjPMatrix cmpmatrix,
                     ajint nseqs, ajint mlen,float fplural,float setcase,
                     ajint identity, AjPStr *cons)
 {
-    ajint   i; 
-    ajint   j; 
+    ajint   i;
+    ajint   j;
     ajint   k;
     ajint   **matrix;
     ajint   m1=0;
@@ -81,13 +81,13 @@ void embConsCalc(AjPSeqset seqset,AjPMatrix cmpmatrix,
 
     nocon = '-';
     if(ajSeqsetIsNuc(seqset))        /* set non-consensus character */
-       nocon = 'N'; 
+       nocon = 'N';
     else if ( ajSeqsetIsProt(seqset))
        nocon = 'X';
-    
-   
+
+
     for(i=0;i<nseqs;i++)                  /* get sequence as string */
-      seqcharptr[i] =  ajSeqsetSeq(seqset, i);  
+      seqcharptr[i] =  ajSeqsetSeq(seqset, i);
 
     for(k=0; k< mlen; k++)
     {
@@ -99,7 +99,7 @@ void embConsCalc(AjPSeqset seqset,AjPMatrix cmpmatrix,
         matching[i] = 0.0;
       }
 
-      for(i=0;i<nseqs;i++) 
+      for(i=0;i<nseqs;i++)
         ajFloatPut(&score,i,0.);
 
       for(i=0;i<nseqs;i++)            /* generate score for columns */
@@ -107,16 +107,16 @@ void embConsCalc(AjPSeqset seqset,AjPMatrix cmpmatrix,
         m1 = ajSeqCvtK(cvt,seqcharptr[i][k]);
         if(m1)
           identical[m1] += ajSeqsetWeight(seqset,i);
-        for(j=i+1;j<nseqs;j++) 
+        for(j=i+1;j<nseqs;j++)
         {
           m2 = ajSeqCvtK(cvt,seqcharptr[j][k]);
           if(m1 && m2)
           {
-            contri = (float)matrix[m1][m2]*ajSeqsetWeight(seqset,j) 
+            contri = (float)matrix[m1][m2]*ajSeqsetWeight(seqset,j)
                                           +ajFloatGet(score,i);
             contrj = (float)matrix[m1][m2]*ajSeqsetWeight(seqset,i)
                                           +ajFloatGet(score,j);
-                    
+
             ajFloatPut(&score,i,contri);
             ajFloatPut(&score,j,contrj);
           }
@@ -127,7 +127,7 @@ void embConsCalc(AjPSeqset seqset,AjPMatrix cmpmatrix,
       max  = -(float)INT_MAX;
       for(i=0;i<nseqs;i++)
       {
-        if(ajFloatGet(score,i) > max) 
+        if(ajFloatGet(score,i) > max)
         {
           highindex = i;
           max       = ajFloatGet(score,i);
@@ -141,7 +141,7 @@ void embConsCalc(AjPSeqset seqset,AjPMatrix cmpmatrix,
         {
           for(j=0;j<nseqs;j++)
           {
-            if( i != j) 
+            if( i != j)
             {
               m2 = ajSeqCvtK (cvt, seqcharptr[j][k]);
               if(m1 && m2 && matrix[m1][m2] > 0)
@@ -188,7 +188,7 @@ void embConsCalc(AjPSeqset seqset,AjPMatrix cmpmatrix,
           if(matchingmaxindex == ajSeqCvtK(cvt,seqcharptr[i][k]))
           j++;
         }
-        if(j<identity) 
+        if(j<identity)
           res = nocon;
       }
 
@@ -199,7 +199,7 @@ void embConsCalc(AjPSeqset seqset,AjPMatrix cmpmatrix,
     AJFREE(matching);
     AJFREE(identical);
     ajFloatDel(&score);
- 
+
     return;
 
 }

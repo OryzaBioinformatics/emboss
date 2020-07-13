@@ -15,7 +15,7 @@ typedef void fvoid_t(void);		/* void function type */
 
 enum capacity {default_size, reserve};
 
-/* @data AjBool *******************************************************
+/* @data AjBool ***************************************************************
 **
 ** Boolean data type
 **
@@ -33,7 +33,7 @@ enum capacity {default_size, reserve};
 
 typedef ajint AjBool;
 
-/* @data AjStatus *******************************************************
+/* @data AjStatus *************************************************************
 **
 ** Status code returned with bit fields.
 **

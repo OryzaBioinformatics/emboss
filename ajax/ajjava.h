@@ -30,7 +30,7 @@ extern "C" {
 #define SEQ_ATTRIB     12
 #define SEQSET_ATTRIB  13
 
-JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqType 
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqType
     (JNIEnv *, jobject, jstring);
 JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqsetType
     (JNIEnv *env, jobject obj, jstring usa);

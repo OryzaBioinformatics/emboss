@@ -13,7 +13,7 @@ extern "C"
 
 #define T Except_T
 
-/*  @data Except_T ********************************************************
+/*  @data Except_T ************************************************************
 **
 ** Exception data structure
 **

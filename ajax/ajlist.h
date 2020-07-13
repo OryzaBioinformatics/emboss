@@ -10,7 +10,7 @@ extern "C"
 
 enum AjEListType {ajEListAny, ajEListStr};
 
-/* @data AjPListNode *******************************************************
+/* @data AjPListNode **********************************************************
 **
 ** Substructure of AjPList
 **
@@ -23,7 +23,7 @@ typedef struct AjSListNode {
 	void *Item;		/* data */
 } AjOListNode, *AjPListNode;
 
-/* @data AjPList ********************************************************
+/* @data AjPList **************************************************************
 **
 ** List data object. Lists are simple linked lists with performance optimised
 ** to allow rapid extension of the beginning or end of the list.
@@ -34,7 +34,7 @@ typedef struct AjSListNode {
 **
 ** @new ajListNew Creates a new general list.
 ** @new ajListstrNew Creates a new AjPStr list.
-** @new ajListNewArgs Create a new list, create the nodes and 
+** @new ajListNewArgs Create a new list, create the nodes and
 **                       add the other arguments as data.
 ** @new ajListstrNewArgs Create a new AjPStr list, create the nodes and
 **                       add the other arguments as data.
@@ -93,7 +93,7 @@ typedef struct AjSList {
   AjEnum Type;
 } AjOList, *AjPList;
 
-/* @data AjIList *******************************************************
+/* @data AjIList **************************************************************
 **
 ** AJAX list iterator data structure
 **

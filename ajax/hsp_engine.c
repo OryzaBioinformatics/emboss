@@ -241,7 +241,7 @@ static ajint matcher(register REGUTSSTRUCT *g, char *string, size_t nmatch,
     return(0);
 }
 
-/* @funcstatic dissect ********************************************
+/* @funcstatic dissect ********************************************************
 **
 ** figure out what matched what, no back references
 **
@@ -442,7 +442,7 @@ static char* dissect(register struct match *m, char *start, char *stop,
     return(sp);
 }
 
-/* @funcstatic backref ********************************************
+/* @funcstatic backref ********************************************************
 **
 ** figure out what matched what, figuring in back references
 **
@@ -653,7 +653,7 @@ static char* backref(register struct match *m, char *start, char *stop,
     return((char *)NULL);		/* dummy */
 }
 
-/* @funcstatic fast ********************************************
+/* @funcstatic fast ***********************************************************
 **
 ** step through the string at top speed
 **
@@ -753,7 +753,7 @@ static char* fast(register struct match *m, char *start, char *stop,
     return(NULL);
 }
 
-/* @funcstatic slow ********************************************
+/* @funcstatic slow ***********************************************************
 **
 ** step through the string more deliberately
 **
@@ -1012,7 +1012,7 @@ static void hsp_engine_print(struct match m, char *caption, states st,
     (void) fprintf(d, "\n");
 }
 
-/* @funcstatic at **********************************************************
+/* @funcstatic at *************************************************************
 **
 ** print current situation
 **

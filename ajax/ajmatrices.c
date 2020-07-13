@@ -1,24 +1,24 @@
-/********************************************************************
-** @source AJAX matrices functions 
+/******************************************************************************
+** @source AJAX matrices functions
 **
 ** @version 1.0
-** @@ 
+** @@
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
 ** version 2 of the License, or (at your option) any later version.
-** 
+**
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Library General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU Library General Public
 ** License along with this library; if not, write to the
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ** Boston, MA  02111-1307, USA.
-********************************************************************/
+******************************************************************************/
 
 #include "ajax.h"
 
@@ -27,7 +27,7 @@
 
 
 
-/* @func ajMatrixNew *******************************************************
+/* @func ajMatrixNew **********************************************************
 **
 ** Creates a new, zero matrix from a text string of defined sequence
 ** characters and a matrix name.
@@ -64,7 +64,7 @@ AjPMatrix ajMatrixNew (char* codes, AjPStr filename) {
   return ret;
 }
 
-/* @func ajMatrixfNew *******************************************************
+/* @func ajMatrixfNew *********************************************************
 **
 ** Creates a new, zero matrix from a text string of defined sequence
 ** characters and a matrix name.
@@ -101,7 +101,7 @@ AjPMatrixf ajMatrixfNew (char* codes, AjPStr filename) {
   return ret;
 }
 
-/* @func ajMatrixfDel *******************************************************
+/* @func ajMatrixfDel *********************************************************
 **
 ** Delete a float matrix
 **
@@ -127,11 +127,11 @@ void ajMatrixfDel (AjPMatrixf *thys)
 
   ajSeqCvtDel(&(*thys)->Cvt);
   AJFREE(*thys);
-  
+
   return;
 }
 
-/* @func ajMatrixDel *******************************************************
+/* @func ajMatrixDel **********************************************************
 **
 ** Delete an integer matrix
 **
@@ -157,11 +157,11 @@ void ajMatrixDel (AjPMatrix *thys)
 
   ajSeqCvtDel(&(*thys)->Cvt);
   AJFREE(*thys);
-  
+
   return;
 }
 
-/* @func ajMatrixArray *******************************************************
+/* @func ajMatrixArray ********************************************************
 **
 ** Returns the comparison matrix as an array of integer arrays.
 ** Sequence characters are indexed in this array using the internal
@@ -191,7 +191,7 @@ float** ajMatrixfArray (AjPMatrixf thys) {
   return thys->Matrixf;
 }
 
-/* @func ajMatrixSize *******************************************************
+/* @func ajMatrixSize *********************************************************
 **
 ** Returns the comparison matrix size.
 **
@@ -204,7 +204,7 @@ ajint ajMatrixSize (AjPMatrix thys) {
   return thys->Size;
 }
 
-/* @func ajMatrixfSize *******************************************************
+/* @func ajMatrixfSize ********************************************************
 **
 ** Returns the comparison matrix size.
 **
@@ -217,7 +217,7 @@ ajint ajMatrixfSize (AjPMatrixf thys) {
   return thys->Size;
 }
 
-/* @func ajMatrixCvt *******************************************************
+/* @func ajMatrixCvt **********************************************************
 **
 ** Returns the sequence character conversion table for a matrix.
 ** This table converts any character defined in the matrix to a
@@ -232,7 +232,7 @@ AjPSeqCvt ajMatrixCvt (AjPMatrix thys) {
   return thys->Cvt;
 }
 
-/* @func ajMatrixfCvt *******************************************************
+/* @func ajMatrixfCvt *********************************************************
 **
 ** Returns the sequence character conversion table for a matrix.
 ** This table converts any character defined in the matrix to a
@@ -247,7 +247,7 @@ AjPSeqCvt ajMatrixfCvt (AjPMatrixf thys) {
   return thys->Cvt;
 }
 
-/* @func ajMatrixChar *******************************************************
+/* @func ajMatrixChar *********************************************************
 **
 ** Returns the sequence character conversion table for a matrix.
 ** This table converts any character defined in the matrix to a
@@ -265,7 +265,7 @@ char ajMatrixChar (AjPMatrix thys, ajint i) {
   return ajStrChar(thys->Codes,i);
 }
 
-/* @func ajMatrixfChar *******************************************************
+/* @func ajMatrixfChar ********************************************************
 **
 ** Returns the sequence character conversion table for a matrix.
 ** This table converts any character defined in the matrix to a
@@ -283,7 +283,7 @@ char ajMatrixfChar (AjPMatrixf thys, ajint i) {
   return ajStrChar(thys->Codes,i);
 }
 
-/* @func ajMatrixName *******************************************************
+/* @func ajMatrixName *********************************************************
 **
 ** Returns the name of a matrix object, usually the filename from
 ** which it was read.
@@ -297,7 +297,7 @@ AjPStr ajMatrixName (AjPMatrix thys) {
   return thys->Name;
 }
 
-/* @func ajMatrixfName *******************************************************
+/* @func ajMatrixfName ********************************************************
 **
 ** Returns the name of a matrix object, usually the filename from
 ** which it was read.
@@ -311,7 +311,7 @@ AjPStr ajMatrixfName (AjPMatrixf thys) {
   return thys->Name;
 }
 
-/* @func ajMatrixRead *******************************************************
+/* @func ajMatrixRead *********************************************************
 **
 ** Constructs a comparison matrix from a given local data file
 **
@@ -324,7 +324,7 @@ AjPStr ajMatrixfName (AjPMatrixf thys) {
 AjBool ajMatrixRead (AjPMatrix* pthis, AjPStr filename) {
 
   AjPStr buffer= NULL;
-  AjPStr delim = NULL; 
+  AjPStr delim = NULL;
   AjPFile file = NULL;
   char *ptr;
   ajint i = 0;
@@ -363,7 +363,7 @@ AjBool ajMatrixRead (AjPMatrix* pthis, AjPStr filename) {
 	matrix = thys->Matrix;
       }
       else{
-        k = ajSeqCvtK(thys->Cvt, *ptr); 
+        k = ajSeqCvtK(thys->Cvt, *ptr);
 	/*	(void) printf("-%d-",k);*/
         templine = ajArrIntLine(&buffer,ajStrStr(delim),cols,2,cols);
 
@@ -395,7 +395,7 @@ AjBool ajMatrixRead (AjPMatrix* pthis, AjPStr filename) {
   return ajTrue;
 }
 
-/* @func ajMatrixfRead *******************************************************
+/* @func ajMatrixfRead ********************************************************
 **
 ** Constructs a comparison matrix from a given local data file
 **
@@ -408,7 +408,7 @@ AjBool ajMatrixRead (AjPMatrix* pthis, AjPStr filename) {
 AjBool ajMatrixfRead (AjPMatrixf* pthis, AjPStr filename) {
 
   AjPStr buffer= NULL;
-  AjPStr delim = NULL; 
+  AjPStr delim = NULL;
   AjPFile file = NULL;
   char *ptr;
   ajint i = 0;
@@ -447,7 +447,7 @@ AjBool ajMatrixfRead (AjPMatrixf* pthis, AjPStr filename) {
 	matrix = thys->Matrixf;
       }
       else{
-        k = ajSeqCvtK(thys->Cvt, *ptr); 
+        k = ajSeqCvtK(thys->Cvt, *ptr);
 	/*	printf("-%d-",k);*/
         templine = ajArrFloatLine(&buffer,ajStrStr(delim),cols,2,cols);
 
@@ -495,7 +495,7 @@ AjBool ajMatrixSeqNum (AjPMatrix thys, AjPSeq seq, AjPStr* numseq) {
   return ajSeqNum (seq, thys->Cvt, numseq);
 }
 
-/* @func ajMatrixfSeqNum *****************************************************
+/* @func ajMatrixfSeqNum ******************************************************
 **
 ** Converts a sequence to index numbers using the matrix's
 ** internal conversion table. Sequence characters not defined

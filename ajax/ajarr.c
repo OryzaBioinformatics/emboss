@@ -1,14 +1,14 @@
-/********************************************************************
+/******************************************************************************
 ** @source AJAX ARRAY functions
 **
 ** These functions control all aspects of AJAX array utilities
 **
 ** @author Copyright (C) 1999 Alan Bleasby
-** @version 1.0 
+** @version 1.0
 ** @modified Mar 12 1999 ajb First version
 ** @modified May 10 2000 ajb added dynamically allocated numeric arrays
 ** @@
-** 
+**
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
@@ -18,12 +18,12 @@
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Library General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU Library General Public
 ** License along with this library; if not, write to the
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ** Boston, MA  02111-1307, USA.
-********************************************************************/
+******************************************************************************/
 
 
 #include "ajax.h"
@@ -58,7 +58,7 @@ static AjBool ajLong3dResize(AjPLong3d *thys, ajint elem);
 
 
 
-/* @func ajChararrNew *************************************************************
+/* @func ajChararrNew *********************************************************
 **
 ** Default constructor for empty AJAX character arrays.
 **
@@ -74,18 +74,19 @@ AjPChar ajChararrNew(void)
     thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(char));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
-    
+
     return thys;
 }
 
 
 
-/* @func ajChararrNewL ************************************************************
+/* @func ajChararrNewL ********************************************************
 **
 ** Constructor given an initial reserved size.
 **
 ** @param [r] size [ajint] Reserved size
-** @return [AjPChar] Pointer to an empty character array struct of specified size.
+** @return [AjPChar] Pointer to an empty character array struct
+**                   of specified size.
 ** @@
 ******************************************************************************/
 
@@ -99,14 +100,14 @@ AjPChar ajChararrNewL(ajint size)
     thys->Ptr = AJALLOC0(size*sizeof(char));
     thys->Len = 0;
     thys->Res = (ajint)size;
-    
+
     return thys;
 }
 
 
 
 
-/* @func ajChararrDel *************************************************************
+/* @func ajChararrDel *********************************************************
 **
 ** Default destructor for AJAX character arrays.
 **
@@ -123,12 +124,12 @@ void ajChararrDel(AjPChar *thys)
 
     if(!thys || !*thys)
 	return;
-    
+
     AJFREE((*thys)->Ptr);
     AJFREE(*thys);
 
     *thys = NULL;
-    
+
     return;
 }
 
@@ -137,7 +138,7 @@ void ajChararrDel(AjPChar *thys)
 
 
 
-/* @func ajChararrGet *************************************************************
+/* @func ajChararrGet *********************************************************
 **
 ** Retrieve an element from an AJAX character array.
 **
@@ -154,7 +155,7 @@ char ajChararrGet(AjPChar thys, ajint elem)
 {
     if(elem<0 || !thys || elem>=thys->Len)
 	ajErr("Attempt to access bad char array index %d\n",elem);
-    
+
     return thys->Ptr[elem];
 }
 
@@ -163,7 +164,7 @@ char ajChararrGet(AjPChar thys, ajint elem)
 
 
 
-/* @func ajChararrPut *************************************************************
+/* @func ajChararrPut *********************************************************
 **
 ** Load a character array element.
 **
@@ -195,14 +196,14 @@ AjBool ajChararrPut(AjPChar *thys, ajint elem, char v)
     (void) ajChararrResize(thys, elem);
 
     (*thys)->Ptr[elem] = v;
-    
+
     return ajTrue;
 }
 
 
 
 
-/* @func ajChararrChararr *************************************************************
+/* @func ajChararrChararr *****************************************************
 **
 ** Returns the current char* pointer. This will remain valid until
 ** the array is resized or deleted.
@@ -242,7 +243,7 @@ AjPInt ajIntNew(void)
     thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(ajint));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
-    
+
     return thys;
 }
 
@@ -267,7 +268,7 @@ AjPInt ajIntNewL(ajint size)
     thys->Ptr = AJALLOC0(size*sizeof(ajint));
     thys->Len = 0;
     thys->Res = (ajint)size;
-    
+
     return thys;
 }
 
@@ -289,12 +290,12 @@ void ajIntDel(AjPInt *thys)
 
     if(!thys || !*thys)
 	return;
-    
+
     AJFREE((*thys)->Ptr);
     AJFREE(*thys);
 
     *thys = NULL;
-    
+
     return;
 }
 
@@ -316,7 +317,7 @@ ajint ajIntGet(AjPInt thys, ajint elem)
 {
     if(elem<0 || !thys || elem>=thys->Len)
 	ajErr("Attempt to access bad ajint array index %d\n",elem);
-    
+
     return thys->Ptr[elem];
 }
 
@@ -353,7 +354,7 @@ AjBool ajIntPut(AjPInt *thys, ajint elem, ajint v)
     (void) ajIntResize(thys, elem);
 
     (*thys)->Ptr[elem] = v;
-    
+
     return ajTrue;
 }
 
@@ -378,7 +379,7 @@ void ajIntInc(AjPInt *thys, ajint elem)
 
 
     ++(*thys)->Ptr[elem];
-    
+
     return;
 }
 
@@ -403,7 +404,7 @@ void ajIntDec(AjPInt *thys, ajint elem)
 
 
     --(*thys)->Ptr[elem];
-    
+
     return;
 }
 
@@ -428,7 +429,7 @@ static AjBool ajChararrResize(AjPChar *thys, ajint size)
     ajint    s;
     ajint    clen;
     ajint    limit;
-    
+
 
     if(!thys || !*thys || size<0)
 	ajErr("Illegal attempt to resize character array");
@@ -437,20 +438,20 @@ static AjBool ajChararrResize(AjPChar *thys, ajint size)
     s = ajRound(size+1,RESERVED_SIZE);
     if(s == clen)
 	return ajFalse;
-    
+
     p = *thys;
 
     *thys = ajChararrNewL(s);
-    
+
     if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
-    
+
     (void) memmove((*thys)->Ptr,p->Ptr,limit*sizeof(char));
 
     (*thys)->Len = size+1;
-    
+
 
     ajChararrDel(&p);
 
@@ -458,7 +459,7 @@ static AjBool ajChararrResize(AjPChar *thys, ajint size)
 }
 
 
-/* @funcstatic ajIntResize ***************************************************
+/* @funcstatic ajIntResize ****************************************************
 **
 ** Resize an integer array.
 **
@@ -478,7 +479,7 @@ static AjBool ajIntResize(AjPInt *thys, ajint size)
     ajint    s;
     ajint    clen;
     ajint    limit;
-    
+
 
     if(!thys || !*thys || size<0)
 	ajErr("Illegal attempt to resize integer array");
@@ -487,20 +488,20 @@ static AjBool ajIntResize(AjPInt *thys, ajint size)
     s = ajRound(size+1,RESERVED_SIZE);
     if(s == clen)
 	return ajFalse;
-    
+
     p = *thys;
 
     *thys = ajIntNewL(s);
-    
+
     if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
-    
+
     (void) memmove((*thys)->Ptr,p->Ptr,limit*sizeof(ajint));
 
     (*thys)->Len = size+1;
-    
+
 
     ajIntDel(&p);
 
@@ -544,7 +545,7 @@ ajint ajIntLen(AjPInt thys)
 
 
 
-/* @func ajFloatNew *************************************************************
+/* @func ajFloatNew ***********************************************************
 **
 ** Default constructor for empty AJAX float arrays.
 **
@@ -560,13 +561,13 @@ AjPFloat ajFloatNew(void)
     thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(float));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
-    
+
     return thys;
 }
 
 
 
-/* @func ajFloatNewL ************************************************************
+/* @func ajFloatNewL **********************************************************
 **
 ** Constructor given an initial reserved size.
 **
@@ -585,12 +586,12 @@ AjPFloat ajFloatNewL(ajint size)
     thys->Ptr = AJALLOC0(size*sizeof(float));
     thys->Len = 0;
     thys->Res = (ajint)size;
-    
+
     return thys;
 }
 
 
-/* @func ajFloatDel *************************************************************
+/* @func ajFloatDel ***********************************************************
 **
 ** Default destructor for AJAX float arrays.
 **
@@ -607,17 +608,17 @@ void ajFloatDel(AjPFloat *thys)
 
     if(!thys || !*thys)
 	return;
-    
+
     AJFREE((*thys)->Ptr);
     AJFREE(*thys);
 
     *thys = NULL;
-    
+
     return;
 }
 
 
-/* @func ajFloatGet *************************************************************
+/* @func ajFloatGet ***********************************************************
 **
 ** Retrieve an element from an AJAX float array.
 **
@@ -634,12 +635,12 @@ float ajFloatGet(AjPFloat thys, ajint elem)
 {
     if(elem<0 || !thys || elem>=thys->Len)
 	ajErr("Attempt to access bad float array index %d\n",elem);
-    
+
     return thys->Ptr[elem];
 }
 
 
-/* @func ajFloatPut *************************************************************
+/* @func ajFloatPut ***********************************************************
 **
 ** Load a float array element.
 **
@@ -671,13 +672,13 @@ AjBool ajFloatPut(AjPFloat *thys, ajint elem, float v)
     (void) ajFloatResize(thys, elem);
 
     (*thys)->Ptr[elem] = v;
-    
+
     return ajTrue;
 }
 
 
 
-/* @funcstatic ajFloatResize ***************************************************
+/* @funcstatic ajFloatResize **************************************************
 **
 ** Resize a float array.
 **
@@ -697,7 +698,7 @@ static AjBool ajFloatResize(AjPFloat *thys, ajint size)
     ajint    s;
     ajint    clen;
     ajint    limit;
-    
+
 
     if(!thys || !*thys || size<0)
 	ajErr("Illegal attempt to resize float array");
@@ -706,20 +707,20 @@ static AjBool ajFloatResize(AjPFloat *thys, ajint size)
     s = ajRound(size+1,RESERVED_SIZE);
     if(s == clen)
 	return ajFalse;
-    
+
     p = *thys;
 
     *thys = ajFloatNewL(s);
-    
+
     if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
-    
+
     (void) memmove((*thys)->Ptr,p->Ptr,limit*sizeof(float));
 
     (*thys)->Len = size+1;
-    
+
 
     ajFloatDel(&p);
 
@@ -728,7 +729,7 @@ static AjBool ajFloatResize(AjPFloat *thys, ajint size)
 
 
 
-/* @func ajFloatFloat *************************************************************
+/* @func ajFloatFloat *********************************************************
 **
 ** Returns the current float* pointer. This will remain valid until
 ** the array is resized or deleted.
@@ -747,7 +748,7 @@ float* ajFloatFloat(AjPFloat thys)
 
 
 
-/* @func ajFloatLen *************************************************************
+/* @func ajFloatLen ***********************************************************
 **
 ** Get length of dynamic 1d float array
 **
@@ -763,7 +764,7 @@ ajint ajFloatLen(AjPFloat thys)
 
 
 
-/* @func ajDoubleNew *************************************************************
+/* @func ajDoubleNew **********************************************************
 **
 ** Default constructor for empty AJAX double arrays.
 **
@@ -779,18 +780,19 @@ AjPDouble ajDoubleNew(void)
     thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(double));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
-    
+
     return thys;
 }
 
 
 
-/* @func ajDoubleNewL ************************************************************
+/* @func ajDoubleNewL *********************************************************
 **
 ** Constructor given an initial reserved size.
 **
 ** @param [r] size [ajint] Reserved size
-** @return [AjPDouble] Pointer to an empty double array struct of specified size.
+** @return [AjPDouble] Pointer to an empty double array struct
+**                     of specified size.
 ** @@
 ******************************************************************************/
 
@@ -804,12 +806,12 @@ AjPDouble ajDoubleNewL(ajint size)
     thys->Ptr = AJALLOC0(size*sizeof(double));
     thys->Len = 0;
     thys->Res = (ajint)size;
-    
+
     return thys;
 }
 
 
-/* @func ajDoubleDel *************************************************************
+/* @func ajDoubleDel **********************************************************
 **
 ** Default destructor for AJAX double arrays.
 **
@@ -826,17 +828,17 @@ void ajDoubleDel(AjPDouble *thys)
 
     if(!thys || !*thys)
 	return;
-    
+
     AJFREE((*thys)->Ptr);
     AJFREE(*thys);
 
     *thys = NULL;
-    
+
     return;
 }
 
 
-/* @func ajDoubleGet *************************************************************
+/* @func ajDoubleGet **********************************************************
 **
 ** Retrieve an element from an AJAX double array.
 **
@@ -853,12 +855,12 @@ double ajDoubleGet(AjPDouble thys, ajint elem)
 {
     if(elem<0 || !thys || elem>=thys->Len)
 	ajErr("Attempt to access bad double array index %d\n",elem);
-    
+
     return thys->Ptr[elem];
 }
 
 
-/* @func ajDoublePut *************************************************************
+/* @func ajDoublePut **********************************************************
 **
 ** Load a double array element.
 **
@@ -890,13 +892,13 @@ AjBool ajDoublePut(AjPDouble *thys, ajint elem, double v)
     (void) ajDoubleResize(thys, elem);
 
     (*thys)->Ptr[elem] = v;
-    
+
     return ajTrue;
 }
 
 
 
-/* @funcstatic ajDoubleResize ***************************************************
+/* @funcstatic ajDoubleResize *************************************************
 **
 ** Resize a double array.
 **
@@ -916,7 +918,7 @@ static AjBool ajDoubleResize(AjPDouble *thys, ajint size)
     ajint    s;
     ajint    clen;
     ajint    limit;
-    
+
 
     if(!thys || !*thys || size<0)
 	ajErr("Illegal attempt to resize double array");
@@ -925,20 +927,20 @@ static AjBool ajDoubleResize(AjPDouble *thys, ajint size)
     s = ajRound(size+1,RESERVED_SIZE);
     if(s == clen)
 	return ajFalse;
-    
+
     p = *thys;
 
     *thys = ajDoubleNewL(s);
-    
+
     if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
-    
+
     (void) memmove((*thys)->Ptr,p->Ptr,limit*sizeof(double));
 
     (*thys)->Len = size+1;
-    
+
 
     ajDoubleDel(&p);
 
@@ -947,7 +949,7 @@ static AjBool ajDoubleResize(AjPDouble *thys, ajint size)
 
 
 
-/* @func ajDoubleDouble *************************************************************
+/* @func ajDoubleDouble *******************************************************
 **
 ** Returns the current double* pointer. This will remain valid until
 ** the array is resized or deleted.
@@ -966,7 +968,7 @@ double* ajDoubleDouble(AjPDouble thys)
 
 
 
-/* @func ajDoubleLen *************************************************************
+/* @func ajDoubleLen **********************************************************
 **
 ** Get length of dynamic 1d double array
 **
@@ -982,7 +984,7 @@ ajint ajDoubleLen(AjPDouble thys)
 
 
 
-/* @func ajShortNew *************************************************************
+/* @func ajShortNew ***********************************************************
 **
 ** Default constructor for empty AJAX short arrays.
 **
@@ -998,13 +1000,13 @@ AjPShort ajShortNew(void)
     thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(short));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
-    
+
     return thys;
 }
 
 
 
-/* @func ajShortNewL ************************************************************
+/* @func ajShortNewL **********************************************************
 **
 ** Constructor given an initial reserved size.
 **
@@ -1023,12 +1025,12 @@ AjPShort ajShortNewL(ajint size)
     thys->Ptr = AJALLOC0(size*sizeof(short));
     thys->Len = 0;
     thys->Res = (ajint)size;
-    
+
     return thys;
 }
 
 
-/* @func ajShortDel *************************************************************
+/* @func ajShortDel ***********************************************************
 **
 ** Default destructor for AJAX short arrays.
 **
@@ -1045,17 +1047,17 @@ void ajShortDel(AjPShort *thys)
 
     if(!thys || !*thys)
 	return;
-    
+
     AJFREE((*thys)->Ptr);
     AJFREE(*thys);
 
     *thys = NULL;
-    
+
     return;
 }
 
 
-/* @func ajShortGet *************************************************************
+/* @func ajShortGet ***********************************************************
 **
 ** Retrieve an element from an AJAX short array.
 **
@@ -1072,12 +1074,12 @@ short ajShortGet(AjPShort thys, ajint elem)
 {
     if(elem<0 || !thys || elem>=thys->Len)
 	ajErr("Attempt to access bad short array index %d\n",elem);
-    
+
     return thys->Ptr[elem];
 }
 
 
-/* @func ajShortPut *************************************************************
+/* @func ajShortPut ***********************************************************
 **
 ** Load a short array element.
 **
@@ -1109,13 +1111,13 @@ AjBool ajShortPut(AjPShort *thys, ajint elem, short v)
     (void) ajShortResize(thys, elem);
 
     (*thys)->Ptr[elem] = v;
-    
+
     return ajTrue;
 }
 
 
 
-/* @funcstatic ajShortResize ***************************************************
+/* @funcstatic ajShortResize **************************************************
 **
 ** Resize a short array.
 **
@@ -1135,7 +1137,7 @@ static AjBool ajShortResize(AjPShort *thys, ajint size)
     ajint    s;
     ajint    clen;
     ajint    limit;
-    
+
 
     if(!thys || !*thys || size<0)
 	ajErr("Illegal attempt to resize short array");
@@ -1144,20 +1146,20 @@ static AjBool ajShortResize(AjPShort *thys, ajint size)
     s = ajRound(size+1,RESERVED_SIZE);
     if(s == clen)
 	return ajFalse;
-    
+
     p = *thys;
 
     *thys = ajShortNewL(s);
-    
+
     if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
-    
+
     (void) memmove((*thys)->Ptr,p->Ptr,limit*sizeof(short));
 
     (*thys)->Len = size+1;
-    
+
 
     ajShortDel(&p);
 
@@ -1166,7 +1168,7 @@ static AjBool ajShortResize(AjPShort *thys, ajint size)
 
 
 
-/* @func ajShortShort *************************************************************
+/* @func ajShortShort *********************************************************
 **
 ** Returns the current short* pointer. This will remain valid until
 ** the array is resized or deleted.
@@ -1185,7 +1187,7 @@ short* ajShortShort(AjPShort thys)
 
 
 
-/* @func ajShortLen *************************************************************
+/* @func ajShortLen ***********************************************************
 **
 ** Get length of dynamic 1d short array
 **
@@ -1201,7 +1203,7 @@ ajint ajShortLen(AjPShort thys)
 
 
 
-/* @func ajLongNew *************************************************************
+/* @func ajLongNew ************************************************************
 **
 ** Default constructor for empty AJAX ajlong arrays.
 **
@@ -1217,13 +1219,13 @@ AjPLong ajLongNew(void)
     thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(ajlong));
     thys->Len = 0;
     thys->Res = RESERVED_SIZE;
-    
+
     return thys;
 }
 
 
 
-/* @func ajLongNewL ************************************************************
+/* @func ajLongNewL ***********************************************************
 **
 ** Constructor given an initial reserved size.
 **
@@ -1242,12 +1244,12 @@ AjPLong ajLongNewL(ajint size)
     thys->Ptr = AJALLOC0(size*sizeof(ajlong));
     thys->Len = 0;
     thys->Res = (ajint)size;
-    
+
     return thys;
 }
 
 
-/* @func ajLongDel *************************************************************
+/* @func ajLongDel ************************************************************
 **
 ** Default destructor for AJAX ajlong arrays.
 **
@@ -1264,17 +1266,17 @@ void ajLongDel(AjPLong *thys)
 
     if(!thys || !*thys)
 	return;
-    
+
     AJFREE((*thys)->Ptr);
     AJFREE(*thys);
 
     *thys = NULL;
-    
+
     return;
 }
 
 
-/* @func ajLongGet *************************************************************
+/* @func ajLongGet ************************************************************
 **
 ** Retrieve an element from an AJAX ajlong array.
 **
@@ -1291,12 +1293,12 @@ ajlong ajLongGet(AjPLong thys, ajint elem)
 {
     if(elem<0 || !thys || elem>=thys->Len)
 	ajErr("Attempt to access bad ajlong array index %d\n",elem);
-    
+
     return thys->Ptr[elem];
 }
 
 
-/* @func ajLongPut *************************************************************
+/* @func ajLongPut ************************************************************
 **
 ** Load a ajlong array element.
 **
@@ -1328,7 +1330,7 @@ AjBool ajLongPut(AjPLong *thys, ajint elem, ajlong v)
     (void) ajLongResize(thys, elem);
 
     (*thys)->Ptr[elem] = v;
-    
+
     return ajTrue;
 }
 
@@ -1354,7 +1356,7 @@ static AjBool ajLongResize(AjPLong *thys, ajint size)
     ajint    s;
     ajint    clen;
     ajint    limit;
-    
+
 
     if(!thys || !*thys || size<0)
 	ajErr("Illegal attempt to resize ajlong array");
@@ -1363,20 +1365,20 @@ static AjBool ajLongResize(AjPLong *thys, ajint size)
     s = ajRound(size+1,RESERVED_SIZE);
     if(s == clen)
 	return ajFalse;
-    
+
     p = *thys;
 
     *thys = ajLongNewL(s);
-    
+
     if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
-    
+
     (void) memmove((*thys)->Ptr,p->Ptr,limit*sizeof(ajlong));
 
     (*thys)->Len = size+1;
-    
+
 
     ajLongDel(&p);
 
@@ -1385,7 +1387,7 @@ static AjBool ajLongResize(AjPLong *thys, ajint size)
 
 
 
-/* @func ajLongLong *************************************************************
+/* @func ajLongLong ***********************************************************
 **
 ** Returns the current ajlong* pointer. This will remain valid until
 ** the array is resized or deleted.
@@ -1420,14 +1422,14 @@ ajlong ajLongLen(AjPLong thys)
 
 
 
-/* @func ajFloatParse ********************************************************
+/* @func ajFloatParse *********************************************************
 **
 ** Parses a string into a floating point array.
 **
 ** The array size is already set.
 **
-** @param [w] str [AjPStr] Input string 
-** @param [r] array [AjPFloat*] Array 
+** @param [w] str [AjPStr] Input string
+** @param [r] array [AjPFloat*] Array
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -1437,7 +1439,7 @@ AjBool ajFloatParse (AjPStr str, AjPFloat* array) {
   static AjPRegexp numexp = NULL;
   ajint i=0;
   float t=0.0;
-  
+
   static AjPStr tmpstr = NULL;
   static AjPStr numstr = NULL;
 
@@ -1461,12 +1463,12 @@ AjBool ajFloatParse (AjPStr str, AjPFloat* array) {
   return ajTrue;
 }
 
-/* @func ajFloatStr **********************************************************
+/* @func ajFloatStr ***********************************************************
 **
 ** Writes a floating point array as a string
 **
-** @param [w] str [AjPStr*] Output string 
-** @param [r] array [AjPFloat] Array 
+** @param [w] str [AjPStr*] Output string
+** @param [r] array [AjPFloat] Array
 ** @param [r] precision [ajint] floating point precision
 ** @return [void]
 ** @@
@@ -1484,11 +1486,11 @@ void ajFloatStr (AjPStr* str, AjPFloat array, ajint precision) {
   return;
 }
 
-/* @func ajFloatTrace ********************************************************
+/* @func ajFloatTrace *********************************************************
 **
 ** Writes a floating point array to the debug file
 **
-** @param [r] array [AjPFloat] Array 
+** @param [r] array [AjPFloat] Array
 ** @param [r] precision [ajint] floating point precision
 ** @param [r] text [char*] Report title
 ** @return [void]
@@ -1509,7 +1511,7 @@ void ajFloatTrace (AjPFloat array, ajint precision, char* text) {
 }
 
 
-/* @func ajArrCommaList ******************************************************
+/* @func ajArrCommaList *******************************************************
 **
 ** Creates an AjPStr array from a string of comma separated tokens
 **
@@ -1526,13 +1528,13 @@ ajint ajArrCommaList(AjPStr s, AjPStr **a)
     ajint n;
     ajint i;
 
-    
+
     n = ajStrTokenCount(&s,",\n");
     if(!n)
 	return 0;
-    
+
     AJCNEW(*a, n);
-    
+
     x = ajStrNew();
     t = ajStrTokenInit(s,",\n");
 
@@ -1550,7 +1552,7 @@ ajint ajArrCommaList(AjPStr s, AjPStr **a)
 
 
 
-/* @func  ajArrDoubleLine ****************************************************
+/* @func  ajArrDoubleLine *****************************************************
 **
 ** Creates a double array from a string of columns
 **
@@ -1563,7 +1565,7 @@ ajint ajArrCommaList(AjPStr s, AjPStr **a)
 ** @@
 ******************************************************************************/
 
-double* ajArrDoubleLine(AjPStr *line, const char *delim, ajint cols, 
+double* ajArrDoubleLine(AjPStr *line, const char *delim, ajint cols,
 			ajint startcol, ajint endcol) {
 
     AjPStrTok t=NULL;
@@ -1571,8 +1573,8 @@ double* ajArrDoubleLine(AjPStr *line, const char *delim, ajint cols,
     static double *ret;
     ajint ncols;
     ajint i;
-    
-    
+
+
     t = ajStrTokenInit(*line, delim);
     tmp = ajStrNew();
     ncols = (endcol-startcol)+1;
@@ -1586,7 +1588,7 @@ double* ajArrDoubleLine(AjPStr *line, const char *delim, ajint cols,
     {
 	if(!ajStrToken(&tmp,&t,delim))
 	    ajFatal("Token missing");
-	
+
 	if(!ajStrToDouble(tmp,&ret[i]))
 	    ajFatal("Bad float conversion");
     }
@@ -1599,7 +1601,7 @@ double* ajArrDoubleLine(AjPStr *line, const char *delim, ajint cols,
 
 
 
-/* @func ajArrIntLine ******************************************************
+/* @func ajArrIntLine *********************************************************
 **
 ** Creates an Int array from a string of columns
 **
@@ -1612,7 +1614,7 @@ double* ajArrDoubleLine(AjPStr *line, const char *delim, ajint cols,
 ** @@
 ******************************************************************************/
 
-ajint* ajArrIntLine(AjPStr *line, const char *delim, ajint cols, 
+ajint* ajArrIntLine(AjPStr *line, const char *delim, ajint cols,
 		  ajint startcol, ajint endcol) {
 
     AjPStrTok t=NULL;
@@ -1620,8 +1622,8 @@ ajint* ajArrIntLine(AjPStr *line, const char *delim, ajint cols,
     static ajint *ret;
     ajint ncols;
     ajint i;
-    
-    
+
+
     t = ajStrTokenInit(*line, delim);
     tmp = ajStrNew();
     ncols = (endcol-startcol)+1;
@@ -1635,7 +1637,7 @@ ajint* ajArrIntLine(AjPStr *line, const char *delim, ajint cols,
     {
 	if(!ajStrToken(&tmp,&t,delim))
 	    ajFatal("Token missing");
-	
+
 	if(!ajStrToInt(tmp,&ret[i]))
 	    ajFatal("Bad integer conversion");
     }
@@ -1647,7 +1649,7 @@ ajint* ajArrIntLine(AjPStr *line, const char *delim, ajint cols,
 }
 
 
-/* @func  ajArrFloatLine ****************************************************
+/* @func  ajArrFloatLine ******************************************************
 **
 ** Creates a Float array from a string of columns
 **
@@ -1660,7 +1662,7 @@ ajint* ajArrIntLine(AjPStr *line, const char *delim, ajint cols,
 ** @@
 ******************************************************************************/
 
-float* ajArrFloatLine(AjPStr *line, const char *delim, ajint cols, 
+float* ajArrFloatLine(AjPStr *line, const char *delim, ajint cols,
 		      ajint startcol, ajint endcol) {
 
     AjPStrTok t=NULL;
@@ -1668,8 +1670,8 @@ float* ajArrFloatLine(AjPStr *line, const char *delim, ajint cols,
     static float *ret;
     ajint ncols;
     ajint i;
-    
-    
+
+
     t = ajStrTokenInit(*line, delim);
     tmp = ajStrNew();
     ncols = (endcol-startcol)+1;
@@ -1683,7 +1685,7 @@ float* ajArrFloatLine(AjPStr *line, const char *delim, ajint cols,
     {
 	if(!ajStrToken(&tmp,&t,delim))
 	    ajFatal("Token missing");
-	
+
 	if(!ajStrToFloat(tmp,&ret[i]))
 	    ajFatal("Bad float conversion");
     }
@@ -1696,7 +1698,7 @@ float* ajArrFloatLine(AjPStr *line, const char *delim, ajint cols,
 
 
 
-/* @func ajInt2dNew **********************************************************
+/* @func ajInt2dNew ***********************************************************
 **
 ** Default constructor for empty AJAX 2D integer arrays.
 **
@@ -1708,7 +1710,7 @@ AjPInt2d ajInt2dNew(void)
 {
     AjPInt2d thys;
     ajint    i;
-    
+
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPInt*));
@@ -1717,13 +1719,13 @@ AjPInt2d ajInt2dNew(void)
 
     for(i=0;i<RESERVED_SIZE;++i)
 	thys->Ptr[i] = NULL;
-    
+
     return thys;
 }
 
 
 
-/* @func ajInt2dNewL *********************************************************
+/* @func ajInt2dNewL **********************************************************
 **
 ** Constructor given an initial reserved size.
 **
@@ -1737,7 +1739,7 @@ AjPInt2d ajInt2dNewL(ajint size)
 {
     AjPInt2d thys;
     ajint i;
-    
+
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
@@ -1775,7 +1777,7 @@ void ajInt2dDel(AjPInt2d *thys)
     for(i=(*thys)->Res-1;i>-1;--i)
 	if((*thys)->Ptr[i])
 	    ajIntDel(&((*thys)->Ptr[i]));
-    
+
     AJFREE((*thys)->Ptr);
     AJFREE(*thys);
 
@@ -1785,7 +1787,7 @@ void ajInt2dDel(AjPInt2d *thys)
 
 
 
-/* @func ajInt2dGet *************************************************************
+/* @func ajInt2dGet ***********************************************************
 **
 ** Retrieve an element from an AJAX 2d integer array.
 **
@@ -1802,7 +1804,7 @@ void ajInt2dDel(AjPInt2d *thys)
 ajint ajInt2dGet(AjPInt2d thys, ajint elem1, ajint elem2)
 {
     AjPInt t;
-    
+
     if(elem1<0 || elem2<0 || !thys || elem1>=thys->Len)
 	ajErr("Attempt to access bad ajint array index [%d][%d]\n",elem1,
 	      elem2);
@@ -1810,13 +1812,13 @@ ajint ajInt2dGet(AjPInt2d thys, ajint elem1, ajint elem2)
     t = thys->Ptr[elem1];
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][]\n",elem1);
-    
+
     return ajIntGet(t,elem2);
 }
 
 
 
-/* @func ajInt2dPut **********************************************************
+/* @func ajInt2dPut ***********************************************************
 **
 ** Load an integer 2d array element.
 **
@@ -1852,15 +1854,15 @@ AjBool ajInt2dPut(AjPInt2d *thys, ajint elem1, ajint elem2, ajint v)
 
     if(!(*thys)->Ptr[elem1])
 	(*thys)->Ptr[elem1] = ajIntNew();
-    
+
     ajIntPut(&(*thys)->Ptr[elem1],elem2,v);
-    
+
     return ajTrue;
 }
 
 
 
-/* @funcstatic ajInt2dResize ***************************************************
+/* @funcstatic ajInt2dResize **************************************************
 **
 ** Resize an integer array.
 **
@@ -1882,7 +1884,7 @@ static AjBool ajInt2dResize(AjPInt2d *thys, ajint size)
     ajint    clen;
     ajint    limit;
     ajint    i;
-    
+
 
     if(!thys || !*thys || size<0)
 	ajErr("Illegal attempt to resize integer array");
@@ -1891,18 +1893,18 @@ static AjBool ajInt2dResize(AjPInt2d *thys, ajint size)
     s = ajRound(size+1,RESERVED_SIZE);
     if(s == clen)
 	return ajFalse;
-    
+
     p = *thys;
 
     AJNEW0(nthys);
     nthys->Ptr = AJALLOC0(s*sizeof(AjPInt*));
     nthys->Res = s;
-    
+
     if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
-    
+
     (void) memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPInt*));
 
     i = nthys->Len = size+1;
@@ -1916,13 +1918,13 @@ static AjBool ajInt2dResize(AjPInt2d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
-    
+
     return ajTrue;
 }
 
 
 
-/* @func ajInt2dLen ***************************************************
+/* @func ajInt2dLen ***********************************************************
 **
 ** Get lengths of 2d ajint array
 **
@@ -1939,7 +1941,7 @@ void ajInt2dLen(AjPInt2d thys, ajint* len1, ajint* len2)
 {
     AjPInt t;
     ajint i;
-    
+
     *len1 = thys->Len;
     *len2 = 0;
     for(i=0;i<*len1;++i)
@@ -1951,7 +1953,7 @@ void ajInt2dLen(AjPInt2d thys, ajint* len1, ajint* len2)
 
 
 
-/* @func ajInt2dInt ***************************************************
+/* @func ajInt2dInt ***********************************************************
 **
 ** Convert AjPInt2d to ajint**
 **
@@ -1968,9 +1970,9 @@ ajint** ajInt2dInt(AjPInt2d thys)
     ajint d1;
     ajint d2;
     ajint i;
-    
+
     ajInt2dLen(thys,&d1,&d2);
-    
+
     AJCNEW(array,d1);
     for(i=0;i<d1;++i)
     {
@@ -1984,7 +1986,7 @@ ajint** ajInt2dInt(AjPInt2d thys)
 
 
 
-/* @func ajInt3dNew **********************************************************
+/* @func ajInt3dNew ***********************************************************
 **
 ** Default constructor for empty AJAX 3D integer arrays.
 **
@@ -1996,7 +1998,7 @@ AjPInt3d ajInt3dNew(void)
 {
     AjPInt3d thys;
     ajint    i;
-    
+
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPInt2d*));
@@ -2005,13 +2007,13 @@ AjPInt3d ajInt3dNew(void)
 
     for(i=0;i<RESERVED_SIZE;++i)
 	thys->Ptr[i] = NULL;
-    
+
     return thys;
 }
 
 
 
-/* @func ajInt3dNewL *********************************************************
+/* @func ajInt3dNewL **********************************************************
 **
 ** Constructor given an initial reserved size.
 **
@@ -2026,7 +2028,7 @@ AjPInt3d ajInt3dNewL(ajint size)
     AjPInt3d thys;
     ajint i;
 
-    size = ajRound(size,RESERVED_SIZE);    
+    size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(size*sizeof(AjPInt2d*));
@@ -2063,7 +2065,7 @@ void ajInt3dDel(AjPInt3d *thys)
     for(i=(*thys)->Res-1;i>-1;--i)
 	if((*thys)->Ptr[i])
 	    ajInt2dDel(&((*thys)->Ptr[i]));
-    
+
     AJFREE((*thys)->Ptr);
     AJFREE(*thys);
 
@@ -2073,7 +2075,7 @@ void ajInt3dDel(AjPInt3d *thys)
 
 
 
-/* @func ajInt3dGet *************************************************************
+/* @func ajInt3dGet ***********************************************************
 **
 ** Retrieve an element from an AJAX 3d integer array.
 **
@@ -2091,7 +2093,7 @@ void ajInt3dDel(AjPInt3d *thys)
 ajint ajInt3dGet(AjPInt3d thys, ajint elem1, ajint elem2, ajint elem3)
 {
     AjPInt2d t;
-    
+
     if(elem1<0 || elem2<0 || elem3<0 || !thys || elem1>=thys->Len)
 	ajErr("Attempt to access bad ajint array index [%d][%d][%d]\n",elem1,
 	      elem2,elem3);
@@ -2099,13 +2101,13 @@ ajint ajInt3dGet(AjPInt3d thys, ajint elem1, ajint elem2, ajint elem3)
     t = thys->Ptr[elem1];
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][][]\n",elem1);
-    
+
     return ajInt2dGet(t,elem2,elem3);
 }
 
 
 
-/* @func ajInt3dPut **********************************************************
+/* @func ajInt3dPut ***********************************************************
 **
 ** Load an integer 3d array element.
 **
@@ -2123,7 +2125,8 @@ ajint ajInt3dGet(AjPInt3d thys, ajint elem1, ajint elem2, ajint elem3)
 ** @@
 ******************************************************************************/
 
-AjBool ajInt3dPut(AjPInt3d *thys, ajint elem1, ajint elem2, ajint elem3, ajint v)
+AjBool ajInt3dPut(AjPInt3d *thys,
+		  ajint elem1, ajint elem2, ajint elem3, ajint v)
 {
     if(!thys || !*thys || elem1<0 || elem2<0 || elem3<0)
 	ajErr("Attempt to write to illegal array value [%d][%d][%d]\n",elem1,
@@ -2142,15 +2145,15 @@ AjBool ajInt3dPut(AjPInt3d *thys, ajint elem1, ajint elem2, ajint elem3, ajint v
 
     if(!(*thys)->Ptr[elem1])
 	(*thys)->Ptr[elem1] = ajInt2dNew();
-    
+
     ajInt2dPut(&(*thys)->Ptr[elem1],elem2,elem3,v);
-    
+
     return ajTrue;
 }
 
 
 
-/* @funcstatic ajInt3dResize ***************************************************
+/* @funcstatic ajInt3dResize **************************************************
 **
 ** Resize an integer array.
 **
@@ -2172,7 +2175,7 @@ static AjBool ajInt3dResize(AjPInt3d *thys, ajint size)
     ajint    clen;
     ajint    limit;
     ajint    i;
-    
+
 
     if(!thys || !*thys || size<0)
 	ajErr("Illegal attempt to resize integer array");
@@ -2181,18 +2184,18 @@ static AjBool ajInt3dResize(AjPInt3d *thys, ajint size)
     s = ajRound(size+1,RESERVED_SIZE);
     if(s == clen)
 	return ajFalse;
-    
+
     p = *thys;
 
     AJNEW0(nthys);
     nthys->Ptr = AJALLOC0(s*sizeof(AjPInt2d*));
     nthys->Res = s;
-    
+
     if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
-    
+
     (void) memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPInt2d*));
 
     i = nthys->Len = size+1;
@@ -2206,13 +2209,13 @@ static AjBool ajInt3dResize(AjPInt3d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
-    
+
     return ajTrue;
 }
 
 
 
-/* @func ajInt3dLen ***************************************************
+/* @func ajInt3dLen ***********************************************************
 **
 ** Get lengths of 3d ajint array
 **
@@ -2233,7 +2236,7 @@ void ajInt3dLen(AjPInt3d thys, ajint* len1, ajint* len2, ajint* len3)
     ajint i;
     ajint j;
     ajint v;
-    
+
     *len1 = thys->Len;
     *len2 = 0;
     for(i=0;i<*len1;++i)
@@ -2248,15 +2251,15 @@ void ajInt3dLen(AjPInt3d thys, ajint* len1, ajint* len2, ajint* len3)
 		if((t1=t2->Ptr[j]))
 		    *len3 = (*len3 > t1->Len) ? *len3 : t1->Len;
 	}
-    
+
     return;
 }
 
 
 
-/* @func ajInt3dInt ***************************************************
+/* @func ajInt3dInt ***********************************************************
 **
-** Convert AjPInt3d to ajint***
+** Convert AjPInt3d to ajint***************************************************
 **
 ** @param  [r] thys [AjPInt3d] Pointer to the ajint array.
 **
@@ -2274,9 +2277,9 @@ ajint*** ajInt3dInt(AjPInt3d thys)
     ajint d3;
     ajint i;
     ajint j;
-    
+
     ajInt3dLen(thys,&d1,&d2,&d3);
-    
+
     AJCNEW0(array,d1);
     for(i=0;i<d1;++i)
     {
@@ -2300,7 +2303,7 @@ ajint*** ajInt3dInt(AjPInt3d thys)
 
 
 
-/* @func ajFloat2dNew **********************************************************
+/* @func ajFloat2dNew *********************************************************
 **
 ** Default constructor for empty AJAX 2D float arrays.
 **
@@ -2312,7 +2315,7 @@ AjPFloat2d ajFloat2dNew(void)
 {
     AjPFloat2d thys;
     ajint    i;
-    
+
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPFloat*));
@@ -2321,13 +2324,13 @@ AjPFloat2d ajFloat2dNew(void)
 
     for(i=0;i<RESERVED_SIZE;++i)
 	thys->Ptr[i] = NULL;
-    
+
     return thys;
 }
 
 
 
-/* @func ajFloat2dNewL *********************************************************
+/* @func ajFloat2dNewL ********************************************************
 **
 ** Constructor given an initial reserved size.
 **
@@ -2357,7 +2360,7 @@ AjPFloat2d ajFloat2dNewL(ajint size)
 
 
 
-/* @func ajFloat2dDel ***********************************************************
+/* @func ajFloat2dDel *********************************************************
 **
 ** Default destructor for AJAX float arrays.
 **
@@ -2379,7 +2382,7 @@ void ajFloat2dDel(AjPFloat2d *thys)
     for(i=(*thys)->Res-1;i>-1;--i)
 	if((*thys)->Ptr[i])
 	    ajFloatDel(&((*thys)->Ptr[i]));
-    
+
     AJFREE((*thys)->Ptr);
     AJFREE(*thys);
 
@@ -2389,7 +2392,7 @@ void ajFloat2dDel(AjPFloat2d *thys)
 
 
 
-/* @func ajFloat2dGet *************************************************************
+/* @func ajFloat2dGet *********************************************************
 **
 ** Retrieve an element from an AJAX 2d float array.
 **
@@ -2406,7 +2409,7 @@ void ajFloat2dDel(AjPFloat2d *thys)
 float ajFloat2dGet(AjPFloat2d thys, ajint elem1, ajint elem2)
 {
     AjPFloat t;
-    
+
     if(elem1<0 || elem2<0 || !thys || elem1>=thys->Len)
 	ajErr("Attempt to access bad float array index [%d][%d]\n",elem1,
 	      elem2);
@@ -2414,13 +2417,13 @@ float ajFloat2dGet(AjPFloat2d thys, ajint elem1, ajint elem2)
     t = thys->Ptr[elem1];
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][]\n",elem1);
-    
+
     return ajFloatGet(t,elem2);
 }
 
 
 
-/* @func ajFloat2dPut **********************************************************
+/* @func ajFloat2dPut *********************************************************
 **
 ** Load a float 2d array element.
 **
@@ -2456,15 +2459,15 @@ AjBool ajFloat2dPut(AjPFloat2d *thys, ajint elem1, ajint elem2, float v)
 
     if(!(*thys)->Ptr[elem1])
 	(*thys)->Ptr[elem1] = ajFloatNew();
-    
+
     ajFloatPut(&(*thys)->Ptr[elem1],elem2,v);
-    
+
     return ajTrue;
 }
 
 
 
-/* @funcstatic ajFloat2dResize ***************************************************
+/* @funcstatic ajFloat2dResize ************************************************
 **
 ** Resize a float array.
 **
@@ -2486,7 +2489,7 @@ static AjBool ajFloat2dResize(AjPFloat2d *thys, ajint size)
     ajint    clen;
     ajint    limit;
     ajint    i;
-    
+
 
     if(!thys || !*thys || size<0)
 	ajErr("Illegal attempt to resize float array");
@@ -2495,18 +2498,18 @@ static AjBool ajFloat2dResize(AjPFloat2d *thys, ajint size)
     s = ajRound(size+1,RESERVED_SIZE);
     if(s == clen)
 	return ajFalse;
-    
+
     p = *thys;
 
     AJNEW0(nthys);
     nthys->Ptr = AJALLOC0(s*sizeof(AjPFloat*));
     nthys->Res = s;
-    
+
     if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
-    
+
     (void) memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPFloat*));
 
     i = nthys->Len = size+1;
@@ -2520,13 +2523,13 @@ static AjBool ajFloat2dResize(AjPFloat2d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
-    
+
     return ajTrue;
 }
 
 
 
-/* @func ajFloat2dLen ***************************************************
+/* @func ajFloat2dLen *********************************************************
 **
 ** Get lengths of 2d float array
 **
@@ -2535,7 +2538,7 @@ static AjBool ajFloat2dResize(AjPFloat2d *thys, ajint size)
 ** @param  [w] len1 [ajint*] Length of 1st dim
 ** @param  [w] len2 [ajint*] Length of 2nd dim
 **
-** @return [void] 
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -2543,7 +2546,7 @@ void ajFloat2dLen(AjPFloat2d thys, ajint* len1, ajint* len2)
 {
     AjPFloat t;
     ajint i;
-    
+
     *len1 = thys->Len;
     *len2 = 0;
     for(i=0;i<*len1;++i)
@@ -2555,7 +2558,7 @@ void ajFloat2dLen(AjPFloat2d thys, ajint* len1, ajint* len2)
 
 
 
-/* @func ajFloat2dFloat ***************************************************
+/* @func ajFloat2dFloat *******************************************************
 **
 ** Convert AjPFloat2d to float**
 **
@@ -2572,9 +2575,9 @@ float** ajFloat2dFloat(AjPFloat2d thys)
     ajint d1;
     ajint d2;
     ajint i;
-    
+
     ajFloat2dLen(thys,&d1,&d2);
-    
+
     AJCNEW(array,d1);
     for(i=0;i<d1;++i)
     {
@@ -2588,7 +2591,7 @@ float** ajFloat2dFloat(AjPFloat2d thys)
 
 
 
-/* @func ajFloat3dNew **********************************************************
+/* @func ajFloat3dNew *********************************************************
 **
 ** Default constructor for empty AJAX 3D float arrays.
 **
@@ -2600,7 +2603,7 @@ AjPFloat3d ajFloat3dNew(void)
 {
     AjPFloat3d thys;
     ajint    i;
-    
+
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPFloat2d*));
@@ -2609,13 +2612,13 @@ AjPFloat3d ajFloat3dNew(void)
 
     for(i=0;i<RESERVED_SIZE;++i)
 	thys->Ptr[i] = NULL;
-    
+
     return thys;
 }
 
 
 
-/* @func ajFloat3dNewL *********************************************************
+/* @func ajFloat3dNewL ********************************************************
 **
 ** Constructor given an initial reserved size.
 **
@@ -2629,7 +2632,7 @@ AjPFloat3d ajFloat3dNewL(ajint size)
 {
     AjPFloat3d thys;
     ajint i;
-    
+
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
@@ -2645,7 +2648,7 @@ AjPFloat3d ajFloat3dNewL(ajint size)
 
 
 
-/* @func ajFloat3dDel ***********************************************************
+/* @func ajFloat3dDel *********************************************************
 **
 ** Default destructor for AJAX float arrays.
 **
@@ -2667,7 +2670,7 @@ void ajFloat3dDel(AjPFloat3d *thys)
     for(i=(*thys)->Res-1;i>-1;--i)
 	if((*thys)->Ptr[i])
 	    ajFloat2dDel(&((*thys)->Ptr[i]));
-    
+
     AJFREE((*thys)->Ptr);
     AJFREE(*thys);
 
@@ -2677,7 +2680,7 @@ void ajFloat3dDel(AjPFloat3d *thys)
 
 
 
-/* @func ajFloat3dGet *************************************************************
+/* @func ajFloat3dGet *********************************************************
 **
 ** Retrieve an element from an AJAX 3d float array.
 **
@@ -2695,7 +2698,7 @@ void ajFloat3dDel(AjPFloat3d *thys)
 float ajFloat3dGet(AjPFloat3d thys, ajint elem1, ajint elem2, ajint elem3)
 {
     AjPFloat2d t;
-    
+
     if(elem1<0 || elem2<0 || elem3<0 || !thys || elem1>=thys->Len)
 	ajErr("Attempt to access bad float array index [%d][%d][%d]\n",elem1,
 	      elem2,elem3);
@@ -2703,13 +2706,13 @@ float ajFloat3dGet(AjPFloat3d thys, ajint elem1, ajint elem2, ajint elem3)
     t = thys->Ptr[elem1];
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][][]\n",elem1);
-    
+
     return ajFloat2dGet(t,elem2,elem3);
 }
 
 
 
-/* @func ajFloat3dPut **********************************************************
+/* @func ajFloat3dPut *********************************************************
 **
 ** Load a float 3d array element.
 **
@@ -2727,7 +2730,8 @@ float ajFloat3dGet(AjPFloat3d thys, ajint elem1, ajint elem2, ajint elem3)
 ** @@
 ******************************************************************************/
 
-AjBool ajFloat3dPut(AjPFloat3d *thys, ajint elem1, ajint elem2, ajint elem3, float v)
+AjBool ajFloat3dPut(AjPFloat3d *thys,
+		    ajint elem1, ajint elem2, ajint elem3, float v)
 {
     if(!thys || !*thys || elem1<0 || elem2<0 || elem3<0)
 	ajErr("Attempt to write to illegal array value [%d][%d][%d]\n",elem1,
@@ -2746,15 +2750,15 @@ AjBool ajFloat3dPut(AjPFloat3d *thys, ajint elem1, ajint elem2, ajint elem3, flo
 
     if(!(*thys)->Ptr[elem1])
 	(*thys)->Ptr[elem1] = ajFloat2dNew();
-    
+
     ajFloat2dPut(&(*thys)->Ptr[elem1],elem2,elem3,v);
-    
+
     return ajTrue;
 }
 
 
 
-/* @funcstatic ajFloat3dResize ***************************************************
+/* @funcstatic ajFloat3dResize ************************************************
 **
 ** Resize a float array.
 **
@@ -2776,7 +2780,7 @@ static AjBool ajFloat3dResize(AjPFloat3d *thys, ajint size)
     ajint    clen;
     ajint    limit;
     ajint    i;
-    
+
 
     if(!thys || !*thys || size<0)
 	ajErr("Illegal attempt to resize float array");
@@ -2785,18 +2789,18 @@ static AjBool ajFloat3dResize(AjPFloat3d *thys, ajint size)
     s = ajRound(size+1,RESERVED_SIZE);
     if(s == clen)
 	return ajFalse;
-    
+
     p = *thys;
 
     AJNEW0(nthys);
     nthys->Ptr = AJALLOC0(s*sizeof(AjPFloat2d*));
     nthys->Res = s;
-    
+
     if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
-    
+
     (void) memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPFloat2d*));
 
     i = nthys->Len = size+1;
@@ -2810,13 +2814,13 @@ static AjBool ajFloat3dResize(AjPFloat3d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
-    
+
     return ajTrue;
 }
 
 
 
-/* @func ajFloat3dLen ***************************************************
+/* @func ajFloat3dLen *********************************************************
 **
 ** Get lengths of 3d float array
 **
@@ -2837,7 +2841,7 @@ void ajFloat3dLen(AjPFloat3d thys, ajint* len1, ajint* len2, ajint* len3)
     ajint i;
     ajint j;
     ajint v;
-    
+
     *len1 = thys->Len;
     *len2 = 0;
     for(i=0;i<*len1;++i)
@@ -2852,15 +2856,15 @@ void ajFloat3dLen(AjPFloat3d thys, ajint* len1, ajint* len2, ajint* len3)
 		if((t1=t2->Ptr[j]))
 		    *len3 = (*len3 > t1->Len) ? *len3 : t1->Len;
 	}
-    
+
     return;
 }
 
 
 
-/* @func ajFloat3dFloat ***************************************************
+/* @func ajFloat3dFloat *******************************************************
 **
-** Convert AjPFloat3d to float***
+** Convert AjPFloat3d to float*************************************************
 **
 ** @param  [r] thys [AjPFloat3d] Pointer to the float array.
 **
@@ -2878,9 +2882,9 @@ float*** ajFloat3dFloat(AjPFloat3d thys)
     ajint d3;
     ajint i;
     ajint j;
-    
+
     ajFloat3dLen(thys,&d1,&d2,&d3);
-    
+
     AJCNEW0(array,d1);
     for(i=0;i<d1;++i)
     {
@@ -2904,7 +2908,7 @@ float*** ajFloat3dFloat(AjPFloat3d thys)
 
 
 
-/* @func ajDouble2dNew **********************************************************
+/* @func ajDouble2dNew ********************************************************
 **
 ** Default constructor for empty AJAX 2D double arrays.
 **
@@ -2916,7 +2920,7 @@ AjPDouble2d ajDouble2dNew(void)
 {
     AjPDouble2d thys;
     ajint    i;
-    
+
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPDouble*));
@@ -2925,13 +2929,13 @@ AjPDouble2d ajDouble2dNew(void)
 
     for(i=0;i<RESERVED_SIZE;++i)
 	thys->Ptr[i] = NULL;
-    
+
     return thys;
 }
 
 
 
-/* @func ajDouble2dNewL *********************************************************
+/* @func ajDouble2dNewL *******************************************************
 **
 ** Constructor given an initial reserved size.
 **
@@ -2945,7 +2949,7 @@ AjPDouble2d ajDouble2dNewL(ajint size)
 {
     AjPDouble2d thys;
     ajint i;
-    
+
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
@@ -2961,7 +2965,7 @@ AjPDouble2d ajDouble2dNewL(ajint size)
 
 
 
-/* @func ajDouble2dDel ***********************************************************
+/* @func ajDouble2dDel ********************************************************
 **
 ** Default destructor for AJAX double arrays.
 **
@@ -2983,7 +2987,7 @@ void ajDouble2dDel(AjPDouble2d *thys)
     for(i=(*thys)->Res-1;i>-1;--i)
 	if((*thys)->Ptr[i])
 	    ajDoubleDel(&((*thys)->Ptr[i]));
-    
+
     AJFREE((*thys)->Ptr);
     AJFREE(*thys);
 
@@ -2993,7 +2997,7 @@ void ajDouble2dDel(AjPDouble2d *thys)
 
 
 
-/* @func ajDouble2dGet *************************************************************
+/* @func ajDouble2dGet ********************************************************
 **
 ** Retrieve an element from an AJAX 2d double array.
 **
@@ -3010,7 +3014,7 @@ void ajDouble2dDel(AjPDouble2d *thys)
 double ajDouble2dGet(AjPDouble2d thys, ajint elem1, ajint elem2)
 {
     AjPDouble t;
-    
+
     if(elem1<0 || elem2<0 || !thys || elem1>=thys->Len)
 	ajErr("Attempt to access bad double array index [%d][%d]\n",elem1,
 	      elem2);
@@ -3018,13 +3022,13 @@ double ajDouble2dGet(AjPDouble2d thys, ajint elem1, ajint elem2)
     t = thys->Ptr[elem1];
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][]\n",elem1);
-    
+
     return ajDoubleGet(t,elem2);
 }
 
 
 
-/* @func ajDouble2dPut **********************************************************
+/* @func ajDouble2dPut ********************************************************
 **
 ** Load a double 2d array element.
 **
@@ -3060,15 +3064,15 @@ AjBool ajDouble2dPut(AjPDouble2d *thys, ajint elem1, ajint elem2, double v)
 
     if(!(*thys)->Ptr[elem1])
 	(*thys)->Ptr[elem1] = ajDoubleNew();
-    
+
     ajDoublePut(&(*thys)->Ptr[elem1],elem2,v);
-    
+
     return ajTrue;
 }
 
 
 
-/* @funcstatic ajDouble2dResize ***************************************************
+/* @funcstatic ajDouble2dResize ***********************************************
 **
 ** Resize a double array.
 **
@@ -3090,7 +3094,7 @@ static AjBool ajDouble2dResize(AjPDouble2d *thys, ajint size)
     ajint    clen;
     ajint    limit;
     ajint    i;
-    
+
 
     if(!thys || !*thys || size<0)
 	ajErr("Illegal attempt to resize double array");
@@ -3099,18 +3103,18 @@ static AjBool ajDouble2dResize(AjPDouble2d *thys, ajint size)
     s = ajRound(size+1,RESERVED_SIZE);
     if(s == clen)
 	return ajFalse;
-    
+
     p = *thys;
 
     AJNEW0(nthys);
     nthys->Ptr = AJALLOC0(s*sizeof(AjPDouble*));
     nthys->Res = s;
-    
+
     if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
-    
+
     (void) memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPDouble*));
 
     i = nthys->Len = size+1;
@@ -3124,13 +3128,13 @@ static AjBool ajDouble2dResize(AjPDouble2d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
-    
+
     return ajTrue;
 }
 
 
 
-/* @func ajDouble2dLen ***************************************************
+/* @func ajDouble2dLen ********************************************************
 **
 ** Get lengths of 2d double array
 **
@@ -3147,7 +3151,7 @@ void ajDouble2dLen(AjPDouble2d thys, ajint* len1, ajint* len2)
 {
     AjPDouble t;
     ajint i;
-    
+
     *len1 = thys->Len;
     *len2 = 0;
     for(i=0;i<*len1;++i)
@@ -3159,7 +3163,7 @@ void ajDouble2dLen(AjPDouble2d thys, ajint* len1, ajint* len2)
 
 
 
-/* @func ajDouble2dDouble ***************************************************
+/* @func ajDouble2dDouble *****************************************************
 **
 ** Convert AjPDouble2d to double**
 **
@@ -3176,9 +3180,9 @@ double** ajDouble2dDouble(AjPDouble2d thys)
     ajint d1;
     ajint d2;
     ajint i;
-    
+
     ajDouble2dLen(thys,&d1,&d2);
-    
+
     AJCNEW(array,d1);
     for(i=0;i<d1;++i)
     {
@@ -3192,7 +3196,7 @@ double** ajDouble2dDouble(AjPDouble2d thys)
 
 
 
-/* @func ajDouble3dNew **********************************************************
+/* @func ajDouble3dNew ********************************************************
 **
 ** Default constructor for empty AJAX 3D double arrays.
 **
@@ -3204,7 +3208,7 @@ AjPDouble3d ajDouble3dNew(void)
 {
     AjPDouble3d thys;
     ajint    i;
-    
+
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPDouble2d*));
@@ -3213,13 +3217,13 @@ AjPDouble3d ajDouble3dNew(void)
 
     for(i=0;i<RESERVED_SIZE;++i)
 	thys->Ptr[i] = NULL;
-    
+
     return thys;
 }
 
 
 
-/* @func ajDouble3dNewL *********************************************************
+/* @func ajDouble3dNewL *******************************************************
 **
 ** Constructor given an initial reserved size.
 **
@@ -3233,7 +3237,7 @@ AjPDouble3d ajDouble3dNewL(ajint size)
 {
     AjPDouble3d thys;
     ajint i;
-    
+
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
@@ -3249,7 +3253,7 @@ AjPDouble3d ajDouble3dNewL(ajint size)
 
 
 
-/* @func ajDouble3dDel ***********************************************************
+/* @func ajDouble3dDel ********************************************************
 **
 ** Default destructor for AJAX double arrays.
 **
@@ -3271,7 +3275,7 @@ void ajDouble3dDel(AjPDouble3d *thys)
     for(i=(*thys)->Res-1;i>-1;--i)
 	if((*thys)->Ptr[i])
 	    ajDouble2dDel(&((*thys)->Ptr[i]));
-    
+
     AJFREE((*thys)->Ptr);
     AJFREE(*thys);
 
@@ -3281,7 +3285,7 @@ void ajDouble3dDel(AjPDouble3d *thys)
 
 
 
-/* @func ajDouble3dGet *************************************************************
+/* @func ajDouble3dGet ********************************************************
 **
 ** Retrieve an element from an AJAX 3d double array.
 **
@@ -3299,7 +3303,7 @@ void ajDouble3dDel(AjPDouble3d *thys)
 double ajDouble3dGet(AjPDouble3d thys, ajint elem1, ajint elem2, ajint elem3)
 {
     AjPDouble2d t;
-    
+
     if(elem1<0 || elem2<0 || elem3<0 || !thys || elem1>=thys->Len)
 	ajErr("Attempt to access bad double array index [%d][%d][%d]\n",elem1,
 	      elem2,elem3);
@@ -3307,13 +3311,13 @@ double ajDouble3dGet(AjPDouble3d thys, ajint elem1, ajint elem2, ajint elem3)
     t = thys->Ptr[elem1];
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][][]\n",elem1);
-    
+
     return ajDouble2dGet(t,elem2,elem3);
 }
 
 
 
-/* @func ajDouble3dPut **********************************************************
+/* @func ajDouble3dPut ********************************************************
 **
 ** Load a double 3d array element.
 **
@@ -3331,7 +3335,8 @@ double ajDouble3dGet(AjPDouble3d thys, ajint elem1, ajint elem2, ajint elem3)
 ** @@
 ******************************************************************************/
 
-AjBool ajDouble3dPut(AjPDouble3d *thys, ajint elem1, ajint elem2, ajint elem3, double v)
+AjBool ajDouble3dPut(AjPDouble3d *thys,
+		     ajint elem1, ajint elem2, ajint elem3, double v)
 {
     if(!thys || !*thys || elem1<0 || elem2<0 || elem3<0)
 	ajErr("Attempt to write to illegal array value [%d][%d][%d]\n",elem1,
@@ -3350,15 +3355,15 @@ AjBool ajDouble3dPut(AjPDouble3d *thys, ajint elem1, ajint elem2, ajint elem3, d
 
     if(!(*thys)->Ptr[elem1])
 	(*thys)->Ptr[elem1] = ajDouble2dNew();
-    
+
     ajDouble2dPut(&(*thys)->Ptr[elem1],elem2,elem3,v);
-    
+
     return ajTrue;
 }
 
 
 
-/* @funcstatic ajDouble3dResize ***************************************************
+/* @funcstatic ajDouble3dResize ***********************************************
 **
 ** Resize a double array.
 **
@@ -3380,7 +3385,7 @@ static AjBool ajDouble3dResize(AjPDouble3d *thys, ajint size)
     ajint    clen;
     ajint    limit;
     ajint    i;
-    
+
 
     if(!thys || !*thys || size<0)
 	ajErr("Illegal attempt to resize double array");
@@ -3389,18 +3394,18 @@ static AjBool ajDouble3dResize(AjPDouble3d *thys, ajint size)
     s = ajRound(size+1,RESERVED_SIZE);
     if(s == clen)
 	return ajFalse;
-    
+
     p = *thys;
 
     AJNEW0(nthys);
     nthys->Ptr = AJALLOC0(s*sizeof(AjPDouble2d*));
     nthys->Res = s;
-    
+
     if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
-    
+
     (void) memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPDouble2d*));
 
     i = nthys->Len = size+1;
@@ -3414,13 +3419,13 @@ static AjBool ajDouble3dResize(AjPDouble3d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
-    
+
     return ajTrue;
 }
 
 
 
-/* @func ajDouble3dLen ***************************************************
+/* @func ajDouble3dLen ********************************************************
 **
 ** Get lengths of 3d double array
 **
@@ -3441,7 +3446,7 @@ void ajDouble3dLen(AjPDouble3d thys, ajint* len1, ajint* len2, ajint* len3)
     ajint i;
     ajint j;
     ajint v;
-    
+
     *len1 = thys->Len;
     *len2 = 0;
     for(i=0;i<*len1;++i)
@@ -3456,15 +3461,15 @@ void ajDouble3dLen(AjPDouble3d thys, ajint* len1, ajint* len2, ajint* len3)
 		if((t1=t2->Ptr[j]))
 		    *len3 = (*len3 > t1->Len) ? *len3 : t1->Len;
 	}
-    
+
     return;
 }
 
 
 
-/* @func ajDouble3dDouble ***************************************************
+/* @func ajDouble3dDouble *****************************************************
 **
-** Convert AjPDouble3d to double***
+** Convert AjPDouble3d to double***********************************************
 **
 ** @param  [r] thys [AjPDouble3d] Pointer to the double array.
 **
@@ -3482,9 +3487,9 @@ double*** ajDouble3dDouble(AjPDouble3d thys)
     ajint d3;
     ajint i;
     ajint j;
-    
+
     ajDouble3dLen(thys,&d1,&d2,&d3);
-    
+
     AJCNEW0(array,d1);
     for(i=0;i<d1;++i)
     {
@@ -3508,7 +3513,7 @@ double*** ajDouble3dDouble(AjPDouble3d thys)
 
 
 
-/* @func ajShort2dNew **********************************************************
+/* @func ajShort2dNew *********************************************************
 **
 ** Default constructor for empty AJAX 2D short arrays.
 **
@@ -3520,7 +3525,7 @@ AjPShort2d ajShort2dNew(void)
 {
     AjPShort2d thys;
     ajint    i;
-    
+
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPShort*));
@@ -3529,13 +3534,13 @@ AjPShort2d ajShort2dNew(void)
 
     for(i=0;i<RESERVED_SIZE;++i)
 	thys->Ptr[i] = NULL;
-    
+
     return thys;
 }
 
 
 
-/* @func ajShort2dNewL *********************************************************
+/* @func ajShort2dNewL ********************************************************
 **
 ** Constructor given an initial reserved size.
 **
@@ -3549,7 +3554,7 @@ AjPShort2d ajShort2dNewL(ajint size)
 {
     AjPShort2d thys;
     ajint i;
-    
+
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
@@ -3565,7 +3570,7 @@ AjPShort2d ajShort2dNewL(ajint size)
 
 
 
-/* @func ajShort2dDel ***********************************************************
+/* @func ajShort2dDel *********************************************************
 **
 ** Default destructor for AJAX short arrays.
 **
@@ -3587,7 +3592,7 @@ void ajShort2dDel(AjPShort2d *thys)
     for(i=(*thys)->Res-1;i>-1;--i)
 	if((*thys)->Ptr[i])
 	    ajShortDel(&((*thys)->Ptr[i]));
-    
+
     AJFREE((*thys)->Ptr);
     AJFREE(*thys);
 
@@ -3597,7 +3602,7 @@ void ajShort2dDel(AjPShort2d *thys)
 
 
 
-/* @func ajShort2dGet *************************************************************
+/* @func ajShort2dGet *********************************************************
 **
 ** Retrieve an element from an AJAX 2d short array.
 **
@@ -3614,7 +3619,7 @@ void ajShort2dDel(AjPShort2d *thys)
 short ajShort2dGet(AjPShort2d thys, ajint elem1, ajint elem2)
 {
     AjPShort t;
-    
+
     if(elem1<0 || elem2<0 || !thys || elem1>=thys->Len)
 	ajErr("Attempt to access bad short array index [%d][%d]\n",elem1,
 	      elem2);
@@ -3622,13 +3627,13 @@ short ajShort2dGet(AjPShort2d thys, ajint elem1, ajint elem2)
     t = thys->Ptr[elem1];
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][]\n",elem1);
-    
+
     return ajShortGet(t,elem2);
 }
 
 
 
-/* @func ajShort2dPut **********************************************************
+/* @func ajShort2dPut *********************************************************
 **
 ** Load a short 2d array element.
 **
@@ -3664,15 +3669,15 @@ AjBool ajShort2dPut(AjPShort2d *thys, ajint elem1, ajint elem2, short v)
 
     if(!(*thys)->Ptr[elem1])
 	(*thys)->Ptr[elem1] = ajShortNew();
-    
+
     ajShortPut(&(*thys)->Ptr[elem1],elem2,v);
-    
+
     return ajTrue;
 }
 
 
 
-/* @funcstatic ajShort2dResize ***************************************************
+/* @funcstatic ajShort2dResize ************************************************
 **
 ** Resize a short array.
 **
@@ -3694,7 +3699,7 @@ static AjBool ajShort2dResize(AjPShort2d *thys, ajint size)
     ajint    clen;
     ajint    limit;
     ajint    i;
-    
+
 
     if(!thys || !*thys || size<0)
 	ajErr("Illegal attempt to resize short array");
@@ -3703,18 +3708,18 @@ static AjBool ajShort2dResize(AjPShort2d *thys, ajint size)
     s = ajRound(size+1,RESERVED_SIZE);
     if(s == clen)
 	return ajFalse;
-    
+
     p = *thys;
 
     AJNEW0(nthys);
     nthys->Ptr = AJALLOC0(s*sizeof(AjPShort*));
     nthys->Res = s;
-    
+
     if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
-    
+
     (void) memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPShort*));
 
     i = nthys->Len = size+1;
@@ -3728,13 +3733,13 @@ static AjBool ajShort2dResize(AjPShort2d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
-    
+
     return ajTrue;
 }
 
 
 
-/* @func ajShort2dLen ***************************************************
+/* @func ajShort2dLen *********************************************************
 **
 ** Get lengths of 2d short array
 **
@@ -3751,7 +3756,7 @@ void ajShort2dLen(AjPShort2d thys, ajint* len1, ajint* len2)
 {
     AjPShort t;
     ajint i;
-    
+
     *len1 = thys->Len;
     *len2 = 0;
     for(i=0;i<*len1;++i)
@@ -3763,7 +3768,7 @@ void ajShort2dLen(AjPShort2d thys, ajint* len1, ajint* len2)
 
 
 
-/* @func ajShort2dShort ***************************************************
+/* @func ajShort2dShort *******************************************************
 **
 ** Convert AjPShort2d to short**
 **
@@ -3780,9 +3785,9 @@ short** ajShort2dShort(AjPShort2d thys)
     ajint d1;
     ajint d2;
     ajint i;
-    
+
     ajShort2dLen(thys,&d1,&d2);
-    
+
     AJCNEW(array,d1);
     for(i=0;i<d1;++i)
     {
@@ -3796,7 +3801,7 @@ short** ajShort2dShort(AjPShort2d thys)
 
 
 
-/* @func ajShort3dNew **********************************************************
+/* @func ajShort3dNew *********************************************************
 **
 ** Default constructor for empty AJAX 3D short arrays.
 **
@@ -3808,7 +3813,7 @@ AjPShort3d ajShort3dNew(void)
 {
     AjPShort3d thys;
     ajint    i;
-    
+
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPShort2d*));
@@ -3817,13 +3822,13 @@ AjPShort3d ajShort3dNew(void)
 
     for(i=0;i<RESERVED_SIZE;++i)
 	thys->Ptr[i] = NULL;
-    
+
     return thys;
 }
 
 
 
-/* @func ajShort3dNewL *********************************************************
+/* @func ajShort3dNewL ********************************************************
 **
 ** Constructor given an initial reserved size.
 **
@@ -3837,7 +3842,7 @@ AjPShort3d ajShort3dNewL(ajint size)
 {
     AjPShort3d thys;
     ajint i;
-    
+
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
@@ -3853,7 +3858,7 @@ AjPShort3d ajShort3dNewL(ajint size)
 
 
 
-/* @func ajShort3dDel ***********************************************************
+/* @func ajShort3dDel *********************************************************
 **
 ** Default destructor for AJAX short arrays.
 **
@@ -3875,7 +3880,7 @@ void ajShort3dDel(AjPShort3d *thys)
     for(i=(*thys)->Res-1;i>-1;--i)
 	if((*thys)->Ptr[i])
 	    ajShort2dDel(&((*thys)->Ptr[i]));
-    
+
     AJFREE((*thys)->Ptr);
     AJFREE(*thys);
 
@@ -3885,7 +3890,7 @@ void ajShort3dDel(AjPShort3d *thys)
 
 
 
-/* @func ajShort3dGet *************************************************************
+/* @func ajShort3dGet *********************************************************
 **
 ** Retrieve an element from an AJAX 3d short array.
 **
@@ -3903,7 +3908,7 @@ void ajShort3dDel(AjPShort3d *thys)
 short ajShort3dGet(AjPShort3d thys, ajint elem1, ajint elem2, ajint elem3)
 {
     AjPShort2d t;
-    
+
     if(elem1<0 || elem2<0 || elem3<0 || !thys || elem1>=thys->Len)
 	ajErr("Attempt to access bad short array index [%d][%d][%d]\n",elem1,
 	      elem2,elem3);
@@ -3911,13 +3916,13 @@ short ajShort3dGet(AjPShort3d thys, ajint elem1, ajint elem2, ajint elem3)
     t = thys->Ptr[elem1];
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][][]\n",elem1);
-    
+
     return ajShort2dGet(t,elem2,elem3);
 }
 
 
 
-/* @func ajShort3dPut **********************************************************
+/* @func ajShort3dPut *********************************************************
 **
 ** Load a short 3d array element.
 **
@@ -3935,7 +3940,8 @@ short ajShort3dGet(AjPShort3d thys, ajint elem1, ajint elem2, ajint elem3)
 ** @@
 ******************************************************************************/
 
-AjBool ajShort3dPut(AjPShort3d *thys, ajint elem1, ajint elem2, ajint elem3, short v)
+AjBool ajShort3dPut(AjPShort3d *thys,
+		    ajint elem1, ajint elem2, ajint elem3, short v)
 {
     if(!thys || !*thys || elem1<0 || elem2<0 || elem3<0)
 	ajErr("Attempt to write to illegal array value [%d][%d][%d]\n",elem1,
@@ -3954,15 +3960,15 @@ AjBool ajShort3dPut(AjPShort3d *thys, ajint elem1, ajint elem2, ajint elem3, sho
 
     if(!(*thys)->Ptr[elem1])
 	(*thys)->Ptr[elem1] = ajShort2dNew();
-    
+
     ajShort2dPut(&(*thys)->Ptr[elem1],elem2,elem3,v);
-    
+
     return ajTrue;
 }
 
 
 
-/* @funcstatic ajShort3dResize ***************************************************
+/* @funcstatic ajShort3dResize ************************************************
 **
 ** Resize a short array.
 **
@@ -3984,7 +3990,7 @@ static AjBool ajShort3dResize(AjPShort3d *thys, ajint size)
     ajint    clen;
     ajint    limit;
     ajint    i;
-    
+
 
     if(!thys || !*thys || size<0)
 	ajErr("Illegal attempt to resize short array");
@@ -3993,18 +3999,18 @@ static AjBool ajShort3dResize(AjPShort3d *thys, ajint size)
     s = ajRound(size+1,RESERVED_SIZE);
     if(s == clen)
 	return ajFalse;
-    
+
     p = *thys;
 
     AJNEW0(nthys);
     nthys->Ptr = AJALLOC0(s*sizeof(AjPShort2d*));
     nthys->Res = s;
-    
+
     if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
-    
+
     (void) memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPShort2d*));
 
     i = nthys->Len = size+1;
@@ -4018,13 +4024,13 @@ static AjBool ajShort3dResize(AjPShort3d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
-    
+
     return ajTrue;
 }
 
 
 
-/* @func ajShort3dLen ***************************************************
+/* @func ajShort3dLen *********************************************************
 **
 ** Get lengths of 3d short array
 **
@@ -4045,7 +4051,7 @@ void ajShort3dLen(AjPShort3d thys, ajint* len1, ajint* len2, ajint* len3)
     ajint i;
     ajint j;
     ajint v;
-    
+
     *len1 = thys->Len;
     *len2 = 0;
     for(i=0;i<*len1;++i)
@@ -4060,15 +4066,15 @@ void ajShort3dLen(AjPShort3d thys, ajint* len1, ajint* len2, ajint* len3)
 		if((t1=t2->Ptr[j]))
 		    *len3 = (*len3 > t1->Len) ? *len3 : t1->Len;
 	}
-    
+
     return;
 }
 
 
 
-/* @func ajShort3dShort ***************************************************
+/* @func ajShort3dShort *******************************************************
 **
-** Convert AjPShort3d to short***
+** Convert AjPShort3d to short*************************************************
 **
 ** @param  [r] thys [AjPShort3d] Pointer to the short array.
 **
@@ -4086,9 +4092,9 @@ short*** ajShort3dShort(AjPShort3d thys)
     ajint d3;
     ajint i;
     ajint j;
-    
+
     ajShort3dLen(thys,&d1,&d2,&d3);
-    
+
     AJCNEW0(array,d1);
     for(i=0;i<d1;++i)
     {
@@ -4124,7 +4130,7 @@ AjPLong2d ajLong2dNew(void)
 {
     AjPLong2d thys;
     ajint    i;
-    
+
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPLong*));
@@ -4133,7 +4139,7 @@ AjPLong2d ajLong2dNew(void)
 
     for(i=0;i<RESERVED_SIZE;++i)
 	thys->Ptr[i] = NULL;
-    
+
     return thys;
 }
 
@@ -4153,7 +4159,7 @@ AjPLong2d ajLong2dNewL(ajint size)
 {
     AjPLong2d thys;
     ajint i;
-    
+
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
@@ -4169,7 +4175,7 @@ AjPLong2d ajLong2dNewL(ajint size)
 
 
 
-/* @func ajLong2dDel ***********************************************************
+/* @func ajLong2dDel **********************************************************
 **
 ** Default destructor for AJAX ajlong arrays.
 **
@@ -4191,7 +4197,7 @@ void ajLong2dDel(AjPLong2d *thys)
     for(i=(*thys)->Res-1;i>-1;--i)
 	if((*thys)->Ptr[i])
 	    ajLongDel(&((*thys)->Ptr[i]));
-    
+
     AJFREE((*thys)->Ptr);
     AJFREE(*thys);
 
@@ -4201,7 +4207,7 @@ void ajLong2dDel(AjPLong2d *thys)
 
 
 
-/* @func ajLong2dGet *************************************************************
+/* @func ajLong2dGet **********************************************************
 **
 ** Retrieve an element from an AJAX 2d ajlong array.
 **
@@ -4218,7 +4224,7 @@ void ajLong2dDel(AjPLong2d *thys)
 ajlong ajLong2dGet(AjPLong2d thys, ajint elem1, ajint elem2)
 {
     AjPLong t;
-    
+
     if(elem1<0 || elem2<0 || !thys || elem1>=thys->Len)
 	ajErr("Attempt to access bad ajlong array index [%d][%d]\n",elem1,
 	      elem2);
@@ -4226,7 +4232,7 @@ ajlong ajLong2dGet(AjPLong2d thys, ajint elem1, ajint elem2)
     t = thys->Ptr[elem1];
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][]\n",elem1);
-    
+
     return ajLongGet(t,elem2);
 }
 
@@ -4268,15 +4274,15 @@ AjBool ajLong2dPut(AjPLong2d *thys, ajint elem1, ajint elem2, ajlong v)
 
     if(!(*thys)->Ptr[elem1])
 	(*thys)->Ptr[elem1] = ajLongNew();
-    
+
     ajLongPut(&(*thys)->Ptr[elem1],elem2,v);
-    
+
     return ajTrue;
 }
 
 
 
-/* @funcstatic ajLong2dResize ***************************************************
+/* @funcstatic ajLong2dResize *************************************************
 **
 ** Resize a ajlong array.
 **
@@ -4298,7 +4304,7 @@ static AjBool ajLong2dResize(AjPLong2d *thys, ajint size)
     ajint    clen;
     ajint    limit;
     ajint    i;
-    
+
 
     if(!thys || !*thys || size<0)
 	ajErr("Illegal attempt to resize ajlong array");
@@ -4307,18 +4313,18 @@ static AjBool ajLong2dResize(AjPLong2d *thys, ajint size)
     s = ajRound(size+1,RESERVED_SIZE);
     if(s == clen)
 	return ajFalse;
-    
+
     p = *thys;
 
     AJNEW0(nthys);
     nthys->Ptr = AJALLOC0(s*sizeof(AjPLong*));
     nthys->Res = s;
-    
+
     if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
-    
+
     (void) memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPLong*));
 
     i = nthys->Len = size+1;
@@ -4332,13 +4338,13 @@ static AjBool ajLong2dResize(AjPLong2d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
-    
+
     return ajTrue;
 }
 
 
 
-/* @func ajLong2dLen ***************************************************
+/* @func ajLong2dLen **********************************************************
 **
 ** Get lengths of 2d ajlong array
 **
@@ -4355,7 +4361,7 @@ void ajLong2dLen(AjPLong2d thys, ajint* len1, ajint* len2)
 {
     AjPLong t;
     ajint i;
-    
+
     *len1 = thys->Len;
     *len2 = 0;
     for(i=0;i<*len1;++i)
@@ -4367,7 +4373,7 @@ void ajLong2dLen(AjPLong2d thys, ajint* len1, ajint* len2)
 
 
 
-/* @func ajLong2dLong ***************************************************
+/* @func ajLong2dLong *********************************************************
 **
 ** Convert AjPLong2d to ajlong**
 **
@@ -4384,9 +4390,9 @@ ajlong** ajLong2dLong(AjPLong2d thys)
     ajint d1;
     ajint d2;
     ajint i;
-    
+
     ajLong2dLen(thys,&d1,&d2);
-    
+
     AJCNEW(array,d1);
     for(i=0;i<d1;++i)
     {
@@ -4412,7 +4418,7 @@ AjPLong3d ajLong3dNew(void)
 {
     AjPLong3d thys;
     ajint    i;
-    
+
 
     AJNEW0(thys);
     thys->Ptr = AJALLOC0(RESERVED_SIZE*sizeof(AjPLong2d*));
@@ -4421,7 +4427,7 @@ AjPLong3d ajLong3dNew(void)
 
     for(i=0;i<RESERVED_SIZE;++i)
 	thys->Ptr[i] = NULL;
-    
+
     return thys;
 }
 
@@ -4441,7 +4447,7 @@ AjPLong3d ajLong3dNewL(ajint size)
 {
     AjPLong3d thys;
     ajint i;
-    
+
     size = ajRound(size,RESERVED_SIZE);
 
     AJNEW0(thys);
@@ -4457,7 +4463,7 @@ AjPLong3d ajLong3dNewL(ajint size)
 
 
 
-/* @func ajLong3dDel ***********************************************************
+/* @func ajLong3dDel **********************************************************
 **
 ** Default destructor for AJAX ajlong arrays.
 **
@@ -4479,7 +4485,7 @@ void ajLong3dDel(AjPLong3d *thys)
     for(i=(*thys)->Res-1;i>-1;--i)
 	if((*thys)->Ptr[i])
 	    ajLong2dDel(&((*thys)->Ptr[i]));
-    
+
     AJFREE((*thys)->Ptr);
     AJFREE(*thys);
 
@@ -4489,7 +4495,7 @@ void ajLong3dDel(AjPLong3d *thys)
 
 
 
-/* @func ajLong3dGet *************************************************************
+/* @func ajLong3dGet **********************************************************
 **
 ** Retrieve an element from an AJAX 3d ajlong array.
 **
@@ -4507,7 +4513,7 @@ void ajLong3dDel(AjPLong3d *thys)
 ajlong ajLong3dGet(AjPLong3d thys, ajint elem1, ajint elem2, ajint elem3)
 {
     AjPLong2d t;
-    
+
     if(elem1<0 || elem2<0 || elem3<0 || !thys || elem1>=thys->Len)
 	ajErr("Attempt to access bad ajlong array index [%d][%d][%d]\n",elem1,
 	      elem2,elem3);
@@ -4515,7 +4521,7 @@ ajlong ajLong3dGet(AjPLong3d thys, ajint elem1, ajint elem2, ajint elem3)
     t = thys->Ptr[elem1];
     if(!t)
 	ajErr("Attempt to access bad 1st dimension [%d][][]\n",elem1);
-    
+
     return ajLong2dGet(t,elem2,elem3);
 }
 
@@ -4539,7 +4545,8 @@ ajlong ajLong3dGet(AjPLong3d thys, ajint elem1, ajint elem2, ajint elem3)
 ** @@
 ******************************************************************************/
 
-AjBool ajLong3dPut(AjPLong3d *thys, ajint elem1, ajint elem2, ajint elem3, ajlong v)
+AjBool ajLong3dPut(AjPLong3d *thys,
+		   ajint elem1, ajint elem2, ajint elem3, ajlong v)
 {
     if(!thys || !*thys || elem1<0 || elem2<0 || elem3<0)
 	ajErr("Attempt to write to illegal array value [%d][%d][%d]\n",elem1,
@@ -4558,15 +4565,15 @@ AjBool ajLong3dPut(AjPLong3d *thys, ajint elem1, ajint elem2, ajint elem3, ajlon
 
     if(!(*thys)->Ptr[elem1])
 	(*thys)->Ptr[elem1] = ajLong2dNew();
-    
+
     ajLong2dPut(&(*thys)->Ptr[elem1],elem2,elem3,v);
-    
+
     return ajTrue;
 }
 
 
 
-/* @funcstatic ajLong3dResize ***************************************************
+/* @funcstatic ajLong3dResize *************************************************
 **
 ** Resize a ajlong array.
 **
@@ -4588,7 +4595,7 @@ static AjBool ajLong3dResize(AjPLong3d *thys, ajint size)
     ajint    clen;
     ajint    limit;
     ajint    i;
-    
+
 
     if(!thys || !*thys || size<0)
 	ajErr("Illegal attempt to resize ajlong array");
@@ -4597,18 +4604,18 @@ static AjBool ajLong3dResize(AjPLong3d *thys, ajint size)
     s = ajRound(size+1,RESERVED_SIZE);
     if(s == clen)
 	return ajFalse;
-    
+
     p = *thys;
 
     AJNEW0(nthys);
     nthys->Ptr = AJALLOC0(s*sizeof(AjPLong2d*));
     nthys->Res = s;
-    
+
     if((ajint)size < p->Len-1)
 	limit = size+1;
     else
 	limit = p->Len;
-    
+
     (void) memmove(nthys->Ptr,p->Ptr,limit*sizeof(AjPLong2d*));
 
     i = nthys->Len = size+1;
@@ -4622,13 +4629,13 @@ static AjBool ajLong3dResize(AjPLong3d *thys, ajint size)
     AJFREE(p);
 
     *thys = nthys;
-    
+
     return ajTrue;
 }
 
 
 
-/* @func ajLong3dLen ***************************************************
+/* @func ajLong3dLen **********************************************************
 **
 ** Get lengths of 3d ajlong array
 **
@@ -4649,7 +4656,7 @@ void ajLong3dLen(AjPLong3d thys, ajint* len1, ajint* len2, ajint* len3)
     ajint i;
     ajint j;
     ajint v;
-    
+
     *len1 = thys->Len;
     *len2 = 0;
     for(i=0;i<*len1;++i)
@@ -4664,15 +4671,15 @@ void ajLong3dLen(AjPLong3d thys, ajint* len1, ajint* len2, ajint* len3)
 		if((t1=t2->Ptr[j]))
 		    *len3 = (*len3 > t1->Len) ? *len3 : t1->Len;
 	}
-    
+
     return;
 }
 
 
 
-/* @func ajLong3dLong ***************************************************
+/* @func ajLong3dLong *********************************************************
 **
-** Convert AjPLong3d to ajlong***
+** Convert AjPLong3d to ajlong*************************************************
 **
 ** @param  [r] thys [AjPLong3d] Pointer to the ajlong array.
 **
@@ -4690,9 +4697,9 @@ ajlong*** ajLong3dLong(AjPLong3d thys)
     ajint d3;
     ajint i;
     ajint j;
-    
+
     ajLong3dLen(thys,&d1,&d2,&d3);
-    
+
     AJCNEW0(array,d1);
     for(i=0;i<d1;++i)
     {

@@ -17,7 +17,7 @@ struct binding {
 
 
 
-/* @data AjPTable *******************************************************
+/* @data AjPTable *************************************************************
 **
 ** Hash table object. Tables are key/value pairs with a simple hash function
 ** to provide rapid searching for keys.
@@ -50,7 +50,7 @@ typedef struct AjSTable {
   ajint (*cmp)(const void *x, const void *y);
   unsigned (*hash)(const void *key, unsigned hashsize);
   ajint length;
-  unsigned timestamp; 
+  unsigned timestamp;
   struct binding **buckets;
 } AjOTable, *AjPTable;
 

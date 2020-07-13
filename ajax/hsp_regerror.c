@@ -59,7 +59,7 @@ static struct rerr {
     {-1,		"",		"*** unknown regexp error code ***"},
 };
 
-/* @func hsp_regerror *******************************************************
+/* @func hsp_regerror *********************************************************
 **
 ** the interface to error numbers
 **
@@ -86,7 +86,7 @@ size_t hsp_regerror(ajint errcode,const regex_t *preg,char *errbuf,
 	for (r = rerrs; r->code >= 0; r++)
 	    if (r->code == target)
 		break;
-	
+
 	if (errcode&REG_ITOA)
 	{
 	    if (r->code >= 0)
@@ -115,7 +115,7 @@ size_t hsp_regerror(ajint errcode,const regex_t *preg,char *errbuf,
     return(len);
 }
 
-/* @funcstatic regatoi *******************************************************
+/* @funcstatic regatoi ********************************************************
 **
 ** internal routine to implement REG_ATOI
 **

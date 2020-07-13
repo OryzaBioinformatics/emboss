@@ -1,28 +1,28 @@
-/********************************************************************
+/******************************************************************************
 ** @source AJAX range functions
 **
 ** @author Copyright (C) 1999 Alan Bleasby
-** @version 1.0 
+** @version 1.0
 ** @modified Aug 21 ajb First version
 ** @modified 7 Sept 1999 GWW - String range edit functions added
 ** @modified 5 Nov 1999 GWW - store text after pairs of numbers
 ** @@
-** 
+**
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
 ** version 2 of the License, or (at your option) any later version.
-** 
+**
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Library General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU Library General Public
 ** License along with this library; if not, write to the
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ** Boston, MA  02111-1307, USA.
-********************************************************************/
+******************************************************************************/
 
 /* ==================================================================== */
 /* ========================== include files =========================== */
@@ -50,7 +50,7 @@
 /* ========================= constructors ============================= */
 /* ==================================================================== */
 
-/* @section Range Constructors ***********************************************
+/* @section Range Constructors ************************************************
 **
 ** All constructors return a new object by pointer. It is the responsibility
 ** of the user to first destroy any previous object. The target pointer
@@ -59,7 +59,7 @@
 **
 ******************************************************************************/
 
-/* @func ajRangeNewI *********************************************************
+/* @func ajRangeNewI **********************************************************
 **
 ** Default constructor for AJAX range objects.
 **
@@ -91,7 +91,7 @@ AjPRange ajRangeNewI (ajint n)
 
 
 
-/* @func ajRangeDel **********************************************************
+/* @func ajRangeDel ***********************************************************
 **
 ** Default destructor for AJAX range objects.
 **
@@ -105,7 +105,7 @@ void ajRangeDel (AjPRange *thys)
 {
 
     ajint i;
-    
+
     if((*thys)->n > 0)
     {
 	AJFREE((*thys)->start);
@@ -119,7 +119,7 @@ void ajRangeDel (AjPRange *thys)
     return;
 }
 
-/* @func ajRangeGet *********************************************************
+/* @func ajRangeGet ***********************************************************
 **
 ** Load a range object
 **
@@ -144,8 +144,9 @@ AjBool ajRangeGet(AjPRange *r, AjPStr str)
     AjBool result = ajTrue;
 
     AjBool doneone = ajFalse;
-    
-    char *nondigit="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ \t\n\r!@#$%^&*()_-+=|\\~`{[}]:;\"'<,>.?/";
+
+    char *nondigit="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                   " \t\n\r!@#$%^&*()_-+=|\\~`{[}]:;\"'<,>.?/";
     char *digit="0123456789";
 
     (void) ajStrAssS(&s, str);
@@ -169,7 +170,7 @@ AjBool ajRangeGet(AjPRange *r, AjPStr str)
 
 	p=ajStrStr(c1);
 	p=ajSysStrtok(p, nondigit);
-    
+
 	n=0;
 
 	if(p)
@@ -280,7 +281,7 @@ AjBool ajRangeGet(AjPRange *r, AjPStr str)
     return result;
 }
 
-/* @func ajRangeFile *********************************************************
+/* @func ajRangeFile **********************************************************
 **
 ** Load a range object from a file
 **
@@ -307,37 +308,37 @@ AjBool ajRangeGet(AjPRange *r, AjPStr str)
 ** @@
 ******************************************************************************/
 AjBool ajRangeFile(AjPRange *r, AjPStr name) {
-	
+
   AjBool result = ajTrue;
   AjPFile infile;
   AjPStr line = NULL;
-  char whiteSpace[] = " \t\n\r";  
-  char notSpace[] = "\n\r";  
+  char whiteSpace[] = " \t\n\r";
+  char notSpace[] = "\n\r";
   AjPStrTok tokens;
   ajint n = 0;	/* no ranges found so far */
   ajint k;
   ajint numone, numtwo;
- 
+
   AjPStr one;
-  AjPStr two;  
+  AjPStr two;
   AjPStr text;
 
   AjPList onelist = ajListstrNew();
   AjPList twolist = ajListstrNew();
   AjPList textlist = ajListstrNew();
 
- 
+
 /* read the file */
   if ((infile = ajFileNewIn(name)) == NULL) return ajFalse;
   while (ajFileReadLine(infile, &line)) {
-  	
+
 /* remove initial and trailing whitespace */
     (void) ajStrChomp(&line);
 
 /* skip comment and blank lines */
     if (!ajStrFindC(line, "#")) continue;
     if (!ajStrLen(line)) continue;
-      
+
 /* parse the numbers out of the line and store in temporary list (we may
 be reading data from stdin, so we can't read in once to count the number
 of ajRange elements, close file, open it again and read the data again
@@ -405,11 +406,11 @@ to populate ajRange) */
   ajListstrFree(&onelist);
   ajListstrFree(&twolist);
   ajListstrFree(&textlist);
-  
+
   return result;
 }
 
-/* @func ajRangeNumber *******************************************************
+/* @func ajRangeNumber ********************************************************
 **
 ** Return the number of ranges in a range object
 **
@@ -423,7 +424,7 @@ ajint ajRangeNumber(AjPRange thys)
     return thys->n;
 }
 
-/* @func ajRangeValues *******************************************************
+/* @func ajRangeValues ********************************************************
 **
 ** Return (as parameters) start and end values in a range
 **
@@ -446,7 +447,7 @@ AjBool ajRangeValues(AjPRange thys, ajint element, ajint *start, ajint *end)
     return ajTrue;
 }
 
-/* @func ajRangeText *******************************************************
+/* @func ajRangeText **********************************************************
 **
 ** Return (as parameters) text value of a range
 ** The text value of a range is any non-digit after the pair of range numbers
@@ -474,7 +475,7 @@ AjBool ajRangeText(AjPRange thys, ajint element, AjPStr * text)
     return ajTrue;
 }
 
-/* @func ajRangeChange *******************************************************
+/* @func ajRangeChange ********************************************************
 **
 ** Set the values of a start and end in a (preexisting) range element
 **
@@ -497,14 +498,14 @@ AjBool ajRangeChange(AjPRange thys, ajint element, ajint start, ajint end)
     return ajTrue;
 }
 
-/* @func ajRangeBegin *******************************************************
+/* @func ajRangeBegin *********************************************************
 **
 ** Sets the range values relative to the Begin value.
 ** Used when a sequence has -sbegin= and -send= parameters set
 ** and we have extracted the specified subsequence.
 ** So if -sbeg 11 has been set and the range is 11-12
 ** the resulting range is changed to 1-2
-** 
+**
 ** @param [u] thys [AjPRange] range object
 ** @param [r] begin [ajint] begin parameter obtained from ajSeqBegin(seq)
 **
@@ -603,12 +604,12 @@ AjBool ajRangeStrExtract (AjPStr *outstr, AjPRange thys, AjPStr instr) {
 **
 ** The opposite of ajRangeStrExtract()
 ** Stuff space characters into a string to pad out to the range.
-** 
+**
 ** It takes a string and an ordered, non-overlapping set of ranges and puts
-** spaces into the string between the ranges. 
+** spaces into the string between the ranges.
 ** So starting with the string 'abcde' and the ranges 3-5,7-8 it will produce:
 ** '  abc de'
-** 
+**
 ** @param [w] outstr [AjPStr *] resulting stuffed string
 ** @param [r] thys [AjPRange] range object
 ** @param [r] instr [AjPStr] string to stuff
@@ -632,7 +633,7 @@ AjBool ajRangeStrStuff (AjPStr *outstr, AjPRange thys, AjPStr instr) {
     {
 	result = ajTrue;
 	(void) ajRangeValues(thys,i,&st,&en);
-	/* change range positions to string positions */   
+	/* change range positions to string positions */
 	--st;
 	--en;
 	len = en-st;
@@ -672,7 +673,7 @@ AjBool ajRangeStrMask (AjPStr *str, AjPRange thys, AjPStr maskchar) {
 	result = ajTrue;
 	(void) ajRangeValues(thys,i,&st,&en);
 
-	/* change range positions to string positions */   
+	/* change range positions to string positions */
 	--st;
 	--en;
 
@@ -686,7 +687,7 @@ AjBool ajRangeStrMask (AjPStr *str, AjPRange thys, AjPStr maskchar) {
 }
 
 
-/* @func ajRangeOverlapSingle ************************************************
+/* @func ajRangeOverlapSingle *************************************************
 **
 ** Detect an overlap of a single range to a region of a sequence
 ** @param [r] start [ajint] start of range
@@ -701,9 +702,9 @@ ajint ajRangeOverlapSingle (ajint start, ajint end, ajint pos, ajint length)
 {
 
     ajint posend = pos+length-1;	/* end position of region in sequence */
-  
+
     /* convert range positions to sequence positions */
-    start--;	
+    start--;
     end--;
 
     if (end < pos || start > posend) return 0;
@@ -754,7 +755,7 @@ ajint ajRangeOverlaps (AjPRange thys, ajint pos, ajint length)
 
 /* @func ajRangeOrdered *******************************************************
 **
-** Tests to see if the set of ranges are in ascending non-overlapping order 
+** Tests to see if the set of ranges are in ascending non-overlapping order
 ** @param [r] thys [AjPRange] range object
 **
 ** @return [AjBool] ajTrue if in ascending non-overlapping order
@@ -781,12 +782,12 @@ AjBool ajRangeOrdered (AjPRange thys)
 }
 
 
-/* @func ajRangeDefault ******************************************************
+/* @func ajRangeDefault *******************************************************
 **
 ** Test whether the default range has been set for a string
 **
 ** IE tests whether the given range is a single range from the start to
-** the end of a sequence string. 
+** the end of a sequence string.
 **
 ** @param [r] thys [AjPRange] range object
 ** @param [r] s [AjPStr] string

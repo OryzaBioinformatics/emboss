@@ -112,7 +112,7 @@ ajint nope=0;
 ** = #define	REG_TRACE	00400	// tracing of execution<br>
 ** = #define	REG_LARGE	01000	// force large representation<br>
 ** = #define	REG_BACKR	02000	// force use of backref code<br>
-** 
+**
 ** @param [r] preg [const regex_t*] Undocumented
 ** @param [r] string [const char*] Undocumented
 ** @param [r] nmatch [size_t] Undocumented

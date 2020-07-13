@@ -6,7 +6,7 @@
 #include "ajcorbaembl.h"
 
 
-/* @func GNOME_Unknown_ref ***************************************************
+/* @func GNOME_Unknown_ref ****************************************************
 **
 ** Undocumented.
 **
@@ -26,7 +26,7 @@ GNOME_Unknown_ref(GNOME_Unknown _obj, CORBA_Environment * ev)
    register GIOPConnection *_cnx;
 
    if (_obj->servant && _obj->vepv && GNOME_Unknown__classid) {
-      
+
 	 ((POA_GNOME_Unknown__epv *) _obj->vepv[GNOME_Unknown__classid])->
 	 ref(_obj->servant, ev);
       return;
@@ -104,7 +104,7 @@ GNOME_Unknown_ref(GNOME_Unknown _obj, CORBA_Environment * ev)
    }
 }
 
-/* @func GNOME_Unknown_unref *************************************************
+/* @func GNOME_Unknown_unref **************************************************
 **
 ** Undocumented.
 **
@@ -124,7 +124,7 @@ GNOME_Unknown_unref(GNOME_Unknown _obj, CORBA_Environment * ev)
    register GIOPConnection *_cnx;
 
    if (_obj->servant && _obj->vepv && GNOME_Unknown__classid) {
-      
+
 	 ((POA_GNOME_Unknown__epv *) _obj->vepv[GNOME_Unknown__classid])->
 	 unref(_obj->servant, ev);
       return;
@@ -202,7 +202,7 @@ GNOME_Unknown_unref(GNOME_Unknown _obj, CORBA_Environment * ev)
    }
 }
 
-/* @func GNOME_Unknown_query_interface ***************************************
+/* @func GNOME_Unknown_query_interface ****************************************
 **
 ** Undocumented.
 **
@@ -334,7 +334,7 @@ GNOME_Unknown_query_interface(GNOME_Unknown _obj, const CORBA_char * repoid,
    }
 }
 
-/* @func _ORBIT_org_biocorba_seqcore_RequestTooLarge_demarshal ***************
+/* @func _ORBIT_org_biocorba_seqcore_RequestTooLarge_demarshal ****************
 **
 ** Undocumented.
 **
@@ -357,7 +357,7 @@ _ORBIT_org_biocorba_seqcore_RequestTooLarge_demarshal(GIOPRecvBuffer *
    _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
    if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
       _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-      
+
 	 (*((guint32 *) & (_ORBIT_tmpvar_1))) =
 	 GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr)); _ORBIT_curptr += 4;
       (*_ORBIT_exdata).reason = CORBA_string_alloc(_ORBIT_tmpvar_1);
@@ -367,7 +367,7 @@ _ORBIT_org_biocorba_seqcore_RequestTooLarge_demarshal(GIOPRecvBuffer *
       _ORBIT_curptr +=
 	 sizeof((*_ORBIT_exdata).reason[_ORBIT_tmpvar_0]) * _ORBIT_tmpvar_1;
       _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-      
+
 	 (*((guint32 *) & ((*_ORBIT_exdata).suggested_size))) =
 	 GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
    } else {
@@ -389,7 +389,7 @@ _ORBIT_org_biocorba_seqcore_RequestTooLarge_demarshal(GIOPRecvBuffer *
 }
 
 
-/* @func _ORBIT_org_biocorba_seqcore_OutOfRange_demarshal ********************
+/* @func _ORBIT_org_biocorba_seqcore_OutOfRange_demarshal *********************
 **
 ** Undocumented.
 **
@@ -412,7 +412,7 @@ _ORBIT_org_biocorba_seqcore_OutOfRange_demarshal(GIOPRecvBuffer *
    _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
    if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
       _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-      
+
 	 (*((guint32 *) & (_ORBIT_tmpvar_1))) =
 	 GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr)); _ORBIT_curptr += 4;
       (*_ORBIT_exdata).reason = CORBA_string_alloc(_ORBIT_tmpvar_1);
@@ -438,7 +438,7 @@ _ORBIT_org_biocorba_seqcore_OutOfRange_demarshal(GIOPRecvBuffer *
 }
 
 
-/* @func _ORBIT_org_biocorba_seqcore_EndOfStream_demarshal *******************
+/* @func _ORBIT_org_biocorba_seqcore_EndOfStream_demarshal ********************
 **
 ** Undocumented.
 **
@@ -458,7 +458,7 @@ _ORBIT_org_biocorba_seqcore_EndOfStream_demarshal(GIOPRecvBuffer *
 }
 
 
-/* @func _ORBIT_org_biocorba_seqcore_NeedsUpdate_demarshal *******************
+/* @func _ORBIT_org_biocorba_seqcore_NeedsUpdate_demarshal ********************
 **
 ** Undocumented.
 **
@@ -481,7 +481,7 @@ _ORBIT_org_biocorba_seqcore_NeedsUpdate_demarshal(GIOPRecvBuffer *
    _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
    if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
       _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-      
+
 	 (*((guint32 *) & (_ORBIT_tmpvar_1))) =
 	 GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr)); _ORBIT_curptr += 4;
       (*_ORBIT_exdata).reason = CORBA_string_alloc(_ORBIT_tmpvar_1);
@@ -507,7 +507,7 @@ _ORBIT_org_biocorba_seqcore_NeedsUpdate_demarshal(GIOPRecvBuffer *
 }
 
 
-/* @func _ORBIT_org_biocorba_seqcore_DoesNotExist_demarshal ******************
+/* @func _ORBIT_org_biocorba_seqcore_DoesNotExist_demarshal *******************
 **
 ** Undocumented.
 **
@@ -530,7 +530,7 @@ _ORBIT_org_biocorba_seqcore_DoesNotExist_demarshal(GIOPRecvBuffer *
    _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
    if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
       _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-      
+
 	 (*((guint32 *) & (_ORBIT_tmpvar_1))) =
 	 GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr)); _ORBIT_curptr += 4;
       (*_ORBIT_exdata).reason = CORBA_string_alloc(_ORBIT_tmpvar_1);
@@ -556,7 +556,7 @@ _ORBIT_org_biocorba_seqcore_DoesNotExist_demarshal(GIOPRecvBuffer *
 }
 
 
-/* @func _ORBIT_org_biocorba_seqcore_UnableToProcess_demarshal ***************
+/* @func _ORBIT_org_biocorba_seqcore_UnableToProcess_demarshal ****************
 **
 ** Undocumented.
 **
@@ -579,7 +579,7 @@ _ORBIT_org_biocorba_seqcore_UnableToProcess_demarshal(GIOPRecvBuffer *
    _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
    if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
       _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-      
+
 	 (*((guint32 *) & (_ORBIT_tmpvar_1))) =
 	 GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr)); _ORBIT_curptr += 4;
       (*_ORBIT_exdata).reason = CORBA_string_alloc(_ORBIT_tmpvar_1);
@@ -605,7 +605,7 @@ _ORBIT_org_biocorba_seqcore_UnableToProcess_demarshal(GIOPRecvBuffer *
 }
 
 
-/* @func org_biocorba_seqcore_AnonymousSeq_type ******************************
+/* @func org_biocorba_seqcore_AnonymousSeq_type *******************************
 **
 ** Undocumented.
 **
@@ -682,7 +682,7 @@ org_biocorba_seqcore_AnonymousSeq_type(org_biocorba_seqcore_AnonymousSeq _obj,
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 2);
-	 
+
 	    (*((guint16 *) & (_ORBIT_retval))) =
 	    GUINT16_SWAP_LE_BE(*((guint16 *) _ORBIT_curptr));} else {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 2);
@@ -714,7 +714,7 @@ org_biocorba_seqcore_AnonymousSeq_type(org_biocorba_seqcore_AnonymousSeq _obj,
    }
 }
 
-/* @func org_biocorba_seqcore_AnonymousSeq_is_circular ***********************
+/* @func org_biocorba_seqcore_AnonymousSeq_is_circular ************************
 **
 ** Undocumented.
 **
@@ -819,7 +819,7 @@ org_biocorba_seqcore_AnonymousSeq_is_circular
    }
 }
 
-/* @func org_biocorba_seqcore_AnonymousSeq_length ****************************
+/* @func org_biocorba_seqcore_AnonymousSeq_length *****************************
 **
 ** Undocumented.
 **
@@ -896,7 +896,7 @@ org_biocorba_seqcore_AnonymousSeq_length(org_biocorba_seqcore_AnonymousSeq
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & (_ORBIT_retval))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));} else {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
@@ -928,7 +928,7 @@ org_biocorba_seqcore_AnonymousSeq_length(org_biocorba_seqcore_AnonymousSeq
    }
 }
 
-/* @func org_biocorba_seqcore_AnonymousSeq_seq *******************************
+/* @func org_biocorba_seqcore_AnonymousSeq_seq ********************************
 **
 ** Undocumented.
 **
@@ -1011,7 +1011,7 @@ org_biocorba_seqcore_AnonymousSeq_seq(org_biocorba_seqcore_AnonymousSeq _obj,
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & (_ORBIT_tmpvar_3))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	 _ORBIT_curptr += 4;
@@ -1057,7 +1057,7 @@ org_biocorba_seqcore_AnonymousSeq_seq(org_biocorba_seqcore_AnonymousSeq _obj,
    }
 }
 
-/* @func org_biocorba_seqcore_AnonymousSeq_subseq ****************************
+/* @func org_biocorba_seqcore_AnonymousSeq_subseq *****************************
 **
 ** Undocumented.
 **
@@ -1153,7 +1153,7 @@ org_biocorba_seqcore_AnonymousSeq_subseq(org_biocorba_seqcore_AnonymousSeq
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & (_ORBIT_tmpvar_3))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	 _ORBIT_curptr += 4;
@@ -1199,7 +1199,7 @@ org_biocorba_seqcore_AnonymousSeq_subseq(org_biocorba_seqcore_AnonymousSeq
    }
 }
 
-/* @func org_biocorba_seqcore_PrimarySeq_display_id **************************
+/* @func org_biocorba_seqcore_PrimarySeq_display_id ***************************
 **
 ** Undocumented.
 **
@@ -1278,7 +1278,7 @@ org_biocorba_seqcore_PrimarySeq_display_id(org_biocorba_seqcore_PrimarySeq
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & (_ORBIT_tmpvar_3))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	 _ORBIT_curptr += 4;
@@ -1323,7 +1323,7 @@ org_biocorba_seqcore_PrimarySeq_display_id(org_biocorba_seqcore_PrimarySeq
    }
 }
 
-/* @func org_biocorba_seqcore_PrimarySeq_primary_id **************************
+/* @func org_biocorba_seqcore_PrimarySeq_primary_id ***************************
 **
 ** Undocumented.
 **
@@ -1402,7 +1402,7 @@ org_biocorba_seqcore_PrimarySeq_primary_id(org_biocorba_seqcore_PrimarySeq
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & (_ORBIT_tmpvar_3))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	 _ORBIT_curptr += 4;
@@ -1447,7 +1447,7 @@ org_biocorba_seqcore_PrimarySeq_primary_id(org_biocorba_seqcore_PrimarySeq
    }
 }
 
-/* @func org_biocorba_seqcore_PrimarySeq_accession_number ********************
+/* @func org_biocorba_seqcore_PrimarySeq_accession_number *********************
 **
 ** Undocumented.
 **
@@ -1525,7 +1525,7 @@ org_biocorba_seqcore_PrimarySeq_accession_number
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & (_ORBIT_tmpvar_3))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	 _ORBIT_curptr += 4;
@@ -1570,7 +1570,7 @@ org_biocorba_seqcore_PrimarySeq_accession_number
    }
 }
 
-/* @func org_biocorba_seqcore_PrimarySeq_version *****************************
+/* @func org_biocorba_seqcore_PrimarySeq_version ******************************
 **
 ** Undocumented.
 **
@@ -1647,7 +1647,7 @@ org_biocorba_seqcore_PrimarySeq_version(org_biocorba_seqcore_PrimarySeq _obj,
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & (_ORBIT_retval))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));} else {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
@@ -1679,7 +1679,7 @@ org_biocorba_seqcore_PrimarySeq_version(org_biocorba_seqcore_PrimarySeq _obj,
    }
 }
 
-/* @func org_biocorba_seqcore_Seq_all_SeqFeatures ****************************
+/* @func org_biocorba_seqcore_Seq_all_SeqFeatures *****************************
 **
 ** Undocumented.
 **
@@ -1800,7 +1800,7 @@ org_biocorba_seqcore_Seq_all_SeqFeatures(org_biocorba_seqcore_Seq _obj,
    }
 }
 
-/* @func org_biocorba_seqcore_Seq_get_SeqFeatures_by_type ********************
+/* @func org_biocorba_seqcore_Seq_get_SeqFeatures_by_type *********************
 **
 ** Undocumented.
 **
@@ -1941,7 +1941,7 @@ org_biocorba_seqcore_Seq_get_SeqFeatures_by_type(org_biocorba_seqcore_Seq
    }
 }
 
-/* @func org_biocorba_seqcore_Seq_get_SeqFeatures_in_region ******************
+/* @func org_biocorba_seqcore_Seq_get_SeqFeatures_in_region *******************
 **
 ** Undocumented.
 **
@@ -2078,7 +2078,7 @@ org_biocorba_seqcore_Seq_get_SeqFeatures_in_region(org_biocorba_seqcore_Seq
    }
 }
 
-/* @func org_biocorba_seqcore_Seq_get_SeqFeatures_in_region_by_type **********
+/* @func org_biocorba_seqcore_Seq_get_SeqFeatures_in_region_by_type ***********
 **
 ** Undocumented.
 **
@@ -2231,7 +2231,7 @@ org_biocorba_seqcore_Seq_get_SeqFeatures_in_region_by_type
    }
 }
 
-/* @func org_biocorba_seqcore_Seq_get_PrimarySeq *****************************
+/* @func org_biocorba_seqcore_Seq_get_PrimarySeq ******************************
 **
 ** Undocumented.
 **
@@ -2346,7 +2346,7 @@ org_biocorba_seqcore_Seq_get_PrimarySeq(org_biocorba_seqcore_Seq _obj,
    }
 }
 
-/* @func org_biocorba_seqcore_SeqFeature_type ********************************
+/* @func org_biocorba_seqcore_SeqFeature_type *********************************
 **
 ** Undocumented.
 **
@@ -2424,7 +2424,7 @@ org_biocorba_seqcore_SeqFeature_type(org_biocorba_seqcore_SeqFeature _obj,
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & (_ORBIT_tmpvar_3))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	 _ORBIT_curptr += 4;
@@ -2469,7 +2469,7 @@ org_biocorba_seqcore_SeqFeature_type(org_biocorba_seqcore_SeqFeature _obj,
    }
 }
 
-/* @func org_biocorba_seqcore_SeqFeature_source ******************************
+/* @func org_biocorba_seqcore_SeqFeature_source *******************************
 **
 ** Undocumented.
 **
@@ -2548,7 +2548,7 @@ org_biocorba_seqcore_SeqFeature_source(org_biocorba_seqcore_SeqFeature _obj,
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & (_ORBIT_tmpvar_3))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	 _ORBIT_curptr += 4;
@@ -2593,7 +2593,7 @@ org_biocorba_seqcore_SeqFeature_source(org_biocorba_seqcore_SeqFeature _obj,
    }
 }
 
-/* @func org_biocorba_seqcore_SeqFeature_seq_primary_id **********************
+/* @func org_biocorba_seqcore_SeqFeature_seq_primary_id ***********************
 **
 ** Undocumented.
 **
@@ -2671,7 +2671,7 @@ org_biocorba_seqcore_SeqFeature_seq_primary_id(org_biocorba_seqcore_SeqFeature
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & (_ORBIT_tmpvar_3))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	 _ORBIT_curptr += 4;
@@ -2716,7 +2716,7 @@ org_biocorba_seqcore_SeqFeature_seq_primary_id(org_biocorba_seqcore_SeqFeature
    }
 }
 
-/* @func org_biocorba_seqcore_SeqFeature_start *******************************
+/* @func org_biocorba_seqcore_SeqFeature_start ********************************
 **
 ** Undocumented.
 **
@@ -2792,7 +2792,7 @@ org_biocorba_seqcore_SeqFeature_start(org_biocorba_seqcore_SeqFeature _obj,
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & (_ORBIT_retval))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));} else {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
@@ -2824,7 +2824,7 @@ org_biocorba_seqcore_SeqFeature_start(org_biocorba_seqcore_SeqFeature _obj,
    }
 }
 
-/* @func org_biocorba_seqcore_SeqFeature_end *********************************
+/* @func org_biocorba_seqcore_SeqFeature_end **********************************
 **
 ** Undocumented.
 **
@@ -2900,7 +2900,7 @@ org_biocorba_seqcore_SeqFeature_end(org_biocorba_seqcore_SeqFeature _obj,
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & (_ORBIT_retval))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));} else {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
@@ -2932,7 +2932,7 @@ org_biocorba_seqcore_SeqFeature_end(org_biocorba_seqcore_SeqFeature _obj,
    }
 }
 
-/* @func org_biocorba_seqcore_SeqFeature_strand ******************************
+/* @func org_biocorba_seqcore_SeqFeature_strand *******************************
 **
 ** Undocumented.
 **
@@ -3009,7 +3009,7 @@ org_biocorba_seqcore_SeqFeature_strand(org_biocorba_seqcore_SeqFeature _obj,
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 2);
-	 
+
 	    (*((guint16 *) & (_ORBIT_retval))) =
 	    GUINT16_SWAP_LE_BE(*((guint16 *) _ORBIT_curptr));} else {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 2);
@@ -3041,7 +3041,7 @@ org_biocorba_seqcore_SeqFeature_strand(org_biocorba_seqcore_SeqFeature _obj,
    }
 }
 
-/* @func org_biocorba_seqcore_SeqFeature_qualifiers **************************
+/* @func org_biocorba_seqcore_SeqFeature_qualifiers ***************************
 **
 ** Undocumented.
 **
@@ -3125,11 +3125,11 @@ org_biocorba_seqcore_SeqFeature_qualifiers(org_biocorba_seqcore_SeqFeature
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & ((*_ORBIT_retval)._length))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	 _ORBIT_curptr += 4;
-	 
+
 	    (*_ORBIT_retval)._buffer =
 	    CORBA_sequence_org_biocorba_seqcore_NameValueSet_allocbuf(
 								      (*_ORBIT_retval).
@@ -3138,11 +3138,11 @@ org_biocorba_seqcore_SeqFeature_qualifiers(org_biocorba_seqcore_SeqFeature
 	 for (_ORBIT_tmpvar_6 = 0; _ORBIT_tmpvar_6 < (*_ORBIT_retval)._length;
 	      _ORBIT_tmpvar_6++) {
 	    _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	    
+
 	       (*((guint32 *) & (_ORBIT_tmpvar_8))) =
 	       GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	    _ORBIT_curptr += 4;
-	    
+
 	       (*_ORBIT_retval)._buffer[_ORBIT_tmpvar_6].name =
 	       CORBA_string_alloc(_ORBIT_tmpvar_8);
 	    memcpy((*_ORBIT_retval)._buffer[_ORBIT_tmpvar_6].name,
@@ -3153,13 +3153,13 @@ org_biocorba_seqcore_SeqFeature_qualifiers(org_biocorba_seqcore_SeqFeature
 	       sizeof((*_ORBIT_retval)._buffer[_ORBIT_tmpvar_6].
 		      name[_ORBIT_tmpvar_7]) * _ORBIT_tmpvar_8;
 	    _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	    
+
 	       (*
 	     ((guint32 *) &
 	   ((*_ORBIT_retval)._buffer[_ORBIT_tmpvar_6].values._length))) =
 GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	    _ORBIT_curptr += 4;
-	    
+
 	       (*_ORBIT_retval)._buffer[_ORBIT_tmpvar_6].values._buffer =
 	       CORBA_sequence_CORBA_string_allocbuf((*_ORBIT_retval).
 						    _buffer[_ORBIT_tmpvar_6].
@@ -3171,11 +3171,11 @@ GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 		 (*_ORBIT_retval)._buffer[_ORBIT_tmpvar_6].values._length;
 		 _ORBIT_tmpvar_9++) {
 	       _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	       
+
 		  (*((guint32 *) & (_ORBIT_tmpvar_11))) =
 		  GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	       _ORBIT_curptr += 4;
-	       
+
 		  (*_ORBIT_retval)._buffer[_ORBIT_tmpvar_6].values.
 		  _buffer[_ORBIT_tmpvar_9] =
 		  CORBA_string_alloc(_ORBIT_tmpvar_11);
@@ -3196,7 +3196,7 @@ GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
 	 (*_ORBIT_retval)._length = *((CORBA_unsigned_long *) _ORBIT_curptr);
 	 _ORBIT_curptr += 4;
-	 
+
 	    (*_ORBIT_retval)._buffer =
 	    CORBA_sequence_org_biocorba_seqcore_NameValueSet_allocbuf(
 								      (*_ORBIT_retval).
@@ -3207,7 +3207,7 @@ GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	    _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
 	    _ORBIT_tmpvar_8 = *((CORBA_unsigned_long *) _ORBIT_curptr);
 	    _ORBIT_curptr += 4;
-	    
+
 	       (*_ORBIT_retval)._buffer[_ORBIT_tmpvar_6].name =
 	       CORBA_string_alloc(_ORBIT_tmpvar_8);
 	    memcpy((*_ORBIT_retval)._buffer[_ORBIT_tmpvar_6].name,
@@ -3218,11 +3218,11 @@ GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	       sizeof((*_ORBIT_retval)._buffer[_ORBIT_tmpvar_6].
 		      name[_ORBIT_tmpvar_7]) * _ORBIT_tmpvar_8;
 	    _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	    
+
 	       (*_ORBIT_retval)._buffer[_ORBIT_tmpvar_6].values._length =
 	       *((CORBA_unsigned_long *) _ORBIT_curptr);
 	    _ORBIT_curptr += 4;
-	    
+
 	       (*_ORBIT_retval)._buffer[_ORBIT_tmpvar_6].values._buffer =
 	       CORBA_sequence_CORBA_string_allocbuf((*_ORBIT_retval).
 						    _buffer[_ORBIT_tmpvar_6].
@@ -3236,7 +3236,7 @@ GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	       _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
 	       _ORBIT_tmpvar_11 = *((CORBA_unsigned_long *) _ORBIT_curptr);
 	       _ORBIT_curptr += 4;
-	       
+
 		  (*_ORBIT_retval)._buffer[_ORBIT_tmpvar_6].values.
 		  _buffer[_ORBIT_tmpvar_9] =
 		  CORBA_string_alloc(_ORBIT_tmpvar_11);
@@ -3280,7 +3280,7 @@ GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
    }
 }
 
-/* @func org_biocorba_seqcore_SeqFeature_sub_SeqFeatures *********************
+/* @func org_biocorba_seqcore_SeqFeature_sub_SeqFeatures **********************
 **
 ** Undocumented.
 **
@@ -3395,7 +3395,7 @@ org_biocorba_seqcore_SeqFeature_sub_SeqFeatures
    }
 }
 
-/* @func org_biocorba_seqcore_SeqFeature_locations ***************************
+/* @func org_biocorba_seqcore_SeqFeature_locations ****************************
 **
 ** Undocumented.
 **
@@ -3479,11 +3479,11 @@ org_biocorba_seqcore_SeqFeature_locations(org_biocorba_seqcore_SeqFeature
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & ((*_ORBIT_retval)._length))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	 _ORBIT_curptr += 4;
-	 
+
 	    (*_ORBIT_retval)._buffer =
 	    CORBA_sequence_org_biocorba_seqcore_SeqFeatureLocation_allocbuf(
 									    (*_ORBIT_retval).
@@ -3492,44 +3492,44 @@ org_biocorba_seqcore_SeqFeature_locations(org_biocorba_seqcore_SeqFeature
 	 for (_ORBIT_tmpvar_1 = 0; _ORBIT_tmpvar_1 < (*_ORBIT_retval)._length;
 	      _ORBIT_tmpvar_1++) {
 	    _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	    
+
 	       (*
 	     ((guint32 *) &
 	   ((*_ORBIT_retval)._buffer[_ORBIT_tmpvar_1].start.position))) =
 GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	    _ORBIT_curptr += 4;
-	    
+
 	       (*
 	     ((guint32 *) &
 	   ((*_ORBIT_retval)._buffer[_ORBIT_tmpvar_1].start.extension))) =
 GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	    _ORBIT_curptr += 4;
-	    
+
 	       (*
 	     ((guint16 *) &
 	   ((*_ORBIT_retval)._buffer[_ORBIT_tmpvar_1].start.fuzzy))) =
 GUINT16_SWAP_LE_BE(*((guint16 *) _ORBIT_curptr));
 	    _ORBIT_curptr += 2;
 	    _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	    
+
 	       (*
 	     ((guint32 *) &
 	   ((*_ORBIT_retval)._buffer[_ORBIT_tmpvar_1].end.position))) =
 GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	    _ORBIT_curptr += 4;
-	    
+
 	       (*
 	     ((guint32 *) &
 	   ((*_ORBIT_retval)._buffer[_ORBIT_tmpvar_1].end.extension))) =
 GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	    _ORBIT_curptr += 4;
-	    
+
 	       (*
 	     ((guint16 *) &
 	   ((*_ORBIT_retval)._buffer[_ORBIT_tmpvar_1].end.fuzzy))) =
 GUINT16_SWAP_LE_BE(*((guint16 *) _ORBIT_curptr));
 	    _ORBIT_curptr += 2;
-	    
+
 	       (*
 	     ((guint16 *) &
 	   ((*_ORBIT_retval)._buffer[_ORBIT_tmpvar_1].strand))) =
@@ -3541,7 +3541,7 @@ GUINT16_SWAP_LE_BE(*((guint16 *) _ORBIT_curptr));
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
 	 (*_ORBIT_retval)._length = *((CORBA_unsigned_long *) _ORBIT_curptr);
 	 _ORBIT_curptr += 4;
-	 
+
 	    (*_ORBIT_retval)._buffer =
 	    CORBA_sequence_org_biocorba_seqcore_SeqFeatureLocation_allocbuf(
 									    (*_ORBIT_retval).
@@ -3594,7 +3594,7 @@ GUINT16_SWAP_LE_BE(*((guint16 *) _ORBIT_curptr));
    }
 }
 
-/* @func org_biocorba_seqcore_SeqFeature_PrimarySeq_is_available *************
+/* @func org_biocorba_seqcore_SeqFeature_PrimarySeq_is_available **************
 **
 ** Undocumented.
 **
@@ -3699,7 +3699,7 @@ org_biocorba_seqcore_SeqFeature_PrimarySeq_is_available
    }
 }
 
-/* @func org_biocorba_seqcore_SeqFeature_get_PrimarySeq **********************
+/* @func org_biocorba_seqcore_SeqFeature_get_PrimarySeq ***********************
 **
 ** Undocumented.
 **
@@ -3820,7 +3820,7 @@ org_biocorba_seqcore_SeqFeature_get_PrimarySeq(org_biocorba_seqcore_SeqFeature
    }
 }
 
-/* @func org_biocorba_seqcore_PrimarySeqIterator_next ************************
+/* @func org_biocorba_seqcore_PrimarySeqIterator_next *************************
 **
 ** Undocumented.
 **
@@ -3941,7 +3941,7 @@ org_biocorba_seqcore_PrimarySeqIterator_next
    }
 }
 
-/* @func org_biocorba_seqcore_PrimarySeqIterator_has_more ********************
+/* @func org_biocorba_seqcore_PrimarySeqIterator_has_more *********************
 **
 ** Undocumented.
 **
@@ -4046,7 +4046,7 @@ org_biocorba_seqcore_PrimarySeqIterator_has_more
    }
 }
 
-/* @func org_biocorba_seqcore_SeqFeatureIterator_next ************************
+/* @func org_biocorba_seqcore_SeqFeatureIterator_next *************************
 **
 ** Undocumented.
 **
@@ -4167,7 +4167,7 @@ org_biocorba_seqcore_SeqFeatureIterator_next
    }
 }
 
-/* @func org_biocorba_seqcore_SeqFeatureIterator_has_more ********************
+/* @func org_biocorba_seqcore_SeqFeatureIterator_has_more *********************
 **
 ** Undocumented.
 **
@@ -4272,7 +4272,7 @@ org_biocorba_seqcore_SeqFeatureIterator_has_more
    }
 }
 
-/* @func org_biocorba_seqcore_PrimarySeqVector_size **************************
+/* @func org_biocorba_seqcore_PrimarySeqVector_size ***************************
 **
 ** Undocumented.
 **
@@ -4349,7 +4349,7 @@ org_biocorba_seqcore_PrimarySeqVector_size
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & (_ORBIT_retval))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));} else {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
@@ -4381,7 +4381,7 @@ org_biocorba_seqcore_PrimarySeqVector_size
    }
 }
 
-/* @func org_biocorba_seqcore_PrimarySeqVector_elementAt *********************
+/* @func org_biocorba_seqcore_PrimarySeqVector_elementAt **********************
 **
 ** Undocumented.
 **
@@ -4507,7 +4507,7 @@ org_biocorba_seqcore_PrimarySeqVector_elementAt
    }
 }
 
-/* @func org_biocorba_seqcore_PrimarySeqVector_iterator **********************
+/* @func org_biocorba_seqcore_PrimarySeqVector_iterator ***********************
 **
 ** Undocumented.
 **
@@ -4622,7 +4622,7 @@ org_biocorba_seqcore_PrimarySeqVector_iterator
    }
 }
 
-/* @func org_biocorba_seqcore_SeqFeatureVector_size **************************
+/* @func org_biocorba_seqcore_SeqFeatureVector_size ***************************
 **
 ** Undocumented.
 **
@@ -4699,7 +4699,7 @@ org_biocorba_seqcore_SeqFeatureVector_size
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & (_ORBIT_retval))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));} else {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
@@ -4731,7 +4731,7 @@ org_biocorba_seqcore_SeqFeatureVector_size
    }
 }
 
-/* @func org_biocorba_seqcore_SeqFeatureVector_elementAt *********************
+/* @func org_biocorba_seqcore_SeqFeatureVector_elementAt **********************
 **
 ** Undocumented.
 **
@@ -4857,7 +4857,7 @@ org_biocorba_seqcore_SeqFeatureVector_elementAt
    }
 }
 
-/* @func org_biocorba_seqcore_SeqFeatureVector_iterator **********************
+/* @func org_biocorba_seqcore_SeqFeatureVector_iterator ***********************
 **
 ** Undocumented.
 **
@@ -4972,7 +4972,7 @@ org_biocorba_seqcore_SeqFeatureVector_iterator
    }
 }
 
-/* @func org_biocorba_seqcore_PrimarySeqDB_name ******************************
+/* @func org_biocorba_seqcore_PrimarySeqDB_name *******************************
 **
 ** Undocumented.
 **
@@ -5051,7 +5051,7 @@ org_biocorba_seqcore_PrimarySeqDB_name(org_biocorba_seqcore_PrimarySeqDB _obj,
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & (_ORBIT_tmpvar_3))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	 _ORBIT_curptr += 4;
@@ -5096,7 +5096,7 @@ org_biocorba_seqcore_PrimarySeqDB_name(org_biocorba_seqcore_PrimarySeqDB _obj,
    }
 }
 
-/* @func org_biocorba_seqcore_PrimarySeqDB_version ***************************
+/* @func org_biocorba_seqcore_PrimarySeqDB_version ****************************
 **
 ** Undocumented.
 **
@@ -5173,7 +5173,7 @@ org_biocorba_seqcore_PrimarySeqDB_version(org_biocorba_seqcore_PrimarySeqDB
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & (_ORBIT_retval))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));} else {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
@@ -5205,7 +5205,7 @@ org_biocorba_seqcore_PrimarySeqDB_version(org_biocorba_seqcore_PrimarySeqDB
    }
 }
 
-/* @func org_biocorba_seqcore_PrimarySeqDB_max_sequence_length ***************
+/* @func org_biocorba_seqcore_PrimarySeqDB_max_sequence_length ****************
 **
 ** Undocumented.
 **
@@ -5281,7 +5281,7 @@ org_biocorba_seqcore_PrimarySeqDB_max_sequence_length
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & (_ORBIT_retval))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));} else {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
@@ -5313,7 +5313,7 @@ org_biocorba_seqcore_PrimarySeqDB_max_sequence_length
    }
 }
 
-/* @func org_biocorba_seqcore_PrimarySeqDB_get_PrimarySeq ********************
+/* @func org_biocorba_seqcore_PrimarySeqDB_get_PrimarySeq *********************
 **
 ** Undocumented.
 **
@@ -5459,7 +5459,7 @@ org_biocorba_seqcore_PrimarySeqDB_get_PrimarySeq
    }
 }
 
-/* @func org_biocorba_seqcore_PrimarySeqDB_get_PrimarySeqVector **************
+/* @func org_biocorba_seqcore_PrimarySeqDB_get_PrimarySeqVector ***************
 **
 ** Undocumented.
 **
@@ -5574,7 +5574,7 @@ org_biocorba_seqcore_PrimarySeqDB_get_PrimarySeqVector
    }
 }
 
-/* @func org_biocorba_seqcore_SeqDB_get_Seq **********************************
+/* @func org_biocorba_seqcore_SeqDB_get_Seq ***********************************
 **
 ** Undocumented.
 **
@@ -5720,7 +5720,7 @@ org_biocorba_seqcore_SeqDB_get_Seq(org_biocorba_seqcore_SeqDB _obj,
    }
 }
 
-/* @func org_biocorba_seqcore_SeqDB_accession_numbers ************************
+/* @func org_biocorba_seqcore_SeqDB_accession_numbers *************************
 **
 ** Undocumented.
 **
@@ -5800,18 +5800,18 @@ org_biocorba_seqcore_SeqDB_accession_numbers(org_biocorba_seqcore_SeqDB _obj,
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & ((*_ORBIT_retval)._length))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	 _ORBIT_curptr += 4;
-	 
+
 	    (*_ORBIT_retval)._buffer =
 	    CORBA_sequence_CORBA_string_allocbuf((*_ORBIT_retval)._length);
 	 (*_ORBIT_retval)._release = CORBA_TRUE;
 	 for (_ORBIT_tmpvar_3 = 0; _ORBIT_tmpvar_3 < (*_ORBIT_retval)._length;
 	      _ORBIT_tmpvar_3++) {
 	    _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	    
+
 	       (*((guint32 *) & (_ORBIT_tmpvar_5))) =
 	       GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	    _ORBIT_curptr += 4;
@@ -5830,7 +5830,7 @@ org_biocorba_seqcore_SeqDB_accession_numbers(org_biocorba_seqcore_SeqDB _obj,
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
 	 (*_ORBIT_retval)._length = *((CORBA_unsigned_long *) _ORBIT_curptr);
 	 _ORBIT_curptr += 4;
-	 
+
 	    (*_ORBIT_retval)._buffer =
 	    CORBA_sequence_CORBA_string_allocbuf((*_ORBIT_retval)._length);
 	 (*_ORBIT_retval)._release = CORBA_TRUE;
@@ -5877,7 +5877,7 @@ org_biocorba_seqcore_SeqDB_accession_numbers(org_biocorba_seqcore_SeqDB _obj,
    }
 }
 
-/* @func org_biocorba_seqcore_UpdateableSeqDB_write_Seq **********************
+/* @func org_biocorba_seqcore_UpdateableSeqDB_write_Seq ***********************
 **
 ** Undocumented.
 **
@@ -6053,7 +6053,7 @@ org_biocorba_seqcore_UpdateableSeqDB_write_Seq
    }
 }
 
-/* @func org_biocorba_seqcore_UpdateableSeqDB_write_PrimarySeq ***************
+/* @func org_biocorba_seqcore_UpdateableSeqDB_write_PrimarySeq ****************
 **
 ** Undocumented.
 **
@@ -6227,7 +6227,7 @@ org_biocorba_seqcore_UpdateableSeqDB_write_PrimarySeq
    }
 }
 
-/* @func org_biocorba_seqcore_BioEnv_get_PrimarySeqIterator_from_file ********
+/* @func org_biocorba_seqcore_BioEnv_get_PrimarySeqIterator_from_file *********
 **
 ** Undocumented.
 **
@@ -6387,7 +6387,7 @@ org_biocorba_seqcore_BioEnv_get_PrimarySeqIterator_from_file
    }
 }
 
-/* @func org_biocorba_seqcore_BioEnv_get_PrimarySeq_from_file ****************
+/* @func org_biocorba_seqcore_BioEnv_get_PrimarySeq_from_file *****************
 **
 ** Undocumented.
 **
@@ -6546,7 +6546,7 @@ org_biocorba_seqcore_BioEnv_get_PrimarySeq_from_file
    }
 }
 
-/* @func org_biocorba_seqcore_BioEnv_get_Seq_from_file ***********************
+/* @func org_biocorba_seqcore_BioEnv_get_Seq_from_file ************************
 **
 ** Undocumented.
 **
@@ -6706,7 +6706,7 @@ org_biocorba_seqcore_BioEnv_get_Seq_from_file(org_biocorba_seqcore_BioEnv
    }
 }
 
-/* @func org_biocorba_seqcore_BioEnv_get_SeqDB_names *************************
+/* @func org_biocorba_seqcore_BioEnv_get_SeqDB_names **************************
 **
 ** Undocumented.
 **
@@ -6786,18 +6786,18 @@ org_biocorba_seqcore_BioEnv_get_SeqDB_names(org_biocorba_seqcore_BioEnv _obj,
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & ((*_ORBIT_retval)._length))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	 _ORBIT_curptr += 4;
-	 
+
 	    (*_ORBIT_retval)._buffer =
 	    CORBA_sequence_CORBA_string_allocbuf((*_ORBIT_retval)._length);
 	 (*_ORBIT_retval)._release = CORBA_TRUE;
 	 for (_ORBIT_tmpvar_3 = 0; _ORBIT_tmpvar_3 < (*_ORBIT_retval)._length;
 	      _ORBIT_tmpvar_3++) {
 	    _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	    
+
 	       (*((guint32 *) & (_ORBIT_tmpvar_5))) =
 	       GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	    _ORBIT_curptr += 4;
@@ -6816,7 +6816,7 @@ org_biocorba_seqcore_BioEnv_get_SeqDB_names(org_biocorba_seqcore_BioEnv _obj,
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
 	 (*_ORBIT_retval)._length = *((CORBA_unsigned_long *) _ORBIT_curptr);
 	 _ORBIT_curptr += 4;
-	 
+
 	    (*_ORBIT_retval)._buffer =
 	    CORBA_sequence_CORBA_string_allocbuf((*_ORBIT_retval)._length);
 	 (*_ORBIT_retval)._release = CORBA_TRUE;
@@ -6863,7 +6863,7 @@ org_biocorba_seqcore_BioEnv_get_SeqDB_names(org_biocorba_seqcore_BioEnv _obj,
    }
 }
 
-/* @func org_biocorba_seqcore_BioEnv_get_SeqDB_versions **********************
+/* @func org_biocorba_seqcore_BioEnv_get_SeqDB_versions ***********************
 **
 ** Undocumented.
 **
@@ -6964,11 +6964,11 @@ org_biocorba_seqcore_BioEnv_get_SeqDB_versions(org_biocorba_seqcore_BioEnv
       _ORBIT_curptr = GIOP_RECV_BUFFER(_ORBIT_recv_buffer)->cur;
       if (giop_msg_conversion_needed(GIOP_MESSAGE_BUFFER(_ORBIT_recv_buffer))) {
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
-	 
+
 	    (*((guint32 *) & ((*_ORBIT_retval)._length))) =
 	    GUINT32_SWAP_LE_BE(*((guint32 *) _ORBIT_curptr));
 	 _ORBIT_curptr += 4;
-	 
+
 	    (*_ORBIT_retval)._buffer =
 	    CORBA_sequence_CORBA_long_allocbuf((*_ORBIT_retval)._length);
 	 (*_ORBIT_retval)._release = CORBA_TRUE;
@@ -6983,7 +6983,7 @@ org_biocorba_seqcore_BioEnv_get_SeqDB_versions(org_biocorba_seqcore_BioEnv
 	 _ORBIT_curptr = ALIGN_ADDRESS(_ORBIT_curptr, 4);
 	 (*_ORBIT_retval)._length = *((CORBA_unsigned_long *) _ORBIT_curptr);
 	 _ORBIT_curptr += 4;
-	 
+
 	    (*_ORBIT_retval)._buffer =
 	    CORBA_sequence_CORBA_long_allocbuf((*_ORBIT_retval)._length);
 	 (*_ORBIT_retval)._release = CORBA_TRUE;
@@ -7021,7 +7021,7 @@ org_biocorba_seqcore_BioEnv_get_SeqDB_versions(org_biocorba_seqcore_BioEnv
    }
 }
 
-/* @func org_biocorba_seqcore_BioEnv_get_SeqDB_by_name ***********************
+/* @func org_biocorba_seqcore_BioEnv_get_SeqDB_by_name ************************
 **
 ** Undocumented.
 **

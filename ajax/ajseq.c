@@ -1,29 +1,29 @@
-/********************************************************************
+/******************************************************************************
 ** @source AJAX SEQ (sequence) functions
 **
 ** These functions control all aspects of AJAX sequence
 ** reading and writing and include simple utilities.
 **
 ** @author Copyright (C) 1998 Peter Rice
-** @version 1.0 
+** @version 1.0
 ** @modified Jun 25 pmr First version
 ** @@
-** 
+**
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
 ** version 2 of the License, or (at your option) any later version.
-** 
+**
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Library General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU Library General Public
 ** License along with this library; if not, write to the
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ** Boston, MA  02111-1307, USA.
-********************************************************************/
+******************************************************************************/
 
 #include "ajax.h"
 #include <limits.h>
@@ -70,7 +70,7 @@ AjPSeqall ajSeqallNew (void)
 }
 
 
-/* @funcstatic seqSelexClone *************************************************
+/* @funcstatic seqSelexClone **************************************************
 **
 ** Clone a Selexdata object
 **
@@ -197,7 +197,7 @@ void ajSeqsetDel(AjPSeqset *thys)
 /* ========================== Assignments ============================= */
 /* ==================================================================== */
 
-/* @section Sequence Stream Assignments **************************************
+/* @section Sequence Stream Assignments ***************************************
 **
 ** These functions overwrite the sequence stream object provided as
 ** the first argument.
@@ -208,7 +208,7 @@ void ajSeqsetDel(AjPSeqset *thys)
 /* =========================== Modifiers ============================== */
 /* ==================================================================== */
 
-/* @section Sequence Stream Modifiers ****************************************
+/* @section Sequence Stream Modifiers *****************************************
 **
 ** These functions use the contents of a sequence stream object and
 ** update them.
@@ -275,7 +275,7 @@ void ajSeqallReverse (AjPSeqall thys)
     return;
 }
 
-/* @func ajSeqallSetRange ****************************************************
+/* @func ajSeqallSetRange *****************************************************
 **
 ** Sets the start and end positions for a sequence stream.
 **
@@ -307,7 +307,7 @@ void ajSeqallSetRange (AjPSeqall seq, ajint ibegin, ajint iend)
 /* ============================ Casts ==================================*/
 /* ==================================================================== */
 
-/* @section Sequence Stream Casts ********************************************
+/* @section Sequence Stream Casts *********************************************
 **
 ** These functions examine the contents of a sequence stream object
 ** and return some derived information. Some of them provide access to
@@ -367,7 +367,7 @@ ajint ajSeqallEnd (AjPSeqall seq)
     return ajSeqPosI(seq->Seq, ajSeqallBegin(seq), seq->End);
 }
 
-/* @func ajSeqallGetRange **************************************************
+/* @func ajSeqallGetRange *****************************************************
 **
 ** Returns the sequence range for a sequence stream
 **
@@ -385,7 +385,7 @@ ajint ajSeqallGetRange (AjPSeqall thys, ajint* begin, ajint* end)
     return ajSeqGetRange(thys->Seq, begin, end);
 }
 
-/* @func ajSeqsetGetFormat **************************************************
+/* @func ajSeqsetGetFormat ****************************************************
 **
 ** Returns the sequence format for a sequence set
 **
@@ -399,7 +399,7 @@ AjPStr ajSeqsetGetFormat (AjPSeqset thys)
     return thys->Formatstr;
 }
 
-/* @func ajSeqsetGetRange **************************************************
+/* @func ajSeqsetGetRange *****************************************************
 **
 ** Returns the sequence range for a sequence set
 **
@@ -424,7 +424,7 @@ ajint ajSeqsetGetRange (AjPSeqset thys, ajint* begin, ajint* end)
     return (*end - *begin + 1);
 }
 
-/* @func ajSeqGetRange **************************************************
+/* @func ajSeqGetRange ********************************************************
 **
 ** Returns the sequence range for a sequence.
 **
@@ -448,7 +448,7 @@ ajint ajSeqGetRange (AjPSeq thys, ajint* begin, ajint* end)
     return (*end - *begin + 1);
 }
 
-/* @func ajSeqallGetName *****************************************************
+/* @func ajSeqallGetName ******************************************************
 **
 ** Returns the sequence name of a sequence stream.
 ** Because this is a pointer to the real internal string
@@ -468,7 +468,7 @@ AjPStr ajSeqallGetName (AjPSeqall thys)
     return thys->Seqin->Name;
 }
 
-/* @func ajSeqallGetNameSeq **************************************************
+/* @func ajSeqallGetNameSeq ***************************************************
 **
 ** Returns the sequence name of a sequence stream.
 ** Because this is a pointer to the real internal string
@@ -488,7 +488,7 @@ AjPStr ajSeqallGetNameSeq (AjPSeqall thys)
     return ajSeqGetName(thys->Seq);
 }
 
-/* @func ajSeqsetGetUsa *****************************************************
+/* @func ajSeqsetGetUsa *******************************************************
 **
 ** Returns the sequence name of a sequence set.
 ** Because this is a pointer to the real internal string
@@ -508,7 +508,7 @@ AjPStr ajSeqsetGetUsa (AjPSeqset thys)
     return thys->Usa;
 }
 
-/* @func ajSeqGetUsa *****************************************************
+/* @func ajSeqGetUsa **********************************************************
 **
 ** Returns the sequence name of a sequence stream.
 ** Because this is a pointer to the real internal string
@@ -531,7 +531,7 @@ AjPStr ajSeqGetUsa (AjPSeq thys)
     return thys->Usa;
 }
 
-/* @func ajSeqallGetUsa *****************************************************
+/* @func ajSeqallGetUsa *******************************************************
 **
 ** Returns the sequence name of a sequence stream.
 ** Because this is a pointer to the real internal string
@@ -555,7 +555,7 @@ AjPStr ajSeqallGetUsa (AjPSeqall thys)
 /* ========================= constructors ============================= */
 /* ==================================================================== */
 
-/* @section Sequence Set Constructors ****************************************
+/* @section Sequence Set Constructors *****************************************
 **
 ** All constructors return a new sequence set object by pointer. It is the
 ** responsibility of the user to first destroy any previous
@@ -692,7 +692,7 @@ void ajSeqsetReverse (AjPSeqset thys)
     return;
 }
 
-/* @func ajSeqsetSetRange ****************************************************
+/* @func ajSeqsetSetRange *****************************************************
 **
 ** Sets the start and end positions for a sequence set.
 **
@@ -729,7 +729,7 @@ void ajSeqsetSetRange (AjPSeqset seq, ajint ibegin, ajint iend)
     return;
 }
 
-/* @func ajSeqsetFill ****************************************************
+/* @func ajSeqsetFill *********************************************************
 **
 ** Fills a sequence set with gaps at the ends of any shorter sequences.
 **
@@ -763,7 +763,7 @@ ajint ajSeqsetFill (AjPSeqset seq)
     return ifix;
 }
 
-/* @func ajSeqsetIsNuc *************************************************
+/* @func ajSeqsetIsNuc ********************************************************
 **
 ** Tests whether a sequence set is nucleotide.
 **
@@ -786,7 +786,7 @@ AjBool ajSeqsetIsNuc (AjPSeqset thys)
     return ajFalse;
 }
 
-/* @func ajSeqsetIsRna *************************************************
+/* @func ajSeqsetIsRna ********************************************************
 **
 ** Tests whether a sequence set is rna.
 **
@@ -807,7 +807,7 @@ AjBool ajSeqsetIsRna (AjPSeqset thys)
 }
 
 
-/* @func ajSeqsetIsDna *************************************************
+/* @func ajSeqsetIsDna ********************************************************
 **
 ** Tests whether a sequence set is dna.
 **
@@ -828,7 +828,7 @@ AjBool ajSeqsetIsDna (AjPSeqset thys)
 }
 
 
-/* @func ajSeqsetIsProt ****************************************************
+/* @func ajSeqsetIsProt *******************************************************
 **
 ** Tests whether a sequence set is protein.
 **
@@ -858,7 +858,7 @@ AjBool ajSeqsetIsProt (AjPSeqset thys)
 /* ============================ Casts ==================================*/
 /* ==================================================================== */
 
-/* @section Sequence Set Casts ********************************************
+/* @section Sequence Set Casts ************************************************
 **
 ** These functions examine the contents of a sequence set object and
 ** return some derived information. Some of them provide access to the
@@ -917,7 +917,7 @@ ajint ajSeqsetEnd (AjPSeqset seq)
     return ajSeqPosII(seq->Len, ajSeqsetBegin(seq), seq->End);
 }
 
-/* @func ajSeqsetSeq *********************************************************
+/* @func ajSeqsetSeq **********************************************************
 **
 ** Returns the sequence data of a sequence in a sequence set
 **
@@ -1009,7 +1009,7 @@ float ajSeqsetTotweight (AjPSeqset seq)
     return ret;
 }
 
-/* @func ajSeqsetGetName *****************************************************
+/* @func ajSeqsetGetName ******************************************************
 **
 ** Returns the sequence name of a sequence set.
 ** Because this is a pointer to the real internal string
@@ -1032,7 +1032,7 @@ AjPStr ajSeqsetGetName (AjPSeqset thys)
     return thys->Usa;
 }
 
-/* @func ajSeqsetGetSeq *****************************************************
+/* @func ajSeqsetGetSeq *******************************************************
 **
 ** Returns one sequence from a sequence set.
 ** Because this is a pointer to the real internal sequence
@@ -1131,7 +1131,7 @@ AjPSeq ajSeqNewL (size_t size)
     pthis->Keylist = ajListstrNew();
     pthis->Taxlist = ajListstrNew();
     pthis->Selexdata = NULL;
-  
+
     return pthis;
 }
 
@@ -1193,7 +1193,7 @@ AjPSeq ajSeqNewS (AjPSeq seq)
 }
 
 
-/* @func ajStockholmNew ********************************************************
+/* @func ajStockholmNew *******************************************************
 **
 ** Creates and initialises a Stockholm object.
 **
@@ -1207,7 +1207,7 @@ AjPStockholm ajStockholmNew(ajint i)
     AjPStockholm thys=NULL;
 
     AJNEW0(thys);
-    
+
     thys->id  = ajStrNew();
     thys->ac  = ajStrNew();
     thys->de  = ajStrNew();
@@ -1234,13 +1234,13 @@ AjPStockholm ajStockholmNew(ajint i)
 	thys->name[i] = ajStrNew();
 	thys->str[i]  = ajStrNew();
     }
-    
+
     return thys;
 }
 
 
 
-/* @func ajStockholmDel ********************************************************
+/* @func ajStockholmDel *******************************************************
 **
 ** Deletes a Stockholm object.
 **
@@ -1253,13 +1253,13 @@ void ajStockholmDel(AjPStockholm *thys)
 {
     AjPStockholm pthis = NULL;
     ajint i;
-    
+
     if(!thys)
 	return;
     pthis = *thys;
     if(!pthis)
 	return;
-    
+
     ajStrDel(&pthis->id);
     ajStrDel(&pthis->ac);
     ajStrDel(&pthis->de);
@@ -1281,16 +1281,16 @@ void ajStockholmDel(AjPStockholm *thys)
 	ajStrDel(&pthis->name[i]);
 	ajStrDel(&pthis->str[i]);
     }
-    
+
     AJFREE(pthis->name);
     AJFREE(pthis->str);
     AJFREE(pthis);
-    
+
     return;
 }
 
 
-/* @func ajStockholmdataNew **************************************************
+/* @func ajStockholmdataNew ***************************************************
 **
 ** Creates and initialises a Stockholm data object.
 **
@@ -1303,7 +1303,7 @@ AjPStockholmdata ajStockholmdataNew(void)
     AjPStockholmdata thys=NULL;
 
     AJNEW0(thys);
-    
+
     thys->id  = ajStrNew();
     thys->ac  = ajStrNew();
     thys->de  = ajStrNew();
@@ -1319,13 +1319,13 @@ AjPStockholmdata ajStockholmdataNew(void)
     thys->ref = ajStrNew();
     thys->sacons  = ajStrNew();
     thys->sscons  = ajStrNew();
-    
+
     return thys;
 }
 
 
 
-/* @func ajStockholmdataDel **************************************************
+/* @func ajStockholmdataDel ***************************************************
 **
 ** Deletes a Stockholm data object.
 **
@@ -1337,13 +1337,13 @@ AjPStockholmdata ajStockholmdataNew(void)
 void ajStockholmdataDel(AjPStockholmdata *thys)
 {
     AjPStockholmdata pthis = NULL;
-    
+
     if(!thys)
 	return;
     pthis = *thys;
     if(!pthis)
 	return;
-    
+
     ajStrDel(&pthis->id);
     ajStrDel(&pthis->ac);
     ajStrDel(&pthis->de);
@@ -1361,13 +1361,13 @@ void ajStockholmdataDel(AjPStockholmdata *thys)
     ajStrDel(&pthis->sscons);
 
     AJFREE(pthis);
-    
+
     return;
 }
 
 
 
-/* @func ajSelexSQNew ********************************************************
+/* @func ajSelexSQNew *********************************************************
 **
 ** Creates and initialises a selex #=SQ line object.
 **
@@ -1390,7 +1390,7 @@ AjPSelexSQ ajSelexSQNew()
 }
 
 
-/* @func ajSelexNew ********************************************************
+/* @func ajSelexNew ***********************************************************
 **
 ** Creates and initialises a selex #=SQ line object.
 **
@@ -1403,7 +1403,7 @@ AjPSelex ajSelexNew(ajint n)
 {
     AjPSelex thys=NULL;
     ajint    i;
-    
+
     AJNEW0(thys);
     thys->id = ajStrNew();
     thys->ac = ajStrNew();
@@ -1417,7 +1417,7 @@ AjPSelex ajSelexNew(ajint n)
     AJCNEW(thys->str,n);
     AJCNEW(thys->ss,n);
     AJCNEW(thys->sq,n);
-    
+
     for(i=0;i<n;++i)
     {
 	thys->name[i] = ajStrNew();
@@ -1430,7 +1430,7 @@ AjPSelex ajSelexNew(ajint n)
 }
 
 
-/* @func ajSelexdataNew ********************************************************
+/* @func ajSelexdataNew *******************************************************
 **
 ** Creates and initialises a selex #=SQ line object.
 **
@@ -1441,7 +1441,7 @@ AjPSelex ajSelexNew(ajint n)
 AjPSelexdata ajSelexdataNew(void)
 {
     AjPSelexdata thys=NULL;
-    
+
     AJNEW0(thys);
     thys->id = ajStrNew();
     thys->ac = ajStrNew();
@@ -1464,7 +1464,7 @@ AjPSelexdata ajSelexdataNew(void)
 /* ========================== destructors ============================= */
 /* ==================================================================== */
 
-/* @section Sequence Destructors *********************************************
+/* @section Sequence Destructors **********************************************
 **
 ** Destruction destroys all internal data structures and frees the
 ** memory allocated for the sequence.
@@ -1484,7 +1484,7 @@ void ajSeqDel (AjPSeq* pthis)
 {
     AjPSeq thys = pthis ? *pthis : 0;
     AjPStr ptr=NULL;
-  
+
     if (!pthis)
 	return;
     if (!*pthis)
@@ -1528,13 +1528,13 @@ void ajSeqDel (AjPSeq* pthis)
 	ajSelexdataDel(&thys->Selexdata);
     if(thys->Stock)
 	ajStockholmdataDel(&thys->Stock);
-  
+
     AJFREE (*pthis);
     return;
 }
 
 
-/* @func ajSelexSQDel ********************************************************
+/* @func ajSelexSQDel *********************************************************
 **
 ** Deletes a Selex object.
 **
@@ -1557,12 +1557,12 @@ void ajSelexSQDel(AjPSelexSQ *thys)
 
     AJFREE(pthis);
     *thys = NULL;
-    
+
     return;
 }
 
 
-/* @func ajSelexDel ********************************************************
+/* @func ajSelexDel ***********************************************************
 **
 ** Deletes a Selex object.
 **
@@ -1576,7 +1576,7 @@ void ajSelexDel(AjPSelex *thys)
     AjPSelex pthis = *thys;
     ajint    i;
     ajint    n;
-    
+
     if(!thys || !pthis)
 	return;
 
@@ -1602,7 +1602,7 @@ void ajSelexDel(AjPSelex *thys)
     ajStrDel(&pthis->au);
     ajStrDel(&pthis->cs);
     ajStrDel(&pthis->rf);
-    
+
     AJFREE(pthis);
     *thys = NULL;
 
@@ -1610,7 +1610,7 @@ void ajSelexDel(AjPSelex *thys)
 }
 
 
-/* @func ajSelexdataDel *****************************************************
+/* @func ajSelexdataDel *******************************************************
 **
 ** Deletes a Selex data object.
 **
@@ -1622,7 +1622,7 @@ void ajSelexDel(AjPSelex *thys)
 void ajSelexdataDel(AjPSelexdata *thys)
 {
     AjPSelexdata pthis = *thys;
-    
+
     if(!thys || !pthis)
 	return;
 
@@ -1638,7 +1638,7 @@ void ajSelexdataDel(AjPSelexdata *thys)
     ajStrDel(&pthis->au);
     ajStrDel(&pthis->cs);
     ajStrDel(&pthis->rf);
-    
+
     AJFREE(pthis);
     *thys = NULL;
 
@@ -1708,7 +1708,7 @@ void ajSeqClear (AjPSeq thys)
 **
 ******************************************************************************/
 
-/* @func ajSeqAssName ********************************************************
+/* @func ajSeqAssName *********************************************************
 **
 ** Assigns the sequence name.
 **
@@ -1743,7 +1743,7 @@ void ajSeqAssNameC (AjPSeq thys, char* text)
     return;
 }
 
-/* @func ajSeqAssAcc ********************************************************
+/* @func ajSeqAssAcc **********************************************************
 **
 ** Assigns the sequence accession number.
 **
@@ -1760,7 +1760,7 @@ void ajSeqAssAcc (AjPSeq thys, AjPStr str)
     return;
 }
 
-/* @func ajSeqAssAccC ********************************************************
+/* @func ajSeqAssAccC *********************************************************
 **
 ** Assigns the sequence accession number.
 **
@@ -1777,7 +1777,7 @@ void ajSeqAssAccC (AjPSeq thys, char* text)
     return;
 }
 
-/* @func ajSeqAssSv ********************************************************
+/* @func ajSeqAssSv ***********************************************************
 **
 ** Assigns the sequence version number.
 **
@@ -1794,7 +1794,7 @@ void ajSeqAssSv (AjPSeq thys, AjPStr str)
     return;
 }
 
-/* @func ajSeqAssSvC ********************************************************
+/* @func ajSeqAssSvC **********************************************************
 **
 ** Assigns the sequence version number.
 **
@@ -1811,7 +1811,7 @@ void ajSeqAssSvC (AjPSeq thys, char* text)
     return;
 }
 
-/* @func ajSeqAssGi ********************************************************
+/* @func ajSeqAssGi ***********************************************************
 **
 ** Assigns the GI version number.
 **
@@ -1828,7 +1828,7 @@ void ajSeqAssGi (AjPSeq thys, AjPStr str)
     return;
 }
 
-/* @func ajSeqAssGiC ********************************************************
+/* @func ajSeqAssGiC **********************************************************
 **
 ** Assigns the GI version number.
 **
@@ -1845,7 +1845,7 @@ void ajSeqAssGiC (AjPSeq thys, char* text)
     return;
 }
 
-/* @func ajSeqAssUfo ********************************************************
+/* @func ajSeqAssUfo **********************************************************
 **
 ** Assigns the sequence feature full name.
 **
@@ -1862,7 +1862,7 @@ void ajSeqAssUfo (AjPSeq thys, AjPStr str)
     return;
 }
 
-/* @func ajSeqAssUfoC ********************************************************
+/* @func ajSeqAssUfoC *********************************************************
 **
 ** Assigns the sequence feature name.
 **
@@ -1879,7 +1879,7 @@ void ajSeqAssUfoC (AjPSeq thys, char* text)
     return;
 }
 
-/* @func ajSeqAssUsa ********************************************************
+/* @func ajSeqAssUsa **********************************************************
 **
 ** Assigns the sequence full name.
 **
@@ -1896,7 +1896,7 @@ void ajSeqAssUsa (AjPSeq thys, AjPStr str)
     return;
 }
 
-/* @func ajSeqAssUsaC ********************************************************
+/* @func ajSeqAssUsaC *********************************************************
 **
 ** Assigns the sequence full name.
 **
@@ -1930,7 +1930,7 @@ void ajSeqAssEntry (AjPSeq thys, AjPStr str)
     return;
 }
 
-/* @func ajSeqAssEntryC ******************************************************
+/* @func ajSeqAssEntryC *******************************************************
 **
 ** Assigns the sequence entryname.
 **
@@ -1947,7 +1947,7 @@ void ajSeqAssEntryC (AjPSeq thys, char* text)
     return;
 }
 
-/* @func ajSeqAssFull ********************************************************
+/* @func ajSeqAssFull *********************************************************
 **
 ** Assigns the sequence full name.
 **
@@ -1981,7 +1981,7 @@ void ajSeqAssFullC (AjPSeq thys, char* text)
     return;
 }
 
-/* @func ajSeqAssFile ********************************************************
+/* @func ajSeqAssFile *********************************************************
 **
 ** Assigns the sequence file name.
 **
@@ -2016,7 +2016,7 @@ void ajSeqAssFileC (AjPSeq thys, char* text)
 }
 
 
-/* @func ajSeqAssSeq ********************************************************
+/* @func ajSeqAssSeq **********************************************************
 **
 ** Assigns a modified sequence to an existing AjPSeq sequence.
 **
@@ -2036,7 +2036,7 @@ void ajSeqAssSeq (AjPSeq thys, AjPStr str)
     return;
 }
 
-/* @func ajSeqAssSeqC ********************************************************
+/* @func ajSeqAssSeqC *********************************************************
 **
 ** Assigns a modified sequence to an existing AjPSeq sequence.
 **
@@ -2071,7 +2071,7 @@ void ajSeqAssSeqCI (AjPSeq thys, char* text, ajint ilen)
     return;
 }
 
-/* @func ajSeqAssDesc ********************************************************
+/* @func ajSeqAssDesc *********************************************************
 **
 ** Assigns a modified description to an existing AjPSeq sequence.
 **
@@ -2105,7 +2105,7 @@ void ajSeqAssDescC (AjPSeq thys, char* text)
     return;
 }
 
-/* @func ajSeqMod ***********************************************************
+/* @func ajSeqMod *************************************************************
 **
 ** Makes a sequence modifiable by making sure there is no duplicate
 ** copy of the sequence.
@@ -2122,7 +2122,7 @@ void ajSeqMod (AjPSeq thys)
     return;
 }
 
-/* @func ajSeqReplace *******************************************************
+/* @func ajSeqReplace *********************************************************
 **
 ** Replaces a sequence with the contents of a string.
 **
@@ -2142,7 +2142,7 @@ void ajSeqReplace (AjPSeq thys, AjPStr seq)
     return;
 }
 
-/* @func ajSeqReplaceC *******************************************************
+/* @func ajSeqReplaceC ********************************************************
 **
 ** Replaces a sequence with the contents of a C text string.
 **
@@ -2161,7 +2161,7 @@ void ajSeqReplaceC (AjPSeq thys, char* seq)
     return;
 }
 
-/* @func ajSeqSetRange *******************************************************
+/* @func ajSeqSetRange ********************************************************
 **
 ** Sets the start and end positions for a sequence (not for a sequence set).
 **
@@ -2190,7 +2190,7 @@ void ajSeqSetRange (AjPSeq seq, ajint ibegin, ajint iend)
     return;
 }
 
-/* @func ajSeqMakeUsa *******************************************************
+/* @func ajSeqMakeUsa *********************************************************
 **
 ** Sets the USA for a sequence.
 **
@@ -2223,10 +2223,10 @@ void ajSeqMakeUsa (AjPSeq thys, AjPSeqin seqin)
 	if (ajStrLen(thys->Entryname))
 	    ajFmtPrintS (&thys->Usa, "%S::%S:%S", thys->Formatstr,
 			 thys->Filename,thys->Entryname);
-	else 
+	else
 	    ajFmtPrintS (&thys->Usa, "%S::%S", thys->Formatstr,
 			 thys->Filename);
-    
+
     }
 
     ajFmtPrintS (&tmpstr, "[");
@@ -2463,13 +2463,13 @@ char ajSeqBaseComp (char base)
 /* ======================== Operators ==================================*/
 /* ==================================================================== */
 
-/* @section Sequence Operators ********************************************
+/* @section Sequence Operators ************************************************
 **
 ** These functions use the contents of a sequence but do not make any changes.
 **
 ******************************************************************************/
 
-/* @func ajSeqIsNuc ****************************************************
+/* @func ajSeqIsNuc ***********************************************************
 **
 ** Tests whether a sequence is nucleotide.
 **
@@ -2496,7 +2496,7 @@ AjBool ajSeqIsNuc (AjPSeq thys)
     return ajFalse;
 }
 
-/* @func ajSeqIsProt *******************************************************
+/* @func ajSeqIsProt **********************************************************
 **
 ** Tests whether a sequence is protein.
 **
@@ -2676,7 +2676,7 @@ AjPStr ajIsSeqversion (AjPStr sv)
     {					/* EMBL/GenBank old Annnnn */
                                         /* or SWISS AnXXXn */
         ajStrAppK(&accnum, *cp);
-	cp++;				
+	cp++;
 
 	for (i=0; i<3; i++)
 	    if (isalpha((ajint)*cp) || isdigit((ajint)*cp))
@@ -2955,7 +2955,7 @@ void ajSeqQueryTrace (AjPSeqQuery thys)
 /* ============================ Casts ================================= */
 /* ==================================================================== */
 
-/* @section Sequence Casts ********************************************
+/* @section Sequence Casts ****************************************************
 **
 ** These functions examine the contents of a sequence and return some
 ** derived information. Some of them provide access to the internal
@@ -3059,7 +3059,7 @@ ajint ajSeqLen (AjPSeq seq)
     return ajStrLen(seq->Seq);
 }
 
-/* @func ajSeqGetReverse *************************************************************
+/* @func ajSeqGetReverse ******************************************************
 **
 ** Returns the sequence direction.
 **
@@ -3090,7 +3090,7 @@ char* ajSeqCharCopy (AjPSeq seq)
     return ajCharNew(seq->Seq);
 }
 
-/* @func ajSeqCharCopyL ******************************************************
+/* @func ajSeqCharCopyL *******************************************************
 **
 ** Returns a sequence as a C character string. This is a copy of the string
 ** so the caller can do anything with it.
@@ -3198,12 +3198,12 @@ AjPSeqCvt ajSeqCvtNewZero (char* bases)
     return ret;
 }
 
-/* @func ajSeqCvtNew ******************************************************
+/* @func ajSeqCvtNew **********************************************************
 **
 ** Generates a new conversion table in which the first character in the
 ** string provided is converted to 0, the second to 1, and so on.
 ** Upper and lower case characters are converted to the same numbers.
-** All other characters are converted to one more than the highest char. 
+** All other characters are converted to one more than the highest char.
 **
 ** @param [r] bases [char*] Allowed sequence characters.
 ** @return [AjPSeqCvt] Conversion table.
@@ -3242,7 +3242,7 @@ AjPSeqCvt ajSeqCvtNew (char* bases)
     return ret;
 }
 
-/* @func ajSeqCvtDel ******************************************************
+/* @func ajSeqCvtDel **********************************************************
 **
 ** Delete a conversion table
 **
@@ -3256,7 +3256,7 @@ void ajSeqCvtDel (AjPSeqCvt* thys)
 
     if(!*thys || !thys)
 	return;
-  
+
     AJFREE((*thys)->table);
     ajStrDel(&(*thys)->bases);
     AJFREE(*thys);
@@ -3282,7 +3282,7 @@ AjPSeqCvt ajSeqCvtNewText (char* bases)
     ajint j;
     char *cp = bases;
     char c;
-  
+
     AJNEW0(ret);
     ret->len = strlen(bases);
     ret->size = CHAR_MAX - CHAR_MIN + 1;
@@ -3310,7 +3310,7 @@ AjPSeqCvt ajSeqCvtNewText (char* bases)
     return ret;
 }
 
-/* @func ajSeqCvtLen *******************************************************
+/* @func ajSeqCvtLen **********************************************************
 **
 ** Returns the length of a conversion table string (number of sequence
 ** characterers explicitly included)
@@ -3326,7 +3326,7 @@ ajint ajSeqCvtLen (AjPSeqCvt thys)
     return thys->len;
 }
 
-/* @func ajSeqCvtK *******************************************************
+/* @func ajSeqCvtK ************************************************************
 **
 ** Returns the integer code corresponding to a sequence character
 ** in a conversion tabkle
@@ -3407,7 +3407,7 @@ char* ajSeqChar (AjPSeq thys)
     return ajStrStr(thys->Seq);
 }
 
-/* @func ajSeqGetAcc *********************************************************
+/* @func ajSeqGetAcc **********************************************************
 **
 ** Returns the sequence accession number.
 ** Because this is a pointer to the real internal string
@@ -3425,7 +3425,7 @@ AjPStr ajSeqGetAcc (AjPSeq thys)
     return thys->Acc;
 }
 
-/* @func ajSeqGetSv *********************************************************
+/* @func ajSeqGetSv ***********************************************************
 **
 ** Returns the sequence version number.
 ** Because this is a pointer to the real internal string
@@ -3443,7 +3443,7 @@ AjPStr ajSeqGetSv (AjPSeq thys)
     return thys->Sv;
 }
 
-/* @func ajSeqGetGi *********************************************************
+/* @func ajSeqGetGi ***********************************************************
 **
 ** Returns the GI version number.
 ** Because this is a pointer to the real internal string
@@ -3461,7 +3461,7 @@ AjPStr ajSeqGetGi (AjPSeq thys)
     return thys->Gi;
 }
 
-/* @func ajSeqGetDesc ********************************************************
+/* @func ajSeqGetDesc *********************************************************
 **
 ** Returns the sequence description.
 ** Because this is a pointer to the real internal string
@@ -3479,7 +3479,7 @@ AjPStr ajSeqGetDesc (AjPSeq thys)
     return thys->Desc;
 }
 
-/* @func ajSeqGetFeat ********************************************************
+/* @func ajSeqGetFeat *********************************************************
 **
 ** Returns the sequence feature table.
 ** Because this is a pointer to the real internal table
@@ -3520,7 +3520,7 @@ AjPFeattable ajSeqCopyFeat (AjPSeq thys)
   return ret;
 }
 
-/* @func ajSeqGetName ********************************************************
+/* @func ajSeqGetName *********************************************************
 **
 ** Returns the sequence name.
 ** Because this is a pointer to the real internal string
@@ -3703,7 +3703,7 @@ void ajSeqoutDel (AjPSeqout* pthis)
 /* @func ajSeqMW **************************************************************
 **
 ** Calculates the molecular weight of a protein sequence.
-** 
+**
 ** @param [P] seq [AjPStr] Sequence as a string.
 ** @return [float] Molecular weight.
 ** @@
@@ -3849,7 +3849,7 @@ void ajSeqCount (AjPStr thys, ajint* b)
 **
 ******************************************************************************/
 
-/* @func ajSeqCheckGcg *****************************************************
+/* @func ajSeqCheckGcg ********************************************************
 **
 ** Calculates a GCG checksum for a sequence.
 **
@@ -3963,7 +3963,7 @@ ajint ajSeqPosII (ajint ilen, ajint imin, ajint ipos)
     return jpos;
 }
 
-/* @func ajSeqTrim **************************************************
+/* @func ajSeqTrim ************************************************************
 **
 ** Trim a sequence using the Begin and Ends.
 **
@@ -4006,26 +4006,26 @@ AjBool ajSeqTrim(AjPSeq thys)
     return okay;
 }
 
-/* @func ajSeqGapCount *****************************************************
+/* @func ajSeqGapCount ********************************************************
 **
 ** returns the number of gaps in a sequence (counting any possible
 ** gap character
 **
 ** @param [w] thys [AjPSeq] Sequence object
-** @return [ajint] Number of gaps 
+** @return [ajint] Number of gaps
 ******************************************************************************/
 
 ajint ajSeqGapCount (AjPSeq thys) {
   return ajSeqGapCountS (thys->Seq);
 }
 
-/* @func ajSeqGapCountS *****************************************************
+/* @func ajSeqGapCountS *******************************************************
 **
 ** returns the number of gaps in a string (counting any possible
 ** gap character
 **
 ** @param [w] str [AjPStr] String object
-** @return [ajint] Number of gaps 
+** @return [ajint] Number of gaps
 ******************************************************************************/
 
 ajint ajSeqGapCountS (AjPStr str) {
@@ -4068,7 +4068,8 @@ void ajSeqGapStandard (AjPSeq thys, char gapch) {
   while (*testgap) {
     if (newgap != *testgap) {
       ajStrSubstituteKK (&thys->Seq, *testgap, newgap);
-      ajDebug(" replaced         '%c'=>'%c' '%S'\n", *testgap, newgap, thys->Seq);
+      ajDebug(" replaced         '%c'=>'%c' '%S'\n",
+	      *testgap, newgap, thys->Seq);
     }
     testgap++;
   }
@@ -4076,7 +4077,7 @@ void ajSeqGapStandard (AjPSeq thys, char gapch) {
   return;
 }
 
-/* @func ajSeqFill ****************************************************
+/* @func ajSeqFill ************************************************************
 **
 ** Fills a single sequence with gaps up to a specified length.
 **

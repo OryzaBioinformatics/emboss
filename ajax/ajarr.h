@@ -9,7 +9,7 @@ extern "C"
 
 #include <sys/types.h>
 
-/* @data AjPChar *******************************************************
+/* @data AjPChar **************************************************************
 **
 ** Ajax character object.
 **
@@ -38,7 +38,7 @@ typedef struct AjSChar {
 
 
 
-/* @data AjPInt *******************************************************
+/* @data AjPInt ***************************************************************
 **
 ** Ajax integer object.
 **
@@ -67,7 +67,7 @@ typedef struct AjSInt {
 
 
 
-/* @data AjPInt2d *******************************************************
+/* @data AjPInt2d *************************************************************
 **
 ** Ajax 2d integer object.
 **
@@ -96,7 +96,7 @@ typedef struct AjSInt2d {
 
 
 
-/* @data AjPInt3d *******************************************************
+/* @data AjPInt3d *************************************************************
 **
 ** Ajax 3d integer object.
 **
@@ -125,7 +125,7 @@ typedef struct AjSInt3d {
 
 
 
-/* @data AjPFloat *******************************************************
+/* @data AjPFloat *************************************************************
 **
 ** Ajax float object.
 **
@@ -154,7 +154,7 @@ typedef struct AjSFloat {
 
 
 
-/* @data AjPFloat2d *******************************************************
+/* @data AjPFloat2d ***********************************************************
 **
 ** Ajax 2d float object.
 **
@@ -183,7 +183,7 @@ typedef struct AjSFloat2d {
 
 
 
-/* @data AjPFloat3d *******************************************************
+/* @data AjPFloat3d ***********************************************************
 **
 ** Ajax 3d float object.
 **
@@ -212,7 +212,7 @@ typedef struct AjSFloat3d {
 
 
 
-/* @data AjPDouble *******************************************************
+/* @data AjPDouble ************************************************************
 **
 ** Ajax double object.
 **
@@ -241,7 +241,7 @@ typedef struct AjSDouble {
 
 
 
-/* @data AjPDouble2d *******************************************************
+/* @data AjPDouble2d **********************************************************
 **
 ** Ajax 2d double object.
 **
@@ -270,7 +270,7 @@ typedef struct AjSDouble2d {
 
 
 
-/* @data AjPDouble3d *******************************************************
+/* @data AjPDouble3d **********************************************************
 **
 ** Ajax 3d double object.
 **
@@ -299,7 +299,7 @@ typedef struct AjSDouble3d {
 
 
 
-/* @data AjPShort *******************************************************
+/* @data AjPShort *************************************************************
 **
 ** Ajax short object.
 **
@@ -328,7 +328,7 @@ typedef struct AjSShort {
 
 
 
-/* @data AjPShort2d *******************************************************
+/* @data AjPShort2d ***********************************************************
 **
 ** Ajax 2d short object.
 **
@@ -357,7 +357,7 @@ typedef struct AjSShort2d {
 
 
 
-/* @data AjPShort3d *******************************************************
+/* @data AjPShort3d ***********************************************************
 **
 ** Ajax 3d short object.
 **
@@ -386,7 +386,7 @@ typedef struct AjSShort3d {
 
 
 
-/* @data AjPLong *******************************************************
+/* @data AjPLong **************************************************************
 **
 ** Ajax ajlong object.
 **
@@ -415,7 +415,7 @@ typedef struct AjSLong {
 
 
 
-/* @data AjPLong2d *******************************************************
+/* @data AjPLong2d ************************************************************
 **
 ** Ajax 2d ajlong object.
 **
@@ -444,7 +444,7 @@ typedef struct AjSLong2d {
 
 
 
-/* @data AjPLong3d *******************************************************
+/* @data AjPLong3d ************************************************************
 **
 ** Ajax 3d ajlong object.
 **
@@ -480,7 +480,7 @@ typedef struct AjSLong3d {
 void        ajDoubleDel(AjPDouble *thys);
 double*     ajDoubleDouble(AjPDouble thys);
 double      ajDoubleGet(AjPDouble thys, ajint elem);
-ajint         ajDoubleLen(AjPDouble thys);
+ajint       ajDoubleLen(AjPDouble thys);
 AjPDouble   ajDoubleNew(void);
 AjPDouble   ajDoubleNewL(ajint size);
 AjBool      ajDoublePut(AjPDouble *thys, ajint elem, double v);
@@ -491,21 +491,25 @@ double**    ajDouble2dDouble(AjPDouble2d thys);
 void        ajDouble2dLen(AjPDouble2d thys, ajint *len1, ajint *len2);
 AjPDouble2d ajDouble2dNew(void);
 AjPDouble2d ajDouble2dNewL(ajint size);
-AjBool      ajDouble2dPut(AjPDouble2d *thys, ajint elem1, ajint elem2, double v);
+AjBool      ajDouble2dPut(AjPDouble2d *thys,
+			  ajint elem1, ajint elem2, double v);
 
 void        ajDouble3dDel(AjPDouble3d *thys);
-double      ajDouble3dGet(AjPDouble3d thys, ajint elem1, ajint elem2, ajint elem3);
+double      ajDouble3dGet(AjPDouble3d thys,
+			  ajint elem1, ajint elem2, ajint elem3);
 double***   ajDouble3dDouble(AjPDouble3d thys);
-void        ajDouble3dLen(AjPDouble3d thys, ajint* len1, ajint* len2, ajint* len3);
+void        ajDouble3dLen(AjPDouble3d thys,
+			  ajint* len1, ajint* len2, ajint* len3);
 AjPDouble3d ajDouble3dNew(void);
 AjPDouble3d ajDouble3dNewL(ajint size);
-AjBool      ajDouble3dPut(AjPDouble3d *thys, ajint elem1, ajint elem2, ajint elem3,
+AjBool      ajDouble3dPut(AjPDouble3d *thys,
+			  ajint elem1, ajint elem2, ajint elem3,
 			  double v);
 
 void        ajFloatDel(AjPFloat *thys);
 float*      ajFloatFloat(AjPFloat thys);
 float       ajFloatGet(AjPFloat thys, ajint elem);
-ajint         ajFloatLen(AjPFloat thys);
+ajint       ajFloatLen(AjPFloat thys);
 AjPFloat    ajFloatNew(void);
 AjPFloat    ajFloatNewL(ajint size);
 AjBool      ajFloatPut(AjPFloat *thys, ajint elem, float v);
@@ -519,66 +523,71 @@ AjPFloat2d  ajFloat2dNewL(ajint size);
 AjBool      ajFloat2dPut(AjPFloat2d *thys, ajint elem1, ajint elem2, float v);
 
 void        ajFloat3dDel(AjPFloat3d *thys);
-float       ajFloat3dGet(AjPFloat3d thys, ajint elem1, ajint elem2, ajint elem3);
+float       ajFloat3dGet(AjPFloat3d thys,
+			 ajint elem1, ajint elem2, ajint elem3);
 float***    ajFloat3dFloat(AjPFloat3d thys);
-void        ajFloat3dLen(AjPFloat3d thys, ajint* len1, ajint* len2, ajint* len3);
+void        ajFloat3dLen(AjPFloat3d thys,
+			 ajint* len1, ajint* len2, ajint* len3);
 AjPFloat3d  ajFloat3dNew(void);
 AjPFloat3d  ajFloat3dNewL(ajint size);
-AjBool      ajFloat3dPut(AjPFloat3d *thys, ajint elem1, ajint elem2, ajint elem3,
+AjBool      ajFloat3dPut(AjPFloat3d *thys,
+			 ajint elem1, ajint elem2, ajint elem3,
 			 float v);
 
-AjPChar      ajChararrNew(void);
-AjPChar      ajChararrNewL(ajint size);
+AjPChar     ajChararrNew(void);
+AjPChar     ajChararrNewL(ajint size);
 void        ajChararrDel(AjPChar *thys);
-char         ajChararrGet(AjPChar thys, ajint elem);
+char        ajChararrGet(AjPChar thys, ajint elem);
 AjBool      ajChararrPut(AjPChar *thys, ajint elem, char v);
-char*        ajChararrChararr(AjPChar thys);
+char*       ajChararrChararr(AjPChar thys);
 
 
 void        ajIntDel(AjPInt *thys);
 void        ajIntDec(AjPInt *thys, ajint elem);
-ajint         ajIntGet(AjPInt thys, ajint elem);
+ajint       ajIntGet(AjPInt thys, ajint elem);
 void        ajIntInc(AjPInt *thys, ajint elem);
-ajint*        ajIntInt(AjPInt thys);
-ajint         ajIntLen(AjPInt thys);
+ajint*      ajIntInt(AjPInt thys);
+ajint       ajIntLen(AjPInt thys);
 AjPInt      ajIntNew(void);
 AjPInt      ajIntNewL(ajint size);
 AjBool      ajIntPut(AjPInt *thys, ajint elem, ajint v);
 
 void        ajInt2dDel(AjPInt2d *thys);
-ajint         ajInt2dGet(AjPInt2d thys, ajint elem1, ajint elem2);
-ajint**       ajInt2dInt(AjPInt2d thys);
+ajint       ajInt2dGet(AjPInt2d thys, ajint elem1, ajint elem2);
+ajint**     ajInt2dInt(AjPInt2d thys);
 void        ajInt2dLen(AjPInt2d thys, ajint *len1, ajint *len2);
 AjPInt2d    ajInt2dNew(void);
 AjPInt2d    ajInt2dNewL(ajint size);
 AjBool      ajInt2dPut(AjPInt2d *thys, ajint elem1, ajint elem2, ajint v);
 
 void        ajInt3dDel(AjPInt3d *thys);
-ajint         ajInt3dGet(AjPInt3d thys, ajint elem1, ajint elem2, ajint elem3);
-ajint***      ajInt3dInt(AjPInt3d thys);
+ajint       ajInt3dGet(AjPInt3d thys, ajint elem1, ajint elem2, ajint elem3);
+ajint***    ajInt3dInt(AjPInt3d thys);
 void        ajInt3dLen(AjPInt3d thys, ajint* len1, ajint* len2, ajint* len3);
 AjPInt3d    ajInt3dNew(void);
 AjPInt3d    ajInt3dNewL(ajint size);
-AjBool      ajInt3dPut(AjPInt3d *thys, ajint elem1, ajint elem2, ajint elem3, ajint v);
+AjBool      ajInt3dPut(AjPInt3d *thys,
+		       ajint elem1, ajint elem2, ajint elem3, ajint v);
 
 void        ajLongDel(AjPLong *thys);
-ajlong        ajLongGet(AjPLong thys, ajint elem);
-ajlong        ajLongLen(AjPLong thys);
-ajlong*       ajLongLong(AjPLong thys);
+ajlong      ajLongGet(AjPLong thys, ajint elem);
+ajlong      ajLongLen(AjPLong thys);
+ajlong*     ajLongLong(AjPLong thys);
 AjPLong     ajLongNew(void);
 AjPLong     ajLongNewL(ajint size);
 AjBool      ajLongPut(AjPLong *thys, ajint elem, ajlong v);
 
 void        ajLong2dDel(AjPLong2d *thys);
-ajlong        ajLong2dGet(AjPLong2d thys, ajint elem1, ajint elem2);
-ajlong**      ajLong2dLong(AjPLong2d thys);
+ajlong      ajLong2dGet(AjPLong2d thys, ajint elem1, ajint elem2);
+ajlong**    ajLong2dLong(AjPLong2d thys);
 void        ajLong2dLen(AjPLong2d thys, ajint *len1, ajint *len2);
 AjPLong2d   ajLong2dNew(void);
 AjPLong2d   ajLong2dNewL(ajint size);
 AjBool      ajLong2dPut(AjPLong2d *thys, ajint elem1, ajint elem2, ajlong v);
 
 void        ajLong3dDel(AjPLong3d *thys);
-ajlong        ajLong3dGet(AjPLong3d thys, ajint elem1, ajint elem2, ajint elem3);
+ajlong      ajLong3dGet(AjPLong3d thys,
+			ajint elem1, ajint elem2, ajint elem3);
 void        ajLong3dLen(AjPLong3d thys, ajint* len1, ajint* len2, ajint* len3);
 ajlong***     ajLong3dLong(AjPLong3d thys);
 AjPLong3d   ajLong3dNew(void);
@@ -588,7 +597,7 @@ AjBool      ajLong3dPut(AjPLong3d *thys, ajint elem1, ajint elem2, ajint elem3,
 
 void        ajShortDel(AjPShort *thys);
 short       ajShortGet(AjPShort thys, ajint elem);
-ajint         ajShortLen(AjPShort thys);
+ajint       ajShortLen(AjPShort thys);
 short*      ajShortShort(AjPShort thys);
 AjPShort    ajShortNew(void);
 AjPShort    ajShortNewL(ajint size);
@@ -603,12 +612,15 @@ AjPShort2d  ajShort2dNewL(ajint size);
 AjBool      ajShort2dPut(AjPShort2d *thys, ajint elem1, ajint elem2, short v);
 
 void        ajShort3dDel(AjPShort3d *thys);
-short       ajShort3dGet(AjPShort3d thys, ajint elem1, ajint elem2, ajint elem3);
-void        ajShort3dLen(AjPShort3d thys, ajint* len1, ajint* len2, ajint* len3);
+short       ajShort3dGet(AjPShort3d thys,
+			 ajint elem1, ajint elem2, ajint elem3);
+void        ajShort3dLen(AjPShort3d thys,
+			 ajint* len1, ajint* len2, ajint* len3);
 short***    ajShort3dShort(AjPShort3d thys);
 AjPShort3d  ajShort3dNew(void);
 AjPShort3d  ajShort3dNewL(ajint size);
-AjBool      ajShort3dPut(AjPShort3d *thys, ajint elem1, ajint elem2, ajint elem3,
+AjBool      ajShort3dPut(AjPShort3d *thys,
+			 ajint elem1, ajint elem2, ajint elem3,
 			 short v);
 
 
@@ -616,12 +628,12 @@ AjBool      ajFloatParse (AjPStr str, AjPFloat *array);
 void        ajFloatStr (AjPStr* str, AjPFloat array, ajint precision);
 void        ajFloatTrace (AjPFloat array, ajint precision, char* text);
 
-ajint         ajArrCommaList(AjPStr s, AjPStr **a);
-double*     ajArrDoubleLine(AjPStr *line, const char *delim, ajint cols, 
+ajint       ajArrCommaList(AjPStr s, AjPStr **a);
+double*     ajArrDoubleLine(AjPStr *line, const char *delim, ajint cols,
 			    ajint startcol, ajint endcol);
-ajint*        ajArrIntLine(AjPStr *line, const char *delim, ajint cols, 
+ajint*      ajArrIntLine(AjPStr *line, const char *delim, ajint cols,
 			 ajint startcol, ajint endcol);
-float*      ajArrFloatLine(AjPStr *line, const char *delim, ajint cols, 
+float*      ajArrFloatLine(AjPStr *line, const char *delim, ajint cols,
 			   ajint startcol, ajint endcol);
 #endif
 

@@ -11,7 +11,7 @@
 typedef struct re_guts REGUTSSTRUCT;
 typedef off_t regoff_t;
 
-/* @data regex_t *******************************************************
+/* @data regex_t **************************************************************
 **
 ** Internal data structure for the Henry Spencer regular expression
 ** (regex) library
@@ -41,7 +41,7 @@ typedef struct {
     regoff_t rm_eo;		/* end of match */
 } regmatch_t, AjOPosRegmatch, *AjPPosRegmatch;
 
-/* @data AjPPosRegexp *******************************************************
+/* @data AjPPosRegexp *********************************************************
  **
  ** Regular expression data structure, based on the Henry Spencer
  ** regexp library.

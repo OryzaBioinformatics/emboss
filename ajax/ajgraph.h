@@ -3,7 +3,7 @@ extern "C"
 {
 #endif
 
-/* @source ajGraph.h 
+/* @source ajGraph.h
 **
 ** General Plot/Printing routines.
 **
@@ -11,12 +11,12 @@ extern "C"
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -42,7 +42,7 @@ extern "C"
 #define GRAPH_YGAP      60
 #define GRAPH_TITLE_GAP 60
 
-#define AJGRAPH_X_BOTTOM   0x0001  /* print xaxis bottom line */ 
+#define AJGRAPH_X_BOTTOM   0x0001  /* print xaxis bottom line */
 #define AJGRAPH_Y_LEFT     0x0002  /* print yaxis left line */
 #define AJGRAPH_X_TOP      0x0004  /* print xaxis top line */
 #define AJGRAPH_Y_RIGHT    0x0008  /* printf y axis on the right*/
@@ -72,7 +72,7 @@ extern "C"
 		       AJGRAPH_X_TOP + AJGRAPH_Y_TICK + AJGRAPH_X_LABEL + \
 		       AJGRAPH_Y_LABEL + AJGRAPH_JOINPOINTS + AJGRAPH_TITLE + \
 		       AJGRAPH_SUBTITLE + AJGRAPH_OVERLAP)
-  
+
 
 void          ajGraphBox (PLFLT x0, PLFLT y0,PLFLT size);
 void          ajGraphBoxFill (PLFLT x0, PLFLT y0, PLFLT size);
@@ -91,15 +91,15 @@ void          ajGraphDataObjAddRect (AjPGraphData graphs,
 				     ajint colour, ajint fill);
 void          ajGraphDataObjAddText (AjPGraphData graphs, float x1, float y1,
 				     ajint colour, char *text);
-void          ajGraphDataxySetMaxMin (AjPGraphData graphdata, float xmin, 
+void          ajGraphDataxySetMaxMin (AjPGraphData graphdata, float xmin,
 				      float xmax, float ymin, float ymax);
 void          ajGraphDataxyMaxMin(float *array, ajint npoints, float *min,
 				  float *max);
-		  
+
 void          ajGraphDataxySetMaxima(AjPGraphData graphdata, float xmin,
 				     float xmax, float ymin, float ymax);
 void          ajGraphDataxySetTypeC(AjPGraphData graphdata, char* type);
-		  
+
 void          ajGraphDia (PLFLT x0, PLFLT y0, PLFLT size);
 void          ajGraphDiaFill (PLFLT x0, PLFLT y0, PLFLT size);
 void          ajGraphDots (PLFLT *x1,PLFLT *y1, ajint numofdots);
@@ -117,7 +117,8 @@ void          ajGraphHoriBars (ajint numofpoints, PLFLT *y,
 				   PLFLT *xmin, PLFLT *xmax);
 ajint         ajGraphInfo(AjPList* files);
 AjStatus      ajGraphInit (char *pgm, ajint argc, char *argv[]);
-AjStatus      ajGraphInitP (char *pgm, ajint argc, char *argv[], char *package);
+AjStatus      ajGraphInitP (char *pgm, ajint argc, char *argv[],
+			    char *package);
 void          ajGraphInitSeq (AjPGraph thys, AjPSeq seq);
 void          ajGraphLabel (char *x, char *y, char *title, char *subtitle);
 void          ajGraphLabelYRight (char *text);
@@ -250,10 +251,10 @@ void          ajGraphPartCircle(PLFLT xcentre, PLFLT ycentre, float radius,
 PLFLT         *ajComputeCoord(PLFLT xcentre, PLFLT ycentre, PLFLT Radius,
 			      PLFLT Angle);
 void          ajGraphDrawTextOnCurve(PLFLT xcentre, PLFLT ycentre,
-				     PLFLT Radius, PLFLT StartAngle, 
+				     PLFLT Radius, PLFLT StartAngle,
 				     PLFLT EndAngle, char *Text, PLFLT just);
 void          ajGraphRectangleOnCurve(PLFLT xcentre, PLFLT ycentre,
-				      PLFLT Radius, PLFLT BoxHeight, 
+				      PLFLT Radius, PLFLT BoxHeight,
 				      PLFLT StartAngle, PLFLT EndAngle);
 PLFLT         ajGraphTextLength(PLFLT x1, PLFLT y1, PLFLT x2, PLFLT y2,
 				char *text);
@@ -265,7 +266,7 @@ float         ajGraphSetCharSize (float size);
 float         ajGraphSetDefCharSize (float size);
 
 void          ajGraphFillRectangleOnCurve(PLFLT xcentre, PLFLT ycentre,
-					  PLFLT Radius, PLFLT BoxHeight, 
+					  PLFLT Radius, PLFLT BoxHeight,
 					  PLFLT StartAngle, PLFLT EndAngle);
 
 

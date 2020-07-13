@@ -6,7 +6,7 @@ extern "C"
 #ifndef embWord_h
 #define embWord_h
 
-/* @data EmbPWordMatch *******************************************************
+/* @data EmbPWordMatch ********************************************************
 **
 ** NUCLEUS data structure for word matches
 **
@@ -20,7 +20,7 @@ typedef struct EmbSWordMatch {
 			    /* so we know which one the match belongs to */
 } EmbOWordMatch, *EmbPWordMatch;
 
-/* @data EmbPWord *******************************************************
+/* @data EmbPWord *************************************************************
 **
 ** NUCLEUS data structure for words
 **
@@ -32,7 +32,7 @@ typedef struct EmbSWord {
   AjPList list;
 } EmbOWord, *EmbPWord;
 
-/* @data EmbPWord2 *******************************************************
+/* @data EmbPWord2 ************************************************************
 **
 ** NUCLEUS data structure for words (part 2)
 **

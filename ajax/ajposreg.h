@@ -17,7 +17,7 @@ extern "C"
 
 /* constructors */
 
-AjPPosRegexp ajPosRegComp (AjPStr exp); 
+AjPPosRegexp ajPosRegComp (AjPStr exp);
 AjPPosRegexp ajPosRegCompC (const char* exp);
 AjPPosRegexp ajPosRegCompCase (AjPStr exp);
 AjPPosRegexp ajPosRegCompCaseC (const char* exp);

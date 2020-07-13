@@ -6,12 +6,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -27,7 +27,7 @@
 
 static ajint embMolFragSort(const void* a, const void* b);
 
-/* @func embMolGetFrags *************************************************
+/* @func embMolGetFrags *******************************************************
 **
 ** Create a sorted list of molwt fragments
 **
@@ -59,7 +59,7 @@ ajint embMolGetFrags(AjPStr thys, ajint rno, AjPList *l)
     };
     EmbPMolFrag frag=NULL;
     EmbPMolFrag *ptr=NULL;
-    
+
     ajint len;
     ajint pos;
     char *p;
@@ -71,16 +71,16 @@ ajint embMolGetFrags(AjPStr thys, ajint rno, AjPList *l)
     ajint end;
     ajint i;
     double mw;
-    
+
 
     if(!defcut)
 	defcut=ajIntNew();
-    
+
     --rno;
 
     len = ajStrLen(thys);
     p   = ajStrStr(thys);
-    
+
     defcnt=0;
 
     /* Positions of complete digest cuts */
@@ -108,7 +108,7 @@ ajint embMolGetFrags(AjPStr thys, ajint rno, AjPList *l)
 	mw = embPropCalcMolwt(p,beg,end);
 	if(rno==7)
 	    mw -= (double)(17.0079 + 31.095);
-	
+
 	AJNEW0(frag);
 	frag->begin = beg+1;
 	frag->end   = end+1;
@@ -147,10 +147,10 @@ ajint embMolGetFrags(AjPStr thys, ajint rno, AjPList *l)
 	}
 	AJFREE(ptr);
     }
-    
+
 
     ajListSort(*l,embMolFragSort);
-	
+
     return ajListLength(*l);
 }
 
@@ -162,7 +162,7 @@ ajint embMolGetFrags(AjPStr thys, ajint rno, AjPList *l)
 **
 ** @param [r] a [const void*] EmbPMolFrag pointer
 ** @param [r] b [const void*] EmbPMolFrag pointer
-** 
+**
 ** @return [ajint] molwt difference
 ******************************************************************************/
 

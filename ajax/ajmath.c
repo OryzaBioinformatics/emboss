@@ -19,7 +19,7 @@ static double aj_rand_other;
 
 
 
-/* @func ajRound *******************************************************
+/* @func ajRound **************************************************************
 **
 ** Rounds an integer to be a multiple of a given number.
 **
@@ -34,7 +34,7 @@ ajint ajRound (ajint i, ajint round) {
 }
 
 
-/* @func ajRoundF *******************************************************
+/* @func ajRoundF *************************************************************
 **
 ** Rounds a floating point number to have bits free for cumulative addition
 **
@@ -69,12 +69,12 @@ float ajRoundF (float a, ajint nbits) {
 
   /*  ajDebug ("\najRoundF (%.10e) c: %.10e bitsused: %d\n", a, c, bitsused);
       ajDebug ("       x: %f i: %d y: %f w: %.1f\n", x, i, y, w);*/
-  
+
   return (float) c;
 }
 
 
-/* @func ajRecToPol  *******************************************************
+/* @func ajRecToPol  **********************************************************
 **
 ** Converts cartesian co-ordinates to polar
 **
@@ -93,7 +93,7 @@ void ajRecToPol(float x, float y, float *radius, float *angle)
 
 
 
-/* @func ajPolToRec  *******************************************************
+/* @func ajPolToRec  **********************************************************
 **
 ** Converts polar co-ordinates to cartesian
 **
@@ -112,7 +112,7 @@ void ajPolToRec(float radius, float angle, float *x, float *y)
 
 
 
-/* @func ajDegToRad  *******************************************************
+/* @func ajDegToRad  **********************************************************
 **
 ** Converts degrees to radians
 **
@@ -126,7 +126,7 @@ float ajDegToRad(float degrees)
 
 
 
-/* @func ajRadToDeg   *******************************************************
+/* @func ajRadToDeg   *********************************************************
 **
 ** Converts radians to degrees
 **
@@ -140,7 +140,7 @@ float ajRadToDeg(float radians)
 
 
 
-/* @func ajGaussProb   *******************************************************
+/* @func ajGaussProb   ********************************************************
 **
 ** Returns a probability given a Gaussian distribution
 **
@@ -158,14 +158,14 @@ double ajGaussProb(float mean, float sd, float score)
 
 
 
-/* @func ajGeoMean   *******************************************************
+/* @func ajGeoMean   **********************************************************
 **
 ** Calculate a geometric mean
 **
 ** @param [r] s [float*] array of values
 ** @param [r] n [ajint] number of values
 ** @return [float] geometric mean
-*****************************************************************************/
+******************************************************************************/
 float ajGeoMean(float *s, ajint n)
 {
     float x;
@@ -178,14 +178,14 @@ float ajGeoMean(float *s, ajint n)
 
 
 
-/* @func ajPosMod   *******************************************************
+/* @func ajPosMod   ***********************************************************
 **
 ** Modulo always returning positive number
 **
 ** @param [r] a [ajint] value1
 ** @param [r] b [ajint] value2
 ** @return [ajint] value1 modulo value2
-*****************************************************************************/
+******************************************************************************/
 ajint ajPosMod(ajint a, ajint b)
 {
     ajint t;
@@ -197,7 +197,7 @@ ajint ajPosMod(ajint a, ajint b)
 }
 
 
-/* @func ajRandomSeed *******************************************************
+/* @func ajRandomSeed *********************************************************
 **
 ** Seed for the ajRandomNumberD routine
 **
@@ -220,7 +220,7 @@ void ajRandomSeed(void)
     ajint ix, iy, iz, i;
     double x=0.0;
     ajint seed;
-    
+
     /*
      *  seed should be set to an integer between 0 and 9999 inclusive; a value
      *  of 0 will initialise the generator only if it has not already been
@@ -272,7 +272,7 @@ ajint ajRandomNumber(void)
     return (ajint) (floor(ajRandomNumberD()*32768.0));
 }
 
-/* @func ajRandomNumberD *****************************************************
+/* @func ajRandomNumberD ******************************************************
 **
 ** Generate a random number between 0-1.0
 **

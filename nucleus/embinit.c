@@ -6,7 +6,7 @@
 
 #include "emboss.h"
 
-/* @func  embInit ******************************************************
+/* @func  embInit *************************************************************
 **
 ** Initialises everything. Reads an ACD (AJAX Command Definition) file
 ** prompts the user for any missing information, reads all sequences
@@ -27,7 +27,7 @@ AjStatus embInit (char *pgm, ajint argc, char *argv[]) {
 
 }
 
-/* @func  embInitP ******************************************************
+/* @func  embInitP ************************************************************
 **
 ** Initialises everything. Reads an ACD (AJAX Command Definition) file
 ** prompts the user for any missing information, reads all sequences

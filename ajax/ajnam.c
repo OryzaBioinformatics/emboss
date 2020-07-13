@@ -1,27 +1,27 @@
-/********************************************************************
-** @source AJAX nam functions 
+/******************************************************************************
+** @source AJAX nam functions
 ** Creates a hash table of initial values and allow access to this
 ** via the routines ajNamDatabase and ajNamGetValue.
 **
 ** @author Copyright (C) 1998 Ian Longden
 ** @version 1.0
-** @@ 
+** @@
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
 ** version 2 of the License, or (at your option) any later version.
-** 
+**
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Library General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU Library General Public
 ** License along with this library; if not, write to the
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ** Boston, MA  02111-1307, USA.
-********************************************************************/
+******************************************************************************/
 
 #include "ajax.h"
 
@@ -89,6 +89,19 @@ static AjPStr namFileOrig = NULL;
 static AjPTable standardNames = NULL;
 static ajint namParseType = 0;
 
+/* @datastatic NamPAttr *******************************************************
+**
+** Resource attribute definition structure
+**
+** @alias NamSAttr
+** @alias NamOAttr
+**
+** @attr Name [char*] Attribute name
+** @attr Defval [char*] Default value, usually an empty string
+** @attr Comment [char*] Comment for documentation purposes
+** @@
+******************************************************************************/
+
 typedef struct NamSAttr {
   char* Name;
   char* Defval;
@@ -115,24 +128,40 @@ NamOAttr namAttr[] = {
   {"command", "", "command line to return entry/ies"},
   {"comment", "", "text comment for the DB definition"},
   {"description", "", "Short database description"},
-  {"dbalias", "", "database name to be used by the access method if different"},
+  {"dbalias", "", "database name to be used by access method if different"},
   {"app", "", "external application command line"},
   {"appentry", "", "external command line for 'methodentry'"},
   {"appquery", "", "external command line for 'methodquery'"},
   {"appall", "", "external command line for 'methodall'"},
   {"exclude", "", "wildcard filenames to exclude from 'filename'"},
-  {"fields", "", "extra database fields available, 'id' and 'acc' are standard"},
+  {"fields", "", "extra database fields available, ID and ACC are standard"},
   {"proxy", "", "http proxy server, or ':' to cancel a global proxy"},
   {"httpversion", "", "HTTP version for GET requests"},
   {NULL, NULL, NULL}
 };
+
+/* @datastatic AjPNamStandards ************************************************
+**
+** Internal database standard structure
+**
+** @alias AjSNamStandards
+** @alias AjONamStandards
+**
+** @attr name [AjPStr] token name
+** @attr value [AjPStr] token value
+** @attr type [ajint] token type enumerated TYPE_START TYPE_ENV
+**                    TYPE_DB TYPE_OPT TYPE_IFILE
+** @attr scope [ajint] token scope always zero
+** @attr data [void*] Attribute names and values for databases
+** @@
+******************************************************************************/
 
 typedef struct AjSNamStandards {
   AjPStr name;
   AjPStr value;
   ajint type;
   ajint scope;
-  void* data ;	     /* Attribute values for database*/
+  void* data ;	     /* Attribute values for databases */
 } AjONamStandards, *AjPNamStandards;
 
 static void namListStandardsDelete(void);
@@ -162,7 +191,7 @@ static AjBool namVarResolve (AjPStr* var);
 
 static void namEntryDelete (AjPNamStandards entry) {
 
-  ajint j; 
+  ajint j;
   AjPStr* dbattr;
 
   if(entry->type == TYPE_DB){
@@ -213,7 +242,7 @@ static void namListStandardsDelete (void) {
     fnew = (AjPNamStandards) array[i+1];
     namEntryDelete (fnew);
   }
-  AJFREE(array); 
+  AJFREE(array);
 
   return;
 }
@@ -309,7 +338,7 @@ static void namListStandards (ajint which)
       }
     }
   }
-  AJFREE(array); 
+  AJFREE(array);
 
   return;
 }
@@ -344,18 +373,18 @@ static void namDebugStandards (ajint which)
       }
     }
   }
-  AJFREE(array); 
+  AJFREE(array);
 
   return;
 }
 
-/* @func ajNamDbDetails ***********************************************
+/* @func ajNamDbDetails *******************************************************
 **
 ** Returns database access method information
 **
 ** @param [r] name [AjPStr] Database name
 ** @param [w] type [AjPStr*] sequence type - 'P' or 'N'
-** @param [w] id [AjBool*] ajTrue = can access single entries 
+** @param [w] id [AjBool*] ajTrue = can access single entries
 ** @param [w] qry [AjBool*] ajTrue = can access wild/query entries
 ** @param [w] all [AjBool*] ajTrue = can access all entries
 ** @param [w] comment [AjPStr*] comment about database
@@ -365,7 +394,7 @@ static void namDebugStandards (ajint which)
 ******************************************************************************/
 
 AjBool ajNamDbDetails (AjPStr name, AjPStr* type, AjBool* id, AjBool* qry,
-		       AjBool* all, AjPStr* comment, AjPStr* release) { 
+		       AjBool* all, AjPStr* comment, AjPStr* release) {
   AjPNamStandards fnew = 0;
   AjPStr* dbattr = NULL;
   ajint i;
@@ -429,7 +458,7 @@ AjBool ajNamDbDetails (AjPStr name, AjPStr* type, AjBool* id, AjBool* qry,
   return ajFalse;
 }
 
-/* @funcstatic namMethod2Scope **********************************************
+/* @funcstatic namMethod2Scope ************************************************
 **
 ** Returns OR'ed values of METHOD_ENTRY, METHOD_QUERY and METHOD_ALL
 ** for the various types of access method for databases.
@@ -473,7 +502,7 @@ ajint result = 0;
   return result;
 }
 
-/* @func ajNamListOrigin *********************************************
+/* @func ajNamListOrigin ******************************************************
 **
 ** Writes a simple list of where the internal tables came from..
 **
@@ -489,7 +518,7 @@ void ajNamListOrigin (void)
   ajUser("");
 }
 
-/* @func ajNamDebugOrigin *********************************************
+/* @func ajNamDebugOrigin *****************************************************
 **
 ** Writes a simple list of where the internal tables came from..
 **
@@ -502,7 +531,7 @@ void ajNamDebugOrigin (void)
   ajDebug("Defaults and .rc files: %S\n", namFileOrig);
 }
 
-/* @func ajNamListDatabases *********************************************
+/* @func ajNamListDatabases ***************************************************
 **
 ** Writes a simple list of all databases in the internal table.
 **
@@ -520,7 +549,7 @@ void ajNamListDatabases (void)
   return;
 }
 
-/* @func ajNamDebugDatabases *********************************************
+/* @func ajNamDebugDatabases **************************************************
 **
 ** Writes a simple debug report of all databases in the internal table.
 **
@@ -557,7 +586,7 @@ void ajNamDebugEnvironmentals (void)
   return;
 }
 
-/* @func ajNamListListDatabases *********************************************
+/* @func ajNamListListDatabases ***********************************************
 **
 ** Creates a AjPList list of all databases in the internal table.
 **
@@ -578,12 +607,12 @@ void ajNamListListDatabases (AjPList dbnames) {
       ajListstrPushApp(dbnames, fnew->name);
     }
   }
-  AJFREE(array); 
+  AJFREE(array);
 
   return;
 }
 
-/* @func ajNamEnvironmentals ********************************************
+/* @func ajNamEnvironmentals **************************************************
 **
 ** Writes a simple list of all variables in the internal table.
 **
@@ -649,7 +678,7 @@ static void namListParse (void** x,void* cl)
   AjPStr key=NULL;
   AjPStr val=NULL;
   static AjPTable Ifiles=NULL;
-  
+
   for (nattr=0; namAttr[nattr].Name; nattr++) ;	/* nattr = count attributes */
 
   namUser("namListParse <%S>\n", *p);
@@ -670,7 +699,7 @@ static void namListParse (void** x,void* cl)
 	  namParseType = TYPE_OPT;
       else if(ajStrPrefixCO("include",*p))
 	  namParseType = TYPE_IFILE;
-	
+
       if (!namParseType)
 	  ajWarn ("%S: Invalid type '%S'\n", namRootStr, *p);
       namUser("type set to %s\n", namTypes[namParseType]);
@@ -679,8 +708,8 @@ static void namListParse (void** x,void* cl)
   {		/* quote is open, so append word */
 				/* till close quote found */
     namUser ("<%c>..<%c> quote processing\n", quoteopen, quoteclose);
-    (void) ajStrAppC(&value," ");    
-    (void) ajStrApp(&value,*p);    
+    (void) ajStrAppC(&value," ");
+    (void) ajStrApp(&value,*p);
     if(ajStrChar(*p,-1) == quoteclose){  /* close quote here ?? */
       namUser ("close quotes\n");
       (void) ajStrTrim(&value, -1);
@@ -688,7 +717,7 @@ static void namListParse (void** x,void* cl)
       if(namParseType == TYPE_ENV)	/* set save flag as value in quotes */
 				/* has been obtained */
 	saveit = ajTrue;
-      else if(namParseType == TYPE_DB) 
+      else if(namParseType == TYPE_DB)
 	dbsave = ajTrue;
     }
   }
@@ -714,7 +743,7 @@ static void namListParse (void** x,void* cl)
       {					/* end of quote on same word */
 	quoteopen = quoteclose = 0;
 	saveit= ajTrue;
-	(void) ajStrTrim(&value, -1);   /* remove quote at the end */ 
+	(void) ajStrTrim(&value, -1);   /* remove quote at the end */
       }
     }
     else
@@ -754,10 +783,10 @@ static void namListParse (void** x,void* cl)
 	  dbsave = ajTrue;
 
 	if(ajStrChar(*p, -1) == quoteclose)
-	{  
+	{
 	  quoteopen = quoteclose = 0;
 	  (void) ajStrTrim(&value,-1);   /* ignore quote if there is */
-				              /* one at end*/ 
+				              /* one at end*/
 	  dbsave = ajTrue;
 	}
 	if(!quoteopen)
@@ -774,7 +803,7 @@ static void namListParse (void** x,void* cl)
       namParseType = 0;
       if(!ajTableGet(Ifiles,*p))
       {
-	  includefn = ajStrNew();	  
+	  includefn = ajStrNew();
 	  ajStrAss(&includefn,*p);
 
 	  if(namFileOrig)
@@ -789,7 +818,7 @@ static void namListParse (void** x,void* cl)
 	      (void) ajStrAppC(&namFileOrig,"(Failed)");
 	  else
 	  {
-	      (void) ajStrAppC(&namFileOrig,"(OK)");	      
+	      (void) ajStrAppC(&namFileOrig,"(OK)");
 	      namProcessFile(ajFileFp(iinf));
 	      ajFileClose(&iinf);
 	  }
@@ -810,7 +839,7 @@ static void namListParse (void** x,void* cl)
     ajStrDel(&value);
     dbsave = ajFalse;
   }
-    
+
   namListParseOK = saveit;
 
   if(saveit)
@@ -844,7 +873,7 @@ static void namListParse (void** x,void* cl)
       namEntryDelete (entry);
       AJFREE (tabname);
     }
- 
+
     namParseType = 0;
     db_input = -1;
     dbattr = 0;
@@ -882,7 +911,7 @@ AjBool ajNamGetenv (AjPStr name,
 /* @func ajNamGetValue ********************************************************
 **
 ** Looks for name as an (upper case) environment variable,
-** and then as-is in the hash table and if found returns 
+** and then as-is in the hash table and if found returns
 ** the AjPStr for this in "value". If not found returns NULL;
 **
 ** @param [r] name [AjPStr] character string find in hash table.
@@ -899,7 +928,7 @@ AjBool ajNamGetValue (AjPStr name, AjPStr* value){
 /* @func ajNamGetValueC *******************************************************
 **
 ** Looks for name as an (upper case) environment variable,
-** and then as-is in the hash table and if found returns 
+** and then as-is in the hash table and if found returns
 ** the AjPStr for this in "value". If not found returns NULL;
 **
 ** @param [r] name [char*] character string find in hash table.
@@ -941,9 +970,9 @@ AjBool ajNamGetValueC (char* name, AjPStr* value){
   return ajFalse;
 }
 
-/* @func ajNamDatabase **************************************************
+/* @func ajNamDatabase ********************************************************
 **
-** Looks for name in the hash table and if found returns 
+** Looks for name in the hash table and if found returns
 ** the attribute for this. If not found returns  NULL;
 **
 ** @param [r] name [AjPStr] character string find in hash table.
@@ -1001,14 +1030,14 @@ static void namProcessFile (FILE* file) {
       ptr = &line[0];
       j=0;
       i=0;
-      while(*ptr != '\n' && i < len){ 
-	
+      while(*ptr != '\n' && i < len){
+
 	if(*ptr == ' ' || *ptr == '\t'){
 	  if(j != 0) {
 	    /*save word */
 	    word[j] = '\0';
 	    wordptr = ajStrNewC(word);
-	    ajListstrPushApp(list1, wordptr); 
+	    ajListstrPushApp(list1, wordptr);
 	    j = 0;
 	  }
 	  i++;ptr++;
@@ -1026,10 +1055,10 @@ static void namProcessFile (FILE* file) {
 	else if(!quote && j !=0 && *ptr == ']'){
 	  word[j] = '\0';
 	  wordptr = ajStrNewC(word);
-	  ajListstrPushApp (list1, wordptr); 
+	  ajListstrPushApp (list1, wordptr);
 	  j = 0;
 	  wordptr = ajStrNewC("]");
-	  ajListstrPushApp(list1, wordptr); 
+	  ajListstrPushApp(list1, wordptr);
 	}
 	else
 	  word[j++] = *ptr;
@@ -1039,10 +1068,10 @@ static void namProcessFile (FILE* file) {
 	/*save word */
 	word[j] = '\0';
 	wordptr = ajStrNewC(word);
-	ajListstrPushApp(list1, wordptr); 
+	ajListstrPushApp(list1, wordptr);
 	j = 0;
       }
-      
+
     }
   }
 
@@ -1168,9 +1197,9 @@ void ajNamInit (char* prefix)
     }
 
     /* look for $HOME/.embossrc */
-    
+
     prefixRoot= getenv("HOME");
-    
+
     if (prefixRoot)
     {
 	(void) ajStrAssC(&namRootStr, prefixRoot);
@@ -1179,7 +1208,7 @@ void ajNamInit (char* prefix)
 	(void) ajStrAppC(&namRootStr, "rc");
 	if (namFileOrig) (void) ajStrAppC (&namFileOrig, ", ");
 	(void) ajStrApp (&namFileOrig, namRootStr);
-    
+
 	prefixRootFile = fopen (ajStrStr(namRootStr), "r");
 	if (prefixRootFile)
 	{
@@ -1290,7 +1319,7 @@ void ajNamExit (void){
   return;
 }
 
-/* @func ajNamDbTest ****************************************************
+/* @func ajNamDbTest **********************************************************
 **
 ** Looks for a database name in the known definitions.
 **
@@ -1311,7 +1340,7 @@ AjBool ajNamDbTest (AjPStr dbname) {
   return ajTrue;
 }
 
-/* @func ajNamDbGetUrl **************************************************
+/* @func ajNamDbGetUrl ********************************************************
 **
 ** Gets the URL definition for a database definition.
 **
@@ -1347,8 +1376,8 @@ AjBool ajNamDbGetUrl (AjPStr dbname, AjPStr* url) {
 
   return ajFalse;
 }
-  
-/* @func ajNamDbGetDbalias **********************************************
+
+/* @func ajNamDbGetDbalias ****************************************************
 **
 ** Gets an alias name for a database.
 **
@@ -1384,8 +1413,8 @@ AjBool ajNamDbGetDbalias (AjPStr dbname, AjPStr* dbalias) {
 
   return ajFalse;
 }
-  
-/* @func ajNamDbData *********************************************************
+
+/* @func ajNamDbData **********************************************************
 **
 ** Given a query with database name and search fields,
 ** fill in the some common fields. The query fields are set later.
@@ -1413,7 +1442,7 @@ AjBool ajNamDbData (AjPSeqQuery qry) {
     ajFatal ("database %S unknown\n", qry->DbName);
 
   dbattr = data->data;
- 
+
   /* general defaults */
 
   (void) namDbSetAttr(dbattr, "type", &qry->DbType);
@@ -1469,7 +1498,7 @@ AjBool ajNamDbQuery (AjPSeqQuery qry) {
 
   if (!ajStrLen(qry->DbType))
     (void) ajNamDbData (qry);
- 
+
   if (!ajSeqQueryIs(qry)) { /* must have a method for all entries */
 
     (void) namDbSetAttr(dbattr, "methodall", &qry->Method);
@@ -1502,7 +1531,7 @@ AjBool ajNamDbQuery (AjPSeqQuery qry) {
     ajErr("No format defined for database '%S'", qry->DbName);
     return ajFalse;
   }
-    
+
   if (!ajStrLen(qry->Method)) {
     ajErr("No access method for database '%S'", qry->DbName);
     return ajFalse;
@@ -1615,7 +1644,7 @@ AjBool ajNamRootInstall (AjPStr* root) {
   return ajTrue;
 }
 
-/* @func ajNamRootPack *****************************************************
+/* @func ajNamRootPack ********************************************************
 **
 ** Returns the package name for the library
 **
@@ -1645,7 +1674,7 @@ AjBool ajNamRootVersion (AjPStr* version) {
   return ajTrue;
 }
 
-/* @func ajNamRoot ******************************************************
+/* @func ajNamRoot ************************************************************
 **
 ** Returns the directory for all file searches
 ** (package level)
@@ -1661,7 +1690,7 @@ AjBool ajNamRoot (AjPStr* root) {
   return ajTrue;
 }
 
-/* @func ajNamRootBase ******************************************************
+/* @func ajNamRootBase ********************************************************
 **
 ** Returns the base directory for all for all file searches
 ** (above package level).
@@ -1677,7 +1706,7 @@ AjBool ajNamRootBase (AjPStr* rootbase) {
   return ajTrue;
 }
 
-/* @func ajNamResolve ***************************************************
+/* @func ajNamResolve *********************************************************
 **
 ** Resolves a variable name if the input string starts with a dollar sign.
 **
@@ -1721,7 +1750,7 @@ AjBool ajNamResolve (AjPStr* name) {
   return ret;
 }
 
-/* @func ajNamUnused *******************************************************
+/* @func ajNamUnused **********************************************************
 **
 ** Dummy function to prevent compiler warnings
 **

@@ -24,7 +24,8 @@ static char othercase(ajint ch);
 static void bothcases(register struct parse *p, ajint ch);
 static void ordinary(register struct parse *p, register ajint ch);
 static void nonnewline(register struct parse *p);
-static void repeat(register struct parse *p, sopno start, ajint from, ajint to);
+static void repeat(register struct parse *p, sopno start,
+		   ajint from, ajint to);
 static ajint seterr(register struct parse *p, ajint e);
 static cset *allocset(register struct parse *p);
 static void freeset(register struct parse *p, register cset *cs);

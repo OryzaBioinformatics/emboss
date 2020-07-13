@@ -8,7 +8,7 @@ extern "C"
 #ifndef ajcorba_h
 #define ajcorba_h
 
-/* @data AjPCorbatype *******************************************************
+/* @data AjPCorbatype *********************************************************
 **
 ** AJAX CORBA type data structure
 **
@@ -37,7 +37,7 @@ typedef struct AjSCorbatype
     AjPStr       Seq;
 } AjOCorbatype,*AjPCorbatype;
 
-/* @data AjPCorbafeat *******************************************************
+/* @data AjPCorbafeat *********************************************************
 **
 ** AJAX CORBA feature data structure
 **

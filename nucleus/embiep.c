@@ -7,12 +7,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -30,7 +30,7 @@ static  AjBool AjIEPinit=0;		/* Has Epk.dat file been read? */
 static  double AjpK[EMBIEPSIZE];	/* pK values from Epk.dat      */
 
 
-/* @func embIepPhToHConc  *************************************************
+/* @func embIepPhToHConc  *****************************************************
 **
 ** Convert pH to hydrogen ion concontration
 **
@@ -44,7 +44,7 @@ double embIepPhToHConc(double pH)
 }
 
 
-/* @func embIepHConcToPh  *************************************************
+/* @func embIepHConcToPh  *****************************************************
 **
 ** Convert hydrogen ion concontration to pH
 **
@@ -58,7 +58,7 @@ double embIepHConcToPh(double H)
 }
 
 
-/* @func embIepPkToK  *************************************************
+/* @func embIepPkToK  *********************************************************
 **
 ** Convert pK to dissociation constant
 **
@@ -72,7 +72,7 @@ double embIepPkToK(double pK)
 }
 
 
-/* @func embIePkTopK  *************************************************
+/* @func embIePkTopK  *********************************************************
 **
 ** Convert dissociation constant to pK
 **
@@ -86,7 +86,7 @@ double embIePkTopK(double K)
 }
 
 
-/* @func embIepPkRead  *************************************************
+/* @func embIepPkRead  ********************************************************
 **
 ** Read the pK values from Epk.dat
 **
@@ -101,9 +101,9 @@ void embIepPkRead(void)
     double  carboxyl=3.6;
     char    ch;
     ajint     i;
-    
+
     if(AjIEPinit) return;
-    
+
 
     ajFileDataNewC(PKFILE,&inf);
     if(!inf)
@@ -144,12 +144,12 @@ void embIepPkRead(void)
     AjIEPinit=ajTrue;
     ajStrDel(&line);
     ajFileClose(&inf);
-    
+
     return;
 }
 
 
-/* @func embIepComp  *************************************************
+/* @func embIepComp  **********************************************************
 **
 ** Calculate the amino acid composition of a protein sequence
 **
@@ -163,7 +163,7 @@ void embIepComp(char *s, ajint amino, ajint *c)
 {
     ajint i;
     char *p;
-    
+
     for(i=0;i<EMBIEPSIZE;++i)
 	c[i]=0;
 
@@ -173,14 +173,14 @@ void embIepComp(char *s, ajint amino, ajint *c)
 	++c[ajAZToInt(ajSysItoC(toupper((ajint)*p)))];
 	++p;
     }
-    
+
     c[EMBIEPAMINO]=amino;
     c[EMBIEPCARBOXYL]=1;
     return;
 }
 
 
-/* @func embIepCalcK  *************************************************
+/* @func embIepCalcK  *********************************************************
 **
 ** Calculate the dissociation constants
 ** Amino acids for which there is no entry in Epk.dat have K set to 0.0
@@ -192,7 +192,7 @@ void embIepComp(char *s, ajint amino, ajint *c)
 void embIepCalcK(double *K)
 {
     ajint i;
-    
+
     if(!AjIEPinit)
 	embIepPkRead();
 
@@ -205,7 +205,7 @@ void embIepCalcK(double *K)
 }
 
 
-/* @func embIepGetProto  *************************************************
+/* @func embIepGetProto  ******************************************************
 **
 ** Calculate the number of H+ bound
 ** Amino acids for which there is no entry in Epk.dat have this set to 0.0
@@ -242,7 +242,7 @@ void embIepGetProto(double *K, ajint *c, ajint *op, double H, double *pro)
 }
 
 
-/* @func embIepGetCharge  *************************************************
+/* @func embIepGetCharge  *****************************************************
 **
 ** Calculate the number of H+ bound
 **
@@ -257,7 +257,7 @@ double embIepGetCharge(ajint *c, double *pro, double *total)
 {
     ajint i;
     double C;
-    
+
     for(i=0,*total=0.0;i<EMBIEPSIZE;++i)
 	*total += pro[i];
 
@@ -274,7 +274,7 @@ double embIepGetCharge(ajint *c, double *pro, double *total)
 
 
 
-/* @func embIepPhConverge  *************************************************
+/* @func embIepPhConverge  ****************************************************
 **
 ** Calculate the pH nearest the IEP or return 0.0 if one doesn't exist
 **
@@ -329,9 +329,9 @@ double embIepPhConverge(ajint *c, double *K, ajint *op, double *pro)
     return tph;
 }
 
-	
 
-/* @func embIepIEP  *************************************************
+
+/* @func embIepIEP  ***********************************************************
 **
 ** Calculate the pH nearest the IEP.
 **
@@ -348,7 +348,7 @@ AjBool embIepIEP(char *s, ajint amino, double *iep, AjBool termini)
     ajint *op=NULL;
     double *K=NULL;
     double *pro=NULL;
-    
+
     *iep=0.0;
 
     AJCNEW (c,   EMBIEPSIZE);

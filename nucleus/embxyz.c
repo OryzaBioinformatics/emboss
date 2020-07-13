@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -23,19 +23,19 @@
 #include "emboss.h"
 
 
-/* @func embXyzSeqsetNR ******************************************************
+/* @func embXyzSeqsetNR *******************************************************
 **
-** Reads a list of AjPSeq's and writes an array describing the redundancy in 
-** the list. Elements in the array correspond to sequences in the list, i.e. 
+** Reads a list of AjPSeq's and writes an array describing the redundancy in
+** the list. Elements in the array correspond to sequences in the list, i.e.
 ** the array[0] corresponds to the first sequence in the list.
-** 
+**
 ** Sequences are classed as redundant (0 in the array, i.e. they are possibly
-** to be discarded later) if they exceed a threshold (%) level of sequence 
-** similarity to any other in the set (the shortest sequence of the current 
+** to be discarded later) if they exceed a threshold (%) level of sequence
+** similarity to any other in the set (the shortest sequence of the current
 ** pair will be discarded).
-** 
-** @param [r] input  [AjPList]    List of ajPSeq's 
-** @param [w] keep   [AjPInt*]    0: rejected (redundant) sequence, 1: the 
+**
+** @param [r] input  [AjPList]    List of ajPSeq's
+** @param [w] keep   [AjPInt*]    0: rejected (redundant) sequence, 1: the
                                   sequence was retained
 ** @param [w] nset   [ajint*]     Number of sequences in nr set (no. of 1's in
 **                                the keep array)
@@ -56,7 +56,7 @@ AjBool embXyzSeqsetNR(AjPList input, AjPInt *keep, ajint *nset,
     ajint         maxarr  =300;	/*Initial size for matrix*/
     ajint         len;
     ajint         x;		/*Counter for seq 1*/
-    ajint         y;		/*Counter for seq 2*/ 
+    ajint         y;		/*Counter for seq 2*/
     ajint         nin;		/*Number of sequences in input list*/
     ajint        *compass;
 
@@ -65,7 +65,7 @@ AjBool embXyzSeqsetNR(AjPList input, AjPInt *keep, ajint *nset,
 
     float     **sub;
     float       id       =0.;	/*Passed as arg but not used here*/
-    float       sim      =0.;	
+    float       sim      =0.;
     float       idx      =0.;	/*Passed as arg but not used here*/
     float       simx     =0.;	/*Passed as arg but not used here*/
     float      *path;
@@ -86,8 +86,8 @@ AjBool embXyzSeqsetNR(AjPList input, AjPInt *keep, ajint *nset,
     /*Intitialise some variables*/
     AJCNEW(path, maxarr);
     AJCNEW(compass, maxarr);
-    m = ajStrNew();    
-    n = ajStrNew();    
+    m = ajStrNew();
+    n = ajStrNew();
     gapopen   = ajRoundF(gapopen,8);
     gapextend = ajRoundF(gapextend,8);
     sub = ajMatrixfArray(matrix);
@@ -105,9 +105,9 @@ AjBool embXyzSeqsetNR(AjPList input, AjPInt *keep, ajint *nset,
 	return ajFalse;
     }
 
-    
+
     /*Create an ajint array to hold lengths of sequences*/
-    lens = ajIntNewL(nin);     
+    lens = ajIntNewL(nin);
     for(x=0; x<nin; x++)
 	ajIntPut(&lens,x,ajSeqLen(inseqs[x]));
 
@@ -115,10 +115,10 @@ AjBool embXyzSeqsetNR(AjPList input, AjPInt *keep, ajint *nset,
     /*Set the keep array elements to 1 */
     for(x=0;x<nin;x++)
 	ajIntPut(keep,x,1);
-       
+
 
     /*Create a 2d float array to hold the similarity scores*/
-    scores = ajFloat2dNew();   
+    scores = ajFloat2dNew();
 
 
 
@@ -126,19 +126,19 @@ AjBool embXyzSeqsetNR(AjPList input, AjPInt *keep, ajint *nset,
 
 
     /*Start of main application loop*/
-    for(x=0; x<nin; x++)       
-    { 
-	for(y=x+1; y<nin; y++) 
+    for(x=0; x<nin; x++)
+    {
+	for(y=x+1; y<nin; y++)
 	{
-	    /*Process w/o alignment identical sequences*/	
+	    /*Process w/o alignment identical sequences*/
 	    if(ajStrMatch(inseqs[x]->Seq, inseqs[y]->Seq))
 	    {
 		ajFloat2dPut(&scores,x,y,(float)100.0);
 		continue;
-	    } 
-	    
+	    }
 
-	    /* Intitialise variables for use by alignment functions*/	    
+
+	    /* Intitialise variables for use by alignment functions*/
 	    len = ajIntGet(lens,x)*ajIntGet(lens,y);
 
 	    if(len>maxarr)
@@ -147,9 +147,9 @@ AjBool embXyzSeqsetNR(AjPList input, AjPInt *keep, ajint *nset,
 		AJCRESIZE(compass,len);
 		maxarr=len;
 	    }
-	    
-	    p = ajSeqChar(inseqs[x]); 
-	    q = ajSeqChar(inseqs[y]); 
+
+	    p = ajSeqChar(inseqs[x]);
+	    q = ajSeqChar(inseqs[y]);
 
 	    ajStrAssC(&m,"");
 	    ajStrAssC(&n,"");
@@ -166,7 +166,7 @@ AjBool embXyzSeqsetNR(AjPList input, AjPInt *keep, ajint *nset,
 		ajFloat2dDel(&scores);
 		ajIntDel(&lens);
 		AJFREE(inseqs);
-		
+
 		return ajFalse;
 	    }
 
@@ -198,14 +198,14 @@ AjBool embXyzSeqsetNR(AjPList input, AjPInt *keep, ajint *nset,
 
 
 
-    
+
     /* Write the keep array as appropriate*/
     for(x=0; x<nin; x++)
     {
 	if(!ajIntGet(*keep,x))
 	    continue;
 
-	for(y=x+1; y<nin; y++)	
+	for(y=x+1; y<nin; y++)
 	{
 	    if(!ajIntGet(*keep,y))
 		continue;
@@ -214,9 +214,9 @@ AjBool embXyzSeqsetNR(AjPList input, AjPInt *keep, ajint *nset,
 	    {
 		if(ajIntGet(lens,x) < ajIntGet(lens,y))
 		    ajIntPut(keep,x,0);
-		
+
 		else
-		    ajIntPut(keep,y,0);  
+		    ajIntPut(keep,y,0);
 	    }
 	}
     }
@@ -234,11 +234,11 @@ AjBool embXyzSeqsetNR(AjPList input, AjPInt *keep, ajint *nset,
     ajFloat2dDel(&scores);
     ajIntDel(&lens);
     AJFREE(inseqs);
-    
-    
+
+
     /* Bye Bye */
     return ajTrue;
-}    
+}
 
 
 
@@ -251,19 +251,19 @@ AjBool embXyzSeqsetNR(AjPList input, AjPInt *keep, ajint *nset,
 
 
 
-/* @func embXyzSeqsetNRRange**************************************************
+/* @func embXyzSeqsetNRRange***************************************************
 **
-** Reads a list of AjPSeq's and writes an array describing the redundancy in 
-** the list. Elements in the array correspond to sequences in the list, i.e. 
+** Reads a list of AjPSeq's and writes an array describing the redundancy in
+** the list. Elements in the array correspond to sequences in the list, i.e.
 ** the array[0] corresponds to the first sequence in the list.
-** 
+**
 ** Sequences are classed as redundant (0 in the array, i.e. they are possibly
-** to be discarded later) if they lie outside a range of threshold (%) sequence 
-** similarity to others in the set (the shortest sequence of the current pair 
+** to be discarded later) if they lie outside a range of threshold (%) sequence
+** similarity to others in the set (the shortest sequence of the current pair
 ** will be discarded).
-** 
-** @param [r] input  [AjPList]    List of ajPSeq's 
-** @param [w] keep   [AjPInt*]    0: rejected (redundant) sequence, 1: the 
+**
+** @param [r] input  [AjPList]    List of ajPSeq's
+** @param [w] keep   [AjPInt*]    0: rejected (redundant) sequence, 1: the
                                   sequence was retained
 ** @param [w] nset   [ajint*]     Number of sequences in nr set (no. of 1's in
 **                                the keep array)
@@ -285,7 +285,7 @@ AjBool embXyzSeqsetNRRange(AjPList input, AjPInt *keep, ajint *nset,
     ajint         maxarr  =300;	/*Initial size for matrix*/
     ajint         len;
     ajint         x;		/*Counter for seq 1*/
-    ajint         y;		/*Counter for seq 2*/ 
+    ajint         y;		/*Counter for seq 2*/
     ajint         nin;		/*Number of sequences in input list*/
     ajint        *compass;
 
@@ -294,7 +294,7 @@ AjBool embXyzSeqsetNRRange(AjPList input, AjPInt *keep, ajint *nset,
 
     float     **sub;
     float       id       =0.;	/*Passed as arg but not used here*/
-    float       sim      =0.;	
+    float       sim      =0.;
     float       idx      =0.;	/*Passed as arg but not used here*/
     float       simx     =0.;	/*Passed as arg but not used here*/
     float      *path;
@@ -307,11 +307,11 @@ AjBool embXyzSeqsetNRRange(AjPList input, AjPInt *keep, ajint *nset,
     AjPFloat2d  scores   =NULL;
     AjPSeqCvt   cvt      =0;
     AjBool      show     =ajFalse;	/*Passed as arg but not used here*/
-    AjBool      ok       =ajFalse;      /*True if the current sequence has 
+    AjBool      ok       =ajFalse;      /*True if the current sequence has
 					  at least thresh1 % similarity to
-					  at least one other sequence in the 
+					  at least one other sequence in the
 					  set */
-    
+
 
 
 
@@ -319,8 +319,8 @@ AjBool embXyzSeqsetNRRange(AjPList input, AjPInt *keep, ajint *nset,
     /*Intitialise some variables*/
     AJCNEW(path, maxarr);
     AJCNEW(compass, maxarr);
-    m = ajStrNew();    
-    n = ajStrNew();    
+    m = ajStrNew();
+    n = ajStrNew();
     gapopen   = ajRoundF(gapopen,8);
     gapextend = ajRoundF(gapextend,8);
     sub = ajMatrixfArray(matrix);
@@ -338,9 +338,9 @@ AjBool embXyzSeqsetNRRange(AjPList input, AjPInt *keep, ajint *nset,
 	return ajFalse;
     }
 
-    
+
     /*Create an ajint array to hold lengths of sequences*/
-    lens = ajIntNewL(nin);     
+    lens = ajIntNewL(nin);
     for(x=0; x<nin; x++)
 	ajIntPut(&lens,x,ajSeqLen(inseqs[x]));
 
@@ -348,10 +348,10 @@ AjBool embXyzSeqsetNRRange(AjPList input, AjPInt *keep, ajint *nset,
     /*Set the keep array elements to 1 */
     for(x=0;x<nin;x++)
 	ajIntPut(keep,x,1);
-       
+
 
     /*Create a 2d float array to hold the similarity scores*/
-    scores = ajFloat2dNew();   
+    scores = ajFloat2dNew();
 
 
 
@@ -359,19 +359,19 @@ AjBool embXyzSeqsetNRRange(AjPList input, AjPInt *keep, ajint *nset,
 
 
     /*Start of main application loop*/
-    for(x=0; x<nin; x++)       
-    { 
-	for(y=x+1; y<nin; y++) 
+    for(x=0; x<nin; x++)
+    {
+	for(y=x+1; y<nin; y++)
 	{
-	    /*Process w/o alignment identical sequences*/	
+	    /*Process w/o alignment identical sequences*/
 	    if(ajStrMatch(inseqs[x]->Seq, inseqs[y]->Seq))
 	    {
 		ajFloat2dPut(&scores,x,y,(float)100.0);
 		continue;
-	    } 
-	    
+	    }
 
-	    /* Intitialise variables for use by alignment functions*/	    
+
+	    /* Intitialise variables for use by alignment functions*/
 	    len = ajIntGet(lens,x)*ajIntGet(lens,y);
 
 	    if(len>maxarr)
@@ -380,9 +380,9 @@ AjBool embXyzSeqsetNRRange(AjPList input, AjPInt *keep, ajint *nset,
 		AJCRESIZE(compass,len);
 		maxarr=len;
 	    }
-	    
-	    p = ajSeqChar(inseqs[x]); 
-	    q = ajSeqChar(inseqs[y]); 
+
+	    p = ajSeqChar(inseqs[x]);
+	    q = ajSeqChar(inseqs[y]);
 
 	    ajStrAssC(&m,"");
 	    ajStrAssC(&n,"");
@@ -399,7 +399,7 @@ AjBool embXyzSeqsetNRRange(AjPList input, AjPInt *keep, ajint *nset,
 		ajFloat2dDel(&scores);
 		ajIntDel(&lens);
 		AJFREE(inseqs);
-		
+
 		return ajFalse;
 	    }
 
@@ -431,14 +431,14 @@ AjBool embXyzSeqsetNRRange(AjPList input, AjPInt *keep, ajint *nset,
 
 
 
-    
+
     /* Write the keep array as appropriate, first check the upper limit*/
     for(x=0; x<nin; x++)
     {
 	if(!ajIntGet(*keep,x))
 	    continue;
 
-	for(y=x+1; y<nin; y++)	
+	for(y=x+1; y<nin; y++)
 	{
 	    if(!ajIntGet(*keep,y))
 		continue;
@@ -447,9 +447,9 @@ AjBool embXyzSeqsetNRRange(AjPList input, AjPInt *keep, ajint *nset,
 	    {
 		if(ajIntGet(lens,x) < ajIntGet(lens,y))
 		    ajIntPut(keep,x,0);
-		
+
 		else
-		    ajIntPut(keep,y,0);  
+		    ajIntPut(keep,y,0);
 	    }
 	}
     }
@@ -463,7 +463,7 @@ AjBool embXyzSeqsetNRRange(AjPList input, AjPInt *keep, ajint *nset,
 
 	ok = ajFalse;
 
-	for(y=x+1; y<nin; y++)	
+	for(y=x+1; y<nin; y++)
 	{
 	    if(!ajIntGet(*keep,y))
 		continue;
@@ -493,8 +493,8 @@ AjBool embXyzSeqsetNRRange(AjPList input, AjPInt *keep, ajint *nset,
     ajFloat2dDel(&scores);
     ajIntDel(&lens);
     AJFREE(inseqs);
-    
-    
+
+
     /* Bye Bye */
     return ajTrue;
-}    
+}

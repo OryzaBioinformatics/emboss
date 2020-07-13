@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -74,7 +74,7 @@ static void comReplace(char *vet,char *seq,char *ch);
 static void comCalcFreqACN(char *seq, ajint lseq,float *Freq);
 
 
-/* @func embComComplexity ********************************************
+/* @func embComComplexity *****************************************************
 **
 ** Complexity calculation
 **
@@ -102,15 +102,15 @@ void embComComplexity(char *seq,char *name, ajint len, ajint jmin, ajint jmax,
 		      ajint sim, ajint freq, ajint omnia,
 		      AjPFile fp,  AjPFile pf, ajint print, ajint num_seq,
 		      float *MedValue){
-    
+
     float   *ComplexOfSeq;
     float   Freq[4];
-    
+
     ajint     NumOfWin;
     ajint     i,j;
     char    ACN[] = "ACGT";
     char    *seqsim=NULL;
-    
+
     comtrace   SortedFreq[4];
     SEQSim  *SetSeqSim=NULL;
     UJSim   *SetUjSim=NULL;
@@ -118,20 +118,20 @@ void embComComplexity(char *seq,char *name, ajint len, ajint jmin, ajint jmax,
     UJWin   *SDValueUj=NULL;
     UJWin   *RealUjValue;
     UJWin   *RatioUj=NULL;
-    
+
     /*AJCNEW (seq, len+1);*/
-    
+
     seq[len] = '\0';
     if(l == len)
 	NumOfWin=1;
     else
 	NumOfWin = comCalcNOfWin(len,l,step);
-    
+
     AJCNEW (ComplexOfSeq, NumOfWin);
     if(freq){
 	for(i=0;i<4;i++)
 	    Freq[i] = 0.0;
- 
+
 	comCalcFreqACN(seq,len,Freq);
 
 	for(i=0;i<4;i++){
@@ -143,18 +143,18 @@ void embComComplexity(char *seq,char *name, ajint len, ajint jmin, ajint jmax,
 	for(i=0;i<4;i++)
 	    SortedFreq[i].pc = SortedFreq[i].pc*10;
     }
-    
+
     AJCNEW (RealUjValue, NumOfWin);
-    
+
     for(i=0;i<NumOfWin;i++)
       AJCNEW (RealUjValue[i].Ujwin, jmax - jmin +1);
-   
-    
-    
+
+
+
     if(sim){
 	/*(void) ajDebug("Nsim = %d \n",sim);*/
         AJCNEW (SetUjSim, sim);
- 
+
 	for(i=0;i<sim;i++){
 	    AJCNEW (SetUjSim[i].Ujsim, NumOfWin);
 	}
@@ -163,16 +163,16 @@ void embComComplexity(char *seq,char *name, ajint len, ajint jmin, ajint jmax,
 	    for(j=0;j<NumOfWin;j++){
                 AJCNEW (SetUjSim[i].Ujsim[j].Ujwin, jmax-jmin+1);
 	    }
-	} 
- 
+	}
+
 	AJCNEW (SetSeqSim, sim);
- 
+
 	for(i=0;i<sim;i++){
 	    AJCNEW (SetSeqSim[i].Sqsim, len+1);
-	} 
-  
+	}
+
 	AJCNEW (seqsim, (len+1));
- 
+
 	AJCNEW (MedValueUj, NumOfWin);
 	for(i=0;i<NumOfWin;i++)
 	    AJCNEW (MedValueUj[i].Ujwin, jmax-jmin+1);
@@ -186,17 +186,17 @@ void embComComplexity(char *seq,char *name, ajint len, ajint jmin, ajint jmax,
 	    AJCNEW (RatioUj[i].Ujwin, jmax-jmin+1);
 
     }
-    
-    
-    
+
+
+
     if(sim){
-	for(i=0;i<sim;i++){ 
+	for(i=0;i<sim;i++){
 	    comSimulSeq(seq,seqsim,len,SortedFreq,ACN,freq);
 	    (void) strcpy(SetSeqSim[i].Sqsim,seqsim);
 	    /*(void) ajDebug("%s \n\n",seqsim);*/
 	}
 	comElabSetSim(SetSeqSim,SetUjSim,NumOfWin,len,sim,jmin,jmax,l,step);
-	comCalcMedValue(SetUjSim,MedValueUj,SDValueUj,sim,NumOfWin,jmax-jmin+1); 
+	comCalcMedValue(SetUjSim,MedValueUj,SDValueUj,sim,NumOfWin,jmax-jmin+1);
 	/*for(j=0;j<NumOfWin;j++){
 	  (void) ajDebug("WIN=%d\n",j);
 	  for(k=0;k<jmax-jmin+1;k++)
@@ -205,7 +205,7 @@ void embComComplexity(char *seq,char *name, ajint len, ajint jmin, ajint jmax,
 	  } */
 	comElabSeq(seq,RealUjValue,jmin,jmax,l,len,step);
 	comCalcComplex(RealUjValue,MedValueUj,RatioUj,NumOfWin,
-		    jmax-jmin+1,ComplexOfSeq); 
+		    jmax-jmin+1,ComplexOfSeq);
 	comCalcFreqACN(seqsim,len,Freq);
 	/*(void) ajDebug("Frequenze della simulata\n");
 	  for(j=0;j<4;j++)
@@ -216,9 +216,9 @@ void embComComplexity(char *seq,char *name, ajint len, ajint jmin, ajint jmax,
     else{
 	comComplexOnSeq2(seq,len,l,NumOfWin,jmin,jmax,step,ComplexOfSeq);
     }
-    
+
     comCalcComplexMed(ComplexOfSeq,NumOfWin,MedValue);
-    
+
     if(sim && print)
 	comWriteTable(pf,name,RealUjValue,MedValueUj,SDValueUj,RatioUj,
 		   NumOfWin,jmin, jmax);
@@ -226,9 +226,9 @@ void embComComplexity(char *seq,char *name, ajint len, ajint jmin, ajint jmax,
 	comWriteValue(name,len,ComplexOfSeq,NumOfWin,l,
 		   step,jmin,jmax,sim,*MedValue,fp);
     }
-    
-    
-    
+
+
+
     /*AJFREE (seq);*/
     AJFREE (ComplexOfSeq);
     if(sim){
@@ -238,7 +238,7 @@ void embComComplexity(char *seq,char *name, ajint len, ajint jmin, ajint jmax,
 	    AJFREE (SDValueUj[i].Ujwin);
 	    AJFREE (MedValueUj[i].Ujwin);
 	}
- 
+
 	AJFREE (RatioUj);
 	AJFREE (SDValueUj);
 	AJFREE (MedValueUj);
@@ -247,16 +247,16 @@ void embComComplexity(char *seq,char *name, ajint len, ajint jmin, ajint jmax,
 	    for(j=0;j<NumOfWin;j++)
 		AJFREE (SetUjSim[i].Ujsim[j].Ujwin);
 	    AJFREE (SetUjSim[i].Ujsim);	/* was missing before pmr 25-jan-00 */
-	}  
+	}
 
 	AJFREE (SetSeqSim);
 	AJFREE (SetUjSim);
     }
-    
-    
+
+
 }
 
-/* @func embComWriteFile ********************************************
+/* @func embComWriteFile ******************************************************
 **
 ** Write output file for complexity calculation
 **
@@ -270,29 +270,36 @@ void embComComplexity(char *seq,char *name, ajint len, ajint jmin, ajint jmax,
 ** @@
 ******************************************************************************/
 
-void embComWriteFile (AjPFile fp, ajint jmin, ajint jmax, ajint lwin, ajint step, ajint sim)
+void embComWriteFile (AjPFile fp, ajint jmin, ajint jmax,
+		      ajint lwin, ajint step, ajint sim)
 {
 
     (void) ajFmtPrintF(fp,"Length of window : %d \n",lwin);
     (void) ajFmtPrintF(fp,"jmin : %d \n",jmin);
     (void) ajFmtPrintF(fp,"jmax : %d \n",jmax);
     (void) ajFmtPrintF(fp,"step : %d \n",step);
-    if(sim) 
+    if(sim)
 	(void) ajFmtPrintF(fp,"sim : %d \n",sim);
     if(sim == 0)
 	(void) ajFmtPrintF(fp,"Execution without simulation \n");
 
-    (void) ajFmtPrintF(fp,"----------------------------------------------------------------------------\n");
-    (void) ajFmtPrintF(fp,"|                  |                  |                  |                  |\n");
-    (void) ajFmtPrintF(fp,"|     number of    |      name of     |     length of    |      value of    |\n");
-    (void) ajFmtPrintF(fp,"|     sequence     |     sequence     |     sequence     |     complexity   |\n");
-    (void) ajFmtPrintF(fp,"|                  |                  |                  |                  |\n");
-    (void) ajFmtPrintF(fp,"----------------------------------------------------------------------------\n");
+    (void) ajFmtPrintF(fp,"---------------------------------------"
+		       "-------------------------------------\n");
+    (void) ajFmtPrintF(fp,"|                  |                  |"
+		       "                  |                  |\n");
+    (void) ajFmtPrintF(fp,"|     number of    |      name of     |"
+		       "     length of    |      value of    |\n");
+    (void) ajFmtPrintF(fp,"|     sequence     |     sequence     |"
+		       "     sequence     |     complexity   |\n");
+    (void) ajFmtPrintF(fp,"|                  |                  |"
+		       "                  |                  |\n");
+    (void) ajFmtPrintF(fp,"---------------------------------------"
+		       "-------------------------------------\n");
 }
 
 
 
-/* @func embComWriteValueOfSeq ********************************************
+/* @func embComWriteValueOfSeq ************************************************
 **
 ** Output sequence values for complexity calculation
 **
@@ -305,16 +312,17 @@ void embComWriteFile (AjPFile fp, ajint jmin, ajint jmax, ajint lwin, ajint step
 ** @@
 ******************************************************************************/
 
-void embComWriteValueOfSeq(AjPFile fp, ajint n,char *name, ajint len,float MedValue)
+void embComWriteValueOfSeq(AjPFile fp, ajint n,char *name,
+			   ajint len,float MedValue)
 {
-  
+
     (void) ajFmtPrintF(fp,"%10d         %19s %14d     %14.4f \n",
 		       n,name,len,MedValue);
 
 
 }
 
-/* @funcstatic comWriteTable ********************************************
+/* @funcstatic comWriteTable **************************************************
 **
 ** Output table of complexity results
 **
@@ -334,27 +342,29 @@ void embComWriteValueOfSeq(AjPFile fp, ajint n,char *name, ajint len,float MedVa
 static void comWriteTable(AjPFile fp,char *name,
 		       UJWin *RUj,UJWin *MedUj,UJWin *SDUj, UJWin *RatUj,
 		       ajint Nwin, ajint jmin, ajint jmax){
-    
-    
-    
+
+
+
     ajint i,j,k;
-    
-    
-    
+
+
+
     (void) ajFmtPrintF (fp,"\n");
     (void) ajFmtPrintF (fp,"Sequence: %s \n\n",name);
-    
-    
+
+
     for(j=jmin;j<=jmax;j++)
 	(void) ajFmtPrintF (fp,"%11s%-1d       ","U",j);
     for(j=jmin;j<=jmax;j++)
 	(void) ajFmtPrintF (fp,"%5s%-1d","R",j);
     (void) ajFmtPrintF (fp,"\n");
-    
-    
-    
-    (void) ajFmtPrintF (fp,"-----------------------------------------------------------------------------------------------------------\n");                               
-    for(i=0;i<Nwin;i++){  
+
+
+
+    (void) ajFmtPrintF (fp,"--------------------------------------------"
+			"-----------------------------------------------"
+			"----------------\n");
+    for(i=0;i<Nwin;i++){
 	(void) ajFmtPrintF (fp,"w%-2d ",i+1);
 	for(k=0;k<jmax-jmin+1;k++)
 	    (void) ajFmtPrintF (fp,"%4d  %5.2f+/-%-5.2f",
@@ -365,11 +375,11 @@ static void comWriteTable(AjPFile fp,char *name,
 	(void) ajFmtPrintF (fp,"\n");
 	(void) ajFmtPrintF (fp,"\n");
 
-    }   
+    }
 }
 
 
-/* @funcstatic comCalcComplex ********************************************
+/* @funcstatic comCalcComplex *************************************************
 **
 ** Calculation for complexity
 **
@@ -385,17 +395,17 @@ static void comWriteTable(AjPFile fp,char *name,
 
 static void comCalcComplex(UJWin *RUj,UJWin *MedUj,UJWin *RatUj,
 			ajint Nwin, ajint Nword, float *CompSeq){
-    
+
     ajint i,k;
-    
+
     for(i=0;i<Nwin;i++)
 	CompSeq[i] = 1.0;
-    
+
     for(i=0;i<Nwin;i++){
 	for(k=0;k<Nword;k++){
 	    RatUj[i].Ujwin[k] = RUj[i].Ujwin[k]/MedUj[i].Ujwin[k];
 	    CompSeq[i] *= RatUj[i].Ujwin[k];
-	} 
+	}
     }
     for(i=0;i<Nwin;i++)
 	if(CompSeq[i] > 1.0)
@@ -405,7 +415,7 @@ static void comCalcComplex(UJWin *RUj,UJWin *MedUj,UJWin *RatUj,
 
 
 
-/* @funcstatic comCalcMedValue ********************************************
+/* @funcstatic comCalcMedValue ************************************************
 **
 ** Mean value calculation for complexity
 **
@@ -421,17 +431,17 @@ static void comCalcComplex(UJWin *RUj,UJWin *MedUj,UJWin *RatUj,
 
 static void comCalcMedValue(UJSim *SetUj,UJWin *MedUj,UJWin *SDUj,
 			 ajint Nsim, ajint Nwin, ajint Nword){
-    
+
     ajint i,j,k;
     float *sum;
     float *var;
-    
-    
+
+
     AJCNEW0 (sum, Nword);
-    
+
     AJCNEW0 (var, Nword);
-    
-    
+
+
     for(j=0;j<Nwin;j++){
 	for(i=0;i<Nsim;i++){
 	    for(k=0;k<Nword;k++)
@@ -442,7 +452,7 @@ static void comCalcMedValue(UJSim *SetUj,UJWin *MedUj,UJWin *SDUj,
 	for(k=0;k<Nword;k++)
 	    sum[k] = 0.0;
     }
-    
+
     for(j=0;j<Nwin;j++){
 	for(i=0;i<Nsim;i++){
 	    for(k=0;k<Nword;k++){
@@ -460,14 +470,14 @@ static void comCalcMedValue(UJSim *SetUj,UJWin *MedUj,UJWin *SDUj,
 	    SDUj[j].Ujwin[k] = (float)sqrt(var[k]);
 	for(k=0;k<Nword;k++)
 	    var[k] = 0.0;
-    }  
+    }
     AJFREE (sum);
     AJFREE (var);
-    
+
 }
 
 
-/* @funcstatic comElabSetSim ********************************************
+/* @funcstatic comElabSetSim **************************************************
 **
 ** Set simulations for complexity calculation
 **
@@ -487,18 +497,18 @@ static void comCalcMedValue(UJSim *SetUj,UJWin *MedUj,UJWin *SDUj,
 static void comElabSetSim(SEQSim* SetSeqSim,UJSim *SetUjSim, ajint Nwin,
 		       ajint lseq, ajint nsim,
 		       ajint jmin, ajint jmax, ajint lwin, ajint step){
-    
-    
+
+
     ajint i;
-    
+
     for(i=0;i<nsim;i++){
 	comElabSeq(SetSeqSim[i].Sqsim,SetUjSim[i].Ujsim,jmin,jmax,
 		   lwin,lseq,step);
-    } 
-    
+    }
+
 }
 
-/* @funcstatic comElabSeq ********************************************
+/* @funcstatic comElabSeq *****************************************************
 **
 ** Input function for complexity calculations
 **
@@ -516,7 +526,7 @@ static void comElabSetSim(SEQSim* SetSeqSim,UJSim *SetUjSim, ajint Nwin,
 static void comElabSeq(char *seq,UJWin *ujwin, ajint jmin, ajint jmax,
 		       ajint lwin, ajint lseq,
 		       ajint step){
-    
+
     ajint j;
     ajint k = 0;
     ajint bwin;
@@ -524,12 +534,12 @@ static void comElabSeq(char *seq,UJWin *ujwin, ajint jmin, ajint jmax,
     ajint nwin = 0;
     char *wind;
     float Uj = 0.0;
-    
+
     AJCNEW (wind, lwin+1);
-    
+
     bwin = 0;
     ewin = lwin-1;
-    
+
     while(ewin<lseq){
 	nwin++;
 	comReadWin(seq,bwin,ewin,wind);
@@ -537,16 +547,16 @@ static void comElabSeq(char *seq,UJWin *ujwin, ajint jmin, ajint jmax,
 	    comCalcUj(lwin,j,wind,&Uj);
 	    ujwin[nwin-1].Ujwin[k] = Uj;
 	    k++;
-	} 
+	}
 	bwin = bwin+step;
 	ewin = bwin+(lwin-1);
 	k = 0;
     }
     AJFREE (wind);
-    
+
 }
 
-/* @funcstatic comCalcNOfWin ********************************************
+/* @funcstatic comCalcNOfWin **************************************************
 **
 ** Calculate number of windws for complexity
 **
@@ -575,7 +585,7 @@ static ajint comCalcNOfWin(ajint lseq, ajint lwin, ajint step){
     return nwin;
 }
 
-/* @funcstatic comWriteSimValue ********************************************
+/* @funcstatic comWriteSimValue ***********************************************
 **
 ** Output simulation value for complexity calculation
 **
@@ -590,14 +600,14 @@ static void comWriteSimValue(float *ComplexOfSim, ajint nsim,AjPFile fp)
 {
 
     ajint i;
- 
+
     (void) ajFmtPrintF (fp,"VALUES FOR EACH SIMULATION\n\n");
     for (i=0;i<nsim;i++)
 	(void) ajFmtPrintF (fp,"%4d %7.4f \n",i+1,ComplexOfSim[i]);
 
 }
 
-/* @funcstatic comWriteValue  ********************************************
+/* @funcstatic comWriteValue  *************************************************
 **
 ** Output of values for complexity calculation
 **
@@ -617,13 +627,14 @@ static void comWriteSimValue(float *ComplexOfSim, ajint nsim,AjPFile fp)
 ******************************************************************************/
 
 static void comWriteValue(char *name, ajint lseq,float *ComplexOfSeq,
-		       ajint NumOfWin, ajint l, ajint step, ajint jmin, ajint jmax,
-		       ajint sim,float MedValue,AjPFile fp){
-    
+			  ajint NumOfWin, ajint l, ajint step,
+			  ajint jmin, ajint jmax,
+			  ajint sim,float MedValue,AjPFile fp){
+
     ajint i;
     ajint bwin ;
-    ajint ewin; 
-    
+    ajint ewin;
+
     (void) ajFmtPrintF (fp,"Name of sequence:   %s \n",name);
     (void) ajFmtPrintF (fp,"Length of sequence: %d \n",lseq);
     (void) ajFmtPrintF (fp,"Length of window  : %d \n",l);
@@ -634,15 +645,21 @@ static void comWriteValue(char *name, ajint lseq,float *ComplexOfSeq,
 	(void) ajFmtPrintF (fp,"sim : %d \n",sim);
     if(sim == 0)
 	(void) ajFmtPrintF (fp,"Execution without simulation\n");
-    
-    (void) ajFmtPrintF (fp,"------------------------------------------------------------------------------\n");
-    (void) ajFmtPrintF (fp,"|                   |                   |                   |                |\n");
-    (void) ajFmtPrintF (fp,"|     begin         |     end           |     value of      |  average       |\n");
-    (void) ajFmtPrintF (fp,"|     window        |     window        |    complexity     |                |\n");
-    (void) ajFmtPrintF (fp,"|                   |                   |                   |                |\n");
-    (void) ajFmtPrintF (fp,"------------------------------------------------------------------------------\n");
-    
-    
+
+    (void) ajFmtPrintF (fp,"-----------------------------------------"
+			"-------------------------------------\n");
+    (void) ajFmtPrintF (fp,"|                   |                   |"
+			"                   |                |\n");
+    (void) ajFmtPrintF (fp,"|     begin         |     end           |"
+			"     value of      |  average       |\n");
+    (void) ajFmtPrintF (fp,"|     window        |     window        |"
+			"    complexity     |                |\n");
+    (void) ajFmtPrintF (fp,"|                   |                   |"
+			"                   |                |\n");
+    (void) ajFmtPrintF (fp,"-----------------------------------------"
+			"-------------------------------------\n");
+
+
     bwin=0;
     ewin=l-1;
     for(i=0;i<NumOfWin;i++){
@@ -659,10 +676,10 @@ static void comWriteValue(char *name, ajint lseq,float *ComplexOfSeq,
 	ewin = bwin+l-1;
     }
     (void) ajFmtPrintF (fp,"\n");
-    
-} 
 
-/* @funcstatic comComplexOnSeq ********************************************
+}
+
+/* @funcstatic comComplexOnSeq ************************************************
 **
 ** Complexity of sequence
 **
@@ -682,21 +699,21 @@ static void comWriteValue(char *name, ajint lseq,float *ComplexOfSeq,
 static void comComplexOnSeq(char *seqsim,char *seq, ajint lseq,
 			    ajint lwin, ajint NumOfWin,
 			    ajint jmin, ajint jmax, ajint step,float *ComplexOfSeq){
-    
-    
-    
+
+
+
     ajint bwin,ewin,nwin;
     char *wind;
     char *winsim;
     float ComplexOfWin = 0.0;
-    
+
     AJCNEW (wind, lwin+1);
     AJCNEW (winsim, lwin+1);
-    
+
     bwin = 0;
     ewin = lwin-1;
     nwin = 0;
-    
+
     while(ewin<lseq){
 	comReadWin(seq,bwin,ewin,wind);
 	comReadWin(seqsim,bwin,ewin,winsim);
@@ -706,13 +723,13 @@ static void comComplexOnSeq(char *seqsim,char *seq, ajint lseq,
 	ewin = bwin+lwin-1;
 	nwin++;
     }
-    
+
     AJFREE (wind);
     AJFREE (winsim);
-    
+
 }
 
-/* @funcstatic comComplexOnSeq2 ********************************************
+/* @funcstatic comComplexOnSeq2 ***********************************************
 **
 ** Complexity of sequence.
 **
@@ -730,19 +747,19 @@ static void comComplexOnSeq(char *seqsim,char *seq, ajint lseq,
 
 static void comComplexOnSeq2(char *seq, ajint lseq, ajint lwin, ajint NumOfWin,
 			  ajint jmin, ajint jmax, ajint step,float *ComplexOfSeq){
-    
-    
-    
+
+
+
     ajint bwin,ewin,nwin;
     char *wind;
     float ComplexOfWin = 0.0;
-    
+
     AJCNEW (wind, lwin+1);
-    
+
     bwin = 0;
     ewin = lwin-1;
     nwin = 0;
-    
+
     while(ewin<lseq){
 	/*(void) ajDebug("bwin=%d ewin=%d \n",bwin+1,ewin+1);*/
 	comReadWin(seq,bwin,ewin,wind);
@@ -752,14 +769,14 @@ static void comComplexOnSeq2(char *seq, ajint lseq, ajint lwin, ajint NumOfWin,
 	ewin = bwin+lwin-1;
 	nwin++;
     }
-    
+
     AJFREE (wind);
-    
-    
+
+
 }
 
 
-/* @funcstatic comSimulSeq ********************************************
+/* @funcstatic comSimulSeq ****************************************************
 **
 ** Simulation of sequence for complexity calculation
 **
@@ -792,7 +809,7 @@ static void comSimulSeq(char *seq,char *seqsim, ajint lseq,comtrace *Freq,
 	n2 = 500.0;
 	n3 = 750.0;
     }
- 
+
     k = 0;
     while (k<lseq){
 	x = rand();
@@ -826,7 +843,7 @@ static void comSimulSeq(char *seq,char *seqsim, ajint lseq,comtrace *Freq,
 	    k++;
 	}
 	if(x1 > n3 && !freq){
-	    seqsim[k] = ACN[3]; 
+	    seqsim[k] = ACN[3];
 	    k++;
 	}
     }
@@ -835,7 +852,7 @@ static void comSimulSeq(char *seq,char *seqsim, ajint lseq,comtrace *Freq,
 }
 
 
-/* @funcstatic comSortFreq ********************************************
+/* @funcstatic comSortFreq ****************************************************
 **
 ** Sort frequencies for complexity calculation
 **
@@ -849,7 +866,7 @@ static void comSortFreq(comtrace *set)
 
     ajint a,b;
     comtrace strutt;
-  
+
     for(a=1;a<4;++a)
 	for(b=3;b>=a;--b){
 	    if(set[b-1].pc>set[b].pc){
@@ -861,7 +878,7 @@ static void comSortFreq(comtrace *set)
 }
 
 
-/* @funcstatic comCalcComplexMed ********************************************
+/* @funcstatic comCalcComplexMed **********************************************
 **
 ** Calculate mean for complexity
 **
@@ -872,7 +889,8 @@ static void comSortFreq(comtrace *set)
 ** @@
 ******************************************************************************/
 
-static void comCalcComplexMed(float *ComplexOfSeq, ajint NumOfWin,float *MedValue)
+static void comCalcComplexMed(float *ComplexOfSeq, ajint NumOfWin,
+			      float *MedValue)
 
 {
     ajint i;
@@ -883,11 +901,11 @@ static void comCalcComplexMed(float *ComplexOfSeq, ajint NumOfWin,float *MedValu
 	sum += ComplexOfSeq[i];
 	ajDebug ("ComplexOfSeq[%d] %.2f\n", i, ComplexOfSeq[i]);
     }
-    *MedValue = sum/(float)(NumOfWin); 
+    *MedValue = sum/(float)(NumOfWin);
 
 }
 
-/* @funcstatic comReadWin ********************************************
+/* @funcstatic comReadWin *****************************************************
 **
 ** Read sequence for complexity
 **
@@ -902,7 +920,7 @@ static void comCalcComplexMed(float *ComplexOfSeq, ajint NumOfWin,float *MedValu
 static void comReadWin(char *seq, ajint bwin, ajint ewin,char *win)
 {
     ajint i,k;
-  
+
 
     k=0;
     for(i=bwin;i<=ewin;i++){
@@ -913,7 +931,7 @@ static void comReadWin(char *seq, ajint bwin, ajint ewin,char *win)
 }
 
 
-/* @funcstatic comRead_j_mer ********************************************
+/* @funcstatic comRead_j_mer **************************************************
 **
 ** Read jmer for complexity
 **
@@ -928,7 +946,7 @@ static void comReadWin(char *seq, ajint bwin, ajint ewin,char *win)
 static void comRead_j_mer(char *win, ajint lwin, ajint jlen,STRING *str)
 
 {
- 
+
     ajint i,r,k,t;
     char *temp;
 
@@ -950,7 +968,7 @@ static void comRead_j_mer(char *win, ajint lwin, ajint jlen,STRING *str)
     AJFREE (temp);
 }
 
-/* @funcstatic comWinComplex2 ********************************************
+/* @funcstatic comWinComplex2 *************************************************
 **
 ** Complexity over window
 **
@@ -967,7 +985,7 @@ static void comWinComplex2(char *win, ajint lwin,float *ComplexOfWin,
 			ajint jmin, ajint jmax)
 {
     ajint j;
- 
+
     float Ujvalue = 0.0;
     float WinValue = 1.0;
 
@@ -982,7 +1000,7 @@ static void comWinComplex2(char *win, ajint lwin,float *ComplexOfWin,
 }
 
 
-/* @funcstatic comWinComplex ********************************************
+/* @funcstatic comWinComplex **************************************************
 **
 ** Complexity over window
 **
@@ -1001,7 +1019,7 @@ static void comWinComplex (char *win,char *winsim, ajint lwin,
 
 {
     ajint j;
- 
+
     float Ujreal = 0.0;
     float Ujsim  = 0.0;
     float Ujvalue = 0.0;
@@ -1012,7 +1030,7 @@ static void comWinComplex (char *win,char *winsim, ajint lwin,
 	comCalcUj(lwin,j,winsim,&Ujsim);
 	/*(void) ajDebug("Ujreal= %.3f \n",Ujreal);
 	  (void) ajDebug("Ujsim= %.3f\n",Ujsim);*/
-	if((Ujreal/Ujsim) > 1.0) 
+	if((Ujreal/Ujsim) > 1.0)
 	    Ujvalue = 1.0;
 	else
 	    Ujvalue = Ujreal/Ujsim;
@@ -1023,7 +1041,7 @@ static void comWinComplex (char *win,char *winsim, ajint lwin,
 
 }
 
-/* @funcstatic comCalcUj2 ********************************************
+/* @funcstatic comCalcUj2 *****************************************************
 **
 ** Uj calculation for complexity
 **
@@ -1037,7 +1055,7 @@ static void comWinComplex (char *win,char *winsim, ajint lwin,
 
 static void comCalcUj2(ajint lwin, ajint jlen,char *win,float *Ujvalue)
 {
- 
+
     ajint unlikej_mer = 0;
     ajint k;
     float z = 0.0;
@@ -1069,7 +1087,7 @@ static void comCalcUj2(ajint lwin, ajint jlen,char *win,float *Ujvalue)
 
 }
 
-/* @funcstatic comCalcUj ********************************************
+/* @funcstatic comCalcUj ******************************************************
 **
 ** Uj calculation for complexity
 **
@@ -1117,7 +1135,7 @@ static void comCalcUj(ajint lwin, ajint jlen,char *win,float *Ujvalue)
 
 }
 
-/* @funcstatic comCounter ********************************************
+/* @funcstatic comCounter *****************************************************
 **
 ** Counter of matches for complexity
 **
@@ -1131,18 +1149,18 @@ static ajint comCounter (STRING* str, ajint k)
 
 {
     ajint i,count=1;
-  
+
 
     for(i=0;i<k-1;i++)
     {
-	if((strcmp(str[i].WORD,str[i+1].WORD)) < 0) 
+	if((strcmp(str[i].WORD,str[i+1].WORD)) < 0)
 	    count++;
     }
     return count;
-}  
+}
 
 
-/* @funcstatic comAmbiguity ********************************************
+/* @funcstatic comAmbiguity ***************************************************
 **
 ** Ambiguity for complexity
 **
@@ -1162,7 +1180,7 @@ static void comAmbiguity (char *seq, ajint l)
     char  Y[]="TC";
     char  W[]="AT";
     char  S[]="GC";
-    char  M[]="AC"; 
+    char  M[]="AC";
     char  K[]="GT";
     char  H[]="ATC";
     char  B[]="GCT";
@@ -1170,7 +1188,7 @@ static void comAmbiguity (char *seq, ajint l)
     char  D[]="GAT";
     char  N[]="ACGT";
 
- 
+
     ch  = seq;
     while(*ch!='\0'){
 	switch(*ch){
@@ -1213,7 +1231,7 @@ static void comAmbiguity (char *seq, ajint l)
 }
 
 
-/* @funcstatic comReplace ********************************************
+/* @funcstatic comReplace *****************************************************
 **
 ** Replacement of bases for complexity simulation
 **
@@ -1238,9 +1256,9 @@ static void comReplace(char *vet,char *seq,char *ch)
     /*(void) ajDebug("%d \n",x1);*/
     *ch = vet[x1];
 
-} 
+}
 
-/* @funcstatic comCalcFreqACN ********************************************
+/* @funcstatic comCalcFreqACN *************************************************
 **
 ** ACN Frequency calculation for complexity
 **
@@ -1278,16 +1296,16 @@ static void comCalcFreqACN(char *seq, ajint lseq,float *Freq)
 	}
 	ch++;
     }
- 
+
     /*(void) ajDebug("A= %d C=%d G=%d T=%d \n",countA,countC,countG,countT);*/
 
-    Freq[0] = ((float)(countA)*(float)(100))/(float)(lseq); 
+    Freq[0] = ((float)(countA)*(float)(100))/(float)(lseq);
     Freq[1] = ((float)(countC)*(float)(100))/(float)(lseq);
     Freq[2] = ((float)(countG)*(float)(100))/(float)(lseq);
-    Freq[3] = ((float)(countT)*(float)(100))/(float)(lseq); 
+    Freq[3] = ((float)(countT)*(float)(100))/(float)(lseq);
 }
 
-/* @func embComUnused ********************************************
+/* @func embComUnused *********************************************************
 **
 ** Unused functions in embcom to avoid compiler warnings
 **

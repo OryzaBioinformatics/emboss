@@ -13,11 +13,11 @@ extern "C"
 #ifndef ajfeatdata_h
 #define ajfeatdata_h
 
-/****************************************************************************
-** Table Classes  ***********************************************************
+/******************************************************************************
+** Table Classes  *************************************************************
 ******************************************************************************/
 
-/* @data AjPFeattabIn *******************************************************
+/* @data AjPFeattabIn *********************************************************
 **
 ** Ajax class for feature table input
 **
@@ -38,9 +38,9 @@ typedef struct AjSFeattabIn {
   AjPStr        Type;		/* Type N or P */
   AjPFileBuff   Handle ;	/* Input buffered file */
   AjPStr        Seqname ;	/* name of AjPSeq assoc. with feature table */
-}  AjOFeattabIn, *AjPFeattabIn ;  
+}  AjOFeattabIn, *AjPFeattabIn ;
 
-/* @data AjPFeattabOut *******************************************************
+/* @data AjPFeattabOut ********************************************************
 **
 ** Ajax class for feature table output
 **
@@ -61,10 +61,10 @@ typedef struct AjSFeattabOut {
   AjPStr        Type;		/* Type N or P */
   AjPFile       Handle ;	/* Output file */
   AjPStr        Seqname ;	/* name of AjPSeq assoc. with feature table */
-}  AjOFeattabOut, *AjPFeattabOut ;  
+}  AjOFeattabOut, *AjPFeattabOut ;
 
 
-/* @data AjPFeattable *******************************************************
+/* @data AjPFeattable *********************************************************
 **
 ** Ajax data type for collecting AjPFeatures in a 'feature table'.
 ** The features themselves may be accessed via iteration methods.
@@ -81,7 +81,7 @@ typedef struct AjSFeattabOut {
 
 typedef struct AjSFeattable {
   AjPStr            Name ;	/* Sequence name */
-  AjPStr            Type ;	/* Sequence type: P or N */ 
+  AjPStr            Type ;	/* Sequence type: P or N */
   ajint             DefFormat ; /* Original input or 'source' format
 				   of the feature table */
   AjPList           Features ;	/* List of AjPFeatures... */
@@ -89,7 +89,7 @@ typedef struct AjSFeattable {
   ajint             End;        /* Last position used (like sequence end) */
   ajint             Len;        /* Maximum length */
   ajint             Groups;	/* Number of current group being added */
-}  AjOFeattable, *AjPFeattable ;  
+}  AjOFeattable, *AjPFeattable ;
 
 
 /******************************************************************************
@@ -97,7 +97,7 @@ typedef struct AjSFeattable {
 ******************************************************************************/
 
 
-/* @data AjPFeature *******************************************************
+/* @data AjPFeature ***********************************************************
 **
 ** Ajax Biological Feature object superclass.
 **
@@ -121,7 +121,7 @@ typedef struct AjSFeattable {
 ** @new    ajFeatNewFromTPS      Constructor: given type, position & score,
 **                               assumes default Source
 ** @new    ajFeatNewFromPS       Constructor: given position & score,
-**                               assumes default Source and Type 
+**                               assumes default Source and Type
 ** @delete ajFeatDel             Default destructor
 ** @assign ajFeatCopy            Copy constructor
 ** @set    ajFeatSetSource       Sets the name of the analysis which
@@ -139,7 +139,7 @@ typedef struct AjSFeattable {
 ** @set    ajFeatAddSubFeature   Adds a subsidiary AjFeature to the feature
 ** @cast   ajFeatSource          Returns the name of the analysis which
 **                               ascertained the feature
-** @cast   ajFeatType            Returns the type of feature (e.g. exon, etc.) 
+** @cast   ajFeatType            Returns the type of feature (e.g. exon, etc.)
 ** @cast   ajFeatScore           Returns the score associated with the
 **                               feature, if any
 ** @cast   ajFeatTag             Returns the value associated with a

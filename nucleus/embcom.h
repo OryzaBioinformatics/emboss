@@ -46,7 +46,7 @@ typedef struct ujsim UJSim;
 struct sqsim{
   char *Sqsim;
  };
- 
+
 typedef struct sqsim SEQSim;
 
 void embComComplexity(char *seq,char *name, ajint len, ajint jmin, ajint jmax,

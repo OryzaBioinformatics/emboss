@@ -7,7 +7,7 @@ extern "C"
 #define embshow_h
 
 
-/* @data EmbPShow *******************************************************
+/* @data EmbPShow *************************************************************
 **
 ** NUCLEUS data structure for EmbPShow object
 **
@@ -29,14 +29,14 @@ typedef struct EmbSShow {
 } EmbOShow, *EmbPShow;
 
 
-/* @data EmbPShowInfo *******************************************************
+/* @data EmbPShowInfo *********************************************************
 **
 ** NUCLEUS data structure for node of list of descriptors object pointers
 **
 ******************************************************************************/
 
 typedef struct EmbSShowInfo {
-  ajint type;  
+  ajint type;
   void * info;
 } EmbOShowInfo, *EmbPShowInfo;
 
@@ -48,7 +48,7 @@ typedef struct EmbSShowInfo {
 enum ShowEValtype {SH_SEQ, SH_BLANK, SH_TICK, SH_TICKNUM, SH_COMP,
 SH_TRAN, SH_RE, SH_FT, SH_NOTE};
 
-/* @data EmbPShowSeq *******************************************************
+/* @data EmbPShowSeq **********************************************************
 **
 ** NUCLEUS data structure for sequence information, type = SH_SEQ
 **
@@ -63,7 +63,7 @@ typedef struct EmbSShowSeq {
 
 /* blank line information, type = SH_BLANK */
 
-/* @data EmbPShowBlank *******************************************************
+/* @data EmbPShowBlank ********************************************************
 **
 ** NUCLEUS data structure for  blank line information, type = SH_BLANK
 **
@@ -76,7 +76,7 @@ pad the structure out
   AjBool dummy;
 } EmbOShowBlank, *EmbPShowBlank;
 
-/* @data EmbPShowTicks *******************************************************
+/* @data EmbPShowTicks ********************************************************
 **
 ** NUCLEUS data structure for tick line information, type = SH_TICK
 **
@@ -102,7 +102,7 @@ pad the structure out
   AjBool dummy;
 } EmbOShowTicknum, *EmbPShowTicknum;
 
-/* @data EmbPShowTran ******************************************************
+/* @data EmbPShowTran *********************************************************
 **
 ** NUCLEUS data structure for translation information, type = SH_TRAN
 **
@@ -119,7 +119,7 @@ typedef struct EmbSShowTran {
   ajint orfminsize;	/* minimum size of ORF to display */
 } EmbOShowTran, *EmbPShowTran;
 
-/* @data EmbPShowComp ******************************************************
+/* @data EmbPShowComp *********************************************************
 **
 ** NUCLEUS data structure for sequence complement information, type = SH_COMP
 **
@@ -129,7 +129,7 @@ typedef struct EmbSShowComp {
   AjBool number;	/* ajTrue = number the complement */
 } EmbOShowComp, *EmbPShowComp;
 
-/* @data EmbPShowRE ******************************************************
+/* @data EmbPShowRE ***********************************************************
 **
 ** NUCLEUS data structure for RE cut site information, type = SH_RE
 **
@@ -138,12 +138,12 @@ typedef struct EmbSShowComp {
 typedef struct EmbSShowRE {
   ajint sense;			/* 1 or -1 = sense to display */
   AjBool flat;			/* ajTrue = display in flat format with recognition sites */
-  AjPList matches;		/* list of AjPMatmatch matches */  
+  AjPList matches;		/* list of AjPMatmatch matches */
   ajint hits;			/* number of hits in list */
   AjPList sitelist;		/* list of EmbSShowREsite */
 } EmbOShowRE, *EmbPShowRE;
 
-/* @data EmbPShowFT ******************************************************
+/* @data EmbPShowFT ***********************************************************
 **
 ** NUCLEUS data structure for  Feature information, type = SH_FT
 **
@@ -153,7 +153,7 @@ typedef struct EmbSShowFT {
   AjPFeattable feat;
 } EmbOShowFT, *EmbPShowFT;
 
-/* @data EmbPShowNote ******************************************************
+/* @data EmbPShowNote *********************************************************
 **
 ** NUCLEUS data structure for annotation information, type = SH_NOTE
 **
@@ -166,7 +166,7 @@ typedef struct EmbSShowNote {
 
 /********* assorted structures ***********/
 
-/* @data EmbPShowREsite ******************************************************
+/* @data EmbPShowREsite *******************************************************
 **
 ** NUCLEUS data structure for RE cut site position list node
 **
@@ -180,24 +180,25 @@ typedef struct EmbSShowREsite {
 
 /* declare functions **********************************************/
 EmbPShow embShowNew (AjPSeq seq, ajint begin, ajint end, ajint width,
-		    ajint length, ajint margin, AjBool html, ajint offset);
-void embShowDel (EmbPShow* pthis);
+		     ajint length, ajint margin, AjBool html, ajint offset);
+void     embShowDel (EmbPShow* pthis);
 
-void embShowAddSeq (EmbPShow thys, AjBool number, AjBool threeletter,
-		    AjPRange upperrange, AjPRange colour);
-void embShowAddBlank (EmbPShow thys);
-void embShowAddTicks (EmbPShow thys);
-void embShowAddTicknum (EmbPShow thys);
-void embShowAddComp (EmbPShow thys, AjBool number);
-void embShowAddTran (EmbPShow thys, AjPTrn trnTable, ajint frame,
-		     AjBool threeletter, AjBool number, AjPRange regions,
-		     ajint orfminsize);
-void embShowAddRE (EmbPShow thys, ajint sense, AjPList restrictlist, AjBool flat);
-void embShowAddFT (EmbPShow thys, AjPFeattable feat);
-void embShowAddNote (EmbPShow thys, AjPRange regions);
-void embShowPrint (AjPFile out, EmbPShow thys);
-void embShowUpperRange(AjPStr *line, AjPRange upperrange, ajint pos);
-void embShowColourRange(AjPStr *line, AjPRange colour, ajint pos);
+void     embShowAddSeq (EmbPShow thys, AjBool number, AjBool threeletter,
+			AjPRange upperrange, AjPRange colour);
+void     embShowAddBlank (EmbPShow thys);
+void     embShowAddTicks (EmbPShow thys);
+void     embShowAddTicknum (EmbPShow thys);
+void     embShowAddComp (EmbPShow thys, AjBool number);
+void     embShowAddTran (EmbPShow thys, AjPTrn trnTable, ajint frame,
+			 AjBool threeletter, AjBool number, AjPRange regions,
+			 ajint orfminsize);
+void     embShowAddRE (EmbPShow thys, ajint sense, AjPList restrictlist,
+		       AjBool flat);
+void     embShowAddFT (EmbPShow thys, AjPFeattable feat);
+void     embShowAddNote (EmbPShow thys, AjPRange regions);
+void     embShowPrint (AjPFile out, EmbPShow thys);
+void     embShowUpperRange (AjPStr *line, AjPRange upperrange, ajint pos);
+void     embShowColourRange (AjPStr *line, AjPRange colour, ajint pos);
 
 #endif
 

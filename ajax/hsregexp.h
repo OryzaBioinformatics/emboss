@@ -12,7 +12,7 @@
 
 #define NSUBEXP  10
 
-/* @data AjPRegexp *******************************************************
+/* @data AjPRegexp ************************************************************
 **
 ** Regular expression data structure, based on the Henry Spencer
 ** regexp library.

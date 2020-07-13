@@ -6,7 +6,7 @@
 
 #include "emboss.h"
 
-/* @func  embExit ******************************************************
+/* @func  embExit *************************************************************
 **
 ** Cleans up as necessary, and calls ajExit
 **

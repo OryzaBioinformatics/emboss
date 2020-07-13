@@ -17,21 +17,21 @@
 ** string.
 **
 ** @author Copyright (C) 1999 Peter Rice
-** @version 1.0 
+** @version 1.0
 ** @modified Feb 26 pmr First version
 ** @@
 ** @@
-** 
+**
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
 ** version 2 of the License, or (at your option) any later version.
-** 
+**
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Library General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU Library General Public
 ** License along with this library; if not, write to the
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -46,7 +46,7 @@ static AjPPosRegexp posregCompFlagsC (const char* exp, ajint cflags);
 
 /* constructors */
 
-/* @func ajPosRegComp ********************************************************
+/* @func ajPosRegComp *********************************************************
 **
 ** Compiles a regular expression.
 **
@@ -111,7 +111,7 @@ static AjPPosRegexp posregCompFlagsC (const char* exp, ajint cflags) {
   return ret;
 }
 
-/* @func ajPosRegCompCase ****************************************************
+/* @func ajPosRegCompCase *****************************************************
 **
 ** Compiles a regular expression ignoring upper/lower case.
 **
@@ -191,7 +191,7 @@ AjPPosRegexp ajPosRegCompNewlineC (const char* exp) {
 
 /* execute expression match */
 
-/* @func ajPosRegExec ********************************************************
+/* @func ajPosRegExec *********************************************************
 **
 ** Execute a regular expression search.
 ** The expression must first have been compiled with ajPosRegComp or
@@ -252,7 +252,7 @@ AjBool ajPosRegExecC (AjPPosRegexp prog, const char* str) {
   return ajFalse;
 }
 
-/* @func ajPosRegOffset ******************************************************
+/* @func ajPosRegOffset *******************************************************
 **
 ** After a successful regular expression match, uses the regular
 ** expression and the original string to calculate the offset
@@ -261,7 +261,7 @@ AjBool ajPosRegExecC (AjPPosRegexp prog, const char* str) {
 ** This information is normally lost during processing.
 **
 ** @param [r] rp [AjPPosRegexp] Compiled POSIX regular expression.
-** @return [ajint] Offset of match from start of string. 
+** @return [ajint] Offset of match from start of string.
 **               -1 if the string and the expression do not match.
 ** @@
 ******************************************************************************/
@@ -273,14 +273,14 @@ ajint ajPosRegOffset (AjPPosRegexp rp) {
   return (rm[0].rm_so);
 }
 
-/* @func ajPosRegOffsetI *****************************************************
+/* @func ajPosRegOffsetI ******************************************************
 **
 ** After a successful regular expression match, returns the offset
 ** of a substring from the start of the string.
 **
 ** @param [r] rp [AjPPosRegexp] Compiled POSIX regular expression.
 ** @param [r] isub [ajint] Substring number.
-** @return [ajint] Offset of match from start of string. 
+** @return [ajint] Offset of match from start of string.
 **               -1 if the string and the expression do not match.
 ** @@
 ******************************************************************************/
@@ -292,13 +292,13 @@ ajint ajPosRegOffsetI (AjPPosRegexp rp, ajint isub) {
   return (rm[isub].rm_so);
 }
 
-/* @func ajPosRegOffsetC *****************************************************
+/* @func ajPosRegOffsetC ******************************************************
 **
 ** After a successful regular expression match, returns the offset
 ** of the match from the start of the string.
 **
 ** @param [r] rp [AjPPosRegexp] Compiled POSIX regular expression.
-** @return [ajint] Offset of match from start of string. 
+** @return [ajint] Offset of match from start of string.
 **               -1 if the string and the expression do not match.
 ** @@
 ******************************************************************************/
@@ -316,7 +316,7 @@ ajint ajPosRegOffsetC (AjPPosRegexp rp) {
 **
 ** @param [r] rp [AjPPosRegexp] Compiled POSIX regular expression.
 ** @param [r] isub [ajint] Substring number.
-** @return [ajint] Offset of match from start of string. 
+** @return [ajint] Offset of match from start of string.
 **               -1 if the string and the expression do not match.
 ** @@
 ******************************************************************************/
@@ -327,7 +327,7 @@ ajint ajPosRegOffsetIC (AjPPosRegexp rp, ajint isub) {
   return (rm[isub].rm_so);
 }
 
-/* @func ajPosRegLenI ********************************************************
+/* @func ajPosRegLenI *********************************************************
 **
 ** After a successful comparison, returns the length of a substring.
 **
@@ -346,7 +346,7 @@ ajint ajPosRegLenI (AjPPosRegexp rp, ajint isub) {
   return (rm[isub].rm_eo - rm[isub].rm_so);
 }
 
-/* @func ajPosRegPost ********************************************************
+/* @func ajPosRegPost *********************************************************
 **
 ** After a successful match, returns the remainder of the string.
 **
@@ -397,7 +397,7 @@ AjBool ajPosRegPostC (AjPPosRegexp rp, const char** post) {
   return ajFalse;
 }
 
-/* @func ajPosRegSubI ********************************************************
+/* @func ajPosRegSubI *********************************************************
 **
 ** After a successful match, returns a substring.
 **
@@ -432,7 +432,7 @@ void ajPosRegSubI (AjPPosRegexp rp, ajint isub, AjPStr* dest) {
 
 /* substitute substrings */
 
-/* @func ajPosRegSub ********************************************************
+/* @func ajPosRegSub **********************************************************
 **
 ** Processes a source string including possible substring references
 ** escaped with backslashes. Results are written to another string.
@@ -449,7 +449,7 @@ void ajPosRegSub (AjPPosRegexp rp, AjPStr source, AjPStr* dest) {
   return;
 }
 
-/* @func ajPosRegSubC ********************************************************
+/* @func ajPosRegSubC *********************************************************
 **
 ** Processes a source string including possible substring references
 ** escaped with backslashes. Results are written to another string.
@@ -470,7 +470,7 @@ void ajPosRegSubC (AjPPosRegexp rp, const char* source, AjPStr* dest) {
 
 /* destructor */
 
-/* @func ajPosRegFree ********************************************************
+/* @func ajPosRegFree *********************************************************
 **
 ** Clears and frees a compiled POSIX regular expression.
 **
@@ -483,9 +483,9 @@ void ajPosRegFree (AjPPosRegexp* exp) {
   hsp_regfree ((*exp)->Regex);
   AJFREE ((*exp)->Match);	/* safe even if it is NULL still */
   AJFREE ((*exp)->Regex);
-  
+
   AJFREE(*exp);
-  
+
   *exp = NULL;
   return;
 }
@@ -527,7 +527,7 @@ void ajPosRegTrace (AjPPosRegexp exp) {
   return;
 }
 
-/* @func ajPosRegErr *******************************************************
+/* @func ajPosRegErr **********************************************************
 **
 ** Reports an error message from a POSIX 1003.2 regular expression operation
 **

@@ -7,12 +7,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -21,20 +21,20 @@
 #include "emboss.h"
 #include <ctype.h>
 
-/************************************
+/******************************************************************************
 **
 ** TO ADD A NEW DISPLAY TYPE:
 **
-*************************************
+*******************************************************************************
 
 Example: complement of the sequence
 
-Create a new type in the descriptor object types 'enum ShowEValtype'. 
+Create a new type in the descriptor object types 'enum ShowEValtype'.
 eg: SH_COMP
 Use this to refer to this type in later routines. (eg: by embShowAddComp)
 
 Create a structure to hold information about what options for this type
-you can have. 
+you can have.
 eg: typedef struct EmbSShowComp { ... }
 
 Create a function called by the user to set up the new type as the next
@@ -43,7 +43,7 @@ eg: embShowAddComp
 
 Create the routine to actually output a line's length of whatever is
 being displayed from position 'pos' of the sequence - the output is
-added to the end of a list of AjPStr. 
+added to the end of a list of AjPStr.
 Everything to be printed should be ajListPushApp'd on to the 'lines' list.
 These strings need not be complete lines - you can push many strings of
 partial lines if you prefer.
@@ -62,24 +62,24 @@ eg:
 */
 
 
-/* @data EmbPShowInfo ***************************************************
+/* @data EmbPShowInfo *********************************************************
 **
-** 
+**
 ** The sequence and associated things to show are held in an ordered list
 ** of type EmbPShowInfo. This list is held in the structure EmbPShow.
-** 
+**
 ** The things to show are displayed around the sequence in the order that
-** they are held on the list. 
-** 
+** they are held on the list.
+**
 ** EmbPShowInfo holds the descriptor (one of EmbPShowBlank, EmbPShowTicks,
 ** EmbPShowSeq, EmbPShowComp, etc.) and the type of the descriptor (one of
 ** SH_BLANK, SH_TICKS, SH_SEQ, SH_COMP, etc.  )
-** 
+**
 ** Each descriptor (EmbPShowSeq, EmbPShowBlank, EmbPShowTicks, etc.) holds
-** information that could be useful in displaying its type of information. 
-** 
+** information that could be useful in displaying its type of information.
+**
 ** So, for example:
-** 
+**
 ** EmbPShow could have a list of:
 ** ----------------------------
 **
@@ -99,9 +99,9 @@ eg:
 **    |       ->info=etc.
 **    |
 **   etc.
-** 
 **
-** 
+**
+**
 ** @@
 ******************************************************************************/
 
@@ -148,23 +148,23 @@ static void showDelRE (EmbPShowRE info);
 static void showDelFT (EmbPShowFT info);
 static void showDelNote (EmbPShowNote info);
 static void showAddTags(AjPStr *tagsout, AjPFeature feat, AjBool values);
-	
+
 
 
 /* ==================================================================== */
 /* ========================= constructors ============================= */
 /* ==================================================================== */
 
-/* @section Show Sequence Constructors ***************************************
+/* @section Show Sequence Constructors ****************************************
 **
 ** All constructors return a new show sequence object by pointer.
 ** The target pointer does not need to be initialised to NULL, but it is
-** good programming practice to do so anyway. 
+** good programming practice to do so anyway.
 **
 ******************************************************************************/
 
 
-/* @func embShowNew ******************************************************
+/* @func embShowNew ***********************************************************
 **
 ** Creates a new sequence show object.
 **
@@ -180,13 +180,13 @@ static void showAddTags(AjPStr *tagsout, AjPFeature feat, AjBool values);
 ** @@
 ******************************************************************************/
 
-EmbPShow embShowNew (AjPSeq seq, ajint begin, ajint end, ajint width, 
+EmbPShow embShowNew (AjPSeq seq, ajint begin, ajint end, ajint width,
 		    ajint length, ajint margin, AjBool html, ajint offset) {
-	
+
   EmbPShow pthis;
-  
+
   AJNEW0(pthis);
-  
+
   pthis->list = ajListNew();
 
 /* information about the sequence */
@@ -201,14 +201,14 @@ EmbPShow embShowNew (AjPSeq seq, ajint begin, ajint end, ajint width,
   pthis->margin = margin;	/* margin for numbering */
   pthis->html = html;		/* ajTrue = format for HTML */
   pthis->offset = offset;	/* number to start displaying with */
-  
+
   return pthis;
 }
-  
 
 
 
-/* @funcstatic showInfoNew **************************************************
+
+/* @funcstatic showInfoNew ****************************************************
 **
 ** Creates a new descriptor structure to be pushed on the list
 **
@@ -219,17 +219,17 @@ EmbPShow embShowNew (AjPSeq seq, ajint begin, ajint end, ajint width,
 ******************************************************************************/
 
 static EmbPShowInfo showInfoNew (void* info, ajint type) {
-	
+
   EmbPShowInfo pthis;
-  
+
   AJNEW0(pthis);
-  
+
   pthis->info = info;
   pthis->type = type;
-  
+
   return pthis;
 }
-  
+
 
 
 
@@ -237,7 +237,7 @@ static EmbPShowInfo showInfoNew (void* info, ajint type) {
 /* ========================== destructors ============================= */
 /* ==================================================================== */
 
-/* @section Show Sequence Destructors ****************************************
+/* @section Show Sequence Destructors *****************************************
 **
 ** Destruction destroys all internal data structures and frees the
 ** memory allocated for the show sequence object.
@@ -262,16 +262,16 @@ void embShowDel (EmbPShow* pthis)
     ajint type;				/* descriptor type */
     void * info;			/* descriptor */
     void *ptr=NULL;
-  
+
     (void) ajDebug("embShowDel\n");
 
-    /* ***
+    /* ************************************************************************
      ****** MOST EMPHATICALLY DO NOT:
      ****** <free the sequence>
-     ****** 
+     **************************************************************************
      ****** It took me a long time to work out why showseq was crashing after
      ****** the first sequence.
-     ****** 
+     **************************************************************************
      ****** It was because I was dutifully freeing up all the data held in
      ****** this structure and 'seq' is later freed by ajSeqallNext
      ******/
@@ -293,11 +293,11 @@ void embShowDel (EmbPShow* pthis)
 	case SH_SEQ:
 	    (void) showDelSeq(info);
 	    break;
-      
+
 	case SH_BLANK:
 	    (void) showDelBlank(info);
 	    break;
-      
+
 	case SH_TICK:
 	    (void) showDelTicks(info);
 	    break;
@@ -337,7 +337,7 @@ void embShowDel (EmbPShow* pthis)
 
     (void) ajListIterFree(iter);
 
-    /* we have already freed the descriptors, so use ajListDel here */ 
+    /* we have already freed the descriptors, so use ajListDel here */
     while(ajListPop(thys->list,(void **)&ptr));
     (void) ajListDel(&thys->list);
 
@@ -346,7 +346,7 @@ void embShowDel (EmbPShow* pthis)
     return;
 }
 
-/* @funcstatic showDelSeq ***********************************************************
+/* @funcstatic showDelSeq *****************************************************
 **
 ** Deletes a show sequence descriptor object.
 **
@@ -361,7 +361,7 @@ static void showDelSeq (EmbPShowSeq info) {
 
 }
 
-/* @funcstatic showDelBlank ***********************************************************
+/* @funcstatic showDelBlank ***************************************************
 **
 ** Deletes a show blank descriptor object.
 **
@@ -376,7 +376,7 @@ static void showDelBlank (EmbPShowBlank info) {
 
 }
 
-/* @funcstatic showDelTicks ***********************************************************
+/* @funcstatic showDelTicks ***************************************************
 **
 ** Deletes a show ticks descriptor object.
 **
@@ -391,7 +391,7 @@ static void showDelTicks (EmbPShowTicks info) {
 
 }
 
-/* @funcstatic showDelTicknum ***********************************************************
+/* @funcstatic showDelTicknum *************************************************
 **
 ** Deletes a show tick numbers descriptor object.
 **
@@ -406,7 +406,7 @@ static void showDelTicknum (EmbPShowTicknum info) {
 
 }
 
-/* @funcstatic showDelComp ***********************************************************
+/* @funcstatic showDelComp ****************************************************
 **
 ** Deletes a show complement descriptor object.
 **
@@ -421,7 +421,7 @@ static void showDelComp (EmbPShowComp info) {
 
 }
 
-/* @funcstatic showDelTran ***********************************************************
+/* @funcstatic showDelTran ****************************************************
 **
 ** Deletes a show translation descriptor object.
 **
@@ -437,7 +437,7 @@ static void showDelTran (EmbPShowTran info) {
 
 }
 
-/* @funcstatic showDelRE ***********************************************************
+/* @funcstatic showDelRE ******************************************************
 **
 ** Deletes a show restriction enzyme descriptor object.
 **
@@ -449,7 +449,7 @@ static void showDelTran (EmbPShowTran info) {
 static void showDelRE (EmbPShowRE info) {
 
     void *ptr;
-    
+
 
     while(ajListPop(info->sitelist,(void **)&ptr))
 	AJFREE(ptr);
@@ -459,7 +459,7 @@ static void showDelRE (EmbPShowRE info) {
 
 }
 
-/* @funcstatic showDelFT ***********************************************************
+/* @funcstatic showDelFT ******************************************************
 **
 ** Deletes a show feature table descriptor object.
 **
@@ -476,7 +476,7 @@ static void showDelFT (EmbPShowFT info) {
 }
 
 
-/* @funcstatic showDelNote ***********************************************************
+/* @funcstatic showDelNote ****************************************************
 **
 ** Deletes a show annotation region descriptor object.
 **
@@ -496,7 +496,7 @@ static void showDelNote (EmbPShowNote info) {
 /* ========================== Assignments ============================= */
 /* ==================================================================== */
 
-/* @section Show Sequence Assignments ***************************************
+/* @section Show Sequence Assignments *****************************************
 **
 ** These functions add to the show sequence object provided as the
 ** first argument.
@@ -524,9 +524,9 @@ AjPRange upperrange, AjPRange colour) {
 
   EmbPShowSeq info;
   ajDebug("embShowAddSeq\n");
-  
+
   AJNEW0(info);
-  
+
   info->number = number;		/* number */
   info->threeletter = threeletter;	/* use three-letter protein code */
   info->upperrange = upperrange;	/* Range of sequence to uppercase */
@@ -550,9 +550,9 @@ void embShowAddBlank (EmbPShow thys) {
 
   EmbPShowBlank info;
   (void) ajDebug("embShowAddBlank\n");
-  
+
   AJNEW0(info);
-  
+
   (void) ajListPushApp(thys->list, showInfoNew(info, SH_BLANK));
 
   return;
@@ -571,7 +571,7 @@ void embShowAddTicks (EmbPShow thys) {
 
   EmbPShowTicks info;
 (void) ajDebug("embShowAddTicks\n");
-  
+
   AJNEW0(info);
 
   (void) ajListPushApp(thys->list, showInfoNew(info, SH_TICK));
@@ -592,7 +592,7 @@ void embShowAddTicknum (EmbPShow thys) {
 
   EmbPShowTicknum info;
 (void) ajDebug("embShowAddTicknum\n");
-  
+
   AJNEW0(info);
 
   (void) ajListPushApp(thys->list, showInfoNew(info, SH_TICKNUM));
@@ -614,9 +614,9 @@ void embShowAddComp (EmbPShow thys, AjBool number) {
 
   EmbPShowComp info;
 (void) ajDebug("embShowAddComp\n");
-  
+
   AJNEW0(info);
-  
+
   info->number = number;	/* number */
 
   (void) ajListPushApp(thys->list, showInfoNew(info, SH_COMP));
@@ -640,12 +640,12 @@ void embShowAddComp (EmbPShow thys, AjBool number) {
 ******************************************************************************/
 
 void embShowAddTran (EmbPShow thys, AjPTrn trnTable, ajint frame,
-		     AjBool threeletter, AjBool number, AjPRange regions, 
+		     AjBool threeletter, AjBool number, AjPRange regions,
 		     ajint orfminsize) {
 
   EmbPShowTran info;
 (void) ajDebug("embShowAddTran\n");
-  
+
   AJNEW0(info);
 
   info->trnTable = trnTable;	/* translation table */
@@ -680,7 +680,7 @@ void embShowAddRE (EmbPShow thys, ajint sense, AjPList restrictlist,
 		   AjBool flat) {
   EmbPShowRE info;
 (void) ajDebug("embShowAddRE\n");
-  
+
   AJNEW0(info);
 
   info->sense = sense;		/* 1 or -1 = sense to translate */
@@ -708,7 +708,7 @@ void embShowAddFT (EmbPShow thys, AjPFeattable feat) {
 
   EmbPShowFT info;
   (void) ajDebug("embShowAddFT\n");
-  
+
   AJNEW0(info);
 
   info->feat = feat;	/* store the feature table */
@@ -732,7 +732,7 @@ void embShowAddNote (EmbPShow thys, AjPRange regions) {
 
   EmbPShowNote info;
 (void) ajDebug("embShowAddNote\n");
-  
+
   AJNEW0(info);
 
   info->regions = regions;	/* regions to note */
@@ -747,7 +747,7 @@ void embShowAddNote (EmbPShow thys, AjPRange regions) {
 /* ==================================================================== */
 
 /* @section Show Sequence Modifiers *******************************************
-**   
+**
 ** These functions modify the behaviour of the last show descriptor on
 ** the list.
 **
@@ -762,13 +762,13 @@ void embShowAddNote (EmbPShow thys, AjPRange regions) {
 /* ==================================================================== */
 /* ======================== Operators ==================================*/
 /* ==================================================================== */
-    
+
 /* @section Show Sequence Operators *******************************************
 **
 ** These functions use the contents of a Show object but do not modify it.
 **
 ******************************************************************************/
-   
+
 
 /* @func embShowPrint *********************************************************
 **
@@ -829,7 +829,7 @@ void embShowPrint(AjPFile out, EmbPShow thys)
 
 	/* delete */
 	(void) ajListstrFree(&lines);
-    
+
     }
 
 }
@@ -845,7 +845,7 @@ void embShowPrint(AjPFile out, EmbPShow thys)
 ******************************************************************************/
 
 static void showPrintLines(AjPFile out, AjPList lines) {
-	
+
   AjIList liter;		/* iterator for lines */
   AjPStr str;
 
@@ -863,9 +863,9 @@ static void showPrintLines(AjPFile out, AjPList lines) {
 /* ==================================================================== */
 /* ======================== Assignments ================================*/
 /* ==================================================================== */
-    
 
-/* @section Show Fill Assignments *******************************************
+
+/* @section Show Fill Assignments *********************************************
 **
 ** These functions fill out the sequence and features lines according to the
 ** descriptor data.
@@ -906,11 +906,11 @@ static void showFillLines(AjPList lines, EmbPShow thys, ajint pos)
 	case SH_SEQ:
 	    (void) showFillSeq(thys, lines, info, pos);
 	    break;
-      
+
 	case SH_BLANK:
 	    (void) showFillBlank(thys, lines, info, pos);
 	    break;
-      
+
 	case SH_TICK:
 	    (void) showFillTicks(thys, lines, info, pos);
 	    break;
@@ -958,7 +958,7 @@ static void showFillLines(AjPList lines, EmbPShow thys, ajint pos)
 ** @@
 ******************************************************************************/
 static void showMargin(EmbPShow thys, AjPList lines) {
-	
+
   AjPStr marginfmt=ajStrNewL(10);
 
 
@@ -980,7 +980,7 @@ static void showMargin(EmbPShow thys, AjPList lines) {
 ** @@
 ******************************************************************************/
 static void showMarginNumber(EmbPShow thys, AjPList lines, ajint number) {
-	
+
   AjPStr marginfmt=ajStrNewL(10);
 
 
@@ -1002,7 +1002,7 @@ static void showMarginNumber(EmbPShow thys, AjPList lines, ajint number) {
 ** @@
 ******************************************************************************/
 static void showPad(AjPList lines, ajint number) {
-	
+
   AjPStr marginfmt=ajStrNewL(10);
 
 
@@ -1014,7 +1014,7 @@ static void showPad(AjPList lines, ajint number) {
   (void) ajStrDel(&marginfmt);
 }
 
-/* @func embShowUpperRange *************************************************
+/* @func embShowUpperRange ****************************************************
 **
 ** Uppercase a string from a sequence with a range
 ** I.e ranges of a sequence are to be uppercased.
@@ -1038,15 +1038,15 @@ void embShowUpperRange(AjPStr * line, AjPRange upperrange, ajint pos) {
 
   for(i=0; i<nr; i++) {	/* for each range in AjPRange upperrange */
     (void) ajRangeValues(upperrange, i, &start, &end);
-/* get type of overlap */    
+/* get type of overlap */
     value = ajRangeOverlapSingle (start, end, pos, ajStrLen(*line));
 
 /* complete overlap */
-    if (value == 2) {	
+    if (value == 2) {
       (void) ajStrToUpper(line);
       return;
 
-/* partial overlap */      
+/* partial overlap */
     } else if (value) {
       start--;	/* change start,end from human-readable position*/
       end--;			/*to index into sequence */
@@ -1059,11 +1059,11 @@ void embShowUpperRange(AjPStr * line, AjPRange upperrange, ajint pos) {
       }
     }
   }
-  
-	
+
+
 }
 
-/* @func embShowColourRange ************************************************
+/* @func embShowColourRange ***************************************************
 **
 ** colour a string from a sequence with a range
 ** I.e ranges of a sequence are to be coloured in HTML.
@@ -1089,17 +1089,17 @@ void embShowColourRange(AjPStr * line, AjPRange colour, ajint pos) {
   for(i=0; i<nr; i++) {	/* for each range in AjPRange colour */
     (void) ajRangeValues(colour, i, &start, &end);
 
-/* get type of overlap */    
+/* get type of overlap */
     value = ajRangeOverlapSingle (start, end, pos, ajStrLen(*line));
 
-/* partial or complete overlap */      
+/* partial or complete overlap */
     if (value) {
       start--;	/* change start from human-readable position to sequence pos */
       end--;	/* ditto end */
 
       start -= pos;
       end -= pos;
-      
+
       if (start < 0) start = 0;
       if (end > ajStrLen(*line)-1) end = ajStrLen(*line)-1;
 
@@ -1121,10 +1121,10 @@ void embShowColourRange(AjPStr * line, AjPRange colour, ajint pos) {
 
     }
   }
-  
+
 /* tidy up */
   ajStrDel(&html);
-	
+
 }
 
 /* @funcstatic showInsertHTML *************************************************
@@ -1158,7 +1158,7 @@ static void showInsertHTML(AjPStr *target, ajint pos, AjPStr insert) {
       if (ajStrStr(*target)[i] == '>') {	/* end tag */
       	tag = ajFalse;
       }
-    }    	
+    }
   }
 
   ajStrInsert(target, i, insert);
@@ -1166,7 +1166,7 @@ static void showInsertHTML(AjPStr *target, ajint pos, AjPStr insert) {
 }
 
 
-/* @funcstatic showFillSeq ***************************************************
+/* @funcstatic showFillSeq ****************************************************
 **
 ** Add this line's worth of sequence to the lines list
 **
@@ -1179,7 +1179,7 @@ static void showInsertHTML(AjPStr *target, ajint pos, AjPStr insert) {
 ******************************************************************************/
 static void showFillSeq(EmbPShow thys, AjPList lines, EmbPShowSeq info,
 			ajint pos) {
-	
+
   AjPStr line=ajStrNewL(81);
 
   AjPStr line1;	/* used to make the three-letter codes */
@@ -1229,7 +1229,7 @@ static void showFillSeq(EmbPShow thys, AjPList lines, EmbPShowSeq info,
 
   } else {
 
-/* nucleic or single-letter code */  	
+/* nucleic or single-letter code */
 /* do uppercase ranges */
     if (ajRangeOverlaps(info->upperrange, pos, thys->width)) {
       (void) embShowUpperRange(&line, info->upperrange, pos);
@@ -1287,11 +1287,11 @@ static void showFillSeq(EmbPShow thys, AjPList lines, EmbPShowSeq info,
 ******************************************************************************/
 static void showFillBlank(EmbPShow thys, AjPList lines, EmbPShowBlank info,
 			  ajint pos) {
-	
+
 /* At last - an easy one! :-) */
 
   AjPStr line=ajStrNewL(2);
-  
+
 (void) ajDebug("showFillBlank\n");
 
   (void) ajStrAssC(&line, "\n");
@@ -1313,7 +1313,7 @@ static void showFillBlank(EmbPShow thys, AjPList lines, EmbPShowBlank info,
 ******************************************************************************/
 static void showFillTicks(EmbPShow thys, AjPList lines, EmbPShowTicks info,
 			  ajint pos) {
-	
+
   AjPStr line=ajStrNewL(81);
   ajint i;
   ajint offset = thys->offset;
@@ -1351,7 +1351,7 @@ static void showFillTicks(EmbPShow thys, AjPList lines, EmbPShowTicks info,
 ******************************************************************************/
 static void showFillTicknum(EmbPShow thys, AjPList lines, EmbPShowTicknum info,
 			    ajint pos) {
-	
+
   AjPStr line=ajStrNewL(81);
   ajint i;
   ajint offset = thys->offset;
@@ -1365,8 +1365,8 @@ static void showFillTicknum(EmbPShow thys, AjPList lines, EmbPShowTicknum info,
   if (pad) {
     (void) showPad(lines, pad);
   }
-  
-  for (i=pos + offset + pad; 
+
+  for (i=pos + offset + pad;
    i < pos+offset+width; i+=10) {
     (void) ajFmtPrintAppS(&line, "%-10d", i);
   }
@@ -1391,7 +1391,7 @@ static void showFillTicknum(EmbPShow thys, AjPList lines, EmbPShowTicknum info,
 ******************************************************************************/
 static void showFillComp(EmbPShow thys, AjPList lines, EmbPShowComp info,
 			 ajint pos) {
-	
+
   AjPStr line=ajStrNewL(81);
 
 (void) ajDebug("showFillComp\n");
@@ -1408,7 +1408,7 @@ static void showFillComp(EmbPShow thys, AjPList lines, EmbPShowComp info,
     (void) showMargin(thys, lines);
   }
 
-/* get the sequence at this position */ 
+/* get the sequence at this position */
   (void) ajStrAppSub(&line, ajSeqStr(thys->seq), pos, pos+thys->width-1);
 /* get the complement */
   (void) ajSeqCompOnlyStr(&line);
@@ -1450,7 +1450,7 @@ static void showFillComp(EmbPShow thys, AjPList lines, EmbPShowComp info,
 static void showFillTran(EmbPShow thys, AjPList lines, EmbPShowTran info,
 			 ajint pos)
 {
-	
+
     AjPStr line=ajStrNewL(81);
     AjPSeq tran=NULL;
     AjPStr seqstr=NULL;	/* local copy of seq string for translating ranges */
@@ -1504,7 +1504,7 @@ static void showFillTran(EmbPShow thys, AjPList lines, EmbPShowTran info,
 		(void) ajSeqReplace (tran,sajb);
 	    }
 	    ajStrDel(&sajb);
-      
+
 	    /*
 	     *  now put in spaces to align the translation to the
 	     *  sequence ranges
@@ -1521,7 +1521,7 @@ static void showFillTran(EmbPShow thys, AjPList lines, EmbPShowTran info,
 	    /*
 	     *  change frames -1 to -3 to frames 4 to 6 for translation
 	     *  of complement (NB that really should say just 'complement', not
-	     *  'reverse-complement' as we will be putting the resulting 
+	     *  'reverse-complement' as we will be putting the resulting
 	     *  reversed peptide under the forward nucleic sequence.)
 	     */
 	    frame = info->frame;
@@ -1529,7 +1529,7 @@ static void showFillTran(EmbPShow thys, AjPList lines, EmbPShowTran info,
 		frame = 3-frame;
             }
 
-	    /* do the translation */    
+	    /* do the translation */
 	    tran = ajTrnSeqOrig (info->trnTable, thys->seq, frame);
 
 	    /*
@@ -1579,7 +1579,7 @@ static void showFillTran(EmbPShow thys, AjPList lines, EmbPShowTran info,
      * line **
      */
 
-    /* get the sequence at this position */ 
+    /* get the sequence at this position */
     (void) ajStrAppSub(&line, ajSeqStr(info->transeq), pos, pos+thys->width-1);
 
     /* get the number of the starting and ending amino-acid on this line */
@@ -1626,7 +1626,7 @@ static void showFillTran(EmbPShow thys, AjPList lines, EmbPShowTran info,
 
 
 
-/* @funcstatic showFillRE ***************************************************
+/* @funcstatic showFillRE *****************************************************
 **
 ** Add this line's worth of Restriction Enzyme cut sites to the lines list
 **
@@ -1640,7 +1640,7 @@ static void showFillTran(EmbPShow thys, AjPList lines, EmbPShowTran info,
 static void showFillRE(EmbPShow thys, AjPList lines, EmbPShowRE info,
 		       ajint pos)
 {
-	
+
     (void) ajDebug("showFillRE\n");
 
     /*
@@ -1659,7 +1659,7 @@ static void showFillRE(EmbPShow thys, AjPList lines, EmbPShowRE info,
     return;
 }
 
-/* @funcstatic showFillREupright ********************************************
+/* @funcstatic showFillREupright **********************************************
 **
 ** Add this line's worth of Restriction Enzyme cut sites to the lines list
 ** Display in upright sit-up-and-beg format
@@ -1680,7 +1680,7 @@ static void showFillREupright(EmbPShow thys, AjPList lines, EmbPShowRE info,
     AjPList linelist = ajListstrNew();	/* list of lines to fill */
     ajint cut;				/* the sites to display */
     AjIList liter;			/* iterator for linelist */
-    AjBool freespace;			/* flag: found free space to print */ 
+    AjBool freespace;			/* flag: found free space to print */
     EmbPMatMatch m=NULL;		/* restriction enz match structure */
     AjIList miter;			/* iterator for matches list */
     EmbPShowREsite sitenode;		/* site node structure */
@@ -1691,7 +1691,7 @@ static void showFillREupright(EmbPShow thys, AjPList lines, EmbPShowRE info,
     AjPStr sajb=NULL;
 
     baseline = ajStrNew();
-  
+
     /* if we have not yet produced a sorted list of cut sites, do it now */
     if (info->sitelist == NULL)
     {
@@ -1813,7 +1813,7 @@ static void showFillREupright(EmbPShow thys, AjPList lines, EmbPShowRE info,
     (void) ajListstrPush(linelist, baseline);
 
     /*
-     *  reverse the order of the lines if we are in the forward sense as 
+     *  reverse the order of the lines if we are in the forward sense as
      *  then we get the ticks pointing downwards :-)
      */
     if (info->sense == 1) ajListstrReverse(linelist);
@@ -1841,7 +1841,7 @@ static void showFillREupright(EmbPShow thys, AjPList lines, EmbPShowRE info,
     ajStrDel(&tick);
 }
 
-/* @funcstatic showFillREuprightSort ****************************************
+/* @funcstatic showFillREuprightSort ******************************************
 **
 ** Sort routine for showFillREupright - produces reverse cut site order
 **
@@ -1862,11 +1862,11 @@ static ajint showFillREuprightSort (const void* a, const void* b) {
     res = ajStrLen((*(EmbPShowREsite *)b)->name) -
           ajStrLen((*(EmbPShowREsite *)a)->name);
   }
-  
+
   return res;
 }
 
-/* @funcstatic showFillREflat ***********************************************
+/* @funcstatic showFillREflat *************************************************
 **
 ** Add this line's worth of Restriction Enzyme cut sites to the lines list
 ** Display in flat format with recognition sites
@@ -1895,12 +1895,12 @@ static void showFillREflat(EmbPShow thys, AjPList lines, EmbPShowRE info,
     char *claimchar = "*";		/* char used to stake a claim to */
     /* that position in the string */
     AjBool freespace;			/* flag for found a free space to */
-    /* print in */ 
+    /* print in */
     EmbPMatMatch m=NULL;		/* restriction enzyme match struct */
     AjIList miter;			/* iterator for matches list */
     ajint ln;
     AjPStr sajb=NULL;
-    
+
     /* debug */
     /*ajDebug("No. of hits in matches list =%d", info->hits);*/
 
@@ -1933,9 +1933,9 @@ static void showFillREflat(EmbPShow thys, AjPList lines, EmbPShowRE info,
 	else
 	{				/* reverse sense */
 	    if (cut2 < start) start = cut2;
-	    if (cut4 && cut4 < start) start = cut4;  	
+	    if (cut4 && cut4 < start) start = cut4;
 	}
-  
+
 	end = base + ajStrLen(m->pat)-1;
 	nameend = base + ajStrLen(m->cod)-1;
 
@@ -1986,11 +1986,11 @@ static void showFillREflat(EmbPShow thys, AjPList lines, EmbPShowRE info,
 
 	    /* cover binding site with '='s */
 	    for (i=base-start; i<base-start+ajStrLen(m->pat); i++)
-		*(ajStrStr(sitestr)+i) = '='; 
+		*(ajStrStr(sitestr)+i) = '=';
 
 	    /*
 	     *  I tried showing the pattern instead of '='s, but it looks
-	     *  awful - GWW 12 Jan 2000 
+	     *  awful - GWW 12 Jan 2000
 	     *      for (j=0, i=base-start; i<base-start+ajStrLen(m->pat);
 	     *           j++, i++)
 	     *          (ajStrStr(sitestr)+i) = ajStrStr(m->pat)[j];
@@ -2095,7 +2095,7 @@ static void showFillREflat(EmbPShow thys, AjPList lines, EmbPShowRE info,
 		    (void) ajStrSub(&namestr, pos-start, ajStrLen(namestr)-1);
 
 		/* make it display from the start of the line */
-		start = pos; 
+		start = pos;
 
 
 	    }
@@ -2173,7 +2173,7 @@ static void showFillREflat(EmbPShow thys, AjPList lines, EmbPShowRE info,
 		start = pos;
 		end = pos+thys->width-1;
 
-	    } 
+	    }
 
 	    /* debug */
 	    else
@@ -2181,7 +2181,7 @@ static void showFillREflat(EmbPShow thys, AjPList lines, EmbPShowRE info,
 		ajDebug("Shouldn't get to here!");
 		continue;
 	    }
-  
+
 	    /* work up list of lines */
 	    freespace = ajFalse;
 
@@ -2243,7 +2243,7 @@ static void showFillREflat(EmbPShow thys, AjPList lines, EmbPShowRE info,
 		(void) ajListstrPushApp(linelist, line);
 		(void) ajListstrPushApp(linelist, line2);
 	    }
-  
+
 	    /* delete the name and site strings */
 	    ajStrDel(&namestr);
 	    ajStrDel(&sitestr);
@@ -2305,7 +2305,7 @@ static void showFillREflat(EmbPShow thys, AjPList lines, EmbPShowRE info,
     return;
 }
 
-/* @funcstatic showFillFT ***************************************************
+/* @funcstatic showFillFT *****************************************************
 **
 ** Add this line's worth of features to the lines list
 ** NB. the 'source' feature is always ignored
@@ -2317,13 +2317,14 @@ static void showFillREflat(EmbPShow thys, AjPList lines, EmbPShowRE info,
 ** @return [void]
 ** @@
 ******************************************************************************/
-static void showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info, ajint pos)
+static void showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info,
+		       ajint pos)
 {
 
 
     AjIList    iter = NULL;
     AjPFeature gf   = NULL;
-  
+
     AjPStr line=NULL;
     AjPStr line2=NULL;
     AjPList linelist=NULL;	/* list of lines to fill */
@@ -2336,22 +2337,22 @@ static void showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info, ajint pos)
     char *claimchar = "*";	/* char used to stake a claim to */
                                 /* that position in the string */
     AjBool freespace;		/* flag for found a free space to */
-    /* print in */ 
+    /* print in */
     ajint ln;
     AjPStr sajb=NULL;
-    
+
 
 
     (void) ajDebug("showFillFT\n");
     linelist = ajListstrNew();
-    
+
     /*
      *  if feat is NULL then there are no features associated with this
      *  sequence
      */
     if (!info->feat)
 	return;
-      
+
     /*  ajDebug("No. of features=%d", ajFeattabCount(info->feat)); */
 
     /* reminder of the AjSFeature structure for handy reference
@@ -2362,11 +2363,11 @@ static void showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info, ajint pos)
      *  AjPFeatVocFeat    Source ;
      *  AjPFeatVocFeat    Type ;
      *  ajint             Start ;
-     *  ajint             End; 
+     *  ajint             End;
      *  ajint             Start2;
      *  ajint             End2;
      *  AjPStr            Score ;
-     *  AjPList           Tags ;  a.k.a. the [group] field tag-values of GFF2 
+     *  AjPList           Tags ;  a.k.a. the [group] field tag-values of GFF2
      *  AjPStr            Comment ;
      *  AjEFeatStrand     Strand ;
      *  AjEFeatFrame      Frame ;
@@ -2383,7 +2384,7 @@ static void showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info, ajint pos)
 	while(ajListIterMore(iter))
 	{
 	    gf = ajListIterNext (iter) ;
-    
+
             /* ignore remote IDs */
             if (!ajFeatIsLocal(gf)) continue;
 
@@ -2398,7 +2399,7 @@ static void showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info, ajint pos)
 	    if (pos+1 > gf->End || pos+thys->width < gf->Start)
 		continue;
 
-	    /*    
+	    /*
 	       ajDebug("type = %S %d-%d", gf->Type, gf->Start, gf->End);
 	     */
 
@@ -2408,7 +2409,7 @@ static void showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info, ajint pos)
 
 	    /* add tags to namestr*/
 	    showAddTags (&namestr, gf, ajTrue);
-      
+
 	    /*
 	     *  note the start and end positions of the name and line
 	     *  graphics
@@ -2624,16 +2625,16 @@ static void showFillNote(EmbPShow thys, AjPList lines, EmbPShowNote info,
     char *claimchar = "*";	/* char used to stake a claim to */
                                 /* that position in the string */
     AjBool freespace;		/* flag for found a free space to */
-    /* print in */ 
+    /* print in */
     ajint ln;
     AjPStr sajb=NULL;
-    
+
     ajint count;		/* count of annotation region */
     ajint rstart, rend;		/* region start and end */
 
     (void) ajDebug("showFillFT\n");
     linelist = ajListstrNew();
-    
+
     /* count through the annotation regions */
     if (info->regions && ajRangeNumber(info->regions))
     {
@@ -2653,7 +2654,7 @@ static void showFillNote(EmbPShow thys, AjPList lines, EmbPShowNote info,
 
 	    /* get annotation string */
             ajRangeText (info->regions, count, &namestr);
-      
+
 	    /*
 	     *  note the start and end positions of the name and line
 	     *  graphics
@@ -2841,7 +2842,7 @@ static void showFillNote(EmbPShow thys, AjPList lines, EmbPShowNote info,
 
 
 
-/* @funcstatic showOverPrint ************************************************
+/* @funcstatic showOverPrint **************************************************
 **
 ** Overwrite (appending if necessary) a portion of a string with another
 **
@@ -2875,7 +2876,7 @@ ajDebug("Target Len=%d Insert Len=%d, start pos=%d",
 /* debug */
 /*
 for (i=0; i<ajStrLen(insert); i++) {
-if (*(ajStrStr(*target)+i+start) == '\0' || *(ajStrStr(insert)+i) == '\0') 
+if (*(ajStrStr(*target)+i+start) == '\0' || *(ajStrStr(insert)+i) == '\0')
 {ajDebug("ARGGGGGGGGGHHHHHHHHHHHHHHHHHHHHHHHHHH!!!!!!!!!!!!!!!!!!!!!!!!!!!!");}
 }
 */
@@ -2885,13 +2886,13 @@ if (*(ajStrStr(*target)+i+start) == '\0' || *(ajStrStr(insert)+i) == '\0')
 /*ajDebug("In overprint, inserting char: %c", *(ajStrStr(insert)+i));*/
     *(ajStrStr(*target)+i+start) = *(ajStrStr(insert)+i);
   }
-/*  
+/*
 ajDebug("result is: >%S<", *target);
-ajDebug("exiting showOverPrint");  
+ajDebug("exiting showOverPrint");
 */
 }
 
-/* @funcstatic showLineIsClear **********************************************
+/* @funcstatic showLineIsClear ************************************************
 **
 ** Checks that a section of a string is clear to print in (only has blanks in)
 **
@@ -2915,7 +2916,7 @@ ajDebug("target=>%S<", *line);
 /*ajDebug("In showLineIsClear: ajStrAppKI of %d chars", end-len);*/
     (void) ajStrAppKI(line, ' ', end-len);
   }
-  
+
   for (i=start; i<=end; i++) {
 /*ajDebug("In showLineIsClear: Line at pos %d is >%c<",
 	i, *(ajStrStr(*line)+i));*/
@@ -2927,7 +2928,7 @@ ajDebug("target=>%S<", *line);
 
 }
 
-/* @funcstatic showAddTags ***********************************************
+/* @funcstatic showAddTags ****************************************************
 **
 ** writes feature tags to the tagsout string
 **
@@ -2935,7 +2936,7 @@ ajDebug("target=>%S<", *line);
 ** @param [r] feat [AjPFeature] Feature to be processed
 ** @param [r] values [AjBool] display values of tags
 **
-** @return [void] 
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -2951,7 +2952,7 @@ static void showAddTags (AjPStr *tagsout, AjPFeature feat, AjBool values)
 
     tagval = ajStrNew();
     tagnam = ajStrNew();
-    
+
     titer = ajFeatTagIter (feat);
 
     while (ajFeatTagval(titer, &tagnam, &tagval))
@@ -2968,7 +2969,7 @@ static void showAddTags (AjPStr *tagsout, AjPFeature feat, AjBool values)
 
     ajStrDel(&tagval);
     ajStrDel(&tagnam);
-    
+
     return;
 }
 

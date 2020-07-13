@@ -3,7 +3,7 @@ extern "C"
 {
 #endif
 
-/* @source embGraph.h 
+/* @source embGraph.h
 **
 ** General Plot/Printing routines.
 **
@@ -11,12 +11,12 @@ extern "C"
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -38,11 +38,13 @@ extern "C"
 #define HIST_SIDEBYSIDE 1
 #define HIST_SEPARATE   2
 
-#define GRAPH_HIST (AJGRAPH_X_BOTTOM + AJGRAPH_Y_LEFT + AJGRAPH_Y_RIGHT+ AJGRAPH_Y_INVERT_TICK + AJGRAPH_X_INVERT_TICK + AJGRAPH_Y_TICK + AJGRAPH_X_TICK + AJGRAPH_X_LABEL + AJGRAPH_Y_LABEL + AJGRAPH_TITLE )
+#define GRAPH_HIST (AJGRAPH_X_BOTTOM + AJGRAPH_Y_LEFT + AJGRAPH_Y_RIGHT + \
+AJGRAPH_Y_INVERT_TICK + AJGRAPH_X_INVERT_TICK + AJGRAPH_Y_TICK + \
+AJGRAPH_X_TICK + AJGRAPH_X_LABEL + AJGRAPH_Y_LABEL + AJGRAPH_TITLE )
 
-extern ajint aj_hist_mark;    
+extern ajint aj_hist_mark;
 
-/* @data AjPHistData *******************************************************
+/* @data AjPHistData **********************************************************
 **
 ** AJAX data structure for histogram graph data
 **
@@ -60,7 +62,7 @@ typedef struct AjSHistData {
   /*  AjPStr yaxisright;*/
 } AjOHistData, *AjPHistData;
 
-/* @data AjPHist *******************************************************
+/* @data AjPHist **************************************************************
 **
 ** AJAX data structure for histogram graph objects
 **
@@ -69,7 +71,7 @@ typedef struct AjSHistData {
 typedef struct AjSHist {
   ajint numofsets;        /* number of current sets */
   ajint numofsetsmax;     /* maximum number of sets */
-  ajint numofdatapoints; 
+  ajint numofdatapoints;
   float xmin,xmax;
   ajint displaytype;
   ajint bins;

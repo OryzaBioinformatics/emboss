@@ -1,26 +1,26 @@
-/********************************************************************
+/******************************************************************************
 ** @source AJAX nucleic acid functions
 **
 ** @author Copyright (C) 1999 Alan Bleasby
-** @version 1.0 
+** @version 1.0
 ** @modified Feb 25 ajb First version
 ** @@
-** 
+**
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
 ** version 2 of the License, or (at your option) any later version.
-** 
+**
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Library General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU Library General Public
 ** License along with this library; if not, write to the
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ** Boston, MA  02111-1307, USA.
-********************************************************************/
+******************************************************************************/
 
 #include "ajax.h"
 #include <math.h>
@@ -41,7 +41,7 @@ AjBool aj_melt_saveshift=1;
 
 
 
-/* @func ajMeltInit *********************************************************
+/* @func ajMeltInit ***********************************************************
 **
 ** Initialises melt entropies, enthalpies and energies. Different data
 ** files are read for DNA or RNA heteroduplex. Also sets optional flag
@@ -62,7 +62,7 @@ void ajMeltInit(AjPStr *type, ajint savesize)
     AjPStr  pair2=NULL;
     AjPStr  acgt=NULL;
     AjPStr  line=NULL;
-    
+
     ajint i,j,k;
     char *p;
     char *q;
@@ -70,16 +70,16 @@ void ajMeltInit(AjPStr *type, ajint savesize)
 
     AjBool got1;
     AjBool got2;
-    
+
 
     aj_melt_savesize = savesize;
     aj_melt_saveinit = ajFalse;
-    
+
     if(aj_melt_I) return;
-    
+
 
     mfname = ajStrNew();
-    
+
     if(!ajStrCmpC(*type, "rna"))
     {
 	(void) ajStrSetC(&mfname,RNAMELTFILE);
@@ -97,12 +97,12 @@ void ajMeltInit(AjPStr *type, ajint savesize)
     pair2=ajStrNew();
     acgt=ajStrNew();
     line=ajStrNew();
-    
+
     (void) ajStrAssC(&pair,"AA");
     (void) ajStrAssC(&acgt,"ACGT");
     p=ajStrStr(pair);
     q=ajStrStr(acgt);
-    
+
     for(i=0,k=0;i<4;++i)
     {
 	*p = *(q+i);
@@ -132,9 +132,9 @@ void ajMeltInit(AjPStr *type, ajint savesize)
 	p=ajSysStrtok(NULL," \t\n\r");
 	if(sscanf(p,"%f",&energy)!=1)
 	    ajFatal("No energy found");
-	
+
 	got1 = got2 = ajFalse;
-	
+
 	for(k=0;k<16;++k)
 	{
 	    if(!ajStrCmpO(aj_m_table[k].pair,pair1))
@@ -145,7 +145,7 @@ void ajMeltInit(AjPStr *type, ajint savesize)
 		got1 = ajTrue;
 	    }
 	}
-	
+
 	for(k=0;k<16;++k)
 	{
 	    if(!ajStrCmpO(aj_m_table[k].pair,pair2))
@@ -156,14 +156,14 @@ void ajMeltInit(AjPStr *type, ajint savesize)
 		got2 = ajTrue;
 	    }
 	}
-	
+
 	if(!got1 || !got2)
 	    ajFatal("ajMeltInit data error");
     }
 
 
 
-    
+
     ajStrDel(&mfname);
     ajStrDel(&pair);
     ajStrDel(&pair1);
@@ -180,7 +180,7 @@ void ajMeltInit(AjPStr *type, ajint savesize)
 
 
 
-/* @func ajProbScore *********************************************************
+/* @func ajProbScore **********************************************************
 **
 ** Gives a score for the probability of two sequences being the same.
 ** The sequences are the same length.
@@ -202,7 +202,7 @@ float ajProbScore(AjPStr *seq1, AjPStr *seq2, ajint len)
     ajint y;
     char *p;
     char *q;
-    
+
 
     mlen = (ajStrLen(*seq1) < ajStrLen(*seq2)) ? ajStrLen(*seq1) :
 	ajStrLen(*seq2);
@@ -217,7 +217,7 @@ float ajProbScore(AjPStr *seq1, AjPStr *seq2, ajint len)
     score = 1.0;
     p = ajStrStr(*seq1);
     q = ajStrStr(*seq2);
-    
+
     for(i=0; i<mlen; ++i)
     {
 	x = ajAZToInt(*(p+i));
@@ -233,7 +233,7 @@ float ajProbScore(AjPStr *seq1, AjPStr *seq2, ajint len)
 
 
 
-/* @func ajMeltEnergy *******************************************************
+/* @func ajMeltEnergy *********************************************************
 **
 ** Calculates melt energy and enthalpy/entropy for a sequence string.
 ** An optional shift is given for stepping along the sequence and loading
@@ -290,7 +290,7 @@ float ajMeltEnergy(AjPStr *strand, ajint len, ajint shift, AjBool isDNA,
 
 
     ipos = 0;
-    
+
     if(doShift)
     {
 	if(!aj_melt_saveinit)
@@ -319,15 +319,15 @@ float ajMeltEnergy(AjPStr *strand, ajint len, ajint shift, AjBool isDNA,
 	    }
 	}
     }
-    else 
-    { 
+    else
+    {
         ipos=0;
 	energy = *entropy = *enthalpy = 0.0;
     }
 
     line = ajStrNew();
     p = ajStrStr(*strand);
-    
+
     while(ipos < len-1)
     {
 	if(doShift)
@@ -341,7 +341,7 @@ float ajMeltEnergy(AjPStr *strand, ajint len, ajint shift, AjBool isDNA,
 	{
 	    (void) ajStrAssSubC(&line,p+ipos,0,1);
 	    ident = ajProbScore(&aj_m_table[j].pair, &line, 2);
-	    
+
 	    if(ident>0.9)
 	    {
 		if(doShift)
@@ -377,7 +377,7 @@ float ajMeltEnergy(AjPStr *strand, ajint len, ajint shift, AjBool isDNA,
 
 
 
-/* @func ajTm *******************************************************
+/* @func ajTm *****************************************************************
 **
 ** Calculates melt temperature of DNA or RNA
 ** An optional shift is given for stepping along the sequence and loading
@@ -408,11 +408,11 @@ float ajTm(AjPStr *strand, ajint len, ajint shift, float saltconc,
     /*    double LogSalt;*/
 
 
-    /* LogSalt = 16.6 * (float) (log10((double) (saltconc/1000.0)));*/    /* mM */
+ /* LogSalt = 16.6 * (float) (log10((double) (saltconc/1000.0)));*/    /* mM */
     R = 1.987;			/* molar gas constant (cal/c * mol)        */
     LogDNA = R * (float)log((double)(DNAconc/4000000000.0));	     /* nM */
     To = 273.15;
-    
+
     (void) ajMeltEnergy(strand, len, shift, isDNA, ajFalse, &sumEnthalpy,
 			&sumEntropy);
 
@@ -426,7 +426,7 @@ float ajTm(AjPStr *strand, ajint len, ajint shift, float saltconc,
 
     dTm = ((enthalpy*1000.0) / (entropy+LogDNA)) /*+ LogSalt*/ - To;
     Tm = (float) dTm;  /* slight loss of precision here but no matter */
-    
+
     return Tm;
 }
 
@@ -435,7 +435,7 @@ float ajTm(AjPStr *strand, ajint len, ajint shift, float saltconc,
 
 
 
-/* @func ajMeltGC *******************************************************
+/* @func ajMeltGC *************************************************************
 **
 ** Calculates GC fraction of a sequence allowing for ambiguity
 **
@@ -451,10 +451,10 @@ float ajMeltGC(AjPStr *strand, ajint len)
     ajint i;
     char *p;
     double count;
-    
+
     p=ajStrStr(*strand);
     count = 0.0;
-    
+
     for(i=0;i<len;++i)
     {
 	t = toupper((ajint) *(p+i));
@@ -471,7 +471,7 @@ float ajMeltGC(AjPStr *strand, ajint len)
 
 
 
-/* @func ajMeltEnergy2 *******************************************************
+/* @func ajMeltEnergy2 ********************************************************
 **
 ** Calculates melt energy for use with programs like prima
 **
@@ -501,7 +501,7 @@ float ajMeltEnergy2(char *strand, ajint pos, ajint len, AjBool isDNA,
 
     ajint i;
     ajint j;
-    
+
     ajint limit=0;
     AjPStr line=NULL;
     float ident=0.0;
@@ -510,7 +510,7 @@ float ajMeltEnergy2(char *strand, ajint pos, ajint len, AjBool isDNA,
 
 
     limit=len-1;
-    
+
     if(!aj_melt_I)
     {
 	if(isDNA)
@@ -524,13 +524,13 @@ float ajMeltEnergy2(char *strand, ajint pos, ajint len, AjBool isDNA,
 	    ajMeltInit(&fname,len);
 	}
 	ajStrDel(&fname);
-	
+
 	AJCNEW0 (*saveentr, limit);
 	AJCNEW0 (*saveenth, limit);
 	AJCNEW0 (*saveener, limit);
 
 	line=ajStrNew();
-	
+
 	for(i=0;i<limit;++i)
 	{
 	    for(j=0;j<16;++j)
@@ -552,7 +552,7 @@ float ajMeltEnergy2(char *strand, ajint pos, ajint len, AjBool isDNA,
 
     energy=*enthalpy=*entropy=(float)0.0;
 
-    
+
     for(i=0;i<limit;++i)
     {
 	energy += (*saveener)[pos+i];
@@ -566,7 +566,7 @@ float ajMeltEnergy2(char *strand, ajint pos, ajint len, AjBool isDNA,
 
 
 
-/* @func ajTm2 *******************************************************
+/* @func ajTm2 ****************************************************************
 **
 ** Calculates melt temperature of DNA or RNA
 **
@@ -598,11 +598,11 @@ float ajTm2(char *strand, ajint pos, ajint len, float saltconc,
     /* double LogSalt;*/
 
 
-    /* LogSalt = 16.6 * (float) (log10((double) (saltconc/1000.0))); */    /* mM */
+ /* LogSalt = 16.6 * (float) (log10((double) (saltconc/1000.0))); */ /* mM */
     R = 1.987;			/* molar gas constant (cal/c * mol)        */
     LogDNA = R * (float)log((double)(DNAconc/4000000000.0));	     /* nM */
     To = 273.15;
-    
+
     (void) ajMeltEnergy2(strand, pos, len, isDNA, &sumEnthalpy,
 			 &sumEntropy, &saveentr, &saveenth, &saveener);
 
@@ -625,7 +625,7 @@ float ajTm2(char *strand, ajint pos, ajint len, float saltconc,
 
 
 
-/* @func ajProdTm *******************************************************
+/* @func ajProdTm *************************************************************
 **
 ** Calculates product melt temperature of DNA
 **
@@ -640,18 +640,18 @@ float ajProdTm(float gc, float saltconc, ajint len)
 {
     float ptm;
     float LogSalt;
-    
+
 
     LogSalt = (float)16.6 * (float) (log10((double) (saltconc/1000.0)));
 
     ptm = (float)81.5 - (float)(675/len) + LogSalt + ((float)0.41 * gc);
-    
+
     return ptm;
 }
 
 
 
-/* @func ajAnneal *******************************************************
+/* @func ajAnneal *************************************************************
 **
 ** Calculates annealing temperature of product and primer
 **

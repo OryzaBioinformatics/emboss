@@ -7,34 +7,34 @@ extern "C"
 #define embgroup_h
 
 
-/* @data GPnode *******************************************************
+/* @data GPnode ***************************************************************
 ** This serves as both a node in a list of names of groups which each hold
 ** a list of details of programs (names and documentation) and also
 ** it is a node in a list of the details of programs (names and documentation).
-** 
+**
 ** Using the same structure for both is a bit confusing, but it simplifies
 ** some of the routines which search and output the lists of gnodes of
-** groups and program data. 
-** 
+** groups and program data.
+**
 ** GROUP LIST 	nodes point to	PROGRAM LISTS
 ** ----------			-------------
-** 
+**
 ** group gnode 	-> program gnode - program gnode - program gnode - etc.
 **     |
 ** group gnode 	-> program gnode - program gnode - program gnode - etc.
 **     |
-**    etc. 
-** 
-** 
+**    etc.
+**
+**
 ** The layout of the 'alpha' list of alphabetic listing of applications is
 ** a bit different - instead of applications being grouped, as in 'glist'
 ** above, the applications all come under one major group and each
 ** application holds a list of the groups it belongs to:
-** 
+**
 ** ALPHA LIST
 ** ----------
-** 
-** group gnode -> program gnode -> group gnode - group gnode - group gnode - etc.
+**
+** group gnode -> program gnode -> group gnode - group gnode - etc.
 ** 		   |
 ** 	       program gnode -> group gnode - group gnode - group gnode - etc.
 ** 		   |
@@ -45,8 +45,8 @@ extern "C"
 ** 	       program gnode -> group gnode - group gnode - group gnode - etc.
 **                    |
 **                   etc.
-**                   
-**                  
+**
+**
 ** @alias Gnode
 **
 ******************************************************************************/

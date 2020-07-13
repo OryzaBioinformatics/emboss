@@ -1235,7 +1235,7 @@ extern "C"
       void *_private;
       void (*ref) (PortableServer_Servant _servant, CORBA_Environment * ev);
       void (*unref) (PortableServer_Servant _servant, CORBA_Environment * ev);
-      
+
 	 CORBA_Object(*query_interface) (PortableServer_Servant _servant,
 					 const CORBA_char * repoid,
 					 CORBA_Environment * ev);
@@ -1283,7 +1283,7 @@ extern "C"
    typedef struct
    {
       void *_private;
-      
+
 	 CORBA_short(*type) (PortableServer_Servant _servant,
 			     CORBA_Environment * ev);
        CORBA_boolean(*is_circular) (PortableServer_Servant _servant,
@@ -1359,21 +1359,21 @@ extern "C"
    typedef struct
    {
       void *_private;
-      
+
 	 org_biocorba_seqcore_SeqFeatureVector(*all_SeqFeatures)
 	 (PortableServer_Servant _servant,
 	  const CORBA_boolean sub_seqfeatures, CORBA_Environment * ev);
-      
+
 	 org_biocorba_seqcore_SeqFeatureVector(*get_SeqFeatures_by_type)
 	 (PortableServer_Servant _servant,
 	  const CORBA_boolean sub_seqfeatures, const CORBA_char * type,
 	  CORBA_Environment * ev);
-      
+
 	 org_biocorba_seqcore_SeqFeatureVector(*get_SeqFeatures_in_region)
 	 (PortableServer_Servant _servant, const CORBA_long start,
 	  const CORBA_long end, const CORBA_boolean sub_seqfeatures,
 	  CORBA_Environment * ev);
-      
+
 	 org_biocorba_seqcore_SeqFeatureVector
 	 (*get_SeqFeatures_in_region_by_type) (PortableServer_Servant
 					       _servant,
@@ -1383,7 +1383,7 @@ extern "C"
 					       sub_seqfeatures,
 					       const CORBA_char * type,
 					       CORBA_Environment * ev);
-      
+
 	 org_biocorba_seqcore_PrimarySeq(*get_PrimarySeq)
 	 (PortableServer_Servant _servant, CORBA_Environment * ev);
    }
@@ -1455,7 +1455,7 @@ extern "C"
       org_biocorba_seqcore_NameValueSetList
 	 *(*qualifiers) (PortableServer_Servant _servant,
 			 CORBA_Environment * ev);
-      
+
 	 org_biocorba_seqcore_SeqFeatureVector(*sub_SeqFeatures)
 	 (PortableServer_Servant _servant, CORBA_Environment * ev);
       org_biocorba_seqcore_SeqFeatureLocationList
@@ -1464,7 +1464,7 @@ extern "C"
        CORBA_boolean(*PrimarySeq_is_available) (PortableServer_Servant
 						_servant,
 						CORBA_Environment * ev);
-      
+
 	 org_biocorba_seqcore_PrimarySeq(*get_PrimarySeq)
 	 (PortableServer_Servant _servant, CORBA_Environment * ev);
    }
@@ -1494,7 +1494,7 @@ extern "C"
    typedef struct
    {
       void *_private;
-      
+
 	 org_biocorba_seqcore_PrimarySeq(*next) (PortableServer_Servant
 						 _servant,
 						 CORBA_Environment * ev);
@@ -1529,7 +1529,7 @@ extern "C"
    typedef struct
    {
       void *_private;
-      
+
 	 org_biocorba_seqcore_SeqFeature(*next) (PortableServer_Servant
 						 _servant,
 						 CORBA_Environment * ev);
@@ -1565,12 +1565,12 @@ extern "C"
    {
       void *_private;
        CORBA_long(*size) (PortableServer_Servant _servant, CORBA_Environment * ev);
-      
+
 	 org_biocorba_seqcore_PrimarySeq(*elementAt) (PortableServer_Servant
 						      _servant,
 						      const CORBA_long index,
 						      CORBA_Environment * ev);
-      
+
 	 org_biocorba_seqcore_PrimarySeqIterator(*iterator)
 	 (PortableServer_Servant _servant, CORBA_Environment * ev);
    }
@@ -1601,12 +1601,12 @@ extern "C"
    {
       void *_private;
        CORBA_long(*size) (PortableServer_Servant _servant, CORBA_Environment * ev);
-      
+
 	 org_biocorba_seqcore_SeqFeature(*elementAt) (PortableServer_Servant
 						      _servant,
 						      const CORBA_long index,
 						      CORBA_Environment * ev);
-      
+
 	 org_biocorba_seqcore_SeqFeatureIterator(*iterator)
 	 (PortableServer_Servant _servant, CORBA_Environment * ev);
    }
@@ -1642,12 +1642,12 @@ extern "C"
 			     CORBA_Environment * ev);
        CORBA_long(*max_sequence_length) (PortableServer_Servant _servant,
 					 CORBA_Environment * ev);
-      
+
 	 org_biocorba_seqcore_PrimarySeq(*get_PrimarySeq)
 	 (PortableServer_Servant _servant,
 	  const CORBA_char * accession_number, const CORBA_long version,
 	  CORBA_Environment * ev);
-      
+
 	 org_biocorba_seqcore_PrimarySeqVector(*get_PrimarySeqVector)
 	 (PortableServer_Servant _servant, CORBA_Environment * ev);
    }
@@ -1677,7 +1677,7 @@ extern "C"
    typedef struct
    {
       void *_private;
-      
+
 	 org_biocorba_seqcore_Seq(*get_Seq) (PortableServer_Servant _servant,
 					     const CORBA_char *
 					     accession_number,
@@ -1754,13 +1754,13 @@ extern "C"
    typedef struct
    {
       void *_private;
-      
+
 	 org_biocorba_seqcore_PrimarySeqIterator
 	 (*get_PrimarySeqIterator_from_file) (PortableServer_Servant _servant,
 					      const CORBA_char * format,
 					      const CORBA_char * filename,
 					      CORBA_Environment * ev);
-      
+
 	 org_biocorba_seqcore_PrimarySeq(*get_PrimarySeq_from_file)
 	 (PortableServer_Servant _servant, const CORBA_char * format,
 	  const CORBA_char * filename, CORBA_Environment * ev);

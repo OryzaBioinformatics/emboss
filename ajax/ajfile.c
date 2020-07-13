@@ -1,24 +1,24 @@
-/********************************************************************
+/******************************************************************************
 ** @source AJAX file routines
 **
-** @version 1.0 
+** @version 1.0
 ** @@
-** 
+**
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
 ** License as published by the Free Software Foundation; either
 ** version 2 of the License, or (at your option) any later version.
-** 
+**
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Library General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU Library General Public
 ** License along with this library; if not, write to the
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ** Boston, MA  02111-1307, USA.
-********************************************************************/
+******************************************************************************/
 
 #include "ajax.h"
 #include <stdarg.h>
@@ -51,7 +51,7 @@ static DIR*   fileOpenDir (AjPStr *dir);
 /* ========================= constructors ============================= */
 /* ==================================================================== */
 
-/* @section File Constructors ************************************************
+/* @section File Constructors *************************************************
 **
 ** All constructors return a new open file by pointer. It is the responsibility
 ** of the user to first destroy any previous file pointer. The target pointer
@@ -66,7 +66,7 @@ static DIR*   fileOpenDir (AjPStr *dir);
 **
 ******************************************************************************/
 
-/* @func ajFileNew *******************************************************
+/* @func ajFileNew ************************************************************
 **
 ** Creates a new file object.
 **
@@ -124,7 +124,7 @@ AjPFile ajFileNewInPipe (const AjPStr name) {
   if (pid < 0)
     ajFatal("fork create failed");
   /* pid is zero in the child, but is the child PID in the parent */
-  
+
   if (!pid) { /* this is the child process */
     (void) close (pipefds[0]);
 
@@ -159,7 +159,7 @@ AjPFile ajFileNewInPipe (const AjPStr name) {
   return thys;
 }
 
-/* @func ajFileNewIn *******************************************************
+/* @func ajFileNewIn **********************************************************
 **
 ** Creates a new file object to read a named file.
 **
@@ -183,9 +183,9 @@ AjPFile ajFileNewIn (const AjPStr name) {
     AjPStr dirname=NULL;
     AjPStr wildname=NULL;
     AjPFile ptr;
-    
+
     char   *p=NULL;
-    
+
     ajDebug("ajFileNewIn '%S'\n", name);
     (void) ajStrAssS(&tmpname, name);
 
@@ -222,7 +222,7 @@ AjPFile ajFileNewIn (const AjPStr name) {
 	    ajDebug("use HOME: '%S'\n", tmpname);
 	}
     }
-    
+
     if (!wildexp)
 	wildexp = ajRegCompC("(.*/)?([^/]*[*?][^/]*)$");
 
@@ -238,7 +238,7 @@ AjPFile ajFileNewIn (const AjPStr name) {
     }
 
 
-    
+
     AJNEW0(thys);
     ajStrAssS(&thys->Name, tmpname);
     (void) ajNamResolve(&thys->Name);
@@ -246,7 +246,7 @@ AjPFile ajFileNewIn (const AjPStr name) {
     if (!thys->fp)
     {
 	ajStrDel(&thys->Name);
-	
+
 	AJFREE (thys);
 	/*    thys->Handle = 0;*/
 	return NULL;
@@ -265,7 +265,7 @@ AjPFile ajFileNewIn (const AjPStr name) {
 
 
 
-/* @func ajFileNewInC *******************************************************
+/* @func ajFileNewInC *********************************************************
 **
 ** Creates a new file object to read a named file.
 **
@@ -281,7 +281,7 @@ AjPFile ajFileNewInC (const char *name)
 {
     AjPStr tmp;
     AjPFile fp;
-    
+
     tmp = ajStrNewC(name);
     fp = ajFileNewIn(tmp);
     ajStrDel(&tmp);
@@ -329,7 +329,7 @@ AjPFile ajFileNewInList (const AjPList list) {
   return thys;
 }
 
-/* @func ajFileNewApp *******************************************************
+/* @func ajFileNewApp *********************************************************
 **
 ** Creates an output file object with a specified name.
 ** The file is opened for append so it either appends to an existing file
@@ -362,7 +362,7 @@ AjPFile ajFileNewApp (const AjPStr name) {
   return thys;
 }
 
-/* @func ajFileNewOut *******************************************************
+/* @func ajFileNewOut *********************************************************
 **
 ** Creates a new output file object with a specified name.
 **
@@ -406,7 +406,7 @@ AjPFile ajFileNewOut (const AjPStr name) {
 
   return thys;
 }
-/* @func ajFileNewOutD ******************************************************
+/* @func ajFileNewOutD ********************************************************
 **
 ** Creates a new output file object with a specified directory and name.
 **
@@ -460,7 +460,7 @@ AjPFile ajFileNewOutD (const AjPStr dir, const AjPStr name) {
   return thys;
 }
 
-/* @func ajFileNewF *******************************************************
+/* @func ajFileNewF ***********************************************************
 **
 ** Creates a new file object from an open C file.
 **
@@ -496,7 +496,7 @@ AjPFile ajFileNewF (FILE* file) {
 /* =========================== destructor ============================= */
 /* ==================================================================== */
 
-/* @section File Destructors ********************************************
+/* @section File Destructors **************************************************
 **
 ** Destruction is achieved by closing the file.
 **
@@ -504,7 +504,7 @@ AjPFile ajFileNewF (FILE* file) {
 **
 ******************************************************************************/
 
-/* @func ajFileClose *******************************************************
+/* @func ajFileClose **********************************************************
 **
 ** Close and free a file object.
 **
@@ -585,13 +585,13 @@ static void fileClose (const AjPFile thys) {
 /* ========================== Assignments ============================= */
 /* ==================================================================== */
 
-/* @section File Assignments ************************************************
+/* @section File Assignments **************************************************
 **
 ** These functions overwrite the file provided as the first argument
 **
 ******************************************************************************/
 
-/* @func ajFileDataNew *******************************************************
+/* @func ajFileDataNew ********************************************************
 **
 ** Returns an allocated AjFileInNew pointer (AjPFile) if file exists
 ** a) in .   b) in ./.embossdata c) ~/ d) ~/.embossdata e) $DATA
@@ -609,7 +609,7 @@ void ajFileDataNew(const AjPStr tfile, AjPFile *fnew)
     AjPStr hname = NULL;
     static AjPStr pname = NULL;
     char *p;
-    
+
     if(tfile == NULL) return;
 
     (void) ajStrAss(&bname, tfile);
@@ -631,7 +631,7 @@ void ajFileDataNew(const AjPStr tfile, AjPFile *fnew)
 	ajStrDelReuse(&fname);
 	return;
     }
-    
+
 
     if((p=getenv("HOME")))
     {
@@ -648,7 +648,7 @@ void ajFileDataNew(const AjPStr tfile, AjPFile *fnew)
 	    ajStrDelReuse(&fname);
 	    return;
 	}
-    
+
 	(void) ajStrAssC(&hname,p);
 	(void) ajStrAppC(&hname,"/.embossdata/");
 	(void) ajStrApp(&hname,bname);
@@ -663,13 +663,13 @@ void ajFileDataNew(const AjPStr tfile, AjPFile *fnew)
 	}
 	ajStrDel(&hname);
     }
-    
-    
+
+
 
 
     if(ajNamGetValueC("DATA", &fname))
     {
-    
+
         (void) ajFileDirFix(&fname);
 	(void) ajStrApp(&fname,bname);
 	ajDebug ("ajFileDataNew trying '%S'\n", fname);
@@ -681,7 +681,7 @@ void ajFileDataNew(const AjPStr tfile, AjPFile *fnew)
 	    return;
 	}
     }
-    
+
     if(ajNamRootInstall(&fname)) /* just EMBOSS/data under installation */
     {
         (void) ajNamRootPack(&pname);	/* just EMBOSS */
@@ -699,10 +699,10 @@ void ajFileDataNew(const AjPStr tfile, AjPFile *fnew)
 	    return;
 	}
     }
-    
+
     if(ajNamRoot(&fname))	/* just emboss/data under source */
     {
-    
+
 	(void) ajStrAppC(&fname,"/data/");
 	(void) ajStrApp(&fname,bname);
 	ajDebug ("ajFileDataNew trying '%S'\n", fname);
@@ -714,7 +714,7 @@ void ajFileDataNew(const AjPStr tfile, AjPFile *fnew)
 	    return;
 	}
     }
-    
+
     ajStrDelReuse(&bname);
     ajStrDelReuse(&fname);
 
@@ -723,7 +723,7 @@ void ajFileDataNew(const AjPStr tfile, AjPFile *fnew)
     return;
 }
 
-/* @func ajFileDataNewC ******************************************************
+/* @func ajFileDataNewC *******************************************************
 **
 ** Returns an allocated AjFileInNew pointer (AjPFile) if file exists
 ** a) in .   b) in ./.embossdata c) ~/ d) ~/.embossdata e) $DATA
@@ -741,12 +741,12 @@ void ajFileDataNewC(const char *s, AjPFile *f)
     t=ajStrNewC(s);
     ajFileDataNew(t,f);
     ajStrDel(&t);
-    
+
     return;
 }
 
 
-/* @func ajFileDataDirNew ****************************************************
+/* @func ajFileDataDirNew *****************************************************
 **
 ** Returns an allocated AjFileInNew pointer (AjPFile) if file exists
 ** in the EMBOSS/data/(dir) directory, or is found in the usual directories
@@ -766,7 +766,7 @@ void ajFileDataDirNew(const AjPStr tfile, const AjPStr dir, AjPFile *fnew)
 
     if(ajNamGetValueC("DATA", &fname))
     {
-    
+
         (void) ajFileDirFix(&fname);
 	if (ajStrLen(dir))
 	{
@@ -782,7 +782,7 @@ void ajFileDataDirNew(const AjPStr tfile, const AjPStr dir, AjPFile *fnew)
 	    return;
 	}
     }
-    
+
     if(ajNamRootInstall(&fname)) /* just EMBOSS/data under installation */
     {
         (void) ajNamRootPack(&pname);	/* just EMBOSS */
@@ -805,10 +805,10 @@ void ajFileDataDirNew(const AjPStr tfile, const AjPStr dir, AjPFile *fnew)
 	    return;
 	}
     }
-    
+
     if(ajNamRoot(&fname))	/* just emboss/data under source */
     {
-    
+
 	(void) ajStrAppC(&fname,"/data/");
 	if (ajStrLen(dir))
 	{
@@ -825,7 +825,7 @@ void ajFileDataDirNew(const AjPStr tfile, const AjPStr dir, AjPFile *fnew)
 	    return;
 	}
     }
-    
+
     ajStrDelReuse(&pname);
     ajStrDelReuse(&fname);
 
@@ -836,7 +836,7 @@ void ajFileDataDirNew(const AjPStr tfile, const AjPStr dir, AjPFile *fnew)
     return;
 }
 
-/* @func ajFileDataDirNewC ***************************************************
+/* @func ajFileDataDirNewC ****************************************************
 **
 ** Returns an allocated AjFileInNew pointer (AjPFile) if file exists
 ** in the EMBOSS/data/(dir) directory, or is found in the usual directories
@@ -859,7 +859,7 @@ void ajFileDataDirNewC(const char *s, const char* d, AjPFile *f)
     ajFileDataDirNew(t,u,f);
     ajStrDel(&t);
     ajStrDel(&u);
-    
+
     return;
 }
 
@@ -868,13 +868,13 @@ void ajFileDataDirNewC(const char *s, const char* d, AjPFile *f)
 /* =========================== Modifiers ============================== */
 /* ==================================================================== */
 
-/* @section File Modifiers **************************************************
+/* @section File Modifiers ****************************************************
 **
 ** These functions use the contents of a file object and update them.
 **
 ******************************************************************************/
 
-/* @func ajFileSeek *******************************************************
+/* @func ajFileSeek ***********************************************************
 **
 ** Sets the current position in an open file.
 **
@@ -905,7 +905,7 @@ ajint ajFileSeek (const AjPFile thys, ajlong offset, ajint wherefrom) {
   return ret;
 }
 
-/* @func ajFileRead *******************************************************
+/* @func ajFileRead ***********************************************************
 **
 ** Binary read from an input file object using the C 'fread' function.
 **
@@ -959,7 +959,7 @@ ajuint ajFileReadUint (const AjPFile thys, AjBool Bigendian) {
   return ret;
 }
 
-/* @func ajFileWrite *******************************************************
+/* @func ajFileWrite **********************************************************
 **
 ** Binary write to an output file object using the C 'fwrite' function.
 **
@@ -976,7 +976,7 @@ size_t ajFileWrite (const AjPFile thys, const void* ptr,
   return fwrite (ptr, element_size, count, thys->fp);
 }
 
-/* @func ajFileNext *******************************************************
+/* @func ajFileNext ***********************************************************
 **
 ** Given a file object that includes a list of input files, closes the
 ** current input file and opens the next one.
@@ -1018,7 +1018,7 @@ AjBool ajFileNext (const AjPFile thys) {
   return ajTrue;
 }
 
-/* @func ajFileReopen *******************************************************
+/* @func ajFileReopen *********************************************************
 **
 ** Reopens a file with a new name.
 **
@@ -1106,7 +1106,7 @@ AjBool ajFileGetsTrim (const AjPFile thys, AjPStr* pdest) {
   return ajTrue;
 }
 
-/* @func ajFileGets *******************************************************
+/* @func ajFileGets ***********************************************************
 **
 ** Reads a line from a file and returns the initial file position.
 **
@@ -1123,7 +1123,7 @@ AjBool ajFileGets (const AjPFile thys, AjPStr* pdest) {
   return ajFileGetsL (thys, pdest, &fpos);
 }
 
-/* @func ajFileGetsL *******************************************************
+/* @func ajFileGetsL **********************************************************
 **
 ** Reads a line from a file.
 **
@@ -1258,7 +1258,7 @@ void ajFileOutHeader (const AjPFile thys) {
   return;
 }
 
-/* @func ajFileNameShorten **********************************************
+/* @func ajFileNameShorten ****************************************************
 **
 ** Truncates a filename to a basic file name.
 **
@@ -1308,7 +1308,7 @@ AjBool ajFileNameShorten (AjPStr* fname) {
   return ajFalse;
 }
 
-/* @func ajFileNameTrim **********************************************
+/* @func ajFileNameTrim *******************************************************
 **
 ** Truncates a filename to a basic file name.extension
 **
@@ -1322,23 +1322,6 @@ AjBool ajFileNameTrim (AjPStr* fname) {
 
   static AjPStr tmpstr = NULL;
   char *p;
-  
-/* Replaced by AJB with routine below. Aug 2000
-  static AjPRegexp fileexp = NULL;
-
-  if (!fileexp)
-    fileexp = ajRegCompC("([A-Za-z0-9_-]+[.][A-Za-z0-9_-]+)$");
-
-  if (ajRegExec(fileexp, *fname)) {
-    ajRegSubI(fileexp, 1, &tmpstr);
-    (void) ajStrAssS (fname, tmpstr);
-    return ajTrue;
-  }
-
-  (void) ajStrAssC (fname, "");
-
-  return ajFalse;
-*/
 
   if((p=strrchr(ajStrStr(*fname),(ajint)'/')))
   {
@@ -1349,7 +1332,7 @@ AjBool ajFileNameTrim (AjPStr* fname) {
   return ajTrue;
 }
 
-/* @func ajFileDataNewWrite **************************************************
+/* @func ajFileDataNewWrite ***************************************************
 **
 ** Returns an allocated AjFileNewOut pointer (AjPFile) to a file in the
 ** emboss_DATA area
@@ -1371,8 +1354,13 @@ void ajFileDataNewWrite(const AjPStr tfile, AjPFile *fnew)
 
     if(ajNamGetValueC("DATA", &fname))
     {
-    
-	(void) ajStrAppC(&fname,"/");
+
+	if (!ajFileDir(&fname))	/* also does ajFileDirFix */
+	{
+	    ajNamRootPack(&pname);
+	    ajFatal("%S_DATA directory not found: %S\n",
+		    pname, fname);
+	}
 	(void) ajStrApp(&fname,tfile);
 	if(!(*fnew = ajFileNewOut(fname)))
 	    ajFatal("Cannot write to file %S\n",fname);
@@ -1383,24 +1371,30 @@ void ajFileDataNewWrite(const AjPStr tfile, AjPFile *fnew)
 
     if(ajNamRootInstall(&fname)) /* just emboss/data under installation */
     {
-    
+
         (void) ajNamRootPack(&pname);	/* just EMBOSS */
 	(void) ajFileDirFix(&fname);
 	(void) ajStrAppC(&fname,"share/");
 	(void) ajStrApp(&fname,pname);
 	(void) ajStrAppC(&fname,"/data/");
-	(void) ajStrApp(&fname,tfile);
-	if(!(*fnew = ajFileNewOut(fname)))
-	    ajFatal("Cannot write to file %s\n",ajStrStr(fname));
-	ajStrDel(&fname);
-	return;
+	if (ajFileDir(&fname))	/* if we are installed, else see below */
+	{
+	    (void) ajStrApp(&fname,tfile);
+	    if(!(*fnew = ajFileNewOut(fname)))
+	      ajFatal("Cannot write to file %s\n",ajStrStr(fname));
+	    ajStrDel(&fname);
+	    return;
+	}
 
     }
 
     if(ajNamRoot(&fname))	/* just emboss/data under source */
     {
-    
+
 	(void) ajStrAppC(&fname,"/data/");
+	if (!ajFileDir(&fname))
+	  ajFatal("Not installed, and source data directory not found: %S\n",
+		  fname);
 	(void) ajStrApp(&fname,tfile);
 	if(!(*fnew = ajFileNewOut(fname)))
 	    ajFatal("Cannot write to file %s\n",ajStrStr(fname));
@@ -1409,9 +1403,10 @@ void ajFileDataNewWrite(const AjPStr tfile, AjPFile *fnew)
 
     }
 
-    else
-	ajFatal("Environment variable EMBOSS_DATA not defined\n");
-    
+
+    ajNamRootPack(&pname);
+    ajFatal("No install or source data directory, and %S_DATA not defined\n",
+	    pname);
     ajStrDelReuse(&fname);
     *fnew = NULL;
 
@@ -1422,17 +1417,17 @@ void ajFileDataNewWrite(const AjPStr tfile, AjPFile *fnew)
 /* ======================== Operators ==================================*/
 /* ==================================================================== */
 
-/* @section File Operators ********************************************
+/* @section File Operators ****************************************************
 **
 ** These functions use the contents of a file object but do not make
 ** any changes.
 **
 ******************************************************************************/
 
-/* @func ajFileDir ***********************************************************
+/* @func ajFileDir ************************************************************
 **
-** Checks that a string is a valid directory, and appends a trailing '/'
-** if it is missing.
+** Checks that a string is a valid existing directory, and appends a
+** trailing '/' if it is missing.
 **
 ** @param [u] dir [AjPStr*] Directory path
 ** @return [AjBool] true if a valid directory.
@@ -1447,7 +1442,7 @@ AjBool ajFileDir (AjPStr* dir) {
     return ajFalse;
 
   (void) closedir(odir);
-  
+
   return ajTrue;
 }
 
@@ -1500,7 +1495,7 @@ AjBool ajFileDirPath (AjPStr* dir) {
 }
 
 
-/* @func ajFileGetwd *********************************************************
+/* @func ajFileGetwd **********************************************************
 **
 ** Returns the current directory
 **
@@ -1525,7 +1520,7 @@ AjBool ajFileGetwd (AjPStr* dir) {
   return ajTrue;
 }
 
-/* @func ajFileDirUp ******************************************************
+/* @func ajFileDirUp **********************************************************
 **
 ** Changes directory name to one level up
 **
@@ -1568,11 +1563,10 @@ static DIR* fileOpenDir (AjPStr* dir) {
   return opendir(ajStrStr(*dir));
 }
 
-/* @func ajFileDirFix ****************************************************
+/* @func ajFileDirFix *********************************************************
 **
-** If the directory name
-** has no trailing slash (on Unix) then one is added. This is why the
-** directory name must be writeable.
+** If the directory name has no trailing slash (on Unix) then one is
+** added. This is why the directory name must be writeable.
 **
 ** @param [u] dir [AjPStr*] Directory name.
 ** @return [void]
@@ -1602,7 +1596,7 @@ void ajFileExit (void) {
 }
 
 
-/* @func ajFileTrace *******************************************************
+/* @func ajFileTrace **********************************************************
 **
 ** Writes debug messages to trace the contents of a file object.
 **
@@ -1622,7 +1616,7 @@ void ajFileTrace (const AjPFile thys) {
 /* ============================ Casts ==================================*/
 /* ==================================================================== */
 
-/* @section File Casts ********************************************
+/* @section File Casts ********************************************************
 **
 ** These functions examine the contents of a file object and return some
 ** derived information. Some of them provide access to the internal
@@ -1643,7 +1637,7 @@ ajint ajFileBuffSize (void) {
   return fileBuffSize;
 }
 
-/* @func ajFileName *******************************************************
+/* @func ajFileName ***********************************************************
 **
 ** Returns the file name for a file object. The filename returned is a pointer
 ** to the real string internally, so the user must take care not to change
@@ -1658,7 +1652,7 @@ const char* ajFileName (const AjPFile thys) {
   return ajStrStr(thys->Name);
 }
 
-/* @func ajFileGetName *******************************************************
+/* @func ajFileGetName ********************************************************
 **
 ** Returns the file name for a file object. The filename returned is a pointer
 ** to the real string internally, so the user must take care not to change
@@ -1703,7 +1697,7 @@ AjBool ajFileStat(AjPStr *fname, ajint mode)
     return ajFalse;
 }
 
-/* @func ajFileLength ********************************************************
+/* @func ajFileLength *********************************************************
 **
 ** Returns the length of a file
 **
@@ -1731,7 +1725,7 @@ ajlong ajFileLength(AjPStr fname)
     return -1;
 }
 
-/* @func ajFileTell *******************************************************
+/* @func ajFileTell ***********************************************************
 **
 ** Returns the current position in an open file.
 **
@@ -1747,7 +1741,7 @@ ajlong ajFileTell (const AjPFile thys)
   return ftell(thys->fp);
 }
 
-/* @func ajFileStdout *******************************************************
+/* @func ajFileStdout *********************************************************
 **
 ** Tests whether a file object is really stdout.
 **
@@ -1763,7 +1757,7 @@ AjBool ajFileStdout (const AjPFile file) {
   return ajFalse;
 }
 
-/* @func ajFileStderr *******************************************************
+/* @func ajFileStderr *********************************************************
 **
 ** Tests whether a file object is really stderr.
 **
@@ -1779,7 +1773,7 @@ AjBool ajFileStderr (const AjPFile file) {
   return ajFalse;
 }
 
-/* @func ajFileStdin *******************************************************
+/* @func ajFileStdin **********************************************************
 **
 ** Tests whether a file object is really stdin.
 **
@@ -1795,7 +1789,7 @@ AjBool ajFileStdin (const AjPFile file) {
   return ajFalse;
 }
 
-/* @func ajFileFp *******************************************************
+/* @func ajFileFp *************************************************************
 **
 ** Returns the C file pointer for an open file.
 **
@@ -1812,7 +1806,7 @@ FILE* ajFileFp (const AjPFile thys) {
 /* ========================= constructors ============================= */
 /* ==================================================================== */
 
-/* @section Buffered File Constructors ***************************************
+/* @section Buffered File Constructors ****************************************
 **
 ** All constructors return a new open file by pointer. It is the responsibility
 ** of the user to first destroy any previous file pointer. The target pointer
@@ -1845,7 +1839,7 @@ AjPFileBuff ajFileBuffNewIn (const AjPStr name) {
   return ajFileBuffNewFile (file);
 }
 
-/* @func ajFileBuffNew *****************************************************
+/* @func ajFileBuffNew ********************************************************
 **
 ** Creates a new buffered input file object with an undefined file.
 **
@@ -1918,14 +1912,14 @@ AjBool ajFileBuffSetFile (AjPFileBuff* pthys, AjPFile file) {
 
   thys = *pthys;
   /* same file ??? */
-  if (thys->File && (thys->File->Handle ==  file->Handle)) { 
+  if (thys->File && (thys->File->Handle ==  file->Handle)) {
     ajFileBuffClear (thys, -1);
     return ajTrue;
   }
 
   /* No: this is a copy of the true pointer. */
   /* ajFileClose (&thys->File); */
-  
+
   thys->File = file;
 
   fileBuffInit (thys);
@@ -2119,7 +2113,7 @@ AjPFileBuff ajFileBuffNewDF (const AjPStr dir, const AjPStr filename) {
   return ajFileBuffNewIn (namefix);
 }
 
-/* @func ajFileNewDW ******************************************************
+/* @func ajFileNewDW **********************************************************
 **
 ** Opens directory "dir"
 ** Looks for file(s) matching "file"
@@ -2179,7 +2173,7 @@ AjPFile ajFileNewDW (const AjPStr dir, const AjPStr wildfile) {
   return ajFileNewInList(list);
 }
 
-/* @func ajFileNewDF ******************************************************
+/* @func ajFileNewDF **********************************************************
 **
 ** Opens directory "dir"
 ** Looks for file "file"
@@ -2207,7 +2201,7 @@ AjPFile ajFileNewDF (const AjPStr dir, const AjPStr filename) {
   return ajFileNewIn(namefix);
 }
 
-/* @func ajFileNewDC ******************************************************
+/* @func ajFileNewDC **********************************************************
 **
 ** Opens directory "dir"
 ** Looks for file "file"
@@ -2221,7 +2215,7 @@ AjPFile ajFileNewDF (const AjPStr dir, const AjPStr filename) {
 AjPFile ajFileNewDC (const AjPStr dir, const char* filename) {
 
   static AjPStr namefix = NULL;
-  
+
   if (ajStrLen(dir))
     (void) ajStrAssS (&namefix, dir);
   else
@@ -2260,7 +2254,7 @@ AjPFileBuff ajFileBuffNewInList (const AjPList list) {
 /* =========================== destructor ============================= */
 /* ==================================================================== */
 
-/* @section Buffered File Destructors ****************************************
+/* @section Buffered File Destructors *****************************************
 **
 ** Destruction is achieved by closing the file.
 **
@@ -2268,7 +2262,7 @@ AjPFileBuff ajFileBuffNewInList (const AjPList list) {
 **
 ******************************************************************************/
 
-/* @func ajFileBuffDel *******************************************************
+/* @func ajFileBuffDel ********************************************************
 **
 ** Destructor for a buffered file object.
 **
@@ -2306,7 +2300,7 @@ void ajFileBuffDel (AjPFileBuff* pthis) {
 /* ========================== Assignments ============================= */
 /* ==================================================================== */
 
-/* @section Buffered File Assignments ****************************************
+/* @section Buffered File Assignments *****************************************
 **
 ** These functions overwrite the file provided as the first argument
 **
@@ -2317,13 +2311,13 @@ void ajFileBuffDel (AjPFileBuff* pthis) {
 /* =========================== Modifiers ============================== */
 /* ==================================================================== */
 
-/* @section BufferedFile Modifiers ******************************************
+/* @section BufferedFile Modifiers ********************************************
 **
 ** These functions use the contents of a file object and update them.
 **
 ******************************************************************************/
 
-/* @func ajFileBuffGet *******************************************************
+/* @func ajFileBuffGet ********************************************************
 **
 ** Reads a line from a buffered file. If the buffer has data, reads from the
 ** buffer. If the buffer is exhausted, reads from the file. If the file is
@@ -2342,7 +2336,7 @@ AjBool ajFileBuffGet (const AjPFileBuff thys, AjPStr* pdest) {
   return ajFileBuffGetL (thys, pdest, &fpos);
 }
 
-/* @func ajFileBuffGetStore **************************************************
+/* @func ajFileBuffGetStore ***************************************************
 **
 ** Reads a line from a buffered file. Also appends the line to
 ** a given string if the append flag is true. A double NULL character
@@ -2364,9 +2358,9 @@ AjBool ajFileBuffGetStore (const AjPFileBuff thys, AjPStr* pdest,
 {
   ajlong fpos = 0;
   AjBool ret;
-  
+
   ret =  ajFileBuffGetL (thys, pdest, &fpos);
-  
+
   if(!store)
       return ret;
 
@@ -2471,7 +2465,7 @@ void ajFileBuffStripHtml (const AjPFileBuff thys) {
   AjPRegexp ncbiexp = NULL;
   AjPRegexp ncbiexp2 = NULL;
   AjPRegexp srsdbexp = NULL;
-  
+
   AjPStr s1 = NULL;
   AjPStr s2 = NULL;
   AjPStr s3 = NULL;
@@ -2996,7 +2990,7 @@ void ajFileBuffClear (const AjPFileBuff thys, ajint lines) {
     else {
       /*ajDebug ("have to delete this line\n'%S'\n", list->Line);*/
       AJFREE(list);	/* deleted, kill the list item */
-    }	
+    }
     list = next;
   }
 
@@ -3051,7 +3045,7 @@ void ajFileBuffNobuff (const AjPFileBuff thys) {
 /* ======================== Operators ==================================*/
 /* ==================================================================== */
 
-/* @section Buffered File Operators *****************************************
+/* @section Buffered File Operators *******************************************
 **
 ** These functions use the contents of a file object but do not make
 ** any changes.
@@ -3144,7 +3138,7 @@ void ajFileBuffTraceFull (const AjPFileBuff thys, size_t nlines,
 /* ============================ Casts ==================================*/
 /* ==================================================================== */
 
-/* @section Buffered File Casts ********************************************
+/* @section Buffered File Casts ***********************************************
 **
 ** These functions examine the contents of a file object and return some
 ** derived information. Some of them provide access to the internal
@@ -3153,7 +3147,7 @@ void ajFileBuffTraceFull (const AjPFileBuff thys, size_t nlines,
 **
 ******************************************************************************/
 
-/* @func ajFileBuffFp *******************************************************
+/* @func ajFileBuffFp *********************************************************
 **
 ** Returns the C file pointer for an open buffered file.
 **
@@ -3190,7 +3184,8 @@ AjPFile ajFileBuffFile (const AjPFileBuff thys) {
 
 AjBool ajFileBuffEmpty (const AjPFileBuff thys) {
 
-  ajDebug ("ajFileBuffEmpty Size: %d Pos: %d End: %b Handle: %d Fp: %x List; %d\n",
+  ajDebug ("ajFileBuffEmpty Size: %d Pos: %d End: %b Handle: %d "
+	   "Fp: %x List; %d\n",
 	   thys->Size, thys->Pos, thys->File->End, thys->File->Handle,
 	   thys->File->fp, ajListstrLength(thys->File->List));
 
@@ -3295,7 +3290,7 @@ AjBool ajFileNameExtC (AjPStr* filename, const char* extension)
     static AjPStr tmpstr=NULL;
     AjBool doext = ajTrue;
     char   *p=NULL;
-    
+
     doext = ajTrue;
     if (!extension || !*extension)
 	doext = ajFalse;
@@ -3309,7 +3304,7 @@ AjBool ajFileNameExtC (AjPStr* filename, const char* extension)
 	*p='\0';
 	tmpstr->Len = p - ajStrStr(tmpstr);
     }
-    
+
 
     if(doext)
     {
@@ -3323,7 +3318,7 @@ AjBool ajFileNameExtC (AjPStr* filename, const char* extension)
     return ajTrue;
 }
 
-/* @func ajFileScan ******************************************************
+/* @func ajFileScan ***********************************************************
 **
 ** Recursively scan through a directory
 **
@@ -3362,7 +3357,7 @@ ajint ajFileScan(AjPStr path, AjPStr filename, AjPList *result,
     tpath = ajStrNew();
     ajStrAssC(&tpath,ajStrStr(path));
 
-    
+
     if(dolist)
     {
 	t=ajStrNewC(ajStrStr(path));
@@ -3377,14 +3372,14 @@ ajint ajFileScan(AjPStr path, AjPStr filename, AjPList *result,
 	ajStrDel(&tpath);
 	return 0;
     }
-    
+
 
     if(!(indir=opendir(ajStrStr(tpath))))
     {
 	ajStrDel(&tpath);
 	return 0;
     }
-    
+
 
     s = ajStrNew();
     dirs = ajListNew();
@@ -3469,7 +3464,7 @@ ajint ajFileScan(AjPStr path, AjPStr filename, AjPList *result,
     return 0;
 }
 
-/* @func ajFileTestSkip ****************************************************
+/* @func ajFileTestSkip *******************************************************
 **
 ** Tests a filename against wildcard
 ** lists of file names to be included and excluded.
@@ -3544,7 +3539,7 @@ AjBool ajFileTestSkip (AjPStr fullname, AjPStr exc, AjPStr inc,
   return ret;
 }
 
-/* @func ajFileDirTrim *******************************************************
+/* @func ajFileDirTrim ********************************************************
 **
 ** Trims the directory path (if any) from a filename
 **
@@ -3570,7 +3565,7 @@ AjBool ajFileDirTrim (AjPStr* name)
   return ajTrue;
 }
 
-/* @func ajFileTempName ****************************************************
+/* @func ajFileTempName *******************************************************
 **
 ** Returns an available temporary filename that can be opened for writing
 ** Filename will be of the form progname-time.randomnumber
@@ -3596,20 +3591,20 @@ char* ajFileTempName(const char *dir)
     ajint     retry;
     AjBool  ok;
     AjPFile outf;
-    
+
     if(!dt)
 	dt     = ajStrNew();
 
     direct = ajStrNew();
-    
+
     if(!dir)
 	ajStrAssC(&direct,".");
     else
 	ajStrAssC(&direct,dir);
     ajStrAppC(&direct,"/");
-    
 
-    
+
+
     ajFmtPrintS(&dt,"%S%s-%d.%d",direct,ajAcdProgram(),time(0),
 		ajRandomNumber());
 
@@ -3632,7 +3627,7 @@ char* ajFileTempName(const char *dir)
 	ajDebug("Cannot find a unique filename [last try %S]\n",dt);
 	ok = ajFalse;
     }
-    
+
     if(!(outf = ajFileNewOut(dt)))
     {
 	ajDebug("Cannot write to file %S\n",dt);
@@ -3643,7 +3638,7 @@ char* ajFileTempName(const char *dir)
 	ajFileClose(&outf);
 	unlink(ajStrStr(dt));
     }
-    
+
     ajStrDel(&direct);
 
     if(!ok)
@@ -3652,7 +3647,7 @@ char* ajFileTempName(const char *dir)
     return ajStrStr(dt);
 }
 
-/* @func ajFileWriteByte ********************************************
+/* @func ajFileWriteByte ******************************************************
 **
 ** Writes a single byte to a binary file
 **
@@ -3666,7 +3661,7 @@ ajint ajFileWriteByte (AjPFile thys, char ch) {
   return fwrite (&ch, 1, 1, ajFileFp(thys));
 }
 
-/* @func ajFileWriteChar ********************************************
+/* @func ajFileWriteChar ******************************************************
 **
 ** Writes a text string to a binary file
 **
@@ -3688,7 +3683,7 @@ ajint ajFileWriteChar (AjPFile thys, char* str, ajint len) {
   return fwrite (buf, len, 1, ajFileFp(thys));
 }
 
-/* @func ajFileWriteInt2 ********************************************
+/* @func ajFileWriteInt2 ******************************************************
 **
 ** Writes a 2 byte integer to a binary file, with the correct byte orientation
 **
@@ -3701,11 +3696,11 @@ ajint ajFileWriteChar (AjPFile thys, char* str, ajint len) {
 ajint ajFileWriteInt2 (AjPFile thys, short i) {
   short j = i;
   if (ajUtilBigendian())ajUtilRev2(&j);
-    
+
   return fwrite (&j, 2, 1, ajFileFp(thys));
 }
 
-/* @func ajFileWriteInt4 ********************************************
+/* @func ajFileWriteInt4 ******************************************************
 **
 ** Writes a 4 byte integer to a binary file, with the correct byte orientation
 **
@@ -3722,7 +3717,7 @@ ajint ajFileWriteInt4 (AjPFile thys, ajint i) {
   return fwrite (&j, 4, 1, ajFileFp(thys));
 }
 
-/* @func ajFileWriteInt8 ********************************************
+/* @func ajFileWriteInt8 ******************************************************
 **
 ** Writes an 8 byte long to a binary file, with the correct byte orientation
 **
@@ -3739,7 +3734,7 @@ ajint ajFileWriteInt8 (AjPFile thys, ajlong l) {
   return fwrite (&j, 8, 1, ajFileFp(thys));
 }
 
-/* @func ajFileWriteStr ********************************************
+/* @func ajFileWriteStr *******************************************************
 **
 ** Writes a string to a binary file
 **
@@ -3761,7 +3756,7 @@ ajint ajFileWriteStr (AjPFile thys, AjPStr str, ajint len) {
 }
 
 
-/* @func ajFileBuffStripSrs  ********************************************
+/* @func ajFileBuffStripSrs  **************************************************
 **
 ** Strip out SRS6.1 header lines.
 **
@@ -3774,9 +3769,9 @@ ajint ajFileBuffStripSrs(AjPFileBuff thys)
     AjPFileBuffList lptr=NULL;
     AjPFileBuffList tptr=NULL;
     AjPFileBuffList lastptr=NULL;
-    
+
     AjBool found;
-    
+
     found = ajFalse;
     lptr = thys->Curr;
 
@@ -3815,12 +3810,12 @@ ajint ajFileBuffStripSrs(AjPFileBuff thys)
     }
 
     thys->Lines = thys->Curr;
-    
-    
+
+
 
     while(lptr && !ajStrPrefixC(lptr->Line,"</pre>"))
     {
-	
+
 	lastptr = lptr;
 	lptr = lptr->Next;
     }
@@ -3843,7 +3838,7 @@ ajint ajFileBuffStripSrs(AjPFileBuff thys)
 	    lastptr->Next = NULL;
 	    continue;
 	}
-	
+
 	lastptr->Next = lptr;
 	while(lptr && !ajStrPrefixC(lptr->Line,"</pre>"))
 	{
@@ -3851,14 +3846,14 @@ ajint ajFileBuffStripSrs(AjPFileBuff thys)
 	    lptr = lptr->Next;
 	}
     }
-    
+
     lptr = thys->Curr;
     while(lptr)
     {
 	ajStrRemoveHtml(&lptr->Line);
 	lptr = lptr->Next;
     }
-    
+
 /*  Test print routine
     lptr=thys->Curr;
     while(lptr)
@@ -3874,7 +3869,7 @@ ajint ajFileBuffStripSrs(AjPFileBuff thys)
 }
 
 
-/* @funcstatic fileListRecurs  ********************************************
+/* @funcstatic fileListRecurs  ************************************************
 **
 ** Add a filename, expanded wildcard filenames and list file contents to
 ** a list
@@ -3901,15 +3896,15 @@ static void fileListRecurs(AjPStr file, AjPList list, ajint *recurs)
     ++(*recurs);
     if(*recurs > FILERECURSLV)
 	ajFatal("Filelist maximum recursion level reached");
-    
+
     ajStrChomp(&file);
     c = *ajStrStr(file);
 
     dir   = ajStrNew();
     line  = ajStrNew();
     dlist = ajListNew();
-    
-    
+
+
     if(ajStrIsWild(file))
     {
 	if(!(p=strrchr(ajStrStr(file),(int)'/')))
@@ -3945,7 +3940,7 @@ static void fileListRecurs(AjPStr file, AjPList list, ajint *recurs)
 	ptr = ajStrNewC(ajStrStr(file));
 	ajListPushApp(list,(void *)ptr);
     }
-    
+
 
     ajListDel(&dlist);
     ajStrDel(&dir);
@@ -3958,10 +3953,10 @@ static void fileListRecurs(AjPStr file, AjPList list, ajint *recurs)
 
 
 
-/* @func ajFileFileList  ********************************************
+/* @func ajFileFileList  ******************************************************
 **
 ** Return a list of files that match a comma-separated string of
-** filenames which can include wildcards or listfiles 
+** filenames which can include wildcards or listfiles
 **
 ** @param [r] files [AjPStr] comma-separated filename list
 **
@@ -3987,7 +3982,7 @@ AjPList ajFileFileList(AjPStr files)
     }
 
     AJFREE(fstr);
-    
+
     if(!ajListLength(list))
     {
 	ajListDel(&list);
@@ -4118,9 +4113,9 @@ static void fileBuffLineDel (AjPFileBuff thys) {
 **
 ** Steps the Curr pointer to the next line in a buffer.
 **
-** Not for use when reading from a file. This steps through the buffer 
+** Not for use when reading from a file. This steps through the buffer
 **
-** @param [u] thys [AjPFileBuff] Fiel buffer
+** @param [u] thys [AjPFileBuff] File buffer
 ** @return [AjBool] ajTrue if there was another line
 ******************************************************************************/
 

@@ -17,7 +17,7 @@ static char *regchar(ajint ch);
 
 /* == end debug.ih == */
 
-/* @func hsp_regprint *******************************************************
+/* @func hsp_regprint *********************************************************
 **
 ** print a regexp for debugging
 **
@@ -104,7 +104,7 @@ void hsp_regprint(regex_t *r, FILE *d)
 	    }
     }
 
-/* @funcstatic s_print *******************************************************
+/* @funcstatic s_print ********************************************************
 **
 ** print the strip for debugging
 **
@@ -252,7 +252,7 @@ static void s_print(register REGUTSSTRUCT *g, FILE *d)
     }
 }
 
-/* @funcstatic regchar *******************************************************
+/* @funcstatic regchar ********************************************************
 **
 ** make a character printable
 **

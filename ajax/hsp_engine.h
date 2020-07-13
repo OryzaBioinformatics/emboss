@@ -30,7 +30,8 @@ static states step(register REGUTSSTRUCT *g, sopno start, sopno stop,
 #define	NNONCHAR	(CODEMAX-CHAR_MAX)
 
 #ifdef REDEBUG
-static void print(struct match *m, char *caption, states st, ajint ch, FILE *d);
+static void print(struct match *m, char *caption, states st,
+		  ajint ch, FILE *d);
 #endif
 #ifdef REDEBUG
 static void at(struct match *m, char *title, char *start, char *stop,

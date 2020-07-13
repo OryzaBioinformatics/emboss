@@ -12,7 +12,7 @@ enum AjEQryType {QRY_UNKNOWN, QRY_ENTRY, QRY_QUERY, QRY_ALL};
 
 typedef struct SeqSAccess SeqSAccess;
 
-/* @data AjPSeqQuery *******************************************************
+/* @data AjPSeqQuery **********************************************************
 **
 ** Ajax Sequence Query object.
 **
@@ -37,7 +37,7 @@ typedef struct SeqSAccess SeqSAccess;
 
 typedef struct AjSSeqQuery {
   AjPStr DbName;		/* Database name */
-  AjPStr DbType;		/* Database type */ 
+  AjPStr DbType;		/* Database type */
   AjPStr Id;			/* ID Wildcard */
   AjPStr Acc;			/* Accession Wildcard */
   AjPStr Des;			/* Description Wildcard */
@@ -52,7 +52,7 @@ typedef struct AjSSeqQuery {
   AjPStr Exclude;		/* File wildcards to exclude (spaced) */
   AjPStr DbFields;		/* Query fields (plus id and acc) */
   AjPStr DbProxy;		/* Proxy host */
-  AjPStr DbHttpVer;		/* HTTP Version */ 
+  AjPStr DbHttpVer;		/* HTTP Version */
   AjPStr Field;			/* Query level */
   AjPStr QryString;		/* Query level */
   AjPStr Application;		/* External application command */
@@ -64,7 +64,7 @@ typedef struct AjSSeqQuery {
 } AjOSeqQuery, *AjPSeqQuery;
 
 
-/* @data AjPSelexSQ *******************************************************
+/* @data AjPSelexSQ ***********************************************************
 **
 ** Ajax Selex object for #=SQ information.
 **
@@ -85,7 +85,7 @@ typedef struct AjSSelexSQ
     ajint  len;
 } AjOSelexSQ, *AjPSelexSQ;
 
-/* @data AjPSelex *******************************************************
+/* @data AjPSelex *************************************************************
 **
 ** Ajax Selex object.
 **
@@ -114,7 +114,7 @@ typedef struct AjSSelex
 } AjOSelex,*AjPSelex;
 
 
-/* @data AjPSelexdata *******************************************************
+/* @data AjPSelexdata *********************************************************
 **
 ** Ajax Selex data object (individual sequences)
 **
@@ -141,7 +141,7 @@ typedef struct AjSSelexdata
 } AjOSelexdata,*AjPSelexdata;
 
 
-/* @data AjPStockholm ***********************************************
+/* @data AjPStockholm *********************************************************
 **
 ** Ajax Stockholm object.
 **
@@ -209,7 +209,7 @@ typedef struct AjSStockholmdata
 } AjOStockholmdata,*AjPStockholmdata;
 
 
-/* @data AjPSeqin *******************************************************
+/* @data AjPSeqin *************************************************************
 **
 ** Ajax Sequence Input object.
 **
@@ -281,7 +281,7 @@ typedef struct AjSSeqin {
 
 
 
-/* @data AjPSeq *******************************************************
+/* @data AjPSeq ***************************************************************
 **
 ** Ajax Sequence object.
 **
@@ -379,7 +379,7 @@ typedef struct AjSSeq {
   AjPStockholmdata Stock;
 } AjOSeq, *AjPSeq;
 
-/* @data AjPSeqset *******************************************************
+/* @data AjPSeqset ************************************************************
 **
 ** Ajax Sequence set object. A sequence set contains one or more
 ** sequences together in memory, for example as a sequence alignment.
@@ -433,7 +433,7 @@ typedef struct AjSSeqset {
 
 
 
-/* @data AjPSeqall *******************************************************
+/* @data AjPSeqall ************************************************************
 **
 ** Ajax Sequence all (stream) object.
 **
@@ -442,7 +442,7 @@ typedef struct AjSSeqset {
 **
 ** @new ajSeqallNew Default constructor
 ** @delete none Typically left until the program ends so there
-**              is no destructor used. 
+**              is no destructor used.
 ** @set ajSeqallNext Master sequence stream input.
 ** @other AjPSeq Sequences
 ** @other AjPSeqin Sequence input

@@ -10,7 +10,7 @@ extern "C"
 
 #define padding_char '-'
 
-/* @data hash_list *******************************************************
+/* @data hash_list ************************************************************
 **
 ** NUCLEUS internal data structure for est2genome EMBOSS application
 ** to maintain internal hash lists.
@@ -31,7 +31,7 @@ typedef enum { INTRON=0, DIAGONAL=1, DELETE_EST=2, DELETE_GENOME=3,
 } directions;
 typedef enum { NOT_A_SITE=1, DONOR=2, ACCEPTOR=4 } donor_acceptor;
 
-/* @data EmbPEstAlign *******************************************************
+/* @data EmbPEstAlign *********************************************************
 **
 ** NUCLEUS data structure for EST alignments (originally for est2genome)
 **
@@ -67,7 +67,7 @@ ajint i_base( char base ); /* char to ajint */
 
 
 FILE *openfile( char *filename, char *mode );
-     
+
      /* attempts to open filename, using mode to determine function
 	(read/write/append), and stops the program on failure */
 
@@ -78,107 +78,113 @@ FILE *openfile_in_envpath(char *basename, char *mode, char *env,
 
 
 char *extension ( char *filename, char *ext);
-     
+
      /* changes the extension of filename to ext.
-	
+
 	e.g.
 	extension( "file.dat", "out" );
-	
+
 	produces file.out
-	
+
 	extension( "file", "out");
-	
+
 	produces file.out
-	
+
 	extension( "file", ".out");
-	
+
 	produces file.out
-	
+
 	extension( "file.out", "");
-	
+
 	produces file
-	
-	Note: filename MUST be long enough to cope ! 
+
+	Note: filename MUST be long enough to cope !
 
         Returns the modified string */
 
 
 char *base_name (char *filename);
-     
+
      /* strips any directory from filename
-	
+
 	e.g.
 	base_name("/gea/users/rmott/.cshrc");
-	
+
 	produces .cshrc
-	
+
 	base_name("/usr");
-	
+
 	produces usr
-	
+
 	*/
-     
+
 char *dirname( char *pathname );
 
 /* strips off the filename from the path, leaving the directory */
 
 char *directory( char *filename, char *dir );
-     
+
      /* changes the directory part of filename to dir.
-	
+
 	e.g.
 	directory( "/home/gea/fred/file.dat", "/usr/local/" );
-	
+
 	produces /usr/local/file.dat
-	
+
 	directory("/usr/lib", "var");
-	
+
 	produces var/lib, i.e. a directory slash is inserted if necessary.
-	
+
 	*/
-     
+
 char *rootname( char *filename );
-     
+
      /* trims off the directory and the extension from filename */
-     
+
 char *make_legal( char *filename );
 
-FILE *argfile( char *format, char *mode, ajint argc, char **argv, char *filename );
-     
-     /* parses the command-line using format, attempts to get a filename and open
-	it. If format does not match any argument then NULL is returned. If format
-	matchs an argument but the file will not open then the program stops*/
-     
-FILE *argfile_force( char *format, char *mode, ajint argc, char **argv, char *filename );
-     
-     /* parses the command-line using format, attempts to get a filename and open
-	it. If format does not match any argument or if format matchs an argument
-	but the file will not open then the program stops*/
+FILE *argfile( char *format, char *mode, ajint argc, char **argv,
+	       char *filename );
+
+     /* parses the command-line using format, attempts to get a
+	filename and open it. If format does not match any argument
+	then NULL is returned. If format matchs an argument but the
+	file will not open then the program stops*/
+
+FILE *argfile_force( char *format, char *mode,
+		     ajint argc, char **argv, char *filename );
+
+     /* parses the command-line using format, attempts to get a
+	filename and open it. If format does not match any argument or
+	if format matchs an argument but the file will not open then
+	the program stops*/
 
 ajint file_time( char *filename );
-     
+
      /* returns the time that filename was last modified, or 0 if filename
 	cannot be opened for reading or if the call to stat fails */
-     
+
 char *file_date( char *filename );
-     
-     /* similar to file_time() execpt that a pointer to the date (in English) */
+
+     /* similar to file_time() execpt that a pointer to the date (in
+	English) */
 
 ajint legal_string( char *string, char **strings, ajint size, ajint *value );
 
-/* checks if string is a member os strings, and sets value to the index in the array strings
-returns 1 on success and 0 on failure */
+/* checks if string is a member os strings, and sets value to the
+index in the array strings returns 1 on success and 0 on failure */
 
 char *next_arg( char *format, ajint argc, char **argv );
 char *cl_stub( char *format );
 
-ajint add_commands_from_file( ajint argc, char **argv, ajint *nargc, char ***nargv );
+ajint add_commands_from_file( ajint argc, char **argv,
+			      ajint *nargc, char ***nargv );
 void print_usage( ajint argc, char **argv, ajint stop );
 void append_usage( char *format, char *text, char *def, ajint overide );
 void gethelp( ajint argc, char **argv );
 
 
-char 
+char
 **split_on_separator( char *string, char separator, ajint *items);
 
 /* headers for simple cmp functions */

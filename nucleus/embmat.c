@@ -10,7 +10,7 @@ static void matPushHitInt(AjPStr *n, EmbPMatPrints *m, AjPList *l, ajint pos,
 
 
 
-/* @funcstatic matPushHitInt *********************************************
+/* @funcstatic matPushHitInt **************************************************
 **
 ** Put a matching protein matrix (EmbPMatPrints) on the heap
 ** as an EmbPMatMatch structure
@@ -49,7 +49,7 @@ static void matPushHitInt(AjPStr *n, EmbPMatPrints *m, AjPList *l, ajint pos,
     mat->hpm     = hpm;
     mat->all	 = ajFalse;
     mat->ordered = ajFalse;
-    
+
 
     ajListPush(*l,(void *)mat);
 
@@ -85,7 +85,7 @@ void embMatMatchDel(EmbPMatMatch *s)
 
 
 
-/* @func embMatPrintsInit ************************************************
+/* @func embMatPrintsInit *****************************************************
 **
 ** Initialise file pointer to the EMBOSS PRINTS data file
 **
@@ -104,7 +104,7 @@ void embMatPrintsInit(AjPFile *fp)
 
 
 
-/* @func embMatProtReadInt **********************************************
+/* @func embMatProtReadInt ****************************************************
 **
 ** Fill a protein matrix structure (EmbPMatPrints) from a data file
 ** Gets next entry.
@@ -136,12 +136,12 @@ AjBool embMatProtReadInt(AjPFile *fp, EmbPMatPrints *s)
 	}
 	p=ajStrStr(line);
     }
-    
+
     AJNEW0 (*s);
 
     (*s)->cod = ajStrNew();
     (void) ajStrAss(&(*s)->cod,line);
-    
+
     (void) ajFileReadLine(*fp,&line);
     (*s)->acc = ajStrNew();
     (void) ajStrAss(&(*s)->acc,line);
@@ -155,7 +155,7 @@ AjBool embMatProtReadInt(AjPFile *fp, EmbPMatPrints *s)
     AJCNEW ((*s)->max, (*s)->n);
     AJCNEW ((*s)->thresh, (*s)->n);
     AJCNEW ((*s)->matrix, (*s)->n);
-    
+
     for(m=0;m<(*s)->n;++m)
     {
 	(void) ajFileReadLine(*fp,&line);
@@ -184,7 +184,7 @@ AjBool embMatProtReadInt(AjPFile *fp, EmbPMatPrints *s)
 
 
 
-/* @func embMatProtDelInt **********************************************
+/* @func embMatProtDelInt *****************************************************
 **
 ** Deallocate a protein matrix structure (EmbPMatPrints)
 **
@@ -198,9 +198,9 @@ void embMatProtDelInt(EmbPMatPrints *s)
     ajint n;
     ajint i;
     ajint j;
-    
+
     n = (*s)->n;
-    
+
     for(i=0;i<n;++i)
 	for(j=0;j<26;++j) AJFREE((*s)->matrix[i][j]);
 
@@ -217,7 +217,7 @@ void embMatProtDelInt(EmbPMatPrints *s)
 
 
 
-/* @func embMatProtScanInt **********************************************
+/* @func embMatProtScanInt ****************************************************
 **
 ** Scan a protein sequence with a fingerprint
 **
@@ -249,30 +249,30 @@ ajint embMatProtScanInt(AjPStr *s, AjPStr *n, EmbPMatPrints *m, AjPList *l,
     ajint sum;
     ajint hpe;
     ajint hpm;
-    
+
     ajint lastelem;
     ajint lastpos;
     ajint op;
-    
+
     ajint i;
     ajint j;
-    
+
     t = ajStrNewC(ajStrStr(*s));
     (void) ajStrToUpper(&t);
     p = q = ajStrStr(t);
     slen = ajStrLen(t);
     for(i=0;i<slen;++i,++p) *p=ajSysItoC(ajAZToInt((ajint)*p));
     p=q;
-    
+
     *all = *ordered = ajTrue;
     lastelem = lastpos = INT_MAX;
 
     hpm=0;
-    
+
     for(elem=(*m)->n - 1;elem >= 0;--elem)
     {
 	hpe=0;
-	
+
 	mlen     = (*m)->len[elem];
 	minpc    = (*m)->thresh[elem];
 	maxscore = (*m)->max[elem];
@@ -302,7 +302,7 @@ ajint embMatProtScanInt(AjPStr *s, AjPStr *n, EmbPMatPrints *m, AjPList *l,
 			lastpos=i;
 		    }
 		}
-		
+
 		++hpe;
 		++hpm;
 		matPushHitInt(n,m,l,i,score,elem,hpe,hpm);
