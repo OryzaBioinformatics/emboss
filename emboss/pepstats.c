@@ -25,9 +25,12 @@
 #include "emboss.h"
 #include <stdlib.h>
 #include <ctype.h>
+#include <math.h>
 
 #define DAYHOFF_FILE "Edayhoff.freq"
-
+#define LAM1 (double)15.43
+#define LAM2 (double)-29.56
+#define CVDISC (double)1.71
 
 /* @prog pepstats *************************************************************
 **
@@ -62,6 +65,11 @@ int main(int argc, char **argv)
     ajint j;
     ajint len;
     ajint sum;
+    ajint ngps;
+    ajint rk;
+    ajint de;
+    double cv;
+    double psolu;
     
     float   *dhstat=NULL;
     AjPStr  datafn=NULL;
@@ -114,7 +122,25 @@ int main(int argc, char **argv)
     if(!embIepIEP(ajStrStr(substr),1,&iep,termini))
 	ajFmtPrintF(outf,"Isoelectric Point = None\n\n");
     else
-	ajFmtPrintF(outf,"Isoelectric Point = %-6.4lf\n\n",iep);
+	ajFmtPrintF(outf,"Isoelectric Point = %-6.4lf\n",iep);
+
+    ngps = c['N'-'A'] + c['G'-'A'] + c['P'-'A'] + c['S'-'A'];
+    rk   = c['R'-'A'] + c['K'-'A'];
+    de   = c['D'-'A'] + c['E'-'A'];
+
+    cv = (double)LAM1*((double)((double)ngps/(double)len)) +
+	 (double)LAM2*fabs((double)(((double)(rk-de)/(double)len)-
+				    (double)0.03));
+
+    psolu = 0.4934 + 0.276*fabs((double)(cv-CVDISC)) -
+	0.0392*(cv-CVDISC)*(cv-CVDISC);
+    
+    if(cv-CVDISC >= 0.0)
+	ajFmtPrintF(outf,"Imp");
+    else
+	ajFmtPrintF(outf,"P");
+    ajFmtPrintF(outf,"robability of expression in inclusion bodies = %.3lf\n\n",
+		psolu);
 
 
     ajFmtPrintF(outf,"Residue\t\tNumber\t\tMole%%\t\tDayhoffStat\n");

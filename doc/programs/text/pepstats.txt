@@ -1,9 +1,8 @@
 
-                              EMBOSS: pepstats
-     _________________________________________________________________
+                                 pepstats 
+                                      
    
-                               Program pepstats
-                                       
+   
 Function
 
    Protein statistics
@@ -21,11 +20,28 @@ Description
      * for each type of amino acid: number, molar percent, DayhoffStat
      * for each physico-chemical class of amino acid: number, molar
        percent
+     * probability of protein expression in E. coli inclusion bodies
        
    DayhoffStat is the amino acid's Dayhoff statistic divided by the molar
    percent. The Dayhoff statistic is the amino acid's relative occurence
    per 1000 aa normalised to 100 by rls@ebi.ac.uk (original work from
    1993)
+   
+   The probability of expression in inclusion bodies is sometimes
+   referred to as a type of solubility measure. If, however, a
+   recombinant protein is expressed in Escherichia coli, it can be
+   expressed as soluble in the cytosol or insoluble in inclusion bodies.
+   If the Harrison model predicts a given protein to be probably
+   expressed in includion bodies, this doesn't mean that it is not
+   possible to get it soluble in the cytosol. One example: Thermatoga
+   maritima cell divison protein FtsA with a C-terminal His-Tag has a 58%
+   Harrison probability of being expressed in inclusion bodies. However,
+   there was plenty of soluble protein in the E. coli cytosol (F. van den
+   Ent and J. Lowe, EMBO J. 19, 5300-5307 2000). If the protein is
+   expressed in inclusion bodies or not is not only dependent on the
+   sequence, but also on many other factors, such as E. coli strain,
+   incubation temperature, type of expression vector, strength of
+   promoter and medium.
    
 Usage
 
@@ -44,11 +60,11 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers:
-   -[no]termini        bool       Include charge at N and C terminus
+   -[no]termini        boolean    Include charge at N and C terminus
    -aadata             string     Molecular weight data for amino acids
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -75,9 +91,10 @@ Output file format
    
 PEPSTATS of LACI_ECOLI from 1 to 360
 
-Molecular weight = 38563.98             Residues = 360
+Molecular weight = 38563.97             Residues = 360
 Average Residue Weight  = 107.122       Charge   = 1.5
 Isoelectric Point = 6.8820
+Improbability of expression in inclusion bodies = 0.670
 
 Residue         Number          Mole%           DayhoffStat
 A = Ala         44              12.222          1.421
@@ -100,7 +117,7 @@ S = Ser         33              9.167           1.310
 T = Thr         19              5.278           0.865
 V = Val         34              9.444           1.431
 W = Trp         2               0.556           0.427
-X = Xxx         0               0.000           0.000
+X = Xaa         0               0.000           0.000
 Y = Tyr         8               2.222           0.654
 Z = Glx         0               0.000           0.000
 
@@ -144,8 +161,9 @@ Notes
    
 References
 
-   None.
-   
+    1. Roger G. Harrison "Expression of soluble heterologous proteins via
+       fusion with NusA protein" in inNovations 11, June 2000, p 4 - 7.
+       
 Warnings
 
    None.
@@ -173,6 +191,7 @@ See also
    emowse Protein identification by mass spectrometry
    freak Residue/base frequency table or plot
    iep Calculates the isoelectric point of a protein
+   mwcontam Shows molwts that match across a set of files
    mwfilter Filter noisy molwts from mass spec output
    octanol Displays protein hydropathy
    pepinfo Plots simple amino acid properties in parallel
