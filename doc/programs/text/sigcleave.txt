@@ -9,20 +9,28 @@ Function
    
 Description
 
-   SigCleave uses the method of von Heijne as modified by von Heijne in
+   sigcleave predicts the site of cleavage between a signal sequence and
+   the mature exported protein. The predictive accuracy is estimated to
+   be around 75-80% for both prokaryotic and eukaryotic proteins.
+   
+   sigcleave uses the method of von Heijne as modified by von Heijne in
    his later book where treatment of positions -1 and -3 in the matrix is
    slightly altered (see references).
    
 Usage
 
-   Here is a sample session with sigcleave.
+   Here is a sample session with sigcleave
+   
 
-% sigcleave
-Reports peptide signal cleavage sites
-Input sequence: sw:ach2_drome
-Output file [ach2_drome.out]:
-Minimum weight [3.5]:
-
+% sigcleave 
+Reports protein signal cleavage sites
+Input sequence(s): tsw:ach2_drome
+Minimum weight [3.5]: 
+Output report [ach2_drome.sig]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -35,14 +43,7 @@ Command line arguments
    -prokaryote         boolean    Specifies the sequence is prokaryotic and
                                   changes the default scoring data file name
 
-   Advanced qualifiers:
-   -pval               integer    Specifies the number of columns before the
-                                  residue at the cleavage site in the weight
-                                  matrix table
-   -nval               integer    specifies the number of columns after the
-                                  residue at the cleavage site in the weight
-                                  matrix table
-
+   Advanced qualifiers: (none)
    General qualifiers:
   -help                boolean    Report command line options. More
                                   information on associated and general
@@ -55,19 +56,110 @@ Command line arguments
    -minweight Minimum scoring weight value for the predicted cleavage
    site Number from 0.000 to 100.000 3.5
    [-outfile]
-   (Parameter 2) Output report file name Report file
+   (Parameter 2) Output report file name Report output file
    Optional qualifiers Allowed values Default
    -prokaryote Specifies the sequence is prokaryotic and changes the
-   default scoring data file name Yes/No No
+   default scoring data file name Boolean value Yes/No No
    Advanced qualifiers Allowed values Default
-   -pval Specifies the number of columns before the residue at the
-   cleavage site in the weight matrix table Integer from -13 to -1 -13
-   -nval specifies the number of columns after the residue at the
-   cleavage site in the weight matrix table Integer 1 or more Pval+15 (2)
+   (none)
    
 Input file format
 
-   The input sequence can be one or more protein sequences.
+   sigcleave reads one or more protein sequence USAs.
+   
+  Input files for usage example
+  
+   'tsw:ach2_drome' is a sequence entry in the example protein database
+   'tsw'
+   
+  Database entry: tsw:ach2_drome
+  
+ID   ACH2_DROME     STANDARD;      PRT;   576 AA.
+AC   P17644;
+DT   01-AUG-1990 (REL. 15, CREATED)
+DT   01-AUG-1990 (REL. 15, LAST SEQUENCE UPDATE)
+DT   01-NOV-1997 (REL. 35, LAST ANNOTATION UPDATE)
+DE   ACETYLCHOLINE RECEPTOR PROTEIN, ALPHA-LIKE CHAIN 2 PRECURSOR.
+GN   ACRE OR SAD OR ACR96AB.
+OS   DROSOPHILA MELANOGASTER (FRUIT FLY).
+OC   EUKARYOTA; METAZOA; ARTHROPODA; TRACHEATA; HEXAPODA; INSECTA;
+OC   PTERYGOTA; DIPTERA; BRACHYCERA; MUSCOMORPHA; EPHYDROIDEA;
+OC   DROSOPHILIDAE; DROSOPHILA.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RC   TISSUE=HEAD;
+RX   MEDLINE; 90301489.
+RA   BAUMANN A., JONAS P., GUNDELFINGER E.D.;
+RT   "Sequence of D alpha 2, a novel alpha-like subunit of Drosophila
+RT   nicotinic acetylcholine receptors.";
+RL   NUCLEIC ACIDS RES. 18:3640-3640(1990).
+RN   [2]
+RP   SEQUENCE FROM N.A.
+RC   TISSUE=HEAD;
+RX   MEDLINE; 90353591.
+RA   JONAS P., BAUMANN A., MERZ B., GUNDELFINGER E.D.;
+RT   "Structure and developmental expression of the D alpha 2 gene
+RT   encoding a novel nicotinic acetylcholine receptor protein of
+RT   Drosophila melanogaster.";
+RL   FEBS LETT. 269:264-268(1990).
+RN   [3]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 90360975.
+RA   SAWRUK E., SCHLOSS P., BETZ H., SCHMITT B.;
+RT   "Heterogeneity of Drosophila nicotinic acetylcholine receptors: SAD,
+RT   a novel developmentally regulated alpha-subunit.";
+RL   EMBO J. 9:2671-2677(1990).
+CC   -!- FUNCTION: AFTER BINDING ACETYLCHOLINE, THE ACHR RESPONDS BY AN
+CC       EXTENSIVE CHANGE IN CONFORMATION THAT AFFECTS ALL SUBUNITS AND
+CC       LEADS TO OPENING OF AN ION-CONDUCTING CHANNEL ACROSS THE PLASMA
+CC       MEMBRANE.
+CC   -!- SUBCELLULAR LOCATION: INTEGRAL MEMBRANE PROTEIN.
+CC   -!- TISSUE SPECIFICITY: CNS IN EMBRYOS.
+CC   -!- DEVELOPMENTAL STAGE: LATE EMBRYONIC AND LATE PUPAL STAGES.
+CC   -!- SIMILARITY: BELONGS TO THE LIGAND-GATED IONIC CHANNELS FAMILY.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; X52274; G7803; -.
+DR   EMBL; X53583; G8533; -.
+DR   PIR; S11679; ACFFA2.
+DR   FLYBASE; FBgn0000039; nAcR-alpha-96Ab.
+DR   PROSITE; PS00236; NEUROTR_ION_CHANNEL; 1.
+DR   PFAM; PF00065; neur_chan; 1.
+KW   RECEPTOR; POSTSYNAPTIC MEMBRANE; IONIC CHANNEL; GLYCOPROTEIN; SIGNAL;
+KW   TRANSMEMBRANE; MULTIGENE FAMILY.
+FT   SIGNAL        1     41       PROBABLE.
+FT   CHAIN        42    576       ACETYLCHOLINE RECEPTOR PROTEIN, ALPHA-2.
+FT   DOMAIN       42    261       EXTRACELLULAR (POTENTIAL).
+FT   TRANSMEM    262    285       POTENTIAL.
+FT   TRANSMEM    293    311       POTENTIAL.
+FT   TRANSMEM    327    346       POTENTIAL.
+FT   DOMAIN      347    526       CYTOPLASMIC (POTENTIAL).
+FT   TRANSMEM    527    545       POTENTIAL.
+FT   DISULFID    169    183       BY SIMILARITY.
+FT   DISULFID    243    244       ASSOCIATED WITH RECEPTOR ACTIVATION
+FT                                (BY SIMILARITY).
+FT   CARBOHYD     65     65       POTENTIAL.
+FT   CARBOHYD    254    254       POTENTIAL.
+FT   CARBOHYD    570    570       POTENTIAL.
+SQ   SEQUENCE   576 AA;  65506 MW;  7B795689 CRC32;
+     MAPGCCTTRP RPIALLAHIW RHCKPLCLLL VLLLLCETVQ ANPDAKRLYD DLLSNYNRLI
+     RPVSNNTDTV LVKLGLRLSQ LIDLNLKDQI LTTNVWLEHE WQDHKFKWDP SEYGGVTELY
+     VPSEHIWLPD IVLYNNADGE YVVTTMTKAI LHYTGKVVWT PPAIFKSSCE IDVRYFPFDQ
+     QTCFMKFGSW TYDGDQIDLK HISQKNDKDN KVEIGIDLRE YYPSVEWDIL GVPAERHEKY
+     YPCCAEPYPD IFFNITLRRK TLFYTVNLII PCVGISYLSV LVFYLPADSG EKIALCISIL
+     LSQTMFFLLI SEIIPSTSLA LPLLGKYLLF TMLLVGLSVV ITIIILNIHY RKPSTHKMRP
+     WIRSFFIKRL PKLLLMRVPK DLLRDLAANK INYGLKFSKT KFGQALMDEM QMNSGGSSPD
+     SLRRMQGRVG AGGCNGMHVT TATNRFSGLV GALGGGLSTL SGYNGLPSVL SGLDDSLSDV
+     AARKKYPFEL EKAIHNVMFI QHHMQRQDEF NAEDQDWGFV AMVMDRLFLW LFMIASLVGT
+     FVILGEAPSL YDDTKAIDVQ LSDVAKQIYN LTEKKN
+//
    
 Output file format
 
@@ -85,12 +177,14 @@ Output file format
    
    By default sigcleave writes a 'motif' report file.
    
-   The output from the above example is:
-  __________________________________________________________________________
-
+  Output files for usage example
+  
+  File: ach2_drome.sig
+  
 ########################################
 # Program: sigcleave
-# Rundate: Mon Feb 11 13:50:56 2002
+# Rundate: Thu Nov 07 14:48:24 2002
+# Report_format: motif
 # Report_file: ach2_drome.sig
 ########################################
 
@@ -160,8 +254,7 @@ Output file format
 
 #---------------------------------------
 #---------------------------------------
-  __________________________________________________________________________
-
+   
 Data files
 
    EMBOSS data files are distributed with the application and stored in
@@ -229,7 +322,8 @@ Notes
    
 References
 
-    1. von Heijne, G. Nucleic Acids Res.: 14:4683 (1986)
+    1. von Heijne, G. "A new method for predicting signal sequence
+       cleavage sites" Nucleic Acids Res.: 14:4683 (1986)
     2. von Heijne, G. "Sequence Analysis in Molecular Biology: Treasure
        Trove or Trivial Pursuit" (Acad. Press, (1987), 113-117)
        
@@ -250,7 +344,7 @@ Known bugs
    
 See also
 
-    Program name                        Description
+    Program name                         Description
    antigenic      Finds antigenic sites in proteins
    digest         Protein proteolytic enzyme or reagent cleavage digest
    fuzzpro        Protein pattern search
@@ -260,6 +354,7 @@ See also
    patmatdb       Search a protein sequence with a motif
    patmatmotifs   Search a PROSITE motif database with a protein sequence
    pepcoil        Predicts coiled coil regions
+   pestfind       Finds PEST motifs as potential proteolytic cleavage sites
    preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
    

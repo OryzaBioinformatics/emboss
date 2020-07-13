@@ -240,7 +240,7 @@ int main(int argc, char **argv)
 	      ajFmtPrintF(outf,
 			  "%13d             %d\n",maxsite+pval+begin,
 			  maxsite+begin);
-	    ajSortFloatIncI(ajFloatFloat(hwt),ajIntInt(hi),n);
+	    ajSortFloatDecI(ajFloatFloat(hwt),ajIntInt(hi),n);
 	    if (n <= 1) {
 	      if (outf) {
 	          ajFmtPrintF(outf,"\n\n\n No other entries above %.2f\n",
