@@ -47,10 +47,10 @@ list: sort  [
   minimum: "1"
   maximum: "1"
   header: "Sorting features"
-  values: "source:Sort by Source, start:Sort by Start position, type:Sort by Type, nosort:No sorting done"
+  values: "source:Sort by Source, start:Sort by Start position, type:Sort by Type, nosort:No sorting done, join:Join coding regions together"
   delimiter: ","
   codedelimiter: ":"
-  information: "Sort features by Type, Start or Source, or Nosort (don't sort - use input order)"
+  information: "Sort features by Type, Start or Source, Nosort (don't sort - use input order) or join coding regions together and leave other features in the input order"
 ]
 
 bool: html  [
@@ -147,7 +147,8 @@ endsection: advanced
 section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   parameter: "Y"
-  default: "stdout"
+  extension: "showfeat"
+#  default: "stdout"
   information: "Output feature details to a file"
   help: "If you enter the name of a file here then this program will write the feature details into that file."
 ]

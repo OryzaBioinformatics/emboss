@@ -1,9 +1,8 @@
 
-                              EMBOSS: showfeat
-     _________________________________________________________________
+                                 showfeat 
+                                      
    
-                               Program showfeat
-                                       
+   
 Function
 
    Show features of a sequence
@@ -19,23 +18,24 @@ Usage
    as a -ufo qualifier (uniform feature object), in this case a file
    containing an EMBL feature table.
 
-% showfeat -ufo paamir.ft
+% showfeat em:paamir
 Show features of a sequence.
-Input sequence(s): embl:paamir
-Output file [stdout]:
+Output file [paamir.showfeat]: stdout
 PAAMIR
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 |==========================================================| 2167
+>                                                            misc_feature
 |----------------------------------------------------------> source
 >                                                            promoter
 |>                                                           promoter
   >                                                          RBS
   |------------------------------->                          CDS
                 |>                                           misc_feature
-                        |------>                             mutation
+                        |------>                             variation
+                                  >                          conflict
                                   |---------------->         CDS
-|                                                            misc_feature
-                                  |                          conflict
+
+
 
 Command line arguments
 
@@ -115,16 +115,18 @@ Command line arguments
                                   separate their names with the character
                                   '|', eg:
                                   pax* | 10
-   -sort               menu       Sort features by Type, Start or Source, or
-                                  Nosort (don't sort - use input order)
+   -sort               menu       Sort features by Type, Start or Source,
+                                  Nosort (don't sort - use input order) or
+                                  join coding regions together and leave other
+                                  features in the input order
 
    Advanced qualifiers:
-   -html               bool       Use HTML formatting
-   -[no]id             bool       Set this to be false if you do not wish to
+   -html               boolean    Use HTML formatting
+   -[no]id             boolean    Set this to be false if you do not wish to
                                   display the ID name of the sequence.
-   -[no]description    bool       Set this to be false if you do not wish to
+   -[no]description    boolean    Set this to be false if you do not wish to
                                   display the description of the sequence.
-   -[no]scale          bool       Set this to be false if you do not wish to
+   -[no]scale          boolean    Set this to be false if you do not wish to
                                   display the scale line.
    -width              integer    You can expand (or contract) the width of
                                   the ASCII-character graphics display of the
@@ -135,7 +137,7 @@ Command line arguments
                                   If the width is set to less than 4, the
                                   graphics lines and the scale line will not
                                   be displayed.
-   -collapse           bool       If this is set, then features from the same
+   -collapse           boolean    If this is set, then features from the same
                                   source and of the same type and sense are
                                   all printed on the same line. For instance
                                   if there are several features from the EMBL
@@ -148,37 +150,37 @@ Command line arguments
                                   displayed on a separate line making it
                                   easier to distinguish where features start
                                   and end.
-   -[no]forward        bool       Set this to be false if you do not wish to
+   -[no]forward        boolean    Set this to be false if you do not wish to
                                   display forward sense features.
-   -[no]reverse        bool       Set this to be false if you do not wish to
+   -[no]reverse        boolean    Set this to be false if you do not wish to
                                   display reverse sense features.
-   -[no]unknown        bool       Set this to be false if you do not wish to
+   -[no]unknown        boolean    Set this to be false if you do not wish to
                                   display unknown sense features. (ie.
                                   features with no directionality - all
                                   protein features are of this type and some
                                   nucleic features (for example, CG-rich
                                   regions)).
-   -strand             bool       Set this if you wish to display the strand
+   -strand             boolean    Set this if you wish to display the strand
                                   of the features. Protein features are always
                                   directionless (indicated by '0'), forward
                                   is indicated by '+' and reverse is '-'.
-   -source             bool       Set this if you wish to display the source
+   -source             boolean    Set this if you wish to display the source
                                   of the features.
                                   The source name is usually either the name
                                   of the program that detected the feature or
                                   it is the name of the feature table (eg:
                                   EMBL) that the feature came from.
-   -position           bool       Set this if you wish to display the start
+   -position           boolean    Set this if you wish to display the start
                                   and end position of the features. If several
                                   features are being displayed on the same
                                   line, then the start and end positions will
                                   be joined by a comma, for example:
                                   '189-189,225-225'.
-   -[no]type           bool       Set this to be false if you do not wish to
+   -[no]type           boolean    Set this to be false if you do not wish to
                                   display the type of the features.
-   -tags               bool       Set this to be false if you do not wish to
+   -tags               boolean    Set this to be false if you do not wish to
                                   display the tags and values of the features.
-   -[no]values         bool       Set this to be false if you do not wish to
+   -[no]values         boolean    Set this to be false if you do not wish to
                                   display the tag values of the features. If
                                   this is set to be false, only the tag names
                                   will be displayed. If the tags are not
@@ -188,7 +190,7 @@ Command line arguments
                                   extremely long.
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -198,7 +200,8 @@ Command line arguments
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    [-outfile]
    (Parameter 2) If you enter the name of a file here then this program
-   will write the feature details into that file. Output file stdout
+   will write the feature details into that file. Output file
+   <sequence>.showfeat
    Optional qualifiers Allowed values Default
    -matchsource By default any feature source in the feature table is
    shown. You can set this to match any feature source you wish to show.
@@ -240,12 +243,14 @@ Command line arguments
    feature tag valueyou wish to show. The tag value may be wildcarded by
    using '*'. If you wish to show more than one tag value, separate their
    names with the character '|', eg: pax* | 10 Any string is accepted *
-   -sort Sort features by Type, Start or Source, or Nosort (don't sort -
-   use input order)
+   -sort Sort features by Type, Start or Source, Nosort (don't sort - use
+   input order) or join coding regions together and leave other features
+   in the input order
    source (Sort by Source)
    start  (Sort by Start position)
    type   (Sort by Type)
    nosort (No sorting done)
+   join   (Join coding regions together)
    start
    Advanced qualifiers Allowed values Default
    -html Use HTML formatting Yes/No No
@@ -369,24 +374,22 @@ FT                   /citation=[3]
 
 Output file format
 
-   The output is a text representation of the feature table, and goes by
-   default to standard output (the terminal).
+   The output is a text representation of the feature table.
    
    Here is the output from the example run:
 
-PAAMIR
-Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 |==========================================================| 2167
+>                                                            misc_feature
 |----------------------------------------------------------> source
 >                                                            promoter
 |>                                                           promoter
   >                                                          RBS
   |------------------------------->                          CDS
                 |>                                           misc_feature
-                        |------>                             mutation
+                        |------>                             variation
+                                  >                          conflict
                                   |---------------->         CDS
-|                                                            misc_feature
-                                  |                          conflict
+
 
 Data files
 

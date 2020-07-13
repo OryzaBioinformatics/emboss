@@ -256,9 +256,14 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 
     AjBool gotoutput = ajFalse;		/* have a line to output */
       
+    AjBool want_multiple_line = ajFalse;/* true if want a join()s line */
+    AjBool in_multiple_line = ajFalse;	/* true if this is a join()s line */
+    AjBool join = ajFalse;		/* want joins on a single line */
+    AjBool child;			/* true if this is a multiple's child */
+
     /* get the feature table of the sequence */
     feat = ajSeqCopyFeat(seq);
-    if(!feat)
+    if (!feat)
 	return;
 
     lineout = ajStrNew();
@@ -273,12 +278,14 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 	else if (!ajStrCmpC(sortlist[0], "start"))
 	    /* sort by: sense, start, type, source, source */
 	    ajListSort(feat->Features, showfeat_CompareFeatPos);
-	else if (!ajStrCmpC(sortlist[0], "start"))
+	else if (!ajStrCmpC(sortlist[0], "type"))
 	    /* type */
 	    /* sort by: sense, type, source, start */
 	    ajListSort(feat->Features, showfeat_CompareFeatType);
+	else if (!ajStrCmpC(sortlist[0], "join"))
+            join = ajTrue;
 /*      else */
-            /* no sort */
+            /* nosort - no sort */
 
 	iter = ajListIter(feat->Features) ;
 
@@ -286,6 +293,19 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 	{
 	    gf = ajListIterNext (iter) ;
 
+            /* see if we have a child of a multiple join */
+	    child = ajFalse;
+            if (ajFeatIsMultiple(gf)) {
+                if (ajFeatIsChild(gf)) {
+                    child = ajTrue;
+                } else {	/* parent */
+                    want_multiple_line = ajTrue;
+                    in_multiple_line = ajFalse;
+                }
+	    } else {
+	    	want_multiple_line = ajFalse;
+	    }
+	    
             /* ignore remote IDs */
             if (!ajFeatIsLocal(gf))
                 continue;
@@ -308,11 +328,22 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 	    if (beg+1 > gf->End || end+1 < gf->Start)
 		continue;
 
-	    /* see if we are starting a new line */
-	    if (!collapse || first ||
-		gf->Strand != strandout ||
-		(source && ajStrCmpCase(gf->Source, sourceout)) ||
-		ajStrCmpCase(gf->Type, typeout))
+	    /* 
+	    ** See if we are starting a new line.
+	    ** Don't start a new line if:
+	    **  collapse and source, type and sense are the same as the last gf
+	    **  or 
+	    **  join and child and we are in an existing join multiple line
+	    */
+	    if ((!collapse || 
+	         first ||
+		 gf->Strand != strandout ||
+		 (source && ajStrCmpCase(gf->Source, sourceout)) ||
+		 ajStrCmpCase(gf->Type, typeout)) 
+		&&
+		(!join ||
+		 ! child ||
+		 !in_multiple_line))
 	    {
 		if (gotoutput)
 		{
@@ -331,6 +362,13 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 
 		/* note that we have something to output */
 		gotoutput = ajTrue;
+		
+		/* are we in a multiple line now? */
+		if (want_multiple_line) {
+		    in_multiple_line = ajTrue;
+		    want_multiple_line = ajFalse;
+		}
+	
 	    }
 	    /* add tags to tagout */
 	    showfeat_AddTagsStr(&tagsout, gf, values);
@@ -665,14 +703,14 @@ static ajint showfeat_CompareFeatPos (const void * a, const void * b)
 ******************************************************************************/
 
 static AjBool showfeat_MatchPatternTags (AjPFeature feat, AjPStr tpattern,
-					 AjPStr vpattern)
+                                         AjPStr vpattern)
 {
-    AjIList titer;			/* iterator for feat */
-    static AjPStr tagnam=NULL;			/* tag structure */
-    static AjPStr tagval=NULL;			/* tag structure */
-    AjBool val = ajFalse;		/* returned value */
-    AjBool tval;			/* tags result */
-    AjBool vval;			/* value result */
+    AjIList titer;                      /* iterator for feat */
+    static AjPStr tagnam=NULL;          /* tag structure */
+    static AjPStr tagval=NULL;          /* tag structure */
+    AjBool val = ajFalse;               /* returned value */
+    AjBool tval;                        /* tags result */
+    AjBool vval;                        /* value result */
 
 
     /*
@@ -680,27 +718,36 @@ static AjBool showfeat_MatchPatternTags (AjPFeature feat, AjPStr tpattern,
      *  both '*', then allow this as a match
      */
     if (!ajStrCmpC(tpattern, "*") &&
-	!ajStrCmpC(vpattern, "*")) 
-	return ajTrue;
+        !ajStrCmpC(vpattern, "*"))
+        return ajTrue;
 
     /* iterate through the tags and test for match to patterns */
     titer = ajFeatTagIter(feat);
-    while (ajFeatTagval(titer, &tagnam, &tagval))
-    {
-	tval = embMiscMatchPattern(tagnam, tpattern);
-	if(!ajStrLen(tagval))		/* if tag has no value */ 
-	    return val;
-	vval = embMiscMatchPattern(tagval, vpattern);
-	if (tval && vval)
-	{
-	    val = ajTrue;
-	    break;
-	}
+    while (ajFeatTagval(titer, &tagnam, &tagval)) {
+        tval = embMiscMatchPattern(tagnam, tpattern);
+/*
+** If tag has no value then
+**   If vpattern is '*' the value pattern is a match
+** Else check vpattern
+*/
+        if (!ajStrLen(tagval)) {
+            if (!ajStrCmpC(vpattern, "*"))
+            	vval = ajTrue;
+            else
+		vval = ajFalse;
+        } else
+            vval = embMiscMatchPattern(tagval, vpattern);
+
+        if (tval && vval) {
+            val = ajTrue;
+            break;
+        }
     }
     (void) ajListIterFree(titer);
 
     return val;
 }
+
 
 
 
