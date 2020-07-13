@@ -148,10 +148,14 @@ sub runtest ($) {
 	  "diffseq" => "diffseq tembl:hsfau tembl:hsfau1 -auto",
 	  "descseq" => "descseq -desc 'Test' tsw:opsd_human -auto",
 	  "degapseq" => "degapseq $ENV{EPURE}/../test/data/globins.msf -auto",
+	  "dbigcg2" => "dbigcg -dir $ENV{EPURE}/../test/pir -file '*.seq' -index . -id pir -db pir -auto",
 	  "dbigcg" => "dbigcg -dir $ENV{EPURE}/../test/embl -file '*.seq' -index . -id embl -db embl -auto",
 	  "dbiflat" => "dbiflat -dir $ENV{EPURE}/../test/swiss -file seq.dat -index . -id swiss -db swiss -auto",
 	  "dbifasta" => "dbifasta -dir $ENV{EPURE}/../test/wormpep -file wormpep -index . -id idacc -db worm -auto",
 	  "dbiblast" => "dbiblast -dir $ENV{EPURE}/../test/wormpep -file wormpep -index . -db worm -auto",
+	  "dbiblastwildstar" => "dbiblast -dir $ENV{EPURE}/../test/data -file swsplit.*.* -index . -db swsplit -auto",
+	  "dbiblastwild" => "dbiblast -dir $ENV{EPURE}/../test/data -file swsplit.*.pin -index . -db swsplit -auto",
+	  "dbiblastlist" => "dbiblast -dir $ENV{EPURE}/../test/data -file 'swsplit.00.pin swsplit.01.pin swsplit.02.pin swsplit.03.pin swsplit.04.pin' -index . -db swsplit -auto",
 	  "dan" => "dan tembl:hsfau -auto",
 	  "cutseq" => "cutseq tembl:hsfau -from 20 -to 500 -auto",
 	  "cusp" => "cusp tembl:hsfau -auto",
@@ -197,6 +201,23 @@ foreach $name (@dotest) {
     elsif ($arg eq "list") {
       foreach $x (sort (keys (%tests))) {
 	printf "%-15s %s\n", $x, $tests{$x};
+      }
+      exit;
+    }
+    elsif ($arg =~ /block=(\d+)/) {
+      $block=$1;
+      $i=0;
+      $blocksize=10;
+      $blockcount=0;
+      foreach $x (sort (keys (%tests))) {
+	if (!$i) {
+	  $blockcount++;
+	}
+	$i++;
+	if ($i >= $blocksize) {$i=0}
+	if ($blockcount == $block) {
+	  runtest($x);
+	}
       }
       exit;
     }
