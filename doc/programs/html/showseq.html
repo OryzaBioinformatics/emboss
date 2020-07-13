@@ -7,37 +7,29 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
 
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
 
+
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
+<td align=left valign=middle>
+<b><font size="+6">
 
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: showseq
-</H2>
-
-
-</font>
-</td>
-
-</tr>
+showseq
+</font></b>
+</td></tr>
 </table>
-</td>
+<br>&nbsp;
+<p>
 
-</tr>
-</table>
 
-<p><hr><p>
-<H1>
-Program showseq
-</H1>
+
+
 
 <H2>
     Function
@@ -144,9 +136,8 @@ small section of the sequence to save space.
 <p>
 
 <pre>
-% showseq embl:eclac -sbeg 1 -send 100
+% showseq tembl:eclac -sbeg 1 -send 100
 Display a sequence with features, translation etc..
-Output file [stdout]:
 Things to display
          0 : Enter your own list of things to display
          1 : Sequence only
@@ -157,8 +148,8 @@ Things to display
          6 : Six frame translations
          7 : Restriction enzyme map
          8 : Baroque
-
-Display format [2]:
+Display format [2]: 
+Output file [eclac.showseq]: stdout
 ECLAC
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
@@ -178,6 +169,7 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
                             |=========================================
           CDS codon_start="1" db_xref="SWISS-PROT:P03023" note="lac repressor p
 
+
 </pre>
 <p>    
         
@@ -194,7 +186,7 @@ over the output format is acheived by selecting the qualifier '-format
 <p>
 
 <pre>
-% showseq embl:eclac -sbeg 1 -send 120
+% showseq tembl:eclac -sbeg 1 -send 120
 Display a sequence with features, translation etc..
 Output file [stdout]:
 Things to display
@@ -225,6 +217,7 @@ Specify your own things to display
         -R : Restriction enzyme cut sites in reverse sense
          A : Annotation
 Enter a list of things to display [B N T S A F]: b,s,t,c
+Output file [eclac.showseq]: stdout
 ECLAC
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
           
@@ -279,7 +272,7 @@ Protein sequence displayed in three-letter codes.  (The codes are
 displayed downwards, so the first code is 'Met'):
 <p>
 <pre>
-% showseq sw:rs24_fugru stdout -three -format 2
+% showseq tsw:rs24_fugru stdout -three -format 2
 RS24_FUGRU
 40S RIBOSOMAL PROTEIN S24.   
          
@@ -305,7 +298,7 @@ RS24_FUGRU
 Number the sequence lines in the margin:
 <p>
 <pre>
-% showseq embl:mmam stdout -format 1 -number
+% showseq tembl:mmam stdout -format 1 -number
 Display a sequence with features, translation etc..
 Output file [stdout]:
 MMAM      
@@ -324,7 +317,7 @@ heavy chain mRNA.
 Start the numbering at a specified value ('123' in this case):
 <p>
 <pre>
-% showseq embl:mmam stdout -format 1 -number -offset 123
+% showseq tembl:mmam stdout -format 1 -number -offset 123
 Display a sequence with features, translation etc..
 MMAM
 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody 
@@ -343,7 +336,7 @@ Make selected regions uppercase.  (Use '-slower' to force the rest of
 the sequence to be lowercase).
 <p>
 <pre>          
-% showseq embl:mmam stdout -format 1 -slower -upper '25-45,101-203,333-362'
+% showseq tembl:mmam stdout -format 1 -slower -upper '25-45,101-203,333-362'
 Display a sequence with features, translation etc..  
 MMAM
 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody
@@ -360,7 +353,7 @@ heavy chain mRNA.
 Translate selected regions:
 <p>
 <pre>
-% showseq embl:mmam stdout -format 4 -send 120 -trans 25-49,66-76
+% showseq embl:mmam tstdout -format 4 -send 120 -trans 25-49,66-76
 Display a sequence with features, translation etc..
 MMAM
 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody
@@ -383,7 +376,7 @@ heavy chain mRNA.
 Add your own annotation to the display
 <p>
 <pre>
-% showseq embl:mmam stdout -format 2 -send 120 -annotation '13-26 binding site 15-15 SNP'
+% showseq tembl:mmam stdout -format 2 -send 120 -annotation '13-26 binding site 15-15 SNP'
 Display a sequence with features, translation etc..
 MMAM
 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody
@@ -590,33 +583,33 @@ IT IS DONE FOR YOU.
    Advanced qualifiers:
    -orfminsize         integer    Minimum size of Open Reading Frames (ORFs)
                                   to display in the translations.
-   -flatreformat       bool       Display RE sites in flat format
+   -flatreformat       boolean    Display RE sites in flat format
    -mincuts            integer    Minimum cuts per RE
    -maxcuts            integer    Maximum cuts per RE
    -sitelen            integer    Minimum recognition site length
-   -single             bool       Force single RE site only cuts
-   -[no]blunt          bool       Allow blunt end RE cutters
-   -[no]sticky         bool       Allow sticky end RE cutters
-   -[no]ambiguity      bool       Allow ambiguous RE matches
-   -plasmid            bool       Allow circular DNA
-   -[no]commercial     bool       Only use restriction enzymes with suppliers
-   -[no]limit          bool       Limits RE hits to one isoschizomer
-   -preferred          bool       Report preferred isoschizomers
-   -threeletter        bool       Display protein sequences in three-letter
+   -single             boolean    Force single RE site only cuts
+   -[no]blunt          boolean    Allow blunt end RE cutters
+   -[no]sticky         boolean    Allow sticky end RE cutters
+   -[no]ambiguity      boolean    Allow ambiguous RE matches
+   -plasmid            boolean    Allow circular DNA
+   -[no]commercial     boolean    Only use restriction enzymes with suppliers
+   -[no]limit          boolean    Limits RE hits to one isoschizomer
+   -preferred          boolean    Report preferred isoschizomers
+   -threeletter        boolean    Display protein sequences in three-letter
                                   code
-   -number             bool       Number the sequences
+   -number             boolean    Number the sequences
    -width              integer    Width of sequence to display
    -length             integer    Line length of page (0 for indefinite)
    -margin             integer    Margin around sequence for numbering
-   -[no]name           bool       Set this to be false if you do not wish to
+   -[no]name           boolean    Set this to be false if you do not wish to
                                   display the ID name of the sequence
-   -[no]description    bool       Set this to be false if you do not wish to
+   -[no]description    boolean    Set this to be false if you do not wish to
                                   display the description of the sequence
    -offset             integer    Offset to start numbering the sequence from
-   -html               bool       Use HTML formatting
+   -html               boolean    Use HTML formatting
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -657,7 +650,7 @@ IT IS DONE FOR YOU.
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>If you enter the name of a file here then this program will write the sequence details into that file.</td>
 <td>Output file</td>
-<td>stdout</td>
+<td><i>&lt;sequence&gt;</i>.showseq</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -781,14 +774,14 @@ If you wish to show more than one type, separate their names with the character 
 <tr>
 <td>-minscore</td>
 <td>If this is greater than or equal to the maximum score, then any score is permitted</td>
-<td>Any integer value</td>
+<td>Any numeric value</td>
 <td>0.0</td>
 </tr>
 
 <tr>
 <td>-maxscore</td>
 <td>If this is less than or equal to the maximum score, then any score is permitted</td>
-<td>Any integer value</td>
+<td>Any numeric value</td>
 <td>0.0</td>
 </tr>
 
@@ -1168,7 +1161,7 @@ An example of this display follows:
 <p>
 
 <pre>
-% showseq embl:eclac stdout -send 60 -format 7 -enz TaqI,Hin6I,AciI,Hin6I,BssKI,Bsu6
+% showseq tembl:eclac stdout -send 60 -format 7 -enz TaqI,Hin6I,AciI,Hin6I,BssKI,Bsu6
 Display a sequence with features, translation etc..
 ECLAC
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
@@ -1415,9 +1408,6 @@ from naive users to embedded scripts.
 
 </pre>
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

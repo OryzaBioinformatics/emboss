@@ -37,7 +37,7 @@ static void showseq_read_equiv(AjPFile *equfile, AjPTable *table);
 static void showseq_read_file_of_enzyme_names(AjPStr *enzymes);
 static AjBool showseq_MatchFeature (AjPFeature gf, AjPStr
         matchsource, AjPStr matchtype, ajint matchsense, float minscore,
-        float maxscore, AjPStr matchtag, AjPStr matchvalue);
+        float maxscore, AjPStr matchtag, AjPStr matchvalue, AjBool *tagsmatch);
 static AjBool showseq_MatchPatternTags (AjPFeature feat, AjPStr tpattern,
                                          AjPStr vpattern);
 static void showseq_FeatureFilter(AjPFeattable featab, AjPStr
@@ -520,6 +520,9 @@ static void showseq_FeatureFilter(AjPFeattable featab, AjPStr
 
     AjIList iter = NULL;
     AjPFeature gf = NULL;
+    AjBool tagsmatch;
+    
+    tagsmatch = ajFalse;
 
     /* foreach feature in the feature table */
     if (featab)
@@ -530,7 +533,7 @@ static void showseq_FeatureFilter(AjPFeattable featab, AjPStr
 	    gf = (AjPFeature)ajListIterNext(iter);
 	    if (!showseq_MatchFeature(gf, matchsource, matchtype, matchsense,
 				      minscore, maxscore, matchtag,
-				      matchvalue))
+				      matchvalue, &tagsmatch))
 	    {
 		/* no match, so delete feature from feature table */
 		ajFeatDel(&gf);
@@ -548,24 +551,35 @@ static void showseq_FeatureFilter(AjPFeattable featab, AjPStr
 ** Test if a feature matches a set of criteria
 **
 ** @param [r] gf [AjPFeature] Feature to test
-** @param [r] matchsource [AjPStr] Required Source pattern
-** @param [r] matchtype [AjPStr] Required Type pattern
-** @param [r] matchsense [ajint] Required Sense pattern +1,0,-1 (or other value$
+** @param [r] source [AjPStr] Required Source pattern
+** @param [r] type [AjPStr] Required Type pattern
+** @param [r] sense [ajint] Required Sense pattern +1,0,-1 (or other value$
 ** @param [r] minscore [float] Min required Score pattern
 ** @param [r] maxscore [float] Max required Score pattern
-** @param [r] matchtag [AjPStr] Required Tag pattern
-** @param [r] matchvalue [AjPStr] Required Value pattern
+** @param [r] tag [AjPStr] Required Tag pattern
+** @param [r] value [AjPStr] Required Value pattern
+** @param [rw] tagsmatch [AjBool *] true if a join has matching tag/values
 ** @return [AjBool] True if feature matches criteria
 ** @@
 ******************************************************************************/
 
 static AjBool showseq_MatchFeature (AjPFeature gf, AjPStr
-        matchsource, AjPStr matchtype, ajint matchsense, float minscore,
-        float maxscore, AjPStr matchtag, AjPStr matchvalue)
+        source, AjPStr type, ajint sense, float minscore,
+        float maxscore, AjPStr tag, AjPStr value, AjBool *tagsmatch)
 {
 
 /* if maxscore < minscore, then don't test the scores */
 AjBool scoreok = (minscore < maxscore);
+
+
+/* 
+** is this not a child of a join() ? 
+** if it is a child, then we use the previous result of MatchPatternTags
+*/
+  if (!ajFeatIsMultiple(gf) || !ajFeatIsChild(gf)) {
+      *tagsmatch = showseq_MatchPatternTags(gf, tag, value);
+  }
+    	
 
 /* ignore remote IDs */
   if (!ajFeatIsLocal(gf))
@@ -577,18 +591,18 @@ AjBool scoreok = (minscore < maxscore);
 **      for sense, 0
 **      for score, maxscore <= minscore
 */
-  if (!embMiscMatchPattern (gf->Source, matchsource) ||
-      !embMiscMatchPattern (gf->Type, matchtype) ||
-      (gf->Strand == '+' && matchsense == -1) ||
-      (gf->Strand == '-' && matchsense == +1) ||
+  if (!embMiscMatchPattern (gf->Source, source) ||
+      !embMiscMatchPattern (gf->Type, type) ||
+      (gf->Strand == '+' && sense == -1) ||
+      (gf->Strand == '-' && sense == +1) ||
       (scoreok && gf->Score < minscore) ||
       (scoreok && gf->Score > maxscore) ||
-      !showseq_MatchPatternTags(gf, matchtag, matchvalue))
+      !*tagsmatch)
     return ajFalse;
 
   return ajTrue;                        
 }
-        
+
 /* @funcstatic showseq_MatchPatternTags **************************************
 **
 ** Checks for a match of the tagpattern and valuepattern to at least one
@@ -623,14 +637,22 @@ static AjBool showseq_MatchPatternTags (AjPFeature feat, AjPStr tpattern,
 
     /* iterate through the tags and test for match to patterns */
     titer = ajFeatTagIter(feat);
-    while (ajFeatTagval(titer, &tagnam, &tagval))
-    {
+    while (ajFeatTagval(titer, &tagnam, &tagval)) {
         tval = embMiscMatchPattern(tagnam, tpattern);
-        if(!ajStrLen(tagval))           /* if tag has no value */
-            return val;
-        vval = embMiscMatchPattern(tagval, vpattern);
-        if (tval && vval)
-        {
+/*
+** If tag has no value then
+**   If vpattern is '*' the value pattern is a match
+** Else check vpattern
+*/
+        if (!ajStrLen(tagval)) {
+            if (!ajStrCmpC(vpattern, "*"))
+            	vval = ajTrue;
+            else
+		vval = ajFalse;
+        } else
+            vval = embMiscMatchPattern(tagval, vpattern);
+
+        if (tval && vval) {
             val = ajTrue;
             break;
         }
@@ -639,5 +661,4 @@ static AjBool showseq_MatchPatternTags (AjPFeature feat, AjPStr tpattern,
 
     return val;
 }
-
 
