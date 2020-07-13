@@ -97,6 +97,7 @@ static AjBool dbigcg_ParseGenbank (AjPFile libr,
 typedef struct SParser
 {
   char* Name;
+  AjBool GcgFormat;
   AjBool (*Parser) (AjPFile libr,
 		    AjPFile* alistfile,
 		    AjBool systemsort, AjPStr* fields,
@@ -106,11 +107,11 @@ typedef struct SParser
 
 static OParser parser[] =
 {
-  { "EMBL", dbigcg_ParseEmbl },
-  { "SWISS", dbigcg_ParseEmbl },
-  { "GENBANK", dbigcg_ParseGenbank },
-  { "PIR", dbigcg_ParsePir },
-  { NULL, NULL }
+  { "EMBL", AJTRUE, dbigcg_ParseEmbl },
+  { "SWISS", AJTRUE, dbigcg_ParseEmbl },
+  { "GENBANK", AJTRUE, dbigcg_ParseGenbank },
+  { "PIR", AJFALSE, dbigcg_ParsePir },
+  { NULL, 0, NULL }
 };
 
 
@@ -330,6 +331,13 @@ int main(int argc, char **argv)
 ** @param [r] libr [AjPFile] Reference file
 ** @param [r] libs [AjPFile] Sequence file
 ** @param [r] ifile [ajint] File number.
+** @param [r] idformat [AjPStr] Id format in GCG file
+** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
+** @param [r] fields [AjPStr*] Field names to be indexed
+** @param [w] maxFieldLen [ajint*] Maximum field token length
+** @param [w] maxidlen [ajint*] Maximum entry ID length
+** @param [r] elistfile [AjPFile] entry file
+** @param [r] alistfile [AjPFile*] field data files array
 ** @return [EmbPEntry] Entry data object.
 ** @@
 ******************************************************************************/
@@ -466,12 +474,17 @@ static AjBool dbigcg_gcgopenlib (AjPStr lname, AjPFile* libr, AjPFile* libs)
 }
 
 
-/* @funcstatic dbigcg_gcggetent **********************************************
+/* @funcstatic dbigcg_gcggetent ***********************************************
 **
 ** get a single entry from the GCG database files
 **
+** @param [r] idformat [AjPStr] Id format in FASTA file
 ** @param [r] libr [AjPFile] Reference file
 ** @param [r] libs [AjPFile] Sequence file
+** @param [r] alistfile [AjPFile*] field data files array
+** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
+** @param [r] fields [AjPStr*] Field names to be indexed
+** @param [w] maxFieldLen [ajint*] Maximum field token length
 ** @param [w] libstr [AjPStr*] ID
 ** @param [w] fdl [AjPList*] Lists of field tokens
 ** @return [ajint] Sequence length
@@ -516,10 +529,13 @@ static ajint dbigcg_gcggetent(AjPStr idformat,
 	called = 1;
     }
 
+    if (!parser[iparser].GcgFormat)
+      return 0;
+
     if (!rexp)
-	rexp = ajRegCompC ("^....([^ \t\n]+)");
+	rexp = ajRegCompC ("^>>>>([^ \t\n]+)");
     if (!sexp)
-	sexp = ajRegCompC("^....([^ \t]+)[ \t]+([^ \t]+)[ \t]+([^ \t]+)"
+	sexp = ajRegCompC("^>>>>([^ \t]+)[ \t]+([^ \t]+)[ \t]+([^ \t]+)"
 			  "[ \t]+([^ \t]+)[ \t]+([0-9]+)");
 
     ajStrAssC(&sline, "");
@@ -540,7 +556,10 @@ static ajint dbigcg_gcggetent(AjPStr idformat,
     /* get the encoding/sequence length info */
 
     if (!ajRegExec(sexp, sline))
+    {
+        ajDebug("dbigcg_gcggetent sequence expression FAILED\n");
 	return 0;
+    }
 
     ajRegSubI(sexp, 1, libstr);	/* Entry ID returned */
 
@@ -628,8 +647,13 @@ static ajint dbigcg_gcggetent(AjPStr idformat,
 **
 ** get a single entry from the PIR database files
 **
+** @param [r] idformat [AjPStr] Id format in FASTA file
 ** @param [r] libr [AjPFile] Reference file
 ** @param [r] libs [AjPFile] Sequence file
+** @param [r] alistfile [AjPFile*] field data files array
+** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
+** @param [r] fields [AjPStr*] Field names to be indexed
+** @param [w] maxFieldLen [ajint*] Maximum field token length
 ** @param [w] libstr [AjPStr*] ID
 ** @param [w] fdl [AjPList*] Lists of field tokens
 ** @return [ajint] Sequence length
@@ -668,6 +692,9 @@ static ajint dbigcg_pirgetent(AjPStr idformat,
 	called = 1;
     }
 
+    if (parser[iparser].GcgFormat)
+      return 0;
+
     if (!pirexp)
 	pirexp = ajRegCompC ("^>..;([^ \t\n]+)");
 
@@ -683,9 +710,8 @@ static ajint dbigcg_pirgetent(AjPStr idformat,
 	}
     }
 
-    /* get the encoding/sequence length info */
-
-    ajDebug ("pirgetent line '%S' \n", sline);
+    ajDebug ("dbigcg_pirgetent .seq (%S) %d '%S' \n",
+	     idformat, ajFileTell(libs), sline);
 
     ajRegExec(pirexp, sline);
 
@@ -705,8 +731,10 @@ static ajint dbigcg_pirgetent(AjPStr idformat,
     ajRegSubI(pirexp, 1, &reflibstr);
     ajRegSubI(pirexp, 1, libstr);
 
-    ajDebug ("pirgetent seqid '%S' spos: %ld\n", *libstr, ajFileTell(libs));
-    ajDebug ("pirgetent refid '%S' spos: %ld\n", *libstr, ajFileTell(libr));
+    ajDebug ("dbigcg_pirgetent seqid '%S' spos: %ld\n",
+	     *libstr, ajFileTell(libs));
+    ajDebug ("dbigcg_pirgetent refid '%S' spos: %ld\n",
+	     *libstr, ajFileTell(libr));
 
     /*
      *  if (!ajStrMatch(*libstr, reflibstr))
@@ -742,7 +770,7 @@ static ajint dbigcg_pirgetent(AjPStr idformat,
     if (spos)
       ajFileSeek(libs, spos, 0);
 
-    ajDebug ("pirgetent end spos %ld line '%S'\n", spos, sline);
+    ajDebug ("dbigcg_pirgetent end spos %ld line '%S'\n", spos, sline);
 
     return gcglen;
 }
@@ -755,6 +783,8 @@ static ajint dbigcg_pirgetent(AjPStr idformat,
 **
 ** @param [r] libr [AjPFile] Reference file
 ** @param [r] libs [AjPFile] Sequence file
+** @param [r] rexp [AjPRegexp] Regular expression to find ID in ref file
+** @param [r] sexp [AjPRegexp] Regular expression to find ID in seq file
 ** @param [w] libstr [AjPStr*] ID
 ** @return [ajint] Sequence length for this section
 ** @@
@@ -854,7 +884,11 @@ static ajint dbigcg_gcgappent (AjPFile libr, AjPFile libs,
 **
 ** Parse the ID, accession from an EMBL or SWISSPROT entry
 **
-** @param [r] line [AjPStr] Input line
+** @param [r] libr [AjPFile] Input file
+** @param [r] alistfile [AjPFile*] field data files array
+** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
+** @param [r] fields [AjPStr*] Field names to be indexed
+** @param [w] maxFieldLen [ajint*] Maximum field token length
 ** @param [w] id [AjPStr*] ID
 ** @param [w] fdl [AjPList*] Lists of field tokens
 ** @return [AjBool] ajTrue on success.
@@ -1086,7 +1120,11 @@ static AjBool dbigcg_ParseEmbl (AjPFile libr,
 **
 ** Parse the ID, accession from a Genbank entry
 **
-** @param [r] line [AjPStr] Input line
+** @param [r] libr [AjPFile] Input file
+** @param [r] alistfile [AjPFile*] field data files array
+** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
+** @param [r] fields [AjPStr*] Field names to be indexed
+** @param [w] maxFieldLen [ajint*] Maximum field token length
 ** @param [w] id [AjPStr*] ID
 ** @param [w] fdl [AjPList*] Lists of field tokens
 ** @return [AjBool] ajTrue on success.
@@ -1328,11 +1366,15 @@ static AjBool dbigcg_ParseGenbank (AjPFile libr,
 }
 
 
-/* @funcstatic dbigcg_ParsePir ********************************************
+/* @funcstatic dbigcg_ParsePir ************************************************
 **
 ** Parse the ID, accession from a PIR entry
 **
-** @param [r] line [AjPStr] Input line
+** @param [r] libr [AjPFile] Input file
+** @param [r] alistfile [AjPFile*] field data files array
+** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
+** @param [r] fields [AjPStr*] Field names to be indexed
+** @param [w] maxFieldLen [ajint*] Maximum field token length
 ** @param [w] id [AjPStr*] ID
 ** @param [w] fdl [AjPList*] Lists of field tokens
 ** @return [AjBool] ajTrue on success.
@@ -1434,8 +1476,10 @@ static AjBool dbigcg_ParsePir (AjPFile libr,
 
     ajFileGets(libr, &rline);
     ajDebug ("line-2 '%S'\n", rline);
-    while (ajRegExec(wrdexp, rline))
+    if (desfield >= 0)
     {
+      while (ajRegExec(wrdexp, rline))
+      {
 	ajRegSubI (wrdexp, 1, &tmpfd);
 	ajStrToUpper(&tmpfd);
 	ajDebug("++des '%S'\n", tmpfd);
@@ -1448,6 +1492,7 @@ static AjBool dbigcg_ParsePir (AjPFile libr,
 	    ajListPushApp (fdl[desfield], fd);
 	}
 	ajRegPost (wrdexp, &rline);
+      }
     }
 
     while (ajStrChar(rline,0)!='>')
@@ -1475,8 +1520,10 @@ static AjBool dbigcg_ParsePir (AjPFile libr,
 	    }
 	}
 
-	if (ajRegExec (keyexp, rline))
+	if (keyfield >= 0)
 	{
+	  if (ajRegExec (keyexp, rline))
+	  {
 	    ajRegPost (keyexp, &tmpline);
 	    while (ajRegExec(phrexp, tmpline))
 	    {
@@ -1493,10 +1540,13 @@ static AjBool dbigcg_ParsePir (AjPFile libr,
 		}
 		ajRegPost (phrexp, &tmpline);
 	    }
+	  }
 	}
 
-	if (ajRegExec (taxexp, rline))
+	if (taxfield >= 0)
 	{
+	  if (ajRegExec (taxexp, rline))
+	  {
 	    ajRegPost (taxexp, &tmpline);
 	    while (ajRegExec(phrexp, tmpline))
 	    {
@@ -1513,6 +1563,7 @@ static AjBool dbigcg_ParsePir (AjPFile libr,
 		}
 		ajRegPost (phrexp, &tmpline);
 	    }
+	  }
 	}
 
 	if (!ajFileGets(libr, &rline))

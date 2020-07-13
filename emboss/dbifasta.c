@@ -286,6 +286,12 @@ int main(int argc, char **argv)
 ** @param [r] idformat [AjPStr] type of id line
 ** @param [r] exp [AjPRegexp] Regular expression for id parsing
 ** @param [r] type [ajint] type of fasta id.
+** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
+** @param [r] fields [AjPStr*] Field names to be indexed
+** @param [w] maxFieldLen [ajint*] Maximum field token length
+** @param [w] maxidlen [ajint*] Maximum entry ID length
+** @param [r] elistfile [AjPFile] entry file
+** @param [r] alistfile [AjPFile*] field data files array
 ** @return [EmbPEntry] Entry data object.
 ** @@
 ******************************************************************************/
@@ -436,9 +442,13 @@ static AjPRegexp dbifasta_getExpr(AjPStr idformat, ajint *type)
 ** @param [r] libr [AjPFile] Input database file
 ** @param [w] dpos [ajint*] Byte offset
 ** @param [w] id [AjPStr*] ID
-** @param [w] fdl [AjPList*] Lists of field tokens
+** @param [w] fdlist [AjPList*] Lists of field tokens
+** @param [w] maxFieldLen [ajint*] Maximum field token length
 ** @param [r] exp [AjPRegexp] regular expression
 ** @param [r] type [ajint] type of id line
+** @param [r] alistfile [AjPFile*] field data files array
+** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
+** @param [r] fields [AjPStr*] Field names to be indexed
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/

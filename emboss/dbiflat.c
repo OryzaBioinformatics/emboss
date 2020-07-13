@@ -290,9 +290,14 @@ int main(int argc, char **argv)
 ** Returns next database entry as an EmbPEntry object
 **
 ** @param [r] libr [AjPFile] Database file
-** @param [r] fields [AjPStr] Format to be used
-** @param [r] fields [AjPStr*] Fields to be indexed
 ** @param [r] ifile [ajint] File number.
+** @param [r] idformat [AjPStr] Format to be used
+** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
+** @param [r] fields [AjPStr*] Fields to be indexed
+** @param [w] maxFieldLen [ajint*] Maximum token length for each field
+** @param [w] maxidlen [ajint*] Maximum entry ID length
+** @param [r] elistfile [AjPFile] entry file
+** @param [r] alistfile [AjPFile*] field data files array
 ** @return [EmbPEntry] Entry data object.
 ** @@
 ******************************************************************************/
@@ -396,7 +401,10 @@ static EmbPEntry dbiflat_NextFlatEntry (AjPFile libr, ajint ifile,
 ** Reads to the end of the entry and then returns.
 **
 ** @param [r] libr [AjPFile] Input database file
+** @param [r] alistfile [AjPFile*] field data files array
+** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
 ** @param [w] fields [AjPStr*] Fields required
+** @param [w] maxFieldLen [ajint*] Maximum token length for each field
 ** @param [w] dpos [ajint*] Byte offset
 ** @param [w] id [AjPStr*] ID
 ** @param [w] fdl [AjPList*] Lists of field values
@@ -646,7 +654,10 @@ static AjBool dbiflat_ParseEmbl (AjPFile libr, AjPFile* alistfile,
 ** Parse the ID, accession from a Genbank entry
 **
 ** @param [r] libr [AjPFile] Input database file
+** @param [r] alistfile [AjPFile*] field data files array
+** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
 ** @param [w] fields [AjPStr*] Fields required
+** @param [w] maxFieldLen [ajint*] Maximum token length for each field
 ** @param [w] dpos [ajint*] Byte offset
 ** @param [w] id [AjPStr*] ID
 ** @param [w] fdl [AjPList*] Lists of field values

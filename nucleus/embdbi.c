@@ -508,6 +508,7 @@ void embDbiHeaderSize (AjPFile file, ajint filesize, ajint recordcnt) {
 ** @param [r] dbname [AjPStr] Database name (up to 20 characters used)
 ** @param [r] release [AjPStr] Release as a string (up to 10 characters used)
 ** @param [r] date [char[4]] Date dd,mm,yy,00
+** @return [void]
 ******************************************************************************/
 
 void      embDbiHeader (AjPFile file, ajint filesize,
@@ -574,7 +575,6 @@ AjPFile embDbiFileSingle (AjPStr dbname, char* extension, ajint num) {
 ** index field, for example EMBL.acnum_sort
 **
 ** @param [R] dbname [AjPStr] Database name
-** @param [R] num [ajint] Number for this file (start at 1)
 ** @param [R] extension [char*] Filename extension.
 ** @return [AjPFile] Opened output file
 **
@@ -597,7 +597,6 @@ AjPFile embDbiFileIn (AjPStr dbname, char* extension) {
 ** index field, for example EMBL.acnum_srt2
 **
 ** @param [R] dbname [AjPStr] Database name
-** @param [R] num [ajint] Number for this file (start at 1)
 ** @param [R] extension [char*] Filename extension.
 ** @return [AjPFile] Opened output file
 **
@@ -614,7 +613,7 @@ AjPFile embDbiFileOut (AjPStr dbname, char* extension) {
   return ret;
 }
 
-/* @func embDbiFileIndex ****************************************************
+/* @func embDbiFileIndex ******************************************************
 **
 ** Builds a filename for a summary file to save IDs or some other
 ** index field, for example EMBL.acsrt2
@@ -641,6 +640,14 @@ AjPFile embDbiFileIndex (AjPStr indexdir, AjPStr field, char* extension) {
 **
 ** Writes the division index file
 **
+** @param [R] indexdir [AjPStr] Index directory
+** @param [R] dbname [AjPStr] Database name
+** @param [R] release [AjPStr] Release number as a string
+** @param [R] date [char[4]] Date
+** @param [R] maxfilelen [ajint] Max file length
+** @param [R] nfiles [ajint] Number of files indexes
+** @param [R] divfiles [AjPStr*] Division filenames
+** @param [R] seqfiles [AjPStr*] Sequence filenames (or NULL if none)
 ** @return [void]
 ******************************************************************************/
 
@@ -683,7 +690,12 @@ void embDbiWriteDivision (AjPStr indexdir,
 **
 ** Writes a record to the division lookup file
 **
-**
+** @param [R] file [AjPFile] Index file
+** @param [R] maxnamlen [ajint] Maximum name length
+** @param [R] recnum [short] Record number
+** @param [R] datfile [AjPStr] Data file name
+** @param [R] seqfile [AjPStr] Seqeunce file name (or NULL if none)
+** @return [void]
 ******************************************************************************/
 
 void embDbiWriteDivisionRecord (AjPFile file, ajint maxnamlen, short recnum,
@@ -728,7 +740,7 @@ void embDbiWriteEntryRecord (AjPFile file, ajint maxidlen, AjPStr id,
   return;
 }
 
-/* @func embDbiWriteHit *************************************************
+/* @func embDbiWriteHit *******************************************************
 **
 ** Writes a record to the field hit (.hit) index file
 **
@@ -745,11 +757,12 @@ void embDbiWriteHit (AjPFile file, ajint idnum) {
   return;
 }
 
-/* @func embDbiWriteTrg *************************************************
+/* @func embDbiWriteTrg *******************************************************
 **
 ** Writes a record to the field target (.trg) index file
 **
 ** @param [r] file [AjPFile] hit file
+** @param [r] maxfieldlen [ajint] Maximum field token length
 ** @param [r] idnum [ajint] First record number (1 for the first) in the
 **                          field hit index file
 ** @param [r] idcnt [ajint] Number of entries for this field value
@@ -768,11 +781,16 @@ void embDbiWriteTrg (AjPFile file, ajint maxfieldlen,
   return;
 }
 
-/* @func embDbiSortOpen ******************************************************
+/* @func embDbiSortOpen *******************************************************
 **
 ** Open sort files for entries and all fields
 **
-** @return [EmbPField] Field token structure.
+** @param [r] alistfile [AjPFile*] Sort files for each field.
+** @param [r] ifile [ajint] Input file number (used for temporary file names)
+** @param [r] dbname [AjPStr] Database name (used for temporary file names)
+** @param [r] fields [AjPStr*] Field names (used for temporary file names)
+** @param [r] nfields [ajint] Number of fields
+** @return [AjPFile] Sort file for entries
 ******************************************************************************/
 
 AjPFile embDbiSortOpen (AjPFile* alistfile, ajint ifile,
@@ -797,6 +815,9 @@ AjPFile embDbiSortOpen (AjPFile* alistfile, ajint ifile,
 **
 ** Close the sort files for entries and all fields
 **
+** @param [r] elistfile [AjPFile*] Sort file for entries
+** @param [r] alistfile [AjPFile*] Sort files for each field.
+** @param [r] nfields [ajint] Number of fields
 ** @return [void]
 ******************************************************************************/
 
@@ -815,8 +836,13 @@ void embDbiSortClose (AjPFile* elistfile, AjPFile* alistfile, ajint nfields)
 
 /* @func embDbiMemEntry *******************************************************
 **
-** Stores data for current entry in memory
+** Stores data for current entry in memory by appending to lists
 **
+** @param [r] idlist [AjPList] List if entry IDs
+** @param [r] fieldList [AjPList*] List of field tokens for each field
+** @param [r] nfields [ajint] Number of fields
+** @param [r] entry [EmbPEntry] Current entry
+** @param [r] ifile [ajint] Current input file number
 ** @return [void]
 ******************************************************************************/
 
@@ -844,9 +870,15 @@ void embDbiMemEntry (AjPList idlist, AjPList* fieldList, ajint nfields,
 
 /* @func embDbiSortWriteEntry *************************************************
 **
-** Write the entryname index file
+** Write the entryname index file using data from the entry sort file.
 **
-** @return [void]
+** @param [r] entFile [AjPFile] Entry file
+** @param [r] maxidlen [ajint] Maximum id length
+** @param [r] dbname [AjPStr] Database name (used in temp file names)
+** @param [r] nfiles [ajint] Number of files
+** @param [r] cleanup [AjBool] Cleanup temp files if true
+** @param [r] sortopt [AjPStr] Sort commandline options
+** @return [ajint] Number of entries
 ******************************************************************************/
 
 ajint embDbiSortWriteEntry (AjPFile entFile, ajint maxidlen,
@@ -900,6 +932,10 @@ ajint embDbiSortWriteEntry (AjPFile entFile, ajint maxidlen,
 **
 ** Write entryname index for in-memory processing
 **
+** @param [r] entFile [AjPFile] entryname index file
+** @param [r] maxidlen [ajint] Maximum entry id length
+** @param [r] idlist [AjPList] List of entry IDs to be written
+** @param [w] ids [void***] AjPStr* array of IDs from list
 ** @return [void]
 ******************************************************************************/
 
@@ -928,8 +964,18 @@ void embDbiMemWriteEntry (AjPFile entFile, ajint maxidlen,
 
 /* @func embDbiSortWriteFields ************************************************
 **
-** Write the fields indices
+** Write the indices for a field.
 **
+** @param [r] dbname [AjPStr] Database name (used for temp file names)
+** @param [r] release [AjPStr] Release number as a string
+** @param [r] date [char[4]] Date
+** @param [r] indexdir [AjPStr] Index directory
+** @param [r] field [AjPStr] Field name (used for temp file names)
+** @param [r] maxFieldLen [ajint] Maximum field token length
+** @param [r] nfiles [ajint] Number of data files
+** @param [r] nentries [ajint] Number of entries
+** @param [r] cleanup [AjBool] Cleanup temp files if true
+** @param [r] sortopt [AjPStr] Sort command line options
 ** @return [ajint] Number of field targets written
 ******************************************************************************/
 
@@ -1109,14 +1155,21 @@ ajint embDbiSortWriteFields (AjPStr dbname, AjPStr release,
 **
 ** Write the fields indices
 **
+** @param [r] dbname [AjPStr] Database name (used for temp file names)
+** @param [r] release [AjPStr] Release number as a string
+** @param [r] date [char[4]] Date
+** @param [r] indexdir [AjPStr] Index directory
+** @param [r] field [AjPStr] Field name (used for file names)
+** @param [r] maxFieldLen [ajint] Maximum field token length
+** @param [r] fieldList [AjPList] List of field tokens to be written
+** @param [r] ids [void**] AjPStr* array offield token s from list
 ** @return [ajint] Number of field targets written
 ******************************************************************************/
 
 ajint embDbiMemWriteFields (AjPStr dbname, AjPStr release,
 			    char date[4], AjPStr indexdir,
 			    AjPStr field, ajint maxFieldLen,
-			    AjPList fieldList,
-			    void** ids)
+			    AjPList fieldList, void** ids)
 {
     ajint fieldCount=0;
     ajint ient;
@@ -1245,6 +1298,8 @@ ajint embDbiMemWriteFields (AjPStr dbname, AjPStr release,
 ** Sets the date as an integer array from a formatted string.
 ** The integer array is the internal format in database index headers
 **
+** @param [r] datestr [AjPStr] Date as a string
+** @param [w] date [char[4]] Data char (1 byte int) array
 ** @return [void]
 ******************************************************************************/
 
@@ -1274,12 +1329,14 @@ void embDbiDateSet (AjPStr datestr, char date[4])
 
 /* @func embDbiMaxlen *********************************************************
 **
-** Compares a string yto a maximum string length.
+** Compares a string to a maximum string length.
 **
 ** A negative maximum length limits the string to that absolute length.
 **
 ** A non-negative length is updated if the string is longer
 **
+** @param [r] token [AjPStr*] Token string
+** @param [u] maxlen [ajint*] Maximum string length
 ** @return [void]
 ******************************************************************************/
 
