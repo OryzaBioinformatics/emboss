@@ -68,8 +68,9 @@ bool: description  [
 ]
 
 outfile: outfile  [
-  optional: "Y"
-  default: "stdout"
+  parameter: "Y"
+  extension: "textsearch"
+#  default: "stdout"
   prompt: "Output sequence details to a file"
   help: "If you enter the name of a file here then this program will write the sequence details into that file."
 ]

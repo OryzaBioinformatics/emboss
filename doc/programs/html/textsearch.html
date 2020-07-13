@@ -7,37 +7,31 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
 
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
 
+
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
+<td align=left valign=middle>
+<b><font size="+6">
 
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: textsearch
-</H2>
-
-
-</font>
-</td>
-
-</tr>
+textsearch
+</font></b>
+</td></tr>
 </table>
-</td>
+<br>&nbsp;
+<p>
 
-</tr>
-</table>
 
-<p><hr><p>
-<H1>
-Program textsearch
-</H1>
+
+
+
+
 
 <H2>
     Function
@@ -69,19 +63,19 @@ annotation, not the full annotation.
 
 Search for matches to 'lacZ'
 <pre>
-% textsearch swissprot:\*  'lacz'
+% textsearch swissprot:\*  'lacz' stdout
 </pre>
 
 <p>
 Search for matches to 'lacz' or 'permease' in E.coli proteins
 <pre>
-% textsearch swissprot:\*_ecoli 'lacZ | permease'
+% textsearch swissprot:\*_ecoli 'lacZ | permease' stdout
 </pre>
 
 <p>
 Output a search for 'transport' formatted with HTML to a file
 <pre>
-% textsearch embl:\* 'transport' -html -outfile embl.transport
+% textsearch embl:\* 'transport' -html -outfile embl.transport stdout
 </pre>
 
 
@@ -106,29 +100,29 @@ IT IS DONE FOR YOU.
                                   human|mouse
                                   will find text with either 'human' OR
                                   'mouse' in the text
-
-   Optional qualifiers:
-   -casesensitive      bool       Do a case-sensitive search
-   -html               bool       Format output as an HTML table
-   -outfile            outfile    If you enter the name of a file here then
+  [-outfile]           outfile    If you enter the name of a file here then
                                   this program will write the sequence details
                                   into that file.
 
+   Optional qualifiers:
+   -casesensitive      boolean    Do a case-sensitive search
+   -html               boolean    Format output as an HTML table
+
    Advanced qualifiers:
-   -only               bool       This is a way of shortening the command line
+   -only               boolean    This is a way of shortening the command line
                                   if you only want a few things to be
                                   displayed. Instead of specifying:
                                   '-nohead -noname -nousa -noacc -nodesc'
                                   to get only the name output, you can specify
                                   '-only -name'
-   -heading            bool       Display column headings
-   -usa                bool       Display the USA of the sequence
-   -accession          bool       Display 'accession' column
-   -name               bool       Display 'name' column
-   -description        bool       Display 'description' column
+   -heading            boolean    Display column headings
+   -usa                boolean    Display the USA of the sequence
+   -accession          boolean    Display 'accession' column
+   -name               boolean    Display 'name' column
+   -description        boolean    Display 'description' column
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -161,6 +155,13 @@ will find text with either 'human' OR 'mouse' in the text</td>
 <td><i>An empty string is accepted</i></td>
 </tr>
 
+<tr>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>If you enter the name of a file here then this program will write the sequence details into that file.</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.textsearch</td>
+</tr>
+
 <tr bgcolor="#FFFFD0">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
@@ -179,13 +180,6 @@ will find text with either 'human' OR 'mouse' in the text</td>
 <td>Format output as an HTML table</td>
 <td>Yes/No</td>
 <td>No</td>
-</tr>
-
-<tr>
-<td>-outfile</td>
-<td>If you enter the name of a file here then this program will write the sequence details into that file.</td>
-<td>Output file</td>
-<td>stdout</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -323,15 +317,21 @@ etc.)
     References
 </H2>
 
+None.
+
 
 <H2>
     Warnings
 </H2>
 
+None.
+
 
 <H2>
     Diagnostic Error Messages
 </H2>
+
+None.
 
 
 <H2>
@@ -415,9 +415,6 @@ from naive users to embedded scripts.
 
 </pre>
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>
