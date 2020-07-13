@@ -1,0 +1,37 @@
+appl: scoprep [
+  documentation: "Reorder scop classificaiton file so that the representative structure of each family is given first"
+  groups: "Protein:3D Structure"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
+]
+
+
+
+
+
+section: input [ info: "input Section" type: page ]
+infile: scopin  [
+  parameter: "Y"
+  prompt: "Name of scop classification file (embl format input)"
+  default: "Escop.dat"
+]
+endsection: input
+
+
+
+
+
+section: output [ info: "output Section" type: page ]
+outfile: scopout  [
+  parameter: "Y"
+  prompt: "Name of scop classification file (embl format output)"
+  default: "Escop.dat.out"
+]
+endsection: output
+
+
+
+
+
+
